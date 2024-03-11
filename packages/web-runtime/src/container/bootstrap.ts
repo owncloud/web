@@ -55,12 +55,7 @@ import {
   RawConfigSchema,
   SentryConfig
 } from '@ownclouders/web-pkg/src/composables/piniaStores/config/types'
-import {
-  onSSEFileLockedEvent,
-  onSSEFileUnlockedEvent,
-  onSSEItemRenamedEvent,
-  onSSEProcessingFinishedEvent
-} from './sse'
+import { onSSEFileLockingEvent, onSSEItemRenamedEvent, onSSEProcessingFinishedEvent } from './sse'
 
 const getEmbedConfigFromQuery = (
   doesEmbedEnabledOptionExists: boolean
@@ -672,6 +667,7 @@ export const registerSSEEventListeners = ({
 
   clientService.sseAuthenticated.addEventListener(MESSAGE_TYPE.ITEM_RENAMED, (msg) =>
     onSSEItemRenamedEvent({
+      topic: MESSAGE_TYPE.ITEM_RENAMED,
       resourcesStore,
       spacesStore,
       msg,
@@ -682,6 +678,7 @@ export const registerSSEEventListeners = ({
 
   clientService.sseAuthenticated.addEventListener(MESSAGE_TYPE.POSTPROCESSING_FINISHED, (msg) =>
     onSSEProcessingFinishedEvent({
+      topic: MESSAGE_TYPE.POSTPROCESSING_FINISHED,
       resourcesStore,
       spacesStore,
       msg,
@@ -692,7 +689,8 @@ export const registerSSEEventListeners = ({
   )
 
   clientService.sseAuthenticated.addEventListener(MESSAGE_TYPE.FILE_LOCKED, (msg) =>
-    onSSEFileLockedEvent({
+    onSSEFileLockingEvent({
+      topic: MESSAGE_TYPE.FILE_LOCKED,
       resourcesStore,
       spacesStore,
       msg,
@@ -701,7 +699,8 @@ export const registerSSEEventListeners = ({
   )
 
   clientService.sseAuthenticated.addEventListener(MESSAGE_TYPE.FILE_UNLOCKED, (msg) =>
-    onSSEFileUnlockedEvent({
+    onSSEFileLockingEvent({
+      topic: MESSAGE_TYPE.FILE_UNLOCKED,
       resourcesStore,
       spacesStore,
       msg,

@@ -49,12 +49,14 @@ const itemInCurrentFolder = ({
 }
 
 export const onSSEItemRenamedEvent = async ({
+  topic,
   resourcesStore,
   spacesStore,
   msg,
   clientService,
   router
 }: {
+  topic: string
   resourcesStore: ResourcesStore
   spacesStore: SpacesStore
   msg: MessageEvent
@@ -90,16 +92,18 @@ export const onSSEItemRenamedEvent = async ({
 
     resourcesStore.upsertResource(updatedResource)
   } catch (e) {
-    console.error('Unable to parse sse event item-renamed data', e)
+    console.error(`Unable to parse sse event ${topic} data`, e)
   }
 }
 
-export const onSSEFileLockedEvent = async ({
+export const onSSEFileLockingEvent = async ({
+  topic,
   resourcesStore,
   spacesStore,
   msg,
   clientService
 }: {
+  topic: string
   resourcesStore: ResourcesStore
   spacesStore: SpacesStore
   msg: MessageEvent
@@ -128,45 +132,7 @@ export const onSSEFileLockedEvent = async ({
       })
     })
   } catch (e) {
-    console.error('Unable to parse sse event file-locked data', e)
-  }
-}
-
-export const onSSEFileUnlockedEvent = async ({
-  resourcesStore,
-  spacesStore,
-  msg,
-  clientService
-}: {
-  resourcesStore: ResourcesStore
-  spacesStore: SpacesStore
-  msg: MessageEvent
-  clientService: ClientService
-}) => {
-  try {
-    const sseData = fileReadyEventSchema.parse(JSON.parse(msg.data))
-    const resource = resourcesStore.resources.find((f) => f.id === sseData.itemid)
-    const space = spacesStore.spaces.find((s) => s.id === resource.storageId)
-
-    if (!resource || !space) {
-      return
-    }
-
-    const updatedResource = await clientService.webdav.getFileInfo(space, {
-      fileId: sseData.itemid
-    })
-
-    resourcesStore.upsertResource(updatedResource)
-    resourcesStore.updateResourceField({
-      id: updatedResource.id,
-      field: 'indicators',
-      value: getIndicators({
-        resource: updatedResource,
-        ancestorMetaData: resourcesStore.ancestorMetaData
-      })
-    })
-  } catch (e) {
-    console.error('Unable to parse sse event file-unlocked data', e)
+    console.error(`Unable to parse sse event ${topic} data`, e)
   }
 }
 
@@ -232,6 +198,6 @@ export const onSSEProcessingFinishedEvent = async ({
       // })
     }
   } catch (e) {
-    console.error('Unable to parse sse event postprocessing-finished data', e)
+    console.error(`Unable to parse sse event ${topic} data`, e)
   }
 }
