@@ -25,8 +25,8 @@ COMMAND [options] [paths]
 Available options:
     --suites        - suites to run. Comma separated values (folder names)
                       e.g.: --suites smoke,shares
-    --exclude       - exclude suites from running. Comma separated values
-                      e.g.: --exclude spaces,search
+    --xsuites       - exclude suites from running. Comma separated values
+                      e.g.: --xsuites spaces,search
     --run-part      - part to run out of total parts (groups)
                       e.g.: --run-part 2 (runs part 2 out of 4)
     --total-parts   - total number of groups to divide into
@@ -37,12 +37,12 @@ Available options:
 while [[ $# -gt 0 ]]; do
     key="$1"
     case ${key} in
-    --exclude)
-        EXCLUDE_SUITES=$(echo "$2" | sed -E "s/,/\n/g")
-        shift 2
-        ;;
     --suites)
         FILTER_SUITES=$(echo "$2" | sed -E "s/,/\n/g")
+        shift 2
+        ;;
+    --xsuites)
+        EXCLUDE_SUITES=$(echo "$2" | sed -E "s/,/\n/g")
         shift 2
         ;;
     --run-part)
@@ -96,7 +96,7 @@ function runE2E() {
         $E2E_COMMAND "$GLOB_FEATURE_PATHS" # run without expanding glob pattern
     else
         # shellcheck disable=SC2086
-        $E2E_COMMAND $FEATURE_PATHS
+        $E2E_COMMAND $FEATURE_PATHS # do not enclose paths with quote
     fi
     exit $?
 }
