@@ -33,9 +33,9 @@ Feature: Upload
       | PARENT/parent.txt  | txtFile | some text    |
       | PARENT/example.txt | txtFile | example text |
     And "Alice" uploads the following resources via drag-n-drop
-        | resource       |
-        | simple.pdf     |
-        | testavatar.jpg |
+      | resource       |
+      | simple.pdf     |
+      | testavatar.jpg |
     And "Alice" tries to upload the following resource
       | resource      | error            |
       | lorem-big.txt | Not enough quota |
@@ -44,10 +44,13 @@ Feature: Upload
       | PARENT     | folder |
       # Coverage for bug: https://github.com/owncloud/ocis/issues/8361
       | comma,.txt | file   |
-  #  currently upload folder feature is not available in playwright
-  #  And "Alice" uploads the following resources
-  #    | resource |
-  #    | PARENT   |
+
+    # https://github.com/owncloud/web/issues/6348
+    # Note: uploading folder with empty sub-folder should be done manually
+    # currently upload folder feature is not available in playwright
+    # And "Alice" uploads the following resources
+    #  | resource |
+    #  | FOLDER   |
     And "Alice" logs out
 
 
