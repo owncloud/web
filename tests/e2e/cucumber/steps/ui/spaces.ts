@@ -223,7 +223,7 @@ When(
 )
 
 When(
-  '{string} downloads the space {string}',
+  /^"([^"]*)" downloads the space (?:"[^"]*")$/,
   async function (this: World, stepUser: string): Promise<void> {
     const { page } = this.actorsEnvironment.getActor({ key: stepUser })
     const spacesObject = new objects.applicationFiles.Spaces({ page })
