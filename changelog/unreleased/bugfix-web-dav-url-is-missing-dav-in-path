@@ -1,0 +1,5 @@
+Bugfix: WebDav Url in right sidebar is missing dav in path
+
+We fixed a bug where the '/dav/' path was missing in the WebDav Url in the right sidebar.
+
+https://github.com/owncloud/web/pull/10576
