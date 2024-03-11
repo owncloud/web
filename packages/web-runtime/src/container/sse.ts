@@ -1,6 +1,7 @@
 import {
   ClientService,
   createFileRouteOptions,
+  getIndicators,
   ImageDimension,
   PreviewService,
   ResourcesStore,
@@ -23,10 +24,10 @@ type SSEMessageData = {
 
 const itemInCurrentFolder = ({
   resourcesStore,
-  sseData
+  parentFolderId
 }: {
   resourcesStore: ResourcesStore
-  sseData: SSEMessageData
+  parentFolderId: string
 }) => {
   const currentFolder = resourcesStore.currentFolder
   if (!currentFolder) {
@@ -35,11 +36,11 @@ const itemInCurrentFolder = ({
 
   if (!extractNodeId(currentFolder.id)) {
     // if we don't have a nodeId here, we have a space (root) as current folder and can only check against the storageId
-    if (currentFolder.id !== extractStorageId(sseData.parentitemid)) {
+    if (currentFolder.id !== extractStorageId(parentFolderId)) {
       return false
     }
   } else {
-    if (currentFolder.id !== sseData.parentitemid) {
+    if (currentFolder.id !== parentFolderId) {
       return false
     }
   }
@@ -48,12 +49,14 @@ const itemInCurrentFolder = ({
 }
 
 export const onSSEItemRenamedEvent = async ({
+  topic,
   resourcesStore,
   spacesStore,
   msg,
   clientService,
   router
 }: {
+  topic: string
   resourcesStore: ResourcesStore
   spacesStore: SpacesStore
   msg: MessageEvent
@@ -62,18 +65,11 @@ export const onSSEItemRenamedEvent = async ({
 }) => {
   try {
     const sseData = fileReadyEventSchema.parse(JSON.parse(msg.data))
-
     const currentFolder = resourcesStore.currentFolder
     const resourceIsCurrentFolder = currentFolder.id === sseData.itemid
-
-    if (!resourceIsCurrentFolder && !itemInCurrentFolder({ resourcesStore, sseData })) {
-      return false
-    }
-
     const resource = resourceIsCurrentFolder
       ? currentFolder
       : resourcesStore.resources.find((f) => f.id === sseData.itemid)
-
     const space = spacesStore.spaces.find((s) => s.id === resource.storageId)
 
     if (!resource || !space) {
@@ -94,22 +90,54 @@ export const onSSEItemRenamedEvent = async ({
       )
     }
 
-    resourcesStore.updateResourceField({
-      id: sseData.itemid,
-      field: 'name',
-      value: updatedResource.name
-    })
-
-    resourcesStore.updateResourceField({
-      id: sseData.itemid,
-      field: 'path',
-      value: updatedResource.path
-    })
+    resourcesStore.upsertResource(updatedResource)
   } catch (e) {
-    console.error('Unable to parse sse event item renamed data', e)
+    console.error(`Unable to parse sse event ${topic} data`, e)
   }
 }
+
+export const onSSEFileLockingEvent = async ({
+  topic,
+  resourcesStore,
+  spacesStore,
+  msg,
+  clientService
+}: {
+  topic: string
+  resourcesStore: ResourcesStore
+  spacesStore: SpacesStore
+  msg: MessageEvent
+  clientService: ClientService
+}) => {
+  try {
+    const sseData = fileReadyEventSchema.parse(JSON.parse(msg.data))
+    const resource = resourcesStore.resources.find((f) => f.id === sseData.itemid)
+    const space = spacesStore.spaces.find((s) => s.id === resource.storageId)
+
+    if (!resource || !space) {
+      return
+    }
+
+    const updatedResource = await clientService.webdav.getFileInfo(space, {
+      fileId: sseData.itemid
+    })
+
+    resourcesStore.upsertResource(updatedResource)
+    resourcesStore.updateResourceField({
+      id: updatedResource.id,
+      field: 'indicators',
+      value: getIndicators({
+        resource: updatedResource,
+        ancestorMetaData: resourcesStore.ancestorMetaData
+      })
+    })
+  } catch (e) {
+    console.error(`Unable to parse sse event ${topic} data`, e)
+  }
+}
+
 export const onSSEProcessingFinishedEvent = async ({
+  topic,
   resourcesStore,
   spacesStore,
   msg,
@@ -119,6 +147,7 @@ export const onSSEProcessingFinishedEvent = async ({
   resourceQueue,
   previewService
 }: {
+  topic: string
   resourcesStore: ResourcesStore
   spacesStore: SpacesStore
   msg: MessageEvent
@@ -129,7 +158,7 @@ export const onSSEProcessingFinishedEvent = async ({
   try {
     const sseData = fileReadyEventSchema.parse(JSON.parse(msg.data))
 
-    if (!itemInCurrentFolder({ resourcesStore, sseData })) {
+    if (!itemInCurrentFolder({ resourcesStore, parentFolderId: sseData.parentitemid })) {
       return false
     }
 
@@ -171,6 +200,6 @@ export const onSSEProcessingFinishedEvent = async ({
       // })
     }
   } catch (e) {
-    console.error('Unable to parse sse event postprocessing-finished data', e)
+    console.error(`Unable to parse sse event ${topic} data`, e)
   }
 }
