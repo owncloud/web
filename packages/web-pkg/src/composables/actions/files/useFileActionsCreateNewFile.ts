@@ -44,6 +44,8 @@ export const useFileActionsCreateNewFile = ({ space }: { space?: SpaceResource }
   )
 
   const getNameErrorMsg = (fileName: string) => {
+    // use blacklist regex capability here to check for invalid characters
+
     if (fileName === '') {
       return $gettext('File name cannot be empty')
     }

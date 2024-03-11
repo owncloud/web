@@ -106,6 +106,7 @@ export interface Capabilities {
     files: {
       app_providers?: AppProviderCapability[]
       archivers?: ArchiverCapability[]
+      blacklisted_files_regex?: string
       favorites?: boolean
       full_text_search?: boolean
       permanent_deletion?: boolean

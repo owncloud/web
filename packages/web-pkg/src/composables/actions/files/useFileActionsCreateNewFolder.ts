@@ -26,6 +26,8 @@ export const useFileActionsCreateNewFolder = ({ space }: { space?: SpaceResource
   const clientService = useClientService()
 
   const checkNewFolderName = (folderName: string, setError: (error: string) => void) => {
+    // use blacklist regex capability here to check for invalid characters
+
     if (folderName.trim() === '') {
       return setError($gettext('Folder name cannot be empty'))
     }

@@ -44,7 +44,10 @@ export const useSpaceActionsRename = () => {
       return
     }
 
+    // use blacklist regex capability here to check for invalid characters
+
     dispatchModal({
+      // Shouldn't this be interpolated?
       title: $gettext('Rename space') + ' ' + resources[0].name,
       confirmText: $gettext('Rename'),
       hasInput: true,

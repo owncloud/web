@@ -39,6 +39,8 @@ export const useFileActionsRename = () => {
     const newPath =
       resource.path.substring(0, resource.path.length - resource.name.length) + newName
 
+    // use blacklist regex capability here to check for invalid characters
+
     if (!newName) {
       return $gettext('The name cannot be empty')
     }

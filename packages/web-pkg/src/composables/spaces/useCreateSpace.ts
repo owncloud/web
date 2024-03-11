@@ -10,6 +10,8 @@ export const useCreateSpace = () => {
   const configStore = useConfigStore()
 
   const createSpace = async (name: string) => {
+    // use blacklist regex capability here to check for invalid characters
+
     const { graphAuthenticated } = clientService
     const { data: createdSpace } = await graphAuthenticated.drives.createDrive({ name }, {})
     const spaceResource = buildSpace({
