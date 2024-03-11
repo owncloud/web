@@ -1,7 +1,6 @@
 import {
   ClientService,
   createFileRouteOptions,
-  getIndicators,
   ImageDimension,
   PreviewService,
   ResourcesStore,
@@ -161,7 +160,6 @@ export const onSSEProcessingFinishedEvent = async ({
     if (!itemInCurrentFolder({ resourcesStore, parentFolderId: sseData.parentitemid })) {
       return false
     }
-
     const resource = resourcesStore.resources.find((f) => f.id === sseData.itemid)
     const space = spacesStore.spaces.find((s) => s.id === resource.storageId)
     const isFileLoaded = !!resource
@@ -200,6 +198,92 @@ export const onSSEProcessingFinishedEvent = async ({
       // })
     }
   } catch (e) {
-    console.error(`Unable to parse sse event ${topic} data`, e)
+    console.error('Unable to parse sse event postprocessing-finished data', e)
+  }
+}
+
+export const onSSEItemTrashedEvent = ({
+  resourcesStore,
+  msg
+}: {
+  resourcesStore: ResourcesStore
+  msg: MessageEvent
+}) => {
+  try {
+    const sseData = fileReadyEventSchema.parse(JSON.parse(msg.data))
+
+    console.log(resourcesStore.currentFolder)
+
+    const resource = resourcesStore.resources.find((f) => f.id === sseData.itemid)
+
+    if (!resource) {
+      return
+    }
+
+    resourcesStore.removeResources([resource])
+  } catch (e) {
+    console.error('Unable to parse sse event item-trashed data', e)
+  }
+}
+
+export const onSSEItemRestoredEvent = async ({
+  resourcesStore,
+  spacesStore,
+  msg,
+  clientService,
+  previewService
+}: {
+  resourcesStore: ResourcesStore
+  spacesStore: SpacesStore
+  msg: MessageEvent
+  clientService: ClientService
+  previewService: PreviewService
+}) => {
+  try {
+    const sseData = fileReadyEventSchema.parse(JSON.parse(msg.data))
+
+    const space = spacesStore.personalSpace
+
+    if (!space) {
+      return
+    }
+
+    const resource = await clientService.webdav.getFileInfo(space, {
+      fileId: sseData.itemid
+    })
+
+    if (!resource) {
+      return
+    }
+
+    if (!itemInCurrentFolder({ resourcesStore, parentFolderId: resource.parentFolderId })) {
+      return false
+    }
+
+    resourcesStore.upsertResource(resource)
+    resourcesStore.updateResourceField({
+      id: resource.id,
+      field: 'indicators',
+      value: getIndicators({
+        resource,
+        ancestorMetaData: resourcesStore.ancestorMetaData
+      })
+    })
+
+    const preview = await previewService.loadPreview({
+      resource,
+      space,
+      dimensions: ImageDimension.Thumbnail
+    })
+
+    if (preview) {
+      resourcesStore.updateResourceField({
+        id: resource.id,
+        field: 'thumbnail',
+        value: preview
+      })
+    }
+  } catch (e) {
+    console.error('Unable to parse sse event item-restored data', e)
   }
 }
