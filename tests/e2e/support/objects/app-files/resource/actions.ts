@@ -113,7 +113,7 @@ const filesContextMenuAction = 'div[id^="context-menu-drop"] button.oc-files-act
 const highlightedFileRowSelector = '#files-space-table tr.oc-table-highlighted'
 const emptyTrashbinButtonSelector = '.oc-files-actions-empty-trash-bin-trigger'
 const resourceLockIcon =
-  '//*[@data-test-resource-name="%s"]/ancestor::tr//td//span[contains(@class, "oc-resource-icon-status-badge-inner")]'
+  '//*[@data-test-resource-name="%s"]/ancestor::tr//td//span[@data-test-indicator-type="resource-locked"]'
 const sharesNavigationButtonSelector = '.oc-sidebar-nav [data-nav-name="files-shares"]'
 const keepBothButton = '.oc-modal-body-actions-confirm'
 
@@ -1712,5 +1712,5 @@ export interface expectFileToBeLockedArgs {
 
 export const getLockLocator = async (args: expectFileToBeLockedArgs): Promise<Locator> => {
   const { page, resource } = args
-  return await page.locator(util.format(resourceLockIcon, resource))
+  return page.locator(util.format(resourceLockIcon, resource))
 }

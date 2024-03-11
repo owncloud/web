@@ -760,7 +760,7 @@ Then(
     const lockLocator = await resourceObject.getLockLocator({ resource: file })
 
     actionType === 'should'
-      ? expect(lockLocator).toBeVisible()
-      : expect(lockLocator).not.toBeVisible()
+      ? await expect(lockLocator).toBeVisible()
+      : await expect(lockLocator).not.toBeVisible()
   }
 )
