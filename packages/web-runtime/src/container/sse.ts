@@ -137,6 +137,7 @@ export const onSSEFileLockingEvent = async ({
 }
 
 export const onSSEProcessingFinishedEvent = async ({
+  topic,
   resourcesStore,
   spacesStore,
   msg,
@@ -146,6 +147,7 @@ export const onSSEProcessingFinishedEvent = async ({
   resourceQueue,
   previewService
 }: {
+  topic: string
   resourcesStore: ResourcesStore
   spacesStore: SpacesStore
   msg: MessageEvent
