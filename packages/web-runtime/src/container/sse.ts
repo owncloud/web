@@ -1,6 +1,7 @@
 import {
   ClientService,
   createFileRouteOptions,
+  getIndicators,
   ImageDimension,
   PreviewService,
   ResourcesStore,
@@ -10,6 +11,8 @@ import PQueue from 'p-queue'
 import { extractNodeId, extractStorageId } from '@ownclouders/web-client/src/helpers'
 import { z } from 'zod'
 import { Router } from 'vue-router'
+import { unref } from 'vue'
+import { storeToRefs } from 'pinia'
 
 const fileReadyEventSchema = z.object({
   itemid: z.string(),
@@ -94,17 +97,7 @@ export const onSSEItemRenamedEvent = async ({
       )
     }
 
-    resourcesStore.updateResourceField({
-      id: sseData.itemid,
-      field: 'name',
-      value: updatedResource.name
-    })
-
-    resourcesStore.updateResourceField({
-      id: sseData.itemid,
-      field: 'path',
-      value: updatedResource.path
-    })
+    resourcesStore.upsertResource(updatedResource)
   } catch (e) {
     console.error('Unable to parse sse event item renamed data', e)
   }
@@ -119,10 +112,13 @@ export const onSSEFileLockedEvent = ({
 }) => {
   try {
     const sseData = fileReadyEventSchema.parse(JSON.parse(msg.data))
+    console.log(sseData)
 
     if (!itemInCurrentFolder({ resourcesStore, sseData })) {
       return false
     }
+
+    console.log('In current')
 
     const resource = resourcesStore.resources.find((f) => f.id === sseData.itemid)
 
@@ -135,6 +131,26 @@ export const onSSEFileLockedEvent = ({
       field: 'locked',
       value: true
     })
+
+    resourcesStore.updateResourceField({
+      id: sseData.itemid,
+      field: 'lockTime',
+      value: resource.lockTime
+    })
+
+    resourcesStore.updateResourceField({
+      id: sseData.itemid,
+      field: 'lockOwnerName',
+      value: resource.lockOwnerName
+    })
+
+    resourcesStore.updateResourceField({
+      id: sseData.itemid,
+      field: 'indicators',
+      value: getIndicators({ resource, ancestorMetaData: resourcesStore.ancestorMetaData })
+    })
+
+    console.log(resource)
   } catch (e) {
     console.error('Unable to parse sse event file locked data', e)
   }
@@ -164,6 +180,24 @@ export const onSSEFileUnlockedEvent = ({
       id: sseData.itemid,
       field: 'locked',
       value: false
+    })
+
+    resourcesStore.updateResourceField({
+      id: sseData.itemid,
+      field: 'lockTime',
+      value: undefined
+    })
+
+    resourcesStore.updateResourceField({
+      id: sseData.itemid,
+      field: 'lockOwnerName',
+      value: undefined
+    })
+
+    resourcesStore.updateResourceField({
+      id: sseData.itemid,
+      field: 'indicators',
+      value: getIndicators({ resource, ancestorMetaData: resourcesStore.ancestorMetaData })
     })
   } catch (e) {
     console.error('Unable to parse sse event file unlocked data', e)
