@@ -103,65 +103,59 @@ export const onSSEItemRenamedEvent = async ({
   }
 }
 
-export const onSSEFileLockedEvent = ({
+export const onSSEFileLockedEvent = async ({
   resourcesStore,
-  msg
+  spacesStore,
+  msg,
+  clientService
 }: {
   resourcesStore: ResourcesStore
+  spacesStore: SpacesStore
   msg: MessageEvent
+  clientService: ClientService
 }) => {
   try {
     const sseData = fileReadyEventSchema.parse(JSON.parse(msg.data))
-    console.log(sseData)
 
     if (!itemInCurrentFolder({ resourcesStore, sseData })) {
       return false
     }
 
-    console.log('In current')
-
     const resource = resourcesStore.resources.find((f) => f.id === sseData.itemid)
+    const space = spacesStore.spaces.find((s) => s.id === resource.storageId)
 
-    if (!resource) {
+    if (!resource || !space) {
       return
     }
 
-    resourcesStore.updateResourceField({
-      id: sseData.itemid,
-      field: 'locked',
-      value: true
+    const updatedResource = await clientService.webdav.getFileInfo(space, {
+      fileId: sseData.itemid
     })
 
+    resourcesStore.upsertResource(updatedResource)
     resourcesStore.updateResourceField({
-      id: sseData.itemid,
-      field: 'lockTime',
-      value: resource.lockTime
-    })
-
-    resourcesStore.updateResourceField({
-      id: sseData.itemid,
-      field: 'lockOwnerName',
-      value: resource.lockOwnerName
-    })
-
-    resourcesStore.updateResourceField({
-      id: sseData.itemid,
+      id: updatedResource.id,
       field: 'indicators',
-      value: getIndicators({ resource, ancestorMetaData: resourcesStore.ancestorMetaData })
+      value: getIndicators({
+        resource: updatedResource,
+        ancestorMetaData: resourcesStore.ancestorMetaData
+      })
     })
-
-    console.log(resource)
   } catch (e) {
     console.error('Unable to parse sse event file locked data', e)
   }
 }
 
-export const onSSEFileUnlockedEvent = ({
+export const onSSEFileUnlockedEvent = async ({
   resourcesStore,
-  msg
+  spacesStore,
+  msg,
+  clientService
 }: {
   resourcesStore: ResourcesStore
+  spacesStore: SpacesStore
   msg: MessageEvent
+  clientService: ClientService
 }) => {
   try {
     const sseData = fileReadyEventSchema.parse(JSON.parse(msg.data))
@@ -171,33 +165,24 @@ export const onSSEFileUnlockedEvent = ({
     }
 
     const resource = resourcesStore.resources.find((f) => f.id === sseData.itemid)
+    const space = spacesStore.spaces.find((s) => s.id === resource.storageId)
 
-    if (!resource) {
+    if (!resource || !space) {
       return
     }
 
-    resourcesStore.updateResourceField({
-      id: sseData.itemid,
-      field: 'locked',
-      value: false
+    const updatedResource = await clientService.webdav.getFileInfo(space, {
+      fileId: sseData.itemid
     })
 
+    resourcesStore.upsertResource(updatedResource)
     resourcesStore.updateResourceField({
-      id: sseData.itemid,
-      field: 'lockTime',
-      value: undefined
-    })
-
-    resourcesStore.updateResourceField({
-      id: sseData.itemid,
-      field: 'lockOwnerName',
-      value: undefined
-    })
-
-    resourcesStore.updateResourceField({
-      id: sseData.itemid,
+      id: updatedResource.id,
       field: 'indicators',
-      value: getIndicators({ resource, ancestorMetaData: resourcesStore.ancestorMetaData })
+      value: getIndicators({
+        resource: updatedResource,
+        ancestorMetaData: resourcesStore.ancestorMetaData
+      })
     })
   } catch (e) {
     console.error('Unable to parse sse event file unlocked data', e)

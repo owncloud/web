@@ -694,14 +694,18 @@ export const registerSSEEventListeners = ({
   clientService.sseAuthenticated.addEventListener(MESSAGE_TYPE.FILE_LOCKED, (msg) =>
     onSSEFileLockedEvent({
       resourcesStore,
-      msg
+      spacesStore,
+      msg,
+      clientService,
     })
   )
 
   clientService.sseAuthenticated.addEventListener(MESSAGE_TYPE.FILE_UNLOCKED, (msg) =>
     onSSEFileUnlockedEvent({
       resourcesStore,
-      msg
+      spacesStore,
+      msg,
+      clientService,
     })
   )
 }
