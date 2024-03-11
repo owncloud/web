@@ -24,7 +24,7 @@ export const useDownloadFile = (options?: DownloadFileOptions) => {
         triggerDownloadWithFilename(file.downloadURL, file.name)
       } catch (e) {
         console.error(e)
-        store.dispatch('showErrorMessage', {
+        showErrorMessage({
           title: $gettext('Download failed'),
           desc: $gettext('File could not be located'),
           errors: [e]
