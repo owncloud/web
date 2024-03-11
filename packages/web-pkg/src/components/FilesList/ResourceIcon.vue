@@ -9,7 +9,7 @@
 </template>
 
 <script lang="ts">
-import { computed, defineComponent, inject, nextTick, PropType, ref, unref, watch } from 'vue'
+import { computed, defineComponent, inject, PropType, unref } from 'vue'
 import { Resource } from '@ownclouders/web-client'
 import { AVAILABLE_SIZES } from 'design-system/src/helpers/constants'
 import {
@@ -96,43 +96,6 @@ export default defineComponent({
       }
     })
 
-    watch([() => props.size, iconLoaded], async () => {
-      await nextTick()
-
-      if (!unref(iconLoaded)) {
-        return false
-      }
-
-      const iconBoundingClientRect = unref(iconRef)?.$el?.getBoundingClientRect()
-      if (!iconBoundingClientRect) {
-        return
-      }
-
-      const innerIconBoundingClientRect = unref(iconRef)
-        ?.$el?.getElementsByTagName('g')?.[0]
-        ?.getBoundingClientRect()
-      if (!innerIconBoundingClientRect) {
-        return
-      }
-
-      const iconOffsetHeight =
-        (iconBoundingClientRect.height - innerIconBoundingClientRect.height) / 2
-      const iconOffsetWidth = (iconBoundingClientRect.width - innerIconBoundingClientRect.width) / 2
-
-      const badgeBoundingClientRect = unref(badgeRef)?.getBoundingClientRect()
-      if (!badgeBoundingClientRect) {
-        return
-      }
-
-      const badgeBottom = iconOffsetHeight - badgeBoundingClientRect.height / 3
-      const badgeRight = iconOffsetWidth - badgeBoundingClientRect.width / 1.8
-
-      badgeStyle.value = {
-        right: `${badgeRight}px`,
-        bottom: `${badgeBottom}px`
-      }
-    })
-
     const iconTypeClass = computed(() => {
       if (unref(isSpace)) {
         return 'oc-resource-icon-space'
@@ -143,42 +106,9 @@ export default defineComponent({
       return 'oc-resource-icon-file'
     })
 
-    const badgeIconSize = computed(() => {
-      if (['xxxlarge', 'xxlarge'].includes(props.size)) {
-        return 'medium'
-      }
-
-      return 'xsmall'
-    })
-
-    const badgeIconAttrs = computed(() => {
-      if (props.resource.locked) {
-        return {
-          name: 'lock',
-          fillType: 'fill',
-          size: unref(badgeIconSize)
-        }
-      }
-      if (props.resource.processing) {
-        return {
-          name: 'loop-right',
-          fillType: 'line',
-          size: unref(badgeIconSize)
-        }
-      }
-
-      return {}
-    })
-
     return {
       icon,
-      iconRef,
-      badgeRef,
-      badgeStyle,
-      iconTypeClass,
-      badgeIconAttrs,
-      badgeIconSize,
-      iconLoaded
+      iconTypeClass
     }
   }
 })
