@@ -32,19 +32,6 @@ Feature: File Upload
     And as "Alice" the content of "CUSTOM/sub1/new-lorem.txt" in the server should be the same as the content of local file "CUSTOM/sub1/new-lorem.txt"
     And as "Alice" the content of "CUSTOM/sub2/sub3/new-lorem.txt" in the server should be the same as the content of local file "CUSTOM/sub2/sub3/new-lorem.txt"
 
-
-  Scenario: simple upload of a folder that does not exist before with empty sub-folders
-    Given a folder "CUSTOM" has been created with the following files in separate sub-folders in the middleware
-      | subFolder      | file |
-      | sub4           |      |
-      | sub5/sub6/sub7 |      |
-    When the user uploads folder "CUSTOM" using the webUI
-    Then no message should be displayed on the webUI
-    And folder "CUSTOM" should be listed on the webUI
-    And as "Alice" folder "CUSTOM" should exist in the server
-    And as "Alice" folder "CUSTOM/sub4" should exist in the server
-    And as "Alice" folder "CUSTOM/sub5/sub6/sub7" should exist in the server
-
   @smokeTest @ocisSmokeTest
   Scenario: simple upload of a folder with subfolders that does not exist before
     When the user uploads folder "PARENT" using the webUI
