@@ -77,7 +77,7 @@ To run a particular test, simply add the feature file and line number to the tes
 
 Various options are available via ENV variables, e.g.
 
-- `BASIC_AUTH=true` use basic authorization for api requests. 
+- `BASIC_AUTH=true` use basic authorization for api requests.
 - `RETRY=n` to retry failures `n` times
 - `SLOW_MO=n` to slow the execution time by `n` milliseconds
 - `TIMEOUT=n` to set tests to timeout after `n` milliseconds
@@ -98,6 +98,22 @@ To then open e.g. the tracing from the `REPORT_DIR`, run
 ```shell
 $ npx playwright show-trace path/to/file.zip
 ```
+
+#### Lint E2E Test Code
+
+Run the following command to find out the lint issues early in the test codes:
+
+```shell
+$ pnpm lint
+```
+
+And to fix the lint problems run the following command:
+
+```shell
+$ pnpm lint --fix
+```
+
+If the lint problems are not fixed by `--fix` option, we have to manually fix the code.
 
 ### Acceptance Tests (Nightwatch)
 

@@ -223,9 +223,8 @@ When(
 )
 
 When(
-  '{string} downloads the space {string}',
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  async function (this: World, stepUser: string, space: string): Promise<void> {
+  /^"([^"]*)" downloads the space (?:"[^"]*")$/,
+  async function (this: World, stepUser: string): Promise<void> {
     const { page } = this.actorsEnvironment.getActor({ key: stepUser })
     const spacesObject = new objects.applicationFiles.Spaces({ page })
     const downloadedResource = await spacesObject.downloadSpace()
