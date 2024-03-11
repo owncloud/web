@@ -11,7 +11,9 @@ E2E_COMMAND="pnpm test:e2e:cucumber" # run command defined in package.json
 ALL_SUITES=$(find "${FEATURES_DIR}"/ -type d | sort | rev | cut -d"/" -f1 | rev | grep -v '^[[:space:]]*$')
 FILTER_SUITES=""
 EXCLUDE_SUITES=""
-SUITE_FEATURE_PATHS=""
+FEATURE_PATHS=""
+GLOB_FEATURE_PATHS=""
+FEATURE_PATHS_FROM_ARG=""
 
 SKIP_RUN_PARTS=true
 RUN_PART=""
@@ -63,7 +65,7 @@ while [[ $# -gt 0 ]]; do
             echo "$HELP_COMMAND"
             exit 1
         fi
-        SUITE_FEATURE_PATHS+=" $1" # maintain the white space
+        FEATURE_PATHS_FROM_ARG+=" $1" # maintain the white space
         shift
         ;;
     esac
@@ -74,7 +76,7 @@ function getFeaturePaths() {
     paths=$(echo "$1" | xargs)
     real_paths=""
     for path in $paths; do
-        real_paths+=" $SCRIPT_PATH/$path"
+        real_paths+=" $SCRIPT_PATH/$path" # maintain the white space
         a_path=$(echo "$path" | cut -d ":" -f1)
         if [[ ! -f $a_path && ! -d $a_path ]]; then
             echo "ERR: File or folder doesn't exist: '$a_path'"
@@ -82,7 +84,7 @@ function getFeaturePaths() {
             exit 1
         fi
     done
-    SUITE_FEATURE_PATHS=$real_paths
+    FEATURE_PATHS=$(echo "$real_paths" | xargs) # remove trailing white spaces
 }
 
 function runE2E() {
@@ -90,7 +92,12 @@ function runE2E() {
         echo "ERR: Project root doesn't exist: '$PROJECT_ROOT'"
     fi
     cd "$PROJECT_ROOT" || exit 1
-    $E2E_COMMAND # run e2e test
+    if [[ -n $GLOB_FEATURE_PATHS ]]; then
+        $E2E_COMMAND "$GLOB_FEATURE_PATHS" # run without expanding glob pattern
+    else
+        # shellcheck disable=SC2086
+        $E2E_COMMAND $FEATURE_PATHS
+    fi
     exit $?
 }
 
@@ -116,13 +123,12 @@ function buildSuitesPattern() {
     if [[ $CURRENT_SUITES_COUNT -gt 1 ]]; then
         suites="{$suites}"
     fi
-    E2E_COMMAND+=" $FEATURES_DIR/$suites/**/*.feature" # maintain the white space
+    GLOB_FEATURE_PATHS="$FEATURES_DIR/$suites/**/*.feature"
 }
 
 # 1. [RUN E2E] run features from provided paths
-if [[ -n $SUITE_FEATURE_PATHS && "$SKIP_RUN_PARTS" == true ]]; then
-    getFeaturePaths "$SUITE_FEATURE_PATHS"
-    E2E_COMMAND+=" $SUITE_FEATURE_PATHS" # maintain the white space
+if [[ -n $FEATURE_PATHS_FROM_ARG && "$SKIP_RUN_PARTS" == true ]]; then
+    getFeaturePaths "$FEATURE_PATHS_FROM_ARG"
     echo "INFO: Running e2e using paths. All cli options will be discarded"
     runE2E
 fi
