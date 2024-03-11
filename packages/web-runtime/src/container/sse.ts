@@ -24,10 +24,10 @@ type SSEMessageData = {
 
 const itemInCurrentFolder = ({
   resourcesStore,
-  sseData
+  parentFolderId
 }: {
   resourcesStore: ResourcesStore
-  sseData: SSEMessageData
+  parentFolderId: string
 }) => {
   const currentFolder = resourcesStore.currentFolder
   if (!currentFolder) {
@@ -36,11 +36,11 @@ const itemInCurrentFolder = ({
 
   if (!extractNodeId(currentFolder.id)) {
     // if we don't have a nodeId here, we have a space (root) as current folder and can only check against the storageId
-    if (currentFolder.id !== extractStorageId(sseData.parentitemid)) {
+    if (currentFolder.id !== extractStorageId(parentFolderId)) {
       return false
     }
   } else {
-    if (currentFolder.id !== sseData.parentitemid) {
+    if (currentFolder.id !== parentFolderId) {
       return false
     }
   }
@@ -63,18 +63,11 @@ export const onSSEItemRenamedEvent = async ({
 }) => {
   try {
     const sseData = fileReadyEventSchema.parse(JSON.parse(msg.data))
-
     const currentFolder = resourcesStore.currentFolder
     const resourceIsCurrentFolder = currentFolder.id === sseData.itemid
-
-    if (!resourceIsCurrentFolder && !itemInCurrentFolder({ resourcesStore, sseData })) {
-      return false
-    }
-
     const resource = resourceIsCurrentFolder
       ? currentFolder
       : resourcesStore.resources.find((f) => f.id === sseData.itemid)
-
     const space = spacesStore.spaces.find((s) => s.id === resource.storageId)
 
     if (!resource || !space) {
@@ -97,7 +90,7 @@ export const onSSEItemRenamedEvent = async ({
 
     resourcesStore.upsertResource(updatedResource)
   } catch (e) {
-    console.error('Unable to parse sse event item renamed data', e)
+    console.error('Unable to parse sse event item-renamed data', e)
   }
 }
 
@@ -114,11 +107,6 @@ export const onSSEFileLockedEvent = async ({
 }) => {
   try {
     const sseData = fileReadyEventSchema.parse(JSON.parse(msg.data))
-
-    if (!itemInCurrentFolder({ resourcesStore, sseData })) {
-      return false
-    }
-
     const resource = resourcesStore.resources.find((f) => f.id === sseData.itemid)
     const space = spacesStore.spaces.find((s) => s.id === resource.storageId)
 
@@ -140,7 +128,7 @@ export const onSSEFileLockedEvent = async ({
       })
     })
   } catch (e) {
-    console.error('Unable to parse sse event file locked data', e)
+    console.error('Unable to parse sse event file-locked data', e)
   }
 }
 
@@ -157,11 +145,6 @@ export const onSSEFileUnlockedEvent = async ({
 }) => {
   try {
     const sseData = fileReadyEventSchema.parse(JSON.parse(msg.data))
-
-    if (!itemInCurrentFolder({ resourcesStore, sseData })) {
-      return false
-    }
-
     const resource = resourcesStore.resources.find((f) => f.id === sseData.itemid)
     const space = spacesStore.spaces.find((s) => s.id === resource.storageId)
 
@@ -183,7 +166,7 @@ export const onSSEFileUnlockedEvent = async ({
       })
     })
   } catch (e) {
-    console.error('Unable to parse sse event file unlocked data', e)
+    console.error('Unable to parse sse event file-unlocked data', e)
   }
 }
 
@@ -207,7 +190,7 @@ export const onSSEProcessingFinishedEvent = async ({
   try {
     const sseData = fileReadyEventSchema.parse(JSON.parse(msg.data))
 
-    if (!itemInCurrentFolder({ resourcesStore, sseData })) {
+    if (!itemInCurrentFolder({ resourcesStore, parentFolderId: sseData.parentitemid })) {
       return false
     }
 
