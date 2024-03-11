@@ -11,8 +11,6 @@ import PQueue from 'p-queue'
 import { extractNodeId, extractStorageId } from '@ownclouders/web-client/src/helpers'
 import { z } from 'zod'
 import { Router } from 'vue-router'
-import { unref } from 'vue'
-import { storeToRefs } from 'pinia'
 
 const fileReadyEventSchema = z.object({
   itemid: z.string(),
