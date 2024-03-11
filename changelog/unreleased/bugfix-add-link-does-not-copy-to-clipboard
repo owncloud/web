@@ -1,0 +1,7 @@
+Bugfix: Add link in right sidebar sharing menu, doesn't copy link to clipboard
+
+We've fixed a bug, where clicking the add link button in the right sidebar sharing menu,
+created a new link but didn't copy it to the clipboard.
+
+https://github.com/owncloud/web/pull/10573
+https://github.com/owncloud/web/issues/10563
