@@ -15,6 +15,7 @@
       :aria-labelledby="accessibleLabel === '' ? null : svgTitleId"
       :focusable="accessibleLabel === '' ? 'false' : null"
       :style="color !== '' ? { fill: color } : {}"
+      @loaded="$emit('loaded')"
     />
   </component>
 </template>
@@ -86,6 +87,7 @@ export default defineComponent({
   components: {
     InlineSvg
   },
+  inheritAttrs: true,
   props: {
     /**
      * The name of the icon to display.
@@ -155,6 +157,7 @@ export default defineComponent({
       default: ''
     }
   },
+  emits: ['loaded'],
   computed: {
     svgTitleId() {
       return uniqueId('oc-icon-title-')

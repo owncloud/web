@@ -18,7 +18,7 @@ Feature: Integrate with online office suites like Collabora and OnlyOffice
       | OpenDocument.odt | OpenDocument | OpenDocument Content |
     And "Alice" creates a public link creates a public link of following resource using the sidebar panel
       | resource         | role     | password |
-      | OpenDocument.odt | Can edit | %public% |   
+      | OpenDocument.odt | Can edit | %public% |
     And "Alice" logs out
     And "Anonymous" opens the public link "Link"
     And "Anonymous" unlocks the public link with password "%public%"

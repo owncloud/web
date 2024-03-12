@@ -5,7 +5,7 @@
         v-if="isSubPanelActive"
         :resource="resource"
         size="large"
-        class="file_info__icon oc-mr-s"
+        class="file_info__icon oc-mr-s oc-position-relative"
       />
       <div class="file_info__body oc-text-overflow">
         <h3 data-testid="files-info-name" class="oc-font-semibold">
@@ -46,7 +46,10 @@ export default defineComponent({
     const resource = inject<Resource>('resource')
     const areFileExtensionsShown = computed(() => resourcesStore.areFileExtensionsShown)
 
-    return { resource, areFileExtensionsShown }
+    return {
+      resource,
+      areFileExtensionsShown
+    }
   }
 })
 </script>

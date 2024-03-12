@@ -1,0 +1,6 @@
+Bugfix: Public link file download
+
+We've fixed a bug where the download of a file from a public link was not working when the user had logged in already. The download only worked if no user was logged in.
+
+https://github.com/owncloud/web/issues/10473
+https://github.com/owncloud/web/pull/10494

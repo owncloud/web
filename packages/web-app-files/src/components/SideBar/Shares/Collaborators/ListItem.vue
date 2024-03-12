@@ -58,6 +58,7 @@
                   :existing-permissions="share.customPermissions"
                   :existing-role="share.role"
                   :allow-share-permission="hasResharing || isAnySpaceShareType"
+                  :is-locked="isLocked"
                   class="files-collaborators-collaborator-role"
                   mode="edit"
                   @option-change="shareRoleChanged"
@@ -108,6 +109,7 @@
           :share-category="shareCategory"
           :can-edit-or-delete="canEditOrDelete"
           :is-share-denied="isShareDenied"
+          :is-locked="isLocked"
           :deniable="deniable"
           @expiration-date-changed="shareExpirationChanged"
           @remove-share="removeShare"
@@ -180,6 +182,10 @@ export default defineComponent({
       default: ''
     },
     deniable: {
+      type: Boolean,
+      default: false
+    },
+    isLocked: {
       type: Boolean,
       default: false
     }
@@ -526,6 +532,7 @@ export default defineComponent({
     margin-left: var(--oc-space-medium);
   }
 }
+
 .files-collaborators-collaborator-expiration {
   margin-top: 5px;
 }
@@ -533,6 +540,7 @@ export default defineComponent({
 .files-collaborators-collaborator-navigation {
   justify-content: end;
 }
+
 .files-collaborators-collaborator-role {
   max-width: 100%;
 }
