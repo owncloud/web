@@ -59,6 +59,7 @@ export const bootstrapApp = async (configurationPath: string): Promise<void> => 
     spacesStore,
     userStore,
     resourcesStore,
+    messagesStore,
     sharesStore
   } = announcePiniaStores()
 
@@ -192,8 +193,10 @@ export const bootstrapApp = async (configurationPath: string): Promise<void> => 
       // Register SSE event listeners
       if (capabilityStore.supportSSE) {
         registerSSEEventListeners({
+          language: gettext,
           resourcesStore,
           spacesStore,
+          messageStore: messagesStore,
           clientService,
           previewService,
           configStore,

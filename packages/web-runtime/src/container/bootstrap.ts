@@ -27,7 +27,8 @@ import {
   useSharesStore,
   useResourcesStore,
   ResourcesStore,
-  SpacesStore
+  SpacesStore,
+  MessageStore
 } from '@ownclouders/web-pkg'
 import { authService } from '../services/auth'
 import {
@@ -646,15 +647,19 @@ export const announceCustomStyles = ({ configStore }: { configStore?: ConfigStor
 }
 
 export const registerSSEEventListeners = ({
+  language,
   resourcesStore,
   spacesStore,
+  messageStore,
   clientService,
   previewService,
   configStore,
   router
 }: {
+  language: Language
   resourcesStore: ResourcesStore
   spacesStore: SpacesStore
+  messageStore: MessageStore
   clientService: ClientService
   previewService: PreviewService
   configStore: ConfigStore
@@ -717,7 +722,9 @@ export const registerSSEEventListeners = ({
   clientService.sseAuthenticated.addEventListener(MESSAGE_TYPE.ITEM_TRASHED, (msg) =>
     onSSEItemTrashedEvent({
       topic: MESSAGE_TYPE.ITEM_TRASHED,
+      language,
       resourcesStore,
+      messageStore,
       msg
     })
   )

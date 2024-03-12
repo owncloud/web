@@ -3,6 +3,7 @@ import {
   createFileRouteOptions,
   getIndicators,
   ImageDimension,
+  MessageStore,
   PreviewService,
   ResourcesStore,
   SpacesStore
@@ -11,6 +12,7 @@ import PQueue from 'p-queue'
 import { extractNodeId, extractStorageId } from '@ownclouders/web-client/src/helpers'
 import { z } from 'zod'
 import { Router } from 'vue-router'
+import { Language } from 'vue3-gettext'
 
 const fileReadyEventSchema = z.object({
   itemid: z.string(),
@@ -207,15 +209,30 @@ export const onSSEProcessingFinishedEvent = async ({
 
 export const onSSEItemTrashedEvent = ({
   topic,
+  language,
+  messageStore,
   resourcesStore,
   msg
 }: {
   topic: string
+  language: Language
   resourcesStore: ResourcesStore
+  messageStore: MessageStore
   msg: MessageEvent
 }) => {
   try {
     const sseData = fileReadyEventSchema.parse(JSON.parse(msg.data))
+    const currentFolder = resourcesStore.currentFolder
+    const resourceIsCurrentFolder = currentFolder.id === sseData.itemid
+
+    if (resourceIsCurrentFolder) {
+      return messageStore.showMessage({
+        title: language.$gettext(
+          'The folder you were accessing has been removed. Please navigate to another location.'
+        )
+      })
+    }
+
     const resource = resourcesStore.resources.find((f) => f.id === sseData.itemid)
 
     if (!resource) {
@@ -243,10 +260,8 @@ export const onSSEItemRestoredEvent = async ({
 }) => {
   try {
     const sseData = fileReadyEventSchema.parse(JSON.parse(msg.data))
-    console.log(sseData.spaceid)
-    console.log(spacesStore.spaces)
+
     const space = spacesStore.spaces.find((space) => space.id === sseData.spaceid)
-    console.log(space)
     if (!space) {
       return
     }
