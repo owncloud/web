@@ -3,7 +3,6 @@ import { fetchEventSource, FetchEventSourceInit } from '@microsoft/fetch-event-s
 export enum MESSAGE_TYPE {
   NOTIFICATION = 'userlog-notification',
   POSTPROCESSING_FINISHED = 'postprocessing-finished',
-  ITEM_RENAMED = 'item-renamed',
   FILE_LOCKED = 'file-locked',
   FILE_UNLOCKED = 'file-unlocked',
   ITEM_RENAMED = 'item-renamed',

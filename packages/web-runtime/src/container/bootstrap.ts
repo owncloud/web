@@ -716,6 +716,7 @@ export const registerSSEEventListeners = ({
 
   clientService.sseAuthenticated.addEventListener(MESSAGE_TYPE.ITEM_TRASHED, (msg) =>
     onSSEItemTrashedEvent({
+      topic: MESSAGE_TYPE.ITEM_TRASHED,
       resourcesStore,
       msg
     })
@@ -723,6 +724,7 @@ export const registerSSEEventListeners = ({
 
   clientService.sseAuthenticated.addEventListener(MESSAGE_TYPE.ITEM_RESTORED, (msg) =>
     onSSEItemRestoredEvent({
+      topic: MESSAGE_TYPE.ITEM_RESTORED,
       resourcesStore,
       spacesStore,
       msg,

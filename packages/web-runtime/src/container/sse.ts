@@ -1,6 +1,7 @@
 import {
   ClientService,
   createFileRouteOptions,
+  getIndicators,
   ImageDimension,
   PreviewService,
   ResourcesStore,
@@ -13,12 +14,14 @@ import { Router } from 'vue-router'
 
 const fileReadyEventSchema = z.object({
   itemid: z.string(),
-  parentitemid: z.string()
+  parentitemid: z.string(),
+  spaceid: z.string()
 })
 
 type SSEMessageData = {
   itemid?: string
   parentitemid?: string
+  spaceid?: string
 }
 
 const itemInCurrentFolder = ({
@@ -198,14 +201,16 @@ export const onSSEProcessingFinishedEvent = async ({
       // })
     }
   } catch (e) {
-    console.error('Unable to parse sse event postprocessing-finished data', e)
+    console.error(`Unable to parse sse event ${topic} data`, e)
   }
 }
 
 export const onSSEItemTrashedEvent = ({
+  topic,
   resourcesStore,
   msg
 }: {
+  topic: string
   resourcesStore: ResourcesStore
   msg: MessageEvent
 }) => {
@@ -222,17 +227,19 @@ export const onSSEItemTrashedEvent = ({
 
     resourcesStore.removeResources([resource])
   } catch (e) {
-    console.error('Unable to parse sse event item-trashed data', e)
+    console.error(`Unable to parse sse event ${topic} data`, e)
   }
 }
 
 export const onSSEItemRestoredEvent = async ({
+  topic,
   resourcesStore,
   spacesStore,
   msg,
   clientService,
   previewService
 }: {
+  topic: string
   resourcesStore: ResourcesStore
   spacesStore: SpacesStore
   msg: MessageEvent
@@ -284,6 +291,6 @@ export const onSSEItemRestoredEvent = async ({
       })
     }
   } catch (e) {
-    console.error('Unable to parse sse event item-restored data', e)
+    console.error(`Unable to parse sse event ${topic} data`, e)
   }
 }
