@@ -728,8 +728,7 @@ export const registerSSEEventListeners = ({
       resourcesStore,
       spacesStore,
       msg,
-      clientService,
-      previewService
+      clientService
     })
   )
 }

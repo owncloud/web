@@ -15,7 +15,7 @@ import { Router } from 'vue-router'
 const fileReadyEventSchema = z.object({
   itemid: z.string(),
   parentitemid: z.string(),
-  spaceid: z.string()
+  spaceid: z.string().optional()
 })
 
 type SSEMessageData = {
@@ -216,9 +216,6 @@ export const onSSEItemTrashedEvent = ({
 }) => {
   try {
     const sseData = fileReadyEventSchema.parse(JSON.parse(msg.data))
-
-    console.log(resourcesStore.currentFolder)
-
     const resource = resourcesStore.resources.find((f) => f.id === sseData.itemid)
 
     if (!resource) {
@@ -236,21 +233,20 @@ export const onSSEItemRestoredEvent = async ({
   resourcesStore,
   spacesStore,
   msg,
-  clientService,
-  previewService
+  clientService
 }: {
   topic: string
   resourcesStore: ResourcesStore
   spacesStore: SpacesStore
   msg: MessageEvent
   clientService: ClientService
-  previewService: PreviewService
 }) => {
   try {
     const sseData = fileReadyEventSchema.parse(JSON.parse(msg.data))
-
-    const space = spacesStore.personalSpace
-
+    console.log(sseData.spaceid)
+    console.log(spacesStore.spaces)
+    const space = spacesStore.spaces.find((space) => space.id === sseData.spaceid)
+    console.log(space)
     if (!space) {
       return
     }
@@ -276,20 +272,6 @@ export const onSSEItemRestoredEvent = async ({
         ancestorMetaData: resourcesStore.ancestorMetaData
       })
     })
-
-    const preview = await previewService.loadPreview({
-      resource,
-      space,
-      dimensions: ImageDimension.Thumbnail
-    })
-
-    if (preview) {
-      resourcesStore.updateResourceField({
-        id: resource.id,
-        field: 'thumbnail',
-        value: preview
-      })
-    }
   } catch (e) {
     console.error(`Unable to parse sse event ${topic} data`, e)
   }

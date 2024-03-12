@@ -69,6 +69,7 @@ export interface Resource {
   spaceReadmeData?: any
   mimeType?: string
   isFolder?: boolean
+  isTrash?: boolean
   sdate?: string // FIXME: move to `ShareResource`
   mdate?: string
   indicators?: any[]
