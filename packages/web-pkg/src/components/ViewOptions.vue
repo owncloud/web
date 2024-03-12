@@ -76,8 +76,8 @@
             id="tiles-size-slider"
             v-model="viewSizeCurrent"
             type="range"
-            min="1"
-            max="6"
+            :min="1"
+            :max="FolderViewModeConstants.tilesSizeMax"
             class="oc-range"
             data-testid="files-tiles-size-slider"
           />

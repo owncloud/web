@@ -7,7 +7,7 @@ import { mock } from 'vitest-mock-extended'
 vi.mock('../../../../src/composables/viewMode', async (importOriginal) => ({
   ...(await importOriginal<any>()),
   useTileSize: vi.fn().mockReturnValue({
-    tileSizePixels: 100
+    calculateTileSizePixels: vi.fn().mockImplementation((viewSize: number) => 100 * viewSize)
   })
 }))
 
@@ -134,8 +134,9 @@ describe('ResourceTiles component', () => {
     { viewSize: 4, expected: 'xxlarge' },
     { viewSize: 5, expected: 'xxxlarge' },
     { viewSize: 6, expected: 'xxxlarge' }
-  ])('passes the "viewSize" to the OcTile component', (data) => {
+  ])('passes the "viewSize" to the OcTile component', async (data) => {
     const { wrapper } = getWrapper({ resources: spacesResources, viewSize: data.viewSize })
+    await wrapper.vm.$nextTick()
     expect(wrapper.find('resource-tile-stub').attributes('resourceiconsize')).toEqual(data.expected)
   })
 
@@ -143,6 +144,7 @@ describe('ResourceTiles component', () => {
     return {
       wrapper: mount(ResourceTiles, {
         props: {
+          viewSize: 1,
           ...props
         },
         slots: {
