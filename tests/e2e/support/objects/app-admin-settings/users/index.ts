@@ -1,6 +1,8 @@
 import { Page } from '@playwright/test'
 import { UsersEnvironment } from '../../../environment'
 import * as po from './actions'
+import { config } from '../../../../config'
+import { getUserId } from '../../../api/graph'
 
 export class Users {
   #page: Page
@@ -9,17 +11,22 @@ export class Users {
     this.#usersEnvironment = new UsersEnvironment()
     this.#page = page
   }
-  getUUID({ key }: { key: string }): string {
-    return this.#usersEnvironment.getCreatedUser({ key }).uuid
+  async getUUID({ key }: { key: string }): Promise<string> {
+    if (config.keycloak) {
+      const user = this.#usersEnvironment.getUser({ key })
+      const admin = this.#usersEnvironment.getUser({ key: 'admin' })
+      return await getUserId({ user, admin })
+    } else {
+      return this.#usersEnvironment.getCreatedUser({ key }).uuid
+    }
   }
-
   async allowLogin({ key, action }: { key: string; action: string }): Promise<void> {
-    const uuid = this.getUUID({ key })
+    const uuid = await this.getUUID({ key })
     await po.openEditPanel({ page: this.#page, uuid, action })
     await po.changeAccountEnabled({ uuid, value: true, page: this.#page })
   }
   async forbidLogin({ key, action }: { key: string; action: string }): Promise<void> {
-    const uuid = this.getUUID({ key })
+    const uuid = await this.getUUID({ key })
     await po.openEditPanel({ page: this.#page, uuid, action })
     await po.changeAccountEnabled({ uuid, value: false, page: this.#page })
   }
@@ -32,27 +39,33 @@ export class Users {
     value: string
     action: string
   }): Promise<void> {
-    const uuid = this.getUUID({ key })
+    const uuid = await this.getUUID({ key })
     await po.openEditPanel({ page: this.#page, uuid, action })
     await po.changeQuota({ uuid, value, page: this.#page })
   }
+
   async selectUser({ key }: { key: string }): Promise<void> {
-    await po.selectUser({ page: this.#page, uuid: this.getUUID({ key }) })
+    const uuid = await this.getUUID({ key })
+    await po.selectUser({ page: this.#page, uuid })
   }
   async changeQuotaUsingBatchAction({
     value,
-    userIds
+    users
   }: {
     value: string
-    userIds: string[]
+    users: string[]
   }): Promise<void> {
+    const userIds = []
+    for (const user of users) {
+      userIds.push(await this.getUUID({ key: user }))
+    }
     await po.changeQuotaUsingBatchAction({ page: this.#page, value, userIds })
   }
   getDisplayedUsers(): Promise<string[]> {
     return po.getDisplayedUsers({ page: this.#page })
   }
   async select({ key }: { key: string }): Promise<void> {
-    await po.selectUser({ page: this.#page, uuid: this.getUUID({ key }) })
+    await po.selectUser({ page: this.#page, uuid: await this.getUUID({ key }) })
   }
   async addToGroupsBatchAtion({
     userIds,
@@ -86,7 +99,7 @@ export class Users {
     value: string
     action: string
   }): Promise<void> {
-    const uuid = this.getUUID({ key })
+    const uuid = await this.getUUID({ key })
 
     await po.openEditPanel({ page: this.#page, uuid, action })
     await po.changeUser({ uuid, attribute: attribute, value: value, page: this.#page })
@@ -109,7 +122,7 @@ export class Users {
     groups: string[]
     action: string
   }): Promise<void> {
-    const uuid = this.getUUID({ key })
+    const uuid = await this.getUUID({ key })
     await po.openEditPanel({ page: this.#page, uuid, action })
     await po.addUserToGroups({ page: this.#page, userId: uuid, groups })
   }
@@ -122,12 +135,12 @@ export class Users {
     groups: string[]
     action: string
   }): Promise<void> {
-    const uuid = this.getUUID({ key })
+    const uuid = await this.getUUID({ key })
     await po.openEditPanel({ page: this.#page, uuid, action })
     await po.removeUserFromGroups({ page: this.#page, userId: uuid, groups })
   }
   async deleteUserUsingContextMenu({ key }: { key: string }): Promise<void> {
-    await po.deleteUserUsingContextMenu({ page: this.#page, uuid: this.getUUID({ key }) })
+    await po.deleteUserUsingContextMenu({ page: this.#page, uuid: await this.getUUID({ key }) })
   }
   async deleteUserUsingBatchAction({ userIds }: { userIds: string[] }): Promise<void> {
     await po.deleteUserUsingBatchAction({ page: this.#page, userIds })
@@ -158,7 +171,7 @@ export class Users {
   }
 
   async openEditPanel({ key, action }: { key: string; action: string }): Promise<void> {
-    await po.openEditPanel({ page: this.#page, uuid: this.getUUID({ key }), action })
+    await po.openEditPanel({ page: this.#page, uuid: await this.getUUID({ key }), action })
   }
 
   async waitForEditPanelToBeVisible(): Promise<void> {
