@@ -22,6 +22,7 @@ Summary
 * Enhancement - Highlight search term in sharing autosuggest list: [#10485](https://github.com/owncloud/web/pull/10485)
 * Enhancement - Warn user before closing browser when upload is in progress: [#10519](https://github.com/owncloud/web/pull/10519)
 * Enhancement - Show locked and processing next to other status indicators: [#10544](https://github.com/owncloud/web/pull/10544)
+* Enhancement - Set emoji as space icon: [#10546](https://github.com/owncloud/web/pull/10546)
 
 Details
 -------
@@ -156,6 +157,15 @@ Details
 
    https://github.com/owncloud/web/issues/10538
    https://github.com/owncloud/web/pull/10544
+
+* Enhancement - Set emoji as space icon: [#10546](https://github.com/owncloud/web/pull/10546)
+
+   We've added a new feature to set emojis as space icon, to do so, the user needs
+   to click on the 'Set icon' button in the context menu of the respective space
+   and has to select an emoji from the emoji picker.
+
+   https://github.com/owncloud/web/issues/10471
+   https://github.com/owncloud/web/pull/10546
 
 Changelog for ownCloud Web [8.0.0] (2024-03-08)
 =======================================
