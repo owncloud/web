@@ -28,7 +28,7 @@ Feature: spaces public link
       | David | Can manage | space     |
     And "Alice" navigates to the projects space page
     And "Alice" navigates to the project space "team.1"
-    And "Alice" uploads the following resources via drag-n-drop
+    And "Alice" uploads the following resources
       | resource       |
       | simple.pdf     |
       | testavatar.jpg |

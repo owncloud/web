@@ -45,10 +45,10 @@ Feature: link
       | lorem.txt     | lorem_new.txt    |
       | textfile.txt  | textfile_new.txt |
       | new-lorem.txt | test.txt         |
-#    currently upload folder feature is not available in playwright
-#    And "Anonymous" uploads the following resources in public link page
-#      | resource              |
-#      | filesForUpload/PARENT |
+    #    currently upload folder feature is not available in playwright
+    #    And "Anonymous" uploads the following resources in public link page
+    #      | resource              |
+    #      | filesForUpload/PARENT |
     And "Alice" removes the public link named "myPublicLink" of resource "folderPublic"
     And "Anonymous" should not be able to open the old link "myPublicLink"
     And "Alice" logs out
@@ -86,10 +86,10 @@ Feature: link
       | pathToFile                    | content   |
       | folderPublic/shareToBrian.txt | some text |
       | folderPublic/shareToBrian.md  | readme    |
-    And "Alice" uploads the following local file into personal space using API
-      | localFile                     | to             |
-      | filesForUpload/simple.pdf     | simple.pdf     |
-      | filesForUpload/testavatar.jpg | testavatar.jpg |
+    And "Alice" uploads the following resource
+      | resource       |
+      | simple.pdf     |
+      | testavatar.jpg |
     And "Alice" shares the following resource using API
       | resource       | recipient | type | role     |
       | folderPublic   | Brian     | user | Can edit |
@@ -143,6 +143,7 @@ Feature: link
     And "Brian" closes the file viewer
     When "Brian" opens the public link "imageLink"
     And "Brian" unlocks the public link with password "%public%"
+    # https://github.com/owncloud/ocis/issues/8602
     Then "Brian" is in a image-viewer
     And "Brian" closes the file viewer
     And "Brian" logs out
@@ -169,9 +170,34 @@ Feature: link
     And "Carol" closes the file viewer
     When "Carol" opens the public link "imageLink"
     And "Carol" unlocks the public link with password "%public%"
+    # https://github.com/owncloud/ocis/issues/8602
     Then "Carol" is in a image-viewer
     And "Carol" closes the file viewer
     And "Carol" logs out
+
+    # Anonymous user
+    When "Anonymous" opens the public link "folderLink"
+    And "Anonymous" unlocks the public link with password "%public%"
+    And "Anonymous" downloads the following public link resources using the sidebar panel
+      | resource  | type |
+      | lorem.txt | file |
+    When "Anonymous" opens the public link "textLink"
+    And "Anonymous" unlocks the public link with password "%public%"
+    Then "Anonymous" is in a text-editor
+    And "Anonymous" closes the file viewer
+    When "Anonymous" opens the public link "markdownLink"
+    And "Anonymous" unlocks the public link with password "%public%"
+    Then "Anonymous" is in a text-editor
+    And "Anonymous" closes the file viewer
+    When "Anonymous" opens the public link "pdfLink"
+    And "Anonymous" unlocks the public link with password "%public%"
+    Then "Anonymous" is in a pdf-viewer
+    And "Anonymous" closes the file viewer
+    When "Anonymous" opens the public link "imageLink"
+    And "Anonymous" unlocks the public link with password "%public%"
+    # https://github.com/owncloud/ocis/issues/8602
+    Then "Anonymous" is in a image-viewer
+    And "Anonymous" closes the file viewer
 
 
   Scenario: add banned password for public link

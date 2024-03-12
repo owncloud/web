@@ -12,6 +12,7 @@ Feature: Upload
     And "Admin" opens the "admin-settings" app
     And "Admin" navigates to the users management page
     When "Admin" changes the quota of the user "Alice" to "0.00001" using the sidebar panel
+    And "Admin" logs out
     And "Alice" opens the "files" app
 
 
