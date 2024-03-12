@@ -5,6 +5,7 @@ NOTIFICATIONS = 3
 
 ALPINE_GIT = "alpine/git:latest"
 APACHE_TIKA = "apache/tika:2.8.0.0"
+KEYCLOAK = "quay.io/keycloak/keycloak:22.0.4"
 MINIO_MC = "minio/mc:RELEASE.2021-10-07T04-19-58Z"
 OC_CI_ALPINE = "owncloudci/alpine:latest"
 OC_CI_BAZEL_BUILDIFIER = "owncloudci/bazel-buildifier"
@@ -25,6 +26,7 @@ PLUGINS_GITHUB_RELEASE = "plugins/github-release:1"
 PLUGINS_S3 = "plugins/s3"
 PLUGINS_S3_CACHE = "plugins/s3-cache:1"
 PLUGINS_SLACK = "plugins/slack:1"
+POSTGRES_ALPINE = "postgres:alpine3.18"
 SELENIUM_STANDALONE_CHROME = "selenium/standalone-chrome:104.0-20220812"
 SELENIUM_STANDALONE_FIREFOX = "selenium/standalone-firefox:104.0-20220812"
 SONARSOURCE_SONAR_SCANNER_CLI = "sonarsource/sonar-scanner-cli:5.0"
@@ -300,7 +302,8 @@ def stagePipelines(ctx):
     unit_test_pipelines = unitTests(ctx)
     e2e_pipelines = e2eTests(ctx)
     acceptance_pipelines = acceptance(ctx)
-    return unit_test_pipelines + pipelinesDependsOn(e2e_pipelines + acceptance_pipelines, unit_test_pipelines)
+    keycloak_pipelines = e2eTestsOnKeycloak(ctx)
+    return unit_test_pipelines + pipelinesDependsOn(e2e_pipelines + keycloak_pipelines + acceptance_pipelines, unit_test_pipelines)
 
 def afterPipelines(ctx):
     return build(ctx) + pipelinesDependsOn(notify(), build(ctx))
@@ -1207,6 +1210,18 @@ def ocisService(type, tika_enabled = False, enforce_password_public_link = False
         "FRONTEND_OCS_ENABLE_DENIALS": True,
         "FRONTEND_PASSWORD_POLICY_BANNED_PASSWORDS_LIST": "%s/tests/drone/banned-passwords.txt" % dir["web"],
     }
+    if type == "keycloak":
+        environment["PROXY_AUTOPROVISION_ACCOUNTS"] = "true"
+        environment["PROXY_ROLE_ASSIGNMENT_DRIVER"] = "oidc"
+        environment["OCIS_OIDC_ISSUER"] = "https://keycloak:8443/realms/oCIS"
+        environment["PROXY_OIDC_REWRITE_WELLKNOWN"] = "true"
+        environment["WEB_OIDC_CLIENT_ID"] = "web"
+        environment["PROXY_USER_OIDC_CLAIM"] = "preferred_username"
+        environment["PROXY_USER_CS3_CLAIM"] = "username"
+        environment["OCIS_ADMIN_USER_ID"] = ""
+        environment["OCIS_EXCLUDE_RUN_SERVICES"] = "idp"
+        environment["GRAPH_ASSIGN_DEFAULT_USER_ROLE"] = "false"
+        environment["GRAPH_USERNAME_MATCH"] = "none"
     if type == "app-provider":
         environment["GATEWAY_GRPC_ADDR"] = "0.0.0.0:9142"
         environment["MICRO_REGISTRY"] = "nats-js-kv"
@@ -2168,3 +2183,150 @@ def appProviderService(name):
             ],
         },
     ]
+
+def postgresService():
+    return [
+        {
+            "name": "postgres",
+            "image": POSTGRES_ALPINE,
+            "environment": {
+                "POSTGRES_DB": "keycloak",
+                "POSTGRES_USER": "keycloak",
+                "POSTGRES_PASSWORD": "keycloak",
+            },
+        },
+    ]
+
+def keycloakService():
+    return [
+        {
+            "name": "generate-keycloak-certs",
+            "image": OC_UBUNTU,
+            "commands": [
+                "apt install openssl -y",
+                "mkdir keycloak-certs",
+                "openssl req -x509 -newkey rsa:2048 -keyout keycloak-certs/keycloakkey.pem -out keycloak-certs/keycloakcrt.pem -nodes -days 365 -subj '/CN=keycloak'",
+                "chmod -R 777 keycloak-certs",
+            ],
+            "volumes": [
+                {
+                    "name": "certs",
+                    "path": "/keycloak-certs",
+                },
+            ],
+        },
+        {
+            "name": "wait-for-postgres",
+            "image": OC_CI_WAIT_FOR,
+            "commands": [
+                "wait-for -it postgres:5432 -t 300",
+            ],
+        },
+        {
+            "name": "keycloak",
+            "image": KEYCLOAK,
+            "detach": True,
+            "environment": {
+                "OCIS_DOMAIN": "ocis:9200",
+                "KC_HOSTNAME": "keycloak:8443",
+                "KC_DB": "postgres",
+                "KC_DB_URL": "jdbc:postgresql://postgres:5432/keycloak",
+                "KC_DB_USERNAME": "keycloak",
+                "KC_DB_PASSWORD": "keycloak",
+                "KC_FEATURES": "impersonation",
+                "KEYCLOAK_ADMIN": "admin",
+                "KEYCLOAK_ADMIN_PASSWORD": "admin",
+                "KC_HTTPS_CERTIFICATE_FILE": "./keycloak-certs/keycloakcrt.pem",
+                "KC_HTTPS_CERTIFICATE_KEY_FILE": "./keycloak-certs/keycloakkey.pem",
+            },
+            "commands": [
+                "mkdir -p /opt/keycloak/data/import",
+                "cp tests/drone/ocis_keycloak/ocis-ci-realm.dist.json /opt/keycloak/data/import/ocis-realm.json",
+                "/opt/keycloak/bin/kc.sh start-dev --proxy edge --spi-connections-http-client-default-disable-trust-manager=false --import-realm --health-enabled=true",
+            ],
+            "volumes": [
+                {
+                    "name": "certs",
+                    "path": "/keycloak-certs",
+                },
+            ],
+        },
+        {
+            "name": "wait-for-keycloak",
+            "image": OC_CI_WAIT_FOR,
+            "commands": [
+                "wait-for -it keycloak:8443 -t 300",
+            ],
+        },
+    ]
+
+def e2eTestsOnKeycloak(ctx):
+    e2e_volumes = [
+        {
+            "name": "uploads",
+            "temp": {},
+        },
+        {
+            "name": "configs",
+            "temp": {},
+        },
+        {
+            "name": "gopath",
+            "temp": {},
+        },
+        {
+            "name": "ocis-config",
+            "temp": {},
+        },
+        {
+            "name": "certs",
+            "temp": {},
+        },
+    ]
+    if not "full-ci" in ctx.build.title.lower() and ctx.build.event != "cron":
+        return []
+
+    return [{
+        "kind": "pipeline",
+        "type": "docker",
+        "name": "e2e-test-on-keycloak",
+        "workspace": web_workspace,
+        "steps": restoreBuildArtifactCache(ctx, "pnpm", ".pnpm-store") +
+                 restoreBuildArtifactCache(ctx, "playwright", ".playwright") +
+                 installPnpm() +
+                 installPlaywright() +
+                 keycloakService() +
+                 restoreBuildArtifactCache(ctx, "web-dist", "dist") +
+                 setupServerConfigureWeb("2") +
+                 restoreOcisCache() +
+                 ocisService("keycloak") +
+                 [
+                     {
+                         "name": "e2e-tests",
+                         "image": OC_CI_NODEJS,
+                         "environment": {
+                             "BASE_URL_OCIS": "ocis:9200",
+                             "HEADLESS": "true",
+                             "RETRY": "1",
+                             "REPORT_TRACING": "true",
+                             "KEYCLOAK": "true",
+                             "KEYCLOAK_HOST": "keycloak:8443",
+                         },
+                         "commands": [
+                             "pnpm test:e2e:cucumber tests/e2e/cucumber/features/journeys",
+                         ],
+                     },
+                 ] +
+                 uploadTracingResult(ctx) +
+                 logTracingResult(ctx, "e2e-tests keycloack-journey-suite"),
+        "services": postgresService(),
+        "volumes": e2e_volumes,
+        "trigger": {
+            "ref": [
+                "refs/heads/master",
+                "refs/heads/stable-*",
+                "refs/tags/**",
+                "refs/pull/**",
+            ],
+        },
+    }]
