@@ -5,19 +5,23 @@
       <span v-if="!existingRole" v-text="inviteLabel" />
       <span v-else>{{ $gettext(selectedRole.label) }}</span>
     </span>
-    <oc-button
-      v-else
-      :id="roleButtonId"
-      class="files-recipient-role-select-btn"
-      appearance="raw"
-      gap-size="none"
-      :aria-label="mode === 'create' ? $gettext('Select permission') : $gettext('Edit permission')"
-    >
-      <oc-icon v-if="showIcon" :name="selectedRole.icon" class="oc-mr-s" />
-      <span v-if="!existingRole" class="oc-text-truncate" v-text="inviteLabel" />
-      <span v-else class="oc-text-truncate" v-text="$gettext(selectedRole.label)" />
-      <oc-icon name="arrow-down-s" />
-    </oc-button>
+    <div v-else v-oc-tooltip="dropButtonTooltip">
+      <oc-button
+        :id="roleButtonId"
+        class="files-recipient-role-select-btn"
+        appearance="raw"
+        gap-size="none"
+        :disabled="isLocked"
+        :aria-label="
+          mode === 'create' ? $gettext('Select permission') : $gettext('Edit permission')
+        "
+      >
+        <oc-icon v-if="showIcon" :name="selectedRole.icon" class="oc-mr-s" />
+        <span v-if="!existingRole" class="oc-text-truncate" v-text="inviteLabel" />
+        <span v-else class="oc-text-truncate" v-text="$gettext(selectedRole.label)" />
+        <oc-icon name="arrow-down-s" />
+      </oc-button>
+    </div>
     <oc-drop
       v-if="availableRoles.length > 1"
       ref="rolesDrop"
@@ -124,10 +128,11 @@ import {
   SpacePeopleShareRoles
 } from '@ownclouders/web-client/src/helpers/share'
 import * as uuid from 'uuid'
-import { defineComponent, inject, PropType, ComponentPublicInstance } from 'vue'
+import { defineComponent, inject, PropType, ComponentPublicInstance, computed } from 'vue'
 import { useAbility, useUserStore, useCapabilityStore } from '@ownclouders/web-pkg'
 import { Resource } from '@ownclouders/web-client'
 import { OcDrop } from 'design-system/src/components'
+import { useGettext } from 'vue3-gettext'
 
 export default defineComponent({
   name: 'RoleDropdown',
@@ -160,20 +165,33 @@ export default defineComponent({
     showIcon: {
       type: Boolean,
       default: false
+    },
+    isLocked: {
+      type: Boolean,
+      default: false
     }
   },
   emits: ['optionChange'],
-  setup() {
+  setup(props) {
     const capabilityStore = useCapabilityStore()
     const capabilityRefs = storeToRefs(capabilityStore)
     const ability = useAbility()
     const userStore = useUserStore()
-
     const { user } = storeToRefs(userStore)
+    const { $gettext } = useGettext()
+
+    const dropButtonTooltip = computed(() => {
+      if (props.isLocked) {
+        return $gettext('Resource is temporarily locked, unable to manage share')
+      }
+
+      return ''
+    })
 
     return {
       ability,
       user,
+      dropButtonTooltip,
       resource: inject<Resource>('resource'),
       incomingParentShare: inject<Share>('incomingParentShare'),
       hasRoleCustomPermissions: capabilityRefs.sharingAllowCustom,

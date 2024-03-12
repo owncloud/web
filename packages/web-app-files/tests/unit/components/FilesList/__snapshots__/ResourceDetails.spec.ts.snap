@@ -4,7 +4,7 @@ exports[`ResourceDetails component > renders resource details correctly 1`] = `
 "<div class="resource-details oc-flex oc-flex-column oc-flex-middle">
   <div class="oc-width-1-3@l oc-width-1-2@m oc-width-3-4">
     <div class="file_info oc-flex oc-flex-between oc-p-s">
-      <div class="oc-flex oc-flex-middle"><span class="oc-icon oc-icon-l oc-icon-passive oc-resource-icon oc-resource-icon-folder file_info__icon oc-mr-s"><!----></span>
+      <div class="oc-flex oc-flex-middle"><span class="oc-icon oc-icon-l oc-icon-passive oc-resource-icon oc-resource-icon-folder file_info__icon oc-mr-s oc-position-relative"><!----></span>
         <div class="file_info__body oc-text-overflow">
           <h3 data-testid="files-info-name" class="oc-font-semibold"><span class="oc-resource-name oc-display-inline-block" data-test-resource-name="image.jpg" title="image.jpg"><span class="oc-resource-basename oc-text-break">image.jpg</span>
             <!--v-if--></span>

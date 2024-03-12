@@ -287,7 +287,7 @@ export class Resource {
     await po.openShotcut({ page: this.#page, name: name, url: url })
   }
 
-  async getLockLocator(args: Omit<po.expectFileToBeLockedArgs, 'page'>): Promise<Locator> {
+  getLockLocator(args: Omit<po.expectFileToBeLockedArgs, 'page'>): Locator {
     return po.getLockLocator({ ...args, page: this.#page })
   }
 }

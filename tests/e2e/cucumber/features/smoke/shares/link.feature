@@ -118,9 +118,14 @@ Feature: link
       | testavatar.jpg | %public% |
     And "Alice" renames the most recently created public link of resource "testavatar.jpg" to "imageLink"
     And "Alice" logs out
+
+    # authenticated user with access to resources. should be redirected to shares with me page
     And "Brian" logs in
     When "Brian" opens the public link "folderLink"
     And "Brian" unlocks the public link with password "%public%"
+    And "Brian" downloads the following public link resources using the sidebar panel
+      | resource         | type |
+      | shareToBrian.txt | file |
     And "Brian" uploads the following resources
       | resource  |
       | lorem.txt |

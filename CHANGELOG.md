@@ -3,7 +3,166 @@ Changelog for ownCloud Web [unreleased] (UNRELEASED)
 The following sections list the changes in ownCloud web unreleased relevant to
 ownCloud admins and users.
 
-[unreleased]: https://github.com/owncloud/web/compare/v9.0.0...master
+[unreleased]: https://github.com/owncloud/web/compare/v8.0.0...master
+
+Summary
+-------
+
+* Bugfix - User data not updated while altering own user: [#10377](https://github.com/owncloud/web/pull/10377)
+* Bugfix - Admin settings keyboard navigation: [#10417](https://github.com/owncloud/web/pull/10417)
+* Bugfix - Load thumbnail when postprocessing is finished: [#10517](https://github.com/owncloud/web/pull/10517)
+* Bugfix - Share sidebar icons: [#10551](https://github.com/owncloud/web/pull/10551)
+* Change - Registering app file editors: [#10330](https://github.com/owncloud/web/pull/10330)
+* Enhancement - Icon for .dcm files: [#9215](https://github.com/owncloud/web/issues/9215)
+* Enhancement - Enable user preferences in public links: [#10207](https://github.com/owncloud/web/pull/10207)
+* Enhancement - Move ThemeSwitcher into Account Settings: [#10334](https://github.com/owncloud/web/pull/10334)
+* Enhancement - Top loading bar increase visibility: [#10383](https://github.com/owncloud/web/issues/10383)
+* Enhancement - Integrate ToastUI editor in the text editor app: [#10390](https://github.com/owncloud/web/pull/10390)
+* Enhancement - Epub reader app: [#10448](https://github.com/owncloud/web/pull/10448)
+* Enhancement - Highlight search term in sharing autosuggest list: [#10485](https://github.com/owncloud/web/pull/10485)
+* Enhancement - Warn user before closing browser when upload is in progress: [#10519](https://github.com/owncloud/web/pull/10519)
+* Enhancement - Show locked and processing next to other status indicators: [#10544](https://github.com/owncloud/web/pull/10544)
+
+Details
+-------
+
+* Bugfix - User data not updated while altering own user: [#10377](https://github.com/owncloud/web/pull/10377)
+
+   We've fixed a bug, where the user data was not updated when altering the own
+   user via the admin settings app, this effected for example the username and
+   email address in the top bar.
+
+   https://github.com/owncloud/web/issues/10373
+   https://github.com/owncloud/web/pull/10377
+
+* Bugfix - Admin settings keyboard navigation: [#10417](https://github.com/owncloud/web/pull/10417)
+
+   We've fixed a bug where keyboard navigation stopped working after deleting a
+   resource in the admin settings app. We also fixed a bug where initial keyboard
+   navigation didn't work, when no resource was selected.
+
+   https://github.com/owncloud/web/issues/10186
+   https://github.com/owncloud/web/pull/10417
+
+* Bugfix - Load thumbnail when postprocessing is finished: [#10517](https://github.com/owncloud/web/pull/10517)
+
+   We've fixed a bug when thumbnails weren't properly refreshed when postprocessing
+   is active on server and the file was updated, e.G text files.
+
+   https://github.com/owncloud/web/issues/10486
+   https://github.com/owncloud/web/pull/10517
+
+* Bugfix - Share sidebar icons: [#10551](https://github.com/owncloud/web/pull/10551)
+
+   We've fixed a bug where the share invite search dropdown didn't have icons in
+   some cases.
+
+   https://github.com/owncloud/web/pull/10551
+
+* Change - Registering app file editors: [#10330](https://github.com/owncloud/web/pull/10330)
+
+   BREAKING CHANGE for developers: The `announceExtensions` method inside the app's
+   `ready` hook, which could be used to register file editors, has been removed.
+   Developers should use the `extensions` property inside the `appInfo` object
+   instead.
+
+   Note that the `handler` property of such an extension has been renamed to
+   `createFileHandler`.
+
+   https://github.com/owncloud/web/issues/10210
+   https://github.com/owncloud/web/pull/10330
+   https://github.com/owncloud/web/pull/10346
+   https://github.com/owncloud/web/pull/10357
+   https://github.com/owncloud/web/pull/10361
+
+* Enhancement - Icon for .dcm files: [#9215](https://github.com/owncloud/web/issues/9215)
+
+   We've added a custom icon for medical images of the file type dcm.
+
+   https://github.com/owncloud/web/issues/9215
+   https://github.com/owncloud/web/pull/10172
+
+* Enhancement - Enable user preferences in public links: [#10207](https://github.com/owncloud/web/pull/10207)
+
+   We've enabled user preferences in public links, so any user even without an
+   account can open preferences in a public link context and for example change the
+   current language.
+
+   https://github.com/owncloud/web/pull/10207
+
+* Enhancement - Move ThemeSwitcher into Account Settings: [#10334](https://github.com/owncloud/web/pull/10334)
+
+   We've moved the ThemeSwitcher to the account settings page.
+
+   https://github.com/owncloud/web/issues/10181
+   https://github.com/owncloud/web/pull/10334
+   https://github.com/owncloud/web/pull/10342
+
+* Enhancement - Top loading bar increase visibility: [#10383](https://github.com/owncloud/web/issues/10383)
+
+   We've improved the visibility in the top loading bar, the height has been
+   increased along with the color contrast.
+
+   https://github.com/owncloud/web/issues/10383
+
+* Enhancement - Integrate ToastUI editor in the text editor app: [#10390](https://github.com/owncloud/web/pull/10390)
+
+   We've integrated the ToastUI editor in our text editor app. This makes writing
+   markdown much easier, since the users will have access to a markdown compatible
+   toolbar. Code syntax highlighting is also supported.
+
+   https://github.com/owncloud/web/issues/9495
+   https://github.com/owncloud/web/issues/10385
+   https://github.com/owncloud/web/pull/10390
+   https://github.com/owncloud/web/pull/10467
+   https://github.com/owncloud/web/pull/10465
+
+* Enhancement - Epub reader app: [#10448](https://github.com/owncloud/web/pull/10448)
+
+   We've added a epub reader app to open ebooks in web. This includes a variety of
+   functionalities such as a comprehensive chapter list, font size adjustment
+   options, and the ability to remember the user's last reading position even after
+   the app is closed.
+
+   https://github.com/owncloud/web/issues/10464
+   https://github.com/owncloud/web/pull/10448
+   https://github.com/owncloud/web/pull/10462
+   https://github.com/owncloud/web/pull/10468
+   https://github.com/owncloud/web/pull/10469
+   https://github.com/owncloud/web/pull/10470
+   https://github.com/owncloud/web/pull/10503
+
+* Enhancement - Highlight search term in sharing autosuggest list: [#10485](https://github.com/owncloud/web/pull/10485)
+
+   We've adjusted the sharing autosuggest list, so the entered search term will be
+   highlighted in the respective name and mail of the found users.
+
+   https://github.com/owncloud/web/issues/10453
+   https://github.com/owncloud/web/pull/10485
+
+* Enhancement - Warn user before closing browser when upload is in progress: [#10519](https://github.com/owncloud/web/pull/10519)
+
+   We've added a warning message for the user, if they try to close the browser
+   while upload is in progress.
+
+   https://github.com/owncloud/web/issues/10500
+   https://github.com/owncloud/web/pull/10519
+
+* Enhancement - Show locked and processing next to other status indicators: [#10544](https://github.com/owncloud/web/pull/10544)
+
+   We've moved the processing and lock indicators to the status table column so all
+   indicators are easy accessible at the same spot. We also show the respective
+   lock and processing states in the tiles view.
+
+   https://github.com/owncloud/web/issues/10538
+   https://github.com/owncloud/web/pull/10544
+
+Changelog for ownCloud Web [8.0.0] (2024-03-08)
+=======================================
+The following sections list the changes in ownCloud web 8.0.0 relevant to
+ownCloud admins and users.
+
+[8.0.0]: https://github.com/owncloud/web/compare/v9.0.0...v8.0.0
 
 Summary
 -------
@@ -44,18 +203,17 @@ Summary
 * Bugfix - Scrollable account page: [#10318](https://github.com/owncloud/web/pull/10318)
 * Bugfix - Private link error messages: [#10321](https://github.com/owncloud/web/pull/10321)
 * Bugfix - Readonly user attributes have no effect on group memberships: [#10347](https://github.com/owncloud/web/pull/10347)
-* Bugfix - User data not updated while altering own user: [#10377](https://github.com/owncloud/web/pull/10377)
-* Bugfix - Admin settings keyboard navigation: [#10417](https://github.com/owncloud/web/pull/10417)
-* Bugfix - Load thumbnail when postprocessing is finished: [#10517](https://github.com/owncloud/web/pull/10517)
-* Bugfix - Share sidebar icons: [#10551](https://github.com/owncloud/web/pull/10551)
+* Bugfix - Restore space: [#10424](https://github.com/owncloud/web/pull/10424)
+* Bugfix - Public link file download: [#10473](https://github.com/owncloud/web/issues/10473)
+* Bugfix - Wrong share permissions when resharing off: [#10489](https://github.com/owncloud/web/pull/10489)
+* Bugfix - Indicate shares that are not manageable due to file locking: [#10514](https://github.com/owncloud/web/pull/10514)
 * Change - Theme handling: [#2404](https://github.com/owncloud/web/issues/2404)
+* Change - Remove deprecated code: [#7338](https://github.com/owncloud/web/issues/7338)
 * Change - Keyword Query Language (KQL) search syntax: [#9653](https://github.com/owncloud/web/pull/9653)
 * Change - DavProperties without namespace: [#9709](https://github.com/owncloud/web/issues/9709)
-* Change - Registering app file editors: [#10330](https://github.com/owncloud/web/pull/10330)
 * Enhancement - Make login url configurable: [#7317](https://github.com/owncloud/ocis/pull/7317)
 * Enhancement - Permission checks for shares and favorites: [#7497](https://github.com/owncloud/ocis/issues/7497)
 * Enhancement - Scroll to newly created folder: [#7600](https://github.com/owncloud/web/issues/7600)
-* Enhancement - Icon for .dcm files: [#9215](https://github.com/owncloud/web/issues/9215)
 * Enhancement - Application unification: [#9302](https://github.com/owncloud/web/issues/9302)
 * Enhancement - Show local loading spinner in sharing button: [#9423](https://github.com/owncloud/web/pull/9423)
 * Enhancement - File versions tooltip with absolute date: [#9441](https://github.com/owncloud/web/pull/9441)
@@ -110,16 +268,8 @@ Summary
 * Enhancement - Create link modal: [#10104](https://github.com/owncloud/web/pull/10104)
 * Enhancement - Registering right sidebar panels as extension: [#10111](https://github.com/owncloud/web/pull/10111)
 * Enhancement - File sidebar in viewer and editor apps: [#10111](https://github.com/owncloud/web/pull/10111)
-* Enhancement - Enable user preferences in public links: [#10207](https://github.com/owncloud/web/pull/10207)
 * Enhancement - Harmonize AppSwitcher icon colors: [#10224](https://github.com/owncloud/web/pull/10224)
-* Enhancement - Move ThemeSwitcher into Account Settings: [#10334](https://github.com/owncloud/web/pull/10334)
 * Enhancement - Preview app add reset button for images: [#10356](https://github.com/owncloud/web/pull/10356)
-* Enhancement - Top loading bar increase visibility: [#10383](https://github.com/owncloud/web/issues/10383)
-* Enhancement - Integrate ToastUI editor in the text editor app: [#10390](https://github.com/owncloud/web/pull/10390)
-* Enhancement - Epub reader app: [#10448](https://github.com/owncloud/web/pull/10448)
-* Enhancement - Highlight search term in sharing autosuggest list: [#10485](https://github.com/owncloud/web/pull/10485)
-* Enhancement - Warn user before closing browser when upload is in progress: [#10519](https://github.com/owncloud/web/pull/10519)
-* Enhancement - Show locked and processing next to other status indicators: [#10544](https://github.com/owncloud/web/pull/10544)
 
 Details
 -------
@@ -411,38 +561,36 @@ Details
 
    https://github.com/owncloud/web/pull/10347
 
-* Bugfix - User data not updated while altering own user: [#10377](https://github.com/owncloud/web/pull/10377)
+* Bugfix - Restore space: [#10424](https://github.com/owncloud/web/pull/10424)
 
-   We've fixed a bug, where the user data was not updated when altering the own
-   user via the admin settings app, this effected for example the username and
-   email address in the top bar.
+   We've fixed a bug where restoring a space was not possible in some
+   constellations for (space) admins.
 
-   https://github.com/owncloud/web/issues/10373
-   https://github.com/owncloud/web/pull/10377
+   https://github.com/owncloud/web/pull/10424
 
-* Bugfix - Admin settings keyboard navigation: [#10417](https://github.com/owncloud/web/pull/10417)
+* Bugfix - Public link file download: [#10473](https://github.com/owncloud/web/issues/10473)
 
-   We've fixed a bug where keyboard navigation stopped working after deleting a
-   resource in the admin settings app. We also fixed a bug where initial keyboard
-   navigation didn't work, when no resource was selected.
+   We've fixed a bug where the download of a file from a public link was not
+   working when the user had logged in already. The download only worked if no user
+   was logged in.
 
-   https://github.com/owncloud/web/issues/10186
-   https://github.com/owncloud/web/pull/10417
+   https://github.com/owncloud/web/issues/10473
+   https://github.com/owncloud/web/pull/10494
 
-* Bugfix - Load thumbnail when postprocessing is finished: [#10517](https://github.com/owncloud/web/pull/10517)
+* Bugfix - Wrong share permissions when resharing off: [#10489](https://github.com/owncloud/web/pull/10489)
 
-   We've fixed a bug when thumbnails weren't properly refreshed when postprocessing
-   is active on server and the file was updated, e.G text files.
+   We've fixed a bug where a share with custom permissions always sent the
+   resharing bit although resharing was disabled.
 
-   https://github.com/owncloud/web/issues/10486
-   https://github.com/owncloud/web/pull/10517
+   https://github.com/owncloud/web/pull/10489
 
-* Bugfix - Share sidebar icons: [#10551](https://github.com/owncloud/web/pull/10551)
+* Bugfix - Indicate shares that are not manageable due to file locking: [#10514](https://github.com/owncloud/web/pull/10514)
 
-   We've fixed a bug where the share invite search dropdown didn't have icons in
-   some cases.
+   We indicate shares that are not manageable when a resource is locked, so the
+   user doesn't run into errors, while trying to delete or update a share.
 
-   https://github.com/owncloud/web/pull/10551
+   https://github.com/owncloud/web/issues/10507
+   https://github.com/owncloud/web/pull/10514
 
 * Change - Theme handling: [#2404](https://github.com/owncloud/web/issues/2404)
 
@@ -466,6 +614,15 @@ Details
    https://github.com/owncloud/web/pull/9401
    https://github.com/owncloud/web/pull/9698
    https://github.com/owncloud/web/pull/10151
+
+* Change - Remove deprecated code: [#7338](https://github.com/owncloud/web/issues/7338)
+
+   We have removed the `getToken` getter from our vuex store and support for the
+   deprecated `user-management` name for the `admin-settings` app. See linked
+   "Deprecations" issue for more information.
+
+   https://github.com/owncloud/web/issues/7338
+   https://github.com/owncloud/web/pull/9959
 
 * Change - Keyword Query Language (KQL) search syntax: [#9653](https://github.com/owncloud/web/pull/9653)
 
@@ -513,22 +670,6 @@ Details
    https://github.com/owncloud/web/issues/9709
    https://github.com/owncloud/web/pull/9764
 
-* Change - Registering app file editors: [#10330](https://github.com/owncloud/web/pull/10330)
-
-   BREAKING CHANGE for developers: The `announceExtensions` method inside the app's
-   `ready` hook, which could be used to register file editors, has been removed.
-   Developers should use the `extensions` property inside the `appInfo` object
-   instead.
-
-   Note that the `handler` property of such an extension has been renamed to
-   `createFileHandler`.
-
-   https://github.com/owncloud/web/issues/10210
-   https://github.com/owncloud/web/pull/10330
-   https://github.com/owncloud/web/pull/10346
-   https://github.com/owncloud/web/pull/10357
-   https://github.com/owncloud/web/pull/10361
-
 * Enhancement - Make login url configurable: [#7317](https://github.com/owncloud/ocis/pull/7317)
 
    We've added a new configuration option loginUrl to web, this is helpful if you
@@ -552,13 +693,6 @@ Details
    https://github.com/owncloud/web/issues/7600
    https://github.com/owncloud/web/issues/7601
    https://github.com/owncloud/web/pulls/8145
-
-* Enhancement - Icon for .dcm files: [#9215](https://github.com/owncloud/web/issues/9215)
-
-   We've added a custom icon for medical images of the file type dcm.
-
-   https://github.com/owncloud/web/issues/9215
-   https://github.com/owncloud/web/pull/10172
 
 * Enhancement - Application unification: [#9302](https://github.com/owncloud/web/issues/9302)
 
@@ -1106,28 +1240,12 @@ Details
    https://github.com/owncloud/web/pull/10152
    https://github.com/owncloud/web/pull/10344
 
-* Enhancement - Enable user preferences in public links: [#10207](https://github.com/owncloud/web/pull/10207)
-
-   We've enabled user preferences in public links, so any user even without an
-   account can open preferences in a public link context and for example change the
-   current language.
-
-   https://github.com/owncloud/web/pull/10207
-
 * Enhancement - Harmonize AppSwitcher icon colors: [#10224](https://github.com/owncloud/web/pull/10224)
 
    We've adjusted the AppSwitcher icon colors to be more inline with the design.
 
    https://github.com/owncloud/web/issues/10121
    https://github.com/owncloud/web/pull/10224
-
-* Enhancement - Move ThemeSwitcher into Account Settings: [#10334](https://github.com/owncloud/web/pull/10334)
-
-   We've moved the ThemeSwitcher to the account settings page.
-
-   https://github.com/owncloud/web/issues/10181
-   https://github.com/owncloud/web/pull/10334
-   https://github.com/owncloud/web/pull/10342
 
 * Enhancement - Preview app add reset button for images: [#10356](https://github.com/owncloud/web/pull/10356)
 
@@ -1136,65 +1254,6 @@ Details
 
    https://github.com/owncloud/web/issues/9840
    https://github.com/owncloud/web/pull/10356
-
-* Enhancement - Top loading bar increase visibility: [#10383](https://github.com/owncloud/web/issues/10383)
-
-   We've improved the visibility in the top loading bar, the height has been
-   increased along with the color contrast.
-
-   https://github.com/owncloud/web/issues/10383
-
-* Enhancement - Integrate ToastUI editor in the text editor app: [#10390](https://github.com/owncloud/web/pull/10390)
-
-   We've integrated the ToastUI editor in our text editor app. This makes writing
-   markdown much easier, since the users will have access to a markdown compatible
-   toolbar. Code syntax highlighting is also supported.
-
-   https://github.com/owncloud/web/issues/9495
-   https://github.com/owncloud/web/issues/10385
-   https://github.com/owncloud/web/pull/10390
-   https://github.com/owncloud/web/pull/10467
-   https://github.com/owncloud/web/pull/10465
-
-* Enhancement - Epub reader app: [#10448](https://github.com/owncloud/web/pull/10448)
-
-   We've added a epub reader app to open ebooks in web. This includes a variety of
-   functionalities such as a comprehensive chapter list, font size adjustment
-   options, and the ability to remember the user's last reading position even after
-   the app is closed.
-
-   https://github.com/owncloud/web/issues/10464
-   https://github.com/owncloud/web/pull/10448
-   https://github.com/owncloud/web/pull/10462
-   https://github.com/owncloud/web/pull/10468
-   https://github.com/owncloud/web/pull/10469
-   https://github.com/owncloud/web/pull/10470
-   https://github.com/owncloud/web/pull/10503
-
-* Enhancement - Highlight search term in sharing autosuggest list: [#10485](https://github.com/owncloud/web/pull/10485)
-
-   We've adjusted the sharing autosuggest list, so the entered search term will be
-   highlighted in the respective name and mail of the found users.
-
-   https://github.com/owncloud/web/issues/10453
-   https://github.com/owncloud/web/pull/10485
-
-* Enhancement - Warn user before closing browser when upload is in progress: [#10519](https://github.com/owncloud/web/pull/10519)
-
-   We've added a warning message for the user, if they try to close the browser
-   while upload is in progress.
-
-   https://github.com/owncloud/web/issues/10500
-   https://github.com/owncloud/web/pull/10519
-
-* Enhancement - Show locked and processing next to other status indicators: [#10544](https://github.com/owncloud/web/pull/10544)
-
-   We've moved the processing and lock indicators to the status table column so all
-   indicators are easy accessible at the same spot. We also show the respective
-   lock and processing states in the tiles view.
-
-   https://github.com/owncloud/web/issues/10538
-   https://github.com/owncloud/web/pull/10544
 
 Changelog for ownCloud Web [9.0.0] (2024-02-26)
 =======================================

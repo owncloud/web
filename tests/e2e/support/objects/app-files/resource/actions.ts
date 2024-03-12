@@ -113,7 +113,7 @@ const filesContextMenuAction = 'div[id^="context-menu-drop"] button.oc-files-act
 const highlightedFileRowSelector = '#files-space-table tr.oc-table-highlighted'
 const emptyTrashbinButtonSelector = '.oc-files-actions-empty-trash-bin-trigger'
 const resourceLockIcon =
-  '//*[@data-test-resource-name="%s"]/ancestor::tr//td//span[contains(@class, "oc-resource-icon-status-badge-inner")]'
+  '//*[@data-test-resource-name="%s"]/ancestor::tr//td//span[@data-test-indicator-type="resource-locked"]'
 const sharesNavigationButtonSelector = '.oc-sidebar-nav [data-nav-name="files-shares"]'
 const keepBothButton = '.oc-modal-body-actions-confirm'
 
@@ -194,7 +194,7 @@ export const createSpaceFromSelection = async ({
 }): Promise<Space> => {
   await selectOrDeselectResources({
     page,
-    resources: resources.map((r) => ({ name: r }) as resourceArgs),
+    resources: resources.map((r) => ({ name: r }) as resourceArgs), // prettier-ignore
     select: true
   })
   await page.locator(util.format(resourceNameSelector, resources[0])).click({ button: 'right' })
@@ -599,11 +599,13 @@ interface resourceArgs {
   type?: string
 }
 
+export type ActionViaType = 'SIDEBAR_PANEL' | 'BATCH_ACTION' | 'SINGLE_SHARE_VIEW'
+
 export interface downloadResourcesArgs {
   page: Page
   resources: resourceArgs[]
   folder?: string
-  via: 'SIDEBAR_PANEL' | 'BATCH_ACTION' | 'SINGLE_SHARE_VIEW'
+  via: ActionViaType
 }
 
 export const downloadResources = async (args: downloadResourcesArgs): Promise<Download[]> => {
@@ -1013,7 +1015,7 @@ export interface deleteResourceArgs {
   page: Page
   resourcesWithInfo: resourceArgs[]
   folder?: string
-  via: 'SIDEBAR_PANEL' | 'BATCH_ACTION'
+  via: ActionViaType
 }
 
 export const deleteResource = async (args: deleteResourceArgs): Promise<void> => {
@@ -1710,7 +1712,7 @@ export interface expectFileToBeLockedArgs {
   resource: string
 }
 
-export const getLockLocator = async (args: expectFileToBeLockedArgs): Promise<Locator> => {
+export const getLockLocator = (args: expectFileToBeLockedArgs): Locator => {
   const { page, resource } = args
-  return await page.locator(util.format(resourceLockIcon, resource))
+  return page.locator(util.format(resourceLockIcon, resource))
 }
