@@ -22,6 +22,8 @@ export type CustomModalComponentInstance = ComponentPublicInstance<
 
 export type Modal = {
   id: string
+  elementId?: string
+  elementClass?: string
   title: string
   variation?: string
   icon?: string

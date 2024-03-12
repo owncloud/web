@@ -24,7 +24,12 @@
 <script lang="ts">
 import { computed, defineComponent, inject, Ref, ref, unref, VNodeRef } from 'vue'
 import { Resource, SpaceResource } from '@ownclouders/web-client'
-import { ActionMenuItem, FileActionOptions, SpaceActionOptions } from '@ownclouders/web-pkg'
+import {
+  ActionMenuItem,
+  FileActionOptions,
+  SpaceActionOptions,
+  useSpaceActionsSetIcon
+} from '@ownclouders/web-pkg'
 import { usePreviewService } from '@ownclouders/web-pkg'
 import {
   useSpaceActionsDelete,
@@ -66,6 +71,7 @@ export default defineComponent({
     const { actions: uploadImageActions, uploadImageSpace } = useSpaceActionsUploadImage({
       spaceImageInput
     })
+    const { actions: setSpaceIconActions } = useSpaceActionsSetIcon()
     const { actions: downloadArchiveActions } = useFileActionsDownloadArchive()
 
     const actions = computed(() =>
@@ -75,6 +81,7 @@ export default defineComponent({
         ...unref(duplicateActions),
         ...unref(editDescriptionActions),
         ...unref(uploadImageActions),
+        ...unref(setSpaceIconActions),
         ...unref(editReadmeContentActions),
         ...unref(editQuotaActions),
         ...unref(restoreActions),

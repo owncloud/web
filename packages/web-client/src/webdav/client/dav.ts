@@ -113,7 +113,7 @@ export class DAV {
 
   public put(
     path: string,
-    content: string,
+    content: string | ArrayBuffer,
     {
       headers = {},
       onUploadProgress,
@@ -168,7 +168,7 @@ export class DAV {
       headers,
       options
     }: {
-      body?: string
+      body?: string | ArrayBuffer
       headers?: Headers
       options?: Partial<RequestOptionsCustom>
     } = {}
