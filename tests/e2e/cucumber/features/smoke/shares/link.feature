@@ -137,15 +137,24 @@ Feature: link
     And "Brian" unlocks the public link with password "%public%"
     Then "Brian" is in a text-editor
     And "Brian" closes the file viewer
+    And "Brian" downloads the following public link resources using the single share view
+      | resource        | type |
+      | shareToBrian.md | file |
     When "Brian" opens the public link "pdfLink"
     And "Brian" unlocks the public link with password "%public%"
     Then "Brian" is in a pdf-viewer
     And "Brian" closes the file viewer
+    And "Brian" downloads the following public link resources using the single share view
+      | resource   | type |
+      | simple.pdf | file |
     When "Brian" opens the public link "imageLink"
     And "Brian" unlocks the public link with password "%public%"
     # https://github.com/owncloud/ocis/issues/8602
     Then "Brian" is in a image-viewer
     And "Brian" closes the file viewer
+    And "Brian" downloads the following public link resources using the single share view
+      | resource       | type |
+      | testavatar.jpg | file |
     And "Brian" logs out
 
     # authenticated user without access to resources. should be redirected to the public links page
@@ -164,15 +173,24 @@ Feature: link
     And "Carol" unlocks the public link with password "%public%"
     Then "Carol" is in a text-editor
     And "Carol" closes the file viewer
+    And "Carol" downloads the following public link resources using the single share view
+      | resource        | type |
+      | shareToBrian.md | file |
     When "Carol" opens the public link "pdfLink"
     And "Carol" unlocks the public link with password "%public%"
     Then "Carol" is in a pdf-viewer
     And "Carol" closes the file viewer
+    And "Carol" downloads the following public link resources using the single share view
+      | resource   | type |
+      | simple.pdf | file |
     When "Carol" opens the public link "imageLink"
     And "Carol" unlocks the public link with password "%public%"
     # https://github.com/owncloud/ocis/issues/8602
     Then "Carol" is in a image-viewer
     And "Carol" closes the file viewer
+    And "Carol" downloads the following public link resources using the single share view
+      | resource       | type |
+      | testavatar.jpg | file |
     And "Carol" logs out
 
     # Anonymous user
@@ -189,15 +207,24 @@ Feature: link
     And "Anonymous" unlocks the public link with password "%public%"
     Then "Anonymous" is in a text-editor
     And "Anonymous" closes the file viewer
+    And "Anonymous" downloads the following public link resources using the single share view
+      | resource        | type |
+      | shareToBrian.md | file |
     When "Anonymous" opens the public link "pdfLink"
     And "Anonymous" unlocks the public link with password "%public%"
     Then "Anonymous" is in a pdf-viewer
     And "Anonymous" closes the file viewer
+    And "Anonymous" downloads the following public link resources using the single share view
+      | resource   | type |
+      | simple.pdf | file |
     When "Anonymous" opens the public link "imageLink"
     And "Anonymous" unlocks the public link with password "%public%"
     # https://github.com/owncloud/ocis/issues/8602
     Then "Anonymous" is in a image-viewer
     And "Anonymous" closes the file viewer
+    And "Anonymous" downloads the following public link resources using the single share view
+      | resource       | type |
+      | testavatar.jpg | file |
 
 
   Scenario: add banned password for public link
