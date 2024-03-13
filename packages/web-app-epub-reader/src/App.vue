@@ -94,7 +94,6 @@ import {
   useThemeStore
 } from '@ownclouders/web-pkg'
 import ePub, { Book, NavItem, Rendition, Location } from 'epubjs'
-import { DisplayedLocation } from 'epubjs/types/rendition'
 
 const DARK_THEME_CONFIG = {
   html: {
@@ -222,7 +221,7 @@ export default defineComponent({
         })
 
         unref(rendition).on('relocated', () => {
-          const currentLocation = unref(rendition).currentLocation() as DisplayedLocation & Location
+          const currentLocation = unref(rendition).currentLocation() as any & Location
           localStorageResourceData.value = { currentLocation }
           navigateLeftDisabled.value = currentLocation.atStart === true
           navigateRightDisabled.value = currentLocation.atEnd === true
