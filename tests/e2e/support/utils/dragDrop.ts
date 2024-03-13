@@ -8,13 +8,13 @@ interface File {
 
 interface FileBuffer {
   name: string
-  buffer: Buffer
+  bufferString: string
 }
 
 export const dragDropFiles = async (page: Page, resources: File[], targetSelector: string) => {
   const files = resources.map((file) => ({
     name: file.name,
-    buffer: readFileSync(file.path)
+    bufferString: JSON.stringify(Array.from(readFileSync(file.path)))
   }))
 
   await page.evaluate(
@@ -23,7 +23,9 @@ export const dragDropFiles = async (page: Page, resources: File[], targetSelecto
       const dt = new DataTransfer()
 
       for (const file of files) {
-        dt.items.add(new File([file.buffer.toString()], file.name))
+        const buffer = Buffer.from(JSON.parse(file.bufferString))
+        const blob = new Blob([buffer])
+        dt.items.add(new File([blob], file.name))
       }
 
       dropArea.dispatchEvent(new DragEvent('drop', { dataTransfer: dt }))
