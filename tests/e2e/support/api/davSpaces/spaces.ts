@@ -60,7 +60,7 @@ const createFile = async ({
 }: {
   user: User
   pathToFile: string
-  content?: string
+  content: string | Buffer
   webDavEndPathToRoot: string
   mtimeDeltaDays?: string
 }): Promise<void> => {
@@ -86,7 +86,7 @@ export const uploadFileInPersonalSpace = async ({
 }: {
   user: User
   pathToFile: string
-  content: string
+  content: string | Buffer
   mtimeDeltaDays?: string
 }): Promise<void> => {
   const webDavEndPathToRoot = 'spaces/' + (await getPersonalSpaceId({ user }))
@@ -127,7 +127,7 @@ export const uploadFileInsideSpaceBySpaceName = async ({
   user: User
   pathToFile: string
   spaceName: string
-  content?: string
+  content?: string | Buffer
 }): Promise<void> => {
   const webDavEndPathToRoot =
     'spaces/' + (await getSpaceIdBySpaceName({ user, spaceType: 'project', spaceName }))
