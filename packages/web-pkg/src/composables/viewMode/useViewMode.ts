@@ -1,4 +1,4 @@
-import { computed, ComputedRef, unref } from 'vue'
+import { computed, ComputedRef, ref, Ref, unref } from 'vue'
 import { queryItemAsString } from '../appDefaults'
 import { useRouteQueryPersisted } from '../router'
 import { FolderViewModeConstants } from './constants'
@@ -25,4 +25,10 @@ export function useViewSize(options: ComputedRef<string>): ComputedRef<number> {
     defaultValue: FolderViewModeConstants.tilesSizeDefault.toString()
   })
   return computed(() => parseInt(queryItemAsString(unref(viewModeSize))))
+}
+
+// doesn't need to be persisted anywhere. Gets re-calculated when the ResourceTiles component gets mounted.
+const viewSizeMax = ref<number>(FolderViewModeConstants.tilesSizeMax)
+export function useViewSizeMax(): Ref<number> {
+  return viewSizeMax
 }

@@ -101,11 +101,7 @@
         :key="`ghost-tile-${index}`"
         class="ghost-tile"
         :aria-hidden="true"
-      >
-        <div>
-          {{ viewSize }}
-        </div>
-      </li>
+      />
     </oc-list>
     <Teleport v-if="dragItem" to="body">
       <resource-ghost-element ref="ghostElementRef" :preview-items="[dragItem, ...dragSelection]" />
@@ -148,7 +144,8 @@ import {
   useMessages,
   useResourceRouteResolver,
   useTileSize,
-  useResourcesStore
+  useResourcesStore,
+  useViewSizeMax
 } from '../../composables'
 
 export default defineComponent({
@@ -211,6 +208,10 @@ export default defineComponent({
     const { $gettext } = useGettext()
     const resourcesStore = useResourcesStore()
     const { emit } = context
+    const viewSizeMax = useViewSizeMax()
+    const viewSizeCurrent = computed(() => {
+      return Math.min(unref(viewSizeMax), props.viewSize)
+    })
 
     const areFileExtensionsShown = computed(() => resourcesStore.areFileExtensionsShown)
 
@@ -351,7 +352,7 @@ export default defineComponent({
         5: 'xxxlarge',
         6: 'xxxlarge'
       }
-      const size = Math.min(props.viewSize, unref(maxTilesAll).length)
+      const size = unref(viewSizeCurrent)
       return sizeMap[size] ?? 'xxlarge'
     })
     onBeforeUpdate(() => {
@@ -437,9 +438,9 @@ export default defineComponent({
     })
     const maxTilesCurrent = computed(() => {
       const maxTiles = unref(maxTilesAll)
-      return maxTiles.length < props.viewSize
+      return maxTiles.length < unref(viewSizeCurrent)
         ? maxTiles[maxTiles.length - 1]
-        : maxTiles[props.viewSize - 1]
+        : maxTiles[unref(viewSizeCurrent) - 1]
     })
     const ghostTilesCount = computed(() => {
       const remainder = unref(maxTilesCurrent) ? props.resources.length % unref(maxTilesCurrent) : 0
@@ -460,6 +461,9 @@ export default defineComponent({
       },
       { immediate: true }
     )
+    watch(maxTilesAll, (all) => {
+      viewSizeMax.value = Math.max(all.length, 1)
+    })
 
     onMounted(() => {
       window.addEventListener('resize', updateViewWidth)
