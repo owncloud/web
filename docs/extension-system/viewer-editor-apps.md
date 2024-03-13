@@ -12,7 +12,7 @@ geekdocCollapseSection: true
 
 ## Viewer and editor apps
 
-The ownCloud Web allows developers to implement apps for viewing and editing specific file types. For instance, the built-in preview app serves as the default application for opening media files like images, videos, or audio.
+ownCloud Web allows developers to implement apps for viewing and editing specific file types. For instance, the built-in preview app serves as the default application for opening media files like images, videos, or audio.
 
 This section will guide you through the process of implementing such an app within ownCloud Web.
 
@@ -24,7 +24,7 @@ The structure of an app is quite simple and straightforward. Consider, for examp
 
 ### App setup
 
-Inside the `src` folder you will need a `index.ts` file that sets up the app so it can be registered by the Web runtime. It follows the basic structure as described in [the apps section]({{< ref "_index.md#apps" >}}), so it may look like this:
+Inside the `src` folder you will need an `index.ts` file that sets up the app so it can be registered by the Web runtime. It follows the basic structure as described in [the apps section]({{< ref "_index.md#apps" >}}), so it may look like this:
 
 ```typescript
 import { AppWrapperRoute, defineWebApplication } from '@ownclouders/web-pkg'
