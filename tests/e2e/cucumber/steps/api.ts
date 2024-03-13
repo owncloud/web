@@ -150,7 +150,7 @@ Given(
       await api.dav.uploadFileInPersonalSpace({
         user,
         pathToFile: info.to,
-        content: content.toString()
+        content
       })
     }
   }
