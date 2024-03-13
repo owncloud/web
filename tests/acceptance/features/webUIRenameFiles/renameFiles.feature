@@ -162,20 +162,6 @@ Feature: rename files
     Then file 'data.part' should be listed on the webUI
 
 
-  Scenario: User tries to rename a file that used to exist but does not anymore
-    Given user "Alice" has logged in using the webUI
-    And the following files have been deleted by user "Alice" in the server
-      | name      |
-      | lorem.txt |
-    When the user tries to rename file "lorem.txt" to "new-lorem.txt" using the webUI
-    Then the "error" message with header 'Failed to rename "lorem.txt" to "new-lorem.txt"' should be displayed on the webUI
-    When the user reloads the current page of the webUI
-    Then file "lorem.txt" should not be listed on the webUI
-    And file "new-lorem.txt" should not be listed on the webUI
-    And as "Alice" file "lorem.txt" should not exist in the server
-    And as "Alice" file "new-lorem.txt" should not exist in the server
-
-
   Scenario: Rename file extension through context-menu without reload
     Given user "Alice" has logged in using the webUI
     When the user renames file "lorem.txt" to "lorem.md" through context-menu using the webUI

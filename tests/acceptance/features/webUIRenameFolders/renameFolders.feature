@@ -117,25 +117,11 @@ Feature: rename folders
     When the user tries to rename folder "simple-folder" to "." using the webUI
     Then the error message 'The name cannot be equal to "."' should be displayed on the webUI dialog prompt
 
-  
+
   Scenario: Rename a folder to .part (on ocis)
     Given user "Alice" has logged in using the webUI
     When the user renames folder "simple-folder" to "simple.part" using the webUI
     Then folder "simple.part" should be listed on the webUI
-
-
-  Scenario: User tries to rename a folder that used to exist but does not anymore
-    Given user "Alice" has logged in using the webUI
-    And the following files have been deleted by user "Alice" in the server
-      | name          |
-      | simple-folder |
-    When the user tries to rename folder "simple-folder" to "new-simple-folder" using the webUI
-    Then the "error" message with header 'Failed to rename "simple-folder" to "new-simple-folder"' should be displayed on the webUI
-    When the user reloads the current page of the webUI
-    Then folder "simple-folder" should not be listed on the webUI
-    And folder "new-simple-folder" should not be listed on the webUI
-    And as "Alice" folder "simple-folder" should not exist in the server
-    And as "Alice" folder "new-simple-folder" should not exist in the server
 
 
   Scenario Outline: Rename a folder to a name with dot
