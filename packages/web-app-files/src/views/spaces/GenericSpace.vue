@@ -649,6 +649,7 @@ export default defineComponent({
         selected,
         this.space,
         targetFolder,
+        this.currentFolder,
         this.$clientService,
         this.$loadingService,
         this.createModal,
