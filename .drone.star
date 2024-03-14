@@ -680,8 +680,12 @@ def e2eTests(ctx):
                 installPnpm() + \
                 installPlaywright() + \
                 restoreBuildArtifactCache(ctx, "web-dist", "dist") + \
-                setupServerConfigureWeb(params["logLevel"]) + \
-                restoreOcisCache()
+                setupServerConfigureWeb(params["logLevel"])
+
+        if ctx.build.event == "cron":
+            steps += restoreBuildArtifactCache(ctx, "ocis-build", "ocis")
+        else:
+            steps += restoreOcisCache()
 
         # oCIS specific environment variables
         environment["BASE_URL_OCIS"] = "ocis:9200"
@@ -815,8 +819,13 @@ def acceptance(ctx):
 
                         services = browserService(alternateSuiteName, browser) + middlewareService()
 
+                        if ctx.build.event == "cron":
+                            steps += restoreBuildArtifactCache(ctx, "ocis-build", "ocis")
+                        else:
+                            steps += restoreOcisCache()
+
                         # Services and steps required for running tests with oCIS
-                        steps += restoreOcisCache() + ocisService("acceptance-tests", enforce_password_public_link = True) + getSkeletonFiles()
+                        steps += ocisService("acceptance-tests", enforce_password_public_link = True) + getSkeletonFiles()
 
                         # Wait for test-related services to be up
                         steps += waitForBrowserService()
@@ -1375,6 +1384,16 @@ def runWebuiAcceptanceTests(ctx, suite, alternateSuiteName, filterTags, extraEnv
     }]
 
 def cacheOcisPipeline(ctx):
+    steps = []
+
+    if ctx.build.event == "cron":
+        steps = getOcislatestCommitId(ctx) + \
+                buildOcis() + \
+                rebuildBuildArtifactCache(ctx, "ocis-build", "ocis")
+    else:
+        steps = checkForExistingOcisCache(ctx) + \
+                buildOcis() + \
+                cacheOcis()
     return [{
         "kind": "pipeline",
         "type": "docker",
@@ -1383,9 +1402,7 @@ def cacheOcisPipeline(ctx):
         "clone": {
             "disable": True,
         },
-        "steps": checkForExistingOcisCache(ctx) +
-                 buildOcis() +
-                 cacheOcis(),
+        "steps": steps,
         "volumes": [{
             "name": "gopath",
             "temp": {},
@@ -2381,3 +2398,23 @@ def e2eTestsOnKeycloak(ctx):
             ],
         },
     }]
+
+def getOcislatestCommitId(ctx):
+    repo_path = "https://raw.githubusercontent.com/owncloud/ocis-php-sdk/%s" % ctx.build.commit
+    return [
+        {
+            "name": "get-ocis-latest-commit-id",
+            "image": OC_CI_ALPINE,
+            "commands": [
+                "curl -o .drone.env %s/.drone.env" % repo_path,
+                "curl -o get-latest-ocis-commit-id.sh %s/tests/drone/get-latest-ocis-commit-id.sh" % repo_path,
+                ". ./.drone.env",
+                "bash get-latest-ocis-commit-id.sh",
+            ],
+            "when": {
+                "event": [
+                    "cron",
+                ],
+            },
+        },
+    ]
