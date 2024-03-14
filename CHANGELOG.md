@@ -1,3 +1,28 @@
+Changelog for ownCloud Web [unreleased] (UNRELEASED)
+=======================================
+The following sections list the changes in ownCloud web unreleased relevant to
+ownCloud admins and users.
+
+[unreleased]: https://github.com/owncloud/web/compare/v8.0.0...master
+
+Summary
+-------
+
+* Enhancement - Tile sizes: [#10018](https://github.com/owncloud/web/issues/10018)
+
+Details
+-------
+
+* Enhancement - Tile sizes: [#10018](https://github.com/owncloud/web/issues/10018)
+
+   We've adjusted the tile sizes to have a bigger base size and smaller stepping
+   from one tile size to the next. In addition to that the default tile size has
+   been changed to the second stepping, so that initially both space tiles and
+   file/folder tiles have a sufficient size for reading longer names.
+
+   https://github.com/owncloud/web/issues/10018
+   https://github.com/owncloud/web/pull/10558
+
 Changelog for ownCloud Web [8.0.0] (2024-03-08)
 =======================================
 The following sections list the changes in ownCloud web 8.0.0 relevant to
