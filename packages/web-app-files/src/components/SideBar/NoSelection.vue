@@ -11,7 +11,7 @@ export default defineComponent({
   name: 'NoSelection',
   computed: {
     selectedFilesString() {
-      return this.$gettext('Select a file or folder to view details.')
+      return this.$gettext('Select a file or folder to view details')
     }
   }
 })

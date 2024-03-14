@@ -62,5 +62,6 @@ exports[`TrashOverview > view states > should render spaces list 1`] = `
     </div>
   </div>
   <!--v-if-->
+  <file-side-bar-stub isopen="false"></file-side-bar-stub>
 </div>"
 `;

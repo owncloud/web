@@ -434,7 +434,7 @@ export default defineComponent({
       {
         name: 'DetailsPanel',
         icon: 'user',
-        title: () => $gettext('User details'),
+        title: () => $gettext('Details'),
         component: DetailsPanel,
         componentAttrs: ({ items }) => ({
           user: items.length === 1 ? items[0] : null,
