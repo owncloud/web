@@ -22,6 +22,8 @@ An app is essentially a distinct package that must be specified as an external a
 
 The structure of an app is quite simple and straightforward. Consider, for example, the [draw.io app](https://github.com/owncloud/web/tree/master/packages/web-app-draw-io). It consists of a `package.json` file, a `src` directory containing all the source code, and a `l10n` directory for translations. Optionally, you may also include a `tests` directory if your application requires testing.
 
+To learn more about apps in general, please refer to the [Web app docs]({{< ref "_index.md#apps" >}}).
+
 ### App setup
 
 Inside the `src` folder you will need an `index.ts` file that sets up the app so it can be registered by the Web runtime. It follows the basic structure as described in [the apps section]({{< ref "_index.md#apps" >}}), so it may look like this:
@@ -114,22 +116,3 @@ interface ApplicationFileExtension {
   routeName?: string
 }
 ```
-
-### Integration in Web
-
-To seamlessly integrate your app into ownCloud Web, you'll need to reference it within the Web configuration. If the configuration lacks an `external_apps` section, you can easily add it at the top level of the JSON file.
-
-Your app must be assigned an `id` and a `path` directing to the built source code. Alternatively, during development, you can reference your app using the directory name as long as it resides within the `packages` directory of the Web project. This alternative approach can be quite handy during development phases.
-
-```json
-{
-  "external_apps": [
-    {
-      "id": "advanced-pdf-viewer",
-      "path": "path/to/your/built/editor.js"
-    }
-  ]
-}
-```
-
-You can also pass a configuration to your app via the optional `config` key.

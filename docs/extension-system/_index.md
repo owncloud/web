@@ -86,6 +86,8 @@ Additional dynamic navigation items can be registered via the extension registry
 
 If you want to learn how to implement an app for viewing and editing specific file types, please consult the [relevant documentation]({{< ref "viewer-editor-apps.md" >}}) for detailed instructions and guidance.
 
+To learn how to integrate an app into ownCloud Web, please refer to the [Web service docs]({{< ref "web.md#web-apps" >}}).
+
 ### Extensions
 
 In contrast to applications, extensions usually have a rather small scope and dedicated functionality.
