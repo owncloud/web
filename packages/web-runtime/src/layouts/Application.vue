@@ -15,7 +15,7 @@
             v-if="isSidebarVisible"
             class="app-navigation"
             :nav-items="navItems"
-            :closed="localStorageNavBarClosed"
+            :closed="navBarClosed"
             @update:nav-bar-closed="setNavBarClosed"
           />
           <portal to="app.runtime.mobile.nav">
@@ -164,9 +164,9 @@ export default defineComponent({
       return unref(navItems).length && !unref(isMobileWidth)
     })
 
-    const localStorageNavBarClosed = useLocalStorage(`oc_navBarClosed`, false)
+    const navBarClosed = useLocalStorage(`oc_navBarClosed`, false)
     const setNavBarClosed = (value: boolean) => {
-      localStorageNavBarClosed.value = value
+      navBarClosed.value = value
     }
 
     return {
@@ -176,7 +176,7 @@ export default defineComponent({
       navItems,
       onResize,
       isMobileWidth,
-      localStorageNavBarClosed,
+      navBarClosed,
       setNavBarClosed
     }
   },
