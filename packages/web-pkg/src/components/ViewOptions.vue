@@ -76,8 +76,8 @@
             id="tiles-size-slider"
             v-model="viewSizeCurrent"
             type="range"
-            min="1"
-            max="6"
+            :min="1"
+            :max="viewSizeMax"
             class="oc-range"
             data-testid="files-tiles-size-slider"
           />
@@ -99,7 +99,8 @@ import {
   PaginationConstants,
   FolderViewModeConstants,
   useRouteName,
-  useResourcesStore
+  useResourcesStore,
+  useViewSizeMax
 } from '../composables'
 import { FolderView } from '../ui/types'
 import { storeToRefs } from 'pinia'
@@ -192,10 +193,13 @@ export default defineComponent({
       { immediate: true, deep: true }
     )
 
+    const viewSizeMax = useViewSizeMax()
+
     return {
       FolderViewModeConstants,
       viewModeCurrent: viewModeQuery,
       viewSizeCurrent: viewSizeQuery,
+      viewSizeMax,
       itemsPerPageCurrent: itemsPerPageQuery,
       queryParamsLoading,
       queryItemAsString,

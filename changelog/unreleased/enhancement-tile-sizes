@@ -1,0 +1,8 @@
+Enhancement: Tile sizes
+
+We've adjusted the tile sizes to have a bigger base size and smaller stepping from one tile size to the next.
+In addition to that the default tile size has been changed to the second stepping, so that initially both
+space tiles and file/folder tiles have a sufficient size for reading longer names.
+
+https://github.com/owncloud/web/issues/10018
+https://github.com/owncloud/web/pull/10558

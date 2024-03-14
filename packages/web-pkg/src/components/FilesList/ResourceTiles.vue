@@ -101,11 +101,7 @@
         :key="`ghost-tile-${index}`"
         class="ghost-tile"
         :aria-hidden="true"
-      >
-        <div>
-          {{ viewSize }}
-        </div>
-      </li>
+      />
     </oc-list>
     <Teleport v-if="dragItem" to="body">
       <resource-ghost-element ref="ghostElementRef" :preview-items="[dragItem, ...dragSelection]" />
@@ -148,7 +144,8 @@ import {
   useMessages,
   useResourceRouteResolver,
   useTileSize,
-  useResourcesStore
+  useResourcesStore,
+  useViewSizeMax
 } from '../../composables'
 
 export default defineComponent({
@@ -211,6 +208,10 @@ export default defineComponent({
     const { $gettext } = useGettext()
     const resourcesStore = useResourcesStore()
     const { emit } = context
+    const viewSizeMax = useViewSizeMax()
+    const viewSizeCurrent = computed(() => {
+      return Math.min(unref(viewSizeMax), props.viewSize)
+    })
 
     const areFileExtensionsShown = computed(() => resourcesStore.areFileExtensionsShown)
 
@@ -351,7 +352,8 @@ export default defineComponent({
         5: 'xxxlarge',
         6: 'xxxlarge'
       }
-      return sizeMap[props.viewSize] ?? 'xlarge'
+      const size = unref(viewSizeCurrent)
+      return sizeMap[size] ?? 'xxlarge'
     })
     onBeforeUpdate(() => {
       tileRefs.value = {
@@ -419,25 +421,37 @@ export default defineComponent({
       const paddingRight = parseInt(style.getPropertyValue('padding-right'), 10) | 0
       viewWidth.value = element.clientWidth - paddingLeft - paddingRight
     }
-    const { tileSizePixels: tileSizePixelsBase } = useTileSize()
     const gapSizePixels = computed(() => {
       return parseFloat(getComputedStyle(document.documentElement).fontSize)
     })
-    const maxTiles = computed(() => {
-      return unref(tileSizePixelsBase)
-        ? Math.floor(unref(viewWidth) / (unref(tileSizePixelsBase) + unref(gapSizePixels)))
-        : 0
+    const { calculateTileSizePixels } = useTileSize()
+    const maxTilesAll = computed<number[]>(() => {
+      const viewSizes = [...Array(FolderViewModeConstants.tilesSizeMax).keys()].map((i) => i + 1)
+      return [
+        ...new Set<number>(
+          viewSizes.map((viewSize) => {
+            const pixels = calculateTileSizePixels(viewSize)
+            return pixels ? Math.round(unref(viewWidth) / (pixels + unref(gapSizePixels))) : 0
+          })
+        )
+      ]
+    })
+    const maxTilesCurrent = computed(() => {
+      const maxTiles = unref(maxTilesAll)
+      return maxTiles.length < unref(viewSizeCurrent)
+        ? maxTiles[maxTiles.length - 1]
+        : maxTiles[unref(viewSizeCurrent) - 1]
     })
     const ghostTilesCount = computed(() => {
-      const remainder = unref(maxTiles) ? props.resources.length % unref(maxTiles) : 0
+      const remainder = unref(maxTilesCurrent) ? props.resources.length % unref(maxTilesCurrent) : 0
       if (!remainder) {
         return 0
       }
-      return unref(maxTiles) - remainder
+      return unref(maxTilesCurrent) - remainder
     })
 
     const tileSizePixels = computed(() => {
-      return unref(viewWidth) / unref(maxTiles) - unref(gapSizePixels)
+      return unref(viewWidth) / unref(maxTilesCurrent) - unref(gapSizePixels)
     })
 
     watch(
@@ -447,6 +461,9 @@ export default defineComponent({
       },
       { immediate: true }
     )
+    watch(maxTilesAll, (all) => {
+      viewSizeMax.value = Math.max(all.length, 1)
+    })
 
     onMounted(() => {
       window.addEventListener('resize', updateViewWidth)

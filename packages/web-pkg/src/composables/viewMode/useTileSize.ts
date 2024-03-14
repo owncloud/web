@@ -1,9 +1,6 @@
-import { useViewSize } from './useViewMode'
-import { computed, onMounted, ref, unref } from 'vue'
+import { onMounted, ref, unref } from 'vue'
 
 export const useTileSize = () => {
-  const viewSize = useViewSize(null)
-
   const themeVarToPixels = (value: string) => {
     if (!value.endsWith('rem') && !value.endsWith('px')) {
       return 0
@@ -23,16 +20,17 @@ export const useTileSize = () => {
     baseSizePixels.value = themeVarToPixels(styles.getPropertyValue('--oc-size-tiles-default'))
     stepSizePixels.value = themeVarToPixels(styles.getPropertyValue('--oc-size-tiles-resize-step'))
   })
-  const tileSizePixels = computed(() => {
-    return unref(baseSizePixels) + (unref(viewSize) - 1) * unref(stepSizePixels)
-  })
-  const tileSizeRem = computed(() => {
+
+  const calculateTileSizePixels = (viewSize: number) => {
+    return unref(baseSizePixels) + (viewSize - 1) * unref(stepSizePixels)
+  }
+  const calculateTileSizeRem = (viewSize: number) => {
     const fontSize = parseFloat(getComputedStyle(document.documentElement).fontSize)
-    return unref(tileSizePixels) / fontSize
-  })
+    return calculateTileSizePixels(viewSize) / fontSize
+  }
 
   return {
-    tileSizePixels,
-    tileSizeRem
+    calculateTileSizePixels,
+    calculateTileSizeRem
   }
 }
