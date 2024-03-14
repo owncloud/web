@@ -1,0 +1,7 @@
+Enhancement: Remember right side bar state
+
+We've implemented a feature to remember the state of the right side bar. Now, when the user reopens the web application,
+the right side bar will remain in its last state, either open or closed, based on the user's previous interaction with it.
+
+https://github.com/owncloud/web/pull/10612
+https://github.com/owncloud/web/issues/9613
