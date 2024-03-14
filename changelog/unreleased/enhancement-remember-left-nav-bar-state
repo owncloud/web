@@ -4,4 +4,5 @@ We've implemented a feature to remember the state of the left navbar. Now, when 
 the navbar will remain in its last state, either fully open or collapsed,
 based on the user's previous interaction with it.
 
-https://github.com/owncloud/web/issues/9613:
+https://github.com/owncloud/web/pull/10611
+https://github.com/owncloud/web/issues/9613
