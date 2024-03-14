@@ -32,7 +32,7 @@ export class Application {
     await Promise.all([
       this.#page.waitForResponse(
         (resp) =>
-          resp.url().endsWith('notifications?format=json') &&
+          resp.url().endsWith('notifications') &&
           resp.status() === 200 &&
           resp.request().method() === 'GET'
       ),

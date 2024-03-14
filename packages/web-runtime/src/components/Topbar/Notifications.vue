@@ -58,18 +58,6 @@
                 >
                   <a :href="el.link" target="_blank" v-text="el.link" />
                 </div>
-                <div v-if="el.actions?.length" class="oc-notifications-actions oc-my-s">
-                  <oc-button
-                    v-for="(action, actionIndex) in el.actions"
-                    :key="index + '-' + actionIndex"
-                    size="small"
-                    :variation="action.primary ? 'primary' : 'passive'"
-                    @click.prevent="
-                      executeAction(el.app, action.link, action.type, el.notification_id)
-                    "
-                    >{{ action.label }}
-                  </oc-button>
-                </div>
                 <div v-if="el.datetime" class="oc-text-small oc-text-muted oc-mt-xs">
                   <span
                     v-oc-tooltip="formatDate(el.datetime)"
@@ -89,7 +77,7 @@
 <script lang="ts">
 import { onMounted, onUnmounted, ref, unref } from 'vue'
 import isEmpty from 'lodash-es/isEmpty'
-import { eventBus, useCapabilityStore, useSpacesStore } from '@ownclouders/web-pkg'
+import { useCapabilityStore, useSpacesStore } from '@ownclouders/web-pkg'
 import NotificationBell from './NotificationBell.vue'
 import { Notification } from '../../helpers/notifications'
 import {
@@ -195,10 +183,9 @@ export default {
     const fetchNotificationsTask = useTask(function* (signal) {
       loading.value = true
       try {
-        const response = yield clientService.owncloudSdk.requests.ocs({
-          service: 'apps/notifications',
-          action: 'api/v1/notifications'
-        })
+        const response = yield clientService.httpAuthenticated.get(
+          'ocs/v2.php/apps/notifications/api/v1/notifications'
+        )
 
         if (response.headers.get('Content-Length') === '0') {
           return
@@ -206,7 +193,7 @@ export default {
 
         const {
           ocs: { data = [] }
-        } = yield response.json()
+        } = yield response.data
         notifications.value =
           data?.sort((a, b) => (new Date(b.datetime) as any) - (new Date(a.datetime) as any)) || []
       } catch (e) {
@@ -222,64 +209,15 @@ export default {
     const deleteNotifications = async (ids: string[]) => {
       loading.value = true
       try {
-        const { status } = await clientService.owncloudSdk.requests.ocs({
-          service: 'apps/notifications',
-          action: `api/v1/notifications`,
-          method: 'DELETE',
-          data: { ids }
-        })
-        if (status === 405) {
-          // oC10
-          const promises = []
-          for (const id of ids) {
-            promises.push(
-              clientService.owncloudSdk.requests.ocs({
-                service: 'apps/notifications',
-                action: `api/v1/notifications/${id}`,
-                method: 'DELETE'
-              })
-            )
-          }
-          return Promise.resolve(promises)
-        }
+        await clientService.httpAuthenticated.delete(
+          'ocs/v2.php/apps/notifications/api/v1/notifications',
+          { data: { ids } }
+        )
       } catch (e) {
         console.error(e)
       } finally {
         notifications.value = unref(notifications).filter((n) => !ids.includes(n.notification_id))
         loading.value = false
-      }
-    }
-
-    const executeAction = async (app, link, type, notificationId) => {
-      try {
-        const response = await clientService.owncloudSdk.requests.ocs({
-          service: 'apps/' + app,
-          action: link.slice(link.lastIndexOf('api')),
-          method: type
-        })
-        const {
-          ocs: { data }
-        } = await response.json()
-
-        await deleteNotifications([notificationId])
-
-        for (const item in data) {
-          const currentPath = unref(route).params.item ? `/${unref(route).params.item}` : '/'
-          const { state, path, file_target: fileTarget } = item as any
-
-          // accepted federated share
-          if (state === 0 && fileTarget) {
-            eventBus.publish('app.files.list.load')
-            return
-          }
-
-          const itemPath = path?.slice(0, path.lastIndexOf('/') + 1)
-          if (itemPath === currentPath) {
-            eventBus.publish('app.files.list.load')
-          }
-        }
-      } catch (e) {
-        console.error(e)
       }
     }
 
@@ -334,7 +272,6 @@ export default {
       loading,
       dropdownOpened,
       deleteNotifications,
-      executeAction,
       formatDate,
       formatDateRelative,
       getMessage,

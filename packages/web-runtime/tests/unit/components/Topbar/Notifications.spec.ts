@@ -1,10 +1,10 @@
 import Notifications from 'web-runtime/src/components/Topbar/Notifications.vue'
-import { Notification, NotificationAction } from 'web-runtime/src/helpers/notifications'
-import { mock, mockDeep } from 'vitest-mock-extended'
+import { Notification } from 'web-runtime/src/helpers/notifications'
+import { mock } from 'vitest-mock-extended'
 import { defaultComponentMocks, defaultPlugins, shallowMount } from 'web-test-helpers'
-import { OwnCloudSdk } from '@ownclouders/web-client/src/types'
 import { SpaceResource } from '@ownclouders/web-client'
 import { RouterLink, RouteLocationNamedRaw, RouteLocationNormalizedLoaded } from 'vue-router'
+import { AxiosResponse } from 'axios'
 
 const selectors = {
   notificationBellStub: 'notification-bell-stub',
@@ -15,8 +15,7 @@ const selectors = {
   notificationItem: '.oc-notifications-item',
   notificationSubject: '.oc-notifications-subject',
   notificationMessage: '.oc-notifications-message',
-  notificationLink: '.oc-notifications-link',
-  notificationActions: '.oc-notifications-actions'
+  notificationLink: '.oc-notifications-link'
 }
 
 vi.mock('@ownclouders/web-pkg', async (importOriginal) => ({
@@ -56,7 +55,7 @@ describe('Notification component', () => {
     await wrapper.find(selectors.markAll).trigger('click')
     await wrapper.vm.$nextTick()
     expect(wrapper.find(selectors.notificationItem).exists()).toBeFalsy()
-    expect(mocks.$clientService.owncloudSdk.requests.ocs).toHaveBeenCalledTimes(3)
+    expect(mocks.$clientService.httpAuthenticated.delete).toHaveBeenCalledTimes(1)
   })
   describe('avatar', () => {
     it('loads based on the username', async () => {
@@ -194,55 +193,13 @@ describe('Notification component', () => {
       })
     })
   })
-  describe('actions', () => {
-    it('display if given', async () => {
-      const notification = mock<Notification>({
-        messageRich: undefined,
-        actions: [mock<NotificationAction>()]
-      })
-      const { wrapper } = getWrapper({ notifications: [notification] })
-      await wrapper.vm.fetchNotificationsTask.perform()
-      await wrapper.vm.fetchNotificationsTask.last
-      expect(wrapper.find(selectors.notificationActions).exists()).toBeTruthy()
-    })
-    it('remove the notification when triggered', async () => {
-      const notification = mock<Notification>({
-        notification_id: '1',
-        messageRich: undefined,
-        actions: [mock<NotificationAction>({ link: 'http://some-link.com' })]
-      })
-      const { wrapper, mocks } = getWrapper({ notifications: [notification] })
-      await wrapper.vm.fetchNotificationsTask.perform()
-      await wrapper.vm.fetchNotificationsTask.last
-      expect(wrapper.find(selectors.notificationItem).exists()).toBeTruthy()
-      const jsonResponse = {
-        json: vi.fn().mockResolvedValue({ ocs: { data: {} } })
-      }
-      mocks.$clientService.owncloudSdk.requests.ocs.mockResolvedValue(
-        mockDeep<Response>(jsonResponse)
-      )
-      await wrapper.find(`${selectors.notificationActions} button`).trigger('click')
-      await wrapper.vm.$nextTick()
-      await wrapper.vm.$nextTick()
-      await wrapper.vm.$nextTick()
-      await wrapper.vm.$nextTick()
-      await wrapper.vm.$nextTick()
-      await wrapper.vm.$nextTick()
-      await wrapper.vm.$nextTick()
-      expect(wrapper.find(selectors.notificationItem).exists()).toBeFalsy()
-    })
-  })
 })
 
 function getWrapper({ mocks = {}, notifications = [], spaces = [] } = {}) {
   const localMocks = { ...defaultComponentMocks(), ...mocks }
-  const clientMock = mockDeep<OwnCloudSdk>()
-  const jsonResponse = {
-    json: vi.fn().mockResolvedValue({ ocs: { data: notifications } }),
-    headers: {}
-  }
-  clientMock.requests.ocs.mockResolvedValue(mockDeep<Response>(jsonResponse))
-  localMocks.$clientService.owncloudSdk = clientMock
+  localMocks.$clientService.httpAuthenticated.get.mockResolvedValue(
+    mock<AxiosResponse>({ data: { ocs: { data: notifications } }, headers: {} })
+  )
 
   return {
     mocks: localMocks,

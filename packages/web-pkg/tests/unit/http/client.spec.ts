@@ -35,7 +35,7 @@ describe('HttpClient', () => {
       const { data: typedResponse } = await client.delete<Schema>('/foo')
       typedResponse.someProperty
 
-      const { data: schemaResponse } = await client.delete('/foo', { schema })
+      const { data: schemaResponse } = await client.delete('/foo', null, { schema })
       schemaResponse.someProperty
     }
 
