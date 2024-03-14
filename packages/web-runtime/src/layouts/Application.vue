@@ -164,7 +164,7 @@ export default defineComponent({
       return unref(navItems).length && !unref(isMobileWidth)
     })
 
-    const localStorageNavBarClosed = useLocalStorage(`oc_NavBarClosed`, false)
+    const localStorageNavBarClosed = useLocalStorage(`oc_navBarClosed`, false)
     const setNavBarClosed = (value: boolean) => {
       localStorageNavBarClosed.value = value
     }
