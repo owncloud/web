@@ -5,6 +5,7 @@ import { mock, mockDeep, mockReset } from 'jest-mock-extended'
 import { buildSpace, Resource } from '@ownclouders/web-client/src/helpers'
 import { ListFilesResult } from '@ownclouders/web-client/src/webdav/listFiles'
 import { Drive } from '@ownclouders/web-client/src/generated'
+import { computed } from 'vue'
 
 const clientServiceMock = mockDeep<ClientService>()
 const loadingServiceMock = mock<LoadingService>({
@@ -62,6 +63,7 @@ describe('resourcesTransfer', () => {
       resourcesToMove,
       targetSpace,
       resourcesToMove[0],
+      computed(() => mock<Resource>()),
       clientServiceMock,
       loadingServiceMock,
       jest.fn(),
@@ -91,6 +93,7 @@ describe('resourcesTransfer', () => {
           resourcesToMove,
           targetSpace,
           targetFolder,
+          computed(() => mock<Resource>()),
           clientServiceMock,
           loadingServiceMock,
           jest.fn(),
@@ -131,6 +134,7 @@ describe('resourcesTransfer', () => {
       resourcesToMove,
       targetSpace,
       resourcesToMove[0],
+      computed(() => mock<Resource>()),
       clientServiceMock,
       loadingServiceMock,
       jest.fn(),
@@ -161,6 +165,7 @@ describe('resourcesTransfer', () => {
       resourcesToMove,
       targetSpace,
       resourcesToMove[0],
+      computed(() => mock<Resource>()),
       clientServiceMock,
       loadingServiceMock,
       jest.fn(),

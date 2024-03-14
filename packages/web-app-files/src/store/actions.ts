@@ -22,6 +22,7 @@ import { ClientService, LoadingTaskCallbackArguments } from '@ownclouders/web-pk
 import { Language } from 'vue3-gettext'
 import { eventBus } from '@ownclouders/web-pkg'
 import { AncestorMetaData } from '@ownclouders/web-pkg'
+import { computed } from 'vue'
 
 const allowSharePermissions = (getters) => {
   return (
@@ -95,6 +96,7 @@ export default {
       resources,
       targetSpace,
       context.state.currentFolder,
+      computed(() => context.state.currentFolder),
       clientService,
       loadingService,
       createModal,
