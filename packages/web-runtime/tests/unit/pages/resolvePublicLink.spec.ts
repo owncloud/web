@@ -1,11 +1,15 @@
 import ResolvePublicLink from '../../../src/pages/resolvePublicLink.vue'
-import { defaultPlugins, defaultComponentMocks, shallowMount } from 'web-test-helpers'
+import { defaultPlugins, defaultComponentMocks, shallowMount, nextTicks } from 'web-test-helpers'
 import { mockDeep } from 'vitest-mock-extended'
 import { CapabilityStore, ClientService } from '@ownclouders/web-pkg'
 import { Resource } from '@ownclouders/web-client'
 import { authService } from 'web-runtime/src/services/auth'
+import { useLoadTokenInfo } from '../../../src/composables/tokenInfo'
+import { Task } from 'vue-concurrency'
 
 vi.mock('web-runtime/src/services/auth')
+vi.mock('web-runtime/src/composables/tokenInfo')
+
 const selectors = {
   cardFooter: '.oc-card-footer',
   ocSpinnerStub: 'oc-spinner-stub',
@@ -26,24 +30,21 @@ describe('resolvePublicLink', () => {
   describe('password required form', () => {
     it('should display if password is required', async () => {
       const { wrapper } = getWrapper({ passwordRequired: true })
-      await wrapper.vm.loadTokenInfoTask.last
       await wrapper.vm.isPasswordRequiredTask.last
-      await wrapper.vm.$nextTick()
+      await nextTicks(4)
       expect(wrapper.find('form').html()).toMatchSnapshot()
     })
     describe('submit button', () => {
       it('should be set as disabled if "password" is empty', async () => {
         const { wrapper } = getWrapper({ passwordRequired: true })
-        await wrapper.vm.loadTokenInfoTask.last
         await wrapper.vm.isPasswordRequiredTask.last
-        await wrapper.vm.$nextTick()
+        await nextTicks(4)
         expect(wrapper.find(selectors.submitButton).attributes().disabled).toBe('true')
       })
       it('should be set as enabled if "password" is not empty', async () => {
         const { wrapper } = getWrapper({ passwordRequired: true })
-        await wrapper.vm.loadTokenInfoTask.last
         await wrapper.vm.isPasswordRequiredTask.last
-        await wrapper.vm.$nextTick()
+        await nextTicks(4)
         wrapper.vm.password = 'password'
         await wrapper.vm.$nextTick()
         expect(wrapper.find(selectors.submitButton).attributes().disabled).toBe('false')
@@ -51,9 +52,8 @@ describe('resolvePublicLink', () => {
       it('should resolve the public link on click', async () => {
         const resolvePublicLinkSpy = vi.spyOn(authService, 'resolvePublicLink')
         const { wrapper } = getWrapper({ passwordRequired: true })
-        await wrapper.vm.loadTokenInfoTask.last
         await wrapper.vm.isPasswordRequiredTask.last
-        await wrapper.vm.$nextTick()
+        await nextTicks(4)
         wrapper.vm.password = 'password'
         await wrapper.vm.$nextTick()
         await wrapper.find(selectors.submitButton).trigger('submit')
@@ -65,11 +65,17 @@ describe('resolvePublicLink', () => {
 })
 
 function getWrapper({ passwordRequired = false } = {}) {
-  const tokenInfo = { password_protected: passwordRequired ? 'true' : 'false' }
+  const tokenInfo = { password_protected: passwordRequired } as any
+  vi.mocked(useLoadTokenInfo).mockReturnValue({
+    loadTokenInfoTask: mockDeep<Task<any, any>>({
+      perform: () => tokenInfo,
+      isRunning: false,
+      isError: false
+    })
+  })
+
   const $clientService = mockDeep<ClientService>()
   $clientService.webdav.getFileInfo.mockResolvedValue(mockDeep<Resource>({ driveType: 'public' }))
-  $clientService.owncloudSdk.shares.getUnprotectedTokenInfo.mockResolvedValue(tokenInfo)
-  $clientService.owncloudSdk.shares.getProtectedTokenInfo.mockResolvedValue(tokenInfo)
   const mocks = { ...defaultComponentMocks(), $clientService }
 
   const capabilities = {
