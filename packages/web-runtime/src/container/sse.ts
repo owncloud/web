@@ -20,12 +20,6 @@ const fileReadyEventSchema = z.object({
   spaceid: z.string().optional()
 })
 
-type SSEMessageData = {
-  itemid?: string
-  parentitemid?: string
-  spaceid?: string
-}
-
 const itemInCurrentFolder = ({
   resourcesStore,
   parentFolderId
