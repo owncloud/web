@@ -1,10 +1,10 @@
 <template>
   <InnerSideBar
-    v-if="isSideBarOpen"
+    v-if="isOpen"
     ref="sidebar"
     class="files-side-bar"
     tabindex="-1"
-    :is-open="isSideBarOpen"
+    :is-open="isOpen"
     :active-panel="activePanel"
     :available-panels="availablePanels"
     :panel-context="panelContext"
@@ -51,8 +51,7 @@ import {
   useSelectedResources,
   useSpacesStore,
   useSharesStore,
-  useResourcesStore,
-  useSideBar
+  useResourcesStore
 } from '../../composables'
 import {
   isProjectSpaceResource,
@@ -86,7 +85,6 @@ export default defineComponent({
     const extensionRegistry = useExtensionRegistry()
     const eventBus = useEventBus()
     const spacesStore = useSpacesStore()
-    const { isSideBarOpen } = useSideBar()
     const { loadShares } = useSharesStore()
 
     const resourcesStore = useResourcesStore()
@@ -178,9 +176,9 @@ export default defineComponent({
     )
 
     watch(
-      () => [...unref(panelContext).items, isSideBarOpen],
+      () => [...unref(panelContext).items, props.isOpen],
       async () => {
-        if (!isSideBarOpen) {
+        if (!props.isOpen) {
           return
         }
         if (unref(panelContext).items?.length !== 1) {
@@ -250,7 +248,6 @@ export default defineComponent({
     return {
       loadedResource,
       setActiveSideBarPanel,
-      isSideBarOpen,
       closeSideBar,
       destroySideBar,
       focusSideBar,
