@@ -97,12 +97,11 @@ export const syncAllShares = async ({ page }: { page: Page }): Promise<void> => 
   const numberOfPendingShares = await page.locator(pendingShareItem).count()
   const checkResponses = []
   for (let i = 0; i < numberOfPendingShares; i++) {
-    const id = await page.locator(pendingShareItem + `[${i + 1}]`).getAttribute('data-item-id')
     checkResponses.push(
       page.waitForResponse(
         (resp) =>
-          resp.url().includes(`shares/pending/${id}`) &&
-          resp.status() === 200 &&
+          resp.url().includes('root/children') &&
+          resp.status() === 201 &&
           resp.request().method() === 'POST'
       )
     )
@@ -127,8 +126,8 @@ export const clickActionInContextMenu = async (
       await Promise.all([
         page.waitForResponse(
           (resp) =>
-            resp.url().includes('shares') &&
-            resp.status() === 200 &&
+            resp.url().includes('root/children') &&
+            resp.status() === 201 &&
             resp.request().method() === 'POST'
         ),
         page.locator(util.format(actionsTriggerButton, resource, action)).click()
@@ -141,7 +140,7 @@ export const clickActionInContextMenu = async (
       await Promise.all([
         page.waitForResponse(
           (resp) =>
-            resp.url().includes('shares') &&
+            resp.url().includes('drives') &&
             resp.status() === 200 &&
             resp.request().method() === 'DELETE'
         ),

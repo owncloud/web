@@ -5,6 +5,7 @@ import { eventBus } from '../../services'
 import { useRouteQuery } from '../router'
 import { SideBarEventTopics } from '../sideBar'
 import { useResourcesStore } from '../piniaStores'
+import { isIncomingShareResource } from '@ownclouders/web-client/src/helpers'
 
 export interface ScrollToResult {
   scrollToResource(
@@ -71,7 +72,13 @@ export const useScrollTo = (): ScrollToResult => {
       return
     }
 
-    const resource = unref(resources).find((r) => r.id === unref(scrollTo))
+    const resource = unref(resources).find((r) => {
+      if (isIncomingShareResource(r)) {
+        return r.shareId === unref(scrollTo)
+      }
+      return r.id === unref(scrollTo)
+    })
+
     if (resource && resource.processing !== true) {
       resourcesStore.setSelection([resource.id])
       scrollToResource(resource.id, { forceScroll: true, topbarElement })

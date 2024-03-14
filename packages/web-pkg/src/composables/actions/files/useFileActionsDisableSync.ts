@@ -1,4 +1,3 @@
-import { triggerShareAction } from '../../../helpers/share/triggerShareAction'
 import {
   isLocationSharesActive,
   isLocationSpacesActive,
@@ -34,11 +33,8 @@ export const useFileActionsDisableSync = () => {
       triggerPromises.push(
         triggerQueue.add(async () => {
           try {
-            await triggerShareAction({
-              resource,
-              status: 2,
-              client: clientService.owncloudSdk
-            })
+            const { graphAuthenticated } = clientService
+            await graphAuthenticated.drives.deleteDriveItem(resource.driveId, resource.id)
 
             updateResourceField<IncomingShareResource, any>({
               id: resource.id,

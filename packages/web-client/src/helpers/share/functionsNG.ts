@@ -94,8 +94,9 @@ export function buildIncomingShareResource({
   const sharePermissions = getShareResourcePermissions({ driveItem, shareRoles })
 
   const resource: IncomingShareResource = {
-    id: driveItem.remoteItem.permissions[0].id,
+    id: driveItem.id,
     shareId: driveItem.remoteItem.permissions[0].id,
+    driveId: driveItem.parentReference?.driveId,
     path: '/',
     name: resourceName,
     fileId: driveItem.remoteItem.id,
@@ -146,8 +147,9 @@ export function buildOutgoingShareResource({
   const path = urlJoin(driveItem.parentReference.path, driveItem.name)
 
   const resource: OutgoingShareResource = {
-    id: driveItem.permissions[0].id,
+    id: driveItem.id,
     shareId: driveItem.permissions[0].id,
+    driveId: driveItem.parentReference?.driveId,
     path,
     name: driveItem.name,
     fileId: driveItem.id,

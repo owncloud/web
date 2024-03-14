@@ -127,14 +127,8 @@ export const clickResource = async ({
   const paths = path.split('/')
   for (const name of paths) {
     const resource = page.locator(util.format(resourceNameSelector, name))
-    const itemId = await resource.locator(fileRow).getAttribute('data-item-id')
     await Promise.all([
-      page.waitForResponse(
-        (resp) =>
-          resp.url().endsWith(encodeURIComponent(name)) ||
-          resp.url().endsWith(itemId) ||
-          resp.url().endsWith(encodeURIComponent(itemId))
-      ),
+      page.waitForResponse((resp) => resp.request().method() === 'PROPFIND'),
       resource.click()
     ])
   }
