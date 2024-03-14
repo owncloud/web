@@ -40,7 +40,7 @@ export default defineComponent({
     const sideBarAvailablePanels = [
       {
         name: 'DetailsPanel',
-        icon: 'group-2',
+        icon: 'settings-4',
         title: () => $gettext('Details'),
         component: DetailsPanel,
         isRoot: () => true,
