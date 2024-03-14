@@ -1,6 +1,6 @@
 import { extractDomSelector, extractExtensionFromFile, extractStorageId } from '../resource'
 import { ShareTypes } from './type'
-import { SHARE_JAIL_ID, buildWebDavSpacesPath } from '../space'
+import { buildWebDavSpacesPath } from '../space'
 import { DriveItem, Identity, UnifiedRoleDefinition, User } from '../../generated'
 import { GraphSharePermission, IncomingShareResource, OutgoingShareResource } from './types'
 import { urlJoin } from '../../utils'
@@ -104,7 +104,7 @@ export function buildIncomingShareResource({
     sdate: driveItem.lastModifiedDateTime, // FIXME: share date is missing in API
     indicators: [],
     tags: [],
-    webDavPath: buildWebDavSpacesPath([SHARE_JAIL_ID, driveItem.id].join('!'), '/'),
+    webDavPath: buildWebDavSpacesPath(driveItem.id, '/'),
     sharedBy,
     owner: driveItem.remoteItem.createdBy?.user,
     sharedWith,
