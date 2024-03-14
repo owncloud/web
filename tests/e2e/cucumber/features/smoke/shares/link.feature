@@ -86,10 +86,10 @@ Feature: link
       | pathToFile                    | content   |
       | folderPublic/shareToBrian.txt | some text |
       | folderPublic/shareToBrian.md  | readme    |
-    And "Alice" uploads the following resource
-      | resource       |
-      | simple.pdf     |
-      | testavatar.jpg |
+    And "Alice" uploads the following local file into personal space using API
+      | localFile                     | to             |
+      | filesForUpload/simple.pdf     | simple.pdf     |
+      | filesForUpload/testavatar.jpg | testavatar.jpg |
     And "Alice" shares the following resource using API
       | resource       | recipient | type | role     |
       | folderPublic   | Brian     | user | Can edit |
