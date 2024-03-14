@@ -61,6 +61,7 @@ import { useTask } from 'vue-concurrency'
 import { isShareSpaceResource, Resource, SHARE_JAIL_ID } from '@ownclouders/web-client/src/helpers'
 import { RouteLocationNamedRaw } from 'vue-router'
 import { useGettext } from 'vue3-gettext'
+import { DriveItem } from '@ownclouders/web-client/src/generated'
 
 export default defineComponent({
   name: 'ResolvePrivateLink',
@@ -122,8 +123,13 @@ export default defineComponent({
         sharedParentResource.value = resource
         resourceIsNestedInShare = path !== '/'
         if (!resourceIsNestedInShare && space.shareId) {
-          const { shareInfo } = yield clientService.owncloudSdk.shares.getShare(space.shareId)
-          isHiddenShare = shareInfo.hidden === 'true'
+          // FIXME: get drive item by id as soon as server supports it
+          const { data } = yield clientService.graphAuthenticated.drives.listSharedWithMe()
+          const share = (data.value as DriveItem[]).find(
+            ({ remoteItem }) => remoteItem.id === resource.id
+          )
+
+          isHiddenShare = share?.['@UI.Hidden']
         }
       }
 
