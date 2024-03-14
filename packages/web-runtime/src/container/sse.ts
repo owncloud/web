@@ -201,7 +201,7 @@ export const onSSEProcessingFinishedEvent = async ({
   }
 }
 
-export const onSSEItemTrashedEvent = ({
+export const onSSEItemTrashedEvent = async ({
   topic,
   language,
   messageStore,
@@ -215,6 +215,15 @@ export const onSSEItemTrashedEvent = ({
   msg: MessageEvent
 }) => {
   try {
+    /**
+     * TODO: Implement a mechanism to identify the client that initiated the trash event.
+     * Currently, a timeout is utilized to ensure the frontend business logic execution,
+     * preventing the user from being prompted to navigate to 'another location'
+     * if the active current folder has been deleted.
+     * If the initiating client matches the current client, no action is required.
+     */
+    await new Promise((resolve) => setTimeout(resolve, 500))
+
     const sseData = fileReadyEventSchema.parse(JSON.parse(msg.data))
     const currentFolder = resourcesStore.currentFolder
     const resourceIsCurrentFolder = currentFolder.id === sseData.itemid
