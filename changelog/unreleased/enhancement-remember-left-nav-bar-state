@@ -1,0 +1,8 @@
+Enhancement: Remember left nav bar state
+
+We've implemented a feature to remember the state of the left navbar. Now, when the user reopens the web application,
+the navbar will remain in its last state, either fully open or collapsed,
+based on the user's previous interaction with it.
+
+https://github.com/owncloud/web/pull/10611
+https://github.com/owncloud/web/issues/9613

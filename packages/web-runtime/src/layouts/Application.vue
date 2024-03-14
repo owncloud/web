@@ -45,7 +45,8 @@ import {
   AppLoadingSpinner,
   useAppsStore,
   useAuthStore,
-  useExtensionRegistry
+  useExtensionRegistry,
+  useLocalStorage
 } from '@ownclouders/web-pkg'
 import TopBar from '../components/Topbar/TopBar.vue'
 import MessageBar from '../components/MessageBar.vue'
@@ -163,7 +164,7 @@ export default defineComponent({
       return unref(navItems).length && !unref(isMobileWidth)
     })
 
-    const navBarClosed = ref(false)
+    const navBarClosed = useLocalStorage(`oc_navBarClosed`, false)
     const setNavBarClosed = (value: boolean) => {
       navBarClosed.value = value
     }
