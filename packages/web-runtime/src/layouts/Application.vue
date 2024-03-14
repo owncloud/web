@@ -15,7 +15,7 @@
             v-if="isSidebarVisible"
             class="app-navigation"
             :nav-items="navItems"
-            :closed="navBarClosed"
+            :closed="localStorageNavBarClosed"
             @update:nav-bar-closed="setNavBarClosed"
           />
           <portal to="app.runtime.mobile.nav">
@@ -45,7 +45,8 @@ import {
   AppLoadingSpinner,
   useAppsStore,
   useAuthStore,
-  useExtensionRegistry
+  useExtensionRegistry,
+  useLocalStorage
 } from '@ownclouders/web-pkg'
 import TopBar from '../components/Topbar/TopBar.vue'
 import MessageBar from '../components/MessageBar.vue'
@@ -163,9 +164,9 @@ export default defineComponent({
       return unref(navItems).length && !unref(isMobileWidth)
     })
 
-    const navBarClosed = ref(false)
+    const localStorageNavBarClosed = useLocalStorage(`oc_NavBarClosed`, false)
     const setNavBarClosed = (value: boolean) => {
-      navBarClosed.value = value
+      localStorageNavBarClosed.value = value
     }
 
     return {
@@ -175,7 +176,7 @@ export default defineComponent({
       navItems,
       onResize,
       isMobileWidth,
-      navBarClosed,
+      localStorageNavBarClosed,
       setNavBarClosed
     }
   },
