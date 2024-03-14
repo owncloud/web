@@ -65,21 +65,24 @@ export class DAV {
     return body
   }
 
-  public async search(
-    pattern: string,
+  public async report(
     path: string,
     {
+      pattern = '',
+      filterRules = null,
       limit = 30,
       properties,
       headers = {}
     }: {
+      pattern?: string
+      filterRules?: Partial<Record<DavPropertyValue, unknown>>
       limit?: number
       properties?: DavPropertyValue[]
       headers?: Headers
     } = {}
   ) {
     const { body, result } = await this.request(DavMethod.report, path, {
-      body: buildPropFindBody(properties, { pattern, limit }),
+      body: buildPropFindBody(properties, { pattern, filterRules, limit }),
       headers
     })
 

@@ -19,6 +19,8 @@ import { Capabilities } from '../ocs'
 import { Ref } from 'vue'
 import { ListFilesByIdFactory } from './listFilesById'
 import { User } from '../generated'
+import { SetFavoriteFactory } from './setFavorite'
+import { ListFavoriteFilesFactory } from './listFavoriteFiles'
 
 export interface WebDavOptions {
   sdk: OwnCloudSdk
@@ -49,4 +51,6 @@ export interface WebDAV {
   restoreFileVersion: ReturnType<typeof RestoreFileVersionFactory>['restoreFileVersion']
   clearTrashBin: ReturnType<typeof ClearTrashBinFactory>['clearTrashBin']
   search: ReturnType<typeof SearchFactory>['search']
+  listFavoriteFiles: ReturnType<typeof ListFavoriteFilesFactory>['listFavoriteFiles']
+  setFavorite: ReturnType<typeof SetFavoriteFactory>['setFavorite']
 }
