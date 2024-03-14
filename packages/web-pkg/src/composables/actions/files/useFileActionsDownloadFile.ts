@@ -18,8 +18,8 @@ export const useFileActionsDownloadFile = () => {
   const isFilesAppActive = useIsFilesAppActive()
   const isSearchActive = useIsSearchActive()
   const { downloadFile } = useDownloadFile()
-  const handler = ({ resources }: FileActionOptions) => {
-    downloadFile(resources[0])
+  const handler = ({ space, resources }: FileActionOptions) => {
+    downloadFile(space, resources[0])
   }
 
   const actions = computed((): FileAction[] => [

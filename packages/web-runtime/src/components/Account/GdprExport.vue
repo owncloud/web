@@ -111,7 +111,7 @@ export default defineComponent({
       }
     }
     const downloadExport = () => {
-      return downloadFile(unref(exportFile))
+      return downloadFile(spacesStore.personalSpace, unref(exportFile))
     }
 
     const exportDate = computed(() => {

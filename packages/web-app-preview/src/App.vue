@@ -171,6 +171,9 @@ export default defineComponent({
 
     const { activeFiles, currentFileContext, closed } = appDefaults
 
+    const fileId = computed(() => unref(unref(currentFileContext).itemId))
+    const space = computed(() => unref(unref(currentFileContext).space))
+
     const isFullScreenModeActivated = ref(false)
     const toggleFullscreenMode = () => {
       const activateFullscreen = !unref(isFullScreenModeActivated)
@@ -236,10 +239,10 @@ export default defineComponent({
     const isFileContentLoading = ref(true)
 
     const triggerActiveFileDownload = () => {
-      if (isFileContentLoading.value) {
+      if (unref(isFileContentLoading)) {
         return
       }
-      downloadFile(activeFilteredFile.value)
+      downloadFile(unref(space), unref(activeFilteredFile))
     }
 
     const fileActions: Action<ActionOptions>[] = [
@@ -274,8 +277,6 @@ export default defineComponent({
       { immediate: true }
     )
 
-    const fileId = computed(() => unref(unref(currentFileContext).itemId))
-    const space = computed(() => unref(unref(currentFileContext).space))
     const { selectedResources } = useSelectedResources()
     watch(activeFilteredFile, (file) => {
       selectedResources.value = [file]

@@ -8,7 +8,7 @@ import { DAV } from './client'
 export const GetFileUrlFactory = (
   dav: DAV,
   getFileContentsFactory: ReturnType<typeof GetFileContentsFactory>,
-  { sdk, capabilities }: WebDavOptions
+  { sdk, capabilities, clientService, user }: WebDavOptions
 ) => {
   return {
     async getFileUrl(
@@ -16,10 +16,14 @@ export const GetFileUrlFactory = (
       resource: Resource,
       {
         disposition = 'attachment',
-        signUrlTimeout = 86400
+        signUrlTimeout = 86400,
+        version = null,
+        preflightHeadRequest = false
       }: {
         disposition?: 'inline' | 'attachment'
         signUrlTimeout?: number
+        version?: string
+        preflightHeadRequest?: boolean
       }
     ): Promise<string> {
       const inlineDisposition = disposition === 'inline'
@@ -30,8 +34,14 @@ export const GetFileUrlFactory = (
       let signed = true
       if (!downloadURL && !inlineDisposition) {
         // compute unsigned url
-        const webDavPath = urlJoin(space.webDavPath, path)
-        downloadURL = dav.getFileUrl(webDavPath)
+        const webDavPath = space ? urlJoin(space.webDavPath, path) : resource.webDavPath
+        downloadURL = version
+          ? dav.getFileUrl(urlJoin('meta', resource.fileId, 'v', version))
+          : dav.getFileUrl(webDavPath)
+
+        if (user && preflightHeadRequest) {
+          await clientService.httpAuthenticated.head(downloadURL)
+        }
 
         // sign url
         if (isUrlSigningEnabled) {

@@ -142,7 +142,7 @@ export default defineComponent({
       fetchVersionsTask.perform()
     }
     const downloadVersion = (version: Resource) => {
-      return downloadFile(unref(resource), version.name)
+      return downloadFile(unref(space), unref(resource), version.name)
     }
     const formatVersionDateRelative = (version: Resource) => {
       return formatRelativeDateFromHTTP(version.mdate, currentLanguage)
