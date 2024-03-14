@@ -1,7 +1,7 @@
 Enhancement: Add SSE events for locking, renaming, deleting, and restoring
 
 We've added Server-Sent Events (SSE) for locking, renaming, deleting, and restoring actions.
-This enhancements ensures that these actions are instantly propagated to other browsers and devices where the user is logged in.
+This enhancement ensures that these actions are instantly propagated to other browsers and devices where the logged in user has access the relevant files and folders.
 Now, users can experience real-time updates across all their devices.
 
 https://github.com/owncloud/web/pull/10586
