@@ -134,7 +134,7 @@ export default defineComponent({
     const subPanels = computed(() => unref(panels).filter((p) => !p.isRoot?.(props.panelContext)))
 
     onBeforeUnmount(() => {
-      eventBus.publish(SideBarEventTopics.close)
+      //eventBus.publish(SideBarEventTopics.close)
     })
 
     return {

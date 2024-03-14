@@ -1,6 +1,7 @@
 import { onBeforeUnmount, readonly, ref, Ref, unref } from 'vue'
 import { EventBus, eventBus as defaultEventBus } from '../../services/eventBus'
 import { SideBarEventTopics } from './eventTopics'
+import { useLocalStorage } from '../localStorage'
 
 interface SideBarResult {
   isSideBarOpen: Ref<boolean>
@@ -14,23 +15,29 @@ interface SideBarOptions {
 
 export const useSideBar = (options?: SideBarOptions): SideBarResult => {
   const eventBus = options?.bus || defaultEventBus
-  const isSideBarOpen = ref(false)
+  const localStorageSideBarOpen = useLocalStorage(`oc_SideBarOpen`, false)
+  console.log(localStorageSideBarOpen)
+
   const sideBarActivePanel = ref(null)
   const toggleSideBarToken = eventBus.subscribe(SideBarEventTopics.toggle, () => {
-    isSideBarOpen.value = !unref(isSideBarOpen)
+    console.log('toggle')
+    localStorageSideBarOpen.value = !unref(localStorageSideBarOpen)
   })
   const closeSideBarToken = eventBus.subscribe(SideBarEventTopics.close, () => {
-    isSideBarOpen.value = false
+    console.log('close')
+    localStorageSideBarOpen.value = false
     sideBarActivePanel.value = null
   })
   const openSideBarToken = eventBus.subscribe(SideBarEventTopics.open, () => {
-    isSideBarOpen.value = true
+    console.log('open')
+    localStorageSideBarOpen.value = true
     sideBarActivePanel.value = null
   })
   const openSideBarWithPanelToken = eventBus.subscribe(
     SideBarEventTopics.openWithPanel,
     (panelName: string) => {
-      isSideBarOpen.value = true
+      console.log('OPEN WITH PANEL TOK')
+      localStorageSideBarOpen.value = true
       sideBarActivePanel.value = panelName
     }
   )
@@ -61,7 +68,7 @@ export const useSideBar = (options?: SideBarOptions): SideBarResult => {
   }
 
   return {
-    isSideBarOpen: readonly(isSideBarOpen),
+    isSideBarOpen: readonly(localStorageSideBarOpen),
     sideBarActivePanel: readonly(sideBarActivePanel),
     onPanelActive
   }
