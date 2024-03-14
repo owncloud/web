@@ -20,9 +20,10 @@ export class HttpClient {
 
   public async delete<T = any, D = any, S extends z.Schema | T = T>(
     url: string,
+    data?: D,
     config?: RequestConfig<D, S>
   ) {
-    return await this.internalRequest('delete', url, config)
+    return await this.internalRequestWithData('delete', url, data, config)
   }
 
   public get<T = unknown, D = any, S extends z.Schema | T = T>(
@@ -107,7 +108,7 @@ export class HttpClient {
   }
 
   private async internalRequestWithData<T = any, D = any, S extends z.Schema | T = T>(
-    method: 'post' | 'put' | 'patch',
+    method: 'post' | 'put' | 'patch' | 'delete',
     url: string,
     data: D,
     config: RequestConfig<D, S>
