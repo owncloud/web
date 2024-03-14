@@ -14,7 +14,7 @@ import { z } from 'zod'
 import { Router } from 'vue-router'
 import { Language } from 'vue3-gettext'
 
-const fileReadyEventSchema = z.object({
+const eventSchema = z.object({
   itemid: z.string(),
   parentitemid: z.string(),
   spaceid: z.string().optional()
@@ -62,7 +62,7 @@ export const onSSEItemRenamedEvent = async ({
   router: Router
 }) => {
   try {
-    const sseData = fileReadyEventSchema.parse(JSON.parse(msg.data))
+    const sseData = eventSchema.parse(JSON.parse(msg.data))
     const currentFolder = resourcesStore.currentFolder
     const resourceIsCurrentFolder = currentFolder.id === sseData.itemid
     const resource = resourceIsCurrentFolder
@@ -108,7 +108,7 @@ export const onSSEFileLockingEvent = async ({
   clientService: ClientService
 }) => {
   try {
-    const sseData = fileReadyEventSchema.parse(JSON.parse(msg.data))
+    const sseData = eventSchema.parse(JSON.parse(msg.data))
     const resource = resourcesStore.resources.find((f) => f.id === sseData.itemid)
     const space = spacesStore.spaces.find((s) => s.id === resource.storageId)
 
@@ -154,7 +154,7 @@ export const onSSEProcessingFinishedEvent = async ({
   previewService: PreviewService
 }) => {
   try {
-    const sseData = fileReadyEventSchema.parse(JSON.parse(msg.data))
+    const sseData = eventSchema.parse(JSON.parse(msg.data))
 
     if (!itemInCurrentFolder({ resourcesStore, parentFolderId: sseData.parentitemid })) {
       return false
@@ -224,7 +224,7 @@ export const onSSEItemTrashedEvent = async ({
      */
     await new Promise((resolve) => setTimeout(resolve, 500))
 
-    const sseData = fileReadyEventSchema.parse(JSON.parse(msg.data))
+    const sseData = eventSchema.parse(JSON.parse(msg.data))
     const currentFolder = resourcesStore.currentFolder
     const resourceIsCurrentFolder = currentFolder.id === sseData.itemid
 
@@ -262,7 +262,7 @@ export const onSSEItemRestoredEvent = async ({
   clientService: ClientService
 }) => {
   try {
-    const sseData = fileReadyEventSchema.parse(JSON.parse(msg.data))
+    const sseData = eventSchema.parse(JSON.parse(msg.data))
 
     const space = spacesStore.spaces.find((space) => space.id === sseData.spaceid)
     if (!space) {
