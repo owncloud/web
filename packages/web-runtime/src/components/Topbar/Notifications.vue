@@ -104,6 +104,7 @@ import { useGettext } from 'vue3-gettext'
 import { useTask } from 'vue-concurrency'
 import { createFileRouteOptions } from '@ownclouders/web-pkg'
 import { MESSAGE_TYPE } from '@ownclouders/web-client/src/sse'
+import { buildSpace } from '@ownclouders/web-client/src/helpers'
 
 const POLLING_INTERVAL = 30000
 
@@ -159,7 +160,7 @@ export default {
       }
       return message
     }
-    const getLink = ({ messageRichParameters, object_type }: Notification) => {
+    const getLink = async ({ messageRichParameters, object_type, subject }: Notification) => {
       if (!messageRichParameters) {
         return null
       }
@@ -175,21 +176,47 @@ export default {
         const space = store.getters['runtime/spaces/spaces'].find(
           (s) => s.fileId === messageRichParameters?.space?.id.split('!')[0] && !s.disabled
         )
-        if (space) {
+
+        if (space && subject === 'Removed from Space') {
+          store.commit('runtime/spaces/REMOVE_SPACE', space)
+          return null
+        } else if (space) {
           return {
             name: 'files-spaces-generic',
             ...createFileRouteOptions(space, { path: '', fileId: space.fileId })
           }
         }
+
+        try {
+          const { data } = await clientService.graphAuthenticated.drives.getDrive(
+            messageRichParameters.space.id
+          )
+
+          const space = buildSpace(data)
+          if (!space.isMember(store.getters.user)) {
+            return null
+          }
+
+          store.commit('runtime/spaces/UPSERT_SPACE', space)
+
+          return {
+            name: 'files-spaces-generic',
+            ...createFileRouteOptions(space, { path: '', fileId: space.fileId })
+          }
+        } catch (error) {
+          // user has probably been removed from space
+          console.error(error)
+          return null
+        }
       }
       return null
     }
 
-    const setAdditionalData = () => {
+    const setAdditionalData = async () => {
       loading.value = true
       for (const notification of unref(notifications)) {
         notification.computedMessage = getMessage(notification)
-        notification.computedLink = getLink(notification)
+        notification.computedLink = await getLink(notification)
       }
       loading.value = false
     }
@@ -215,7 +242,7 @@ export default {
         console.error(e)
       } finally {
         if (unref(dropdownOpened)) {
-          setAdditionalData()
+          yield setAdditionalData()
         }
         loading.value = false
       }

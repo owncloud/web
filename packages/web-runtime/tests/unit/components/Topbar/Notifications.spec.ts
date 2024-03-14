@@ -6,10 +6,12 @@ import {
   defaultComponentMocks,
   defaultPlugins,
   shallowMount,
-  defaultStoreMockOptions
+  defaultStoreMockOptions,
+  mockAxiosResolve
 } from 'web-test-helpers'
 import { OwnCloudSdk } from '@ownclouders/web-client/src/types'
 import { SpaceResource } from '@ownclouders/web-client'
+import { Drive } from '@ownclouders/web-client/src/generated'
 
 const selectors = {
   notificationBellStub: 'notification-bell-stub',
@@ -21,7 +23,8 @@ const selectors = {
   notificationSubject: '.oc-notifications-subject',
   notificationMessage: '.oc-notifications-message',
   notificationLink: '.oc-notifications-link',
-  notificationActions: '.oc-notifications-actions'
+  notificationActions: '.oc-notifications-actions',
+  notificationRouterLinkStub: '.oc-notifications-item router-link-stub'
 }
 
 jest.mock('@ownclouders/web-pkg', () => ({
@@ -160,15 +163,14 @@ describe('Notification component', () => {
         await wrapper.vm.fetchNotificationsTask.last
         wrapper.vm.showDrop()
         await wrapper.vm.$nextTick()
-        const routerLink = wrapper.findComponent<any>(
-          `${selectors.notificationItem} router-link-stub`
-        )
+        await wrapper.vm.$nextTick()
+        const routerLink = wrapper.findComponent<any>(selectors.notificationRouterLinkStub)
         expect(routerLink.props('to').name).toEqual('files-shares-with-me')
         expect(routerLink.props('to').query).toEqual({
           scrollTo: notification.messageRichParameters.share.id
         })
       })
-      it('renders notification as link for spaces', async () => {
+      it('renders notification as link for already loaded spaces', async () => {
         const spaceMock = mock<SpaceResource>({
           fileId: '1',
           getDriveAliasAndItem: () => 'driveAlias',
@@ -187,12 +189,65 @@ describe('Notification component', () => {
         await wrapper.vm.fetchNotificationsTask.last
         wrapper.vm.showDrop()
         await wrapper.vm.$nextTick()
-        const routerLink = wrapper.findComponent<any>(
-          `${selectors.notificationItem} router-link-stub`
-        )
+        await wrapper.vm.$nextTick()
+        const routerLink = wrapper.findComponent<any>(selectors.notificationRouterLinkStub)
         expect(routerLink.props('to').params).toEqual({
           driveAliasAndItem: 'driveAlias'
         })
+      })
+      it('renders notification as link for new spaces after fetching them', async () => {
+        const spaceMock = mock<SpaceResource>({
+          fileId: '1',
+          getDriveAliasAndItem: () => 'driveAlias',
+          disabled: false
+        })
+        const notification = mock<Notification>({
+          messageRich: '{user} added you to space {space}',
+          object_type: 'storagespace',
+          messageRichParameters: {
+            user: { displayname: 'Albert Einstein' },
+            space: { name: 'someFile.txt', id: `${spaceMock.fileId}!2` }
+          }
+        })
+
+        const { wrapper, mocks } = getWrapper({ notifications: [notification] })
+        mocks.$clientService.graphAuthenticated.drives.getDrive.mockResolvedValue(
+          mockAxiosResolve(mock<Drive>({ special: [] }))
+        )
+
+        await wrapper.vm.fetchNotificationsTask.perform()
+        await wrapper.vm.fetchNotificationsTask.last
+        wrapper.vm.showDrop()
+        await wrapper.vm.$nextTick()
+        await wrapper.vm.$nextTick()
+        const routerLink = wrapper.findComponent<any>(selectors.notificationRouterLinkStub)
+
+        expect(mocks.$clientService.graphAuthenticated.drives.getDrive).toHaveBeenCalledTimes(1)
+        expect(routerLink.exists()).toBeTruthy()
+      })
+      it('does not render notification as link if user has been removed from space', async () => {
+        const spaceMock = mock<SpaceResource>({
+          fileId: '1',
+          getDriveAliasAndItem: () => 'driveAlias',
+          disabled: false
+        })
+        const notification = mock<Notification>({
+          messageRich: '{user} removed you from space {space}',
+          object_type: 'storagespace',
+          subject: 'Removed from Space',
+          messageRichParameters: {
+            user: { displayname: 'Albert Einstein' },
+            space: { name: 'someFile.txt', id: `${spaceMock.fileId}!2` }
+          }
+        })
+        const { wrapper } = getWrapper({ notifications: [notification], spaces: [spaceMock] })
+        await wrapper.vm.fetchNotificationsTask.perform()
+        await wrapper.vm.fetchNotificationsTask.last
+        wrapper.vm.showDrop()
+        await wrapper.vm.$nextTick()
+        await wrapper.vm.$nextTick()
+        const routerLink = wrapper.findComponent<any>(selectors.notificationRouterLinkStub)
+        expect(routerLink.exists()).toBeFalsy()
       })
     })
   })
