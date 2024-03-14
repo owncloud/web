@@ -35,6 +35,33 @@ export const buildPropFindBody = (
   return builder.build(xmlObj)
 }
 
+export const buildPropPatchBody = (
+  properties: Partial<Record<DavPropertyValue, unknown>>
+): string => {
+  const props = Object.keys(properties).reduce<Record<string, string>>((acc, val) => {
+    const davNamespace = DavProperties.DavNamespace.includes(val as DavPropertyValue)
+    acc[davNamespace ? `d:${val}` : `oc:${val}`] = properties[val]
+    return acc
+  }, {})
+
+  const xmlObj = {
+    'd:propertyupdate': {
+      'd:set': { 'd:prop': props },
+      '@@xmlns:d': 'DAV:',
+      '@@xmlns:oc': 'http://owncloud.org/ns'
+    }
+  }
+
+  const builder = new XMLBuilder({
+    format: true,
+    ignoreAttributes: false,
+    attributeNamePrefix: '@@',
+    suppressEmptyNode: true
+  })
+
+  return builder.build(xmlObj)
+}
+
 export const buildPublicLinkAuthHeader = (password: string) => {
   return 'Basic ' + Buffer.from('public:' + password).toString('base64')
 }
