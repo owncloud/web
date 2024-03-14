@@ -8,7 +8,7 @@ import { DAV } from './client'
 export const GetFileUrlFactory = (
   dav: DAV,
   getFileContentsFactory: ReturnType<typeof GetFileContentsFactory>,
-  { sdk, capabilities, clientService, user }: WebDavOptions
+  { capabilities, clientService, user }: WebDavOptions
 ) => {
   return {
     async getFileUrl(
@@ -39,13 +39,13 @@ export const GetFileUrlFactory = (
           ? dav.getFileUrl(urlJoin('meta', resource.fileId, 'v', version))
           : dav.getFileUrl(webDavPath)
 
-        if (user && doHeadRequest) {
+        if (unref(user) && doHeadRequest) {
           await clientService.httpAuthenticated.head(downloadURL)
         }
 
         // sign url
-        if (isUrlSigningEnabled) {
-          downloadURL = await sdk.signUrl(downloadURL, signUrlTimeout)
+        if (isUrlSigningEnabled && unref(user)) {
+          downloadURL = await clientService.ocsUserContext.signUrl(downloadURL, signUrlTimeout)
         } else {
           signed = false
         }

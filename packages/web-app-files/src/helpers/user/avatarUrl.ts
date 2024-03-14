@@ -23,12 +23,7 @@ export const avatarUrl = async (options: AvatarUrlOptions, cached = false): Prom
     throw new Error(statusText)
   }
 
-  const { owncloudSdk } = options.clientService
-  if (!owncloudSdk || typeof owncloudSdk.signUrl !== 'function') {
-    return url
-  }
-
-  return owncloudSdk.signUrl(url)
+  return options.clientService.ocsUserContext.signUrl(url)
 }
 
 const cacheFactory = async (options: AvatarUrlOptions): Promise<string> => {
