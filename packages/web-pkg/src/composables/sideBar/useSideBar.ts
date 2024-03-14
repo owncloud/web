@@ -15,24 +15,24 @@ interface SideBarOptions {
 
 export const useSideBar = (options?: SideBarOptions): SideBarResult => {
   const eventBus = options?.bus || defaultEventBus
-  const localStorageSideBarOpen = useLocalStorage(`oc_SideBarOpen`, false)
+  const isSideBarOpen = useLocalStorage(`oc_sideBarOpen`, false)
 
   const sideBarActivePanel = ref(null)
   const toggleSideBarToken = eventBus.subscribe(SideBarEventTopics.toggle, () => {
-    localStorageSideBarOpen.value = !unref(localStorageSideBarOpen)
+    isSideBarOpen.value = !unref(isSideBarOpen)
   })
   const closeSideBarToken = eventBus.subscribe(SideBarEventTopics.close, () => {
-    localStorageSideBarOpen.value = false
+    isSideBarOpen.value = false
     sideBarActivePanel.value = null
   })
   const openSideBarToken = eventBus.subscribe(SideBarEventTopics.open, () => {
-    localStorageSideBarOpen.value = true
+    isSideBarOpen.value = true
     sideBarActivePanel.value = null
   })
   const openSideBarWithPanelToken = eventBus.subscribe(
     SideBarEventTopics.openWithPanel,
     (panelName: string) => {
-      localStorageSideBarOpen.value = true
+      isSideBarOpen.value = true
       sideBarActivePanel.value = panelName
     }
   )
@@ -63,7 +63,7 @@ export const useSideBar = (options?: SideBarOptions): SideBarResult => {
   }
 
   return {
-    isSideBarOpen: readonly(localStorageSideBarOpen),
+    isSideBarOpen: readonly(isSideBarOpen),
     sideBarActivePanel: readonly(sideBarActivePanel),
     onPanelActive
   }
