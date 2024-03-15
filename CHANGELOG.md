@@ -10,6 +10,7 @@ Summary
 
 * Enhancement - Tile sizes: [#10018](https://github.com/owncloud/web/issues/10018)
 * Enhancement - Remember left nav bar state: [#10611](https://github.com/owncloud/web/pull/10611)
+* Enhancement - Remember right side bar state: [#10612](https://github.com/owncloud/web/pull/10612)
 
 Details
 -------
@@ -33,6 +34,16 @@ Details
 
    https://github.com/owncloud/web/issues/9613
    https://github.com/owncloud/web/pull/10611
+
+* Enhancement - Remember right side bar state: [#10612](https://github.com/owncloud/web/pull/10612)
+
+   We've implemented a feature to remember the state of the right side bar. Now,
+   when the user reopens the web application, the right side bar will remain in its
+   last state, either open or closed, based on the user's previous interaction with
+   it.
+
+   https://github.com/owncloud/web/issues/9613
+   https://github.com/owncloud/web/pull/10612
 
 Changelog for ownCloud Web [8.0.0] (2024-03-08)
 =======================================
