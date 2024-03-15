@@ -120,7 +120,7 @@ export default defineComponent({
       {
         name: 'DetailsPanel',
         icon: 'group-2',
-        title: () => $gettext('Group details'),
+        title: () => $gettext('Details'),
         component: DetailsPanel,
         componentAttrs: () => ({ groups: unref(selectedGroups) }),
         isRoot: () => true,

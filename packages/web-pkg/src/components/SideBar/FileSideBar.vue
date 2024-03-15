@@ -232,7 +232,7 @@ export default defineComponent({
         }
         isLoading.value = false
       },
-      { deep: true }
+      { deep: true, immediate: true }
     )
 
     provide('resource', readonly(loadedResource))

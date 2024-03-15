@@ -4,6 +4,7 @@ import FileActions from '../../components/SideBar/Actions/FileActions.vue'
 import FileVersions from '../../components/SideBar/Versions/FileVersions.vue'
 import SharesPanel from '../../components/SideBar/Shares/SharesPanel.vue'
 import NoSelection from '../../components/SideBar/NoSelection.vue'
+import TrashNoSelection from '../../components/SideBar/TrashNoSelection.vue'
 import SpaceActions from '../../components/SideBar/Actions/SpaceActions.vue'
 import {
   SpaceDetails,
@@ -52,6 +53,10 @@ export const useSideBarPanels = () => {
             component: NoSelection,
             isRoot: () => true,
             isVisible: ({ parent, items }) => {
+              if (isLocationTrashActive(router, 'files-trash-overview')) {
+                // trash overview has its own "no selection" panel
+                return false
+              }
               if (isLocationSpacesActive(router, 'files-spaces-projects')) {
                 // project spaces overview has its own "no selection" panel
                 return false
@@ -61,6 +66,21 @@ export const useSideBarPanels = () => {
               }
               // empty selection in a project space root shows a "details" panel for the space itself
               return !isProjectSpaceResource(parent)
+            }
+          }
+        },
+        {
+          id: 'com.github.owncloud.web.files.sidebar-panel.trash-no-selection',
+          type: 'sidebarPanel',
+          scopes: ['resource'],
+          panel: {
+            name: 'no-selection',
+            icon: 'questionnaire-line',
+            title: () => $gettext('Details'),
+            component: TrashNoSelection,
+            isRoot: () => true,
+            isVisible: () => {
+              return isLocationTrashActive(router, 'files-trash-overview')
             }
           }
         },

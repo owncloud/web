@@ -61,6 +61,7 @@
         </template>
       </template>
     </files-view-wrapper>
+    <file-side-bar :is-open="isSideBarOpen" :active-panel="sideBarActivePanel" />
   </div>
 </template>
 
@@ -72,9 +73,11 @@ import { useGettext } from 'vue3-gettext'
 import { useTask } from 'vue-concurrency'
 import {
   defaultFuseOptions,
+  FileSideBar,
   useClientService,
   useResourcesStore,
   useRouter,
+  useSideBar,
   useSpacesStore,
   useUserStore
 } from '@ownclouders/web-pkg'
@@ -94,7 +97,7 @@ import { useFileListHeaderPosition } from '@ownclouders/web-pkg'
 
 export default defineComponent({
   name: 'TrashOverview',
-  components: { FilesViewWrapper, AppBar, AppLoadingSpinner, NoContentMessage },
+  components: { FileSideBar, FilesViewWrapper, AppBar, AppLoadingSpinner, NoContentMessage },
   setup() {
     const userStore = useUserStore()
     const spacesStore = useSpacesStore()
@@ -259,7 +262,8 @@ export default defineComponent({
       loadResourcesTask,
       areResourcesLoading,
       isPersonalSpaceResource,
-      fileListHeaderY
+      fileListHeaderY,
+      ...useSideBar()
     }
   }
 })

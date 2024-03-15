@@ -51,7 +51,12 @@ export default defineComponent({
   overflow: auto;
 }
 
+// Adjustments to match our theming
 .toastui-editor-defaultUI {
   border: none;
+}
+.toastui-editor-defaultUI-toolbar,
+.toastui-editor-md-tab-container {
+  background-color: var(--oc-color-background-default) !important;
 }
 </style>

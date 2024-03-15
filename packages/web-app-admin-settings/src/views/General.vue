@@ -1,6 +1,13 @@
 <template>
   <div>
-    <app-template ref="template" :breadcrumbs="breadcrumbs" :show-app-bar="false">
+    <app-template
+      ref="template"
+      :breadcrumbs="breadcrumbs"
+      :show-app-bar="false"
+      :is-side-bar-open="isSideBarOpen"
+      :side-bar-active-panel="sideBarActivePanel"
+      :side-bar-available-panels="sideBarAvailablePanels"
+    >
       <template #mainContent>
         <div class="oc-px-m">
           <InfoSection />
@@ -16,6 +23,9 @@ import { defineComponent, ref } from 'vue'
 import AppTemplate from '../components/AppTemplate.vue'
 import InfoSection from '../components/General/InfoSection.vue'
 import AppearanceSection from '../components/General/AppearanceSection.vue'
+import DetailsPanel from '../components/General/SideBar/DetailsPanel.vue'
+import { useGettext } from 'vue3-gettext'
+import { useSideBar } from '@ownclouders/web-pkg'
 
 export default defineComponent({
   components: {
@@ -25,9 +35,23 @@ export default defineComponent({
   },
   setup() {
     const template = ref()
+    const { $gettext } = useGettext()
+
+    const sideBarAvailablePanels = [
+      {
+        name: 'DetailsPanel',
+        icon: 'settings-4',
+        title: () => $gettext('Details'),
+        component: DetailsPanel,
+        isRoot: () => true,
+        isVisible: () => true
+      }
+    ]
 
     return {
-      template
+      template,
+      sideBarAvailablePanels,
+      ...useSideBar()
     }
   },
   computed: {
