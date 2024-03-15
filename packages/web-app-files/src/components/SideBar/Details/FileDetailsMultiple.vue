@@ -64,7 +64,7 @@ export default defineComponent({
     },
     sizeValue() {
       let size = 0
-      this.selectedResources.forEach((i) => (size += parseInt(i.size?.toString() || 0)))
+      this.selectedResources.forEach((i) => (size += parseInt(i.size?.toString() || '0')))
       return formatFileSize(size, this.$language.current)
     },
     sizeText() {
