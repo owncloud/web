@@ -267,7 +267,7 @@ export default defineComponent({
         if (unref(resource)) {
           loadPreviewTask.perform(unref(resource))
           if (
-            !props.versionsEnabled &&
+            props.versionsEnabled &&
             !unref(resource).isFolder &&
             !unref(publicLinkContextReady)
           ) {
