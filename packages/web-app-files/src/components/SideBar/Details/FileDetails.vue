@@ -33,6 +33,12 @@
       >
         <col class="oc-width-1-3" />
         <col class="oc-width-2-3" />
+        <tr v-if="hasDeletionDate" data-testid="delete-timestamp">
+          <th scope="col" class="oc-pr-s oc-font-semibold" v-text="$gettext('Deleted at')" />
+          <td>
+            <span v-text="capitalizedDeletionDate"></span>
+          </td>
+        </tr>
         <tr v-if="hasTimestamp" data-testid="timestamp">
           <th scope="col" class="oc-pr-s oc-font-semibold" v-text="$gettext('Last modified')" />
           <td>
@@ -131,7 +137,8 @@ import {
   useCapabilityStore,
   useConfigStore,
   useClientService,
-  useResourcesStore
+  useResourcesStore,
+  formatDateFromJSDate
 } from '@ownclouders/web-pkg'
 import upperFirst from 'lodash-es/upperFirst'
 import { isShareResource, ShareTypes } from '@ownclouders/web-client/src/helpers/share'
@@ -167,6 +174,11 @@ export default defineComponent({
       type: Boolean,
       required: false,
       default: true
+    },
+    versionsEnabled: {
+      type: Boolean,
+      required: false,
+      default: true
     }
   },
   setup(props) {
@@ -175,6 +187,7 @@ export default defineComponent({
     const capabilityStore = useCapabilityStore()
     const clientService = useClientService()
     const { getMatchingSpace } = useGetMatchingSpace()
+
     const language = useGettext()
 
     const resourcesStore = useResourcesStore()
@@ -184,6 +197,7 @@ export default defineComponent({
 
     const resource = inject<Ref<Resource>>('resource')
     const space = inject<Ref<SpaceResource>>('space')
+
     const previewService = usePreviewService()
     const preview = ref(undefined)
 
@@ -252,8 +266,11 @@ export default defineComponent({
       () => {
         if (unref(resource)) {
           loadPreviewTask.perform(unref(resource))
-
-          if (!unref(resource).isFolder && !unref(publicLinkContextReady)) {
+          if (
+            !props.versionsEnabled &&
+            !unref(resource).isFolder &&
+            !unref(publicLinkContextReady)
+          ) {
             loadVersions(unref(resource).fileId)
           }
         }
@@ -270,6 +287,15 @@ export default defineComponent({
       return props.tagsEnabled && capabilityStore.filesTags
     })
 
+    const hasDeletionDate = computed(() => {
+      return unref(resource).ddate
+    })
+
+    const capitalizedDeletionDate = computed(() => {
+      const displayDate = formatDateFromJSDate(new Date(unref(resource).ddate), language.current)
+      return upperFirst(displayDate)
+    })
+
     return {
       user,
       preview,
@@ -277,6 +303,8 @@ export default defineComponent({
       space,
       resource,
       hasTags,
+      hasDeletionDate,
+      capitalizedDeletionDate,
       isPreviewLoading,
       ancestorMetaData,
       sharedAncestor,
@@ -294,7 +322,8 @@ export default defineComponent({
         this.ownerDisplayName ||
         this.showSize ||
         this.showShares ||
-        this.showVersions
+        this.showVersions ||
+        this.hasDeletionDate
       )
     },
     sharedViaTooltip() {

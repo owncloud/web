@@ -20,7 +20,7 @@
           <th scope="col" class="oc-pr-s oc-font-semibold" v-text="spacesText" />
           <td v-text="spacesCount" />
         </tr>
-        <tr data-testid="size">
+        <tr v-if="hasSize" data-testid="size">
           <th scope="col" class="oc-pr-s oc-font-semibold" v-text="sizeText" />
           <td v-text="sizeValue" />
         </tr>
@@ -29,7 +29,7 @@
   </div>
 </template>
 <script lang="ts">
-import { defineComponent } from 'vue'
+import { computed, defineComponent, unref } from 'vue'
 import { storeToRefs } from 'pinia'
 import { formatFileSize, useResourcesStore } from '@ownclouders/web-pkg'
 
@@ -42,7 +42,11 @@ export default defineComponent({
     const resourcesStore = useResourcesStore()
     const { selectedResources } = storeToRefs(resourcesStore)
 
-    return { selectedResources }
+    const hasSize = computed(() => {
+      return unref(selectedResources).some((resource) => resource.hasOwnProperty('size'))
+    })
+
+    return { hasSize, selectedResources }
   },
   computed: {
     selectedFilesCount() {
@@ -60,7 +64,7 @@ export default defineComponent({
     },
     sizeValue() {
       let size = 0
-      this.selectedResources.forEach((i) => (size += parseInt(i.size.toString())))
+      this.selectedResources.forEach((i) => (size += parseInt(i?.size?.toString())))
       return formatFileSize(size, this.$language.current)
     },
     sizeText() {
@@ -110,11 +114,13 @@ export default defineComponent({
     .preview-icon {
       display: inline-block;
     }
+
     .preview-text {
       display: block;
     }
   }
 }
+
 .details-table {
   text-align: left;
 
