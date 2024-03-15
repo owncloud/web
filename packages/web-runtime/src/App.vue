@@ -40,7 +40,7 @@ export default defineComponent({
     watch(
       () => unref(activeRoute),
       (newRoute, oldRoute) => {
-        const getAppContextFromRoute = (route: RouteLocation): string => {
+        const getAppContextFromRoute = (route: RouteLocation): string[] => {
           return route?.path?.split('/').slice(1, 4)
         }
 
