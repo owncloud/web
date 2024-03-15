@@ -1,0 +1,8 @@
+Enhancement: Add details panel to trash
+
+We've added the details panel to the right side bar, when the user selects a resource in the trash.
+We also added a panel for multi select.
+
+https://github.com/owncloud/web/pull/10624
+https://github.com/owncloud/web/issues/10620
+https://github.com/owncloud/web/issues/10616
