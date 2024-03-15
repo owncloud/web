@@ -255,7 +255,7 @@ export default defineComponent({
        * webDavPath might not be set when user is navigating on public link,
        * even if the user is authenticated and the file owner.
        */
-      return resourcesStore.areWebDavDetailsShown && unref(resource)?.webDavPath
+      return resourcesStore.areWebDavDetailsShown && unref(resource).webDavPath
     })
     const formatDateRelative = (date) => {
       return formatRelativeDateFromJSDate(new Date(date), language.current)
