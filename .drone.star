@@ -40,7 +40,7 @@ dir = {
     "federated": "/var/www/owncloud/federated",
     "server": "/var/www/owncloud/server",
     "web": "/var/www/owncloud/web",
-    "ocis": "/var/www/owncloud/ocis-build",
+    "ocis": "/var/www/owncloud/ocis",
     "commentsFile": "/var/www/owncloud/web/comments.file",
     "app": "/srv/app",
     "config": "/srv/config",
@@ -523,6 +523,8 @@ def buildCacheWeb(ctx):
                      },
                      "commands": [
                          "make dist",
+                         "pwd",
+                         "ls -al",
                      ],
                  }] +
                  rebuildBuildArtifactCache(ctx, "web-dist", "dist"),
@@ -683,7 +685,7 @@ def e2eTests(ctx):
                 setupServerConfigureWeb(params["logLevel"])
 
         if ctx.build.event != "cron":
-            steps += restoreBuildArtifactCache(ctx, "ocis-build", "ocis")
+            steps += restoreBuildArtifactCache(ctx, "ocis", "ocis")
         else:
             steps += restoreOcisCache()
 
@@ -820,7 +822,7 @@ def acceptance(ctx):
                         services = browserService(alternateSuiteName, browser) + middlewareService()
 
                         if ctx.build.event != "cron":
-                            steps += restoreBuildArtifactCache(ctx, "ocis-build", "ocis")
+                            steps += restoreBuildArtifactCache(ctx, "ocis", "ocis")
                         else:
                             steps += restoreOcisCache()
 
@@ -961,6 +963,8 @@ def installPnpm():
             'npm install --silent --global --force "$(jq -r ".packageManager" < package.json)"',
             "pnpm config set store-dir ./.pnpm-store",
             "pnpm install",
+            "pwd",
+            "ls -al",
         ],
     }]
 
@@ -1264,6 +1268,7 @@ def ocisService(type, tika_enabled = False, enforce_password_public_link = False
             "detach": True,
             "environment": environment,
             "commands": [
+                "pwd",
                 "cd %s" % dir["ocis"],
                 "mkdir -p %s" % dir["ocisRevaDataRoot"],
                 "mkdir -p /srv/app/tmp/ocis/storage/users/",
@@ -1389,7 +1394,7 @@ def cacheOcisPipeline(ctx):
     if ctx.build.event != "cron":
         steps = getOcislatestCommitId(ctx) + \
                 buildOcis() + \
-                rebuildBuildArtifactCache(ctx, "ocis-build", "ocis")
+                rebuildBuildArtifactCache(ctx, "ocis", "ocis")
     else:
         steps = checkForExistingOcisCache(ctx) + \
                 buildOcis() + \
@@ -1439,9 +1444,6 @@ def buildOcis():
             "image": OC_CI_GOLANG,
             "commands": [
                 "source .drone.env",
-                "cd $GOPATH/src",
-                "mkdir -p github.com/owncloud",
-                "cd github.com/owncloud",
                 "git clone -b $OCIS_BRANCH --single-branch %s" % ocis_repo_url,
                 "cd ocis",
                 "git checkout $OCIS_COMMITID",
@@ -1453,20 +1455,22 @@ def buildOcis():
             "image": OC_CI_NODEJS,
             "commands": [
                 # we cannot use the $GOPATH here because of different base image
-                "cd /go/src/github.com/owncloud/ocis/",
+                "cd ocis",
                 "retry -t 3 'make ci-node-generate'",
             ],
-            "volumes": go_step_volumes,
         },
         {
             "name": "build-ocis",
             "image": OC_CI_GOLANG,
             "commands": [
                 "source .drone.env",
-                "cd $GOPATH/src/github.com/owncloud/ocis/ocis",
+                "cd ocis/ocis",
                 "retry -t 3 'make build'",
-                "mkdir -p %s/$OCIS_COMMITID" % dir["base"],
-                "cp bin/ocis %s/$OCIS_COMMITID" % dir["base"],
+                "cp bin/ocis %s" % dir["base"],
+                "pwd",
+                "cd %s" % dir["base"],
+                "ls -al",
+                "pwd",
             ],
             "volumes": go_step_volumes,
         },
@@ -1480,7 +1484,7 @@ def cacheOcis():
         "commands": [
             ". ./.drone.env",
             "mc alias set s3 $MC_HOST $AWS_ACCESS_KEY_ID $AWS_SECRET_ACCESS_KEY",
-            "mc cp -r -a %s/$OCIS_COMMITID/ocis s3/$CACHE_BUCKET/ocis-build/$OCIS_COMMITID" % dir["base"],
+            "mc cp -r -a %s s3/$CACHE_BUCKET/ocis-build/$OCIS_COMMITID" % dir["ocis"],
             "mc ls --recursive s3/$CACHE_BUCKET/ocis-build",
         ],
     }]
@@ -2408,6 +2412,7 @@ def getOcislatestCommitId(ctx):
             "commands": [
                 "curl -o .drone.env %s/.drone.env" % web_repo_path,
                 "curl -o get-latest-ocis-commit-id.sh %s/tests/drone/get-latest-ocis-commit-id.sh" % web_repo_path,
+                "pwd",
                 "ls -al",
                 ". ./.drone.env",
                 "bash get-latest-ocis-commit-id.sh",
