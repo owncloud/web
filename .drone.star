@@ -2400,14 +2400,15 @@ def e2eTestsOnKeycloak(ctx):
     }]
 
 def getOcislatestCommitId(ctx):
-    repo_path = "https://raw.githubusercontent.com/owncloud/ocis-php-sdk/%s" % ctx.build.commit
+    web_repo_path = "https://raw.githubusercontent.com/owncloud/web/%s" % ctx.build.commit
     return [
         {
             "name": "get-ocis-latest-commit-id",
             "image": OC_CI_ALPINE,
             "commands": [
-                "curl -o .drone.env %s/.drone.env" % repo_path,
-                "curl -o get-latest-ocis-commit-id.sh %s/tests/drone/get-latest-ocis-commit-id.sh" % repo_path,
+                "curl -o .drone.env %s/.drone.env" % web_repo_path,
+                "curl -o get-latest-ocis-commit-id.sh %s/tests/drone/get-latest-ocis-commit-id.sh" % web_repo_path,
+                "ls -al",
                 ". ./.drone.env",
                 "bash get-latest-ocis-commit-id.sh",
             ],
