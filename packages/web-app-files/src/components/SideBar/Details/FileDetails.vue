@@ -90,7 +90,7 @@
           <th scope="col" class="oc-pr-s oc-font-semibold" v-text="$gettext('Size')" />
           <td v-text="resourceSize" />
         </tr>
-        <web-dav-details v-if="showWebDavDetails" />
+        <web-dav-details v-if="showWebDavDetails" :space="space" />
         <tr v-if="showVersions" data-testid="versionsInfo">
           <th scope="col" class="oc-pr-s oc-font-semibold" v-text="$gettext('Versions')" />
           <td>

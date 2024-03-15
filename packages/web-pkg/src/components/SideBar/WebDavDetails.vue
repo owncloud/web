@@ -38,16 +38,19 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, inject, ref, Ref, computed, unref } from 'vue'
+import { defineComponent, inject, ref, Ref, computed, unref, PropType } from 'vue'
 import { urlJoin } from '@ownclouders/web-client/src/utils'
-import { Resource } from '@ownclouders/web-client'
-import { useConfigStore } from '../../composables'
+import { Resource, SpaceResource } from '@ownclouders/web-client'
 
 export default defineComponent({
   name: 'WebDavDetails',
-  setup() {
-    const configStore = useConfigStore()
-
+  props: {
+    space: {
+      type: Object as PropType<SpaceResource>,
+      required: true
+    }
+  },
+  setup(props) {
     const resource = inject<Ref<Resource>>('resource')
     const copiedIcon = 'check'
     const copyIcon = 'file-copy'
@@ -55,7 +58,7 @@ export default defineComponent({
     const copyWebDAVUrlIcon = ref(copyIcon)
 
     const webDavUrl = computed(() => {
-      return urlJoin(configStore.serverUrl, unref(resource).webDavPath)
+      return urlJoin(props.space.root.webDavUrl, unref(resource).path)
     })
 
     const copyWebDAVPathToClipboard = () => {
