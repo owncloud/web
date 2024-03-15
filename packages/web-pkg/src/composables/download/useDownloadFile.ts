@@ -18,7 +18,7 @@ export const useDownloadFile = (options?: DownloadFileOptions) => {
     try {
       const url = await clientService.webdav.getFileUrl(space, file, {
         version,
-        preflightHeadRequest: true
+        doHeadRequest: true
       })
       triggerDownloadWithFilename(url, file.name)
     } catch (e) {

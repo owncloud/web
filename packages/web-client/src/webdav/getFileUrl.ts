@@ -18,12 +18,12 @@ export const GetFileUrlFactory = (
         disposition = 'attachment',
         signUrlTimeout = 86400,
         version = null,
-        preflightHeadRequest = false
+        doHeadRequest = false
       }: {
         disposition?: 'inline' | 'attachment'
         signUrlTimeout?: number
         version?: string
-        preflightHeadRequest?: boolean
+        doHeadRequest?: boolean
       }
     ): Promise<string> {
       const inlineDisposition = disposition === 'inline'
@@ -39,7 +39,7 @@ export const GetFileUrlFactory = (
           ? dav.getFileUrl(urlJoin('meta', resource.fileId, 'v', version))
           : dav.getFileUrl(webDavPath)
 
-        if (user && preflightHeadRequest) {
+        if (user && doHeadRequest) {
           await clientService.httpAuthenticated.head(downloadURL)
         }
 
