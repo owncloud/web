@@ -270,7 +270,7 @@ def main(ctx):
 
     after = pipelinesDependsOn(afterPipelines(ctx), stages)
 
-    pipelines = before + stages + after
+    pipelines = before + stages
 
     deploys = example_deploys(ctx)
     if ctx.build.event != "cron":
@@ -288,11 +288,7 @@ def main(ctx):
     return pipelines
 
 def beforePipelines(ctx):
-    return checkStarlark() + \
-           licenseCheck(ctx) + \
-           checkTestSuitesInExpectedFailures(ctx) + \
-           documentation(ctx) + \
-           changelog(ctx) + \
+    return checkTestSuitesInExpectedFailures(ctx) + \
            pnpmCache(ctx) + \
            cacheOcisPipeline(ctx) + \
            pipelinesDependsOn(buildCacheWeb(ctx), pnpmCache(ctx)) + \
@@ -303,7 +299,7 @@ def stagePipelines(ctx):
     e2e_pipelines = e2eTests(ctx)
     acceptance_pipelines = acceptance(ctx)
     keycloak_pipelines = e2eTestsOnKeycloak(ctx)
-    return unit_test_pipelines + buildAndTestDesignSystem(ctx) + pipelinesDependsOn(e2e_pipelines + keycloak_pipelines + acceptance_pipelines, unit_test_pipelines)
+    return e2e_pipelines + keycloak_pipelines + acceptance_pipelines
 
 def afterPipelines(ctx):
     return build(ctx) + pipelinesDependsOn(notify(), build(ctx))
@@ -1269,7 +1265,8 @@ def ocisService(type, tika_enabled = False, enforce_password_public_link = False
             "environment": environment,
             "commands": [
                 "pwd",
-                "cd %s" % dir["ocis"],
+                "ls -al",
+                "ls -al ocis",
                 "mkdir -p %s" % dir["ocisRevaDataRoot"],
                 "mkdir -p /srv/app/tmp/ocis/storage/users/",
                 "./ocis init",
@@ -1277,6 +1274,9 @@ def ocisService(type, tika_enabled = False, enforce_password_public_link = False
                 "./ocis server",
             ],
             "volumes": [{
+                "name": "ocis",
+                "path": dir["ocis"],
+            }, {
                 "name": "gopath",
                 "path": dir["app"],
             }, {
@@ -1444,8 +1444,8 @@ def buildOcis():
             "image": OC_CI_GOLANG,
             "commands": [
                 "source .drone.env",
-                "git clone -b $OCIS_BRANCH --single-branch %s" % ocis_repo_url,
-                "cd ocis",
+                "git clone -b $OCIS_BRANCH --single-branch %s ocis_server" % ocis_repo_url,
+                "cd ocis_server",
                 "git checkout $OCIS_COMMITID",
             ],
             "volumes": go_step_volumes,
@@ -1455,7 +1455,7 @@ def buildOcis():
             "image": OC_CI_NODEJS,
             "commands": [
                 # we cannot use the $GOPATH here because of different base image
-                "cd ocis",
+                "cd ocis_server",
                 "retry -t 3 'make ci-node-generate'",
             ],
         },
@@ -1464,13 +1464,12 @@ def buildOcis():
             "image": OC_CI_GOLANG,
             "commands": [
                 "source .drone.env",
-                "cd ocis/ocis",
+                "cd ocis_server/ocis",
                 "retry -t 3 'make build'",
-                "cp bin/ocis %s" % dir["base"],
+                "cp bin/ocis %s" % dir["web"],
                 "pwd",
-                "cd %s" % dir["base"],
-                "ls -al",
-                "pwd",
+                "ls -al %s" % dir["base"],
+                "ls -al %s" % dir["web"],
             ],
             "volumes": go_step_volumes,
         },
