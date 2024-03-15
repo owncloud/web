@@ -9,6 +9,7 @@ Summary
 -------
 
 * Enhancement - Tile sizes: [#10018](https://github.com/owncloud/web/issues/10018)
+* Enhancement - Add SSE events for locking, renaming, deleting, and restoring: [#10586](https://github.com/owncloud/web/pull/10586)
 * Enhancement - Remember left nav bar state: [#10611](https://github.com/owncloud/web/pull/10611)
 * Enhancement - Remember right side bar state: [#10612](https://github.com/owncloud/web/pull/10612)
 
@@ -24,6 +25,21 @@ Details
 
    https://github.com/owncloud/web/issues/10018
    https://github.com/owncloud/web/pull/10558
+
+* Enhancement - Add SSE events for locking, renaming, deleting, and restoring: [#10586](https://github.com/owncloud/web/pull/10586)
+
+   We've added Server-Sent Events (SSE) for locking, renaming, deleting, and
+   restoring actions. This enhancement ensures that these actions are instantly
+   propagated to other browsers and devices where the logged in user has access the
+   relevant files and folders. Now, users can experience real-time updates across
+   all their devices.
+
+   https://github.com/owncloud/web/issues/9849
+   https://github.com/owncloud/web/issues/9781
+   https://github.com/owncloud/web/issues/9848
+   https://github.com/owncloud/web/pull/10586
+   https://github.com/owncloud/web/pull/10572
+   https://github.com/owncloud/web/pull/10567
 
 * Enhancement - Remember left nav bar state: [#10611](https://github.com/owncloud/web/pull/10611)
 
