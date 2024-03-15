@@ -257,7 +257,6 @@ export default defineComponent({
        */
       return (
         resourcesStore.areWebDavDetailsShown &&
-        unref(space)?.root?.webDavUrl &&
         unref(resource)?.webDavPath
       )
     })
