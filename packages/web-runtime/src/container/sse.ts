@@ -3,6 +3,7 @@ import {
   createFileRouteOptions,
   getIndicators,
   ImageDimension,
+  MessageStore,
   PreviewService,
   ResourcesStore,
   SpacesStore
@@ -11,16 +12,13 @@ import PQueue from 'p-queue'
 import { extractNodeId, extractStorageId } from '@ownclouders/web-client/src/helpers'
 import { z } from 'zod'
 import { Router } from 'vue-router'
+import { Language } from 'vue3-gettext'
 
-const fileReadyEventSchema = z.object({
+const eventSchema = z.object({
   itemid: z.string(),
-  parentitemid: z.string()
+  parentitemid: z.string(),
+  spaceid: z.string().optional()
 })
-
-type SSEMessageData = {
-  itemid?: string
-  parentitemid?: string
-}
 
 const itemInCurrentFolder = ({
   resourcesStore,
@@ -64,7 +62,7 @@ export const onSSEItemRenamedEvent = async ({
   router: Router
 }) => {
   try {
-    const sseData = fileReadyEventSchema.parse(JSON.parse(msg.data))
+    const sseData = eventSchema.parse(JSON.parse(msg.data))
     const currentFolder = resourcesStore.currentFolder
     const resourceIsCurrentFolder = currentFolder.id === sseData.itemid
     const resource = resourceIsCurrentFolder
@@ -110,7 +108,7 @@ export const onSSEFileLockingEvent = async ({
   clientService: ClientService
 }) => {
   try {
-    const sseData = fileReadyEventSchema.parse(JSON.parse(msg.data))
+    const sseData = eventSchema.parse(JSON.parse(msg.data))
     const resource = resourcesStore.resources.find((f) => f.id === sseData.itemid)
     const space = spacesStore.spaces.find((s) => s.id === resource.storageId)
 
@@ -156,12 +154,11 @@ export const onSSEProcessingFinishedEvent = async ({
   previewService: PreviewService
 }) => {
   try {
-    const sseData = fileReadyEventSchema.parse(JSON.parse(msg.data))
+    const sseData = eventSchema.parse(JSON.parse(msg.data))
 
     if (!itemInCurrentFolder({ resourcesStore, parentFolderId: sseData.parentitemid })) {
       return false
     }
-
     const resource = resourcesStore.resources.find((f) => f.id === sseData.itemid)
     const space = spacesStore.spaces.find((s) => s.id === resource.storageId)
     const isFileLoaded = !!resource
@@ -199,6 +196,100 @@ export const onSSEProcessingFinishedEvent = async ({
       //   resourcesStore.upsertResource(resource)
       // })
     }
+  } catch (e) {
+    console.error(`Unable to parse sse event ${topic} data`, e)
+  }
+}
+
+export const onSSEItemTrashedEvent = async ({
+  topic,
+  language,
+  messageStore,
+  resourcesStore,
+  msg
+}: {
+  topic: string
+  language: Language
+  resourcesStore: ResourcesStore
+  messageStore: MessageStore
+  msg: MessageEvent
+}) => {
+  try {
+    /**
+     * TODO: Implement a mechanism to identify the client that initiated the trash event.
+     * Currently, a timeout is utilized to ensure the frontend business logic execution,
+     * preventing the user from being prompted to navigate to 'another location'
+     * if the active current folder has been deleted.
+     * If the initiating client matches the current client, no action is required.
+     */
+    await new Promise((resolve) => setTimeout(resolve, 500))
+
+    const sseData = eventSchema.parse(JSON.parse(msg.data))
+    const currentFolder = resourcesStore.currentFolder
+    const resourceIsCurrentFolder = currentFolder.id === sseData.itemid
+
+    if (resourceIsCurrentFolder) {
+      return messageStore.showMessage({
+        title: language.$gettext(
+          'The folder you were accessing has been removed. Please navigate to another location.'
+        )
+      })
+    }
+
+    const resource = resourcesStore.resources.find((f) => f.id === sseData.itemid)
+
+    if (!resource) {
+      return
+    }
+
+    resourcesStore.removeResources([resource])
+  } catch (e) {
+    console.error(`Unable to parse sse event ${topic} data`, e)
+  }
+}
+
+export const onSSEItemRestoredEvent = async ({
+  topic,
+  resourcesStore,
+  spacesStore,
+  msg,
+  clientService
+}: {
+  topic: string
+  resourcesStore: ResourcesStore
+  spacesStore: SpacesStore
+  msg: MessageEvent
+  clientService: ClientService
+}) => {
+  try {
+    const sseData = eventSchema.parse(JSON.parse(msg.data))
+
+    const space = spacesStore.spaces.find((space) => space.id === sseData.spaceid)
+    if (!space) {
+      return
+    }
+
+    const resource = await clientService.webdav.getFileInfo(space, {
+      fileId: sseData.itemid
+    })
+
+    if (!resource) {
+      return
+    }
+
+    if (!itemInCurrentFolder({ resourcesStore, parentFolderId: resource.parentFolderId })) {
+      return false
+    }
+
+    resourcesStore.upsertResource(resource)
+    resourcesStore.updateResourceField({
+      id: resource.id,
+      field: 'indicators',
+      value: getIndicators({
+        resource,
+        ancestorMetaData: resourcesStore.ancestorMetaData
+      })
+    })
   } catch (e) {
     console.error(`Unable to parse sse event ${topic} data`, e)
   }

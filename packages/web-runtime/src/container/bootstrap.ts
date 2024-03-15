@@ -27,7 +27,8 @@ import {
   useSharesStore,
   useResourcesStore,
   ResourcesStore,
-  SpacesStore
+  SpacesStore,
+  MessageStore
 } from '@ownclouders/web-pkg'
 import { authService } from '../services/auth'
 import {
@@ -55,7 +56,13 @@ import {
   RawConfigSchema,
   SentryConfig
 } from '@ownclouders/web-pkg/src/composables/piniaStores/config/types'
-import { onSSEFileLockingEvent, onSSEItemRenamedEvent, onSSEProcessingFinishedEvent } from './sse'
+import {
+  onSSEFileLockingEvent,
+  onSSEItemRenamedEvent,
+  onSSEProcessingFinishedEvent,
+  onSSEItemRestoredEvent,
+  onSSEItemTrashedEvent
+} from './sse'
 
 const getEmbedConfigFromQuery = (
   doesEmbedEnabledOptionExists: boolean
@@ -640,15 +647,19 @@ export const announceCustomStyles = ({ configStore }: { configStore?: ConfigStor
 }
 
 export const registerSSEEventListeners = ({
+  language,
   resourcesStore,
   spacesStore,
+  messageStore,
   clientService,
   previewService,
   configStore,
   router
 }: {
+  language: Language
   resourcesStore: ResourcesStore
   spacesStore: SpacesStore
+  messageStore: MessageStore
   clientService: ClientService
   previewService: PreviewService
   configStore: ConfigStore
@@ -701,6 +712,26 @@ export const registerSSEEventListeners = ({
   clientService.sseAuthenticated.addEventListener(MESSAGE_TYPE.FILE_UNLOCKED, (msg) =>
     onSSEFileLockingEvent({
       topic: MESSAGE_TYPE.FILE_UNLOCKED,
+      resourcesStore,
+      spacesStore,
+      msg,
+      clientService
+    })
+  )
+
+  clientService.sseAuthenticated.addEventListener(MESSAGE_TYPE.ITEM_TRASHED, (msg) =>
+    onSSEItemTrashedEvent({
+      topic: MESSAGE_TYPE.ITEM_TRASHED,
+      language,
+      resourcesStore,
+      messageStore,
+      msg
+    })
+  )
+
+  clientService.sseAuthenticated.addEventListener(MESSAGE_TYPE.ITEM_RESTORED, (msg) =>
+    onSSEItemRestoredEvent({
+      topic: MESSAGE_TYPE.ITEM_RESTORED,
       resourcesStore,
       spacesStore,
       msg,
