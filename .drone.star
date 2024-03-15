@@ -682,7 +682,7 @@ def e2eTests(ctx):
                 restoreBuildArtifactCache(ctx, "web-dist", "dist") + \
                 setupServerConfigureWeb(params["logLevel"])
 
-        if ctx.build.event == "cron":
+        if ctx.build.event != "cron":
             steps += restoreBuildArtifactCache(ctx, "ocis-build", "ocis")
         else:
             steps += restoreOcisCache()
@@ -819,7 +819,7 @@ def acceptance(ctx):
 
                         services = browserService(alternateSuiteName, browser) + middlewareService()
 
-                        if ctx.build.event == "cron":
+                        if ctx.build.event != "cron":
                             steps += restoreBuildArtifactCache(ctx, "ocis-build", "ocis")
                         else:
                             steps += restoreOcisCache()
@@ -1386,7 +1386,7 @@ def runWebuiAcceptanceTests(ctx, suite, alternateSuiteName, filterTags, extraEnv
 def cacheOcisPipeline(ctx):
     steps = []
 
-    if ctx.build.event == "cron":
+    if ctx.build.event != "cron":
         steps = getOcislatestCommitId(ctx) + \
                 buildOcis() + \
                 rebuildBuildArtifactCache(ctx, "ocis-build", "ocis")
@@ -2411,10 +2411,5 @@ def getOcislatestCommitId(ctx):
                 ". ./.drone.env",
                 "bash get-latest-ocis-commit-id.sh",
             ],
-            "when": {
-                "event": [
-                    "cron",
-                ],
-            },
         },
     ]
