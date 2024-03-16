@@ -40,7 +40,7 @@ dir = {
     "federated": "/var/www/owncloud/federated",
     "server": "/var/www/owncloud/server",
     "web": "/var/www/owncloud/web",
-    "ocis": "/var/www/owncloud/ocis-build",
+    "ocis": "/var/www/owncloud/ocis",
     "commentsFile": "/var/www/owncloud/web/comments.file",
     "app": "/srv/app",
     "config": "/srv/config",
@@ -683,8 +683,12 @@ def e2eTests(ctx):
                 installPnpm() + \
                 installPlaywright() + \
                 restoreBuildArtifactCache(ctx, "web-dist", "dist") + \
-                setupServerConfigureWeb(params["logLevel"]) + \
-                restoreOcisCache()
+                setupServerConfigureWeb(params["logLevel"])
+
+        if ctx.build.event == "cron":
+            steps += restoreBuildArtifactCache(ctx, "ocis", "ocis")
+        else:
+            steps += restoreOcisCache()
 
         # oCIS specific environment variables
         environment["BASE_URL_OCIS"] = "ocis:9200"
@@ -819,8 +823,13 @@ def acceptance(ctx):
 
                         services = browserService(alternateSuiteName, browser) + middlewareService()
 
+                        if ctx.build.event == "cron":
+                            steps += restoreBuildArtifactCache(ctx, "ocis", "ocis")
+                        else:
+                            steps += restoreOcisCache()
+
                         # Services and steps required for running tests with oCIS
-                        steps += restoreOcisCache() + ocisService("acceptance-tests", enforce_password_public_link = True) + getSkeletonFiles()
+                        steps += ocisService("acceptance-tests", enforce_password_public_link = True) + getSkeletonFiles()
 
                         # Wait for test-related services to be up
                         steps += waitForBrowserService()
@@ -1258,7 +1267,6 @@ def ocisService(type, tika_enabled = False, enforce_password_public_link = False
             "detach": True,
             "environment": environment,
             "commands": [
-                "cd %s" % dir["ocis"],
                 "mkdir -p %s" % dir["ocisRevaDataRoot"],
                 "mkdir -p /srv/app/tmp/ocis/storage/users/",
                 "./ocis init",
@@ -1378,6 +1386,16 @@ def runWebuiAcceptanceTests(ctx, suite, alternateSuiteName, filterTags, extraEnv
     }]
 
 def cacheOcisPipeline(ctx):
+    steps = []
+
+    if ctx.build.event == "cron":
+        steps = getOcislatestCommitId(ctx) + \
+                buildOcis() + \
+                rebuildBuildArtifactCache(ctx, "ocis", "ocis")
+    else:
+        steps = checkForExistingOcisCache(ctx) + \
+                buildOcis() + \
+                cacheOcis()
     return [{
         "kind": "pipeline",
         "type": "docker",
@@ -1386,9 +1404,7 @@ def cacheOcisPipeline(ctx):
         "clone": {
             "disable": True,
         },
-        "steps": checkForExistingOcisCache(ctx) +
-                 buildOcis() +
-                 cacheOcis(),
+        "steps": steps,
         "volumes": [{
             "name": "gopath",
             "temp": {},
@@ -1425,11 +1441,8 @@ def buildOcis():
             "image": OC_CI_GOLANG,
             "commands": [
                 "source .drone.env",
-                "cd $GOPATH/src",
-                "mkdir -p github.com/owncloud",
-                "cd github.com/owncloud",
-                "git clone -b $OCIS_BRANCH --single-branch %s" % ocis_repo_url,
-                "cd ocis",
+                "git clone -b $OCIS_BRANCH --single-branch %s ocis_server" % ocis_repo_url,
+                "cd ocis_server",
                 "git checkout $OCIS_COMMITID",
             ],
             "volumes": go_step_volumes,
@@ -1438,8 +1451,7 @@ def buildOcis():
             "name": "generate-ocis",
             "image": OC_CI_NODEJS,
             "commands": [
-                # we cannot use the $GOPATH here because of different base image
-                "cd /go/src/github.com/owncloud/ocis/",
+                "cd ocis_server",
                 "retry -t 3 'make ci-node-generate'",
             ],
             "volumes": go_step_volumes,
@@ -1449,10 +1461,9 @@ def buildOcis():
             "image": OC_CI_GOLANG,
             "commands": [
                 "source .drone.env",
-                "cd $GOPATH/src/github.com/owncloud/ocis/ocis",
+                "cd ocis_server/ocis",
                 "retry -t 3 'make build'",
-                "mkdir -p %s/$OCIS_COMMITID" % dir["base"],
-                "cp bin/ocis %s/$OCIS_COMMITID" % dir["base"],
+                "cp bin/ocis %s" % dir["web"],
             ],
             "volumes": go_step_volumes,
         },
@@ -1466,7 +1477,7 @@ def cacheOcis():
         "commands": [
             ". ./.drone.env",
             "mc alias set s3 $MC_HOST $AWS_ACCESS_KEY_ID $AWS_SECRET_ACCESS_KEY",
-            "mc cp -r -a %s/$OCIS_COMMITID/ocis s3/$CACHE_BUCKET/ocis-build/$OCIS_COMMITID" % dir["base"],
+            "mc cp -r -a %s s3/$CACHE_BUCKET/ocis-build/$OCIS_COMMITID" % dir["ocis"],
             "mc ls --recursive s3/$CACHE_BUCKET/ocis-build",
         ],
     }]
@@ -1844,6 +1855,9 @@ def genericCachePurge(flush_path):
         "kind": "pipeline",
         "type": "docker",
         "name": "purge_build_artifact_cache",
+        "clone": {
+            "disable": True,
+        },
         "platform": {
             "os": "linux",
             "arch": "amd64",
@@ -2172,7 +2186,6 @@ def appProviderService(name):
             "detach": True,
             "environment": environment,
             "commands": [
-                "cd %s" % dir["ocis"],
                 "./ocis app-provider server",
             ],
             "volumes": [
@@ -2290,39 +2303,45 @@ def e2eTestsOnKeycloak(ctx):
     if not "full-ci" in ctx.build.title.lower() and ctx.build.event != "cron":
         return []
 
+    steps = restoreBuildArtifactCache(ctx, "pnpm", ".pnpm-store") + \
+            restoreBuildArtifactCache(ctx, "playwright", ".playwright") + \
+            installPnpm() + \
+            installPlaywright() + \
+            keycloakService() + \
+            restoreBuildArtifactCache(ctx, "web-dist", "dist") + \
+            setupServerConfigureWeb("2")
+    if ctx.build.event == "cron":
+        steps += restoreBuildArtifactCache(ctx, "ocis", "ocis")
+    else:
+        steps += restoreOcisCache()
+
+    steps += ocisService("keycloak") + \
+             [
+                 {
+                     "name": "e2e-tests",
+                     "image": OC_CI_NODEJS,
+                     "environment": {
+                         "BASE_URL_OCIS": "ocis:9200",
+                         "HEADLESS": "true",
+                         "RETRY": "1",
+                         "REPORT_TRACING": "true",
+                         "KEYCLOAK": "true",
+                         "KEYCLOAK_HOST": "keycloak:8443",
+                     },
+                     "commands": [
+                         "pnpm test:e2e:cucumber tests/e2e/cucumber/features/journeys",
+                     ],
+                 },
+             ] + \
+             uploadTracingResult(ctx) + \
+             logTracingResult(ctx, "e2e-tests keycloack-journey-suite")
+
     return [{
         "kind": "pipeline",
         "type": "docker",
         "name": "e2e-test-on-keycloak",
         "workspace": web_workspace,
-        "steps": restoreBuildArtifactCache(ctx, "pnpm", ".pnpm-store") +
-                 restoreBuildArtifactCache(ctx, "playwright", ".playwright") +
-                 installPnpm() +
-                 installPlaywright() +
-                 keycloakService() +
-                 restoreBuildArtifactCache(ctx, "web-dist", "dist") +
-                 setupServerConfigureWeb("2") +
-                 restoreOcisCache() +
-                 ocisService("keycloak") +
-                 [
-                     {
-                         "name": "e2e-tests",
-                         "image": OC_CI_NODEJS,
-                         "environment": {
-                             "BASE_URL_OCIS": "ocis:9200",
-                             "HEADLESS": "true",
-                             "RETRY": "1",
-                             "REPORT_TRACING": "true",
-                             "KEYCLOAK": "true",
-                             "KEYCLOAK_HOST": "keycloak:8443",
-                         },
-                         "commands": [
-                             "pnpm test:e2e:cucumber tests/e2e/cucumber/features/journeys",
-                         ],
-                     },
-                 ] +
-                 uploadTracingResult(ctx) +
-                 logTracingResult(ctx, "e2e-tests keycloack-journey-suite"),
+        "steps": steps,
         "services": postgresService(),
         "volumes": e2e_volumes,
         "trigger": {
@@ -2334,3 +2353,20 @@ def e2eTestsOnKeycloak(ctx):
             ],
         },
     }]
+
+def getOcislatestCommitId(ctx):
+    web_repo_path = "https://raw.githubusercontent.com/owncloud/web/%s" % ctx.build.commit
+    return [
+        {
+            "name": "get-ocis-latest-commit-id",
+            "image": OC_CI_ALPINE,
+            "commands": [
+                "curl -o .drone.env %s/.drone.env" % web_repo_path,
+                "curl -o get-latest-ocis-commit-id.sh %s/tests/drone/get-latest-ocis-commit-id.sh" % web_repo_path,
+                "pwd",
+                "ls -al",
+                ". ./.drone.env",
+                "bash get-latest-ocis-commit-id.sh",
+            ],
+        },
+    ]
