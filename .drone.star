@@ -2189,7 +2189,7 @@ def appProviderService(name):
             "detach": True,
             "environment": environment,
             "commands": [
-                "cd %s" % dir["ocis"],
+                "ls -al",
                 "./ocis app-provider server",
             ],
             "volumes": [
@@ -2357,39 +2357,45 @@ def e2eTestsOnKeycloak(ctx):
     if not "full-ci" in ctx.build.title.lower() and ctx.build.event != "cron":
         return []
 
+    steps = restoreBuildArtifactCache(ctx, "pnpm", ".pnpm-store") + \
+            restoreBuildArtifactCache(ctx, "playwright", ".playwright") + \
+            installPnpm() + \
+            installPlaywright() + \
+            keycloakService() + \
+            restoreBuildArtifactCache(ctx, "web-dist", "dist") + \
+            setupServerConfigureWeb("2")
+    if ctx.build.event != "cron":
+        steps += restoreBuildArtifactCache(ctx, "ocis", "ocis")
+    else:
+        steps += restoreOcisCache()
+
+    steps += ocisService("keycloak") + \
+             [
+                 {
+                     "name": "e2e-tests",
+                     "image": OC_CI_NODEJS,
+                     "environment": {
+                         "BASE_URL_OCIS": "ocis:9200",
+                         "HEADLESS": "true",
+                         "RETRY": "1",
+                         "REPORT_TRACING": "true",
+                         "KEYCLOAK": "true",
+                         "KEYCLOAK_HOST": "keycloak:8443",
+                     },
+                     "commands": [
+                         "pnpm test:e2e:cucumber tests/e2e/cucumber/features/journeys",
+                     ],
+                 },
+             ] + \
+             uploadTracingResult(ctx) + \
+             logTracingResult(ctx, "e2e-tests keycloack-journey-suite")
+
     return [{
         "kind": "pipeline",
         "type": "docker",
         "name": "e2e-test-on-keycloak",
         "workspace": web_workspace,
-        "steps": restoreBuildArtifactCache(ctx, "pnpm", ".pnpm-store") +
-                 restoreBuildArtifactCache(ctx, "playwright", ".playwright") +
-                 installPnpm() +
-                 installPlaywright() +
-                 keycloakService() +
-                 restoreBuildArtifactCache(ctx, "web-dist", "dist") +
-                 setupServerConfigureWeb("2") +
-                 restoreOcisCache() +
-                 ocisService("keycloak") +
-                 [
-                     {
-                         "name": "e2e-tests",
-                         "image": OC_CI_NODEJS,
-                         "environment": {
-                             "BASE_URL_OCIS": "ocis:9200",
-                             "HEADLESS": "true",
-                             "RETRY": "1",
-                             "REPORT_TRACING": "true",
-                             "KEYCLOAK": "true",
-                             "KEYCLOAK_HOST": "keycloak:8443",
-                         },
-                         "commands": [
-                             "pnpm test:e2e:cucumber tests/e2e/cucumber/features/journeys",
-                         ],
-                     },
-                 ] +
-                 uploadTracingResult(ctx) +
-                 logTracingResult(ctx, "e2e-tests keycloack-journey-suite"),
+        "steps": steps,
         "services": postgresService(),
         "volumes": e2e_volumes,
         "trigger": {
