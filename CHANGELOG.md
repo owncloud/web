@@ -12,6 +12,7 @@ Summary
 * Enhancement - Add SSE events for locking, renaming, deleting, and restoring: [#10586](https://github.com/owncloud/web/pull/10586)
 * Enhancement - Remember left nav bar state: [#10611](https://github.com/owncloud/web/pull/10611)
 * Enhancement - Remember right side bar state: [#10612](https://github.com/owncloud/web/pull/10612)
+* Enhancement - Add details panel to trash: [#10624](https://github.com/owncloud/web/pull/10624)
 
 Details
 -------
@@ -60,6 +61,15 @@ Details
 
    https://github.com/owncloud/web/issues/9613
    https://github.com/owncloud/web/pull/10612
+
+* Enhancement - Add details panel to trash: [#10624](https://github.com/owncloud/web/pull/10624)
+
+   We've added the details panel to the right side bar, when the user selects a
+   resource in the trash. We also added a panel for multi select.
+
+   https://github.com/owncloud/web/issues/10620
+   https://github.com/owncloud/web/issues/10616
+   https://github.com/owncloud/web/pull/10624
 
 Changelog for ownCloud Web [8.0.0] (2024-03-08)
 =======================================
