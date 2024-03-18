@@ -34,6 +34,26 @@ Available options:
     --help, -h      - show cli options
 "
 
+function log() {
+    case $1 in
+    info)
+        echo -e "\e[0mINF: $2\e[0m"
+        ;;
+    error)
+        echo -e "\e[31mERR: $2\e[0m"
+        ;;
+    warn)
+        echo -e "\e[93mWRN: $2\e[0m"USAGE:
+        ;;
+    cmd)
+        echo -e "\e[96mUSAGE: $2\e[0m"
+        ;;
+    *)
+        echo -e "\e[0m$1\e[0m"
+        ;;
+    esac
+}
+
 while [[ $# -gt 0 ]]; do
     key="$1"
     case ${key} in
@@ -56,13 +76,13 @@ while [[ $# -gt 0 ]]; do
         shift 2
         ;;
     --help | -h)
-        echo "$HELP_COMMAND"
+        log "$HELP_COMMAND"
         exit 0
         ;;
     *)
         if [[ $1 =~ ^-.* ]]; then
-            echo "ERR: Unknown option: '$1'"
-            echo "$HELP_COMMAND"
+            log error "Unknown option: '$1'"
+            log "$HELP_COMMAND"
             exit 1
         fi
         FEATURE_PATHS_FROM_ARG+=" $1" # maintain the white space
@@ -79,8 +99,8 @@ function getFeaturePaths() {
         real_paths+=" $SCRIPT_PATH/$path" # maintain the white space
         a_path=$(echo "$path" | cut -d ":" -f1)
         if [[ ! -f $a_path && ! -d $a_path ]]; then
-            echo "ERR: File or folder doesn't exist: '$a_path'"
-            echo "INFO: Path must be relative to '$SCRIPT_PATH_REL'"
+            log error "File or folder doesn't exist: '$a_path'"
+            log info "Path must be relative to '$SCRIPT_PATH_REL'"
             exit 1
         fi
     done
@@ -89,7 +109,7 @@ function getFeaturePaths() {
 
 function runE2E() {
     if [[ ! -d "$PROJECT_ROOT" ]]; then
-        echo "ERR: Project root doesn't exist: '$PROJECT_ROOT'"
+        log error "Project root doesn't exist: '$PROJECT_ROOT'"
     fi
     cd "$PROJECT_ROOT" || exit 1
     if [[ -n $GLOB_FEATURE_PATHS ]]; then
@@ -111,7 +131,7 @@ function checkSuites() {
             fi
         done
         if [[ "$exists" == false ]]; then
-            echo "ERR: Suite doesn't exist: '$e_suite'"
+            log error "Suite doesn't exist: '$e_suite'"
             exit 1
         fi
     done
@@ -129,7 +149,7 @@ function buildSuitesPattern() {
 # 1. [RUN E2E] run features from provided paths
 if [[ -n $FEATURE_PATHS_FROM_ARG && "$SKIP_RUN_PARTS" == true ]]; then
     getFeaturePaths "$FEATURE_PATHS_FROM_ARG"
-    echo "INFO: Running e2e using paths. All cli options will be discarded"
+    log info "Running e2e using paths. All cli options will be discarded"
     runE2E
 fi
 
@@ -151,13 +171,13 @@ fi
 
 if [[ "$SKIP_RUN_PARTS" != true ]]; then
     if [[ -z $RUN_PART ]]; then
-        echo "ERR: Missing '--run-part'"
-        echo "USAGE: --run-part <number>"
+        log error "Missing '--run-part'"
+        log cmd "--run-part <number>"
         exit 1
     fi
     if [[ -z $TOTAL_PARTS ]]; then
-        echo "ERR: Missing '--total-parts'"
-        echo "USAGE: --total-parts <number>"
+        log error "Missing '--total-parts'"
+        log cmd "--total-parts <number>"
         exit 1
     fi
 
