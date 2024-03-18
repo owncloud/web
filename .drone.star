@@ -109,7 +109,6 @@ config = {
                     "webUIDeleteFilesFolders",
                 ],
                 "oCISFiles2": [
-                    "webUIFilesList",
                     "webUIFilesDetails",
                 ],
                 "oCISFiles3": [
@@ -177,7 +176,6 @@ basicTestSuites = [
     "webUIFiles",
     "webUIFilesCopy",
     "webUIFilesDetails",
-    "webUIFilesList",
     "webUILogin",
     "webUIMoveFilesFolders",
     "webUIPreview",
