@@ -96,7 +96,6 @@ export default defineComponent({
     const { selectedResources } = useSelectedResources()
 
     const panelContext = computed<SideBarPanelContext<SpaceResource, Resource, Resource>>(() => {
-      console.log('currentFolderChange', unref(currentFolder))
       if (unref(selectedResources).length === 0) {
         return {
           root: props.space,

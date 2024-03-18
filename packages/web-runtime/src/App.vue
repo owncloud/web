@@ -19,6 +19,7 @@ import { eventBus, useResourcesStore, useRouter, useThemeStore } from '@owncloud
 import { useHead } from './composables/head'
 import { RouteLocation } from 'vue-router'
 import { storeToRefs } from 'pinia'
+import { isEqual } from 'lodash-es'
 
 export default defineComponent({
   components: {
@@ -47,9 +48,7 @@ export default defineComponent({
         const oldAppContext = getAppContextFromRoute(oldRoute)
         const newAppContext = getAppContextFromRoute(newRoute)
 
-        console.log(oldAppContext, newAppContext)
-
-        if (oldAppContext === newAppContext) {
+        if (isEqual(oldAppContext, newAppContext)) {
           return
         }
 
