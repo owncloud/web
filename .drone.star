@@ -64,29 +64,32 @@ config = {
         "oCIS-1": {
             "earlyFail": True,
             "skip": False,
-            "featurePaths": [
-                "tests/e2e/cucumber/features/{smoke,journeys}/*.feature",
+            "suites": [
+                "journeys",
+                "smoke",
             ],
         },
         "oCIS-2": {
             "earlyFail": True,
             "skip": False,
-            "featurePaths": [
-                "tests/e2e/cucumber/features/smoke/{spaces,admin-settings}/*.feature",
+            "suites": [
+                "admin-settings",
+                "spaces",
             ],
         },
         "oCIS-3": {
             "earlyFail": True,
             "skip": False,
             "tikaNeeded": True,
-            "featurePaths": [
-                "tests/e2e/cucumber/features/smoke/{search,shares}/*.feature",
+            "suites": [
+                "search",
+                "shares",
             ],
         },
         "oCIS-app-provider": {
             "skip": False,
-            "featurePaths": [
-                "tests/e2e/cucumber/features/smoke/app-provider/*.feature",
+            "suites": [
+                "app-provider",
             ],
         },
     },
@@ -636,7 +639,7 @@ def e2eTests(ctx):
         "logLevel": "2",
         "reportTracing": "false",
         "db": "mysql:5.5",
-        "featurePaths": "",
+        "suites": [],
         "tikaNeeded": False,
     }
 
@@ -709,7 +712,8 @@ def e2eTests(ctx):
                      "image": OC_CI_NODEJS,
                      "environment": environment,
                      "commands": [
-                         "pnpm test:e2e:cucumber %s" % " ".join(params["featurePaths"]),
+                         "cd tests/e2e",
+                         "bash run-e2e.sh --suites %s" % ",".join(params["suites"]),
                      ],
                  }] + \
                  uploadTracingResult(ctx) + \
