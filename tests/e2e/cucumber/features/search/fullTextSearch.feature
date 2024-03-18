@@ -77,8 +77,7 @@ Feature: Search
       | fileToShare.txt               |
       | spaceFolder/spaceTextfile.txt |
 
-    When "Brian" enables the option to search in file content
-    And "Brian" searches "Cheers" using the global search and the "all files" filter and presses enter
+    When "Brian" searches "Cheers" using the global search and the "all files" filter and presses enter
     Then following resources should be displayed in the files list for user "Brian"
       | resource                      |
       | textfile.txt                  |

@@ -11,10 +11,10 @@ const mediaTypeOutside = '.files-search-result-filter'
 const clearFilterSelector = '.item-filter-%s .oc-filter-chip-clear'
 const lastModifiedFilterSelector = '.item-filter-lastModified'
 const lastModifiedFilterItem = '[data-test-value="%s"]'
-const enableSearchInFileContentSelector =
-  '//div[contains(@class,"files-search-filter-full-text")]//button[contains(@class,"oc-filter-chip-button")]'
-const disableSearchInFileContentSelector =
-  '//div[contains(@class,"files-search-filter-full-text")]//button[contains(@class,"oc-filter-chip-clear")]'
+const enableSearchTitleOnlySelector =
+  '//div[contains(@class,"files-search-filter-title-only")]//button[contains(@class,"oc-filter-chip-button")]'
+const disableSearchTitleOnlySelector =
+  '//div[contains(@class,"files-search-filter-title-only")]//button[contains(@class,"oc-filter-chip-clear")]'
 
 export const getSearchResultMessage = ({ page }: { page: Page }): Promise<string> => {
   return page.locator(searchResultMessageSelector).innerText()
@@ -80,7 +80,7 @@ export const clearFilter = async ({
   await page.locator(util.format(clearFilterSelector, filter)).click()
 }
 
-export const toggleSearchInFileContent = async ({
+export const toggleSearchTitleOnly = async ({
   enableOrDisable,
   page
 }: {
@@ -88,8 +88,6 @@ export const toggleSearchInFileContent = async ({
   page: Page
 }): Promise<void> => {
   const selector =
-    enableOrDisable === 'enable'
-      ? enableSearchInFileContentSelector
-      : disableSearchInFileContentSelector
+    enableOrDisable === 'enable' ? enableSearchTitleOnlySelector : disableSearchTitleOnlySelector
   await page.locator(selector).click()
 }

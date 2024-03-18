@@ -23,11 +23,11 @@ When(
 )
 
 When(
-  /^"([^"]*)" (enable|disable)s the option to search in file content?$/,
+  /^"([^"]*)" (enable|disable)s the option to search title only?$/,
   async function (this: World, stepUser: string, enableOrDisable: string): Promise<void> {
     const { page } = this.actorsEnvironment.getActor({ key: stepUser })
     const searchObject = new objects.applicationFiles.Search({ page })
-    await searchObject.toggleSearchInFileContent({ enableOrDisable })
+    await searchObject.toggleSearchTitleOnly({ enableOrDisable })
   }
 )
 When(
