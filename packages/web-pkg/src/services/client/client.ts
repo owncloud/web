@@ -8,7 +8,8 @@ import { OwnCloudSdk } from '@ownclouders/web-client/src/types'
 import { Language } from 'vue3-gettext'
 import { FetchEventSourceInit } from '@microsoft/fetch-event-source'
 import { sse } from '@ownclouders/web-client/src/sse'
-import { AuthStore, ConfigStore } from '../../composables'
+import { AuthStore, ConfigStore, UserStore } from '../../composables'
+import { computed } from 'vue'
 
 interface OcClient {
   token: string
@@ -53,12 +54,14 @@ export interface ClientServiceOptions {
   configStore: ConfigStore
   language: Language
   authStore: AuthStore
+  userStore: UserStore
 }
 
 export class ClientService {
   private configStore: ConfigStore
   private language: Language
   private authStore: AuthStore
+  private userStore: UserStore
 
   private httpAuthenticatedClient: HttpClient
   private httpUnAuthenticatedClient: HttpClient
@@ -73,6 +76,7 @@ export class ClientService {
     this.configStore = options.configStore
     this.language = options.language
     this.authStore = options.authStore
+    this.userStore = options.userStore
   }
 
   public get httpAuthenticated(): _HttpClient {
@@ -139,7 +143,8 @@ export class ClientService {
   private getOcsClient(authParams: AuthParameters): OcClient {
     const { graph, ocs } = client(
       this.configStore.serverUrl,
-      createAxiosInstance(authParams, this.currentLanguage)
+      createAxiosInstance(authParams, this.currentLanguage),
+      computed(() => this.userStore.user)
     )
     return {
       token: this.authStore.accessToken,

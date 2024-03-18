@@ -17,29 +17,20 @@ describe('avatarUrl', () => {
     defaultOptions.clientService.httpAuthenticated.head.mockResolvedValue({
       status: 200
     } as AxiosResponse)
-    defaultOptions.clientService.owncloudSdk.signUrl.mockRejectedValue(new Error('error'))
+    defaultOptions.clientService.ocsUserContext.signUrl.mockRejectedValue(new Error('error'))
     const avatarUrlPromise = avatarUrl(defaultOptions)
     await expect(avatarUrlPromise).rejects.toThrow(new Error('error'))
     expect(defaultOptions.clientService.httpAuthenticated.head).toHaveBeenCalledWith(
       buildUrl(defaultOptions)
     )
   })
-  it('returns an unsigned url', async () => {
-    const defaultOptions = getDefaultOptions()
-    defaultOptions.clientService.owncloudSdk = null
-    defaultOptions.clientService.httpAuthenticated.head.mockResolvedValue({
-      status: 200
-    } as AxiosResponse)
-    const avatarUrlPromise = avatarUrl(defaultOptions)
-    await expect(avatarUrlPromise).resolves.toBe(buildUrl(defaultOptions))
-  })
   it('returns a signed url', async () => {
     const defaultOptions = getDefaultOptions()
     defaultOptions.clientService.httpAuthenticated.head.mockResolvedValue({
       status: 200
     } as AxiosResponse)
-    defaultOptions.clientService.owncloudSdk.signUrl.mockImplementation((url) => {
-      return `${url}?signed=true`
+    defaultOptions.clientService.ocsUserContext.signUrl.mockImplementation((url) => {
+      return Promise.resolve(`${url}?signed=true`)
     })
     const avatarUrlPromise = avatarUrl(defaultOptions)
     await expect(avatarUrlPromise).resolves.toBe(`${buildUrl(defaultOptions)}?signed=true`)
@@ -49,7 +40,9 @@ describe('avatarUrl', () => {
     defaultOptions.clientService.httpAuthenticated.head.mockResolvedValue({
       status: 200
     } as AxiosResponse)
-    defaultOptions.clientService.owncloudSdk.signUrl.mockImplementation((url) => url)
+    defaultOptions.clientService.ocsUserContext.signUrl.mockImplementation((url) =>
+      Promise.resolve(url)
+    )
 
     const avatarUrlPromiseUncached = avatarUrl(defaultOptions, true)
     await expect(avatarUrlPromiseUncached).resolves.toBe(buildUrl(defaultOptions))

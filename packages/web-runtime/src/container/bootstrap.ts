@@ -402,7 +402,8 @@ export const announceClientService = ({
   const clientService = new ClientService({
     configStore,
     language: app.config.globalProperties.$language,
-    authStore
+    authStore,
+    userStore
   })
   app.config.globalProperties.$client = sdk
   app.config.globalProperties.$clientService = clientService

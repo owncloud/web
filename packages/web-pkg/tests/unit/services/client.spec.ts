@@ -1,5 +1,5 @@
 import { HttpClient } from '../../../src/http'
-import { ClientService, useAuthStore, useConfigStore } from '../../../src/'
+import { ClientService, useAuthStore, useConfigStore, useUserStore } from '../../../src/'
 import { Language } from 'vue3-gettext'
 import { Graph, OCS, client as _client } from '@ownclouders/web-client'
 import { createTestingPinia, writable } from 'web-test-helpers'
@@ -12,13 +12,15 @@ const serverUrl = 'someUrl'
 const getClientServiceMock = () => {
   const authStore = useAuthStore()
   const configStore = useConfigStore()
+  const userStore = useUserStore()
   writable(configStore).serverUrl = serverUrl
 
   return {
     clientService: new ClientService({
       configStore,
       language: language as Language,
-      authStore
+      authStore,
+      userStore
     }),
     authStore
   }
@@ -88,7 +90,7 @@ describe('ClientService', () => {
     })
     const { clientService, authStore } = getClientServiceMock()
     const client = clientService.graphAuthenticated
-    expect(_client).toHaveBeenCalledWith(serverUrl, expect.anything())
+    expect(_client).toHaveBeenCalledWith(serverUrl, expect.anything(), expect.anything())
     expect(_client).toHaveBeenCalledTimes(1)
     expect(graphClient).toEqual(client)
     // test re-instantiation on token and language change
@@ -108,7 +110,7 @@ describe('ClientService', () => {
     })
     const { clientService, authStore } = getClientServiceMock()
     const client = clientService.ocsUserContext
-    expect(_client).toHaveBeenCalledWith(serverUrl, expect.anything())
+    expect(_client).toHaveBeenCalledWith(serverUrl, expect.anything(), expect.anything())
     expect(_client).toHaveBeenCalledTimes(1)
     expect(ocsClient).toEqual(client)
     // test re-instantiation on token and language change
@@ -128,7 +130,7 @@ describe('ClientService', () => {
     })
     const { clientService, authStore } = getClientServiceMock()
     const client = clientService.ocsPublicLinkContext()
-    expect(_client).toHaveBeenCalledWith(serverUrl, expect.anything())
+    expect(_client).toHaveBeenCalledWith(serverUrl, expect.anything(), expect.anything())
     expect(_client).toHaveBeenCalledTimes(1)
     expect(ocsClient).toEqual(client)
     // test re-instantiation on token and language change

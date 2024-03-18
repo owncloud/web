@@ -66,7 +66,7 @@ export class ArchiverService {
 
     const url = options.publicToken
       ? downloadUrl
-      : await this.clientService.owncloudSdk.signUrl(downloadUrl)
+      : await this.clientService.ocsUserContext.signUrl(downloadUrl)
 
     try {
       const response = await this.clientService.httpUnAuthenticated.get<ArrayBuffer>(url, {
