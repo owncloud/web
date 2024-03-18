@@ -43,7 +43,7 @@ export default defineComponent({
     const { selectedResources } = storeToRefs(resourcesStore)
 
     const hasSize = computed(() => {
-      return unref(selectedResources).some((resource) => resource.hasOwnProperty('size'))
+      return unref(selectedResources).some((resource) => Object.hasOwn(resource, 'size'))
     })
 
     return { hasSize, selectedResources }
