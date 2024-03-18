@@ -95,14 +95,13 @@ export const useSideBarPanels = () => {
             component: FileDetails,
             componentAttrs: ({ items }) => ({
               previewEnabled: unref(isFilesAppActive),
-              tagsEnabled: !isPersonalSpaceRoot(items[0])
+              tagsEnabled:
+                !isPersonalSpaceRoot(items[0]) &&
+                !isLocationTrashActive(router, 'files-trash-generic'),
+              versionsEnabled: !isLocationTrashActive(router, 'files-trash-generic')
             }),
-            isRoot: () => !isLocationTrashActive(router, 'files-trash-generic'),
+            isRoot: () => true,
             isVisible: ({ items }) => {
-              if (isLocationTrashActive(router, 'files-trash-generic')) {
-                // details panel is not available in trash
-                return false
-              }
               if (items?.length !== 1) {
                 return false
               }
@@ -148,7 +147,7 @@ export const useSideBarPanels = () => {
             icon: 'slideshow-3',
             title: () => $gettext('Actions'),
             component: FileActions,
-            isRoot: () => isLocationTrashActive(router, 'files-trash-generic'),
+            isRoot: () => false,
             isVisible: ({ items }) => {
               if (items?.length !== 1) {
                 return false

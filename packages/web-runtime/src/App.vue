@@ -19,6 +19,7 @@ import { eventBus, useResourcesStore, useRouter, useThemeStore } from '@owncloud
 import { useHead } from './composables/head'
 import { RouteLocation } from 'vue-router'
 import { storeToRefs } from 'pinia'
+import { isEqual } from 'lodash-es'
 
 export default defineComponent({
   components: {
@@ -40,14 +41,14 @@ export default defineComponent({
     watch(
       () => unref(activeRoute),
       (newRoute, oldRoute) => {
-        const getAppFromRoute = (route: RouteLocation): string => {
-          return route?.path?.split('/')?.[1]
+        const getAppContextFromRoute = (route: RouteLocation): string[] => {
+          return route?.path?.split('/').slice(1, 4)
         }
 
-        const oldApp = getAppFromRoute(oldRoute)
-        const newApp = getAppFromRoute(newRoute)
+        const oldAppContext = getAppContextFromRoute(oldRoute)
+        const newAppContext = getAppContextFromRoute(newRoute)
 
-        if (oldApp === newApp) {
+        if (isEqual(oldAppContext, newAppContext)) {
           return
         }
 
@@ -56,7 +57,7 @@ export default defineComponent({
         }
 
         /*
-         * If app has been changed and no file context is set, we will reset current folder.
+         * If app context has been changed and no file context is set, we will reset current folder.
          */
         resourcesStore.setCurrentFolder(null)
       }

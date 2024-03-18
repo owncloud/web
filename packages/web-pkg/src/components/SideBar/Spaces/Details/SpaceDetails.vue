@@ -66,7 +66,7 @@
           <space-quota :space-quota="resource.spaceQuota" />
         </td>
       </tr>
-      <web-dav-details v-if="showWebDavDetails" />
+      <web-dav-details v-if="showWebDavDetails" :space="resource" />
       <portal-target
         name="app.files.sidebar.space.details.table"
         :slot-props="{ space: resource, resource }"

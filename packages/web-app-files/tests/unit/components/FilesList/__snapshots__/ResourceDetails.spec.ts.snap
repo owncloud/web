@@ -19,6 +19,7 @@ exports[`ResourceDetails component > renders resource details correctly 1`] = `
         <table data-v-5080a6a4="" class="details-table oc-width-1-1" aria-label="Overview of the information about the selected file">
           <col data-v-5080a6a4="" class="oc-width-1-3">
           <col data-v-5080a6a4="" class="oc-width-2-3">
+          <!--v-if-->
           <tr data-v-5080a6a4="" data-testid="timestamp">
             <th data-v-5080a6a4="" scope="col" class="oc-pr-s oc-font-semibold">Last modified</th>
             <td data-v-5080a6a4=""><span data-v-5080a6a4="">Oct 21, 2015, 7:28 AM</span></td>

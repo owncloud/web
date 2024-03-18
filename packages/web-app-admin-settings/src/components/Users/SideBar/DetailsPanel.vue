@@ -1,6 +1,6 @@
 <template>
   <div class="oc-mt-xl">
-    <div v-if="noUsers" class="oc-flex user-info">
+    <div v-if="noUsers" class="oc-flex user-info oc-text-center">
       <oc-icon name="user" size="xxlarge" />
       <p v-translate>Select a user to view details</p>
     </div>

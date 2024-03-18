@@ -1,6 +1,6 @@
 <template>
   <div class="oc-mt-xl">
-    <div v-if="noGroups" class="oc-flex group-info">
+    <div v-if="noGroups" class="oc-flex group-info oc-text-center">
       <oc-icon name="group-2" size="xxlarge" />
       <p v-translate>Select a group to view details</p>
     </div>
@@ -59,9 +59,11 @@ export default defineComponent({
   align-items: center;
   flex-direction: column;
 }
+
 .group-info-display-name {
   font-size: 1.5rem;
 }
+
 .details-table {
   text-align: left;
 
