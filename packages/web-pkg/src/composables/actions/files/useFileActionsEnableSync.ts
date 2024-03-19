@@ -1,5 +1,3 @@
-import { triggerShareAction } from '../../../helpers/share/triggerShareAction'
-
 import PQueue from 'p-queue'
 import { IncomingShareResource } from '@ownclouders/web-client/src/helpers/share'
 import { isLocationSharesActive, isLocationSpacesActive } from '../../../router'
@@ -33,11 +31,12 @@ export const useFileActionsEnableSync = () => {
       triggerPromises.push(
         triggerQueue.add(async () => {
           try {
-            await triggerShareAction({
-              resource,
-              status: 0,
-              client: clientService.owncloudSdk
+            const { graphAuthenticated } = clientService
+            await graphAuthenticated.drives.createDriveItem(resource.driveId, {
+              name: resource.name,
+              remoteItem: { id: resource.fileId }
             })
+
             updateResourceField<IncomingShareResource, any>({
               id: resource.id,
               field: 'syncEnabled',

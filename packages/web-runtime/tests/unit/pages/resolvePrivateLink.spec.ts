@@ -1,9 +1,15 @@
 import resolvePrivateLink from '../../../src/pages/resolvePrivateLink.vue'
-import { defaultPlugins, defaultComponentMocks, shallowMount } from 'web-test-helpers'
+import {
+  defaultPlugins,
+  defaultComponentMocks,
+  shallowMount,
+  mockAxiosResolve
+} from 'web-test-helpers'
 import { mock } from 'vitest-mock-extended'
 import { queryItemAsString, useGetResourceContext } from '@ownclouders/web-pkg'
 import { Resource, SpaceResource } from '@ownclouders/web-client'
 import { SHARE_JAIL_ID } from '@ownclouders/web-client/src/helpers'
+import { DriveItem } from '@ownclouders/web-client/src/generated'
 
 vi.mock('@ownclouders/web-pkg', async (importOriginal) => ({
   ...(await importOriginal<any>()),
@@ -69,7 +75,7 @@ describe('resolvePrivateLink', () => {
         driveType: 'share',
         getDriveAliasAndItem: () => driveAliasAndItem
       })
-      const resource = mock<Resource>({ fileId, type: 'file' })
+      const resource = mock<Resource>({ fileId, id: fileId, type: 'file' })
       const { wrapper, mocks } = getWrapper({
         space,
         resource,
@@ -169,9 +175,11 @@ function getWrapper({
   })
 
   const mocks = { ...defaultComponentMocks() }
-  mocks.$clientService.owncloudSdk.shares.getShare.mockResolvedValue({
-    shareInfo: { hidden: hiddenShare ? 'true' : 'false' }
-  })
+  mocks.$clientService.graphAuthenticated.drives.listSharedWithMe.mockResolvedValue(
+    mockAxiosResolve({
+      value: [{ remoteItem: { id: '1' }, '@UI.Hidden': hiddenShare } as DriveItem]
+    })
+  )
 
   return {
     mocks,

@@ -94,6 +94,7 @@ const indicators = [
 const resourcesWithAllFields = [
   {
     id: 'forest',
+    driveId: 'forest',
     name: 'forest.jpg',
     path: 'images/nature/forest.jpg',
     extension: 'jpg',
@@ -120,6 +121,7 @@ const resourcesWithAllFields = [
   },
   {
     id: 'notes',
+    driveId: 'notes',
     name: 'notes.txt',
     path: '/Documents/notes.txt',
     extension: 'txt',
@@ -145,6 +147,7 @@ const resourcesWithAllFields = [
   },
   {
     id: 'documents',
+    driveId: 'documents',
     name: 'Documents',
     path: '/Documents',
     indicators,
@@ -169,6 +172,7 @@ const resourcesWithAllFields = [
   },
   {
     id: 'another-one==',
+    driveId: 'another-one==',
     name: 'Another one',
     path: '/Another one',
     indicators,
@@ -196,6 +200,7 @@ const resourcesWithAllFields = [
 const processingResourcesWithAllFields = [
   {
     id: 'rainforest',
+    driveId: 'rainforest',
     name: 'rainforest.jpg',
     path: 'images/nature/rainforest.jpg',
     extension: 'jpg',
@@ -223,6 +228,7 @@ const processingResourcesWithAllFields = [
   },
   {
     id: 'personalnotes',
+    driveId: 'personalnotes',
     name: 'personalnotes.txt',
     path: '/Documents/personalnotes.txt',
     extension: 'txt',

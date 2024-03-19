@@ -28,7 +28,10 @@ import {
   MeDriveApiFactory,
   RoleManagementApiFactory,
   UnifiedRoleDefinition,
-  CollectionOfDriveItems1
+  CollectionOfDriveItems1,
+  DriveItemApiFactory,
+  DrivesRootApiFactory,
+  DriveItem
 } from './generated'
 
 export interface Graph {
@@ -50,6 +53,8 @@ export interface Graph {
     updateDrive: (id: string, drive: Drive, options: any) => AxiosPromise<Drive>
     disableDrive: (id: string) => AxiosPromise<void>
     deleteDrive: (id: string) => AxiosPromise<void>
+    deleteDriveItem: (driveId: string, itemId: string) => AxiosPromise<void>
+    createDriveItem: (driveId: string, driveItem: DriveItem) => AxiosPromise<DriveItem>
   }
   users: {
     getUser: (userId: string) => AxiosPromise<User>
@@ -121,6 +126,8 @@ export const graph = (baseURI: string, axiosClient: AxiosInstance): Graph => {
   const drivesApiFactory = DrivesApiFactory(config, config.basePath, axiosClient)
   const tagsApiFactory = TagsApiFactory(config, config.basePath, axiosClient)
   const roleManagementApiFactory = RoleManagementApiFactory(config, config.basePath, axiosClient)
+  const driveItemApiFactory = DriveItemApiFactory(config, config.basePath, axiosClient)
+  const drivesRootApiFactory = DrivesRootApiFactory(config, config.basePath, axiosClient)
 
   return <Graph>{
     applications: {
@@ -150,7 +157,11 @@ export const graph = (baseURI: string, axiosClient: AxiosInstance): Graph => {
           headers: {
             Purge: 'T'
           }
-        })
+        }),
+      deleteDriveItem: (driveId: string, itemId: string) =>
+        driveItemApiFactory.deleteDriveItem(driveId, itemId),
+      createDriveItem: (driveId: string, driveItem: DriveItem) =>
+        drivesRootApiFactory.createDriveItem(driveId, driveItem)
     },
     users: {
       getUser: (userId: string) =>
