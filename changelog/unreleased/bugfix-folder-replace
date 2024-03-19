@@ -1,0 +1,6 @@
+Bugfix: Folder replace
+
+The "Replace" conflict option, which previously didn't work at all when trying to copy/move a folder, has been fixed.
+
+https://github.com/owncloud/web/issues/10515
+https://github.com/owncloud/web/pull/10597

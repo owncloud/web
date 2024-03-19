@@ -11,6 +11,7 @@ import {
 } from '.'
 import { ClientService, LoadingService, LoadingTaskCallbackArguments } from '../../../services'
 import { useMessages } from '../../../composables'
+import { Ref, unref } from 'vue'
 
 export class ResourceTransfer extends ConflictDialog {
   constructor(
@@ -18,6 +19,7 @@ export class ResourceTransfer extends ConflictDialog {
     private resourcesToMove: Resource[],
     private targetSpace: SpaceResource,
     private targetFolder: Resource,
+    private currentFolder: Ref<Resource>,
     private clientService: ClientService,
     private loadingService: LoadingService,
     $gettext: (
@@ -134,10 +136,19 @@ export class ResourceTransfer extends ConflictDialog {
   }
 
   // This is for an edge case if a user moves a subfolder with the same name as the parent folder into the parent of the parent folder (which is not possible because of the backend)
-  public isOverwritingParentFolder(resource, targetFolder, targetFolderResources) {
+  public isOverwritingParentFolder(
+    resource: Resource,
+    targetFolder: Resource,
+    targetFolderResources: Resource[]
+  ) {
     if (resource.type !== 'folder') {
       return false
     }
+
+    if (targetFolder.path === unref(this.currentFolder)?.path) {
+      return false
+    }
+
     const folderName = basename(resource.path)
     const newPath = join(targetFolder.path, folderName)
     return targetFolderResources.some((resource) => resource.path === newPath)
@@ -160,8 +171,9 @@ export class ResourceTransfer extends ConflictDialog {
       let targetName = resource.name
       let overwriteTarget = false
       if (hasConflict) {
-        const resolveStrategy = resolvedConflicts.find((e) => e.resource.id === resource.id)
-          ?.strategy
+        const resolveStrategy = resolvedConflicts.find(
+          (e) => e.resource.id === resource.id
+        )?.strategy
         if (resolveStrategy === ResolveStrategy.SKIP) {
           continue
         }

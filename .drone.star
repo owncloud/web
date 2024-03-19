@@ -1226,7 +1226,6 @@ def ocisService(type, tika_enabled = False, enforce_password_public_link = False
         environment["OCIS_EXCLUDE_RUN_SERVICES"] = "idp"
         environment["GRAPH_ASSIGN_DEFAULT_USER_ROLE"] = "false"
         environment["GRAPH_USERNAME_MATCH"] = "none"
-
     if type == "app-provider":
         environment["GATEWAY_GRPC_ADDR"] = "0.0.0.0:9142"
         environment["MICRO_REGISTRY"] = "nats-js-kv"
