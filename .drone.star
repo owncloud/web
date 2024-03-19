@@ -5,7 +5,7 @@ NOTIFICATIONS = 3
 
 ALPINE_GIT = "alpine/git:latest"
 APACHE_TIKA = "apache/tika:2.8.0.0"
-KEYCLOAK = "quay.io/keycloak/keycloak:22.0.4"
+KEYCLOAK = "quay.io/keycloak/keycloak:24.0.1"
 MINIO_MC = "minio/mc:RELEASE.2021-10-07T04-19-58Z"
 OC_CI_ALPINE = "owncloudci/alpine:latest"
 OC_CI_BAZEL_BUILDIFIER = "owncloudci/bazel-buildifier"
