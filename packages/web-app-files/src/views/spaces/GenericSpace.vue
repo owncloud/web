@@ -640,7 +640,7 @@ export default defineComponent({
         selected,
         this.space,
         targetFolder,
-        this.currentFolder,
+        computed(() => this.currentFolder),
         this.$clientService,
         this.$loadingService,
         this.$gettext,

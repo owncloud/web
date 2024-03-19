@@ -51,6 +51,7 @@ export const useFileActionsPaste = () => {
       resources,
       targetSpace,
       unref(currentFolder),
+      currentFolder,
       clientService,
       loadingService,
       $gettext,
