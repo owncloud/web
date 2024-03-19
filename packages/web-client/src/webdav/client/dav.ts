@@ -9,7 +9,7 @@ import {
 import { v4 as uuidV4 } from 'uuid'
 import { encodePath, urlJoin } from '../../utils'
 import { DavMethod, DavPropertyValue } from '../constants'
-import { buildPropFindBody } from './builders'
+import { buildPropFindBody, buildPropPatchBody } from './builders'
 import { parseError, parseMultiStatus, parseTusHeaders } from './parsers'
 import { WebDavResponseResource } from '../../helpers'
 import { HttpError } from '../../errors'
@@ -65,21 +65,24 @@ export class DAV {
     return body
   }
 
-  public async search(
-    pattern: string,
+  public async report(
     path: string,
     {
+      pattern = '',
+      filterRules = null,
       limit = 30,
       properties,
       headers = {}
     }: {
+      pattern?: string
+      filterRules?: Partial<Record<DavPropertyValue, unknown>>
       limit?: number
       properties?: DavPropertyValue[]
       headers?: Headers
     } = {}
   ) {
     const { body, result } = await this.request(DavMethod.report, path, {
-      body: buildPropFindBody(properties, { pattern, limit }),
+      body: buildPropFindBody(properties, { pattern, filterRules, limit }),
       headers
     })
 
@@ -144,6 +147,15 @@ export class DAV {
 
   public delete(path: string, { headers = {} }: { headers?: Headers } = {}) {
     return this.request(DavMethod.delete, path, { headers })
+  }
+
+  public propPatch(
+    path: string,
+    properties: Partial<Record<DavPropertyValue, unknown>>,
+    { headers = {} }: { headers?: Headers } = {}
+  ) {
+    const body = buildPropPatchBody(properties)
+    return this.request(DavMethod.proppatch, path, { body, headers })
   }
 
   public getFileUrl(path: string) {

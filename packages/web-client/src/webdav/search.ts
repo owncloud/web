@@ -26,7 +26,8 @@ export const SearchFactory = (dav: DAV, { accessToken }: WebDavOptions) => {
     ): Promise<SearchResult> {
       const path = '/spaces/'
       const headers = buildAuthHeader(unref(accessToken))
-      const { range, results } = await dav.search(term, path, {
+      const { range, results } = await dav.report(path, {
+        pattern: term,
         limit: searchLimit,
         properties: davProperties,
         headers

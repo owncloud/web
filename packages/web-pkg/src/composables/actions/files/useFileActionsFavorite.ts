@@ -19,10 +19,10 @@ export const useFileActionsFavorite = () => {
   const resourcesStore = useResourcesStore()
   const eventBus = useEventBus()
 
-  const handler = async ({ resources }: FileActionOptions) => {
+  const handler = async ({ space, resources }: FileActionOptions) => {
     try {
       const newValue = !resources[0].starred
-      await clientService.owncloudSdk.files.favorite(resources[0].webDavPath, newValue)
+      await clientService.webdav.setFavorite(space, resources[0], newValue)
 
       resourcesStore.updateResourceField({ id: resources[0].id, field: 'starred', value: newValue })
       if (!newValue) {

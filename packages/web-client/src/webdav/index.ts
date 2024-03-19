@@ -17,6 +17,8 @@ import { GetPathForFileIdFactory } from './getPathForFileId'
 import { DAV } from './client/dav'
 import { ListFileVersionsFactory } from './listFileVersions'
 import { ListFilesByIdFactory } from './listFilesById'
+import { SetFavoriteFactory } from './setFavorite'
+import { ListFavoriteFilesFactory } from './listFavoriteFiles'
 
 export * from './constants'
 export * from './types'
@@ -61,6 +63,9 @@ export const webdav = (options: WebDavOptions): WebDAV => {
 
   const { search } = SearchFactory(dav, options)
 
+  const { listFavoriteFiles } = ListFavoriteFilesFactory(dav, options)
+  const { setFavorite } = SetFavoriteFactory(dav, options)
+
   return {
     copyFiles,
     createFolder,
@@ -79,6 +84,8 @@ export const webdav = (options: WebDavOptions): WebDAV => {
     putFileContents,
     revokeUrl,
     clearTrashBin,
-    search
+    search,
+    listFavoriteFiles,
+    setFavorite
   }
 }
