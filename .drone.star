@@ -1426,10 +1426,8 @@ def restoreOcisCache():
         "environment": minio_mc_environment,
         "commands": [
             ". ./.drone.env",
-            "rm -rf %s" % dir["ocis"],
-            "mkdir -p %s" % dir["ocis"],
             "mc alias set s3 $MC_HOST $AWS_ACCESS_KEY_ID $AWS_SECRET_ACCESS_KEY",
-            "mc cp -r -a s3/$CACHE_BUCKET/ocis-build/$OCIS_COMMITID/ocis %s" % dir["ocis"],
+            "mc cp -r -a s3/$CACHE_BUCKET/ocis-build/$OCIS_COMMITID/ocis %s" % dir["web"],
         ],
     }]
 
@@ -1441,8 +1439,8 @@ def buildOcis():
             "image": OC_CI_GOLANG,
             "commands": [
                 "source .drone.env",
-                "git clone -b $OCIS_BRANCH --single-branch %s ocis_server" % ocis_repo_url,
-                "cd ocis_server",
+                "git clone -b $OCIS_BRANCH --single-branch %s ocis_repo" % ocis_repo_url,
+                "cd ocis_repo",
                 "git checkout $OCIS_COMMITID",
             ],
             "volumes": go_step_volumes,
@@ -1451,7 +1449,7 @@ def buildOcis():
             "name": "generate-ocis",
             "image": OC_CI_NODEJS,
             "commands": [
-                "cd ocis_server",
+                "cd ocis_repo",
                 "retry -t 3 'make ci-node-generate'",
             ],
             "volumes": go_step_volumes,
@@ -1461,7 +1459,7 @@ def buildOcis():
             "image": OC_CI_GOLANG,
             "commands": [
                 "source .drone.env",
-                "cd ocis_server/ocis",
+                "cd ocis_repo/ocis",
                 "retry -t 3 'make build'",
                 "cp bin/ocis %s" % dir["web"],
             ],
@@ -1477,7 +1475,7 @@ def cacheOcis():
         "commands": [
             ". ./.drone.env",
             "mc alias set s3 $MC_HOST $AWS_ACCESS_KEY_ID $AWS_SECRET_ACCESS_KEY",
-            "mc cp -r -a %s s3/$CACHE_BUCKET/ocis-build/$OCIS_COMMITID" % dir["ocis"],
+            "mc cp -r -a %s/ocis s3/$CACHE_BUCKET/ocis-build/$OCIS_COMMITID" % dir["web"],
             "mc ls --recursive s3/$CACHE_BUCKET/ocis-build",
         ],
     }]
@@ -2363,8 +2361,6 @@ def getOcislatestCommitId(ctx):
             "commands": [
                 "curl -o .drone.env %s/.drone.env" % web_repo_path,
                 "curl -o get-latest-ocis-commit-id.sh %s/tests/drone/get-latest-ocis-commit-id.sh" % web_repo_path,
-                "pwd",
-                "ls -al",
                 ". ./.drone.env",
                 "bash get-latest-ocis-commit-id.sh",
             ],
