@@ -1,0 +1,6 @@
+Enhancement: Full text search default
+
+Full text search is now enabled by default when searching for files if the server supports it.
+
+https://github.com/owncloud/web/issues/10534
+https://github.com/owncloud/web/pull/10626

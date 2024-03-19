@@ -105,7 +105,9 @@ import {
   createLocationCommon,
   isLocationCommonActive,
   isLocationSpacesActive,
+  queryItemAsString,
   useAuthStore,
+  useCapabilityStore,
   useResourcesStore
 } from '@ownclouders/web-pkg'
 import Mark from 'mark.js'
@@ -123,6 +125,7 @@ export default defineComponent({
   components: { SearchBarFilter },
   setup() {
     const router = useRouter()
+    const capabilityStore = useCapabilityStore()
     const showCancelButton = ref(false)
     const isMobileWidth = inject<Ref<boolean>>('isMobileWidth')
     const scopeQueryValue = useRouteQuery('scope')
@@ -142,6 +145,8 @@ export default defineComponent({
     const searchResults = ref([])
     const loading = ref(false)
     const currentFolderAvailable = ref(false)
+
+    const fullTextSearchEnabled = computed(() => capabilityStore.searchContent?.enabled)
 
     const listProviderAvailable = computed(() =>
       unref(availableProviders).some((p) => !!p.listSearch)
@@ -179,18 +184,26 @@ export default defineComponent({
       if (!unref(term)) {
         return
       }
-      const terms = [`name:"*${unref(term)}*"`]
+
+      const terms: string[] = []
+
+      let nameQuery = `name:"*${unref(term)}*"`
+      if (unref(fullTextSearchEnabled)) {
+        nameQuery = `(name:"*${unref(term)}*" OR content:"${unref(term)}")`
+      }
+
+      terms.push(nameQuery)
 
       if (
         unref(currentFolderAvailable) &&
         unref(locationFilterId) === SearchLocationFilterConstants.currentFolder
       ) {
-        let scope
+        let scope: string
 
         if (unref(currentFolder)?.fileId) {
           scope = unref(currentFolder)?.fileId
         } else {
-          scope = unref(scopeQueryValue)
+          scope = queryItemAsString(unref(scopeQueryValue))
         }
 
         terms.push(`scope:${scope}`)

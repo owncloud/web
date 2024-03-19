@@ -25,7 +25,7 @@ const selectors = {
   resourceTableStub: 'resource-table-stub',
   tagFilter: '.files-search-filter-tags',
   lastModifiedFilter: '.files-search-filter-last-modified',
-  fullTextFilter: '.files-search-filter-full-text',
+  titleOnlyFilter: '.files-search-filter-title-only',
   filter: '.files-search-result-filter'
 }
 
@@ -66,7 +66,7 @@ describe('List component', () => {
         name: 'files-common-search',
         query: merge(
           {
-            q_fullText: 'q_fullText',
+            q_titleOnly: 'q_titleOnly',
             q_tags: 'q_tags',
             q_lastModified: 'q_lastModified',
             useScope: 'useScope'
@@ -123,7 +123,7 @@ describe('List component', () => {
         })
         await wrapper.vm.loadAvailableTagsTask.last
         expect(wrapper.emitted('search')[0][0]).toEqual(
-          `name:"*${searchTerm}*" AND tag:("${availableTags[0]}" OR "${availableTags[1]}")`
+          `(name:"*${searchTerm}*" OR content:"${searchTerm}") AND tag:("${availableTags[0]}" OR "${availableTags[1]}")`
         )
       })
     })
@@ -176,25 +176,29 @@ describe('List component', () => {
         })
         await wrapper.vm.loadAvailableTagsTask.last
         expect(wrapper.emitted('search')[0][0]).toEqual(
-          `name:"*${searchTerm}*" AND mtime:"${lastModifiedFilterQuery}"`
+          `(name:"*${searchTerm}*" OR content:"${searchTerm}") AND mtime:${lastModifiedFilterQuery}`
         )
       })
     })
 
-    describe('fullText', () => {
+    describe('titleOnly', () => {
       it('should render filter if enabled via capabilities', () => {
         const { wrapper } = getWrapper({ fullTextSearchEnabled: true })
-        expect(wrapper.find(selectors.fullTextFilter).exists()).toBeTruthy()
+        expect(wrapper.find(selectors.titleOnlyFilter).exists()).toBeTruthy()
       })
-      it('should set initial filter when fullText is set active via query param', async () => {
+      it('should not render filter if not enabled via capabilities', () => {
+        const { wrapper } = getWrapper({ fullTextSearchEnabled: false })
+        expect(wrapper.find(selectors.titleOnlyFilter).exists()).toBeFalsy()
+      })
+      it('should set initial filter when titleOnly is set active via query param', async () => {
         const searchTerm = 'term'
         const { wrapper } = getWrapper({
           searchTerm,
-          fullTextFilterQuery: 'true',
+          titleOnlyFilterQuery: 'true',
           fullTextSearchEnabled: true
         })
         await wrapper.vm.loadAvailableTagsTask.last
-        expect(wrapper.emitted('search')[0][0]).toEqual(`content:"${searchTerm}"`)
+        expect(wrapper.emitted('search')[0][0]).toEqual(`name:"*${searchTerm}*"`)
       })
     })
   })
@@ -205,14 +209,14 @@ function getWrapper({
   resources = [],
   searchTerm = '',
   tagFilterQuery = null,
-  fullTextFilterQuery = null,
-  fullTextSearchEnabled = false,
+  titleOnlyFilterQuery = null,
+  fullTextSearchEnabled = true,
   availableLastModifiedValues = {},
   lastModifiedFilterQuery = null,
   mocks = {}
 } = {}) {
   vi.mocked(queryItemAsString).mockImplementationOnce(() => searchTerm)
-  vi.mocked(queryItemAsString).mockImplementationOnce(() => fullTextFilterQuery)
+  vi.mocked(queryItemAsString).mockImplementationOnce(() => titleOnlyFilterQuery)
   vi.mocked(queryItemAsString).mockImplementationOnce(() => tagFilterQuery)
   vi.mocked(queryItemAsString).mockImplementationOnce(() => lastModifiedFilterQuery)
 

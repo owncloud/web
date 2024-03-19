@@ -71,9 +71,9 @@
 
         <item-filter-toggle
           v-if="fullTextSearchEnabled"
-          :filter-label="$gettext('Search only in content')"
-          filter-name="fullText"
-          class="files-search-filter-full-text oc-mr-s"
+          :filter-label="$gettext('Title only')"
+          filter-name="titleOnly"
+          class="files-search-filter-title-only oc-mr-s"
         />
       </div>
       <app-loading-spinner v-if="loading" />
@@ -272,11 +272,13 @@ export default defineComponent({
     const tagParam = useRouteQuery('q_tags')
     const lastModifiedParam = useRouteQuery('q_lastModified')
     const mediaTypeParam = useRouteQuery('q_mediaType')
-    const fullTextParam = useRouteQuery('q_fullText')
+    const titleOnlyParam = useRouteQuery('q_titleOnly')
+
+    const fullTextSearchEnabled = computed(() => capabilityStore.searchContent?.enabled)
 
     const displayFilter = computed(() => {
       return (
-        capabilityStore.searchContent?.enabled ||
+        unref(fullTextSearchEnabled) ||
         unref(availableTags).length ||
         capabilityStore.searchLastMofifiedDate?.enabled
       )
@@ -339,21 +341,26 @@ export default defineComponent({
     }
 
     const buildSearchTerm = (manuallyUpdateFilterChip = false) => {
-      const query = {}
+      const query: string[] = []
 
       const humanSearchTerm = unref(searchTerm)
-      const isContentOnlySearch = queryItemAsString(unref(fullTextParam)) == 'true'
+      const isTitleOnlySearch = queryItemAsString(unref(titleOnlyParam)) == 'true'
+      const useFullTextSearch = unref(fullTextSearchEnabled) && !isTitleOnlySearch
 
-      if (isContentOnlySearch && !!humanSearchTerm) {
-        query['content'] = `"${humanSearchTerm}"`
-      } else if (!!humanSearchTerm) {
-        query['name'] = `"*${humanSearchTerm}*"`
+      if (!!humanSearchTerm) {
+        let nameQuery = `name:"*${humanSearchTerm}*"`
+
+        if (useFullTextSearch) {
+          nameQuery = `(name:"*${humanSearchTerm}*" OR content:"${humanSearchTerm}")`
+        }
+
+        query.push(nameQuery)
       }
 
       const humanScopeQuery = unref(scopeQuery)
       const isScopedSearch = unref(doUseScope) === 'true'
       if (isScopedSearch && humanScopeQuery) {
-        query['scope'] = `${humanScopeQuery}`
+        query.push(`scope:${humanScopeQuery}`)
       }
 
       const updateFilter = (v: Ref<InstanceType<typeof ItemFilter>>) => {
@@ -370,46 +377,26 @@ export default defineComponent({
 
       const humanTagsParams = queryItemAsString(unref(tagParam))
       if (humanTagsParams) {
-        query['tag'] = humanTagsParams.split('+').map((t) => `"${t}"`)
+        const tags = humanTagsParams.split('+').map((t) => `"${t}"`)
+        query.push(`tag:(${tags.join(' OR ')})`)
         updateFilter(tagFilter)
       }
 
       const lastModifiedParams = queryItemAsString(unref(lastModifiedParam))
       if (lastModifiedParams) {
-        query['mtime'] = `"${lastModifiedParams}"`
+        query.push(`mtime:${lastModifiedParams}`)
         updateFilter(lastModifiedFilter)
       }
 
       const mediaTypeParams = queryItemAsString(unref(mediaTypeParam))
       if (mediaTypeParams) {
-        query['mediatype'] = mediaTypeParams.split('+').map((t) => `"${t}"`)
+        const mediatypes = mediaTypeParams.split('+').map((t) => `"${t}"`)
+        query.push(`mediatype:(${mediatypes.join(' OR ')})`)
         updateFilter(mediaTypeFilter)
       }
-      return (
-        // By definition (KQL spec) OR, AND or (GROUP) is implicit for simple cases where
-        // different or identical keys are part of the query.
-        //
-        // We list these operators for the following reasons nevertheless explicit:
-        // * request readability
-        // * code readability
-        // * complex cases readability
-        Object.keys(query)
-          .reduce((acc, prop) => {
-            const isArrayValue = Array.isArray(query[prop])
-
-            if (!isArrayValue) {
-              acc.push(`${prop}:${query[prop]}`)
-            }
-
-            if (isArrayValue) {
-              acc.push(`${prop}:(${query[prop].join(' OR ')})`)
-            }
-
-            return acc
-          }, [])
-          .sort((a, b) => a.startsWith('scope:') - b.startsWith('scope:'))
-          .join(' AND ')
-      )
+      return query
+        .sort((a, b) => Number(a.startsWith('scope:')) - Number(b.startsWith('scope:')))
+        .join(' AND ')
     }
 
     const breadcrumbs = computed(() => {
@@ -457,7 +444,7 @@ export default defineComponent({
         {
           const isSameTerm = newVal?.term === oldVal?.term
           const isSameFilter = [
-            'q_fullText',
+            'q_titleOnly',
             'q_tags',
             'q_lastModified',
             'q_mediaType',
@@ -479,7 +466,7 @@ export default defineComponent({
       configOptions,
       loadAvailableTagsTask,
       fileListHeaderY,
-      fullTextSearchEnabled: computed(() => capabilityStore.searchContent?.enabled),
+      fullTextSearchEnabled,
       getMatchingSpace,
       availableTags,
       tagFilter,

@@ -32,7 +32,7 @@ export const buildRoutes = (components: RouteComponents): RouteRecordRaw[] => [
             'provider',
             'q_tags',
             'q_lastModified',
-            'q_fullText',
+            'q_titleOnly',
             'q_mediaType',
             'scope',
             'useScope'

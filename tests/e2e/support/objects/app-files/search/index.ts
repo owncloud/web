@@ -28,7 +28,7 @@ export class Search {
     await po.clearFilter({ page: this.#page, filter: string })
   }
 
-  async toggleSearchInFileContent({ enableOrDisable: string }): Promise<void> {
-    await po.toggleSearchInFileContent({ enableOrDisable: string, page: this.#page })
+  async toggleSearchTitleOnly({ enableOrDisable: string }): Promise<void> {
+    await po.toggleSearchTitleOnly({ enableOrDisable: string, page: this.#page })
   }
 }
