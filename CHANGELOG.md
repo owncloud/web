@@ -9,6 +9,7 @@ Summary
 -------
 
 * Enhancement - Tile sizes: [#10018](https://github.com/owncloud/web/issues/10018)
+* Enhancement - Full text search default: [#10534](https://github.com/owncloud/web/issues/10534)
 * Enhancement - Add SSE events for locking, renaming, deleting, and restoring: [#10586](https://github.com/owncloud/web/pull/10586)
 * Enhancement - Remember left nav bar state: [#10611](https://github.com/owncloud/web/pull/10611)
 * Enhancement - Remember right side bar state: [#10612](https://github.com/owncloud/web/pull/10612)
@@ -26,6 +27,14 @@ Details
 
    https://github.com/owncloud/web/issues/10018
    https://github.com/owncloud/web/pull/10558
+
+* Enhancement - Full text search default: [#10534](https://github.com/owncloud/web/issues/10534)
+
+   Full text search is now enabled by default when searching for files if the
+   server supports it.
+
+   https://github.com/owncloud/web/issues/10534
+   https://github.com/owncloud/web/pull/10626
 
 * Enhancement - Add SSE events for locking, renaming, deleting, and restoring: [#10586](https://github.com/owncloud/web/pull/10586)
 
