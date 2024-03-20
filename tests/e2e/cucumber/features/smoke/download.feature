@@ -57,7 +57,7 @@ Feature: Download
       | folderPublic   |              | folder |
       | emptyFolder    |              | folder |
     And "Brian" opens the following file in mediaviewer
-      | resource        |
+      | resource       |
       | testavatar.jpg |
     And "Brian" downloads the following image from the mediaviewer
       | resource       |
