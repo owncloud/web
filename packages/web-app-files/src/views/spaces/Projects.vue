@@ -413,11 +413,11 @@ export default defineComponent({
 
     const displayThumbnails = computed(() => configStore.options.displayThumbnails)
 
-    const rowMounted = (space) => {
+    const rowMounted = (space: SpaceResource) => {
       loadPreview(space)
     }
 
-    const loadPreview = async (space) => {
+    const loadPreview = async (space: SpaceResource) => {
       if (!unref(displayThumbnails) || !space.spaceImageData) {
         return
       }
@@ -450,7 +450,8 @@ export default defineComponent({
     }
 
     const folderView = computed(() => {
-      return unref(viewModes).find((v) => v.name === unref(viewMode))
+      const viewModeName = unref(viewMode) || FolderViewModeConstants.name.tiles
+      return unref(viewModes).find((v) => v.name === viewModeName)
     })
 
     return {
