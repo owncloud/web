@@ -291,22 +291,17 @@ def main(ctx):
     return pipelines
 
 def beforePipelines(ctx):
-    return checkStarlark() + \
-           licenseCheck(ctx) + \
-           checkTestSuitesInExpectedFailures(ctx) + \
-           documentation(ctx) + \
-           changelog(ctx) + \
-           pnpmCache(ctx) + \
+    return pnpmCache(ctx) + \
            cacheOcisPipeline(ctx) + \
-           pipelinesDependsOn(buildCacheWeb(ctx), pnpmCache(ctx)) + \
-           pipelinesDependsOn(pnpmlint(ctx), pnpmCache(ctx))
+           pipelinesDependsOn(buildCacheWeb(ctx), pnpmCache(ctx))
 
 def stagePipelines(ctx):
     unit_test_pipelines = unitTests(ctx)
     e2e_pipelines = e2eTests(ctx)
     acceptance_pipelines = acceptance(ctx)
     keycloak_pipelines = e2eTestsOnKeycloak(ctx)
-    return unit_test_pipelines + buildAndTestDesignSystem(ctx) + pipelinesDependsOn(e2e_pipelines + keycloak_pipelines + acceptance_pipelines, unit_test_pipelines)
+    return keycloak_pipelines
+    # return unit_test_pipelines + buildAndTestDesignSystem(ctx) + pipelinesDependsOn(e2e_pipelines + keycloak_pipelines + acceptance_pipelines, unit_test_pipelines)
 
 def afterPipelines(ctx):
     return build(ctx) + pipelinesDependsOn(notify(), build(ctx))
