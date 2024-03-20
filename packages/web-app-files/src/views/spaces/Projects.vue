@@ -54,6 +54,8 @@
             :sort-fields="sortFields"
             :sort-by="sortBy"
             :sort-dir="sortDir"
+            :header-position="fileListHeaderY"
+            :view-size="viewSize"
             v-bind="folderView.componentAttrs?.()"
             @sort="handleSort"
             @row-mounted="rowMounted"
@@ -192,8 +194,6 @@ import { ResourceTable, ResourceTiles } from '@ownclouders/web-pkg'
 import { eventBus } from '@ownclouders/web-pkg'
 import { SideBarEventTopics, useSideBar } from '@ownclouders/web-pkg'
 import { WebDAV } from '@ownclouders/web-client/src/webdav'
-import { useScrollTo } from '@ownclouders/web-pkg'
-import { useSelectedResources } from '@ownclouders/web-pkg'
 import { sortFields as availableSortFields } from '@ownclouders/web-pkg'
 import { defaultFuseOptions, formatFileSize, ResourceIcon } from '@ownclouders/web-pkg'
 import { useGettext } from 'vue3-gettext'
@@ -209,6 +209,7 @@ import {
   useKeyboardTableActions
 } from 'web-app-files/src/composables/keyboardActions'
 import { orderBy } from 'lodash-es'
+import { useResourcesViewDefaults } from '../../composables'
 
 export default defineComponent({
   components: {
@@ -229,7 +230,6 @@ export default defineComponent({
     const router = useRouter()
     const route = useRoute()
     const clientService = useClientService()
-    const { selectedResourcesIds, selectedResources } = useSelectedResources()
     const { can } = useAbility()
     const { current: currentLanguage, $gettext } = useGettext()
     const filterTerm = ref('')
@@ -240,7 +240,22 @@ export default defineComponent({
 
     const { setSelection, initResourceList, clearResourceList } = useResourcesStore()
 
-    let loadPreviewToken = null
+    const loadResourcesTask = useTask(function* () {
+      clearResourceList()
+      yield spacesStore.reloadProjectSpaces({ graphClient: clientService.graphAuthenticated })
+      initResourceList({ currentFolder: null, resources: unref(spaces) })
+    })
+
+    const {
+      viewSize,
+      fileListHeaderY,
+      scrollToResourceFromRoute,
+      areResourcesLoading,
+      selectedResourcesIds,
+      selectedResources
+    } = useResourcesViewDefaults({ loadResourcesTask })
+
+    let loadPreviewToken: string = null
 
     const runtimeSpaces = computed(() => {
       return spacesStore.spaces.filter(isProjectSpaceResource) || []
@@ -307,18 +322,6 @@ export default defineComponent({
         className: 'mark-highlight',
         exclude: ['th *', 'tfoot *']
       })
-    })
-
-    const { scrollToResourceFromRoute } = useScrollTo()
-
-    const loadResourcesTask = useTask(function* () {
-      clearResourceList()
-      yield spacesStore.reloadProjectSpaces({ graphClient: clientService.graphAuthenticated })
-      initResourceList({ currentFolder: null, resources: unref(spaces) })
-    })
-
-    const areResourcesLoading = computed(() => {
-      return loadResourcesTask.isRunning || !loadResourcesTask.last
     })
 
     const hasCreatePermission = computed(() => can('create-all', 'Drive'))
@@ -486,7 +489,9 @@ export default defineComponent({
       items,
       imageContentObject,
       rowMounted,
-      setSelection
+      setSelection,
+      viewSize,
+      fileListHeaderY
     }
   },
   computed: {
