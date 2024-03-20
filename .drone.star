@@ -2280,6 +2280,7 @@ def keycloakService():
         {
             "name": "keycloak",
             "image": KEYCLOAK,
+            "pull": "always",
             "detach": True,
             "environment": {
                 "OCIS_DOMAIN": "ocis:9200",
