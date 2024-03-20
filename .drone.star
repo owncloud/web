@@ -974,7 +974,7 @@ def installPlaywright():
             "PLAYWRIGHT_BROWSERS_PATH": ".playwright",
         },
         "commands": [
-            "pnpm exec playwright install --with-deps",
+            "pnpm exec playwright install --with-deps chromium",
         ],
     }]
 
@@ -1233,8 +1233,7 @@ def ocisService(type, tika_enabled = False, enforce_password_public_link = False
         environment["OCIS_EXCLUDE_RUN_SERVICES"] = "idp"
         environment["GRAPH_ASSIGN_DEFAULT_USER_ROLE"] = "false"
         environment["GRAPH_USERNAME_MATCH"] = "none"
-
-    if type == "app-provider":
+    elif type == "app-provider":
         environment["GATEWAY_GRPC_ADDR"] = "0.0.0.0:9142"
         environment["MICRO_REGISTRY"] = "nats-js-kv"
         environment["MICRO_REGISTRY_ADDRESS"] = "0.0.0.0:9233"
@@ -1242,8 +1241,6 @@ def ocisService(type, tika_enabled = False, enforce_password_public_link = False
         environment["NATS_NATS_PORT"] = 9233
     else:
         environment["WEB_UI_CONFIG_FILE"] = "%s" % dir["ocisConfig"]
-        environment["STORAGE_HOME_DRIVER"] = "ocis"
-        environment["STORAGE_USERS_DRIVER"] = "ocis"
 
     if tika_enabled:
         environment["FRONTEND_FULL_TEXT_SEARCH_ENABLED"] = True
@@ -2269,10 +2266,9 @@ def keycloakService():
     return [
         {
             "name": "generate-keycloak-certs",
-            "image": OC_UBUNTU,
+            "image": OC_CI_NODEJS,
             "commands": [
-                "apt install openssl -y",
-                "mkdir keycloak-certs",
+                "mkdir -p keycloak-certs",
                 "openssl req -x509 -newkey rsa:2048 -keyout keycloak-certs/keycloakkey.pem -out keycloak-certs/keycloakcrt.pem -nodes -days 365 -subj '/CN=keycloak'",
                 "chmod -R 777 keycloak-certs",
             ],
@@ -2351,6 +2347,7 @@ def e2eTestsOnKeycloak(ctx):
             "temp": {},
         },
     ]
+
     if not "full-ci" in ctx.build.title.lower() and ctx.build.event != "cron":
         return []
 
