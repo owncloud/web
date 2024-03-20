@@ -2310,7 +2310,7 @@ def keycloakService():
             "commands": [
                 "mkdir -p /opt/keycloak/data/import",
                 "cp tests/drone/ocis_keycloak/ocis-ci-realm.dist.json /opt/keycloak/data/import/ocis-realm.json",
-                "/opt/keycloak/bin/kc.sh start-dev --proxy edge --spi-connections-http-client-default-disable-trust-manager=false --import-realm --health-enabled=true",
+                "/opt/keycloak/bin/kc.sh start-dev --proxy=edge --spi-connections-http-client-default-disable-trust-manager=true --import-realm --health-enabled=true",
             ],
             "volumes": [
                 {
