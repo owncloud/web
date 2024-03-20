@@ -298,7 +298,7 @@ export default defineComponent({
   }
 
   .files-wrapper {
-    flex-wrap: nowrap;
+    flex-wrap: nowrap !important;
   }
 }
 
