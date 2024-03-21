@@ -5,4 +5,6 @@ In addition to that the default tile size has been changed to the second steppin
 space tiles and file/folder tiles have a sufficient size for reading longer names.
 
 https://github.com/owncloud/web/issues/10018
+https://github.com/owncloud/web/issues/10638
 https://github.com/owncloud/web/pull/10558
+https://github.com/owncloud/web/pull/10646
