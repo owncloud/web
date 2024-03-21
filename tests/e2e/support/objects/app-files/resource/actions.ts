@@ -7,6 +7,7 @@ import { File, Space } from '../../../types'
 import { dragDropFiles } from '../../../utils/dragDrop'
 import { LinksEnvironment } from '../../../environment'
 import { config } from '../../../../config'
+import { buildXpathLiteral } from '../../../utils/locator'
 
 const downloadFileButtonSingleShareView = '.oc-files-actions-download-file-trigger'
 const downloadFolderButtonSingleShareView = '.oc-files-actions-download-archive-trigger'
@@ -25,8 +26,11 @@ export const fileRow =
   '//ancestor::*[(contains(@class, "oc-tile-card") or contains(@class, "oc-tbody-tr"))]'
 export const resourceNameSelector =
   ':is(#files-space-table, .oc-tiles-item, #files-shared-with-me-accepted-section, .files-table) [data-test-resource-name="%s"]'
+// following breadcrumb selectors is passed to buildXpathLiteral function as the content to be insetred might contain quotes
 const breadcrumbResourceNameSelector =
-  '//span[contains(@class, "oc-breadcrumb-item-text") and text()="%s"]'
+  '//span[contains(@class, "oc-breadcrumb-item-text") and text()=%s]'
+const breadcrumbLastResourceNameSelector = '.oc-breadcrumb-item-text-last'
+const breadcrumbResourceSelector = '//*[@id="files-breadcrumb"]//span[text()=%s]//ancestor::li'
 const addNewResourceButton = `#new-file-menu-btn`
 const createNewFolderButton = '#new-folder-btn'
 const createNewTxtFileButton = '.new-file-btn-txt'
@@ -125,7 +129,10 @@ export const clickResource = async ({
 }): Promise<void> => {
   const paths = path.split('/')
   for (const name of paths) {
-    const resource = page.locator(util.format(resourceNameSelector, name))
+    // if resource name consists of single or double quotes, add an escape character
+    const folder = name.replace(/'/g, "\\'").replace(/"/g, '\\"')
+
+    const resource = page.locator(util.format(resourceNameSelector, folder))
     const itemId = await resource.locator(fileRow).getAttribute('data-item-id')
     await Promise.all([
       page.waitForResponse(
@@ -137,6 +144,23 @@ export const clickResource = async ({
       resource.click()
     ])
   }
+}
+
+export const clickResourceFromBreadcrumb = async ({ page, resource }): Promise<void> => {
+  const folder = buildXpathLiteral(resource)
+  const itemId = await page
+    .locator(util.format(breadcrumbResourceSelector, folder))
+    .getAttribute('data-item-id')
+  await Promise.all([
+    page.waitForResponse(
+      (resp) =>
+        resp.url().endsWith(encodeURIComponent(resource)) ||
+        resp.url().endsWith(itemId) ||
+        resp.url().endsWith(encodeURIComponent(itemId))
+    ),
+    page.locator(util.format(breadcrumbResourceNameSelector, folder)).click()
+  ])
+  await expect(page.locator(breadcrumbLastResourceNameSelector)).toHaveText(resource)
 }
 
 /**/
@@ -827,7 +851,9 @@ export const moveOrCopyMultipleResources = async (
     }
     case 'drag-drop-breadcrumb': {
       const source = page.locator(highlightedFileRowSelector).first()
-      const target = page.locator(util.format(breadcrumbResourceNameSelector, newLocation))
+      const target = page.locator(
+        util.format(breadcrumbResourceNameSelector, buildXpathLiteral(newLocation))
+      )
 
       await Promise.all([...waitForMoveResponses, source.dragTo(target)])
 
@@ -917,7 +943,9 @@ export const moveOrCopyResource = async (args: moveOrCopyResourceArgs): Promise<
     }
     case 'drag-drop-breadcrumb': {
       const source = page.locator(util.format(resourceNameSelector, resourceBase))
-      const target = page.locator(util.format(breadcrumbResourceNameSelector, newLocation))
+      const target = page.locator(
+        util.format(breadcrumbResourceNameSelector, buildXpathLiteral(newLocation))
+      )
 
       await Promise.all([
         page.waitForResponse(
@@ -931,7 +959,9 @@ export const moveOrCopyResource = async (args: moveOrCopyResourceArgs): Promise<
 
       await Promise.all([
         page.locator(util.format(resourceNameSelector, resourceBase)),
-        page.locator(util.format(breadcrumbResourceNameSelector, newLocation)).click()
+        page
+          .locator(util.format(breadcrumbResourceNameSelector, buildXpathLiteral(newLocation)))
+          .click()
       ])
 
       break
