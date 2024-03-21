@@ -1303,7 +1303,6 @@ def checkForExistingOcisCache(ctx):
                 "curl -o check-oCIS-cache.sh %s/tests/drone/check-oCIS-cache.sh" % web_repo_path,
                 ". ./.drone.env",
                 "mc alias set s3 $MC_HOST $AWS_ACCESS_KEY_ID $AWS_SECRET_ACCESS_KEY",
-                "mc rm --recursive --force s3/$CACHE_BUCKET/ocis-build/ae74e77c4656b9b5fa6af3386a15d10bad49e759",
                 "mc ls --recursive s3/$CACHE_BUCKET/ocis-build",
                 "bash check-oCIS-cache.sh",
             ],
@@ -1478,7 +1477,7 @@ def cacheOcis():
         "commands": [
             ". ./.drone.env",
             "mc alias set s3 $MC_HOST $AWS_ACCESS_KEY_ID $AWS_SECRET_ACCESS_KEY",
-            "mc cp -r -a %s/ocis s3/$CACHE_BUCKET/ocis-build/$OCIS_COMMITID" % dir["web"],
+            "mc cp -a %s/ocis s3/$CACHE_BUCKET/ocis-build/$OCIS_COMMITID" % dir["web"],
             "mc ls --recursive s3/$CACHE_BUCKET/ocis-build",
         ],
     }]
