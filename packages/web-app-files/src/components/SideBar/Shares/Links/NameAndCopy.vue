@@ -29,12 +29,11 @@
 </template>
 
 <script lang="ts">
-import { defineComponent } from 'vue'
+import { defineComponent, PropType } from 'vue'
 import { useMessages } from '@ownclouders/web-pkg'
 import { useClipboard } from '@vueuse/core'
 import { useGettext } from 'vue3-gettext'
 import { LinkShare } from '@ownclouders/web-client/src/helpers'
-import { PropType } from 'vue'
 
 export default defineComponent({
   name: 'NameAndCopy',

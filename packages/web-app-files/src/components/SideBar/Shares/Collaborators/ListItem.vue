@@ -451,9 +451,8 @@ export default defineComponent({
         })
 
         if (isProjectSpaceResource(this.resource)) {
-          const graphResponse = await this.clientService.graphAuthenticated.drives.getDrive(
-            this.resource.id
-          )
+          const client = this.clientService.graphAuthenticated
+          const graphResponse = await client.drives.getDrive(this.resource.id)
 
           this.upsertSpace(buildSpace(graphResponse.data))
           this.upsertSpaceMember({ member: share })

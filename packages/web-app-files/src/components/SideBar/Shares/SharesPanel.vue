@@ -14,14 +14,13 @@
 </template>
 
 <script lang="ts">
-import { ComponentPublicInstance, defineComponent, inject } from 'vue'
+import { ComponentPublicInstance, defineComponent, inject, Ref } from 'vue'
 import FileLinks from './FileLinks.vue'
 import FileShares from './FileShares.vue'
 import SpaceMembers from './SpaceMembers.vue'
 import { useSharesStore } from '@ownclouders/web-pkg'
 import { Resource } from '@ownclouders/web-client'
 import { storeToRefs } from 'pinia'
-import { Ref } from 'vue'
 
 export default defineComponent({
   name: 'SharesPanel',

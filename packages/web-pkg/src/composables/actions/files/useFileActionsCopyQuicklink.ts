@@ -10,6 +10,7 @@ import { useFileActionsCreateLink } from './useFileActionsCreateLink'
 import { useMessages, useUserStore } from '../../piniaStores'
 import { Permission } from '@ownclouders/web-client/src/generated'
 import { buildLinkShare } from '@ownclouders/web-client/src/helpers/share/functionsNG'
+import { getGraphItemId } from '@ownclouders/web-client/src/helpers'
 
 export const useFileActionsCopyQuickLink = () => {
   const { showMessage, showErrorMessage } = useMessages()
@@ -57,11 +58,8 @@ export const useFileActionsCopyQuickLink = () => {
     space: SpaceResource
     resource: Resource
   }): Promise<LinkShare> => {
-    // FIXME: care for project space id separately?
-    const { data } = await clientService.graphAuthenticated.permissions.listPermissions(
-      space.id,
-      resource.id
-    )
+    const client = clientService.graphAuthenticated
+    const { data } = await client.permissions.listPermissions(space.id, getGraphItemId(resource))
 
     const permissions = ((data as any).value || []) as Permission[]
     const graphPermission = permissions.find((p) => p.link?.['@libre.graph.quickLink'])

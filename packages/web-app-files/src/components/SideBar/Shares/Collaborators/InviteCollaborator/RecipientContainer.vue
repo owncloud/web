@@ -20,11 +20,10 @@
 <script lang="ts">
 import { avatarUrl } from '../../../../../helpers/user'
 import { CollaboratorAutoCompleteItem, ShareTypes } from '@ownclouders/web-client/src/helpers/share'
-import { defineComponent } from 'vue'
+import { defineComponent, PropType } from 'vue'
 import { Recipient } from 'design-system/src/components/OcRecipient/types'
 import { useCapabilityStore, useConfigStore } from '@ownclouders/web-pkg'
 import { storeToRefs } from 'pinia'
-import { PropType } from 'vue'
 
 export default defineComponent({
   props: {
