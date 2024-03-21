@@ -7,13 +7,14 @@ import {
   usePreviewService,
   useUserStore,
   useMessages,
-  useSpacesStore
+  useSpacesStore,
+  useResourcesStore
 } from '@ownclouders/web-pkg'
 import { eventBus } from '@ownclouders/web-pkg'
 import { useGettext } from 'vue3-gettext'
 import { SpaceAction, SpaceActionOptions } from '@ownclouders/web-pkg'
 import { useCreateSpace } from '@ownclouders/web-pkg'
-import { buildSpace } from '@ownclouders/web-client/src/helpers'
+import { buildSpace, extractStorageId } from '@ownclouders/web-client/src/helpers'
 
 export const useSpaceActionsUploadImage = ({ spaceImageInput }: { spaceImageInput: VNodeRef }) => {
   const userStore = useUserStore()
@@ -22,8 +23,8 @@ export const useSpaceActionsUploadImage = ({ spaceImageInput }: { spaceImageInpu
   const clientService = useClientService()
   const loadingService = useLoadingService()
   const previewService = usePreviewService()
-  const { createDefaultMetaFolder } = useCreateSpace()
   const spacesStore = useSpacesStore()
+  const resourcesStore = useResourcesStore()
 
   let selectedSpace: SpaceResource = null
   const handler = ({ resources }: SpaceActionOptions) => {
@@ -50,11 +51,10 @@ export const useSpaceActionsUploadImage = ({ spaceImageInput }: { spaceImageInpu
     try {
       await clientService.webdav.getFileInfo(selectedSpace, { path: '.space' })
     } catch (_) {
-      spacesStore.updateSpaceField({
-        id: selectedSpace.id,
-        field: 'spaceReadmeData',
-        value: (await createDefaultMetaFolder(selectedSpace)).spaceReadmeData
-      })
+      const spaceFolder = await clientService.webdav.createFolder(selectedSpace, { path: '.space' })
+      if (extractStorageId(spaceFolder.parentFolderId) === resourcesStore.currentFolder?.id) {
+        resourcesStore.upsertResource(spaceFolder)
+      }
     }
 
     return loadingService.addTask(async () => {

@@ -4,9 +4,15 @@ import { SpaceAction, SpaceActionOptions } from '../types'
 import { useClientService } from '../../clientService'
 import { useLoadingService } from '../../loadingService'
 import { useGettext } from 'vue3-gettext'
-import { useMessages, useModals, useSpacesStore, useUserStore } from '../../piniaStores'
+import {
+  useMessages,
+  useModals,
+  useResourcesStore,
+  useSpacesStore,
+  useUserStore
+} from '../../piniaStores'
 import { useCreateSpace } from '../../spaces'
-import { buildSpace } from '@ownclouders/web-client/src/helpers'
+import { buildSpace, extractStorageId } from '@ownclouders/web-client/src/helpers'
 import { eventBus } from '../../../services'
 import { Drive } from '@ownclouders/web-client/src/generated'
 import { blobToArrayBuffer, canvasToBlob } from '../../../helpers'
@@ -18,8 +24,8 @@ export const useSpaceActionsSetIcon = () => {
   const { $gettext } = useGettext()
   const clientService = useClientService()
   const loadingService = useLoadingService()
-  const { createDefaultMetaFolder } = useCreateSpace()
   const spacesStore = useSpacesStore()
+  const resourcesStore = useResourcesStore()
   const { dispatchModal } = useModals()
   const handler = ({ resources }: SpaceActionOptions) => {
     if (resources.length !== 1) {
@@ -68,11 +74,10 @@ export const useSpaceActionsSetIcon = () => {
     try {
       await clientService.webdav.getFileInfo(space, { path: '.space' })
     } catch (_) {
-      spacesStore.updateSpaceField({
-        id: space.id,
-        field: 'spaceReadmeData',
-        value: (await createDefaultMetaFolder(space)).spaceReadmeData
-      })
+      const spaceFolder = await clientService.webdav.createFolder(space, { path: '.space' })
+      if (extractStorageId(spaceFolder.parentFolderId) === resourcesStore.currentFolder?.id) {
+        resourcesStore.upsertResource(spaceFolder)
+      }
     }
 
     return loadingService.addTask(async () => {
