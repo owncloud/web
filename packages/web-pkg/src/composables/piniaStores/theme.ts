@@ -104,7 +104,9 @@ export const useThemeStore = defineStore('theme', () => {
     availableThemes.value = themeConfig.themes.map((theme) => merge(themeConfig.defaults, theme))
 
     if (unref(currentThemeName) === null) {
-      currentThemeName.value = unref(availableThemes).find((t) => t.isDark === unref(isDark)).name
+      const theme =
+        unref(availableThemes).find((t) => t.isDark === unref(isDark)) || unref(availableThemes)[0]
+      currentThemeName.value = theme.name
     }
 
     setAndApplyTheme(
