@@ -195,7 +195,7 @@ export const createSpaceFromFolder = async ({
       (resp) =>
         resp.status() === 201 &&
         resp.request().method() === 'POST' &&
-        resp.url().endsWith('/drives')
+        resp.url().endsWith('/drives?template=default')
     ),
     page.locator(util.format(actionConfirmationButton, 'Create')).click()
   ])
