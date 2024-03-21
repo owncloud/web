@@ -5,7 +5,7 @@ import { useGettext } from 'vue3-gettext'
 import { useOpenWithDefaultApp } from '../useOpenWithDefaultApp'
 import { buildSpace, getRelativeSpecialFolderSpacePath } from '@ownclouders/web-client/src/helpers'
 import { useClientService } from '../../clientService'
-import { useConfigStore, useResourcesStore, useSpacesStore, useUserStore } from '../../piniaStores'
+import { useConfigStore, useSpacesStore, useUserStore } from '../../piniaStores'
 import { useCreateSpace } from '../../spaces'
 import { Drive } from '@ownclouders/web-client/src/generated'
 
@@ -13,7 +13,6 @@ export const useSpaceActionsEditReadmeContent = () => {
   const clientService = useClientService()
   const { openWithDefaultApp } = useOpenWithDefaultApp()
   const { createDefaultMetaFolder } = useCreateSpace()
-  const resourcesStore = useResourcesStore()
   const userStore = useUserStore()
   const spacesStore = useSpacesStore()
   const configStore = useConfigStore()
@@ -49,8 +48,6 @@ export const useSpaceActionsEditReadmeContent = () => {
         field: 'spaceReadmeData',
         value: buildSpace({ ...updatedDriveData, serverUrl: configStore.serverUrl }).spaceReadmeData
       })
-
-      resourcesStore.upsertResource(markdownResource)
     }
 
     if (!markdownResource) {
