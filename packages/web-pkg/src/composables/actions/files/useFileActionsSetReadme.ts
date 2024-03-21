@@ -4,8 +4,8 @@ import { useClientService } from '../../clientService'
 import { useRouter } from '../../router'
 import { FileAction, FileActionOptions } from '../types'
 import { Drive } from '@ownclouders/web-client/src/generated'
-import { buildSpace } from '@ownclouders/web-client/src/helpers'
-import { useMessages, useSpacesStore, useUserStore } from '../../piniaStores'
+import { buildSpace, extractNodeId, extractStorageId } from '@ownclouders/web-client/src/helpers'
+import { useMessages, useResourcesStore, useSpacesStore, useUserStore } from '../../piniaStores'
 
 export const useFileActionsSetReadme = () => {
   const { showMessage, showErrorMessage } = useMessages()
@@ -14,15 +14,20 @@ export const useFileActionsSetReadme = () => {
   const { $gettext } = useGettext()
   const clientService = useClientService()
   const spacesStore = useSpacesStore()
+  const resourcesStore = useResourcesStore()
 
   const handler = async ({ space, resources }: FileActionOptions) => {
     try {
       const { graphAuthenticated, webdav } = clientService
       const fileContent = (await webdav.getFileContents(space, { path: resources[0].path })).body
+
       try {
         await webdav.getFileInfo(space, { path: '.space' })
       } catch (_) {
-        await webdav.createFolder(space, { path: '.space' })
+        const spaceFolder = await webdav.createFolder(space, { path: '.space' })
+        if (extractStorageId(spaceFolder.parentFolderId) === resourcesStore.currentFolder?.id) {
+          resourcesStore.upsertResource(spaceFolder)
+        }
       }
 
       await webdav.putFileContents(space, {
