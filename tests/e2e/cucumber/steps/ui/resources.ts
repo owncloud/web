@@ -112,6 +112,15 @@ When(
 )
 
 When(
+  /^"([^"]*)" downloads the following image(?:s)? from the mediaviewer$/,
+  async function (this: World, stepUser: string, stepTable: DataTable) {
+    const { page } = this.actorsEnvironment.getActor({ key: stepUser })
+    const resourceObject = new objects.applicationFiles.Resource({ page })
+    await processDownload(stepTable, resourceObject, 'preview')
+  }
+)
+
+When(
   /^"([^"]*)" deletes the following resource(?:s)? using the (sidebar panel|batch action)$/,
   async function (this: World, stepUser: string, actionType: string, stepTable: DataTable) {
     const { page } = this.actorsEnvironment.getActor({ key: stepUser })
