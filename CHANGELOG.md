@@ -3,11 +3,12 @@ Changelog for ownCloud Web [unreleased] (UNRELEASED)
 The following sections list the changes in ownCloud web unreleased relevant to
 ownCloud admins and users.
 
-[unreleased]: https://github.com/owncloud/web/compare/v8.0.0...master
+[unreleased]: https://github.com/owncloud/web/compare/v8.0.1...master
 
 Summary
 -------
 
+* Bugfix - Folder replace: [#10515](https://github.com/owncloud/web/issues/10515)
 * Enhancement - Tile sizes: [#10018](https://github.com/owncloud/web/issues/10018)
 * Enhancement - Full text search default: [#10534](https://github.com/owncloud/web/issues/10534)
 * Enhancement - Add SSE events for locking, renaming, deleting, and restoring: [#10586](https://github.com/owncloud/web/pull/10586)
@@ -17,6 +18,14 @@ Summary
 
 Details
 -------
+
+* Bugfix - Folder replace: [#10515](https://github.com/owncloud/web/issues/10515)
+
+   The "Replace" conflict option, which previously didn't work at all when trying
+   to copy/move a folder, has been fixed.
+
+   https://github.com/owncloud/web/issues/10515
+   https://github.com/owncloud/web/pull/10597
 
 * Enhancement - Tile sizes: [#10018](https://github.com/owncloud/web/issues/10018)
 
@@ -79,6 +88,46 @@ Details
    https://github.com/owncloud/web/issues/10620
    https://github.com/owncloud/web/issues/10616
    https://github.com/owncloud/web/pull/10624
+
+Changelog for ownCloud Web [8.0.1] (2024-03-12)
+=======================================
+The following sections list the changes in ownCloud web 8.0.1 relevant to
+ownCloud admins and users.
+
+[8.0.1]: https://github.com/owncloud/web/compare/v8.0.0...v8.0.1
+
+Summary
+-------
+
+* Bugfix - Add link in right sidebar sharing menu, doesn't copy link to clipboard: [#10573](https://github.com/owncloud/web/pull/10573)
+* Bugfix - WebDav Url in right sidebar is missing dav in path: [#10576](https://github.com/owncloud/web/pull/10576)
+* Bugfix - Update translations: [#10585](https://github.com/owncloud/web/issues/10585)
+
+Details
+-------
+
+* Bugfix - Add link in right sidebar sharing menu, doesn't copy link to clipboard: [#10573](https://github.com/owncloud/web/pull/10573)
+
+   We've fixed a bug, where clicking the add link button in the right sidebar
+   sharing menu, created a new link but didn't copy it to the clipboard.
+
+   https://github.com/owncloud/web/issues/10563
+   https://github.com/owncloud/web/pull/10573
+   https://github.com/owncloud/web/pull/10581
+
+* Bugfix - WebDav Url in right sidebar is missing dav in path: [#10576](https://github.com/owncloud/web/pull/10576)
+
+   We fixed a bug where the '/dav/' path was missing in the WebDav Url in the right
+   sidebar.
+
+   https://github.com/owncloud/web/pull/10576
+
+* Bugfix - Update translations: [#10585](https://github.com/owncloud/web/issues/10585)
+
+   We've corrected some German translations.
+
+   https://github.com/owncloud/web/issues/10585
+   https://github.com/owncloud/web/pull/10589
 
 Changelog for ownCloud Web [8.0.0] (2024-03-08)
 =======================================
