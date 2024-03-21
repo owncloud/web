@@ -75,11 +75,7 @@ export const useSpaceActionsEditReadmeContent = () => {
           return false
         }
 
-        if (!resources[0].canEditReadme({ user: userStore.user })) {
-          return false
-        }
-
-        return true
+        return resources[0].canEditReadme({ user: userStore.user })
       },
       componentType: 'button',
       class: 'oc-files-actions-edit-readme-content-trigger'
