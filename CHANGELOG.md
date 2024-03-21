@@ -35,7 +35,9 @@ Details
    file/folder tiles have a sufficient size for reading longer names.
 
    https://github.com/owncloud/web/issues/10018
+   https://github.com/owncloud/web/issues/10638
    https://github.com/owncloud/web/pull/10558
+   https://github.com/owncloud/web/pull/10646
 
 * Enhancement - Full text search default: [#10534](https://github.com/owncloud/web/issues/10534)
 
