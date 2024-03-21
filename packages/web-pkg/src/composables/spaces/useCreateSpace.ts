@@ -1,13 +1,11 @@
-import { buildSpace, SpaceResource } from '@ownclouders/web-client/src/helpers'
-import { Drive } from '@ownclouders/web-client/src/generated'
-import { useGettext } from 'vue3-gettext'
+import { buildSpace, extractStorageId, SpaceResource } from '@ownclouders/web-client/src/helpers'
 import { useClientService } from '../clientService'
-import { useConfigStore } from '../piniaStores'
+import { useConfigStore, useResourcesStore } from '../piniaStores'
 
 export const useCreateSpace = () => {
   const clientService = useClientService()
-  const { $gettext } = useGettext()
   const configStore = useConfigStore()
+  const resourcesStore = useResourcesStore()
 
   const createSpace = async (name: string) => {
     const { graphAuthenticated } = clientService
@@ -15,19 +13,18 @@ export const useCreateSpace = () => {
       { name },
       { params: { template: 'default' } }
     )
-
-    console.log(
-      buildSpace({
-        ...createdSpace,
-        serverUrl: configStore.serverUrl
-      })
-    )
-
     return buildSpace({
       ...createdSpace,
       serverUrl: configStore.serverUrl
     })
   }
 
-  return { createSpace }
+  const createDefaultMetaFolder = async (space: SpaceResource) => {
+    const spaceFolder = await clientService.webdav.createFolder(space, { path: '.space' })
+    if (extractStorageId(spaceFolder.parentFolderId) === resourcesStore.currentFolder?.id) {
+      resourcesStore.upsertResource(spaceFolder)
+    }
+  }
+
+  return { createSpace, createDefaultMetaFolder }
 }
