@@ -1437,8 +1437,12 @@ def buildOcis():
             "image": OC_CI_GOLANG,
             "commands": [
                 "source .drone.env",
-                "git clone -b $OCIS_BRANCH --single-branch %s ocis_repo" % ocis_repo_url,
-                "cd ocis_repo",
+                # NOTE: it is important to not start repo name with ocis*
+                # because we copy ocis binary to root workspace
+                # and upload binary <workspace>/ocis to cache bucket.
+                # This prevents accidental upload of ocis repo to the cache
+                "git clone -b $OCIS_BRANCH --single-branch %s repo_ocis" % ocis_repo_url,
+                "cd repo_ocis",
                 "git checkout $OCIS_COMMITID",
             ],
             "volumes": go_step_volumes,
@@ -1447,7 +1451,7 @@ def buildOcis():
             "name": "generate-ocis",
             "image": OC_CI_NODEJS,
             "commands": [
-                "cd ocis_repo",
+                "cd repo_ocis",
                 "retry -t 3 'make ci-node-generate'",
             ],
             "volumes": go_step_volumes,
@@ -1457,7 +1461,7 @@ def buildOcis():
             "image": OC_CI_GOLANG,
             "commands": [
                 "source .drone.env",
-                "cd ocis_repo/ocis",
+                "cd repo_ocis/ocis",
                 "retry -t 3 'make build'",
                 "cp bin/ocis %s" % dir["web"],
             ],
@@ -1473,7 +1477,7 @@ def cacheOcis():
         "commands": [
             ". ./.drone.env",
             "mc alias set s3 $MC_HOST $AWS_ACCESS_KEY_ID $AWS_SECRET_ACCESS_KEY",
-            "mc cp -r -a %s/ocis s3/$CACHE_BUCKET/ocis-build/$OCIS_COMMITID" % dir["web"],
+            "mc cp -a %s/ocis s3/$CACHE_BUCKET/ocis-build/$OCIS_COMMITID" % dir["web"],
             "mc ls --recursive s3/$CACHE_BUCKET/ocis-build",
         ],
     }]
