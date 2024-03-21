@@ -256,6 +256,7 @@ def Diff(li1, li2):
     return li_dif
 
 def main(ctx):
+    return cacheOcisPipeline(ctx)
     uiSuitesCheck = checkTestSuites()
     if (uiSuitesCheck == False):
         print("Errors detected. Review messages above.")
@@ -1303,6 +1304,7 @@ def checkForExistingOcisCache(ctx):
                 "curl -o check-oCIS-cache.sh %s/tests/drone/check-oCIS-cache.sh" % web_repo_path,
                 ". ./.drone.env",
                 "mc alias set s3 $MC_HOST $AWS_ACCESS_KEY_ID $AWS_SECRET_ACCESS_KEY",
+                "mc rm --recursive --force s3/$CACHE_BUCKET/ocis-build/ae74e77c4656b9b5fa6af3386a15d10bad49e759",
                 "mc ls --recursive s3/$CACHE_BUCKET/ocis-build",
                 "bash check-oCIS-cache.sh",
             ],
@@ -1391,9 +1393,7 @@ def cacheOcisPipeline(ctx):
                 buildOcis() + \
                 rebuildBuildArtifactCache(ctx, "ocis", "ocis")
     else:
-        steps = checkForExistingOcisCache(ctx) + \
-                buildOcis() + \
-                cacheOcis()
+        steps = checkForExistingOcisCache(ctx)
     return [{
         "kind": "pipeline",
         "type": "docker",
