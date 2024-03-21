@@ -1,0 +1,6 @@
+Bugfix: Scope loss when showing search results
+
+Clicking "Show n results" in the search preview no longer loses the search scope.
+
+https://github.com/owncloud/web/issues/10634
+https://github.com/owncloud/web/pull/10653
