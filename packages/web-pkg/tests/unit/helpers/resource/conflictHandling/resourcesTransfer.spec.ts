@@ -14,6 +14,7 @@ import {
   LoadingService,
   LoadingTaskCallbackArguments
 } from '../../../../../src/services'
+import { computed } from 'vue'
 
 const clientServiceMock = mockDeep<ClientService>()
 const loadingServiceMock = mock<LoadingService>({
@@ -72,6 +73,7 @@ describe('resourcesTransfer', () => {
       resourcesToMove,
       targetSpace,
       resourcesToMove[0],
+      computed(() => mock<Resource>()),
       clientServiceMock,
       loadingServiceMock,
       vi.fn(),
@@ -97,6 +99,7 @@ describe('resourcesTransfer', () => {
           resourcesToMove,
           targetSpace,
           targetFolder,
+          computed(() => mock<Resource>()),
           clientServiceMock,
           loadingServiceMock,
           vi.fn(),
@@ -133,6 +136,7 @@ describe('resourcesTransfer', () => {
       resourcesToMove,
       targetSpace,
       resourcesToMove[0],
+      computed(() => mock<Resource>()),
       clientServiceMock,
       loadingServiceMock,
       vi.fn(),
@@ -159,6 +163,7 @@ describe('resourcesTransfer', () => {
       resourcesToMove,
       targetSpace,
       resourcesToMove[0],
+      computed(() => mock<Resource>()),
       clientServiceMock,
       loadingServiceMock,
       vi.fn(),

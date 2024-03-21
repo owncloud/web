@@ -11,6 +11,7 @@ import {
 import { useCreateLink, useDefaultLinkPermissions } from '../../links'
 import { useLoadingService } from '../../loadingService'
 import { useMessages, useModals, useUserStore, useCapabilityStore } from '../../piniaStores'
+import { useClipboard } from '../../clipboard'
 
 export const useFileActionsCreateLink = ({
   enforceModal = false,
@@ -30,19 +31,35 @@ export const useFileActionsCreateLink = ({
   const { defaultLinkPermissions } = useDefaultLinkPermissions()
   const { createLink } = useCreateLink()
   const { dispatchModal } = useModals()
+  const { copyToClipboard } = useClipboard()
 
-  const proceedResult = (result: PromiseSettledResult<Share>[]) => {
+  const proceedResult = async (result: PromiseSettledResult<Share>[]) => {
     const succeeded = result.filter(
       (val): val is PromiseFulfilledResult<Share> => val.status === 'fulfilled'
     )
-    if (succeeded.length && showMessages) {
-      showMessage({
-        title: $ngettext(
-          'Link has been created successfully',
-          'Links have been created successfully',
-          succeeded.length
-        )
-      })
+
+    if (succeeded.length) {
+      let successMessage = $gettext('Link has been created successfully')
+
+      if (result.length === 1) {
+        // Only copy to clipboard if the user tries to create one single link
+        try {
+          await copyToClipboard(succeeded[0].value.url)
+          successMessage = $gettext('The link has been copied to your clipboard.')
+        } catch (e) {
+          console.warn('Unable to copy link to clipboard', e)
+        }
+      }
+
+      if (showMessages) {
+        showMessage({
+          title: $ngettext(
+            successMessage,
+            'Links have been created successfully.',
+            succeeded.length
+          )
+        })
+      }
     }
 
     const failed = result.filter(({ status }) => status === 'rejected')

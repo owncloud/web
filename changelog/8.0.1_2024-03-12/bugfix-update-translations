@@ -1,0 +1,6 @@
+Bugfix: Update translations
+
+We've corrected some German translations.
+
+https://github.com/owncloud/web/issues/10585
+https://github.com/owncloud/web/pull/10589
