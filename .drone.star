@@ -1303,7 +1303,7 @@ def checkForExistingOcisCache(ctx):
                 "curl -o check-oCIS-cache.sh %s/tests/drone/check-oCIS-cache.sh" % web_repo_path,
                 ". ./.drone.env",
                 "mc alias set s3 $MC_HOST $AWS_ACCESS_KEY_ID $AWS_SECRET_ACCESS_KEY",
-                "mc ls --recursive s3/$CACHE_BUCKET/ocis-build",
+                "mc ls",
                 "bash check-oCIS-cache.sh",
             ],
         },
