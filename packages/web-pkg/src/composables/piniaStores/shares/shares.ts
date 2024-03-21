@@ -255,7 +255,7 @@ export const useSharesStore = defineStore('shares', () => {
   const addLink = async ({ clientService, space, resource, options }: AddLinkOptions) => {
     const { data } = await clientService.graphAuthenticated.permissions.createLink(
       space.id,
-      resource.id,
+      getGraphItemId(resource),
       options
     )
 
@@ -303,7 +303,7 @@ export const useSharesStore = defineStore('shares', () => {
     if (Object.hasOwn(options, 'password')) {
       response = await clientService.graphAuthenticated.permissions.setPermissionPassword(
         space.id,
-        resource.id,
+        getGraphItemId(resource),
         linkShare.id,
         { password: options.password }
       )
@@ -312,7 +312,7 @@ export const useSharesStore = defineStore('shares', () => {
     } else {
       response = await clientService.graphAuthenticated.permissions.updatePermission(
         space.id,
-        resource.id,
+        getGraphItemId(resource),
         linkShare.id,
         {
           link: {
@@ -344,7 +344,7 @@ export const useSharesStore = defineStore('shares', () => {
   }: DeleteLinkOptions) => {
     await clientService.graphAuthenticated.permissions.deletePermission(
       space.id,
-      resource.id,
+      getGraphItemId(resource),
       linkShare.id
     )
 
