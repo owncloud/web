@@ -192,6 +192,7 @@ export const useSharesStore = defineStore('shares', () => {
           graphPermission,
           graphRoles: unref(graphRoles),
           resourceId: resource.id,
+          spaceId: space.id,
           user: userStore.user
         })
       )
@@ -224,6 +225,7 @@ export const useSharesStore = defineStore('shares', () => {
       graphPermission: data,
       graphRoles: unref(graphRoles),
       resourceId: resource.id,
+      spaceId: space.id,
       user: userStore.user
     })
     upsertCollaboratorShare(share)
