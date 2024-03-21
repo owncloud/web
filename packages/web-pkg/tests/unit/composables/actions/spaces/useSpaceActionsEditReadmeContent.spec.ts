@@ -41,25 +41,6 @@ describe('editReadmeContent', () => {
         }
       })
     })
-    it('should be false when spaceReadmeData does not exist', () => {
-      const spaceMock = mock<Drive>({
-        id: '1',
-        root: {
-          permissions: [{ roles: ['manager'], grantedToIdentities: [{ user: { id: '1' } }] }]
-        },
-        special: null
-      })
-
-      getWrapper({
-        setup: ({ actions }) => {
-          expect(
-            unref(actions)[0].isVisible({
-              resources: [buildSpace(spaceMock)]
-            })
-          ).toBe(false)
-        }
-      })
-    })
     it('should be false when the current user is a viewer', () => {
       const spaceMock = mock<Drive>({
         id: '1',

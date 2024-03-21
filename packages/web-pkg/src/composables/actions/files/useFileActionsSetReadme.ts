@@ -4,8 +4,9 @@ import { useClientService } from '../../clientService'
 import { useRouter } from '../../router'
 import { FileAction, FileActionOptions } from '../types'
 import { Drive } from '@ownclouders/web-client/src/generated'
-import { buildSpace, extractNodeId, extractStorageId } from '@ownclouders/web-client/src/helpers'
-import { useMessages, useResourcesStore, useSpacesStore, useUserStore } from '../../piniaStores'
+import { buildSpace } from '@ownclouders/web-client/src/helpers'
+import { useMessages, useSpacesStore, useUserStore } from '../../piniaStores'
+import { useCreateSpace } from '../../spaces'
 
 export const useFileActionsSetReadme = () => {
   const { showMessage, showErrorMessage } = useMessages()
@@ -14,7 +15,7 @@ export const useFileActionsSetReadme = () => {
   const { $gettext } = useGettext()
   const clientService = useClientService()
   const spacesStore = useSpacesStore()
-  const resourcesStore = useResourcesStore()
+  const { createDefaultMetaFolder } = useCreateSpace()
 
   const handler = async ({ space, resources }: FileActionOptions) => {
     try {
@@ -24,10 +25,7 @@ export const useFileActionsSetReadme = () => {
       try {
         await webdav.getFileInfo(space, { path: '.space' })
       } catch (_) {
-        const spaceFolder = await webdav.createFolder(space, { path: '.space' })
-        if (extractStorageId(spaceFolder.parentFolderId) === resourcesStore.currentFolder?.id) {
-          resourcesStore.upsertResource(spaceFolder)
-        }
+        await createDefaultMetaFolder(space)
       }
 
       await webdav.putFileContents(space, {
