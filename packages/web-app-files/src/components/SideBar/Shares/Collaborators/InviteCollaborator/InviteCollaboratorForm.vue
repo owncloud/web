@@ -291,12 +291,12 @@ export default defineComponent({
 
       const users = (userData.value || []).map((u) => ({
         ...u,
-        shareType: ShareTypes.user.value
+        shareType: unref(resourceIsSpace) ? ShareTypes.spaceUser.value : ShareTypes.user.value
       })) as CollaboratorAutoCompleteItem[]
 
       const groups = (groupData.value || []).map((u) => ({
         ...u,
-        shareType: ShareTypes.group.value
+        shareType: unref(resourceIsSpace) ? ShareTypes.spaceGroup.value : ShareTypes.group.value
       })) as CollaboratorAutoCompleteItem[]
 
       autocompleteResults.value = [...users, ...groups]
@@ -340,6 +340,10 @@ export default defineComponent({
       const addedShares: CollaboratorShare[] = []
 
       unref(selectedCollaborators).forEach(({ id, shareType, displayName }) => {
+        const type = [ShareTypes.group.value, ShareTypes.spaceGroup.value].includes(shareType)
+          ? 'group'
+          : 'user'
+
         savePromises.push(
           saveQueue.add(async () => {
             try {
@@ -353,8 +357,7 @@ export default defineComponent({
                   recipients: [
                     {
                       objectId: id,
-                      '@libre.graph.recipient.type':
-                        shareType === ShareTypes.group.value ? 'group' : 'user'
+                      '@libre.graph.recipient.type': type
                     }
                   ]
                 }

@@ -267,7 +267,7 @@ export default defineComponent({
       if (succeeded.length && unref(isEmbedEnabled)) {
         postMessage<string[]>(
           'owncloud-embed:share',
-          (succeeded as PromiseFulfilledResult<LinkShare>[]).map(({ value }) => value.link.webUrl)
+          (succeeded as PromiseFulfilledResult<LinkShare>[]).map(({ value }) => value.webUrl)
         )
       }
 

@@ -299,8 +299,9 @@ export const useSharesStore = defineStore('shares', () => {
     linkShare,
     options
   }: UpdateLinkOptions) => {
+    let response
     if (Object.hasOwn(options, 'password')) {
-      await clientService.graphAuthenticated.permissions.setPermissionPassword(
+      response = await clientService.graphAuthenticated.permissions.setPermissionPassword(
         space.id,
         resource.id,
         linkShare.id,
@@ -308,26 +309,25 @@ export const useSharesStore = defineStore('shares', () => {
       )
 
       linkShare.hasPassword = !!options.password
+    } else {
+      response = await clientService.graphAuthenticated.permissions.updatePermission(
+        space.id,
+        resource.id,
+        linkShare.id,
+        {
+          link: {
+            ...(options.type && { type: options.type }),
+            ...(options.displayName && {
+              '@libre.graph.displayName': options.displayName
+            })
+          },
+          expirationDateTime: options.expirationDateTime
+        }
+      )
     }
 
-    const { data } = await clientService.graphAuthenticated.permissions.updatePermission(
-      space.id,
-      resource.id,
-      linkShare.id,
-      {
-        link: {
-          ...linkShare.link,
-          ...(options.type && { type: options.type }),
-          ...(options.displayName && {
-            '@libre.graph.displayName': options.displayName
-          })
-        },
-        expirationDateTime: options.expirationDateTime
-      }
-    )
-
     const link = buildLinkShare({
-      graphPermission: data,
+      graphPermission: response.data,
       user: userStore.user,
       resourceId: resource.id
     })

@@ -269,7 +269,11 @@ export function buildLinkShare({
     shareType: ShareTypes.link.value,
     sharedBy: { id: user.id, displayName: user.displayName },
     hasPassword: graphPermission.hasPassword,
-    link: graphPermission.link,
-    expirationDateTime: graphPermission.expirationDateTime
+    expirationDateTime: graphPermission.expirationDateTime,
+    displayName: graphPermission.link['@libre.graph.displayName'],
+    isQuickLink: graphPermission.link['@libre.graph.quickLink'],
+    type: graphPermission.link.type,
+    webUrl: graphPermission.link.webUrl,
+    preventsDownload: graphPermission.link.preventsDownload
   }
 }

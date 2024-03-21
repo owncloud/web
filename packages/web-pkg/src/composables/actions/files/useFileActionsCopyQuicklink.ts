@@ -25,7 +25,7 @@ export const useFileActionsCopyQuickLink = () => {
       (val): val is PromiseFulfilledResult<LinkShare> => val.status === 'fulfilled'
     )
     if (link?.value) {
-      await copyQuickLinkToClipboard(link.value.link.webUrl)
+      await copyQuickLinkToClipboard(link.value.webUrl)
     }
   }
 
@@ -75,7 +75,7 @@ export const useFileActionsCopyQuickLink = () => {
 
     const existingQuickLink = await getExistingQuickLink({ space, resource })
     if (existingQuickLink) {
-      return copyQuickLinkToClipboard(existingQuickLink.link.webUrl)
+      return copyQuickLinkToClipboard(existingQuickLink.webUrl)
     }
 
     return unref(createQuicklinkAction).handler({ space, resources })

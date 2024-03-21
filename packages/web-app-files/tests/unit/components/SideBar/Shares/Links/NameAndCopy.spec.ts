@@ -4,10 +4,8 @@ import NameAndCopy from 'web-app-files/src/components/SideBar/Shares/Links/NameA
 import { defaultPlugins, mount } from 'web-test-helpers'
 
 const linkShare = {
-  link: {
-    '@libre.graph.displayName': 'Example link',
-    webUrl: 'https://some-url.com/abc'
-  }
+  displayName: 'Example link',
+  webUrl: 'https://some-url.com/abc'
 } as LinkShare
 
 // @vitest-environment jsdom
@@ -38,7 +36,7 @@ describe('NameAndCopy', () => {
     expect(showMessage).not.toHaveBeenCalled()
 
     await wrapper.find('.oc-files-public-link-copy-url').trigger('click')
-    expect(window.navigator.clipboard.writeText).toHaveBeenCalledWith(linkShare.link.webUrl)
+    expect(window.navigator.clipboard.writeText).toHaveBeenCalledWith(linkShare.webUrl)
     expect(wrapper.html()).toMatchSnapshot()
     expect(showMessage).toHaveBeenCalledTimes(1)
 

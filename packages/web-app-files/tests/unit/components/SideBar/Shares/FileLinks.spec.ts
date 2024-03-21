@@ -19,19 +19,15 @@ const defaultLinksList = [
     id: '1',
     indirect: false,
     shareType: ShareTypes.link.value,
-    link: {
-      '@libre.graph.displayName': 'public link 1',
-      webUrl: ' some-link-1'
-    }
+    displayName: 'public link 1',
+    webUrl: ' some-link-1'
   },
   {
     id: '2',
     indirect: true,
     shareType: ShareTypes.link.value,
-    link: {
-      '@libre.graph.displayName': 'public link 2',
-      webUrl: ' some-link-2'
-    }
+    displayName: 'public link 2',
+    webUrl: ' some-link-2'
   }
 ] as LinkShare[]
 
@@ -74,7 +70,7 @@ describe('FileLinks', () => {
       })
 
       describe('collapsing', () => {
-        const link = mock<LinkShare>({ indirect: false })
+        const link = mock<LinkShare>({ indirect: false, isQuickLink: false })
 
         it('shows all links if showAllOnLoad config is set', () => {
           const links = [link, link, link, link]
@@ -134,7 +130,7 @@ describe('FileLinks', () => {
 
     it('existing viewer link is not modifiable', () => {
       const viewerLink = defaultLinksList[0]
-      viewerLink.link.type = SharingLinkType.View
+      viewerLink.type = SharingLinkType.View
       const { wrapper } = getWrapper({ resource, abilities: [], links: [viewerLink] })
       const detailsAndEdit = wrapper.findComponent<typeof DetailsAndEdit>(
         linkListItemDetailsAndEdit
@@ -144,7 +140,7 @@ describe('FileLinks', () => {
     })
     it('existing internal link is modifiable', () => {
       const internalLink = defaultLinksList[0]
-      internalLink.link.type = SharingLinkType.Internal
+      internalLink.type = SharingLinkType.Internal
       const { wrapper } = getWrapper({ resource, abilities: [], links: [internalLink] })
       const detailsAndEdit = wrapper.findComponent<typeof DetailsAndEdit>(
         linkListItemDetailsAndEdit

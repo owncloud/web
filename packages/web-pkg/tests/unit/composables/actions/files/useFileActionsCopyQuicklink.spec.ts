@@ -92,9 +92,7 @@ function getWrapper({ setup, canShare = true, quickLinkExists = false }) {
     ])
   })
   vi.mocked(useCanShare).mockReturnValue({ canShare: vi.fn(() => canShare) })
-  vi.mocked(buildLinkShare).mockReturnValue(
-    mock<LinkShare>({ link: { '@libre.graph.quickLink': quickLinkExists } })
-  )
+  vi.mocked(buildLinkShare).mockReturnValue(mock<LinkShare>({ isQuickLink: quickLinkExists }))
   vi.mocked(useClipboard).mockReturnValue({ copyToClipboard: vi.fn() })
 
   const mocks = { ...defaultComponentMocks(), createLinkMock }

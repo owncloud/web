@@ -11,11 +11,9 @@ vi.mock('@ownclouders/web-pkg', async (importOriginal) => ({
 }))
 
 const exampleLink = {
-  link: {
-    '@libre.graph.displayName': 'Example link',
-    webUrl: 'https://some-url.com/abc',
-    type: SharingLinkType.View
-  }
+  displayName: 'Example link',
+  webUrl: 'https://some-url.com/abc',
+  type: SharingLinkType.View
 } as LinkShare
 
 describe('DetailsAndEdit component', () => {
@@ -39,8 +37,8 @@ describe('DetailsAndEdit component', () => {
 
   describe('editOptions computed property', () => {
     it('does not add "add-expiration" option if isAliasLink is true', () => {
-      const exampleLinkInternal = { ...exampleLink, link: { ...exampleLink.link } }
-      exampleLinkInternal.link.type = SharingLinkType.Internal
+      const exampleLinkInternal = { ...exampleLink }
+      exampleLinkInternal.type = SharingLinkType.Internal
       const { wrapper } = getShallowMountedWrapper(exampleLinkInternal, false, true)
       expect(wrapper.vm.editOptions.some((option) => option.id === 'add-expiration')).toBe(false)
     })

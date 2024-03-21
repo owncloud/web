@@ -1,4 +1,4 @@
-import { Identity, SharingLink, UnifiedRoleDefinition } from '../../generated'
+import { Identity, SharingLinkType, UnifiedRoleDefinition } from '../../generated'
 import { Resource } from '../resource'
 
 export enum GraphSharePermission {
@@ -52,8 +52,12 @@ export interface CollaboratorShare extends Share {
 }
 
 export interface LinkShare extends Share {
+  displayName: string
   hasPassword: boolean
-  link: SharingLink
+  isQuickLink: boolean
+  type: SharingLinkType
+  webUrl: string
+  preventsDownload?: boolean
 }
 
 export interface CollaboratorAutoCompleteItem {

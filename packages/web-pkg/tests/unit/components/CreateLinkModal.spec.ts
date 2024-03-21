@@ -104,12 +104,12 @@ describe('CreateLinkModal', () => {
     it('emits event in embed mode including the created links', async () => {
       const resources = [mock<Resource>({ isFolder: false })]
       const { wrapper, mocks } = getWrapper({ resources, embedModeEnabled: true })
-      const link = mock<LinkShare>({ link: { webUrl: 'someurl' } })
+      const link = mock<LinkShare>({ webUrl: 'someurl' })
 
       const { addLink } = useSharesStore()
       ;(addLink as any).mockResolvedValue(link)
       await wrapper.vm.onConfirm()
-      expect(mocks.postMessageMock).toHaveBeenCalledWith('owncloud-embed:share', [link.link.webUrl])
+      expect(mocks.postMessageMock).toHaveBeenCalledWith('owncloud-embed:share', [link.webUrl])
     })
     it('shows error messages for links that failed to be created', async () => {
       const consoleMock = vi.fn(() => undefined)

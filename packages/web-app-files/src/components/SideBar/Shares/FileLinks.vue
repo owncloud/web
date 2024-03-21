@@ -23,7 +23,7 @@
         :expiration-rules="expirationRules"
         :is-folder-share="resource.isFolder"
         :is-modifiable="canEditLink(quicklink)"
-        :is-password-enforced="isPasswordEnforcedForLinkType(quicklink.link.type)"
+        :is-password-enforced="isPasswordEnforcedForLinkType(quicklink.type)"
         :is-password-removable="canDeletePublicLinkPassword(quicklink)"
         :link-share="quicklink"
         @update-link="handleLinkUpdate"
@@ -55,7 +55,7 @@
           :expiration-rules="expirationRules"
           :is-folder-share="resource.isFolder"
           :is-modifiable="canEditLink(link)"
-          :is-password-enforced="isPasswordEnforcedForLinkType(link.link.type)"
+          :is-password-enforced="isPasswordEnforcedForLinkType(link.type)"
           :is-password-removable="canDeletePublicLinkPassword(link)"
           :link-share="link"
           @update-link="handleLinkUpdate"
@@ -179,7 +179,7 @@ export default defineComponent({
     const indirectLinkListCollapsed = ref(initialLinkListCollapsed)
     const directLinks = computed(() =>
       unref(linkShares)
-        .filter((l) => !l.indirect && !l.link['@libre.graph.quickLink'])
+        .filter((l) => !l.indirect && !l.isQuickLink)
         .sort((a: any, b: any) => b.stime - a.stime) // FIXME: share date not yet available
         .map((share) => {
           return { ...share, key: 'direct-link-' + share.id }
@@ -201,7 +201,7 @@ export default defineComponent({
     const canEditLink = (linkShare: LinkShare) => {
       return (
         canCreateLinks({ space: unref(space), resource: unref(resource) }) &&
-        (can('create-all', 'PublicLink') || linkShare.link.type === SharingLinkType.Internal)
+        (can('create-all', 'PublicLink') || linkShare.type === SharingLinkType.Internal)
       )
     }
 
@@ -215,15 +215,13 @@ export default defineComponent({
     }
 
     const canDeletePublicLinkPassword = (linkShare: LinkShare) => {
-      const isPasswordEnforced = isPasswordEnforcedForLinkType(linkShare.link.type)
+      const isPasswordEnforced = isPasswordEnforcedForLinkType(linkShare.type)
 
       if (!isPasswordEnforced) {
         return true
       }
 
-      return (
-        linkShare.link.type === SharingLinkType.View && unref(canDeleteReadOnlyPublicLinkPassword)
-      )
+      return linkShare.type === SharingLinkType.View && unref(canDeleteReadOnlyPublicLinkPassword)
     }
 
     const handleLinkUpdate = async ({
@@ -245,8 +243,8 @@ export default defineComponent({
           resource: unref(resource),
           linkShare,
           options: {
-            displayName: linkShare.link['@libre.graph.displayName'],
-            type: linkShare.link.type,
+            displayName: linkShare.displayName,
+            type: linkShare.type,
             expirationDateTime: linkShare.expirationDateTime,
             ...(password !== undefined && { password })
           }
@@ -313,9 +311,7 @@ export default defineComponent({
     },
 
     quicklink() {
-      return this.linkShares.find(
-        ({ link, indirect }) => link['@libre.graph.quickLink'] === true && !indirect
-      )
+      return this.linkShares.find(({ isQuickLink, indirect }) => isQuickLink === true && !indirect)
     },
 
     helpersEnabled() {

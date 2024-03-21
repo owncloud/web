@@ -9,9 +9,9 @@
       <div v-else class="oc-flex oc-flex-middle oc-text-truncate">
         <oc-icon name="link" fill-type="line" />
         <p
-          v-oc-tooltip="linkShare.link.webUrl"
+          v-oc-tooltip="linkShare.webUrl"
           class="oc-files-file-link-url oc-ml-s oc-text-truncate oc-my-rm"
-          v-text="linkShare.link.webUrl"
+          v-text="linkShare.webUrl"
         />
       </div>
       <oc-button
@@ -55,12 +55,12 @@ export default defineComponent({
     } = useClipboard({ legacy: true, copiedDuring: 550 })
 
     const copyLinkToClipboard = () => {
-      copy(props.linkShare.link.webUrl)
+      copy(props.linkShare.webUrl)
       showMessage({
-        title: props.linkShare.link['@libre.graph.quickLink']
+        title: props.linkShare.isQuickLink
           ? $gettext('The link has been copied to your clipboard.')
           : $gettext('The link "%{linkName}" has been copied to your clipboard.', {
-              linkName: props.linkShare.link['@libre.graph.displayName']
+              linkName: props.linkShare.displayName
             })
       })
     }
@@ -73,7 +73,7 @@ export default defineComponent({
   },
   computed: {
     linkName() {
-      return this.linkShare.link['@libre.graph.displayName']
+      return this.linkShare.displayName
     },
     copyBtnLabel() {
       return this.$gettext('Copy')

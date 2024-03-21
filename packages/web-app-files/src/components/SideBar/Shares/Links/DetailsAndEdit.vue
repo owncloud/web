@@ -216,7 +216,7 @@ export default defineComponent({
     const space = inject<Ref<SpaceResource>>('space')
     const resource = inject<Ref<Resource>>('resource')
 
-    const currentLinkType = ref<SharingLinkType>(props.linkShare.link.type)
+    const currentLinkType = ref<SharingLinkType>(props.linkShare.type)
 
     const dateExpire = computed(() => {
       return formatRelativeDateFromDateTime(
@@ -228,7 +228,7 @@ export default defineComponent({
     const updateSelectedType = (type: SharingLinkType) => {
       currentLinkType.value = type
       const linkShare = props.linkShare
-      linkShare.link.type = type
+      linkShare.type = type
       emit('updateLink', { linkShare })
     }
 
@@ -249,11 +249,11 @@ export default defineComponent({
     )
 
     const isAliasLink = computed(() => {
-      return props.linkShare.link.type === SharingLinkType.Internal
+      return props.linkShare.type === SharingLinkType.Internal
     })
 
     const isUploaderLink = computed(() => {
-      return props.linkShare.link.type === SharingLinkType.Upload
+      return props.linkShare.type === SharingLinkType.Upload
     })
 
     const currentLinkRoleDescription = computed(() => {
@@ -483,7 +483,7 @@ export default defineComponent({
         title: this.$gettext('Edit name'),
         confirmText: this.$gettext('Save'),
         hasInput: true,
-        inputValue: this.linkShare.link['@libre.graph.displayName'],
+        inputValue: this.linkShare.displayName,
         inputLabel: this.$gettext('Link name'),
         onInput: (name, setError) => {
           if (name.length > 255) {
@@ -493,7 +493,7 @@ export default defineComponent({
         },
         onConfirm: (displayName: string) => {
           const linkShare = this.linkShare
-          linkShare.link['@libre.graph.displayName'] = displayName
+          linkShare.displayName = displayName
           return Promise.resolve(this.$emit('updateLink', { linkShare }))
         }
       })
