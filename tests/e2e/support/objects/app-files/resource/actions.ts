@@ -215,7 +215,7 @@ export const createSpaceFromSelection = async ({
 }): Promise<Space> => {
   await selectOrDeselectResources({
     page,
-    resources: resources.map((r) => ({ name: r }) as resourceArgs), // prettier-ignore
+    resources: resources.map((r) => ({name: r}) as resourceArgs), // prettier-ignore
     select: true
   })
   await page.locator(util.format(resourceNameSelector, resources[0])).click({ button: 'right' })
@@ -227,7 +227,7 @@ export const createSpaceFromSelection = async ({
       (resp) =>
         resp.status() === 201 &&
         resp.request().method() === 'POST' &&
-        resp.url().endsWith('/drives')
+        resp.url().endsWith('/drives?template=default')
     ),
     page.locator(util.format(actionConfirmationButton, 'Create')).click()
   ])
