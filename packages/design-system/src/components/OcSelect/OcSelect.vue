@@ -1,6 +1,6 @@
 <template>
   <div>
-    <label :for="id" class="oc-label" v-text="label" />
+    <label v-if="label" :for="id" class="oc-label" v-text="label" />
     <oc-contextual-helper
       v-if="contextualHelper?.isEnabled"
       v-bind="contextualHelper?.data"

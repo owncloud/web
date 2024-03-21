@@ -170,7 +170,7 @@ export default defineComponent({
       extensionRegistry
         .requestExtensions<SidebarPanelExtension<SpaceResource, Resource, Resource>>(
           'sidebarPanel',
-          ['resource']
+          { scopes: ['resource'] }
         )
         .map((e) => e.panel)
     )

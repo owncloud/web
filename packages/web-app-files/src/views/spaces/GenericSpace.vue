@@ -268,7 +268,7 @@ export default defineComponent({
     const viewModes = computed(() => {
       return [
         ...extensionRegistry
-          .requestExtensions<FolderViewExtension>('folderView', ['resource'])
+          .requestExtensions<FolderViewExtension>('folderView', { scopes: ['resource'] })
           .map((e) => e.folderView)
       ]
     })

@@ -75,7 +75,7 @@ export default defineComponent({
     const extensionRegistry = useExtensionRegistry()
     const extensionContextActions = computed(() => {
       return extensionRegistry
-        .requestExtensions<ActionExtension>('action', ['resource.context-menu'])
+        .requestExtensions<ActionExtension>('action', { scopes: ['resource.context-menu'] })
         .map((e) => e.action)
     })
 
