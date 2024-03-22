@@ -51,27 +51,11 @@ export const createSpace = async (args: createSpaceArgs): Promise<string> => {
     (postResp) =>
       postResp.status() === 201 &&
       postResp.request().method() === 'POST' &&
-      postResp.url().endsWith('drives')
-  )
-  const mkcolResponsePromise = page.waitForResponse(
-    (resp) =>
-      resp.status() === 201 && resp.request().method() === 'MKCOL' && resp.url().includes('.space')
-  )
-  const putResponsePromise = page.waitForResponse(
-    (resp) =>
-      resp.status() === 201 &&
-      resp.request().method() === 'PUT' &&
-      resp.url().endsWith('/.space/readme.md')
-  )
-  const patchResponsePromise = page.waitForResponse(
-    (resp) => resp.status() === 200 && resp.request().method() === 'PATCH'
+      postResp.url().endsWith('drives?template=default')
   )
 
   const [responses] = await Promise.all([
     postResponsePromise,
-    mkcolResponsePromise,
-    putResponsePromise,
-    patchResponsePromise,
     page.locator(actionConfirmButton).click()
   ])
 
