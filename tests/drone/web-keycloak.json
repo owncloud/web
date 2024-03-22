@@ -1,0 +1,31 @@
+{
+  "server": "https://ocis:9200",
+  "theme": "https://ocis:9200/themes/owncloud/theme.json",
+  "openIdConnect": {
+    "client_id": "web",
+    "response_type": "code",
+    "scope": "openid profile email"
+  },
+  "options": {
+    "topCenterNotifications": true,
+    "disablePreviews": true,
+    "displayResourcesLazy": false,
+    "sidebar": {
+      "shares": {
+        "showAllOnLoad": true
+      }
+    },
+    "routing": {
+      "idBased": false
+    }
+  },
+  "apps": [
+    "files",
+    "draw-io",
+    "text-editor",
+    "media-viewer",
+    "pdf-viewer",
+    "search",
+    "admin-settings"
+  ]
+}

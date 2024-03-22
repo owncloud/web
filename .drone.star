@@ -45,6 +45,7 @@ dir = {
     "app": "/srv/app",
     "config": "/srv/config",
     "ocisConfig": "/srv/config/drone/config-ocis.json",
+    "webKeycloakConfig": "/srv/config/drone/web-keycloak.json",
     "ocisIdentifierRegistrationConfig": "/srv/config/drone/identifier-registration.yml",
     "ocisRevaDataRoot": "/srv/app/tmp/ocis/owncloud/data/",
     "testingDataDir": "/srv/app/testing/data/",
@@ -1233,6 +1234,7 @@ def ocisService(type, tika_enabled = False, enforce_password_public_link = False
         environment["OCIS_EXCLUDE_RUN_SERVICES"] = "idp"
         environment["GRAPH_ASSIGN_DEFAULT_USER_ROLE"] = "false"
         environment["GRAPH_USERNAME_MATCH"] = "none"
+        environment["WEB_UI_CONFIG_FILE"] = "%s" % dir["webKeycloakConfig"]
     elif type == "app-provider":
         environment["GATEWAY_GRPC_ADDR"] = "0.0.0.0:9142"
         environment["MICRO_REGISTRY"] = "nats-js-kv"
