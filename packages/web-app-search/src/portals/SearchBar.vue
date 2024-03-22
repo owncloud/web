@@ -70,7 +70,7 @@
               <li class="oc-text-truncate oc-flex oc-flex-between oc-text-muted provider-details">
                 <span class="display-name" v-text="$gettext(provider.displayName)" />
                 <span v-if="!!provider.listSearch">
-                  <router-link class="more-results" :to="getMoreResultsLinkForProvider(provider)">
+                  <router-link class="more-results" :to="getSearchResultLocation(provider.id)">
                     <span>{{ getMoreResultsDetailsTextForProvider(provider) }}</span>
                   </router-link>
                 </span>
@@ -104,7 +104,8 @@
 import {
   createLocationCommon,
   isLocationCommonActive,
-  isLocationSpacesActive
+  isLocationSpacesActive,
+  queryItemAsString
 } from '@ownclouders/web-pkg'
 import Mark from 'mark.js'
 import { debounce } from 'lodash-es'
@@ -165,6 +166,23 @@ export default defineComponent({
       return unref(optionsDropRef) as InstanceType<GlobalComponents['OcDrop']>
     })
 
+    const scope = computed(() => {
+      const currentFolder = store.getters['Files/currentFolder']
+
+      if (unref(currentFolderAvailable) && currentFolder?.fileId) {
+        return currentFolder.fileId
+      }
+
+      return queryItemAsString(unref(scopeQueryValue))
+    })
+
+    const useScope = computed(() => {
+      return (
+        unref(currentFolderAvailable) &&
+        unref(locationFilterId) === SearchLocationFilterConstants.currentFolder
+      )
+    })
+
     const search = async () => {
       searchResults.value = []
       if (!unref(term)) {
@@ -172,20 +190,8 @@ export default defineComponent({
       }
       const terms = [`name:"*${unref(term)}*"`]
 
-      if (
-        unref(currentFolderAvailable) &&
-        unref(locationFilterId) === SearchLocationFilterConstants.currentFolder
-      ) {
-        const currentFolder = store.getters['Files/currentFolder']
-        let scope
-
-        if (currentFolder?.fileId) {
-          scope = currentFolder?.fileId
-        } else {
-          scope = unref(scopeQueryValue)
-        }
-
-        terms.push(`scope:${scope}`)
+      if (unref(useScope)) {
+        terms.push(`scope:${unref(scope)}`)
       }
 
       loading.value = true
@@ -211,35 +217,27 @@ export default defineComponent({
       }
 
       if (unref(activePreviewIndex) === null) {
-        const currentQuery = unref(router.currentRoute).query
-        const currentFolder = store.getters['Files/currentFolder']
-
-        let scope
-        if (unref(currentFolderAvailable) && currentFolder?.fileId) {
-          scope = currentFolder?.fileId
-        } else {
-          scope = unref(scopeQueryValue)
-        }
-        const useScope =
-          unref(currentFolderAvailable) &&
-          unref(locationFilterId) === SearchLocationFilterConstants.currentFolder
-        router.push(
-          createLocationCommon('files-common-search', {
-            query: {
-              ...(currentQuery && { ...currentQuery }),
-              term: unref(term),
-              ...(scope && { scope }),
-              useScope: useScope.toString(),
-              provider: 'files.sdk'
-            }
-          })
-        )
+        router.push(getSearchResultLocation('files.sdk'))
       }
       if (unref(activePreviewIndex) !== null) {
         unref(optionsDrop)
           .$el.querySelectorAll('.preview')
           [unref(activePreviewIndex)].firstChild.click()
       }
+    }
+
+    const getSearchResultLocation = (providerId: string) => {
+      const currentQuery = unref(router.currentRoute).query
+
+      return createLocationCommon('files-common-search', {
+        query: {
+          ...(currentQuery && { ...currentQuery }),
+          term: unref(term),
+          ...(unref(scope) && { scope: unref(scope) }),
+          useScope: unref(useScope).toString(),
+          provider: providerId
+        }
+      })
     }
 
     const onLocationFilterChange = (event) => {
@@ -292,7 +290,8 @@ export default defineComponent({
       availableProviders,
       search,
       showPreview,
-      updateTerm
+      updateTerm,
+      getSearchResultLocation
     }
   },
 
@@ -422,13 +421,6 @@ export default defineComponent({
 
     getSearchResultForProvider(provider) {
       return this.searchResults.find(({ providerId }) => providerId === provider.id)?.result
-    },
-    getMoreResultsLinkForProvider(provider) {
-      const currentQuery = unref(this.$router.currentRoute).query
-
-      return createLocationCommon('files-common-search', {
-        query: { ...(currentQuery && { ...currentQuery }), term: this.term, provider: provider.id }
-      })
     },
     parseRouteQuery(route, initialLoad = false) {
       const currentFolderAvailable =
