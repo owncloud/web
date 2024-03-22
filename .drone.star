@@ -5,11 +5,10 @@ NOTIFICATIONS = 3
 
 ALPINE_GIT = "alpine/git:latest"
 APACHE_TIKA = "apache/tika:2.8.0.0"
-KEYCLOAK = "quay.io/keycloak/keycloak:22.0.4"
+KEYCLOAK = "quay.io/keycloak/keycloak:24.0.1"
 MINIO_MC = "minio/mc:RELEASE.2021-10-07T04-19-58Z"
 OC_CI_ALPINE = "owncloudci/alpine:latest"
 OC_CI_BAZEL_BUILDIFIER = "owncloudci/bazel-buildifier"
-OC_CI_CORE_NODEJS = "owncloudci/core:nodejs14"
 OC_CI_DRONE_ANSIBLE = "owncloudci/drone-ansible:latest"
 OC_CI_DRONE_SKIP_PIPELINE = "owncloudci/drone-skip-pipeline"
 OC_CI_GOLANG = "owncloudci/golang:1.22"
@@ -43,9 +42,9 @@ dir = {
     "ocis": "/var/www/owncloud/ocis",
     "commentsFile": "/var/www/owncloud/web/comments.file",
     "app": "/srv/app",
-    "config": "/srv/config",
-    "ocisConfig": "/srv/config/drone/config-ocis.json",
-    "ocisIdentifierRegistrationConfig": "/srv/config/drone/identifier-registration.yml",
+    "ocisConfig": "/var/www/owncloud/web/tests/drone/config-ocis.json",
+    "webKeycloakConfig": "/var/www/owncloud/web/tests/drone/web-keycloak.json",
+    "ocisIdentifierRegistrationConfig": "/var/www/owncloud/web/tests/drone/identifier-registration.yml",
     "ocisRevaDataRoot": "/srv/app/tmp/ocis/owncloud/data/",
     "testingDataDir": "/srv/app/testing/data/",
 }
@@ -219,9 +218,6 @@ go_step_volumes = [{
 }, {
     "name": "gopath",
     "path": "/go",
-}, {
-    "name": "configs",
-    "path": dir["config"],
 }]
 
 web_workspace = {
@@ -680,8 +676,7 @@ def e2eTests(ctx):
                 restoreBuildArtifactCache(ctx, "playwright", ".playwright") + \
                 installPnpm() + \
                 installPlaywright() + \
-                restoreBuildArtifactCache(ctx, "web-dist", "dist") + \
-                setupServerConfigureWeb(params["logLevel"])
+                restoreBuildArtifactCache(ctx, "web-dist", "dist")
 
         if ctx.build.event == "cron":
             steps += restoreBuildArtifactCache(ctx, "ocis", "ocis")
@@ -817,7 +812,6 @@ def acceptance(ctx):
                         # TODO: don't start services if we skip it -> maybe we need to convert them to steps
                         steps += skipIfUnchanged(ctx, "acceptance-tests")
                         steps += restoreBuildArtifactCache(ctx, "web-dist", "dist")
-                        steps += setupServerConfigureWeb(params["logLevel"])
 
                         services = browserService(alternateSuiteName, browser) + middlewareService()
 
@@ -1234,7 +1228,12 @@ def ocisService(type, tika_enabled = False, enforce_password_public_link = False
         environment["GRAPH_ASSIGN_DEFAULT_USER_ROLE"] = "false"
         environment["GRAPH_USERNAME_MATCH"] = "none"
 
-    if type == "app-provider":
+        # TODO: after ocis issue is fixed
+        #   - use config from dir["ocisConfig"]
+        #   - remove config file from dir["webKeycloakConfig"]
+        # issue: https://github.com/owncloud/ocis/issues/8703
+        environment["WEB_UI_CONFIG_FILE"] = "%s" % dir["webKeycloakConfig"]
+    elif type == "app-provider":
         environment["GATEWAY_GRPC_ADDR"] = "0.0.0.0:9142"
         environment["MICRO_REGISTRY"] = "nats-js-kv"
         environment["MICRO_REGISTRY_ADDRESS"] = "0.0.0.0:9233"
@@ -1242,8 +1241,6 @@ def ocisService(type, tika_enabled = False, enforce_password_public_link = False
         environment["NATS_NATS_PORT"] = 9233
     else:
         environment["WEB_UI_CONFIG_FILE"] = "%s" % dir["ocisConfig"]
-        environment["STORAGE_HOME_DRIVER"] = "ocis"
-        environment["STORAGE_USERS_DRIVER"] = "ocis"
 
     if tika_enabled:
         environment["FRONTEND_FULL_TEXT_SEARCH_ENABLED"] = True
@@ -1276,9 +1273,6 @@ def ocisService(type, tika_enabled = False, enforce_password_public_link = False
                 "name": "gopath",
                 "path": dir["app"],
             }, {
-                "name": "configs",
-                "path": dir["config"],
-            }, {
                 "name": "ocis-config",
                 "path": "/root/.ocis/config",
             }],
@@ -1309,21 +1303,6 @@ def checkForExistingOcisCache(ctx):
             ],
         },
     ]
-
-def setupServerConfigureWeb(logLevel):
-    return [{
-        "name": "setup-server-configure-web",
-        "image": OC_CI_PHP,
-        "commands": [
-            "mkdir -p /srv/config",
-            "cp -r %s/tests/drone /srv/config" % dir["web"],
-            "ls -la /srv/config/drone",
-        ],
-        "volumes": [{
-            "name": "configs",
-            "path": dir["config"],
-        }],
-    }]
 
 def copyFilesForUpload():
     return [{
@@ -1378,9 +1357,6 @@ def runWebuiAcceptanceTests(ctx, suite, alternateSuiteName, filterTags, extraEnv
         "volumes": [{
             "name": "gopath",
             "path": dir["app"],
-        }, {
-            "name": "configs",
-            "path": dir["config"],
         }],
     }]
 
@@ -2269,10 +2245,9 @@ def keycloakService():
     return [
         {
             "name": "generate-keycloak-certs",
-            "image": OC_UBUNTU,
+            "image": OC_CI_NODEJS,
             "commands": [
-                "apt install openssl -y",
-                "mkdir keycloak-certs",
+                "mkdir -p keycloak-certs",
                 "openssl req -x509 -newkey rsa:2048 -keyout keycloak-certs/keycloakkey.pem -out keycloak-certs/keycloakcrt.pem -nodes -days 365 -subj '/CN=keycloak'",
                 "chmod -R 777 keycloak-certs",
             ],
@@ -2310,7 +2285,7 @@ def keycloakService():
             "commands": [
                 "mkdir -p /opt/keycloak/data/import",
                 "cp tests/drone/ocis_keycloak/ocis-ci-realm.dist.json /opt/keycloak/data/import/ocis-realm.json",
-                "/opt/keycloak/bin/kc.sh start-dev --proxy edge --spi-connections-http-client-default-disable-trust-manager=false --import-realm --health-enabled=true",
+                "/opt/keycloak/bin/kc.sh start-dev --proxy=edge --spi-connections-http-client-default-disable-trust-manager=true --import-realm --health-enabled=true",
             ],
             "volumes": [
                 {
@@ -2351,6 +2326,7 @@ def e2eTestsOnKeycloak(ctx):
             "temp": {},
         },
     ]
+
     if not "full-ci" in ctx.build.title.lower() and ctx.build.event != "cron":
         return []
 
@@ -2359,8 +2335,7 @@ def e2eTestsOnKeycloak(ctx):
             installPnpm() + \
             installPlaywright() + \
             keycloakService() + \
-            restoreBuildArtifactCache(ctx, "web-dist", "dist") + \
-            setupServerConfigureWeb("2")
+            restoreBuildArtifactCache(ctx, "web-dist", "dist")
     if ctx.build.event == "cron":
         steps += restoreBuildArtifactCache(ctx, "ocis", "ocis")
     else:
