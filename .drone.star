@@ -9,7 +9,6 @@ KEYCLOAK = "quay.io/keycloak/keycloak:24.0.1"
 MINIO_MC = "minio/mc:RELEASE.2021-10-07T04-19-58Z"
 OC_CI_ALPINE = "owncloudci/alpine:latest"
 OC_CI_BAZEL_BUILDIFIER = "owncloudci/bazel-buildifier"
-OC_CI_CORE_NODEJS = "owncloudci/core:nodejs14"
 OC_CI_DRONE_ANSIBLE = "owncloudci/drone-ansible:latest"
 OC_CI_DRONE_SKIP_PIPELINE = "owncloudci/drone-skip-pipeline"
 OC_CI_GOLANG = "owncloudci/golang:1.22"
@@ -1234,6 +1233,11 @@ def ocisService(type, tika_enabled = False, enforce_password_public_link = False
         environment["OCIS_EXCLUDE_RUN_SERVICES"] = "idp"
         environment["GRAPH_ASSIGN_DEFAULT_USER_ROLE"] = "false"
         environment["GRAPH_USERNAME_MATCH"] = "none"
+
+        # TODO: after ocis issue is fixed
+        #   - use config from dir["ocisConfig"]
+        #   - remove config file from dir["webKeycloakConfig"]
+        # issue: https://github.com/owncloud/ocis/issues/8703
         environment["WEB_UI_CONFIG_FILE"] = "%s" % dir["webKeycloakConfig"]
     elif type == "app-provider":
         environment["GATEWAY_GRPC_ADDR"] = "0.0.0.0:9142"
