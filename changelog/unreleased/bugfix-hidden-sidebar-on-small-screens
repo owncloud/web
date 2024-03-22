@@ -1,0 +1,6 @@
+Bugfix: Hidden right sidebar on small screens
+
+The issue causing the right sidebar to not display on screens smaller than 960px has been fixed.
+
+https://github.com/owncloud/web/issues/10598
+https://github.com/owncloud/web/pull/10643
