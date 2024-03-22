@@ -42,10 +42,9 @@ dir = {
     "ocis": "/var/www/owncloud/ocis",
     "commentsFile": "/var/www/owncloud/web/comments.file",
     "app": "/srv/app",
-    "config": "/srv/config",
-    "ocisConfig": "/srv/config/drone/config-ocis.json",
-    "webKeycloakConfig": "/srv/config/drone/web-keycloak.json",
-    "ocisIdentifierRegistrationConfig": "/srv/config/drone/identifier-registration.yml",
+    "ocisConfig": "/var/www/owncloud/web/tests/drone/config-ocis.json",
+    "webKeycloakConfig": "/var/www/owncloud/web/tests/drone/web-keycloak.json",
+    "ocisIdentifierRegistrationConfig": "/var/www/owncloud/web/tests/drone/identifier-registration.yml",
     "ocisRevaDataRoot": "/srv/app/tmp/ocis/owncloud/data/",
     "testingDataDir": "/srv/app/testing/data/",
 }
@@ -219,9 +218,6 @@ go_step_volumes = [{
 }, {
     "name": "gopath",
     "path": "/go",
-}, {
-    "name": "configs",
-    "path": dir["config"],
 }]
 
 web_workspace = {
@@ -680,8 +676,7 @@ def e2eTests(ctx):
                 restoreBuildArtifactCache(ctx, "playwright", ".playwright") + \
                 installPnpm() + \
                 installPlaywright() + \
-                restoreBuildArtifactCache(ctx, "web-dist", "dist") + \
-                setupServerConfigureWeb(params["logLevel"])
+                restoreBuildArtifactCache(ctx, "web-dist", "dist")
 
         if ctx.build.event == "cron":
             steps += restoreBuildArtifactCache(ctx, "ocis", "ocis")
@@ -817,7 +812,6 @@ def acceptance(ctx):
                         # TODO: don't start services if we skip it -> maybe we need to convert them to steps
                         steps += skipIfUnchanged(ctx, "acceptance-tests")
                         steps += restoreBuildArtifactCache(ctx, "web-dist", "dist")
-                        steps += setupServerConfigureWeb(params["logLevel"])
 
                         services = browserService(alternateSuiteName, browser) + middlewareService()
 
@@ -974,7 +968,7 @@ def installPlaywright():
             "PLAYWRIGHT_BROWSERS_PATH": ".playwright",
         },
         "commands": [
-            "pnpm exec playwright install --with-deps chromium",
+            "pnpm exec playwright install --with-deps",
         ],
     }]
 
@@ -1279,9 +1273,6 @@ def ocisService(type, tika_enabled = False, enforce_password_public_link = False
                 "name": "gopath",
                 "path": dir["app"],
             }, {
-                "name": "configs",
-                "path": dir["config"],
-            }, {
                 "name": "ocis-config",
                 "path": "/root/.ocis/config",
             }],
@@ -1312,21 +1303,6 @@ def checkForExistingOcisCache(ctx):
             ],
         },
     ]
-
-def setupServerConfigureWeb(logLevel):
-    return [{
-        "name": "setup-server-configure-web",
-        "image": OC_CI_PHP,
-        "commands": [
-            "mkdir -p /srv/config",
-            "cp -r %s/tests/drone /srv/config" % dir["web"],
-            "ls -la /srv/config/drone",
-        ],
-        "volumes": [{
-            "name": "configs",
-            "path": dir["config"],
-        }],
-    }]
 
 def copyFilesForUpload():
     return [{
@@ -1381,9 +1357,6 @@ def runWebuiAcceptanceTests(ctx, suite, alternateSuiteName, filterTags, extraEnv
         "volumes": [{
             "name": "gopath",
             "path": dir["app"],
-        }, {
-            "name": "configs",
-            "path": dir["config"],
         }],
     }]
 
@@ -2362,8 +2335,7 @@ def e2eTestsOnKeycloak(ctx):
             installPnpm() + \
             installPlaywright() + \
             keycloakService() + \
-            restoreBuildArtifactCache(ctx, "web-dist", "dist") + \
-            setupServerConfigureWeb("2")
+            restoreBuildArtifactCache(ctx, "web-dist", "dist")
     if ctx.build.event == "cron":
         steps += restoreBuildArtifactCache(ctx, "ocis", "ocis")
     else:
