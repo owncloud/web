@@ -1,0 +1,6 @@
+Bugfix: Theme loading without matching theme
+
+We've fixed an issue where theme loading would break when there was no matching oC theme found for the user's OS setting. For example, this occurred when a user's OS setting was configured to "dark," but the instance of oC did not offer a dark theme.
+
+https://github.com/owncloud/web/issues/10657
+https://github.com/owncloud/web/pull/10659
