@@ -1,0 +1,6 @@
+Bugfix: Space notification links
+
+Links for incoming new space notifications have been fixed. We also made sure links are being removed if a user has been removed from a space and the space had been loaded before.
+
+https://github.com/owncloud/web/issues/10397
+https://github.com/owncloud/web/pull/10603
