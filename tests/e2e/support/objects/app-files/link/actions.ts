@@ -255,7 +255,7 @@ export const setPassword = async (page: Page): Promise<void> => {
     page.waitForResponse(
       (res) =>
         res.url().includes('permissions') &&
-        res.request().method() === 'PATCH' &&
+        res.request().method() === 'POST' &&
         res.status() === 200
     ),
     page.locator(editPublicLinkRenameConfirm).click()

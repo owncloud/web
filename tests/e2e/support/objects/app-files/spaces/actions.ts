@@ -294,9 +294,9 @@ export const changeSpaceRole = async (args: SpaceMembersArgs): Promise<void> => 
     await Promise.all([
       page.waitForResponse(
         (resp) =>
-          resp.url().includes('shares') &&
+          resp.url().includes('permissions') &&
           resp.status() === 200 &&
-          resp.request().method() === 'POST'
+          resp.request().method() === 'PATCH'
       ),
       Collaborator.changeCollaboratorRole({ page, collaborator })
     ])
