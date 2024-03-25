@@ -211,7 +211,7 @@ export default defineComponent({
               collaboratorShare: share
             })
 
-            if (currentUserRemoved) {
+            if (!currentUserRemoved) {
               const client = this.clientService.graphAuthenticated
               const graphResponse = await client.drives.getDrive(share.id)
               this.upsertSpace(buildSpace(graphResponse.data))
