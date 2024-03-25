@@ -58,7 +58,7 @@ When(
 )
 
 Then(
-  /^"([^"]*)" is in a (text-editor|pdf-viewer|image-viewer)$/,
+  /^"([^"]*)" is in a (text-editor|pdf-viewer|media-viewer)$/,
   async function (this: World, stepUser: string, fileViewerType: string): Promise<void> {
     const { page } = this.actorsEnvironment.getActor({ key: stepUser })
     const fileViewerLocator = editor.fileViewerLocator({ page, fileViewerType })

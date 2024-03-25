@@ -89,7 +89,7 @@ Feature: spaces public link
     And "David" edits the public link named "folderLink" of resource "spaceFolder" changing role to "Can edit"
     When "David" opens the public link "imageLink"
     And "David" unlocks the public link with password "%public%"
-    Then "David" is in a image-viewer
+    Then "David" is in a media-viewer
     And "David" closes the file viewer
     And "David" logs out
 

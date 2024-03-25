@@ -90,6 +90,7 @@ Feature: link
       | localFile                     | to             |
       | filesForUpload/simple.pdf     | simple.pdf     |
       | filesForUpload/testavatar.jpg | testavatar.jpg |
+      | filesForUpload/test_video.mp4 | test_video.mp4 |
     And "Alice" shares the following resource using API
       | resource       | recipient | type | role     |
       | folderPublic   | Brian     | user | Can edit |
@@ -117,6 +118,10 @@ Feature: link
       | resource       | password |
       | testavatar.jpg | %public% |
     And "Alice" renames the most recently created public link of resource "testavatar.jpg" to "imageLink"
+    And "Alice" creates a public link creates a public link of following resource using the sidebar panel
+      | resource       | password |
+      | test_video.mp4 | %public% |
+    And "Alice" renames the most recently created public link of resource "test_video.mp4" to "videoLink"
     And "Alice" logs out
 
     # authenticated user with access to resources. should be redirected to shares with me page
@@ -149,8 +154,7 @@ Feature: link
       | simple.pdf | file |
     When "Brian" opens the public link "imageLink"
     And "Brian" unlocks the public link with password "%public%"
-    # https://github.com/owncloud/ocis/issues/8602
-    Then "Brian" is in a image-viewer
+    Then "Brian" is in a media-viewer
     And "Brian" closes the file viewer
     And "Brian" downloads the following public link resources using the single share view
       | resource       | type |
@@ -185,8 +189,7 @@ Feature: link
       | simple.pdf | file |
     When "Carol" opens the public link "imageLink"
     And "Carol" unlocks the public link with password "%public%"
-    # https://github.com/owncloud/ocis/issues/8602
-    Then "Carol" is in a image-viewer
+    Then "Carol" is in a media-viewer
     And "Carol" closes the file viewer
     And "Carol" downloads the following public link resources using the single share view
       | resource       | type |
@@ -220,11 +223,15 @@ Feature: link
     When "Anonymous" opens the public link "imageLink"
     And "Anonymous" unlocks the public link with password "%public%"
     # https://github.com/owncloud/ocis/issues/8602
-    Then "Anonymous" is in a image-viewer
+    Then "Anonymous" is in a media-viewer
     And "Anonymous" closes the file viewer
     And "Anonymous" downloads the following public link resources using the single share view
       | resource       | type |
       | testavatar.jpg | file |
+    When "Anonymous" opens the public link "videoLink"
+    And "Anonymous" unlocks the public link with password "%public%"
+    Then "Anonymous" is in a media-viewer
+    And "Anonymous" closes the file viewer
 
 
   Scenario: add banned password for public link

@@ -47,7 +47,7 @@ Feature: Users can create shortcuts for resources and sites
       | resource | name | type |
       | logo.jpg | logo | file |
     And "Brian" opens a shortcut "logo.url"
-    Then "Brian" is in a image-viewer
+    Then "Brian" is in a media-viewer
     And "Brian" closes the file viewer
 
     # create a shortcut to the public link

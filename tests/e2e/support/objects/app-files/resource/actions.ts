@@ -9,6 +9,7 @@ import { LinksEnvironment } from '../../../environment'
 import { config } from '../../../../config'
 import { buildXpathLiteral } from '../../../utils/locator'
 
+const downloadPreviewButton = '//button[contains(@id, "preview-download")]'
 const downloadFileButtonSingleShareView = '.oc-files-actions-download-file-trigger'
 const downloadFolderButtonSingleShareView = '.oc-files-actions-download-archive-trigger'
 const filesView = '#files-view'
@@ -75,6 +76,8 @@ const loadingSpinner = '#files-global-search-options .loading'
 const filesViewOptionButton = '#files-view-options-btn'
 const hiddenFilesToggleButton = '//*[@data-testid="files-switch-hidden-files"]//button'
 const previewImage = '//main[@id="preview"]//div[contains(@class,"stage_media")]//img'
+const previewAudio = '//main[@id="preview"]//div[contains(@class,"stage_media")]//audio//source'
+const previewVideo = '//main[@id="preview"]//div[contains(@class,"stage_media")]//video//source'
 const drawioSaveButton = '.geBigButton >> text=Save'
 const drawioIframe = '#drawio-editor'
 const externalEditorIframe = '[name="app-iframe"]'
@@ -119,6 +122,7 @@ const resourceLockIcon =
   '//*[@data-test-resource-name="%s"]/ancestor::tr//td//span[contains(@class, "oc-resource-icon-status-badge")]'
 const sharesNavigationButtonSelector = '.oc-sidebar-nav [data-nav-name="files-shares"]'
 const keepBothButton = '.oc-modal-body-actions-confirm'
+const mediaNavigationButton = `//button[contains(@class, "preview-controls-%s")]`
 
 export const clickResource = async ({
   page,
@@ -589,6 +593,15 @@ const pauseResumeUpload = (page: Page): Promise<void> => {
   return page.locator(pauseResumeUploadButton).click()
 }
 
+export const navigateMediaFile = async ({ page, navigationType }): Promise<void> => {
+  await Promise.all([
+    page.waitForResponse((resp) => resp.status() === 200 && resp.request().method() === 'GET'),
+    page.locator(util.format(mediaNavigationButton, navigationType)).click()
+  ])
+  const fileViewerLocator = editor.fileViewerLocator({ page, fileViewerType: 'media-viewer' })
+  await expect(fileViewerLocator).toBeVisible()
+}
+
 export const pauseResourceUpload = async (page: Page): Promise<void> => {
   await pauseResumeUpload(page)
   await Promise.all([
@@ -620,7 +633,11 @@ interface resourceArgs {
   type?: string
 }
 
-export type ActionViaType = 'SIDEBAR_PANEL' | 'BATCH_ACTION' | 'SINGLE_SHARE_VIEW'
+export type ActionViaType =
+  | 'SIDEBAR_PANEL'
+  | 'BATCH_ACTION'
+  | 'SINGLE_SHARE_VIEW'
+  | 'PREVIEW_TOPBAR'
 
 export interface downloadResourcesArgs {
   page: Page
@@ -686,6 +703,15 @@ export const downloadResources = async (args: downloadResourcesArgs): Promise<Do
       }
       break
     }
+
+    case 'PREVIEW_TOPBAR':
+      const [download] = await Promise.all([
+        page.waitForEvent('download'),
+        page.locator(downloadPreviewButton).click()
+      ])
+      downloads.push(download)
+
+      break
   }
 
   return downloads
@@ -1524,7 +1550,13 @@ export const removeTagsFromResource = async (args: resourceTagsArgs): Promise<vo
 export interface openFileInViewerArgs {
   page: Page
   name: string
-  actionType: 'mediaviewer' | 'pdfviewer' | 'texteditor' | 'Collabora' | 'OnlyOffice'
+  actionType:
+    | 'mediaviewer'
+    | 'audioviewer'
+    | 'pdfviewer'
+    | 'texteditor'
+    | 'Collabora'
+    | 'OnlyOffice'
 }
 
 export const openFileInViewer = async (args: openFileInViewerArgs): Promise<void> => {
@@ -1553,9 +1585,20 @@ export const openFileInViewer = async (args: openFileInViewerArgs): Promise<void
         ),
         page.locator(util.format(resourceNameSelector, name)).click()
       ])
-
-      // in case of error <img> doesn't contain src="blob:https://url"
-      expect(await page.locator(previewImage).getAttribute('src')).toContain('blob')
+      const extension = name.split('.').pop()
+      switch (extension) {
+        case 'mp3':
+        case 'ogg':
+          expect(await page.locator(previewAudio).getAttribute('src')).toContain(name)
+          break
+        case 'webm':
+        case 'mp4':
+          expect(await page.locator(previewVideo).getAttribute('src')).toContain(name)
+          break
+        default:
+          // in case of error <img> doesn't contain src="blob:https://url"
+          expect(await page.locator(previewImage).getAttribute('src')).toContain('blob')
+      }
       break
     }
     case 'pdfviewer':
@@ -1569,6 +1612,12 @@ export const openFileInViewer = async (args: openFileInViewerArgs): Promise<void
       break
     }
   }
+}
+
+export const previewMediaFromSidebarPanel = async ({ page, resource }): Promise<void> => {
+  await sidebar.open({ page: page, resource })
+  await sidebar.openPanel({ page, name: 'actions' })
+  await page.locator(util.format(sideBarActionButton, 'Preview')).click()
 }
 
 export const checkThatFileVersionIsNotAvailable = async (
