@@ -1477,7 +1477,7 @@ def cacheOcis():
         "commands": [
             ". ./.drone.env",
             "mc alias set s3 $MC_HOST $AWS_ACCESS_KEY_ID $AWS_SECRET_ACCESS_KEY",
-            "mc cp -a %s/ocis s3/$CACHE_BUCKET/ocis-build/$OCIS_COMMITID" % dir["web"],
+            "mc cp -a %s/ocis s3/$CACHE_BUCKET/ocis-build/$OCIS_COMMITID/" % dir["web"],
             "mc ls --recursive s3/$CACHE_BUCKET/ocis-build",
         ],
     }]
