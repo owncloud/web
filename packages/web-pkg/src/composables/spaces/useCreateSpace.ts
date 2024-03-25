@@ -1,47 +1,29 @@
-import { buildSpace, SpaceResource } from '@ownclouders/web-client/src/helpers'
-import { Drive } from '@ownclouders/web-client/src/generated'
-import { useGettext } from 'vue3-gettext'
+import { buildSpace, extractStorageId, SpaceResource } from '@ownclouders/web-client/src/helpers'
 import { useClientService } from '../clientService'
-import { useConfigStore } from '../piniaStores'
+import { useConfigStore, useResourcesStore } from '../piniaStores'
 
 export const useCreateSpace = () => {
   const clientService = useClientService()
-  const { $gettext } = useGettext()
   const configStore = useConfigStore()
+  const resourcesStore = useResourcesStore()
 
   const createSpace = async (name: string) => {
     const { graphAuthenticated } = clientService
-    const { data: createdSpace } = await graphAuthenticated.drives.createDrive({ name }, {})
-    const spaceResource = buildSpace({
+    const { data: createdSpace } = await graphAuthenticated.drives.createDrive(
+      { name },
+      { params: { template: 'default' } }
+    )
+    return buildSpace({
       ...createdSpace,
       serverUrl: configStore.serverUrl
     })
-
-    return await createDefaultMetaFolder(spaceResource)
   }
 
   const createDefaultMetaFolder = async (space: SpaceResource) => {
-    const { graphAuthenticated, webdav } = clientService
-    await webdav.createFolder(space, { path: '.space' })
-    const file = await webdav.putFileContents(space, {
-      path: '.space/readme.md',
-      content: $gettext('Here you can add a description for this Space.')
-    })
-    const { data: updatedDriveData } = await graphAuthenticated.drives.updateDrive(
-      space.id as string,
-      {
-        special: [
-          {
-            specialFolder: {
-              name: 'readme'
-            },
-            id: file.id as string
-          }
-        ]
-      } as Drive,
-      {}
-    )
-    return buildSpace({ ...updatedDriveData, serverUrl: configStore.serverUrl })
+    const spaceFolder = await clientService.webdav.createFolder(space, { path: '.space' })
+    if (extractStorageId(spaceFolder.parentFolderId) === resourcesStore.currentFolder?.id) {
+      resourcesStore.upsertResource(spaceFolder)
+    }
   }
 
   return { createSpace, createDefaultMetaFolder }

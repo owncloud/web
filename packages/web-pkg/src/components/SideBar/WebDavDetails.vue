@@ -58,7 +58,7 @@ export default defineComponent({
     const copyWebDAVUrlIcon = ref(copyIcon)
 
     const webDavUrl = computed(() => {
-      return urlJoin(props.space.root.webDavUrl, unref(resource).path)
+      return urlJoin(props.space?.root?.webDavUrl, unref(resource).path)
     })
 
     const copyWebDAVPathToClipboard = () => {

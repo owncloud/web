@@ -6,6 +6,7 @@ import { FileAction, FileActionOptions } from '../types'
 import { Drive } from '@ownclouders/web-client/src/generated'
 import { buildSpace } from '@ownclouders/web-client/src/helpers'
 import { useMessages, useSpacesStore, useUserStore } from '../../piniaStores'
+import { useCreateSpace } from '../../spaces'
 
 export const useFileActionsSetReadme = () => {
   const { showMessage, showErrorMessage } = useMessages()
@@ -14,15 +15,17 @@ export const useFileActionsSetReadme = () => {
   const { $gettext } = useGettext()
   const clientService = useClientService()
   const spacesStore = useSpacesStore()
+  const { createDefaultMetaFolder } = useCreateSpace()
 
   const handler = async ({ space, resources }: FileActionOptions) => {
     try {
       const { graphAuthenticated, webdav } = clientService
       const fileContent = (await webdav.getFileContents(space, { path: resources[0].path })).body
+
       try {
         await webdav.getFileInfo(space, { path: '.space' })
       } catch (_) {
-        await webdav.createFolder(space, { path: '.space' })
+        await createDefaultMetaFolder(space)
       }
 
       await webdav.putFileContents(space, {

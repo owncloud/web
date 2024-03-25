@@ -22,8 +22,8 @@ export const useSpaceActionsUploadImage = ({ spaceImageInput }: { spaceImageInpu
   const clientService = useClientService()
   const loadingService = useLoadingService()
   const previewService = usePreviewService()
-  const { createDefaultMetaFolder } = useCreateSpace()
   const spacesStore = useSpacesStore()
+  const { createDefaultMetaFolder } = useCreateSpace()
 
   let selectedSpace: SpaceResource = null
   const handler = ({ resources }: SpaceActionOptions) => {
@@ -50,11 +50,7 @@ export const useSpaceActionsUploadImage = ({ spaceImageInput }: { spaceImageInpu
     try {
       await clientService.webdav.getFileInfo(selectedSpace, { path: '.space' })
     } catch (_) {
-      spacesStore.updateSpaceField({
-        id: selectedSpace.id,
-        field: 'spaceReadmeData',
-        value: (await createDefaultMetaFolder(selectedSpace)).spaceReadmeData
-      })
+      await createDefaultMetaFolder(selectedSpace)
     }
 
     return loadingService.addTask(async () => {

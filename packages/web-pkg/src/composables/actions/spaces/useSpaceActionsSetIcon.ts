@@ -18,8 +18,8 @@ export const useSpaceActionsSetIcon = () => {
   const { $gettext } = useGettext()
   const clientService = useClientService()
   const loadingService = useLoadingService()
-  const { createDefaultMetaFolder } = useCreateSpace()
   const spacesStore = useSpacesStore()
+  const { createDefaultMetaFolder } = useCreateSpace()
   const { dispatchModal } = useModals()
   const handler = ({ resources }: SpaceActionOptions) => {
     if (resources.length !== 1) {
@@ -68,11 +68,7 @@ export const useSpaceActionsSetIcon = () => {
     try {
       await clientService.webdav.getFileInfo(space, { path: '.space' })
     } catch (_) {
-      spacesStore.updateSpaceField({
-        id: space.id,
-        field: 'spaceReadmeData',
-        value: (await createDefaultMetaFolder(space)).spaceReadmeData
-      })
+      await createDefaultMetaFolder(space)
     }
 
     return loadingService.addTask(async () => {
