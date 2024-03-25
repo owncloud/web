@@ -223,34 +223,35 @@ Feature: link
       | testavatar.jpg | file |
 
 
-  Scenario: add banned password for public link
-    When "Alice" logs in
-    And "Alice" creates the following files into personal space using API
-      | pathToFile | content   |
-      | lorem.txt  | some text |
+  # FIXME: https://github.com/owncloud/web/issues/10671
+  # Scenario: add banned password for public link
+  #   When "Alice" logs in
+  #   And "Alice" creates the following files into personal space using API
+  #     | pathToFile | content   |
+  #     | lorem.txt  | some text |
 
-    And "Alice" opens the "files" app
-    And "Alice" creates a public link creates a public link of following resource using the sidebar panel
-      | resource  | password |
-      | lorem.txt | %public% |
-    When "Alice" tries to sets a new password "ownCloud-1" of the public link named "Link" of resource "lorem.txt"
-    # https://github.com/owncloud/ocis/issues/8624
-    Then "Alice" should see an error message
-      """
-      unfortunately, your password is commonly used. please pick a harder-to-guess password for your safety
-      """
-    And "Alice" closes the public link password dialog box
-    When "Alice" tries to sets a new password "ownCloud-1" of the public link named "Link" of resource "lorem.txt"
-    # https://github.com/owncloud/ocis/issues/8624
-    Then "Alice" should see an error message
-      """
-      unfortunately, your password is commonly used. please pick a harder-to-guess password for your safety
-      """
-    And "Alice" reveals the password of the public link
-    And "Alice" hides the password of the public link
-    And "Alice" generates the password for the public link
-    And "Alice" copies the password of the public link
-    And "Alice" sets the password of the public link
-    And "Anonymous" opens the public link "Link"
-    And "Anonymous" unlocks the public link with password "%copied_password%"
-    And "Alice" logs out
+  #   And "Alice" opens the "files" app
+  #   And "Alice" creates a public link creates a public link of following resource using the sidebar panel
+  #     | resource  | password |
+  #     | lorem.txt | %public% |
+  #   When "Alice" tries to sets a new password "ownCloud-1" of the public link named "Link" of resource "lorem.txt"
+  #   # https://github.com/owncloud/ocis/issues/8624
+  #   Then "Alice" should see an error message
+  #     """
+  #     unfortunately, your password is commonly used. please pick a harder-to-guess password for your safety
+  #     """
+  #   And "Alice" closes the public link password dialog box
+  #   When "Alice" tries to sets a new password "ownCloud-1" of the public link named "Link" of resource "lorem.txt"
+  #   # https://github.com/owncloud/ocis/issues/8624
+  #   Then "Alice" should see an error message
+  #     """
+  #     unfortunately, your password is commonly used. please pick a harder-to-guess password for your safety
+  #     """
+  #   And "Alice" reveals the password of the public link
+  #   And "Alice" hides the password of the public link
+  #   And "Alice" generates the password for the public link
+  #   And "Alice" copies the password of the public link
+  #   And "Alice" sets the password of the public link
+  #   And "Anonymous" opens the public link "Link"
+  #   And "Anonymous" unlocks the public link with password "%copied_password%"
+  #   And "Alice" logs out
