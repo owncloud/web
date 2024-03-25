@@ -213,7 +213,7 @@ export default defineComponent({
 
             if (!currentUserRemoved) {
               const client = this.clientService.graphAuthenticated
-              const graphResponse = await client.drives.getDrive(share.id)
+              const graphResponse = await client.drives.getDrive(share.resourceId)
               this.upsertSpace(buildSpace(graphResponse.data))
             }
 
