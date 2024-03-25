@@ -92,6 +92,12 @@ Feature: share
       | testavatar.jpeg  | Brian     | user | Can view                             | file         |
       | simple.pdf       | Brian     | user | custom_permissions:read,update,share | file         |
       | sharedFile.txt   | Brian     | user | Can edit                             | file         |
+    And "Alice" navigates to the shared with others page
+    And "Alice" opens the following file in mediaviewer
+      | resource        |
+      | testavatar.jpeg |
+    Then "Alice" is in a image-viewer
+    When "Alice" closes the file viewer
 
     And "Brian" opens the "files" app
     And "Brian" navigates to the shared with me page
@@ -105,7 +111,8 @@ Feature: share
     And "Brian" opens the following file in mediaviewer
       | resource        |
       | testavatar.jpeg |
-    And "Brian" closes the file viewer
+    Then "Brian" is in a image-viewer
+    When "Brian" closes the file viewer
     And "Brian" opens the following file in pdfviewer
       | resource   |
       | simple.pdf |
