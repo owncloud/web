@@ -26,7 +26,7 @@ export const fileRow =
   '//ancestor::*[(contains(@class, "oc-tile-card") or contains(@class, "oc-tbody-tr"))]'
 export const resourceNameSelector =
   ':is(#files-space-table, .oc-tiles-item, #files-shared-with-me-accepted-section, .files-table) [data-test-resource-name="%s"]'
-// following breadcrumb selectors is passed to buildXpathLiteral function as the content to be insetred might contain quotes
+// following breadcrumb selectors is passed to buildXpathLiteral function as the content to be inserted might contain quotes
 const breadcrumbResourceNameSelector =
   '//span[contains(@class, "oc-breadcrumb-item-text") and text()=%s]'
 const breadcrumbLastResourceNameSelector = '.oc-breadcrumb-item-text-last'
@@ -154,7 +154,9 @@ export const clickResourceFromBreadcrumb = async ({ page, resource }): Promise<v
   await Promise.all([
     page.waitForResponse(
       (resp) =>
-        resp.url().endsWith(encodeURIComponent(resource)) ||
+        (resp.status() === 207 &&
+          resp.request().method() === 'PROPFIND' &&
+          resp.url().endsWith(encodeURIComponent(resource))) ||
         resp.url().endsWith(itemId) ||
         resp.url().endsWith(encodeURIComponent(itemId))
     ),
