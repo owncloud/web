@@ -201,6 +201,10 @@ export class Resource {
     await po.clickResource({ page: this.#page, path: resource })
   }
 
+  async openFolderViaBreadcrumb(resource): Promise<void> {
+    await po.clickResourceFromBreadcrumb({ page: this.#page, resource })
+  }
+
   async switchToTilesViewMode(): Promise<void> {
     await po.clickViewModeToggle({ page: this.#page, target: 'resource-tiles' })
   }

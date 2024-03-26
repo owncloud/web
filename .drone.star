@@ -114,7 +114,6 @@ config = {
                     "webUIRenameFiles",
                 ],
                 "oCISFiles4": [
-                    "webUIFiles",
                     "webUIRenameFolders",
                 ],
                 "oCISFiles5": [

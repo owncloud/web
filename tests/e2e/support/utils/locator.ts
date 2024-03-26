@@ -13,3 +13,17 @@ export const waitForEvent = (locator: Locator, type: keyof SVGElementEventMap): 
       }),
     { type }
   )
+
+export const buildXpathLiteral = (value) => {
+  switch (true) {
+    case !value.includes("'"):
+      // if we don't have any single quotes, then wrap them with single quotes
+      return "'" + value + "'"
+    case !value.includes('"'):
+      // if we don't have any double quotes, then wrap them with double quotes
+      return '"' + value + '"'
+    default:
+      // use concat to find the literal in the xpath if they contain both quotes
+      return "concat('" + value.replace(/'/g, "',\"'\",'") + "')"
+  }
+}
