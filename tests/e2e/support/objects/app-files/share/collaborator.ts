@@ -54,7 +54,7 @@ export interface IAccessDetails {
 }
 
 export type CollaboratorType = 'user' | 'group'
-export type CustomPermissionType = 'read' | 'update' | 'create' | 'delete' | 'share'
+export type CustomPermissionType = 'read' | 'update' | 'create' | 'delete'
 
 export const shareRoles: Readonly<{
   'Invited people': string
@@ -112,14 +112,12 @@ export default class Collaborator {
     'read',
     'update',
     'create',
-    'delete',
-    'share'
+    'delete'
   ]
 
   static readonly FILE_CUSTOM_PERMISSIONS: Omit<CustomPermissionType[], 'create' | 'delete'> = [
     'read',
-    'update',
-    'share'
+    'update'
   ]
 
   static async addCollaborator(args: CollaboratorArgs): Promise<void> {
