@@ -12,27 +12,27 @@ Feature: share
     Given "Brian" disables auto-accepting using API
     And "Alice" logs in
     And "Alice" creates the following folder in personal space using API
-      | name                   |
-      | folder_to_shared       |
-      | folder_to_customShared |
-      | shared_folder          |
+      | name               |
+      | folder_to_shared   |
+      | folder_to_shared_2 |
+      | shared_folder      |
     And "Alice" opens the "files" app
     And "Alice" uploads the following resource
-      | resource      | to                     |
-      | lorem.txt     | folder_to_shared       |
-      | lorem-big.txt | folder_to_customShared |
+      | resource      | to                 |
+      | lorem.txt     | folder_to_shared   |
+      | lorem-big.txt | folder_to_shared_2 |
     When "Alice" shares the following resource using the sidebar panel
-      | resource               | recipient | type | role       | resourceType |
-      | folder_to_shared       | Brian     | user | Can edit   | folder       |
-      | shared_folder          | Brian     | user | Can edit   | folder       |
-      | folder_to_customShared | Brian     | user | Can edit   | folder       |
+      | resource           | recipient | type | role       | resourceType |
+      | folder_to_shared   | Brian     | user | Can edit   | folder       |
+      | shared_folder      | Brian     | user | Can edit   | folder       |
+      | folder_to_shared_2 | Brian     | user | Can edit   | folder       |
 
     And "Brian" opens the "files" app
     And "Brian" navigates to the shared with me page
     And "Brian" enables the sync for the following shares
-      | name                   |
-      | folder_to_shared       |
-      | folder_to_customShared |
+      | name               |
+      | folder_to_shared   |
+      | folder_to_shared_2 |
     Then "Brian" should not see a sync status for the folder "shared_folder"
     When "Brian" enables the sync for the following share using the context menu
       | name          |
@@ -44,12 +44,12 @@ Feature: share
       | resource                   | as            |
       | folder_to_shared/lorem.txt | lorem_new.txt |
     And "Brian" uploads the following resource
-      | resource        | to                     |
-      | simple.pdf      | folder_to_shared       |
-      | testavatar.jpeg | folder_to_customShared |
+      | resource        | to                 |
+      | simple.pdf      | folder_to_shared   |
+      | testavatar.jpeg | folder_to_shared_2 |
     When "Brian" deletes the following resources using the sidebar panel
-      | resource      | from                   |
-      | lorem-big.txt | folder_to_customShared |
+      | resource      | from               |
+      | lorem-big.txt | folder_to_shared_2 |
     And "Alice" opens the "files" app
     And "Alice" uploads the following resource
       | resource          | to               | option  |
@@ -58,17 +58,17 @@ Feature: share
       | resource   | to               |
       | simple.pdf | folder_to_shared |
     And "Alice" removes following sharee
-      | resource               | recipient |
-      | folder_to_customShared | Brian     |
+      | resource           | recipient |
+      | folder_to_shared_2 | Brian     |
     When "Alice" deletes the following resources using the sidebar panel
       | resource         | from             |
       | lorem_new.txt    | folder_to_shared |
       | folder_to_shared |                  |
     And "Alice" logs out
     Then "Brian" should not be able to see the following shares
-      | resource               | owner        |
-      | folder_to_customShared | Alice Hansen |
-      | folder_to_shared       | Alice Hansen |
+      | resource           | owner        |
+      | folder_to_shared_2 | Alice Hansen |
+      | folder_to_shared   | Alice Hansen |
     And "Brian" logs out
 
 
