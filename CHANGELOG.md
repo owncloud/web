@@ -1,125 +1,3 @@
-Changelog for ownCloud Web [unreleased] (UNRELEASED)
-=======================================
-The following sections list the changes in ownCloud web unreleased relevant to
-ownCloud admins and users.
-
-[unreleased]: https://github.com/owncloud/web/compare/v8.0.1...master
-
-Summary
--------
-
-* Bugfix - Folder replace: [#10515](https://github.com/owncloud/web/issues/10515)
-* Bugfix - Hidden right sidebar on small screens: [#10598](https://github.com/owncloud/web/issues/10598)
-* Bugfix - Scope loss when showing search results: [#10634](https://github.com/owncloud/web/issues/10634)
-* Bugfix - Theme loading without matching theme: [#10657](https://github.com/owncloud/web/issues/10657)
-* Enhancement - Tile sizes: [#10018](https://github.com/owncloud/web/issues/10018)
-* Enhancement - Full text search default: [#10534](https://github.com/owncloud/web/issues/10534)
-* Enhancement - Add SSE events for locking, renaming, deleting, and restoring: [#10586](https://github.com/owncloud/web/pull/10586)
-* Enhancement - Remember left nav bar state: [#10611](https://github.com/owncloud/web/pull/10611)
-* Enhancement - Remember right side bar state: [#10612](https://github.com/owncloud/web/pull/10612)
-* Enhancement - Add details panel to trash: [#10624](https://github.com/owncloud/web/pull/10624)
-
-Details
--------
-
-* Bugfix - Folder replace: [#10515](https://github.com/owncloud/web/issues/10515)
-
-   The "Replace" conflict option, which previously didn't work at all when trying
-   to copy/move a folder, has been fixed.
-
-   https://github.com/owncloud/web/issues/10515
-   https://github.com/owncloud/web/pull/10597
-
-* Bugfix - Hidden right sidebar on small screens: [#10598](https://github.com/owncloud/web/issues/10598)
-
-   The issue causing the right sidebar to not display on screens smaller than 960px
-   has been fixed.
-
-   https://github.com/owncloud/web/issues/10598
-   https://github.com/owncloud/web/pull/10643
-
-* Bugfix - Scope loss when showing search results: [#10634](https://github.com/owncloud/web/issues/10634)
-
-   Clicking "Show n results" in the search preview no longer loses the search
-   scope.
-
-   https://github.com/owncloud/web/issues/10634
-   https://github.com/owncloud/web/pull/10653
-
-* Bugfix - Theme loading without matching theme: [#10657](https://github.com/owncloud/web/issues/10657)
-
-   We've fixed an issue where theme loading would break when there was no matching
-   oC theme found for the user's OS setting. For example, this occurred when a
-   user's OS setting was configured to "dark," but the instance of oC did not offer
-   a dark theme.
-
-   https://github.com/owncloud/web/issues/10657
-   https://github.com/owncloud/web/pull/10659
-
-* Enhancement - Tile sizes: [#10018](https://github.com/owncloud/web/issues/10018)
-
-   We've adjusted the tile sizes to have a bigger base size and smaller stepping
-   from one tile size to the next. In addition to that the default tile size has
-   been changed to the second stepping, so that initially both space tiles and
-   file/folder tiles have a sufficient size for reading longer names.
-
-   https://github.com/owncloud/web/issues/10018
-   https://github.com/owncloud/web/issues/10638
-   https://github.com/owncloud/web/pull/10558
-   https://github.com/owncloud/web/pull/10646
-
-* Enhancement - Full text search default: [#10534](https://github.com/owncloud/web/issues/10534)
-
-   Full text search is now enabled by default when searching for files if the
-   server supports it.
-
-   https://github.com/owncloud/web/issues/10534
-   https://github.com/owncloud/web/pull/10626
-
-* Enhancement - Add SSE events for locking, renaming, deleting, and restoring: [#10586](https://github.com/owncloud/web/pull/10586)
-
-   We've added Server-Sent Events (SSE) for locking, renaming, deleting, and
-   restoring actions. This enhancement ensures that these actions are instantly
-   propagated to other browsers and devices where the logged in user has access the
-   relevant files and folders. Now, users can experience real-time updates across
-   all their devices.
-
-   https://github.com/owncloud/web/issues/9849
-   https://github.com/owncloud/web/issues/9781
-   https://github.com/owncloud/web/issues/9848
-   https://github.com/owncloud/web/pull/10586
-   https://github.com/owncloud/web/pull/10572
-   https://github.com/owncloud/web/pull/10567
-
-* Enhancement - Remember left nav bar state: [#10611](https://github.com/owncloud/web/pull/10611)
-
-   We've implemented a feature to remember the state of the left navbar. Now, when
-   the user reopens the web application, the navbar will remain in its last state,
-   either fully open or collapsed, based on the user's previous interaction with
-   it.
-
-   https://github.com/owncloud/web/issues/9613
-   https://github.com/owncloud/web/pull/10611
-
-* Enhancement - Remember right side bar state: [#10612](https://github.com/owncloud/web/pull/10612)
-
-   We've implemented a feature to remember the state of the right side bar. Now,
-   when the user reopens the web application, the right side bar will remain in its
-   last state, either open or closed, based on the user's previous interaction with
-   it.
-
-   https://github.com/owncloud/web/issues/9613
-   https://github.com/owncloud/web/pull/10612
-
-* Enhancement - Add details panel to trash: [#10624](https://github.com/owncloud/web/pull/10624)
-
-   We've added the details panel to the right side bar, when the user selects a
-   resource in the trash. We also added a panel for multi select.
-
-   https://github.com/owncloud/web/issues/10620
-   https://github.com/owncloud/web/issues/10616
-   https://github.com/owncloud/web/pull/10624
-
 Changelog for ownCloud Web [8.0.1] (2024-03-12)
 =======================================
 The following sections list the changes in ownCloud web 8.0.1 relevant to
@@ -1270,8 +1148,12 @@ Summary
 
 * Bugfix - User data not updated while altering own user: [#10377](https://github.com/owncloud/web/pull/10377)
 * Bugfix - Admin settings keyboard navigation: [#10417](https://github.com/owncloud/web/pull/10417)
+* Bugfix - Folder replace: [#10515](https://github.com/owncloud/web/issues/10515)
 * Bugfix - Load thumbnail when postprocessing is finished: [#10517](https://github.com/owncloud/web/pull/10517)
 * Bugfix - Share sidebar icons: [#10551](https://github.com/owncloud/web/pull/10551)
+* Bugfix - Hidden right sidebar on small screens: [#10598](https://github.com/owncloud/web/issues/10598)
+* Bugfix - Scope loss when showing search results: [#10634](https://github.com/owncloud/web/issues/10634)
+* Bugfix - Theme loading without matching theme: [#10657](https://github.com/owncloud/web/issues/10657)
 * Change - Remove deprecated code: [#7338](https://github.com/owncloud/web/issues/7338)
 * Change - Remove skeleton app: [#9892](https://github.com/owncloud/web/issues/9892)
 * Change - Remove deprecated extension point for adding quick actions: [#10102](https://github.com/owncloud/web/pull/10102)
@@ -1280,6 +1162,7 @@ Summary
 * Change - Remove ocs user: [#10240](https://github.com/owncloud/web/pull/10240)
 * Change - Registering app file editors: [#10330](https://github.com/owncloud/web/pull/10330)
 * Enhancement - Icon for .dcm files: [#9215](https://github.com/owncloud/web/issues/9215)
+* Enhancement - Tile sizes: [#10018](https://github.com/owncloud/web/issues/10018)
 * Enhancement - Enable user preferences in public links: [#10207](https://github.com/owncloud/web/pull/10207)
 * Enhancement - Move ThemeSwitcher into Account Settings: [#10334](https://github.com/owncloud/web/pull/10334)
 * Enhancement - Top loading bar increase visibility: [#10383](https://github.com/owncloud/web/issues/10383)
@@ -1287,8 +1170,13 @@ Summary
 * Enhancement - Epub reader app: [#10448](https://github.com/owncloud/web/pull/10448)
 * Enhancement - Highlight search term in sharing autosuggest list: [#10485](https://github.com/owncloud/web/pull/10485)
 * Enhancement - Warn user before closing browser when upload is in progress: [#10519](https://github.com/owncloud/web/pull/10519)
+* Enhancement - Full text search default: [#10534](https://github.com/owncloud/web/issues/10534)
 * Enhancement - Show locked and processing next to other status indicators: [#10544](https://github.com/owncloud/web/pull/10544)
 * Enhancement - Set emoji as space icon: [#10546](https://github.com/owncloud/web/pull/10546)
+* Enhancement - Add SSE events for locking, renaming, deleting, and restoring: [#10586](https://github.com/owncloud/web/pull/10586)
+* Enhancement - Remember left nav bar state: [#10611](https://github.com/owncloud/web/pull/10611)
+* Enhancement - Remember right side bar state: [#10612](https://github.com/owncloud/web/pull/10612)
+* Enhancement - Add details panel to trash: [#10624](https://github.com/owncloud/web/pull/10624)
 
 Details
 -------
@@ -1311,6 +1199,14 @@ Details
    https://github.com/owncloud/web/issues/10186
    https://github.com/owncloud/web/pull/10417
 
+* Bugfix - Folder replace: [#10515](https://github.com/owncloud/web/issues/10515)
+
+   The "Replace" conflict option, which previously didn't work at all when trying
+   to copy/move a folder, has been fixed.
+
+   https://github.com/owncloud/web/issues/10515
+   https://github.com/owncloud/web/pull/10597
+
 * Bugfix - Load thumbnail when postprocessing is finished: [#10517](https://github.com/owncloud/web/pull/10517)
 
    We've fixed a bug when thumbnails weren't properly refreshed when postprocessing
@@ -1325,6 +1221,32 @@ Details
    some cases.
 
    https://github.com/owncloud/web/pull/10551
+
+* Bugfix - Hidden right sidebar on small screens: [#10598](https://github.com/owncloud/web/issues/10598)
+
+   The issue causing the right sidebar to not display on screens smaller than 960px
+   has been fixed.
+
+   https://github.com/owncloud/web/issues/10598
+   https://github.com/owncloud/web/pull/10643
+
+* Bugfix - Scope loss when showing search results: [#10634](https://github.com/owncloud/web/issues/10634)
+
+   Clicking "Show n results" in the search preview no longer loses the search
+   scope.
+
+   https://github.com/owncloud/web/issues/10634
+   https://github.com/owncloud/web/pull/10653
+
+* Bugfix - Theme loading without matching theme: [#10657](https://github.com/owncloud/web/issues/10657)
+
+   We've fixed an issue where theme loading would break when there was no matching
+   oC theme found for the user's OS setting. For example, this occurred when a
+   user's OS setting was configured to "dark," but the instance of oC did not offer
+   a dark theme.
+
+   https://github.com/owncloud/web/issues/10657
+   https://github.com/owncloud/web/pull/10659
 
 * Change - Remove deprecated code: [#7338](https://github.com/owncloud/web/issues/7338)
 
@@ -1459,6 +1381,18 @@ Details
    https://github.com/owncloud/web/issues/9215
    https://github.com/owncloud/web/pull/10172
 
+* Enhancement - Tile sizes: [#10018](https://github.com/owncloud/web/issues/10018)
+
+   We've adjusted the tile sizes to have a bigger base size and smaller stepping
+   from one tile size to the next. In addition to that the default tile size has
+   been changed to the second stepping, so that initially both space tiles and
+   file/folder tiles have a sufficient size for reading longer names.
+
+   https://github.com/owncloud/web/issues/10018
+   https://github.com/owncloud/web/issues/10638
+   https://github.com/owncloud/web/pull/10558
+   https://github.com/owncloud/web/pull/10646
+
 * Enhancement - Enable user preferences in public links: [#10207](https://github.com/owncloud/web/pull/10207)
 
    We've enabled user preferences in public links, so any user even without an
@@ -1525,6 +1459,14 @@ Details
    https://github.com/owncloud/web/issues/10500
    https://github.com/owncloud/web/pull/10519
 
+* Enhancement - Full text search default: [#10534](https://github.com/owncloud/web/issues/10534)
+
+   Full text search is now enabled by default when searching for files if the
+   server supports it.
+
+   https://github.com/owncloud/web/issues/10534
+   https://github.com/owncloud/web/pull/10626
+
 * Enhancement - Show locked and processing next to other status indicators: [#10544](https://github.com/owncloud/web/pull/10544)
 
    We've moved the processing and lock indicators to the status table column so all
@@ -1542,6 +1484,50 @@ Details
 
    https://github.com/owncloud/web/issues/10471
    https://github.com/owncloud/web/pull/10546
+
+* Enhancement - Add SSE events for locking, renaming, deleting, and restoring: [#10586](https://github.com/owncloud/web/pull/10586)
+
+   We've added Server-Sent Events (SSE) for locking, renaming, deleting, and
+   restoring actions. This enhancement ensures that these actions are instantly
+   propagated to other browsers and devices where the logged in user has access the
+   relevant files and folders. Now, users can experience real-time updates across
+   all their devices.
+
+   https://github.com/owncloud/web/issues/9849
+   https://github.com/owncloud/web/issues/9781
+   https://github.com/owncloud/web/issues/9848
+   https://github.com/owncloud/web/pull/10586
+   https://github.com/owncloud/web/pull/10572
+   https://github.com/owncloud/web/pull/10567
+
+* Enhancement - Remember left nav bar state: [#10611](https://github.com/owncloud/web/pull/10611)
+
+   We've implemented a feature to remember the state of the left navbar. Now, when
+   the user reopens the web application, the navbar will remain in its last state,
+   either fully open or collapsed, based on the user's previous interaction with
+   it.
+
+   https://github.com/owncloud/web/issues/9613
+   https://github.com/owncloud/web/pull/10611
+
+* Enhancement - Remember right side bar state: [#10612](https://github.com/owncloud/web/pull/10612)
+
+   We've implemented a feature to remember the state of the right side bar. Now,
+   when the user reopens the web application, the right side bar will remain in its
+   last state, either open or closed, based on the user's previous interaction with
+   it.
+
+   https://github.com/owncloud/web/issues/9613
+   https://github.com/owncloud/web/pull/10612
+
+* Enhancement - Add details panel to trash: [#10624](https://github.com/owncloud/web/pull/10624)
+
+   We've added the details panel to the right side bar, when the user selects a
+   resource in the trash. We also added a panel for multi select.
+
+   https://github.com/owncloud/web/issues/10620
+   https://github.com/owncloud/web/issues/10616
+   https://github.com/owncloud/web/pull/10624
 
 Changelog for ownCloud Web [7.1.3] (2023-12-15)
 =======================================
