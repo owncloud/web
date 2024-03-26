@@ -227,21 +227,8 @@ export default defineComponent({
       })
     }
     const notifyShare = async () => {
-      try {
-        const response = await clientService.owncloudSdk.shares.notifyShare(props.share.id)
-        showMessage({
-          title: $gettext('Success'),
-          desc: $gettext('Email reminder sent to %{ recipient }', { recipient: response[0] }),
-          status: 'success'
-        })
-      } catch (error) {
-        console.error(error)
-        showErrorMessage({
-          title: $gettext('An error occurred'),
-          desc: $gettext('Email notification could not be sent'),
-          errors: [error]
-        })
-      }
+      // FIXME: cern code
+      // const response = await clientService.owncloudSdk.shares.notifyShare(props.share.id)
     }
 
     return {

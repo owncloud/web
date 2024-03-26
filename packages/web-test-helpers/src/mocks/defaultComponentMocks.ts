@@ -8,7 +8,6 @@ import {
   UppyService
 } from '../../../web-pkg/src/'
 import { Router, RouteLocationNormalizedLoaded, RouteLocationRaw } from 'vue-router'
-import { OwnCloudSdk } from '../../../web-client/src/types'
 import { ref } from 'vue'
 
 export interface ComponentMocksOptions {
@@ -28,7 +27,6 @@ export const defaultComponentMocks = ({ currentRoute = undefined }: ComponentMoc
     $route,
     $clientService: mockDeep<ClientService>(),
     $previewService: mockDeep<PreviewService>(),
-    $client: mockDeep<OwnCloudSdk>(),
     $uppyService: mockDeep<UppyService>(),
     $loadingService: mock<LoadingService>({
       addTask: (callback) => {

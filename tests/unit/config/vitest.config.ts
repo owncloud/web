@@ -39,7 +39,6 @@ export default defineConfig({
     ],
     alias: {
       'vue-inline-svg': `${root}/tests/unit/stubs/empty.ts`,
-      'owncloud-sdk': `${root}/tests/unit/stubs/empty.ts`,
       webfontloader: `${root}/tests/unit/stubs/webfontloader.ts`
     },
     coverage: {

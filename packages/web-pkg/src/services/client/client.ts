@@ -4,7 +4,6 @@ import { Auth, AuthParameters } from './auth'
 import axios, { AxiosInstance } from 'axios'
 import { v4 as uuidV4 } from 'uuid'
 import { WebDAV } from '@ownclouders/web-client/src/webdav'
-import { OwnCloudSdk } from '@ownclouders/web-client/src/types'
 import { Language } from 'vue3-gettext'
 import { FetchEventSourceInit } from '@microsoft/fetch-event-source'
 import { sse } from '@ownclouders/web-client/src/sse'
@@ -69,7 +68,6 @@ export class ClientService {
   private ocUserContextClient: OcClient
   private ocPublicLinkContextClient: OcClient
 
-  private owncloudSdkClient: OwnCloudSdk
   private webdavClient: WebDAV
 
   constructor(options: ClientServiceOptions) {
@@ -160,14 +158,6 @@ export class ClientService {
       (hasToken && client.token !== this.authStore.accessToken) ||
       client.language !== this.currentLanguage
     )
-  }
-
-  public get owncloudSdk(): OwnCloudSdk {
-    return this.owncloudSdkClient
-  }
-
-  public set owncloudSdk(owncloudSdk: OwnCloudSdk) {
-    this.owncloudSdkClient = owncloudSdk
   }
 
   public get webdav(): WebDAV {
