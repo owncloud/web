@@ -86,12 +86,12 @@ Feature: share
       | testavatar.jpeg |
       | simple.pdf      |
     When "Alice" shares the following resource using the sidebar panel
-      | resource         | recipient | type | role                                 | resourceType |
-      | shareToBrian.txt | Brian     | user | Can edit                             | file         |
-      | shareToBrian.md  | Brian     | user | Can edit                             | file         |
-      | testavatar.jpeg  | Brian     | user | Can view                             | file         |
-      | simple.pdf       | Brian     | user | custom_permissions:read,update,share | file         |
-      | sharedFile.txt   | Brian     | user | Can edit                             | file         |
+      | resource         | recipient | type | role                           | resourceType |
+      | shareToBrian.txt | Brian     | user | Can edit                       | file         |
+      | shareToBrian.md  | Brian     | user | Can edit                       | file         |
+      | testavatar.jpeg  | Brian     | user | Can view                       | file         |
+      | simple.pdf       | Brian     | user | custom_permissions:read,update | file         |
+      | sharedFile.txt   | Brian     | user | Can edit                       | file         |
 
     And "Brian" opens the "files" app
     And "Brian" navigates to the shared with me page
