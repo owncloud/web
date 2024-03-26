@@ -1,6 +1,5 @@
 /// <reference types="vite/client" />
 
-import { OwnCloudSdk } from '@ownclouders/web-client/src/types'
 import { UppyService } from '@ownclouders/web-pkg'
 import { Route, Router } from 'vue-router'
 
@@ -15,9 +14,6 @@ declare global {
 
 declare module 'vue' {
   interface ComponentCustomProperties {
-    // TODO: get rid of direct OwnCloudSdk usage
-    $client: OwnCloudSdk
-
     $uppyService: UppyService
 
     $router: Router

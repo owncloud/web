@@ -49,7 +49,7 @@ export function useAppFileHandling({
     return clientService.webdav.revokeUrl(url)
   }
 
-  // TODO: support query parameters, possibly needs porting away from owncloud-sdk
+  // TODO: support query parameters
   const getFileContents = (
     fileContext: MaybeRef<FileContext>,
     options: { responseType?: 'arrayBuffer' | 'blob' | 'text' } & Record<string, any>

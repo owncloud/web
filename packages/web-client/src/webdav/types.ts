@@ -1,4 +1,3 @@
-import { OwnCloudSdk } from '../types'
 import { CreateFolderFactory } from './createFolder'
 import { GetFileContentsFactory } from './getFileContents'
 import { GetFileInfoFactory } from './getFileInfo'
@@ -23,7 +22,6 @@ import { SetFavoriteFactory } from './setFavorite'
 import { ListFavoriteFilesFactory } from './listFavoriteFiles'
 
 export interface WebDavOptions {
-  sdk: OwnCloudSdk
   accessToken: Ref<string>
   baseUrl: string
   capabilities: Ref<Capabilities['capabilities']>

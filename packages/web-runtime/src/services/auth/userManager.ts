@@ -164,8 +164,6 @@ export class UserManager extends OidcUserManager {
         return
       }
 
-      this.initializeOwnCloudSdk(accessToken)
-
       if (this.capabilityStore.supportSSE) {
         ;(this.clientService.sseAuthenticated as SSEAdapter).updateAccessToken(accessToken)
       }
@@ -177,27 +175,6 @@ export class UserManager extends OidcUserManager {
       }
     })()
     return this.updateAccessTokenPromise
-  }
-
-  private initializeOwnCloudSdk(accessToken: string): void {
-    const options: Record<string, unknown> = {
-      baseUrl: this.configStore.serverUrl,
-      auth: {
-        bearer: accessToken
-      },
-      headers: {
-        'Accept-Language': this.language.current
-      }
-    }
-    if (this.userStore.user) {
-      options.userInfo = {
-        id: this.userStore.user.onPremisesSamAccountName,
-        'display-name': this.userStore.user.displayName,
-        email: this.userStore.user.mail
-      }
-    }
-
-    this.clientService.owncloudSdk.init(options)
   }
 
   private async fetchUserInfo(accessToken: string): Promise<void> {
@@ -222,7 +199,6 @@ export class UserManager extends OidcUserManager {
         language: this.language,
         languageSetting: graphUser.data.preferredLanguage
       })
-      this.initializeOwnCloudSdk(accessToken)
     }
   }
 

@@ -3,7 +3,6 @@ import { buildApplication, NextApplication } from './application'
 import { RouteLocationRaw, Router, RouteRecordNormalized } from 'vue-router'
 import { App, computed, watch } from 'vue'
 import { loadTheme } from '../helpers/theme'
-import OwnCloud from 'owncloud-sdk'
 import { createGettext, GetTextOptions, Language } from 'vue3-gettext'
 import { getBackendVersion, getWebVersion } from './versions'
 import {
@@ -379,7 +378,7 @@ export const announceAdditionalTranslations = ({
 }
 
 /**
- * announce clientService and owncloud SDK and inject it into vue
+ * announce clientService and inject it into vue
  *
  * @param vue
  * @param configStore
@@ -397,19 +396,14 @@ export const announceClientService = ({
   authStore: AuthStore
   capabilityStore: CapabilityStore
 }): void => {
-  const sdk = new OwnCloud()
-  sdk.init({ baseUrl: configStore.serverUrl })
   const clientService = new ClientService({
     configStore,
     language: app.config.globalProperties.$language,
     authStore,
     userStore
   })
-  app.config.globalProperties.$client = sdk
   app.config.globalProperties.$clientService = clientService
-  app.config.globalProperties.$clientService.owncloudSdk = sdk
   app.config.globalProperties.$clientService.webdav = webdav({
-    sdk,
     accessToken: computed(() => authStore.accessToken),
     baseUrl: configStore.serverUrl,
     capabilities: computed(() => capabilityStore.capabilities),
@@ -418,7 +412,6 @@ export const announceClientService = ({
     user: computed(() => userStore.user)
   })
 
-  app.provide('$client', sdk)
   app.provide('$clientService', clientService)
 }
 
