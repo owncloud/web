@@ -107,7 +107,7 @@ export default defineComponent({
   name: 'EditDropdown',
   props: {
     expirationDate: {
-      type: Date,
+      type: String,
       required: false,
       default: undefined
     },
@@ -149,7 +149,7 @@ export default defineComponent({
     const language = useGettext()
     const configStore = useConfigStore()
 
-    const toggleShareDenied = (value) => {
+    const toggleShareDenied = (value: boolean) => {
       emit('setDenyShare', value)
     }
 
@@ -163,7 +163,7 @@ export default defineComponent({
 
     const dateExpire = computed(() =>
       formatRelativeDateFromDateTime(
-        DateTime.fromJSDate(props.expirationDate).endOf('day'),
+        DateTime.fromISO(props.expirationDate).endOf('day'),
         language.current
       )
     )
@@ -324,14 +324,12 @@ export default defineComponent({
   methods: {
     updateExpirationDate() {
       this.$emit('expirationDateChanged', {
-        expirationDate: DateTime.fromJSDate(this.enteredExpirationDate).endOf('day').toISO()
+        expirationDateTime: DateTime.fromJSDate(this.enteredExpirationDate).endOf('day').toISO()
       })
       ;(this.$refs.expirationDateDrop as InstanceType<typeof OcDrop>).hide()
     },
     removeExpirationDate() {
-      this.$emit('expirationDateChanged', {
-        expirationDate: null
-      })
+      this.$emit('expirationDateChanged', { expirationDateTime: null })
       ;(this.$refs.expirationDateDrop as InstanceType<typeof OcDrop>).hide()
     },
     removeShare() {

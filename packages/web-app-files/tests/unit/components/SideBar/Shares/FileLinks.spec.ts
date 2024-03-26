@@ -2,44 +2,40 @@ import FileLinks from 'web-app-files/src/components/SideBar/Shares/FileLinks.vue
 import { defaultPlugins, shallowMount, defaultComponentMocks } from 'web-test-helpers'
 import { mock, mockDeep } from 'vitest-mock-extended'
 import { Resource } from '@ownclouders/web-client'
-import { Share, SharePermissions, ShareTypes } from '@ownclouders/web-client/src/helpers/share'
+import { LinkShare, ShareTypes } from '@ownclouders/web-client/src/helpers/share'
 import { AbilityRule } from '@ownclouders/web-client/src/helpers/resource/types'
 import {
   CapabilityStore,
   FileAction,
-  getDefaultLinkPermissions,
+  useCanShare,
   useFileActionsCreateLink
 } from '@ownclouders/web-pkg'
 import { computed } from 'vue'
 import DetailsAndEdit from '../../../../../src/components/SideBar/Shares/Links/DetailsAndEdit.vue'
+import { SharingLinkType } from '@ownclouders/web-client/src/generated'
 
 const defaultLinksList = [
   {
     id: '1',
     indirect: false,
-    name: 'public link 1',
-    url: 'some-link-1',
-    path: '/file-1.txt',
-    permissions: 1,
-    outgoing: true,
-    shareType: ShareTypes.link.value
+    shareType: ShareTypes.link.value,
+    displayName: 'public link 1',
+    webUrl: ' some-link-1'
   },
   {
     id: '2',
     indirect: true,
-    name: 'public link 2',
-    url: 'some-link-2',
-    path: '/file-2.txt',
-    permissions: 1,
-    outgoing: true,
-    shareType: ShareTypes.link.value
+    shareType: ShareTypes.link.value,
+    displayName: 'public link 2',
+    webUrl: ' some-link-2'
   }
-]
+] as LinkShare[]
 
 const selectors = {
   linkAddButton: '#files-file-link-add',
-  noResharePermissions: '[data-testid="files-links-no-reshare-permissions-message"]',
-  linkNoResults: '#oc-file-links-no-results'
+  noSharePermissions: '[data-testid="files-links-no-share-permissions-message"]',
+  linkNoResults: '#oc-file-links-no-results',
+  indirectToggle: '.indirect-link-list-toggle'
 }
 
 const linkListItemNameAndCopy = 'name-and-copy-stub'
@@ -47,8 +43,8 @@ const linkListItemDetailsAndEdit = 'details-and-edit-stub'
 
 vi.mock('@ownclouders/web-pkg', async (importOriginal) => ({
   ...(await importOriginal<any>()),
-  getDefaultLinkPermissions: vi.fn(),
-  useFileActionsCreateLink: vi.fn()
+  useFileActionsCreateLink: vi.fn(),
+  useCanShare: vi.fn()
 }))
 
 describe('FileLinks', () => {
@@ -63,24 +59,38 @@ describe('FileLinks', () => {
         expect(linkListItems.length).toBe(2)
         expect(linkListItemsDetails.length).toBe(2)
 
-        expect(linkListItems.at(0).props().link).toMatchObject({
-          id: '1',
-          indirect: false,
-          name: 'public link 1',
-          key: 'direct-link-1'
-        })
-        expect(linkListItems.at(1).props().link).toMatchObject({
-          id: '2',
-          indirect: true,
-          name: 'public link 2',
-          key: 'indirect-link-2'
-        })
+        expect(linkListItems.at(0).props('linkShare')).toMatchObject(defaultLinksList[0])
+        expect(linkListItems.at(1).props('linkShare')).toMatchObject(defaultLinksList[1])
       })
 
       it('should not show the "no results" message', () => {
         const { wrapper } = getWrapper()
 
         expect(wrapper.find(selectors.linkNoResults).exists()).toBeFalsy()
+      })
+
+      describe('collapsing', () => {
+        const link = mock<LinkShare>({ indirect: false, isQuickLink: false })
+
+        it('shows all links if showAllOnLoad config is set', () => {
+          const links = [link, link, link, link]
+          const { wrapper } = getWrapper({ links, showAllOnLoad: true })
+
+          expect(wrapper.findAll(linkListItemNameAndCopy).length).toBe(links.length)
+        })
+        it('shows only 3 links if showAllOnLoad config is not set', () => {
+          const links = [link, link, link, link]
+          const { wrapper } = getWrapper({ links, showAllOnLoad: false })
+
+          expect(wrapper.findAll(linkListItemNameAndCopy).length).toBe(3)
+        })
+        it('button toggles to show all links', async () => {
+          const links = [link, link, link, link]
+          const { wrapper } = getWrapper({ links, showAllOnLoad: false })
+          await wrapper.find(selectors.indirectToggle).trigger('click')
+
+          expect(wrapper.findAll(linkListItemNameAndCopy).length).toBe(links.length)
+        })
       })
     })
 
@@ -104,16 +114,9 @@ describe('FileLinks', () => {
     })
   })
   describe('when canCreateLinks is set to false', () => {
-    it('should show the "no reshare permissions" message', () => {
-      const resource = mockDeep<Resource>({
-        path: '/lorem.txt',
-        type: 'file',
-        canShare: vi.fn(() => false),
-        isFolder: false,
-        isReceivedShare: vi.fn()
-      })
-      const { wrapper } = getWrapper({ resource })
-      expect(wrapper.find(selectors.noResharePermissions).exists()).toBeTruthy()
+    it('should show the "no share permissions" message', () => {
+      const { wrapper } = getWrapper({ canShare: false })
+      expect(wrapper.find(selectors.noSharePermissions).exists()).toBeTruthy()
     })
   })
   describe('user does not have the permission to create public links', () => {
@@ -126,16 +129,8 @@ describe('FileLinks', () => {
     })
 
     it('existing viewer link is not modifiable', () => {
-      const viewerLink = {
-        id: '1',
-        indirect: false,
-        name: 'public link 1',
-        url: 'some-link-1',
-        path: '/file-1.txt',
-        permissions: 1,
-        outgoing: true,
-        shareType: ShareTypes.link.value
-      }
+      const viewerLink = defaultLinksList[0]
+      viewerLink.type = SharingLinkType.View
       const { wrapper } = getWrapper({ resource, abilities: [], links: [viewerLink] })
       const detailsAndEdit = wrapper.findComponent<typeof DetailsAndEdit>(
         linkListItemDetailsAndEdit
@@ -143,25 +138,14 @@ describe('FileLinks', () => {
       const isModifiable = detailsAndEdit.props('isModifiable')
       expect(isModifiable).toBeFalsy()
     })
-    it('existing internal link is modifiable but only shows the internal link option', () => {
-      const internalLink = {
-        id: '1',
-        indirect: false,
-        name: 'internal link 1',
-        url: 'some-link-1',
-        path: '/file-1.txt',
-        permissions: 0,
-        outgoing: true,
-        shareType: ShareTypes.link.value
-      }
+    it('existing internal link is modifiable', () => {
+      const internalLink = defaultLinksList[0]
+      internalLink.type = SharingLinkType.Internal
       const { wrapper } = getWrapper({ resource, abilities: [], links: [internalLink] })
       const detailsAndEdit = wrapper.findComponent<typeof DetailsAndEdit>(
         linkListItemDetailsAndEdit
       )
-      const availableRoleOptions = detailsAndEdit.props('availableRoleOptions')
       const isModifiable = detailsAndEdit.props('isModifiable')
-      expect(availableRoleOptions.length).toBe(1)
-      expect(availableRoleOptions[0].permissions(false)).toEqual([SharePermissions.internal])
       expect(isModifiable).toBeTruthy()
     })
   })
@@ -171,15 +155,18 @@ function getWrapper({
   resource = mockDeep<Resource>({ isFolder: false, canShare: () => true }),
   links = defaultLinksList,
   abilities = [{ action: 'create-all', subject: 'PublicLink' }],
-  defaultLinkPermissions = 0
+  canShare = true,
+  showAllOnLoad = true
 }: {
   resource?: Resource
   links?: typeof defaultLinksList
   abilities?: AbilityRule[]
   defaultLinkPermissions?: number
+  canShare?: boolean
+  showAllOnLoad?: boolean
 } = {}) {
   const createLinkMock = vi.fn()
-  vi.mocked(getDefaultLinkPermissions).mockReturnValue(defaultLinkPermissions)
+  vi.mocked(useCanShare).mockReturnValue({ canShare: () => canShare })
   vi.mocked(useFileActionsCreateLink).mockReturnValue({
     actions: computed(() => [mock<FileAction>({ name: 'create-links', handler: createLinkMock })])
   })
@@ -206,18 +193,15 @@ function getWrapper({
             abilities,
             piniaOptions: {
               capabilityState: { capabilities },
-              configState: { options: { sidebar: { shares: { showAllOnLoad: true } } } },
-              sharesState: { shares: links as Share[] }
+              configState: { options: { sidebar: { shares: { showAllOnLoad } } } },
+              sharesState: { linkShares: links }
             }
           })
         ],
         renderStubDefaultSlot: true,
         stubs: { OcButton: false },
         mocks,
-        provide: {
-          incomingParentShare: undefined,
-          resource
-        }
+        provide: { resource }
       }
     })
   }

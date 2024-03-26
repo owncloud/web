@@ -1,16 +1,19 @@
-import { computed, unref } from 'vue'
+import { ref, unref } from 'vue'
 import { useFileActionsCreateLink } from '../../../../../src/composables/actions/files/useFileActionsCreateLink'
-import { useMessages, useModals, CapabilityStore } from '../../../../../src/composables/piniaStores'
+import {
+  useMessages,
+  useModals,
+  CapabilityStore,
+  useSharesStore
+} from '../../../../../src/composables/piniaStores'
 import { defaultComponentMocks, getComposableWrapper } from 'web-test-helpers'
 import { mock } from 'vitest-mock-extended'
 import { Resource } from '@ownclouders/web-client'
-import { useCreateLink, useDefaultLinkPermissions } from '../../../../../src/composables/links'
-import { SharePermissionBit } from '@ownclouders/web-client/src/helpers'
+import { SharingLinkType } from '@ownclouders/web-client/src/generated'
+import { useLinkTypes } from '../../../../../src/composables/links/useLinkTypes'
 
-vi.mock('../../../../../src/composables/links', async (importOriginal) => ({
-  ...(await importOriginal<any>()),
-  useCreateLink: vi.fn(),
-  useDefaultLinkPermissions: vi.fn()
+vi.mock('../../../../../src/composables/links/useLinkTypes', () => ({
+  useLinkTypes: vi.fn()
 }))
 
 describe('useFileActionsCreateLink', () => {
@@ -55,20 +58,25 @@ describe('useFileActionsCreateLink', () => {
   describe('handler', () => {
     it('calls the createLink method and shows messages', () => {
       getWrapper({
-        setup: async ({ actions }, { mocks }) => {
+        setup: async ({ actions }) => {
+          const { addLink } = useSharesStore()
           // link action
           await unref(actions)[0].handler({ resources: [mock<Resource>({ canShare: () => true })] })
-          expect(mocks.createLinkMock).toHaveBeenCalledWith(
-            expect.objectContaining({ quicklink: false })
+          expect(addLink).toHaveBeenCalledWith(
+            expect.objectContaining({
+              options: expect.objectContaining({ '@libre.graph.quickLink': false })
+            })
           )
           const { showMessage } = useMessages()
           expect(showMessage).toHaveBeenCalledTimes(1)
 
           // quick link action
           await unref(actions)[1].handler({ resources: [mock<Resource>({ canShare: () => true })] })
-          expect(mocks.createLinkMock).toHaveBeenNthCalledWith(
+          expect(addLink).toHaveBeenNthCalledWith(
             2,
-            expect.objectContaining({ quicklink: true })
+            expect.objectContaining({
+              options: expect.objectContaining({ '@libre.graph.quickLink': true })
+            })
           )
         }
       })
@@ -76,10 +84,11 @@ describe('useFileActionsCreateLink', () => {
     it('shows a modal if enforced', () => {
       getWrapper({
         enforceModal: true,
-        setup: ({ actions }, { mocks }) => {
+        setup: ({ actions }) => {
+          const { addLink } = useSharesStore()
           const { dispatchModal } = useModals()
           unref(actions)[0].handler({ resources: [mock<Resource>({ canShare: () => true })] })
-          expect(mocks.createLinkMock).not.toHaveBeenCalled()
+          expect(addLink).not.toHaveBeenCalled()
           expect(dispatchModal).toHaveBeenCalledTimes(1)
         }
       })
@@ -87,11 +96,12 @@ describe('useFileActionsCreateLink', () => {
     it('shows a modal if password is enforced and link is not internal', () => {
       getWrapper({
         passwordEnforced: true,
-        defaultLinkPermissions: SharePermissionBit.Read,
-        setup: ({ actions }, { mocks }) => {
+        defaultLinkType: SharingLinkType.View,
+        setup: ({ actions }) => {
+          const { addLink } = useSharesStore()
           const { dispatchModal } = useModals()
           unref(actions)[0].handler({ resources: [mock<Resource>({ canShare: () => true })] })
-          expect(mocks.createLinkMock).not.toHaveBeenCalled()
+          expect(addLink).not.toHaveBeenCalled()
           expect(dispatchModal).toHaveBeenCalledTimes(1)
         }
       })
@@ -123,17 +133,15 @@ function getWrapper({
   setup,
   enforceModal = false,
   passwordEnforced = false,
-  defaultLinkPermissions = SharePermissionBit.Read,
+  defaultLinkType = SharingLinkType.View,
   onLinkCreatedCallback = undefined,
   showMessages = true
 }) {
-  const createLinkMock = vi.fn()
-  vi.mocked(useCreateLink).mockReturnValue({ createLink: createLinkMock })
-  vi.mocked(useDefaultLinkPermissions).mockReturnValue({
-    defaultLinkPermissions: computed(() => defaultLinkPermissions)
-  })
+  vi.mocked(useLinkTypes).mockReturnValue(
+    mock<ReturnType<typeof useLinkTypes>>({ defaultLinkType: ref(defaultLinkType) })
+  )
 
-  const mocks = { ...defaultComponentMocks(), createLinkMock }
+  const mocks = { ...defaultComponentMocks() }
   const capabilities = {
     files_sharing: { public: { password: { enforced_for: { read_only: passwordEnforced } } } }
   } satisfies Partial<CapabilityStore['capabilities']>

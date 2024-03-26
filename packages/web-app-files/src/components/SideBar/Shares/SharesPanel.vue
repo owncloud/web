@@ -14,12 +14,11 @@
 </template>
 
 <script lang="ts">
-import { ComponentPublicInstance, defineComponent, inject, provide } from 'vue'
+import { ComponentPublicInstance, defineComponent, inject, Ref } from 'vue'
 import FileLinks from './FileLinks.vue'
 import FileShares from './FileShares.vue'
 import SpaceMembers from './SpaceMembers.vue'
 import { useSharesStore } from '@ownclouders/web-pkg'
-import { useIncomingParentShare } from '../../../composables/parentShare'
 import { Resource } from '@ownclouders/web-client'
 import { storeToRefs } from 'pinia'
 
@@ -39,23 +38,15 @@ export default defineComponent({
     const sharesStore = useSharesStore()
     const { loading: sharesLoading } = storeToRefs(sharesStore)
 
-    const { incomingParentShare, ...rest } = useIncomingParentShare()
-    provide('incomingParentShare', incomingParentShare)
-
     return {
-      incomingParentShare,
-      ...rest,
       sharesLoading,
-      resource: inject<Resource>('resource'),
+      resource: inject<Ref<Resource>>('resource'),
       activePanel: inject<String>('activePanel')
     }
   },
   watch: {
     sharesLoading: {
       handler: function (sharesLoading, old) {
-        if (!sharesLoading) {
-          this.loadIncomingParentShare.perform(this.resource)
-        }
         // FIXME: !old can be removed as soon as https://github.com/owncloud/web/issues/7621 has been fixed
         if (!this.activePanel || !old) {
           return

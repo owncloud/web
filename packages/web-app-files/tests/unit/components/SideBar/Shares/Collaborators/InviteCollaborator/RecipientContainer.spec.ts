@@ -1,5 +1,5 @@
 import RecipientContainer from 'web-app-files/src/components/SideBar/Shares/Collaborators/InviteCollaborator/RecipientContainer.vue'
-import { ShareTypes } from '@ownclouders/web-client/src/helpers/share'
+import { CollaboratorAutoCompleteItem, ShareTypes } from '@ownclouders/web-client/src/helpers/share'
 import { defaultPlugins, mount } from 'web-test-helpers'
 import { CapabilityStore } from '@ownclouders/web-pkg'
 
@@ -7,19 +7,16 @@ vi.mock('web-app-files/src/helpers/user/avatarUrl', () => ({
   avatarUrl: vi.fn().mockReturnValue('avatarUrl')
 }))
 
-const getRecipient = (shareType: number | string = ShareTypes.user.value) => ({
-  label: 'Albert Einstein',
-  value: {
-    shareType,
-    shareWith: 'einstein',
-    shareWithAdditionalInfo: 'einstein@example.org'
-  }
+const getRecipient = (shareType: number = ShareTypes.user.value): CollaboratorAutoCompleteItem => ({
+  displayName: 'Albert Einstein',
+  id: 'einstein',
+  shareType
 })
 
 describe('InviteCollaborator RecipientContainer', () => {
   describe('renders a recipient with a deselect button', () => {
     it.each(ShareTypes.authenticated)('different recipients for different shareTypes', (type) => {
-      const recipient = getRecipient(type.key)
+      const recipient = getRecipient(type.value)
       const { wrapper } = getMountedWrapper(recipient)
       expect(wrapper.html()).toMatchSnapshot()
     })

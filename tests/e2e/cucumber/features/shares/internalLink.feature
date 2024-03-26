@@ -26,8 +26,8 @@ Feature: internal link share
       | resource   | to       |
       | simple.pdf | myfolder |
     And "Alice" updates following sharee role
-      | resource | recipient | type | role                    |
-      | myfolder | Brian     | user | custom_permissions:read |
+      | resource | recipient | type | role     |
+      | myfolder | Brian     | user | Can view |
     And "Alice" logs out
     Then "Brian" should see folder "myfolder" but should not be able to edit
     And "Brian" logs out

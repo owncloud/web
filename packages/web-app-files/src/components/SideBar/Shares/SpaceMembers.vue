@@ -36,7 +36,7 @@
       </div>
     </div>
     <invite-collaborator-form
-      v-if="currentUserCanShare"
+      v-if="canShare({ space: resource, resource })"
       key="new-collaborator"
       :save-button-label="$gettext('Add')"
       :invite-label="$gettext('Search')"
@@ -49,11 +49,11 @@
         class="oc-list oc-list-divider oc-overflow-hidden oc-m-rm"
         :aria-label="$gettext('Space members')"
       >
-        <li v-for="collaborator in filteredSpaceMembers" :key="collaborator.key">
+        <li v-for="collaborator in filteredSpaceMembers" :key="collaborator.id">
           <collaborator-list-item
             :share="collaborator"
             :modifiable="isModifiable(collaborator)"
-            @on-delete="$_ocCollaborators_deleteShare_trigger(collaborator)"
+            @on-delete="deleteMemberConfirm(collaborator)"
           />
         </li>
       </ul>
@@ -65,19 +65,25 @@
 import { storeToRefs } from 'pinia'
 import CollaboratorListItem from './Collaborators/ListItem.vue'
 import InviteCollaboratorForm from './Collaborators/InviteCollaborator/InviteCollaboratorForm.vue'
-import { spaceRoleManager } from '@ownclouders/web-client/src/helpers/share'
+import { GraphShareRoleIdMap } from '@ownclouders/web-client/src/helpers/share'
 import {
   createLocationSpaces,
   isLocationSpacesActive,
+  useCanShare,
   useConfigStore,
   useMessages,
   useModals,
+  useSharesStore,
   useSpacesStore,
   useUserStore
 } from '@ownclouders/web-pkg'
 import { defineComponent, inject, Ref } from 'vue'
 import { shareSpaceAddMemberHelp } from '../../../helpers/contextualHelpers'
-import { ProjectSpaceResource } from '@ownclouders/web-client/src/helpers'
+import {
+  ProjectSpaceResource,
+  CollaboratorShare,
+  buildSpace
+} from '@ownclouders/web-client/src/helpers'
 import { useClientService } from '@ownclouders/web-pkg'
 import Fuse from 'fuse.js'
 import Mark from 'mark.js'
@@ -92,9 +98,11 @@ export default defineComponent({
   setup() {
     const userStore = useUserStore()
     const clientService = useClientService()
+    const { canShare } = useCanShare()
     const { dispatchModal } = useModals()
+    const { deleteShare } = useSharesStore()
     const spacesStore = useSpacesStore()
-    const { deleteSpaceMember } = spacesStore
+    const { upsertSpace, removeSpaceMember } = spacesStore
     const { spaceMembers } = storeToRefs(spacesStore)
 
     const configStore = useConfigStore()
@@ -110,7 +118,10 @@ export default defineComponent({
       resource: inject<Ref<ProjectSpaceResource>>('resource'),
       dispatchModal,
       spaceMembers,
-      deleteSpaceMember,
+      deleteShare,
+      upsertSpace,
+      removeSpaceMember,
+      canShare,
       ...useMessages()
     }
   },
@@ -133,12 +144,6 @@ export default defineComponent({
     },
     hasCollaborators() {
       return this.spaceMembers.length > 0
-    },
-    currentUserCanShare() {
-      return !this.resource.disabled && this.currentUserIsManager
-    },
-    currentUserIsManager() {
-      return this.resource.isManager(this.user)
     }
   },
   watch: {
@@ -159,13 +164,13 @@ export default defineComponent({
     }
   },
   methods: {
-    filter(collection, term) {
+    filter(collection: CollaboratorShare[], term: string) {
       if (!(term || '').trim()) {
         return collection
       }
       const searchEngine = new Fuse(collection, {
         ...defaultFuseOptions,
-        keys: ['collaborator.displayName', 'collaborator.name']
+        keys: ['sharedWith.displayName', 'sharedWith.name']
       })
 
       return searchEngine.search(term).map((r) => r.item)
@@ -173,60 +178,67 @@ export default defineComponent({
     toggleFilter() {
       this.isFilterOpen = !this.isFilterOpen
     },
-    isModifiable(share) {
-      if (!this.currentUserCanShare) {
+    isModifiable(share: CollaboratorShare) {
+      if (!this.canShare({ space: this.resource, resource: this.resource })) {
         return false
       }
 
-      if (share.role.name !== spaceRoleManager.name) {
+      if (share.role.id !== GraphShareRoleIdMap.SpaceManager) {
         return true
       }
 
       // forbid to remove last manager of a space
       const managers = this.spaceMembers.filter(
-        (collaborator) => collaborator.role.name === spaceRoleManager.name
+        ({ role }) => role.id === GraphShareRoleIdMap.SpaceManager
       )
       return managers.length > 1
     },
 
-    $_ocCollaborators_deleteShare_trigger(share) {
+    deleteMemberConfirm(share: CollaboratorShare) {
       this.dispatchModal({
         variation: 'danger',
         title: this.$gettext('Remove member'),
         confirmText: this.$gettext('Remove'),
         message: this.$gettext('Are you sure you want to remove this member?'),
         hasInput: false,
-        onConfirm: () => this.$_ocCollaborators_deleteShare(share)
-      })
-    },
+        onConfirm: async () => {
+          try {
+            const currentUserRemoved = share.sharedWith.id === this.user.id
+            await this.deleteShare({
+              clientService: this.clientService,
+              space: this.resource,
+              resource: this.resource,
+              collaboratorShare: share
+            })
 
-    async $_ocCollaborators_deleteShare(share) {
-      try {
-        const currentUserRemoved = share.collaborator.name === this.user.onPremisesSamAccountName
-        await this.deleteSpaceMember({
-          client: this.$client,
-          graphClient: this.clientService.graphAuthenticated,
-          share: share,
-          reloadSpace: !currentUserRemoved
-        })
-        this.showMessage({
-          title: this.$gettext('Share was removed successfully')
-        })
+            if (!currentUserRemoved) {
+              const client = this.clientService.graphAuthenticated
+              const graphResponse = await client.drives.getDrive(share.resourceId)
+              this.upsertSpace(buildSpace(graphResponse.data))
+            }
 
-        if (currentUserRemoved) {
-          if (isLocationSpacesActive(this.$router, 'files-spaces-projects')) {
-            await this.$router.go(0)
-            return
+            this.removeSpaceMember({ member: share })
+
+            this.showMessage({
+              title: this.$gettext('Share was removed successfully')
+            })
+
+            if (currentUserRemoved) {
+              if (isLocationSpacesActive(this.$router, 'files-spaces-projects')) {
+                await this.$router.go(0)
+                return
+              }
+              await this.$router.push(createLocationSpaces('files-spaces-projects'))
+            }
+          } catch (error) {
+            console.error(error)
+            this.showErrorMessage({
+              title: this.$gettext('Failed to remove share'),
+              errors: [error]
+            })
           }
-          await this.$router.push(createLocationSpaces('files-spaces-projects'))
         }
-      } catch (error) {
-        console.error(error)
-        this.showErrorMessage({
-          title: this.$gettext('Failed to remove share'),
-          errors: [error]
-        })
-      }
+      })
     }
   }
 })

@@ -1,19 +1,27 @@
-import { Resource } from '@ownclouders/web-client'
+import { Resource, SpaceResource } from '@ownclouders/web-client'
 import { useAbility } from '../ability'
-import { useCapabilityStore } from '../piniaStores'
+import { useCapabilityStore, useUserStore } from '../piniaStores'
+import { isProjectSpaceResource, isShareSpaceResource } from '@ownclouders/web-client/src/helpers'
 
 export const useCanShare = () => {
   const capabilityStore = useCapabilityStore()
   const ability = useAbility()
+  const userStore = useUserStore()
 
-  const canShare = (item: Resource) => {
+  const canShare = ({ space, resource }: { space: SpaceResource; resource: Resource }) => {
     if (!capabilityStore.sharingApiEnabled) {
       return false
     }
-    if (item.isReceivedShare() && !capabilityStore.sharingResharing) {
+
+    if (isShareSpaceResource(space)) {
       return false
     }
-    return item.canShare({ ability })
+
+    if (isProjectSpaceResource(space) && !space.isManager(userStore.user)) {
+      return false
+    }
+
+    return resource.canShare({ ability, user: userStore.user })
   }
 
   return { canShare }

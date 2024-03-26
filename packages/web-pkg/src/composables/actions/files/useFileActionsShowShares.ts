@@ -28,7 +28,7 @@ export const useFileActionsShowShares = () => {
       icon: 'user-add',
       label: () => $gettext('Share'),
       handler,
-      isVisible: ({ resources }) => {
+      isVisible: ({ space, resources }) => {
         // sidebar is currently only available inside files app
         if (!unref(isFilesAppActive)) {
           return false
@@ -43,7 +43,7 @@ export const useFileActionsShowShares = () => {
         if (isIncomingShareResource(resources[0]) && !resources[0].syncEnabled) {
           return false
         }
-        return canShare(resources[0])
+        return canShare({ space, resource: resources[0] })
       },
       componentType: 'button',
       class: 'oc-files-actions-show-shares-trigger'

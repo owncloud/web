@@ -1,8 +1,5 @@
-import { Identity, UnifiedRoleDefinition } from '../../generated'
+import { Identity, SharingLinkType, UnifiedRoleDefinition } from '../../generated'
 import { Resource } from '../resource'
-import type { User } from '../user'
-import type { ShareRole } from './role'
-import type { SharePermission } from './permission'
 
 export enum GraphSharePermission {
   createUpload = 'libre.graph/driveItem/upload/create',
@@ -34,30 +31,38 @@ export interface IncomingShareResource extends ShareResource {
   sharePermissions: GraphSharePermission[]
 }
 
-/** @deprecated */
+export interface ShareRoleNG extends UnifiedRoleDefinition {
+  icon?: string
+  label?: string
+}
+
 export interface Share {
-  shareType: number
   id: string
-  collaborator?: User
-  permissions?: number
-  role?: ShareRole
-  token?: string
-  url?: string
-  path?: string
-  description?: string
-  stime?: string
-  name?: string
-  password?: boolean
-  expiration?: string
-  itemSource?: string
-  file?: { parent: string; source: string; target: string }
-  owner?: User
-  fileOwner?: User
-  customPermissions?: SharePermission[]
-  expires?: Date
-  quicklink?: boolean
-  outgoing?: boolean
-  indirect?: boolean
-  notifyUploads?: boolean
-  notifyUploadsExtraRecipients?: string
+  resourceId: string
+  indirect: boolean
+  sharedBy: Identity
+  shareType: number
+  expirationDateTime?: string
+}
+
+export interface CollaboratorShare extends Share {
+  permissions: GraphSharePermission[]
+  sharedWith: Identity
+  role: ShareRoleNG
+}
+
+export interface LinkShare extends Share {
+  displayName: string
+  hasPassword: boolean
+  isQuickLink: boolean
+  type: SharingLinkType
+  webUrl: string
+  preventsDownload?: boolean
+}
+
+export interface CollaboratorAutoCompleteItem {
+  id: string
+  displayName: string
+  shareType: number
+  mail?: string
 }

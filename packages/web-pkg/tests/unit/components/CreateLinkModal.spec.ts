@@ -3,43 +3,24 @@ import { defaultComponentMocks, defaultPlugins, mount } from 'web-test-helpers'
 import { mock } from 'vitest-mock-extended'
 import { PasswordPolicyService } from '../../../src/services'
 import { usePasswordPolicyService } from '../../../src/composables/passwordPolicyService'
-import { getDefaultLinkPermissions } from '../../../src/helpers/share/link'
-import {
-  AbilityRule,
-  LinkShareRoles,
-  Resource,
-  Share,
-  SharePermissionBit,
-  linkRoleContributorFolder,
-  linkRoleEditorFile,
-  linkRoleEditorFolder,
-  linkRoleInternalFile,
-  linkRoleInternalFolder,
-  linkRoleUploaderFolder,
-  linkRoleViewerFile,
-  linkRoleViewerFolder
-} from '@ownclouders/web-client/src/helpers'
+import { AbilityRule, LinkShare, Resource, ShareRoleNG } from '@ownclouders/web-client/src/helpers'
 import { PasswordPolicy } from 'design-system/src/helpers'
 import { useEmbedMode } from '../../../src/composables/embedMode'
-import { useCreateLink } from '../../../src/composables/links'
+import { useLinkTypes } from '../../../src/composables/links'
 import { ref } from 'vue'
-import { CapabilityStore } from '../../../src/composables/piniaStores'
+import { CapabilityStore, useSharesStore } from '../../../src/composables/piniaStores'
+import { SharingLinkType } from '@ownclouders/web-client/src/generated'
 
 vi.mock('../../../src/composables/embedMode')
 vi.mock('../../../src/composables/passwordPolicyService')
-vi.mock('../../../src/helpers/share/link', async (importOriginal) => ({
-  ...(await importOriginal<any>()),
-  getDefaultLinkPermissions: vi.fn()
-}))
 vi.mock('../../../src/composables/links', async (importOriginal) => ({
   ...(await importOriginal<any>()),
-  useCreateLink: vi.fn()
+  useLinkTypes: vi.fn()
 }))
 
 const selectors = {
   passwordInput: '.link-modal-password-input',
-  selectedRoleLabel: '.selected .role-dropdown-list-option-label',
-  roleLabels: '.role-dropdown-list-option-label',
+  roleElements: '.role-dropdown-list li',
   contextMenuToggle: '#link-modal-context-menu-toggle',
   confirmBtn: '.link-modal-confirm',
   cancelBtn: '.link-modal-cancel'
@@ -52,61 +33,28 @@ describe('CreateLinkModal', () => {
       expect(wrapper.find(selectors.passwordInput).exists()).toBeTruthy()
     })
     it('should be disabled for internal links', () => {
-      const { wrapper } = getWrapper({ defaultLinkPermissions: 0 })
+      const { wrapper } = getWrapper({ defaultLinkType: SharingLinkType.Internal })
       expect(wrapper.find(selectors.passwordInput).attributes('disabled')).toBeTruthy()
     })
     it('should not be rendered if user cannot create public links', () => {
-      const { wrapper } = getWrapper({ userCanCreatePublicLinks: false, defaultLinkPermissions: 0 })
+      const { wrapper } = getWrapper({
+        userCanCreatePublicLinks: false,
+        availableLinkTypes: [SharingLinkType.Internal],
+        defaultLinkType: SharingLinkType.Internal
+      })
       expect(wrapper.find(selectors.passwordInput).exists()).toBeFalsy()
     })
   })
   describe('link role select', () => {
-    it.each([SharePermissionBit.Internal, SharePermissionBit.Read])(
-      'uses the link default permissions to retrieve the initial role',
-      (defaultLinkPermissions) => {
-        const expectedRole = LinkShareRoles.getByBitmask(defaultLinkPermissions, false)
-        const { wrapper } = getWrapper({ defaultLinkPermissions })
+    it('lists all types as roles', () => {
+      const availableLinkTypes = [
+        SharingLinkType.View,
+        SharingLinkType.Internal,
+        SharingLinkType.Edit
+      ]
+      const { wrapper } = getWrapper({ availableLinkTypes })
 
-        expect(wrapper.find(selectors.selectedRoleLabel).text()).toEqual(expectedRole.label)
-      }
-    )
-    describe('available roles', () => {
-      it('lists all available roles for a folder', () => {
-        const resource = mock<Resource>({ isFolder: true })
-        const { wrapper } = getWrapper({ resources: [resource] })
-        const folderRoleLabels = [
-          linkRoleInternalFolder,
-          linkRoleViewerFolder,
-          linkRoleEditorFolder,
-          linkRoleContributorFolder,
-          linkRoleUploaderFolder
-        ].map(({ label }) => label)
-
-        for (const label of wrapper.findAll(selectors.roleLabels)) {
-          expect(folderRoleLabels.includes(label.text())).toBeTruthy()
-        }
-      })
-      it('lists all available roles for a file', () => {
-        const resource = mock<Resource>({ isFolder: false })
-        const { wrapper } = getWrapper({ resources: [resource] })
-        const fileRoleLabels = [linkRoleInternalFile, linkRoleViewerFile, linkRoleEditorFile].map(
-          ({ label }) => label
-        )
-
-        for (const label of wrapper.findAll(selectors.roleLabels)) {
-          expect(fileRoleLabels.includes(label.text())).toBeTruthy()
-        }
-      })
-      it('lists only the internal role if user cannot create public links', () => {
-        const resource = mock<Resource>({ isFolder: false })
-        const { wrapper } = getWrapper({
-          resources: [resource],
-          userCanCreatePublicLinks: false,
-          defaultLinkPermissions: 0
-        })
-        expect(wrapper.findAll(selectors.roleLabels).length).toBe(1)
-        expect(wrapper.find(selectors.selectedRoleLabel).text()).toEqual(linkRoleInternalFile.label)
-      })
+      expect(wrapper.findAll(selectors.roleElements).length).toBe(availableLinkTypes.length)
     })
   })
   describe('context menu', () => {
@@ -115,7 +63,11 @@ describe('CreateLinkModal', () => {
       expect(wrapper.find(selectors.contextMenuToggle).exists()).toBeTruthy()
     })
     it('should not display the button to toggle the context menu if user cannot create public links', () => {
-      const { wrapper } = getWrapper({ userCanCreatePublicLinks: false, defaultLinkPermissions: 0 })
+      const { wrapper } = getWrapper({
+        userCanCreatePublicLinks: false,
+        availableLinkTypes: [SharingLinkType.Internal],
+        defaultLinkType: SharingLinkType.Internal
+      })
       expect(wrapper.find(selectors.contextMenuToggle).exists()).toBeFalsy()
     })
   })
@@ -142,26 +94,33 @@ describe('CreateLinkModal', () => {
     it('creates links for all resources', async () => {
       const callbackFn = vi.fn()
       const resources = [mock<Resource>({ isFolder: false }), mock<Resource>({ isFolder: false })]
-      const { wrapper, mocks } = getWrapper({ resources, callbackFn })
+      const { wrapper } = getWrapper({ resources, callbackFn })
       await wrapper.vm.onConfirm()
-      expect(mocks.createLinkMock).toHaveBeenCalledTimes(resources.length)
+
+      const { addLink } = useSharesStore()
+      expect(addLink).toHaveBeenCalledTimes(resources.length)
       expect(callbackFn).toHaveBeenCalledTimes(1)
     })
     it('emits event in embed mode including the created links', async () => {
       const resources = [mock<Resource>({ isFolder: false })]
       const { wrapper, mocks } = getWrapper({ resources, embedModeEnabled: true })
-      const share = mock<Share>({ url: 'someurl' })
-      mocks.createLinkMock.mockResolvedValue(share)
+      const link = mock<LinkShare>({ webUrl: 'someurl' })
+
+      const { addLink } = useSharesStore()
+      ;(addLink as any).mockResolvedValue(link)
       await wrapper.vm.onConfirm()
-      expect(mocks.postMessageMock).toHaveBeenCalledWith('owncloud-embed:share', [share.url])
+      expect(mocks.postMessageMock).toHaveBeenCalledWith('owncloud-embed:share', [link.webUrl])
     })
     it('shows error messages for links that failed to be created', async () => {
       const consoleMock = vi.fn(() => undefined)
       vi.spyOn(console, 'error').mockImplementation(consoleMock)
       const resources = [mock<Resource>({ isFolder: false })]
-      const { wrapper, mocks } = getWrapper({ resources })
-      mocks.createLinkMock.mockRejectedValue(new Error(''))
+      const { wrapper } = getWrapper({ resources })
+
+      const { addLink } = useSharesStore()
+      ;(addLink as any).mockRejectedValue({ response: {} })
       await wrapper.vm.onConfirm()
+
       expect(consoleMock).toHaveBeenCalledTimes(1)
     })
     it('calls the callback at the end if given', async () => {
@@ -175,10 +134,14 @@ describe('CreateLinkModal', () => {
       'correctly passes the quicklink property to createLink',
       async (isQuickLink) => {
         const resources = [mock<Resource>({ isFolder: false })]
-        const { wrapper, mocks } = getWrapper({ resources, isQuickLink })
+        const { wrapper } = getWrapper({ resources, isQuickLink })
         await wrapper.vm.onConfirm()
-        expect(mocks.createLinkMock).toHaveBeenCalledWith(
-          expect.objectContaining({ quicklink: isQuickLink })
+
+        const { addLink } = useSharesStore()
+        expect(addLink).toHaveBeenCalledWith(
+          expect.objectContaining({
+            options: expect.objectContaining({ '@libre.graph.quickLink': isQuickLink })
+          })
         )
       }
     )
@@ -187,22 +150,38 @@ describe('CreateLinkModal', () => {
 
 function getWrapper({
   resources = [],
-  defaultLinkPermissions = 1,
+  defaultLinkType = SharingLinkType.View,
   userCanCreatePublicLinks = true,
   passwordEnforced = false,
   passwordPolicyFulfilled = true,
   embedModeEnabled = false,
   callbackFn = undefined,
-  isQuickLink = false
+  isQuickLink = false,
+  availableLinkTypes = [SharingLinkType.Internal, SharingLinkType.View]
+}: {
+  resources?: Resource[]
+  defaultLinkType?: SharingLinkType
+  userCanCreatePublicLinks?: boolean
+  passwordEnforced?: boolean
+  passwordPolicyFulfilled?: boolean
+  embedModeEnabled?: boolean
+  callbackFn?: any
+  isQuickLink?: boolean
+  availableLinkTypes?: SharingLinkType[]
 } = {}) {
   vi.mocked(usePasswordPolicyService).mockReturnValue(
     mock<PasswordPolicyService>({
       getPolicy: () => mock<PasswordPolicy>({ check: () => passwordPolicyFulfilled })
     })
   )
-  vi.mocked(getDefaultLinkPermissions).mockReturnValue(defaultLinkPermissions)
-  const createLinkMock = vi.fn()
-  vi.mocked(useCreateLink).mockReturnValue({ createLink: createLinkMock })
+  vi.mocked(useLinkTypes).mockReturnValue(
+    mock<ReturnType<typeof useLinkTypes>>({
+      defaultLinkType: ref(defaultLinkType),
+      getAvailableLinkTypes: () => availableLinkTypes,
+      getLinkRoleByType: () => mock<ShareRoleNG>(),
+      isPasswordEnforcedForLinkType: () => passwordEnforced
+    })
+  )
 
   const postMessageMock = vi.fn()
   vi.mocked(useEmbedMode).mockReturnValue(
@@ -212,7 +191,7 @@ function getWrapper({
     })
   )
 
-  const mocks = { ...defaultComponentMocks(), postMessageMock, createLinkMock }
+  const mocks = { ...defaultComponentMocks(), postMessageMock }
 
   const abilities = [] as AbilityRule[]
   if (userCanCreatePublicLinks) {
@@ -246,7 +225,7 @@ function getWrapper({
         ],
         mocks,
         provide: mocks,
-        stubs: { OcTextInput: true, OcDatepicker: true }
+        stubs: { OcTextInput: true, OcDatepicker: true, OcButton: true }
       }
     })
   }

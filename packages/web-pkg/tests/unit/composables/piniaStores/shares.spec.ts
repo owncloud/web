@@ -6,15 +6,21 @@ import {
   DeleteShareOptions,
   UpdateLinkOptions,
   UpdateShareOptions,
-  useSharesStore
+  useSharesStore,
+  useUserStore
 } from '../../../../src/composables/piniaStores'
 import { mock, mockDeep } from 'vitest-mock-extended'
 import { ClientService } from '../../../../src/services'
-import { Resource, Share, ShareTypes } from '@ownclouders/web-client/src/helpers'
+import { Resource } from '@ownclouders/web-client/src/helpers'
+import { Permission, User } from '@ownclouders/web-client/src/generated'
+import {
+  buildCollaboratorShare,
+  buildLinkShare
+} from '@ownclouders/web-client/src/helpers/share/functionsNG'
 
-vi.mock('@ownclouders/web-client/src/helpers/share/functions', () => ({
-  buildShare: (share) => share,
-  buildCollaboratorShare: (share) => share
+vi.mock('@ownclouders/web-client/src/helpers/share/functionsNG', () => ({
+  buildLinkShare: vi.fn((share) => share),
+  buildCollaboratorShare: vi.fn((share) => share)
 }))
 
 describe('useSharesStore', () => {
@@ -25,174 +31,157 @@ describe('useSharesStore', () => {
     })
   })
 
-  describe('loadShares', () => {
-    it('fetches shares and sets them as in- and outgoing shares', () => {
-      getWrapper({
-        setup: async (instance) => {
-          const clientService = mockDeep<ClientService>()
-          clientService.owncloudSdk.shares.getShares.mockResolvedValueOnce([
-            { shareInfo: { id: 1 } }
-          ])
-          clientService.owncloudSdk.shares.getShares.mockResolvedValueOnce([
-            { shareInfo: { id: 3 } }
-          ])
-          clientService.owncloudSdk.shares.getShares.mockResolvedValueOnce([
-            { shareInfo: { id: 2 } }
-          ])
-          clientService.owncloudSdk.shares.getShares.mockResolvedValueOnce([
-            { shareInfo: { id: 4 } }
-          ])
-
-          await instance.loadShares({
-            clientService,
-            resource: mock<Resource>(),
-            path: '/someFolder/someFile.txt',
-            storageId: '1',
-            ancestorMetaData: {}
-          })
-
-          expect(instance.outgoingShares).toEqual([
-            { id: 1, outgoing: true, indirect: false },
-            { id: 2, outgoing: true, indirect: true }
-          ])
-          expect(instance.incomingShares).toEqual([
-            { id: 3, outgoing: false, indirect: false },
-            { id: 4, outgoing: false, indirect: true }
-          ])
-
-          // FIXME: pqueue makes issues?!
-          // expect(clientService.owncloudSdk.shares.getShares).toHaveBeenCalledTimes(4)
-        }
-      })
-    })
-    it('uses the cache and only updates the "indirect" state', () => {
-      getWrapper({
-        setup: async (instance) => {
-          const clientService = mockDeep<ClientService>()
-          const loadedShare = mock<Share>({
-            outgoing: true,
-            indirect: true,
-            path: '/someFile.txt'
-          })
-
-          instance.shares = [loadedShare]
-
-          await instance.loadShares({
-            clientService,
-            resource: mock<Resource>(),
-            path: '/someFile.txt',
-            storageId: '1',
-            ancestorMetaData: {},
-            useCached: true
-          })
-
-          expect(instance.outgoingShares).toEqual([{ ...loadedShare, indirect: false }])
-          expect(clientService.owncloudSdk.shares.getShares).not.toHaveBeenCalled()
-        }
-      })
-    })
-  })
-
   describe('addShare', () => {
-    it('adds a user share', () => {
+    it('adds a collaborator share', () => {
       getWrapper({
         setup: async (instance) => {
-          const clientService = mockDeep<ClientService>()
-          clientService.owncloudSdk.shares.shareFileWithUser.mockResolvedValue({})
-          await instance.addShare(
-            mock<AddShareOptions>({
-              clientService,
-              shareType: ShareTypes.user.value
-            })
-          )
+          const resource = { id: '1' } as Resource
+          const permission = { id: '1' } as Permission
+          const user = { id: '1' } as User
 
-          expect(clientService.owncloudSdk.shares.shareFileWithUser).toHaveBeenCalledTimes(1)
-        }
-      })
-    })
-    it('adds a group share', () => {
-      getWrapper({
-        setup: async (instance) => {
           const clientService = mockDeep<ClientService>()
-          clientService.owncloudSdk.shares.shareFileWithGroup.mockResolvedValue({})
-          await instance.addShare(
-            mock<AddShareOptions>({
-              clientService,
-              shareType: ShareTypes.group.value
-            })
-          )
+          clientService.graphAuthenticated.permissions.invite.mockResolvedValue({
+            data: { value: [permission] }
+          } as any)
 
-          expect(clientService.owncloudSdk.shares.shareFileWithGroup).toHaveBeenCalledTimes(1)
+          const userStore = useUserStore()
+          userStore.user = user
+
+          await instance.addShare(mock<AddShareOptions>({ clientService, resource }))
+
+          expect(clientService.graphAuthenticated.permissions.invite).toHaveBeenCalledTimes(1)
+          expect(instance.collaboratorShares.length).toBe(1)
+          expect(buildCollaboratorShare).toHaveBeenCalledWith({
+            graphPermission: permission,
+            graphRoles: [],
+            resourceId: resource.id,
+            user
+          })
         }
       })
     })
   })
   describe('updateShare', () => {
-    it('updates a share', () => {
+    it('updates a collaborator share', () => {
       getWrapper({
         setup: async (instance) => {
-          const clientService = mockDeep<ClientService>()
-          clientService.owncloudSdk.shares.updateShare.mockResolvedValue({})
-          await instance.updateShare(mock<UpdateShareOptions>({ clientService }))
+          const resource = { id: '1' } as Resource
+          const permission = { id: '1' } as Permission
+          const user = { id: '1' } as User
 
-          expect(clientService.owncloudSdk.shares.updateShare).toHaveBeenCalledTimes(1)
+          const clientService = mockDeep<ClientService>()
+          clientService.graphAuthenticated.permissions.updatePermission.mockResolvedValue({
+            data: permission
+          } as any)
+
+          const userStore = useUserStore()
+          userStore.user = user
+
+          await instance.updateShare(mock<UpdateShareOptions>({ clientService, resource }))
+
+          expect(
+            clientService.graphAuthenticated.permissions.updatePermission
+          ).toHaveBeenCalledTimes(1)
+          expect(buildCollaboratorShare).toHaveBeenCalledWith({
+            graphPermission: permission,
+            graphRoles: [],
+            resourceId: resource.id,
+            user
+          })
         }
       })
     })
   })
   describe('deleteShare', () => {
-    it('deletes a share', () => {
+    it('deletes a collaborator share', () => {
       getWrapper({
         setup: async (instance) => {
+          const resource = { id: '1' } as Resource
           const clientService = mockDeep<ClientService>()
-          clientService.owncloudSdk.shares.deleteShare.mockResolvedValue({})
-          await instance.deleteShare(
-            mock<DeleteShareOptions>({
-              clientService
-            })
-          )
+          clientService.graphAuthenticated.permissions.deletePermission.mockResolvedValue(undefined)
 
-          expect(clientService.owncloudSdk.shares.deleteShare).toHaveBeenCalledTimes(1)
+          await instance.deleteShare(mock<DeleteShareOptions>({ clientService, resource }))
+
+          expect(
+            clientService.graphAuthenticated.permissions.deletePermission
+          ).toHaveBeenCalledTimes(1)
         }
       })
     })
   })
 
   describe('addLink', () => {
-    it('adds a link', () => {
+    it('adds a link share', () => {
       getWrapper({
         setup: async (instance) => {
-          const clientService = mockDeep<ClientService>()
-          clientService.owncloudSdk.shares.shareFileWithLink.mockResolvedValue({})
-          await instance.addLink(mock<AddLinkOptions>({ clientService }))
+          const resource = { id: '1' } as Resource
+          const permission = { id: '1' } as Permission
+          const user = { id: '1' } as User
 
-          expect(clientService.owncloudSdk.shares.shareFileWithLink).toHaveBeenCalledTimes(1)
+          const clientService = mockDeep<ClientService>()
+          clientService.graphAuthenticated.permissions.createLink.mockResolvedValue({
+            data: permission
+          } as any)
+
+          const userStore = useUserStore()
+          userStore.user = user
+
+          await instance.addLink(mock<AddLinkOptions>({ clientService, resource }))
+
+          expect(clientService.graphAuthenticated.permissions.createLink).toHaveBeenCalledTimes(1)
+          expect(instance.linkShares.length).toBe(1)
+          expect(buildLinkShare).toHaveBeenCalledWith({
+            graphPermission: permission,
+            resourceId: resource.id,
+            user
+          })
         }
       })
     })
   })
   describe('updateLink', () => {
-    it('updates a link', () => {
+    it('updates a link share', () => {
       getWrapper({
         setup: async (instance) => {
-          const clientService = mockDeep<ClientService>()
-          clientService.owncloudSdk.shares.updateShare.mockResolvedValue({})
-          await instance.updateLink(mock<UpdateLinkOptions>({ clientService }))
+          const resource = { id: '1' } as Resource
+          const permission = { id: '1' } as Permission
+          const user = { id: '1' } as User
 
-          expect(clientService.owncloudSdk.shares.updateShare).toHaveBeenCalledTimes(1)
+          const clientService = mockDeep<ClientService>()
+          clientService.graphAuthenticated.permissions.updatePermission.mockResolvedValue({
+            data: permission
+          } as any)
+
+          const userStore = useUserStore()
+          userStore.user = user
+
+          await instance.updateLink(mock<UpdateLinkOptions>({ clientService, resource }))
+
+          expect(
+            clientService.graphAuthenticated.permissions.updatePermission
+          ).toHaveBeenCalledTimes(1)
+          expect(buildLinkShare).toHaveBeenCalledWith({
+            graphPermission: permission,
+            resourceId: resource.id,
+            user
+          })
         }
       })
     })
   })
   describe('deleteLink', () => {
-    it('deletes a link', () => {
+    it('deletes a link share', () => {
       getWrapper({
         setup: async (instance) => {
+          const resource = { id: '1' } as Resource
           const clientService = mockDeep<ClientService>()
-          clientService.owncloudSdk.shares.deleteShare.mockResolvedValue({})
-          await instance.deleteLink(mock<DeleteLinkOptions>({ clientService }))
+          clientService.graphAuthenticated.permissions.deletePermission.mockResolvedValue(undefined)
 
-          expect(clientService.owncloudSdk.shares.deleteShare).toHaveBeenCalledTimes(1)
+          await instance.deleteLink(mock<DeleteLinkOptions>({ clientService, resource }))
+
+          expect(
+            clientService.graphAuthenticated.permissions.deletePermission
+          ).toHaveBeenCalledTimes(1)
         }
       })
     })

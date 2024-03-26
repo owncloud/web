@@ -2,7 +2,7 @@ import { mock } from 'vitest-mock-extended'
 import SetLinkPasswordModal from '../../../../src/components/Modals/SetLinkPasswordModal.vue'
 import { defaultComponentMocks, defaultPlugins, shallowMount } from 'web-test-helpers'
 import { Modal, useMessages, useSharesStore } from '@ownclouders/web-pkg'
-import { Share } from '@ownclouders/web-client/src/helpers'
+import { Resource, LinkShare, SpaceResource } from '@ownclouders/web-client/src/helpers'
 
 describe('SetLinkPasswordModal', () => {
   it('should render a text input field for the password', () => {
@@ -40,7 +40,9 @@ function getWrapper() {
     wrapper: shallowMount(SetLinkPasswordModal, {
       props: {
         modal: mock<Modal>(),
-        link: mock<Share>()
+        link: mock<LinkShare>(),
+        space: mock<SpaceResource>(),
+        resource: mock<Resource>()
       },
       global: {
         plugins: [...defaultPlugins()],

@@ -19,8 +19,8 @@
 
 <script lang="ts">
 import { avatarUrl } from '../../../../../helpers/user'
-import { ShareTypes } from '@ownclouders/web-client/src/helpers/share'
-import { defineComponent } from 'vue'
+import { CollaboratorAutoCompleteItem, ShareTypes } from '@ownclouders/web-client/src/helpers/share'
+import { defineComponent, PropType } from 'vue'
 import { Recipient } from 'design-system/src/components/OcRecipient/types'
 import { useCapabilityStore, useConfigStore } from '@ownclouders/web-pkg'
 import { storeToRefs } from 'pinia'
@@ -28,7 +28,7 @@ import { storeToRefs } from 'pinia'
 export default defineComponent({
   props: {
     recipient: {
-      type: Object,
+      type: Object as PropType<CollaboratorAutoCompleteItem>,
       required: true
     },
     deselect: {
@@ -52,10 +52,10 @@ export default defineComponent({
   data(): { formattedRecipient: Recipient } {
     return {
       formattedRecipient: {
-        name: this.recipient.label,
+        name: this.recipient.displayName,
         icon: this.getRecipientIcon(),
         hasAvatar: [ShareTypes.user.value, ShareTypes.spaceUser.value].includes(
-          this.recipient.value.shareType
+          this.recipient.shareType
         ),
         isLoadingAvatar: true
       }
@@ -64,7 +64,7 @@ export default defineComponent({
 
   computed: {
     btnDeselectRecipientLabel() {
-      return this.$gettext('Deselect %{name}', { name: this.recipient.label })
+      return this.$gettext('Deselect %{name}', { name: this.recipient.displayName })
     }
   },
 
@@ -74,7 +74,7 @@ export default defineComponent({
         this.formattedRecipient.avatar = await avatarUrl({
           clientService: this.$clientService,
           server: this.serverUrl,
-          username: this.recipient.value.shareWith
+          username: this.recipient.displayName
         })
       } catch (error) {
         console.error(error)
@@ -86,7 +86,7 @@ export default defineComponent({
 
   methods: {
     getRecipientIcon() {
-      switch (this.recipient.value.shareType) {
+      switch (this.recipient.shareType) {
         case ShareTypes.group.value:
           return {
             name: ShareTypes.group.icon,

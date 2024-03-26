@@ -3,66 +3,60 @@ import { mock } from 'vitest-mock-extended'
 import { Resource } from '@ownclouders/web-client'
 import { SpaceResource } from '@ownclouders/web-client/src/helpers'
 import { v4 as uuidV4 } from 'uuid'
-import { Share } from '@ownclouders/web-client/src/helpers/share'
+import {
+  CollaboratorShare,
+  ShareRoleNG,
+  ShareTypes
+} from '@ownclouders/web-client/src/helpers/share'
 import {
   defaultPlugins,
   mount,
   shallowMount,
   defaultComponentMocks,
-  defaultStubs,
-  RouteLocation
+  defaultStubs
 } from 'web-test-helpers'
-import { CapabilityStore, useResourcesStore, useSharesStore } from '@ownclouders/web-pkg'
 import CollaboratorListItem from '../../../../../src/components/SideBar/Shares/Collaborators/ListItem.vue'
+import { CapabilityStore, useCanShare, useModals } from '@ownclouders/web-pkg'
+import { User } from '@ownclouders/web-client/src/generated'
 
-const getCollaborator = () => ({
-  shareType: 0,
+vi.mock('@ownclouders/web-pkg', async (importOriginal) => ({
+  ...(await importOriginal<any>()),
+  useCanShare: vi.fn()
+}))
+
+const getCollaborator = (): CollaboratorShare => ({
   id: uuidV4(),
-  outgoing: true,
-  collaborator: {
-    name: 'einstein',
-    displayName: 'Albert Einstein',
-    additionalInfo: 'einstein@example.org'
+  sharedWith: {
+    id: 'einstein',
+    displayName: 'Albert Einstein'
   },
-  owner: {
-    name: 'admin',
-    displayName: 'Admin',
-    additionalInfo: 'admin@example.org'
+  sharedBy: {
+    id: 'admin',
+    displayName: 'Admin'
   },
-  fileOwner: {
-    name: 'admin',
-    displayName: 'Admin',
-    additionalInfo: 'admin@example.org'
-  },
-  file: {},
-  stime: '1639152810',
-  permissions: 15,
-  itemSource: '1',
-  path: "/Neuer Ordner-'singe'",
-  key: 'collaborator-f5c28709-b921-4ec8-b39a-4c243709b514'
+  permissions: [],
+  role: mock<ShareRoleNG>(),
+  resourceId: uuidV4(),
+  indirect: false,
+  shareType: ShareTypes.user.value
 })
 
 describe('FileShares', () => {
   describe('invite collaborator form', () => {
     it('renders the form when the resource can be shared', () => {
       const resource = mock<Resource>({ isReceivedShare: () => false, canShare: () => true })
-      const { wrapper } = getWrapper({ resource })
+      const { wrapper } = getWrapper({ resource, canShare: true })
       expect(wrapper.find('invite-collaborator-form-stub').exists()).toBeTruthy()
     })
     it('does not render the form when the resource can not be shared', () => {
       const resource = mock<Resource>({ isReceivedShare: () => false, canShare: () => false })
-      const { wrapper } = getWrapper({ resource })
+      const { wrapper } = getWrapper({ resource, canShare: false })
       expect(wrapper.find('invite-collaborator-form-stub').exists()).toBeFalsy()
     })
     it('does render the form when the resource is a received share and re-sharing is enabled', () => {
       const resource = mock<Resource>({ isReceivedShare: () => true, canShare: () => true })
       const { wrapper } = getWrapper({ resource })
       expect(wrapper.find('invite-collaborator-form-stub').exists()).toBeTruthy()
-    })
-    it('does not render the form when the resource is a received share and re-sharing is disabled', () => {
-      const resource = mock<Resource>({ isReceivedShare: () => true, canShare: () => true })
-      const { wrapper } = getWrapper({ resource, hasReSharing: false })
-      expect(wrapper.find('invite-collaborator-form-stub').exists()).toBeFalsy()
     })
   })
 
@@ -79,20 +73,16 @@ describe('FileShares', () => {
       expect(wrapper.html()).toMatchSnapshot()
     })
     it('reacts on delete events', async () => {
-      const spyOnCollaboratorDeleteTrigger = vi
-        .spyOn(FileShares.methods, '$_ocCollaborators_deleteShare_trigger')
-        .mockImplementation(() => undefined)
       const { wrapper } = getWrapper({ collaborators })
-      wrapper
-        .findComponent<typeof CollaboratorListItem>('collaborator-list-item-stub')
-        .vm.$emit('onDelete')
+      const { dispatchModal } = useModals()
+      ;(wrapper.findComponent<any>('collaborator-list-item-stub').vm as any).$emit('onDelete')
       await wrapper.vm.$nextTick()
-      expect(spyOnCollaboratorDeleteTrigger).toHaveBeenCalledTimes(1)
+      expect(dispatchModal).toHaveBeenCalledTimes(1)
     })
     it('correctly passes the shared parent route to the collaborator list item for indirect shares', () => {
       const indirectCollaborator = { ...getCollaborator(), indirect: true }
       const ancestorMetaData = {
-        '/somePath': { id: indirectCollaborator.itemSource }
+        '/somePath': { id: indirectCollaborator.resourceId }
       }
       const { wrapper } = getWrapper({ collaborators: [indirectCollaborator], ancestorMetaData })
       const listItemStub = wrapper.findComponent<typeof CollaboratorListItem>(
@@ -125,7 +115,7 @@ describe('FileShares', () => {
       expect(wrapper.vm.isShareModifiable(collaborators[0])).toBe(false)
     })
     it('share should not be modifiable if user is not manager', () => {
-      const space = mock<SpaceResource>({ driveType: 'personal' })
+      const space = mock<SpaceResource>({ driveType: 'project' })
       ;(space as any).isManager = vi.fn(() => false)
       collaborators[0]['indirect'] = true
       const { wrapper } = getWrapper({ space, mountType: shallowMount, collaborators })
@@ -135,16 +125,16 @@ describe('FileShares', () => {
 
   describe('current space', () => {
     it('loads space members if a space is given and the current user is member', () => {
-      const user = { onPremisesSamAccountName: '1' }
+      const user = { id: '1' } as User
       const space = mock<SpaceResource>({ driveType: 'project' })
       const spaceMembers = [
-        { collaborator: { name: user.onPremisesSamAccountName } },
-        { collaborator: { name: 2 } }
-      ]
+        { sharedWith: { id: user.id } },
+        { sharedWith: { id: '2' } }
+      ] as CollaboratorShare[]
       const collaborator = getCollaborator()
-      collaborator.collaborator = {
-        ...collaborator.collaborator,
-        name: user.onPremisesSamAccountName
+      collaborator.sharedWith = {
+        ...collaborator.sharedWith,
+        id: user.id
       }
       const { wrapper } = getWrapper({ space, collaborators: [collaborator], user, spaceMembers })
       expect(wrapper.find('#files-collaborators-list').exists()).toBeTruthy()
@@ -152,49 +142,25 @@ describe('FileShares', () => {
       expect(wrapper.html()).toMatchSnapshot()
     })
     it('does not load space members if a space is given but the current user not a member', () => {
-      const user = { onPremisesSamAccountName: '1' }
+      const user = { id: '1' } as User
       const space = mock<SpaceResource>({ driveType: 'project' })
       const spaceMembers = [{ collaborator: { name: `${user}-2` } }]
       const collaborator = getCollaborator()
-      collaborator.collaborator = {
-        ...collaborator.collaborator,
-        name: user.onPremisesSamAccountName
+      collaborator.sharedWith = {
+        ...collaborator.sharedWith,
+        id: user.id
       }
       const { wrapper } = getWrapper({ space, collaborators: [collaborator], user, spaceMembers })
       expect(wrapper.find('#space-collaborators-list').exists()).toBeFalsy()
     })
   })
 
-  describe('"$_ocCollaborators_deleteShare" method', () => {
-    it('calls "deleteShare" when successful', async () => {
+  describe('"deleteShareConfirmation" method', () => {
+    it('dispatches a modal', () => {
       const { wrapper } = getWrapper()
-      const deleteShareSpy = vi.spyOn(wrapper.vm, 'deleteShare')
-      const share = mock<Share>()
-      await wrapper.vm.$_ocCollaborators_deleteShare(share)
-      expect(deleteShareSpy).toHaveBeenCalled()
-    })
-    it('shows a message when an error occurs', async () => {
-      vi.spyOn(console, 'error').mockImplementation(() => undefined)
-      const { wrapper } = getWrapper()
-      vi.spyOn(wrapper.vm, 'deleteShare').mockRejectedValue(new Error())
-      const showErrorMessageSpy = vi.spyOn(wrapper.vm, 'showErrorMessage')
-      const share = mock<Share>()
-      await wrapper.vm.$_ocCollaborators_deleteShare(share)
-      expect(showErrorMessageSpy).toHaveBeenCalled()
-    })
-    it('removes file when the last share on the "Shared with others"-page has been removed', async () => {
-      const { wrapper } = getWrapper({
-        collaborators: [getCollaborator()],
-        currentRouteName: 'files-shares-with-others'
-      })
-      const share = mock<Share>()
-      await wrapper.vm.$_ocCollaborators_deleteShare(share)
-
-      const { removeResources } = useResourcesStore()
-      expect(removeResources).toHaveBeenCalled()
-
-      const { deleteShare } = useSharesStore()
-      expect(deleteShare).toHaveBeenCalled()
+      const { dispatchModal } = useModals()
+      wrapper.vm.deleteShareConfirmation(mock<CollaboratorShare>())
+      expect(dispatchModal).toHaveBeenCalled()
     })
   })
 })
@@ -202,17 +168,18 @@ describe('FileShares', () => {
 function getWrapper({
   mountType = shallowMount,
   resource = mock<Resource>({ isReceivedShare: () => false, canShare: () => true }),
-  hasReSharing = true,
   space = mock<SpaceResource>(),
   collaborators = [],
   spaceMembers = [],
-  user = { onPremisesSamAccountName: '1' },
+  user = undefined,
   showAllOnLoad = true,
-  currentRouteName = 'files-spaces-generic',
-  ancestorMetaData = {}
+  ancestorMetaData = {},
+  canShare = true
 } = {}) {
+  vi.mocked(useCanShare).mockReturnValue({ canShare: () => canShare })
+
   const capabilities = {
-    files_sharing: { resharing: hasReSharing, deny_access: false }
+    files_sharing: { deny_access: false }
   } satisfies Partial<CapabilityStore['capabilities']>
 
   return {
@@ -227,19 +194,13 @@ function getWrapper({
               configState: {
                 options: { contextHelpers: true, sidebar: { shares: { showAllOnLoad } } }
               },
-              sharesState: { shares: collaborators },
+              sharesState: { collaboratorShares: collaborators },
               resourcesStore: { ancestorMetaData }
             }
           })
         ],
-        mocks: defaultComponentMocks({
-          currentRoute: mock<RouteLocation>({ name: currentRouteName })
-        }),
-        provide: {
-          resource,
-          space,
-          incomingParentShare: {}
-        },
+        mocks: defaultComponentMocks(),
+        provide: { resource, space },
         stubs: {
           ...defaultStubs,
           OcButton: false,

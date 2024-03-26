@@ -148,10 +148,7 @@ export default defineComponent({
       })
     })
 
-    const linkShareCount = computed(() => {
-      return sharesStore.outgoingLinks.length
-    })
-
+    const linkShareCount = computed(() => sharesStore.linkShares.length)
     const showWebDavDetails = computed(() => resourcesStore.areWebDavDetailsShown)
 
     return {

@@ -131,9 +131,7 @@ export default defineComponent({
         .setLocale(getLocaleFromLanguage(language.current))
         .endOf('day')
       emit('optionChange', {
-        expirationDate: dateCurrent.isValid
-          ? dateCurrent.toFormat("yyyy-MM-dd'T'HH:mm:ssZZZ")
-          : null
+        expirationDate: dateCurrent.isValid ? dateCurrent : null
       })
     })
 

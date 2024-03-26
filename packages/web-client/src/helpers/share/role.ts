@@ -5,6 +5,7 @@ const $gettext = (str) => {
   return str
 }
 
+/** @deprecated */
 export abstract class ShareRole {
   private readonly _name: string
   private readonly _folder: boolean
@@ -95,6 +96,7 @@ export abstract class ShareRole {
   }
 }
 
+/** @deprecated */
 export class CustomShareRole extends ShareRole {
   get hasCustomPermissions(): boolean {
     return true
@@ -106,12 +108,14 @@ export class CustomShareRole extends ShareRole {
   }
 }
 
+/** @deprecated */
 export class PeopleShareRole extends ShareRole {
   public description(allowSharing: boolean): string {
     return shareRoleDescriptions[this.bitmask(allowSharing)]
   }
 }
 
+/** @deprecated */
 export class SpaceShareRole extends ShareRole {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   public description(allowSharing: boolean): string {
@@ -126,6 +130,7 @@ export class SpaceShareRole extends ShareRole {
   }
 }
 
+/** @deprecated */
 export class LinkShareRole extends ShareRole {
   public description(allowSharing: boolean): string {
     return linkRoleDescriptions[this.bitmask(allowSharing)]
@@ -307,6 +312,7 @@ export const spaceRoleManager = new SpaceShareRole(
   ]
 )
 
+/** @deprecated */
 export abstract class SpacePeopleShareRoles {
   static readonly all = [spaceRoleViewer, spaceRoleEditor, spaceRoleManager]
 
@@ -320,6 +326,7 @@ export abstract class SpacePeopleShareRoles {
   }
 }
 
+/** @deprecated */
 export abstract class PeopleShareRoles {
   static readonly all = [
     peopleRoleViewerFile,
@@ -371,6 +378,7 @@ export abstract class PeopleShareRoles {
   }
 }
 
+/** @deprecated */
 export abstract class LinkShareRoles {
   static list(
     isFolder: boolean,

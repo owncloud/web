@@ -5,39 +5,38 @@
       <oc-contextual-helper v-if="helpersEnabled" class="oc-pl-xs" v-bind="viaLinkHelp" />
     </div>
     <p
-      v-if="!canCreateLinks"
-      data-testid="files-links-no-reshare-permissions-message"
+      v-if="!canCreateLinks({ space, resource })"
+      data-testid="files-links-no-share-permissions-message"
       class="oc-mt-m"
-      v-text="noResharePermsMessage"
+      v-text="$gettext('You do not have permission to create links')"
     />
-    <div v-if="quicklink || canCreateLinks" class="oc-mt-m">
-      <name-and-copy v-if="quicklink" :link="quicklink" />
+    <div v-if="quicklink || canCreateLinks({ space, resource })" class="oc-mt-m">
+      <name-and-copy v-if="quicklink" :link-share="quicklink" />
       <create-quick-link
-        v-else-if="canCreateLinks"
+        v-else-if="canCreateLinks({ space, resource })"
         :expiration-rules="expirationRules"
-        @create-public-link="addNewLink"
+        @create-public-link="addNewLink(true)"
       />
       <details-and-edit
         v-if="quicklink"
-        :available-role-options="getAvailableRoleOptions(quicklink)"
         :can-rename="false"
         :expiration-rules="expirationRules"
         :is-folder-share="resource.isFolder"
         :is-modifiable="canEditLink(quicklink)"
-        :is-password-enforced="isPasswordEnforcedFor(quicklink)"
+        :is-password-enforced="isPasswordEnforcedForLinkType(quicklink.type)"
         :is-password-removable="canDeletePublicLinkPassword(quicklink)"
-        :link="quicklink"
-        @update-link="checkLinkToUpdate"
+        :link-share="quicklink"
+        @update-link="handleLinkUpdate"
         @remove-public-link="deleteLinkConfirmation"
       />
       <hr class="oc-my-m" />
       <oc-button
-        v-if="canCreateLinks"
+        v-if="canCreateLinks({ space, resource })"
         id="files-file-link-add"
         variation="primary"
         appearance="raw"
         data-testid="files-link-add-btn"
-        @click="addNewLink"
+        @click="addNewLink(false)"
       >
         <span v-text="$gettext('Add link')"
       /></oc-button>
@@ -50,23 +49,26 @@
         class="oc-py-s"
         :data-testid="`files-link-id-${link.id}`"
       >
-        <name-and-copy :link="link" />
+        <name-and-copy :link-share="link" />
         <details-and-edit
-          :available-role-options="getAvailableRoleOptions(link)"
           :can-rename="true"
           :expiration-rules="expirationRules"
           :is-folder-share="resource.isFolder"
           :is-modifiable="canEditLink(link)"
-          :is-password-enforced="isPasswordEnforcedFor(link)"
+          :is-password-enforced="isPasswordEnforcedForLinkType(link.type)"
           :is-password-removable="canDeletePublicLinkPassword(link)"
-          :link="link"
-          @update-link="checkLinkToUpdate"
+          :link-share="link"
+          @update-link="handleLinkUpdate"
           @remove-public-link="deleteLinkConfirmation"
         />
       </li>
     </oc-list>
     <div v-if="directLinks.length > 3" class="oc-flex oc-flex-center">
-      <oc-button appearance="raw" @click="toggleLinkListCollapsed">
+      <oc-button
+        class="indirect-link-list-toggle"
+        appearance="raw"
+        @click="toggleLinkListCollapsed"
+      >
         <span v-text="collapseButtonTitle" />
         <oc-icon :name="collapseButtonIcon" fill-type="line" />
       </oc-button>
@@ -86,19 +88,18 @@
           class="oc-py-s"
           :data-testid="`files-link-id-${link.id}`"
         >
-          <name-and-copy :link="link" />
+          <name-and-copy :link-share="link" />
           <details-and-edit
-            :available-role-options="getAvailableRoleOptions(link)"
             :expiration-rules="expirationRules"
             :is-folder-share="true"
             :is-modifiable="false"
-            :link="link"
+            :link-share="link"
           />
         </li>
       </oc-list>
       <div class="oc-flex oc-flex-center">
         <oc-button
-          id="indirect-link-list-toggle"
+          class="indirect-link-list-toggle"
           appearance="raw"
           @click="toggleIndirectLinkListCollapsed"
         >
@@ -111,45 +112,30 @@
 </template>
 <script lang="ts">
 import { computed, defineComponent, inject, ref, Ref, unref } from 'vue'
-import { DateTime } from 'luxon'
 import {
   useAbility,
   useExpirationRules,
-  useDefaultLinkPermissions,
   useFileActionsCreateLink,
   FileAction,
   useClientService,
   useModals,
-  useUserStore,
   useMessages,
-  useCapabilityStore,
   useConfigStore,
-  useResourcesStore
+  useResourcesStore,
+  useLinkTypes,
+  useCanShare
 } from '@ownclouders/web-pkg'
 import { shareViaLinkHelp, shareViaIndirectLinkHelp } from '../../../helpers/contextualHelpers'
-import {
-  linkRoleContributorFolder,
-  linkRoleEditorFolder,
-  linkRoleUploaderFolder,
-  linkRoleViewerFolder,
-  LinkShareRoles,
-  Share,
-  SharePermissions
-} from '@ownclouders/web-client/src/helpers/share'
+import { LinkShare } from '@ownclouders/web-client/src/helpers/share'
 import DetailsAndEdit from './Links/DetailsAndEdit.vue'
 import NameAndCopy from './Links/NameAndCopy.vue'
 import CreateQuickLink from './Links/CreateQuickLink.vue'
 import SetLinkPasswordModal from '../../Modals/SetLinkPasswordModal.vue'
-import { getLocaleFromLanguage } from '@ownclouders/web-pkg'
-import {
-  Resource,
-  SpaceResource,
-  isProjectSpaceResource,
-  isShareSpaceResource
-} from '@ownclouders/web-client/src/helpers'
+import { Resource, SpaceResource } from '@ownclouders/web-client/src/helpers'
 import { isLocationSharesActive, useSharesStore } from '@ownclouders/web-pkg'
 import { useGettext } from 'vue3-gettext'
 import { storeToRefs } from 'pinia'
+import { SharingLinkType } from '@ownclouders/web-client/src/generated'
 
 export default defineComponent({
   name: 'FileLinks',
@@ -160,21 +146,19 @@ export default defineComponent({
   },
   setup() {
     const { showMessage, showErrorMessage } = useMessages()
-    const userStore = useUserStore()
     const { $gettext } = useGettext()
     const ability = useAbility()
     const clientService = useClientService()
     const { can } = ability
     const { expirationRules } = useExpirationRules()
-    const capabilityStore = useCapabilityStore()
-    const capabilityRefs = storeToRefs(capabilityStore)
-    const { defaultLinkPermissions } = useDefaultLinkPermissions()
     const { dispatchModal } = useModals()
     const { removeResources } = useResourcesStore()
+    const { isPasswordEnforcedForLinkType } = useLinkTypes()
+    const { canShare: canCreateLinks } = useCanShare()
 
     const sharesStore = useSharesStore()
     const { updateLink, deleteLink } = sharesStore
-    const { outgoingLinks } = storeToRefs(sharesStore)
+    const { linkShares } = storeToRefs(sharesStore)
 
     const configStore = useConfigStore()
     const { options: configOptions } = storeToRefs(configStore)
@@ -194,65 +178,80 @@ export default defineComponent({
     const linkListCollapsed = ref(initialLinkListCollapsed)
     const indirectLinkListCollapsed = ref(initialLinkListCollapsed)
     const directLinks = computed(() =>
-      unref(outgoingLinks)
-        .filter((l) => !l.indirect && !l.quicklink)
-        .sort((a: any, b: any) => b.stime - a.stime)
+      unref(linkShares)
+        .filter((l) => !l.indirect && !l.isQuickLink)
+        .sort((a: any, b: any) => b.stime - a.stime) // FIXME: share date not yet available
         .map((share) => {
           return { ...share, key: 'direct-link-' + share.id }
         })
     )
     const indirectLinks = computed(() =>
-      unref(outgoingLinks)
+      unref(linkShares)
         .filter((l) => l.indirect)
-        .sort((a: any, b: any) => b.stime - a.stime)
+        .sort((a: any, b: any) => b.stime - a.stime) // FIXME: share date not yet available
         .map((share) => {
           return { ...share, key: 'indirect-link-' + share.id }
         })
     )
-    const canCreatePublicLinks = computed(() => can('create-all', 'PublicLink'))
 
     const canDeleteReadOnlyPublicLinkPassword = computed(() =>
       can('delete-all', 'ReadOnlyPublicLinkPassword')
     )
 
-    const canCreateLinks = computed(() => {
-      if (unref(resource).isReceivedShare() && !capabilityStore.sharingResharing) {
-        return false
-      }
-
-      const isSharedResource = isShareSpaceResource(unref(space))
-      if (isSharedResource && !capabilityStore.sharingResharing) {
-        return false
-      }
-
-      if (isProjectSpaceResource(unref(resource)) && unref(resource).disabled) {
-        return false
-      }
-
-      return unref(resource).canShare({ user: userStore.user, ability })
-    })
-
-    const canEditLink = ({ permissions }: Share) => {
+    const canEditLink = (linkShare: LinkShare) => {
       return (
-        unref(canCreateLinks) &&
-        (can('create-all', 'PublicLink') || permissions === SharePermissions.internal.bit)
+        canCreateLinks({ space: unref(space), resource: unref(resource) }) &&
+        (can('create-all', 'PublicLink') || linkShare.type === SharingLinkType.Internal)
       )
     }
 
-    const addNewLink = ({ link }) => {
+    const addNewLink = (isQuickLink: boolean) => {
       const handlerArgs = { space: unref(space), resources: [unref(resource)] }
-      if (link?.quicklink) {
+      if (isQuickLink) {
         return unref(createQuicklinkAction)?.handler(handlerArgs)
       }
 
       return unref(createLinkAction)?.handler(handlerArgs)
     }
 
-    const updatePublicLink = async ({ params }) => {
+    const canDeletePublicLinkPassword = (linkShare: LinkShare) => {
+      const isPasswordEnforced = isPasswordEnforcedForLinkType(linkShare.type)
+
+      if (!isPasswordEnforced) {
+        return true
+      }
+
+      return linkShare.type === SharingLinkType.View && unref(canDeleteReadOnlyPublicLinkPassword)
+    }
+
+    const handleLinkUpdate = async ({
+      linkShare,
+      password = undefined
+    }: {
+      linkShare: LinkShare
+      password?: string
+    }) => {
+      if (password !== undefined && !canDeletePublicLinkPassword(linkShare)) {
+        showPasswordModal(linkShare)
+        return
+      }
+
       try {
-        await updateLink({ id: params.id, clientService, params })
+        await updateLink({
+          clientService,
+          space: unref(space),
+          resource: unref(resource),
+          linkShare,
+          options: {
+            displayName: linkShare.displayName,
+            type: linkShare.type,
+            expirationDateTime: linkShare.expirationDateTime,
+            ...(password !== undefined && { password })
+          }
+        })
         showMessage({ title: $gettext('Link was updated successfully') })
       } catch (e) {
+        console.error(e)
         showErrorMessage({
           title: $gettext('Failed to update link'),
           errors: [e]
@@ -260,44 +259,41 @@ export default defineComponent({
       }
     }
 
-    const showPasswordModal = (params) => {
+    const showPasswordModal = (linkShare: LinkShare) => {
       dispatchModal({
         title: $gettext('Set password'),
         customComponent: SetLinkPasswordModal,
-        customComponentAttrs: () => ({ link: params })
+        customComponentAttrs: () => ({
+          space: unref(space),
+          resource: unref(resource),
+          link: linkShare
+        })
       })
     }
 
     return {
-      ability,
+      clientService,
       space,
       resource,
-      incomingParentShare: inject<Share>('incomingParentShare'),
-      hasPublicLinkEditing: capabilityRefs.sharingPublicCanEdit,
-      hasPublicLinkContribute: capabilityRefs.sharingPublicCanContribute,
-      hasPublicLinkAliasSupport: capabilityRefs.sharingPublicAlias,
-      passwordEnforced: capabilityRefs.sharingPublicPasswordEnforcedFor,
+      isPasswordEnforcedForLinkType,
       indirectLinkListCollapsed,
       linkListCollapsed,
-      outgoingLinks,
+      linkShares,
       directLinks,
       indirectLinks,
       deleteLink,
-      canCreatePublicLinks,
-      canDeleteReadOnlyPublicLinkPassword,
       configStore,
       configOptions,
       canCreateLinks,
       canEditLink,
       expirationRules,
-      updatePublicLink,
-      showPasswordModal,
-      defaultLinkPermissions,
+      handleLinkUpdate,
       addNewLink,
       dispatchModal,
       showMessage,
       showErrorMessage,
-      removeResources
+      removeResources,
+      canDeletePublicLinkPassword
     }
   },
   computed: {
@@ -315,7 +311,7 @@ export default defineComponent({
     },
 
     quicklink() {
-      return this.outgoingLinks.find((link) => link.quicklink === true && !link.indirect)
+      return this.linkShares.find(({ isQuickLink, indirect }) => isQuickLink === true && !indirect)
     },
 
     helpersEnabled() {
@@ -327,9 +323,6 @@ export default defineComponent({
     },
     indirectLinkHelp() {
       return shareViaIndirectLinkHelp({ configStore: this.configStore })
-    },
-    noResharePermsMessage() {
-      return this.$gettext('You do not have permission to create links')
     },
 
     linksHeading() {
@@ -358,18 +351,6 @@ export default defineComponent({
 
     resourceIsSpace() {
       return this.resource.type === 'space'
-    },
-
-    currentStorageId() {
-      if (this.resourceIsSpace) {
-        return this.resource.id
-      }
-
-      if (this.space) {
-        return this.space.id
-      }
-
-      return null
     }
   },
   methods: {
@@ -381,112 +362,7 @@ export default defineComponent({
       this.indirectLinkListCollapsed = !this.indirectLinkListCollapsed
     },
 
-    isPasswordEnforcedFor(link) {
-      const isFolder = link.indirect || this.resource.isFolder
-      const currentRole = LinkShareRoles.getByBitmask(parseInt(link.permissions), isFolder)
-
-      /**
-       * `passwordEnforced` members are oddly designed. they look like they map to permissions,
-       * but in reality they map to role names. hence the comparison with specific link roles.
-       *
-       * comparisons are happening based on role names because file-roles and folder-roles share the same name.
-       */
-      return (
-        (this.passwordEnforced.read_only === true &&
-          currentRole.name === linkRoleViewerFolder.name) ||
-        (this.passwordEnforced.upload_only === true &&
-          currentRole.name === linkRoleUploaderFolder.name) ||
-        (this.passwordEnforced.read_write === true &&
-          currentRole.name === linkRoleContributorFolder.name) ||
-        (this.passwordEnforced.read_write_delete === true &&
-          currentRole.name === linkRoleEditorFolder.name)
-      )
-    },
-
-    canDeletePublicLinkPassword(link) {
-      const isFolder = link.indirect || this.resource.isFolder
-      const isPasswordEnforced = this.isPasswordEnforcedFor(link)
-
-      if (!isPasswordEnforced) {
-        return true
-      }
-
-      const currentRole = LinkShareRoles.getByBitmask(parseInt(link.permissions), isFolder)
-
-      return (
-        currentRole.name === linkRoleViewerFolder.name && this.canDeleteReadOnlyPublicLinkPassword
-      )
-    },
-
-    checkLinkToUpdate({ link }) {
-      let params = this.getParamsForLink(link)
-      if (link.permissions === 0) {
-        params = {
-          ...params,
-          password: '',
-          expireDate: ''
-        }
-      }
-
-      if (!link.password && !this.canDeletePublicLinkPassword(link)) {
-        this.showPasswordModal(params)
-      } else {
-        this.updatePublicLink({ params })
-      }
-    },
-
-    getParamsForLink(link) {
-      let expireDate = ''
-
-      if (link.expiration) {
-        expireDate = (
-          typeof link.expiration === 'string'
-            ? DateTime.fromISO(link.expiration)
-            : DateTime.fromJSDate(link.expiration)
-        )
-          .setLocale(getLocaleFromLanguage(this.$language.current))
-          .endOf('day')
-          .toFormat("yyyy-MM-dd'T'HH:mm:ssZZZ")
-      }
-
-      let password
-
-      switch (link.password) {
-        // no password
-        case false:
-          password = undefined
-          break
-        // delete password
-        case '':
-          password = ''
-          break
-        // existing password
-        case true:
-          password = undefined
-          break
-        // adding/editing password
-        default:
-          password = link.password
-          break
-      }
-
-      return {
-        expireDate,
-        password,
-        id: link.id,
-        permissions: link.permissions.toString(),
-        quicklink: link.quicklink,
-        name: link.name,
-        spaceRef: this.resource.fileId,
-        notifyUploads: link.notifyUploads,
-        notifyUploadsExtraRecipients: link.notifyUploadsExtraRecipients,
-        ...(this.currentStorageId && {
-          storageId: this.currentStorageId
-        })
-      }
-    },
-
-    deleteLinkConfirmation({ link }) {
+    deleteLinkConfirmation({ link }: { link: LinkShare }) {
       this.dispatchModal({
         variation: 'danger',
         title: this.$gettext('Delete link'),
@@ -494,71 +370,37 @@ export default defineComponent({
           'Are you sure you want to delete this link? Recreating the same link again is not possible.'
         ),
         confirmText: this.$gettext('Delete'),
-        onConfirm: () =>
-          this.removeLink({
-            clientService: this.$clientService,
-            share: link,
-            resource: this.resource
-          })
-      })
-    },
+        onConfirm: async () => {
+          let lastLinkId = this.linkShares.length === 1 ? this.linkShares[0].id : undefined
+          const loadIndicators = this.linkShares.filter((l) => !l.indirect).length === 1
 
-    async removeLink({ clientService, share, resource }) {
-      let path = resource.path
-      // sharing a share root from the share jail -> use resource name as path
-      if (path === '/') {
-        path = `/${resource.name}`
-      }
+          try {
+            await this.deleteLink({
+              clientService: this.clientService,
+              space: this.space,
+              resource: this.resource,
+              linkShare: link,
+              loadIndicators
+            })
 
-      let lastLinkId = this.outgoingLinks.length === 1 ? this.outgoingLinks[0].id : undefined
-      const loadIndicators = this.outgoingLinks.filter((l) => !l.indirect).length === 1
+            this.showMessage({ title: this.$gettext('Link was deleted successfully') })
 
-      try {
-        await this.deleteLink({
-          clientService,
-          share,
-          path,
-          loadIndicators
-        })
-        this.showMessage({
-          title: this.$gettext('Link was deleted successfully')
-        })
-
-        if (lastLinkId && isLocationSharesActive(this.$router, 'files-shares-via-link')) {
-          if (this.resourceIsSpace) {
-            // spaces need their actual id instead of their share id to be removed from the file list
-            lastLinkId = this.resource.id.toString()
+            if (lastLinkId && isLocationSharesActive(this.$router, 'files-shares-via-link')) {
+              if (this.resourceIsSpace) {
+                // spaces need their actual id instead of their share id to be removed from the file list
+                lastLinkId = this.resource.id.toString()
+              }
+              this.removeResources([{ id: lastLinkId }] as Resource[])
+            }
+          } catch (e) {
+            console.error(e)
+            this.showErrorMessage({
+              title: this.$gettext('Failed to delete link'),
+              errors: [e]
+            })
           }
-          this.removeResources([{ id: lastLinkId }] as Resource[])
         }
-      } catch (e) {
-        console.error(e)
-        this.showErrorMessage({
-          title: this.$gettext('Failed to delete link'),
-          errors: [e]
-        })
-      }
-    },
-
-    getAvailableRoleOptions(link) {
-      if (this.incomingParentShare && this.canCreateLinks) {
-        return LinkShareRoles.filterByBitmask(
-          this.incomingParentShare.permissions,
-          this.resource.isFolder,
-          this.hasPublicLinkEditing,
-          this.hasPublicLinkContribute,
-          this.hasPublicLinkAliasSupport,
-          this.canCreatePublicLinks
-        )
-      }
-
-      return LinkShareRoles.list(
-        this.resource.isFolder,
-        this.hasPublicLinkEditing,
-        this.hasPublicLinkContribute,
-        this.hasPublicLinkAliasSupport,
-        this.canCreatePublicLinks
-      )
+      })
     }
   }
 })

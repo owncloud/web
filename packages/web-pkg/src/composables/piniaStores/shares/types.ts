@@ -1,64 +1,50 @@
 import { Resource } from '@ownclouders/web-client'
 import { ClientService } from '../../../services'
-import { AncestorMetaData } from '../../../types'
-import { Share, ShareRole, ShareTypes } from '@ownclouders/web-client/src/helpers'
-
-export interface LoadSharesOptions {
-  clientService: ClientService
-  resource: Resource
-  path: string
-  storageId: string
-  ancestorMetaData: AncestorMetaData
-  useCached?: boolean
-}
+import { CollaboratorShare, LinkShare, SpaceResource } from '@ownclouders/web-client/src/helpers'
+import { DriveItemCreateLink, DriveItemInvite } from '@ownclouders/web-client/src/generated'
 
 export interface AddShareOptions {
   clientService: ClientService
+  space: SpaceResource
   resource: Resource
-  path: string
-  shareWith: string
-  shareType: ShareTypes
-  permissions: number
-  role: ShareRole
-  storageId: string
-  expirationDate?: string
-  notify?: boolean
-  shareWithUser?: string
-  shareWithProvider?: string
+  options: DriveItemInvite
 }
 
 export interface UpdateShareOptions {
   clientService: ClientService
+  space: SpaceResource
   resource: Resource
-  share: Share
-  permissions: number
-  expirationDate: string
-  role: ShareRole
+  collaboratorShare: CollaboratorShare
+  options: DriveItemInvite
 }
 
 export interface DeleteShareOptions {
   clientService: ClientService
-  share: Share
-  path: string
+  space: SpaceResource
+  resource: Resource
+  collaboratorShare: CollaboratorShare
   loadIndicators?: boolean
 }
 
 export interface AddLinkOptions {
   clientService: ClientService
-  path: string
-  params: any
-  storageId: string
+  space: SpaceResource
+  resource: Resource
+  options: DriveItemCreateLink
 }
 
 export interface UpdateLinkOptions {
   clientService: ClientService
-  id: string
-  params: any
+  space: SpaceResource
+  resource: Resource
+  linkShare: LinkShare
+  options: Omit<DriveItemCreateLink, '@libre.graph.quickLink'>
 }
 
 export interface DeleteLinkOptions {
   clientService: ClientService
-  share: Share
-  path: string
+  space: SpaceResource
+  resource: Resource
+  linkShare: LinkShare
   loadIndicators?: boolean
 }

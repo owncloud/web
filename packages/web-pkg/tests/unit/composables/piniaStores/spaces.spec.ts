@@ -3,15 +3,12 @@ import { useSpacesStore, sortSpaceMembers } from '../../../../src/composables/pi
 import { createPinia, setActivePinia } from 'pinia'
 import { mock, mockDeep } from 'vitest-mock-extended'
 import {
-  Share,
-  ShareTypes,
-  SpaceResource,
-  spaceRoleEditor,
-  spaceRoleManager
+  CollaboratorShare,
+  GraphShareRoleIdMap,
+  SpaceResource
 } from '@ownclouders/web-client/src/helpers'
 import { Graph } from '@ownclouders/web-client'
 import { Drive } from '@ownclouders/web-client/src/generated'
-import { OwnCloudSdk } from '@ownclouders/web-client/src/types'
 
 describe('spaces', () => {
   beforeEach(() => {
@@ -21,18 +18,18 @@ describe('spaces', () => {
   describe('method "sortSpaceMembers"', () => {
     it('always puts space managers first', () => {
       const members = [
-        mock<Share>({
-          role: { name: spaceRoleEditor.name },
-          collaborator: { displayName: 'user1' }
+        mock<CollaboratorShare>({
+          role: { id: GraphShareRoleIdMap.SpaceEditor },
+          sharedWith: { displayName: 'user1' }
         }),
-        mock<Share>({
-          role: { name: spaceRoleManager.name },
-          collaborator: { displayName: 'user2' }
+        mock<CollaboratorShare>({
+          role: { id: GraphShareRoleIdMap.SpaceManager },
+          sharedWith: { displayName: 'user2' }
         })
       ]
 
       const sortedMembers = sortSpaceMembers(members)
-      expect(sortedMembers[0].role.name).toEqual(spaceRoleManager.name)
+      expect(sortedMembers[0].role.id).toEqual(GraphShareRoleIdMap.SpaceManager)
     })
   })
 
@@ -240,95 +237,32 @@ describe('spaces', () => {
       })
     })
   })
-  describe('method "addSpaceMember"', () => {
+  describe('method "upsertSpaceMember"', () => {
     it('correctly adds space members', () => {
       getWrapper({
-        setup: async (instance) => {
-          const drive = mock<Drive>({ id: '1', special: [] })
-          const graphClient = mockDeep<Graph>()
-          graphClient.drives.getDrive.mockResolvedValue(mockAxiosResolve(drive))
+        setup: (instance) => {
+          const member = mock<CollaboratorShare>({ id: '1' })
 
-          const client = mockDeep<OwnCloudSdk>()
+          instance.upsertSpaceMember({ member })
 
-          await instance.addSpaceMember({
-            client,
-            graphClient,
-            path: '/',
-            shareWith: '',
-            permissions: 1,
-            expirationDate: '',
-            role: spaceRoleEditor,
-            storageId: '1',
-            displayName: 'foo',
-            shareType: ShareTypes.spaceUser
-          })
-
-          expect(client.shares.shareSpace).toHaveBeenCalledTimes(1)
-          expect(graphClient.drives.getDrive).toHaveBeenCalledTimes(1)
           expect(instance.spaceMembers.length).toBe(1)
+          expect(instance.spaceMembers[0].id).toBe(member.id)
         }
       })
     })
-  })
-  describe('method "changeSpaceMember"', () => {
-    it('correctly updates a space member', () => {
+    it('correctly updates space members', () => {
       getWrapper({
-        setup: async (instance) => {
-          const drive = mock<Drive>({ id: '1', special: [] })
-          const share = mock<Share>({
-            id: '1',
-            collaborator: { displayName: 'foo', role: spaceRoleManager }
-          })
+        setup: (instance) => {
+          const member = mock<CollaboratorShare>({ id: '1', indirect: false })
+          instance.upsertSpaceMember({ member })
 
-          instance.spaceMembers = [share]
-          const graphClient = mockDeep<Graph>()
-          graphClient.drives.getDrive.mockResolvedValue(mockAxiosResolve(drive))
-
-          const client = mockDeep<OwnCloudSdk>()
-
-          await instance.changeSpaceMember({
-            client,
-            graphClient,
-            share,
-            permissions: 1,
-            expirationDate: '',
-            role: spaceRoleEditor
-          })
-
-          expect(client.shares.shareSpace).toHaveBeenCalledTimes(1)
-          expect(graphClient.drives.getDrive).toHaveBeenCalledTimes(1)
           expect(instance.spaceMembers.length).toBe(1)
-          expect(instance.spaceMembers[0].role).toEqual(spaceRoleEditor)
-        }
-      })
-    })
-  })
-  describe('method "deleteSpaceMember"', () => {
-    it('correctly removes a space member', () => {
-      getWrapper({
-        setup: async (instance) => {
-          const drive = mock<Drive>({ id: '1', special: [] })
-          const share = mock<Share>({
-            id: '1',
-            collaborator: { displayName: 'foo', role: spaceRoleManager }
-          })
+          expect(instance.spaceMembers[0].indirect).toBe(member.indirect)
 
-          instance.spaceMembers = [share]
-          const graphClient = mockDeep<Graph>()
-          graphClient.drives.getDrive.mockResolvedValue(mockAxiosResolve(drive))
+          instance.upsertSpaceMember({ member: { ...member, indirect: true } })
 
-          const client = mockDeep<OwnCloudSdk>()
-
-          await instance.deleteSpaceMember({
-            client,
-            graphClient,
-            share,
-            reloadSpace: true
-          })
-
-          expect(client.shares.deleteShare).toHaveBeenCalledTimes(1)
-          expect(graphClient.drives.getDrive).toHaveBeenCalledTimes(1)
-          expect(instance.spaceMembers.length).toBe(0)
+          expect(instance.spaceMembers.length).toBe(1)
+          expect(instance.spaceMembers[0].indirect).toBe(true)
         }
       })
     })

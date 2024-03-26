@@ -1,37 +1,38 @@
 <template>
   <div>
     <oc-list class="role-dropdown-list">
-      <li
-        v-for="(roleOption, index) in availableRoleOptions"
-        :key="`role-dropdown-${roleOption.key}`"
-      >
+      <li v-for="(type, i) in availableLinkTypes" :key="`role-dropdown-${i}`">
         <oc-button
-          :id="`files-role-${roleOption.name}`"
-          :ref="(el: any) => (roleRefs[index] = el)"
+          :id="`files-role-${getLinkId(type)}`"
+          :ref="(el: any) => (roleRefs[type] = el)"
           :class="{
-            selected: isSelectedRole(roleOption),
-            'oc-background-primary-gradient': isSelectedRole(roleOption)
+            selected: isSelectedLinkType(type),
+            'oc-background-primary-gradient': isSelectedLinkType(type)
           }"
-          :appearance="isSelectedRole(roleOption) ? 'raw-inverse' : 'raw'"
-          :variation="isSelectedRole(roleOption) ? 'primary' : 'passive'"
+          :appearance="isSelectedLinkType(type) ? 'raw-inverse' : 'raw'"
+          :variation="isSelectedLinkType(type) ? 'primary' : 'passive'"
           justify-content="space-between"
           class="oc-p-s"
-          @click="updateSelectedRole(roleOption)"
+          @click="updateSelectedLinkType(type)"
         >
           <span class="oc-flex oc-flex-middle">
-            <oc-icon :name="roleOption.icon" class="oc-pl-s oc-pr-m" variation="inherit" />
+            <oc-icon
+              :name="getLinkRoleByType(type).icon"
+              class="oc-pl-s oc-pr-m"
+              variation="inherit"
+            />
             <span>
               <span
                 class="role-dropdown-list-option-label oc-text-bold oc-display-block oc-width-1-1"
-                v-text="$gettext(roleOption.label)"
+                v-text="$gettext(getLinkRoleByType(type).displayName)"
               />
-              <span v-if="isSelectedRole(roleOption)" class="oc-text-small">{{
-                $gettext(roleOption.description(false))
+              <span v-if="isSelectedLinkType(type)" class="oc-text-small">{{
+                $gettext(getLinkRoleByType(type).description)
               }}</span>
             </span>
           </span>
           <span class="oc-flex">
-            <oc-radio v-model="selectedRole" :option="roleOption" :hide-label="true" />
+            <oc-radio v-model="selectedType" :option="type" :hide-label="true" />
           </span>
         </oc-button>
       </li>
@@ -47,12 +48,14 @@
       :generate-password-method="generatePasswordMethod"
       :error-message="password.error"
       :description-message="
-        selectedRoleIsInternal ? $gettext('Password cannot be set for internal links') : undefined
+        selectedLinkTypeIsInternal
+          ? $gettext('Password cannot be set for internal links')
+          : undefined
       "
       :fix-message-line="true"
       :label="passwordEnforced ? `${$gettext('Password')}*` : $gettext('Password')"
       class="link-modal-password-input oc-mt-l"
-      :disabled="selectedRoleIsInternal"
+      :disabled="selectedLinkTypeIsInternal"
       @update:model-value="updatePassword"
     />
   </div>
@@ -93,7 +96,7 @@
               <oc-button
                 appearance="raw"
                 class="oc-p-s action-menu-item link-expiry-picker-btn"
-                :disabled="selectedRoleIsInternal"
+                :disabled="selectedLinkTypeIsInternal"
                 @click="togglePopover"
               >
                 <oc-icon name="calendar-event" fill-type="line" size="medium" />
@@ -139,31 +142,21 @@
 import { DateTime } from 'luxon'
 import { v4 as uuidV4 } from 'uuid'
 import { useGettext } from 'vue3-gettext'
-import { computed, defineComponent, PropType, ref, Ref, reactive, unref, onMounted } from 'vue'
+import { computed, defineComponent, PropType, ref, reactive, unref, onMounted } from 'vue'
 import {
-  useAbility,
   usePasswordPolicyService,
   useEmbedMode,
   useExpirationRules,
-  useDefaultLinkPermissions,
-  useCreateLink,
+  useLinkTypes,
   Modal,
-  useCapabilityStore
+  useSharesStore,
+  useClientService
 } from '../composables'
-import {
-  LinkShareRoles,
-  Share,
-  ShareRole,
-  SpaceResource,
-  linkRoleContributorFolder,
-  linkRoleEditorFolder,
-  linkRoleInternalFolder,
-  linkRoleUploaderFolder,
-  linkRoleViewerFolder
-} from '@ownclouders/web-client/src/helpers'
+import { LinkShare, SpaceResource } from '@ownclouders/web-client/src/helpers'
 import { Resource } from '@ownclouders/web-client'
 import { formatRelativeDateFromDateTime } from '../helpers'
 import { OcButton } from 'design-system/src/components'
+import { SharingLinkType } from '@ownclouders/web-client/src/generated'
 
 export default defineComponent({
   name: 'CreateLinkModal',
@@ -173,22 +166,27 @@ export default defineComponent({
     space: { type: Object as PropType<SpaceResource>, default: undefined },
     isQuickLink: { type: Boolean, default: false },
     callbackFn: {
-      type: Function as PropType<(result: PromiseSettledResult<Share>[]) => Promise<void> | void>,
+      type: Function as PropType<
+        (result: PromiseSettledResult<LinkShare>[]) => Promise<void> | void
+      >,
       default: undefined
     }
   },
   emits: ['cancel', 'confirm'],
   setup(props, { expose }) {
-    const capabilityStore = useCapabilityStore()
+    const clientService = useClientService()
     const { $gettext, current: currentLanguage } = useGettext()
-    const ability = useAbility()
     const passwordPolicyService = usePasswordPolicyService()
     const { isEnabled: isEmbedEnabled, postMessage } = useEmbedMode()
     const { expirationRules } = useExpirationRules()
-    const { defaultLinkPermissions } = useDefaultLinkPermissions()
-    const { createLink } = useCreateLink()
+    const {
+      defaultLinkType,
+      getAvailableLinkTypes,
+      getLinkRoleByType,
+      isPasswordEnforcedForLinkType
+    } = useLinkTypes()
+    const { addLink } = useSharesStore()
 
-    const canCreatePublicLinks = computed(() => ability.can('create-all', 'PublicLink'))
     const passwordPolicy = passwordPolicyService.getPolicy()
 
     const isFolder = computed(() => props.resources.every(({ isFolder }) => isFolder))
@@ -197,39 +195,17 @@ export default defineComponent({
     const roleRefs = ref<Record<string, InstanceType<typeof OcButton>>>({})
 
     const password = reactive({ value: '', error: undefined })
-    const selectedRole = ref<ShareRole>(
-      LinkShareRoles.getByBitmask(unref(defaultLinkPermissions), unref(isFolder))
-    ) as Ref<ShareRole>
+    const selectedType = ref(unref(defaultLinkType))
     const selectedExpiry = ref<DateTime>()
 
-    const availableRoleOptions = computed(() => {
-      return LinkShareRoles.list(
-        unref(isFolder),
-        capabilityStore.sharingPublicCanEdit,
-        capabilityStore.sharingPublicCanContribute,
-        capabilityStore.sharingPublicAlias,
-        unref(canCreatePublicLinks)
-      )
-    })
+    const availableLinkTypes = computed(() => getAvailableLinkTypes({ isFolder: unref(isFolder) }))
+    const passwordEnforced = computed(() => isPasswordEnforcedForLinkType(unref(selectedType)))
 
-    const passwordEnforced = computed(() => {
-      return (
-        (capabilityStore.sharingPublicPasswordEnforcedFor.read_only === true &&
-          unref(selectedRole).name === linkRoleViewerFolder.name) ||
-        (capabilityStore.sharingPublicPasswordEnforcedFor.upload_only === true &&
-          unref(selectedRole).name === linkRoleUploaderFolder.name) ||
-        (capabilityStore.sharingPublicPasswordEnforcedFor.read_write === true &&
-          unref(selectedRole).name === linkRoleContributorFolder.name) ||
-        (capabilityStore.sharingPublicPasswordEnforcedFor.read_write_delete === true &&
-          unref(selectedRole).name === linkRoleEditorFolder.name)
-      )
-    })
-
-    const selectedRoleIsInternal = computed(
-      () => unref(selectedRole)?.bitmask(false) === linkRoleInternalFolder.bitmask(false)
+    const selectedLinkTypeIsInternal = computed(
+      () => unref(selectedType) === SharingLinkType.Internal
     )
     const onlyInternalLinksAllowed = computed(
-      () => unref(availableRoleOptions).length === 1 && unref(selectedRoleIsInternal)
+      () => unref(availableLinkTypes).length === 1 && unref(selectedLinkTypeIsInternal)
     )
 
     const selectedExpiryDateRelative = computed(() =>
@@ -255,22 +231,26 @@ export default defineComponent({
     })
 
     const createLinks = () => {
-      return Promise.allSettled<Share>(
+      return Promise.allSettled<LinkShare>(
         props.resources.map((resource) =>
-          createLink({
-            resource,
+          addLink({
+            clientService,
             space: props.space,
-            quicklink: props.isQuickLink,
-            permissions: unref(selectedRole).bitmask(false),
-            password: unref(password).value,
-            expireDate: unref(selectedExpiry)
+            resource,
+            options: {
+              type: unref(selectedType),
+              '@libre.graph.quickLink': props.isQuickLink,
+              password: unref(password).value,
+              expirationDateTime: unref(selectedExpiry),
+              displayName: $gettext('Link')
+            }
           })
         )
       )
     }
 
     const onConfirm = async () => {
-      if (!unref(selectedRoleIsInternal)) {
+      if (!unref(selectedLinkTypeIsInternal)) {
         if (unref(passwordEnforced) && !unref(password).value) {
           password.error = $gettext('Password must not be empty')
           return Promise.reject()
@@ -287,7 +267,7 @@ export default defineComponent({
       if (succeeded.length && unref(isEmbedEnabled)) {
         postMessage<string[]>(
           'owncloud-embed:share',
-          (succeeded as PromiseFulfilledResult<Share>[]).map(({ value }) => value.url)
+          (succeeded as PromiseFulfilledResult<LinkShare>[]).map(({ value }) => value.webUrl)
         )
       }
 
@@ -299,8 +279,8 @@ export default defineComponent({
           .forEach((e) => {
             console.error(e)
             // Human-readable error message is provided, for example when password is on banned list
-            if (e.statusCode === 400) {
-              userFacingErrors.push(e)
+            if (e.response?.status === 400) {
+              userFacingErrors.push(e.response.data.error)
             }
           })
       }
@@ -317,17 +297,17 @@ export default defineComponent({
 
     expose({ onConfirm })
 
-    const isSelectedRole = (role: ShareRole) => {
-      return unref(selectedRole)?.bitmask(false) === role.bitmask(false)
+    const isSelectedLinkType = (type: SharingLinkType) => {
+      return unref(selectedType) === type
     }
     const updatePassword = (value: string) => {
       password.value = value
       password.error = undefined
     }
 
-    const updateSelectedRole = (role: ShareRole) => {
-      selectedRole.value = role
-      if (unref(selectedRoleIsInternal)) {
+    const updateSelectedLinkType = (type: SharingLinkType) => {
+      selectedType.value = type
+      if (unref(selectedLinkTypeIsInternal)) {
         password.value = ''
         password.error = ''
         selectedExpiry.value = undefined
@@ -337,12 +317,24 @@ export default defineComponent({
       }
     }
 
-    onMounted(() => {
-      const activeRoleOptionIdx = unref(availableRoleOptions).findIndex(
-        ({ name }) => name === unref(selectedRole).name
-      )
+    // FIXME: only needed for e2e and acceptance tests, map id to human readable element id
+    const getLinkId = (type: SharingLinkType) => {
+      const id = getLinkRoleByType(type).id
 
-      const activeRoleOption = unref(roleRefs)[activeRoleOptionIdx]
+      const map = {
+        internal: 'internal',
+        view: 'viewer',
+        upload: 'contributor',
+        edit: 'editor',
+        createOnly: 'uploader',
+        blocksDownload: 'blocksDownload'
+      }
+
+      return map[id]
+    }
+
+    onMounted(() => {
+      const activeRoleOption = unref(roleRefs)[unref(selectedType)]
       if (activeRoleOption) {
         activeRoleOption.$el.focus()
       }
@@ -358,13 +350,15 @@ export default defineComponent({
       selectedExpiry,
       expirationDateTooltip,
       expirationRules,
-      availableRoleOptions,
-      selectedRole,
-      selectedRoleIsInternal,
+      availableLinkTypes,
+      selectedType,
+      selectedLinkTypeIsInternal,
       onlyInternalLinksAllowed,
-      isSelectedRole,
-      updateSelectedRole,
+      isSelectedLinkType,
+      updateSelectedLinkType,
       updatePassword,
+      getLinkRoleByType,
+      getLinkId,
 
       // unit tests
       onConfirm

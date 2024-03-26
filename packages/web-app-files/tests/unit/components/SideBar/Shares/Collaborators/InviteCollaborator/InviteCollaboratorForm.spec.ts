@@ -1,6 +1,5 @@
 import { mock } from 'vitest-mock-extended'
 import InviteCollaboratorForm from 'web-app-files/src/components/SideBar/Shares/Collaborators/InviteCollaborator/InviteCollaboratorForm.vue'
-import { ShareTypes } from '@ownclouders/web-client/src/helpers/share'
 import {
   defaultComponentMocks,
   defaultPlugins,
@@ -8,8 +7,20 @@ import {
   shallowMount
 } from 'web-test-helpers'
 import { Resource, SpaceResource } from '@ownclouders/web-client'
+import { useSharesStore } from '@ownclouders/web-pkg'
+import {
+  CollaboratorAutoCompleteItem,
+  GraphShareRoleIdMap,
+  ShareRoleNG
+} from '@ownclouders/web-client/src/helpers'
+import { Mock } from 'vitest'
+import { Group, User } from '@ownclouders/web-client/src/generated'
+import { AxiosResponse } from 'axios'
+
+vi.mock('lodash-es', () => ({ debounce: (fn) => fn() }))
 
 const folderMock = {
+  id: '1',
   type: 'folder',
   isFolder: true,
   mdate: 'Wed, 21 Oct 2015 07:28:00 GMT',
@@ -20,7 +31,7 @@ const folderMock = {
   canShare: vi.fn(() => true),
   path: '/documents',
   canDeny: () => false
-}
+} as Resource
 
 const spaceMock = {
   id: '1',
@@ -36,72 +47,95 @@ describe('InviteCollaboratorForm', () => {
     it.todo('renders an invite-sharees button')
     it.todo('renders an hidden-announcer')
   })
-  describe('behaves correctly', () => {
-    it.todo('upon mount fetches recipients')
+  describe('fetching recipients', () => {
+    it('fetches recipients upon mount', async () => {
+      const { wrapper, mocks } = getWrapper()
+      await wrapper.vm.fetchRecipientsTask.last
+
+      expect(mocks.$clientService.graphAuthenticated.users.listUsers).toHaveBeenCalledTimes(1)
+      expect(mocks.$clientService.graphAuthenticated.groups.listGroups).toHaveBeenCalledTimes(1)
+    })
+    it('fetches users and groups returned from the server', async () => {
+      const { wrapper } = getWrapper({ users: [{ id: '2' }], groups: [{ id: '2' }] })
+      await wrapper.vm.fetchRecipientsTask.last
+
+      expect(wrapper.vm.autocompleteResults.length).toBe(2)
+    })
+  })
+  describe('share action', () => {
     it('clicking the invite-sharees button calls the "share"-action', async () => {
-      const selectedCollaborators = [
-        { shareWith: 'marie', value: { shareType: ShareTypes.user.value }, label: 'label' }
-      ]
-      const { wrapper } = getWrapper({ selectedCollaborators })
-      const spyTriggerUpload = vi.spyOn(wrapper.vm, 'share')
+      const { wrapper } = getWrapper()
+      const shareSpy = vi.spyOn(wrapper.vm, 'share')
       const shareBtn = wrapper.find('#new-collaborators-form-create-button')
       expect(shareBtn.exists()).toBeTruthy()
 
+      await wrapper.vm.$nextTick()
       await shareBtn.trigger('click')
-      expect(spyTriggerUpload).toHaveBeenCalledTimes(0)
+      expect(shareSpy).toHaveBeenCalledTimes(0)
     })
     it.each([
-      { storageId: undefined, resource: mock<Resource>(folderMock), addMethod: 'addShare' },
-      {
-        storageId: undefined,
-        resource: mock<SpaceResource>(spaceMock),
-        addMethod: 'addSpaceMember'
-      },
-      { storageId: '1', resource: mock<Resource>(folderMock), addMethod: 'addShare' }
+      { storageId: undefined, resource: mock<Resource>(folderMock) },
+      { storageId: undefined, resource: mock<SpaceResource>(spaceMock) },
+      { storageId: '1', resource: mock<Resource>(folderMock) }
     ] as const)('calls the "addShare" action', async (dataSet) => {
-      const selectedCollaborators = [
-        { shareWith: 'marie', value: { shareType: ShareTypes.user.value }, label: 'label' }
-      ]
       const { wrapper } = getWrapper({
-        selectedCollaborators,
         storageId: dataSet.storageId,
         resource: dataSet.resource
       })
-      const addShareSpy = vi.spyOn(wrapper.vm, dataSet.addMethod)
+
+      wrapper.vm.selectedCollaborators = [mock<CollaboratorAutoCompleteItem>()]
+
+      const { addShare } = useSharesStore()
+      ;(addShare as Mock).mockResolvedValue([])
+
+      await wrapper.vm.$nextTick()
       await wrapper.vm.share()
-      expect(addShareSpy).toHaveBeenCalled()
+
+      expect(addShare).toHaveBeenCalled()
     })
     it.todo('resets focus upon selecting an invitee')
   })
 })
 
 function getWrapper({
-  selectedCollaborators = [],
   storageId = 'fake-storage-id',
-  resource = mock<Resource>(folderMock)
+  resource = mock<Resource>(folderMock),
+  users = [],
+  groups = []
 }: {
-  selectedCollaborators?: any[]
   storageId?: string
   resource?: Resource
+  users?: User[]
+  groups?: Group[]
 } = {}) {
   const mocks = defaultComponentMocks({
     currentRoute: mock<RouteLocation>({ params: { storageId } })
   })
+
+  mocks.$clientService.graphAuthenticated.users.listUsers.mockResolvedValue(
+    mock<AxiosResponse>({ data: { value: users } })
+  )
+  mocks.$clientService.graphAuthenticated.groups.listGroups.mockResolvedValue(
+    mock<AxiosResponse>({ data: { value: groups } })
+  )
+
   const capabilities = { files_sharing: { federation: { incoming: true, outgoing: true } } }
 
   return {
+    mocks,
     wrapper: shallowMount(InviteCollaboratorForm, {
-      data() {
-        return {
-          selectedCollaborators
-        }
-      },
       global: {
         plugins: [
           ...defaultPlugins({
             piniaOptions: {
               capabilityState: { capabilities },
-              configState: { options: { concurrentRequests: { shares: { create: 1 } } } }
+              configState: { options: { concurrentRequests: { shares: { create: 1 } } } },
+              sharesState: {
+                graphRoles: [
+                  mock<ShareRoleNG>({ id: GraphShareRoleIdMap.Viewer }),
+                  mock<ShareRoleNG>({ id: GraphShareRoleIdMap.SpaceViewer })
+                ]
+              }
             }
           })
         ],

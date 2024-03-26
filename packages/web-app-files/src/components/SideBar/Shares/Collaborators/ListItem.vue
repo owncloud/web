@@ -1,7 +1,7 @@
 <template>
   <div
     :data-testid="`collaborator-${isAnyUserShareType ? 'user' : 'group'}-item-${
-      share.collaborator.name
+      share.sharedWith.displayName
     }`"
     class="files-collaborators-collaborator oc-py-xs"
   >
@@ -20,8 +20,8 @@
           <template v-else>
             <avatar-image
               v-if="isAnyUserShareType"
-              :userid="share.collaborator.name"
-              :user-name="share.collaborator.displayName"
+              :userid="share.sharedWith.id"
+              :user-name="share.sharedWith.displayName"
               :width="36"
               class="files-collaborators-collaborator-indicator"
             />
@@ -52,12 +52,10 @@
               v-text="$gettext('Access denied')"
             />
             <template v-else>
-              <div v-if="canEditOrDelete" class="oc-flex oc-flex-nowrap oc-flex-middle">
+              <div v-if="modifiable" class="oc-flex oc-flex-nowrap oc-flex-middle">
                 <role-dropdown
                   :dom-selector="shareDomSelector"
-                  :existing-permissions="share.customPermissions"
                   :existing-role="share.role"
-                  :allow-share-permission="hasResharing || isAnySpaceShareType"
                   :is-locked="isLocked"
                   class="files-collaborators-collaborator-role"
                   mode="edit"
@@ -66,9 +64,9 @@
               </div>
               <div v-else-if="share.role">
                 <span
-                  v-oc-tooltip="$gettext(share.role.description(false))"
+                  v-oc-tooltip="$gettext(share.role.description)"
                   class="oc-mr-xs"
-                  v-text="$gettext(share.role.label)"
+                  v-text="$gettext(share.role.displayName)"
                 />
               </div>
             </template>
@@ -105,9 +103,9 @@
           :id="`edit-drop-down-${editDropDownToggleId}`"
           class="files-collaborators-collaborator-edit"
           data-testid="collaborator-edit"
-          :expiration-date="share.expires ? share.expires : null"
+          :expiration-date="share.expirationDateTime ? share.expirationDateTime : null"
           :share-category="shareCategory"
-          :can-edit-or-delete="canEditOrDelete"
+          :can-edit-or-delete="modifiable"
           :is-share-denied="isShareDenied"
           :is-locked="isLocked"
           :deniable="deniable"
@@ -135,14 +133,17 @@ import { DateTime } from 'luxon'
 
 import EditDropdown from './EditDropdown.vue'
 import RoleDropdown from './RoleDropdown.vue'
-import { Share, SharePermissions, ShareTypes } from '@ownclouders/web-client/src/helpers/share'
+import {
+  CollaboratorShare,
+  ShareRoleNG,
+  ShareTypes
+} from '@ownclouders/web-client/src/helpers/share'
 import {
   queryItemAsString,
   useMessages,
   useModals,
   useSpacesStore,
   useUserStore,
-  useCapabilityStore,
   useSharesStore
 } from '@ownclouders/web-pkg'
 import { Resource, extractDomSelector } from '@ownclouders/web-client/src/helpers/resource'
@@ -153,6 +154,8 @@ import { useClientService } from '@ownclouders/web-pkg'
 import { OcInfoDrop, OcDrop } from 'design-system/src/components'
 import { RouteLocationNamedRaw } from 'vue-router'
 import { useGettext } from 'vue3-gettext'
+import { SpaceResource } from '@ownclouders/web-client'
+import { buildSpace, isProjectSpaceResource } from '@ownclouders/web-client/src/helpers'
 
 export default defineComponent({
   name: 'ListItem',
@@ -162,7 +165,7 @@ export default defineComponent({
   },
   props: {
     share: {
-      type: Object as PropType<Share>,
+      type: Object as PropType<CollaboratorShare>,
       required: true
     },
     isShareDenied: {
@@ -194,14 +197,12 @@ export default defineComponent({
   setup(props, { emit }) {
     const { showMessage, showErrorMessage } = useMessages()
     const userStore = useUserStore()
-    const capabilityStore = useCapabilityStore()
-    const capabilityRefs = storeToRefs(capabilityStore)
     const clientService = useClientService()
     const { $gettext } = useGettext()
     const { dispatchModal } = useModals()
-    const { changeSpaceMember } = useSpacesStore()
 
     const { updateShare } = useSharesStore()
+    const { upsertSpace, upsertSpaceMember } = useSpacesStore()
 
     const { user } = storeToRefs(userStore)
 
@@ -245,17 +246,17 @@ export default defineComponent({
 
     return {
       resource: inject<Ref<Resource>>('resource'),
-      changeSpaceMember,
+      space: inject<Ref<SpaceResource>>('space'),
       updateShare,
       user,
-      hasResharing: capabilityRefs.sharingResharing,
-      resharingDefault: capabilityRefs.sharingResharingDefault,
       clientService,
       sharedParentDir,
       setDenyShare,
       showNotifyShareModal,
       showMessage,
-      showErrorMessage
+      showErrorMessage,
+      upsertSpace,
+      upsertSpaceMember
     }
   },
   computed: {
@@ -302,33 +303,21 @@ export default defineComponent({
     },
 
     shareDisplayName() {
-      if (this.user.onPremisesSamAccountName === this.share.collaborator.name) {
+      if (this.user.id === this.share.sharedWith.id) {
         return this.$gettext('%{collaboratorName} (me)', {
-          collaboratorName: this.share.collaborator.displayName
+          collaboratorName: this.share.sharedWith.displayName
         })
       }
-      return this.share.collaborator.displayName
-    },
-
-    shareAdditionalInfo() {
-      return this.share.collaborator.additionalInfo
+      return this.share.sharedWith.displayName
     },
 
     shareDisplayNameTooltip() {
-      return (
-        this.shareDisplayName + (this.shareAdditionalInfo ? `(${this.shareAdditionalInfo})` : '')
-      )
+      return this.shareDisplayName
     },
 
     screenreaderShareDisplayName() {
       const context = {
-        displayName: this.share.collaborator.displayName,
-        ...(this.share.collaborator.additionalInfo && {
-          additionalInfo: this.share.collaborator.additionalInfo
-        })
-      }
-      if (this.shareAdditionalInfo) {
-        return this.$gettext('Share receiver name: %{ displayName } (%{ additionalInfo })', context)
+        displayName: this.share.sharedWith.displayName
       }
 
       return this.$gettext('Share receiver name: %{ displayName }', context)
@@ -341,24 +330,20 @@ export default defineComponent({
       })
     },
 
-    canEditOrDelete() {
-      return this.modifiable
-    },
-
     hasExpirationDate() {
-      return this.share.expires
+      return !!this.share.expirationDateTime
     },
 
     expirationDate() {
       return formatDateFromDateTime(
-        DateTime.fromJSDate(this.share.expires).endOf('day'),
+        DateTime.fromISO(this.share.expirationDateTime).endOf('day'),
         this.$language.current
       )
     },
 
     expirationDateRelative() {
       return formatRelativeDateFromDateTime(
-        DateTime.fromJSDate(this.share.expires).endOf('day'),
+        DateTime.fromISO(this.share.expirationDateTime).endOf('day'),
         this.$language.current
       )
     },
@@ -367,28 +352,20 @@ export default defineComponent({
       return uuid.v4()
     },
     shareDate() {
-      return formatDateFromDateTime(
-        DateTime.fromSeconds(parseInt(this.share.stime)),
-        this.$language.current
-      )
+      return ''
+      // FIXME
+      // return formatDateFromDateTime(
+      //   DateTime.fromSeconds(parseInt(this.share.permission.)),
+      //   this.$language.current
+      // )
     },
     shareOwnerDisplayName() {
-      return this.share.owner.displayName
-    },
-    shareOwnerAdditionalInfo() {
-      return this.share.owner.additionalInfo
+      return this.share.sharedBy.displayName
     },
     accessDetailsPropsSpace() {
       const list = []
 
       list.push({ text: this.$gettext('Name'), headline: true }, { text: this.shareDisplayName })
-
-      if (this.shareAdditionalInfo) {
-        list.push(
-          { text: this.$gettext('Additional info'), headline: true },
-          { text: this.shareAdditionalInfo }
-        )
-      }
 
       list.push({ text: this.$gettext('Type'), headline: true }, { text: this.shareTypeText })
 
@@ -402,13 +379,6 @@ export default defineComponent({
 
       list.push({ text: this.$gettext('Name'), headline: true }, { text: this.shareDisplayName })
 
-      if (this.shareAdditionalInfo) {
-        list.push(
-          { text: this.$gettext('Additional info'), headline: true },
-          { text: this.shareAdditionalInfo }
-        )
-      }
-
       list.push({ text: this.$gettext('Type'), headline: true }, { text: this.shareTypeText })
       list.push(
         { text: this.$gettext('Access expires'), headline: true },
@@ -417,11 +387,7 @@ export default defineComponent({
       list.push({ text: this.$gettext('Shared on'), headline: true }, { text: this.shareDate })
       list.push(
         { text: this.$gettext('Invited by'), headline: true },
-        {
-          text: this.shareOwnerAdditionalInfo
-            ? `${this.shareOwnerDisplayName} (${this.shareOwnerAdditionalInfo})`
-            : this.shareOwnerDisplayName
-        }
+        { text: this.shareOwnerDisplayName }
       )
 
       return {
@@ -442,10 +408,10 @@ export default defineComponent({
       ).show()
     },
 
-    shareRoleChanged({ role, permissions }) {
-      const expirationDate = this.share.expires
+    async shareRoleChanged(role: ShareRoleNG) {
+      const expirationDateTime = this.share.expirationDateTime
       try {
-        this.saveShareChanges({ role, permissions, expirationDate })
+        await this.saveShareChanges({ role, expirationDateTime })
       } catch (e) {
         console.error(e)
         this.showErrorMessage({
@@ -455,11 +421,10 @@ export default defineComponent({
       }
     },
 
-    shareExpirationChanged({ expirationDate }) {
+    async shareExpirationChanged({ expirationDateTime }) {
       const role = this.share.role
-      const permissions = this.share.customPermissions
       try {
-        this.saveShareChanges({ role, permissions, expirationDate })
+        await this.saveShareChanges({ role, expirationDateTime })
       } catch (e) {
         console.error(e)
         this.showErrorMessage({
@@ -469,34 +434,28 @@ export default defineComponent({
       }
     },
 
-    saveShareChanges({ role, permissions, expirationDate }) {
-      const bitmask = role.hasCustomPermissions
-        ? SharePermissions.permissionsToBitmask(permissions)
-        : SharePermissions.permissionsToBitmask(
-            role.permissions(
-              (this.hasResharing && this.resharingDefault) || this.isAnySpaceShareType
-            )
-          )
-
+    async saveShareChanges({
+      role,
+      expirationDateTime
+    }: {
+      role: ShareRoleNG
+      expirationDateTime?: string
+    }) {
       try {
-        if (this.isAnySpaceShareType) {
-          this.changeSpaceMember({
-            client: this.$client,
-            graphClient: this.clientService.graphAuthenticated,
-            share: this.share,
-            permissions: bitmask,
-            expirationDate: expirationDate || '',
-            role
-          })
-        } else {
-          this.updateShare({
-            clientService: this.$clientService,
-            resource: this.resource,
-            share: this.share,
-            permissions: bitmask,
-            expirationDate: expirationDate || '',
-            role
-          })
+        const share = await this.updateShare({
+          clientService: this.$clientService,
+          space: this.space,
+          resource: this.resource,
+          collaboratorShare: this.share,
+          options: { roles: [role.id], expirationDateTime }
+        })
+
+        if (isProjectSpaceResource(this.resource)) {
+          const client = this.clientService.graphAuthenticated
+          const graphResponse = await client.drives.getDrive(this.resource.id)
+
+          this.upsertSpace(buildSpace(graphResponse.data))
+          this.upsertSpaceMember({ member: share })
         }
 
         this.showMessage({ title: this.$gettext('Share successfully changed') })

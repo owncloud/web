@@ -6,7 +6,12 @@ import { Capabilities } from '../../../web-client/src/ocs'
 import { mock } from 'vitest-mock-extended'
 import { SpaceResource } from '../../../web-client/src'
 import { OptionsConfig } from '../../../web-pkg/src/composables/piniaStores/config/types'
-import { Resource, Share } from '../../../web-client/src/helpers'
+import {
+  Resource,
+  CollaboratorShare,
+  LinkShare,
+  ShareRoleNG
+} from '../../../web-client/src/helpers'
 import {
   AncestorMetaData,
   ApplicationFileExtension,
@@ -51,8 +56,13 @@ export type PiniaMockOptions = {
     selectedIds?: string[]
     areFileExtensionsShown?: boolean
   }
-  sharesState?: { shares?: Share[]; loading?: boolean }
-  spacesState?: { spaces?: SpaceResource[]; spaceMembers?: Share[] }
+  sharesState?: {
+    collaboratorShares?: CollaboratorShare[]
+    linkShares?: LinkShare[]
+    graphRoles?: ShareRoleNG[]
+    loading?: boolean
+  }
+  spacesState?: { spaces?: SpaceResource[]; spaceMembers?: CollaboratorShare[] }
   userState?: { user?: User }
   capabilityState?: {
     capabilities?: Partial<Capabilities['capabilities']>
@@ -119,8 +129,8 @@ export function createMockStore({
         ...themeState
       },
       resources: { resources: [], ...resourcesStore },
-      shares: { shares: [], ...sharesState },
-      spaces: { spaces: [], spaceMembers: [], ...spacesState, ...spaceSettingsStore },
+      shares: { collaboratorShares: [], linkShares: [], ...sharesState },
+      spaces: { spaces: [], spaceMembers: [], ...spacesState },
       userSettings: { users: [], selectedUsers: [], ...userSettingsStore },
       groupSettings: { groups: [], selectedGroups: [], ...groupSettingsStore },
       spaceSettings: { spaces: [], selectedSpaces: [], ...spaceSettingsStore },

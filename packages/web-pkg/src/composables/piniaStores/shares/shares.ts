@@ -1,104 +1,141 @@
 import {
+  CollaboratorShare,
+  LinkShare,
   Share,
+  GraphShareRoleIdMap,
+  ShareRoleNG,
   ShareTypes,
-  buildCollaboratorShare,
-  buildShare,
-  isProjectSpaceResource
+  isProjectSpaceResource,
+  getGraphItemId
 } from '@ownclouders/web-client/src/helpers'
 import { defineStore } from 'pinia'
-import { Ref, computed, ref, unref } from 'vue'
-import { useConfigStore } from './../config'
-import PQueue from 'p-queue'
-import { getParentPaths } from '../../../helpers'
-import { useCapabilityStore } from './../capabilities'
+import { Ref, ref, unref } from 'vue'
 import {
   AddLinkOptions,
   AddShareOptions,
   DeleteLinkOptions,
   DeleteShareOptions,
-  LoadSharesOptions,
   UpdateLinkOptions,
   UpdateShareOptions
 } from './types'
 import { useResourcesStore } from '../resources'
 import { UnifiedRoleDefinition } from '@ownclouders/web-client/src/generated'
+import { useUserStore } from '../user'
+import {
+  buildLinkShare,
+  buildCollaboratorShare
+} from '@ownclouders/web-client/src/helpers/share/functionsNG'
 
 export const useSharesStore = defineStore('shares', () => {
-  const configStore = useConfigStore()
-  const capabilityStore = useCapabilityStore()
   const resourcesStore = useResourcesStore()
+  const userStore = useUserStore()
 
-  const loading = ref<Promise<unknown>>()
-  const shares = ref<Share[]>([]) as Ref<Share[]>
-  const graphRoles = ref<UnifiedRoleDefinition[]>([])
-
-  const incomingShares = computed(() => unref(shares).filter(({ outgoing }) => !outgoing) || [])
-  const incomingCollaborators = computed(
-    () =>
-      unref(incomingShares).filter(({ shareType }) =>
-        ShareTypes.containsAnyValue(ShareTypes.authenticated, [shareType])
-      ) || []
-  )
-
-  const outgoingShares = computed(() => unref(shares).filter(({ outgoing }) => outgoing) || [])
-  const outgoingLinks = computed(
-    () =>
-      unref(outgoingShares).filter(({ shareType }) =>
-        ShareTypes.containsAnyValue(ShareTypes.unauthenticated, [shareType])
-      ) || []
-  )
-  const outgoingCollaborators = computed(
-    () =>
-      unref(outgoingShares).filter(({ shareType }) =>
-        ShareTypes.containsAnyValue(ShareTypes.authenticated, [shareType])
-      ) || []
-  )
-
-  const allowResharing = computed(
-    () => capabilityStore.sharingResharing && capabilityStore.sharingResharingDefault
-  )
+  const loading = ref(false)
+  const collaboratorShares = ref<CollaboratorShare[]>([]) as Ref<CollaboratorShare[]>
+  const linkShares = ref<LinkShare[]>([]) as Ref<LinkShare[]>
+  const graphRoles = ref<ShareRoleNG[]>([]) as Ref<ShareRoleNG[]>
 
   const setGraphRoles = (values: UnifiedRoleDefinition[]) => {
-    graphRoles.value = values
+    const ShareRoleIconMap = {
+      [GraphShareRoleIdMap.Viewer]: 'eye',
+      [GraphShareRoleIdMap.SpaceViewer]: 'eye',
+      [GraphShareRoleIdMap.FileEditor]: 'pencil',
+      [GraphShareRoleIdMap.FolderEditor]: 'pencil',
+      [GraphShareRoleIdMap.SpaceEditor]: 'pencil',
+      [GraphShareRoleIdMap.SpaceManager]: 'user-star'
+    }
+
+    const $gettext = (str: string) => str // dummy
+    const ShareRoleLabelMap = {
+      [GraphShareRoleIdMap.Viewer]: $gettext('Can view'),
+      [GraphShareRoleIdMap.SpaceViewer]: $gettext('Can view'),
+      [GraphShareRoleIdMap.FileEditor]: $gettext('Can edit'),
+      [GraphShareRoleIdMap.FolderEditor]: $gettext('Can edit'),
+      [GraphShareRoleIdMap.SpaceEditor]: $gettext('Can edit'),
+      [GraphShareRoleIdMap.SpaceManager]: $gettext('Can manage')
+    }
+
+    graphRoles.value = values.map((v) => ({
+      ...v,
+      icon: ShareRoleIconMap[v.id] || 'user',
+      label: ShareRoleLabelMap[v.id] || v.displayName
+    }))
   }
 
-  const upsertShare = (share: Share) => {
-    const existingShare = unref(shares).find(({ id }) => id === share.id)
+  const upsertCollaboratorShare = (share: CollaboratorShare) => {
+    const existingShare = unref(collaboratorShares).find(({ id }) => id === share.id)
 
     if (existingShare) {
       Object.assign(existingShare, share)
       return
     }
 
-    unref(shares).push(share)
+    unref(collaboratorShares).push(share)
   }
 
-  const removeShare = (share: Share) => {
-    shares.value = unref(shares).filter(({ id }) => id !== share.id)
+  const setCollaboratorShares = (values: CollaboratorShare[]) => {
+    collaboratorShares.value = values
+  }
+
+  const addCollaboratorShares = (values: CollaboratorShare[]) => {
+    unref(collaboratorShares).push(...values)
+  }
+
+  const removeCollaboratorShare = (share: CollaboratorShare) => {
+    collaboratorShares.value = unref(collaboratorShares).filter(({ id }) => id !== share.id)
   }
 
   const pruneShares = () => {
-    shares.value = []
+    collaboratorShares.value = []
+    linkShares.value = []
     loading.value = undefined
   }
 
-  const awaitLoading = async () => {
-    if (unref(loading)) {
-      await unref(loading)
+  // remove loaded shares that are not within the current path
+  const removeOrphanedShares = () => {
+    const ancestorIds = Object.values(resourcesStore.ancestorMetaData).map(({ id }) => id)
+
+    if (!ancestorIds.length) {
+      collaboratorShares.value = []
+      linkShares.value = []
+      return
     }
+
+    unref(collaboratorShares).forEach((share) => {
+      if (!ancestorIds.includes(share.resourceId)) {
+        removeCollaboratorShare(share)
+      }
+    })
+
+    unref(linkShares).forEach((share) => {
+      if (!ancestorIds.includes(share.resourceId)) {
+        removeLinkShare(share)
+      }
+    })
   }
 
-  const setLoading = () => {
-    let resolvePromise: (value: unknown) => void
-    const promise = new Promise((resolve) => {
-      resolvePromise = resolve
-    })
-    loading.value = promise
-    promise.then(() => {
-      loading.value = undefined
-    })
+  const setLinkShares = (values: LinkShare[]) => {
+    linkShares.value = values
+  }
 
-    return resolvePromise
+  const upsertLinkShare = (share: LinkShare) => {
+    const existingShare = unref(linkShares).find(({ id }) => id === share.id)
+
+    if (existingShare) {
+      Object.assign(existingShare, share)
+      return
+    }
+
+    // FIXME: use push as soon as we have a share date
+    unref(linkShares).unshift(share)
+  }
+
+  const removeLinkShare = (share: LinkShare) => {
+    linkShares.value = unref(linkShares).filter(({ id }) => id !== share.id)
+  }
+
+  const setLoading = (value: boolean) => {
+    loading.value = value
   }
 
   const updateFileShareTypes = (path: string) => {
@@ -117,10 +154,11 @@ export const useSharesStore = defineStore('shares', () => {
       return
     }
 
+    const allShares = [...unref(collaboratorShares), ...unref(linkShares)]
     resourcesStore.updateResourceField({
       id: file.id,
       field: 'shareTypes',
-      value: computeShareTypes(unref(outgoingShares).filter((s) => !s.indirect))
+      value: computeShareTypes(allShares.filter((s) => !s.indirect))
     })
 
     const ancestorEntry = resourcesStore.ancestorMetaData[file.path] ?? null
@@ -128,193 +166,117 @@ export const useSharesStore = defineStore('shares', () => {
       resourcesStore.updateAncestorField({
         path: ancestorEntry.path,
         field: 'shareTypes',
-        value: computeShareTypes(unref(outgoingShares).filter((s) => !s.indirect))
+        value: computeShareTypes(allShares.filter((s) => !s.indirect))
       })
     }
   }
 
-  const loadShares = async ({
-    clientService,
-    resource,
-    path,
-    storageId,
-    ancestorMetaData,
-    useCached = true
-  }: LoadSharesOptions) => {
-    await awaitLoading()
-    const resolvePromise = setLoading()
-
-    const parentPaths = path === '/' ? ['/'] : getParentPaths(path, true)
-    const currentlyLoadedShares = [...unref(shares)]
-    const loadedShares = []
-
-    const shareQueriesQueue = new PQueue({
-      concurrency: configStore.options.concurrentRequests.shares.list
-    })
-    const shareQueriesPromises = []
-
-    const getShares = (
-      subPath: string,
-      indirect: boolean,
-      options,
-      outgoing: boolean
-    ): Promise<void> => {
-      const buildMethod = outgoing ? buildShare : buildCollaboratorShare
-      const res = indirect || !resource ? { type: 'folder' } : resource
-      return clientService.owncloudSdk.shares
-        .getShares(subPath, options)
-        .then((data) => {
-          data.forEach((element) => {
-            loadedShares.push({
-              ...buildMethod(element.shareInfo, res, unref(allowResharing)),
-              outgoing,
-              indirect
-            })
-          })
-        })
-        .catch((error) => {
-          console.error('SHARESTREE_ERROR', error)
-        })
-    }
-
-    if (!path) {
-      // space shares
-      shareQueriesPromises.push(
-        getShares(path, false, { reshares: true, spaceRef: storageId }, true)
-      )
-    }
-
-    parentPaths.forEach((queryPath) => {
-      const ancestorMeta = unref(ancestorMetaData)[queryPath] ?? null
-      const indirect = path !== queryPath
-      const spaceRef = indirect ? ancestorMeta?.id : storageId
-      // no need to fetch cached shares again, only adjust the "indirect" state
-      if (useCached && currentlyLoadedShares.length) {
-        const cached = currentlyLoadedShares.filter((s) => s.path === queryPath)
-        if (cached.length) {
-          loadedShares.push(...cached.map((c) => ({ ...c, indirect })))
-          return
-        }
-      }
-
-      // query the outgoing share information for each of the parent paths
-      shareQueriesPromises.push(
-        shareQueriesQueue.add(() =>
-          getShares(queryPath, indirect, { reshares: true, spaceRef }, true)
-        )
-      )
-      // query the incoming share information for each of the parent paths
-      // TODO: skip in project spaces and personal space'
-      shareQueriesPromises.push(
-        shareQueriesQueue.add(() =>
-          getShares(queryPath, indirect, { shared_with_me: true, spaceRef }, false)
-        )
-      )
-    })
-
-    return Promise.allSettled(shareQueriesPromises).then(() => {
-      shares.value = loadedShares
-      resolvePromise(undefined)
-    })
-  }
-
   const addShare = async ({
     clientService,
+    space,
     resource,
-    path,
-    shareWith,
-    shareType,
-    permissions,
-    role,
-    storageId,
-    expirationDate = undefined,
-    notify = undefined,
-    shareWithUser = undefined,
-    shareWithProvider = undefined
-  }: AddShareOptions) => {
-    const isGroupShare = shareType === ShareTypes.group.value
-    const options = {
-      permissions,
-      role: role.name,
-      expirationDate,
-      spaceRef: storageId,
-      remoteUser: undefined,
-      ...(notify && { notify }),
-      ...(shareWithUser && { shareWithUser }),
-      ...(shareWithProvider && { shareWithProvider })
-    }
+    options
+  }: AddShareOptions): Promise<CollaboratorShare[]> => {
+    const {
+      data: { value: permissions }
+    } = await clientService.graphAuthenticated.permissions.invite(
+      space.id,
+      getGraphItemId(resource),
+      options
+    )
 
-    if (!isGroupShare) {
-      options.remoteUser = shareType === ShareTypes.remote.value
-    }
+    const builtShares = []
 
-    const shareMethod = isGroupShare ? 'shareFileWithGroup' : 'shareFileWithUser'
-    const share = await clientService.owncloudSdk.shares[shareMethod](path, shareWith, options)
-    const builtShare = buildCollaboratorShare(share.shareInfo, resource, unref(allowResharing))
+    permissions.forEach((graphPermission) => {
+      builtShares.push(
+        buildCollaboratorShare({
+          graphPermission,
+          graphRoles: unref(graphRoles),
+          resourceId: resource.id,
+          spaceId: space.id,
+          user: userStore.user
+        })
+      )
+    })
 
-    await awaitLoading()
-    upsertShare({ ...builtShare, outgoing: true })
-    updateFileShareTypes(path)
-    resourcesStore.loadIndicators(path)
+    addCollaboratorShares(builtShares)
+    updateFileShareTypes(resource.path)
+    resourcesStore.loadIndicators(resource.path)
+    return builtShares
   }
 
   const updateShare = async ({
     clientService,
+    space,
     resource,
-    share,
-    permissions,
-    expirationDate,
-    role
+    collaboratorShare,
+    options
   }: UpdateShareOptions) => {
-    const updatedShare = await clientService.owncloudSdk.shares.updateShare(share.id, {
-      role: role.name,
-      permissions,
-      expireDate: expirationDate
-    })
-
-    const builtShare = buildCollaboratorShare(
-      updatedShare.shareInfo,
-      resource,
-      unref(allowResharing)
+    const { data } = await clientService.graphAuthenticated.permissions.updatePermission(
+      space.id,
+      getGraphItemId(resource),
+      collaboratorShare.id,
+      {
+        roles: options.roles,
+        expirationDateTime: options.expirationDateTime
+      }
     )
-    upsertShare({ ...builtShare, outgoing: true })
+
+    const share = buildCollaboratorShare({
+      graphPermission: data,
+      graphRoles: unref(graphRoles),
+      resourceId: resource.id,
+      spaceId: space.id,
+      user: userStore.user
+    })
+    upsertCollaboratorShare(share)
+    return share
   }
 
   const deleteShare = async ({
     clientService,
-    share,
-    path,
+    space,
+    resource,
+    collaboratorShare,
     loadIndicators = false
   }: DeleteShareOptions) => {
-    await clientService.owncloudSdk.shares.deleteShare(share.id, {})
-    await awaitLoading()
-    removeShare(share)
-    updateFileShareTypes(path)
+    await clientService.graphAuthenticated.permissions.deletePermission(
+      space.id,
+      getGraphItemId(resource),
+      collaboratorShare.id
+    )
+
+    removeCollaboratorShare(collaboratorShare)
+    updateFileShareTypes(resource.path)
     if (loadIndicators) {
-      resourcesStore.loadIndicators(path)
+      resourcesStore.loadIndicators(resource.path)
     }
   }
 
-  const addLink = async ({ path, clientService, params, storageId }: AddLinkOptions) => {
-    const { shareInfo } = await clientService.owncloudSdk.shares.shareFileWithLink(path, {
-      ...params,
-      spaceRef: storageId
-    })
+  const addLink = async ({ clientService, space, resource, options }: AddLinkOptions) => {
+    const { data } = await clientService.graphAuthenticated.permissions.createLink(
+      space.id,
+      getGraphItemId(resource),
+      options
+    )
 
-    const link = buildShare(shareInfo, null, unref(allowResharing))
-    await awaitLoading()
+    const link = buildLinkShare({
+      graphPermission: data,
+      user: userStore.user,
+      resourceId: resource.id
+    })
 
     const selectedFiles = resourcesStore.selectedResources
     const fileIsSelected =
-      selectedFiles.some(({ fileId }) => fileId === storageId) ||
-      (selectedFiles.length === 0 && resourcesStore.currentFolder.fileId === storageId)
+      selectedFiles.some(({ fileId }) => fileId === resource.fileId) ||
+      (selectedFiles.length === 0 && resourcesStore.currentFolder.fileId === resource.fileId)
 
-    upsertShare({ ...link, outgoing: true, indirect: !fileIsSelected })
-    updateFileShareTypes(path)
+    upsertLinkShare(link)
+    updateFileShareTypes(resource.path)
 
     if (!fileIsSelected) {
       // we might need to update the share types for the ancestor resource as well
-      const ancestor = resourcesStore.ancestorMetaData[path] ?? null
+      const ancestor = resourcesStore.ancestorMetaData[resource.path] ?? null
       if (ancestor) {
         const { shareTypes } = ancestor
         if (!shareTypes.includes(ShareTypes.link.value)) {
@@ -327,47 +289,86 @@ export const useSharesStore = defineStore('shares', () => {
       }
     }
 
-    resourcesStore.loadIndicators(path)
+    resourcesStore.loadIndicators(resource.path)
     return link
   }
 
-  const updateLink = async ({ id, clientService, params }: UpdateLinkOptions) => {
-    const { shareInfo } = await clientService.owncloudSdk.shares.updateShare(id, params)
-    const link = buildShare(shareInfo, null, unref(allowResharing))
-    upsertShare({ ...link, outgoing: true })
+  const updateLink = async ({
+    clientService,
+    space,
+    resource,
+    linkShare,
+    options
+  }: UpdateLinkOptions) => {
+    let response
+    if (Object.hasOwn(options, 'password')) {
+      response = await clientService.graphAuthenticated.permissions.setPermissionPassword(
+        space.id,
+        getGraphItemId(resource),
+        linkShare.id,
+        { password: options.password }
+      )
 
+      linkShare.hasPassword = !!options.password
+    } else {
+      response = await clientService.graphAuthenticated.permissions.updatePermission(
+        space.id,
+        getGraphItemId(resource),
+        linkShare.id,
+        {
+          link: {
+            ...(options.type && { type: options.type }),
+            ...(options.displayName && {
+              '@libre.graph.displayName': options.displayName
+            })
+          },
+          expirationDateTime: options.expirationDateTime
+        }
+      )
+    }
+
+    const link = buildLinkShare({
+      graphPermission: response.data,
+      user: userStore.user,
+      resourceId: resource.id
+    })
+    upsertLinkShare(link)
     return link
   }
 
   const deleteLink = async ({
-    share,
     clientService,
-    path,
+    space,
+    resource,
+    linkShare,
     loadIndicators = false
   }: DeleteLinkOptions) => {
-    await clientService.owncloudSdk.shares.deleteShare(share.id)
-    await awaitLoading()
-    removeShare(share)
-    updateFileShareTypes(path)
+    await clientService.graphAuthenticated.permissions.deletePermission(
+      space.id,
+      getGraphItemId(resource),
+      linkShare.id
+    )
+
+    removeLinkShare(linkShare)
+    updateFileShareTypes(resource.path)
     if (loadIndicators) {
-      resourcesStore.loadIndicators(path)
+      resourcesStore.loadIndicators(resource.path)
     }
   }
 
   return {
     loading,
-    shares,
+    collaboratorShares,
+    linkShares,
     graphRoles,
-    incomingShares,
-    incomingCollaborators,
-    outgoingShares,
-    outgoingLinks,
-    outgoingCollaborators,
 
     setGraphRoles,
+    setLoading,
+    setCollaboratorShares,
+    setLinkShares,
+    removeOrphanedShares,
 
     pruneShares,
-    loadShares,
     addShare,
     updateShare,
     deleteShare,

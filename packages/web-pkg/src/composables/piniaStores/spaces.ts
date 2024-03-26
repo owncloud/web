@@ -2,27 +2,27 @@ import { defineStore } from 'pinia'
 import { computed, ref, unref } from 'vue'
 import { Graph, SpaceResource } from '@ownclouders/web-client'
 import {
-  ShareType,
+  GraphShareRoleIdMap,
   buildSpace,
-  buildSpaceShare,
   extractStorageId,
+  getGraphItemId,
   isPersonalSpaceResource,
-  isProjectSpaceResource,
-  spaceRoleManager
+  isProjectSpaceResource
 } from '@ownclouders/web-client/src/helpers'
-import type { Share, ShareRole } from '@ownclouders/web-client/src/helpers'
-import type { OwnCloudSdk } from '@ownclouders/web-client/src/types'
+import type { CollaboratorShare } from '@ownclouders/web-client/src/helpers'
 import { useUserStore } from './user'
 import { ConfigStore, useConfigStore } from './config'
+import { buildCollaboratorShare } from '@ownclouders/web-client/src/helpers/share/functionsNG'
+import { useSharesStore } from './shares'
 
-export const sortSpaceMembers = (shares: Share[]) => {
+export const sortSpaceMembers = (shares: CollaboratorShare[]) => {
   const sortedManagers = shares
-    .filter((share) => share.role.name === spaceRoleManager.name)
-    .sort((a, b) => a.collaborator.displayName.localeCompare(b.collaborator.displayName))
+    .filter((share) => share.role.id === GraphShareRoleIdMap.SpaceManager)
+    .sort((a, b) => a.sharedWith.displayName.localeCompare(b.sharedWith.displayName))
 
   const sortedRest = shares
-    .filter((share) => share.role.name !== spaceRoleManager.name)
-    .sort((a, b) => a.collaborator.displayName.localeCompare(b.collaborator.displayName))
+    .filter((share) => share.role.id !== GraphShareRoleIdMap.SpaceManager)
+    .sort((a, b) => a.sharedWith.displayName.localeCompare(b.sharedWith.displayName))
 
   return [...sortedManagers, ...sortedRest]
 }
@@ -75,9 +75,10 @@ export const getSpacesByType = async ({
 export const useSpacesStore = defineStore('spaces', () => {
   const userStore = useUserStore()
   const configStore = useConfigStore()
+  const sharesStore = useSharesStore()
 
   const spaces = ref<SpaceResource[]>([])
-  const spaceMembers = ref<Share[]>([])
+  const spaceMembers = ref<CollaboratorShare[]>([])
   const currentSpace = ref<SpaceResource>()
   const spacesInitialized = ref(false)
   const mountPointsInitialized = ref(false)
@@ -101,6 +102,10 @@ export const useSpacesStore = defineStore('spaces', () => {
 
   const setCurrentSpace = (space: SpaceResource) => {
     currentSpace.value = space
+  }
+
+  const setSpaceMembers = (members: CollaboratorShare[]) => {
+    spaceMembers.value = members
   }
 
   const addSpaces = (s: SpaceResource[]) => {
@@ -189,142 +194,41 @@ export const useSpacesStore = defineStore('spaces', () => {
     space: SpaceResource
   }) => {
     spaceMembers.value = []
-    const promises = []
-    const spaceShares: Share[] = []
+    const spaceShares: CollaboratorShare[] = []
 
-    for (const role of Object.keys(space.spaceRoles)) {
-      for (const { kind, id, expirationDate } of space.spaceRoles[role]) {
-        const promise =
-          kind === 'group' ? graphClient.groups.getGroup(id) : graphClient.users.getUser(id)
+    const { data } = await graphClient.permissions.listPermissions(space.id, getGraphItemId(space))
 
-        promise.then((resolved) => {
-          spaceShares.push(
-            buildSpaceShare({ ...resolved.data, role, kind, expirationDate }, space.id)
-          )
-        })
-
-        promises.push(promise)
+    const permissions = data.value || []
+    permissions.forEach((graphPermission) => {
+      if (!graphPermission.link) {
+        spaceShares.push(
+          buildCollaboratorShare({
+            graphPermission,
+            graphRoles: sharesStore.graphRoles,
+            resourceId: space.id,
+            spaceId: space.id,
+            user: userStore.user
+          })
+        )
       }
-    }
+    })
 
-    await Promise.allSettled(promises)
     spaceMembers.value = sortSpaceMembers(spaceShares)
   }
 
-  const addSpaceMember = async ({
-    client,
-    graphClient,
-    path,
-    shareWith,
-    permissions,
-    expirationDate,
-    role,
-    storageId,
-    displayName,
-    shareType
-  }: {
-    client: OwnCloudSdk
-    graphClient: Graph
-    path: string
-    shareWith: string
-    permissions: number
-    expirationDate: string
-    role: ShareRole
-    storageId: string
-    displayName: string
-    shareType: ShareType
-  }) => {
-    const additionalParams = { permissions, role: role.name, expirationDate }
-    await client.shares.shareSpace(path, shareWith, shareType, storageId, additionalParams)
-    const graphResponse = await graphClient.drives.getDrive(storageId)
-    upsertSpace(buildSpace(graphResponse.data))
-    unref(spaceMembers).push(
-      buildSpaceShare(
-        {
-          role: role.name,
-          onPremisesSamAccountName: shareWith,
-          displayName,
-          expirationDate,
-          share_type: shareType
-        },
-        storageId
-      )
-    )
-  }
-
-  const changeSpaceMember = async ({
-    client,
-    graphClient,
-    share,
-    permissions,
-    expirationDate,
-    role
-  }: {
-    client: OwnCloudSdk
-    graphClient: Graph
-    share: Share
-    permissions: number
-    expirationDate: string
-    role: ShareRole
-  }) => {
-    await client.shares.shareSpace(
-      '',
-      share.collaborator.name || share.collaborator.displayName,
-      share.shareType,
-      share.id,
-      { permissions, role: role.name, expirationDate }
-    )
-
-    const graphResponse = await graphClient.drives.getDrive(share.id)
-    upsertSpace(buildSpace(graphResponse.data))
-    const spaceShare = buildSpaceShare(
-      {
-        role: role.name,
-        onPremisesSamAccountName: share.collaborator.name,
-        displayName: share.collaborator.displayName,
-        expirationDate,
-        share_type: share.shareType
-      },
-      share.id
-    )
-
-    const checkAttr = spaceShare.collaborator.name ? 'name' : 'displayName'
-    const existingMember = unref(spaceMembers).find(
-      ({ id, collaborator }) =>
-        spaceShare.id === id && spaceShare.collaborator[checkAttr] === collaborator[checkAttr]
-    )
-    Object.assign(existingMember, spaceShare)
-  }
-
-  const deleteSpaceMember = async ({
-    client,
-    graphClient,
-    share,
-    reloadSpace = true
-  }: {
-    client: OwnCloudSdk
-    graphClient: Graph
-    share: Share
-    reloadSpace: boolean
-  }) => {
-    const params = { shareWith: share.collaborator.name || share.collaborator.displayName }
-    await client.shares.deleteShare(share.id, params)
-
-    if (reloadSpace) {
-      const graphResponse = await graphClient.drives.getDrive(share.id)
-      upsertSpace(buildSpace(graphResponse.data))
+  const upsertSpaceMember = ({ member }: { member: CollaboratorShare }) => {
+    const existingMember = unref(spaceMembers).find(({ id }) => id === member.id)
+    if (existingMember) {
+      Object.assign(existingMember, member)
+      return
     }
 
-    const checkAttr = share.collaborator.name ? 'name' : 'displayName'
-    const existingMember = unref(spaceMembers).find(
-      ({ id, collaborator }) =>
-        share.id === id && share.collaborator[checkAttr] === collaborator[checkAttr]
-    )
+    unref(spaceMembers).push(member)
+  }
 
-    spaceMembers.value = unref(spaceMembers).filter(
-      ({ id, collaborator }) =>
-        existingMember.id !== id || share.collaborator[checkAttr] !== collaborator[checkAttr]
-    )
+  const removeSpaceMember = ({ member }: { member: CollaboratorShare }) => {
+    const existingMember = unref(spaceMembers).find(({ id }) => id === member.id)
+    spaceMembers.value = unref(spaceMembers).filter(({ id }) => existingMember.id !== id)
   }
 
   return {
@@ -340,6 +244,7 @@ export const useSpacesStore = defineStore('spaces', () => {
     setMountPointsInitialized,
     setSpacesLoading,
     setCurrentSpace,
+    setSpaceMembers,
 
     addSpaces,
     removeSpace,
@@ -349,10 +254,9 @@ export const useSpacesStore = defineStore('spaces', () => {
     loadMountPoints,
     reloadProjectSpaces,
 
-    addSpaceMember,
     loadSpaceMembers,
-    changeSpaceMember,
-    deleteSpaceMember
+    upsertSpaceMember,
+    removeSpaceMember
   }
 })
 

@@ -1,3 +1,2 @@
-export * from './useCreateLink'
-export * from './useDefaultLinkPermissions'
+export * from './useLinkTypes'
 export * from './useExpirationRules'
