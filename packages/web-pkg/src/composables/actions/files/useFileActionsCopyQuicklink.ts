@@ -8,7 +8,6 @@ import { useClipboard } from '../../clipboard'
 import { Resource, SpaceResource } from '@ownclouders/web-client'
 import { useFileActionsCreateLink } from './useFileActionsCreateLink'
 import { useMessages, useUserStore } from '../../piniaStores'
-import { Permission } from '@ownclouders/web-client/src/generated'
 import { buildLinkShare } from '@ownclouders/web-client/src/helpers/share/functionsNG'
 import { getGraphItemId } from '@ownclouders/web-client/src/helpers'
 
@@ -61,7 +60,7 @@ export const useFileActionsCopyQuickLink = () => {
     const client = clientService.graphAuthenticated
     const { data } = await client.permissions.listPermissions(space.id, getGraphItemId(resource))
 
-    const permissions = ((data as any).value || []) as Permission[]
+    const permissions = data.value || []
     const graphPermission = permissions.find((p) => p.link?.['@libre.graph.quickLink'])
     return graphPermission
       ? buildLinkShare({ graphPermission, user: userStore.user, resourceId: resource.id })

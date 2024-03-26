@@ -14,7 +14,6 @@ import { useUserStore } from './user'
 import { ConfigStore, useConfigStore } from './config'
 import { buildCollaboratorShare } from '@ownclouders/web-client/src/helpers/share/functionsNG'
 import { useSharesStore } from './shares'
-import { Permission } from '@ownclouders/web-client/src/generated'
 
 export const sortSpaceMembers = (shares: CollaboratorShare[]) => {
   const sortedManagers = shares
@@ -199,7 +198,7 @@ export const useSpacesStore = defineStore('spaces', () => {
 
     const { data } = await graphClient.permissions.listPermissions(space.id, getGraphItemId(space))
 
-    const permissions = ((data as any).value || []) as Permission[]
+    const permissions = data.value || []
     permissions.forEach((graphPermission) => {
       if (!graphPermission.link) {
         spaceShares.push(

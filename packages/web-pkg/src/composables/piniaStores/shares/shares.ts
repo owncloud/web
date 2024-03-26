@@ -19,7 +19,7 @@ import {
   UpdateShareOptions
 } from './types'
 import { useResourcesStore } from '../resources'
-import { Permission, UnifiedRoleDefinition } from '@ownclouders/web-client/src/generated'
+import { UnifiedRoleDefinition } from '@ownclouders/web-client/src/generated'
 import { useUserStore } from '../user'
 import {
   buildLinkShare,
@@ -177,13 +177,14 @@ export const useSharesStore = defineStore('shares', () => {
     resource,
     options
   }: AddShareOptions): Promise<CollaboratorShare[]> => {
-    const { data } = await clientService.graphAuthenticated.permissions.invite(
+    const {
+      data: { value: permissions }
+    } = await clientService.graphAuthenticated.permissions.invite(
       space.id,
       getGraphItemId(resource),
       options
     )
 
-    const permissions = (data as any).value as Permission[]
     const builtShares = []
 
     permissions.forEach((graphPermission) => {

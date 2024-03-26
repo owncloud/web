@@ -36,7 +36,9 @@ import {
   Permission,
   DriveItemCreateLink,
   DriveItemInvite,
-  SharingLinkPassword
+  SharingLinkPassword,
+  CollectionOfPermissions,
+  CollectionOfPermissionsWithAllowedValues
 } from './generated'
 
 export interface Graph {
@@ -102,7 +104,10 @@ export interface Graph {
   }
   permissions: {
     getPermission: (driveId: string, itemId: string, permId: string) => AxiosPromise<Permission>
-    listPermissions: (driveId: string, itemId: string) => AxiosPromise<Permission[]>
+    listPermissions: (
+      driveId: string,
+      itemId: string
+    ) => AxiosPromise<CollectionOfPermissionsWithAllowedValues>
     createLink: (
       driveId: string,
       itemId: string,
@@ -112,7 +117,7 @@ export interface Graph {
       driveId: string,
       itemId: string,
       driveItemInvite?: DriveItemInvite
-    ) => AxiosPromise<Permission>
+    ) => AxiosPromise<CollectionOfPermissions>
     deletePermission: (driveId: string, itemId: string, permId: string) => AxiosPromise<void>
     updatePermission: (
       driveId: string,
