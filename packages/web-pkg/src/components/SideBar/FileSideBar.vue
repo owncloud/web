@@ -63,7 +63,8 @@ import {
   CollaboratorShare,
   LinkShare,
   ShareRoleNG,
-  getGraphItemId
+  getGraphItemId,
+  call
 } from '@ownclouders/web-client/src/helpers'
 import { storeToRefs } from 'pinia'
 import { useTask } from 'vue-concurrency'
@@ -199,9 +200,8 @@ export default defineComponent({
       const { collaboratorShares: collaboratorCache, linkShares: linkCache } = sharesStore
 
       const resourceId = getGraphItemId(resource)
-      const { data } = yield clientService.graphAuthenticated.permissions.listPermissions(
-        props.space.id,
-        resourceId
+      const { data } = yield* call(
+        clientService.graphAuthenticated.permissions.listPermissions(props.space.id, resourceId)
       )
 
       let availableRoles =
@@ -225,7 +225,7 @@ export default defineComponent({
 
       availableShareRoles.value = availableRoles
 
-      const permissions = ((data as any).value || []) as Permission[]
+      const permissions = data.value || []
 
       const loadedCollaboratorShares: CollaboratorShare[] = []
       const loadedLinkShares: LinkShare[] = []
