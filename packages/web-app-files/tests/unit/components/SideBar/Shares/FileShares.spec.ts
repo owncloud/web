@@ -75,7 +75,9 @@ describe('FileShares', () => {
     it('reacts on delete events', async () => {
       const { wrapper } = getWrapper({ collaborators })
       const { dispatchModal } = useModals()
-      ;(wrapper.findComponent<any>('collaborator-list-item-stub').vm as any).$emit('onDelete')
+      wrapper
+        .findComponent<typeof CollaboratorListItem>('collaborator-list-item-stub')
+        .vm.$emit('onDelete')
       await wrapper.vm.$nextTick()
       expect(dispatchModal).toHaveBeenCalledTimes(1)
     })
