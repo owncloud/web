@@ -60,7 +60,9 @@ export default defineComponent({
         updateModal(unref(modal)?.id, 'confirmDisabled', true)
 
         if (unref(modal)?.onConfirm) {
-          await loadingService.addTask(() => unref(modal).onConfirm(value))
+          await loadingService.addTask(async () => {
+            await unref(modal).onConfirm(value)
+          })
         } else if (unref(customComponentRef)?.onConfirm) {
           await loadingService.addTask(() => unref(customComponentRef).onConfirm())
         }
