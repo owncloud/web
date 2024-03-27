@@ -372,6 +372,15 @@ When(
 )
 
 When(
+  '{string} navigates to folder {string} via breadcrumb',
+  async function (this: World, stepUser: string, resource: string): Promise<void> {
+    const { page } = this.actorsEnvironment.getActor({ key: stepUser })
+    const resourceObject = new objects.applicationFiles.Resource({ page })
+    await resourceObject.openFolderViaBreadcrumb(resource)
+  }
+)
+
+When(
   '{string} enables the option to display the hidden file',
   async function (this: World, stepUser: string): Promise<void> {
     const { page } = this.actorsEnvironment.getActor({ key: stepUser })
