@@ -24,7 +24,7 @@ import { useUserStore } from '../user'
 import {
   buildLinkShare,
   buildCollaboratorShare
-} from '@ownclouders/web-client/src/helpers/share/functionsNG'
+} from '@ownclouders/web-client/src/helpers/share/functions'
 
 export const useSharesStore = defineStore('shares', () => {
   const resourcesStore = useResourcesStore()

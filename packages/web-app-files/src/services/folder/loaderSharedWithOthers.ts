@@ -2,7 +2,7 @@ import { FolderLoader, FolderLoaderTask, TaskContext } from '../folder'
 import { Router } from 'vue-router'
 import { useTask } from 'vue-concurrency'
 import { isLocationSharesActive } from '@ownclouders/web-pkg'
-import { buildOutgoingShareResource } from '@ownclouders/web-client/src/helpers/share/functionsNG'
+import { buildOutgoingShareResource } from '@ownclouders/web-client/src/helpers/share/functions'
 
 export class FolderLoaderSharedWithOthers implements FolderLoader {
   public isEnabled(): boolean {

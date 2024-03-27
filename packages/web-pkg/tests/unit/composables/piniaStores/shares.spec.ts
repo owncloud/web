@@ -16,9 +16,9 @@ import { Permission, User } from '@ownclouders/web-client/src/generated'
 import {
   buildCollaboratorShare,
   buildLinkShare
-} from '@ownclouders/web-client/src/helpers/share/functionsNG'
+} from '@ownclouders/web-client/src/helpers/share/functions'
 
-vi.mock('@ownclouders/web-client/src/helpers/share/functionsNG', () => ({
+vi.mock('@ownclouders/web-client/src/helpers/share/functions', () => ({
   buildLinkShare: vi.fn((share) => share),
   buildCollaboratorShare: vi.fn((share) => share)
 }))

@@ -8,7 +8,7 @@ import { useClipboard } from '../../clipboard'
 import { Resource, SpaceResource } from '@ownclouders/web-client'
 import { useFileActionsCreateLink } from './useFileActionsCreateLink'
 import { useMessages, useUserStore } from '../../piniaStores'
-import { buildLinkShare } from '@ownclouders/web-client/src/helpers/share/functionsNG'
+import { buildLinkShare } from '@ownclouders/web-client/src/helpers/share/functions'
 import { getGraphItemId } from '@ownclouders/web-client/src/helpers'
 
 export const useFileActionsCopyQuickLink = () => {
