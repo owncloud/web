@@ -54,9 +54,7 @@ export default defineComponent({
       formattedRecipient: {
         name: this.recipient.displayName,
         icon: this.getRecipientIcon(),
-        hasAvatar: [ShareTypes.user.value, ShareTypes.spaceUser.value].includes(
-          this.recipient.shareType
-        ),
+        hasAvatar: this.recipient.shareType === ShareTypes.user.value,
         isLoadingAvatar: true
       }
     }

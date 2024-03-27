@@ -77,6 +77,7 @@
             :deniable="isSpaceMemberDeniable(collaborator)"
             :modifiable="false"
             :is-share-denied="isSpaceMemberDenied(collaborator)"
+            :is-space-share="true"
             @on-set-deny="setDenyShare"
           />
         </li>
@@ -118,7 +119,8 @@ import {
   isProjectSpaceResource,
   Resource,
   SpaceResource,
-  CollaboratorShare
+  CollaboratorShare,
+  isSpaceResource
 } from '@ownclouders/web-client/src/helpers'
 import { getSharedAncestorRoute } from '@ownclouders/web-pkg'
 
@@ -355,11 +357,9 @@ export default defineComponent({
             clientService: this.$clientService,
             space: this.space,
             resource: this.resource,
-            collaboratorShare:
-              share.shareType === ShareTypes.spaceUser.value ||
-              share.shareType === ShareTypes.spaceGroup.value
-                ? this.getDeniedSpaceMember(share)
-                : this.getDeniedShare(share),
+            collaboratorShare: isSpaceResource(this.resource)
+              ? this.getDeniedSpaceMember(share)
+              : this.getDeniedShare(share),
             loadIndicators: false
           })
           this.showMessage({

@@ -251,7 +251,6 @@ export default defineComponent({
               graphPermission,
               graphRoles: sharesStore.graphRoles,
               resourceId,
-              spaceId: getGraphItemId(props.space),
               user: userStore.user,
               indirect
             })

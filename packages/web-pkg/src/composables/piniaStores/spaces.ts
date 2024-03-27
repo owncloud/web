@@ -206,7 +206,6 @@ export const useSpacesStore = defineStore('spaces', () => {
             graphPermission,
             graphRoles: sharesStore.graphRoles,
             resourceId: space.id,
-            spaceId: space.id,
             user: userStore.user
           })
         )

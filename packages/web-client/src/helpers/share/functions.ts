@@ -229,32 +229,22 @@ export function buildCollaboratorShare({
   graphPermission,
   graphRoles,
   resourceId,
-  spaceId,
   user,
   indirect = false
 }: {
   graphPermission: Permission
   graphRoles: UnifiedRoleDefinition[]
   resourceId: string
-  spaceId: string
   user: User
   indirect?: boolean
 }): CollaboratorShare {
   const role = graphRoles.find(({ id }) => id === graphPermission.roles?.[0])
-  const isSpace = resourceId === spaceId
-
-  let shareType: number
-  if (graphPermission.grantedToV2.group) {
-    shareType = isSpace ? ShareTypes.spaceGroup.value : ShareTypes.group.value
-  } else {
-    shareType = isSpace ? ShareTypes.spaceUser.value : ShareTypes.user.value
-  }
 
   return {
     id: graphPermission.id,
     resourceId,
     indirect,
-    shareType,
+    shareType: graphPermission.grantedToV2.group ? ShareTypes.group.value : ShareTypes.user.value,
     role,
     sharedBy: { id: user.id, displayName: user.displayName },
     sharedWith: graphPermission.grantedToV2.user || graphPermission.grantedToV2.group,

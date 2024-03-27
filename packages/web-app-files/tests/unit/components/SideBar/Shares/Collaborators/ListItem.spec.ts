@@ -59,15 +59,14 @@ const getShareMock = ({
 
 describe('Collaborator ListItem component', () => {
   describe('displays the correct image/icon according to the shareType', () => {
-    describe('user and spaceUser share type', () => {
-      it.each([ShareTypes.user.value, ShareTypes.spaceUser.value])(
-        'should display a users avatar',
-        (shareType) => {
-          const { wrapper } = createWrapper({ share: getShareMock({ shareType }) })
-          expect(wrapper.find(selectors.userAvatarImage).exists()).toBeTruthy()
-          expect(wrapper.find(selectors.notUserAvatar).exists()).toBeFalsy()
-        }
-      )
+    describe('user share type', () => {
+      it('should display a users avatar', () => {
+        const { wrapper } = createWrapper({
+          share: getShareMock({ shareType: ShareTypes.user.value })
+        })
+        expect(wrapper.find(selectors.userAvatarImage).exists()).toBeTruthy()
+        expect(wrapper.find(selectors.notUserAvatar).exists()).toBeFalsy()
+      })
       it('sets user info on the avatar', () => {
         const share = getShareMock()
         const { wrapper } = createWrapper({ share })
@@ -80,20 +79,19 @@ describe('Collaborator ListItem component', () => {
       })
     })
     describe('non-user share types', () => {
-      it.each(
-        ShareTypes.all.filter(
-          (shareType) => ![ShareTypes.user, ShareTypes.spaceUser].includes(shareType)
-        )
-      )('should display an oc-avatar-item for any non-user share types', (shareType) => {
-        const { wrapper } = createWrapper({ share: getShareMock({ shareType: shareType.value }) })
-        expect(wrapper.find(selectors.userAvatarImage).exists()).toBeFalsy()
-        expect(wrapper.find(selectors.notUserAvatar).exists()).toBeTruthy()
-        expect(wrapper.find(selectors.notUserAvatar).attributes().name).toEqual(shareType.key)
-      })
+      it.each(ShareTypes.all.filter((shareType) => shareType !== ShareTypes.user))(
+        'should display an oc-avatar-item for any non-user share types',
+        (shareType) => {
+          const { wrapper } = createWrapper({ share: getShareMock({ shareType: shareType.value }) })
+          expect(wrapper.find(selectors.userAvatarImage).exists()).toBeFalsy()
+          expect(wrapper.find(selectors.notUserAvatar).exists()).toBeTruthy()
+          expect(wrapper.find(selectors.notUserAvatar).attributes().name).toEqual(shareType.key)
+        }
+      )
       it('should display an oc-avatar-item for space group shares', () => {
         const { wrapper } = createWrapper({
           share: getShareMock({
-            shareType: ShareTypes.spaceGroup.value,
+            shareType: ShareTypes.group.value,
             sharedWith: { id: '1', displayName: 'someGroup' }
           })
         })
@@ -157,7 +155,7 @@ describe('Collaborator ListItem component', () => {
     it('calls "upsertSpaceMember" for space resources', async () => {
       const resource = mock<SpaceResource>({ driveType: 'project' })
       const { wrapper } = createWrapper({
-        share: getShareMock({ shareType: ShareTypes.spaceUser.value }),
+        share: getShareMock({ shareType: ShareTypes.user.value }),
         resource
       })
       wrapper.findComponent<typeof RoleDropdown>('role-dropdown-stub').vm.$emit('optionChange', {
@@ -177,7 +175,7 @@ describe('Collaborator ListItem component', () => {
         throw new Error()
       })
       wrapper.findComponent<typeof RoleDropdown>('role-dropdown-stub').vm.$emit('optionChange', {
-        share: getShareMock({ shareType: ShareTypes.spaceUser.value }),
+        share: getShareMock({ shareType: ShareTypes.user.value }),
         resource
       })
 

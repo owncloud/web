@@ -62,16 +62,11 @@ export default {
     },
 
     isAnyUserShareType() {
-      return [ShareTypes.user.key, ShareTypes.spaceUser.key].includes(this.shareType.key)
+      return ShareTypes.user.key === this.shareType.key
     },
 
     isAnyPrimaryShareType() {
-      return [
-        ShareTypes.user.key,
-        ShareTypes.spaceUser.key,
-        ShareTypes.group.key,
-        ShareTypes.spaceGroup.key
-      ].includes(this.shareType.key)
+      return [ShareTypes.user.key, ShareTypes.group.key].includes(this.shareType.key)
     },
 
     collaboratorClass() {

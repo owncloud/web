@@ -11,9 +11,7 @@ describe('AutocompleteItem component', () => {
     'displays the correct image/icon according to the shareType',
     (shareType) => {
       const { wrapper } = createWrapper({ shareType: shareType.value })
-      const isUserShareType = [ShareTypes.user.key, ShareTypes.spaceUser.key].includes(
-        shareType.key
-      )
+      const isUserShareType = shareType.key === ShareTypes.user.key
       if (isUserShareType) {
         expect(wrapper.find('avatar-image-stub').exists()).toBeTruthy()
         expect(wrapper.find('oc-avatar-item-stub').exists()).toBeFalsy()
@@ -47,15 +45,13 @@ describe('AutocompleteItem component', () => {
         'Alice Hansen'
       )
     })
-    it.each([
-      ShareTypes.user.value,
-      ShareTypes.spaceUser.value,
-      ShareTypes.group.value,
-      ShareTypes.spaceGroup.value
-    ])('hides share type for users and groups', (shareType: number) => {
-      const { wrapper } = createWrapper({ shareType })
-      expect(wrapper.find('.files-collaborators-autocomplete-share-type').exists()).toBeFalsy()
-    })
+    it.each([ShareTypes.user.value, ShareTypes.group.value])(
+      'hides share type for users and groups',
+      (shareType: number) => {
+        const { wrapper } = createWrapper({ shareType })
+        expect(wrapper.find('.files-collaborators-autocomplete-share-type').exists()).toBeFalsy()
+      }
+    )
     it('shows share type for guests', () => {
       const { wrapper } = createWrapper({ shareType: ShareTypes.guest.value })
       expect(wrapper.find('.files-collaborators-autocomplete-share-type').text()).toEqual('(Guest)')
