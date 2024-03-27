@@ -31,7 +31,7 @@ export interface IncomingShareResource extends ShareResource {
   sharePermissions: GraphSharePermission[]
 }
 
-export interface ShareRoleNG extends UnifiedRoleDefinition {
+export interface ShareRole extends UnifiedRoleDefinition {
   icon?: string
   label?: string
 }
@@ -48,7 +48,7 @@ export interface Share {
 export interface CollaboratorShare extends Share {
   permissions: GraphSharePermission[]
   sharedWith: Identity
-  role: ShareRoleNG
+  role: ShareRole
 }
 
 export interface LinkShare extends Share {

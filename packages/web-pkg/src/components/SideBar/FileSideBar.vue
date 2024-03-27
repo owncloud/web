@@ -62,7 +62,7 @@ import {
   Resource,
   CollaboratorShare,
   LinkShare,
-  ShareRoleNG,
+  ShareRole,
   getGraphItemId,
   call
 } from '@ownclouders/web-client/src/helpers'
@@ -109,7 +109,7 @@ export default defineComponent({
     const loadedResource = ref<Resource>()
     const isLoading = ref(false)
 
-    const availableShareRoles = ref<ShareRoleNG[]>([])
+    const availableShareRoles = ref<ShareRole[]>([])
 
     const { selectedResources } = useSelectedResources()
 

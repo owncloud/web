@@ -3,11 +3,7 @@ import { mock } from 'vitest-mock-extended'
 import { Resource } from '@ownclouders/web-client'
 import { SpaceResource } from '@ownclouders/web-client/src/helpers'
 import { v4 as uuidV4 } from 'uuid'
-import {
-  CollaboratorShare,
-  ShareRoleNG,
-  ShareTypes
-} from '@ownclouders/web-client/src/helpers/share'
+import { CollaboratorShare, ShareRole, ShareTypes } from '@ownclouders/web-client/src/helpers/share'
 import {
   defaultPlugins,
   mount,
@@ -35,7 +31,7 @@ const getCollaborator = (): CollaboratorShare => ({
     displayName: 'Admin'
   },
   permissions: [],
-  role: mock<ShareRoleNG>(),
+  role: mock<ShareRole>(),
   resourceId: uuidV4(),
   indirect: false,
   shareType: ShareTypes.user.value

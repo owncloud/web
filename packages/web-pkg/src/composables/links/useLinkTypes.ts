@@ -3,7 +3,7 @@ import { useAbility } from '../ability'
 import { useCapabilityStore } from '../piniaStores'
 import { SharingLinkType } from '@ownclouders/web-client/src/generated'
 import { useGettext } from 'vue3-gettext'
-import { ShareRoleNG } from '@ownclouders/web-client/src/helpers'
+import { ShareRole } from '@ownclouders/web-client/src/helpers'
 
 export const useLinkTypes = () => {
   const { $gettext } = useGettext()
@@ -99,9 +99,9 @@ export const useLinkTypes = () => {
       ),
       icon: 'inbox-unarchive'
     }
-  ] satisfies ShareRoleNG[]
+  ] satisfies ShareRole[]
 
-  const getLinkRoleByType = (type: SharingLinkType): ShareRoleNG => {
+  const getLinkRoleByType = (type: SharingLinkType): ShareRole => {
     return linkShareRoles.find(({ id }) => id === type)
   }
 

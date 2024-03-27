@@ -1,5 +1,5 @@
 import DetailsAndEdit from 'web-app-files/src/components/SideBar/Shares/Links/DetailsAndEdit.vue'
-import { LinkShare, ShareRoleNG } from '@ownclouders/web-client/src/helpers/share'
+import { LinkShare, ShareRole } from '@ownclouders/web-client/src/helpers/share'
 import { defaultPlugins, shallowMount, defaultComponentMocks } from 'web-test-helpers'
 import { mock } from 'vitest-mock-extended'
 import { useLinkTypes } from '@ownclouders/web-pkg'
@@ -58,7 +58,7 @@ function getShallowMountedWrapper(
   vi.mocked(useLinkTypes).mockReturnValue(
     mock<ReturnType<typeof useLinkTypes>>({
       getAvailableLinkTypes: () => [SharingLinkType.View],
-      getLinkRoleByType: () => mock<ShareRoleNG>({ displayName: '', description: '', label: '' })
+      getLinkRoleByType: () => mock<ShareRole>({ displayName: '', description: '', label: '' })
     })
   )
 

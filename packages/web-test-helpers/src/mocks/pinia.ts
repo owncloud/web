@@ -6,12 +6,7 @@ import { Capabilities } from '../../../web-client/src/ocs'
 import { mock } from 'vitest-mock-extended'
 import { SpaceResource } from '../../../web-client/src'
 import { OptionsConfig } from '../../../web-pkg/src/composables/piniaStores/config/types'
-import {
-  Resource,
-  CollaboratorShare,
-  LinkShare,
-  ShareRoleNG
-} from '../../../web-client/src/helpers'
+import { Resource, CollaboratorShare, LinkShare, ShareRole } from '../../../web-client/src/helpers'
 import {
   AncestorMetaData,
   ApplicationFileExtension,
@@ -59,7 +54,7 @@ export type PiniaMockOptions = {
   sharesState?: {
     collaboratorShares?: CollaboratorShare[]
     linkShares?: LinkShare[]
-    graphRoles?: ShareRoleNG[]
+    graphRoles?: ShareRole[]
     loading?: boolean
   }
   spacesState?: { spaces?: SpaceResource[]; spaceMembers?: CollaboratorShare[] }

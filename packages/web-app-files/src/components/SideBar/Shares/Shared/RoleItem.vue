@@ -2,24 +2,24 @@
   <span :id="`files-role-${roleName}`" class="roles-select-role-item">
     <span
       class="oc-text-bold oc-display-block oc-width-1-1"
-      v-text="$gettext((role as ShareRoleNG).displayName)"
+      v-text="$gettext((role as ShareRole).displayName)"
     />
     <span
       class="oc-m-rm oc-text-small oc-display-block"
-      v-text="$gettext((role as ShareRoleNG).description)"
+      v-text="$gettext((role as ShareRole).description)"
     />
   </span>
 </template>
 
 <script lang="ts">
-import { ShareRoleNG } from '@ownclouders/web-client/src/helpers'
+import { ShareRole } from '@ownclouders/web-client/src/helpers'
 import { computed, defineComponent, PropType } from 'vue'
 
 export default defineComponent({
   name: 'RoleItem',
   props: {
     role: {
-      type: Object as PropType<ShareRoleNG>,
+      type: Object as PropType<ShareRole>,
       required: true
     }
   },
@@ -36,7 +36,7 @@ export default defineComponent({
         '1c996275-f1c9-4e71-abdf-a42f6495e960': 'uploader'
       }
 
-      return map[(props.role as ShareRoleNG).id]
+      return map[(props.role as ShareRole).id]
     })
 
     return { roleName }
