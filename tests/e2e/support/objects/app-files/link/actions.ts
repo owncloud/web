@@ -3,7 +3,6 @@ import util from 'util'
 import { sidebar } from '../utils'
 import { getActualExpiryDate } from '../../../utils/datePicker'
 import { clickResource } from '../resource/actions'
-import { shareRoles } from '../share/collaborator'
 
 export interface createLinkArgs {
   page: Page
@@ -62,7 +61,7 @@ export type publicLinkAndItsEditButtonVisibilityArgs = {
   resource?: string
   space?: boolean
 }
-const publicLinkSetRoleButton = `#files-role-%s`
+const publicLinkSetRoleButton = `//span[contains(@class,"role-dropdown-list-option-label") and text()='%s']`
 const linkExpiryDatepicker = '.link-expiry-picker:not(.vc-container)'
 const publicLinkEditRoleButton =
   `//h4[contains(@class, "oc-files-file-link-name") and text()="%s"]//ancestor::li//div[contains(@class, "link-details")]/` +
@@ -121,7 +120,7 @@ export const createLink = async (args: createLinkArgs): Promise<string> => {
   }
   await page.locator(addPublicLinkButton).click()
   if (role) {
-    await page.locator(util.format(publicLinkSetRoleButton, shareRoles[role])).click()
+    await page.locator(util.format(publicLinkSetRoleButton, role)).click()
   }
 
   role === 'Invited people'
@@ -170,7 +169,7 @@ export const changeRole = async (args: changeRoleArgs): Promise<string> => {
         res.request().method() === 'PATCH' &&
         res.status() === 200
     ),
-    page.locator(util.format(publicLinkSetRoleButton, shareRoles[role])).click()
+    page.locator(util.format(publicLinkSetRoleButton, role)).click()
   ])
 
   const message = await page.locator(linkUpdateDialog).textContent()

@@ -2,7 +2,6 @@ import join from 'join-path'
 
 import { checkResponseStatus, request } from '../http'
 import { User } from '../../types'
-import { shareRoles } from '../../objects/app-files/share/collaborator'
 
 export const shareTypes: Readonly<{
   user: string
@@ -16,6 +15,22 @@ export const shareTypes: Readonly<{
   public: '3',
   federated: '6',
   space: '7'
+}
+
+export const shareRoles: Readonly<{
+  'Invited people': string
+  'Can upload': string
+  'Can manage': string
+  'Can edit': string
+  'Can view': string
+  'Secret File Drop': string
+}> = {
+  'Invited people': 'internal',
+  'Can upload': 'contributor',
+  'Can manage': 'manager',
+  'Can edit': 'editor',
+  'Can view': 'viewer',
+  'Secret File Drop': 'uploader'
 }
 
 export const createShare = async ({

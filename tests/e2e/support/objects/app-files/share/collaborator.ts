@@ -55,33 +55,16 @@ export interface IAccessDetails {
 
 export type CollaboratorType = 'user' | 'group'
 
-export const shareRoles: Readonly<{
-  'Invited people': string
-  'Can upload': string
-  'Can manage': string
-  'Can edit': string
-  'Can view': string
-  'Secret File Drop': string
-}> = {
-  'Invited people': 'internal',
-  'Can upload': 'contributor',
-  'Can manage': 'manager',
-  'Can edit': 'editor',
-  'Can view': 'viewer',
-  'Secret File Drop': 'uploader'
-}
-
 export default class Collaborator {
   private static readonly invitePanel = '//*[@id="oc-files-sharing-sidebar"]'
   private static readonly inviteInput = '#files-share-invite-input'
   private static readonly newCollaboratorRoleDropdown =
     '//*[@id="files-collaborators-role-button-new"]'
-  private static readonly newCollaboratorRoleItemSelector = '//*[@id="files-role-%s"]'
   private static readonly sendInvitationButton = '#new-collaborators-form-create-button'
   private static readonly collaboratorRoleDropdownButton =
     '%s//button[contains(@class,"files-recipient-role-select-btn")]'
   private static readonly collaboratorRoleItemSelector =
-    '%s//ul[contains(@class,"files-recipient-role-drop-list")]//button[@id="files-recipient-role-drop-btn-%s"]'
+    '%s//span[contains(@class,"roles-select-role-item")]/span[text()="%s"]'
   private static readonly collaboratorEditDropdownButton =
     '%s//button[contains(@class,"collaborator-edit-dropdown-options-btn")]'
   private static readonly collaboratorUserSelector = '//*[@data-testid="collaborator-user-item-%s"]'
@@ -160,11 +143,11 @@ export default class Collaborator {
   ): Promise<void> {
     if (!dropdownSelector) {
       dropdownSelector = Collaborator.newCollaboratorRoleDropdown
-      itemSelector = Collaborator.newCollaboratorRoleItemSelector
+      itemSelector = util.format(Collaborator.collaboratorRoleItemSelector, '')
     }
     await page.click(dropdownSelector)
 
-    return await page.click(util.format(itemSelector, shareRoles[role]))
+    return await page.click(util.format(itemSelector, role))
   }
 
   static async changeCollaboratorRole(args: CollaboratorArgs): Promise<void> {
