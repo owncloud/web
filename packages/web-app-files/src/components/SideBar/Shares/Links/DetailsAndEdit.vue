@@ -494,7 +494,7 @@ export default defineComponent({
         onConfirm: (displayName: string) => {
           const linkShare = this.linkShare
           linkShare.displayName = displayName
-          return Promise.resolve(this.$emit('updateLink', { linkShare }))
+          this.$emit('updateLink', { linkShare })
         }
       })
     },
@@ -521,8 +521,9 @@ export default defineComponent({
         inputLabel: this.$gettext('Email address'),
         inputType: 'email',
         onInput: (value, setError) => setError(this.getEmailValidationMsg(value)),
-        onConfirm: (value: string) =>
-          Promise.resolve(this.$emit('updateLink', { linkShare: { ...this.linkShare } }))
+        onConfirm: () => {
+          this.$emit('updateLink', { linkShare: { ...this.linkShare } })
+        }
       })
     },
     getEmailValidationMsg(email: string) {

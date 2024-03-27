@@ -46,7 +46,7 @@ export type Modal = {
   customComponent?: CustomModalComponent
   customComponentAttrs?: () => Record<string, unknown>
   onCancel?: () => void
-  onConfirm?: (value: string) => Promise<void>
+  onConfirm?: (value: string) => void | Promise<void>
   onInput?: (value: string, setError: (error: string) => void) => void
 }
 
