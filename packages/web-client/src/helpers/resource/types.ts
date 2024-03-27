@@ -32,12 +32,15 @@ export type AbilitySubjects =
 export type Ability = MongoAbility<[AbilityActions, AbilitySubjects]>
 export type AbilityRule = SubjectRawRule<AbilityActions, AbilitySubjects, any>
 
-export interface SpaceRole {
-  id: string
-  displayName: string
-  expirationDate: string
+export interface SpaceRole extends Identity {
   kind: 'user' | 'group'
   isMember(u: User): boolean
+}
+
+export interface SpaceRoles {
+  viewer: SpaceRole[]
+  editor: SpaceRole[]
+  manager: SpaceRole[]
 }
 
 // TODO: add more fields to the resource interface. Extend into different resource types: FileResource, FolderResource, ShareResource, IncomingShareResource, OutgoingShareResource, ...
@@ -61,9 +64,7 @@ export interface Resource {
   locked?: boolean
   lockOwnerName?: string
   lockTime?: string
-  spaceRoles?: {
-    [k: string]: SpaceRole[]
-  }
+  spaceRoles?: SpaceRoles
   spaceQuota?: any
   spaceImageData?: any
   spaceReadmeData?: any

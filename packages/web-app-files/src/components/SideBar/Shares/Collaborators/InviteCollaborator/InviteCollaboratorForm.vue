@@ -138,7 +138,7 @@ import {
   CollaboratorAutoCompleteItem,
   CollaboratorShare,
   GraphShareRoleIdMap,
-  ShareRoleNG,
+  ShareRole,
   ShareTypes
 } from '@ownclouders/web-client/src/helpers/share'
 import {
@@ -211,7 +211,7 @@ export default defineComponent({
     const expirationDate = ref<string>()
     const selectedCollaborators = ref<CollaboratorAutoCompleteItem[]>([])
     const announcement = ref<string>()
-    const selectedRole = ref<ShareRoleNG>()
+    const selectedRole = ref<ShareRole>()
 
     const resource = inject<Resource>('resource')
     const space = inject<SpaceResource>('space')
@@ -507,7 +507,7 @@ export default defineComponent({
       )
     },
 
-    collaboratorRoleChanged(role: ShareRoleNG) {
+    collaboratorRoleChanged(role: ShareRole) {
       this.selectedRole = role
     },
 

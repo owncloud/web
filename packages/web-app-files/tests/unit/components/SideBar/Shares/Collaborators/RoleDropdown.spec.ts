@@ -1,5 +1,5 @@
 import RoleDropdown from 'web-app-files/src/components/SideBar/Shares/Collaborators/RoleDropdown.vue'
-import { ShareRoleNG } from '@ownclouders/web-client/src/helpers/share'
+import { ShareRole } from '@ownclouders/web-client/src/helpers/share'
 import { defaultPlugins, mount, shallowMount } from 'web-test-helpers'
 import { mock } from 'vitest-mock-extended'
 import { Resource } from '@ownclouders/web-client'
@@ -18,7 +18,7 @@ describe('RoleDropdown', () => {
   it('renders a button with existing role if given', () => {
     const { wrapper } = getWrapper({
       mountType: shallowMount,
-      existingRole: mock<ShareRoleNG>({ label: 'Can edit' })
+      existingRole: mock<ShareRole>({ label: 'Can edit' })
     })
     expect(wrapper.find(selectors.recipientRoleBtn).exists()).toBeTruthy()
     expect(wrapper.find(`${selectors.recipientRoleBtn} span`).text()).toEqual('Can edit')
@@ -26,9 +26,7 @@ describe('RoleDropdown', () => {
   it('does not render a button if only one role is available', () => {
     const { wrapper } = getWrapper({
       mountType: shallowMount,
-      availableShareRoles: [
-        mock<ShareRoleNG>({ displayName: 'Viewer', description: '', label: '' })
-      ]
+      availableShareRoles: [mock<ShareRole>({ displayName: 'Viewer', description: '', label: '' })]
     })
     expect(wrapper.find(selectors.recipientRoleBtn).exists()).toBeFalsy()
   })
@@ -44,8 +42,8 @@ function getWrapper({
   mountType = mount,
   existingRole = null,
   availableShareRoles = [
-    mock<ShareRoleNG>({ displayName: 'Viewer', description: '', label: 'Can view' }),
-    mock<ShareRoleNG>({ displayName: 'Editor', description: '', label: 'Can edit' })
+    mock<ShareRole>({ displayName: 'Viewer', description: '', label: 'Can view' }),
+    mock<ShareRole>({ displayName: 'Editor', description: '', label: 'Can edit' })
   ]
 } = {}) {
   return {

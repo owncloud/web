@@ -1,7 +1,7 @@
 import SpaceMembers from 'web-app-files/src/components/SideBar/Shares/SpaceMembers.vue'
 import {
   ShareTypes,
-  ShareRoleNG,
+  ShareRole,
   CollaboratorShare,
   GraphShareRoleIdMap
 } from '@ownclouders/web-client/src/helpers/share'
@@ -30,7 +30,7 @@ const memberMocks = [
       id: 'alice',
       displayName: 'alice'
     },
-    role: mock<ShareRoleNG>({ id: GraphShareRoleIdMap.SpaceManager }),
+    role: mock<ShareRole>({ id: GraphShareRoleIdMap.SpaceManager }),
     permissions: [],
     resourceId: '1',
     indirect: false,
@@ -43,7 +43,7 @@ const memberMocks = [
       onPremisesSamAccountName: 'Einstein',
       displayName: 'einstein'
     },
-    role: mock<ShareRoleNG>({ id: GraphShareRoleIdMap.SpaceEditor }),
+    role: mock<ShareRole>({ id: GraphShareRoleIdMap.SpaceEditor }),
     permissions: [],
     resourceId: '1',
     indirect: false,
@@ -56,7 +56,7 @@ const memberMocks = [
       onPremisesSamAccountName: 'Marie',
       displayName: 'marie'
     },
-    role: mock<ShareRoleNG>({ id: GraphShareRoleIdMap.SpaceViewer }),
+    role: mock<ShareRole>({ id: GraphShareRoleIdMap.SpaceViewer }),
     permissions: [],
     resourceId: '1',
     indirect: false,

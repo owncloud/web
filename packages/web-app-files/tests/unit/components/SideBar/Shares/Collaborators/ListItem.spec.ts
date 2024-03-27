@@ -2,7 +2,7 @@ import ListItem from '../../../../../../src/components/SideBar/Shares/Collaborat
 import {
   CollaboratorShare,
   GraphSharePermission,
-  ShareRoleNG,
+  ShareRole,
   ShareTypes
 } from '@ownclouders/web-client/src/helpers/share'
 import {
@@ -51,7 +51,7 @@ const getShareMock = ({
   sharedBy: { id: '2', displayName: 'marie' },
   permissions: [],
   shareType: shareType || ShareTypes.user.value,
-  role: mock<ShareRoleNG>({ description: '', displayName: '' }),
+  role: mock<ShareRole>({ description: '', displayName: '' }),
   resourceId: '1',
   indirect: false,
   expirationDateTime: expirationDateTime || ''

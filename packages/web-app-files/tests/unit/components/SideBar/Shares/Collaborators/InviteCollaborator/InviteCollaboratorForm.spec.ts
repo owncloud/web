@@ -11,7 +11,7 @@ import { useSharesStore } from '@ownclouders/web-pkg'
 import {
   CollaboratorAutoCompleteItem,
   GraphShareRoleIdMap,
-  ShareRoleNG
+  ShareRole
 } from '@ownclouders/web-client/src/helpers'
 import { Mock } from 'vitest'
 import { Group, User } from '@ownclouders/web-client/src/generated'
@@ -132,8 +132,8 @@ function getWrapper({
               configState: { options: { concurrentRequests: { shares: { create: 1 } } } },
               sharesState: {
                 graphRoles: [
-                  mock<ShareRoleNG>({ id: GraphShareRoleIdMap.Viewer }),
-                  mock<ShareRoleNG>({ id: GraphShareRoleIdMap.SpaceViewer })
+                  mock<ShareRole>({ id: GraphShareRoleIdMap.Viewer }),
+                  mock<ShareRole>({ id: GraphShareRoleIdMap.SpaceViewer })
                 ]
               }
             }

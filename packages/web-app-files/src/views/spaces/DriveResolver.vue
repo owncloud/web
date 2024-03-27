@@ -30,10 +30,10 @@ import { createLocationSpaces, isLocationTrashActive } from '@ownclouders/web-pk
 import {
   isPublicSpaceResource,
   PublicSpaceResource,
+  SharePermissionBit,
   SpaceResource
 } from '@ownclouders/web-client/src/helpers'
 import { locationPublicUpload } from '@ownclouders/web-pkg'
-import { linkRoleUploaderFolder } from '@ownclouders/web-client/src/helpers/share'
 import { createFileRouteOptions } from '@ownclouders/web-pkg'
 import { AppLoadingSpinner } from '@ownclouders/web-pkg'
 import { dirname } from 'path'
@@ -146,7 +146,8 @@ export default defineComponent({
 
         let publicSpace = (await getSpaceResource()) as PublicSpaceResource
 
-        if (linkRoleUploaderFolder.bitmask(false) === publicSpace.publicLinkPermission) {
+        // FIXME: check for type once https://github.com/owncloud/ocis/issues/8740 is resolved
+        if (publicSpace.publicLinkPermission === SharePermissionBit.Create) {
           router.push({
             name: locationPublicUpload.name,
             params: { token: space.id.toString() }

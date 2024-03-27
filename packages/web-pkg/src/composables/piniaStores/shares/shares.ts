@@ -3,7 +3,7 @@ import {
   LinkShare,
   Share,
   GraphShareRoleIdMap,
-  ShareRoleNG,
+  ShareRole,
   ShareTypes,
   isProjectSpaceResource,
   getGraphItemId
@@ -33,7 +33,7 @@ export const useSharesStore = defineStore('shares', () => {
   const loading = ref(false)
   const collaboratorShares = ref<CollaboratorShare[]>([]) as Ref<CollaboratorShare[]>
   const linkShares = ref<LinkShare[]>([]) as Ref<LinkShare[]>
-  const graphRoles = ref<ShareRoleNG[]>([]) as Ref<ShareRoleNG[]>
+  const graphRoles = ref<ShareRole[]>([]) as Ref<ShareRole[]>
 
   const setGraphRoles = (values: UnifiedRoleDefinition[]) => {
     const ShareRoleIconMap = {

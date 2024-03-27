@@ -1,7 +1,7 @@
 import SpaceDetails from '../../../../../../src/components/SideBar/Spaces/Details/SpaceDetails.vue'
 import {
   CollaboratorShare,
-  ShareRoleNG,
+  ShareRole,
   GraphShareRoleIdMap
 } from '@ownclouders/web-client/src/helpers/share'
 import { mock } from 'vitest-mock-extended'
@@ -29,7 +29,7 @@ const spaceShare = {
     id: 'Alice',
     displayName: 'alice'
   },
-  role: mock<ShareRoleNG>({ id: GraphShareRoleIdMap.SpaceManager })
+  role: mock<ShareRole>({ id: GraphShareRoleIdMap.SpaceManager })
 } as CollaboratorShare
 
 const selectors = {

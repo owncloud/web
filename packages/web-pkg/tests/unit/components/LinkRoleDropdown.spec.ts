@@ -1,7 +1,7 @@
 import LinkRoleDropdown from '../../../src/components/LinkRoleDropdown.vue'
 import { defaultComponentMocks, defaultPlugins, mount } from 'web-test-helpers'
 import { mock } from 'vitest-mock-extended'
-import { ShareRoleNG } from '@ownclouders/web-client/src/helpers'
+import { ShareRole } from '@ownclouders/web-client/src/helpers'
 import { SharingLinkType } from '@ownclouders/web-client/src/generated'
 import { useLinkTypes } from '../../../src/composables/links/useLinkTypes'
 
@@ -38,7 +38,7 @@ function getWrapper({ modelValue = mock<SharingLinkType>(), availableLinkTypeOpt
   vi.mocked(useLinkTypes).mockReturnValue(
     mock<ReturnType<typeof useLinkTypes>>({
       getLinkRoleByType: (value) =>
-        mock<ShareRoleNG>({ displayName: value, description: value, label: value })
+        mock<ShareRole>({ displayName: value, description: value, label: value })
     })
   )
 

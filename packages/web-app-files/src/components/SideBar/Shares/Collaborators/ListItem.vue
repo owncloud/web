@@ -133,11 +133,7 @@ import { DateTime } from 'luxon'
 
 import EditDropdown from './EditDropdown.vue'
 import RoleDropdown from './RoleDropdown.vue'
-import {
-  CollaboratorShare,
-  ShareRoleNG,
-  ShareTypes
-} from '@ownclouders/web-client/src/helpers/share'
+import { CollaboratorShare, ShareRole, ShareTypes } from '@ownclouders/web-client/src/helpers/share'
 import {
   queryItemAsString,
   useMessages,
@@ -395,7 +391,7 @@ export default defineComponent({
       ).show()
     },
 
-    async shareRoleChanged(role: ShareRoleNG) {
+    async shareRoleChanged(role: ShareRole) {
       const expirationDateTime = this.share.expirationDateTime
       try {
         await this.saveShareChanges({ role, expirationDateTime })
@@ -425,7 +421,7 @@ export default defineComponent({
       role,
       expirationDateTime
     }: {
-      role: ShareRoleNG
+      role: ShareRole
       expirationDateTime?: string
     }) {
       try {

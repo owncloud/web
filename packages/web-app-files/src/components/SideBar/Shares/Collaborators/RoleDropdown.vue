@@ -81,14 +81,14 @@ import { useAbility, useUserStore } from '@ownclouders/web-pkg'
 import { Resource } from '@ownclouders/web-client'
 import { useGettext } from 'vue3-gettext'
 import { useSharesStore } from '@ownclouders/web-pkg'
-import { ShareRoleNG } from '@ownclouders/web-client/src/helpers'
+import { ShareRole } from '@ownclouders/web-client/src/helpers'
 
 export default defineComponent({
   name: 'RoleDropdown',
   components: { RoleItem },
   props: {
     existingRole: {
-      type: Object as PropType<ShareRoleNG>,
+      type: Object as PropType<ShareRole>,
       required: false,
       default: undefined
     },
@@ -128,22 +128,22 @@ export default defineComponent({
       return ''
     })
 
-    const availableRoles = inject<Ref<ShareRoleNG[]>>('availableShareRoles')
+    const availableRoles = inject<Ref<ShareRole[]>>('availableShareRoles')
 
     const initialSelectedRole = props.existingRole ? props.existingRole : unref(availableRoles)[0]
-    const selectedRole = ref<ShareRoleNG>(initialSelectedRole)
+    const selectedRole = ref<ShareRole>(initialSelectedRole)
 
-    const isSelectedRole = (role: ShareRoleNG) => {
+    const isSelectedRole = (role: ShareRole) => {
       return unref(selectedRole).id === role.id
     }
 
-    const selectRole = (role: ShareRoleNG) => {
+    const selectRole = (role: ShareRole) => {
       selectedRole.value = role
       emit('optionChange', unref(selectedRole))
     }
 
     // FIXME: only needed for e2e and acceptance tests, map id to human readable element id
-    const getRoleName = (role: ShareRoleNG) => {
+    const getRoleName = (role: ShareRole) => {
       const map = {
         'b1e2218d-eef8-4d4c-b82d-0f1a1b48f3b5': 'viewer',
         'a8d5fe5e-96e3-418d-825b-534dbdf22b99': 'viewer',
