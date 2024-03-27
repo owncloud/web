@@ -1,5 +1,5 @@
 import { readFileSync } from 'fs'
-import { Page, expect } from '@playwright/test'
+import { Page } from '@playwright/test'
 
 interface File {
   name: string
@@ -16,8 +16,6 @@ export const dragDropFiles = async (page: Page, resources: File[], targetSelecto
     name: file.name,
     bufferString: JSON.stringify(Array.from(readFileSync(file.path)))
   }))
-  // waiting to files view
-  await expect(page.locator('#new-file-menu-btn')).toBeVisible()
 
   await page.evaluate(
     ([files, targetSelector]: [FileBuffer[], string]) => {
