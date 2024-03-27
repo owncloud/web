@@ -65,7 +65,9 @@ export default defineComponent({
       } catch (e) {
         // Human-readable error message is provided, for example when password is on banned list
         if (e.response?.status === 400) {
-          errorMessage.value = $gettext(e.response.data.error.message)
+          const errorMsg = e.response.data.error.message
+          const capitalizedErrorMsg = errorMsg.charAt(0).toUpperCase() + errorMsg.slice(1)
+          errorMessage.value = $gettext(capitalizedErrorMsg)
           return Promise.reject()
         }
 
