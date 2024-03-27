@@ -17,6 +17,7 @@ const downloadFileButtonSideBar =
 const downloadFolderButtonSideBar =
   '#oc-files-actions-sidebar .oc-files-actions-download-archive-trigger'
 const downloadButtonBatchAction = '.oc-files-actions-download-archive-trigger'
+const downloadPreviewButton = '#preview-download'
 const deleteButtonBatchAction = '.oc-files-actions-delete-trigger'
 const createSpaceFromResourceAction = '.oc-files-actions-create-space-from-resource-trigger'
 const checkBox = `//*[@data-test-resource-name="%s"]//ancestor::tr//input`
@@ -620,7 +621,7 @@ interface resourceArgs {
   type?: string
 }
 
-export type ActionViaType = 'SIDEBAR_PANEL' | 'BATCH_ACTION' | 'SINGLE_SHARE_VIEW'
+export type ActionViaType = 'SIDEBAR_PANEL' | 'BATCH_ACTION' | 'SINGLE_SHARE_VIEW' | 'PREVIEW'
 
 export interface downloadResourcesArgs {
   page: Page
@@ -684,6 +685,14 @@ export const downloadResources = async (args: downloadResourcesArgs): Promise<Do
 
         downloads.push(download)
       }
+      break
+    }
+    case 'PREVIEW': {
+      const [download] = await Promise.all([
+        page.waitForEvent('download'),
+        page.locator(downloadPreviewButton).click()
+      ])
+      downloads.push(download)
       break
     }
   }

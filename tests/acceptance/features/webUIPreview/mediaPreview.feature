@@ -57,30 +57,6 @@ Feature: display image in preview app on the webUI
       | testavatar.jpg  | testavatar.png  |
 
 
-  Scenario: downloading media resource is possible
-    Given user "Alice" has uploaded file "testavatar.jpg" to "testavatar.jpg" in the server
-    And user "Alice" has logged in using the webUI
-    And the user has viewed the file "testavatar.jpg" in the preview app using the webUI
-    When the user downloads the media resource using the webUI
-    Then no message should be displayed on the webUI
-
-
-  Scenario: closing preview app is possible
-    Given user "Alice" has uploaded file "testavatar.jpg" to "testavatar.jpg" in the server
-    And user "Alice" has logged in using the webUI
-    And the user has viewed the file "testavatar.jpg" in the preview app using the webUI
-    When the user closes the media resource using the webUI
-    Then the file "testavatar.jpg" should not be displayed in the preview app webUI
-    And the user should be in the root directory on the webUI
-
-
-  Scenario: preview of image with preview app by clicking on the file name
-    Given user "Alice" has uploaded file "testavatar.jpg" to "testavatar.jpg" in the server
-    And user "Alice" has logged in using the webUI
-    When the user views the file "testavatar.jpg" in the preview app by clicking on the file name using the webUI
-    Then the file "testavatar.jpg" should be displayed in the preview app webUI
-
-
   Scenario: preview of mp3 file with preview app by clicking on the file name
     Given user "Alice" has uploaded file "testimage.mp3" to "testimage.mp3" in the server
     And user "Alice" has logged in using the webUI

@@ -27,10 +27,6 @@ Feature: link
     And "Anonymous" drop uploads following resources
       | resource     |
       | textfile.txt |
-    When "Alice" downloads the following resources using the batch action
-      | resource     | from         | type |
-      | lorem.txt    | folderPublic | file |
-      | textfile.txt | folderPublic | file |
     And "Alice" edits the public link named "myPublicLink" of resource "folderPublic" changing role to "Can edit"
     And "Anonymous" refreshes the old link
     And "Anonymous" downloads the following public link resources using the sidebar panel
