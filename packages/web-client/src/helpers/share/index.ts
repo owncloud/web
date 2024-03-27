@@ -1,6 +1,5 @@
 export * from './constants'
 export * from './functions'
 export * from './permission'
-export * from './role'
 export * from './type'
 export * from './types'

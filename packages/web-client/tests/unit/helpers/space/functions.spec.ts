@@ -1,5 +1,4 @@
 import { buildSpace, ProjectSpaceResource } from '../../../../src/helpers/space'
-import { spaceRoleEditor, spaceRoleManager, spaceRoleViewer } from '../../../../src/helpers/share'
 import { mock } from 'vitest-mock-extended'
 import { Ability } from '@ownclouders/web-client/src/helpers/resource/types'
 import { Drive, User } from '@ownclouders/web-client/src/generated'
@@ -9,9 +8,9 @@ describe('buildSpace', () => {
 
   describe('isViewer', () => {
     it.each([
-      { role: spaceRoleViewer.name, expectedResult: true },
-      { role: spaceRoleEditor.name, expectedResult: false },
-      { role: spaceRoleManager.name, expectedResult: false }
+      { role: 'viewer', expectedResult: true },
+      { role: 'editor', expectedResult: false },
+      { role: 'manager', expectedResult: false }
     ])('returns true for a viewer of the space', (data) => {
       const space = buildSpace(
         mock<Drive>({
@@ -27,9 +26,9 @@ describe('buildSpace', () => {
 
   describe('isEditor', () => {
     it.each([
-      { role: spaceRoleViewer.name, expectedResult: false },
-      { role: spaceRoleEditor.name, expectedResult: true },
-      { role: spaceRoleManager.name, expectedResult: false }
+      { role: 'viewer', expectedResult: false },
+      { role: 'editor', expectedResult: true },
+      { role: 'manager', expectedResult: false }
     ])('returns true for a editor of the space', (data) => {
       const space = buildSpace(
         mock<Drive>({
@@ -45,9 +44,9 @@ describe('buildSpace', () => {
 
   describe('isManager', () => {
     it.each([
-      { role: spaceRoleViewer.name, expectedResult: false },
-      { role: spaceRoleEditor.name, expectedResult: false },
-      { role: spaceRoleManager.name, expectedResult: true }
+      { role: 'viewer', expectedResult: false },
+      { role: 'editor', expectedResult: false },
+      { role: 'manager', expectedResult: true }
     ])('returns true for a manager of the space', (data) => {
       const space = buildSpace(
         mock<Drive>({
@@ -62,9 +61,9 @@ describe('buildSpace', () => {
   })
 
   it.each([
-    { role: spaceRoleViewer.name, expectedResult: false },
-    { role: spaceRoleEditor.name, expectedResult: true },
-    { role: spaceRoleManager.name, expectedResult: true }
+    { role: 'viewer', expectedResult: false },
+    { role: 'editor', expectedResult: true },
+    { role: 'manager', expectedResult: true }
   ])('canUpload', (data) => {
     const space = buildSpace(
       mock<Drive>({
@@ -80,31 +79,31 @@ describe('buildSpace', () => {
   it.each([
     {
       userCan: false,
-      spaceRole: spaceRoleManager.name,
+      spaceRole: 'manager',
       spaceDisabled: true,
       expectedResult: true
     },
     {
       userCan: false,
-      spaceRole: spaceRoleEditor.name,
+      spaceRole: 'editor',
       spaceDisabled: true,
       expectedResult: false
     },
     {
       userCan: false,
-      spaceRole: spaceRoleViewer.name,
+      spaceRole: 'viewer',
       spaceDisabled: true,
       expectedResult: false
     },
     {
       userCan: true,
-      spaceRole: spaceRoleViewer.name,
+      spaceRole: 'viewer',
       spaceDisabled: true,
       expectedResult: true
     },
     {
       userCan: true,
-      spaceRole: spaceRoleViewer.name,
+      spaceRole: 'viewer',
       spaceDisabled: false,
       expectedResult: false
     }
@@ -123,9 +122,9 @@ describe('buildSpace', () => {
   })
 
   it.each([
-    { spaceRole: spaceRoleManager.name, expectedResult: true },
-    { spaceRole: spaceRoleEditor.name, expectedResult: false },
-    { spaceRole: spaceRoleViewer.name, expectedResult: false }
+    { spaceRole: 'manager', expectedResult: true },
+    { spaceRole: 'editor', expectedResult: false },
+    { spaceRole: 'viewer', expectedResult: false }
   ])('canRename', (data) => {
     const space = buildSpace(
       mock<Drive>({
@@ -139,9 +138,9 @@ describe('buildSpace', () => {
   })
 
   it.each([
-    { spaceRole: spaceRoleManager.name, expectedResult: true },
-    { spaceRole: spaceRoleEditor.name, expectedResult: false },
-    { spaceRole: spaceRoleViewer.name, expectedResult: false }
+    { spaceRole: 'manager', expectedResult: true },
+    { spaceRole: 'editor', expectedResult: false },
+    { spaceRole: 'viewer', expectedResult: false }
   ])('canEditDescription', (data) => {
     const space = buildSpace(
       mock<Drive>({
@@ -156,17 +155,17 @@ describe('buildSpace', () => {
 
   it.each([
     {
-      spaceRole: spaceRoleManager.name,
+      spaceRole: 'manager',
       spaceDisabled: true,
       expectedResult: true
     },
     {
-      spaceRole: spaceRoleEditor.name,
+      spaceRole: 'editor',
       spaceDisabled: true,
       expectedResult: false
     },
     {
-      spaceRole: spaceRoleViewer.name,
+      spaceRole: 'viewer',
       spaceDisabled: true,
       expectedResult: false
     }
@@ -186,31 +185,31 @@ describe('buildSpace', () => {
   it.each([
     {
       userCan: false,
-      spaceRole: spaceRoleManager.name,
+      spaceRole: 'manager',
       spaceDisabled: false,
       expectedResult: true
     },
     {
       userCan: false,
-      spaceRole: spaceRoleEditor.name,
+      spaceRole: 'editor',
       spaceDisabled: false,
       expectedResult: false
     },
     {
       userCan: false,
-      spaceRole: spaceRoleViewer.name,
+      spaceRole: 'viewer',
       spaceDisabled: false,
       expectedResult: false
     },
     {
       userCan: true,
-      spaceRole: spaceRoleViewer.name,
+      spaceRole: 'viewer',
       spaceDisabled: false,
       expectedResult: true
     },
     {
       userCan: true,
-      spaceRole: spaceRoleViewer.name,
+      spaceRole: 'viewer',
       spaceDisabled: true,
       expectedResult: false
     }
@@ -229,9 +228,9 @@ describe('buildSpace', () => {
   })
 
   it.each([
-    { role: spaceRoleManager.name, expectedResult: true },
-    { role: spaceRoleEditor.name, expectedResult: false },
-    { role: spaceRoleViewer.name, expectedResult: false }
+    { role: 'manager', expectedResult: true },
+    { role: 'editor', expectedResult: false },
+    { role: 'viewer', expectedResult: false }
   ])('canShare', (data) => {
     const space = buildSpace(
       mock<Drive>({
@@ -245,9 +244,9 @@ describe('buildSpace', () => {
   })
 
   it.each([
-    { role: spaceRoleManager.name, expectedResult: true },
-    { role: spaceRoleEditor.name, expectedResult: true },
-    { role: spaceRoleViewer.name, expectedResult: false }
+    { role: 'manager', expectedResult: true },
+    { role: 'editor', expectedResult: true },
+    { role: 'viewer', expectedResult: false }
   ])('canEditImage', (data) => {
     const space = buildSpace(
       mock<Drive>({
@@ -261,9 +260,9 @@ describe('buildSpace', () => {
   })
 
   it.each([
-    { role: spaceRoleManager.name, expectedResult: true },
-    { role: spaceRoleEditor.name, expectedResult: true },
-    { role: spaceRoleViewer.name, expectedResult: false }
+    { role: 'manager', expectedResult: true },
+    { role: 'editor', expectedResult: true },
+    { role: 'viewer', expectedResult: false }
   ])('canEditReadme', (data) => {
     const space = buildSpace(
       mock<Drive>({

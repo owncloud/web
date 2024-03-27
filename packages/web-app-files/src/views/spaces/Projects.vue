@@ -197,11 +197,6 @@ import { WebDAV } from '@ownclouders/web-client/src/webdav'
 import { sortFields as availableSortFields } from '@ownclouders/web-pkg'
 import { defaultFuseOptions, formatFileSize, ResourceIcon } from '@ownclouders/web-pkg'
 import { useGettext } from 'vue3-gettext'
-import {
-  spaceRoleEditor,
-  spaceRoleManager,
-  spaceRoleViewer
-} from '@ownclouders/web-client/src/helpers/share'
 import { useKeyboardActions } from '@ownclouders/web-pkg'
 import {
   useKeyboardTableNavigation,
@@ -348,7 +343,7 @@ export default defineComponent({
     useKeyboardTableActions(keyActions)
 
     const getManagerNames = (space: SpaceResource) => {
-      const allManagers = space.spaceRoles[spaceRoleManager.name]
+      const allManagers = space.spaceRoles.manager
       const managers = allManagers.length > 2 ? allManagers.slice(0, 2) : allManagers
       let managerStr = managers.map((m) => m.displayName).join(', ')
       if (allManagers.length > 2) {
@@ -378,9 +373,9 @@ export default defineComponent({
     }
     const getMemberCount = (space: SpaceResource) => {
       return (
-        space.spaceRoles[spaceRoleManager.name].length +
-        space.spaceRoles[spaceRoleEditor.name].length +
-        space.spaceRoles[spaceRoleViewer.name].length
+        space.spaceRoles.manager.length +
+        space.spaceRoles.editor.length +
+        space.spaceRoles.viewer.length
       )
     }
 

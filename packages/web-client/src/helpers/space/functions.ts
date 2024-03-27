@@ -1,6 +1,5 @@
 import { User } from '../../generated'
 import { extractDomSelector, extractNodeId, Resource, SpaceRole } from '../resource'
-import { SpacePeopleShareRoles, spaceRoleEditor, spaceRoleManager, spaceRoleViewer } from '../share'
 import {
   PublicSpaceResource,
   ShareSpaceResource,
@@ -122,7 +121,7 @@ export function buildSpace(
 ): SpaceResource {
   let spaceImageData: DriveItem, spaceReadmeData: DriveItem
   let disabled = false
-  const spaceRoles = Object.fromEntries(SpacePeopleShareRoles.list().map((role) => [role.name, []]))
+  const spaceRoles: Resource['spaceRoles'] = { viewer: [], editor: [], manager: [] }
 
   if (data.special) {
     spaceImageData = data.special.find((el) => el.specialFolder.name === 'image')
@@ -146,7 +145,6 @@ export function buildSpace(
             kind,
             id: info[kind].id,
             displayName: info[kind].displayName,
-            expirationDate: permission.expirationDateTime,
             isMember(u?: User): boolean {
               if (!u) {
                 return false
@@ -278,13 +276,13 @@ export function buildSpace(
       return urlJoin(webDavTrashUrl, path)
     },
     isViewer(user: User): boolean {
-      return this.spaceRoles[spaceRoleViewer.name].map((r) => r.isMember(user)).some(Boolean)
+      return this.spaceRoles.viewer.map((r) => r.isMember(user)).some(Boolean)
     },
     isEditor(user: User): boolean {
-      return this.spaceRoles[spaceRoleEditor.name].map((r) => r.isMember(user)).some(Boolean)
+      return this.spaceRoles.editor.map((r) => r.isMember(user)).some(Boolean)
     },
     isManager(user: User): boolean {
-      return this.spaceRoles[spaceRoleManager.name].map((r) => r.isMember(user)).some(Boolean)
+      return this.spaceRoles.manager.map((r) => r.isMember(user)).some(Boolean)
     },
     isMember(user: User): boolean {
       return this.isViewer(user) || this.isEditor(user) || this.isManager(user)

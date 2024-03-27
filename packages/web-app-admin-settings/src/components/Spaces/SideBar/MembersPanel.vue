@@ -42,11 +42,6 @@ import { Resource } from '@ownclouders/web-client/src'
 import MembersRoleSection from './MembersRoleSection.vue'
 import Fuse from 'fuse.js'
 import Mark from 'mark.js'
-import {
-  spaceRoleEditor,
-  spaceRoleManager,
-  spaceRoleViewer
-} from '@ownclouders/web-client/src/helpers/share'
 import { defaultFuseOptions } from '@ownclouders/web-pkg'
 
 export default defineComponent({
@@ -70,15 +65,15 @@ export default defineComponent({
       return [
         ...unref(resource).spaceRoles.manager.map((r) => ({
           ...r,
-          roleType: spaceRoleManager.name
+          roleType: 'manager'
         })),
         ...unref(resource).spaceRoles.editor.map((r) => ({
           ...r,
-          roleType: spaceRoleEditor.name
+          roleType: 'editor'
         })),
         ...unref(resource).spaceRoles.viewer.map((r) => ({
           ...r,
-          roleType: spaceRoleViewer.name
+          roleType: 'viewer'
         }))
       ].sort((a, b) => a.displayName.localeCompare(b.displayName))
     })
@@ -87,13 +82,13 @@ export default defineComponent({
       return filterMembers(unref(spaceMembers), unref(filterTerm))
     })
     const filteredSpaceManagers = computed(() => {
-      return unref(filteredSpaceMembers).filter((m) => m.roleType === spaceRoleManager.name)
+      return unref(filteredSpaceMembers).filter((m) => m.roleType === 'manager')
     })
     const filteredSpaceEditors = computed(() => {
-      return unref(filteredSpaceMembers).filter((m) => m.roleType === spaceRoleEditor.name)
+      return unref(filteredSpaceMembers).filter((m) => m.roleType === 'editor')
     })
     const filteredSpaceViewers = computed(() => {
-      return unref(filteredSpaceMembers).filter((m) => m.roleType === spaceRoleViewer.name)
+      return unref(filteredSpaceMembers).filter((m) => m.roleType === 'viewer')
     })
 
     watch(filterTerm, () => {

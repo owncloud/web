@@ -129,11 +129,6 @@ import {
 } from '@ownclouders/web-pkg'
 import { computed, defineComponent, nextTick, onMounted, ref, unref, watch } from 'vue'
 import { SpaceResource } from '@ownclouders/web-client/src/helpers'
-import {
-  spaceRoleEditor,
-  spaceRoleManager,
-  spaceRoleViewer
-} from '@ownclouders/web-client/src/helpers/share'
 import Mark from 'mark.js'
 import Fuse from 'fuse.js'
 import { useGettext } from 'vue3-gettext'
@@ -344,7 +339,7 @@ export default defineComponent({
     ])
 
     const getManagerNames = (space: SpaceResource) => {
-      const allManagers = space.spaceRoles[spaceRoleManager.name]
+      const allManagers = space.spaceRoles.manager
       const managers = allManagers.length > 2 ? allManagers.slice(0, 2) : allManagers
       let managerStr = managers.map((m) => m.displayName).join(', ')
       if (allManagers.length > 2) {
@@ -379,9 +374,9 @@ export default defineComponent({
     }
     const getMemberCount = (space: SpaceResource) => {
       return (
-        space.spaceRoles[spaceRoleManager.name].length +
-        space.spaceRoles[spaceRoleEditor.name].length +
-        space.spaceRoles[spaceRoleViewer.name].length
+        space.spaceRoles.manager.length +
+        space.spaceRoles.editor.length +
+        space.spaceRoles.viewer.length
       )
     }
 

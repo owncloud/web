@@ -79,12 +79,11 @@ import {
   useUpload
 } from '@ownclouders/web-pkg'
 import { eventBus } from '@ownclouders/web-pkg'
-import { linkRoleUploaderFolder } from '@ownclouders/web-client/src/helpers/share'
 import { useService, UppyService } from '@ownclouders/web-pkg'
 import { useAuthService } from '@ownclouders/web-pkg'
 import { HandleUpload } from 'web-app-files/src/HandleUpload'
 import { createFileRouteOptions } from '@ownclouders/web-pkg'
-import { PublicSpaceResource } from '@ownclouders/web-client/src/helpers'
+import { PublicSpaceResource, SharePermissionBit } from '@ownclouders/web-client/src/helpers'
 
 export default defineComponent({
   components: {
@@ -179,8 +178,9 @@ export default defineComponent({
         .listFiles(space, {}, { depth: 0 })
         .then(({ resource }) => {
           // Redirect to files list if the link doesn't have role "uploader"
+          // FIXME: check for type once https://github.com/owncloud/ocis/issues/8740 is resolved
           const sharePermissions = (resource as PublicSpaceResource).publicLinkPermission
-          if (linkRoleUploaderFolder.bitmask(false) !== sharePermissions) {
+          if (sharePermissions !== SharePermissionBit.Create) {
             router.replace(
               createLocationPublic('files-public-link', {
                 params: { driveAliasAndItem: `public/${authStore.publicLinkToken}` }

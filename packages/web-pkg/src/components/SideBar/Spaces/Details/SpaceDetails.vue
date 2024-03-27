@@ -83,7 +83,6 @@ import {
   getRelativeSpecialFolderSpacePath,
   SpaceResource
 } from '@ownclouders/web-client/src/helpers'
-import { spaceRoleManager } from '@ownclouders/web-client/src/helpers/share'
 import {
   usePreviewService,
   useClientService,
@@ -212,7 +211,7 @@ export default defineComponent({
       return formatDateFromISO(this.resource.mdate, this.$language.current)
     },
     ownerUsernames() {
-      return this.resource.spaceRoles[spaceRoleManager.name]
+      return this.resource.spaceRoles.manager
         .map((share) => {
           if (share.id === this.user?.id) {
             return this.$gettext('%{displayName} (me)', { displayName: share.displayName })

@@ -25,9 +25,7 @@ import {
   isProjectSpaceResource,
   isShareResource,
   isShareSpaceResource,
-  SpaceResource,
-  spaceRoleEditor,
-  spaceRoleManager
+  SpaceResource
 } from '@ownclouders/web-client/src/helpers'
 import { Resource } from '@ownclouders/web-client'
 import { useGettext } from 'vue3-gettext'
@@ -311,10 +309,9 @@ export const useSideBarPanels = () => {
               ) {
                 return false
               }
-              return [
-                ...items[0].spaceRoles[spaceRoleManager.name],
-                ...items[0].spaceRoles[spaceRoleEditor.name]
-              ].some((role) => role.id === userStore.user.id)
+              return [...items[0].spaceRoles.manager, ...items[0].spaceRoles.editor].some(
+                (role) => role.id === userStore.user.id
+              )
             }
           }
         },
