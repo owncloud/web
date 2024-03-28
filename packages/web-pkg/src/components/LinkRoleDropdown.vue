@@ -28,7 +28,7 @@
     <oc-list class="role-dropdown-list">
       <li v-for="(type, i) in availableLinkTypeOptions" :key="`role-dropdown-${i}`">
         <oc-button
-          :id="`files-role-${getLinkId(type)}`"
+          :id="`files-role-${getLinkRoleByType(type).id}`"
           :class="{
             selected: isSelectedType(type),
             'oc-background-primary-gradient': isSelectedType(type)
@@ -96,29 +96,12 @@ export default defineComponent({
 
     const dropUuid = uuid.v4()
 
-    // FIXME: only needed for e2e and acceptance tests, map id to human readable element id
-    const getLinkId = (type: SharingLinkType) => {
-      const id = getLinkRoleByType(type).id
-
-      const map = {
-        internal: 'internal',
-        view: 'viewer',
-        upload: 'contributor',
-        edit: 'editor',
-        createOnly: 'uploader',
-        blocksDownload: 'blocksDownload'
-      }
-
-      return map[id]
-    }
-
     return {
       isSelectedType,
       updateSelectedType,
       currentLinkRoleLabel,
       dropUuid,
-      getLinkRoleByType,
-      getLinkId
+      getLinkRoleByType
     }
   }
 })

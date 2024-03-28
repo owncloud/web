@@ -594,16 +594,22 @@ module.exports = {
       selector: '#files-file-link-role-button'
     },
     roleViewer: {
-      selector: '#files-role-viewer'
+      selector: '//span[contains(@class,"role-dropdown-list-option-label") and text()="Can view"]',
+      locateStrategy: 'xpath'
     },
     roleContributor: {
-      selector: '#files-role-contributor'
+      selector:
+        '//span[contains(@class,"role-dropdown-list-option-label") and text()="Can upload"]',
+      locateStrategy: 'xpath'
     },
     roleEditor: {
-      selector: '#files-role-editor'
+      selector: '//span[contains(@class,"role-dropdown-list-option-label") and text()="Can edit"]',
+      locateStrategy: 'xpath'
     },
     roleUploader: {
-      selector: '#files-role-uploader'
+      selector:
+        '//span[contains(@class,"role-dropdown-list-option-label") and text()="Secret File Drop"]',
+      locateStrategy: 'xpath'
     },
     publicLinkEditRoleButton: {
       selector:
