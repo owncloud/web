@@ -130,7 +130,6 @@ import { LinkShare } from '@ownclouders/web-client/src/helpers/share'
 import DetailsAndEdit from './Links/DetailsAndEdit.vue'
 import NameAndCopy from './Links/NameAndCopy.vue'
 import CreateQuickLink from './Links/CreateQuickLink.vue'
-import SetLinkPasswordModal from '../../Modals/SetLinkPasswordModal.vue'
 import { Resource, SpaceResource } from '@ownclouders/web-client/src/helpers'
 import { isLocationSharesActive, useSharesStore } from '@ownclouders/web-pkg'
 import { useGettext } from 'vue3-gettext'
@@ -231,11 +230,6 @@ export default defineComponent({
       linkShare: LinkShare
       password?: string
     }) => {
-      if (password !== undefined && !canDeletePublicLinkPassword(linkShare)) {
-        showPasswordModal(linkShare)
-        return
-      }
-
       try {
         await updateLink({
           clientService,
@@ -257,18 +251,6 @@ export default defineComponent({
           errors: [e]
         })
       }
-    }
-
-    const showPasswordModal = (linkShare: LinkShare) => {
-      dispatchModal({
-        title: $gettext('Set password'),
-        customComponent: SetLinkPasswordModal,
-        customComponentAttrs: () => ({
-          space: unref(space),
-          resource: unref(resource),
-          link: linkShare
-        })
-      })
     }
 
     return {
