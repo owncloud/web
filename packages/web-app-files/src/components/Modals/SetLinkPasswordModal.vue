@@ -34,7 +34,11 @@ export default defineComponent({
     modal: { type: Object as PropType<Modal>, required: true },
     space: { type: Object as PropType<SpaceResource>, required: true },
     resource: { type: Object as PropType<Resource>, required: true },
-    link: { type: Object as PropType<LinkShare>, required: true }
+    link: { type: Object as PropType<LinkShare>, required: true },
+    callbackFn: {
+      type: Function as PropType<() => void>,
+      default: undefined
+    }
   },
   emits: ['confirm', 'update:confirmDisabled'],
   setup(props, { expose }) {
@@ -61,6 +65,10 @@ export default defineComponent({
           linkShare: props.link,
           options: { password: unref(password) }
         })
+        if (props.callbackFn) {
+          props.callbackFn()
+          return
+        }
         showMessage({ title: $gettext('Link was updated successfully') })
       } catch (e) {
         // Human-readable error message is provided, for example when password is on banned list
