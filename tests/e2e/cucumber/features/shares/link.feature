@@ -234,17 +234,15 @@ Feature: link
       | resource  | password |
       | lorem.txt | %public% |
     When "Alice" tries to sets a new password "ownCloud-1" of the public link named "Link" of resource "lorem.txt"
-    # https://github.com/owncloud/ocis/issues/8624
     Then "Alice" should see an error message
       """
-      unfortunately, your password is commonly used. please pick a harder-to-guess password for your safety
+      Unfortunately, your password is commonly used. please pick a harder-to-guess password for your safety
       """
     And "Alice" closes the public link password dialog box
     When "Alice" tries to sets a new password "ownCloud-1" of the public link named "Link" of resource "lorem.txt"
-    # https://github.com/owncloud/ocis/issues/8624
     Then "Alice" should see an error message
       """
-      unfortunately, your password is commonly used. please pick a harder-to-guess password for your safety
+      Unfortunately, your password is commonly used. please pick a harder-to-guess password for your safety
       """
     And "Alice" reveals the password of the public link
     And "Alice" hides the password of the public link

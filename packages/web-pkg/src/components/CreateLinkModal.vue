@@ -280,7 +280,9 @@ export default defineComponent({
             console.error(e)
             // Human-readable error message is provided, for example when password is on banned list
             if (e.response?.status === 400) {
-              userFacingErrors.push(e.response.data.error)
+              const error = e.response.data.error
+              error.message = error.message.charAt(0).toUpperCase() + error.message.slice(1)
+              userFacingErrors.push(error)
             }
           })
       }
