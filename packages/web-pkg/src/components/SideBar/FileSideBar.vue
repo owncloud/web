@@ -71,7 +71,7 @@ import { useTask } from 'vue-concurrency'
 import {
   buildCollaboratorShare,
   buildLinkShare
-} from '@ownclouders/web-client/src/helpers/share/functionsNG'
+} from '@ownclouders/web-client/src/helpers/share/functions'
 import { Permission } from '@ownclouders/web-client/src/generated'
 
 export default defineComponent({
