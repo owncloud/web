@@ -59,7 +59,7 @@
               variation="passive"
               appearance="outline"
               @click="cancelModalAction"
-              >{{ buttonCancelText }}</oc-button
+              >{{ $gettext(buttonCancelText) }}</oc-button
             >
             <oc-button
               v-if="!hideConfirmButton"
@@ -68,7 +68,7 @@
               appearance="filled"
               :disabled="buttonConfirmDisabled || !!inputError"
               @click="confirm"
-              >{{ buttonConfirmText }}</oc-button
+              >{{ $gettext(buttonConfirmText) }}</oc-button
             >
           </div>
         </div>
