@@ -10,6 +10,7 @@ import {
 import { mock } from 'vitest-mock-extended'
 import { AxiosResponse } from 'axios'
 import {
+  Extension,
   ExtensionPoint,
   useExtensionRegistry,
   useMessages,
@@ -230,7 +231,7 @@ describe('account page', () => {
       expect(wrapper.find(selectors.extensionsSection).exists()).toBeFalsy()
     })
 
-    it('should be visible if any extension points offer preferences', async () => {
+    it('should be hidden if an extension point only has 1 or less extensions', async () => {
       const extensionPointMock = mock<ExtensionPoint>({
         userPreference: {
           label: 'example-extension-point'
@@ -238,6 +239,35 @@ describe('account page', () => {
       })
       const { wrapper } = getWrapper({
         extensionPoints: [extensionPointMock]
+      })
+      await blockLoadingState(wrapper)
+
+      expect(wrapper.find(selectors.extensionsSection).exists()).toBeFalsy()
+    })
+
+    it('should be visible if an extension point has at least 2 extensions', async () => {
+      const extensionPoint = mock<ExtensionPoint>({
+        id: 'test-extension-point',
+        multiple: false,
+        defaultExtensionId: 'foo-2'
+      })
+      const extensions = [
+        mock<Extension>({
+          id: 'foo-1',
+          userPreference: {
+            optionLabel: 'Foo 1'
+          }
+        }),
+        mock<Extension>({
+          id: 'foo-2',
+          userPreference: {
+            optionLabel: 'Foo 2'
+          }
+        })
+      ]
+      const { wrapper } = getWrapper({
+        extensionPoints: [extensionPoint],
+        extensions
       })
       await blockLoadingState(wrapper)
 
