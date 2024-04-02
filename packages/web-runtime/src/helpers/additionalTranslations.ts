@@ -18,5 +18,16 @@ export const additionalTranslations = {
   ocsErrorPasswordOnBannedList: $gettext(
     'Unfortunately, your password is commonly used. please pick a harder-to-guess password for your safety'
   ),
-  openAppFromSmartBanner: $gettext('OPEN')
+  openAppFromSmartBanner: $gettext('OPEN'),
+  shareRoleDescriptionViewer: $gettext('View and download.'),
+  shareRoleDescriptionEditor: $gettext('View, download, upload, edit, add and delete.'),
+  shareRoleDescriptionFileEditor: $gettext('View, download and edit.'),
+  shareRoleDescriptionUploader: $gettext('View, download and upload.'),
+  shareRoleDescriptionManager: $gettext(
+    'View, download, upload, edit, add, delete and manage members.'
+  ),
+  shareRoleLabelViewer: $gettext('Can view'),
+  shareRoleLabelEditor: $gettext('Can edit'),
+  shareRoleLabelUploader: $gettext('Can upload'),
+  shareRoleLabelManager: $gettext('Can manage')
 }
