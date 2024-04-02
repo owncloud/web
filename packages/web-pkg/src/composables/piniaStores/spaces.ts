@@ -12,7 +12,7 @@ import {
 import type { CollaboratorShare } from '@ownclouders/web-client/src/helpers'
 import { useUserStore } from './user'
 import { ConfigStore, useConfigStore } from './config'
-import { buildCollaboratorShare } from '@ownclouders/web-client/src/helpers/share/functionsNG'
+import { buildCollaboratorShare } from '@ownclouders/web-client/src/helpers/share/functions'
 import { useSharesStore } from './shares'
 
 export const sortSpaceMembers = (shares: CollaboratorShare[]) => {
