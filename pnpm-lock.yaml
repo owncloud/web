@@ -573,8 +573,8 @@ importers:
         specifier: workspace:*
         version: link:../web-pkg
       axios:
-        specifier: 1.6.5
-        version: 1.6.5
+        specifier: 1.6.8
+        version: 1.6.8
       deep-object-diff:
         specifier: ^1.1.9
         version: 1.1.9
@@ -601,7 +601,7 @@ importers:
         version: 9.0.1
       vue-concurrency:
         specifier: 5.0.0
-        version: 5.0.0(@algolia/client-search@4.22.1)(@types/node@16.18.30)(axios@1.6.5)(fuse.js@6.6.2)(postcss@8.4.32)(react@17.0.2)(sass@1.69.7)(search-insights@2.13.0)(typescript@5.3.3)(vue@3.4.21)
+        version: 5.0.0(@algolia/client-search@4.22.1)(@types/node@16.18.30)(axios@1.6.8)(fuse.js@6.6.2)(postcss@8.4.32)(react@17.0.2)(sass@1.69.7)(search-insights@2.13.0)(typescript@5.3.3)(vue@3.4.21)
       web-app-admin-settings:
         specifier: workspace:*
         version: 'link:'
@@ -658,7 +658,7 @@ importers:
         version: 9.0.1
       vue-concurrency:
         specifier: 5.0.0
-        version: 5.0.0(@algolia/client-search@4.22.1)(@types/node@16.18.30)(axios@1.6.5)(fuse.js@6.6.2)(postcss@8.4.32)(react@17.0.2)(sass@1.69.7)(search-insights@2.13.0)(typescript@5.3.3)(vue@3.4.21)
+        version: 5.0.0(@algolia/client-search@4.22.1)(@types/node@16.18.30)(axios@1.6.8)(fuse.js@6.6.2)(postcss@8.4.32)(react@17.0.2)(sass@1.69.7)(search-insights@2.13.0)(typescript@5.3.3)(vue@3.4.21)
       vue3-gettext:
         specifier: 2.4.0
         version: 2.4.0(@vue/compiler-sfc@3.4.21)(vue@3.4.21)
@@ -688,8 +688,8 @@ importers:
         specifier: https://github.com/owncloud/uppy/releases/download/v3.12.13-owncloud/uppy-onedrive.tgz
         version: '@github.com/owncloud/uppy/releases/download/v3.12.13-owncloud/uppy-onedrive.tgz(@uppy/core@3.3.0)'
       axios:
-        specifier: 1.6.5
-        version: 1.6.5
+        specifier: 1.6.8
+        version: 1.6.8
       design-system:
         specifier: workspace:@ownclouders/design-system@*
         version: link:../design-system
@@ -728,7 +728,7 @@ importers:
         version: 9.0.1
       vue-concurrency:
         specifier: 5.0.0
-        version: 5.0.0(@algolia/client-search@4.22.1)(@types/node@16.18.30)(axios@1.6.5)(fuse.js@6.6.2)(postcss@8.4.32)(react@17.0.2)(sass@1.69.7)(search-insights@2.13.0)(typescript@5.3.3)(vue@3.4.21)
+        version: 5.0.0(@algolia/client-search@4.22.1)(@types/node@16.18.30)(axios@1.6.8)(fuse.js@6.6.2)(postcss@8.4.32)(react@17.0.2)(sass@1.69.7)(search-insights@2.13.0)(typescript@5.3.3)(vue@3.4.21)
       vue-router:
         specifier: 4.2.5
         version: 4.2.5(vue@3.4.21)
@@ -792,8 +792,8 @@ importers:
         specifier: workspace:*
         version: link:../web-pkg
       axios:
-        specifier: 1.6.5
-        version: 1.6.5
+        specifier: 1.6.8
+        version: 1.6.8
       email-validator:
         specifier: ^2.0.4
         version: 2.0.4
@@ -808,7 +808,7 @@ importers:
         version: 9.0.1
       vue-concurrency:
         specifier: 5.0.0
-        version: 5.0.0(@algolia/client-search@4.22.1)(@types/node@16.18.30)(axios@1.6.5)(fuse.js@6.6.2)(postcss@8.4.32)(react@17.0.2)(sass@1.69.7)(search-insights@2.13.0)(typescript@5.3.3)(vue@3.4.21)
+        version: 5.0.0(@algolia/client-search@4.22.1)(@types/node@16.18.30)(axios@1.6.8)(fuse.js@6.6.2)(postcss@8.4.32)(react@17.0.2)(sass@1.69.7)(search-insights@2.13.0)(typescript@5.3.3)(vue@3.4.21)
       zod:
         specifier: 3.22.4
         version: 3.22.4
@@ -886,7 +886,7 @@ importers:
         version: link:../web-pkg
       vue-concurrency:
         specifier: 5.0.0
-        version: 5.0.0(@algolia/client-search@4.22.1)(@types/node@16.18.30)(axios@1.6.5)(fuse.js@6.6.2)(postcss@8.4.32)(react@17.0.2)(sass@1.69.7)(search-insights@2.13.0)(typescript@5.3.3)(vue@3.4.21)
+        version: 5.0.0(@algolia/client-search@4.22.1)(@types/node@16.18.30)(axios@1.6.8)(fuse.js@6.6.2)(postcss@8.4.32)(react@17.0.2)(sass@1.69.7)(search-insights@2.13.0)(typescript@5.3.3)(vue@3.4.21)
       vue3-gettext:
         specifier: 2.4.0
         version: 2.4.0(@vue/compiler-sfc@3.4.21)(vue@3.4.21)
@@ -926,8 +926,8 @@ importers:
         specifier: workspace:*
         version: 'link:'
       axios:
-        specifier: 1.6.5
-        version: 1.6.5
+        specifier: 1.6.8
+        version: 1.6.8
       fast-xml-parser:
         specifier: 4.3.3
         version: 4.3.3
@@ -983,8 +983,8 @@ importers:
         specifier: ^10.0.0
         version: 10.3.0(vue@3.4.21)
       axios:
-        specifier: 1.6.5
-        version: 1.6.5
+        specifier: 1.6.8
+        version: 1.6.8
       deepmerge:
         specifier: ^4.2.2
         version: 4.2.2
@@ -1035,7 +1035,7 @@ importers:
         version: 1.2.1(@types/node@16.18.30)(happy-dom@13.3.1)(jsdom@20.0.3)(sass@1.69.7)
       vue-concurrency:
         specifier: 5.0.0
-        version: 5.0.0(@algolia/client-search@4.22.1)(@types/node@16.18.30)(axios@1.6.5)(fuse.js@6.6.2)(postcss@8.4.32)(react@17.0.2)(sass@1.69.7)(search-insights@2.13.0)(typescript@5.3.3)(vue@3.4.21)
+        version: 5.0.0(@algolia/client-search@4.22.1)(@types/node@16.18.30)(axios@1.6.8)(fuse.js@6.6.2)(postcss@8.4.32)(react@17.0.2)(sass@1.69.7)(search-insights@2.13.0)(typescript@5.3.3)(vue@3.4.21)
       vue-router:
         specifier: 4.2.5
         version: 4.2.5(vue@3.4.21)
@@ -1092,8 +1092,8 @@ importers:
         specifier: 2.0.0
         version: 2.0.0(vue@3.4.21)
       axios:
-        specifier: 1.6.5
-        version: 1.6.5
+        specifier: 1.6.8
+        version: 1.6.8
       design-system:
         specifier: workspace:@ownclouders/design-system@*
         version: link:../design-system
@@ -1159,7 +1159,7 @@ importers:
         version: 3.4.21(typescript@5.3.3)
       vue-concurrency:
         specifier: 5.0.0
-        version: 5.0.0(@algolia/client-search@4.22.1)(@types/node@16.18.30)(axios@1.6.5)(fuse.js@6.6.2)(postcss@8.4.32)(react@17.0.2)(sass@1.69.7)(search-insights@2.13.0)(typescript@5.3.3)(vue@3.4.21)
+        version: 5.0.0(@algolia/client-search@4.22.1)(@types/node@16.18.30)(axios@1.6.8)(fuse.js@6.6.2)(postcss@8.4.32)(react@17.0.2)(sass@1.69.7)(search-insights@2.13.0)(typescript@5.3.3)(vue@3.4.21)
       vue-inline-svg:
         specifier: 3.1.2
         version: 3.1.2(vue@3.4.21)
@@ -1207,8 +1207,8 @@ importers:
         specifier: ^2.2.1
         version: 2.2.1(@casl/ability@6.3.3)(vue@3.4.21)
       axios:
-        specifier: 1.6.5
-        version: 1.6.5
+        specifier: 1.6.8
+        version: 1.6.8
       pinia:
         specifier: 2.1.7
         version: 2.1.7(typescript@5.3.3)(vue@3.4.21)
@@ -4808,7 +4808,7 @@ packages:
       vue: 3.4.21(typescript@5.3.3)
     dev: false
 
-  /@vueuse/integrations@10.9.0(axios@1.6.5)(focus-trap@7.5.4)(fuse.js@6.6.2)(vue@3.4.21):
+  /@vueuse/integrations@10.9.0(axios@1.6.8)(focus-trap@7.5.4)(fuse.js@6.6.2)(vue@3.4.21):
     resolution: {integrity: sha512-acK+A01AYdWSvL4BZmCoJAcyHJ6EqhmkQEXbQLwev1MY7NBnS+hcEMx/BzVoR9zKI+UqEPMD9u6PsyAuiTRT4Q==}
     peerDependencies:
       async-validator: '*'
@@ -4851,7 +4851,7 @@ packages:
     dependencies:
       '@vueuse/core': 10.9.0(vue@3.4.21)
       '@vueuse/shared': 10.9.0(vue@3.4.21)
-      axios: 1.6.5
+      axios: 1.6.8
       focus-trap: 7.5.4
       fuse.js: 6.6.2
       vue-demi: 0.14.7(vue@3.4.21)
@@ -5645,10 +5645,10 @@ packages:
     resolution: {integrity: sha512-xh1Rl34h6Fi1DC2WWKfxUTVqRsNnr6LsKz2+hfwDxQJWmrx8+c7ylaqBMcHfl1U1r2dsifOvKX3LQuLNZ+XSvA==}
     dev: true
 
-  /axios@1.6.5:
-    resolution: {integrity: sha512-Ii012v05KEVuUoFWmMW/UQv9aRIc3ZwkWDcM+h5Il8izZCtRVpDUfwpoFf7eOtajT3QiGR4yDUx7lPqHJULgbg==}
+  /axios@1.6.8:
+    resolution: {integrity: sha512-v/ZHtJDU39mDpyBoFVkETcd/uNdxrWRrg3bKpOKzXFA6Bvqopts6ALSMU3y6ijYxbw2B+wPrIv46egTzJXCLGQ==}
     dependencies:
-      follow-redirects: 1.15.4(debug@4.3.4)
+      follow-redirects: 1.15.6
       form-data: 4.0.0
       proxy-from-env: 1.1.0
     transitivePeerDependencies:
@@ -6309,7 +6309,7 @@ packages:
     requiresBuild: true
     dependencies:
       '@testim/chrome-version': 1.1.4
-      axios: 1.6.5
+      axios: 1.6.8
       compare-versions: 6.1.0
       extract-zip: 2.0.1
       https-proxy-agent: 5.0.1
@@ -7273,6 +7273,7 @@ packages:
     dependencies:
       ms: 2.1.2
       supports-color: 6.1.0
+    dev: true
 
   /debug@4.3.4(supports-color@8.1.1):
     resolution: {integrity: sha512-PRWFHuSU3eDtQJPvnNY7Jcket1j0t5OuOsFzPPzsekD52Zl8qUfFIPEiswXqIvHWGVHOgX+7G/vCNNhehwxfkQ==}
@@ -8813,6 +8814,16 @@ packages:
         optional: true
     dependencies:
       debug: 4.3.4(supports-color@6.1.0)
+    dev: true
+
+  /follow-redirects@1.15.6:
+    resolution: {integrity: sha512-wWN62YITEaOpSK584EZXJafH1AGpO8RVgElfkuXbTOrPX4fIfOyEpW/CsiNd8JdYrAoOvafRTOEnvsO++qCqFA==}
+    engines: {node: '>=4.0'}
+    peerDependencies:
+      debug: '*'
+    peerDependenciesMeta:
+      debug:
+        optional: true
 
   /for-each@0.3.3:
     resolution: {integrity: sha512-jqYfLp7mo9vIyQf8ykW2v7A+2N4QjeCeI5+Dz9XraiO1ign81wjiH7Fb9vSOWvQfNtmSa4H2RoQTrrXivdUZmw==}
@@ -15828,6 +15839,7 @@ packages:
     engines: {node: '>=6'}
     dependencies:
       has-flag: 3.0.0
+    dev: true
 
   /supports-color@7.2.0:
     resolution: {integrity: sha512-qpCAvRl9stuOHveKsn7HncJRvv501qIacKzQlO/+Lwxc9+0q2wLyv4Dfvt80/DPn2pqOBsJdDiogXGR9+OvwRw==}
@@ -16986,7 +16998,7 @@ packages:
       fsevents: 2.3.3
     dev: false
 
-  /vitepress@1.0.0-rc.44(@algolia/client-search@4.22.1)(@types/node@16.18.30)(axios@1.6.5)(fuse.js@6.6.2)(postcss@8.4.32)(react@17.0.2)(sass@1.69.7)(search-insights@2.13.0)(typescript@5.3.3):
+  /vitepress@1.0.0-rc.44(@algolia/client-search@4.22.1)(@types/node@16.18.30)(axios@1.6.8)(fuse.js@6.6.2)(postcss@8.4.32)(react@17.0.2)(sass@1.69.7)(search-insights@2.13.0)(typescript@5.3.3):
     resolution: {integrity: sha512-tO5taxGI7fSpBK1D8zrZTyJJERlyU9nnt0jHSt3fywfq3VKn977Hg0wUuTkEmwXlFYwuW26+6+3xorf4nD3XvA==}
     hasBin: true
     peerDependencies:
@@ -17006,7 +17018,7 @@ packages:
       '@vitejs/plugin-vue': 5.0.4(vite@5.1.4)(vue@3.4.21)
       '@vue/devtools-api': 7.0.15(vue@3.4.21)
       '@vueuse/core': 10.9.0(vue@3.4.21)
-      '@vueuse/integrations': 10.9.0(axios@1.6.5)(focus-trap@7.5.4)(fuse.js@6.6.2)(vue@3.4.21)
+      '@vueuse/integrations': 10.9.0(axios@1.6.8)(focus-trap@7.5.4)(fuse.js@6.6.2)(vue@3.4.21)
       focus-trap: 7.5.4
       mark.js: 8.11.1
       minisearch: 6.3.0
@@ -17192,13 +17204,13 @@ packages:
     resolution: {integrity: sha512-0vOfAtI67UjeO1G6UiX5Kd76CqaQ67wrRZiOe7UAb9Jm6GzlUr/fC7CV90XfwapJRjpCMaZFhv1V0ajWRmE9Dg==}
     dev: true
 
-  /vue-concurrency@5.0.0(@algolia/client-search@4.22.1)(@types/node@16.18.30)(axios@1.6.5)(fuse.js@6.6.2)(postcss@8.4.32)(react@17.0.2)(sass@1.69.7)(search-insights@2.13.0)(typescript@5.3.3)(vue@3.4.21):
+  /vue-concurrency@5.0.0(@algolia/client-search@4.22.1)(@types/node@16.18.30)(axios@1.6.8)(fuse.js@6.6.2)(postcss@8.4.32)(react@17.0.2)(sass@1.69.7)(search-insights@2.13.0)(typescript@5.3.3)(vue@3.4.21):
     resolution: {integrity: sha512-is13diwBO0Kr1/bKO7OV9bDUV0K0GlfdSfPvzL/+TyghZrdn3zKYM/OPRoe///3QQ0dGD4m6stGpKK9b0CfBiQ==}
     peerDependencies:
       vue: ^3.3
     dependencies:
       caf: 15.0.1(patch_hash=l6oc6ggvh6ycwg3k5urnriyw5a)
-      vitepress: 1.0.0-rc.44(@algolia/client-search@4.22.1)(@types/node@16.18.30)(axios@1.6.5)(fuse.js@6.6.2)(postcss@8.4.32)(react@17.0.2)(sass@1.69.7)(search-insights@2.13.0)(typescript@5.3.3)
+      vitepress: 1.0.0-rc.44(@algolia/client-search@4.22.1)(@types/node@16.18.30)(axios@1.6.8)(fuse.js@6.6.2)(postcss@8.4.32)(react@17.0.2)(sass@1.69.7)(search-insights@2.13.0)(typescript@5.3.3)
       vue: 3.4.21(typescript@5.3.3)
     transitivePeerDependencies:
       - '@algolia/client-search'
