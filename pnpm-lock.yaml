@@ -586,8 +586,8 @@ importers:
         specifier: workspace:*
         version: link:../web-pkg
       axios:
-        specifier: 1.6.4
-        version: 1.6.4
+        specifier: 1.6.8
+        version: 1.6.8
       deep-object-diff:
         specifier: ^1.1.9
         version: 1.1.9
@@ -688,8 +688,8 @@ importers:
         specifier: https://github.com/owncloud/uppy/releases/download/v3.12.13-owncloud/uppy-onedrive.tgz
         version: '@github.com/owncloud/uppy/releases/download/v3.12.13-owncloud/uppy-onedrive.tgz(@uppy/core@3.3.0)'
       axios:
-        specifier: 1.6.4
-        version: 1.6.4
+        specifier: 1.6.8
+        version: 1.6.8
       design-system:
         specifier: workspace:@ownclouders/design-system@*
         version: link:../design-system
@@ -804,8 +804,8 @@ importers:
         specifier: workspace:*
         version: link:../web-pkg
       axios:
-        specifier: 1.6.4
-        version: 1.6.4
+        specifier: 1.6.8
+        version: 1.6.8
       email-validator:
         specifier: ^2.0.4
         version: 2.0.4
@@ -966,11 +966,11 @@ importers:
         specifier: workspace:*
         version: 'link:'
       axios:
-        specifier: 1.6.4
-        version: 1.6.4
+        specifier: 1.6.8
+        version: 1.6.8
       fast-xml-parser:
-        specifier: 4.3.2
-        version: 4.3.2
+        specifier: 4.3.3
+        version: 4.3.3
       lodash-es:
         specifier: ^4.17.21
         version: 4.17.21
@@ -1017,8 +1017,8 @@ importers:
         specifier: ^10.0.0
         version: 10.3.0(vue@3.3.8)
       axios:
-        specifier: 1.6.4
-        version: 1.6.4
+        specifier: 1.6.8
+        version: 1.6.8
       deepmerge:
         specifier: ^4.2.2
         version: 4.2.2
@@ -1117,8 +1117,8 @@ importers:
         specifier: 2.0.0
         version: 2.0.0(vue@3.3.8)
       axios:
-        specifier: 1.6.4
-        version: 1.6.4
+        specifier: 1.6.8
+        version: 1.6.8
       design-system:
         specifier: workspace:@ownclouders/design-system@*
         version: link:../design-system
@@ -1151,7 +1151,7 @@ importers:
         version: 2.4.0
       owncloud-sdk:
         specifier: 3.1.0-alpha.10
-        version: 3.1.0-alpha.10(axios@1.6.4)(cross-fetch@3.1.8)(promise@8.1.0)(qs@6.11.2)(utf8@3.0.0)(uuid@9.0.1)(webdav@5.3.1)(xml-js@1.6.11)
+        version: 3.1.0-alpha.10(axios@1.6.8)(cross-fetch@3.1.8)(promise@8.1.0)(qs@6.11.2)(utf8@3.0.0)(uuid@9.0.1)(webdav@5.3.1)(xml-js@1.6.11)
       p-queue:
         specifier: ^6.6.2
         version: 6.6.2
@@ -1247,8 +1247,8 @@ importers:
         specifier: ^2.2.1
         version: 2.2.1(@casl/ability@6.3.3)(vue@3.3.8)
       axios:
-        specifier: 1.6.4
-        version: 1.6.4
+        specifier: 1.6.8
+        version: 1.6.8
       pinia:
         specifier: 2.1.7
         version: 2.1.7(typescript@5.3.3)(vue@3.3.8)
@@ -5495,10 +5495,10 @@ packages:
     engines: {node: '>=4'}
     dev: true
 
-  /axios@1.6.4:
-    resolution: {integrity: sha512-heJnIs6N4aa1eSthhN9M5ioILu8Wi8vmQW9iHQ9NUvfkJb0lEEDUiIdQNAuBtfUt3FxReaKdpQA5DbmMOqzF/A==}
+  /axios@1.6.8:
+    resolution: {integrity: sha512-v/ZHtJDU39mDpyBoFVkETcd/uNdxrWRrg3bKpOKzXFA6Bvqopts6ALSMU3y6ijYxbw2B+wPrIv46egTzJXCLGQ==}
     dependencies:
-      follow-redirects: 1.15.4
+      follow-redirects: 1.15.6
       form-data: 4.0.0
       proxy-from-env: 1.1.0
     transitivePeerDependencies:
@@ -6352,7 +6352,7 @@ packages:
     requiresBuild: true
     dependencies:
       '@testim/chrome-version': 1.1.4
-      axios: 1.6.4
+      axios: 1.6.8
       compare-versions: 6.1.0
       extract-zip: 2.0.1
       https-proxy-agent: 5.0.1
@@ -8774,8 +8774,8 @@ packages:
     resolution: {integrity: sha512-W+KJc2dmILlPplD/H4K9l9LcAHAfPtP6BY84uVLXQ6Evcz9Lcg33Y2z1IVblT6xdY54PXYVHEv+0Wpq8Io6zkA==}
     dev: true
 
-  /fast-xml-parser@4.3.2:
-    resolution: {integrity: sha512-rmrXUXwbJedoXkStenj1kkljNF7ugn5ZjR9FJcwmCfcCbtOMDghPajbc+Tck6vE6F5XsDmx+Pr2le9fw8+pXBg==}
+  /fast-xml-parser@4.3.3:
+    resolution: {integrity: sha512-coV/D1MhrShMvU6D0I+VAK3umz6hUaxxhL0yp/9RjfiYUfAv14rDhGQL+PLForhMdr0wq3PiV07WtkkNjJjNHg==}
     hasBin: true
     dependencies:
       strnum: 1.0.5
@@ -9031,8 +9031,8 @@ packages:
     dependencies:
       tabbable: 6.0.1
 
-  /follow-redirects@1.15.1(debug@4.3.4):
-    resolution: {integrity: sha512-yLAMQs+k0b2m7cVxpS1VKJVvoz7SS9Td1zss3XRwXj+ZDH00RJgnuLx7E44wx02kQLrdM3aOOy+FpzS7+8OizA==}
+  /follow-redirects@1.15.4(debug@4.3.4):
+    resolution: {integrity: sha512-Cr4D/5wlrb0z9dgERpUL3LrmPKVDsETIJhaCMeDfuFYcqa5bldGV6wBsAN6X/vxlXQtFBMrXdXxdL8CbDTGniw==}
     engines: {node: '>=4.0'}
     peerDependencies:
       debug: '*'
@@ -9043,8 +9043,8 @@ packages:
       debug: 4.3.4(supports-color@6.1.0)
     dev: true
 
-  /follow-redirects@1.15.4:
-    resolution: {integrity: sha512-Cr4D/5wlrb0z9dgERpUL3LrmPKVDsETIJhaCMeDfuFYcqa5bldGV6wBsAN6X/vxlXQtFBMrXdXxdL8CbDTGniw==}
+  /follow-redirects@1.15.6:
+    resolution: {integrity: sha512-wWN62YITEaOpSK584EZXJafH1AGpO8RVgElfkuXbTOrPX4fIfOyEpW/CsiNd8JdYrAoOvafRTOEnvsO++qCqFA==}
     engines: {node: '>=4.0'}
     peerDependencies:
       debug: '*'
@@ -9879,7 +9879,7 @@ packages:
     engines: {node: '>=8.0.0'}
     dependencies:
       eventemitter3: 4.0.7
-      follow-redirects: 1.15.1(debug@4.3.4)
+      follow-redirects: 1.15.4(debug@4.3.4)
       requires-port: 1.0.0
     transitivePeerDependencies:
       - debug
@@ -13133,7 +13133,7 @@ packages:
     resolution: {integrity: sha512-gjcpUc3clBf9+210TRaDWbf+rZZZEshZ+DlXMRCeAjp0xhTrnQsKHypIy1J3d5hKdUzj69t708EHtU8P6bUn0A==}
     dev: true
 
-  /owncloud-sdk@3.1.0-alpha.10(axios@1.6.4)(cross-fetch@3.1.8)(promise@8.1.0)(qs@6.11.2)(utf8@3.0.0)(uuid@9.0.1)(webdav@5.3.1)(xml-js@1.6.11):
+  /owncloud-sdk@3.1.0-alpha.10(axios@1.6.8)(cross-fetch@3.1.8)(promise@8.1.0)(qs@6.11.2)(utf8@3.0.0)(uuid@9.0.1)(webdav@5.3.1)(xml-js@1.6.11):
     resolution: {integrity: sha512-cAq6BKkyDvm5MpcksicpBsfkr4ZEB+nm1Yl74FH3Qtm/wbI4uWwaTjqQmzYF5prAQDBDbi9F6nADp83zqfmPTA==}
     peerDependencies:
       axios: ^0.27.2
@@ -13145,7 +13145,7 @@ packages:
       webdav: 4.10.0
       xml-js: ^1.6.11
     dependencies:
-      axios: 1.6.4
+      axios: 1.6.8
       cross-fetch: 3.1.8
       promise: 8.1.0
       qs: 6.11.2
@@ -18102,7 +18102,7 @@ packages:
       '@buttercup/fetch': 0.1.2
       base-64: 1.0.0
       byte-length: 1.0.2
-      fast-xml-parser: 4.3.2
+      fast-xml-parser: 4.3.3
       he: 1.2.0
       hot-patcher: 2.0.1
       layerr: 2.0.1

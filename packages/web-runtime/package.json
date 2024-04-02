@@ -15,7 +15,7 @@
     "@uppy/core": "3.3.0",
     "@uppy/utils": "^5.3.0",
     "@vueuse/head": "2.0.0",
-    "axios": "1.6.4",
+    "axios": "1.6.8",
     "design-system": "workspace:@ownclouders/design-system@*",
     "easygettext": "https://github.com/owncloud/easygettext/archive/refs/tags/v2.18.2-oc.tar.gz",
     "filesize": "^9.0.11",
