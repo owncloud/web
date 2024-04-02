@@ -45,20 +45,9 @@ export const useSharesStore = defineStore('shares', () => {
       [GraphShareRoleIdMap.SpaceManager]: 'user-star'
     }
 
-    const $gettext = (str: string) => str // dummy
-    const ShareRoleLabelMap = {
-      [GraphShareRoleIdMap.Viewer]: $gettext('Can view'),
-      [GraphShareRoleIdMap.SpaceViewer]: $gettext('Can view'),
-      [GraphShareRoleIdMap.FileEditor]: $gettext('Can edit'),
-      [GraphShareRoleIdMap.FolderEditor]: $gettext('Can edit'),
-      [GraphShareRoleIdMap.SpaceEditor]: $gettext('Can edit'),
-      [GraphShareRoleIdMap.SpaceManager]: $gettext('Can manage')
-    }
-
     graphRoles.value = values.map((v) => ({
       ...v,
-      icon: ShareRoleIconMap[v.id] || 'user',
-      label: ShareRoleLabelMap[v.id] || v.displayName
+      icon: ShareRoleIconMap[v.id] || 'user'
     }))
   }
 
