@@ -153,6 +153,7 @@ import * as EmailValidator from 'email-validator'
 import {
   createLocationSpaces,
   LinkRoleDropdown,
+  useAbility,
   useConfigStore,
   useLinkTypes,
   useModals,
@@ -209,14 +210,20 @@ export default defineComponent({
     const { $gettext, current } = useGettext()
     const configStore = useConfigStore()
     const passwordPolicyService = usePasswordPolicyService()
+    const { can } = useAbility()
     const spacesStore = useSpacesStore()
     const { spaces } = storeToRefs(spacesStore)
-    const { getAvailableLinkTypes, getLinkRoleByType } = useLinkTypes()
+    const { getAvailableLinkTypes, getLinkRoleByType, isPasswordEnforcedForLinkType } =
+      useLinkTypes()
 
     const space = inject<Ref<SpaceResource>>('space')
     const resource = inject<Ref<Resource>>('resource')
 
     const currentLinkType = ref<SharingLinkType>(props.linkShare.type)
+
+    const canDeleteReadOnlyPublicLinkPassword = computed(() =>
+      can('delete-all', 'ReadOnlyPublicLinkPassword')
+    )
 
     const dateExpire = computed(() => {
       return formatRelativeDateFromDateTime(
@@ -229,17 +236,28 @@ export default defineComponent({
       currentLinkType.value = type
       const linkShare = props.linkShare
       linkShare.type = type
+
+      const needsNoPw =
+        type === SharingLinkType.Internal ||
+        (unref(canDeleteReadOnlyPublicLinkPassword) && type === SharingLinkType.View)
+
+      if (!linkShare.hasPassword && !needsNoPw && isPasswordEnforcedForLinkType(type)) {
+        showPasswordModal(() => emit('updateLink', { linkShare: { ...linkShare, type } }))
+        return
+      }
+
       emit('updateLink', { linkShare })
     }
 
-    const showPasswordModal = () => {
+    const showPasswordModal = (callbackFn: () => void = undefined) => {
       dispatchModal({
         title: props.linkShare.hasPassword ? $gettext('Edit password') : $gettext('Add password'),
         customComponent: SetLinkPasswordModal,
         customComponentAttrs: () => ({
           space: unref(space),
           resource: unref(resource),
-          link: props.linkShare
+          link: props.linkShare,
+          ...(callbackFn && { callbackFn })
         })
       })
     }
@@ -342,7 +360,7 @@ export default defineComponent({
           id: 'edit-password',
           title: this.$gettext('Edit password'),
           icon: 'lock-password',
-          method: this.showPasswordModal
+          method: () => this.showPasswordModal()
         })
 
         if (this.isPasswordRemovable) {
@@ -359,7 +377,7 @@ export default defineComponent({
           id: 'add-password',
           title: this.$gettext('Add password'),
           icon: 'lock-password',
-          method: this.showPasswordModal
+          method: () => this.showPasswordModal()
         })
       }
 
