@@ -1,4 +1,4 @@
-import { shallowMount } from 'web-test-helpers'
+import { defaultPlugins, shallowMount } from 'web-test-helpers'
 import Modal from './OcModal.vue'
 
 const defaultProps = {
@@ -20,7 +20,7 @@ describe('OcModal', () => {
         ...defaultProps,
         variation: 'danger'
       },
-      global: { renderStubDefaultSlot: true }
+      global: { renderStubDefaultSlot: true, plugins: [...defaultPlugins()] }
     })
 
     expect(wrapper.findAll('.oc-modal-danger').length).toBe(1)
@@ -28,7 +28,7 @@ describe('OcModal', () => {
 
   it('hides icon if not specified', () => {
     const wrapper = shallowMount(Modal, {
-      global: { renderStubDefaultSlot: true },
+      global: { renderStubDefaultSlot: true, plugins: [...defaultPlugins()] },
       props: {
         ...defaultProps
       }
@@ -40,7 +40,7 @@ describe('OcModal', () => {
 
   it('overrides props message with slot', () => {
     const wrapper = shallowMount(Modal, {
-      global: { renderStubDefaultSlot: true },
+      global: { renderStubDefaultSlot: true, plugins: [...defaultPlugins()] },
       props: {
         ...defaultProps
       },
@@ -55,7 +55,7 @@ describe('OcModal', () => {
 
   it('matches snapshot', () => {
     const wrapper = shallowMount(Modal, {
-      global: { renderStubDefaultSlot: true },
+      global: { renderStubDefaultSlot: true, plugins: [...defaultPlugins()] },
       props: {
         ...defaultProps,
         icon: 'info'
@@ -67,7 +67,7 @@ describe('OcModal', () => {
 
   it('displays input', () => {
     const wrapper = shallowMount(Modal, {
-      global: { renderStubDefaultSlot: true },
+      global: { renderStubDefaultSlot: true, plugins: [...defaultPlugins()] },
       props: inputProps
     })
 
