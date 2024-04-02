@@ -141,6 +141,7 @@
 <script lang="ts">
 import { DateTime } from 'luxon'
 import { v4 as uuidV4 } from 'uuid'
+import { upperFirst } from 'lodash-es'
 import { useGettext } from 'vue3-gettext'
 import { computed, defineComponent, PropType, ref, reactive, unref, onMounted } from 'vue'
 import {
@@ -280,7 +281,9 @@ export default defineComponent({
             console.error(e)
             // Human-readable error message is provided, for example when password is on banned list
             if (e.response?.status === 400) {
-              userFacingErrors.push(e.response.data.error)
+              const error = e.response.data.error
+              error.message = upperFirst(error.message)
+              userFacingErrors.push(error)
             }
           })
       }

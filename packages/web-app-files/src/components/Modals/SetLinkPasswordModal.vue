@@ -19,6 +19,7 @@
 <script lang="ts">
 import { defineComponent, ref, unref, PropType } from 'vue'
 import { useGettext } from 'vue3-gettext'
+import { upperFirst } from 'lodash-es'
 import {
   Modal,
   useClientService,
@@ -65,7 +66,8 @@ export default defineComponent({
       } catch (e) {
         // Human-readable error message is provided, for example when password is on banned list
         if (e.response?.status === 400) {
-          errorMessage.value = $gettext(e.response.data.error.message)
+          const errorMsg = e.response.data.error.message
+          errorMessage.value = $gettext(upperFirst(errorMsg))
           return Promise.reject()
         }
 
