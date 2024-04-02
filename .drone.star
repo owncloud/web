@@ -58,6 +58,7 @@ config = {
     },
     "branches": [
         "master",
+        "stable-*",
     ],
     "pnpmlint": True,
     "e2e": {
