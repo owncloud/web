@@ -65,4 +65,5 @@ export interface CollaboratorAutoCompleteItem {
   displayName: string
   shareType: number
   mail?: string
+  onPremisesSamAccountName?: string
 }

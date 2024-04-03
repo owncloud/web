@@ -289,17 +289,7 @@ export default defineComponent({
       )
       const { data: groupData } = yield client.groups.listGroups('displayName', null, `"${query}"`)
 
-      const users = (userData.value || []).map((u) => ({
-        ...u,
-        shareType: ShareTypes.user.value
-      })) as CollaboratorAutoCompleteItem[]
-
-      const groups = (groupData.value || []).map((u) => ({
-        ...u,
-        shareType: ShareTypes.group.value
-      })) as CollaboratorAutoCompleteItem[]
-
-      autocompleteResults.value = [...users, ...groups]
+      autocompleteResults.value = [...userData.value, ...groupData.value]
         .filter((collaborator: CollaboratorAutoCompleteItem) => {
           if (collaborator.id === userStore.user.id) {
             // filter current user
@@ -319,10 +309,10 @@ export default defineComponent({
           return true
         })
         .map((collaborator) => ({
-          id: collaborator.id,
-          displayName: collaborator.displayName,
-          shareType: collaborator.shareType,
-          mail: collaborator.mail
+          ...collaborator,
+          shareType: Object.hasOwn(collaborator, 'mail')
+            ? ShareTypes.user.value
+            : ShareTypes.group.value
         })) satisfies CollaboratorAutoCompleteItem[]
       searchInProgress.value = false
     }).restartable()

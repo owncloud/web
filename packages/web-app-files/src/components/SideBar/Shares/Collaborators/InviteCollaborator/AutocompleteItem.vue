@@ -29,13 +29,17 @@
           v-text="`(${$gettext(shareType.label)})`"
         />
       </template>
-      <div v-if="item.mail" class="files-collaborators-autocomplete-mail" v-text="`${item.mail}`" />
+      <div
+        v-if="additionalInfo"
+        class="files-collaborators-autocomplete-additionalInfo"
+        v-text="`${additionalInfo}`"
+      />
     </div>
   </div>
 </template>
 
 <script lang="ts">
-import { PropType } from 'vue'
+import { computed, PropType } from 'vue'
 import { CollaboratorAutoCompleteItem, ShareTypes } from '@ownclouders/web-client/src/helpers/share'
 
 export default {
@@ -47,7 +51,13 @@ export default {
       required: true
     }
   },
+  setup(props) {
+    const additionalInfo = computed(() => {
+      return props.item.mail || props.item.onPremisesSamAccountName
+    })
 
+    return { additionalInfo }
+  },
   computed: {
     shareType() {
       return ShareTypes.getByValue(this.item.shareType)
@@ -77,7 +87,7 @@ export default {
 </script>
 
 <style lang="scss">
-.files-collaborators-autocomplete-mail {
+.files-collaborators-autocomplete-additionalInfo {
   font-size: var(--oc-font-size-small);
 }
 </style>
