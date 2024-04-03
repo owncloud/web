@@ -21,7 +21,8 @@ sub panel.
 
 ### Configuration
 
-An example of a right sidebar panel extension configuration can be found below:
+To define a right sidebar panel extension, you implement the `SidebarPanelExtension` interface.
+It can be found below:
 
 ```typescript
 interface SidebarPanelExtension<R extends Item, P extends Item, T extends Item> {
@@ -32,7 +33,7 @@ interface SidebarPanelExtension<R extends Item, P extends Item, T extends Item> 
 }
 ```
 
-For `id`, `type`, and `scopes`, please see [extension base section]({{< ref "../_index.md#extension-base-configuration" >}}) in top level docs.
+For `id`, `type`, and `scopes`, please see [extension base section]({{< ref "../_index.md#extension-base-configuration" >}}) in the top level docs.
 
 The `panel` object configures the actual sidebar panel. It consists of different properties and functions, where all the functions get called with a
 `SideBarPanelContext` entity from the integrating extension points.
