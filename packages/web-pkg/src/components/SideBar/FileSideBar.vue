@@ -216,10 +216,10 @@ export default defineComponent({
       let data: CollectionOfPermissionsWithAllowedValues
 
       if (isSpaceResource(resource)) {
-        const response = yield* call(client.listPermissionsSpaceRoot(props.space.id))
+        const response = yield* call(client.listPermissionsSpaceRoot(props.space?.id))
         data = response.data
       } else {
-        const response = yield* call(client.listPermissions(props.space.id, resource.id))
+        const response = yield* call(client.listPermissions(props.space?.id, resource.id))
         data = response.data
       }
 
@@ -320,7 +320,7 @@ export default defineComponent({
       const promises = ancestorIds.map((id) => {
         return queue.add(() =>
           clientService.graphAuthenticated.permissions
-            .listPermissions(props.space.id, id)
+            .listPermissions(props.space?.id, id)
             .then((value) => {
               const data = value.data
               const permissions = ((data as any).value || []) as Permission[]
@@ -455,7 +455,10 @@ export default defineComponent({
       availablePanels,
       isFileHeaderVisible,
       isSpaceHeaderVisible,
-      isLoading
+      isLoading,
+
+      // unit tests
+      loadSharesTask
     }
   }
 })
