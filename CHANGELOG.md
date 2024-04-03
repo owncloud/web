@@ -1,3 +1,51 @@
+Changelog for ownCloud Web [unreleased] (UNRELEASED)
+=======================================
+The following sections list the changes in ownCloud web unreleased relevant to
+ownCloud admins and users.
+
+[unreleased]: https://github.com/owncloud/web/compare/v8.0.1...master
+
+Summary
+-------
+
+* Enhancement - Custom component extension type: [#10443](https://github.com/owncloud/web/pull/10443)
+* Enhancement - Add extensionPoint concept: [#10443](https://github.com/owncloud/web/pull/10443)
+
+Details
+-------
+
+* Enhancement - Custom component extension type: [#10443](https://github.com/owncloud/web/pull/10443)
+
+   We've introduced a new extension type `customComponent`. This allows to register
+   a custom component via an extension which can then be rendered in a custom
+   component render target. For the mapping to the render target, an extension
+   point needs to be registered and a CustomComponentTarget for this extension
+   point needs to be in place in a vue template.
+
+   https://github.com/owncloud/web/pull/10443
+
+* Enhancement - Add extensionPoint concept: [#10443](https://github.com/owncloud/web/pull/10443)
+
+   The extension system now allows developers to register extension points. An
+   extension point defines the metadata for the integration of a certain extension
+   type in a certain context. Examples for extension points are render targets for
+   custom components, targets for file actions (e.g. the right click context menu,
+   the batch actions, the whitespace context menu), etc.
+
+   Extensions can now specify that they are only valid for a certain or multiple
+   extension points. This way a file action extension can e.g. specify to be
+   rendered only in the context menu, but not in the batch actions. Consequently,
+   the extension points concept is the next iteration of the `scopes` concept. The
+   `scopes` concept will most likely be removed in a future release.
+
+   Extension points can define if users should be able to choose preferences for
+   the extension point. E.g. for the global progress bar extension point, users can
+   choose which of the available progress bar extensions should be used, since the
+   extension point only allows one extension to be active. At the moment we persist
+   the user choice in the local storage of the browser.
+
+   https://github.com/owncloud/web/pull/10443
+
 Changelog for ownCloud Web [8.0.1] (2024-03-12)
 =======================================
 The following sections list the changes in ownCloud web 8.0.1 relevant to
