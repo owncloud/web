@@ -206,6 +206,7 @@ import { AppLoadingSpinner } from '@ownclouders/web-pkg'
 import { SSEAdapter } from '@ownclouders/web-client/src/sse'
 import { supportedLanguages } from '../defaults/languages'
 import { User } from '@ownclouders/web-client/src/generated'
+import { isEmpty } from 'lodash-es'
 
 export default defineComponent({
   name: 'AccountPage',
@@ -453,7 +454,10 @@ export default defineComponent({
       return extensionRegistry
         .getExtensionPoints<ExtensionPoint>()
         .filter((extensionPoint: ExtensionPoint) => {
-          if (!Object.hasOwn(extensionPoint, 'userPreference')) {
+          if (
+            !Object.hasOwn(extensionPoint, 'userPreference') ||
+            isEmpty(extensionPoint.userPreference)
+          ) {
             return false
           }
           const extensions = extensionRegistry.requestExtensions(extensionPoint.type, {
