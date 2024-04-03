@@ -1,5 +1,5 @@
 import AutocompleteItem from 'web-app-files/src/components/SideBar/Shares/Collaborators/InviteCollaborator/AutocompleteItem.vue'
-import { ShareTypes } from '@ownclouders/web-client/src/helpers/share'
+import { CollaboratorAutoCompleteItem, ShareTypes } from '@ownclouders/web-client/src/helpers/share'
 import { defaultPlugins, shallowMount } from 'web-test-helpers'
 
 describe('AutocompleteItem component', () => {
@@ -57,13 +57,40 @@ describe('AutocompleteItem component', () => {
       expect(wrapper.find('.files-collaborators-autocomplete-share-type').text()).toEqual('(Guest)')
     })
   })
+  describe('additional info', () => {
+    it('shows the email for a user if given', () => {
+      const mail = 'foo@bar.com'
+      const { wrapper } = createWrapper({ shareType: ShareTypes.user.value, mail })
+      expect(wrapper.find('.files-collaborators-autocomplete-additionalInfo').text()).toEqual(mail)
+    })
+    it('shows the onPremisesSamAccountName for a user if no mail given', () => {
+      const onPremisesSamAccountName = 'fooBar'
+      const { wrapper } = createWrapper({
+        shareType: ShareTypes.user.value,
+        onPremisesSamAccountName
+      })
+      expect(wrapper.find('.files-collaborators-autocomplete-additionalInfo').text()).toEqual(
+        onPremisesSamAccountName
+      )
+    })
+    it('does not show for group shares', () => {
+      const { wrapper } = createWrapper({ shareType: ShareTypes.group.value })
+      expect(wrapper.find('.files-collaborators-autocomplete-additionalInfo').exists()).toBeFalsy()
+    })
+  })
 })
 
-function createWrapper({ shareType = ShareTypes.user.value, id = '', displayName = '' } = {}) {
+function createWrapper({
+  shareType = ShareTypes.user.value,
+  id = '',
+  displayName = '',
+  mail = '',
+  onPremisesSamAccountName = ''
+}: Partial<CollaboratorAutoCompleteItem>) {
   return {
     wrapper: shallowMount(AutocompleteItem, {
       props: {
-        item: { shareType, id, displayName }
+        item: { shareType, id, displayName, mail, onPremisesSamAccountName }
       },
       global: {
         renderStubDefaultSlot: true,
