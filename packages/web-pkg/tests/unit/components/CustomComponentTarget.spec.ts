@@ -1,11 +1,5 @@
 import CustomComponentTarget from '../../../src/components/CustomComponentTarget.vue'
-import {
-  defaultComponentMocks,
-  defaultPlugins,
-  mount,
-  useExtensionPreferencesStoreMock,
-  useExtensionRegistryMock
-} from 'web-test-helpers'
+import { defaultComponentMocks, defaultPlugins, mount } from 'web-test-helpers'
 import {
   CustomComponentExtension,
   Extension,
@@ -16,12 +10,6 @@ import {
 } from '../../../src'
 import { mock } from 'vitest-mock-extended'
 import { h } from 'vue'
-
-vi.mock('../../../src/composables', async (importOriginal) => ({
-  ...(await importOriginal<any>()),
-  useExtensionRegistry: vi.fn(),
-  useExtensionPreferencesStore: vi.fn()
-}))
 
 const selectors = {
   target: '[data-testid="custom-component-target"]'
@@ -108,20 +96,15 @@ function getWrapper({
   extensions: Extension[]
   preference?: ExtensionPreferenceItem
 }) {
-  vi.mocked(useExtensionRegistry).mockImplementation(() =>
-    useExtensionRegistryMock({
-      requestExtensions<ExtensionType>(type: string) {
-        return extensions as ExtensionType[]
-      }
-    })
-  )
-  vi.mocked(useExtensionPreferencesStore).mockImplementation(() =>
-    useExtensionPreferencesStoreMock({
-      getExtensionPreference() {
-        return preference
-      }
-    })
-  )
+  const plugins = defaultPlugins()
+
+  const { getExtensionPreference } = useExtensionPreferencesStore()
+  console.log(getExtensionPreference)
+  vi.mocked(getExtensionPreference).mockReturnValue(preference)
+
+  const { requestExtensions } = useExtensionRegistry()
+  console.log(requestExtensions)
+  vi.mocked(requestExtensions).mockReturnValue(extensions)
 
   const mocks = defaultComponentMocks()
 
@@ -132,7 +115,7 @@ function getWrapper({
         extensionPoint
       },
       global: {
-        plugins: [...defaultPlugins()],
+        plugins,
         mocks,
         provide: mocks,
         stubs: { OcCheckbox: true }

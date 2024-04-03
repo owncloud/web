@@ -1,5 +1,4 @@
 export * from './axios'
 export * from './pinia'
-export * from './useExtensionPreferencesStoreMock'
 export * from './useExtensionRegistryMock'
 export * from './useGetMatchingSpaceMock'
