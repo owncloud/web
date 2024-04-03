@@ -316,8 +316,12 @@ export default defineComponent({
       sharesStore.setLinkShares(loadedLinkShares)
 
       if (isProjectSpaceResource(resource)) {
-        // FIXME: do we need this?
         spacesStore.setSpaceMembers(sharesStore.collaboratorShares)
+      } else if (isProjectSpaceResource(props.space)) {
+        yield spacesStore.loadSpaceMembers({
+          graphClient: clientService.graphAuthenticated,
+          space: props.space
+        })
       }
 
       sharesStore.setLoading(false)

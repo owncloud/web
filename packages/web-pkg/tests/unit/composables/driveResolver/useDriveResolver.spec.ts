@@ -3,7 +3,6 @@ import { ref, unref } from 'vue'
 import { mock, mockDeep } from 'vitest-mock-extended'
 import { isShareSpaceResource, SpaceResource } from '@ownclouders/web-client/src/helpers'
 import { getComposableWrapper, defaultComponentMocks, RouteLocation } from 'web-test-helpers'
-import { useSpacesStore } from '../../../../src/composables/piniaStores'
 
 describe('useDriveResolver', () => {
   it('should be valid', () => {
@@ -106,36 +105,6 @@ describe('useDriveResolver', () => {
         })
         expect(unref(space)).toEqual(spaceMock)
         expect(unref(item)).toEqual(resourcePath)
-      },
-      {
-        mocks,
-        provide: mocks,
-        pluginOptions: { piniaOptions: { spacesState: { spaces: [spaceMock] } } }
-      }
-    )
-  })
-  it.each([
-    { driveType: 'projects', loadMembersCalls: 1 },
-    { driveType: 'public', loadMembersCalls: 0 },
-    { driveType: 'share', loadMembersCalls: 0 },
-    { driveType: 'personal', loadMembersCalls: 0 }
-  ])('loads space members for a project space', (data) => {
-    const driveAlias = `/${data.driveType}`
-    const spaceMock = mockDeep<SpaceResource>({ driveAlias, driveType: data.driveType })
-
-    const mocks = defaultComponentMocks({
-      currentRoute: mock<RouteLocation>({
-        name: 'files-spaces-generic',
-        path: '/',
-        query: { fileId: undefined }
-      })
-    })
-
-    getComposableWrapper(
-      () => {
-        useDriveResolver({ driveAliasAndItem: ref(`${driveAlias}/someFolder`) })
-        const spacesStore = useSpacesStore()
-        expect(spacesStore.loadSpaceMembers).toHaveBeenCalledTimes(data.loadMembersCalls)
       },
       {
         mocks,

@@ -94,7 +94,6 @@ import {
   useClientService,
   usePreviewService,
   ProcessorType,
-  useSpacesStore,
   useResourcesStore,
   TextEditor
 } from '@ownclouders/web-pkg'
@@ -128,7 +127,6 @@ export default defineComponent({
     const clientService = useClientService()
     const { getFileContents, getFileInfo } = clientService.webdav
     const previewService = usePreviewService()
-    const spacesStore = useSpacesStore()
     const resourcesStore = useResourcesStore()
 
     const markdownContainerRef = ref(null)
@@ -238,7 +236,7 @@ export default defineComponent({
     )
 
     const memberCount = computed(() => {
-      return spacesStore.spaceMembers.length
+      return Object.values(props.space.spaceRoles).flat().length
     })
     const memberCountString = computed(() => {
       return $ngettext('%{count} member', '%{count} members', unref(memberCount), {
