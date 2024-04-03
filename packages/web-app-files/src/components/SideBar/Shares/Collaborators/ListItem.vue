@@ -118,7 +118,7 @@
         <oc-info-drop
           ref="accessDetailsDrop"
           class="share-access-details-drop"
-          v-bind="isAnySpaceShareType ? accessDetailsPropsSpace : accessDetailsProps"
+          v-bind="accessDetailsProps"
           mode="manual"
           :target="`#edit-drop-down-${editDropDownToggleId}`"
         />
@@ -185,6 +185,10 @@ export default defineComponent({
       default: false
     },
     isLocked: {
+      type: Boolean,
+      default: false
+    },
+    isSpaceShare: {
       type: Boolean,
       default: false
     }
@@ -263,11 +267,7 @@ export default defineComponent({
     },
 
     isAnyUserShareType() {
-      return [ShareTypes.user, ShareTypes.spaceUser].includes(this.shareType)
-    },
-
-    isAnySpaceShareType() {
-      return [ShareTypes.spaceUser, ShareTypes.spaceGroup].includes(this.shareType)
+      return ShareTypes.user === this.shareType
     },
 
     shareTypeText() {
@@ -345,18 +345,6 @@ export default defineComponent({
     shareOwnerDisplayName() {
       return this.share.sharedBy.displayName
     },
-    accessDetailsPropsSpace() {
-      const list = []
-
-      list.push({ text: this.$gettext('Name'), headline: true }, { text: this.shareDisplayName })
-
-      list.push({ text: this.$gettext('Type'), headline: true }, { text: this.shareTypeText })
-
-      return {
-        title: this.$gettext('Access details'),
-        list
-      }
-    },
     accessDetailsProps() {
       const list = []
 
@@ -368,10 +356,13 @@ export default defineComponent({
         { text: this.hasExpirationDate ? this.expirationDate : this.$gettext('no') }
       )
       list.push({ text: this.$gettext('Shared on'), headline: true }, { text: this.shareDate })
-      list.push(
-        { text: this.$gettext('Invited by'), headline: true },
-        { text: this.shareOwnerDisplayName }
-      )
+
+      if (!this.isSpaceShare) {
+        list.push(
+          { text: this.$gettext('Invited by'), headline: true },
+          { text: this.shareOwnerDisplayName }
+        )
+      }
 
       return {
         title: this.$gettext('Access details'),

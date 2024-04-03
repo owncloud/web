@@ -27,6 +27,10 @@ export interface SpaceResource extends Resource {
   isOwner(user: User): boolean
 }
 
+export const isSpaceResource = (resource: Resource): resource is SpaceResource => {
+  return resource?.type === 'space'
+}
+
 export interface PersonalSpaceResource extends SpaceResource {
   __personalSpaceResource?: any
 }

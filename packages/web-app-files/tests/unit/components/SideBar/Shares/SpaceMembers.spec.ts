@@ -25,7 +25,7 @@ vi.mock('@ownclouders/web-pkg', async (importOriginal) => ({
 const memberMocks = [
   {
     id: '1',
-    shareType: ShareTypes.spaceUser.value,
+    shareType: ShareTypes.user.value,
     sharedWith: {
       id: 'alice',
       displayName: 'alice'
@@ -38,7 +38,7 @@ const memberMocks = [
   },
   {
     id: '2',
-    shareType: ShareTypes.spaceUser.value,
+    shareType: ShareTypes.user.value,
     sharedWith: {
       onPremisesSamAccountName: 'Einstein',
       displayName: 'einstein'
@@ -51,7 +51,7 @@ const memberMocks = [
   },
   {
     id: '3',
-    shareType: ShareTypes.spaceUser.value,
+    shareType: ShareTypes.user.value,
     sharedWith: {
       onPremisesSamAccountName: 'Marie',
       displayName: 'marie'

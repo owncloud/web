@@ -53,6 +53,7 @@
           <collaborator-list-item
             :share="collaborator"
             :modifiable="isModifiable(collaborator)"
+            :is-space-share="true"
             @on-delete="deleteMemberConfirm(collaborator)"
           />
         </li>
