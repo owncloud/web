@@ -8,11 +8,18 @@ ownCloud admins and users.
 Summary
 -------
 
+* Bugfix - Apply sandbox attribute to iframe in draw-io extension: [#10702](https://github.com/owncloud/web/pull/10702)
 * Enhancement - Custom component extension type: [#10443](https://github.com/owncloud/web/pull/10443)
 * Enhancement - Add extensionPoint concept: [#10443](https://github.com/owncloud/web/pull/10443)
 
 Details
 -------
+
+* Bugfix - Apply sandbox attribute to iframe in draw-io extension: [#10702](https://github.com/owncloud/web/pull/10702)
+
+   General hardening of ownCloud Web
+
+   https://github.com/owncloud/web/pull/10702
 
 * Enhancement - Custom component extension type: [#10443](https://github.com/owncloud/web/pull/10443)
 
