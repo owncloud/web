@@ -4,8 +4,10 @@
     ref="drawIoEditor"
     :src="iframeSource"
     :title="$gettext('Draw.io editor')"
+    sandbox="allow-scripts allow-same-origin"
   />
 </template>
+
 <script lang="ts">
 import qs from 'qs'
 import {
