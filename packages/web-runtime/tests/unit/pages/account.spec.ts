@@ -243,7 +243,10 @@ describe('account page', () => {
       const extensionPoint = mock<ExtensionPoint>({
         id: 'test-extension-point',
         multiple: false,
-        defaultExtensionId: 'foo-2'
+        defaultExtensionId: 'foo-2',
+        userPreference: {
+          label: 'Foo container'
+        }
       })
       const extensions = [
         mock<Extension>({
