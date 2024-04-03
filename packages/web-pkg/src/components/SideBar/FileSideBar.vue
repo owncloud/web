@@ -315,7 +315,9 @@ export default defineComponent({
       sharesStore.setCollaboratorShares(loadedCollaboratorShares)
       sharesStore.setLinkShares(loadedLinkShares)
 
-      if (isProjectSpaceResource(props.space)) {
+      if (isProjectSpaceResource(resource)) {
+        spacesStore.setSpaceMembers(sharesStore.collaboratorShares)
+      } else if (isProjectSpaceResource(props.space)) {
         yield spacesStore.loadSpaceMembers({
           graphClient: clientService.graphAuthenticated,
           space: props.space

@@ -373,6 +373,8 @@ export default defineComponent({
         )
       })
 
+      const results = await Promise.allSettled(savePromises)
+
       if (isProjectSpaceResource(unref(resource))) {
         const graphResponse = await clientService.graphAuthenticated.drives.getDrive(
           unref(resource).id
@@ -384,8 +386,6 @@ export default defineComponent({
           upsertSpaceMember({ member })
         })
       }
-
-      const results = await Promise.allSettled(savePromises)
 
       if (results.length !== errors.length) {
         showMessage({ title: $gettext('Share was added successfully') })
