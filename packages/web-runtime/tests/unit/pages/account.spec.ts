@@ -4,8 +4,7 @@ import {
   defaultPlugins,
   mockAxiosResolve,
   shallowMount,
-  mockAxiosReject,
-  useExtensionRegistryMock
+  mockAxiosReject
 } from 'web-test-helpers'
 import { mock } from 'vitest-mock-extended'
 import { AxiosResponse } from 'axios'
@@ -19,11 +18,6 @@ import {
 import { LanguageOption, SettingsBundle, SettingsValue } from 'web-runtime/src/helpers/settings'
 import { User } from '@ownclouders/web-client/src/generated'
 import { VueWrapper } from '@vue/test-utils'
-
-vi.mock('@ownclouders/web-pkg', async (importOriginal) => ({
-  ...(await importOriginal<any>()),
-  useExtensionRegistry: vi.fn()
-}))
 
 const $route = {
   meta: {
@@ -292,16 +286,27 @@ function getWrapper({
   extensionPoints = [],
   extensions = []
 } = {}) {
-  vi.mocked(useExtensionRegistry).mockImplementation(() =>
-    useExtensionRegistryMock({
-      getExtensionPoints<ExtensionPointType>(options?: { type?: string }) {
-        return extensionPoints as ExtensionPointType[]
+  const plugins = defaultPlugins({
+    piniaOptions: {
+      userState: { user },
+      authState: {
+        userContextReady: isUserContext,
+        publicLinkContextReady: isPublicLinkContext
       },
-      requestExtensions<ExtensionType>(type: string) {
-        return extensions as ExtensionType[]
+      spacesState: { spaces },
+      capabilityState: { capabilities },
+      configState: {
+        options: {
+          logoutUrl: 'https://account-manager/logout',
+          ...(accountEditLink && { accountEditLink })
+        }
       }
-    })
-  )
+    }
+  })
+
+  const { getExtensionPoints, requestExtensions } = useExtensionRegistry()
+  vi.mocked(getExtensionPoints).mockReturnValue(extensionPoints)
+  vi.mocked(requestExtensions).mockReturnValue(extensions)
 
   const mocks = {
     ...defaultComponentMocks(),
@@ -328,25 +333,7 @@ function getWrapper({
     mocks,
     wrapper: shallowMount(account, {
       global: {
-        plugins: [
-          ...defaultPlugins({
-            piniaOptions: {
-              userState: { user },
-              authState: {
-                userContextReady: isUserContext,
-                publicLinkContextReady: isPublicLinkContext
-              },
-              spacesState: { spaces },
-              capabilityState: { capabilities },
-              configState: {
-                options: {
-                  logoutUrl: 'https://account-manager/logout',
-                  ...(accountEditLink && { accountEditLink })
-                }
-              }
-            }
-          })
-        ],
+        plugins,
         mocks,
         provide: mocks,
         stubs: {

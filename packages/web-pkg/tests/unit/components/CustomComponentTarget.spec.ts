@@ -99,11 +99,9 @@ function getWrapper({
   const plugins = defaultPlugins()
 
   const { getExtensionPreference } = useExtensionPreferencesStore()
-  console.log(getExtensionPreference)
   vi.mocked(getExtensionPreference).mockReturnValue(preference)
 
   const { requestExtensions } = useExtensionRegistry()
-  console.log(requestExtensions)
   vi.mocked(requestExtensions).mockReturnValue(extensions)
 
   const mocks = defaultComponentMocks()

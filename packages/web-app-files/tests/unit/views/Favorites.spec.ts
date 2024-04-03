@@ -6,14 +6,12 @@ import { mockDeep, mock } from 'vitest-mock-extended'
 import { Resource } from '@ownclouders/web-client'
 import { defaultPlugins, defaultStubs, mount, defaultComponentMocks } from 'web-test-helpers'
 import { RouteLocation } from 'vue-router'
-import { useExtensionRegistryMock } from 'web-test-helpers/src/mocks/useExtensionRegistryMock'
-import { useExtensionRegistry } from '@ownclouders/web-pkg'
+import { Extension, useExtensionRegistry } from '@ownclouders/web-pkg'
 
 vi.mock('web-app-files/src/composables')
 vi.mock('@ownclouders/web-pkg', async (importOriginal) => ({
   ...(await importOriginal<any>()),
-  useFileActions: vi.fn(),
-  useExtensionRegistry: vi.fn()
+  useFileActions: vi.fn()
 }))
 
 describe('Favorites view', () => {
@@ -44,6 +42,8 @@ describe('Favorites view', () => {
 })
 
 function getMountedWrapper({ mocks = {}, files = [], loading = false } = {}) {
+  const plugins = defaultPlugins()
+
   vi.mocked(useResourcesViewDefaults).mockImplementation(() => {
     return useResourcesViewDefaultsMock({
       paginatedResources: ref(files),
@@ -66,15 +66,9 @@ function getMountedWrapper({ mocks = {}, files = [], loading = false } = {}) {
         component: h('div', { class: 'resource-table' })
       }
     }
-  ]
-
-  vi.mocked(useExtensionRegistry).mockImplementation(() =>
-    useExtensionRegistryMock({
-      requestExtensions<ExtensionType>(type: string) {
-        return extensions as ExtensionType[]
-      }
-    })
-  )
+  ] satisfies Extension[]
+  const { requestExtensions } = useExtensionRegistry()
+  vi.mocked(requestExtensions).mockReturnValue(extensions)
 
   const defaultMocks = {
     ...defaultComponentMocks({
@@ -86,7 +80,7 @@ function getMountedWrapper({ mocks = {}, files = [], loading = false } = {}) {
   return {
     wrapper: mount(Favorites, {
       global: {
-        plugins: [...defaultPlugins()],
+        plugins,
         mocks: defaultMocks,
         provide: defaultMocks,
         stubs: defaultStubs

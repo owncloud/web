@@ -1,11 +1,5 @@
 import ExtensionPreference from '../../../../src/components/Account/ExtensionPreference.vue'
-import {
-  defaultComponentMocks,
-  defaultPlugins,
-  getOcSelectOptions,
-  mount,
-  useExtensionRegistryMock
-} from 'web-test-helpers'
+import { defaultComponentMocks, defaultPlugins, getOcSelectOptions, mount } from 'web-test-helpers'
 import {
   Extension,
   ExtensionPoint,
@@ -13,11 +7,6 @@ import {
   useExtensionRegistry
 } from '@ownclouders/web-pkg'
 import { mock } from 'vitest-mock-extended'
-
-vi.mock('@ownclouders/web-pkg', async (importOriginal) => ({
-  ...(await importOriginal<any>()),
-  useExtensionRegistry: vi.fn()
-}))
 
 const selectors = {
   dropdown: '.extension-preference'
@@ -101,13 +90,14 @@ function getWrapper({
   extensionPoint: ExtensionPoint
   extensions?: Extension[]
 }) {
-  vi.mocked(useExtensionRegistry).mockImplementation(() =>
-    useExtensionRegistryMock({
-      requestExtensions<ExtensionType>(type: string) {
-        return extensions as ExtensionType[]
-      }
-    })
-  )
+  const plugins = defaultPlugins({
+    piniaOptions: {
+      stubActions: false
+    }
+  })
+
+  const { requestExtensions } = useExtensionRegistry()
+  vi.mocked(requestExtensions).mockReturnValue(extensions)
 
   const mocks = {
     ...defaultComponentMocks()
@@ -120,13 +110,7 @@ function getWrapper({
         extensionPoint
       },
       global: {
-        plugins: [
-          ...defaultPlugins({
-            piniaOptions: {
-              stubActions: false
-            }
-          })
-        ],
+        plugins,
         mocks,
         provide: mocks,
         stubs: { VueSelect: false }

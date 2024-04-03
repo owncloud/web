@@ -4,13 +4,11 @@ import { defaultComponentMocks, defaultPlugins, shallowMount } from 'web-test-he
 import { useExtensionRegistry } from '@ownclouders/web-pkg'
 import { mock } from 'vitest-mock-extended'
 import { ref } from 'vue'
-import { useExtensionRegistryMock } from 'web-test-helpers/src/mocks/useExtensionRegistryMock'
 import { Resource } from '@ownclouders/web-client'
 
 vi.mock('@ownclouders/web-pkg', async (importOriginal) => ({
   ...(await importOriginal<any>()),
-  useEmbedMode: vi.fn(),
-  useExtensionRegistry: vi.fn()
+  useEmbedMode: vi.fn()
 }))
 
 const collaboratorAction = {
@@ -83,19 +81,17 @@ describe('QuickActions', () => {
 })
 
 function getWrapper({ embedModeEnabled = false } = {}) {
+  const plugins = defaultPlugins()
+
   vi.mocked(useEmbedMode).mockReturnValue(
     mock<ReturnType<typeof useEmbedMode>>({ isEnabled: ref(embedModeEnabled) })
   )
 
-  vi.mocked(useExtensionRegistry).mockImplementation(() =>
-    useExtensionRegistryMock({
-      requestExtensions: () =>
-        [
-          mock<ActionExtension>({ scopes: ['resource.quick-action'], action: collaboratorAction }),
-          mock<ActionExtension>({ scopes: ['resource.quick-action'], action: quicklinkAction })
-        ] as any[]
-    })
-  )
+  const { requestExtensions } = useExtensionRegistry()
+  vi.mocked(requestExtensions).mockReturnValue([
+    mock<ActionExtension>({ scopes: ['resource.quick-action'], action: collaboratorAction }),
+    mock<ActionExtension>({ scopes: ['resource.quick-action'], action: quicklinkAction })
+  ] as any[])
 
   return {
     wrapper: shallowMount(QuickActions, {
@@ -105,7 +101,7 @@ function getWrapper({ embedModeEnabled = false } = {}) {
       global: {
         stubs: { OcButton: false },
         mocks: { ...defaultComponentMocks() },
-        plugins: [...defaultPlugins()]
+        plugins
       }
     })
   }

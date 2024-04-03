@@ -9,6 +9,7 @@ import {
 } from 'web-test-helpers'
 import { defineComponent, ref } from 'vue'
 import { useSelectedResources } from '../../../../src/composables/selection'
+import { useExtensionRegistry } from '../../../../src'
 
 const InnerSideBarComponent = defineComponent({
   props: { availablePanels: { type: Array, required: true } },
@@ -79,6 +80,11 @@ function createWrapper({
   item = undefined,
   isOpen = true
 }: { item?: Resource; isOpen?: boolean } = {}) {
+  const plugins = defaultPlugins()
+
+  const { requestExtensions } = useExtensionRegistry()
+  vi.mocked(requestExtensions).mockReturnValue([])
+
   vi.mocked(useSelectedResources).mockReturnValue(
     mock<ReturnType<typeof useSelectedResources>>({
       selectedResources: item ? ref([item]) : ref([])
@@ -94,7 +100,7 @@ function createWrapper({
         isOpen
       },
       global: {
-        plugins: [...defaultPlugins()],
+        plugins,
         renderStubDefaultSlot: true,
         stubs: {
           InnerSideBar: InnerSideBarComponent
