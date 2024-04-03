@@ -91,7 +91,7 @@ function getWrapper({ embedModeEnabled = false } = {}) {
   vi.mocked(requestExtensions).mockReturnValue([
     mock<ActionExtension>({ scopes: ['resource.quick-action'], action: collaboratorAction }),
     mock<ActionExtension>({ scopes: ['resource.quick-action'], action: quicklinkAction })
-  ] as any[])
+  ])
 
   return {
     wrapper: shallowMount(QuickActions, {

@@ -452,8 +452,10 @@ export default defineComponent({
     const extensionPointsWithUserPreferences = computed(() => {
       return extensionRegistry
         .getExtensionPoints<ExtensionPoint>()
-        .filter((extensionPoint: ExtensionPoint) => extensionPoint.userPreference)
         .filter((extensionPoint: ExtensionPoint) => {
+          if (!Object.hasOwn(extensionPoint, 'userPreference')) {
+            return false
+          }
           const extensions = extensionRegistry.requestExtensions(extensionPoint.type, {
             extensionPointIds: [extensionPoint.id]
           })
