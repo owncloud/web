@@ -2,23 +2,23 @@
 
 exports[`account page > account information section > displays basic user information 1`] = `
 "<dl data-v-f2ac0579="" class="account-page-info oc-flex oc-flex-wrap">
-  <div data-v-f2ac0579="" class="account-page-info-username oc-mb oc-width-1-2@s">
+  <div data-v-f2ac0579="" class="account-page-info-username oc-mb oc-width-1-2@m oc-width-1-1@s">
     <dt data-v-f2ac0579="" class="oc-text-normal oc-text-muted">Username</dt>
     <dd data-v-f2ac0579="">some-username</dd>
   </div>
-  <div data-v-f2ac0579="" class="account-page-info-displayname oc-mb oc-width-1-2@s">
+  <div data-v-f2ac0579="" class="account-page-info-displayname oc-mb oc-width-1-2@m oc-width-1-1@s">
     <dt data-v-f2ac0579="" class="oc-text-normal oc-text-muted">First and last name</dt>
     <dd data-v-f2ac0579="">some-displayname</dd>
   </div>
-  <div data-v-f2ac0579="" class="account-page-info-email oc-mb oc-width-1-2@s">
+  <div data-v-f2ac0579="" class="account-page-info-email oc-mb oc-width-1-2@m oc-width-1-1@s">
     <dt data-v-f2ac0579="" class="oc-text-normal oc-text-muted">Email</dt>
     <dd data-v-f2ac0579="">some-email</dd>
   </div>
-  <div data-v-f2ac0579="" class="account-page-info-groups oc-mb oc-width-1-2@s">
+  <div data-v-f2ac0579="" class="account-page-info-groups oc-mb oc-width-1-2@m oc-width-1-1@s">
     <dt data-v-f2ac0579="" class="oc-text-normal oc-text-muted">Group memberships</dt>
     <dd data-v-f2ac0579="" data-testid="group-names"><span data-v-f2ac0579="" data-testid="group-names-empty">You are not part of any group</span></dd>
   </div>
-  <div data-v-f2ac0579="" class="account-page-logout-all-devices oc-mb oc-width-1-2@s">
+  <div data-v-f2ac0579="" class="account-page-logout-all-devices oc-mb oc-width-1-2@m oc-width-1-1@s">
     <dt data-v-f2ac0579="" class="oc-text-normal oc-text-muted">Logout from active devices</dt>
     <dd data-v-f2ac0579="" data-testid="logout">
       <oc-button-stub data-v-f2ac0579="" appearance="raw" type="a" href="https://account-manager/logout" target="_blank" data-testid="account-page-logout-url-btn"></oc-button-stub>
@@ -41,15 +41,15 @@ exports[`account page > public link context > should render a limited view 1`] =
       <h2 data-v-f2ac0579="" class="oc-text-bold">Preferences</h2>
     </div>
     <dl data-v-f2ac0579="" class="account-page-preferences oc-flex oc-flex-wrap">
-      <div data-v-f2ac0579="" class="account-page-info-language oc-mb oc-width-1-2@s">
+      <div data-v-f2ac0579="" class="account-page-info-language oc-mb oc-width-1-2@m oc-width-1-1@s">
         <dt data-v-f2ac0579="" class="oc-text-normal oc-text-muted">Language</dt>
-        <dd data-v-f2ac0579="" data-testid="language" class="oc-width-1-3">
-          <oc-select-stub data-v-f2ac0579="" id="oc-select-1" filter="[Function]" disabled="false" optionlabel="label" getoptionlabel="[Function]" searchable="true" clearable="false" loading="false" fixmessageline="false" multiple="false" readonly="false" placeholder="Please choose..." options="[object Object],[object Object],[object Object],[object Object],[object Object],[object Object],[object Object],[object Object],[object Object],[object Object],[object Object],[object Object],[object Object]"></oc-select-stub>
+        <dd data-v-f2ac0579="" data-testid="language" class="oc-width-1-3@l oc-width-1-2@m oc-width-1-1@s">
+          <oc-select-stub data-v-f2ac0579="" id="oc-select-1" filter="[Function]" disabled="false" optionlabel="label" getoptionlabel="[Function]" searchable="true" clearable="false" loading="false" fixmessageline="false" multiple="false" readonly="false" placeholder="Please choose..." options="[object Object],[object Object],[object Object],[object Object],[object Object],[object Object],[object Object],[object Object],[object Object],[object Object],[object Object],[object Object],[object Object]" model-value="[object Object]"></oc-select-stub>
         </dd>
       </div>
-      <div data-v-f2ac0579="" class="account-page-info-theme oc-mb oc-width-1-2@s">
+      <div data-v-f2ac0579="" class="account-page-info-theme oc-mb oc-width-1-2@m oc-width-1-1@s">
         <dt data-v-f2ac0579="" class="oc-text-normal oc-text-muted">Theme</dt>
-        <dd data-v-f2ac0579="" data-testid="theme" class="oc-width-1-3">
+        <dd data-v-f2ac0579="" data-testid="theme" class="oc-width-1-3@l oc-width-1-2@m oc-width-1-1@s">
           <theme-switcher-stub data-v-f2ac0579=""></theme-switcher-stub>
         </dd>
       </div>
@@ -57,6 +57,7 @@ exports[`account page > public link context > should render a limited view 1`] =
       <!--v-if-->
     </dl>
   </div>
+  <!--v-if-->
   <!--v-if-->
 </main>"
 `;

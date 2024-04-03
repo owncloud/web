@@ -13,6 +13,6 @@ export const getExtensionNavItems = ({
   appId: string
 }) =>
   extensionRegistry
-    .requestExtensions<SidebarNavExtension>('sidebarNav', [`app.${appId}`])
+    .requestExtensions<SidebarNavExtension>('sidebarNav', { scopes: [`app.${appId}`] })
     .map(({ navItem }) => navItem)
     .filter((n) => !Object.hasOwn(n, 'isVisible') || n.isVisible())

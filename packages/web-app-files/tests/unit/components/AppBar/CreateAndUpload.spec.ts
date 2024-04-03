@@ -9,7 +9,8 @@ import {
   useSpacesStore,
   CapabilityStore,
   useClipboardStore,
-  useFileActionsPaste
+  useFileActionsPaste,
+  useExtensionRegistry
 } from '@ownclouders/web-pkg'
 import { eventBus, UppyResource } from '@ownclouders/web-pkg'
 import {
@@ -19,14 +20,11 @@ import {
   mockAxiosResolve
 } from 'web-test-helpers'
 import { RouteLocation } from 'vue-router'
-import { useExtensionRegistry } from '@ownclouders/web-pkg'
-import { useExtensionRegistryMock } from 'web-test-helpers/src/mocks/useExtensionRegistryMock'
 import { ref } from 'vue'
 import { OcButton } from 'design-system/src/components'
 
 vi.mock('@ownclouders/web-pkg', async (importOriginal) => ({
   ...(await importOriginal<any>()),
-  useExtensionRegistry: vi.fn(),
   useRequest: vi.fn(),
   useFileActionsCreateNewFile: vi.fn(),
   useFileActions: vi.fn(),
@@ -173,10 +171,25 @@ function getWrapper({
     mock<FileAction>({ label: () => 'Draw.io document', ext: 'drawio' })
   ]
 } = {}) {
+  const capabilities = {
+    spaces: { enabled: true },
+    files: { app_providers: [{ new_url: '/' }] }
+  } satisfies Partial<CapabilityStore['capabilities']>
+
+  const plugins = defaultPlugins({
+    piniaOptions: {
+      spacesState: { spaces },
+      capabilityState: { capabilities },
+      clipboardState: { resources: clipboardResources },
+      resourcesStore: { areFileExtensionsShown, currentFolder, resources: files }
+    }
+  })
+
   vi.mocked(useRequest).mockImplementation(() => ({
     makeRequest: vi.fn().mockResolvedValue({ status: 200 })
   }))
-  vi.mocked(useExtensionRegistry).mockImplementation(() => useExtensionRegistryMock())
+  const { requestExtensions } = useExtensionRegistry()
+  vi.mocked(requestExtensions).mockReturnValue([])
 
   vi.mocked(useFileActionsCreateNewFile).mockReturnValue(
     mock<ReturnType<typeof useFileActionsCreateNewFile>>({
@@ -195,10 +208,6 @@ function getWrapper({
     ...defaultComponentMocks({ currentRoute: mock<RouteLocation>({ name: currentRouteName }) }),
     pasteActionHandler
   }
-  const capabilities = {
-    spaces: { enabled: true },
-    files: { app_providers: [{ new_url: '/' }] }
-  } satisfies Partial<CapabilityStore['capabilities']>
 
   return {
     mocks,
@@ -210,16 +219,7 @@ function getWrapper({
         renderStubDefaultSlot: true,
         mocks,
         provide: mocks,
-        plugins: [
-          ...defaultPlugins({
-            piniaOptions: {
-              spacesState: { spaces },
-              capabilityState: { capabilities },
-              clipboardState: { resources: clipboardResources },
-              resourcesStore: { areFileExtensionsShown, currentFolder, resources: files }
-            }
-          })
-        ]
+        plugins
       }
     })
   }

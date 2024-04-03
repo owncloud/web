@@ -18,26 +18,26 @@
         </oc-button>
       </div>
       <dl class="account-page-info oc-flex oc-flex-wrap">
-        <div class="account-page-info-username oc-mb oc-width-1-2@s">
+        <div class="account-page-info-username oc-mb oc-width-1-2@m oc-width-1-1@s">
           <dt class="oc-text-normal oc-text-muted" v-text="$gettext('Username')" />
           <dd>
             {{ user.onPremisesSamAccountName }}
           </dd>
         </div>
-        <div class="account-page-info-displayname oc-mb oc-width-1-2@s">
+        <div class="account-page-info-displayname oc-mb oc-width-1-2@m oc-width-1-1@s">
           <dt class="oc-text-normal oc-text-muted" v-text="$gettext('First and last name')" />
           <dd>
             {{ user.displayName }}
           </dd>
         </div>
-        <div class="account-page-info-email oc-mb oc-width-1-2@s">
+        <div class="account-page-info-email oc-mb oc-width-1-2@m oc-width-1-1@s">
           <dt class="oc-text-normal oc-text-muted" v-text="$gettext('Email')" />
           <dd>
             <template v-if="user.mail">{{ user.mail }}</template>
             <span v-else v-text="$gettext('No email has been set up')" />
           </dd>
         </div>
-        <div class="account-page-info-groups oc-mb oc-width-1-2@s">
+        <div class="account-page-info-groups oc-mb oc-width-1-2@m oc-width-1-1@s">
           <dt class="oc-text-normal oc-text-muted" v-text="$gettext('Group memberships')" />
           <dd data-testid="group-names">
             <span v-if="groupNames">{{ groupNames }}</span>
@@ -48,7 +48,10 @@
             />
           </dd>
         </div>
-        <div v-if="showLogout" class="account-page-logout-all-devices oc-mb oc-width-1-2@s">
+        <div
+          v-if="showLogout"
+          class="account-page-logout-all-devices oc-mb oc-width-1-2@m oc-width-1-1@s"
+        >
           <dt
             class="oc-text-normal oc-text-muted"
             v-text="$gettext('Logout from active devices')"
@@ -65,7 +68,10 @@
             </oc-button>
           </dd>
         </div>
-        <div v-if="showChangePassword" class="account-page-password oc-mb oc-width-1-2@s">
+        <div
+          v-if="showChangePassword"
+          class="account-page-password oc-mb oc-width-1-2@m oc-width-1-1@s"
+        >
           <dt class="oc-text-normal oc-text-muted" v-text="$gettext('Password')" />
           <dd data-testid="password">
             <oc-button
@@ -85,9 +91,9 @@
         <h2 class="oc-text-bold" v-text="$gettext('Preferences')" />
       </div>
       <dl class="account-page-preferences oc-flex oc-flex-wrap">
-        <div class="account-page-info-language oc-mb oc-width-1-2@s">
+        <div class="account-page-info-language oc-mb oc-width-1-2@m oc-width-1-1@s">
           <dt class="oc-text-normal oc-text-muted" v-text="$gettext('Language')" />
-          <dd data-testid="language" class="oc-width-1-3">
+          <dd data-testid="language" class="oc-width-1-3@l oc-width-1-2@m oc-width-1-1@s">
             <oc-select
               v-if="languageOptions"
               :placeholder="$gettext('Please choose...')"
@@ -98,13 +104,16 @@
             />
           </dd>
         </div>
-        <div class="account-page-info-theme oc-mb oc-width-1-2@s">
+        <div class="account-page-info-theme oc-mb oc-width-1-2@m oc-width-1-1@s">
           <dt class="oc-text-normal oc-text-muted" v-text="$gettext('Theme')" />
-          <dd data-testid="theme" class="oc-width-1-3">
+          <dd data-testid="theme" class="oc-width-1-3@l oc-width-1-2@m oc-width-1-1@s">
             <theme-switcher />
           </dd>
         </div>
-        <div v-if="showNotifications" class="account-page-notification oc-mb oc-width-1-2@s">
+        <div
+          v-if="showNotifications"
+          class="account-page-notification oc-mb oc-width-1-2@m oc-width-1-1@s"
+        >
           <dt class="oc-text-normal oc-text-muted" v-text="$gettext('Notifications')" />
           <dd data-testid="notification-mails">
             <oc-checkbox
@@ -116,7 +125,10 @@
             />
           </dd>
         </div>
-        <div v-if="showWebDavDetails" class="account-page-view-options oc-mb oc-width-1-2@s">
+        <div
+          v-if="showWebDavDetails"
+          class="account-page-view-options oc-mb oc-width-1-2@m oc-width-1-1@s"
+        >
           <dt class="oc-text-normal oc-text-muted" v-text="$gettext('View options')" />
           <dd data-testid="view-options">
             <oc-checkbox
@@ -130,12 +142,38 @@
         </div>
       </dl>
     </div>
+    <div
+      v-if="extensionPointsWithUserPreferences.length"
+      class="account-page-extension-preferences oc-width-1-1"
+    >
+      <div class="oc-flex oc-width-1-1">
+        <h2 class="oc-text-bold" v-text="$gettext('Extensions')" />
+      </div>
+      <dl class="account-page-extensions oc-flex oc-flex-wrap">
+        <div
+          v-for="extensionPoint in extensionPointsWithUserPreferences"
+          :key="`extension-point-preference-${extensionPoint.id}`"
+          class="oc-mb oc-width-1-1"
+        >
+          <dt class="oc-text-normal oc-text-muted" v-text="extensionPoint.userPreference.label" />
+          <dd class="oc-width-1-6@l oc-width-1-3@m oc-width-1-1@s">
+            <extension-preference :extension-point="extensionPoint" />
+          </dd>
+        </div>
+      </dl>
+    </div>
     <div v-if="showGdprExport" class="account-page-gdpr-export oc-width-1-1">
-      <h2 class="oc-text-bold oc-mb" v-text="$gettext('GDPR')" />
-      <dt class="oc-text-normal oc-text-muted" v-text="$gettext('GDPR export')" />
-      <dd data-testid="gdpr-export">
-        <gdpr-export />
-      </dd>
+      <div class="oc-flex oc-width-1-1">
+        <h2 class="oc-text-bold oc-mb" v-text="$gettext('GDPR')" />
+      </div>
+      <dl class="account-page-gdpr-export">
+        <div class="oc-mb">
+          <dt class="oc-text-normal oc-text-muted" v-text="$gettext('GDPR export')" />
+          <dd data-testid="gdpr-export">
+            <gdpr-export />
+          </dd>
+        </div>
+      </dl>
     </div>
   </main>
 </template>
@@ -146,10 +184,12 @@ import EditPasswordModal from '../components/EditPasswordModal.vue'
 import { SettingsBundle, LanguageOption, SettingsValue } from '../helpers/settings'
 import { computed, defineComponent, onMounted, unref, ref } from 'vue'
 import {
+  ExtensionPoint,
   useAuthStore,
   useCapabilityStore,
   useClientService,
   useConfigStore,
+  useExtensionRegistry,
   useMessages,
   useModals,
   useResourcesStore,
@@ -159,18 +199,21 @@ import {
 import { useTask } from 'vue-concurrency'
 import { useGettext } from 'vue3-gettext'
 import { setCurrentLanguage } from 'web-runtime/src/helpers/language'
-import GdprExport from 'web-runtime/src/components/Account/GdprExport.vue'
+import GdprExport from '../components/Account/GdprExport.vue'
+import ThemeSwitcher from '../components/Account/ThemeSwitcher.vue'
+import ExtensionPreference from '../components/Account/ExtensionPreference.vue'
 import { AppLoadingSpinner } from '@ownclouders/web-pkg'
 import { SSEAdapter } from '@ownclouders/web-client/src/sse'
 import { supportedLanguages } from '../defaults/languages'
 import { User } from '@ownclouders/web-client/src/generated'
-import ThemeSwitcher from 'web-runtime/src/components/ThemeSwitcher.vue'
+import { isEmpty } from 'lodash-es'
 
 export default defineComponent({
   name: 'AccountPage',
   components: {
     AppLoadingSpinner,
     GdprExport,
+    ExtensionPreference,
     ThemeSwitcher
   },
   setup() {
@@ -406,6 +449,24 @@ export default defineComponent({
       }
     }
 
+    const extensionRegistry = useExtensionRegistry()
+    const extensionPointsWithUserPreferences = computed(() => {
+      return extensionRegistry
+        .getExtensionPoints<ExtensionPoint>()
+        .filter((extensionPoint: ExtensionPoint) => {
+          if (
+            !Object.hasOwn(extensionPoint, 'userPreference') ||
+            isEmpty(extensionPoint.userPreference)
+          ) {
+            return false
+          }
+          const extensions = extensionRegistry.requestExtensions(extensionPoint.type, {
+            extensionPointIds: [extensionPoint.id]
+          })
+          return !!extensions.length
+        })
+    })
+
     onMounted(async () => {
       await loadAccountBundleTask.perform()
       await loadValuesListTask.perform()
@@ -435,6 +496,7 @@ export default defineComponent({
     return {
       clientService,
       languageOptions,
+      extensionPointsWithUserPreferences,
       selectedLanguageValue,
       updateSelectedLanguage,
       updateDisableEmailNotifications,

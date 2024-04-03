@@ -21,7 +21,8 @@ exports[`Epub reader app > renders correctly 1`] = `
           <!--v-if-->
           <!-- @slot Content of the button --> <span class="oc-icon oc-icon-s oc-icon-passive"><!----></span> <span class="oc-icon oc-icon-xs oc-icon-passive"><!----></span>
         </button></div>
-      <div class="epub-reader-controls-chapters-select oc-width-1-1 oc-px-s oc-hidden@l" modelvalue="[object Object]" options="[object Object],[object Object]"><label for="oc-select-1" class="oc-label"></label>
+      <div class="epub-reader-controls-chapters-select oc-width-1-1 oc-px-s oc-hidden@l" modelvalue="[object Object]" options="[object Object],[object Object]">
+        <!--v-if-->
         <!--v-if-->
         <div dir="auto" class="v-select vs--single vs--unsearchable oc-select epub-reader-controls-chapters-select oc-width-1-1 oc-px-s oc-hidden@l" style="background: transparent;">
           <div id="vs1__combobox" class="vs__dropdown-toggle" role="combobox" aria-expanded="false" aria-owns="vs1__listbox" aria-label="Search for option">

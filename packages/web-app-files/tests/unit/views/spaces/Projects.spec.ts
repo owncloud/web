@@ -1,7 +1,12 @@
 import Projects from '../../../../src/views/spaces/Projects.vue'
 import { mock } from 'vitest-mock-extended'
 import { h, nextTick, ref } from 'vue'
-import { queryItemAsString, useFileActionsDelete, useExtensionRegistry } from '@ownclouders/web-pkg'
+import {
+  queryItemAsString,
+  useFileActionsDelete,
+  useExtensionRegistry,
+  Extension
+} from '@ownclouders/web-pkg'
 
 import {
   defaultPlugins,
@@ -10,14 +15,12 @@ import {
   defaultStubs,
   RouteLocation
 } from 'web-test-helpers'
-import { useExtensionRegistryMock } from 'web-test-helpers/src/mocks/useExtensionRegistryMock'
 
 vi.mock('@ownclouders/web-pkg', async (importOriginal) => ({
   ...(await importOriginal<any>()),
   displayPositionedDropdown: vi.fn(),
   queryItemAsString: vi.fn(),
   appDefaults: vi.fn(),
-  useExtensionRegistry: vi.fn(),
   useRouteQueryPersisted: vi.fn().mockImplementation(() => ref('resource-table')),
   useFileActions: vi.fn(),
   useFileActionsDelete: vi.fn(() => mock<ReturnType<typeof useFileActionsDelete>>())
@@ -93,6 +96,8 @@ describe('Projects view', () => {
 })
 
 function getMountedWrapper({ mocks = {}, spaces = [], abilities = [], stubAppBar = true } = {}) {
+  const plugins = defaultPlugins({ abilities, piniaOptions: { spacesState: { spaces } } })
+
   vi.mocked(queryItemAsString).mockImplementationOnce(() => '1')
   vi.mocked(queryItemAsString).mockImplementationOnce(() => '100')
 
@@ -111,15 +116,9 @@ function getMountedWrapper({ mocks = {}, spaces = [], abilities = [], stubAppBar
         component: h('div', { class: 'resource-table' })
       }
     }
-  ]
-
-  vi.mocked(useExtensionRegistry).mockImplementation(() =>
-    useExtensionRegistryMock({
-      requestExtensions<ExtensionType>(type: string, scopes: string[]) {
-        return extensions as ExtensionType[]
-      }
-    })
-  )
+  ] satisfies Extension[]
+  const { requestExtensions } = useExtensionRegistry()
+  vi.mocked(requestExtensions).mockReturnValue(extensions)
 
   const defaultMocks = {
     ...defaultComponentMocks({
@@ -132,7 +131,7 @@ function getMountedWrapper({ mocks = {}, spaces = [], abilities = [], stubAppBar
     mocks: defaultMocks,
     wrapper: mount(Projects, {
       global: {
-        plugins: [...defaultPlugins({ abilities, piniaOptions: { spacesState: { spaces } } })],
+        plugins,
         mocks: defaultMocks,
         provide: defaultMocks,
         stubs: {

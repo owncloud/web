@@ -12,9 +12,13 @@ import {
   RouteLocation,
   ComponentProps
 } from 'web-test-helpers'
-import { AppBar, useBreadcrumbsFromPath, useExtensionRegistry } from '@ownclouders/web-pkg'
+import {
+  AppBar,
+  Extension,
+  useBreadcrumbsFromPath,
+  useExtensionRegistry
+} from '@ownclouders/web-pkg'
 import { useBreadcrumbsFromPathMock } from '../../../mocks/useBreadcrumbsFromPathMock'
-import { useExtensionRegistryMock } from 'web-test-helpers/src/mocks/useExtensionRegistryMock'
 import { h } from 'vue'
 
 const mockCreateFolder = vi.fn()
@@ -25,7 +29,6 @@ vi.mock('web-app-files/src/composables/keyboardActions')
 vi.mock('@ownclouders/web-pkg', async (importOriginal) => ({
   ...(await importOriginal<any>()),
   useBreadcrumbsFromPath: vi.fn(),
-  useExtensionRegistry: vi.fn(),
   useFileActionsCreateNewFolder: () => ({
     actions: [{ handler: mockCreateFolder }]
   }),
@@ -289,6 +292,13 @@ function getMountedWrapper({
   breadcrumbsFromPath = [],
   stubs = {}
 } = {}) {
+  const plugins = defaultPlugins({
+    piniaOptions: {
+      configState: { options: { runningOnEos } },
+      resourcesStore: { currentFolder }
+    }
+  })
+
   const resourcesViewDetailsMock = useResourcesViewDefaultsMock({
     paginatedResources: ref(files),
     areResourcesLoading: ref(loading)
@@ -313,15 +323,9 @@ function getMountedWrapper({
         component: h('div', { class: 'resource-table' })
       }
     }
-  ]
-
-  vi.mocked(useExtensionRegistry).mockImplementation(() =>
-    useExtensionRegistryMock({
-      requestExtensions<ExtensionType>(type: string, scopes: string[]) {
-        return extensions as ExtensionType[]
-      }
-    })
-  )
+  ] satisfies Extension[]
+  const { requestExtensions } = useExtensionRegistry()
+  vi.mocked(requestExtensions).mockReturnValue(extensions)
 
   const defaultMocks = {
     ...defaultComponentMocks({ currentRoute: mock<RouteLocation>(currentRoute) }),
@@ -340,14 +344,7 @@ function getMountedWrapper({
     wrapper: mount(GenericSpace, {
       props: propsData,
       global: {
-        plugins: [
-          ...defaultPlugins({
-            piniaOptions: {
-              configState: { options: { runningOnEos } },
-              resourcesStore: { currentFolder }
-            }
-          })
-        ],
+        plugins,
         mocks: defaultMocks,
         provide: defaultMocks,
         stubs: { ...defaultStubs, 'resource-details': true, portal: true, ...stubs }

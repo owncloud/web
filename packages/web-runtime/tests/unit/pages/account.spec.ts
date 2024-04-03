@@ -8,9 +8,16 @@ import {
 } from 'web-test-helpers'
 import { mock } from 'vitest-mock-extended'
 import { AxiosResponse } from 'axios'
-import { useMessages, useResourcesStore } from '@ownclouders/web-pkg'
+import {
+  Extension,
+  ExtensionPoint,
+  useExtensionRegistry,
+  useMessages,
+  useResourcesStore
+} from '@ownclouders/web-pkg'
 import { LanguageOption, SettingsBundle, SettingsValue } from 'web-runtime/src/helpers/settings'
 import { User } from '@ownclouders/web-client/src/generated'
+import { VueWrapper } from '@vue/test-utils'
 
 const $route = {
   meta: {
@@ -27,16 +34,16 @@ const selectors = {
   accountPageInfo: '.account-page-info',
   groupNames: '[data-testid="group-names"]',
   groupNamesEmpty: '[data-testid="group-names-empty"]',
-  gdprExport: '[data-testid="gdpr-export"]'
+  gdprExport: '[data-testid="gdpr-export"]',
+  extensionsSection: '.account-page-extension-preferences'
 }
 
 describe('account page', () => {
   describe('public link context', () => {
     it('should render a limited view', async () => {
       const { wrapper } = getWrapper({ isUserContext: false, isPublicLinkContext: true })
-      await wrapper.vm.loadAccountBundleTask.last
-      await wrapper.vm.loadValuesListTask.last
-      await wrapper.vm.loadGraphUserTask.last
+      await blockLoadingState(wrapper)
+
       expect(wrapper.html()).toMatchSnapshot()
     })
   })
@@ -47,20 +54,14 @@ describe('account page', () => {
         const { wrapper } = getWrapper({
           accountEditLink: { href: '/' }
         })
-
-        await wrapper.vm.loadAccountBundleTask.last
-        await wrapper.vm.loadValuesListTask.last
-        await wrapper.vm.loadGraphUserTask.last
+        await blockLoadingState(wrapper)
 
         const editUrlButton = wrapper.find(selectors.editUrlButton)
         expect(editUrlButton.html()).toMatchSnapshot()
       })
       it('should not be displayed if not defined via config', async () => {
         const { wrapper } = getWrapper()
-
-        await wrapper.vm.loadAccountBundleTask.last
-        await wrapper.vm.loadValuesListTask.last
-        await wrapper.vm.loadGraphUserTask.last
+        await blockLoadingState(wrapper)
 
         const editUrlButton = wrapper.find(selectors.editUrlButton)
         expect(editUrlButton.exists()).toBeFalsy()
@@ -78,10 +79,7 @@ describe('account page', () => {
           memberOf: []
         })
       })
-
-      await wrapper.vm.loadAccountBundleTask.last
-      await wrapper.vm.loadValuesListTask.last
-      await wrapper.vm.loadGraphUserTask.last
+      await blockLoadingState(wrapper)
 
       const accountPageInfo = wrapper.find(selectors.accountPageInfo)
       expect(accountPageInfo.html()).toMatchSnapshot()
@@ -90,10 +88,7 @@ describe('account page', () => {
     describe('group membership', () => {
       it('displays message if not member of any groups', async () => {
         const { wrapper } = getWrapper()
-
-        await wrapper.vm.loadAccountBundleTask.last
-        await wrapper.vm.loadValuesListTask.last
-        await wrapper.vm.loadGraphUserTask.last
+        await blockLoadingState(wrapper)
 
         const groupNamesEmpty = wrapper.find(selectors.groupNamesEmpty)
         expect(groupNamesEmpty.exists()).toBeTruthy()
@@ -104,10 +99,7 @@ describe('account page', () => {
             memberOf: [{ displayName: 'one' }, { displayName: 'two' }, { displayName: 'three' }]
           })
         })
-
-        await wrapper.vm.loadAccountBundleTask.last
-        await wrapper.vm.loadValuesListTask.last
-        await wrapper.vm.loadGraphUserTask.last
+        await blockLoadingState(wrapper)
 
         const groupNames = wrapper.find(selectors.groupNames)
         expect(groupNames.html()).toMatchSnapshot()
@@ -117,29 +109,20 @@ describe('account page', () => {
     describe('Logout from all devices link', () => {
       it('should render the logout from active devices if logoutUrl is provided', async () => {
         const { wrapper } = getWrapper()
-
-        await wrapper.vm.loadAccountBundleTask.last
-        await wrapper.vm.loadValuesListTask.last
-        await wrapper.vm.loadGraphUserTask.last
+        await blockLoadingState(wrapper)
 
         expect(wrapper.find('[data-testid="logout"]').exists()).toBe(true)
       })
       it("shouldn't render the logout from active devices if logoutUrl isn't provided", async () => {
         const { wrapper } = getWrapper()
-
-        await wrapper.vm.loadAccountBundleTask.last
-        await wrapper.vm.loadValuesListTask.last
-        await wrapper.vm.loadGraphUserTask.last
+        await blockLoadingState(wrapper)
 
         wrapper.vm.logoutUrl = undefined
         expect(wrapper.find('[data-testid="logout"]').exists()).toBe(true)
       })
       it('should use url from configuration manager', async () => {
         const { wrapper } = getWrapper()
-
-        await wrapper.vm.loadAccountBundleTask.last
-        await wrapper.vm.loadValuesListTask.last
-        await wrapper.vm.loadGraphUserTask.last
+        await blockLoadingState(wrapper)
 
         const logoutButton = wrapper.find(selectors.logoutButton)
         expect(logoutButton.attributes('href')).toBe('https://account-manager/logout')
@@ -153,10 +136,7 @@ describe('account page', () => {
         const { wrapper } = getWrapper({
           capabilities: { graph: { users: { change_password_self_disabled: false } } }
         })
-
-        await wrapper.vm.loadAccountBundleTask.last
-        await wrapper.vm.loadValuesListTask.last
-        await wrapper.vm.loadGraphUserTask.last
+        await blockLoadingState(wrapper)
 
         const editPasswordButton = wrapper.find(selectors.editPasswordButton)
         expect(editPasswordButton.exists()).toBeTruthy()
@@ -165,10 +145,7 @@ describe('account page', () => {
         const { wrapper } = getWrapper({
           capabilities: { graph: { users: { change_password_self_disabled: true } } }
         })
-
-        await wrapper.vm.loadAccountBundleTask.last
-        await wrapper.vm.loadValuesListTask.last
-        await wrapper.vm.loadGraphUserTask.last
+        await blockLoadingState(wrapper)
 
         const editPasswordButton = wrapper.find(selectors.editPasswordButton)
         expect(editPasswordButton.exists()).toBeFalsy()
@@ -179,10 +156,7 @@ describe('account page', () => {
   describe('Method "updateDisableEmailNotifications', () => {
     it('should show a message on success', async () => {
       const { wrapper, mocks } = getWrapper()
-
-      await wrapper.vm.loadAccountBundleTask.last
-      await wrapper.vm.loadValuesListTask.last
-      await wrapper.vm.loadGraphUserTask.last
+      await blockLoadingState(wrapper)
 
       mocks.$clientService.httpAuthenticated.post.mockResolvedValueOnce(mockAxiosResolve({}))
       await wrapper.vm.updateDisableEmailNotifications(true)
@@ -193,10 +167,7 @@ describe('account page', () => {
       vi.spyOn(console, 'error').mockImplementation(() => undefined)
 
       const { wrapper, mocks } = getWrapper()
-
-      await wrapper.vm.loadAccountBundleTask.last
-      await wrapper.vm.loadValuesListTask.last
-      await wrapper.vm.loadGraphUserTask.last
+      await blockLoadingState(wrapper)
 
       mocks.$clientService.httpAuthenticated.post.mockImplementation(() => mockAxiosReject('err'))
       await wrapper.vm.updateDisableEmailNotifications(true)
@@ -208,10 +179,7 @@ describe('account page', () => {
   describe('Method "updateSelectedLanguage', () => {
     it('should show a message on success', async () => {
       const { wrapper, mocks } = getWrapper({})
-
-      await wrapper.vm.loadAccountBundleTask.last
-      await wrapper.vm.loadValuesListTask.last
-      await wrapper.vm.loadGraphUserTask.last
+      await blockLoadingState(wrapper)
 
       mocks.$clientService.graphAuthenticated.users.editMe.mockResolvedValueOnce(
         mockAxiosResolve({})
@@ -224,10 +192,7 @@ describe('account page', () => {
       vi.spyOn(console, 'error').mockImplementation(() => undefined)
 
       const { wrapper, mocks } = getWrapper({})
-
-      await wrapper.vm.loadAccountBundleTask.last
-      await wrapper.vm.loadValuesListTask.last
-      await wrapper.vm.loadGraphUserTask.last
+      await blockLoadingState(wrapper)
 
       mocks.$clientService.graphAuthenticated.users.editMe.mockImplementation(() =>
         mockAxiosReject('err')
@@ -241,10 +206,7 @@ describe('account page', () => {
   describe('Method "updateViewOptionsWebDavDetails', () => {
     it('should show a message on success', async () => {
       const { wrapper } = getWrapper({})
-
-      await wrapper.vm.loadAccountBundleTask.last
-      await wrapper.vm.loadValuesListTask.last
-      await wrapper.vm.loadGraphUserTask.last
+      await blockLoadingState(wrapper)
 
       await wrapper.vm.updateViewOptionsWebDavDetails(true)
       const { showMessage } = useMessages()
@@ -254,7 +216,68 @@ describe('account page', () => {
       expect(setAreWebDavDetailsShown).toHaveBeenCalled()
     })
   })
+
+  describe('Extensions section', () => {
+    it('should be hidden if no extension points offer preferences', async () => {
+      const { wrapper } = getWrapper({})
+      await blockLoadingState(wrapper)
+
+      expect(wrapper.find(selectors.extensionsSection).exists()).toBeFalsy()
+    })
+
+    it('should be hidden if an extension point only has 1 or less extensions', async () => {
+      const extensionPointMock = mock<ExtensionPoint>({
+        userPreference: {
+          label: 'example-extension-point'
+        }
+      })
+      const { wrapper } = getWrapper({
+        extensionPoints: [extensionPointMock]
+      })
+      await blockLoadingState(wrapper)
+
+      expect(wrapper.find(selectors.extensionsSection).exists()).toBeFalsy()
+    })
+
+    it('should be visible if an extension point has at least 2 extensions', async () => {
+      const extensionPoint = mock<ExtensionPoint>({
+        id: 'test-extension-point',
+        multiple: false,
+        defaultExtensionId: 'foo-2',
+        userPreference: {
+          label: 'Foo container'
+        }
+      })
+      const extensions = [
+        mock<Extension>({
+          id: 'foo-1',
+          userPreference: {
+            optionLabel: 'Foo 1'
+          }
+        }),
+        mock<Extension>({
+          id: 'foo-2',
+          userPreference: {
+            optionLabel: 'Foo 2'
+          }
+        })
+      ]
+      const { wrapper } = getWrapper({
+        extensionPoints: [extensionPoint],
+        extensions
+      })
+      await blockLoadingState(wrapper)
+
+      expect(wrapper.find(selectors.extensionsSection).exists()).toBeTruthy()
+    })
+  })
 })
+
+const blockLoadingState = async (wrapper: VueWrapper<any, any>) => {
+  await wrapper.vm.loadAccountBundleTask.last
+  await wrapper.vm.loadValuesListTask.last
+  await wrapper.vm.loadGraphUserTask.last
+}
 
 function getWrapper({
   user = mock<User>({ memberOf: [] }),
@@ -262,8 +285,32 @@ function getWrapper({
   accountEditLink = undefined,
   spaces = [],
   isPublicLinkContext = false,
-  isUserContext = true
+  isUserContext = true,
+  extensionPoints = [],
+  extensions = []
 } = {}) {
+  const plugins = defaultPlugins({
+    piniaOptions: {
+      userState: { user },
+      authState: {
+        userContextReady: isUserContext,
+        publicLinkContextReady: isPublicLinkContext
+      },
+      spacesState: { spaces },
+      capabilityState: { capabilities },
+      configState: {
+        options: {
+          logoutUrl: 'https://account-manager/logout',
+          ...(accountEditLink && { accountEditLink })
+        }
+      }
+    }
+  })
+
+  const { getExtensionPoints, requestExtensions } = useExtensionRegistry()
+  vi.mocked(getExtensionPoints).mockReturnValue(extensionPoints)
+  vi.mocked(requestExtensions).mockReturnValue(extensions)
+
   const mocks = {
     ...defaultComponentMocks(),
     $route
@@ -289,25 +336,7 @@ function getWrapper({
     mocks,
     wrapper: shallowMount(account, {
       global: {
-        plugins: [
-          ...defaultPlugins({
-            piniaOptions: {
-              userState: { user },
-              authState: {
-                userContextReady: isUserContext,
-                publicLinkContextReady: isPublicLinkContext
-              },
-              spacesState: { spaces },
-              capabilityState: { capabilities },
-              configState: {
-                options: {
-                  logoutUrl: 'https://account-manager/logout',
-                  ...(accountEditLink && { accountEditLink })
-                }
-              }
-            }
-          })
-        ],
+        plugins,
         mocks,
         provide: mocks,
         stubs: {
