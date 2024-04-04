@@ -170,24 +170,23 @@ export const onSSEProcessingFinishedEvent = async ({
     const sseData = eventSchema.parse(JSON.parse(msg.data))
     console.log(sseData)
 
-    if (sseData.initiatorid === clientStore.clientInitiatorId) {
-      /**
-       * If the request was initiated by the current client (browser tab),
-       * there's no need to proceed with the action since the web already
-       * handles its own business logic. Therefore, we'll return early here.
-       */
-      return
-    }
-
     if (!itemInCurrentFolder({ resourcesStore, parentFolderId: sseData.parentitemid })) {
       return false
     }
     const resource = resourcesStore.resources.find((f) => f.id === sseData.itemid)
 
     /**
-     * Resource not loaded, this indicates an upload for example
+     * If resource is not loaded, it suggests an upload is in progress.
      */
-    if (!!resource) {
+    if (!resource) {
+      if (sseData.initiatorid === clientStore.clientInitiatorId) {
+        /**
+         * If the upload is initiated by the current client,
+         * there's no necessity to retrieve the resources again.
+         */
+        return
+      }
+
       return resourceQueue.add(async () => {
         const { resource } = await clientService.webdav.listFilesById({
           fileId: sseData.itemid
