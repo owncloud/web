@@ -36,6 +36,10 @@ describe('RoleDropdown', () => {
     await wrapper.find(selectors.roleButton).trigger('click')
     expect(wrapper.emitted('optionChange')).toBeTruthy()
   })
+  it('renders a button for each available role', () => {
+    const { wrapper } = getWrapper({ mountType: shallowMount })
+    expect(wrapper.findAll(selectors.roleButton).length).toBe(2)
+  })
 })
 
 function getWrapper({
