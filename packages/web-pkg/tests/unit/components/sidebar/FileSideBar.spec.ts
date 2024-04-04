@@ -1,5 +1,5 @@
 import FileSideBar from '../../../../src/components/SideBar/FileSideBar.vue'
-import { Resource } from '@ownclouders/web-client/src/helpers'
+import { Resource, SpaceResource } from '@ownclouders/web-client/src/helpers'
 import { mock } from 'vitest-mock-extended'
 import {
   defaultComponentMocks,
@@ -47,7 +47,7 @@ describe('FileSideBar', () => {
       expect(wrapper.find(selectors.fileInfoStub).exists()).toBeFalsy()
     })
     it('should not show when selected resource is a project space', async () => {
-      const item = mock<Resource>({ path: '/someFolder', driveType: 'project' })
+      const item = mock<SpaceResource>({ path: '/someFolder', driveType: 'project' })
       const { wrapper } = createWrapper({ item })
       wrapper.vm.loadedResource = item
       await wrapper.vm.$nextTick()
@@ -56,7 +56,7 @@ describe('FileSideBar', () => {
   })
   describe('space info header', () => {
     it('should show when one project space resource selected', async () => {
-      const item = mock<Resource>({ path: '/someFolder', driveType: 'project' })
+      const item = mock<SpaceResource>({ path: '/someFolder', driveType: 'project' })
       const { wrapper } = createWrapper({ item })
       wrapper.vm.loadedResource = item
       await wrapper.vm.$nextTick()

@@ -2,7 +2,11 @@ import { computed } from 'vue'
 import { SpaceAction, SpaceActionOptions } from '../types'
 import { useGettext } from 'vue3-gettext'
 import { useAbility } from '../../ability'
-import { SpaceResource, isProjectSpaceResource } from '@ownclouders/web-client/src/helpers'
+import {
+  SpaceResource,
+  isProjectSpaceResource,
+  isSpaceResource
+} from '@ownclouders/web-client/src/helpers'
 import { QuotaModal } from '../../../components'
 import { useModals } from '../../piniaStores'
 
@@ -45,7 +49,9 @@ export const useSpaceActionsEditQuota = () => {
         if (!resources || !resources.length) {
           return false
         }
-        if (resources.some((r) => !isProjectSpaceResource(r) || r.spaceQuota === false)) {
+        if (
+          resources.some((r) => !isProjectSpaceResource(r) || (isSpaceResource(r) && !r.spaceQuota))
+        ) {
           return false
         }
         return ability.can('set-quota-all', 'Drive')

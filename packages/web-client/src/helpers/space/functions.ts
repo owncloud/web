@@ -1,11 +1,13 @@
 import { User } from '../../generated'
-import { extractDomSelector, extractNodeId, Resource, SpaceRole } from '../resource'
+import { extractDomSelector, extractNodeId, Resource } from '../resource'
 import {
   PublicSpaceResource,
   ShareSpaceResource,
   SpaceResource,
   SHARE_JAIL_ID,
-  OCM_PROVIDER_ID
+  OCM_PROVIDER_ID,
+  SpaceRoles,
+  SpaceRole
 } from './types'
 
 import { DavProperty } from '../../webdav/constants'
@@ -88,7 +90,7 @@ export function buildShareSpaceResource({
   shareName: string
   serverUrl: string
 }): ShareSpaceResource {
-  let id
+  let id: string
   if (driveAliasPrefix === 'ocm-share') {
     id = `${OCM_PROVIDER_ID}$${shareId}!${shareId}`
   } else {
@@ -121,7 +123,7 @@ export function buildSpace(
 ): SpaceResource {
   let spaceImageData: DriveItem, spaceReadmeData: DriveItem
   let disabled = false
-  const spaceRoles: Resource['spaceRoles'] = { viewer: [], editor: [], manager: [] }
+  const spaceRoles: SpaceRoles = { viewer: [], editor: [], manager: [] }
 
   if (data.special) {
     spaceImageData = data.special.find((el) => el.specialFolder.name === 'image')
@@ -202,9 +204,7 @@ export function buildSpace(
     starred: false,
     etag: '',
     shareId: data.shareId?.toString(),
-    shareTypes: (function () {
-      return []
-    })(),
+    shareTypes: [],
     privateLink: '',
     downloadURL: '',
     owner: data.owner?.user,

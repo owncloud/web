@@ -38,7 +38,7 @@
 </template>
 <script lang="ts">
 import { computed, defineComponent, inject, ref, watch, unref } from 'vue'
-import { Resource } from '@ownclouders/web-client/src'
+import { SpaceResource, SpaceRole } from '@ownclouders/web-client/src/helpers'
 import MembersRoleSection from './MembersRoleSection.vue'
 import Fuse from 'fuse.js'
 import Mark from 'mark.js'
@@ -48,11 +48,11 @@ export default defineComponent({
   name: 'MembersPanel',
   components: { MembersRoleSection },
   setup() {
-    const resource = inject<Resource>('resource')
+    const resource = inject<SpaceResource>('resource')
     const filterTerm = ref('')
     const markInstance = ref(null)
     const membersListRef = ref(null)
-    const filterMembers = (collection, term) => {
+    const filterMembers = (collection: Array<SpaceRole & { roleType: string }>, term: string) => {
       if (!(term || '').trim()) {
         return collection
       }

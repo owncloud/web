@@ -2,7 +2,7 @@ import ResolvePublicLink from '../../../src/pages/resolvePublicLink.vue'
 import { defaultPlugins, defaultComponentMocks, shallowMount, nextTicks } from 'web-test-helpers'
 import { mockDeep } from 'vitest-mock-extended'
 import { CapabilityStore, ClientService } from '@ownclouders/web-pkg'
-import { Resource } from '@ownclouders/web-client'
+import { SpaceResource } from '@ownclouders/web-client'
 import { authService } from 'web-runtime/src/services/auth'
 import { useLoadTokenInfo } from '../../../src/composables/tokenInfo'
 import { Task } from 'vue-concurrency'
@@ -75,7 +75,9 @@ function getWrapper({ passwordRequired = false } = {}) {
   })
 
   const $clientService = mockDeep<ClientService>()
-  $clientService.webdav.getFileInfo.mockResolvedValue(mockDeep<Resource>({ driveType: 'public' }))
+  $clientService.webdav.getFileInfo.mockResolvedValue(
+    mockDeep<SpaceResource>({ driveType: 'public' })
+  )
   const mocks = { ...defaultComponentMocks(), $clientService }
 
   const capabilities = {
