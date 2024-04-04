@@ -1,5 +1,11 @@
 import { HttpClient } from '../../../src/http'
-import { ClientService, useAuthStore, useConfigStore, useUserStore } from '../../../src/'
+import {
+  ClientService,
+  useAuthStore,
+  useClientStore,
+  useConfigStore,
+  useUserStore
+} from '../../../src/'
 import { Language } from 'vue3-gettext'
 import { Graph, OCS, client as _client } from '@ownclouders/web-client'
 import { createTestingPinia, writable } from 'web-test-helpers'
@@ -13,6 +19,7 @@ const getClientServiceMock = () => {
   const authStore = useAuthStore()
   const configStore = useConfigStore()
   const userStore = useUserStore()
+  const clientStore = useClientStore()
   writable(configStore).serverUrl = serverUrl
 
   return {
@@ -20,7 +27,8 @@ const getClientServiceMock = () => {
       configStore,
       language: language as Language,
       authStore,
-      userStore
+      userStore,
+      clientStore
     }),
     authStore
   }

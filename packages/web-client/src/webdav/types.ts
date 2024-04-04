@@ -28,6 +28,7 @@ export interface WebDavOptions {
   clientService: any
   language: Ref<string>
   user: Ref<User>
+  clientInitiatorId: Ref<string>
 }
 
 export interface WebDAV {

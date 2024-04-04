@@ -7,7 +7,8 @@ export enum MESSAGE_TYPE {
   FILE_UNLOCKED = 'file-unlocked',
   ITEM_RENAMED = 'item-renamed',
   ITEM_TRASHED = 'item-trashed',
-  ITEM_RESTORED = 'item-restored'
+  ITEM_RESTORED = 'item-restored',
+  FOLDER_CREATED = 'folder-created'
 }
 
 export class RetriableError extends Error {

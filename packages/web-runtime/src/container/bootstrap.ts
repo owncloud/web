@@ -27,7 +27,8 @@ import {
   useResourcesStore,
   ResourcesStore,
   SpacesStore,
-  MessageStore
+  MessageStore,
+  useClientStore
 } from '@ownclouders/web-pkg'
 import { authService } from '../services/auth'
 import {
@@ -60,8 +61,10 @@ import {
   onSSEItemRenamedEvent,
   onSSEProcessingFinishedEvent,
   onSSEItemRestoredEvent,
-  onSSEItemTrashedEvent
+  onSSEItemTrashedEvent,
+  onSSEFolderCreatedEvent
 } from './sse'
+import { ClientStore } from '@ownclouders/web-pkg/src/composables/piniaStores/client'
 
 const getEmbedConfigFromQuery = (
   doesEmbedEnabledOptionExists: boolean
@@ -331,6 +334,7 @@ export const announcePiniaStores = () => {
   const sharesStore = useSharesStore()
   const spacesStore = useSpacesStore()
   const userStore = useUserStore()
+  const clientStore = useClientStore()
 
   return {
     appsStore,
@@ -343,7 +347,8 @@ export const announcePiniaStores = () => {
     modalStore,
     sharesStore,
     spacesStore,
-    userStore
+    userStore,
+    clientStore
   }
 }
 
@@ -388,19 +393,24 @@ export const announceClientService = ({
   configStore,
   userStore,
   authStore,
-  capabilityStore
+  capabilityStore,
+  clientStore
 }: {
   app: App
   configStore: ConfigStore
   userStore: UserStore
   authStore: AuthStore
   capabilityStore: CapabilityStore
+  clientStore: ClientStore
 }): void => {
+  clientStore.setClientInitiatorId(uuidV4())
+
   const clientService = new ClientService({
     configStore,
     language: app.config.globalProperties.$language,
     authStore,
-    userStore
+    userStore,
+    clientStore
   })
   app.config.globalProperties.$clientService = clientService
   app.config.globalProperties.$clientService.webdav = webdav({
@@ -409,6 +419,7 @@ export const announceClientService = ({
     capabilities: computed(() => capabilityStore.capabilities),
     clientService: app.config.globalProperties.$clientService,
     language: computed(() => app.config.globalProperties.$language.current),
+    clientInitiatorId: computed(() => clientStore.clientInitiatorId),
     user: computed(() => userStore.user)
   })
 
@@ -644,6 +655,7 @@ export const registerSSEEventListeners = ({
   language,
   resourcesStore,
   spacesStore,
+  clientStore,
   messageStore,
   clientService,
   previewService,
@@ -653,6 +665,7 @@ export const registerSSEEventListeners = ({
   language: Language
   resourcesStore: ResourcesStore
   spacesStore: SpacesStore
+  clientStore: ClientStore
   messageStore: MessageStore
   clientService: ClientService
   previewService: PreviewService
@@ -675,6 +688,7 @@ export const registerSSEEventListeners = ({
       topic: MESSAGE_TYPE.ITEM_RENAMED,
       resourcesStore,
       spacesStore,
+      clientStore,
       msg,
       clientService,
       router
@@ -686,6 +700,7 @@ export const registerSSEEventListeners = ({
       topic: MESSAGE_TYPE.POSTPROCESSING_FINISHED,
       resourcesStore,
       spacesStore,
+      clientStore,
       msg,
       clientService,
       previewService,
@@ -718,6 +733,7 @@ export const registerSSEEventListeners = ({
       topic: MESSAGE_TYPE.ITEM_TRASHED,
       language,
       resourcesStore,
+      clientStore,
       messageStore,
       msg
     })
@@ -728,6 +744,18 @@ export const registerSSEEventListeners = ({
       topic: MESSAGE_TYPE.ITEM_RESTORED,
       resourcesStore,
       spacesStore,
+      clientStore,
+      msg,
+      clientService
+    })
+  )
+
+  clientService.sseAuthenticated.addEventListener(MESSAGE_TYPE.FOLDER_CREATED, (msg) =>
+    onSSEFolderCreatedEvent({
+      topic: MESSAGE_TYPE.FOLDER_CREATED,
+      resourcesStore,
+      spacesStore,
+      clientStore,
       msg,
       clientService
     })

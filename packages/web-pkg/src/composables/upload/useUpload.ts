@@ -2,7 +2,7 @@ import { computed, unref, watch } from 'vue'
 import { UppyService } from '../../services/uppy/uppyService'
 import { v4 as uuidV4 } from 'uuid'
 import { useGettext } from 'vue3-gettext'
-import { useAuthStore, useCapabilityStore, useConfigStore } from '../piniaStores'
+import { useAuthStore, useCapabilityStore, useClientStore, useConfigStore } from '../piniaStores'
 
 interface UploadOptions {
   uppyService: UppyService
@@ -11,11 +11,15 @@ interface UploadOptions {
 export function useUpload(options: UploadOptions) {
   const configStore = useConfigStore()
   const capabilityStore = useCapabilityStore()
+  const clientStore = useClientStore()
   const { current: currentLanguage } = useGettext()
   const authStore = useAuthStore()
 
   const headers = computed((): { [key: string]: string } => {
-    const headers = { 'Accept-Language': currentLanguage }
+    const headers = {
+      'Accept-Language': currentLanguage,
+      'Initiator-ID': clientStore.clientInitiatorId
+    }
     if (authStore.publicLinkContextReady) {
       const password = authStore.publicLinkPassword
       if (password) {
@@ -42,6 +46,7 @@ export function useUpload(options: UploadOptions) {
         req.setHeader('Authorization', unref(headers).Authorization)
         req.setHeader('X-Request-ID', uuidV4())
         req.setHeader('Accept-Language', unref(headers)['Accept-Language'])
+        req.setHeader('Initiator-ID', unref(headers)['Initiator-ID'])
       },
       headers: (file) =>
         !!file.xhrUpload || file?.isRemote

@@ -27,7 +27,8 @@ export const webdav = (options: WebDavOptions): WebDAV => {
   const dav = new DAV({
     accessToken: options.accessToken,
     baseUrl: options.baseUrl,
-    language: options.language
+    language: options.language,
+    clientInitiatorId: options.clientInitiatorId
   })
 
   const pathForFileIdFactory = GetPathForFileIdFactory(dav, options)

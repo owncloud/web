@@ -18,6 +18,7 @@ interface DAVOptions {
   accessToken: Ref<string>
   baseUrl: string
   language: Ref<string>
+  clientInitiatorId: Ref<string>
 }
 
 interface DavResult {
@@ -31,12 +32,14 @@ export class DAV {
   private client: WebDAVClient
   private davPath: string
   private language: Ref<string>
+  private clientInitiatorId: Ref<string>
 
-  constructor({ accessToken, baseUrl, language }: DAVOptions) {
+  constructor({ accessToken, baseUrl, language, clientInitiatorId }: DAVOptions) {
     this.davPath = urlJoin(baseUrl, 'remote.php/dav')
     this.accessToken = accessToken
     this.client = createClient(this.davPath, {})
     this.language = language
+    this.clientInitiatorId = clientInitiatorId
   }
 
   public mkcol(path: string, { headers = {} }: { headers?: Headers } = {}) {
@@ -166,6 +169,7 @@ export class DAV {
     return {
       'Accept-Language': unref(this.language),
       'Content-Type': 'application/xml; charset=utf-8',
+      'Initiator-ID': unref(this.clientInitiatorId),
       'X-Requested-With': 'XMLHttpRequest',
       'X-Request-ID': uuidV4(),
       ...headers
