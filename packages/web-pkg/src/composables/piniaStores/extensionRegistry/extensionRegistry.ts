@@ -30,8 +30,11 @@ export const useExtensionRegistry = defineStore('extensionRegistry', () => {
     ) as T[]
   }
 
-  const extensionPoints = ref<ExtensionPoint[]>([])
+  const extensionPoints = ref<Ref<ExtensionPoint[]>[]>([])
   const registerExtensionPoint = (e: ExtensionPoint) => {
+    extensionPoints.value.push(ref([e]))
+  }
+  const registerExtensionPoints = (e: Ref<ExtensionPoint[]>) => {
     extensionPoints.value.push(e)
   }
   const getExtensionPoints = <T extends ExtensionPoint>(
@@ -39,12 +42,15 @@ export const useExtensionRegistry = defineStore('extensionRegistry', () => {
       type?: ExtensionType
     } = {}
   ) => {
-    return unref(extensionPoints).filter((e) => {
-      if (Object.hasOwn(options, 'type') && e.type !== options.type) {
-        return false
-      }
-      return true
-    }) as T[]
+    return unref(extensionPoints).flatMap(
+      (e) =>
+        unref(e).filter((e) => {
+          if (Object.hasOwn(options, 'type') && e.type !== options.type) {
+            return false
+          }
+          return true
+        }) as T[]
+    )
   }
 
   return {
@@ -53,6 +59,7 @@ export const useExtensionRegistry = defineStore('extensionRegistry', () => {
     requestExtensions,
     extensionPoints,
     registerExtensionPoint,
+    registerExtensionPoints,
     getExtensionPoints
   }
 })
