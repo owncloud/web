@@ -29,14 +29,14 @@ export const useSpaceActionsEditReadmeContent = () => {
       })
 
       const { data: updatedDriveData } = await clientService.graphAuthenticated.drives.updateDrive(
-        resources[0].id as string,
+        resources[0].id,
         {
           special: [
             {
               specialFolder: {
                 name: 'readme'
               },
-              id: markdownResource.id as string
+              id: markdownResource.id
             }
           ]
         } as Drive,
