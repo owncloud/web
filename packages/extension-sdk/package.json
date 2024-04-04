@@ -19,7 +19,7 @@
     "rollup-plugin-serve": "^2.0.2"
   },
   "peerDependencies": {
-    "vite": "^5.0.0",
+    "vite": "^5",
     "sass": "^1.62.1"
   }
 }
