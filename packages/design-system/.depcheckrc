@@ -6,7 +6,6 @@
     "stylelint-config-standard",
     "stylelint-config-sass-guidelines",
     "style-loader",
-    "postcss-url",
     "postcss-import"
   ],
   "ignorePatterns": [
