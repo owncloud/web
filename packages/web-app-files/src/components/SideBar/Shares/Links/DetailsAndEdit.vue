@@ -37,6 +37,7 @@
         v-if="linkShare.hasPassword"
         v-oc-tooltip="passwortProtectionTooltip"
         name="lock-password"
+        class="oc-files-file-link-has-password"
         fill-type="line"
         :aria-label="passwortProtectionTooltip"
       />
