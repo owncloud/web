@@ -51,6 +51,6 @@
     "vue-concurrency": "5.0.0",
     "vue-router": "4.2.5",
     "vue3-gettext": "2.4.0",
-    "vitest": "1.2.1"
+    "vitest": "1.4.0"
   }
 }
