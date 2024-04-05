@@ -37,7 +37,7 @@ export const useFileActionsEnableSync = () => {
               remoteItem: { id: resource.fileId }
             })
 
-            updateResourceField<IncomingShareResource, any>({
+            updateResourceField<IncomingShareResource>({
               id: resource.id,
               field: 'syncEnabled',
               value: true

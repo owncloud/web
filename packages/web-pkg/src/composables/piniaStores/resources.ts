@@ -77,16 +77,16 @@ export const useResourcesStore = defineStore('resources', () => {
     resources.value = [...other, ...values]
   }
 
-  const updateResourceField = <T extends Resource, K extends keyof Resource>({
+  const updateResourceField = <T extends Resource>({
     id,
     field,
     value
   }: {
     id: T['id']
-    field: K
-    value: T[K]
+    field: keyof T
+    value: T[keyof T]
   }) => {
-    const resource = unref(resources).find((resource) => id === resource.id)
+    const resource = unref(resources).find((resource) => id === resource.id) as T
     if (resource) {
       resource[field] = value
     }

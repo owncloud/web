@@ -151,7 +151,7 @@ export default defineComponent({
           })
         }
         spacesStore.updateSpaceField({ id: space.id, field: 'spaceQuota', value: driveData.quota })
-        updateResourceField<SpaceResource, any>({
+        updateResourceField<SpaceResource>({
           id: space.id,
           field: 'spaceQuota',
           value: driveData.quota
