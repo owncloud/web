@@ -78,7 +78,7 @@
                   width="33"
                   height="33"
                 />
-                <oc-resource-icon v-else class="oc-mr-s" :resource="resource" />
+                <resource-icon v-else class="oc-mr-s" :resource="resource" />
               </template>
             </template>
             <template #actions="{ resource }">

@@ -130,8 +130,9 @@ export default defineComponent({
       const dateCurrent = DateTime.fromJSDate(val)
         .setLocale(getLocaleFromLanguage(language.current))
         .endOf('day')
+
       emit('optionChange', {
-        expirationDate: dateCurrent.isValid ? dateCurrent : null
+        expirationDate: dateCurrent.isValid ? dateCurrent.toString() : null
       })
     })
 

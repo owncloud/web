@@ -226,7 +226,7 @@ export default defineComponent({
     )
 
     const dateExpire = computed(() => {
-      return formatRelativeDateFromDateTime(
+      return formatDateFromDateTime(
         DateTime.fromISO(props.linkShare.expirationDateTime).endOf('day'),
         current
       )
@@ -322,7 +322,7 @@ export default defineComponent({
       if (this.linkShare.expirationDateTime) {
         result.push({
           id: 'edit-expiration',
-          title: this.$gettext('Expires %{expires}', { expires: this.dateExpire }),
+          title: this.$gettext('Expires %{expires}', { expires: this.expirationDateRelative }),
           method: () => {
             this.$emit('updateLink', {
               linkShare: { ...this.linkShare, expirationDateTime: this.dateExpire }
@@ -434,13 +434,6 @@ export default defineComponent({
       )
     },
 
-    localExpirationDate() {
-      return formatDateFromDateTime(
-        DateTime.fromISO(this.linkShare.expirationDateTime).endOf('day'),
-        this.$language.current
-      )
-    },
-
     expirationDateRelative() {
       return formatRelativeDateFromDateTime(
         DateTime.fromISO(this.linkShare.expirationDateTime).endOf('day'),
@@ -451,7 +444,7 @@ export default defineComponent({
     expirationDateTooltip() {
       return this.$gettext(
         'Expires %{timeToExpiry} (%{expiryDate})',
-        { timeToExpiry: this.expirationDateRelative, expiryDate: this.localExpirationDate },
+        { timeToExpiry: this.expirationDateRelative, expiryDate: this.dateExpire },
         true
       )
     },
@@ -488,7 +481,10 @@ export default defineComponent({
   },
   watch: {
     newExpiration(expirationDateTime: string) {
-      this.$emit('updateLink', { linkShare: { ...this.linkShare, expirationDateTime } })
+      const date = DateTime.fromJSDate(expirationDateTime)
+      this.$emit('updateLink', {
+        linkShare: { ...this.linkShare, expirationDateTime: date.toString() }
+      })
     }
   },
   methods: {
