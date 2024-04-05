@@ -164,7 +164,7 @@ export default defineComponent({
     })
 
     const shouldDisplayThumbnails = (resource: Resource) => {
-      return !isResourceTxtFileAlmostEmpty(resource)
+      return resource.thumbnail && !isResourceTxtFileAlmostEmpty(resource)
     }
 
     return {
