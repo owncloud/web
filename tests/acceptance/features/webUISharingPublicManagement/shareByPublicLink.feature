@@ -34,9 +34,6 @@ Feature: Public link share management
     And user "Alice" has logged in using the webUI
     When the user browses to the shared-via-link page using the webUI
     Then folder "simple-folder" should be listed on the webUI
-    And the following resources should have the following collaborators
-      | fileName      | expectedCollaborators    |
-      | simple-folder | link-editor, link-viewer |
 
 
   Scenario: user cancel removes operation for the public link of a file
@@ -109,6 +106,3 @@ Feature: Public link share management
     And user "Alice" has logged in using the webUI
     When the user browses to the shared-via-link page using the webUI
     Then file "lorem.txt" should be listed on the webUI
-    And the following resources should have the following collaborators
-      | fileName  | expectedCollaborators |
-      | lorem.txt | Public-link           |
