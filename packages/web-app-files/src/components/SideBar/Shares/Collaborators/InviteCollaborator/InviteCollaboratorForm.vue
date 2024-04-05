@@ -289,8 +289,18 @@ export default defineComponent({
       )
       const { data: groupData } = yield client.groups.listGroups('displayName', null, `"${query}"`)
 
-      autocompleteResults.value = [...userData.value, ...groupData.value]
-        .filter((collaborator: CollaboratorAutoCompleteItem) => {
+      const users = (userData.value || []).map((u) => ({
+        ...u,
+        shareType: ShareTypes.user.value
+      })) as CollaboratorAutoCompleteItem[]
+
+      const groups = (groupData.value || []).map((u) => ({
+        ...u,
+        shareType: ShareTypes.group.value
+      })) as CollaboratorAutoCompleteItem[]
+
+      autocompleteResults.value = [...users, ...groups].filter(
+        (collaborator: CollaboratorAutoCompleteItem) => {
           if (collaborator.id === userStore.user.id) {
             // filter current user
             return false
@@ -307,13 +317,8 @@ export default defineComponent({
           announcement.value = $gettext('Person was added')
 
           return true
-        })
-        .map((collaborator) => ({
-          ...collaborator,
-          shareType: Object.hasOwn(collaborator, 'mail')
-            ? ShareTypes.user.value
-            : ShareTypes.group.value
-        })) satisfies CollaboratorAutoCompleteItem[]
+        }
+      )
       searchInProgress.value = false
     }).restartable()
 
