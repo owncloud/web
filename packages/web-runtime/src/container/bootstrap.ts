@@ -62,7 +62,8 @@ import {
   onSSEProcessingFinishedEvent,
   onSSEItemRestoredEvent,
   onSSEItemTrashedEvent,
-  onSSEFolderCreatedEvent
+  onSSEFolderCreatedEvent,
+  onSSEFileTouchedEvent
 } from './sse'
 import { ClientStore } from '@ownclouders/web-pkg/src/composables/piniaStores/client'
 
@@ -753,6 +754,28 @@ export const registerSSEEventListeners = ({
   clientService.sseAuthenticated.addEventListener(MESSAGE_TYPE.FOLDER_CREATED, (msg) =>
     onSSEFolderCreatedEvent({
       topic: MESSAGE_TYPE.FOLDER_CREATED,
+      resourcesStore,
+      spacesStore,
+      clientStore,
+      msg,
+      clientService
+    })
+  )
+
+  clientService.sseAuthenticated.addEventListener(MESSAGE_TYPE.FOLDER_CREATED, (msg) =>
+    onSSEFolderCreatedEvent({
+      topic: MESSAGE_TYPE.FOLDER_CREATED,
+      resourcesStore,
+      spacesStore,
+      clientStore,
+      msg,
+      clientService
+    })
+  )
+
+  clientService.sseAuthenticated.addEventListener(MESSAGE_TYPE.FILE_TOUCHED, (msg) =>
+    onSSEFileTouchedEvent({
+      topic: MESSAGE_TYPE.FILE_TOUCHED,
       resourcesStore,
       spacesStore,
       clientStore,

@@ -161,6 +161,7 @@ export const onSSEProcessingFinishedEvent = async ({
   topic: string
   resourcesStore: ResourcesStore
   spacesStore: SpacesStore
+  clientStore: ClientStore
   msg: MessageEvent
   clientService: ClientService
   resourceQueue: PQueue
@@ -168,7 +169,6 @@ export const onSSEProcessingFinishedEvent = async ({
 }) => {
   try {
     const sseData = eventSchema.parse(JSON.parse(msg.data))
-    console.log(sseData)
 
     if (!itemInCurrentFolder({ resourcesStore, parentFolderId: sseData.parentitemid })) {
       return false
@@ -325,6 +325,61 @@ export const onSSEItemRestoredEvent = async ({
         ancestorMetaData: resourcesStore.ancestorMetaData
       })
     })
+  } catch (e) {
+    console.error(`Unable to parse sse event ${topic} data`, e)
+  }
+}
+
+/**
+ * The FileTouched event is triggered when a new empty file, such as a new text file,
+ * is about to be created on the server. This event is necessary because the
+ * post-processing event won't be triggered in this case.
+ */
+export const onSSEFileTouchedEvent = async ({
+  topic,
+  resourcesStore,
+  spacesStore,
+  clientStore,
+  msg,
+  clientService
+}: {
+  topic: string
+  resourcesStore: ResourcesStore
+  spacesStore: SpacesStore
+  clientStore: ClientStore
+  msg: MessageEvent
+  clientService: ClientService
+}) => {
+  try {
+    const sseData = eventSchema.parse(JSON.parse(msg.data))
+
+    if (sseData.initiatorid === clientStore.clientInitiatorId) {
+      /**
+       * If the request was initiated by the current client (browser tab),
+       * there's no need to proceed with the action since the web already
+       * handles its own business logic. Therefore, we'll return early here.
+       */
+      return
+    }
+
+    const space = spacesStore.spaces.find((space) => space.id === sseData.spaceid)
+    if (!space) {
+      return
+    }
+
+    const resource = await clientService.webdav.getFileInfo(space, {
+      fileId: sseData.itemid
+    })
+
+    if (!resource) {
+      return
+    }
+
+    if (!itemInCurrentFolder({ resourcesStore, parentFolderId: resource.parentFolderId })) {
+      return false
+    }
+
+    resourcesStore.upsertResource(resource)
   } catch (e) {
     console.error(`Unable to parse sse event ${topic} data`, e)
   }
