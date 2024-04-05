@@ -91,7 +91,9 @@ import {
   useRouteMeta,
   useSpacesStore,
   useRouter,
-  FolderViewModeConstants
+  FolderViewModeConstants,
+  useExtensionRegistry,
+  ActionExtension
 } from '../../composables'
 import { BreadcrumbItem } from 'design-system/src/components/OcBreadcrumb/types'
 import { useActiveLocation } from '../../composables'
@@ -151,6 +153,7 @@ export default defineComponent({
     const { $gettext } = useGettext()
     const { can } = useAbility()
     const router = useRouter()
+    const { requestExtensions } = useExtensionRegistry()
 
     const resourcesStore = useResourcesStore()
     const { selectedResources } = storeToRefs(resourcesStore)
@@ -205,6 +208,13 @@ export default defineComponent({
           ...unref(deleteSpaceActions),
           ...unref(disableSpaceActions)
         ] as FileAction[]
+      }
+
+      const actionExtensions = requestExtensions<ActionExtension>('action', {
+        extensionPointIds: ['app.files.batch-actions']
+      })
+      if (actionExtensions.length) {
+        actions = [...actions, ...actionExtensions.map((e) => e.action)]
       }
 
       return actions.filter((item) =>

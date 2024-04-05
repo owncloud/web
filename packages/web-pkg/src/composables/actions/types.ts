@@ -6,6 +6,7 @@ import { IconFillType } from '../../helpers'
 export type ActionOptions = Record<string, unknown | unknown[]>
 export interface Action<T = ActionOptions> {
   name: string
+  category?: 'context' | 'share' | 'actions' | 'sidebar'
   icon: string
   iconFillType?: IconFillType
   variation?: string

@@ -469,7 +469,7 @@ export default defineComponent({
           ) {
             return false
           }
-          const extensions = extensionRegistry.requestExtensions(extensionPoint.type, {
+          const extensions = extensionRegistry.requestExtensions(extensionPoint.extensionType, {
             extensionPointIds: [extensionPoint.id]
           })
           return !!extensions.length

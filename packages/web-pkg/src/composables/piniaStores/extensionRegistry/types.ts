@@ -7,7 +7,7 @@ import { Component, Slot } from 'vue'
 import { StringUnionOrAnyString } from '../../../utils'
 
 export type ExtensionType = StringUnionOrAnyString<
-  'action' | 'search' | 'sidebarNav' | 'sidebarPanel' | 'folderView' | 'customComponent'
+  'action' | 'customComponent' | 'folderView' | 'search' | 'sidebarNav' | 'sidebarPanel'
 >
 
 export type ExtensionScope = StringUnionOrAnyString<'resource' | 'user' | 'group'>
@@ -63,7 +63,7 @@ export type Extension =
 
 export type ExtensionPoint = {
   id: string
-  type: ExtensionType
+  extensionType: ExtensionType
   multiple?: boolean
   defaultExtensionId?: string
   userPreference?: {

@@ -94,14 +94,14 @@ describe('useExtensionRegistry', () => {
       it('if no matching extension points are found', () => {
         const extensionPoint = mock<ExtensionPoint>({
           id: 'foo-1',
-          type: 'customComponent'
+          extensionType: 'customComponent'
         })
 
         getWrapper({
           setup: (instance) => {
             instance.registerExtensionPoint(extensionPoint)
 
-            const result = instance.getExtensionPoints({ type: 'customComponent' })
+            const result = instance.getExtensionPoints({ extensionType: 'customComponent' })
             expect(result.length).toBe(1)
           }
         })
@@ -112,15 +112,15 @@ describe('useExtensionRegistry', () => {
       const extensionPoints = [
         mock<ExtensionPoint>({
           id: 'foo-1',
-          type: 'customComponent'
+          extensionType: 'customComponent'
         }),
         mock<ExtensionPoint>({
           id: 'foo-2',
-          type: 'sidebarPanel'
+          extensionType: 'sidebarPanel'
         }),
         mock<ExtensionPoint>({
           id: ' foo-3',
-          type: 'customComponent'
+          extensionType: 'customComponent'
         })
       ]
 
@@ -128,10 +128,10 @@ describe('useExtensionRegistry', () => {
         setup: (instance) => {
           extensionPoints.forEach((ep) => instance.registerExtensionPoint(ep))
 
-          const result1 = instance.getExtensionPoints({ type: 'customComponent' })
+          const result1 = instance.getExtensionPoints({ extensionType: 'customComponent' })
           expect(result1.map((ep) => ep.id)).toEqual([extensionPoints[0].id, extensionPoints[2].id])
 
-          const result2 = instance.getExtensionPoints({ type: 'sidebarPanel' })
+          const result2 = instance.getExtensionPoints({ extensionType: 'sidebarPanel' })
           expect(result2.map((ep) => ep.id)).toEqual([extensionPoints[1].id])
         }
       })

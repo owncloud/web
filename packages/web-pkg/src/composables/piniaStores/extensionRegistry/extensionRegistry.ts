@@ -39,13 +39,16 @@ export const useExtensionRegistry = defineStore('extensionRegistry', () => {
   }
   const getExtensionPoints = <T extends ExtensionPoint>(
     options: {
-      type?: ExtensionType
+      extensionType?: ExtensionType
     } = {}
   ) => {
     return unref(extensionPoints).flatMap(
       (e) =>
         unref(e).filter((e) => {
-          if (Object.hasOwn(options, 'type') && e.type !== options.type) {
+          if (
+            Object.hasOwn(options, 'extensionType') &&
+            e.extensionType !== options.extensionType
+          ) {
             return false
           }
           return true

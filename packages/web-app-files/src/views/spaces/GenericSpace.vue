@@ -203,6 +203,7 @@ import {
 } from 'web-app-files/src/composables/keyboardActions'
 import { storeToRefs } from 'pinia'
 import { ComponentPublicInstance } from 'vue'
+import { folderViewsFolder } from '../../extensionPoints'
 
 const visibilityObserver = new VisibilityObserver()
 
@@ -273,7 +274,9 @@ export default defineComponent({
     const viewModes = computed(() => {
       return [
         ...extensionRegistry
-          .requestExtensions<FolderViewExtension>('folderView', { scopes: ['resource'] })
+          .requestExtensions<FolderViewExtension>('folderView', {
+            extensionPointIds: [folderViewsFolder]
+          })
           .map((e) => e.folderView)
       ]
     })

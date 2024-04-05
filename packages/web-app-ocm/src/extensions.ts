@@ -52,13 +52,17 @@ export const extensions = () => {
         {
           id: 'com.github.owncloud.web.open-file-remote',
           type: 'action',
-          scopes: ['resource', 'resource.context-menu'],
+          extensionPointIds: ['app.files.context-actions'],
           action: {
             name: 'open-file-remote',
+            category: 'actions',
             icon: 'remote-control',
             handler,
             label: () => $gettext('Open remotely'),
             isVisible: ({ resources }: FileActionOptions) => {
+              if (!resources?.length) {
+                return false
+              }
               return (
                 configStore.options.ocm.openRemotely &&
                 resources[0]?.storageId?.startsWith(OCM_PROVIDER_ID)

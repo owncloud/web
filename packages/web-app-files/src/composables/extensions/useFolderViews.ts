@@ -1,6 +1,10 @@
-import { FolderViewExtension } from '@ownclouders/web-pkg'
+import { FolderViewExtension, ResourceTable, ResourceTiles } from '@ownclouders/web-pkg'
 import { useGettext } from 'vue3-gettext'
-import { ResourceTable, ResourceTiles } from '@ownclouders/web-pkg'
+import {
+  folderViewsFavorites,
+  folderViewsFolder,
+  folderViewsProjectSpaces
+} from '../../extensionPoints'
 
 export const useFolderViews = (): FolderViewExtension[] => {
   const { $gettext } = useGettext()
@@ -9,7 +13,7 @@ export const useFolderViews = (): FolderViewExtension[] => {
     {
       id: 'com.github.owncloud.web.files.folder-view.resource-table',
       type: 'folderView',
-      scopes: ['resource', 'space', 'favorite'],
+      extensionPointIds: [folderViewsFolder, folderViewsProjectSpaces, folderViewsFavorites],
       folderView: {
         name: 'resource-table',
         label: $gettext('Switch to default table view'),
@@ -23,7 +27,7 @@ export const useFolderViews = (): FolderViewExtension[] => {
     {
       id: 'com.github.owncloud.web.files.folder-view.resource-table-condensed',
       type: 'folderView',
-      scopes: ['resource'],
+      extensionPointIds: [folderViewsFolder],
       folderView: {
         name: 'resource-table-condensed',
         label: $gettext('Switch to condensed table view'),
@@ -37,7 +41,7 @@ export const useFolderViews = (): FolderViewExtension[] => {
     {
       id: 'com.github.owncloud.web.files.folder-view.resource-tiles',
       type: 'folderView',
-      scopes: ['resource', 'space', 'favorite'],
+      extensionPointIds: [folderViewsFolder, folderViewsProjectSpaces, folderViewsFavorites],
       folderView: {
         name: 'resource-tiles',
         label: $gettext('Switch to tiles view'),

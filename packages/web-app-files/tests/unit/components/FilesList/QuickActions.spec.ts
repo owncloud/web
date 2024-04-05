@@ -5,6 +5,7 @@ import { useExtensionRegistry } from '@ownclouders/web-pkg'
 import { mock } from 'vitest-mock-extended'
 import { ref } from 'vue'
 import { Resource } from '@ownclouders/web-client'
+import { quickActionsExtensionPointId } from '../../../../src/extensionPoints'
 
 vi.mock('@ownclouders/web-pkg', async (importOriginal) => ({
   ...(await importOriginal<any>()),
@@ -20,7 +21,7 @@ const collaboratorAction = {
   label: () => 'Add people'
 }
 
-const quicklinkAction = {
+const quickLinkAction = {
   isVisible: vi.fn(() => false),
   handler: vi.fn(),
   icon: 'link-add',
@@ -89,8 +90,14 @@ function getWrapper({ embedModeEnabled = false } = {}) {
 
   const { requestExtensions } = useExtensionRegistry()
   vi.mocked(requestExtensions).mockReturnValue([
-    mock<ActionExtension>({ scopes: ['resource.quick-action'], action: collaboratorAction }),
-    mock<ActionExtension>({ scopes: ['resource.quick-action'], action: quicklinkAction })
+    mock<ActionExtension>({
+      extensionPointIds: [quickActionsExtensionPointId],
+      action: collaboratorAction
+    }),
+    mock<ActionExtension>({
+      extensionPointIds: [quickActionsExtensionPointId],
+      action: quickLinkAction
+    })
   ])
 
   return {

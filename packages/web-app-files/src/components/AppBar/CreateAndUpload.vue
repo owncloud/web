@@ -228,6 +228,7 @@ import { ActionExtension, useExtensionRegistry } from '@ownclouders/web-pkg'
 import { Action, ResourceIcon } from '@ownclouders/web-pkg'
 import { v4 as uuidv4 } from 'uuid'
 import { storeToRefs } from 'pinia'
+import { uploadMenuExtensionPointId } from '../../extensionPoints'
 
 export default defineComponent({
   components: {
@@ -319,7 +320,9 @@ export default defineComponent({
     const extensionActions = computed(() => {
       return [
         ...extensionRegistry
-          .requestExtensions<ActionExtension>('action', { scopes: ['upload-menu'] })
+          .requestExtensions<ActionExtension>('action', {
+            extensionPointIds: [uploadMenuExtensionPointId]
+          })
           .map((e) => e.action)
       ].filter((e) => e.isVisible())
     })

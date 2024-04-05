@@ -4,16 +4,13 @@
 
 <script lang="ts">
 import ContextActionMenu from '../ContextActions/ContextActionMenu.vue'
-
-import {
-  useFileActionsOpenShortcut,
-  ActionExtension,
-  useExtensionRegistry,
-  useFileActionsToggleHideShare
-} from '../../composables'
 import { computed, defineComponent, PropType, Ref, toRef, unref } from 'vue'
-
 import {
+  ActionExtension,
+  FileActionOptions,
+  useExtensionRegistry,
+  useFileActionsOpenShortcut,
+  useFileActionsToggleHideShare,
   useFileActionsCopyQuickLink,
   useFileActionsPaste,
   useFileActionsShowDetails,
@@ -34,9 +31,8 @@ import {
   useFileActionsCreateSpaceFromResource,
   useFileActionsSetReadme,
   useFileActions
-} from '../../composables/actions/files'
-
-import { FileActionOptions } from '../../composables/actions'
+} from '../../composables'
+import { isNil } from 'lodash-es'
 
 export default defineComponent({
   name: 'ContextActions',
@@ -73,14 +69,24 @@ export default defineComponent({
     const { actions: openShortcutActions } = useFileActionsOpenShortcut()
 
     const extensionRegistry = useExtensionRegistry()
-    const extensionContextActions = computed(() => {
+    const extensionsContextActions = computed(() => {
       return extensionRegistry
-        .requestExtensions<ActionExtension>('action', { scopes: ['resource.context-menu'] })
+        .requestExtensions<ActionExtension>('action', {
+          extensionPointIds: ['app.files.context-actions']
+        })
+        .map((e) => e.action)
+    })
+    const extensionsBatchActions = computed(() => {
+      return extensionRegistry
+        .requestExtensions<ActionExtension>('action', {
+          extensionPointIds: ['app.files.batch-actions']
+        })
         .map((e) => e.action)
     })
 
     // type cast to make vue-tsc aware of the type
     const actionOptions = toRef(props, 'actionOptions') as Ref<FileActionOptions>
+
     const menuItemsBatchActions = computed(() =>
       [
         ...unref(enableSyncActions),
@@ -91,22 +97,35 @@ export default defineComponent({
         ...unref(emptyTrashBinActions),
         ...unref(deleteActions),
         ...unref(restoreActions),
-        ...unref(createSpaceFromResourceActions)
+        ...unref(createSpaceFromResourceActions),
+        ...unref(extensionsBatchActions).filter(
+          (a) => a.category === 'actions' || isNil(a.category)
+        )
+      ].filter((item) => item.isVisible(unref(actionOptions)))
+    )
+    const menuItemsBatchSideBar = computed(() =>
+      [
+        ...unref(showDetailsActions),
+        ...unref(extensionsBatchActions).filter((a) => a.category === 'sidebar')
       ].filter((item) => item.isVisible(unref(actionOptions)))
     )
 
     const menuItemsContext = computed(() => {
-      const fileHandlers = [...unref(openShortcutActions), ...unref(editorActions)]
-
-      return [...fileHandlers]
+      return [
+        ...unref(openShortcutActions),
+        ...unref(editorActions),
+        ...unref(extensionsContextActions).filter((a) => a.category === 'context')
+      ]
         .filter((item) => item.isVisible(unref(actionOptions)))
         .sort((x, y) => Number(y.hasPriority) - Number(x.hasPriority))
     })
 
     const menuItemsShare = computed(() => {
-      return [...unref(showSharesActions), ...unref(createQuickLinkActions)].filter((item) =>
-        item.isVisible(unref(actionOptions))
-      )
+      return [
+        ...unref(showSharesActions),
+        ...unref(createQuickLinkActions),
+        ...unref(extensionsContextActions).filter((a) => a.category === 'share')
+      ].filter((item) => item.isVisible(unref(actionOptions)))
     })
 
     const menuItemsActions = computed(() => {
@@ -125,19 +144,21 @@ export default defineComponent({
         ...unref(hideShareActions),
         ...unref(setSpaceImageActions),
         ...unref(setSpaceReadmeActions),
-        ...unref(extensionContextActions)
+        ...unref(extensionsContextActions).filter(
+          (a) => a.category === 'actions' || isNil(a.category)
+        )
       ].filter((item) => item.isVisible(unref(actionOptions)))
     })
 
     const menuItemsSidebar = computed(() => {
-      const fileHandlers = [...unref(navigateActions)]
       return [
         ...unref(favoriteActions).map((action) => {
           action.keepOpen = true
           return action
         }),
-        ...fileHandlers,
-        ...unref(showDetailsActions)
+        ...unref(navigateActions),
+        ...unref(showDetailsActions),
+        ...unref(extensionsContextActions).filter((a) => a.category === 'sidebar')
       ].filter((item) => item.isVisible(unref(actionOptions)))
     })
 
@@ -152,7 +173,7 @@ export default defineComponent({
         }
         sections.push({
           name: 'batch-details',
-          items: [...unref(showDetailsActions)]
+          items: [...unref(menuItemsBatchSideBar)]
         })
         return sections
       }

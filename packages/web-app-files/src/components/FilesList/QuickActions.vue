@@ -20,6 +20,7 @@ import { computed, defineComponent, PropType } from 'vue'
 import { ActionExtension, useEmbedMode, useExtensionRegistry } from '@ownclouders/web-pkg'
 import { Resource, SpaceResource } from '@ownclouders/web-client'
 import { unref } from 'vue'
+import { quickActionsExtensionPointId } from '../../extensionPoints'
 
 export default defineComponent({
   name: 'QuickActions',
@@ -39,7 +40,9 @@ export default defineComponent({
 
     const filteredActions = computed(() => {
       return unref(extensionRegistry)
-        .requestExtensions<ActionExtension>('action', { scopes: ['resource.quick-action'] })
+        .requestExtensions<ActionExtension>('action', {
+          extensionPointIds: [quickActionsExtensionPointId]
+        })
         .map((e) => e.action)
         .filter(({ isVisible }) => isVisible({ space: props.space, resources: [props.item] }))
     })

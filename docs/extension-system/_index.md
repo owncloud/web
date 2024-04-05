@@ -96,7 +96,7 @@ In contrast to applications, extensions usually have a rather small scope and de
 
 The globally available extension registry provided by the ownCloud Web runtime can be used to both register and query extensions. All extensions
 which are being made available via an `app` get registered in the extension registry automatically. In your custom application code you can
-then query any of the available extensions by providing a `type` string and optionally a list of `scopes`. Throughout the ownCloud Web platform
+then query any of the available extensions by providing a `type` string and optionally a list of `extensionPointIds`. Throughout the ownCloud Web platform
 and most prominently also in the `files` app we have defined some extension points which automatically use certain extensions, see the 
 `Extension Points` section below.
 
@@ -104,8 +104,8 @@ and most prominently also in the `files` app we have defined some extension poin
 
 For building an extension you can choose from the types predefined by the ownCloud Web extension system. See the full list of available extension types below.
 
-1. `ActionExtension` (type `action`) - An extension that can register `Action` items which then get shown in various places (e.g. context menus, batch actions), depending on their 
-respective scope. Most commonly used for file and folder actions (e.g. copy, rename, delete, etc.). For details, please refer to the [action docs]({{< ref "extension-types/actions.md" >}})
+1. `ActionExtension` (type `action`) - An extension that can register `Action` items which then get shown in various places (e.g. context menus, batch actions), depending on the 
+extension points defined in the extension respectively. Most commonly used for file and folder actions (e.g. copy, rename, delete, etc.). For details, please refer to the [action docs]({{< ref "extension-types/actions.md" >}})
 2. `SearchExtension` (type `search`) - An extension that can register additional search providers. For details, please refer to the [search docs]({{< ref "extension-types/search.md" >}})
 3. `SidebarNavExtension` (type `sidebarNav`) - An extension that can register additional navigation items to the left sidebar. These can be scoped to specific apps, and programmatically enabled/disabled.
 For details, please refer to the [sidebar nav docs]({{< ref "extension-types/left-sidebar-menu-item.md" >}})
@@ -134,17 +134,22 @@ You can find predefined extension point ids in the extension points section belo
 #### Extension Points
 
 There are standardized components and places where extensions are being used automatically. The following are the ones that are currently provided
-by the ownCloud Web runtime or the `files` app.
+by the ownCloud Web runtime or the `files` app. If you decide to develop an extension which fulfills the type and allows the extensionPointId of the respective extension point, 
+your extension will be used automatically. 
 
 1. Left Sidebar for Navigation
-2. Right Sidebar in any file(s) context 
-3. Folder Views in the files app 
-4. Right click context menu in the files app 
-5. Batch actions in the files app
-6. Upload menu in the files app 
-7. Quick actions in the files list of the files app
-8. Search results in the search app
-9. Global progress bar for the global loading state. Extension point id `app.runtime.global-progress-bar`. Allows to render a single custom component.
+2. Any file(s) context (files app, viewer apps, editor apps)
+   1. Right sidebar. ExtensionPointId `app.files.sidebar`. Mounts extensions of type `sidebarPanel`. 
+3. Files app
+   1. Folder views for regular folders. ExtensionPointId `app.files.folder-views.folder`.
+   2. Folder views for the project spaces overview. ExtensionPointId `app.files.folder-views.project-spaces`.
+   3. Folder views for the favorites page. ExtensionPointId `app.files.folder-views.favorites`.
+   4. Right click context menu. ExtensionPointId `app.files.context-actions`.
+   5. Batch actions in the app bar above file lists. ExtensionPointId `app.files.batch-actions`.
+   6. Upload menu. ExtensionPointId `app.files.upload-menu`.
+   7. Quick actions. ExtensionPointId `app.files.quick-actions`.
+4. Search results in the search app
+5. Global progress bar for the global loading state. ExtensionPointId `app.runtime.global-progress-bar`. Mounts a single extensions of type `customComponent`.
 
 #### User Preferences for Extensions
 

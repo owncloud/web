@@ -1,15 +1,16 @@
 import {
   Extension,
-  useRouter,
-  useSearch,
-  useFileActionsShowShares,
+  useCapabilityStore,
   useFileActionsCopyQuickLink,
-  useCapabilityStore
+  useFileActionsShowShares,
+  useRouter,
+  useSearch
 } from '@ownclouders/web-pkg'
 import { computed, unref } from 'vue'
 import { SDKSearch } from './search'
 import { useSideBarPanels } from './composables/extensions/useFileSideBars'
 import { useFolderViews } from './composables/extensions/useFolderViews'
+import { quickActionsExtensionPointId } from './extensionPoints'
 
 export const extensions = () => {
   const capabilityStore = useCapabilityStore()
@@ -34,13 +35,13 @@ export const extensions = () => {
         },
         {
           id: 'com.github.owncloud.web.files.quick-action.collaborator',
-          scopes: ['resource', 'resource.quick-action'],
+          extensionPointIds: [quickActionsExtensionPointId],
           type: 'action',
           action: unref(showSharesActions)[0]
         },
         {
           id: 'com.github.owncloud.web.files.quick-action.quicklink',
-          scopes: ['resource', 'resource.quick-action'],
+          extensionPointIds: [quickActionsExtensionPointId],
           type: 'action',
           action: unref(quickLinkActions)[0]
         }

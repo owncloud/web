@@ -23,6 +23,7 @@ import { AppNavigationItem } from '@ownclouders/web-pkg'
 import SearchResults from '../../web-app-search/src/views/List.vue'
 import { isPersonalSpaceResource, isShareSpaceResource } from '@ownclouders/web-client'
 import { ComponentCustomProperties } from 'vue'
+import { extensionPoints } from './extensionPoints'
 
 // just a dummy function to trick gettext tools
 function $gettext(msg: string) {
@@ -35,7 +36,8 @@ const appInfo: ApplicationInformation = {
   icon: 'resource-type-folder',
   color: 'var(--oc-color-swatch-primary-muted)',
   isFileEditor: false,
-  extensions: []
+  extensions: [],
+  extensionPoints: []
 }
 
 export const navItems = (context: ComponentCustomProperties): AppNavigationItem[] => {
@@ -158,7 +160,8 @@ export default defineWebApplication({
       }),
       navItems,
       translations,
-      extensions: extensions()
+      extensions: extensions(),
+      extensionPoints: extensionPoints()
     }
   }
 })

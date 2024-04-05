@@ -11,7 +11,7 @@ import {
 } from 'web-test-helpers'
 import { ArchiverService } from '../../../../src/services'
 import { FolderView } from '../../../../src/ui/types'
-import { ViewOptions } from '../../../../src'
+import { useExtensionRegistry, ViewOptions } from '../../../../src'
 import { OcBreadcrumb } from 'design-system/src/components'
 
 const selectors = {
@@ -147,6 +147,15 @@ function getShallowWrapper(
   }),
   isMobileWidth = false
 ) {
+  const plugins = defaultPlugins({
+    piniaOptions: {
+      resourcesStore: { resources: selected, selectedIds: selected.map(({ id }) => id) }
+    }
+  })
+
+  const { requestExtensions } = useExtensionRegistry()
+  vi.mocked(requestExtensions).mockReturnValue([])
+
   const mocks = {
     ...defaultComponentMocks({
       currentRoute
@@ -160,13 +169,7 @@ function getShallowWrapper(
       props: { ...props, space: mock<SpaceResource>() },
       slots,
       global: {
-        plugins: [
-          ...defaultPlugins({
-            piniaOptions: {
-              resourcesStore: { resources: selected, selectedIds: selected.map(({ id }) => id) }
-            }
-          })
-        ],
+        plugins,
         provide: { ...mocks, isMobileWidth: ref(isMobileWidth) },
         mocks
       }

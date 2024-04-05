@@ -68,7 +68,8 @@ import {
   defineComponent,
   onBeforeUnmount,
   onMounted,
-  ref
+  ref,
+  unref
 } from 'vue'
 import { debounce } from 'lodash-es'
 
@@ -97,7 +98,7 @@ import FilesViewWrapper from '../components/FilesViewWrapper.vue'
 import { useResourcesViewDefaults } from '../composables'
 import { useFileActions } from '@ownclouders/web-pkg'
 import { storeToRefs } from 'pinia'
-import { unref } from 'vue'
+import { folderViewsFavorites } from '../extensionPoints'
 
 const visibilityObserver = new VisibilityObserver()
 
@@ -130,7 +131,9 @@ export default defineComponent({
     const viewModes = computed(() => {
       return [
         ...extensionRegistry
-          .requestExtensions<FolderViewExtension>('folderView', { scopes: ['favorite'] })
+          .requestExtensions<FolderViewExtension>('folderView', {
+            extensionPointIds: [folderViewsFavorites]
+          })
           .map((e) => e.folderView)
       ]
     })

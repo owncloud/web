@@ -37,7 +37,7 @@ export default defineComponent({
     const extensionPreferences = useExtensionPreferencesStore()
 
     const allExtensions = computed<Extension[]>(() =>
-      extensionRegistry.requestExtensions<Extension>(props.extensionPoint.type, {
+      extensionRegistry.requestExtensions<Extension>(props.extensionPoint.extensionType, {
         extensionPointIds: [props.extensionPoint.id]
       })
     )

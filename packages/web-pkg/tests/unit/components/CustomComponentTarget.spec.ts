@@ -18,12 +18,12 @@ const selectors = {
 describe('CustomComponentTarget', () => {
   const mockExtensionPointSingle = mock<ExtensionPoint>({
     id: 'dummy-extension-point-single',
-    type: 'customComponent',
+    extensionType: 'customComponent',
     multiple: false
   })
   const mockExtensionPointMulti = mock<ExtensionPoint>({
     id: 'dummy-extension-point-multi',
-    type: 'customComponent',
+    extensionType: 'customComponent',
     multiple: true
   })
 

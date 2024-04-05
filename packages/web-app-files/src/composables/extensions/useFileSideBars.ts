@@ -32,6 +32,7 @@ import {
 import { Resource } from '@ownclouders/web-client'
 import { useGettext } from 'vue3-gettext'
 import { computed, unref } from 'vue'
+import { fileSideBarExtensionPointId } from '../../extensionPoints'
 
 export const useSideBarPanels = () => {
   const router = useRouter()
@@ -47,7 +48,7 @@ export const useSideBarPanels = () => {
         {
           id: 'com.github.owncloud.web.files.sidebar-panel.no-selection',
           type: 'sidebarPanel',
-          scopes: ['resource'],
+          extensionPointIds: [fileSideBarExtensionPointId],
           panel: {
             name: 'no-selection',
             icon: 'questionnaire-line',
@@ -74,7 +75,7 @@ export const useSideBarPanels = () => {
         {
           id: 'com.github.owncloud.web.files.sidebar-panel.trash-no-selection',
           type: 'sidebarPanel',
-          scopes: ['resource'],
+          extensionPointIds: [fileSideBarExtensionPointId],
           panel: {
             name: 'no-selection',
             icon: 'questionnaire-line',
@@ -89,7 +90,7 @@ export const useSideBarPanels = () => {
         {
           id: 'com.github.owncloud.web.files.sidebar-panel.details-single-selection',
           type: 'sidebarPanel',
-          scopes: ['resource'],
+          extensionPointIds: [fileSideBarExtensionPointId],
           panel: {
             name: 'details',
             icon: 'questionnaire-line',
@@ -115,7 +116,7 @@ export const useSideBarPanels = () => {
         {
           id: 'com.github.owncloud.web.files.sidebar-panel.details-multi-selection',
           type: 'sidebarPanel',
-          scopes: ['resource'],
+          extensionPointIds: [fileSideBarExtensionPointId],
           panel: {
             name: 'details-multiple',
             icon: 'questionnaire-line',
@@ -143,7 +144,7 @@ export const useSideBarPanels = () => {
         {
           id: 'com.github.owncloud.web.files.sidebar-panel.actions',
           type: 'sidebarPanel',
-          scopes: ['resource'],
+          extensionPointIds: [fileSideBarExtensionPointId],
           panel: {
             name: 'actions',
             icon: 'slideshow-3',
@@ -166,7 +167,7 @@ export const useSideBarPanels = () => {
         {
           id: 'com.github.owncloud.web.files.sidebar-panel.sharing',
           type: 'sidebarPanel',
-          scopes: ['resource'],
+          extensionPointIds: [fileSideBarExtensionPointId],
           panel: {
             name: 'sharing',
             icon: 'user-add',
@@ -210,7 +211,7 @@ export const useSideBarPanels = () => {
         {
           id: 'com.github.owncloud.web.files.sidebar-panel.versions',
           type: 'sidebarPanel',
-          scopes: ['resource'],
+          extensionPointIds: [fileSideBarExtensionPointId],
           panel: {
             name: 'versions',
             icon: 'git-branch',
@@ -246,7 +247,7 @@ export const useSideBarPanels = () => {
         {
           id: 'com.github.owncloud.web.files.sidebar-panel.projects.no-selection',
           type: 'sidebarPanel',
-          scopes: ['resource'],
+          extensionPointIds: [fileSideBarExtensionPointId],
           panel: {
             name: 'no-selection',
             icon: 'questionnaire-line',
@@ -265,7 +266,7 @@ export const useSideBarPanels = () => {
         {
           id: 'com.github.owncloud.web.files.sidebar-panel.projects.details-single-selection',
           type: 'sidebarPanel',
-          scopes: ['resource'],
+          extensionPointIds: [fileSideBarExtensionPointId],
           panel: {
             name: 'details-space',
             icon: 'questionnaire-line',
@@ -280,7 +281,7 @@ export const useSideBarPanels = () => {
         {
           id: 'com.github.owncloud.web.files.sidebar-panel.projects.details-multi-selection',
           type: 'sidebarPanel',
-          scopes: ['resource'],
+          extensionPointIds: [fileSideBarExtensionPointId],
           panel: {
             name: 'details-space-multiple',
             icon: 'questionnaire-line',
@@ -298,7 +299,7 @@ export const useSideBarPanels = () => {
         {
           id: 'com.github.owncloud.web.files.sidebar-panel.projects.actions',
           type: 'sidebarPanel',
-          scopes: ['resource'],
+          extensionPointIds: [fileSideBarExtensionPointId],
           panel: {
             name: 'space-actions',
             icon: 'slideshow-3',
@@ -326,7 +327,7 @@ export const useSideBarPanels = () => {
         {
           id: 'com.github.owncloud.web.files.sidebar-panel.projects.sharing',
           type: 'sidebarPanel',
-          scopes: ['resource'],
+          extensionPointIds: [fileSideBarExtensionPointId],
           panel: {
             name: 'space-share',
             icon: 'group',
