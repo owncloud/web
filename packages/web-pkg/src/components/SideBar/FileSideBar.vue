@@ -118,10 +118,9 @@ export default defineComponent({
     const { selectedResources } = useSelectedResources()
 
     const isMetaDataLoading = ref(false)
-    const isVersionsLoading = ref(false)
 
     const isLoading = computed(() => {
-      return unref(isMetaDataLoading) || unref(isVersionsLoading)
+      return unref(isMetaDataLoading) || loadVersionsTask.isRunning
     })
 
     const panelContext = computed<SideBarPanelContext<SpaceResource, Resource, Resource>>(() => {
@@ -370,12 +369,9 @@ export default defineComponent({
           !unref(isSharedViaLinkLocation)
         ) {
           try {
-            isVersionsLoading.value = true
             await loadVersionsTask.perform(resource)
           } catch (e) {
             console.error(e)
-          } finally {
-            isVersionsLoading.value = false
           }
         }
       },
