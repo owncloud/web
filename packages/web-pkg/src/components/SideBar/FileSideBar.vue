@@ -110,11 +110,15 @@ export default defineComponent({
     const { currentFolder } = storeToRefs(resourcesStore)
 
     const loadedResource = ref<Resource>()
+    const versions = ref<Resource>([])
+
     const isLoading = ref(false)
 
     const availableShareRoles = ref<ShareRole[]>([])
 
     const { selectedResources } = useSelectedResources()
+
+    provide('versions', versions)
 
     const panelContext = computed<SideBarPanelContext<SpaceResource, Resource, Resource>>(() => {
       if (unref(selectedResources).length === 0) {
@@ -195,6 +199,10 @@ export default defineComponent({
         )
         .map((e) => e.panel)
     )
+
+    const loadVersionsTask = useTask(function* (signal, resource: Resource) {
+      versions.value = yield clientService.webdav.listFileVersions(resource.id)
+    })
 
     const loadSharesTask = useTask(function* (signal, resource: Resource) {
       sharesStore.setLoading(true)
@@ -357,6 +365,14 @@ export default defineComponent({
           try {
             if (loadSharesTask.isRunning) {
               loadSharesTask.cancelAll()
+            }
+
+            if (loadVersionsTask.isRunning) {
+              loadVersionsTask.cancelAll()
+            }
+
+            if (!resource.isFolder) {
+              loadVersionsTask.perform(resource)
             }
 
             loadSharesTask.perform(resource)

@@ -1,7 +1,6 @@
 <template>
   <div id="oc-file-versions-sidebar" class="-oc-mt-s">
-    <oc-loader v-if="areVersionsLoading" />
-    <ul v-else-if="versions.length" class="oc-m-rm oc-position-relative">
+    <ul v-if="versions.length" class="oc-m-rm oc-position-relative">
       <li class="spacer oc-pb-l" aria-hidden="true"></li>
       <li
         v-for="(item, index) in versions"
@@ -85,8 +84,8 @@ export default defineComponent({
 
     const space = inject<Ref<SpaceResource>>('space')
     const resource = inject<Ref<Resource>>('resource')
+    const versions = inject<Ref<SpaceResource>>('versions')
 
-    const versions = ref<Resource[]>([])
     const fetchVersionsTask = useTask(function* () {
       try {
         versions.value = yield clientService.webdav.listFileVersions(unref(resource).fileId)
@@ -94,21 +93,6 @@ export default defineComponent({
         console.error(e)
       }
     })
-    const areVersionsLoading = computed(() => {
-      return !fetchVersionsTask.last || fetchVersionsTask.isRunning
-    })
-    watch(
-      [() => unref(resource)?.id, () => unref(resource)?.etag],
-      ([id, etag]) => {
-        if (!id || !etag) {
-          return
-        }
-        fetchVersionsTask.perform()
-      },
-      {
-        immediate: true
-      }
-    )
 
     const isRevertible = computed(() => {
       if (props.isReadOnly) {
@@ -158,7 +142,6 @@ export default defineComponent({
       space,
       resource,
       versions,
-      areVersionsLoading,
       isRevertible,
       revertToVersion,
       downloadVersion,
