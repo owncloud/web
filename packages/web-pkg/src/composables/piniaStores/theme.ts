@@ -35,7 +35,6 @@ const DesignTokens = z.object({
 })
 
 const LoginPage = z.object({
-  autoRedirect: z.boolean(),
   backgroundImg: z.string()
 })
 

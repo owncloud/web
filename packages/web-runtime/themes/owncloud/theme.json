@@ -22,7 +22,6 @@
           "login": "themes/owncloud/assets/logo.svg"
         },
         "loginPage": {
-          "autoRedirect": true,
           "backgroundImg": "themes/owncloud/assets/loginBackground.jpg"
         },
         "designTokens": {
