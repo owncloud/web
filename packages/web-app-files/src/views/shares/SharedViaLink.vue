@@ -22,7 +22,7 @@
           v-else
           v-model:selectedIds="selectedResourcesIds"
           :is-side-bar-open="isSideBarOpen"
-          :fields-displayed="['name', 'sharedWith', 'sdate']"
+          :fields-displayed="['name', 'sdate']"
           :are-thumbnails-displayed="displayThumbnails"
           :are-paths-displayed="true"
           :resources="paginatedResources"

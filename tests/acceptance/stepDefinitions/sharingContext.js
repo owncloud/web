@@ -838,25 +838,6 @@ Then(
   }
 )
 
-Then('the following resources should have the following collaborators', async function (dataTable) {
-  for (const { fileName, expectedCollaborators } of dataTable.hashes()) {
-    const collaboratorsArray = await client.page
-      .sharedWithOthersPage()
-      .getCollaboratorsForResource(fileName)
-
-    const expectedCollaboratorsArray = expectedCollaborators.split(',').map((s) => s.trim())
-    assert.ok(
-      _.intersection(collaboratorsArray, expectedCollaboratorsArray).length ===
-        expectedCollaboratorsArray.length,
-      `Expected collaborators to be the same for "${fileName}": expected [` +
-        expectedCollaboratorsArray.join(', ') +
-        '] got [' +
-        collaboratorsArray.join(', ') +
-        ']'
-    )
-  }
-})
-
 When(
   'the user (tries to )share/shares file/folder/resource {string} with user {string} which expires in {string} day/days using the webUI',
   function (resource, sharee, days) {
