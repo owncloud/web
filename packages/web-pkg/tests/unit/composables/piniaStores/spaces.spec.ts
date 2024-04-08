@@ -1,14 +1,26 @@
 import { getComposableWrapper, mockAxiosResolve } from 'web-test-helpers'
-import { useSpacesStore, sortSpaceMembers } from '../../../../src/composables/piniaStores'
+import {
+  useSpacesStore,
+  sortSpaceMembers,
+  useUserStore,
+  useSharesStore
+} from '../../../../src/composables/piniaStores'
 import { createPinia, setActivePinia } from 'pinia'
 import { mock, mockDeep } from 'vitest-mock-extended'
 import {
   CollaboratorShare,
   GraphShareRoleIdMap,
+  ShareRole,
   SpaceResource
 } from '@ownclouders/web-client/src/helpers'
 import { Graph } from '@ownclouders/web-client'
-import { Drive } from '@ownclouders/web-client/src/generated'
+import {
+  CollectionOfPermissionsWithAllowedValues,
+  Drive,
+  Permission,
+  User
+} from '@ownclouders/web-client/src/generated'
+import { ClientService } from '../../../../src/services'
 
 describe('spaces', () => {
   beforeEach(() => {
@@ -263,6 +275,38 @@ describe('spaces', () => {
 
           expect(instance.spaceMembers.length).toBe(1)
           expect(instance.spaceMembers[0].indirect).toBe(true)
+        }
+      })
+    })
+  })
+  describe('method "loadSpaceMembers"', () => {
+    it('loads space members and sets them', () => {
+      getWrapper({
+        setup: async (instance) => {
+          const permission = mock<Permission>({ id: '1', link: undefined, roles: ['roleId'] })
+          const clientService = mockDeep<ClientService>()
+          clientService.graphAuthenticated.permissions.listPermissionsSpaceRoot.mockResolvedValue(
+            mockAxiosResolve(
+              mock<CollectionOfPermissionsWithAllowedValues>({ value: [permission] })
+            )
+          )
+
+          const userStore = useUserStore()
+          userStore.user = mock<User>()
+
+          const sharesStore = useSharesStore()
+          sharesStore.graphRoles = [mock<ShareRole>({ id: 'roleId' })]
+
+          await instance.loadSpaceMembers({
+            graphClient: clientService.graphAuthenticated,
+            space: mock<SpaceResource>()
+          })
+
+          expect(
+            clientService.graphAuthenticated.permissions.listPermissionsSpaceRoot
+          ).toHaveBeenCalled()
+          expect(instance.spaceMembers.length).toBe(1)
+          expect(instance.spaceMembers[0].id).toBe(permission.id)
         }
       })
     })
