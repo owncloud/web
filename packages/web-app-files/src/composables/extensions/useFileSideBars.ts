@@ -22,6 +22,7 @@ import {
   useCapabilityStore
 } from '@ownclouders/web-pkg'
 import {
+  isIncomingShareResource,
   isProjectSpaceResource,
   isShareResource,
   isShareSpaceResource,
@@ -227,7 +228,10 @@ export const useSideBarPanels = () => {
               }
               if (
                 isLocationTrashActive(router, 'files-trash-generic') ||
-                isLocationPublicActive(router, 'files-public-link')
+                isLocationPublicActive(router, 'files-public-link') ||
+                isLocationSharesActive(router, 'files-shares-with-others') ||
+                isLocationSharesActive(router, 'files-shares-via-link') ||
+                isIncomingShareResource(items[0])
               ) {
                 return false
               }
