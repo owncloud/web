@@ -359,7 +359,15 @@ export default defineComponent({
           loadVersionsTask.cancelAll()
         }
 
-        if (!resource.isFolder) {
+        if (
+          !resource.isFolder &&
+          !isProjectSpaceResource(resource) &&
+          !unref(isPublicFilesLocation) &&
+          !unref(isTrashLocation) &&
+          !unref(isSharedWithMeLocation) &&
+          !unref(isSharedWithOthersLocation) &&
+          !unref(isSharedViaLinkLocation)
+        ) {
           try {
             isVersionsLoading.value = true
             await loadVersionsTask.perform(resource)
