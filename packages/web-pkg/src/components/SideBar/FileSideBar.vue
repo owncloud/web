@@ -112,13 +112,16 @@ export default defineComponent({
     const loadedResource = ref<Resource>()
     const versions = ref<Resource>([])
 
-    const isLoading = ref(false)
-
     const availableShareRoles = ref<ShareRole[]>([])
 
     const { selectedResources } = useSelectedResources()
 
-    provide('versions', versions)
+    const isMetaDataLoading = ref(false)
+    const isVersionsLoading = ref(false)
+
+    const isLoading = computed(() => {
+      return unref(isMetaDataLoading) || unref(isVersionsLoading)
+    })
 
     const panelContext = computed<SideBarPanelContext<SpaceResource, Resource, Resource>>(() => {
       if (unref(selectedResources).length === 0) {
@@ -345,6 +348,34 @@ export default defineComponent({
     watch(
       () => [...unref(panelContext).items, props.isOpen],
       async () => {
+        if (unref(panelContext).items?.length !== 1) {
+          // don't load additional metadata for empty or multi-select contexts
+          return
+        }
+
+        const resource = unref(panelContext).items[0]
+
+        if (loadVersionsTask.isRunning) {
+          loadVersionsTask.cancelAll()
+        }
+
+        if (!resource.isFolder) {
+          try {
+            isVersionsLoading.value = true
+            await loadVersionsTask.perform(resource)
+          } catch (e) {
+            console.error(e)
+          } finally {
+            isVersionsLoading.value = false
+          }
+        }
+      },
+      { deep: true, immediate: true }
+    )
+
+    watch(
+      () => [...unref(panelContext).items, props.isOpen],
+      async () => {
         if (!props.isOpen) {
           sharesStore.pruneShares()
           loadedResource.value = null
@@ -360,19 +391,11 @@ export default defineComponent({
           return
         }
 
-        isLoading.value = true
+        isMetaDataLoading.value = true
         if (!unref(isPublicFilesLocation) && !unref(isTrashLocation)) {
           try {
             if (loadSharesTask.isRunning) {
               loadSharesTask.cancelAll()
-            }
-
-            if (loadVersionsTask.isRunning) {
-              loadVersionsTask.cancelAll()
-            }
-
-            if (!resource.isFolder) {
-              loadVersionsTask.perform(resource)
             }
 
             loadSharesTask.perform(resource)
@@ -383,7 +406,7 @@ export default defineComponent({
 
         if (!unref(isShareLocation)) {
           loadedResource.value = resource
-          isLoading.value = false
+          isMetaDataLoading.value = false
           return
         }
 
@@ -400,12 +423,13 @@ export default defineComponent({
           loadedResource.value = resource
           console.error(error)
         }
-        isLoading.value = false
+        isMetaDataLoading.value = false
       },
       { deep: true, immediate: true }
     )
 
     provide('resource', readonly(loadedResource))
+    provide('versions', readonly(versions))
     provide(
       'space',
       computed(() => props.space)
@@ -424,9 +448,9 @@ export default defineComponent({
       focusSideBar,
       panelContext,
       availablePanels,
-      isLoading,
       isFileHeaderVisible,
-      isSpaceHeaderVisible
+      isSpaceHeaderVisible,
+      isLoading
     }
   }
 })

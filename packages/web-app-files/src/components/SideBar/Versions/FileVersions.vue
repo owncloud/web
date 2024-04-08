@@ -62,9 +62,8 @@ import {
   useDownloadFile,
   useResourcesStore
 } from '@ownclouders/web-pkg'
-import { computed, defineComponent, inject, Ref, ref, unref, watch } from 'vue'
+import { computed, defineComponent, inject, Ref, unref } from 'vue'
 import { isShareSpaceResource, Resource, SpaceResource } from '@ownclouders/web-client/src/helpers'
-import { useTask } from 'vue-concurrency'
 import { useGettext } from 'vue3-gettext'
 
 export default defineComponent({
@@ -85,14 +84,6 @@ export default defineComponent({
     const space = inject<Ref<SpaceResource>>('space')
     const resource = inject<Ref<Resource>>('resource')
     const versions = inject<Ref<SpaceResource>>('versions')
-
-    const fetchVersionsTask = useTask(function* () {
-      try {
-        versions.value = yield clientService.webdav.listFileVersions(unref(resource).fileId)
-      } catch (e) {
-        console.error(e)
-      }
-    })
 
     const isRevertible = computed(() => {
       if (props.isReadOnly) {
@@ -122,8 +113,6 @@ export default defineComponent({
           })
         }
       }
-
-      fetchVersionsTask.perform()
     }
     const downloadVersion = (version: Resource) => {
       return downloadFile(unref(space), unref(resource), version.name)
@@ -147,10 +136,7 @@ export default defineComponent({
       downloadVersion,
       formatVersionDateRelative,
       formatVersionDate,
-      formatVersionFileSize,
-
-      // HACK: exported for unit tests
-      fetchVersionsTask
+      formatVersionFileSize
     }
   }
 })

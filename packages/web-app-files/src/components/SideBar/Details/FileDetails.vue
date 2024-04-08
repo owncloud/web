@@ -129,14 +129,13 @@
 </template>
 <script lang="ts">
 import { storeToRefs } from 'pinia'
-import { computed, defineComponent, inject, Ref, ref, unref, watch } from 'vue'
+import { computed, defineComponent, inject, Ref, ref, unref } from 'vue'
 import {
   ImageDimension,
   useAuthStore,
   useUserStore,
   useCapabilityStore,
   useConfigStore,
-  useClientService,
   useResourcesStore,
   formatDateFromJSDate
 } from '@ownclouders/web-pkg'
@@ -191,7 +190,6 @@ export default defineComponent({
 
     const resource = inject<Ref<Resource>>('resource')
     const versions = inject<Ref<Resource[]>>('versions')
-    console.log(versions)
     const space = inject<Ref<SpaceResource>>('space')
 
     const previewService = usePreviewService()
