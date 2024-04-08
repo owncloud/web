@@ -1,0 +1,8 @@
+Bugfix: Versions loaded multiple times when opening sidebar
+
+We've fixed a bug, where the versions endpoint was fetched multiple times when the sidebar was opened
+and therefore added unnecessary load to the server.
+
+https://github.com/owncloud/web/pull/10746
+https://github.com/owncloud/web/issues/10381
+https://github.com/owncloud/web/issues/10619
