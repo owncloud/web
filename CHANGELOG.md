@@ -12,6 +12,7 @@ Summary
 * Bugfix - Apply sandbox attribute to iframe in app-external extension: [#10706](https://github.com/owncloud/web/pull/10706)
 * Enhancement - Custom component extension type: [#10443](https://github.com/owncloud/web/pull/10443)
 * Enhancement - Add extensionPoint concept: [#10443](https://github.com/owncloud/web/pull/10443)
+* Enhancement - Implement Server-Sent Events (SSE) for File Creation: [#10709](https://github.com/owncloud/web/pull/10709)
 
 Details
 -------
@@ -59,6 +60,17 @@ Details
    the user choice in the local storage of the browser.
 
    https://github.com/owncloud/web/pull/10443
+
+* Enhancement - Implement Server-Sent Events (SSE) for File Creation: [#10709](https://github.com/owncloud/web/pull/10709)
+
+   We've implemented Server-Sent Events (SSE) to notify users in real-time when a
+   file is uploaded, a new folder is created, or a file is created (e.g., a text
+   file). With this enhancement, users will see new files automatically appear in
+   another browser tab if they have one open or when collaborating with others in
+   the same space.
+
+   https://github.com/owncloud/web/issues/9782
+   https://github.com/owncloud/web/pull/10709
 
 Changelog for ownCloud Web [8.0.1] (2024-03-12)
 =======================================
