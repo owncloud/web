@@ -3,7 +3,7 @@ import {
   useFileActionsCopyQuickLink,
   useFileActionsCreateLink
 } from '../../../../../src/composables/actions/files'
-import { defaultComponentMocks, getComposableWrapper } from 'web-test-helpers'
+import { defaultComponentMocks, getComposableWrapper, mockAxiosResolve } from 'web-test-helpers'
 import { mock } from 'vitest-mock-extended'
 import { FileAction } from '../../../../../src/composables/actions'
 import { useCanShare } from '../../../../../src/composables/shares'
@@ -65,6 +65,9 @@ describe('useFileActionsCopyQuickLink', () => {
             space: mock<SpaceResource>()
           })
           expect(mocks.createLinkMock).toHaveBeenCalledTimes(1)
+          expect(
+            mocks.$clientService.graphAuthenticated.permissions.listPermissions
+          ).toHaveBeenCalled()
         }
       })
     })
@@ -79,6 +82,20 @@ describe('useFileActionsCopyQuickLink', () => {
           expect(mocks.createLinkMock).not.toHaveBeenCalled()
           const { showMessage } = useMessages()
           expect(showMessage).toHaveBeenCalledTimes(1)
+        }
+      })
+    })
+    it('calls the graph root endpoint for spaces', () => {
+      getWrapper({
+        setup: async ({ actions }, { mocks }) => {
+          await unref(actions)[0].handler({
+            resources: [mock<SpaceResource>({ type: 'space' })],
+            space: mock<SpaceResource>()
+          })
+          expect(mocks.createLinkMock).toHaveBeenCalledTimes(1)
+          expect(
+            mocks.$clientService.graphAuthenticated.permissions.listPermissionsSpaceRoot
+          ).toHaveBeenCalled()
         }
       })
     })
@@ -97,11 +114,13 @@ function getWrapper({ setup, canShare = true, quickLinkExists = false }) {
   vi.mocked(useClipboard).mockReturnValue({ copyToClipboard: vi.fn() })
 
   const mocks = { ...defaultComponentMocks(), createLinkMock }
-  mocks.$clientService.graphAuthenticated.permissions.listPermissions.mockResolvedValue({
-    data: {
-      value: [mock<Permission>({ link: { '@libre.graph.quickLink': quickLinkExists } })]
-    }
-  } as any)
+
+  const resolvedData = mockAxiosResolve({
+    value: [mock<Permission>({ link: { '@libre.graph.quickLink': quickLinkExists } })]
+  })
+  const graphClientMock = mocks.$clientService.graphAuthenticated
+  graphClientMock.permissions.listPermissions.mockResolvedValue(resolvedData)
+  graphClientMock.permissions.listPermissionsSpaceRoot.mockResolvedValue(resolvedData)
 
   return {
     wrapper: getComposableWrapper(
