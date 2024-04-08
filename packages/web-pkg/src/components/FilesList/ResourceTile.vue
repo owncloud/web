@@ -173,7 +173,6 @@ export default defineComponent({
       tooltipLabelIcon,
       resourceDisabled,
       resourceDescription,
-      tooltipLabelIcon,
       shouldDisplayThumbnails
     }
   }
