@@ -146,11 +146,10 @@ Here, you can specify the images to be used in the `"topbar"`, for the `"favicon
 
 ##### The "loginPage" options
 
-Using the `"autoRedirect"` boolean, you can specify whether the user is shown a login page before possible getting redirected to your LDAP/OIDC/OAuth provider. If it is set to true, you can set the background image for said login page by providing an image file in the `"backgroundImg"` option.
+You can set the background image for the login page by providing an image file in the `"backgroundImg"` option.
 
 ```json
 "loginPage": {
-  "autoRedirect": true,
   "backgroundImg": "themes/owncloud/assets/loginBackground.jpg"
 },
 ```
@@ -402,7 +401,6 @@ A full template for your custom theme is provided below, and you can use the ins
           "login": "themes/owncloud/assets/logo.svg"
         },
         "loginPage": {
-          "autoRedirect": true,
           "backgroundImg": "themes/owncloud/assets/loginBackground.jpg"
         },
         "designTokens": {
