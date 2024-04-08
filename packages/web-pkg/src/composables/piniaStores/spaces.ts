@@ -5,7 +5,6 @@ import {
   GraphShareRoleIdMap,
   buildSpace,
   extractStorageId,
-  getGraphItemId,
   isPersonalSpaceResource,
   isProjectSpaceResource
 } from '@ownclouders/web-client/src/helpers'
@@ -196,7 +195,7 @@ export const useSpacesStore = defineStore('spaces', () => {
     spaceMembers.value = []
     const spaceShares: CollaboratorShare[] = []
 
-    const { data } = await graphClient.permissions.listPermissions(space.id, getGraphItemId(space))
+    const { data } = await graphClient.permissions.listPermissionsSpaceRoot(space.id)
 
     const permissions = data.value || []
     permissions.forEach((graphPermission) => {
