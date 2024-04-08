@@ -1,6 +1,7 @@
 import qs from 'qs'
 import AccessDeniedPage from '../pages/accessDenied.vue'
 import Account from '../pages/account.vue'
+import LoginPage from '../pages/login.vue'
 import LogoutPage from '../pages/logout.vue'
 import OidcCallbackPage from '../pages/oidcCallback.vue'
 import ResolvePublicLinkPage from '../pages/resolvePublicLink.vue'
@@ -13,7 +14,6 @@ import {
   createRouter,
   RouteLocationNormalizedLoaded
 } from 'vue-router'
-import { authService } from '../services/auth'
 
 export * from './helpers'
 export { createRouter } from 'vue-router'
@@ -28,9 +28,7 @@ const routes = [
   {
     path: '/login',
     name: 'login',
-    redirect: (to) => {
-      return authService.loginUser(to.query.redirectUrl)
-    },
+    component: LoginPage,
     meta: { title: $gettext('Login'), authContext: 'anonymous' }
   },
   {
