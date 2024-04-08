@@ -111,7 +111,7 @@ export default defineComponent({
     const { currentFolder } = storeToRefs(resourcesStore)
 
     const loadedResource = ref<Resource>()
-    const versions = ref<Resource>([])
+    const versions = ref<Resource[]>([])
 
     const availableShareRoles = ref<ShareRole[]>([])
 

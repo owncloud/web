@@ -83,7 +83,7 @@ export default defineComponent({
 
     const space = inject<Ref<SpaceResource>>('space')
     const resource = inject<Ref<Resource>>('resource')
-    const versions = inject<Ref<SpaceResource>>('versions')
+    const versions = inject<Ref<Resource[]>>('versions')
 
     const isRevertible = computed(() => {
       if (props.isReadOnly) {
