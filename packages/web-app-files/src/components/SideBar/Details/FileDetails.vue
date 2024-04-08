@@ -129,7 +129,7 @@
 </template>
 <script lang="ts">
 import { storeToRefs } from 'pinia'
-import { computed, defineComponent, inject, Ref, ref, unref } from 'vue'
+import { computed, defineComponent, inject, Ref, ref, unref, watch } from 'vue'
 import {
   ImageDimension,
   useAuthStore,
@@ -263,6 +263,16 @@ export default defineComponent({
       const displayDate = formatDateFromJSDate(new Date(unref(resource).ddate), language.current)
       return upperFirst(displayDate)
     })
+
+    watch(
+      resource,
+      () => {
+        if (unref(resource)) {
+          loadPreviewTask.perform(unref(resource))
+        }
+      },
+      { immediate: true }
+    )
 
     return {
       user,
