@@ -46,7 +46,6 @@ describe('ResourceDetails component', () => {
         })
       })
     }
-    mocks.$clientService.webdav.listFileVersions.mockResolvedValue([])
 
     const file = {
       id: '0',
@@ -76,7 +75,8 @@ describe('ResourceDetails component', () => {
           provide: {
             ...mocks,
             space,
-            resource: file
+            resource: file,
+            versions: []
           }
         }
       })

@@ -63,6 +63,7 @@ import {
   CollaboratorShare,
   LinkShare,
   ShareRole,
+  isIncomingShareResource,
   call,
   isSpaceResource
 } from '@ownclouders/web-client/src/helpers'
@@ -362,9 +363,9 @@ export default defineComponent({
         if (
           !resource.isFolder &&
           !isProjectSpaceResource(resource) &&
+          !isIncomingShareResource(resource) &&
           !unref(isPublicFilesLocation) &&
           !unref(isTrashLocation) &&
-          !unref(isSharedWithMeLocation) &&
           !unref(isSharedWithOthersLocation) &&
           !unref(isSharedViaLinkLocation)
         ) {
