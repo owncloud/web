@@ -1,0 +1,9 @@
+Enhancement: Implement Server-Sent Events (SSE) for File Creation
+
+We've implemented Server-Sent Events (SSE) to notify users in real-time when a file is uploaded,
+a new folder is created, or a file is created (e.g., a text file).
+With this enhancement, users will see new files automatically appear in another browser tab if they have one open or
+when collaborating with others in the same space.
+
+https://github.com/owncloud/web/pull/10709
+https://github.com/owncloud/web/issues/9782

@@ -5,9 +5,11 @@ export enum MESSAGE_TYPE {
   POSTPROCESSING_FINISHED = 'postprocessing-finished',
   FILE_LOCKED = 'file-locked',
   FILE_UNLOCKED = 'file-unlocked',
+  FILE_TOUCHED = 'file-touched',
   ITEM_RENAMED = 'item-renamed',
   ITEM_TRASHED = 'item-trashed',
-  ITEM_RESTORED = 'item-restored'
+  ITEM_RESTORED = 'item-restored',
+  FOLDER_CREATED = 'folder-created'
 }
 
 export class RetriableError extends Error {

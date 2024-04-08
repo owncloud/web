@@ -33,7 +33,11 @@
       >
         <div class="oc-tile-card-hover"></div>
         <slot name="imageField" :item="resource">
-          <oc-img v-if="resource.thumbnail" class="tile-preview" :src="resource.thumbnail" />
+          <oc-img
+            v-if="shouldDisplayThumbnails(resource)"
+            class="tile-preview"
+            :src="resource.thumbnail"
+          />
           <resource-icon
             v-else
             :resource="resource"
@@ -82,6 +86,7 @@ import ResourceLink from './ResourceLink.vue'
 import { Resource } from '@ownclouders/web-client'
 import { useGettext } from 'vue3-gettext'
 import { isSpaceResource } from '@ownclouders/web-client/src/helpers'
+import { isResourceTxtFileAlmostEmpty } from '../../helpers'
 
 export default defineComponent({
   name: 'ResourceTile',
@@ -158,12 +163,17 @@ export default defineComponent({
       return ''
     })
 
+    const shouldDisplayThumbnails = (resource: Resource) => {
+      return resource.thumbnail && !isResourceTxtFileAlmostEmpty(resource)
+    }
+
     return {
       statusIconAttrs,
       showStatusIcon,
       tooltipLabelIcon,
       resourceDisabled,
-      resourceDescription
+      resourceDescription,
+      shouldDisplayThumbnails
     }
   }
 })

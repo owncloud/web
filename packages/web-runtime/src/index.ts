@@ -60,7 +60,8 @@ export const bootstrapApp = async (configurationPath: string): Promise<void> => 
     userStore,
     resourcesStore,
     messagesStore,
-    sharesStore
+    sharesStore,
+    clientStore
   } = announcePiniaStores()
 
   app.provide('$router', router)
@@ -82,7 +83,8 @@ export const bootstrapApp = async (configurationPath: string): Promise<void> => 
     configStore,
     userStore,
     authStore,
-    capabilityStore
+    capabilityStore,
+    clientStore
   })
   // TODO: move to announceArchiverService function
   app.config.globalProperties.$archiverService = new ArchiverService(
@@ -196,6 +198,7 @@ export const bootstrapApp = async (configurationPath: string): Promise<void> => 
           language: gettext,
           resourcesStore,
           spacesStore,
+          clientStore,
           messageStore: messagesStore,
           clientService,
           previewService,

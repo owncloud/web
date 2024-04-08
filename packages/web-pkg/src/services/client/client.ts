@@ -7,7 +7,7 @@ import { WebDAV } from '@ownclouders/web-client/src/webdav'
 import { Language } from 'vue3-gettext'
 import { FetchEventSourceInit } from '@microsoft/fetch-event-source'
 import { sse } from '@ownclouders/web-client/src/sse'
-import { AuthStore, ConfigStore, UserStore } from '../../composables'
+import { AuthStore, ClientStore, ConfigStore, UserStore } from '../../composables'
 import { computed } from 'vue'
 
 interface OcClient {
@@ -54,6 +54,7 @@ export interface ClientServiceOptions {
   language: Language
   authStore: AuthStore
   userStore: UserStore
+  clientStore: ClientStore
 }
 
 export class ClientService {
@@ -61,6 +62,7 @@ export class ClientService {
   private language: Language
   private authStore: AuthStore
   private userStore: UserStore
+  private clientStore: ClientStore
 
   private httpAuthenticatedClient: HttpClient
   private httpUnAuthenticatedClient: HttpClient
@@ -75,6 +77,7 @@ export class ClientService {
     this.language = options.language
     this.authStore = options.authStore
     this.userStore = options.userStore
+    this.clientStore = options.clientStore
   }
 
   public get httpAuthenticated(): _HttpClient {
@@ -132,7 +135,8 @@ export class ClientService {
           'Accept-Language': this.currentLanguage,
           ...(!!authenticated && { Authorization: 'Bearer ' + this.authStore.accessToken }),
           'X-Requested-With': 'XMLHttpRequest',
-          'X-Request-ID': uuidV4()
+          'X-Request-ID': uuidV4(),
+          'Initiator-ID': this.clientStore.clientInitiatorId
         }
       })
     }
