@@ -2,7 +2,6 @@ import path, { basename, dirname } from 'path'
 import { urlJoin } from '../../utils'
 import { DavPermission, DavProperty } from '../../webdav/constants'
 import { Resource, WebDavResponseResource } from './types'
-import { isProjectSpaceResource } from '../space'
 
 const fileExtensions = {
   complex: ['tar.bz2', 'tar.gz', 'tar.xz']
@@ -25,12 +24,6 @@ export const extractStorageId = (id?: string): string => {
 
 export const extractNodeId = (id?: string): string => {
   return extractIdSegment(id, 1)
-}
-
-export const getGraphItemId = (resource: Resource): string => {
-  return isProjectSpaceResource(resource)
-    ? `${resource.id}!${resource.id.split('$')[1]}`
-    : resource.id
 }
 
 export const extractNameWithoutExtension = (resource?: Resource): string => {

@@ -108,9 +108,16 @@ export interface Graph {
       driveId: string,
       itemId: string
     ) => AxiosPromise<CollectionOfPermissionsWithAllowedValues>
+    listPermissionsSpaceRoot: (
+      driveId: string
+    ) => AxiosPromise<CollectionOfPermissionsWithAllowedValues>
     createLink: (
       driveId: string,
       itemId: string,
+      driveItemCreateLink?: DriveItemCreateLink
+    ) => AxiosPromise<Permission>
+    createLinkSpaceRoot: (
+      driveId: string,
       driveItemCreateLink?: DriveItemCreateLink
     ) => AxiosPromise<Permission>
     invite: (
@@ -118,16 +125,31 @@ export interface Graph {
       itemId: string,
       driveItemInvite?: DriveItemInvite
     ) => AxiosPromise<CollectionOfPermissions>
+    inviteSpaceRoot: (
+      driveId: string,
+      driveItemInvite?: DriveItemInvite
+    ) => AxiosPromise<CollectionOfPermissions>
     deletePermission: (driveId: string, itemId: string, permId: string) => AxiosPromise<void>
+    deletePermissionSpaceRoot: (driveId: string, permId: string) => AxiosPromise<void>
     updatePermission: (
       driveId: string,
       itemId: string,
       permId: string,
       permission: Permission
     ) => AxiosPromise<Permission>
+    updatePermissionSpaceRoot: (
+      driveId: string,
+      permId: string,
+      permission: Permission
+    ) => AxiosPromise<Permission>
     setPermissionPassword: (
       driveId: string,
       itemId: string,
+      permId: string,
+      sharingLinkPassword: SharingLinkPassword
+    ) => AxiosPromise<Permission>
+    setPermissionPasswordSpaceRoot: (
+      driveId: string,
       permId: string,
       sharingLinkPassword: SharingLinkPassword
     ) => AxiosPromise<Permission>
@@ -263,14 +285,24 @@ export const graph = (baseURI: string, axiosClient: AxiosInstance): Graph => {
         drivesPermissionsApiFactory.getPermission(driveId, itemId, permId),
       listPermissions: (driveId: string, itemId: string) =>
         drivesPermissionsApiFactory.listPermissions(driveId, itemId),
+      listPermissionsSpaceRoot: (driveId: string) =>
+        drivesRootApiFactory.listPermissionsSpaceRoot(driveId),
       createLink: (driveId: string, itemId: string, driveItemCreateLink?: DriveItemCreateLink) =>
         drivesPermissionsApiFactory.createLink(driveId, itemId, driveItemCreateLink),
+      createLinkSpaceRoot: (driveId: string, driveItemCreateLink?: DriveItemCreateLink) =>
+        drivesRootApiFactory.createLinkSpaceRoot(driveId, driveItemCreateLink),
       invite: (driveId: string, itemId: string, driveItemInvite?: DriveItemInvite) =>
         drivesPermissionsApiFactory.invite(driveId, itemId, driveItemInvite),
+      inviteSpaceRoot: (driveId: string, driveItemInvite?: DriveItemInvite) =>
+        drivesRootApiFactory.inviteSpaceRoot(driveId, driveItemInvite),
       deletePermission: (driveId: string, itemId: string, permId: string) =>
         drivesPermissionsApiFactory.deletePermission(driveId, itemId, permId),
+      deletePermissionSpaceRoot: (driveId: string, permId: string) =>
+        drivesRootApiFactory.deletePermissionSpaceRoot(driveId, permId),
       updatePermission: (driveId: string, itemId: string, permId: string, permission: Permission) =>
         drivesPermissionsApiFactory.updatePermission(driveId, itemId, permId, permission),
+      updatePermissionSpaceRoot: (driveId: string, permId: string, permission: Permission) =>
+        drivesRootApiFactory.updatePermissionSpaceRoot(driveId, permId, permission),
       setPermissionPassword: (
         driveId: string,
         itemId: string,
@@ -282,7 +314,12 @@ export const graph = (baseURI: string, axiosClient: AxiosInstance): Graph => {
           itemId,
           permId,
           sharingLinkPassword
-        )
+        ),
+      setPermissionPasswordSpaceRoot: (
+        driveId: string,
+        permId: string,
+        sharingLinkPassword: SharingLinkPassword
+      ) => drivesRootApiFactory.setPermissionPasswordSpaceRoot(driveId, permId, sharingLinkPassword)
     }
   }
 }

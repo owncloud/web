@@ -63,8 +63,8 @@ import {
   CollaboratorShare,
   LinkShare,
   ShareRole,
-  getGraphItemId,
-  call
+  call,
+  isSpaceResource
 } from '@ownclouders/web-client/src/helpers'
 import { storeToRefs } from 'pinia'
 import { useTask } from 'vue-concurrency'
@@ -72,7 +72,10 @@ import {
   buildCollaboratorShare,
   buildLinkShare
 } from '@ownclouders/web-client/src/helpers/share/functions'
-import { Permission } from '@ownclouders/web-client/src/generated'
+import {
+  CollectionOfPermissionsWithAllowedValues,
+  Permission
+} from '@ownclouders/web-client/src/generated'
 
 export default defineComponent({
   name: 'FileSideBar',
@@ -195,14 +198,19 @@ export default defineComponent({
 
     const loadSharesTask = useTask(function* (signal, resource: Resource) {
       sharesStore.setLoading(true)
-
       sharesStore.removeOrphanedShares()
-      const { collaboratorShares: collaboratorCache, linkShares: linkCache } = sharesStore
 
-      const resourceId = getGraphItemId(resource)
-      const { data } = yield* call(
-        clientService.graphAuthenticated.permissions.listPermissions(props.space.id, resourceId)
-      )
+      const { collaboratorShares: collaboratorCache, linkShares: linkCache } = sharesStore
+      const client = clientService.graphAuthenticated.permissions
+      let data: CollectionOfPermissionsWithAllowedValues
+
+      if (isSpaceResource(resource)) {
+        const response = yield* call(client.listPermissionsSpaceRoot(props.space.id))
+        data = response.data
+      } else {
+        const response = yield* call(client.listPermissions(props.space.id, resource.id))
+        data = response.data
+      }
 
       let availableRoles =
         sharesStore.graphRoles.filter(
@@ -259,7 +267,7 @@ export default defineComponent({
       }
 
       // load direct shares
-      buildShares({ p: permissions, resourceId })
+      buildShares({ p: permissions, resourceId: resource.id })
 
       // use cache for indirect shares
       const useCache = !unref(isFlatFileList) && !unref(isProjectsLocation)
@@ -292,7 +300,7 @@ export default defineComponent({
       const chachedIds = [...collaboratorCache, ...linkCache].map(({ resourceId }) => resourceId)
       const ancestorIds = Object.values(ancestorDataWithoutRoot)
         .map(({ id }) => id)
-        .filter((id) => id !== resourceId && !chachedIds.includes(id))
+        .filter((id) => id !== resource.id && !chachedIds.includes(id))
 
       const queue = new PQueue({
         concurrency: configStore.options.concurrentRequests.shares.list
