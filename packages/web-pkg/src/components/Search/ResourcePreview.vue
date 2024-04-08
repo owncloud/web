@@ -24,7 +24,7 @@ import {
   useConfigStore,
   useResourcesStore
 } from '../../composables'
-import { Resource } from '@ownclouders/web-client/src/helpers'
+import { isSpaceResource, Resource } from '@ownclouders/web-client/src/helpers'
 import { isResourceTxtFileAlmostEmpty } from '../../helpers'
 import ResourceListItem from '../FilesList/ResourceListItem.vue'
 import { SearchResultValue } from './types'
@@ -77,7 +77,8 @@ export default defineComponent({
     const space = computed(() => getMatchingSpace(unref(resource)))
 
     const resourceDisabled = computed(() => {
-      return unref(resource).disabled === true
+      const res = unref(resource)
+      return isSpaceResource(res) && res.disabled === true
     })
 
     const resourceClicked = () => {

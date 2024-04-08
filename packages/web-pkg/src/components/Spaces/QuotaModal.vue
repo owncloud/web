@@ -151,7 +151,11 @@ export default defineComponent({
           })
         }
         spacesStore.updateSpaceField({ id: space.id, field: 'spaceQuota', value: driveData.quota })
-        updateResourceField({ id: space.id, field: 'spaceQuota', value: driveData.quota })
+        updateResourceField<SpaceResource>({
+          id: space.id,
+          field: 'spaceQuota',
+          value: driveData.quota
+        })
       })
       const results = await Promise.allSettled<Array<unknown>>(requests)
       const succeeded = results.filter((r) => r.status === 'fulfilled')

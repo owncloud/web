@@ -42,7 +42,7 @@ export const useFileActionsToggleHideShare = () => {
               }
             )
 
-            updateResourceField<IncomingShareResource, any>({
+            updateResourceField<IncomingShareResource>({
               id: resource.id,
               field: 'hidden',
               value: hidden

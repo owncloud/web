@@ -210,7 +210,7 @@ export default defineComponent({
       })
     },
     personalStorageDetailsLabel() {
-      const total = this.quota.definition === 'none' ? 0 : this.quota.total || 0
+      const total = this.quota.total || 0
       const used = this.quota.used || 0
       return total
         ? this.$gettext('%{used} of %{total} used', {

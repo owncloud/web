@@ -36,7 +36,7 @@ export const useFileActionsDisableSync = () => {
             const { graphAuthenticated } = clientService
             await graphAuthenticated.drives.deleteDriveItem(resource.driveId, resource.id)
 
-            updateResourceField<IncomingShareResource, any>({
+            updateResourceField<IncomingShareResource>({
               id: resource.id,
               field: 'syncEnabled',
               value: false

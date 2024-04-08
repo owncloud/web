@@ -5,7 +5,7 @@
     :class="{
       'oc-tile-card-selected': isResourceSelected,
       'oc-tile-card-disabled': resource.processing,
-      'state-trashed': resource.disabled
+      'state-trashed': resourceDisabled
     }"
     @contextmenu="$emit('contextmenu', $event)"
   >
@@ -20,7 +20,7 @@
         <slot name="selection" :item="resource" />
       </div>
       <oc-tag
-        v-if="resource.disabled"
+        v-if="resourceDisabled"
         class="resource-disabled-indicator oc-position-absolute"
         type="span"
       >
@@ -67,8 +67,8 @@
           <slot name="contextMenu" :item="resource" />
         </div>
       </div>
-      <p v-if="resource.description" class="oc-text-left oc-my-rm oc-text-truncate">
-        <small v-text="resource.description" />
+      <p v-if="resourceDescription" class="oc-text-left oc-my-rm oc-text-truncate">
+        <small v-text="resourceDescription" />
       </p>
     </div>
   </div>
@@ -81,6 +81,7 @@ import ResourceListItem from './ResourceListItem.vue'
 import ResourceLink from './ResourceLink.vue'
 import { Resource } from '@ownclouders/web-client'
 import { useGettext } from 'vue3-gettext'
+import { isSpaceResource } from '@ownclouders/web-client/src/helpers'
 
 export default defineComponent({
   name: 'ResourceTile',
@@ -146,10 +147,23 @@ export default defineComponent({
       return null
     })
 
+    const resourceDisabled = computed(() => {
+      return isSpaceResource(props.resource) && props.resource.disabled === true
+    })
+
+    const resourceDescription = computed(() => {
+      if (isSpaceResource(props.resource)) {
+        return props.resource.description
+      }
+      return ''
+    })
+
     return {
       statusIconAttrs,
       showStatusIcon,
-      tooltipLabelIcon
+      tooltipLabelIcon,
+      resourceDisabled,
+      resourceDescription
     }
   }
 })

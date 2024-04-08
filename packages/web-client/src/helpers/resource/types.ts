@@ -32,18 +32,7 @@ export type AbilitySubjects =
 export type Ability = MongoAbility<[AbilityActions, AbilitySubjects]>
 export type AbilityRule = SubjectRawRule<AbilityActions, AbilitySubjects, any>
 
-export interface SpaceRole extends Identity {
-  kind: 'user' | 'group'
-  isMember(u: User): boolean
-}
-
-export interface SpaceRoles {
-  viewer: SpaceRole[]
-  editor: SpaceRole[]
-  manager: SpaceRole[]
-}
-
-// TODO: add more fields to the resource interface. Extend into different resource types: FileResource, FolderResource, ShareResource, IncomingShareResource, OutgoingShareResource, ...
+// FIXME: almost all of the properties are non-optional, the interface should reflect that
 export interface Resource {
   id: string
   fileId?: string
@@ -54,7 +43,6 @@ export interface Resource {
   tags?: string[]
   audio?: Audio
   location?: GeoCoordinates
-  disabled?: boolean
   path: string
   webDavPath?: string
   downloadURL?: string
@@ -64,15 +52,11 @@ export interface Resource {
   locked?: boolean
   lockOwnerName?: string
   lockTime?: string
-  spaceRoles?: SpaceRoles
-  spaceQuota?: any
-  spaceImageData?: any
-  spaceReadmeData?: any
   mimeType?: string
   isFolder?: boolean
   sdate?: string // FIXME: move to `ShareResource`
   mdate?: string
-  indicators?: any[]
+  indicators?: any[] // FIXME: add type
   size?: number | string // FIXME
   permissions?: string
   starred?: boolean
@@ -81,10 +65,6 @@ export interface Resource {
   shareRoot?: string // FIXME: this originates from the old OCS api, should be removed in the future
   shareTypes?: number[]
   privateLink?: string
-  description?: string
-  driveType?: 'mountpoint' | 'personal' | 'project' | 'share' | 'public' | (string & unknown)
-  driveAlias?: string
-  matchingSpace?: any
   owner?: Identity
   extension?: string
   ddate?: string
@@ -92,26 +72,19 @@ export interface Resource {
   canCreate?(): boolean
   canUpload?({ user }: { user?: User }): boolean
   canDownload?(): boolean
-  canShare?({ user, ability }?: { user?: User; ability?: Ability }): boolean
-  canRename?({ user }?: { user?: User; ability?: Ability }): boolean
-  canBeDeleted?({ user }?: { user?: User; ability?: Ability }): boolean
+  canShare?(args?: { user?: User; ability?: Ability }): boolean
+  canRename?(args?: { user?: User; ability?: Ability }): boolean
+  canBeDeleted?(args?: { user?: User; ability?: Ability }): boolean
   canBeRestored?(): boolean
   canDeny?(): boolean
-  canEditDescription?({ user }: { user?: User; ability?: Ability }): boolean
-  canRestore?({ user }: { user?: User; ability?: any }): boolean
-  canDisable?({ user }: { user?: User; ability?: any }): boolean
-  canEditImage?({ user }: { user?: User }): boolean
-  canEditReadme?({ user }: { user?: User }): boolean
   canRemoveFromTrashbin?({ user }: { user?: User }): boolean
-
-  canEditSpaceQuota?(): boolean
   canEditTags?(): boolean
+
+  getDomSelector?(): string
 
   isReceivedShare?(): boolean
   isShareRoot?(): boolean
   isMounted?(): boolean
-
-  getDomSelector?(): string
 }
 
 // These interfaces have empty (unused) __${type}SpaceResource properties which are only

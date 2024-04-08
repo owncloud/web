@@ -125,16 +125,16 @@ export const useSpacesStore = defineStore('spaces', () => {
     addSpaces([space])
   }
 
-  const updateSpaceField = <T extends SpaceResource, K extends keyof SpaceResource>({
+  const updateSpaceField = <T extends SpaceResource>({
     id,
     field,
     value
   }: {
     id: T['id']
-    field: K
-    value: T[K]
+    field: keyof T
+    value: T[keyof T]
   }) => {
-    const space = unref(spaces).find((space) => id === space.id)
+    const space = unref(spaces).find((space) => id === space.id) as T
     if (space) {
       space[field] = value
     }

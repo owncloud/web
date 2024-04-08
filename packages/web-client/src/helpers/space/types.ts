@@ -6,20 +6,45 @@
 // ```
 // because in the else block resource gets the type never. If this is changed in a later TypeScript version
 // or all types get different members, the underscored props can be removed.
-import { DriveItem } from '@ownclouders/web-client/src/generated'
-import { Resource } from '../resource'
-import { User } from '../../generated'
+import { DriveItem, Identity, Quota, User } from '@ownclouders/web-client/src/generated'
+import { Ability, Resource } from '../resource'
 
 export const SHARE_JAIL_ID = 'a0ca6a90-a365-4782-871e-d44447bbc668'
 export const OCM_PROVIDER_ID = '89f37a33-858b-45fa-8890-a1f2b27d90e1'
 
+export interface SpaceRole extends Identity {
+  kind: 'user' | 'group'
+  isMember(u: User): boolean
+}
+
+export interface SpaceRoles {
+  viewer: SpaceRole[]
+  editor: SpaceRole[]
+  manager: SpaceRole[]
+}
+
 export interface SpaceResource extends Resource {
-  disabled?: boolean
-  webDavTrashPath: string
+  description: string
+  disabled: boolean
+  driveAlias: string
+  driveType: 'mountpoint' | 'personal' | 'project' | 'share' | 'public' | (string & unknown)
   root: DriveItem
+  spaceRoles: SpaceRoles
+  spaceQuota: Quota
+  spaceImageData: DriveItem
+  spaceReadmeData: DriveItem
+  webDavTrashPath: string
+
+  canDisable(args?: { user?: User; ability?: Ability }): boolean
+  canEditDescription(args?: { user?: User; ability?: Ability }): boolean
+  canEditImage(args?: { user?: User }): boolean
+  canEditReadme(args?: { user?: User }): boolean
+  canRestore(args?: { user?: User; ability?: Ability }): boolean
+
   getWebDavUrl({ path }: { path: string }): string
   getWebDavTrashUrl({ path }: { path: string }): string
   getDriveAliasAndItem(resource: Resource): string
+
   isViewer(user: User): boolean
   isEditor(user: User): boolean
   isManager(user: User): boolean
@@ -35,14 +60,14 @@ export interface PersonalSpaceResource extends SpaceResource {
   __personalSpaceResource?: any
 }
 export const isPersonalSpaceResource = (resource: Resource): resource is PersonalSpaceResource => {
-  return resource?.driveType === 'personal'
+  return (resource as SpaceResource)?.driveType === 'personal'
 }
 
 export interface ProjectSpaceResource extends SpaceResource {
   __projectSpaceResource?: any
 }
 export const isProjectSpaceResource = (resource: Resource): resource is ProjectSpaceResource => {
-  return resource?.driveType === 'project'
+  return (resource as SpaceResource)?.driveType === 'project'
 }
 
 export interface ShareSpaceResource extends SpaceResource {
@@ -50,7 +75,7 @@ export interface ShareSpaceResource extends SpaceResource {
   rename(newName: string): void
 }
 export const isShareSpaceResource = (resource: Resource): resource is ShareSpaceResource => {
-  return resource?.driveType === 'share'
+  return (resource as SpaceResource)?.driveType === 'share'
 }
 
 export interface MountPointSpaceResource extends SpaceResource {
@@ -59,7 +84,7 @@ export interface MountPointSpaceResource extends SpaceResource {
 export const isMountPointSpaceResource = (
   resource: Resource
 ): resource is MountPointSpaceResource => {
-  return resource?.driveType === 'mountpoint'
+  return (resource as SpaceResource)?.driveType === 'mountpoint'
 }
 
 export interface PublicSpaceResource extends SpaceResource {
@@ -71,5 +96,5 @@ export interface PublicSpaceResource extends SpaceResource {
   publicLinkShareOwner?: string
 }
 export const isPublicSpaceResource = (resource: Resource): resource is PublicSpaceResource => {
-  return resource?.driveType === 'public'
+  return (resource as SpaceResource)?.driveType === 'public'
 }

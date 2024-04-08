@@ -8,7 +8,7 @@ import {
 } from '../../../../../src/composables/piniaStores'
 import { defaultComponentMocks, getComposableWrapper } from 'web-test-helpers'
 import { mock } from 'vitest-mock-extended'
-import { Resource } from '@ownclouders/web-client'
+import { Resource, SpaceResource } from '@ownclouders/web-client'
 import { SharingLinkType } from '@ownclouders/web-client/src/generated'
 import { useLinkTypes } from '../../../../../src/composables/links/useLinkTypes'
 
@@ -37,7 +37,7 @@ describe('useFileActionsCreateLink', () => {
       getWrapper({
         setup: ({ actions }) => {
           const resources = [
-            mock<Resource>({ canShare: () => true, disabled: true, driveType: 'project' })
+            mock<SpaceResource>({ canShare: () => true, disabled: true, driveType: 'project' })
           ]
           expect(unref(actions)[0].isVisible({ space: null, resources })).toBeFalsy()
         }
