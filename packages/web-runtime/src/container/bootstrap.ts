@@ -36,7 +36,8 @@ import {
   LoadingService,
   PasswordPolicyService,
   PreviewService,
-  UppyService
+  UppyService,
+  ClientStore
 } from '@ownclouders/web-pkg'
 import { init as sentryInit } from '@sentry/vue'
 import { webdav } from '@ownclouders/web-client/src/webdav'
@@ -65,7 +66,6 @@ import {
   onSSEFolderCreatedEvent,
   onSSEFileTouchedEvent
 } from './sse'
-import { ClientStore } from '@ownclouders/web-pkg/src/composables/piniaStores/client'
 
 const getEmbedConfigFromQuery = (
   doesEmbedEnabledOptionExists: boolean
@@ -743,17 +743,6 @@ export const registerSSEEventListeners = ({
   clientService.sseAuthenticated.addEventListener(MESSAGE_TYPE.ITEM_RESTORED, (msg) =>
     onSSEItemRestoredEvent({
       topic: MESSAGE_TYPE.ITEM_RESTORED,
-      resourcesStore,
-      spacesStore,
-      clientStore,
-      msg,
-      clientService
-    })
-  )
-
-  clientService.sseAuthenticated.addEventListener(MESSAGE_TYPE.FOLDER_CREATED, (msg) =>
-    onSSEFolderCreatedEvent({
-      topic: MESSAGE_TYPE.FOLDER_CREATED,
       resourcesStore,
       spacesStore,
       clientStore,
