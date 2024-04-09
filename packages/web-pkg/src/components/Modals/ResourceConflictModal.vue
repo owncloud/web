@@ -23,7 +23,7 @@
         appearance="outline"
         variation="passive"
         @click="onConfirmSecondary"
-        >{{ $gettext('Replace') }}
+        >{{ confirmSecondaryText }}
       </oc-button>
       <oc-button
         class="oc-modal-body-actions-confirm oc-ml-s"
@@ -54,7 +54,8 @@ export default defineComponent({
       required: true
     },
     suggestMerge: { type: Boolean, default: true },
-    separateSkipHandling: { type: Boolean, default: false }
+    separateSkipHandling: { type: Boolean, default: false },
+    confirmSecondaryTextOverwrite: { type: String, default: null }
   },
   setup(props) {
     const { removeModal } = useModals()
@@ -96,6 +97,10 @@ export default defineComponent({
         : $gettext('File with name "%{name}" already exists.', { name: props.resource.name }, true)
     )
 
+    const confirmSecondaryText = computed(() => {
+      return props.confirmSecondaryTextOverwrite || $gettext('Replace')
+    })
+
     const onConfirm = () => {
       removeModal(props.modal.id)
       props.callbackFn({
@@ -125,6 +130,7 @@ export default defineComponent({
       message,
       checkboxValue,
       checkboxLabel,
+      confirmSecondaryText,
       onConfirm,
       onConfirmSecondary,
       onCancel

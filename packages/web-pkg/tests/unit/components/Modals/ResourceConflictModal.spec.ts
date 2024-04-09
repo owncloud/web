@@ -16,6 +16,22 @@ describe('ResourceConflictModal', () => {
       expect(wrapper.find('oc-checkbox-stub').exists()).toBeFalsy()
     })
   })
+  describe('buttons', () => {
+    describe('confirmSecondary', () => {
+      describe('text', () => {
+        it('should equal "Replace" when no "confirmSecondaryTextOverwrite" property is given', () => {
+          const { wrapper } = getWrapper()
+          expect(wrapper.vm.confirmSecondaryText).toEqual('Replace')
+        })
+        it('should equal "confirmSecondaryTextOverwrite" when property is given', () => {
+          const { wrapper } = getWrapper({
+            props: { confirmSecondaryTextOverwrite: 'Merge' }
+          })
+          expect(wrapper.vm.confirmSecondaryText).toEqual('Merge')
+        })
+      })
+    })
+  })
   describe('onConfirm', () => {
     it('should call the callback', async () => {
       const callbackFn = vi.fn()

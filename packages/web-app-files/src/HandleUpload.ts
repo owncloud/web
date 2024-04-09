@@ -8,7 +8,7 @@ import { Ref, unref } from 'vue'
 import { RouteLocationNormalizedLoaded } from 'vue-router'
 import { SpaceResource } from '@ownclouders/web-client/src'
 import { urlJoin } from '@ownclouders/web-client/src/utils'
-import { ResourceConflict } from './helpers/resource'
+import { UploadResourceConflict } from './helpers/resource'
 import {
   MessageStore,
   ResourcesStore,
@@ -388,7 +388,7 @@ export class HandleUpload extends BasePlugin {
 
     // name conflict handling
     if (this.conflictHandlingEnabled) {
-      const conflictHandler = new ResourceConflict(this.resourcesStore, this.language)
+      const conflictHandler = new UploadResourceConflict(this.resourcesStore, this.language)
       const conflicts = conflictHandler.getConflicts(filesToUpload)
       if (conflicts.length) {
         const dashboard = document.getElementsByClassName('uppy-Dashboard')
