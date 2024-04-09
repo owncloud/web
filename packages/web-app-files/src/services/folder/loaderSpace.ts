@@ -32,7 +32,7 @@ export class FolderLoaderSpace implements FolderLoader {
   }
 
   public getTask(context: TaskContext): FolderLoaderTask {
-    const { router, clientService, resourcesStore } = context
+    const { router, clientService, resourcesStore, userStore } = context
     const { webdav } = clientService
     const { replaceInvalidFileRoute } = useFileRouteReplace({ router })
 
@@ -77,7 +77,12 @@ export class FolderLoaderSpace implements FolderLoader {
         if (options.loadShares) {
           const ancestorMetaData = resourcesStore.ancestorMetaData
           for (const file of resources) {
-            file.indicators = getIndicators({ resource: file, ancestorMetaData })
+            file.indicators = getIndicators({
+              space,
+              resource: file,
+              ancestorMetaData,
+              user: userStore.user
+            })
           }
         }
 

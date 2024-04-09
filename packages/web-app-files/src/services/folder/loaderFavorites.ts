@@ -27,7 +27,6 @@ export class FolderLoaderFavorites implements FolderLoader {
 
       resources = resources.map(buildResource)
       resourcesStore.initResourceList({ currentFolder: null, resources })
-      resourcesStore.loadIndicators('/')
     })
   }
 }

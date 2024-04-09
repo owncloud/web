@@ -194,7 +194,7 @@ export const useSharesStore = defineStore('shares', () => {
 
     addCollaboratorShares(builtShares)
     updateFileShareTypes(resource.path)
-    resourcesStore.loadIndicators(resource.path)
+    resourcesStore.loadIndicators(space, resource.path)
     return builtShares
   }
 
@@ -258,7 +258,7 @@ export const useSharesStore = defineStore('shares', () => {
     removeCollaboratorShare(collaboratorShare)
     updateFileShareTypes(resource.path)
     if (loadIndicators) {
-      resourcesStore.loadIndicators(resource.path)
+      resourcesStore.loadIndicators(space, resource.path)
     }
   }
 
@@ -303,7 +303,7 @@ export const useSharesStore = defineStore('shares', () => {
       }
     }
 
-    resourcesStore.loadIndicators(resource.path)
+    resourcesStore.loadIndicators(space, resource.path)
     return link
   }
 
@@ -374,7 +374,7 @@ export const useSharesStore = defineStore('shares', () => {
     removeLinkShare(linkShare)
     updateFileShareTypes(resource.path)
     if (loadIndicators) {
-      resourcesStore.loadIndicators(resource.path)
+      resourcesStore.loadIndicators(space, resource.path)
     }
   }
 

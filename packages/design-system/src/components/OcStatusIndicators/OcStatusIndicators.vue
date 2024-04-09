@@ -4,7 +4,7 @@
       <oc-button
         v-if="hasHandler(indicator)"
         :id="indicator.id"
-        :key="indicator.id"
+        :key="`${indicator.id}-handler`"
         v-oc-tooltip="$gettext(indicator.label)"
         class="oc-status-indicators-indicator oc-ml-xs"
         :aria-label="$gettext(indicator.label)"
@@ -12,7 +12,7 @@
         appearance="raw"
         :data-testid="indicator.id"
         :data-test-indicator-type="indicator.type"
-        @click="indicator.handler(resource, indicator.target, $router)"
+        @click="indicator.handler(resource)"
       >
         <oc-icon
           :name="indicator.icon"
@@ -60,7 +60,6 @@ type Indicator = {
   handler?: any
   accessibleDescription?: string
   visible?: boolean
-  target?: string
   type?: string
   fillType?: string
 }
@@ -92,17 +91,12 @@ export default defineComponent({
      * label: String to be used as a accessible label and tooltip for the indicator
      *
      * Optional:
-     * handler: An action to be triggered when the indicator is clicked. Receives the resource and a target string
+     * handler: An action to be triggered when the indicator is clicked. Receives the resource.
      * accessibleDescription: A string to be used as a accessible description for the indicator. It renders an element only visible for screenreaders to provide additional context
      */
     indicators: {
       type: Array as PropType<Indicator[]>,
       required: true
-    },
-    target: {
-      type: String,
-      required: false,
-      default: ''
     }
   },
 
