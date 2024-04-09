@@ -27,8 +27,7 @@ export class ConflictDialog {
         [key: string]: string
       },
       disableHtmlEscaping?: boolean
-    ) => string,
-    protected isUpload?: boolean
+    ) => string
   ) {}
 
   async resolveAllConflicts(
