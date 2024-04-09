@@ -14,7 +14,7 @@
       </div>
       <oc-button
         v-oc-tooltip="$gettext('Create link')"
-        class="oc-ml-s"
+        class="oc-ml-s create-quicklink-button"
         size="small"
         :aria-label="$gettext('Create link')"
         @click="$emit('createPublicLink')"
