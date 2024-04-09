@@ -4,6 +4,7 @@ import { mock } from 'vitest-mock-extended'
 import { Resource } from '@ownclouders/web-client'
 import { ResolveStrategy } from '../../../../src/helpers/resource'
 import { Modal } from '../../../../src/composables/piniaStores'
+import { describe } from 'node:test'
 
 describe('ResourceConflictModal', () => {
   describe('checkbox', () => {
@@ -14,6 +15,24 @@ describe('ResourceConflictModal', () => {
     it('does not render if one conflict given', () => {
       const { wrapper } = getWrapper({ props: { conflictCount: 1 } })
       expect(wrapper.find('oc-checkbox-stub').exists()).toBeFalsy()
+    })
+  })
+  describe('buttons', () => {
+    describe('confirmSecondary', () => {
+      describe('text', () => {
+        it('should equal "Merge" when resource is a folder', () => {
+          const { wrapper } = getWrapper({
+            props: { resource: mock<Resource>({ isFolder: true }) }
+          })
+          expect(wrapper.vm.confirmSecondaryText).toEqual('Merge')
+        })
+        it('should equal "Replace" when resource is not a folder', () => {
+          const { wrapper } = getWrapper({
+            props: { resource: mock<Resource>({ isFolder: false }) }
+          })
+          expect(wrapper.vm.confirmSecondaryText).toEqual('Replace')
+        })
+      })
     })
   })
   describe('onConfirm', () => {
