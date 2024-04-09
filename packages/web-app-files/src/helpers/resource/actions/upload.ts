@@ -6,8 +6,10 @@ import {
   ResolveConflict,
   resolveFileNameDuplicate,
   ResolveStrategy,
+  ResourceConflictModal,
   ResourcesStore,
-  UppyResource
+  UppyResource,
+  useModals
 } from '@ownclouders/web-pkg'
 
 interface ConflictedResource {
@@ -15,15 +17,44 @@ interface ConflictedResource {
   type: string
 }
 
-export class ResourceConflict extends ConflictDialog {
+export class UploadResourceConflict extends ConflictDialog {
   resourcesStore: ResourcesStore
 
-  constructor(resourcesStore: ResourcesStore, language: Language, isUpload = false) {
+  constructor(resourcesStore: ResourcesStore, language: Language) {
     const { $gettext, $ngettext } = language
     super($gettext, $ngettext)
 
-    this.isUpload = isUpload
     this.resourcesStore = resourcesStore
+  }
+
+  resolveFileExists(
+    resource: Resource,
+    conflictCount: number,
+    suggestMerge = false,
+    separateSkipHandling = false // separate skip-handling between files and folders
+  ): Promise<ResolveConflict> {
+    const { dispatchModal } = useModals()
+
+    return new Promise<ResolveConflict>((resolve) => {
+      dispatchModal({
+        variation: 'danger',
+        title: resource.isFolder
+          ? this.$gettext('Folder already exists')
+          : this.$gettext('File already exists'),
+        hideActions: true,
+        customComponent: ResourceConflictModal,
+        customComponentAttrs: () => ({
+          isUpload: true,
+          resource,
+          conflictCount,
+          suggestMerge,
+          separateSkipHandling,
+          callbackFn: (conflict: ResolveConflict) => {
+            resolve(conflict)
+          }
+        })
+      })
+    })
   }
 
   getConflicts(files: UppyResource[]): ConflictedResource[] {

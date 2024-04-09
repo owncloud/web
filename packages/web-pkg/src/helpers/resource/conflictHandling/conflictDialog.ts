@@ -95,7 +95,6 @@ export class ConflictDialog {
           conflictCount,
           suggestMerge,
           separateSkipHandling,
-          isUpload: this.isUpload,
           callbackFn: (conflict: ResolveConflict) => {
             resolve(conflict)
           }
