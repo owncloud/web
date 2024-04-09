@@ -345,38 +345,15 @@ export default defineComponent({
       sharesStore.setLoading(false)
     }).restartable()
 
-    watch(
-      () => [...unref(panelContext).items, props.isOpen],
-      async () => {
-        if (unref(panelContext).items?.length !== 1) {
-          // don't load additional metadata for empty or multi-select contexts
-          return
-        }
-
-        const resource = unref(panelContext).items[0]
-
-        if (loadVersionsTask.isRunning) {
-          loadVersionsTask.cancelAll()
-        }
-
-        if (
-          !resource.isFolder &&
-          !isProjectSpaceResource(resource) &&
-          !isIncomingShareResource(resource) &&
-          !unref(isPublicFilesLocation) &&
-          !unref(isTrashLocation) &&
-          !unref(isSharedWithOthersLocation) &&
-          !unref(isSharedViaLinkLocation)
-        ) {
-          try {
-            await loadVersionsTask.perform(resource)
-          } catch (e) {
-            console.error(e)
-          }
-        }
-      },
-      { deep: true, immediate: true }
-    )
+    const loadVersions = (resource: Resource) => {
+      return (
+        !resource.isFolder &&
+        !isSpaceResource(resource) &&
+        !isIncomingShareResource(resource) &&
+        !unref(isPublicFilesLocation) &&
+        !unref(isTrashLocation)
+      )
+    }
 
     watch(
       () => [...unref(panelContext).items, props.isOpen],
@@ -391,6 +368,19 @@ export default defineComponent({
           return
         }
         const resource = unref(panelContext).items[0]
+
+        if (loadVersionsTask.isRunning) {
+          loadVersionsTask.cancelAll()
+        }
+
+        if (loadVersions(resource)) {
+          try {
+            await loadVersionsTask.perform(resource)
+          } catch (e) {
+            console.error(e)
+          }
+        }
+
         if (unref(loadedResource)?.id === resource.id) {
           // current resource is already loaded
           return
@@ -430,7 +420,10 @@ export default defineComponent({
         }
         isMetaDataLoading.value = false
       },
-      { deep: true, immediate: true }
+      {
+        deep: true,
+        immediate: true
+      }
     )
 
     provide('resource', readonly(loadedResource))

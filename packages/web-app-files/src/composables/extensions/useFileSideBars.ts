@@ -26,6 +26,7 @@ import {
   isProjectSpaceResource,
   isShareResource,
   isShareSpaceResource,
+  isSpaceResource,
   SpaceResource
 } from '@ownclouders/web-client/src/helpers'
 import { Resource } from '@ownclouders/web-client'
@@ -229,9 +230,8 @@ export const useSideBarPanels = () => {
               if (
                 isLocationTrashActive(router, 'files-trash-generic') ||
                 isLocationPublicActive(router, 'files-public-link') ||
-                isLocationSharesActive(router, 'files-shares-with-others') ||
-                isLocationSharesActive(router, 'files-shares-via-link') ||
-                isIncomingShareResource(items[0])
+                isIncomingShareResource(items[0]) ||
+                isSpaceResource(items[0])
               ) {
                 return false
               }
