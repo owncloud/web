@@ -1,21 +1,119 @@
-Changelog for ownCloud Web [unreleased] (UNRELEASED)
+Changelog for ownCloud Web [9.0.0] (2024-04-09)
 =======================================
-The following sections list the changes in ownCloud web unreleased relevant to
+The following sections list the changes in ownCloud web 9.0.0 relevant to
 ownCloud admins and users.
 
-[unreleased]: https://github.com/owncloud/web/compare/v8.0.1...master
+[9.0.0]: https://github.com/owncloud/web/compare/v8.0.1...v9.0.0
 
 Summary
 -------
 
+* Bugfix - User data not updated while altering own user: [#10377](https://github.com/owncloud/web/pull/10377)
+* Bugfix - Admin settings keyboard navigation: [#10417](https://github.com/owncloud/web/pull/10417)
+* Bugfix - Folder replace: [#10515](https://github.com/owncloud/web/issues/10515)
+* Bugfix - Load thumbnail when postprocessing is finished: [#10517](https://github.com/owncloud/web/pull/10517)
+* Bugfix - Share sidebar icons: [#10551](https://github.com/owncloud/web/pull/10551)
+* Bugfix - Hidden right sidebar on small screens: [#10598](https://github.com/owncloud/web/issues/10598)
+* Bugfix - Scope loss when showing search results: [#10634](https://github.com/owncloud/web/issues/10634)
+* Bugfix - Theme loading without matching theme: [#10657](https://github.com/owncloud/web/issues/10657)
 * Bugfix - Apply sandbox attribute to iframe in draw-io extension: [#10702](https://github.com/owncloud/web/pull/10702)
 * Bugfix - Apply sandbox attribute to iframe in app-external extension: [#10706](https://github.com/owncloud/web/pull/10706)
+* Change - Remove deprecated code: [#7338](https://github.com/owncloud/web/issues/7338)
+* Change - Remove skeleton app: [#9892](https://github.com/owncloud/web/issues/9892)
+* Change - Remove deprecated extension point for adding quick actions: [#10102](https://github.com/owncloud/web/pull/10102)
+* Change - Remove homeFolder option: [#10122](https://github.com/owncloud/web/pull/10122)
+* Change - Vuex store removed: [#10210](https://github.com/owncloud/web/issues/10210)
+* Change - Remove ocs user: [#10240](https://github.com/owncloud/web/pull/10240)
+* Change - Registering app file editors: [#10330](https://github.com/owncloud/web/pull/10330)
+* Enhancement - Icon for .dcm files: [#9215](https://github.com/owncloud/web/issues/9215)
+* Enhancement - Tile sizes: [#10018](https://github.com/owncloud/web/issues/10018)
+* Enhancement - Enable user preferences in public links: [#10207](https://github.com/owncloud/web/pull/10207)
+* Enhancement - Move ThemeSwitcher into Account Settings: [#10334](https://github.com/owncloud/web/pull/10334)
+* Enhancement - Top loading bar increase visibility: [#10383](https://github.com/owncloud/web/issues/10383)
+* Enhancement - Integrate ToastUI editor in the text editor app: [#10390](https://github.com/owncloud/web/pull/10390)
 * Enhancement - Custom component extension type: [#10443](https://github.com/owncloud/web/pull/10443)
 * Enhancement - Add extensionPoint concept: [#10443](https://github.com/owncloud/web/pull/10443)
+* Enhancement - Epub reader app: [#10448](https://github.com/owncloud/web/pull/10448)
+* Enhancement - Highlight search term in sharing autosuggest list: [#10485](https://github.com/owncloud/web/pull/10485)
+* Enhancement - Warn user before closing browser when upload is in progress: [#10519](https://github.com/owncloud/web/pull/10519)
+* Enhancement - Full text search default: [#10534](https://github.com/owncloud/web/issues/10534)
+* Enhancement - Show locked and processing next to other status indicators: [#10544](https://github.com/owncloud/web/pull/10544)
+* Enhancement - Set emoji as space icon: [#10546](https://github.com/owncloud/web/pull/10546)
+* Enhancement - Add SSE events for locking, renaming, deleting, and restoring: [#10586](https://github.com/owncloud/web/pull/10586)
+* Enhancement - Remember left nav bar state: [#10611](https://github.com/owncloud/web/pull/10611)
+* Enhancement - Remember right side bar state: [#10612](https://github.com/owncloud/web/pull/10612)
+* Enhancement - Add details panel to trash: [#10624](https://github.com/owncloud/web/pull/10624)
 * Enhancement - Implement Server-Sent Events (SSE) for File Creation: [#10709](https://github.com/owncloud/web/pull/10709)
 
 Details
 -------
+
+* Bugfix - User data not updated while altering own user: [#10377](https://github.com/owncloud/web/pull/10377)
+
+   We've fixed a bug, where the user data was not updated when altering the own
+   user via the admin settings app, this effected for example the username and
+   email address in the top bar.
+
+   https://github.com/owncloud/web/issues/10373
+   https://github.com/owncloud/web/pull/10377
+
+* Bugfix - Admin settings keyboard navigation: [#10417](https://github.com/owncloud/web/pull/10417)
+
+   We've fixed a bug where keyboard navigation stopped working after deleting a
+   resource in the admin settings app. We also fixed a bug where initial keyboard
+   navigation didn't work, when no resource was selected.
+
+   https://github.com/owncloud/web/issues/10186
+   https://github.com/owncloud/web/pull/10417
+
+* Bugfix - Folder replace: [#10515](https://github.com/owncloud/web/issues/10515)
+
+   The "Replace" conflict option, which previously didn't work at all when trying
+   to copy/move a folder, has been fixed.
+
+   https://github.com/owncloud/web/issues/10515
+   https://github.com/owncloud/web/pull/10597
+
+* Bugfix - Load thumbnail when postprocessing is finished: [#10517](https://github.com/owncloud/web/pull/10517)
+
+   We've fixed a bug when thumbnails weren't properly refreshed when postprocessing
+   is active on server and the file was updated, e.G text files.
+
+   https://github.com/owncloud/web/issues/10486
+   https://github.com/owncloud/web/pull/10517
+
+* Bugfix - Share sidebar icons: [#10551](https://github.com/owncloud/web/pull/10551)
+
+   We've fixed a bug where the share invite search dropdown didn't have icons in
+   some cases.
+
+   https://github.com/owncloud/web/pull/10551
+
+* Bugfix - Hidden right sidebar on small screens: [#10598](https://github.com/owncloud/web/issues/10598)
+
+   The issue causing the right sidebar to not display on screens smaller than 960px
+   has been fixed.
+
+   https://github.com/owncloud/web/issues/10598
+   https://github.com/owncloud/web/pull/10643
+
+* Bugfix - Scope loss when showing search results: [#10634](https://github.com/owncloud/web/issues/10634)
+
+   Clicking "Show n results" in the search preview no longer loses the search
+   scope.
+
+   https://github.com/owncloud/web/issues/10634
+   https://github.com/owncloud/web/pull/10653
+
+* Bugfix - Theme loading without matching theme: [#10657](https://github.com/owncloud/web/issues/10657)
+
+   We've fixed an issue where theme loading would break when there was no matching
+   oC theme found for the user's OS setting. For example, this occurred when a
+   user's OS setting was configured to "dark," but the instance of oC did not offer
+   a dark theme.
+
+   https://github.com/owncloud/web/issues/10657
+   https://github.com/owncloud/web/pull/10659
 
 * Bugfix - Apply sandbox attribute to iframe in draw-io extension: [#10702](https://github.com/owncloud/web/pull/10702)
 
@@ -28,6 +126,186 @@ Details
    General hardening of ownCloud Web integration with OnlyOffice/Collabora
 
    https://github.com/owncloud/web/pull/10706
+
+* Change - Remove deprecated code: [#7338](https://github.com/owncloud/web/issues/7338)
+
+   We have removed the `getToken` getter from our vuex store and support for the
+   deprecated `user-management` name for the `admin-settings` app. See linked
+   "Deprecations" issue for more information.
+
+   https://github.com/owncloud/web/issues/7338
+   https://github.com/owncloud/web/pull/9959
+
+* Change - Remove skeleton app: [#9892](https://github.com/owncloud/web/issues/9892)
+
+   Due to improvements in the extension system in general, we have removed the
+   skeleton app. Documentation regarding the extension API and guides/examples can
+   be found in the dev docs.
+
+   https://github.com/owncloud/web/issues/9892
+   https://github.com/owncloud/web/pull/10067
+
+* Change - Remove deprecated extension point for adding quick actions: [#10102](https://github.com/owncloud/web/pull/10102)
+
+   BREAKING CHANGE for developers: The old way of registering quick actions via the
+   `quickaction` property of an app has been removed. Quick actions should be
+   registered as extension via our extension registry. They need to be of type
+   `action` and have the `files.quick-action` scope.
+
+   https://github.com/owncloud/web/pull/10102
+   https://github.com/owncloud/web/pull/10223
+
+* Change - Remove homeFolder option: [#10122](https://github.com/owncloud/web/pull/10122)
+
+   We have removed the `homeFolder` option as it was originally implemented and
+   used by CERN but isn't needed anymore.
+
+   https://github.com/owncloud/web/pull/10122
+
+* Change - Vuex store removed: [#10210](https://github.com/owncloud/web/issues/10210)
+
+   BREAKING CHANGE for developers: The vuex store has been removed in favor of
+   pinia.
+
+   All store modules have been migrated to a pinia store module. Please see the
+   linked issue down below for a list of all migrated stores and how to use them
+   now.
+
+   There are a number of things that have been removed and/or moved into pinia
+   composables instead:
+
+   Globals:
+
+   - `store` and `$store` variables have been removed. - `ConfigurationManager` has
+   been removed. The config now sits inside the configuration store.
+
+   App framework:
+
+   - `announceStore` has been removed. There is no need for apps to announce stores
+   to the runtime. If you need to use a store in your app, simply create a pinia
+   store module and use it. - `announceExtensions` has been removed. The proper way
+   for an app to register file extensions is via the `extensions` property inside
+   the `appInfo` object. - `requestStore` has been removed. There is no need to
+   request specific stores. All stores that `web-pkg` provides can be imported and
+   accessed via their composables. - `enabled` callback as well as the `name`
+   callback of the `AppNavigationItem` no longer have the `capabilities` parameter.
+   - `store` param of the `ClassicApplicationScript` has been removed.
+
+   Composables:
+
+   - `useStore` has been removed. Use the pinia for the store you want to use
+   instead. - `useAccessToken` has been removed. It now sits inside the auth store.
+   - `usePublicLinkContext` has been removed. It now sits inside the auth store. -
+   `usePublicLinkPassword` has been removed. It now sits inside the auth store. -
+   `usePublicLinkToken` has been removed. It now sits inside the auth store. -
+   `useUserContext` has been removed. It now sits inside the auth store. -
+   `useConfigurationManager` has been removed. The config now sits inside the
+   configuration store. - `use...Capability` composables have been removed.
+   Capablities now sit inside the capability store.
+
+   For store specific changes please see the linked issue and PRs down below.
+
+   https://github.com/owncloud/web/issues/10210
+   https://github.com/owncloud/web/pull/10212
+   https://github.com/owncloud/web/pull/10240
+   https://github.com/owncloud/web/pull/10307
+   https://github.com/owncloud/web/pull/10309
+   https://github.com/owncloud/web/pull/10316
+   https://github.com/owncloud/web/pull/10323
+   https://github.com/owncloud/web/pull/10326
+   https://github.com/owncloud/web/pull/10329
+   https://github.com/owncloud/web/pull/10331
+   https://github.com/owncloud/web/pull/10336
+   https://github.com/owncloud/web/pull/10338
+   https://github.com/owncloud/web/pull/10341
+   https://github.com/owncloud/web/pull/10346
+   https://github.com/owncloud/web/pull/10349
+   https://github.com/owncloud/web/pull/10362
+   https://github.com/owncloud/web/pull/10363
+   https://github.com/owncloud/web/pull/10368
+   https://github.com/owncloud/web/pull/10372
+
+* Change - Remove ocs user: [#10240](https://github.com/owncloud/web/pull/10240)
+
+   BREAKING CHANGE for developers: The user from the ocs api has been removed in
+   favor of the graph user. That means the user that can be retrieved from the
+   store looks slightly different than the OCS user (though it still holds the same
+   information).
+
+   For more details please see the linked PR down below.
+
+   https://github.com/owncloud/web/issues/10210
+   https://github.com/owncloud/web/pull/10240
+
+* Change - Registering app file editors: [#10330](https://github.com/owncloud/web/pull/10330)
+
+   BREAKING CHANGE for developers: The `announceExtensions` method inside the app's
+   `ready` hook, which could be used to register file editors, has been removed.
+   Developers should use the `extensions` property inside the `appInfo` object
+   instead.
+
+   Note that the `handler` property of such an extension has been renamed to
+   `createFileHandler`.
+
+   https://github.com/owncloud/web/issues/10210
+   https://github.com/owncloud/web/pull/10330
+   https://github.com/owncloud/web/pull/10346
+   https://github.com/owncloud/web/pull/10357
+   https://github.com/owncloud/web/pull/10361
+
+* Enhancement - Icon for .dcm files: [#9215](https://github.com/owncloud/web/issues/9215)
+
+   We've added a custom icon for medical images of the file type dcm.
+
+   https://github.com/owncloud/web/issues/9215
+   https://github.com/owncloud/web/pull/10172
+
+* Enhancement - Tile sizes: [#10018](https://github.com/owncloud/web/issues/10018)
+
+   We've adjusted the tile sizes to have a bigger base size and smaller stepping
+   from one tile size to the next. In addition to that the default tile size has
+   been changed to the second stepping, so that initially both space tiles and
+   file/folder tiles have a sufficient size for reading longer names.
+
+   https://github.com/owncloud/web/issues/10018
+   https://github.com/owncloud/web/issues/10638
+   https://github.com/owncloud/web/pull/10558
+   https://github.com/owncloud/web/pull/10646
+
+* Enhancement - Enable user preferences in public links: [#10207](https://github.com/owncloud/web/pull/10207)
+
+   We've enabled user preferences in public links, so any user even without an
+   account can open preferences in a public link context and for example change the
+   current language.
+
+   https://github.com/owncloud/web/pull/10207
+
+* Enhancement - Move ThemeSwitcher into Account Settings: [#10334](https://github.com/owncloud/web/pull/10334)
+
+   We've moved the ThemeSwitcher to the account settings page.
+
+   https://github.com/owncloud/web/issues/10181
+   https://github.com/owncloud/web/pull/10334
+   https://github.com/owncloud/web/pull/10342
+
+* Enhancement - Top loading bar increase visibility: [#10383](https://github.com/owncloud/web/issues/10383)
+
+   We've improved the visibility in the top loading bar, the height has been
+   increased along with the color contrast.
+
+   https://github.com/owncloud/web/issues/10383
+
+* Enhancement - Integrate ToastUI editor in the text editor app: [#10390](https://github.com/owncloud/web/pull/10390)
+
+   We've integrated the ToastUI editor in our text editor app. This makes writing
+   markdown much easier, since the users will have access to a markdown compatible
+   toolbar. Code syntax highlighting is also supported.
+
+   https://github.com/owncloud/web/issues/9495
+   https://github.com/owncloud/web/issues/10385
+   https://github.com/owncloud/web/pull/10390
+   https://github.com/owncloud/web/pull/10467
+   https://github.com/owncloud/web/pull/10465
 
 * Enhancement - Custom component extension type: [#10443](https://github.com/owncloud/web/pull/10443)
 
@@ -60,6 +338,107 @@ Details
    the user choice in the local storage of the browser.
 
    https://github.com/owncloud/web/pull/10443
+
+* Enhancement - Epub reader app: [#10448](https://github.com/owncloud/web/pull/10448)
+
+   We've added a epub reader app to open ebooks in web. This includes a variety of
+   functionalities such as a comprehensive chapter list, font size adjustment
+   options, and the ability to remember the user's last reading position even after
+   the app is closed.
+
+   https://github.com/owncloud/web/issues/10464
+   https://github.com/owncloud/web/pull/10448
+   https://github.com/owncloud/web/pull/10462
+   https://github.com/owncloud/web/pull/10468
+   https://github.com/owncloud/web/pull/10469
+   https://github.com/owncloud/web/pull/10470
+   https://github.com/owncloud/web/pull/10503
+
+* Enhancement - Highlight search term in sharing autosuggest list: [#10485](https://github.com/owncloud/web/pull/10485)
+
+   We've adjusted the sharing autosuggest list, so the entered search term will be
+   highlighted in the respective name and mail of the found users.
+
+   https://github.com/owncloud/web/issues/10453
+   https://github.com/owncloud/web/pull/10485
+
+* Enhancement - Warn user before closing browser when upload is in progress: [#10519](https://github.com/owncloud/web/pull/10519)
+
+   We've added a warning message for the user, if they try to close the browser
+   while upload is in progress.
+
+   https://github.com/owncloud/web/issues/10500
+   https://github.com/owncloud/web/pull/10519
+
+* Enhancement - Full text search default: [#10534](https://github.com/owncloud/web/issues/10534)
+
+   Full text search is now enabled by default when searching for files if the
+   server supports it.
+
+   https://github.com/owncloud/web/issues/10534
+   https://github.com/owncloud/web/pull/10626
+
+* Enhancement - Show locked and processing next to other status indicators: [#10544](https://github.com/owncloud/web/pull/10544)
+
+   We've moved the processing and lock indicators to the status table column so all
+   indicators are easy accessible at the same spot. We also show the respective
+   lock and processing states in the tiles view.
+
+   https://github.com/owncloud/web/issues/10538
+   https://github.com/owncloud/web/pull/10544
+
+* Enhancement - Set emoji as space icon: [#10546](https://github.com/owncloud/web/pull/10546)
+
+   We've added a new feature to set emojis as space icon, to do so, the user needs
+   to click on the 'Set icon' button in the context menu of the respective space
+   and has to select an emoji from the emoji picker.
+
+   https://github.com/owncloud/web/issues/10471
+   https://github.com/owncloud/web/pull/10546
+
+* Enhancement - Add SSE events for locking, renaming, deleting, and restoring: [#10586](https://github.com/owncloud/web/pull/10586)
+
+   We've added Server-Sent Events (SSE) for locking, renaming, deleting, and
+   restoring actions. This enhancement ensures that these actions are instantly
+   propagated to other browsers and devices where the logged in user has access the
+   relevant files and folders. Now, users can experience real-time updates across
+   all their devices.
+
+   https://github.com/owncloud/web/issues/9849
+   https://github.com/owncloud/web/issues/9781
+   https://github.com/owncloud/web/issues/9848
+   https://github.com/owncloud/web/pull/10586
+   https://github.com/owncloud/web/pull/10572
+   https://github.com/owncloud/web/pull/10567
+
+* Enhancement - Remember left nav bar state: [#10611](https://github.com/owncloud/web/pull/10611)
+
+   We've implemented a feature to remember the state of the left navbar. Now, when
+   the user reopens the web application, the navbar will remain in its last state,
+   either fully open or collapsed, based on the user's previous interaction with
+   it.
+
+   https://github.com/owncloud/web/issues/9613
+   https://github.com/owncloud/web/pull/10611
+
+* Enhancement - Remember right side bar state: [#10612](https://github.com/owncloud/web/pull/10612)
+
+   We've implemented a feature to remember the state of the right side bar. Now,
+   when the user reopens the web application, the right side bar will remain in its
+   last state, either open or closed, based on the user's previous interaction with
+   it.
+
+   https://github.com/owncloud/web/issues/9613
+   https://github.com/owncloud/web/pull/10612
+
+* Enhancement - Add details panel to trash: [#10624](https://github.com/owncloud/web/pull/10624)
+
+   We've added the details panel to the right side bar, when the user selects a
+   resource in the trash. We also added a panel for multi select.
+
+   https://github.com/owncloud/web/issues/10620
+   https://github.com/owncloud/web/issues/10616
+   https://github.com/owncloud/web/pull/10624
 
 * Enhancement - Implement Server-Sent Events (SSE) for File Creation: [#10709](https://github.com/owncloud/web/pull/10709)
 
@@ -117,7 +496,7 @@ Changelog for ownCloud Web [8.0.0] (2024-03-08)
 The following sections list the changes in ownCloud web 8.0.0 relevant to
 ownCloud admins and users.
 
-[8.0.0]: https://github.com/owncloud/web/compare/v9.0.0...v8.0.0
+[8.0.0]: https://github.com/owncloud/web/compare/v7.1.3...v8.0.0
 
 Summary
 -------
@@ -1209,399 +1588,6 @@ Details
 
    https://github.com/owncloud/web/issues/9840
    https://github.com/owncloud/web/pull/10356
-
-Changelog for ownCloud Web [9.0.0] (2024-02-26)
-=======================================
-The following sections list the changes in ownCloud web 9.0.0 relevant to
-ownCloud admins and users.
-
-[9.0.0]: https://github.com/owncloud/web/compare/v7.1.3...v9.0.0
-
-Summary
--------
-
-* Bugfix - User data not updated while altering own user: [#10377](https://github.com/owncloud/web/pull/10377)
-* Bugfix - Admin settings keyboard navigation: [#10417](https://github.com/owncloud/web/pull/10417)
-* Bugfix - Folder replace: [#10515](https://github.com/owncloud/web/issues/10515)
-* Bugfix - Load thumbnail when postprocessing is finished: [#10517](https://github.com/owncloud/web/pull/10517)
-* Bugfix - Share sidebar icons: [#10551](https://github.com/owncloud/web/pull/10551)
-* Bugfix - Hidden right sidebar on small screens: [#10598](https://github.com/owncloud/web/issues/10598)
-* Bugfix - Scope loss when showing search results: [#10634](https://github.com/owncloud/web/issues/10634)
-* Bugfix - Theme loading without matching theme: [#10657](https://github.com/owncloud/web/issues/10657)
-* Change - Remove deprecated code: [#7338](https://github.com/owncloud/web/issues/7338)
-* Change - Remove skeleton app: [#9892](https://github.com/owncloud/web/issues/9892)
-* Change - Remove deprecated extension point for adding quick actions: [#10102](https://github.com/owncloud/web/pull/10102)
-* Change - Remove homeFolder option: [#10122](https://github.com/owncloud/web/pull/10122)
-* Change - Vuex store removed: [#10210](https://github.com/owncloud/web/issues/10210)
-* Change - Remove ocs user: [#10240](https://github.com/owncloud/web/pull/10240)
-* Change - Registering app file editors: [#10330](https://github.com/owncloud/web/pull/10330)
-* Enhancement - Icon for .dcm files: [#9215](https://github.com/owncloud/web/issues/9215)
-* Enhancement - Tile sizes: [#10018](https://github.com/owncloud/web/issues/10018)
-* Enhancement - Enable user preferences in public links: [#10207](https://github.com/owncloud/web/pull/10207)
-* Enhancement - Move ThemeSwitcher into Account Settings: [#10334](https://github.com/owncloud/web/pull/10334)
-* Enhancement - Top loading bar increase visibility: [#10383](https://github.com/owncloud/web/issues/10383)
-* Enhancement - Integrate ToastUI editor in the text editor app: [#10390](https://github.com/owncloud/web/pull/10390)
-* Enhancement - Epub reader app: [#10448](https://github.com/owncloud/web/pull/10448)
-* Enhancement - Highlight search term in sharing autosuggest list: [#10485](https://github.com/owncloud/web/pull/10485)
-* Enhancement - Warn user before closing browser when upload is in progress: [#10519](https://github.com/owncloud/web/pull/10519)
-* Enhancement - Full text search default: [#10534](https://github.com/owncloud/web/issues/10534)
-* Enhancement - Show locked and processing next to other status indicators: [#10544](https://github.com/owncloud/web/pull/10544)
-* Enhancement - Set emoji as space icon: [#10546](https://github.com/owncloud/web/pull/10546)
-* Enhancement - Add SSE events for locking, renaming, deleting, and restoring: [#10586](https://github.com/owncloud/web/pull/10586)
-* Enhancement - Remember left nav bar state: [#10611](https://github.com/owncloud/web/pull/10611)
-* Enhancement - Remember right side bar state: [#10612](https://github.com/owncloud/web/pull/10612)
-* Enhancement - Add details panel to trash: [#10624](https://github.com/owncloud/web/pull/10624)
-
-Details
--------
-
-* Bugfix - User data not updated while altering own user: [#10377](https://github.com/owncloud/web/pull/10377)
-
-   We've fixed a bug, where the user data was not updated when altering the own
-   user via the admin settings app, this effected for example the username and
-   email address in the top bar.
-
-   https://github.com/owncloud/web/issues/10373
-   https://github.com/owncloud/web/pull/10377
-
-* Bugfix - Admin settings keyboard navigation: [#10417](https://github.com/owncloud/web/pull/10417)
-
-   We've fixed a bug where keyboard navigation stopped working after deleting a
-   resource in the admin settings app. We also fixed a bug where initial keyboard
-   navigation didn't work, when no resource was selected.
-
-   https://github.com/owncloud/web/issues/10186
-   https://github.com/owncloud/web/pull/10417
-
-* Bugfix - Folder replace: [#10515](https://github.com/owncloud/web/issues/10515)
-
-   The "Replace" conflict option, which previously didn't work at all when trying
-   to copy/move a folder, has been fixed.
-
-   https://github.com/owncloud/web/issues/10515
-   https://github.com/owncloud/web/pull/10597
-
-* Bugfix - Load thumbnail when postprocessing is finished: [#10517](https://github.com/owncloud/web/pull/10517)
-
-   We've fixed a bug when thumbnails weren't properly refreshed when postprocessing
-   is active on server and the file was updated, e.G text files.
-
-   https://github.com/owncloud/web/issues/10486
-   https://github.com/owncloud/web/pull/10517
-
-* Bugfix - Share sidebar icons: [#10551](https://github.com/owncloud/web/pull/10551)
-
-   We've fixed a bug where the share invite search dropdown didn't have icons in
-   some cases.
-
-   https://github.com/owncloud/web/pull/10551
-
-* Bugfix - Hidden right sidebar on small screens: [#10598](https://github.com/owncloud/web/issues/10598)
-
-   The issue causing the right sidebar to not display on screens smaller than 960px
-   has been fixed.
-
-   https://github.com/owncloud/web/issues/10598
-   https://github.com/owncloud/web/pull/10643
-
-* Bugfix - Scope loss when showing search results: [#10634](https://github.com/owncloud/web/issues/10634)
-
-   Clicking "Show n results" in the search preview no longer loses the search
-   scope.
-
-   https://github.com/owncloud/web/issues/10634
-   https://github.com/owncloud/web/pull/10653
-
-* Bugfix - Theme loading without matching theme: [#10657](https://github.com/owncloud/web/issues/10657)
-
-   We've fixed an issue where theme loading would break when there was no matching
-   oC theme found for the user's OS setting. For example, this occurred when a
-   user's OS setting was configured to "dark," but the instance of oC did not offer
-   a dark theme.
-
-   https://github.com/owncloud/web/issues/10657
-   https://github.com/owncloud/web/pull/10659
-
-* Change - Remove deprecated code: [#7338](https://github.com/owncloud/web/issues/7338)
-
-   We have removed the `getToken` getter from our vuex store and support for the
-   deprecated `user-management` name for the `admin-settings` app. See linked
-   "Deprecations" issue for more information.
-
-   https://github.com/owncloud/web/issues/7338
-   https://github.com/owncloud/web/pull/9959
-
-* Change - Remove skeleton app: [#9892](https://github.com/owncloud/web/issues/9892)
-
-   Due to improvements in the extension system in general, we have removed the
-   skeleton app. Documentation regarding the extension API and guides/examples can
-   be found in the dev docs.
-
-   https://github.com/owncloud/web/issues/9892
-   https://github.com/owncloud/web/pull/10067
-
-* Change - Remove deprecated extension point for adding quick actions: [#10102](https://github.com/owncloud/web/pull/10102)
-
-   BREAKING CHANGE for developers: The old way of registering quick actions via the
-   `quickaction` property of an app has been removed. Quick actions should be
-   registered as extension via our extension registry. They need to be of type
-   `action` and have the `files.quick-action` scope.
-
-   https://github.com/owncloud/web/pull/10102
-   https://github.com/owncloud/web/pull/10223
-
-* Change - Remove homeFolder option: [#10122](https://github.com/owncloud/web/pull/10122)
-
-   We have removed the `homeFolder` option as it was originally implemented and
-   used by CERN but isn't needed anymore.
-
-   https://github.com/owncloud/web/pull/10122
-
-* Change - Vuex store removed: [#10210](https://github.com/owncloud/web/issues/10210)
-
-   BREAKING CHANGE for developers: The vuex store has been removed in favor of
-   pinia.
-
-   All store modules have been migrated to a pinia store module. Please see the
-   linked issue down below for a list of all migrated stores and how to use them
-   now.
-
-   There are a number of things that have been removed and/or moved into pinia
-   composables instead:
-
-   Globals:
-
-   - `store` and `$store` variables have been removed. - `ConfigurationManager` has
-   been removed. The config now sits inside the configuration store.
-
-   App framework:
-
-   - `announceStore` has been removed. There is no need for apps to announce stores
-   to the runtime. If you need to use a store in your app, simply create a pinia
-   store module and use it. - `announceExtensions` has been removed. The proper way
-   for an app to register file extensions is via the `extensions` property inside
-   the `appInfo` object. - `requestStore` has been removed. There is no need to
-   request specific stores. All stores that `web-pkg` provides can be imported and
-   accessed via their composables. - `enabled` callback as well as the `name`
-   callback of the `AppNavigationItem` no longer have the `capabilities` parameter.
-   - `store` param of the `ClassicApplicationScript` has been removed.
-
-   Composables:
-
-   - `useStore` has been removed. Use the pinia for the store you want to use
-   instead. - `useAccessToken` has been removed. It now sits inside the auth store.
-   - `usePublicLinkContext` has been removed. It now sits inside the auth store. -
-   `usePublicLinkPassword` has been removed. It now sits inside the auth store. -
-   `usePublicLinkToken` has been removed. It now sits inside the auth store. -
-   `useUserContext` has been removed. It now sits inside the auth store. -
-   `useConfigurationManager` has been removed. The config now sits inside the
-   configuration store. - `use...Capability` composables have been removed.
-   Capablities now sit inside the capability store.
-
-   For store specific changes please see the linked issue and PRs down below.
-
-   https://github.com/owncloud/web/issues/10210
-   https://github.com/owncloud/web/pull/10212
-   https://github.com/owncloud/web/pull/10240
-   https://github.com/owncloud/web/pull/10307
-   https://github.com/owncloud/web/pull/10309
-   https://github.com/owncloud/web/pull/10316
-   https://github.com/owncloud/web/pull/10323
-   https://github.com/owncloud/web/pull/10326
-   https://github.com/owncloud/web/pull/10329
-   https://github.com/owncloud/web/pull/10331
-   https://github.com/owncloud/web/pull/10336
-   https://github.com/owncloud/web/pull/10338
-   https://github.com/owncloud/web/pull/10341
-   https://github.com/owncloud/web/pull/10346
-   https://github.com/owncloud/web/pull/10349
-   https://github.com/owncloud/web/pull/10362
-   https://github.com/owncloud/web/pull/10363
-   https://github.com/owncloud/web/pull/10368
-   https://github.com/owncloud/web/pull/10372
-
-* Change - Remove ocs user: [#10240](https://github.com/owncloud/web/pull/10240)
-
-   BREAKING CHANGE for developers: The user from the ocs api has been removed in
-   favor of the graph user. That means the user that can be retrieved from the
-   store looks slightly different than the OCS user (though it still holds the same
-   information).
-
-   For more details please see the linked PR down below.
-
-   https://github.com/owncloud/web/issues/10210
-   https://github.com/owncloud/web/pull/10240
-
-* Change - Registering app file editors: [#10330](https://github.com/owncloud/web/pull/10330)
-
-   BREAKING CHANGE for developers: The `announceExtensions` method inside the app's
-   `ready` hook, which could be used to register file editors, has been removed.
-   Developers should use the `extensions` property inside the `appInfo` object
-   instead.
-
-   Note that the `handler` property of such an extension has been renamed to
-   `createFileHandler`.
-
-   https://github.com/owncloud/web/issues/10210
-   https://github.com/owncloud/web/pull/10330
-   https://github.com/owncloud/web/pull/10346
-   https://github.com/owncloud/web/pull/10357
-   https://github.com/owncloud/web/pull/10361
-
-* Enhancement - Icon for .dcm files: [#9215](https://github.com/owncloud/web/issues/9215)
-
-   We've added a custom icon for medical images of the file type dcm.
-
-   https://github.com/owncloud/web/issues/9215
-   https://github.com/owncloud/web/pull/10172
-
-* Enhancement - Tile sizes: [#10018](https://github.com/owncloud/web/issues/10018)
-
-   We've adjusted the tile sizes to have a bigger base size and smaller stepping
-   from one tile size to the next. In addition to that the default tile size has
-   been changed to the second stepping, so that initially both space tiles and
-   file/folder tiles have a sufficient size for reading longer names.
-
-   https://github.com/owncloud/web/issues/10018
-   https://github.com/owncloud/web/issues/10638
-   https://github.com/owncloud/web/pull/10558
-   https://github.com/owncloud/web/pull/10646
-
-* Enhancement - Enable user preferences in public links: [#10207](https://github.com/owncloud/web/pull/10207)
-
-   We've enabled user preferences in public links, so any user even without an
-   account can open preferences in a public link context and for example change the
-   current language.
-
-   https://github.com/owncloud/web/pull/10207
-
-* Enhancement - Move ThemeSwitcher into Account Settings: [#10334](https://github.com/owncloud/web/pull/10334)
-
-   We've moved the ThemeSwitcher to the account settings page.
-
-   https://github.com/owncloud/web/issues/10181
-   https://github.com/owncloud/web/pull/10334
-   https://github.com/owncloud/web/pull/10342
-
-* Enhancement - Top loading bar increase visibility: [#10383](https://github.com/owncloud/web/issues/10383)
-
-   We've improved the visibility in the top loading bar, the height has been
-   increased along with the color contrast.
-
-   https://github.com/owncloud/web/issues/10383
-
-* Enhancement - Integrate ToastUI editor in the text editor app: [#10390](https://github.com/owncloud/web/pull/10390)
-
-   We've integrated the ToastUI editor in our text editor app. This makes writing
-   markdown much easier, since the users will have access to a markdown compatible
-   toolbar. Code syntax highlighting is also supported.
-
-   https://github.com/owncloud/web/issues/9495
-   https://github.com/owncloud/web/issues/10385
-   https://github.com/owncloud/web/pull/10390
-   https://github.com/owncloud/web/pull/10467
-   https://github.com/owncloud/web/pull/10465
-
-* Enhancement - Epub reader app: [#10448](https://github.com/owncloud/web/pull/10448)
-
-   We've added a epub reader app to open ebooks in web. This includes a variety of
-   functionalities such as a comprehensive chapter list, font size adjustment
-   options, and the ability to remember the user's last reading position even after
-   the app is closed.
-
-   https://github.com/owncloud/web/issues/10464
-   https://github.com/owncloud/web/pull/10448
-   https://github.com/owncloud/web/pull/10462
-   https://github.com/owncloud/web/pull/10468
-   https://github.com/owncloud/web/pull/10469
-   https://github.com/owncloud/web/pull/10470
-   https://github.com/owncloud/web/pull/10503
-
-* Enhancement - Highlight search term in sharing autosuggest list: [#10485](https://github.com/owncloud/web/pull/10485)
-
-   We've adjusted the sharing autosuggest list, so the entered search term will be
-   highlighted in the respective name and mail of the found users.
-
-   https://github.com/owncloud/web/issues/10453
-   https://github.com/owncloud/web/pull/10485
-
-* Enhancement - Warn user before closing browser when upload is in progress: [#10519](https://github.com/owncloud/web/pull/10519)
-
-   We've added a warning message for the user, if they try to close the browser
-   while upload is in progress.
-
-   https://github.com/owncloud/web/issues/10500
-   https://github.com/owncloud/web/pull/10519
-
-* Enhancement - Full text search default: [#10534](https://github.com/owncloud/web/issues/10534)
-
-   Full text search is now enabled by default when searching for files if the
-   server supports it.
-
-   https://github.com/owncloud/web/issues/10534
-   https://github.com/owncloud/web/pull/10626
-
-* Enhancement - Show locked and processing next to other status indicators: [#10544](https://github.com/owncloud/web/pull/10544)
-
-   We've moved the processing and lock indicators to the status table column so all
-   indicators are easy accessible at the same spot. We also show the respective
-   lock and processing states in the tiles view.
-
-   https://github.com/owncloud/web/issues/10538
-   https://github.com/owncloud/web/pull/10544
-
-* Enhancement - Set emoji as space icon: [#10546](https://github.com/owncloud/web/pull/10546)
-
-   We've added a new feature to set emojis as space icon, to do so, the user needs
-   to click on the 'Set icon' button in the context menu of the respective space
-   and has to select an emoji from the emoji picker.
-
-   https://github.com/owncloud/web/issues/10471
-   https://github.com/owncloud/web/pull/10546
-
-* Enhancement - Add SSE events for locking, renaming, deleting, and restoring: [#10586](https://github.com/owncloud/web/pull/10586)
-
-   We've added Server-Sent Events (SSE) for locking, renaming, deleting, and
-   restoring actions. This enhancement ensures that these actions are instantly
-   propagated to other browsers and devices where the logged in user has access the
-   relevant files and folders. Now, users can experience real-time updates across
-   all their devices.
-
-   https://github.com/owncloud/web/issues/9849
-   https://github.com/owncloud/web/issues/9781
-   https://github.com/owncloud/web/issues/9848
-   https://github.com/owncloud/web/pull/10586
-   https://github.com/owncloud/web/pull/10572
-   https://github.com/owncloud/web/pull/10567
-
-* Enhancement - Remember left nav bar state: [#10611](https://github.com/owncloud/web/pull/10611)
-
-   We've implemented a feature to remember the state of the left navbar. Now, when
-   the user reopens the web application, the navbar will remain in its last state,
-   either fully open or collapsed, based on the user's previous interaction with
-   it.
-
-   https://github.com/owncloud/web/issues/9613
-   https://github.com/owncloud/web/pull/10611
-
-* Enhancement - Remember right side bar state: [#10612](https://github.com/owncloud/web/pull/10612)
-
-   We've implemented a feature to remember the state of the right side bar. Now,
-   when the user reopens the web application, the right side bar will remain in its
-   last state, either open or closed, based on the user's previous interaction with
-   it.
-
-   https://github.com/owncloud/web/issues/9613
-   https://github.com/owncloud/web/pull/10612
-
-* Enhancement - Add details panel to trash: [#10624](https://github.com/owncloud/web/pull/10624)
-
-   We've added the details panel to the right side bar, when the user selects a
-   resource in the trash. We also added a panel for multi select.
-
-   https://github.com/owncloud/web/issues/10620
-   https://github.com/owncloud/web/issues/10616
-   https://github.com/owncloud/web/pull/10624
 
 Changelog for ownCloud Web [7.1.3] (2023-12-15)
 =======================================
