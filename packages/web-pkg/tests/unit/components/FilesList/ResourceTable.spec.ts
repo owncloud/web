@@ -3,11 +3,12 @@ import ResourceTable from '../../../../src/components/FilesList/ResourceTable.vu
 import {
   extractDomSelector,
   IncomingShareResource,
+  OutgoingShareResource,
   Resource,
   ShareTypes,
   SpaceResource
 } from '@ownclouders/web-client/src/helpers'
-import { defaultPlugins, mount } from 'web-test-helpers'
+import { defaultPlugins, mount, PartialComponentProps } from 'web-test-helpers'
 import { CapabilityStore } from '../../../../src/composables/piniaStores'
 import { displayPositionedDropdown } from '../../../../src/helpers/contextMenuDropdown'
 import { eventBus } from '../../../../src/services/eventBus'
@@ -498,12 +499,36 @@ describe('ResourceTable', () => {
       })
     })
   })
+  describe('"shared with" field', () => {
+    it('only displays authenticated shares', () => {
+      const resource = mock<OutgoingShareResource>({ id: '1' })
+      resource.sharedWith = [
+        {
+          id: 'bob',
+          displayName: 'Bob',
+          shareType: ShareTypes.user.value
+        },
+        { displayName: 'Link', shareType: ShareTypes.link.value }
+      ]
+
+      const { wrapper } = getMountedWrapper({ resources: [resource] })
+
+      expect(wrapper.find('.resource-table-shared-with').exists()).toBeTruthy()
+      expect(wrapper.findAll('.resource-table-shared-with .oc-avatar').length).toBe(1)
+    })
+  })
 })
 
 function getMountedWrapper({
   props = {},
   userContextReady = true,
-  addProcessingResources = false
+  addProcessingResources = false,
+  resources = resourcesWithAllFields
+}: {
+  props?: PartialComponentProps<typeof ResourceTable>
+  userContextReady?: boolean
+  addProcessingResources?: boolean
+  resources?: Resource[]
 } = {}) {
   const capabilities = {
     files: { tags: true }
@@ -513,7 +538,7 @@ function getMountedWrapper({
     wrapper: mount(ResourceTable, {
       props: {
         resources: [
-          ...resourcesWithAllFields,
+          ...resources,
           ...(addProcessingResources ? processingResourcesWithAllFields : [])
         ],
         selection: [],
