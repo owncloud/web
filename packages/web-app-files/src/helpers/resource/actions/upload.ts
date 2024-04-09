@@ -44,7 +44,9 @@ export class UploadResourceConflict extends ConflictDialog {
         hideActions: true,
         customComponent: ResourceConflictModal,
         customComponentAttrs: () => ({
-          isUpload: true,
+          confirmSecondaryTextOverwrite: resource.isFolder
+            ? this.$gettext('Merge')
+            : this.$gettext('Replace'),
           resource,
           conflictCount,
           suggestMerge,
