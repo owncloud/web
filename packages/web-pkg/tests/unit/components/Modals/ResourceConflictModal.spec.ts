@@ -19,15 +19,27 @@ describe('ResourceConflictModal', () => {
   describe('buttons', () => {
     describe('confirmSecondary', () => {
       describe('text', () => {
-        it('should equal "Merge" when resource is a folder', () => {
+        it('should equal "Merge" when resource is a folder and "isUpload" is set to true', () => {
           const { wrapper } = getWrapper({
-            props: { resource: mock<Resource>({ isFolder: true }) }
+            props: { resource: mock<Resource>({ isFolder: true }), isUpload: true }
           })
           expect(wrapper.vm.confirmSecondaryText).toEqual('Merge')
         })
-        it('should equal "Replace" when resource is not a folder', () => {
+        it('should equal "Replace" when resource is not a folder and "isUpload" is set to true', () => {
           const { wrapper } = getWrapper({
             props: { resource: mock<Resource>({ isFolder: false }) }
+          })
+          expect(wrapper.vm.confirmSecondaryText).toEqual('Replace')
+        })
+        it('should equal "Replace" when resource is a folder and "isUpload" is set to false', () => {
+          const { wrapper } = getWrapper({
+            props: { resource: mock<Resource>({ isFolder: true }), isUpload: false }
+          })
+          expect(wrapper.vm.confirmSecondaryText).toEqual('Replace')
+        })
+        it('should equal "Replace" when resource is not a folder and "isUpload" is set to false', () => {
+          const { wrapper } = getWrapper({
+            props: { resource: mock<Resource>({ isFolder: false }), isUpload: false }
           })
           expect(wrapper.vm.confirmSecondaryText).toEqual('Replace')
         })

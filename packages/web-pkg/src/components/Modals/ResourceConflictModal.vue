@@ -54,7 +54,8 @@ export default defineComponent({
       required: true
     },
     suggestMerge: { type: Boolean, default: true },
-    separateSkipHandling: { type: Boolean, default: false }
+    separateSkipHandling: { type: Boolean, default: false },
+    isUpload: { type: Boolean, default: false }
   },
   setup(props) {
     const { removeModal } = useModals()
@@ -97,7 +98,7 @@ export default defineComponent({
     )
 
     const confirmSecondaryText = computed(() => {
-      return props.resource.isFolder ? $gettext('Merge') : $gettext('Replace')
+      return props.isUpload && props.resource.isFolder ? $gettext('Merge') : $gettext('Replace')
     })
 
     const onConfirm = () => {

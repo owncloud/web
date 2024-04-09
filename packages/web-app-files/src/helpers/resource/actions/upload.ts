@@ -18,10 +18,11 @@ interface ConflictedResource {
 export class ResourceConflict extends ConflictDialog {
   resourcesStore: ResourcesStore
 
-  constructor(resourcesStore: ResourcesStore, language: Language) {
+  constructor(resourcesStore: ResourcesStore, language: Language, isUpload = false) {
     const { $gettext, $ngettext } = language
     super($gettext, $ngettext)
 
+    this.isUpload = isUpload
     this.resourcesStore = resourcesStore
   }
 

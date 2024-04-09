@@ -27,7 +27,8 @@ export class ConflictDialog {
         [key: string]: string
       },
       disableHtmlEscaping?: boolean
-    ) => string
+    ) => string,
+    protected isUpload?: boolean
   ) {}
 
   async resolveAllConflicts(
@@ -94,6 +95,7 @@ export class ConflictDialog {
           conflictCount,
           suggestMerge,
           separateSkipHandling,
+          isUpload: this.isUpload,
           callbackFn: (conflict: ResolveConflict) => {
             resolve(conflict)
           }

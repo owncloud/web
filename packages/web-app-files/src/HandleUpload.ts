@@ -388,7 +388,7 @@ export class HandleUpload extends BasePlugin {
 
     // name conflict handling
     if (this.conflictHandlingEnabled) {
-      const conflictHandler = new ResourceConflict(this.resourcesStore, this.language)
+      const conflictHandler = new ResourceConflict(this.resourcesStore, this.language, true)
       const conflicts = conflictHandler.getConflicts(filesToUpload)
       if (conflicts.length) {
         const dashboard = document.getElementsByClassName('uppy-Dashboard')
