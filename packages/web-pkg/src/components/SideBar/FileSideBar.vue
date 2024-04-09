@@ -345,15 +345,34 @@ export default defineComponent({
       sharesStore.setLoading(false)
     }).restartable()
 
-    const loadVersions = (resource: Resource) => {
-      return (
-        !resource.isFolder &&
-        !isSpaceResource(resource) &&
-        !isIncomingShareResource(resource) &&
-        !unref(isPublicFilesLocation) &&
-        !unref(isTrashLocation)
-      )
-    }
+    watch(
+      () => [...unref(panelContext).items, props.isOpen],
+      async () => {
+        if (unref(panelContext).items?.length !== 1) {
+          return
+        }
+        const resource = unref(panelContext).items[0]
+
+        if (loadVersionsTask.isRunning) {
+          loadVersionsTask.cancelAll()
+        }
+
+        if (
+          !resource.isFolder &&
+          !isSpaceResource(resource) &&
+          !isIncomingShareResource(resource) &&
+          !unref(isPublicFilesLocation) &&
+          !unref(isTrashLocation)
+        ) {
+          try {
+            await loadVersionsTask.perform(resource)
+          } catch (e) {
+            console.error(e)
+          }
+        }
+      },
+      { immediate: true, deep: true }
+    )
 
     watch(
       () => [...unref(panelContext).items, props.isOpen],
@@ -368,18 +387,6 @@ export default defineComponent({
           return
         }
         const resource = unref(panelContext).items[0]
-
-        if (loadVersionsTask.isRunning) {
-          loadVersionsTask.cancelAll()
-        }
-
-        if (loadVersions(resource)) {
-          try {
-            await loadVersionsTask.perform(resource)
-          } catch (e) {
-            console.error(e)
-          }
-        }
 
         if (unref(loadedResource)?.id === resource.id) {
           // current resource is already loaded
