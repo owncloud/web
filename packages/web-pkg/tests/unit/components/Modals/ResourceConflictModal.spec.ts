@@ -4,7 +4,6 @@ import { mock } from 'vitest-mock-extended'
 import { Resource } from '@ownclouders/web-client'
 import { ResolveStrategy } from '../../../../src/helpers/resource'
 import { Modal } from '../../../../src/composables/piniaStores'
-import { describe } from 'node:test'
 
 describe('ResourceConflictModal', () => {
   describe('checkbox', () => {
