@@ -376,11 +376,12 @@ services:
       - '/var/run/docker.sock:/var/run/docker.sock:ro'
 
   tika-service:
-    image: dadarek/wait-for-dependencies
+    image: owncloudci/wait-for:latest
     container_name: web_tika_service
     depends_on:
       - tika
-    command: tika:9998
+    command:
+      - 'wait-for -it tika:9998 -t 300'
 
   tika:
     image: apache/tika:2.9.1.0
