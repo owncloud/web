@@ -1,3 +1,27 @@
+Changelog for ownCloud Web [unreleased] (UNRELEASED)
+=======================================
+The following sections list the changes in ownCloud web unreleased relevant to
+ownCloud admins and users.
+
+[unreleased]: https://github.com/owncloud/web/compare/v9.0.0...master
+
+Summary
+-------
+
+* Bugfix - Versions loaded multiple times when opening sidebar: [#10746](https://github.com/owncloud/web/pull/10746)
+
+Details
+-------
+
+* Bugfix - Versions loaded multiple times when opening sidebar: [#10746](https://github.com/owncloud/web/pull/10746)
+
+   We've fixed a bug, where the versions endpoint was fetched multiple times when
+   the sidebar was opened and therefore added unnecessary load to the server.
+
+   https://github.com/owncloud/web/issues/10381
+   https://github.com/owncloud/web/issues/10619
+   https://github.com/owncloud/web/pull/10746
+
 Changelog for ownCloud Web [9.0.0] (2024-04-09)
 =======================================
 The following sections list the changes in ownCloud web 9.0.0 relevant to
