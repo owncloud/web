@@ -207,7 +207,6 @@ function createWrapper({
   const publicLocation = createLocationPublic('files-public-link')
   const currentRoute = isPublicLinkContext ? publicLocation : spacesLocation
   const mocks = defaultComponentMocks({ currentRoute: mock<RouteLocation>(currentRoute as any) })
-  mocks.$clientService.webdav.listFileVersions.mockResolvedValue(versions)
   const capabilities = { files: { tags: tagsEnabled } }
   return {
     wrapper: mount(FileDetails, {
@@ -215,6 +214,7 @@ function createWrapper({
         stubs: { 'router-link': true, 'resource-icon': true },
         provide: {
           ...mocks,
+          versions,
           resource,
           space: mockDeep<SpaceResource>()
         },

@@ -136,7 +136,6 @@ import {
   useUserStore,
   useCapabilityStore,
   useConfigStore,
-  useClientService,
   useResourcesStore,
   formatDateFromJSDate
 } from '@ownclouders/web-pkg'
@@ -174,18 +173,12 @@ export default defineComponent({
       type: Boolean,
       required: false,
       default: true
-    },
-    versionsEnabled: {
-      type: Boolean,
-      required: false,
-      default: true
     }
   },
   setup(props) {
     const configStore = useConfigStore()
     const userStore = useUserStore()
     const capabilityStore = useCapabilityStore()
-    const clientService = useClientService()
     const { getMatchingSpace } = useGetMatchingSpace()
 
     const language = useGettext()
@@ -196,6 +189,7 @@ export default defineComponent({
     const { user } = storeToRefs(userStore)
 
     const resource = inject<Ref<Resource>>('resource')
+    const versions = inject<Ref<Resource[]>>('versions')
     const space = inject<Ref<SpaceResource>>('space')
 
     const previewService = usePreviewService()
@@ -203,15 +197,6 @@ export default defineComponent({
 
     const authStore = useAuthStore()
     const { publicLinkContextReady } = storeToRefs(authStore)
-
-    const versions = ref<Resource[]>([])
-    const loadVersions = async (fileId: Resource['fileId']) => {
-      try {
-        versions.value = await clientService.webdav.listFileVersions(fileId)
-      } catch (e) {
-        console.error(e)
-      }
-    }
 
     const isPreviewEnabled = computed(() => {
       if (unref(resource).isFolder) {
@@ -261,23 +246,6 @@ export default defineComponent({
       return formatRelativeDateFromJSDate(new Date(date), language.current)
     }
 
-    watch(
-      resource,
-      () => {
-        if (unref(resource)) {
-          loadPreviewTask.perform(unref(resource))
-          if (
-            props.versionsEnabled &&
-            !unref(resource).isFolder &&
-            !unref(publicLinkContextReady)
-          ) {
-            loadVersions(unref(resource).fileId)
-          }
-        }
-      },
-      { immediate: true }
-    )
-
     const contextualHelper = {
       isEnabled: configStore.options.contextHelpers,
       data: tagsHelper({ configStore })
@@ -295,6 +263,16 @@ export default defineComponent({
       const displayDate = formatDateFromJSDate(new Date(unref(resource).ddate), language.current)
       return upperFirst(displayDate)
     })
+
+    watch(
+      resource,
+      () => {
+        if (unref(resource)) {
+          loadPreviewTask.perform(unref(resource))
+        }
+      },
+      { immediate: true }
+    )
 
     return {
       user,

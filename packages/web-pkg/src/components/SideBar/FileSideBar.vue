@@ -63,6 +63,7 @@ import {
   CollaboratorShare,
   LinkShare,
   ShareRole,
+  isIncomingShareResource,
   call,
   isSpaceResource
 } from '@ownclouders/web-client/src/helpers'
@@ -110,11 +111,17 @@ export default defineComponent({
     const { currentFolder } = storeToRefs(resourcesStore)
 
     const loadedResource = ref<Resource>()
-    const isLoading = ref(false)
+    const versions = ref<Resource[]>([])
 
     const availableShareRoles = ref<ShareRole[]>([])
 
     const { selectedResources } = useSelectedResources()
+
+    const isMetaDataLoading = ref(false)
+
+    const isLoading = computed(() => {
+      return unref(isMetaDataLoading) || loadVersionsTask.isRunning
+    })
 
     const panelContext = computed<SideBarPanelContext<SpaceResource, Resource, Resource>>(() => {
       if (unref(selectedResources).length === 0) {
@@ -195,6 +202,10 @@ export default defineComponent({
         )
         .map((e) => e.panel)
     )
+
+    const loadVersionsTask = useTask(function* (signal, resource: Resource) {
+      versions.value = yield clientService.webdav.listFileVersions(resource.id)
+    })
 
     const loadSharesTask = useTask(function* (signal, resource: Resource) {
       sharesStore.setLoading(true)
@@ -337,6 +348,35 @@ export default defineComponent({
     watch(
       () => [...unref(panelContext).items, props.isOpen],
       async () => {
+        if (unref(panelContext).items?.length !== 1) {
+          return
+        }
+        const resource = unref(panelContext).items[0]
+
+        if (loadVersionsTask.isRunning) {
+          loadVersionsTask.cancelAll()
+        }
+
+        if (
+          !resource.isFolder &&
+          !isSpaceResource(resource) &&
+          !isIncomingShareResource(resource) &&
+          !unref(isPublicFilesLocation) &&
+          !unref(isTrashLocation)
+        ) {
+          try {
+            await loadVersionsTask.perform(resource)
+          } catch (e) {
+            console.error(e)
+          }
+        }
+      },
+      { immediate: true, deep: true }
+    )
+
+    watch(
+      () => [...unref(panelContext).items, props.isOpen],
+      async () => {
         if (!props.isOpen) {
           sharesStore.pruneShares()
           loadedResource.value = null
@@ -347,12 +387,13 @@ export default defineComponent({
           return
         }
         const resource = unref(panelContext).items[0]
+
         if (unref(loadedResource)?.id === resource.id) {
           // current resource is already loaded
           return
         }
 
-        isLoading.value = true
+        isMetaDataLoading.value = true
         if (!unref(isPublicFilesLocation) && !unref(isTrashLocation)) {
           try {
             if (loadSharesTask.isRunning) {
@@ -367,7 +408,7 @@ export default defineComponent({
 
         if (!unref(isShareLocation)) {
           loadedResource.value = resource
-          isLoading.value = false
+          isMetaDataLoading.value = false
           return
         }
 
@@ -384,12 +425,16 @@ export default defineComponent({
           loadedResource.value = resource
           console.error(error)
         }
-        isLoading.value = false
+        isMetaDataLoading.value = false
       },
-      { deep: true, immediate: true }
+      {
+        deep: true,
+        immediate: true
+      }
     )
 
     provide('resource', readonly(loadedResource))
+    provide('versions', readonly(versions))
     provide(
       'space',
       computed(() => props.space)
@@ -408,9 +453,9 @@ export default defineComponent({
       focusSideBar,
       panelContext,
       availablePanels,
-      isLoading,
       isFileHeaderVisible,
-      isSpaceHeaderVisible
+      isSpaceHeaderVisible,
+      isLoading
     }
   }
 })
