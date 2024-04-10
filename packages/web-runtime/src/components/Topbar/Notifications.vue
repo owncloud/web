@@ -212,12 +212,12 @@ export default {
 
     const computeNotificationDataTask = useTask(function* (signal, notifications) {
       for (const notification of unref(notifications)) {
-        if (!notification.hasOwnProperty('computedMessage')) {
+        if (!notification.computedMessage) {
           notification.computedMessage = yield new Promise((resolve) =>
             resolve(getMessage(notification))
           )
         }
-        if (!notification.hasOwnProperty('computedLink')) {
+        if (!notification.computedLink) {
           notification.computedLink = yield new Promise((resolve) => resolve(getLink(notification)))
         }
       }
@@ -269,11 +269,11 @@ export default {
 
     watch(
       [notifications, dropdownOpen],
-      async () => {
+      () => {
         if (!unref(dropdownOpen)) {
           return false
         }
-        await computeNotificationDataTask.perform(notifications)
+        computeNotificationDataTask.perform(notifications)
       },
       { immediate: true }
     )
