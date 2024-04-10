@@ -212,12 +212,10 @@ export default {
     const computeNotificationDataTask = useTask(function* (signal, notifications) {
       for (const notification of unref(notifications)) {
         if (!notification.computedMessage) {
-          notification.computedMessage = yield new Promise((resolve) =>
-            resolve(getMessage(notification))
-          )
+          notification.computedMessage = yield Promise.resolve(getMessage(notification))
         }
         if (!notification.computedLink) {
-          notification.computedLink = yield new Promise((resolve) => resolve(getLink(notification)))
+          notification.computedLink = yield Promise.resolve(getLink(notification))
         }
       }
     }).restartable()
