@@ -17,7 +17,7 @@
           v-if="notifications.length"
           class="oc-notifications-mark-all"
           appearance="raw"
-          @click="deleteNotifications(notifications.map((n) => n.notification_id))"
+          @click="deleteNotificationsTask.perform(notifications.map((n) => n.notification_id))"
           ><span v-text="$gettext('Mark all as read')"
         /></oc-button>
       </div>
@@ -75,7 +75,7 @@
   </div>
 </template>
 <script lang="ts">
-import { onMounted, onUnmounted, ref, unref } from 'vue'
+import { computed, onMounted, onUnmounted, ref, unref, watch } from 'vue'
 import isEmpty from 'lodash-es/isEmpty'
 import { useCapabilityStore, useSpacesStore } from '@ownclouders/web-pkg'
 import NotificationBell from './NotificationBell.vue'
@@ -83,8 +83,7 @@ import { Notification } from '../../helpers/notifications'
 import {
   formatDateFromISO,
   formatRelativeDateFromISO,
-  useClientService,
-  useRoute
+  useClientService
 } from '@ownclouders/web-pkg'
 import { useGettext } from 'vue3-gettext'
 import { useTask } from 'vue-concurrency'
@@ -102,12 +101,19 @@ export default {
     const capabilityStore = useCapabilityStore()
     const clientService = useClientService()
     const { current: currentLanguage } = useGettext()
-    const route = useRoute()
 
     const notifications = ref<Notification[]>([])
-    const loading = ref(false)
+
     const notificationsInterval = ref()
-    const dropdownOpened = ref(false)
+    const dropdownOpen = ref(false)
+
+    const loading = computed(() => {
+      return (
+        fetchNotificationsTask.isRunning ||
+        deleteNotificationsTask.isRunning ||
+        computeNotificationDataTask.isRunning
+      )
+    })
 
     const formatDate = (date) => {
       return formatDateFromISO(date, currentLanguage)
@@ -171,17 +177,7 @@ export default {
       return null
     }
 
-    const setAdditionalData = () => {
-      loading.value = true
-      for (const notification of unref(notifications)) {
-        notification.computedMessage = getMessage(notification)
-        notification.computedLink = getLink(notification)
-      }
-      loading.value = false
-    }
-
     const fetchNotificationsTask = useTask(function* (signal) {
-      loading.value = true
       try {
         const response = yield clientService.httpAuthenticated.get(
           'ocs/v2.php/apps/notifications/api/v1/notifications'
@@ -198,18 +194,12 @@ export default {
           data?.sort((a, b) => (new Date(b.datetime) as any) - (new Date(a.datetime) as any)) || []
       } catch (e) {
         console.error(e)
-      } finally {
-        if (unref(dropdownOpened)) {
-          setAdditionalData()
-        }
-        loading.value = false
       }
     }).restartable()
 
-    const deleteNotifications = async (ids: string[]) => {
-      loading.value = true
+    const deleteNotificationsTask = useTask(function* (signal, ids) {
       try {
-        await clientService.httpAuthenticated.delete(
+        yield clientService.httpAuthenticated.delete(
           'ocs/v2.php/apps/notifications/api/v1/notifications',
           { data: { ids } }
         )
@@ -217,9 +207,18 @@ export default {
         console.error(e)
       } finally {
         notifications.value = unref(notifications).filter((n) => !ids.includes(n.notification_id))
-        loading.value = false
       }
-    }
+    }).restartable()
+
+    const computeNotificationDataTask = useTask(function* (signal, notifications) {
+      for (const notification of unref(notifications)) {
+        if (!notification.computed) {
+          notification.computedMessage = getMessage(notification)
+          notification.computedLink = getLink(notification)
+          notification.computed = true
+        }
+      }
+    }).restartable()
 
     const onSSENotificationEvent = (event) => {
       try {
@@ -234,11 +233,10 @@ export default {
     }
 
     const hideDrop = () => {
-      dropdownOpened.value = false
+      dropdownOpen.value = false
     }
     const showDrop = () => {
-      dropdownOpened.value = true
-      setAdditionalData()
+      dropdownOpen.value = true
     }
 
     onMounted(() => {
@@ -266,12 +264,24 @@ export default {
       }
     })
 
+    watch(
+      [notifications, dropdownOpen],
+      () => {
+        if (!unref(dropdownOpen)) {
+          return false
+        }
+
+        computeNotificationDataTask.perform(notifications)
+      },
+      { immediate: true }
+    )
+
     return {
       notifications,
       fetchNotificationsTask,
       loading,
-      dropdownOpened,
-      deleteNotifications,
+      dropdownOpened: dropdownOpen,
+      deleteNotificationsTask,
       formatDate,
       formatDateRelative,
       getMessage,
