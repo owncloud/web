@@ -159,7 +159,6 @@ describe('Notification component', () => {
           computedLink: undefined
         })
         const { wrapper } = getWrapper({ notifications: [notification] })
-        await wrapper.vm.fetchNotificationsTask.last
         wrapper.vm.showDrop()
         await wrapper.vm.fetchNotificationsTask.last
         await wrapper.vm.computeNotificationDataTask.last
