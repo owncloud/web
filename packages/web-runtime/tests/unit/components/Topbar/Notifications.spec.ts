@@ -18,10 +18,6 @@ const selectors = {
   notificationLink: '.oc-notifications-link'
 }
 
-vi.mock('vue-concurrency', async (importOriginal) => ({
-  ...(await importOriginal<any>())
-}))
-
 vi.mock('@ownclouders/web-pkg', async (importOriginal) => ({
   ...(await importOriginal<any>()),
   queryItemAsString: vi.fn(),
