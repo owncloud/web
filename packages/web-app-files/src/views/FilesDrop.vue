@@ -1,45 +1,83 @@
 <template>
-  <app-loading-spinner v-if="loading" />
-  <div
-    v-else
-    id="files-drop-container"
-    class="oc-height-1-1 oc-flex oc-flex-column oc-flex-between"
-  >
-    <div v-if="dragareaEnabled" class="dragarea" />
-    <h1 class="oc-invisible-sr">{{ pageTitle }}</h1>
-    <div class="oc-p oc-height-1-1 oc-text-center">
-      <div key="loaded-drop" class="oc-flex oc-flex-column">
-        <div class="oc-width-1-1 oc-width-xxlarge@m">
-          <h2 v-text="title" />
-          <resource-upload
-            id="files-drop-zone"
-            ref="fileUpload"
-            class="oc-flex oc-flex-middle oc-flex-center oc-placeholder"
-            :btn-label="$gettext('Drop files here to upload or click to select file')"
-          />
-          <div id="previews" hidden />
-        </div>
-        <div v-if="errorMessage">
-          <h2>
-            <span v-text="$gettext('An error occurred while loading the public link')" />
-          </h2>
-          <p class="oc-rm-m oc-m-rm" v-text="errorMessage" />
-        </div>
-        <div v-else class="oc-flex oc-flex-center oc-width-1-1">
-          <p
-            id="files-drop-info-message"
-            class="oc-m-rm oc-pt-xl oc-text-small"
-            v-text="
-              $gettext(
-                'Note: Transfer of nested folder structures is not possible. Instead, all files from the subfolders will be uploaded individually.'
-              )
-            "
-          />
-        </div>
-      </div>
+  <div id="files-drop">
+    <app-loading-spinner v-if="loading" />
+    <div v-else id="files-drop-container" class="oc-height-1-1">
+      <h1 class="oc-invisible-sr">{{ pageTitle }}</h1>
 
-      <div class="oc-mt-xxl">
-        <p v-text="themeSlogan" />
+      <div v-if="dragareaEnabled" class="dragarea" />
+      <div key="loaded-drop" class="oc-flex oc-flex-center oc-height-1-1">
+        <div class="foo-container oc-text-center">
+          <div class="oc-flex oc-flex-column oc-flex-middle oc-flex-between oc-height-1-1">
+            <!-- Visible title & upload CTA -->
+            <div class="oc-width-1-1">
+              <h2 v-text="title" />
+
+              <!-- If no file upload yet start -->
+              <p>
+                {{ $gettext("Drop files here to upload or use the 'Upload' button.") }}
+              </p>
+              <div id="foo">
+                <resource-upload
+                  id="files-drop-zone"
+                  ref="fileUpload"
+                  class="oc-flex oc-flex-middle oc-flex-center oc-placeholder"
+                >
+                  <template v-slot="{ triggerUpload, uploadLabelId }">
+                    <oc-button appearance="filled" variation="primary" @click="triggerUpload">
+                      <span :id="uploadLabelId" v-text="$gettext('Upload')"></span>
+                    </oc-button>
+                  </template>
+                </resource-upload>
+              </div>
+            </div>
+            <!-- If no file upload yet end -->
+
+            <!-- Once one file upload start -->
+            <upload-info
+              class="oc-width-1-1"
+              :info-expanded-initial="true"
+              :headless="true"
+              :show-expand-details-button="false"
+            />
+            <!-- Once one file upload end -->
+
+            <div v-if="errorMessage" class="oc-background-warning oc-width-1-1">
+              <h2>
+                <span v-text="$gettext('An error occurred while loading the public link')" />
+              </h2>
+              <p class="oc-rm-m oc-m-rm" v-text="errorMessage" />
+            </div>
+            <div v-else class="oc-width-1-1 oc-flex oc-flex-middle oc-background-muted oc-p-l">
+              <oc-icon name="information"></oc-icon>
+              <div class="oc-text-left oc-ml-m">
+                <p v-text="existingContentNote" />
+                <p v-text="flatFolderNote" />
+              </div>
+            </div>
+
+            <div
+              class="oc-width-1-1 oc-flex oc-flex-column oc-flex-middle oc-mb-l oc-p-m oc-background-brand"
+            >
+              <oc-img :src="themeLogo" alt="" class="oc-width-1-3" />
+              <p class="oc-text-brand-contrast" v-text="themeSlogan" />
+              <p
+                v-if="!isCurrentThemeOwncloud"
+                class="oc-text-brand-contrast"
+                v-text="$gettext('This feature is brought to you by ownCloud')"
+              />
+              <oc-button
+                type="a"
+                appearance="raw"
+                :variation="'primary'"
+                size="small"
+                :href="'https://owncloud.com/'"
+                target="_blank"
+              >
+                {{ $gettext('Learn more about ownCloud') }}
+              </oc-button>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
   </div>
@@ -47,17 +85,6 @@
 
 <script lang="ts">
 import { storeToRefs } from 'pinia'
-import {
-  createLocationPublic,
-  createLocationSpaces,
-  useAuthStore,
-  useMessages,
-  useSpacesStore,
-  useThemeStore,
-  useUserStore,
-  useResourcesStore
-} from '@ownclouders/web-pkg'
-import ResourceUpload from '../components/AppBar/Upload/ResourceUpload.vue'
 import {
   computed,
   defineComponent,
@@ -69,25 +96,38 @@ import {
   watch
 } from 'vue'
 import { useGettext } from 'vue3-gettext'
+
 import {
-  useClientService,
-  useRouter,
-  useRoute,
-  useGetMatchingSpace,
-  useRouteQuery,
+  createFileRouteOptions,
+  createLocationPublic,
+  createLocationSpaces,
+  eventBus,
   queryItemAsString,
-  useUpload
+  UppyService,
+  useAuthService,
+  useAuthStore,
+  useClientService,
+  useGetMatchingSpace,
+  useMessages,
+  useResourcesStore,
+  useRoute,
+  useRouteQuery,
+  useRouter,
+  useService,
+  useSpacesStore,
+  useThemeStore,
+  useUpload,
+  useUserStore
 } from '@ownclouders/web-pkg'
-import { eventBus } from '@ownclouders/web-pkg'
-import { useService, UppyService } from '@ownclouders/web-pkg'
-import { useAuthService } from '@ownclouders/web-pkg'
 import { HandleUpload } from 'web-app-files/src/HandleUpload'
-import { createFileRouteOptions } from '@ownclouders/web-pkg'
 import { PublicSpaceResource, SharePermissionBit } from '@ownclouders/web-client/src/helpers'
+import UploadInfo from 'web-runtime/src/components/UploadInfo.vue'
+import ResourceUpload from '../components/AppBar/Upload/ResourceUpload.vue'
 
 export default defineComponent({
   components: {
-    ResourceUpload
+    ResourceUpload,
+    UploadInfo
   },
   setup() {
     const uppyService = useService<UppyService>('$uppyService')
@@ -98,6 +138,7 @@ export default defineComponent({
     const router = useRouter()
     const route = useRoute()
     const language = useGettext()
+    const { $gettext } = useGettext()
     const authService = useAuthService()
     const clientService = useClientService()
     const authStore = useAuthStore()
@@ -107,6 +148,8 @@ export default defineComponent({
     const resourcesStore = useResourcesStore()
 
     const { currentTheme } = storeToRefs(themeStore)
+    const isCurrentThemeOwncloud = computed(() => currentTheme.value.common.name === 'ownCloud')
+    const themeLogo = computed(() => currentTheme.value.logo.topbar)
     const themeSlogan = computed(() => currentTheme.value.common.slogan)
 
     const fileIdQueryItem = useRouteQuery('fileId')
@@ -227,28 +270,48 @@ export default defineComponent({
       uppyService.removePlugin(uppyService.getPlugin('HandleUpload'))
     })
 
-    return {
-      dragareaEnabled,
-      loading,
-      errorMessage,
-      share,
-      themeSlogan
-    }
-  },
-  computed: {
-    pageTitle() {
-      return this.$gettext(this.$route.meta.title as string)
-    },
-    title() {
+    const pageTitle = computed(() => {
+      return $gettext(route.value.meta.title as string)
+    })
+
+    const title = computed(() => {
       // share might not be loaded
-      if (this.share) {
-        return this.$gettext(
-          '%{owner} shared this folder with you for uploading',
-          { owner: this.share.publicLinkShareOwner },
+      if (share.value) {
+        return $gettext(
+          '%{owner} is requesting files',
+          { owner: share.value.publicLinkShareOwnerDisplayName },
           true
         )
       }
-      return ''
+      return $gettext('Failed to load files. Please make sure your link is correct and try again.')
+    })
+
+    const existingContentNote = computed(() => {
+      return $gettext(
+        'Existing content is not revealed. Only %{owner} can see uploads.',
+        { owner: share.value.publicLinkShareOwnerDisplayName },
+        true
+      )
+    })
+
+    const flatFolderNote = computed(() => {
+      return $gettext(
+        'Transfer of nested folder structures is not possible. Instead, all files from the subfolders will be uploaded individually.'
+      )
+    })
+
+    return {
+      dragareaEnabled,
+      errorMessage,
+      existingContentNote,
+      flatFolderNote,
+      isCurrentThemeOwncloud,
+      loading,
+      pageTitle,
+      share,
+      themeLogo,
+      themeSlogan,
+      title
     }
   }
 })
@@ -256,11 +319,20 @@ export default defineComponent({
 
 <style lang="scss">
 #files-drop {
+  overflow-y: scroll;
+  padding: var(--oc-space-large);
+
   &-container {
-    position: relative;
     background: transparent;
-    border: 1px dashed var(--oc-color-input-border);
-    margin: var(--oc-space-xlarge);
+    border: none;
+
+    @media (min-width: $oc-breakpoint-small-default) {
+      border: 3px dashed var(--oc-color-input-border);
+
+      border-radius: 14px;
+    }
+
+    position: relative;
   }
 
   &-info-message {
@@ -270,7 +342,21 @@ export default defineComponent({
   }
 }
 
+.foo-container {
+  width: 85%;
+  @media (min-width: $oc-breakpoint-xsmall-max) {
+    width: 70%;
+  }
+  @media (min-width: $oc-breakpoint-small-default) {
+    width: 55%;
+  }
+  @media (min-width: $oc-breakpoint-medium-default) {
+    width: 30%;
+  }
+}
+
 .dragarea {
+  border: none !important;
   background-color: rgba(60, 130, 225, 0.21);
   pointer-events: none;
   top: 0;
@@ -279,7 +365,5 @@ export default defineComponent({
   bottom: 0;
   position: absolute;
   z-index: 9;
-  border-radius: 14px;
-  border: 2px dashed var(--oc-color-swatch-primary-muted);
 }
 </style>

@@ -80,9 +80,7 @@ export default defineComponent({
     MobileNav,
     TopBar,
     SidebarNav,
-    UploadInfo,
-    UploadBar,
-    LoadingIndicator
+    UploadBar
   },
   setup() {
     const router = useRouter()
