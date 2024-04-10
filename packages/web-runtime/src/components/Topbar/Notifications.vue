@@ -212,10 +212,11 @@ export default {
 
     const computeNotificationDataTask = useTask(function* (signal, notifications) {
       for (const notification of unref(notifications)) {
-        if (!notification.computed) {
+        if (!notification.computedMessage) {
           notification.computedMessage = getMessage(notification)
+        }
+        if (!notification.computedLink) {
           notification.computedLink = getLink(notification)
-          notification.computed = true
         }
       }
     }).restartable()
@@ -270,7 +271,6 @@ export default {
         if (!unref(dropdownOpen)) {
           return false
         }
-
         computeNotificationDataTask.perform(notifications)
       },
       { immediate: true }
@@ -282,6 +282,7 @@ export default {
       loading,
       dropdownOpened: dropdownOpen,
       deleteNotificationsTask,
+      computeNotificationDataTask,
       formatDate,
       formatDateRelative,
       getMessage,

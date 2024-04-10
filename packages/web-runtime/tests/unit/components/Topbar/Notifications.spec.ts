@@ -18,9 +18,14 @@ const selectors = {
   notificationLink: '.oc-notifications-link'
 }
 
+vi.mock('vue-concurrency', async (importOriginal) => ({
+  ...(await importOriginal<any>())
+}))
+
 vi.mock('@ownclouders/web-pkg', async (importOriginal) => ({
   ...(await importOriginal<any>()),
-  useServerSentEvents: vi.fn()
+  queryItemAsString: vi.fn(),
+  useAppDefaults: vi.fn()
 }))
 
 describe('Notification component', () => {
@@ -31,7 +36,13 @@ describe('Notification component', () => {
     expect(wrapper.find(selectors.markAll).exists()).toBeFalsy()
   })
   it('renders a set of notifications', async () => {
-    const notifications = [mock<Notification>({ messageRich: undefined })]
+    const notifications = [
+      mock<Notification>({
+        messageRich: undefined,
+        computedMessage: undefined,
+        computedLink: undefined
+      })
+    ]
     const { wrapper } = getWrapper({ notifications })
     await wrapper.vm.fetchNotificationsTask.perform()
     await wrapper.vm.fetchNotificationsTask.last
@@ -41,9 +52,6 @@ describe('Notification component', () => {
   it('renders the loading state', async () => {
     const notifications = [mock<Notification>({ messageRich: undefined })]
     const { wrapper } = getWrapper({ notifications })
-    await wrapper.vm.fetchNotificationsTask.perform()
-    await wrapper.vm.fetchNotificationsTask.last
-    wrapper.vm.loading = true
     await wrapper.vm.$nextTick()
     expect(wrapper.find(selectors.notificationsLoading).exists()).toBeTruthy()
   })
@@ -89,7 +97,9 @@ describe('Notification component', () => {
     it('displays if no message given', async () => {
       const notification = mock<Notification>({
         messageRich: undefined,
-        message: undefined
+        message: undefined,
+        computedMessage: undefined,
+        computedLink: undefined
       })
       const { wrapper } = getWrapper({ notifications: [notification] })
       await wrapper.vm.fetchNotificationsTask.perform()
@@ -101,7 +111,9 @@ describe('Notification component', () => {
     it('displays simple message if messageRich not given', async () => {
       const notification = mock<Notification>({
         messageRich: undefined,
-        message: 'some message'
+        message: 'some message',
+        computedMessage: undefined,
+        computedLink: undefined
       })
       const { wrapper } = getWrapper({ notifications: [notification] })
       await wrapper.vm.fetchNotificationsTask.perform()
@@ -116,7 +128,9 @@ describe('Notification component', () => {
         messageRichParameters: {
           user: { displayname: 'Albert Einstein' },
           resource: { name: 'someFile.txt' }
-        }
+        },
+        computedMessage: undefined,
+        computedLink: undefined
       })
       const { wrapper } = getWrapper({ notifications: [notification] })
       await wrapper.vm.fetchNotificationsTask.perform()
@@ -132,6 +146,8 @@ describe('Notification component', () => {
     it('displays if given directly', async () => {
       const notification = mock<Notification>({
         messageRich: undefined,
+        computedMessage: undefined,
+        computedLink: undefined,
         link: 'http://some-link.com'
       })
       const { wrapper } = getWrapper({ notifications: [notification] })
@@ -148,7 +164,9 @@ describe('Notification component', () => {
             user: { displayname: 'Albert Einstein' },
             resource: { name: 'someFile.txt' },
             share: { id: '1' }
-          }
+          },
+          computedMessage: undefined,
+          computedLink: undefined
         })
         const { wrapper } = getWrapper({ notifications: [notification] })
         await wrapper.vm.fetchNotificationsTask.perform()
@@ -177,7 +195,9 @@ describe('Notification component', () => {
           messageRichParameters: {
             user: { displayname: 'Albert Einstein' },
             space: { name: 'someFile.txt', id: `${spaceMock.fileId}!2` }
-          }
+          },
+          computedMessage: undefined,
+          computedLink: undefined
         })
         const { wrapper } = getWrapper({ notifications: [notification], spaces: [spaceMock] })
         await wrapper.vm.fetchNotificationsTask.perform()
