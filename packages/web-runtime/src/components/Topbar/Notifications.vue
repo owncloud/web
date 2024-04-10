@@ -103,7 +103,6 @@ export default {
     const { current: currentLanguage } = useGettext()
 
     const notifications = ref<Notification[]>([])
-
     const notificationsInterval = ref()
     const dropdownOpen = ref(false)
 
