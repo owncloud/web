@@ -667,6 +667,32 @@ Then(
   }
 )
 
+Then(
+  '{string} should not see the version panel for the file(s)',
+  async function (this: World, stepUser: string, stepTable: DataTable): Promise<void> {
+    const { page } = this.actorsEnvironment.getActor({ key: stepUser })
+    const resourceObject = new objects.applicationFiles.Resource({ page })
+    const fileInfo = stepTable.hashes().reduce<File[]>((acc, stepRow) => {
+      const { to, resource } = stepRow
+
+      if (!acc[to]) {
+        acc[to] = []
+      }
+
+      acc[to].push(this.filesEnvironment.getFile({ name: resource }))
+
+      return acc
+    }, [])
+
+    for (const folder of Object.keys(fileInfo)) {
+      await resourceObject.checkThatFileVersionPanelIsNotAvailable({
+        folder,
+        files: fileInfo[folder]
+      })
+    }
+  }
+)
+
 When(
   '{string} navigates to page {string} of the personal/project space files view',
   async function (this: World, stepUser: string, pageNumber: string) {

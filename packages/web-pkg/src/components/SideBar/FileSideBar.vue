@@ -36,7 +36,6 @@ import { SpaceInfo } from './Spaces'
 import { FileInfo } from './Files'
 import {
   isLocationCommonActive,
-  isLocationPublicActive,
   isLocationSharesActive,
   isLocationSpacesActive,
   isLocationTrashActive
@@ -63,9 +62,9 @@ import {
   CollaboratorShare,
   LinkShare,
   ShareRole,
-  isIncomingShareResource,
   call,
-  isSpaceResource
+  isSpaceResource,
+  isPersonalSpaceResource
 } from '@ownclouders/web-client/src/helpers'
 import { storeToRefs } from 'pinia'
 import { useTask } from 'vue-concurrency'
@@ -150,7 +149,6 @@ export default defineComponent({
     const isProjectsLocation = isLocationSpacesActive(router, 'files-spaces-projects')
     const isFavoritesLocation = useActiveLocation(isLocationCommonActive, 'files-common-favorites')
     const isSearchLocation = useActiveLocation(isLocationCommonActive, 'files-common-search')
-    const isPublicFilesLocation = useActiveLocation(isLocationPublicActive, 'files-public-link')
     const isTrashLocation = useActiveLocation(isLocationTrashActive, 'files-trash-generic')
 
     const closeSideBar = () => {
@@ -193,6 +191,12 @@ export default defineComponent({
     const isFlatFileList = computed(() => {
       return unref(isShareLocation) || unref(isSearchLocation) || unref(isFavoritesLocation)
     })
+
+    const userIsSpaceMember = computed(
+      () =>
+        (isProjectSpaceResource(props.space) && props.space.isMember(userStore.user)) ||
+        (isPersonalSpaceResource(props.space) && props.space.isOwner(userStore.user))
+    )
 
     const availablePanels = computed(() =>
       extensionRegistry
@@ -360,8 +364,7 @@ export default defineComponent({
         if (
           !resource.isFolder &&
           !isSpaceResource(resource) &&
-          !isIncomingShareResource(resource) &&
-          !unref(isPublicFilesLocation) &&
+          unref(userIsSpaceMember) &&
           !unref(isTrashLocation)
         ) {
           try {
@@ -394,7 +397,7 @@ export default defineComponent({
         }
 
         isMetaDataLoading.value = true
-        if (!unref(isPublicFilesLocation) && !unref(isTrashLocation)) {
+        if (unref(userIsSpaceMember) && !unref(isTrashLocation)) {
           try {
             if (loadSharesTask.isRunning) {
               loadSharesTask.cancelAll()

@@ -22,7 +22,7 @@ import {
   useCapabilityStore
 } from '@ownclouders/web-pkg'
 import {
-  isIncomingShareResource,
+  isPersonalSpaceResource,
   isProjectSpaceResource,
   isShareResource,
   isShareSpaceResource,
@@ -219,7 +219,7 @@ export const useSideBarPanels = () => {
             componentAttrs: () => ({
               isReadOnly: !unref(isFilesAppActive)
             }),
-            isVisible: ({ items }) => {
+            isVisible: ({ items, root }) => {
               if (items?.length !== 1) {
                 return false
               }
@@ -227,10 +227,14 @@ export const useSideBarPanels = () => {
                 // project space roots don't support versions
                 return false
               }
+
+              const userIsSpaceMember =
+                (isProjectSpaceResource(root) && root.isMember(userStore.user)) ||
+                (isPersonalSpaceResource(root) && root.isOwner(userStore.user))
+
               if (
                 isLocationTrashActive(router, 'files-trash-generic') ||
-                isLocationPublicActive(router, 'files-public-link') ||
-                isIncomingShareResource(items[0]) ||
+                !userIsSpaceMember ||
                 isSpaceResource(items[0])
               ) {
                 return false
