@@ -8,8 +8,6 @@
       mode="click"
       :options="{ pos: 'bottom-right', delayHide: 0 }"
       class="oc-overflow-auto"
-      @hide-drop="hideDrop"
-      @show-drop="showDrop"
     >
       <div class="oc-flex oc-flex-between oc-flex-middle oc-mb-s">
         <span class="oc-text-bold oc-text-large oc-m-rm" v-text="$gettext('Notifications')" />
@@ -75,19 +73,19 @@
   </div>
 </template>
 <script lang="ts">
-import { computed, onMounted, onUnmounted, ref, unref } from 'vue'
+import {computed, onMounted, onUnmounted, ref, unref} from 'vue'
 import isEmpty from 'lodash-es/isEmpty'
-import { useCapabilityStore, useSpacesStore, createFileRouteOptions } from '@ownclouders/web-pkg'
+import {useCapabilityStore, useSpacesStore, createFileRouteOptions} from '@ownclouders/web-pkg'
 import NotificationBell from './NotificationBell.vue'
-import { Notification } from '../../helpers/notifications'
+import {Notification} from '../../helpers/notifications'
 import {
   formatDateFromISO,
   formatRelativeDateFromISO,
   useClientService
 } from '@ownclouders/web-pkg'
-import { useGettext } from 'vue3-gettext'
-import { useTask } from 'vue-concurrency'
-import { MESSAGE_TYPE } from '@ownclouders/web-client/src/sse'
+import {useGettext} from 'vue3-gettext'
+import {useTask} from 'vue-concurrency'
+import {MESSAGE_TYPE} from '@ownclouders/web-client/src/sse'
 
 const POLLING_INTERVAL = 30000
 
@@ -96,179 +94,173 @@ export default {
     NotificationBell
   },
   setup() {
-    const spacesStore = useSpacesStore()
-    const capabilityStore = useCapabilityStore()
-    const clientService = useClientService()
-    const { current: currentLanguage } = useGettext()
+    setup()
+    {
+      const spacesStore = useSpacesStore()
+      const capabilityStore = useCapabilityStore()
+      const clientService = useClientService()
+      const {current: currentLanguage} = useGettext()
 
-    const notifications = ref<Notification[]>([])
-    const notificationsInterval = ref()
-    const dropdownOpen = ref(false)
+      const notifications = ref<Notification[]>([])
+      const notificationsInterval = ref()
 
-    const loading = computed(() => {
-      return fetchNotificationsTask.isRunning || deleteNotificationsTask.isRunning
-    })
+      const loading = computed(() => {
+        return fetchNotificationsTask.isRunning || deleteNotificationsTask.isRunning
+      })
 
-    const formatDate = (date) => {
-      return formatDateFromISO(date, currentLanguage)
-    }
-    const formatDateRelative = (date) => {
-      return formatRelativeDateFromISO(date, currentLanguage)
-    }
+      const formatDate = (date) => {
+        return formatDateFromISO(date, currentLanguage)
+      }
+      const formatDateRelative = (date) => {
+        return formatRelativeDateFromISO(date, currentLanguage)
+      }
 
-    const messageParameters = [
-      { name: 'user', labelAttribute: 'displayname' },
-      { name: 'resource', labelAttribute: 'name' },
-      { name: 'space', labelAttribute: 'name' },
-      { name: 'virus', labelAttribute: 'name' }
-    ]
-    const getMessage = ({ message, messageRich, messageRichParameters }: Notification): string => {
-      if (messageRich && !isEmpty(messageRichParameters)) {
-        let interpolatedMessage = messageRich
-        for (const param of messageParameters) {
-          if (interpolatedMessage.includes(`{${param.name}}`)) {
-            const richParam = messageRichParameters[param.name] ?? undefined
-            if (!richParam) {
-              return message
+      const messageParameters = [
+        {name: 'user', labelAttribute: 'displayname'},
+        {name: 'resource', labelAttribute: 'name'},
+        {name: 'space', labelAttribute: 'name'},
+        {name: 'virus', labelAttribute: 'name'}
+      ]
+      const getMessage = ({message, messageRich, messageRichParameters}: Notification): string => {
+        if (messageRich && !isEmpty(messageRichParameters)) {
+          let interpolatedMessage = messageRich
+          for (const param of messageParameters) {
+            if (interpolatedMessage.includes(`{${param.name}}`)) {
+              const richParam = messageRichParameters[param.name] ?? undefined
+              if (!richParam) {
+                return message
+              }
+              const label = richParam[param.labelAttribute] ?? undefined
+              if (!label) {
+                return message
+              }
+              interpolatedMessage = interpolatedMessage.replace(
+                  `{${param.name}}`,
+                  `<strong>${label}</strong>`
+              )
             }
-            const label = richParam[param.labelAttribute] ?? undefined
-            if (!label) {
-              return message
-            }
-            interpolatedMessage = interpolatedMessage.replace(
-              `{${param.name}}`,
-              `<strong>${label}</strong>`
-            )
+          }
+          return interpolatedMessage
+        }
+        return message
+      }
+      const getLink = ({messageRichParameters, object_type}: Notification) => {
+        if (!messageRichParameters) {
+          return null
+        }
+        if (object_type === 'share') {
+          return {
+            name: 'files-shares-with-me',
+            ...(!!messageRichParameters?.share?.id && {
+              query: {scrollTo: messageRichParameters.share.id}
+            })
           }
         }
-        return interpolatedMessage
-      }
-      return message
-    }
-    const getLink = ({ messageRichParameters, object_type }: Notification) => {
-      if (!messageRichParameters) {
+        if (object_type === 'storagespace' && messageRichParameters?.space?.id) {
+          const space = spacesStore.spaces.find(
+              (s) => s.fileId === messageRichParameters?.space?.id.split('!')[0] && !s.disabled
+          )
+          if (space) {
+            return {
+              name: 'files-spaces-generic',
+              ...createFileRouteOptions(space, {path: '', fileId: space.fileId})
+            }
+          }
+        }
         return null
       }
-      if (object_type === 'share') {
-        return {
-          name: 'files-shares-with-me',
-          ...(!!messageRichParameters?.share?.id && {
-            query: { scrollTo: messageRichParameters.share.id }
-          })
-        }
-      }
-      if (object_type === 'storagespace' && messageRichParameters?.space?.id) {
-        const space = spacesStore.spaces.find(
-          (s) => s.fileId === messageRichParameters?.space?.id.split('!')[0] && !s.disabled
-        )
-        if (space) {
-          return {
-            name: 'files-spaces-generic',
-            ...createFileRouteOptions(space, { path: '', fileId: space.fileId })
+
+      const fetchNotificationsTask = useTask(function* (signal) {
+        try {
+          const response = yield clientService.httpAuthenticated.get(
+              'ocs/v2.php/apps/notifications/api/v1/notifications'
+          )
+
+          if (response.headers.get('Content-Length') === '0') {
+            return
           }
+
+          const {
+            ocs: {data = []}
+          } = yield response.data
+          notifications.value =
+              data?.sort((a, b) => (new Date(b.datetime) as any) - (new Date(a.datetime) as any)) || []
+          unref(notifications).forEach((notification) => setAdditionalNotificationData(notification))
+        } catch (e) {
+          console.error(e)
+        }
+      }).restartable()
+
+      const deleteNotificationsTask = useTask(function* (signal, ids) {
+        try {
+          yield clientService.httpAuthenticated.delete(
+              'ocs/v2.php/apps/notifications/api/v1/notifications',
+              {data: {ids}}
+          )
+        } catch (e) {
+          console.error(e)
+        } finally {
+          notifications.value = unref(notifications).filter((n) => !ids.includes(n.notification_id))
+        }
+      }).restartable()
+
+      const setAdditionalNotificationData = (notification: Notification) => {
+        notification.computedMessage = getMessage(notification)
+        notification.computedLink = getLink(notification)
+      }
+
+      const onSSENotificationEvent = (event) => {
+        try {
+          const notification = JSON.parse(event.data) as Notification
+          if (!notification || !notification.notification_id) {
+            return
+          }
+          setAdditionalNotificationData(notification)
+          notifications.value = [notification, ...unref(notifications)]
+        } catch (_) {
+          console.error('Unable to parse sse notification data')
         }
       }
-      return null
-    }
 
-    const fetchNotificationsTask = useTask(function* (signal) {
-      try {
-        const response = yield clientService.httpAuthenticated.get(
-          'ocs/v2.php/apps/notifications/api/v1/notifications'
-        )
-
-        if (response.headers.get('Content-Length') === '0') {
-          return
+      onMounted(() => {
+        fetchNotificationsTask.perform()
+        if (unref(capabilityStore.supportSSE)) {
+          clientService.sseAuthenticated.addEventListener(
+              MESSAGE_TYPE.NOTIFICATION,
+              onSSENotificationEvent
+          )
+        } else {
+          notificationsInterval.value = setInterval(() => {
+            fetchNotificationsTask.perform()
+          }, POLLING_INTERVAL)
         }
+      })
 
-        const {
-          ocs: { data = [] }
-        } = yield response.data
-        notifications.value =
-          data?.sort((a, b) => (new Date(b.datetime) as any) - (new Date(a.datetime) as any)) || []
-        unref(notifications).forEach((notification) => setAdditionalNotificationData(notification))
-      } catch (e) {
-        console.error(e)
-      }
-    }).restartable()
-
-    const deleteNotificationsTask = useTask(function* (signal, ids) {
-      try {
-        yield clientService.httpAuthenticated.delete(
-          'ocs/v2.php/apps/notifications/api/v1/notifications',
-          { data: { ids } }
-        )
-      } catch (e) {
-        console.error(e)
-      } finally {
-        notifications.value = unref(notifications).filter((n) => !ids.includes(n.notification_id))
-      }
-    }).restartable()
-
-    const setAdditionalNotificationData = (notification: Notification) => {
-      notification.computedMessage = getMessage(notification)
-      notification.computedLink = getLink(notification)
-    }
-
-    const onSSENotificationEvent = (event) => {
-      try {
-        const notification = JSON.parse(event.data) as Notification
-        if (!notification || !notification.notification_id) {
-          return
+      onUnmounted(() => {
+        if (unref(capabilityStore.supportSSE)) {
+          clientService.sseAuthenticated.removeEventListener(
+              MESSAGE_TYPE.NOTIFICATION,
+              onSSENotificationEvent
+          )
+        } else {
+          clearInterval(unref(notificationsInterval))
         }
-        setAdditionalNotificationData(notification)
-        notifications.value = [notification, ...unref(notifications)]
-      } catch (_) {
-        console.error('Unable to parse sse notification data')
+      })
+
+      return {
+        notifications,
+        fetchNotificationsTask,
+        loading,
+        deleteNotificationsTask,
+        formatDate,
+        formatDateRelative,
+        getMessage,
+        getLink,
+        hideDrop,
+        showDrop
       }
-    }
-
-    const hideDrop = () => {
-      dropdownOpen.value = false
-    }
-    const showDrop = () => {
-      dropdownOpen.value = true
-    }
-
-    onMounted(() => {
-      fetchNotificationsTask.perform()
-      if (unref(capabilityStore.supportSSE)) {
-        clientService.sseAuthenticated.addEventListener(
-          MESSAGE_TYPE.NOTIFICATION,
-          onSSENotificationEvent
-        )
-      } else {
-        notificationsInterval.value = setInterval(() => {
-          fetchNotificationsTask.perform()
-        }, POLLING_INTERVAL)
-      }
-    })
-
-    onUnmounted(() => {
-      if (unref(capabilityStore.supportSSE)) {
-        clientService.sseAuthenticated.removeEventListener(
-          MESSAGE_TYPE.NOTIFICATION,
-          onSSENotificationEvent
-        )
-      } else {
-        clearInterval(unref(notificationsInterval))
-      }
-    })
-
-    return {
-      notifications,
-      fetchNotificationsTask,
-      loading,
-      deleteNotificationsTask,
-      formatDate,
-      formatDateRelative,
-      getMessage,
-      getLink,
-      hideDrop,
-      showDrop
     }
   }
-}
 </script>
 
 <style lang="scss" scoped>
