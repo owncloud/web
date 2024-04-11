@@ -107,7 +107,6 @@ describe('Notification component', () => {
         computedLink: undefined
       })
       const { wrapper } = getWrapper({ notifications: [notification] })
-      wrapper.vm.showDrop()
       await wrapper.vm.fetchNotificationsTask.last
       await wrapper.vm.$nextTick()
       expect(wrapper.find(selectors.notificationMessage).text()).toEqual(notification.message)
@@ -123,7 +122,6 @@ describe('Notification component', () => {
         computedLink: undefined
       })
       const { wrapper } = getWrapper({ notifications: [notification] })
-      wrapper.vm.showDrop()
       await wrapper.vm.fetchNotificationsTask.last
       await wrapper.vm.$nextTick()
       expect(wrapper.find(selectors.notificationMessage).text()).toEqual(
@@ -157,7 +155,6 @@ describe('Notification component', () => {
           computedLink: undefined
         })
         const { wrapper } = getWrapper({ notifications: [notification] })
-        wrapper.vm.showDrop()
         await wrapper.vm.fetchNotificationsTask.last
         await wrapper.vm.$nextTick()
 
@@ -188,7 +185,6 @@ describe('Notification component', () => {
           computedLink: undefined
         })
         const { wrapper } = getWrapper({ notifications: [notification], spaces: [spaceMock] })
-        wrapper.vm.showDrop()
         await wrapper.vm.fetchNotificationsTask.last
         await wrapper.vm.$nextTick()
         const routerLink = wrapper.findComponent<typeof RouterLink>(
