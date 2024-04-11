@@ -9,6 +9,7 @@ Summary
 -------
 
 * Bugfix - Versions loaded multiple times when opening sidebar: [#10746](https://github.com/owncloud/web/pull/10746)
+* Bugfix - Incoming notifications broken while notification center is open: [#10760](https://github.com/owncloud/web/pull/10760)
 
 Details
 -------
@@ -21,6 +22,14 @@ Details
    https://github.com/owncloud/web/issues/10381
    https://github.com/owncloud/web/issues/10619
    https://github.com/owncloud/web/pull/10746
+
+* Bugfix - Incoming notifications broken while notification center is open: [#10760](https://github.com/owncloud/web/pull/10760)
+
+   We've fixed a bug where the visual representation of new incoming notifications
+   were broken, while the notification center was opened.
+
+   https://github.com/owncloud/web/issues/10602
+   https://github.com/owncloud/web/pull/10760
 
 Changelog for ownCloud Web [9.0.0] (2024-04-09)
 =======================================
