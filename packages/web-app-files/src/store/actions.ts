@@ -1,6 +1,6 @@
 import PQueue from 'p-queue'
 
-import { getParentPaths } from '@ownclouders/web-pkg'
+import { ConfigurationManager, getParentPaths } from '@ownclouders/web-pkg'
 import {
   buildShare,
   buildCollaboratorShare,
@@ -18,7 +18,7 @@ import {
   SpaceResource
 } from '@ownclouders/web-client/src/helpers'
 import { WebDAV } from '@ownclouders/web-client/src/webdav'
-import { ClientService, LoadingTaskCallbackArguments } from '@ownclouders/web-pkg'
+import { ClientService } from '@ownclouders/web-pkg'
 import { Language } from 'vue3-gettext'
 import { eventBus } from '@ownclouders/web-pkg'
 import { AncestorMetaData } from '@ownclouders/web-pkg'
@@ -165,7 +165,7 @@ export default {
       space: SpaceResource
       files: Resource[]
       clientService: ClientService
-      loadingCallbackArgs: LoadingTaskCallbackArguments
+      configurationManager: ConfigurationManager
       firstRun: boolean
     } & Language
   ) {
@@ -175,47 +175,52 @@ export default {
       space,
       files,
       clientService,
-      loadingCallbackArgs,
+      configurationManager,
       firstRun = true
     } = options
-    const { setProgress } = loadingCallbackArgs
-    const promises = []
-    const removedFiles = []
-    for (const [i, file] of files.entries()) {
-      const promise = clientService.webdav
-        .deleteFile(space, file)
-        .then(() => {
-          removedFiles.push(file)
-        })
-        .catch((error) => {
-          let title = $gettext('Failed to delete "%{file}"', { file: file.name })
-          if (error.statusCode === 423) {
-            if (firstRun) {
-              return context.dispatch('deleteFiles', {
-                ...options,
-                space,
-                files: [file],
-                clientService,
-                firstRun: false
+    const removedFiles: Resource[] = []
+
+    const queue = new PQueue({
+      concurrency: configurationManager.options.concurrentRequests.resourceBatchActions
+    })
+
+    const promises = files.map((file) =>
+      queue.add(() =>
+        clientService.webdav
+          .deleteFile(space, file)
+          .then(() => {
+            removedFiles.push(file)
+          })
+          .catch((error) => {
+            let title = $gettext('Failed to delete "%{file}"', { file: file.name })
+            if (error.statusCode === 423) {
+              if (firstRun) {
+                return context.dispatch('deleteFiles', {
+                  ...options,
+                  space,
+                  files: [file],
+                  clientService,
+                  configurationManager,
+                  firstRun: false
+                })
+              }
+
+              title = $gettext('Failed to delete "%{file}" - the file is locked', {
+                file: file.name
               })
             }
+            context.dispatch(
+              'showErrorMessage',
+              {
+                title,
+                error
+              },
+              { root: true }
+            )
+          })
+      )
+    )
 
-            title = $gettext('Failed to delete "%{file}" - the file is locked', { file: file.name })
-          }
-          context.dispatch(
-            'showErrorMessage',
-            {
-              title,
-              error
-            },
-            { root: true }
-          )
-        })
-        .finally(() => {
-          setProgress({ total: files.length, current: i + 1 })
-        })
-      promises.push(promise)
-    }
     return Promise.all(promises).then(() => {
       context.commit('REMOVE_FILES', removedFiles)
       context.commit('REMOVE_FILES_FROM_SEARCHED', removedFiles)
