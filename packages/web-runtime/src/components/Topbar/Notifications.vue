@@ -75,9 +75,9 @@
   </div>
 </template>
 <script lang="ts">
-import { computed, onMounted, onUnmounted, ref, unref, watch } from 'vue'
+import { computed, onMounted, onUnmounted, ref, unref } from 'vue'
 import isEmpty from 'lodash-es/isEmpty'
-import { useCapabilityStore, useSpacesStore } from '@ownclouders/web-pkg'
+import { useCapabilityStore, useSpacesStore, createFileRouteOptions } from '@ownclouders/web-pkg'
 import NotificationBell from './NotificationBell.vue'
 import { Notification } from '../../helpers/notifications'
 import {
@@ -87,7 +87,6 @@ import {
 } from '@ownclouders/web-pkg'
 import { useGettext } from 'vue3-gettext'
 import { useTask } from 'vue-concurrency'
-import { createFileRouteOptions } from '@ownclouders/web-pkg'
 import { MESSAGE_TYPE } from '@ownclouders/web-client/src/sse'
 
 const POLLING_INTERVAL = 30000
@@ -107,11 +106,7 @@ export default {
     const dropdownOpen = ref(false)
 
     const loading = computed(() => {
-      return (
-        fetchNotificationsTask.isRunning ||
-        deleteNotificationsTask.isRunning ||
-        computeNotificationDataTask.isRunning
-      )
+      return fetchNotificationsTask.isRunning || deleteNotificationsTask.isRunning
     })
 
     const formatDate = (date) => {
@@ -127,7 +122,7 @@ export default {
       { name: 'space', labelAttribute: 'name' },
       { name: 'virus', labelAttribute: 'name' }
     ]
-    const getMessage = ({ message, messageRich, messageRichParameters }: Notification) => {
+    const getMessage = ({ message, messageRich, messageRichParameters }: Notification): string => {
       if (messageRich && !isEmpty(messageRichParameters)) {
         let interpolatedMessage = messageRich
         for (const param of messageParameters) {
@@ -191,6 +186,7 @@ export default {
         } = yield response.data
         notifications.value =
           data?.sort((a, b) => (new Date(b.datetime) as any) - (new Date(a.datetime) as any)) || []
+        unref(notifications).forEach((notification) => setAdditionalNotificationData(notification))
       } catch (e) {
         console.error(e)
       }
@@ -209,16 +205,10 @@ export default {
       }
     }).restartable()
 
-    const computeNotificationDataTask = useTask(function* (signal, notifications) {
-      for (const notification of unref(notifications)) {
-        if (!notification.computedMessage) {
-          notification.computedMessage = yield getMessage(notification)
-        }
-        if (!notification.computedLink) {
-          notification.computedLink = yield getLink(notification)
-        }
-      }
-    }).restartable()
+    const setAdditionalNotificationData = (notification: Notification) => {
+      notification.computedMessage = getMessage(notification)
+      notification.computedLink = getLink(notification)
+    }
 
     const onSSENotificationEvent = (event) => {
       try {
@@ -226,6 +216,7 @@ export default {
         if (!notification || !notification.notification_id) {
           return
         }
+        setAdditionalNotificationData(notification)
         notifications.value = [notification, ...unref(notifications)]
       } catch (_) {
         console.error('Unable to parse sse notification data')
@@ -264,24 +255,12 @@ export default {
       }
     })
 
-    watch(
-      [notifications, dropdownOpen],
-      () => {
-        if (!unref(dropdownOpen)) {
-          return false
-        }
-        computeNotificationDataTask.perform(notifications)
-      },
-      { immediate: true }
-    )
-
     return {
       notifications,
       fetchNotificationsTask,
       loading,
       dropdownOpened: dropdownOpen,
       deleteNotificationsTask,
-      computeNotificationDataTask,
       formatDate,
       formatDateRelative,
       getMessage,
