@@ -259,7 +259,6 @@ export default {
       notifications,
       fetchNotificationsTask,
       loading,
-      dropdownOpened: dropdownOpen,
       deleteNotificationsTask,
       formatDate,
       formatDateRelative,
