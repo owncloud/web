@@ -75,14 +75,16 @@
 <script lang="ts">
 import { computed, onMounted, onUnmounted, ref, unref } from 'vue'
 import isEmpty from 'lodash-es/isEmpty'
-import { useCapabilityStore, useSpacesStore, createFileRouteOptions } from '@ownclouders/web-pkg'
-import NotificationBell from './NotificationBell.vue'
-import { Notification } from '../../helpers/notifications'
 import {
+  useCapabilityStore,
+  useSpacesStore,
+  createFileRouteOptions,
   formatDateFromISO,
   formatRelativeDateFromISO,
   useClientService
 } from '@ownclouders/web-pkg'
+import NotificationBell from './NotificationBell.vue'
+import { Notification } from '../../helpers/notifications'
 import { useGettext } from 'vue3-gettext'
 import { useTask } from 'vue-concurrency'
 import { MESSAGE_TYPE } from '@ownclouders/web-client/src/sse'
