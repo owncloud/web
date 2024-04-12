@@ -141,7 +141,7 @@ export const clickActionInContextMenu = async (
         page.waitForResponse(
           (resp) =>
             resp.url().includes('drives') &&
-            resp.status() === 200 &&
+            resp.status() === 204 &&
             resp.request().method() === 'DELETE'
         ),
         page.locator(util.format(actionsTriggerButton, resource, action)).click()
