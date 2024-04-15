@@ -80,7 +80,11 @@ export default defineComponent({
     const resolveToInternalLocation = async (path: string) => {
       const internalSpace = getInternalSpace(unref(fileId).split('!')[0])
       if (internalSpace) {
-        const resource = await clientService.webdav.getFileInfo(internalSpace, { path })
+        const resource = await clientService.webdav.getFileInfo(
+          internalSpace,
+          { path },
+          { headers: { Authorization: `Bearer ${authStore.accessToken}` } }
+        )
 
         const resourceId = resource.type !== 'folder' ? resource.parentFolderId : resource.fileId
         const resourcePath = resource.type !== 'folder' ? dirname(path) : path
@@ -135,7 +139,9 @@ export default defineComponent({
         const isRunningOnEos = configStore.options.runningOnEos
         if (authStore.userContextReady && unref(fileId) && !isRunningOnEos) {
           try {
-            const path = await clientService.webdav.getPathForFileId(unref(fileId))
+            const path = await clientService.webdav.getPathForFileId(unref(fileId), {
+              headers: { Authorization: `Bearer ${authStore.accessToken}` }
+            })
             await resolveToInternalLocation(path)
             loading.value = false
             return
