@@ -1,7 +1,6 @@
 import { Capabilities, GetCapabilitiesFactory } from './capabilities'
 import { AxiosInstance } from 'axios'
 import { UrlSign } from './urlSign'
-import { Ref } from 'vue'
 import { User } from '../generated'
 
 export type { Capabilities } from './capabilities'
@@ -11,7 +10,7 @@ export interface OCS {
   signUrl: (url: string) => Promise<string>
 }
 
-export const ocs = (baseURI: string, axiosClient: AxiosInstance, user: Ref<User>): OCS => {
+export const ocs = (baseURI: string, axiosClient: AxiosInstance, user: User): OCS => {
   const url = new URL(baseURI)
   url.pathname = [...url.pathname.split('/'), 'ocs', 'v1.php'].filter(Boolean).join('/')
   const ocsV1BaseURI = url.href

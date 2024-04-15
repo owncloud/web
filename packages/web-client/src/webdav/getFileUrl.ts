@@ -1,4 +1,3 @@
-import { unref } from 'vue'
 import { Resource, SpaceResource } from '../helpers'
 import { urlJoin } from '../utils'
 import { GetFileContentsFactory } from './getFileContents'
@@ -35,7 +34,7 @@ export const GetFileUrlFactory = (
 
       let signed = true
       if (!downloadURL && !inlineDisposition) {
-        const authHeader = buildAuthHeader(unref(accessToken), space)['Authorization']
+        const authHeader = buildAuthHeader(accessToken, space)['Authorization']
 
         // compute unsigned url
         const webDavPath = space ? urlJoin(space.webDavPath, path) : resource.webDavPath
@@ -43,12 +42,12 @@ export const GetFileUrlFactory = (
           ? dav.getFileUrl(urlJoin('meta', resource.fileId, 'v', version))
           : dav.getFileUrl(webDavPath)
 
-        if (unref(user) && doHeadRequest) {
+        if (user && doHeadRequest) {
           await axiosClient.head(downloadURL, { headers: { Authorization: authHeader } })
         }
 
         // sign url
-        if (isUrlSigningEnabled && unref(user)) {
+        if (isUrlSigningEnabled && user) {
           axiosClient.interceptors.request.use((config) => {
             config.headers['Authorization'] = authHeader
             return config

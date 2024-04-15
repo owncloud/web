@@ -3,7 +3,6 @@ import { isPublicSpaceResource, SpaceResource } from '../helpers'
 import { WebDavOptions } from './types'
 import { buildAuthHeader, buildPublicLinkAuthHeader, DAV } from './client'
 import { HttpError } from '../errors'
-import { unref } from 'vue'
 import { ResponseType } from 'axios'
 
 export type GetFileContentsResponse = {
@@ -31,7 +30,7 @@ export const GetFileContentsFactory = (dav: DAV, { accessToken, axiosClient }: W
             Authorization:
               isPublicSpaceResource(space) && space.publicLinkPassword
                 ? buildPublicLinkAuthHeader(space.publicLinkPassword)['Authorization']
-                : buildAuthHeader(unref(accessToken), space)['Authorization'],
+                : buildAuthHeader(accessToken, space)['Authorization'],
             ...(noCache && { 'Cache-Control': 'no-cache' })
           }
         })

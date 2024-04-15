@@ -2,19 +2,18 @@ import { AxiosInstance } from 'axios'
 import { urlJoin } from '../utils'
 import convert from 'xml-js'
 import { User } from '../generated'
-import { Ref, unref } from 'vue'
 import { pbkdf2Sync } from 'crypto'
 
 export interface UrlSignOptions {
   axiosClient: AxiosInstance
   baseURI: string
-  user: Ref<User>
+  user: User
 }
 
 export class UrlSign {
   private axiosClient: AxiosInstance
   private baseURI: string
-  private user: Ref<User>
+  private user: User
 
   private signingKey: string
 
@@ -31,7 +30,7 @@ export class UrlSign {
 
   public async signUrl(url: string) {
     const signedUrl = new URL(url)
-    signedUrl.searchParams.set('OC-Credential', unref(this.user).onPremisesSamAccountName)
+    signedUrl.searchParams.set('OC-Credential', this.user.onPremisesSamAccountName)
     signedUrl.searchParams.set('OC-Date', new Date().toISOString())
     signedUrl.searchParams.set('OC-Expires', this.TTL.toString())
     signedUrl.searchParams.set('OC-Verb', 'GET')

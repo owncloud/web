@@ -14,7 +14,6 @@ import { RestoreFileVersionFactory } from './restoreFileVersion'
 import { ClearTrashBinFactory } from './clearTrashBin'
 import { SearchFactory } from './search'
 import { GetPathForFileIdFactory } from './getPathForFileId'
-import { Ref } from 'vue'
 import { ListFilesByIdFactory } from './listFilesById'
 import { User } from '../generated'
 import { SetFavoriteFactory } from './setFavorite'
@@ -22,12 +21,12 @@ import { ListFavoriteFilesFactory } from './listFavoriteFiles'
 import { AxiosInstance } from 'axios'
 
 export interface WebDavOptions {
-  accessToken: Ref<string>
+  accessToken: string
   axiosClient: AxiosInstance
   baseUrl: string
-  language: Ref<string>
-  user: Ref<User>
-  clientInitiatorId: Ref<string>
+  language: string
+  user: User
+  clientInitiatorId: string
 }
 
 export interface WebDAV {

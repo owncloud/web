@@ -2,7 +2,6 @@ import { urlJoin } from '../utils'
 import { SpaceResource } from '../helpers'
 import { DAV, buildAuthHeader } from './client'
 import { WebDavOptions } from './types'
-import { unref } from 'vue'
 
 export const CopyFilesFactory = (dav: DAV, { accessToken }: WebDavOptions) => {
   return {
@@ -13,7 +12,7 @@ export const CopyFilesFactory = (dav: DAV, { accessToken }: WebDavOptions) => {
       { path: targetPath },
       options?: { overwrite?: boolean }
     ) {
-      const headers = buildAuthHeader(unref(accessToken), sourceSpace)
+      const headers = buildAuthHeader(accessToken, sourceSpace)
       return dav.copy(
         urlJoin(sourceSpace.webDavPath, sourcePath),
         urlJoin(targetSpace.webDavPath, targetPath),

@@ -4,7 +4,6 @@ import { GetFileInfoFactory } from './getFileInfo'
 import { WebDavOptions } from './types'
 import { DAV, buildAuthHeader } from './client'
 import { ProgressEventCallback } from 'webdav'
-import { unref } from 'vue'
 
 export const PutFileContentsFactory = (
   dav: DAV,
@@ -36,7 +35,7 @@ export const PutFileContentsFactory = (
         onUploadProgress,
         headers: {
           ...headers,
-          ...buildAuthHeader(unref(accessToken), space)
+          ...buildAuthHeader(accessToken, space)
         }
       })
 

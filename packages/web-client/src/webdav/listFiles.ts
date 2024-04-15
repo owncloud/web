@@ -15,7 +15,6 @@ import { urlJoin } from '../utils'
 import { DAV, buildAuthHeader } from './client'
 import { GetPathForFileIdFactory } from './getPathForFileId'
 import { WebDavOptions } from './types'
-import { unref } from 'vue'
 
 export type ListFilesOptions = {
   depth?: number
@@ -35,7 +34,7 @@ export const ListFilesFactory = (
       { depth = 1, davProperties, isTrash = false }: ListFilesOptions = {}
     ): Promise<ListFilesResult> {
       let webDavResources: WebDavResponseResource[]
-      const headers = buildAuthHeader(unref(accessToken), space)
+      const headers = buildAuthHeader(accessToken, space)
       if (isPublicSpaceResource(space)) {
         webDavResources = await dav.propfind(urlJoin(space.webDavPath, path), {
           depth,

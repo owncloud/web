@@ -4,7 +4,6 @@ import { DavProperties, DavPropertyValue } from './constants'
 import { urlJoin } from '../utils'
 import { DAV, buildAuthHeader } from './client'
 import { WebDavOptions } from './types'
-import { unref } from 'vue'
 import { ListFilesResult } from './listFiles'
 
 export type ListFilesByIdOptions = {
@@ -18,7 +17,7 @@ export const ListFilesByIdFactory = (dav: DAV, { accessToken }: WebDavOptions) =
       { fileId }: { fileId?: string },
       { depth = 1, davProperties }: ListFilesByIdOptions = {}
     ): Promise<ListFilesResult> {
-      const headers = buildAuthHeader(unref(accessToken), null)
+      const headers = buildAuthHeader(accessToken, null)
 
       const webDavPath = urlJoin('/spaces', fileId)
       const webDavResources = await dav.propfind(webDavPath, {

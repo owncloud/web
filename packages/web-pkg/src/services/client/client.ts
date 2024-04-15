@@ -8,7 +8,6 @@ import { Language } from 'vue3-gettext'
 import { FetchEventSourceInit } from '@microsoft/fetch-event-source'
 import { sse } from '@ownclouders/web-client/src/sse'
 import { AuthStore, ClientStore, ConfigStore, UserStore } from '../../composables'
-import { computed } from 'vue'
 
 interface ClientContext {
   language: string
@@ -145,12 +144,12 @@ export class ClientService {
 
   private getOcClient(authParams: AuthParameters): OcClient {
     const { graph, ocs, webdav } = client({
-      accessToken: computed(() => this.authStore.accessToken),
+      accessToken: this.authStore.accessToken,
       axiosClient: createAxiosInstance(authParams, this.currentLanguage),
       baseURI: this.configStore.serverUrl,
-      clientInitiatorId: computed(() => this.clientStore.clientInitiatorId),
-      language: computed(() => this.currentLanguage),
-      user: computed(() => this.userStore.user)
+      clientInitiatorId: this.clientStore.clientInitiatorId,
+      language: this.currentLanguage,
+      user: this.userStore.user
     })
 
     return {
@@ -173,6 +172,7 @@ export class ClientService {
   public get webdav(): WebDAV {
     const hasToken = !!this.authStore.accessToken
     if (this.clientNeedsInit(this.ocWebdavContextClient, hasToken)) {
+      console.log('NEEDS INIT')
       this.ocWebdavContextClient = this.getOcClient({ accessToken: this.authStore.accessToken })
     }
     return this.ocWebdavContextClient.webdav

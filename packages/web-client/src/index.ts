@@ -2,7 +2,6 @@ import { AxiosInstance } from 'axios'
 import { graph, Graph } from './graph'
 import { ocs, OCS } from './ocs'
 import { User } from './generated'
-import { Ref } from 'vue'
 import { WebDAV, webdav } from './webdav'
 
 export type { Graph } from './graph'
@@ -22,12 +21,12 @@ interface Client {
 }
 
 type ClientOptions = {
-  accessToken: Ref<string>
+  accessToken: string
   axiosClient: AxiosInstance
   baseURI: string
-  clientInitiatorId: Ref<string>
-  language: Ref<string>
-  user: Ref<User>
+  clientInitiatorId: string
+  language: string
+  user: User
 }
 
 export const client = ({

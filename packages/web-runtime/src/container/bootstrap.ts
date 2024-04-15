@@ -1,7 +1,7 @@
 import { registerClient } from '../services/clientRegistration'
 import { buildApplication, NextApplication } from './application'
 import { RouteLocationRaw, Router, RouteRecordNormalized } from 'vue-router'
-import { App, computed, watch } from 'vue'
+import { App, watch } from 'vue'
 import { loadTheme } from '../helpers/theme'
 import { createGettext, GetTextOptions, Language } from 'vue3-gettext'
 import { getBackendVersion, getWebVersion } from './versions'
@@ -40,7 +40,6 @@ import {
   ClientStore
 } from '@ownclouders/web-pkg'
 import { init as sentryInit } from '@sentry/vue'
-import { webdav } from '@ownclouders/web-client/src/webdav'
 import { v4 as uuidV4 } from 'uuid'
 import { merge } from 'lodash-es'
 import {

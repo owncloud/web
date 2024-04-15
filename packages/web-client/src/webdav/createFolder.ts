@@ -4,7 +4,6 @@ import { urlJoin } from '../utils'
 import { DAV } from './client/dav'
 import { WebDavOptions } from './types'
 import { buildAuthHeader } from './client'
-import { unref } from 'vue'
 
 export const CreateFolderFactory = (
   dav: DAV,
@@ -16,7 +15,7 @@ export const CreateFolderFactory = (
       space: SpaceResource,
       { path, fetchFolder = true }: { path?: string; fetchFolder?: boolean }
     ): Promise<FolderResource> {
-      const headers = buildAuthHeader(unref(accessToken), space)
+      const headers = buildAuthHeader(accessToken, space)
       await dav.mkcol(urlJoin(space.webDavPath, path, { leadingSlash: true }), { headers })
 
       if (fetchFolder) {

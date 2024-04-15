@@ -1,4 +1,3 @@
-import { unref } from 'vue'
 import { Resource, SpaceResource, buildWebDavSpacesTrashPath } from '../helpers'
 import { WebDavOptions } from './types'
 import { DAV, buildAuthHeader } from './client'
@@ -17,7 +16,7 @@ export const ClearTrashBinFactory = (dav: DAV, { accessToken }: WebDavOptions) =
         path = urlJoin(path, id)
       }
 
-      const headers = buildAuthHeader(unref(accessToken), space)
+      const headers = buildAuthHeader(accessToken, space)
       return dav.delete(path, { headers })
     }
   }

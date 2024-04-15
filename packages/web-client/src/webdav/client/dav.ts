@@ -1,4 +1,3 @@
-import { Ref, unref } from 'vue'
 import {
   Headers,
   ProgressEventCallback,
@@ -15,10 +14,10 @@ import { WebDavResponseResource } from '../../helpers'
 import { HttpError } from '../../errors'
 
 interface DAVOptions {
-  accessToken: Ref<string>
+  accessToken: string
   baseUrl: string
-  language: Ref<string>
-  clientInitiatorId: Ref<string>
+  language: string
+  clientInitiatorId: string
 }
 
 interface DavResult {
@@ -28,11 +27,11 @@ interface DavResult {
 }
 
 export class DAV {
-  private accessToken: Ref<string>
+  private accessToken: string
   private client: WebDAVClient
   private davPath: string
-  private language: Ref<string>
-  private clientInitiatorId: Ref<string>
+  private language: string
+  private clientInitiatorId: string
 
   constructor({ accessToken, baseUrl, language, clientInitiatorId }: DAVOptions) {
     this.davPath = urlJoin(baseUrl, 'remote.php/dav')
@@ -167,9 +166,9 @@ export class DAV {
 
   private buildHeaders(headers: Headers = {}): Headers {
     return {
-      'Accept-Language': unref(this.language),
+      'Accept-Language': this.language,
       'Content-Type': 'application/xml; charset=utf-8',
-      'Initiator-ID': unref(this.clientInitiatorId),
+      'Initiator-ID': this.clientInitiatorId,
       'X-Requested-With': 'XMLHttpRequest',
       'X-Request-ID': uuidV4(),
       ...headers

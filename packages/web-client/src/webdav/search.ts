@@ -2,7 +2,6 @@ import { Resource, buildResource } from '../helpers'
 import { WebDavOptions } from './types'
 import { DavProperties, DavProperty, DavPropertyValue } from './constants'
 import { DAV, buildAuthHeader } from './client'
-import { unref } from 'vue'
 
 export interface SearchResource extends Resource {
   highlights: string
@@ -25,7 +24,7 @@ export const SearchFactory = (dav: DAV, { accessToken }: WebDavOptions) => {
       { davProperties = DavProperties.Default, searchLimit }: SearchOptions
     ): Promise<SearchResult> {
       const path = '/spaces/'
-      const headers = buildAuthHeader(unref(accessToken))
+      const headers = buildAuthHeader(accessToken)
       const { range, results } = await dav.report(path, {
         pattern: term,
         limit: searchLimit,

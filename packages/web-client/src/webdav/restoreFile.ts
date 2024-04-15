@@ -2,7 +2,6 @@ import { isPublicSpaceResource, SpaceResource } from '../helpers'
 import { WebDavOptions } from './types'
 import { urlJoin } from '../utils'
 import { buildAuthHeader, DAV } from './client'
-import { unref } from 'vue'
 
 export const RestoreFileFactory = (dav: DAV, { accessToken }: WebDavOptions) => {
   return {
@@ -17,7 +16,7 @@ export const RestoreFileFactory = (dav: DAV, { accessToken }: WebDavOptions) => 
       }
 
       const restoreWebDavPath = urlJoin(space.webDavPath, restorePath)
-      const headers = buildAuthHeader(unref(accessToken))
+      const headers = buildAuthHeader(accessToken)
       return dav.move(urlJoin(space.webDavTrashPath, id), restoreWebDavPath, { overwrite, headers })
     }
   }
