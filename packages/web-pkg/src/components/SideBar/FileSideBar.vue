@@ -227,26 +227,10 @@ export default defineComponent({
         data = response.data
       }
 
-      let availableRoles =
-        sharesStore.graphRoles.filter(
-          (r) =>
-            data['@libre.graph.permissions.roles.allowedValues']?.map(({ id }) => id).includes(r.id)
-        ) || []
-
-      // FIXME server bug, remove when https://github.com/owncloud/ocis/issues/8331 is resolved
-      if (resource.isFolder) {
-        availableRoles = availableRoles.filter(
-          ({ id }) => id !== '2d00ce52-1fc2-4dbc-8b95-a73b73395f5a'
-        )
-      } else {
-        availableRoles = availableRoles.filter(
-          ({ id }) =>
-            id !== 'fb6c3e19-e378-47e5-b277-9732f9de6e21' &&
-            id !== '1c996275-f1c9-4e71-abdf-a42f6495e960'
-        )
-      }
-
-      availableShareRoles.value = availableRoles
+      const allowedValues = data['@libre.graph.permissions.roles.allowedValues']
+      availableShareRoles.value =
+        sharesStore.graphRoles.filter((r) => allowedValues?.map(({ id }) => id).includes(r.id)) ||
+        []
 
       const permissions = data.value || []
 
