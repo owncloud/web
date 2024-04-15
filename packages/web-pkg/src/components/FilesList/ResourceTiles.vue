@@ -281,7 +281,11 @@ export default defineComponent({
     }
 
     const isResourceClickable = (resource) => {
-      return !(isEmbedModeEnabled && !resource.isFolder)
+      if (isEmbedModeEnabled && !resource.isFolder) {
+        return false
+      }
+
+      return true
     }
 
     const emitSelect = (selectedIds) => {
