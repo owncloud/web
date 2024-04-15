@@ -133,7 +133,7 @@
       appearance="filled"
       variation="primary"
       @click="$emit('confirm')"
-      >{{ $gettext('Copy link') }}
+      >{{ confirmButtonText }}
     </oc-button>
   </div>
 </template>
@@ -191,6 +191,10 @@ export default defineComponent({
     const passwordPolicy = passwordPolicyService.getPolicy()
 
     const isFolder = computed(() => props.resources.every(({ isFolder }) => isFolder))
+
+    const confirmButtonText = computed(() => {
+      return unref(isEmbedEnabled) ? $gettext('Share link(s)') : $gettext('Copy link')
+    })
 
     const passwordInputKey = ref(uuidV4())
     const roleRefs = ref<Record<string, InstanceType<typeof OcButton>>>({})
@@ -345,6 +349,7 @@ export default defineComponent({
       updateSelectedLinkType,
       updatePassword,
       getLinkRoleByType,
+      confirmButtonText,
 
       // unit tests
       onConfirm
