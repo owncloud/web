@@ -1,0 +1,7 @@
+Enhancement: Implement Server-Sent Events (SSE) for file updates
+
+We've implemented Server-Sent Events (SSE) to notify users in real-time about file changes.
+Users now receive real-time UI updates when e.g. the last modification date or size of a file is updated.
+
+https://github.com/owncloud/web/pull/10782
+https://github.com/owncloud/web/issues/10779
