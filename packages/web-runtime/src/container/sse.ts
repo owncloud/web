@@ -19,7 +19,8 @@ const eventSchema = z.object({
   itemid: z.string(),
   parentitemid: z.string(),
   spaceid: z.string().optional(),
-  initiatorid: z.string().optional()
+  initiatorid: z.string().optional(),
+  etag: z.string().optional()
 })
 
 const itemInCurrentFolder = ({
@@ -195,27 +196,39 @@ export const onSSEProcessingFinishedEvent = async ({
       })
     }
 
-    resourcesStore.updateResourceField({
-      id: sseData.itemid,
-      field: 'processing',
-      value: false
+    /**
+     * Resource not changed, don't fetch more data
+     */
+    if (resource.etag === sseData.etag) {
+      return resourcesStore.updateResourceField({
+        id: sseData.itemid,
+        field: 'processing',
+        value: false
+      })
+    }
+
+    const space = spacesStore.spaces.find((s) => s.id === sseData.spaceid)
+    if (!space) {
+      return
+    }
+
+    const updatedResource = await clientService.webdav.getFileInfo(space, {
+      fileId: sseData.itemid
+    })
+    resourcesStore.upsertResource(updatedResource)
+
+    const preview = await previewService.loadPreview({
+      resource,
+      space,
+      dimensions: ImageDimension.Thumbnail
     })
 
-    const space = spacesStore.spaces.find((s) => s.id === resource.storageId)
-    if (space) {
-      const preview = await previewService.loadPreview({
-        resource,
-        space,
-        dimensions: ImageDimension.Thumbnail
+    if (preview) {
+      resourcesStore.updateResourceField({
+        id: sseData.itemid,
+        field: 'thumbnail',
+        value: preview
       })
-
-      if (preview) {
-        resourcesStore.updateResourceField({
-          id: sseData.itemid,
-          field: 'thumbnail',
-          value: preview
-        })
-      }
     }
   } catch (e) {
     console.error(`Unable to parse sse event ${topic} data`, e)

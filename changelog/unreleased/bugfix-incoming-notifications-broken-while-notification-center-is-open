@@ -1,0 +1,7 @@
+Bugfix: Incoming notifications broken while notification center is open
+
+We've fixed a bug where the visual representation of new incoming notifications were broken,
+while the notification center was opened.
+
+https://github.com/owncloud/web/pull/10760
+https://github.com/owncloud/web/issues/10602

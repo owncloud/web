@@ -1,7 +1,6 @@
 <template>
   <div id="oc-file-versions-sidebar" class="-oc-mt-s">
-    <oc-loader v-if="areVersionsLoading" />
-    <ul v-else-if="versions.length" class="oc-m-rm oc-position-relative">
+    <ul v-if="versions.length" class="oc-m-rm oc-position-relative">
       <li class="spacer oc-pb-l" aria-hidden="true"></li>
       <li
         v-for="(item, index) in versions"
@@ -63,9 +62,8 @@ import {
   useDownloadFile,
   useResourcesStore
 } from '@ownclouders/web-pkg'
-import { computed, defineComponent, inject, Ref, ref, unref, watch } from 'vue'
+import { computed, defineComponent, inject, Ref, unref } from 'vue'
 import { isShareSpaceResource, Resource, SpaceResource } from '@ownclouders/web-client/src/helpers'
-import { useTask } from 'vue-concurrency'
 import { useGettext } from 'vue3-gettext'
 
 export default defineComponent({
@@ -85,30 +83,7 @@ export default defineComponent({
 
     const space = inject<Ref<SpaceResource>>('space')
     const resource = inject<Ref<Resource>>('resource')
-
-    const versions = ref<Resource[]>([])
-    const fetchVersionsTask = useTask(function* () {
-      try {
-        versions.value = yield clientService.webdav.listFileVersions(unref(resource).fileId)
-      } catch (e) {
-        console.error(e)
-      }
-    })
-    const areVersionsLoading = computed(() => {
-      return !fetchVersionsTask.last || fetchVersionsTask.isRunning
-    })
-    watch(
-      [() => unref(resource)?.id, () => unref(resource)?.etag],
-      ([id, etag]) => {
-        if (!id || !etag) {
-          return
-        }
-        fetchVersionsTask.perform()
-      },
-      {
-        immediate: true
-      }
-    )
+    const versions = inject<Ref<Resource[]>>('versions')
 
     const isRevertible = computed(() => {
       if (props.isReadOnly) {
@@ -138,8 +113,6 @@ export default defineComponent({
           })
         }
       }
-
-      fetchVersionsTask.perform()
     }
     const downloadVersion = (version: Resource) => {
       return downloadFile(unref(space), unref(resource), version.name)
@@ -158,16 +131,12 @@ export default defineComponent({
       space,
       resource,
       versions,
-      areVersionsLoading,
       isRevertible,
       revertToVersion,
       downloadVersion,
       formatVersionDateRelative,
       formatVersionDate,
-      formatVersionFileSize,
-
-      // HACK: exported for unit tests
-      fetchVersionsTask
+      formatVersionFileSize
     }
   }
 })

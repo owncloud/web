@@ -54,7 +54,7 @@ Feature: share
     And "Alice" uploads the following resource
       | resource          | to               | option  |
       | PARENT/simple.pdf | folder_to_shared | replace |
-    And "Brian" should not see the version of the file
+    And "Brian" should not see the version panel for the file
       | resource   | to               |
       | simple.pdf | folder_to_shared |
     And "Alice" removes following sharee

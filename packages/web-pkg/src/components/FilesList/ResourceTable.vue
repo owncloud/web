@@ -174,7 +174,12 @@
       />
     </template>
     <template #sharedBy="{ item }">
-      <oc-button appearance="raw-inverse" variation="passive" @click="openSharingSidebar(item)">
+      <oc-button
+        appearance="raw-inverse"
+        variation="passive"
+        class="resource-table-shared-by"
+        @click="openSharingSidebar(item)"
+      >
         <oc-avatars
           class="resource-table-people"
           :items="getSharedByAvatarItems(item)"
@@ -184,7 +189,12 @@
       </oc-button>
     </template>
     <template #sharedWith="{ item }">
-      <oc-button appearance="raw-inverse" variation="passive" @click="openSharingSidebar(item)">
+      <oc-button
+        appearance="raw-inverse"
+        variation="passive"
+        class="resource-table-shared-with"
+        @click="openSharingSidebar(item)"
+      >
         <oc-avatars
           class="resource-table-people"
           :items="getSharedWithAvatarItems(item)"
@@ -1021,34 +1031,22 @@ export default defineComponent({
         resource.type === 'folder' ? this.$gettext('folder') : this.$gettext('file')
 
       const shareCount = resource.sharedWith.filter(({ shareType }) =>
-        [ShareTypes.user.value, ShareTypes.link.value].includes(shareType)
-      ).length
-      const linkCount = resource.sharedWith.filter(
-        ({ shareType }) => shareType === ShareTypes.link.value
+        ShareTypes.authenticated.includes(ShareTypes.getByValue(shareType))
       ).length
 
-      const shareText =
-        shareCount > 0
-          ? this.$ngettext(
-              'This %{ resourceType } is shared via %{ shareCount } invite',
-              'This %{ resourceType } is shared via %{ shareCount } invites',
-              shareCount
-            )
-          : ''
-      const linkText =
-        linkCount > 0
-          ? this.$ngettext(
-              'This %{ resourceType } is shared via %{ linkCount } link',
-              'This %{ resourceType } is shared via %{ linkCount } links',
-              linkCount
-            )
-          : ''
-      const description = [shareText, linkText].join(' ')
-      return this.$gettext(description, {
-        resourceType,
-        shareCount: shareCount.toString(),
-        linkCount: linkCount.toString()
-      })
+      if (!shareCount) {
+        return ''
+      }
+
+      return this.$ngettext(
+        'This %{ resourceType } is shared via %{ shareCount } invite',
+        'This %{ resourceType } is shared via %{ shareCount } invites',
+        shareCount,
+        {
+          resourceType,
+          shareCount: shareCount.toString()
+        }
+      )
     },
     getSharedByAvatarDescription(resource: Resource) {
       if (!isShareResource(resource)) {
@@ -1079,12 +1077,16 @@ export default defineComponent({
         return []
       }
 
-      return resource.sharedWith.map((s) => ({
-        displayName: s.displayName,
-        name: s.displayName,
-        shareType: s.shareType,
-        username: s.id
-      }))
+      return resource.sharedWith
+        .filter(({ shareType }) =>
+          ShareTypes.authenticated.includes(ShareTypes.getByValue(shareType))
+        )
+        .map((s) => ({
+          displayName: s.displayName,
+          name: s.displayName,
+          shareType: s.shareType,
+          username: s.id
+        }))
     }
   }
 })

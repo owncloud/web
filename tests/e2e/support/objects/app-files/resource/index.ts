@@ -257,6 +257,14 @@ export class Resource {
     await this.#page.goto(startUrl)
   }
 
+  async checkThatFileVersionPanelIsNotAvailable(
+    args: Omit<po.resourceVersionArgs, 'page'>
+  ): Promise<void> {
+    const startUrl = this.#page.url()
+    await po.checkThatFileVersionPanelIsNotAvailable({ ...args, page: this.#page })
+    await this.#page.goto(startUrl)
+  }
+
   async changePage(args: Omit<po.changePageArgs, 'page'>): Promise<void> {
     await po.changePage({ ...args, page: this.#page })
   }

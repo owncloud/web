@@ -12,7 +12,8 @@ vi.mock('../../../src/composables/links/useLinkTypes', () => ({
 const selectors = {
   currentRole: '.link-current-role',
   roleOption: '.role-dropdown-list li',
-  roleOptionLabel: '.role-dropdown-list-option-label'
+  roleOptionLabel: '.role-dropdown-list-option-label',
+  roleDropdownBtn: '.link-role-dropdown-toggle'
 }
 
 describe('LinkRoleDropdown', () => {
@@ -32,9 +33,19 @@ describe('LinkRoleDropdown', () => {
       expect(wrapper.findAll(selectors.roleOptionLabel).at(index).text()).toEqual(role)
     })
   })
+  it('does not render a button but a span if only one link type is available', () => {
+    const availableLinkTypeOptions = [SharingLinkType.View]
+    const { wrapper } = getWrapper({ availableLinkTypeOptions })
+
+    expect(wrapper.find(selectors.roleDropdownBtn).exists()).toBeFalsy()
+    expect(wrapper.find(selectors.currentRole).exists()).toBeTruthy()
+  })
 })
 
-function getWrapper({ modelValue = mock<SharingLinkType>(), availableLinkTypeOptions = [] } = {}) {
+function getWrapper({
+  modelValue = SharingLinkType.View,
+  availableLinkTypeOptions = []
+}: { modelValue?: SharingLinkType; availableLinkTypeOptions?: SharingLinkType[] } = {}) {
   vi.mocked(useLinkTypes).mockReturnValue(
     mock<ReturnType<typeof useLinkTypes>>({
       getLinkRoleByType: (value) =>

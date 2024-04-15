@@ -36,7 +36,6 @@ import { SpaceInfo } from './Spaces'
 import { FileInfo } from './Files'
 import {
   isLocationCommonActive,
-  isLocationPublicActive,
   isLocationSharesActive,
   isLocationSpacesActive,
   isLocationTrashActive
@@ -64,7 +63,8 @@ import {
   LinkShare,
   ShareRole,
   call,
-  isSpaceResource
+  isSpaceResource,
+  isPersonalSpaceResource
 } from '@ownclouders/web-client/src/helpers'
 import { storeToRefs } from 'pinia'
 import { useTask } from 'vue-concurrency'
@@ -110,11 +110,17 @@ export default defineComponent({
     const { currentFolder } = storeToRefs(resourcesStore)
 
     const loadedResource = ref<Resource>()
-    const isLoading = ref(false)
+    const versions = ref<Resource[]>([])
 
     const availableShareRoles = ref<ShareRole[]>([])
 
     const { selectedResources } = useSelectedResources()
+
+    const isMetaDataLoading = ref(false)
+
+    const isLoading = computed(() => {
+      return unref(isMetaDataLoading) || loadVersionsTask.isRunning
+    })
 
     const panelContext = computed<SideBarPanelContext<SpaceResource, Resource, Resource>>(() => {
       if (unref(selectedResources).length === 0) {
@@ -143,7 +149,6 @@ export default defineComponent({
     const isProjectsLocation = isLocationSpacesActive(router, 'files-spaces-projects')
     const isFavoritesLocation = useActiveLocation(isLocationCommonActive, 'files-common-favorites')
     const isSearchLocation = useActiveLocation(isLocationCommonActive, 'files-common-search')
-    const isPublicFilesLocation = useActiveLocation(isLocationPublicActive, 'files-public-link')
     const isTrashLocation = useActiveLocation(isLocationTrashActive, 'files-trash-generic')
 
     const closeSideBar = () => {
@@ -187,6 +192,12 @@ export default defineComponent({
       return unref(isShareLocation) || unref(isSearchLocation) || unref(isFavoritesLocation)
     })
 
+    const userIsSpaceMember = computed(
+      () =>
+        (isProjectSpaceResource(props.space) && props.space.isMember(userStore.user)) ||
+        (isPersonalSpaceResource(props.space) && props.space.isOwner(userStore.user))
+    )
+
     const availablePanels = computed(() =>
       extensionRegistry
         .requestExtensions<SidebarPanelExtension<SpaceResource, Resource, Resource>>(
@@ -195,6 +206,10 @@ export default defineComponent({
         )
         .map((e) => e.panel)
     )
+
+    const loadVersionsTask = useTask(function* (signal, resource: Resource) {
+      versions.value = yield clientService.webdav.listFileVersions(resource.id)
+    })
 
     const loadSharesTask = useTask(function* (signal, resource: Resource) {
       sharesStore.setLoading(true)
@@ -205,33 +220,17 @@ export default defineComponent({
       let data: CollectionOfPermissionsWithAllowedValues
 
       if (isSpaceResource(resource)) {
-        const response = yield* call(client.listPermissionsSpaceRoot(props.space.id))
+        const response = yield* call(client.listPermissionsSpaceRoot(props.space?.id))
         data = response.data
       } else {
-        const response = yield* call(client.listPermissions(props.space.id, resource.id))
+        const response = yield* call(client.listPermissions(props.space?.id, resource.id))
         data = response.data
       }
 
-      let availableRoles =
-        sharesStore.graphRoles.filter(
-          (r) =>
-            data['@libre.graph.permissions.roles.allowedValues']?.map(({ id }) => id).includes(r.id)
-        ) || []
-
-      // FIXME server bug, remove when https://github.com/owncloud/ocis/issues/8331 is resolved
-      if (resource.isFolder) {
-        availableRoles = availableRoles.filter(
-          ({ id }) => id !== '2d00ce52-1fc2-4dbc-8b95-a73b73395f5a'
-        )
-      } else {
-        availableRoles = availableRoles.filter(
-          ({ id }) =>
-            id !== 'fb6c3e19-e378-47e5-b277-9732f9de6e21' &&
-            id !== '1c996275-f1c9-4e71-abdf-a42f6495e960'
-        )
-      }
-
-      availableShareRoles.value = availableRoles
+      const allowedValues = data['@libre.graph.permissions.roles.allowedValues']
+      availableShareRoles.value =
+        sharesStore.graphRoles.filter((r) => allowedValues?.map(({ id }) => id).includes(r.id)) ||
+        []
 
       const permissions = data.value || []
 
@@ -309,7 +308,7 @@ export default defineComponent({
       const promises = ancestorIds.map((id) => {
         return queue.add(() =>
           clientService.graphAuthenticated.permissions
-            .listPermissions(props.space.id, id)
+            .listPermissions(props.space?.id, id)
             .then((value) => {
               const data = value.data
               const permissions = ((data as any).value || []) as Permission[]
@@ -337,6 +336,34 @@ export default defineComponent({
     watch(
       () => [...unref(panelContext).items, props.isOpen],
       async () => {
+        if (unref(panelContext).items?.length !== 1) {
+          return
+        }
+        const resource = unref(panelContext).items[0]
+
+        if (loadVersionsTask.isRunning) {
+          loadVersionsTask.cancelAll()
+        }
+
+        if (
+          !resource.isFolder &&
+          !isSpaceResource(resource) &&
+          unref(userIsSpaceMember) &&
+          !unref(isTrashLocation)
+        ) {
+          try {
+            await loadVersionsTask.perform(resource)
+          } catch (e) {
+            console.error(e)
+          }
+        }
+      },
+      { immediate: true, deep: true }
+    )
+
+    watch(
+      () => [...unref(panelContext).items, props.isOpen],
+      async () => {
         if (!props.isOpen) {
           sharesStore.pruneShares()
           loadedResource.value = null
@@ -347,13 +374,14 @@ export default defineComponent({
           return
         }
         const resource = unref(panelContext).items[0]
+
         if (unref(loadedResource)?.id === resource.id) {
           // current resource is already loaded
           return
         }
 
-        isLoading.value = true
-        if (!unref(isPublicFilesLocation) && !unref(isTrashLocation)) {
+        isMetaDataLoading.value = true
+        if (unref(userIsSpaceMember) && !unref(isTrashLocation)) {
           try {
             if (loadSharesTask.isRunning) {
               loadSharesTask.cancelAll()
@@ -367,7 +395,7 @@ export default defineComponent({
 
         if (!unref(isShareLocation)) {
           loadedResource.value = resource
-          isLoading.value = false
+          isMetaDataLoading.value = false
           return
         }
 
@@ -384,12 +412,16 @@ export default defineComponent({
           loadedResource.value = resource
           console.error(error)
         }
-        isLoading.value = false
+        isMetaDataLoading.value = false
       },
-      { deep: true, immediate: true }
+      {
+        deep: true,
+        immediate: true
+      }
     )
 
     provide('resource', readonly(loadedResource))
+    provide('versions', readonly(versions))
     provide(
       'space',
       computed(() => props.space)
@@ -408,9 +440,12 @@ export default defineComponent({
       focusSideBar,
       panelContext,
       availablePanels,
-      isLoading,
       isFileHeaderVisible,
-      isSpaceHeaderVisible
+      isSpaceHeaderVisible,
+      isLoading,
+
+      // unit tests
+      loadSharesTask
     }
   }
 })

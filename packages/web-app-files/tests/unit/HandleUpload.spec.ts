@@ -15,7 +15,7 @@ import {
   useResourcesStore
 } from '@ownclouders/web-pkg'
 import { Language } from 'vue3-gettext'
-import { ResourceConflict } from 'web-app-files/src/helpers/resource/actions'
+import { UploadResourceConflict } from 'web-app-files/src/helpers/resource/actions'
 import { createTestingPinia } from 'web-test-helpers'
 
 vi.mock('web-app-files/src/helpers/resource/actions')
@@ -261,10 +261,10 @@ const getWrapper = ({
   conflictHandlerResult = [],
   spaces = []
 } = {}) => {
-  const resourceConflict = mock<ResourceConflict>()
+  const resourceConflict = mock<UploadResourceConflict>()
   resourceConflict.getConflicts.mockReturnValue(conflicts)
   resourceConflict.displayOverwriteDialog.mockResolvedValue(conflictHandlerResult)
-  vi.mocked(ResourceConflict).mockImplementation(() => resourceConflict)
+  vi.mocked(UploadResourceConflict).mockImplementation(() => resourceConflict)
 
   const route = mock<RouteLocationNormalizedLoaded>()
   route.params.driveAliasAndItem = '1'

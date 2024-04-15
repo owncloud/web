@@ -90,6 +90,7 @@ const tagInInputForm =
 const tagFormInput = '//*[@data-testid="tags"]//input'
 const resourcesAsTiles = '#files-view .oc-tiles'
 const fileVersionSidebar = '#oc-file-versions-sidebar'
+const versionsPanelSelect = '//*[@data-testid="sidebar-panel-versions-select"]'
 const noLinkMessage = '#web .oc-link-resolve-error-message'
 const listItemPageSelector = '//*[contains(@class,"oc-pagination-list-item-page") and text()="%s"]'
 const itemsPerPageDropDownOptionSelector =
@@ -1600,6 +1601,17 @@ export const checkThatFileVersionIsNotAvailable = async (
 
   await sidebar.openPanel({ page, name: 'versions' })
   await expect(page.locator(fileVersionSidebar)).toHaveText('No Versions available for this file')
+}
+
+export const checkThatFileVersionPanelIsNotAvailable = async (
+  args: resourceVersionArgs
+): Promise<void> => {
+  const { page, files, folder } = args
+  const fileName = files.map((file) => path.basename(file.name))
+  await clickResource({ page, path: folder })
+  await sidebar.open({ page, resource: fileName[0] })
+
+  await expect(page.locator(versionsPanelSelect)).not.toBeVisible()
 }
 
 export const expectThatPublicLinkIsDeleted = async (args): Promise<void> => {
