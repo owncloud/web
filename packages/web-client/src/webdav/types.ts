@@ -21,12 +21,9 @@ import { ListFavoriteFilesFactory } from './listFavoriteFiles'
 import { AxiosInstance } from 'axios'
 
 export interface WebDavOptions {
-  accessToken: string
   axiosClient: AxiosInstance
   baseUrl: string
-  language: string
   user: User
-  clientInitiatorId: string
 }
 
 export interface WebDAV {

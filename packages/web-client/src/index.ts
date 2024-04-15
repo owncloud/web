@@ -21,32 +21,15 @@ interface Client {
 }
 
 type ClientOptions = {
-  accessToken: string
   axiosClient: AxiosInstance
   baseURI: string
-  clientInitiatorId: string
-  language: string
   user: User
 }
 
-export const client = ({
-  accessToken,
-  axiosClient,
-  baseURI,
-  clientInitiatorId,
-  language,
-  user
-}: ClientOptions): Client => {
+export const client = ({ axiosClient, baseURI, user }: ClientOptions): Client => {
   return {
     graph: graph(baseURI, axiosClient),
     ocs: ocs(baseURI, axiosClient, user),
-    webdav: webdav({
-      accessToken,
-      axiosClient,
-      baseUrl: baseURI,
-      clientInitiatorId,
-      language,
-      user
-    })
+    webdav: webdav({ axiosClient, baseUrl: baseURI, user })
   }
 }

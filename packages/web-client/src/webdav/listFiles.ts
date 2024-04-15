@@ -12,7 +12,7 @@ import {
   SpaceResource
 } from '../helpers'
 import { urlJoin } from '../utils'
-import { DAV, buildAuthHeader } from './client'
+import { DAV } from './client'
 import { GetPathForFileIdFactory } from './getPathForFileId'
 import { WebDavOptions } from './types'
 
@@ -25,7 +25,7 @@ export type ListFilesOptions = {
 export const ListFilesFactory = (
   dav: DAV,
   pathForFileIdFactory: ReturnType<typeof GetPathForFileIdFactory>,
-  { accessToken }: WebDavOptions
+  options: WebDavOptions
 ) => {
   return {
     async listFiles(
@@ -34,11 +34,9 @@ export const ListFilesFactory = (
       { depth = 1, davProperties, isTrash = false }: ListFilesOptions = {}
     ): Promise<ListFilesResult> {
       let webDavResources: WebDavResponseResource[]
-      const headers = buildAuthHeader(accessToken, space)
       if (isPublicSpaceResource(space)) {
         webDavResources = await dav.propfind(urlJoin(space.webDavPath, path), {
           depth,
-          headers,
           properties: davProperties || DavProperties.PublicLink
         })
 
@@ -108,7 +106,6 @@ export const ListFilesFactory = (
 
         webDavResources = await dav.propfind(webDavPath, {
           depth,
-          headers,
           properties: davProperties || DavProperties.Default
         })
         if (isTrash) {

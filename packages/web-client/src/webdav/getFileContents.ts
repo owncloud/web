@@ -1,7 +1,7 @@
 import { urlJoin } from '../utils'
-import { isPublicSpaceResource, SpaceResource } from '../helpers'
+import { SpaceResource } from '../helpers'
 import { WebDavOptions } from './types'
-import { buildAuthHeader, buildPublicLinkAuthHeader, DAV } from './client'
+import { DAV } from './client'
 import { HttpError } from '../errors'
 import { ResponseType } from 'axios'
 
@@ -10,7 +10,7 @@ export type GetFileContentsResponse = {
   [key: string]: any
 }
 
-export const GetFileContentsFactory = (dav: DAV, { accessToken, axiosClient }: WebDavOptions) => {
+export const GetFileContentsFactory = (dav: DAV, { axiosClient }: WebDavOptions) => {
   return {
     async getFileContents(
       space: SpaceResource,
@@ -27,10 +27,6 @@ export const GetFileContentsFactory = (dav: DAV, { accessToken, axiosClient }: W
         const response = await axiosClient.get(dav.getFileUrl(urlJoin(space.webDavPath, path)), {
           responseType,
           headers: {
-            Authorization:
-              isPublicSpaceResource(space) && space.publicLinkPassword
-                ? buildPublicLinkAuthHeader(space.publicLinkPassword)['Authorization']
-                : buildAuthHeader(accessToken, space)['Authorization'],
             ...(noCache && { 'Cache-Control': 'no-cache' })
           }
         })

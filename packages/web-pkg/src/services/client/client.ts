@@ -11,7 +11,9 @@ import { AuthStore, ClientStore, ConfigStore, UserStore } from '../../composable
 
 interface ClientContext {
   language: string
-  token?: string
+  token: string
+  publicLinkToken?: string
+  publicLinkPassword?: string
 }
 
 interface HttpClient extends ClientContext {
@@ -35,16 +37,19 @@ const createFetchOptions = (authParams: AuthParameters, language: string): Fetch
   }
 }
 
-const createAxiosInstance = (authParams: AuthParameters, language: string): AxiosInstance => {
+const createAxiosInstance = (
+  authParams: AuthParameters,
+  language: string,
+  initiatorId: string
+): AxiosInstance => {
   const auth = new Auth(authParams)
   const axiosClient = axios.create({
-    headers: auth.getHeaders()
+    headers: { ...auth.getHeaders(), 'Accept-Language': language, 'Initiator-ID': initiatorId }
   })
   axiosClient.interceptors.request.use((config) => {
     config.headers['X-Request-ID'] = uuidV4()
     config.headers['X-Requested-With'] = 'XMLHttpRequest'
     config.headers['Content-Type'] = 'application/x-www-form-urlencoded'
-    config.headers['Accept-Language'] = language
     return config
   })
   return axiosClient
@@ -144,11 +149,12 @@ export class ClientService {
 
   private getOcClient(authParams: AuthParameters): OcClient {
     const { graph, ocs, webdav } = client({
-      accessToken: this.authStore.accessToken,
-      axiosClient: createAxiosInstance(authParams, this.currentLanguage),
+      axiosClient: createAxiosInstance(
+        authParams,
+        this.currentLanguage,
+        this.clientStore.clientInitiatorId
+      ),
       baseURI: this.configStore.serverUrl,
-      clientInitiatorId: this.clientStore.clientInitiatorId,
-      language: this.currentLanguage,
       user: this.userStore.user
     })
 
@@ -165,6 +171,8 @@ export class ClientService {
     return (
       !client ||
       (hasToken && client.token !== this.authStore.accessToken) ||
+      client.publicLinkPassword !== this.authStore.publicLinkPassword ||
+      client.publicLinkToken !== this.authStore.publicLinkToken ||
       client.language !== this.currentLanguage
     )
   }
@@ -172,8 +180,11 @@ export class ClientService {
   public get webdav(): WebDAV {
     const hasToken = !!this.authStore.accessToken
     if (this.clientNeedsInit(this.ocWebdavContextClient, hasToken)) {
-      console.log('NEEDS INIT')
-      this.ocWebdavContextClient = this.getOcClient({ accessToken: this.authStore.accessToken })
+      this.ocWebdavContextClient = this.getOcClient({
+        accessToken: this.authStore.accessToken,
+        publicLinkPassword: this.authStore.publicLinkPassword,
+        publicLinkToken: this.authStore.publicLinkToken
+      })
     }
     return this.ocWebdavContextClient.webdav
   }

@@ -79,23 +79,3 @@ export const buildPropPatchBody = (
 
   return builder.build(xmlObj)
 }
-
-export const buildPublicLinkAuthHeader = (password: string) => {
-  return 'Basic ' + Buffer.from('public:' + password).toString('base64')
-}
-
-export const buildAuthHeader = (token: string, space: SpaceResource = null): Headers => {
-  if (isPublicSpaceResource(space)) {
-    // TODO: make check cleaner
-    if (space.driveAlias.startsWith('ocm/')) {
-      return { Authorization: `Bearer ${space.id}` }
-    }
-
-    if (space.publicLinkPassword) {
-      return { Authorization: buildPublicLinkAuthHeader(space.publicLinkPassword) }
-    }
-    return {}
-  }
-
-  return { Authorization: `Bearer ${token}` }
-}

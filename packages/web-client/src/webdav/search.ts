@@ -1,7 +1,7 @@
 import { Resource, buildResource } from '../helpers'
 import { WebDavOptions } from './types'
 import { DavProperties, DavProperty, DavPropertyValue } from './constants'
-import { DAV, buildAuthHeader } from './client'
+import { DAV } from './client'
 
 export interface SearchResource extends Resource {
   highlights: string
@@ -17,19 +17,17 @@ export type SearchResult = {
   totalResults: number
 }
 
-export const SearchFactory = (dav: DAV, { accessToken }: WebDavOptions) => {
+export const SearchFactory = (dav: DAV, options: WebDavOptions) => {
   return {
     async search(
       term: string,
       { davProperties = DavProperties.Default, searchLimit }: SearchOptions
     ): Promise<SearchResult> {
       const path = '/spaces/'
-      const headers = buildAuthHeader(accessToken)
       const { range, results } = await dav.report(path, {
         pattern: term,
         limit: searchLimit,
-        properties: davProperties,
-        headers
+        properties: davProperties
       })
 
       return {

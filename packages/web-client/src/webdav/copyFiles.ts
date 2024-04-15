@@ -1,9 +1,9 @@
 import { urlJoin } from '../utils'
 import { SpaceResource } from '../helpers'
-import { DAV, buildAuthHeader } from './client'
+import { DAV } from './client'
 import { WebDavOptions } from './types'
 
-export const CopyFilesFactory = (dav: DAV, { accessToken }: WebDavOptions) => {
+export const CopyFilesFactory = (dav: DAV, options: WebDavOptions) => {
   return {
     copyFiles(
       sourceSpace: SpaceResource,
@@ -12,11 +12,10 @@ export const CopyFilesFactory = (dav: DAV, { accessToken }: WebDavOptions) => {
       { path: targetPath },
       options?: { overwrite?: boolean }
     ) {
-      const headers = buildAuthHeader(accessToken, sourceSpace)
       return dav.copy(
         urlJoin(sourceSpace.webDavPath, sourcePath),
         urlJoin(targetSpace.webDavPath, targetPath),
-        { overwrite: options?.overwrite || false, headers }
+        { overwrite: options?.overwrite || false }
       )
     }
   }

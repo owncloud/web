@@ -78,7 +78,9 @@ import { ref, unref, computed, defineComponent, onMounted } from 'vue'
 import {
   buildPublicSpaceResource,
   isPublicSpaceResource,
-  PublicSpaceResource
+  PublicSpaceResource,
+  Resource,
+  SpaceResource
 } from '@ownclouders/web-client/src/helpers'
 import isEmpty from 'lodash-es/isEmpty'
 import { useGettext } from 'vue3-gettext'
@@ -204,19 +206,22 @@ export default defineComponent({
         return
       }
 
-      const publicLink = yield loadPublicLinkTask.perform()
-      if (loadPublicLinkTask.isError) {
-        const e = loadPublicLinkTask.last.error
-        console.error(e, e.resource)
-        return
-      }
-
       yield authService.resolvePublicLink(
         unref(token),
         unref(passwordRequired),
         unref(passwordRequired) ? unref(password) : '',
         unref(publicLinkType)
       )
+
+      let publicLink: SpaceResource
+
+      try {
+        publicLink = yield loadPublicLinkTask.perform()
+      } catch (e) {
+        authStore.clearPublicLinkContext()
+        console.error(e, e.resource)
+        return
+      }
 
       const url = queryItemAsString(unref(redirectUrl))
       if (url) {

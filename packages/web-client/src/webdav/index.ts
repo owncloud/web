@@ -24,12 +24,7 @@ export * from './constants'
 export * from './types'
 
 export const webdav = (options: WebDavOptions): WebDAV => {
-  const dav = new DAV({
-    accessToken: options.accessToken,
-    baseUrl: options.baseUrl,
-    language: options.language,
-    clientInitiatorId: options.clientInitiatorId
-  })
+  const dav = new DAV({ axiosClient: options.axiosClient, baseUrl: options.baseUrl })
 
   const pathForFileIdFactory = GetPathForFileIdFactory(dav, options)
   const { getPathForFileId } = pathForFileIdFactory

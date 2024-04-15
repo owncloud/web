@@ -2,13 +2,13 @@ import { urlJoin } from '../utils'
 import { SpaceResource } from '../helpers'
 import { GetFileInfoFactory } from './getFileInfo'
 import { WebDavOptions } from './types'
-import { DAV, buildAuthHeader } from './client'
+import { DAV } from './client'
 import { ProgressEventCallback } from 'webdav'
 
 export const PutFileContentsFactory = (
   dav: DAV,
   getFileInfoFactory: ReturnType<typeof GetFileInfoFactory>,
-  { accessToken }: WebDavOptions
+  options: WebDavOptions
 ) => {
   return {
     async putFileContents(
@@ -33,10 +33,7 @@ export const PutFileContentsFactory = (
         previousEntityTag,
         overwrite,
         onUploadProgress,
-        headers: {
-          ...headers,
-          ...buildAuthHeader(accessToken, space)
-        }
+        headers
       })
 
       return getFileInfoFactory.getFileInfo(space, { path })

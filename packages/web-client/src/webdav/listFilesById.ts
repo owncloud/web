@@ -2,7 +2,7 @@ import { buildResource } from '../helpers/resource'
 import { DavProperties, DavPropertyValue } from './constants'
 
 import { urlJoin } from '../utils'
-import { DAV, buildAuthHeader } from './client'
+import { DAV } from './client'
 import { WebDavOptions } from './types'
 import { ListFilesResult } from './listFiles'
 
@@ -11,18 +11,15 @@ export type ListFilesByIdOptions = {
   davProperties?: DavPropertyValue[]
 }
 
-export const ListFilesByIdFactory = (dav: DAV, { accessToken }: WebDavOptions) => {
+export const ListFilesByIdFactory = (dav: DAV, options: WebDavOptions) => {
   return {
     async listFilesById(
       { fileId }: { fileId?: string },
       { depth = 1, davProperties }: ListFilesByIdOptions = {}
     ): Promise<ListFilesResult> {
-      const headers = buildAuthHeader(accessToken, null)
-
       const webDavPath = urlJoin('/spaces', fileId)
       const webDavResources = await dav.propfind(webDavPath, {
         depth,
-        headers,
         properties: davProperties || DavProperties.Default
       })
       const resources = webDavResources.map(buildResource)
