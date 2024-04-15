@@ -45,6 +45,7 @@
           :resource="resource"
           :resource-route="getRoute(resource)"
           :is-resource-selected="isResourceSelected(resource)"
+          :is-resource-clickable="isResourceClickable(resource)"
           :is-extension-displayed="areFileExtensionsShown"
           :resource-icon-size="resourceIconSize"
           :draggable="dragDrop"
@@ -145,7 +146,8 @@ import {
   useResourceRouteResolver,
   useTileSize,
   useResourcesStore,
-  useViewSizeMax
+  useViewSizeMax,
+  useEmbedMode
 } from '../../composables'
 
 export default defineComponent({
@@ -208,6 +210,7 @@ export default defineComponent({
     const { $gettext } = useGettext()
     const resourcesStore = useResourcesStore()
     const { emit } = context
+    const { isEnabled: isEmbedModeEnabled } = useEmbedMode()
     const viewSizeMax = useViewSizeMax()
     const viewSizeCurrent = computed(() => {
       return Math.min(unref(viewSizeMax), props.viewSize)
@@ -275,6 +278,10 @@ export default defineComponent({
 
     const isResourceSelected = (resource) => {
       return props.selectedIds.includes(resource.id)
+    }
+
+    const isResourceClickable = (resource) => {
+      return !(isEmbedModeEnabled && !resource.isFolder)
     }
 
     const emitSelect = (selectedIds) => {
@@ -486,6 +493,7 @@ export default defineComponent({
       getResourceCheckboxLabel,
       selectSorting,
       isSortFieldSelected,
+      isResourceClickable,
       currentSortField,
       resourceIconSize,
       ghostElementRef,
