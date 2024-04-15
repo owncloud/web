@@ -7,7 +7,7 @@ import { WebDAV } from '@ownclouders/web-client/src/webdav'
 import { Language } from 'vue3-gettext'
 import { FetchEventSourceInit } from '@microsoft/fetch-event-source'
 import { sse } from '@ownclouders/web-client/src/sse'
-import { AuthStore, ClientStore, ConfigStore } from '../../composables'
+import { AuthStore, ConfigStore } from '../../composables'
 
 interface ClientContext {
   language: string
@@ -59,14 +59,14 @@ export interface ClientServiceOptions {
   configStore: ConfigStore
   language: Language
   authStore: AuthStore
-  clientStore: ClientStore
 }
 
 export class ClientService {
   private configStore: ConfigStore
   private language: Language
   private authStore: AuthStore
-  private clientStore: ClientStore
+
+  private initiatorUuid: string
 
   private httpAuthenticatedClient: HttpClient
   private httpUnAuthenticatedClient: HttpClient
@@ -79,7 +79,12 @@ export class ClientService {
     this.configStore = options.configStore
     this.language = options.language
     this.authStore = options.authStore
-    this.clientStore = options.clientStore
+
+    this.initiatorUuid = uuidV4()
+  }
+
+  public get initiatorId(): string {
+    return this.initiatorUuid
   }
 
   public get httpAuthenticated(): _HttpClient {
@@ -138,7 +143,7 @@ export class ClientService {
           ...(!!authenticated && { Authorization: 'Bearer ' + this.authStore.accessToken }),
           'X-Requested-With': 'XMLHttpRequest',
           'X-Request-ID': uuidV4(),
-          'Initiator-ID': this.clientStore.clientInitiatorId
+          'Initiator-ID': this.initiatorId
         }
       })
     }
@@ -146,11 +151,7 @@ export class ClientService {
 
   private getOcClient(authParams: AuthParameters): OcClient {
     const { graph, ocs, webdav } = client({
-      axiosClient: createAxiosInstance(
-        authParams,
-        this.currentLanguage,
-        this.clientStore.clientInitiatorId
-      ),
+      axiosClient: createAxiosInstance(authParams, this.currentLanguage, this.initiatorId),
       baseURI: this.configStore.serverUrl
     })
 

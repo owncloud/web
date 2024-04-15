@@ -27,8 +27,7 @@ import {
   useResourcesStore,
   ResourcesStore,
   SpacesStore,
-  MessageStore,
-  useClientStore
+  MessageStore
 } from '@ownclouders/web-pkg'
 import { authService } from '../services/auth'
 import {
@@ -36,8 +35,7 @@ import {
   LoadingService,
   PasswordPolicyService,
   PreviewService,
-  UppyService,
-  ClientStore
+  UppyService
 } from '@ownclouders/web-pkg'
 import { init as sentryInit } from '@sentry/vue'
 import { v4 as uuidV4 } from 'uuid'
@@ -334,7 +332,6 @@ export const announcePiniaStores = () => {
   const sharesStore = useSharesStore()
   const spacesStore = useSpacesStore()
   const userStore = useUserStore()
-  const clientStore = useClientStore()
 
   return {
     appsStore,
@@ -347,8 +344,7 @@ export const announcePiniaStores = () => {
     modalStore,
     sharesStore,
     spacesStore,
-    userStore,
-    clientStore
+    userStore
   }
 }
 
@@ -391,21 +387,16 @@ export const announceAdditionalTranslations = ({
 export const announceClientService = ({
   app,
   configStore,
-  authStore,
-  clientStore
+  authStore
 }: {
   app: App
   configStore: ConfigStore
   authStore: AuthStore
-  clientStore: ClientStore
 }): void => {
-  clientStore.setClientInitiatorId(uuidV4())
-
   const clientService = new ClientService({
     configStore,
     language: app.config.globalProperties.$language,
-    authStore,
-    clientStore
+    authStore
   })
   app.config.globalProperties.$clientService = clientService
   app.provide('$clientService', clientService)
@@ -640,7 +631,6 @@ export const registerSSEEventListeners = ({
   language,
   resourcesStore,
   spacesStore,
-  clientStore,
   messageStore,
   clientService,
   previewService,
@@ -650,7 +640,6 @@ export const registerSSEEventListeners = ({
   language: Language
   resourcesStore: ResourcesStore
   spacesStore: SpacesStore
-  clientStore: ClientStore
   messageStore: MessageStore
   clientService: ClientService
   previewService: PreviewService
@@ -673,7 +662,6 @@ export const registerSSEEventListeners = ({
       topic: MESSAGE_TYPE.ITEM_RENAMED,
       resourcesStore,
       spacesStore,
-      clientStore,
       msg,
       clientService,
       router
@@ -685,7 +673,6 @@ export const registerSSEEventListeners = ({
       topic: MESSAGE_TYPE.POSTPROCESSING_FINISHED,
       resourcesStore,
       spacesStore,
-      clientStore,
       msg,
       clientService,
       previewService,
@@ -718,7 +705,7 @@ export const registerSSEEventListeners = ({
       topic: MESSAGE_TYPE.ITEM_TRASHED,
       language,
       resourcesStore,
-      clientStore,
+      clientService,
       messageStore,
       msg
     })
@@ -729,7 +716,6 @@ export const registerSSEEventListeners = ({
       topic: MESSAGE_TYPE.ITEM_RESTORED,
       resourcesStore,
       spacesStore,
-      clientStore,
       msg,
       clientService
     })
@@ -740,7 +726,6 @@ export const registerSSEEventListeners = ({
       topic: MESSAGE_TYPE.FOLDER_CREATED,
       resourcesStore,
       spacesStore,
-      clientStore,
       msg,
       clientService
     })
@@ -751,7 +736,6 @@ export const registerSSEEventListeners = ({
       topic: MESSAGE_TYPE.FILE_TOUCHED,
       resourcesStore,
       spacesStore,
-      clientStore,
       msg,
       clientService
     })

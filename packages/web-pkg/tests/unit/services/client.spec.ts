@@ -1,5 +1,5 @@
 import { HttpClient } from '../../../src/http'
-import { ClientService, useAuthStore, useClientStore, useConfigStore } from '../../../src/'
+import { ClientService, useAuthStore, useConfigStore } from '../../../src/'
 import { Language } from 'vue3-gettext'
 import { Graph, OCS, client as _client } from '@ownclouders/web-client'
 import { createTestingPinia, writable } from 'web-test-helpers'
@@ -12,15 +12,13 @@ const serverUrl = 'someUrl'
 const getClientServiceMock = () => {
   const authStore = useAuthStore()
   const configStore = useConfigStore()
-  const clientStore = useClientStore()
   writable(configStore).serverUrl = serverUrl
 
   return {
     clientService: new ClientService({
       configStore,
       language: language as Language,
-      authStore,
-      clientStore
+      authStore
     }),
     authStore
   }
@@ -45,7 +43,8 @@ describe('ClientService', () => {
           'Accept-Language': language.current,
           Authorization: `Bearer ${getters['runtime/auth/accessToken']}`,
           'X-Requested-With': 'XMLHttpRequest',
-          'X-Request-ID': v4uuid
+          'X-Request-ID': v4uuid,
+          'Initiator-ID': v4uuid
         }
       })
     )
@@ -70,7 +69,8 @@ describe('ClientService', () => {
         headers: {
           'Accept-Language': language.current,
           'X-Requested-With': 'XMLHttpRequest',
-          'X-Request-ID': v4uuid
+          'X-Request-ID': v4uuid,
+          'Initiator-ID': v4uuid
         }
       })
     )
