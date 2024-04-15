@@ -58,18 +58,20 @@
               class="oc-modal-body-actions-cancel"
               variation="passive"
               appearance="outline"
+              :disabled="isLoading"
               @click="cancelModalAction"
-              >{{ $gettext(buttonCancelText) }}</oc-button
-            >
+              >{{ $gettext(buttonCancelText) }}
+            </oc-button>
             <oc-button
               v-if="!hideConfirmButton"
               class="oc-modal-body-actions-confirm oc-ml-s"
               variation="primary"
               appearance="filled"
-              :disabled="buttonConfirmDisabled || !!inputError"
+              :disabled="isLoading || buttonConfirmDisabled || !!inputError"
+              :show-spinner="showSpinner"
               @click="confirm"
-              >{{ $gettext(buttonConfirmText) }}</oc-button
-            >
+              >{{ $gettext(buttonConfirmText) }}
+            </oc-button>
           </div>
         </div>
       </div>
@@ -78,7 +80,7 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, PropType, ComponentPublicInstance } from 'vue'
+import { defineComponent, PropType, ComponentPublicInstance, ref, watch } from 'vue'
 import OcButton from '../OcButton/OcButton.vue'
 import OcIcon from '../OcIcon/OcIcon.vue'
 import OcTextInput from '../OcTextInput/OcTextInput.vue'
@@ -283,9 +285,44 @@ export default defineComponent({
     hideActions: {
       type: Boolean,
       default: false
+    },
+    /**
+     * Sets the loading state
+     * if enabled, confirm and cancel buttons are disabled,
+     * loading spinner will be shown in confirm button after a certain timeout
+     */
+    isLoading: {
+      type: Boolean,
+      required: false,
+      default: false
     }
   },
   emits: ['cancel', 'confirm', 'input'],
+  setup(props) {
+    const showSpinner = ref(false)
+
+    watch(
+      () => props.isLoading,
+      () => {
+        if (!props.isLoading) {
+          showSpinner.value = false
+          return
+        }
+        setTimeout(() => {
+          if (!props.isLoading) {
+            showSpinner.value = false
+            return
+          }
+          showSpinner.value = true
+        }, 700)
+      },
+      { immediate: true }
+    )
+
+    return {
+      showSpinner
+    }
+  },
   data() {
     return {
       userInputValue: null
@@ -438,6 +475,7 @@ export default defineComponent({
     color: var(--oc-color-text-default);
     line-height: 1.625;
     padding: var(--oc-space-medium) var(--oc-space-medium) 0;
+
     span {
       color: var(--oc-color-text-default);
     }
@@ -496,40 +534,40 @@ export default defineComponent({
 ```js
 <div>
   <oc-modal
-    icon="information"
-    title="Accept terms of use"
-    message="Do you accept our terms of use?"
-    button-cancel-text="Decline"
-    button-confirm-text="Accept"
-    class="oc-mb-l oc-position-relative"
+      icon="information"
+      title="Accept terms of use"
+      message="Do you accept our terms of use?"
+      button-cancel-text="Decline"
+      button-confirm-text="Accept"
+      class="oc-mb-l oc-position-relative"
   />
 </div>
 ```
 ```js
 <div>
   <oc-modal
-    variation="danger"
-    icon="alert"
-    title="Delete file lorem.txt"
-    message="Are you sure you want to delete this file? All its content will be permanently removed. This action cannot be undone."
-    button-cancel-text="Cancel"
-    button-confirm-text="Delete"
-    class="oc-mb-l oc-position-relative"
+      variation="danger"
+      icon="alert"
+      title="Delete file lorem.txt"
+      message="Are you sure you want to delete this file? All its content will be permanently removed. This action cannot be undone."
+      button-cancel-text="Cancel"
+      button-confirm-text="Delete"
+      class="oc-mb-l oc-position-relative"
   />
 </div>
 ```
 ```js
 <div>
   <oc-modal
-    title="Create new folder"
-    button-cancel-text="Cancel"
-    button-confirm-text="Create"
-    :has-input="true"
-    input-value="New folder"
-    input-label="Folder name"
-    input-description="Enter a folder name"
-    input-error="This name is already taken, please choose another one"
-    class="oc-mb-l oc-position-relative"
+      title="Create new folder"
+      button-cancel-text="Cancel"
+      button-confirm-text="Create"
+      :has-input="true"
+      input-value="New folder"
+      input-label="Folder name"
+      input-description="Enter a folder name"
+      input-error="This name is already taken, please choose another one"
+      class="oc-mb-l oc-position-relative"
   />
 </div>
 ```
@@ -537,15 +575,15 @@ export default defineComponent({
 ```js
 <div>
   <oc-modal
-    title="Rename file lorem.txt"
-    button-cancel-text="Cancel"
-    button-confirm-text="Rename"
-    class="oc-position-relative"
+      title="Rename file lorem.txt"
+      button-cancel-text="Cancel"
+      button-confirm-text="Rename"
+      class="oc-position-relative"
   >
     <template v-slot:content>
       <oc-text-input
-        value="lorem.txt"
-        label="File name"
+          value="lorem.txt"
+          label="File name"
       />
     </template>
   </oc-modal>
@@ -555,12 +593,12 @@ export default defineComponent({
 ```js
 <div>
   <oc-modal
-    icon="information"
-    title="Accept terms of use"
-    message="Do you accept our terms of use?"
-    button-cancel-text="Decline"
-    button-confirm-text="Accept"
-    class="oc-mb-l oc-position-relative"
+      icon="information"
+      title="Accept terms of use"
+      message="Do you accept our terms of use?"
+      button-cancel-text="Decline"
+      button-confirm-text="Accept"
+      class="oc-mb-l oc-position-relative"
   />
 </div>
 ```
@@ -568,12 +606,12 @@ export default defineComponent({
 ```js
 <div>
   <oc-modal
-    icon="information"
-    title="Accept terms of use"
-    message="Do you accept our terms of use?"
-    button-cancel-text="Decline"
-    button-confirm-text="Accept"
-    class="oc-mb-l oc-position-relative"
+      icon="information"
+      title="Accept terms of use"
+      message="Do you accept our terms of use?"
+      button-cancel-text="Decline"
+      button-confirm-text="Accept"
+      class="oc-mb-l oc-position-relative"
   />
 </div>
 ```
@@ -581,28 +619,28 @@ export default defineComponent({
 ```js
 <div>
   <oc-modal
-    icon="information"
-    title="Accept terms of use"
-    message="Do you accept our terms of use?"
-    button-cancel-text="Decline"
-    button-confirm-text="Accept"
-    contextual-helper-label="I need more information?"
-    :contextual-helper-data="{ title: 'This is more information' }"
-    class="oc-mb-l oc-position-relative"
+      icon="information"
+      title="Accept terms of use"
+      message="Do you accept our terms of use?"
+      button-cancel-text="Decline"
+      button-confirm-text="Accept"
+      contextual-helper-label="I need more information?"
+      :contextual-helper-data="{ title: 'This is more information' }"
+      class="oc-mb-l oc-position-relative"
   />
 </div>
 ```
 
 ```js
 <div>
-	<oc-modal
-			icon="info"
-			title="Accept terms of use"
-			message="Do you accept our terms of use?"
-			button-cancel-text="Decline"
-			button-confirm-text="Accept"
-			class="oc-mb-l oc-position-relative"
-	/>
+  <oc-modal
+      icon="info"
+      title="Accept terms of use"
+      message="Do you accept our terms of use?"
+      button-cancel-text="Decline"
+      button-confirm-text="Accept"
+      class="oc-mb-l oc-position-relative"
+  />
 </div>
 ```
 </docs>

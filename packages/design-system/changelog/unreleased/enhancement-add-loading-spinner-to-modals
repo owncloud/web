@@ -1,0 +1,8 @@
+Enhancement: add loading spinner to modals
+
+We've added loading spinners within modals to provide users with immediate feedback on actions in progress,
+particularly beneficial in instances of slow server connections.
+This enhancement ensures users are informed of ongoing processes, enhancing the overall user experience.
+
+https://github.com/owncloud/web/pull/10787
+https://github.com/owncloud/web/issues/9183
