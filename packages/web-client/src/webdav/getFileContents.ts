@@ -1,16 +1,21 @@
-import { Headers } from 'webdav'
 import { urlJoin } from '../utils'
 import { isPublicSpaceResource, SpaceResource } from '../helpers'
 import { WebDavOptions } from './types'
-import { buildPublicLinkAuthHeader, DAV } from './client'
+import { buildAuthHeader, buildPublicLinkAuthHeader, DAV } from './client'
 import { HttpError } from '../errors'
+import { unref } from 'vue'
+import { AxiosInstance, ResponseType } from 'axios'
 
 export type GetFileContentsResponse = {
   body: any
   [key: string]: any
 }
 
-export const GetFileContentsFactory = (dav: DAV, { clientService }: WebDavOptions) => {
+export const GetFileContentsFactory = (
+  dav: DAV,
+  axiosClient: AxiosInstance,
+  { accessToken }: WebDavOptions
+) => {
   return {
     async getFileContents(
       space: SpaceResource,
@@ -19,37 +24,28 @@ export const GetFileContentsFactory = (dav: DAV, { clientService }: WebDavOption
         responseType = 'text',
         noCache = true
       }: {
-        responseType?: 'arrayBuffer' | 'blob' | 'text'
+        responseType?: ResponseType
         noCache?: boolean
       } = {}
     ): Promise<GetFileContentsResponse> {
-      const { httpAuthenticated, httpUnAuthenticated } = clientService
-      const client = isPublicSpaceResource(space) ? httpUnAuthenticated : httpAuthenticated
-
-      const requestOptions = {
-        responseType,
-        headers: {
-          'Content-Type': 'application/x-www-form-urlencoded',
-          ...(noCache && { 'Cache-Control': 'no-cache' })
-        } as Headers
-      }
-
-      if (isPublicSpaceResource(space) && space.publicLinkPassword) {
-        requestOptions.headers.Authorization = buildPublicLinkAuthHeader(space.publicLinkPassword)
-      }
-
       try {
-        const response = await client.get(
-          dav.getFileUrl(urlJoin(space.webDavPath, path)),
-          requestOptions
-        )
+        const response = await axiosClient.get(dav.getFileUrl(urlJoin(space.webDavPath, path)), {
+          responseType,
+          headers: {
+            Authorization:
+              isPublicSpaceResource(space) && space.publicLinkPassword
+                ? buildPublicLinkAuthHeader(space.publicLinkPassword)['Authorization']
+                : buildAuthHeader(unref(accessToken), space)['Authorization'],
+            ...(noCache && { 'Cache-Control': 'no-cache' })
+          }
+        })
         return {
           response,
           body: response.data,
           headers: {
-            ETag: response.headers.get('etag'),
-            'OC-ETag': response.headers.get('oc-etag'),
-            'OC-FileId': response.headers.get('oc-fileid')
+            ETag: response.headers['etag'],
+            'OC-ETag': response.headers['oc-etag'],
+            'OC-FileId': response.headers['oc-fileid']
           }
         }
       } catch (error) {

@@ -14,7 +14,7 @@ interface AppFileHandlingOptions {
   clientService: ClientService
 }
 
-export type FileContentOptions = { responseType?: 'arrayBuffer' | 'blob' | 'text' } & Record<
+export type FileContentOptions = { responseType?: 'arraybuffer' | 'blob' | 'text' } & Record<
   string,
   any
 >
@@ -55,7 +55,7 @@ export function useAppFileHandling({
   // TODO: support query parameters
   const getFileContents = (
     fileContext: MaybeRef<FileContext>,
-    options: { responseType?: 'arrayBuffer' | 'blob' | 'text' } & Record<string, any>
+    options: { responseType?: 'arraybuffer' | 'blob' | 'text' } & Record<string, any>
   ) => {
     return webdav.getFileContents(
       unref(unref(fileContext).space),

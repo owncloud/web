@@ -23,7 +23,6 @@ import { ListFavoriteFilesFactory } from './listFavoriteFiles'
 export interface WebDavOptions {
   accessToken: Ref<string>
   baseUrl: string
-  clientService: any
   language: Ref<string>
   user: Ref<User>
   clientInitiatorId: Ref<string>

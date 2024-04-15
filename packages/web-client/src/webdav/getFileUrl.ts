@@ -1,14 +1,17 @@
 import { unref } from 'vue'
+import { AxiosInstance } from 'axios'
 import { Resource, SpaceResource } from '../helpers'
 import { urlJoin } from '../utils'
 import { GetFileContentsFactory } from './getFileContents'
 import { WebDavOptions } from './types'
-import { DAV } from './client'
+import { DAV, buildAuthHeader } from './client'
+import { ocs } from '../ocs'
 
 export const GetFileUrlFactory = (
   dav: DAV,
+  axiosClient: AxiosInstance,
   getFileContentsFactory: ReturnType<typeof GetFileContentsFactory>,
-  { clientService, user }: WebDavOptions
+  { accessToken, baseUrl, user }: WebDavOptions
 ) => {
   return {
     async getFileUrl(
@@ -34,6 +37,8 @@ export const GetFileUrlFactory = (
 
       let signed = true
       if (!downloadURL && !inlineDisposition) {
+        const authHeader = buildAuthHeader(unref(accessToken), space)['Authorization']
+
         // compute unsigned url
         const webDavPath = space ? urlJoin(space.webDavPath, path) : resource.webDavPath
         downloadURL = version
@@ -41,12 +46,18 @@ export const GetFileUrlFactory = (
           : dav.getFileUrl(webDavPath)
 
         if (unref(user) && doHeadRequest) {
-          await clientService.httpAuthenticated.head(downloadURL)
+          await axiosClient.head(downloadURL, { headers: { Authorization: authHeader } })
         }
 
         // sign url
         if (isUrlSigningEnabled && unref(user)) {
-          downloadURL = await clientService.ocsUserContext.signUrl(downloadURL, signUrlTimeout)
+          axiosClient.interceptors.request.use((config) => {
+            config.headers['Authorization'] = authHeader
+            return config
+          })
+
+          const ocsClient = ocs(baseUrl, axiosClient, user)
+          downloadURL = await ocsClient.signUrl(downloadURL)
         } else {
           signed = false
         }

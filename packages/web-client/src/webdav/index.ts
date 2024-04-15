@@ -19,6 +19,9 @@ import { ListFileVersionsFactory } from './listFileVersions'
 import { ListFilesByIdFactory } from './listFilesById'
 import { SetFavoriteFactory } from './setFavorite'
 import { ListFavoriteFilesFactory } from './listFavoriteFiles'
+import axios from 'axios'
+import { v4 as uuidV4 } from 'uuid'
+import { unref } from 'vue'
 
 export * from './constants'
 export * from './types'
@@ -29,6 +32,16 @@ export const webdav = (options: WebDavOptions): WebDAV => {
     baseUrl: options.baseUrl,
     language: options.language,
     clientInitiatorId: options.clientInitiatorId
+  })
+
+  const axiosClient = axios.create({
+    headers: {
+      'Accept-Language': unref(options.language),
+      'Content-Type': 'application/x-www-form-urlencoded',
+      'X-Request-ID': uuidV4(),
+      'X-Requested-With': 'XMLHttpRequest',
+      'Initiator-ID': unref(options.clientInitiatorId)
+    }
   })
 
   const pathForFileIdFactory = GetPathForFileIdFactory(dav, options)
@@ -44,11 +57,16 @@ export const webdav = (options: WebDavOptions): WebDAV => {
   const { getFileInfo } = getFileInfoFactory
 
   const { createFolder } = CreateFolderFactory(dav, getFileInfoFactory, options)
-  const getFileContentsFactory = GetFileContentsFactory(dav, options)
+  const getFileContentsFactory = GetFileContentsFactory(dav, axiosClient, options)
   const { getFileContents } = getFileContentsFactory
   const { putFileContents } = PutFileContentsFactory(dav, getFileInfoFactory, options)
 
-  const { getFileUrl, revokeUrl } = GetFileUrlFactory(dav, getFileContentsFactory, options)
+  const { getFileUrl, revokeUrl } = GetFileUrlFactory(
+    dav,
+    axiosClient,
+    getFileContentsFactory,
+    options
+  )
   const { getPublicFileUrl } = GetPublicFileUrlFactory(dav, options)
 
   const { copyFiles } = CopyFilesFactory(dav, options)
