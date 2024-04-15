@@ -394,14 +394,12 @@ export const announceClientService = ({
   configStore,
   userStore,
   authStore,
-  capabilityStore,
   clientStore
 }: {
   app: App
   configStore: ConfigStore
   userStore: UserStore
   authStore: AuthStore
-  capabilityStore: CapabilityStore
   clientStore: ClientStore
 }): void => {
   clientStore.setClientInitiatorId(uuidV4())
@@ -417,7 +415,6 @@ export const announceClientService = ({
   app.config.globalProperties.$clientService.webdav = webdav({
     accessToken: computed(() => authStore.accessToken),
     baseUrl: configStore.serverUrl,
-    capabilities: computed(() => capabilityStore.capabilities),
     clientService: app.config.globalProperties.$clientService,
     language: computed(() => app.config.globalProperties.$language.current),
     clientInitiatorId: computed(() => clientStore.clientInitiatorId),

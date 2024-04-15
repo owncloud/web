@@ -83,7 +83,6 @@ export const bootstrapApp = async (configurationPath: string): Promise<void> => 
     configStore,
     userStore,
     authStore,
-    capabilityStore,
     clientStore
   })
   // TODO: move to announceArchiverService function
