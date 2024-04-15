@@ -1,7 +1,6 @@
 import { AxiosInstance } from 'axios'
 import { graph, Graph } from './graph'
 import { ocs, OCS } from './ocs'
-import { User } from './generated'
 import { WebDAV, webdav } from './webdav'
 
 export type { Graph } from './graph'
@@ -23,13 +22,12 @@ interface Client {
 type ClientOptions = {
   axiosClient: AxiosInstance
   baseURI: string
-  user: User
 }
 
-export const client = ({ axiosClient, baseURI, user }: ClientOptions): Client => {
+export const client = ({ axiosClient, baseURI }: ClientOptions): Client => {
   return {
     graph: graph(baseURI, axiosClient),
-    ocs: ocs(baseURI, axiosClient, user),
-    webdav: webdav({ axiosClient, baseUrl: baseURI, user })
+    ocs: ocs(baseURI, axiosClient),
+    webdav: webdav({ axiosClient, baseUrl: baseURI })
   }
 }

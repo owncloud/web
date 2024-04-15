@@ -81,13 +81,13 @@ export const bootstrapApp = async (configurationPath: string): Promise<void> => 
   announceClientService({
     app,
     configStore,
-    userStore,
     authStore,
     clientStore
   })
   // TODO: move to announceArchiverService function
   app.config.globalProperties.$archiverService = new ArchiverService(
     app.config.globalProperties.$clientService,
+    userStore,
     configStore.serverUrl,
     computed(
       () =>

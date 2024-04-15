@@ -78,9 +78,7 @@ import { ref, unref, computed, defineComponent, onMounted } from 'vue'
 import {
   buildPublicSpaceResource,
   isPublicSpaceResource,
-  PublicSpaceResource,
-  Resource,
-  SpaceResource
+  PublicSpaceResource
 } from '@ownclouders/web-client/src/helpers'
 import isEmpty from 'lodash-es/isEmpty'
 import { useGettext } from 'vue3-gettext'
@@ -213,7 +211,7 @@ export default defineComponent({
         unref(publicLinkType)
       )
 
-      let publicLink: SpaceResource
+      let publicLink: PublicSpaceResource
 
       try {
         publicLink = yield loadPublicLinkTask.perform()

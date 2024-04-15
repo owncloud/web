@@ -391,13 +391,11 @@ export const announceAdditionalTranslations = ({
 export const announceClientService = ({
   app,
   configStore,
-  userStore,
   authStore,
   clientStore
 }: {
   app: App
   configStore: ConfigStore
-  userStore: UserStore
   authStore: AuthStore
   clientStore: ClientStore
 }): void => {
@@ -407,7 +405,6 @@ export const announceClientService = ({
     configStore,
     language: app.config.globalProperties.$language,
     authStore,
-    userStore,
     clientStore
   })
   app.config.globalProperties.$clientService = clientService

@@ -10,6 +10,7 @@ import { triggerDownloadWithFilename } from '../helpers/download'
 
 import { Ref, ref, computed, unref } from 'vue'
 import { ArchiverCapability } from '@ownclouders/web-client/src/ocs/capabilities'
+import { UserStore } from '../composables'
 
 interface TriggerDownloadOptions {
   dir?: string
@@ -22,6 +23,7 @@ interface TriggerDownloadOptions {
 
 export class ArchiverService {
   clientService: ClientService
+  userStore: UserStore
   serverUrl: string
   capability: Ref<ArchiverCapability>
   available: Ref<boolean>
@@ -29,10 +31,12 @@ export class ArchiverService {
 
   constructor(
     clientService: ClientService,
+    userStore: UserStore,
     serverUrl: string,
     archiverCapabilities: Ref<ArchiverCapability[]> = ref([])
   ) {
     this.clientService = clientService
+    this.userStore = userStore
     this.serverUrl = serverUrl
     this.capability = computed(() => {
       const archivers = unref(archiverCapabilities)
@@ -66,7 +70,10 @@ export class ArchiverService {
 
     const url = options.publicToken
       ? downloadUrl
-      : await this.clientService.ocsUserContext.signUrl(downloadUrl)
+      : await this.clientService.ocsUserContext.signUrl(
+          downloadUrl,
+          this.userStore.user?.onPremisesSamAccountName
+        )
 
     try {
       const response = await this.clientService.httpUnAuthenticated.get<ArrayBuffer>(url, {

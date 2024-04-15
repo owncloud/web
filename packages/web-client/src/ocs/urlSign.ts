@@ -1,19 +1,16 @@
 import { AxiosInstance } from 'axios'
 import { urlJoin } from '../utils'
 import convert from 'xml-js'
-import { User } from '../generated'
 import { pbkdf2Sync } from 'crypto'
 
 export interface UrlSignOptions {
   axiosClient: AxiosInstance
   baseURI: string
-  user: User
 }
 
 export class UrlSign {
   private axiosClient: AxiosInstance
   private baseURI: string
-  private user: User
 
   private signingKey: string
 
@@ -22,15 +19,14 @@ export class UrlSign {
   private HASH_LENGTH = 32
   private ITERATION_COUNT = 10000
 
-  constructor({ axiosClient, baseURI, user }: UrlSignOptions) {
+  constructor({ axiosClient, baseURI }: UrlSignOptions) {
     this.axiosClient = axiosClient
     this.baseURI = baseURI
-    this.user = user
   }
 
-  public async signUrl(url: string) {
+  public async signUrl(url: string, username: string) {
     const signedUrl = new URL(url)
-    signedUrl.searchParams.set('OC-Credential', this.user.onPremisesSamAccountName)
+    signedUrl.searchParams.set('OC-Credential', username)
     signedUrl.searchParams.set('OC-Date', new Date().toISOString())
     signedUrl.searchParams.set('OC-Expires', this.TTL.toString())
     signedUrl.searchParams.set('OC-Verb', 'GET')

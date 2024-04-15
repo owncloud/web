@@ -8,7 +8,7 @@ import { FileResource, SpaceResource } from '@ownclouders/web-client/src/helpers
 import { useClientService } from '../clientService'
 import { ListFilesOptions } from '@ownclouders/web-client/src/webdav/listFiles'
 import { WebDAV } from '@ownclouders/web-client/src/webdav'
-import { useCapabilityStore } from '../piniaStores'
+import { useCapabilityStore, useUserStore } from '../piniaStores'
 
 interface AppFileHandlingOptions {
   clientService: ClientService
@@ -40,10 +40,12 @@ export function useAppFileHandling({
 }: AppFileHandlingOptions): AppFileHandlingResult {
   const clientService = useClientService()
   const capabilityStore = useCapabilityStore()
+  const userStore = useUserStore()
 
   const getUrlForResource = (space: SpaceResource, resource: Resource, options?: any) => {
     return clientService.webdav.getFileUrl(space, resource, {
       isUrlSigningEnabled: capabilityStore.supportUrlSigning,
+      username: userStore.user?.onPremisesSamAccountName,
       ...options
     })
   }

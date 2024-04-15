@@ -8,7 +8,7 @@ import { ocs } from '../ocs'
 export const GetFileUrlFactory = (
   dav: DAV,
   getFileContentsFactory: ReturnType<typeof GetFileContentsFactory>,
-  { axiosClient, baseUrl, user }: WebDavOptions
+  { axiosClient, baseUrl }: WebDavOptions
 ) => {
   return {
     async getFileUrl(
@@ -19,13 +19,15 @@ export const GetFileUrlFactory = (
         isUrlSigningEnabled = false,
         signUrlTimeout = 86400,
         version = null,
-        doHeadRequest = false
+        doHeadRequest = false,
+        username = ''
       }: {
         disposition?: 'inline' | 'attachment'
         isUrlSigningEnabled?: boolean
         signUrlTimeout?: number
         version?: string
         doHeadRequest?: boolean
+        username?: string
       }
     ): Promise<string> {
       const inlineDisposition = disposition === 'inline'
@@ -40,14 +42,14 @@ export const GetFileUrlFactory = (
           ? dav.getFileUrl(urlJoin('meta', resource.fileId, 'v', version))
           : dav.getFileUrl(webDavPath)
 
-        if (user && doHeadRequest) {
+        if (username && doHeadRequest) {
           await axiosClient.head(downloadURL)
         }
 
         // sign url
-        if (isUrlSigningEnabled && user) {
-          const ocsClient = ocs(baseUrl, axiosClient, user)
-          downloadURL = await ocsClient.signUrl(downloadURL)
+        if (isUrlSigningEnabled && username) {
+          const ocsClient = ocs(baseUrl, axiosClient)
+          downloadURL = await ocsClient.signUrl(downloadURL, username)
         } else {
           signed = false
         }

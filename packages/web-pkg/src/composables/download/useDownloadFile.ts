@@ -2,7 +2,7 @@ import { useClientService } from '../clientService'
 import { triggerDownloadWithFilename } from '../../../src/helpers'
 import { useGettext } from 'vue3-gettext'
 import { ClientService } from '../../services'
-import { useCapabilityStore, useMessages } from '../piniaStores'
+import { useCapabilityStore, useMessages, useUserStore } from '../piniaStores'
 import { Resource, SpaceResource } from '@ownclouders/web-client'
 
 export interface DownloadFileOptions {
@@ -14,13 +14,15 @@ export const useDownloadFile = (options?: DownloadFileOptions) => {
   const clientService = options?.clientService || useClientService()
   const { $gettext } = useGettext()
   const capabilityStore = useCapabilityStore()
+  const userStore = useUserStore()
 
   const downloadFile = async (space: SpaceResource, file: Resource, version: string = null) => {
     try {
       const url = await clientService.webdav.getFileUrl(space, file, {
         version,
         doHeadRequest: true,
-        isUrlSigningEnabled: capabilityStore.supportUrlSigning
+        isUrlSigningEnabled: capabilityStore.supportUrlSigning,
+        username: userStore.user?.onPremisesSamAccountName
       })
       triggerDownloadWithFilename(url, file.name)
     } catch (e) {

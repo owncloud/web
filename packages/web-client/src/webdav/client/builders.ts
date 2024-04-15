@@ -1,7 +1,5 @@
 import { XMLBuilder } from 'fast-xml-parser'
 import { DavProperties, DavPropertyValue } from '../constants'
-import { SpaceResource, isPublicSpaceResource } from '../../helpers'
-import { Headers } from 'webdav'
 
 const getNamespacedDavProps = (obj: Partial<Record<DavPropertyValue, unknown>>) => {
   return Object.keys(obj).reduce<Record<string, string>>((acc, val) => {

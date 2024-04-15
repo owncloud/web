@@ -15,7 +15,6 @@ import { ClearTrashBinFactory } from './clearTrashBin'
 import { SearchFactory } from './search'
 import { GetPathForFileIdFactory } from './getPathForFileId'
 import { ListFilesByIdFactory } from './listFilesById'
-import { User } from '../generated'
 import { SetFavoriteFactory } from './setFavorite'
 import { ListFavoriteFilesFactory } from './listFavoriteFiles'
 import { AxiosInstance } from 'axios'
@@ -23,7 +22,6 @@ import { AxiosInstance } from 'axios'
 export interface WebDavOptions {
   axiosClient: AxiosInstance
   baseUrl: string
-  user: User
 }
 
 export interface WebDAV {
