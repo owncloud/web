@@ -10,17 +10,19 @@ import { sse } from '@ownclouders/web-client/src/sse'
 import { AuthStore, ClientStore, ConfigStore, UserStore } from '../../composables'
 import { computed } from 'vue'
 
-interface OcClient {
-  token: string
-  language: string
-  graph: Graph
-  ocs: OCS
-}
-
-interface HttpClient {
-  client: _HttpClient
+interface ClientContext {
   language: string
   token?: string
+}
+
+interface HttpClient extends ClientContext {
+  client: _HttpClient
+}
+
+interface OcClient extends ClientContext {
+  graph: Graph
+  ocs: OCS
+  webdav: WebDAV
 }
 
 const createFetchOptions = (authParams: AuthParameters, language: string): FetchEventSourceInit => {
@@ -69,8 +71,7 @@ export class ClientService {
 
   private ocUserContextClient: OcClient
   private ocPublicLinkContextClient: OcClient
-
-  private webdavClient: WebDAV
+  private ocWebdavContextClient: OcClient
 
   constructor(options: ClientServiceOptions) {
     this.configStore = options.configStore
@@ -96,7 +97,7 @@ export class ClientService {
 
   public get graphAuthenticated(): Graph {
     if (this.clientNeedsInit(this.ocUserContextClient)) {
-      this.ocUserContextClient = this.getOcsClient({ accessToken: this.authStore.accessToken })
+      this.ocUserContextClient = this.getOcClient({ accessToken: this.authStore.accessToken })
     }
     return this.ocUserContextClient.graph
   }
@@ -110,14 +111,14 @@ export class ClientService {
 
   public get ocsUserContext(): OCS {
     if (this.clientNeedsInit(this.ocUserContextClient)) {
-      this.ocUserContextClient = this.getOcsClient({ accessToken: this.authStore.accessToken })
+      this.ocUserContextClient = this.getOcClient({ accessToken: this.authStore.accessToken })
     }
     return this.ocUserContextClient.ocs
   }
 
   public ocsPublicLinkContext(password?: string): OCS {
     if (this.clientNeedsInit(this.ocPublicLinkContextClient)) {
-      this.ocPublicLinkContextClient = this.getOcsClient({
+      this.ocPublicLinkContextClient = this.getOcClient({
         publicLinkToken: this.authStore.accessToken,
         publicLinkPassword: password
       })
@@ -142,21 +143,26 @@ export class ClientService {
     }
   }
 
-  private getOcsClient(authParams: AuthParameters): OcClient {
-    const { graph, ocs } = client(
-      this.configStore.serverUrl,
-      createAxiosInstance(authParams, this.currentLanguage),
-      computed(() => this.userStore.user)
-    )
+  private getOcClient(authParams: AuthParameters): OcClient {
+    const { graph, ocs, webdav } = client({
+      accessToken: computed(() => this.authStore.accessToken),
+      axiosClient: createAxiosInstance(authParams, this.currentLanguage),
+      baseURI: this.configStore.serverUrl,
+      clientInitiatorId: computed(() => this.clientStore.clientInitiatorId),
+      language: computed(() => this.currentLanguage),
+      user: computed(() => this.userStore.user)
+    })
+
     return {
       token: this.authStore.accessToken,
       language: this.currentLanguage,
       graph,
-      ocs
+      ocs,
+      webdav
     }
   }
 
-  private clientNeedsInit(client, hasToken = true) {
+  private clientNeedsInit(client: ClientContext, hasToken = true) {
     return (
       !client ||
       (hasToken && client.token !== this.authStore.accessToken) ||
@@ -165,11 +171,11 @@ export class ClientService {
   }
 
   public get webdav(): WebDAV {
-    return this.webdavClient
-  }
-
-  public set webdav(webdav: WebDAV) {
-    this.webdavClient = webdav
+    const hasToken = !!this.authStore.accessToken
+    if (this.clientNeedsInit(this.ocWebdavContextClient, hasToken)) {
+      this.ocWebdavContextClient = this.getOcClient({ accessToken: this.authStore.accessToken })
+    }
+    return this.ocWebdavContextClient.webdav
   }
 
   get currentLanguage(): string {

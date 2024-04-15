@@ -1,5 +1,4 @@
 import { unref } from 'vue'
-import { AxiosInstance } from 'axios'
 import { Resource, SpaceResource } from '../helpers'
 import { urlJoin } from '../utils'
 import { GetFileContentsFactory } from './getFileContents'
@@ -9,9 +8,8 @@ import { ocs } from '../ocs'
 
 export const GetFileUrlFactory = (
   dav: DAV,
-  axiosClient: AxiosInstance,
   getFileContentsFactory: ReturnType<typeof GetFileContentsFactory>,
-  { accessToken, baseUrl, user }: WebDavOptions
+  { accessToken, axiosClient, baseUrl, user }: WebDavOptions
 ) => {
   return {
     async getFileUrl(

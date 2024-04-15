@@ -4,18 +4,14 @@ import { WebDavOptions } from './types'
 import { buildAuthHeader, buildPublicLinkAuthHeader, DAV } from './client'
 import { HttpError } from '../errors'
 import { unref } from 'vue'
-import { AxiosInstance, ResponseType } from 'axios'
+import { ResponseType } from 'axios'
 
 export type GetFileContentsResponse = {
   body: any
   [key: string]: any
 }
 
-export const GetFileContentsFactory = (
-  dav: DAV,
-  axiosClient: AxiosInstance,
-  { accessToken }: WebDavOptions
-) => {
+export const GetFileContentsFactory = (dav: DAV, { accessToken, axiosClient }: WebDavOptions) => {
   return {
     async getFileContents(
       space: SpaceResource,

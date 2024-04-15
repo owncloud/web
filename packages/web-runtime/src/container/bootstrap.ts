@@ -412,14 +412,6 @@ export const announceClientService = ({
     clientStore
   })
   app.config.globalProperties.$clientService = clientService
-  app.config.globalProperties.$clientService.webdav = webdav({
-    accessToken: computed(() => authStore.accessToken),
-    baseUrl: configStore.serverUrl,
-    language: computed(() => app.config.globalProperties.$language.current),
-    clientInitiatorId: computed(() => clientStore.clientInitiatorId),
-    user: computed(() => userStore.user)
-  })
-
   app.provide('$clientService', clientService)
 }
 

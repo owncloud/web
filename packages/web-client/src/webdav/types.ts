@@ -19,9 +19,11 @@ import { ListFilesByIdFactory } from './listFilesById'
 import { User } from '../generated'
 import { SetFavoriteFactory } from './setFavorite'
 import { ListFavoriteFilesFactory } from './listFavoriteFiles'
+import { AxiosInstance } from 'axios'
 
 export interface WebDavOptions {
   accessToken: Ref<string>
+  axiosClient: AxiosInstance
   baseUrl: string
   language: Ref<string>
   user: Ref<User>
