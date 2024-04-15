@@ -78,17 +78,30 @@ export const useKeyboardActions = (options?: KeyboardActionsOptions): KeyboardAc
       return
     }
 
+    type PossibleModifier = 'altKey' | 'ctrlKey' | 'metaKey' | 'shiftKey'
+
     const { key, ctrlKey, metaKey, shiftKey } = event
     let modifier = null
+    const disallowedModifierkeys: PossibleModifier[] = []
+
     if (metaKey || ctrlKey) {
       modifier = ModifierKey.Ctrl
+      disallowedModifierkeys.push('altKey', 'shiftKey')
     } else if (shiftKey) {
       modifier = ModifierKey.Shift
+      disallowedModifierkeys.push('altKey', 'ctrlKey', 'metaKey')
     }
+
+    const hasDisallowedModifier = (event: KeyboardEvent, disallowedKeys: PossibleModifier[]) =>
+      disallowedKeys.some((key) => event[key])
 
     unref(actions)
       .filter((action) => {
-        return action.primary === key && action.modifier === modifier
+        return (
+          action.primary === key &&
+          action.modifier === modifier &&
+          !hasDisallowedModifier(event, disallowedModifierkeys)
+        )
       })
       .forEach((action) => {
         event.preventDefault()
