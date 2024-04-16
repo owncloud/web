@@ -162,7 +162,7 @@ describe('ResourceTiles component', () => {
     it('emits the "sort"-event', async () => {
       const index = 2
       const { wrapper } = getWrapper({ sortFields })
-      ;(wrapper.vm.$refs.sortDrop as unknown).tippy = { hide: vi.fn() }
+      ;(wrapper.vm.$refs.sortDrop as any).tippy = { hide: vi.fn() }
       await wrapper.findAll('.oc-tiles-sort-list-item').at(index).trigger('click')
       expect(wrapper.emitted('sort')).toBeTruthy()
       expect(wrapper.emitted('sort')[0][0]).toEqual({
