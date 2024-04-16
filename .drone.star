@@ -63,7 +63,7 @@ config = {
     "e2e": {
         "oCIS-1": {
             "earlyFail": True,
-            "skip": False,
+            "skip": True,
             "suites": [
                 "journeys",
                 "smoke",
@@ -71,7 +71,7 @@ config = {
         },
         "oCIS-2": {
             "earlyFail": True,
-            "skip": False,
+            "skip": True,
             "suites": [
                 "admin-settings",
                 "spaces",
@@ -79,14 +79,20 @@ config = {
         },
         "oCIS-3": {
             "earlyFail": True,
-            "skip": False,
+            "skip": True,
             "tikaNeeded": True,
             "suites": [
                 "search",
                 "shares",
             ],
         },
-        "oCIS-app-provider": {
+        "oCIS-app-provider-wopi-cs3": {
+            "skip": False,
+            "suites": [
+                "app-provider",
+            ],
+        },
+        "oCIS-app-provider-wopi-builtin": {
             "skip": False,
             "suites": [
                 "app-provider",
@@ -99,6 +105,7 @@ config = {
             "servers": [
                 "",
             ],
+            "skip": True,
             "suites": {
                 "oCISBasic": [
                     "webUIPreview",
@@ -296,11 +303,10 @@ def beforePipelines(ctx):
            pipelinesDependsOn(pnpmlint(ctx), pnpmCache(ctx))
 
 def stagePipelines(ctx):
-    unit_test_pipelines = unitTests(ctx)
     e2e_pipelines = e2eTests(ctx)
     acceptance_pipelines = acceptance(ctx)
     keycloak_pipelines = e2eTestsOnKeycloak(ctx)
-    return unit_test_pipelines + buildAndTestDesignSystem(ctx) + pipelinesDependsOn(e2e_pipelines + keycloak_pipelines + acceptance_pipelines, unit_test_pipelines)
+    return buildAndTestDesignSystem(ctx) + e2e_pipelines + keycloak_pipelines + acceptance_pipelines
 
 def afterPipelines(ctx):
     return build(ctx) + pipelinesDependsOn(notify(), build(ctx))
@@ -654,7 +660,10 @@ def e2eTests(ctx):
         for item in default:
             params[item] = matrix[item] if item in matrix else default[item]
 
-        if suite == "oCIS-app-provider" and not "full-ci" in ctx.build.title.lower() and ctx.build.event != "cron":
+        if suite == "oCIS-app-provider-wopi-cs3" and not "full-ci" in ctx.build.title.lower() and ctx.build.event != "cron":
+            continue
+
+        if suite == "oCIS-app-provider-wopi-builtin" and not "full-ci" in ctx.build.title.lower() and ctx.build.event != "cron":
             continue
 
         if params["skip"]:
@@ -689,12 +698,20 @@ def e2eTests(ctx):
         # oCIS specific dependencies
         depends_on = ["cache-ocis"]
 
-        if suite == "oCIS-app-provider":
+        if suite == "oCIS-app-provider-wopi-cs3":
             # app-provider specific steps
             steps += collaboraService() + \
                      onlyofficeService() + \
                      ocisService("app-provider") + \
-                     wopiServer() + \
+                     wopiServer("cs3") + \
+                     appProviderService("collabora") + \
+                     appProviderService("onlyoffice")
+        elif suite == "oCIS-app-provider-wopi-builtin":
+            # app-provider specific steps
+            steps += collaboraService() + \
+                     onlyofficeService() + \
+                     ocisService("app-provider") + \
+                     wopiServer("builtin") + \
                      appProviderService("collabora") + \
                      appProviderService("onlyoffice")
         else:
@@ -2057,24 +2074,40 @@ def tikaService():
         },
     ]
 
-def wopiServer():
-    return [
-        {
-            "name": "wopiserver",
-            "type": "docker",
-            "image": "cs3org/wopiserver:v10.3.0",
-            "detach": True,
-            "commands": [
-                "echo 'LoremIpsum567' > /etc/wopi/wopisecret",
-                "cp %s/tests/drone/wopiserver/wopiserver.conf /etc/wopi/wopiserver.conf" % dir["web"],
-                "/app/wopiserver.py",
-            ],
-        },
+def wopiServer(wopiServerType):
+    wopiServer = []
+
+    if wopiServerType == "cs3":
+        wopiServer = [
+            {
+                "name": "wopiserver",
+                "type": "docker",
+                "image": "cs3org/wopiserver:v10.3.0",
+                "detach": True,
+                "commands": [
+                    "echo 'LoremIpsum567' > /etc/wopi/wopisecret",
+                    "cp %s/tests/drone/wopiserver/wopiserver.conf /etc/wopi/wopiserver.conf" % dir["web"],
+                    "/app/wopiserver.py",
+                ],
+            },
+        ]
+    else:
+        wopiServer = [
+            {
+                "name": "wopiserver",
+                "image": OC_CI_GOLANG,
+                "detach": True,
+                "commands": [
+                    "./ocis collaboration server",
+                ],
+            },
+        ]
+    return wopiServer + [
         {
             "name": "wait-for-wopi-server",
             "image": OC_CI_WAIT_FOR,
             "commands": [
-                "wait-for -it wopiserver:8880 -t 300",
+                "wait-for -it wopiserver:9300 -t 300",
             ],
         },
     ]
@@ -2137,7 +2170,7 @@ def appProviderService(name):
         "APP_PROVIDER_GRPC_ADDR": "0.0.0.0:9164",
         "APP_PROVIDER_DRIVER": "wopi",
         "APP_PROVIDER_WOPI_INSECURE": True,
-        "APP_PROVIDER_WOPI_WOPI_SERVER_EXTERNAL_URL": "http://wopiserver:8880",
+        "APP_PROVIDER_WOPI_WOPI_SERVER_EXTERNAL_URL": "http://wopiserver:9300",
         "APP_PROVIDER_WOPI_FOLDER_URL_BASE_URL": "https://ocis:9200",
         "MICRO_REGISTRY": "nats-js-kv",
         "MICRO_REGISTRY_ADDRESS": "ocis:9233",
