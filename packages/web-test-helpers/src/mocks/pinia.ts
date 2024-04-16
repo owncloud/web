@@ -9,9 +9,12 @@ import { OptionsConfig } from '../../../web-pkg/src/composables/piniaStores/conf
 import { Resource, CollaboratorShare, LinkShare, ShareRole } from '../../../web-client/src/helpers'
 import {
   AncestorMetaData,
+  AppConfigObject,
   ApplicationFileExtension,
+  ApplicationInformation,
   ClipboardActions
 } from '../../../web-pkg/types'
+import { ref } from 'vue'
 
 export { createTestingPinia }
 
@@ -63,6 +66,11 @@ export type PiniaMockOptions = {
     capabilities?: Partial<Capabilities['capabilities']>
     isInitialized?: boolean
   }
+  appsStore?: {
+    apps?: ApplicationInformation
+    externalAppConfig?: AppConfigObject
+    fileExtensions?: ApplicationFileExtension[]
+  }
 }
 
 export function createMockStore({
@@ -78,6 +86,7 @@ export function createMockStore({
   userSettingsStore = {},
   groupSettingsStore = {},
   spaceSettingsStore = {},
+  appsStore = {},
   sharesState = {},
   spacesState = {},
   userState = {},
@@ -124,6 +133,7 @@ export function createMockStore({
         ...themeState
       },
       resources: { resources: [], ...resourcesStore },
+      apps: { fileExtensions: [], apps: {}, ...appsStore },
       shares: { collaboratorShares: [], linkShares: [], ...sharesState },
       spaces: { spaces: [], spaceMembers: [], ...spacesState },
       userSettings: { users: [], selectedUsers: [], ...userSettingsStore },
