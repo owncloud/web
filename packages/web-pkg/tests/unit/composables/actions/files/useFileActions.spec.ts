@@ -17,7 +17,7 @@ describe('fileActions', () => {
         }
       })
     })
-    it('should provide an empty list if embed mode is enables', () => {
+    it('should provide an empty list if embed mode is enabled', () => {
       mockUseEmbedMode.mockReturnValue({
         isEnabled: computed(() => true)
       })
