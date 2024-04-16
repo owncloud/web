@@ -43,6 +43,7 @@
     "@uppy/core": "3.3.0",
     "caf": "15.0.1",
     "portal-vue": "3.0.0",
+    "vue3-gettext": "2.4.0",
     "uuid": "9.0.1",
     "vue-demi": "0.14.6",
     "vue-router": "4.2.5"
@@ -67,7 +68,7 @@
     "@types/node": "16.18.30",
     "@types/node-fetch": "2.6.10",
     "@vitejs/plugin-vue": "5.0.3",
-    "@vue/test-utils": "2.4.4",
+    "@vue/test-utils": "2.4.5",
     "autoprefixer": "10.4.16",
     "browserslist-to-esbuild": "^1.2.0",
     "browserslist-useragent-regexp": "^4.0.0",

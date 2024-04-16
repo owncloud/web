@@ -7,6 +7,7 @@
   "types": "types.d.ts",
   "private": false,
   "author": "ownCloud GmbH <devops@owncloud.com>",
+  "type": "module",
   "homepage": "https://github.com/owncloud/web/tree/master/packages/web-pkg",
   "repository": {
     "type": "git",

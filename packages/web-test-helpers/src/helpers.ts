@@ -3,7 +3,7 @@ import { defineComponent, nextTick } from 'vue'
 import { defaultPlugins, DefaultPluginsOptions } from './defaultPlugins'
 import { createRouter as _createRouter } from '../../web-runtime/src/router'
 import { createMemoryHistory, RouterOptions } from 'vue-router'
-import { DefinedComponent } from '@vue/test-utils/dist/types'
+import { DefinedComponent } from '@vue/test-utils'
 
 export { mount, shallowMount } from '@vue/test-utils'
 

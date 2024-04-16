@@ -7,7 +7,6 @@
     "esModuleInterop": true,
     "skipLibCheck": true,
     "target": "es2022",
-    "moduleResolution": "node",
     "resolveJsonModule": true,
     "isolatedModules": true,
 
@@ -16,7 +15,7 @@
     "noUncheckedIndexedAccess": false,
     "noImplicitThis": true,
 
-    "module": "es2020",
+    "module": "preserve",
     "sourceMap": true,
 
     "lib": [
@@ -25,7 +24,7 @@
       "dom",
       "dom.iterable"
     ],
-    "types": ["vitest/globals"]
+    "types": ["vitest/globals", "vue3-gettext"]
   },
   "exclude": [
     "node_modules"
