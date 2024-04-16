@@ -60,8 +60,7 @@ import {
   formatFileSize,
   useClientService,
   useDownloadFile,
-  useResourcesStore,
-  useUserStore
+  useResourcesStore
 } from '@ownclouders/web-pkg'
 import { computed, defineComponent, inject, Ref, unref } from 'vue'
 import { isShareSpaceResource, Resource, SpaceResource } from '@ownclouders/web-client/src/helpers'
@@ -81,7 +80,6 @@ export default defineComponent({
     const { current: currentLanguage } = useGettext()
     const { downloadFile } = useDownloadFile({ clientService })
     const { updateResourceField } = useResourcesStore()
-    const userStore = useUserStore()
 
     const space = inject<Ref<SpaceResource>>('space')
     const resource = inject<Ref<Resource>>('resource')
@@ -102,9 +100,7 @@ export default defineComponent({
     })
 
     const revertToVersion = async (version: Resource) => {
-      await clientService.webdav.restoreFileVersion(unref(space), unref(resource), version.name, {
-        username: userStore.user?.onPremisesSamAccountName
-      })
+      await clientService.webdav.restoreFileVersion(unref(space), unref(resource), version.name)
       const restoredResource = await clientService.webdav.getFileInfo(unref(space), unref(resource))
 
       const fieldsToUpdate = ['size', 'mdate'] as const

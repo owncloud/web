@@ -6,17 +6,10 @@ import { DAV } from './client'
 
 export const RestoreFileVersionFactory = (dav: DAV, options: WebDavOptions) => {
   return {
-    restoreFileVersion(
-      space: SpaceResource,
-      { id, path }: Resource,
-      versionId: string,
-      { username = '' }: { username?: string }
-    ) {
+    restoreFileVersion(space: SpaceResource, { id, path }: Resource, versionId: string) {
       const webDavPath = urlJoin(space.webDavPath, path)
       const source = urlJoin('meta', id, 'v', versionId, { leadingSlash: true })
-      const target = urlJoin('files', username, webDavPath, {
-        leadingSlash: true
-      })
+      const target = urlJoin('files', webDavPath, { leadingSlash: true })
       return dav.copy(source, target)
     }
   }
