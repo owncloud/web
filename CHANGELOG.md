@@ -1,3 +1,26 @@
+Changelog for ownCloud Web [unreleased] (UNRELEASED)
+=======================================
+The following sections list the changes in ownCloud web unreleased relevant to
+ownCloud admins and users.
+
+[unreleased]: https://github.com/owncloud/web/compare/v9.0.0...master
+
+Summary
+-------
+
+* Change - Disable opening files in embed mode: [#10786](https://github.com/owncloud/web/pull/10786)
+
+Details
+-------
+
+* Change - Disable opening files in embed mode: [#10786](https://github.com/owncloud/web/pull/10786)
+
+   We have disabled to open files in the embed mode, since opening or editing files
+   is not in scope of the embed mode
+
+   https://github.com/owncloud/web/issues/10635
+   https://github.com/owncloud/web/pull/10786
+
 Changelog for ownCloud Web [9.0.0] (2024-04-16)
 =======================================
 The following sections list the changes in ownCloud web 9.0.0 relevant to
