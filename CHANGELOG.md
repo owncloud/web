@@ -1,47 +1,4 @@
-Changelog for ownCloud Web [unreleased] (UNRELEASED)
-=======================================
-The following sections list the changes in ownCloud web unreleased relevant to
-ownCloud admins and users.
-
-[unreleased]: https://github.com/owncloud/web/compare/v9.0.0...master
-
-Summary
--------
-
-* Bugfix - Versions loaded multiple times when opening sidebar: [#10746](https://github.com/owncloud/web/pull/10746)
-* Bugfix - Incoming notifications broken while notification center is open: [#10760](https://github.com/owncloud/web/pull/10760)
-* Enhancement - Implement Server-Sent Events (SSE) for file updates: [#10782](https://github.com/owncloud/web/pull/10782)
-
-Details
--------
-
-* Bugfix - Versions loaded multiple times when opening sidebar: [#10746](https://github.com/owncloud/web/pull/10746)
-
-   We've fixed a bug, where the versions endpoint was fetched multiple times when
-   the sidebar was opened and therefore added unnecessary load to the server.
-
-   https://github.com/owncloud/web/issues/10381
-   https://github.com/owncloud/web/issues/10619
-   https://github.com/owncloud/web/pull/10746
-
-* Bugfix - Incoming notifications broken while notification center is open: [#10760](https://github.com/owncloud/web/pull/10760)
-
-   We've fixed a bug where the visual representation of new incoming notifications
-   were broken, while the notification center was opened.
-
-   https://github.com/owncloud/web/issues/10602
-   https://github.com/owncloud/web/pull/10760
-
-* Enhancement - Implement Server-Sent Events (SSE) for file updates: [#10782](https://github.com/owncloud/web/pull/10782)
-
-   We've implemented Server-Sent Events (SSE) to notify users in real-time about
-   file changes. Users now receive real-time UI updates when e.g. the last
-   modification date or size of a file is updated.
-
-   https://github.com/owncloud/web/issues/10779
-   https://github.com/owncloud/web/pull/10782
-
-Changelog for ownCloud Web [9.0.0] (2024-04-09)
+Changelog for ownCloud Web [9.0.0] (2024-04-16)
 =======================================
 The following sections list the changes in ownCloud web 9.0.0 relevant to
 ownCloud admins and users.
@@ -61,6 +18,8 @@ Summary
 * Bugfix - Theme loading without matching theme: [#10657](https://github.com/owncloud/web/issues/10657)
 * Bugfix - Apply sandbox attribute to iframe in draw-io extension: [#10702](https://github.com/owncloud/web/pull/10702)
 * Bugfix - Apply sandbox attribute to iframe in app-external extension: [#10706](https://github.com/owncloud/web/pull/10706)
+* Bugfix - Versions loaded multiple times when opening sidebar: [#10746](https://github.com/owncloud/web/pull/10746)
+* Bugfix - Incoming notifications broken while notification center is open: [#10760](https://github.com/owncloud/web/pull/10760)
 * Change - Remove deprecated code: [#7338](https://github.com/owncloud/web/issues/7338)
 * Change - Remove skeleton app: [#9892](https://github.com/owncloud/web/issues/9892)
 * Change - Remove deprecated extension point for adding quick actions: [#10102](https://github.com/owncloud/web/pull/10102)
@@ -87,6 +46,7 @@ Summary
 * Enhancement - Remember right side bar state: [#10612](https://github.com/owncloud/web/pull/10612)
 * Enhancement - Add details panel to trash: [#10624](https://github.com/owncloud/web/pull/10624)
 * Enhancement - Implement Server-Sent Events (SSE) for File Creation: [#10709](https://github.com/owncloud/web/pull/10709)
+* Enhancement - Implement Server-Sent Events (SSE) for file updates: [#10782](https://github.com/owncloud/web/pull/10782)
 
 Details
 -------
@@ -169,6 +129,23 @@ Details
    General hardening of ownCloud Web integration with OnlyOffice/Collabora
 
    https://github.com/owncloud/web/pull/10706
+
+* Bugfix - Versions loaded multiple times when opening sidebar: [#10746](https://github.com/owncloud/web/pull/10746)
+
+   We've fixed a bug, where the versions endpoint was fetched multiple times when
+   the sidebar was opened and therefore added unnecessary load to the server.
+
+   https://github.com/owncloud/web/issues/10381
+   https://github.com/owncloud/web/issues/10619
+   https://github.com/owncloud/web/pull/10746
+
+* Bugfix - Incoming notifications broken while notification center is open: [#10760](https://github.com/owncloud/web/pull/10760)
+
+   We've fixed a bug where the visual representation of new incoming notifications
+   were broken, while the notification center was opened.
+
+   https://github.com/owncloud/web/issues/10602
+   https://github.com/owncloud/web/pull/10760
 
 * Change - Remove deprecated code: [#7338](https://github.com/owncloud/web/issues/7338)
 
@@ -493,6 +470,15 @@ Details
 
    https://github.com/owncloud/web/issues/9782
    https://github.com/owncloud/web/pull/10709
+
+* Enhancement - Implement Server-Sent Events (SSE) for file updates: [#10782](https://github.com/owncloud/web/pull/10782)
+
+   We've implemented Server-Sent Events (SSE) to notify users in real-time about
+   file changes. Users now receive real-time UI updates when e.g. the last
+   modification date or size of a file is updated.
+
+   https://github.com/owncloud/web/issues/10779
+   https://github.com/owncloud/web/pull/10782
 
 Changelog for ownCloud Web [8.0.1] (2024-03-12)
 =======================================
