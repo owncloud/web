@@ -9,7 +9,7 @@ import {
   useCapabilityStore,
   useConfigStore
 } from '../../../src/composables/piniaStores'
-import { User } from '@ownclouders/web-client/src/generated'
+import { User } from '@ownclouders/web-client/graph/generated'
 
 describe('PreviewService', () => {
   describe('method "isMimetypeSupported"', () => {

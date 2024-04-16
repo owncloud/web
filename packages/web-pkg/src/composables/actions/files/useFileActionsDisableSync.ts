@@ -4,7 +4,7 @@ import {
   createLocationShares
 } from '../../../router'
 import PQueue from 'p-queue'
-import { IncomingShareResource } from '@ownclouders/web-client/src/helpers/share'
+import { IncomingShareResource } from '@ownclouders/web-client'
 import { useClientService } from '../../clientService'
 import { useLoadingService } from '../../loadingService'
 import { useRouter } from '../../router'

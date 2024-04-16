@@ -53,7 +53,7 @@
   </div>
 </template>
 <script lang="ts">
-import { DavPermission } from '@ownclouders/web-client/src/webdav/constants'
+import { DavPermission } from '@ownclouders/web-client/webdav'
 import {
   formatRelativeDateFromHTTP,
   formatDateFromJSDate,
@@ -63,7 +63,7 @@ import {
   useResourcesStore
 } from '@ownclouders/web-pkg'
 import { computed, defineComponent, inject, Ref, unref } from 'vue'
-import { isShareSpaceResource, Resource, SpaceResource } from '@ownclouders/web-client/src/helpers'
+import { isShareSpaceResource, Resource, SpaceResource } from '@ownclouders/web-client'
 import { useGettext } from 'vue3-gettext'
 
 export default defineComponent({

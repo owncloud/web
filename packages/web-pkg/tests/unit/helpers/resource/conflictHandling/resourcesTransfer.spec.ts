@@ -5,9 +5,9 @@ import {
   resolveFileNameDuplicate
 } from '../../../../../src/helpers/resource/conflictHandling'
 import { mock, mockDeep, mockReset } from 'vitest-mock-extended'
-import { buildSpace, Resource } from '@ownclouders/web-client/src/helpers'
-import { ListFilesResult } from '@ownclouders/web-client/src/webdav/listFiles'
-import { Drive } from '@ownclouders/web-client/src/generated'
+import { buildSpace, Resource } from '@ownclouders/web-client'
+import { ListFilesResult } from '@ownclouders/web-client/webdav'
+import { Drive } from '@ownclouders/web-client/graph/generated'
 import { createTestingPinia } from 'web-test-helpers'
 import {
   ClientService,

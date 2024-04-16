@@ -7,7 +7,7 @@ import { computed, unref } from 'vue'
 
 import { useGettext } from 'vue3-gettext'
 import { FileAction, FileActionOptions } from '../types'
-import { isProjectSpaceResource } from '@ownclouders/web-client/src/helpers'
+import { isProjectSpaceResource } from '@ownclouders/web-client'
 import { useRouter } from '../../router'
 import { useConfigStore, useClipboardStore, useResourcesStore } from '../../piniaStores'
 import { storeToRefs } from 'pinia'

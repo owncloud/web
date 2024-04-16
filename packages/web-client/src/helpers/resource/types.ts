@@ -1,8 +1,8 @@
-import { DavFileInfoResponse } from '@ownclouders/web-client/src/webdav/constants'
-import { Identity, User } from '../../generated'
+import { DavFileInfoResponse } from '@ownclouders/web-client/webdav'
+import { Identity, User } from '../../graph/generated'
 import { MongoAbility, SubjectRawRule } from '@casl/ability'
 import { DAVResultResponseProps, FileStat } from 'webdav'
-import { Audio, GeoCoordinates } from '../../generated'
+import { Audio, GeoCoordinates } from '../../graph/generated'
 
 export type AbilityActions =
   | 'create'
@@ -114,4 +114,8 @@ export interface WebDavResponseResource extends Omit<FileStat, 'props'> {
   props?: Omit<DAVResultResponseProps, 'getcontentlength'> & DavFileInfoResponse
   processing?: boolean
   tusSupport?: WebDavResponseTusSupport
+}
+
+export interface SearchResource extends Resource {
+  highlights: string
 }

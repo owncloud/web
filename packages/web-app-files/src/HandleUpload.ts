@@ -6,8 +6,8 @@ import * as uuid from 'uuid'
 import { Language } from 'vue3-gettext'
 import { Ref, unref } from 'vue'
 import { RouteLocationNormalizedLoaded } from 'vue-router'
-import { SpaceResource } from '@ownclouders/web-client/src'
-import { urlJoin } from '@ownclouders/web-client/src/utils'
+import { SpaceResource } from '@ownclouders/web-client'
+import { urlJoin } from '@ownclouders/web-client'
 import { UploadResourceConflict } from './helpers/resource'
 import {
   MessageStore,
@@ -17,7 +17,7 @@ import {
   locationPublicLink
 } from '@ownclouders/web-pkg'
 import { locationSpacesGeneric, UppyService, UppyResource } from '@ownclouders/web-pkg'
-import { isPersonalSpaceResource, isShareSpaceResource } from '@ownclouders/web-client/src/helpers'
+import { isPersonalSpaceResource, isShareSpaceResource } from '@ownclouders/web-client'
 import { ClientService, queryItemAsString } from '@ownclouders/web-pkg'
 
 export interface HandleUploadOptions {

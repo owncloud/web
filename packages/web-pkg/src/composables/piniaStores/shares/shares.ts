@@ -7,7 +7,7 @@ import {
   ShareTypes,
   isProjectSpaceResource,
   isSpaceResource
-} from '@ownclouders/web-client/src/helpers'
+} from '@ownclouders/web-client'
 import { defineStore } from 'pinia'
 import { Ref, ref, unref } from 'vue'
 import { AxiosResponse } from 'axios'
@@ -20,12 +20,9 @@ import {
   UpdateShareOptions
 } from './types'
 import { useResourcesStore } from '../resources'
-import { Permission, UnifiedRoleDefinition } from '@ownclouders/web-client/src/generated'
+import { Permission, UnifiedRoleDefinition } from '@ownclouders/web-client/graph/generated'
 import { useUserStore } from '../user'
-import {
-  buildLinkShare,
-  buildCollaboratorShare
-} from '@ownclouders/web-client/src/helpers/share/functions'
+import { buildLinkShare, buildCollaboratorShare } from '@ownclouders/web-client'
 
 export const useSharesStore = defineStore('shares', () => {
   const resourcesStore = useResourcesStore()

@@ -67,7 +67,7 @@ import {
   FederatedConnection
 } from '@ownclouders/web-pkg'
 import { useGettext } from 'vue3-gettext'
-import { ShareTypes } from '@ownclouders/web-client/src/helpers'
+import { ShareTypes } from '@ownclouders/web-client'
 import { buildConnection } from '../functions'
 
 export default defineComponent({

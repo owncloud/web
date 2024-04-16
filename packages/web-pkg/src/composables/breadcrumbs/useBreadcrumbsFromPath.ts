@@ -3,8 +3,8 @@ import { RouteLocation } from 'vue-router'
 import omit from 'lodash-es/omit'
 import { BreadcrumbItem } from 'design-system/src/components/OcBreadcrumb/types'
 import { v4 as uuidv4 } from 'uuid'
-import { SpaceResource } from '@ownclouders/web-client/src'
-import { urlJoin } from '@ownclouders/web-client/src/utils'
+import { SpaceResource } from '@ownclouders/web-client'
+import { urlJoin } from '@ownclouders/web-client'
 import { useGetMatchingSpace } from '../spaces'
 
 export const useBreadcrumbsFromPath = () => {

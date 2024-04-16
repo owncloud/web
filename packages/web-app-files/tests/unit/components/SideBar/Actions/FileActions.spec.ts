@@ -1,5 +1,5 @@
 import FileActions from 'web-app-files/src/components/SideBar/Actions/FileActions.vue'
-import { Resource, SpaceResource } from '@ownclouders/web-client/src/helpers'
+import { Resource, SpaceResource } from '@ownclouders/web-client'
 import { mock } from 'vitest-mock-extended'
 import {
   defaultPlugins,

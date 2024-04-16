@@ -6,8 +6,8 @@ import { useRouter } from '../../router'
 import { useGettext } from 'vue3-gettext'
 import { computed } from 'vue'
 import { FileAction, FileActionOptions } from '../types'
-import { Drive } from '@ownclouders/web-client/src/generated'
-import { buildSpace } from '@ownclouders/web-client/src/helpers'
+import { Drive } from '@ownclouders/web-client/graph/generated'
+import { buildSpace } from '@ownclouders/web-client'
 import { useMessages, useSpacesStore, useUserStore } from '../../piniaStores'
 
 export const useFileActionsSetImage = () => {

@@ -4,7 +4,7 @@ import { useResourcesViewDefaultsMock } from 'web-app-files/tests/mocks/useResou
 import { ref } from 'vue'
 import { mock } from 'vitest-mock-extended'
 import { Resource } from '@ownclouders/web-client'
-import { SpaceResource } from '@ownclouders/web-client/src/helpers'
+import { SpaceResource } from '@ownclouders/web-client'
 import {
   defaultPlugins,
   mount,

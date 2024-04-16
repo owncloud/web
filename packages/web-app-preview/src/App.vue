@@ -88,7 +88,7 @@
 <script lang="ts">
 import { computed, defineComponent, ref, unref } from 'vue'
 import { RouteLocationRaw } from 'vue-router'
-import { Resource } from '@ownclouders/web-client/src'
+import { Resource } from '@ownclouders/web-client'
 import {
   AppTopBar,
   FileSideBar,

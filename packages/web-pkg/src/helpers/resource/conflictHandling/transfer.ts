@@ -1,6 +1,6 @@
 import { Resource } from '@ownclouders/web-client'
 import { basename, join } from 'path'
-import { SpaceResource } from '@ownclouders/web-client/src/helpers'
+import { SpaceResource } from '@ownclouders/web-client'
 import {
   ConflictDialog,
   FileConflict,

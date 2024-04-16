@@ -153,11 +153,11 @@ import {
   useSharesStore,
   useClientService
 } from '../composables'
-import { LinkShare, SpaceResource } from '@ownclouders/web-client/src/helpers'
+import { LinkShare, SpaceResource } from '@ownclouders/web-client'
 import { Resource } from '@ownclouders/web-client'
 import { formatRelativeDateFromDateTime } from '../helpers'
 import { OcButton } from 'design-system/src/components'
-import { SharingLinkType } from '@ownclouders/web-client/src/generated'
+import { SharingLinkType } from '@ownclouders/web-client/graph/generated'
 
 export default defineComponent({
   name: 'CreateLinkModal',

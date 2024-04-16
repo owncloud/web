@@ -19,7 +19,7 @@ import { RequestResult, useRequest } from '../authContext'
 import { useClientService } from '../clientService'
 import { MaybeRef } from '../../utils'
 import { useDriveResolver } from '../driveResolver'
-import { urlJoin } from '@ownclouders/web-client/src/utils'
+import { urlJoin } from '@ownclouders/web-client'
 import { useAppsStore, useAuthStore } from '../piniaStores'
 import { storeToRefs } from 'pinia'
 

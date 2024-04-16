@@ -1,10 +1,10 @@
 import { useSpaceActionsEditQuota } from '../../../../../src/composables/actions'
 import { useModals } from '../../../../../src/composables/piniaStores'
-import { buildSpace } from '@ownclouders/web-client/src/helpers'
+import { buildSpace } from '@ownclouders/web-client'
 import { defaultComponentMocks, getComposableWrapper } from 'web-test-helpers'
 import { unref } from 'vue'
 import { mock } from 'vitest-mock-extended'
-import { Drive } from '@ownclouders/web-client/src/generated'
+import { Drive } from '@ownclouders/web-client/graph/generated'
 
 describe('editQuota', () => {
   describe('isVisible property', () => {

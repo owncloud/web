@@ -4,7 +4,7 @@ import {
   GraphSharePermission,
   ShareRole,
   ShareTypes
-} from '@ownclouders/web-client/src/helpers/share'
+} from '@ownclouders/web-client'
 import {
   defaultPlugins,
   mount,
@@ -19,7 +19,8 @@ import RoleDropdown from '../../../../../../src/components/SideBar/Shares/Collab
 import { mock } from 'vitest-mock-extended'
 import { Resource, SpaceResource } from '@ownclouders/web-client'
 
-vi.mock('@ownclouders/web-client/src/helpers/space/functions', () => ({
+vi.mock('@ownclouders/web-client', async (importOriginal) => ({
+  ...(await importOriginal<any>()),
   buildSpace: vi.fn((space) => space)
 }))
 

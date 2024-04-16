@@ -1,5 +1,5 @@
 import { navItems, routes } from '../../src/index'
-import { Ability } from '@ownclouders/web-client/src/helpers/resource/types'
+import { Ability } from '@ownclouders/web-client'
 import { mock } from 'vitest-mock-extended'
 
 const getAbilityMock = (hasPermission) => mock<Ability>({ can: () => hasPermission })

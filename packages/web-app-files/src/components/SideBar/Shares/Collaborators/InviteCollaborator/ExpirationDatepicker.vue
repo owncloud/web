@@ -50,7 +50,7 @@
 import { DateTime } from 'luxon'
 import { computed, watch, defineComponent, customRef } from 'vue'
 import { useCapabilityStore } from '@ownclouders/web-pkg'
-import { ShareTypes } from '@ownclouders/web-client/src/helpers/share'
+import { ShareTypes } from '@ownclouders/web-client'
 import { formatRelativeDateFromDateTime, getLocaleFromLanguage } from '@ownclouders/web-pkg'
 import { useGettext } from 'vue3-gettext'
 

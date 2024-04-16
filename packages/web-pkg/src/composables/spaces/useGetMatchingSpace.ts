@@ -9,7 +9,7 @@ import {
   ShareTypes,
   OCM_PROVIDER_ID,
   isShareResource
-} from '@ownclouders/web-client/src/helpers'
+} from '@ownclouders/web-client'
 import { computed, Ref, unref } from 'vue'
 import { basename } from 'path'
 import { useSpacesStore, useUserStore, useConfigStore } from '../piniaStores'

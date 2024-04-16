@@ -5,9 +5,9 @@ import { defaultComponentMocks, getComposableWrapper, RouteLocation } from 'web-
 import { useMessages, useResourcesStore } from '../../../../../src/composables/piniaStores'
 import { unref } from 'vue'
 import { Resource } from '@ownclouders/web-client'
-import { ProjectSpaceResource, SpaceResource } from '@ownclouders/web-client/src/helpers'
+import { ProjectSpaceResource, SpaceResource } from '@ownclouders/web-client'
 import { LoadingTaskCallbackArguments } from '../../../../../src/services/loadingService'
-import { Drive } from '@ownclouders/web-client/src/generated'
+import { Drive } from '@ownclouders/web-client/graph/generated'
 import { AxiosResponse } from 'axios'
 
 describe('restore', () => {

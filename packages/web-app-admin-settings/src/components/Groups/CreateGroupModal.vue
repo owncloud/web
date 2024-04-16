@@ -16,7 +16,7 @@
 <script lang="ts">
 import { useGettext } from 'vue3-gettext'
 import { computed, defineComponent, ref, PropType, unref, watch } from 'vue'
-import { Group } from '@ownclouders/web-client/src/generated'
+import { Group } from '@ownclouders/web-client/graph/generated'
 import { MaybeRef, Modal, useClientService, useMessages } from '@ownclouders/web-pkg'
 import { useGroupSettingsStore } from '../../composables'
 

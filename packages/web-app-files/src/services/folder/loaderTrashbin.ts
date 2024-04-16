@@ -1,9 +1,9 @@
 import { FolderLoader, FolderLoaderTask, TaskContext } from '../folder'
 import { Router } from 'vue-router'
 import { useTask } from 'vue-concurrency'
-import { DavProperties } from '@ownclouders/web-client/src/webdav/constants'
+import { DavProperties } from '@ownclouders/web-client/webdav'
 import { isLocationTrashActive } from '@ownclouders/web-pkg'
-import { SpaceResource } from '@ownclouders/web-client/src/helpers'
+import { SpaceResource } from '@ownclouders/web-client'
 
 export class FolderLoaderTrashbin implements FolderLoader {
   public isEnabled(): boolean {

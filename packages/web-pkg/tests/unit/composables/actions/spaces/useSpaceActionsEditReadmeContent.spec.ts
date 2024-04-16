@@ -2,11 +2,11 @@ import {
   useOpenWithDefaultApp,
   useSpaceActionsEditReadmeContent
 } from '../../../../../src/composables/actions'
-import { SpaceResource, buildSpace } from '@ownclouders/web-client/src/helpers'
+import { SpaceResource, buildSpace } from '@ownclouders/web-client'
 import { getComposableWrapper } from 'web-test-helpers'
 import { unref } from 'vue'
 import { mock, mockDeep } from 'vitest-mock-extended'
-import { Drive } from '@ownclouders/web-client/src/generated'
+import { Drive } from '@ownclouders/web-client/graph/generated'
 import { ClientService } from '../../../../../src'
 
 vi.mock('../../../../../src/composables/actions/useOpenWithDefaultApp', () => ({

@@ -5,8 +5,8 @@ import { mock, mockDeep } from 'vitest-mock-extended'
 import { ClientService } from '@ownclouders/web-pkg'
 import { useGetMatchingSpace } from '@ownclouders/web-pkg'
 import { locationPublicUpload } from '@ownclouders/web-pkg'
-import { PublicSpaceResource, Resource, SpaceResource } from '@ownclouders/web-client/src/helpers'
-import { SharePermissionBit } from '@ownclouders/web-client/src/helpers/share'
+import { PublicSpaceResource, Resource, SpaceResource } from '@ownclouders/web-client'
+import { SharePermissionBit } from '@ownclouders/web-client'
 import {
   defaultPlugins,
   mount,

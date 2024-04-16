@@ -24,7 +24,7 @@ import {
   useConfigStore,
   useResourcesStore
 } from '../../composables'
-import { isSpaceResource, Resource } from '@ownclouders/web-client/src/helpers'
+import { isSpaceResource, Resource } from '@ownclouders/web-client'
 import { isResourceTxtFileAlmostEmpty } from '../../helpers'
 import ResourceListItem from '../FilesList/ResourceListItem.vue'
 import { SearchResultValue } from './types'

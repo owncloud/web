@@ -203,9 +203,9 @@ import GdprExport from '../components/Account/GdprExport.vue'
 import ThemeSwitcher from '../components/Account/ThemeSwitcher.vue'
 import ExtensionPreference from '../components/Account/ExtensionPreference.vue'
 import { AppLoadingSpinner } from '@ownclouders/web-pkg'
-import { SSEAdapter } from '@ownclouders/web-client/src/sse'
+import { SSEAdapter } from '@ownclouders/web-client/sse'
 import { supportedLanguages } from '../defaults/languages'
-import { User } from '@ownclouders/web-client/src/generated'
+import { User } from '@ownclouders/web-client/graph/generated'
 import { isEmpty } from 'lodash-es'
 
 export default defineComponent({

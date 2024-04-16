@@ -9,7 +9,7 @@ import {
 import { defaultComponentMocks, getComposableWrapper } from 'web-test-helpers'
 import { mock } from 'vitest-mock-extended'
 import { Resource, SpaceResource } from '@ownclouders/web-client'
-import { SharingLinkType } from '@ownclouders/web-client/src/generated'
+import { SharingLinkType } from '@ownclouders/web-client/graph/generated'
 import { useLinkTypes } from '../../../../../src/composables/links/useLinkTypes'
 
 vi.mock('../../../../../src/composables/links/useLinkTypes', () => ({

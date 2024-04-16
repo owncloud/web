@@ -1,11 +1,11 @@
 import { computed, unref } from 'vue'
-import { Resource } from '@ownclouders/web-client/src'
+import { Resource } from '@ownclouders/web-client'
 import { queryItemAsString } from '../appDefaults/useAppNavigation'
 import { eventBus } from '../../services'
 import { useRouteQuery } from '../router'
 import { SideBarEventTopics } from '../sideBar'
 import { useResourcesStore } from '../piniaStores'
-import { isIncomingShareResource } from '@ownclouders/web-client/src/helpers'
+import { isIncomingShareResource } from '@ownclouders/web-client'
 
 export interface ScrollToResult {
   scrollToResource(

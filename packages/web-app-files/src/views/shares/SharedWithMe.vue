@@ -115,7 +115,7 @@ import { useGroupingSettings } from '@ownclouders/web-pkg'
 import SharesNavigation from 'web-app-files/src/components/AppBar/SharesNavigation.vue'
 import { useGettext } from 'vue3-gettext'
 import { useOpenWithDefaultApp, defaultFuseOptions } from '@ownclouders/web-pkg'
-import { IncomingShareResource, ShareTypes } from '@ownclouders/web-client/src/helpers'
+import { IncomingShareResource, ShareTypes } from '@ownclouders/web-client'
 import { uniq } from 'lodash-es'
 
 export default defineComponent({

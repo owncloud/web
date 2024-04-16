@@ -1,5 +1,5 @@
 import { unref } from 'vue'
-import { SpaceResource } from '@ownclouders/web-client/src'
+import { SpaceResource } from '@ownclouders/web-client'
 import { useSpaceActionsShowMembers } from '../../../../../src/composables/actions'
 import { getComposableWrapper } from 'web-test-helpers'
 

@@ -6,7 +6,7 @@
 // ```
 // because in the else block resource gets the type never. If this is changed in a later TypeScript version
 // or all types get different members, the underscored props can be removed.
-import { DriveItem, Identity, Quota, User } from '@ownclouders/web-client/src/generated'
+import { DriveItem, Identity, Quota, User } from '@ownclouders/web-client/graph/generated'
 import { Ability, Resource } from '../resource'
 
 export const SHARE_JAIL_ID = 'a0ca6a90-a365-4782-871e-d44447bbc668'

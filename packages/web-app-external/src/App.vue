@@ -30,8 +30,8 @@ import { PropType, computed, defineComponent, unref, nextTick, ref, watch, VNode
 import { useTask } from 'vue-concurrency'
 import { useGettext } from 'vue3-gettext'
 
-import { Resource, SpaceResource } from '@ownclouders/web-client/src'
-import { urlJoin } from '@ownclouders/web-client/src/utils'
+import { Resource, SpaceResource } from '@ownclouders/web-client'
+import { urlJoin } from '@ownclouders/web-client'
 import {
   isSameResource,
   queryItemAsString,
@@ -45,7 +45,7 @@ import {
   isProjectSpaceResource,
   isPublicSpaceResource,
   isShareSpaceResource
-} from '@ownclouders/web-client/src/helpers'
+} from '@ownclouders/web-client'
 
 export default defineComponent({
   name: 'ExternalApp',

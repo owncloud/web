@@ -6,14 +6,14 @@ import {
   isProjectSpaceResource,
   extractExtensionFromFile,
   SpaceResource
-} from '@ownclouders/web-client/src/helpers'
+} from '@ownclouders/web-client'
 import {
   ResolveStrategy,
   ResolveConflict,
   resolveFileNameDuplicate,
   ConflictDialog
 } from '../../../helpers/resource'
-import { urlJoin } from '@ownclouders/web-client/src/utils'
+import { urlJoin } from '@ownclouders/web-client'
 import { useClientService } from '../../clientService'
 import { useLoadingService } from '../../loadingService'
 import { useRouter } from '../../router'

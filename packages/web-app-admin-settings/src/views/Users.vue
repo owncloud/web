@@ -137,7 +137,7 @@ import {
   useUserActionsEditQuota,
   useUserActionsCreateUser
 } from '../composables'
-import { User, Group } from '@ownclouders/web-client/src/generated'
+import { User, Group } from '@ownclouders/web-client/graph/generated'
 import {
   AppLoadingSpinner,
   ItemFilter,

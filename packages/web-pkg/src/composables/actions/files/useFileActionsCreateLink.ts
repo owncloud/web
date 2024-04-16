@@ -3,7 +3,7 @@ import { useGettext } from 'vue3-gettext'
 import { FileAction, FileActionOptions } from '../../actions'
 import { CreateLinkModal } from '../../../components'
 import { useAbility } from '../../ability'
-import { LinkShare, isProjectSpaceResource } from '@ownclouders/web-client/src/helpers'
+import { LinkShare, isProjectSpaceResource } from '@ownclouders/web-client'
 import { useLinkTypes } from '../../links'
 import { useLoadingService } from '../../loadingService'
 import {
@@ -15,7 +15,7 @@ import {
 } from '../../piniaStores'
 import { useClipboard } from '../../clipboard'
 import { useClientService } from '../../clientService'
-import { SharingLinkType } from '@ownclouders/web-client/src/generated'
+import { SharingLinkType } from '@ownclouders/web-client/graph/generated'
 
 export const useFileActionsCreateLink = ({
   enforceModal = false,

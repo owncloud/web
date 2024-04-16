@@ -1,4 +1,4 @@
-import { Ability } from '@ownclouders/web-client/src/helpers/resource/types'
+import { Ability } from '@ownclouders/web-client'
 import {
   ArchiverService,
   ClientService,

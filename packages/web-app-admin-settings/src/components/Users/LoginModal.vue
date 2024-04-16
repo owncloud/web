@@ -16,7 +16,7 @@
 <script lang="ts">
 import { computed, defineComponent, onMounted, PropType, ref, unref, watch } from 'vue'
 import { useGettext } from 'vue3-gettext'
-import { User } from '@ownclouders/web-client/src/generated'
+import { User } from '@ownclouders/web-client/graph/generated'
 import { useClientService, useUserStore, Modal, useMessages } from '@ownclouders/web-pkg'
 import { useUserSettingsStore } from '../../composables/stores/userSettings'
 

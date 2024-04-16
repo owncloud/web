@@ -6,8 +6,8 @@ import {
   useModals,
   useResourcesStore
 } from '../../../../../src/composables/piniaStores'
-import { SpaceResource } from '@ownclouders/web-client/src'
-import { FolderResource, Resource } from '@ownclouders/web-client/src/helpers'
+import { SpaceResource } from '@ownclouders/web-client'
+import { FolderResource, Resource } from '@ownclouders/web-client'
 import { RouteLocation, defaultComponentMocks, getComposableWrapper } from 'web-test-helpers/src'
 import { useScrollToMock } from '../../../../mocks/useScrollToMock'
 import { useScrollTo } from '../../../../../src/composables/scrollTo'

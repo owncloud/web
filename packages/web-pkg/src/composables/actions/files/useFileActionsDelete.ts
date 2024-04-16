@@ -5,7 +5,7 @@ import {
   isLocationTrashActive,
   isLocationCommonActive
 } from '../../../router'
-import { isProjectSpaceResource } from '@ownclouders/web-client/src/helpers'
+import { isProjectSpaceResource } from '@ownclouders/web-client'
 import { useRouter } from '../../router'
 import { useGettext } from 'vue3-gettext'
 import { FileAction, FileActionOptions } from '../types'

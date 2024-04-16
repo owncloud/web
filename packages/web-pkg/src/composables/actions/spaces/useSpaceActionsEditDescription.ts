@@ -1,11 +1,11 @@
-import { Drive } from '@ownclouders/web-client/src/generated'
+import { Drive } from '@ownclouders/web-client/graph/generated'
 import { computed, unref } from 'vue'
 import { SpaceAction, SpaceActionOptions } from '../types'
 import { useRoute } from '../../router'
 import { useAbility } from '../../ability'
 import { useClientService } from '../../clientService'
 import { useGettext } from 'vue3-gettext'
-import { SpaceResource } from '@ownclouders/web-client/src'
+import { SpaceResource } from '@ownclouders/web-client'
 import { useMessages, useModals, useSpacesStore, useUserStore } from '../../piniaStores'
 
 export const useSpaceActionsEditDescription = () => {

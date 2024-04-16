@@ -9,7 +9,7 @@
 <script lang="ts">
 import { defineComponent, PropType, ref, unref, watch } from 'vue'
 import { useGettext } from 'vue3-gettext'
-import { Group, User } from '@ownclouders/web-client/src/generated'
+import { Group, User } from '@ownclouders/web-client/graph/generated'
 import GroupSelect from './GroupSelect.vue'
 import { useClientService, Modal, useMessages, useConfigStore } from '@ownclouders/web-pkg'
 import { useUserSettingsStore } from '../../composables/stores/userSettings'

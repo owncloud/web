@@ -1,7 +1,7 @@
 import MembersPanel from '../../../../../src/components/Spaces/SideBar/MembersPanel.vue'
 import { defaultPlugins, shallowMount } from 'web-test-helpers'
 import { mock } from 'vitest-mock-extended'
-import { SpaceResource } from '@ownclouders/web-client/src/helpers'
+import { SpaceResource } from '@ownclouders/web-client'
 import MembersRoleSection from '../../../../../src/components/Spaces/SideBar/MembersRoleSection.vue'
 
 const spaceMock = mock<SpaceResource>({

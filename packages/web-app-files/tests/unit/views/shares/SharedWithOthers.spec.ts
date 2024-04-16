@@ -6,7 +6,7 @@ import { defaultStubs, RouteLocation } from 'web-test-helpers'
 import { mock, mockDeep } from 'vitest-mock-extended'
 import { Resource } from '@ownclouders/web-client'
 import { defaultPlugins, mount, defaultComponentMocks } from 'web-test-helpers'
-import { ShareResource, ShareTypes } from '@ownclouders/web-client/src/helpers'
+import { ShareResource, ShareTypes } from '@ownclouders/web-client'
 import { useSortMock } from '../../../mocks/useSortMock'
 import { ResourceTable } from '@ownclouders/web-pkg'
 

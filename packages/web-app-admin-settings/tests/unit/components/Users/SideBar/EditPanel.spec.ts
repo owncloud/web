@@ -6,7 +6,7 @@ import {
   shallowMount
 } from 'web-test-helpers'
 import { mock } from 'vitest-mock-extended'
-import { Group } from '@ownclouders/web-client/src/generated'
+import { Group } from '@ownclouders/web-client/graph/generated'
 import { AxiosResponse } from 'axios'
 import { CapabilityStore } from '@ownclouders/web-pkg'
 import GroupSelect from '../../../../../src/components/Users/GroupSelect.vue'

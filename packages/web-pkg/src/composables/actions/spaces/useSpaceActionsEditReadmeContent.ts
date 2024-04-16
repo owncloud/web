@@ -3,11 +3,11 @@ import { computed } from 'vue'
 import { useGettext } from 'vue3-gettext'
 
 import { useOpenWithDefaultApp } from '../useOpenWithDefaultApp'
-import { buildSpace, getRelativeSpecialFolderSpacePath } from '@ownclouders/web-client/src/helpers'
+import { buildSpace, getRelativeSpecialFolderSpacePath } from '@ownclouders/web-client'
 import { useClientService } from '../../clientService'
 import { useConfigStore, useSpacesStore, useUserStore } from '../../piniaStores'
 import { useCreateSpace } from '../../spaces'
-import { Drive } from '@ownclouders/web-client/src/generated'
+import { Drive } from '@ownclouders/web-client/graph/generated'
 
 export const useSpaceActionsEditReadmeContent = () => {
   const clientService = useClientService()

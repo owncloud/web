@@ -4,7 +4,7 @@ import { createLocationTrash, createLocationSpaces } from '../../../../../src/ro
 import { mock } from 'vitest-mock-extended'
 import { getComposableWrapper, defaultComponentMocks, RouteLocation } from 'web-test-helpers'
 import { unref } from 'vue'
-import { ProjectSpaceResource, Resource } from '@ownclouders/web-client/src/helpers'
+import { ProjectSpaceResource, Resource } from '@ownclouders/web-client'
 import { FileActionOptions } from '../../../../../src/composables/actions'
 
 describe('emptyTrashBin', () => {

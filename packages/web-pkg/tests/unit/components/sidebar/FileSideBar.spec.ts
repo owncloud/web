@@ -5,7 +5,7 @@ import {
   SpaceResource,
   buildCollaboratorShare,
   buildLinkShare
-} from '@ownclouders/web-client/src/helpers'
+} from '@ownclouders/web-client'
 import { mock } from 'vitest-mock-extended'
 import {
   defaultComponentMocks,
@@ -26,7 +26,7 @@ import {
   CollectionOfPermissionsWithAllowedValues,
   Permission,
   SharingLink
-} from '@ownclouders/web-client/src/generated'
+} from '@ownclouders/web-client/graph/generated'
 import { AncestorMetaDataValue } from '../../../../src'
 
 const InnerSideBarComponent = defineComponent({
@@ -36,7 +36,8 @@ const InnerSideBarComponent = defineComponent({
 
 vi.mock('../../../../src/composables/selection', () => ({ useSelectedResources: vi.fn() }))
 
-vi.mock('@ownclouders/web-client/src/helpers/share/functions', () => ({
+vi.mock('@ownclouders/web-client', async (importOriginal) => ({
+  ...(await importOriginal<any>()),
   buildLinkShare: vi.fn((share) => share),
   buildCollaboratorShare: vi.fn((share) => share)
 }))

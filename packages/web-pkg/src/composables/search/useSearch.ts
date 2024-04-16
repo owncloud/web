@@ -1,11 +1,11 @@
 import { computed, unref } from 'vue'
 import { SearchResult } from '../../components'
-import { DavProperties } from '@ownclouders/web-client/src/webdav'
-import { urlJoin } from '@ownclouders/web-client/src/utils'
+import { DavProperties } from '@ownclouders/web-client/webdav'
+import { urlJoin } from '@ownclouders/web-client'
 import { useClientService } from '../clientService'
-import { isProjectSpaceResource } from '@ownclouders/web-client/src/helpers'
+import { isProjectSpaceResource } from '@ownclouders/web-client'
 import { useConfigStore, useResourcesStore, useSpacesStore } from '../piniaStores'
-import { SearchResource } from '@ownclouders/web-client/src/webdav/search'
+import { SearchResource } from '@ownclouders/web-client'
 
 export const useSearch = () => {
   const configStore = useConfigStore()

@@ -1,5 +1,5 @@
 import { useSpaceActionsDuplicate } from '../../../../../src/composables/actions/spaces'
-import { AbilityRule, SpaceResource } from '@ownclouders/web-client/src/helpers'
+import { AbilityRule, SpaceResource } from '@ownclouders/web-client'
 import { mock } from 'vitest-mock-extended'
 import {
   defaultComponentMocks,
@@ -8,7 +8,7 @@ import {
   getComposableWrapper
 } from 'web-test-helpers'
 import { unref } from 'vue'
-import { ListFilesResult } from '@ownclouders/web-client/src/webdav/listFiles'
+import { ListFilesResult } from '@ownclouders/web-client/webdav'
 import {
   useMessages,
   useResourcesStore,

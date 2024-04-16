@@ -3,7 +3,7 @@ import { eventBus } from '@ownclouders/web-pkg'
 import { KeyboardActions } from '@ownclouders/web-pkg'
 import { findIndex, find } from 'lodash-es'
 import { Resource } from '@ownclouders/web-client'
-import { Item } from '@ownclouders/web-client/src/helpers'
+import { Item } from '@ownclouders/web-client'
 
 export const useKeyboardTableMouseActions = (
   keyActions: KeyboardActions,

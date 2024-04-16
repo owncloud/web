@@ -7,7 +7,7 @@
 </template>
 <script lang="ts">
 import { computed, defineComponent, PropType, unref } from 'vue'
-import { Group } from '@ownclouders/web-client/src/generated'
+import { Group } from '@ownclouders/web-client/graph/generated'
 import { useGettext } from 'vue3-gettext'
 export default defineComponent({
   name: 'GroupInfoBox',

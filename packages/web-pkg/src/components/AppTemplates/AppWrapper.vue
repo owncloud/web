@@ -73,9 +73,9 @@ import {
   SpaceResource,
   isPersonalSpaceResource,
   isProjectSpaceResource
-} from '@ownclouders/web-client/src/helpers'
-import { DavPermission } from '@ownclouders/web-client/src/webdav/constants'
-import { HttpError } from '@ownclouders/web-client/src/errors'
+} from '@ownclouders/web-client'
+import { DavPermission } from '@ownclouders/web-client/webdav'
+import { HttpError } from '@ownclouders/web-client'
 import { dirname } from 'path'
 
 export default defineComponent({

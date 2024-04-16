@@ -1,9 +1,9 @@
 import DetailsAndEdit from 'web-app-files/src/components/SideBar/Shares/Links/DetailsAndEdit.vue'
-import { LinkShare, ShareRole } from '@ownclouders/web-client/src/helpers/share'
+import { LinkShare, ShareRole } from '@ownclouders/web-client'
 import { defaultPlugins, shallowMount, defaultComponentMocks } from 'web-test-helpers'
 import { mock } from 'vitest-mock-extended'
 import { useLinkTypes, LinkRoleDropdown } from '@ownclouders/web-pkg'
-import { SharingLinkType } from '@ownclouders/web-client/src/generated'
+import { SharingLinkType } from '@ownclouders/web-client/graph/generated'
 import { Resource } from '@ownclouders/web-client'
 
 vi.mock('@ownclouders/web-pkg', async (importOriginal) => ({

@@ -2,7 +2,7 @@ import { defineComponent, h } from 'vue'
 import AppWrapper from './AppWrapper.vue'
 import { AppWrapperSlotArgs } from './types'
 import { FileContentOptions, UrlForResourceOptions } from '../../composables'
-import { Resource } from '@ownclouders/web-client/src'
+import { Resource } from '@ownclouders/web-client'
 
 export function AppWrapperRoute(
   fileEditor: ReturnType<typeof defineComponent>,

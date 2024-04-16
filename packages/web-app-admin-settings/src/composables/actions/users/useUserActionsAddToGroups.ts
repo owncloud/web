@@ -1,7 +1,7 @@
 import { computed, Ref, unref } from 'vue'
 import { useGettext } from 'vue3-gettext'
 import { UserAction, useModals, useCapabilityStore } from '@ownclouders/web-pkg'
-import { Group } from '@ownclouders/web-client/src/generated'
+import { Group } from '@ownclouders/web-client/graph/generated'
 import AddToGroupsModal from '../../../components/Users/AddToGroupsModal.vue'
 
 export const useUserActionsAddToGroups = ({ groups }: { groups: Ref<Group[]> }) => {

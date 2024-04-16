@@ -85,7 +85,7 @@ import ResourceListItem from './ResourceListItem.vue'
 import ResourceLink from './ResourceLink.vue'
 import { Resource } from '@ownclouders/web-client'
 import { useGettext } from 'vue3-gettext'
-import { isSpaceResource } from '@ownclouders/web-client/src/helpers'
+import { isSpaceResource } from '@ownclouders/web-client'
 import { isResourceTxtFileAlmostEmpty } from '../../helpers'
 
 export default defineComponent({

@@ -1,7 +1,7 @@
 import { buildSpace, ProjectSpaceResource } from '../../../../src/helpers/space'
 import { mock } from 'vitest-mock-extended'
-import { Ability } from '@ownclouders/web-client/src/helpers/resource/types'
-import { Drive, User } from '@ownclouders/web-client/src/generated'
+import { Ability } from '@ownclouders/web-client'
+import { Drive, User } from '@ownclouders/web-client/graph/generated'
 
 describe('buildSpace', () => {
   const id = '1'

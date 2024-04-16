@@ -128,7 +128,7 @@ import {
   useKeyboardActions
 } from '@ownclouders/web-pkg'
 import { computed, defineComponent, nextTick, onMounted, ref, unref, watch } from 'vue'
-import { SpaceResource } from '@ownclouders/web-client/src/helpers'
+import { SpaceResource } from '@ownclouders/web-client'
 import Mark from 'mark.js'
 import Fuse from 'fuse.js'
 import { useGettext } from 'vue3-gettext'

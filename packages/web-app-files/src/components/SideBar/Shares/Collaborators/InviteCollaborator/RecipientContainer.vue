@@ -19,7 +19,7 @@
 
 <script lang="ts">
 import { avatarUrl } from '../../../../../helpers/user'
-import { CollaboratorAutoCompleteItem, ShareTypes } from '@ownclouders/web-client/src/helpers/share'
+import { CollaboratorAutoCompleteItem, ShareTypes } from '@ownclouders/web-client'
 import { defineComponent, PropType } from 'vue'
 import { Recipient } from 'design-system/src/components/OcRecipient/types'
 import { useCapabilityStore, useConfigStore } from '@ownclouders/web-pkg'

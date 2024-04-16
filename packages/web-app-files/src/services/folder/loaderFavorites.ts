@@ -1,7 +1,7 @@
 import { FolderLoader, FolderLoaderTask, TaskContext } from '../folder'
 import { Router } from 'vue-router'
 import { useTask } from 'vue-concurrency'
-import { buildResource } from '@ownclouders/web-client/src/helpers'
+import { buildResource } from '@ownclouders/web-client'
 import { isLocationCommonActive } from '@ownclouders/web-pkg'
 
 export class FolderLoaderFavorites implements FolderLoader {

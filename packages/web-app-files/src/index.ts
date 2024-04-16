@@ -20,7 +20,7 @@ import { AppNavigationItem } from '@ownclouders/web-pkg'
 
 // dirty: importing view from other extension within project
 import SearchResults from '../../web-app-search/src/views/List.vue'
-import { isPersonalSpaceResource, isShareSpaceResource } from '@ownclouders/web-client/src/helpers'
+import { isPersonalSpaceResource, isShareSpaceResource } from '@ownclouders/web-client'
 
 // just a dummy function to trick gettext tools
 function $gettext(msg) {

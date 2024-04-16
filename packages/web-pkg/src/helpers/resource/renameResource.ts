@@ -1,9 +1,5 @@
 import { basename, join } from 'path'
-import {
-  Resource,
-  SpaceResource,
-  extractExtensionFromFile
-} from '@ownclouders/web-client/src/helpers'
+import { Resource, SpaceResource, extractExtensionFromFile } from '@ownclouders/web-client'
 
 export function renameResource(space: SpaceResource, resource: Resource, newPath: string) {
   resource.name = basename(newPath)

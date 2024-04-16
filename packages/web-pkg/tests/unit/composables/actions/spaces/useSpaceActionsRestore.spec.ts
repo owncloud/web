@@ -1,5 +1,5 @@
 import { useSpaceActionsRestore } from '../../../../../src/composables/actions/spaces'
-import { buildSpace, SpaceResource } from '@ownclouders/web-client/src/helpers'
+import { buildSpace, SpaceResource } from '@ownclouders/web-client'
 import { mock } from 'vitest-mock-extended'
 import {
   defaultComponentMocks,
@@ -8,7 +8,7 @@ import {
   getComposableWrapper
 } from 'web-test-helpers'
 import { unref } from 'vue'
-import { Drive } from '@ownclouders/web-client/src/generated'
+import { Drive } from '@ownclouders/web-client/graph/generated'
 import { useMessages, useModals } from '../../../../../src/composables/piniaStores'
 
 describe('restore', () => {

@@ -3,10 +3,10 @@ import {
   buildShareSpaceResource,
   isMountPointSpaceResource,
   OCM_PROVIDER_ID
-} from '@ownclouders/web-client/src/helpers'
+} from '@ownclouders/web-client'
 import { computed, unref } from 'vue'
 import { useClientService } from '../clientService'
-import { urlJoin } from '@ownclouders/web-client/src/utils'
+import { urlJoin } from '@ownclouders/web-client'
 import { useLoadFileInfoById } from './useLoadFileInfoById'
 import { useSpacesStore, useConfigStore } from '../piniaStores'
 

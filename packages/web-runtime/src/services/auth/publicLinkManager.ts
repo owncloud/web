@@ -1,5 +1,5 @@
 import { AuthStore, CapabilityStore, ClientService } from '@ownclouders/web-pkg'
-import { PublicLinkType } from '@ownclouders/web-client/src/helpers'
+import { PublicLinkType } from '@ownclouders/web-client'
 
 export interface PublicLinkManagerOptions {
   clientService: ClientService

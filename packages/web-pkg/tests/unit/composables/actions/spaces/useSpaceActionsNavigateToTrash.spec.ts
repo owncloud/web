@@ -2,7 +2,7 @@ import { useSpaceActionsNavigateToTrash } from '../../../../../src'
 import { mock } from 'vitest-mock-extended'
 import { defaultComponentMocks, RouteLocation, getComposableWrapper } from 'web-test-helpers'
 import { unref } from 'vue'
-import { SpaceResource } from '@ownclouders/web-client/src'
+import { SpaceResource } from '@ownclouders/web-client'
 
 describe('navigateToSpace', () => {
   describe('isVisible property', () => {

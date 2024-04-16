@@ -2,8 +2,8 @@ import FileLinks from 'web-app-files/src/components/SideBar/Shares/FileLinks.vue
 import { defaultPlugins, shallowMount, defaultComponentMocks } from 'web-test-helpers'
 import { mock, mockDeep } from 'vitest-mock-extended'
 import { Resource } from '@ownclouders/web-client'
-import { LinkShare, ShareTypes } from '@ownclouders/web-client/src/helpers/share'
-import { AbilityRule } from '@ownclouders/web-client/src/helpers/resource/types'
+import { LinkShare, ShareTypes } from '@ownclouders/web-client'
+import { AbilityRule } from '@ownclouders/web-client'
 import {
   CapabilityStore,
   FileAction,
@@ -12,7 +12,7 @@ import {
 } from '@ownclouders/web-pkg'
 import { computed } from 'vue'
 import DetailsAndEdit from '../../../../../src/components/SideBar/Shares/Links/DetailsAndEdit.vue'
-import { SharingLinkType } from '@ownclouders/web-client/src/generated'
+import { SharingLinkType } from '@ownclouders/web-client/graph/generated'
 
 const defaultLinksList = [
   {

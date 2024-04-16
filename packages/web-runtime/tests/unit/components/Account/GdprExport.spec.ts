@@ -2,7 +2,7 @@ import GdprExport from 'web-runtime/src/components/Account/GdprExport.vue'
 import { defaultComponentMocks, defaultPlugins, shallowMount } from 'web-test-helpers'
 import { mock, mockDeep } from 'vitest-mock-extended'
 import { ClientService } from '@ownclouders/web-pkg'
-import { Resource } from '@ownclouders/web-client/src'
+import { Resource } from '@ownclouders/web-client'
 
 const selectors = {
   ocSpinnerStub: 'oc-spinner-stub',

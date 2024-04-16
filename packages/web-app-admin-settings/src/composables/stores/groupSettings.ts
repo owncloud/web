@@ -1,6 +1,6 @@
 import { defineStore } from 'pinia'
 import { ref, unref } from 'vue'
-import { Group } from '@ownclouders/web-client/src/generated'
+import { Group } from '@ownclouders/web-client/graph/generated'
 
 export const useGroupSettingsStore = defineStore('groupSettings', () => {
   const groups = ref<Group[]>([])

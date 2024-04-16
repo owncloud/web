@@ -1,7 +1,7 @@
 import { FolderLoader, FolderLoaderTask, TaskContext } from '../folder'
 import { Router } from 'vue-router'
 import { useTask } from 'vue-concurrency'
-import { buildIncomingShareResource } from '@ownclouders/web-client/src/helpers/share/functions'
+import { buildIncomingShareResource } from '@ownclouders/web-client'
 import { isLocationSharesActive } from '@ownclouders/web-pkg'
 
 export class FolderLoaderSharedWithMe implements FolderLoader {

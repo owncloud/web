@@ -4,9 +4,9 @@ import {
   ShareRole,
   CollaboratorShare,
   GraphShareRoleIdMap
-} from '@ownclouders/web-client/src/helpers/share'
+} from '@ownclouders/web-client'
 import { mock } from 'vitest-mock-extended'
-import { ProjectSpaceResource, SpaceResource } from '@ownclouders/web-client/src/helpers'
+import { ProjectSpaceResource, SpaceResource } from '@ownclouders/web-client'
 import {
   defaultPlugins,
   mount,
@@ -14,7 +14,7 @@ import {
   defaultComponentMocks,
   RouteLocation
 } from 'web-test-helpers'
-import { User } from '@ownclouders/web-client/src/generated'
+import { User } from '@ownclouders/web-client/graph/generated'
 import { useCanShare, useModals } from '@ownclouders/web-pkg'
 
 vi.mock('@ownclouders/web-pkg', async (importOriginal) => ({

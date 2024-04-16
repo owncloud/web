@@ -2,7 +2,7 @@ import { defineStore } from 'pinia'
 import { computed, ref, unref } from 'vue'
 import merge from 'lodash-es/merge'
 import { OptionsConfig, RawConfig } from './types'
-import { urlJoin } from '@ownclouders/web-client/src/utils'
+import { urlJoin } from '@ownclouders/web-client'
 import { useAppsStore } from '../apps'
 
 const defaultOptions = {

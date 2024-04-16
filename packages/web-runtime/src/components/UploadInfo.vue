@@ -159,7 +159,7 @@ import { defineComponent, ref, watch, unref } from 'vue'
 import { isUndefined } from 'lodash-es'
 import getSpeed from '@uppy/utils/lib/getSpeed'
 
-import { urlJoin } from '@ownclouders/web-client/src/utils'
+import { urlJoin } from '@ownclouders/web-client'
 import { useConfigStore } from '@ownclouders/web-pkg'
 import {
   formatFileSize,
@@ -168,7 +168,7 @@ import {
   ResourceIcon,
   ResourceName
 } from '@ownclouders/web-pkg'
-import { extractParentFolderName } from '@ownclouders/web-client/src/helpers'
+import { extractParentFolderName } from '@ownclouders/web-client'
 import { storeToRefs } from 'pinia'
 
 export default defineComponent({

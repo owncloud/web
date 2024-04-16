@@ -3,7 +3,7 @@ import { queryItemAsString, useMessages, useModals, useRouteQuery } from '@owncl
 import { useClientService } from '@ownclouders/web-pkg'
 import { GroupAction, GroupActionOptions } from '@ownclouders/web-pkg'
 import { useGettext } from 'vue3-gettext'
-import { Group } from '@ownclouders/web-client/src/generated'
+import { Group } from '@ownclouders/web-client/graph/generated'
 import { useGroupSettingsStore } from '../../stores'
 
 export const useGroupActionsDelete = () => {

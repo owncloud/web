@@ -1,7 +1,7 @@
 import { PasswordPolicyService } from '../../../src/services'
 import { createTestingPinia } from 'web-test-helpers'
 import { Language } from 'vue3-gettext'
-import { PasswordPolicyCapability } from '@ownclouders/web-client/src/ocs/capabilities'
+import { PasswordPolicyCapability } from '@ownclouders/web-client/ocs'
 import { useCapabilityStore } from '../../../src/composables/piniaStores'
 
 describe('PasswordPolicyService', () => {

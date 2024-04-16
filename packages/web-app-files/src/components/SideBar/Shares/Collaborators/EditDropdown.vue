@@ -93,8 +93,8 @@ import { computed, defineComponent, inject, Ref } from 'vue'
 import { DateTime } from 'luxon'
 import uniqueId from 'design-system/src/utils/uniqueId'
 import { OcDrop } from 'design-system/src/components'
-import { Resource } from '@ownclouders/web-client/src'
-import { isProjectSpaceResource } from '@ownclouders/web-client/src/helpers'
+import { Resource } from '@ownclouders/web-client'
+import { isProjectSpaceResource } from '@ownclouders/web-client'
 import {
   formatRelativeDateFromDateTime,
   useCapabilityStore,

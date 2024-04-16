@@ -1,4 +1,4 @@
-import { Identity, SharingLinkType, UnifiedRoleDefinition } from '../../generated'
+import { Identity, SharingLinkType, UnifiedRoleDefinition } from '../../graph/generated'
 import { Resource } from '../resource'
 
 export enum GraphSharePermission {

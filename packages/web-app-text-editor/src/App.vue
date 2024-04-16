@@ -15,7 +15,7 @@
 
 <script lang="ts">
 import { defineComponent, PropType } from 'vue'
-import { Resource } from '@ownclouders/web-client/src/helpers/resource/types'
+import { Resource } from '@ownclouders/web-client'
 import { AppConfigObject, TextEditor as TextEditorComponent } from '@ownclouders/web-pkg'
 
 export default defineComponent({

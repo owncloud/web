@@ -1,6 +1,6 @@
 import { defineComponent } from 'vue'
 import { IconFillType } from '../../helpers/resource'
-import { Item } from '@ownclouders/web-client/src/helpers'
+import { Item } from '@ownclouders/web-client'
 
 export interface SideBarPanelContext<R extends Item, P extends Item, T extends Item> {
   root?: R

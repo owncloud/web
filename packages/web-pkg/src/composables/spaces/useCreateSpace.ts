@@ -1,4 +1,4 @@
-import { buildSpace, extractStorageId, SpaceResource } from '@ownclouders/web-client/src/helpers'
+import { buildSpace, extractStorageId, SpaceResource } from '@ownclouders/web-client'
 import { useClientService } from '../clientService'
 import { useConfigStore, useResourcesStore } from '../piniaStores'
 

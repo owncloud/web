@@ -1,5 +1,5 @@
 import { useRouter } from './useRouter'
-import { Resource, SpaceResource } from '@ownclouders/web-client/src/helpers'
+import { Resource, SpaceResource } from '@ownclouders/web-client'
 import { createFileRouteOptions } from '../../helpers/router'
 import { Router } from 'vue-router'
 import { ConfigStore, useConfigStore } from '../piniaStores'

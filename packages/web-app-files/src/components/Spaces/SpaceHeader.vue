@@ -89,7 +89,7 @@ import {
   unref,
   watch
 } from 'vue'
-import { SpaceResource } from '@ownclouders/web-client/src/helpers'
+import { SpaceResource } from '@ownclouders/web-client'
 import {
   useClientService,
   usePreviewService,

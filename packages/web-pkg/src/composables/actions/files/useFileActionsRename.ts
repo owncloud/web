@@ -2,12 +2,12 @@ import { isSameResource } from '../../../helpers/resource'
 import { isLocationTrashActive, isLocationSharesActive } from '../../../router'
 import { Resource } from '@ownclouders/web-client'
 import { dirname, join } from 'path'
-import { WebDAV } from '@ownclouders/web-client/src/webdav'
+import { WebDAV } from '@ownclouders/web-client/webdav'
 import {
   SpaceResource,
   isShareSpaceResource,
   extractNameWithoutExtension
-} from '@ownclouders/web-client/src/helpers'
+} from '@ownclouders/web-client'
 import { createFileRouteOptions } from '../../../helpers/router'
 import { renameResource as _renameResource } from '../../../helpers/resource'
 import { computed } from 'vue'

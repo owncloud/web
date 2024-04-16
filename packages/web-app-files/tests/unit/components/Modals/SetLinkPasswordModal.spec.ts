@@ -2,7 +2,7 @@ import { mock } from 'vitest-mock-extended'
 import SetLinkPasswordModal from '../../../../src/components/Modals/SetLinkPasswordModal.vue'
 import { defaultComponentMocks, defaultPlugins, shallowMount } from 'web-test-helpers'
 import { Modal, useMessages, useSharesStore } from '@ownclouders/web-pkg'
-import { Resource, LinkShare, SpaceResource } from '@ownclouders/web-client/src/helpers'
+import { Resource, LinkShare, SpaceResource } from '@ownclouders/web-client'
 
 describe('SetLinkPasswordModal', () => {
   it('should render a text input field for the password', () => {

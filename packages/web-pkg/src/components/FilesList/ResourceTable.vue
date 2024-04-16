@@ -236,12 +236,8 @@
 import { defineComponent, PropType, computed, unref, ref, ComputedRef } from 'vue'
 import { useWindowSize } from '@vueuse/core'
 import { Resource } from '@ownclouders/web-client'
-import { extractDomSelector, SpaceResource } from '@ownclouders/web-client/src/helpers'
-import {
-  ShareTypes,
-  isIncomingShareResource,
-  isShareResource
-} from '@ownclouders/web-client/src/helpers/share'
+import { extractDomSelector, SpaceResource } from '@ownclouders/web-client'
+import { ShareTypes, isIncomingShareResource, isShareResource } from '@ownclouders/web-client'
 
 import {
   SortDir,

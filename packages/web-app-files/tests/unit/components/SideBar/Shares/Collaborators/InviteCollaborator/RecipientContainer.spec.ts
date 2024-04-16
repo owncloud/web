@@ -1,5 +1,5 @@
 import RecipientContainer from 'web-app-files/src/components/SideBar/Shares/Collaborators/InviteCollaborator/RecipientContainer.vue'
-import { CollaboratorAutoCompleteItem, ShareTypes } from '@ownclouders/web-client/src/helpers/share'
+import { CollaboratorAutoCompleteItem, ShareTypes } from '@ownclouders/web-client'
 import { defaultPlugins, mount } from 'web-test-helpers'
 import { CapabilityStore } from '@ownclouders/web-pkg'
 

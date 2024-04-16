@@ -32,7 +32,7 @@ import {
   useResourcesStore
 } from '@ownclouders/web-pkg'
 import { useFileActionsCreateNewFolder } from '@ownclouders/web-pkg'
-import { SpaceResource } from '@ownclouders/web-client/src'
+import { SpaceResource } from '@ownclouders/web-client'
 import { ActionMenuItem } from '@ownclouders/web-pkg'
 import { storeToRefs } from 'pinia'
 

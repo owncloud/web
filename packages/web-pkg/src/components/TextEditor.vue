@@ -4,7 +4,7 @@
 
 <script lang="ts">
 import { computed, defineComponent, unref, PropType, ref, onMounted } from 'vue'
-import { Resource } from '@ownclouders/web-client/src/helpers/resource/types'
+import { Resource } from '@ownclouders/web-client'
 
 import '@toast-ui/editor/dist/toastui-editor.css'
 import '@toast-ui/editor/dist/theme/toastui-editor-dark.css'

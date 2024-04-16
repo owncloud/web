@@ -3,13 +3,13 @@ import { defaultComponentMocks, defaultPlugins, mount } from 'web-test-helpers'
 import { mock } from 'vitest-mock-extended'
 import { PasswordPolicyService } from '../../../src/services'
 import { usePasswordPolicyService } from '../../../src/composables/passwordPolicyService'
-import { AbilityRule, LinkShare, Resource, ShareRole } from '@ownclouders/web-client/src/helpers'
+import { AbilityRule, LinkShare, Resource, ShareRole } from '@ownclouders/web-client'
 import { PasswordPolicy } from 'design-system/src/helpers'
 import { useEmbedMode } from '../../../src/composables/embedMode'
 import { useLinkTypes } from '../../../src/composables/links'
 import { ref } from 'vue'
 import { CapabilityStore, useSharesStore } from '../../../src/composables/piniaStores'
-import { SharingLinkType } from '@ownclouders/web-client/src/generated'
+import { SharingLinkType } from '@ownclouders/web-client/graph/generated'
 
 vi.mock('../../../src/composables/embedMode')
 vi.mock('../../../src/composables/passwordPolicyService')

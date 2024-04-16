@@ -12,7 +12,7 @@
 </template>
 
 <script lang="ts">
-import { ShareRole } from '@ownclouders/web-client/src/helpers'
+import { ShareRole } from '@ownclouders/web-client'
 import { defineComponent, PropType } from 'vue'
 
 export default defineComponent({

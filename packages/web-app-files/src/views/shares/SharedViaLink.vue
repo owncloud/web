@@ -88,7 +88,7 @@ import { Resource } from '@ownclouders/web-client'
 import { useGetMatchingSpace } from '@ownclouders/web-pkg'
 import SharesNavigation from 'web-app-files/src/components/AppBar/SharesNavigation.vue'
 import { storeToRefs } from 'pinia'
-import { OutgoingShareResource } from '@ownclouders/web-client/src/helpers'
+import { OutgoingShareResource } from '@ownclouders/web-client'
 
 const visibilityObserver = new VisibilityObserver()
 

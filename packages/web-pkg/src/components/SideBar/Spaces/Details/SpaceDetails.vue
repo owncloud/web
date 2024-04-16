@@ -79,10 +79,7 @@
 import { storeToRefs } from 'pinia'
 import { defineComponent, inject, ref, Ref, computed, unref } from 'vue'
 import { useTask } from 'vue-concurrency'
-import {
-  getRelativeSpecialFolderSpacePath,
-  SpaceResource
-} from '@ownclouders/web-client/src/helpers'
+import { getRelativeSpecialFolderSpacePath, SpaceResource } from '@ownclouders/web-client'
 import {
   usePreviewService,
   useClientService,

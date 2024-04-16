@@ -107,7 +107,7 @@ import {
 } from '@ownclouders/web-pkg'
 import { isLocationSharesActive } from '@ownclouders/web-pkg'
 import { textUtils } from '../../../helpers/textUtils'
-import { ShareTypes } from '@ownclouders/web-client/src/helpers/share'
+import { ShareTypes } from '@ownclouders/web-client'
 import InviteCollaboratorForm from './Collaborators/InviteCollaborator/InviteCollaboratorForm.vue'
 import CollaboratorListItem from './Collaborators/ListItem.vue'
 import {
@@ -121,7 +121,7 @@ import {
   SpaceResource,
   CollaboratorShare,
   isSpaceResource
-} from '@ownclouders/web-client/src/helpers'
+} from '@ownclouders/web-client'
 import { getSharedAncestorRoute } from '@ownclouders/web-pkg'
 
 export default defineComponent({

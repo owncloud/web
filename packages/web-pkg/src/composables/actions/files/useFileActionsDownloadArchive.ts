@@ -12,7 +12,7 @@ import {
   isProjectSpaceResource,
   isPublicSpaceResource,
   Resource
-} from '@ownclouders/web-client/src/helpers'
+} from '@ownclouders/web-client'
 import { computed, unref } from 'vue'
 import { useLoadingService } from '../../loadingService'
 import { useRouter } from '../../router'

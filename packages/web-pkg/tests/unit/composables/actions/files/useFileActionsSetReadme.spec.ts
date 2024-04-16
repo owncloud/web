@@ -1,6 +1,6 @@
 import { useFileActionsSetReadme } from '../../../../../src'
 import { useMessages } from '../../../../../src/composables/piniaStores'
-import { buildSpace, FileResource, SpaceResource } from '@ownclouders/web-client/src/helpers'
+import { buildSpace, FileResource, SpaceResource } from '@ownclouders/web-client'
 import { mock } from 'vitest-mock-extended'
 
 import {
@@ -10,8 +10,8 @@ import {
   mockAxiosResolve
 } from 'web-test-helpers'
 import { unref } from 'vue'
-import { GetFileContentsResponse } from '@ownclouders/web-client/src/webdav/getFileContents'
-import { Drive } from '@ownclouders/web-client/src/generated'
+import { GetFileContentsResponse } from '@ownclouders/web-client/webdav'
+import { Drive } from '@ownclouders/web-client/graph/generated'
 
 describe('setReadme', () => {
   describe('isVisible property', () => {

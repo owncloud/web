@@ -66,7 +66,7 @@
 import { storeToRefs } from 'pinia'
 import CollaboratorListItem from './Collaborators/ListItem.vue'
 import InviteCollaboratorForm from './Collaborators/InviteCollaborator/InviteCollaboratorForm.vue'
-import { GraphShareRoleIdMap } from '@ownclouders/web-client/src/helpers/share'
+import { GraphShareRoleIdMap } from '@ownclouders/web-client'
 import {
   createLocationSpaces,
   isLocationSpacesActive,
@@ -80,11 +80,7 @@ import {
 } from '@ownclouders/web-pkg'
 import { defineComponent, inject, Ref } from 'vue'
 import { shareSpaceAddMemberHelp } from '../../../helpers/contextualHelpers'
-import {
-  ProjectSpaceResource,
-  CollaboratorShare,
-  buildSpace
-} from '@ownclouders/web-client/src/helpers'
+import { ProjectSpaceResource, CollaboratorShare, buildSpace } from '@ownclouders/web-client'
 import { useClientService } from '@ownclouders/web-pkg'
 import Fuse from 'fuse.js'
 import Mark from 'mark.js'

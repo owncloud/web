@@ -20,7 +20,7 @@
 import { computed, defineComponent, unref, PropType, ref, onMounted, watch } from 'vue'
 import { useGettext } from 'vue3-gettext'
 import QuotaSelect from '../QuotaSelect.vue'
-import { SpaceResource } from '@ownclouders/web-client/src'
+import { SpaceResource } from '@ownclouders/web-client'
 import {
   Modal,
   useClientService,
@@ -31,7 +31,7 @@ import {
 } from '../../composables'
 import { useRouter } from '../../composables/router'
 import { eventBus } from '../../services'
-import { Drive } from '@ownclouders/web-client/src/generated'
+import { Drive } from '@ownclouders/web-client/graph/generated'
 import { storeToRefs } from 'pinia'
 
 export default defineComponent({

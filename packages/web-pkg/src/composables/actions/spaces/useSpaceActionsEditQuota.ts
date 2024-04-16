@@ -2,11 +2,7 @@ import { computed } from 'vue'
 import { SpaceAction, SpaceActionOptions } from '../types'
 import { useGettext } from 'vue3-gettext'
 import { useAbility } from '../../ability'
-import {
-  SpaceResource,
-  isProjectSpaceResource,
-  isSpaceResource
-} from '@ownclouders/web-client/src/helpers'
+import { SpaceResource, isProjectSpaceResource, isSpaceResource } from '@ownclouders/web-client'
 import { QuotaModal } from '../../../components'
 import { useModals } from '../../piniaStores'
 

@@ -140,7 +140,7 @@ import {
   GraphShareRoleIdMap,
   ShareRole,
   ShareTypes
-} from '@ownclouders/web-client/src/helpers/share'
+} from '@ownclouders/web-client'
 import {
   useCapabilityStore,
   useClientService,
@@ -158,7 +158,7 @@ import { DateTime } from 'luxon'
 import { OcDrop } from 'design-system/src/components'
 import { useTask } from 'vue-concurrency'
 import { useGettext } from 'vue3-gettext'
-import { buildSpace, isProjectSpaceResource } from '@ownclouders/web-client/src/helpers'
+import { buildSpace, isProjectSpaceResource } from '@ownclouders/web-client'
 
 // just a dummy function to trick gettext tools
 const $gettext = (str) => {

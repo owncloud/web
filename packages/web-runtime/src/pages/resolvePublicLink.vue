@@ -59,7 +59,7 @@
 </template>
 
 <script lang="ts">
-import { SharePermissionBit } from '@ownclouders/web-client/src/helpers/share'
+import { SharePermissionBit } from '@ownclouders/web-client'
 import { authService } from '../services/auth'
 
 import {
@@ -79,12 +79,12 @@ import {
   buildPublicSpaceResource,
   isPublicSpaceResource,
   PublicSpaceResource
-} from '@ownclouders/web-client/src/helpers'
+} from '@ownclouders/web-client'
 import isEmpty from 'lodash-es/isEmpty'
 import { useGettext } from 'vue3-gettext'
 // full import is needed here so it can be overwritten via CERN config
 import { useLoadTokenInfo } from 'web-runtime/src/composables/tokenInfo'
-import { urlJoin } from '@ownclouders/web-client/src/utils'
+import { urlJoin } from '@ownclouders/web-client'
 import { RouteLocationNamedRaw } from 'vue-router'
 import { dirname } from 'path'
 import { storeToRefs } from 'pinia'

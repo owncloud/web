@@ -23,6 +23,9 @@ import { ListFavoriteFilesFactory } from './listFavoriteFiles'
 export * from './constants'
 export * from './types'
 
+export type { ListFilesOptions, ListFilesResult } from './listFiles'
+export type { GetFileContentsResponse } from './getFileContents'
+
 export const webdav = (options: WebDavOptions): WebDAV => {
   const dav = new DAV({ axiosClient: options.axiosClient, baseUrl: options.baseUrl })
 

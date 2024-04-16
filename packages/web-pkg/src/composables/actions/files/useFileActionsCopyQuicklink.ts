@@ -1,4 +1,4 @@
-import { LinkShare, isIncomingShareResource } from '@ownclouders/web-client/src/helpers/share'
+import { LinkShare, isIncomingShareResource } from '@ownclouders/web-client'
 import { computed, unref } from 'vue'
 import { useClientService } from '../../clientService'
 import { useGettext } from 'vue3-gettext'
@@ -8,9 +8,9 @@ import { useClipboard } from '../../clipboard'
 import { Resource, SpaceResource } from '@ownclouders/web-client'
 import { useFileActionsCreateLink } from './useFileActionsCreateLink'
 import { useMessages, useUserStore } from '../../piniaStores'
-import { buildLinkShare } from '@ownclouders/web-client/src/helpers/share/functions'
-import { isSpaceResource } from '@ownclouders/web-client/src/helpers'
-import { CollectionOfPermissionsWithAllowedValues } from '@ownclouders/web-client/src/generated'
+import { buildLinkShare } from '@ownclouders/web-client'
+import { isSpaceResource } from '@ownclouders/web-client'
+import { CollectionOfPermissionsWithAllowedValues } from '@ownclouders/web-client/graph/generated'
 
 export const useFileActionsCopyQuickLink = () => {
   const { showMessage, showErrorMessage } = useMessages()

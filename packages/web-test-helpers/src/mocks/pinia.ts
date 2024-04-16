@@ -1,6 +1,6 @@
 import { createTestingPinia } from '@pinia/testing'
 import defaultTheme from '../../../web-runtime/themes/owncloud/theme.json'
-import { User, Group } from '../../../web-client/src/generated'
+import { User, Group } from '../../../web-client/src/graph/generated'
 import { Message, Modal, WebThemeType } from '../../../web-pkg/src/composables/piniaStores'
 import { Capabilities } from '../../../web-client/src/ocs'
 import { mock } from 'vitest-mock-extended'

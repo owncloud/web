@@ -1,6 +1,6 @@
 import { isLocationTrashActive } from '../../../router'
-import { SpaceResource } from '@ownclouders/web-client/src/helpers'
-import { isProjectSpaceResource } from '@ownclouders/web-client/src/helpers'
+import { SpaceResource } from '@ownclouders/web-client'
+import { isProjectSpaceResource } from '@ownclouders/web-client'
 import { computed } from 'vue'
 import { useClientService } from '../../clientService'
 import { useRouter } from '../../router'

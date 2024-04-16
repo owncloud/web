@@ -8,7 +8,7 @@ import {
 } from 'web-test-helpers'
 import { mock } from 'vitest-mock-extended'
 import { unref } from 'vue'
-import { SpaceResource } from '@ownclouders/web-client/src'
+import { SpaceResource } from '@ownclouders/web-client'
 
 describe('editDescription', () => {
   describe('handler', () => {

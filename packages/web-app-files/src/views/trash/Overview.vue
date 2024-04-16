@@ -89,7 +89,7 @@ import {
   isPersonalSpaceResource,
   isProjectSpaceResource,
   SpaceResource
-} from '@ownclouders/web-client/src/helpers'
+} from '@ownclouders/web-client'
 import { AppLoadingSpinner } from '@ownclouders/web-pkg'
 import { NoContentMessage } from '@ownclouders/web-pkg'
 import { FieldType } from 'design-system/src/components/OcTable/OcTable.vue'

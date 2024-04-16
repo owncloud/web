@@ -12,7 +12,7 @@ import {
 } from '../../composables/actions/users'
 import { computed, defineComponent, PropType, unref } from 'vue'
 import { ContextActionMenu } from '@ownclouders/web-pkg'
-import { User } from '@ownclouders/web-client/src/generated'
+import { User } from '@ownclouders/web-client/graph/generated'
 import { useActionsShowDetails } from '@ownclouders/web-pkg'
 
 export default defineComponent({
