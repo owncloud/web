@@ -96,7 +96,7 @@
     "sass": "1.69.7",
     "ts-node": "10.9.2",
     "tslib": "2.5.0",
-    "typescript": "5.3.3",
+    "typescript": "5.4.5",
     "url-search-params-polyfill": "8.1.1",
     "vite": "5.2.8",
     "vitest": "1.4.0",
