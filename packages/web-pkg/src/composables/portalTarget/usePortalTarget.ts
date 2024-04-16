@@ -1,5 +1,5 @@
 import { useWormhole } from 'portal-vue'
-import { TransportInput } from 'portal-vue/types/types'
+import { TransportInput } from 'portal-vue/types'
 import { useEventBus } from '../eventBus'
 import { PortalTargetEventTopics } from './eventTopics'
 

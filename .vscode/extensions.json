@@ -6,7 +6,7 @@
     "EditorConfig.EditorConfig",
     "Orta.vscode-jest",
     "Vue.volar",
-    "Vue.vscode-typescript-vue-plugin",
-    "alexkrechik.cucumberautocomplete"
+    "alexkrechik.cucumberautocomplete",
+    "vscode.typescript-language-features"
   ]
 }

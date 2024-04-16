@@ -3,7 +3,6 @@ import { defineComponent, nextTick } from 'vue'
 import { defaultPlugins, DefaultPluginsOptions } from './defaultPlugins'
 import { createRouter as _createRouter } from '../../web-runtime/src/router'
 import { createMemoryHistory, RouterOptions } from 'vue-router'
-import { DefinedComponent } from '@vue/test-utils/dist/types'
 
 export { mount, shallowMount } from '@vue/test-utils'
 
@@ -80,5 +79,6 @@ export const nextTicks = async (amount: number) => {
   }
 }
 
+type DefinedComponent = new (...args: any[]) => any
 export type ComponentProps<T extends DefinedComponent> = InstanceType<T>['$props']
 export type PartialComponentProps<T extends DefinedComponent> = Partial<ComponentProps<T>>
