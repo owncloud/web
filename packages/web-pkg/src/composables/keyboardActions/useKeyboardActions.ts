@@ -82,14 +82,14 @@ export const useKeyboardActions = (options?: KeyboardActionsOptions): KeyboardAc
 
     const { key, ctrlKey, metaKey, shiftKey } = event
     let modifier = null
-    const disallowedModifierkeys: PossibleModifier[] = []
+    const disallowedModifiers: PossibleModifier[] = []
 
     if (metaKey || ctrlKey) {
       modifier = ModifierKey.Ctrl
-      disallowedModifierkeys.push('altKey', 'shiftKey')
+      disallowedModifiers.push('altKey', 'shiftKey')
     } else if (shiftKey) {
       modifier = ModifierKey.Shift
-      disallowedModifierkeys.push('altKey', 'ctrlKey', 'metaKey')
+      disallowedModifiers.push('altKey', 'ctrlKey', 'metaKey')
     }
 
     const hasDisallowedModifier = (event: KeyboardEvent, disallowedKeys: PossibleModifier[]) =>
@@ -100,7 +100,7 @@ export const useKeyboardActions = (options?: KeyboardActionsOptions): KeyboardAc
         return (
           action.primary === key &&
           action.modifier === modifier &&
-          !hasDisallowedModifier(event, disallowedModifierkeys)
+          !hasDisallowedModifier(event, disallowedModifiers)
         )
       })
       .forEach((action) => {
