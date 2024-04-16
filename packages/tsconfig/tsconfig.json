@@ -24,7 +24,7 @@
       "dom",
       "dom.iterable"
     ],
-    "types": ["vitest/globals", "vue3-gettext"]
+    "types": ["vitest/globals"]
   },
   "exclude": [
     "node_modules"
