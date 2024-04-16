@@ -5,7 +5,7 @@ import { useRouter } from '../../router'
 import { SpaceResource } from '@ownclouders/web-client'
 import { createLocationTrash } from '../../../router'
 import { createFileRouteOptions } from '../../../helpers'
-import { isProjectSpaceResource } from '@ownclouders/web-client/src/helpers'
+import { isProjectSpaceResource } from '@ownclouders/web-client'
 
 export const useSpaceActionsNavigateToTrash = () => {
   const router = useRouter()

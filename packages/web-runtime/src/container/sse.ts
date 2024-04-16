@@ -9,7 +9,7 @@ import {
   SpacesStore
 } from '@ownclouders/web-pkg'
 import PQueue from 'p-queue'
-import { extractNodeId, extractStorageId } from '@ownclouders/web-client/src/helpers'
+import { extractNodeId, extractStorageId } from '@ownclouders/web-client'
 import { z } from 'zod'
 import { Router } from 'vue-router'
 import { Language } from 'vue3-gettext'

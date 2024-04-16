@@ -3,7 +3,7 @@ import { ref, unref } from 'vue'
 import { defaultComponentMocks, RouteLocation, getComposableWrapper } from 'web-test-helpers'
 import { useFileActionsOpenShortcut, useRoute } from '../../../../../src'
 import { Resource } from '@ownclouders/web-client'
-import { GetFileContentsResponse } from '@ownclouders/web-client/src/webdav/getFileContents'
+import { GetFileContentsResponse } from '@ownclouders/web-client/webdav'
 
 vi.mock('../../../../../src/composables/router', async (importOriginal) => ({
   ...(await importOriginal<any>()),

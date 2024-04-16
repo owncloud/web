@@ -45,7 +45,7 @@ import {
   resourceIconMappingInjectionKey,
   ResourceIconMapping
 } from '@ownclouders/web-pkg'
-import { MESSAGE_TYPE } from '@ownclouders/web-client/src/sse'
+import { MESSAGE_TYPE } from '@ownclouders/web-client/sse'
 import { getQueryParam } from '../helpers/url'
 import PQueue from 'p-queue'
 import { storeToRefs } from 'pinia'

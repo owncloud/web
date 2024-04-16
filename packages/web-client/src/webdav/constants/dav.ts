@@ -1,4 +1,4 @@
-import { Audio, GeoCoordinates } from '../../generated'
+import { Audio, GeoCoordinates } from '../../graph/generated'
 
 export abstract class DavPermission {
   static readonly Shared: string = 'S'

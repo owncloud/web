@@ -23,7 +23,7 @@ import {
   Permission,
   UnifiedRoleDefinition,
   User
-} from '../../../../src/generated'
+} from '../../../../src/graph/generated'
 
 describe('share helper functions', () => {
   describe('isShareResource', () => {

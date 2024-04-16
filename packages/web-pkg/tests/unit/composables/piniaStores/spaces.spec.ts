@@ -12,14 +12,14 @@ import {
   GraphShareRoleIdMap,
   ShareRole,
   SpaceResource
-} from '@ownclouders/web-client/src/helpers'
-import { Graph } from '@ownclouders/web-client'
+} from '@ownclouders/web-client'
+import { Graph } from '@ownclouders/web-client/graph'
 import {
   CollectionOfPermissionsWithAllowedValues,
   Drive,
   Permission,
   User
-} from '@ownclouders/web-client/src/generated'
+} from '@ownclouders/web-client/graph/generated'
 import { ClientService } from '../../../../src/services'
 
 describe('spaces', () => {

@@ -133,7 +133,7 @@ import { DateTime } from 'luxon'
 
 import EditDropdown from './EditDropdown.vue'
 import RoleDropdown from './RoleDropdown.vue'
-import { CollaboratorShare, ShareRole, ShareTypes } from '@ownclouders/web-client/src/helpers/share'
+import { CollaboratorShare, ShareRole, ShareTypes } from '@ownclouders/web-client'
 import {
   queryItemAsString,
   useMessages,
@@ -142,7 +142,7 @@ import {
   useUserStore,
   useSharesStore
 } from '@ownclouders/web-pkg'
-import { Resource, extractDomSelector } from '@ownclouders/web-client/src/helpers/resource'
+import { Resource, extractDomSelector } from '@ownclouders/web-client'
 import { computed, defineComponent, inject, PropType, Ref } from 'vue'
 import * as uuid from 'uuid'
 import { formatDateFromDateTime, formatRelativeDateFromDateTime } from '@ownclouders/web-pkg'
@@ -151,7 +151,7 @@ import { OcInfoDrop, OcDrop } from 'design-system/src/components'
 import { RouteLocationNamedRaw } from 'vue-router'
 import { useGettext } from 'vue3-gettext'
 import { SpaceResource } from '@ownclouders/web-client'
-import { buildSpace, isProjectSpaceResource } from '@ownclouders/web-client/src/helpers'
+import { buildSpace, isProjectSpaceResource } from '@ownclouders/web-client'
 
 export default defineComponent({
   name: 'ListItem',

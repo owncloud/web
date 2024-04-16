@@ -29,7 +29,7 @@
 
 <script lang="ts">
 import { computed, defineComponent, onMounted, onBeforeUnmount, ref } from 'vue'
-import { Resource } from '@ownclouders/web-client/src'
+import { Resource } from '@ownclouders/web-client'
 import { useService, ResourceIcon } from '@ownclouders/web-pkg'
 import type { UppyService } from '@ownclouders/web-pkg'
 

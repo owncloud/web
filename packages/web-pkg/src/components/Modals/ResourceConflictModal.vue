@@ -40,7 +40,7 @@
 import { computed, defineComponent, PropType, ref, unref } from 'vue'
 import { useGettext } from 'vue3-gettext'
 import { Modal, useModals } from '../../composables'
-import { Resource } from '@ownclouders/web-client/src'
+import { Resource } from '@ownclouders/web-client'
 import { ResolveConflict, ResolveStrategy } from '../../helpers/resource'
 
 export default defineComponent({

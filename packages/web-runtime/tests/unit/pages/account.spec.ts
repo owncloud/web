@@ -16,7 +16,7 @@ import {
   useResourcesStore
 } from '@ownclouders/web-pkg'
 import { LanguageOption, SettingsBundle, SettingsValue } from 'web-runtime/src/helpers/settings'
-import { User } from '@ownclouders/web-client/src/generated'
+import { User } from '@ownclouders/web-client/graph/generated'
 import { VueWrapper } from '@vue/test-utils'
 
 const $route = {

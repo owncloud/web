@@ -5,7 +5,7 @@ import { useGettext } from 'vue3-gettext'
 import { useRoute, useRouter } from '../../router'
 import { useAbility } from '../../ability'
 import { useClientService } from '../../clientService'
-import { isProjectSpaceResource } from '@ownclouders/web-client/src/helpers'
+import { isProjectSpaceResource } from '@ownclouders/web-client'
 import { useMessages, useModals, useSpacesStore, useUserStore } from '../../piniaStores'
 
 export const useSpaceActionsDisable = () => {

@@ -8,9 +8,9 @@ import { createRouter, createMemoryHistory } from 'vue-router'
 import { defaultComponentMocks, defaultPlugins, mockAxiosResolve } from 'web-test-helpers/src'
 import { AppBar, ItemFilter, queryItemAsString, useResourcesStore } from '@ownclouders/web-pkg'
 import { ref } from 'vue'
-import { Resource } from '@ownclouders/web-client/src'
+import { Resource } from '@ownclouders/web-client'
 import { mock } from 'vitest-mock-extended'
-import { Capabilities } from '@ownclouders/web-client/src/ocs'
+import { Capabilities } from '@ownclouders/web-client/ocs'
 
 vi.mock('web-app-files/src/composables')
 vi.mock('@ownclouders/web-pkg', async (importOriginal) => ({

@@ -27,7 +27,7 @@ import {
   usePasswordPolicyService,
   useSharesStore
 } from '@ownclouders/web-pkg'
-import { LinkShare, Resource, SpaceResource } from '@ownclouders/web-client/src/helpers'
+import { LinkShare, Resource, SpaceResource } from '@ownclouders/web-client'
 
 export default defineComponent({
   name: 'SetLinkPasswordModal',

@@ -118,7 +118,7 @@ import {
   useRouter
 } from '@ownclouders/web-pkg'
 import { SideBarEventTopics } from '@ownclouders/web-pkg'
-import { Group } from '@ownclouders/web-client/src/generated'
+import { Group } from '@ownclouders/web-client/graph/generated'
 import { ContextMenuQuickAction } from '@ownclouders/web-pkg'
 import { useGettext } from 'vue3-gettext'
 import { defaultFuseOptions } from '@ownclouders/web-pkg'

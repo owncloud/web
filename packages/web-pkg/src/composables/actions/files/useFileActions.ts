@@ -1,5 +1,5 @@
 import kebabCase from 'lodash-es/kebabCase'
-import { isIncomingShareResource } from '@ownclouders/web-client/src/helpers/share'
+import { isIncomingShareResource } from '@ownclouders/web-client'
 import { routeToContextQuery } from '../../appDefaults'
 import { isLocationTrashActive } from '../../../router'
 import { computed, unref } from 'vue'

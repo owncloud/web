@@ -3,7 +3,7 @@ import { stringify } from 'qs'
 import { cacheService } from '../cache'
 import { ClientService } from '../client'
 import { encodePath } from '../../utils'
-import { isPublicSpaceResource } from '@ownclouders/web-client/src/helpers'
+import { isPublicSpaceResource } from '@ownclouders/web-client'
 import { BuildQueryStringOptions, LoadPreviewOptions } from '.'
 import { AuthStore, CapabilityStore, ConfigStore, UserStore } from '../../composables'
 

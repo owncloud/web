@@ -11,7 +11,7 @@ import { useIsSearchActive } from '../helpers'
 import { computed, unref } from 'vue'
 import { useGettext } from 'vue3-gettext'
 import { useDownloadFile } from '../../download'
-import { isIncomingShareResource } from '@ownclouders/web-client/src/helpers'
+import { isIncomingShareResource } from '@ownclouders/web-client'
 
 export const useFileActionsDownloadFile = () => {
   const router = useRouter()

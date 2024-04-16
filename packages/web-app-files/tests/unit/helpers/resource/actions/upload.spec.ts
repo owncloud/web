@@ -2,7 +2,7 @@ import { mock, mockDeep } from 'vitest-mock-extended'
 import { Language } from 'vue3-gettext'
 import { UploadResourceConflict } from 'web-app-files/src/helpers/resource'
 import { ResolveStrategy, UppyResource, useResourcesStore } from '@ownclouders/web-pkg'
-import { Resource } from '@ownclouders/web-client/src/helpers'
+import { Resource } from '@ownclouders/web-client'
 import { createTestingPinia } from 'web-test-helpers/src'
 
 const getResourceConflictInstance = ({

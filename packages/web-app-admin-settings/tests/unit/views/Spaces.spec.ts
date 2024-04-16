@@ -1,5 +1,6 @@
 import { mockAxiosResolve } from 'web-test-helpers/src/mocks'
-import { Graph, SpaceResource } from '@ownclouders/web-client'
+import { SpaceResource } from '@ownclouders/web-client'
+import { Graph } from '@ownclouders/web-client/graph'
 import { mock, mockDeep } from 'vitest-mock-extended'
 import { ClientService, useAppDefaults } from '@ownclouders/web-pkg'
 import { defaultComponentMocks, defaultPlugins, mount } from 'web-test-helpers'

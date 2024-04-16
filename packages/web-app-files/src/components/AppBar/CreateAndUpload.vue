@@ -218,7 +218,7 @@ import {
   SpaceResource,
   isPublicSpaceResource,
   isShareSpaceResource
-} from '@ownclouders/web-client/src/helpers'
+} from '@ownclouders/web-client'
 import { useService, useUpload, UppyService, UppyResource } from '@ownclouders/web-pkg'
 import { HandleUpload } from 'web-app-files/src/HandleUpload'
 import { useRoute } from 'vue-router'

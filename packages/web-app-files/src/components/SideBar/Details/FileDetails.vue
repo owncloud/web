@@ -140,7 +140,7 @@ import {
   formatDateFromJSDate
 } from '@ownclouders/web-pkg'
 import upperFirst from 'lodash-es/upperFirst'
-import { isShareResource, ShareTypes } from '@ownclouders/web-client/src/helpers/share'
+import { isShareResource, ShareTypes } from '@ownclouders/web-client'
 import { usePreviewService, useGetMatchingSpace } from '@ownclouders/web-pkg'
 import { getIndicators } from '@ownclouders/web-pkg'
 import {

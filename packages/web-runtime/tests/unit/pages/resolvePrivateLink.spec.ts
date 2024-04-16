@@ -8,8 +8,8 @@ import {
 import { mock } from 'vitest-mock-extended'
 import { queryItemAsString, useGetResourceContext } from '@ownclouders/web-pkg'
 import { Resource, SpaceResource } from '@ownclouders/web-client'
-import { SHARE_JAIL_ID } from '@ownclouders/web-client/src/helpers'
-import { DriveItem } from '@ownclouders/web-client/src/generated'
+import { SHARE_JAIL_ID } from '@ownclouders/web-client'
+import { DriveItem } from '@ownclouders/web-client/graph/generated'
 
 vi.mock('@ownclouders/web-pkg', async (importOriginal) => ({
   ...(await importOriginal<any>()),

@@ -1,5 +1,5 @@
-import { Resource, SpaceResource } from '@ownclouders/web-client/src'
-import { Group, User } from '@ownclouders/web-client/src/generated'
+import { Resource, SpaceResource } from '@ownclouders/web-client'
+import { Group, User } from '@ownclouders/web-client/graph/generated'
 import { RouteLocationRaw } from 'vue-router'
 import { IconFillType } from '../../helpers'
 

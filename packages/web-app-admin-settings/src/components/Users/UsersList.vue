@@ -107,7 +107,7 @@ import {
   useKeyboardActions
 } from '@ownclouders/web-pkg'
 import { SideBarEventTopics } from '@ownclouders/web-pkg'
-import { AppRole, User } from '@ownclouders/web-client/src/generated'
+import { AppRole, User } from '@ownclouders/web-client/graph/generated'
 import { ContextMenuQuickAction } from '@ownclouders/web-pkg'
 import { useFileListHeaderPosition, usePagination } from '@ownclouders/web-pkg'
 import { Pagination } from '@ownclouders/web-pkg'

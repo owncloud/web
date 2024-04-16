@@ -13,8 +13,8 @@ import {
   CollaboratorShare,
   GraphShareRoleIdMap,
   ShareRole
-} from '@ownclouders/web-client/src/helpers'
-import { Group, User } from '@ownclouders/web-client/src/generated'
+} from '@ownclouders/web-client'
+import { Group, User } from '@ownclouders/web-client/graph/generated'
 import { AxiosResponse } from 'axios'
 import OcButton from 'design-system/src/components/OcButton/OcButton.vue'
 

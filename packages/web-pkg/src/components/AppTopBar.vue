@@ -84,11 +84,7 @@ import ContextActionMenu from './ContextActions/ContextActionMenu.vue'
 import { useGettext } from 'vue3-gettext'
 import { Action, useFolderLink, useGetMatchingSpace, useResourcesStore } from '../composables'
 import ResourceListItem from './FilesList/ResourceListItem.vue'
-import {
-  Resource,
-  isPublicSpaceResource,
-  isShareSpaceResource
-} from '@ownclouders/web-client/src/helpers'
+import { Resource, isPublicSpaceResource, isShareSpaceResource } from '@ownclouders/web-client'
 
 export default defineComponent({
   name: 'AppTopBar',

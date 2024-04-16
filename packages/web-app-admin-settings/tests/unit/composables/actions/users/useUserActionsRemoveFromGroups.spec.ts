@@ -1,7 +1,7 @@
 import { useUserActionsRemoveFromGroups } from '../../../../../src/composables/actions/users/useUserActionsRemoveFromGroups'
 import { mock } from 'vitest-mock-extended'
 import { ref, unref } from 'vue'
-import { User } from '@ownclouders/web-client/src/generated'
+import { User } from '@ownclouders/web-client/graph/generated'
 import { getComposableWrapper, writable } from 'web-test-helpers'
 import { useCapabilityStore, useModals } from '@ownclouders/web-pkg'
 

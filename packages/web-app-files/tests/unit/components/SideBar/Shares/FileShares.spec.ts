@@ -1,9 +1,9 @@
 import FileShares from 'web-app-files/src/components/SideBar/Shares/FileShares.vue'
 import { mock } from 'vitest-mock-extended'
 import { Resource } from '@ownclouders/web-client'
-import { SpaceResource } from '@ownclouders/web-client/src/helpers'
+import { SpaceResource } from '@ownclouders/web-client'
 import { v4 as uuidV4 } from 'uuid'
-import { CollaboratorShare, ShareRole, ShareTypes } from '@ownclouders/web-client/src/helpers/share'
+import { CollaboratorShare, ShareRole, ShareTypes } from '@ownclouders/web-client'
 import {
   defaultPlugins,
   mount,
@@ -13,7 +13,7 @@ import {
 } from 'web-test-helpers'
 import CollaboratorListItem from '../../../../../src/components/SideBar/Shares/Collaborators/ListItem.vue'
 import { CapabilityStore, useCanShare, useModals } from '@ownclouders/web-pkg'
-import { User } from '@ownclouders/web-client/src/generated'
+import { User } from '@ownclouders/web-client/graph/generated'
 
 vi.mock('@ownclouders/web-pkg', async (importOriginal) => ({
   ...(await importOriginal<any>()),

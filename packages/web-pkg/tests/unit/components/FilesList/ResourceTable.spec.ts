@@ -7,7 +7,7 @@ import {
   Resource,
   ShareTypes,
   SpaceResource
-} from '@ownclouders/web-client/src/helpers'
+} from '@ownclouders/web-client'
 import { defaultPlugins, mount, PartialComponentProps } from 'web-test-helpers'
 import { CapabilityStore } from '../../../../src/composables/piniaStores'
 import { displayPositionedDropdown } from '../../../../src/helpers/contextMenuDropdown'
@@ -15,7 +15,7 @@ import { eventBus } from '../../../../src/services/eventBus'
 import { SideBarEventTopics } from '../../../../src/composables/sideBar'
 import { mock } from 'vitest-mock-extended'
 import { computed } from 'vue'
-import { Identity } from '@ownclouders/web-client/src/generated'
+import { Identity } from '@ownclouders/web-client/graph/generated'
 
 const mockUseEmbedMode = vi.fn().mockReturnValue({ isLocationPicker: computed(() => false) })
 

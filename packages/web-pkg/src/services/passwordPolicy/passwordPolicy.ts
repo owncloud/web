@@ -8,7 +8,7 @@ import {
   MustContainRule,
   MustNotBeEmptyRule
 } from './rules'
-import { PasswordPolicyCapability } from '@ownclouders/web-client/src/ocs/capabilities'
+import { PasswordPolicyCapability } from '@ownclouders/web-client/ocs'
 import { PasswordPolicy } from 'password-sheriff'
 import { GeneratePassword } from 'js-generate-password'
 import { CapabilityStore } from '../../composables'

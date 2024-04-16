@@ -4,7 +4,7 @@ import { mock, mockDeep } from 'vitest-mock-extended'
 import { ClientService } from '../../../src/services'
 import { unref, ref, Ref } from 'vue'
 import { AxiosResponse } from 'axios'
-import { ArchiverCapability } from '@ownclouders/web-client/src/ocs/capabilities'
+import { ArchiverCapability } from '@ownclouders/web-client/ocs'
 import { createTestingPinia } from 'web-test-helpers'
 import { useUserStore } from '../../../src/composables/piniaStores'
 

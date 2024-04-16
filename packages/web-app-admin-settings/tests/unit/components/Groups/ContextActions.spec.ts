@@ -1,6 +1,6 @@
 import { defaultPlugins, mount } from 'web-test-helpers'
 import { mock } from 'vitest-mock-extended'
-import { Resource } from '@ownclouders/web-client/src/helpers'
+import { Resource } from '@ownclouders/web-client'
 import ContextActions from '../../../../src/components/Groups/ContextActions.vue'
 import {
   useGroupActionsDelete,

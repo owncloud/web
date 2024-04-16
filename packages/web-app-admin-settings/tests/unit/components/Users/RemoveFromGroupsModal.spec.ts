@@ -6,7 +6,7 @@ import {
   shallowMount
 } from 'web-test-helpers'
 import { mock } from 'vitest-mock-extended'
-import { Group, User } from '@ownclouders/web-client/src/generated'
+import { Group, User } from '@ownclouders/web-client/graph/generated'
 import { Modal, useMessages } from '@ownclouders/web-pkg'
 import { useUserSettingsStore } from '../../../../src/composables/stores/userSettings'
 

@@ -1,11 +1,7 @@
-import { Resource, buildResource } from '../helpers'
+import { SearchResource, buildResource } from '../helpers'
 import { WebDavOptions } from './types'
 import { DavProperties, DavProperty, DavPropertyValue } from './constants'
 import { DAV } from './client'
-
-export interface SearchResource extends Resource {
-  highlights: string
-}
 
 export type SearchOptions = {
   davProperties?: DavPropertyValue[]

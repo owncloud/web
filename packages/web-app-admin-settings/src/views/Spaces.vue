@@ -69,7 +69,7 @@ import {
   useSpaceActionsEditQuota,
   useConfigStore
 } from '@ownclouders/web-pkg'
-import { buildSpace, SpaceResource } from '@ownclouders/web-client/src/helpers'
+import { buildSpace, SpaceResource } from '@ownclouders/web-client'
 import { computed, defineComponent, onBeforeUnmount, onMounted, ref, unref } from 'vue'
 import { useTask } from 'vue-concurrency'
 import { useGettext } from 'vue3-gettext'

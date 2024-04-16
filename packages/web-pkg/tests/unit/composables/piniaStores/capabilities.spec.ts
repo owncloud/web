@@ -1,7 +1,7 @@
 import { getComposableWrapper } from 'web-test-helpers'
 import { useCapabilityStore } from '../../../../src/composables/piniaStores'
 import { createPinia, setActivePinia } from 'pinia'
-import { Capabilities } from '@ownclouders/web-client/src/ocs'
+import { Capabilities } from '@ownclouders/web-client/ocs'
 
 describe('useCapabilityStore', () => {
   beforeEach(() => {

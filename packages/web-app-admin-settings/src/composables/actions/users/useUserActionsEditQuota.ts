@@ -9,8 +9,8 @@ import {
   useCapabilityStore
 } from '@ownclouders/web-pkg'
 import { SpaceResource } from '@ownclouders/web-client'
-import { isPersonalSpaceResource } from '@ownclouders/web-client/src/helpers'
-import { User } from '@ownclouders/web-client/src/generated'
+import { isPersonalSpaceResource } from '@ownclouders/web-client'
+import { User } from '@ownclouders/web-client/graph/generated'
 
 export const useUserActionsEditQuota = () => {
   const { dispatchModal } = useModals()

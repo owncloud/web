@@ -1,7 +1,7 @@
 import { setUser as sentrySetUser } from '@sentry/vue'
 import { defineStore } from 'pinia'
 import { ref } from 'vue'
-import { User } from '@ownclouders/web-client/src/generated'
+import { User } from '@ownclouders/web-client/graph/generated'
 
 export const useUserStore = defineStore('user', () => {
   const user = ref<User>()

@@ -1,6 +1,6 @@
 import { defaultComponentMocks, defaultPlugins, defaultStubs, mount } from 'web-test-helpers'
 import { mock } from 'vitest-mock-extended'
-import { Resource } from '@ownclouders/web-client/src/helpers'
+import { Resource } from '@ownclouders/web-client'
 import ActionsPanel from '../../../../../src/components/Spaces/SideBar/ActionsPanel.vue'
 import {
   useSpaceActionsDisable,

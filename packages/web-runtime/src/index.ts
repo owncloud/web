@@ -35,7 +35,7 @@ import {
   isPersonalSpaceResource,
   isPublicSpaceResource,
   PublicSpaceResource
-} from '@ownclouders/web-client/src/helpers'
+} from '@ownclouders/web-client'
 import { loadCustomTranslations } from 'web-runtime/src/helpers/customTranslations'
 import { computed, createApp, watch } from 'vue'
 import PortalVue, { createWormhole } from 'portal-vue'
@@ -43,7 +43,7 @@ import { createPinia } from 'pinia'
 import Avatar from './components/Avatar.vue'
 import focusMixin from './mixins/focusMixin'
 import { ArchiverService } from '@ownclouders/web-pkg'
-import { UnifiedRoleDefinition } from '@ownclouders/web-client/src/generated'
+import { UnifiedRoleDefinition } from '@ownclouders/web-client/graph/generated'
 
 export const bootstrapApp = async (configurationPath: string): Promise<void> => {
   const pinia = createPinia()

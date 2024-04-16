@@ -13,7 +13,7 @@ import { defaultStubs, RouteLocation } from 'web-test-helpers'
 import { useSortMock } from 'web-app-files/tests/mocks/useSortMock'
 import { mock } from 'vitest-mock-extended'
 import { defaultPlugins, mount, defaultComponentMocks } from 'web-test-helpers'
-import { ShareTypes, IncomingShareResource } from '@ownclouders/web-client/src/helpers'
+import { ShareTypes, IncomingShareResource } from '@ownclouders/web-client'
 import SharedWithMeSection from '../../../../src/components/Shares/SharedWithMeSection.vue'
 
 vi.mock('web-app-files/src/composables/resourcesViewDefaults')

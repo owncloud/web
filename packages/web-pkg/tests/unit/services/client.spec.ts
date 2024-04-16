@@ -1,7 +1,9 @@
 import { HttpClient } from '../../../src/http'
 import { ClientService, useAuthStore, useConfigStore } from '../../../src/'
 import { Language } from 'vue3-gettext'
-import { Graph, OCS, client as _client } from '@ownclouders/web-client'
+import { client as _client } from '@ownclouders/web-client'
+import { Graph } from '@ownclouders/web-client/graph'
+import { OCS } from '@ownclouders/web-client/ocs'
 import { createTestingPinia, writable } from 'web-test-helpers'
 import axios from 'axios'
 
@@ -25,7 +27,10 @@ const getClientServiceMock = () => {
 }
 const v4uuid = '00000000-0000-0000-0000-000000000000'
 vi.mock('uuid', () => ({ v4: () => v4uuid }))
-vi.mock('@ownclouders/web-client', () => ({ client: vi.fn(() => ({ graph: {}, ocs: {} })) }))
+vi.mock('@ownclouders/web-client', async (importOriginal) => ({
+  ...(await importOriginal<any>()),
+  client: vi.fn(() => ({ graph: {}, ocs: {} }))
+}))
 
 describe('ClientService', () => {
   beforeEach(() => {

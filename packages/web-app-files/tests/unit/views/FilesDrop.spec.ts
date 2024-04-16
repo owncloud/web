@@ -8,7 +8,7 @@ import {
 } from 'web-test-helpers'
 import { mock, mockDeep } from 'vitest-mock-extended'
 import { ClientService } from '@ownclouders/web-pkg'
-import { ListFilesResult } from '@ownclouders/web-client/src/webdav/listFiles'
+import { ListFilesResult } from '@ownclouders/web-client/webdav'
 
 describe('FilesDrop view', () => {
   describe('different files view states', () => {

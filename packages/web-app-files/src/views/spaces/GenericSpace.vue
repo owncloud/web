@@ -139,7 +139,7 @@ import {
   isPublicSpaceResource,
   isShareSpaceResource,
   SpaceResource
-} from '@ownclouders/web-client/src/helpers'
+} from '@ownclouders/web-client'
 
 import {
   FolderViewExtension,

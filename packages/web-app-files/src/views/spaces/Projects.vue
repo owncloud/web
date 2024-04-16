@@ -188,12 +188,12 @@ import {
   ProjectSpaceResource,
   Resource,
   SpaceResource
-} from '@ownclouders/web-client/src/helpers'
+} from '@ownclouders/web-client'
 import FilesViewWrapper from '../../components/FilesViewWrapper.vue'
 import { ResourceTable, ResourceTiles } from '@ownclouders/web-pkg'
 import { eventBus } from '@ownclouders/web-pkg'
 import { SideBarEventTopics, useSideBar } from '@ownclouders/web-pkg'
-import { WebDAV } from '@ownclouders/web-client/src/webdav'
+import { WebDAV } from '@ownclouders/web-client/webdav'
 import { sortFields as availableSortFields } from '@ownclouders/web-pkg'
 import { defaultFuseOptions, formatFileSize, ResourceIcon } from '@ownclouders/web-pkg'
 import { useGettext } from 'vue3-gettext'

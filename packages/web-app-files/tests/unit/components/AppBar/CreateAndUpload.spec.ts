@@ -1,7 +1,7 @@
 import CreateAndUpload from 'web-app-files/src/components/AppBar/CreateAndUpload.vue'
 import { mock } from 'vitest-mock-extended'
-import { Resource, SpaceResource } from '@ownclouders/web-client/src/helpers'
-import { Drive } from '@ownclouders/web-client/src/generated'
+import { Resource, SpaceResource } from '@ownclouders/web-client'
+import { Drive } from '@ownclouders/web-client/graph/generated'
 import {
   FileAction,
   useFileActionsCreateNewFile,

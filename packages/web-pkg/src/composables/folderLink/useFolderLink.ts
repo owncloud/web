@@ -4,7 +4,7 @@ import {
   isProjectSpaceResource,
   isShareRoot,
   isShareSpaceResource
-} from '@ownclouders/web-client/src/helpers'
+} from '@ownclouders/web-client'
 import { useGettext } from 'vue3-gettext'
 import { unref } from 'vue'
 import { useGetMatchingSpace } from '../spaces'

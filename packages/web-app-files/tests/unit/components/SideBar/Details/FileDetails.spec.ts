@@ -1,8 +1,8 @@
 import FileDetails from '../../../../../src/components/SideBar/Details/FileDetails.vue'
-import { ShareResource, ShareTypes } from '@ownclouders/web-client/src/helpers/share'
+import { ShareResource, ShareTypes } from '@ownclouders/web-client'
 import { defaultComponentMocks, defaultPlugins, RouteLocation } from 'web-test-helpers'
 import { mock, mockDeep } from 'vitest-mock-extended'
-import { SpaceResource } from '@ownclouders/web-client/src/helpers'
+import { SpaceResource } from '@ownclouders/web-client'
 import { createLocationSpaces, createLocationPublic } from '@ownclouders/web-pkg/'
 import { mount } from '@vue/test-utils'
 

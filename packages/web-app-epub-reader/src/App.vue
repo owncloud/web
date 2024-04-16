@@ -85,7 +85,7 @@
 
 <script lang="ts">
 import { computed, defineComponent, nextTick, PropType, ref, unref, watch } from 'vue'
-import { Resource } from '@ownclouders/web-client/src/helpers/resource/types'
+import { Resource } from '@ownclouders/web-client'
 import {
   AppConfigObject,
   Key,

@@ -110,7 +110,7 @@ import { Resource } from '@ownclouders/web-client'
 import { useGroupingSettings } from '@ownclouders/web-pkg'
 import { useGetMatchingSpace } from '@ownclouders/web-pkg'
 import SharesNavigation from 'web-app-files/src/components/AppBar/SharesNavigation.vue'
-import { OutgoingShareResource, ShareTypes } from '@ownclouders/web-client/src/helpers'
+import { OutgoingShareResource, ShareTypes } from '@ownclouders/web-client'
 import { storeToRefs } from 'pinia'
 
 const visibilityObserver = new VisibilityObserver()

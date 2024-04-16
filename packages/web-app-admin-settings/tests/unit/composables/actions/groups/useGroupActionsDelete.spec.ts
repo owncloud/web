@@ -1,7 +1,7 @@
 import { useGroupActionsDelete } from '../../../../../src/composables/actions/groups/useGroupActionsDelete'
 import { mock } from 'vitest-mock-extended'
 import { unref } from 'vue'
-import { Group } from '@ownclouders/web-client/src/generated'
+import { Group } from '@ownclouders/web-client/graph/generated'
 import { defaultComponentMocks, getComposableWrapper } from 'web-test-helpers'
 import { useGroupSettingsStore } from '../../../../../src/composables'
 

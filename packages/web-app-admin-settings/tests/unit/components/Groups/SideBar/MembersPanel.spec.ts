@@ -1,7 +1,7 @@
 import MembersPanel from '../../../../../src/components/Groups/SideBar/MembersPanel.vue'
 import { defaultPlugins, shallowMount } from 'web-test-helpers'
 import { mock } from 'vitest-mock-extended'
-import { Group } from '@ownclouders/web-client/src/generated'
+import { Group } from '@ownclouders/web-client/graph/generated'
 import MembersRoleSection from '../../../../../src/components/Groups/SideBar/MembersRoleSection.vue'
 
 const groupMock = mock<Group>({

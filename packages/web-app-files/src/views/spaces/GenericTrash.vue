@@ -81,7 +81,7 @@ import { useResourcesViewDefaults } from '../../composables'
 import { computed, defineComponent, PropType, onMounted, onBeforeUnmount, unref } from 'vue'
 import { Resource } from '@ownclouders/web-client'
 import { createLocationTrash } from '@ownclouders/web-pkg'
-import { isProjectSpaceResource, SpaceResource } from '@ownclouders/web-client/src/helpers'
+import { isProjectSpaceResource, SpaceResource } from '@ownclouders/web-client'
 import { useDocumentTitle } from '@ownclouders/web-pkg'
 import { useGettext } from 'vue3-gettext'
 

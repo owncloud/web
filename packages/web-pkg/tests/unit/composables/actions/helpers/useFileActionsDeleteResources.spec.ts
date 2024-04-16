@@ -1,6 +1,6 @@
 import { useFileActionsDeleteResources } from '../../../../../src/composables/actions'
 import { mockDeep } from 'vitest-mock-extended'
-import { FolderResource, SpaceResource } from '@ownclouders/web-client/src/helpers'
+import { FolderResource, SpaceResource } from '@ownclouders/web-client'
 import { defaultComponentMocks, getComposableWrapper } from 'web-test-helpers'
 import { nextTick } from 'vue'
 

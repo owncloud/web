@@ -9,7 +9,7 @@ import {
 import { useClientService } from '@ownclouders/web-pkg'
 import { UserAction, UserActionOptions } from '@ownclouders/web-pkg'
 import { useGettext } from 'vue3-gettext'
-import { User } from '@ownclouders/web-client/src/generated'
+import { User } from '@ownclouders/web-client/graph/generated'
 import { useUserSettingsStore } from '../../stores/userSettings'
 
 export const useUserActionsDelete = () => {

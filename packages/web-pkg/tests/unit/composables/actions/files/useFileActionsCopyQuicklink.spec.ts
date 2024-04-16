@@ -8,11 +8,11 @@ import { mock } from 'vitest-mock-extended'
 import { FileAction } from '../../../../../src/composables/actions'
 import { useCanShare } from '../../../../../src/composables/shares'
 import { Resource, SpaceResource } from '@ownclouders/web-client'
-import { LinkShare } from '@ownclouders/web-client/src/helpers/share'
-import { buildLinkShare } from '@ownclouders/web-client/src/helpers/share/functions'
+import { LinkShare } from '@ownclouders/web-client'
+import { buildLinkShare } from '@ownclouders/web-client'
 import { useClipboard } from '../../../../../src/composables/clipboard'
 import { useMessages } from '../../../../../src/composables/piniaStores'
-import { Permission } from '@ownclouders/web-client/src/generated'
+import { Permission } from '@ownclouders/web-client/graph/generated'
 
 vi.mock('../../../../../src/composables/shares', () => ({
   useCanShare: vi.fn()
@@ -26,7 +26,7 @@ vi.mock('../../../../../src/composables/clipboard', () => ({
   useClipboard: vi.fn()
 }))
 
-vi.mock('@ownclouders/web-client/src/helpers/share/functions', async (importOriginal) => ({
+vi.mock('@ownclouders/web-client', async (importOriginal) => ({
   ...(await importOriginal<any>()),
   buildLinkShare: vi.fn()
 }))

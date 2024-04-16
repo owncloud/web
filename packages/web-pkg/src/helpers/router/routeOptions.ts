@@ -1,4 +1,4 @@
-import { isShareSpaceResource, Resource, SpaceResource } from '@ownclouders/web-client/src/helpers'
+import { isShareSpaceResource, Resource, SpaceResource } from '@ownclouders/web-client'
 import { ConfigStore, LocationQuery, useConfigStore } from '../../composables'
 import { RouteParams } from 'vue-router'
 import { isUndefined } from 'lodash-es'

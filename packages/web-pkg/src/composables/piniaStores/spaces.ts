@@ -1,17 +1,18 @@
 import { defineStore } from 'pinia'
 import { computed, ref, unref } from 'vue'
-import { Graph, SpaceResource } from '@ownclouders/web-client'
+import { SpaceResource } from '@ownclouders/web-client'
+import { Graph } from '@ownclouders/web-client/graph'
 import {
   GraphShareRoleIdMap,
   buildSpace,
   extractStorageId,
   isPersonalSpaceResource,
   isProjectSpaceResource
-} from '@ownclouders/web-client/src/helpers'
-import type { CollaboratorShare } from '@ownclouders/web-client/src/helpers'
+} from '@ownclouders/web-client'
+import type { CollaboratorShare } from '@ownclouders/web-client'
 import { useUserStore } from './user'
 import { ConfigStore, useConfigStore } from './config'
-import { buildCollaboratorShare } from '@ownclouders/web-client/src/helpers/share/functions'
+import { buildCollaboratorShare } from '@ownclouders/web-client'
 import { useSharesStore } from './shares'
 
 export const sortSpaceMembers = (shares: CollaboratorShare[]) => {

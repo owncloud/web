@@ -14,7 +14,7 @@ import * as pinia from 'pinia' // eslint-disable-line
 import * as webPkg from '@ownclouders/web-pkg'
 import * as webClient from '@ownclouders/web-client'
 
-import { urlJoin } from '@ownclouders/web-client/src/utils'
+import { urlJoin } from '@ownclouders/web-client'
 import { App } from 'vue'
 import { AppConfigObject, ClassicApplicationScript } from '@ownclouders/web-pkg'
 

@@ -1,5 +1,5 @@
 import { isLocationTrashActive } from '../../../router'
-import { ShareResource, isIncomingShareResource } from '@ownclouders/web-client/src/helpers/share'
+import { ShareResource, isIncomingShareResource } from '@ownclouders/web-client'
 import { eventBus } from '../../../services'
 import { SideBarEventTopics } from '../../sideBar'
 import { computed, unref } from 'vue'

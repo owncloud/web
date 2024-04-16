@@ -1,7 +1,7 @@
 import { useGroupActionsEdit } from '../../../../../src/composables/actions/groups/useGroupActionsEdit'
 import { mock } from 'vitest-mock-extended'
 import { unref } from 'vue'
-import { Group } from '@ownclouders/web-client/src/generated'
+import { Group } from '@ownclouders/web-client/graph/generated'
 import { getComposableWrapper } from 'web-test-helpers'
 
 describe('useGroupActionsEdit', () => {

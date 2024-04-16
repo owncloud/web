@@ -40,7 +40,7 @@
 
 <script lang="ts">
 import { computed, PropType } from 'vue'
-import { CollaboratorAutoCompleteItem, ShareTypes } from '@ownclouders/web-client/src/helpers/share'
+import { CollaboratorAutoCompleteItem, ShareTypes } from '@ownclouders/web-client'
 
 export default {
   name: 'AutocompleteItem',

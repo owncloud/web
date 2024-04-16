@@ -1,7 +1,7 @@
 import { ref } from 'vue'
 import SpaceHeader from 'web-app-files/src/components/Spaces/SpaceHeader.vue'
-import { Drive } from '@ownclouders/web-client/src/generated'
-import { SpaceResource, buildSpace } from '@ownclouders/web-client/src/helpers'
+import { Drive } from '@ownclouders/web-client/graph/generated'
+import { SpaceResource, buildSpace } from '@ownclouders/web-client'
 import { defaultPlugins, mount, defaultComponentMocks } from 'web-test-helpers'
 
 describe('SpaceHeader', () => {

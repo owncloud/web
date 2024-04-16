@@ -10,7 +10,7 @@ import {
 import { extractDomSelector, extractExtensionFromFile, extractStorageId } from '../resource'
 import { ShareTypes } from './type'
 import { buildWebDavSpacesPath } from '../space'
-import { DriveItem, Identity, Permission, UnifiedRoleDefinition, User } from '../../generated'
+import { DriveItem, Identity, Permission, UnifiedRoleDefinition, User } from '../../graph/generated'
 import { urlJoin } from '../../utils'
 import { uniq } from 'lodash-es'
 

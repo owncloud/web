@@ -1,6 +1,6 @@
 import { Language } from 'vue3-gettext'
 import { Resource } from '@ownclouders/web-client'
-import { extractExtensionFromFile } from '@ownclouders/web-client/src/helpers'
+import { extractExtensionFromFile } from '@ownclouders/web-client'
 import {
   ConflictDialog,
   ResolveConflict,

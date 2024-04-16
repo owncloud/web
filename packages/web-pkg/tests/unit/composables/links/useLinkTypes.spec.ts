@@ -1,10 +1,10 @@
 import { unref } from 'vue'
 import { useLinkTypes } from '../../../../src/composables/links/useLinkTypes'
 import { defaultComponentMocks, getComposableWrapper } from 'web-test-helpers'
-import { SharingLinkType } from '@ownclouders/web-client/src/generated'
-import { AbilityRule } from '@ownclouders/web-client/src/helpers'
-import { Capabilities } from '@ownclouders/web-client/src/ocs'
-import { PasswordEnforcedForCapability } from '@ownclouders/web-client/src/ocs/capabilities'
+import { SharingLinkType } from '@ownclouders/web-client/graph/generated'
+import { AbilityRule } from '@ownclouders/web-client'
+import { Capabilities } from '@ownclouders/web-client/ocs'
+import { PasswordEnforcedForCapability } from '@ownclouders/web-client/ocs'
 
 describe('useLinkTypes', () => {
   it('should be valid', () => {

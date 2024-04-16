@@ -1,12 +1,12 @@
 import { computed, unref } from 'vue'
 import { useGettext } from 'vue3-gettext'
-import { SpaceResource } from '@ownclouders/web-client/src'
+import { SpaceResource } from '@ownclouders/web-client'
 import { useClientService } from '../../clientService'
 import { useRoute } from '../../router'
 import { eventBus } from '../../../services'
 import { useAbility } from '../../ability'
 import { SpaceAction, SpaceActionOptions } from '../types'
-import { isProjectSpaceResource } from '@ownclouders/web-client/src/helpers'
+import { isProjectSpaceResource } from '@ownclouders/web-client'
 import {
   useMessages,
   useModals,

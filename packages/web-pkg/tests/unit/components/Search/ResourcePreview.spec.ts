@@ -1,6 +1,6 @@
 import { mock } from 'vitest-mock-extended'
 import { ResourcePreview } from '../../../../src/components'
-import { SpaceResource } from '@ownclouders/web-client/src'
+import { SpaceResource } from '@ownclouders/web-client'
 import { useGetMatchingSpace } from '../../../../src/composables/spaces/useGetMatchingSpace'
 import {
   defaultComponentMocks,

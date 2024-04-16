@@ -1,7 +1,7 @@
 import { Resource } from '@ownclouders/web-client'
 import { ClientService } from '../../../services'
-import { CollaboratorShare, LinkShare, SpaceResource } from '@ownclouders/web-client/src/helpers'
-import { DriveItemCreateLink, DriveItemInvite } from '@ownclouders/web-client/src/generated'
+import { CollaboratorShare, LinkShare, SpaceResource } from '@ownclouders/web-client'
+import { DriveItemCreateLink, DriveItemInvite } from '@ownclouders/web-client/graph/generated'
 
 export interface AddShareOptions {
   clientService: ClientService

@@ -38,7 +38,7 @@
 </template>
 <script lang="ts">
 import { computed, defineComponent, inject, ref, watch, unref } from 'vue'
-import { SpaceResource, SpaceRole } from '@ownclouders/web-client/src/helpers'
+import { SpaceResource, SpaceRole } from '@ownclouders/web-client'
 import MembersRoleSection from './MembersRoleSection.vue'
 import Fuse from 'fuse.js'
 import Mark from 'mark.js'

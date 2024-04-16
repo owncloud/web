@@ -130,7 +130,7 @@ import {
   Drive,
   Group,
   User
-} from '@ownclouders/web-client/src/generated'
+} from '@ownclouders/web-client/graph/generated'
 import { MaybeRef, useClientService } from '@ownclouders/web-pkg'
 import { storeToRefs } from 'pinia'
 import { diff } from 'deep-object-diff'

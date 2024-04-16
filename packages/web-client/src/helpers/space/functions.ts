@@ -1,4 +1,4 @@
-import { User } from '../../generated'
+import { User } from '../../graph/generated'
 import { extractDomSelector, extractNodeId, Resource } from '../resource'
 import {
   PublicSpaceResource,
@@ -13,7 +13,7 @@ import {
 import { DavProperty } from '../../webdav/constants'
 import { buildWebDavPublicPath, buildWebDavOcmPath } from '../publicLink'
 import { urlJoin } from '../../utils'
-import { Drive, DriveItem } from '@ownclouders/web-client/src/generated'
+import { Drive, DriveItem } from '@ownclouders/web-client/graph/generated'
 
 export function buildWebDavSpacesPath(storageId: string | number, path?: string) {
   return urlJoin('spaces', storageId, path, {

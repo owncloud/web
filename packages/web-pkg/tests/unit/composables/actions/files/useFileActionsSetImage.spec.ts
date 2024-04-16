@@ -1,6 +1,6 @@
 import { useFileActionsSetImage } from '../../../../../src'
 import { useMessages } from '../../../../../src/composables/piniaStores'
-import { buildSpace, Resource, SpaceResource } from '@ownclouders/web-client/src/helpers'
+import { buildSpace, Resource, SpaceResource } from '@ownclouders/web-client'
 import { mock } from 'vitest-mock-extended'
 import {
   defaultComponentMocks,
@@ -9,7 +9,7 @@ import {
   mockAxiosResolve
 } from 'web-test-helpers'
 import { unref } from 'vue'
-import { Drive } from '@ownclouders/web-client/src/generated'
+import { Drive } from '@ownclouders/web-client/graph/generated'
 
 describe('setImage', () => {
   describe('isVisible property', () => {

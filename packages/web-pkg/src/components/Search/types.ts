@@ -1,4 +1,4 @@
-import { SearchResource } from '@ownclouders/web-client/src/webdav/search'
+import { SearchResource } from '@ownclouders/web-client'
 import { Component } from 'vue'
 
 export interface GenericSearchResultItem {

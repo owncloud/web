@@ -1,7 +1,7 @@
 import { useDriveResolver } from '../../../../src/composables/driveResolver'
 import { ref, unref } from 'vue'
 import { mock, mockDeep } from 'vitest-mock-extended'
-import { isShareSpaceResource, SpaceResource } from '@ownclouders/web-client/src/helpers'
+import { isShareSpaceResource, SpaceResource } from '@ownclouders/web-client'
 import { getComposableWrapper, defaultComponentMocks, RouteLocation } from 'web-test-helpers'
 
 describe('useDriveResolver', () => {

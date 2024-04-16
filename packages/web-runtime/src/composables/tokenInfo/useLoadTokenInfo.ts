@@ -2,7 +2,7 @@ import { useTask } from 'vue-concurrency'
 import convert from 'xml-js'
 import { useClientService, useAuthStore, AuthStore } from '@ownclouders/web-pkg'
 import { ClientService } from '@ownclouders/web-pkg'
-import { urlJoin } from '@ownclouders/web-client/src/utils'
+import { urlJoin } from '@ownclouders/web-client'
 
 export interface LoadTokenInfoOptions {
   clientService?: ClientService

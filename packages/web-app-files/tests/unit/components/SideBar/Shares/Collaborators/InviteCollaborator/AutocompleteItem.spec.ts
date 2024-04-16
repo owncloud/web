@@ -1,5 +1,5 @@
 import AutocompleteItem from 'web-app-files/src/components/SideBar/Shares/Collaborators/InviteCollaborator/AutocompleteItem.vue'
-import { CollaboratorAutoCompleteItem, ShareTypes } from '@ownclouders/web-client/src/helpers/share'
+import { CollaboratorAutoCompleteItem, ShareTypes } from '@ownclouders/web-client'
 import { defaultPlugins, shallowMount } from 'web-test-helpers'
 
 describe('AutocompleteItem component', () => {

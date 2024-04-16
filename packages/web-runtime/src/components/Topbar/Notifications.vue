@@ -87,7 +87,7 @@ import NotificationBell from './NotificationBell.vue'
 import { Notification } from '../../helpers/notifications'
 import { useGettext } from 'vue3-gettext'
 import { useTask } from 'vue-concurrency'
-import { MESSAGE_TYPE } from '@ownclouders/web-client/src/sse'
+import { MESSAGE_TYPE } from '@ownclouders/web-client/sse'
 
 const POLLING_INTERVAL = 30000
 

@@ -1,9 +1,5 @@
 import SpaceDetails from '../../../../../../src/components/SideBar/Spaces/Details/SpaceDetails.vue'
-import {
-  CollaboratorShare,
-  ShareRole,
-  GraphShareRoleIdMap
-} from '@ownclouders/web-client/src/helpers/share'
+import { CollaboratorShare, ShareRole, GraphShareRoleIdMap } from '@ownclouders/web-client'
 import { mock } from 'vitest-mock-extended'
 import { defaultPlugins, shallowMount } from 'web-test-helpers'
 

@@ -8,8 +8,8 @@ import {
 } from 'web-test-helpers'
 import { SpaceResource } from '@ownclouders/web-client'
 import { mock } from 'vitest-mock-extended'
-import { FileResource } from '@ownclouders/web-client/src/helpers'
-import { SearchResource } from '@ownclouders/web-client/src/webdav/search'
+import { FileResource } from '@ownclouders/web-client'
+import { SearchResource } from '@ownclouders/web-client'
 import { useMessages, useResourcesStore } from '../../../src/composables/piniaStores'
 
 describe('CreateShortcutModal', () => {

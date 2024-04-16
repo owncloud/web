@@ -11,14 +11,12 @@ import {
 } from '../../../../src/composables/piniaStores'
 import { mock, mockDeep } from 'vitest-mock-extended'
 import { ClientService } from '../../../../src/services'
-import { Resource, SpaceResource } from '@ownclouders/web-client/src/helpers'
-import { Permission, User } from '@ownclouders/web-client/src/generated'
-import {
-  buildCollaboratorShare,
-  buildLinkShare
-} from '@ownclouders/web-client/src/helpers/share/functions'
+import { Resource, SpaceResource } from '@ownclouders/web-client'
+import { Permission, User } from '@ownclouders/web-client/graph/generated'
+import { buildCollaboratorShare, buildLinkShare } from '@ownclouders/web-client'
 
-vi.mock('@ownclouders/web-client/src/helpers/share/functions', () => ({
+vi.mock('@ownclouders/web-client', async (importOriginal) => ({
+  ...(await importOriginal<any>()),
   buildLinkShare: vi.fn((share) => share),
   buildCollaboratorShare: vi.fn((share) => share)
 }))

@@ -3,13 +3,13 @@ import major from 'semver/functions/major'
 import rcompare from 'semver/functions/rcompare'
 
 import { RuntimeError } from '../errors'
-import { HttpError } from '@ownclouders/web-client/src/errors'
+import { HttpError } from '@ownclouders/web-client'
 import { ClientService } from '../services'
-import { urlJoin } from '@ownclouders/web-client/src/utils'
+import { urlJoin } from '@ownclouders/web-client'
 import { triggerDownloadWithFilename } from '../helpers/download'
 
 import { Ref, ref, computed, unref } from 'vue'
-import { ArchiverCapability } from '@ownclouders/web-client/src/ocs/capabilities'
+import { ArchiverCapability } from '@ownclouders/web-client/ocs'
 import { UserStore } from '../composables'
 
 interface TriggerDownloadOptions {

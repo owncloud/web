@@ -83,7 +83,7 @@ import { useService, UppyService } from '@ownclouders/web-pkg'
 import { useAuthService } from '@ownclouders/web-pkg'
 import { HandleUpload } from 'web-app-files/src/HandleUpload'
 import { createFileRouteOptions } from '@ownclouders/web-pkg'
-import { PublicSpaceResource, SharePermissionBit } from '@ownclouders/web-client/src/helpers'
+import { PublicSpaceResource, SharePermissionBit } from '@ownclouders/web-client'
 
 export default defineComponent({
   components: {

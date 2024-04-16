@@ -5,7 +5,7 @@ import {
   useResourcesStore
 } from '../../../../../src/composables/piniaStores'
 import { mock, mockDeep } from 'vitest-mock-extended'
-import { Resource, SpaceResource } from '@ownclouders/web-client/src/helpers'
+import { Resource, SpaceResource } from '@ownclouders/web-client'
 import { defaultComponentMocks, getComposableWrapper } from 'web-test-helpers'
 import { unref } from 'vue'
 

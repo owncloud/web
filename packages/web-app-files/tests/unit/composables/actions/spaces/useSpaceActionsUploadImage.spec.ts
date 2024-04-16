@@ -8,8 +8,8 @@ import {
 } from 'web-test-helpers'
 import { unref, VNodeRef } from 'vue'
 import { eventBus, useMessages } from '@ownclouders/web-pkg'
-import { Resource, SpaceResource } from '@ownclouders/web-client/src'
-import { Drive } from '@ownclouders/web-client/src/generated'
+import { Resource, SpaceResource } from '@ownclouders/web-client'
+import { Drive } from '@ownclouders/web-client/graph/generated'
 
 describe('uploadImage', () => {
   describe('method "uploadImageSpace"', () => {

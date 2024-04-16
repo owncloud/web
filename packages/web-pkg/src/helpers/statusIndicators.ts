@@ -1,4 +1,4 @@
-import { ShareTypes } from '@ownclouders/web-client/src/helpers/share'
+import { ShareTypes } from '@ownclouders/web-client'
 import { eventBus } from '../services'
 import { SideBarEventTopics } from '../composables/sideBar'
 import { createLocationShares } from '../router'

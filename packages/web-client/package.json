@@ -3,7 +3,6 @@
   "version": "0.0.1",
   "description": "ownCloud web client",
   "license": "AGPL-3.0",
-  "main": "src/index.ts",
   "private": false,
   "author": "ownCloud GmbH <devops@owncloud.com>",
   "homepage": "https://github.com/owncloud/web/tree/master/packages/web-client",
@@ -11,6 +10,29 @@
     "type": "git",
     "url": "https://github.com/owncloud/web",
     "directory": "packages/web-client"
+  },
+  "exports": {
+    ".": {
+      "default": "./src/index.ts"
+    },
+    "./graph": {
+      "default": "./src/graph/index.ts"
+    },
+    "./graph/generated": {
+      "default": "./src/graph/generated/index.ts"
+    },
+    "./ocs": {
+      "default": "./src/ocs/index.ts"
+    },
+    "./sse": {
+      "default": "./src/sse/index.ts"
+    },
+    "./webdav": {
+      "default": "./src/webdav/index.ts"
+    },
+    "./l10n": {
+      "default": "./l10n/translations.json"
+    }
   },
   "scripts": {
     "generate-openapi": "rm -rf src/generated && docker run --rm -v \"${PWD}/src:/local\" openapitools/openapi-generator-cli generate -i https://raw.githubusercontent.com/owncloud/libre-graph-api/main/api/openapi-spec/v1.0.yaml  -g typescript-axios -o /local/generated"

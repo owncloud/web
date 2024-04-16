@@ -7,12 +7,12 @@ import {
   isPublicSpaceResource,
   isShareSpaceResource,
   SpaceResource
-} from '@ownclouders/web-client/src/helpers'
+} from '@ownclouders/web-client'
 import { unref } from 'vue'
 import { FolderLoaderOptions } from './types'
 import { authService } from 'web-runtime/src/services/auth'
 import { useFileRouteReplace } from '@ownclouders/web-pkg'
-import { IncomingShareResource } from '@ownclouders/web-client/src/helpers/share'
+import { IncomingShareResource } from '@ownclouders/web-client'
 import { getIndicators } from '@ownclouders/web-pkg'
 
 export class FolderLoaderSpace implements FolderLoader {

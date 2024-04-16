@@ -81,7 +81,7 @@ import { useAbility, useUserStore } from '@ownclouders/web-pkg'
 import { Resource } from '@ownclouders/web-client'
 import { useGettext } from 'vue3-gettext'
 import { useSharesStore } from '@ownclouders/web-pkg'
-import { ShareRole } from '@ownclouders/web-client/src/helpers'
+import { ShareRole } from '@ownclouders/web-client'
 
 export default defineComponent({
   name: 'RoleDropdown',

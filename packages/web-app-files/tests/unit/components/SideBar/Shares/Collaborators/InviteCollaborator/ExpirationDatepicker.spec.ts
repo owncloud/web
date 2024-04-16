@@ -1,5 +1,5 @@
 import ExpirationDatepicker from 'web-app-files/src/components/SideBar/Shares/Collaborators/InviteCollaborator/ExpirationDatepicker.vue'
-import { ShareTypes } from '@ownclouders/web-client/src/helpers/share'
+import { ShareTypes } from '@ownclouders/web-client'
 import merge from 'lodash-es/merge'
 import { DateTime } from 'luxon'
 import { defaultPlugins, mount } from 'web-test-helpers'

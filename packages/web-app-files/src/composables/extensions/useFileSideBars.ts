@@ -28,7 +28,7 @@ import {
   isShareSpaceResource,
   isSpaceResource,
   SpaceResource
-} from '@ownclouders/web-client/src/helpers'
+} from '@ownclouders/web-client'
 import { Resource } from '@ownclouders/web-client'
 import { useGettext } from 'vue3-gettext'
 import { computed, unref } from 'vue'

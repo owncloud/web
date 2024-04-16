@@ -1,7 +1,7 @@
 import { useUserActionsEditLogin } from '../../../../../src/composables/actions/users/useUserActionsEditLogin'
 import { mock } from 'vitest-mock-extended'
 import { unref } from 'vue'
-import { User } from '@ownclouders/web-client/src/generated'
+import { User } from '@ownclouders/web-client/graph/generated'
 import { getComposableWrapper, writable } from 'web-test-helpers'
 import { useCapabilityStore, useModals } from '@ownclouders/web-pkg'
 

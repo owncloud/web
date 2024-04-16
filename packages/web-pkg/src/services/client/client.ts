@@ -1,12 +1,14 @@
 import { HttpClient as _HttpClient } from '../../http'
-import { client, Graph, OCS } from '@ownclouders/web-client'
+import { client } from '@ownclouders/web-client'
+import { Graph } from '@ownclouders/web-client/graph'
+import { OCS } from '@ownclouders/web-client/ocs'
 import { Auth, AuthParameters } from './auth'
 import axios, { AxiosInstance } from 'axios'
 import { v4 as uuidV4 } from 'uuid'
-import { WebDAV } from '@ownclouders/web-client/src/webdav'
+import { WebDAV } from '@ownclouders/web-client/webdav'
 import { Language } from 'vue3-gettext'
 import { FetchEventSourceInit } from '@microsoft/fetch-event-source'
-import { sse } from '@ownclouders/web-client/src/sse'
+import { sse } from '@ownclouders/web-client/sse'
 import { AuthStore, ConfigStore } from '../../composables'
 
 interface ClientContext {

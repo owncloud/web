@@ -1,6 +1,6 @@
 import { computed, unref, VNodeRef } from 'vue'
-import { SpaceResource } from '@ownclouders/web-client/src'
-import { Drive } from '@ownclouders/web-client/src/generated'
+import { SpaceResource } from '@ownclouders/web-client'
+import { Drive } from '@ownclouders/web-client/graph/generated'
 import {
   useClientService,
   useLoadingService,
@@ -13,7 +13,7 @@ import { eventBus } from '@ownclouders/web-pkg'
 import { useGettext } from 'vue3-gettext'
 import { SpaceAction, SpaceActionOptions } from '@ownclouders/web-pkg'
 import { useCreateSpace } from '@ownclouders/web-pkg'
-import { buildSpace } from '@ownclouders/web-client/src/helpers'
+import { buildSpace } from '@ownclouders/web-client'
 
 export const useSpaceActionsUploadImage = ({ spaceImageInput }: { spaceImageInput: VNodeRef }) => {
   const userStore = useUserStore()

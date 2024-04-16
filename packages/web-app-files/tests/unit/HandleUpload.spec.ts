@@ -1,7 +1,7 @@
 import Uppy, { UppyFile, State, UIPlugin } from '@uppy/core'
 import { HandleUpload } from '../../src/HandleUpload'
 import { mock, mockDeep } from 'vitest-mock-extended'
-import { Resource, SpaceResource } from '@ownclouders/web-client/src'
+import { Resource, SpaceResource } from '@ownclouders/web-client'
 import { RouteLocationNormalizedLoaded } from 'vue-router'
 import { ref, unref } from 'vue'
 import {

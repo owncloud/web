@@ -2,7 +2,7 @@ import { useScrollTo } from '@ownclouders/web-pkg'
 import { Ref, unref } from 'vue'
 import { Key, KeyboardActions, ModifierKey } from '@ownclouders/web-pkg'
 import { find, findIndex } from 'lodash-es'
-import { Item } from '@ownclouders/web-client/src/helpers'
+import { Item } from '@ownclouders/web-client'
 
 export const useKeyboardTableNavigation = (
   keyActions: KeyboardActions,

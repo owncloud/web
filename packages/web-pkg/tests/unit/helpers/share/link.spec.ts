@@ -1,6 +1,6 @@
 import { getExpirationRules } from '../../../../src/helpers/share'
 import { mock } from 'vitest-mock-extended'
-import { PublicExpirationCapability } from '@ownclouders/web-client/src/ocs/capabilities'
+import { PublicExpirationCapability } from '@ownclouders/web-client/ocs'
 import { createTestingPinia } from 'web-test-helpers'
 import { useCapabilityStore } from '../../../../src/composables/piniaStores'
 

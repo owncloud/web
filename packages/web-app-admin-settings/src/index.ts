@@ -3,7 +3,7 @@ import General from './views/General.vue'
 import Users from './views/Users.vue'
 import Groups from './views/Groups.vue'
 import Spaces from './views/Spaces.vue'
-import { Ability } from '@ownclouders/web-client/src/helpers/resource/types'
+import { Ability } from '@ownclouders/web-client'
 import {
   AppNavigationItem,
   defineWebApplication,

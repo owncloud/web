@@ -1,6 +1,6 @@
 import { useSpaceActionsDelete } from '../../../../../src/composables/actions'
 import { useMessages, useModals } from '../../../../../src/composables/piniaStores'
-import { buildSpace, SpaceResource } from '@ownclouders/web-client/src/helpers'
+import { buildSpace, SpaceResource } from '@ownclouders/web-client'
 import {
   defaultComponentMocks,
   mockAxiosResolve,
@@ -9,7 +9,7 @@ import {
 } from 'web-test-helpers'
 import { mock } from 'vitest-mock-extended'
 import { unref } from 'vue'
-import { Drive } from '@ownclouders/web-client/src/generated'
+import { Drive } from '@ownclouders/web-client/graph/generated'
 
 describe('delete', () => {
   describe('isVisible property', () => {

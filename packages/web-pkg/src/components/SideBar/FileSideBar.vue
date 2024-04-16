@@ -65,17 +65,14 @@ import {
   call,
   isSpaceResource,
   isPersonalSpaceResource
-} from '@ownclouders/web-client/src/helpers'
+} from '@ownclouders/web-client'
 import { storeToRefs } from 'pinia'
 import { useTask } from 'vue-concurrency'
-import {
-  buildCollaboratorShare,
-  buildLinkShare
-} from '@ownclouders/web-client/src/helpers/share/functions'
+import { buildCollaboratorShare, buildLinkShare } from '@ownclouders/web-client'
 import {
   CollectionOfPermissionsWithAllowedValues,
   Permission
-} from '@ownclouders/web-client/src/generated'
+} from '@ownclouders/web-client/graph/generated'
 
 export default defineComponent({
   name: 'FileSideBar',

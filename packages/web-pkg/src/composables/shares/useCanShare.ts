@@ -1,7 +1,7 @@
 import { Resource, SpaceResource } from '@ownclouders/web-client'
 import { useAbility } from '../ability'
 import { useCapabilityStore, useUserStore } from '../piniaStores'
-import { isProjectSpaceResource, isShareSpaceResource } from '@ownclouders/web-client/src/helpers'
+import { isProjectSpaceResource, isShareSpaceResource } from '@ownclouders/web-client'
 
 export const useCanShare = () => {
   const capabilityStore = useCapabilityStore()

@@ -67,7 +67,7 @@ import {
   useResourcesStore,
   useSpacesStore
 } from '@ownclouders/web-pkg'
-import { urlJoin } from '@ownclouders/web-client/src/utils'
+import { urlJoin } from '@ownclouders/web-client'
 import { storeToRefs } from 'pinia'
 
 export default defineComponent({
