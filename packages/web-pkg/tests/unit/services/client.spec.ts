@@ -1,11 +1,5 @@
 import { HttpClient } from '../../../src/http'
-import {
-  ClientService,
-  useAuthStore,
-  useClientStore,
-  useConfigStore,
-  useUserStore
-} from '../../../src/'
+import { ClientService, useAuthStore, useConfigStore } from '../../../src/'
 import { Language } from 'vue3-gettext'
 import { Graph, OCS, client as _client } from '@ownclouders/web-client'
 import { createTestingPinia, writable } from 'web-test-helpers'
@@ -18,17 +12,13 @@ const serverUrl = 'someUrl'
 const getClientServiceMock = () => {
   const authStore = useAuthStore()
   const configStore = useConfigStore()
-  const userStore = useUserStore()
-  const clientStore = useClientStore()
   writable(configStore).serverUrl = serverUrl
 
   return {
     clientService: new ClientService({
       configStore,
       language: language as Language,
-      authStore,
-      userStore,
-      clientStore
+      authStore
     }),
     authStore
   }
@@ -53,7 +43,8 @@ describe('ClientService', () => {
           'Accept-Language': language.current,
           Authorization: `Bearer ${getters['runtime/auth/accessToken']}`,
           'X-Requested-With': 'XMLHttpRequest',
-          'X-Request-ID': v4uuid
+          'X-Request-ID': v4uuid,
+          'Initiator-ID': v4uuid
         }
       })
     )
@@ -78,7 +69,8 @@ describe('ClientService', () => {
         headers: {
           'Accept-Language': language.current,
           'X-Requested-With': 'XMLHttpRequest',
-          'X-Request-ID': v4uuid
+          'X-Request-ID': v4uuid,
+          'Initiator-ID': v4uuid
         }
       })
     )
@@ -98,7 +90,7 @@ describe('ClientService', () => {
     })
     const { clientService, authStore } = getClientServiceMock()
     const client = clientService.graphAuthenticated
-    expect(_client).toHaveBeenCalledWith(serverUrl, expect.anything(), expect.anything())
+    expect(_client).toHaveBeenCalledWith(expect.objectContaining({ baseURI: serverUrl }))
     expect(_client).toHaveBeenCalledTimes(1)
     expect(graphClient).toEqual(client)
     // test re-instantiation on token and language change
@@ -118,7 +110,7 @@ describe('ClientService', () => {
     })
     const { clientService, authStore } = getClientServiceMock()
     const client = clientService.ocsUserContext
-    expect(_client).toHaveBeenCalledWith(serverUrl, expect.anything(), expect.anything())
+    expect(_client).toHaveBeenCalledWith(expect.objectContaining({ baseURI: serverUrl }))
     expect(_client).toHaveBeenCalledTimes(1)
     expect(ocsClient).toEqual(client)
     // test re-instantiation on token and language change
@@ -138,7 +130,7 @@ describe('ClientService', () => {
     })
     const { clientService, authStore } = getClientServiceMock()
     const client = clientService.ocsPublicLinkContext()
-    expect(_client).toHaveBeenCalledWith(serverUrl, expect.anything(), expect.anything())
+    expect(_client).toHaveBeenCalledWith(expect.objectContaining({ baseURI: serverUrl }))
     expect(_client).toHaveBeenCalledTimes(1)
     expect(ocsClient).toEqual(client)
     // test re-instantiation on token and language change

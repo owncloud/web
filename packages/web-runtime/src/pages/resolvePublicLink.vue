@@ -204,19 +204,22 @@ export default defineComponent({
         return
       }
 
-      const publicLink = yield loadPublicLinkTask.perform()
-      if (loadPublicLinkTask.isError) {
-        const e = loadPublicLinkTask.last.error
-        console.error(e, e.resource)
-        return
-      }
-
       yield authService.resolvePublicLink(
         unref(token),
         unref(passwordRequired),
         unref(passwordRequired) ? unref(password) : '',
         unref(publicLinkType)
       )
+
+      let publicLink: PublicSpaceResource
+
+      try {
+        publicLink = yield loadPublicLinkTask.perform()
+      } catch (e) {
+        authStore.clearPublicLinkContext()
+        console.error(e, e.resource)
+        return
+      }
 
       const url = queryItemAsString(unref(redirectUrl))
       if (url) {

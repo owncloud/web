@@ -1,9 +1,8 @@
 import { SpaceResource, isShareSpaceResource, SHARE_JAIL_ID } from '../helpers'
 import { WebDavOptions } from './types'
-import { DAV, buildAuthHeader } from './client'
-import { unref } from 'vue'
+import { DAV } from './client'
 
-export const MoveFilesFactory = (dav: DAV, { accessToken }: WebDavOptions) => {
+export const MoveFilesFactory = (dav: DAV, options: WebDavOptions) => {
   return {
     moveFiles(
       sourceSpace: SpaceResource,
@@ -12,19 +11,18 @@ export const MoveFilesFactory = (dav: DAV, { accessToken }: WebDavOptions) => {
       { path: targetPath },
       options?: { overwrite?: boolean }
     ) {
-      const headers = buildAuthHeader(unref(accessToken), sourceSpace)
       if (isShareSpaceResource(sourceSpace) && sourcePath === '/') {
         return dav.move(
           `${sourceSpace.webDavPath}/${sourcePath || ''}`,
           `/spaces/${SHARE_JAIL_ID}!${SHARE_JAIL_ID}/${targetPath || ''}`,
-          { overwrite: options?.overwrite || false, headers }
+          { overwrite: options?.overwrite || false }
         )
       }
 
       return dav.move(
         `${sourceSpace.webDavPath}/${sourcePath || ''}`,
         `${targetSpace.webDavPath}/${targetPath || ''}`,
-        { overwrite: options?.overwrite || false, headers }
+        { overwrite: options?.overwrite || false }
       )
     }
   }

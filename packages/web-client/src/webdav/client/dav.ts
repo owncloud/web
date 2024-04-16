@@ -1,4 +1,3 @@
-import { Ref, unref } from 'vue'
 import {
   Headers,
   ProgressEventCallback,
@@ -13,12 +12,11 @@ import { buildPropFindBody, buildPropPatchBody } from './builders'
 import { parseError, parseMultiStatus, parseTusHeaders } from './parsers'
 import { WebDavResponseResource } from '../../helpers'
 import { HttpError } from '../../errors'
+import { AxiosInstance } from 'axios'
 
 interface DAVOptions {
-  accessToken: Ref<string>
+  axiosClient: AxiosInstance
   baseUrl: string
-  language: Ref<string>
-  clientInitiatorId: Ref<string>
 }
 
 interface DavResult {
@@ -28,18 +26,14 @@ interface DavResult {
 }
 
 export class DAV {
-  private accessToken: Ref<string>
   private client: WebDAVClient
+  private axiosClient: AxiosInstance
   private davPath: string
-  private language: Ref<string>
-  private clientInitiatorId: Ref<string>
 
-  constructor({ accessToken, baseUrl, language, clientInitiatorId }: DAVOptions) {
+  constructor({ axiosClient, baseUrl }: DAVOptions) {
     this.davPath = urlJoin(baseUrl, 'remote.php/dav')
-    this.accessToken = accessToken
     this.client = createClient(this.davPath, {})
-    this.language = language
-    this.clientInitiatorId = clientInitiatorId
+    this.axiosClient = axiosClient
   }
 
   public mkcol(path: string, { headers = {} }: { headers?: Headers } = {}) {
@@ -166,10 +160,15 @@ export class DAV {
   }
 
   private buildHeaders(headers: Headers = {}): Headers {
+    const authHeader = this.axiosClient.defaults.headers.Authorization
+    const languageHeader = this.axiosClient.defaults.headers['Accept-Language']
+    const initiatorIdHeader = this.axiosClient.defaults.headers['Initiator-ID']
+
     return {
-      'Accept-Language': unref(this.language),
+      ...(authHeader && { Authorization: authHeader.toString() }),
+      ...(languageHeader && { 'Accept-Language': languageHeader.toString() }),
+      ...(initiatorIdHeader && { 'Initiator-ID': initiatorIdHeader.toString() }),
       'Content-Type': 'application/xml; charset=utf-8',
-      'Initiator-ID': unref(this.clientInitiatorId),
       'X-Requested-With': 'XMLHttpRequest',
       'X-Request-ID': uuidV4(),
       ...headers

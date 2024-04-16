@@ -1,13 +1,15 @@
-import { unref } from 'vue'
+import { Headers } from 'webdav'
 import { urlJoin } from '../utils'
-import { DAV, buildAuthHeader } from './client'
+import { DAV } from './client'
 import { DavProperty } from './constants'
 import { WebDavOptions } from './types'
 
-export const GetPathForFileIdFactory = (dav: DAV, { accessToken }: WebDavOptions) => {
+export const GetPathForFileIdFactory = (dav: DAV, options: WebDavOptions) => {
   return {
-    async getPathForFileId(id: string): Promise<string> {
-      const headers = buildAuthHeader(unref(accessToken))
+    async getPathForFileId(
+      id: string,
+      { headers = {} }: { headers?: Headers } = {}
+    ): Promise<string> {
       const result = await dav.propfind(urlJoin('meta', id, { leadingSlash: true }), {
         properties: [DavProperty.MetaPathForUser],
         headers

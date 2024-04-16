@@ -60,8 +60,7 @@ export const bootstrapApp = async (configurationPath: string): Promise<void> => 
     userStore,
     resourcesStore,
     messagesStore,
-    sharesStore,
-    clientStore
+    sharesStore
   } = announcePiniaStores()
 
   app.provide('$router', router)
@@ -78,17 +77,11 @@ export const bootstrapApp = async (configurationPath: string): Promise<void> => 
   })
   announceUppyService({ app })
 
-  announceClientService({
-    app,
-    configStore,
-    userStore,
-    authStore,
-    capabilityStore,
-    clientStore
-  })
+  announceClientService({ app, configStore, authStore })
   // TODO: move to announceArchiverService function
   app.config.globalProperties.$archiverService = new ArchiverService(
     app.config.globalProperties.$clientService,
+    userStore,
     configStore.serverUrl,
     computed(
       () =>
@@ -198,7 +191,6 @@ export const bootstrapApp = async (configurationPath: string): Promise<void> => 
           language: gettext,
           resourcesStore,
           spacesStore,
-          clientStore,
           messageStore: messagesStore,
           clientService,
           previewService,

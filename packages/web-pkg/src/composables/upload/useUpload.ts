@@ -2,7 +2,9 @@ import { computed, unref, watch } from 'vue'
 import { UppyService } from '../../services/uppy/uppyService'
 import { v4 as uuidV4 } from 'uuid'
 import { useGettext } from 'vue3-gettext'
-import { useAuthStore, useCapabilityStore, useClientStore, useConfigStore } from '../piniaStores'
+import { useAuthStore, useCapabilityStore, useConfigStore } from '../piniaStores'
+import { useClientService } from '../clientService'
+import { Auth } from '../../services'
 
 interface UploadOptions {
   uppyService: UppyService
@@ -11,29 +13,21 @@ interface UploadOptions {
 export function useUpload(options: UploadOptions) {
   const configStore = useConfigStore()
   const capabilityStore = useCapabilityStore()
-  const clientStore = useClientStore()
+  const clientService = useClientService()
   const { current: currentLanguage } = useGettext()
   const authStore = useAuthStore()
 
   const headers = computed((): { [key: string]: string } => {
-    const headers = {
-      'Accept-Language': currentLanguage,
-      'Initiator-ID': clientStore.clientInitiatorId
-    }
-    if (authStore.publicLinkContextReady) {
-      const password = authStore.publicLinkPassword
-      if (password) {
-        return {
-          ...headers,
-          Authorization: 'Basic ' + Buffer.from('public:' + password).toString('base64')
-        }
-      }
+    const auth = new Auth({
+      accessToken: authStore.accessToken,
+      publicLinkToken: authStore.publicLinkToken,
+      publicLinkPassword: authStore.publicLinkPassword
+    })
 
-      return headers
-    }
     return {
-      ...headers,
-      Authorization: 'Bearer ' + authStore.accessToken
+      'Accept-Language': currentLanguage,
+      'Initiator-ID': clientService.initiatorId,
+      ...auth.getHeaders()
     }
   })
 

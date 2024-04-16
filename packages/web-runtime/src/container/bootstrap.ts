@@ -1,7 +1,7 @@
 import { registerClient } from '../services/clientRegistration'
 import { buildApplication, NextApplication } from './application'
 import { RouteLocationRaw, Router, RouteRecordNormalized } from 'vue-router'
-import { App, computed, watch } from 'vue'
+import { App, watch } from 'vue'
 import { loadTheme } from '../helpers/theme'
 import { createGettext, GetTextOptions, Language } from 'vue3-gettext'
 import { getBackendVersion, getWebVersion } from './versions'
@@ -27,8 +27,7 @@ import {
   useResourcesStore,
   ResourcesStore,
   SpacesStore,
-  MessageStore,
-  useClientStore
+  MessageStore
 } from '@ownclouders/web-pkg'
 import { authService } from '../services/auth'
 import {
@@ -36,11 +35,9 @@ import {
   LoadingService,
   PasswordPolicyService,
   PreviewService,
-  UppyService,
-  ClientStore
+  UppyService
 } from '@ownclouders/web-pkg'
 import { init as sentryInit } from '@sentry/vue'
-import { webdav } from '@ownclouders/web-client/src/webdav'
 import { v4 as uuidV4 } from 'uuid'
 import { merge } from 'lodash-es'
 import {
@@ -335,7 +332,6 @@ export const announcePiniaStores = () => {
   const sharesStore = useSharesStore()
   const spacesStore = useSpacesStore()
   const userStore = useUserStore()
-  const clientStore = useClientStore()
 
   return {
     appsStore,
@@ -348,8 +344,7 @@ export const announcePiniaStores = () => {
     modalStore,
     sharesStore,
     spacesStore,
-    userStore,
-    clientStore
+    userStore
   }
 }
 
@@ -392,38 +387,18 @@ export const announceAdditionalTranslations = ({
 export const announceClientService = ({
   app,
   configStore,
-  userStore,
-  authStore,
-  capabilityStore,
-  clientStore
+  authStore
 }: {
   app: App
   configStore: ConfigStore
-  userStore: UserStore
   authStore: AuthStore
-  capabilityStore: CapabilityStore
-  clientStore: ClientStore
 }): void => {
-  clientStore.setClientInitiatorId(uuidV4())
-
   const clientService = new ClientService({
     configStore,
     language: app.config.globalProperties.$language,
-    authStore,
-    userStore,
-    clientStore
+    authStore
   })
   app.config.globalProperties.$clientService = clientService
-  app.config.globalProperties.$clientService.webdav = webdav({
-    accessToken: computed(() => authStore.accessToken),
-    baseUrl: configStore.serverUrl,
-    capabilities: computed(() => capabilityStore.capabilities),
-    clientService: app.config.globalProperties.$clientService,
-    language: computed(() => app.config.globalProperties.$language.current),
-    clientInitiatorId: computed(() => clientStore.clientInitiatorId),
-    user: computed(() => userStore.user)
-  })
-
   app.provide('$clientService', clientService)
 }
 
@@ -656,7 +631,6 @@ export const registerSSEEventListeners = ({
   language,
   resourcesStore,
   spacesStore,
-  clientStore,
   messageStore,
   clientService,
   previewService,
@@ -666,7 +640,6 @@ export const registerSSEEventListeners = ({
   language: Language
   resourcesStore: ResourcesStore
   spacesStore: SpacesStore
-  clientStore: ClientStore
   messageStore: MessageStore
   clientService: ClientService
   previewService: PreviewService
@@ -689,7 +662,6 @@ export const registerSSEEventListeners = ({
       topic: MESSAGE_TYPE.ITEM_RENAMED,
       resourcesStore,
       spacesStore,
-      clientStore,
       msg,
       clientService,
       router
@@ -701,7 +673,6 @@ export const registerSSEEventListeners = ({
       topic: MESSAGE_TYPE.POSTPROCESSING_FINISHED,
       resourcesStore,
       spacesStore,
-      clientStore,
       msg,
       clientService,
       previewService,
@@ -734,7 +705,7 @@ export const registerSSEEventListeners = ({
       topic: MESSAGE_TYPE.ITEM_TRASHED,
       language,
       resourcesStore,
-      clientStore,
+      clientService,
       messageStore,
       msg
     })
@@ -745,7 +716,6 @@ export const registerSSEEventListeners = ({
       topic: MESSAGE_TYPE.ITEM_RESTORED,
       resourcesStore,
       spacesStore,
-      clientStore,
       msg,
       clientService
     })
@@ -756,7 +726,6 @@ export const registerSSEEventListeners = ({
       topic: MESSAGE_TYPE.FOLDER_CREATED,
       resourcesStore,
       spacesStore,
-      clientStore,
       msg,
       clientService
     })
@@ -767,7 +736,6 @@ export const registerSSEEventListeners = ({
       topic: MESSAGE_TYPE.FILE_TOUCHED,
       resourcesStore,
       spacesStore,
-      clientStore,
       msg,
       clientService
     })

@@ -1,6 +1,5 @@
 import {
   ClientService,
-  ClientStore,
   createFileRouteOptions,
   getIndicators,
   ImageDimension,
@@ -53,7 +52,6 @@ export const onSSEItemRenamedEvent = async ({
   topic,
   resourcesStore,
   spacesStore,
-  clientStore,
   msg,
   clientService,
   router
@@ -61,7 +59,6 @@ export const onSSEItemRenamedEvent = async ({
   topic: string
   resourcesStore: ResourcesStore
   spacesStore: SpacesStore
-  clientStore
   msg: MessageEvent
   clientService: ClientService
   router: Router
@@ -69,7 +66,7 @@ export const onSSEItemRenamedEvent = async ({
   try {
     const sseData = eventSchema.parse(JSON.parse(msg.data))
 
-    if (sseData.initiatorid === clientStore.clientInitiatorId) {
+    if (sseData.initiatorid === clientService.initiatorId) {
       /**
        * If the request was initiated by the current client (browser tab),
        * there's no need to proceed with the action since the web already
@@ -153,7 +150,6 @@ export const onSSEProcessingFinishedEvent = async ({
   topic,
   resourcesStore,
   spacesStore,
-  clientStore,
   msg,
   clientService,
   resourceQueue,
@@ -162,7 +158,6 @@ export const onSSEProcessingFinishedEvent = async ({
   topic: string
   resourcesStore: ResourcesStore
   spacesStore: SpacesStore
-  clientStore: ClientStore
   msg: MessageEvent
   clientService: ClientService
   resourceQueue: PQueue
@@ -180,7 +175,7 @@ export const onSSEProcessingFinishedEvent = async ({
      * If resource is not loaded, it suggests an upload is in progress.
      */
     if (!resource) {
-      if (sseData.initiatorid === clientStore.clientInitiatorId) {
+      if (sseData.initiatorid === clientService.initiatorId) {
         /**
          * If the upload is initiated by the current client,
          * there's no necessity to retrieve the resources again.
@@ -235,25 +230,25 @@ export const onSSEProcessingFinishedEvent = async ({
   }
 }
 
-export const onSSEItemTrashedEvent = async ({
+export const onSSEItemTrashedEvent = ({
   topic,
   language,
   messageStore,
   resourcesStore,
-  clientStore,
+  clientService,
   msg
 }: {
   topic: string
   language: Language
   resourcesStore: ResourcesStore
-  clientStore: ClientStore
+  clientService: ClientService
   messageStore: MessageStore
   msg: MessageEvent
 }) => {
   try {
     const sseData = eventSchema.parse(JSON.parse(msg.data))
 
-    if (sseData.initiatorid === clientStore.clientInitiatorId) {
+    if (sseData.initiatorid === clientService.initiatorId) {
       /**
        * If the request was initiated by the current client (browser tab),
        * there's no need to proceed with the action since the web already
@@ -289,21 +284,19 @@ export const onSSEItemRestoredEvent = async ({
   topic,
   resourcesStore,
   spacesStore,
-  clientStore,
   msg,
   clientService
 }: {
   topic: string
   resourcesStore: ResourcesStore
   spacesStore: SpacesStore
-  clientStore: ClientStore
   msg: MessageEvent
   clientService: ClientService
 }) => {
   try {
     const sseData = eventSchema.parse(JSON.parse(msg.data))
 
-    if (sseData.initiatorid === clientStore.clientInitiatorId) {
+    if (sseData.initiatorid === clientService.initiatorId) {
       /**
        * If the request was initiated by the current client (browser tab),
        * there's no need to proceed with the action since the web already
@@ -352,21 +345,19 @@ export const onSSEFileTouchedEvent = async ({
   topic,
   resourcesStore,
   spacesStore,
-  clientStore,
   msg,
   clientService
 }: {
   topic: string
   resourcesStore: ResourcesStore
   spacesStore: SpacesStore
-  clientStore: ClientStore
   msg: MessageEvent
   clientService: ClientService
 }) => {
   try {
     const sseData = eventSchema.parse(JSON.parse(msg.data))
 
-    if (sseData.initiatorid === clientStore.clientInitiatorId) {
+    if (sseData.initiatorid === clientService.initiatorId) {
       /**
        * If the request was initiated by the current client (browser tab),
        * there's no need to proceed with the action since the web already
@@ -402,21 +393,19 @@ export const onSSEFolderCreatedEvent = async ({
   topic,
   resourcesStore,
   spacesStore,
-  clientStore,
   msg,
   clientService
 }: {
   topic: string
   resourcesStore: ResourcesStore
   spacesStore: SpacesStore
-  clientStore: ClientStore
   msg: MessageEvent
   clientService: ClientService
 }) => {
   try {
     const sseData = eventSchema.parse(JSON.parse(msg.data))
 
-    if (sseData.initiatorid === clientStore.clientInitiatorId) {
+    if (sseData.initiatorid === clientService.initiatorId) {
       /**
        * If the request was initiated by the current client (browser tab),
        * there's no need to proceed with the action since the web already
