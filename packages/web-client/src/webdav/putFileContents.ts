@@ -3,7 +3,7 @@ import { SpaceResource } from '../helpers'
 import { GetFileInfoFactory } from './getFileInfo'
 import { WebDavOptions } from './types'
 import { DAV } from './client'
-import { ProgressEventCallback } from 'webdav'
+import { Headers, ProgressEventCallback } from 'webdav'
 
 export const PutFileContentsFactory = (
   dav: DAV,
@@ -24,7 +24,7 @@ export const PutFileContentsFactory = (
         path?: string
         content?: string | ArrayBuffer
         previousEntityTag?: string
-        headers?: Record<string, string>
+        headers?: Headers
         overwrite?: boolean
         onUploadProgress?: ProgressEventCallback
       }
