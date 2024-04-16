@@ -30,12 +30,7 @@ describe('fileActions', () => {
   })
 })
 
-function getWrapper({
-  setup
-}: {
-  searchLocation: boolean
-  setup: (instance: ReturnType<typeof useFileActions>) => void
-}) {
+function getWrapper({ setup }: { setup: (instance: ReturnType<typeof useFileActions>) => void }) {
   const mocks = {
     ...defaultComponentMocks({
       currentRoute: mock<RouteLocation>({ name: 'files-spaces-generic' })
@@ -53,12 +48,13 @@ function getWrapper({
         provide: mocks,
         pluginOptions: {
           piniaOptions: {
-            appsStore: {
+            appsState: {
               apps: {
                 'text-editor': {
                   applicationMenu: {
                     priority: 20,
-                    openAsEditor: true
+                    openAsEditor: true,
+                    enabled: () => true
                   },
                   defaultExtension: 'txt',
                   icon: 'file-text',
@@ -68,8 +64,7 @@ function getWrapper({
                   isFileEditor: true,
                   extensions: [
                     {
-                      extension: 'txt',
-                      newFileMenu: {}
+                      extension: 'txt'
                     }
                   ]
                 }
@@ -78,7 +73,6 @@ function getWrapper({
                 {
                   app: 'text-editor',
                   extension: 'txt',
-                  newFileMenu: {},
                   hasPriority: false
                 }
               ]

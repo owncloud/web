@@ -19,7 +19,11 @@ export { createTestingPinia }
 
 export type PiniaMockOptions = {
   stubActions?: boolean
-  appsState?: { fileExtensions?: ApplicationFileExtension[] }
+  appsState?: {
+    apps?: Record<string, ApplicationInformation>
+    externalAppConfig?: AppConfigObject
+    fileExtensions?: ApplicationFileExtension[]
+  }
   authState?: {
     accessToken?: string
     idpContextReady?: boolean
@@ -65,11 +69,6 @@ export type PiniaMockOptions = {
     capabilities?: Partial<Capabilities['capabilities']>
     isInitialized?: boolean
   }
-  appsStore?: {
-    apps?: ApplicationInformation
-    externalAppConfig?: AppConfigObject
-    fileExtensions?: ApplicationFileExtension[]
-  }
 }
 
 export function createMockStore({
@@ -85,7 +84,6 @@ export function createMockStore({
   userSettingsStore = {},
   groupSettingsStore = {},
   spaceSettingsStore = {},
-  appsStore = {},
   sharesState = {},
   spacesState = {},
   userState = {},
@@ -105,7 +103,7 @@ export function createMockStore({
   return createTestingPinia({
     stubActions,
     initialState: {
-      apps: { ...appsState },
+      apps: { fileExtensions: [], apps: {}, ...appsState },
       auth: { ...authState },
       clipboard: { resources: [], ...clipboardState },
       config: {
@@ -132,7 +130,6 @@ export function createMockStore({
         ...themeState
       },
       resources: { resources: [], ...resourcesStore },
-      apps: { fileExtensions: [], apps: {}, ...appsStore },
       shares: { collaboratorShares: [], linkShares: [], ...sharesState },
       spaces: { spaces: [], spaceMembers: [], ...spacesState },
       userSettings: { users: [], selectedUsers: [], ...userSettingsStore },
