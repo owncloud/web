@@ -280,12 +280,8 @@ export default defineComponent({
       return props.selectedIds.includes(resource.id)
     }
 
-    const isResourceClickable = (resource) => {
-      if (isEmbedModeEnabled && !resource.isFolder) {
-        return false
-      }
-
-      return true
+    const isResourceClickable = (resource: Resource) => {
+      return !(unref(isEmbedModeEnabled) && !resource.isFolder)
     }
 
     const emitSelect = (selectedIds) => {

@@ -17,7 +17,9 @@ import { mock } from 'vitest-mock-extended'
 import { computed } from 'vue'
 import { Identity } from '@ownclouders/web-client/src/generated'
 
-const mockUseEmbedMode = vi.fn().mockReturnValue({ isLocationPicker: computed(() => false) })
+const mockUseEmbedMode = vi
+  .fn()
+  .mockReturnValue({ isLocationPicker: computed(() => false), isEnabled: computed(() => false) })
 
 vi.mock('../../../../src/helpers/contextMenuDropdown')
 vi.mock('../../../../src/composables/embedMode', () => ({
@@ -359,6 +361,17 @@ describe('ResourceTable', () => {
       const tr = await wrapper.find('.oc-tbody-tr-rainforest .oc-resource-name')
       await tr.trigger('click')
 
+      expect(wrapper.emitted().fileClick).toBeUndefined()
+    })
+
+    it('does not emit fileClick upon clicking on a resource when embed mode is enabled', async () => {
+      mockUseEmbedMode.mockReturnValue({
+        isEnabled: computed(() => true)
+      })
+      const { wrapper } = getMountedWrapper()
+      const tr = await wrapper.find('.oc-tbody-tr-forest .oc-resource-name')
+      await tr.trigger('click')
+      console.log(wrapper.emitted())
       expect(wrapper.emitted().fileClick).toBeUndefined()
     })
   })

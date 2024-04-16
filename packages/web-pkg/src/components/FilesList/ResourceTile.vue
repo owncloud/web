@@ -59,6 +59,7 @@
             :resource="resource"
             :is-icon-displayed="false"
             :is-extension-displayed="isExtensionDisplayed"
+            :is-resource-clickable="isResourceClickable"
             :folder-link="resourceRoute"
             @click="$emit('click')"
           />
