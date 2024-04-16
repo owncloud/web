@@ -62,7 +62,7 @@ import {
 import {
   Action,
   ActionOptions,
-  ModifierKey,
+  Modifier,
   Key,
   useAppMeta,
   useGetResourceContext,
@@ -383,15 +383,12 @@ export default defineComponent({
       }
       const editorOptions = configStore.options.editor
       if (editorOptions.autosaveEnabled) {
-        autosaveIntervalId = setInterval(
-          async () => {
-            if (isDirty.value) {
-              await save()
-              autosavePopup()
-            }
-          },
-          (editorOptions.autosaveInterval || 120) * 1000
-        )
+        autosaveIntervalId = setInterval(async () => {
+          if (isDirty.value) {
+            await save()
+            autosavePopup()
+          }
+        }, (editorOptions.autosaveInterval || 120) * 1000)
       }
     })
     onBeforeUnmount(() => {
@@ -404,7 +401,7 @@ export default defineComponent({
     })
 
     const { bindKeyAction } = useKeyboardActions({ skipDisabledKeyBindingsCheck: true })
-    bindKeyAction({ modifier: ModifierKey.Ctrl, primary: Key.S }, () => {
+    bindKeyAction({ modifier: Modifier.Ctrl, primary: Key.S }, () => {
       if (!unref(isDirty)) {
         return
       }

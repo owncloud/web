@@ -1,6 +1,6 @@
 import { useScrollTo } from '@ownclouders/web-pkg'
 import { Ref, unref } from 'vue'
-import { Key, KeyboardActions, ModifierKey } from '@ownclouders/web-pkg'
+import { Key, KeyboardActions, Modifier } from '@ownclouders/web-pkg'
 import { find, findIndex } from 'lodash-es'
 import { Item } from '@ownclouders/web-client'
 
@@ -17,15 +17,15 @@ export const useKeyboardTableNavigation = (
 
   keyActions.bindKeyAction({ primary: Key.ArrowDown }, () => handleNavigateAction())
 
-  keyActions.bindKeyAction({ modifier: ModifierKey.Shift, primary: Key.ArrowUp }, () =>
+  keyActions.bindKeyAction({ modifier: Modifier.Shift, primary: Key.ArrowUp }, () =>
     handleShiftUpAction()
   )
 
-  keyActions.bindKeyAction({ modifier: ModifierKey.Shift, primary: Key.ArrowDown }, () =>
+  keyActions.bindKeyAction({ modifier: Modifier.Shift, primary: Key.ArrowDown }, () =>
     handleShiftDownAction()
   )
 
-  keyActions.bindKeyAction({ modifier: ModifierKey.Ctrl, primary: Key.A }, () =>
+  keyActions.bindKeyAction({ modifier: Modifier.Ctrl, primary: Key.A }, () =>
     handleSelectAllAction()
   )
 

@@ -1,7 +1,7 @@
 import { QueryValue, useResourcesStore, FolderViewModeConstants } from '@ownclouders/web-pkg'
 import { useScrollTo } from '@ownclouders/web-pkg'
 import { Ref, ref, unref, nextTick, watchEffect } from 'vue'
-import { Key, KeyboardActions, ModifierKey } from '@ownclouders/web-pkg'
+import { Key, KeyboardActions, Modifier } from '@ownclouders/web-pkg'
 import { Resource } from '@ownclouders/web-client'
 import { findIndex } from 'lodash-es'
 import { storeToRefs } from 'pinia'
@@ -23,7 +23,7 @@ export const useKeyboardTableNavigation = (
   const tileViewStart = ref(null)
   const tileViewDirection = ref(null)
 
-  keyActions.bindKeyAction({ modifier: ModifierKey.Ctrl, primary: Key.A }, () =>
+  keyActions.bindKeyAction({ modifier: Modifier.Ctrl, primary: Key.A }, () =>
     handleSelectAllAction()
   )
 
@@ -67,24 +67,24 @@ export const useKeyboardTableNavigation = (
     )
 
     bindKeyActionsIds.value.push(
-      keyActions.bindKeyAction({ modifier: ModifierKey.Shift, primary: Key.ArrowLeft }, () =>
+      keyActions.bindKeyAction({ modifier: Modifier.Shift, primary: Key.ArrowLeft }, () =>
         handleTilesShiftHorizontalAction(Direction.LEFT)
       )
     )
     bindKeyActionsIds.value.push(
-      keyActions.bindKeyAction({ modifier: ModifierKey.Shift, primary: Key.ArrowRight }, () =>
+      keyActions.bindKeyAction({ modifier: Modifier.Shift, primary: Key.ArrowRight }, () =>
         handleTilesShiftHorizontalAction(Direction.RIGHT)
       )
     )
 
     bindKeyActionsIds.value.push(
-      keyActions.bindKeyAction({ modifier: ModifierKey.Shift, primary: Key.ArrowUp }, () => {
+      keyActions.bindKeyAction({ modifier: Modifier.Shift, primary: Key.ArrowUp }, () => {
         handleTilesShiftUpAction()
       })
     )
 
     bindKeyActionsIds.value.push(
-      keyActions.bindKeyAction({ modifier: ModifierKey.Shift, primary: Key.ArrowDown }, () => {
+      keyActions.bindKeyAction({ modifier: Modifier.Shift, primary: Key.ArrowDown }, () => {
         handleTilesShiftDownAction()
       })
     )
@@ -100,13 +100,13 @@ export const useKeyboardTableNavigation = (
     )
 
     bindKeyActionsIds.value.push(
-      keyActions.bindKeyAction({ modifier: ModifierKey.Shift, primary: Key.ArrowUp }, () =>
+      keyActions.bindKeyAction({ modifier: Modifier.Shift, primary: Key.ArrowUp }, () =>
         handleShiftUpAction()
       )
     )
 
     bindKeyActionsIds.value.push(
-      keyActions.bindKeyAction({ modifier: ModifierKey.Shift, primary: Key.ArrowDown }, () =>
+      keyActions.bindKeyAction({ modifier: Modifier.Shift, primary: Key.ArrowDown }, () =>
         handleShiftDownAction()
       )
     )

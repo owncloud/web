@@ -20,7 +20,7 @@ export enum Key {
   Esc = 'Escape'
 }
 
-export enum ModifierKey {
+export enum Modifier {
   Ctrl = 'Control',
   Shift = 'Shift'
 }
@@ -30,13 +30,13 @@ export interface KeyboardActions {
   selectionCursor: Ref<number>
   removeKeyAction: (id: string) => void
   resetSelectionCursor: () => void
-  bindKeyAction: (keys: { primary: Key; modifier?: ModifierKey }, callback: () => void) => string
+  bindKeyAction: (keys: { primary: Key; modifier?: Modifier }, callback: () => void) => string
 }
 
 export interface KeyboardAction {
   id: string
   primary: Key
-  modifier: ModifierKey | null
+  modifier: Modifier | null
   callback: (event: KeyboardEvent) => void
 }
 
@@ -78,29 +78,29 @@ export const useKeyboardActions = (options?: KeyboardActionsOptions): KeyboardAc
       return
     }
 
-    type PossibleModifier = 'altKey' | 'ctrlKey' | 'metaKey' | 'shiftKey'
+    type ModifierKey = 'altKey' | 'ctrlKey' | 'metaKey' | 'shiftKey'
 
     const { key, ctrlKey, metaKey, shiftKey } = event
     let modifier = null
-    const disallowedModifiers: PossibleModifier[] = []
+    const disallowedModifierKeys: ModifierKey[] = []
 
     if (metaKey || ctrlKey) {
-      modifier = ModifierKey.Ctrl
-      disallowedModifiers.push('altKey', 'shiftKey')
+      modifier = Modifier.Ctrl
+      disallowedModifierKeys.push('altKey', 'shiftKey')
     } else if (shiftKey) {
-      modifier = ModifierKey.Shift
-      disallowedModifiers.push('altKey', 'ctrlKey', 'metaKey')
+      modifier = Modifier.Shift
+      disallowedModifierKeys.push('altKey', 'ctrlKey', 'metaKey')
     }
 
-    const hasDisallowedModifier = (event: KeyboardEvent, disallowedKeys: PossibleModifier[]) =>
-      disallowedKeys.some((key) => event[key])
+    const hasDisallowedModifier = (event: KeyboardEvent, disallowedModifierKeys: ModifierKey[]) =>
+      disallowedModifierKeys.some((key) => event[key])
 
     unref(actions)
       .filter((action) => {
         return (
           action.primary === key &&
           action.modifier === modifier &&
-          !hasDisallowedModifier(event, disallowedModifiers)
+          !hasDisallowedModifier(event, disallowedModifierKeys)
         )
       })
       .forEach((action) => {
@@ -109,7 +109,7 @@ export const useKeyboardActions = (options?: KeyboardActionsOptions): KeyboardAc
       })
   }
   const bindKeyAction = (
-    keys: { primary: Key; modifier?: ModifierKey },
+    keys: { primary: Key; modifier?: Modifier },
     callback: () => void
   ): string => {
     const id = uuid.v4()
