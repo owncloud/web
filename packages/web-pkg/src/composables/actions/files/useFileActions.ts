@@ -33,6 +33,7 @@ import { useAppsStore, useConfigStore, useResourcesStore } from '../../piniaStor
 import { ApplicationFileExtension } from '../../../apps'
 import { Resource, SpaceResource } from '@ownclouders/web-client'
 import { storeToRefs } from 'pinia'
+import { useEmbedMode } from '../../embedMode'
 
 export const EDITOR_MODE_EDIT = 'edit'
 export const EDITOR_MODE_CREATE = 'create'
@@ -47,6 +48,7 @@ export const useFileActions = () => {
   const router = useRouter()
   const { $gettext } = useGettext()
   const isSearchActive = useIsSearchActive()
+  const { isEnabled: isEmbedModeEnabled } = useEmbedMode()
 
   const { openUrl } = useWindowOpen()
 
@@ -86,6 +88,10 @@ export const useFileActions = () => {
   ])
 
   const editorActions = computed(() => {
+    if (unref(isEmbedModeEnabled)) {
+      return []
+    }
+
     return appsStore.fileExtensions
       .map((fileExtension): FileAction => {
         const appInfo = appsStore.apps[fileExtension.app]

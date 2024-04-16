@@ -1,0 +1,6 @@
+Change: Disable opening files in embed mode
+
+We have disabled to open files in the embed mode, since opening or editing files is not in scope of the embed mode
+
+https://github.com/owncloud/web/pull/10786
+https://github.com/owncloud/web/issues/10635

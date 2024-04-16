@@ -9,7 +9,9 @@ import { OptionsConfig } from '../../../web-pkg/src/composables/piniaStores/conf
 import { Resource, CollaboratorShare, LinkShare, ShareRole } from '../../../web-client/src/helpers'
 import {
   AncestorMetaData,
+  AppConfigObject,
   ApplicationFileExtension,
+  ApplicationInformation,
   ClipboardActions
 } from '../../../web-pkg/types'
 
@@ -17,7 +19,11 @@ export { createTestingPinia }
 
 export type PiniaMockOptions = {
   stubActions?: boolean
-  appsState?: { fileExtensions?: ApplicationFileExtension[] }
+  appsState?: {
+    apps?: Record<string, ApplicationInformation>
+    externalAppConfig?: AppConfigObject
+    fileExtensions?: ApplicationFileExtension[]
+  }
   authState?: {
     accessToken?: string
     idpContextReady?: boolean
@@ -97,7 +103,7 @@ export function createMockStore({
   return createTestingPinia({
     stubActions,
     initialState: {
-      apps: { ...appsState },
+      apps: { fileExtensions: [], apps: {}, ...appsState },
       auth: { ...authState },
       clipboard: { resources: [], ...clipboardState },
       config: {

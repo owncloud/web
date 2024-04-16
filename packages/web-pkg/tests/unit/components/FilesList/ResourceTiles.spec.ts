@@ -3,6 +3,8 @@ import ResourceTiles from '../../../../src/components/FilesList/ResourceTiles.vu
 import { sortFields } from '../../../../src/helpers/ui/resourceTiles'
 import { Resource } from '@ownclouders/web-client'
 import { mock } from 'vitest-mock-extended'
+import { computed } from 'vue'
+import { extractDomSelector } from '@ownclouders/web-client/src/helpers'
 
 vi.mock('../../../../src/composables/viewMode', async (importOriginal) => ({
   ...(await importOriginal<any>()),
@@ -11,6 +13,26 @@ vi.mock('../../../../src/composables/viewMode', async (importOriginal) => ({
   })
 }))
 
+const mockUseEmbedMode = vi.fn().mockReturnValue({ isEnabled: computed(() => false) })
+vi.mock('../../../../src/composables/embedMode', () => ({
+  useEmbedMode: vi.fn().mockImplementation(() => mockUseEmbedMode())
+}))
+
+const router = {
+  push: vi.fn(),
+  afterEach: vi.fn(),
+  currentRoute: {
+    name: 'some-route-name',
+    query: {},
+    params: {
+      driveAliasAndItem: ''
+    }
+  },
+  resolve: (r) => {
+    return { href: r.name }
+  }
+}
+
 const spacesResources = [
   {
     id: '1',
@@ -18,6 +40,7 @@ const spacesResources = [
     path: '',
     type: 'space',
     isFolder: true,
+    indicators: [],
     getDriveAliasAndItem: () => '1'
   },
   {
@@ -26,7 +49,32 @@ const spacesResources = [
     path: '',
     type: 'space',
     isFolder: true,
+    indicators: [],
     getDriveAliasAndItem: () => '2'
+  }
+]
+
+const resources = [
+  {
+    id: 'forest',
+    driveId: 'forest',
+    name: 'forest.jpg',
+    path: 'images/nature/forest.jpg',
+    extension: 'jpg',
+    thumbnail: 'https://cdn.pixabay.com/photo/2015/09/09/16/05/forest-931706_960_720.jpg',
+    indicators: [],
+    isFolder: false,
+    type: 'file',
+    tags: ['space', 'tag', 'moon'],
+    size: '111000234',
+    hidden: false,
+    syncEnabled: true,
+    outgoing: false,
+    shareRoles: [],
+    sharePermissions: [],
+    shareTypes: [],
+    canRename: vi.fn(),
+    getDomSelector: () => extractDomSelector('forest')
   }
 ]
 
@@ -71,9 +119,18 @@ describe('ResourceTiles component', () => {
   })
 
   it('emits fileClick event upon click on tile', async () => {
-    const { wrapper } = getWrapper({ resources: spacesResources })
-    await wrapper.find('resource-tile-stub').trigger('click')
-    expect(wrapper.emitted('click')).toBeTruthy()
+    const { wrapper } = getWrapper({ resources: resources })
+    await wrapper.find('.oc-tiles-item .oc-resource-name').trigger('click')
+    expect(wrapper.emitted().fileClick[0][0].resources[0].name).toMatch('forest.jpg')
+  })
+
+  it('does not emit fileClick event upon click on tile when embed mode is enabled', async () => {
+    mockUseEmbedMode.mockReturnValue({
+      isEnabled: computed(() => true)
+    })
+    const { wrapper } = getWrapper({ resources: resources })
+    await wrapper.find('.oc-tiles-item .oc-resource-name').trigger('click')
+    expect(wrapper.emitted().fileClick).toBeUndefined()
   })
 
   it('emits update:selectedIds event on resource selection and sets the selection', () => {
@@ -82,7 +139,9 @@ describe('ResourceTiles component', () => {
       selectedIds: [spacesResources[0].id]
     })
     wrapper.vm.toggleSelection(spacesResources[0])
-    expect(wrapper.find('resource-tile-stub').attributes('isresourceselected')).toEqual('true')
+    expect(
+      wrapper.findComponent({ name: 'resource-tile' }).props('isResourceSelected')
+    ).toBeTruthy()
     expect(wrapper.emitted('update:selectedIds')).toBeTruthy()
   })
 
@@ -103,6 +162,7 @@ describe('ResourceTiles component', () => {
     it('emits the "sort"-event', async () => {
       const index = 2
       const { wrapper } = getWrapper({ sortFields })
+      ;(wrapper.vm.$refs.sortDrop as any).tippy = { hide: vi.fn() }
       await wrapper.findAll('.oc-tiles-sort-list-item').at(index).trigger('click')
       expect(wrapper.emitted('sort')).toBeTruthy()
       expect(wrapper.emitted('sort')[0][0]).toEqual({
@@ -137,7 +197,9 @@ describe('ResourceTiles component', () => {
   ])('passes the "viewSize" to the OcTile component', async (data) => {
     const { wrapper } = getWrapper({ resources: spacesResources, viewSize: data.viewSize })
     await wrapper.vm.$nextTick()
-    expect(wrapper.find('resource-tile-stub').attributes('resourceiconsize')).toEqual(data.expected)
+    expect(wrapper.findComponent({ name: 'resource-tile' }).props('resourceIconSize')).toEqual(
+      data.expected
+    )
   })
 
   function getWrapper(props = {}, slots = {}) {
@@ -151,8 +213,15 @@ describe('ResourceTiles component', () => {
           ...slots
         },
         global: {
-          plugins: [...defaultPlugins({ designSystem: false })],
-          stubs: { ResourceTile: true }
+          plugins: [...defaultPlugins()],
+          mocks: {
+            $route: router.currentRoute,
+            $router: router
+          },
+          provide: {
+            $router: router,
+            $route: router.currentRoute
+          }
         }
       })
     }

@@ -491,7 +491,7 @@ export default defineComponent({
   setup(props, context) {
     const capabilityStore = useCapabilityStore()
     const { getMatchingSpace } = useGetMatchingSpace()
-    const { isLocationPicker } = useEmbedMode()
+    const { isLocationPicker, isEnabled: isEmbedModeEnabled } = useEmbedMode()
 
     const configStore = useConfigStore()
     const { options: configOptions } = storeToRefs(configStore)
@@ -558,6 +558,7 @@ export default defineComponent({
         targetRouteCallback: computed(() => props.targetRouteCallback)
       }),
       isLocationPicker,
+      isEmbedModeEnabled,
       toggleSelection,
       areFileExtensionsShown,
       latestSelectedId
@@ -1003,6 +1004,10 @@ export default defineComponent({
     },
     isResourceClickable(resource: Resource) {
       if (!this.areResourcesClickable) {
+        return false
+      }
+
+      if (this.isEmbedModeEnabled && !resource.isFolder) {
         return false
       }
 
