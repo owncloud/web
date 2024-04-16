@@ -14,7 +14,6 @@ import {
   ApplicationInformation,
   ClipboardActions
 } from '../../../web-pkg/types'
-import { ref } from 'vue'
 
 export { createTestingPinia }
 

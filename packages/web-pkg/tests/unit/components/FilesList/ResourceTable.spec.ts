@@ -371,7 +371,6 @@ describe('ResourceTable', () => {
       const { wrapper } = getMountedWrapper()
       const tr = await wrapper.find('.oc-tbody-tr-forest .oc-resource-name')
       await tr.trigger('click')
-      console.log(wrapper.emitted())
       expect(wrapper.emitted().fileClick).toBeUndefined()
     })
   })
