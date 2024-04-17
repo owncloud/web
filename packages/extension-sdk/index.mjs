@@ -61,6 +61,11 @@ export const defineConfig = (overrides = {}) => {
               'vue3-gettext',
 
               '@ownclouders/web-client',
+              '@ownclouders/web-client/graph',
+              '@ownclouders/web-client/graph/generated',
+              '@ownclouders/web-client/ocs',
+              '@ownclouders/web-client/sse',
+              '@ownclouders/web-client/webdav',
               '@ownclouders/web-pkg',
               'web-client',
               'web-pkg'

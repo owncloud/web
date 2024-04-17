@@ -13,6 +13,11 @@ import * as vueGettext from 'vue3-gettext' // eslint-disable-line
 import * as pinia from 'pinia' // eslint-disable-line
 import * as webPkg from '@ownclouders/web-pkg'
 import * as webClient from '@ownclouders/web-client'
+import * as webClientGraph from '@ownclouders/web-client/graph'
+import * as webClientGraphGenerated from '@ownclouders/web-client/graph/generated'
+import * as webClientOcs from '@ownclouders/web-client/ocs'
+import * as webClientSse from '@ownclouders/web-client/sse'
+import * as webClientWebdav from '@ownclouders/web-client/webdav'
 
 import { urlJoin } from '@ownclouders/web-client'
 import { App } from 'vue'
@@ -32,6 +37,11 @@ const injectionMap = {
   'vue3-gettext': vueGettext,
   '@ownclouders/web-pkg': webPkg,
   '@ownclouders/web-client': webClient,
+  '@ownclouders/web-client/graph': webClientGraph,
+  '@ownclouders/web-client/graph/generated': webClientGraphGenerated,
+  '@ownclouders/web-client/ocs': webClientOcs,
+  '@ownclouders/web-client/sse': webClientSse,
+  '@ownclouders/web-client/webdav': webClientWebdav,
   'web-pkg': webPkg,
   'web-client': webClient
 }
