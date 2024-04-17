@@ -4,7 +4,7 @@ import { sortFields } from '../../../../src/helpers/ui/resourceTiles'
 import { Resource } from '@ownclouders/web-client'
 import { mock } from 'vitest-mock-extended'
 import { computed } from 'vue'
-import { extractDomSelector } from '@ownclouders/web-client/src/helpers'
+import { extractDomSelector } from '@ownclouders/web-client'
 
 vi.mock('../../../../src/composables/viewMode', async (importOriginal) => ({
   ...(await importOriginal<any>()),
