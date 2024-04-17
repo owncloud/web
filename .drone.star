@@ -298,7 +298,7 @@ def beforePipelines(ctx):
 def stagePipelines(ctx):
     unit_test_pipelines = unitTests(ctx)
 
-    # only run unit tests when publishing a standalone package
+    # run only unit tests when publishing a standalone package
     if (determineReleasePackage(ctx) != None):
         return unit_test_pipelines
 
