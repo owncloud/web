@@ -1,5 +1,9 @@
 <template>
-  <nav :id="id" :class="`oc-breadcrumb oc-breadcrumb-${variation}`">
+  <nav
+    :id="id"
+    :class="`oc-breadcrumb oc-breadcrumb-${variation}`"
+    :aria-label="$gettext('Breadcrumbs')"
+  >
     <ol class="oc-breadcrumb-list oc-flex oc-m-rm oc-p-rm">
       <li
         v-for="(item, index) in displayItems"
