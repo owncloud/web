@@ -66,6 +66,7 @@ export const onSSEItemRenamedEvent = async ({
 }) => {
   try {
     const sseData = eventSchema.parse(JSON.parse(msg.data))
+    console.debug(`SSE event '${topic}'`, sseData)
 
     if (sseData.initiatorid === clientService.initiatorId) {
       /**
@@ -124,6 +125,8 @@ export const onSSEFileLockingEvent = async ({
 }) => {
   try {
     const sseData = eventSchema.parse(JSON.parse(msg.data))
+    console.debug(`SSE event '${topic}'`, sseData)
+
     const resource = resourcesStore.resources.find((f) => f.id === sseData.itemid)
     const space = spacesStore.spaces.find((s) => s.id === resource.storageId)
 
@@ -170,6 +173,7 @@ export const onSSEProcessingFinishedEvent = async ({
 }) => {
   try {
     const sseData = eventSchema.parse(JSON.parse(msg.data))
+    console.debug(`SSE event '${topic}'`, sseData)
 
     if (!itemInCurrentFolder({ resourcesStore, parentFolderId: sseData.parentitemid })) {
       return false
@@ -252,6 +256,7 @@ export const onSSEItemTrashedEvent = ({
 }) => {
   try {
     const sseData = eventSchema.parse(JSON.parse(msg.data))
+    console.debug(`SSE event '${topic}'`, sseData)
 
     if (sseData.initiatorid === clientService.initiatorId) {
       /**
@@ -302,6 +307,7 @@ export const onSSEItemRestoredEvent = async ({
 }) => {
   try {
     const sseData = eventSchema.parse(JSON.parse(msg.data))
+    console.debug(`SSE event '${topic}'`, sseData)
 
     if (sseData.initiatorid === clientService.initiatorId) {
       /**
@@ -345,6 +351,63 @@ export const onSSEItemRestoredEvent = async ({
   }
 }
 
+export const onSSEItemMovedEvent = async ({
+  topic,
+  resourcesStore,
+  spacesStore,
+  msg,
+  clientService
+}: {
+  topic: string
+  resourcesStore: ResourcesStore
+  spacesStore: SpacesStore
+  msg: MessageEvent
+  clientService: ClientService
+}) => {
+  try {
+    const sseData = eventSchema.parse(JSON.parse(msg.data))
+    console.debug(`SSE event '${topic}'`, sseData)
+
+    if (sseData.initiatorid === clientService.initiatorId) {
+      /**
+       * If the request was initiated by the current client (browser tab),
+       * there's no need to proceed with the action since the web already
+       * handles its own business logic. Therefore, we'll return early here.
+       */
+      return
+    }
+
+    const space = spacesStore.spaces.find((space) => space.id === sseData.spaceid)
+    if (!space) {
+      return
+    }
+
+    const resource = await clientService.webdav.getFileInfo(space, {
+      fileId: sseData.itemid
+    })
+
+    if (!resource) {
+      return
+    }
+
+    if (resource.parentFolderId !== resourcesStore.currentFolder.id) {
+      return resourcesStore.removeResources([resource])
+    }
+
+    resourcesStore.upsertResource(resource)
+    resourcesStore.updateResourceField({
+      id: resource.id,
+      field: 'indicators',
+      value: getIndicators({
+        resource,
+        ancestorMetaData: resourcesStore.ancestorMetaData
+      })
+    })
+  } catch (e) {
+    console.error(`Unable to parse sse event ${topic} data`, e)
+  }
+}
+
 /**
  * The FileTouched event is triggered when a new empty file, such as a new text file,
  * is about to be created on the server. This event is necessary because the
@@ -365,6 +428,7 @@ export const onSSEFileTouchedEvent = async ({
 }) => {
   try {
     const sseData = eventSchema.parse(JSON.parse(msg.data))
+    console.debug(`SSE event '${topic}'`, sseData)
 
     if (sseData.initiatorid === clientService.initiatorId) {
       /**
@@ -413,6 +477,7 @@ export const onSSEFolderCreatedEvent = async ({
 }) => {
   try {
     const sseData = eventSchema.parse(JSON.parse(msg.data))
+    console.debug(`SSE event '${topic}'`, sseData)
 
     if (sseData.initiatorid === clientService.initiatorId) {
       /**

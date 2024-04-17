@@ -1,0 +1,6 @@
+Enhancement: Add SSE event for moving
+
+We've added Server-Sent Events (SSE) for moving resources.
+This enhancement ensures that the moving action instantly propagated to other browsers and devices where the logged in user has access the relevant files and folders.
+
+

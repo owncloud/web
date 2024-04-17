@@ -61,7 +61,8 @@ import {
   onSSEItemRestoredEvent,
   onSSEItemTrashedEvent,
   onSSEFolderCreatedEvent,
-  onSSEFileTouchedEvent
+  onSSEFileTouchedEvent,
+  onSSEItemMovedEvent
 } from './sse'
 
 const getEmbedConfigFromQuery = (
@@ -721,6 +722,16 @@ export const registerSSEEventListeners = ({
       resourcesStore,
       spacesStore,
       userStore,
+      msg,
+      clientService
+    })
+  )
+
+  clientService.sseAuthenticated.addEventListener(MESSAGE_TYPE.ITEM_MOVED, (msg) =>
+    onSSEItemMovedEvent({
+      topic: MESSAGE_TYPE.ITEM_MOVED,
+      resourcesStore,
+      spacesStore,
       msg,
       clientService
     })
