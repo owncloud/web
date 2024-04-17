@@ -8,8 +8,8 @@ import {
   SpaceResource,
   isPersonalSpaceResource,
   isProjectSpaceResource
-} from '@ownclouders/web-client/src/helpers'
-import { User } from '@ownclouders/web-client/src/generated'
+} from '@ownclouders/web-client'
+import { User } from '@ownclouders/web-client/graph/generated'
 
 // dummy to trick gettext string extraction into recognizing strings
 const $gettext = (str): string => {
