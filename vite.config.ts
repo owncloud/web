@@ -177,11 +177,13 @@ export default defineConfig(({ mode, command }) => {
         }
       },
       plugins: [
-        // We need to "undefine" `define` which is set by requirejs loaded in index.html
-        treatAsCommonjs() as any as PluginOption, // treatAsCommonjs currently returns a Plugin_2 instance
         nodePolyfills({
           exclude: ['crypto']
         }),
+
+        // We need to "undefine" `define` which is set by requirejs loaded in index.html
+        treatAsCommonjs(),
+
         // In order to avoid multiple definitions of the global styles we import via additionalData into every component
         // we also insert a marker, so we can remove the global definitions after processing.
         // The downside of this approach is that @extend does not work because it modifies the global styles, thus we emit
