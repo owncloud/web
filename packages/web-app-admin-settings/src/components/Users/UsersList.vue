@@ -62,6 +62,7 @@
       <template #actions="{ item }">
         <oc-button
           v-oc-tooltip="$gettext('Details')"
+          :aria-label="$gettext('Details')"
           appearance="raw"
           class="oc-mr-xs quick-action-button oc-p-xs users-table-btn-details"
           @click="showDetails(item)"
@@ -70,6 +71,7 @@
         </oc-button>
         <oc-button
           v-oc-tooltip="$gettext('Edit')"
+          :aria-label="$gettext('Edit')"
           appearance="raw"
           class="oc-mr-xs quick-action-button oc-p-xs users-table-btn-edit"
           @click="showEditPanel(item)"

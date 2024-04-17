@@ -14,10 +14,10 @@ exports[`Epub reader app > renders correctly 1`] = `
   </ul>
   <div class="oc-width-1-1 oc-height-1-1">
     <div class="epub-reader-controls oc-flex oc-flex-middle oc-m-s">
-      <div class="epub-reader-controls-font-size oc-flex oc-button-group"><button type="button" class="oc-button oc-rounded oc-button-m oc-button-justify-content-center oc-button-gap-undefined oc-button-passive oc-button-passive-outline epub-reader-controls-font-size-decrease">
+      <div class="epub-reader-controls-font-size oc-flex oc-button-group"><button type="button" aria-label="Decrease font size" class="oc-button oc-rounded oc-button-m oc-button-justify-content-center oc-button-gap-undefined oc-button-passive oc-button-passive-outline epub-reader-controls-font-size-decrease">
           <!--v-if-->
           <!-- @slot Content of the button --> <span class="oc-icon oc-icon-s oc-icon-passive"><!----></span> <span class="oc-icon oc-icon-xs oc-icon-passive"><!----></span>
-        </button> <button type="button" class="oc-button oc-rounded oc-button-m oc-button-justify-content-center oc-button-gap-undefined oc-button-passive oc-button-passive-outline epub-reader-controls-font-size-reset">100%</button> <button type="button" class="oc-button oc-rounded oc-button-m oc-button-justify-content-center oc-button-gap-undefined oc-button-passive oc-button-passive-outline epub-reader-controls-font-size-increase">
+        </button> <button type="button" class="oc-button oc-rounded oc-button-m oc-button-justify-content-center oc-button-gap-undefined oc-button-passive oc-button-passive-outline epub-reader-controls-font-size-reset">100%</button> <button type="button" aria-label="Increase font size" class="oc-button oc-rounded oc-button-m oc-button-justify-content-center oc-button-gap-undefined oc-button-passive oc-button-passive-outline epub-reader-controls-font-size-increase">
           <!--v-if-->
           <!-- @slot Content of the button --> <span class="oc-icon oc-icon-s oc-icon-passive"><!----></span> <span class="oc-icon oc-icon-xs oc-icon-passive"><!----></span>
         </button></div>
@@ -43,12 +43,12 @@ exports[`Epub reader app > renders correctly 1`] = `
       </div>
     </div>
     <div class="oc-flex oc-flex-center oc-width-1-1 oc-height-1-1">
-      <div class="oc-flex oc-flex-middle oc-mx-l"><button type="button" class="oc-button oc-rounded oc-button-m oc-button-justify-content-center oc-button-gap-m oc-button-passive oc-button-passive-raw epub-reader-navigate-left">
+      <div class="oc-flex oc-flex-middle oc-mx-l"><button type="button" aria-label="Navigate to previous page" class="oc-button oc-rounded oc-button-m oc-button-justify-content-center oc-button-gap-m oc-button-passive oc-button-passive-raw epub-reader-navigate-left">
           <!--v-if-->
           <!-- @slot Content of the button --> <span class="oc-icon oc-icon-xl oc-icon-passive"><!----></span>
         </button></div>
       <div id="reader" class="oc-flex oc-flex-center"></div>
-      <div class="oc-flex oc-flex-middle oc-mx-l"><button type="button" class="oc-button oc-rounded oc-button-m oc-button-justify-content-center oc-button-gap-m oc-button-passive oc-button-passive-raw epub-reader-navigate-right">
+      <div class="oc-flex oc-flex-middle oc-mx-l"><button type="button" aria-label="Navigate to next page" class="oc-button oc-rounded oc-button-m oc-button-justify-content-center oc-button-gap-m oc-button-passive oc-button-passive-raw epub-reader-navigate-right">
           <!--v-if-->
           <!-- @slot Content of the button --> <span class="oc-icon oc-icon-xl oc-icon-passive"><!----></span>
         </button></div>

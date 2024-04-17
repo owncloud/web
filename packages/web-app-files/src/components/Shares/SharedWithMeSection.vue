@@ -40,6 +40,7 @@
           <oc-icon
             v-if="resource.syncEnabled"
             v-oc-tooltip="$gettext('Synced with your devices')"
+            :accessible-label="$gettext('Synced with your devices')"
             name="loop-right"
             class="sync-enabled"
           />

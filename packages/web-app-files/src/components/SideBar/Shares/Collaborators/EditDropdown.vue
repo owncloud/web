@@ -4,6 +4,7 @@
       <oc-button
         :id="editShareBtnId"
         class="collaborator-edit-dropdown-options-btn"
+        :aria-label="isLocked ? dropButtonTooltip : $gettext('Open context menu to edit share')"
         appearance="raw"
         :disabled="isLocked"
       >
