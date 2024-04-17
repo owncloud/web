@@ -732,6 +732,7 @@ export const registerSSEEventListeners = ({
       topic: MESSAGE_TYPE.ITEM_MOVED,
       resourcesStore,
       spacesStore,
+      userStore,
       msg,
       clientService
     })

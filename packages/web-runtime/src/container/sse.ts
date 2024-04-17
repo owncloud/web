@@ -355,12 +355,14 @@ export const onSSEItemMovedEvent = async ({
   topic,
   resourcesStore,
   spacesStore,
+  userStore,
   msg,
   clientService
 }: {
   topic: string
   resourcesStore: ResourcesStore
   spacesStore: SpacesStore
+  userStore: UserStore
   msg: MessageEvent
   clientService: ClientService
 }) => {
@@ -400,6 +402,8 @@ export const onSSEItemMovedEvent = async ({
       field: 'indicators',
       value: getIndicators({
         resource,
+        space,
+        user: userStore.user,
         ancestorMetaData: resourcesStore.ancestorMetaData
       })
     })
