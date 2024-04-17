@@ -1,4 +1,4 @@
-import { defineConfig, PluginOption, UserConfig, ViteDevServer } from 'vite'
+import { defineConfig, UserConfig, ViteDevServer } from 'vite'
 import { mergeConfig, searchForWorkspaceRoot } from 'vite'
 import vue from '@vitejs/plugin-vue'
 import EnvironmentPlugin from 'vite-plugin-environment'
