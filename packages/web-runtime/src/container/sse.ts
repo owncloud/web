@@ -6,7 +6,8 @@ import {
   MessageStore,
   PreviewService,
   ResourcesStore,
-  SpacesStore
+  SpacesStore,
+  UserStore
 } from '@ownclouders/web-pkg'
 import PQueue from 'p-queue'
 import { extractNodeId, extractStorageId } from '@ownclouders/web-client'
@@ -110,12 +111,14 @@ export const onSSEFileLockingEvent = async ({
   topic,
   resourcesStore,
   spacesStore,
+  userStore,
   msg,
   clientService
 }: {
   topic: string
   resourcesStore: ResourcesStore
   spacesStore: SpacesStore
+  userStore: UserStore
   msg: MessageEvent
   clientService: ClientService
 }) => {
@@ -137,8 +140,10 @@ export const onSSEFileLockingEvent = async ({
       id: updatedResource.id,
       field: 'indicators',
       value: getIndicators({
+        space,
         resource: updatedResource,
-        ancestorMetaData: resourcesStore.ancestorMetaData
+        ancestorMetaData: resourcesStore.ancestorMetaData,
+        user: userStore.user
       })
     })
   } catch (e) {
@@ -284,12 +289,14 @@ export const onSSEItemRestoredEvent = async ({
   topic,
   resourcesStore,
   spacesStore,
+  userStore,
   msg,
   clientService
 }: {
   topic: string
   resourcesStore: ResourcesStore
   spacesStore: SpacesStore
+  userStore: UserStore
   msg: MessageEvent
   clientService: ClientService
 }) => {
@@ -327,8 +334,10 @@ export const onSSEItemRestoredEvent = async ({
       id: resource.id,
       field: 'indicators',
       value: getIndicators({
+        space,
         resource,
-        ancestorMetaData: resourcesStore.ancestorMetaData
+        ancestorMetaData: resourcesStore.ancestorMetaData,
+        user: userStore.user
       })
     })
   } catch (e) {

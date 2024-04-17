@@ -635,6 +635,7 @@ export const registerSSEEventListeners = ({
   clientService,
   previewService,
   configStore,
+  userStore,
   router
 }: {
   language: Language
@@ -644,6 +645,7 @@ export const registerSSEEventListeners = ({
   clientService: ClientService
   previewService: PreviewService
   configStore: ConfigStore
+  userStore: UserStore
   router: Router
 }): void => {
   const resourceQueue = new PQueue({
@@ -685,6 +687,7 @@ export const registerSSEEventListeners = ({
       topic: MESSAGE_TYPE.FILE_LOCKED,
       resourcesStore,
       spacesStore,
+      userStore,
       msg,
       clientService
     })
@@ -695,6 +698,7 @@ export const registerSSEEventListeners = ({
       topic: MESSAGE_TYPE.FILE_UNLOCKED,
       resourcesStore,
       spacesStore,
+      userStore,
       msg,
       clientService
     })
@@ -716,6 +720,7 @@ export const registerSSEEventListeners = ({
       topic: MESSAGE_TYPE.ITEM_RESTORED,
       resourcesStore,
       spacesStore,
+      userStore,
       msg,
       clientService
     })

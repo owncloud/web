@@ -264,6 +264,15 @@ export default defineComponent({
       return upperFirst(displayDate)
     })
 
+    const shareIndicators = computed(() => {
+      return getIndicators({
+        space: unref(space),
+        resource: unref(resource),
+        ancestorMetaData: unref(ancestorMetaData),
+        user: unref(user)
+      })
+    })
+
     watch(
       resource,
       () => {
@@ -284,13 +293,13 @@ export default defineComponent({
       hasDeletionDate,
       capitalizedDeletionDate,
       isPreviewLoading,
-      ancestorMetaData,
       sharedAncestor,
       sharedAncestorRoute,
       formatDateRelative,
       contextualHelper,
       showWebDavDetails,
-      versions
+      versions,
+      shareIndicators
     }
   },
   computed: {
@@ -363,9 +372,6 @@ export default defineComponent({
     },
     ownedByCurrentUser() {
       return this.resource.owner?.id === this.user?.id
-    },
-    shareIndicators() {
-      return getIndicators({ resource: this.resource, ancestorMetaData: this.ancestorMetaData })
     },
     sharedByDisplayNames() {
       if (!isShareResource(this.resource)) {

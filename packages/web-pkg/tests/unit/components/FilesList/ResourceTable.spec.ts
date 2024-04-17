@@ -5,6 +5,7 @@ import {
   IncomingShareResource,
   OutgoingShareResource,
   Resource,
+  ResourceIndicator,
   ShareTypes,
   SpaceResource
 } from '@ownclouders/web-client'
@@ -81,18 +82,15 @@ const indicators = [
   {
     id: 'files-sharing',
     label: 'Shared with other people',
-    visible: true,
     icon: 'group',
-    handler: (resource, indicatorId) =>
-      alert(`Resource: ${resource.name}, indicator: ${indicatorId}`)
+    handler: (resource) => alert(`Resource: ${resource.name}`)
   },
   {
     id: 'file-link',
     label: 'Shared via link',
-    visible: true,
     icon: 'link'
   }
-]
+] as ResourceIndicator[]
 
 const resourcesWithAllFields = [
   {

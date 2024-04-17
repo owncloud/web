@@ -78,7 +78,7 @@ export const useFileActionsPaste = () => {
 
       return Promise.all(loadingResources).then(() => {
         resourcesStore.upsertResources(fetchedResources)
-        resourcesStore.loadIndicators(unref(currentFolder).path)
+        resourcesStore.loadIndicators(targetSpace, unref(currentFolder).path)
       })
     })
   }

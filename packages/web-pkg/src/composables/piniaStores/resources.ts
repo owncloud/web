@@ -174,12 +174,14 @@ export const useResourcesStore = defineStore('resources', () => {
     window.localStorage.setItem('oc_webDavDetailsShown', value.toString())
   }
 
-  const loadIndicators = (path: string) => {
+  const loadIndicators = (space: SpaceResource, path: string) => {
     const files = unref(resources).filter((f) => f.path.startsWith(path))
     for (const resource of files) {
       const indicators = getIndicators({
+        space,
         resource,
-        ancestorMetaData: unref(ancestorMetaData)
+        ancestorMetaData: unref(ancestorMetaData),
+        user: userStore.user
       })
       if (!indicators.length && !resource.indicators.length) {
         continue

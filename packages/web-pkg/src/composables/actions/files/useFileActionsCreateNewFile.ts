@@ -75,7 +75,12 @@ export const useFileActionsCreateNewFile = ({ space }: { space?: SpaceResource }
 
   const openFile = (resource: Resource, appFileExtension: ApplicationFileExtension) => {
     if (loadIndicatorsForNewFile.value) {
-      resource.indicators = getIndicators({ resource, ancestorMetaData: unref(ancestorMetaData) })
+      resource.indicators = getIndicators({
+        space,
+        resource,
+        ancestorMetaData: unref(ancestorMetaData),
+        user: userStore.user
+      })
     }
 
     resourcesStore.upsertResource(resource)

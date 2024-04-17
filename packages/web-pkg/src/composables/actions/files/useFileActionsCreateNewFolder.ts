@@ -6,11 +6,15 @@ import { FileAction } from '../../../'
 import { useGettext } from 'vue3-gettext'
 import { resolveFileNameDuplicate } from '../../../helpers/resource'
 import { join } from 'path'
-import { WebDAV } from '@ownclouders/web-client/webdav'
 import { isLocationSpacesActive } from '../../../router'
 import { getIndicators } from '../../../helpers/statusIndicators'
 import { useScrollTo } from '../../scrollTo'
-import { useMessages, useModals, useResourcesStore } from '../../../composables/piniaStores'
+import {
+  useMessages,
+  useModals,
+  useResourcesStore,
+  useUserStore
+} from '../../../composables/piniaStores'
 import { storeToRefs } from 'pinia'
 
 export const useFileActionsCreateNewFolder = ({ space }: { space?: SpaceResource } = {}) => {
@@ -19,6 +23,7 @@ export const useFileActionsCreateNewFolder = ({ space }: { space?: SpaceResource
   const { dispatchModal } = useModals()
   const { $gettext } = useGettext()
   const { scrollToResource } = useScrollTo()
+  const userRoleStore = useUserStore()
 
   const resourcesStore = useResourcesStore()
   const { resources, currentFolder, ancestorMetaData } = storeToRefs(resourcesStore)
@@ -60,12 +65,15 @@ export const useFileActionsCreateNewFolder = ({ space }: { space?: SpaceResource
 
     try {
       const path = join(unref(currentFolder).path, folderName)
-      const resource = await (clientService.webdav as WebDAV).createFolder(space, {
-        path
-      })
+      const resource = await clientService.webdav.createFolder(space, { path })
 
       if (unref(loadIndicatorsForNewFile)) {
-        resource.indicators = getIndicators({ resource, ancestorMetaData: unref(ancestorMetaData) })
+        resource.indicators = getIndicators({
+          space,
+          resource,
+          ancestorMetaData: unref(ancestorMetaData),
+          user: userRoleStore.user
+        })
       }
 
       resourcesStore.upsertResource(resource)
