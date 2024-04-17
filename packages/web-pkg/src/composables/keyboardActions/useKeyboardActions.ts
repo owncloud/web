@@ -95,13 +95,13 @@ export const useKeyboardActions = (options?: KeyboardActionsOptions): KeyboardAc
     const hasDisallowedModifier = (event: KeyboardEvent, disallowedModifierKeys: ModifierKey[]) =>
       disallowedModifierKeys.some((key) => event[key])
 
+    if (hasDisallowedModifier(event, disallowedModifierKeys)) {
+      return
+    }
+
     unref(actions)
       .filter((action) => {
-        return (
-          action.primary === key &&
-          action.modifier === modifier &&
-          !hasDisallowedModifier(event, disallowedModifierKeys)
-        )
+        return action.primary === key && action.modifier === modifier
       })
       .forEach((action) => {
         event.preventDefault()
