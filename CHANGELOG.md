@@ -9,6 +9,7 @@ Summary
 -------
 
 * Change - Disable opening files in embed mode: [#10786](https://github.com/owncloud/web/pull/10786)
+* Enhancement - Add SSE event for moving: [#10798](https://github.com/owncloud/web/pull/10798)
 
 Details
 -------
@@ -20,6 +21,15 @@ Details
 
    https://github.com/owncloud/web/issues/10635
    https://github.com/owncloud/web/pull/10786
+
+* Enhancement - Add SSE event for moving: [#10798](https://github.com/owncloud/web/pull/10798)
+
+   We've added Server-Sent Events (SSE) for moving resources. When the user moves
+   files or folders, everyone with access to them instantly sees the changes across
+   their browsers and devices.
+
+   https://github.com/owncloud/web/issues/10780
+   https://github.com/owncloud/web/pull/10798
 
 Changelog for ownCloud Web [9.0.0] (2024-04-16)
 =======================================
