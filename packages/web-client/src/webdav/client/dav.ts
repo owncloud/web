@@ -14,12 +14,12 @@ import { WebDavResponseResource } from '../../helpers'
 import { HttpError } from '../../errors'
 import { AxiosInstance } from 'axios'
 
-interface DAVOptions {
+export interface DAVOptions {
   axiosClient: AxiosInstance
   baseUrl: string
 }
 
-interface DavResult {
+export interface DavResult {
   body: WebDavResponseResource[] | undefined
   status: number
   result: Response
