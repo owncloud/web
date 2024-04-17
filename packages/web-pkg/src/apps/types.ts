@@ -14,7 +14,7 @@ export interface AppReadyHookArgs {
 
 export interface AppNavigationItem {
   isActive?: () => boolean
-  activeFor?: { name?: string; path?: string }[]
+  activeFor?: () => { name?: string; path?: string }[]
   isVisible?: () => boolean
   fillType?: IconFillType
   icon?: string

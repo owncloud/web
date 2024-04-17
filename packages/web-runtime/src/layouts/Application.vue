@@ -154,7 +154,8 @@ export default defineComponent({
           let active = typeof item.isActive !== 'function' || item.isActive()
 
           if (active) {
-            active = [item.route, ...(item.activeFor || [])].filter(Boolean).some((currentItem) => {
+            const activeFor = typeof item.activeFor === 'function' ? item.activeFor() : []
+            active = [item.route, ...activeFor].filter(Boolean).some((currentItem) => {
               try {
                 const comparativeHref = router.resolve(currentItem).href
                 return currentHref.startsWith(comparativeHref)
