@@ -19,6 +19,12 @@
     <script src="js/require.js?<%= data.compilationTimestamp %>"></script>
     <% } %>
     <script type="module" src="./packages/web-runtime/src/index.ts"></script>
+    <script type="module">
+      // Fix Buffer usage in production (!)
+      // If single file downloads work in production after removing this, it can probably be removed permanently
+      import { Buffer } from "buffer";
+      window.Buffer = Buffer;
+    </script>
     <link rel="stylesheet" href="./packages/design-system/src/styles/stylesWrapper.scss" />
     <style>
       html,

@@ -178,10 +178,7 @@ export default defineConfig(({ mode, command }) => {
       },
       plugins: [
         nodePolyfills({
-          exclude: ['crypto'],
-          globals: {
-            Buffer: true
-          }
+          exclude: ['crypto']
         }),
 
         // We need to "undefine" `define` which is set by requirejs loaded in index.html
