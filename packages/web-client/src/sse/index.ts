@@ -9,6 +9,7 @@ export enum MESSAGE_TYPE {
   ITEM_RENAMED = 'item-renamed',
   ITEM_TRASHED = 'item-trashed',
   ITEM_RESTORED = 'item-restored',
+  ITEM_MOVED = 'item-moved',
   FOLDER_CREATED = 'folder-created'
 }
 
