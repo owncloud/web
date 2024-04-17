@@ -1,20 +1,14 @@
 import { join, resolve } from 'path'
 import { defineConfig, searchForWorkspaceRoot } from 'vite'
 import dts from 'vite-plugin-dts'
+import { nodePolyfills } from 'vite-plugin-node-polyfills'
 
 const projectRootDir = searchForWorkspaceRoot(process.cwd())
 
 export default defineConfig({
   resolve: {
     alias: {
-      path: 'rollup-plugin-node-polyfills/polyfills/path',
-      crypto: join(projectRootDir, 'polyfills/crypto.js'),
-      stream: 'rollup-plugin-node-polyfills/polyfills/stream',
-      string_decoder: 'rollup-plugin-node-polyfills/polyfills/string-decoder',
-      util: 'rollup-plugin-node-polyfills/polyfills/util',
-      buffer: 'rollup-plugin-node-polyfills/polyfills/buffer-es6',
-      process: 'rollup-plugin-node-polyfills/polyfills/process-es6',
-      events: 'rollup-plugin-node-polyfills/polyfills/events'
+      crypto: join(projectRootDir, 'polyfills/crypto.js')
     }
   },
   build: {
@@ -29,5 +23,10 @@ export default defineConfig({
       }
     }
   },
-  plugins: [dts()]
+  plugins: [
+    nodePolyfills({
+      exclude: ['crypto']
+    }),
+    dts()
+  ]
 })

@@ -7,9 +7,6 @@
     <meta http-equiv="x-ua-compatible" content="IE=edge" />
 
     <title><%= data.title %></title>
-    <script>
-      window.global = window
-    </script>
     <link rel="manifest" href="manifest.json" crossorigin="use-credentials" />
     <% if (data.buildConfig.cdn) { %>
     <script src="//cdnjs.cloudflare.com/ajax/libs/require.js/2.3.6/require.min.js"></script>
@@ -22,12 +19,6 @@
     <script src="js/require.js?<%= data.compilationTimestamp %>"></script>
     <% } %>
     <script type="module" src="./packages/web-runtime/src/index.ts"></script>
-    <script type="module">
-      // Fix Buffer usage in production (!)
-      // If single file downloads work in production after removing this, it can probably be removed permanently
-      import { Buffer } from 'buffer'
-      window.Buffer = Buffer
-    </script>
     <link rel="stylesheet" href="./packages/design-system/src/styles/stylesWrapper.scss" />
     <style>
       html,

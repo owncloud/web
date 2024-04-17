@@ -15,7 +15,6 @@
   },
   "dependencies": {
     "@vitejs/plugin-vue": "^4.0.0",
-    "rollup-plugin-node-polyfills": "^0.2.1",
     "rollup-plugin-serve": "^2.0.2"
   },
   "peerDependencies": {

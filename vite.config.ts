@@ -6,6 +6,7 @@ import { viteStaticCopy } from 'vite-plugin-static-copy'
 import { treatAsCommonjs } from 'vite-plugin-treat-umd-as-commonjs'
 import visualizer from 'rollup-plugin-visualizer'
 import compression from 'rollup-plugin-gzip'
+import { nodePolyfills } from 'vite-plugin-node-polyfills'
 
 import ejs from 'ejs'
 import { basename, join } from 'path'
@@ -172,22 +173,15 @@ export default defineConfig(({ mode, command }) => {
       resolve: {
         dedupe: ['vue3-gettext'],
         alias: {
-          crypto: join(projectRootDir, 'polyfills/crypto.js'),
-          buffer: 'rollup-plugin-node-polyfills/polyfills/buffer-es6',
-          path: 'rollup-plugin-node-polyfills/polyfills/path',
-          util: 'rollup-plugin-node-polyfills/polyfills/util',
-
-          // xml-js
-          stream: 'rollup-plugin-node-polyfills/polyfills/stream',
-          string_decoder: 'rollup-plugin-node-polyfills/polyfills/string-decoder',
-          process: 'rollup-plugin-node-polyfills/polyfills/process-es6',
-          events: 'rollup-plugin-node-polyfills/polyfills/events'
+          crypto: join(projectRootDir, 'polyfills/crypto.js')
         }
       },
       plugins: [
         // We need to "undefine" `define` which is set by requirejs loaded in index.html
         treatAsCommonjs() as any as PluginOption, // treatAsCommonjs currently returns a Plugin_2 instance
-
+        nodePolyfills({
+          exclude: ['crypto']
+        }),
         // In order to avoid multiple definitions of the global styles we import via additionalData into every component
         // we also insert a marker, so we can remove the global definitions after processing.
         // The downside of this approach is that @extend does not work because it modifies the global styles, thus we emit
