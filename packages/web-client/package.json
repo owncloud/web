@@ -81,12 +81,12 @@
     "postpublish": "rm -rf ./package"
   },
   "devDependencies": {
+    "clean-publish": "4.2.0",
     "vite-plugin-dts": "3.6.0"
   },
   "peerDependencies": {
     "@casl/ability": "^6.3.3",
     "axios": "1.6.8",
-    "clean-publish": "4.2.0",
     "fast-xml-parser": "4.3.3",
     "lodash-es": "^4.17.21",
     "luxon": "3.2.1",

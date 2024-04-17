@@ -928,9 +928,6 @@ importers:
       axios:
         specifier: 1.6.8
         version: 1.6.8
-      clean-publish:
-        specifier: 4.2.0
-        version: 4.2.0
       fast-xml-parser:
         specifier: 4.3.3
         version: 4.3.3
@@ -950,6 +947,9 @@ importers:
         specifier: 3.22.4
         version: 3.22.4
     devDependencies:
+      clean-publish:
+        specifier: 4.2.0
+        version: 4.2.0
       vite-plugin-dts:
         specifier: 3.6.0
         version: 3.6.0(@types/node@16.18.30)(rollup@4.14.0)(typescript@5.4.5)(vite@5.2.8)
@@ -6883,7 +6883,7 @@ packages:
       fast-glob: 3.3.2
       lilconfig: 2.1.0
       micromatch: 4.0.5
-    dev: false
+    dev: true
 
   /clean-stack@2.2.0:
     resolution: {integrity: sha512-4diC9HaTE+KRAMWhDhrGOECgWZxoevMc5TlkObMqNSsVU62PYzXZ/SMTjzyGAFF1YusgxGcSWTEXBhp0CPwQ1A==}
@@ -11579,6 +11579,7 @@ packages:
   /lilconfig@2.1.0:
     resolution: {integrity: sha512-utWOt/GHzuUxnLKxB6dk81RoOeoNeHgbrXiuGk4yyF5qlRz+iIVWu56E2fqGHFrXz0QNUhLB/8nKqvRH66JKGQ==}
     engines: {node: '>=10'}
+    dev: true
 
   /lines-and-columns@1.1.6:
     resolution: {integrity: sha512-8ZmlJFVK9iCmtLz19HpSsR8HaAMWBT284VMNednLwlIMDP2hJDCIhUp0IZ2xUcZ+Ob6BM0VvCSJwzASDM45NLQ==}
