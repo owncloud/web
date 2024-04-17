@@ -2,9 +2,9 @@
 
 exports[`AppBar component > renders > by default no breadcrumbs, no bulkactions, no sharesnavigation but viewoptions and sidebartoggle 1`] = `
 "<div data-v-aba8ddeb="" id="files-app-bar" class="" displayviewmodeswitch="false" hassidebartoggle="true">
-  <oc-hidden-announcer-stub data-v-aba8ddeb="" announcement="No items selected." level="polite"></oc-hidden-announcer-stub>
   <div data-v-aba8ddeb="" class="files-topbar oc-py-s">
     <h1 data-v-aba8ddeb="" class="oc-invisible-sr">ExampleTitle</h1>
+    <oc-hidden-announcer-stub data-v-aba8ddeb="" announcement="No items selected." level="polite"></oc-hidden-announcer-stub>
     <div data-v-aba8ddeb="" class="oc-flex oc-flex-middle files-app-bar-controls oc-flex-right">
       <!--v-if-->
       <portal-target data-v-aba8ddeb="" name="app.runtime.mobile.nav"></portal-target>
@@ -24,9 +24,9 @@ exports[`AppBar component > renders > by default no breadcrumbs, no bulkactions,
 
 exports[`AppBar component > renders > if given, with content in the actions slot 1`] = `
 "<div data-v-aba8ddeb="" id="files-app-bar" class="" displayviewmodeswitch="false" hassidebartoggle="true">
-  <oc-hidden-announcer-stub data-v-aba8ddeb="" announcement="No items selected." level="polite"></oc-hidden-announcer-stub>
   <div data-v-aba8ddeb="" class="files-topbar oc-py-s">
     <h1 data-v-aba8ddeb="" class="oc-invisible-sr">ExampleTitle</h1>
+    <oc-hidden-announcer-stub data-v-aba8ddeb="" announcement="No items selected." level="polite"></oc-hidden-announcer-stub>
     <div data-v-aba8ddeb="" class="oc-flex oc-flex-middle files-app-bar-controls oc-flex-right">
       <!--v-if-->
       <portal-target data-v-aba8ddeb="" name="app.runtime.mobile.nav"></portal-target>
@@ -46,9 +46,9 @@ exports[`AppBar component > renders > if given, with content in the actions slot
 
 exports[`AppBar component > renders > if given, with content in the content slot 1`] = `
 "<div data-v-aba8ddeb="" id="files-app-bar" class="" displayviewmodeswitch="false" hassidebartoggle="true">
-  <oc-hidden-announcer-stub data-v-aba8ddeb="" announcement="No items selected." level="polite"></oc-hidden-announcer-stub>
   <div data-v-aba8ddeb="" class="files-topbar oc-py-s">
     <h1 data-v-aba8ddeb="" class="oc-invisible-sr">ExampleTitle</h1>
+    <oc-hidden-announcer-stub data-v-aba8ddeb="" announcement="No items selected." level="polite"></oc-hidden-announcer-stub>
     <div data-v-aba8ddeb="" class="oc-flex oc-flex-middle files-app-bar-controls oc-flex-right">
       <!--v-if-->
       <portal-target data-v-aba8ddeb="" name="app.runtime.mobile.nav"></portal-target>
