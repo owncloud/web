@@ -40,6 +40,7 @@
       v-oc-tooltip="$gettext('Clear filter')"
       class="oc-filter-chip-clear oc-px-xs"
       appearance="raw"
+      :aria-label="$gettext('Clear filter')"
       @click="$emit('clearFilter')"
     >
       <oc-icon name="close" size="small" color="var(--oc-color-text-inverse)" />

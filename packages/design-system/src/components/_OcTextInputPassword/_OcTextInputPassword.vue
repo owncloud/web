@@ -16,7 +16,8 @@
     />
     <oc-button
       v-if="password && !disabled"
-      v-oc-tooltip="$gettext('Show password')"
+      v-oc-tooltip="showPassword ? $gettext('Hide password') : $gettext('Show password')"
+      :aria-label="showPassword ? $gettext('Hide password') : $gettext('Show password')"
       class="oc-text-input-show-password-toggle oc-px-s oc-background-default"
       appearance="raw"
       size="small"
@@ -27,6 +28,7 @@
     <oc-button
       v-if="password && !disabled"
       v-oc-tooltip="$gettext('Copy password')"
+      :aria-label="$gettext('Copy password')"
       class="oc-text-input-copy-password-button oc-px-s oc-background-default"
       appearance="raw"
       size="small"
@@ -37,6 +39,7 @@
     <oc-button
       v-if="generatePasswordMethod && !disabled"
       v-oc-tooltip="$gettext('Generate password')"
+      :aria-label="$gettext('Generate password')"
       class="oc-text-input-generate-password-button oc-px-s oc-background-default"
       appearance="raw"
       size="small"
