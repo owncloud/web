@@ -1,4 +1,4 @@
-import { Key, ModifierKey, useKeyboardActions } from '../../../../src/composables/keyboardActions'
+import { Key, Modifier, useKeyboardActions } from '../../../../src/composables/keyboardActions'
 import { getComposableWrapper } from 'web-test-helpers'
 import { ref } from 'vue'
 
@@ -49,12 +49,35 @@ describe('useKeyboardActions', () => {
     expect(counter.value).toBe(1)
 
     // primary key + modifier
-    keyboardActions.bindKeyAction({ modifier: ModifierKey.Ctrl, primary: Key.A }, increment)
+    keyboardActions.bindKeyAction({ modifier: Modifier.Ctrl, primary: Key.A }, increment)
 
     const eventWithModifier = new KeyboardEvent('keydown', { key: 'a', ctrlKey: true })
     document.dispatchEvent(eventWithModifier)
 
     expect(counter.value).toBe(2)
+
+    wrapper.unmount()
+  })
+
+  it('should not execute callback on key event if disallowed modifier is present', () => {
+    const wrapper = getWrapper()
+    const { keyboardActions } = wrapper.vm
+    const counter = ref(0)
+
+    const increment = () => {
+      counter.value += 1
+    }
+
+    keyboardActions.bindKeyAction({ modifier: Modifier.Ctrl, primary: Key.A }, increment)
+
+    const eventWithModifier = new KeyboardEvent('keydown', {
+      key: 'a',
+      ctrlKey: true,
+      shiftKey: true
+    })
+    document.dispatchEvent(eventWithModifier)
+
+    expect(counter.value).toBe(0)
 
     wrapper.unmount()
   })

@@ -62,7 +62,7 @@ import {
 import {
   Action,
   ActionOptions,
-  ModifierKey,
+  Modifier,
   Key,
   useAppMeta,
   useGetResourceContext,
@@ -404,7 +404,7 @@ export default defineComponent({
     })
 
     const { bindKeyAction } = useKeyboardActions({ skipDisabledKeyBindingsCheck: true })
-    bindKeyAction({ modifier: ModifierKey.Ctrl, primary: Key.S }, () => {
+    bindKeyAction({ modifier: Modifier.Ctrl, primary: Key.S }, () => {
       if (!unref(isDirty)) {
         return
       }

@@ -20,7 +20,7 @@ export enum Key {
   Esc = 'Escape'
 }
 
-export enum ModifierKey {
+export enum Modifier {
   Ctrl = 'Control',
   Shift = 'Shift'
 }
@@ -30,13 +30,13 @@ export interface KeyboardActions {
   selectionCursor: Ref<number>
   removeKeyAction: (id: string) => void
   resetSelectionCursor: () => void
-  bindKeyAction: (keys: { primary: Key; modifier?: ModifierKey }, callback: () => void) => string
+  bindKeyAction: (keys: { primary: Key; modifier?: Modifier }, callback: () => void) => string
 }
 
 export interface KeyboardAction {
   id: string
   primary: Key
-  modifier: ModifierKey | null
+  modifier: Modifier | null
   callback: (event: KeyboardEvent) => void
 }
 
@@ -78,12 +78,25 @@ export const useKeyboardActions = (options?: KeyboardActionsOptions): KeyboardAc
       return
     }
 
+    type ModifierKey = 'altKey' | 'ctrlKey' | 'metaKey' | 'shiftKey'
+
     const { key, ctrlKey, metaKey, shiftKey } = event
     let modifier = null
+    const disallowedModifierKeys: ModifierKey[] = []
+
     if (metaKey || ctrlKey) {
-      modifier = ModifierKey.Ctrl
+      modifier = Modifier.Ctrl
+      disallowedModifierKeys.push('altKey', 'shiftKey')
     } else if (shiftKey) {
-      modifier = ModifierKey.Shift
+      modifier = Modifier.Shift
+      disallowedModifierKeys.push('altKey', 'ctrlKey', 'metaKey')
+    }
+
+    const hasDisallowedModifier = (event: KeyboardEvent, disallowedModifierKeys: ModifierKey[]) =>
+      disallowedModifierKeys.some((key) => event[key])
+
+    if (hasDisallowedModifier(event, disallowedModifierKeys)) {
+      return
     }
 
     unref(actions)
@@ -96,7 +109,7 @@ export const useKeyboardActions = (options?: KeyboardActionsOptions): KeyboardAc
       })
   }
   const bindKeyAction = (
-    keys: { primary: Key; modifier?: ModifierKey },
+    keys: { primary: Key; modifier?: Modifier },
     callback: () => void
   ): string => {
     const id = uuid.v4()

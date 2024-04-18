@@ -1,7 +1,7 @@
 import {
   Key,
   KeyboardActions,
-  ModifierKey,
+  Modifier,
   useClipboardStore,
   useResourcesStore
 } from '@ownclouders/web-pkg'
@@ -16,15 +16,15 @@ export const useKeyboardTableSpaceActions = (keyActions: KeyboardActions, space:
   const { actions: pasteFileActions } = useFileActionsPaste()
   const pasteFileAction = unref(pasteFileActions)[0].handler
 
-  keyActions.bindKeyAction({ modifier: ModifierKey.Ctrl, primary: Key.C }, () => {
+  keyActions.bindKeyAction({ modifier: Modifier.Ctrl, primary: Key.C }, () => {
     copyResources(resourcesStore.selectedResources)
   })
 
-  keyActions.bindKeyAction({ modifier: ModifierKey.Ctrl, primary: Key.V }, () => {
+  keyActions.bindKeyAction({ modifier: Modifier.Ctrl, primary: Key.V }, () => {
     pasteFileAction({ space: space })
   })
 
-  keyActions.bindKeyAction({ modifier: ModifierKey.Ctrl, primary: Key.X }, () => {
+  keyActions.bindKeyAction({ modifier: Modifier.Ctrl, primary: Key.X }, () => {
     cutResources(resourcesStore.selectedResources)
   })
 }
