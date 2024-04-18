@@ -6,6 +6,9 @@ Feature: web can be navigated through urls
       | id    |
       | Alice |
       | Brian |
+    And "Admin" assigns following roles to the users using API
+      | id    | role        |
+      | Alice | Space Admin |
     And "Alice" logs in
     And "Alice" creates the following folders in personal space using API
       | name   |
@@ -20,9 +23,6 @@ Feature: web can be navigated through urls
     And "Alice" creates the following files into personal space using API
       | pathToFile | content     |
       | lorem.txt  | new content |
-    And "Admin" assigns following roles to the users using API
-      | id    | role        |
-      | Alice | Space Admin |
     And "Alice" creates the following project space using API
       | name        | id     |
       | Development | team.1 |
