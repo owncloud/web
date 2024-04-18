@@ -529,6 +529,10 @@ export default defineComponent({
 #new-collaborators-form-create-button {
   padding-left: 30px;
   padding-right: 30px;
+
+  .oc-spinner {
+    margin-left: -0.5rem;
+  }
 }
 
 .new-collaborators-form-cern > .cern-files-share-invite-input {

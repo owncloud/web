@@ -66,7 +66,7 @@
               v-if="!hideConfirmButton"
               class="oc-modal-body-actions-confirm oc-ml-s"
               variation="primary"
-              appearance="filled"
+              :appearance="buttonConfirmAppearance"
               :disabled="isLoading || buttonConfirmDisabled || !!inputError"
               :show-spinner="showSpinner"
               @click="confirm"
@@ -300,27 +300,37 @@ export default defineComponent({
   emits: ['cancel', 'confirm', 'input'],
   setup(props) {
     const showSpinner = ref(false)
+    const buttonConfirmAppearance = ref('filled')
+
+    const resetLoadingState = () => {
+      showSpinner.value = false
+      buttonConfirmAppearance.value = 'filled'
+    }
+
+    const setLoadingState = () => {
+      showSpinner.value = true
+      buttonConfirmAppearance.value = 'outline'
+    }
 
     watch(
       () => props.isLoading,
       () => {
         if (!props.isLoading) {
-          showSpinner.value = false
-          return
+          return resetLoadingState()
         }
         setTimeout(() => {
           if (!props.isLoading) {
-            showSpinner.value = false
-            return
+            return resetLoadingState()
           }
-          showSpinner.value = true
+          setLoadingState()
         }, 700)
       },
       { immediate: true }
     )
 
     return {
-      showSpinner
+      showSpinner,
+      buttonConfirmAppearance
     }
   },
   data() {
@@ -534,40 +544,40 @@ export default defineComponent({
 ```js
 <div>
   <oc-modal
-      icon="information"
-      title="Accept terms of use"
-      message="Do you accept our terms of use?"
-      button-cancel-text="Decline"
-      button-confirm-text="Accept"
-      class="oc-mb-l oc-position-relative"
+    icon="information"
+    title="Accept terms of use"
+    message="Do you accept our terms of use?"
+    button-cancel-text="Decline"
+    button-confirm-text="Accept"
+    class="oc-mb-l oc-position-relative"
   />
 </div>
 ```
 ```js
 <div>
   <oc-modal
-      variation="danger"
-      icon="alert"
-      title="Delete file lorem.txt"
-      message="Are you sure you want to delete this file? All its content will be permanently removed. This action cannot be undone."
-      button-cancel-text="Cancel"
-      button-confirm-text="Delete"
-      class="oc-mb-l oc-position-relative"
+    variation="danger"
+    icon="alert"
+    title="Delete file lorem.txt"
+    message="Are you sure you want to delete this file? All its content will be permanently removed. This action cannot be undone."
+    button-cancel-text="Cancel"
+    button-confirm-text="Delete"
+    class="oc-mb-l oc-position-relative"
   />
 </div>
 ```
 ```js
 <div>
   <oc-modal
-      title="Create new folder"
-      button-cancel-text="Cancel"
-      button-confirm-text="Create"
-      :has-input="true"
-      input-value="New folder"
-      input-label="Folder name"
-      input-description="Enter a folder name"
-      input-error="This name is already taken, please choose another one"
-      class="oc-mb-l oc-position-relative"
+    title="Create new folder"
+    button-cancel-text="Cancel"
+    button-confirm-text="Create"
+    :has-input="true"
+    input-value="New folder"
+    input-label="Folder name"
+    input-description="Enter a folder name"
+    input-error="This name is already taken, please choose another one"
+    class="oc-mb-l oc-position-relative"
   />
 </div>
 ```
@@ -575,15 +585,15 @@ export default defineComponent({
 ```js
 <div>
   <oc-modal
-      title="Rename file lorem.txt"
-      button-cancel-text="Cancel"
-      button-confirm-text="Rename"
-      class="oc-position-relative"
+    title="Rename file lorem.txt"
+    button-cancel-text="Cancel"
+    button-confirm-text="Rename"
+    class="oc-position-relative"
   >
     <template v-slot:content>
       <oc-text-input
-          value="lorem.txt"
-          label="File name"
+        value="lorem.txt"
+        label="File name"
       />
     </template>
   </oc-modal>
@@ -593,12 +603,12 @@ export default defineComponent({
 ```js
 <div>
   <oc-modal
-      icon="information"
-      title="Accept terms of use"
-      message="Do you accept our terms of use?"
-      button-cancel-text="Decline"
-      button-confirm-text="Accept"
-      class="oc-mb-l oc-position-relative"
+    icon="information"
+    title="Accept terms of use"
+    message="Do you accept our terms of use?"
+    button-cancel-text="Decline"
+    button-confirm-text="Accept"
+    class="oc-mb-l oc-position-relative"
   />
 </div>
 ```
@@ -606,12 +616,12 @@ export default defineComponent({
 ```js
 <div>
   <oc-modal
-      icon="information"
-      title="Accept terms of use"
-      message="Do you accept our terms of use?"
-      button-cancel-text="Decline"
-      button-confirm-text="Accept"
-      class="oc-mb-l oc-position-relative"
+    icon="information"
+    title="Accept terms of use"
+    message="Do you accept our terms of use?"
+    button-cancel-text="Decline"
+    button-confirm-text="Accept"
+    class="oc-mb-l oc-position-relative"
   />
 </div>
 ```
@@ -619,14 +629,14 @@ export default defineComponent({
 ```js
 <div>
   <oc-modal
-      icon="information"
-      title="Accept terms of use"
-      message="Do you accept our terms of use?"
-      button-cancel-text="Decline"
-      button-confirm-text="Accept"
-      contextual-helper-label="I need more information?"
-      :contextual-helper-data="{ title: 'This is more information' }"
-      class="oc-mb-l oc-position-relative"
+    icon="information"
+    title="Accept terms of use"
+    message="Do you accept our terms of use?"
+    button-cancel-text="Decline"
+    button-confirm-text="Accept"
+    contextual-helper-label="I need more information?"
+    :contextual-helper-data="{ title: 'This is more information' }"
+    class="oc-mb-l oc-position-relative"
   />
 </div>
 ```
@@ -634,12 +644,12 @@ export default defineComponent({
 ```js
 <div>
   <oc-modal
-      icon="info"
-      title="Accept terms of use"
-      message="Do you accept our terms of use?"
-      button-cancel-text="Decline"
-      button-confirm-text="Accept"
-      class="oc-mb-l oc-position-relative"
+    icon="info"
+    title="Accept terms of use"
+    message="Do you accept our terms of use?"
+    button-cancel-text="Decline"
+    button-confirm-text="Accept"
+    class="oc-mb-l oc-position-relative"
   />
 </div>
 ```

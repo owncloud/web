@@ -104,12 +104,18 @@ describe('OcModal', () => {
     expect(
       wrapper.findComponent<typeof OcButton>('.oc-modal-body-actions-confirm').props('showSpinner')
     ).toBeFalsy()
+    expect(
+      wrapper.findComponent<typeof OcButton>('.oc-modal-body-actions-confirm').props('appearance')
+    ).toEqual('filled')
 
     await waitForSpinnerToShow()
 
     expect(
       wrapper.findComponent<typeof OcButton>('.oc-modal-body-actions-confirm').props('showSpinner')
     ).toBeTruthy()
+    expect(
+      wrapper.findComponent<typeof OcButton>('.oc-modal-body-actions-confirm').props('appearance')
+    ).toEqual('outline')
     expect(wrapper.html()).toMatchSnapshot()
   })
 })
