@@ -13,7 +13,7 @@
         <oc-button
           v-oc-tooltip="$gettext('Close')"
           appearance="raw"
-          :aria-label="$gettext('Close tooltip')"
+          :aria-label="$gettext('Close')"
         >
           <oc-icon name="close" fill-type="line" size="medium" variation="inherit" />
         </oc-button>

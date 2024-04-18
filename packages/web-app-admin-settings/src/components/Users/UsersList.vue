@@ -61,8 +61,8 @@
       </template>
       <template #actions="{ item }">
         <oc-button
-          v-oc-tooltip="$gettext('Details')"
-          :aria-label="$gettext('Details')"
+          v-oc-tooltip="$gettext('Show details')"
+          :aria-label="$gettext('Show details')"
           appearance="raw"
           class="oc-mr-xs quick-action-button oc-p-xs users-table-btn-details"
           @click="showDetails(item)"

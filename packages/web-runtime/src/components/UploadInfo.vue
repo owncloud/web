@@ -4,7 +4,6 @@
       class="upload-info-title oc-flex oc-flex-between oc-flex-middle oc-px-m oc-py-s oc-rounded-top"
     >
       <p v-oc-tooltip="uploadDetails" class="oc-my-xs" v-text="uploadInfoTitle" />
-      <!-- Here -->
       <oc-button
         v-if="!filesInProgressCount"
         id="close-upload-info-btn"
@@ -74,7 +73,6 @@
         >
           <oc-icon :name="uploadsPaused ? 'play-circle' : 'pause-circle'" fill-type="line" />
         </oc-button>
-        <!-- Here -->
         <oc-button
           v-if="runningUploads && !inPreparation && !inFinalization && !disableActions"
           id="cancel-upload-info-btn"
