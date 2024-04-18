@@ -312,9 +312,8 @@ export default defineComponent({
       const rightSidebarWidth =
         document.getElementById('app-sidebar')?.getBoundingClientRect().width || 0
 
-      const rightControlsWidth = document.getElementById(
-        'files-app-bar-controls-right'
-      )?.clientWidth
+      const rightControlsWidth = document.getElementById('files-app-bar-controls-right')
+        ?.clientWidth
 
       this.breadcrumbMaxWidth =
         totalContentWidth - leftSidebarWidth - rightSidebarWidth - rightControlsWidth
