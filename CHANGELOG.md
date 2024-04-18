@@ -9,6 +9,7 @@ Summary
 -------
 
 * Change - Disable opening files in embed mode: [#10786](https://github.com/owncloud/web/pull/10786)
+* Enhancement - Accessibility improvements: [#5383](https://github.com/owncloud/web/issues/5383)
 * Enhancement - Add SSE event for moving: [#10798](https://github.com/owncloud/web/pull/10798)
 
 Details
@@ -21,6 +22,16 @@ Details
 
    https://github.com/owncloud/web/issues/10635
    https://github.com/owncloud/web/pull/10786
+
+* Enhancement - Accessibility improvements: [#5383](https://github.com/owncloud/web/issues/5383)
+
+   Across the board, we have implemented improvements in regards of accessibility
+   for the web UI.
+
+   https://github.com/owncloud/web/issues/5383
+   https://github.com/owncloud/web/issues/5391
+   https://github.com/owncloud/web/issues/10731
+   https://github.com/owncloud/web/pull/10802
 
 * Enhancement - Add SSE event for moving: [#10798](https://github.com/owncloud/web/pull/10798)
 
