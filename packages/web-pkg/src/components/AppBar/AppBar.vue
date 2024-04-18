@@ -1,9 +1,8 @@
 <template>
   <div id="files-app-bar" ref="filesAppBar" :class="{ 'files-app-bar-squashed': isSideBarOpen }">
-    <oc-hidden-announcer :announcement="selectedResourcesAnnouncement" level="polite" />
-
     <div class="files-topbar oc-py-s">
       <h1 class="oc-invisible-sr" v-text="pageTitle" />
+      <oc-hidden-announcer :announcement="selectedResourcesAnnouncement" level="polite" />
       <div
         class="oc-flex oc-flex-middle files-app-bar-controls"
         :class="{

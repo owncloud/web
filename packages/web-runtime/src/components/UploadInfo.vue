@@ -8,6 +8,7 @@
         v-if="!filesInProgressCount"
         id="close-upload-info-btn"
         v-oc-tooltip="$gettext('Close')"
+        :aria-label="$gettext('Close')"
         appearance="raw-inverse"
         variation="brand"
         @click="closeInfo"
@@ -54,6 +55,7 @@
         >
           <oc-icon name="restart" fill-type="line" />
         </oc-button>
+
         <oc-button
           v-if="
             runningUploads &&
@@ -66,6 +68,7 @@
           v-oc-tooltip="uploadsPaused ? $gettext('Resume upload') : $gettext('Pause upload')"
           class="oc-ml-s"
           appearance="raw"
+          :aria-label="uploadsPaused ? $gettext('Resume upload') : $gettext('Pause upload')"
           @click="togglePauseUploads"
         >
           <oc-icon :name="uploadsPaused ? 'play-circle' : 'pause-circle'" fill-type="line" />
@@ -76,6 +79,7 @@
           v-oc-tooltip="$gettext('Cancel upload')"
           class="oc-ml-s"
           appearance="raw"
+          :aria-label="$gettext('Cancel upload')"
           @click="cancelAllUploads"
         >
           <oc-icon name="close-circle" fill-type="line" />

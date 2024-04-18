@@ -1,7 +1,7 @@
 // Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
 exports[`OcBreadcrumb > displays all items 1`] = `
-"<nav id="oc-breadcrumbs-2" class="oc-breadcrumb oc-breadcrumb-default">
+"<nav id="oc-breadcrumbs-2" class="oc-breadcrumb oc-breadcrumb-default" aria-label="Breadcrumbs">
   <ol class="oc-breadcrumb-list oc-flex oc-m-rm oc-p-rm">
     <li data-key="0" class="oc-breadcrumb-list-item oc-flex oc-flex-middle">
       <router-link-stub tag="a" to="[object Object]"><span class="oc-breadcrumb-item-text oc-breadcrumb-item-navigable">First folder</span></router-link-stub>
@@ -37,7 +37,7 @@ exports[`OcBreadcrumb > displays all items 1`] = `
 `;
 
 exports[`OcBreadcrumb > sets correct variation 1`] = `
-"<nav id="oc-breadcrumbs-1" class="oc-breadcrumb oc-breadcrumb-lead">
+"<nav id="oc-breadcrumbs-1" class="oc-breadcrumb oc-breadcrumb-lead" aria-label="Breadcrumbs">
   <ol class="oc-breadcrumb-list oc-flex oc-m-rm oc-p-rm">
     <li data-key="0" class="oc-breadcrumb-list-item oc-flex oc-flex-middle">
       <router-link-stub tag="a" to="[object Object]"><span class="oc-breadcrumb-item-text oc-breadcrumb-item-navigable">First folder</span></router-link-stub>

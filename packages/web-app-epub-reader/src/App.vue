@@ -21,6 +21,7 @@
         <div class="epub-reader-controls-font-size oc-flex oc-button-group">
           <oc-button
             v-oc-tooltip="`${currentFontSizePercentage - FONT_SIZE_PERCENTAGE_STEP}%`"
+            :aria-label="$gettext('Decrease font size')"
             class="epub-reader-controls-font-size-decrease"
             :disabled="decreaseFontSizeDisabled"
             gap-size="none"
@@ -38,6 +39,7 @@
           />
           <oc-button
             v-oc-tooltip="`${currentFontSizePercentage + FONT_SIZE_PERCENTAGE_STEP}%`"
+            :aria-label="$gettext('Increase font size')"
             class="epub-reader-controls-font-size-increase"
             :disabled="increaseFontSizeDisabled"
             gap-size="none"
@@ -59,6 +61,7 @@
         <div class="oc-flex oc-flex-middle oc-mx-l">
           <oc-button
             class="epub-reader-navigate-left"
+            :aria-label="$gettext('Navigate to previous page')"
             :disabled="navigateLeftDisabled"
             appearance="raw"
             @click="navigateLeft"
@@ -71,6 +74,7 @@
         <div class="oc-flex oc-flex-middle oc-mx-l">
           <oc-button
             class="epub-reader-navigate-right"
+            :aria-label="$gettext('Navigate to next page')"
             :disabled="navigateRightDisabled"
             appearance="raw"
             @click="navigateRight"
