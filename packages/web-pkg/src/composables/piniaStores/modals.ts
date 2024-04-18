@@ -30,6 +30,7 @@ export type Modal = {
   message?: string
   cancelText?: string
   confirmDisabled?: boolean
+  isLoading?: boolean
   confirmText?: string
   hideActions?: boolean
   hideConfirmButton?: boolean

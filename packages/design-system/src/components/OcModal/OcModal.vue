@@ -58,18 +58,20 @@
               class="oc-modal-body-actions-cancel"
               variation="passive"
               appearance="outline"
+              :disabled="isLoading"
               @click="cancelModalAction"
-              >{{ $gettext(buttonCancelText) }}</oc-button
-            >
+              >{{ $gettext(buttonCancelText) }}
+            </oc-button>
             <oc-button
               v-if="!hideConfirmButton"
               class="oc-modal-body-actions-confirm oc-ml-s"
               variation="primary"
-              appearance="filled"
-              :disabled="buttonConfirmDisabled || !!inputError"
+              :appearance="buttonConfirmAppearance"
+              :disabled="isLoading || buttonConfirmDisabled || !!inputError"
+              :show-spinner="showSpinner"
               @click="confirm"
-              >{{ $gettext(buttonConfirmText) }}</oc-button
-            >
+              >{{ $gettext(buttonConfirmText) }}
+            </oc-button>
           </div>
         </div>
       </div>
@@ -78,7 +80,7 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, PropType, ComponentPublicInstance } from 'vue'
+import { defineComponent, PropType, ComponentPublicInstance, ref, watch } from 'vue'
 import OcButton from '../OcButton/OcButton.vue'
 import OcIcon from '../OcIcon/OcIcon.vue'
 import OcTextInput from '../OcTextInput/OcTextInput.vue'
@@ -283,9 +285,54 @@ export default defineComponent({
     hideActions: {
       type: Boolean,
       default: false
+    },
+    /**
+     * Sets the loading state
+     * if enabled, confirm and cancel buttons are disabled,
+     * loading spinner will be shown in confirm button after a certain timeout
+     */
+    isLoading: {
+      type: Boolean,
+      required: false,
+      default: false
     }
   },
   emits: ['cancel', 'confirm', 'input'],
+  setup(props) {
+    const showSpinner = ref(false)
+    const buttonConfirmAppearance = ref('filled')
+
+    const resetLoadingState = () => {
+      showSpinner.value = false
+      buttonConfirmAppearance.value = 'filled'
+    }
+
+    const setLoadingState = () => {
+      showSpinner.value = true
+      buttonConfirmAppearance.value = 'outline'
+    }
+
+    watch(
+      () => props.isLoading,
+      () => {
+        if (!props.isLoading) {
+          return resetLoadingState()
+        }
+        setTimeout(() => {
+          if (!props.isLoading) {
+            return resetLoadingState()
+          }
+          setLoadingState()
+        }, 700)
+      },
+      { immediate: true }
+    )
+
+    return {
+      showSpinner,
+      buttonConfirmAppearance
+    }
+  },
   data() {
     return {
       userInputValue: null
@@ -438,6 +485,7 @@ export default defineComponent({
     color: var(--oc-color-text-default);
     line-height: 1.625;
     padding: var(--oc-space-medium) var(--oc-space-medium) 0;
+
     span {
       color: var(--oc-color-text-default);
     }
@@ -595,14 +643,14 @@ export default defineComponent({
 
 ```js
 <div>
-	<oc-modal
-			icon="info"
-			title="Accept terms of use"
-			message="Do you accept our terms of use?"
-			button-cancel-text="Decline"
-			button-confirm-text="Accept"
-			class="oc-mb-l oc-position-relative"
-	/>
+  <oc-modal
+    icon="info"
+    title="Accept terms of use"
+    message="Do you accept our terms of use?"
+    button-cancel-text="Decline"
+    button-confirm-text="Accept"
+    class="oc-mb-l oc-position-relative"
+  />
 </div>
 ```
 </docs>

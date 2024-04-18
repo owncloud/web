@@ -22,6 +22,7 @@
     :contextual-helper-label="modal.contextualHelperLabel"
     :contextual-helper-data="modal.contextualHelperData"
     :focus-trap-initial="modal.focusTrapInitial"
+    :is-loading="modal.isLoading"
     @cancel="onModalCancel"
     @confirm="onModalConfirm"
     @input="onModalInput"
@@ -57,7 +58,7 @@ export default defineComponent({
 
     const onModalConfirm = async (value?: string) => {
       try {
-        updateModal(unref(modal)?.id, 'confirmDisabled', true)
+        updateModal(unref(modal)?.id, 'isLoading', true)
 
         if (unref(modal)?.onConfirm) {
           await loadingService.addTask(async () => {
@@ -67,7 +68,7 @@ export default defineComponent({
           await loadingService.addTask(() => unref(customComponentRef).onConfirm())
         }
       } catch (error) {
-        updateModal(unref(modal)?.id, 'confirmDisabled', false)
+        updateModal(unref(modal)?.id, 'isLoading', false)
         return
       }
 
