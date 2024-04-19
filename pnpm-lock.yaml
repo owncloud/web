@@ -987,6 +987,9 @@ importers:
       '@uppy/xhr-upload':
         specifier: https://github.com/owncloud/uppy/releases/download/v3.12.13-owncloud/uppy-xhr-upload.tgz
         version: '@github.com/owncloud/uppy/releases/download/v3.12.13-owncloud/uppy-xhr-upload.tgz(@uppy/core@3.3.0)'
+      '@vue/shared':
+        specifier: 3.4.23
+        version: 3.4.23
       '@vueuse/core':
         specifier: ^10.0.0
         version: 10.3.0(vue@3.4.21)
@@ -1057,15 +1060,22 @@ importers:
       '@toast-ui/editor-plugin-code-syntax-highlight':
         specifier: ^3.1.0
         version: 3.1.0
+      clean-publish:
+        specifier: 4.2.0
+        version: 4.2.0
       prismjs:
         specifier: ^1.29.0
         version: 1.29.0
+      vite-plugin-dts:
+        specifier: 3.6.0
+        version: 3.6.0(@types/node@16.18.30)(rollup@4.14.0)(typescript@5.4.5)(vite@5.2.8)
       web-test-helpers:
         specifier: workspace:*
         version: link:../web-test-helpers
       zod:
         specifier: ^3.22.4
         version: 3.22.4
+    publishDirectory: package
 
   packages/web-runtime:
     dependencies:
@@ -5163,6 +5173,10 @@ packages:
 
   /@vue/shared@3.4.21:
     resolution: {integrity: sha512-PuJe7vDIi6VYSinuEbUIQgMIRZGgM8e4R+G+/dQTk0X1NEdvgvvgv7m+rfmDH1gZzyA1OjjoWskvHlfRNfQf3g==}
+
+  /@vue/shared@3.4.23:
+    resolution: {integrity: sha512-wBQ0gvf+SMwsCQOyusNw/GoXPV47WGd1xB5A1Pgzy0sQ3Bi5r5xm3n+92y3gCnB3MWqnRDdvfkRGxhKtbBRNgg==}
+    dev: false
 
   /@vue/test-utils@2.4.5:
     resolution: {integrity: sha512-oo2u7vktOyKUked36R93NB7mg2B+N7Plr8lxp2JBGwr18ch6EggFjixSCdIVVLkT6Qr0z359Xvnafc9dcKyDUg==}

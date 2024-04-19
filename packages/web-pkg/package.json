@@ -1,6 +1,6 @@
 {
   "name": "@ownclouders/web-pkg",
-  "version": "0.0.3",
+  "version": "0.0.6",
   "description": "ownCloud web pkg",
   "license": "AGPL-3.0",
   "main": "src/index.ts",
@@ -14,12 +14,32 @@
     "url": "https://github.com/owncloud/web",
     "directory": "packages/web-pkg"
   },
+  "files": [
+    "dist/"
+  ],
+  "publishConfig": {
+    "directory": "package",
+    "linkDirectory": false,
+    "types": "./dist/src/index.d.ts",
+    "exports": {
+      ".": {
+        "types": "./dist/src/index.d.ts"
+      }
+    }
+  },
+  "scripts": {
+    "vite": "vite",
+    "prepublishOnly": "rm -rf ./package && clean-publish && rm -rf package/dist/tests package/dist/*.css && find package && cat package/package.json",
+    "postpublish": "rm -rf ./package"
+  },
   "devDependencies": {
+    "clean-publish": "4.2.0",
     "web-test-helpers": "workspace:*",
     "zod": "^3.22.4",
     "@toast-ui/editor": "^3.2.2",
     "@toast-ui/editor-plugin-code-syntax-highlight": "^3.1.0",
-    "prismjs": "^1.29.0"
+    "prismjs": "^1.29.0",
+    "vite-plugin-dts": "3.6.0"
   },
   "peerDependencies": {
     "@casl/ability": "^6.3.3",
@@ -33,6 +53,7 @@
     "@uppy/utils": "^5.3.0",
     "@uppy/xhr-upload": "^3.0.1",
     "@vueuse/core": "^10.0.0",
+    "@vue/shared": "3.4.23",
     "axios": "1.6.8",
     "deepmerge": "^4.2.2",
     "design-system": "workspace:@ownclouders/design-system@*",
