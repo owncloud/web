@@ -389,7 +389,7 @@ A full template for your custom theme is provided below, and you can use the ins
       "imprint": "",
       "privacy": ""
     },
-    "roles": {
+    "shareRoles": {
       "b1e2218d-eef8-4d4c-b82d-0f1a1b48f3b5": {
         "name": "UnifiedRoleViewer",
         "iconName": "eye"
