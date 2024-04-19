@@ -616,7 +616,7 @@ export const onSSESpaceMemberRemovedEvent = async ({
     ) {
       return messageStore.showMessage({
         title: language.$gettext(
-          'The space you were accessing has been unshared. Please navigate to another location.'
+          'Your access to this space has been revoked. Please navigate to another location.'
         )
       })
     }
