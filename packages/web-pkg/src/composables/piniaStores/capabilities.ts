@@ -36,9 +36,7 @@ const defaultValues = {
       password: {
         enforced_for: { read_only: false, upload_only: false, read_write: false }
       }
-    },
-    resharing: true,
-    resharing_default: true
+    }
   },
   graph: {
     'personal-data-export': false,
@@ -123,10 +121,6 @@ export const useCapabilityStore = defineStore('capabilities', () => {
   const sharingPublicExpireDate = computed(
     () => unref(capabilities).files_sharing.public?.expire_date
   )
-  const sharingResharing = computed(() => unref(capabilities).files_sharing.resharing)
-  const sharingResharingDefault = computed(
-    () => unref(capabilities).files_sharing.resharing_default
-  )
   const sharingSearchMinLength = computed(() => unref(capabilities).files_sharing.search_min_length)
   const sharingUserExpireDate = computed(() => unref(capabilities).files_sharing.user?.expire_date)
   const sharingUserProfilePicture = computed(
@@ -178,8 +172,6 @@ export const useCapabilityStore = defineStore('capabilities', () => {
     filesPermanentDeletion,
     filesTags,
     filesUndelete,
-    sharingResharing,
-    sharingResharingDefault,
     sharingApiEnabled,
     sharingDenyAccess,
     sharingCanRename,
