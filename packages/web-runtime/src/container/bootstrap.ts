@@ -62,7 +62,13 @@ import {
   onSSEItemTrashedEvent,
   onSSEFolderCreatedEvent,
   onSSEFileTouchedEvent,
-  onSSEItemMovedEvent
+  onSSEItemMovedEvent,
+  onSSESpaceMemberAddedEvent,
+  onSSESpaceMemberRemovedEvent,
+  onSSESpaceShareUpdatedEvent,
+  onSSEShareCreatedEvent,
+  onSSEShareRemovedEvent,
+  onSSEShareUpdatedEvent
 } from './sse'
 
 const getEmbedConfigFromQuery = (
@@ -753,6 +759,76 @@ export const registerSSEEventListeners = ({
       topic: MESSAGE_TYPE.FILE_TOUCHED,
       resourcesStore,
       spacesStore,
+      msg,
+      clientService
+    })
+  )
+
+  clientService.sseAuthenticated.addEventListener(MESSAGE_TYPE.SPACE_MEMBER_ADDED, (msg) =>
+    onSSESpaceMemberAddedEvent({
+      topic: MESSAGE_TYPE.SPACE_MEMBER_ADDED,
+      resourcesStore,
+      spacesStore,
+      userStore,
+      msg,
+      clientService,
+      router
+    })
+  )
+
+  clientService.sseAuthenticated.addEventListener(MESSAGE_TYPE.SPACE_MEMBER_REMOVED, (msg) =>
+    onSSESpaceMemberRemovedEvent({
+      topic: MESSAGE_TYPE.SPACE_MEMBER_REMOVED,
+      resourcesStore,
+      spacesStore,
+      userStore,
+      messageStore,
+      msg,
+      clientService,
+      language,
+      router
+    })
+  )
+
+  clientService.sseAuthenticated.addEventListener(MESSAGE_TYPE.SPACE_SHARE_UPDATED, (msg) =>
+    onSSESpaceShareUpdatedEvent({
+      topic: MESSAGE_TYPE.SPACE_SHARE_UPDATED,
+      resourcesStore,
+      spacesStore,
+      userStore,
+      msg,
+      clientService
+    })
+  )
+
+  clientService.sseAuthenticated.addEventListener(MESSAGE_TYPE.SHARE_CREATED, (msg) =>
+    onSSEShareCreatedEvent({
+      topic: MESSAGE_TYPE.SHARE_CREATED,
+      resourcesStore,
+      spacesStore,
+      userStore,
+      msg,
+      clientService
+    })
+  )
+
+  clientService.sseAuthenticated.addEventListener(MESSAGE_TYPE.SHARE_REMOVED, (msg) =>
+    onSSEShareRemovedEvent({
+      topic: MESSAGE_TYPE.SHARE_REMOVED,
+      resourcesStore,
+      spacesStore,
+      userStore,
+      msg,
+      clientService
+    })
+  )
+
+  clientService.sseAuthenticated.addEventListener(MESSAGE_TYPE.SHARE_UPDATED, (msg) =>
+    onSSEShareUpdatedEvent({
+      topic: MESSAGE_TYPE.SHARE_UPDATED,
+      resourcesStore,
+      spacesStore,
+      userStore,
       msg,
       clientService
     })

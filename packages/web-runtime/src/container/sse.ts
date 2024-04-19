@@ -3,6 +3,7 @@ import {
   createFileRouteOptions,
   getIndicators,
   ImageDimension,
+  isLocationSpacesActive,
   MessageStore,
   PreviewService,
   ResourcesStore,
@@ -10,7 +11,7 @@ import {
   UserStore
 } from '@ownclouders/web-pkg'
 import PQueue from 'p-queue'
-import { extractNodeId, extractStorageId } from '@ownclouders/web-client'
+import { buildSpace, extractNodeId, extractStorageId } from '@ownclouders/web-client'
 import { z } from 'zod'
 import { Router } from 'vue-router'
 import { Language } from 'vue3-gettext'
@@ -510,6 +511,242 @@ export const onSSEFolderCreatedEvent = async ({
     }
 
     resourcesStore.upsertResource(resource)
+  } catch (e) {
+    console.error(`Unable to parse sse event ${topic} data`, e)
+  }
+}
+
+export const onSSESpaceMemberAddedEvent = async ({
+  topic,
+  resourcesStore,
+  spacesStore,
+  userStore,
+  msg,
+  clientService,
+  router
+}: {
+  topic: string
+  resourcesStore: ResourcesStore
+  spacesStore: SpacesStore
+  userStore: UserStore
+  msg: MessageEvent
+  clientService: ClientService
+  router: Router
+}) => {
+  try {
+    const sseData = eventSchema.parse(JSON.parse(msg.data))
+    console.debug(`SSE event '${topic}'`, sseData)
+
+    if (sseData.initiatorid === clientService.initiatorId) {
+      /**
+       * If the request was initiated by the current client (browser tab),
+       * there's no need to proceed with the action since the web already
+       * handles its own business logic. Therefore, we'll return early here.
+       */
+      return
+    }
+
+    let space = spacesStore.spaces.find((space) => space.id === sseData.spaceid)
+    if (!space) {
+      const { data } = await clientService.graphAuthenticated.drives.getDrive(sseData.itemid)
+      space = buildSpace(data)
+      spacesStore.addSpaces([space])
+    }
+
+    if (!isLocationSpacesActive(router, 'files-spaces-projects')) {
+      return
+    }
+
+    resourcesStore.upsertResource(space)
+  } catch (e) {
+    console.error(`Unable to parse sse event ${topic} data`, e)
+  }
+}
+
+export const onSSESpaceMemberRemovedEvent = async ({
+  topic,
+  resourcesStore,
+  spacesStore,
+  userStore,
+  messageStore,
+  msg,
+  clientService,
+  language,
+  router
+}: {
+  topic: string
+  resourcesStore: ResourcesStore
+  spacesStore: SpacesStore
+  userStore: UserStore
+  msg: MessageEvent
+  clientService: ClientService
+  messageStore: MessageStore
+  language: Language
+  router: Router
+}) => {
+  try {
+    const sseData = eventSchema.parse(JSON.parse(msg.data))
+    console.debug(`SSE event '${topic}'`, sseData)
+
+    if (sseData.initiatorid === clientService.initiatorId) {
+      /**
+       * If the request was initiated by the current client (browser tab),
+       * there's no need to proceed with the action since the web already
+       * handles its own business logic. Therefore, we'll return early here.
+       */
+      return
+    }
+
+    const space = spacesStore.spaces.find((space) => space.id === sseData.spaceid)
+    if (!space) {
+      return
+    }
+
+    spacesStore.removeSpace(space)
+
+    if (isLocationSpacesActive(router, 'files-spaces-projects')) {
+      return resourcesStore.removeResources([space])
+    }
+
+    console.log(resourcesStore.currentFolder)
+    console.log(space)
+    if (
+      isLocationSpacesActive(router, 'files-spaces-generic') &&
+      space.id === resourcesStore.currentFolder.storageId
+    ) {
+      return messageStore.showMessage({
+        title: language.$gettext(
+          'The space you were accessing has been unshared. Please navigate to another location.'
+        )
+      })
+    }
+  } catch (e) {
+    console.error(`Unable to parse sse event ${topic} data`, e)
+  }
+}
+
+export const onSSESpaceShareUpdatedEvent = async ({
+  topic,
+  resourcesStore,
+  spacesStore,
+  userStore,
+  msg,
+  clientService
+}: {
+  topic: string
+  resourcesStore: ResourcesStore
+  spacesStore: SpacesStore
+  userStore: UserStore
+  msg: MessageEvent
+  clientService: ClientService
+}) => {
+  try {
+    const sseData = eventSchema.parse(JSON.parse(msg.data))
+    console.debug(`SSE event '${topic}'`, sseData)
+
+    if (sseData.initiatorid === clientService.initiatorId) {
+      /**
+       * If the request was initiated by the current client (browser tab),
+       * there's no need to proceed with the action since the web already
+       * handles its own business logic. Therefore, we'll return early here.
+       */
+      return
+    }
+  } catch (e) {
+    console.error(`Unable to parse sse event ${topic} data`, e)
+  }
+}
+
+export const onSSEShareCreatedEvent = async ({
+  topic,
+  resourcesStore,
+  spacesStore,
+  userStore,
+  msg,
+  clientService
+}: {
+  topic: string
+  resourcesStore: ResourcesStore
+  spacesStore: SpacesStore
+  userStore: UserStore
+  msg: MessageEvent
+  clientService: ClientService
+}) => {
+  try {
+    const sseData = eventSchema.parse(JSON.parse(msg.data))
+    console.debug(`SSE event '${topic}'`, sseData)
+
+    if (sseData.initiatorid === clientService.initiatorId) {
+      /**
+       * If the request was initiated by the current client (browser tab),
+       * there's no need to proceed with the action since the web already
+       * handles its own business logic. Therefore, we'll return early here.
+       */
+      return
+    }
+  } catch (e) {
+    console.error(`Unable to parse sse event ${topic} data`, e)
+  }
+}
+export const onSSEShareUpdatedEvent = async ({
+  topic,
+  resourcesStore,
+  spacesStore,
+  userStore,
+  msg,
+  clientService
+}: {
+  topic: string
+  resourcesStore: ResourcesStore
+  spacesStore: SpacesStore
+  userStore: UserStore
+  msg: MessageEvent
+  clientService: ClientService
+}) => {
+  try {
+    const sseData = eventSchema.parse(JSON.parse(msg.data))
+    console.debug(`SSE event '${topic}'`, sseData)
+
+    if (sseData.initiatorid === clientService.initiatorId) {
+      /**
+       * If the request was initiated by the current client (browser tab),
+       * there's no need to proceed with the action since the web already
+       * handles its own business logic. Therefore, we'll return early here.
+       */
+      return
+    }
+  } catch (e) {
+    console.error(`Unable to parse sse event ${topic} data`, e)
+  }
+}
+
+export const onSSEShareRemovedEvent = async ({
+  topic,
+  resourcesStore,
+  spacesStore,
+  userStore,
+  msg,
+  clientService
+}: {
+  topic: string
+  resourcesStore: ResourcesStore
+  spacesStore: SpacesStore
+  userStore: UserStore
+  msg: MessageEvent
+  clientService: ClientService
+}) => {
+  try {
+    const sseData = eventSchema.parse(JSON.parse(msg.data))
+    console.debug(`SSE event '${topic}'`, sseData)
+
+    if (sseData.initiatorid === clientService.initiatorId) {
+      /**
+       * If the request was initiated by the current client (browser tab),
+       * there's no need to proceed with the action since the web already
+       * handles its own business logic. Therefore, we'll return early here.
+       */
+      return
+    }
   } catch (e) {
     console.error(`Unable to parse sse event ${topic} data`, e)
   }
