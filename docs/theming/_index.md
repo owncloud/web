@@ -61,7 +61,7 @@ The structure of a valid `common` section is outlined below:
     "imprint": "",
     "privacy": ""
   }, 
-  "roles": {}
+  "shareRoles": {}
 }
 ```
 
