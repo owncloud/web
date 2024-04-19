@@ -1,0 +1,7 @@
+Enhancement: Ability to theme sharing role icons
+
+We've added the ability to theme the sharing role icons.
+This is useful for custom themes that want to customize the look of the sharing role dropdown.
+
+https://github.com/owncloud/web/pull/10801
+https://github.com/owncloud/ocis/issues/8844

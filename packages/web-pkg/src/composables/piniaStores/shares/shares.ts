@@ -2,7 +2,6 @@ import {
   CollaboratorShare,
   LinkShare,
   Share,
-  GraphShareRoleIdMap,
   ShareRole,
   ShareTypes,
   isProjectSpaceResource,
@@ -20,6 +19,7 @@ import {
   UpdateShareOptions
 } from './types'
 import { useResourcesStore } from '../resources'
+import { useThemeStore } from '../theme'
 import { Permission, UnifiedRoleDefinition } from '@ownclouders/web-client/graph/generated'
 import { useUserStore } from '../user'
 import { buildLinkShare, buildCollaboratorShare } from '@ownclouders/web-client'
@@ -27,25 +27,16 @@ import { buildLinkShare, buildCollaboratorShare } from '@ownclouders/web-client'
 export const useSharesStore = defineStore('shares', () => {
   const resourcesStore = useResourcesStore()
   const userStore = useUserStore()
-
+  const { getRoleIcon: getThemeRoleIcon } = useThemeStore()
   const loading = ref(false)
   const collaboratorShares = ref<CollaboratorShare[]>([]) as Ref<CollaboratorShare[]>
   const linkShares = ref<LinkShare[]>([]) as Ref<LinkShare[]>
   const graphRoles = ref<ShareRole[]>([]) as Ref<ShareRole[]>
 
   const setGraphRoles = (values: UnifiedRoleDefinition[]) => {
-    const ShareRoleIconMap = {
-      [GraphShareRoleIdMap.Viewer]: 'eye',
-      [GraphShareRoleIdMap.SpaceViewer]: 'eye',
-      [GraphShareRoleIdMap.FileEditor]: 'pencil',
-      [GraphShareRoleIdMap.FolderEditor]: 'pencil',
-      [GraphShareRoleIdMap.SpaceEditor]: 'pencil',
-      [GraphShareRoleIdMap.SpaceManager]: 'user-star'
-    }
-
     graphRoles.value = values.map((v) => ({
       ...v,
-      icon: ShareRoleIconMap[v.id] || 'user'
+      icon: getThemeRoleIcon(v)
     }))
   }
 

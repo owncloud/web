@@ -4,6 +4,7 @@ import { computed, ref, unref } from 'vue'
 import { useLocalStorage, usePreferredDark } from '@vueuse/core'
 import { z } from 'zod'
 import { applyCustomProp } from 'design-system/src/'
+import { ShareRole } from '@ownclouders/web-client'
 
 const AppBanner = z.object({
   title: z.string().optional(),
@@ -22,7 +23,13 @@ const CommonSection = z.object({
     accessDeniedHelp: z.string(),
     imprint: z.string(),
     privacy: z.string()
-  })
+  }),
+  shareRoles: z.record(
+    z.string(),
+    z.object({
+      iconName: z.string()
+    })
+  )
 })
 
 const DesignTokens = z.object({
@@ -140,12 +147,17 @@ export const useThemeStore = defineStore('theme', () => {
     })
   }
 
+  const getRoleIcon = (role: ShareRole) => {
+    return unref(currentTheme).common?.shareRoles[role.id]?.iconName || 'user'
+  }
+
   return {
     availableThemes,
     currentTheme,
     initializeThemes,
     setAndApplyTheme,
     setAutoSystemTheme,
-    isCurrentThemeAutoSystem
+    isCurrentThemeAutoSystem,
+    getRoleIcon
   }
 })
