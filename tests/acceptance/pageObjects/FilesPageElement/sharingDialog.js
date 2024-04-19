@@ -563,14 +563,14 @@ module.exports = {
      * @returns {boolean} Whether the message has been found
      */
     isSharePermissionMessageVisible: function () {
-      return this.waitForElementVisible('@noResharePermissions')
+      return this.waitForElementVisible('@noSharePermissions')
     },
     /**
      *
      * @returns {boolean} Whether the message has been found
      */
     isLinkSharePermissionMessageVisible: function () {
-      return this.waitForElementVisible('@noReshareLinkPermissions')
+      return this.waitForElementVisible('@noShareLinkPermissions')
     }
   },
   elements: {
@@ -582,12 +582,12 @@ module.exports = {
       selector: '//*[@id="oc-files-sharing-sidebar"]',
       locateStrategy: 'xpath'
     },
-    noResharePermissions: {
-      selector: '//p[@data-testid="files-collaborators-no-reshare-permissions-message"]',
+    noSharePermissions: {
+      selector: '//p[@data-testid="files-collaborators-no-share-permissions-message"]',
       locateStrategy: 'xpath'
     },
-    noReshareLinkPermissions: {
-      selector: '//p[@data-testid="files-links-no-reshare-permissions-message"]',
+    noShareLinkPermissions: {
+      selector: '//p[@data-testid="files-links-no-share-permissions-message"]',
       locateStrategy: 'xpath'
     },
     sharingAutoComplete: {
