@@ -11,6 +11,7 @@ Summary
 * Change - Disable opening files in embed mode: [#10786](https://github.com/owncloud/web/pull/10786)
 * Enhancement - Accessibility improvements: [#5383](https://github.com/owncloud/web/issues/5383)
 * Enhancement - Add SSE event for moving: [#10798](https://github.com/owncloud/web/pull/10798)
+* Enhancement - Ability to theme sharing role icons: [#10801](https://github.com/owncloud/web/pull/10801)
 
 Details
 -------
@@ -41,6 +42,14 @@ Details
 
    https://github.com/owncloud/web/issues/10780
    https://github.com/owncloud/web/pull/10798
+
+* Enhancement - Ability to theme sharing role icons: [#10801](https://github.com/owncloud/web/pull/10801)
+
+   We've added the ability to theme the sharing role icons. This is useful for
+   custom themes that want to customize the look of the sharing role dropdown.
+
+   https://github.com/owncloud/ocis/issues/8844
+   https://github.com/owncloud/web/pull/10801
 
 Changelog for ownCloud Web [9.0.0] (2024-04-16)
 =======================================
