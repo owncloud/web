@@ -3,12 +3,11 @@ import {
   createLocationPublic,
   createLocationSpaces,
   isLocationPublicActive,
-  isLocationSharesActive,
   isLocationTrashActive
 } from '../../../router'
 import { isIncomingShareResource } from '@ownclouders/web-client'
 import merge from 'lodash-es/merge'
-import { isShareSpaceResource, SpaceResource } from '@ownclouders/web-client'
+import { SpaceResource } from '@ownclouders/web-client'
 import { createFileRouteOptions } from '../../../helpers/router'
 import { useGetMatchingSpace } from '../../spaces'
 import { useRouter } from '../../router'
@@ -67,15 +66,6 @@ export const useFileActionsNavigate = () => {
       },
       componentType: 'router-link',
       route: ({ space, resources }) => {
-        if (
-          isShareSpaceResource(space) &&
-          (isLocationSharesActive(router, 'files-shares-with-others') ||
-            isLocationSharesActive(router, 'files-shares-via-link'))
-        ) {
-          // FIXME: This is a hacky way to resolve re-shares, but we don't have other options currently
-          return { name: 'resolvePrivateLink', params: { fileId: resources[0].fileId } }
-        }
-
         return merge(
           {},
           unref(routeName),
