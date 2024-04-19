@@ -24,7 +24,7 @@ const CommonSection = z.object({
     imprint: z.string(),
     privacy: z.string()
   }),
-  roles: z.record(
+  shareRoles: z.record(
     z.string(),
     z.object({
       iconName: z.string()
@@ -148,7 +148,7 @@ export const useThemeStore = defineStore('theme', () => {
   }
 
   const getRoleIcon = (role: ShareRole) => {
-    return unref(currentTheme).common?.roles[role.id]?.iconName || 'user'
+    return unref(currentTheme).common?.shareRoles[role.id]?.iconName || 'user'
   }
 
   return {
