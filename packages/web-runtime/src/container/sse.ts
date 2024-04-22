@@ -1,6 +1,7 @@
 import {
   ClientService,
   createFileRouteOptions,
+  eventBus,
   getIndicators,
   ImageDimension,
   isLocationSharesActive,
@@ -24,7 +25,6 @@ import {
 import { z } from 'zod'
 import { Router } from 'vue-router'
 import { Language } from 'vue3-gettext'
-import { DriveItem } from '@ownclouders/web-client/graph/generated'
 
 const eventSchema = z.object({
   itemid: z.string(),
@@ -454,7 +454,7 @@ export const onSSESpaceMemberRemovedEvent = async ({
     return
   }
 
-  //TODO: check if sse event is affected user not equal, fetch space, upsert return
+  // TODO: check if sse event is affected user not equal, fetch space, upsert return
   try {
     const { data } = await clientService.graphAuthenticated.drives.listMyDrives(
       '',
@@ -491,12 +491,20 @@ export const onSSESpaceShareUpdatedEvent = async ({
   sseData,
   resourcesStore,
   spacesStore,
-  userStore,
   clientService
 }: SseEventOptions) => {
   if (sseData.initiatorid === clientService.initiatorId) {
     // If initiated by current client (browser tab), action unnecessary. Web manages its own logic, return early.
     return
+  }
+
+  // TODO: check if sse event is affected user not equal, fetch space, upsert return
+  if (resourcesStore.currentFolder?.storageId === sseData.spaceid) {
+    const { data } = await clientService.graphAuthenticated.drives.getDrive(sseData.itemid)
+    const space = buildSpace(data)
+    spacesStore.upsertSpace(space)
+
+    return eventBus.publish('app.files.list.load')
   }
 }
 
@@ -540,9 +548,7 @@ export const onSSEShareCreatedEvent = async ({
   if (isLocationSharesActive(router, 'files-shares-with-me')) {
     // FIXME: get drive item by id as soon as server supports it
     const { data } = await clientService.graphAuthenticated.drives.listSharedWithMe()
-    const driveItem = (data.value as DriveItem[]).find(
-      ({ remoteItem }) => remoteItem.id === sseData.itemid
-    )
+    const driveItem = data.value.find(({ remoteItem }) => remoteItem.id === sseData.itemid)
     if (!driveItem) {
       return
     }
@@ -553,7 +559,7 @@ export const onSSEShareCreatedEvent = async ({
   if (isLocationSharesActive(router, 'files-shares-with-others')) {
     // FIXME: get drive item by id as soon as server supports it
     const { data } = await clientService.graphAuthenticated.drives.listSharedByMe()
-    const driveItem = (data.value as DriveItem[]).find(({ id }) => id === sseData.itemid)
+    const driveItem = data.value.find(({ id }) => id === sseData.itemid)
     if (!driveItem) {
       return
     }
@@ -564,13 +570,29 @@ export const onSSEShareCreatedEvent = async ({
 export const onSSEShareUpdatedEvent = async ({
   sseData,
   resourcesStore,
-  spacesStore,
-  userStore,
-  clientService
+  sharesStore,
+  clientService,
+  router
 }: SseEventOptions) => {
   if (sseData.initiatorid === clientService.initiatorId) {
     // If initiated by current client (browser tab), action unnecessary. Web manages its own logic, return early.
     return
+  }
+
+  // TODO: check if sse event is affected user not equal, fetch space, upsert return
+  if (resourcesStore.currentFolder?.storageId === sseData.spaceid) {
+    return eventBus.publish('app.files.list.load')
+  }
+
+  if (isLocationSharesActive(router, 'files-shares-with-me')) {
+    // FIXME: get drive item by id as soon as server supports it
+    const { data } = await clientService.graphAuthenticated.drives.listSharedWithMe()
+    const driveItem = data.value.find(({ remoteItem }) => remoteItem.id === sseData.itemid)
+    if (!driveItem) {
+      return
+    }
+    const resource = buildIncomingShareResource({ driveItem, graphRoles: sharesStore.graphRoles })
+    return resourcesStore.upsertResource(resource)
   }
 }
 
@@ -589,6 +611,7 @@ export const onSSEShareRemovedEvent = async ({
     return
   }
 
+  // TODO: check if sse event is affected user not equal, fetch space, upsert return
   if (resourcesStore.currentFolder?.storageId === sseData.spaceid) {
     return messageStore.showMessage({
       title: language.$gettext(
@@ -686,7 +709,7 @@ export const onSSELinkCreatedEvent = async ({
   if (isLocationSharesActive(router, 'files-shares-via-link')) {
     // FIXME: get drive item by id as soon as server supports it
     const { data } = await clientService.graphAuthenticated.drives.listSharedByMe()
-    const driveItem = (data.value as DriveItem[]).find(({ id }) => id === sseData.itemid)
+    const driveItem = data.value.find(({ id }) => id === sseData.itemid)
     if (!driveItem) {
       return
     }
@@ -694,13 +717,8 @@ export const onSSELinkCreatedEvent = async ({
     return resourcesStore.upsertResource(resource)
   }
 }
-export const onSSELinkUpdatedEvent = async ({
-  sseData,
-  resourcesStore,
-  spacesStore,
-  userStore,
-  clientService
-}: SseEventOptions) => {
+
+export const onSSELinkUpdatedEvent = ({ sseData, clientService }: SseEventOptions) => {
   if (sseData.initiatorid === clientService.initiatorId) {
     // If initiated by current client (browser tab), action unnecessary. Web manages its own logic, return early.
     return
