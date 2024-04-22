@@ -3,18 +3,28 @@ import {
   createFileRouteOptions,
   getIndicators,
   ImageDimension,
+  isLocationSharesActive,
   isLocationSpacesActive,
   MessageStore,
   PreviewService,
   ResourcesStore,
+  SharesStore,
   SpacesStore,
   UserStore
 } from '@ownclouders/web-pkg'
 import PQueue from 'p-queue'
-import { buildSpace, extractNodeId, extractStorageId } from '@ownclouders/web-client'
+import {
+  buildIncomingShareResource,
+  buildOutgoingShareResource,
+  buildSpace,
+  extractNodeId,
+  extractStorageId,
+  ShareTypes
+} from '@ownclouders/web-client'
 import { z } from 'zod'
 import { Router } from 'vue-router'
 import { Language } from 'vue3-gettext'
+import { DriveItem } from '@ownclouders/web-client/graph/generated'
 
 const eventSchema = z.object({
   itemid: z.string(),
@@ -31,6 +41,7 @@ export interface SseEventOptions {
   spacesStore: SpacesStore
   userStore: UserStore
   messageStore: MessageStore
+  sharesStore: SharesStore
   clientService: ClientService
   previewService: PreviewService
   router: Router
@@ -443,6 +454,7 @@ export const onSSESpaceMemberRemovedEvent = async ({
     return
   }
 
+  //TODO: check if sse event is affected user not equal, fetch space, upsert return
   try {
     const { data } = await clientService.graphAuthenticated.drives.listMyDrives(
       '',
@@ -492,12 +504,61 @@ export const onSSEShareCreatedEvent = async ({
   sseData,
   resourcesStore,
   spacesStore,
+  sharesStore,
   userStore,
-  clientService
+  clientService,
+  router
 }: SseEventOptions) => {
   if (sseData.initiatorid === clientService.initiatorId) {
     // If initiated by current client (browser tab), action unnecessary. Web manages its own logic, return early.
     return
+  }
+
+  if (itemInCurrentFolder({ resourcesStore, parentFolderId: sseData.parentitemid })) {
+    const space = spacesStore.spaces.find((space) => space.id === sseData.spaceid)
+    if (!space) {
+      return
+    }
+
+    const resource = await clientService.webdav.getFileInfo(space, {
+      fileId: sseData.itemid
+    })
+
+    resourcesStore.upsertResource(resource)
+    return resourcesStore.updateResourceField({
+      id: resource.id,
+      field: 'indicators',
+      value: getIndicators({
+        space,
+        resource,
+        ancestorMetaData: resourcesStore.ancestorMetaData,
+        user: userStore.user
+      })
+    })
+  }
+
+  if (isLocationSharesActive(router, 'files-shares-with-me')) {
+    // FIXME: get drive item by id as soon as server supports it
+    const { data } = await clientService.graphAuthenticated.drives.listSharedWithMe()
+    const driveItem = (data.value as DriveItem[]).find(
+      ({ remoteItem }) => remoteItem.id === sseData.itemid
+    )
+    if (!driveItem) {
+      return
+    }
+    const resource = buildIncomingShareResource({ driveItem, graphRoles: sharesStore.graphRoles })
+    return resourcesStore.upsertResource(resource)
+  }
+
+  if (isLocationSharesActive(router, 'files-shares-with-others')) {
+    // FIXME: get drive item by id as soon as server supports it
+    const { data } = await clientService.graphAuthenticated.drives.listSharedByMe()
+    const driveItem = (data.value as DriveItem[]).find(({ id }) => id === sseData.itemid)
+    if (!driveItem) {
+      return
+    }
+    const resource = buildOutgoingShareResource({ driveItem, user: userStore.user })
+    return resourcesStore.upsertResource(resource)
   }
 }
 export const onSSEShareUpdatedEvent = async ({
@@ -518,11 +579,71 @@ export const onSSEShareRemovedEvent = async ({
   resourcesStore,
   spacesStore,
   userStore,
-  clientService
+  clientService,
+  messageStore,
+  language,
+  router
 }: SseEventOptions) => {
   if (sseData.initiatorid === clientService.initiatorId) {
     // If initiated by current client (browser tab), action unnecessary. Web manages its own logic, return early.
     return
+  }
+
+  if (resourcesStore.currentFolder?.storageId === sseData.spaceid) {
+    return messageStore.showMessage({
+      title: language.$gettext(
+        'Your access to this share has been revoked. Please navigate to another location.'
+      )
+    })
+  }
+
+  if (itemInCurrentFolder({ resourcesStore, parentFolderId: sseData.parentitemid })) {
+    const space = spacesStore.spaces.find((space) => space.id === sseData.spaceid)
+    if (!space) {
+      return
+    }
+
+    const resource = await clientService.webdav.getFileInfo(space, {
+      fileId: sseData.itemid
+    })
+
+    resourcesStore.upsertResource(resource)
+    return resourcesStore.updateResourceField({
+      id: resource.id,
+      field: 'indicators',
+      value: getIndicators({
+        space,
+        resource,
+        ancestorMetaData: resourcesStore.ancestorMetaData,
+        user: userStore.user
+      })
+    })
+  }
+
+  if (isLocationSharesActive(router, 'files-shares-with-others')) {
+    const space = spacesStore.spaces.find((space) => space.id === sseData.spaceid)
+    if (!space) {
+      return
+    }
+
+    const resource = await clientService.webdav.getFileInfo(space, {
+      fileId: sseData.itemid
+    })
+
+    if (
+      !resource.shareTypes.includes(ShareTypes.user.value) &&
+      !resource.shareTypes.includes(ShareTypes.group.value)
+    ) {
+      return resourcesStore.removeResources([resource])
+    }
+  }
+
+  if (isLocationSharesActive(router, 'files-shares-with-me')) {
+    const removedShareResource = resourcesStore.resources.find((r) => r.fileId === sseData.itemid)
+    if (!removedShareResource) {
+      return
+    }
+    return resourcesStore.removeResources([removedShareResource])
   }
 }
 
@@ -531,11 +652,46 @@ export const onSSELinkCreatedEvent = async ({
   resourcesStore,
   spacesStore,
   userStore,
-  clientService
+  clientService,
+  router
 }: SseEventOptions) => {
   if (sseData.initiatorid === clientService.initiatorId) {
     // If initiated by current client (browser tab), action unnecessary. Web manages its own logic, return early.
     return
+  }
+
+  if (itemInCurrentFolder({ resourcesStore, parentFolderId: sseData.parentitemid })) {
+    const space = spacesStore.spaces.find((space) => space.id === sseData.spaceid)
+    if (!space) {
+      return
+    }
+
+    const resource = await clientService.webdav.getFileInfo(space, {
+      fileId: sseData.itemid
+    })
+
+    resourcesStore.upsertResource(resource)
+    return resourcesStore.updateResourceField({
+      id: resource.id,
+      field: 'indicators',
+      value: getIndicators({
+        space,
+        resource,
+        ancestorMetaData: resourcesStore.ancestorMetaData,
+        user: userStore.user
+      })
+    })
+  }
+
+  if (isLocationSharesActive(router, 'files-shares-via-link')) {
+    // FIXME: get drive item by id as soon as server supports it
+    const { data } = await clientService.graphAuthenticated.drives.listSharedByMe()
+    const driveItem = (data.value as DriveItem[]).find(({ id }) => id === sseData.itemid)
+    if (!driveItem) {
+      return
+    }
+    const resource = buildOutgoingShareResource({ driveItem, user: userStore.user })
+    return resourcesStore.upsertResource(resource)
   }
 }
 export const onSSELinkUpdatedEvent = async ({
@@ -556,10 +712,40 @@ export const onSSELinkRemovedEvent = async ({
   resourcesStore,
   spacesStore,
   userStore,
-  clientService
+  clientService,
+  router
 }: SseEventOptions) => {
   if (sseData.initiatorid === clientService.initiatorId) {
     // If initiated by current client (browser tab), action unnecessary. Web manages its own logic, return early.
     return
+  }
+
+  const space = spacesStore.spaces.find((space) => space.id === sseData.spaceid)
+  if (!space) {
+    return
+  }
+
+  const resource = await clientService.webdav.getFileInfo(space, {
+    fileId: sseData.itemid
+  })
+
+  if (itemInCurrentFolder({ resourcesStore, parentFolderId: sseData.parentitemid })) {
+    resourcesStore.upsertResource(resource)
+    resourcesStore.updateResourceField({
+      id: resource.id,
+      field: 'indicators',
+      value: getIndicators({
+        space,
+        resource,
+        ancestorMetaData: resourcesStore.ancestorMetaData,
+        user: userStore.user
+      })
+    })
+  }
+
+  if (isLocationSharesActive(router, 'files-shares-via-link')) {
+    if (!resource.shareTypes.includes(ShareTypes.link.value)) {
+      return resourcesStore.removeResources([resource])
+    }
   }
 }

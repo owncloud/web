@@ -27,7 +27,8 @@ import {
   useResourcesStore,
   ResourcesStore,
   SpacesStore,
-  MessageStore
+  MessageStore,
+  SharesStore
 } from '@ownclouders/web-pkg'
 import { authService } from '../services/auth'
 import {
@@ -72,7 +73,8 @@ import {
   onSSELinkCreatedEvent,
   onSSELinkRemovedEvent,
   sseEventWrapper,
-  SseEventWrapperOptions
+  SseEventWrapperOptions,
+  onSSELinkUpdatedEvent
 } from './sse'
 
 const getEmbedConfigFromQuery = (
@@ -643,6 +645,7 @@ export const registerSSEEventListeners = ({
   resourcesStore,
   spacesStore,
   messageStore,
+  sharesStore,
   clientService,
   previewService,
   configStore,
@@ -653,6 +656,7 @@ export const registerSSEEventListeners = ({
   resourcesStore: ResourcesStore
   spacesStore: SpacesStore
   messageStore: MessageStore
+  sharesStore: SharesStore
   clientService: ClientService
   previewService: PreviewService
   configStore: ConfigStore
@@ -675,6 +679,7 @@ export const registerSSEEventListeners = ({
     spacesStore,
     messageStore,
     userStore,
+    sharesStore,
     clientService,
     previewService,
     language,
@@ -840,7 +845,7 @@ export const registerSSEEventListeners = ({
       topic: MESSAGE_TYPE.LINK_UPDATED,
       msg,
       ...sseEventWrapperOptions,
-      method: onSSELinkRemovedEvent
+      method: onSSELinkUpdatedEvent
     })
   )
 }
