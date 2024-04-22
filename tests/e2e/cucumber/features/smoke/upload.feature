@@ -24,6 +24,9 @@ Feature: Upload
       | textfile.txt      | txtFile | some random content |
       # Coverage for bug: https://github.com/owncloud/ocis/issues/8361
       | comma,.txt        | txtFile | comma               |
+      # Coverage for bug: https://github.com/owncloud/web/issues/10810
+      | test#file.txt     | txtFile | some content        |
+      | test#folder       | folder  |                     |
     When "Alice" uploads the following resources
       | resource          | option    |
       | new-lorem-big.txt | replace   |
@@ -41,10 +44,13 @@ Feature: Upload
       | resource      | error            |
       | lorem-big.txt | Not enough quota |
     And "Alice" downloads the following resources using the sidebar panel
-      | resource   | type   |
-      | PARENT     | folder |
+      | resource      | type   |
+      | PARENT        | folder |
       # Coverage for bug: https://github.com/owncloud/ocis/issues/8361
-      | comma,.txt | file   |
+      | comma,.txt    | file   |
+      # Coverage for bug: https://github.com/owncloud/web/issues/10810
+      | test#file.txt | file   |
+      | test#folder   | folder |
 
     # https://github.com/owncloud/web/issues/6348
     # Note: uploading folder with empty sub-folder should be done manually
