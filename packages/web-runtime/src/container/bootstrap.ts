@@ -70,7 +70,9 @@ import {
   onSSEShareRemovedEvent,
   onSSEShareUpdatedEvent,
   onSSELinkCreatedEvent,
-  onSSELinkRemovedEvent
+  onSSELinkRemovedEvent,
+  sseEventWrapper,
+  SseEventWrapperOptions
 } from './sse'
 
 const getEmbedConfigFromQuery = (
@@ -668,204 +670,177 @@ export const registerSSEEventListeners = ({
     }
   )
 
+  const sseEventWrapperOptions = {
+    resourcesStore,
+    spacesStore,
+    messageStore,
+    userStore,
+    clientService,
+    previewService,
+    language,
+    router,
+    resourceQueue
+  } satisfies Partial<SseEventWrapperOptions>
+
   clientService.sseAuthenticated.addEventListener(MESSAGE_TYPE.ITEM_RENAMED, (msg) =>
-    onSSEItemRenamedEvent({
+    sseEventWrapper({
       topic: MESSAGE_TYPE.ITEM_RENAMED,
-      resourcesStore,
-      spacesStore,
       msg,
-      clientService,
-      router
+      ...sseEventWrapperOptions,
+      method: onSSEItemRenamedEvent
     })
   )
 
   clientService.sseAuthenticated.addEventListener(MESSAGE_TYPE.POSTPROCESSING_FINISHED, (msg) =>
-    onSSEProcessingFinishedEvent({
+    sseEventWrapper({
       topic: MESSAGE_TYPE.POSTPROCESSING_FINISHED,
-      resourcesStore,
-      spacesStore,
       msg,
-      clientService,
-      previewService,
-      resourceQueue
+      ...sseEventWrapperOptions,
+      method: onSSEProcessingFinishedEvent
     })
   )
 
   clientService.sseAuthenticated.addEventListener(MESSAGE_TYPE.FILE_LOCKED, (msg) =>
-    onSSEFileLockingEvent({
+    sseEventWrapper({
       topic: MESSAGE_TYPE.FILE_LOCKED,
-      resourcesStore,
-      spacesStore,
-      userStore,
       msg,
-      clientService
+      ...sseEventWrapperOptions,
+      method: onSSEFileLockingEvent
     })
   )
 
   clientService.sseAuthenticated.addEventListener(MESSAGE_TYPE.FILE_UNLOCKED, (msg) =>
-    onSSEFileLockingEvent({
+    sseEventWrapper({
       topic: MESSAGE_TYPE.FILE_UNLOCKED,
-      resourcesStore,
-      spacesStore,
-      userStore,
       msg,
-      clientService
+      ...sseEventWrapperOptions,
+      method: onSSEFileLockingEvent
     })
   )
 
   clientService.sseAuthenticated.addEventListener(MESSAGE_TYPE.ITEM_TRASHED, (msg) =>
-    onSSEItemTrashedEvent({
+    sseEventWrapper({
       topic: MESSAGE_TYPE.ITEM_TRASHED,
-      language,
-      resourcesStore,
-      clientService,
-      messageStore,
-      msg
+      msg,
+      ...sseEventWrapperOptions,
+      method: onSSEItemTrashedEvent
     })
   )
 
   clientService.sseAuthenticated.addEventListener(MESSAGE_TYPE.ITEM_RESTORED, (msg) =>
-    onSSEItemRestoredEvent({
+    sseEventWrapper({
       topic: MESSAGE_TYPE.ITEM_RESTORED,
-      resourcesStore,
-      spacesStore,
-      userStore,
       msg,
-      clientService
+      ...sseEventWrapperOptions,
+      method: onSSEItemRestoredEvent
     })
   )
 
   clientService.sseAuthenticated.addEventListener(MESSAGE_TYPE.ITEM_MOVED, (msg) =>
-    onSSEItemMovedEvent({
+    sseEventWrapper({
       topic: MESSAGE_TYPE.ITEM_MOVED,
-      resourcesStore,
-      spacesStore,
-      userStore,
       msg,
-      clientService
+      ...sseEventWrapperOptions,
+      method: onSSEItemMovedEvent
     })
   )
 
   clientService.sseAuthenticated.addEventListener(MESSAGE_TYPE.FOLDER_CREATED, (msg) =>
-    onSSEFolderCreatedEvent({
+    sseEventWrapper({
       topic: MESSAGE_TYPE.FOLDER_CREATED,
-      resourcesStore,
-      spacesStore,
       msg,
-      clientService
+      ...sseEventWrapperOptions,
+      method: onSSEFolderCreatedEvent
     })
   )
 
   clientService.sseAuthenticated.addEventListener(MESSAGE_TYPE.FILE_TOUCHED, (msg) =>
-    onSSEFileTouchedEvent({
+    sseEventWrapper({
       topic: MESSAGE_TYPE.FILE_TOUCHED,
-      resourcesStore,
-      spacesStore,
       msg,
-      clientService
+      ...sseEventWrapperOptions,
+      method: onSSEFileTouchedEvent
     })
   )
 
   clientService.sseAuthenticated.addEventListener(MESSAGE_TYPE.SPACE_MEMBER_ADDED, (msg) =>
-    onSSESpaceMemberAddedEvent({
+    sseEventWrapper({
       topic: MESSAGE_TYPE.SPACE_MEMBER_ADDED,
-      resourcesStore,
-      spacesStore,
       msg,
-      clientService,
-      router
+      ...sseEventWrapperOptions,
+      method: onSSESpaceMemberAddedEvent
     })
   )
 
   clientService.sseAuthenticated.addEventListener(MESSAGE_TYPE.SPACE_MEMBER_REMOVED, (msg) =>
-    onSSESpaceMemberRemovedEvent({
+    sseEventWrapper({
       topic: MESSAGE_TYPE.SPACE_MEMBER_REMOVED,
-      resourcesStore,
-      spacesStore,
-      messageStore,
       msg,
-      clientService,
-      language,
-      router
+      ...sseEventWrapperOptions,
+      method: onSSESpaceMemberRemovedEvent
     })
   )
 
   clientService.sseAuthenticated.addEventListener(MESSAGE_TYPE.SPACE_SHARE_UPDATED, (msg) =>
-    onSSESpaceShareUpdatedEvent({
+    sseEventWrapper({
       topic: MESSAGE_TYPE.SPACE_SHARE_UPDATED,
-      spacesStore,
-      resourcesStore,
-      messageStore,
       msg,
-      clientService,
-      language,
-      router
+      ...sseEventWrapperOptions,
+      method: onSSESpaceShareUpdatedEvent
     })
   )
 
   clientService.sseAuthenticated.addEventListener(MESSAGE_TYPE.SHARE_CREATED, (msg) =>
-    onSSEShareCreatedEvent({
+    sseEventWrapper({
       topic: MESSAGE_TYPE.SHARE_CREATED,
-      resourcesStore,
-      spacesStore,
-      userStore,
       msg,
-      clientService
+      ...sseEventWrapperOptions,
+      method: onSSEShareCreatedEvent
     })
   )
 
   clientService.sseAuthenticated.addEventListener(MESSAGE_TYPE.SHARE_REMOVED, (msg) =>
-    onSSEShareRemovedEvent({
+    sseEventWrapper({
       topic: MESSAGE_TYPE.SHARE_REMOVED,
-      resourcesStore,
-      spacesStore,
-      userStore,
       msg,
-      clientService
+      ...sseEventWrapperOptions,
+      method: onSSEShareRemovedEvent
     })
   )
 
   clientService.sseAuthenticated.addEventListener(MESSAGE_TYPE.SHARE_UPDATED, (msg) =>
-    onSSEShareUpdatedEvent({
+    sseEventWrapper({
       topic: MESSAGE_TYPE.SHARE_UPDATED,
-      resourcesStore,
-      spacesStore,
-      userStore,
       msg,
-      clientService
+      ...sseEventWrapperOptions,
+      method: onSSEShareUpdatedEvent
     })
   )
 
   clientService.sseAuthenticated.addEventListener(MESSAGE_TYPE.LINK_CREATED, (msg) =>
-    onSSELinkCreatedEvent({
-      topic: MESSAGE_TYPE.SHARE_CREATED,
-      resourcesStore,
-      spacesStore,
-      userStore,
+    sseEventWrapper({
+      topic: MESSAGE_TYPE.LINK_CREATED,
       msg,
-      clientService
+      ...sseEventWrapperOptions,
+      method: onSSELinkCreatedEvent
     })
   )
 
   clientService.sseAuthenticated.addEventListener(MESSAGE_TYPE.LINK_REMOVED, (msg) =>
-    onSSELinkRemovedEvent({
-      topic: MESSAGE_TYPE.SHARE_REMOVED,
-      resourcesStore,
-      spacesStore,
-      userStore,
+    sseEventWrapper({
+      topic: MESSAGE_TYPE.LINK_REMOVED,
       msg,
-      clientService
+      ...sseEventWrapperOptions,
+      method: onSSELinkRemovedEvent
     })
   )
 
   clientService.sseAuthenticated.addEventListener(MESSAGE_TYPE.LINK_UPDATED, (msg) =>
-    onSSELinkRemovedEvent({
-      topic: MESSAGE_TYPE.SHARE_UPDATED,
-      resourcesStore,
-      spacesStore,
-      userStore,
+    sseEventWrapper({
+      topic: MESSAGE_TYPE.LINK_UPDATED,
       msg,
-      clientService
+      ...sseEventWrapperOptions,
+      method: onSSELinkRemovedEvent
     })
   )
 }
