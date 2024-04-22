@@ -96,7 +96,7 @@ interfaces for various entities (like files, folders, shares and spaces) and mak
 transformed so that you can deal with more useful objects. The web-client package gets published
 on npmjs.com as [@ownclouders/web-client](https://www.npmjs.com/package/@ownclouders/web-client).
 
-Dedicated documentation for the `web-client` package is not available, yet, since our extension system is still work in progress.
+Dedicated documentation for the `web-client` package is not available, yet, since our extension system is still work in progress. However, the package's [README.md](https://github.com/owncloud/web/blob/master/packages/web-client/README.md) gives you a few examples on how to use it.
 
 ### web-pkg
 

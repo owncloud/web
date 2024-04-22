@@ -151,3 +151,10 @@ by the ownCloud Web runtime or the `files` app.
 To allow users to configure extensions, extension points can define user preferences. User preferences are defined as an object on the extension point configuration.
 Whenever an extension point declares to accept user preferences, it will get listed with a dropdown on the Preferences page (reachable via top right user menu).
 The user can then select one out of all the extensions which have been registered for this extension point. 
+
+### Helpful packages
+
+We currently offer two packages that can be integrated into your app, providing useful utilities and types.
+
+- `web-client` - This package serves as an abstraction layer between the server APIs and an app or extension. It converts API data into objects with helpful types and utilities. For details, please refer to the package's [README.md](https://github.com/owncloud/web/blob/master/packages/web-client/README.md).
+- `web-pkg` - This package provides utilities, most importantly a variety of components and composables, that can be useful when developing apps and extensions. For details, please refer to the package's [README.md](https://github.com/owncloud/web/blob/master/packages/web-pkg/README.md).
