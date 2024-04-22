@@ -125,10 +125,12 @@ export default defineConfig(({ mode, command }) => {
     ...(!production && {
       server: {
         port: 9201,
-        https: {
-          key: readFileSync('./dev/docker/traefik/certificates/server.key'),
-          cert: readFileSync('./dev/docker/traefik/certificates/server.crt')
-        }
+        ...(process.env.VITEST !== 'true' && {
+          https: {
+            key: readFileSync('./dev/docker/traefik/certificates/server.key'),
+            cert: readFileSync('./dev/docker/traefik/certificates/server.crt')
+          }
+        })
       }
     })
   }

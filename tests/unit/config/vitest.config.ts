@@ -34,8 +34,7 @@ export default defineConfig({
       '**/.{idea,git,cache,output,temp}/**',
       '**/{karma,rollup,webpack,vite,vitest,jest,ava,babel,nyc,cypress,tsup,build}.config.*',
       '.pnpm-store/*',
-      'packages/design-system/tests/e2e/**',
-      'packages/design-system/docs/**'
+      'e2e/**'
     ],
     alias: {
       'vue-inline-svg': `${root}/tests/unit/stubs/empty.ts`,
