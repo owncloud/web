@@ -40,19 +40,14 @@ const getCollaborator = (): CollaboratorShare => ({
 describe('FileShares', () => {
   describe('invite collaborator form', () => {
     it('renders the form when the resource can be shared', () => {
-      const resource = mock<Resource>({ isReceivedShare: () => false, canShare: () => true })
+      const resource = mock<Resource>()
       const { wrapper } = getWrapper({ resource, canShare: true })
       expect(wrapper.find('invite-collaborator-form-stub').exists()).toBeTruthy()
     })
     it('does not render the form when the resource can not be shared', () => {
-      const resource = mock<Resource>({ isReceivedShare: () => false, canShare: () => false })
+      const resource = mock<Resource>()
       const { wrapper } = getWrapper({ resource, canShare: false })
       expect(wrapper.find('invite-collaborator-form-stub').exists()).toBeFalsy()
-    })
-    it('does render the form when the resource is a received share and re-sharing is enabled', () => {
-      const resource = mock<Resource>({ isReceivedShare: () => true, canShare: () => true })
-      const { wrapper } = getWrapper({ resource })
-      expect(wrapper.find('invite-collaborator-form-stub').exists()).toBeTruthy()
     })
   })
 

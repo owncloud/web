@@ -63,7 +63,6 @@ export const extractParentFolderName = (resource: Resource): string | null => {
 }
 
 export const isShareRoot = (resource: Resource) => {
-  // FIXME: does not work for OCS resources (re-shares), see workaround in useResourceRouteResolver
   return typeof resource.isShareRoot === 'function' && resource.isShareRoot()
 }
 

@@ -153,8 +153,6 @@ export interface Capabilities {
         supports_upload_only?: boolean
         upload?: boolean
       }
-      resharing?: boolean
-      resharing_default?: boolean
       search_min_length?: number
       group?: {
         expire_date?: {

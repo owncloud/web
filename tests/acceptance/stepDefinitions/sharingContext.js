@@ -82,14 +82,13 @@ Then(
  * @param {string} type user|group
  * @param {string} name
  * @param {string} role
- * @param {string} resharedThrough
  * @param {string} additionalInfo
  * @returns {Promise}
  */
 const assertCollaboratorslistContains = function (
   type,
   name,
-  { role = undefined, resharedThrough = undefined, additionalInfo = undefined }
+  { role = undefined, additionalInfo = undefined }
 ) {
   if (type !== 'user' && type !== 'group' && type !== 'remote user') {
     throw new Error(`illegal type "${type}"`)
@@ -113,9 +112,6 @@ const assertCollaboratorslistContains = function (
 
       if (role) {
         assert.strictEqual(role, share.role)
-      }
-      if (resharedThrough) {
-        assert.strictEqual(`Shared by ${resharedThrough}`, share.resharer)
       }
       if (additionalInfo) {
         assert.strictEqual(`${additionalInfo}`, share.additionalInfo)
@@ -676,13 +672,6 @@ Then(
         `The expected expiration information was either '${information1}' or '${information2}', but got '${actualInfo}'`
       )
     }
-  }
-)
-
-Then(
-  'user {string} should be listed as {string} reshared through {string} in the collaborators list on the webUI',
-  function (user, role, resharedThrough) {
-    return assertCollaboratorslistContains('user', user, { role, resharedThrough })
   }
 )
 

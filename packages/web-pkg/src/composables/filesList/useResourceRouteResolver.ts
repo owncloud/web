@@ -2,7 +2,7 @@ import { unref, Ref } from 'vue'
 
 import { useGetMatchingSpace } from '../spaces'
 import { createFileRouteOptions } from '../../helpers/router'
-import { createLocationSpaces, createLocationShares } from '../../router'
+import { createLocationSpaces } from '../../router'
 import { CreateTargetRouteOptions } from '../../helpers/folderLink/types'
 import { Resource, SpaceResource } from '@ownclouders/web-client'
 import { ConfigStore } from '../piniaStores'
@@ -18,7 +18,7 @@ export const useResourceRouteResolver = (
   context?: any
 ) => {
   const targetRouteCallback = options.targetRouteCallback
-  const { getInternalSpace, getMatchingSpace } = useGetMatchingSpace(options)
+  const { getMatchingSpace } = useGetMatchingSpace(options)
 
   const createFolderLink = (createTargetRouteOptions: CreateTargetRouteOptions) => {
     if (unref(targetRouteCallback)) {
@@ -26,13 +26,7 @@ export const useResourceRouteResolver = (
     }
 
     const { path, fileId, resource } = createTargetRouteOptions
-    if (!resource.shareId && !unref(options.space) && !getInternalSpace(resource.storageId)) {
-      if (path === '/') {
-        return createLocationShares('files-shares-with-me')
-      }
-      // FIXME: This is a hacky way to resolve re-shares, but we don't have other options currently
-      return { name: 'resolvePrivateLink', params: { fileId } }
-    }
+
     const space = unref(options.space) || getMatchingSpace(resource)
     if (!space) {
       return {}

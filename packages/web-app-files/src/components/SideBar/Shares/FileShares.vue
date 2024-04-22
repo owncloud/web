@@ -15,8 +15,8 @@
     />
     <p
       v-else
-      key="no-reshare-permissions-message"
-      data-testid="files-collaborators-no-reshare-permissions-message"
+      key="no-share-permissions-message"
+      data-testid="files-collaborators-no-share-permissions-message"
       v-text="noSharePermsMessage"
     />
     <div v-if="hasSharees" class="avatars-wrapper oc-flex oc-flex-middle oc-flex-between">

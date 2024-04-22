@@ -103,20 +103,6 @@ Then(
   }
 )
 
-Then(
-  /"([^"]*)" (should|should not) be able to reshare the following resource(?:s)?$/,
-  async function (this: World, stepUser: string, condition: string, stepTable: DataTable) {
-    const ableToShare = condition === 'should'
-    const { page } = this.actorsEnvironment.getActor({ key: stepUser })
-    const shareObject = new objects.applicationFiles.Share({ page })
-
-    for (const { resource } of stepTable.hashes()) {
-      const hasSharePermission = await shareObject.hasPermissionToShare(resource)
-      expect(hasSharePermission).toBe(ableToShare)
-    }
-  }
-)
-
 When(
   '{string} navigates to the shared with me page',
   async function (this: World, stepUser: string): Promise<void> {

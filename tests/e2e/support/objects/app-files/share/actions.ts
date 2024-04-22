@@ -10,7 +10,7 @@ import { createdLinkStore } from '../../../store'
 const quickShareButton =
   '//*[@data-test-resource-name="%s"]/ancestor::tr//button[contains(@class, "files-quick-action-show-shares")]'
 const noPermissionToShareLabel =
-  '//*[@data-testid="files-collaborators-no-reshare-permissions-message"]'
+  '//*[@data-testid="files-collaborators-no-share-permissions-message"]'
 const actionMenuDropdownButton =
   '//*[@data-test-resource-name="%s"]/ancestor::tr//button[contains(@class, "resource-table-btn-action-dropdown")]'
 const actionsTriggerButton =
