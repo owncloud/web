@@ -2,11 +2,12 @@ import { unref } from 'vue'
 import { usePublicLinkContext } from '../authContext'
 import { useClientService } from '../clientService'
 import { useStore } from '../store'
-import { triggerDownloadWithFilename } from '../../../src/helpers'
+import { triggerDownloadWithFilename } from '../../helpers'
 import { useGettext } from 'vue3-gettext'
 import { useCapabilityCoreSupportUrlSigning } from '../capability'
 import { Store } from 'vuex'
 import { ClientService } from '../../services'
+import { encodePath } from '../../utils'
 
 export interface DownloadFileOptions {
   store?: Store<any>
@@ -42,7 +43,7 @@ export const useDownloadFile = (options?: DownloadFileOptions) => {
     // construct the download url
     const url =
       version === null
-        ? `${client.helpers._davPath}${file.webDavPath}`
+        ? `${client.helpers._davPath}${encodePath(file.webDavPath)}`
         : client.fileVersions.getFileVersionUrl(file.fileId, version)
 
     // download with signing enabled
