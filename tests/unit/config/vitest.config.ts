@@ -21,6 +21,7 @@ export default defineConfig({
     }
   ],
   test: {
+    name: 'unit',
     root,
     globals: true,
     environment: 'happy-dom',
