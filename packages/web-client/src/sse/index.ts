@@ -16,7 +16,10 @@ export enum MESSAGE_TYPE {
   SPACE_SHARE_UPDATED = 'space-share-updated',
   SHARE_CREATED = 'share-created',
   SHARE_REMOVED = 'share-removed',
-  SHARE_UPDATED = 'share-updated'
+  SHARE_UPDATED = 'share-updated',
+  LINK_CREATED = 'link-created',
+  LINK_REMOVED = 'link-removed',
+  LINK_UPDATED = 'link-updated'
 }
 
 export class RetriableError extends Error {

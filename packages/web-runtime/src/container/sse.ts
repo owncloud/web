@@ -520,7 +520,6 @@ export const onSSESpaceMemberAddedEvent = async ({
   topic,
   resourcesStore,
   spacesStore,
-  userStore,
   msg,
   clientService,
   router
@@ -528,7 +527,6 @@ export const onSSESpaceMemberAddedEvent = async ({
   topic: string
   resourcesStore: ResourcesStore
   spacesStore: SpacesStore
-  userStore: UserStore
   msg: MessageEvent
   clientService: ClientService
   router: Router
@@ -546,12 +544,9 @@ export const onSSESpaceMemberAddedEvent = async ({
       return
     }
 
-    let space = spacesStore.spaces.find((space) => space.id === sseData.spaceid)
-    if (!space) {
-      const { data } = await clientService.graphAuthenticated.drives.getDrive(sseData.itemid)
-      space = buildSpace(data)
-      spacesStore.addSpaces([space])
-    }
+    const { data } = await clientService.graphAuthenticated.drives.getDrive(sseData.itemid)
+    const space = buildSpace(data)
+    spacesStore.upsertSpace(space)
 
     if (!isLocationSpacesActive(router, 'files-spaces-projects')) {
       return
@@ -567,7 +562,6 @@ export const onSSESpaceMemberRemovedEvent = async ({
   topic,
   resourcesStore,
   spacesStore,
-  userStore,
   messageStore,
   msg,
   clientService,
@@ -577,7 +571,6 @@ export const onSSESpaceMemberRemovedEvent = async ({
   topic: string
   resourcesStore: ResourcesStore
   spacesStore: SpacesStore
-  userStore: UserStore
   msg: MessageEvent
   clientService: ClientService
   messageStore: MessageStore
@@ -597,28 +590,35 @@ export const onSSESpaceMemberRemovedEvent = async ({
       return
     }
 
-    const space = spacesStore.spaces.find((space) => space.id === sseData.spaceid)
-    if (!space) {
-      return
-    }
+    try {
+      const { data } = await clientService.graphAuthenticated.drives.listMyDrives(
+        '',
+        `id eq '${sseData.spaceid}'`
+      )
+      const space = buildSpace(data.value[0])
+      return spacesStore.upsertSpace(space)
+    } catch (_) {
+      const removedSpace = spacesStore.spaces.find((space) => space.id === sseData.spaceid)
+      if (!removedSpace) {
+        return
+      }
 
-    spacesStore.removeSpace(space)
+      spacesStore.removeSpace(removedSpace)
 
-    if (isLocationSpacesActive(router, 'files-spaces-projects')) {
-      return resourcesStore.removeResources([space])
-    }
+      if (isLocationSpacesActive(router, 'files-spaces-projects')) {
+        return resourcesStore.removeResources([removedSpace])
+      }
 
-    console.log(resourcesStore.currentFolder)
-    console.log(space)
-    if (
-      isLocationSpacesActive(router, 'files-spaces-generic') &&
-      space.id === resourcesStore.currentFolder.storageId
-    ) {
-      return messageStore.showMessage({
-        title: language.$gettext(
-          'Your access to this space has been revoked. Please navigate to another location.'
-        )
-      })
+      if (
+        isLocationSpacesActive(router, 'files-spaces-generic') &&
+        removedSpace.id === resourcesStore.currentFolder.storageId
+      ) {
+        return messageStore.showMessage({
+          title: language.$gettext(
+            'Your access to this space has been revoked. Please navigate to another location.'
+          )
+        })
+      }
     }
   } catch (e) {
     console.error(`Unable to parse sse event ${topic} data`, e)
@@ -627,18 +627,22 @@ export const onSSESpaceMemberRemovedEvent = async ({
 
 export const onSSESpaceShareUpdatedEvent = async ({
   topic,
-  resourcesStore,
   spacesStore,
-  userStore,
+  resourcesStore,
+  messageStore,
   msg,
-  clientService
+  clientService,
+  router,
+  language
 }: {
   topic: string
-  resourcesStore: ResourcesStore
   spacesStore: SpacesStore
-  userStore: UserStore
+  resourcesStore: ResourcesStore
+  messageStore: MessageStore
   msg: MessageEvent
   clientService: ClientService
+  router: Router
+  language: Language
 }) => {
   try {
     const sseData = eventSchema.parse(JSON.parse(msg.data))
@@ -651,6 +655,20 @@ export const onSSESpaceShareUpdatedEvent = async ({
        * handles its own business logic. Therefore, we'll return early here.
        */
       return
+    }
+
+    const { data } = await clientService.graphAuthenticated.drives.getDrive(sseData.itemid)
+    const space = buildSpace(data)
+    spacesStore.upsertSpace(space)
+
+    //TODO: Check that the actual user permission has changed, affectedUserId must be present in event
+    if (
+      isLocationSpacesActive(router, 'files-spaces-generic') &&
+      space.id === resourcesStore.currentFolder.storageId
+    ) {
+      return messageStore.showMessage({
+        title: language.$gettext('Your space role has been updated.')
+      })
     }
   } catch (e) {
     console.error(`Unable to parse sse event ${topic} data`, e)
@@ -721,6 +739,101 @@ export const onSSEShareUpdatedEvent = async ({
 }
 
 export const onSSEShareRemovedEvent = async ({
+  topic,
+  resourcesStore,
+  spacesStore,
+  userStore,
+  msg,
+  clientService
+}: {
+  topic: string
+  resourcesStore: ResourcesStore
+  spacesStore: SpacesStore
+  userStore: UserStore
+  msg: MessageEvent
+  clientService: ClientService
+}) => {
+  try {
+    const sseData = eventSchema.parse(JSON.parse(msg.data))
+    console.debug(`SSE event '${topic}'`, sseData)
+
+    if (sseData.initiatorid === clientService.initiatorId) {
+      /**
+       * If the request was initiated by the current client (browser tab),
+       * there's no need to proceed with the action since the web already
+       * handles its own business logic. Therefore, we'll return early here.
+       */
+      return
+    }
+  } catch (e) {
+    console.error(`Unable to parse sse event ${topic} data`, e)
+  }
+}
+
+export const onSSELinkCreatedEvent = async ({
+  topic,
+  resourcesStore,
+  spacesStore,
+  userStore,
+  msg,
+  clientService
+}: {
+  topic: string
+  resourcesStore: ResourcesStore
+  spacesStore: SpacesStore
+  userStore: UserStore
+  msg: MessageEvent
+  clientService: ClientService
+}) => {
+  try {
+    const sseData = eventSchema.parse(JSON.parse(msg.data))
+    console.debug(`SSE event '${topic}'`, sseData)
+
+    if (sseData.initiatorid === clientService.initiatorId) {
+      /**
+       * If the request was initiated by the current client (browser tab),
+       * there's no need to proceed with the action since the web already
+       * handles its own business logic. Therefore, we'll return early here.
+       */
+      return
+    }
+  } catch (e) {
+    console.error(`Unable to parse sse event ${topic} data`, e)
+  }
+}
+export const onSSELinkUpdatedEvent = async ({
+  topic,
+  resourcesStore,
+  spacesStore,
+  userStore,
+  msg,
+  clientService
+}: {
+  topic: string
+  resourcesStore: ResourcesStore
+  spacesStore: SpacesStore
+  userStore: UserStore
+  msg: MessageEvent
+  clientService: ClientService
+}) => {
+  try {
+    const sseData = eventSchema.parse(JSON.parse(msg.data))
+    console.debug(`SSE event '${topic}'`, sseData)
+
+    if (sseData.initiatorid === clientService.initiatorId) {
+      /**
+       * If the request was initiated by the current client (browser tab),
+       * there's no need to proceed with the action since the web already
+       * handles its own business logic. Therefore, we'll return early here.
+       */
+      return
+    }
+  } catch (e) {
+    console.error(`Unable to parse sse event ${topic} data`, e)
+  }
+}
+
+export const onSSELinkRemovedEvent = async ({
   topic,
   resourcesStore,
   spacesStore,

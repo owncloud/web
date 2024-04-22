@@ -68,7 +68,9 @@ import {
   onSSESpaceShareUpdatedEvent,
   onSSEShareCreatedEvent,
   onSSEShareRemovedEvent,
-  onSSEShareUpdatedEvent
+  onSSEShareUpdatedEvent,
+  onSSELinkCreatedEvent,
+  onSSELinkRemovedEvent
 } from './sse'
 
 const getEmbedConfigFromQuery = (
@@ -769,7 +771,6 @@ export const registerSSEEventListeners = ({
       topic: MESSAGE_TYPE.SPACE_MEMBER_ADDED,
       resourcesStore,
       spacesStore,
-      userStore,
       msg,
       clientService,
       router
@@ -781,7 +782,6 @@ export const registerSSEEventListeners = ({
       topic: MESSAGE_TYPE.SPACE_MEMBER_REMOVED,
       resourcesStore,
       spacesStore,
-      userStore,
       messageStore,
       msg,
       clientService,
@@ -793,11 +793,13 @@ export const registerSSEEventListeners = ({
   clientService.sseAuthenticated.addEventListener(MESSAGE_TYPE.SPACE_SHARE_UPDATED, (msg) =>
     onSSESpaceShareUpdatedEvent({
       topic: MESSAGE_TYPE.SPACE_SHARE_UPDATED,
-      resourcesStore,
       spacesStore,
-      userStore,
+      resourcesStore,
+      messageStore,
       msg,
-      clientService
+      clientService,
+      language,
+      router
     })
   )
 
@@ -825,6 +827,39 @@ export const registerSSEEventListeners = ({
 
   clientService.sseAuthenticated.addEventListener(MESSAGE_TYPE.SHARE_UPDATED, (msg) =>
     onSSEShareUpdatedEvent({
+      topic: MESSAGE_TYPE.SHARE_UPDATED,
+      resourcesStore,
+      spacesStore,
+      userStore,
+      msg,
+      clientService
+    })
+  )
+
+  clientService.sseAuthenticated.addEventListener(MESSAGE_TYPE.LINK_CREATED, (msg) =>
+    onSSELinkCreatedEvent({
+      topic: MESSAGE_TYPE.SHARE_CREATED,
+      resourcesStore,
+      spacesStore,
+      userStore,
+      msg,
+      clientService
+    })
+  )
+
+  clientService.sseAuthenticated.addEventListener(MESSAGE_TYPE.LINK_REMOVED, (msg) =>
+    onSSELinkRemovedEvent({
+      topic: MESSAGE_TYPE.SHARE_REMOVED,
+      resourcesStore,
+      spacesStore,
+      userStore,
+      msg,
+      clientService
+    })
+  )
+
+  clientService.sseAuthenticated.addEventListener(MESSAGE_TYPE.LINK_UPDATED, (msg) =>
+    onSSELinkRemovedEvent({
       topic: MESSAGE_TYPE.SHARE_UPDATED,
       resourcesStore,
       spacesStore,
