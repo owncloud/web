@@ -24,6 +24,9 @@ overrides:
 packageExtensionsChecksum: 3ef0ab2b0f9b90185dab73258f7cc8d5
 
 patchedDependencies:
+  '@vitest/coverage-v8@1.5.0':
+    hash: 76xtm63yscrbezcman4d4p7jte
+    path: patches/vitest-coverage-v8@1.5.0.patch
   caf@15.0.1:
     hash: l6oc6ggvh6ycwg3k5urnriyw5a
     path: patches/caf@15.0.1.patch
@@ -143,7 +146,7 @@ importers:
         version: 5.0.3(vite@5.2.8)(vue@3.4.21)
       '@vitest/coverage-v8':
         specifier: 1.5.0
-        version: 1.5.0(vitest@1.5.0)
+        version: 1.5.0(patch_hash=76xtm63yscrbezcman4d4p7jte)(vitest@1.5.0)
       '@vue/test-utils':
         specifier: 2.4.5
         version: 2.4.5
@@ -4952,7 +4955,7 @@ packages:
       vue: 3.4.21(typescript@5.4.5)
     dev: false
 
-  /@vitest/coverage-v8@1.5.0(vitest@1.5.0):
+  /@vitest/coverage-v8@1.5.0(patch_hash=76xtm63yscrbezcman4d4p7jte)(vitest@1.5.0):
     resolution: {integrity: sha512-1igVwlcqw1QUMdfcMlzzY4coikSIBN944pkueGi0pawrX5I5Z+9hxdTR+w3Sg6Q3eZhvdMAs8ZaF9JuTG1uYOQ==}
     peerDependencies:
       vitest: 1.5.0
@@ -4974,6 +4977,7 @@ packages:
     transitivePeerDependencies:
       - supports-color
     dev: true
+    patched: true
 
   /@vitest/expect@1.4.0:
     resolution: {integrity: sha512-Jths0sWCJZ8BxjKe+p+eKsoqev1/T8lYcrjavEaz8auEJ4jAVY0GwW3JKmdVU4mmNPLPHixh4GNXP7GFtAiDHA==}
