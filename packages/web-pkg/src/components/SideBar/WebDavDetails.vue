@@ -2,11 +2,7 @@
   <tr>
     <th scope="col" class="oc-pr-s oc-font-semibold" v-text="'WebDAV path'" />
     <td class="oc-flex oc-flex-middle">
-      <div
-        v-oc-tooltip="resource.webDavPath"
-        class="oc-text-truncate"
-        v-text="resource.webDavPath"
-      />
+      <div v-oc-tooltip="webDavPath" class="oc-text-truncate" v-text="webDavPath" />
       <oc-button
         v-oc-tooltip="$gettext('Copy WebDAV path')"
         class="oc-ml-s"
@@ -42,6 +38,7 @@ import { defineComponent, inject, ref, Ref, computed, unref } from 'vue'
 import { urlJoin } from '@ownclouders/web-client/src/utils'
 import { Resource } from '@ownclouders/web-client'
 import { useConfigurationManager } from '../../composables'
+import { encodePath } from '../../utils'
 
 export default defineComponent({
   name: 'WebDavDetails',
@@ -53,12 +50,15 @@ export default defineComponent({
     const copyWebDAVPathIcon = ref(copyIcon)
     const copyWebDAVUrlIcon = ref(copyIcon)
 
+    const webDavPath = computed(() => {
+      return encodePath(unref(resource).webDavPath)
+    })
     const webDavUrl = computed(() => {
-      return urlJoin(configurationManager.serverUrl, 'dav', unref(resource).webDavPath)
+      return urlJoin(configurationManager.serverUrl, 'dav', unref(webDavPath))
     })
 
     const copyWebDAVPathToClipboard = () => {
-      navigator.clipboard.writeText(unref(resource).webDavPath)
+      navigator.clipboard.writeText(unref(webDavPath))
       copyWebDAVPathIcon.value = copiedIcon
       setTimeout(() => (copyWebDAVPathIcon.value = copyIcon), 500)
     }
@@ -74,8 +74,8 @@ export default defineComponent({
       copyWebDAVPathToClipboard,
       copyWebDAVUrlIcon,
       copyWebDAVUrlToClipboard,
-      webDavUrl,
-      resource
+      webDavPath,
+      webDavUrl
     }
   }
 })
