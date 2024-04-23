@@ -434,12 +434,10 @@ export default defineComponent({
 }
 
 .oc-modal {
-  box-shadow: 5px 0 25px rgba(0, 0, 0, 0.3);
+  background-color: var(--oc-color-background-default);
   border: 1px solid var(--oc-color-input-border);
   border-radius: 15px;
-  background-color: var(--oc-color-background-default);
-  overflow-y: scroll;
-  max-height: 95vh !important;
+  box-shadow: 5px 0 25px rgba(0, 0, 0, 0.3);
   max-width: 500px;
   width: 100%;
 
@@ -501,6 +499,8 @@ export default defineComponent({
   &-body {
     color: var(--oc-color-text-default);
     line-height: 1.625;
+    max-height: calc(80vh - 2rem) !important;
+    overflow-y: auto;
     padding: var(--oc-space-medium) var(--oc-space-medium) 0;
     span {
       color: var(--oc-color-text-default);
