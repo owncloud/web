@@ -457,7 +457,6 @@ export const onSSESpaceMemberRemovedEvent = async ({
     return
   }
 
-  //TODO: RECHECK IF FIXED IN BACKEND
   if (!sseData.affecteduserids?.includes(userStore.user.id)) {
     const { data } = await clientService.graphAuthenticated.drives.listMyDrives(
       '',
@@ -502,7 +501,6 @@ export const onSSESpaceShareUpdatedEvent = async ({
     return
   }
 
-  // TODO: check if sse event is affected user not equal, fetch space, upsert return
   if (
     sseData.affecteduserids?.includes(userStore.user.id) &&
     resourcesStore.currentFolder?.storageId === sseData.spaceid
@@ -586,7 +584,6 @@ export const onSSEShareUpdatedEvent = async ({
     return
   }
 
-  // TODO: check if sse event is affected user not equal, fetch space, upsert return
   if (
     sseData.affecteduserids?.includes(userStore.user.id) &&
     resourcesStore.currentFolder?.storageId === sseData.spaceid
@@ -621,7 +618,6 @@ export const onSSEShareRemovedEvent = async ({
     return
   }
 
-  // TODO: check if sse event is affected user not equal, fetch space, upsert return
   if (
     sseData.affecteduserids?.includes(userStore.user.id) &&
     resourcesStore.currentFolder?.storageId === sseData.spaceid
