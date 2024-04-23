@@ -61,6 +61,7 @@ export interface Graph {
     disableDrive: (id: string) => AxiosPromise<void>
     deleteDrive: (id: string) => AxiosPromise<void>
     deleteDriveItem: (driveId: string, itemId: string) => AxiosPromise<void>
+    updateDriveItem: (driveId: string, itemId: string, driveItem: DriveItem) => AxiosPromise<void>
     createDriveItem: (driveId: string, driveItem: DriveItem) => AxiosPromise<DriveItem>
   }
   users: {
@@ -224,6 +225,8 @@ export const graph = (baseURI: string, axiosClient: AxiosInstance): Graph => {
         }),
       deleteDriveItem: (driveId: string, itemId: string) =>
         driveItemApiFactory.deleteDriveItem(driveId, itemId),
+      updateDriveItem: (driveId: string, itemId: string, driveItem: DriveItem) =>
+        driveItemApiFactory.updateDriveItem(driveId, itemId, driveItem),
       createDriveItem: (driveId: string, driveItem: DriveItem) =>
         drivesRootApiFactory.createDriveItem(driveId, driveItem)
     },

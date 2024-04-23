@@ -8,7 +8,6 @@ import { useGettext } from 'vue3-gettext'
 import { FileAction, FileActionOptions } from '../../actions'
 import { useMessages, useConfigStore, useResourcesStore } from '../../piniaStores'
 import { IncomingShareResource } from '@ownclouders/web-client'
-import { urlJoin } from '@ownclouders/web-client'
 
 export const useFileActionsToggleHideShare = () => {
   const { showMessage, showErrorMessage } = useMessages()
@@ -32,14 +31,10 @@ export const useFileActionsToggleHideShare = () => {
       triggerPromises.push(
         triggerQueue.add(async () => {
           try {
-            // FIXME: use graph endpoint as soon as it's available: https://github.com/owncloud/ocis/issues/8654
-            await clientService.httpAuthenticated.put(
-              urlJoin('ocs/v2.php/apps/files_sharing/api/v1/shares/pending', resource.shareId),
-              null,
-              {
-                params: { hidden: hidden ? 'true' : 'false', format: 'json' },
-                headers: { 'Ocs-Apirequest': true }
-              }
+            await clientService.graphAuthenticated.drives.updateDriveItem(
+              resource.driveId,
+              resource.id,
+              { '@UI.Hidden': hidden }
             )
 
             updateResourceField<IncomingShareResource>({
