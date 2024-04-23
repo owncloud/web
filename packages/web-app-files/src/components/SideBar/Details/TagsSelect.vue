@@ -2,6 +2,8 @@
   <oc-select
     ref="tagSelect"
     v-model="selectedTags"
+    :label="$gettext('Add or edit tags')"
+    :is-label-hidden="true"
     class="tags-select"
     :multiple="true"
     :disabled="readonly"

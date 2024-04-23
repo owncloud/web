@@ -6,6 +6,7 @@
       data-testid="oc-page-size-label"
       v-text="label"
     />
+    <!-- Streamline label above into oc-select? -->
     <oc-select
       :input-id="selectId"
       class="oc-page-size-select"

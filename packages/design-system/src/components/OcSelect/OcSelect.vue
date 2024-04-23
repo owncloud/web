@@ -1,6 +1,12 @@
 <template>
   <div>
-    <label v-if="label" :for="id" class="oc-label" v-text="label" />
+    <label
+      v-if="label"
+      :for="id"
+      :class="{ 'oc-invisible-sr': isLabelHidden }"
+      class="oc-label"
+      v-text="label"
+    />
     <oc-contextual-helper
       v-if="contextualHelper?.isEnabled"
       v-bind="contextualHelper?.data"
@@ -280,6 +286,10 @@ export default defineComponent({
     readOnly: {
       type: Boolean,
       default: false
+    },
+    isLabelHidden: {
+      type: Boolean,
+      default: false
     }
   },
   emits: ['search:input', 'update:modelValue'],
@@ -304,7 +314,9 @@ export default defineComponent({
     }
 
     onMounted(() => {
-      setComboBoxAriaLabel()
+      if (!props.label) {
+        setComboBoxAriaLabel()
+      }
     })
 
     const dropdownEnabled = ref(false)
