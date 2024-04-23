@@ -19,7 +19,6 @@ import {
   buildOutgoingShareResource,
   buildSpace,
   extractNodeId,
-  extractStorageId,
   ShareTypes
 } from '@ownclouders/web-client'
 import { z } from 'zod'
