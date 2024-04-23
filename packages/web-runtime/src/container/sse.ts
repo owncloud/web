@@ -31,7 +31,8 @@ const eventSchema = z.object({
   parentitemid: z.string(),
   spaceid: z.string().optional(),
   initiatorid: z.string().optional(),
-  etag: z.string().optional()
+  etag: z.string().optional(),
+  affecteduserids: z.array(z.string()).optional().nullable()
 })
 
 export type EventSchemaType = z.infer<typeof eventSchema>
@@ -64,7 +65,7 @@ export const sseEventWrapper = (options: SseEventWrapperOptions) => {
 
     return method({ ...sseEventOptions, sseData })
   } catch (e) {
-    console.error(`Unable to parse sse event ${topic} data`, e)
+    console.error(`Unable to process sse event ${topic} data`, e)
   }
 }
 
@@ -82,7 +83,8 @@ const itemInCurrentFolder = ({
 
   if (!extractNodeId(currentFolder.id)) {
     // if we don't have a nodeId here, we have a space (root) as current folder and can only check against the storageId
-    if (currentFolder.id !== extractStorageId(parentFolderId)) {
+    const spaceNodeId = currentFolder.id.split('$')[1]
+    if (`${currentFolder.id}!${spaceNodeId}` !== parentFolderId) {
       return false
     }
   } else {
@@ -107,7 +109,7 @@ export const onSSEItemRenamedEvent = async ({
   }
 
   const currentFolder = resourcesStore.currentFolder
-  const resourceIsCurrentFolder = currentFolder.id === sseData.itemid
+  const resourceIsCurrentFolder = currentFolder?.id === sseData.itemid
   const resource = resourceIsCurrentFolder
     ? currentFolder
     : resourcesStore.resources.find((f) => f.id === sseData.itemid)
@@ -247,7 +249,7 @@ export const onSSEItemTrashedEvent = ({
   }
 
   const currentFolder = resourcesStore.currentFolder
-  const resourceIsCurrentFolder = currentFolder.id === sseData.itemid
+  const resourceIsCurrentFolder = currentFolder?.id === sseData.itemid
 
   if (resourceIsCurrentFolder) {
     return messageStore.showMessage({
@@ -333,7 +335,7 @@ export const onSSEItemMovedEvent = async ({
     return
   }
 
-  if (resource.parentFolderId !== resourcesStore.currentFolder.id) {
+  if (resource.parentFolderId !== resourcesStore.currentFolder?.id) {
     return resourcesStore.removeResources([resource])
   }
 
@@ -447,6 +449,7 @@ export const onSSESpaceMemberRemovedEvent = async ({
   messageStore,
   clientService,
   language,
+  userStore,
   router
 }: SseEventOptions) => {
   if (sseData.initiatorid === clientService.initiatorId) {
@@ -454,36 +457,36 @@ export const onSSESpaceMemberRemovedEvent = async ({
     return
   }
 
-  // TODO: check if sse event is affected user not equal, fetch space, upsert return
-  try {
+  //TODO: RECHECK IF FIXED IN BACKEND
+  if (!sseData.affecteduserids?.includes(userStore.user.id)) {
     const { data } = await clientService.graphAuthenticated.drives.listMyDrives(
       '',
       `id eq '${sseData.spaceid}'`
     )
     const space = buildSpace(data.value[0])
     return spacesStore.upsertSpace(space)
-  } catch (_) {
-    const removedSpace = spacesStore.spaces.find((space) => space.id === sseData.spaceid)
-    if (!removedSpace) {
-      return
-    }
+  }
 
-    spacesStore.removeSpace(removedSpace)
+  const removedSpace = spacesStore.spaces.find((space) => space.id === sseData.spaceid)
+  if (!removedSpace) {
+    return
+  }
 
-    if (isLocationSpacesActive(router, 'files-spaces-projects')) {
-      return resourcesStore.removeResources([removedSpace])
-    }
+  spacesStore.removeSpace(removedSpace)
 
-    if (
-      isLocationSpacesActive(router, 'files-spaces-generic') &&
-      removedSpace.id === resourcesStore.currentFolder.storageId
-    ) {
-      return messageStore.showMessage({
-        title: language.$gettext(
-          'Your access to this space has been revoked. Please navigate to another location.'
-        )
-      })
-    }
+  if (isLocationSpacesActive(router, 'files-spaces-projects')) {
+    return resourcesStore.removeResources([removedSpace])
+  }
+
+  if (
+    isLocationSpacesActive(router, 'files-spaces-generic') &&
+    removedSpace.id === resourcesStore.currentFolder.storageId
+  ) {
+    return messageStore.showMessage({
+      title: language.$gettext(
+        'Your access to this space has been revoked. Please navigate to another location.'
+      )
+    })
   }
 }
 
@@ -491,7 +494,8 @@ export const onSSESpaceShareUpdatedEvent = async ({
   sseData,
   resourcesStore,
   spacesStore,
-  clientService
+  clientService,
+  userStore
 }: SseEventOptions) => {
   if (sseData.initiatorid === clientService.initiatorId) {
     // If initiated by current client (browser tab), action unnecessary. Web manages its own logic, return early.
@@ -499,11 +503,13 @@ export const onSSESpaceShareUpdatedEvent = async ({
   }
 
   // TODO: check if sse event is affected user not equal, fetch space, upsert return
-  if (resourcesStore.currentFolder?.storageId === sseData.spaceid) {
+  if (
+    sseData.affecteduserids?.includes(userStore.user.id) &&
+    resourcesStore.currentFolder?.storageId === sseData.spaceid
+  ) {
     const { data } = await clientService.graphAuthenticated.drives.getDrive(sseData.itemid)
     const space = buildSpace(data)
     spacesStore.upsertSpace(space)
-
     return eventBus.publish('app.files.list.load')
   }
 }
@@ -572,6 +578,7 @@ export const onSSEShareUpdatedEvent = async ({
   resourcesStore,
   sharesStore,
   clientService,
+  userStore,
   router
 }: SseEventOptions) => {
   if (sseData.initiatorid === clientService.initiatorId) {
@@ -580,7 +587,10 @@ export const onSSEShareUpdatedEvent = async ({
   }
 
   // TODO: check if sse event is affected user not equal, fetch space, upsert return
-  if (resourcesStore.currentFolder?.storageId === sseData.spaceid) {
+  if (
+    sseData.affecteduserids?.includes(userStore.user.id) &&
+    resourcesStore.currentFolder?.storageId === sseData.spaceid
+  ) {
     return eventBus.publish('app.files.list.load')
   }
 
@@ -612,7 +622,10 @@ export const onSSEShareRemovedEvent = async ({
   }
 
   // TODO: check if sse event is affected user not equal, fetch space, upsert return
-  if (resourcesStore.currentFolder?.storageId === sseData.spaceid) {
+  if (
+    sseData.affecteduserids?.includes(userStore.user.id) &&
+    resourcesStore.currentFolder?.storageId === sseData.spaceid
+  ) {
     return messageStore.showMessage({
       title: language.$gettext(
         'Your access to this share has been revoked. Please navigate to another location.'
