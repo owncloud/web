@@ -32,6 +32,7 @@
     <oc-text-input
       id="create-user-input-password"
       v-model="user.passwordProfile.password"
+      autocomplete="new-password"
       class="oc-mb-s"
       :label="$gettext('Password') + '*'"
       :error-message="formData.password.errorMessage"
