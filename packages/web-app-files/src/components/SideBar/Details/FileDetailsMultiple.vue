@@ -7,7 +7,7 @@
       </div>
     </div>
     <div>
-      <table class="details-table" :aria-label="detailsTableLabel">
+      <table class="details-table" :aria-label="detailsTableLabel" role="presentation">
         <tr data-testid="filesCount">
           <th scope="col" class="oc-pr-s oc-font-semibold" v-text="filesText" />
           <td v-text="filesCount" />

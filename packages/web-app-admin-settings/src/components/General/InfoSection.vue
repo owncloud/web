@@ -2,7 +2,7 @@
   <div>
     <h2 class="oc-py-s" v-text="$gettext('Info')" />
 
-    <table class="details-table">
+    <table class="details-table" role="presentation">
       <tr>
         <th scope="col" class="oc-pr-s" v-text="$gettext('ownCloud')" />
         <td v-text="backendProductName" />

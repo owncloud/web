@@ -177,9 +177,10 @@
       />
     </template>
     <template #ddate="{ item }">
-      <span
+      <p
         v-oc-tooltip="formatDate(item.ddate)"
         tabindex="0"
+        class="oc-m-rm"
         v-text="formatDateRelative(item.ddate)"
       />
     </template>
