@@ -252,3 +252,27 @@ Feature: link
     And "Anonymous" opens the public link "Link"
     And "Anonymous" unlocks the public link with password "%copied_password%"
     And "Alice" logs out
+
+
+  Scenario: edit password of the public link
+    When "Alice" logs in
+    And "Alice" creates the following folders in personal space using API
+      | name         |
+      | folderPublic |
+    And "Alice" creates the following files into personal space using API
+      | pathToFile             | content     |
+      | folderPublic/lorem.txt | lorem ipsum |
+    And "Alice" opens the "files" app
+    And "Alice" creates a public link creates a public link of following resource using the sidebar panel
+      | resource     | role     | password |
+      | folderPublic | Can edit | %public% |
+    And "Alice" renames the most recently created public link of resource "folderPublic" to "myPublicLink"
+    When "Anonymous" opens the public link "myPublicLink"
+    And "Anonymous" unlocks the public link with password "%public%"
+    And "Alice" changes the password of the public link named "myPublicLink" of resource "folderPublic" to "new-strongPass1"
+    And "Anonymous" refreshes the old link
+    And "Anonymous" unlocks the public link with password "new-strongPass1"
+    And "Anonymous" downloads the following public link resources using the sidebar panel
+      | resource  | type |
+      | lorem.txt | file |
+    And "Alice" logs out
