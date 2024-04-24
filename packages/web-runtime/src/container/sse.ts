@@ -548,35 +548,6 @@ export const onSSEShareCreatedEvent = async ({
     })
   }
 
-  if (sseData.spaceid === resourcesStore.currentFolder?.storageId) {
-    const space = spacesStore.spaces.find((space) => space.id === sseData.spaceid)
-    if (!space) {
-      return
-    }
-
-    const resource = await clientService.webdav.getFileInfo(space, {
-      fileId: sseData.itemid
-    })
-
-    if (resourcesStore.currentFolder.path.startsWith(resource.path)) {
-      resourcesStore.clearAncestorMetaData()
-      await resourcesStore.loadAncestorMetaData({
-        folder: resourcesStore.currentFolder,
-        space,
-        client: clientService.webdav
-      })
-
-      return resourcesStore.resources.forEach((file) => {
-        file.indicators = getIndicators({
-          space,
-          resource: file,
-          ancestorMetaData: resourcesStore.ancestorMetaData,
-          user: userStore.user
-        })
-      })
-    }
-  }
-
   if (isLocationSharesActive(router, 'files-shares-with-me')) {
     // FIXME: get drive item by id as soon as server supports it
     const { data } = await clientService.graphAuthenticated.drives.listSharedWithMe()
@@ -680,35 +651,6 @@ export const onSSEShareRemovedEvent = async ({
     })
   }
 
-  if (sseData.spaceid === resourcesStore.currentFolder?.storageId) {
-    const space = spacesStore.spaces.find((space) => space.id === sseData.spaceid)
-    if (!space) {
-      return
-    }
-
-    const resource = await clientService.webdav.getFileInfo(space, {
-      fileId: sseData.itemid
-    })
-
-    if (resourcesStore.currentFolder.path.startsWith(resource.path)) {
-      resourcesStore.clearAncestorMetaData()
-      await resourcesStore.loadAncestorMetaData({
-        folder: resourcesStore.currentFolder,
-        space,
-        client: clientService.webdav
-      })
-
-      return resourcesStore.resources.forEach((file) => {
-        file.indicators = getIndicators({
-          space,
-          resource: file,
-          ancestorMetaData: resourcesStore.ancestorMetaData,
-          user: userStore.user
-        })
-      })
-    }
-  }
-
   if (isLocationSharesActive(router, 'files-shares-with-others')) {
     const space = spacesStore.spaces.find((space) => space.id === sseData.spaceid)
     if (!space) {
@@ -772,35 +714,6 @@ export const onSSELinkCreatedEvent = async ({
     })
   }
 
-  if (sseData.spaceid === resourcesStore.currentFolder?.storageId) {
-    const space = spacesStore.spaces.find((space) => space.id === sseData.spaceid)
-    if (!space) {
-      return
-    }
-
-    const resource = await clientService.webdav.getFileInfo(space, {
-      fileId: sseData.itemid
-    })
-
-    if (resourcesStore.currentFolder.path.startsWith(resource.path)) {
-      resourcesStore.clearAncestorMetaData()
-      await resourcesStore.loadAncestorMetaData({
-        folder: resourcesStore.currentFolder,
-        space,
-        client: clientService.webdav
-      })
-
-      return resourcesStore.resources.forEach((file) => {
-        file.indicators = getIndicators({
-          space,
-          resource: file,
-          ancestorMetaData: resourcesStore.ancestorMetaData,
-          user: userStore.user
-        })
-      })
-    }
-  }
-
   if (isLocationSharesActive(router, 'files-shares-via-link')) {
     // FIXME: get drive item by id as soon as server supports it
     const { data } = await clientService.graphAuthenticated.drives.listSharedByMe()
@@ -854,26 +767,6 @@ export const onSSELinkRemovedEvent = async ({
         user: userStore.user
       })
     })
-  }
-
-  if (sseData.spaceid === resourcesStore.currentFolder?.storageId) {
-    if (resourcesStore.currentFolder.path.startsWith(resource.path)) {
-      resourcesStore.clearAncestorMetaData()
-      await resourcesStore.loadAncestorMetaData({
-        folder: resourcesStore.currentFolder,
-        space,
-        client: clientService.webdav
-      })
-
-      return resourcesStore.resources.forEach((file) => {
-        file.indicators = getIndicators({
-          space,
-          resource: file,
-          ancestorMetaData: resourcesStore.ancestorMetaData,
-          user: userStore.user
-        })
-      })
-    }
   }
 
   if (isLocationSharesActive(router, 'files-shares-via-link')) {
