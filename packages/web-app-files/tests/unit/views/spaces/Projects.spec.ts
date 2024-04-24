@@ -17,9 +17,9 @@ import {
 } from 'web-test-helpers'
 import { AbilityRule, SpaceResource } from '@ownclouders/web-client'
 import {
-  folderViewsFavorites,
-  folderViewsFolder,
-  folderViewsProjectSpaces
+  folderViewsFavoritesExtensionPoint,
+  folderViewsFolderExtensionPoint,
+  folderViewsProjectSpacesExtensionPoint
 } from '../../../../src/extensionPoints'
 
 vi.mock('@ownclouders/web-pkg', async (importOriginal) => ({
@@ -121,7 +121,11 @@ function getMountedWrapper({
     {
       id: 'com.github.owncloud.web.files.folder-view.resource-table',
       type: 'folderView',
-      extensionPointIds: [folderViewsFolder, folderViewsProjectSpaces, folderViewsFavorites],
+      extensionPointIds: [
+        folderViewsFolderExtensionPoint.id,
+        folderViewsProjectSpacesExtensionPoint.id,
+        folderViewsFavoritesExtensionPoint.id
+      ],
       folderView: {
         name: 'resource-table',
         label: 'Switch to default view',

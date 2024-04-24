@@ -71,14 +71,16 @@ export default defineComponent({
     const extensionRegistry = useExtensionRegistry()
     const extensionsContextActions = computed(() => {
       return extensionRegistry
-        .requestExtensions<ActionExtension>('action', {
+        .requestExtensions<ActionExtension>({
+          extensionType: 'action',
           extensionPointIds: ['app.files.context-actions']
         })
         .map((e) => e.action)
     })
     const extensionsBatchActions = computed(() => {
       return extensionRegistry
-        .requestExtensions<ActionExtension>('action', {
+        .requestExtensions<ActionExtension>({
+          extensionType: 'action',
           extensionPointIds: ['app.files.batch-actions']
         })
         .map((e) => e.action)

@@ -10,11 +10,20 @@ describe('useExtensionRegistry', () => {
   })
 
   describe('register and request extensions', () => {
+    describe('querying extensions throws an error', () => {
+      it('if neither extensionType nor extensionPoint are provided', () => {
+        getWrapper({
+          setup: (instance) => {
+            expect(() => instance.requestExtensions({})).toThrowError()
+          }
+        })
+      })
+    })
     describe('querying extensions has an empty result', () => {
       it('if no extensions are registered', () => {
         getWrapper({
           setup: (instance) => {
-            const result = instance.requestExtensions('customComponent')
+            const result = instance.requestExtensions({ extensionType: 'customComponent' })
             expect(result.length).toBe(0)
           }
         })
@@ -34,15 +43,17 @@ describe('useExtensionRegistry', () => {
           setup: (instance) => {
             instance.registerExtensions(extensions)
 
-            const result1 = instance.requestExtensions('sidebarPanel')
+            const result1 = instance.requestExtensions({ extensionType: 'sidebarPanel' })
             expect(result1.length).toBe(0)
 
-            const result2 = instance.requestExtensions('sidebarPanel', {
+            const result2 = instance.requestExtensions({
+              extensionType: 'sidebarPanel',
               extensionPointIds: ['some-other-extension-point-id']
             })
             expect(result2.length).toBe(0)
 
-            const result3 = instance.requestExtensions('customComponent', {
+            const result3 = instance.requestExtensions({
+              extensionType: 'customComponent',
               extensionPointIds: ['some-other-extension-point-id']
             })
             expect(result3.length).toBe(0)
@@ -68,10 +79,11 @@ describe('useExtensionRegistry', () => {
         setup: (instance) => {
           instance.registerExtensions(extensions)
 
-          const resultPlain = instance.requestExtensions('customComponent')
+          const resultPlain = instance.requestExtensions({ extensionType: 'customComponent' })
           expect(resultPlain.map((e) => e.id)).toEqual(extensionIds)
 
-          const resultWithExtensionPoint = instance.requestExtensions('customComponent', {
+          const resultWithExtensionPoint = instance.requestExtensions({
+            extensionType: 'customComponent',
             extensionPointIds: [extensionPointId, 'unknown-extension-point-id']
           })
           expect(resultWithExtensionPoint.map((e) => e.id)).toEqual(extensionIds)

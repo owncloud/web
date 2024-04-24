@@ -205,7 +205,7 @@ import {
 } from 'web-app-files/src/composables/keyboardActions'
 import { orderBy } from 'lodash-es'
 import { useResourcesViewDefaults } from '../../composables'
-import { folderViewsProjectSpaces } from '../../extensionPoints'
+import { folderViewsProjectSpacesExtensionPoint } from '../../extensionPoints'
 
 export default defineComponent({
   components: {
@@ -326,8 +326,8 @@ export default defineComponent({
     const viewModes = computed(() => {
       return [
         ...extensionRegistry
-          .requestExtensions<FolderViewExtension>('folderView', {
-            extensionPointIds: [folderViewsProjectSpaces]
+          .requestExtensions<FolderViewExtension>({
+            extensionPoint: folderViewsProjectSpacesExtensionPoint
           })
           .map((e) => e.folderView)
       ]

@@ -2,6 +2,7 @@ import { defineStore } from 'pinia'
 import { ref, Ref, unref } from 'vue'
 import { useConfigStore } from '../config'
 import { Extension, ExtensionPoint, ExtensionType } from './types'
+import { isNil } from 'lodash-es'
 
 export const useExtensionRegistry = defineStore('extensionRegistry', () => {
   const configStore = useConfigStore()
@@ -11,19 +12,29 @@ export const useExtensionRegistry = defineStore('extensionRegistry', () => {
   const registerExtensions = (e: Ref<Extension[]>) => {
     extensions.value.push(e)
   }
-  const requestExtensions = <T extends Extension>(
-    type: ExtensionType,
-    options?: {
-      extensionPointIds?: string[]
+  const requestExtensions = <T extends Extension>(options: {
+    extensionType?: ExtensionType
+    extensionPointIds?: string[]
+    extensionPoint?: ExtensionPoint
+  }) => {
+    let extensionType = options.extensionType
+    let extensionPointIds = options.extensionPointIds || []
+    if (!isNil(options.extensionPoint)) {
+      extensionType = options.extensionPoint.extensionType
+      extensionPointIds = [options.extensionPoint.id]
     }
-  ) => {
+
+    if (!extensionType) {
+      throw new Error('Either extensionType or extensionPoint must be provided')
+    }
+
     return unref(extensions).flatMap((e) =>
       unref(e).filter(
         (e) =>
-          e.type === type &&
+          e.type === extensionType &&
           !configStore.options.disabledExtensions.includes(e.id) &&
-          (!options?.extensionPointIds ||
-            e.extensionPointIds?.some((id) => options?.extensionPointIds.includes(id)))
+          (!extensionPointIds.length ||
+            e.extensionPointIds?.some((id) => extensionPointIds.includes(id)))
       )
     ) as T[]
   }

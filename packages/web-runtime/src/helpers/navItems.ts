@@ -13,7 +13,8 @@ export const getExtensionNavItems = ({
   appId: string
 }) =>
   extensionRegistry
-    .requestExtensions<SidebarNavExtension>('sidebarNav', {
+    .requestExtensions<SidebarNavExtension>({
+      extensionType: 'sidebarNav',
       extensionPointIds: [`app.${appId}.navItems`]
     })
     .map(({ navItem }) => navItem)

@@ -10,7 +10,7 @@ import { computed, unref } from 'vue'
 import { SDKSearch } from './search'
 import { useSideBarPanels } from './composables/extensions/useFileSideBars'
 import { useFolderViews } from './composables/extensions/useFolderViews'
-import { quickActionsExtensionPointId } from './extensionPoints'
+import { quickActionsExtensionPoint } from './extensionPoints'
 
 export const extensions = () => {
   const capabilityStore = useCapabilityStore()
@@ -35,13 +35,13 @@ export const extensions = () => {
         },
         {
           id: 'com.github.owncloud.web.files.quick-action.collaborator',
-          extensionPointIds: [quickActionsExtensionPointId],
+          extensionPointIds: [quickActionsExtensionPoint.id],
           type: 'action',
           action: unref(showSharesActions)[0]
         },
         {
           id: 'com.github.owncloud.web.files.quick-action.quicklink',
-          extensionPointIds: [quickActionsExtensionPointId],
+          extensionPointIds: [quickActionsExtensionPoint.id],
           type: 'action',
           action: unref(quickLinkActions)[0]
         }

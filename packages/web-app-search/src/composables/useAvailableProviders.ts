@@ -4,11 +4,9 @@ import { computed, Ref } from 'vue'
 export const useAvailableProviders = (): Ref<SearchProvider[]> => {
   const extensionRegistry = useExtensionRegistry()
 
-  const availableProviders = computed(() => {
+  return computed(() => {
     return extensionRegistry
-      .requestExtensions<SearchExtension>('search')
+      .requestExtensions<SearchExtension>({ extensionType: 'search' })
       .map(({ searchProvider }) => searchProvider)
   })
-
-  return availableProviders
 }

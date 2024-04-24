@@ -23,9 +23,9 @@ import { useBreadcrumbsFromPathMock } from '../../../mocks/useBreadcrumbsFromPat
 import { h } from 'vue'
 import { BreadcrumbItem } from 'design-system/src/components/OcBreadcrumb/types'
 import {
-  folderViewsFavorites,
-  folderViewsFolder,
-  folderViewsProjectSpaces
+  folderViewsFavoritesExtensionPoint,
+  folderViewsFolderExtensionPoint,
+  folderViewsProjectSpacesExtensionPoint
 } from '../../../../src/extensionPoints'
 
 const mockCreateFolder = vi.fn()
@@ -330,7 +330,11 @@ function getMountedWrapper({
     {
       id: 'com.github.owncloud.web.files.folder-view.resource-table',
       type: 'folderView',
-      extensionPointIds: [folderViewsFolder, folderViewsProjectSpaces, folderViewsFavorites],
+      extensionPointIds: [
+        folderViewsFolderExtensionPoint.id,
+        folderViewsProjectSpacesExtensionPoint.id,
+        folderViewsFavoritesExtensionPoint.id
+      ],
       folderView: {
         name: 'resource-table',
         label: 'Switch to default view',

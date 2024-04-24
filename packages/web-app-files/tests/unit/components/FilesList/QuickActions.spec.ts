@@ -5,7 +5,7 @@ import { useExtensionRegistry } from '@ownclouders/web-pkg'
 import { mock } from 'vitest-mock-extended'
 import { ref } from 'vue'
 import { Resource } from '@ownclouders/web-client'
-import { quickActionsExtensionPointId } from '../../../../src/extensionPoints'
+import { quickActionsExtensionPoint } from '../../../../src/extensionPoints'
 
 vi.mock('@ownclouders/web-pkg', async (importOriginal) => ({
   ...(await importOriginal<any>()),
@@ -91,11 +91,11 @@ function getWrapper({ embedModeEnabled = false } = {}) {
   const { requestExtensions } = useExtensionRegistry()
   vi.mocked(requestExtensions).mockReturnValue([
     mock<ActionExtension>({
-      extensionPointIds: [quickActionsExtensionPointId],
+      extensionPointIds: [quickActionsExtensionPoint.id],
       action: collaboratorAction
     }),
     mock<ActionExtension>({
-      extensionPointIds: [quickActionsExtensionPointId],
+      extensionPointIds: [quickActionsExtensionPoint.id],
       action: quickLinkAction
     })
   ])

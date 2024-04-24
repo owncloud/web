@@ -8,9 +8,9 @@ import { defaultPlugins, defaultStubs, mount, defaultComponentMocks } from 'web-
 import { RouteLocation } from 'vue-router'
 import { Extension, useExtensionRegistry } from '@ownclouders/web-pkg'
 import {
-  folderViewsFavorites,
-  folderViewsFolder,
-  folderViewsProjectSpaces
+  folderViewsFavoritesExtensionPoint,
+  folderViewsFolderExtensionPoint,
+  folderViewsProjectSpacesExtensionPoint
 } from '../../../src/extensionPoints'
 
 vi.mock('web-app-files/src/composables')
@@ -64,7 +64,11 @@ function getMountedWrapper({
     {
       id: 'com.github.owncloud.web.files.folder-view.resource-table',
       type: 'folderView',
-      extensionPointIds: [folderViewsFolder, folderViewsProjectSpaces, folderViewsFavorites],
+      extensionPointIds: [
+        folderViewsFolderExtensionPoint.id,
+        folderViewsProjectSpacesExtensionPoint.id,
+        folderViewsFavoritesExtensionPoint.id
+      ],
       folderView: {
         name: 'resource-table',
         label: 'Switch to default view',

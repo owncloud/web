@@ -28,8 +28,8 @@ export default defineComponent({
     const extensionPreferences = useExtensionPreferencesStore()
 
     const allExtensions = computed(() => {
-      return extensionRegistry.requestExtensions<CustomComponentExtension>('customComponent', {
-        extensionPointIds: [props.extensionPoint.id]
+      return extensionRegistry.requestExtensions<CustomComponentExtension>({
+        extensionPoint: props.extensionPoint
       })
     })
 

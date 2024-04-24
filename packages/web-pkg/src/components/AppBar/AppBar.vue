@@ -210,7 +210,8 @@ export default defineComponent({
         ] as FileAction[]
       }
 
-      const actionExtensions = requestExtensions<ActionExtension>('action', {
+      const actionExtensions = requestExtensions<ActionExtension>({
+        extensionType: 'action',
         extensionPointIds: ['app.files.batch-actions']
       })
       if (actionExtensions.length) {

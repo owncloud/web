@@ -183,10 +183,10 @@ export default defineComponent({
 
     const availablePanels = computed(() =>
       extensionRegistry
-        .requestExtensions<SidebarPanelExtension<SpaceResource, Resource, Resource>>(
-          'sidebarPanel',
-          { extensionPointIds: ['app.files.sidebar'] }
-        )
+        .requestExtensions<SidebarPanelExtension<SpaceResource, Resource, Resource>>({
+          extensionType: 'sidebarPanel',
+          extensionPointIds: ['app.files.sidebar']
+        })
         .map((e) => e.panel)
     )
 

@@ -98,7 +98,7 @@ import FilesViewWrapper from '../components/FilesViewWrapper.vue'
 import { useResourcesViewDefaults } from '../composables'
 import { useFileActions } from '@ownclouders/web-pkg'
 import { storeToRefs } from 'pinia'
-import { folderViewsFavorites } from '../extensionPoints'
+import { folderViewsFavoritesExtensionPoint } from '../extensionPoints'
 
 const visibilityObserver = new VisibilityObserver()
 
@@ -131,8 +131,8 @@ export default defineComponent({
     const viewModes = computed(() => {
       return [
         ...extensionRegistry
-          .requestExtensions<FolderViewExtension>('folderView', {
-            extensionPointIds: [folderViewsFavorites]
+          .requestExtensions<FolderViewExtension>({
+            extensionPoint: folderViewsFavoritesExtensionPoint
           })
           .map((e) => e.folderView)
       ]
