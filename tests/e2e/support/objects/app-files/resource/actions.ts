@@ -9,6 +9,7 @@ import { LinksEnvironment } from '../../../environment'
 import { config } from '../../../../config'
 import { buildXpathLiteral } from '../../../utils/locator'
 
+const topbarFilenameSelector = '#app-top-bar-resource .oc-resource-name'
 const downloadPreviewButton = '//button[contains(@id, "preview-download")]'
 const downloadFileButtonSingleShareView = '.oc-files-actions-download-file-trigger'
 const downloadFolderButtonSingleShareView = '.oc-files-actions-download-archive-trigger'
@@ -594,12 +595,18 @@ const pauseResumeUpload = (page: Page): Promise<void> => {
 }
 
 export const navigateMediaFile = async ({ page, navigationType }): Promise<void> => {
-  await Promise.all([
-    page.waitForResponse((resp) => resp.status() === 200 && resp.request().method() === 'GET'),
-    page.locator(util.format(mediaNavigationButton, navigationType)).click()
-  ])
+  const oldFileInMediaViewer = await page
+    .locator(topbarFilenameSelector)
+    .getAttribute('data-test-resource-name')
+
+  await page.locator(util.format(mediaNavigationButton, navigationType)).click()
   const fileViewerLocator = editor.fileViewerLocator({ page, fileViewerType: 'media-viewer' })
   await expect(fileViewerLocator).toBeVisible()
+
+  const currentFileInMediaViewer = await page
+    .locator(topbarFilenameSelector)
+    .getAttribute('data-test-resource-name')
+  expect(currentFileInMediaViewer).not.toEqual(oldFileInMediaViewer)
 }
 
 export const pauseResourceUpload = async (page: Page): Promise<void> => {
