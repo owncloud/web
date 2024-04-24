@@ -796,7 +796,7 @@ When(
 )
 
 When(
-  '{string} views the file {string} in the preview app using the sidebar panel',
+  '{string} opens a file {string} in the media-viewer using the sidebar panel',
   async function (this: World, stepUser: any, file: any): Promise<void> {
     const { page } = this.actorsEnvironment.getActor({ key: stepUser })
     const resourceObject = new objects.applicationFiles.Resource({ page })

@@ -154,6 +154,7 @@ Feature: link
       | simple.pdf | file |
     When "Brian" opens the public link "imageLink"
     And "Brian" unlocks the public link with password "%public%"
+    # https://github.com/owncloud/ocis/issues/8602
     Then "Brian" is in a media-viewer
     And "Brian" closes the file viewer
     And "Brian" downloads the following public link resources using the single share view

@@ -91,7 +91,7 @@ Feature: share
       | test_video.mp4  |
       | testavatar.jpeg |
       | testavatar.png  |
-    When "Alice" views the file "testavatar.png" in the preview app using the sidebar panel
+    When "Alice" opens a file "testavatar.png" in the media-viewer using the sidebar panel
     Then "Alice" is in a media-viewer
     When "Alice" closes the file viewer
     And "Alice" opens the following file in mediaviewer

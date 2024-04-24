@@ -1615,7 +1615,7 @@ export const openFileInViewer = async (args: openFileInViewerArgs): Promise<void
 }
 
 export const previewMediaFromSidebarPanel = async ({ page, resource }): Promise<void> => {
-  await sidebar.open({ page: page, resource })
+  await sidebar.open({ page, resource })
   await sidebar.openPanel({ page, name: 'actions' })
   await page.locator(util.format(sideBarActionButton, 'Preview')).click()
 }
