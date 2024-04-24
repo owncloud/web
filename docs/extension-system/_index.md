@@ -134,22 +134,20 @@ You can find predefined extension point ids in the extension points section belo
 #### Extension Points
 
 There are standardized components and places where extensions are being used automatically. The following are the ones that are currently provided
-by the ownCloud Web runtime or the `files` app. If you decide to develop an extension which fulfills the type and allows the extensionPointId of the respective extension point, 
+by the ownCloud Web runtime or the `files` app. If you decide to develop an extension which fulfills the type and registers itself for the extensionPointId of the respective extension point, 
 your extension will be used automatically. 
 
-1. Left Sidebar for Navigation
-2. Any file(s) context (files app, viewer apps, editor apps)
-   1. Right sidebar. ExtensionPointId `app.files.sidebar`. Mounts extensions of type `sidebarPanel`. 
-3. Files app
-   1. Folder views for regular folders. ExtensionPointId `app.files.folder-views.folder`.
-   2. Folder views for the project spaces overview. ExtensionPointId `app.files.folder-views.project-spaces`.
-   3. Folder views for the favorites page. ExtensionPointId `app.files.folder-views.favorites`.
-   4. Right click context menu. ExtensionPointId `app.files.context-actions`.
-   5. Batch actions in the app bar above file lists. ExtensionPointId `app.files.batch-actions`.
-   6. Upload menu. ExtensionPointId `app.files.upload-menu`.
-   7. Quick actions. ExtensionPointId `app.files.quick-actions`.
-4. Search results in the search app
-5. Global progress bar for the global loading state. ExtensionPointId `app.runtime.global-progress-bar`. Mounts a single extensions of type `customComponent`.
+1. Left Sidebar for Navigation. ExtensionPointId `app.${appName}.navItems` (dynamically created for each app). Mounts extensions of type `sidebarNav`.
+2. Files app
+   1. Right sidebar. ExtensionPointId `app.files.sidebar`. Mounts extensions of type `sidebarPanel`. Used in any file(s) context (files app, file viewer apps, file editor apps)
+   2. Folder views for regular folders. ExtensionPointId `app.files.folder-views.folder`. Mounts extensions of type `folderView`.
+   3. Folder views for the project spaces overview. ExtensionPointId `app.files.folder-views.project-spaces`. Mounts extensions of type `folderView`.
+   4. Folder views for the favorites page. ExtensionPointId `app.files.folder-views.favorites`. Mounts extensions of type `folderView`.
+   5. Right click context menu. ExtensionPointId `app.files.context-actions`. Mounts extensions of type `action`.
+   6. Batch actions in the app bar above file lists. ExtensionPointId `app.files.batch-actions`. Mounts extensions of type `action`.
+   7. Upload menu. ExtensionPointId `app.files.upload-menu`. Mounts extensions of type `action`.
+   8. Quick actions. ExtensionPointId `app.files.quick-actions`. Mounts extensions of type `action`.
+3. Global progress bar for the global loading state. ExtensionPointId `app.runtime.global-progress-bar`. Mounts a single extensions of type `customComponent`. If multiple exist, the user can choose via the account page.
 
 #### User Preferences for Extensions
 
