@@ -113,7 +113,7 @@
   "engines": {
     "node": ">=16"
   },
-  "packageManager": "pnpm@8.14.1",
+  "packageManager": "pnpm@9.0.5",
   "volta": {
     "node": "18.19.0"
   },
