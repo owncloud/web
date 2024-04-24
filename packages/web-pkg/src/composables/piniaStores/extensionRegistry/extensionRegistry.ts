@@ -1,7 +1,7 @@
 import { defineStore } from 'pinia'
 import { ref, Ref, unref } from 'vue'
 import { useConfigStore } from '../config'
-import { Extension, ExtensionPoint, ExtensionScope, ExtensionType } from './types'
+import { Extension, ExtensionPoint, ExtensionType } from './types'
 
 export const useExtensionRegistry = defineStore('extensionRegistry', () => {
   const configStore = useConfigStore()
@@ -14,7 +14,6 @@ export const useExtensionRegistry = defineStore('extensionRegistry', () => {
   const requestExtensions = <T extends Extension>(
     type: ExtensionType,
     options?: {
-      scopes?: ExtensionScope[]
       extensionPointIds?: string[]
     }
   ) => {
@@ -23,7 +22,6 @@ export const useExtensionRegistry = defineStore('extensionRegistry', () => {
         (e) =>
           e.type === type &&
           !configStore.options.disabledExtensions.includes(e.id) &&
-          (!options?.scopes || e.scopes?.some((s) => options?.scopes.includes(s))) &&
           (!options?.extensionPointIds ||
             e.extensionPointIds?.some((id) => options?.extensionPointIds.includes(id)))
       )

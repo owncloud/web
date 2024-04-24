@@ -72,11 +72,18 @@ const announceNavigationItems = (
     throw new ApiError("navigationItems can't be blank")
   }
 
+  const navExtensionPoint = {
+    id: `app.${applicationId}.navItems`,
+    extensionType: 'sidebarNav',
+    multiple: true
+  }
+  extensionRegistry.registerExtensionPoint(navExtensionPoint)
+
   const navExtensions = navigationItems.map((navItem) => ({
     id: `app.${applicationId}.${navItem.name}`,
     type: 'sidebarNav',
     navItem,
-    scopes: [`app.${applicationId}`]
+    extensionPointIds: [navExtensionPoint.id]
   })) as SidebarNavExtension[]
 
   extensionRegistry.registerExtensions(computed(() => navExtensions))

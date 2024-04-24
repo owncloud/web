@@ -10,13 +10,10 @@ export type ExtensionType = StringUnionOrAnyString<
   'action' | 'customComponent' | 'folderView' | 'search' | 'sidebarNav' | 'sidebarPanel'
 >
 
-export type ExtensionScope = StringUnionOrAnyString<'resource' | 'user' | 'group'>
-
 export type BaseExtension = {
   id: string
   type: ExtensionType
   extensionPointIds?: string[]
-  scopes?: ExtensionScope[] // TODO: deprecated
   userPreference?: {
     optionLabel?: string
   }
