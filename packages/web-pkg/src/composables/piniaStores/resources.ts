@@ -195,10 +195,6 @@ export const useResourcesStore = defineStore('resources', () => {
     ancestorMetaData.value = value
   }
 
-  const clearAncestorMetaData = () => {
-    ancestorMetaData.value = {}
-  }
-
   const updateAncestorField = <
     T extends AncestorMetaDataValue,
     K extends keyof AncestorMetaDataValue
@@ -328,7 +324,6 @@ export const useResourcesStore = defineStore('resources', () => {
 
     ancestorMetaData,
     setAncestorMetaData,
-    clearAncestorMetaData,
     updateAncestorField,
     loadAncestorMetaData
   }
