@@ -122,7 +122,7 @@ export function buildIncomingShareResource({
     fileId: driveItem.remoteItem.id,
     storageId,
     parentFolderId: driveItem.parentReference?.id,
-    sdate: driveItem.lastModifiedDateTime, // FIXME: share date is missing in API
+    sdate: driveItem.remoteItem.permissions[0].createdDateTime,
     indicators: [],
     tags: [],
     webDavPath: buildWebDavSpacesPath(driveItem.id, '/'),
@@ -175,7 +175,7 @@ export function buildOutgoingShareResource({
     fileId: driveItem.id,
     storageId,
     parentFolderId: driveItem.parentReference?.id,
-    sdate: driveItem.lastModifiedDateTime, // FIXME: share date is missing in API
+    sdate: driveItem.permissions[0].createdDateTime,
     indicators: [],
     tags: [],
     webDavPath: buildWebDavSpacesPath(storageId, path),
@@ -251,6 +251,7 @@ export function buildCollaboratorShare({
     permissions: (graphPermission['@libre.graph.permissions.actions']
       ? graphPermission['@libre.graph.permissions.actions']
       : role.rolePermissions.flatMap((p) => p.allowedResourceActions)) as GraphSharePermission[],
+    createdDateTime: graphPermission.createdDateTime,
     expirationDateTime: graphPermission.expirationDateTime
   }
 }
@@ -273,6 +274,7 @@ export function buildLinkShare({
     shareType: ShareTypes.link.value,
     sharedBy: { id: user.id, displayName: user.displayName },
     hasPassword: graphPermission.hasPassword,
+    createdDateTime: graphPermission.createdDateTime,
     expirationDateTime: graphPermission.expirationDateTime,
     displayName: graphPermission.link['@libre.graph.displayName'],
     isQuickLink: graphPermission.link['@libre.graph.quickLink'],

@@ -104,8 +104,7 @@ export const useSharesStore = defineStore('shares', () => {
       return
     }
 
-    // FIXME: use push as soon as we have a share date
-    unref(linkShares).unshift(share)
+    unref(linkShares).push(share)
   }
 
   const removeLinkShare = (share: LinkShare) => {

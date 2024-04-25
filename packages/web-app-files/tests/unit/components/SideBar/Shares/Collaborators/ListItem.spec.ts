@@ -55,7 +55,8 @@ const getShareMock = ({
   role: mock<ShareRole>({ description: '', displayName: '' }),
   resourceId: '1',
   indirect: false,
-  expirationDateTime: expirationDateTime || ''
+  expirationDateTime: expirationDateTime || '',
+  createdDateTime: '2024-01-01'
 })
 
 describe('Collaborator ListItem component', () => {

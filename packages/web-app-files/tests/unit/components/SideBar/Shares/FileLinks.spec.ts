@@ -19,6 +19,7 @@ const defaultLinksList = [
     id: '1',
     indirect: false,
     shareType: ShareTypes.link.value,
+    createdDateTime: '2020-01-01',
     displayName: 'public link 1',
     webUrl: ' some-link-1'
   },
@@ -26,6 +27,7 @@ const defaultLinksList = [
     id: '2',
     indirect: true,
     shareType: ShareTypes.link.value,
+    createdDateTime: '2020-01-01',
     displayName: 'public link 2',
     webUrl: ' some-link-2'
   }
@@ -70,7 +72,11 @@ describe('FileLinks', () => {
       })
 
       describe('collapsing', () => {
-        const link = mock<LinkShare>({ indirect: false, isQuickLink: false })
+        const link = mock<LinkShare>({
+          indirect: false,
+          isQuickLink: false,
+          createdDateTime: '2020-01-01'
+        })
 
         it('shows all links if showAllOnLoad config is set', () => {
           const links = [link, link, link, link]

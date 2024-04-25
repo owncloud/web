@@ -67,7 +67,6 @@ export interface Resource {
   lockTime?: string
   mimeType?: string
   isFolder?: boolean
-  sdate?: string // FIXME: move to `ShareResource`
   mdate?: string
   indicators?: ResourceIndicator[]
   size?: number | string // FIXME

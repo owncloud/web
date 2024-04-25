@@ -61,7 +61,11 @@ export interface Graph {
     disableDrive: (id: string) => AxiosPromise<void>
     deleteDrive: (id: string) => AxiosPromise<void>
     deleteDriveItem: (driveId: string, itemId: string) => AxiosPromise<void>
-    updateDriveItem: (driveId: string, itemId: string, driveItem: DriveItem) => AxiosPromise<void>
+    updateDriveItem: (
+      driveId: string,
+      itemId: string,
+      driveItem: DriveItem
+    ) => AxiosPromise<DriveItem>
     createDriveItem: (driveId: string, driveItem: DriveItem) => AxiosPromise<DriveItem>
   }
   users: {

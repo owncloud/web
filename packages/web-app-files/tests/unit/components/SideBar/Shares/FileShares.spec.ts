@@ -34,7 +34,8 @@ const getCollaborator = (): CollaboratorShare => ({
   role: mock<ShareRole>(),
   resourceId: uuidV4(),
   indirect: false,
-  shareType: ShareTypes.user.value
+  shareType: ShareTypes.user.value,
+  createdDateTime: '2024-01-01'
 })
 
 describe('FileShares', () => {
