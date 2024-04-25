@@ -71,6 +71,7 @@ export const onSSESpaceMemberRemovedEvent = async ({
     isLocationSpacesActive(router, 'files-spaces-generic') &&
     removedSpace.id === resourcesStore.currentFolder.storageId
   ) {
+    // Fixme: Message triggers when user membership was revoked, but still is in a group membership, which is wrong
     return messageStore.showMessage({
       title: language.$gettext(
         'Your access to this space has been revoked. Please navigate to another location.'
@@ -227,6 +228,7 @@ export const onSSEShareRemovedEvent = async ({
     sseData.affecteduserids?.includes(userStore.user.id) &&
     resourcesStore.currentFolder?.storageId === sseData.spaceid
   ) {
+    // Fixme: Message triggers when user share was revoked, but still is in a group share, which is wrong
     return messageStore.showMessage({
       title: language.$gettext(
         'Your access to this share has been revoked. Please navigate to another location.'
