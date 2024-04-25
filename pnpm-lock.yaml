@@ -36,9 +36,6 @@ patchedDependencies:
   vue3-gettext@2.4.0:
     hash: x32qkm4z6srz5xuveescagpdyu
     path: patches/vue3-gettext@2.4.0.patch
-  webdav@5.3.1:
-    hash: mahhb53czxqswha5lbflaeszya
-    path: patches/webdav@5.3.1.patch
 
 importers:
 
@@ -947,8 +944,8 @@ importers:
         specifier: 3.2.1
         version: 3.2.1
       webdav:
-        specifier: 5.3.1
-        version: 5.3.1(patch_hash=mahhb53czxqswha5lbflaeszya)
+        specifier: 5.6.0
+        version: 5.6.0
       xml-js:
         specifier: ^1.6.11
         version: 1.6.11
@@ -1200,8 +1197,8 @@ importers:
         specifier: workspace:*
         version: 'link:'
       webdav:
-        specifier: 5.3.1
-        version: 5.3.1(patch_hash=mahhb53czxqswha5lbflaeszya)
+        specifier: 5.6.0
+        version: 5.6.0
       webfontloader:
         specifier: ^1.6.28
         version: 1.6.28
@@ -2006,8 +2003,8 @@ packages:
   '@blakeembrey/template@1.1.0':
     resolution: {integrity: sha512-iZf+UWfL+DogJVpd/xMQyP6X6McYd6ArdYoPMiv/zlOTzeXXfQbYxBNJJBF6tThvsjLMbA8tLjkCdm9RWMFCCw==}
 
-  '@buttercup/fetch@0.1.2':
-    resolution: {integrity: sha512-mDBtsysQ0Gnrp4FamlRJGpu7HUHwbyLC4uUav1I7QAqThFAa/4d1cdZCxrV5gKvh6zO1fu95bILNJi4Y2hALhQ==}
+  '@buttercup/fetch@0.2.1':
+    resolution: {integrity: sha512-sCgECOx8wiqY8NN1xN22BqqKzXYIG2AicNLlakOAI4f0WgyLVUbAigMf8CZhBtJxdudTcB1gD5lciqi44jwJvg==}
 
   '@casl/ability@6.3.3':
     resolution: {integrity: sha512-UzbqsE9etu6QzZrRmqIyVun2kztAzJ46Tz7lC/2P2buCE6B6Ll7Vptz7JTQtGwapLbeKo2jS7dL966TVOQ7x4g==}
@@ -10718,9 +10715,9 @@ packages:
     resolution: {integrity: sha512-e0MO3wdXWKrLbL0DgGnUV7WHVuw9OUvL4hjgnPkIeEvESk74gAITi5G606JtZPp39cd8HA9VQzCIvA49LpPN5Q==}
     engines: {node: '>= 8'}
 
-  webdav@5.3.1:
-    resolution: {integrity: sha512-wzZdTHtMuSIXqHGBznc8FM2L94Mc/17Tbn9ppoMybRO0bjWOSIeScdVXWX5qqHsg00EjfiOcwMqGFx6ghIhccQ==}
-    engines: {node: '>=14'}
+  webdav@5.6.0:
+    resolution: {integrity: sha512-1zpC9T+nZAEz3hHrEdis3gybiwoR5LillHmFiylhYWAsGU0bGlWlRZtK5NJ3bTr2wCoKABrRGGqLk24+UxF4Gg==}
+    engines: {node: '>=16'}
 
   webfontloader@1.6.28:
     resolution: {integrity: sha512-Egb0oFEga6f+nSgasH3E0M405Pzn6y3/9tOVanv/DLfa1YBIgcv90L18YyWnvXkRbIM17v5Kv6IT2N6g1x5tvQ==}
@@ -11900,7 +11897,7 @@ snapshots:
 
   '@blakeembrey/template@1.1.0': {}
 
-  '@buttercup/fetch@0.1.2':
+  '@buttercup/fetch@0.2.1':
     optionalDependencies:
       node-fetch: 3.3.2
 
@@ -15172,8 +15169,7 @@ snapshots:
 
   data-uri-to-buffer@3.0.1: {}
 
-  data-uri-to-buffer@4.0.1:
-    optional: true
+  data-uri-to-buffer@4.0.1: {}
 
   data-urls@3.0.2:
     dependencies:
@@ -16126,7 +16122,6 @@ snapshots:
     dependencies:
       node-domexception: 1.0.0
       web-streams-polyfill: 3.2.1
-    optional: true
 
   figgy-pudding@3.5.2: {}
 
@@ -16344,7 +16339,6 @@ snapshots:
   formdata-polyfill@4.0.10:
     dependencies:
       fetch-blob: 3.2.0
-    optional: true
 
   forwarded@0.2.0: {}
 
@@ -18227,8 +18221,7 @@ snapshots:
     dependencies:
       minimatch: 3.1.2
 
-  node-domexception@1.0.0:
-    optional: true
+  node-domexception@1.0.0: {}
 
   node-emoji@1.11.0:
     dependencies:
@@ -18248,7 +18241,6 @@ snapshots:
       data-uri-to-buffer: 4.0.1
       fetch-blob: 3.2.0
       formdata-polyfill: 4.0.10
-    optional: true
 
   node-forge@0.10.0: {}
 
@@ -21959,21 +21951,21 @@ snapshots:
     dependencies:
       defaults: 1.0.4
 
-  web-streams-polyfill@3.2.1:
-    optional: true
+  web-streams-polyfill@3.2.1: {}
 
-  webdav@5.3.1(patch_hash=mahhb53czxqswha5lbflaeszya):
+  webdav@5.6.0:
     dependencies:
-      '@buttercup/fetch': 0.1.2
+      '@buttercup/fetch': 0.2.1
       base-64: 1.0.0
       byte-length: 1.0.2
+      entities: 4.5.0
       fast-xml-parser: 4.3.3
-      he: 1.2.0
       hot-patcher: 2.0.1
       layerr: 2.0.1
       md5: 2.3.0
       minimatch: 7.4.6
       nested-property: 4.0.0
+      node-fetch: 3.3.2
       path-posix: 1.0.0
       url-join: 5.0.0
       url-parse: 1.5.10
