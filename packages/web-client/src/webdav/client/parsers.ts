@@ -1,6 +1,5 @@
-import { parseXML } from 'webdav'
+import { parseXML, prepareFileFromProps } from 'webdav'
 import { XMLParser } from 'fast-xml-parser'
-import { prepareFileFromProps } from 'webdav/tools/dav'
 import { WebDavResponseResource, WebDavResponseTusSupport } from '../../helpers'
 import { urlJoin } from '../../utils'
 
