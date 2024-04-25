@@ -19,7 +19,7 @@ Feature: rename
     And "Alice" shares the following resource using API
       | resource | recipient | type | role     |
       | folder   | Brian     | user | Can edit |
-    And "Alice" creates a public link creates a public link of following resource using the sidebar panel
+    And "Alice" creates a public link of following resource using the sidebar panel
       | resource | role     | password |
       | folder   | Can edit | %public% |
     And "Brian" logs in

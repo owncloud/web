@@ -294,4 +294,12 @@ export class Resource {
   getLockLocator(args: Omit<po.expectFileToBeLockedArgs, 'page'>): Locator {
     return po.getLockLocator({ ...args, page: this.#page })
   }
+
+  async navigateMediaFile(navigationType): Promise<void> {
+    return po.navigateMediaFile({ page: this.#page, navigationType })
+  }
+
+  async previewMediaFromSidebarPanel(resource): Promise<void> {
+    await po.previewMediaFromSidebarPanel({ page: this.#page, resource })
+  }
 }
