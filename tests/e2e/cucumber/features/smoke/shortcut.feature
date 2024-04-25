@@ -21,7 +21,7 @@ Feature: Users can create shortcuts for resources and sites
       | resource | recipient | type | role     |
       | logo.jpg | Brian     | user | Can view |
     And "Alice" opens the "files" app
-    And "Alice" creates a public link creates a public link of following resource using the sidebar panel
+    And "Alice" creates a public link of following resource using the sidebar panel
       | resource        | password |
       | docs/notice.txt | %public% |
     And "Alice" renames the most recently created public link of resource "docs/notice.txt" to "myPublicLink"

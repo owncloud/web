@@ -16,7 +16,7 @@ Feature: link
       | folderPublic/lorem.txt | lorem ipsum |
 
     And "Alice" opens the "files" app
-    And "Alice" creates a public link creates a public link of following resource using the sidebar panel
+    And "Alice" creates a public link of following resource using the sidebar panel
       | resource     | role             | password |
       | folderPublic | Secret File Drop | %public% |
     And "Alice" renames the most recently created public link of resource "folderPublic" to "myPublicLink"
@@ -98,27 +98,27 @@ Feature: link
       | testavatar.jpg | Brian     | user | Can edit |
 
     And "Alice" opens the "files" app
-    And "Alice" creates a public link creates a public link of following resource using the sidebar panel
+    And "Alice" creates a public link of following resource using the sidebar panel
       | resource     | password |
       | folderPublic | %public% |
     And "Alice" renames the most recently created public link of resource "folderPublic" to "folderLink"
-    And "Alice" creates a public link creates a public link of following resource using the sidebar panel
+    And "Alice" creates a public link of following resource using the sidebar panel
       | resource                      | password |
       | folderPublic/shareToBrian.txt | %public% |
     And "Alice" renames the most recently created public link of resource "folderPublic/shareToBrian.txt" to "textLink"
-    And "Alice" creates a public link creates a public link of following resource using the sidebar panel
+    And "Alice" creates a public link of following resource using the sidebar panel
       | resource                     | password |
       | folderPublic/shareToBrian.md | %public% |
     And "Alice" renames the most recently created public link of resource "folderPublic/shareToBrian.md" to "markdownLink"
-    And "Alice" creates a public link creates a public link of following resource using the sidebar panel
+    And "Alice" creates a public link of following resource using the sidebar panel
       | resource   | password |
       | simple.pdf | %public% |
     And "Alice" renames the most recently created public link of resource "simple.pdf" to "pdfLink"
-    And "Alice" creates a public link creates a public link of following resource using the sidebar panel
+    And "Alice" creates a public link of following resource using the sidebar panel
       | resource       | password |
       | testavatar.jpg | %public% |
     And "Alice" renames the most recently created public link of resource "testavatar.jpg" to "imageLink"
-    And "Alice" creates a public link creates a public link of following resource using the sidebar panel
+    And "Alice" creates a public link of following resource using the sidebar panel
       | resource       | password |
       | test_video.mp4 | %public% |
     And "Alice" renames the most recently created public link of resource "test_video.mp4" to "videoLink"
@@ -242,7 +242,7 @@ Feature: link
       | lorem.txt  | some text |
 
     And "Alice" opens the "files" app
-    And "Alice" creates a public link creates a public link of following resource using the sidebar panel
+    And "Alice" creates a public link of following resource using the sidebar panel
       | resource  | password |
       | lorem.txt | %public% |
     When "Alice" tries to sets a new password "ownCloud-1" of the public link named "Link" of resource "lorem.txt"
@@ -275,7 +275,7 @@ Feature: link
       | pathToFile             | content     |
       | folderPublic/lorem.txt | lorem ipsum |
     And "Alice" opens the "files" app
-    And "Alice" creates a public link creates a public link of following resource using the sidebar panel
+    And "Alice" creates a public link of following resource using the sidebar panel
       | resource     | role     | password |
       | folderPublic | Can edit | %public% |
     And "Alice" renames the most recently created public link of resource "folderPublic" to "myPublicLink"

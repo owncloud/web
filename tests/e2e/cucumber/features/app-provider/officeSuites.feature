@@ -16,7 +16,7 @@ Feature: Integrate with online office suites like Collabora and OnlyOffice
     When "Alice" creates the following resources
       | resource         | type         | content              |
       | OpenDocument.odt | OpenDocument | OpenDocument Content |
-    And "Alice" creates a public link creates a public link of following resource using the sidebar panel
+    And "Alice" creates a public link of following resource using the sidebar panel
       | resource         | role     | password |
       | OpenDocument.odt | Can edit | %public% |
     And "Alice" logs out
@@ -29,7 +29,7 @@ Feature: Integrate with online office suites like Collabora and OnlyOffice
     When "Alice" creates the following resources
       | resource           | type           | content                |
       | MicrosoftWord.docx | Microsoft Word | Microsoft Word Content |
-    And "Alice" creates a public link creates a public link of following resource using the sidebar panel
+    And "Alice" creates a public link of following resource using the sidebar panel
       | resource           | role     | password |
       | MicrosoftWord.docx | Can edit | %public% |
     And "Alice" logs out

@@ -99,9 +99,9 @@ Feature: share
       | testavatar.jpeg |
     Then "Alice" is in a media-viewer
     When "Alice" navigates to the next media resource
-    When "Alice" navigates to the previous media resource
-    When "Alice" closes the file viewer
-    When "Alice" opens the following file in mediaviewer
+    And "Alice" navigates to the previous media resource
+    And "Alice" closes the file viewer
+    And "Alice" opens the following file in mediaviewer
       | resource        |
       | sampleGif.gif   |
     Then "Alice" is in a media-viewer
@@ -128,7 +128,7 @@ Feature: share
     When "Alice" downloads the following resource using the preview topbar
       | resource       | type |
       | test_video.mp4 | file |
-    When "Alice" closes the file viewer
+    And "Alice" closes the file viewer
     And "Alice" shares the following resource using the sidebar panel
       | resource         | recipient | type | role                                 | resourceType |
       | shareToBrian.txt | Brian     | user | Can edit                             | file         |
