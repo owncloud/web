@@ -10,7 +10,16 @@ export enum MESSAGE_TYPE {
   ITEM_TRASHED = 'item-trashed',
   ITEM_RESTORED = 'item-restored',
   ITEM_MOVED = 'item-moved',
-  FOLDER_CREATED = 'folder-created'
+  FOLDER_CREATED = 'folder-created',
+  SPACE_MEMBER_ADDED = 'space-member-added',
+  SPACE_MEMBER_REMOVED = 'space-member-removed',
+  SPACE_SHARE_UPDATED = 'space-share-updated',
+  SHARE_CREATED = 'share-created',
+  SHARE_REMOVED = 'share-removed',
+  SHARE_UPDATED = 'share-updated',
+  LINK_CREATED = 'link-created',
+  LINK_REMOVED = 'link-removed',
+  LINK_UPDATED = 'link-updated'
 }
 
 export class RetriableError extends Error {
