@@ -10,7 +10,7 @@ export const sseEventWrapper = (options: SseEventWrapperOptions) => {
 
     return method({ ...sseEventOptions, sseData })
   } catch (e) {
-    console.error(`Unable to process sse event ${topic} data`, e)
+    console.error(`Unable to process sse event ${topic}`, e)
   }
 }
 export const itemInCurrentFolder = ({
