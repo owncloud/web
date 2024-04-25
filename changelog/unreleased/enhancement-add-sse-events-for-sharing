@@ -1,0 +1,7 @@
+Enhancement: Add SSE event for moving
+
+We've added Server-Sent Events (SSE) for sharing.
+This notifies the user when they received or revoked access to a share or membership to a space.
+
+https://github.com/owncloud/web/pull/10807
+https://github.com/owncloud/web/issues/10647
