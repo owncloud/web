@@ -21,7 +21,7 @@ Feature: Users can create shortcuts for resources and sites
       | resource       | recipient | type | role     |
       | testavatar.jpg | Brian     | user | Can view |
     And "Alice" opens the "files" app
-    And "Alice" creates a public link creates a public link of following resource using the sidebar panel
+    And "Alice" creates a public link of following resource using the sidebar panel
       | resource        | password |
       | docs/notice.txt | %public% |
     And "Alice" renames the most recently created public link of resource "docs/notice.txt" to "myPublicLink"
@@ -47,7 +47,7 @@ Feature: Users can create shortcuts for resources and sites
       | resource       | name | type |
       | testavatar.jpg | logo | file |
     And "Brian" opens a shortcut "logo.url"
-    Then "Brian" is in a image-viewer
+    Then "Brian" is in a media-viewer
     And "Brian" closes the file viewer
 
     # create a shortcut to the public link

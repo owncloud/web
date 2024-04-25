@@ -30,7 +30,7 @@ Feature: lock
     And for "Alice" file "test.odt" should be locked
 
     # checking that sharing/unsharing and creating link of the locked file is possible
-    And "Alice" creates a public link creates a public link of following resource using the sidebar panel
+    And "Alice" creates a public link of following resource using the sidebar panel
       | resource | password |
       | test.odt | %public% |
     And "Alice" shares the following resource using the sidebar panel

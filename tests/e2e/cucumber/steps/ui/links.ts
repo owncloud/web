@@ -4,7 +4,7 @@ import { World } from '../../environment'
 import { objects } from '../../../support'
 
 When(
-  '{string} creates a public link creates a public link of following resource using the sidebar panel',
+  '{string} creates a public link of following resource using the sidebar panel',
   async function (this: World, stepUser: string, stepTable: DataTable) {
     const { page } = this.actorsEnvironment.getActor({ key: stepUser })
     const linkObject = new objects.applicationFiles.Link({ page })

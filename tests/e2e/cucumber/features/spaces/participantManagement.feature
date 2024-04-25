@@ -56,7 +56,7 @@ Feature: spaces participant management
     Then "Carol" should see folder "parent" but should not be able to edit
     # page reload is necessary to fetch all the changes made by user Brian
     When "Alice" reloads the spaces page
-    And "Alice" creates a public link creates a public link of following resource using the sidebar panel
+    And "Alice" creates a public link of following resource using the sidebar panel
       | resource | role     | password |
       | parent   | Can edit | %public% |
     And "Anonymous" opens the public link "Link"

@@ -86,16 +86,67 @@ Feature: share
       | shareToBrian.md  | new readme content edited |
     And "Alice" uploads the following resource
       | resource        |
-      | testavatar.jpeg |
       | simple.pdf      |
-    When "Alice" shares the following resource using the sidebar panel
+      | sampleGif.gif   |
+      | testimage.mp3   |
+      | sampleOgg.ogg   |
+      | sampleWebm.webm |
+      | test_video.mp4  |
+      | testavatar.jpeg |
+      | testavatar.png  |
+    When "Alice" opens a file "testavatar.png" in the media-viewer using the sidebar panel
+    Then "Alice" is in a media-viewer
+    When "Alice" closes the file viewer
+    And "Alice" opens the following file in mediaviewer
+      | resource        |
+      | testavatar.jpeg |
+    Then "Alice" is in a media-viewer
+    When "Alice" navigates to the next media resource
+    And "Alice" navigates to the previous media resource
+    And "Alice" closes the file viewer
+    And "Alice" opens the following file in mediaviewer
+      | resource        |
+      | sampleGif.gif   |
+    Then "Alice" is in a media-viewer
+    When "Alice" closes the file viewer
+    And "Alice" opens the following file in mediaviewer
+      | resource      |
+      | testimage.mp3 |
+    Then "Alice" is in a media-viewer
+    When "Alice" closes the file viewer
+    And "Alice" opens the following file in mediaviewer
+      | resource      |
+      | sampleOgg.ogg |
+    Then "Alice" is in a media-viewer
+    When "Alice" closes the file viewer
+    And "Alice" opens the following file in mediaviewer
+      | resource        |
+      | sampleWebm.webm |
+    Then "Alice" is in a media-viewer
+    When "Alice" closes the file viewer
+    And "Alice" opens the following file in mediaviewer
+      | resource       |
+      | test_video.mp4 |
+    Then "Alice" is in a media-viewer
+    When "Alice" downloads the following resource using the preview topbar
+      | resource       | type |
+      | test_video.mp4 | file |
+    And "Alice" closes the file viewer
+    And "Alice" shares the following resource using the sidebar panel
       | resource         | recipient | type | role     | resourceType |
       | shareToBrian.txt | Brian     | user | Can edit | file         |
       | shareToBrian.md  | Brian     | user | Can edit | file         |
       | testavatar.jpeg  | Brian     | user | Can view | file         |
       | simple.pdf       | Brian     | user | Can edit | file         |
       | sharedFile.txt   | Brian     | user | Can edit | file         |
+    And "Alice" navigates to the shared with others page
+    And "Alice" opens the following file in mediaviewer
+      | resource        |
+      | testavatar.jpeg |
+    Then "Alice" is in a media-viewer
+    When "Alice" closes the file viewer
 
+    And "Brian" opens the "files" app
     And "Brian" navigates to the shared with me page
     And "Brian" disables the sync for the following share
       | name           |
@@ -107,11 +158,13 @@ Feature: share
     And "Brian" opens the following file in mediaviewer
       | resource        |
       | testavatar.jpeg |
-    And "Brian" closes the file viewer
+    Then "Brian" is in a media-viewer
+    When "Brian" closes the file viewer
     And "Brian" opens the following file in pdfviewer
       | resource   |
       | simple.pdf |
     And "Brian" closes the file viewer
+    And "Alice" navigates to the personal space page
     And "Alice" removes following sharee
       | resource         | recipient |
       | shareToBrian.txt | Brian     |
