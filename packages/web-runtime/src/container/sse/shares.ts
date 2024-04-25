@@ -11,7 +11,7 @@ import {
   isLocationSpacesActive
 } from '@ownclouders/web-pkg'
 import { SSEEventOptions } from './types'
-import { itemInCurrentFolder } from './helpers'
+import { isItemInCurrentFolder } from './helpers'
 
 export const onSSESpaceMemberAddedEvent = async ({
   sseData,
@@ -126,7 +126,7 @@ export const onSSEShareCreatedEvent = async ({
 
   if (
     isLocationSpacesActive(router, 'files-spaces-generic') &&
-    itemInCurrentFolder({
+    isItemInCurrentFolder({
       resourcesStore,
       parentFolderId: sseData.parentitemid
     })
@@ -238,7 +238,7 @@ export const onSSEShareRemovedEvent = async ({
 
   if (
     isLocationSpacesActive(router, 'files-spaces-generic') &&
-    itemInCurrentFolder({
+    isItemInCurrentFolder({
       resourcesStore,
       parentFolderId: sseData.parentitemid
     })
@@ -307,7 +307,7 @@ export const onSSELinkCreatedEvent = async ({
 
   if (
     isLocationSpacesActive(router, 'files-spaces-generic') &&
-    itemInCurrentFolder({
+    isItemInCurrentFolder({
       resourcesStore,
       parentFolderId: sseData.parentitemid
     })
@@ -377,7 +377,7 @@ export const onSSELinkRemovedEvent = async ({
 
   if (
     isLocationSpacesActive(router, 'files-spaces-generic') &&
-    itemInCurrentFolder({
+    isItemInCurrentFolder({
       resourcesStore,
       parentFolderId: sseData.parentitemid
     })

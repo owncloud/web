@@ -13,7 +13,7 @@ export const sseEventWrapper = (options: SseEventWrapperOptions) => {
     console.error(`Unable to process sse event ${topic}`, e)
   }
 }
-export const itemInCurrentFolder = ({
+export const isItemInCurrentFolder = ({
   resourcesStore,
   parentFolderId
 }: {

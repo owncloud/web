@@ -1,6 +1,6 @@
 import { createFileRouteOptions, getIndicators, ImageDimension } from '@ownclouders/web-pkg'
 import { SSEEventOptions } from './types'
-import { itemInCurrentFolder } from './helpers'
+import { isItemInCurrentFolder } from './helpers'
 
 export const onSSEItemRenamedEvent = async ({
   sseData,
@@ -81,7 +81,7 @@ export const onSSEProcessingFinishedEvent = async ({
   resourceQueue,
   previewService
 }: SSEEventOptions) => {
-  if (!itemInCurrentFolder({ resourcesStore, parentFolderId: sseData.parentitemid })) {
+  if (!isItemInCurrentFolder({ resourcesStore, parentFolderId: sseData.parentitemid })) {
     return false
   }
   const resource = resourcesStore.resources.find((f) => f.id === sseData.itemid)
@@ -199,7 +199,7 @@ export const onSSEItemRestoredEvent = async ({
     return
   }
 
-  if (!itemInCurrentFolder({ resourcesStore, parentFolderId: resource.parentFolderId })) {
+  if (!isItemInCurrentFolder({ resourcesStore, parentFolderId: resource.parentFolderId })) {
     return false
   }
 
@@ -287,7 +287,7 @@ export const onSSEFileTouchedEvent = async ({
     return
   }
 
-  if (!itemInCurrentFolder({ resourcesStore, parentFolderId: resource.parentFolderId })) {
+  if (!isItemInCurrentFolder({ resourcesStore, parentFolderId: resource.parentFolderId })) {
     return false
   }
 
@@ -318,7 +318,7 @@ export const onSSEFolderCreatedEvent = async ({
     return
   }
 
-  if (!itemInCurrentFolder({ resourcesStore, parentFolderId: resource.parentFolderId })) {
+  if (!isItemInCurrentFolder({ resourcesStore, parentFolderId: resource.parentFolderId })) {
     return false
   }
 
