@@ -12,6 +12,7 @@ Summary
 * Enhancement - Accessibility improvements: [#5383](https://github.com/owncloud/web/issues/5383)
 * Enhancement - Add SSE event for moving: [#10798](https://github.com/owncloud/web/pull/10798)
 * Enhancement - Ability to theme sharing role icons: [#10801](https://github.com/owncloud/web/pull/10801)
+* Enhancement - Add SSE event for moving: [#10807](https://github.com/owncloud/web/pull/10807)
 
 Details
 -------
@@ -50,6 +51,14 @@ Details
 
    https://github.com/owncloud/ocis/issues/8844
    https://github.com/owncloud/web/pull/10801
+
+* Enhancement - Add SSE event for moving: [#10807](https://github.com/owncloud/web/pull/10807)
+
+   We've added Server-Sent Events (SSE) for sharing. This notifies the user when
+   they received or revoked access to a share or membership to a space.
+
+   https://github.com/owncloud/web/issues/10647
+   https://github.com/owncloud/web/pull/10807
 
 Changelog for ownCloud Web [9.0.0] (2024-04-16)
 =======================================
