@@ -4,8 +4,6 @@ import {
   PublicSpaceResource,
   ShareSpaceResource,
   SpaceResource,
-  SHARE_JAIL_ID,
-  OCM_PROVIDER_ID,
   SpaceRoles,
   SpaceRole
 } from './types'
@@ -82,28 +80,21 @@ export function buildPublicSpaceResource(
 
 export function buildShareSpaceResource({
   driveAliasPrefix,
-  shareId,
+  id,
   shareName,
   serverUrl
 }: {
   driveAliasPrefix: 'share' | 'ocm-share'
-  shareId: string | number
+  id: string
   shareName: string
   serverUrl: string
 }): ShareSpaceResource {
-  let id: string
-  if (driveAliasPrefix === 'ocm-share') {
-    id = `${OCM_PROVIDER_ID}$${shareId}!${shareId}`
-  } else {
-    id = [SHARE_JAIL_ID, shareId].join('!')
-  }
-
   const space = buildSpace({
     id,
     driveAlias: `${driveAliasPrefix}/${shareName}`,
     driveType: 'share',
     name: shareName,
-    shareId,
+    shareId: id,
     serverUrl
   }) as ShareSpaceResource
   space.rename = (newName: string) => {

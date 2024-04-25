@@ -29,7 +29,8 @@ export const SearchFactory = (dav: DAV, options: WebDavOptions) => {
       return {
         resources: results.map((r) => ({
           ...buildResource(r),
-          highlights: r.props[DavProperty.Highlights] || ''
+          highlights: r.props[DavProperty.Highlights] || '',
+          shareId: r.props[DavProperty.RemoteItemId] || ''
         })),
         totalResults: range ? parseInt(range?.split('/')[1]) : null
       }

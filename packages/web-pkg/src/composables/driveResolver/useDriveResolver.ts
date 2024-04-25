@@ -99,7 +99,7 @@ export const useDriveResolver = (options: DriveResolverOptions = {}): DriveResol
         const driveAliasPrefix = driveAliasAndItem.startsWith('ocm-share/') ? 'ocm-share' : 'share'
         matchingSpace = buildShareSpaceResource({
           driveAliasPrefix,
-          shareId: queryItemAsString(unref(shareId)),
+          id: queryItemAsString(unref(shareId)),
           shareName: unref(shareName),
           serverUrl: configStore.serverUrl
         })

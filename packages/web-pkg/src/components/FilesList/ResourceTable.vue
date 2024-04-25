@@ -1041,11 +1041,6 @@ export default defineComponent({
         return false
       }
 
-      // TODO: remove as soon as unsynced shares are accessible
-      if (isIncomingShareResource(resource) && !resource.syncEnabled) {
-        return false
-      }
-
       return !this.disabledResources.includes(resource.id)
     },
     getResourceCheckboxLabel(resource: Resource) {

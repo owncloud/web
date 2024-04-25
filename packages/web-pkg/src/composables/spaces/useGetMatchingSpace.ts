@@ -65,7 +65,7 @@ export const useGetMatchingSpace = (options?: GetMatchingSpaceOptions) => {
 
     return buildShareSpaceResource({
       driveAliasPrefix,
-      shareId: resource.shareId,
+      id: resource.shareId,
       shareName,
       serverUrl: configStore.serverUrl
     })

@@ -1,4 +1,4 @@
-import { SpaceResource, isShareSpaceResource, SHARE_JAIL_ID } from '../helpers'
+import { SpaceResource } from '../helpers'
 import { WebDavOptions } from './types'
 import { DAV } from './client'
 
@@ -11,14 +11,6 @@ export const MoveFilesFactory = (dav: DAV, options: WebDavOptions) => {
       { path: targetPath }: { path: string },
       options?: { overwrite?: boolean }
     ) {
-      if (isShareSpaceResource(sourceSpace) && sourcePath === '/') {
-        return dav.move(
-          `${sourceSpace.webDavPath}/${sourcePath || ''}`,
-          `/spaces/${SHARE_JAIL_ID}!${SHARE_JAIL_ID}/${targetPath || ''}`,
-          { overwrite: options?.overwrite || false }
-        )
-      }
-
       return dav.move(
         `${sourceSpace.webDavPath}/${sourcePath || ''}`,
         `${targetSpace.webDavPath}/${targetPath || ''}`,

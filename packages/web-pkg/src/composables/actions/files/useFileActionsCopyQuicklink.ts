@@ -1,4 +1,4 @@
-import { LinkShare, isIncomingShareResource } from '@ownclouders/web-client'
+import { LinkShare } from '@ownclouders/web-client'
 import { computed, unref } from 'vue'
 import { useClientService } from '../../clientService'
 import { useGettext } from 'vue3-gettext'
@@ -95,9 +95,6 @@ export const useFileActionsCopyQuickLink = () => {
       handler,
       isVisible: ({ space, resources }) => {
         if (resources.length !== 1) {
-          return false
-        }
-        if (isIncomingShareResource(resources[0]) && !resources[0].syncEnabled) {
           return false
         }
 

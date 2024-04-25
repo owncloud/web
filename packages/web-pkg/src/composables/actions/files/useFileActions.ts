@@ -1,5 +1,5 @@
 import kebabCase from 'lodash-es/kebabCase'
-import { isIncomingShareResource } from '@ownclouders/web-client'
+import { isShareSpaceResource } from '@ownclouders/web-client'
 import { routeToContextQuery } from '../../appDefaults'
 import { isLocationTrashActive } from '../../../router'
 import { computed, unref } from 'vue'
@@ -122,11 +122,7 @@ export const useFileActions = () => {
               return false
             }
 
-            if (
-              !unref(isSearchActive) &&
-              (isLocationTrashActive(router, 'files-trash-generic') ||
-                (isIncomingShareResource(resources[0]) && !resources[0].syncEnabled))
-            ) {
+            if (!unref(isSearchActive) && isLocationTrashActive(router, 'files-trash-generic')) {
               return false
             }
 
