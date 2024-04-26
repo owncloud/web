@@ -1,33 +1,46 @@
 import { Resource, SpaceResource } from '@ownclouders/web-client'
 import { createTestingPinia } from 'web-test-helpers'
-import { useResourcesStore } from '@ownclouders/web-pkg/src'
-import { mock } from 'vitest-mock-extended'
+import {
+  ClientService,
+  PreviewService,
+  useMessages,
+  useResourcesStore,
+  useSharesStore,
+  useSpacesStore,
+  useUserStore
+} from '@ownclouders/web-pkg'
+import { mock, mockDeep } from 'vitest-mock-extended'
 import { isItemInCurrentFolder, sseEventWrapper } from '../../../../src/container/sse'
+import PQueue from 'p-queue'
+import { Language } from 'vue3-gettext'
+import { Router } from 'vue-router'
 
 describe('helpers', () => {
   describe('method "sseEventWrapper"', () => {
     it('calls "console.debug" when executed', () => {
       console.debug = vi.fn()
       const topic = 'folder-created'
-      const msg = { data: JSON.stringify({ itemid: 'newfolder' }) }
+      const msg = mock<MessageEvent>({ data: JSON.stringify({ itemid: 'newfolder' }) })
       sseEventWrapper({
         msg,
         topic,
-        method: () => {}
+        method: () => {},
+        ...getMocks()
       })
       expect(console.debug).toHaveBeenCalledWith(`SSE event '${topic}'`, { itemid: 'newfolder' })
     })
     it('calls "console.error" when error was thrown', () => {
       console.error = vi.fn()
       const topic = 'folder-created'
-      const msg = { data: JSON.stringify({ itemid: 'newfolder' }) }
+      const msg = mock<MessageEvent>({ data: JSON.stringify({ itemid: 'newfolder' }) })
       const error = new Error('processing failed')
       sseEventWrapper({
         msg,
         topic,
         method: () => {
           throw error
-        }
+        },
+        ...getMocks()
       })
       expect(console.error).toHaveBeenCalledWith(`Unable to process sse event ${topic}`, error)
     })
@@ -93,8 +106,26 @@ const getMocks = ({
   createTestingPinia()
   const resourcesStore = useResourcesStore()
   resourcesStore.currentFolder = currentFolder
+  const spacesStore = useSpacesStore()
+  const messageStore = useMessages()
+  const userStore = useUserStore()
+  const sharesStore = useSharesStore()
+  const clientService = mockDeep<ClientService>()
+  const previewService = mockDeep<PreviewService>()
+  const router = mockDeep<Router>()
+  const language = mockDeep<Language>()
+  const resourceQueue = mockDeep<PQueue>()
 
   return {
-    resourcesStore
+    resourcesStore,
+    spacesStore,
+    router,
+    messageStore,
+    userStore,
+    sharesStore,
+    clientService,
+    previewService,
+    resourceQueue,
+    language
   }
 }
