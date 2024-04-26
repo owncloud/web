@@ -14,7 +14,7 @@ import PQueue from 'p-queue'
 
 export const eventSchema = z.object({
   itemid: z.string(),
-  parentitemid: z.string(),
+  parentitemid: z.string().optional(),
   spaceid: z.string().optional(),
   initiatorid: z.string().optional(),
   etag: z.string().optional(),
