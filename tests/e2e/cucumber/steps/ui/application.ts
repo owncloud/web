@@ -1,6 +1,7 @@
 import { When } from '@cucumber/cucumber'
 import { World } from '../../environment'
 import { objects } from '../../../support'
+import { waitForSSEEvent } from '../../../support/utils/locator'
 
 When(
   '{string} navigates to the project spaces management page',
@@ -25,3 +26,10 @@ When('{string} reloads the page', async function (this: World, stepUser: string)
   const applicationObject = new objects.runtime.Application({ page })
   await applicationObject.reloadPage()
 })
+
+When(
+  '{string} should get {string} SSE event',
+  async function (this: World, user: string, event: string): Promise<void> {
+    await waitForSSEEvent(user, event)
+  }
+)

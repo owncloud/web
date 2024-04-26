@@ -26,6 +26,7 @@ import { getTokenFromLogin } from '../../support/utils/tokenHelper'
 import { createdTokenStore } from '../../support/store/token'
 import { removeTempUploadDirectory } from '../../support/utils/runtimeFs'
 import { refreshToken, setupKeycloakAdminUser } from '../../support/api/keycloak'
+import { closeSSEConnections } from '../../support/environment/sse'
 
 export { World }
 
@@ -130,6 +131,7 @@ After(async function (this: World, { result, willBeRetried }: ITestCaseHookParam
   createdLinkStore.clear()
   createdTokenStore.clear()
   removeTempUploadDirectory()
+  closeSSEConnections()
 })
 
 AfterAll(() => state.browser && state.browser.close())

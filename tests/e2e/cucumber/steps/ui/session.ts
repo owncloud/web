@@ -1,7 +1,9 @@
 import { Given, When, Then } from '@cucumber/cucumber'
+import { PickleTag } from '@cucumber/messages'
 import { World } from '../../environment'
 import { config } from '../../../config'
 import { objects } from '../../../support'
+import { listenSSE } from '../../../support/environment/sse'
 
 async function createNewSession(world: World, stepUser: string) {
   const { page } = await world.actorsEnvironment.createActor({
@@ -22,6 +24,19 @@ async function LogInUser(this: World, stepUser: string): Promise<void> {
 
   await page.goto(config.frontendUrl)
   await sessionObject.login({ user })
+
+  if (this.feature.tags.length > 0) {
+    const tags = []
+    this.feature.tags.forEach((tag: PickleTag) => {
+      !!tag.name && tags.push(tag.name)
+    }, [])
+
+    // listen to SSE events when running scenarios with '@sse' tag
+    if (tags.includes('@sse')) {
+      void listenSSE(config.frontendUrl, user)
+    }
+  }
+
   await page.locator('#web-content').waitFor()
 }
 
