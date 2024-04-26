@@ -6,9 +6,9 @@ export const MoveFilesFactory = (dav: DAV, options: WebDavOptions) => {
   return {
     moveFiles(
       sourceSpace: SpaceResource,
-      { path: sourcePath },
+      { path: sourcePath }: { path: string },
       targetSpace: SpaceResource,
-      { path: targetPath },
+      { path: targetPath }: { path: string },
       options?: { overwrite?: boolean }
     ) {
       if (isShareSpaceResource(sourceSpace) && sourcePath === '/') {

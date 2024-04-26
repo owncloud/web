@@ -91,7 +91,7 @@ export class SSEAdapter implements EventSource {
     })
   }
 
-  fetchProvider(...args) {
+  fetchProvider(...args: [RequestInfo | URL, RequestInit]) {
     const [resource, config] = args
     const fetchConfig = { ...config, ...this.fetchOptions }
     return window.fetch(resource, fetchConfig)
@@ -101,14 +101,17 @@ export class SSEAdapter implements EventSource {
     this.abortController.abort('closed')
   }
 
-  addEventListener(type: string, listener: (this: EventSource, event: MessageEvent) => any): void {
+  addEventListener<K extends keyof EventSourceEventMap>(
+    type: string,
+    listener: (this: EventSource, event: EventSourceEventMap[K]) => any
+  ): void {
     this.eventListenerMap[type] = this.eventListenerMap[type] || []
     this.eventListenerMap[type].push(listener)
   }
 
-  removeEventListener(
+  removeEventListener<K extends keyof EventSourceEventMap>(
     type: string,
-    listener: (this: EventSource, event: MessageEvent) => any
+    listener: (this: EventSource, event: EventSourceEventMap[K]) => any
   ): void {
     this.eventListenerMap[type] = this.eventListenerMap[type]?.filter((func) => func !== listener)
   }
@@ -132,7 +135,7 @@ export class SSEAdapter implements EventSource {
 
 let eventSource: SSEAdapter = null
 
-export const sse = (baseURI: string, fetchOptions: FetchEventSourceInit): EventSource => {
+export const sse = (baseURI: string, fetchOptions: FetchEventSourceInit): SSEAdapter => {
   if (!eventSource) {
     eventSource = new SSEAdapter(
       new URL('ocs/v2.php/apps/notifications/api/v1/notifications/sse', baseURI).href,

@@ -4,10 +4,11 @@ vi.mock('@microsoft/fetch-event-source', () => ({
 
 import { EventSourceMessage, fetchEventSource } from '@microsoft/fetch-event-source'
 import { SSEAdapter, sse, MESSAGE_TYPE, RetriableError } from '../../src/sse'
+import { Mock } from 'vitest'
 
 const url = 'https://owncloud.test/'
 describe('SSEAdapter', () => {
-  let mockFetch
+  let mockFetch: Mock
 
   beforeEach(() => {
     mockFetch = vi.fn()

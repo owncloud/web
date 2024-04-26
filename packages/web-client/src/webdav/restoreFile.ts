@@ -7,7 +7,7 @@ export const RestoreFileFactory = (dav: DAV, options: WebDavOptions) => {
   return {
     restoreFile(
       space: SpaceResource,
-      { id }: { id: string | number },
+      { id }: { id: string },
       { path: restorePath }: { path: string },
       { overwrite }: { overwrite?: boolean }
     ) {

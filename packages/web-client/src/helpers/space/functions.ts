@@ -1,5 +1,5 @@
 import { User } from '../../graph/generated'
-import { extractDomSelector, extractNodeId, Resource } from '../resource'
+import { extractDomSelector, extractNodeId, Resource, ResourceIndicator } from '../resource'
 import {
   PublicSpaceResource,
   ShareSpaceResource,
@@ -15,7 +15,7 @@ import { buildWebDavPublicPath, buildWebDavOcmPath } from '../publicLink'
 import { urlJoin } from '../../utils'
 import { Drive, DriveItem } from '@ownclouders/web-client/graph/generated'
 
-export function buildWebDavSpacesPath(storageId: string | number, path?: string) {
+export function buildWebDavSpacesPath(storageId: string, path?: string) {
   return urlJoin('spaces', storageId, path, {
     leadingSlash: true
   })
@@ -28,9 +28,10 @@ export function buildWebDavSpacesTrashPath(storageId: string, path = '') {
 }
 
 export function getRelativeSpecialFolderSpacePath(space: SpaceResource, type: 'image' | 'readme') {
-  const typeMap = { image: 'spaceImageData', readme: 'spaceReadmeData' }
-  const webDavPathComponents = decodeURI(space[typeMap[type]].webDavUrl).split('/')
-  const idComponent = webDavPathComponents.find((c) => c.startsWith(space.id.toString()))
+  const typeMap = { image: 'spaceImageData', readme: 'spaceReadmeData' } as const
+  const specialProp = space[typeMap[type]]
+  const webDavPathComponents = decodeURI(specialProp.webDavUrl).split('/')
+  const idComponent = webDavPathComponents.find((c) => c.startsWith(space.id))
   if (!idComponent) {
     return ''
   }
@@ -140,7 +141,7 @@ export function buildSpace(
 
   if (data.root?.permissions) {
     for (const permission of data.root.permissions) {
-      spaceRoles[permission.roles[0]].push(
+      spaceRoles[permission.roles[0] as keyof SpaceRoles].push(
         ...permission.grantedToIdentities.reduce((acc, info) => {
           const kind = info.hasOwnProperty('group') ? 'group' : 'user'
           const spaceRole: SpaceRole = {
@@ -198,13 +199,13 @@ export function buildSpace(
     isFolder: true,
     mdate: data.lastModifiedDateTime,
     size: data.quota?.used,
-    indicators: [],
-    tags: [],
+    indicators: [] as ResourceIndicator[],
+    tags: [] as string[],
     permissions: '',
     starred: false,
     etag: '',
     shareId: data.shareId?.toString(),
-    shareTypes: [],
+    shareTypes: [] as number[],
     privateLink: '',
     downloadURL: '',
     owner: data.owner?.user,

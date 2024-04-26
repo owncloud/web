@@ -2,9 +2,9 @@ import { XMLBuilder } from 'fast-xml-parser'
 import { DavProperties, DavPropertyValue } from '../constants'
 
 const getNamespacedDavProps = (obj: Partial<Record<DavPropertyValue, unknown>>) => {
-  return Object.keys(obj).reduce<Record<string, string>>((acc, val) => {
+  return Object.keys(obj).reduce<Record<string, unknown>>((acc, val) => {
     const davNamespace = DavProperties.DavNamespace.includes(val as DavPropertyValue)
-    acc[davNamespace ? `d:${val}` : `oc:${val}`] = obj[val] || ''
+    acc[davNamespace ? `d:${val}` : `oc:${val}`] = obj[val as DavPropertyValue] || ''
     return acc
   }, {})
 }

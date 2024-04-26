@@ -51,7 +51,7 @@ export const ListFilesFactory = (
         // FIXME: This is a workaround for https://github.com/owncloud/ocis/issues/4758
         if (webDavResources.length === 1) {
           webDavResources[0].filename = urlJoin(space.id, path, {
-            leadingSlashes: true
+            leadingSlash: true
           })
         }
 
