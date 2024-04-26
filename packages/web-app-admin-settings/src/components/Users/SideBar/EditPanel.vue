@@ -199,7 +199,7 @@ export default defineComponent({
       )
     })
     const isLoginInputDisabled = computed(() => userStore.user.id === (props.user as User).id)
-    const isInputFieldReadOnly = (key) => {
+    const isInputFieldReadOnly = (key: string) => {
       return capabilityStore.graphUsersReadOnlyAttributes.includes(key)
     }
 
@@ -249,10 +249,10 @@ export default defineComponent({
       }
     }
 
-    const onEditUser = async ({ user, editUser }) => {
+    const onEditUser = async ({ user, editUser }: { user: User; editUser: User }) => {
       try {
         const client = clientService.graphAuthenticated
-        const graphEditUserPayloadExtractor = (user) => {
+        const graphEditUserPayloadExtractor = (user: User) => {
           return omit(user, ['drive', 'appRoleAssignments', 'memberOf'])
         }
         const graphEditUserPayload = diff(
@@ -377,7 +377,7 @@ export default defineComponent({
     }
   },
   methods: {
-    changeSelectedQuotaOption(option) {
+    changeSelectedQuotaOption(option: { value: number; displayValue: string }) {
       this.editUser.drive.quota.total = option.value
     },
     changeSelectedGroupOption(option: Group[]) {
@@ -467,7 +467,7 @@ export default defineComponent({
         formDataValue.errorMessage = ''
       })
     },
-    onUpdateRole(role) {
+    onUpdateRole(role: AppRoleAssignment) {
       if (!this.editUser.appRoleAssignments.length) {
         // FIXME: Add resourceId and principalId to be able to remove type cast
         this.editUser.appRoleAssignments.push({
@@ -477,12 +477,12 @@ export default defineComponent({
       }
       this.editUser.appRoleAssignments[0].appRoleId = role.id
     },
-    onUpdatePassword(password) {
+    onUpdatePassword(password: string) {
       this.editUser.passwordProfile = {
         password
       }
     },
-    onUpdateLogin({ value }) {
+    onUpdateLogin({ value }: { value: boolean }) {
       this.editUser.accountEnabled = value
     }
   }

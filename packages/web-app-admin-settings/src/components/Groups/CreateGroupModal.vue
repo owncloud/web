@@ -33,7 +33,7 @@ export default defineComponent({
     const groupSettingsStore = useGroupSettingsStore()
 
     const group: MaybeRef<Group> = ref({ displayName: '' })
-    const formData = ref({
+    const formData = ref<Record<string, { errorMessage: string; valid: boolean }>>({
       displayName: {
         errorMessage: '',
         valid: false

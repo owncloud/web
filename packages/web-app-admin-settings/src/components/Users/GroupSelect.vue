@@ -57,8 +57,8 @@ export default defineComponent({
   emits: ['selectedOptionChange'],
   setup(props, { emit }) {
     const selectedOptions = ref()
-    const onUpdate = (event) => {
-      selectedOptions.value = event
+    const onUpdate = (group: Group) => {
+      selectedOptions.value = group
       emit('selectedOptionChange', unref(selectedOptions))
     }
 

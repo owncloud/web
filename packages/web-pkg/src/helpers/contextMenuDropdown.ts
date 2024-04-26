@@ -1,8 +1,21 @@
-export const displayPositionedDropdown = (dropdown, event, contextMenuButton) => {
+import OcButton from 'design-system/src/components/OcButton/OcButton.vue'
+import OcDrop from 'design-system/src/components/OcDrop/OcDrop.vue'
+import { ComponentPublicInstance } from 'vue'
+
+export type ContextMenuBtnClickEventData = {
+  event: MouseEvent
+  dropdown: ComponentPublicInstance<typeof OcDrop>
+}
+
+export const displayPositionedDropdown = (
+  dropdown: ComponentPublicInstance<typeof OcDrop>,
+  event: MouseEvent,
+  contextMenuButton: ComponentPublicInstance<typeof OcButton>
+) => {
   const contextMenuButtonPos = contextMenuButton.$el.getBoundingClientRect()
   const isKeyboardEvent = event.clientY === 0
   const yValue = isKeyboardEvent
-    ? event.srcElement?.getBoundingClientRect().top || 0
+    ? (event.target as HTMLElement)?.getBoundingClientRect().top || 0
     : event.clientY
 
   dropdown.setProps({

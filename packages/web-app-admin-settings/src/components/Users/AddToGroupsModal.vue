@@ -51,7 +51,7 @@ export default defineComponent({
 
     const onConfirm = async () => {
       const client = clientService.graphAuthenticated
-      const usersToFetch = []
+      const usersToFetch: string[] = []
       const promises = unref(selectedOptions).reduce((acc, group) => {
         for (const user of props.users) {
           if (!user.memberOf.find((userGroup) => userGroup.id === group.id)) {

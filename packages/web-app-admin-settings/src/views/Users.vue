@@ -137,7 +137,7 @@ import {
   useUserActionsEditQuota,
   useUserActionsCreateUser
 } from '../composables'
-import { User, Group } from '@ownclouders/web-client/graph/generated'
+import { User, Group, AppRole, Quota } from '@ownclouders/web-client/graph/generated'
 import {
   AppLoadingSpinner,
   ItemFilter,
@@ -152,7 +152,8 @@ import {
   SideBarPanel,
   SideBarPanelContext,
   useCapabilityStore,
-  useConfigStore
+  useConfigStore,
+  QueryValue
 } from '@ownclouders/web-pkg'
 import {
   computed,
@@ -162,7 +163,8 @@ import {
   onMounted,
   unref,
   watch,
-  nextTick
+  nextTick,
+  Ref
 } from 'vue'
 import { useTask } from 'vue-concurrency'
 import { useGettext } from 'vue3-gettext'
@@ -250,7 +252,7 @@ export default defineComponent({
       }
 
       const filter = Object.values(filters)
-        .reduce((acc, f: any) => {
+        .reduce((acc, f) => {
           if ('value' in f) {
             if (unref(f.value)) {
               acc.push(format(f.query, unref(f.value)))
@@ -306,7 +308,10 @@ export default defineComponent({
       return router.push({ ...unref(route), query: { ...unref(route).query, page: '1' } })
     }
 
-    const filters = {
+    const filters: Record<
+      string,
+      { param: Ref<QueryValue>; query: string; ids?: Ref<string[]>; value?: Ref<string> }
+    > = {
       groups: {
         param: useRouteQuery('q_groups'),
         query: `memberOf/any(m:m/id eq '%s')`,
@@ -331,14 +336,14 @@ export default defineComponent({
         unref(filters.displayName.value)?.length
       )
     })
-    const filterGroups = (groups) => {
+    const filterGroups = (groups: Group[]) => {
       filters.groups.ids.value = groups.map((g) => g.id)
       loadUsersTask.perform()
       userSettingsStore.setSelectedUsers([])
       additionalUserDataLoadedForUserIds.value = []
       return resetPagination()
     }
-    const filterRoles = (roles) => {
+    const filterRoles = (roles: AppRole[]) => {
       filters.roles.ids.value = roles.map((r) => r.id)
       loadUsersTask.perform()
       userSettingsStore.setSelectedUsers([])
@@ -378,7 +383,7 @@ export default defineComponent({
       ].filter((item) => item.isVisible({ resources: unref(selectedUsers) }))
     })
 
-    const updateSpaceQuota = ({ spaceId, quota }) => {
+    const updateSpaceQuota = ({ spaceId, quota }: { spaceId: string; quota: Quota }) => {
       const user = unref(users).find((u) => u.drive?.id === spaceId)
       user.drive.quota = quota
       userSettingsStore.upsertUser(user)

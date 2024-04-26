@@ -48,7 +48,7 @@ const spaceMocks = [
       remaining: 1500000000
     }
   }
-]
+] as SpaceResource[]
 
 const selectors = {
   ocTableStub: 'oc-table-stub'
@@ -69,7 +69,7 @@ describe('SpacesList', () => {
     'sorts by property "%s"',
     async (prop) => {
       const { wrapper } = getWrapper({ mountType: shallowMount, spaces: spaceMocks })
-      wrapper.vm.sortBy = prop
+      wrapper.vm.sortBy = prop as keyof SpaceResource
       await wrapper.vm.$nextTick()
       expect(
         (
@@ -90,7 +90,7 @@ describe('SpacesList', () => {
   it('should set the sort parameters accordingly when calling "handleSort"', () => {
     const { wrapper } = getWrapper({ spaces: [spaceMocks[0]] })
     const sortBy = 'members'
-    const sortDir = 'desc'
+    const sortDir = SortDir.Desc
     wrapper.vm.handleSort({ sortBy, sortDir })
     expect(wrapper.vm.sortBy).toEqual(sortBy)
     expect(wrapper.vm.sortDir).toEqual(sortDir)
@@ -103,7 +103,6 @@ describe('SpacesList', () => {
   })
   it('should show the context menu on right click', async () => {
     const spyDisplayPositionedDropdown = vi.mocked(displayPositionedDropdown)
-    // .mockImplementation(() => undefined)
     const { wrapper } = getWrapper({ spaces: spaceMocks })
     await wrapper.find(`[data-item-id="${spaceMocks[0].id}"]`).trigger('contextmenu')
     expect(spyDisplayPositionedDropdown).toHaveBeenCalledTimes(1)
@@ -134,7 +133,7 @@ describe('SpacesList', () => {
       })
     })
     describe('selectSpace ', () => {
-      it('selects a space', async () => {
+      it('selects a space', () => {
         const spaces = [mock<SpaceResource>({ id: '1', name: 'Some Space' })]
         const { wrapper } = getWrapper({ mountType: shallowMount, spaces })
         wrapper.vm.selectSpace(spaces[0])
@@ -161,7 +160,11 @@ describe('SpacesList', () => {
   })
 })
 
-function getWrapper({ mountType = mount, spaces = [], selectedSpaces = [] } = {}) {
+function getWrapper({
+  mountType = mount,
+  spaces = [],
+  selectedSpaces = []
+}: { mountType?: typeof mount; spaces?: SpaceResource[]; selectedSpaces?: SpaceResource[] } = {}) {
   vi.mocked(queryItemAsString).mockImplementationOnce(() => '1')
   vi.mocked(queryItemAsString).mockImplementationOnce(() => '100')
   const mocks = defaultComponentMocks()

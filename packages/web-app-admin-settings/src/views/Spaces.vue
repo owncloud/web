@@ -76,6 +76,7 @@ import { useGettext } from 'vue3-gettext'
 
 import { useSpaceSettingsStore } from '../composables'
 import { storeToRefs } from 'pinia'
+import { Drive, Quota } from '@ownclouders/web-client/graph/generated'
 
 export default defineComponent({
   name: 'SpacesView',
@@ -120,7 +121,7 @@ export default defineComponent({
         'name asc',
         'driveType eq project'
       )
-      const drives = drivesResponse.map((space) =>
+      const drives = drivesResponse.map((space: Drive) =>
         buildSpace({ ...space, serverUrl: configStore.serverUrl })
       )
       spaceSettingsStore.setSpaces(drives)
@@ -226,7 +227,7 @@ export default defineComponent({
 
       updateQuotaForSpaceEventToken = eventBus.subscribe(
         'app.admin-settings.spaces.space.quota.updated',
-        ({ spaceId, quota }) => {
+        ({ spaceId, quota }: { spaceId: string; quota: Quota }) => {
           const space = unref(spaces).find((s) => s.id === spaceId)
           if (space) {
             space.spaceQuota = quota

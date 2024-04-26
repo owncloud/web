@@ -7,13 +7,13 @@ import { Item } from '@ownclouders/web-client'
 
 export const useKeyboardTableMouseActions = (
   keyActions: KeyboardActions,
-  paginatedResources: Ref<{ id: string }[]>,
+  paginatedResources: Ref<Item[]>,
   selectedRows: Ref<Item[]>,
   lastSelectedRowIndex: Ref<number>,
   lastSelectedRowId: Ref<string | null>
 ) => {
-  let resourceListClickedMetaEvent
-  let resourceListClickedShiftEvent
+  let resourceListClickedMetaEvent: string
+  let resourceListClickedShiftEvent: string
 
   const handleCtrlClickAction = (resource: Resource) => {
     const rowIndex = findIndex(unref(selectedRows), { id: resource.id })
@@ -28,7 +28,13 @@ export const useKeyboardTableMouseActions = (
     lastSelectedRowId.value = String(resource.id)
   }
 
-  const handleShiftClickAction = ({ resource, skipTargetSelection }) => {
+  const handleShiftClickAction = ({
+    resource,
+    skipTargetSelection
+  }: {
+    resource: Item
+    skipTargetSelection: boolean
+  }) => {
     const parent = document.querySelectorAll(`[data-item-id='${resource.id}']`)[0]
     const resourceNodes = Object.values(parent.parentNode.children)
     const latestNode = resourceNodes.find(

@@ -233,7 +233,15 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, PropType, computed, unref, ref, ComputedRef } from 'vue'
+import {
+  defineComponent,
+  PropType,
+  computed,
+  unref,
+  ref,
+  ComputedRef,
+  ComponentPublicInstance
+} from 'vue'
 import { useWindowSize } from '@vueuse/core'
 import { Resource } from '@ownclouders/web-client'
 import { extractDomSelector, SpaceResource } from '@ownclouders/web-client'
@@ -275,6 +283,7 @@ import get from 'lodash-es/get'
 // ODS component import is necessary here for CERN to overwrite OcTable
 import OcTable from 'design-system/src/components/OcTable/OcTable.vue'
 import { storeToRefs } from 'pinia'
+import OcButton from 'design-system/src/components/OcButton/OcButton.vue'
 
 const TAGS_MINIMUM_SCREEN_WIDTH = 850
 
@@ -910,7 +919,11 @@ export default defineComponent({
       if (!this.isResourceSelected(item)) {
         this.emitSelect([item.id])
       }
-      displayPositionedDropdown(dropdown.tippy, event, this.$refs.contextMenuButton)
+      displayPositionedDropdown(
+        dropdown.tippy,
+        event,
+        this.$refs.contextMenuButton as ComponentPublicInstance<typeof OcButton>
+      )
     },
     showContextMenu(row, event, item) {
       event.preventDefault()
@@ -926,7 +939,11 @@ export default defineComponent({
       if (!this.isResourceSelected(item)) {
         this.emitSelect([item.id])
       }
-      displayPositionedDropdown(instance._tippy, event, this.$refs.contextMenuButton)
+      displayPositionedDropdown(
+        instance._tippy,
+        event,
+        this.$refs.contextMenuButton as ComponentPublicInstance<typeof OcButton>
+      )
     },
     rowMounted(resource, component) {
       /**

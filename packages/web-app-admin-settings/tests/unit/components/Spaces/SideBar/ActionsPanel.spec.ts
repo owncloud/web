@@ -11,7 +11,7 @@ import {
 import { computed, ref } from 'vue'
 import { Action } from '@ownclouders/web-pkg'
 
-function createMockActionComposables(module) {
+function createMockActionComposables(module: Record<string, any>) {
   const mockModule: Record<string, any> = {}
   for (const m of Object.keys(module)) {
     mockModule[m] = vi.fn(() => ({ actions: ref([]) }))

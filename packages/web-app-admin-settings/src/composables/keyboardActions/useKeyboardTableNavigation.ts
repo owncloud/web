@@ -6,7 +6,7 @@ import { Item } from '@ownclouders/web-client'
 
 export const useKeyboardTableNavigation = (
   keyActions: KeyboardActions,
-  paginatedResources: Ref<{ id: string }[]>,
+  paginatedResources: Ref<Item[]>,
   selectedRows: Ref<Item[]>,
   lastSelectedRowIndex: Ref<number>,
   lastSelectedRowId: Ref<string | null>

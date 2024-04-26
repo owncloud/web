@@ -21,7 +21,7 @@ export default defineComponent({
     groupMembers: {
       type: Array as PropType<User[]>,
       required: false,
-      default: () => []
+      default: (): User[] => []
     }
   }
 })

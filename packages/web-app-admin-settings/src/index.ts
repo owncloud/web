@@ -13,13 +13,13 @@ import {
 import { RouteRecordRaw } from 'vue-router'
 
 // just a dummy function to trick gettext tools
-function $gettext(msg) {
+function $gettext(msg: string) {
   return msg
 }
 
 const appId = 'admin-settings'
 
-export const routes = ({ $ability }: { $ability: Ability }) => [
+export const routes = ({ $ability }: { $ability: Ability }): RouteRecordRaw[] => [
   {
     path: '/',
     redirect: () => {
@@ -172,7 +172,7 @@ export default defineWebApplication({
           priority: 40
         }
       },
-      routes: routes as () => RouteRecordRaw[],
+      routes,
       navItems,
       translations
     }

@@ -3,6 +3,7 @@ import { defaultComponentMocks, defaultPlugins, mount, shallowMount } from 'web-
 import { displayPositionedDropdown, eventBus, queryItemAsString } from '@ownclouders/web-pkg'
 import { SideBarEventTopics } from '@ownclouders/web-pkg'
 import { useUserSettingsStore } from '../../../../src/composables/stores/userSettings'
+import { User } from '@ownclouders/web-client/graph/generated'
 
 const getUserMocks = () => [{ id: '1', displayName: 'jan' }]
 vi.mock('@ownclouders/web-pkg', async (importOriginal) => ({
@@ -57,7 +58,7 @@ describe('UsersList', () => {
           [
             { appRoleAssignments: [{ appRoleId: '1' }] },
             { appRoleAssignments: [{ appRoleId: '2' }] }
-          ],
+          ] as User[],
           'role',
           false
         )
@@ -74,7 +75,7 @@ describe('UsersList', () => {
           [
             { appRoleAssignments: [{ appRoleId: '1' }] },
             { appRoleAssignments: [{ appRoleId: '2' }] }
-          ],
+          ] as User[],
           'role',
           true
         )
@@ -158,7 +159,11 @@ describe('UsersList', () => {
   })
 })
 
-function getWrapper({ mountType = shallowMount, users = [], selectedUsers = [] } = {}) {
+function getWrapper({
+  mountType = shallowMount,
+  users = [],
+  selectedUsers = []
+}: { mountType?: typeof mount; users?: User[]; selectedUsers?: User[] } = {}) {
   vi.mocked(queryItemAsString).mockImplementationOnce(() => '1')
   vi.mocked(queryItemAsString).mockImplementationOnce(() => '100')
   const mocks = defaultComponentMocks()

@@ -88,7 +88,7 @@ export default defineComponent({
       default: null
     },
     users: {
-      type: Array,
+      type: Array as PropType<User[]>,
       required: true
     },
     roles: {
@@ -128,7 +128,7 @@ export default defineComponent({
       )
     },
     groupsDisplayValue() {
-      return this.user.memberOf
+      return this._user.memberOf
         .map((group) => group.displayName)
         .sort()
         .join(', ')

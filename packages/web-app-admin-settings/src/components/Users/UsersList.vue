@@ -101,8 +101,9 @@
 
 <script lang="ts">
 import { useGettext } from 'vue3-gettext'
-import { defineComponent, PropType, ref, unref, computed } from 'vue'
+import { ComponentPublicInstance, defineComponent, PropType, ref, unref, computed } from 'vue'
 import {
+  ContextMenuBtnClickEventData,
   displayPositionedDropdown,
   eventBus,
   SortDir,
@@ -135,8 +136,8 @@ export default defineComponent({
     const { $gettext } = useGettext()
 
     const contextMenuButtonRef = ref(undefined)
-    const sortBy = ref<string>('onPremisesSamAccountName')
-    const sortDir = ref<string>(SortDir.Asc)
+    const sortBy = ref('onPremisesSamAccountName')
+    const sortDir = ref<SortDir>(SortDir.Asc)
     const { y: fileListHeaderY } = useFileListHeaderPosition('#admin-settings-app-bar')
 
     const lastSelectedUserIndex = ref(0)
@@ -145,7 +146,7 @@ export default defineComponent({
     const userSettingsStore = useUserSettingsStore()
     const { users, selectedUsers } = storeToRefs(userSettingsStore)
 
-    const isUserSelected = (user) => {
+    const isUserSelected = (user: User) => {
       return unref(selectedUsers).some((s) => s.id === user.id)
     }
     const selectUser = (selectedUser: User) => {
@@ -171,33 +172,35 @@ export default defineComponent({
       userSettingsStore.setSelectedUsers(users)
     }
 
-    const showDetails = (user) => {
+    const showDetails = (user: User) => {
       if (!isUserSelected(user)) {
         selectUser(user)
       }
       eventBus.publish(SideBarEventTopics.open)
     }
 
-    const showEditPanel = (user) => {
+    const showEditPanel = (user: User) => {
       if (!isUserSelected(user)) {
         selectUser(user)
       }
       eventBus.publish(SideBarEventTopics.openWithPanel, 'EditPanel')
     }
 
-    const showUserAssigmentPanel = (user) => {
+    const showUserAssigmentPanel = (user: User) => {
       if (!isUserSelected(user)) {
         selectUser(user)
       }
       eventBus.publish(SideBarEventTopics.openWithPanel, 'UserAssignmentsPanel')
     }
 
-    const rowClicked = (data) => {
+    const rowClicked = (data: [User, MouseEvent]) => {
       const resource = data[0]
       const eventData = data[1]
-      const isCheckboxClicked = eventData?.target.getAttribute('type') === 'checkbox'
+      const isCheckboxClicked =
+        (eventData?.target as HTMLElement).getAttribute('type') === 'checkbox'
 
-      const contextActionClicked = eventData?.target?.closest('div')?.id === 'oc-files-context-menu'
+      const contextActionClicked =
+        (eventData?.target as HTMLElement)?.closest('div')?.id === 'oc-files-context-menu'
       if (contextActionClicked) {
         return
       }
@@ -217,7 +220,7 @@ export default defineComponent({
       unselectAllUsers()
       selectUser(resource)
     }
-    const showContextMenuOnBtnClick = (data, user) => {
+    const showContextMenuOnBtnClick = (data: ContextMenuBtnClickEventData, user: User) => {
       const { dropdown, event } = data
       if (dropdown?.tippy === undefined) {
         return
@@ -227,7 +230,11 @@ export default defineComponent({
       }
       displayPositionedDropdown(dropdown.tippy, event, unref(contextMenuButtonRef))
     }
-    const showContextMenuOnRightClick = (row, event, user) => {
+    const showContextMenuOnRightClick = (
+      row: ComponentPublicInstance<unknown>,
+      event: MouseEvent,
+      user: User
+    ) => {
       event.preventDefault()
       const dropdown = row.$el.getElementsByClassName('users-table-btn-action-dropdown')[0]
       if (dropdown === undefined) {
@@ -249,9 +256,9 @@ export default defineComponent({
       )
     }
 
-    const orderBy = (list, prop, desc) => {
+    const orderBy = (list: User[], prop: string, desc: boolean) => {
       return [...list].sort((user1, user2) => {
-        let a, b
+        let a: string, b: string
 
         switch (prop) {
           case 'role':
@@ -263,8 +270,8 @@ export default defineComponent({
             b = ('accountEnabled' in user2 ? user2.accountEnabled : true).toString()
             break
           default:
-            a = user1[prop] || ''
-            b = user2[prop] || ''
+            a = user1[prop as keyof User].toString() || ''
+            b = user2[prop as keyof User].toString() || ''
         }
 
         return desc ? b.localeCompare(a) : a.localeCompare(b)
@@ -393,11 +400,11 @@ export default defineComponent({
     }
   },
   methods: {
-    handleSort(event) {
+    handleSort(event: { sortBy: string; sortDir: SortDir }) {
       this.sortBy = event.sortBy
       this.sortDir = event.sortDir
     },
-    getSelectUserLabel(user) {
+    getSelectUserLabel(user: User) {
       return this.$gettext('Select %{ user }', { user: user.displayName }, true)
     }
   }

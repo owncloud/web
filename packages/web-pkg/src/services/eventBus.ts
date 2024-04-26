@@ -7,10 +7,10 @@ export class EventBus {
     this.topics = new Map()
   }
 
-  public subscribe(topic: string, callback: (data?: unknown) => void): string {
+  public subscribe<T = unknown>(topic: string, callback: (data?: T) => void): string {
     const subscription = {
       token: uuid.v4(),
-      callback
+      callback: callback as (data?: unknown) => void
     }
     const subscriptions = [subscription, ...(this.topics.get(topic) || [])]
 
