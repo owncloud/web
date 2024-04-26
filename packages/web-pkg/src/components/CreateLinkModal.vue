@@ -201,7 +201,7 @@ export default defineComponent({
 
     const password = reactive({ value: '', error: undefined })
     const selectedType = ref(unref(defaultLinkType))
-    const selectedExpiry = ref<DateTime>()
+    const selectedExpiry = ref<string>()
 
     const availableLinkTypes = computed(() => getAvailableLinkTypes({ isFolder: unref(isFolder) }))
     const passwordEnforced = computed(() => isPasswordEnforcedForLinkType(unref(selectedType)))
@@ -215,14 +215,14 @@ export default defineComponent({
 
     const selectedExpiryDateRelative = computed(() =>
       formatRelativeDateFromDateTime(
-        DateTime.fromJSDate(unref(selectedExpiry)).endOf('day'),
+        DateTime.fromJSDate(new Date(unref(selectedExpiry))).endOf('day'),
         currentLanguage
       )
     )
 
     const selectedExpiryDate = computed(() =>
       formatRelativeDateFromDateTime(
-        DateTime.fromJSDate(unref(selectedExpiry)).endOf('day'),
+        DateTime.fromJSDate(new Date(unref(selectedExpiry))).endOf('day'),
         currentLanguage
       )
     )

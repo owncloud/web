@@ -5,6 +5,7 @@
   "description": "ownCloud web draw.io integration",
   "license": "AGPL-3.0",
   "devDependencies": {
+    "@types/luxon": "3.2.1",
     "web-test-helpers": "workspace:*"
   },
   "peerDependencies": {

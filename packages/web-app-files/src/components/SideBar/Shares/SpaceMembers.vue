@@ -78,7 +78,7 @@ import {
   useSpacesStore,
   useUserStore
 } from '@ownclouders/web-pkg'
-import { defineComponent, inject, Ref } from 'vue'
+import { defineComponent, inject, ref, Ref } from 'vue'
 import { shareSpaceAddMemberHelp } from '../../../helpers/contextualHelpers'
 import { ProjectSpaceResource, CollaboratorShare, buildSpace } from '@ownclouders/web-client'
 import { useClientService } from '@ownclouders/web-pkg'
@@ -107,6 +107,8 @@ export default defineComponent({
 
     const { user } = storeToRefs(userStore)
 
+    const markInstance = ref<Mark>()
+
     return {
       user,
       clientService,
@@ -119,14 +121,14 @@ export default defineComponent({
       upsertSpace,
       removeSpaceMember,
       canShare,
+      markInstance,
       ...useMessages()
     }
   },
   data: () => {
     return {
       filterTerm: '',
-      isFilterOpen: false,
-      markInstance: null
+      isFilterOpen: false
     }
   },
   computed: {
@@ -150,7 +152,7 @@ export default defineComponent({
     filterTerm() {
       this.$nextTick(() => {
         if (this.$refs.collaboratorList) {
-          this.markInstance = new Mark(this.$refs.collaboratorList)
+          this.markInstance = new Mark(this.$refs.collaboratorList as HTMLElement)
           this.markInstance.unmark()
           this.markInstance.mark(this.filterTerm, {
             element: 'span',

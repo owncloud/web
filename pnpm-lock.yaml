@@ -41,6 +41,9 @@ importers:
 
   .:
     dependencies:
+      '@types/uuid':
+        specifier: 9.0.1
+        version: 9.0.1
       '@uppy/core':
         specifier: https://github.com/owncloud/uppy/releases/download/v3.12.13-owncloud/uppy-core.tgz
         version: https://github.com/owncloud/uppy/releases/download/v3.12.13-owncloud/uppy-core.tgz
@@ -615,6 +618,12 @@ importers:
         specifier: workspace:*
         version: 'link:'
     devDependencies:
+      '@types/mark.js':
+        specifier: 8.11.12
+        version: 8.11.12
+      '@types/uuid':
+        specifier: 9.0.1
+        version: 9.0.1
       web-test-helpers:
         specifier: workspace:*
         version: link:../web-test-helpers
@@ -631,6 +640,9 @@ importers:
         specifier: 3.2.1
         version: 3.2.1
     devDependencies:
+      '@types/luxon':
+        specifier: 3.2.1
+        version: 3.2.1
       web-test-helpers:
         specifier: workspace:*
         version: link:../web-test-helpers
@@ -675,6 +687,9 @@ importers:
         specifier: 3.22.4
         version: 3.22.4
     devDependencies:
+      '@types/uuid':
+        specifier: 9.0.1
+        version: 9.0.1
       web-test-helpers:
         specifier: workspace:*
         version: link:../web-test-helpers
@@ -754,6 +769,18 @@ importers:
         specifier: workspace:*
         version: link:../web-runtime
     devDependencies:
+      '@types/dompurify':
+        specifier: 3.0.5
+        version: 3.0.5
+      '@types/luxon':
+        specifier: 3.2.1
+        version: 3.2.1
+      '@types/mark.js':
+        specifier: 8.11.12
+        version: 8.11.12
+      '@types/uuid':
+        specifier: 9.0.1
+        version: 9.0.1
       '@vueuse/core':
         specifier: ^10.3.0
         version: 10.3.0(vue@3.4.21(typescript@5.4.5))
@@ -821,6 +848,10 @@ importers:
       zod:
         specifier: 3.22.4
         version: 3.22.4
+    devDependencies:
+      '@types/uuid':
+        specifier: 9.0.1
+        version: 9.0.1
 
   packages/web-app-pdf-viewer:
     dependencies:
@@ -881,6 +912,9 @@ importers:
         specifier: workspace:*
         version: link:../web-app-files
     devDependencies:
+      '@types/mark.js':
+        specifier: 8.11.12
+        version: 8.11.12
       web-test-helpers:
         specifier: workspace:*
         version: link:../web-test-helpers
@@ -953,6 +987,9 @@ importers:
         specifier: 3.22.4
         version: 3.22.4
     devDependencies:
+      '@types/luxon':
+        specifier: 3.2.1
+        version: 3.2.1
       clean-publish:
         specifier: 4.2.0
         version: 4.2.0
@@ -1066,6 +1103,18 @@ importers:
       '@toast-ui/editor-plugin-code-syntax-highlight':
         specifier: ^3.1.0
         version: 3.1.0
+      '@types/dompurify':
+        specifier: 3.0.5
+        version: 3.0.5
+      '@types/luxon':
+        specifier: 3.2.1
+        version: 3.2.1
+      '@types/mark.js':
+        specifier: 8.11.12
+        version: 8.11.12
+      '@types/uuid':
+        specifier: 9.0.1
+        version: 9.0.1
       clean-publish:
         specifier: 4.2.0
         version: 4.2.0
@@ -1210,11 +1259,14 @@ importers:
         version: 3.22.4
     devDependencies:
       '@types/luxon':
-        specifier: 2.4.0
-        version: 2.4.0
+        specifier: 3.2.1
+        version: 3.2.1
       '@types/semver':
         specifier: 7.5.0
         version: 7.5.0
+      '@types/uuid':
+        specifier: 9.0.1
+        version: 9.0.1
       web-test-helpers:
         specifier: workspace:*
         version: link:../web-test-helpers
@@ -2944,6 +2996,9 @@ packages:
   '@types/debug@4.1.7':
     resolution: {integrity: sha512-9AonUzyTjXXhEOa0DnqpzZi6VHlqKMswga9EXjpXnnqxwLtdvPPtlO8evrI5D9S6asFRCQ6v+wpiUKbw+vKqyg==}
 
+  '@types/dompurify@3.0.5':
+    resolution: {integrity: sha512-1Wg0g3BtQF7sSb27fJQAKck1HECM6zV1EB66j8JH9i3LCjYabJa0FSdiSgsD5K/RbrsR0SiraKacLB+T8ZVYAg==}
+
   '@types/eslint-scope@3.7.7':
     resolution: {integrity: sha512-MzMFlSLBqNF2gcHWO0G1vP/YQyfvrxZ0bF+u7mzUdZ1/xK4A4sru+nraZz5i3iEIk1l1uyicaDVTB4QbbEkAYg==}
 
@@ -2977,6 +3032,9 @@ packages:
   '@types/istanbul-lib-coverage@2.0.6':
     resolution: {integrity: sha512-2QF/t/auWm0lsy8XtKVPG19v3sSOQlJe/YHZgfjb/KBBHOGSV+J2q/S671rcq9uTBrLAXmZpqJiaQbMT+zNU1w==}
 
+  '@types/jquery@3.5.29':
+    resolution: {integrity: sha512-oXQQC9X9MOPRrMhPHHOsXqeQDnWeCDT3PelUIg/Oy8FAbzSZtFHRjc7IpbfFVmpLtJ+UOoywpRsuO5Jxjybyeg==}
+
   '@types/json-schema@7.0.15':
     resolution: {integrity: sha512-5+fP8P8MFNC+AyZCDxrB2pkZFPGzqQWUzpSeuuVLvm8VMcorNYavBqoFcxK8bQz4Qsbn4oUEEem4wDLfcysGHA==}
 
@@ -2996,8 +3054,11 @@ packages:
   '@types/lodash@4.14.202':
     resolution: {integrity: sha512-OvlIYQK9tNneDlS0VN54LLd5uiPCBOp7gS5Z0f1mjoJYBrtStzgmJBxONW3U6OZqdtNzZPmn9BS/7WI7BFFcFQ==}
 
-  '@types/luxon@2.4.0':
-    resolution: {integrity: sha512-oCavjEjRXuR6URJEtQm0eBdfsBiEcGBZbq21of8iGkeKxU1+1xgKuFPClaBZl2KB8ZZBSWlgk61tH6Mf+nvZVw==}
+  '@types/luxon@3.2.1':
+    resolution: {integrity: sha512-49uU4h0D58OySiSRnZD9NLy9/POKup3I20HIgZsH112D2dz/WwyUf2oxJO3lLxD1ogNpa4LqeYm9z97+jkxROg==}
+
+  '@types/mark.js@8.11.12':
+    resolution: {integrity: sha512-244ZnaIBpz4c6xutliAnYVZp6xJlmC569jZqnR3ElO1Y01ooYASSVQEqpd2x0A2UfrgVMs5V9/9tUAdZaDMytQ==}
 
   '@types/markdown-it@13.0.7':
     resolution: {integrity: sha512-U/CBi2YUUcTHBt5tjO2r5QV/x0Po6nsYwQU4Y04fBS6vfoImaiZ6f8bi3CjTCxBPQSO1LMyUqkByzi8AidyxfA==}
@@ -3062,6 +3123,9 @@ packages:
   '@types/serve-static@1.15.5':
     resolution: {integrity: sha512-PDRk21MnK70hja/YF8AHfC7yIsiQHn1rcXx7ijCFBX/k+XQJhQT/gw3xekXKJvx+5SXaMMS8oqQy09Mzvz2TuQ==}
 
+  '@types/sizzle@2.3.8':
+    resolution: {integrity: sha512-0vWLNK2D5MT9dg0iOo8GlKguPAU02QjmZitPEsXRuJXU/OGIOt9vT9Fc26wtYuavLxtO45v9PGleoL9Z0k1LHg==}
+
   '@types/sockjs@0.3.36':
     resolution: {integrity: sha512-MK9V6NzAS1+Ud7JV9lJLFqW85VbC9dq3LmwZCuBe4wBDgKC0Kj/jd8Xl+nSviU+Qc3+m7umHHyHg//2KSa0a0Q==}
 
@@ -3070,6 +3134,9 @@ packages:
 
   '@types/tapable@1.0.12':
     resolution: {integrity: sha512-bTHG8fcxEqv1M9+TD14P8ok8hjxoOCkfKc8XXLaaD05kI7ohpeI956jtDOD3XHKBQrlyPughUtzm1jtVhHpA5Q==}
+
+  '@types/trusted-types@2.0.7':
+    resolution: {integrity: sha512-ScaPdn1dQczgbl0QFTeTOmVHFULt394XJgOQNoyVhZ6r2vLnMLJfBPd53SB52T/3G36VI1/g2MZaX0cwDuXsfw==}
 
   '@types/uglify-js@3.17.4':
     resolution: {integrity: sha512-Hm/T0kV3ywpJyMGNbsItdivRhYNCQQf1IIsYsXnoVPES4t+FMLyDe0/K+Ea7ahWtMtSNb22ZdY7MIyoD9rqARg==}
@@ -12858,6 +12925,10 @@ snapshots:
     dependencies:
       '@types/ms': 0.7.31
 
+  '@types/dompurify@3.0.5':
+    dependencies:
+      '@types/trusted-types': 2.0.7
+
   '@types/eslint-scope@3.7.7':
     dependencies:
       '@types/eslint': 8.56.1
@@ -12904,6 +12975,10 @@ snapshots:
 
   '@types/istanbul-lib-coverage@2.0.6': {}
 
+  '@types/jquery@3.5.29':
+    dependencies:
+      '@types/sizzle': 2.3.8
+
   '@types/json-schema@7.0.15': {}
 
   '@types/linkify-it@3.0.5': {}
@@ -12920,7 +12995,11 @@ snapshots:
 
   '@types/lodash@4.14.202': {}
 
-  '@types/luxon@2.4.0': {}
+  '@types/luxon@3.2.1': {}
+
+  '@types/mark.js@8.11.12':
+    dependencies:
+      '@types/jquery': 3.5.29
 
   '@types/markdown-it@13.0.7':
     dependencies:
@@ -12983,6 +13062,8 @@ snapshots:
       '@types/mime': 3.0.4
       '@types/node': 16.18.30
 
+  '@types/sizzle@2.3.8': {}
+
   '@types/sockjs@0.3.36':
     dependencies:
       '@types/node': 16.18.30
@@ -12990,6 +13071,8 @@ snapshots:
   '@types/source-list-map@0.1.6': {}
 
   '@types/tapable@1.0.12': {}
+
+  '@types/trusted-types@2.0.7': {}
 
   '@types/uglify-js@3.17.4':
     dependencies:

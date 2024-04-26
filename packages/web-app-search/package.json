@@ -5,6 +5,7 @@
   "description": "ownCloud web search",
   "license": "AGPL-3.0",
   "devDependencies": {
+    "@types/mark.js": "8.11.12",
     "web-test-helpers": "workspace:*"
   },
   "dependencies": {

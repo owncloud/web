@@ -81,6 +81,7 @@
     "postpublish": "rm -rf ./package"
   },
   "devDependencies": {
+    "@types/luxon": "3.2.1",
     "clean-publish": "4.2.0",
     "vite-plugin-dts": "3.6.0"
   },

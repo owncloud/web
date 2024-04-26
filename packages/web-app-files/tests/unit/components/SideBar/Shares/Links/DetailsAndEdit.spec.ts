@@ -101,7 +101,7 @@ function getShallowMountedWrapper({
         expirationRules: {
           enforced: false,
           default: null,
-          min: 'Wed Apr 01 2020 00:00:00 GMT+0000 (Coordinated Universal Time)',
+          min: new Date(),
           max: null
         },
         linkShare,

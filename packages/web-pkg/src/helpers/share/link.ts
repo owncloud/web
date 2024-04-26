@@ -3,7 +3,7 @@ import { getLocaleFromLanguage } from '../locale'
 import { CapabilityStore } from '../../composables'
 
 // TODO: move to useExpirationRules composable
-export type ExpirationRules = { enforced: boolean; default: DateTime; min: DateTime; max: DateTime }
+export type ExpirationRules = { enforced: boolean; default: Date; min: Date; max: Date }
 
 export const getExpirationRules = ({
   capabilityStore,
@@ -14,8 +14,8 @@ export const getExpirationRules = ({
 }): ExpirationRules => {
   const expireDate = capabilityStore.sharingPublicExpireDate
 
-  let defaultExpireDate: DateTime = null
-  let maxExpireDateFromCaps: DateTime = null
+  let defaultExpireDate: Date = null
+  let maxExpireDateFromCaps: Date = null
 
   if (expireDate.days) {
     const days = parseInt(expireDate.days)
