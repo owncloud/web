@@ -23,8 +23,6 @@ Feature: spaces participant management
     And "Alice" creates the following project space using API
       | name | id     |
       | team | team.1 |
-    And "Alice" opens the "files" app
-    And "Alice" navigates to the projects space page
     And "Alice" navigates to the project space "team.1"
     And "Alice" adds following users to the project space
       | user     | role     | kind  |
@@ -33,7 +31,6 @@ Feature: spaces participant management
       | sales    | Can view | group |
       | security | Can edit | group |
     When "Brian" logs in
-    And "Brian" navigates to the projects space page
     And "Brian" navigates to the project space "team.1"
     And "Brian" creates the following resources
       | resource | type   |
@@ -42,12 +39,10 @@ Feature: spaces participant management
       | resource  | to     |
       | lorem.txt | parent |
     When "David" logs in
-    And "David" navigates to the projects space page
     And "David" navigates to the project space "team.1"
     Then "David" should see folder "parent" but should not be able to edit
     And "David" logs out
     When "Edith" logs in
-    And "Edith" navigates to the projects space page
     And "Edith" navigates to the project space "team.1"
     And "Edith" creates the following resources
       | resource | type   |
@@ -57,7 +52,6 @@ Feature: spaces participant management
       | lorem.txt | edith |
     And "Edith" logs out
     When "Carol" logs in
-    And "Carol" navigates to the projects space page
     And "Carol" navigates to the project space "team.1"
     Then "Carol" should see folder "parent" but should not be able to edit
     # page reload is necessary to fetch all the changes made by user Brian
@@ -92,12 +86,10 @@ Feature: spaces participant management
     And "Brian" should not be able to delete following resource from the trashbin
       | resource            |
       | parent/textfile.txt |
-    When "Alice" navigates to the projects space page
     And "Alice" navigates to the project space "team.1"
     And "Alice" removes access to following users from the project space
       | user  |
       | Brian |
-    When "Brian" navigates to the projects space page
     Then "Brian" should not be able to see space "team.1"
     And "Brian" logs out
     When "Alice" changes the roles of the following users in the project space

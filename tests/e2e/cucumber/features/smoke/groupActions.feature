@@ -57,7 +57,6 @@ Feature: Group actions
       | sharedFolder | finance   | group | Can edit |
       | sharedFolder | security  | group | Can edit |
 
-    And "Brian" opens the "files" app
     And "Brian" navigates to the shared with me page
 
     And "Brian" enables the sync for all shares using the batch actions

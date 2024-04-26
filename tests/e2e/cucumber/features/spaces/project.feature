@@ -60,7 +60,6 @@ Feature: spaces.personal
       | folder_to_shared | Brian     | user | Can edit | folder       |
 
     # team.2
-    And "Alice" navigates to the projects space page
     And "Alice" navigates to the project space "team.2"
     And "Alice" updates the space "team.2" name to "management team"
     And "Alice" updates the space "team.2" subtitle to "management team - subtitle"
@@ -100,7 +99,6 @@ Feature: spaces.personal
     And "Brian" uploads the following resource
       | resource   | to               |
       | simple.pdf | folder_to_shared |
-    And "Alice" navigates to the projects space page
     And "Alice" navigates to the project space "team.1"
     And "Alice" updates the space "team.1" image to "testavatar.jpeg"
     And "Alice" uploads the following resource
@@ -139,7 +137,6 @@ Feature: spaces.personal
     And "Alice" creates the following project space using API
       | name | id     |
       | team | team.1 |
-    And "Alice" navigates to the projects space page
     And "Alice" navigates to the project space "team.1"
     And "Alice" creates the following resources
       | resource            | type    | content             |
@@ -154,8 +151,6 @@ Feature: spaces.personal
     And "Alice" logs out
 
     When "Carol" logs in
-    And "Carol" opens the "files" app
-    And "Carol" navigates to the projects space page
     And "Carol" navigates to the project space "team.1"
     And "Carol" should not see the version of the file
       | resource     | to     |
@@ -163,8 +158,6 @@ Feature: spaces.personal
     And "Carol" logs out
 
     When "Brian" logs in
-    And "Brian" opens the "files" app
-    And "Brian" navigates to the projects space page
     And "Brian" navigates to the project space "team.1"
     And "Brian" downloads old version of the following resource
       | resource     | to     |
