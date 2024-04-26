@@ -81,6 +81,10 @@ Feature: share
       | shareToBrian.md     | mdFile     | readme    |
       | shareToBrian.drawio | drawioFile |           |
       | sharedFile.txt      | txtFile    | some text |
+    And "Alice" edits the following resources
+      | resource         | content                   |
+      | shareToBrian.txt | new content edited        |
+      | shareToBrian.md  | new readme content edited |
     And "Alice" uploads the following resource
       | resource        |
       | testavatar.jpeg |
