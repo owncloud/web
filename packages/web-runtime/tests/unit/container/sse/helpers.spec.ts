@@ -102,7 +102,7 @@ const getMocks = ({
     isFolder: true,
     storageId: 'space1'
   })
-} = {}) => {
+}: { currentFolder?: Resource } = {}) => {
   createTestingPinia()
   const resourcesStore = useResourcesStore()
   resourcesStore.currentFolder = currentFolder

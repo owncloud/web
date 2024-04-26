@@ -146,7 +146,10 @@ describe('file events', () => {
         parentitemid: resourceToTrash.parentFolderId
       })
       await onSSEItemTrashedEvent({ sseData, ...mocks })
-      expect(mocks.messageStore.showMessage).toHaveBeenCalled()
+      expect(mocks.messageStore.showMessage).toHaveBeenCalledWith({
+        title:
+          'The folder you were accessing has been removed. Please navigate to another location.'
+      })
       expect(mocks.resourcesStore.removeResources).not.toHaveBeenCalled()
     })
     it('does not trigger any action when resource is not in store', async () => {
@@ -429,7 +432,7 @@ const getMocks = ({
   }),
   resources = [],
   spaces = [mockDeep<SpaceResource>({ id: 'space1' })]
-} = {}) => {
+}: { currentFolder?: Resource; resources?: Resource[]; spaces?: SpaceResource[] } = {}) => {
   createTestingPinia()
   const resourcesStore = useResourcesStore()
   resourcesStore.currentFolder = currentFolder
@@ -442,7 +445,9 @@ const getMocks = ({
   const clientService = mockDeep<ClientService>({ initiatorId: 'local1' })
   const previewService = mockDeep<PreviewService>()
   const router = mockDeep<Router>()
-  const language = mockDeep<Language>()
+  const language = mockDeep<Language>({
+    $gettext: vi.fn((m) => m)
+  })
   const resourceQueue = mockDeep<PQueue>()
 
   return {
