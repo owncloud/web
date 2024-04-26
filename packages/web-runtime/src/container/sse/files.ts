@@ -50,7 +50,7 @@ export const onSSEFileLockingEvent = async ({
   clientService
 }: SSEEventOptions) => {
   const resource = resourcesStore.resources.find((f) => f.id === sseData.itemid)
-  const space = spacesStore.spaces.find((s) => s.id === resource.storageId)
+  const space = spacesStore.spaces.find((s) => s.id === resource?.storageId)
 
   if (!resource || !space) {
     return
