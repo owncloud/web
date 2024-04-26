@@ -482,7 +482,7 @@ export default defineComponent({
   },
   watch: {
     newExpiration(expirationDateTime: string) {
-      const date = DateTime.fromJSDate(expirationDateTime)
+      const date = DateTime.fromJSDate(new Date(expirationDateTime))
       this.$emit('updateLink', {
         linkShare: { ...this.linkShare, expirationDateTime: date.toString() }
       })

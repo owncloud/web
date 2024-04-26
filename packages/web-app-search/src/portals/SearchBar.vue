@@ -145,6 +145,7 @@ export default defineComponent({
     const searchResults = ref([])
     const loading = ref(false)
     const currentFolderAvailable = ref(false)
+    const markInstance = ref<Mark>()
 
     const fullTextSearchEnabled = computed(() => capabilityStore.searchContent?.enabled)
 
@@ -316,6 +317,7 @@ export default defineComponent({
       searchResults,
       loading,
       availableProviders,
+      markInstance,
       search,
       showPreview,
       updateTerm,
@@ -327,7 +329,6 @@ export default defineComponent({
     return {
       activeProvider: undefined,
       optionsVisible: false,
-      markInstance: null,
       clearTermEvent: null
     }
   },
@@ -363,7 +364,7 @@ export default defineComponent({
             return
           }
           if (this.optionsDrop) {
-            this.markInstance = new Mark(this.optionsDrop.$refs.drop)
+            this.markInstance = new Mark(this.optionsDrop.$refs.drop as HTMLElement)
             this.markInstance.unmark()
             this.markInstance.mark(this.term, {
               element: 'span',
