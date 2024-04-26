@@ -43,7 +43,6 @@ dir = {
     "commentsFile": "/var/www/owncloud/web/comments.file",
     "app": "/srv/app",
     "ocisConfig": "/var/www/owncloud/web/tests/drone/config-ocis.json",
-    "webKeycloakConfig": "/var/www/owncloud/web/tests/drone/web-keycloak.json",
     "ocisIdentifierRegistrationConfig": "/var/www/owncloud/web/tests/drone/identifier-registration.yml",
     "ocisRevaDataRoot": "/srv/app/tmp/ocis/owncloud/data/",
     "testingDataDir": "/srv/app/testing/data/",
@@ -1237,12 +1236,7 @@ def ocisService(type, tika_enabled = False, enforce_password_public_link = False
         environment["GRAPH_ASSIGN_DEFAULT_USER_ROLE"] = "false"
         environment["GRAPH_USERNAME_MATCH"] = "none"
 
-        # TODO: after ocis issue is fixed
-        #   - use config from dir["ocisConfig"]
-        #   - remove config file from dir["webKeycloakConfig"]
-        # issue: https://github.com/owncloud/ocis/issues/8703
-        environment["WEB_UI_CONFIG_FILE"] = "%s" % dir["webKeycloakConfig"]
-    elif type == "app-provider":
+    if type == "app-provider":
         environment["GATEWAY_GRPC_ADDR"] = "0.0.0.0:9142"
         environment["MICRO_REGISTRY"] = "nats-js-kv"
         environment["MICRO_REGISTRY_ADDRESS"] = "0.0.0.0:9233"
