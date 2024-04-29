@@ -179,7 +179,7 @@ function getWrapper({
   readOnlyUserAttributes = [],
   selectedGroups = [],
   groups = availableGroupOptions
-} = {}) {
+}: { readOnlyUserAttributes?: string[]; selectedGroups?: Group[]; groups?: Group[] } = {}) {
   const mocks = defaultComponentMocks()
   const capabilities = {
     graph: { users: { read_only_attributes: readOnlyUserAttributes } }

@@ -108,10 +108,11 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, ref, unref, computed, watch } from 'vue'
+import { ComponentPublicInstance, defineComponent, ref, unref, computed, watch } from 'vue'
 import Fuse from 'fuse.js'
 import Mark from 'mark.js'
 import {
+  ContextMenuBtnClickEventData,
   displayPositionedDropdown,
   eventBus,
   SortDir,
@@ -142,9 +143,9 @@ export default defineComponent({
     const { $gettext } = useGettext()
     const { y: fileListHeaderY } = useFileListHeaderPosition('#admin-settings-app-bar')
     const contextMenuButtonRef = ref(undefined)
-    const sortBy = ref<string>('displayName')
-    const sortDir = ref<string>(SortDir.Asc)
-    const filterTerm = ref<string>('')
+    const sortBy = ref<keyof Group>('displayName')
+    const sortDir = ref<SortDir>(SortDir.Asc)
+    const filterTerm = ref('')
     const router = useRouter()
     const route = useRoute()
     const markInstance = ref(null)
@@ -155,7 +156,7 @@ export default defineComponent({
     const groupSettingsStore = useGroupSettingsStore()
     const { groups, selectedGroups } = storeToRefs(groupSettingsStore)
 
-    const isGroupSelected = (group) => {
+    const isGroupSelected = (group: Group) => {
       return unref(selectedGroups).some((s) => s.id === group.id)
     }
     const selectGroup = (selectedGroup: Group) => {
@@ -181,18 +182,20 @@ export default defineComponent({
       groupSettingsStore.setSelectedGroups(groups)
     }
 
-    const showDetails = (group) => {
+    const showDetails = (group: Group) => {
       if (!isGroupSelected(group)) {
         selectGroup(group)
       }
       eventBus.publish(SideBarEventTopics.open)
     }
-    const rowClicked = (data) => {
+    const rowClicked = (data: [Group, MouseEvent]) => {
       const resource = data[0]
       const eventData = data[1]
-      const isCheckboxClicked = eventData?.target.getAttribute('type') === 'checkbox'
+      const isCheckboxClicked =
+        (eventData?.target as HTMLElement).getAttribute('type') === 'checkbox'
 
-      const contextActionClicked = eventData?.target?.closest('div')?.id === 'oc-files-context-menu'
+      const contextActionClicked =
+        (eventData?.target as HTMLElement)?.closest('div')?.id === 'oc-files-context-menu'
       if (contextActionClicked) {
         return
       }
@@ -213,7 +216,7 @@ export default defineComponent({
       unselectAllGroups()
       selectGroup(resource)
     }
-    const showContextMenuOnBtnClick = (data, group) => {
+    const showContextMenuOnBtnClick = (data: ContextMenuBtnClickEventData, group: Group) => {
       const { dropdown, event } = data
       if (dropdown?.tippy === undefined) {
         return
@@ -223,7 +226,11 @@ export default defineComponent({
       }
       displayPositionedDropdown(dropdown.tippy, event, unref(contextMenuButtonRef))
     }
-    const showContextMenuOnRightClick = (row, event, group) => {
+    const showContextMenuOnRightClick = (
+      row: ComponentPublicInstance<unknown>,
+      event: MouseEvent,
+      group: Group
+    ) => {
       event.preventDefault()
       const dropdown = row.$el.getElementsByClassName('groups-table-btn-action-dropdown')[0]
       if (dropdown === undefined) {
@@ -235,7 +242,7 @@ export default defineComponent({
       displayPositionedDropdown(dropdown._tippy, event, unref(contextMenuButtonRef))
     }
 
-    const showEditPanel = (group) => {
+    const showEditPanel = (group: Group) => {
       if (!isGroupSelected(group)) {
         selectGroup(group)
       }
@@ -252,11 +259,11 @@ export default defineComponent({
       return groupsSearchEngine.search(filterTerm).map((r) => r.item)
     }
 
-    const orderBy = (list, prop, desc) => {
+    const orderBy = (list: Group[], prop: keyof Group, desc: boolean) => {
       return [...list].sort((a, b) => {
-        a = a[prop]?.toString() || ''
-        b = b[prop]?.toString() || ''
-        return desc ? b.localeCompare(a) : a.localeCompare(b)
+        const c = a[prop]?.toString() || ''
+        const d = b[prop]?.toString() || ''
+        return desc ? d.localeCompare(c) : c.localeCompare(d)
       })
     }
 
@@ -394,11 +401,11 @@ export default defineComponent({
     })
   },
   methods: {
-    handleSort(event) {
+    handleSort(event: { sortBy: keyof Group; sortDir: SortDir }) {
       this.sortBy = event.sortBy
       this.sortDir = event.sortDir
     },
-    getSelectGroupLabel(group) {
+    getSelectGroupLabel(group: Group) {
       return this.$gettext('Select %{ group }', { group: group.displayName }, true)
     }
   }

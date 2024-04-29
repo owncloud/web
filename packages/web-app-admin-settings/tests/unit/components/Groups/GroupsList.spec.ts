@@ -3,11 +3,13 @@ import { defaultComponentMocks, defaultPlugins, mount, shallowMount } from 'web-
 import { displayPositionedDropdown, eventBus, queryItemAsString } from '@ownclouders/web-pkg'
 import { SideBarEventTopics } from '@ownclouders/web-pkg'
 import { useGroupSettingsStore } from '../../../../src/composables'
+import { Group } from '@ownclouders/web-client/graph/generated'
 
-const getGroupMocks = () => [
-  { id: '1', members: [] },
-  { id: '2', members: [] }
-]
+const getGroupMocks = () =>
+  [
+    { id: '1', members: [] },
+    { id: '2', members: [] }
+  ] as Group[]
 
 vi.mock('@ownclouders/web-pkg', async (importOriginal) => ({
   ...(await importOriginal<any>()),
@@ -124,7 +126,11 @@ describe('GroupsList', () => {
   })
 })
 
-function getWrapper({ mountType = shallowMount, groups = [], selectedGroups = [] } = {}) {
+function getWrapper({
+  mountType = shallowMount,
+  groups = [],
+  selectedGroups = []
+}: { mountType?: typeof mount; groups?: Group[]; selectedGroups?: Group[] } = {}) {
   vi.mocked(queryItemAsString).mockImplementationOnce(() => '1')
   vi.mocked(queryItemAsString).mockImplementationOnce(() => '100')
   const mocks = defaultComponentMocks()

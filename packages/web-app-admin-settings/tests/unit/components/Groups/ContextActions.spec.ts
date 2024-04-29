@@ -9,7 +9,7 @@ import {
 import { computed, ref } from 'vue'
 import { Action } from '@ownclouders/web-pkg'
 
-function createMockActionComposables(module) {
+function createMockActionComposables(module: Record<string, unknown>) {
   const mockModule: Record<string, any> = {}
   for (const m of Object.keys(module)) {
     mockModule[m] = vi.fn(() => ({ actions: ref([]) }))
@@ -18,21 +18,21 @@ function createMockActionComposables(module) {
 }
 
 vi.mock('@ownclouders/web-pkg', async (importOriginal) => {
-  const original = await importOriginal()
+  const original = await importOriginal<any>()
   return createMockActionComposables(original)
 })
 
 vi.mock(
   'web-app-admin-settings/src/composables/actions/groups/useGroupActionsDelete',
   async (importOriginal) => {
-    const original = await importOriginal()
+    const original = await importOriginal<any>()
     return createMockActionComposables(original)
   }
 )
 vi.mock(
   'web-app-admin-settings/src/composables/actions/groups/useGroupActionsEdit',
   async (importOriginal) => {
-    const original = await importOriginal()
+    const original = await importOriginal<any>()
     return createMockActionComposables(original)
   }
 )

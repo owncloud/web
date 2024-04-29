@@ -62,7 +62,7 @@ export default defineComponent({
     const { $gettext } = useGettext()
     const userSettingsStore = useUserSettingsStore()
 
-    const formData = ref({
+    const formData = ref<Record<string, { errorMessage: string; valid: boolean }>>({
       userName: {
         errorMessage: '',
         valid: false

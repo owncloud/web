@@ -127,8 +127,9 @@ export type FieldType = {
   accessibleLabelCallback?: (...args: unknown[]) => string
 }
 
+// FIXME: ideally the id should not be optional, but some generated types (e.g. User and Group) need this
 type Item = {
-  id: string
+  id?: string
 }
 
 /**

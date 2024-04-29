@@ -3,6 +3,7 @@ import { mockAxiosResolve } from 'web-test-helpers/src/mocks'
 import { mockDeep } from 'vitest-mock-extended'
 import { ClientService } from '@ownclouders/web-pkg'
 import { defaultComponentMocks, defaultPlugins, mount } from 'web-test-helpers'
+import { Group } from '@ownclouders/web-client/graph/generated'
 
 const selectors = { batchActionsStub: 'batch-actions-stub' }
 const getClientServiceMock = () => {
@@ -20,7 +21,7 @@ vi.mock('@ownclouders/web-pkg', async (importOriginal) => ({
 describe('Groups view', () => {
   describe('computed method "sideBarAvailablePanels"', () => {
     describe('EditPanel', () => {
-      it('should be available when one group is selected', async () => {
+      it('should be available when one group is selected', () => {
         const { wrapper } = getWrapper()
         expect(
           wrapper.vm.sideBarAvailablePanels
@@ -82,7 +83,7 @@ function getWrapper({
   clientService = getClientServiceMock(),
   groups = [],
   selectedGroups = []
-} = {}) {
+}: { clientService?: ClientService; groups?: Group[]; selectedGroups?: Group[] } = {}) {
   const mocks = { ...defaultComponentMocks(), $clientService: clientService }
 
   return {

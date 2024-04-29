@@ -11,7 +11,7 @@ export const useGeneralActionsUploadLogo = ({ imageInput }: { imageInput: VNodeR
   const clientService = useClientService()
   const router = useRouter()
 
-  const uploadImage = async (ev: InputEvent) => {
+  const uploadImage = async (ev: Event) => {
     const file = (ev.currentTarget as HTMLInputElement).files[0]
 
     if (!file) {

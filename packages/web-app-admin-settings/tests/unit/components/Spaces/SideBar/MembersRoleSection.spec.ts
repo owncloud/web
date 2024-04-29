@@ -14,7 +14,7 @@ describe('MembersRoleSection', () => {
   })
 })
 
-function getWrapper({ members = [] } = {}) {
+function getWrapper({ members = [] }: { members?: SpaceRole[] } = {}) {
   return {
     wrapper: shallowMount(MembersRoleSection, {
       props: {

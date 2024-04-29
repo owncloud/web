@@ -17,7 +17,7 @@ vi.mock('@ownclouders/web-pkg', async (importOriginal) => ({
 vi.mock('../../../src/composables/actions/users/useUserActionsCreateUser')
 vi.mocked(useAppDefaults).mockImplementation(() => useAppDefaultsMock())
 
-const getDefaultUser = () => {
+const getDefaultUser = (): User => {
   return {
     id: '1',
     displayName: 'Admin',

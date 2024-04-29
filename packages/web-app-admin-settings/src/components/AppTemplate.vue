@@ -59,7 +59,13 @@
 
 <script lang="ts">
 import { perPageDefault, paginationOptions } from 'web-app-admin-settings/src/defaults'
-import { AppLoadingSpinner, SideBar, BatchActions, SideBarPanelContext } from '@ownclouders/web-pkg'
+import {
+  AppLoadingSpinner,
+  SideBar,
+  BatchActions,
+  SideBarPanelContext,
+  Action
+} from '@ownclouders/web-pkg'
 import {
   defineComponent,
   inject,
@@ -76,6 +82,7 @@ import { SideBarEventTopics } from '@ownclouders/web-pkg'
 import { SideBarPanel } from '@ownclouders/web-pkg'
 import { BreadcrumbItem } from 'design-system/src/components/OcBreadcrumb/types'
 import { ViewOptions } from '@ownclouders/web-pkg'
+import { Item } from '@ownclouders/web-client'
 
 export default defineComponent({
   components: {
@@ -97,12 +104,12 @@ export default defineComponent({
     sideBarAvailablePanels: {
       required: false,
       type: Array as PropType<SideBarPanel<unknown, unknown, unknown>[]>,
-      default: () => []
+      default: (): SideBarPanel<unknown, unknown, unknown>[] => []
     },
     sideBarPanelContext: {
       required: false,
       type: Object as PropType<SideBarPanelContext<unknown, unknown, unknown>>,
-      default: () => ({})
+      default: (): SideBarPanelContext<unknown, unknown, unknown> => ({})
     },
     sideBarActivePanel: {
       required: false,
@@ -130,14 +137,14 @@ export default defineComponent({
       default: false
     },
     batchActionItems: {
-      type: Array as PropType<any>,
+      type: Array as PropType<Item[]>,
       required: false,
-      default: () => []
+      default: (): Item[] => []
     },
     batchActions: {
-      type: Array as PropType<any>,
+      type: Array as PropType<Action[]>,
       required: false,
-      default: () => []
+      default: (): Action[] => []
     },
     showAppBar: {
       type: Boolean,
@@ -158,7 +165,7 @@ export default defineComponent({
     const closeSideBar = () => {
       eventBus.publish(SideBarEventTopics.close)
     }
-    const selectPanel = (panel) => {
+    const selectPanel = (panel: string) => {
       eventBus.publish(SideBarEventTopics.setActivePanel, panel)
     }
 

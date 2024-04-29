@@ -125,9 +125,19 @@ import {
   displayPositionedDropdown,
   formatFileSize,
   defaultFuseOptions,
-  useKeyboardActions
+  useKeyboardActions,
+  ContextMenuBtnClickEventData
 } from '@ownclouders/web-pkg'
-import { computed, defineComponent, nextTick, onMounted, ref, unref, watch } from 'vue'
+import {
+  ComponentPublicInstance,
+  computed,
+  defineComponent,
+  nextTick,
+  onMounted,
+  ref,
+  unref,
+  watch
+} from 'vue'
 import { SpaceResource } from '@ownclouders/web-client'
 import Mark from 'mark.js'
 import Fuse from 'fuse.js'
@@ -179,9 +189,9 @@ export default defineComponent({
       })
     })
 
-    const orderBy = (list, prop, desc) => {
+    const orderBy = (list: SpaceResource[], prop: string, desc: boolean) => {
       return [...list].sort((s1, s2) => {
-        let a, b
+        let a: string, b: string
         const numeric = ['totalQuota', 'usedQuota', 'remainingQuota'].includes(prop)
 
         switch (prop) {
@@ -206,8 +216,8 @@ export default defineComponent({
             b = s2.disabled.toString()
             break
           default:
-            a = s1[prop] || ''
-            b = s2[prop] || ''
+            a = s1[prop as keyof SpaceResource].toString() || ''
+            b = s2[prop as keyof SpaceResource].toString() || ''
         }
 
         return desc
@@ -252,11 +262,11 @@ export default defineComponent({
       return unref(paginatedItems).length === unref(selectedSpaces).length
     })
 
-    const handleSort = (event) => {
+    const handleSort = (event: { sortBy: string; sortDir: SortDir }) => {
       sortBy.value = event.sortBy
       sortDir.value = event.sortDir
     }
-    const filter = (spaces, filterTerm) => {
+    const filter = (spaces: SpaceResource[], filterTerm: string) => {
       if (!(filterTerm || '').trim()) {
         return spaces
       }
@@ -347,10 +357,10 @@ export default defineComponent({
       }
       return managerStr
     }
-    const formatDate = (date) => {
+    const formatDate = (date: string) => {
       return formatDateFromJSDate(new Date(date), currentLanguage)
     }
-    const formatDateRelative = (date) => {
+    const formatDateRelative = (date: string) => {
       return formatRelativeDateFromJSDate(new Date(date), currentLanguage)
     }
     const getTotalQuota = (space: SpaceResource) => {
@@ -402,12 +412,14 @@ export default defineComponent({
       })
     })
 
-    const fileClicked = (data) => {
+    const fileClicked = (data: [SpaceResource, MouseEvent]) => {
       const resource = data[0]
       const eventData = data[1]
-      const isCheckboxClicked = eventData?.target.getAttribute('type') === 'checkbox'
+      const isCheckboxClicked =
+        (eventData?.target as HTMLElement).getAttribute('type') === 'checkbox'
 
-      const contextActionClicked = eventData?.target?.closest('div')?.id === 'oc-files-context-menu'
+      const contextActionClicked =
+        (eventData?.target as HTMLElement)?.closest('div')?.id === 'oc-files-context-menu'
       if (contextActionClicked) {
         return
       }
@@ -429,7 +441,10 @@ export default defineComponent({
       selectSpace(resource)
     }
 
-    const showContextMenuOnBtnClick = (data, space) => {
+    const showContextMenuOnBtnClick = (
+      data: ContextMenuBtnClickEventData,
+      space: SpaceResource
+    ) => {
       const { dropdown, event } = data
       if (dropdown?.tippy === undefined) {
         return
@@ -439,7 +454,11 @@ export default defineComponent({
       }
       displayPositionedDropdown(dropdown.tippy, event, unref(contextMenuButtonRef))
     }
-    const showContextMenuOnRightClick = (row, event, space) => {
+    const showContextMenuOnRightClick = (
+      row: ComponentPublicInstance<unknown>,
+      event: MouseEvent,
+      space: SpaceResource
+    ) => {
       event.preventDefault()
       const dropdown = row.$el.getElementsByClassName('spaces-table-btn-action-dropdown')[0]
       if (dropdown === undefined) {

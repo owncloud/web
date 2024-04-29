@@ -33,7 +33,7 @@ export default defineComponent({
     const markInstance = ref(null)
     const membersListRef = ref(null)
 
-    const filterMembers = (collection, term) => {
+    const filterMembers = (collection: Group[], term: string) => {
       if (!(term || '').trim()) {
         return collection
       }

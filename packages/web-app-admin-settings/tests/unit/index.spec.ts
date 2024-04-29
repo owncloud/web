@@ -2,7 +2,7 @@ import { navItems, routes } from '../../src/index'
 import { Ability } from '@ownclouders/web-client'
 import { mock } from 'vitest-mock-extended'
 
-const getAbilityMock = (hasPermission) => mock<Ability>({ can: () => hasPermission })
+const getAbilityMock = (hasPermission: boolean) => mock<Ability>({ can: () => hasPermission })
 
 describe('admin settings index', () => {
   describe('navItems', () => {
@@ -48,32 +48,23 @@ describe('admin settings index', () => {
       it('should redirect to general if permission given', () => {
         const ability = mock<Ability>()
         ability.can.mockReturnValueOnce(true)
-        expect(
-          routes({ $ability: ability })
-            .find((n) => n.path === '/')
-            .redirect().name
-        ).toEqual('admin-settings-general')
+        const route = routes({ $ability: ability }).find((n) => n.path === '/')
+        expect((route.redirect as any)().name).toEqual('admin-settings-general')
       })
       it('should redirect to user management if permission given', () => {
         const ability = mock<Ability>()
         ability.can.mockReturnValueOnce(false)
         ability.can.mockReturnValueOnce(true)
-        expect(
-          routes({ $ability: ability })
-            .find((n) => n.path === '/')
-            .redirect().name
-        ).toEqual('admin-settings-users')
+        const route = routes({ $ability: ability }).find((n) => n.path === '/')
+        expect((route.redirect as any)().name).toEqual('admin-settings-users')
       })
       it('should redirect to group management if permission given', () => {
         const ability = mock<Ability>()
         ability.can.mockReturnValueOnce(false)
         ability.can.mockReturnValueOnce(false)
         ability.can.mockReturnValueOnce(true)
-        expect(
-          routes({ $ability: ability })
-            .find((n) => n.path === '/')
-            .redirect().name
-        ).toEqual('admin-settings-groups')
+        const route = routes({ $ability: ability }).find((n) => n.path === '/')
+        expect((route.redirect as any)().name).toEqual('admin-settings-groups')
       })
       it('should redirect to space management if permission given', () => {
         const ability = mock<Ability>()
@@ -81,11 +72,8 @@ describe('admin settings index', () => {
         ability.can.mockReturnValueOnce(false)
         ability.can.mockReturnValueOnce(false)
         ability.can.mockReturnValueOnce(true)
-        expect(
-          routes({ $ability: ability })
-            .find((n) => n.path === '/')
-            .redirect().name
-        ).toEqual('admin-settings-spaces')
+        const route = routes({ $ability: ability }).find((n) => n.path === '/')
+        expect((route.redirect as any)().name).toEqual('admin-settings-spaces')
       })
       it('should throw an error if permissions are insufficient', () => {
         const ability = mock<Ability>()
@@ -100,7 +88,7 @@ describe('admin settings index', () => {
       const ability = mock<Ability>({ can: vi.fn(() => can) })
       const route = routes({ $ability: ability }).find((n) => n.path === '/general')
       const nextMock = vi.fn()
-      route.beforeEnter({}, {}, nextMock)
+      ;(route.beforeEnter as any)({}, {}, nextMock)
       const args = [...(redirect ? [redirect] : [])]
       expect(nextMock).toHaveBeenCalledWith(...args)
     })
@@ -111,7 +99,7 @@ describe('admin settings index', () => {
       const ability = mock<Ability>({ can: vi.fn(() => can) })
       const route = routes({ $ability: ability }).find((n) => n.path === '/users')
       const nextMock = vi.fn()
-      route.beforeEnter({}, {}, nextMock)
+      ;(route.beforeEnter as any)({}, {}, nextMock)
       const args = [...(redirect ? [redirect] : [])]
       expect(nextMock).toHaveBeenCalledWith(...args)
     })
@@ -122,7 +110,7 @@ describe('admin settings index', () => {
       const ability = mock<Ability>({ can: vi.fn(() => can) })
       const route = routes({ $ability: ability }).find((n) => n.path === '/groups')
       const nextMock = vi.fn()
-      route.beforeEnter({}, {}, nextMock)
+      ;(route.beforeEnter as any)({}, {}, nextMock)
       const args = [...(redirect ? [redirect] : [])]
       expect(nextMock).toHaveBeenCalledWith(...args)
     })
@@ -133,7 +121,7 @@ describe('admin settings index', () => {
       const ability = mock<Ability>({ can: vi.fn(() => can) })
       const route = routes({ $ability: ability }).find((n) => n.path === '/spaces')
       const nextMock = vi.fn()
-      route.beforeEnter({}, {}, nextMock)
+      ;(route.beforeEnter as any)({}, {}, nextMock)
       const args = [...(redirect ? [redirect] : [])]
       expect(nextMock).toHaveBeenCalledWith(...args)
     })

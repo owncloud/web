@@ -1,6 +1,6 @@
 import { computed } from 'vue'
 import { useGettext } from 'vue3-gettext'
-import { UserAction, useModals, useCapabilityStore } from '@ownclouders/web-pkg'
+import { UserAction, useModals, useCapabilityStore, UserActionOptions } from '@ownclouders/web-pkg'
 import LoginModal from '../../../components/Users/LoginModal.vue'
 
 export const useUserActionsEditLogin = () => {
@@ -8,7 +8,7 @@ export const useUserActionsEditLogin = () => {
   const capabilityStore = useCapabilityStore()
   const { $gettext, $ngettext } = useGettext()
 
-  const handler = ({ resources }) => {
+  const handler = ({ resources }: UserActionOptions) => {
     dispatchModal({
       title: $ngettext(
         'Edit login for "%{user}"',
