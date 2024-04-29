@@ -1,0 +1,50 @@
+import { fetchEventSource, EventStreamContentType } from '@ai-zen/node-fetch-event-source'
+import { getAuthHeader } from '../api/http'
+import { User } from '../types'
+
+const sseEventStore = {}
+const ctrl = new AbortController()
+
+export const listenSSE = (baseUrl: string, user: User): Promise<void> => {
+  const sseUrl = new URL('ocs/v2.php/apps/notifications/api/v1/notifications/sse', baseUrl).href
+
+  return fetchEventSource(sseUrl, {
+    headers: {
+      ...getAuthHeader(user)
+    },
+    signal: ctrl.signal,
+    async onopen(response) {
+      if (response.ok && response.headers.get('content-type') === EventStreamContentType) {
+        console.log('Listening to SSE events...')
+        return Promise.resolve()
+      }
+    },
+    onmessage(message) {
+      if (message.event === 'FatalError') {
+        throw new Error(message.data)
+      }
+      if (!Object.hasOwn(sseEventStore, user.id)) {
+        sseEventStore[user.id] = []
+      }
+      // push event to the array
+      // TODO: also store message.data if necessary
+      sseEventStore[user.id.toLowerCase()].push(message.event)
+    },
+    onclose() {
+      console.error('Closing SSE...')
+    },
+    onerror(err) {
+      console.error(err)
+      ctrl.abort()
+    }
+  })
+}
+
+export const getSSEEvents = (user: string): Array<string> => {
+  // recent events should be evaluated first
+  return sseEventStore[user.toLowerCase()].reverse()
+}
+
+export const closeSSEConnections = () => {
+  ctrl.abort()
+}

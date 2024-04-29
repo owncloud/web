@@ -4,6 +4,18 @@ import { User } from '../types'
 import { config } from '../../config'
 import { TokenEnvironmentFactory } from '../environment'
 
+export const getAuthHeader = (user: User, isKeycloakRequest: boolean = false) => {
+  const tokenEnvironment = TokenEnvironmentFactory(isKeycloakRequest ? 'keycloak' : null)
+  const authHeader = {
+    Authorization: 'Basic ' + Buffer.from(user.id + ':' + user.password).toString('base64')
+  }
+
+  if (!config.basicAuth) {
+    authHeader.Authorization = 'Bearer ' + tokenEnvironment.getToken({ user }).accessToken
+  }
+  return authHeader
+}
+
 export const request = async ({
   method,
   path,
@@ -19,15 +31,7 @@ export const request = async ({
   header?: object
   isKeycloakRequest?: boolean
 }): Promise<Response> => {
-  const tokenEnvironment = TokenEnvironmentFactory(isKeycloakRequest ? 'keycloak' : null)
-
-  const authHeader = {
-    Authorization: 'Basic ' + Buffer.from(user.id + ':' + user.password).toString('base64')
-  }
-
-  if (!config.basicAuth) {
-    authHeader.Authorization = 'Bearer ' + tokenEnvironment.getToken({ user }).accessToken
-  }
+  const authHeader = getAuthHeader(user, isKeycloakRequest)
 
   const basicHeader = {
     'OCS-APIREQUEST': true as any,

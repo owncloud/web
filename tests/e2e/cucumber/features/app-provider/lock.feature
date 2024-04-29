@@ -27,9 +27,7 @@ Feature: lock
       | resource |
       | test.odt |
     Then "Brian" should see the content "some content" in editor "Collabora"
-
-    When "Alice" opens the "files" app
-    Then for "Alice" file "test.odt" should be locked
+    And for "Alice" file "test.odt" should be locked
 
     # checking that sharing/unsharing and creating link of the locked file is possible
     And "Alice" creates a public link creates a public link of following resource using the sidebar panel
@@ -44,6 +42,5 @@ Feature: lock
     #   | test.odt | Brian     |
     And "Brian" logs out
 
-    When "Alice" reloads the page
-    Then for "Alice" file "test.odt" should not be locked
+    And for "Alice" file "test.odt" should not be locked
     And "Alice" logs out

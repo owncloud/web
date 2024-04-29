@@ -3,6 +3,7 @@
     "luxon": "3.2.1"
   },
   "devDependencies": {
+    "@ai-zen/node-fetch-event-source": "^2.1.4",
     "xml-js": "^1.6.11"
   }
 }
