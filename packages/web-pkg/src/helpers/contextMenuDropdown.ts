@@ -3,18 +3,22 @@ import OcDrop from 'design-system/src/components/OcDrop/OcDrop.vue'
 import { ComponentPublicInstance } from 'vue'
 
 export type ContextMenuBtnClickEventData = {
-  event: MouseEvent
+  event: MouseEvent | KeyboardEvent
   dropdown: ComponentPublicInstance<typeof OcDrop>
+}
+
+const isKeyboardEvent = (event: Event): event is KeyboardEvent => {
+  return (event as any).clientY === 0
 }
 
 export const displayPositionedDropdown = (
   dropdown: ComponentPublicInstance<typeof OcDrop>,
-  event: MouseEvent,
+  event: MouseEvent | KeyboardEvent,
   contextMenuButton: ComponentPublicInstance<typeof OcButton>
 ) => {
   const contextMenuButtonPos = contextMenuButton.$el.getBoundingClientRect()
-  const isKeyboardEvent = event.clientY === 0
-  const yValue = isKeyboardEvent
+
+  const yValue = isKeyboardEvent(event)
     ? (event.target as HTMLElement)?.getBoundingClientRect().top || 0
     : event.clientY
 
@@ -29,8 +33,14 @@ export const displayPositionedDropdown = (
        * so we render the dropdown at the position of the mouse pointer.
        * Otherwise we render the dropdown at the position of the three-dot-menu
        */
-      left: event.type === 'contextmenu' ? event.clientX : contextMenuButtonPos.x,
-      right: event.type === 'contextmenu' ? event.clientX : contextMenuButtonPos.x
+      left:
+        event.type === 'contextmenu' && !isKeyboardEvent(event)
+          ? event.clientX
+          : contextMenuButtonPos.x,
+      right:
+        event.type === 'contextmenu' && !isKeyboardEvent(event)
+          ? event.clientX
+          : contextMenuButtonPos.x
     })
   })
 

@@ -4,7 +4,7 @@ describe('displayPositionedDropdown', () => {
   it('shows the dropdown', () => {
     const dropdown = { setProps: vi.fn(), show: vi.fn() } as any
     const ctxMenuBtn = { $el: { getBoundingClientRect: vi.fn() } } as any
-    displayPositionedDropdown(dropdown, null, ctxMenuBtn)
+    displayPositionedDropdown(dropdown, {} as MouseEvent, ctxMenuBtn)
     expect(dropdown.show).toHaveBeenCalled()
   })
   it('horizontally positions the drop at the cursor for "contextmenu"-event', () => {
@@ -57,7 +57,7 @@ describe('displayPositionedDropdown', () => {
     const yPos = 200
     const event = {
       clientY: 0,
-      srcElement: { getBoundingClientRect: () => ({ top: yPos }) }
+      target: { getBoundingClientRect: () => ({ top: yPos }) }
     } as unknown as MouseEvent
     let dropdownProps
     const dropdown = {

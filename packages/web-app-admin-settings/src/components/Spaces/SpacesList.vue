@@ -190,7 +190,6 @@ export default defineComponent({
     })
 
     const orderBy = (list: SpaceResource[], prop: string, desc: boolean) => {
-      console.log(prop, list)
       return [...list].sort((s1, s2) => {
         let a: string, b: string
         const numeric = ['totalQuota', 'usedQuota', 'remainingQuota'].includes(prop)

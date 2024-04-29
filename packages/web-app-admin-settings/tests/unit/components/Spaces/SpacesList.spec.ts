@@ -69,7 +69,7 @@ describe('SpacesList', () => {
     'sorts by property "%s"',
     async (prop) => {
       const { wrapper } = getWrapper({ mountType: shallowMount, spaces: spaceMocks })
-      wrapper.vm.sortBy = prop as keyof SpaceResource
+      wrapper.vm.sortBy = prop
       await wrapper.vm.$nextTick()
       expect(
         (

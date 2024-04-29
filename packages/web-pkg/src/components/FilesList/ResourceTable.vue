@@ -517,6 +517,7 @@ export default defineComponent({
 
     const dragItem = ref<Resource>()
     const ghostElement = ref()
+    const contextMenuButton = ref<ComponentPublicInstance<typeof OcButton>>()
 
     const { width } = useWindowSize()
     const hasTags = computed(
@@ -544,6 +545,7 @@ export default defineComponent({
       configOptions,
       dragItem,
       ghostElement,
+      contextMenuButton,
       getTagToolTip,
       renameActions,
       renameHandler,
@@ -919,11 +921,7 @@ export default defineComponent({
       if (!this.isResourceSelected(item)) {
         this.emitSelect([item.id])
       }
-      displayPositionedDropdown(
-        dropdown.tippy,
-        event,
-        this.$refs.contextMenuButton as ComponentPublicInstance<typeof OcButton>
-      )
+      displayPositionedDropdown(dropdown.tippy, event, this.contextMenuButton)
     },
     showContextMenu(row, event, item) {
       event.preventDefault()
@@ -939,11 +937,7 @@ export default defineComponent({
       if (!this.isResourceSelected(item)) {
         this.emitSelect([item.id])
       }
-      displayPositionedDropdown(
-        instance._tippy,
-        event,
-        this.$refs.contextMenuButton as ComponentPublicInstance<typeof OcButton>
-      )
+      displayPositionedDropdown(instance._tippy, event, this.contextMenuButton)
     },
     rowMounted(resource, component) {
       /**

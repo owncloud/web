@@ -143,7 +143,7 @@ export default defineComponent({
     const { $gettext } = useGettext()
     const { y: fileListHeaderY } = useFileListHeaderPosition('#admin-settings-app-bar')
     const contextMenuButtonRef = ref(undefined)
-    const sortBy = ref('displayName')
+    const sortBy = ref<keyof Group>('displayName')
     const sortDir = ref<SortDir>(SortDir.Asc)
     const filterTerm = ref('')
     const router = useRouter()
@@ -259,11 +259,11 @@ export default defineComponent({
       return groupsSearchEngine.search(filterTerm).map((r) => r.item)
     }
 
-    const orderBy = (list: Group[], prop: string, desc: boolean) => {
+    const orderBy = (list: Group[], prop: keyof Group, desc: boolean) => {
       return [...list].sort((a, b) => {
-        const c = a[prop as keyof Group]?.toString() || ''
-        const d = b[prop as keyof Group]?.toString() || ''
-        return desc ? d.localeCompare(d) : c.localeCompare(c)
+        const c = a[prop]?.toString() || ''
+        const d = b[prop]?.toString() || ''
+        return desc ? d.localeCompare(c) : c.localeCompare(d)
       })
     }
 
@@ -401,7 +401,7 @@ export default defineComponent({
     })
   },
   methods: {
-    handleSort(event: { sortBy: string; sortDir: SortDir }) {
+    handleSort(event: { sortBy: keyof Group; sortDir: SortDir }) {
       this.sortBy = event.sortBy
       this.sortDir = event.sortDir
     },

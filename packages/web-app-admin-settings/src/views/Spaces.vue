@@ -69,14 +69,14 @@ import {
   useSpaceActionsEditQuota,
   useConfigStore
 } from '@ownclouders/web-pkg'
-import { buildSpace, SpaceResource } from '@ownclouders/web-client'
+import { buildSpace, call, SpaceResource } from '@ownclouders/web-client'
 import { computed, defineComponent, onBeforeUnmount, onMounted, ref, unref } from 'vue'
 import { useTask } from 'vue-concurrency'
 import { useGettext } from 'vue3-gettext'
 
 import { useSpaceSettingsStore } from '../composables'
 import { storeToRefs } from 'pinia'
-import { Drive, Quota } from '@ownclouders/web-client/graph/generated'
+import { Quota } from '@ownclouders/web-client/graph/generated'
 
 export default defineComponent({
   name: 'SpacesView',
@@ -117,11 +117,10 @@ export default defineComponent({
     const loadResourcesTask = useTask(function* (signal) {
       const {
         data: { value: drivesResponse }
-      } = yield clientService.graphAuthenticated.drives.listAllDrives(
-        'name asc',
-        'driveType eq project'
+      } = yield* call(
+        clientService.graphAuthenticated.drives.listAllDrives('name asc', 'driveType eq project')
       )
-      const drives = drivesResponse.map((space: Drive) =>
+      const drives = drivesResponse.map((space) =>
         buildSpace({ ...space, serverUrl: configStore.serverUrl })
       )
       spaceSettingsStore.setSpaces(drives)
