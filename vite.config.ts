@@ -135,6 +135,7 @@ export default defineConfig(({ mode, command }) => {
     })
   }
 
+  const host = process.env.OWNCLOUD_WEB_HOST || 'host.docker.internal'
   return mergeConfig(
     {
       base: '',
@@ -162,7 +163,7 @@ export default defineConfig(({ mode, command }) => {
         target: browserslistToEsbuild()
       },
       server: {
-        host: 'host.docker.internal',
+        host: host,
         strictPort: true
       },
       css: {
