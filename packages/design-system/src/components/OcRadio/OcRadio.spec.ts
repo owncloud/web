@@ -1,8 +1,8 @@
 import OcRadio from './OcRadio.vue'
-import { mount } from 'web-test-helpers'
+import { PartialComponentProps, mount } from 'web-test-helpers'
 
 describe('OcRadio', () => {
-  function getWrapper(props = {}) {
+  function getWrapper(props: PartialComponentProps<typeof OcRadio> = {}) {
     return mount(OcRadio, {
       props: {
         ...props,
@@ -90,7 +90,7 @@ describe('OcRadio', () => {
     })
   })
   describe('input options', () => {
-    const rawData = {
+    const rawData: { availableOptions: string[]; selectedOption: unknown } = {
       availableOptions: ['Water', 'Wine', 'Beer'],
       selectedOption: null
     }

@@ -77,7 +77,7 @@ export default defineComponent({
   setup() {
     const query = ref('')
 
-    const updateQuery = (value) => {
+    const updateQuery = (value: string) => {
       query.value = value
     }
 
@@ -93,7 +93,7 @@ export default defineComponent({
       return this.icons
         .filter((icon) => icon.includes(this.query))
         .map((icon, index) => ({
-          id: index,
+          id: index.toString(),
           filename: icon.replace('-fill', '').replace('-line', ''),
           fillType: icon.endsWith('-fill') ? 'fill' : icon.endsWith('-line') ? 'line' : 'none'
         }))
@@ -139,7 +139,7 @@ export default defineComponent({
     }
   },
   mounted() {
-    this.icons = req.keys().map((filename) => {
+    this.icons = req.keys().map((filename: string) => {
       return filename.split('.').slice(0, -1).join('.').substring(2)
     })
   }

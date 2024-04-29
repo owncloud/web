@@ -1,3 +1,3 @@
-const __logger = (v) => v
+const __logger = (v: unknown) => v
 
 export default __logger

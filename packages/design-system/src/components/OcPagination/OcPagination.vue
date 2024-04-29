@@ -32,6 +32,8 @@
 import { defineComponent } from 'vue'
 import OcIcon from '../OcIcon/OcIcon.vue'
 
+type Page = string | number
+
 /**
  * A list of links used for switching to different pages
  */
@@ -87,7 +89,7 @@ export default defineComponent({
 
   computed: {
     displayedPages() {
-      let pages = []
+      let pages: Array<Page> = []
 
       for (let i = 0; i < this.pages; i++) {
         pages.push(i + 1)
@@ -103,11 +105,11 @@ export default defineComponent({
         )
 
         if (this.$_currentPage > 2) {
-          pages[0] > 2 ? pages.unshift(1, '...') : pages.unshift(1)
+          Number(pages[0]) > 2 ? pages.unshift(1, '...') : pages.unshift(1)
         }
 
         if (this.$_currentPage < this.pages - 1) {
-          pages[pages.length - 1] < this.pages - 1
+          Number(pages[pages.length - 1]) < this.pages - 1
             ? pages.push('...', this.pages)
             : pages.push(this.pages)
         }
@@ -140,19 +142,19 @@ export default defineComponent({
   },
 
   methods: {
-    pageLabel(page) {
-      return this.$gettext('Go to page %{ page }', { page })
+    pageLabel(page: Page) {
+      return this.$gettext('Go to page %{ page }', { page: page.toString() })
     },
 
-    isCurrentPage(page) {
+    isCurrentPage(page: Page) {
       return this.$_currentPage === page
     },
 
-    pageComponent(page) {
+    pageComponent(page: Page) {
       return page === '...' || this.isCurrentPage(page) ? 'span' : 'router-link'
     },
 
-    bindPageProps(page) {
+    bindPageProps(page: Page) {
       if (page === '...') {
         return
       }
@@ -171,7 +173,7 @@ export default defineComponent({
       }
     },
 
-    pageClass(page) {
+    pageClass(page: Page) {
       const classes = ['oc-pagination-list-item-page']
 
       if (this.isCurrentPage(page)) {
@@ -185,7 +187,7 @@ export default defineComponent({
       return classes
     },
 
-    bindPageLink(page) {
+    bindPageLink(page: Page) {
       return {
         name: this.currentRoute.name,
         query: { ...this.currentRoute.query, page },

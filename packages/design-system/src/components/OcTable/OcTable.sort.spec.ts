@@ -46,7 +46,7 @@ const data = [
     id: '5324435',
     resource: 'id-2'
   }
-]
+] as Array<{ id: string } & any>
 
 describe('OcTable.sort', () => {
   describe('aria-sort', () => {

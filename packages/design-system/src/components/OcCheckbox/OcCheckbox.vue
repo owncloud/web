@@ -108,7 +108,7 @@ export default defineComponent({
       get() {
         return this.modelValue
       },
-      set: function (value) {
+      set: function (value: boolean) {
         this.$emit('update:modelValue', value)
       }
     },

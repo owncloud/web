@@ -270,7 +270,7 @@ export default defineComponent({
       return {}
     },
     additionalAttributes() {
-      const additionalAttrs = {}
+      const additionalAttrs: Record<string, unknown> = {}
       if (!!this.warningMessage || !!this.errorMessage || !!this.descriptionMessage) {
         additionalAttrs['aria-describedby'] = this.messageId
       }

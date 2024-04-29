@@ -172,18 +172,18 @@ export default defineComponent({
     }
   },
   methods: {
-    sizeClass(c) {
+    sizeClass(c: string) {
       return this.prefix(getSizeClass(c))
     },
-    variationClass(c) {
+    variationClass(c: string) {
       return this.prefix(c)
     },
-    prefix(string) {
+    prefix(string: string) {
       if (string !== null) {
         return `oc-icon-${string}`
       }
     },
-    transformSvgElement(svg) {
+    transformSvgElement(svg: SVGElement) {
       if (this.accessibleLabel !== '') {
         const title = document.createElement('title')
         title.setAttribute('id', this.svgTitleId)

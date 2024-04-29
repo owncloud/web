@@ -74,7 +74,8 @@
 </template>
 
 <script lang="ts">
-import { defineComponent } from 'vue'
+import { Component, defineComponent } from 'vue'
+// @ts-ignore
 import orderBy from '../../../docs/utils/orderBy'
 
 export default defineComponent({
@@ -85,19 +86,19 @@ export default defineComponent({
     }
   },
   methods: {
-    getComponents: function () {
-      const components = []
+    getComponents: function (): Component[] {
+      const components: Component[] = []
       const contexts = [(require as any).context('@/components/', true, /\.vue$/)]
 
       contexts.forEach((context) => {
-        context.keys().forEach((key) => components.push(context(key).default))
+        context.keys().forEach((key: string) => components.push(context(key).default))
       })
 
       return components.map((c) => {
         return c
       })
     },
-    orderData: function (data) {
+    orderData: function (data: Component[]) {
       return orderBy(data, 'name', 'asc')
     }
   }

@@ -396,7 +396,7 @@ export default defineComponent({
        */
       this.$emit('confirm', this.userInputValue)
     },
-    inputOnInput(value) {
+    inputOnInput(value: string) {
       /**
        * The user typed into the input
        *
@@ -404,7 +404,7 @@ export default defineComponent({
        */
       this.$emit('input', value)
     },
-    inputAssignPropAsValue(value) {
+    inputAssignPropAsValue(value: string) {
       this.userInputValue = value
     }
   }

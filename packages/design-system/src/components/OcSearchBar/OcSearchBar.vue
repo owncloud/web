@@ -280,7 +280,7 @@ export default defineComponent({
        */
       this.$emit('search', this.query)
     },
-    onType(query) {
+    onType(query: string) {
       this.query = this.trimQuery ? query.trim() : query
       /**
        * Input event to support model directive

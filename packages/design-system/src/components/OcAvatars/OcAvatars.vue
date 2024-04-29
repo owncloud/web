@@ -39,6 +39,14 @@ import OcAvatarFederated from '../OcAvatarFederated/OcAvatarFederated.vue'
 import OcAvatarGuest from '../OcAvatarGuest/OcAvatarGuest.vue'
 import { defineComponent, PropType } from 'vue'
 
+type Item = {
+  displayName?: string
+  name?: string
+  shareType?: number
+  username?: string
+  avatar?: string
+}
+
 /**
  * Display a group of avatars
  */
@@ -61,7 +69,7 @@ export default defineComponent({
      * Users, public links, groups, federated and guests to be displayed with avatars
      */
     items: {
-      type: Array as PropType<any[]>,
+      type: Array as PropType<Item[]>,
       required: true
     },
     /**
@@ -144,7 +152,7 @@ export default defineComponent({
     }
   },
   methods: {
-    getAvatarComponentForItem(item) {
+    getAvatarComponentForItem(item: Item) {
       switch (item.shareType) {
         case shareType.link:
           return OcAvatarLink

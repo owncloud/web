@@ -101,7 +101,7 @@ export default defineComponent({
       get() {
         return this.modelValue
       },
-      set(value) {
+      set(value: unknown) {
         this.$emit('update:modelValue', value)
       }
     },

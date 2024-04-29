@@ -125,7 +125,7 @@ export default defineComponent({
       this.imgError = true
     },
 
-    randomBackgroundColor(seed, colors) {
+    randomBackgroundColor(seed: number, colors: string[]) {
       return colors[seed % colors.length]
     }
   }

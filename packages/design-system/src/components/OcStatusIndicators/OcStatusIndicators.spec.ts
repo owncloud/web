@@ -5,7 +5,7 @@ const fileResource = {
   name: 'forest.jpg',
   path: 'nature/forest.jpg',
   thumbnail: 'https://cdn.pixabay.com/photo/2015/09/09/16/05/forest-931706_960_720.jpg',
-  indicators: [],
+  indicators: [] as unknown[],
   type: 'file',
   isFolder: false,
   extension: 'jpg'

@@ -76,7 +76,7 @@ export default defineComponent({
     }
   },
   methods: {
-    $_ocTag_click(event) {
+    $_ocTag_click(event: MouseEvent) {
       /**
        * Emitted as soon as the user clicks on the tag
        * @type {event}

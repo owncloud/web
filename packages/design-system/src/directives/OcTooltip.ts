@@ -1,12 +1,12 @@
-import tippy from 'tippy.js'
+import tippy, { Instance } from 'tippy.js'
 import merge from 'deepmerge'
 import __logger from '../utils/logger'
 
 export const hideOnEsc = {
   name: 'hideOnEsc',
   defaultValue: true,
-  fn({ hide }) {
-    const onKeyDown = (e) => {
+  fn({ hide }: Instance) {
+    const onKeyDown = (e: KeyboardEvent) => {
       if (e.code === 'Escape') {
         hide()
       }
@@ -26,16 +26,16 @@ export const hideOnEsc = {
 export const ariaHidden = {
   name: 'ariaHidden',
   defaultValue: true,
-  fn(instance) {
+  fn(instance: Instance) {
     return {
       onCreate() {
-        instance.popper.setAttribute('aria-hidden', true)
+        instance.popper.setAttribute('aria-hidden', 'true')
       }
     }
   }
 }
 
-export const destroy = (_tippy) => {
+export const destroy = (_tippy: Instance) => {
   if (!_tippy) {
     return
   }
@@ -47,7 +47,7 @@ export const destroy = (_tippy) => {
   }
 }
 
-const initOrUpdate = (el, { value = {} }: any) => {
+const initOrUpdate = (el: HTMLElement & { tooltip: any }, { value = {} }: any) => {
   if (Object.prototype.toString.call(value) !== '[object Object]') {
     value = { content: value }
   }
@@ -84,5 +84,5 @@ export default {
   name: 'OcTooltip',
   beforeMount: initOrUpdate,
   updated: initOrUpdate,
-  unmounted: (el) => destroy(el.tooltip)
+  unmounted: (el: HTMLElement & { tooltip: any }) => destroy(el.tooltip)
 }

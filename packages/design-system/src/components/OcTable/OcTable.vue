@@ -41,13 +41,20 @@
         :key="`oc-tbody-tr-${itemDomSelector(item) || trIndex}`"
         :ref="`row-${trIndex}`"
         v-bind="extractTbodyTrProps(item, trIndex)"
-        :data-item-id="item[idKey]"
+        :data-item-id="item[idKey as keyof Item]"
         :draggable="dragDrop"
         @click="$emit(constants.EVENT_TROW_CLICKED, [item, $event])"
         @contextmenu="
-          $emit(constants.EVENT_TROW_CONTEXTMENU, $refs[`row-${trIndex}`][0], $event, item)
+          $emit(
+            constants.EVENT_TROW_CONTEXTMENU,
+            ($refs[`row-${trIndex}`] as HTMLElement[])[0],
+            $event,
+            item
+          )
         "
-        @vue:mounted="$emit(constants.EVENT_TROW_MOUNTED, item, $refs[`row-${trIndex}`][0])"
+        @vue:mounted="
+          $emit(constants.EVENT_TROW_MOUNTED, item, ($refs[`row-${trIndex}`] as HTMLElement[])[0])
+        "
         @dragstart="dragStart(item, $event)"
         @drop="dropRowEvent(itemDomSelector(item), $event)"
         @dragenter.prevent="dropRowStyling(itemDomSelector(item), false, $event)"
@@ -62,10 +69,10 @@
         >
           <slot v-if="isFieldTypeSlot(field)" :name="field.name" :item="item" />
           <template v-else-if="isFieldTypeCallback(field)">
-            {{ field.callback(item[field.name]) }}
+            {{ field.callback(item[field.name as keyof Item]) }}
           </template>
           <template v-else>
-            {{ item[field.name] }}
+            {{ item[field.name as keyof Item] }}
           </template>
         </oc-td>
       </oc-tr>
@@ -116,6 +123,12 @@ export type FieldType = {
   thClass?: string
   tdClass?: string
   sortable?: boolean
+  sortDir?: string
+  accessibleLabelCallback?: (...args: unknown[]) => string
+}
+
+type Item = {
+  id: string
 }
 
 /**
@@ -140,7 +153,7 @@ export default defineComponent({
      * specify it in the `id-key` property of oc-table.
      */
     data: {
-      type: Array,
+      type: Array as PropType<Item[]>,
       required: true
     },
     /**
@@ -157,8 +170,8 @@ export default defineComponent({
     itemDomSelector: {
       type: Function,
       required: false,
-      default(item) {
-        return item[(this as any).idKey]
+      default(item: Item) {
+        return item[(this as any).idKey as keyof Item]
       }
     },
     /**
@@ -216,7 +229,7 @@ export default defineComponent({
      */
     disabled: {
       type: Array as PropType<Array<string | number>>,
-      default: () => []
+      default: (): Array<string | number> => []
     },
     /**
      * Top position of header used when the header is sticky in pixels
@@ -329,25 +342,25 @@ export default defineComponent({
     }
   },
   methods: {
-    dragOver(event) {
+    dragOver(event: DragEvent) {
       event.preventDefault()
     },
-    dragStart(item, event) {
+    dragStart(item: Item, event: DragEvent) {
       this.$emit(EVENT_ITEM_DRAGGED, item, event)
     },
-    dropRowEvent(selector, event) {
+    dropRowEvent(selector: Item, event: DragEvent) {
       this.$emit(EVENT_ITEM_DROPPED, selector, event)
     },
-    dropRowStyling(selector, leaving, event) {
+    dropRowStyling(selector: Item, leaving: boolean, event: DragEvent) {
       this.$emit('dropRowStyling', selector, leaving, event)
     },
-    isFieldTypeSlot(field) {
+    isFieldTypeSlot(field: FieldType) {
       return field.type === 'slot'
     },
-    isFieldTypeCallback(field) {
+    isFieldTypeCallback(field: FieldType) {
       return ['callback', 'function'].indexOf(field.type) >= 0
     },
-    extractFieldTitle(field) {
+    extractFieldTitle(field: FieldType) {
       if (Object.prototype.hasOwnProperty.call(field, 'title')) {
         return field.title
       }
@@ -358,7 +371,7 @@ export default defineComponent({
         class: this.tableClasses
       }
     },
-    extractThProps(field, index) {
+    extractThProps(field: FieldType, index: number) {
       const props = this.extractCellProps(field)
       props.class = `oc-table-header-cell oc-table-header-cell-${field.name}`
       if (Object.prototype.hasOwnProperty.call(field, 'thClass')) {
@@ -380,7 +393,7 @@ export default defineComponent({
 
       return props
     },
-    extractTbodyTrProps(item, index) {
+    extractTbodyTrProps(item: Item, index: number) {
       return {
         ...(this.lazy && { lazy: { colspan: this.fullColspan } }),
         class: [
@@ -391,7 +404,7 @@ export default defineComponent({
         ].filter(Boolean)
       }
     },
-    extractTdProps(field, index, item) {
+    extractTdProps(field: FieldType, index: number, item: Item) {
       const props = this.extractCellProps(field)
       props.class = `oc-table-data-cell oc-table-data-cell-${field.name}`
       if (Object.prototype.hasOwnProperty.call(field, 'tdClass')) {
@@ -415,7 +428,7 @@ export default defineComponent({
 
       return props
     },
-    extractCellProps(field) {
+    extractCellProps(field: FieldType): Record<string, string> {
       return {
         ...(field?.alignH && { alignH: field.alignH }),
         ...(field?.alignV && { alignV: field.alignV }),
@@ -425,50 +438,50 @@ export default defineComponent({
         style: undefined
       }
     },
-    isHighlighted(item) {
+    isHighlighted(item: Item) {
       if (!this.highlighted) {
         return false
       }
 
       if (Array.isArray(this.highlighted)) {
-        return this.highlighted.indexOf(item[this.idKey]) > -1
+        return this.highlighted.indexOf(item[this.idKey as keyof Item]) > -1
       }
 
-      return this.highlighted === item[this.idKey]
+      return this.highlighted === item[this.idKey as keyof Item]
     },
-    isDisabled(item) {
+    isDisabled(item: Item) {
       if (!this.disabled.length) {
         return false
       }
 
-      return this.disabled.indexOf(item[this.idKey]) > -1
+      return this.disabled.indexOf(item[this.idKey as keyof Item]) > -1
     },
 
-    cellKey(field, index, item) {
-      const prefix = [item[this.idKey], index + 1].filter(Boolean)
+    cellKey(field: FieldType, index: number, item: Item) {
+      const prefix = [item[this.idKey as keyof Item], index + 1].filter(Boolean)
 
       if (this.isFieldTypeSlot(field)) {
         return [...prefix, field.name].join('-')
       }
 
       if (this.isFieldTypeCallback(field)) {
-        return [...prefix, field.callback(item[field.name])].join('-')
+        return [...prefix, field.callback(item[field.name as keyof Item])].join('-')
       }
 
-      return [...prefix, item[field.name]].join('-')
+      return [...prefix, item[field.name as keyof Item]].join('-')
     },
 
-    getSortLabel(name) {
+    getSortLabel(name: string) {
       return this.$gettext('Sort by %{ name }', { name })
     },
 
-    handleTrClick(field) {
+    handleTrClick(field: FieldType) {
       if (this.isSortable) {
         this.handleSort(field)
       }
     },
 
-    extractSortThProps(props, field) {
+    extractSortThProps(props: Record<string, string>, field: FieldType) {
       if (!this.fieldIsSortable(field)) {
         return
       }
@@ -479,10 +492,10 @@ export default defineComponent({
       }
       props['aria-sort'] = sort
     },
-    fieldIsSortable({ sortable }) {
+    fieldIsSortable({ sortable }: FieldType) {
       return !!sortable
     },
-    handleSort(field) {
+    handleSort(field: FieldType) {
       if (!this.fieldIsSortable(field)) {
         return
       }

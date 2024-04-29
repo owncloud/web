@@ -1,8 +1,8 @@
 import OcCheckbox from './OcCheckbox.vue'
-import { mount } from 'web-test-helpers'
+import { PartialComponentProps, mount } from 'web-test-helpers'
 
 describe('OcCheckbox', () => {
-  function getWrapperWithProps(props) {
+  function getWrapperWithProps(props: PartialComponentProps<typeof OcCheckbox>) {
     return mount(OcCheckbox, {
       props: {
         label: 'test label',
