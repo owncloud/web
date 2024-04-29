@@ -52,11 +52,8 @@ export const onSSESpaceMemberRemovedEvent = async ({
   }
 
   if (!sseData.affecteduserids?.includes(userStore.user.id)) {
-    const { data } = await clientService.graphAuthenticated.drives.listMyDrives(
-      '',
-      `id eq '${sseData.spaceid}'`
-    )
-    const space = buildSpace(data.value[0])
+    const { data } = await clientService.graphAuthenticated.drives.getDrive(sseData.itemid)
+    const space = buildSpace(data)
     return spacesStore.upsertSpace(space)
   }
 
