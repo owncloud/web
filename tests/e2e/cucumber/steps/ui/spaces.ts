@@ -39,7 +39,8 @@ When(
   async function (this: World, stepUser: string, key: string): Promise<void> {
     const { page } = this.actorsEnvironment.getActor({ key: stepUser })
     const spacesObject = new objects.applicationFiles.Spaces({ page })
-
+    const pageObject = new objects.applicationFiles.page.spaces.Projects({ page })
+    await pageObject.navigate()
     await spacesObject.open({ key })
   }
 )

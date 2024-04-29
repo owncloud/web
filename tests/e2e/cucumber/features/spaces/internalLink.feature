@@ -23,7 +23,6 @@ Feature: internal link share in project space
       | user  | role     | shareType |
       | Brian | Can edit | space     |
       | Carol | Can view | space     |
-    And "Alice" navigates to the projects space page
     And "Alice" navigates to the project space "marketing.1"
     # internal link to space
 

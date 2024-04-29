@@ -22,7 +22,6 @@ Feature: lock
       | test.odt | Brian     | user | Can edit |
 
     And "Brian" logs in
-    And "Brian" opens the "files" app
     And "Brian" navigates to the shared with me page
     When "Brian" opens the following file in Collabora
       | resource |

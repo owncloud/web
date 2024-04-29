@@ -15,7 +15,6 @@ Feature: Search
     And "Alice" uploads the following local file into personal space using API
       | localFile                   | to              |
       | filesForUpload/textfile.txt | fileToShare.txt |
-    And "Alice" opens the "files" app
     And "Alice" adds the following tags for the following resources using API
       | resource        | tags      |
       | fileToShare.txt | alice tag |
@@ -42,7 +41,6 @@ Feature: Search
     And "Brian" creates the following file in space "FullTextSearch" using API
       | name                          | content                   |
       | spaceFolder/spaceTextfile.txt | This is test file. Cheers |
-    And "Brian" opens the "files" app
     And "Brian" adds the following tags for the following resources using API
       | resource        | tags  |
       | fileWithTag.txt | tag 1 |
