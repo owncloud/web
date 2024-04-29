@@ -20,7 +20,6 @@ Feature: internal link share
     When "Alice" edits the public link named "Link" of resource "myfolder" changing role to "Invited people"
     And "Brian" opens the public link "Link"
     And "Brian" logs in from the internal link
-    And "Brian" opens the "files" app
     And "Brian" navigates to the shared with me page
     And "Brian" uploads the following resource
       | resource   | to       |

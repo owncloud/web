@@ -26,7 +26,6 @@ Feature: spaces public link
       | Brian | Can edit   | space     |
       | Carol | Can view   | space     |
       | David | Can manage | space     |
-    And "Alice" navigates to the projects space page
     And "Alice" navigates to the project space "team.1"
     And "Alice" uploads the following resources via drag-n-drop
       | resource       |
@@ -108,7 +107,6 @@ Feature: spaces public link
     And "Alice" creates the following file in space "team" using API
       | name     | content   |
       | file.txt | some text |
-    And "Alice" navigates to the projects space page
     And "Alice" navigates to the project space "team.1"
     When "Alice" creates quick link of the resource "file.txt" with password "%public%" from the context menu
     And "Anonymous" opens the public link "Link"
@@ -116,3 +114,43 @@ Feature: spaces public link
     Then "Anonymous" is in a text-editor
     And "Anonymous" closes the file viewer
     And "Alice" logs out
+
+
+  Scenario: crud operation to public link for space
+    Given "Admin" creates following users using API
+      | id    |
+      | Alice |
+    And "Admin" assigns following roles to the users using API
+      | id    | role        |
+      | Alice | Space Admin |
+    When "Alice" logs in
+    And "Alice" creates the following project space using API
+      | name | id     |
+      | team | team.1 |
+    And "Alice" creates the following file in space "team" using API
+      | name        | content   |
+      | example.txt | some text |
+    And "Alice" navigates to the project space "team.1"
+    And "Alice" creates a public link for the space with password "%public%" using the sidebar panel
+    And "Alice" renames the most recently created public link of space to "spaceLink"
+    And "Alice" edits the public link named "spaceLink" of the space changing role to "Can edit"
+    And "Alice" logs out
+
+    And "Anonymous" opens the public link "spaceLink"
+    And "Anonymous" unlocks the public link with password "%public%"
+    And "Anonymous" downloads the following public link resources using the sidebar panel
+      | resource    | type |
+      | example.txt | file |
+    And "Anonymous" uploads the following resources in public link page
+      | resource      |
+      | new-lorem.txt |
+    And "Anonymous" renames the following public link resources
+      | resource    | as          |
+      | example.txt | renamed.txt |
+    And "Anonymous" edits the following resources
+      | resource    | content     |
+      | renamed.txt | new content |
+    When "Anonymous" deletes the following resources using the sidebar panel
+      | resource      |
+      | renamed.txt   |
+      | new-lorem.txt |

@@ -20,7 +20,6 @@ Feature: Kindergarten can use web to organize a day
 
   Scenario: Alice can share this weeks meal plan with all parents
     When "Alice" logs in
-    And "Alice" opens the "files" app
     And "Alice" navigates to the personal space page
     And "Alice" creates the following resources
       | resource                             | type   |
@@ -63,7 +62,6 @@ Feature: Kindergarten can use web to organize a day
       | groups/Teddy Bear Daycare/meal plan/data.zip       | Carol     | user  | custom_permissions:read,update        | file         |
     # Then what do we check for to be confident that the above things done by Alice have worked?
     When "Brian" logs in
-    And "Brian" opens the "files" app
     And "Brian" navigates to the shared with me page
     And "Brian" downloads the following resources using the sidebar panel
       | resource | from      | type |
@@ -71,7 +69,6 @@ Feature: Kindergarten can use web to organize a day
     # Then what do we check for to be confident that the above things done by Brian have worked?
     # Then the downloaded zip should contain... ?
     When "Carol" logs in
-    And "Carol" opens the "files" app
     And "Carol" navigates to the shared with me page
     And "Carol" downloads the following resources using the sidebar panel
       | resource      | from      | type   |

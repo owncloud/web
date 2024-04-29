@@ -27,7 +27,6 @@ Feature: share
       | shared_folder          | Brian     | user | Can edit                              | folder       |
       | folder_to_customShared | Brian     | user | custom_permissions:read,create,delete | folder       |
 
-    And "Brian" opens the "files" app
     And "Brian" navigates to the shared with me page
     And "Brian" accepts the following share
       | name                   |
@@ -147,7 +146,6 @@ Feature: share
     Then "Alice" is in a media-viewer
     When "Alice" closes the file viewer
 
-    And "Brian" opens the "files" app
     And "Brian" navigates to the shared with me page
     And "Brian" declines the following share from the context menu
       | name           |
