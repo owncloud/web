@@ -7,9 +7,9 @@ export const CopyFilesFactory = (dav: DAV, options: WebDavOptions) => {
   return {
     copyFiles(
       sourceSpace: SpaceResource,
-      { path: sourcePath },
+      { path: sourcePath }: { path: string },
       targetSpace: SpaceResource,
-      { path: targetPath },
+      { path: targetPath }: { path: string },
       options?: { overwrite?: boolean }
     ) {
       return dav.copy(

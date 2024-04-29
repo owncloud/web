@@ -16,7 +16,8 @@
 </template>
 
 <script lang="ts">
-import tippy, { hideAll } from 'tippy.js'
+import tippy, { ReferenceElement, hideAll } from 'tippy.js'
+import { Modifier } from '@popperjs/core'
 import { detectOverflow } from '@popperjs/core'
 import { destroy, hideOnEsc } from '../../directives/OcTooltip'
 import { AVAILABLE_SIZES } from '../../helpers/constants'
@@ -177,7 +178,7 @@ export default defineComponent({
         content: 'describedby'
       },
       ...(!this.isNested && {
-        onShow: (instance) => {
+        onShow: (instance: ReferenceElement) => {
           this.$emit('showDrop')
           hideAll({ exclude: instance })
         },
@@ -216,7 +217,7 @@ export default defineComponent({
                 state.styles.popper.overflowX = `hidden`
               }
             }
-          }
+          } as Modifier<'fixVerticalPosition', unknown>
         ]
       },
       content

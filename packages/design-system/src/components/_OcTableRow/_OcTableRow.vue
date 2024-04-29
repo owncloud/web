@@ -46,7 +46,7 @@ export default defineComponent({
   ],
   setup(props, ctx) {
     const observerTarget = customRef((track, trigger) => {
-      let $el
+      let $el: HTMLElement
       return {
         get() {
           track()

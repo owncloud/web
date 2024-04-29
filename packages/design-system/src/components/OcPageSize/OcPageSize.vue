@@ -72,7 +72,7 @@ export default defineComponent({
   emits: ['change'],
 
   methods: {
-    emitChange(value) {
+    emitChange(value: boolean) {
       /**
        * Triggers when a value is selected
        *

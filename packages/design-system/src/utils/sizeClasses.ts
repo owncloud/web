@@ -11,6 +11,6 @@ const sizeClassMappings = {
   remove: 'rm'
 }
 
-export function getSizeClass(size) {
-  return sizeClassMappings[size]
+export function getSizeClass(size: string) {
+  return sizeClassMappings[size as keyof typeof sizeClassMappings]
 }

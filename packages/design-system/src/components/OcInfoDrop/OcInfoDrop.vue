@@ -117,7 +117,7 @@ export default defineComponent({
     list: {
       type: Array as PropType<ListElement[]>,
       required: false,
-      default: () => []
+      default: (): ListElement[] => []
     },
     /**
      * Text at the end

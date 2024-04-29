@@ -1,4 +1,4 @@
-import { mount } from 'web-test-helpers'
+import { PartialComponentProps, mount } from 'web-test-helpers'
 import OcAvatar from './OcAvatar.vue'
 import { extractInitials } from './extractInitials'
 
@@ -53,7 +53,7 @@ describe('OcAvatar', () => {
   }
   describe('prop value', () => {
     describe('when src is set', () => {
-      let wrapper
+      let wrapper: ReturnType<typeof getWrapper>
       beforeEach(() => {
         wrapper = getWrapper({
           src: 'http://some-image.jpg'
@@ -82,7 +82,7 @@ describe('OcAvatar', () => {
       })
     })
     describe('when width is set', () => {
-      let wrapper
+      let wrapper: ReturnType<typeof getWrapper>
       beforeEach(() => {
         wrapper = getWrapper({
           width: 100
@@ -119,7 +119,7 @@ describe('OcAvatar', () => {
   })
 })
 
-function getWrapper(props) {
+function getWrapper(props: PartialComponentProps<typeof OcAvatar>) {
   return mount(OcAvatar, {
     props
   })

@@ -1,8 +1,8 @@
 import OcInfoDrop from './OcInfoDrop.vue'
-import { defaultPlugins, shallowMount } from 'web-test-helpers'
+import { PartialComponentProps, defaultPlugins, shallowMount } from 'web-test-helpers'
 
 describe('OcInfoDrop', () => {
-  function getWrapperWithProps(props) {
+  function getWrapperWithProps(props: PartialComponentProps<typeof OcInfoDrop>) {
     return shallowMount(OcInfoDrop, {
       props,
       global: {

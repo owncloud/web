@@ -49,7 +49,7 @@
 </template>
 
 <script lang="ts">
-import { computed, defineComponent } from 'vue'
+import { computed, defineComponent, PropType } from 'vue'
 import uniqueId from '../../utils/uniqueId'
 
 export default defineComponent({
@@ -73,9 +73,9 @@ export default defineComponent({
      * An array of selected item names. It is being ignored when `isToggle` is set to `true`.
      */
     selectedItemNames: {
-      type: Array,
+      type: Array as PropType<string[]>,
       required: false,
-      default: () => []
+      default: (): string[] => []
     },
     /**
      * Display the filter chip as a on/off toggle.

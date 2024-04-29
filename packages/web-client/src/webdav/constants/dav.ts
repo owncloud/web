@@ -63,7 +63,7 @@ const DavPropertyMapping = {
   ETag: defString('getetag' as const),
   MimeType: defString('getcontenttype' as const),
   ResourceType: defStringArray('resourcetype' as const),
-  LockDiscovery: defString('lockdiscovery' as const),
+  LockDiscovery: { value: 'lockdiscovery', type: null as Record<string, unknown> },
   LockOwnerName: defString('ownername' as const),
   LockTime: defString('locktime' as const),
   ActiveLock: {
@@ -76,7 +76,7 @@ const DavPropertyMapping = {
 
   ShareId: defString('shareid' as const),
   ShareRoot: defString('shareroot' as const),
-  ShareTypes: defStringArray('share-types' as const),
+  ShareTypes: { value: 'share-types', type: null as Record<string, number[]> },
   SharePermissions: defString('share-permissions' as const),
 
   TrashbinOriginalFilename: defString('trashbin-original-filename' as const),

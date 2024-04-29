@@ -14,7 +14,7 @@ const mockIntersectionObserver = () => {
 
     return {
       mock,
-      callback: (args, fastForward = 0) => {
+      callback: (args: unknown[], fastForward = 0) => {
         ;(window.IntersectionObserver as any).mock.calls[0][0](args)
         vi.advanceTimersByTime(fastForward)
       }

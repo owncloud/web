@@ -78,7 +78,7 @@ import { computed, defineComponent, PropType, ref, unref, watch } from 'vue'
 import OcIcon from '../OcIcon/OcIcon.vue'
 import OcButton from '../OcButton/OcButton.vue'
 import { useGettext } from 'vue3-gettext'
-import { PasswordPolicy } from '../../helpers'
+import { PasswordPolicy, PasswordPolicyRule } from '../../helpers'
 export default defineComponent({
   name: 'OCTextInputPassword',
   components: { OcButton, OcIcon },
@@ -134,11 +134,11 @@ export default defineComponent({
       return props.passwordPolicy.missing(unref(password))
     })
 
-    const getPasswordPolicyRuleMessage = (rule) => {
-      const paramObj = {}
+    const getPasswordPolicyRuleMessage = (rule: PasswordPolicyRule) => {
+      const paramObj: Record<string, string> = {}
 
       for (let formatKey = 0; formatKey < rule.format.length; formatKey++) {
-        paramObj[`param${formatKey + 1}`] = rule.format[formatKey]
+        paramObj[`param${formatKey + 1}`] = rule.format[formatKey]?.toString()
       }
 
       return $gettext(rule.message, paramObj, true)

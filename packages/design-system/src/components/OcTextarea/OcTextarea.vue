@@ -128,7 +128,7 @@ export default defineComponent({
       return `${this.id}-message`
     },
     additionalAttributes() {
-      const additionalAttrs = {}
+      const additionalAttrs: Record<string, unknown> = {}
       if (!!this.warningMessage || !!this.errorMessage || !!this.descriptionMessage) {
         additionalAttrs['aria-describedby'] = this.messageId
       }
@@ -155,21 +155,21 @@ export default defineComponent({
     focus() {
       ;(this.$refs.input as HTMLInputElement).focus()
     },
-    onInput(value) {
+    onInput(value: string) {
       /**
        * Input event
        * @type {event}
        **/
       this.$emit('update:modelValue', value)
     },
-    onFocus(value) {
+    onFocus(value: boolean) {
       /**
        * Focus event - emitted as soon as the input field is focused
        * @type {event}
        **/
       this.$emit('focus', value)
     },
-    onKeyDown(e) {
+    onKeyDown(e: KeyboardEvent) {
       const enterKey = e.key?.toLowerCase() === 'enter'
       if (this.submitOnEnter && enterKey && !e.ctrlKey && !e.shiftKey) {
         /**
@@ -177,7 +177,7 @@ export default defineComponent({
          * Only applies if submitOnEnter is set to true
          * @type {string}
          */
-        this.$emit('change', e.target.value)
+        this.$emit('change', (e.target as HTMLInputElement).value)
       }
 
       /**

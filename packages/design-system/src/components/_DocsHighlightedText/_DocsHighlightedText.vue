@@ -63,7 +63,7 @@ export default defineComponent({
     }
   },
   methods: {
-    buildFragments(line) {
+    buildFragments(line: string) {
       if (this.highlighted) {
         const regex = new RegExp('(' + this.highlighted + ')', 'gi')
         const textFragments = line.split(regex)

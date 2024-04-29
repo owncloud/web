@@ -15,7 +15,9 @@
 
 <script lang="ts">
 import { computed, defineComponent } from 'vue'
+import { Modifier } from '@popperjs/core'
 
+// @ts-ignore
 import { DatePicker } from 'v-calendar'
 import 'v-calendar/dist/style.css'
 
@@ -44,13 +46,13 @@ export default defineComponent({
                 state.modifiersData.fullHeight || state.elements.popper.offsetHeight
               const rect = state.elements.popper.getBoundingClientRect()
               const neededScreenSpace =
-                state.elements.reference.offsetHeight + rect.top + dropHeight
+                (state.elements.reference as HTMLElement).offsetHeight + rect.top + dropHeight
 
               if (state.placement !== 'top-start' && neededScreenSpace > window.innerHeight) {
                 state.styles.popper.top = `-${150}px`
               }
             }
-          }
+          } as Modifier<'fixVerticalPosition', unknown>
         ]
       }
     })

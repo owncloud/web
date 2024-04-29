@@ -1,13 +1,14 @@
-import { onBeforeUnmount, ref, watch } from 'vue'
+import { Ref, onBeforeUnmount, ref, watch } from 'vue'
 
-/**
- *
- * @param {Ref<Element>} target - ref with element to be observed
- * @param {('show'|'showHide')} mode - showHide shows and hides the element on screen enter or leave, show only detects entering the screen and the keeps it rendered
- * @param {string} rootMargin - margin that will be added around the element to detect visibility
- * @returns {{isVisible: Ref<boolean>}}
- */
-export const useIsVisible = ({ target, mode = 'show', rootMargin = '100px' }) => {
+export const useIsVisible = ({
+  target,
+  mode = 'show',
+  rootMargin = '100px'
+}: {
+  target: Ref<Element>
+  mode?: string
+  rootMargin?: string
+}) => {
   const isSupported = window && 'IntersectionObserver' in window
   if (!isSupported) {
     return {

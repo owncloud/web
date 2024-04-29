@@ -8,11 +8,12 @@
 </template>
 
 <script lang="ts">
-import { defineComponent } from 'vue'
+import { PropType, defineComponent } from 'vue'
 import uniqueId from '../../utils/uniqueId'
 import OcButton from '../OcButton/OcButton.vue'
 import OcIcon from '../OcIcon/OcIcon.vue'
 import OcInfoDrop from '../OcInfoDrop/OcInfoDrop.vue'
+import { ContextualHelperData } from '../../helpers'
 
 export default defineComponent({
   name: 'OcContextualHelper',
@@ -39,9 +40,9 @@ export default defineComponent({
      * List element
      */
     list: {
-      type: Array,
+      type: Array as PropType<ContextualHelperData[]>,
       required: false,
-      default: () => []
+      default: (): ContextualHelperData[] => []
     },
     /**
      * Text at the end

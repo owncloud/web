@@ -20,7 +20,7 @@ export interface UrlJoinOptions {
   trailingSlash?: boolean | 'keep' | undefined
 }
 
-const normalizeParts = (parts) =>
+const normalizeParts = (parts: string[]) =>
   parts
     // Filter non-string or non-numeric values
     .filter((part) => typeof part === 'string' || typeof part === 'number')
@@ -29,7 +29,7 @@ const normalizeParts = (parts) =>
     // Remove empty parts
     .filter((part) => part)
 
-const parseParts = (parts) => {
+const parseParts = (parts: string[]) => {
   const partsStr = parts.join('/')
   const [, prefix = '', pathname = ''] = partsStr.match(urlRegExp) || []
 
@@ -43,7 +43,7 @@ const parseParts = (parts) => {
   }
 }
 
-const buildUrl = (parsedParts, options: UrlJoinOptions) => {
+const buildUrl = (parsedParts: ReturnType<typeof parseParts>, options: UrlJoinOptions) => {
   const { prefix, pathname } = parsedParts
   const { parts: pathnameParts, hasLeading, hasTrailing } = pathname
   const { leadingSlash, trailingSlash } = options
@@ -76,9 +76,9 @@ const buildUrl = (parsedParts, options: UrlJoinOptions) => {
   return url
 }
 
-export const urlJoin = (...parts) => {
+export const urlJoin = (...parts: Array<string | UrlJoinOptions>) => {
   const lastArg = parts[parts.length - 1]
-  let options
+  let options: UrlJoinOptions
 
   // If last argument is an object, then it's the options
   // Note that null is an object, so we verify if is truthy
@@ -95,11 +95,11 @@ export const urlJoin = (...parts) => {
   } as UrlJoinOptions
 
   // Normalize parts before parsing them
-  parts = normalizeParts(parts)
+  parts = normalizeParts(parts as string[])
 
   // Split the parts into prefix, pathname
   // (scheme://host)(/pathnameParts.join('/'))
-  const parsedParts = parseParts(parts)
+  const parsedParts = parseParts(parts as string[])
 
   // Finally build the url based on the parsedParts
   return buildUrl(parsedParts, options)

@@ -14,7 +14,7 @@ describe('OcPageSize', () => {
     wrapper
       .findComponent<typeof PageSize>('[data-testid="oc-page-size-select"]')
       .vm.$emit('update:modelValue', 500)
-    expect(wrapper.emitted().change[0][0]).toEqual(500)
+    expect(wrapper.emitted('change')[0][0]).toEqual(500)
   })
 
   it('displays label', () => {

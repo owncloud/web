@@ -90,7 +90,6 @@
 <script lang="ts">
 import Fuse from 'fuse.js'
 import uniqueId from '../../utils/uniqueId'
-import VueSelect from 'vue-select'
 import {
   defineComponent,
   ComponentPublicInstance,
@@ -103,6 +102,8 @@ import {
 import { useGettext } from 'vue3-gettext'
 import 'vue-select/dist/vue-select.css'
 import { ContextualHelper } from '../../helpers'
+// @ts-ignore
+import VueSelect from 'vue-select'
 
 // the keycode property is deprecated in the JS event API, vue-select still works with it though
 enum KeyCode {
@@ -135,7 +136,7 @@ export default defineComponent({
     filter: {
       type: Function,
       required: false,
-      default: (items, search, props) => {
+      default: (items: unknown[], search: string, props: { label: string }) => {
         if (items.length < 1) {
           return []
         }
@@ -149,7 +150,7 @@ export default defineComponent({
           minMatchCharLength: 1
         })
 
-        return search.length ? fuse.search(search).map(({ item }) => item) : (fuse as any).list
+        return search.length ? fuse.search(search).map(({ item }) => item) : items
       }
     },
     /**
@@ -186,7 +187,7 @@ export default defineComponent({
     },
     getOptionLabel: {
       type: Function,
-      default(this: any, option) {
+      default(this: any, option: string | Record<string, unknown>) {
         if (typeof option === 'object') {
           // we pass this function down to vue-select
           // so it needs to work in this component and in vue-select
@@ -293,13 +294,13 @@ export default defineComponent({
       comboBoxElement?.setAttribute('aria-label', $gettext('Search for option'))
     }
 
-    const userInput = (event) => {
+    const userInput = (event: Event) => {
       /**
        * Triggers when a value of search input is changed
        *
        * @property {string} query search query
        */
-      emit('search:input', event.target.value)
+      emit('search:input', (event.target as HTMLInputElement).value)
     }
 
     onMounted(() => {
@@ -307,11 +308,19 @@ export default defineComponent({
     })
 
     const dropdownEnabled = ref(false)
-    const setDropdownEnabled = (enabled) => {
+    const setDropdownEnabled = (enabled: boolean) => {
       dropdownEnabled.value = enabled
     }
 
-    const selectDropdownShouldOpen = ({ noDrop, open, mutableLoading }) => {
+    const selectDropdownShouldOpen = ({
+      noDrop,
+      open,
+      mutableLoading
+    }: {
+      noDrop?: boolean
+      open?: boolean
+      mutableLoading?: boolean
+    }) => {
       return !noDrop && open && !mutableLoading && unref(dropdownEnabled)
     }
 
@@ -323,7 +332,7 @@ export default defineComponent({
       setDropdownEnabled(false)
     }
 
-    const selectMapKeydown = (map, vm) => {
+    const selectMapKeydown = (map: Record<number, (e: KeyboardEvent) => void>) => {
       return {
         ...map,
         [KeyCode.Enter]: (e: KeyboardEvent) => {
@@ -357,7 +366,7 @@ export default defineComponent({
   },
   computed: {
     additionalAttributes() {
-      const additionalAttrs = {}
+      const additionalAttrs: Record<string, unknown> = {}
       additionalAttrs['input-id'] = this.id
       additionalAttrs['getOptionLabel'] = this.getOptionLabel
       additionalAttrs['label'] = this.optionLabel

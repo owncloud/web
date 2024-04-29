@@ -1,7 +1,7 @@
 import { intersection } from 'lodash-es'
 
 // dummy to trick gettext string extraction into recognizing strings
-const $gettext = (str) => {
+const $gettext = (str: string) => {
   return str
 }
 

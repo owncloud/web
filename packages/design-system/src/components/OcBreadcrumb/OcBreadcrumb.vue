@@ -24,7 +24,7 @@
         @dragover.prevent
         @dragenter.prevent="dropItemStyling(item, index, false, $event)"
         @dragleave.prevent="dropItemStyling(item, index, true, $event)"
-        @mouseleave="dropItemStyling(item, index, true, $event)"
+        @mouseleave="dropItemStyling(item, index, true, $event as DragEvent)"
         @drop="dropItemEvent(item, index)"
       >
         <router-link
@@ -116,6 +116,7 @@ import OcIcon from '../OcIcon/OcIcon.vue'
 import uniqueId from '../../utils/uniqueId'
 
 import { BreadcrumbItem } from './types'
+import { RouteLocationPathRaw } from 'vue-router'
 
 /**
  * Displays a breadcrumb. Each item in the items property has the following elements:
@@ -207,7 +208,7 @@ export default defineComponent({
     const hiddenItems = ref<BreadcrumbItem[]>([])
     const displayItems = ref<BreadcrumbItem[]>(props.items.slice())
 
-    const getBreadcrumbElement = (id): HTMLElement => {
+    const getBreadcrumbElement = (id: string): HTMLElement => {
       return document.querySelector(`.oc-breadcrumb-list [data-item-id="${id}"]`)
     }
 
@@ -219,12 +220,16 @@ export default defineComponent({
         item.isStaticNav
       )
     }
-    const dropItemEvent = (item, index) => {
+    const dropItemEvent = (item: BreadcrumbItem, index: number) => {
       if (!isDropAllowed(item, index)) {
         return
       }
-      item.to.path = item.to.path || '/'
-      emit(EVENT_ITEM_DROPPED_BREADCRUMB, item.to)
+
+      if (typeof item.to === 'object') {
+        const itemTo = item.to as RouteLocationPathRaw
+        itemTo.path = itemTo.path || '/'
+        emit(EVENT_ITEM_DROPPED_BREADCRUMB, itemTo)
+      }
     }
 
     const calculateTotalBreadcrumbWidth = () => {
@@ -237,7 +242,7 @@ export default defineComponent({
       return totalBreadcrumbWidth
     }
 
-    const reduceBreadcrumb = (offsetIndex) => {
+    const reduceBreadcrumb = (offsetIndex: number) => {
       const breadcrumbMaxWidth = props.maxWidth
       if (!breadcrumbMaxWidth) {
         return
@@ -265,7 +270,7 @@ export default defineComponent({
         displayItems.value.splice(props.truncationOffset - 1, 0, {
           text: '...',
           allowContextActions: false,
-          to: {},
+          to: {} as BreadcrumbItem['to'],
           isTruncationPlaceholder: true
         })
       }
@@ -292,17 +297,22 @@ export default defineComponent({
       return $gettext('Show actions for current folder')
     })
 
-    const getAriaCurrent = (index): 'page' | null => {
+    const getAriaCurrent = (index: number): 'page' | null => {
       return props.items.length - 1 === index ? 'page' : null
     }
 
-    const dropItemStyling = (item: BreadcrumbItem, index: number, leaving: boolean, event) => {
+    const dropItemStyling = (
+      item: BreadcrumbItem,
+      index: number,
+      leaving: boolean,
+      event: DragEvent
+    ) => {
       if (!isDropAllowed(item, index)) {
         return
       }
       const hasFilePayload = (event.dataTransfer?.types || []).some((e) => e === 'Files')
       if (hasFilePayload) return
-      if (event.currentTarget?.contains(event.relatedTarget)) {
+      if ((event.currentTarget as HTMLElement)?.contains(event.relatedTarget as HTMLElement)) {
         return
       }
 

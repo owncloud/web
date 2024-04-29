@@ -191,7 +191,7 @@ export default defineComponent({
     }
   },
   methods: {
-    $_ocButton_onClick(event) {
+    $_ocButton_onClick(event: MouseEvent) {
       this.$emit('click', event)
     }
   }

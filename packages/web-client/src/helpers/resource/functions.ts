@@ -1,7 +1,7 @@
 import path, { basename, dirname } from 'path'
 import { urlJoin } from '../../utils'
 import { DavPermission, DavProperty } from '../../webdav/constants'
-import { Resource, WebDavResponseResource } from './types'
+import { Resource, ResourceIndicator, WebDavResponseResource } from './types'
 
 const fileExtensions = {
   complex: ['tar.bz2', 'tar.gz', 'tar.xz']
@@ -86,7 +86,8 @@ export function buildResource(resource: WebDavResponseResource): Resource {
   const extension = extractExtensionFromFile({ ...resource, id, name, path: resourcePath })
 
   const lock = resource.props[DavProperty.LockDiscovery]
-  let activeLock: string, lockOwnerName: string, lockTime: string
+  let activeLock: { [DavProperty.LockOwnerName]?: string; [DavProperty.LockTime]?: string }
+  let lockOwnerName: string, lockTime: string
   if (lock) {
     activeLock = lock[DavProperty.ActiveLock]
     lockOwnerName = activeLock[DavProperty.LockOwnerName]
@@ -121,7 +122,7 @@ export function buildResource(resource: WebDavResponseResource): Resource {
     size: isFolder
       ? resource.props[DavProperty.ContentSize]?.toString() || '0'
       : resource.props[DavProperty.ContentLength]?.toString() || '0',
-    indicators: [],
+    indicators: [] as ResourceIndicator[],
     permissions: resource.props[DavProperty.Permissions] || '',
     starred: resource.props[DavProperty.IsFavorite] !== 0,
     etag: resource.props[DavProperty.ETag],

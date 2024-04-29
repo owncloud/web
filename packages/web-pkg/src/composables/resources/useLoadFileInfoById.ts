@@ -18,7 +18,7 @@ export const useLoadFileInfoById = (options: LoadFileInfoByIdOptions) => {
     DavProperty.ResourceType
   ]
 
-  const loadFileInfoByIdTask = useTask(function* (signal, fileId: string | number) {
+  const loadFileInfoByIdTask = useTask(function* (signal, fileId: string) {
     const space = buildSpace({
       id: fileId.toString(),
       name: '',

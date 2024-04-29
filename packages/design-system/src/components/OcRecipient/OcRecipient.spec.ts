@@ -3,11 +3,7 @@ import Recipient from './OcRecipient.vue'
 import { Recipient as RecipientType } from './types'
 
 describe('OcRecipient', () => {
-  /**
-   * @param {Object} props
-   * @returns {Wrapper<Vue>}
-   */
-  function getWrapper(props = undefined, slot = undefined) {
+  function getWrapper(props: Partial<RecipientType> = undefined, slot: string = undefined) {
     const slots = slot ? { append: slot } : {}
 
     return shallowMount(Recipient, {
@@ -67,13 +63,10 @@ describe('OcRecipient', () => {
   })
 
   it.each([
-    ['name is not defined', {}],
     [
       'name is not a string',
       {
-        name: {
-          first: 'Alice'
-        }
+        name: null
       }
     ],
     [
@@ -83,15 +76,12 @@ describe('OcRecipient', () => {
       }
     ],
     ['icon name is not defined', { name: 'Alice', icon: {} }],
-    ['icon name is not a string', { name: 'Alice', icon: { name: { inverted: 'inverted' } } }],
+    ['icon name is not a string', { name: 'Alice', icon: { name: null } }],
     ['icon name is empty', { name: 'Alice', icon: { name: '' } }],
     ['icon label is not defined', { name: 'Alice', icon: { name: 'person' } }],
-    [
-      'icon label is not a string',
-      { name: 'Alice', icon: { name: 'person', label: { long: 'Long label' } } }
-    ],
+    ['icon label is not a string', { name: 'Alice', icon: { name: 'person', label: null } }],
     ['icon label is empty', { name: 'Alice', icon: { name: 'Alice', label: '' } }]
-  ])('throws an error if %s', (def, prop: RecipientType) => {
+  ])('throws an error if %s', (def: string, prop: RecipientType) => {
     expect(() => shallowMount(Recipient, { props: { recipient: prop } })).toThrow(
       `Recipient ${def}`
     )
