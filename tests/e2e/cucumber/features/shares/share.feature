@@ -27,7 +27,6 @@ Feature: share
       | shared_folder      | Brian     | user | Can edit   | folder       |
       | folder_to_shared_2 | Brian     | user | Can edit   | folder       |
 
-    And "Brian" opens the "files" app
     And "Brian" navigates to the shared with me page
     And "Brian" enables the sync for the following shares
       | name               |
@@ -93,7 +92,6 @@ Feature: share
       | simple.pdf       | Brian     | user | Can edit | file         |
       | sharedFile.txt   | Brian     | user | Can edit | file         |
 
-    And "Brian" opens the "files" app
     And "Brian" navigates to the shared with me page
     And "Brian" disables the sync for the following share
       | name           |

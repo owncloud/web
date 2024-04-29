@@ -19,7 +19,6 @@ Feature: create Space shortcut
       | lorem.txt         | spaceFolder  |
     And "Alice" navigates to the personal space page
     And "Alice" creates space "folderSpace" from folder "spaceFolder" using the context menu
-    And "Alice" navigates to the projects space page
     And "Alice" navigates to the project space "folderSpace"
     Then following resources should be displayed in the files list for user "Alice"
       | resource  |
@@ -48,7 +47,6 @@ Feature: create Space shortcut
       | resource                |
       | resourceFolder          |
       | lorem.txt               |
-    And "Alice" navigates to the projects space page
     And "Alice" navigates to the project space "resourceSpace"
     Then following resources should be displayed in the files list for user "Alice"
       | resource        |

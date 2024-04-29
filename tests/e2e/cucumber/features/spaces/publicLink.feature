@@ -26,7 +26,6 @@ Feature: spaces public link
       | Brian | Can edit   | space     |
       | Carol | Can view   | space     |
       | David | Can manage | space     |
-    And "Alice" navigates to the projects space page
     And "Alice" navigates to the project space "team.1"
     And "Alice" uploads the following resources via drag-n-drop
       | resource       |
@@ -108,7 +107,6 @@ Feature: spaces public link
     And "Alice" creates the following file in space "team" using API
       | name     | content   |
       | file.txt | some text |
-    And "Alice" navigates to the projects space page
     And "Alice" navigates to the project space "team.1"
     When "Alice" creates quick link of the resource "file.txt" with password "%public%" from the context menu
     And "Anonymous" opens the public link "Link"
@@ -132,7 +130,6 @@ Feature: spaces public link
     And "Alice" creates the following file in space "team" using API
       | name        | content   |
       | example.txt | some text |
-    And "Alice" navigates to the projects space page
     And "Alice" navigates to the project space "team.1"
     And "Alice" creates a public link for the space with password "%public%" using the sidebar panel
     And "Alice" renames the most recently created public link of space to "spaceLink"
