@@ -719,7 +719,6 @@ export const downloadResources = async (args: downloadResourcesArgs): Promise<Do
         page.locator(downloadPreviewButton).click()
       ])
       downloads.push(download)
-
       break
   }
 
