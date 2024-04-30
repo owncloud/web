@@ -3,6 +3,7 @@ directives:
     - '''self'''
   connect-src:
     - '''self'''
+    - 'https://${KEYCLOAK_DOMAIN:-keycloak:8443}/'
   default-src:
     - '''none'''
   font-src:
@@ -14,14 +15,12 @@ directives:
     - 'https://embed.diagrams.net/'
     - 'https://${ONLYOFFICE_DOMAIN:-onlyoffice:443}/'
     - 'https://${COLLABORA_DOMAIN:-collabora:9980}/'
-    - 'https://${KEYCLOAK_DOMAIN:-keycloak:8443}/'
   img-src:
     - '''self'''
     - 'data:'
     - 'blob:'
     - 'https://${ONLYOFFICE_DOMAIN:-onlyoffice:443}/'
     - 'https://${COLLABORA_DOMAIN:-collabora:9980}/'
-    - 'https://${KEYCLOAK_DOMAIN:-keycloak:8443}/'
   manifest-src:
     - '''self'''
   media-src:
