@@ -116,8 +116,8 @@ export const useSharesStore = defineStore('shares', () => {
   }
 
   const updateFileShareTypes = (path: string) => {
-    const computeShareTypes = (shares: Share[]): any => {
-      const shareTypes = new Set()
+    const computeShareTypes = (shares: Share[]) => {
+      const shareTypes = new Set<number>()
       shares.forEach((share) => {
         shareTypes.add(share.shareType)
       })

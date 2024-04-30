@@ -9,7 +9,7 @@ import { ConfigStore } from '../piniaStores'
 
 export type ResourceRouteResolverOptions = {
   configStore?: ConfigStore
-  targetRouteCallback?: Ref<any>
+  targetRouteCallback?: Ref<(arg: CreateTargetRouteOptions) => unknown>
   space?: Ref<SpaceResource>
 }
 

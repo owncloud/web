@@ -1,6 +1,7 @@
+import { Resource, ShareResource } from '@ownclouders/web-client'
 import { SortDir, SortField } from '../../composables/sort'
 
-export const determineResourceTableSortFields = (firstResource): SortField[] => {
+export const determineResourceTableSortFields = (firstResource: Resource): SortField[] => {
   if (!firstResource) {
     return []
   }
@@ -18,7 +19,7 @@ export const determineResourceTableSortFields = (firstResource): SortField[] => 
     },
     {
       name: 'sharedWith',
-      sortable: (sharedWith) => {
+      sortable: (sharedWith: ShareResource['sharedWith']) => {
         if (sharedWith.length > 0) {
           // Ensure the sharees are always sorted and that users
           // take precedence over groups. Then return a string with
@@ -45,17 +46,17 @@ export const determineResourceTableSortFields = (firstResource): SortField[] => 
     },
     {
       name: 'mdate',
-      sortable: (date) => new Date(date).valueOf(),
+      sortable: (date: string) => new Date(date).valueOf(),
       sortDir: SortDir.Desc
     },
     {
       name: 'sdate',
-      sortable: (date) => new Date(date).valueOf(),
+      sortable: (date: string) => new Date(date).valueOf(),
       sortDir: SortDir.Desc
     },
     {
       name: 'ddate',
-      sortable: (date) => new Date(date).valueOf(),
+      sortable: (date: string) => new Date(date).valueOf(),
       sortDir: SortDir.Desc
     }
   ].filter((field) => Object.prototype.hasOwnProperty.call(firstResource, field.name))

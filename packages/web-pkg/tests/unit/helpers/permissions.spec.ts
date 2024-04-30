@@ -1,3 +1,4 @@
+import { Resource } from '@ownclouders/web-client'
 import { canBeMoved } from '../../../src/helpers/permissions'
 
 describe('permissions helper', () => {
@@ -18,7 +19,7 @@ describe('permissions helper', () => {
               isReceivedShare: () => input.isReceivedShare,
               isMounted: () => input.isMounted,
               canBeDeleted: () => input.canBeDeleted
-            },
+            } as unknown as Resource,
             input.parentPath
           )
         ).toBeTruthy()
@@ -41,7 +42,7 @@ describe('permissions helper', () => {
               isReceivedShare: () => input.isReceivedShare,
               isMounted: () => input.isMounted,
               canBeDeleted: () => input.canBeDeleted
-            },
+            } as unknown as Resource,
             input.parentPath
           )
         ).toBeFalsy()

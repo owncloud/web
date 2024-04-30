@@ -1,15 +1,15 @@
 import { defaultComponentMocks, getComposableWrapper } from 'web-test-helpers'
 import { CapabilityStore, useSearch } from '../../../../src/composables'
-import { SpaceResource } from '@ownclouders/web-client'
+import { SearchResource, SpaceResource } from '@ownclouders/web-client'
 
 describe('useSearch', () => {
   describe('method "search"', () => {
     it('can search', async () => {
       const files = [
-        { id: 'foo', name: 'foo', fileInfo: {} },
-        { id: 'bar', name: 'bar', fileInfo: {} },
-        { id: 'baz', name: 'baz', fileInfo: {} }
-      ]
+        { id: 'foo', name: 'foo' },
+        { id: 'bar', name: 'bar' },
+        { id: 'baz', name: 'baz' }
+      ] as SearchResource[]
 
       const wrapper = createWrapper({ resources: files })
 
@@ -20,7 +20,7 @@ describe('useSearch', () => {
       expect(withTermResult.values.map((r) => r.data)).toMatchObject(files)
     })
     it('properly returns space resources', async () => {
-      const files = [{ id: 'foo', name: 'foo', parentFolderId: '2' }]
+      const files = [{ id: 'foo', name: 'foo', parentFolderId: '2' }] as SearchResource[]
 
       const wrapper = createWrapper({ resources: files })
 
@@ -30,7 +30,7 @@ describe('useSearch', () => {
   })
 })
 
-const createWrapper = ({ resources = [] }: { resources?: any[] } = {}) => {
+const createWrapper = ({ resources = [] }: { resources?: SearchResource[] } = {}) => {
   const spaces = [
     {
       id: '1',

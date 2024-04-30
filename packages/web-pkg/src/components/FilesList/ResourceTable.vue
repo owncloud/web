@@ -243,7 +243,7 @@ import {
   ComponentPublicInstance
 } from 'vue'
 import { useWindowSize } from '@vueuse/core'
-import { Resource } from '@ownclouders/web-client'
+import { IncomingShareResource, Resource } from '@ownclouders/web-client'
 import { extractDomSelector, SpaceResource } from '@ownclouders/web-client'
 import { ShareTypes, isIncomingShareResource, isShareResource } from '@ownclouders/web-client'
 
@@ -257,7 +257,8 @@ import {
   useCapabilityStore,
   useConfigStore,
   useClipboardStore,
-  useResourcesStore
+  useResourcesStore,
+  useRouter
 } from '../../composables'
 import ResourceListItem from './ResourceListItem.vue'
 import ResourceGhostElement from './ResourceGhostElement.vue'
@@ -265,6 +266,8 @@ import ResourceSize from './ResourceSize.vue'
 import { EVENT_TROW_MOUNTED, EVENT_FILE_DROPPED, ImageDimension } from '../../constants'
 import { eventBus } from '../../services'
 import {
+  ContextMenuBtnClickEventData,
+  CreateTargetRouteOptions,
   displayPositionedDropdown,
   formatDateFromJSDate,
   formatRelativeDateFromJSDate
@@ -284,6 +287,7 @@ import get from 'lodash-es/get'
 import OcTable from 'design-system/src/components/OcTable/OcTable.vue'
 import { storeToRefs } from 'pinia'
 import OcButton from 'design-system/src/components/OcButton/OcButton.vue'
+import { FieldType } from 'design-system/src/components/OcTable/OcTable.vue'
 
 const TAGS_MINIMUM_SCREEN_WIDTH = 850
 
@@ -321,7 +325,7 @@ export default defineComponent({
     resourceDomSelector: {
       type: Function,
       required: false,
-      default: (resource) => extractDomSelector(resource.id)
+      default: (resource: Resource) => extractDomSelector(resource.id)
     },
     /**
      * Asserts whether resources path should be shown in the resource name
@@ -344,7 +348,7 @@ export default defineComponent({
      */
     selectedIds: {
       type: Array as PropType<string[]>,
-      default: () => []
+      default: (): string[] => []
     },
     /**
      * Asserts whether actions are available
@@ -358,7 +362,7 @@ export default defineComponent({
      * Accepts a `path` and a `resource` param and returns a corresponding route object.
      */
     targetRouteCallback: {
-      type: Function,
+      type: Function as PropType<(arg: CreateTargetRouteOptions) => unknown>,
       required: false,
       default: undefined
     },
@@ -498,6 +502,7 @@ export default defineComponent({
     'update:modelValue'
   ],
   setup(props, context) {
+    const router = useRouter()
     const capabilityStore = useCapabilityStore()
     const { getMatchingSpace } = useGetMatchingSpace()
     const { isLocationPicker, isEnabled: isEmbedModeEnabled } = useEmbedMode()
@@ -542,6 +547,7 @@ export default defineComponent({
     })
 
     return {
+      router,
       configOptions,
       dragItem,
       ghostElement,
@@ -589,7 +595,7 @@ export default defineComponent({
         return []
       }
       const firstResource = this.resources[0]
-      const fields = []
+      const fields: FieldType[] = []
       if (this.isSelectable) {
         fields.push({
           name: 'select',
@@ -602,83 +608,84 @@ export default defineComponent({
 
       const sortFields = determineResourceTableSortFields(firstResource)
       fields.push(
-        ...[
-          {
-            name: 'name',
-            title: this.$gettext('Name'),
-            type: 'slot',
-            width: 'expand',
-            wrap: 'truncate'
-          },
+        ...(
+          [
+            {
+              name: 'name',
+              title: this.$gettext('Name'),
+              type: 'slot',
+              width: 'expand',
+              wrap: 'truncate'
+            },
 
-          {
-            name: 'manager',
-            prop: 'spaceRoles',
-            title: this.$gettext('Manager'),
-            type: 'slot'
-          },
-          {
-            name: 'members',
-            title: this.$gettext('Members'),
-            prop: 'spaceRoles',
-            type: 'slot'
-          },
-          {
-            name: 'totalQuota',
-            prop: 'spaceQuota.total',
-            title: this.$gettext('Total quota'),
-            type: 'slot',
-            sortable: true
-          },
-          {
-            name: 'usedQuota',
-            prop: 'spaceQuota.used',
-            title: this.$gettext('Used quota'),
-            type: 'slot',
-            sortable: true
-          },
-          {
-            name: 'remainingQuota',
-            prop: 'spaceQuota.remaining',
-            title: this.$gettext('Remaining quota'),
-            type: 'slot',
-            sortable: true
-          },
-          {
-            name: 'indicators',
-            title: this.$gettext('Status'),
-            type: 'slot',
-            alignH: 'right',
-            wrap: 'nowrap',
-            width: 'shrink'
-          },
-          {
-            name: 'size',
-            title: this.$gettext('Size'),
-            type: 'slot',
-            alignH: 'right',
-            wrap: 'nowrap',
-            width: 'shrink'
-          },
-          {
-            name: 'syncEnabled',
-            title: this.$gettext('Status'),
-            type: 'slot',
-            alignH: 'right',
-            wrap: 'nowrap',
-            width: 'shrink'
-          },
-          {
-            name: 'status',
-            prop: 'disabled',
-            title: this.$gettext('Status'),
-            type: 'slot',
-            alignH: 'right',
-            wrap: 'nowrap',
-            width: 'shrink'
-          },
-          this.hasTags
-            ? {
+            {
+              name: 'manager',
+              prop: 'spaceRoles',
+              title: this.$gettext('Manager'),
+              type: 'slot'
+            },
+            {
+              name: 'members',
+              title: this.$gettext('Members'),
+              prop: 'spaceRoles',
+              type: 'slot'
+            },
+            {
+              name: 'totalQuota',
+              prop: 'spaceQuota.total',
+              title: this.$gettext('Total quota'),
+              type: 'slot',
+              sortable: true
+            },
+            {
+              name: 'usedQuota',
+              prop: 'spaceQuota.used',
+              title: this.$gettext('Used quota'),
+              type: 'slot',
+              sortable: true
+            },
+            {
+              name: 'remainingQuota',
+              prop: 'spaceQuota.remaining',
+              title: this.$gettext('Remaining quota'),
+              type: 'slot',
+              sortable: true
+            },
+            {
+              name: 'indicators',
+              title: this.$gettext('Status'),
+              type: 'slot',
+              alignH: 'right',
+              wrap: 'nowrap',
+              width: 'shrink'
+            },
+            {
+              name: 'size',
+              title: this.$gettext('Size'),
+              type: 'slot',
+              alignH: 'right',
+              wrap: 'nowrap',
+              width: 'shrink'
+            },
+            {
+              name: 'syncEnabled',
+              title: this.$gettext('Status'),
+              type: 'slot',
+              alignH: 'right',
+              wrap: 'nowrap',
+              width: 'shrink'
+            },
+            {
+              name: 'status',
+              prop: 'disabled',
+              title: this.$gettext('Status'),
+              type: 'slot',
+              alignH: 'right',
+              wrap: 'nowrap',
+              width: 'shrink'
+            },
+            ...(this.hasTags && [
+              {
                 name: 'tags',
                 title: this.$gettext('Tags'),
                 type: 'slot',
@@ -686,56 +693,66 @@ export default defineComponent({
                 wrap: 'nowrap',
                 width: 'shrink'
               }
-            : {},
-          {
-            name: 'sharedBy',
-            title: this.$gettext('Shared by'),
-            type: 'slot',
-            alignH: 'right',
-            wrap: 'nowrap',
-            width: 'shrink'
-          },
-          {
-            name: 'sharedWith',
-            title: this.$gettext('Shared with'),
-            type: 'slot',
-            alignH: 'right',
-            wrap: 'nowrap',
-            width: 'shrink'
-          },
-          {
-            name: 'mdate',
-            title: this.$gettext('Modified'),
-            type: 'slot',
-            alignH: 'right',
-            wrap: 'nowrap',
-            width: 'shrink',
-            accessibleLabelCallback: (item) =>
-              this.formatDateRelative(item.mdate) + ' (' + this.formatDate(item.mdate) + ')'
-          },
-          {
-            name: 'sdate',
-            title: this.$gettext('Shared on'),
-            type: 'slot',
-            alignH: 'right',
-            wrap: 'nowrap',
-            width: 'shrink',
-            accessibleLabelCallback: (item) =>
-              this.formatDateRelative(item.sdate) + ' (' + this.formatDate(item.sdate) + ')'
-          },
-          {
-            name: 'ddate',
-            title: this.$gettext('Deleted'),
-            type: 'slot',
-            alignH: 'right',
-            wrap: 'nowrap',
-            width: 'shrink',
-            accessibleLabelCallback: (item) =>
-              this.formatDateRelative(item.ddate) + ' (' + this.formatDate(item.ddate) + ')'
-          }
-        ]
+            ]),
+            {
+              name: 'sharedBy',
+              title: this.$gettext('Shared by'),
+              type: 'slot',
+              alignH: 'right',
+              wrap: 'nowrap',
+              width: 'shrink'
+            },
+            {
+              name: 'sharedWith',
+              title: this.$gettext('Shared with'),
+              type: 'slot',
+              alignH: 'right',
+              wrap: 'nowrap',
+              width: 'shrink'
+            },
+            {
+              name: 'mdate',
+              title: this.$gettext('Modified'),
+              type: 'slot',
+              alignH: 'right',
+              wrap: 'nowrap',
+              width: 'shrink',
+              accessibleLabelCallback: (item) =>
+                this.formatDateRelative((item as Resource).mdate) +
+                ' (' +
+                this.formatDate((item as Resource).mdate) +
+                ')'
+            },
+            {
+              name: 'sdate',
+              title: this.$gettext('Shared on'),
+              type: 'slot',
+              alignH: 'right',
+              wrap: 'nowrap',
+              width: 'shrink',
+              accessibleLabelCallback: (item) =>
+                this.formatDateRelative((item as IncomingShareResource).sdate) +
+                ' (' +
+                this.formatDate((item as IncomingShareResource).sdate) +
+                ')'
+            },
+            {
+              name: 'ddate',
+              title: this.$gettext('Deleted'),
+              type: 'slot',
+              alignH: 'right',
+              wrap: 'nowrap',
+              width: 'shrink',
+              accessibleLabelCallback: (item) =>
+                this.formatDateRelative((item as Resource).ddate) +
+                ' (' +
+                this.formatDate((item as Resource).ddate) +
+                ')'
+            }
+          ] as FieldType[]
+        )
           .filter((field) => {
-            let hasField
+            let hasField: boolean
             if (field.prop) {
               hasField = get(firstResource, field.prop) !== undefined
             } else {
@@ -798,25 +815,25 @@ export default defineComponent({
     }
   },
   methods: {
-    isResourceSelected(item) {
+    isResourceSelected(item: Resource) {
       return this.selectedIds.includes(item.id)
     },
-    isResourceCut(resource) {
+    isResourceCut(resource: Resource) {
       if (this.clipboardAction !== ClipboardActions.Cut) {
         return false
       }
       return this.clipboardResources.some((r) => r.id === resource.id)
     },
-    shouldDisplayThumbnails(item) {
+    shouldDisplayThumbnails(item: Resource) {
       return this.areThumbnailsDisplayed && !isResourceTxtFileAlmostEmpty(item)
     },
     getTagLink(tag: string) {
-      const currentTerm = unref(this.$router.currentRoute).query?.term
+      const currentTerm = unref(this.router.currentRoute).query?.term
       return createLocationCommon('files-common-search', {
         query: { provider: 'files.sdk', q_tags: tag, ...(currentTerm && { term: currentTerm }) }
       })
     },
-    getTagComponentAttrs(tag) {
+    getTagComponentAttrs(tag: string) {
       if (!this.userContextReady) {
         return {}
       }
@@ -851,7 +868,7 @@ export default defineComponent({
       }
       eventBus.publish(SideBarEventTopics.openWithPanel, panelToOpen)
     },
-    async fileDragged(file: Resource, event) {
+    async fileDragged(file: Resource, event: DragEvent) {
       if (!this.dragDrop) {
         return
       }
@@ -860,7 +877,7 @@ export default defineComponent({
 
       this.addSelectedResource(file)
     },
-    fileDropped(selector: HTMLElement, event) {
+    fileDropped(selector: HTMLElement, event: DragEvent) {
       if (!this.dragDrop) {
         return
       }
@@ -869,14 +886,14 @@ export default defineComponent({
         return
       }
       this.dragItem = null
-      const dropTarget = event.target
+      const dropTarget = event.target as HTMLElement
       const dropTargetTr = dropTarget.closest('tr')
       const dropItemId = dropTargetTr.dataset.itemId
       this.dropRowStyling(selector, true, event)
 
       this.$emit(EVENT_FILE_DROPPED, dropItemId)
     },
-    async setDragItem(item: Resource, event) {
+    async setDragItem(item: Resource, event: DragEvent) {
       this.dragItem = item
       await this.$nextTick()
       this.ghostElement.$el.ariaHidden = 'true'
@@ -886,12 +903,12 @@ export default defineComponent({
       event.dataTransfer.dropEffect = 'move'
       event.dataTransfer.effectAllowed = 'move'
     },
-    dropRowStyling(selector: HTMLElement, leaving: boolean, event) {
+    dropRowStyling(selector: HTMLElement, leaving: boolean, event: DragEvent) {
       const hasFilePayload = (event.dataTransfer?.types || []).some((e) => e === 'Files')
       if (hasFilePayload) {
         return
       }
-      if (event.currentTarget?.contains(event.relatedTarget)) {
+      if ((event.currentTarget as HTMLElement)?.contains(event.relatedTarget as HTMLElement)) {
         return
       }
 
@@ -899,7 +916,7 @@ export default defineComponent({
       const className = 'highlightedDropTarget'
       leaving ? classList.remove(className) : classList.add(className)
     },
-    sort(opts) {
+    sort(opts: { sortBy: string; sortDir: SortDir }) {
       this.$emit('sort', opts)
     },
     addSelectedResource(file: Resource) {
@@ -909,7 +926,7 @@ export default defineComponent({
       }
       this.toggleSelection(file.id)
     },
-    showContextMenuOnBtnClick(data, item) {
+    showContextMenuOnBtnClick(data: ContextMenuBtnClickEventData, item: Resource) {
       if (this.isResourceDisabled(item)) {
         return false
       }
@@ -923,7 +940,7 @@ export default defineComponent({
       }
       displayPositionedDropdown(dropdown.tippy, event, this.contextMenuButton)
     },
-    showContextMenu(row, event, item) {
+    showContextMenu(row: ComponentPublicInstance<unknown>, event: MouseEvent, item: Resource) {
       event.preventDefault()
 
       if (this.isResourceDisabled(item)) {
@@ -939,7 +956,7 @@ export default defineComponent({
       }
       displayPositionedDropdown(instance._tippy, event, this.contextMenuButton)
     },
-    rowMounted(resource, component) {
+    rowMounted(resource: Resource, component: ComponentPublicInstance<unknown>) {
       /**
        * Triggered whenever a row is mounted
        * @property {object} resource The resource which was mounted as table row
@@ -947,7 +964,7 @@ export default defineComponent({
        */
       this.$emit('rowMounted', resource, component, this.constants.ImageDimension.Thumbnail)
     },
-    fileClicked(data) {
+    fileClicked(data: [Resource, MouseEvent, boolean]) {
       /**
        * Triggered when the file row is clicked
        * @property {object} resource The resource for which the event is triggered
@@ -961,8 +978,10 @@ export default defineComponent({
       const eventData = data[1]
       const skipTargetSelection = data[2] ?? false
 
-      const isCheckboxClicked = eventData?.target.getAttribute('type') === 'checkbox'
-      const contextActionClicked = eventData?.target?.closest('div')?.id === 'oc-files-context-menu'
+      const isCheckboxClicked =
+        (eventData?.target as HTMLElement).getAttribute('type') === 'checkbox'
+      const contextActionClicked =
+        (eventData?.target as HTMLElement)?.closest('div')?.id === 'oc-files-context-menu'
       if (contextActionClicked) {
         return
       }
@@ -977,13 +996,13 @@ export default defineComponent({
       }
       return this.emitSelect([resource.id])
     },
-    formatDate(date) {
+    formatDate(date: string) {
       return formatDateFromJSDate(new Date(date), this.$language.current)
     },
-    formatDateRelative(date) {
+    formatDateRelative(date: string) {
       return formatRelativeDateFromJSDate(new Date(date), this.$language.current)
     },
-    setSelection(selected, resource: Resource) {
+    setSelection(selected: string[], resource: Resource) {
       if (selected) {
         this.emitSelect([...this.selectedIds, resource.id])
       } else {

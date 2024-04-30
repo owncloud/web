@@ -30,11 +30,11 @@ export interface AppNavigationItem {
  */
 export interface ApplicationQuickAction {
   id?: string
-  label?: (...args) => string | string
+  label?: (...args: unknown[]) => string | string
   icon?: string
   iconFillType?: IconFillType
-  handler?: (...args) => Promise<void> | void
-  displayed?: (...args) => boolean | boolean
+  handler?: (...args: unknown[]) => Promise<void> | void
+  displayed?: (...args: unknown[]) => boolean | boolean
 }
 
 export type AppConfigObject = Record<string, any>
@@ -89,13 +89,13 @@ export interface ApplicationTranslations {
 /** ClassicApplicationScript reflects classic application script structure */
 export interface ClassicApplicationScript {
   appInfo?: ApplicationInformation
-  routes?: ((...args) => RouteRecordRaw[]) | RouteRecordRaw[]
-  navItems?: ((...args) => AppNavigationItem[]) | AppNavigationItem[]
+  routes?: ((args: ComponentCustomProperties) => RouteRecordRaw[]) | RouteRecordRaw[]
+  navItems?: ((args: ComponentCustomProperties) => AppNavigationItem[]) | AppNavigationItem[]
   translations?: ApplicationTranslations
   extensions?: Ref<Extension[]>
   initialize?: () => void
   ready?: (args: AppReadyHookArgs) => Promise<void> | void
-  mounted?: (...args) => void
+  mounted?: (args: AppReadyHookArgs) => void
   // TODO: move this to its own type
   setup?: (args: { applicationConfig: AppConfigObject }) => ClassicApplicationScript
 }

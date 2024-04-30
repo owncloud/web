@@ -34,7 +34,10 @@ describe('LoadingIndicator', () => {
   })
 })
 
-function getWrapper({ isLoading = false, currentProgress = null } = {}) {
+function getWrapper({
+  isLoading = false,
+  currentProgress = null
+}: { isLoading?: boolean; currentProgress?: number } = {}) {
   const mocks = { $loadingService: mock<LoadingService>({ isLoading, currentProgress }) }
   return {
     wrapper: shallowMount(LoadingIndicator, {

@@ -5,12 +5,16 @@ describe('QuotaSelect', () => {
   describe('method "optionSelectable"', () => {
     it('should return true while option selectable property is not false', () => {
       const { wrapper } = getWrapper()
-      expect(wrapper.vm.optionSelectable({ selectable: true })).toBeTruthy()
-      expect(wrapper.vm.optionSelectable({})).toBeTruthy()
+      expect(
+        wrapper.vm.optionSelectable({ value: 1, displayValue: '', selectable: true })
+      ).toBeTruthy()
+      expect(wrapper.vm.optionSelectable({ value: 1, displayValue: '' })).toBeTruthy()
     })
     it('should return false while option selectable property is false', () => {
       const { wrapper } = getWrapper()
-      expect(wrapper.vm.optionSelectable({ selectable: false })).toBeFalsy()
+      expect(
+        wrapper.vm.optionSelectable({ value: 1, displayValue: '', selectable: false })
+      ).toBeFalsy()
     })
   })
   describe('method "createOption"', () => {

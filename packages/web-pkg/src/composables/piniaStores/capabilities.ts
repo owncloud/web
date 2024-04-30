@@ -1,4 +1,4 @@
-import { Capabilities } from '@ownclouders/web-client/ocs'
+import { AppProviderCapability, Capabilities } from '@ownclouders/web-client/ocs'
 import { defineStore } from 'pinia'
 import { computed, ref, unref } from 'vue'
 import merge from 'lodash-es/merge'
@@ -11,7 +11,7 @@ const defaultValues = {
   },
   dav: {},
   files: {
-    app_providers: [],
+    app_providers: [] as AppProviderCapability[],
     favorites: false,
     permanent_deletion: true,
     tags: false,
@@ -44,11 +44,11 @@ const defaultValues = {
       change_password_self_disabled: true,
       create_disabled: false,
       delete_disabled: false,
-      read_only_attributes: []
+      read_only_attributes: [] as string[]
     }
   },
   notifications: {
-    'ocs-endpoints': []
+    'ocs-endpoints': [] as string[]
   },
   password_policy: {},
   search: {

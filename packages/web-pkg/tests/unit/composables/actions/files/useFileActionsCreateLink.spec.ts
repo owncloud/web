@@ -8,7 +8,7 @@ import {
 } from '../../../../../src/composables/piniaStores'
 import { defaultComponentMocks, getComposableWrapper } from 'web-test-helpers'
 import { mock } from 'vitest-mock-extended'
-import { Resource, SpaceResource } from '@ownclouders/web-client'
+import { LinkShare, Resource, SpaceResource } from '@ownclouders/web-client'
 import { SharingLinkType } from '@ownclouders/web-client/graph/generated'
 import { useLinkTypes } from '../../../../../src/composables/links/useLinkTypes'
 
@@ -61,7 +61,10 @@ describe('useFileActionsCreateLink', () => {
         setup: async ({ actions }) => {
           const { addLink } = useSharesStore()
           // link action
-          await unref(actions)[0].handler({ resources: [mock<Resource>({ canShare: () => true })] })
+          await unref(actions)[0].handler({
+            resources: [mock<Resource>({ canShare: () => true })],
+            space: undefined
+          })
           expect(addLink).toHaveBeenCalledWith(
             expect.objectContaining({
               options: expect.objectContaining({ '@libre.graph.quickLink': false })
@@ -71,7 +74,10 @@ describe('useFileActionsCreateLink', () => {
           expect(showMessage).toHaveBeenCalledTimes(1)
 
           // quick link action
-          await unref(actions)[1].handler({ resources: [mock<Resource>({ canShare: () => true })] })
+          await unref(actions)[1].handler({
+            resources: [mock<Resource>({ canShare: () => true })],
+            space: undefined
+          })
           expect(addLink).toHaveBeenNthCalledWith(
             2,
             expect.objectContaining({
@@ -87,7 +93,10 @@ describe('useFileActionsCreateLink', () => {
         setup: ({ actions }) => {
           const { addLink } = useSharesStore()
           const { dispatchModal } = useModals()
-          unref(actions)[0].handler({ resources: [mock<Resource>({ canShare: () => true })] })
+          unref(actions)[0].handler({
+            resources: [mock<Resource>({ canShare: () => true })],
+            space: undefined
+          })
           expect(addLink).not.toHaveBeenCalled()
           expect(dispatchModal).toHaveBeenCalledTimes(1)
         }
@@ -100,7 +109,10 @@ describe('useFileActionsCreateLink', () => {
         setup: ({ actions }) => {
           const { addLink } = useSharesStore()
           const { dispatchModal } = useModals()
-          unref(actions)[0].handler({ resources: [mock<Resource>({ canShare: () => true })] })
+          unref(actions)[0].handler({
+            resources: [mock<Resource>({ canShare: () => true })],
+            space: undefined
+          })
           expect(addLink).not.toHaveBeenCalled()
           expect(dispatchModal).toHaveBeenCalledTimes(1)
         }
@@ -111,7 +123,10 @@ describe('useFileActionsCreateLink', () => {
       getWrapper({
         onLinkCreatedCallback,
         setup: async ({ actions }) => {
-          await unref(actions)[0].handler({ resources: [mock<Resource>({ canShare: () => true })] })
+          await unref(actions)[0].handler({
+            resources: [mock<Resource>({ canShare: () => true })],
+            space: undefined
+          })
           expect(onLinkCreatedCallback).toHaveBeenCalledTimes(1)
         }
       })
@@ -120,7 +135,10 @@ describe('useFileActionsCreateLink', () => {
       getWrapper({
         showMessages: false,
         setup: async ({ actions }) => {
-          await unref(actions)[0].handler({ resources: [mock<Resource>({ canShare: () => true })] })
+          await unref(actions)[0].handler({
+            resources: [mock<Resource>({ canShare: () => true })],
+            space: undefined
+          })
           const { showMessage } = useMessages()
           expect(showMessage).not.toHaveBeenCalled()
         }
@@ -136,6 +154,16 @@ function getWrapper({
   defaultLinkType = SharingLinkType.View,
   onLinkCreatedCallback = undefined,
   showMessages = true
+}: {
+  setup: (
+    instance: ReturnType<typeof useFileActionsCreateLink>,
+    mocks: Record<string, unknown>
+  ) => void
+  enforceModal?: boolean
+  passwordEnforced?: boolean
+  defaultLinkType?: SharingLinkType
+  onLinkCreatedCallback?: (result: PromiseSettledResult<LinkShare>[]) => Promise<void> | void
+  showMessages?: boolean
 }) {
   vi.mocked(useLinkTypes).mockReturnValue(
     mock<ReturnType<typeof useLinkTypes>>({ defaultLinkType: ref(defaultLinkType) })

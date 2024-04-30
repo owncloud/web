@@ -137,7 +137,7 @@ export const useResourcesStore = defineStore('resources', () => {
   const removeSelection = (id: string) => {
     latestSelectedId.value = id
     if (unref(selectedIds).includes(id)) {
-      delete unref(selectedIds)[id]
+      selectedIds.value = unref(selectedIds).filter((i) => i !== id)
     }
   }
 

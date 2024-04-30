@@ -14,9 +14,13 @@
 </template>
 
 <script lang="ts">
-import { defineComponent } from 'vue'
+import { Modal } from '../../composables/piniaStores'
+import { PropType, defineComponent } from 'vue'
 
 export default defineComponent({
-  name: 'SpaceMoveInfoModal'
+  name: 'SpaceMoveInfoModal',
+  props: {
+    modal: { type: Object as PropType<Modal>, required: true }
+  }
 })
 </script>

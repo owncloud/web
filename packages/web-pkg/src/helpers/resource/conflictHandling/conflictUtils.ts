@@ -6,7 +6,7 @@ export const resolveFileNameDuplicate = (
   extension: string,
   existingResources: Resource[],
   iteration = 1
-) => {
+): string => {
   let potentialName
   if (!extension) {
     potentialName = `${name} (${iteration})`

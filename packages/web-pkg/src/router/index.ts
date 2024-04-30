@@ -40,7 +40,7 @@ const ROOT_ROUTE = {
   name: 'root',
   path: '/',
   redirect: (to) => createLocationSpaces('files-spaces-generic', to)
-}
+} as RouteRecordRaw
 
 const buildRoutes = (components: RouteComponents): RouteRecordRaw[] => [
   ROOT_ROUTE,

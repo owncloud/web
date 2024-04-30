@@ -18,11 +18,13 @@ import '@toast-ui/editor/dist/i18n/ko-kr'
 import '@toast-ui/editor/dist/i18n/sv-se'
 import '@toast-ui/editor/dist/i18n/tr-tr'
 import '@toast-ui/editor/dist/i18n/zh-cn'
+// @ts-ignore
 import { Editor, EditorCore, EditorOptions } from '@toast-ui/editor'
+// @ts-ignore
+import codeSyntaxHighlight from '@toast-ui/editor-plugin-code-syntax-highlight/dist/toastui-editor-plugin-code-syntax-highlight-all.js'
 
 import 'prismjs/themes/prism.css'
 import '@toast-ui/editor-plugin-code-syntax-highlight/dist/toastui-editor-plugin-code-syntax-highlight.css'
-import codeSyntaxHighlight from '@toast-ui/editor-plugin-code-syntax-highlight/dist/toastui-editor-plugin-code-syntax-highlight-all.js'
 
 import { useGettext } from 'vue3-gettext'
 import { useThemeStore } from '../composables'

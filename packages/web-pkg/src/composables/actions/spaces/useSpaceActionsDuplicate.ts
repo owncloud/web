@@ -64,7 +64,7 @@ export const useSpaceActionsDuplicate = () => {
       if (existingSpace.spaceReadmeData || existingSpace.spaceImageData) {
         const specialRequestData = {
           special: []
-        }
+        } as Drive
 
         if (existingSpace.spaceReadmeData) {
           const newSpaceReadmeFile = await clientService.webdav.getFileInfo(duplicatedSpace, {

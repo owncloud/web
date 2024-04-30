@@ -1,11 +1,13 @@
 import isEqual from 'lodash-es/isEqual'
-import { stringify } from 'qs'
 import { cacheService } from '../cache'
 import { ClientService } from '../client'
 import { encodePath } from '../../utils'
 import { isPublicSpaceResource } from '@ownclouders/web-client'
 import { BuildQueryStringOptions, LoadPreviewOptions } from '.'
 import { AuthStore, CapabilityStore, ConfigStore, UserStore } from '../../composables'
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+// @ts-ignore
+import { stringify } from 'qs'
 
 export class PreviewService {
   clientService: ClientService

@@ -24,7 +24,7 @@ export const formatDateFromHTTP = (
 }
 export const formatDateFromISO = (
   date: string,
-  currentLanguage,
+  currentLanguage: string,
   format = DateTime.DATETIME_MED
 ) => {
   return formatDateFromDateTime(DateTime.fromISO(date), currentLanguage, format)

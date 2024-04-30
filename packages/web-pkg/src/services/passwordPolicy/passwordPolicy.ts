@@ -9,9 +9,11 @@ import {
   MustNotBeEmptyRule
 } from './rules'
 import { PasswordPolicyCapability } from '@ownclouders/web-client/ocs'
-import { PasswordPolicy } from 'password-sheriff'
 import { GeneratePassword } from 'js-generate-password'
 import { CapabilityStore } from '../../composables'
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+// @ts-ignore
+import { PasswordPolicy } from 'password-sheriff'
 
 interface GeneratePasswordRules {
   length: number

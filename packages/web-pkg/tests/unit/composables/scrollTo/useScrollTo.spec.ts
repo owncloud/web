@@ -25,7 +25,7 @@ describe('useScrollTo', () => {
     it('does nothing when no element was found', () => {
       const htmlPageObject = getHTMLPageObject()
       vi.spyOn(document, 'querySelectorAll').mockImplementation(() => [] as any)
-      vi.spyOn(document, 'getElementById').mockImplementation(() => mockFilesTopBar as any)
+      vi.spyOn(document, 'getElementById').mockImplementation(() => mockFilesTopBar as HTMLElement)
 
       const mocks = defaultComponentMocks()
 
@@ -41,7 +41,7 @@ describe('useScrollTo', () => {
     it('calls "scrollIntoView" when the page bottom is reached', () => {
       const htmlPageObject = getHTMLPageObject()
       vi.spyOn(document, 'querySelectorAll').mockImplementation(() => [htmlPageObject] as any)
-      vi.spyOn(document, 'getElementById').mockImplementation(() => mockFilesTopBar as any)
+      vi.spyOn(document, 'getElementById').mockImplementation(() => mockFilesTopBar as HTMLElement)
 
       window.innerHeight = 100
 
@@ -59,7 +59,7 @@ describe('useScrollTo', () => {
     it('calls "scrollIntoView" when the page top is reached', () => {
       const htmlPageObject = getHTMLPageObject()
       vi.spyOn(document, 'querySelectorAll').mockImplementation(() => [htmlPageObject] as any)
-      vi.spyOn(document, 'getElementById').mockImplementation(() => mockFilesTopBar as any)
+      vi.spyOn(document, 'getElementById').mockImplementation(() => mockFilesTopBar as HTMLElement)
 
       window.innerHeight = 500
 

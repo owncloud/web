@@ -163,7 +163,7 @@ const compare = (
   collator: Intl.Collator,
   sortBy: string,
   sortDir: SortDir,
-  sortable
+  sortable: SortField['sortable']
 ) => {
   let aValue = get(a, sortBy)
   let bValue = get(b, sortBy)
@@ -171,7 +171,7 @@ const compare = (
 
   if (sortable) {
     if (typeof sortable === 'string') {
-      const genArrComp = (vals) => {
+      const genArrComp = (vals: Record<string, unknown>[]) => {
         return vals.map((val) => val[sortable]).join('')
       }
 

@@ -124,7 +124,8 @@ export type FieldType = {
   tdClass?: string
   sortable?: boolean
   sortDir?: string
-  accessibleLabelCallback?: (...args: unknown[]) => string
+  prop?: string
+  accessibleLabelCallback?: (item: Item) => string
 }
 
 // FIXME: ideally the id should not be optional, but some generated types (e.g. User and Group) need this

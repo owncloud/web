@@ -47,7 +47,7 @@ function getWrapper({
   itemsPerPage
 }: {
   setup: (instance: ReturnType<typeof usePagination>) => void
-  items: any[]
+  items: number[]
   currentPage: number
   itemsPerPage: number
 }) {

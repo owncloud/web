@@ -91,7 +91,15 @@ export class LoadingService {
     eventBus.publish(LoadingEventTopics.remove)
   }
 
-  private setProgress({ task, total, current }): void {
+  private setProgress({
+    task,
+    total,
+    current
+  }: {
+    task: LoadingTask
+    total: number
+    current: number
+  }): void {
     if (!task.state) {
       task.state = { total: 0, current: 0 }
     }

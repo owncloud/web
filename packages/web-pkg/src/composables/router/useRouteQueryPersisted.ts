@@ -2,6 +2,7 @@ import { Ref, watch, unref } from 'vue'
 import { useRouteQuery } from './useRouteQuery'
 import { useLocalStorage } from '../localStorage/useLocalStorage'
 import { QueryValue } from './types'
+import { queryItemAsString } from '../appDefaults'
 
 export interface RouteQueryPersistedOptions {
   name: string
@@ -16,7 +17,7 @@ interface WatcherValue {
 
 export const useRouteQueryPersisted = (options: RouteQueryPersistedOptions): Ref<QueryValue> => {
   const routeQueryVariable = useRouteQuery(options.name)
-  const localStorageVariable = useLocalStorage(localStorageKey(options))
+  const localStorageVariable = useLocalStorage<QueryValue>(localStorageKey(options))
   watch(
     (): WatcherValue => {
       if (unref(routeQueryVariable)) {
@@ -38,7 +39,8 @@ export const useRouteQueryPersisted = (options: RouteQueryPersistedOptions): Ref
     },
     (val) => {
       if (['route', 'default'].includes(val.source)) {
-        localStorageVariable.value = val.value === options.defaultValue ? undefined : val.value
+        localStorageVariable.value =
+          val.value === options.defaultValue ? undefined : queryItemAsString(val.value)
       }
       if (['storage', 'default'].includes(val.source)) {
         routeQueryVariable.value = val.value

@@ -90,6 +90,7 @@ import {
   useResourcesStore,
   useRouteMeta,
   useSpacesStore,
+  useRouter,
   FolderViewModeConstants
 } from '../../composables'
 import { BreadcrumbItem } from 'design-system/src/components/OcBreadcrumb/types'
@@ -104,6 +105,7 @@ import {
   useSpaceActionsRestore
 } from '../../composables'
 import { storeToRefs } from 'pinia'
+import { RouteLocationRaw } from 'vue-router'
 
 const { EVENT_ITEM_DROPPED } = helpers
 
@@ -121,15 +123,15 @@ export default defineComponent({
     },
     breadcrumbs: {
       type: Array as PropType<BreadcrumbItem[]>,
-      default: () => []
+      default: (): BreadcrumbItem[] => []
     },
     breadcrumbsContextActionsItems: {
       type: Array as PropType<Resource[]>,
-      default: () => []
+      default: (): Resource[] => []
     },
     viewModes: {
       type: Array as PropType<FolderView[]>,
-      default: () => []
+      default: (): FolderView[] => []
     },
     hasBulkActions: { type: Boolean, default: false },
     hasViewOptions: { type: Boolean, default: true },
@@ -148,6 +150,7 @@ export default defineComponent({
     const spacesStore = useSpacesStore()
     const { $gettext } = useGettext()
     const { can } = useAbility()
+    const router = useRouter()
 
     const resourcesStore = useResourcesStore()
     const { selectedResources } = storeToRefs(resourcesStore)
@@ -176,7 +179,7 @@ export default defineComponent({
     )
 
     const batchActions = computed(() => {
-      let actions = [
+      let actions: FileAction[] = [
         ...unref(hideShareActions),
         ...unref(enableSyncActions),
         ...unref(disableSyncActions),
@@ -239,7 +242,7 @@ export default defineComponent({
         ? 3
         : 2
     })
-    const fileDroppedBreadcrumb = (data) => {
+    const fileDroppedBreadcrumb = (data: RouteLocationRaw) => {
       emit(EVENT_ITEM_DROPPED, data)
     }
 
@@ -252,6 +255,7 @@ export default defineComponent({
     })
 
     return {
+      router,
       hasSharesNavigation,
       batchActions,
       showBreadcrumb,
@@ -277,7 +281,7 @@ export default defineComponent({
       return (
         this.hasBulkActions &&
         (this.selectedResources.length >= 1 ||
-          isLocationTrashActive(this.$router, 'files-trash-generic'))
+          isLocationTrashActive(this.router, 'files-trash-generic'))
       )
     },
     selectedResourcesAnnouncement() {

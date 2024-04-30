@@ -41,7 +41,7 @@
         class="oc-tiles-item has-item-context-menu"
       >
         <resource-tile
-          :ref="(el) => (tileRefs.tiles[resource.id] = el)"
+          :ref="(el) => (tileRefs.tiles[resource.id] = el as ResourceTileRef)"
           :resource="resource"
           :resource-route="getRoute(resource)"
           :is-resource-selected="isResourceSelected(resource)"
@@ -85,7 +85,7 @@
           </template>
           <template #contextMenu>
             <context-menu-quick-action
-              :ref="(el) => (tileRefs.dropBtns[resource.id] = el)"
+              :ref="(el) => (tileRefs.dropBtns[resource.id] = el as ContextMenuQuickActionRef)"
               :item="resource"
               class="resource-tiles-btn-action-dropdown"
               @quick-action-clicked="showContextMenuOnBtnClick($event, resource, resource.id)"
@@ -116,6 +116,7 @@
 <script lang="ts">
 import {
   computed,
+  ComponentPublicInstance,
   defineComponent,
   nextTick,
   onBeforeUnmount,
@@ -127,14 +128,19 @@ import {
   watch
 } from 'vue'
 import { useGettext } from 'vue3-gettext'
-import { Resource, SpaceResource } from '@ownclouders/web-client'
+import { isSpaceResource, Resource, SpaceResource } from '@ownclouders/web-client'
 
 // Constants should match what is being used in OcTable/ResourceTable
 // Alignment regarding naming would be an API-breaking change and can
 // Be done at a later point in time?
 import { ContextMenuQuickAction } from '../ContextActions'
 import { createLocationSpaces } from '../../router'
-import { createFileRouteOptions, displayPositionedDropdown } from '../../helpers'
+import {
+  ContextMenuBtnClickEventData,
+  createFileRouteOptions,
+  CreateTargetRouteOptions,
+  displayPositionedDropdown
+} from '../../helpers'
 import { eventBus } from '../../services'
 import { ImageDimension } from '../../constants'
 import { ResourceTile, ResourceGhostElement } from './index'
@@ -150,6 +156,9 @@ import {
   useEmbedMode
 } from '../../composables'
 
+type ResourceTileRef = ComponentPublicInstance<typeof ResourceTile>
+type ContextMenuQuickActionRef = ComponentPublicInstance<typeof ContextMenuQuickAction>
+
 export default defineComponent({
   name: 'ResourceTiles',
   components: { ContextMenuQuickAction, ResourceGhostElement, ResourceTile },
@@ -159,14 +168,14 @@ export default defineComponent({
      */
     resources: {
       type: Array as PropType<Resource[]>,
-      default: () => []
+      default: (): Resource[] => []
     },
     selectedIds: {
-      type: Array,
-      default: () => []
+      type: Array as PropType<string[]>,
+      default: (): string[] => []
     },
     targetRouteCallback: {
-      type: Function,
+      type: Function as PropType<(arg: CreateTargetRouteOptions) => unknown>,
       required: false,
       default: undefined
     },
@@ -177,7 +186,7 @@ export default defineComponent({
     },
     sortFields: {
       type: Array as PropType<SortField[]>,
-      default: () => []
+      default: (): SortField[] => []
     },
     sortBy: {
       type: String,
@@ -221,9 +230,12 @@ export default defineComponent({
     const dragItem = ref()
     const ghostElementRef = ref()
 
-    const tileRefs = ref({
-      tiles: [],
-      dropBtns: []
+    const tileRefs = ref<{
+      tiles: Record<string, ResourceTileRef>
+      dropBtns: Record<string, ContextMenuQuickActionRef>
+    }>({
+      tiles: {},
+      dropBtns: {}
     })
 
     const resourceRouteResolver = useResourceRouteResolver(
@@ -234,8 +246,8 @@ export default defineComponent({
       context
     )
 
-    const getRoute = (resource) => {
-      if (resource.type === 'space') {
+    const getRoute = (resource: Resource) => {
+      if (isSpaceResource(resource)) {
         return resource.disabled
           ? { path: '#' }
           : createLocationSpaces(
@@ -256,8 +268,8 @@ export default defineComponent({
       return { path: '' }
     }
 
-    const emitTileClick = (resource) => {
-      if (resource.disabled && resource.type === 'space') {
+    const emitTileClick = (resource: Resource) => {
+      if (isSpaceResource(resource) && resource.disabled) {
         showMessage({
           title: $gettext('Disabled spaces cannot be entered'),
           status: 'warning'
@@ -268,7 +280,11 @@ export default defineComponent({
       }
     }
 
-    const showContextMenuOnBtnClick = (data, item, index) => {
+    const showContextMenuOnBtnClick = (
+      data: ContextMenuBtnClickEventData,
+      item: Resource,
+      index: string
+    ) => {
       const { dropdown, event } = data
       if (dropdown?.tippy === undefined) {
         return
@@ -276,7 +292,7 @@ export default defineComponent({
       displayPositionedDropdown(dropdown.tippy, event, unref(tileRefs).dropBtns[index])
     }
 
-    const isResourceSelected = (resource) => {
+    const isResourceSelected = (resource: Resource) => {
       return props.selectedIds.includes(resource.id)
     }
 
@@ -284,11 +300,15 @@ export default defineComponent({
       return !(unref(isEmbedModeEnabled) && !resource.isFolder)
     }
 
-    const emitSelect = (selectedIds) => {
+    const emitSelect = (selectedIds: string[]) => {
       emit('update:selectedIds', selectedIds)
     }
 
-    const showContextMenu = (event, item: Resource, reference) => {
+    const showContextMenu = (
+      event: MouseEvent,
+      item: Resource,
+      reference: ComponentPublicInstance<unknown>
+    ) => {
       event.preventDefault()
       const drop = unref(tileRefs).tiles[item.id]?.$el.getElementsByClassName(
         'resource-tiles-btn-action-dropdown'
@@ -303,7 +323,7 @@ export default defineComponent({
       displayPositionedDropdown(drop._tippy, event, reference)
     }
 
-    const toggleTile = (data) => {
+    const toggleTile = (data: [Resource, MouseEvent]) => {
       const resource = data[0]
       const eventData = data[1]
 
@@ -319,14 +339,14 @@ export default defineComponent({
       toggleSelection(resource)
     }
 
-    const toggleSelection = (resource) => {
+    const toggleSelection = (resource: Resource) => {
       const selectedIds = !isResourceSelected(resource)
         ? [...props.selectedIds, resource.id]
         : props.selectedIds.filter((id) => id !== resource.id)
       context.emit('update:selectedIds', selectedIds)
     }
 
-    const getResourceCheckboxLabel = (resource) => {
+    const getResourceCheckboxLabel = (resource: Resource) => {
       switch (resource.type) {
         case 'folder':
           return $gettext('Select folder')
@@ -343,15 +363,15 @@ export default defineComponent({
         props.sortFields[0]
       )
     })
-    const selectSorting = (field) => {
+    const selectSorting = (field: SortField) => {
       context.emit('sort', { sortBy: field.name, sortDir: field.sortDir })
     }
-    const isSortFieldSelected = (field) => {
+    const isSortFieldSelected = (field: SortField) => {
       return unref(currentSortField) === field
     }
 
     const resourceIconSize = computed(() => {
-      const sizeMap = {
+      const sizeMap: Record<number, string> = {
         1: 'xlarge',
         2: 'xlarge',
         3: 'xxlarge',
@@ -364,16 +384,16 @@ export default defineComponent({
     })
     onBeforeUpdate(() => {
       tileRefs.value = {
-        tiles: [],
-        dropBtns: []
+        tiles: {},
+        dropBtns: {}
       }
     })
 
-    const setDropStyling = (resource, leaving, event) => {
+    const setDropStyling = (resource: Resource, leaving: boolean, event: DragEvent) => {
       const hasFilePayload = (event.dataTransfer?.types || []).some((e) => e === 'Files')
       if (
         hasFilePayload ||
-        event.currentTarget?.contains(event.relatedTarget) ||
+        (event.currentTarget as HTMLElement)?.contains(event.relatedTarget as HTMLElement) ||
         props.selectedIds.includes(resource.id) ||
         resource.type !== 'folder'
       ) {
@@ -389,7 +409,7 @@ export default defineComponent({
     const dragSelection = computed(() => {
       return props.selectedIds.filter((id) => id !== unref(dragItem).id)
     })
-    const setDragItem = async (item, event) => {
+    const setDragItem = async (item: Resource, event: DragEvent) => {
       dragItem.value = item
       await nextTick()
       unref(ghostElementRef).$el.ariaHidden = 'true'
@@ -399,14 +419,14 @@ export default defineComponent({
       event.dataTransfer.dropEffect = 'move'
       event.dataTransfer.effectAllowed = 'move'
     }
-    const dragStart = async (resource, event) => {
+    const dragStart = async (resource: Resource, event: DragEvent) => {
       if (!isResourceSelected(resource)) {
         toggleSelection(resource)
       }
       await setDragItem(resource, event)
     }
 
-    const fileDropped = (resource, event) => {
+    const fileDropped = (resource: Resource, event: DragEvent) => {
       const hasFilePayload = (event.dataTransfer.types || []).some((e) => e === 'Files')
       if (hasFilePayload) {
         return

@@ -133,7 +133,7 @@ export default defineComponent({
     },
     viewModes: {
       type: Array as PropType<FolderView[]>,
-      default: () => []
+      default: (): FolderView[] => []
     }
   },
   setup(props) {
@@ -218,7 +218,7 @@ export default defineComponent({
         return this.areHiddenFilesShown
       },
 
-      set(value) {
+      set(value: boolean) {
         this.setAreHiddenFilesShown(value)
       }
     },
@@ -227,16 +227,16 @@ export default defineComponent({
         return this.areFileExtensionsShown
       },
 
-      set(value) {
+      set(value: boolean) {
         this.setAreFileExtensionsShown(value)
       }
     }
   },
   methods: {
-    updateHiddenFilesShownModel(event) {
+    updateHiddenFilesShownModel(event: boolean) {
       this.hiddenFilesShownModel = event
     },
-    updateFileExtensionsShownModel(event) {
+    updateFileExtensionsShownModel(event: boolean) {
       this.fileExtensionsShownModel = event
     }
   }

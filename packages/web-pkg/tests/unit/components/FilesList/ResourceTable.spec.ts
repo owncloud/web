@@ -37,7 +37,7 @@ const router = {
       driveAliasAndItem: ''
     }
   },
-  resolve: (r) => {
+  resolve: (r: { name: string }) => {
     return { href: r.name }
   }
 }
@@ -270,7 +270,7 @@ describe('ResourceTable', () => {
   it('accepts resourceDomId closure', () => {
     const { wrapper } = getMountedWrapper({
       props: {
-        resourceDomSelector: (resource) => ['custom', resource.getDomSelector()].join('-')
+        resourceDomSelector: (resource: Resource) => ['custom', resource.getDomSelector()].join('-')
       }
     })
     resourcesWithAllFields.forEach((resource) => {
@@ -351,7 +351,9 @@ describe('ResourceTable', () => {
       const tr = await wrapper.find('.oc-tbody-tr-forest .oc-resource-name')
       await tr.trigger('click')
 
-      expect(wrapper.emitted().fileClick[0][0].resources[0].name).toMatch('forest.jpg')
+      expect(
+        (wrapper.emitted('fileClick')[0][0] as { resources: Resource[] }).resources[0].name
+      ).toMatch('forest.jpg')
     })
 
     it('does not emit fileClick upon clicking on a disabled resource name', async () => {

@@ -133,7 +133,7 @@ export const useThemeStore = defineStore('theme', () => {
       { name: 'fontSizes', prefix: 'font-size' },
       { name: 'sizes', prefix: 'size' },
       { name: 'spacing', prefix: 'spacing' }
-    ]
+    ] as const
 
     applyCustomProp('font-family', unref(currentTheme).designTokens.fontFamily)
 

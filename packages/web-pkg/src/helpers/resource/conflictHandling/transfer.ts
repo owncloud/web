@@ -62,7 +62,11 @@ export class ResourceTransfer extends ConflictDialog {
     messageStore.showErrorMessage({ title })
   }
 
-  showResultMessage(errors, movedResources: Array<Resource>, transferType: TransferType) {
+  showResultMessage(
+    errors: (Error & { resourceName: string })[],
+    movedResources: Array<Resource>,
+    transferType: TransferType
+  ) {
     if (errors.length === 0) {
       const count = movedResources.length
       if (count === 0) {
@@ -90,8 +94,16 @@ export class ResourceTransfer extends ConflictDialog {
     }
     let title =
       transferType === TransferType.COPY
-        ? this.$gettext('Failed to copy %{count} resources', { count: errors.length }, true)
-        : this.$gettext('Failed to move %{count} resources', { count: errors.length }, true)
+        ? this.$gettext(
+            'Failed to copy %{count} resources',
+            { count: errors.length.toString() },
+            true
+          )
+        : this.$gettext(
+            'Failed to move %{count} resources',
+            { count: errors.length.toString() },
+            true
+          )
     if (errors.length === 1) {
       title =
         transferType === TransferType.COPY

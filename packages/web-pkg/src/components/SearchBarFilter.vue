@@ -73,8 +73,8 @@ export default defineComponent({
       }
     ])
 
-    const isIndexGreaterZero = (index): boolean => {
-      return parseInt(index) > 0
+    const isIndexGreaterZero = (index: number): boolean => {
+      return index > 0
     }
 
     watch(

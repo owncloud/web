@@ -29,7 +29,7 @@
 
 <script lang="ts">
 import { computed, defineComponent } from 'vue'
-import { extractDomSelector } from '@ownclouders/web-client'
+import { Resource, extractDomSelector } from '@ownclouders/web-client'
 import { useGettext } from 'vue3-gettext'
 
 export default defineComponent({
@@ -42,7 +42,7 @@ export default defineComponent({
     resourceDomSelector: {
       type: Function,
       required: false,
-      default: (resource) => extractDomSelector(resource.id)
+      default: (resource: Resource) => extractDomSelector(resource.id)
     }
   },
   emits: ['quickActionClicked'],

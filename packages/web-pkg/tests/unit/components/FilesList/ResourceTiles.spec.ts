@@ -1,10 +1,11 @@
-import { defaultPlugins, mount } from 'web-test-helpers'
+import { defaultComponentMocks, defaultPlugins, mount } from 'web-test-helpers'
 import ResourceTiles from '../../../../src/components/FilesList/ResourceTiles.vue'
 import { sortFields } from '../../../../src/helpers/ui/resourceTiles'
-import { Resource } from '@ownclouders/web-client'
+import { Resource, ResourceIndicator, SpaceResource } from '@ownclouders/web-client'
 import { mock } from 'vitest-mock-extended'
-import { computed } from 'vue'
+import { ComponentPublicInstance, computed } from 'vue'
 import { extractDomSelector } from '@ownclouders/web-client'
+import OcDrop from 'design-system/src/components/OcDrop/OcDrop.vue'
 
 vi.mock('../../../../src/composables/viewMode', async (importOriginal) => ({
   ...(await importOriginal<any>()),
@@ -17,21 +18,6 @@ const mockUseEmbedMode = vi.fn().mockReturnValue({ isEnabled: computed(() => fal
 vi.mock('../../../../src/composables/embedMode', () => ({
   useEmbedMode: vi.fn().mockImplementation(() => mockUseEmbedMode())
 }))
-
-const router = {
-  push: vi.fn(),
-  afterEach: vi.fn(),
-  currentRoute: {
-    name: 'some-route-name',
-    query: {},
-    params: {
-      driveAliasAndItem: ''
-    }
-  },
-  resolve: (r) => {
-    return { href: r.name }
-  }
-}
 
 const spacesResources = [
   {
@@ -52,7 +38,7 @@ const spacesResources = [
     indicators: [],
     getDriveAliasAndItem: () => '2'
   }
-]
+] as unknown as SpaceResource[]
 
 const resources = [
   {
@@ -62,17 +48,14 @@ const resources = [
     path: 'images/nature/forest.jpg',
     extension: 'jpg',
     thumbnail: 'https://cdn.pixabay.com/photo/2015/09/09/16/05/forest-931706_960_720.jpg',
-    indicators: [],
     isFolder: false,
+    indicators: [] as ResourceIndicator[],
     type: 'file',
     tags: ['space', 'tag', 'moon'],
     size: '111000234',
     hidden: false,
     syncEnabled: true,
     outgoing: false,
-    shareRoles: [],
-    sharePermissions: [],
-    shareTypes: [],
     canRename: vi.fn(),
     getDomSelector: () => extractDomSelector('forest')
   }
@@ -84,7 +67,7 @@ describe('ResourceTiles component', () => {
   beforeEach(() => {
     const mockElement = {
       clientWidth: 800
-    }
+    } as HTMLElement
     document.getElementById = vi.fn((id) => {
       if (id === 'tiles-view') {
         return mockElement
@@ -93,7 +76,7 @@ describe('ResourceTiles component', () => {
     })
     window.getComputedStyle = vi.fn().mockImplementation(() => {
       return {
-        getPropertyValue: (propName) => {
+        getPropertyValue: (propName: string) => {
           switch (propName) {
             case '--oc-size-tiles-default':
               return '9rem'
@@ -121,7 +104,9 @@ describe('ResourceTiles component', () => {
   it('emits fileClick event upon click on tile', async () => {
     const { wrapper } = getWrapper({ resources: resources })
     await wrapper.find('.oc-tiles-item .oc-resource-name').trigger('click')
-    expect(wrapper.emitted().fileClick[0][0].resources[0].name).toMatch('forest.jpg')
+    expect(
+      (wrapper.emitted('fileClick')[0][0] as { resources: Resource[] }).resources[0].name
+    ).toMatch('forest.jpg')
   })
 
   it('does not emit fileClick event upon click on tile when embed mode is enabled', async () => {
@@ -162,7 +147,9 @@ describe('ResourceTiles component', () => {
     it('emits the "sort"-event', async () => {
       const index = 2
       const { wrapper } = getWrapper({ sortFields })
-      ;(wrapper.vm.$refs.sortDrop as any).tippy = { hide: vi.fn() }
+      ;(wrapper.vm.$refs.sortDrop as ComponentPublicInstance<typeof OcDrop>).tippy = {
+        hide: vi.fn()
+      }
       await wrapper.findAll('.oc-tiles-sort-list-item').at(index).trigger('click')
       expect(wrapper.emitted('sort')).toBeTruthy()
       expect(wrapper.emitted('sort')[0][0]).toEqual({
@@ -175,13 +162,15 @@ describe('ResourceTiles component', () => {
         const { wrapper } = getWrapper()
         wrapper.vm.dragItem = mock<Resource>()
         await wrapper.vm.$nextTick()
-        ;(wrapper.vm.$refs.ghostElementRef as any).$el = { style: {} }
-        wrapper.vm.dragStart(mock<Resource>(), { dataTransfer: { setDragImage: vi.fn() } })
+        ;(wrapper.vm.$refs.ghostElementRef as ComponentPublicInstance<unknown>).$el = { style: {} }
+        wrapper.vm.dragStart(mock<Resource>(), {
+          dataTransfer: { setDragImage: vi.fn() }
+        } as unknown as DragEvent)
         expect(wrapper.emitted('update:selectedIds')).toBeDefined()
       })
       it('emits the "fileDropped"-event on resource drop', () => {
         const { wrapper } = getWrapper()
-        wrapper.vm.fileDropped(mock<Resource>(), { dataTransfer: {} })
+        wrapper.vm.fileDropped(mock<Resource>(), { dataTransfer: {} } as DragEvent)
         expect(wrapper.emitted('fileDropped')).toBeDefined()
       })
     })
@@ -203,6 +192,8 @@ describe('ResourceTiles component', () => {
   })
 
   function getWrapper(props = {}, slots = {}) {
+    const mocks = defaultComponentMocks()
+
     return {
       wrapper: mount(ResourceTiles, {
         props: {
@@ -214,14 +205,8 @@ describe('ResourceTiles component', () => {
         },
         global: {
           plugins: [...defaultPlugins()],
-          mocks: {
-            $route: router.currentRoute,
-            $router: router
-          },
-          provide: {
-            $router: router,
-            $route: router.currentRoute
-          }
+          mocks: mocks,
+          provide: mocks
         }
       })
     }

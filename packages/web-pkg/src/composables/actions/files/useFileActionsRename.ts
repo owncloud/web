@@ -35,7 +35,11 @@ export const useFileActionsRename = () => {
   const resourcesStore = useResourcesStore()
   const { setCurrentFolder, upsertResource } = resourcesStore
 
-  const getNameErrorMsg = (resource: Resource, newName: string, parentResources = undefined) => {
+  const getNameErrorMsg = (
+    resource: Resource,
+    newName: string,
+    parentResources: Resource[] = undefined
+  ) => {
     const newPath =
       resource.path.substring(0, resource.path.length - resource.name.length) + newName
 
@@ -147,7 +151,7 @@ export const useFileActionsRename = () => {
 
   const handler = async ({ space, resources }: FileActionOptions) => {
     const currentFolder = resourcesStore.currentFolder
-    let parentResources
+    let parentResources: Resource[]
     if (isSameResource(resources[0], currentFolder)) {
       const parentPath = dirname(currentFolder.path)
       parentResources = (await clientService.webdav.listFiles(space, { path: parentPath })).children

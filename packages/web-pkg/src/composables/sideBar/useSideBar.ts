@@ -50,7 +50,7 @@ export const useSideBar = (options?: SideBarOptions): SideBarResult => {
     eventBus.unsubscribe(SideBarEventTopics.setActivePanel, setActiveSideBarPanelToken)
   })
 
-  const onPanelActive = (name: string, callback: (string) => void) => {
+  const onPanelActive = (name: string, callback: (string: string) => void) => {
     eventBus.subscribe(SideBarEventTopics.setActivePanel, (panelName: string) => {
       if (name !== panelName) {
         return

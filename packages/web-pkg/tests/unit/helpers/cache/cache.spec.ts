@@ -1,3 +1,4 @@
+import { MockInstance } from 'vitest'
 import Cache from '../../../../src/helpers/cache/cache'
 
 const newCache = <T>(vs: T[], ttl?: number, capacity?: number): Cache<number, T> => {
@@ -142,9 +143,9 @@ describe('Cache', () => {
 
 describe('cache', () => {
   describe('CacheElement', () => {
-    let cache
-    let key, value, key2, value2
-    let evictSpy
+    let cache: Cache<string, unknown>
+    let key: string, value: string, key2: string, value2: string
+    let evictSpy: MockInstance
     beforeEach(() => {
       const options = { ttl: 0, opacity: 0 }
       evictSpy = vi.spyOn(Cache.prototype, 'evict')

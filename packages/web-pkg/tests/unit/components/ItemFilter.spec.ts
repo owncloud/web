@@ -1,5 +1,10 @@
 import ItemFilter from '../../../src/components/ItemFilter.vue'
-import { defaultComponentMocks, defaultPlugins, mount } from 'web-test-helpers'
+import {
+  PartialComponentProps,
+  defaultComponentMocks,
+  defaultPlugins,
+  mount
+} from 'web-test-helpers'
 import { queryItemAsString } from '../../../src/composables/appDefaults'
 import { OcCheckbox } from 'design-system/src/components'
 import { unref } from 'vue'
@@ -136,7 +141,7 @@ describe('ItemFilter', () => {
     })
 
     it('sets the default label using getLabel computed property when no prop is set', () => {
-      const label = undefined
+      const label: string = undefined
       const { wrapper } = getWrapper({
         props: {
           showOptionFilter: true,
@@ -149,7 +154,10 @@ describe('ItemFilter', () => {
   })
 })
 
-function getWrapper({ props = {}, initialQuery = '' }: any = {}) {
+function getWrapper({
+  props = {},
+  initialQuery = ''
+}: { props?: PartialComponentProps<typeof ItemFilter>; initialQuery?: string } = {}) {
   vi.mocked(queryItemAsString).mockImplementation(() => initialQuery)
   const mocks = defaultComponentMocks()
   return {
@@ -162,7 +170,7 @@ function getWrapper({ props = {}, initialQuery = '' }: any = {}) {
         ...props
       },
       slots: {
-        item(data: any) {
+        item(data) {
           return props.displayNameAttribute ? data.item[props.displayNameAttribute] : data.item.name
         }
       },

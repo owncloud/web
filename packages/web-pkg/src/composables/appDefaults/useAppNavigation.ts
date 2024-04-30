@@ -3,7 +3,7 @@ import { RouteLocation, Router, RouteParams } from 'vue-router'
 
 import { MaybeRef } from '../../utils'
 import { FileContext } from './types'
-import { LocationQuery } from '../router'
+import { LocationQuery, QueryValue } from '../router'
 import { Resource } from '@ownclouders/web-client'
 import { useFileRouteReplace } from '../router/useFileRouteReplace'
 
@@ -33,7 +33,7 @@ const contextRouteQueryKey = 'contextRouteQuery'
 export const routeToContextQuery = (location: RouteLocation): LocationQuery => {
   const { params, query } = location
 
-  const contextQuery = {}
+  const contextQuery: Record<string, QueryValue> = {}
   const contextQueryItems = ['fileId', 'shareId'].concat(
     (location as any).meta?.contextQueryItems || []
   ) as string[]

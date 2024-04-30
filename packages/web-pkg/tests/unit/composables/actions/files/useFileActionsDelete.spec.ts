@@ -148,7 +148,10 @@ function getWrapper({
   }))
   const mocks = {
     ...defaultComponentMocks({ currentRoute: mock<RouteLocation>({ name: routeName }) }),
-    space: { driveType: 'personal', spaceRoles: { viewer: [], editor: [], manager: [] } }
+    space: {
+      driveType: 'personal',
+      spaceRoles: { viewer: [], editor: [], manager: [] }
+    } as unknown as SpaceResource
   }
   const capabilities = {
     spaces: { enabled: true }

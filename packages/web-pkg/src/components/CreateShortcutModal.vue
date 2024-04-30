@@ -149,7 +149,7 @@ export default defineComponent({
     const searchResult: Ref<SearchResult> = ref(null)
     const activeDropItemIndex = ref(null)
     const isDropOpen = ref(false)
-    let markInstance = null
+    let markInstance: Mark = null
 
     const dropItemUrl = computed(() => {
       let url = unref(inputUrl).trim()
@@ -234,7 +234,7 @@ export default defineComponent({
       inputFilename.value = filename
     }
 
-    const isDropItemActive = (index) => {
+    const isDropItemActive = (index: number) => {
       return unref(activeDropItemIndex) === index
     }
 

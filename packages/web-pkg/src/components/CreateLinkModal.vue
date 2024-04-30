@@ -4,7 +4,7 @@
       <li v-for="(type, i) in availableLinkTypes" :key="`role-dropdown-${i}`">
         <oc-button
           :id="`files-role-${getLinkRoleByType(type).id}`"
-          :ref="(el: any) => (roleRefs[type] = el)"
+          :ref="(el) => (roleRefs[type] = el as RoleRef)"
           :class="{
             selected: isSelectedLinkType(type),
             'oc-background-primary-gradient': isSelectedLinkType(type)
@@ -143,7 +143,16 @@ import { DateTime } from 'luxon'
 import { v4 as uuidV4 } from 'uuid'
 import { upperFirst } from 'lodash-es'
 import { useGettext } from 'vue3-gettext'
-import { computed, defineComponent, PropType, ref, reactive, unref, onMounted } from 'vue'
+import {
+  ComponentPublicInstance,
+  computed,
+  defineComponent,
+  PropType,
+  ref,
+  reactive,
+  unref,
+  onMounted
+} from 'vue'
 import {
   usePasswordPolicyService,
   useEmbedMode,
@@ -158,6 +167,8 @@ import { Resource } from '@ownclouders/web-client'
 import { formatRelativeDateFromDateTime } from '../helpers'
 import { OcButton } from 'design-system/src/components'
 import { SharingLinkType } from '@ownclouders/web-client/graph/generated'
+
+type RoleRef = ComponentPublicInstance<typeof OcButton>
 
 export default defineComponent({
   name: 'CreateLinkModal',
@@ -197,7 +208,7 @@ export default defineComponent({
     })
 
     const passwordInputKey = ref(uuidV4())
-    const roleRefs = ref<Record<string, InstanceType<typeof OcButton>>>({})
+    const roleRefs = ref<Record<string, RoleRef>>({})
 
     const password = reactive({ value: '', error: undefined })
     const selectedType = ref(unref(defaultLinkType))
@@ -276,7 +287,7 @@ export default defineComponent({
         )
       }
 
-      let userFacingErrors = []
+      let userFacingErrors: Error[] = []
       const failed = result.filter(({ status }) => status === 'rejected')
       if (failed.length) {
         ;(failed as PromiseRejectedResult[])

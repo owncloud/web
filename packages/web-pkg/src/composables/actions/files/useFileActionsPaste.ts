@@ -84,22 +84,23 @@ export const useFileActionsPaste = () => {
   }
 
   const handler = async ({ space: targetSpace }: FileActionOptions) => {
-    const resourceSpaceMapping: Record<string, { space: SpaceResource; resources: Resource[] }> =
-      clipboardStore.resources.reduce((acc, resource) => {
-        if (resource.storageId in acc) {
-          acc[resource.storageId].resources.push(resource)
-          return acc
-        }
-
-        const matchingSpace = getMatchingSpace(resource)
-
-        if (!(matchingSpace.id in acc)) {
-          acc[matchingSpace.id] = { space: matchingSpace, resources: [] }
-        }
-
-        acc[matchingSpace.id].resources.push(resource)
+    const resourceSpaceMapping = clipboardStore.resources.reduce<
+      Record<string, { space: SpaceResource; resources: Resource[] }>
+    >((acc, resource) => {
+      if (resource.storageId in acc) {
+        acc[resource.storageId].resources.push(resource)
         return acc
-      }, {})
+      }
+
+      const matchingSpace = getMatchingSpace(resource)
+
+      if (!(matchingSpace.id in acc)) {
+        acc[matchingSpace.id] = { space: matchingSpace, resources: [] }
+      }
+
+      acc[matchingSpace.id].resources.push(resource)
+      return acc
+    }, {})
 
     const promises = Object.values(resourceSpaceMapping).map(
       ({ space: sourceSpace, resources: resourcesToCopy }) => {

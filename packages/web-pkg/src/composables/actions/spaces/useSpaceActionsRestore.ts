@@ -20,7 +20,7 @@ export const useSpaceActionsRestore = () => {
   const { dispatchModal } = useModals()
   const spacesStore = useSpacesStore()
 
-  const filterResourcesToRestore = (resources): SpaceResource[] => {
+  const filterResourcesToRestore = (resources: SpaceResource[]): SpaceResource[] => {
     return resources.filter(
       (r) => isProjectSpaceResource(r) && r.canRestore({ user: userStore.user, ability })
     )

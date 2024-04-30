@@ -1,6 +1,6 @@
 import { mock } from 'vitest-mock-extended'
 import { unref } from 'vue'
-import { Resource } from '@ownclouders/web-client'
+import { Resource, SpaceResource } from '@ownclouders/web-client'
 import { defaultComponentMocks, RouteLocation, getComposableWrapper } from 'web-test-helpers'
 import { useFileActionsCopy } from '../../../../../src/composables/actions/files'
 import { useClipboardStore } from '../../../../../src/composables/piniaStores'
@@ -51,7 +51,10 @@ function getWrapper({
 
   const mocks = {
     ...defaultComponentMocks({ currentRoute: mock<RouteLocation>({ name: routeName }) }),
-    space: { driveType: 'personal', spaceRoles: { viewer: [], editor: [], manager: [] } }
+    space: {
+      driveType: 'personal',
+      spaceRoles: { viewer: [], editor: [], manager: [] }
+    } as unknown as SpaceResource
   }
   return {
     mocks,

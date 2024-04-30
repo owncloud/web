@@ -1,13 +1,15 @@
 import { VisibilityObserver } from '../../../src/observer'
 
-let callback
-let mockIntersectionObserver
+let callback: (
+  arg: { isIntersecting: boolean; intersectionRatio: number; target: HTMLElement }[]
+) => void
+let mockIntersectionObserver: IntersectionObserver
 const reset = () => {
   mockIntersectionObserver = {
     observe: vi.fn(),
     disconnect: vi.fn(),
     unobserve: vi.fn()
-  }
+  } as unknown as IntersectionObserver
   window.IntersectionObserver = vi.fn().mockImplementation((cb) => {
     callback = cb
     return mockIntersectionObserver
@@ -56,7 +58,7 @@ describe('VisibilityObserver', () => {
     expect(onExit).toHaveBeenCalledTimes(2)
   })
 
-  it.each(['disconnect', 'unobserve'])('handles %p', (m) => {
+  it.each(['disconnect', 'unobserve'] as const)('handles %p', (m) => {
     const onEnter = vi.fn()
     const onExit = vi.fn()
     const observer = new VisibilityObserver()

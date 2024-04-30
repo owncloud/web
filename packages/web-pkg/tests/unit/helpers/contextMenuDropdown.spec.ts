@@ -9,7 +9,7 @@ describe('displayPositionedDropdown', () => {
   })
   it('horizontally positions the drop at the cursor for "contextmenu"-event', () => {
     const event = { type: 'contextmenu', clientX: 100 } as MouseEvent
-    let dropdownProps
+    let dropdownProps = { getReferenceClientRect: vi.fn(() => undefined) }
     const dropdown = {
       setProps: vi.fn((props) => {
         dropdownProps = props
@@ -24,7 +24,7 @@ describe('displayPositionedDropdown', () => {
   })
   it('horizontally positions the drop at context menu button if no "contextmenu"-event given', () => {
     const event = { clientX: 100 } as MouseEvent
-    let dropdownProps
+    let dropdownProps = { getReferenceClientRect: vi.fn(() => undefined) }
     const dropdown = {
       setProps: vi.fn((props) => {
         dropdownProps = props
@@ -40,7 +40,7 @@ describe('displayPositionedDropdown', () => {
   })
   it('vertically positions the drop via "clientY" if given', () => {
     const event = { clientY: 100 } as MouseEvent
-    let dropdownProps
+    let dropdownProps = { getReferenceClientRect: vi.fn(() => undefined) }
     const dropdown = {
       setProps: vi.fn((props) => {
         dropdownProps = props
@@ -59,7 +59,7 @@ describe('displayPositionedDropdown', () => {
       clientY: 0,
       target: { getBoundingClientRect: () => ({ top: yPos }) }
     } as unknown as MouseEvent
-    let dropdownProps
+    let dropdownProps = { getReferenceClientRect: vi.fn(() => undefined) }
     const dropdown = {
       setProps: vi.fn((props) => {
         dropdownProps = props

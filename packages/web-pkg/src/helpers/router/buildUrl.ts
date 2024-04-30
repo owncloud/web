@@ -1,6 +1,6 @@
 import { Router } from 'vue-router'
 
-export const buildUrl = (router: Router, pathname) => {
+export const buildUrl = (router: Router, pathname: string) => {
   const base = document.querySelector('base')
   const isHistoryMode = !!base
   const baseUrl = new URL(window.location.href.split('#')[0])

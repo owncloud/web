@@ -11,15 +11,17 @@
 </template>
 
 <script lang="ts">
-import { defineComponent } from 'vue'
+import { defineComponent, PropType } from 'vue'
 import { filesize } from 'filesize'
+import { Quota } from '@ownclouders/web-client/graph/generated'
 
 export default defineComponent({
   name: 'SpaceQuota',
   props: {
     spaceQuota: {
-      type: Object,
-      required: true
+      type: Object as PropType<Quota>,
+      required: true,
+      default: () => undefined as Quota // FIXME: hack because vue doesn't detect type
     }
   },
   computed: {

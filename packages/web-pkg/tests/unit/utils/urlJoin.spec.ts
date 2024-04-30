@@ -14,7 +14,7 @@ describe('proper-url-join', () => {
     [['/', 2], '/2'],
     [['//', '/fol//der//', '//file'], '/fol/der/file'],
     [['?&@'], '/?&@']
-  ])('joins %s as %s', (args: any, expected: string) => {
+  ])('joins %s as %s', (args: unknown, expected: string) => {
     // eslint-disable-next-line @typescript-eslint/ban-ts-comment
     // @ts-ignore
     expect(urlJoin(...args)).toBe(expected)

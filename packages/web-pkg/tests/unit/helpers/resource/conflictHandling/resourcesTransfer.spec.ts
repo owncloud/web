@@ -5,7 +5,7 @@ import {
   resolveFileNameDuplicate
 } from '../../../../../src/helpers/resource/conflictHandling'
 import { mock, mockDeep, mockReset } from 'vitest-mock-extended'
-import { buildSpace, Resource } from '@ownclouders/web-client'
+import { buildSpace, Resource, SpaceResource } from '@ownclouders/web-client'
 import { ListFilesResult } from '@ownclouders/web-client/webdav'
 import { Drive } from '@ownclouders/web-client/graph/generated'
 import { createTestingPinia } from 'web-test-helpers'
@@ -22,10 +22,10 @@ const loadingServiceMock = mock<LoadingService>({
     return callback(mock<LoadingTaskCallbackArguments>())
   }
 })
-let resourcesToMove
-let sourceSpace
-let targetSpace
-let targetFolder
+let resourcesToMove: Resource[]
+let sourceSpace: SpaceResource
+let targetSpace: SpaceResource
+let targetFolder: Resource
 
 describe('resourcesTransfer', () => {
   beforeEach(() => {
@@ -63,7 +63,7 @@ describe('resourcesTransfer', () => {
     { name: 'b.png', extension: 'png', expectName: 'b (2).png', existing: [{ name: 'b (1).png' }] }
   ])('should name duplicate file correctly', (dataSet) => {
     const existing = dataSet.existing ? [...resourcesToMove, ...dataSet.existing] : resourcesToMove
-    const result = resolveFileNameDuplicate(dataSet.name, dataSet.extension, existing)
+    const result = resolveFileNameDuplicate(dataSet.name, dataSet.extension, existing as Resource[])
     expect(result).toEqual(dataSet.expectName)
   })
 

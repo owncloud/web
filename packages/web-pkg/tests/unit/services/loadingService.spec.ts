@@ -49,8 +49,8 @@ describe('LoadingService', () => {
 
     service.addTask(
       ({ setProgress }) => {
-        const promises = []
-        const actions = [1, 2, 3, 4]
+        const promises: Promise<void>[] = []
+        const actions = [1, 2, 3, 4] as const
         for (const action of actions) {
           promises.push(
             new Promise((resolve) => {

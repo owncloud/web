@@ -294,7 +294,7 @@ export default defineComponent({
             .listPermissions(props.space?.id, id)
             .then((value) => {
               const data = value.data
-              const permissions = ((data as any).value || []) as Permission[]
+              const permissions = data.value || []
               buildShares({ p: permissions, resourceId: id, indirect: true })
             })
         )

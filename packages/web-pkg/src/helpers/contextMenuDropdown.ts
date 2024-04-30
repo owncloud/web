@@ -1,4 +1,3 @@
-import OcButton from 'design-system/src/components/OcButton/OcButton.vue'
 import OcDrop from 'design-system/src/components/OcDrop/OcDrop.vue'
 import { ComponentPublicInstance } from 'vue'
 
@@ -14,7 +13,7 @@ const isKeyboardEvent = (event: Event): event is KeyboardEvent => {
 export const displayPositionedDropdown = (
   dropdown: ComponentPublicInstance<typeof OcDrop>,
   event: MouseEvent | KeyboardEvent,
-  contextMenuButton: ComponentPublicInstance<typeof OcButton>
+  contextMenuButton: ComponentPublicInstance<unknown>
 ) => {
   const contextMenuButtonPos = contextMenuButton.$el.getBoundingClientRect()
 
