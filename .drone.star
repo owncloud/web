@@ -1222,6 +1222,7 @@ def ocisService(type, tika_enabled = False, enforce_password_public_link = False
         "FRONTEND_SEARCH_MIN_LENGTH": "2",
         "FRONTEND_OCS_ENABLE_DENIALS": True,
         "OCIS_PASSWORD_POLICY_BANNED_PASSWORDS_LIST": "%s/tests/drone/banned-passwords.txt" % dir["web"],
+        "PROXY_CSP_CONFIG_FILE_LOCATION": "%s/tests/drone/csp.yaml" % dir["web"],
     }
     if type == "keycloak":
         environment["PROXY_AUTOPROVISION_ACCOUNTS"] = "true"
@@ -1235,6 +1236,7 @@ def ocisService(type, tika_enabled = False, enforce_password_public_link = False
         environment["OCIS_EXCLUDE_RUN_SERVICES"] = "idp"
         environment["GRAPH_ASSIGN_DEFAULT_USER_ROLE"] = "false"
         environment["GRAPH_USERNAME_MATCH"] = "none"
+        environment["KEYCLOAK_DOMAIN"] = "keycloak:8443"
 
     if type == "app-provider":
         environment["GATEWAY_GRPC_ADDR"] = "0.0.0.0:9142"
@@ -1242,6 +1244,8 @@ def ocisService(type, tika_enabled = False, enforce_password_public_link = False
         environment["MICRO_REGISTRY_ADDRESS"] = "0.0.0.0:9233"
         environment["NATS_NATS_HOST"] = "0.0.0.0"
         environment["NATS_NATS_PORT"] = 9233
+        environment["COLLABORA_DOMAIN"] = "collabora:9980"
+        environment["ONLYOFFICE_DOMAIN"] = "onlyoffice:443"
     else:
         environment["WEB_UI_CONFIG_FILE"] = "%s" % dir["ocisConfig"]
 
