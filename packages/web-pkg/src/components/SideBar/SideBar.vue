@@ -64,7 +64,6 @@
               <component
                 :is="panel.component"
                 v-bind="panel.componentAttrs?.(panelContext) || {}"
-                @scroll-to-element="scrollToElement"
               />
             </slot>
           </div>
@@ -194,22 +193,6 @@ export default defineComponent({
     hiddenObserver.disconnect()
   },
   methods: {
-    scrollToElement({ element, panelName }) {
-      const sideBarPanelBodyEl = document.getElementsByClassName(
-        `sidebar-panel__body-${panelName}`
-      )[0]
-
-      const sideBarPanelPadding = Number(
-        window.getComputedStyle(sideBarPanelBodyEl).getPropertyValue('padding')?.split('px')[0]
-      )
-
-      sideBarPanelBodyEl.scrollTo(
-        0,
-        element.getBoundingClientRect().y -
-          sideBarPanelBodyEl.getBoundingClientRect().y -
-          sideBarPanelPadding
-      )
-    },
     setSidebarPanel(panel: string) {
       this.$emit('selectPanel', panel)
     },

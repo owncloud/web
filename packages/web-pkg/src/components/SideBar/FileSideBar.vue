@@ -11,9 +11,6 @@
     :loading="isLoading"
     v-bind="$attrs"
     data-custom-key-bindings-disabled="true"
-    @before-unmount="destroySideBar"
-    @mounted="focusSideBar"
-    @file-changed="focusSideBar"
     @select-panel="setActiveSideBarPanel"
     @close="closeSideBar"
   >
@@ -151,19 +148,8 @@ export default defineComponent({
     const closeSideBar = () => {
       eventBus.publish(SideBarEventTopics.close)
     }
-    const setActiveSideBarPanel = (panelName) => {
+    const setActiveSideBarPanel = (panelName: string) => {
       eventBus.publish(SideBarEventTopics.setActivePanel, panelName)
-    }
-    const focusSideBar = (component, event) => {
-      component.focus({
-        from: document.activeElement,
-        to: component.sidebar?.$el,
-        revert: event === 'beforeUnmount'
-      })
-    }
-    const destroySideBar = (component, event) => {
-      focusSideBar(component, event)
-      eventBus.publish(SideBarEventTopics.close)
     }
     const isFileHeaderVisible = computed(() => {
       return (
@@ -433,8 +419,6 @@ export default defineComponent({
       loadedResource,
       setActiveSideBarPanel,
       closeSideBar,
-      destroySideBar,
-      focusSideBar,
       panelContext,
       availablePanels,
       isFileHeaderVisible,
