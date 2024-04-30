@@ -56,8 +56,8 @@ export default defineComponent({
     const uppyService = useService<UppyService>('$uppyService')
     const isRemoteUploadInProgress = ref(uppyService.isRemoteUploadInProgress())
 
-    let uploadStartedSub
-    let uploadCompletedSub
+    let uploadStartedSub: string
+    let uploadCompletedSub: string
 
     const resource = computed(() => {
       return { extension: '', isFolder: props.isFolder } as Resource

@@ -154,6 +154,7 @@
 import { useResourcesViewDefaults } from '../../composables'
 import {
   AppLoadingSpinner,
+  SearchResult,
   useCapabilityStore,
   useConfigStore,
   useResourcesStore
@@ -166,12 +167,23 @@ import { ContextActions, FileSideBar } from '@ownclouders/web-pkg'
 import { debounce } from 'lodash-es'
 import { useGettext } from 'vue3-gettext'
 import { AppBar } from '@ownclouders/web-pkg'
-import { computed, defineComponent, nextTick, onMounted, Ref, ref, unref, watch } from 'vue'
+import {
+  ComponentPublicInstance,
+  computed,
+  defineComponent,
+  nextTick,
+  onMounted,
+  PropType,
+  Ref,
+  ref,
+  unref,
+  watch
+} from 'vue'
 import ListInfo from '../FilesList/ListInfo.vue'
 import { Pagination } from '@ownclouders/web-pkg'
 import { useFileActions } from '@ownclouders/web-pkg'
 import { searchLimit } from '../../search/sdk/list'
-import { Resource } from '@ownclouders/web-client'
+import { Resource, SearchResource, call } from '@ownclouders/web-client'
 import FilesViewWrapper from '../FilesViewWrapper.vue'
 import {
   queryItemAsString,
@@ -225,7 +237,7 @@ export default defineComponent({
   },
   props: {
     searchResult: {
-      type: Object,
+      type: Object as PropType<SearchResult>,
       default: function () {
         return { totalResults: null, values: [] }
       }
@@ -287,7 +299,7 @@ export default defineComponent({
     const loadAvailableTagsTask = useTask(function* () {
       const {
         data: { value: tags = [] }
-      } = yield clientService.graphAuthenticated.tags.getTags()
+      } = yield* call(clientService.graphAuthenticated.tags.getTags())
       availableTags.value = [...tags.map((t) => ({ id: t, label: t }))]
     })
 
@@ -296,7 +308,7 @@ export default defineComponent({
     })
 
     // transifex hack b/c dynamically fetched values from backend will otherwise not be automatically translated
-    const lastModifiedTranslations = {
+    const lastModifiedTranslations: Record<string, string> = {
       today: $gettext('today'),
       yesterday: $gettext('yesterday'),
       'this week': $gettext('this week'),
@@ -317,7 +329,7 @@ export default defineComponent({
       })) || []
     )
 
-    const mediaTypeMapping = {
+    const mediaTypeMapping: Record<string, { label: string; icon: string }> = {
       file: { label: $gettext('File'), icon: 'txt' },
       folder: { label: $gettext('Folder'), icon: 'folder' },
       document: { label: $gettext('Document'), icon: 'doc' },
@@ -336,7 +348,7 @@ export default defineComponent({
       ).map((key) => ({ id: key, ...mediaTypeMapping[key] }))
     })
 
-    const getFakeResourceForIcon = (item) => {
+    const getFakeResourceForIcon = (item: { label: string; icon: string }) => {
       return { type: 'file', extension: item.icon, isFolder: item.icon == 'folder' } as Resource
     }
 
@@ -512,7 +524,7 @@ export default defineComponent({
         'Found %{totalResults}, showing the %{itemCount} best matching results',
         {
           itemCount: this.itemCount.toString(),
-          totalResults: this.searchResult.totalResults
+          totalResults: this.searchResult.totalResults.toString()
         }
       )
     }
@@ -525,10 +537,10 @@ export default defineComponent({
         }
 
         this.clearResourceList()
-        this.initResourceList({
+        this.initResourceList<SearchResource>({
           currentFolder: null,
           resources: this.searchResult.values.length
-            ? this.searchResult.values.map((searchResult) => searchResult.data)
+            ? this.searchResult.values.map((searchResult) => searchResult.data as SearchResource)
             : []
         })
         await nextTick()
@@ -540,7 +552,7 @@ export default defineComponent({
     visibilityObserver.disconnect()
   },
   methods: {
-    rowMounted(resource: Resource, component) {
+    rowMounted(resource: Resource, component: ComponentPublicInstance<unknown>) {
       if (!this.displayThumbnails) {
         return
       }

@@ -1,3 +1,4 @@
+import { Resource } from '@ownclouders/web-client'
 import FileDetailsMultiple from '../../../../../src/components/SideBar/Details/FileDetailsMultiple.vue'
 import { defaultPlugins, shallowMount } from 'web-test-helpers'
 
@@ -13,25 +14,25 @@ const folderA = {
   type: 'folder',
   mdate: 'Wed, 21 Oct 2015 07:28:00 GMT',
   size: '740'
-}
+} as Resource
 const folderB = {
   id: '2',
   type: 'folder',
   mdate: 'Wed, 21 Oct 2015 07:28:00 GMT',
   size: '740'
-}
+} as Resource
 const fileA = {
   id: '3',
   type: 'file',
   mdate: 'Wed, 21 Oct 2015 07:28:00 GMT',
   size: '740'
-}
+} as Resource
 const fileB = {
   id: '4',
   type: 'file',
   mdate: 'Wed, 21 Oct 2015 07:28:00 GMT',
   size: '740'
-}
+} as Resource
 
 describe('Details Multiple Selection SideBar Item', () => {
   it('should display information for two selected folders', () => {
@@ -57,7 +58,7 @@ describe('Details Multiple Selection SideBar Item', () => {
   })
 })
 
-function createWrapper(resources) {
+function createWrapper(resources: Resource[]) {
   return {
     wrapper: shallowMount(FileDetailsMultiple, {
       global: {

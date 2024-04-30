@@ -41,7 +41,11 @@ describe('Favorites view', () => {
   })
 })
 
-function getMountedWrapper({ mocks = {}, files = [], loading = false } = {}) {
+function getMountedWrapper({
+  mocks = {},
+  files = [],
+  loading = false
+}: { mocks?: Record<string, unknown>; files?: Resource[]; loading?: boolean } = {}) {
   const plugins = defaultPlugins()
 
   vi.mocked(useResourcesViewDefaults).mockImplementation(() => {

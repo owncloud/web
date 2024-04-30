@@ -2,7 +2,7 @@ import { FolderLoader, FolderLoaderTask, TaskContext } from '../folder'
 import { Router } from 'vue-router'
 import { useTask } from 'vue-concurrency'
 import { isLocationSharesActive } from '@ownclouders/web-pkg'
-import { buildOutgoingShareResource } from '@ownclouders/web-client'
+import { buildOutgoingShareResource, call } from '@ownclouders/web-client'
 
 export class FolderLoaderSharedViaLink implements FolderLoader {
   public isEnabled(): boolean {
@@ -27,7 +27,7 @@ export class FolderLoaderSharedViaLink implements FolderLoader {
 
       const {
         data: { value }
-      } = yield clientService.graphAuthenticated.drives.listSharedByMe()
+      } = yield* call(clientService.graphAuthenticated.drives.listSharedByMe())
 
       const resources = value
         .filter((s) => s.permissions.some(({ link }) => !!link))

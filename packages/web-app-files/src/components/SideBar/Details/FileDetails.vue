@@ -242,7 +242,7 @@ export default defineComponent({
        */
       return resourcesStore.areWebDavDetailsShown && unref(resource).webDavPath
     })
-    const formatDateRelative = (date) => {
+    const formatDateRelative = (date: string) => {
       return formatRelativeDateFromJSDate(new Date(date), language.current)
     }
 

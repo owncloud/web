@@ -3,6 +3,7 @@ import { Router } from 'vue-router'
 import { useTask } from 'vue-concurrency'
 import { isLocationPublicActive, isLocationSpacesActive } from '@ownclouders/web-pkg'
 import {
+  call,
   isPersonalSpaceResource,
   isPublicSpaceResource,
   isShareSpaceResource,
@@ -48,10 +49,9 @@ export class FolderLoaderSpace implements FolderLoader {
         resourcesStore.clearResourceList()
 
         // eslint-disable-next-line prefer-const
-        let { resource: currentFolder, children: resources } = yield webdav.listFiles(space, {
-          path,
-          fileId
-        })
+        let { resource: currentFolder, children: resources } = yield* call(
+          webdav.listFiles(space, { path, fileId })
+        )
         // if current folder has no id (= singe file public link) we must not correct the route
         if (currentFolder.id) {
           replaceInvalidFileRoute({ space, resource: currentFolder, path, fileId })

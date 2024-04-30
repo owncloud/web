@@ -172,6 +172,16 @@ import SetLinkPasswordModal from '../../../Modals/SetLinkPasswordModal.vue'
 import { storeToRefs } from 'pinia'
 import { SharingLinkType } from '@ownclouders/web-client/graph/generated'
 
+type EditOption = {
+  id: string
+  title: string
+  icon: string
+  method: () => void
+  variation?: string
+  remove?: any
+  showDatepicker?: boolean
+}
+
 export default defineComponent({
   name: 'DetailsAndEdit',
   components: { LinkRoleDropdown },
@@ -308,8 +318,8 @@ export default defineComponent({
     }
   },
   computed: {
-    editOptions() {
-      const result = []
+    editOptions(): EditOption[] {
+      const result: EditOption[] = []
 
       if (this.canRename) {
         result.push({
@@ -409,7 +419,7 @@ export default defineComponent({
       return result
     },
 
-    deleteOption() {
+    deleteOption(): EditOption {
       return {
         id: 'delete',
         title: this.$gettext('Delete link'),

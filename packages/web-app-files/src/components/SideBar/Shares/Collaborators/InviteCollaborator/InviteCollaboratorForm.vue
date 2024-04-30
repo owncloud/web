@@ -8,7 +8,7 @@
         :options="accountTypes"
         :label="$gettext('Account type')"
         class="cern-account-type-input"
-        :reduce="(option) => option.description"
+        :reduce="(option: AccountType) => option.description"
       >
         <template #option="{ description }">
           <span class="option oc-text-xsmall" v-text="description" />
@@ -29,7 +29,7 @@
         :label="selectedCollaboratorsLabel"
         aria-describedby="files-share-invite-hint"
         :dropdown-should-open="
-          ({ open, search }) => open && search.length >= minSearchLength && !searchInProgress
+          ({ open, search }: DropDownShouldOpenOptions) => open && search.length >= minSearchLength && !searchInProgress
         "
         @search:input="onSearch"
         @update:model-value="resetFocusOnInvite"
@@ -139,7 +139,8 @@ import {
   CollaboratorShare,
   GraphShareRoleIdMap,
   ShareRole,
-  ShareTypes
+  ShareTypes,
+  call
 } from '@ownclouders/web-client'
 import {
   useCapabilityStore,
@@ -161,9 +162,16 @@ import { useGettext } from 'vue3-gettext'
 import { buildSpace, isProjectSpaceResource } from '@ownclouders/web-client'
 
 // just a dummy function to trick gettext tools
-const $gettext = (str) => {
+const $gettext = (str: string) => {
   return str
 }
+
+type AccountType = {
+  prefix: string
+  description: string
+}
+
+type DropDownShouldOpenOptions = { open: boolean; search: string[] }
 
 export default defineComponent({
   name: 'InviteCollaboratorForm',
@@ -267,7 +275,7 @@ export default defineComponent({
     })
 
     const accountType = ref('standard')
-    const accountTypes = [
+    const accountTypes: AccountType[] = [
       { prefix: '', description: 'standard' },
       { prefix: 'a:', description: 'secondary' },
       { prefix: 'a:', description: 'service' },
@@ -281,13 +289,12 @@ export default defineComponent({
 
     const fetchRecipientsTask = useTask(function* (signal, query: string) {
       const client = clientService.graphAuthenticated
-      const { data: userData } = yield client.users.listUsers(
-        'displayName',
-        null,
-        null,
-        `"${query}"`
+      const { data: userData } = yield* call(
+        client.users.listUsers('displayName', null, null, `"${query}"`)
       )
-      const { data: groupData } = yield client.groups.listGroups('displayName', null, `"${query}"`)
+      const { data: groupData } = yield* call(
+        client.groups.listGroups('displayName', null, `"${query}"`)
+      )
 
       const users = (userData.value || []).map((u) => ({
         ...u,
@@ -330,7 +337,7 @@ export default defineComponent({
       saving.value = true
 
       const saveQueue = new PQueue({ concurrency: unref(createSharesConcurrentRequests) })
-      const savePromises = []
+      const savePromises: Promise<void>[] = []
       const errors: { displayName: string; error: Error }[] = []
       const addedShares: CollaboratorShare[] = []
 

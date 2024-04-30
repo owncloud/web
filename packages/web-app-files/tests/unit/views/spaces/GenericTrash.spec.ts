@@ -63,6 +63,11 @@ function getMountedWrapper({
   props = {} as PartialComponentProps<typeof GenericTrash>,
   files = [],
   loading = false
+}: {
+  mocks?: Record<string, unknown>
+  props?: PartialComponentProps<typeof GenericTrash>
+  files?: Resource[]
+  loading?: boolean
 } = {}) {
   vi.mocked(useResourcesViewDefaults).mockImplementation(() =>
     useResourcesViewDefaultsMock({

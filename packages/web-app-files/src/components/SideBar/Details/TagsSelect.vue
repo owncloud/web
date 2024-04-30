@@ -83,7 +83,7 @@ import {
 import { useGettext } from 'vue3-gettext'
 import { useTask } from 'vue-concurrency'
 import diff from 'lodash-es/difference'
-import { Resource } from '@ownclouders/web-client'
+import { call, Resource } from '@ownclouders/web-client'
 
 type TagOption = {
   label: string
@@ -144,7 +144,7 @@ export default defineComponent({
     const loadAvailableTagsTask = useTask(function* () {
       const {
         data: { value: tags = [] }
-      } = yield clientService.graphAuthenticated.tags.getTags()
+      } = yield* call(clientService.graphAuthenticated.tags.getTags())
 
       allTags = tags
       const selectedLabels = new Set(unref(selectedTags).map((o) => o.label))
@@ -241,12 +241,12 @@ export default defineComponent({
       }
     })
 
-    const keydownMethods = (map, vm) => {
+    const keydownMethods = (map: Record<string, (e: Event) => void>) => {
       const objectMapping = {
         ...map
       }
-      objectMapping[KeyCode.Backspace] = async (e) => {
-        if (e.target.value || selectedTags.value.length === 0) {
+      objectMapping[KeyCode.Backspace] = async (e: Event) => {
+        if ((e.target as HTMLInputElement).value || selectedTags.value.length === 0) {
           return
         }
 

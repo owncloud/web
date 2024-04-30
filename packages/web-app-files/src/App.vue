@@ -20,7 +20,7 @@ export default defineComponent({
     const hideDropzone = () => {
       dragareaEnabled.value = false
     }
-    const onDragOver = (event) => {
+    const onDragOver = (event: DragEvent) => {
       dragareaEnabled.value = (event.dataTransfer.types || []).some((e) => e === 'Files')
     }
 

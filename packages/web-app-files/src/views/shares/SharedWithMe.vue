@@ -182,8 +182,8 @@ export default defineComponent({
       const selectedShareTypes = queryItemAsString(unref(selectedShareTypesQuery))?.split('+')
       if (selectedShareTypes?.length) {
         result = result.filter(({ shareTypes }) => {
-          return selectedShareTypes
-            .map((t) => ShareTypes[t].value)
+          return ShareTypes.getByKeys(selectedShareTypes)
+            .map(({ value }) => value)
             .some((t) => shareTypes.includes(t))
         })
       }

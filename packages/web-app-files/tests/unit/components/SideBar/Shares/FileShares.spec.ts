@@ -12,7 +12,7 @@ import {
   defaultStubs
 } from 'web-test-helpers'
 import CollaboratorListItem from '../../../../../src/components/SideBar/Shares/Collaborators/ListItem.vue'
-import { CapabilityStore, useCanShare, useModals } from '@ownclouders/web-pkg'
+import { AncestorMetaData, CapabilityStore, useCanShare, useModals } from '@ownclouders/web-pkg'
 import { User } from '@ownclouders/web-client/graph/generated'
 
 vi.mock('@ownclouders/web-pkg', async (importOriginal) => ({
@@ -53,7 +53,7 @@ describe('FileShares', () => {
   })
 
   describe('collaborators list', () => {
-    let collaborators
+    let collaborators: CollaboratorShare[]
     beforeEach(() => {
       collaborators = [getCollaborator(), getCollaborator(), getCollaborator(), getCollaborator()]
     })
@@ -77,7 +77,7 @@ describe('FileShares', () => {
       const indirectCollaborator = { ...getCollaborator(), indirect: true }
       const ancestorMetaData = {
         '/somePath': { id: indirectCollaborator.resourceId }
-      }
+      } as unknown as AncestorMetaData
       const { wrapper } = getWrapper({ collaborators: [indirectCollaborator], ancestorMetaData })
       const listItemStub = wrapper.findComponent<typeof CollaboratorListItem>(
         'collaborator-list-item-stub'
@@ -109,8 +109,7 @@ describe('FileShares', () => {
       expect(wrapper.vm.isShareModifiable(collaborators[0])).toBe(false)
     })
     it('share should not be modifiable if user is not manager', () => {
-      const space = mock<SpaceResource>({ driveType: 'project' })
-      ;(space as any).isManager = vi.fn(() => false)
+      const space = mock<SpaceResource>({ driveType: 'project', isManager: () => false })
       collaborators[0]['indirect'] = true
       const { wrapper } = getWrapper({ space, mountType: shallowMount, collaborators })
       expect(wrapper.vm.isShareModifiable(collaborators[0])).toBe(false)
@@ -138,7 +137,7 @@ describe('FileShares', () => {
     it('does not load space members if a space is given but the current user not a member', () => {
       const user = { id: '1' } as User
       const space = mock<SpaceResource>({ driveType: 'project' })
-      const spaceMembers = [{ collaborator: { name: `${user}-2` } }]
+      const spaceMembers = [{ sharedWith: { id: `${user}-2` } }] as CollaboratorShare[]
       const collaborator = getCollaborator()
       collaborator.sharedWith = {
         ...collaborator.sharedWith,
@@ -169,6 +168,16 @@ function getWrapper({
   showAllOnLoad = true,
   ancestorMetaData = {},
   canShare = true
+}: {
+  mountType?: typeof mount
+  resource?: Resource
+  space?: SpaceResource
+  collaborators?: CollaboratorShare[]
+  spaceMembers?: CollaboratorShare[]
+  user?: User
+  showAllOnLoad?: boolean
+  ancestorMetaData?: AncestorMetaData
+  canShare?: boolean
 } = {}) {
   vi.mocked(useCanShare).mockReturnValue({ canShare: () => canShare })
 

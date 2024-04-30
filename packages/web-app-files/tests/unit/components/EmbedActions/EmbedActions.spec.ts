@@ -47,7 +47,7 @@ describe('EmbedActions', () => {
 
     it('should emit select event with currentFolder as selected resource when select action is triggered', async () => {
       const { wrapper, mocks } = getWrapper({
-        currentFolder: { id: '1' },
+        currentFolder: { id: '1' } as Resource,
         isLocationPicker: true
       })
 
@@ -107,6 +107,11 @@ function getWrapper(
     currentFolder = undefined,
     createLinksActionEnabled = true,
     isLocationPicker = false
+  }: {
+    selectedIds?: string[]
+    currentFolder?: Resource
+    createLinksActionEnabled?: boolean
+    isLocationPicker?: boolean
   } = {
     selectedIds: []
   }

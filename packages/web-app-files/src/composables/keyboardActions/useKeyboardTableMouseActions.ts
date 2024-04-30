@@ -21,7 +21,13 @@ export const useKeyboardTableMouseActions = (
     resourcesStore.toggleSelection(resource.id)
   }
 
-  const handleShiftClickAction = ({ resource, skipTargetSelection }) => {
+  const handleShiftClickAction = ({
+    resource,
+    skipTargetSelection
+  }: {
+    resource: Resource
+    skipTargetSelection: boolean
+  }) => {
     const parent = document.querySelectorAll(`[data-item-id='${resource.id}']`)[0]
     const resourceNodes = Object.values(parent.parentNode.children)
     const latestNode = resourceNodes.find(
@@ -47,7 +53,13 @@ export const useKeyboardTableMouseActions = (
     resourcesStore.setLastSelectedId(resource.id)
   }
 
-  const handleTilesShiftClickAction = ({ resource, skipTargetSelection }) => {
+  const handleTilesShiftClickAction = ({
+    resource,
+    skipTargetSelection
+  }: {
+    resource: Resource
+    skipTargetSelection: boolean
+  }) => {
     const tilesListCard = document.querySelectorAll('#tiles-view > ul > li > div')
     const startIndex = findIndex(
       tilesListCard,

@@ -42,7 +42,7 @@
 </template>
 
 <script lang="ts">
-import { isLocationSharesActive } from '@ownclouders/web-pkg'
+import { isLocationSharesActive, RouteShareTypes } from '@ownclouders/web-pkg'
 import {
   locationSharesViaLink,
   locationSharesWithMe,
@@ -53,6 +53,7 @@ import { computed, defineComponent, unref } from 'vue'
 import { useRouter } from '@ownclouders/web-pkg'
 import { useActiveLocation } from '@ownclouders/web-pkg'
 import { useGettext } from 'vue3-gettext'
+import { RouteRecordNormalized } from 'vue-router'
 
 export default defineComponent({
   setup() {
@@ -62,38 +63,38 @@ export default defineComponent({
       locationSharesWithMe,
       locationSharesWithOthers,
       locationSharesViaLink
-    ].reduce((routes, route) => {
-      routes[route.name] = router.getRoutes().find((r) => r.name === route.name)
+    ].reduce<Record<string, RouteRecordNormalized>>((routes, route) => {
+      routes[route.name as string] = router.getRoutes().find((r) => r.name === route.name)
       return routes
     }, {})
     const sharesWithMeActive = useActiveLocation(
       isLocationSharesActive,
-      locationSharesWithMe.name as string
+      locationSharesWithMe.name as RouteShareTypes
     )
     const sharesWithOthersActive = useActiveLocation(
       isLocationSharesActive,
-      locationSharesWithOthers.name as string
+      locationSharesWithOthers.name as RouteShareTypes
     )
     const sharesViaLinkActive = useActiveLocation(
       isLocationSharesActive,
-      locationSharesViaLink.name as string
+      locationSharesViaLink.name as RouteShareTypes
     )
     const navItems = computed(() => [
       {
         icon: 'share-forward',
-        to: sharesRoutes[locationSharesWithMe.name].path,
+        to: sharesRoutes[locationSharesWithMe.name as string].path,
         text: $gettext('Shared with me'),
         active: unref(sharesWithMeActive)
       },
       {
         icon: 'reply',
-        to: sharesRoutes[locationSharesWithOthers.name].path,
+        to: sharesRoutes[locationSharesWithOthers.name as string].path,
         text: $gettext('Shared with others'),
         active: unref(sharesWithOthersActive)
       },
       {
         icon: 'link',
-        to: sharesRoutes[locationSharesViaLink.name].path,
+        to: sharesRoutes[locationSharesViaLink.name as string].path,
         text: $gettext('Shared via link'),
         active: unref(sharesViaLinkActive)
       }

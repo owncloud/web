@@ -181,6 +181,7 @@
 
 <script lang="ts">
 import {
+  FileAction,
   isLocationPublicActive,
   isLocationSpacesActive,
   useClipboardStore,
@@ -219,7 +220,7 @@ import {
   isPublicSpaceResource,
   isShareSpaceResource
 } from '@ownclouders/web-client'
-import { useService, useUpload, UppyService, UppyResource } from '@ownclouders/web-pkg'
+import { useService, useUpload, UppyService, UploadResult } from '@ownclouders/web-pkg'
 import { HandleUpload } from 'web-app-files/src/HandleUpload'
 import { useRoute } from 'vue-router'
 import { useGettext } from 'vue3-gettext'
@@ -336,13 +337,13 @@ export default defineComponent({
       return action.isDisabled ? action.isDisabled() : false
     }
 
-    const handlePasteFileEvent = (event) => {
+    const handlePasteFileEvent = (event: ClipboardEvent) => {
       // Ignore file in clipboard if there are already files from owncloud in the clipboard
       if (unref(clipboardResources).length || !unref(canUpload)) {
         return
       }
       // Browsers only allow single files to be pasted for security reasons
-      const items = (event.clipboardData || event.originalEvent.clipboardData).items
+      const items = event.clipboardData.items
       const fileItem = [...items].find((i) => i.kind === 'file')
       if (!fileItem) {
         return
@@ -352,9 +353,9 @@ export default defineComponent({
       event.preventDefault()
     }
 
-    const onUploadComplete = async (result) => {
+    const onUploadComplete = async (result: UploadResult) => {
       if (result.successful) {
-        const file = result.successful[0] as UppyResource
+        const file = result.successful[0]
 
         if (!file) {
           return
@@ -496,7 +497,7 @@ export default defineComponent({
     }
   },
   methods: {
-    getIconResource(fileHandler) {
+    getIconResource(fileHandler: FileAction) {
       return { type: 'file', extension: fileHandler.ext } as Resource
     }
   }

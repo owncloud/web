@@ -32,7 +32,7 @@ describe('DriveResolver view', () => {
   })
   it('renders the "generic-trash"-component when on a trash route', async () => {
     const { wrapper } = getMountedWrapper({
-      space: mockDeep<SpaceResource>({ driveType: 'project' }),
+      space: mock<SpaceResource>({ driveType: 'project' }),
       currentRouteName: 'files-trash-generic'
     })
     await wrapper.vm.$nextTick()
@@ -41,14 +41,18 @@ describe('DriveResolver view', () => {
   })
   it('renders the "generic-space"-component when a space is given', async () => {
     const { wrapper } = getMountedWrapper({
-      space: mockDeep<SpaceResource>({ driveType: 'project' })
+      space: mock<SpaceResource>({ driveType: 'project' })
     })
     await wrapper.vm.$nextTick()
 
     expect(wrapper.find('generic-space-stub').exists()).toBeTruthy()
   })
   it('redirects to the public drop page in a public context with "upload-only"-permissions', async () => {
-    const space = { id: '1', getDriveAliasAndItem: vi.fn(), driveType: 'public' }
+    const space = mock<SpaceResource>({
+      id: '1',
+      getDriveAliasAndItem: vi.fn(),
+      driveType: 'public'
+    })
     const clientService = mockDeep<ClientService>()
     clientService.webdav.getFileInfo.mockResolvedValue(
       mockDeep<PublicSpaceResource>({ publicLinkPermission: SharePermissionBit.Create })
@@ -68,8 +72,16 @@ describe('DriveResolver view', () => {
     })
   })
   it('redirects to personal space if user has access to the resource via their personal space', async () => {
-    const space = { id: '1', getDriveAliasAndItem: vi.fn(), driveType: 'public' }
-    const internalSpace = { id: '1', getDriveAliasAndItem: vi.fn(), driveType: 'personal' }
+    const space = mock<SpaceResource>({
+      id: '1',
+      getDriveAliasAndItem: vi.fn(),
+      driveType: 'public'
+    })
+    const internalSpace = mock<SpaceResource>({
+      id: '1',
+      getDriveAliasAndItem: vi.fn(),
+      driveType: 'personal'
+    })
     const clientService = mockDeep<ClientService>()
     clientService.webdav.getPathForFileId.mockResolvedValue('/path')
     clientService.webdav.getFileInfo.mockResolvedValue(mock<Resource>())
@@ -91,7 +103,11 @@ describe('DriveResolver view', () => {
     )
   })
   it('redirects to private link if user has access to the resource via a share', async () => {
-    const space = { id: '1', getDriveAliasAndItem: vi.fn(), driveType: 'public' }
+    const space = mock<SpaceResource>({
+      id: '1',
+      getDriveAliasAndItem: vi.fn(),
+      driveType: 'public'
+    })
     const clientService = mockDeep<ClientService>()
     clientService.webdav.getPathForFileId.mockResolvedValue('/path')
     const { wrapper, mocks } = getMountedWrapper({
@@ -129,11 +145,19 @@ function getMountedWrapper({
   userContextReady = false,
   driveAliasAndItem = 'personal/einstein/file',
   fileId = '1'
+}: {
+  mocks?: Record<string, unknown>
+  space?: SpaceResource
+  internalSpace?: SpaceResource
+  currentRouteName?: string
+  userContextReady?: boolean
+  driveAliasAndItem?: string
+  fileId?: string
 } = {}) {
   vi.mocked(useRouteParam).mockReturnValue(ref(driveAliasAndItem))
   vi.mocked(queryItemAsString).mockReturnValue(fileId)
   vi.mocked(useDriveResolver).mockImplementation(() => ({
-    space,
+    space: ref(space),
     item: ref('/'),
     itemId: computed(() => 'id'),
     loading: ref(false)

@@ -72,6 +72,10 @@ export abstract class ShareTypes {
     return values.map((value) => this.getByValue(value))
   }
 
+  static getByKeys(keys: string[]): ShareType[] {
+    return keys.map((key) => this.all.find((type) => type.key === key))
+  }
+
   static getValues(types: ShareType[]): number[] {
     return types.map((t) => t.value)
   }

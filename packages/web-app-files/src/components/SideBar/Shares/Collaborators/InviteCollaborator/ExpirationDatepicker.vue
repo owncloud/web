@@ -48,7 +48,7 @@
 
 <script lang="ts">
 import { DateTime } from 'luxon'
-import { computed, watch, defineComponent, customRef } from 'vue'
+import { computed, watch, defineComponent, customRef, PropType } from 'vue'
 import { useCapabilityStore } from '@ownclouders/web-pkg'
 import { ShareTypes } from '@ownclouders/web-client'
 import { formatRelativeDateFromDateTime, getLocaleFromLanguage } from '@ownclouders/web-pkg'
@@ -58,9 +58,9 @@ export default defineComponent({
   name: 'DateCurrentpicker',
   props: {
     shareTypes: {
-      type: Array,
+      type: Array as PropType<number[]>,
       required: false,
-      default: () => []
+      default: (): number[] => []
     }
   },
   emits: ['optionChange'],
@@ -107,7 +107,7 @@ export default defineComponent({
     })
     const dateMax = computed(() => (enforced.value ? dateDefault.value : null))
     const dateCurrent = customRef<Date>((track, trigger) => {
-      let date = null
+      let date: Date = null
       return {
         get() {
           track()

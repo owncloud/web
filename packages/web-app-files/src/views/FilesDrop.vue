@@ -134,14 +134,14 @@ export default defineComponent({
     const dragareaEnabled = ref(false)
     const loading = ref(true)
     const errorMessage = ref(null)
-    let dragOver
-    let dragOut
-    let drop
+    let dragOver: string
+    let dragOut: string
+    let drop: string
 
     const hideDropzone = () => {
       dragareaEnabled.value = false
     }
-    const onDragOver = (event) => {
+    const onDragOver = (event: DragEvent) => {
       dragareaEnabled.value = (event.dataTransfer.types || []).some((e) => e === 'Files')
     }
 

@@ -9,6 +9,7 @@ import SpaceProjects from './views/spaces/Projects.vue'
 import TrashOverview from './views/trash/Overview.vue'
 import translations from '../l10n/translations.json'
 import {
+  ApplicationInformation,
   defineWebApplication,
   useCapabilityStore,
   useSpacesStore,
@@ -21,13 +22,14 @@ import { AppNavigationItem } from '@ownclouders/web-pkg'
 // dirty: importing view from other extension within project
 import SearchResults from '../../web-app-search/src/views/List.vue'
 import { isPersonalSpaceResource, isShareSpaceResource } from '@ownclouders/web-client'
+import { ComponentCustomProperties } from 'vue'
 
 // just a dummy function to trick gettext tools
-function $gettext(msg) {
+function $gettext(msg: string) {
   return msg
 }
 
-const appInfo = {
+const appInfo: ApplicationInformation = {
   name: $gettext('Files'),
   id: 'files',
   icon: 'resource-type-folder',
@@ -36,7 +38,7 @@ const appInfo = {
   extensions: []
 }
 
-export const navItems = (context): AppNavigationItem[] => {
+export const navItems = (context: ComponentCustomProperties): AppNavigationItem[] => {
   const spacesStores = useSpacesStore()
   const userStore = useUserStore()
   const capabilityStore = useCapabilityStore()

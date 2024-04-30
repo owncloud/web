@@ -229,7 +229,7 @@ export default defineComponent({
     const { current: currentLanguage, $gettext } = useGettext()
     const filterTerm = ref('')
     const markInstance = ref(undefined)
-    const imageContentObject = ref({})
+    const imageContentObject = ref<Record<string, { fileId: string; data: string }>>({})
     const previewService = usePreviewService()
     const configStore = useConfigStore()
 

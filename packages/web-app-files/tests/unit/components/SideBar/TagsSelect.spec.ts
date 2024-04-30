@@ -123,7 +123,11 @@ describe('Tag Select', () => {
   })
 })
 
-function createWrapper(resource, clientService = mockDeep<ClientService>(), stubVueSelect = true) {
+function createWrapper(
+  resource: Resource,
+  clientService = mockDeep<ClientService>(),
+  stubVueSelect = true
+) {
   const mocks = { ...defaultComponentMocks(), $clientService: clientService }
   return {
     wrapper: mount(TagsSelect, {

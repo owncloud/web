@@ -8,6 +8,7 @@ import DropTarget from '@uppy/drop-target'
 import getFileType from '@uppy/utils/lib/getFileType'
 import generateFileID from '@uppy/utils/lib/generateFileID'
 import { urlJoin } from '@ownclouders/web-client'
+import { UppyResource } from './types'
 
 type UppyServiceTopics =
   | 'uploadStarted'
@@ -25,6 +26,12 @@ type UppyServiceTopics =
 
 export type uppyHeaders = {
   [name: string]: string | number
+}
+
+export type UploadResult = {
+  successful: UppyResource[]
+  failed: UppyResource[]
+  uploadID?: string
 }
 
 interface UppyServiceOptions {
@@ -202,7 +209,7 @@ export class UppyService {
     }
   }
 
-  subscribe(topic: UppyServiceTopics, callback: (data?: unknown) => void): string {
+  subscribe<T>(topic: UppyServiceTopics, callback: (data?: T) => void): string {
     return eventBus.subscribe(topic, callback)
   }
 

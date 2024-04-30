@@ -23,7 +23,7 @@ describe('SetLinkPasswordModal', () => {
     it('shows an error message on error', async () => {
       const { wrapper } = getWrapper()
       const sharesStore = useSharesStore()
-      ;(sharesStore.updateLink as any).mockRejectedValue(new Error(''))
+      vi.mocked(sharesStore.updateLink).mockRejectedValue(new Error(''))
       await wrapper.vm.onConfirm()
 
       const { showErrorMessage } = useMessages()

@@ -175,7 +175,7 @@ export default defineComponent({
   },
 
   methods: {
-    cycleRoles(event) {
+    cycleRoles(event: KeyboardEvent) {
       // events only need to be captured if the roleSelect element is visible
       if (!get(this.$refs.rolesDrop, 'tippy.state.isShown', false)) {
         return
@@ -208,7 +208,7 @@ export default defineComponent({
         roleSelect.find((rs) => rs.$el.classList.contains('selected')) ||
         roleSelect[0]
       const activeRoleSelectIndex = roleSelect.indexOf(activeRoleSelect)
-      const activateRoleSelect = (idx) => roleSelect[idx].$el.focus()
+      const activateRoleSelect = (idx: number) => roleSelect[idx].$el.focus()
 
       // if the event key is arrow up
       // and the next active role select index would be less than 0

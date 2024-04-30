@@ -105,7 +105,7 @@ import { ContextActions } from '@ownclouders/web-pkg'
 import FilesViewWrapper from '../../components/FilesViewWrapper.vue'
 
 import { useResourcesViewDefaults } from '../../composables'
-import { defineComponent, computed, unref } from 'vue'
+import { defineComponent, computed, unref, ComponentPublicInstance } from 'vue'
 import { Resource } from '@ownclouders/web-client'
 import { useGroupingSettings } from '@ownclouders/web-pkg'
 import { useGetMatchingSpace } from '@ownclouders/web-pkg'
@@ -155,8 +155,8 @@ export default defineComponent({
         return unref(paginatedResources)
       }
       return unref(paginatedResources).filter((item) => {
-        return selectedShareTypes
-          .map((t) => ShareTypes[t].value)
+        return ShareTypes.getByKeys(selectedShareTypes)
+          .map(({ value }) => value)
           .some((t) => item.shareTypes.includes(t))
       })
     })
@@ -219,7 +219,7 @@ export default defineComponent({
   },
 
   methods: {
-    rowMounted(resource: Resource, component) {
+    rowMounted(resource: Resource, component: ComponentPublicInstance<unknown>) {
       const loadPreview = async () => {
         const preview = await this.$previewService.loadPreview(
           {

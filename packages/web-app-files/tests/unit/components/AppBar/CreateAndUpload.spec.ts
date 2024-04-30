@@ -84,7 +84,9 @@ describe('CreateAndUpload component', () => {
     it('should show if clipboard is empty', () => {
       const { wrapper } = getWrapper()
       expect(
-        wrapper.findComponent<any>(`${elSelector.clipboardBtns} oc-button-stub`).exists()
+        wrapper
+          .findComponent<typeof OcButton>(`${elSelector.clipboardBtns} oc-button-stub`)
+          .exists()
       ).toBeFalsy()
     })
     it('should show if clipboard is not empty', () => {
@@ -123,7 +125,7 @@ describe('CreateAndUpload component', () => {
       const { wrapper, mocks } = getWrapper({ spaces })
       const graphMock = mocks.$clientService.graphAuthenticated
       graphMock.drives.getDrive.mockResolvedValue(mockAxiosResolve<Drive>())
-      await wrapper.vm.onUploadComplete({ successful: [file] })
+      await wrapper.vm.onUploadComplete({ successful: [file], failed: [] })
       const spacesStore = useSpacesStore()
       expect(spacesStore.updateSpaceField).toHaveBeenCalledTimes(updated)
     })
@@ -137,7 +139,7 @@ describe('CreateAndUpload component', () => {
       })
       const graphMock = mocks.$clientService.graphAuthenticated
       graphMock.drives.getDrive.mockResolvedValue(mockAxiosResolve<Drive>())
-      await wrapper.vm.onUploadComplete({ successful: [file] })
+      await wrapper.vm.onUploadComplete({ successful: [file], failed: [] })
       expect(eventSpy).toHaveBeenCalled()
     })
   })
@@ -161,7 +163,6 @@ function getWrapper({
   currentRouteName = 'files-spaces-generic',
   space = mock<SpaceResource>(),
   spaces = [],
-  item = undefined,
   itemId = undefined,
   newFileAction = false,
   areFileExtensionsShown = false,
@@ -170,6 +171,17 @@ function getWrapper({
     mock<FileAction>({ label: () => 'Mark-down file', ext: 'md' }),
     mock<FileAction>({ label: () => 'Draw.io document', ext: 'drawio' })
   ]
+}: {
+  clipboardResources?: Resource[]
+  files?: Resource[]
+  currentFolder?: Resource
+  currentRouteName?: string
+  space?: SpaceResource
+  spaces?: SpaceResource[]
+  itemId?: string
+  newFileAction?: boolean
+  areFileExtensionsShown?: boolean
+  createActions?: FileAction[]
 } = {}) {
   const capabilities = {
     spaces: { enabled: true },
@@ -213,7 +225,7 @@ function getWrapper({
     mocks,
     wrapper: shallowMount(CreateAndUpload, {
       data: () => ({ newFileAction }),
-      props: { space: space, item, itemId },
+      props: { space: space, itemId },
       global: {
         stubs: { OcButton: false },
         renderStubDefaultSlot: true,

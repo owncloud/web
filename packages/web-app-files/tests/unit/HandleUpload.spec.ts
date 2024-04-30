@@ -161,7 +161,7 @@ describe('HandleUpload', () => {
           const result = await instance.checkQuotaExceeded([
             mock<UppyResource>({
               name: 'name',
-              meta: { spaceId: '1', routeName: locationSpacesGeneric.name as any },
+              meta: { spaceId: '1', routeName: locationSpacesGeneric.name as string },
               data: { size }
             })
           ])
@@ -180,7 +180,7 @@ describe('HandleUpload', () => {
         const result = await instance.checkQuotaExceeded([
           mock<UppyResource>({
             name: 'name',
-            meta: { spaceId: '1', routeName: locationSpacesGeneric.name as any },
+            meta: { spaceId: '1', routeName: locationSpacesGeneric.name as string },
             data: { size }
           })
         ])
@@ -199,7 +199,7 @@ describe('HandleUpload', () => {
         const result = await instance.checkQuotaExceeded([
           mock<UppyResource>({
             name: 'name',
-            meta: { spaceId: '1', routeName: locationSpacesGeneric.name as any },
+            meta: { spaceId: '1', routeName: locationSpacesGeneric.name as string },
             data: { size }
           })
         ])

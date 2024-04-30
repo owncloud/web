@@ -9,7 +9,7 @@ import {
   SearchProvider
 } from '@ownclouders/web-pkg'
 
-function $gettext(msg) {
+function $gettext(msg: string) {
   return msg
 }
 

@@ -4,9 +4,9 @@ import { useResourcesViewDefaultsMock } from 'web-app-files/tests/mocks/useResou
 import { ref } from 'vue'
 import { defaultStubs, RouteLocation } from 'web-test-helpers'
 import { mock, mockDeep } from 'vitest-mock-extended'
-import { Resource } from '@ownclouders/web-client'
+import { IncomingShareResource } from '@ownclouders/web-client'
 import { defaultPlugins, mount, defaultComponentMocks } from 'web-test-helpers'
-import { ShareResource, ShareTypes } from '@ownclouders/web-client'
+import { ShareTypes } from '@ownclouders/web-client'
 import { useSortMock } from '../../../mocks/useSortMock'
 import { ResourceTable } from '@ownclouders/web-pkg'
 
@@ -39,7 +39,7 @@ describe('SharedWithOthers view', () => {
       expect(wrapper.find('.no-content-message').exists()).toBeTruthy()
     })
     it('shows the files table when files are available', () => {
-      const mockedFiles = [mockDeep<Resource>(), mockDeep<Resource>()]
+      const mockedFiles = [mockDeep<IncomingShareResource>(), mockDeep<IncomingShareResource>()]
       const { wrapper } = getMountedWrapper({ files: mockedFiles })
       expect(wrapper.find('.no-content-message').exists()).toBeFalsy()
       expect(wrapper.find('resource-table-stub').exists()).toBeTruthy()
@@ -53,15 +53,15 @@ describe('SharedWithOthers view', () => {
       it('shows filter if multiple share types are present', () => {
         const { wrapper } = getMountedWrapper({
           files: [
-            mock<ShareResource>({ shareTypes: [ShareTypes.user.value] }),
-            mock<ShareResource>({ shareTypes: [ShareTypes.group.value] })
+            mock<IncomingShareResource>({ shareTypes: [ShareTypes.user.value] }),
+            mock<IncomingShareResource>({ shareTypes: [ShareTypes.group.value] })
           ]
         })
         expect(wrapper.find('.share-type-filter').exists()).toBeTruthy()
       })
       it('does not show filter if only one share type is present', () => {
         const { wrapper } = getMountedWrapper({
-          files: [mock<ShareResource>({ shareTypes: [ShareTypes.user.value] })]
+          files: [mock<IncomingShareResource>({ shareTypes: [ShareTypes.user.value] })]
         })
         expect(wrapper.find('.share-type-filter').exists()).toBeFalsy()
       })
@@ -69,7 +69,11 @@ describe('SharedWithOthers view', () => {
   })
 })
 
-function getMountedWrapper({ mocks = {}, files = [], loading = false } = {}) {
+function getMountedWrapper({
+  mocks = {},
+  files = [],
+  loading = false
+}: { mocks?: Record<string, unknown>; files?: IncomingShareResource[]; loading?: boolean } = {}) {
   vi.mocked(useResourcesViewDefaults).mockImplementation(() =>
     useResourcesViewDefaultsMock({
       paginatedResources: ref(files),
