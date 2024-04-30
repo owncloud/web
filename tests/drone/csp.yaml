@@ -1,0 +1,37 @@
+directives:
+  child-src:
+    - '''self'''
+  connect-src:
+    - '''self'''
+  default-src:
+    - '''none'''
+  font-src:
+    - '''self'''
+  frame-ancestors:
+    - '''none'''
+  frame-src:
+    - '''self'''
+    - 'https://embed.diagrams.net/'
+    - 'https://${ONLYOFFICE_DOMAIN:-onlyoffice:443}/'
+    - 'https://${COLLABORA_DOMAIN:-collabora:9980}/'
+    - 'https://${KEYCLOAK_DOMAIN:-keycloak:8443}/'
+  img-src:
+    - '''self'''
+    - 'data:'
+    - 'blob:'
+    - 'https://${ONLYOFFICE_DOMAIN:-onlyoffice:443}/'
+    - 'https://${COLLABORA_DOMAIN:-collabora:9980}/'
+    - 'https://${KEYCLOAK_DOMAIN:-keycloak:8443}/'
+  manifest-src:
+    - '''self'''
+  media-src:
+    - '''self'''
+  object-src:
+    - '''self'''
+    - 'blob:'
+  script-src:
+    - '''self'''
+    - '''unsafe-inline'''
+  style-src:
+    - '''self'''
+    - '''unsafe-inline'''

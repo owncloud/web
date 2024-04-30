@@ -1222,6 +1222,9 @@ def ocisService(type, tika_enabled = False, enforce_password_public_link = False
         "FRONTEND_SEARCH_MIN_LENGTH": "2",
         "FRONTEND_OCS_ENABLE_DENIALS": True,
         "OCIS_PASSWORD_POLICY_BANNED_PASSWORDS_LIST": "%s/tests/drone/banned-passwords.txt" % dir["web"],
+        "PROXY_CSP_CONFIG_FILE_LOCATION": "%s/tests/drone/csp.yaml" % dir["web"],
+        "COLLABORA_DOMAIN": "${COLLABORA_DOMAIN:-collabora:9980}",
+        "ONLYOFFICE_DOMAIN": "${ONLYOFFICE_DOMAIN:-onlyoffice:443}",
     }
     if type == "keycloak":
         environment["PROXY_AUTOPROVISION_ACCOUNTS"] = "true"
