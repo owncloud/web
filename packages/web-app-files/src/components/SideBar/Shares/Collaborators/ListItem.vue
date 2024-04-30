@@ -198,7 +198,7 @@ export default defineComponent({
     const { showMessage, showErrorMessage } = useMessages()
     const userStore = useUserStore()
     const clientService = useClientService()
-    const { $gettext } = useGettext()
+    const { $gettext, current: currentLanguage } = useGettext()
     const { dispatchModal } = useModals()
 
     const { updateShare } = useSharesStore()
@@ -210,6 +210,10 @@ export default defineComponent({
       return queryItemAsString(props.sharedParentRoute?.params?.driveAliasAndItem)
         .split('/')
         .pop()
+    })
+
+    const shareDate = computed(() => {
+      return formatDateFromDateTime(DateTime.fromISO(props.share.createdDateTime), currentLanguage)
     })
 
     const setDenyShare = (value) => {
@@ -238,6 +242,7 @@ export default defineComponent({
       user,
       clientService,
       sharedParentDir,
+      shareDate,
       setDenyShare,
       showNotifyShareModal,
       showMessage,
@@ -333,14 +338,6 @@ export default defineComponent({
 
     editDropDownToggleId() {
       return uuid.v4()
-    },
-    shareDate() {
-      return ''
-      // FIXME
-      // return formatDateFromDateTime(
-      //   DateTime.fromSeconds(parseInt(this.share.permission.)),
-      //   this.$language.current
-      // )
     },
     shareOwnerDisplayName() {
       return this.share.sharedBy.displayName

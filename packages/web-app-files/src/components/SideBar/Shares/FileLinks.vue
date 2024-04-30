@@ -179,7 +179,7 @@ export default defineComponent({
     const directLinks = computed(() =>
       unref(linkShares)
         .filter((l) => !l.indirect && !l.isQuickLink)
-        .sort((a: any, b: any) => b.stime - a.stime) // FIXME: share date not yet available
+        .sort((a, b) => b.createdDateTime.localeCompare(a.createdDateTime))
         .map((share) => {
           return { ...share, key: 'direct-link-' + share.id }
         })
@@ -187,7 +187,7 @@ export default defineComponent({
     const indirectLinks = computed(() =>
       unref(linkShares)
         .filter((l) => l.indirect)
-        .sort((a: any, b: any) => b.stime - a.stime) // FIXME: share date not yet available
+        .sort((a, b) => b.createdDateTime.localeCompare(a.createdDateTime))
         .map((share) => {
           return { ...share, key: 'indirect-link-' + share.id }
         })

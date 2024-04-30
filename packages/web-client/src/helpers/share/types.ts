@@ -19,6 +19,7 @@ export enum GraphSharePermission {
 export interface ShareResource extends Resource {
   sharedWith: Array<{ shareType: number } & Identity>
   sharedBy: Identity[]
+  sdate: string
   outgoing: boolean
   driveId: string
 }
@@ -42,6 +43,7 @@ export interface Share {
   indirect: boolean
   sharedBy: Identity
   shareType: number
+  createdDateTime: string
   expirationDateTime?: string
 }
 
