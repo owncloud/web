@@ -28,7 +28,6 @@ export default defineComponent({
     showSpaceMembers: { type: Boolean, default: false },
     showLinks: { type: Boolean, default: false }
   },
-  emits: ['scrollToElement'],
   setup() {
     const sharesStore = useSharesStore()
     const { loading: sharesLoading } = storeToRefs(sharesStore)
