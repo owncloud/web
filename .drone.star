@@ -113,9 +113,6 @@ config = {
                 "oCISFiles3": [
                     "webUIRenameFiles",
                 ],
-                "oCISFiles4": [
-                    "webUIRenameFolders",
-                ],
                 "oCISFiles5": [
                     "webUIFilesCopy",
                     "webUITextEditor",
@@ -168,14 +165,12 @@ config = {
 basicTestSuites = [
     "webUICreateFilesFolders",
     "webUIDeleteFilesFolders",
-    "webUIFiles",
     "webUIFilesCopy",
     "webUIFilesDetails",
     "webUILogin",
     "webUIMoveFilesFolders",
     "webUIPreview",
     "webUIRenameFiles",
-    "webUIRenameFolders",
     "webUISharingAcceptShares",
     "webUISharingInternalGroupsEdgeCases",
     "webUISharingInternalGroupsSharingIndicator",
