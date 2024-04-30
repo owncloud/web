@@ -130,9 +130,6 @@ config = {
                     "webUISharingInternalGroupsSharingIndicator",
                     "webUISharingInternalUsersSharingIndicator",
                 ],
-                "oCISSharingAutocompletionResharing": [
-                    "webUISharingAutocompletion",
-                ],
                 "oCISSharingPublic1": [
                     "webUISharingPublicBasic",
                 ],
@@ -180,7 +177,6 @@ basicTestSuites = [
     "webUIRenameFiles",
     "webUIRenameFolders",
     "webUISharingAcceptShares",
-    "webUISharingAutocompletion",
     "webUISharingInternalGroupsEdgeCases",
     "webUISharingInternalGroupsSharingIndicator",
     "webUISharingInternalUsers",
