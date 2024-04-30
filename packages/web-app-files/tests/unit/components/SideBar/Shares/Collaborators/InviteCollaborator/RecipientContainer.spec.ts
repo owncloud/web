@@ -37,7 +37,7 @@ describe('InviteCollaborator RecipientContainer', () => {
   })
 })
 
-function getMountedWrapper(recipient, avatarsEnabled = false) {
+function getMountedWrapper(recipient: CollaboratorAutoCompleteItem, avatarsEnabled = false) {
   const capabilities = {
     files_sharing: {
       user: {

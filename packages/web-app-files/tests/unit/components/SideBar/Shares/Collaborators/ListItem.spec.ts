@@ -18,6 +18,7 @@ import EditDropdown from '../../../../../../src/components/SideBar/Shares/Collab
 import RoleDropdown from '../../../../../../src/components/SideBar/Shares/Collaborators/RoleDropdown.vue'
 import { mock } from 'vitest-mock-extended'
 import { Resource, SpaceResource } from '@ownclouders/web-client'
+import { RouteLocationNamedRaw } from 'vue-router'
 
 vi.mock('@ownclouders/web-client', async (importOriginal) => ({
   ...(await importOriginal<any>()),
@@ -224,6 +225,11 @@ function createWrapper({
   modifiable = true,
   sharedParentRoute = null,
   resource = mock<Resource>()
+}: {
+  share?: CollaboratorShare
+  modifiable?: boolean
+  sharedParentRoute?: RouteLocationNamedRaw
+  resource?: Resource
 } = {}) {
   const mocks = defaultComponentMocks()
   mocks.$clientService.graphAuthenticated.drives.getDrive.mockResolvedValue(

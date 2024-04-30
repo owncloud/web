@@ -1,10 +1,11 @@
 import FileDetails from '../../../../../src/components/SideBar/Details/FileDetails.vue'
-import { ShareResource, ShareTypes } from '@ownclouders/web-client'
+import { Resource, ShareResource, ShareTypes } from '@ownclouders/web-client'
 import { defaultComponentMocks, defaultPlugins, RouteLocation } from 'web-test-helpers'
 import { mock, mockDeep } from 'vitest-mock-extended'
 import { SpaceResource } from '@ownclouders/web-client'
-import { createLocationSpaces, createLocationPublic } from '@ownclouders/web-pkg/'
+import { AncestorMetaData } from '@ownclouders/web-pkg/'
 import { mount } from '@vue/test-utils'
+import { User } from '@ownclouders/web-client/graph/generated'
 
 const getResourceMock = ({
   type = 'file',
@@ -106,7 +107,7 @@ describe('Details SideBar Panel', () => {
       const resource = getResourceMock()
       const ancestorMetaData = {
         '/somePath': { path: '/somePath', shareTypes: [ShareTypes.user.value] }
-      }
+      } as unknown as AncestorMetaData
       const { wrapper } = createWrapper({ resource, ancestorMetaData })
       expect(wrapper.find(selectors.sharedVia).exists()).toBeTruthy()
     })
@@ -202,11 +203,18 @@ function createWrapper({
   user = { onPremisesSamAccountName: 'marie' },
   versions = [],
   tagsEnabled = true
+}: {
+  resource?: Resource
+  isPublicLinkContext?: boolean
+  ancestorMetaData?: AncestorMetaData
+  user?: User
+  versions?: string[]
+  tagsEnabled?: boolean
 } = {}) {
-  const spacesLocation = createLocationSpaces('files-spaces-generic')
-  const publicLocation = createLocationPublic('files-public-link')
-  const currentRoute = isPublicLinkContext ? publicLocation : spacesLocation
-  const mocks = defaultComponentMocks({ currentRoute: mock<RouteLocation>(currentRoute as any) })
+  const currentRouteName = isPublicLinkContext ? 'files-public-link' : 'files-spaces-generic'
+  const mocks = defaultComponentMocks({
+    currentRoute: mock<RouteLocation>({ name: currentRouteName })
+  })
   const capabilities = { files: { tags: tagsEnabled } }
   return {
     wrapper: mount(FileDetails, {

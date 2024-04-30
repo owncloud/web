@@ -214,6 +214,16 @@ function getWrapper({
   availableLastModifiedValues = {},
   lastModifiedFilterQuery = null,
   mocks = {}
+}: {
+  availableTags?: string[]
+  resources?: Resource[]
+  searchTerm?: string
+  tagFilterQuery?: string
+  titleOnlyFilterQuery?: string
+  fullTextSearchEnabled?: boolean
+  availableLastModifiedValues?: Record<string, string[]>
+  lastModifiedFilterQuery?: string
+  mocks?: Record<string, unknown>
 } = {}) {
   vi.mocked(queryItemAsString).mockImplementationOnce(() => searchTerm)
   vi.mocked(queryItemAsString).mockImplementationOnce(() => titleOnlyFilterQuery)

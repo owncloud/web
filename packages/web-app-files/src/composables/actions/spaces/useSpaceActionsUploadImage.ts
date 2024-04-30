@@ -35,9 +35,9 @@ export const useSpaceActionsUploadImage = ({ spaceImageInput }: { spaceImageInpu
     unref(spaceImageInput)?.click()
   }
 
-  const uploadImageSpace = async (ev) => {
+  const uploadImageSpace = async (ev: Event) => {
     const graphClient = clientService.graphAuthenticated
-    const file = ev.currentTarget.files[0]
+    const file = (ev.currentTarget as HTMLInputElement).files[0]
 
     if (!file) {
       return
@@ -59,13 +59,11 @@ export const useSpaceActionsUploadImage = ({ spaceImageInput }: { spaceImageInpu
       //
       // https://github.com/perry-mitchell/webdav-client/blob/dd8d0dcc319297edc70077abd74b935361bc2412/source/tools/body.ts#L18
       const content = await file.arrayBuffer()
-      const headers = {
+      const headers: Record<string, string> = {
         'Content-Type': 'application/offset+octet-stream'
       }
 
-      if (file.lastModifiedDate) {
-        headers['X-OC-Mtime'] = '' + file.lastModifiedDate.getTime() / 1000
-      } else if (file.lastModified) {
+      if (file.lastModified) {
         headers['X-OC-Mtime'] = '' + file.lastModified / 1000
       }
 

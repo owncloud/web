@@ -2,7 +2,7 @@ import { DateTime } from 'luxon'
 import FileVersions from 'web-app-files/src/components/SideBar/Versions/FileVersions.vue'
 import { defaultComponentMocks, defaultStubs } from 'web-test-helpers'
 import { mock, mockDeep } from 'vitest-mock-extended'
-import { Resource } from '@ownclouders/web-client'
+import { Resource, SpaceResource } from '@ownclouders/web-client'
 import { ShareResource, ShareSpaceResource } from '@ownclouders/web-client'
 import { DavPermission } from '@ownclouders/web-client/webdav'
 import { defaultPlugins, mount, shallowMount } from 'web-test-helpers'
@@ -35,9 +35,6 @@ const defaultVersions = [
   })
 ]
 
-const loadingStubSelector = 'oc-loader-stub'
-const versionTableStubSelector = 'oc-simple-table-stub'
-
 const selectors = {
   noVersionsMessage: '[data-testid="file-versions-no-versions"]',
   lastModifiedDate: '[data-testid="file-versions-file-last-modified-date"]',
@@ -47,7 +44,7 @@ const selectors = {
 }
 
 describe('FileVersions', () => {
-  it('should show no versions message if there are no versions', async () => {
+  it('should show no versions message if there are no versions', () => {
     const { wrapper } = getMountedWrapper({ mountType: shallowMount, versions: [] })
     const noVersionsMessageElement = wrapper.find(selectors.noVersionsMessage)
 
@@ -56,7 +53,7 @@ describe('FileVersions', () => {
 
   describe('when the file has versions', () => {
     describe('versions list', () => {
-      it('should show last modified date of each version', async () => {
+      it('should show last modified date of each version', () => {
         const { wrapper } = getMountedWrapper({ mountType: shallowMount })
         const dateElement = wrapper.findAll(selectors.lastModifiedDate)
 
@@ -64,7 +61,7 @@ describe('FileVersions', () => {
         expect(dateElement.at(0).text()).toBe('1 day ago')
         expect(dateElement.at(1).text()).toBe('7 days ago')
       })
-      it('should show content length of each version', async () => {
+      it('should show content length of each version', () => {
         const { wrapper } = getMountedWrapper({ mountType: shallowMount })
         const contentLengthElement = wrapper.findAll(selectors.resourceSize)
 
@@ -74,19 +71,19 @@ describe('FileVersions', () => {
       })
       describe('row actions', () => {
         describe('reverting to a specific version', () => {
-          it('should be possible for a non-share', async () => {
+          it('should be possible for a non-share', () => {
             const { wrapper } = getMountedWrapper()
             const revertVersionButton = wrapper.findAll(selectors.revertVersionButton)
             expect(revertVersionButton.length).toBe(defaultVersions.length)
           })
-          it('should be possible for a share with write permissions', async () => {
+          it('should be possible for a share with write permissions', () => {
             const resource = mockDeep<ShareResource>({ permissions: DavPermission.Updateable })
             const space = mockDeep<ShareSpaceResource>({ driveType: 'share' })
             const { wrapper } = getMountedWrapper({ resource, space })
             const revertVersionButton = wrapper.findAll(selectors.revertVersionButton)
             expect(revertVersionButton.length).toBe(defaultVersions.length)
           })
-          it('should not be possible for a share with read-only permissions', async () => {
+          it('should not be possible for a share with read-only permissions', () => {
             const resource = mockDeep<ShareResource>({ permissions: '' })
             const space = mockDeep<ShareSpaceResource>({ driveType: 'share' })
             const { wrapper } = getMountedWrapper({ resource, space })
@@ -128,8 +125,12 @@ function getMountedWrapper({
   mountType = mount,
   space = undefined,
   versions = defaultVersions,
-  resource = mock<Resource>({ id: '1', size: 0, mdate: '' }),
-  loadingStateDelay = 0
+  resource = mock<Resource>({ id: '1', size: 0, mdate: '' })
+}: {
+  mountType?: typeof mount
+  space?: SpaceResource
+  versions?: Resource[]
+  resource?: Resource
 } = {}) {
   const downloadFile = vi.fn()
   vi.mocked(useDownloadFile).mockReturnValue({ downloadFile })

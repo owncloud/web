@@ -5,7 +5,7 @@ import { ref } from 'vue'
 import { createTestingPinia } from 'web-test-helpers/src'
 import { useCapabilityStore } from '@ownclouders/web-pkg'
 
-const getStore = (reports = []) => {
+const getStore = (reports: string[] = []) => {
   createTestingPinia({
     initialState: { capabilities: { capabilities: { dav: { reports } } } }
   })

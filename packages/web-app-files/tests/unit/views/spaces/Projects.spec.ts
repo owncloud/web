@@ -15,6 +15,7 @@ import {
   defaultStubs,
   RouteLocation
 } from 'web-test-helpers'
+import { AbilityRule, SpaceResource } from '@ownclouders/web-client'
 
 vi.mock('@ownclouders/web-pkg', async (importOriginal) => ({
   ...(await importOriginal<any>()),
@@ -47,7 +48,7 @@ const spacesResources = [
     isFolder: true,
     getDriveAliasAndItem: () => '2'
   }
-]
+] as unknown as SpaceResource[]
 
 describe('Projects view', () => {
   it('appBar always present', () => {
@@ -95,7 +96,17 @@ describe('Projects view', () => {
   })
 })
 
-function getMountedWrapper({ mocks = {}, spaces = [], abilities = [], stubAppBar = true } = {}) {
+function getMountedWrapper({
+  mocks = {},
+  spaces = [],
+  abilities = [],
+  stubAppBar = true
+}: {
+  mocks?: Record<string, unknown>
+  spaces?: SpaceResource[]
+  abilities?: AbilityRule[]
+  stubAppBar?: boolean
+} = {}) {
   const plugins = defaultPlugins({ abilities, piniaOptions: { spacesState: { spaces } } })
 
   vi.mocked(queryItemAsString).mockImplementationOnce(() => '1')

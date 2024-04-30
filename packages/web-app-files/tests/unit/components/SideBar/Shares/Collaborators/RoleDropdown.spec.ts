@@ -49,6 +49,10 @@ function getWrapper({
     mock<ShareRole>({ displayName: 'Can view', description: '' }),
     mock<ShareRole>({ displayName: 'Can edit', description: '' })
   ]
+}: {
+  mountType?: typeof mount
+  existingRole?: ShareRole
+  availableShareRoles?: ShareRole[]
 } = {}) {
   return {
     wrapper: mountType(RoleDropdown, {

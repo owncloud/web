@@ -16,6 +16,7 @@ import {
 } from 'web-test-helpers'
 import { User } from '@ownclouders/web-client/graph/generated'
 import { useCanShare, useModals } from '@ownclouders/web-pkg'
+import ListItem from 'web-app-files/src/components/SideBar/Shares/Collaborators/ListItem.vue'
 
 vi.mock('@ownclouders/web-pkg', async (importOriginal) => ({
   ...(await importOriginal<any>()),
@@ -101,7 +102,7 @@ describe('SpaceMembers', () => {
     it('reacts on delete events by collaborator list items', async () => {
       const user = mock<User>({ id: 'admin' })
       const wrapper = getWrapper({ user })
-      wrapper.findComponent<any>('collaborator-list-item-stub').vm.$emit('onDelete')
+      wrapper.findComponent<typeof ListItem>('collaborator-list-item-stub').vm.$emit('onDelete')
       await wrapper.vm.$nextTick()
 
       const { dispatchModal } = useModals()

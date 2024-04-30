@@ -74,6 +74,7 @@ import { useTask } from 'vue-concurrency'
 import {
   defaultFuseOptions,
   FileSideBar,
+  SortDir,
   useClientService,
   useResourcesStore,
   useRouter,
@@ -107,8 +108,8 @@ export default defineComponent({
     const { y: fileListHeaderY } = useFileListHeaderPosition()
     const resourcesStore = useResourcesStore()
 
-    const sortBy = ref('name')
-    const sortDir = ref('asc')
+    const sortBy = ref<keyof SpaceResource>('name')
+    const sortDir = ref<SortDir>(SortDir.Asc)
     const filterTerm = ref('')
     const markInstance = ref(undefined)
     const tableRef = ref(undefined)
@@ -145,7 +146,7 @@ export default defineComponent({
       { text: $gettext('Deleted files'), onClick: () => loadResourcesTask.perform() }
     ])
 
-    const sort = (list: SpaceResource[], propName: string, desc: boolean) => {
+    const sort = (list: SpaceResource[], propName: keyof SpaceResource, desc: boolean) => {
       return [...list].sort((s1, s2) => {
         if (isPersonalSpaceResource(s1)) {
           return -1
@@ -154,8 +155,8 @@ export default defineComponent({
           return +1
         }
 
-        const a = s1[propName]
-        const b = s2[propName]
+        const a = s1[propName].toString()
+        const b = s2[propName].toString()
 
         return desc ? b.localeCompare(a) : a.localeCompare(b)
       })
@@ -163,7 +164,7 @@ export default defineComponent({
     const displaySpaces = computed(() =>
       sort(filter(unref(spaces), unref(filterTerm)), unref(sortBy), unref(sortDir) === 'desc')
     )
-    const handleSort = (event) => {
+    const handleSort = (event: { sortBy: keyof SpaceResource; sortDir: SortDir }) => {
       sortBy.value = event.sortBy
       sortDir.value = event.sortDir
     }

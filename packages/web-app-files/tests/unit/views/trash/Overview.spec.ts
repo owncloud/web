@@ -9,6 +9,8 @@ import {
 import { mock } from 'vitest-mock-extended'
 import { nextTick } from 'vue'
 import { SpaceResource } from '@ownclouders/web-client'
+import { SortDir } from '@ownclouders/web-pkg'
+import OcTable from 'design-system/src/components/OcTable/OcTable.vue'
 
 const spaceMocks = [
   {
@@ -70,16 +72,18 @@ describe('TrashOverview', () => {
 
       wrapper.vm.sortBy = 'name'
       await nextTick()
-      sortedSpaces = wrapper.findComponent<any>({ name: 'oc-table' }).props().data
+      sortedSpaces = wrapper.findComponent<typeof OcTable>({ name: 'oc-table' }).props()
+        .data as SpaceResource[]
       expect(sortedSpaces.map((s) => s.id)).toEqual([
         spaceMocks[0].id,
         spaceMocks[1].id,
         spaceMocks[2].id
       ])
 
-      wrapper.vm.sortDir = 'desc'
+      wrapper.vm.sortDir = SortDir.Desc
       await nextTick()
-      sortedSpaces = wrapper.findComponent<any>({ name: 'oc-table' }).props().data
+      sortedSpaces = wrapper.findComponent<typeof OcTable>({ name: 'oc-table' }).props()
+        .data as SpaceResource[]
       expect(sortedSpaces.map((s) => s.id)).toEqual([
         spaceMocks[0].id,
         spaceMocks[2].id,
@@ -88,8 +92,8 @@ describe('TrashOverview', () => {
     })
     it('should set the sort parameters accordingly when calling "handleSort"', () => {
       const { wrapper } = getWrapper({ spaces: [spaceMocks[0]] })
-      const sortBy = 'members'
-      const sortDir = 'desc'
+      const sortBy = 'spaceRoles'
+      const sortDir = SortDir.Desc
       wrapper.vm.handleSort({ sortBy, sortDir })
       expect(wrapper.vm.sortBy).toEqual(sortBy)
       expect(wrapper.vm.sortDir).toEqual(sortDir)

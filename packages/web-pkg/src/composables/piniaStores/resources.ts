@@ -100,7 +100,7 @@ export const useResourcesStore = defineStore('resources', () => {
     currentFolder.value = undefined
   }
 
-  const initResourceList = (data: { resources: Resource[]; currentFolder: Resource }) => {
+  const initResourceList = <T extends Resource>(data: { resources: T[]; currentFolder: T }) => {
     resources.value = data.resources
     currentFolder.value = data.currentFolder
   }

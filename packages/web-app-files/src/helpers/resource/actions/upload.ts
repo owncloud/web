@@ -92,8 +92,8 @@ export class UploadResourceConflict extends ConflictDialog {
   ): Promise<UppyResource[]> {
     let fileCount = 0
     let folderCount = 0
-    const resolvedFileConflicts = []
-    const resolvedFolderConflicts = []
+    const resolvedFileConflicts: { name: string; strategy: ResolveStrategy }[] = []
+    const resolvedFolderConflicts: { name: string; strategy: ResolveStrategy }[] = []
     let doForAllConflicts = false
     let allConflictsStrategy
     let doForAllConflictsFolders = false

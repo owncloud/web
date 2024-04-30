@@ -62,7 +62,14 @@
 </template>
 
 <script lang="ts">
-import { computed, defineComponent, onBeforeUnmount, onMounted, ref } from 'vue'
+import {
+  ComponentPublicInstance,
+  computed,
+  defineComponent,
+  onBeforeUnmount,
+  onMounted,
+  ref
+} from 'vue'
 import { debounce } from 'lodash-es'
 
 import { Resource } from '@ownclouders/web-client'
@@ -91,7 +98,6 @@ import { useResourcesViewDefaults } from '../composables'
 import { useFileActions } from '@ownclouders/web-pkg'
 import { storeToRefs } from 'pinia'
 import { unref } from 'vue'
-import { ComponentPublicInstance } from 'vue'
 
 const visibilityObserver = new VisibilityObserver()
 
@@ -187,7 +193,7 @@ export default defineComponent({
   },
 
   methods: {
-    rowMounted(resource: Resource, component) {
+    rowMounted(resource: Resource, component: ComponentPublicInstance<unknown>) {
       if (!this.displayThumbnails) {
         return
       }

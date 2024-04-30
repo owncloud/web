@@ -1,5 +1,5 @@
 import SpaceContextActions from '../../../../src/components/Spaces/SpaceContextActions.vue'
-import { buildSpace } from '@ownclouders/web-client'
+import { buildSpace, SpaceResource } from '@ownclouders/web-client'
 import { defaultComponentMocks, defaultPlugins, mount, RouteLocation } from 'web-test-helpers'
 import { mock } from 'vitest-mock-extended'
 import { Drive } from '@ownclouders/web-client/graph/generated'
@@ -29,7 +29,7 @@ describe('SpaceContextActions', () => {
   })
 })
 
-function getWrapper(space) {
+function getWrapper(space: SpaceResource) {
   const mocks = defaultComponentMocks({ currentRoute: mock<RouteLocation>({ path: '/files' }) })
   mocks.$previewService.getSupportedMimeTypes.mockReturnValue([])
   return {

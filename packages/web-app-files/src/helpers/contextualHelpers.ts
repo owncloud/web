@@ -3,7 +3,7 @@ import { ContextualHelperData } from 'design-system/src/helpers'
 import { ConfigStore } from '@ownclouders/web-pkg'
 
 // just a dummy function to trick gettext tools
-function $gettext(msg) {
+function $gettext(msg: string) {
   return msg
 }
 

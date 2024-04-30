@@ -159,6 +159,11 @@ function getMountedWrapper({
   loading = false,
   files = [],
   openWithDefaultAppQuery = ''
+}: {
+  mocks?: Record<string, unknown>
+  files?: IncomingShareResource[]
+  loading?: boolean
+  openWithDefaultAppQuery?: string
 } = {}) {
   vi.mocked(useResourcesViewDefaults).mockImplementation(() =>
     useResourcesViewDefaultsMock({

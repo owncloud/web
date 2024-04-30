@@ -18,7 +18,7 @@ import { Group, User } from '@ownclouders/web-client/graph/generated'
 import { AxiosResponse } from 'axios'
 import OcButton from 'design-system/src/components/OcButton/OcButton.vue'
 
-vi.mock('lodash-es', () => ({ debounce: (fn) => fn() }))
+vi.mock('lodash-es', () => ({ debounce: (fn: any) => fn() }))
 
 const folderMock = {
   id: '1',

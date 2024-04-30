@@ -1,7 +1,7 @@
 import { FolderLoader, FolderLoaderTask, TaskContext } from '../folder'
 import { Router } from 'vue-router'
 import { useTask } from 'vue-concurrency'
-import { buildIncomingShareResource } from '@ownclouders/web-client'
+import { buildIncomingShareResource, call } from '@ownclouders/web-client'
 import { isLocationSharesActive } from '@ownclouders/web-pkg'
 
 export class FolderLoaderSharedWithMe implements FolderLoader {
@@ -27,7 +27,7 @@ export class FolderLoaderSharedWithMe implements FolderLoader {
 
       const {
         data: { value }
-      } = yield clientService.graphAuthenticated.drives.listSharedWithMe()
+      } = yield* call(clientService.graphAuthenticated.drives.listSharedWithMe())
 
       const resources = value.map((driveItem) =>
         buildIncomingShareResource({ driveItem, graphRoles: sharesStore.graphRoles })

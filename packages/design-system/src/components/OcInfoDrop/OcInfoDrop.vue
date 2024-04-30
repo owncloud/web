@@ -50,7 +50,7 @@ import uniqueId from '../../utils/uniqueId'
 
 export type ListElement = {
   text: string
-  headline?: string
+  headline?: boolean
 }
 
 export default defineComponent({

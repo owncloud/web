@@ -20,7 +20,8 @@ import {
   createLocationShares,
   locationSharesViaLink,
   locationSharesWithMe,
-  locationSharesWithOthers
+  locationSharesWithOthers,
+  RouteShareTypes
 } from './shares'
 import {
   buildRoutes as buildSpacesRoutes,
@@ -72,3 +73,5 @@ export {
   buildRoutes,
   ActiveRouteDirectorFunc
 }
+
+export type { RouteShareTypes }

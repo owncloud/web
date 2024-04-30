@@ -39,7 +39,7 @@ describe('uploadImage', () => {
                 }
               ]
             }
-          })
+          } as unknown as Event)
 
           expect(busStub).toHaveBeenCalledWith('app.files.spaces.uploaded-image', expect.anything())
           const { showMessage } = useMessages()
@@ -65,7 +65,7 @@ describe('uploadImage', () => {
                 }
               ]
             }
-          })
+          } as unknown as Event)
 
           const { showErrorMessage } = useMessages()
           expect(showErrorMessage).toHaveBeenCalledTimes(1)

@@ -2,13 +2,13 @@ import { RouteComponents } from './router'
 import { RouteLocationNamedRaw, RouteRecordRaw } from 'vue-router'
 import { createLocation, isLocationActiveDirector, $gettext } from './utils'
 
-type shareTypes =
+export type RouteShareTypes =
   | 'files-shares'
   | 'files-shares-with-me'
   | 'files-shares-with-others'
   | 'files-shares-via-link'
 
-export const createLocationShares = (name: shareTypes, location = {}): RouteLocationNamedRaw =>
+export const createLocationShares = (name: RouteShareTypes, location = {}): RouteLocationNamedRaw =>
   createLocation(name, location)
 
 export const locationShares = createLocationShares('files-shares')
@@ -16,7 +16,7 @@ export const locationSharesWithMe = createLocationShares('files-shares-with-me')
 export const locationSharesWithOthers = createLocationShares('files-shares-with-others')
 export const locationSharesViaLink = createLocationShares('files-shares-via-link')
 
-export const isLocationSharesActive = isLocationActiveDirector<shareTypes>(
+export const isLocationSharesActive = isLocationActiveDirector<RouteShareTypes>(
   locationSharesWithMe,
   locationSharesWithOthers,
   locationSharesViaLink

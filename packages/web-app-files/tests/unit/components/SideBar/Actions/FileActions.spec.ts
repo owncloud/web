@@ -17,7 +17,7 @@ vi.mock('@ownclouders/web-pkg', async (importOriginal) => ({
 }))
 
 type ActionWithSelector = Action & { selector: string }
-const fileActions = {
+const fileActions: Record<string, ActionWithSelector> = {
   copy: mock<ActionWithSelector>({
     handler: vi.fn(),
     label: () => 'Copy',

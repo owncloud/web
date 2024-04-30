@@ -1,5 +1,4 @@
-import Uppy, { UppyFile } from '@uppy/core'
-import BasePlugin from '@uppy/core/lib/BasePlugin.js'
+import Uppy, { BasePlugin, UppyFile } from '@uppy/core'
 import { filesize } from 'filesize'
 import { basename, dirname, join } from 'path'
 import * as uuid from 'uuid'
@@ -46,10 +45,6 @@ export interface HandleUploadOptions {
  * 5. start upload
  */
 export class HandleUpload extends BasePlugin {
-  id: string
-  type: string
-  uppy: Uppy
-
   clientService: ClientService
   language: Language
   route: Ref<RouteLocationNormalizedLoaded>
@@ -161,7 +156,7 @@ export class HandleUpload extends BasePlugin {
         ...file.meta,
         // file data
         name: file.name,
-        mtime: (file.data as any).lastModified / 1000,
+        mtime: file.data.lastModified / 1000,
         // current path & space
         spaceId: this.space.id,
         spaceName: this.space.name,
@@ -170,7 +165,7 @@ export class HandleUpload extends BasePlugin {
         currentFolder: currentFolderPath,
         currentFolderId,
         // upload data
-        uppyId: this.uppyService.generateUploadId(file as any),
+        uppyId: this.uppyService.generateUploadId(file),
         relativeFolder: directory,
         tusEndpoint: endpoint,
         uploadId: uuid.v4(),
@@ -343,7 +338,7 @@ export class HandleUpload extends BasePlugin {
       }
 
       const foldersToBeCreated = Object.keys(current)
-      const promises = []
+      const promises: Promise<unknown>[] = []
       for (const folder of foldersToBeCreated) {
         promises.push(createDirectoryLevel(current[folder], join(path, folder)))
       }

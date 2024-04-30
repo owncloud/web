@@ -3,7 +3,7 @@ import { useResourcesViewDefaults } from 'web-app-files/src/composables'
 import { useResourcesViewDefaultsMock } from 'web-app-files/tests/mocks/useResourcesViewDefaultsMock'
 import { ref } from 'vue'
 import { mock, mockDeep } from 'vitest-mock-extended'
-import { Resource } from '@ownclouders/web-client'
+import { OutgoingShareResource } from '@ownclouders/web-client'
 import {
   defaultPlugins,
   mount,
@@ -39,7 +39,7 @@ describe('SharedViaLink view', () => {
       expect(wrapper.find('.no-content-message').exists()).toBeTruthy()
     })
     it('shows the files table when files are available', () => {
-      const mockedFiles = [mockDeep<Resource>(), mockDeep<Resource>()]
+      const mockedFiles = [mockDeep<OutgoingShareResource>(), mockDeep<OutgoingShareResource>()]
       const { wrapper } = getMountedWrapper({ files: mockedFiles })
       expect(wrapper.find('.no-content-message').exists()).toBeFalsy()
       expect(wrapper.find('resource-table-stub').exists()).toBeTruthy()
@@ -50,7 +50,11 @@ describe('SharedViaLink view', () => {
   })
 })
 
-function getMountedWrapper({ mocks = {}, files = [], loading = false } = {}) {
+function getMountedWrapper({
+  mocks = {},
+  files = [],
+  loading = false
+}: { mocks?: Record<string, unknown>; files?: OutgoingShareResource[]; loading?: boolean } = {}) {
   vi.mocked(useResourcesViewDefaults).mockImplementation(() =>
     useResourcesViewDefaultsMock({
       paginatedResources: ref(files),

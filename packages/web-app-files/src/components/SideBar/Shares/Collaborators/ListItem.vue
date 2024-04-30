@@ -152,6 +152,7 @@ import { RouteLocationNamedRaw } from 'vue-router'
 import { useGettext } from 'vue3-gettext'
 import { SpaceResource } from '@ownclouders/web-client'
 import { buildSpace, isProjectSpaceResource } from '@ownclouders/web-client'
+import { ContextualHelperDataListItem } from 'design-system/src/helpers'
 
 export default defineComponent({
   name: 'ListItem',
@@ -216,7 +217,7 @@ export default defineComponent({
       return formatDateFromDateTime(DateTime.fromISO(props.share.createdDateTime), currentLanguage)
     })
 
-    const setDenyShare = (value) => {
+    const setDenyShare = (value: boolean) => {
       emit('onSetDeny', { share: props.share, value })
     }
 
@@ -343,7 +344,7 @@ export default defineComponent({
       return this.share.sharedBy.displayName
     },
     accessDetailsProps() {
-      const list = []
+      const list: ContextualHelperDataListItem[] = []
 
       list.push({ text: this.$gettext('Name'), headline: true }, { text: this.shareDisplayName })
 
@@ -392,7 +393,7 @@ export default defineComponent({
       }
     },
 
-    async shareExpirationChanged({ expirationDateTime }) {
+    async shareExpirationChanged({ expirationDateTime }: { expirationDateTime: string }) {
       const role = this.share.role
       try {
         await this.saveShareChanges({ role, expirationDateTime })

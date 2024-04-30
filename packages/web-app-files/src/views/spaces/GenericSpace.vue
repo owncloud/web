@@ -387,7 +387,7 @@ export default defineComponent({
       )
     })
 
-    const focusAndAnnounceBreadcrumb = (sameRoute) => {
+    const focusAndAnnounceBreadcrumb = (sameRoute: boolean) => {
       const breadcrumbEl = document.getElementById('files-breadcrumb')
       if (!breadcrumbEl) {
         return
@@ -504,7 +504,7 @@ export default defineComponent({
     })
 
     const whitespaceContextMenu = ref(null)
-    const showContextMenu = (event) => {
+    const showContextMenu = (event: MouseEvent) => {
       resourcesStore.resetSelection()
       displayPositionedDropdown(
         unref(whitespaceContextMenu).$el._tippy,
@@ -600,7 +600,7 @@ export default defineComponent({
   },
 
   methods: {
-    async fileDropped(fileTarget) {
+    async fileDropped(fileTarget: string | { name: string; path: string }) {
       const selected = [...this.selectedResources]
       let targetFolder = null
       if (typeof fileTarget === 'string') {
@@ -651,7 +651,11 @@ export default defineComponent({
       this.resetSelection()
     },
 
-    rowMounted(resource: Resource, component, dimensions) {
+    rowMounted(
+      resource: Resource,
+      component: ComponentPublicInstance<unknown>,
+      dimensions: [number, number]
+    ) {
       if (!this.displayThumbnails) {
         return
       }

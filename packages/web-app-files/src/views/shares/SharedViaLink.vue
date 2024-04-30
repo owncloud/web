@@ -83,7 +83,7 @@ import { ResourceTable } from '@ownclouders/web-pkg'
 import { Pagination } from '@ownclouders/web-pkg'
 
 import { useResourcesViewDefaults } from '../../composables'
-import { defineComponent, unref } from 'vue'
+import { ComponentPublicInstance, defineComponent, unref } from 'vue'
 import { Resource } from '@ownclouders/web-client'
 import { useGetMatchingSpace } from '@ownclouders/web-pkg'
 import SharesNavigation from 'web-app-files/src/components/AppBar/SharesNavigation.vue'
@@ -176,7 +176,7 @@ export default defineComponent({
   },
 
   methods: {
-    rowMounted(resource: Resource, component) {
+    rowMounted(resource: Resource, component: ComponentPublicInstance<unknown>) {
       if (!this.displayThumbnails) {
         return
       }

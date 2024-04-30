@@ -19,13 +19,13 @@ const enabledCapabilities = merge({}, bareCapabilities, {
   user: {
     expire_date: {
       enabled: true,
-      days: 1
+      days: '1'
     }
   },
   group: {
     expire_date: {
       enabled: true,
-      days: 2
+      days: '2'
     }
   }
 })
@@ -79,16 +79,20 @@ describe('InviteCollaborator ExpirationDatepicker', () => {
       .find('[data-testid="recipient-datepicker"]')
       .attributes().modelvalue
     expect(
-      DateTime.now().plus({ days: enabledCapabilities.user.expire_date.days }).toISODate()
+      DateTime.now()
+        .plus({ days: Number(enabledCapabilities.user.expire_date.days) })
+        .toISODate()
     ).toBe(DateTime.fromJSDate(new Date(selectedDate)).toISODate())
 
     const capabilityStore = useCapabilityStore()
-    capabilityStore.capabilities.files_sharing = enforcedCapabilities as any
+    capabilityStore.capabilities.files_sharing = enforcedCapabilities
 
     await nextTick()
     const maxDate = wrapper.find('[data-testid="recipient-datepicker"]').attributes()['max-date']
     expect(
-      DateTime.now().plus({ days: enabledCapabilities.user.expire_date.days }).toISODate()
+      DateTime.now()
+        .plus({ days: Number(enabledCapabilities.user.expire_date.days) })
+        .toISODate()
     ).toBe(DateTime.fromJSDate(new Date(maxDate)).toISODate())
   })
 
@@ -103,16 +107,20 @@ describe('InviteCollaborator ExpirationDatepicker', () => {
       .attributes().modelvalue
 
     expect(
-      DateTime.now().plus({ days: enabledCapabilities.group.expire_date.days }).toISODate()
+      DateTime.now()
+        .plus({ days: Number(enabledCapabilities.group.expire_date.days) })
+        .toISODate()
     ).toBe(DateTime.fromJSDate(new Date(selectedDate)).toISODate())
 
     const capabilityStore = useCapabilityStore()
-    capabilityStore.capabilities.files_sharing = enforcedCapabilities as any
+    capabilityStore.capabilities.files_sharing = enforcedCapabilities
 
     await nextTick()
     const maxDate = wrapper.find('[data-testid="recipient-datepicker"]').attributes()['max-date']
     expect(
-      DateTime.now().plus({ days: enabledCapabilities.group.expire_date.days }).toISODate()
+      DateTime.now()
+        .plus({ days: Number(enabledCapabilities.group.expire_date.days) })
+        .toISODate()
     ).toBe(DateTime.fromJSDate(new Date(maxDate)).toISODate())
   })
 
@@ -127,16 +135,20 @@ describe('InviteCollaborator ExpirationDatepicker', () => {
       .attributes().modelvalue
 
     expect(
-      DateTime.now().plus({ days: enabledCapabilities.user.expire_date.days }).toISODate()
+      DateTime.now()
+        .plus({ days: Number(enabledCapabilities.user.expire_date.days) })
+        .toISODate()
     ).toBe(DateTime.fromJSDate(new Date(selectedDate)).toISODate())
 
     const capabilityStore = useCapabilityStore()
-    capabilityStore.capabilities.files_sharing = enforcedCapabilities as any
+    capabilityStore.capabilities.files_sharing = enforcedCapabilities
 
     await nextTick()
     const maxDate = wrapper.find('[data-testid="recipient-datepicker"]').attributes()['max-date']
     expect(
-      DateTime.now().plus({ days: enabledCapabilities.user.expire_date.days }).toISODate()
+      DateTime.now()
+        .plus({ days: Number(enabledCapabilities.user.expire_date.days) })
+        .toISODate()
     ).toBe(DateTime.fromJSDate(new Date(maxDate)).toISODate())
   })
 
@@ -145,46 +157,68 @@ describe('InviteCollaborator ExpirationDatepicker', () => {
       sharingCapabilities: enabledCapabilities,
       stubOcDatepicker: true
     })
-    expect(wrapper.emitted().optionChange).toBeFalsy()
+    expect(wrapper.emitted('optionChange')).toBeFalsy()
 
     const capabilityStore = useCapabilityStore()
-    capabilityStore.capabilities.files_sharing = enabledCapabilities as any
+    capabilityStore.capabilities.files_sharing = enabledCapabilities
 
     await wrapper.setProps({ shareTypes: [ShareTypes.user.value] })
     await nextTick()
-    expect(wrapper.emitted().optionChange.length).toBe(1)
-    expect(DateTime.fromISO(wrapper.emitted().optionChange[0][0].expirationDate).toISODate()).toBe(
-      DateTime.now().plus({ days: enabledCapabilities.user.expire_date.days }).toISODate()
+    expect(wrapper.emitted('optionChange').length).toBe(1)
+    expect(
+      DateTime.fromISO(
+        (wrapper.emitted('optionChange')[0][0] as { expirationDate: string }).expirationDate
+      ).toISODate()
+    ).toBe(
+      DateTime.now()
+        .plus({ days: Number(enabledCapabilities.user.expire_date.days) })
+        .toISODate()
     )
 
     await wrapper.setProps({ shareTypes: [ShareTypes.group.value] })
     await nextTick()
     await nextTick()
-    expect(wrapper.emitted().optionChange.length).toBe(2)
+    expect(wrapper.emitted('optionChange').length).toBe(2)
 
-    expect(DateTime.fromISO(wrapper.emitted().optionChange[1][0].expirationDate).toISODate()).toBe(
-      DateTime.now().plus({ days: enabledCapabilities.group.expire_date.days }).toISODate()
+    expect(
+      DateTime.fromISO(
+        (wrapper.emitted('optionChange')[1][0] as { expirationDate: string }).expirationDate
+      ).toISODate()
+    ).toBe(
+      DateTime.now()
+        .plus({ days: Number(enabledCapabilities.group.expire_date.days) })
+        .toISODate()
     )
 
     await wrapper.setProps({ shareTypes: [] })
     await nextTick()
-    expect(wrapper.emitted().optionChange.length).toBe(3)
-    expect(wrapper.emitted().optionChange[2][0].expirationDate).toBe(null)
+    expect(wrapper.emitted('optionChange').length).toBe(3)
+    expect(
+      (wrapper.emitted('optionChange')[2][0] as { expirationDate: string }).expirationDate
+    ).toBe(null)
 
     const manualDate = DateTime.now().plus({ days: 5 })
     wrapper.vm.dateCurrent = manualDate.toJSDate()
     await nextTick()
-    expect(wrapper.emitted().optionChange.length).toBe(4)
-    expect(DateTime.fromISO(wrapper.emitted().optionChange[3][0].expirationDate).toISODate()).toBe(
-      manualDate.toISODate()
-    )
+    expect(wrapper.emitted('optionChange').length).toBe(4)
+    expect(
+      DateTime.fromISO(
+        (wrapper.emitted('optionChange')[3][0] as { expirationDate: string }).expirationDate
+      ).toISODate()
+    ).toBe(manualDate.toISODate())
 
     wrapper.vm.dateCurrent = null
     await wrapper.setProps({ shareTypes: [ShareTypes.user.value, ShareTypes.group.value] })
     await nextTick()
-    expect(wrapper.emitted().optionChange.length).toBe(5)
-    expect(DateTime.fromISO(wrapper.emitted().optionChange[4][0].expirationDate).toISODate()).toBe(
-      DateTime.now().plus({ days: enabledCapabilities.user.expire_date.days }).toISODate()
+    expect(wrapper.emitted('optionChange').length).toBe(5)
+    expect(
+      DateTime.fromISO(
+        (wrapper.emitted('optionChange')[4][0] as { expirationDate: string }).expirationDate
+      ).toISODate()
+    ).toBe(
+      DateTime.now()
+        .plus({ days: Number(enabledCapabilities.user.expire_date.days) })
+        .toISODate()
     )
   })
 })

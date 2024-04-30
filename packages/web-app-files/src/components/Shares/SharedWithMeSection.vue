@@ -97,7 +97,7 @@ import {
   useFileActionsToggleHideShare,
   useResourcesStore
 } from '@ownclouders/web-pkg'
-import { computed, defineComponent, PropType, unref } from 'vue'
+import { ComponentPublicInstance, computed, defineComponent, PropType, unref } from 'vue'
 import { debounce } from 'lodash-es'
 import { ImageDimension } from '@ownclouders/web-pkg'
 import { VisibilityObserver } from '@ownclouders/web-pkg'
@@ -253,7 +253,7 @@ export default defineComponent({
     visibilityObserver.disconnect()
   },
   methods: {
-    rowMounted(resource: IncomingShareResource, component) {
+    rowMounted(resource: IncomingShareResource, component: ComponentPublicInstance<unknown>) {
       const loadPreview = async () => {
         const preview = await this.$previewService.loadPreview(
           {

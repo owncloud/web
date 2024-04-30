@@ -10,7 +10,8 @@ import {
   defaultComponentMocks,
   defaultStubs,
   RouteLocation,
-  ComponentProps
+  ComponentProps,
+  PartialComponentProps
 } from 'web-test-helpers'
 import {
   AppBar,
@@ -20,6 +21,7 @@ import {
 } from '@ownclouders/web-pkg'
 import { useBreadcrumbsFromPathMock } from '../../../mocks/useBreadcrumbsFromPathMock'
 import { h } from 'vue'
+import { BreadcrumbItem } from 'design-system/src/components/OcBreadcrumb/types'
 
 const mockCreateFolder = vi.fn()
 const mockUseEmbedMode = vi.fn().mockReturnValue({ isEnabled: computed(() => false) })
@@ -96,12 +98,12 @@ describe('GenericSpace view', () => {
       { driveType: 'project', expectedItems: 2 },
       { driveType: 'share', expectedItems: 3 }
     ])('include root item(s)', ({ driveType, expectedItems }) => {
-      const space = {
-        id: 1,
+      const space = mock<SpaceResource>({
+        id: '1',
         getDriveAliasAndItem: vi.fn(),
         driveType,
         isOwner: () => driveType === 'personal'
-      }
+      })
       const { wrapper } = getMountedWrapper({ files: [mockDeep<Resource>()], props: { space } })
       expect(wrapper.findComponent<typeof AppBar>('app-bar-stub').props().breadcrumbs.length).toBe(
         expectedItems
@@ -291,6 +293,17 @@ function getMountedWrapper({
   }),
   breadcrumbsFromPath = [],
   stubs = {}
+}: {
+  mocks?: Record<string, unknown>
+  props?: PartialComponentProps<typeof GenericSpace>
+  files?: Resource[]
+  loading?: boolean
+  currentRoute?: Partial<RouteLocation>
+  currentFolder?: Resource
+  runningOnEos?: boolean
+  space?: SpaceResource
+  breadcrumbsFromPath?: BreadcrumbItem[]
+  stubs?: any
 } = {}) {
   const plugins = defaultPlugins({
     piniaOptions: {

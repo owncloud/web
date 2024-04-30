@@ -1,18 +1,18 @@
 import NotFoundMessage from '../../../../src/components/FilesList/NotFoundMessage.vue'
-import { createLocationPublic, createLocationSpaces } from '@ownclouders/web-pkg'
 import { PublicSpaceResource, SpaceResource, Resource } from '@ownclouders/web-client'
 import { MockProxy, mock } from 'vitest-mock-extended'
 import { join } from 'path'
 import { defaultComponentMocks, defaultPlugins, shallowMount } from 'web-test-helpers'
 import { OcButton } from 'design-system/src/components'
+import { RouteLocationNormalizedLoaded } from 'vue-router'
 
 const selectors = {
   homeButton: '#files-list-not-found-button-go-home',
   reloadLinkButton: '#files-list-not-found-button-reload-link'
 }
 
-const spacesLocation = createLocationSpaces('files-spaces-generic')
-const publicLocation = createLocationPublic('files-public-link')
+const spacesLocation = mock<RouteLocationNormalizedLoaded>({ name: 'files-spaces-generic' })
+const publicLocation = mock<RouteLocationNormalizedLoaded>({ name: 'files-public-link' })
 
 describe('NotFoundMessage', () => {
   describe('when user on personal route', () => {
@@ -87,7 +87,7 @@ describe('NotFoundMessage', () => {
   })
 })
 
-function getWrapper(space, route) {
+function getWrapper(space: SpaceResource, route: RouteLocationNormalizedLoaded) {
   const mocks = defaultComponentMocks({ currentRoute: route })
   return {
     wrapper: shallowMount(NotFoundMessage, {
