@@ -2,7 +2,7 @@ import { Page } from '@playwright/test'
 import { SpacesEnvironment, LinksEnvironment } from '../../../environment'
 import { File } from '../../../types'
 import * as po from './actions'
-import { spaceWithSpaceIDNotExist } from './utils'
+import { spaceWithSpaceIDNotExist, spaceWithSpaceIDExist } from './utils'
 import { ICollaborator } from '../share/collaborator'
 
 export class Spaces {
@@ -69,10 +69,13 @@ export class Spaces {
     await spaceWithSpaceIDNotExist({ spaceID, page: this.#page })
   }
 
+  async expectThatSpacesExist(space: string): Promise<void> {
+    const spaceID = this.getSpaceID({ key: space })
+    await spaceWithSpaceIDExist({ spaceID, page: this.#page })
+  }
+
   async canUserEditResource(args: Omit<po.canUserEditSpaceResourceArgs, 'page'>): Promise<boolean> {
-    const startUrl = this.#page.url()
     const canEdit = await po.canUserEditSpaceResource({ ...args, page: this.#page })
-    await this.#page.goto(startUrl)
     return canEdit
   }
 
@@ -113,5 +116,25 @@ export class Spaces {
 
   downloadSpace(): Promise<string> {
     return po.downloadSpace(this.#page)
+  }
+
+  async expectThatShowShareButtonExist({
+    shareType,
+    resource
+  }: {
+    shareType: string
+    resource: string
+  }): Promise<void> {
+    await po.showInvitedPeopleOrLinkButtonExist({ page: this.#page, shareType, resource })
+  }
+
+  async expectThatShowShareButtonNotExist({
+    shareType,
+    resource
+  }: {
+    shareType: string
+    resource: string
+  }): Promise<void> {
+    await po.showInvitedPeopleOrLinkButtonNotExist({ page: this.#page, shareType, resource })
   }
 }

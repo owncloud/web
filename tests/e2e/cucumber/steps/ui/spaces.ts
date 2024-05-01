@@ -117,22 +117,34 @@ When(
 )
 
 Then(
-  '{string} should see folder {string} but should not be able to edit',
-  async function (this: World, stepUser: string, resource: string): Promise<void> {
+  /^"([^"]*)" (should|should not) be able to edit (?:folder|file) "([^"]*)"$/,
+  async function (
+    this: World,
+    stepUser: string,
+    actionType: string,
+    resource: string
+  ): Promise<void> {
     const { page } = this.actorsEnvironment.getActor({ key: stepUser })
     const spacesObject = new objects.applicationFiles.Spaces({ page })
     const userCanEdit = await spacesObject.canUserEditResource({ resource })
-    expect(userCanEdit).toBe(false)
+    expect(userCanEdit).toBe(actionType === 'should' ? true : false)
   }
 )
 
 Then(
-  '{string} should see file {string} but should not be able to edit',
-  async function (this: World, stepUser: string, resource: string): Promise<void> {
+  /^"([^"]*)" (should|should not) see (show links|show invited people) button on the (?:folder|file) "([^"]*)"$/,
+  async function (
+    this: World,
+    stepUser: string,
+    actionType: string,
+    shareType: string,
+    resource: string
+  ): Promise<void> {
     const { page } = this.actorsEnvironment.getActor({ key: stepUser })
     const spacesObject = new objects.applicationFiles.Spaces({ page })
-    const userCanEdit = await spacesObject.canUserEditResource({ resource })
-    expect(userCanEdit).toBe(false)
+    actionType === 'should'
+      ? await spacesObject.expectThatShowShareButtonExist({ shareType, resource })
+      : await spacesObject.expectThatShowShareButtonNotExist({ shareType, resource })
   }
 )
 
@@ -142,6 +154,15 @@ Then(
     const { page } = this.actorsEnvironment.getActor({ key: stepUser })
     const spacesObject = new objects.applicationFiles.Spaces({ page })
     await spacesObject.expectThatSpacesIdNotExist(space)
+  }
+)
+
+Then(
+  '{string} should see space {string}',
+  async function (this: World, stepUser: string, space: string): Promise<void> {
+    const { page } = this.actorsEnvironment.getActor({ key: stepUser })
+    const spacesObject = new objects.applicationFiles.Spaces({ page })
+    await spacesObject.expectThatSpacesExist(space)
   }
 )
 

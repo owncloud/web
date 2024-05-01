@@ -28,5 +28,5 @@ Feature: internal link share
       | resource | recipient | type | role     |
       | myfolder | Brian     | user | Can view |
     And "Alice" logs out
-    Then "Brian" should see folder "myfolder" but should not be able to edit
+    Then "Brian" should not be able to edit folder "myfolder"
     And "Brian" logs out

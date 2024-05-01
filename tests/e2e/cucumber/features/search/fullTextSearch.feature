@@ -47,7 +47,7 @@ Feature: Search
       | withTag.txt     | tag 1 |
 
     When "Brian" searches "" using the global search and the "all files" filter and presses enter
-    Then "Brian" should see the message "Search for files" on the webUI
+    Then "Brian" should see the message "Search for files" on the search result
 
     When "Brian" selects tag "alice tag" from the search result filter chip
     Then following resources should be displayed in the files list for user "Brian"

@@ -99,4 +99,8 @@ export class Share {
     await this.#page.goto(startUrl)
     return accessDetails
   }
+
+  getMessage(): Promise<string> {
+    return po.getMessage({ page: this.#page })
+  }
 }

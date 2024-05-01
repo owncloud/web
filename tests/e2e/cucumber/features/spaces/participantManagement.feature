@@ -40,7 +40,7 @@ Feature: spaces participant management
       | lorem.txt | parent |
     When "David" logs in
     And "David" navigates to the project space "team.1"
-    Then "David" should see folder "parent" but should not be able to edit
+    Then "David" should not be able to edit folder "parent"
     And "David" logs out
     When "Edith" logs in
     And "Edith" navigates to the project space "team.1"
@@ -53,7 +53,7 @@ Feature: spaces participant management
     And "Edith" logs out
     When "Carol" logs in
     And "Carol" navigates to the project space "team.1"
-    Then "Carol" should see folder "parent" but should not be able to edit
+    Then "Carol" should not be able to edit folder "parent"
     # page reload is necessary to fetch all the changes made by user Brian
     When "Alice" reloads the spaces page
     And "Alice" creates a public link of following resource using the sidebar panel

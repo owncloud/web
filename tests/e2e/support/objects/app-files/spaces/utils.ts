@@ -12,3 +12,9 @@ export const spaceWithSpaceIDNotExist = async (args: searchForSpacesIdsArgs): Pr
   const space = page.locator(util.format(spaceIdSelector, spaceID))
   await expect(space).not.toBeVisible()
 }
+
+export const spaceWithSpaceIDExist = async (args: searchForSpacesIdsArgs): Promise<void> => {
+  const { page, spaceID } = args
+  const space = page.locator(util.format(spaceIdSelector, spaceID))
+  await expect(space).toBeVisible()
+}
