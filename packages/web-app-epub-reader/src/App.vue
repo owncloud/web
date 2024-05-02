@@ -51,6 +51,7 @@
         </div>
         <oc-select
           v-model="currentChapter"
+          :aria-label="$gettext('Select a chapter')"
           class="epub-reader-controls-chapters-select oc-width-1-1 oc-px-s oc-hidden@l"
           :options="chapters"
           :searchable="false"

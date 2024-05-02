@@ -96,6 +96,7 @@
           <dd data-testid="language" class="oc-width-1-3@l oc-width-1-2@m oc-width-1-1@s">
             <oc-select
               v-if="languageOptions"
+              :aria-label="$gettext('Select language')"
               :placeholder="$gettext('Please choose...')"
               :model-value="selectedLanguageValue"
               :clearable="false"

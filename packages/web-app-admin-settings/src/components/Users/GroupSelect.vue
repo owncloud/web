@@ -2,6 +2,7 @@
   <div id="user-group-select-form">
     <oc-select
       :model-value="selectedOptions"
+      :aria-label="$gettext('Select groups')"
       class="oc-mb-s"
       :multiple="true"
       :options="groupOptions"

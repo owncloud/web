@@ -1,6 +1,7 @@
 <template>
   <div>
     <oc-select
+      :aria-label="$gettext('Select a theme')"
       :model-value="currentThemeOrAuto"
       :clearable="false"
       :options="availableThemesAndAuto"
