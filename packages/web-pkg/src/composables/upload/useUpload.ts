@@ -5,6 +5,9 @@ import { useGettext } from 'vue3-gettext'
 import { useAuthStore, useCapabilityStore, useConfigStore } from '../piniaStores'
 import { useClientService } from '../clientService'
 import { Auth } from '../../services'
+import { TusOptions } from '@uppy/tus'
+import { XHRUploadOptions } from '@uppy/xhr-upload'
+import { UppyFile } from '@uppy/core'
 
 interface UploadOptions {
   uppyService: UppyService
@@ -27,48 +30,60 @@ export function useUpload(options: UploadOptions) {
     return {
       'Accept-Language': currentLanguage,
       'Initiator-ID': clientService.initiatorId,
+      'X-Request-ID': uuidV4(),
       ...auth.getHeaders()
     }
   })
 
-  const uppyOptions = computed(() => {
-    const isTusSupported = capabilityStore.tusMaxChunkSize > 0
+  const isTusSupported = computed(() => capabilityStore.tusMaxChunkSize > 0)
 
+  const tusOptions = computed<TusOptions>(() => {
+    const options: TusOptions = {
+      onBeforeRequest: (req, file) =>
+        new Promise((resolve) => {
+          req.setHeader('Authorization', unref(headers).Authorization)
+          req.setHeader('X-Request-ID', unref(headers)['X-Request-ID'])
+          req.setHeader('Accept-Language', unref(headers)['Accept-Language'])
+          req.setHeader('Initiator-ID', unref(headers)['Initiator-ID'])
+          if (file?.isRemote) {
+            req.setHeader('x-oc-mtime', (file?.data?.lastModified / 1000).toString())
+          }
+          resolve()
+        }),
+      chunkSize: capabilityStore.tusMaxChunkSize || Infinity,
+      overridePatchMethod: capabilityStore.tusHttpMethodOverride,
+      uploadDataDuringCreation: capabilityStore.tusExtension.includes('creation-with-upload')
+    }
+
+    // FIXME: remove if cloud upload still works without this
+    ;(options as any)['headers'] = (file: UppyFile) => {
+      if (!!file.xhrUpload || file?.isRemote) {
+        return { 'x-oc-mtime': file?.data?.lastModified / 1000, ...unref(headers) }
+      }
+    }
+
+    return options
+  })
+
+  const xhrOptions = computed<XHRUploadOptions>(() => {
     return {
-      isTusSupported,
-      onBeforeRequest: (req) => {
-        req.setHeader('Authorization', unref(headers).Authorization)
-        req.setHeader('X-Request-ID', uuidV4())
-        req.setHeader('Accept-Language', unref(headers)['Accept-Language'])
-        req.setHeader('Initiator-ID', unref(headers)['Initiator-ID'])
-      },
-      headers: (file) =>
-        !!file.xhrUpload || file?.isRemote
-          ? {
-              'x-oc-mtime': file?.data?.lastModified / 1000,
-              'X-Request-ID': uuidV4(),
-              ...unref(headers)
-            }
-          : {},
-      ...(isTusSupported && {
-        tusMaxChunkSize: capabilityStore.tusMaxChunkSize,
-        tusHttpMethodOverride: capabilityStore.tusHttpMethodOverride,
-        tusExtension: capabilityStore.tusExtension
-      }),
-      ...(!isTusSupported && {
-        xhrTimeout: configStore.options.upload?.xhr?.timeout || 60000
+      timeout: configStore.options.upload?.xhr?.timeout || 60000,
+      endpoint: '',
+      headers: (file) => ({
+        'x-oc-mtime': file?.data?.lastModified / 1000,
+        ...unref(headers)
       })
     }
   })
 
   watch(
-    uppyOptions,
+    [tusOptions, xhrOptions],
     () => {
-      if (unref(uppyOptions).isTusSupported) {
-        options.uppyService.useTus(unref(uppyOptions))
+      if (unref(isTusSupported)) {
+        options.uppyService.useTus(unref(tusOptions))
         return
       }
-      options.uppyService.useXhr(unref(uppyOptions))
+      options.uppyService.useXhr(unref(xhrOptions))
     },
     { immediate: true }
   )
