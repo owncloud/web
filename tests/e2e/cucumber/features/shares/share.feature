@@ -134,12 +134,12 @@ Feature: share
       | test_video.mp4 | file |
     And "Alice" closes the file viewer
     And "Alice" shares the following resource using the sidebar panel
-      | resource         | recipient | type | role                                 | resourceType |
-      | shareToBrian.txt | Brian     | user | Can edit                             | file         |
-      | shareToBrian.md  | Brian     | user | Can edit                             | file         |
-      | testavatar.jpeg  | Brian     | user | Can view                             | file         |
-      | simple.pdf       | Brian     | user | custom_permissions:read,update,share | file         |
-      | sharedFile.txt   | Brian     | user | Can edit                             | file         |
+      | resource         | recipient | type | role     | resourceType |
+      | shareToBrian.txt | Brian     | user | Can edit | file         |
+      | shareToBrian.md  | Brian     | user | Can edit | file         |
+      | testavatar.jpeg  | Brian     | user | Can view | file         |
+      | simple.pdf       | Brian     | user | Can edit | file         |
+      | sharedFile.txt   | Brian     | user | Can edit | file         |
     And "Alice" navigates to the shared with others page
     And "Alice" opens the following file in mediaviewer
       | resource        |
@@ -165,6 +165,7 @@ Feature: share
       | resource   |
       | simple.pdf |
     And "Brian" closes the file viewer
+    And "Alice" navigates to the personal space page
     And "Alice" removes following sharee
       | resource         | recipient |
       | shareToBrian.txt | Brian     |

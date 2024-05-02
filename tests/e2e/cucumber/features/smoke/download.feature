@@ -37,9 +37,9 @@ Feature: Download
     And "Alice" opens the following file in mediaviewer
       | resource        |
       | testavatar.jpg |
-    And "Alice" downloads the following image from the mediaviewer
-      | resource       |
-      | testavatar.jpg |
+    And "Alice" downloads the following resources using the preview topbar
+      | resource       | type |
+      | testavatar.jpg | file |
     And "Alice" closes the file viewer
     And "Alice" logs out
 
@@ -59,7 +59,7 @@ Feature: Download
     And "Brian" opens the following file in mediaviewer
       | resource       |
       | testavatar.jpg |
-    And "Brian" downloads the following image from the mediaviewer
-      | resource       |
-      | testavatar.jpg |
+    And "Brian" downloads the following resources using the preview topbar
+      | resource       | type |
+      | testavatar.jpg | file |
     And "Brian" logs out
