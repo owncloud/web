@@ -2,8 +2,8 @@
   <div>
     <label
       v-if="label"
+      :aria-hidden="accessibleLabel.length > 0"
       :for="id"
-      :class="{ 'oc-invisible-sr': isLabelHidden }"
       class="oc-label"
       v-text="label"
     />
@@ -14,6 +14,7 @@
     ></oc-contextual-helper>
     <vue-select
       ref="select"
+      :aria-label="accessibleLabel"
       :disabled="disabled || readOnly"
       :filter="filter"
       :loading="loading"
@@ -99,17 +100,16 @@ import uniqueId from '../../utils/uniqueId'
 import {
   defineComponent,
   ComponentPublicInstance,
-  onMounted,
+  computed,
   ref,
   unref,
   VNodeRef,
   PropType
 } from 'vue'
+import VueSelect from 'vs-vue3-select'
 import { useGettext } from 'vue3-gettext'
-import 'vue-select/dist/vue-select.css'
+import 'vs-vue3-select/dist/vs-vue3-select.css'
 import { ContextualHelper } from '../../helpers'
-// @ts-ignore
-import VueSelect from 'vue-select'
 
 // the keycode property is deprecated in the JS event API, vue-select still works with it though
 enum KeyCode {
@@ -166,6 +166,10 @@ export default defineComponent({
       type: Boolean,
       required: false,
       default: false
+    },
+    ariaLabel: {
+      type: String,
+      required: true
     },
     /**
      * Label of the select component
@@ -286,10 +290,6 @@ export default defineComponent({
     readOnly: {
       type: Boolean,
       default: false
-    },
-    isLabelHidden: {
-      type: Boolean,
-      default: false
     }
   },
   emits: ['search:input', 'update:modelValue'],
@@ -312,12 +312,6 @@ export default defineComponent({
        */
       emit('search:input', (event.target as HTMLInputElement).value)
     }
-
-    onMounted(() => {
-      if (!props.label) {
-        setComboBoxAriaLabel()
-      }
-    })
 
     const dropdownEnabled = ref(false)
     const setDropdownEnabled = (enabled: boolean) => {
@@ -366,7 +360,12 @@ export default defineComponent({
       setDropdownEnabled(true)
     }
 
+    const accessibleLabel = computed(() => {
+      return props.ariaLabel || props.label
+    })
+
     return {
+      accessibleLabel,
       select,
       userInput,
       selectDropdownShouldOpen,

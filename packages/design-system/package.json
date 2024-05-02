@@ -108,7 +108,7 @@
     "vue-inline-svg": "3.1.2",
     "vue-loader": "^17.4.2",
     "vue-router": "4.2.5",
-    "vue-select": "4.0.0-beta.6",
+    "vs-vue3-select": "^1.3.5",
     "vue-style-loader": "^4.1.3",
     "vue-styleguidist": "^4.72.4",
     "vue3-gettext": "2.4.0",
@@ -132,7 +132,7 @@
     "v-calendar": "github:dschmidt/v-calendar#3ce6e3b8afd5491cb53ee811281d5fa8a45b044d",
     "vue": "3.4.21",
     "vue-inline-svg": "3.1.2",
-    "vue-select": "^3.12.0",
+    "vs-vue3-select": "^1.3.5",
     "webfontloader": "^1.6.28"
   },
   "engines": {
