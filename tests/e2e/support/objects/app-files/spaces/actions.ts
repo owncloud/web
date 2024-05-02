@@ -1,4 +1,4 @@
-import { Page, expect } from '@playwright/test'
+import { Page } from '@playwright/test'
 import util from 'util'
 
 import { sidebar, editor } from '../utils'
@@ -23,10 +23,6 @@ const spacesDescriptionInputArea = '.md-mode .ProseMirror'
 const spacesDescriptionSaveTextFileInEditorButton = '#app-save-action:visible'
 const sideBarActions =
   '//ul[@id="oc-files-actions-sidebar"]//span[@class="oc-files-context-action-label"]'
-const showInvitedPeopleButton =
-  '//span[@data-test-resource-name="%s"]/ancestor::tr[contains(@class, "oc-tbody-tr")]//button[contains(@data-test-indicator-type, "user-direct")]'
-const showLinkButton =
-  '//span[@data-test-resource-name="%s"]/ancestor::tr[contains(@class, "oc-tbody-tr")]//button[contains(@data-test-indicator-type, "link-direct")]'
 
 export const openActionsPanel = async (page: Page): Promise<void> => {
   await sidebar.open({ page })
@@ -328,26 +324,4 @@ export const downloadSpace = async (page: Page): Promise<string> => {
   await sidebar.close({ page })
 
   return download.suggestedFilename()
-}
-
-export const showInvitedPeopleOrLinkButtonExist = async (args: {
-  page: Page
-  shareType: string
-  resource: string
-}): Promise<void> => {
-  const { page, shareType, resource } = args
-  shareType === 'show invited people'
-    ? await expect(page.locator(util.format(showInvitedPeopleButton, resource))).toBeVisible()
-    : await expect(page.locator(util.format(showLinkButton, resource))).toBeVisible()
-}
-
-export const showInvitedPeopleOrLinkButtonNotExist = async (args: {
-  page: Page
-  shareType: string
-  resource: string
-}): Promise<void> => {
-  const { page, shareType, resource } = args
-  shareType === 'show invited people'
-    ? await expect(page.locator(util.format(showInvitedPeopleButton, resource))).not.toBeVisible()
-    : await expect(page.locator(util.format(showLinkButton, resource))).not.toBeVisible()
 }

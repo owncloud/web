@@ -90,7 +90,7 @@ Feature: spaces participant management
     And "Alice" removes access to following users from the project space
       | user  |
       | Brian |
-    Then "Brian" should not be able to see space "team.1"
+    Then "Brian" should not see space "team.1"
     And "Brian" logs out
     When "Alice" changes the roles of the following users in the project space
       | user  | role       |
@@ -101,5 +101,5 @@ Feature: spaces participant management
       | parent/textfile.txt |
     And "Carol" logs out
     And "Alice" as project manager removes their own access to the project space
-    Then "Alice" should not be able to see space "team.1"
+    Then "Alice" should not see space "team.1"
     And "Alice" logs out

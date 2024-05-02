@@ -1,8 +1,8 @@
-import { Page } from '@playwright/test'
+import { Locator, Page } from '@playwright/test'
 import { SpacesEnvironment, LinksEnvironment } from '../../../environment'
 import { File } from '../../../types'
 import * as po from './actions'
-import { spaceWithSpaceIDNotExist, spaceWithSpaceIDExist } from './utils'
+import { spaceLocator, showShareButtonSelector } from './utils'
 import { ICollaborator } from '../share/collaborator'
 
 export class Spaces {
@@ -64,14 +64,9 @@ export class Spaces {
     await po.removeAccessSpaceMembers({ ...args, page: this.#page })
   }
 
-  async expectThatSpacesIdNotExist(space: string): Promise<void> {
+  getSpaceLocator(space: string): Locator {
     const spaceID = this.getSpaceID({ key: space })
-    await spaceWithSpaceIDNotExist({ spaceID, page: this.#page })
-  }
-
-  async expectThatSpacesExist(space: string): Promise<void> {
-    const spaceID = this.getSpaceID({ key: space })
-    await spaceWithSpaceIDExist({ spaceID, page: this.#page })
+    return spaceLocator({ spaceID, page: this.#page })
   }
 
   async canUserEditResource(args: Omit<po.canUserEditSpaceResourceArgs, 'page'>): Promise<boolean> {
@@ -118,23 +113,13 @@ export class Spaces {
     return po.downloadSpace(this.#page)
   }
 
-  async expectThatShowShareButtonExist({
-    shareType,
+  showShareButtonSelector({
+    buttonLabel,
     resource
   }: {
-    shareType: string
+    buttonLabel: string
     resource: string
-  }): Promise<void> {
-    await po.showInvitedPeopleOrLinkButtonExist({ page: this.#page, shareType, resource })
-  }
-
-  async expectThatShowShareButtonNotExist({
-    shareType,
-    resource
-  }: {
-    shareType: string
-    resource: string
-  }): Promise<void> {
-    await po.showInvitedPeopleOrLinkButtonNotExist({ page: this.#page, shareType, resource })
+  }): Locator {
+    return showShareButtonSelector({ page: this.#page, buttonLabel, resource })
   }
 }

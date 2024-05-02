@@ -87,7 +87,7 @@ Feature: server sent events
     And "Brian" should get "share-updated" SSE event
 
     # link-created
-    When "Alice" creates a public link creates a public link of following resource using the sidebar panel
+    When "Alice" creates a public link of following resource using the sidebar panel
       | resource     | password |
       | space-folder | %public% |
     Then "Alice" should get "link-created" SSE event
@@ -120,7 +120,7 @@ Feature: server sent events
       | Brian |
     Then "Alice" should get "space-member-removed" SSE event
     And "Brian" should get "space-member-removed" SSE event
-    And "Brian" should not be able to see space "marketing"
+    And "Brian" should not see space "marketing"
 
     And "Brian" logs out
     And "Alice" logs out

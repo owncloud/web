@@ -137,32 +137,30 @@ Then(
     this: World,
     stepUser: string,
     actionType: string,
-    shareType: string,
+    buttonLabel: string,
     resource: string
   ): Promise<void> {
     const { page } = this.actorsEnvironment.getActor({ key: stepUser })
     const spacesObject = new objects.applicationFiles.Spaces({ page })
+    const showShareButtonSelector = spacesObject.showShareButtonSelector({
+      buttonLabel,
+      resource
+    })
     actionType === 'should'
-      ? await spacesObject.expectThatShowShareButtonExist({ shareType, resource })
-      : await spacesObject.expectThatShowShareButtonNotExist({ shareType, resource })
+      ? await expect(showShareButtonSelector).toBeVisible()
+      : await expect(showShareButtonSelector).not.toBeVisible()
   }
 )
 
 Then(
-  '{string} should not be able to see space {string}',
-  async function (this: World, stepUser: string, space: string): Promise<void> {
+  /^"([^"]*)" (should|should not) see space "([^"]*)"$/,
+  async function (this: World, stepUser: string, actionType: string, space: string): Promise<void> {
     const { page } = this.actorsEnvironment.getActor({ key: stepUser })
     const spacesObject = new objects.applicationFiles.Spaces({ page })
-    await spacesObject.expectThatSpacesIdNotExist(space)
-  }
-)
-
-Then(
-  '{string} should see space {string}',
-  async function (this: World, stepUser: string, space: string): Promise<void> {
-    const { page } = this.actorsEnvironment.getActor({ key: stepUser })
-    const spacesObject = new objects.applicationFiles.Spaces({ page })
-    await spacesObject.expectThatSpacesExist(space)
+    const spaceLocator = spacesObject.getSpaceLocator(space)
+    actionType === 'should'
+      ? await expect(spaceLocator).toBeVisible()
+      : await expect(spaceLocator).not.toBeVisible()
   }
 )
 
