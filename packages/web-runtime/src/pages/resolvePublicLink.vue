@@ -80,10 +80,7 @@ import {
   isPublicSpaceResource,
   PublicSpaceResource
 } from '@ownclouders/web-client'
-import isEmpty from 'lodash-es/isEmpty'
 import { useGettext } from 'vue3-gettext'
-// full import is needed here so it can be overwritten via CERN config
-import { useLoadTokenInfo } from 'web-runtime/src/composables/tokenInfo'
 import { urlJoin } from '@ownclouders/web-client'
 import { RouteLocationNamedRaw } from 'vue-router'
 import { dirname } from 'path'
@@ -132,26 +129,27 @@ export default defineComponent({
       return queryItemAsString(unref(detailsQuery))
     })
 
-    // token info
-    const { loadTokenInfoTask } = useLoadTokenInfo({ clientService, authStore })
-    const tokenInfo = ref(null)
+    const isPasswordRequired = ref(false)
+    const isInternalLink = ref(false)
 
-    // generic public link loading
-    const isPasswordRequired = ref<boolean>()
-    const isPasswordRequiredTask = useTask(function* () {
-      if (!isEmpty(unref(tokenInfo))) {
-        return unref(tokenInfo).password_protected
-      }
+    const loadLinkMetaDataTask = useTask(function* () {
       try {
         let space: PublicSpaceResource = {
           ...unref(publicLinkSpace),
           publicLinkPassword: null
         }
         yield clientService.webdav.getFileInfo(space)
-        return false
       } catch (error) {
         if (error.statusCode === 401) {
-          return true
+          if (error.message === "No 'Authorization: Basic' header found") {
+            isPasswordRequired.value = true
+          }
+
+          if (error.message === "No 'Authorization: Bearer' header found") {
+            isInternalLink.value = true
+          }
+
+          return
         }
         if (error.statusCode === 404) {
           throw new Error($gettext('The resource could not be located, it may not exist anymore.'))
@@ -182,25 +180,13 @@ export default defineComponent({
       return false
     })
 
-    // resolve public link. resolve into authenticated context if possible.
-    const redirectToPrivateLink = (fileId: string | number) => {
-      return router.push({
-        name: 'resolvePrivateLink',
-        params: { fileId: `${fileId}` },
-        ...(unref(details) && {
-          query: {
-            details: unref(details)
-          }
-        })
-      })
-    }
     const resolvePublicLinkTask = useTask(function* (signal, passwordRequired: boolean) {
       if (unref(isOcmLink) && !configStore.options.ocm.openRemotely) {
         throw new Error($gettext('Opening files from remote is disabled'))
       }
 
-      if (!isEmpty(unref(tokenInfo)) && unref(tokenInfo)?.alias_link) {
-        redirectToPrivateLink(unref(tokenInfo).id)
+      if (unref(isInternalLink)) {
+        router.push({ name: 'login', query: { redirectUrl: `/i/${unref(token)}` } })
         return
       }
 
@@ -282,11 +268,9 @@ export default defineComponent({
       if (resolvePublicLinkTask.isError && resolvePublicLinkTask.last.error.statusCode !== 401) {
         return resolvePublicLinkTask.last.error.message
       }
-      if (loadTokenInfoTask.isError) {
-        return loadTokenInfoTask.last.error.message
-      }
-      if (isPasswordRequiredTask.isError) {
-        return isPasswordRequiredTask.last.error.message
+
+      if (loadLinkMetaDataTask.isError) {
+        return loadLinkMetaDataTask.last.error.message
       }
       return null
     })
@@ -297,8 +281,7 @@ export default defineComponent({
         return
       }
 
-      tokenInfo.value = await loadTokenInfoTask.perform(unref(token))
-      isPasswordRequired.value = await isPasswordRequiredTask.perform()
+      await loadLinkMetaDataTask.perform()
       if (!unref(isPasswordRequired)) {
         await resolvePublicLinkTask.perform(false)
       }
@@ -324,9 +307,8 @@ export default defineComponent({
       wrongPasswordMessage,
       errorMessage,
       footerSlogan,
-      loadTokenInfoTask,
       resolvePublicLinkTask,
-      isPasswordRequiredTask
+      loadLinkMetaDataTask
     }
   }
 })

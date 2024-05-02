@@ -29,11 +29,6 @@ export default defineConfig(async (args) => {
     projectRootDir,
     'packages/web-pkg/src/cern/components/CollapsibleOcTable.vue'
   )
-  // token info request
-  ;(config.resolve.alias as any)['web-runtime/src/composables/tokenInfo'] = join(
-    projectRootDir,
-    'packages/web-pkg/src/cern/composables/useLoadTokenInfo'
-  )
   // create space component
   ;(config.resolve.alias as any)['../../components/AppBar/CreateSpace.vue'] = join(
     projectRootDir,
