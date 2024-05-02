@@ -30,7 +30,7 @@ Feature: internal link share in project space
     And "Alice" renames the most recently created public link of space to "spaceLink"
     And "Alice" edits the public link named "spaceLink" of the space changing role to "Invited people"
     # internal link to folder
-    And "Alice" creates a public link creates a public link of following resource using the sidebar panel
+    And "Alice" creates a public link of following resource using the sidebar panel
       | resource | role           | password |
       | myfolder | Invited people | %public% |
     # When "Alice" edits the public link named "Link" of resource "myfolder" changing role to "Invited people"

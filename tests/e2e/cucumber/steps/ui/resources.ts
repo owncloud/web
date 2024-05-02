@@ -103,20 +103,11 @@ When(
 )
 
 When(
-  /^"([^"]*)" downloads the following resource(?:s)? using the (sidebar panel|batch action)$/,
+  /^"([^"]*)" downloads the following resource(?:s)? using the (sidebar panel|batch action|preview topbar)$/,
   async function (this: World, stepUser: string, actionType: string, stepTable: DataTable) {
     const { page } = this.actorsEnvironment.getActor({ key: stepUser })
     const resourceObject = new objects.applicationFiles.Resource({ page })
     await processDownload(stepTable, resourceObject, actionType)
-  }
-)
-
-When(
-  /^"([^"]*)" downloads the following image(?:s)? from the mediaviewer$/,
-  async function (this: World, stepUser: string, stepTable: DataTable) {
-    const { page } = this.actorsEnvironment.getActor({ key: stepUser })
-    const resourceObject = new objects.applicationFiles.Resource({ page })
-    await processDownload(stepTable, resourceObject, 'preview')
   }
 )
 
@@ -470,8 +461,8 @@ export const processDownload = async (
       case 'sidebar panel':
         via = 'SIDEBAR_PANEL'
         break
-      case 'preview':
-        via = 'PREVIEW'
+      case 'preview topbar':
+        via = 'PREVIEW_TOPBAR'
         break
       default:
         break
@@ -488,7 +479,7 @@ export const processDownload = async (
       downloadedResources.push(name)
     })
 
-    if (actionType === 'sidebar panel') {
+    if (actionType === 'sidebar panel' || actionType === 'preview topbar') {
       expect(downloads.length).toBe(files.length)
       for (const resource of files) {
         const fileOrFolderName = path.parse(resource.name).name
@@ -818,5 +809,23 @@ Then(
     actionType === 'should'
       ? await expect(lockLocator).toBeVisible()
       : await expect(lockLocator).not.toBeVisible()
+  }
+)
+
+When(
+  /^"([^"]*)" navigates to the (next|previous) media resource$/,
+  async function (this: World, stepUser: string, navigationType: string): Promise<void> {
+    const { page } = this.actorsEnvironment.getActor({ key: stepUser })
+    const resourceObject = new objects.applicationFiles.Resource({ page })
+    await resourceObject.navigateMediaFile(navigationType)
+  }
+)
+
+When(
+  '{string} opens a file {string} in the media-viewer using the sidebar panel',
+  async function (this: World, stepUser: any, file: any): Promise<void> {
+    const { page } = this.actorsEnvironment.getActor({ key: stepUser })
+    const resourceObject = new objects.applicationFiles.Resource({ page })
+    await resourceObject.previewMediaFromSidebarPanel(file)
   }
 )

@@ -100,7 +100,6 @@ config = {
             ],
             "suites": {
                 "oCISBasic": [
-                    "webUIPreview",
                     "webUILogin",
                 ],
                 "oCISFiles1": [
@@ -169,7 +168,6 @@ basicTestSuites = [
     "webUIFilesDetails",
     "webUILogin",
     "webUIMoveFilesFolders",
-    "webUIPreview",
     "webUIRenameFiles",
     "webUISharingAcceptShares",
     "webUISharingInternalGroupsEdgeCases",

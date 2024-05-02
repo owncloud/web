@@ -39,7 +39,7 @@ Feature: language settings
       | filesForUpload/lorem.txt | lorem.txt |
 
     And "Alice" opens the "files" app
-    And "Alice" creates a public link creates a public link of following resource using the sidebar panel
+    And "Alice" creates a public link of following resource using the sidebar panel
       | resource     | password |
       | folderPublic | %public% |
     And "Alice" logs out

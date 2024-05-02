@@ -32,7 +32,7 @@ export const fileViewerLocator = ({
       return page.locator(texEditor)
     case 'pdf-viewer':
       return page.locator(pdfViewer)
-    case 'image-viewer':
+    case 'media-viewer':
       return page.locator(imageViewer)
     default:
       throw new Error(`${fileViewerType} not implemented`)
