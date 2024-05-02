@@ -10,7 +10,6 @@ import { config } from '../../../../config'
 import { buildXpathLiteral } from '../../../utils/locator'
 
 const topbarFilenameSelector = '#app-top-bar-resource .oc-resource-name'
-const downloadPreviewButton = '//button[contains(@id, "preview-download")]'
 const downloadFileButtonSingleShareView = '.oc-files-actions-download-file-trigger'
 const downloadFolderButtonSingleShareView = '.oc-files-actions-download-archive-trigger'
 const filesView = '#files-view'
