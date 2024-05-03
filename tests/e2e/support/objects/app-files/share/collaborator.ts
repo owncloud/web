@@ -61,11 +61,11 @@ export default class Collaborator {
   private static readonly newCollaboratorRoleDropdown =
     '//*[@id="files-collaborators-role-button-new"]'
   private static readonly sendInvitationButton = '#new-collaborators-form-create-button'
-  private static readonly collaboratorRoleDropdownButton =
+  public static readonly collaboratorRoleDropdownButton =
     '%s//button[contains(@class,"files-recipient-role-select-btn")]'
   private static readonly collaboratorRoleItemSelector =
     '%s//span[contains(@class,"roles-select-role-item")]/span[text()="%s"]'
-  private static readonly collaboratorEditDropdownButton =
+  public static readonly collaboratorEditDropdownButton =
     '%s//button[contains(@class,"collaborator-edit-dropdown-options-btn")]'
   private static readonly collaboratorUserSelector = '//*[@data-testid="collaborator-user-item-%s"]'
   private static readonly collaboratorGroupSelector =

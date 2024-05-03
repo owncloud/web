@@ -1,4 +1,4 @@
-import { Page, expect } from '@playwright/test'
+import { Page, expect, Locator } from '@playwright/test'
 import util from 'util'
 import Collaborator, { ICollaborator, IAccessDetails } from './collaborator'
 import { sidebar } from '../utils'
@@ -6,6 +6,7 @@ import { clickResource } from '../resource/actions'
 import { clearCurrentPopup, createLinkArgs } from '../link/actions'
 import { config } from '../../../../config.js'
 import { createdLinkStore } from '../../../store'
+import { User } from '../../../types'
 
 const quickShareButton =
   '//*[@data-test-resource-name="%s"]/ancestor::tr//button[contains(@class, "files-quick-action-show-shares")]'
@@ -291,4 +292,16 @@ export const getAccessDetails = async (args: {
 
 export const getMessage = ({ page }: { page: Page }): Promise<string> => {
   return page.locator(informMessage).textContent()
+}
+
+export const changeRoleLocator = (args: { page: Page; recipient: User }): Locator => {
+  const { page, recipient } = args
+  const recipientRow = Collaborator.getCollaboratorUserOrGroupSelector(recipient, 'user')
+  return page.locator(util.format(Collaborator.collaboratorRoleDropdownButton, recipientRow))
+}
+
+export const changeShareLocator = (args: { page: Page; recipient: User }): Locator => {
+  const { page, recipient } = args
+  const recipientRow = Collaborator.getCollaboratorUserOrGroupSelector(recipient, 'user')
+  return page.locator(util.format(Collaborator.collaboratorEditDropdownButton, recipientRow))
 }

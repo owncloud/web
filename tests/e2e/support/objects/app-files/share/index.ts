@@ -1,8 +1,9 @@
-import { Page } from '@playwright/test'
+import { Page, Locator } from '@playwright/test'
 import * as po from './actions'
 import { resourceIsNotOpenable, isAcceptedSharePresent, resourceIsSynced } from './utils'
 import { createLinkArgs } from '../link/actions'
 import { ICollaborator, IAccessDetails } from './collaborator'
+import { User } from '../../../types'
 export class Share {
   #page: Page
 
@@ -102,5 +103,13 @@ export class Share {
 
   getMessage(): Promise<string> {
     return po.getMessage({ page: this.#page })
+  }
+
+  changeRoleLocator(recipient: User): Locator {
+    return po.changeRoleLocator({ page: this.#page, recipient })
+  }
+
+  changeShareLocator(recipient: User): Locator {
+    return po.changeRoleLocator({ page: this.#page, recipient })
   }
 }
