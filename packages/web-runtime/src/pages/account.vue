@@ -207,6 +207,7 @@ import { SSEAdapter } from '@ownclouders/web-client/sse'
 import { supportedLanguages } from '../defaults/languages'
 import { User } from '@ownclouders/web-client/graph/generated'
 import { isEmpty } from 'lodash-es'
+import { call } from '@ownclouders/web-client'
 
 export default defineComponent({
   name: 'AccountPage',
@@ -266,9 +267,12 @@ export default defineComponent({
       try {
         const {
           data: { values }
-        } = yield clientService.httpAuthenticated.post('/api/v0/settings/values-list', {
-          account_uuid: 'me'
-        })
+        } = yield* call(
+          clientService.httpAuthenticated.post<{ values: SettingsValue[] }>(
+            '/api/v0/settings/values-list',
+            { account_uuid: 'me' }
+          )
+        )
         valuesList.value = values || []
       } catch (e) {
         console.error(e)
@@ -288,7 +292,12 @@ export default defineComponent({
       try {
         const {
           data: { bundles }
-        } = yield clientService.httpAuthenticated.post('/api/v0/settings/bundles-list', {})
+        } = yield* call(
+          clientService.httpAuthenticated.post<{ bundles: SettingsBundle[] }>(
+            '/api/v0/settings/bundles-list',
+            {}
+          )
+        )
         accountBundle.value = bundles?.find((b) => b.extension === 'ocis-accounts')
       } catch (e) {
         console.error(e)
@@ -306,7 +315,7 @@ export default defineComponent({
       }
 
       try {
-        const { data } = yield clientService.graphAuthenticated.users.getMe()
+        const { data } = yield* call(clientService.graphAuthenticated.users.getMe())
         graphUser.value = data
       } catch (e) {
         console.error(e)
@@ -330,7 +339,7 @@ export default defineComponent({
     })
 
     const languageOptions = Object.keys(supportedLanguages).map((langCode) => ({
-      label: supportedLanguages[langCode],
+      label: supportedLanguages[langCode as keyof typeof supportedLanguages],
       value: langCode
     }))
 

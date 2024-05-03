@@ -2,7 +2,7 @@ import { Modal, useModals } from '@ownclouders/web-pkg'
 import { mock } from 'vitest-mock-extended'
 import { PropType, defineComponent } from 'vue'
 import ModalWrapper from 'web-runtime/src/components/ModalWrapper.vue'
-import { defaultPlugins, shallowMount, defaultComponentMocks } from 'web-test-helpers'
+import { defaultPlugins, shallowMount, defaultComponentMocks, writable } from 'web-test-helpers'
 
 const CustomModalComponent = defineComponent({
   name: 'CustomModalComponent',
@@ -20,7 +20,7 @@ describe('ModalWrapper', () => {
     const modal = mock<Modal>()
     const { wrapper } = getShallowWrapper({ modals: [modal] })
     const modalStore = useModals()
-    ;(modalStore.activeModal as any) = modal
+    writable(modalStore).activeModal = modal
     await wrapper.vm.$nextTick()
 
     expect(wrapper.find('.oc-modal').exists()).toBeTruthy()
@@ -33,7 +33,7 @@ describe('ModalWrapper', () => {
     } as Modal
     const { wrapper } = getShallowWrapper({ modals: [modal] })
     const modalStore = useModals()
-    ;(modalStore.activeModal as any) = modal
+    writable(modalStore).activeModal = modal
     await wrapper.vm.$nextTick()
 
     expect(wrapper.find('custom-modal-component-stub').exists()).toBeTruthy()
@@ -43,7 +43,7 @@ describe('ModalWrapper', () => {
       const modal = mock<Modal>({ onConfirm: vi.fn().mockResolvedValue(undefined) })
       const { wrapper } = getShallowWrapper({ modals: [modal] })
       const modalStore = useModals()
-      ;(modalStore.activeModal as any) = modal
+      writable(modalStore).activeModal = modal
 
       const value = 'value'
       await wrapper.vm.onModalConfirm(value)
@@ -56,7 +56,7 @@ describe('ModalWrapper', () => {
       const modal = mock<Modal>({ onConfirm: vi.fn().mockRejectedValue(new Error('')) })
       const { wrapper } = getShallowWrapper({ modals: [modal] })
       const modalStore = useModals()
-      ;(modalStore.activeModal as any) = modal
+      writable(modalStore).activeModal = modal
 
       await wrapper.vm.onModalConfirm()
 
@@ -66,7 +66,7 @@ describe('ModalWrapper', () => {
       const modal = mock<Modal>({ onConfirm: null })
       const { wrapper } = getShallowWrapper({ modals: [modal] })
       const modalStore = useModals()
-      ;(modalStore.activeModal as any) = modal
+      writable(modalStore).activeModal = modal
       await wrapper.vm.$nextTick()
       wrapper.vm.customComponentRef = { onConfirm: vi.fn() }
 
@@ -76,13 +76,13 @@ describe('ModalWrapper', () => {
     })
   })
   describe('method "onModalCancel"', () => {
-    it('calls the modal "onCancel" if given and removes the modal', async () => {
+    it('calls the modal "onCancel" if given and removes the modal', () => {
       const modal = mock<Modal>({ onCancel: vi.fn() })
       const { wrapper } = getShallowWrapper({ modals: [modal] })
       const modalStore = useModals()
-      ;(modalStore.activeModal as any) = modal
+      writable(modalStore).activeModal = modal
 
-      await wrapper.vm.onModalCancel()
+      wrapper.vm.onModalCancel()
 
       expect(modal.onCancel).toHaveBeenCalled()
       expect(modalStore.removeModal).toHaveBeenCalled()
@@ -91,44 +91,44 @@ describe('ModalWrapper', () => {
       const modal = mock<Modal>({ onCancel: null })
       const { wrapper } = getShallowWrapper({ modals: [modal] })
       const modalStore = useModals()
-      ;(modalStore.activeModal as any) = modal
+      writable(modalStore).activeModal = modal
       await wrapper.vm.$nextTick()
       wrapper.vm.customComponentRef = { onCancel: vi.fn() }
 
-      await wrapper.vm.onModalCancel()
+      wrapper.vm.onModalCancel()
 
       expect(wrapper.vm.customComponentRef.onCancel).toHaveBeenCalled()
     })
   })
   describe('method "onModalInput"', () => {
-    it('calls the modal "onInput" if given', async () => {
+    it('calls the modal "onInput" if given', () => {
       const modal = mock<Modal>({ onInput: vi.fn() })
       const { wrapper } = getShallowWrapper({ modals: [modal] })
       const modalStore = useModals()
-      ;(modalStore.activeModal as any) = modal
+      writable(modalStore).activeModal = modal
 
       const value = 'value'
-      await wrapper.vm.onModalInput(value)
+      wrapper.vm.onModalInput(value)
 
       expect(modal.onInput).toHaveBeenCalledWith(value, expect.anything())
     })
   })
   describe('method "onModalConfirmDisabled"', () => {
-    it('updates the modal confirm button state', async () => {
+    it('updates the modal confirm button state', () => {
       const modal = mock<Modal>()
       const { wrapper } = getShallowWrapper({ modals: [modal] })
       const modalStore = useModals()
-      ;(modalStore.activeModal as any) = modal
+      writable(modalStore).activeModal = modal
 
       const value = true
-      await wrapper.vm.onModalConfirmDisabled(value)
+      wrapper.vm.onModalConfirmDisabled(value)
 
       expect(modalStore.updateModal).toHaveBeenCalled()
     })
   })
 })
 
-function getShallowWrapper({ modals = [] } = {}) {
+function getShallowWrapper({ modals = [] }: { modals?: Modal[] } = {}) {
   const mocks = defaultComponentMocks()
 
   return {

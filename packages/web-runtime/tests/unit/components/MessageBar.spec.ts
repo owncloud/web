@@ -1,4 +1,4 @@
-import { useMessages } from '@ownclouders/web-pkg'
+import { Message, useMessages } from '@ownclouders/web-pkg'
 import { OcNotificationMessage } from 'design-system/src/components'
 import MessageBar from 'web-runtime/src/components/MessageBar.vue'
 import { defaultPlugins, shallowMount } from 'web-test-helpers'
@@ -79,7 +79,7 @@ describe('MessageBar component', () => {
   })
 })
 
-function getShallowWrapper(messages = []) {
+function getShallowWrapper(messages: Message[] = []) {
   return {
     wrapper: shallowMount(MessageBar, {
       global: {

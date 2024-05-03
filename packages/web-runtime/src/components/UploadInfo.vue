@@ -100,13 +100,7 @@
       :class="{ 'has-errors': showErrorLog }"
     >
       <ul class="oc-list">
-        <li
-          v-for="(item, idx) in uploads"
-          :key="idx"
-          :class="{
-            'oc-mb-s': idx !== Object.keys(uploads).length - 1
-          }"
-        >
+        <li v-for="(item, idx) in uploads" :key="idx">
           <span class="oc-flex oc-flex-middle">
             <oc-icon v-if="item.status === 'error'" name="close" variation="danger" size="small" />
             <oc-icon
@@ -122,7 +116,7 @@
               v-if="displayFileAsResource(item)"
               :key="item.path"
               class="oc-ml-s"
-              :resource="item"
+              :resource="item as Resource"
               :is-path-displayed="true"
               :is-thumbnail-displayed="displayThumbnails"
               :is-resource-clickable="isResourceClickable(item)"
@@ -131,7 +125,11 @@
               :parent-folder-link="parentFolderLink(item)"
             />
             <span v-else class="oc-flex oc-flex-middle oc-text-truncate">
-              <resource-icon :resource="item" size="large" class="file_info__icon oc-mx-s" />
+              <resource-icon
+                :resource="item as Resource"
+                size="large"
+                class="file_info__icon oc-mx-s"
+              />
               <resource-name
                 :name="item.name"
                 :extension="item.extension"
@@ -161,10 +159,11 @@
 <script lang="ts">
 import { defineComponent, ref, watch, unref } from 'vue'
 import { isUndefined } from 'lodash-es'
+// @ts-ignore
 import getSpeed from '@uppy/utils/lib/getSpeed'
 
-import { urlJoin } from '@ownclouders/web-client'
-import { useConfigStore } from '@ownclouders/web-pkg'
+import { HttpError, Resource, urlJoin } from '@ownclouders/web-client'
+import { queryItemAsString, useConfigStore } from '@ownclouders/web-pkg'
 import {
   formatFileSize,
   UppyResource,
@@ -174,6 +173,17 @@ import {
 } from '@ownclouders/web-pkg'
 import { extractParentFolderName } from '@ownclouders/web-client'
 import { storeToRefs } from 'pinia'
+import { RouteLocationNamedRaw } from 'vue-router'
+
+interface UploadResult extends UppyResource {
+  extension?: string
+  path?: string
+  targetRoute?: RouteLocationNamedRaw
+  status?: string
+  filesCount?: number
+  successCount?: number
+  errorCount?: number
+}
 
 export default defineComponent({
   components: { ResourceListItem, ResourceIcon, ResourceName },
@@ -183,9 +193,9 @@ export default defineComponent({
 
     const showInfo = ref(false) // show the overlay?
     const infoExpanded = ref(false) // show the info including all uploads?
-    const uploads = ref<Record<any, any>>({}) // uploads that are being displayed via "infoExpanded"
-    const errors = ref({}) // all failed files
-    const successful = ref([]) // all successful files
+    const uploads = ref<Record<string, UploadResult>>({}) // uploads that are being displayed via "infoExpanded"
+    const errors = ref<Record<string, HttpError>>({}) // all failed files
+    const successful = ref<string[]>([]) // all successful files
     const filesInProgressCount = ref(0) // files (not folders!) that are being processed currently
     const totalProgress = ref(0) // current uploads progress (0-100)
     const uploadsPaused = ref(false) // all uploads paused?
@@ -196,9 +206,9 @@ export default defineComponent({
     const bytesTotal = ref(0)
     const bytesUploaded = ref(0)
     const uploadSpeed = ref(0)
-    const filesInEstimation = ref({})
-    const timeStarted = ref(null)
-    const remainingTime = ref(undefined)
+    const filesInEstimation = ref<Record<string, number>>({})
+    const timeStarted = ref<Date>(null)
+    const remainingTime = ref<string>(undefined)
     const disableActions = ref(false) // disables the following actions: pause, resume, retry
 
     const onBeforeUnload = (e: BeforeUnloadEvent) => {
@@ -303,15 +313,16 @@ export default defineComponent({
       return this.infoExpanded && this.uploadErrorLogContent
     },
     uploadErrorLogContent() {
-      const requestIds = Object.values(this.errors).reduce((acc: Array<string>, error: any) => {
-        const requestId = error.originalRequest?._headers?.['X-Request-ID']
+      const requestIds = Object.values(this.errors).reduce<string[]>((acc, error) => {
+        // tus-js-client error
+        const requestId = (error as any).originalRequest?._headers?.['X-Request-ID']
 
         if (requestId) {
           acc.push(requestId)
         }
 
         return acc
-      }, []) as Array<any>
+      }, [])
 
       return requestIds.map((item) => `X-Request-Id: ${item}`).join('\r\n')
     }
@@ -372,64 +383,70 @@ export default defineComponent({
     this.$uppyService.subscribe('progress', (value: number) => {
       this.totalProgress = value
     })
-    this.$uppyService.subscribe('upload-progress', ({ file, progress }) => {
-      if (!this.timeStarted) {
-        this.timeStarted = new Date()
-        this.inPreparation = false
+    this.$uppyService.subscribe(
+      'upload-progress',
+      ({ file, progress }: { file: UppyResource; progress: { bytesUploaded: number } }) => {
+        if (!this.timeStarted) {
+          this.timeStarted = new Date()
+          this.inPreparation = false
+        }
+
+        if (this.filesInEstimation[file.meta.uploadId] === undefined) {
+          this.filesInEstimation[file.meta.uploadId] = 0
+        }
+
+        const byteIncrease = progress.bytesUploaded - this.filesInEstimation[file.meta.uploadId]
+        this.bytesUploaded += byteIncrease
+        this.filesInEstimation[file.meta.uploadId] = progress.bytesUploaded
+
+        const timeElapsed = +new Date().getTime() - this.timeStarted.getTime()
+
+        this.uploadSpeed = getSpeed({
+          bytesUploaded: this.bytesUploaded,
+          uploadStarted: this.timeStarted
+        })
+
+        const progressPercent = (100 * this.bytesUploaded) / this.bytesTotal
+        if (progressPercent === 0) {
+          return
+        }
+        const totalTimeNeededInMilliseconds = (timeElapsed / progressPercent) * 100
+        const remainingMilliseconds = totalTimeNeededInMilliseconds - timeElapsed
+
+        this.remainingTime = this.getRemainingTime(remainingMilliseconds)
+        if (progressPercent === 100) {
+          this.inFinalization = true
+        }
       }
+    )
+    this.$uppyService.subscribe(
+      'uploadError',
+      ({ file, error }: { file: UppyResource; error: Error }) => {
+        if (this.errors[file.meta.uploadId]) {
+          return
+        }
 
-      if (this.filesInEstimation[file.meta.uploadId] === undefined) {
-        this.filesInEstimation[file.meta.uploadId] = 0
+        // file inside folder -> was not added to this.uploads, but must be now because of error
+        if (!this.uploads[file.meta.uploadId]) {
+          this.uploads[file.meta.uploadId] = file
+        }
+
+        if (file.meta.relativePath) {
+          this.uploads[file.meta.uploadId].path = file.meta.relativePath
+        } else {
+          this.uploads[file.meta.uploadId].path = urlJoin(file.meta.currentFolder, file.name)
+        }
+
+        this.uploads[file.meta.uploadId].targetRoute = this.buildRouteFromUppyResource(file)
+        this.uploads[file.meta.uploadId].status = 'error'
+        this.errors[file.meta.uploadId] = error as HttpError
+        this.filesInProgressCount -= 1
+
+        if (file.meta.topLevelFolderId) {
+          this.handleTopLevelFolderUpdate(file, 'error')
+        }
       }
-
-      const byteIncrease = progress.bytesUploaded - this.filesInEstimation[file.meta.uploadId]
-      this.bytesUploaded += byteIncrease
-      this.filesInEstimation[file.meta.uploadId] = progress.bytesUploaded
-
-      const timeElapsed = +new Date() - this.timeStarted
-
-      this.uploadSpeed = getSpeed({
-        bytesUploaded: this.bytesUploaded,
-        uploadStarted: this.timeStarted
-      })
-
-      const progressPercent = (100 * this.bytesUploaded) / this.bytesTotal
-      if (progressPercent === 0) {
-        return
-      }
-      const totalTimeNeededInMilliseconds = (timeElapsed / progressPercent) * 100
-      const remainingMilliseconds = totalTimeNeededInMilliseconds - timeElapsed
-
-      this.remainingTime = this.getRemainingTime(remainingMilliseconds)
-      if (progressPercent === 100) {
-        this.inFinalization = true
-      }
-    })
-    this.$uppyService.subscribe('uploadError', ({ file, error }) => {
-      if (this.errors[file.meta.uploadId]) {
-        return
-      }
-
-      // file inside folder -> was not added to this.uploads, but must be now because of error
-      if (!this.uploads[file.meta.uploadId]) {
-        this.uploads[file.meta.uploadId] = file
-      }
-
-      if (file.meta.relativePath) {
-        this.uploads[file.meta.uploadId].path = file.meta.relativePath
-      } else {
-        this.uploads[file.meta.uploadId].path = urlJoin(file.meta.currentFolder, file.name)
-      }
-
-      this.uploads[file.meta.uploadId].targetRoute = file.meta.route
-      this.uploads[file.meta.uploadId].status = 'error'
-      this.errors[file.meta.uploadId] = error
-      this.filesInProgressCount -= 1
-
-      if (file.meta.topLevelFolderId) {
-        this.handleTopLevelFolderUpdate(file, 'error')
-      }
-    })
+    )
     this.$uppyService.subscribe('uploadSuccess', (file: UppyResource) => {
       // item inside folder
       if (!this.uploads[file.meta.uploadId]) {
@@ -471,7 +488,7 @@ export default defineComponent({
     })
   },
   methods: {
-    getRemainingTime(remainingMilliseconds) {
+    getRemainingTime(remainingMilliseconds: number) {
       const roundedRemainingMinutes = Math.round(remainingMilliseconds / 1000 / 60)
       if (roundedRemainingMinutes >= 1 && roundedRemainingMinutes < 60) {
         return this.$ngettext(
@@ -494,7 +511,7 @@ export default defineComponent({
 
       return this.$gettext('Few seconds left')
     },
-    handleTopLevelFolderUpdate(file, status) {
+    handleTopLevelFolderUpdate(file: UppyResource, status: string) {
       const topLevelFolder = this.uploads[file.meta.topLevelFolderId]
       if (status === 'success') {
         topLevelFolder.successCount += 1
@@ -532,13 +549,13 @@ export default defineComponent({
       this.inFinalization = false
       this.uploadsPaused = false
     },
-    displayFileAsResource(file) {
+    displayFileAsResource(file: UploadResult) {
       return !!file.targetRoute
     },
-    isResourceClickable(file) {
+    isResourceClickable(file: UploadResult) {
       return file.isFolder === true
     },
-    folderLink(file) {
+    folderLink(file: UploadResult) {
       if (!file.isFolder) {
         return {}
       }
@@ -546,9 +563,13 @@ export default defineComponent({
         ...file.targetRoute,
         params: {
           ...file.targetRoute.params,
-          driveAliasAndItem: urlJoin(file.targetRoute.params.driveAliasAndItem, file.name, {
-            leadingSlash: false
-          })
+          driveAliasAndItem: urlJoin(
+            queryItemAsString(file.targetRoute.params.driveAliasAndItem),
+            file.name,
+            {
+              leadingSlash: false
+            }
+          )
         },
         query: {
           ...file.targetRoute.query,
@@ -557,7 +578,7 @@ export default defineComponent({
         }
       }
     },
-    parentFolderLink(file: any) {
+    parentFolderLink(file: UploadResult) {
       return {
         ...file.targetRoute,
         query: {
@@ -567,7 +588,7 @@ export default defineComponent({
         }
       }
     },
-    buildRouteFromUppyResource(resource) {
+    buildRouteFromUppyResource(resource: UppyResource): RouteLocationNamedRaw {
       if (!resource.meta.routeName) {
         return null
       }
@@ -581,12 +602,12 @@ export default defineComponent({
         }
       }
     },
-    parentFolderName(file) {
+    parentFolderName(file: UploadResult) {
       const {
         meta: { spaceName, driveType }
       } = file
 
-      const parentFolder = extractParentFolderName(file)
+      const parentFolder = extractParentFolderName(file as Resource)
       if (parentFolder) {
         return parentFolder
       }
@@ -636,14 +657,14 @@ export default defineComponent({
       this.resetProgress()
       this.$uppyService.cancelAllUploads()
       const runningUploads = Object.values(this.uploads).filter(
-        (u: any) => u.status !== 'success' && u.status !== 'error'
+        (u) => u.status !== 'success' && u.status !== 'error'
       )
 
       for (const item of runningUploads as UppyResource[]) {
         this.uploads[item.meta.uploadId].status = 'cancelled'
       }
     },
-    getUploadItemMessage(item) {
+    getUploadItemMessage(item: UploadResult) {
       const error = this.errors[item.meta.uploadId]
 
       if (!error) {
@@ -651,7 +672,7 @@ export default defineComponent({
       }
 
       //TODO: Remove extraction code as soon as https://github.com/tus/tus-js-client/issues/448 is solved
-      const formatErrorMessageToObject = (errorMessage) => {
+      const formatErrorMessageToObject = (errorMessage: string) => {
         let responseCode = errorMessage.match(/response code: (\d+)/)?.[1]
         const errorBody = JSON.parse(
           errorMessage.match(/response text: ([\s\S]+?), request id/)?.[1] || '{}'
@@ -680,7 +701,7 @@ export default defineComponent({
             : this.$gettext('Unknown error')
       }
     },
-    getUploadItemClass(item) {
+    getUploadItemClass(item: UploadResult) {
       return this.errors[item.meta.uploadId] ? 'upload-info-danger' : 'upload-info-success'
     }
   }

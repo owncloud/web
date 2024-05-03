@@ -8,7 +8,7 @@ import { RouteLocation, RouteLocationNormalizedLoaded, RouteLocationRaw, Router 
 // to patch needs to be enabled on a route level, to do so add meta.patchCleanPath = true property to the route
 // c.f. https://github.com/vuejs/router/issues/1638
 export const patchRouter = (router: Router) => {
-  const cleanPath = (route) =>
+  const cleanPath = (route: string) =>
     [
       ['%2F', '/'],
       ['//', '/']
@@ -34,17 +34,18 @@ export const patchRouter = (router: Router) => {
     }
   }
 
-  const routerMethodFactory = (method) => (to) => {
-    const resolved = router.resolve(to)
-    if (resolved.meta?.patchCleanPath !== true) {
-      return method(to)
-    }
+  const routerMethodFactory =
+    (method: (arg: RouteLocationRaw) => ReturnType<Router['push']>) => (to: RouteLocationRaw) => {
+      const resolved = router.resolve(to)
+      if (resolved.meta?.patchCleanPath !== true) {
+        return method(to)
+      }
 
-    return method({
-      path: cleanPath(resolved.fullPath),
-      query: resolved.query
-    })
-  }
+      return method({
+        path: cleanPath(resolved.fullPath),
+        query: resolved.query
+      })
+    }
 
   router.push = routerMethodFactory(router.push.bind(router))
   router.replace = routerMethodFactory(router.replace.bind(router))

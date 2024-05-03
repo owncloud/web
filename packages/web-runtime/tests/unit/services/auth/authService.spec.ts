@@ -1,5 +1,6 @@
-import { useAuthStore, useConfigStore } from '@ownclouders/web-pkg'
+import { ConfigStore, useAuthStore, useConfigStore } from '@ownclouders/web-pkg'
 import { mock } from 'vitest-mock-extended'
+import { Router } from 'vue-router'
 import { AuthService } from 'web-runtime/src/services/auth/authService'
 import { UserManager } from 'web-runtime/src/services/auth/userManager'
 import { RouteLocation, createRouter, createTestingPinia } from 'web-test-helpers/src'
@@ -9,7 +10,15 @@ console.debug = vi.fn()
 
 vi.mock('web-runtime/src/services/auth/userManager')
 
-const initAuthService = ({ authService, configStore = null, router = null }) => {
+const initAuthService = ({
+  authService,
+  configStore = null,
+  router = null
+}: {
+  authService: AuthService
+  configStore?: ConfigStore
+  router?: Router
+}) => {
   createTestingPinia()
   const authStore = useAuthStore()
   configStore = configStore || useConfigStore()
@@ -32,7 +41,7 @@ describe('AuthService', () => {
       ]
     ])(
       'parses query params and passes them explicitly to router.replace: %s => %s %s',
-      async (url, path, query: any) => {
+      async (url, path, query: Record<string, string>) => {
         const authService = new AuthService()
 
         Object.defineProperty(authService, 'userManager', {

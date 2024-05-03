@@ -88,7 +88,10 @@ describe('Avatar component', () => {
   })
 })
 
-function getShallowWrapper(loading = false, clientService = undefined) {
+function getShallowWrapper(
+  loading = false,
+  clientService: ReturnType<typeof mockDeep<ClientService>> = undefined
+) {
   const mocks = { ...defaultComponentMocks() }
   if (!clientService) {
     clientService = mockDeep<ClientService>()

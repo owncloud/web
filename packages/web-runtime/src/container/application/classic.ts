@@ -53,7 +53,8 @@ class ClassicApplication extends NextApplication {
       hook({
         ...(instance && {
           portal: {
-            open: (...args) => this.runtimeApi.openPortal.apply(instance, [instance, ...args])
+            open: (...args: unknown[]) =>
+              this.runtimeApi.openPortal.apply(instance, [instance, ...args])
           }
         }),
         instance,

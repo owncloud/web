@@ -25,7 +25,7 @@ describe('OcSidebarNav', () => {
   })
 })
 
-function getWrapper(collapsed) {
+function getWrapper(collapsed: boolean) {
   return {
     wrapper: mount(SidebarNavItem, {
       props: {

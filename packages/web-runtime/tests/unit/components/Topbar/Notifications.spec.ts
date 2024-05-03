@@ -5,6 +5,7 @@ import { defaultComponentMocks, defaultPlugins, shallowMount } from 'web-test-he
 import { SpaceResource } from '@ownclouders/web-client'
 import { RouterLink, RouteLocationNamedRaw, RouteLocationNormalizedLoaded } from 'vue-router'
 import { AxiosResponse } from 'axios'
+import Avatar from 'web-runtime/src/components/Avatar.vue'
 
 const selectors = {
   notificationBellStub: 'notification-bell-stub',
@@ -67,7 +68,7 @@ describe('Notification component', () => {
       })
       const { wrapper } = getWrapper({ notifications: [notification] })
       await wrapper.vm.fetchNotificationsTask.last
-      const avatarImageStub = wrapper.findComponent<any>(selectors.avatarImageStub)
+      const avatarImageStub = wrapper.findComponent<typeof Avatar>(selectors.avatarImageStub)
       expect(avatarImageStub.attributes('userid')).toEqual(notification.user)
       expect(avatarImageStub.attributes('user-name')).toEqual(notification.user)
     })
@@ -80,7 +81,7 @@ describe('Notification component', () => {
       })
       const { wrapper } = getWrapper({ notifications: [notification] })
       await wrapper.vm.fetchNotificationsTask.last
-      const avatarImageStub = wrapper.findComponent<any>(selectors.avatarImageStub)
+      const avatarImageStub = wrapper.findComponent<typeof Avatar>(selectors.avatarImageStub)
       expect(avatarImageStub.attributes('userid')).toEqual(name)
       expect(avatarImageStub.attributes('user-name')).toEqual(displayname)
     })
@@ -198,7 +199,15 @@ describe('Notification component', () => {
   })
 })
 
-function getWrapper({ mocks = {}, notifications = [], spaces = [] } = {}) {
+function getWrapper({
+  mocks = {},
+  notifications = [],
+  spaces = []
+}: {
+  mocks?: Record<string, unknown>
+  notifications?: Notification[]
+  spaces?: SpaceResource[]
+} = {}) {
   const localMocks = { ...defaultComponentMocks(), ...mocks }
   localMocks.$clientService.httpAuthenticated.get.mockResolvedValue(
     mock<AxiosResponse>({ data: { ocs: { data: notifications } }, headers: {} })

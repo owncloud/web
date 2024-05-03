@@ -2,7 +2,7 @@ import { buildUrl, OpenIdConnectConfig } from '@ownclouders/web-pkg'
 import { v4 as uuidV4 } from 'uuid'
 import { router } from 'web-runtime/src/router'
 
-async function get(url) {
+async function get(url: string) {
   return await fetch(url, { headers: { 'X-Request-ID': uuidV4() } })
     .then((res) => {
       return res.json()
@@ -12,7 +12,7 @@ async function get(url) {
     })
 }
 
-async function post(url, data) {
+async function post(url: string, data: unknown) {
   return await fetch(url, {
     method: 'POST',
     headers: {

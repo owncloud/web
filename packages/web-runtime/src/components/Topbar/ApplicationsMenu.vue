@@ -57,7 +57,6 @@ import OcApplicationIcon from 'design-system/src/components/OcApplicationIcon/Oc
 import { useGettext } from 'vue3-gettext'
 import * as uuid from 'uuid'
 import {
-  ApplicationInformation,
   EDITOR_MODE_EDIT,
   resolveFileNameDuplicate,
   useAppsStore,
@@ -69,6 +68,7 @@ import {
 } from '@ownclouders/web-pkg'
 import { urlJoin } from '@ownclouders/web-client'
 import { storeToRefs } from 'pinia'
+import { MenuItem } from '../../helpers/menuItems'
 
 export default defineComponent({
   components: {
@@ -76,9 +76,9 @@ export default defineComponent({
   },
   props: {
     applicationsList: {
-      type: Array as PropType<any[]>,
+      type: Array as PropType<MenuItem[]>,
       required: false,
-      default: () => []
+      default: (): MenuItem[] => []
     }
   },
   setup() {
@@ -100,7 +100,7 @@ export default defineComponent({
       appIconKey.value = uuid.v4().replaceAll('-', '')
     }
 
-    const onEditorApplicationClick = async (item: ApplicationInformation) => {
+    const onEditorApplicationClick = async (item: MenuItem) => {
       let destinationSpace = unref(currentFolder) ? getMatchingSpace(unref(currentFolder)) : null
       let destinationFiles = unref(resources)
       let filePath = unref(currentFolder)?.path
@@ -128,16 +128,16 @@ export default defineComponent({
 
       openEditor(appFileExtension, space, emptyResource, EDITOR_MODE_EDIT, space.shareId)
     }
-    const getAdditionalEventBindings = (item: ApplicationInformation) => {
-      if (item.applicationMenu?.openAsEditor) {
+    const getAdditionalEventBindings = (item: MenuItem) => {
+      if (item?.openAsEditor) {
         return {
           click: () => onEditorApplicationClick(item)
         }
       }
       return {}
     }
-    const getAdditionalAttributes = (item: any) => {
-      if (item.applicationMenu?.openAsEditor) {
+    const getAdditionalAttributes = (item: MenuItem) => {
+      if (item?.openAsEditor) {
         return {}
       }
       return {

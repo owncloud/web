@@ -90,7 +90,7 @@ export default defineComponent({
     /**
      * Load a new avatar from this userid
      */
-    setUser(userid) {
+    setUser(userid: string) {
       this.loading = true
       this.avatarSource = ''
       if (!this.userProfilePicture || userid === '') {

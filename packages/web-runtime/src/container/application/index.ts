@@ -58,8 +58,8 @@ const loadScriptRequireJS = <T>(moduleUri: string) => {
   return new Promise<T>((resolve, reject) =>
     requirejs(
       [moduleUri],
-      (app) => resolve(app),
-      (err) => reject(err)
+      (app: T) => resolve(app),
+      (err: Error) => reject(err)
     )
   )
 }

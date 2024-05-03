@@ -88,6 +88,8 @@ import { Notification } from '../../helpers/notifications'
 import { useGettext } from 'vue3-gettext'
 import { useTask } from 'vue-concurrency'
 import { MESSAGE_TYPE } from '@ownclouders/web-client/sse'
+import { call } from '@ownclouders/web-client'
+import { AxiosHeaders } from 'axios'
 
 const POLLING_INTERVAL = 30000
 
@@ -108,10 +110,10 @@ export default {
       return fetchNotificationsTask.isRunning || deleteNotificationsTask.isRunning
     })
 
-    const formatDate = (date) => {
+    const formatDate = (date: string) => {
       return formatDateFromISO(date, currentLanguage)
     }
-    const formatDateRelative = (date) => {
+    const formatDateRelative = (date: string) => {
       return formatRelativeDateFromISO(date, currentLanguage)
     }
 
@@ -172,19 +174,20 @@ export default {
 
     const fetchNotificationsTask = useTask(function* (signal) {
       try {
-        const response = yield clientService.httpAuthenticated.get(
-          'ocs/v2.php/apps/notifications/api/v1/notifications'
+        const response = yield* call(
+          clientService.httpAuthenticated.get<{ ocs: { data: Notification[] } }>(
+            'ocs/v2.php/apps/notifications/api/v1/notifications'
+          )
         )
 
-        if (response.headers.get('Content-Length') === '0') {
+        if ((response.headers as AxiosHeaders).get('Content-Length') === '0') {
           return
         }
 
         const {
           ocs: { data = [] }
-        } = yield response.data
-        notifications.value =
-          data?.sort((a, b) => (new Date(b.datetime) as any) - (new Date(a.datetime) as any)) || []
+        } = response.data
+        notifications.value = data?.sort((a, b) => b.datetime.localeCompare(a.datetime)) || []
         unref(notifications).forEach((notification) => setAdditionalNotificationData(notification))
       } catch (e) {
         console.error(e)
@@ -209,7 +212,7 @@ export default {
       notification.computedLink = getLink(notification)
     }
 
-    const onSSENotificationEvent = (event) => {
+    const onSSENotificationEvent = (event: MessageEvent) => {
       try {
         const notification = JSON.parse(event.data) as Notification
         if (!notification || !notification.notification_id) {

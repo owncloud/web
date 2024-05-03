@@ -152,13 +152,14 @@ import {
   routeToContextQuery
 } from '@ownclouders/web-pkg'
 import { OcDrop } from 'design-system/src/components'
+import { MenuItem } from '../../helpers/menuItems'
 
 export default defineComponent({
   props: {
     applicationsList: {
-      type: Array as PropType<any>,
+      type: Array as PropType<MenuItem[]>,
       required: false,
-      default: () => []
+      default: (): MenuItem[] => []
     }
   },
   setup() {

@@ -11,6 +11,7 @@ import { AxiosResponse } from 'axios'
 import {
   Extension,
   ExtensionPoint,
+  OptionsConfig,
   useExtensionRegistry,
   useMessages,
   useResourcesStore
@@ -18,6 +19,8 @@ import {
 import { LanguageOption, SettingsBundle, SettingsValue } from 'web-runtime/src/helpers/settings'
 import { User } from '@ownclouders/web-client/graph/generated'
 import { VueWrapper } from '@vue/test-utils'
+import { SpaceResource } from '@ownclouders/web-client'
+import { Capabilities } from '@ownclouders/web-client/ocs'
 
 const $route = {
   meta: {
@@ -288,6 +291,15 @@ function getWrapper({
   isUserContext = true,
   extensionPoints = [],
   extensions = []
+}: {
+  user?: User
+  capabilities?: Partial<Capabilities['capabilities']>
+  accountEditLink?: OptionsConfig['accountEditLink']
+  spaces?: SpaceResource[]
+  isPublicLinkContext?: boolean
+  isUserContext?: boolean
+  extensionPoints?: ExtensionPoint[]
+  extensions?: Extension[]
 } = {}) {
   const plugins = defaultPlugins({
     piniaOptions: {

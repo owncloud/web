@@ -65,7 +65,7 @@ describe('GdprExport component', () => {
   })
 })
 
-function getWrapper(resource = undefined) {
+function getWrapper(resource: Resource = undefined) {
   const clientService = mockDeep<ClientService>()
   if (resource) {
     clientService.webdav.getFileInfo.mockResolvedValue(resource)
