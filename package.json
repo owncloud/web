@@ -79,7 +79,7 @@
     "core-js": "3.30.2",
     "cross-fetch": "4.0.0",
     "cucumber-html-reporter": "7.1.1",
-    "ejs": "3.1.9",
+    "ejs": "3.1.10",
     "eslint": "8.56.0",
     "flush-promises": "1.0.2",
     "git-repo-info": "2.1.1",
