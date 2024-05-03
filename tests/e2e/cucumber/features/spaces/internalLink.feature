@@ -46,5 +46,5 @@ Feature: internal link share in project space
     When "Carol" opens the public link "spaceLink"
     And "Carol" logs in from the internal link
     And "Carol" opens folder "myfolder"
-    Then "Carol" should see file "simple.pdf" but should not be able to edit
+    Then "Carol" should not be able to edit file "simple.pdf"
     And "Carol" logs out
