@@ -1,8 +1,8 @@
-import { Page } from '@playwright/test'
+import { Locator, Page } from '@playwright/test'
 import { SpacesEnvironment, LinksEnvironment } from '../../../environment'
 import { File } from '../../../types'
 import * as po from './actions'
-import { spaceWithSpaceIDNotExist } from './utils'
+import { spaceLocator, showShareButtonSelector } from './utils'
 import { ICollaborator } from '../share/collaborator'
 
 export class Spaces {
@@ -64,15 +64,13 @@ export class Spaces {
     await po.removeAccessSpaceMembers({ ...args, page: this.#page })
   }
 
-  async expectThatSpacesIdNotExist(space: string): Promise<void> {
+  getSpaceLocator(space: string): Locator {
     const spaceID = this.getSpaceID({ key: space })
-    await spaceWithSpaceIDNotExist({ spaceID, page: this.#page })
+    return spaceLocator({ spaceID, page: this.#page })
   }
 
   async canUserEditResource(args: Omit<po.canUserEditSpaceResourceArgs, 'page'>): Promise<boolean> {
-    const startUrl = this.#page.url()
     const canEdit = await po.canUserEditSpaceResource({ ...args, page: this.#page })
-    await this.#page.goto(startUrl)
     return canEdit
   }
 
@@ -113,5 +111,15 @@ export class Spaces {
 
   downloadSpace(): Promise<string> {
     return po.downloadSpace(this.#page)
+  }
+
+  showShareButtonSelector({
+    buttonLabel,
+    resource
+  }: {
+    buttonLabel: string
+    resource: string
+  }): Locator {
+    return showShareButtonSelector({ page: this.#page, buttonLabel, resource })
   }
 }

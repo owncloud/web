@@ -117,31 +117,50 @@ When(
 )
 
 Then(
-  '{string} should see folder {string} but should not be able to edit',
-  async function (this: World, stepUser: string, resource: string): Promise<void> {
+  /^"([^"]*)" (should|should not) be able to edit (?:folder|file) "([^"]*)"$/,
+  async function (
+    this: World,
+    stepUser: string,
+    actionType: string,
+    resource: string
+  ): Promise<void> {
     const { page } = this.actorsEnvironment.getActor({ key: stepUser })
     const spacesObject = new objects.applicationFiles.Spaces({ page })
     const userCanEdit = await spacesObject.canUserEditResource({ resource })
-    expect(userCanEdit).toBe(false)
+    expect(userCanEdit).toBe(actionType === 'should' ? true : false)
   }
 )
 
 Then(
-  '{string} should see file {string} but should not be able to edit',
-  async function (this: World, stepUser: string, resource: string): Promise<void> {
+  /^"([^"]*)" (should|should not) see (show links|show invited people) button on the (?:folder|file) "([^"]*)"$/,
+  async function (
+    this: World,
+    stepUser: string,
+    actionType: string,
+    buttonLabel: string,
+    resource: string
+  ): Promise<void> {
     const { page } = this.actorsEnvironment.getActor({ key: stepUser })
     const spacesObject = new objects.applicationFiles.Spaces({ page })
-    const userCanEdit = await spacesObject.canUserEditResource({ resource })
-    expect(userCanEdit).toBe(false)
+    const showShareButtonSelector = spacesObject.showShareButtonSelector({
+      buttonLabel,
+      resource
+    })
+    actionType === 'should'
+      ? await expect(showShareButtonSelector).toBeVisible()
+      : await expect(showShareButtonSelector).not.toBeVisible()
   }
 )
 
 Then(
-  '{string} should not be able to see space {string}',
-  async function (this: World, stepUser: string, space: string): Promise<void> {
+  /^"([^"]*)" (should|should not) see space "([^"]*)"$/,
+  async function (this: World, stepUser: string, actionType: string, space: string): Promise<void> {
     const { page } = this.actorsEnvironment.getActor({ key: stepUser })
     const spacesObject = new objects.applicationFiles.Spaces({ page })
-    await spacesObject.expectThatSpacesIdNotExist(space)
+    const spaceLocator = spacesObject.getSpaceLocator(space)
+    actionType === 'should'
+      ? await expect(spaceLocator).toBeVisible()
+      : await expect(spaceLocator).not.toBeVisible()
   }
 )
 

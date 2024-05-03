@@ -75,7 +75,7 @@ Feature: spaces public link
     And "Carol" should not be able to edit the public link named "folderLink"
     When "Carol" opens the public link "folderLink"
     And "Carol" unlocks the public link with password "%public%"
-    Then "Carol" should see folder "subFolder" but should not be able to edit
+    Then "Carol" should not be able to edit folder "subFolder"
     When "Carol" opens the public link "pdfLink"
     And "Carol" unlocks the public link with password "%public%"
     Then "Carol" is in a pdf-viewer

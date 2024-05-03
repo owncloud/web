@@ -27,6 +27,7 @@ const passwordInput = '.oc-modal-body input.oc-text-input'
 const createLinkButton = '.oc-modal-body-actions-confirm'
 const showMoreOptionsButton = '#show-more-share-options-btn'
 const calendarDatePickerId = 'recipient-datepicker-btn'
+const informMessage = '//div[contains(@class,"oc-notification-message-title")]'
 
 export interface ShareArgs {
   page: Page
@@ -285,4 +286,8 @@ export const getAccessDetails = async (args: {
   await openSharingPanel(page, resource)
 
   return Collaborator.getAccessDetails(page, collaborator)
+}
+
+export const getMessage = ({ page }: { page: Page }): Promise<string> => {
+  return page.locator(informMessage).textContent()
 }

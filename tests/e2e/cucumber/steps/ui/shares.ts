@@ -341,3 +341,13 @@ When(
     expect(actualDetails).toMatchObject(expectedDetails)
   }
 )
+
+Then(
+  '{string} should see the message {string} on the webUI',
+  async function (this: World, stepUser: string, message: string): Promise<void> {
+    const { page } = this.actorsEnvironment.getActor({ key: stepUser })
+    const shareObject = new objects.applicationFiles.Share({ page })
+    const actualMessage = await shareObject.getMessage()
+    expect(actualMessage).toBe(message)
+  }
+)
