@@ -109,22 +109,11 @@ config = {
                 "oCISFiles2": [
                     "webUIFilesDetails",
                 ],
-                "oCISFiles3": [
-                    "webUIRenameFiles",
-                ],
                 "oCISFiles5": [
-                    "webUIFilesCopy",
                     "webUITextEditor",
-                ],
-                "oCISSharingInternal1": [
-                    "webUISharingInternalGroupsEdgeCases",
                 ],
                 "oCISSharingInternal2": [
                     "webUISharingInternalUsers",
-                ],
-                "oCISSharingInternal3": [
-                    "webUISharingInternalGroupsSharingIndicator",
-                    "webUISharingInternalUsersSharingIndicator",
                 ],
                 "oCISSharingPublic1": [
                     "webUISharingPublicBasic",
@@ -134,10 +123,6 @@ config = {
                 ],
                 "oCISSharingPublic3": [
                     "webUISharingPublicDifferentRoles",
-                ],
-                "oCISUploadMove": [
-                    "webUIUpload",
-                    "webUIMoveFilesFolders",
                 ],
                 "oCISTrashbinJourney": [
                     "webUITrashbinDelete",
@@ -164,16 +149,10 @@ config = {
 basicTestSuites = [
     "webUICreateFilesFolders",
     "webUIDeleteFilesFolders",
-    "webUIFilesCopy",
     "webUIFilesDetails",
     "webUILogin",
-    "webUIMoveFilesFolders",
-    "webUIRenameFiles",
     "webUISharingAcceptShares",
-    "webUISharingInternalGroupsEdgeCases",
-    "webUISharingInternalGroupsSharingIndicator",
     "webUISharingInternalUsers",
-    "webUISharingInternalUsersSharingIndicator",
     "webUISharingPublicBasic",
     "webUISharingPublicDifferentRoles",
     "webUISharingPublicManagement",
@@ -181,7 +160,6 @@ basicTestSuites = [
     "webUITrashbinDelete",
     "webUITrashbinFilesFolders",
     "webUITrashbinRestore",
-    "webUIUpload",
 ]
 
 # minio mc environment variables

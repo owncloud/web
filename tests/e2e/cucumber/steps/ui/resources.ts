@@ -143,6 +143,11 @@ When(
     const { page } = this.actorsEnvironment.getActor({ key: stepUser })
     const resourceObject = new objects.applicationFiles.Resource({ page })
 
+    // drag-n-drop always does MOVE
+    if (method.includes('drag-drop')) {
+      expect(actionType).toBe('moves')
+    }
+
     for (const { resource, to, option } of stepTable.hashes()) {
       await resourceObject[actionType === 'copies' ? 'copy' : 'move']({
         resource,
@@ -166,6 +171,11 @@ When(
   ): Promise<void> {
     const { page } = this.actorsEnvironment.getActor({ key: stepUser })
     const resourceObject = new objects.applicationFiles.Resource({ page })
+
+    // drag-n-drop always does MOVE
+    if (method.includes('drag-drop')) {
+      expect(actionType).toBe('moves')
+    }
 
     const resources = [].concat(...stepTable.rows())
     await resourceObject[
