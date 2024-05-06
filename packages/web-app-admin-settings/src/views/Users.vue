@@ -280,7 +280,12 @@ export default defineComponent({
     })
 
     const isLoading = computed(() => {
-      return loadUsersTask.isRunning || !loadUsersTask.last || loadResourcesTask.isRunning || !loadResourcesTask.last
+      return (
+        loadUsersTask.isRunning ||
+        !loadUsersTask.last ||
+        loadResourcesTask.isRunning ||
+        !loadResourcesTask.last
+      )
     })
 
     const loadResourcesTask = useTask(function* (signal) {
