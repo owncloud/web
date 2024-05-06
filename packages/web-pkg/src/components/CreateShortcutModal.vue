@@ -12,19 +12,15 @@
     @click="onClickUrlInput"
   >
     <template #label>
-      <div class="oc-flex oc-flex-middle">
-        <label
-          class="oc-label"
-          for="create-shortcut-modal-url-input"
-          v-text="$gettext('Webpage for file')"
-        ></label>
+      <div class="oc-flex oc-flex-middle create-shortcut-modal-label">
+        <label for="create-shortcut-modal-url-input" v-text="$gettext('Webpage for file')"></label>
         <oc-contextual-helper
           :text="
             $gettext(
               'Enter the target URL of a webpage or the name of a file. Users will be directed to this webpage or file.'
             )
           "
-          class="oc-ml-xs create-shortcut-modal-label-contextual-helper"
+          class="oc-ml-xs"
         />
       </div>
     </template>
@@ -93,15 +89,14 @@
       :fix-message-line="true"
     >
       <template #label>
-        <div class="oc-flex oc-flex-middle">
+        <div class="oc-flex oc-flex-middle create-shortcut-modal-label">
           <label
-            class="oc-label"
             for="create-shortcut-modal-filename-input"
             v-text="$gettext('Shortcut name')"
           ></label>
           <oc-contextual-helper
             :text="$gettext('Shortcut name as it will appear in the file list.')"
-            class="oc-ml-xs create-shortcut-modal-label-contextual-helper"
+            class="oc-ml-xs"
           />
         </div>
       </template>
@@ -467,7 +462,7 @@ export default defineComponent({
     background: none !important;
   }
 
-  &-label-contextual-helper {
+  &-label {
     margin-bottom: 0.2rem;
   }
 }
