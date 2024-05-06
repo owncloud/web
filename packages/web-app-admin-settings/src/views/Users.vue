@@ -29,95 +29,96 @@
         </div>
       </template>
       <template #mainContent>
-        <app-loading-spinner v-if="isLoading" />
-        <div v-else>
-          <users-list :roles="roles" :class="{ 'users-table-squashed': isSideBarOpen }">
-            <template #contextMenu>
-              <context-actions :items="selectedUsers" />
-            </template>
-            <template #filter>
-              <div class="oc-flex oc-flex-middle">
-                <div class="oc-mr-m oc-flex oc-flex-middle">
-                  <oc-icon name="filter-2" class="oc-mr-xs" />
-                  <span v-text="$gettext('Filter:')" />
-                </div>
-                <item-filter
-                  :allow-multiple="true"
-                  :filter-label="$gettext('Groups')"
-                  :filterable-attributes="['displayName']"
-                  :items="groups"
-                  :option-filter-label="$gettext('Filter groups')"
-                  :show-option-filter="true"
-                  class="oc-mr-s"
-                  display-name-attribute="displayName"
-                  filter-name="groups"
-                  @selection-change="filterGroups"
-                >
-                  <template #image="{ item }">
-                    <avatar-image :width="32" :userid="item.id" :user-name="item.displayName" />
-                  </template>
-                  <template #item="{ item }">
-                    <div v-text="item.displayName" />
-                  </template>
-                </item-filter>
-                <item-filter
-                  :allow-multiple="true"
-                  :filter-label="$gettext('Roles')"
-                  :filterable-attributes="['displayName']"
-                  :items="roles"
-                  :option-filter-label="$gettext('Filter roles')"
-                  :show-option-filter="true"
-                  display-name-attribute="displayName"
-                  filter-name="roles"
-                  @selection-change="filterRoles"
-                >
-                  <template #image="{ item }">
-                    <avatar-image
-                      :width="32"
-                      :userid="item.id"
-                      :user-name="$gettext(item.displayName)"
-                    />
-                  </template>
-                  <template #item="{ item }">
-                    <div v-text="$gettext(item.displayName)" />
-                  </template>
-                </item-filter>
+        <users-list
+          :is-loading="isLoading"
+          :roles="roles"
+          :class="{ 'users-table-squashed': isSideBarOpen }"
+        >
+          <template #contextMenu>
+            <context-actions :items="selectedUsers" />
+          </template>
+          <template #filter>
+            <div class="oc-flex oc-flex-middle">
+              <div class="oc-mr-m oc-flex oc-flex-middle">
+                <oc-icon name="filter-2" class="oc-mr-xs" />
+                <span v-text="$gettext('Filter:')" />
               </div>
-              <div class="oc-flex oc-flex-middle">
-                <oc-text-input
-                  id="users-filter"
-                  v-model.trim="filterTermDisplayName"
-                  :label="$gettext('Search')"
-                  autocomplete="off"
-                  @keypress.enter="filterDisplayName"
-                />
-                <oc-button
-                  id="users-filter-confirm"
-                  class="oc-ml-xs"
-                  appearance="raw"
-                  @click="filterDisplayName"
-                >
-                  <oc-icon name="search" fill-type="line" />
-                </oc-button>
-              </div>
-            </template>
-            <template #noResults>
-              <no-content-message
-                v-if="isFilteringMandatory && !isFilteringActive"
-                icon="error-warning"
+              <item-filter
+                :allow-multiple="true"
+                :filter-label="$gettext('Groups')"
+                :filterable-attributes="['displayName']"
+                :items="groups"
+                :option-filter-label="$gettext('Filter groups')"
+                :show-option-filter="true"
+                class="oc-mr-s"
+                display-name-attribute="displayName"
+                filter-name="groups"
+                @selection-change="filterGroups"
               >
-                <template #message>
-                  <span v-text="$gettext('Please specify a filter to see results')" />
+                <template #image="{ item }">
+                  <avatar-image :width="32" :userid="item.id" :user-name="item.displayName" />
                 </template>
-              </no-content-message>
-              <no-content-message v-else icon="user">
-                <template #message>
-                  <span v-text="$gettext('No users in here')" />
+                <template #item="{ item }">
+                  <div v-text="item.displayName" />
                 </template>
-              </no-content-message>
-            </template>
-          </users-list>
-        </div>
+              </item-filter>
+              <item-filter
+                :allow-multiple="true"
+                :filter-label="$gettext('Roles')"
+                :filterable-attributes="['displayName']"
+                :items="roles"
+                :option-filter-label="$gettext('Filter roles')"
+                :show-option-filter="true"
+                display-name-attribute="displayName"
+                filter-name="roles"
+                @selection-change="filterRoles"
+              >
+                <template #image="{ item }">
+                  <avatar-image
+                    :width="32"
+                    :userid="item.id"
+                    :user-name="$gettext(item.displayName)"
+                  />
+                </template>
+                <template #item="{ item }">
+                  <div v-text="$gettext(item.displayName)" />
+                </template>
+              </item-filter>
+            </div>
+            <div class="oc-flex oc-flex-middle">
+              <oc-text-input
+                id="users-filter"
+                v-model.trim="filterTermDisplayName"
+                :label="$gettext('Search')"
+                autocomplete="off"
+                @keypress.enter="filterDisplayName"
+              />
+              <oc-button
+                id="users-filter-confirm"
+                class="oc-ml-xs"
+                appearance="raw"
+                @click="filterDisplayName"
+              >
+                <oc-icon name="search" fill-type="line" />
+              </oc-button>
+            </div>
+          </template>
+          <template #noResults>
+            <no-content-message
+              v-if="isFilteringMandatory && !isFilteringActive"
+              icon="error-warning"
+            >
+              <template #message>
+                <span v-text="$gettext('Please specify a filter to see results')" />
+              </template>
+            </no-content-message>
+            <no-content-message v-else icon="user">
+              <template #message>
+                <span v-text="$gettext('No users in here')" />
+              </template>
+            </no-content-message>
+          </template>
+        </users-list>
       </template>
     </app-template>
   </div>
@@ -139,7 +140,6 @@ import {
 } from '../composables'
 import { User, Group, AppRole, Quota } from '@ownclouders/web-client/graph/generated'
 import {
-  AppLoadingSpinner,
   ItemFilter,
   NoContentMessage,
   eventBus,
@@ -179,7 +179,6 @@ export default defineComponent({
   name: 'UsersView',
   components: {
     NoContentMessage,
-    AppLoadingSpinner,
     AppTemplate,
     UsersList,
     ContextActions,
