@@ -3,4 +3,5 @@ Enhancement: Show loading spinner while searching or filtering users
 While searching or filtering users in the admin settings, there will be shown a loading spinner,
 to indicate the request is processing.
 
+https://github.com/owncloud/web/pull/10874
 https://github.com/owncloud/web/issues/10821
