@@ -1,6 +1,8 @@
 <template>
   <div :class="$attrs.class">
-    <label class="oc-label" :for="id" v-text="label" />
+    <slot name="label">
+      <label class="oc-label" :for="id" v-text="label" />
+    </slot>
     <div class="oc-position-relative">
       <oc-icon
         v-if="readOnly"
@@ -432,8 +434,9 @@ export default defineComponent({
     <oc-text-input label="Focus field" ref="inputForFocus"/>
     <oc-button @click="_focusAndSelect" class="oc-my-m">Focus and select input below</oc-button>
     <oc-text-input label="Select field" value="Will you select this existing text?" ref="inputForFocusSelect"/>
-    <oc-text-input label="Clear input" v-model="inputValueForClearing" :clear-button-enabled="true" />
-    <oc-text-input label="Input with default" v-model="inputValueWithDefault" :clear-button-enabled="true" default-value="Some default"/>
+    <oc-text-input label="Clear input" v-model="inputValueForClearing" :clear-button-enabled="true"/>
+    <oc-text-input label="Input with default" v-model="inputValueWithDefault" :clear-button-enabled="true"
+                   default-value="Some default"/>
     <p>
       Value: {{ inputValueWithDefault !== null ? inputValueWithDefault : "null" }}
     </p>

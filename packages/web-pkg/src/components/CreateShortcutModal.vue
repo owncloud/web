@@ -2,14 +2,33 @@
   <oc-text-input
     id="create-shortcut-modal-url-input"
     v-model="inputUrl"
-    :label="$gettext('Shortcut to a webpage or file')"
+    :placeholder="'example.org'"
+    :label="$gettext('Webpage or file')"
     @keydown.up="onKeyUpDrop"
     @keydown.down="onKeyDownDrop"
     @keydown.esc="onKeyEscDrop"
     @keydown.enter="onKeyEnterDrop"
     @input="onInputUrlInput"
     @click="onClickUrlInput"
-  />
+  >
+    <template #label>
+      <div class="oc-flex oc-flex-middle">
+        <label
+          class="oc-label"
+          for="create-shortcut-modal-url-input"
+          v-text="$gettext('Webpage for file')"
+        ></label>
+        <oc-contextual-helper
+          :text="
+            $gettext(
+              'Enter the target URL of a webpage or the name of a file. Users will be directed to this webpage or file.'
+            )
+          "
+          class="oc-ml-xs create-shortcut-modal-label-contextual-helper"
+        />
+      </div>
+    </template>
+  </oc-text-input>
   <oc-drop
     ref="dropRef"
     class="oc-pt-s"
@@ -65,15 +84,28 @@
       </template>
     </oc-list>
   </oc-drop>
-  <div class="oc-flex oc-width-1-1 oc-mt-m">
+  <div v-if="inputFilename" class="oc-flex oc-width-1-1 oc-mt-m">
     <oc-text-input
+      id="create-shortcut-modal-filename-input"
       v-model="inputFilename"
       class="oc-width-1-1"
-      :label="$gettext('Shortcut name')"
       :error-message="inputFileNameErrorMessage"
       :fix-message-line="true"
-    />
-    <span class="oc-ml-s oc-flex oc-flex-bottom create-shortcut-modal-url-extension">.url</span>
+    >
+      <template #label>
+        <div class="oc-flex oc-flex-middle">
+          <label
+            class="oc-label"
+            for="create-shortcut-modal-filename-input"
+            v-text="$gettext('Shortcut name')"
+          ></label>
+          <oc-contextual-helper
+            :text="$gettext('Shortcut name as it will appear in the file list.')"
+            class="oc-ml-xs create-shortcut-modal-label-contextual-helper"
+          />
+        </div>
+      </template>
+    </oc-text-input>
   </div>
 </template>
 
@@ -315,6 +347,7 @@ export default defineComponent({
     const onInputUrlInput = async () => {
       await nextTick()
 
+      inputFilename.value = inputUrl.value.trim()
       const hideDrop = !inputUrl.value.trim().length
 
       if (hideDrop) {
@@ -432,6 +465,10 @@ export default defineComponent({
 
   &-search-separator:hover {
     background: none !important;
+  }
+
+  &-label-contextual-helper {
+    margin-bottom: 0.2rem;
   }
 }
 
