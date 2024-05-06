@@ -29,7 +29,7 @@
         </div>
       </template>
       <template #mainContent>
-        <app-loading-spinner v-if="loadResourcesTask.isRunning || !loadResourcesTask.last" />
+        <app-loading-spinner v-if="isLoading" />
         <div v-else>
           <users-list :roles="roles" :class="{ 'users-table-squashed': isSideBarOpen }">
             <template #contextMenu>
@@ -279,6 +279,10 @@ export default defineComponent({
       userSettingsStore.setUsers(usersResponse.data.value || [])
     })
 
+    const isLoading = computed(() => {
+      return loadUsersTask.isRunning || !loadUsersTask.last || loadResourcesTask.isRunning || !loadResourcesTask.last
+    })
+
     const loadResourcesTask = useTask(function* (signal) {
       yield loadUsersTask.perform()
       yield loadGroupsTask.perform()
@@ -473,6 +477,7 @@ export default defineComponent({
       users,
       roles,
       groups,
+      isLoading,
       loadResourcesTask,
       loadAdditionalUserDataTask,
       clientService,
