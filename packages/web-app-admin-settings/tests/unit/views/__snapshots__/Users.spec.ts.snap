@@ -19,26 +19,26 @@ exports[`Users view > list view > renders initially warning if filters are manda
           <!--v-if-->
         </div>
       </div>
-      <div data-v-32efd9c6="">
-        <div data-v-32efd9c6="" id="user-list" class="">
-          <div class="user-filters oc-flex oc-flex-between oc-flex-wrap oc-flex-bottom oc-mx-m oc-mb-m">
-            <div data-v-32efd9c6="" class="oc-flex oc-flex-middle">
-              <div data-v-32efd9c6="" class="oc-mr-m oc-flex oc-flex-middle"><span data-v-32efd9c6="" class="oc-icon oc-icon-m oc-icon-passive oc-mr-xs"><!----></span> <span data-v-32efd9c6="">Filter:</span></div>
-              <item-filter-stub data-v-32efd9c6="" filterlabel="Groups" items="undefined" filtername="groups" optionfilterlabel="Filter groups" showoptionfilter="true" allowmultiple="true" idattribute="id" displaynameattribute="displayName" filterableattributes="displayName" closeonclick="false" class="oc-mr-s"></item-filter-stub>
-              <item-filter-stub data-v-32efd9c6="" filterlabel="Roles" items="undefined" filtername="roles" optionfilterlabel="Filter roles" showoptionfilter="true" allowmultiple="true" idattribute="id" displaynameattribute="displayName" filterableattributes="displayName" closeonclick="false"></item-filter-stub>
-            </div>
-            <div data-v-32efd9c6="" class="oc-flex oc-flex-middle">
-              <div data-v-32efd9c6="" class=""><label class="oc-label" for="users-filter">Search</label>
-                <div class="oc-position-relative">
-                  <!--v-if--> <input id="users-filter" modelmodifiers="[object Object]" autocomplete="off" aria-invalid="false" class="oc-text-input oc-input oc-rounded" type="text">
-                  <!--v-if-->
-                </div>
-                <!--v-if-->
+      <div data-v-32efd9c6="" id="user-list" class="">
+        <div class="user-filters oc-flex oc-flex-between oc-flex-wrap oc-flex-bottom oc-mx-m oc-mb-m">
+          <div data-v-32efd9c6="" class="oc-flex oc-flex-middle">
+            <div data-v-32efd9c6="" class="oc-mr-m oc-flex oc-flex-middle"><span data-v-32efd9c6="" class="oc-icon oc-icon-m oc-icon-passive oc-mr-xs"><!----></span> <span data-v-32efd9c6="">Filter:</span></div>
+            <item-filter-stub data-v-32efd9c6="" filterlabel="Groups" filtername="groups" optionfilterlabel="Filter groups" showoptionfilter="true" allowmultiple="true" idattribute="id" displaynameattribute="displayName" filterableattributes="displayName" closeonclick="false" class="oc-mr-s" items="undefined"></item-filter-stub>
+            <item-filter-stub data-v-32efd9c6="" filterlabel="Roles" filtername="roles" optionfilterlabel="Filter roles" showoptionfilter="true" allowmultiple="true" idattribute="id" displaynameattribute="displayName" filterableattributes="displayName" closeonclick="false" items="undefined"></item-filter-stub>
+          </div>
+          <div data-v-32efd9c6="" class="oc-flex oc-flex-middle">
+            <div data-v-32efd9c6="" class=""><label class="oc-label" for="users-filter">Search</label>
+              <div class="oc-position-relative">
+                <!--v-if--> <input id="users-filter" modelmodifiers="[object Object]" autocomplete="off" aria-invalid="false" class="oc-text-input oc-input oc-rounded" type="text">
                 <!--v-if-->
               </div>
-              <oc-button-stub data-v-32efd9c6="" type="button" disabled="false" size="medium" submit="button" variation="passive" appearance="raw" justifycontent="center" gapsize="medium" showspinner="false" id="users-filter-confirm" class="oc-ml-xs"></oc-button-stub>
+              <!--v-if-->
+              <!--v-if-->
             </div>
+            <oc-button-stub data-v-32efd9c6="" type="button" disabled="false" size="medium" submit="button" variation="passive" appearance="raw" justifycontent="center" gapsize="medium" showspinner="false" id="users-filter-confirm" class="oc-ml-xs"></oc-button-stub>
           </div>
+        </div>
+        <div>
           <no-content-message-stub data-v-32efd9c6="" icon="error-warning" iconfilltype="fill"></no-content-message-stub>
         </div>
       </div>
@@ -67,26 +67,26 @@ exports[`Users view > list view > renders list initially 1`] = `
           <!--v-if-->
         </div>
       </div>
-      <div data-v-32efd9c6="">
-        <div data-v-32efd9c6="" id="user-list" class="">
-          <div class="user-filters oc-flex oc-flex-between oc-flex-wrap oc-flex-bottom oc-mx-m oc-mb-m">
-            <div data-v-32efd9c6="" class="oc-flex oc-flex-middle">
-              <div data-v-32efd9c6="" class="oc-mr-m oc-flex oc-flex-middle"><span data-v-32efd9c6="" class="oc-icon oc-icon-m oc-icon-passive oc-mr-xs"><!----></span> <span data-v-32efd9c6="">Filter:</span></div>
-              <item-filter-stub data-v-32efd9c6="" filterlabel="Groups" items="undefined" filtername="groups" optionfilterlabel="Filter groups" showoptionfilter="true" allowmultiple="true" idattribute="id" displaynameattribute="displayName" filterableattributes="displayName" closeonclick="false" class="oc-mr-s"></item-filter-stub>
-              <item-filter-stub data-v-32efd9c6="" filterlabel="Roles" items="undefined" filtername="roles" optionfilterlabel="Filter roles" showoptionfilter="true" allowmultiple="true" idattribute="id" displaynameattribute="displayName" filterableattributes="displayName" closeonclick="false"></item-filter-stub>
-            </div>
-            <div data-v-32efd9c6="" class="oc-flex oc-flex-middle">
-              <div data-v-32efd9c6="" class=""><label class="oc-label" for="users-filter">Search</label>
-                <div class="oc-position-relative">
-                  <!--v-if--> <input id="users-filter" modelmodifiers="[object Object]" autocomplete="off" aria-invalid="false" class="oc-text-input oc-input oc-rounded" type="text">
-                  <!--v-if-->
-                </div>
-                <!--v-if-->
+      <div data-v-32efd9c6="" id="user-list" class="">
+        <div class="user-filters oc-flex oc-flex-between oc-flex-wrap oc-flex-bottom oc-mx-m oc-mb-m">
+          <div data-v-32efd9c6="" class="oc-flex oc-flex-middle">
+            <div data-v-32efd9c6="" class="oc-mr-m oc-flex oc-flex-middle"><span data-v-32efd9c6="" class="oc-icon oc-icon-m oc-icon-passive oc-mr-xs"><!----></span> <span data-v-32efd9c6="">Filter:</span></div>
+            <item-filter-stub data-v-32efd9c6="" filterlabel="Groups" filtername="groups" optionfilterlabel="Filter groups" showoptionfilter="true" allowmultiple="true" idattribute="id" displaynameattribute="displayName" filterableattributes="displayName" closeonclick="false" class="oc-mr-s" items="undefined"></item-filter-stub>
+            <item-filter-stub data-v-32efd9c6="" filterlabel="Roles" filtername="roles" optionfilterlabel="Filter roles" showoptionfilter="true" allowmultiple="true" idattribute="id" displaynameattribute="displayName" filterableattributes="displayName" closeonclick="false" items="undefined"></item-filter-stub>
+          </div>
+          <div data-v-32efd9c6="" class="oc-flex oc-flex-middle">
+            <div data-v-32efd9c6="" class=""><label class="oc-label" for="users-filter">Search</label>
+              <div class="oc-position-relative">
+                <!--v-if--> <input id="users-filter" modelmodifiers="[object Object]" autocomplete="off" aria-invalid="false" class="oc-text-input oc-input oc-rounded" type="text">
                 <!--v-if-->
               </div>
-              <oc-button-stub data-v-32efd9c6="" type="button" disabled="false" size="medium" submit="button" variation="passive" appearance="raw" justifycontent="center" gapsize="medium" showspinner="false" id="users-filter-confirm" class="oc-ml-xs"></oc-button-stub>
+              <!--v-if-->
+              <!--v-if-->
             </div>
+            <oc-button-stub data-v-32efd9c6="" type="button" disabled="false" size="medium" submit="button" variation="passive" appearance="raw" justifycontent="center" gapsize="medium" showspinner="false" id="users-filter-confirm" class="oc-ml-xs"></oc-button-stub>
           </div>
+        </div>
+        <div>
           <table class="oc-table oc-table-hover oc-table-sticky has-item-context-menu users-table">
             <thead class="oc-thead">
               <tr tabindex="-1" class="oc-table-header-row">

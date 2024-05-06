@@ -3,99 +3,104 @@
     <div class="user-filters oc-flex oc-flex-between oc-flex-wrap oc-flex-bottom oc-mx-m oc-mb-m">
       <slot name="filter" />
     </div>
-    <slot v-if="!users.length" name="noResults" />
-    <oc-table
-      v-else
-      class="users-table"
-      :sort-by="sortBy"
-      :sort-dir="sortDir"
-      :fields="fields"
-      :data="paginatedItems"
-      :highlighted="highlighted"
-      :sticky="true"
-      :header-position="fileListHeaderY"
-      :hover="true"
-      @sort="handleSort"
-      @contextmenu-clicked="showContextMenuOnRightClick"
-      @highlight="rowClicked"
-    >
-      <template #selectHeader>
-        <oc-checkbox
-          size="large"
-          class="oc-ml-s"
-          :label="$gettext('Select all users')"
-          :model-value="allUsersSelected"
-          hide-label
-          @update:model-value="allUsersSelected ? unselectAllUsers() : selectUsers(paginatedItems)"
-        />
-      </template>
-      <template #select="{ item }">
-        <oc-checkbox
-          class="oc-ml-s"
-          size="large"
-          :model-value="isUserSelected(item)"
-          :option="item"
-          :label="getSelectUserLabel(item)"
-          hide-label
-          @update:model-value="selectUser(item)"
-          @click.stop="rowClicked([item, $event])"
-        />
-      </template>
-      <template #avatar="{ item }">
-        <avatar-image :width="32" :userid="item.id" :user-name="item.displayName" />
-      </template>
-      <template #role="{ item }">
-        <template v-if="item.appRoleAssignments">{{ getRoleDisplayNameByUser(item) }}</template>
-      </template>
-      <template #accountEnabled="{ item }">
-        <span v-if="item.accountEnabled === false" class="oc-flex oc-flex-middle">
-          <oc-icon name="stop-circle" fill-type="line" class="oc-mr-s" /><span
-            v-text="$gettext('Forbidden')"
+    <app-loading-spinner v-if="isLoading" />
+    <div v-else>
+      <slot v-if="!users.length" name="noResults" />
+      <oc-table
+        v-else
+        class="users-table"
+        :sort-by="sortBy"
+        :sort-dir="sortDir"
+        :fields="fields"
+        :data="paginatedItems"
+        :highlighted="highlighted"
+        :sticky="true"
+        :header-position="fileListHeaderY"
+        :hover="true"
+        @sort="handleSort"
+        @contextmenu-clicked="showContextMenuOnRightClick"
+        @highlight="rowClicked"
+      >
+        <template #selectHeader>
+          <oc-checkbox
+            size="large"
+            class="oc-ml-s"
+            :label="$gettext('Select all users')"
+            :model-value="allUsersSelected"
+            hide-label
+            @update:model-value="
+              allUsersSelected ? unselectAllUsers() : selectUsers(paginatedItems)
+            "
           />
-        </span>
-        <span v-else class="oc-flex oc-flex-middle">
-          <oc-icon name="play-circle" fill-type="line" class="oc-mr-s" /><span
-            v-text="$gettext('Allowed')"
+        </template>
+        <template #select="{ item }">
+          <oc-checkbox
+            class="oc-ml-s"
+            size="large"
+            :model-value="isUserSelected(item)"
+            :option="item"
+            :label="getSelectUserLabel(item)"
+            hide-label
+            @update:model-value="selectUser(item)"
+            @click.stop="rowClicked([item, $event])"
           />
-        </span>
-      </template>
-      <template #actions="{ item }">
-        <oc-button
-          v-oc-tooltip="$gettext('Show details')"
-          :aria-label="$gettext('Show details')"
-          appearance="raw"
-          class="oc-mr-xs quick-action-button oc-p-xs users-table-btn-details"
-          @click="showDetails(item)"
-        >
-          <oc-icon name="information" fill-type="line" />
-        </oc-button>
-        <oc-button
-          v-oc-tooltip="$gettext('Edit')"
-          :aria-label="$gettext('Edit')"
-          appearance="raw"
-          class="oc-mr-xs quick-action-button oc-p-xs users-table-btn-edit"
-          @click="showEditPanel(item)"
-        >
-          <oc-icon name="pencil" fill-type="line" />
-        </oc-button>
-        <context-menu-quick-action
-          ref="contextMenuButtonRef"
-          :item="item"
-          class="users-table-btn-action-dropdown"
-          @quick-action-clicked="showContextMenuOnBtnClick($event, item)"
-        >
-          <template #contextMenu>
-            <slot name="contextMenu" :user="item" />
-          </template>
-        </context-menu-quick-action>
-      </template>
-      <template #footer>
-        <pagination :pages="totalPages" :current-page="currentPage" />
-        <div class="oc-text-nowrap oc-text-center oc-width-1-1 oc-my-s">
-          <p class="oc-text-muted">{{ footerTextTotal }}</p>
-        </div>
-      </template>
-    </oc-table>
+        </template>
+        <template #avatar="{ item }">
+          <avatar-image :width="32" :userid="item.id" :user-name="item.displayName" />
+        </template>
+        <template #role="{ item }">
+          <template v-if="item.appRoleAssignments">{{ getRoleDisplayNameByUser(item) }}</template>
+        </template>
+        <template #accountEnabled="{ item }">
+          <span v-if="item.accountEnabled === false" class="oc-flex oc-flex-middle">
+            <oc-icon name="stop-circle" fill-type="line" class="oc-mr-s" /><span
+              v-text="$gettext('Forbidden')"
+            />
+          </span>
+          <span v-else class="oc-flex oc-flex-middle">
+            <oc-icon name="play-circle" fill-type="line" class="oc-mr-s" /><span
+              v-text="$gettext('Allowed')"
+            />
+          </span>
+        </template>
+        <template #actions="{ item }">
+          <oc-button
+            v-oc-tooltip="$gettext('Show details')"
+            :aria-label="$gettext('Show details')"
+            appearance="raw"
+            class="oc-mr-xs quick-action-button oc-p-xs users-table-btn-details"
+            @click="showDetails(item)"
+          >
+            <oc-icon name="information" fill-type="line" />
+          </oc-button>
+          <oc-button
+            v-oc-tooltip="$gettext('Edit')"
+            :aria-label="$gettext('Edit')"
+            appearance="raw"
+            class="oc-mr-xs quick-action-button oc-p-xs users-table-btn-edit"
+            @click="showEditPanel(item)"
+          >
+            <oc-icon name="pencil" fill-type="line" />
+          </oc-button>
+          <context-menu-quick-action
+            ref="contextMenuButtonRef"
+            :item="item"
+            class="users-table-btn-action-dropdown"
+            @quick-action-clicked="showContextMenuOnBtnClick($event, item)"
+          >
+            <template #contextMenu>
+              <slot name="contextMenu" :user="item" />
+            </template>
+          </context-menu-quick-action>
+        </template>
+        <template #footer>
+          <pagination :pages="totalPages" :current-page="currentPage" />
+          <div class="oc-text-nowrap oc-text-center oc-width-1-1 oc-my-s">
+            <p class="oc-text-muted">{{ footerTextTotal }}</p>
+          </div>
+        </template>
+      </oc-table>
+    </div>
   </div>
 </template>
 
@@ -103,6 +108,7 @@
 import { useGettext } from 'vue3-gettext'
 import { ComponentPublicInstance, defineComponent, PropType, ref, unref, computed } from 'vue'
 import {
+  AppLoadingSpinner,
   ContextMenuBtnClickEventData,
   displayPositionedDropdown,
   eventBus,
@@ -125,11 +131,15 @@ import { findIndex } from 'lodash-es'
 
 export default defineComponent({
   name: 'UsersList',
-  components: { ContextMenuQuickAction, Pagination },
+  components: { AppLoadingSpinner, ContextMenuQuickAction, Pagination },
   props: {
     roles: {
       type: Array as PropType<AppRole[]>,
       required: true
+    },
+    isLoading: {
+      type: Boolean,
+      default: false
     }
   },
   setup(props) {
