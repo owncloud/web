@@ -340,8 +340,8 @@ Then(
     )
 
     if (actionType === 'should') {
-      await expect(changeRole).not.toBeDisabled
-      await expect(changeShare).not.toBeDisabled
+      await expect(changeRole).not.toBeDisabled()
+      await expect(changeShare).not.toBeDisabled()
     } else {
       await expect(changeRole).toBeDisabled()
       await expect(changeShare).toBeDisabled()
