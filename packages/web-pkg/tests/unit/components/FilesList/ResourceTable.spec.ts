@@ -352,7 +352,7 @@ describe('ResourceTable', () => {
       await tr.trigger('click')
 
       expect(
-        (wrapper.emitted('fileClick')[0][0] as { resources: Resource[] }).resources[0].name
+        wrapper.emitted<{ resources: Resource[] }>('fileClick')[0][0].resources[0].name
       ).toMatch('forest.jpg')
     })
 

@@ -135,7 +135,7 @@ export default defineComponent({
     const currentChapter = ref<NavItem>()
     const navigateLeftDisabled = ref(false)
     const navigateRightDisabled = ref(false)
-    const localStorageData = useLocalStorage(`oc_epubReader`, {})
+    const localStorageData = useLocalStorage<{ fontSizePercentage?: number }>(`oc_epubReader`, {})
     const currentFontSizePercentage = ref(unref(localStorageData).fontSizePercentage || 100)
     const themeStore = useThemeStore()
     let book = ref<Book>()
@@ -191,7 +191,7 @@ export default defineComponent({
           unref(book).destroy()
         }
 
-        const localStorageResourceData = useLocalStorage(
+        const localStorageResourceData = useLocalStorage<{ currentLocation?: Location }>(
           `oc_epubReader_resource_${props.resource.id}`,
           {}
         )

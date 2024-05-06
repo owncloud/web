@@ -1,8 +1,15 @@
-import { defaultPlugins, getOcSelectOptions, mount, nextTicks } from 'web-test-helpers'
+import {
+  PartialComponentProps,
+  defaultPlugins,
+  getOcSelectOptions,
+  mount,
+  nextTicks
+} from 'web-test-helpers'
 import App from '../../src/App.vue'
 import { useLocalStorage } from '@ownclouders/web-pkg'
 import { Resource } from '@ownclouders/web-client'
 import { mock } from 'vitest-mock-extended'
+import { ref } from 'vue'
 
 vi.mock('@ownclouders/web-pkg', async (importOriginal) => ({
   ...(await importOriginal<any>()),
@@ -204,12 +211,12 @@ function getWrapper({
   localStorageGeneral = {},
   localStorageResource = {}
 }: {
-  propsData?: Record<string, unknown>
-  localStorageGeneral?: ReturnType<typeof useLocalStorage>
-  localStorageResource?: ReturnType<typeof useLocalStorage>
+  propsData?: PartialComponentProps<typeof App>
+  localStorageGeneral?: Record<string, unknown>
+  localStorageResource?: Record<string, unknown>
 } = {}) {
-  vi.mocked(useLocalStorage).mockImplementationOnce(() => localStorageGeneral)
-  vi.mocked(useLocalStorage).mockImplementationOnce(() => localStorageResource)
+  vi.mocked(useLocalStorage).mockImplementationOnce(() => ref(localStorageGeneral))
+  vi.mocked(useLocalStorage).mockImplementationOnce(() => ref(localStorageResource))
 
   return {
     wrapper: mount(App, {

@@ -230,12 +230,9 @@ export default defineComponent({
     const dragItem = ref()
     const ghostElementRef = ref()
 
-    const tileRefs = ref<{
-      tiles: Record<string, ResourceTileRef>
-      dropBtns: Record<string, ContextMenuQuickActionRef>
-    }>({
-      tiles: {},
-      dropBtns: {}
+    const tileRefs = ref({
+      tiles: {} as Record<string, ResourceTileRef>,
+      dropBtns: {} as Record<string, ContextMenuQuickActionRef>
     })
 
     const resourceRouteResolver = useResourceRouteResolver(

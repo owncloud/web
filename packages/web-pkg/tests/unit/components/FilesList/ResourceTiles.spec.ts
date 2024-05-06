@@ -104,9 +104,9 @@ describe('ResourceTiles component', () => {
   it('emits fileClick event upon click on tile', async () => {
     const { wrapper } = getWrapper({ resources: resources })
     await wrapper.find('.oc-tiles-item .oc-resource-name').trigger('click')
-    expect(
-      (wrapper.emitted('fileClick')[0][0] as { resources: Resource[] }).resources[0].name
-    ).toMatch('forest.jpg')
+    expect(wrapper.emitted<{ resources: Resource[] }>('fileClick')[0][0].resources[0].name).toMatch(
+      'forest.jpg'
+    )
   })
 
   it('does not emit fileClick event upon click on tile when embed mode is enabled', async () => {
