@@ -3,8 +3,8 @@ Feature: server sent events
       events:
       | userlog-notification    |   |
       | postprocessing-finished |   |
-      | file-locked             |   |
-      | file-unlocked           |   |
+      | file-locked             | x | checked in the app-provider/lock.feature 
+      | file-unlocked           | x | checked in the app-provider/lock.feature
       | file-touched            |   |
       | item-renamed            |   |
       | item-trashed            |   |
@@ -133,7 +133,44 @@ Feature: server sent events
     And "Alice" creates the following folder in personal space using API
       | name                   |
       | sharedFolder/subFolder |
-    
+
+    # share-created
+    When "Alice" shares the following resource using the sidebar panel
+      | resource     | recipient | type | role     |
+      | sharedFolder | Brian     | user | Can view |
+    Then "Alice" should get "share-created" SSE event
+    And "Brian" should get "share-created" SSE event
+    And "Brian" should not be able to edit folder "sharedFolder"
+
+    # share-updated
+    When "Brian" opens folder "sharedFolder"
+    And "Alice" updates following sharee role
+      | resource     | recipient | type | role     | resourceType |
+      | sharedFolder | Brian     | user | Can edit | folder       |
+    Then "Alice" should get "share-updated" SSE event
+    And "Brian" should get "share-updated" SSE event
+    And "Brian" should be able to edit folder "subFolder"
+
+    # share-removed
+    When "Alice" removes following sharee
+      | resource     | recipient |
+      | sharedFolder | Brian     |
+    Then "Alice" should get "share-removed" SSE event
+    And "Brian" should get "share-removed" SSE event
+    And "Brian" should see the message "Your access to this share has been revoked. Please navigate to another location." on the webUI
+
+    And "Brian" logs out
+    And "Alice" logs out
+
+
+  Scenario: public link sse events
+    When "Brian" logs in
+    And "Brian" navigates to the shared with me page
+    And "Alice" logs in
+    And "Alice" creates the following folder in personal space using API
+      | name                   |
+      | sharedFolder/subFolder |
+
     # share-created
     When "Alice" shares the following resource using the sidebar panel
       | resource     | recipient | type | role     |
