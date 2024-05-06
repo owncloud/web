@@ -13,6 +13,7 @@ Summary
 * Enhancement - Add SSE event for moving: [#10798](https://github.com/owncloud/web/pull/10798)
 * Enhancement - Ability to theme sharing role icons: [#10801](https://github.com/owncloud/web/pull/10801)
 * Enhancement - Add SSE event for moving: [#10807](https://github.com/owncloud/web/pull/10807)
+* Enhancement - Show loading spinner while searching or filtering users: [#10874](https://github.com/owncloud/web/pull/10874)
 
 Details
 -------
@@ -59,6 +60,14 @@ Details
 
    https://github.com/owncloud/web/issues/10647
    https://github.com/owncloud/web/pull/10807
+
+* Enhancement - Show loading spinner while searching or filtering users: [#10874](https://github.com/owncloud/web/pull/10874)
+
+   While searching or filtering users in the admin settings, there will be shown a
+   loading spinner, to indicate the request is processing.
+
+   https://github.com/owncloud/web/issues/10821
+   https://github.com/owncloud/web/pull/10874
 
 Changelog for ownCloud Web [9.0.0] (2024-04-16)
 =======================================
