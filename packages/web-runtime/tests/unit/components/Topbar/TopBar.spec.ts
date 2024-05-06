@@ -1,3 +1,6 @@
+import { Capabilities } from '@ownclouders/web-client/ocs'
+import { ApplicationInformation } from '@ownclouders/web-pkg'
+import { mock } from 'vitest-mock-extended'
 import { computed } from 'vue'
 import TopBar from 'web-runtime/src/components/Topbar/TopBar.vue'
 import { defaultComponentMocks, defaultPlugins, shallowMount } from 'web-test-helpers'
@@ -67,13 +70,22 @@ describe('Top Bar component', () => {
   )
 })
 
-const getWrapper = ({ capabilities = {}, userContextReady = true } = {}) => {
+const getWrapper = ({
+  capabilities = {},
+  userContextReady = true
+}: { capabilities?: Partial<Capabilities['capabilities']>; userContextReady?: boolean } = {}) => {
   const mocks = { ...defaultComponentMocks() }
 
   return {
     wrapper: shallowMount(TopBar, {
       props: {
-        applicationsList: ['testApp']
+        applicationsList: [
+          mock<ApplicationInformation>({
+            type: 'extension',
+            icon: '',
+            applicationMenu: { enabled: () => true }
+          })
+        ]
       },
       global: {
         plugins: [

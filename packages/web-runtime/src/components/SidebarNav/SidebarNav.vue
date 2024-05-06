@@ -29,7 +29,7 @@
       <oc-list>
         <sidebar-nav-item
           v-for="(link, index) in navItems"
-          :ref="(el: any) => (navItemRefs[index] = el)"
+          :ref="(el) => (navItemRefs[index] = el as NavItemRef)"
           :key="index"
           :index="getUuid()"
           :target="link.route"
@@ -62,6 +62,8 @@ import * as uuid from 'uuid'
 import SidebarNavItem from './SidebarNavItem.vue'
 import { NavItem } from '../../helpers/navItems'
 
+type NavItemRef = InstanceType<typeof SidebarNavItem>
+
 export default defineComponent({
   components: {
     SidebarNavItem
@@ -75,9 +77,9 @@ export default defineComponent({
   },
   emits: ['update:nav-bar-closed'],
   setup(props) {
-    let resizeObserver
-    const navItemRefs = ref<Record<string, InstanceType<typeof SidebarNavItem>>>({})
-    const highlighterAttrs = ref<Record<string, any>>({})
+    let resizeObserver: ResizeObserver
+    const navItemRefs = ref<Record<string, NavItemRef>>({})
+    const highlighterAttrs = ref<Record<string, unknown>>({})
 
     onMounted(() => {
       const navBar = document.getElementById('web-nav-sidebar')

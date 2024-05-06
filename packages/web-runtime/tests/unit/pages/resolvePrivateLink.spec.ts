@@ -156,8 +156,17 @@ function getWrapper({
   hiddenShare = false,
   openWithDefaultAppQuery = 'true',
   openLinksWithDefaultApp = true
+}: {
+  space?: SpaceResource
+  resource?: Resource
+  path?: string
+  fileId?: string
+  details?: string
+  hiddenShare?: boolean
+  openWithDefaultAppQuery?: string
+  openLinksWithDefaultApp?: boolean
 } = {}) {
-  vi.mocked(queryItemAsString).mockImplementation((str: string) => {
+  vi.mocked(queryItemAsString).mockImplementation((str) => {
     if (str === 'fileId') {
       return fileId
     }
@@ -167,7 +176,7 @@ function getWrapper({
     if (str === 'details') {
       return details
     }
-    return str
+    return str.toString()
   })
 
   vi.mocked(useGetResourceContext).mockReturnValue({

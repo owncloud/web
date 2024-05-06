@@ -16,6 +16,7 @@ import { setCurrentLanguage } from 'web-runtime/src/helpers/language'
 import { router } from 'web-runtime/src/router'
 import { SSEAdapter } from '@ownclouders/web-client/sse'
 import { User as OcUser } from '@ownclouders/web-client/graph/generated'
+import { SettingsBundle } from '../../helpers/settings'
 
 const postLoginRedirectUrlKey = 'oc.postLoginRedirectUrl'
 type UnloadReason = 'authError' | 'logout'
@@ -149,7 +150,7 @@ export class UserManager extends OidcUserManager {
     }
   }
 
-  updateContext(accessToken: string, fetchUserData: boolean): Promise<void> {
+  updateContext(accessToken: string, fetchUserData: boolean) {
     const userKnown = !!this.userStore.user
     const accessTokenChanged = this.authStore.accessToken !== accessToken
     if (!accessTokenChanged) {
@@ -169,7 +170,7 @@ export class UserManager extends OidcUserManager {
       }
 
       if (!userKnown) {
-        await this.fetchUserInfo(accessToken)
+        await this.fetchUserInfo()
         await this.updateUserAbilities(this.userStore.user)
         this.authStore.setUserContextReady(true)
       }
@@ -177,12 +178,12 @@ export class UserManager extends OidcUserManager {
     return this.updateAccessTokenPromise
   }
 
-  private async fetchUserInfo(accessToken: string): Promise<void> {
+  private async fetchUserInfo() {
     await this.fetchCapabilities()
 
     const graphClient = this.clientService.graphAuthenticated
     const [graphUser, roles] = await Promise.all([graphClient.users.getMe(), this.fetchRoles()])
-    const role = await this.fetchRole({ graphUser, roles })
+    const role = await this.fetchRole({ graphUser: graphUser.data, roles })
 
     this.userStore.setUser({
       id: graphUser.data.id,
@@ -190,7 +191,7 @@ export class UserManager extends OidcUserManager {
       displayName: graphUser.data.displayName,
       mail: graphUser.data.mail,
       memberOf: graphUser.data.memberOf,
-      appRoleAssignments: role ? [role] : [],
+      appRoleAssignments: role ? [role as any] : [], // FIXME
       preferredLanguage: graphUser.data.preferredLanguage || ''
     })
 
@@ -202,12 +203,12 @@ export class UserManager extends OidcUserManager {
     }
   }
 
-  private async fetchRoles(): Promise<any> {
+  private async fetchRoles() {
     const httpClient = this.clientService.httpAuthenticated
     try {
       const {
         data: { bundles: roles }
-      } = await httpClient.post('/api/v0/settings/roles-list', {})
+      } = await httpClient.post<{ bundles: SettingsBundle[] }>('/api/v0/settings/roles-list', {})
       return roles
     } catch (e) {
       console.error(e)
@@ -215,17 +216,18 @@ export class UserManager extends OidcUserManager {
     }
   }
 
-  private async fetchRole({ graphUser, roles }): Promise<any> {
+  private async fetchRole({ graphUser, roles }: { graphUser: OcUser; roles: SettingsBundle[] }) {
     const httpClient = this.clientService.httpAuthenticated
-    const userAssignmentResponse = await httpClient.post('/api/v0/settings/assignments-list', {
-      account_uuid: graphUser.data.id
-    })
+    const userAssignmentResponse = await httpClient.post<{ assignments: SettingsBundle[] }>(
+      '/api/v0/settings/assignments-list',
+      { account_uuid: graphUser.id }
+    )
     const assignments = userAssignmentResponse.data?.assignments
     const roleAssignment = assignments.find((assignment) => 'roleId' in assignment)
     return roleAssignment ? roles.find((role) => role.id === roleAssignment.roleId) : null
   }
 
-  private async fetchCapabilities(): Promise<void> {
+  private async fetchCapabilities() {
     if (this.capabilityStore.isInitialized) {
       return
     }
@@ -281,17 +283,18 @@ export class UserManager extends OidcUserManager {
     return user
   }
 
-  private async fetchPermissions({ user }: { user: OcUser }): Promise<any> {
+  private async fetchPermissions({ user }: { user: OcUser }) {
     const httpClient = this.clientService.httpAuthenticated
-    const oC10DefaultPermissions = ['PublicLink.Write.all']
     try {
       const {
         data: { permissions }
-      } = await httpClient.post('/api/v0/settings/permissions-list', { account_uuid: user.id })
-      return permissions || oC10DefaultPermissions
+      } = await httpClient.post<{ permissions: string[] }>('/api/v0/settings/permissions-list', {
+        account_uuid: user.id
+      })
+      return permissions
     } catch (e) {
       console.error(e)
-      return oC10DefaultPermissions
+      return []
     }
   }
 

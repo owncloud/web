@@ -49,7 +49,7 @@ import Notifications from './Notifications.vue'
 import FeedbackLink from './FeedbackLink.vue'
 import SideBarToggle from './SideBarToggle.vue'
 import {
-  useAbility,
+  ApplicationInformation,
   useAuthStore,
   useCapabilityStore,
   useConfigStore,
@@ -58,6 +58,9 @@ import {
   useThemeStore
 } from '@ownclouders/web-pkg'
 import { isRuntimeRoute } from '../../router'
+import { MenuItem } from '../../helpers/menuItems'
+
+type Menus = 'apps' | 'appSwitcher' | 'user'
 
 export default {
   components: {
@@ -69,9 +72,9 @@ export default {
   },
   props: {
     applicationsList: {
-      type: Array as PropType<any[]>,
+      type: Array as PropType<ApplicationInformation[]>,
       required: false,
-      default: () => []
+      default: (): ApplicationInformation[] => []
     }
   },
   setup(props) {
@@ -84,7 +87,6 @@ export default {
     const authStore = useAuthStore()
     const language = useGettext()
     const router = useRouter()
-    const ability = useAbility()
     const { isEnabled: isEmbedModeEnabled } = useEmbedMode()
 
     const logoWidth = ref('150px')
@@ -112,9 +114,10 @@ export default {
       return isRuntimeRoute(unref(router.currentRoute))
     })
 
-    const isNavItemPermitted = (permittedMenus, navItem) => {
-      if (navItem.menu) {
-        return permittedMenus.includes(navItem.menu)
+    const isNavItemPermitted = (permittedMenus: Menus[], navItem: ApplicationInformation) => {
+      // FIXME: there is no menu...
+      if ((navItem as any).menu) {
+        return permittedMenus.includes((navItem as any).menu)
       }
       return permittedMenus.includes(null)
     }
@@ -124,33 +127,28 @@ export default {
      * The following properties must be accessible in the wrapping code:
      * - applicationsList
      * - $language
-     *
-     * @param {Array} permittedMenus
-     * @param {String} activeRoutePath
-     * @returns {*}
      */
-    const getMenuItems = (permittedMenus, activeRoutePath) => {
+    const getMenuItems = (permittedMenus: Menus[], activeRoutePath: string) => {
       return props.applicationsList
         .filter((app) => {
           if (app.type === 'extension') {
-            return (
-              app.applicationMenu.enabled instanceof Function &&
-              app.applicationMenu.enabled(ability) &&
-              !permittedMenus.includes('user')
-            )
+            return app.applicationMenu?.enabled() && !permittedMenus.includes('user')
           }
           return isNavItemPermitted(permittedMenus, app)
         })
-        .map((item) => {
+        .map<MenuItem>((item) => {
+          // FIXME: types are a mess here
+          const _item = item as any
+
           const lang = language.current
           // TODO: move language resolution to a common function
           // FIXME: need to handle logic for variants like en_US vs en_GB
-          let title = item.title ? item.title.en : item.name
-          let color = item.color
-          let icon
-          let iconUrl
-          if (item.title && item.title[lang]) {
-            title = item.title[lang]
+          let title = _item.title ? _item.title.en : _item.name
+          let color = _item.color
+          let icon: string
+          let iconUrl: string
+          if (_item.title && _item.title[lang]) {
+            title = _item.title[lang]
           }
 
           if (!item.icon) {
@@ -162,26 +160,26 @@ export default {
             iconUrl = item.icon
           }
 
-          const app: any = {
-            id: item.id,
+          const app: MenuItem = {
+            id: _item.id,
             icon: icon,
             iconUrl: iconUrl,
             title: title,
             color: color,
-            applicationMenu: item.applicationMenu,
-            defaultExtension: item.defaultExtension
+            defaultExtension: _item.defaultExtension,
+            ..._item.applicationMenu
           }
 
-          if (item.url) {
-            app.url = item.url
-            app.target = ['_blank', '_self', '_parent', '_top'].includes(item.target)
-              ? item.target
+          if (_item.url) {
+            app.url = _item.url
+            app.target = ['_blank', '_self', '_parent', '_top'].includes(_item.target)
+              ? _item.target
               : '_blank'
-          } else if (item.path) {
-            app.path = item.path
+          } else if (_item.path) {
+            app.path = _item.path
             app.active = activeRoutePath?.startsWith(app.path)
           } else {
-            app.path = `/${item.id}`
+            app.path = `/${_item.id}`
             app.active = activeRoutePath?.startsWith(app.path)
           }
 
@@ -196,7 +194,7 @@ export default {
     )
 
     const contentOnLeftPortal = ref(false)
-    const updateLeftPortal = (newContent) => {
+    const updateLeftPortal = (newContent: { hasContent: boolean; sources: string[] }) => {
       contentOnLeftPortal.value = newContent.hasContent
     }
 

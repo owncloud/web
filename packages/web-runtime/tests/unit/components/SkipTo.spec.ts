@@ -1,3 +1,4 @@
+import { DOMWrapper } from '@vue/test-utils'
 import SkipTo from 'web-runtime/src/components/SkipTo.vue'
 import { shallowMount } from 'web-test-helpers'
 ;(document as any).getElementById = vi.fn(() => ({
@@ -11,14 +12,10 @@ const selectors = {
 }
 
 describe('SkipTo component', () => {
-  afterEach(() => {
-    vi.clearAllMocks()
-  })
-
   const spySkipToTarget = vi.spyOn(SkipTo.methods, 'skipToTarget')
 
-  let wrapper
-  let skipButton
+  let wrapper: ReturnType<typeof getShallowWrapper>['wrapper']
+  let skipButton: DOMWrapper<Element>
   beforeEach(() => {
     wrapper = getShallowWrapper().wrapper
     skipButton = wrapper.find(selectors.skipButton)

@@ -92,19 +92,25 @@ export default defineComponent({
   mounted() {
     eventBus.subscribe(
       'runtime.documentTitle.changed',
-      ({ shortDocumentTitle, fullDocumentTitle }) => {
+      ({
+        shortDocumentTitle,
+        fullDocumentTitle
+      }: {
+        shortDocumentTitle: string
+        fullDocumentTitle: string
+      }) => {
         document.title = fullDocumentTitle
         this.announceRouteChange(shortDocumentTitle)
       }
     )
   },
   methods: {
-    announceRouteChange(pageTitle) {
+    announceRouteChange(pageTitle: string) {
       this.announcement = this.$gettext('Navigated to %{ pageTitle }', { pageTitle })
     },
 
-    extractPageTitleFromRoute(route) {
-      const routeTitle = route.meta.title ? this.$gettext(route.meta.title) : undefined
+    extractPageTitleFromRoute(route: RouteLocation) {
+      const routeTitle = route.meta.title ? this.$gettext(route.meta.title.toString()) : undefined
       if (!routeTitle) {
         return
       }

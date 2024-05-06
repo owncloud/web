@@ -6,6 +6,8 @@ import {
   shallowMount
 } from 'web-test-helpers'
 import { mock } from 'vitest-mock-extended'
+import { MenuItem } from 'web-runtime/src/helpers/menuItems'
+import { SpaceResource } from '@ownclouders/web-client'
 
 vi.mock('@ownclouders/web-pkg', async (importOriginal) => ({
   ...(await importOriginal<any>()),
@@ -26,7 +28,7 @@ const menuLinks = [
     url: 'http://some.org',
     target: '_blank'
   }
-]
+] as MenuItem[]
 
 describe('ApplicationsMenu component', () => {
   it('should render navigation with button and menu items in dropdown', () => {
@@ -35,12 +37,15 @@ describe('ApplicationsMenu component', () => {
   })
 })
 
-function getWrapper(applicationsList = []) {
+function getWrapper(applicationsList: MenuItem[] = []) {
   const mocks = {
     ...defaultComponentMocks({
       currentRoute: mock<RouteLocation>({ query: { app: 'admin-settings' } })
     }),
-    space: { driveType: 'personal', spaceRoles: { viewer: [], editor: [], manager: [] } }
+    space: {
+      driveType: 'personal',
+      spaceRoles: { viewer: [], editor: [], manager: [] }
+    } as unknown as SpaceResource
   }
 
   return {

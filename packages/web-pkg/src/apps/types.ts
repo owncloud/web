@@ -74,6 +74,7 @@ export interface ApplicationInformation {
   isFileEditor?: boolean
   extensions?: ApplicationFileExtension[]
   defaultExtension?: string
+  type?: string
   applicationMenu?: ApplicationMenuItem
 }
 

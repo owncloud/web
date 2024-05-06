@@ -43,6 +43,7 @@ export interface SettingsBundle {
     boolValue?: Record<string, any>
   }[]
   type: string
+  roleId?: string
 }
 
 export interface LanguageOption {

@@ -5,12 +5,12 @@ import { ThemingConfig, WebThemeConfig } from '@ownclouders/web-pkg'
 import { mock } from 'vitest-mock-extended'
 
 vi.mock('@ownclouders/web-pkg', async (importOriginal) => {
-  const actual = await importOriginal()
+  const actual = await importOriginal<any>()
   return {
-    ...(actual as any),
+    ...actual,
     ThemingConfig: {
       parse: vi.fn((arg) => arg),
-      safeParse: (arg) => (actual as any).ThemingConfig.safeParse(arg)
+      safeParse: (arg: unknown) => actual.ThemingConfig.safeParse(arg)
     }
   }
 })

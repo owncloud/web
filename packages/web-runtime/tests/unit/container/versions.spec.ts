@@ -1,6 +1,7 @@
 import { useCapabilityStore } from '@ownclouders/web-pkg'
 import { getBackendVersion, getWebVersion } from '../../../src/container/versions'
 import { createTestingPinia } from 'web-test-helpers'
+import { Capabilities } from '@ownclouders/web-client/ocs'
 
 describe('collect version information', () => {
   describe('web version', () => {
@@ -50,7 +51,7 @@ describe('collect version information', () => {
   })
 })
 
-const versionStore = (version: any) => {
+const versionStore = (version: Capabilities['capabilities']['core']['status']) => {
   createTestingPinia()
   const capabilityStore = useCapabilityStore()
   capabilityStore.capabilities.core.status = version

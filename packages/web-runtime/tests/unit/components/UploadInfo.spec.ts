@@ -1,7 +1,8 @@
 import UploadInfo from '../../../src/components/UploadInfo.vue'
 import { defaultPlugins, shallowMount, defaultComponentMocks } from 'web-test-helpers'
-import { ResourceListItem } from '@ownclouders/web-pkg'
+import { ResourceListItem, UppyResource } from '@ownclouders/web-pkg'
 import { nextTick } from 'vue'
+import { HttpError } from '@ownclouders/web-client'
 
 const selectors = {
   overlay: '#upload-info',
@@ -53,7 +54,7 @@ describe('UploadInfo component', () => {
     it('should show that an upload failed', async () => {
       const { wrapper } = getShallowWrapper()
       wrapper.vm.showInfo = true
-      ;(wrapper.vm.errors = [{ name: 'file', type: 'file' }]), await nextTick()
+      ;(wrapper.vm.errors = { '1': new HttpError('', undefined) }), await nextTick()
 
       const uploadTitle = wrapper.find(selectors.title).text()
       expect(uploadTitle).toBe('Upload failed')
@@ -114,7 +115,7 @@ describe('UploadInfo component', () => {
     it('should show the number of failed items', async () => {
       const { wrapper } = getShallowWrapper()
       wrapper.vm.showInfo = true
-      wrapper.vm.errors = [{ name: 'file', type: 'file' }]
+      wrapper.vm.errors = { '1': new HttpError('', undefined) }
       wrapper.vm.successful = ['1']
       await nextTick()
 
@@ -135,10 +136,21 @@ describe('UploadInfo component', () => {
       const { wrapper } = getShallowWrapper()
       wrapper.vm.showInfo = true
       wrapper.vm.infoExpanded = true
-      wrapper.vm.uploads = [
-        { name: 'file', type: 'file', meta: { uploadId: '1' } },
-        { name: 'file2', type: 'file', meta: { uploadId: '2' } }
-      ]
+      wrapper.vm.uploads = {
+        '1': {
+          name: 'file',
+          path: '/',
+          type: 'file',
+          meta: { uploadId: '1' }
+        } as unknown as UppyResource,
+        '2': {
+          name: 'file2',
+          path: '/',
+          type: 'file',
+          meta: { uploadId: '2' }
+        } as unknown as UppyResource
+      }
+
       await nextTick()
 
       const info = wrapper.find(selectors.info.items)
@@ -151,14 +163,29 @@ describe('UploadInfo component', () => {
       const { wrapper } = getShallowWrapper()
       wrapper.vm.showInfo = true
       wrapper.vm.infoExpanded = true
-      ;(wrapper.vm.uploads = [
-        { name: 'file', type: 'file', meta: { uploadId: '1' } },
-        { name: 'file2', type: 'file', meta: { uploadId: '2' } },
-        { name: 'file3', type: 'file', meta: { uploadId: '3' } }
-      ]),
+      ;(wrapper.vm.uploads = {
+        '1': {
+          name: 'file',
+          path: '/',
+          type: 'file',
+          meta: { uploadId: '1' }
+        } as unknown as UppyResource,
+        '2': {
+          name: 'file2',
+          path: '/',
+          type: 'file',
+          meta: { uploadId: '2' }
+        } as unknown as UppyResource,
+        '3': {
+          name: 'file3',
+          path: '/',
+          type: 'file',
+          meta: { uploadId: '3' }
+        } as unknown as UppyResource
+      }),
         (wrapper.vm.errors = {
-          1: new Error(),
-          2: new Error()
+          1: new HttpError('', undefined),
+          2: new HttpError('', undefined)
         })
       await nextTick()
 
@@ -168,22 +195,22 @@ describe('UploadInfo component', () => {
       const infoMessages = wrapper.findAll(selectors.message)
       expect(infoMessages.length).toBe(2)
       expect(infoMessages.at(0).text()).toBe('Unknown error')
-      expect(infoMessages.at(0).text()).toBe('Unknown error')
+      expect(infoMessages.at(1).text()).toBe('Unknown error')
     })
     it('folder is clickable', async () => {
       const { wrapper } = getShallowWrapper()
       wrapper.vm.showInfo = true
       wrapper.vm.infoExpanded = true
-      wrapper.vm.uploads = [
-        {
+      wrapper.vm.uploads = {
+        '1': {
           name: 'file',
           type: 'folder',
           isFolder: true,
           targetRoute: { params: { driveAliasAndItem: 'some/drive/alias' } },
           path: '',
           meta: { uploadId: '1' }
-        }
-      ]
+        } as unknown as UppyResource
+      }
       await nextTick()
 
       const info = wrapper.find(selectors.info.items)

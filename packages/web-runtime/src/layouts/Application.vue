@@ -45,6 +45,7 @@
 import orderBy from 'lodash-es/orderBy'
 import {
   AppLoadingSpinner,
+  ApplicationInformation,
   CustomComponentExtension,
   CustomComponentTarget,
   Extension,
@@ -222,7 +223,7 @@ export default defineComponent({
     },
 
     applicationsList() {
-      const list = []
+      const list: ApplicationInformation[] = []
 
       Object.values(this.apps).forEach((app) => {
         list.push({

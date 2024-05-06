@@ -8,15 +8,13 @@ import {
 } from 'web-test-helpers'
 import { mock } from 'vitest-mock-extended'
 import { SpaceResource } from '@ownclouders/web-client'
+import { Quota } from '@ownclouders/web-client/graph/generated'
+import { MenuItem } from 'web-runtime/src/helpers/menuItems'
 
 const totalQuota = 1000
 const basicQuota = 300
 const warningQuota = 810
 const dangerQuota = 910
-
-const basicRelativeQuota = (basicQuota / totalQuota) * 100
-const warningRelativeQuota = (warningQuota / totalQuota) * 100
-const dangerRelativeQuota = (dangerQuota / totalQuota) * 100
 
 const noEmail = ''
 const email = 'test@test.de'
@@ -30,10 +28,7 @@ describe('User Menu component', () => {
   })
   describe('when quota and no email is set', () => {
     it('renders a navigation without email', () => {
-      const wrapper = getMountedWrapper(
-        { used: basicQuota, total: totalQuota, relative: basicRelativeQuota },
-        noEmail
-      )
+      const wrapper = getMountedWrapper({ used: basicQuota, total: totalQuota }, noEmail)
       expect(wrapper.html()).toMatchSnapshot()
     })
   })
@@ -54,9 +49,7 @@ describe('User Menu component', () => {
       const wrapper = getMountedWrapper(
         {
           used: basicQuota,
-          total: totalQuota,
-          relative: basicRelativeQuota,
-          definition: 'default'
+          total: totalQuota
         },
         email
       )
@@ -68,9 +61,7 @@ describe('User Menu component', () => {
       const wrapper = getMountedWrapper(
         {
           used: warningQuota,
-          total: totalQuota,
-          relative: warningRelativeQuota,
-          definition: 'default'
+          total: totalQuota
         },
         email
       )
@@ -82,9 +73,7 @@ describe('User Menu component', () => {
       const wrapper = getMountedWrapper(
         {
           used: dangerQuota,
-          total: totalQuota,
-          relative: dangerRelativeQuota,
-          definition: 'default'
+          total: totalQuota
         },
         email
       )
@@ -96,8 +85,7 @@ describe('User Menu component', () => {
       const wrapper = getMountedWrapper(
         {
           used: basicQuota,
-          total: 0,
-          definition: 'default'
+          total: 0
         },
         email
       )
@@ -109,9 +97,7 @@ describe('User Menu component', () => {
       const wrapper = getMountedWrapper(
         {
           used: dangerQuota,
-          total: 0,
-          relative: dangerRelativeQuota,
-          definition: 'none'
+          total: 0
         },
         email
       )
@@ -123,9 +109,7 @@ describe('User Menu component', () => {
       const wrapper = getMountedWrapper(
         {
           used: dangerQuota,
-          total: totalQuota,
-          relative: dangerRelativeQuota,
-          definition: 'none'
+          total: totalQuota
         },
         email,
         false,
@@ -140,7 +124,12 @@ describe('User Menu component', () => {
   })
 })
 
-const getMountedWrapper = (quota, userEmail: string, noUser = false, areThemeUrlsSet = false) => {
+const getMountedWrapper = (
+  quota: Quota,
+  userEmail: string,
+  noUser = false,
+  areThemeUrlsSet = false
+) => {
   const mocks = {
     ...defaultComponentMocks({
       currentRoute: mock<RouteLocation>({ path: '/files', fullPath: '/files' })
@@ -154,7 +143,7 @@ const getMountedWrapper = (quota, userEmail: string, noUser = false, areThemeUrl
           icon: 'application',
           path: '/settings',
           title: 'Settings'
-        }
+        } as MenuItem
       ]
     },
     global: {
