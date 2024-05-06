@@ -2,9 +2,8 @@ import { checkResponseStatus, request } from '../http'
 import { User } from '../../types'
 import join from 'join-path'
 import { getPersonalSpaceId, getSpaceIdBySpaceName } from '../graph'
-import { Response } from 'node-fetch'
 import convert from 'xml-js'
-import _ from 'lodash/object'
+import _ from 'lodash-es/object'
 import { createShare } from '../share'
 import { createTagsForResource } from '../graph/utils'
 
@@ -144,7 +143,7 @@ export const getDataOfFileInsideSpace = async ({
   pathToFileName: string
   spaceType: string
   spaceName: string
-}): Promise<Response> => {
+}) => {
   const body =
     '<?xml version="1.0"?>\n' +
     '<d:propfind  xmlns:d="DAV:" xmlns:oc="http://owncloud.org/ns">\n' +

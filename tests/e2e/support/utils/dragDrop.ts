@@ -17,8 +17,8 @@ export const dragDropFiles = async (page: Page, resources: File[], targetSelecto
     bufferString: JSON.stringify(Array.from(readFileSync(file.path)))
   }))
 
-  await page.evaluate(
-    ([files, targetSelector]: [FileBuffer[], string]) => {
+  await page.evaluate<Promise<void>, [FileBuffer[], string]>(
+    ([files, targetSelector]) => {
       const dropArea = document.querySelector(targetSelector)
       const dt = new DataTransfer()
 

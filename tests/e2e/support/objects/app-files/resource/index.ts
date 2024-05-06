@@ -1,4 +1,4 @@
-import { Download, Locator, Page } from '@playwright/test'
+import { Download, Locator, Page, Response } from '@playwright/test'
 import * as po from './actions'
 import { Space } from '../../../types'
 
@@ -116,7 +116,7 @@ export class Resource {
     await this.#page.goto(startUrl)
   }
 
-  async downloadVersion(args: Omit<po.downloadResourceVersionArgs, 'page'>): Promise<Download[]> {
+  async downloadVersion(args: Omit<po.downloadResourceVersionArgs, 'page'>): Promise<Response[]> {
     const startUrl = this.#page.url()
     const downloads = await po.downloadResourceVersion({ ...args, page: this.#page })
     await this.#page.goto(startUrl)
@@ -138,7 +138,7 @@ export class Resource {
     await this.#page.goto(startUrl)
   }
 
-  async emptyTrashbin({ page }): Promise<void> {
+  async emptyTrashbin({ page }: { page: Page }): Promise<void> {
     const startUrl = this.#page.url()
     await po.emptyTrashbin({ page })
     await this.#page.goto(startUrl)
@@ -197,11 +197,11 @@ export class Resource {
     }
   }
 
-  async openFolder(resource): Promise<void> {
+  async openFolder(resource: string): Promise<void> {
     await po.clickResource({ page: this.#page, path: resource })
   }
 
-  async openFolderViaBreadcrumb(resource): Promise<void> {
+  async openFolderViaBreadcrumb(resource: string): Promise<void> {
     await po.clickResourceFromBreadcrumb({ page: this.#page, resource })
   }
 
@@ -303,11 +303,11 @@ export class Resource {
     return po.getLockLocator({ ...args, page: this.#page })
   }
 
-  async navigateMediaFile(navigationType): Promise<void> {
+  async navigateMediaFile(navigationType: string): Promise<void> {
     return po.navigateMediaFile({ page: this.#page, navigationType })
   }
 
-  async previewMediaFromSidebarPanel(resource): Promise<void> {
+  async previewMediaFromSidebarPanel(resource: string): Promise<void> {
     await po.previewMediaFromSidebarPanel({ page: this.#page, resource })
   }
 }

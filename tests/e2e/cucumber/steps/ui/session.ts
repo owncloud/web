@@ -26,7 +26,7 @@ async function LogInUser(this: World, stepUser: string): Promise<void> {
   await sessionObject.login({ user })
 
   if (this.feature.tags.length > 0) {
-    const tags = []
+    const tags: string[] = []
     this.feature.tags.forEach((tag: PickleTag) => {
       !!tag.name && tags.push(tag.name)
     }, [])

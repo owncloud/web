@@ -1,11 +1,17 @@
 import { DataTable, Then, When } from '@cucumber/cucumber'
 import { expect } from '@playwright/test'
 import { World } from '../../environment'
-import { objects } from '../../../support'
-import { ICollaborator } from '../../../support/objects/app-files/share/collaborator'
+import { environment, objects } from '../../../support'
+import {
+  CollaboratorType,
+  ICollaborator
+} from '../../../support/objects/app-files/share/collaborator'
 
-const parseShareTable = function (stepTable: DataTable, usersEnvironment) {
-  return stepTable.hashes().reduce((acc, stepRow) => {
+const parseShareTable = function (
+  stepTable: DataTable,
+  usersEnvironment: environment.UsersEnvironment
+) {
+  return stepTable.hashes().reduce<Record<string, ICollaborator[]>>((acc, stepRow) => {
     const { resource, recipient, type, role, resourceType, expirationDate } = stepRow
 
     if (!acc[resource]) {
@@ -18,13 +24,13 @@ const parseShareTable = function (stepTable: DataTable, usersEnvironment) {
           ? usersEnvironment.getGroup({ key: recipient })
           : usersEnvironment.getUser({ key: recipient }),
       role,
-      type,
+      type: type as CollaboratorType,
       resourceType,
       expirationDate
     })
 
     return acc
-  }, [])
+  }, {})
 }
 
 When(

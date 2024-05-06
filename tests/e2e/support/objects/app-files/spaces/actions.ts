@@ -214,7 +214,7 @@ export const canUserEditSpaceResource = async (
   return false
 }
 
-export const reloadSpacePage = async (page): Promise<void> => {
+export const reloadSpacePage = async (page: Page): Promise<void> => {
   await page.reload()
 }
 

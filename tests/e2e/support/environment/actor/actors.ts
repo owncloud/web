@@ -1,4 +1,4 @@
-import { kebabCase } from 'lodash'
+import { kebabCase } from 'lodash-es'
 import { DateTime } from 'luxon'
 import { Actor } from '../../types'
 import { ActorsOptions } from './shared'

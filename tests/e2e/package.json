@@ -4,6 +4,7 @@
   },
   "devDependencies": {
     "@ai-zen/node-fetch-event-source": "^2.1.4",
+    "@types/luxon": "3.2.1",
     "xml-js": "^1.6.11"
   }
 }

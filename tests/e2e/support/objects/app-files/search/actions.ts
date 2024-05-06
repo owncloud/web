@@ -24,7 +24,7 @@ export const selectTagFilter = async ({
   tag,
   page
 }: {
-  tag: StaticRangeInit
+  tag: string
   page: Page
 }): Promise<void> => {
   await page.locator(selectTagDropdownSelector).click()

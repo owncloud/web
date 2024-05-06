@@ -1,4 +1,4 @@
-import { Download, Locator, Page, expect } from '@playwright/test'
+import { Download, Locator, Page, Response, expect } from '@playwright/test'
 import util from 'util'
 import path from 'path'
 import { resourceExists, waitForResources } from './utils'
@@ -147,7 +147,13 @@ export const clickResource = async ({
   }
 }
 
-export const clickResourceFromBreadcrumb = async ({ page, resource }): Promise<void> => {
+export const clickResourceFromBreadcrumb = async ({
+  page,
+  resource
+}: {
+  page: Page
+  resource: string
+}): Promise<void> => {
   const folder = buildXpathLiteral(resource)
   const itemId = await page
     .locator(util.format(breadcrumbResourceSelector, folder))
@@ -423,7 +429,7 @@ export const openAndGetContentOfDocument = async ({
   return await page.evaluate(() => navigator.clipboard.readText())
 }
 
-const isAppProviderServiceForOfficeSuitesReadyInWebUI = async (page, type) => {
+const isAppProviderServiceForOfficeSuitesReadyInWebUI = async (page: Page, type: string) => {
   let retry = 1
   let isCreateNewOfficeDocumentFileButtonVisible
   while (retry <= 5) {
@@ -596,7 +602,13 @@ const pauseResumeUpload = (page: Page): Promise<void> => {
   return page.locator(pauseResumeUploadButton).click()
 }
 
-export const navigateMediaFile = async ({ page, navigationType }): Promise<void> => {
+export const navigateMediaFile = async ({
+  page,
+  navigationType
+}: {
+  page: Page
+  navigationType: string
+}): Promise<void> => {
   const oldFileInMediaViewer = await page
     .locator(topbarFilenameSelector)
     .getAttribute('data-test-resource-name')
@@ -1103,7 +1115,7 @@ export const deleteResource = async (args: deleteResourceArgs): Promise<void> =>
 
     case 'BATCH_ACTION': {
       await selectOrDeselectResources({ page, resources: resourcesWithInfo, folder, select: true })
-      const deletetedResources = []
+      const deletetedResources: string[] = []
       if (resourcesWithInfo.length <= 1) {
         throw new Error('Single resource or objects cannot be deleted with batch action')
       }
@@ -1138,12 +1150,10 @@ export interface downloadResourceVersionArgs {
   folder?: string
 }
 
-export const downloadResourceVersion = async (
-  args: downloadResourceVersionArgs
-): Promise<Download[]> => {
+export const downloadResourceVersion = async (args: downloadResourceVersionArgs) => {
   const { page, files, folder } = args
   const fileName = files.map((file) => path.basename(file.name))
-  const downloads = []
+  const downloads: Response[] = []
   await clickResource({ page, path: folder })
   await sidebar.open({ page, resource: fileName[0] })
   await sidebar.openPanel({ page, name: 'versions' })
@@ -1208,7 +1218,7 @@ export const deleteTrashbinMultipleResources = async (
   }
 }
 
-export const emptyTrashbin = async ({ page }): Promise<void> => {
+export const emptyTrashbin = async ({ page }: { page: Page }): Promise<void> => {
   await page.locator(emptyTrashbinButtonSelector).click()
   await Promise.all([
     page.waitForResponse((resp) => resp.status() === 204 && resp.request().method() === 'DELETE'),
@@ -1416,18 +1426,18 @@ export interface getDisplayedResourcesArgs {
   page: Page
 }
 
-export const getDisplayedResourcesFromSearch = async (page): Promise<string[]> => {
+export const getDisplayedResourcesFromSearch = async (page: Page): Promise<string[]> => {
   const result = await page.locator(searchList).allInnerTexts()
   // the result has values like `test\n.txt` so remove new line
   return result.map((result) => result.replace('\n', ''))
 }
 
-export const getDisplayedResourcesFromFilesList = async (page): Promise<string[]> => {
+export const getDisplayedResourcesFromFilesList = async (page: Page): Promise<string[]> => {
   const files = []
   await page.locator('[data-test-resource-path]').first().waitFor()
   // wait for tika indexing
   await new Promise((resolve) => setTimeout(resolve, 1000))
-  const result = await page.locator('[data-test-resource-path]')
+  const result = page.locator('[data-test-resource-path]')
 
   const count = await result.count()
   for (let i = 0; i < count; i++) {
@@ -1437,10 +1447,10 @@ export const getDisplayedResourcesFromFilesList = async (page): Promise<string[]
   return files
 }
 
-export const getDisplayedResourcesFromShares = async (page): Promise<string[]> => {
+export const getDisplayedResourcesFromShares = async (page: Page): Promise<string[]> => {
   const files = []
   await page.locator(sharesNavigationButtonSelector).click()
-  const result = await page.locator('[data-test-resource-path]')
+  const result = page.locator('[data-test-resource-path]')
 
   const count = await result.count()
   for (let i = 0; i < count; i++) {
@@ -1450,9 +1460,9 @@ export const getDisplayedResourcesFromShares = async (page): Promise<string[]> =
   return files
 }
 
-export const getDisplayedResourcesFromTrashbin = async (page): Promise<string[]> => {
+export const getDisplayedResourcesFromTrashbin = async (page: Page): Promise<string[]> => {
   const files = []
-  const result = await page.locator('[data-test-resource-path]')
+  const result = page.locator('[data-test-resource-path]')
 
   const count = await result.count()
   for (let i = 0; i < count; i++) {
@@ -1472,13 +1482,13 @@ export const clickViewModeToggle = async (args: switchViewModeArgs): Promise<voi
   await page.locator(`.viewmode-switch-buttons .${target}`).click()
 }
 
-export const expectThatResourcesAreTiles = async (args): Promise<void> => {
+export const expectThatResourcesAreTiles = async (args: { page: Page }): Promise<void> => {
   const { page } = args
   const tiles = page.locator(resourcesAsTiles)
   await expect(tiles).toBeVisible()
 }
 
-export const showHiddenResources = async (page): Promise<void> => {
+export const showHiddenResources = async (page: Page): Promise<void> => {
   await page.locator(filesViewOptionButton).click()
   await page.locator(hiddenFilesToggleButton).click()
   // close the files view option
@@ -1622,7 +1632,13 @@ export const openFileInViewer = async (args: openFileInViewerArgs): Promise<void
   }
 }
 
-export const previewMediaFromSidebarPanel = async ({ page, resource }): Promise<void> => {
+export const previewMediaFromSidebarPanel = async ({
+  page,
+  resource
+}: {
+  page: Page
+  resource: string
+}): Promise<void> => {
   await sidebar.open({ page, resource })
   await sidebar.openPanel({ page, name: 'actions' })
   await page.locator(util.format(sideBarActionButton, 'Preview')).first().click()
@@ -1660,7 +1676,10 @@ export const checkThatFileVersionPanelIsNotAvailable = async (
   await expect(page.locator(versionsPanelSelect)).not.toBeVisible()
 }
 
-export const expectThatPublicLinkIsDeleted = async (args): Promise<void> => {
+export const expectThatPublicLinkIsDeleted = async (args: {
+  page: Page
+  url: string
+}): Promise<void> => {
   const { page, url } = args
   await Promise.all([
     page.waitForResponse((resp) => resp.status() === 404 && resp.request().method() === 'PROPFIND'),
@@ -1695,7 +1714,7 @@ export const changeItemsPerPage = async (args: changeItemsPerPageArgs): Promise<
   await page.locator(filesViewOptionButton).click()
 }
 
-export const getFileListFooterText = ({ page }): Promise<string> => {
+export const getFileListFooterText = ({ page }: { page: Page }): Promise<string> => {
   return page.locator(footerTextSelector).textContent()
 }
 
@@ -1704,7 +1723,7 @@ export interface expectNumberOfResourcesInThePageToBeArgs {
   numberOfResources: number
 }
 
-export const countNumberOfResourcesInThePage = ({ page }): Promise<number> => {
+export const countNumberOfResourcesInThePage = ({ page }: { page: Page }): Promise<number> => {
   // playwright's default count function is not used here because count only counts
   // elements that are visible in the page but in this case we want to get
   // all the elements present
@@ -1716,7 +1735,7 @@ export const countNumberOfResourcesInThePage = ({ page }): Promise<number> => {
   )
 }
 
-export const expectPageNumberNotToBeVisible = async ({ page }): Promise<void> => {
+export const expectPageNumberNotToBeVisible = async ({ page }: { page: Page }): Promise<void> => {
   await expect(page.locator(filesPaginationNavSelector)).not.toBeVisible()
 }
 
@@ -1725,7 +1744,13 @@ export interface expectFileToBeSelectedArgs {
   fileName: string
 }
 
-export const expectFileToBeSelected = async ({ page, fileName }): Promise<void> => {
+export const expectFileToBeSelected = async ({
+  page,
+  fileName
+}: {
+  page: Page
+  fileName: string
+}): Promise<void> => {
   await expect(page.locator(util.format(checkBox, fileName))).toBeChecked()
 }
 

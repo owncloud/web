@@ -228,7 +228,10 @@ export const addPassword = async (args: addPasswordArgs): Promise<void> => {
   expect(message.trim()).toBe('Link was updated successfully')
 }
 
-export const showOrHidePassword = async (args): Promise<void> => {
+export const showOrHidePassword = async (args: {
+  page: Page
+  showOrHide: string
+}): Promise<void> => {
   const { page, showOrHide } = args
   await page.locator(showOrHidePasswordButton).click()
   showOrHide === 'reveals'
