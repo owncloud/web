@@ -20,7 +20,7 @@ describe('setIcon', () => {
         getContext: () => ({
           fillText: vi.fn()
         })
-      } as any
+      } as unknown as HTMLElement
     })
   })
   describe('isVisible property', () => {

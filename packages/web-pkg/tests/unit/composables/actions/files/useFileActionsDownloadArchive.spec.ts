@@ -1,7 +1,7 @@
 import { mock } from 'vitest-mock-extended'
 import { unref } from 'vue'
 import { useFileActionsDownloadArchive } from '../../../../../src/composables/actions'
-import { Resource } from '@ownclouders/web-client'
+import { Resource, SpaceResource } from '@ownclouders/web-client'
 import { defaultComponentMocks, RouteLocation, getComposableWrapper } from 'web-test-helpers'
 import { useArchiverService } from '../../../../../src/composables'
 import { ArchiverService } from '../../../../../src'
@@ -52,7 +52,7 @@ describe('downloadArchive', () => {
 
 function getWrapper({
   searchLocation = false,
-  triggerDownloadMock = vi.fn() as (...args) => unknown,
+  triggerDownloadMock = vi.fn() as (...args: unknown[]) => unknown,
   setup = () => undefined
 } = {}) {
   const routeName = searchLocation ? 'files-common-search' : 'files-spaces-generic'
@@ -66,7 +66,10 @@ function getWrapper({
 
   const mocks = {
     ...defaultComponentMocks({ currentRoute: mock<RouteLocation>({ name: routeName }) }),
-    space: { driveType: 'personal', spaceRoles: { viewer: [], editor: [], manager: [] } }
+    space: {
+      driveType: 'personal',
+      spaceRoles: { viewer: [], editor: [], manager: [] }
+    } as unknown as SpaceResource
   }
 
   return {

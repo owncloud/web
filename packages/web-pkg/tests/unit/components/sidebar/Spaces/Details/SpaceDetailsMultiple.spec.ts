@@ -1,3 +1,4 @@
+import { SpaceResource } from '@ownclouders/web-client'
 import SpaceDetailsMultiple from '../../../../../../src/components/SideBar/Spaces/Details/SpaceDetailsMultiple.vue'
 import { defaultPlugins, shallowMount } from 'web-test-helpers'
 
@@ -11,7 +12,7 @@ const spaceMock = {
     total: 1000,
     remaining: 900
   }
-}
+} as unknown as SpaceResource
 
 describe('Multiple Details SideBar Panel', () => {
   it('displays the details side panel', () => {
@@ -20,7 +21,7 @@ describe('Multiple Details SideBar Panel', () => {
   })
 })
 
-function createWrapper(spaceResource) {
+function createWrapper(spaceResource: SpaceResource) {
   return {
     wrapper: shallowMount(SpaceDetailsMultiple, {
       global: {

@@ -1,3 +1,4 @@
+import { SpaceResource } from '@ownclouders/web-client'
 import SpaceInfo from '../../../../../src/components/SideBar/Spaces/SpaceInfo.vue'
 import { defaultPlugins, shallowMount } from 'web-test-helpers'
 
@@ -9,7 +10,7 @@ const spaceMock = {
   spaceQuota: {
     used: 100
   }
-}
+} as unknown as SpaceResource
 
 const selectors = {
   name: '[data-testid="space-info-name"]',
@@ -25,7 +26,7 @@ describe('SpaceInfo', () => {
   })
 })
 
-function createWrapper(spaceResource) {
+function createWrapper(spaceResource: SpaceResource) {
   return {
     wrapper: shallowMount(SpaceInfo, {
       global: {

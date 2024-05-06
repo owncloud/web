@@ -1,3 +1,4 @@
+import { IncomingShareResource } from '@ownclouders/web-client'
 import { computed, Ref, unref } from 'vue'
 
 export const useGroupingSettings = ({
@@ -12,9 +13,9 @@ export const useGroupingSettings = ({
       groupingBy: localStorage.getItem('grouping-shared-with-me') || 'Shared on',
       showGroupingOptions: true,
       groupingFunctions: {
-        'Name alphabetically': function (row) {
+        'Name alphabetically': function (row: IncomingShareResource) {
           localStorage.setItem('grouping-shared-with-me', 'Name alphabetically')
-          if (!isNaN(row.name.charAt(0))) {
+          if (!isNaN(Number(row.name.charAt(0)))) {
             return '#'
           }
           if (row.name.charAt(0) === '.') {
@@ -22,7 +23,7 @@ export const useGroupingSettings = ({
           }
           return row.name.charAt(0).toLowerCase()
         },
-        'Shared on': function (row) {
+        'Shared on': function (row: IncomingShareResource) {
           localStorage.setItem('grouping-shared-with-me', 'Shared on')
           const recently = Date.now() - 604800000
           const lastMonth = Date.now() - 2592000000
@@ -35,16 +36,16 @@ export const useGroupingSettings = ({
             return 'Last month'
           }
         },
-        'Share owner': function (row) {
+        'Share owner': function (row: IncomingShareResource) {
           localStorage.setItem('grouping-shared-with-me', 'Share owner')
-          return row.share?.owner?.displayName
+          return row?.owner?.displayName
         },
         None: function () {
           localStorage.setItem('grouping-shared-with-me', 'None')
         }
       },
       sortGroups: {
-        'Name alphabetically': function (groups) {
+        'Name alphabetically': function (groups: { name: string }[]) {
           // sort in alphabetical order by group name
           const sortedGroups = groups.sort(function (a, b) {
             if (a.name < b.name) {
@@ -61,7 +62,7 @@ export const useGroupingSettings = ({
           }
           return sortedGroups
         },
-        'Shared on': function (groups) {
+        'Shared on': function (groups: { name: string }[]) {
           // sort in order: 1-Recently, 2-Last month, 3-Older
           const sortedGroups = []
           const options = ['Recently', 'Last month', 'Older']
@@ -77,7 +78,7 @@ export const useGroupingSettings = ({
           }
           return sortedGroups
         },
-        'Share owner': function (groups) {
+        'Share owner': function (groups: { name: string }[]) {
           // sort in alphabetical order by group name
           const sortedGroups = groups.sort(function (a, b) {
             if (a.name < b.name) {

@@ -119,7 +119,7 @@ describe('archiver', () => {
       formats: [],
       max_num_files: '42',
       max_size: '1073741824'
-    }
+    } as ArchiverCapability
     const capabilityV2 = {
       enabled: true,
       version: 'v2.3.5',
@@ -127,7 +127,7 @@ describe('archiver', () => {
       formats: [],
       max_num_files: '42',
       max_size: '1073741824'
-    }
+    } as ArchiverCapability
     const capabilityV3 = {
       enabled: false,
       version: 'v3.2.5',
@@ -135,7 +135,7 @@ describe('archiver', () => {
       formats: [],
       max_num_files: '42',
       max_size: '1073741824'
-    }
+    } as ArchiverCapability
 
     it('uses the highest major version', async () => {
       const capabilities = ref([capabilityV1, capabilityV2, capabilityV3])

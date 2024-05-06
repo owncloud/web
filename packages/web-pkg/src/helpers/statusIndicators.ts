@@ -12,7 +12,7 @@ import {
 import { User } from '@ownclouders/web-client/graph/generated'
 
 // dummy to trick gettext string extraction into recognizing strings
-const $gettext = (str): string => {
+const $gettext = (str: string): string => {
   return str
 }
 

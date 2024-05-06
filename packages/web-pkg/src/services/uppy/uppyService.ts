@@ -5,10 +5,14 @@ import XHRUpload, { XHRUploadOptions } from '@uppy/xhr-upload'
 import { Language } from 'vue3-gettext'
 import { eventBus } from '../eventBus'
 import DropTarget from '@uppy/drop-target'
-import getFileType from '@uppy/utils/lib/getFileType'
-import generateFileID from '@uppy/utils/lib/generateFileID'
 import { urlJoin } from '@ownclouders/web-client'
 import { UppyResource } from './types'
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+// @ts-ignore
+import getFileType from '@uppy/utils/lib/getFileType'
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+// @ts-ignore
+import generateFileID from '@uppy/utils/lib/generateFileID'
 
 type UppyServiceTopics =
   | 'uploadStarted'

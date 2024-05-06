@@ -95,11 +95,11 @@ export default defineComponent({
   props: {
     dropDownActions: {
       type: Array as PropType<Action[]>,
-      default: () => []
+      default: (): Action[] => []
     },
     mainActions: {
       type: Array as PropType<Action[]>,
-      default: () => []
+      default: (): Action[] => []
     },
     resource: {
       type: Object as PropType<Resource>,

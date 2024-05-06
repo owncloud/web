@@ -71,6 +71,7 @@ import {
 import {
   Resource,
   SpaceResource,
+  call,
   isPersonalSpaceResource,
   isProjectSpaceResource
 } from '@ownclouders/web-client'
@@ -94,12 +95,12 @@ export default defineComponent({
     },
     urlForResourceOptions: {
       type: Object as PropType<UrlForResourceOptions>,
-      default: () => null,
+      default: (): UrlForResourceOptions => null,
       required: false
     },
     fileContentOptions: {
       type: Object as PropType<FileContentOptions>,
-      default: () => null,
+      default: (): FileContentOptions => null,
       required: false
     },
     wrappedComponent: {
@@ -107,8 +108,8 @@ export default defineComponent({
       default: null
     },
     importResourceWithExtension: {
-      type: Function as PropType<(Resource) => string>,
-      default: () => null
+      type: Function as PropType<(resource: Resource) => string>,
+      default: (): Resource => null
     }
   },
   setup(props) {
@@ -148,9 +149,8 @@ export default defineComponent({
       return unref(currentContent) !== unref(serverContent)
     })
 
-    const preventUnload = (e) => {
+    const preventUnload = (e: Event) => {
       e.preventDefault()
-      e.returnValue = ''
     }
 
     watch(isDirty, (dirty) => {
@@ -268,9 +268,8 @@ export default defineComponent({
         )
 
         if (unref(hasProp('currentContent'))) {
-          const fileContentsResponse = yield getFileContents(
-            currentFileContext,
-            props.fileContentOptions
+          const fileContentsResponse = yield* call(
+            getFileContents(currentFileContext, props.fileContentOptions)
           )
           serverContent.value = currentContent.value = fileContentsResponse.body
           currentETag.value = fileContentsResponse.headers['OC-ETag']
@@ -376,7 +375,7 @@ export default defineComponent({
       await saveFileTask.perform()
     }
 
-    let autosaveIntervalId = null
+    let autosaveIntervalId: ReturnType<typeof setInterval> = null
     onMounted(() => {
       if (!unref(isEditor)) {
         return
@@ -459,10 +458,10 @@ export default defineComponent({
       currentFileContext: unref(currentFileContext),
       currentContent: unref(currentContent),
 
-      'onUpdate:currentContent': (value) => {
+      'onUpdate:currentContent': (value: unknown) => {
         currentContent.value = value
       },
-      'onUpdate:applicationName': (value) => {
+      'onUpdate:applicationName': (value: string) => {
         applicationName.value = value
       },
 

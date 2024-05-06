@@ -1,5 +1,5 @@
 import { mock } from 'vitest-mock-extended'
-import _ from 'lodash'
+import _ from 'lodash-es'
 import {
   defaultPlugins,
   mount,

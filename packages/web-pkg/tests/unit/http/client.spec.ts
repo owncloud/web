@@ -125,7 +125,7 @@ describe('HttpClient', () => {
     }
     expect(true).toBe(true)
   })
-  test.each(['delete', 'get', 'head', 'options', 'patch', 'post', 'put'])('%s', (m) => {
+  test.each(['delete', 'get', 'head', 'options', 'patch', 'post', 'put'] as const)('%s', (m) => {
     const client = new HttpClient()
     client[m]('url')
     mockAxios[m].mockResolvedValue({ data: undefined })

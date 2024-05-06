@@ -28,7 +28,7 @@
                 }"
                 justify-content="space-between"
                 appearance="raw"
-                :data-test-value="item[displayNameAttribute]"
+                :data-test-value="item[displayNameAttribute as keyof Item]"
                 @click="toggleItemSelection(item)"
               >
                 <div class="oc-flex oc-flex-middle oc-text-truncate">
@@ -70,6 +70,8 @@ import { useRoute, useRouteQuery, useRouter } from '../composables'
 import { defaultFuseOptions } from '../helpers'
 import { queryItemAsString } from '../composables/appDefaults'
 
+type Item = unknown
+
 export default defineComponent({
   name: 'ItemFilter',
   props: {
@@ -92,7 +94,7 @@ export default defineComponent({
       default: false
     },
     items: {
-      type: Array,
+      type: Array as PropType<Item[]>,
       required: true
     },
     allowMultiple: {
@@ -111,9 +113,9 @@ export default defineComponent({
       default: 'name'
     },
     filterableAttributes: {
-      type: Array as PropType<Fuse.FuseOptionKey<unknown>[]>,
+      type: Array as PropType<Fuse.FuseOptionKey<Item>[]>,
       required: false,
-      default: () => []
+      default: (): Fuse.FuseOptionKey<Item>[] => []
     },
     closeOnClick: {
       type: Boolean,
@@ -133,8 +135,8 @@ export default defineComponent({
     const queryParam = `q_${props.filterName}`
     const currentRouteQuery = useRouteQuery(queryParam)
 
-    const getId = (item) => {
-      return item[props.idAttribute]
+    const getId = (item: Item) => {
+      return item[props.idAttribute as keyof Item]
     }
 
     const setRouteQuery = () => {
@@ -153,11 +155,11 @@ export default defineComponent({
       })
     }
 
-    const isItemSelected = (item) => {
+    const isItemSelected = (item: Item) => {
       return !!unref(selectedItems).find((s) => getId(s) === getId(item))
     }
 
-    const toggleItemSelection = async (item) => {
+    const toggleItemSelection = async (item: Item) => {
       if (isItemSelected(item)) {
         selectedItems.value = unref(selectedItems).filter((s) => getId(s) !== getId(item))
       } else {
@@ -171,7 +173,7 @@ export default defineComponent({
     }
 
     const filterTerm = ref()
-    const filter = (items: unknown[], filterTerm) => {
+    const filter = (items: Item[], filterTerm: string) => {
       if (!(filterTerm || '').trim()) {
         return items
       }
@@ -189,7 +191,7 @@ export default defineComponent({
       setRouteQuery()
     }
 
-    const setDisplayedItems = (items) => {
+    const setDisplayedItems = (items: Item[]) => {
       displayedItems.value = items
     }
 
@@ -215,7 +217,7 @@ export default defineComponent({
       const queryStr = queryItemAsString(unref(currentRouteQuery))
       if (queryStr) {
         const ids = queryStr.split('+')
-        selectedItems.value = props.items.filter((s: any) => ids.includes(getId(s)))
+        selectedItems.value = props.items.filter((s) => ids.includes(getId(s)))
       }
     }
 

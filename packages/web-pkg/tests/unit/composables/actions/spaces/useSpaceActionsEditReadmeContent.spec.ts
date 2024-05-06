@@ -79,9 +79,9 @@ function getWrapper({
 }: {
   setup: (
     instance: ReturnType<typeof useSpaceActionsEditReadmeContent>,
-    mocks: { openWithDefaultApp: any }
+    mocks: { openWithDefaultApp: () => void }
   ) => void
-  openWithDefaultApp?: any
+  openWithDefaultApp?: () => void
 }) {
   vi.mocked(useOpenWithDefaultApp).mockReturnValue(
     mock<ReturnType<typeof useOpenWithDefaultApp>>({

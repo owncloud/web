@@ -45,7 +45,7 @@ export const useFileActionsDeleteResources = () => {
   const queue = new PQueue({
     concurrency: configStore.options.concurrentRequests.resourceBatchActions
   })
-  const deleteOps = []
+  const deleteOps: Promise<void>[] = []
   const resourcesToDelete = ref([])
 
   const currentPageQuery = useRouteQuery('page', '1')
@@ -59,13 +59,13 @@ export const useFileActionsDeleteResources = () => {
   })
 
   const resources = computed(() => {
-    return cloneStateObject(unref(resourcesToDelete))
+    return cloneStateObject<Resource[]>(unref(resourcesToDelete))
   })
 
   const dialogTitle = computed(() => {
     const currentResources = unref(resources)
     const isFolder = currentResources[0].type === 'folder'
-    let title = null
+    let title: string = null
 
     if (currentResources.length === 1) {
       if (isFolder) {
@@ -92,7 +92,7 @@ export const useFileActionsDeleteResources = () => {
       'Permanently delete selected resource?',
       'Permanently delete %{amount} selected resources?',
       currentResources.length,
-      { amount: currentResources.length },
+      { amount: currentResources.length.toString() },
       false
     )
   })
@@ -177,8 +177,8 @@ export const useFileActionsDeleteResources = () => {
     firstRun?: boolean
   }) => {
     const { setProgress } = loadingCallbackArgs
-    const promises = []
-    const removedFiles = []
+    const promises: Promise<void>[] = []
+    const removedFiles: Resource[] = []
     for (const [i, file] of files.entries()) {
       const promise = clientService.webdav
         .deleteFile(space, file)
@@ -225,22 +225,23 @@ export const useFileActionsDeleteResources = () => {
   const filesList_delete = (resources: Resource[]) => {
     resourcesToDelete.value = [...resources]
 
-    const resourceSpaceMapping: Record<string, { space: SpaceResource; resources: Resource[] }> =
-      unref(resources).reduce((acc, resource) => {
-        if (resource.storageId in acc) {
-          acc[resource.storageId].resources.push(resource)
-          return acc
-        }
-
-        const matchingSpace = getMatchingSpace(resource)
-
-        if (!(matchingSpace.id in acc)) {
-          acc[matchingSpace.id] = { space: matchingSpace, resources: [] }
-        }
-
-        acc[matchingSpace.id].resources.push(resource)
+    const resourceSpaceMapping = unref(resources).reduce<
+      Record<string, { space: SpaceResource; resources: Resource[] }>
+    >((acc, resource) => {
+      if (resource.storageId in acc) {
+        acc[resource.storageId].resources.push(resource)
         return acc
-      }, {})
+      }
+
+      const matchingSpace = getMatchingSpace(resource)
+
+      if (!(matchingSpace.id in acc)) {
+        acc[matchingSpace.id] = { space: matchingSpace, resources: [] }
+      }
+
+      acc[matchingSpace.id].resources.push(resource)
+      return acc
+    }, {})
 
     return Object.values(resourceSpaceMapping).map(
       ({ space: spaceForDeletion, resources: resourcesForDeletion }) => {

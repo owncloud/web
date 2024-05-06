@@ -18,7 +18,7 @@ export const useSearch = () => {
   const getProjectSpace = (id: string) => {
     return unref(projectSpaces).find((s) => s.id === id)
   }
-  const search = async (term: string, searchLimit = null): Promise<SearchResult> => {
+  const search = async (term: string, searchLimit: number = null): Promise<SearchResult> => {
     if (configStore.options.routing.fullShareOwnerPaths) {
       await spacesStore.loadMountPoints({ graphClient: clientService.graphAuthenticated })
     }

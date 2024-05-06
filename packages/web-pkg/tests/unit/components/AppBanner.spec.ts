@@ -38,7 +38,13 @@ describe('AppBanner', () => {
   })
 })
 
-function getWrapper({ fileId, sessionStorageReturnValue }) {
+function getWrapper({
+  fileId,
+  sessionStorageReturnValue
+}: {
+  fileId: string
+  sessionStorageReturnValue: string
+}) {
   const router = createRouter({
     routes: [
       {

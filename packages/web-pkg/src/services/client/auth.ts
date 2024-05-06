@@ -15,7 +15,7 @@ export class Auth {
     this.publicLinkPassword = params.publicLinkPassword
   }
 
-  getHeaders(): any {
+  getHeaders(): Record<string, string> {
     return {
       ...(this.publicLinkToken && { 'public-token': this.publicLinkToken }),
       ...(this.publicLinkPassword && {

@@ -128,7 +128,7 @@ export default defineComponent({
         })
       if (this.action.keepOpen) {
         return {
-          click: (event) => {
+          click: (event: Event) => {
             event.stopPropagation()
             callback()
           }

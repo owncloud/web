@@ -42,7 +42,11 @@ export function useAppFileHandling({
   const capabilityStore = useCapabilityStore()
   const userStore = useUserStore()
 
-  const getUrlForResource = (space: SpaceResource, resource: Resource, options?: any) => {
+  const getUrlForResource = (
+    space: SpaceResource,
+    resource: Resource,
+    options?: UrlForResourceOptions
+  ) => {
     return clientService.webdav.getFileUrl(space, resource, {
       isUrlSigningEnabled: capabilityStore.supportUrlSigning,
       username: userStore.user?.onPremisesSamAccountName,

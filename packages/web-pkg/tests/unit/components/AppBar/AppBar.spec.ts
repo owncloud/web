@@ -6,7 +6,8 @@ import {
   defaultComponentMocks,
   defaultPlugins,
   shallowMount,
-  RouteLocation
+  RouteLocation,
+  PartialComponentProps
 } from 'web-test-helpers'
 import { ArchiverService } from '../../../../src/services'
 import { FolderView } from '../../../../src/ui/types'
@@ -113,7 +114,7 @@ describe('AppBar component', () => {
         expect(wrapper.find(selectors.viewOptionsStub).exists()).toBeFalsy()
       })
       it('passes viewModes array to ViewOptions', () => {
-        const viewModes = [mock<FolderView>]
+        const viewModes = [mock<FolderView>()]
         const { wrapper } = getShallowWrapper([], {}, { hasViewOptions: true, viewModes })
         expect(
           wrapper.findComponent<typeof ViewOptions>(selectors.viewOptionsStub).props('viewModes')
@@ -132,13 +133,12 @@ describe('AppBar component', () => {
 })
 
 function getShallowWrapper(
-  selected = [],
+  selected: Resource[] = [],
   slots = {},
-  props: { [key: string]: any } = {
+  props: PartialComponentProps<typeof AppBar> = {
     breadcrumbs: [],
-    displayViewModeSwitch: false,
+    viewModes: [],
     hasBulkActions: false,
-    hasSidebarToggle: true,
     hasViewOptions: true
   },
   currentRoute = mock<RouteLocation>({

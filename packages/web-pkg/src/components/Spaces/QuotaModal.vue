@@ -33,6 +33,7 @@ import { useRouter } from '../../composables/router'
 import { eventBus } from '../../services'
 import { Drive } from '@ownclouders/web-client/graph/generated'
 import { storeToRefs } from 'pinia'
+import { ContextualHelperData } from 'design-system/src/helpers'
 
 export default defineComponent({
   name: 'SpaceQuotaModal',
@@ -50,8 +51,8 @@ export default defineComponent({
       default: ''
     },
     warningMessageContextualHelperData: {
-      type: Object,
-      default: () => ({})
+      type: Object as PropType<ContextualHelperData>,
+      default: (): ContextualHelperData => ({})
     },
     resourceType: {
       type: String,
@@ -126,7 +127,7 @@ export default defineComponent({
       { immediate: true }
     )
 
-    const changeSelectedQuotaOption = (option) => {
+    const changeSelectedQuotaOption = (option: { value: number }) => {
       selectedOption.value = option.value
     }
 

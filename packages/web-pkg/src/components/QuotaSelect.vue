@@ -31,7 +31,15 @@
 </template>
 
 <script lang="ts">
+import { ref } from 'vue'
+import { isNumber } from 'lodash-es'
 import { formatFileSize } from '../helpers'
+
+type Option = {
+  value: number
+  displayValue: string
+  selectable?: boolean
+}
 
 export default {
   name: 'QuotaSelect',
@@ -46,17 +54,17 @@ export default {
     }
   },
   emits: ['selectedOptionChange'],
-  data: function () {
-    return {
-      selectedOption: undefined,
-      options: []
-    }
+  setup() {
+    const selectedOption = ref<Option>(undefined)
+    const options = ref<Option[]>([])
+
+    return { selectedOption, options }
   },
   computed: {
     quotaLimit() {
       return this.maxQuota || 1e15
     },
-    DEFAULT_OPTIONS(): { value: number; displayValue: string; selectable?: boolean }[] {
+    DEFAULT_OPTIONS(): Option[] {
       return [
         {
           value: Math.pow(10, 9),
@@ -102,18 +110,22 @@ export default {
     this.selectedOption = this.options.find((o) => o.value === this.totalQuota)
   },
   methods: {
-    onUpdate(event) {
+    onUpdate(event: Option) {
       this.selectedOption = event
       this.$emit('selectedOptionChange', this.selectedOption)
     },
-    optionSelectable(option) {
+    optionSelectable(option: Option) {
       return option.selectable !== false
     },
-    isValueValidNumber(value) {
+    isValueValidNumber(value: string | number) {
+      if (isNumber(value)) {
+        return value > 0
+      }
+
       const optionIsNumberRegex = /^[0-9]\d*(([.,])\d+)?$/g
-      return optionIsNumberRegex.test(value) && value > 0
+      return optionIsNumberRegex.test(value)
     },
-    createOption(option) {
+    createOption(option: string) {
       option = option.replace(',', '.')
 
       if (!this.isValueValidNumber(option)) {
@@ -131,7 +143,7 @@ export default {
           value,
           displayValue: this.getFormattedFileSize(value),
           error: this.$gettext('Please enter a value equal to or less than %{ quotaLimit }', {
-            quotaLimit: this.getFormattedFileSize(this.quotaLimit)
+            quotaLimit: this.getFormattedFileSize(this.quotaLimit).toString()
           }),
 
           selectable: false
@@ -175,9 +187,9 @@ export default {
       ]
       this.options = availableOptions
     },
-    getFormattedFileSize(value) {
+    getFormattedFileSize(value: number) {
       const formattedFilesize = formatFileSize(value, this.$language.current)
-      return !this.isValueValidNumber(value) ? value : formattedFilesize
+      return !this.isValueValidNumber(value) ? value.toString() : formattedFilesize
     }
   }
 }

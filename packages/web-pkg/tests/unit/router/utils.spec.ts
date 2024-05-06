@@ -3,7 +3,7 @@ import {
   isLocationActiveDirector,
   createLocation
 } from '../../../src/router/utils'
-import { RouteLocation, Router } from 'vue-router'
+import { RouteLocation, RouteLocationNamedRaw, Router } from 'vue-router'
 import { mock } from 'vitest-mock-extended'
 import { ref } from 'vue'
 
@@ -12,7 +12,8 @@ describe('utils', () => {
     it('returns true if one location is active', () => {
       const fakeRouter = mock<Router>({
         currentRoute: ref({ name: 'foo' }),
-        resolve: (r: any) => mock<RouteLocation & { href: string }>({ href: r.name })
+        resolve: (r: RouteLocationNamedRaw) =>
+          mock<RouteLocation & { href: string }>({ href: r.name.toString() })
       })
 
       expect(isLocationActive(fakeRouter, mock<RouteLocation>({ name: 'foo' }))).toBe(true)
@@ -28,7 +29,8 @@ describe('utils', () => {
     it('returns false if all locations inactive', () => {
       const fakeRouter = mock<Router>({
         currentRoute: ref({ name: 'foo' }),
-        resolve: (r: any) => mock<RouteLocation & { href: string }>({ href: r.name })
+        resolve: (r: RouteLocationNamedRaw) =>
+          mock<RouteLocation & { href: string }>({ href: r.name.toString() })
       })
 
       expect(isLocationActive(fakeRouter, mock<RouteLocation>({ name: 'bar' }))).toBe(false)
@@ -46,7 +48,8 @@ describe('utils', () => {
     test('director can be created and be used to check active locations', () => {
       const fakeRouter = mock<Router>({
         currentRoute: ref({ name: 'unknown' }),
-        resolve: (r: any) => mock<RouteLocation & { href: string }>({ href: r.name })
+        resolve: (r: RouteLocationNamedRaw) =>
+          mock<RouteLocation & { href: string }>({ href: r.name.toString() })
       })
 
       const isFilesLocationActive = isLocationActiveDirector(
@@ -65,7 +68,8 @@ describe('utils', () => {
     test('director closure only allows to check known locations and throws if unknown', () => {
       const fakeRouter = mock<Router>({
         currentRoute: ref({ name: 'baz' }),
-        resolve: (r: any) => mock<RouteLocation & { href: string }>({ href: r.name })
+        resolve: (r: RouteLocationNamedRaw) =>
+          mock<RouteLocation & { href: string }>({ href: r.name.toString() })
       })
 
       const isFilesLocationActive = isLocationActiveDirector(

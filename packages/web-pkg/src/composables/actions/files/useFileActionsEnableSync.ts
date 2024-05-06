@@ -22,8 +22,8 @@ export const useFileActionsEnableSync = () => {
   const { updateResourceField } = resourcesStore
 
   const handler = async ({ resources }: FileActionOptions<IncomingShareResource>) => {
-    const errors = []
-    const triggerPromises = []
+    const errors: Error[] = []
+    const triggerPromises: Promise<void>[] = []
     const triggerQueue = new PQueue({
       concurrency: configStore.options.concurrentRequests.resourceBatchActions
     })

@@ -44,14 +44,18 @@ describe('useFileActionsCopyQuickLink', () => {
       getWrapper({
         canShare: false,
         setup: ({ actions }) => {
-          expect(unref(actions)[0].isVisible({ resources: [mock<Resource>()] })).toBeFalsy()
+          expect(
+            unref(actions)[0].isVisible({ resources: [mock<Resource>()], space: undefined })
+          ).toBeFalsy()
         }
       })
     })
     it('should return true if resource can be shared', () => {
       getWrapper({
         setup: ({ actions }) => {
-          expect(unref(actions)[0].isVisible({ resources: [mock<Resource>()] })).toBeTruthy()
+          expect(
+            unref(actions)[0].isVisible({ resources: [mock<Resource>()], space: undefined })
+          ).toBeTruthy()
         }
       })
     })
@@ -102,7 +106,18 @@ describe('useFileActionsCopyQuickLink', () => {
   })
 })
 
-function getWrapper({ setup, canShare = true, quickLinkExists = false }) {
+function getWrapper({
+  setup,
+  canShare = true,
+  quickLinkExists = false
+}: {
+  setup: (
+    instance: ReturnType<typeof useFileActionsCopyQuickLink>,
+    mocks: Record<string, any>
+  ) => void
+  canShare?: boolean
+  quickLinkExists?: boolean
+}) {
   const createLinkMock = vi.fn()
   vi.mocked(useFileActionsCreateLink).mockReturnValue({
     actions: computed(() => [

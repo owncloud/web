@@ -18,7 +18,7 @@ const defaultOptions = {
   contextHelpers: true,
   contextHelpersReadMore: true,
   defaultExtension: 'files',
-  disabledExtensions: [],
+  disabledExtensions: [] as string[],
   disablePreviews: false,
   displayResourcesLazy: true,
   displayThumbnails: true,
@@ -34,7 +34,7 @@ const defaultOptions = {
   ocm: {},
   openAppsInTab: false,
   openLinksWithDefaultApp: true,
-  previewFileMimeTypes: [],
+  previewFileMimeTypes: [] as string[],
   routing: {
     idBased: true
   },

@@ -1,6 +1,5 @@
 import { useFileActionsEmptyTrashBin } from '../../../../../src/composables/actions'
 import { useMessages, useModals } from '../../../../../src/composables/piniaStores'
-import { createLocationTrash, createLocationSpaces } from '../../../../../src/router'
 import { mock } from 'vitest-mock-extended'
 import { getComposableWrapper, defaultComponentMocks, RouteLocation } from 'web-test-helpers'
 import { unref } from 'vue'
@@ -93,11 +92,9 @@ function getWrapper({
 }) {
   const mocks = {
     ...defaultComponentMocks({
-      currentRoute: mock<RouteLocation>(
-        invalidLocation
-          ? (createLocationSpaces('files-spaces-generic') as any)
-          : (createLocationTrash('files-trash-generic') as any)
-      )
+      currentRoute: mock<RouteLocation>({
+        name: invalidLocation ? 'files-spaces-generic' : 'files-trash-generic'
+      })
     }),
     space: mock<ProjectSpaceResource>({ driveType, isEditor: () => false, isManager: () => false })
   }

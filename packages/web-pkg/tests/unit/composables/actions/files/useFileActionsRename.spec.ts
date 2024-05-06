@@ -100,7 +100,7 @@ describe('rename', () => {
       {
         currentName: 'currentName',
         newName: 'newname',
-        parentResources: [{ name: 'newname', path: '/newname' }],
+        parentResources: [{ name: 'newname', path: '/newname' } as Resource],
         message: 'The name "newname" is already taken'
       }
     ])('should detect name errors and display error messages accordingly', (inputData) => {

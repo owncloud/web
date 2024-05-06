@@ -1,5 +1,5 @@
 import CreateLinkModal from '../../../src/components/CreateLinkModal.vue'
-import { defaultComponentMocks, defaultPlugins, mount } from 'web-test-helpers'
+import { ComponentProps, defaultComponentMocks, defaultPlugins, mount } from 'web-test-helpers'
 import { mock } from 'vitest-mock-extended'
 import { PasswordPolicyService } from '../../../src/services'
 import { usePasswordPolicyService } from '../../../src/composables/passwordPolicyService'
@@ -107,7 +107,7 @@ describe('CreateLinkModal', () => {
       const link = mock<LinkShare>({ webUrl: 'someurl' })
 
       const { addLink } = useSharesStore()
-      ;(addLink as any).mockResolvedValue(link)
+      vi.mocked(addLink).mockResolvedValue(link)
       await wrapper.vm.onConfirm()
       expect(mocks.postMessageMock).toHaveBeenCalledWith('owncloud-embed:share', [link.webUrl])
     })
@@ -118,7 +118,7 @@ describe('CreateLinkModal', () => {
       const { wrapper } = getWrapper({ resources })
 
       const { addLink } = useSharesStore()
-      ;(addLink as any).mockRejectedValue({ response: {} })
+      vi.mocked(addLink).mockRejectedValue({ response: {} })
       await wrapper.vm.onConfirm()
 
       expect(consoleMock).toHaveBeenCalledTimes(1)
@@ -165,7 +165,7 @@ function getWrapper({
   passwordEnforced?: boolean
   passwordPolicyFulfilled?: boolean
   embedModeEnabled?: boolean
-  callbackFn?: any
+  callbackFn?: ComponentProps<typeof CreateLinkModal>['callbackFn']
   isQuickLink?: boolean
   availableLinkTypes?: SharingLinkType[]
 } = {}) {

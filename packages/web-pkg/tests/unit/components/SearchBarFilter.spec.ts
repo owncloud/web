@@ -2,6 +2,7 @@ import { useRouteQuery } from '../../../src/composables/router/useRouteQuery'
 import SearchBarFilter from '../../../src/components/SearchBarFilter.vue'
 import { defaultComponentMocks, defaultPlugins, shallowMount } from 'web-test-helpers'
 import { OcFilterChip } from 'design-system/src/components'
+import { ref } from 'vue'
 
 vi.mock('../../../src/composables/router/useRouteQuery')
 
@@ -33,8 +34,11 @@ describe('SearchBarFilter', () => {
   })
 })
 
-function getWrapper({ currentFolderAvailable = false, useScope = null } = {}) {
-  vi.mocked(useRouteQuery).mockImplementationOnce(() => useScope)
+function getWrapper({
+  currentFolderAvailable = false,
+  useScope = null
+}: { currentFolderAvailable?: boolean; useScope?: string } = {}) {
+  vi.mocked(useRouteQuery).mockImplementationOnce(() => ref(useScope))
 
   const mocks = defaultComponentMocks()
   return {

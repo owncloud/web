@@ -153,7 +153,7 @@ export const useFileActionsCreateNewFile = ({ space }: { space?: SpaceResource }
   }
 
   const actions = computed((): FileAction[] => {
-    const actions = []
+    const actions: FileAction[] = []
     // make sure there is only one action for a file extension/mime-type
     // if there are
     // - multiple ApplicationFileExtensions with priority
@@ -176,7 +176,7 @@ export const useFileActionsCreateNewFile = ({ space }: { space?: SpaceResource }
         icon: 'add',
         handler: (args) => handler(args, appFileExtension.extension, appFileExtension),
         label: () => $gettext(appFileExtension.newFileMenu.menuTitle()),
-        isEnabled: () => {
+        isVisible: () => {
           return unref(currentFolder)?.canUpload({ user: userStore.user })
         },
         componentType: 'button',

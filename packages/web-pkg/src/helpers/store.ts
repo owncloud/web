@@ -5,7 +5,7 @@
  * @param {Object} state Object in the state to be copied
  * @return {Object} Copied object
  */
-export function cloneStateObject(state: unknown): any {
+export function cloneStateObject<T>(state: T): T {
   if (state === undefined) {
     throw new Error('cloneStateObject: cannot clone "undefined"')
   }

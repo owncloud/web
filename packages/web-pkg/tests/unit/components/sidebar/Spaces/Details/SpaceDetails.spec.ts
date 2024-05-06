@@ -1,5 +1,10 @@
 import SpaceDetails from '../../../../../../src/components/SideBar/Spaces/Details/SpaceDetails.vue'
-import { CollaboratorShare, ShareRole, GraphShareRoleIdMap } from '@ownclouders/web-client'
+import {
+  CollaboratorShare,
+  ShareRole,
+  GraphShareRoleIdMap,
+  SpaceResource
+} from '@ownclouders/web-client'
 import { mock } from 'vitest-mock-extended'
 import { defaultPlugins, shallowMount } from 'web-test-helpers'
 
@@ -17,7 +22,7 @@ const spaceMock = {
     used: 100,
     total: 1000
   }
-}
+} as unknown as SpaceResource
 
 const spaceShare = {
   id: '1',

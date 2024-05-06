@@ -50,7 +50,13 @@ describe('acceptShare', () => {
   })
 })
 
-function getWrapper({ setup, routeName = sharesWithMeLocation }) {
+function getWrapper({
+  setup,
+  routeName = sharesWithMeLocation
+}: {
+  setup: (instance: ReturnType<typeof useFileActionsEnableSync>) => void
+  routeName?: string
+}) {
   const mocks = defaultComponentMocks({ currentRoute: mock<RouteLocation>({ name: routeName }) })
   return {
     wrapper: getComposableWrapper(setup, {

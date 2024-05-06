@@ -20,8 +20,8 @@ export const useFileActionsToggleHideShare = () => {
   const { updateResourceField, resetSelection } = useResourcesStore()
 
   const handler = async ({ resources }: FileActionOptions<IncomingShareResource>) => {
-    const errors = []
-    const triggerPromises = []
+    const errors: Error[] = []
+    const triggerPromises: Promise<void>[] = []
     const triggerQueue = new PQueue({
       concurrency: configStore.options.concurrentRequests.resourceBatchActions
     })

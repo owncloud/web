@@ -5,7 +5,7 @@ import { FileAction, FileActionOptions } from '../../actions'
 import { useAbility } from '../../ability'
 import { useClientService } from '../../clientService'
 import { useRouter } from '../../router'
-import { isPersonalSpaceResource } from '@ownclouders/web-client'
+import { Resource, SpaceResource, isPersonalSpaceResource } from '@ownclouders/web-client'
 import { isLocationSpacesActive } from '../../../router'
 import { useCreateSpace } from '../../spaces'
 import { useSpaceHelpers } from '../../spaces'
@@ -32,7 +32,15 @@ export const useFileActionsCreateSpaceFromResource = () => {
   const spacesStore = useSpacesStore()
   const resourcesStore = useResourcesStore()
 
-  const confirmAction = async ({ spaceName, resources, space }) => {
+  const confirmAction = async ({
+    spaceName,
+    resources,
+    space
+  }: {
+    spaceName: string
+    resources: Resource[]
+    space: SpaceResource
+  }) => {
     const { webdav } = clientService
     const queue = new PQueue({
       concurrency: configStore.options.concurrentRequests.resourceBatchActions

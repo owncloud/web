@@ -88,7 +88,7 @@ export class MustContainRule implements PasswordPolicyRule {
 
     return true
   }
-  missing(options, password) {
+  missing(options: PasswordPolicyRuleOptions, password: string) {
     return this.explain(options, this.assert(options, password))
   }
 }

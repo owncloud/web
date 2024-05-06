@@ -52,7 +52,7 @@ export default defineComponent({
   emits: ['confirm', 'revert'],
   setup() {
     const saved = ref(false)
-    let savedEventToken
+    let savedEventToken: string
 
     onMounted(() => {
       savedEventToken = eventBus.subscribe('sidebar.entity.saved', () => {

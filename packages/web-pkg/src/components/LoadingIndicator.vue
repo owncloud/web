@@ -18,9 +18,9 @@ export default defineComponent({
   name: 'LoadingIndicator',
   setup() {
     const loadingService = useLoadingService()
-    let addLoadingEventToken
-    let removeLoadingEventToken
-    let setProgressToken
+    let addLoadingEventToken: string
+    let removeLoadingEventToken: string
+    let setProgressToken: string
 
     const isLoading = ref(loadingService.isLoading)
     const currentProgress = ref(loadingService.currentProgress)

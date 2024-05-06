@@ -3,12 +3,12 @@ import { SideBarEventTopics, useSideBar } from '../../../../src/composables/side
 import { unref, ref } from 'vue'
 import { getComposableWrapper } from 'web-test-helpers'
 
-vi.mock('../../../../src/composables/localStorage', async (importOriginal) => ({
+vi.mock('../../../../src/composables/localStorage', () => ({
   useLocalStorage: () => ref(false)
 }))
 
 describe('useSideBar', () => {
-  let eventBus
+  let eventBus: EventBus
   beforeEach(() => {
     eventBus = new EventBus()
   })

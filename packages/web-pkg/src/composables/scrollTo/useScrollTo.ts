@@ -29,7 +29,10 @@ export const useScrollTo = (): ScrollToResult => {
 
   const scrollToResource = (
     resourceId: Resource['id'],
-    options = { forceScroll: false, topbarElement: null }
+    options: { forceScroll?: boolean; topbarElement: string } = {
+      forceScroll: false,
+      topbarElement: null
+    }
   ) => {
     const resourceElement = document.querySelectorAll(
       `[data-item-id='${resourceId}']`

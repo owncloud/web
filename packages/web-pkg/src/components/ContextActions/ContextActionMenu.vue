@@ -52,8 +52,8 @@ export default defineComponent({
     }
   },
   methods: {
-    getSectionClasses(index) {
-      const classes = []
+    getSectionClasses(index: number) {
+      const classes: string[] = []
       if (!this.menuSections.length) {
         return classes
       }

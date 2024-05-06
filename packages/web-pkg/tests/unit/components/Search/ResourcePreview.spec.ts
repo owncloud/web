@@ -1,5 +1,5 @@
 import { mock } from 'vitest-mock-extended'
-import { ResourcePreview } from '../../../../src/components'
+import { ResourcePreview, SearchResultValue } from '../../../../src/components'
 import { SpaceResource } from '@ownclouders/web-client'
 import { useGetMatchingSpace } from '../../../../src/composables/spaces/useGetMatchingSpace'
 import {
@@ -55,7 +55,7 @@ describe('Preview component', () => {
 
 function getWrapper({
   space = null,
-  searchResult = {
+  searchResult = mock<SearchResultValue>({
     id: '1',
     data: {
       storageId: '1',
@@ -63,11 +63,11 @@ function getWrapper({
       path: '/',
       shareRoot: ''
     }
-  },
+  }),
   areFileExtensionsShown = true
 }: {
   space?: SpaceResource
-  searchResult?: any
+  searchResult?: SearchResultValue
   areFileExtensionsShown?: boolean
 } = {}) {
   vi.mocked(useGetMatchingSpace).mockImplementation(() =>

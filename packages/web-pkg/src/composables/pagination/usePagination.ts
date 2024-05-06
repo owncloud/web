@@ -5,6 +5,7 @@ import { PaginationConstants } from './constants'
 import { eventBus } from '../../services'
 import { findIndex } from 'lodash-es'
 import { useRoute, useRouter } from 'vue-router'
+import { Item } from '@ownclouders/web-client'
 
 interface PaginationOptions<T> {
   items: MaybeRef<Array<T>>
@@ -52,7 +53,7 @@ export function usePagination<T>(options: PaginationOptions<T>): PaginationResul
       forceScroll: boolean
       topbarElement: string
     }) => {
-      const index = findIndex(unref(options.items), (item: any) => item.id === resourceId)
+      const index = findIndex(unref(options.items), (item: Item) => item.id === resourceId)
       if (index >= 0) {
         const page = Math.ceil((index + 1) / Number(unref(perPage)))
         router.push({ ...unref(route), query: { ...unref(route).query, page } }).then(() => {

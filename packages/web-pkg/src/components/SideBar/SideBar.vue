@@ -246,7 +246,7 @@ export default defineComponent({
       this.oldPanelName = this.activePanelName
     },
 
-    openPanel(panel) {
+    openPanel(panel: string) {
       this.setOldPanelName()
       this.setSidebarPanel(panel)
     },

@@ -1,5 +1,4 @@
 import { useFileActionsRestore } from '../../../../../src/composables/actions'
-import { createLocationTrash, createLocationSpaces } from '../../../../../src/router'
 import { mock } from 'vitest-mock-extended'
 import { defaultComponentMocks, getComposableWrapper, RouteLocation } from 'web-test-helpers'
 import { useMessages, useResourcesStore } from '../../../../../src/composables/piniaStores'
@@ -174,11 +173,9 @@ function getWrapper({
 }) {
   const mocks = {
     ...defaultComponentMocks({
-      currentRoute: mock<RouteLocation>(
-        invalidLocation
-          ? (createLocationSpaces('files-spaces-generic') as any)
-          : (createLocationTrash('files-trash-generic') as any)
-      )
+      currentRoute: mock<RouteLocation>({
+        name: invalidLocation ? 'files-spaces-generic' : 'files-trash-generic'
+      })
     }),
     space: mock<ProjectSpaceResource>({
       driveType,

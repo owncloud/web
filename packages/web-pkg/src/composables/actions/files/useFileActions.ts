@@ -224,11 +224,12 @@ export const useFileActions = () => {
   }
 
   const getDefaultAction = (options: GetFileActionsOptions): Action | null => {
-    const filterCallback = (action) =>
+    const filterCallback = (action: FileAction) =>
       action.isVisible({
         ...options,
+        // FIXME: parent does not exit in FileActionOptions, what is this supposed to do?
         parent: unref(currentFolder)
-      })
+      } as any)
 
     // first priority: handlers from config
     const enabledEditorActions = unref(editorActions).filter(filterCallback)

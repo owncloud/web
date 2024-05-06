@@ -1,7 +1,12 @@
 import { getComposableWrapper } from 'web-test-helpers'
 import { mock } from 'vitest-mock-extended'
 import { Resource, SpaceResource } from '@ownclouders/web-client'
-import { useFileActions, Action, useOpenWithDefaultApp } from '../../../../src/composables'
+import {
+  useFileActions,
+  Action,
+  useOpenWithDefaultApp,
+  FileAction
+} from '../../../../src/composables'
 
 vi.mock('../../../../src/composables/actions/files', async (importOriginal) => ({
   ...(await importOriginal<any>()),
@@ -44,9 +49,9 @@ function getWrapper({
 }: {
   setup: (
     instance: ReturnType<typeof useOpenWithDefaultApp>,
-    mocks: { defaultEditorAction: any }
+    mocks: { defaultEditorAction: FileAction }
   ) => void
-  defaultEditorAction?: any
+  defaultEditorAction?: FileAction
 }) {
   vi.mocked(useFileActions).mockReturnValue(
     mock<ReturnType<typeof useFileActions>>({

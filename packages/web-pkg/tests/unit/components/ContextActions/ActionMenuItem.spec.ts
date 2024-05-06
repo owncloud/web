@@ -1,4 +1,5 @@
 import ActionMenuItem from '../../../../src/components/ContextActions/ActionMenuItem.vue'
+import { FileAction } from '../../../../src/composables/actions'
 import { defaultPlugins, mount, shallowMount } from 'web-test-helpers'
 
 const selectors = {
@@ -17,18 +18,16 @@ const fileActions = {
     handler: vi.fn(),
     label: () => 'Download',
     componentType: 'button',
-    class: 'oc-files-actions-download-file-trigger',
-    selector: '.oc-files-actions-download-file-trigger'
-  },
+    class: 'oc-files-actions-download-file-trigger'
+  } as unknown as FileAction,
   navigate: {
     name: 'navigate',
     icon: 'folder-open',
     route: () => ({ name: 'files-personal' }),
     label: () => 'Open Folder',
     componentType: 'router-link',
-    class: 'oc-files-actions-navigate-trigger',
-    selector: '.oc-files-actions-navigate-trigger'
-  }
+    class: 'oc-files-actions-navigate-trigger'
+  } as unknown as FileAction
 }
 
 describe('ActionMenuItem component', () => {
@@ -55,16 +54,16 @@ describe('ActionMenuItem component', () => {
     const action = { ...fileActions.download, disabledTooltip: () => 'Foo', isDisabled: () => true }
     const { wrapper } = getWrapper(action)
 
-    expect(wrapper.find(fileActions.download.selector).attributes().arialabel).toBe(
+    expect(wrapper.find(`.${fileActions.download.class}`).attributes().arialabel).toBe(
       action.disabledTooltip()
     )
-    expect(wrapper.find(fileActions.download.selector).attributes().disabled).toBeTruthy()
+    expect(wrapper.find(`.${fileActions.download.class}`).attributes().disabled).toBeTruthy()
   })
   describe('component is of type oc-button', () => {
     it('calls the action handler on button click', async () => {
       const action = fileActions.download
       const spyHandler = action.handler
-      const { wrapper } = getWrapper(action, [], null, mount)
+      const { wrapper } = getWrapper(action, mount)
       const button = wrapper.find(selectors.handler)
       expect(button.exists()).toBeTruthy()
       expect(button.element.tagName).toBe('BUTTON')
@@ -75,7 +74,7 @@ describe('ActionMenuItem component', () => {
   describe('component is of type router-link', () => {
     it('has a link', () => {
       const action = fileActions.navigate
-      const { wrapper } = getWrapper(action, [], null, mount)
+      const { wrapper } = getWrapper(action, mount)
       const link = wrapper.find(selectors.handler)
       expect(link.exists()).toBeTruthy()
       expect(link.element.tagName).toBe('ROUTER-LINK-STUB')
@@ -86,14 +85,13 @@ describe('ActionMenuItem component', () => {
   })
 })
 
-function getWrapper(action, items = [], appearance = null, mountType = shallowMount) {
+function getWrapper(action: FileAction, mountType = shallowMount) {
   return {
     wrapper: mountType(ActionMenuItem, {
       props: {
         action,
         actionOptions: {},
-        items,
-        ...(appearance && { appearance })
+        items: []
       },
       global: {
         renderStubDefaultSlot: true,

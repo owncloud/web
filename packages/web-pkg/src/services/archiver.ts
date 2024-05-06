@@ -1,5 +1,9 @@
 // Workaround https://github.com/npm/node-semver/issues/381
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+// @ts-ignore
 import major from 'semver/functions/major'
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+// @ts-ignore
 import rcompare from 'semver/functions/rcompare'
 
 import { RuntimeError } from '../errors'
@@ -11,6 +15,7 @@ import { triggerDownloadWithFilename } from '../helpers/download'
 import { Ref, ref, computed, unref } from 'vue'
 import { ArchiverCapability } from '@ownclouders/web-client/ocs'
 import { UserStore } from '../composables'
+import { AxiosResponseHeaders, RawAxiosResponseHeaders } from 'axios'
 
 interface TriggerDownloadOptions {
   dir?: string
@@ -137,7 +142,7 @@ export class ArchiverService {
     return urlJoin(this.serverUrl, capability.archiver_url)
   }
 
-  private getFileNameFromResponseHeaders(headers) {
+  private getFileNameFromResponseHeaders(headers: RawAxiosResponseHeaders | AxiosResponseHeaders) {
     const fileName = headers['content-disposition']?.split('"')[1]
     return decodeURI(fileName)
   }

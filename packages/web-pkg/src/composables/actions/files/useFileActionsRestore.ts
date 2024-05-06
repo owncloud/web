@@ -34,7 +34,7 @@ export const useFileActionsRestore = () => {
   const resourcesStore = useResourcesStore()
 
   const collectConflicts = async (space: SpaceResource, sortedResources: Resource[]) => {
-    const existingResourcesCache = {}
+    const existingResourcesCache: Record<string, Resource[]> = {}
     const conflicts: Resource[] = []
     const resolvedResources: Resource[] = []
     const missingFolderPaths: string[] = []
@@ -144,11 +144,11 @@ export const useFileActionsRestore = () => {
     missingFolderPaths: string[],
     { setProgress }: LoadingTaskCallbackArguments
   ) => {
-    const restoredResources = []
-    const failedResources = []
-    const errors = []
+    const restoredResources: Resource[] = []
+    const failedResources: Resource[] = []
+    const errors: Error[] = []
 
-    let createdFolderPaths = []
+    let createdFolderPaths: string[] = []
     for (const [i, resource] of resources.entries()) {
       const parentPath = dirname(resource.path)
       if (missingFolderPaths.includes(parentPath)) {
@@ -190,12 +190,12 @@ export const useFileActionsRestore = () => {
     // failure handler (for partial and full failure)
     if (failedResources.length) {
       let translated
-      const translateParams: any = {}
+      const translateParams: Record<string, string> = {}
       if (failedResources.length === 1) {
         translateParams.resource = failedResources[0].name
         translated = $gettext('Failed to restore "%{resource}"', translateParams, true)
       } else {
-        translateParams.resourceCount = failedResources.length
+        translateParams.resourceCount = failedResources.length.toString()
         translated = $gettext('Failed to restore %{resourceCount} files', translateParams, true)
       }
       showErrorMessage({ title: translated, errors })
@@ -203,7 +203,7 @@ export const useFileActionsRestore = () => {
 
     // Reload quota
     const graphClient = clientService.graphAuthenticated
-    const driveResponse = await graphClient.drives.getDrive(space.id as string)
+    const driveResponse = await graphClient.drives.getDrive(space.id)
     spacesStore.updateSpaceField({
       id: driveResponse.data.id,
       field: 'spaceQuota',

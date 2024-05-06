@@ -1,7 +1,8 @@
+import { Resource } from '@ownclouders/web-client'
 import { SortDir, SortField } from '../../composables/sort'
 
 // just a dummy function to trick gettext tools
-function $gettext(msg) {
+function $gettext(msg: string) {
   return msg
 }
 
@@ -21,13 +22,13 @@ export const sortFields: SortField[] = [
   {
     label: $gettext('Newest'),
     name: 'mdate',
-    sortable: (date) => new Date(date).valueOf(),
+    sortable: (date: string) => new Date(date).valueOf(),
     sortDir: SortDir.Desc
   },
   {
     label: $gettext('Oldest'),
     name: 'mdate',
-    sortable: (date) => new Date(date).valueOf(),
+    sortable: (date: string) => new Date(date).valueOf(),
     sortDir: SortDir.Asc
   },
   {
@@ -65,7 +66,7 @@ export const sortFields: SortField[] = [
   }
 ]
 
-export const determineResourceTilesSortFields = (firstResource): SortField[] => {
+export const determineResourceTilesSortFields = (firstResource: Resource): SortField[] => {
   if (!firstResource) {
     return []
   }
