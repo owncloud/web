@@ -36,7 +36,9 @@
               <span class="oc-mr-xs">-</span>
               <oc-contextual-helper
                 :text="
-                  $gettext('User roles become available once the user has logged in for the first time.')
+                  $gettext(
+                    'User roles become available once the user has logged in for the first time.'
+                  )
                 "
               />
             </span>
@@ -56,7 +58,9 @@
               <span class="oc-mr-xs">-</span>
               <oc-contextual-helper
                 :text="
-                  $gettext('User quota becomes available once the user has logged in for the first time.')
+                  $gettext(
+                    'User quota becomes available once the user has logged in for the first time.'
+                  )
                 "
               />
             </span>
