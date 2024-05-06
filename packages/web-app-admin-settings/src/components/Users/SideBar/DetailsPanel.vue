@@ -32,6 +32,14 @@
           <th scope="col" class="oc-pr-s" v-text="$gettext('Role')" />
           <td>
             <span v-if="_user.appRoleAssignments" v-text="roleDisplayName" />
+            <span v-else>
+              <span class="oc-mr-xs">-</span>
+              <oc-contextual-helper
+                :text="
+                  $gettext('User roles become available once the user has logged in for the first time.')
+                "
+              />
+            </span>
           </td>
         </tr>
         <tr>
@@ -48,7 +56,7 @@
               <span class="oc-mr-xs">-</span>
               <oc-contextual-helper
                 :text="
-                  $gettext('To see an individual quota, the user needs to have logged in once.')
+                  $gettext('User quota becomes available once the user has logged in for the first time.')
                 "
               />
             </span>
