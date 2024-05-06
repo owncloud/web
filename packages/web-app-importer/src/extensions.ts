@@ -13,10 +13,12 @@ import type { UppyService } from '@ownclouders/web-pkg'
 import '@uppy/dashboard/dist/style.min.css'
 import Dashboard from '@uppy/dashboard'
 import OneDrive from '@uppy/onedrive'
-import { WebdavPublicLink } from '@uppy/webdav'
 import GoogleDrive from '@uppy/google-drive'
 import { Extension } from '@ownclouders/web-pkg'
 import { ApplicationSetupOptions } from '@ownclouders/web-pkg'
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+// @ts-ignore
+import { WebdavPublicLink } from '@uppy/webdav'
 
 export const extensions = ({ applicationConfig }: ApplicationSetupOptions) => {
   const userStore = useUserStore()

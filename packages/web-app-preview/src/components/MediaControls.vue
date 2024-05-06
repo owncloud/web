@@ -183,7 +183,7 @@ export default defineComponent({
       })
     })
 
-    const calculateZoom = (zoom, factor) => {
+    const calculateZoom = (zoom: number, factor: number) => {
       return Math.round(zoom * factor * 20) / 20
     }
     const imageShrink = () => {

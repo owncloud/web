@@ -11,7 +11,7 @@
 <script lang="ts">
 import { CachedFile } from '../../helpers/types'
 import { defineComponent, PropType, onMounted, ref, watch, unref, nextTick } from 'vue'
-import type { PanzoomObject } from '@panzoom/panzoom'
+import type { PanzoomObject, PanzoomOptions } from '@panzoom/panzoom'
 import Panzoom from '@panzoom/panzoom'
 
 export default defineComponent({
@@ -43,7 +43,7 @@ export default defineComponent({
     const img = ref<HTMLElement | null>()
     const panzoom = ref<PanzoomObject>()
 
-    const onPanZoomChange = (event) => {
+    const onPanZoomChange = (event: Event) => {
       emit('panZoomChange', event)
     }
 
@@ -94,7 +94,7 @@ export default defineComponent({
             `rotate(${props.currentImageRotation}deg) scale(${scale}) translate(${h}px, ${v}px)`
           )
         }
-      })
+      } as PanzoomOptions)
       ;(unref(img) as unknown as HTMLElement).addEventListener('panzoomchange', onPanZoomChange)
     }
 

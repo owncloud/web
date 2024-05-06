@@ -273,14 +273,14 @@ export default defineComponent({
       }
     }
 
-    const copyLink = (rowData) => {
+    const copyLink = (rowData: { item: { link: string; token: string } }) => {
       navigator.clipboard.writeText(rowData.item.link)
       showMessage({
         title: $gettext('Invition link copied'),
         desc: $gettext('Invitation link has been copied to your clipboard.')
       })
     }
-    const copyToken = (rowData) => {
+    const copyToken = (rowData: { item: { link: string; token: string } }) => {
       navigator.clipboard.writeText(rowData.item.token)
       showMessage({
         title: $gettext('Invite token copied'),

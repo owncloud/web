@@ -15,7 +15,7 @@ import { useAvailableProviders } from '../../../src/composables'
 const component = defineComponent({
   emits: ['click', 'keyup'],
   setup(props, ctx) {
-    const onClick = (event) => {
+    const onClick = (event: Event) => {
       ctx.emit('click', event)
     }
     return { onClick }
@@ -58,7 +58,7 @@ const selectors = {
   optionsVisible: '.tippy-box[data-state="visible"]'
 }
 
-vi.mock('lodash-es', () => ({ debounce: (fn) => fn }))
+vi.mock('lodash-es', () => ({ debounce: (fn: unknown) => fn }))
 vi.mock('../../../src/composables/useAvailableProviders')
 
 beforeEach(() => {
@@ -81,7 +81,7 @@ beforeEach(() => {
   })
 })
 
-let wrapper
+let wrapper: ReturnType<typeof getMountedWrapper>['wrapper']
 afterEach(() => {
   wrapper.unmount()
 })

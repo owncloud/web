@@ -1,4 +1,4 @@
-import { defineConfig, searchForWorkspaceRoot } from 'vite'
+import { PluginOption, defineConfig, searchForWorkspaceRoot } from 'vite'
 import _defineConfig, { historyModePlugins } from './vite.config'
 import { join } from 'path'
 
@@ -25,22 +25,22 @@ export default defineConfig(async (args) => {
   }
 
   // collapsible table
-  config.resolve.alias['design-system/src/components/OcTable/OcTable.vue'] = join(
+  ;(config.resolve.alias as any)['design-system/src/components/OcTable/OcTable.vue'] = join(
     projectRootDir,
     'packages/web-pkg/src/cern/components/CollapsibleOcTable.vue'
   )
   // token info request
-  config.resolve.alias['web-runtime/src/composables/tokenInfo'] = join(
+  ;(config.resolve.alias as any)['web-runtime/src/composables/tokenInfo'] = join(
     projectRootDir,
     'packages/web-pkg/src/cern/composables/useLoadTokenInfo'
   )
   // create space component
-  config.resolve.alias['../../components/AppBar/CreateSpace.vue'] = join(
+  ;(config.resolve.alias as any)['../../components/AppBar/CreateSpace.vue'] = join(
     projectRootDir,
     'packages/web-pkg/src/cern/components/CreateSpace.vue'
   )
 
-  config.plugins.push(historyModePlugins()[0])
+  config.plugins.push(historyModePlugins()[0] as PluginOption)
 
   return config
 })

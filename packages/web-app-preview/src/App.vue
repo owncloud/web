@@ -86,13 +86,14 @@
   </main>
 </template>
 <script lang="ts">
-import { computed, defineComponent, ref, unref } from 'vue'
+import { computed, defineComponent, ref, Ref, unref } from 'vue'
 import { RouteLocationRaw } from 'vue-router'
 import { Resource } from '@ownclouders/web-client'
 import {
   AppTopBar,
   FileSideBar,
   ProcessorType,
+  SortDir,
   useAppsStore,
   useSelectedResources,
   useSideBar
@@ -137,7 +138,9 @@ export default defineComponent({
     const route = useRoute()
     const appsStore = useAppsStore()
     const appDefaults = useAppDefaults({ applicationId: 'preview' })
-    const contextRouteQuery = useRouteQuery('contextRouteQuery')
+    const contextRouteQuery = useRouteQuery('contextRouteQuery') as unknown as Ref<
+      Record<string, string>
+    >
     const { downloadFile } = useDownloadFile()
 
     const activeIndex = ref()
@@ -162,11 +165,11 @@ export default defineComponent({
       }
       return unref(contextRouteQuery)['sort-by'] ?? 'name'
     })
-    const sortDir = computed(() => {
+    const sortDir = computed<SortDir>(() => {
       if (!unref(contextRouteQuery)) {
-        return 'desc'
+        return SortDir.Desc
       }
-      return unref(contextRouteQuery)['sort-dir'] ?? 'asc'
+      return (unref(contextRouteQuery)['sort-dir'] as SortDir) ?? SortDir.Asc
     })
 
     const { activeFiles, currentFileContext, closed } = appDefaults
@@ -454,17 +457,17 @@ export default defineComponent({
       this.activeIndex--
       this.updateLocalHistory()
     },
-    isFileTypeImage(file) {
+    isFileTypeImage(file: Resource) {
       return !this.isFileTypeAudio(file) && !this.isFileTypeVideo(file)
     },
-    isFileTypeAudio(file) {
+    isFileTypeAudio(file: Resource) {
       return file.mimeType.toLowerCase().startsWith('audio')
     },
 
-    isFileTypeVideo(file) {
+    isFileTypeVideo(file: Resource) {
       return file.mimeType.toLowerCase().startsWith('video')
     },
-    addPreviewToCache(file, url) {
+    addPreviewToCache(file: Resource, url: string) {
       this.cachedFiles.push({
         id: file.id,
         name: file.name,
@@ -476,7 +479,7 @@ export default defineComponent({
         isAudio: this.isFileTypeAudio(file)
       })
     },
-    loadPreview(file) {
+    loadPreview(file: Resource) {
       return this.$previewService.loadPreview({
         space: unref(this.currentFileContext.space),
         resource: file,
@@ -485,7 +488,7 @@ export default defineComponent({
       })
     },
     preloadImages() {
-      const loadPreviewAsync = (file) => {
+      const loadPreviewAsync = (file: Resource) => {
         this.toPreloadImageIds.push(file.id)
         this.loadPreview(file)
 
@@ -498,7 +501,7 @@ export default defineComponent({
           })
       }
 
-      const preloadFile = (preloadFileIndex) => {
+      const preloadFile = (preloadFileIndex: number) => {
         let cycleIndex =
           (((this.activeIndex + preloadFileIndex) % this.filteredFiles.length) +
             this.filteredFiles.length) %

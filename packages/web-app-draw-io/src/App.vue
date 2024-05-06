@@ -122,7 +122,7 @@ export default defineComponent({
       }
     }
 
-    const handleMessage = async (event) => {
+    const handleMessage = async (event: MessageEvent) => {
       if (event.data.length > 0) {
         if (event.origin !== unref(config).url) {
           return
