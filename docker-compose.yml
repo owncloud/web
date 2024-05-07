@@ -92,6 +92,9 @@ services:
       # make the registry available to the app provider containers
       MICRO_REGISTRY: 'nats-js-kv'
       MICRO_REGISTRY_ADDRESS: 0.0.0.0:9233
+      PROXY_CSP_CONFIG_FILE_LOCATION: /etc/ocis/csp.yaml
+      ONLYOFFICE_DOMAIN: host.docker.internal:9981
+      COLLABORA_DOMAIN: host.docker.internal:9980
     labels:
       traefik.enable: true
       traefik.http.routers.ocis.tls: true
@@ -101,6 +104,7 @@ services:
       # workaround: https://github.com/owncloud/ocis/issues/5108
       traefik.http.routers.ocis.middlewares: cors
     volumes:
+      - ./dev/docker/ocis/csp.yaml:/etc/ocis/csp.yaml
       - ./dev/docker/ocis/password-policy-banned-passwords.txt:/etc/ocis/password-policy-banned-passwords.txt
       - ./dev/docker/ocis.idp.config.yaml:/etc/ocis/idp.yaml
       - ./dev/docker/ocis-ca:/var/lib/ocis/proxy
@@ -395,7 +399,6 @@ volumes:
   uppy_companion_datadir:
   ocis-config:
   ocis-federated-config:
-
 
 networks:
   traefik:
