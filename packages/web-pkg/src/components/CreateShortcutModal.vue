@@ -13,7 +13,7 @@
   >
     <template #label>
       <div class="oc-flex oc-flex-middle create-shortcut-modal-label">
-        <label for="create-shortcut-modal-url-input" v-text="$gettext('Webpage for file')"></label>
+        <label for="create-shortcut-modal-url-input" v-text="$gettext('Webpage or file')"></label>
         <oc-contextual-helper
           :text="
             $gettext(
