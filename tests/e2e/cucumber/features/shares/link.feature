@@ -9,8 +9,9 @@ Feature: link
   Scenario: public link
     When "Alice" logs in
     And "Alice" creates the following folders in personal space using API
-      | name         |
-      | folderPublic |
+      | name                   |
+      | folderPublic           |
+      | folderPublic/SubFolder |
     And "Alice" creates the following files into personal space using API
       | pathToFile             | content     |
       | folderPublic/lorem.txt | lorem ipsum |
@@ -34,13 +35,19 @@ Feature: link
       | lorem.txt    | file |
       | textfile.txt | file |
     And "Anonymous" uploads the following resources in public link page
-      | resource      |
-      | new-lorem.txt |
+      | resource      | option  |
+      | new-lorem.txt |         |
+      | lorem.txt     | replace |
+    And "Anonymous" moves the following resource using drag-drop
+      | resource      | to        |
+      | new-lorem.txt | SubFolder |
+    And "Anonymous" copies the following resource using sidebar-panel
+      | resource  | to        |
+      | lorem.txt | SubFolder |
     And "Anonymous" renames the following public link resources
       | resource      | as               |
       | lorem.txt     | lorem_new.txt    |
       | textfile.txt  | textfile_new.txt |
-      | new-lorem.txt | test.txt         |
     #    currently upload folder feature is not available in playwright
     #    And "Anonymous" uploads the following resources in public link page
     #      | resource              |
