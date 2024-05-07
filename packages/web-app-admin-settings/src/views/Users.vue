@@ -66,7 +66,7 @@
                 :allow-multiple="true"
                 :filter-label="$gettext('Roles')"
                 :filterable-attributes="['displayName']"
-                :items="roles"
+                :items="displayFilterRoles"
                 :option-filter-label="$gettext('Filter roles')"
                 :show-option-filter="true"
                 display-name-attribute="displayName"
@@ -74,7 +74,9 @@
                 @selection-change="filterRoles"
               >
                 <template #image="{ item }">
+                  <avatar-image v-if="!item.id" :width="32" :userid="item.id" user-name="x" />
                   <avatar-image
+                    v-else
                     :width="32"
                     :userid="item.id"
                     :user-name="$gettext(item.displayName)"
@@ -351,6 +353,14 @@ export default defineComponent({
       additionalUserDataLoadedForUserIds.value = []
       return resetPagination()
     }
+
+    const displayFilterRoles = computed(() => {
+      const noRole = {
+        displayName: $gettext('None (never logged in)'),
+        id: null
+      }
+      return [noRole, ...roles.value]
+    })
     const filterRoles = (roles: AppRole[]) => {
       filters.roles.ids.value = roles.map((r) => r.id)
       loadUsersTask.perform()
@@ -480,6 +490,7 @@ export default defineComponent({
       sideBarLoading,
       users,
       roles,
+      displayFilterRoles,
       groups,
       isLoading,
       loadResourcesTask,
