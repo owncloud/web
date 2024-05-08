@@ -94,7 +94,6 @@ export function buildShareSpaceResource({
     driveAlias: `${driveAliasPrefix}/${shareName}`,
     driveType: 'share',
     name: shareName,
-    shareId: id,
     serverUrl
   }) as ShareSpaceResource
   space.rename = (newName: string) => {
@@ -108,7 +107,6 @@ export function buildSpace(
   data: Drive & {
     path?: string
     serverUrl?: string
-    shareId?: string | number
     webDavPath?: string
     webDavTrashPath?: string
   }
@@ -195,7 +193,6 @@ export function buildSpace(
     permissions: '',
     starred: false,
     etag: '',
-    shareId: data.shareId?.toString(),
     shareTypes: [] as number[],
     privateLink: '',
     downloadURL: '',
@@ -282,7 +279,7 @@ export function buildSpace(
     isOwner({ id }: User): boolean {
       return id === this.owner?.id
     }
-  }
+  } satisfies SpaceResource
   Object.defineProperty(s, 'nodeId', {
     get() {
       return extractNodeId(this.id)

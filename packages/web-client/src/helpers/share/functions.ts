@@ -115,7 +115,7 @@ export function buildIncomingShareResource({
 
   const resource: IncomingShareResource = {
     id: driveItem.id,
-    shareId: driveItem.remoteItem.id,
+    remoteItemId: driveItem.remoteItem.id,
     driveId: driveItem.parentReference?.driveId,
     path: '/',
     name: resourceName,
@@ -168,7 +168,6 @@ export function buildOutgoingShareResource({
 
   const resource: OutgoingShareResource = {
     id: driveItem.id,
-    shareId: driveItem.permissions[0].id,
     driveId: driveItem.parentReference?.driveId,
     path,
     name: driveItem.name,

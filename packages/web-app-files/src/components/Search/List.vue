@@ -421,10 +421,10 @@ export default defineComponent({
       ]
     })
 
-    const resourceDomSelector = ({ id, shareId }: Resource) => {
+    const resourceDomSelector = ({ id, remoteItemId }: Resource) => {
       let selectorStr = id.toString()
-      if (shareId) {
-        selectorStr += shareId
+      if (remoteItemId) {
+        selectorStr += remoteItemId
       }
       return extractDomSelector(selectorStr)
     }

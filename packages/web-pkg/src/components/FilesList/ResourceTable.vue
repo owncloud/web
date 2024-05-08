@@ -245,7 +245,7 @@ import {
 import { useWindowSize } from '@vueuse/core'
 import { IncomingShareResource, Resource } from '@ownclouders/web-client'
 import { extractDomSelector, SpaceResource } from '@ownclouders/web-client'
-import { ShareTypes, isIncomingShareResource, isShareResource } from '@ownclouders/web-client'
+import { ShareTypes, isShareResource } from '@ownclouders/web-client'
 
 import {
   SortDir,

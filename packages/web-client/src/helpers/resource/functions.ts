@@ -129,8 +129,8 @@ export function buildResource(resource: WebDavResponseResource): Resource {
     shareTypes,
     privateLink: resource.props[DavProperty.PrivateLink],
     downloadURL: resource.props[DavProperty.DownloadURL],
-    shareId: resource.props[DavProperty.ShareId],
-    shareRoot: resource.props[DavProperty.ShareRoot],
+    remoteItemId: resource.props[DavProperty.RemoteItemId],
+    remoteItemPath: resource.props[DavProperty.ShareRoot],
     owner: {
       id: resource.props[DavProperty.OwnerId],
       displayName: resource.props[DavProperty.OwnerDisplayName]

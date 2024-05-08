@@ -227,8 +227,8 @@ export const useFileActionsRename = () => {
         // FIXME: Remove this check as soon as renaming shares works as expected
         // see https://github.com/owncloud/ocis/issues/4866
         const rootShareIncluded = configStore.options.routing.fullShareOwnerPaths
-          ? resources.some((r) => r.shareRoot && r.path)
-          : resources.some((r) => r.shareId && r.path === '/')
+          ? resources.some((r) => r.remoteItemPath && r.path)
+          : resources.some((r) => r.remoteItemId && r.path === '/')
         if (rootShareIncluded) {
           return false
         }

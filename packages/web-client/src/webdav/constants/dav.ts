@@ -116,7 +116,7 @@ export abstract class DavProperties {
     DavProperty.ActiveLock,
     DavProperty.OwnerId,
     DavProperty.OwnerDisplayName,
-    DavProperty.ShareId,
+    DavProperty.RemoteItemId,
     DavProperty.ShareRoot,
     DavProperty.ShareTypes,
     DavProperty.PrivateLink,

@@ -110,13 +110,7 @@ export const useFileActions = () => {
           }),
           img: appInfo.img,
           handler: (options) =>
-            openEditor(
-              fileExtension,
-              options.space,
-              options.resources[0],
-              EDITOR_MODE_EDIT,
-              options.space.shareId
-            ),
+            openEditor(fileExtension, options.space, options.resources[0], EDITOR_MODE_EDIT),
           isVisible: ({ resources }) => {
             if (resources.length !== 1) {
               return false
@@ -159,7 +153,7 @@ export const useFileActions = () => {
     space: SpaceResource,
     resource: Resource,
     mode: string,
-    shareId: string
+    remoteItemId: string
   ) => {
     return {
       name: appFileExtension.routeName || appFileExtension.app,
@@ -170,7 +164,7 @@ export const useFileActions = () => {
         mode
       },
       query: {
-        ...(shareId && { shareId }),
+        ...(remoteItemId && { shareId: remoteItemId }),
         ...(resource.fileId && configStore.options.routing.idBased && { fileId: resource.fileId }),
         ...(appFileExtension.app === 'external' && { app: appFileExtension.name }),
         ...routeToContextQuery(unref(router.currentRoute))
@@ -182,10 +176,10 @@ export const useFileActions = () => {
     appFileExtension: ApplicationFileExtension,
     space: SpaceResource,
     resource: Resource,
-    mode: string,
-    shareId: string = undefined
+    mode: string
   ) => {
-    const routeOpts = routeOptsHelper(appFileExtension, space, resource, mode, shareId)
+    const remoteItemId = isShareSpaceResource(space) ? space.id : undefined
+    const routeOpts = routeOptsHelper(appFileExtension, space, resource, mode, remoteItemId)
 
     if (configStore.options.openAppsInTab) {
       const path = router.resolve(routeOpts).href

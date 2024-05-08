@@ -132,7 +132,7 @@ describe('share helper functions', () => {
 
       expect(result.id).toEqual(driveItem.id)
       expect(result.fileId).toEqual(driveItem.remoteItem.id)
-      expect(result.shareId).toEqual(driveItem.remoteItem.permissions[0].id)
+      expect(result.remoteItemId).toEqual(driveItem.remoteItem.id)
       expect(result.driveId).toEqual(driveItem.parentReference.driveId)
       expect(result.parentFolderId).toEqual(driveItem.parentReference.id)
     })
@@ -177,7 +177,6 @@ describe('share helper functions', () => {
 
       expect(result.id).toEqual(driveItem.id)
       expect(result.fileId).toEqual(driveItem.id)
-      expect(result.shareId).toEqual(driveItem.permissions[0].id)
       expect(result.driveId).toEqual(driveItem.parentReference.driveId)
       expect(result.parentFolderId).toEqual(driveItem.parentReference.id)
     })

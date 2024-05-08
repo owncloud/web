@@ -124,7 +124,7 @@ export default defineComponent({
       if (isShareSpaceResource(space)) {
         sharedParentResource.value = resource
         resourceIsNestedInShare = path !== '/'
-        if (!resourceIsNestedInShare && space.shareId) {
+        if (!resourceIsNestedInShare) {
           // FIXME: get drive item by id as soon as server supports it
           const { data } = yield clientService.graphAuthenticated.drives.listSharedWithMe()
           const share = (data.value as DriveItem[]).find(
@@ -158,8 +158,7 @@ export default defineComponent({
       targetLocation.params = params
       targetLocation.query = {
         ...query,
-        scrollTo:
-          targetLocation.name === 'files-shares-with-me' ? space.shareId : unref(resource).fileId,
+        scrollTo: unref(resource).fileId,
         ...(unref(details) && { details: unref(details) }),
         ...(isHiddenShare && { 'q_share-visibility': 'hidden' }),
         ...(openWithDefault && { openWithDefaultApp: 'true' })
