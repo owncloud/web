@@ -23,7 +23,7 @@ Feature: lock
     When "Brian" opens the following file in Collabora
       | resource |
       | test.odt |
-    Then "Brian" should see the content "some content" in editor "OnlyOffice"
+    Then "Brian" should see the content "some content" in editor "Collabora"
 
     # file-locked
     And "Alice" should get "file-locked" SSE event
