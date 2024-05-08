@@ -58,12 +58,10 @@ import { unref, defineComponent, computed, onMounted, ref, Ref } from 'vue'
 import { dirname } from 'path'
 import { createFileRouteOptions, useGetResourceContext } from '@ownclouders/web-pkg'
 import { useTask } from 'vue-concurrency'
-import { isShareSpaceResource, Resource } from '@ownclouders/web-client'
+import { isShareSpaceResource, Resource, SHARE_JAIL_ID } from '@ownclouders/web-client'
 import { RouteLocationNamedRaw } from 'vue-router'
 import { useGettext } from 'vue3-gettext'
 import { DriveItem } from '@ownclouders/web-client/graph/generated'
-
-export const SHARE_JAIL_ID = 'a0ca6a90-a365-4782-871e-d44447bbc668'
 
 export default defineComponent({
   name: 'ResolvePrivateLink',

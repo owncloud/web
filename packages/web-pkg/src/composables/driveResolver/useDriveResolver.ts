@@ -1,5 +1,5 @@
 import { computed, Ref, ref, unref, watch } from 'vue'
-import { buildShareSpaceResource, SpaceResource } from '@ownclouders/web-client'
+import { buildShareSpaceResource, SHARE_JAIL_ID, SpaceResource } from '@ownclouders/web-client'
 import { useRouteQuery } from '../router'
 import { useSpacesLoading } from './useSpacesLoading'
 import { queryItemAsString } from '../appDefaults'
@@ -97,9 +97,16 @@ export const useDriveResolver = (options: DriveResolverOptions = {}): DriveResol
       ) {
         const [shareName, ...item] = driveAliasAndItem.split('/').slice(1)
         const driveAliasPrefix = driveAliasAndItem.startsWith('ocm-share/') ? 'ocm-share' : 'share'
+
+        let shareIdStr = queryItemAsString(unref(shareId))
+        // keep compatibility with old share jail ids pre sharing NG
+        if (shareIdStr?.includes(':')) {
+          shareIdStr = [SHARE_JAIL_ID, shareIdStr].join('!')
+        }
+
         matchingSpace = buildShareSpaceResource({
           driveAliasPrefix,
-          id: queryItemAsString(unref(shareId)),
+          id: shareIdStr,
           shareName: unref(shareName),
           serverUrl: configStore.serverUrl
         })
