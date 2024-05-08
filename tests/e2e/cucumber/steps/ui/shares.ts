@@ -323,11 +323,12 @@ Then(
 )
 
 Then(
-  /^"([^"]*)" (should|should not) be able to manage share with user "([^"]*)"$/,
+  /^"([^"]*)" (should|should not) be able to manage share of a file "([^"]*)" for user "([^"]*)"$/,
   async function (
     this: World,
     stepUser: any,
     actionType: string,
+    resource: string,
     recipient: string
   ): Promise<void> {
     const { page } = this.actorsEnvironment.getActor({ key: stepUser })
@@ -338,6 +339,8 @@ Then(
     const changeShare = shareObject.changeShareLocator(
       this.usersEnvironment.getUser({ key: recipient })
     )
+
+    await shareObject.openSharingPanel(resource)
 
     if (actionType === 'should') {
       await expect(changeRole).not.toBeDisabled()
