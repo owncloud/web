@@ -263,9 +263,9 @@ export default defineComponent({
      * Array of items that should be selected by default.
      */
     selection: {
-      type: Array as PropType<any[]>,
+      type: Array as PropType<Item[]>,
       required: false,
-      default: () => []
+      default: (): Item[] => []
     },
     /**
      * Determines if the table content should be loaded lazily.

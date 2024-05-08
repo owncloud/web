@@ -348,7 +348,7 @@ export default class Collaborator {
 
     return page.locator('.share-access-details-drop dl').evaluate((el) => {
       const nodes = el.childNodes
-      const details = {}
+      const details: Record<string, string> = {}
       nodes.forEach((node) => {
         if (node.nodeName === 'DT') {
           details[node.textContent] = node.nextSibling.textContent

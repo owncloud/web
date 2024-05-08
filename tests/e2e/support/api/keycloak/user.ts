@@ -58,7 +58,15 @@ export const createUser = async ({ user, admin }: { user: User; admin: User }): 
   return user
 }
 
-export const assignRole = async ({ admin, uuid, role }) => {
+export const assignRole = async ({
+  admin,
+  uuid,
+  role
+}: {
+  admin: User
+  uuid: string
+  role: string
+}) => {
   return request({
     method: 'POST',
     path: join(realmBasePath, 'users', uuid, 'role-mappings', 'realm'),

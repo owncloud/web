@@ -102,6 +102,7 @@
 
 <script lang="ts">
 import {
+  SearchProvider,
   createLocationCommon,
   isLocationCommonActive,
   isLocationSpacesActive,
@@ -119,6 +120,7 @@ import { computed, defineComponent, GlobalComponents, inject, Ref, ref, unref, w
 import { SearchLocationFilterConstants } from '@ownclouders/web-pkg'
 import { SearchBarFilter } from '@ownclouders/web-pkg'
 import { useAvailableProviders } from '../composables'
+import { RouteLocationNormalizedLoaded } from 'vue-router'
 
 export default defineComponent({
   name: 'SearchBar',
@@ -260,7 +262,7 @@ export default defineComponent({
       })
     }
 
-    const onLocationFilterChange = (event) => {
+    const onLocationFilterChange = (event: { value: { id: string } }) => {
       locationFilterId.value = event.value.id
       if (!unref(term)) {
         return
@@ -281,7 +283,7 @@ export default defineComponent({
       await search()
     }
 
-    const updateTerm = (input) => {
+    const updateTerm = (input: string) => {
       restoreSearchFromRoute.value = false
       term.value = input
       if (!unref(term)) {
@@ -438,10 +440,10 @@ export default defineComponent({
       )
     },
 
-    getSearchResultForProvider(provider) {
+    getSearchResultForProvider(provider: SearchProvider) {
       return this.searchResults.find(({ providerId }) => providerId === provider.id)?.result
     },
-    parseRouteQuery(route, initialLoad = false) {
+    parseRouteQuery(route: RouteLocationNormalizedLoaded, initialLoad = false) {
       const currentFolderAvailable =
         (isLocationSpacesActive(this.$router, 'files-spaces-generic') || !!this.scopeQueryValue) &&
         !isLocationSpacesActive(this.$router, 'files-spaces-projects')
@@ -459,11 +461,11 @@ export default defineComponent({
           return
         }
         this.restoreSearchFromRoute = initialLoad
-        this.term = routeTerm
-        input.value = routeTerm
+        this.term = queryItemAsString(routeTerm)
+        input.value = queryItemAsString(routeTerm)
       })
     },
-    getMoreResultsDetailsTextForProvider(provider) {
+    getMoreResultsDetailsTextForProvider(provider: SearchProvider) {
       const searchResult = this.getSearchResultForProvider(provider)
       if (!searchResult || !searchResult.totalResults) {
         return this.$gettext('Show all results')
@@ -478,7 +480,7 @@ export default defineComponent({
         }
       )
     },
-    isPreviewElementActive(searchId) {
+    isPreviewElementActive(searchId: string) {
       const previewElements = this.optionsDrop.$el.querySelectorAll('.preview')
       return previewElements[this.activePreviewIndex]?.dataset?.searchId === searchId
     },

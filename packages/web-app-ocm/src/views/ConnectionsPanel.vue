@@ -87,9 +87,9 @@ export default defineComponent({
      * Highlighted connections
      */
     highlightedConnections: {
-      type: Array,
+      type: Array as PropType<string[]>,
       required: false,
-      default: () => []
+      default: (): string[] => []
     },
     /**
      * Loading
@@ -152,7 +152,7 @@ export default defineComponent({
       })
     }
 
-    const deleteConnection = async (user) => {
+    const deleteConnection = async (user: FederatedConnection) => {
       try {
         await clientService.httpAuthenticated.delete('/sciencemesh/delete-accepted-user', null, {
           params: {

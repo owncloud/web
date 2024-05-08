@@ -16,7 +16,7 @@ export const waitForEvent = (locator: Locator, type: keyof SVGElementEventMap): 
     { type }
   )
 
-export const buildXpathLiteral = (value) => {
+export const buildXpathLiteral = (value: string) => {
   switch (true) {
     case !value.includes("'"):
       // if we don't have any single quotes, then wrap them with single quotes

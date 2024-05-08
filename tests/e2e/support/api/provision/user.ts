@@ -27,7 +27,15 @@ export const deleteUser = async ({ user, admin }: { user: User; admin: User }): 
   return await graphDeleteUser({ user, admin })
 }
 
-export const assignRole = async ({ admin, user, role }): Promise<void> => {
+export const assignRole = async ({
+  admin,
+  user,
+  role
+}: {
+  admin: User
+  user: User
+  role: string
+}): Promise<void> => {
   if (config.keycloak) {
     const usersEnvironment = new UsersEnvironment()
     const createdUser = usersEnvironment.getCreatedUser({ key: user.id })

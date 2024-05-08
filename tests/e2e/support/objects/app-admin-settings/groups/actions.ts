@@ -18,7 +18,7 @@ const closeEditPanel = '.sidebar-panel__header .header__close'
 const userInput = '#%s-input'
 const compareDialogConfirm = '.compare-save-dialog-confirm-btn'
 
-export const createGroup = async (args: { page: Page; key: string }): Promise<Response> => {
+export const createGroup = async (args: { page: Page; key: string }) => {
   const { page, key } = args
   await page.locator(newGroupBtn).click()
   await page.locator(createGroupInput).fill(key)

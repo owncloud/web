@@ -21,7 +21,7 @@ import {
   createdGroupStore,
   createdUserStore
 } from '../../support/store'
-import { User } from '../../support/types'
+import { Group, User } from '../../support/types'
 import { getTokenFromLogin } from '../../support/utils/tokenHelper'
 import { createdTokenStore } from '../../support/store/token'
 import { removeTempUploadDirectory } from '../../support/utils/runtimeFs'
@@ -87,13 +87,15 @@ BeforeAll(async (): Promise<void> => {
     headless: config.headless
   }
 
-  state.browser = await {
+  const browsers: Record<string, () => Promise<Browser>> = {
     firefox: async (): Promise<Browser> => await firefox.launch(browserConfiguration),
     webkit: async (): Promise<Browser> => await webkit.launch(browserConfiguration),
     chrome: async (): Promise<Browser> =>
       await chromium.launch({ ...browserConfiguration, channel: 'chrome' }),
     chromium: async (): Promise<Browser> => await chromium.launch(browserConfiguration)
-  }[config.browser]()
+  }
+
+  state.browser = await browsers[config.browser]()
 
   // setup keycloak admin user
   if (config.keycloak) {
@@ -139,7 +141,7 @@ AfterAll(() => state.browser && state.browser.close())
 setWorldConstructor(World)
 
 const cleanUpUser = async (adminUser: User) => {
-  const requests = []
+  const requests: Promise<User>[] = []
   createdUserStore.forEach((user) => {
     requests.push(api.provision.deleteUser({ user, admin: adminUser }))
   })
@@ -148,7 +150,7 @@ const cleanUpUser = async (adminUser: User) => {
 }
 
 const cleanUpSpaces = async (adminUser: User) => {
-  const requests = []
+  const requests: Promise<void>[] = []
   createdSpaceStore.forEach((space) => {
     requests.push(
       api.graph
@@ -171,7 +173,7 @@ const cleanUpSpaces = async (adminUser: User) => {
 }
 
 const cleanUpGroup = async (adminUser: User) => {
-  const requests = []
+  const requests: Promise<Group>[] = []
   createdGroupStore.forEach((group) => {
     requests.push(api.graph.deleteGroup({ group, admin: adminUser }))
   })

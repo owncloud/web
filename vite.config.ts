@@ -1,4 +1,4 @@
-import { defineConfig, UserConfig, ViteDevServer } from 'vite'
+import { defineConfig, Plugin, UserConfig, ViteDevServer } from 'vite'
 import { mergeConfig, searchForWorkspaceRoot } from 'vite'
 import vue from '@vitejs/plugin-vue'
 import EnvironmentPlugin from 'vite-plugin-environment'
@@ -8,7 +8,6 @@ import visualizer from 'rollup-plugin-visualizer'
 import compression from 'rollup-plugin-gzip'
 import { nodePolyfills } from 'vite-plugin-node-polyfills'
 
-import ejs from 'ejs'
 import { basename, join } from 'path'
 import { existsSync, readdirSync, readFileSync } from 'fs'
 
@@ -19,6 +18,10 @@ import { getUserAgentRegex } from 'browserslist-useragent-regexp'
 import browserslistToEsbuild from 'browserslist-to-esbuild'
 import fetch from 'node-fetch'
 import { Agent } from 'https'
+
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+// @ts-ignore
+import ejs from 'ejs'
 
 const buildConfig = {
   requirejs: {},
@@ -44,7 +47,7 @@ const input = readdirSync('packages').reduce(
     for (const extension of ['js', 'ts']) {
       const root = join('packages', i, 'src', `index.${extension}`)
       if (existsSync(root)) {
-        acc[i] = root
+        acc[i as keyof typeof acc] = root
         break
       }
     }
@@ -152,7 +155,7 @@ export default defineConfig(({ mode, command }) => {
             dir: 'dist',
             chunkFileNames: join('js', 'chunks', '[name]-[hash].mjs'),
             entryFileNames: join('js', '[name]-[hash].mjs'),
-            manualChunks: (id) => {
+            manualChunks: (id: string) => {
               if (id.includes('node_modules')) {
                 return 'vendor'
               }
@@ -192,7 +195,7 @@ export default defineConfig(({ mode, command }) => {
         // a warning if `@extend` is used in the code base.
         {
           name: '@ownclouders/vite-plugin-strip-css',
-          transform(src: string, id) {
+          transform(src: string, id: string) {
             if (id.endsWith('.vue') && !id.includes('node_modules') && src.includes('@extend')) {
               console.warn(
                 'You are using @extend in your component. This is likely not working in your styles. Please use mixins instead.',
@@ -305,11 +308,11 @@ export default defineConfig(({ mode, command }) => {
                 moduleNames = Object.keys(bundle)
                 // We are in production mode here and need to provide paths relative to the module that contains the import, i.e. web-runtime-*.mjs
                 // so it works when oC Web is hosted in a sub folder, e.g. when using the oC 10 integration app
-                buildModulePath = (moduleName) => moduleName.replace('js/', './')
+                buildModulePath = (moduleName: string) => moduleName.replace('js/', './')
               } else {
                 // We are in development mode here, so we can just use absolute module paths
                 moduleNames = Object.keys(input)
-                buildModulePath = (moduleName) => `/packages/${moduleName}/src/index`
+                buildModulePath = (moduleName: string) => `/packages/${moduleName}/src/index`
               }
 
               const re = new RegExp(/(web-app-.*)/)
@@ -339,7 +342,7 @@ export default defineConfig(({ mode, command }) => {
           : visualizer({
               filename: join('dist', 'report.html')
             })
-      ]
+      ] as Plugin[]
     },
     config
   )

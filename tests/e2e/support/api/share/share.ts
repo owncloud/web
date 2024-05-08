@@ -1,5 +1,4 @@
 import join from 'join-path'
-
 import { checkResponseStatus, request } from '../http'
 import { User } from '../../types'
 
@@ -31,7 +30,7 @@ export const shareRoles: Readonly<{
   'Can edit': 'editor',
   'Can view': 'viewer',
   'Secret File Drop': 'uploader'
-}
+} as const
 
 export const createShare = async ({
   user,
@@ -53,8 +52,8 @@ export const createShare = async ({
   const body = new URLSearchParams()
   body.append('path', path)
   body.append('shareWith', shareWith)
-  body.append('shareType', shareTypes[shareType])
-  body.append('role', shareRoles[role])
+  body.append('shareType', shareTypes[shareType as keyof typeof shareTypes])
+  body.append('role', shareRoles[role as keyof typeof shareRoles])
   body.append('name', name)
   if (space_ref) {
     body.append('space_ref', space_ref)

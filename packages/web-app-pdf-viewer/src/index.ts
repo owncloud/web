@@ -3,7 +3,7 @@ import { AppWrapperRoute } from '@ownclouders/web-pkg'
 import PdfViewer from './App.vue'
 
 // just a dummy function to trick gettext tools
-function $gettext(msg) {
+function $gettext(msg: string) {
   return msg
 }
 

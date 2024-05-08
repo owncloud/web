@@ -7,7 +7,7 @@ import { Component } from 'vue'
 import translations from '../l10n/translations.json'
 
 // just a dummy function to trick gettext tools
-const $gettext = (msg) => {
+const $gettext = (msg: string) => {
   return msg
 }
 

@@ -193,7 +193,7 @@ When(
   async function (this: World, stepUser: string, stepTable: DataTable): Promise<void> {
     const { page } = this.actorsEnvironment.getActor({ key: stepUser })
     const resourceObject = new objects.applicationFiles.Resource({ page })
-    const fileInfo = stepTable.hashes().reduce((acc, stepRow) => {
+    const fileInfo = stepTable.hashes().reduce<Record<string, any>>((acc, stepRow) => {
       const { to, resource, version, openDetailsPanel } = stepRow
 
       if (!acc[to]) {
@@ -208,7 +208,7 @@ When(
       acc[to]['openDetailsPanel'] = openDetailsPanel === 'true'
 
       return acc
-    }, [])
+    }, {})
     for (const folder of Object.keys(fileInfo)) {
       await resourceObject.restoreVersion({
         folder,
@@ -224,7 +224,7 @@ When(
   async function (this: World, stepUser: string, stepTable: DataTable): Promise<void> {
     const { page } = this.actorsEnvironment.getActor({ key: stepUser })
     const resourceObject = new objects.applicationFiles.Resource({ page })
-    const fileInfo = stepTable.hashes().reduce((acc, stepRow) => {
+    const fileInfo = stepTable.hashes().reduce<Record<string, File[]>>((acc, stepRow) => {
       const { to, resource } = stepRow
 
       if (!acc[to]) {
@@ -234,7 +234,7 @@ When(
       acc[to].push(this.filesEnvironment.getFile({ name: resource }))
 
       return acc
-    }, [])
+    }, {})
 
     for (const folder of Object.keys(fileInfo)) {
       await resourceObject.downloadVersion({ folder, files: fileInfo[folder] })
@@ -414,17 +414,19 @@ export const processDelete = async (
   actionType: string
 ) => {
   let files, parentFolder
-  const deleteInfo = stepTable.hashes().reduce((acc, stepRow) => {
-    const { resource, from } = stepRow
-    const resourceInfo = {
-      name: resource
-    }
-    if (!acc[from]) {
-      acc[from] = []
-    }
-    acc[from].push(resourceInfo)
-    return acc
-  }, [])
+  const deleteInfo = stepTable
+    .hashes()
+    .reduce<Record<string, { name: string }[]>>((acc, stepRow) => {
+      const { resource, from } = stepRow
+      const resourceInfo = {
+        name: resource
+      }
+      if (!acc[from]) {
+        acc[from] = []
+      }
+      acc[from].push(resourceInfo)
+      return acc
+    }, {})
 
   for (const folder of Object.keys(deleteInfo)) {
     files = deleteInfo[folder]
@@ -443,21 +445,23 @@ export const processDownload = async (
   actionType: string
 ) => {
   let downloads, files, parentFolder
-  const downloadedResources = []
-  const downloadInfo = stepTable.hashes().reduce((acc, stepRow) => {
-    const { resource, from, type } = stepRow
-    const resourceInfo = {
-      name: resource,
-      type: type
-    }
-    if (!acc[from]) {
-      acc[from] = []
-    }
+  const downloadedResources: string[] = []
+  const downloadInfo = stepTable
+    .hashes()
+    .reduce<Record<string, { name: string; type: string }[]>>((acc, stepRow) => {
+      const { resource, from, type } = stepRow
+      const resourceInfo = {
+        name: resource,
+        type: type
+      }
+      if (!acc[from]) {
+        acc[from] = []
+      }
 
-    acc[from].push(resourceInfo)
+      acc[from].push(resourceInfo)
 
-    return acc
-  }, [])
+      return acc
+    }, {})
 
   for (const folder of Object.keys(downloadInfo)) {
     files = downloadInfo[folder]
@@ -650,7 +654,7 @@ Then(
   async function (this: World, stepUser: string, stepTable: DataTable): Promise<void> {
     const { page } = this.actorsEnvironment.getActor({ key: stepUser })
     const resourceObject = new objects.applicationFiles.Resource({ page })
-    const fileInfo = stepTable.hashes().reduce<File[]>((acc, stepRow) => {
+    const fileInfo = stepTable.hashes().reduce<Record<string, File[]>>((acc, stepRow) => {
       const { to, resource } = stepRow
 
       if (!acc[to]) {
@@ -660,7 +664,7 @@ Then(
       acc[to].push(this.filesEnvironment.getFile({ name: resource }))
 
       return acc
-    }, [])
+    }, {})
 
     for (const folder of Object.keys(fileInfo)) {
       await resourceObject.checkThatFileVersionIsNotAvailable({ folder, files: fileInfo[folder] })
@@ -673,7 +677,7 @@ Then(
   async function (this: World, stepUser: string, stepTable: DataTable): Promise<void> {
     const { page } = this.actorsEnvironment.getActor({ key: stepUser })
     const resourceObject = new objects.applicationFiles.Resource({ page })
-    const fileInfo = stepTable.hashes().reduce<File[]>((acc, stepRow) => {
+    const fileInfo = stepTable.hashes().reduce<Record<string, File[]>>((acc, stepRow) => {
       const { to, resource } = stepRow
 
       if (!acc[to]) {
@@ -683,7 +687,7 @@ Then(
       acc[to].push(this.filesEnvironment.getFile({ name: resource }))
 
       return acc
-    }, [])
+    }, {})
 
     for (const folder of Object.keys(fileInfo)) {
       await resourceObject.checkThatFileVersionPanelIsNotAvailable({

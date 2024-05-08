@@ -82,11 +82,11 @@ export default defineComponent({
       })
     })
 
-    const errorPopup = (error) => {
+    const errorPopup = (error: string) => {
       showErrorMessage({
         title: $gettext('An error occurred'),
         desc: error,
-        errors: [error]
+        errors: [new Error(error)]
       })
     }
 
@@ -163,7 +163,7 @@ export default defineComponent({
     }
 
     // switch to write mode when edit is clicked
-    const catchClickMicrosoftEdit = (event) => {
+    const catchClickMicrosoftEdit = (event: MessageEvent) => {
       try {
         if (JSON.parse(event.data)?.MessageId === 'UI_Edit') {
           loadAppUrl.perform('write')

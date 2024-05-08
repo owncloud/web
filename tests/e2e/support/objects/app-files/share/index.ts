@@ -60,11 +60,11 @@ export class Share {
     await po.createQuickLink({ ...args, page: this.#page })
   }
 
-  async resourceIsNotOpenable(resource): Promise<boolean> {
+  async resourceIsNotOpenable(resource: string): Promise<boolean> {
     return await resourceIsNotOpenable({ page: this.#page, resource })
   }
 
-  async resourceIsSynced(resource): Promise<boolean> {
+  async resourceIsSynced(resource: string): Promise<boolean> {
     return await resourceIsSynced({ page: this.#page, resource })
   }
 
@@ -113,7 +113,7 @@ export class Share {
     return po.changeRoleLocator({ page: this.#page, recipient })
   }
 
-  async openSharingPanel(resource): Promise<void> {
+  async openSharingPanel(resource: string): Promise<void> {
     await po.openSharingPanel(this.#page, resource)
   }
 }

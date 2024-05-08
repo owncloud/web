@@ -24,9 +24,9 @@ const spaceMembersDiv = '[data-testid="space-members"]'
 const spaceMemberList =
   '[data-testid="space-members-role-%s"] ul [data-testid="space-members-list"]'
 
-export const getDisplayedSpaces = async (page): Promise<string[]> => {
+export const getDisplayedSpaces = async (page: Page): Promise<string[]> => {
   const spaces = []
-  const result = await page.locator(spaceTrSelector)
+  const result = page.locator(spaceTrSelector)
 
   const count = await result.count()
   for (let i = 0; i < count; i++) {
@@ -252,7 +252,7 @@ export const listSpaceMembers = async (args: {
 }): Promise<Array<string>> => {
   const { page, filter } = args
   await page.locator(spaceMembersDiv).waitFor()
-  let users = []
+  let users: string[] = []
   const names = []
   switch (filter) {
     case 'managers':

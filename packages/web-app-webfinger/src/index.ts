@@ -2,7 +2,7 @@ import translations from '../l10n/translations.json'
 import Resolve from './views/Resolve.vue'
 
 // just a dummy function to trick gettext tools
-function $gettext(msg) {
+function $gettext(msg: string) {
   return msg
 }
 

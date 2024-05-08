@@ -2,7 +2,7 @@ import { fetchEventSource, EventStreamContentType } from '@ai-zen/node-fetch-eve
 import { getAuthHeader } from '../api/http'
 import { User } from '../types'
 
-const sseEventStore = {}
+const sseEventStore: Record<string, string[]> = {}
 const ctrl = new AbortController()
 
 export const listenSSE = (baseUrl: string, user: User): Promise<void> => {

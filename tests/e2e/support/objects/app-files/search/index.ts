@@ -12,23 +12,31 @@ export class Search {
     return po.getSearchResultMessage({ page: this.#page })
   }
 
-  async selectTagFilter({ tag: string }): Promise<void> {
+  async selectTagFilter({ tag: string }: { tag: string }): Promise<void> {
     await po.selectTagFilter({ tag: string, page: this.#page })
   }
 
-  async selectMediaTypeFilter({ mediaType: string }): Promise<void> {
+  async selectMediaTypeFilter({ mediaType: string }: { mediaType: string }): Promise<void> {
     await po.selectMediaTypeFilter({ mediaType: string, page: this.#page })
   }
 
-  async selectlastModifiedFilter({ lastModified: string }): Promise<void> {
+  async selectlastModifiedFilter({
+    lastModified: string
+  }: {
+    lastModified: string
+  }): Promise<void> {
     await po.selectLastModifiedFilter({ lastModified: string, page: this.#page })
   }
 
-  async clearFilter({ filter: string }): Promise<void> {
+  async clearFilter({ filter: string }: { filter: string }): Promise<void> {
     await po.clearFilter({ page: this.#page, filter: string })
   }
 
-  async toggleSearchTitleOnly({ enableOrDisable: string }): Promise<void> {
+  async toggleSearchTitleOnly({
+    enableOrDisable: string
+  }: {
+    enableOrDisable: string
+  }): Promise<void> {
     await po.toggleSearchTitleOnly({ enableOrDisable: string, page: this.#page })
   }
 }

@@ -71,7 +71,7 @@ import {
 import { $gettext } from '@ownclouders/web-pkg/src/router/utils'
 import { useGettext } from 'vue3-gettext'
 import { onBeforeRouteUpdate, RouteLocationNormalized } from 'vue-router'
-import { providerListSchema } from '../schemas'
+import { ProviderSchema, providerListSchema } from '../schemas'
 import { OcTextInput } from '@ownclouders/design-system/src/components'
 
 export default defineComponent({
@@ -151,7 +151,7 @@ export default defineComponent({
         el.scrollIntoView()
       }
     }
-    const isMyProviderSelectedProvider = (p) => {
+    const isMyProviderSelectedProvider = (p: ProviderSchema) => {
       return p.domain === new URL(configStore.serverUrl).hostname
     }
 
