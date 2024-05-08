@@ -323,7 +323,7 @@ Then(
 )
 
 Then(
-  /^"([^"]*)" (should|should not) be able to manage share for file "([^"]*)" with user "([^"]*)"$/,
+  /^"([^"]*)" (should|should not) be able to manage share of a file "([^"]*)" for user "([^"]*)"$/,
   async function (
     this: World,
     stepUser: any,

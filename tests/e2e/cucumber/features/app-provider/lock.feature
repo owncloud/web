@@ -34,7 +34,7 @@ Feature: lock
 
     # checking that user cannot delete or change share of the locked file
     # https://github.com/owncloud/web/issues/10507
-    And "Alice" should not be able to manage share for file "test.odt" with user "Brian"
+    And "Alice" should not be able to manage share of a file "test.odt" for user "Brian"
 
     # checking that sharing and creating link of the locked file is possible
     And "Alice" creates a public link of following resource using the sidebar panel
@@ -48,7 +48,7 @@ Feature: lock
     When "Brian" closes the file viewer
     Then "Alice" should get "file-unlocked" SSE event
     And for "Alice" file "test.odt" should not be locked
-    And "Alice" should be able to manage share for file "test.odt" with user "Brian"
+    And "Alice" should be able to manage share of a file "test.odt" for user "Brian"
 
     And "Brian" logs out
     And "Alice" logs out
