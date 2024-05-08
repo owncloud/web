@@ -1374,9 +1374,6 @@ importers:
       '@ai-zen/node-fetch-event-source':
         specifier: ^2.1.4
         version: 2.1.4
-      '@types/luxon':
-        specifier: 3.2.1
-        version: 3.2.1
       xml-js:
         specifier: ^1.6.11
         version: 1.6.11
