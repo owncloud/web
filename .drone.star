@@ -101,21 +101,11 @@ config = {
                 "",
             ],
             "suites": {
-                "oCISBasic": [
-                    "webUILogin",
-                ],
                 "oCISFiles1": [
                     "webUICreateFilesFolders",
-                    "webUIDeleteFilesFolders",
-                ],
-                "oCISFiles2": [
-                    "webUIFilesDetails",
                 ],
                 "oCISFiles5": [
                     "webUITextEditor",
-                ],
-                "oCISSharingInternal2": [
-                    "webUISharingInternalUsers",
                 ],
                 "oCISSharingPublic1": [
                     "webUISharingPublicBasic",
@@ -127,8 +117,6 @@ config = {
                     "webUISharingPublicDifferentRoles",
                 ],
                 "oCISTrashbinJourney": [
-                    "webUITrashbinDelete",
-                    "webUITrashbinFilesFolders",
                     "webUITrashbinRestore",
                 ],
             },
@@ -150,17 +138,11 @@ config = {
 
 basicTestSuites = [
     "webUICreateFilesFolders",
-    "webUIDeleteFilesFolders",
-    "webUIFilesDetails",
-    "webUILogin",
     "webUISharingAcceptShares",
-    "webUISharingInternalUsers",
     "webUISharingPublicBasic",
     "webUISharingPublicDifferentRoles",
     "webUISharingPublicManagement",
     "webUITextEditor",
-    "webUITrashbinDelete",
-    "webUITrashbinFilesFolders",
     "webUITrashbinRestore",
 ]
 

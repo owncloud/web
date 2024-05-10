@@ -190,8 +190,9 @@ Feature: share
       | myfolder   |
       | mainFolder |
     And "Alice" creates the following files into personal space using API
-      | pathToFile | content      |
-      | new.txt    | some content |
+      | pathToFile           | content      |
+      | new.txt              | some content |
+      | mainFolder/lorem.txt | lorem epsum  |
     And "Alice" opens the "files" app
     When "Alice" shares the following resource using the sidebar panel
       | resource   | recipient | type  | role     | resourceType | expirationDate |
@@ -204,6 +205,9 @@ Feature: share
     And "Alice" checks the following access details of share "mainFolder" for user "Brian"
       | Name            | Brian Murphy      |
       | Additional info | brian@example.org |
+      | Type            | User              |
+    And "Alice" checks the following access details of share "mainFolder/lorem.txt" for user "Brian"
+      | Name            | Brian Murphy      |
       | Type            | User              |
     And "Alice" sets the expiration date of share "myfolder" of group "sales" to "+3 days"
     And "Alice" checks the following access details of share "myfolder" for group "sales"
