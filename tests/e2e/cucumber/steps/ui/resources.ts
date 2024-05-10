@@ -890,3 +890,21 @@ Then(
       : await expect(showShareIndicator).not.toBeVisible()
   }
 )
+
+Then(
+  /^"([^"]*)" (should|should not) be able to edit content of following resources?$/,
+  async function (
+    this: World,
+    stepUser: string,
+    actionType: string,
+    stepTable: DataTable
+  ): Promise<void> {
+    const { page } = this.actorsEnvironment.getActor({ key: stepUser })
+    const resourceObject = new objects.applicationFiles.Resource({ page })
+
+    for (const info of stepTable.hashes()) {
+      const canEdit = await resourceObject.canEditContent({ type: info.type })
+      expect(canEdit).toBe(actionType === 'should')
+    }
+  }
+)
