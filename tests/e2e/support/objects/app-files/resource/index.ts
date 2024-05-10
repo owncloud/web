@@ -334,4 +334,8 @@ export class Resource {
   async canManageResource(args: Omit<po.canManageResourceArgs, 'page'>): Promise<boolean> {
     return await po.canManageResource({ ...args, page: this.#page })
   }
+
+  async canEditContent({ type }: { type: string }): Promise<boolean> {
+    return await po.canEditContent({ page: this.#page, type })
+  }
 }
