@@ -311,4 +311,8 @@ export class Resource {
   async previewMediaFromSidebarPanel(resource): Promise<void> {
     await po.previewMediaFromSidebarPanel({ page: this.#page, resource })
   }
+
+  async canEditContent({ type }: { type: string }): Promise<boolean> {
+    return await po.canEditContent({ page: this.#page, type })
+  }
 }
