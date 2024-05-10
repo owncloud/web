@@ -162,7 +162,7 @@ Feature: spaces.personal
     And "Brian" downloads old version of the following resource
       | resource     | to     |
       | textfile.txt | parent |
-    And "Brian" restores following resources
+    And "Brian" restores following resources version
       | resource     | to     | version | openDetailsPanel |
       | textfile.txt | parent | 1       | true             |
     And "Brian" logs out

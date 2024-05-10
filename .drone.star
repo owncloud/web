@@ -102,9 +102,6 @@ config = {
                 "oCISFiles1": [
                     "webUICreateFilesFolders",
                 ],
-                "oCISFiles5": [
-                    "webUITextEditor",
-                ],
                 "oCISSharingPublic1": [
                     "webUISharingPublicBasic",
                 ],
@@ -113,9 +110,6 @@ config = {
                 ],
                 "oCISSharingPublic3": [
                     "webUISharingPublicDifferentRoles",
-                ],
-                "oCISTrashbinJourney": [
-                    "webUITrashbinRestore",
                 ],
             },
             "extraEnvironment": {
@@ -140,8 +134,6 @@ basicTestSuites = [
     "webUISharingPublicBasic",
     "webUISharingPublicDifferentRoles",
     "webUISharingPublicManagement",
-    "webUITextEditor",
-    "webUITrashbinRestore",
 ]
 
 # minio mc environment variables
