@@ -1236,6 +1236,11 @@ export interface restoreResourceTrashbinArgs {
   page: Page
 }
 
+export interface batchRestoreTrashbinResourcesArgs {
+  resources: string[]
+  page: Page
+}
+
 export interface clickTagArgs {
   resource: string
   tag: string
@@ -1254,20 +1259,59 @@ export interface createSpaceFromSelectionArgs {
   page: Page
 }
 
-export const restoreResourceTrashbin = async (
-  args: restoreResourceTrashbinArgs
-): Promise<string> => {
-  const { page, resource } = args
+export const selectTrashbinResource = async (page: Page, resource: string): Promise<void> => {
   const resourceCheckbox = page.locator(
     util.format(checkBoxForTrashbin, `/${resource.replace(/^\/+/, '')}`)
   )
   if (!(await resourceCheckbox.isChecked())) {
     await resourceCheckbox.check()
   }
+}
+
+export const restoreTrashBinResource = async (
+  args: restoreResourceTrashbinArgs
+): Promise<string> => {
+  const { page, resource } = args
+  await selectTrashbinResource(page, resource)
+
+  const resourceNameLocator = page.locator(util.format(resourceNameSelector, resource))
+  const itemId = await resourceNameLocator.locator(fileRow).getAttribute('data-item-id')
+
   await Promise.all([
-    page.waitForResponse((resp) => resp.status() === 201 && resp.request().method() === 'MOVE'),
+    page.waitForResponse(
+      (resp) =>
+        resp.status() === 201 &&
+        resp.request().method() === 'MOVE' &&
+        resp.request().url().endsWith(`/${itemId}`)
+    ),
     page.locator(restoreResourceButton).click()
   ])
+
+  const message = await page.locator(notificationMessageDialog).textContent()
+  return message.trim().toLowerCase()
+}
+
+export const batchRestoreTrashBinResources = async (
+  args: batchRestoreTrashbinResourcesArgs
+): Promise<string> => {
+  const { page, resources } = args
+
+  const waitResponses = []
+  for (const resource of resources) {
+    await selectTrashbinResource(page, resource)
+    const resourceNameLocator = page.locator(util.format(resourceNameSelector, resource))
+    const itemId = await resourceNameLocator.locator(fileRow).getAttribute('data-item-id')
+    waitResponses.push(
+      page.waitForResponse(
+        (resp) =>
+          resp.status() === 201 &&
+          resp.request().method() === 'MOVE' &&
+          resp.request().url().endsWith(`/${itemId}`)
+      )
+    )
+  }
+
+  await Promise.all([waitResponses, page.locator(restoreResourceButton).click()])
 
   const message = await page.locator(notificationMessageDialog).textContent()
   return message.trim().toLowerCase()
