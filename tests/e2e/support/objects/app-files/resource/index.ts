@@ -152,7 +152,16 @@ export class Resource {
 
   async restoreTrashBin(args: Omit<po.restoreResourceTrashbinArgs, 'page'>): Promise<string> {
     const startUrl = this.#page.url()
-    const message = await po.restoreResourceTrashbin({ ...args, page: this.#page })
+    const message = await po.restoreTrashBinResource({ ...args, page: this.#page })
+    await this.#page.goto(startUrl)
+    return message
+  }
+
+  async batchRestoreTrashBin(
+    args: Omit<po.batchRestoreTrashbinResourcesArgs, 'page'>
+  ): Promise<string> {
+    const startUrl = this.#page.url()
+    const message = await po.batchRestoreTrashBinResources({ ...args, page: this.#page })
     await this.#page.goto(startUrl)
     return message
   }
