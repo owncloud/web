@@ -30,7 +30,7 @@ Feature: web can be navigated through urls
       | name              | content                   |
       | spaceTextfile.txt | This is test file. Cheers |
     When "Alice" navigates to "versions" details panel of file "lorem.txt" of space "personal" through the URL
-    Then "Alice" restores following resources
+    Then "Alice" restores following resources version
       | resource  | to | version | openDetailsPanel |
       | lorem.txt | /  | 1       | false            |
     When "Alice" navigates to "sharing" details panel of file "lorem.txt" of space "personal" through the URL

@@ -189,7 +189,7 @@ When(
 )
 
 When(
-  '{string} restores following resource(s)',
+  '{string} restores following resource(s) version',
   async function (this: World, stepUser: string, stepTable: DataTable): Promise<void> {
     const { page } = this.actorsEnvironment.getActor({ key: stepUser })
     const resourceObject = new objects.applicationFiles.Resource({ page })
@@ -310,14 +310,25 @@ Then(
 )
 
 Then(
-  '{string} restores the following resource from trashbin',
-  async function (this: World, stepUser: string, stepTable: DataTable): Promise<void> {
+  /^"([^"]*)" restores the following resource(?:s)? from trashbin( using the batch action)?$/,
+  async function (
+    this: World,
+    stepUser: string,
+    batchAction: string,
+    stepTable: DataTable
+  ): Promise<void> {
     const { page } = this.actorsEnvironment.getActor({ key: stepUser })
     const resourceObject = new objects.applicationFiles.Resource({ page })
-    for (const info of stepTable.hashes()) {
-      const message = await resourceObject.restoreTrashBin({ resource: info.resource })
-      const paths = info.resource.split('/')
-      expect(message).toBe(`${paths[paths.length - 1]} was restored successfully`)
+    if (batchAction) {
+      const resources = stepTable.hashes().map((info) => info.resource)
+      const message = await resourceObject.batchRestoreTrashBin({ resources })
+      expect(message).toBe(`${resources.length} files restored successfully`)
+    } else {
+      for (const info of stepTable.hashes()) {
+        const message = await resourceObject.restoreTrashBin({ resource: info.resource })
+        const paths = info.resource.split('/')
+        expect(message).toBe(`${paths[paths.length - 1]} was restored successfully`)
+      }
     }
   }
 )

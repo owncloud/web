@@ -43,12 +43,14 @@ Feature: Trashbin delete
 
 
   Scenario: delete and restore a file inside a received shared folder
-    Given "Alice" creates the following resources
-      | resource      | type   |
-      | folderToShare | folder |
-    And "Alice" uploads the following resource
-      | resource  | to            |
-      | lorem.txt | folderToShare |
+    Given "Alice" creates the following folders in personal space using API
+      | name          |
+      | folderToShare |
+      | empty-folder   |
+    And "Alice" creates the following files into personal space using API
+      | pathToFile              | content     |
+      | folderToShare/lorem.txt | lorem ipsum |
+      | sample.txt              | sample      |
     And "Alice" shares the following resource using the sidebar panel
       | resource      | recipient | type | role     | resourceType |
       | folderToShare | Brian     | user | Can edit | folder       |
@@ -62,13 +64,21 @@ Feature: Trashbin delete
     Then following resources should not be displayed in the trashbin for user "Brian"
       | resource                |
       | folderToShare/lorem.txt |
+    When "Alice" deletes the following resources using the sidebar panel
+      | resource     |
+      | sample.txt   |
+      | empty-folder |
     And "Alice" navigates to the trashbin
-    And following resources should be displayed in the trashbin for user "Alice"
+    Then following resources should be displayed in the trashbin for user "Alice"
       | resource                |
       | folderToShare/lorem.txt |
-    And "Alice" restores the following resource from trashbin
+    And "Alice" restores the following resources from trashbin
       | resource                |
       | folderToShare/lorem.txt |
+    And "Alice" restores the following resources from trashbin using the batch action
+      | resource                |
+      | sample.txt              |
+      | empty-folder            |
     And "Alice" opens the "files" app
     And "Alice" opens folder "folderToShare"
     And following resources should be displayed in the files list for user "Alice"
