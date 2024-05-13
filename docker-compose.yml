@@ -87,7 +87,7 @@ services:
     environment:
       <<: *ocis-environment
       OCIS_URL: ${OCIS_URL:-https://host.docker.internal:9200}
-      OCIS_CORS_ALLOW_ORIGINS: 'https://host.docker.internal:9200'
+      OCIS_CORS_ALLOW_ORIGINS: https://host.docker.internal:9200,https://host.docker.internal:9201
       OCM_WEBAPP_TEMPLATE: https://host.docker.internal:9201/o/{{.Token}}/{relative-path-to-shared-resource}
       # make the registry available to the app provider containers
       MICRO_REGISTRY: 'nats-js-kv'
