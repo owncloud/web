@@ -286,6 +286,7 @@ export default defineComponent({
       if (dropdown?.tippy === undefined) {
         return
       }
+      resourcesStore.setSelection([item.id])
       displayPositionedDropdown(dropdown.tippy, event, unref(tileRefs).dropBtns[index])
     }
 
