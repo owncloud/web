@@ -1,0 +1,5 @@
+Bugfix: IDP logout issues
+
+Falsely showing the logout page after opening ownCloud Web with an expired token has been fixed.
+
+https://github.com/owncloud/web/pull/10881

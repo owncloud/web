@@ -252,14 +252,10 @@ export class AuthService {
       })
     }
     if (isUserContextRequired(this.router, route) || isIdpContextRequired(this.router, route)) {
-      // defines a number of seconds after a token expired.
-      // if that threshold surpasses we assume a regular token expiry instead of an auth error.
-      // as a result, the user will be logged out.
-      const TOKEN_EXPIRY_THRESHOLD = 5
-
       const user = await this.userManager.getUser()
-      if (user?.expires_in && user.expires_in < -TOKEN_EXPIRY_THRESHOLD) {
-        return this.logoutUser()
+      if (user?.expires_in !== undefined && user.expires_in < 0) {
+        // token expired, simply return and let the regular auth flow do its thing
+        return
       }
 
       await this.userManager.removeUser('authError')
