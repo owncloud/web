@@ -1,6 +1,6 @@
 Bugfix: Context menu empty in tiles view
 
-We've fixed a bug where the context menu was able in the tiles view after clicking the show context menu button
+We've fixed a bug where the context menu was empty in the tiles view after clicking the show context menu button
 
 https://github.com/owncloud/web/pull/10900
 https://github.com/owncloud/web/issues/10793
