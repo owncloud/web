@@ -36,8 +36,7 @@ const appInfo: ApplicationInformation = {
   icon: 'resource-type-folder',
   color: 'var(--oc-color-swatch-primary-muted)',
   isFileEditor: false,
-  extensions: [],
-  extensionPoints: []
+  extensions: []
 }
 
 export const navItems = (context: ComponentCustomProperties): AppNavigationItem[] => {
