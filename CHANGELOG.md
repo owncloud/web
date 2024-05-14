@@ -8,6 +8,7 @@ ownCloud admins and users.
 Summary
 -------
 
+* Bugfix - Context menu empty in tiles view: [#10900](https://github.com/owncloud/web/pull/10900)
 * Change - Disable opening files in embed mode: [#10786](https://github.com/owncloud/web/pull/10786)
 * Enhancement - Accessibility improvements: [#5383](https://github.com/owncloud/web/issues/5383)
 * Enhancement - Add SSE event for moving: [#10798](https://github.com/owncloud/web/pull/10798)
@@ -17,6 +18,14 @@ Summary
 
 Details
 -------
+
+* Bugfix - Context menu empty in tiles view: [#10900](https://github.com/owncloud/web/pull/10900)
+
+   We've fixed a bug where the context menu was empty in the tiles view after
+   clicking the show context menu button
+
+   https://github.com/owncloud/web/issues/10793
+   https://github.com/owncloud/web/pull/10900
 
 * Change - Disable opening files in embed mode: [#10786](https://github.com/owncloud/web/pull/10786)
 
