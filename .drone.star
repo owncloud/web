@@ -99,8 +99,8 @@ config = {
                 "",
             ],
             "suites": {
-                "oCISFiles1": [
-                    "webUICreateFilesFolders",
+                "oCISFiles5": [
+                    "webUITextEditor",
                 ],
                 "oCISSharingPublic1": [
                     "webUISharingPublicBasic",
@@ -129,7 +129,6 @@ config = {
 }
 
 basicTestSuites = [
-    "webUICreateFilesFolders",
     "webUISharingAcceptShares",
     "webUISharingPublicBasic",
     "webUISharingPublicDifferentRoles",
