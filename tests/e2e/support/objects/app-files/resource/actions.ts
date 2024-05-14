@@ -1327,7 +1327,7 @@ export const batchRestoreTrashBinResources = async (
     )
   }
 
-  await Promise.all([waitResponses, page.locator(restoreResourceButton).click()])
+  await Promise.all([...waitResponses, page.locator(restoreResourceButton).click()])
 
   const message = await page.locator(notificationMessageDialog).textContent()
   return message.trim().toLowerCase()
