@@ -162,7 +162,7 @@ describe('HandleUpload', () => {
             mock<UppyResource>({
               name: 'name',
               meta: { spaceId: '1', routeName: locationSpacesGeneric.name as string },
-              data: { size }
+              data: { size } as Blob
             })
           ])
           expect(result).toBe(quotaExceeded)
@@ -181,7 +181,7 @@ describe('HandleUpload', () => {
           mock<UppyResource>({
             name: 'name',
             meta: { spaceId: '1', routeName: locationSpacesGeneric.name as string },
-            data: { size }
+            data: { size } as Blob
           })
         ])
         expect(result).toBeFalsy()
@@ -200,7 +200,7 @@ describe('HandleUpload', () => {
           mock<UppyResource>({
             name: 'name',
             meta: { spaceId: '1', routeName: locationSpacesGeneric.name as string },
-            data: { size }
+            data: { size } as Blob
           })
         ])
         expect(result).toBeFalsy()
