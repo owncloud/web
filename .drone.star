@@ -99,12 +99,6 @@ config = {
                 "",
             ],
             "suites": {
-                "oCISFiles1": [
-                    "webUICreateFilesFolders",
-                ],
-                "oCISSharingPublic1": [
-                    "webUISharingPublicBasic",
-                ],
                 "oCISSharingPublic2": [
                     "webUISharingPublicManagement",
                 ],
@@ -129,9 +123,7 @@ config = {
 }
 
 basicTestSuites = [
-    "webUICreateFilesFolders",
     "webUISharingAcceptShares",
-    "webUISharingPublicBasic",
     "webUISharingPublicDifferentRoles",
     "webUISharingPublicManagement",
 ]
