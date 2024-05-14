@@ -1074,12 +1074,13 @@ export const restoreResourceVersion = async (args: resourceVersionArgs) => {
 export interface deleteResourceArgs {
   page: Page
   resourcesWithInfo: resourceArgs[]
-  folder?: string
   via: ActionViaType
+  folder?: string
+  isPublicLink?: boolean
 }
 
 export const deleteResource = async (args: deleteResourceArgs): Promise<void> => {
-  const { page, resourcesWithInfo, folder, via } = args
+  const { page, resourcesWithInfo, folder, via, isPublicLink } = args
   switch (via) {
     case 'SIDEBAR_PANEL': {
       if (folder) {
@@ -1102,30 +1103,34 @@ export const deleteResource = async (args: deleteResourceArgs): Promise<void> =>
 
     case 'BATCH_ACTION': {
       await selectOrDeselectResources({ page, resources: resourcesWithInfo, folder, select: true })
-      const deletetedResources = []
-      if (resourcesWithInfo.length <= 1) {
-        throw new Error('Single resource or objects cannot be deleted with batch action')
+
+      const waitResponses = []
+      for (const info of resourcesWithInfo) {
+        waitResponses.push(
+          page.waitForResponse(
+            (resp) =>
+              resp.status() === 204 &&
+              resp.request().method() === 'DELETE' &&
+              resp
+                .request()
+                .url()
+                .endsWith(`/${encodeURIComponent(info.name)}`)
+          )
+        )
+      }
+      if (!isPublicLink) {
+        // wait for GET response after all the resource are deleted with batch action
+        waitResponses.push(
+          page.waitForResponse(
+            (resp) =>
+              resp.url().includes('graph/v1.0/drives') &&
+              resp.status() === 200 &&
+              resp.request().method() === 'GET'
+          )
+        )
       }
 
-      await Promise.all([
-        page.waitForResponse((resp) => {
-          if (resp.status() === 204 && resp.request().method() === 'DELETE') {
-            deletetedResources.push(decodeURIComponent(resp.url().split('/').pop()))
-          }
-          // waiting for GET response after all the resource are deleted with batch action
-          return (
-            resp.url().includes('graph/v1.0/drives') &&
-            resp.status() === 200 &&
-            resp.request().method() === 'GET'
-          )
-        }),
-        page.locator(deleteButtonBatchAction).click()
-      ])
-      // assertion that the resources actually got deleted
-      expect(deletetedResources.length).toBe(resourcesWithInfo.length)
-      for (const resource of resourcesWithInfo) {
-        expect(deletetedResources).toContain(resource.name)
-      }
+      await Promise.all([...waitResponses, page.locator(deleteButtonBatchAction).click()])
       break
     }
   }
@@ -1311,7 +1316,7 @@ export const batchRestoreTrashBinResources = async (
     )
   }
 
-  await Promise.all([waitResponses, page.locator(restoreResourceButton).click()])
+  await Promise.all([...waitResponses, page.locator(restoreResourceButton).click()])
 
   const message = await page.locator(notificationMessageDialog).textContent()
   return message.trim().toLowerCase()

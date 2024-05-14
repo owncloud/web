@@ -42,20 +42,28 @@ Feature: link
       | resource      | option  |
       | new-lorem.txt |         |
       | lorem.txt     | replace |
+    And "Anonymous" creates the following resources
+      | resource       | type   |
+      | myfolder       | folder |
+      | myfolder/child | folder |
+    # currently upload folder feature is not available in playwright
+    # And "Anonymous" uploads the following resources in public link page
+    #   | resource              |
+    #   | filesForUpload/PARENT |
     And "Anonymous" moves the following resource using drag-drop
       | resource      | to        |
       | new-lorem.txt | SubFolder |
     And "Anonymous" copies the following resource using sidebar-panel
-      | resource  | to        |
-      | lorem.txt | SubFolder |
+      | resource  | to       |
+      | lorem.txt | myfolder |
     And "Anonymous" renames the following public link resources
       | resource      | as               |
       | lorem.txt     | lorem_new.txt    |
       | textfile.txt  | textfile_new.txt |
-    #    currently upload folder feature is not available in playwright
-    #    And "Anonymous" uploads the following resources in public link page
-    #      | resource              |
-    #      | filesForUpload/PARENT |
+    And "Anonymous" deletes the following resources from public link using batch action
+      | resource  | from     |
+      | lorem.txt | myfolder |
+      | child     | myfolder |
     And "Alice" removes the public link named "myPublicLink" of resource "folderPublic"
     And "Anonymous" should not be able to open the old link "myPublicLink"
     And "Alice" logs out

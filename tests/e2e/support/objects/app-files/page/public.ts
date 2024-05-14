@@ -78,7 +78,7 @@ export class Public {
 
   async delete(args: Omit<po.deleteResourceArgs, 'page'>): Promise<void> {
     const startUrl = this.#page.url()
-    await po.deleteResource({ ...args, page: this.#page })
+    await po.deleteResource({ ...args, page: this.#page, isPublicLink: true })
     await this.#page.goto(startUrl)
   }
 
