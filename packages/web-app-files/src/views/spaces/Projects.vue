@@ -66,8 +66,10 @@
                 :rounded="true"
                 size="small"
                 class="oc-position-absolute manager-badge"
-                v-text="$gettext('Manager')"
-              ></oc-tag>
+                v-oc-tooltip="$gettext('Manager')"
+              >
+                <oc-icon name="user-star" color="white" size="small" />
+              </oc-tag>
             </template>
             <template #image="{ resource }">
               <template v-if="viewMode === FolderViewModeConstants.name.tiles">
@@ -545,11 +547,8 @@ export default defineComponent({
   right: var(--oc-space-xsmall);
   top: var(--oc-space-xsmall);
   background: var(--oc-color-swatch-primary-gradient);
-  color: white;
   z-index: 1;
-  opacity: 0.9;
   border: none;
-  user-select: none;
 }
 
 .state-trashed {
