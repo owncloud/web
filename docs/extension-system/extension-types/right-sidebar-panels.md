@@ -15,9 +15,10 @@ geekdocCollapseSection: true
 The right sidebar is supposed to show information and make context specific actions available for single or multiple selected items.
 
 It is structured in a hierarchical way:
+
 - Panels which are defined as `root` panels get rendered as immediate members of the right sidebar.
 - Panels which are defined as non-`root` panels receive a navigation item below the `root` panels so that users can navigate into the respective
-sub panel.
+  sub panel.
 
 ### Configuration
 
@@ -26,9 +27,9 @@ It can be found below:
 
 ```typescript
 interface SidebarPanelExtension<R extends Item, P extends Item, T extends Item> {
-  id: string,
-  type: 'sidebarPanel',
-  scopes?: ExtensionScope[],
+  id: string
+  type: 'sidebarPanel'
+  scopes?: ExtensionScope[]
   panel: SideBarPanel<R, P, T> // Please check the SideBarPanel section below
 }
 ```
@@ -49,11 +50,11 @@ interface SideBarPanelContext<R extends Item, P extends Item, T extends Item> {
 ```
 
 - `items` - The most important member of the panel context, which denotes all selected items. That can mean all selected files in a files listing,
-all selected users in a user listing, the individual current file in a file editor.
+  all selected users in a user listing, the individual current file in a file editor.
 - `parent` - The immediate parent of the selected items. For example, if the user selects a file in a file listing, the parent is the parent folder,
-or if being in a root of a space, the space itself. Can be `null` for non-hierarchical contexts, e.g. a user listing. 
+  or if being in a root of a space, the space itself. Can be `null` for non-hierarchical contexts, e.g. a user listing.
 - `root` - The uppermost parent of the selected items. For example, if the user selects a file in a file listing, the root is always the space in which
-the selected files reside. Can be `null` for non-hierarchical contexts, e.g. a user listing.
+  the selected files reside. Can be `null` for non-hierarchical contexts, e.g. a user listing.
 
 #### SideBarPanel
 
@@ -80,6 +81,56 @@ interface SideBarPanel<R extends Item, P extends Item, T extends Item> {
 ## Extension Point FileSideBar
 
 In the context of files (e.g. file listing, text editor for a single file, etc.) we have a dedicated component `FileSideBar` which can be
-toggled (shown/hidden) with a button in the top bar. The component queries all extensions of the type `sideBarPanel` from the extension 
+toggled (shown/hidden) with a button in the top bar. The component queries all extensions of the type `sideBarPanel` from the extension
 registry that also fulfill the scope `resource`. By registering an custom extension of type `sideBarPanel` and scope `resource`, your extension
 will automatically become available in all environments that display the `FileSideBar` (i.e. any file viewer, file editor, file listing).
+
+## Example
+
+The following example shows how a sidebar panel for displaying exif data for a resource could look like. Note that the extension is wrapped inside a Vue composable so it can easily be reused. All helper types and composables are being provided via the [web-pkg](https://github.com/owncloud/web/tree/master/packages/web-pkg) and the [web-client](https://github.com/owncloud/web/tree/master/packages/web-client) packages.
+
+```typescript
+export const useExifDataPanelExtension = () => {
+  const { $gettext } = useGettext()
+
+  const extension = computed<SidebarPanelExtension<SpaceResource, Resource, Resource>>(() => ({
+    id: 'com.github.owncloud.web.files.sidebar-panel.exif-data',
+    type: 'sidebarPanel',
+    scopes: ['resource'],
+    panel: {
+      name: 'exif-data',
+      icon: 'image',
+      title: () => $gettext('EXIF data'),
+      component: ExifDataPanelComponent,
+      isRoot: () => true,
+      isVisible: ({ items }) => {
+        if (items?.length !== 1) {
+          return false
+        }
+
+        return true
+      }
+    }
+  }))
+
+  return { extension }
+}
+```
+
+The extension can then be registered in any app like so:
+
+```typescript
+export default defineWebApplication({
+  setup() {
+    const { extension } = useExifDataPanelExtension()
+
+    return {
+      appInfo: {
+        name: $gettext('Exif panel app'),
+        id: 'exif-panel-app'
+      },
+      extensions: computed(() => [unref(extension)])
+    }
+  }
+})
+```
