@@ -12,7 +12,7 @@
 
 <script lang="ts">
 import { defineComponent, PropType } from 'vue'
-import { filesize } from 'filesize'
+import { filesize, FileSizeOptionsString } from 'filesize'
 import { Quota } from '@ownclouders/web-client/graph/generated'
 
 export default defineComponent({
@@ -39,10 +39,10 @@ export default defineComponent({
       })
     },
     quotaTotal() {
-      return filesize(this.spaceQuota.total)
+      return filesize<FileSizeOptionsString>(this.spaceQuota.total)
     },
     quotaUsed() {
-      return filesize(this.spaceQuota.used)
+      return filesize<FileSizeOptionsString>(this.spaceQuota.used)
     },
     quotaUsagePercent() {
       return parseFloat(((this.spaceQuota.used / this.spaceQuota.total) * 100).toFixed(2))

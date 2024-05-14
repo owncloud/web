@@ -142,7 +142,7 @@
 <script lang="ts">
 import { storeToRefs } from 'pinia'
 import { defineComponent, PropType, ComponentPublicInstance, computed, unref } from 'vue'
-import { filesize } from 'filesize'
+import { filesize, FileSizeOptionsString } from 'filesize'
 import { authService } from '../../services/auth'
 import {
   useRoute,
@@ -215,12 +215,12 @@ export default defineComponent({
       const used = this.quota.used || 0
       return total
         ? this.$gettext('%{used} of %{total} used', {
-            used: filesize(used),
-            total: filesize(total)
+            used: filesize<FileSizeOptionsString>(used),
+            total: filesize<FileSizeOptionsString>(total)
           })
         : this.$gettext('%{used} used', {
-            used: filesize(used),
-            total: filesize(total)
+            used: filesize<FileSizeOptionsString>(used),
+            total: filesize<FileSizeOptionsString>(total)
           })
     },
     limitedPersonalStorage() {
