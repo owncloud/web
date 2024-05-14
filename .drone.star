@@ -102,9 +102,6 @@ config = {
                 "oCISFiles5": [
                     "webUITextEditor",
                 ],
-                "oCISSharingPublic1": [
-                    "webUISharingPublicBasic",
-                ],
                 "oCISSharingPublic2": [
                     "webUISharingPublicManagement",
                 ],
@@ -130,7 +127,6 @@ config = {
 
 basicTestSuites = [
     "webUISharingAcceptShares",
-    "webUISharingPublicBasic",
     "webUISharingPublicDifferentRoles",
     "webUISharingPublicManagement",
 ]
