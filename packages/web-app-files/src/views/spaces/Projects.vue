@@ -60,6 +60,15 @@
             @sort="handleSort"
             @row-mounted="rowMounted"
           >
+            <template #resource-badge="{ resource }">
+              <oc-tag
+                v-if="showManagerBadge(resource)"
+                :rounded="true"
+                size="small"
+                class="oc-position-absolute manager-badge"
+                v-text="$gettext('Manager')"
+              ></oc-tag>
+            </template>
             <template #image="{ resource }">
               <template v-if="viewMode === FolderViewModeConstants.name.tiles">
                 <img
@@ -160,7 +169,8 @@ import {
   useResourcesStore,
   useSpacesStore,
   FolderViewExtension,
-  useExtensionRegistry
+  useExtensionRegistry,
+  useUserStore
 } from '@ownclouders/web-pkg'
 
 import { AppBar } from '@ownclouders/web-pkg'
@@ -205,6 +215,7 @@ import {
 } from 'web-app-files/src/composables/keyboardActions'
 import { orderBy } from 'lodash-es'
 import { useResourcesViewDefaults } from '../../composables'
+import { $gettext } from '@ownclouders/web-pkg/src/router/utils'
 
 export default defineComponent({
   components: {
@@ -232,6 +243,7 @@ export default defineComponent({
     const imageContentObject = ref<Record<string, { fileId: string; data: string }>>({})
     const previewService = usePreviewService()
     const configStore = useConfigStore()
+    const userStore = useUserStore()
 
     const { setSelection, initResourceList, clearResourceList } = useResourcesStore()
 
@@ -452,6 +464,12 @@ export default defineComponent({
       return unref(viewModes).find((v) => v.name === viewModeName)
     })
 
+    const showManagerBadge = (resource: ProjectSpaceResource) => {
+      return (
+        unref(viewMode) === FolderViewModeConstants.name.tiles && resource.isManager(userStore.user)
+      )
+    }
+
     return {
       ...useSideBar(),
       spaces,
@@ -486,7 +504,8 @@ export default defineComponent({
       rowMounted,
       setSelection,
       viewSize,
-      fileListHeaderY
+      fileListHeaderY,
+      showManagerBadge
     }
   },
   computed: {
@@ -504,6 +523,7 @@ export default defineComponent({
     }
   },
   methods: {
+    $gettext,
     openSidebarSharePanel(space: SpaceResource) {
       this.setSelection([space.id])
       eventBus.publish(SideBarEventTopics.openWithPanel, 'space-share')
@@ -519,6 +539,17 @@ export default defineComponent({
 
 .table-preview {
   border-radius: 3px;
+}
+
+.manager-badge {
+  right: var(--oc-space-xsmall);
+  top: var(--oc-space-xsmall);
+  background: var(--oc-color-swatch-primary-gradient);
+  color: white;
+  z-index: 1;
+  opacity: 0.9;
+  border: none;
+  user-select: none;
 }
 
 .state-trashed {

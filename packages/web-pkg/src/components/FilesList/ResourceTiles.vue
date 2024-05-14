@@ -70,6 +70,9 @@
               @click.stop.prevent="toggleTile([resource, $event])"
             />
           </template>
+          <template #resource-badge>
+            <slot name="resource-badge" :resource="resource" />
+          </template>
           <template #imageField>
             <slot name="image" :resource="resource" />
           </template>
