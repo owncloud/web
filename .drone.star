@@ -99,9 +99,6 @@ config = {
                 "",
             ],
             "suites": {
-                "oCISFiles5": [
-                    "webUITextEditor",
-                ],
                 "oCISSharingPublic2": [
                     "webUISharingPublicManagement",
                 ],
