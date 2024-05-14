@@ -854,3 +854,39 @@ When(
     await resourceObject.previewMediaFromSidebarPanel(file)
   }
 )
+
+Then(
+  /^"([^"]*)" (should|should not) be able to edit (?:folder|file) "([^"]*)"$/,
+  async function (
+    this: World,
+    stepUser: string,
+    actionType: string,
+    resource: string
+  ): Promise<void> {
+    const { page } = this.actorsEnvironment.getActor({ key: stepUser })
+    const resourceObject = new objects.applicationFiles.Resource({ page })
+    const userCanEdit = await resourceObject.canManageResource({ resource })
+    expect(userCanEdit).toBe(actionType === 'should' ? true : false)
+  }
+)
+
+Then(
+  /^"([^"]*)" (should|should not) see (link-direct|link-indirect|user-direct|user-indirect) indicator on the (?:folder|file) "([^"]*)"$/,
+  async function (
+    this: World,
+    stepUser: string,
+    actionType: string,
+    buttonLabel: string,
+    resource: string
+  ): Promise<void> {
+    const { page } = this.actorsEnvironment.getActor({ key: stepUser })
+    const resourceObject = new objects.applicationFiles.Resource({ page })
+    const showShareIndicator = resourceObject.showShareIndicatorSelector({
+      buttonLabel,
+      resource
+    })
+    actionType === 'should'
+      ? await expect(showShareIndicator).toBeVisible()
+      : await expect(showShareIndicator).not.toBeVisible()
+  }
+)

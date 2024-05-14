@@ -33,3 +33,13 @@ When(
     await waitForSSEEvent(user, event)
   }
 )
+
+When(
+  '{string} opens the {string} url',
+  async function (this: World, stepUser: string, url: string): Promise<void> {
+    const { page } = this.actorsEnvironment.getActor({ key: stepUser })
+    const applicationObject = new objects.runtime.Application({ page })
+    url = url === '%clipboard%' ? await page.evaluate('navigator.clipboard.readText()') : url
+    await applicationObject.openUrl(url)
+  }
+)

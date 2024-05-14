@@ -128,6 +128,15 @@ When(
 )
 
 When(
+  '{string} navigates to the shared via link page',
+  async function (this: World, stepUser: string): Promise<void> {
+    const { page } = this.actorsEnvironment.getActor({ key: stepUser })
+    const pageObject = new objects.applicationFiles.page.shares.ViaLink({ page })
+    await pageObject.navigate()
+  }
+)
+
+When(
   '{string} disables the sync for the following share(s)',
   async function (this: World, stepUser: string, stepTable: DataTable): Promise<void> {
     const { page } = this.actorsEnvironment.getActor({ key: stepUser })
