@@ -88,6 +88,7 @@ export interface openSpaceArgs {
 export const openSpace = async (args: openSpaceArgs): Promise<void> => {
   const { page, id } = args
   await page.locator(util.format(spaceIdSelector, id)).click()
+  await page.locator('#files-space-table').waitFor()
 }
 /**/
 
