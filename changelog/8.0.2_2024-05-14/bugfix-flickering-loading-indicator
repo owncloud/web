@@ -1,0 +1,7 @@
+Bugfix: Flickering loading indicator
+
+The flickering loading indicator when batch deleting a lot of files has been fixed.
+
+We also added a request limit that stops the network from being overrun with concurrent requests.
+
+https://github.com/owncloud/web/pull/10763
