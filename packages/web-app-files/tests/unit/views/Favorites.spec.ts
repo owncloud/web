@@ -6,7 +6,7 @@ import { mockDeep, mock } from 'vitest-mock-extended'
 import { Resource } from '@ownclouders/web-client'
 import { defaultPlugins, defaultStubs, mount, defaultComponentMocks } from 'web-test-helpers'
 import { RouteLocation } from 'vue-router'
-import { Extension, useExtensionRegistry } from '@ownclouders/web-pkg'
+import { FolderViewExtension, useExtensionRegistry } from '@ownclouders/web-pkg'
 import {
   folderViewsFavoritesExtensionPoint,
   folderViewsFolderExtensionPoint,
@@ -79,7 +79,7 @@ function getMountedWrapper({
         component: h('div', { class: 'resource-table' })
       }
     }
-  ] satisfies Extension[]
+  ] satisfies FolderViewExtension[]
   const { requestExtensions } = useExtensionRegistry()
   vi.mocked(requestExtensions).mockReturnValue(extensions)
 

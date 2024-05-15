@@ -15,7 +15,7 @@ import {
 } from 'web-test-helpers'
 import {
   AppBar,
-  Extension,
+  FolderViewExtension,
   useBreadcrumbsFromPath,
   useExtensionRegistry
 } from '@ownclouders/web-pkg'
@@ -345,7 +345,7 @@ function getMountedWrapper({
         component: h('div', { class: 'resource-table' })
       }
     }
-  ] satisfies Extension[]
+  ] satisfies FolderViewExtension[]
   const { requestExtensions } = useExtensionRegistry()
   vi.mocked(requestExtensions).mockReturnValue(extensions)
 

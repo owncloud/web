@@ -5,7 +5,7 @@ import {
   queryItemAsString,
   useFileActionsDelete,
   useExtensionRegistry,
-  Extension
+  FolderViewExtension
 } from '@ownclouders/web-pkg'
 
 import {
@@ -136,7 +136,7 @@ function getMountedWrapper({
         component: h('div', { class: 'resource-table' })
       }
     }
-  ] satisfies Extension[]
+  ] satisfies FolderViewExtension[]
   const { requestExtensions } = useExtensionRegistry()
   vi.mocked(requestExtensions).mockReturnValue(extensions)
 

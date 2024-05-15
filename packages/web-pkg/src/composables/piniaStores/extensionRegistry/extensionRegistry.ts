@@ -2,7 +2,6 @@ import { defineStore } from 'pinia'
 import { ref, Ref, unref } from 'vue'
 import { useConfigStore } from '../config'
 import { Extension, ExtensionPoint, ExtensionType } from './types'
-import { isNil } from 'lodash-es'
 
 export const useExtensionRegistry = defineStore('extensionRegistry', () => {
   const configStore = useConfigStore()
@@ -12,41 +11,29 @@ export const useExtensionRegistry = defineStore('extensionRegistry', () => {
   const registerExtensions = (e: Ref<Extension[]>) => {
     extensions.value.push(e)
   }
-  const requestExtensions = <T extends Extension>(options: {
-    extensionType?: ExtensionType
-    extensionPointIds?: string[]
-    extensionPoint?: ExtensionPoint
-  }) => {
-    let extensionType = options.extensionType
-    let extensionPointIds = options.extensionPointIds || []
-    if (!isNil(options.extensionPoint)) {
-      extensionType = options.extensionPoint.extensionType
-      extensionPointIds = [options.extensionPoint.id]
-    }
-
-    if (!extensionType) {
-      throw new Error('Either extensionType or extensionPoint must be provided')
+  const requestExtensions = <T extends Extension>(extensionPoint: ExtensionPoint<T>) => {
+    if (!extensionPoint.id || !extensionPoint.extensionType) {
+      throw new Error('ExtensionPoint must have an id and an extensionType')
     }
 
     return unref(extensions).flatMap((e) =>
       unref(e).filter(
         (e) =>
-          e.type === extensionType &&
+          e.type === extensionPoint.extensionType &&
           !configStore.options.disabledExtensions.includes(e.id) &&
-          (!extensionPointIds.length ||
-            e.extensionPointIds?.some((id) => extensionPointIds.includes(id)))
+          (!e.extensionPointIds || e.extensionPointIds?.includes(extensionPoint.id))
       )
     ) as T[]
   }
 
-  const extensionPoints = ref<Ref<ExtensionPoint[]>[]>([])
-  const registerExtensionPoint = (e: ExtensionPoint) => {
+  const extensionPoints = ref<Ref<ExtensionPoint<Extension>[]>[]>([])
+  const registerExtensionPoint = <T extends Extension>(e: ExtensionPoint<T>) => {
     extensionPoints.value.push(ref([e]))
   }
-  const registerExtensionPoints = (e: Ref<ExtensionPoint[]>) => {
+  const registerExtensionPoints = <T extends Extension>(e: Ref<ExtensionPoint<T>[]>) => {
     extensionPoints.value.push(e)
   }
-  const getExtensionPoints = <T extends ExtensionPoint>(
+  const getExtensionPoints = <T extends ExtensionPoint<Extension>>(
     options: {
       extensionType?: ExtensionType
     } = {}

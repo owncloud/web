@@ -17,7 +17,7 @@
 
 <script lang="ts">
 import { computed, defineComponent, PropType } from 'vue'
-import { ActionExtension, useEmbedMode, useExtensionRegistry } from '@ownclouders/web-pkg'
+import { useEmbedMode, useExtensionRegistry } from '@ownclouders/web-pkg'
 import { Resource, SpaceResource } from '@ownclouders/web-client'
 import { unref } from 'vue'
 import { quickActionsExtensionPoint } from '../../extensionPoints'
@@ -40,9 +40,7 @@ export default defineComponent({
 
     const filteredActions = computed(() => {
       return unref(extensionRegistry)
-        .requestExtensions<ActionExtension>({
-          extensionPoint: quickActionsExtensionPoint
-        })
+        .requestExtensions(quickActionsExtensionPoint)
         .map((e) => e.action)
         .filter(({ isVisible }) => isVisible({ space: props.space, resources: [props.item] }))
     })

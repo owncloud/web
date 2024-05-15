@@ -146,7 +146,6 @@ import {
 } from '@ownclouders/web-client'
 
 import {
-  FolderViewExtension,
   ProcessorType,
   ResourceTransfer,
   TransferType,
@@ -274,9 +273,7 @@ export default defineComponent({
     const viewModes = computed(() => {
       return [
         ...extensionRegistry
-          .requestExtensions<FolderViewExtension>({
-            extensionPoint: folderViewsFolderExtensionPoint
-          })
+          .requestExtensions(folderViewsFolderExtensionPoint)
           .map((e) => e.folderView)
       ]
     })

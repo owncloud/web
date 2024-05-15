@@ -188,7 +188,7 @@ export default defineComponent({
       }
     }
     extensionRegistry.registerExtensions(toRef([defaultProgressBarExtension] satisfies Extension[]))
-    const progressBarExtensionPoint: ExtensionPoint = {
+    const progressBarExtensionPoint: ExtensionPoint<CustomComponentExtension> = {
       id: progressBarExtensionPointId,
       extensionType: 'customComponent',
       multiple: false,

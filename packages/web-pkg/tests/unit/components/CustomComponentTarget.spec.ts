@@ -16,12 +16,12 @@ const selectors = {
 }
 
 describe('CustomComponentTarget', () => {
-  const mockExtensionPointSingle = mock<ExtensionPoint>({
+  const mockExtensionPointSingle = mock<ExtensionPoint<Extension>>({
     id: 'dummy-extension-point-single',
     extensionType: 'customComponent',
     multiple: false
   })
-  const mockExtensionPointMulti = mock<ExtensionPoint>({
+  const mockExtensionPointMulti = mock<ExtensionPoint<Extension>>({
     id: 'dummy-extension-point-multi',
     extensionType: 'customComponent',
     multiple: true
@@ -92,7 +92,7 @@ function getWrapper({
   extensions,
   preference
 }: {
-  extensionPoint: ExtensionPoint
+  extensionPoint: ExtensionPoint<Extension>
   extensions: Extension[]
   preference?: ExtensionPreferenceItem
 }) {

@@ -75,7 +75,6 @@ import { debounce } from 'lodash-es'
 
 import { Resource } from '@ownclouders/web-client'
 import {
-  FolderViewExtension,
   VisibilityObserver,
   useExtensionRegistry,
   useConfigStore,
@@ -131,9 +130,7 @@ export default defineComponent({
     const viewModes = computed(() => {
       return [
         ...extensionRegistry
-          .requestExtensions<FolderViewExtension>({
-            extensionPoint: folderViewsFavoritesExtensionPoint
-          })
+          .requestExtensions(folderViewsFavoritesExtensionPoint)
           .map((e) => e.folderView)
       ]
     })

@@ -159,7 +159,6 @@ import {
   useConfigStore,
   useResourcesStore,
   useSpacesStore,
-  FolderViewExtension,
   useExtensionRegistry
 } from '@ownclouders/web-pkg'
 
@@ -326,9 +325,7 @@ export default defineComponent({
     const viewModes = computed(() => {
       return [
         ...extensionRegistry
-          .requestExtensions<FolderViewExtension>({
-            extensionPoint: folderViewsProjectSpacesExtensionPoint
-          })
+          .requestExtensions(folderViewsProjectSpacesExtensionPoint)
           .map((e) => e.folderView)
       ]
     })

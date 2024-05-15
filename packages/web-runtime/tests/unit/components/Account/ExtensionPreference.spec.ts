@@ -18,7 +18,7 @@ describe('ExtensionPreference component', () => {
   })
 
   it('renders a dropdown for an extension point', () => {
-    const extensionPoint = mock<ExtensionPoint>({
+    const extensionPoint = mock<ExtensionPoint<Extension>>({
       id: 'test-extension-point',
       multiple: false
     })
@@ -27,7 +27,7 @@ describe('ExtensionPreference component', () => {
   })
 
   describe('extensionPoint with multiple=false', () => {
-    const extensionPoint = mock<ExtensionPoint>({
+    const extensionPoint = mock<ExtensionPoint<Extension>>({
       id: 'test-extension-point',
       multiple: false,
       defaultExtensionId: 'foo-2'
@@ -87,7 +87,7 @@ function getWrapper({
   extensionPoint,
   extensions = []
 }: {
-  extensionPoint: ExtensionPoint
+  extensionPoint: ExtensionPoint<Extension>
   extensions?: Extension[]
 }) {
   const plugins = defaultPlugins({

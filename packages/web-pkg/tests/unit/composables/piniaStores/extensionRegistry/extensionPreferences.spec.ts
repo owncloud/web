@@ -66,7 +66,7 @@ describe('useExtensionPreferencesStore', () => {
       it('returns all provided extension ids', () => {
         getWrapper({
           setup: (instance) => {
-            const extensionPoint = mock<ExtensionPoint>({
+            const extensionPoint = mock<ExtensionPoint<Extension>>({
               id: 'extension-point-id',
               multiple: true
             })
@@ -83,7 +83,7 @@ describe('useExtensionPreferencesStore', () => {
       it('returns the default extension id from the extension point', () => {
         getWrapper({
           setup: (instance) => {
-            const extensionPoint = mock<ExtensionPoint>({
+            const extensionPoint = mock<ExtensionPoint<Extension>>({
               id: 'extension-point-id',
               multiple: false,
               defaultExtensionId: 'foo-1'
@@ -95,7 +95,7 @@ describe('useExtensionPreferencesStore', () => {
       it('returns an empty array if the extension point has no default extension id', () => {
         getWrapper({
           setup: (instance) => {
-            const extensionPoint = mock<ExtensionPoint>({
+            const extensionPoint = mock<ExtensionPoint<Extension>>({
               id: 'extension-point-id',
               multiple: false,
               defaultExtensionId: undefined

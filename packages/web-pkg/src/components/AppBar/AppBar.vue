@@ -211,8 +211,8 @@ export default defineComponent({
       }
 
       const actionExtensions = requestExtensions<ActionExtension>({
-        extensionType: 'action',
-        extensionPointIds: ['app.files.batch-actions']
+        id: 'app.files.batch-actions',
+        extensionType: 'action'
       })
       if (actionExtensions.length) {
         actions = [...actions, ...actionExtensions.map((e) => e.action)]

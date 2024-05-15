@@ -94,7 +94,7 @@ export interface ClassicApplicationScript {
   navItems?: ((args: ComponentCustomProperties) => AppNavigationItem[]) | AppNavigationItem[]
   translations?: ApplicationTranslations
   extensions?: Ref<Extension[]>
-  extensionPoints?: Ref<ExtensionPoint[]>
+  extensionPoints?: Ref<ExtensionPoint<any>[]>
   initialize?: () => void
   ready?: (args: AppReadyHookArgs) => Promise<void> | void
   mounted?: (args: AppReadyHookArgs) => void

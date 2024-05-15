@@ -29,7 +29,7 @@ export const useExtensionPreferencesStore = defineStore('extensionPreferences', 
     }
   }
   const extractDefaultExtensionIds = (
-    extensionPoint: ExtensionPoint,
+    extensionPoint: ExtensionPoint<Extension>,
     extensions: Extension[]
   ): string[] => {
     if (extensionPoint.multiple) {

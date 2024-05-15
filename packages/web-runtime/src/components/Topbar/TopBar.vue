@@ -19,7 +19,7 @@
       </router-link>
     </div>
     <div v-if="!contentOnLeftPortal" class="oc-topbar-center">
-      <portal-target name="app.runtime.header" multiple />
+      <custom-component-target :extension-point="topBarCenterExtensionPoint" />
     </div>
     <div class="oc-topbar-right oc-flex oc-flex-middle">
       <portal-target name="app.runtime.header.right" multiple />
@@ -50,6 +50,7 @@ import FeedbackLink from './FeedbackLink.vue'
 import SideBarToggle from './SideBarToggle.vue'
 import {
   ApplicationInformation,
+  CustomComponentTarget,
   useAuthStore,
   useCapabilityStore,
   useConfigStore,
@@ -59,12 +60,14 @@ import {
 } from '@ownclouders/web-pkg'
 import { isRuntimeRoute } from '../../router'
 import { MenuItem } from '../../helpers/menuItems'
+import { topBarCenterExtensionPoint } from '../../extensionPoints'
 
 type Menus = 'apps' | 'appSwitcher' | 'user'
 
 export default {
   components: {
     ApplicationsMenu,
+    CustomComponentTarget,
     FeedbackLink,
     Notifications,
     SideBarToggle,
@@ -210,7 +213,8 @@ export default {
       isEmbedModeEnabled,
       isSideBarToggleVisible,
       isSideBarToggleDisabled,
-      homeLink
+      homeLink,
+      topBarCenterExtensionPoint
     }
   },
   computed: {

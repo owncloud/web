@@ -28,7 +28,7 @@ export default defineComponent({
   name: 'ExtensionRegistry',
   props: {
     extensionPoint: {
-      type: Object as PropType<ExtensionPoint>,
+      type: Object as PropType<ExtensionPoint<Extension>>,
       required: true
     }
   },
@@ -36,18 +36,14 @@ export default defineComponent({
     const extensionRegistry = useExtensionRegistry()
     const extensionPreferences = useExtensionPreferencesStore()
 
-    const allExtensions = computed<Extension[]>(() =>
-      extensionRegistry.requestExtensions<Extension>({
-        extensionPoint: props.extensionPoint
-      })
-    )
+    const allExtensions = computed(() => extensionRegistry.requestExtensions(props.extensionPoint))
     const defaultExtensionIds = computed(() => {
       return extensionPreferences.extractDefaultExtensionIds(
         props.extensionPoint,
         unref(allExtensions)
       )
     })
-    const extensions = computed<Extension[]>(() => {
+    const extensions = computed(() => {
       return unref(allExtensions).sort((extension1, extension2) => {
         // default extension first
         if (
