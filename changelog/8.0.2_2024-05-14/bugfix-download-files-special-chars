@@ -1,0 +1,7 @@
+Bugfix: Download files with special chars in name
+
+We've fixed a bug where having a `#` in the filename resulted in requests going to cut off urls.
+
+https://github.com/owncloud/web/issues/10810
+https://github.com/owncloud/web/pull/10813
+https://github.com/owncloud/web/pull/10817

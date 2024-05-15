@@ -168,15 +168,12 @@ export const useFileActionsDeleteResources = () => {
   const deleteFiles = ({
     space,
     files,
-    loadingCallbackArgs,
     firstRun
   }: {
     space: SpaceResource
     files: Resource[]
-    loadingCallbackArgs: LoadingTaskCallbackArguments
     firstRun?: boolean
   }) => {
-    const { setProgress } = loadingCallbackArgs
     const promises: Promise<void>[] = []
     const removedFiles: Resource[] = []
     for (const [i, file] of files.entries()) {
@@ -189,15 +186,12 @@ export const useFileActionsDeleteResources = () => {
           let title = $gettext('Failed to delete "%{file}"', { file: file.name })
           if (error.statusCode === 423) {
             if (firstRun) {
-              return deleteFiles({ space, files: [file], loadingCallbackArgs, firstRun: false })
+              return deleteFiles({ space, files: [file], firstRun: false })
             }
 
             title = $gettext('Failed to delete "%{file}" - the file is locked', { file: file.name })
           }
           messageStore.showErrorMessage({ title, errors: [error] })
-        })
-        .finally(() => {
-          setProgress({ total: files.length, current: i + 1 })
         })
       promises.push(promise)
     }
@@ -245,52 +239,46 @@ export const useFileActionsDeleteResources = () => {
 
     return Object.values(resourceSpaceMapping).map(
       ({ space: spaceForDeletion, resources: resourcesForDeletion }) => {
-        return loadingService.addTask(
-          (loadingCallbackArgs) => {
-            return deleteFiles({
-              space: spaceForDeletion,
-              files: resourcesForDeletion,
-              loadingCallbackArgs
-            }).then(async () => {
-              // Load quota
-              if (
-                isLocationSpacesActive(router, 'files-spaces-generic') &&
-                !['public', 'share'].includes(spaceForDeletion?.driveType)
-              ) {
-                const graphClient = clientService.graphAuthenticated
-                const driveResponse = await graphClient.drives.getDrive(
-                  unref(resources)[0].storageId
-                )
-                spacesStore.updateSpaceField({
-                  id: driveResponse.data.id,
-                  field: 'spaceQuota',
-                  value: driveResponse.data.quota
+        return loadingService.addTask(() => {
+          return deleteFiles({
+            space: spaceForDeletion,
+            files: resourcesForDeletion
+          }).then(async () => {
+            // Load quota
+            if (
+              isLocationSpacesActive(router, 'files-spaces-generic') &&
+              !['public', 'share'].includes(spaceForDeletion?.driveType)
+            ) {
+              const graphClient = clientService.graphAuthenticated
+              const driveResponse = await graphClient.drives.getDrive(unref(resources)[0].storageId)
+              spacesStore.updateSpaceField({
+                id: driveResponse.data.id,
+                field: 'spaceQuota',
+                value: driveResponse.data.quota
+              })
+            }
+
+            if (
+              unref(resourcesToDelete).length &&
+              isSameResource(unref(resourcesToDelete)[0], unref(currentFolder))
+            ) {
+              // current folder is being deleted
+              return router.push(
+                createFileRouteOptions(spaceForDeletion, {
+                  path: dirname(unref(resourcesToDelete)[0].path),
+                  fileId: unref(resourcesToDelete)[0].parentFolderId
                 })
-              }
+              )
+            }
 
-              if (
-                unref(resourcesToDelete).length &&
-                isSameResource(unref(resourcesToDelete)[0], unref(currentFolder))
-              ) {
-                // current folder is being deleted
-                return router.push(
-                  createFileRouteOptions(spaceForDeletion, {
-                    path: dirname(unref(resourcesToDelete)[0].path),
-                    fileId: unref(resourcesToDelete)[0].parentFolderId
-                  })
-                )
-              }
-
-              const activeFilesCount = resourcesStore.activeResources.length
-              const pageCount = Math.ceil(unref(activeFilesCount) / unref(itemsPerPage))
-              if (unref(currentPage) > 1 && unref(currentPage) > pageCount) {
-                // reset pagination to avoid empty lists (happens when deleting all items on the last page)
-                currentPageQuery.value = pageCount.toString()
-              }
-            })
-          },
-          { indeterminate: false }
-        )
+            const activeFilesCount = resourcesStore.activeResources.length
+            const pageCount = Math.ceil(unref(activeFilesCount) / unref(itemsPerPage))
+            if (unref(currentPage) > 1 && unref(currentPage) > pageCount) {
+              // reset pagination to avoid empty lists (happens when deleting all items on the last page)
+              currentPageQuery.value = pageCount.toString()
+            }
+          })
+        })
       }
     )
   }

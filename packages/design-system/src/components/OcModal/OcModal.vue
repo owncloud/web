@@ -419,12 +419,14 @@ export default defineComponent({
 }
 
 .oc-modal {
-  max-width: 500px;
-  width: 100%;
-  box-shadow: 5px 0 25px rgba(0, 0, 0, 0.3);
+  background-color: var(--oc-color-background-default);
   border: 1px solid var(--oc-color-input-border);
   border-radius: 15px;
-  background-color: var(--oc-color-background-default);
+  box-shadow: 5px 0 25px rgba(0, 0, 0, 0.3);
+  max-height: 90vh;
+  max-width: 500px;
+  overflow: auto;
+  width: 100%;
 
   &:focus {
     outline: none;

@@ -1,0 +1,6 @@
+Bugfix: Vertical scroll for OcModal on small screens
+
+We've fixed an issue where modals were not scrollable on screens with small heights.
+
+https://github.com/owncloud/web/issues/10814
+https://github.com/owncloud/web/pull/10816
