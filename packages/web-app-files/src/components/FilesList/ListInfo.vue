@@ -96,7 +96,7 @@ export default defineComponent({
         foldersStr = this.$ngettext(
           '%{ foldersCount } folder including %{ foldersHiddenCount } hidden',
           '%{ foldersCount } folders including %{ foldersHiddenCount } hidden',
-          this.files,
+          this.folders,
           {
             foldersCount: this.folders.toString(),
             foldersHiddenCount: this.hiddenFolders.toString()
