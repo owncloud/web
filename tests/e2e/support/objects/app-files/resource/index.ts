@@ -1,6 +1,7 @@
 import { Download, Locator, Page } from '@playwright/test'
 import * as po from './actions'
 import { Space } from '../../../types'
+import { showShareIndicator } from './utils'
 
 export class Resource {
   #page: Page
@@ -312,7 +313,17 @@ export class Resource {
     await po.previewMediaFromSidebarPanel({ page: this.#page, resource })
   }
 
-  async canEditContent({ type }: { type: string }): Promise<boolean> {
-    return await po.canEditContent({ page: this.#page, type })
+  showShareIndicatorSelector({
+    buttonLabel,
+    resource
+  }: {
+    buttonLabel: string
+    resource: string
+  }): Locator {
+    return showShareIndicator({ page: this.#page, buttonLabel, resource })
+  }
+
+  async canManageResource(args: Omit<po.canManageResourceArgs, 'page'>): Promise<boolean> {
+    return await po.canManageResource({ ...args, page: this.#page })
   }
 }

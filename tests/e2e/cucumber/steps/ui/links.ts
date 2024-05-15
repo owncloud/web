@@ -231,3 +231,18 @@ When(
     await pageObject.openShareWithMeFromInternalLink(actor)
   }
 )
+
+When(
+  '{string} copies the link {string} of resource {string}',
+  async function (
+    this: World,
+    stepUser: string,
+    linkName: string,
+    resource: string
+  ): Promise<void> {
+    const { page } = this.actorsEnvironment.getActor({ key: stepUser })
+    const linkObject = new objects.applicationFiles.Link({ page })
+    const clipboard = await linkObject.copyLinkToClipboard({ resource: resource, name: linkName })
+    expect(clipboard).toBe(this.linksEnvironment.getLink({ name: linkName }).url)
+  }
+)

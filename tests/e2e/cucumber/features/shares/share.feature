@@ -5,11 +5,11 @@ Feature: share
       | id    |
       | Alice |
       | Brian |
-    And "Brian" logs in
 
   Scenario: folder
+    And "Brian" logs in
     # disabling auto accepting to check accepting share
-    Given "Brian" disables auto-accepting using API
+    And "Brian" disables auto-accepting using API
     And "Alice" logs in
     And "Alice" creates the following folder in personal space using API
       | name                   |
@@ -22,10 +22,10 @@ Feature: share
       | lorem.txt     | folder_to_shared       |
       | lorem-big.txt | folder_to_customShared |
     When "Alice" shares the following resource using the sidebar panel
-      | resource               | recipient | type | role                                  | resourceType |
-      | folder_to_shared       | Brian     | user | Can edit                              | folder       |
-      | shared_folder          | Brian     | user | Can edit                              | folder       |
-      | folder_to_customShared | Brian     | user | custom_permissions:read,create,delete | folder       |
+      | resource           | recipient | type | role     | resourceType |
+      | folder_to_shared   | Brian     | user | Can edit | folder       |
+      | shared_folder      | Brian     | user | Can edit | folder       |
+      | folder_to_shared_2 | Brian     | user | Can edit | folder       |
 
     And "Brian" navigates to the shared with me page
     And "Brian" accepts the following share
@@ -105,8 +105,8 @@ Feature: share
     And "Alice" navigates to the previous media resource
     And "Alice" closes the file viewer
     And "Alice" opens the following file in mediaviewer
-      | resource        |
-      | sampleGif.gif   |
+      | resource      |
+      | sampleGif.gif |
     Then "Alice" is in a media-viewer
     When "Alice" closes the file viewer
     And "Alice" opens the following file in mediaviewer
@@ -146,6 +146,8 @@ Feature: share
     Then "Alice" is in a media-viewer
     When "Alice" closes the file viewer
 
+    When "Brian" logs in
+    And "Brian" opens the "files" app
     And "Brian" navigates to the shared with me page
     And "Brian" declines the following share from the context menu
       | name           |
@@ -202,12 +204,11 @@ Feature: share
     # set expirationDate to existing share
     And "Alice" sets the expiration date of share "mainFolder" of user "Brian" to "+5 days"
     And "Alice" checks the following access details of share "mainFolder" for user "Brian"
-      | Name            | Brian Murphy      |
-      | Additional info | brian@example.org |
-      | Type            | User              |
+      | Name | Brian Murphy |
+      | Type | User         |
     And "Alice" checks the following access details of share "mainFolder/lorem.txt" for user "Brian"
-      | Name            | Brian Murphy      |
-      | Type            | User              |
+      | Name | Brian Murphy |
+      | Type | User         |
     And "Alice" sets the expiration date of share "myfolder" of group "sales" to "+3 days"
     And "Alice" checks the following access details of share "myfolder" for group "sales"
       | Name | sales department |
@@ -217,9 +218,6 @@ Feature: share
       | resource | recipient | type  |
       | myfolder | sales     | group |
     And  "Alice" logs out
-
-    And "Brian" navigates to the shared with me page
-    And "Brian" logs out
 
 
   Scenario: receive two shares with same name
@@ -252,7 +250,8 @@ Feature: share
       | testfile.txt | Brian     | user | Can view |
       | test-folder  | Brian     | user | Can view |
     And "Carol" logs out
-    When "Brian" navigates to the shared with me page
+    When "Brian" logs in
+    And "Brian" navigates to the shared with me page
     Then following resources should be displayed in the Shares for user "Brian"
       | resource     |
       | testfile.txt |
@@ -285,4 +284,19 @@ Feature: share
       | resource                 |
       | testfile.txt             |
       | test-folder/testfile.txt |
+    And "Alice" logs out
+
+
+  Scenario: share indication
+    When "Alice" logs in
+    And "Alice" creates the following folders in personal space using API
+      | name                  |
+      | shareFolder/subFolder |
+    And "Alice" shares the following resource using API
+      | resource    | recipient | type | role     |
+      | shareFolder | Brian     | user | Can edit |
+    And "Alice" opens the "files" app
+    Then "Alice" should see user-direct indicator on the folder "shareFolder"
+    When "Alice" opens folder "shareFolder"
+    Then "Alice" should see user-indirect indicator on the folder "subFolder"
     And "Alice" logs out

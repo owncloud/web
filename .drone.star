@@ -102,9 +102,6 @@ config = {
             ],
             "suites": {
                 "oCISSharingPublic2": [
-                    "webUISharingPublicManagement",
-                ],
-                "oCISSharingPublic3": [
                     "webUISharingPublicDifferentRoles",
                 ],
             },
@@ -125,9 +122,7 @@ config = {
 }
 
 basicTestSuites = [
-    "webUISharingAcceptShares",
     "webUISharingPublicDifferentRoles",
-    "webUISharingPublicManagement",
 ]
 
 # minio mc environment variables

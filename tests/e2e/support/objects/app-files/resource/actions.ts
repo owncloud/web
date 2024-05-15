@@ -122,8 +122,8 @@ const resourceLockIcon =
 const sharesNavigationButtonSelector = '.oc-sidebar-nav [data-nav-name="files-shares"]'
 const keepBothButton = '.oc-modal-body-actions-confirm'
 const mediaNavigationButton = `//button[contains(@class, "preview-controls-%s")]`
-const collaboraDocPermissionModeSelector = '#PermissionMode'
-const onlyOfficeFileTitleSelector = `//section[@id="box-doc-name"]/input[@id="rib-doc-name"]`
+const sideBarActions =
+  '//ul[@id="oc-files-actions-sidebar"]//span[@class="oc-files-context-action-label"]'
 
 export const clickResource = async ({
   page,
@@ -1844,38 +1844,22 @@ export const getLockLocator = (args: expectFileToBeLockedArgs): Locator => {
   return page.locator(util.format(resourceLockIcon, resource))
 }
 
-export const canEditContent = async ({
-  page,
-  type
-}: {
+export interface canManageResourceArgs {
+  resource: string
   page: Page
-  type: string
-}): Promise<boolean> => {
-  const editorMainFrame = page.frameLocator(externalEditorIframe)
-  switch (type) {
-    case 'OpenDocument':
-      // By Default when "OpenDocument" is created, it is opened with "Collabora" if both app-provider services are running together
-      try {
-        await editorMainFrame
-          .locator(collaboraWelcomeModalIframe)
-          .waitFor({ timeout: config.minTimeout * 1000 })
-        await page.keyboard.press('Escape')
-      } catch (e) {
-        console.log('No welcome modal found. Continue...')
-      }
-      const collaboraDocPermissionModeLocator = editorMainFrame.locator(
-        collaboraDocPermissionModeSelector
-      )
-      const collaboraDocPermissionModeText = (
-        await collaboraDocPermissionModeLocator.innerText()
-      ).trim()
-      return collaboraDocPermissionModeText === 'Edit'
-    case 'Microsoft Word':
-      // By Default when "Microsoft Word document" is created, it is opened with "OnlyOffice" if both app-provider services are running together
-      const innerFrame = editorMainFrame.frameLocator(onlyOfficeInnerFrameSelector)
-      await innerFrame.locator(onlyOfficeCanvasEditorSelector).click()
-      const onlyOfficeDocTitle = await innerFrame.locator(onlyOfficeFileTitleSelector).inputValue()
-      // title appears as "MicrosoftWord.docx (read only)"
-      return !onlyOfficeDocTitle.endsWith('(read only)')
+}
+
+export const canManageResource = async (args: canManageResourceArgs): Promise<boolean> => {
+  const { resource, page } = args
+  const notExpectedActions = ['move', 'rename', 'delete']
+  await sidebar.open({ page: page, resource })
+  await sidebar.openPanel({ page: page, name: 'actions' })
+  const presentActions = await page.locator(sideBarActions).allTextContents()
+  const presentActionsToLower = presentActions.map((actions) => actions.toLowerCase())
+  for (const actions of notExpectedActions) {
+    if (presentActionsToLower.includes(actions)) {
+      return true
+    }
   }
+  return false
 }

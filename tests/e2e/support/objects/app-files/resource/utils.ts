@@ -1,8 +1,9 @@
-import { errors, Page } from '@playwright/test'
+import { errors, Page, Locator } from '@playwright/test'
 import util from 'util'
 
-export const resourceNameSelector =
-  ':is(#files-space-table, .oc-tiles-item, #files-shared-with-me-accepted-section, .files-table) [data-test-resource-name="%s"]'
+const resourceNameSelector = '#files-space-table [data-test-resource-name="%s"]'
+const showLinkShareButton =
+  '//span[@data-test-resource-name="%s"]/ancestor::tr[contains(@class, "oc-tbody-tr")]//button[contains(@data-test-indicator-type, "%s")]'
 
 /**
  * one of the few places where timeout should be used, as we also use this to detect the absence of an element
@@ -46,4 +47,13 @@ export const waitForResources = async ({
   await Promise.all(
     names.map((name) => page.locator(util.format(resourceNameSelector, name)).waitFor())
   )
+}
+
+export const showShareIndicator = (args: {
+  page: Page
+  buttonLabel: string
+  resource: string
+}): Locator => {
+  const { page, buttonLabel, resource } = args
+  return page.locator(util.format(showLinkShareButton, resource, buttonLabel))
 }

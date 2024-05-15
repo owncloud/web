@@ -110,4 +110,8 @@ export class Link {
   async clickOnCancelButton(): Promise<void> {
     await po.clickOnCancelButton(this.#page)
   }
+
+  copyLinkToClipboard(args: Omit<po.copyLinkArgs, 'page'>): Promise<string> {
+    return po.copyLinkToClipboard({ ...args, page: this.#page })
+  }
 }

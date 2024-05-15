@@ -19,10 +19,8 @@ const spacesQuotaSearchField = '.oc-modal .vs__search'
 const selectedQuotaValueField = '.vs--open'
 const quotaValueDropDown = `.vs__dropdown-option :text-is("%s")`
 const editSpacesDescription = '.oc-files-actions-edit-readme-content-trigger:visible'
-const spacesDescriptionInputArea = '#description-input-area'
-const sideBarActions =
-  '//ul[@id="oc-files-actions-sidebar"]//span[@class="oc-files-context-action-label"]'
-const spaceHeaderSelector = '.space-header'
+const spacesDescriptionInputArea = '.md-mode .ProseMirror'
+const spacesDescriptionSaveTextFileInEditorButton = '#app-save-action:visible'
 
 export const openActionsPanel = async (page: Page): Promise<void> => {
   await sidebar.open({ page })
@@ -204,28 +202,7 @@ export const addSpaceMembers = async (args: SpaceMembersArgs): Promise<void> => 
   await sidebar.close({ page: page })
 }
 
-export interface canUserEditSpaceResourceArgs {
-  resource: string
-  page: Page
-}
-export const canUserEditSpaceResource = async (
-  args: canUserEditSpaceResourceArgs
-): Promise<boolean> => {
-  const { resource, page } = args
-  const notExpectedActions = ['move', 'rename', 'delete']
-  await sidebar.open({ page: page, resource })
-  await sidebar.openPanel({ page: page, name: 'actions' })
-  const presentActions = await page.locator(sideBarActions).allTextContents()
-  const presentActionsToLower = presentActions.map((actions) => actions.toLowerCase())
-  for (const actions of notExpectedActions) {
-    if (presentActionsToLower.includes(actions)) {
-      return true
-    }
-  }
-  return false
-}
-
-export const reloadSpacePage = async (page): Promise<void> => {
+export const reloadSpacePage = async (page: Page): Promise<void> => {
   await page.reload()
 }
 

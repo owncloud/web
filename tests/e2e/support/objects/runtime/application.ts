@@ -62,4 +62,8 @@ export class Application {
     await this.#page.locator(markNotificationsAsReadButton).click()
     await this.#page.locator(notificationsLoading).waitFor({ state: 'detached' })
   }
+
+  async openUrl(url): Promise<void> {
+    await this.#page.goto(url)
+  }
 }
