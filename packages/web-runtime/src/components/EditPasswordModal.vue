@@ -10,6 +10,7 @@
     :label="$gettext('New password')"
     type="password"
     :fix-message-line="true"
+    :error-message="newPasswordErrorMessage"
     @change="validatePasswordConfirm"
   />
   <oc-text-input
@@ -40,12 +41,14 @@ export default defineComponent({
     const newPassword = ref('')
     const newPasswordConfirm = ref('')
     const passwordConfirmErrorMessage = ref('')
+    const newPasswordErrorMessage = ref('')
 
     const confirmButtonDisabled = computed(() => {
       return (
         !unref(currentPassword).trim().length ||
         !unref(newPassword).trim().length ||
-        unref(newPassword) !== unref(newPasswordConfirm)
+        unref(newPassword).trim() !== unref(newPasswordConfirm).trim() ||
+        unref(currentPassword).trim() === unref(newPassword).trim()
       )
     })
 
@@ -74,11 +77,25 @@ export default defineComponent({
 
     expose({ onConfirm })
 
+    watch([currentPassword, newPassword], () => {
+      newPasswordErrorMessage.value = ''
+      if (!unref(currentPassword).trim().length || !unref(newPassword).trim().length) {
+        return
+      }
+      if (unref(currentPassword).trim() != unref(newPassword).trim()) {
+        return
+      }
+      newPasswordErrorMessage.value = $gettext(
+        'New password must be different from current password'
+      )
+    })
+
     return {
       currentPassword,
       newPassword,
       newPasswordConfirm,
       passwordConfirmErrorMessage,
+      newPasswordErrorMessage,
 
       // unit tests
       confirmButtonDisabled
