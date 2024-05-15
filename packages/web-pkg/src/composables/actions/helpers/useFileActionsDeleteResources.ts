@@ -23,7 +23,6 @@ import {
   useResourcesStore
 } from '../../piniaStores'
 import { storeToRefs } from 'pinia'
-import { LoadingTaskCallbackArguments } from '../../../services'
 
 export const useFileActionsDeleteResources = () => {
   const configStore = useConfigStore()

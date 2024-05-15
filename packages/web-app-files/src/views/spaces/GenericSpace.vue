@@ -17,9 +17,9 @@
         <template #actions="{ limitedScreenSpace }">
           <oc-button
             v-if="isEmbedModeEnabled"
-            class="oc-mr-s"
             key="new-folder-btn"
             v-oc-tooltip="limitedScreenSpace ? $gettext('New folder') : ''"
+            class="oc-mr-s"
             data-testid="btn-new-folder"
             :aria-label="$gettext('New folder')"
             appearance="filled"
