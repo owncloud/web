@@ -46,11 +46,12 @@ Feature: Trashbin delete
     Given "Alice" creates the following folders in personal space using API
       | name          |
       | folderToShare |
-      | empty-folder   |
+      | empty-folder  |
     And "Alice" creates the following files into personal space using API
       | pathToFile              | content     |
       | folderToShare/lorem.txt | lorem ipsum |
       | sample.txt              | sample      |
+    And "Alice" opens the "files" app
     And "Alice" shares the following resource using the sidebar panel
       | resource      | recipient | type | role     | resourceType |
       | folderToShare | Brian     | user | Can edit | folder       |

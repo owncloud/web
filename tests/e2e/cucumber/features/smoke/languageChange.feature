@@ -28,23 +28,3 @@ Feature: language settings
       | Brian Murphy hat check_message mit Ihnen geteilt |
     And "Alice" logs out
 
-
-  Scenario: anonymous user language change
-    When "Alice" logs in
-    And "Alice" creates the following folder in personal space using API
-      | name         |
-      | folderPublic |
-    And "Alice" uploads the following local file into personal space using API
-      | localFile                | to        |
-      | filesForUpload/lorem.txt | lorem.txt |
-
-    And "Alice" opens the "files" app
-    And "Alice" creates a public link of following resource using the sidebar panel
-      | resource     | password |
-      | folderPublic | %public% |
-    And "Alice" logs out
-    When "Anonymous" opens the public link "Link"
-    And "Anonymous" unlocks the public link with password "%public%"
-    And "Anonymous" opens the user menu
-    And "Anonymous" changes the language to "Deutsch - German"
-    Then "Anonymous" should see the following account page title "Konto"

@@ -1,7 +1,7 @@
 import { Download, Locator, Page, expect } from '@playwright/test'
 import util from 'util'
 import path from 'path'
-import { resourceExists, waitForResources } from './utils'
+import { resourceExists, waitForResources, resourceNameSelector } from './utils'
 import { editor, sidebar } from '../utils'
 import { File, Space } from '../../../types'
 import { dragDropFiles } from '../../../utils/dragDrop'
@@ -26,8 +26,6 @@ const checkBoxForTrashbin = `//*[@data-test-resource-path="%s"]//ancestor::tr//i
 const filesSelector = '//*[@data-test-resource-name="%s"]'
 export const fileRow =
   '//ancestor::*[(contains(@class, "oc-tile-card") or contains(@class, "oc-tbody-tr"))]'
-export const resourceNameSelector =
-  ':is(#files-space-table, .oc-tiles-item, #files-shared-with-me-accepted-section, .files-table) [data-test-resource-name="%s"]'
 // following breadcrumb selectors is passed to buildXpathLiteral function as the content to be inserted might contain quotes
 const breadcrumbResourceNameSelector =
   '//span[contains(@class, "oc-breadcrumb-item-text") and text()=%s]'
@@ -138,13 +136,9 @@ export const clickResource = async ({
     const folder = name.replace(/'/g, "\\'").replace(/"/g, '\\"')
 
     const resource = page.locator(util.format(resourceNameSelector, folder))
-    const itemId = await resource.locator(fileRow).getAttribute('data-item-id')
     await Promise.all([
       page.waitForResponse(
-        (resp) =>
-          resp.url().endsWith(encodeURIComponent(name)) ||
-          resp.url().endsWith(itemId) ||
-          resp.url().endsWith(encodeURIComponent(itemId))
+        (resp) => resp.status() === 207 && resp.request().method() === 'PROPFIND'
       ),
       resource.click()
     ])

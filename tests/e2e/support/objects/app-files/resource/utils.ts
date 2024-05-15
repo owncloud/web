@@ -1,7 +1,9 @@
 import { errors, Page } from '@playwright/test'
 import util from 'util'
 
-const resourceNameSelector = '#files-space-table [data-test-resource-name="%s"]'
+export const resourceNameSelector =
+  ':is(#files-space-table, .oc-tiles-item, #files-shared-with-me-accepted-section, .files-table) [data-test-resource-name="%s"]'
+
 /**
  * one of the few places where timeout should be used, as we also use this to detect the absence of an element
  * it is not possible to differentiate between `element not there yet` and `element not loaded yet`.
