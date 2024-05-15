@@ -16,6 +16,7 @@ Summary
 * Enhancement - Ability to theme sharing role icons: [#10801](https://github.com/owncloud/web/pull/10801)
 * Enhancement - Add SSE event for moving: [#10807](https://github.com/owncloud/web/pull/10807)
 * Enhancement - Show loading spinner while searching or filtering users: [#10874](https://github.com/owncloud/web/pull/10874)
+* Enhancement - Display hidden resources information in files list: [#10907](https://github.com/owncloud/web/pull/10907)
 
 Details
 -------
@@ -86,6 +87,14 @@ Details
 
    https://github.com/owncloud/web/issues/10821
    https://github.com/owncloud/web/pull/10874
+
+* Enhancement - Display hidden resources information in files list: [#10907](https://github.com/owncloud/web/pull/10907)
+
+   We've added the ability for the user to see how many files and folders are
+   hidden in the files list footer.
+
+   https://github.com/owncloud/web/issues/9036
+   https://github.com/owncloud/web/pull/10907
 
 Changelog for ownCloud Web [8.0.2] (2024-05-14)
 =======================================
