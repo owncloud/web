@@ -1,4 +1,4 @@
-import { Audio, GeoCoordinates } from '../../graph/generated'
+import { Audio, GeoCoordinates, Image, Photo } from '../../graph/generated'
 
 export abstract class DavPermission {
   static readonly Shared: string = 'S'
@@ -59,6 +59,14 @@ const DavPropertyMapping = {
   Location: {
     value: 'location',
     type: null as GeoCoordinates
+  },
+  Image: {
+    value: 'image',
+    type: null as Image
+  },
+  Photo: {
+    value: 'photo',
+    type: null as Photo
   },
   ETag: defString('getetag' as const),
   MimeType: defString('getcontenttype' as const),
@@ -128,7 +136,9 @@ export abstract class DavProperties {
     DavProperty.DownloadURL,
     DavProperty.Tags,
     DavProperty.Audio,
-    DavProperty.Location
+    DavProperty.Location,
+    DavProperty.Image,
+    DavProperty.Photo
   ]
 
   static readonly PublicLink: DavPropertyValue[] = DavProperties.Default.concat([
