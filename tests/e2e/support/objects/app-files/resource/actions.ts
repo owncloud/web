@@ -379,9 +379,20 @@ export const fillContentOfDocument = async ({
   text: string
   editorToOpen: string
 }): Promise<void> => {
+  const editorMainFrame = page.frameLocator(externalEditorIframe)
   switch (editorToOpen) {
     case 'TextEditor':
       await page.locator(textEditorTextArea).fill(text)
+      break
+    case 'Collabora':
+      await editorMainFrame.locator(collaboraDocTextAreaSelector).focus()
+      await page.keyboard.press('Control+A')
+      await editorMainFrame.locator(collaboraDocTextAreaSelector).fill(text)
+      break
+    case 'OnlyOffice':
+      const innerIframe = editorMainFrame.frameLocator(onlyOfficeInnerFrameSelector)
+      await page.keyboard.press('Control+A')
+      await innerIframe.locator(onlyofficeDocTextAreaSelector).fill(text)
       break
     default:
       throw new Error("Editor should be 'TextEditor' but found " + editorToOpen)
@@ -1533,11 +1544,12 @@ export const showHiddenResources = async (page): Promise<void> => {
 export interface editResourcesArgs {
   page: Page
   name: string
+  type: string
   content: string
 }
 
 export const editResources = async (args: editResourcesArgs): Promise<void> => {
-  const { page, name, content } = args
+  const { page, name, type, content } = args
   const { dir: resourceDir } = path.parse(name)
 
   const folderPaths = name.split('/')
@@ -1547,8 +1559,17 @@ export const editResources = async (args: editResourcesArgs): Promise<void> => {
     await clickResource({ page, path: resourceDir })
   }
 
-  await page.locator(util.format(resourceNameSelector, resourceName)).click()
-  await editTextDocument({ page, content: content, name: resourceName })
+  switch (type) {
+    case 'OpenDocument':
+      await fillContentOfDocument({ page, text: content, editorToOpen: 'Collabora' })
+      break
+    case 'Microsoft Word':
+      await fillContentOfDocument({ page, text: content, editorToOpen: 'OnlyOffice' })
+      break
+    default:
+      await page.locator(util.format(resourceNameSelector, resourceName)).click()
+      await editTextDocument({ page, content: content, name: resourceName })
+  }
 }
 
 export const addTagsToResource = async (args: resourceTagsArgs): Promise<void> => {
@@ -1617,6 +1638,16 @@ export const openFileInViewer = async (args: openFileInViewerArgs): Promise<void
 
   switch (actionType) {
     case 'OnlyOffice':
+      await Promise.all([
+        page.waitForResponse(
+          (resp) =>
+            resp.url().includes(`app_name=${actionType}`) &&
+            resp.status() === 200 &&
+            resp.request().method() === 'POST'
+        ),
+        page.locator(util.format(resourceNameSelector, name)).click()
+      ])
+      break
     case 'Collabora':
       await Promise.all([
         page.waitForResponse(
