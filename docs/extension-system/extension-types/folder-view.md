@@ -18,12 +18,11 @@ This is what the FolderViewExtension interface looks like:
 
 ```typescript
 interface FolderViewExtension {
-    id: string
-    scopes?: ExtensionScope[]
-    type: 'folderView'
-    folderView: FolderView // See FolderView section below
+  id: string
+  scopes?: ExtensionScope[]
+  type: 'folderView'
+  folderView: FolderView // See FolderView section below
 }
-
 ```
 
 For `id`, `type`, and `scopes`, please see [extension base section]({{< ref "../_index.md#extension-base-configuration" >}}) in top level docs.
@@ -38,3 +37,48 @@ For the folderView object, you have the following configuration options:
 - `isScrollable` - Optional boolean, determines whether the user can scroll inside the component or it statically fills the viewport
 - `component` - The Vue component to render the resources. It should expect a prop of type `Resource[]`
 - `componentAttrs` - Optional additional configuration for the component mentioned above
+
+### Example
+
+The following example shows how an extension for a custom folder view could look like. Note that the extension is wrapped inside a Vue composable so it can easily be reused. All helper types and composables are being provided via the [web-pkg](https://github.com/owncloud/web/tree/master/packages/web-pkg) package.
+
+```typescript
+export const useCustomFolderViewExtension = () => {
+  const { $gettext } = useGettext()
+
+  const extension = computed<FolderViewExtension>(() => ({
+    id: 'com.github.owncloud.web.files.folder-view.custom',
+    type: 'folderView',
+    scopes: ['resource', 'space', 'favorite'],
+    folderView: {
+      name: 'custom-table',
+      label: $gettext('Switch to custom folder view'),
+      icon: {
+        name: 'menu-line',
+        fillType: 'none'
+      },
+      component: YourCustomFolderViewComponent
+    }
+  }))
+
+  return { extension }
+}
+```
+
+The extension could then be registered in any app like so:
+
+```typescript
+export default defineWebApplication({
+  setup() {
+    const { extension } = useCustomFolderViewExtension()
+
+    return {
+      appInfo: {
+        name: $gettext('Custom folder view app'),
+        id: 'custom-folder-view-app'
+      },
+      extensions: computed(() => [unref(extension)])
+    }
+  }
+})
+```
