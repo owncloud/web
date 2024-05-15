@@ -41,12 +41,20 @@ export const useResourcesStore = defineStore('resources', () => {
 
   const totalResourcesCount = computed(() => {
     const fileCount = unref(resources).filter(({ type }) => type === 'file').length
+    const hiddenFileCount = unref(resources).filter(
+      ({ type, name }) => type === 'file' && name.startsWith('.')
+    ).length
     const folderCount = unref(resources).filter(({ type }) => type === 'folder').length
+    const hiddenFolderCount = unref(resources).filter(
+      ({ type, name }) => type === 'folder' && name.startsWith('.')
+    ).length
     const spaceCount = unref(resources).filter(isProjectSpaceResource).length
 
     return {
       files: fileCount,
+      hiddenFiles: hiddenFileCount,
       folders: folderCount,
+      hiddenFolders: hiddenFolderCount,
       spaces: spaceCount
     }
   })

@@ -106,8 +106,11 @@
                   v-if="paginatedResources.length > 0"
                   class="oc-width-1-1 oc-my-s"
                   :files="totalResourcesCount.files"
+                  :hidden-files="totalResourcesCount.hiddenFiles"
                   :folders="totalResourcesCount.folders"
+                  :hidden-folders="totalResourcesCount.hiddenFolders"
                   :size="totalResourcesSize"
+                  :show-hidden-items="!areHiddenFilesShown"
                 />
               </template>
               <template #quickActions="{ resource }">
@@ -257,7 +260,8 @@ export default defineComponent({
 
     const resourcesStore = useResourcesStore()
     const { removeResources, resetSelection, updateResourceField } = resourcesStore
-    const { currentFolder, totalResourcesCount, totalResourcesSize } = storeToRefs(resourcesStore)
+    const { currentFolder, totalResourcesCount, totalResourcesSize, areHiddenFilesShown } =
+      storeToRefs(resourcesStore)
 
     let loadResourcesEventToken: string
 
@@ -544,7 +548,8 @@ export default defineComponent({
       totalResourcesSize,
       removeResources,
       resetSelection,
-      updateResourceField
+      updateResourceField,
+      areHiddenFilesShown
     }
   },
 
