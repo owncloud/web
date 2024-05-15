@@ -3,11 +3,12 @@ Changelog for ownCloud Web [unreleased] (UNRELEASED)
 The following sections list the changes in ownCloud web unreleased relevant to
 ownCloud admins and users.
 
-[unreleased]: https://github.com/owncloud/web/compare/v9.0.0...master
+[unreleased]: https://github.com/owncloud/web/compare/v8.0.2...master
 
 Summary
 -------
 
+* Bugfix - Vertical scroll for OcModal on small screens: [#10814](https://github.com/owncloud/web/issues/10814)
 * Bugfix - Context menu empty in tiles view: [#10900](https://github.com/owncloud/web/pull/10900)
 * Change - Disable opening files in embed mode: [#10786](https://github.com/owncloud/web/pull/10786)
 * Enhancement - Accessibility improvements: [#5383](https://github.com/owncloud/web/issues/5383)
@@ -18,6 +19,14 @@ Summary
 
 Details
 -------
+
+* Bugfix - Vertical scroll for OcModal on small screens: [#10814](https://github.com/owncloud/web/issues/10814)
+
+   We've fixed an issue where modals were not scrollable on screens with small
+   heights.
+
+   https://github.com/owncloud/web/issues/10814
+   https://github.com/owncloud/web/pull/10816
 
 * Bugfix - Context menu empty in tiles view: [#10900](https://github.com/owncloud/web/pull/10900)
 
@@ -78,6 +87,87 @@ Details
    https://github.com/owncloud/web/issues/10821
    https://github.com/owncloud/web/pull/10874
 
+Changelog for ownCloud Web [8.0.2] (2024-05-14)
+=======================================
+The following sections list the changes in ownCloud web 8.0.2 relevant to
+ownCloud admins and users.
+
+[8.0.2]: https://github.com/owncloud/web/compare/v9.0.0...v8.0.2
+
+Summary
+-------
+
+* Bugfix - Folder replace: [#10515](https://github.com/owncloud/web/issues/10515)
+* Bugfix - Hidden right sidebar on small screens: [#10598](https://github.com/owncloud/web/issues/10598)
+* Bugfix - Scope loss when showing search results: [#10634](https://github.com/owncloud/web/issues/10634)
+* Bugfix - Theme loading without matching theme: [#10657](https://github.com/owncloud/web/issues/10657)
+* Bugfix - Flickering loading indicator: [#10763](https://github.com/owncloud/web/pull/10763)
+* Bugfix - Download files with special chars in name: [#10810](https://github.com/owncloud/web/issues/10810)
+* Bugfix - IDP logout issues: [#10881](https://github.com/owncloud/web/pull/10881)
+
+Details
+-------
+
+* Bugfix - Folder replace: [#10515](https://github.com/owncloud/web/issues/10515)
+
+   The "Replace" conflict option, which previously didn't work at all when trying
+   to copy/move a folder, has been fixed.
+
+   https://github.com/owncloud/web/issues/10515
+   https://github.com/owncloud/web/pull/10597
+
+* Bugfix - Hidden right sidebar on small screens: [#10598](https://github.com/owncloud/web/issues/10598)
+
+   The issue causing the right sidebar to not display on screens smaller than 960px
+   has been fixed.
+
+   https://github.com/owncloud/web/issues/10598
+   https://github.com/owncloud/web/pull/10643
+
+* Bugfix - Scope loss when showing search results: [#10634](https://github.com/owncloud/web/issues/10634)
+
+   Clicking "Show n results" in the search preview no longer loses the search
+   scope.
+
+   https://github.com/owncloud/web/issues/10634
+   https://github.com/owncloud/web/pull/10653
+
+* Bugfix - Theme loading without matching theme: [#10657](https://github.com/owncloud/web/issues/10657)
+
+   We've fixed an issue where theme loading would break when there was no matching
+   oC theme found for the user's OS setting. For example, this occurred when a
+   user's OS setting was configured to "dark," but the instance of oC did not offer
+   a dark theme.
+
+   https://github.com/owncloud/web/issues/10657
+   https://github.com/owncloud/web/pull/10659
+
+* Bugfix - Flickering loading indicator: [#10763](https://github.com/owncloud/web/pull/10763)
+
+   The flickering loading indicator when batch deleting a lot of files has been
+   fixed.
+
+   We also added a request limit that stops the network from being overrun with
+   concurrent requests.
+
+   https://github.com/owncloud/web/pull/10763
+
+* Bugfix - Download files with special chars in name: [#10810](https://github.com/owncloud/web/issues/10810)
+
+   We've fixed a bug where having a `#` in the filename resulted in requests going
+   to cut off urls.
+
+   https://github.com/owncloud/web/issues/10810
+   https://github.com/owncloud/web/pull/10813
+   https://github.com/owncloud/web/pull/10817
+
+* Bugfix - IDP logout issues: [#10881](https://github.com/owncloud/web/pull/10881)
+
+   Falsely showing the logout page after opening ownCloud Web with an expired token
+   has been fixed.
+
+   https://github.com/owncloud/web/pull/10881
+
 Changelog for ownCloud Web [9.0.0] (2024-04-16)
 =======================================
 The following sections list the changes in ownCloud web 9.0.0 relevant to
@@ -90,12 +180,8 @@ Summary
 
 * Bugfix - User data not updated while altering own user: [#10377](https://github.com/owncloud/web/pull/10377)
 * Bugfix - Admin settings keyboard navigation: [#10417](https://github.com/owncloud/web/pull/10417)
-* Bugfix - Folder replace: [#10515](https://github.com/owncloud/web/issues/10515)
 * Bugfix - Load thumbnail when postprocessing is finished: [#10517](https://github.com/owncloud/web/pull/10517)
 * Bugfix - Share sidebar icons: [#10551](https://github.com/owncloud/web/pull/10551)
-* Bugfix - Hidden right sidebar on small screens: [#10598](https://github.com/owncloud/web/issues/10598)
-* Bugfix - Scope loss when showing search results: [#10634](https://github.com/owncloud/web/issues/10634)
-* Bugfix - Theme loading without matching theme: [#10657](https://github.com/owncloud/web/issues/10657)
 * Bugfix - Apply sandbox attribute to iframe in draw-io extension: [#10702](https://github.com/owncloud/web/pull/10702)
 * Bugfix - Apply sandbox attribute to iframe in app-external extension: [#10706](https://github.com/owncloud/web/pull/10706)
 * Bugfix - Versions loaded multiple times when opening sidebar: [#10746](https://github.com/owncloud/web/pull/10746)
@@ -149,14 +235,6 @@ Details
    https://github.com/owncloud/web/issues/10186
    https://github.com/owncloud/web/pull/10417
 
-* Bugfix - Folder replace: [#10515](https://github.com/owncloud/web/issues/10515)
-
-   The "Replace" conflict option, which previously didn't work at all when trying
-   to copy/move a folder, has been fixed.
-
-   https://github.com/owncloud/web/issues/10515
-   https://github.com/owncloud/web/pull/10597
-
 * Bugfix - Load thumbnail when postprocessing is finished: [#10517](https://github.com/owncloud/web/pull/10517)
 
    We've fixed a bug when thumbnails weren't properly refreshed when postprocessing
@@ -171,32 +249,6 @@ Details
    some cases.
 
    https://github.com/owncloud/web/pull/10551
-
-* Bugfix - Hidden right sidebar on small screens: [#10598](https://github.com/owncloud/web/issues/10598)
-
-   The issue causing the right sidebar to not display on screens smaller than 960px
-   has been fixed.
-
-   https://github.com/owncloud/web/issues/10598
-   https://github.com/owncloud/web/pull/10643
-
-* Bugfix - Scope loss when showing search results: [#10634](https://github.com/owncloud/web/issues/10634)
-
-   Clicking "Show n results" in the search preview no longer loses the search
-   scope.
-
-   https://github.com/owncloud/web/issues/10634
-   https://github.com/owncloud/web/pull/10653
-
-* Bugfix - Theme loading without matching theme: [#10657](https://github.com/owncloud/web/issues/10657)
-
-   We've fixed an issue where theme loading would break when there was no matching
-   oC theme found for the user's OS setting. For example, this occurred when a
-   user's OS setting was configured to "dark," but the instance of oC did not offer
-   a dark theme.
-
-   https://github.com/owncloud/web/issues/10657
-   https://github.com/owncloud/web/pull/10659
 
 * Bugfix - Apply sandbox attribute to iframe in draw-io extension: [#10702](https://github.com/owncloud/web/pull/10702)
 
