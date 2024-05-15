@@ -24,9 +24,19 @@ export default defineComponent({
       type: Number,
       required: true
     },
+    hiddenFiles: {
+      type: Number,
+      required: false,
+      default: 0
+    },
     folders: {
       type: Number,
       required: true
+    },
+    hiddenFolders: {
+      type: Number,
+      required: false,
+      default: 0
     },
     spaces: {
       type: Number,
@@ -45,6 +55,11 @@ export default defineComponent({
       type: [String, Number],
       required: false,
       default: null
+    },
+    showHiddenItems: {
+      type: Boolean,
+      required: false,
+      default: false
     }
   },
   computed: {
@@ -52,11 +67,23 @@ export default defineComponent({
       return this.files + this.folders + (this.showSpaces ? this.spaces : 0)
     },
     text() {
-      const filesStr = this.$ngettext('%{ filesCount } file', '%{ filesCount } files', this.files, {
+      let filesStr = this.$ngettext('%{ filesCount } file', '%{ filesCount } files', this.files, {
         filesCount: this.files.toString()
       })
 
-      const foldersStr = this.$ngettext(
+      if (this.showHiddenItems && this.hiddenFiles) {
+        filesStr = this.$ngettext(
+          '%{ filesCount } file including %{ filesHiddenCount } hidden',
+          '%{ filesCount } files including %{ filesHiddenCount } hidden',
+          this.files,
+          {
+            filesCount: this.files.toString(),
+            filesHiddenCount: this.hiddenFiles.toString()
+          }
+        )
+      }
+
+      let foldersStr = this.$ngettext(
         '%{ foldersCount } folder',
         '%{ foldersCount } folders',
         this.folders,
@@ -64,6 +91,19 @@ export default defineComponent({
           foldersCount: this.folders.toString()
         }
       )
+
+      if (this.showHiddenItems && this.hiddenFolders) {
+        foldersStr = this.$ngettext(
+          '%{ foldersCount } folder including %{ foldersHiddenCount } hidden',
+          '%{ foldersCount } folders including %{ foldersHiddenCount } hidden',
+          this.folders,
+          {
+            foldersCount: this.folders.toString(),
+            foldersHiddenCount: this.hiddenFolders.toString()
+          }
+        )
+      }
+
       const spacesStr = this.$ngettext(
         '%{ spacesCount } space',
         '%{ spacesCount } spaces',
