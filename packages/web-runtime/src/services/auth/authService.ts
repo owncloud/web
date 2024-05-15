@@ -19,6 +19,7 @@ import { unref } from 'vue'
 import { Ability } from '@ownclouders/web-client'
 import { Language } from 'vue3-gettext'
 import { PublicLinkType } from '@ownclouders/web-client'
+import { WebWorkersStore } from '@ownclouders/web-pkg'
 
 export class AuthService {
   private clientService: ClientService
@@ -31,6 +32,7 @@ export class AuthService {
   private userStore: UserStore
   private authStore: AuthStore
   private capabilityStore: CapabilityStore
+  private webWorkersStore: WebWorkersStore
 
   public hasAuthErrorOccurred: boolean
 
@@ -42,7 +44,8 @@ export class AuthService {
     language: Language,
     userStore: UserStore,
     authStore: AuthStore,
-    capabilityStore: CapabilityStore
+    capabilityStore: CapabilityStore,
+    webWorkersStore: WebWorkersStore
   ): void {
     this.configStore = configStore
     this.clientService = clientService
@@ -53,6 +56,7 @@ export class AuthService {
     this.userStore = userStore
     this.authStore = authStore
     this.capabilityStore = capabilityStore
+    this.webWorkersStore = webWorkersStore
   }
 
   /**
@@ -92,7 +96,8 @@ export class AuthService {
         language: this.language,
         userStore: this.userStore,
         authStore: this.authStore,
-        capabilityStore: this.capabilityStore
+        capabilityStore: this.capabilityStore,
+        webWorkersStore: this.webWorkersStore
       })
     }
 

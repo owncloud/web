@@ -76,6 +76,7 @@ import {
   SseEventWrapperOptions,
   onSSELinkUpdatedEvent
 } from './sse'
+import { useWebWorkersStore, WebWorkersStore } from '@ownclouders/web-pkg'
 
 const getEmbedConfigFromQuery = (
   doesEmbedEnabledOptionExists: boolean
@@ -345,6 +346,7 @@ export const announcePiniaStores = () => {
   const sharesStore = useSharesStore()
   const spacesStore = useSpacesStore()
   const userStore = useUserStore()
+  const webWorkersStore = useWebWorkersStore()
 
   return {
     appsStore,
@@ -357,7 +359,8 @@ export const announcePiniaStores = () => {
     modalStore,
     sharesStore,
     spacesStore,
-    userStore
+    userStore,
+    webWorkersStore
   }
 }
 
@@ -480,7 +483,8 @@ export const announceAuthService = ({
   router,
   userStore,
   authStore,
-  capabilityStore
+  capabilityStore,
+  webWorkersStore
 }: {
   app: App
   configStore: ConfigStore
@@ -488,6 +492,7 @@ export const announceAuthService = ({
   userStore: UserStore
   authStore: AuthStore
   capabilityStore: CapabilityStore
+  webWorkersStore: WebWorkersStore
 }): void => {
   const ability = app.config.globalProperties.$ability
   const language = app.config.globalProperties.$language
@@ -500,7 +505,8 @@ export const announceAuthService = ({
     language,
     userStore,
     authStore,
-    capabilityStore
+    capabilityStore,
+    webWorkersStore
   )
   app.config.globalProperties.$authService = authService
   app.provide('$authService', authService)

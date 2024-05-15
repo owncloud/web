@@ -23,7 +23,7 @@ const initAuthService = ({
   const authStore = useAuthStore()
   configStore = configStore || useConfigStore()
 
-  authService.initialize(configStore, null, router, null, null, null, authStore, null)
+  authService.initialize(configStore, null, router, null, null, null, authStore, null, null)
 }
 
 describe('AuthService', () => {

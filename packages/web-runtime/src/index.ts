@@ -61,7 +61,8 @@ export const bootstrapApp = async (configurationPath: string): Promise<void> => 
     userStore,
     resourcesStore,
     messagesStore,
-    sharesStore
+    sharesStore,
+    webWorkersStore
   } = announcePiniaStores()
 
   extensionRegistry.registerExtensionPoints(extensionPoints())
@@ -142,7 +143,8 @@ export const bootstrapApp = async (configurationPath: string): Promise<void> => 
     router,
     userStore,
     authStore,
-    capabilityStore
+    capabilityStore,
+    webWorkersStore
   })
   announceCustomStyles({ configStore })
   announceCustomScripts({ configStore })

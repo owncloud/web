@@ -1,8 +1,10 @@
 import { useFileActionsDeleteResources } from '../../../../../src/composables/actions'
 import { mockDeep } from 'vitest-mock-extended'
-import { FolderResource, SpaceResource } from '@ownclouders/web-client'
+import { FolderResource, Resource, SpaceResource } from '@ownclouders/web-client'
 import { defaultComponentMocks, getComposableWrapper } from 'web-test-helpers'
-import { nextTick } from 'vue'
+import { useDeleteWorker } from '../../../../../src/composables/webWorkers/deleteWorker'
+
+vi.mock('../../../../../src/composables/webWorkers/deleteWorker')
 
 const currentFolder = {
   id: '1',
@@ -12,11 +14,14 @@ const currentFolder = {
 describe('deleteResources', () => {
   describe('method "filesList_delete"', () => {
     it('should call the delete action on a resource in the file list', () => {
+      const filesToDelete = [{ id: '2', path: '/folder/fileToDelete.txt' }]
+
       getWrapper({
         currentFolder,
-        setup: async ({ filesList_delete }, { router }) => {
-          await filesList_delete([{ id: '2', path: '/folder/fileToDelete.txt' }])
-          await nextTick()
+        result: filesToDelete,
+        setup: ({ filesList_delete }, { router }) => {
+          filesList_delete(filesToDelete)
+
           expect(router.push).toHaveBeenCalledTimes(0)
         }
       })
@@ -26,18 +31,9 @@ describe('deleteResources', () => {
       const resourcesToDelete = [currentFolder]
       getWrapper({
         currentFolder,
-        setup: async ({ filesList_delete }, { router }) => {
-          await filesList_delete(resourcesToDelete)
-          // FIXME: well...
-          await nextTick()
-          await nextTick()
-          await nextTick()
-          await nextTick()
-          await nextTick()
-          await nextTick()
-          await nextTick()
-          await nextTick()
-          await nextTick()
+        setup: ({ filesList_delete }, { router }) => {
+          filesList_delete(resourcesToDelete)
+
           expect(router.push).toHaveBeenCalledTimes(1)
         }
       })
@@ -47,7 +43,8 @@ describe('deleteResources', () => {
 
 function getWrapper({
   currentFolder,
-  setup
+  setup,
+  result = []
 }: {
   currentFolder: FolderResource
   setup: (
@@ -60,12 +57,19 @@ function getWrapper({
       router: ReturnType<typeof defaultComponentMocks>['$router']
     }
   ) => void
+  result?: Resource[]
 }) {
   const mocks = {
     ...defaultComponentMocks(),
     space: mockDeep<SpaceResource>()
   }
   mocks.$clientService.webdav.deleteFile.mockResolvedValue(undefined)
+
+  vi.mocked(useDeleteWorker).mockReturnValue({
+    startWorker: vi.fn().mockImplementation((_, callback) => {
+      callback({ successful: result, failed: [] })
+    })
+  })
 
   return {
     mocks,

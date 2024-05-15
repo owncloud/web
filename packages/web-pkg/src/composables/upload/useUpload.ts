@@ -1,13 +1,10 @@
 import { computed, unref, watch } from 'vue'
 import { UppyService } from '../../services/uppy/uppyService'
-import { v4 as uuidV4 } from 'uuid'
-import { useGettext } from 'vue3-gettext'
-import { useAuthStore, useCapabilityStore, useConfigStore } from '../piniaStores'
-import { useClientService } from '../clientService'
-import { Auth } from '../../services'
+import { useCapabilityStore, useConfigStore } from '../piniaStores'
 import { TusOptions } from '@uppy/tus'
 import { XHRUploadOptions } from '@uppy/xhr-upload'
 import { UppyFile } from '@uppy/core'
+import { useRequestHeaders } from '../requestHeaders'
 
 interface UploadOptions {
   uppyService: UppyService
@@ -16,24 +13,7 @@ interface UploadOptions {
 export function useUpload(options: UploadOptions) {
   const configStore = useConfigStore()
   const capabilityStore = useCapabilityStore()
-  const clientService = useClientService()
-  const { current: currentLanguage } = useGettext()
-  const authStore = useAuthStore()
-
-  const headers = computed((): { [key: string]: string } => {
-    const auth = new Auth({
-      accessToken: authStore.accessToken,
-      publicLinkToken: authStore.publicLinkToken,
-      publicLinkPassword: authStore.publicLinkPassword
-    })
-
-    return {
-      'Accept-Language': currentLanguage,
-      'Initiator-ID': clientService.initiatorId,
-      'X-Request-ID': uuidV4(),
-      ...auth.getHeaders()
-    }
-  })
+  const { headers } = useRequestHeaders()
 
   const isTusSupported = computed(() => capabilityStore.tusMaxChunkSize > 0)
 

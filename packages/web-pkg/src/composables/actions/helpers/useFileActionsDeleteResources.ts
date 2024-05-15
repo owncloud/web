@@ -9,7 +9,6 @@ import { computed, unref } from 'vue'
 import { queryItemAsString } from '../../appDefaults'
 import { useGetMatchingSpace } from '../../spaces'
 import { useRouteQuery } from '../../router'
-import { useLoadingService } from '../../loadingService'
 import { useClientService } from '../../clientService'
 import { useRouter } from '../../router'
 import { useGettext } from 'vue3-gettext'
@@ -23,6 +22,7 @@ import {
   useResourcesStore
 } from '../../piniaStores'
 import { storeToRefs } from 'pinia'
+import { useDeleteWorker } from '../../webWorkers'
 
 export const useFileActionsDeleteResources = () => {
   const configStore = useConfigStore()
@@ -33,10 +33,10 @@ export const useFileActionsDeleteResources = () => {
   const { getMatchingSpace } = useGetMatchingSpace()
   const { $gettext, $ngettext } = language
   const clientService = useClientService()
-  const loadingService = useLoadingService()
   const { dispatchModal } = useModals()
   const spacesStore = useSpacesStore()
   const sharesStore = useSharesStore()
+  const { startWorker } = useDeleteWorker()
 
   const resourcesStore = useResourcesStore()
   const { currentFolder } = storeToRefs(resourcesStore)
@@ -164,57 +164,6 @@ export const useFileActionsDeleteResources = () => {
     await Promise.all(deleteOps)
   }
 
-  const deleteFiles = ({
-    space,
-    files,
-    firstRun
-  }: {
-    space: SpaceResource
-    files: Resource[]
-    firstRun?: boolean
-  }) => {
-    const promises: Promise<void>[] = []
-    const removedFiles: Resource[] = []
-    for (const [i, file] of files.entries()) {
-      const promise = clientService.webdav
-        .deleteFile(space, file)
-        .then(() => {
-          removedFiles.push(file)
-        })
-        .catch((error) => {
-          let title = $gettext('Failed to delete "%{file}"', { file: file.name })
-          if (error.statusCode === 423) {
-            if (firstRun) {
-              return deleteFiles({ space, files: [file], firstRun: false })
-            }
-
-            title = $gettext('Failed to delete "%{file}" - the file is locked', { file: file.name })
-          }
-          messageStore.showErrorMessage({ title, errors: [error] })
-        })
-      promises.push(promise)
-    }
-    return Promise.all(promises).then(() => {
-      resourcesStore.removeResources(removedFiles)
-      resourcesStore.resetSelection()
-      sharesStore.pruneShares()
-
-      if (removedFiles.length) {
-        const title =
-          removedFiles.length === 1 && files.length === 1
-            ? $gettext('"%{item}" was moved to trash bin', { item: removedFiles[0].name })
-            : $ngettext(
-                '%{itemCount} item was moved to trash bin',
-                '%{itemCount} items were moved to trash bin',
-                removedFiles.length,
-                { itemCount: removedFiles.length.toString() },
-                true
-              )
-        messageStore.showMessage({ title })
-      }
-    })
-  }
-
   const filesList_delete = (resources: Resource[]) => {
     resourcesToDelete.value = [...resources]
 
@@ -236,13 +185,55 @@ export const useFileActionsDeleteResources = () => {
       return acc
     }, {})
 
+    const originalCurrentFolderId = unref(currentFolder).id
+
     return Object.values(resourceSpaceMapping).map(
       ({ space: spaceForDeletion, resources: resourcesForDeletion }) => {
-        return loadingService.addTask(() => {
-          return deleteFiles({
-            space: spaceForDeletion,
-            files: resourcesForDeletion
-          }).then(async () => {
+        startWorker(
+          { space: spaceForDeletion, resources: resourcesForDeletion },
+          async ({ successful, failed }) => {
+            if (successful.length) {
+              const title =
+                successful.length === 1 && resources.length === 1
+                  ? $gettext('"%{item}" was moved to trash bin', { item: successful[0].name })
+                  : $ngettext(
+                      '%{itemCount} item was moved to trash bin',
+                      '%{itemCount} items were moved to trash bin',
+                      successful.length,
+                      { itemCount: successful.length.toString() },
+                      true
+                    )
+
+              messageStore.showMessage({ title })
+            }
+
+            failed.forEach(({ status, resource }) => {
+              let title = $gettext('Failed to delete "%{resource}"', { resource: resource.name })
+              if (status === 423) {
+                title = $gettext('Failed to delete "%{resource}" - the file is locked', {
+                  resource: resource.name
+                })
+              }
+
+              messageStore.showErrorMessage({ title, errors: [new Error()] })
+            })
+
+            // user hasn't navigated to another location meanwhile
+            if (originalCurrentFolderId === unref(currentFolder)?.id) {
+              resourcesStore.removeResources(successful)
+
+              successful.forEach(({ id }) => {
+                resourcesStore.removeSelection(id)
+              })
+
+              const activeFilesCount = resourcesStore.activeResources.length
+              const pageCount = Math.ceil(unref(activeFilesCount) / unref(itemsPerPage))
+              if (unref(currentPage) > 1 && unref(currentPage) > pageCount) {
+                // reset pagination to avoid empty lists (happens when deleting all items on the last page)
+                currentPageQuery.value = pageCount.toString()
+              }
+            }
+
             // Load quota
             if (
               isLocationSpacesActive(router, 'files-spaces-generic') &&
@@ -269,15 +260,8 @@ export const useFileActionsDeleteResources = () => {
                 })
               )
             }
-
-            const activeFilesCount = resourcesStore.activeResources.length
-            const pageCount = Math.ceil(unref(activeFilesCount) / unref(itemsPerPage))
-            if (unref(currentPage) > 1 && unref(currentPage) > pageCount) {
-              // reset pagination to avoid empty lists (happens when deleting all items on the last page)
-              currentPageQuery.value = pageCount.toString()
-            }
-          })
-        })
+          }
+        )
       }
     )
   }
