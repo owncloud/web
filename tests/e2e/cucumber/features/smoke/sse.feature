@@ -77,7 +77,7 @@ Feature: server sent events
       | space-folder | Carol     | user | Can view |
     Then "Alice" should get "share-created" SSE event
     And "Brian" should get "share-created" SSE event
-    And "Brian" should see show invited people button on the folder "space-folder"
+    And "Brian" should see user-direct indicator on the folder "space-folder"
 
     # share-updated
     When "Alice" updates following sharee role
@@ -92,7 +92,7 @@ Feature: server sent events
       | space-folder | %public% |
     Then "Alice" should get "link-created" SSE event
     Then "Brian" should get "link-created" SSE event
-    And "Brian" should see show links button on the folder "space-folder"
+    And "Brian" should see link-direct indicator on the folder "space-folder"
 
     # link-updated
     When "Alice" renames the most recently created public link of resource "space-folder" to "myLink"
@@ -105,13 +105,13 @@ Feature: server sent events
       | space-folder | Carol     |
     Then "Alice" should get "share-removed" SSE event
     And "Brian" should get "share-removed" SSE event
-    And "Brian" should not see show invited people button on the folder "space-folder"
+    And "Brian" should not see user-direct indicator on the folder "space-folder"
 
     # link-removed
     When "Alice" removes the public link named "myLink" of resource "space-folder"
     Then "Alice" should get "link-removed" SSE event
     And "Brian" should get "link-removed" SSE event
-    And "Brian" should not see show links button on the folder "space-folder"
+    And "Brian" should not see link-direct indicator on the folder "space-folder"
 
     # space-member-removed
     When "Brian" navigates to the projects space page

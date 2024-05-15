@@ -2,7 +2,7 @@ import { Locator, Page } from '@playwright/test'
 import { SpacesEnvironment, LinksEnvironment } from '../../../environment'
 import { File } from '../../../types'
 import * as po from './actions'
-import { spaceLocator, showShareButtonSelector } from './utils'
+import { spaceLocator } from './utils'
 import { ICollaborator } from '../share/collaborator'
 
 export class Spaces {
@@ -69,11 +69,6 @@ export class Spaces {
     return spaceLocator({ spaceID, page: this.#page })
   }
 
-  async canUserEditResource(args: Omit<po.canUserEditSpaceResourceArgs, 'page'>): Promise<boolean> {
-    const canEdit = await po.canUserEditSpaceResource({ ...args, page: this.#page })
-    return canEdit
-  }
-
   async changeRoles(args: Omit<po.SpaceMembersArgs, 'page'>): Promise<void> {
     await po.changeSpaceRole({ ...args, page: this.#page })
   }
@@ -111,15 +106,5 @@ export class Spaces {
 
   downloadSpace(): Promise<string> {
     return po.downloadSpace(this.#page)
-  }
-
-  showShareButtonSelector({
-    buttonLabel,
-    resource
-  }: {
-    buttonLabel: string
-    resource: string
-  }): Locator {
-    return showShareButtonSelector({ page: this.#page, buttonLabel, resource })
   }
 }

@@ -117,42 +117,6 @@ When(
 )
 
 Then(
-  /^"([^"]*)" (should|should not) be able to edit (?:folder|file) "([^"]*)"$/,
-  async function (
-    this: World,
-    stepUser: string,
-    actionType: string,
-    resource: string
-  ): Promise<void> {
-    const { page } = this.actorsEnvironment.getActor({ key: stepUser })
-    const spacesObject = new objects.applicationFiles.Spaces({ page })
-    const userCanEdit = await spacesObject.canUserEditResource({ resource })
-    expect(userCanEdit).toBe(actionType === 'should' ? true : false)
-  }
-)
-
-Then(
-  /^"([^"]*)" (should|should not) see (show links|show invited people) button on the (?:folder|file) "([^"]*)"$/,
-  async function (
-    this: World,
-    stepUser: string,
-    actionType: string,
-    buttonLabel: string,
-    resource: string
-  ): Promise<void> {
-    const { page } = this.actorsEnvironment.getActor({ key: stepUser })
-    const spacesObject = new objects.applicationFiles.Spaces({ page })
-    const showShareButtonSelector = spacesObject.showShareButtonSelector({
-      buttonLabel,
-      resource
-    })
-    actionType === 'should'
-      ? await expect(showShareButtonSelector).toBeVisible()
-      : await expect(showShareButtonSelector).not.toBeVisible()
-  }
-)
-
-Then(
   /^"([^"]*)" (should|should not) see space "([^"]*)"$/,
   async function (this: World, stepUser: string, actionType: string, space: string): Promise<void> {
     const { page } = this.actorsEnvironment.getActor({ key: stepUser })
