@@ -10,8 +10,10 @@ Summary
 
 * Bugfix - Vertical scroll for OcModal on small screens: [#10814](https://github.com/owncloud/web/issues/10814)
 * Bugfix - Context menu empty in tiles view: [#10900](https://github.com/owncloud/web/pull/10900)
+* Change - Portal target removed: [#10758](https://github.com/owncloud/web/pull/10758)
 * Change - Disable opening files in embed mode: [#10786](https://github.com/owncloud/web/pull/10786)
 * Enhancement - Accessibility improvements: [#5383](https://github.com/owncloud/web/issues/5383)
+* Enhancement - Search providers extension point: [#10758](https://github.com/owncloud/web/pull/10758)
 * Enhancement - Add SSE event for moving: [#10798](https://github.com/owncloud/web/pull/10798)
 * Enhancement - Ability to theme sharing role icons: [#10801](https://github.com/owncloud/web/pull/10801)
 * Enhancement - Add SSE event for moving: [#10807](https://github.com/owncloud/web/pull/10807)
@@ -37,10 +39,26 @@ Details
    https://github.com/owncloud/web/issues/10793
    https://github.com/owncloud/web/pull/10900
 
+* Change - Portal target removed: [#10758](https://github.com/owncloud/web/pull/10758)
+
+   BREAKING CHANGE for developers: The (undocumented) portal target
+   `app.runtime.header` is not available anymore. Please use the extension point
+   `app.runtime.header.center` with `customComponent` extensions instead (for
+   details see below).
+
+   The portal target `app.runtime.header` has been removed in favour of a new
+   extension point with the id `app.runtime.header.center`. The extension point is
+   capable of mounting extensions of type `customComponent`. The search bar, which
+   was previously using this portal target, was rewired into an extension. Other
+   `portal` instances which used this portal target won't work anymore and need to
+   be ported to the `customComponent` extension type instead.
+
+   https://github.com/owncloud/web/pull/10758
+
 * Change - Disable opening files in embed mode: [#10786](https://github.com/owncloud/web/pull/10786)
 
    We have disabled to open files in the embed mode, since opening or editing files
-   is not in scope of the embed mode
+   is not in scope of the embed mode.
 
    https://github.com/owncloud/web/issues/10635
    https://github.com/owncloud/web/pull/10786
@@ -54,6 +72,15 @@ Details
    https://github.com/owncloud/web/issues/5391
    https://github.com/owncloud/web/issues/10731
    https://github.com/owncloud/web/pull/10802
+
+* Enhancement - Search providers extension point: [#10758](https://github.com/owncloud/web/pull/10758)
+
+   We've added a new extension point with the id `app.search.provider` and for the
+   extensionType `search` that can be used to register additional search providers.
+   All search providers that are registered for this extension point will be used
+   by the global search automatically.
+
+   https://github.com/owncloud/web/pull/10758
 
 * Enhancement - Add SSE event for moving: [#10798](https://github.com/owncloud/web/pull/10798)
 
@@ -202,6 +229,7 @@ Summary
 * Change - Vuex store removed: [#10210](https://github.com/owncloud/web/issues/10210)
 * Change - Remove ocs user: [#10240](https://github.com/owncloud/web/pull/10240)
 * Change - Registering app file editors: [#10330](https://github.com/owncloud/web/pull/10330)
+* Change - Add extensionPoint concept: [#10443](https://github.com/owncloud/web/pull/10443)
 * Enhancement - Icon for .dcm files: [#9215](https://github.com/owncloud/web/issues/9215)
 * Enhancement - Tile sizes: [#10018](https://github.com/owncloud/web/issues/10018)
 * Enhancement - Enable user preferences in public links: [#10207](https://github.com/owncloud/web/pull/10207)
@@ -209,7 +237,6 @@ Summary
 * Enhancement - Top loading bar increase visibility: [#10383](https://github.com/owncloud/web/issues/10383)
 * Enhancement - Integrate ToastUI editor in the text editor app: [#10390](https://github.com/owncloud/web/pull/10390)
 * Enhancement - Custom component extension type: [#10443](https://github.com/owncloud/web/pull/10443)
-* Enhancement - Add extensionPoint concept: [#10443](https://github.com/owncloud/web/pull/10443)
 * Enhancement - Epub reader app: [#10448](https://github.com/owncloud/web/pull/10448)
 * Enhancement - Highlight search term in sharing autosuggest list: [#10485](https://github.com/owncloud/web/pull/10485)
 * Enhancement - Warn user before closing browser when upload is in progress: [#10519](https://github.com/owncloud/web/pull/10519)
@@ -311,7 +338,7 @@ Details
    BREAKING CHANGE for developers: The old way of registering quick actions via the
    `quickaction` property of an app has been removed. Quick actions should be
    registered as extension via our extension registry. They need to be of type
-   `action` and have the `files.quick-action` scope.
+   `action` and have the `app.files.quick-action` extensionPointId.
 
    https://github.com/owncloud/web/pull/10102
    https://github.com/owncloud/web/pull/10223
@@ -414,6 +441,32 @@ Details
    https://github.com/owncloud/web/pull/10357
    https://github.com/owncloud/web/pull/10361
 
+* Change - Add extensionPoint concept: [#10443](https://github.com/owncloud/web/pull/10443)
+
+   BREAKING CHANGE for developers: The `scopes` property has been removed from the
+   `Extension` type in favour of the new `extensionPointIds` property.
+
+   The extension system now allows developers to register extension points. An
+   extension point defines the metadata for the integration of a certain extension
+   type in a certain context. Examples for extension points are render targets for
+   custom components, targets for file actions (e.g. the right click context menu,
+   the batch actions, the whitespace context menu), etc.
+
+   Extensions can now specify that they are only valid for a certain or multiple
+   extension points. This way a file action extension can e.g. specify to be
+   rendered only in the context menu, but not in the batch actions. Consequently,
+   the extension points concept is the next iteration of the `scopes` concept. The
+   `scopes` concept has been removed from the codebase.
+
+   Extension points can define if users should be able to choose preferences for
+   the extension point. E.g. for the global progress bar extension point, users can
+   choose which of the available progress bar extensions should be used, since the
+   extension point only allows one extension to be active. At the moment we persist
+   the user choice in the localStorage of the browser.
+
+   https://github.com/owncloud/web/pull/10443
+   https://github.com/owncloud/web/pull/10758
+
 * Enhancement - Icon for .dcm files: [#9215](https://github.com/owncloud/web/issues/9215)
 
    We've added a custom icon for medical images of the file type dcm.
@@ -475,28 +528,6 @@ Details
    component render target. For the mapping to the render target, an extension
    point needs to be registered and a CustomComponentTarget for this extension
    point needs to be in place in a vue template.
-
-   https://github.com/owncloud/web/pull/10443
-
-* Enhancement - Add extensionPoint concept: [#10443](https://github.com/owncloud/web/pull/10443)
-
-   The extension system now allows developers to register extension points. An
-   extension point defines the metadata for the integration of a certain extension
-   type in a certain context. Examples for extension points are render targets for
-   custom components, targets for file actions (e.g. the right click context menu,
-   the batch actions, the whitespace context menu), etc.
-
-   Extensions can now specify that they are only valid for a certain or multiple
-   extension points. This way a file action extension can e.g. specify to be
-   rendered only in the context menu, but not in the batch actions. Consequently,
-   the extension points concept is the next iteration of the `scopes` concept. The
-   `scopes` concept will most likely be removed in a future release.
-
-   Extension points can define if users should be able to choose preferences for
-   the extension point. E.g. for the global progress bar extension point, users can
-   choose which of the available progress bar extensions should be used, since the
-   extension point only allows one extension to be active. At the moment we persist
-   the user choice in the local storage of the browser.
 
    https://github.com/owncloud/web/pull/10443
 
