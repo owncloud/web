@@ -129,5 +129,9 @@ export const convertClassicApplication = ({
     extensionRegistry.registerExtensions(applicationScript.extensions)
   }
 
+  if (applicationScript.extensionPoints) {
+    extensionRegistry.registerExtensionPoints(applicationScript.extensionPoints)
+  }
+
   return new ClassicApplication(runtimeApi, applicationScript, app)
 }

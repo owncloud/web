@@ -15,13 +15,18 @@ import {
 } from 'web-test-helpers'
 import {
   AppBar,
-  Extension,
+  FolderViewExtension,
   useBreadcrumbsFromPath,
   useExtensionRegistry
 } from '@ownclouders/web-pkg'
 import { useBreadcrumbsFromPathMock } from '../../../mocks/useBreadcrumbsFromPathMock'
 import { h } from 'vue'
 import { BreadcrumbItem } from 'design-system/src/components/OcBreadcrumb/types'
+import {
+  folderViewsFavoritesExtensionPoint,
+  folderViewsFolderExtensionPoint,
+  folderViewsProjectSpacesExtensionPoint
+} from '../../../../src/extensionPoints'
 
 const mockCreateFolder = vi.fn()
 const mockUseEmbedMode = vi.fn().mockReturnValue({ isEnabled: computed(() => false) })
@@ -325,7 +330,11 @@ function getMountedWrapper({
     {
       id: 'com.github.owncloud.web.files.folder-view.resource-table',
       type: 'folderView',
-      scopes: ['resource', 'space', 'favorite'],
+      extensionPointIds: [
+        folderViewsFolderExtensionPoint.id,
+        folderViewsProjectSpacesExtensionPoint.id,
+        folderViewsFavoritesExtensionPoint.id
+      ],
       folderView: {
         name: 'resource-table',
         label: 'Switch to default view',
@@ -336,7 +345,7 @@ function getMountedWrapper({
         component: h('div', { class: 'resource-table' })
       }
     }
-  ] satisfies Extension[]
+  ] satisfies FolderViewExtension[]
   const { requestExtensions } = useExtensionRegistry()
   vi.mocked(requestExtensions).mockReturnValue(extensions)
 

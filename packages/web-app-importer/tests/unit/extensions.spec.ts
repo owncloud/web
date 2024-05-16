@@ -3,11 +3,11 @@ import { unref } from 'vue'
 import { Resource } from '@ownclouders/web-client'
 import { mock, mockDeep } from 'vitest-mock-extended'
 import { extensions } from '../../src/extensions'
-import { ApplicationSetupOptions, UppyService } from '@ownclouders/web-pkg'
+import { ActionExtension, ApplicationSetupOptions, UppyService } from '@ownclouders/web-pkg'
 
 const getAction = (opts: ApplicationSetupOptions) => {
-  const { action } = unref(extensions(opts))[0]
-  return action
+  const importFileExtension = unref(extensions(opts))[0] as ActionExtension
+  return importFileExtension.action
 }
 
 describe('useFileActionsImport', () => {
@@ -16,7 +16,7 @@ describe('useFileActionsImport', () => {
       getWrapper({
         currentFolder: mock<Resource>({ canUpload: () => true }),
         setup: () => {
-          const action = unref(extensions({ applicationConfig: {} }))[0].action
+          const action = getAction({ applicationConfig: {} })
           expect(action.isVisible()).toBeFalsy()
         }
       })
@@ -52,14 +52,12 @@ describe('useFileActionsImport', () => {
       getWrapper({
         currentFolder: mock<Resource>({ canUpload: () => true }),
         setup: () => {
-          const action = unref(
-            extensions({
-              applicationConfig: {
-                companionUrl: 'companionUrl',
-                supportedClouds: []
-              }
-            })
-          )[0].action
+          const action = getAction({
+            applicationConfig: {
+              companionUrl: 'companionUrl',
+              supportedClouds: []
+            }
+          })
           expect(action.isVisible()).toBeFalsy()
         }
       })

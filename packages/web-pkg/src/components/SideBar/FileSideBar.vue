@@ -183,10 +183,10 @@ export default defineComponent({
 
     const availablePanels = computed(() =>
       extensionRegistry
-        .requestExtensions<SidebarPanelExtension<SpaceResource, Resource, Resource>>(
-          'sidebarPanel',
-          { scopes: ['resource'] }
-        )
+        .requestExtensions<SidebarPanelExtension<SpaceResource, Resource, Resource>>({
+          id: 'global.files.sidebar',
+          extensionType: 'sidebarPanel'
+        })
         .map((e) => e.panel)
     )
 
@@ -279,10 +279,10 @@ export default defineComponent({
         delete ancestorDataWithoutRoot['/']
       }
 
-      const chachedIds = [...collaboratorCache, ...linkCache].map(({ resourceId }) => resourceId)
+      const cachedIds = [...collaboratorCache, ...linkCache].map(({ resourceId }) => resourceId)
       const ancestorIds = Object.values(ancestorDataWithoutRoot)
         .map(({ id }) => id)
-        .filter((id) => id !== resource.id && !chachedIds.includes(id))
+        .filter((id) => id !== resource.id && !cachedIds.includes(id))
 
       const queue = new PQueue({
         concurrency: configStore.options.concurrentRequests.shares.list

@@ -1,7 +1,7 @@
 import { defineStore } from 'pinia'
 import { ref, Ref, unref } from 'vue'
 import { useConfigStore } from '../config'
-import { Extension, ExtensionPoint, ExtensionScope, ExtensionType } from './types'
+import { Extension, ExtensionPoint, ExtensionType } from './types'
 
 export const useExtensionRegistry = defineStore('extensionRegistry', () => {
   const configStore = useConfigStore()
@@ -11,40 +11,42 @@ export const useExtensionRegistry = defineStore('extensionRegistry', () => {
   const registerExtensions = (e: Ref<Extension[]>) => {
     extensions.value.push(e)
   }
-  const requestExtensions = <T extends Extension>(
-    type: ExtensionType,
-    options?: {
-      scopes?: ExtensionScope[]
-      extensionPointIds?: string[]
+  const requestExtensions = <T extends Extension>(extensionPoint: ExtensionPoint<T>) => {
+    if (!extensionPoint.id || !extensionPoint.extensionType) {
+      throw new Error('ExtensionPoint must have an id and an extensionType')
     }
-  ) => {
+
     return unref(extensions).flatMap((e) =>
       unref(e).filter(
         (e) =>
-          e.type === type &&
+          e.type === extensionPoint.extensionType &&
           !configStore.options.disabledExtensions.includes(e.id) &&
-          (!options?.scopes || e.scopes?.some((s) => options?.scopes.includes(s))) &&
-          (!options?.extensionPointIds ||
-            e.extensionPointIds?.some((id) => options?.extensionPointIds.includes(id)))
+          (!e.extensionPointIds || e.extensionPointIds?.includes(extensionPoint.id))
       )
     ) as T[]
   }
 
-  const extensionPoints = ref<ExtensionPoint[]>([])
-  const registerExtensionPoint = (e: ExtensionPoint) => {
+  const extensionPoints = ref<Ref<ExtensionPoint<Extension>[]>[]>([])
+  const registerExtensionPoints = <T extends Extension>(e: Ref<ExtensionPoint<T>[]>) => {
     extensionPoints.value.push(e)
   }
-  const getExtensionPoints = <T extends ExtensionPoint>(
+  const getExtensionPoints = <T extends ExtensionPoint<Extension>>(
     options: {
-      type?: ExtensionType
+      extensionType?: ExtensionType
     } = {}
   ) => {
-    return unref(extensionPoints).filter((e) => {
-      if (Object.hasOwn(options, 'type') && e.type !== options.type) {
-        return false
-      }
-      return true
-    }) as T[]
+    return unref(extensionPoints).flatMap(
+      (e) =>
+        unref(e).filter((e) => {
+          if (
+            Object.hasOwn(options, 'extensionType') &&
+            e.extensionType !== options.extensionType
+          ) {
+            return false
+          }
+          return true
+        }) as T[]
+    )
   }
 
   return {
@@ -52,7 +54,7 @@ export const useExtensionRegistry = defineStore('extensionRegistry', () => {
     registerExtensions,
     requestExtensions,
     extensionPoints,
-    registerExtensionPoint,
+    registerExtensionPoints,
     getExtensionPoints
   }
 })

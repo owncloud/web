@@ -1,7 +1,13 @@
 import { RouteRecordRaw, Router } from 'vue-router'
 import clone from 'lodash-es/clone'
 import { RuntimeApi } from './types'
-import { ApiError, ExtensionRegistry, SidebarNavExtension } from '@ownclouders/web-pkg'
+import {
+  ApiError,
+  Extension,
+  ExtensionPoint,
+  ExtensionRegistry,
+  SidebarNavExtension
+} from '@ownclouders/web-pkg'
 import { isEqual, isObject, isArray, merge } from 'lodash-es'
 import { App, Component, computed, h } from 'vue'
 import { ApplicationTranslations, AppNavigationItem } from '@ownclouders/web-pkg'
@@ -72,11 +78,19 @@ const announceNavigationItems = (
     throw new ApiError("navigationItems can't be blank")
   }
 
+  const navExtensionPoint = {
+    id: `app.${applicationId}.navItems`,
+    extensionType: 'sidebarNav',
+    multiple: true
+  }
+  const extensionPoints = computed<ExtensionPoint<Extension>[]>(() => [navExtensionPoint])
+  extensionRegistry.registerExtensionPoints(extensionPoints)
+
   const navExtensions = navigationItems.map((navItem) => ({
     id: `app.${applicationId}.${navItem.name}`,
     type: 'sidebarNav',
     navItem,
-    scopes: [`app.${applicationId}`]
+    extensionPointIds: [navExtensionPoint.id]
   })) as SidebarNavExtension[]
 
   extensionRegistry.registerExtensions(computed(() => navExtensions))

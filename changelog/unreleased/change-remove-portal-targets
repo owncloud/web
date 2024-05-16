@@ -1,0 +1,9 @@
+Change: Portal target removed
+
+BREAKING CHANGE for developers: The (undocumented) portal target `app.runtime.header` is not available anymore. Please use the extension point `app.runtime.header.center` with `customComponent` extensions instead (for details see below).
+
+The portal target `app.runtime.header` has been removed in favour of a new extension point with the id `app.runtime.header.center`. The extension point
+is capable of mounting extensions of type `customComponent`. The search bar, which was previously using this portal target, was rewired into an extension. Other `portal` instances which used this portal target won't work anymore
+and need to be ported to the `customComponent` extension type instead.
+
+https://github.com/owncloud/web/pull/10758

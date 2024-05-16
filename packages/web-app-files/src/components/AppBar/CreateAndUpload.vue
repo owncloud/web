@@ -224,10 +224,11 @@ import { useService, useUpload, UppyService, UploadResult } from '@ownclouders/w
 import { HandleUpload } from 'web-app-files/src/HandleUpload'
 import { useRoute } from 'vue-router'
 import { useGettext } from 'vue3-gettext'
-import { ActionExtension, useExtensionRegistry } from '@ownclouders/web-pkg'
+import { useExtensionRegistry } from '@ownclouders/web-pkg'
 import { Action, ResourceIcon } from '@ownclouders/web-pkg'
 import { v4 as uuidv4 } from 'uuid'
 import { storeToRefs } from 'pinia'
+import { uploadMenuExtensionPoint } from '../../extensionPoints'
 
 export default defineComponent({
   components: {
@@ -318,9 +319,7 @@ export default defineComponent({
     const extensionRegistry = useExtensionRegistry()
     const extensionActions = computed(() => {
       return [
-        ...extensionRegistry
-          .requestExtensions<ActionExtension>('action', { scopes: ['upload-menu'] })
-          .map((e) => e.action)
+        ...extensionRegistry.requestExtensions(uploadMenuExtensionPoint).map((e) => e.action)
       ].filter((e) => e.isVisible())
     })
 

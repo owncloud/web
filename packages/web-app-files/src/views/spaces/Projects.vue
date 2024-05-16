@@ -159,7 +159,6 @@ import {
   useConfigStore,
   useResourcesStore,
   useSpacesStore,
-  FolderViewExtension,
   useExtensionRegistry
 } from '@ownclouders/web-pkg'
 
@@ -205,6 +204,7 @@ import {
 } from 'web-app-files/src/composables/keyboardActions'
 import { orderBy } from 'lodash-es'
 import { useResourcesViewDefaults } from '../../composables'
+import { folderViewsProjectSpacesExtensionPoint } from '../../extensionPoints'
 
 export default defineComponent({
   components: {
@@ -325,7 +325,7 @@ export default defineComponent({
     const viewModes = computed(() => {
       return [
         ...extensionRegistry
-          .requestExtensions<FolderViewExtension>('folderView', { scopes: ['space'] })
+          .requestExtensions(folderViewsProjectSpacesExtensionPoint)
           .map((e) => e.folderView)
       ]
     })

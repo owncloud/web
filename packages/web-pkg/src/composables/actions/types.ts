@@ -2,10 +2,12 @@ import { Resource, SpaceResource } from '@ownclouders/web-client'
 import { Group, User } from '@ownclouders/web-client/graph/generated'
 import { RouteLocationRaw } from 'vue-router'
 import { IconFillType } from '../../helpers'
+import { StringUnionOrAnyString } from '../../utils'
 
 export type ActionOptions = Record<string, unknown | unknown[]>
 export interface Action<T = ActionOptions> {
   name: string
+  category?: StringUnionOrAnyString<'context' | 'share' | 'actions' | 'sidebar'>
   icon: string
   iconFillType?: IconFillType
   variation?: string

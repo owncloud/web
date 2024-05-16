@@ -1,6 +1,6 @@
 Change: Remove deprecated extension point for adding quick actions
 
-BREAKING CHANGE for developers: The old way of registering quick actions via the `quickaction` property of an app has been removed. Quick actions should be registered as extension via our extension registry. They need to be of type `action` and have the `files.quick-action` scope.
+BREAKING CHANGE for developers: The old way of registering quick actions via the `quickaction` property of an app has been removed. Quick actions should be registered as extension via our extension registry. They need to be of type `action` and have the `app.files.quick-action` extensionPointId.
 
 https://github.com/owncloud/web/pull/10102
 https://github.com/owncloud/web/pull/10223

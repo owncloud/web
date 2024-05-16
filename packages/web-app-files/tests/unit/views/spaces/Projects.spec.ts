@@ -5,7 +5,7 @@ import {
   queryItemAsString,
   useFileActionsDelete,
   useExtensionRegistry,
-  Extension
+  FolderViewExtension
 } from '@ownclouders/web-pkg'
 
 import {
@@ -16,6 +16,11 @@ import {
   RouteLocation
 } from 'web-test-helpers'
 import { AbilityRule, SpaceResource } from '@ownclouders/web-client'
+import {
+  folderViewsFavoritesExtensionPoint,
+  folderViewsFolderExtensionPoint,
+  folderViewsProjectSpacesExtensionPoint
+} from '../../../../src/extensionPoints'
 
 vi.mock('@ownclouders/web-pkg', async (importOriginal) => ({
   ...(await importOriginal<any>()),
@@ -116,7 +121,11 @@ function getMountedWrapper({
     {
       id: 'com.github.owncloud.web.files.folder-view.resource-table',
       type: 'folderView',
-      scopes: ['resource', 'space', 'favorite'],
+      extensionPointIds: [
+        folderViewsFolderExtensionPoint.id,
+        folderViewsProjectSpacesExtensionPoint.id,
+        folderViewsFavoritesExtensionPoint.id
+      ],
       folderView: {
         name: 'resource-table',
         label: 'Switch to default view',
@@ -127,7 +136,7 @@ function getMountedWrapper({
         component: h('div', { class: 'resource-table' })
       }
     }
-  ] satisfies Extension[]
+  ] satisfies FolderViewExtension[]
   const { requestExtensions } = useExtensionRegistry()
   vi.mocked(requestExtensions).mockReturnValue(extensions)
 

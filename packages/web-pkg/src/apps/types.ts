@@ -1,6 +1,6 @@
 import { App, ComponentCustomProperties, Ref } from 'vue'
 import { RouteLocationRaw, Router, RouteRecordRaw } from 'vue-router'
-import { Extension } from '../composables/piniaStores'
+import { Extension, ExtensionPoint } from '../composables/piniaStores'
 import { IconFillType } from '../helpers'
 import { Resource, SpaceResource } from '@ownclouders/web-client'
 
@@ -94,6 +94,7 @@ export interface ClassicApplicationScript {
   navItems?: ((args: ComponentCustomProperties) => AppNavigationItem[]) | AppNavigationItem[]
   translations?: ApplicationTranslations
   extensions?: Ref<Extension[]>
+  extensionPoints?: Ref<ExtensionPoint<any>[]>
   initialize?: () => void
   ready?: (args: AppReadyHookArgs) => Promise<void> | void
   mounted?: (args: AppReadyHookArgs) => void

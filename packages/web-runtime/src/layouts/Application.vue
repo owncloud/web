@@ -188,16 +188,17 @@ export default defineComponent({
       }
     }
     extensionRegistry.registerExtensions(toRef([defaultProgressBarExtension] satisfies Extension[]))
-    const progressBarExtensionPoint: ExtensionPoint = {
+    const progressBarExtensionPoint: ExtensionPoint<CustomComponentExtension> = {
       id: progressBarExtensionPointId,
-      type: 'customComponent',
+      extensionType: 'customComponent',
       multiple: false,
       defaultExtensionId: defaultProgressBarExtension.id,
       userPreference: {
         label: $gettext('Global progress bar')
       }
     }
-    extensionRegistry.registerExtensionPoint(progressBarExtensionPoint)
+    const extensionPoints = computed<ExtensionPoint<Extension>[]>(() => [progressBarExtensionPoint])
+    extensionRegistry.registerExtensionPoints(extensionPoints)
 
     return {
       apps,

@@ -117,35 +117,32 @@ export const extensions = ({ applicationConfig }: ApplicationSetupOptions) => {
     }
   }
 
-  return computed(
-    () =>
-      [
-        {
-          id: 'com.github.owncloud.web.import-file',
-          type: 'action',
-          scopes: ['resource', 'upload-menu'],
-          action: {
-            name: 'import-files',
-            icon: 'cloud',
-            handler,
-            label: () => $gettext('Import'),
-            isVisible: () => {
-              if (!companionUrl) {
-                return false
-              }
-
-              if (authStore.publicLinkContextReady) {
-                return false
-              }
-
-              return unref(canUpload) && supportedClouds.length
-            },
-            isDisabled: () => !!Object.keys(uppyService.getCurrentUploads()).length,
-            disabledTooltip: () => $gettext('Please wait until all imports have finished'),
-            componentType: 'button',
-            class: 'oc-files-actions-import'
+  return computed<Extension[]>(() => [
+    {
+      id: 'com.github.owncloud.web.import-file',
+      type: 'action',
+      extensionPointIds: ['app.files.upload-menu'],
+      action: {
+        name: 'import-files',
+        icon: 'cloud',
+        handler,
+        label: () => $gettext('Import'),
+        isVisible: () => {
+          if (!companionUrl) {
+            return false
           }
-        }
-      ] satisfies Extension[]
-  )
+
+          if (authStore.publicLinkContextReady) {
+            return false
+          }
+
+          return unref(canUpload) && supportedClouds.length
+        },
+        isDisabled: () => !!Object.keys(uppyService.getCurrentUploads()).length,
+        disabledTooltip: () => $gettext('Please wait until all imports have finished'),
+        componentType: 'button',
+        class: 'oc-files-actions-import'
+      }
+    }
+  ])
 }

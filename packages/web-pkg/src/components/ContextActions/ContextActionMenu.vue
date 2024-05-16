@@ -23,7 +23,7 @@
 <script lang="ts">
 import { defineComponent, PropType } from 'vue'
 import ActionMenuItem from './ActionMenuItem.vue'
-import { Action, ActionOptions } from '../../composables/actions'
+import { Action, ActionOptions } from '../../composables'
 
 type MenuSection = {
   name: string

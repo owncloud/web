@@ -23,13 +23,13 @@ It looks like this:
 interface SidebarNavExtension {
     id: string
     type: 'sidebarNav'
-    scopes?: ExtensionScope[]
+    extensionPointIds?: string[]
     navItem: AppNavigationItem // Please check the AppNavigationItem section below
     }
 }
 ```
 
-For `id`, `type`, and `scopes`, please see [extension base section]({{< ref "../_index.md#extension-base-configuration" >}}) in top level docs.
+For `id`, `type`, and `extensionPointIds`, please see [extension base section]({{< ref "../_index.md#extension-base-configuration" >}}) in top level docs.
 
 #### AppNavigationItem
 

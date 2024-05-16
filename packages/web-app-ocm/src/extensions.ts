@@ -46,28 +46,29 @@ export const extensions = () => {
     }
   }
 
-  return computed(
-    () =>
-      [
-        {
-          id: 'com.github.owncloud.web.open-file-remote',
-          type: 'action',
-          scopes: ['resource', 'resource.context-menu'],
-          action: {
-            name: 'open-file-remote',
-            icon: 'remote-control',
-            handler,
-            label: () => $gettext('Open remotely'),
-            isVisible: ({ resources }: FileActionOptions) => {
-              return (
-                configStore.options.ocm.openRemotely &&
-                resources[0]?.storageId?.startsWith(OCM_PROVIDER_ID)
-              )
-            },
-            componentType: 'button',
-            class: 'oc-files-actions-open-file-remote'
+  return computed<Extension[]>(() => [
+    {
+      id: 'com.github.owncloud.web.open-file-remote',
+      type: 'action',
+      extensionPointIds: ['global.files.context-actions'],
+      action: {
+        name: 'open-file-remote',
+        category: 'actions',
+        icon: 'remote-control',
+        handler,
+        label: () => $gettext('Open remotely'),
+        isVisible: ({ resources }: FileActionOptions) => {
+          if (!resources?.length) {
+            return false
           }
-        }
-      ] satisfies Extension[]
-  )
+          return (
+            configStore.options.ocm.openRemotely &&
+            resources[0]?.storageId?.startsWith(OCM_PROVIDER_ID)
+          )
+        },
+        componentType: 'button',
+        class: 'oc-files-actions-open-file-remote'
+      }
+    }
+  ])
 }

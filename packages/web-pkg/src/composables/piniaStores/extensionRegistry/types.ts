@@ -7,63 +7,52 @@ import { Component, Slot } from 'vue'
 import { StringUnionOrAnyString } from '../../../utils'
 
 export type ExtensionType = StringUnionOrAnyString<
-  'action' | 'search' | 'sidebarNav' | 'sidebarPanel' | 'folderView' | 'customComponent'
+  'action' | 'customComponent' | 'folderView' | 'search' | 'sidebarNav' | 'sidebarPanel'
 >
 
-export type ExtensionScope = StringUnionOrAnyString<'resource' | 'user' | 'group'>
-
-export type BaseExtension = {
+export type Extension = {
   id: string
   type: ExtensionType
   extensionPointIds?: string[]
-  scopes?: ExtensionScope[] // TODO: deprecated
   userPreference?: {
     optionLabel?: string
   }
 }
 
-export interface ActionExtension extends BaseExtension {
+export interface ActionExtension extends Extension {
   type: 'action'
   action: Action
 }
 
-export interface SearchExtension extends BaseExtension {
+export interface SearchExtension extends Extension {
   type: 'search'
   searchProvider: SearchProvider
 }
 
-export interface SidebarNavExtension extends BaseExtension {
+export interface SidebarNavExtension extends Extension {
   type: 'sidebarNav'
   navItem: AppNavigationItem
 }
 
 export interface SidebarPanelExtension<R extends Item, P extends Item, T extends Item>
-  extends BaseExtension {
+  extends Extension {
   type: 'sidebarPanel'
   panel: SideBarPanel<R, P, T>
 }
 
-export interface FolderViewExtension extends BaseExtension {
+export interface FolderViewExtension extends Extension {
   type: 'folderView'
   folderView: FolderView
 }
 
-export interface CustomComponentExtension extends BaseExtension {
+export interface CustomComponentExtension extends Extension {
   type: 'customComponent'
   content: Slot | Component
 }
 
-export type Extension =
-  | ActionExtension
-  | SearchExtension
-  | SidebarNavExtension
-  | SidebarPanelExtension<Item, Item, Item>
-  | FolderViewExtension
-  | CustomComponentExtension
-
-export type ExtensionPoint = {
+export type ExtensionPoint<T extends Extension> = {
   id: string
-  type: ExtensionType
+  extensionType: ExtensionType
   multiple?: boolean
   defaultExtensionId?: string
   userPreference?: {

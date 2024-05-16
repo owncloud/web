@@ -19,7 +19,7 @@ export default defineComponent({
   name: 'CustomComponentTarget',
   props: {
     extensionPoint: {
-      type: Object as PropType<ExtensionPoint>,
+      type: Object as PropType<ExtensionPoint<CustomComponentExtension>>,
       required: true
     }
   },
@@ -28,9 +28,7 @@ export default defineComponent({
     const extensionPreferences = useExtensionPreferencesStore()
 
     const allExtensions = computed(() => {
-      return extensionRegistry.requestExtensions<CustomComponentExtension>('customComponent', {
-        extensionPointIds: [props.extensionPoint.id]
-      })
+      return extensionRegistry.requestExtensions(props.extensionPoint)
     })
 
     const defaultExtensionIds = extensionPreferences.extractDefaultExtensionIds(

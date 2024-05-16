@@ -44,6 +44,7 @@ import Avatar from './components/Avatar.vue'
 import focusMixin from './mixins/focusMixin'
 import { ArchiverService } from '@ownclouders/web-pkg'
 import { UnifiedRoleDefinition } from '@ownclouders/web-client/graph/generated'
+import { extensionPoints } from './extensionPoints'
 
 export const bootstrapApp = async (configurationPath: string): Promise<void> => {
   const pinia = createPinia()
@@ -62,6 +63,8 @@ export const bootstrapApp = async (configurationPath: string): Promise<void> => 
     messagesStore,
     sharesStore
   } = announcePiniaStores()
+
+  extensionRegistry.registerExtensionPoints(extensionPoints())
 
   app.provide('$router', router)
 

@@ -1,0 +1,7 @@
+Enhancement: Search providers extension point
+
+We've added a new extension point with the id `app.search.provider` and for the extensionType `search` that can be used to
+register additional search providers. All search providers that are registered for this extension point will be used
+by the global search automatically.
+
+https://github.com/owncloud/web/pull/10758

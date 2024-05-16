@@ -1,4 +1,6 @@
-Enhancement: Add extensionPoint concept
+Change: Add extensionPoint concept
+
+BREAKING CHANGE for developers: The `scopes` property has been removed from the `Extension` type in favour of the new `extensionPointIds` property.
 
 The extension system now allows developers to register extension points. An extension point defines the metadata for the
 integration of a certain extension type in a certain context. Examples for extension points are render targets for
@@ -7,10 +9,11 @@ menu), etc.
 
 Extensions can now specify that they are only valid for a certain or multiple extension points. This way a file action extension
 can e.g. specify to be rendered only in the context menu, but not in the batch actions. Consequently, the extension points
-concept is the next iteration of the `scopes` concept. The `scopes` concept will most likely be removed in a future release.
+concept is the next iteration of the `scopes` concept. The `scopes` concept has been removed from the codebase.
 
 Extension points can define if users should be able to choose preferences for the extension point. E.g. for the global progress
 bar extension point, users can choose which of the available progress bar extensions should be used, since the extension point
-only allows one extension to be active. At the moment we persist the user choice in the local storage of the browser.
+only allows one extension to be active. At the moment we persist the user choice in the localStorage of the browser.
 
 https://github.com/owncloud/web/pull/10443
+https://github.com/owncloud/web/pull/10758

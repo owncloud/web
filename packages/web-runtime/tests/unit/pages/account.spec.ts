@@ -229,7 +229,7 @@ describe('account page', () => {
     })
 
     it('should be hidden if an extension point only has 1 or less extensions', async () => {
-      const extensionPointMock = mock<ExtensionPoint>({
+      const extensionPointMock = mock<ExtensionPoint<Extension>>({
         userPreference: {
           label: 'example-extension-point'
         }
@@ -243,7 +243,7 @@ describe('account page', () => {
     })
 
     it('should be visible if an extension point has at least 2 extensions', async () => {
-      const extensionPoint = mock<ExtensionPoint>({
+      const extensionPoint = mock<ExtensionPoint<Extension>>({
         id: 'test-extension-point',
         multiple: false,
         defaultExtensionId: 'foo-2',
@@ -298,7 +298,7 @@ function getWrapper({
   spaces?: SpaceResource[]
   isPublicLinkContext?: boolean
   isUserContext?: boolean
-  extensionPoints?: ExtensionPoint[]
+  extensionPoints?: ExtensionPoint<Extension>[]
   extensions?: Extension[]
 } = {}) {
   const plugins = defaultPlugins({

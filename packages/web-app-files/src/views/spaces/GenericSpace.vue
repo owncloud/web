@@ -146,7 +146,6 @@ import {
 } from '@ownclouders/web-client'
 
 import {
-  FolderViewExtension,
   ProcessorType,
   ResourceTransfer,
   TransferType,
@@ -203,6 +202,7 @@ import {
 } from 'web-app-files/src/composables/keyboardActions'
 import { storeToRefs } from 'pinia'
 import { ComponentPublicInstance } from 'vue'
+import { folderViewsFolderExtensionPoint } from '../../extensionPoints'
 
 const visibilityObserver = new VisibilityObserver()
 
@@ -273,7 +273,7 @@ export default defineComponent({
     const viewModes = computed(() => {
       return [
         ...extensionRegistry
-          .requestExtensions<FolderViewExtension>('folderView', { scopes: ['resource'] })
+          .requestExtensions(folderViewsFolderExtensionPoint)
           .map((e) => e.folderView)
       ]
     })

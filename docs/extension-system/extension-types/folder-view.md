@@ -19,13 +19,13 @@ This is what the FolderViewExtension interface looks like:
 ```typescript
 interface FolderViewExtension {
   id: string
-  scopes?: ExtensionScope[]
   type: 'folderView'
+  extensionPointIds?: string[]
   folderView: FolderView // See FolderView section below
 }
 ```
 
-For `id`, `type`, and `scopes`, please see [extension base section]({{< ref "../_index.md#extension-base-configuration" >}}) in top level docs.
+For `id`, `type`, and `extensionPointIds`, please see [extension base section]({{< ref "../_index.md#extension-base-configuration" >}}) in top level docs.
 
 #### FolderView
 
