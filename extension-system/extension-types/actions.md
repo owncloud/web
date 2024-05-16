@@ -16,18 +16,18 @@ Actions are one of the possible extension types. Registered actions get rendered
 
 ### Configuration
 
-This is what the ActionExtension interface looks like:
+This is what the `ActionExtension` interface looks like:
 
 ```typescript
 interface ActionExtension {
   id: string
   type: 'action'
-  scopes?: ExtensionScope[]
+  extensionPointIds?: string[]
   action: Action // Please check the Action section below
 }
 ```
 
-For `id`, `type`, and `scopes`, please see [extension base section]({{< ref "../_index.md#extension-base-configuration" >}}) in top level docs.
+For `id`, `type`, and `extensionPointIds`, please see [extension base section]({{< ref "../_index.md#extension-base-configuration" >}}) in top level docs.
 
 #### Action
 

@@ -22,9 +22,9 @@ Here's what it looks like:
 
 ```typescript
 interface CustomComponentExtension {
-  id: string,
-  type: 'customComponent',
-  extensionPointIds: string[],
+  id: string
+  type: 'customComponent'
+  extensionPointIds?: string[]
   content: Slot | Component
 }
 ```
