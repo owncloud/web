@@ -10,6 +10,7 @@ exports[`MembersPanel > should display an empty result if no matching members fo
     <!--v-if-->
     <!--v-if-->
     <!--v-if-->
+    <!--v-if-->
   </div>
 </div>"
 `;
@@ -29,6 +30,10 @@ exports[`MembersPanel > should render all members accordingly to their role assi
     </div>
     <div class="oc-mb-m" data-testid="space-members-role-viewers">
       <h3 class="oc-text-bold oc-text-medium">Viewers</h3>
+      <members-role-section-stub members="[object Object]"></members-role-section-stub>
+    </div>
+    <div class="oc-mb-m" data-testid="space-members-role-secure-viewers">
+      <h3 class="oc-text-bold oc-text-medium">Secure viewers</h3>
       <members-role-section-stub members="[object Object]"></members-role-section-stub>
     </div>
   </div>

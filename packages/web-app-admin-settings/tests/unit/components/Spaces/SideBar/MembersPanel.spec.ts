@@ -11,7 +11,8 @@ const spaceMock = mock<SpaceResource>({
       { kind: 'user', displayName: 'einstein' },
       { kind: 'group', displayName: 'physic-haters' }
     ],
-    viewer: [{ kind: 'user', displayName: 'marie' }]
+    viewer: [{ kind: 'user', displayName: 'marie' }],
+    'secure-viewer': [{ kind: 'user', displayName: 'kathrine' }]
   }
 })
 

@@ -124,7 +124,7 @@ export function buildSpace(
 ): SpaceResource {
   let spaceImageData: DriveItem, spaceReadmeData: DriveItem
   let disabled = false
-  const spaceRoles: SpaceRoles = { viewer: [], editor: [], manager: [] }
+  const spaceRoles: SpaceRoles = { viewer: [], editor: [], manager: [], 'secure-viewer': [] }
 
   if (data.special) {
     spaceImageData = data.special.find((el) => el.specialFolder.name === 'image')
@@ -284,6 +284,9 @@ export function buildSpace(
     },
     isManager(user: User): boolean {
       return this.spaceRoles.manager.map((r) => r.isMember(user)).some(Boolean)
+    },
+    isSecureViewer(user: User): boolean {
+      return this.spaceRoles['secure-viewer'].map((r) => r.isMember(user)).some(Boolean)
     },
     isMember(user: User): boolean {
       return this.isViewer(user) || this.isEditor(user) || this.isManager(user)
