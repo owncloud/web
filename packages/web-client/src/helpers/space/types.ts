@@ -21,6 +21,7 @@ export interface SpaceRoles {
   viewer: SpaceRole[]
   editor: SpaceRole[]
   manager: SpaceRole[]
+  'secure-viewer': SpaceRole[]
 }
 
 export interface SpaceResource extends Resource {

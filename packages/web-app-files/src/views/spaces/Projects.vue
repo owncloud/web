@@ -372,11 +372,7 @@ export default defineComponent({
       return formatFileSize(space.spaceQuota.remaining, currentLanguage)
     }
     const getMemberCount = (space: SpaceResource) => {
-      return (
-        space.spaceRoles.manager.length +
-        space.spaceRoles.editor.length +
-        space.spaceRoles.viewer.length
-      )
+      return Object.values(space.spaceRoles).flat().length
     }
 
     onMounted(async () => {

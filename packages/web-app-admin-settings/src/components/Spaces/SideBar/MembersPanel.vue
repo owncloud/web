@@ -33,6 +33,14 @@
         <h3 class="oc-text-bold oc-text-medium" v-text="$gettext('Viewers')" />
         <members-role-section :members="filteredSpaceViewers" />
       </div>
+      <div
+        v-if="filteredSpaceSecureViewers.length"
+        class="oc-mb-m"
+        data-testid="space-members-role-secure-viewers"
+      >
+        <h3 class="oc-text-bold oc-text-medium" v-text="$gettext('Secure viewers')" />
+        <members-role-section :members="filteredSpaceSecureViewers" />
+      </div>
     </div>
   </div>
 </template>
@@ -74,6 +82,10 @@ export default defineComponent({
         ...unref(resource).spaceRoles.viewer.map((r) => ({
           ...r,
           roleType: 'viewer'
+        })),
+        ...unref(resource).spaceRoles['secure-viewer'].map((r) => ({
+          ...r,
+          roleType: 'secure-viewer'
         }))
       ].sort((a, b) => a.displayName.localeCompare(b.displayName))
     })
@@ -89,6 +101,9 @@ export default defineComponent({
     })
     const filteredSpaceViewers = computed(() => {
       return unref(filteredSpaceMembers).filter((m) => m.roleType === 'viewer')
+    })
+    const filteredSpaceSecureViewers = computed(() => {
+      return unref(filteredSpaceMembers).filter((m) => m.roleType === 'secure-viewer')
     })
 
     watch(filterTerm, () => {
@@ -108,6 +123,7 @@ export default defineComponent({
       filteredSpaceManagers,
       filteredSpaceEditors,
       filteredSpaceViewers,
+      filteredSpaceSecureViewers,
       membersListRef
     }
   }
