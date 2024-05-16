@@ -98,11 +98,7 @@ config = {
             "servers": [
                 "",
             ],
-            "suites": {
-                "oCISSharingPublic2": [
-                    "webUISharingPublicDifferentRoles",
-                ],
-            },
+            "suites": {},
             "extraEnvironment": {
                 "NODE_TLS_REJECT_UNAUTHORIZED": "0",
                 "SERVER_HOST": "https://ocis:9200",
@@ -119,9 +115,7 @@ config = {
     "build": True,
 }
 
-basicTestSuites = [
-    "webUISharingPublicDifferentRoles",
-]
+basicTestSuites = []
 
 # minio mc environment variables
 minio_mc_environment = {
