@@ -184,8 +184,6 @@ import EditPasswordModal from '../components/EditPasswordModal.vue'
 import { SettingsBundle, LanguageOption, SettingsValue } from '../helpers/settings'
 import { computed, defineComponent, onMounted, unref, ref } from 'vue'
 import {
-  Extension,
-  ExtensionPoint,
   useAuthStore,
   useCapabilityStore,
   useClientService,
@@ -461,18 +459,16 @@ export default defineComponent({
 
     const extensionRegistry = useExtensionRegistry()
     const extensionPointsWithUserPreferences = computed(() => {
-      return extensionRegistry
-        .getExtensionPoints<ExtensionPoint<Extension>>()
-        .filter((extensionPoint) => {
-          if (
-            !Object.hasOwn(extensionPoint, 'userPreference') ||
-            isEmpty(extensionPoint.userPreference)
-          ) {
-            return false
-          }
-          const extensions = extensionRegistry.requestExtensions(extensionPoint)
-          return !!extensions.length
-        })
+      return extensionRegistry.getExtensionPoints().filter((extensionPoint) => {
+        if (
+          !Object.hasOwn(extensionPoint, 'userPreference') ||
+          isEmpty(extensionPoint.userPreference)
+        ) {
+          return false
+        }
+        const extensions = extensionRegistry.requestExtensions(extensionPoint)
+        return !!extensions.length
+      })
     })
 
     onMounted(async () => {
