@@ -8,7 +8,7 @@ import {
 } from '../../../../../src'
 import { getComposableWrapper } from 'web-test-helpers'
 import { createPinia, setActivePinia } from 'pinia'
-import { computed } from 'vue'
+import { computed, unref } from 'vue'
 import { mock } from 'vitest-mock-extended'
 
 describe('useExtensionRegistry', () => {
@@ -150,10 +150,11 @@ describe('useExtensionRegistry', () => {
           id: 'foo-1',
           extensionType: 'customComponent'
         })
+        const extensionPoints = computed<ExtensionPoint<Extension>[]>(() => [extensionPoint])
 
         getWrapper({
           setup: (instance) => {
-            instance.registerExtensionPoint(extensionPoint)
+            instance.registerExtensionPoints(extensionPoints)
 
             const result = instance.getExtensionPoints({ extensionType: 'customComponent' })
             expect(result.length).toBe(1)
@@ -163,30 +164,35 @@ describe('useExtensionRegistry', () => {
     })
 
     it('can query extension points by type', () => {
-      const extensionPoints = [
-        mock<ExtensionPoint<CustomComponentExtension>>({
-          id: 'foo-1',
-          extensionType: 'customComponent'
-        }),
-        mock<ExtensionPoint<SidebarPanelExtension<any, any, any>>>({
-          id: 'foo-2',
-          extensionType: 'sidebarPanel'
-        }),
-        mock<ExtensionPoint<CustomComponentExtension>>({
-          id: ' foo-3',
-          extensionType: 'customComponent'
-        })
-      ]
+      const extensionPoints = computed<ExtensionPoint<Extension>[]>(() => {
+        return [
+          mock<ExtensionPoint<CustomComponentExtension>>({
+            id: 'foo-1',
+            extensionType: 'customComponent'
+          }),
+          mock<ExtensionPoint<SidebarPanelExtension<any, any, any>>>({
+            id: 'foo-2',
+            extensionType: 'sidebarPanel'
+          }),
+          mock<ExtensionPoint<CustomComponentExtension>>({
+            id: ' foo-3',
+            extensionType: 'customComponent'
+          })
+        ]
+      })
 
       getWrapper({
         setup: (instance) => {
-          extensionPoints.forEach((ep) => instance.registerExtensionPoint(ep))
+          instance.registerExtensionPoints(extensionPoints)
 
           const result1 = instance.getExtensionPoints({ extensionType: 'customComponent' })
-          expect(result1.map((ep) => ep.id)).toEqual([extensionPoints[0].id, extensionPoints[2].id])
+          expect(result1.map((ep) => ep.id)).toEqual([
+            unref(extensionPoints)[0].id,
+            unref(extensionPoints)[2].id
+          ])
 
           const result2 = instance.getExtensionPoints({ extensionType: 'sidebarPanel' })
-          expect(result2.map((ep) => ep.id)).toEqual([extensionPoints[1].id])
+          expect(result2.map((ep) => ep.id)).toEqual([unref(extensionPoints)[1].id])
         }
       })
     })

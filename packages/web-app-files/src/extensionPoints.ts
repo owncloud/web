@@ -12,7 +12,7 @@ export const uploadMenuExtensionPoint: ExtensionPoint<ActionExtension> = {
   multiple: true
 }
 export const quickActionsExtensionPoint: ExtensionPoint<ActionExtension> = {
-  id: 'global.files.quick-actions',
+  id: 'app.files.quick-actions',
   extensionType: 'action',
   multiple: true
 }

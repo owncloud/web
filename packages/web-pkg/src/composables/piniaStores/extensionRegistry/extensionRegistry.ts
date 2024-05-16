@@ -27,9 +27,6 @@ export const useExtensionRegistry = defineStore('extensionRegistry', () => {
   }
 
   const extensionPoints = ref<Ref<ExtensionPoint<Extension>[]>[]>([])
-  const registerExtensionPoint = <T extends Extension>(e: ExtensionPoint<T>) => {
-    extensionPoints.value.push(ref([e]))
-  }
   const registerExtensionPoints = <T extends Extension>(e: Ref<ExtensionPoint<T>[]>) => {
     extensionPoints.value.push(e)
   }
@@ -57,7 +54,6 @@ export const useExtensionRegistry = defineStore('extensionRegistry', () => {
     registerExtensions,
     requestExtensions,
     extensionPoints,
-    registerExtensionPoint,
     registerExtensionPoints,
     getExtensionPoints
   }

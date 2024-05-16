@@ -197,7 +197,8 @@ export default defineComponent({
         label: $gettext('Global progress bar')
       }
     }
-    extensionRegistry.registerExtensionPoint(progressBarExtensionPoint)
+    const extensionPoints = computed<ExtensionPoint<Extension>[]>(() => [progressBarExtensionPoint])
+    extensionRegistry.registerExtensionPoints(extensionPoints)
 
     return {
       apps,

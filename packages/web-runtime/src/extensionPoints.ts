@@ -1,4 +1,4 @@
-import { CustomComponentExtension, ExtensionPoint } from '@ownclouders/web-pkg'
+import { CustomComponentExtension, Extension, ExtensionPoint } from '@ownclouders/web-pkg'
 import { computed } from 'vue'
 
 export const topBarCenterExtensionPoint: ExtensionPoint<CustomComponentExtension> = {
@@ -8,7 +8,7 @@ export const topBarCenterExtensionPoint: ExtensionPoint<CustomComponentExtension
 }
 
 export const extensionPoints = () => {
-  return computed<ExtensionPoint<any>[]>(() => {
+  return computed<ExtensionPoint<Extension>[]>(() => {
     return [topBarCenterExtensionPoint]
   })
 }
