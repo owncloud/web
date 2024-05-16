@@ -7,6 +7,9 @@ Feature: link
 
 
   Scenario: public link
+    Given "Admin" creates following user using API
+      | id    |
+      | Brian |
     When "Alice" logs in
     And "Alice" creates the following folders in personal space using API
       | name                   |
@@ -28,7 +31,36 @@ Feature: link
     And "Anonymous" drop uploads following resources
       | resource     |
       | textfile.txt |
+
+    # authenticated user
+    When "Brian" logs in
+    And "Brian" opens the public link "myPublicLink"
+    And "Brian" unlocks the public link with password "%public%"
+    And "Brian" drop uploads following resources
+      | resource   |
+      | simple.pdf |
+
+
+    When "Alice" opens folder "folderPublic"
+    Then following resources should be displayed in the files list for user "Alice"
+      | resource     |
+      | textfile.txt |
+      | simple.pdf   |
+    And "Alice" opens the "files" app
     And "Alice" edits the public link named "myPublicLink" of resource "folderPublic" changing role to "Can edit"
+
+    And "Brian" refreshes the old link
+    Then following resources should be displayed in the files list for user "Brian"
+      | resource     |
+      | textfile.txt |
+      | simple.pdf   |
+      | SubFolder    |
+      | lorem.txt    |
+    And "Brian" deletes the following resources from public link using sidebar panel
+      | resource   |
+      | simple.pdf |
+    And "Brian" logs out
+
     And "Anonymous" refreshes the old link
     And "Anonymous" downloads the following public link resources using the sidebar panel
       | resource     | type |
