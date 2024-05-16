@@ -22,6 +22,7 @@ const editSpacesDescription = '.oc-files-actions-edit-readme-content-trigger:vis
 const spacesDescriptionInputArea = '#description-input-area'
 const sideBarActions =
   '//ul[@id="oc-files-actions-sidebar"]//span[@class="oc-files-context-action-label"]'
+const spaceHeaderSelector = '.space-header'
 
 export const openActionsPanel = async (page: Page): Promise<void> => {
   await sidebar.open({ page })
@@ -88,6 +89,7 @@ export interface openSpaceArgs {
 export const openSpace = async (args: openSpaceArgs): Promise<void> => {
   const { page, id } = args
   await page.locator(util.format(spaceIdSelector, id)).click()
+  await page.locator(spaceHeaderSelector).waitFor()
 }
 /**/
 
