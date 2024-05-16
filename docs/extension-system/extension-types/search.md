@@ -23,7 +23,7 @@ An example of a search extension configuration can be found below:
 interface SearchExtension {
   id: string
   type: 'search'
-  scopes?: ExtensionScope[]
+  extensionPointIds?: string[]
   searchProvider: {
     id: string
     available: boolean
@@ -34,7 +34,7 @@ interface SearchExtension {
 }
 ```
 
-For `id`, `type`, and `scopes`, please see [extension base section]({{< ref "../_index.md#extension-base-configuration" >}}) in top level docs.
+For `id`, `type`, and `extensionPointIds`, please see [extension base section]({{< ref "../_index.md#extension-base-configuration" >}}) in top level docs.
 
 The `searchProvider` object configures the actual provider. It consist of the following:
 
