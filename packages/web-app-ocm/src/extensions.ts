@@ -50,7 +50,7 @@ export const extensions = () => {
     {
       id: 'com.github.owncloud.web.open-file-remote',
       type: 'action',
-      extensionPointIds: ['app.files.context-actions'],
+      extensionPointIds: ['global.files.context-actions'],
       action: {
         name: 'open-file-remote',
         category: 'actions',

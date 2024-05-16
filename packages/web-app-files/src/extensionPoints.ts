@@ -12,22 +12,22 @@ export const uploadMenuExtensionPoint: ExtensionPoint<ActionExtension> = {
   multiple: true
 }
 export const quickActionsExtensionPoint: ExtensionPoint<ActionExtension> = {
-  id: 'app.files.quick-actions',
+  id: 'global.files.quick-actions',
   extensionType: 'action',
   multiple: true
 }
 export const batchActionsExtensionPoint: ExtensionPoint<ActionExtension> = {
-  id: 'app.files.batch-actions',
+  id: 'global.files.batch-actions',
   extensionType: 'action',
   multiple: true
 }
 export const contextActionsExtensionPoint: ExtensionPoint<ActionExtension> = {
-  id: 'app.files.context-actions',
+  id: 'global.files.context-actions',
   extensionType: 'action',
   multiple: true
 }
 export const fileSideBarExtensionPoint: ExtensionPoint<SidebarPanelExtension<any, any, any>> = {
-  id: 'app.files.sidebar',
+  id: 'global.files.sidebar',
   extensionType: 'sidebarPanel',
   multiple: true
 }
