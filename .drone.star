@@ -17,7 +17,6 @@ OC_CI_HUGO = "owncloudci/hugo:0.115.2"
 OC_CI_NODEJS = "owncloudci/nodejs:18"
 OC_CI_PHP = "owncloudci/php:7.4"
 OC_CI_WAIT_FOR = "owncloudci/wait-for:latest"
-OC_TESTING_MIDDLEWARE = "owncloud/owncloud-test-middleware:1.8.8"
 OC_UBUNTU = "owncloud/ubuntu:20.04"
 PLUGINS_DOCKER = "plugins/docker:20.14"
 PLUGINS_GH_PAGES = "plugins/gh-pages:1"
@@ -27,8 +26,6 @@ PLUGINS_S3 = "plugins/s3"
 PLUGINS_S3_CACHE = "plugins/s3-cache:1"
 PLUGINS_SLACK = "plugins/slack:1"
 POSTGRES_ALPINE = "postgres:alpine3.18"
-SELENIUM_STANDALONE_CHROME = "selenium/standalone-chrome:104.0-20220812"
-SELENIUM_STANDALONE_FIREFOX = "selenium/standalone-firefox:104.0-20220812"
 SONARSOURCE_SONAR_SCANNER_CLI = "sonarsource/sonar-scanner-cli:5.0"
 TOOLHIPPIE_CALENS = "toolhippie/calens:latest"
 
@@ -94,30 +91,8 @@ config = {
             ],
         },
     },
-    "acceptance": {
-        "webUI": {
-            "type": FULL,
-            "servers": [
-                "",
-            ],
-            "suites": {},
-            "extraEnvironment": {
-                "NODE_TLS_REJECT_UNAUTHORIZED": "0",
-                "SERVER_HOST": "https://ocis:9200",
-                "BACKEND_HOST": "https://ocis:9200",
-                "TESTING_DATA_DIR": "%s" % dir["testingDataDir"],
-                "OCIS_REVA_DATA_ROOT": "%s" % dir["ocisRevaDataRoot"],
-                "WEB_UI_CONFIG_FILE": "%s" % dir["ocisConfig"],
-                "EXPECTED_FAILURES_FILE": "%s/tests/acceptance/expected-failures-with-ocis-server-ocis-storage.md" % dir["web"],
-            },
-            "filterTags": "not @skip and not @skipOnOCIS and not @notToImplementOnOCIS",
-            "screenShots": True,
-        },
-    },
     "build": True,
 }
-
-basicTestSuites = []
 
 # minio mc environment variables
 minio_mc_environment = {
@@ -151,38 +126,11 @@ web_workspace = {
     "path": config["app"],
 }
 
-def checkTestSuites():
-    for testGroupName, test in config["acceptance"].items():
-        suites = []
-        for key, items in test["suites"].items():
-            if (type(items) == "list"):
-                suites += items
-            elif (type(items) == "string"):
-                suites.append(key)
-            else:
-                print("Error: invalid value for suite, it must be a list or string")
-                return False
-
-        expected = []
-        if (test["type"] == FULL):
-            expected += basicTestSuites
-
-        if (sorted(suites) != sorted(expected)):
-            print("Error: Suites dont match " + testGroupName)
-            print(Diff(sorted(suites), sorted(expected)))
-
-    return True
-
 def Diff(li1, li2):
     li_dif = [i for i in li1 + li2 if i not in li1 or i not in li2]
     return li_dif
 
 def main(ctx):
-    uiSuitesCheck = checkTestSuites()
-    if (uiSuitesCheck == False):
-        print("Errors detected. Review messages above.")
-        return []
-
     before = beforePipelines(ctx)
 
     stages = pipelinesDependsOn(stagePipelines(ctx), before)
@@ -213,7 +161,6 @@ def main(ctx):
 def beforePipelines(ctx):
     return checkStarlark() + \
            licenseCheck(ctx) + \
-           checkTestSuitesInExpectedFailures(ctx) + \
            documentation(ctx) + \
            changelog(ctx) + \
            pnpmCache(ctx) + \
@@ -224,9 +171,8 @@ def beforePipelines(ctx):
 def stagePipelines(ctx):
     unit_test_pipelines = unitTests(ctx)
     e2e_pipelines = e2eTests(ctx)
-    acceptance_pipelines = acceptance(ctx)
     keycloak_pipelines = e2eTestsOnKeycloak(ctx)
-    return unit_test_pipelines + pipelinesDependsOn(e2e_pipelines + keycloak_pipelines + acceptance_pipelines, unit_test_pipelines)
+    return unit_test_pipelines + pipelinesDependsOn(e2e_pipelines + keycloak_pipelines, unit_test_pipelines)
 
 def afterPipelines(ctx):
     return build(ctx) + pipelinesDependsOn(notify(), build(ctx))
@@ -656,155 +602,6 @@ def e2eTests(ctx):
         })
     return pipelines
 
-def acceptance(ctx):
-    pipelines = []
-
-    if "acceptance" not in config:
-        return pipelines
-
-    if type(config["acceptance"]) == "bool":
-        if not config["acceptance"]:
-            return pipelines
-
-    errorFound = False
-
-    default = {
-        "servers": [],
-        "browsers": ["chrome"],
-        "databases": ["mysql:5.5"],
-        "extraEnvironment": {},
-        "cronOnly": False,
-        "filterTags": "not @skip and not @skipOnOCIS and not @notToImplementOnOCIS",
-        "logLevel": "2",
-        "notificationsAppNeeded": False,
-        "screenShots": False,
-        "openIdConnect": False,
-        "skip": False,
-        "debugSuites": [],
-        "retry": True,
-    }
-
-    if "defaults" in config:
-        if "acceptance" in config["defaults"]:
-            for item in config["defaults"]["acceptance"]:
-                default[item] = config["defaults"]["acceptance"][item]
-
-    for category, matrix in config["acceptance"].items():
-        if type(matrix["suites"]) == "list":
-            suites = {}
-            for suite in matrix["suites"]:
-                suites[suite] = suite
-        else:
-            suites = matrix["suites"]
-
-        if "debugSuites" in matrix and len(matrix["debugSuites"]) != 0:
-            if type(matrix["debugSuites"]) == "list":
-                suites = {}
-                for suite in matrix["debugSuites"]:
-                    suites[suite] = suite
-            else:
-                suites = matrix["debugSuites"]
-
-        for key, value in suites.items():
-            if type(value) == "list":
-                suite = value
-                suiteName = key
-                alternateSuiteName = key
-            else:
-                suite = key
-                alternateSuiteName = value
-                suiteName = value
-
-            params = {}
-            for item in default:
-                params[item] = matrix[item] if item in matrix else default[item]
-
-            for server in params["servers"]:
-                for browser in params["browsers"]:
-                    for db in params["databases"]:
-                        if params["skip"]:
-                            continue
-
-                        browserString = "" if browser == "" else "-" + browser
-                        serverString = "" if server == "" else "-" + server.replace("daily-", "").replace("-qa", "")
-                        name = "%s%s%s" % (suiteName, browserString, serverString)
-                        maxLength = 50
-                        nameLength = len(name)
-                        if nameLength > maxLength:
-                            print("Error: generated stage name of length", nameLength, "is not supported. The maximum length is " + str(maxLength) + ".", name)
-                            errorFound = True
-
-                        steps = []
-
-                        # TODO: don't start services if we skip it -> maybe we need to convert them to steps
-                        steps += skipIfUnchanged(ctx, "acceptance-tests")
-                        steps += restoreBuildArtifactCache(ctx, "web-dist", "dist")
-                        steps += setupServerConfigureWeb(params["logLevel"])
-
-                        services = browserService(alternateSuiteName, browser) + middlewareService()
-
-                        if ctx.build.event == "cron":
-                            steps += restoreBuildArtifactCache(ctx, "ocis", "ocis")
-                        else:
-                            steps += restoreOcisCache()
-
-                        # Services and steps required for running tests with oCIS
-                        steps += ocisService("acceptance-tests", enforce_password_public_link = True) + getSkeletonFiles()
-
-                        # Wait for test-related services to be up
-                        steps += waitForBrowserService()
-                        steps += waitForMiddlewareService()
-
-                        # run the acceptance tests
-                        steps += runWebuiAcceptanceTests(ctx, suite, alternateSuiteName, params["filterTags"], params["extraEnvironment"], params["screenShots"], params["retry"])
-
-                        # Capture the screenshots from acceptance tests (only runs on failure)
-                        if (params["screenShots"]):
-                            steps += uploadScreenshots() + logAcceptanceTestsScreenshotsResult(suiteName)
-
-                        result = {
-                            "kind": "pipeline",
-                            "type": "docker",
-                            "name": name,
-                            "workspace": {
-                                "base": dir["base"],
-                                "path": config["app"],
-                            },
-                            "steps": steps,
-                            "services": services,
-                            "trigger": {
-                                "ref": [
-                                    "refs/tags/**",
-                                    "refs/pull/**",
-                                ],
-                            },
-                            "volumes": [{
-                                "name": "uploads",
-                                "temp": {},
-                            }, {
-                                "name": "configs",
-                                "temp": {},
-                            }, {
-                                "name": "gopath",
-                                "temp": {},
-                            }],
-                        }
-
-                        result = pipelineDependsOn(result, cacheOcisPipeline(ctx))
-
-                        for branch in config["branches"]:
-                            result["trigger"]["ref"].append("refs/heads/%s" % branch)
-
-                        if (params["cronOnly"]):
-                            result["trigger"]["event"] = ["cron"]
-
-                        pipelines.append(result)
-
-    if errorFound:
-        return False
-
-    return pipelines
-
 def notify():
     pipelines = []
 
@@ -844,38 +641,6 @@ def notify():
     pipelines.append(result)
 
     return pipelines
-
-def browserService(alternateSuiteName, browser):
-    if browser == "chrome":
-        return [{
-            "name": "selenium",
-            "image": SELENIUM_STANDALONE_CHROME,
-            "volumes": [{
-                "name": "uploads",
-                "path": "/uploads",
-            }],
-        }]
-
-    if browser == "firefox":
-        return [{
-            "name": "selenium",
-            "image": SELENIUM_STANDALONE_FIREFOX,
-            "volumes": [{
-                "name": "uploads",
-                "path": "/uploads",
-            }],
-        }]
-
-    return []
-
-def waitForBrowserService():
-    return [{
-        "name": "wait-for-browser-service",
-        "image": OC_CI_WAIT_FOR,
-        "commands": [
-            "wait-for -it selenium:4444 -t 300",
-        ],
-    }]
 
 def installPnpm():
     return [{
@@ -1261,50 +1026,6 @@ def copyFilesForUpload():
         ],
     }]
 
-def runWebuiAcceptanceTests(ctx, suite, alternateSuiteName, filterTags, extraEnvironment, screenShots, retry):
-    environment = {}
-    if (filterTags != ""):
-        environment["TEST_TAGS"] = filterTags
-
-    environment["LOCAL_UPLOAD_DIR"] = "/uploads"
-    if type(suite) == "list":
-        paths = ""
-        for path in suite:
-            paths = paths + "features/" + path + " "
-        environment["TEST_PATHS"] = paths
-    elif (suite != "all"):
-        environment["TEST_CONTEXT"] = suite
-
-    if (ctx.build.event == "cron") or (not retry):
-        environment["RERUN_FAILED_WEBUI_SCENARIOS"] = "false"
-    if (screenShots):
-        environment["SCREENSHOTS"] = "true"
-    environment["SERVER_HOST"] = "http://web"
-    environment["BACKEND_HOST"] = "http://owncloud"
-    environment["COMMENTS_FILE"] = "%s" % dir["commentsFile"]
-    environment["MIDDLEWARE_HOST"] = "http://middleware:3000"
-    environment["REMOTE_UPLOAD_DIR"] = "/usr/src/app/filesForUpload"
-    environment["WEB_UI_CONFIG_FILE"] = "%s/dist/config.json" % dir["web"]
-
-    for env in extraEnvironment:
-        environment[env] = extraEnvironment[env]
-
-    return restoreBuildArtifactCache(ctx, "pnpm", ".pnpm-store") + installPnpm() + [{
-        "name": "webui-acceptance-tests",
-        "image": OC_CI_NODEJS,
-        "environment": environment,
-        "commands": [
-            "cd %s/tests/acceptance && ./run.sh" % dir["web"],
-        ],
-        "volumes": [{
-            "name": "gopath",
-            "path": dir["app"],
-        }, {
-            "name": "configs",
-            "path": dir["config"],
-        }],
-    }]
-
 def cacheOcisPipeline(ctx):
     steps = []
 
@@ -1402,41 +1123,6 @@ def cacheOcis():
             "mc cp -a %s/ocis s3/$CACHE_BUCKET/ocis-build/$OCIS_COMMITID/" % dir["web"],
             "mc ls --recursive s3/$CACHE_BUCKET/ocis-build",
         ],
-    }]
-
-def uploadScreenshots():
-    return [{
-        "name": "upload-screenshots",
-        "image": PLUGINS_S3,
-        "pull": "if-not-exists",
-        "settings": {
-            "bucket": {
-                "from_secret": "cache_public_s3_bucket",
-            },
-            "endpoint": {
-                "from_secret": "cache_public_s3_server",
-            },
-            "path_style": True,
-            "source": "%s/tests/acceptance/reports/screenshots/**/*" % dir["web"],
-            "strip_prefix": "%s/tests/acceptance/reports/screenshots" % dir["web"],
-            "target": "/${DRONE_REPO}/${DRONE_BUILD_NUMBER}/screenshots",
-        },
-        "environment": {
-            "AWS_ACCESS_KEY_ID": {
-                "from_secret": "cache_public_s3_access_key",
-            },
-            "AWS_SECRET_ACCESS_KEY": {
-                "from_secret": "cache_public_s3_secret_key",
-            },
-        },
-        "when": {
-            "status": [
-                "failure",
-            ],
-            "event": [
-                "pull_request",
-            ],
-        },
     }]
 
 def example_deploys(ctx):
@@ -1585,64 +1271,6 @@ def licenseCheck(ctx):
         },
     }]
 
-def checkTestSuitesInExpectedFailures(ctx):
-    return [{
-        "kind": "pipeline",
-        "type": "docker",
-        "name": "check-suites-in-expected-failures",
-        "workspace": {
-            "base": dir["base"],
-            "path": config["app"],
-        },
-        "steps": [
-            {
-                "name": "check-suites",
-                "image": OC_CI_ALPINE,
-                "commands": [
-                    "%s/tests/acceptance/check-deleted-suites-in-expected-failure.sh" % dir["web"],
-                ],
-            },
-        ],
-        "trigger": {
-            "ref": [
-                "refs/pull/**",
-            ],
-        },
-    }]
-
-def middlewareService():
-    environment = {
-        "BACKEND_HOST": "https://ocis:9200",
-        "OCIS_REVA_DATA_ROOT": "/srv/app/tmp/ocis/storage/owncloud/",
-        "RUN_ON_OCIS": "true",
-        "REMOTE_UPLOAD_DIR": "/uploads",
-        "NODE_TLS_REJECT_UNAUTHORIZED": "0",
-        "MIDDLEWARE_HOST": "middleware",
-        "TEST_WITH_GRAPH_API": "true",
-    }
-
-    return [{
-        "name": "middleware",
-        "image": OC_TESTING_MIDDLEWARE,
-        "environment": environment,
-        "volumes": [{
-            "name": "gopath",
-            "path": dir["app"],
-        }, {
-            "name": "uploads",
-            "path": "/uploads",
-        }],
-    }]
-
-def waitForMiddlewareService():
-    return [{
-        "name": "wait-for-middleware-service",
-        "image": OC_CI_WAIT_FOR,
-        "commands": [
-            "wait-for -it middleware:3000 -t 300",
-        ],
-    }]
-
 def pipelineDependsOn(pipeline, dependant_pipelines):
     if "depends_on" in pipeline.keys():
         pipeline["depends_on"] = pipeline["depends_on"] + getPipelineNames(dependant_pipelines)
@@ -1702,25 +1330,11 @@ def skipIfUnchanged(ctx, type):
         }
         return [skip_step]
 
-    if type == "acceptance-tests":
-        acceptance_skip_steps = [
-            "^__fixtures__/.*",
-            "^__mocks__/.*",
-            "^packages/.*/tests/.*",
-            "^tests/e2e/.*",
-            "^tests/unit/.*",
-        ]
-        skip_step["settings"] = {
-            "ALLOW_SKIP_CHANGED": base_skip_steps + acceptance_skip_steps,
-        }
-        return [skip_step]
-
     if type == "e2e-tests":
         e2e_skip_steps = [
             "^__fixtures__/.*",
             "^__mocks__/.*",
             "^packages/.*/tests/.*",
-            "^tests/acceptance/.*",
             "^tests/unit/.*",
         ]
         skip_step["settings"] = {
@@ -1730,7 +1344,28 @@ def skipIfUnchanged(ctx, type):
 
     if type == "unit-tests":
         unit_skip_steps = [
-            "^tests/acceptance/.*",
+            "^tests/e2e/.*",
+        ]
+        skip_step["settings"] = {
+            "ALLOW_SKIP_CHANGED": base_skip_steps + unit_skip_steps,
+        }
+        return [skip_step]
+
+    if type == "e2e-tests":
+        e2e_skip_steps = [
+            "^__fixtures__/.*",
+            "^__mocks__/.*",
+            "^packages/.*/tests/.*",
+            "^tests/unit/.*",
+        ]
+        skip_step["settings"] = {
+            "ALLOW_SKIP_CHANGED": base_skip_steps + e2e_skip_steps,
+        }
+        return [skip_step]
+
+    if type == "unit-tests":
+        unit_skip_steps = [
+            "^tests/e2e/.*",
         ]
         skip_step["settings"] = {
             "ALLOW_SKIP_CHANGED": base_skip_steps + unit_skip_steps,
@@ -1904,25 +1539,6 @@ def pipelineSanityChecks(ctx, pipelines):
 
     for image in images.keys():
         print(" %sx\t%s" % (images[image], image))
-
-def logAcceptanceTestsScreenshotsResult(suite):
-    return [{
-        "name": "log-acceptance-tests-screenshot",
-        "image": OC_UBUNTU,
-        "commands": [
-            "cd %s/tests/acceptance/reports/screenshots/" % dir["web"],
-            'echo "To see the screenshots, please visit the following path"',
-            'for f in *.png; do echo "### $f\n" \'!\'"(https://cache.owncloud.com/public/${DRONE_REPO}/${DRONE_BUILD_NUMBER}/screenshots/$f) \n"; done',
-        ],
-        "when": {
-            "status": [
-                "failure",
-            ],
-            "event": [
-                "pull_request",
-            ],
-        },
-    }]
 
 def uploadTracingResult(ctx):
     status = ["failure"]

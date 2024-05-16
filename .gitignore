@@ -40,10 +40,6 @@ tests/testing-app
 
 /.pnpm-store/
 
-# acceptance test artifacts
-logfile.txt
-comments.file
-
 # drone CI is in .drone.star, do not let someone accidentally commit a local .drone.yml
 .drone.yml
 
@@ -58,8 +54,6 @@ comments.file
 tests/report/cucumber_report.json
 tests/report/cucumber_report.html
 .vscode/settings.json
-tests/acceptance/report/cucumber_report.json
-tests/acceptance/report/cucumber_report.html
 
 # third party licenses
 /third-party-licenses

@@ -33,14 +33,9 @@ Having these packages side by side within the `/packages` folder of the repo is 
 
 ### tests Folder
 
-For historic reasons, there are two end-to-end test collections in the ownCloud Web project. The older one lives in `/tests/acceptance`,
-using [Nightwatch.js](https://nightwatchjs.org). The newer one lives in `/tests/e2e`, using [Playwright](https://playwright.dev).
-We're slowly moving away from the nightwatch.js-based e2e tests. As our coverage with playwright based e2e tests grows continuously, it might
-happen that you will not find the `/tests/acceptance` folder anymore. If that's the case at the time of reading this, those are happy times.
+We're using the [Playwright](https://playwright.dev) for UI testing. The UI tests are located in the `/tests/e2e`
+
 You're more than welcome to make a pull request and adjust this section of the docs accordingly. :-)
-
-The rest of the folder contains helpers and configuration files for our automated testing infrastructure.
-
 You can read more about testing in our [testing section]({{< ref "../testing/_index.md" >}})
 
 ### package.json File

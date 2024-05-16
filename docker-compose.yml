@@ -136,44 +136,6 @@ services:
       - ocis-federated-config:/etc/ocis
       - ${OCIS_WEB_CONFIG:-./dev/docker/ocis.web-federated.config.json}:/web/config.json:ro
 
-  selenium:
-    build:
-      dockerfile: selenium.Dockerfile
-      context: ./dev/docker
-      args:
-        SELENIUM_IMAGE: ${SELENIUM_IMAGE:-selenium/standalone-chrome:104.0-20220812}
-    container_name: web_selenium
-    ports:
-      - 4444:4444
-      - 5900:5900
-      - 7900:7900
-      - 6080:7900
-    volumes:
-      - /dev/shm:/dev/shm
-      - uploads:/uploads:ro
-    extra_hosts:
-      - host.docker.internal:${DOCKER_HOST:-host-gateway}
-    environment:
-      VNC_NO_PASSWORD: 'true'
-
-  middleware-ocis:
-    image: owncloud/owncloud-test-middleware:latest
-    hostname: middleware
-    extra_hosts:
-      - host.docker.internal:${DOCKER_HOST:-host-gateway}
-    ports:
-      - '3000:3000'
-    volumes:
-      - uploads:/uploads
-    environment:
-      MIDDLEWARE_PORT: 3000
-      MIDDLEWARE_HOST: '0.0.0.0'
-      RUN_ON_OCIS: 'true'
-      NODE_TLS_REJECT_UNAUTHORIZED: '0'
-      BACKEND_HOST: 'https://host.docker.internal:9200'
-      REMOTE_UPLOAD_DIR: '/uploads'
-      TEST_WITH_GRAPH_API: 'true'
-
   companion:
     image: owncloud/uppy-companion:3.12.13-owncloud
     extra_hosts:
