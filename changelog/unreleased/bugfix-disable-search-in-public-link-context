@@ -1,0 +1,8 @@
+Bugfix: Disable search in public link context
+
+We've fixed a bug where the search was visible in the public link context but not usable,
+since we are not able yet to provide searching in this context.
+Therefore the search was disabled in the public link context.
+
+https://github.com/owncloud/web/pull/10928
+https://github.com/owncloud/web/issues/10915
