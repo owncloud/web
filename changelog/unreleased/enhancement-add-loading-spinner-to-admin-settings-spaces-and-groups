@@ -1,0 +1,7 @@
+Enhancement: Add loading spinner to admin settings spaces and groups
+
+We've added a loading spinner to the spaces and groups view in the admin settings to indicate loading task,
+when the server needs time to respond.
+
+https://github.com/owncloud/web/pull/10929
+https://github.com/owncloud/web/issues/10922
