@@ -124,6 +124,8 @@ const keepBothButton = '.oc-modal-body-actions-confirm'
 const mediaNavigationButton = `//button[contains(@class, "preview-controls-%s")]`
 const sideBarActions =
   '//ul[@id="oc-files-actions-sidebar"]//span[@class="oc-files-context-action-label"]'
+const collaboraDocPermissionModeSelector = '#PermissionMode'
+const onlyOfficeFileTitleSelector = `//section[@id="box-doc-name"]/input[@id="rib-doc-name"]`
 
 export const clickResource = async ({
   page,
@@ -1842,6 +1844,42 @@ export interface expectFileToBeLockedArgs {
 export const getLockLocator = (args: expectFileToBeLockedArgs): Locator => {
   const { page, resource } = args
   return page.locator(util.format(resourceLockIcon, resource))
+}
+
+export const canEditContent = async ({
+  page,
+  type
+}: {
+  page: Page
+  type: string
+}): Promise<boolean> => {
+  const editorMainFrame = page.frameLocator(externalEditorIframe)
+  switch (type) {
+    case 'OpenDocument':
+      // By Default when "OpenDocument" is created, it is opened with "Collabora" if both app-provider services are running together
+      try {
+        await editorMainFrame
+          .locator(collaboraWelcomeModalIframe)
+          .waitFor({ timeout: config.minTimeout * 1000 })
+        await page.keyboard.press('Escape')
+      } catch (e) {
+        console.log('No welcome modal found. Continue...')
+      }
+      const collaboraDocPermissionModeLocator = editorMainFrame.locator(
+        collaboraDocPermissionModeSelector
+      )
+      const collaboraDocPermissionModeText = (
+        await collaboraDocPermissionModeLocator.innerText()
+      ).trim()
+      return collaboraDocPermissionModeText === 'Edit'
+    case 'Microsoft Word':
+      // By Default when "Microsoft Word document" is created, it is opened with "OnlyOffice" if both app-provider services are running together
+      const innerFrame = editorMainFrame.frameLocator(onlyOfficeInnerFrameSelector)
+      await innerFrame.locator(onlyOfficeCanvasEditorSelector).click()
+      const onlyOfficeDocTitle = await innerFrame.locator(onlyOfficeFileTitleSelector).inputValue()
+      // title appears as "MicrosoftWord.docx (read only)"
+      return !onlyOfficeDocTitle.endsWith('(read only)')
+  }
 }
 
 export interface canManageResourceArgs {

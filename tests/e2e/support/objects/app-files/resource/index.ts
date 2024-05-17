@@ -313,6 +313,10 @@ export class Resource {
     await po.previewMediaFromSidebarPanel({ page: this.#page, resource })
   }
 
+  async canEditContent({ type }: { type: string }): Promise<boolean> {
+    return await po.canEditContent({ page: this.#page, type })
+  }
+
   showShareIndicatorSelector({
     buttonLabel,
     resource

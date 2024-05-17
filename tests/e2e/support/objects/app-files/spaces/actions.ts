@@ -20,7 +20,7 @@ const selectedQuotaValueField = '.vs--open'
 const quotaValueDropDown = `.vs__dropdown-option :text-is("%s")`
 const editSpacesDescription = '.oc-files-actions-edit-readme-content-trigger:visible'
 const spacesDescriptionInputArea = '.md-mode .ProseMirror'
-const spacesDescriptionSaveTextFileInEditorButton = '#app-save-action:visible'
+const spaceHeaderSelector = '.space-header'
 
 export const openActionsPanel = async (page: Page): Promise<void> => {
   await sidebar.open({ page })
