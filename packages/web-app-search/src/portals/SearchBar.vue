@@ -134,7 +134,7 @@ export default defineComponent({
     const availableProviders = useAvailableProviders()
 
     const authStore = useAuthStore()
-    const { userContextReady } = storeToRefs(authStore)
+    const { userContextReady, publicLinkContextReady } = storeToRefs(authStore)
 
     const resourcesStore = useResourcesStore()
     const { currentFolder } = storeToRefs(resourcesStore)
@@ -304,6 +304,7 @@ export default defineComponent({
 
     return {
       userContextReady,
+      publicLinkContextReady,
       showCancelButton,
       onLocationFilterChange,
       currentFolderAvailable,
@@ -340,7 +341,12 @@ export default defineComponent({
     },
 
     isSearchBarEnabled() {
-      return this.availableProviders.length && this.userContextReady
+      /**
+       * We don't show the search provider in public link context,
+       * since we are not able to provide search in the public link yet.
+       * Enable as soon this feature is available.
+       */
+      return this.availableProviders.length && this.userContextReady && !this.publicLinkContextReady
     },
     displayProviders() {
       /**
