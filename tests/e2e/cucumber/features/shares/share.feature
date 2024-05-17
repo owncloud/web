@@ -22,10 +22,10 @@ Feature: share
       | lorem.txt     | folder_to_shared       |
       | lorem-big.txt | folder_to_customShared |
     When "Alice" shares the following resource using the sidebar panel
-      | resource           | recipient | type | role     | resourceType |
-      | folder_to_shared   | Brian     | user | Can edit | folder       |
-      | shared_folder      | Brian     | user | Can edit | folder       |
-      | folder_to_shared_2 | Brian     | user | Can edit | folder       |
+      | resource               | recipient | type | role                                  | resourceType |
+      | folder_to_shared       | Brian     | user | Can edit                              | folder       |
+      | shared_folder          | Brian     | user | Can edit                              | folder       |
+      | folder_to_customShared | Brian     | user | custom_permissions:read,create,delete | folder       |
 
     And "Brian" navigates to the shared with me page
     And "Brian" accepts the following share
