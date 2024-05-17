@@ -10,6 +10,7 @@ Summary
 
 * Bugfix - Vertical scroll for OcModal on small screens: [#10814](https://github.com/owncloud/web/issues/10814)
 * Bugfix - Context menu empty in tiles view: [#10900](https://github.com/owncloud/web/pull/10900)
+* Bugfix - Disable search in public link context: [#10928](https://github.com/owncloud/web/pull/10928)
 * Change - Portal target removed: [#10758](https://github.com/owncloud/web/pull/10758)
 * Change - Disable opening files in embed mode: [#10786](https://github.com/owncloud/web/pull/10786)
 * Enhancement - Accessibility improvements: [#5383](https://github.com/owncloud/web/issues/5383)
@@ -19,6 +20,7 @@ Summary
 * Enhancement - Add SSE event for moving: [#10807](https://github.com/owncloud/web/pull/10807)
 * Enhancement - Show loading spinner while searching or filtering users: [#10874](https://github.com/owncloud/web/pull/10874)
 * Enhancement - Display hidden resources information in files list: [#10907](https://github.com/owncloud/web/pull/10907)
+* Enhancement - Add loading spinner to admin settings spaces and groups: [#10929](https://github.com/owncloud/web/pull/10929)
 
 Details
 -------
@@ -38,6 +40,15 @@ Details
 
    https://github.com/owncloud/web/issues/10793
    https://github.com/owncloud/web/pull/10900
+
+* Bugfix - Disable search in public link context: [#10928](https://github.com/owncloud/web/pull/10928)
+
+   We've fixed a bug where the search was visible in the public link context but
+   not usable, since we are not able yet to provide searching in this context.
+   Therefore the search was disabled in the public link context.
+
+   https://github.com/owncloud/web/issues/10915
+   https://github.com/owncloud/web/pull/10928
 
 * Change - Portal target removed: [#10758](https://github.com/owncloud/web/pull/10758)
 
@@ -122,6 +133,14 @@ Details
 
    https://github.com/owncloud/web/issues/9036
    https://github.com/owncloud/web/pull/10907
+
+* Enhancement - Add loading spinner to admin settings spaces and groups: [#10929](https://github.com/owncloud/web/pull/10929)
+
+   We've added a loading spinner to the spaces and groups view in the admin
+   settings to indicate loading task, when the server needs time to respond.
+
+   https://github.com/owncloud/web/issues/10922
+   https://github.com/owncloud/web/pull/10929
 
 Changelog for ownCloud Web [8.0.2] (2024-05-14)
 =======================================
