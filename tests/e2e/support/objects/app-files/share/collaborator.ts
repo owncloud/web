@@ -82,7 +82,7 @@ export default class Collaborator {
   public static readonly collaboratorRoleDropdownButton =
     '%s//button[contains(@class,"files-recipient-role-select-btn")]'
   private static readonly collaboratorRoleItemSelector =
-    '%s//span[contains(@class,"roles-select-role-item")]/span[text()="%s"]'
+    '%s//ul[contains(@class,"files-recipient-role-drop-list")]//button[@id="files-recipient-role-drop-btn-%s"]'
   public static readonly collaboratorEditDropdownButton =
     '%s//button[contains(@class,"collaborator-edit-dropdown-options-btn")]'
   private static readonly collaboratorUserSelector = '//*[@data-testid="collaborator-user-item-%s"]'

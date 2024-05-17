@@ -19,7 +19,7 @@ const spacesQuotaSearchField = '.oc-modal .vs__search'
 const selectedQuotaValueField = '.vs--open'
 const quotaValueDropDown = `.vs__dropdown-option :text-is("%s")`
 const editSpacesDescription = '.oc-files-actions-edit-readme-content-trigger:visible'
-const spacesDescriptionInputArea = '.md-mode .ProseMirror'
+const spacesDescriptionInputArea = '#description-input-area'
 const spaceHeaderSelector = '.space-header'
 
 export const openActionsPanel = async (page: Page): Promise<void> => {
@@ -147,16 +147,28 @@ export const changeSpaceDescription = async (args: {
 }): Promise<void> => {
   const { page, value } = args
   await openActionsPanel(page)
-  const waitForUpdate = () =>
+  const waitForGET = page.waitForResponse(
+    (resp) =>
+      resp.url().endsWith('readme.md') && resp.status() === 200 && resp.request().method() === 'GET'
+  )
+  await Promise.all([waitForGET, page.locator(editSpacesDescription).click()])
+  await page.locator(spacesDescriptionInputArea).fill(value)
+  await Promise.all([
     page.waitForResponse(
       (resp) =>
         resp.url().endsWith('readme.md') &&
-        resp.status() === 200 &&
-        resp.request().method() === 'GET'
-    )
-  await Promise.all([waitForUpdate(), page.locator(editSpacesDescription).click()])
-  await page.locator(spacesDescriptionInputArea).fill(value)
-  await Promise.all([waitForUpdate(), page.locator(actionConfirmButton).click()])
+        resp.status() === 204 &&
+        resp.request().method() === 'PUT'
+    ),
+    page.waitForResponse(
+      (resp) =>
+        resp.url().endsWith('readme.md') &&
+        resp.status() === 207 &&
+        resp.request().method() === 'PROPFIND'
+    ),
+    waitForGET,
+    page.locator(actionConfirmButton).click()
+  ])
   await sidebar.close({ page: page })
 }
 
