@@ -120,8 +120,8 @@ export default defineComponent({
           usersToFetch.map((userId) => client.users.getUser(userId))
         )
 
-        usersResponse.forEach(({ data }) => {
-          userSettingsStore.upsertUser(data)
+        usersResponse.forEach((user) => {
+          userSettingsStore.upsertUser(user)
         })
       } catch (e) {
         console.error(e)

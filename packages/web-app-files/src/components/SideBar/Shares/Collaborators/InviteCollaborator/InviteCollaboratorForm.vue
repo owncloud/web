@@ -289,14 +289,15 @@ export default defineComponent({
 
     const fetchRecipientsTask = useTask(function* (signal, query: string) {
       const client = clientService.graphAuthenticated
-      const { data: userData } = yield* call(
-        client.users.listUsers('displayName', null, null, `"${query}"`)
+      const userData = yield* call(
+        client.users.listUsers({ orderBy: ['displayName'], search: `"${query}"` })
       )
+
       const { data: groupData } = yield* call(
         client.groups.listGroups('displayName', null, `"${query}"`)
       )
 
-      const users = (userData.value || []).map((u) => ({
+      const users = (userData || []).map((u) => ({
         ...u,
         shareType: ShareTypes.user.value
       })) as CollaboratorAutoCompleteItem[]

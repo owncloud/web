@@ -314,8 +314,7 @@ export default defineComponent({
       }
 
       try {
-        const { data } = yield* call(clientService.graphAuthenticated.users.getMe())
-        graphUser.value = data
+        graphUser.value = yield* call(clientService.graphAuthenticated.users.getMe())
       } catch (e) {
         console.error(e)
         showErrorMessage({

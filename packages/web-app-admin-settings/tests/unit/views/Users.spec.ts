@@ -72,15 +72,9 @@ const getDefaultApplications = () => {
 
 const getClientService = () => {
   const clientService = mockDeep<ClientService>()
-  clientService.graphAuthenticated.users.listUsers.mockResolvedValue(
-    mock<AxiosResponse>({ data: { value: [getDefaultUser()] } })
-  )
-  clientService.graphAuthenticated.users.getUser.mockResolvedValue(
-    mock<AxiosResponse>({ data: getDefaultUser() })
-  )
-  clientService.graphAuthenticated.users.editUser.mockResolvedValue(
-    mock<AxiosResponse>({ data: getDefaultUser() })
-  )
+  clientService.graphAuthenticated.users.listUsers.mockResolvedValue([mock<User>(getDefaultUser())])
+  clientService.graphAuthenticated.users.getUser.mockResolvedValue(mock<User>(getDefaultUser()))
+  clientService.graphAuthenticated.users.editUser.mockResolvedValue(mock<User>(getDefaultUser()))
   clientService.graphAuthenticated.groups.listGroups.mockResolvedValue(
     mock<AxiosResponse>({ data: { value: [] } })
   )
@@ -193,12 +187,11 @@ describe('Users view', () => {
           .vm.$emit('selectionChange', [{ id: '1' }])
         await wrapper.vm.$nextTick()
         expect(clientService.graphAuthenticated.users.listUsers).toHaveBeenCalledTimes(2)
-        expect(clientService.graphAuthenticated.users.listUsers).toHaveBeenNthCalledWith(
-          2,
-          'displayName',
-          "(memberOf/any(m:m/id eq '1'))",
-          ['appRoleAssignments']
-        )
+        expect(clientService.graphAuthenticated.users.listUsers).toHaveBeenNthCalledWith(2, {
+          orderBy: ['displayName'],
+          filter: "(memberOf/any(m:m/id eq '1'))",
+          expand: ['appRoleAssignments']
+        })
       })
       it('does filter initially if group ids are given via query param', async () => {
         const groupIdsQueryParam = '1+2'
@@ -209,11 +202,11 @@ describe('Users view', () => {
           groupFilterQuery: groupIdsQueryParam
         })
         await wrapper.vm.loadResourcesTask.last
-        expect(clientService.graphAuthenticated.users.listUsers).toHaveBeenCalledWith(
-          'displayName',
-          "(memberOf/any(m:m/id eq '1') or memberOf/any(m:m/id eq '2'))",
-          ['appRoleAssignments']
-        )
+        expect(clientService.graphAuthenticated.users.listUsers).toHaveBeenCalledWith({
+          orderBy: ['displayName'],
+          filter: "(memberOf/any(m:m/id eq '1') or memberOf/any(m:m/id eq '2'))",
+          expand: ['appRoleAssignments']
+        })
       })
     })
     describe('roles', () => {
@@ -227,12 +220,11 @@ describe('Users view', () => {
           .vm.$emit('selectionChange', [{ id: '1' }])
         await wrapper.vm.$nextTick()
         expect(clientService.graphAuthenticated.users.listUsers).toHaveBeenCalledTimes(2)
-        expect(clientService.graphAuthenticated.users.listUsers).toHaveBeenNthCalledWith(
-          2,
-          'displayName',
-          "(appRoleAssignments/any(m:m/appRoleId eq '1'))",
-          ['appRoleAssignments']
-        )
+        expect(clientService.graphAuthenticated.users.listUsers).toHaveBeenNthCalledWith(2, {
+          orderBy: ['displayName'],
+          filter: "(appRoleAssignments/any(m:m/appRoleId eq '1'))",
+          expand: ['appRoleAssignments']
+        })
       })
       it('does filter initially if role ids are given via query param', async () => {
         const roleIdsQueryParam = '1+2'
@@ -243,11 +235,12 @@ describe('Users view', () => {
           roleFilterQuery: roleIdsQueryParam
         })
         await wrapper.vm.loadResourcesTask.last
-        expect(clientService.graphAuthenticated.users.listUsers).toHaveBeenCalledWith(
-          'displayName',
-          "(appRoleAssignments/any(m:m/appRoleId eq '1') or appRoleAssignments/any(m:m/appRoleId eq '2'))",
-          ['appRoleAssignments']
-        )
+        expect(clientService.graphAuthenticated.users.listUsers).toHaveBeenCalledWith({
+          orderBy: ['displayName'],
+          filter:
+            "(appRoleAssignments/any(m:m/appRoleId eq '1') or appRoleAssignments/any(m:m/appRoleId eq '2'))",
+          expand: ['appRoleAssignments']
+        })
       })
     })
     describe('displayName', () => {
@@ -260,11 +253,11 @@ describe('Users view', () => {
           displayNameFilterQuery: displayNameFilterQueryParam
         })
         await wrapper.vm.loadResourcesTask.last
-        expect(clientService.graphAuthenticated.users.listUsers).toHaveBeenCalledWith(
-          'displayName',
-          "contains(displayName,'Albert')",
-          ['appRoleAssignments']
-        )
+        expect(clientService.graphAuthenticated.users.listUsers).toHaveBeenCalledWith({
+          orderBy: ['displayName'],
+          filter: "contains(displayName,'Albert')",
+          expand: ['appRoleAssignments']
+        })
       })
     })
   })

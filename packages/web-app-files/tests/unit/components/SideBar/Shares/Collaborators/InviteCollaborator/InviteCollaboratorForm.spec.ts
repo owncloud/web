@@ -169,9 +169,7 @@ function getWrapper({
     currentRoute: mock<RouteLocation>({ params: { storageId } })
   })
 
-  mocks.$clientService.graphAuthenticated.users.listUsers.mockResolvedValue(
-    mock<AxiosResponse>({ data: { value: users } })
-  )
+  mocks.$clientService.graphAuthenticated.users.listUsers.mockResolvedValue(users)
   mocks.$clientService.graphAuthenticated.groups.listGroups.mockResolvedValue(
     mock<AxiosResponse>({ data: { value: groups } })
   )

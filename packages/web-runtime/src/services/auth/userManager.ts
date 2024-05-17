@@ -189,22 +189,22 @@ export class UserManager extends OidcUserManager {
 
     const graphClient = this.clientService.graphAuthenticated
     const [graphUser, roles] = await Promise.all([graphClient.users.getMe(), this.fetchRoles()])
-    const role = await this.fetchRole({ graphUser: graphUser.data, roles })
+    const role = await this.fetchRole({ graphUser, roles })
 
     this.userStore.setUser({
-      id: graphUser.data.id,
-      onPremisesSamAccountName: graphUser.data.onPremisesSamAccountName,
-      displayName: graphUser.data.displayName,
-      mail: graphUser.data.mail,
-      memberOf: graphUser.data.memberOf,
+      id: graphUser.id,
+      onPremisesSamAccountName: graphUser.onPremisesSamAccountName,
+      displayName: graphUser.displayName,
+      mail: graphUser.mail,
+      memberOf: graphUser.memberOf,
       appRoleAssignments: role ? [role as any] : [], // FIXME
-      preferredLanguage: graphUser.data.preferredLanguage || ''
+      preferredLanguage: graphUser.preferredLanguage || ''
     })
 
-    if (graphUser?.data?.preferredLanguage) {
+    if (graphUser.preferredLanguage) {
       setCurrentLanguage({
         language: this.language,
-        languageSetting: graphUser.data.preferredLanguage
+        languageSetting: graphUser.preferredLanguage
       })
     }
   }

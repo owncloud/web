@@ -111,9 +111,8 @@ export default defineComponent({
 
       try {
         const client = clientService.graphAuthenticated
-        const { data } = await client.users.createUser(unref(user))
-        const { id: createdUserId } = data
-        const { data: createdUser } = await client.users.getUser(createdUserId)
+        const { id: createdUserId } = await client.users.createUser(unref(user))
+        const createdUser = await client.users.getUser(createdUserId)
         showMessage({ title: $gettext('User was created successfully') })
         userSettingsStore.upsertUser(createdUser)
       } catch (error) {
