@@ -21,23 +21,26 @@
         />
       </template>
       <template #mainContent>
-        <no-content-message
-          v-if="!spaces.length"
-          id="admin-settings-spaces-empty"
-          class="spaces-empty"
-          icon="layout-grid"
-        >
-          <template #message>
-            <span v-translate>No spaces in here</span>
-          </template>
-        </no-content-message>
-        <div v-else>
-          <spaces-list :class="{ 'spaces-table-squashed': isSideBarOpen }">
-            <template #contextMenu>
-              <context-actions :items="selectedSpaces" />
+        <app-loading-spinner v-if="isLoading" />
+        <template v-else>
+          <no-content-message
+            v-if="!spaces.length"
+            id="admin-settings-spaces-empty"
+            class="spaces-empty"
+            icon="layout-grid"
+          >
+            <template #message>
+              <span v-translate>No spaces in here</span>
             </template>
-          </spaces-list>
-        </div>
+          </no-content-message>
+          <div v-else>
+            <spaces-list :class="{ 'spaces-table-squashed': isSideBarOpen }">
+              <template #contextMenu>
+                <context-actions :items="selectedSpaces" />
+              </template>
+            </spaces-list>
+          </div>
+        </template>
       </template>
     </app-template>
   </div>
@@ -67,7 +70,8 @@ import {
   useSpaceActionsDisable,
   useSpaceActionsRestore,
   useSpaceActionsEditQuota,
-  useConfigStore
+  useConfigStore,
+  AppLoadingSpinner
 } from '@ownclouders/web-pkg'
 import { buildSpace, call, SpaceResource } from '@ownclouders/web-client'
 import { computed, defineComponent, onBeforeUnmount, onMounted, ref, unref } from 'vue'
@@ -81,6 +85,7 @@ import { Quota } from '@ownclouders/web-client/graph/generated'
 export default defineComponent({
   name: 'SpacesView',
   components: {
+    AppLoadingSpinner,
     SpacesList,
     AppTemplate,
     NoContentMessage,
@@ -124,6 +129,10 @@ export default defineComponent({
         buildSpace({ ...space, serverUrl: configStore.serverUrl })
       )
       spaceSettingsStore.setSpaces(drives)
+    })
+
+    const isLoading = computed(() => {
+      return loadResourcesTask.isRunning || !loadResourcesTask.last
     })
 
     const breadcrumbs = computed(() => [
@@ -254,6 +263,7 @@ export default defineComponent({
       selectedSpaces,
       sideBarAvailablePanels,
       sideBarPanelContext,
+      isLoading,
       template
     }
   }
