@@ -7,6 +7,9 @@ Feature: link
 
 
   Scenario: public link
+    Given "Admin" creates following user using API
+      | id    |
+      | Brian |
     When "Alice" logs in
     And "Alice" creates the following folders in personal space using API
       | name                   |
@@ -28,7 +31,36 @@ Feature: link
     And "Anonymous" drop uploads following resources
       | resource     |
       | textfile.txt |
+
+    # authenticated user
+    When "Brian" logs in
+    And "Brian" opens the public link "myPublicLink"
+    And "Brian" unlocks the public link with password "%public%"
+    And "Brian" drop uploads following resources
+      | resource   |
+      | simple.pdf |
+
+
+    When "Alice" opens folder "folderPublic"
+    Then following resources should be displayed in the files list for user "Alice"
+      | resource     |
+      | textfile.txt |
+      | simple.pdf   |
+    And "Alice" opens the "files" app
     And "Alice" edits the public link named "myPublicLink" of resource "folderPublic" changing role to "Can edit"
+
+    And "Brian" refreshes the old link
+    Then following resources should be displayed in the files list for user "Brian"
+      | resource     |
+      | textfile.txt |
+      | simple.pdf   |
+      | SubFolder    |
+      | lorem.txt    |
+    And "Brian" deletes the following resources from public link using sidebar panel
+      | resource   |
+      | simple.pdf |
+    And "Brian" logs out
+
     And "Anonymous" refreshes the old link
     And "Anonymous" downloads the following public link resources using the sidebar panel
       | resource     | type |
@@ -53,9 +85,9 @@ Feature: link
       | resource  | to       |
       | lorem.txt | myfolder |
     And "Anonymous" renames the following public link resources
-      | resource      | as               |
-      | lorem.txt     | lorem_new.txt    |
-      | textfile.txt  | textfile_new.txt |
+      | resource     | as               |
+      | lorem.txt    | lorem_new.txt    |
+      | textfile.txt | textfile_new.txt |
     And "Anonymous" deletes the following resources from public link using batch action
       | resource  | from     |
       | lorem.txt | myfolder |
@@ -299,4 +331,37 @@ Feature: link
     And "Anonymous" downloads the following public link resources using the sidebar panel
       | resource  | type |
       | lorem.txt | file |
+    And "Alice" logs out
+
+
+  Scenario: link indication
+    When "Alice" logs in
+    And "Alice" creates the following folders in personal space using API
+      | name         |
+      | folderPublic |
+    And "Alice" creates the following files into personal space using API
+      | pathToFile             | content     |
+      | folderPublic/lorem.txt | lorem ipsum |
+    And "Alice" opens the "files" app
+    And "Alice" creates a public link of following resource using the sidebar panel
+      | resource     | role     | password |
+      | folderPublic | Can edit | %public% |
+    When "Alice" opens the "files" app
+    Then "Alice" should see link-direct indicator on the folder "folderPublic"
+    When "Alice" opens folder "folderPublic"
+    Then "Alice" should see link-indirect indicator on the file "lorem.txt"
+
+    And "Alice" navigates to the shared via link page
+    Then following resources should be displayed in the files list for user "Alice"
+      | resource     |
+      | folderPublic |
+
+    # check copy link to clipboard button
+    When "Alice" opens the "files" app
+    And "Alice" copies the link "Link" of resource "folderPublic"
+    And "Alice" opens the "%clipboard%" url
+    And "Alice" unlocks the public link with password "%public%"
+    Then following resources should be displayed in the files list for user "Alice"
+      | resource  |
+      | lorem.txt |
     And "Alice" logs out

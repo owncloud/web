@@ -15,15 +15,14 @@ Feature: rename
     And "Alice" creates the following files into personal space using API
       | pathToFile         | content      |
       | folder/example.txt | example text |
-    And "Alice" opens the "files" app
     And "Alice" shares the following resource using API
       | resource | recipient | type | role     |
       | folder   | Brian     | user | Can edit |
+    And "Alice" opens the "files" app
     And "Alice" creates a public link of following resource using the sidebar panel
       | resource | role     | password |
       | folder   | Can edit | %public% |
     And "Brian" logs in
-    And "Brian" opens the "files" app
     And "Brian" navigates to the shared with me page
     And "Brian" opens folder "folder"
 

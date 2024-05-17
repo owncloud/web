@@ -39,7 +39,8 @@ When(
   async function (this: World, stepUser: string, key: string): Promise<void> {
     const { page } = this.actorsEnvironment.getActor({ key: stepUser })
     const spacesObject = new objects.applicationFiles.Spaces({ page })
-
+    const pageObject = new objects.applicationFiles.page.spaces.Projects({ page })
+    await pageObject.navigate()
     await spacesObject.open({ key })
   }
 )
@@ -116,31 +117,14 @@ When(
 )
 
 Then(
-  '{string} should see folder {string} but should not be able to edit',
-  async function (this: World, stepUser: string, resource: string): Promise<void> {
+  /^"([^"]*)" (should|should not) see space "([^"]*)"$/,
+  async function (this: World, stepUser: string, actionType: string, space: string): Promise<void> {
     const { page } = this.actorsEnvironment.getActor({ key: stepUser })
     const spacesObject = new objects.applicationFiles.Spaces({ page })
-    const userCanEdit = await spacesObject.canUserEditResource({ resource })
-    expect(userCanEdit).toBe(false)
-  }
-)
-
-Then(
-  '{string} should see file {string} but should not be able to edit',
-  async function (this: World, stepUser: string, resource: string): Promise<void> {
-    const { page } = this.actorsEnvironment.getActor({ key: stepUser })
-    const spacesObject = new objects.applicationFiles.Spaces({ page })
-    const userCanEdit = await spacesObject.canUserEditResource({ resource })
-    expect(userCanEdit).toBe(false)
-  }
-)
-
-Then(
-  '{string} should not be able to see space {string}',
-  async function (this: World, stepUser: string, space: string): Promise<void> {
-    const { page } = this.actorsEnvironment.getActor({ key: stepUser })
-    const spacesObject = new objects.applicationFiles.Spaces({ page })
-    await spacesObject.expectThatSpacesIdNotExist(space)
+    const spaceLocator = spacesObject.getSpaceLocator(space)
+    actionType === 'should'
+      ? await expect(spaceLocator).toBeVisible()
+      : await expect(spaceLocator).not.toBeVisible()
   }
 )
 

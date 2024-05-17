@@ -122,6 +122,8 @@ const resourceLockIcon =
 const sharesNavigationButtonSelector = '.oc-sidebar-nav [data-nav-name="files-shares"]'
 const keepBothButton = '.oc-modal-body-actions-confirm'
 const mediaNavigationButton = `//button[contains(@class, "preview-controls-%s")]`
+const sideBarActions =
+  '//ul[@id="oc-files-actions-sidebar"]//span[@class="oc-files-context-action-label"]'
 const collaboraDocPermissionModeSelector = '#PermissionMode'
 const onlyOfficeFileTitleSelector = `//section[@id="box-doc-name"]/input[@id="rib-doc-name"]`
 
@@ -1878,4 +1880,24 @@ export const canEditContent = async ({
       // title appears as "MicrosoftWord.docx (read only)"
       return !onlyOfficeDocTitle.endsWith('(read only)')
   }
+}
+
+export interface canManageResourceArgs {
+  resource: string
+  page: Page
+}
+
+export const canManageResource = async (args: canManageResourceArgs): Promise<boolean> => {
+  const { resource, page } = args
+  const notExpectedActions = ['move', 'rename', 'delete']
+  await sidebar.open({ page: page, resource })
+  await sidebar.openPanel({ page: page, name: 'actions' })
+  const presentActions = await page.locator(sideBarActions).allTextContents()
+  const presentActionsToLower = presentActions.map((actions) => actions.toLowerCase())
+  for (const actions of notExpectedActions) {
+    if (presentActionsToLower.includes(actions)) {
+      return true
+    }
+  }
+  return false
 }

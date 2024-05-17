@@ -21,8 +21,6 @@ Feature: download space
     And "Alice" creates the following file in space "team" using API
       | name                  | content    |
       | spaceFolder/lorem.txt | space team |
-    And "Alice" opens the "files" app
-    And "Alice" navigates to the projects space page
     And "Alice" navigates to the project space "team.1"
     When "Alice" downloads the space "team.1"
     And "Alice" adds following users to the project space
@@ -30,8 +28,6 @@ Feature: download space
       | Brian    | Can edit | user  |
     And "Alice" logs out
     And "Brian" logs in
-    And "Brian" opens the "files" app
-    And "Brian" navigates to the projects space page
     And "Brian" navigates to the project space "team.1"
     When "Brian" downloads the space "team.1"
     And "Brian" logs out

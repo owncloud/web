@@ -11,8 +11,6 @@ Feature: Search in the project space
     And "Alice" creates the following project space using API
       | name | id     |
       | team | team.1 |
-    And "Alice" opens the "files" app
-    And "Alice" navigates to the projects space page
     And "Alice" navigates to the project space "team.1"
     And "Alice" creates the following resources
       | resource                   | type   |

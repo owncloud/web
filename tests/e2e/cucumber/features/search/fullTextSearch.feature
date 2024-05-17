@@ -15,7 +15,6 @@ Feature: Search
     And "Alice" uploads the following local file into personal space using API
       | localFile                   | to              |
       | filesForUpload/textfile.txt | fileToShare.txt |
-    And "Alice" opens the "files" app
     And "Alice" adds the following tags for the following resources using API
       | resource        | tags      |
       | fileToShare.txt | alice tag |
@@ -42,14 +41,13 @@ Feature: Search
     And "Brian" creates the following file in space "FullTextSearch" using API
       | name                          | content                   |
       | spaceFolder/spaceTextfile.txt | This is test file. Cheers |
-    And "Brian" opens the "files" app
     And "Brian" adds the following tags for the following resources using API
       | resource        | tags  |
       | fileWithTag.txt | tag 1 |
       | withTag.txt     | tag 1 |
 
     When "Brian" searches "" using the global search and the "all files" filter and presses enter
-    Then "Brian" should see the message "Search for files" on the webUI
+    Then "Brian" should see the message "Search for files" on the search result
 
     When "Brian" selects tag "alice tag" from the search result filter chip
     Then following resources should be displayed in the files list for user "Brian"

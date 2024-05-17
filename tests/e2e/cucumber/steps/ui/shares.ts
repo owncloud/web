@@ -152,7 +152,16 @@ When(
 )
 
 When(
-  '{string} declines the following share(s)',
+  '{string} navigates to the shared via link page',
+  async function (this: World, stepUser: string): Promise<void> {
+    const { page } = this.actorsEnvironment.getActor({ key: stepUser })
+    const pageObject = new objects.applicationFiles.page.shares.ViaLink({ page })
+    await pageObject.navigate()
+  }
+)
+
+When(
+  '{string} disables the sync for the following share(s)',
   async function (this: World, stepUser: string, stepTable: DataTable): Promise<void> {
     const { page } = this.actorsEnvironment.getActor({ key: stepUser })
     const shareObject = new objects.applicationFiles.Share({ page })
@@ -339,5 +348,42 @@ When(
     })
 
     expect(actualDetails).toMatchObject(expectedDetails)
+  }
+)
+
+Then(
+  '{string} should see the message {string} on the webUI',
+  async function (this: World, stepUser: string, message: string): Promise<void> {
+    const { page } = this.actorsEnvironment.getActor({ key: stepUser })
+    const shareObject = new objects.applicationFiles.Share({ page })
+    const actualMessage = await shareObject.getMessage()
+    expect(actualMessage).toBe(message)
+  }
+)
+
+Then(
+  /^"([^"]*)" (should|should not) be able to manage share with user "([^"]*)"$/,
+  async function (
+    this: World,
+    stepUser: any,
+    actionType: string,
+    recipient: string
+  ): Promise<void> {
+    const { page } = this.actorsEnvironment.getActor({ key: stepUser })
+    const shareObject = new objects.applicationFiles.Share({ page })
+    const changeRole = shareObject.changeRoleLocator(
+      this.usersEnvironment.getUser({ key: recipient })
+    )
+    const changeShare = shareObject.changeShareLocator(
+      this.usersEnvironment.getUser({ key: recipient })
+    )
+
+    if (actionType === 'should') {
+      await expect(changeRole).not.toBeDisabled()
+      await expect(changeShare).not.toBeDisabled()
+    } else {
+      await expect(changeRole).toBeDisabled()
+      await expect(changeShare).toBeDisabled()
+    }
   }
 )

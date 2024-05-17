@@ -4,7 +4,7 @@ import { objects } from '../../../support'
 import { expect } from '@playwright/test'
 
 Then(
-  '{string} should see the message {string} on the webUI',
+  '{string} should see the message {string} on the search result',
   async function (this: World, stepUser: string, message: string): Promise<void> {
     const { page } = this.actorsEnvironment.getActor({ key: stepUser })
     const searchObject = new objects.applicationFiles.Search({ page })

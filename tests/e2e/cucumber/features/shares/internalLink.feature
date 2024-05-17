@@ -20,7 +20,6 @@ Feature: internal link share
     When "Alice" edits the public link named "Link" of resource "myfolder" changing role to "Invited people"
     And "Brian" opens the public link "Link"
     And "Brian" logs in from the internal link
-    And "Brian" opens the "files" app
     And "Brian" navigates to the shared with me page
     And "Brian" uploads the following resource
       | resource   | to       |
@@ -29,5 +28,5 @@ Feature: internal link share
       | resource | recipient | type | role                    |
       | myfolder | Brian     | user | custom_permissions:read |
     And "Alice" logs out
-    Then "Brian" should see folder "myfolder" but should not be able to edit
+    Then "Brian" should not be able to edit folder "myfolder"
     And "Brian" logs out
