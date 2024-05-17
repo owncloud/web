@@ -28,23 +28,26 @@
         </div>
       </template>
       <template #mainContent>
-        <no-content-message
-          v-if="!groups.length"
-          id="admin-settings-groups-empty"
-          class="files-empty"
-          icon="user"
-        >
-          <template #message>
-            <span v-translate>No groups in here</span>
-          </template>
-        </no-content-message>
-        <div v-else>
-          <groups-list>
-            <template #contextMenu>
-              <context-actions :action-options="{ resources: selectedGroups }" />
+        <app-loading-spinner v-if="isLoading" />
+        <template v-else>
+          <no-content-message
+            v-if="!groups.length"
+            id="admin-settings-groups-empty"
+            class="files-empty"
+            icon="user"
+          >
+            <template #message>
+              <span v-translate>No groups in here</span>
             </template>
-          </groups-list>
-        </div>
+          </no-content-message>
+          <div v-else>
+            <groups-list>
+              <template #contextMenu>
+                <context-actions :action-options="{ resources: selectedGroups }" />
+              </template>
+            </groups-list>
+          </div>
+        </template>
       </template>
     </app-template>
   </div>
@@ -60,6 +63,7 @@ import MembersPanel from '../components/Groups/SideBar/MembersPanel.vue'
 import { useGroupSettingsStore } from '../composables'
 import { useGroupActionsCreateGroup, useGroupActionsDelete } from '../composables/actions/groups'
 import {
+  AppLoadingSpinner,
   NoContentMessage,
   SideBarPanel,
   SideBarPanelContext,
@@ -75,6 +79,7 @@ import { storeToRefs } from 'pinia'
 
 export default defineComponent({
   components: {
+    AppLoadingSpinner,
     AppTemplate,
     GroupsList,
     NoContentMessage,
@@ -107,6 +112,10 @@ export default defineComponent({
       return [...unref(deleteActions)].filter((item) =>
         item.isVisible({ resources: unref(selectedGroups) })
       )
+    })
+
+    const isLoading = computed(() => {
+      return loadResourcesTask.isRunning || !loadResourcesTask.last
     })
 
     const sideBarPanelContext = computed<SideBarPanelContext<unknown, unknown, Group>>(() => {
@@ -168,7 +177,8 @@ export default defineComponent({
       sideBarAvailablePanels,
       sideBarPanelContext,
       createGroupAction,
-      groupSettingsStore
+      groupSettingsStore,
+      isLoading
     }
   },
   computed: {
