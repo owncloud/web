@@ -1,7 +1,0 @@
-Bugfix: App switcher not usable when text editor app is open
-
-We've fixed a bug where clicking on an item at the app switcher had no effect,
-when the text editor app was open.
-
-https://github.com/owncloud/web/pull/10935
-https://github.com/owncloud/web/issues/10930
