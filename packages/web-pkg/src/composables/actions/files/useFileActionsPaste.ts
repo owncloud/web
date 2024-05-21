@@ -10,7 +10,7 @@ import { useClientService } from '../../clientService'
 import { useLoadingService } from '../../loadingService'
 import { useRouter } from '../../router'
 import { FileAction, FileActionOptions } from '../types'
-import { Resource, SpaceResource } from '@ownclouders/web-client'
+import { Resource, SpaceResource, isShareSpaceResource } from '@ownclouders/web-client'
 import { useClipboardStore, useResourcesStore } from '../../piniaStores'
 import { ClipboardActions, ResourceTransfer, TransferType } from '../../../helpers'
 import { storeToRefs } from 'pinia'
@@ -77,6 +77,12 @@ export const useFileActionsPaste = () => {
       }
 
       return Promise.all(loadingResources).then(() => {
+        if (isShareSpaceResource(targetSpace)) {
+          fetchedResources.forEach((r) => {
+            r.remoteItemId = targetSpace.id
+          })
+        }
+
         resourcesStore.upsertResources(fetchedResources)
         resourcesStore.loadIndicators(targetSpace, unref(currentFolder).path)
       })
