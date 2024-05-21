@@ -156,11 +156,12 @@ import {
   LinkRoleDropdown,
   useAbility,
   useConfigStore,
+  useGetMatchingSpace,
   useLinkTypes,
   useModals,
-  useSpacesStore
+  useResourcesStore
 } from '@ownclouders/web-pkg'
-import { LinkShare } from '@ownclouders/web-client'
+import { LinkShare, ShareTypes } from '@ownclouders/web-client'
 import { computed, defineComponent, inject, PropType, Ref, ref, unref } from 'vue'
 import { formatDateFromDateTime, formatRelativeDateFromDateTime } from '@ownclouders/web-pkg'
 import { Resource, SpaceResource } from '@ownclouders/web-client'
@@ -222,10 +223,12 @@ export default defineComponent({
     const configStore = useConfigStore()
     const passwordPolicyService = usePasswordPolicyService()
     const { can } = useAbility()
-    const spacesStore = useSpacesStore()
-    const { spaces } = storeToRefs(spacesStore)
+    const { getMatchingSpace } = useGetMatchingSpace()
     const { getAvailableLinkTypes, getLinkRoleByType, isPasswordEnforcedForLinkType } =
       useLinkTypes()
+
+    const resourcesStore = useResourcesStore()
+    const { ancestorMetaData } = storeToRefs(resourcesStore)
 
     const space = inject<Ref<SpaceResource>>('space')
     const resource = inject<Ref<Resource>>('resource')
@@ -293,10 +296,40 @@ export default defineComponent({
       return getLinkRoleByType(unref(currentLinkType))?.label || ''
     })
 
+    const sharedAncestor = computed(() => {
+      const ancestorPath = Object.keys(unref(ancestorMetaData)).find((key) =>
+        unref(ancestorMetaData)[key].shareTypes.includes(ShareTypes.link.value)
+      )
+      return ancestorPath ? unref(ancestorMetaData)[ancestorPath] : undefined
+    })
+
+    const viaRouterParams = computed(() => {
+      const matchingSpace = getMatchingSpace(unref(resource))
+      if (!matchingSpace || !unref(sharedAncestor)) {
+        return {}
+      }
+
+      return createLocationSpaces(
+        'files-spaces-generic',
+        createFileRouteOptions(matchingSpace, {
+          path: unref(sharedAncestor).path,
+          fileId: unref(sharedAncestor).id
+        })
+      )
+    })
+
+    const viaTooltip = computed(() => {
+      if (!props.linkShare.indirect || !unref(sharedAncestor)) {
+        return null
+      }
+
+      return $gettext('Navigate to the parent (%{folderName})', {
+        folderName: basename(unref(sharedAncestor).path)
+      })
+    })
+
     return {
       space,
-      resource,
-      spaces,
       passwordPolicyService,
       dateExpire,
       updateSelectedType,
@@ -309,7 +342,9 @@ export default defineComponent({
       isAliasLink,
       isUploaderLink,
       currentLinkRoleDescription,
-      currentLinkRoleLabel
+      currentLinkRoleLabel,
+      viaRouterParams,
+      viaTooltip
     }
   },
   data() {
@@ -429,22 +464,6 @@ export default defineComponent({
       }
     },
 
-    viaRouterParams() {
-      const matchingSpace = (this.space ||
-        this.spaces.find((space) => space.id === this.resource.storageId)) as SpaceResource
-      if (!matchingSpace) {
-        return {}
-      }
-
-      return createLocationSpaces(
-        'files-spaces-generic',
-        createFileRouteOptions(matchingSpace, {
-          path: this.resource.path,
-          fileId: this.resource.fileId
-        })
-      )
-    },
-
     expirationDateRelative() {
       return formatRelativeDateFromDateTime(
         DateTime.fromISO(this.linkShare.expirationDateTime).endOf('day'),
@@ -456,17 +475,6 @@ export default defineComponent({
       return this.$gettext(
         'Expires %{timeToExpiry} (%{expiryDate})',
         { timeToExpiry: this.expirationDateRelative, expiryDate: this.dateExpire },
-        true
-      )
-    },
-
-    viaTooltip() {
-      if (!this.linkShare.indirect) {
-        return null
-      }
-      return (
-        this.$gettext('Navigate to the parent (%{folderName})'),
-        { folderName: basename(this.resource.path) },
         true
       )
     },
