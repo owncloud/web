@@ -154,7 +154,16 @@
 <script lang="ts">
 import { debounce, omit, last } from 'lodash-es'
 import { basename } from 'path'
-import { computed, defineComponent, PropType, onBeforeUnmount, onMounted, unref, ref } from 'vue'
+import {
+  computed,
+  ComponentPublicInstance,
+  defineComponent,
+  PropType,
+  onBeforeUnmount,
+  onMounted,
+  unref,
+  ref
+} from 'vue'
 import { RouteLocationNamedRaw } from 'vue-router'
 import { mapGetters, mapState, mapActions, mapMutations, useStore } from 'vuex'
 import { useGettext } from 'vue3-gettext'
@@ -504,9 +513,8 @@ export default defineComponent({
       eventBus.unsubscribe('app.files.list.load', loadResourcesEventToken)
     })
 
-    const whitespaceContextMenu = ref(null)
-    const showContextMenu = (event) => {
-      store.commit('Files/RESET_SELECTION')
+    const whitespaceContextMenu = ref<ComponentPublicInstance<typeof WhitespaceContextMenu>>(null)
+    const showContextMenu = (event: MouseEvent) => {
       displayPositionedDropdown(
         unref(whitespaceContextMenu).$el._tippy,
         event,
@@ -528,8 +536,8 @@ export default defineComponent({
       performLoaderTask,
       ViewModeConstants,
       viewModes,
-      uploadHint: $gettext(
-        'Drag files and folders here or use the "New" or "Upload" buttons to add files'
+      uploadHint: computed(() =>
+        $gettext('Drag files and folders here or use the "New" or "Upload" buttons to add files')
       ),
       whitespaceContextMenu,
       clientService,

@@ -1,0 +1,6 @@
+Bugfix: Resource deselection on right-click
+
+We've fixed an issue where right-clicking any empty space inside the files table would reset the current selection.
+
+https://github.com/owncloud/web/issues/10918
+https://github.com/owncloud/web/pull/10936
