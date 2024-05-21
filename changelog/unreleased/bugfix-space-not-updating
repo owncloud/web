@@ -1,0 +1,6 @@
+Bugfix: Space not updating on navigation
+
+We've fixed an issue where the current space did not update when navigating from one space into another directly, e.g. via search results. That could lead to uploads and file actions not working properly.
+
+https://github.com/owncloud/web/issues/10941
+https://github.com/owncloud/web/pull/10943

@@ -1,11 +1,11 @@
 import { Resource, SpaceResource } from '@ownclouders/web-client/src/helpers'
-import { computed, unref } from 'vue'
+import { Ref, computed, unref } from 'vue'
 import { useStore } from '../../store'
 import { FileAction } from '../../../composables'
 import { CreateShortcutModal } from '../../../components'
 import { useGettext } from 'vue3-gettext'
 
-export const useFileActionsCreateNewShortcut = ({ space }: { space: SpaceResource }) => {
+export const useFileActionsCreateNewShortcut = ({ space }: { space: Ref<SpaceResource> }) => {
   const store = useStore()
   const { $gettext } = useGettext()
   const currentFolder = computed((): Resource => store.getters['Files/currentFolder'])
@@ -15,7 +15,7 @@ export const useFileActionsCreateNewShortcut = ({ space }: { space: SpaceResourc
       title: $gettext('Create a Shortcut'),
       hideActions: true,
       customComponent: CreateShortcutModal,
-      customComponentAttrs: () => ({ space })
+      customComponentAttrs: () => ({ space: unref(space) })
     })
   }
 

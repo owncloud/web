@@ -269,9 +269,12 @@ export default defineComponent({
     const hasShareJail = useCapabilityShareJailEnabled()
     const { breadcrumbsFromPath, concatBreadcrumbs } = useBreadcrumbsFromPath()
     const { openWithDefaultApp } = useOpenWithDefaultApp()
+
+    const space = computed(() => props.space)
+
     const { actions: createNewFolder } = useFileActionsCreateNewFolder({
       store,
-      space: props.space
+      space
     })
     const { isEnabled: isEmbedModeEnabled } = useEmbedMode()
 
@@ -291,8 +294,8 @@ export default defineComponent({
       path,
       fileId
     }: CreateTargetRouteOptions): RouteLocationNamedRaw => {
-      const { params, query } = createFileRouteOptions(props.space, { path, fileId })
-      if (isPublicSpaceResource(props.space)) {
+      const { params, query } = createFileRouteOptions(unref(space), { path, fileId })
+      if (isPublicSpaceResource(unref(space))) {
         return createLocationPublic('files-public-link', { params, query })
       }
       return createLocationSpaces('files-spaces-generic', { params, query })
@@ -300,7 +303,7 @@ export default defineComponent({
 
     const hasSpaceHeader = computed(() => {
       // for now the space header is only available in the root of a project space.
-      return props.space.driveType === 'project' && props.item === '/'
+      return unref(space).driveType === 'project' && props.item === '/'
     })
 
     const folderNotFound = computed(() => store.getters['Files/currentFolder'] === null)
@@ -310,7 +313,7 @@ export default defineComponent({
     )
 
     const titleSegments = computed(() => {
-      const segments = [props.space.name]
+      const segments = [unref(space).name]
       if (props.item !== '/') {
         segments.unshift(basename(props.item))
       }
@@ -321,16 +324,15 @@ export default defineComponent({
 
     const route = useRoute()
     const breadcrumbs = computed(() => {
-      const space = props.space
       const rootBreadcrumbItems: BreadcrumbItem[] = []
-      if (isProjectSpaceResource(space)) {
+      if (isProjectSpaceResource(unref(space))) {
         rootBreadcrumbItems.push({
           id: uuidv4(),
           text: $gettext('Spaces'),
           to: createLocationSpaces('files-spaces-projects'),
           isStaticNav: true
         })
-      } else if (isShareSpaceResource(space)) {
+      } else if (isShareSpaceResource(unref(space))) {
         rootBreadcrumbItems.push(
           {
             id: uuidv4(),
@@ -348,30 +350,30 @@ export default defineComponent({
       }
 
       let spaceBreadcrumbItem: BreadcrumbItem
-      let { params, query } = createFileRouteOptions(space, { fileId: space.fileId })
+      let { params, query } = createFileRouteOptions(unref(space), { fileId: unref(space).fileId })
       query = omit({ ...unref(route).query, ...query }, 'page')
-      if (isPersonalSpaceResource(space)) {
+      if (isPersonalSpaceResource(unref(space))) {
         spaceBreadcrumbItem = {
           id: uuidv4(),
-          text: space.name,
-          ...(space.isOwner(store.getters.user) && {
+          text: unref(space).name,
+          ...(unref(space).isOwner(store.getters.user) && {
             to: createLocationSpaces('files-spaces-generic', {
               params,
               query
             })
           })
         }
-      } else if (isShareSpaceResource(space)) {
+      } else if (isShareSpaceResource(unref(space))) {
         spaceBreadcrumbItem = {
           id: uuidv4(),
           allowContextActions: true,
-          text: space.name,
+          text: unref(space).name,
           to: createLocationSpaces('files-spaces-generic', {
             params,
             query: omit(query, 'fileId')
           })
         }
-      } else if (isPublicSpaceResource(space)) {
+      } else if (isPublicSpaceResource(unref(space))) {
         spaceBreadcrumbItem = {
           id: uuidv4(),
           text: $gettext('Public link'),
@@ -385,7 +387,7 @@ export default defineComponent({
         spaceBreadcrumbItem = {
           id: uuidv4(),
           allowContextActions: !unref(hasSpaceHeader),
-          text: space.name,
+          text: unref(space).name,
           to: createLocationSpaces('files-spaces-generic', {
             params,
             query
@@ -445,7 +447,7 @@ export default defineComponent({
       resourcesViewDefaults.viewMode
     )
     useKeyboardTableMouseActions(keyActions, resourcesViewDefaults.viewMode)
-    useKeyboardTableSpaceActions(keyActions, props.space)
+    useKeyboardTableSpaceActions(keyActions, space)
 
     const performLoaderTask = async (
       sameRoute: boolean,
@@ -456,9 +458,9 @@ export default defineComponent({
         return
       }
 
-      const options: FolderLoaderOptions = { loadShares: !isPublicSpaceResource(props.space) }
+      const options: FolderLoaderOptions = { loadShares: !isPublicSpaceResource(unref(space)) }
       await resourcesViewDefaults.loadResourcesTask.perform(
-        props.space,
+        unref(space),
         path || props.item,
         fileId || props.itemId,
         options
@@ -473,7 +475,7 @@ export default defineComponent({
 
       if (unref(openWithDefaultAppQuery) === 'true') {
         openWithDefaultApp({
-          space: props.space,
+          space: unref(space),
           resource: unref(resourcesViewDefaults.selectedResources)[0]
         })
       }

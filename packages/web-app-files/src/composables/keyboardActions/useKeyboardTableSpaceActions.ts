@@ -4,8 +4,12 @@ import { useStore } from '@ownclouders/web-pkg'
 import { useGettext } from 'vue3-gettext'
 import { unref } from 'vue'
 import { useFileActionsPaste } from '@ownclouders/web-pkg'
+import { Ref } from 'vue'
 
-export const useKeyboardTableSpaceActions = (keyActions: KeyboardActions, space: SpaceResource) => {
+export const useKeyboardTableSpaceActions = (
+  keyActions: KeyboardActions,
+  space: Ref<SpaceResource>
+) => {
   const store = useStore()
   const language = useGettext()
 
@@ -15,19 +19,19 @@ export const useKeyboardTableSpaceActions = (keyActions: KeyboardActions, space:
   keyActions.bindKeyAction({ modifier: ModifierKey.Ctrl, primary: Key.C }, () => {
     store.dispatch('Files/copySelectedFiles', {
       ...language,
-      space: space,
+      space: unref(space),
       resources: store.getters['Files/selectedFiles']
     })
   })
 
   keyActions.bindKeyAction({ modifier: ModifierKey.Ctrl, primary: Key.V }, () => {
-    pasteFileAction({ space: space })
+    pasteFileAction({ space: unref(space) })
   })
 
   keyActions.bindKeyAction({ modifier: ModifierKey.Ctrl, primary: Key.X }, () => {
     store.dispatch('Files/cutSelectedFiles', {
       ...language,
-      space: space,
+      space: unref(space),
       resources: store.getters['Files/selectedFiles']
     })
   })

@@ -29,7 +29,7 @@ export const useFileActionsCreateNewFile = ({
   mimetypesAllowedForCreation
 }: {
   store?: Store<any>
-  space?: SpaceResource
+  space?: Ref<SpaceResource>
   newFileHandlers?: Ref<any> // FIXME: type?
   mimetypesAllowedForCreation?: Ref<any> // FIXME: type?
 } = {}) => {
@@ -99,13 +99,13 @@ export const useFileActionsCreateNewFile = ({
         throw new Error(`An error has occurred: ${response.status}`)
       }
       const path = join(unref(currentFolder).path, fileName) || ''
-      const resource = await (clientService.webdav as WebDAV).getFileInfo(space, {
+      const resource = await (clientService.webdav as WebDAV).getFileInfo(unref(space), {
         path
       })
       if (unref(loadIndicatorsForNewFile)) {
         resource.indicators = getIndicators({ resource, ancestorMetaData: unref(ancestorMetaData) })
       }
-      triggerDefaultAction({ space: space, resources: [resource] })
+      triggerDefaultAction({ space: unref(space), resources: [resource] })
       store.commit('Files/UPSERT_RESOURCE', resource)
       store.dispatch('hideModal')
       store.dispatch('showMessage', {
@@ -121,7 +121,9 @@ export const useFileActionsCreateNewFile = ({
   }
 
   const loadIndicatorsForNewFile = computed(() => {
-    return isLocationSpacesActive(router, 'files-spaces-generic') && space.driveType !== 'share'
+    return (
+      isLocationSpacesActive(router, 'files-spaces-generic') && unref(space).driveType !== 'share'
+    )
   })
 
   const addNewFile = async (fileName, openAction) => {
@@ -131,7 +133,7 @@ export const useFileActionsCreateNewFile = ({
 
     try {
       const path = join(unref(currentFolder).path, fileName)
-      const resource = await (clientService.webdav as WebDAV).putFileContents(space, {
+      const resource = await (clientService.webdav as WebDAV).putFileContents(unref(space), {
         path
       })
 
@@ -144,11 +146,11 @@ export const useFileActionsCreateNewFile = ({
       if (openAction) {
         openEditor(
           openAction,
-          space.getDriveAliasAndItem(resource),
+          unref(space).getDriveAliasAndItem(resource),
           resource.webDavPath,
           resource.fileId,
           EDITOR_MODE_CREATE,
-          space.shareId
+          unref(space).shareId
         )
         store.dispatch('hideModal')
 
