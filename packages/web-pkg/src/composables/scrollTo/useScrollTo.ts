@@ -77,7 +77,7 @@ export const useScrollTo = (): ScrollToResult => {
 
     const resource = unref(resources).find((r) => {
       if (isIncomingShareResource(r)) {
-        return r.shareId === unref(scrollTo)
+        return r.remoteItemId === unref(scrollTo)
       }
       return r.id === unref(scrollTo)
     })

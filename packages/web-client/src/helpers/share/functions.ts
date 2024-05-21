@@ -115,7 +115,7 @@ export function buildIncomingShareResource({
 
   const resource: IncomingShareResource = {
     id: driveItem.id,
-    shareId: driveItem.remoteItem.permissions[0].id,
+    remoteItemId: driveItem.remoteItem.id,
     driveId: driveItem.parentReference?.driveId,
     path: '/',
     name: resourceName,
@@ -125,7 +125,7 @@ export function buildIncomingShareResource({
     sdate: driveItem.remoteItem.permissions[0].createdDateTime,
     indicators: [],
     tags: [],
-    webDavPath: buildWebDavSpacesPath(driveItem.id, '/'),
+    webDavPath: buildWebDavSpacesPath(driveItem.remoteItem.id, '/'),
     sharedBy,
     owner: driveItem.remoteItem.createdBy?.user,
     sharedWith,
@@ -168,7 +168,6 @@ export function buildOutgoingShareResource({
 
   const resource: OutgoingShareResource = {
     id: driveItem.id,
-    shareId: driveItem.permissions[0].id,
     driveId: driveItem.parentReference?.driveId,
     path,
     name: driveItem.name,

@@ -73,7 +73,8 @@ import {
   SpaceResource,
   call,
   isPersonalSpaceResource,
-  isProjectSpaceResource
+  isProjectSpaceResource,
+  isShareSpaceResource
 } from '@ownclouders/web-client'
 import { DavPermission } from '@ownclouders/web-client/webdav'
 import { HttpError } from '@ownclouders/web-client'
@@ -221,13 +222,13 @@ export default defineComponent({
         query: {
           ...unref(currentRoute).query,
           fileId: id,
-          shareId: space.shareId,
           contextRouteName: path === '/' ? 'files-shares-with-me' : 'files-spaces-generic',
+          ...(isShareSpaceResource(space) && { shareId: space.id }),
           contextRouteParams: {
             driveAliasAndItem: dirname(driveAliasAndItem)
           } as any,
           contextRouteQuery: {
-            shareId: space.shareId
+            ...(isShareSpaceResource(space) && { shareId: space.id })
           } as any
         }
       })

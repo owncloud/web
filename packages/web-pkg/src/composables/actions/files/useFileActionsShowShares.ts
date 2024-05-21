@@ -1,5 +1,5 @@
 import { isLocationTrashActive } from '../../../router'
-import { ShareResource, isIncomingShareResource } from '@ownclouders/web-client'
+import { ShareResource } from '@ownclouders/web-client'
 import { eventBus } from '../../../services'
 import { SideBarEventTopics } from '../../sideBar'
 import { computed, unref } from 'vue'
@@ -38,9 +38,6 @@ export const useFileActionsShowShares = () => {
           return false
         }
         if (resources.length !== 1) {
-          return false
-        }
-        if (isIncomingShareResource(resources[0]) && !resources[0].syncEnabled) {
           return false
         }
         return canShare({ space, resource: resources[0] })

@@ -62,8 +62,8 @@ describe('useFolderLink', () => {
     it('should equal the "Shared with me" if resource is representing the root share', () => {
       const resource = {
         path: '/My share',
-        shareRoot: '/My share',
-        shareId: '1',
+        remoteItemPath: '/My share',
+        remoteItemId: '1',
         isShareRoot: () => true
       } as Resource
 
@@ -74,8 +74,8 @@ describe('useFolderLink', () => {
     it('should equal the share name if resource is representing a file or folder in the root of a share', () => {
       const resource = {
         path: '/My share/test.txt',
-        shareRoot: '/My share',
-        shareId: '1'
+        remoteItemPath: '/My share',
+        remoteItemId: '1'
       } as Resource
 
       const wrapper = createWrapper()

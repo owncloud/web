@@ -81,6 +81,7 @@ const DavPropertyMapping = {
   DownloadURL: defString('downloadURL' as const),
   Highlights: defString('highlights' as const),
   MetaPathForUser: defString('meta-path-for-user' as const),
+  RemoteItemId: defString('remote-item-id' as const),
 
   ShareId: defString('shareid' as const),
   ShareRoot: defString('shareroot' as const),
@@ -123,7 +124,7 @@ export abstract class DavProperties {
     DavProperty.ActiveLock,
     DavProperty.OwnerId,
     DavProperty.OwnerDisplayName,
-    DavProperty.ShareId,
+    DavProperty.RemoteItemId,
     DavProperty.ShareRoot,
     DavProperty.ShareTypes,
     DavProperty.PrivateLink,

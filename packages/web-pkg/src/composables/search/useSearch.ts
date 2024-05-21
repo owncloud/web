@@ -42,8 +42,8 @@ export const useSearch = () => {
           const matchingSpace = getProjectSpace(resource.parentFolderId)
           const data = (matchingSpace ? matchingSpace : resource) as SearchResource
 
-          if (configStore.options.routing.fullShareOwnerPaths && data.shareRoot) {
-            data.path = urlJoin(data.shareRoot, data.path)
+          if (configStore.options.routing.fullShareOwnerPaths && data.remoteItemPath) {
+            data.path = urlJoin(data.remoteItemPath, data.path)
           }
 
           return { id: data.id, data }

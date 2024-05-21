@@ -7,12 +7,7 @@ import {
 import { useIsFilesAppActive } from '../helpers'
 import path from 'path'
 import first from 'lodash-es/first'
-import {
-  isIncomingShareResource,
-  isProjectSpaceResource,
-  isPublicSpaceResource,
-  Resource
-} from '@ownclouders/web-client'
+import { isProjectSpaceResource, isPublicSpaceResource, Resource } from '@ownclouders/web-client'
 import { computed, unref } from 'vue'
 import { useLoadingService } from '../../loadingService'
 import { useRouter } from '../../router'
@@ -128,9 +123,6 @@ export const useFileActionsDownloadArchive = () => {
             return false
           }
           if (isProjectSpaceResource(resources[0]) && resources[0].disabled) {
-            return false
-          }
-          if (isIncomingShareResource(resources[0]) && !resources[0].syncEnabled) {
             return false
           }
           if (

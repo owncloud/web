@@ -73,13 +73,15 @@ export interface Resource {
   permissions?: string
   starred?: boolean
   etag?: string
-  shareId?: string // FIXME: this originates from the old OCS api, should be removed in the future
-  shareRoot?: string // FIXME: this originates from the old OCS api, should be removed in the future
   shareTypes?: number[]
   privateLink?: string
   owner?: Identity
   extension?: string
   ddate?: string
+
+  // necessary for incoming share resources and resources inside shares
+  remoteItemId?: string
+  remoteItemPath?: string
 
   canCreate?(): boolean
   canUpload?({ user }: { user?: User }): boolean

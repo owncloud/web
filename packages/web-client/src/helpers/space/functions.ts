@@ -4,8 +4,6 @@ import {
   PublicSpaceResource,
   ShareSpaceResource,
   SpaceResource,
-  SHARE_JAIL_ID,
-  OCM_PROVIDER_ID,
   SpaceRoles,
   SpaceRole
 } from './types'
@@ -82,28 +80,20 @@ export function buildPublicSpaceResource(
 
 export function buildShareSpaceResource({
   driveAliasPrefix,
-  shareId,
+  id,
   shareName,
   serverUrl
 }: {
   driveAliasPrefix: 'share' | 'ocm-share'
-  shareId: string | number
+  id: string
   shareName: string
   serverUrl: string
 }): ShareSpaceResource {
-  let id: string
-  if (driveAliasPrefix === 'ocm-share') {
-    id = `${OCM_PROVIDER_ID}$${shareId}!${shareId}`
-  } else {
-    id = [SHARE_JAIL_ID, shareId].join('!')
-  }
-
   const space = buildSpace({
     id,
     driveAlias: `${driveAliasPrefix}/${shareName}`,
     driveType: 'share',
     name: shareName,
-    shareId,
     serverUrl
   }) as ShareSpaceResource
   space.rename = (newName: string) => {
@@ -117,7 +107,6 @@ export function buildSpace(
   data: Drive & {
     path?: string
     serverUrl?: string
-    shareId?: string | number
     webDavPath?: string
     webDavTrashPath?: string
   }
@@ -204,7 +193,6 @@ export function buildSpace(
     permissions: '',
     starred: false,
     etag: '',
-    shareId: data.shareId?.toString(),
     shareTypes: [] as number[],
     privateLink: '',
     downloadURL: '',
@@ -294,7 +282,7 @@ export function buildSpace(
     isOwner({ id }: User): boolean {
       return id === this.owner?.id
     }
-  }
+  } satisfies SpaceResource
   Object.defineProperty(s, 'nodeId', {
     get() {
       return extractNodeId(this.id)

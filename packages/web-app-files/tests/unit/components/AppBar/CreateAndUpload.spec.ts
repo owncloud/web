@@ -97,7 +97,7 @@ describe('CreateAndUpload component', () => {
       const { wrapper, mocks } = getWrapper({
         clipboardResources: [
           mock<Resource>({
-            shareRoot: undefined
+            remoteItemPath: undefined
           })
         ]
       })

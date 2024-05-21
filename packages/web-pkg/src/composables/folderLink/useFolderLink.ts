@@ -46,7 +46,7 @@ export const useFolderLink = (options: ResourceRouteResolverOptions = {}) => {
       space,
       path: dirname(resource.path)
     })
-    if ((resource.shareId && resource.path === '/') || !parentFolderAccessible) {
+    if ((resource.remoteItemId && resource.path === '/') || !parentFolderAccessible) {
       return createLocationShares('files-shares-with-me')
     }
     if (isProjectSpaceResource(resource)) {

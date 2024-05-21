@@ -5,7 +5,6 @@ import {
   isLocationPublicActive,
   isLocationTrashActive
 } from '../../../router'
-import { isIncomingShareResource } from '@ownclouders/web-client'
 import merge from 'lodash-es/merge'
 import { SpaceResource } from '@ownclouders/web-client'
 import { createFileRouteOptions } from '../../../helpers/router'
@@ -55,10 +54,6 @@ export const useFileActionsNavigate = () => {
         }
 
         if (!resources[0].isFolder || resources[0].type === 'space') {
-          return false
-        }
-
-        if (isIncomingShareResource(resources[0]) && !resources[0].syncEnabled) {
           return false
         }
 

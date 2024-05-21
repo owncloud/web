@@ -26,7 +26,7 @@ export const createFileRouteOptions = (
       driveAliasAndItem: space.getDriveAliasAndItem({ path: target.path || '' } as Resource)
     },
     query: {
-      ...(isShareSpaceResource(space) && { shareId: space.shareId }),
+      ...(isShareSpaceResource(space) && { shareId: space.id }),
       ...(config?.options?.routing?.idBased &&
         !isUndefined(target.fileId) && { fileId: `${target.fileId}` })
     }

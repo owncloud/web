@@ -62,7 +62,7 @@ export class FolderLoaderSpace implements FolderLoader {
             // FIXME: it would be cleaner to fetch the driveItem as soon as graph api is capable of it
             currentFolder = {
               ...currentFolder,
-              id: space.shareId,
+              id: space.id,
               syncEnabled: true,
               canShare: () => false
             } as IncomingShareResource
@@ -87,8 +87,8 @@ export class FolderLoaderSpace implements FolderLoader {
         }
 
         // TODO: remove when server returns share id for federated shares in propfind response
-        if (space.shareId) {
-          resources.forEach((r) => (r.shareId = space.shareId))
+        if (isShareSpaceResource(space)) {
+          resources.forEach((r) => (r.remoteItemId = space.id))
         }
 
         resourcesStore.initResourceList({ currentFolder, resources })

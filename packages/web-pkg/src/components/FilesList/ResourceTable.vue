@@ -245,7 +245,7 @@ import {
 import { useWindowSize } from '@vueuse/core'
 import { IncomingShareResource, Resource } from '@ownclouders/web-client'
 import { extractDomSelector, SpaceResource } from '@ownclouders/web-client'
-import { ShareTypes, isIncomingShareResource, isShareResource } from '@ownclouders/web-client'
+import { ShareTypes, isShareResource } from '@ownclouders/web-client'
 
 import {
   SortDir,
@@ -1038,11 +1038,6 @@ export default defineComponent({
       }
 
       if (this.isEmbedModeEnabled && !resource.isFolder) {
-        return false
-      }
-
-      // TODO: remove as soon as unsynced shares are accessible
-      if (isIncomingShareResource(resource) && !resource.syncEnabled) {
         return false
       }
 

@@ -85,7 +85,7 @@ export const useFileActionsCreateNewFile = ({ space }: { space?: SpaceResource }
 
     resourcesStore.upsertResource(resource)
 
-    return openEditor(appFileExtension, space, resource, EDITOR_MODE_CREATE, space.shareId)
+    return openEditor(appFileExtension, space, resource, EDITOR_MODE_CREATE)
   }
 
   const handler = (

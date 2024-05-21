@@ -52,8 +52,8 @@ export const useGetMatchingSpace = (options?: GetMatchingSpaceOptions) => {
         : 'share'
 
     let shareName: string
-    if (resource.shareRoot) {
-      shareName = basename(resource.shareRoot)
+    if (resource.remoteItemPath) {
+      shareName = basename(resource.remoteItemPath)
     } else if (
       unref(driveAliasAndItem)?.startsWith('share/') ||
       unref(driveAliasAndItem)?.startsWith('ocm-share/')
@@ -65,7 +65,7 @@ export const useGetMatchingSpace = (options?: GetMatchingSpaceOptions) => {
 
     return buildShareSpaceResource({
       driveAliasPrefix,
-      shareId: resource.shareId,
+      id: resource.remoteItemId,
       shareName,
       serverUrl: configStore.serverUrl
     })

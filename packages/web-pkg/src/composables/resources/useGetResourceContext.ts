@@ -58,7 +58,7 @@ export const useGetResourceContext = () => {
 
     space = buildShareSpaceResource({
       driveAliasPrefix: resource.storageId?.startsWith(OCM_PROVIDER_ID) ? 'ocm-share' : 'share',
-      shareId: mountPoint.nodeId,
+      id: mountPoint.root?.remoteItem?.id,
       shareName: mountPoint.name,
       serverUrl: configStore.serverUrl
     })
