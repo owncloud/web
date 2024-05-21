@@ -47,6 +47,7 @@ export interface SpaceResource extends Resource {
   getDriveAliasAndItem(resource: Resource): string
 
   isViewer(user: User): boolean
+  isSecureViewer(user: User): boolean
   isEditor(user: User): boolean
   isManager(user: User): boolean
   isMember(user: User): boolean
