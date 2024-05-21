@@ -1,10 +1,16 @@
 import DetailsAndEdit from 'web-app-files/src/components/SideBar/Shares/Links/DetailsAndEdit.vue'
-import { LinkShare, ShareRole } from '@ownclouders/web-client'
+import { LinkShare, ShareRole, ShareTypes } from '@ownclouders/web-client'
 import { defaultPlugins, shallowMount, defaultComponentMocks } from 'web-test-helpers'
 import { mock } from 'vitest-mock-extended'
-import { useLinkTypes, LinkRoleDropdown } from '@ownclouders/web-pkg'
+import {
+  useLinkTypes,
+  LinkRoleDropdown,
+  AncestorMetaDataValue,
+  AncestorMetaData
+} from '@ownclouders/web-pkg'
 import { SharingLinkType } from '@ownclouders/web-client/graph/generated'
 import { Resource } from '@ownclouders/web-client'
+import OcButton from 'design-system/src/components/OcButton/OcButton.vue'
 
 vi.mock('@ownclouders/web-pkg', async (importOriginal) => ({
   ...(await importOriginal<any>()),
@@ -59,8 +65,18 @@ describe('DetailsAndEdit component', () => {
 
   it('renders a button for indirect links', () => {
     const linkShare = mock<LinkShare>({ indirect: true })
-    const { wrapper } = getShallowMountedWrapper({ linkShare })
-    expect(wrapper.find('.oc-files-file-link-via').exists()).toBeTruthy()
+    const ancestorMetaData = {
+      '/parent': mock<AncestorMetaDataValue>({
+        id: 'ancestorId',
+        shareTypes: [ShareTypes.link.value],
+        path: '/parent'
+      })
+    }
+
+    const { wrapper } = getShallowMountedWrapper({ linkShare, ancestorMetaData })
+    const viaButton = wrapper.findComponent<typeof OcButton>('.oc-files-file-link-via')
+    expect(viaButton.exists()).toBeTruthy()
+    expect(viaButton.props('to').query.fileId).toEqual('ancestorId')
   })
 
   describe('additional information icons', () => {
@@ -80,11 +96,13 @@ describe('DetailsAndEdit component', () => {
 function getShallowMountedWrapper({
   linkShare = exampleLink,
   isModifiable = true,
-  availableLinkTypes = [SharingLinkType.View]
+  availableLinkTypes = [SharingLinkType.View],
+  ancestorMetaData = {}
 }: {
   linkShare?: LinkShare
   isModifiable?: boolean
   availableLinkTypes?: SharingLinkType[]
+  ancestorMetaData?: AncestorMetaData
 } = {}) {
   vi.mocked(useLinkTypes).mockReturnValue(
     mock<ReturnType<typeof useLinkTypes>>({
@@ -111,9 +129,17 @@ function getShallowMountedWrapper({
       global: {
         mocks,
         renderStubDefaultSlot: true,
-        stubs: { OcDatepicker: false, 'date-picker': true },
-        plugins: [...defaultPlugins()],
-        provide: { ...mocks, resource: mock<Resource>({ path: '/' }) }
+        stubs: { OcDatepicker: false, 'date-picker': true, OcButton: false },
+        plugins: [
+          ...defaultPlugins({
+            piniaOptions: {
+              resourcesStore: {
+                ancestorMetaData
+              }
+            }
+          })
+        ],
+        provide: { ...mocks, resource: mock<Resource>({ path: '/', remoteItemPath: undefined }) }
       }
     })
   }
