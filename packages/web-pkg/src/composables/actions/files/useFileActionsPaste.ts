@@ -77,6 +77,7 @@ export const useFileActionsPaste = () => {
       }
 
       return Promise.all(loadingResources).then(() => {
+        // FIXME: move to buildResource as soon as it has space context
         if (isShareSpaceResource(targetSpace)) {
           fetchedResources.forEach((r) => {
             r.remoteItemId = targetSpace.id

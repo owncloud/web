@@ -76,6 +76,7 @@ export const useFileActionsCreateNewFolder = ({ space }: { space?: SpaceResource
         })
       }
 
+      // FIXME: move to buildResource as soon as it has space context
       if (isShareSpaceResource(space)) {
         resource.remoteItemId = space.id
       }
