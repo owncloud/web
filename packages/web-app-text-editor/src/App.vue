@@ -54,7 +54,7 @@ export default defineComponent({
 .toastui-editor-defaultUI {
   // Adjustments to match our theming
   border: none;
-  // Adjustments to not overlay with out app picker
+  // Adjustments to not overlay with the app switcher
   z-index: 0;
 }
 
