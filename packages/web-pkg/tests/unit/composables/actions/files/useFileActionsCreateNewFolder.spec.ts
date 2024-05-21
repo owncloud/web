@@ -6,7 +6,7 @@ import {
   useModals,
   useResourcesStore
 } from '../../../../../src/composables/piniaStores'
-import { SpaceResource } from '@ownclouders/web-client'
+import { ShareSpaceResource, SpaceResource } from '@ownclouders/web-client'
 import { FolderResource, Resource } from '@ownclouders/web-client'
 import { RouteLocation, defaultComponentMocks, getComposableWrapper } from 'web-test-helpers/src'
 import { useScrollToMock } from '../../../../mocks/useScrollToMock'
@@ -69,6 +69,20 @@ describe('useFileActionsCreateNewFolder', () => {
             })
           )
           consoleErrorMock.mockRestore()
+        }
+      })
+    })
+    it('adds the remoteItemId if the current space is a share space', () => {
+      const space = mock<ShareSpaceResource>({ id: '1', driveType: 'share' })
+      getWrapper({
+        space,
+        setup: async ({ addNewFolder }) => {
+          await addNewFolder('myfolder')
+
+          const { upsertResource } = useResourcesStore()
+          expect(upsertResource).toHaveBeenCalledWith(
+            expect.objectContaining({ remoteItemId: '1' })
+          )
         }
       })
     })

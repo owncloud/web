@@ -1,4 +1,4 @@
-import { SpaceResource } from '@ownclouders/web-client'
+import { SpaceResource, isShareSpaceResource } from '@ownclouders/web-client'
 import { computed, nextTick, unref } from 'vue'
 import { useClientService } from '../../clientService'
 import { useRouter } from '../../router'
@@ -74,6 +74,10 @@ export const useFileActionsCreateNewFolder = ({ space }: { space?: SpaceResource
           ancestorMetaData: unref(ancestorMetaData),
           user: userRoleStore.user
         })
+      }
+
+      if (isShareSpaceResource(space)) {
+        resource.remoteItemId = space.id
       }
 
       resourcesStore.upsertResource(resource)
