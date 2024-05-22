@@ -17,6 +17,7 @@ import { router } from 'web-runtime/src/router'
 import { SSEAdapter } from '@ownclouders/web-client/sse'
 import { User as OcUser } from '@ownclouders/web-client/graph/generated'
 import { SettingsBundle } from '../../helpers/settings'
+import { WebWorkersStore } from '@ownclouders/web-pkg'
 
 const postLoginRedirectUrlKey = 'oc.postLoginRedirectUrl'
 type UnloadReason = 'authError' | 'logout'
@@ -29,6 +30,7 @@ export interface UserManagerOptions {
   userStore: UserStore
   authStore: AuthStore
   capabilityStore: CapabilityStore
+  webWorkersStore: WebWorkersStore
 }
 
 export class UserManager extends OidcUserManager {
@@ -37,6 +39,7 @@ export class UserManager extends OidcUserManager {
   private configStore: ConfigStore
   private userStore: UserStore
   private authStore: AuthStore
+  private webWorkersStore: WebWorkersStore
   private capabilityStore: CapabilityStore
   private updateAccessTokenPromise: Promise<void> | null
   private _unloadReason: UnloadReason
@@ -115,6 +118,7 @@ export class UserManager extends OidcUserManager {
     this.userStore = options.userStore
     this.authStore = options.authStore
     this.capabilityStore = options.capabilityStore
+    this.webWorkersStore = options.webWorkersStore
   }
 
   /**
@@ -168,6 +172,8 @@ export class UserManager extends OidcUserManager {
       if (this.capabilityStore.supportSSE) {
         ;(this.clientService.sseAuthenticated as SSEAdapter).updateAccessToken(accessToken)
       }
+
+      this.webWorkersStore.updateAccessTokens(accessToken)
 
       if (!userKnown) {
         await this.fetchUserInfo()
