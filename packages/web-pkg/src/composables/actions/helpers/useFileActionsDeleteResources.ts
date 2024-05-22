@@ -185,7 +185,7 @@ export const useFileActionsDeleteResources = () => {
       return acc
     }, {})
 
-    const originalCurrentFolderId = unref(currentFolder).id
+    const originalCurrentFolderId = unref(currentFolder)?.id
 
     return Object.values(resourceSpaceMapping).map(
       ({ space: spaceForDeletion, resources: resourcesForDeletion }) => {
