@@ -1,52 +1,47 @@
+import axios, { AxiosInstance } from 'axios'
 import PQueue from 'p-queue'
-import { Resource, encodePath } from '@ownclouders/web-client'
-import { WorkerTopics } from '../../piniaStores/webWorkers'
+import { Resource, client, SpaceResource } from '@ownclouders/web-client'
+import { WorkerTopic } from '../../piniaStores/webWorkers'
 
 type MessageData = {
-  baseUrl: string
-  accessToken: string
-  headers: Record<string, string>
-  resources: Resource[]
+  baseUrl?: string
+  accessToken?: string
+  headers?: Record<string, string>
+  space?: SpaceResource
+  resources?: Resource[]
 }
 
 type Message = {
-  topic: WorkerTopics
+  topic: WorkerTopic
   data: MessageData
 }
 
-let accessToken: string
+let axiosClient: AxiosInstance
 
 self.onmessage = async (e: MessageEvent) => {
   const { topic, data } = JSON.parse(e.data) as Message
 
-  if (accessToken === undefined || accessToken === null) {
-    // init access token, empty string if in public context
-    accessToken = data.accessToken || ''
-  }
+  if (topic === 'tokenUpdate' && axiosClient) {
+    const existingToken = axiosClient?.defaults.headers.Authorization
 
-  if (topic === 'tokenUpdate') {
     // token must only be updated for bearer tokens, not on public links
-    if (accessToken?.startsWith('Bearer')) {
-      accessToken = data.accessToken
+    if (existingToken?.toString().startsWith('Bearer')) {
+      Object.assign(axiosClient.defaults, { headers: { Authorization: data.accessToken } })
     }
 
     return
   }
 
-  const { baseUrl, headers, resources } = data
+  const { baseUrl, headers, space, resources } = data
+
+  axiosClient = axios.create({ headers })
+  const { webdav } = client({ axiosClient, baseURI: baseUrl })
 
   const successful: Resource[] = []
   const failed: { resource: Resource; status: number }[] = []
   const queue = new PQueue({ concurrency: 2 })
 
-  const doDelete = async (path: string) => {
-    // fake timer so requests take more time
-    await new Promise((res) => setTimeout(res, 2000))
-    return fetch(`${baseUrl}/${encodePath(path)}`, {
-      method: 'DELETE',
-      headers: { ...headers, ...(accessToken && { Authorization: accessToken }) }
-    })
-  }
+  const doDelete = (path: string) => webdav.deleteFile(space, { path })
 
   const promises = resources.map((r) => {
     return queue.add(async () => {

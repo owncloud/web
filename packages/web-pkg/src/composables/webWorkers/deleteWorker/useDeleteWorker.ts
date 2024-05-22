@@ -1,6 +1,6 @@
 import { unref } from 'vue'
 import { useWebWorkersStore } from '../../piniaStores/webWorkers'
-import { Resource, SpaceResource, urlJoin } from '@ownclouders/web-client'
+import { Resource, SpaceResource } from '@ownclouders/web-client'
 import { useConfigStore } from '../../piniaStores'
 import { useLoadingService } from '../../loadingService'
 import { useRequestHeaders } from '../../requestHeaders'
@@ -45,9 +45,9 @@ export const useDeleteWorker = () => {
     return JSON.stringify({
       topic: 'startProcess',
       data: {
+        space,
         resources,
-        baseUrl: urlJoin(configStore.serverUrl, 'remote.php', 'dav', space.webDavPath),
-        accessToken: unref(headers).Authorization,
+        baseUrl: configStore.serverUrl,
         headers: unref(headers)
       }
     })

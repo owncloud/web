@@ -7,14 +7,15 @@ export interface WebWorker<T = any> extends UseWebWorkerReturn<T> {
   id: string
 }
 
-export type WorkerTopics = 'startProcess' | 'tokenUpdate'
+export type WorkerTopic = 'startProcess' | 'tokenUpdate'
 
 export const useWebWorkersStore = defineStore('webWorkers', () => {
   const workers = ref([]) as Ref<WebWorker[]>
 
   const createWorker = <T = any>(workerUrl: string): WebWorker<T> => {
-    const result = useWebWorker(workerUrl, { type: 'module', name: uuidV4() })
-    const worker = { id: uuidV4(), ...result }
+    const workerId = uuidV4()
+    const result = useWebWorker(workerUrl, { type: 'module', name: workerId })
+    const worker = { id: workerId, ...result }
     unref(workers).push(worker)
     return worker
   }
