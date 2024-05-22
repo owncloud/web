@@ -21,7 +21,7 @@
             @update:nav-bar-closed="setNavBarClosed"
           />
           <portal to="app.runtime.mobile.nav">
-            <mobile-nav v-if="isMobileWidth" :nav-items="navItems" />
+            <mobile-nav v-if="isMobileWidth && navItems.length" :nav-items="navItems" />
           </portal>
           <router-view
             v-for="name in ['default', 'app', 'fullscreen']"
