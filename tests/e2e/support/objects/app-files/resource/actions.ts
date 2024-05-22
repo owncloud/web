@@ -751,22 +751,12 @@ export const selectOrDeselectResources = async (args: selectResourcesArgs): Prom
   if (folder) {
     await clickResource({ page, path: folder })
   }
-
   for (const resource of resources) {
-    const exists = await resourceExists({
-      page,
-      name: resource.name
-    })
-    if (exists) {
-      const resourceCheckbox = page.locator(util.format(checkBox, resource.name))
-
-      if (!(await resourceCheckbox.isChecked()) && select) {
-        await resourceCheckbox.check()
-      } else if (await resourceCheckbox.isChecked()) {
-        await resourceCheckbox.uncheck()
-      }
-    } else {
-      throw new Error(`The resource ${resource.name} you are trying to select does not exist`)
+    const resourceCheckbox = page.locator(util.format(checkBox, resource.name))
+    if (!(await resourceCheckbox.isChecked()) && select) {
+      await resourceCheckbox.check()
+    } else if (await resourceCheckbox.isChecked()) {
+      await resourceCheckbox.uncheck()
     }
   }
 }

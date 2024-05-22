@@ -72,7 +72,6 @@ Feature: link
       | lorem.txt     | replace |
     And "Anonymous" creates the following resources
       | resource       | type   |
-      | myfolder       | folder |
       | myfolder/child | folder |
     # currently upload folder feature is not available in playwright
     # And "Anonymous" uploads the following resources in public link page
