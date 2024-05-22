@@ -2,6 +2,7 @@ import path, { basename, dirname } from 'path'
 import { urlJoin } from '../../utils'
 import { DavPermission, DavProperty } from '../../webdav/constants'
 import { Resource, ResourceIndicator, WebDavResponseResource } from './types'
+import { camelCase } from 'lodash-es'
 
 const fileExtensions = {
   complex: ['tar.bz2', 'tar.gz', 'tar.xz']
@@ -64,6 +65,17 @@ export const extractParentFolderName = (resource: Resource): string | null => {
 
 export const isShareRoot = (resource: Resource) => {
   return typeof resource.isShareRoot === 'function' && resource.isShareRoot()
+}
+
+const convertObjectToCamelCaseKeys = (data: Record<string, any>) => {
+  if (!data) {
+    return data
+  }
+  const converted = {}
+  Object.keys(data).forEach((key) => {
+    converted[camelCase(key)] = data[key]
+  })
+  return converted
 }
 
 export function buildResource(resource: WebDavResponseResource): Resource {
@@ -136,8 +148,10 @@ export function buildResource(resource: WebDavResponseResource): Resource {
       displayName: resource.props[DavProperty.OwnerDisplayName]
     },
     tags: (resource.props[DavProperty.Tags] || '').split(',').filter(Boolean),
-    audio: resource.props[DavProperty.Audio],
-    location: resource.props[DavProperty.Location],
+    audio: convertObjectToCamelCaseKeys(resource.props[DavProperty.Audio]),
+    location: convertObjectToCamelCaseKeys(resource.props[DavProperty.Location]),
+    image: convertObjectToCamelCaseKeys(resource.props[DavProperty.Image]),
+    photo: convertObjectToCamelCaseKeys(resource.props[DavProperty.Photo]),
     canUpload: function () {
       return this.permissions.indexOf(DavPermission.FolderCreateable) >= 0
     },

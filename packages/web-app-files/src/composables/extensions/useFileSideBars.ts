@@ -1,5 +1,6 @@
 import FileDetails from '../../components/SideBar/Details/FileDetails.vue'
 import FileDetailsMultiple from '../../components/SideBar/Details/FileDetailsMultiple.vue'
+import ExifPanel from '../../components/SideBar/Exif/ExifPanel.vue'
 import FileActions from '../../components/SideBar/Actions/FileActions.vue'
 import FileVersions from '../../components/SideBar/Versions/FileVersions.vue'
 import SharesPanel from '../../components/SideBar/Shares/SharesPanel.vue'
@@ -33,6 +34,7 @@ import { Resource } from '@ownclouders/web-client'
 import { useGettext } from 'vue3-gettext'
 import { unref } from 'vue'
 import { fileSideBarExtensionPoint } from '../../extensionPoints'
+import { isEmpty } from 'lodash-es'
 
 export const useSideBarPanels = (): SidebarPanelExtension<SpaceResource, Resource, Resource>[] => {
   const router = useRouter()
@@ -135,6 +137,27 @@ export const useSideBarPanels = (): SidebarPanelExtension<SpaceResource, Resourc
             return false
           }
           return items?.length > 1
+        }
+      }
+    },
+    {
+      id: 'com.github.owncloud.web.files.sidebar-panel.exif',
+      type: 'sidebarPanel',
+      extensionPointIds: ['global.files.sidebar'],
+      panel: {
+        name: 'exif',
+        icon: 'image',
+        title: () => $gettext('Image Info'),
+        component: ExifPanel,
+        isVisible: ({ items }) => {
+          if (items?.length !== 1) {
+            return false
+          }
+          const item = items[0]
+          if (item.type !== 'file') {
+            return false
+          }
+          return !isEmpty(item.image) || !isEmpty(item.photo)
         }
       }
     },
