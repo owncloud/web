@@ -162,6 +162,10 @@ export default defineComponent({
 
     watch(isMobileWidth, () => {
       const searchBarEl = document.getElementById('files-global-search-bar')
+      if (!searchBarEl) {
+        return
+      }
+
       const optionDropVisible = !!document.querySelector('.tippy-box[data-state="visible"]')
 
       if (!unref(isMobileWidth)) {
