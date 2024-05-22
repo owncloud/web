@@ -21,7 +21,9 @@ export const useDeleteWorker = () => {
     { space, resources }: { space: SpaceResource; resources: Resource[] },
     callback: (result: WorkerReturnData) => void
   ) => {
-    const worker = createWorker<WorkerReturnData>(DeleteWorker as unknown as string)
+    const worker = createWorker<WorkerReturnData>(DeleteWorker as unknown as string, {
+      needsTokenRenewal: true
+    })
 
     let resolveLoading: (value: unknown) => void
 

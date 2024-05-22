@@ -5,6 +5,7 @@ import { UseWebWorkerReturn, useWebWorker } from '@vueuse/core'
 
 export interface WebWorker<T = any> extends UseWebWorkerReturn<T> {
   id: string
+  needsTokenRenewal: boolean
 }
 
 export type WorkerTopic = 'startProcess' | 'tokenUpdate'
@@ -12,10 +13,13 @@ export type WorkerTopic = 'startProcess' | 'tokenUpdate'
 export const useWebWorkersStore = defineStore('webWorkers', () => {
   const workers = ref([]) as Ref<WebWorker[]>
 
-  const createWorker = <T = any>(workerUrl: string): WebWorker<T> => {
+  const createWorker = <T = any>(
+    workerUrl: string,
+    { needsTokenRenewal = false }: { needsTokenRenewal?: boolean } = {}
+  ): WebWorker<T> => {
     const workerId = uuidV4()
     const result = useWebWorker(workerUrl, { type: 'module', name: workerId })
-    const worker = { id: workerId, ...result }
+    const worker = { id: workerId, needsTokenRenewal, ...result }
     unref(workers).push(worker)
     return worker
   }
@@ -37,9 +41,13 @@ export const useWebWorkersStore = defineStore('webWorkers', () => {
   }
 
   const updateAccessTokens = (accessToken: string) => {
-    unref(workers).forEach(({ post }) => {
-      post(JSON.stringify({ topic: 'tokenUpdate', data: { accessToken: `Bearer ${accessToken}` } }))
-    })
+    unref(workers)
+      .filter(({ needsTokenRenewal }) => needsTokenRenewal)
+      .forEach(({ post }) => {
+        post(
+          JSON.stringify({ topic: 'tokenUpdate', data: { accessToken: `Bearer ${accessToken}` } })
+        )
+      })
   }
 
   return {

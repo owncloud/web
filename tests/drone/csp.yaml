@@ -10,7 +10,7 @@ directives:
   font-src:
     - '''self'''
   frame-ancestors:
-    - '''none'''
+    - '''self'''
   frame-src:
     - '''self'''
     - 'https://embed.diagrams.net/'

@@ -31,6 +31,9 @@ export interface UserManagerOptions {
   authStore: AuthStore
   capabilityStore: CapabilityStore
   webWorkersStore: WebWorkersStore
+
+  // number of seconds before an access token is to expire to raise the accessTokenExpiring event
+  accessTokenExpiryThreshold: number
 }
 
 export class UserManager extends OidcUserManager {
@@ -66,13 +69,12 @@ export class UserManager extends OidcUserManager {
       response_type: 'code', // "code" triggers auth code grant flow
 
       post_logout_redirect_uri: buildUrl(router, '/'),
-      accessTokenExpiringNotificationTimeInSeconds: 10,
+      accessTokenExpiringNotificationTimeInSeconds: options.accessTokenExpiryThreshold,
       authority: '',
       client_id: '',
 
-      automaticSilentRenew: options.configStore.options.embed?.enabled
-        ? !options.configStore.options.embed.delegateAuthentication
-        : true
+      // we trigger the token renewal manually via a timer running in a web worker
+      automaticSilentRenew: false
     }
 
     if (options.configStore.isOIDC) {

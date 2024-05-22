@@ -5,7 +5,8 @@ import {
   ClientService,
   UserStore,
   CapabilityStore,
-  ConfigStore
+  ConfigStore,
+  useTokenTimerWorker
 } from '@ownclouders/web-pkg'
 import { RouteLocation, Router } from 'vue-router'
 import {
@@ -33,6 +34,12 @@ export class AuthService {
   private authStore: AuthStore
   private capabilityStore: CapabilityStore
   private webWorkersStore: WebWorkersStore
+
+  private tokenTimerWorker: ReturnType<typeof useTokenTimerWorker>
+  private tokenTimerInitialized = false
+
+  // number of seconds before an access token is to expire to raise the accessTokenExpiring event
+  private accessTokenExpiryThreshold = 10
 
   public hasAuthErrorOccurred: boolean
 
@@ -97,8 +104,18 @@ export class AuthService {
         userStore: this.userStore,
         authStore: this.authStore,
         capabilityStore: this.capabilityStore,
-        webWorkersStore: this.webWorkersStore
+        webWorkersStore: this.webWorkersStore,
+        accessTokenExpiryThreshold: this.accessTokenExpiryThreshold
       })
+
+      if (!this.tokenTimerWorker) {
+        const { options } = this.configStore
+
+        if (!options.embed?.enabled || !options.embed?.delegateAuthentication) {
+          this.tokenTimerWorker = useTokenTimerWorker({ authService: this })
+          this.tokenTimerWorker.startWorker()
+        }
+      }
     }
 
     if (!isAnonymousContext(this.router, to)) {
@@ -112,24 +129,11 @@ export class AuthService {
           }
 
           /**
-           * Retry silent token renewal
-           *
-           * in cases where the application runs in the background (different tab, different window) the AccessTokenExpired event gets called
-           * even if the application is still able to obtain a new token.
-           *
-           * The main reason for this is the browser throttling in combination with `oidc-client-ts` 'Timer' class which uses 'setInterval' to notify / refresh all necessary parties.
-           * In those cases the internal clock gets out of sync and the auth library emits that event.
-           *
-           * For a better understanding why this happens and the interval execution gets throttled please read:
-           * https://developer.chrome.com/blog/timer-throttling-in-chrome-88/
-           *
-           * in cases where 'automaticSilentRenew' is enabled we try to obtain a new token one more time before we really start the authError flow.
+           * The silent token renewal can fail in some scenarios with a slow network connection
+           * because the iFrame times out. To overcome this issue, we retry the silent signin
+           * here, which should work eventually as soon as the network connection is stable enough.
            */
-          if (this.userManager.settings.automaticSilentRenew) {
-            this.userManager.signinSilent().catch(handleExpirationError)
-          } else {
-            handleExpirationError()
-          }
+          this.userManager.signinSilent().catch(handleExpirationError)
         })
 
         this.userManager.events.addAccessTokenExpiring((...args) => {
@@ -137,6 +141,11 @@ export class AuthService {
         })
 
         this.userManager.events.addUserLoaded(async (user) => {
+          this.tokenTimerWorker?.setTokenTimer({
+            expiry: user.expires_in,
+            expiryThreshold: this.accessTokenExpiryThreshold
+          })
+
           console.debug(
             `New User Loaded. access_token： ${user.access_token}, refresh_token: ${user.refresh_token}`
           )
@@ -150,6 +159,7 @@ export class AuthService {
 
         this.userManager.events.addUserUnloaded(async () => {
           console.log('user unloaded…')
+          this.tokenTimerWorker?.resetTokenTimer()
           await this.resetStateAfterUserLogout()
 
           if (this.userManager.unloadReason === 'authError') {
@@ -194,6 +204,16 @@ export class AuthService {
 
         try {
           await this.userManager.updateContext(accessToken, fetchUserData)
+
+          if (!this.tokenTimerInitialized) {
+            const user = await this.userManager.getUser()
+            this.tokenTimerWorker?.setTokenTimer({
+              expiry: user.expires_in,
+              expiryThreshold: this.accessTokenExpiryThreshold
+            })
+
+            this.tokenTimerInitialized = true
+          }
         } catch (e) {
           console.error(e)
           await this.handleAuthError(unref(this.router.currentRoute))
@@ -205,6 +225,10 @@ export class AuthService {
   public loginUser(redirectUrl?: string) {
     this.userManager.setPostLoginRedirectUrl(redirectUrl)
     return this.userManager.signinRedirect()
+  }
+
+  public signinSilent() {
+    return this.userManager.signinSilent()
   }
 
   /**
@@ -275,6 +299,7 @@ export class AuthService {
       }
 
       await this.userManager.removeUser('authError')
+      this.tokenTimerWorker?.resetTokenTimer()
       return
     }
     // authGuard is taking care of redirecting the user to the
