@@ -684,16 +684,14 @@ export default defineComponent({
               wrap: 'nowrap',
               width: 'shrink'
             },
-            ...(this.hasTags && [
-              {
-                name: 'tags',
-                title: this.$gettext('Tags'),
-                type: 'slot',
-                alignH: 'right',
-                wrap: 'nowrap',
-                width: 'shrink'
-              }
-            ]),
+            {
+              name: 'tags',
+              title: this.$gettext('Tags'),
+              type: 'slot',
+              alignH: 'right',
+              wrap: 'nowrap',
+              width: 'shrink'
+            },
             {
               name: 'sharedBy',
               title: this.$gettext('Shared by'),
@@ -752,6 +750,10 @@ export default defineComponent({
           ] as FieldType[]
         )
           .filter((field) => {
+            if (field.name === 'tags' && !this.hasTags) {
+              return false
+            }
+
             let hasField: boolean
             if (field.prop) {
               hasField = get(firstResource, field.prop) !== undefined
@@ -761,6 +763,7 @@ export default defineComponent({
             if (!this.fieldsDisplayed) {
               return hasField
             }
+
             return hasField && this.fieldsDisplayed.includes(field.name)
           })
           .map((field) => {
