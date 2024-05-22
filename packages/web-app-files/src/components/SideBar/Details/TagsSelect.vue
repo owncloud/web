@@ -73,8 +73,8 @@ import {
 import {
   createLocationCommon,
   eventBus,
-  isLocationPublicActive,
   SideBarEventTopics,
+  useAuthStore,
   useClientService,
   useMessages,
   useResourcesStore,
@@ -84,6 +84,7 @@ import { useGettext } from 'vue3-gettext'
 import { useTask } from 'vue-concurrency'
 import diff from 'lodash-es/difference'
 import { call, Resource } from '@ownclouders/web-client'
+import { storeToRefs } from 'pinia'
 
 type TagOption = {
   label: string
@@ -117,13 +118,16 @@ export default defineComponent({
     const router = useRouter()
     const { updateResourceField } = useResourcesStore()
 
-    const isPublicLocation = isLocationPublicActive(router, 'files-public-link')
-    const type = unref(isPublicLocation) ? 'span' : 'router-link'
+    const authStore = useAuthStore()
+    const { publicLinkContextReady } = storeToRefs(authStore)
+
+    const type = unref(publicLinkContextReady) ? 'span' : 'router-link'
     const resource = toRef(props, 'resource')
     const { $gettext } = useGettext()
     const readonly = computed(
       () =>
         unref(resource).locked === true ||
+        unref(publicLinkContextReady) ||
         (typeof unref(resource).canEditTags === 'function' &&
           unref(resource).canEditTags() === false)
     )
@@ -267,7 +271,7 @@ export default defineComponent({
     }
 
     const getAdditionalAttributes = (tag: string) => {
-      if (unref(isPublicLocation)) {
+      if (unref(publicLinkContextReady)) {
         return {}
       }
       return {
@@ -293,7 +297,6 @@ export default defineComponent({
       readonly,
       getAdditionalAttributes,
       onTagClicked,
-      isPublicLocation,
       type
     }
   }
