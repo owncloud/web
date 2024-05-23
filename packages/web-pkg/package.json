@@ -42,6 +42,7 @@
     "zod": "^3.22.4",
     "@toast-ui/editor": "^3.2.2",
     "@toast-ui/editor-plugin-code-syntax-highlight": "^3.1.0",
+    "@vitest/web-worker": "1.6.0",
     "prismjs": "^1.29.0",
     "vite-plugin-dts": "3.6.0"
   },
@@ -77,6 +78,6 @@
     "vue-concurrency": "5.0.1",
     "vue-router": "4.2.5",
     "vue3-gettext": "2.4.0",
-    "vitest": "1.4.0"
+    "vitest": "1.6.0"
   }
 }
