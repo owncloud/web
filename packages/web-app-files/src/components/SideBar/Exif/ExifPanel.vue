@@ -61,7 +61,7 @@
 <script lang="ts">
 import { computed, defineComponent, inject, Ref, unref } from 'vue'
 import { Resource } from '@ownclouders/web-client'
-import { formatDateFromISO, useMessages } from '@ownclouders/web-pkg'
+import { formatDateFromISO, useConfigStore, useMessages } from '@ownclouders/web-pkg'
 import { useGettext } from 'vue3-gettext'
 import { useClipboard } from '@vueuse/core'
 
@@ -69,6 +69,7 @@ export default defineComponent({
   name: 'ExifPanel',
   setup() {
     const resource = inject<Ref<Resource>>('resource')
+    const config = useConfigStore()
     const { current: currentLanguage, $gettext } = useGettext()
     const { showMessage } = useMessages()
     const {
@@ -131,6 +132,9 @@ export default defineComponent({
     const location = computed(() => {
       const l = unref(resource).location
       if (!l?.latitude || !l?.longitude) {
+        return ''
+      }
+      if (config.options.sidebar?.exif?.showLocation === false) {
         return ''
       }
       return `${l.latitude}, ${l.longitude}`

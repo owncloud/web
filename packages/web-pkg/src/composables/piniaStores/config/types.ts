@@ -123,6 +123,11 @@ const OptionsConfigSchema = z.object({
         .object({
           showAllOnLoad: z.boolean().optional()
         })
+        .optional(),
+      exif: z
+        .object({
+          showLocation: z.boolean().optional()
+        })
         .optional()
     })
     .optional(),
