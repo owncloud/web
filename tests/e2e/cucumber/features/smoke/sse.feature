@@ -1,15 +1,15 @@
 @sse
 Feature: server sent events
       events:
-      | userlog-notification    |   |
-      | postprocessing-finished |   |
-      | file-locked             | x | checked in the app-provider/lock.feature 
+      | userlog-notification    | x |
+      | postprocessing-finished | x |
+      | file-locked             | x | checked in the app-provider/lock.feature
       | file-unlocked           | x | checked in the app-provider/lock.feature
-      | file-touched            |   |
-      | item-renamed            |   |
-      | item-trashed            |   |
-      | item-restored           |   |
-      | item-moved              |   |
+      | file-touched            | x |
+      | item-renamed            | x |
+      | item-trashed            | x |
+      | item-restored           | x |
+      | item-moved              | x |
       | folder-created          | x |
       | space-member-added      | x |
       | space-member-removed    | x |
@@ -163,38 +163,89 @@ Feature: server sent events
     And "Alice" logs out
 
 
-  Scenario: public link sse events
-    When "Brian" logs in
-    And "Brian" navigates to the shared with me page
+  Scenario: sse events on file operations
+    Given "Admin" assigns following roles to the users using API
+      | id    | role        |
+      | Alice | Space Admin |
     And "Alice" logs in
-    And "Alice" creates the following folder in personal space using API
-      | name                   |
-      | sharedFolder/subFolder |
+    And "Alice" creates the following project space using API
+      | name      | id        |
+      | Marketing | marketing |
+    And "Alice" adds the following members to the space "Marketing" using API
+      | user  | role     | shareType |
+      | Brian | Can edit | space     |
+    And "Alice" creates the following folder in space "Marketing" using API
+      | name         |
+      | space-folder |
+    When "Alice" navigates to the project space "marketing"
+    And "Brian" logs in
+    And "Brian" navigates to the project space "marketing"
+   
+    # postprocessing-finished - upload file
+    When "Brian" uploads the following resources
+      | resource   |
+      | simple.pdf |
+    Then "Brian" should get "postprocessing-finished" SSE event
+    And "Alice" should get "postprocessing-finished" SSE event
+    And following resources should be displayed in the files list for user "Alice"
+      | resource   |
+      | simple.pdf |
 
-    # share-created
-    When "Alice" shares the following resource using the sidebar panel
-      | resource     | recipient | type | role     |
-      | sharedFolder | Brian     | user | Can view |
-    Then "Alice" should get "share-created" SSE event
-    And "Brian" should get "share-created" SSE event
-    And "Brian" should not be able to edit folder "sharedFolder"
+    # postprocessing-finished - create file
+    # file-touched -create file
+    When "Alice" creates the following resources
+      | resource    | type    | content   |
+      | example.txt | txtFile | some text |
+    Then "Alice" should get "postprocessing-finished" SSE event
+    And "Alice" should get "file-touched" SSE event
+    And "Brian" should get "postprocessing-finished" SSE event
+    And "Brian" should get "file-touched" SSE event
+    And following resources should be displayed in the files list for user "Brian"
+      | resource    |
+      | example.txt |
 
-    # share-updated
-    When "Brian" opens folder "sharedFolder"
-    And "Alice" updates following sharee role
-      | resource     | recipient | type | role     | resourceType |
-      | sharedFolder | Brian     | user | Can edit | folder       |
-    Then "Alice" should get "share-updated" SSE event
-    And "Brian" should get "share-updated" SSE event
-    And "Brian" should be able to edit folder "subFolder"
+    # item-renamed
+    When "Brian" renames the following resource
+      | resource   | as                 |
+      | simple.pdf | simple-renamed.pdf |
+    Then "Brian" should get "item-renamed" SSE event
+    And "Alice" should get "item-renamed" SSE event
+    And following resources should be displayed in the files list for user "Alice"
+      | resource           |
+      | simple-renamed.pdf |
 
-    # share-removed
-    When "Alice" removes following sharee
-      | resource     | recipient |
-      | sharedFolder | Brian     |
-    Then "Alice" should get "share-removed" SSE event
-    And "Brian" should get "share-removed" SSE event
-    And "Brian" should see the message "Your access to this share has been revoked. Please navigate to another location." on the webUI
+    # item-trashed
+    When "Alice" deletes the following resource using the sidebar panel
+      | resource    |
+      | example.txt |
+    Then "Alice" should get "item-trashed" SSE event
+    And "Brian" should get "item-trashed" SSE event
+    And following resources should not be displayed in the files list for user "Brian"
+      | resource    |
+      | example.txt |
+
+    # item-restored
+    When "Brian" navigates to the trashbin of the project space "marketing"
+    And "Brian" restores the following resources from trashbin
+      | resource    |
+      | example.txt |
+    Then "Brian" should get "item-restored" SSE event
+    And "Alice" should get "item-restored" SSE event
+    And following resources should be displayed in the files list for user "Alice"
+      | resource    |
+      | example.txt |
+
+    # item-moved
+    When "Brian" navigates to the project space "marketing"
+    And "Brian" opens folder "space-folder"
+    And "Alice" moves the following resource using drag-drop
+      | resource           | to           |
+      | simple-renamed.pdf | space-folder |
+    Then "Alice" should get "item-moved" SSE event
+    And "Brian" should get "item-moved" SSE event
+    And following resources should be displayed in the files list for user "Brian"
+      | resource           |
+      | simple-renamed.pdf |
 
     And "Brian" logs out
     And "Alice" logs out
