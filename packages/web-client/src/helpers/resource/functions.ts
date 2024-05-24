@@ -190,7 +190,7 @@ export function buildResource(resource: WebDavResponseResource): Resource {
 
 export function buildDeletedResource(resource: WebDavResponseResource): Resource {
   const isFolder = resource.type === 'directory'
-  const fullName = resource.props[DavProperty.TrashbinOriginalFilename]
+  const fullName = resource.props[DavProperty.TrashbinOriginalFilename]?.toString()
   const extension = extractExtensionFromFile({ name: fullName, type: resource.type } as Resource)
   const id = path.basename(resource.filename)
   return {

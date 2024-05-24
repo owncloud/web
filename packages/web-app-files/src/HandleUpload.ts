@@ -29,7 +29,7 @@ export interface HandleUploadOptions {
   resourcesStore: ResourcesStore
   uppyService: UppyService
   id?: string
-  space?: SpaceResource
+  space?: Ref<SpaceResource>
   quotaCheckEnabled?: boolean
   directoryTreeCreateEnabled?: boolean
   conflictHandlingEnabled?: boolean
@@ -48,7 +48,7 @@ export class HandleUpload extends BasePlugin {
   clientService: ClientService
   language: Language
   route: Ref<RouteLocationNormalizedLoaded>
-  space: SpaceResource
+  space: Ref<SpaceResource>
   userStore: UserStore
   messageStore: MessageStore
   spacesStore: SpacesStore
@@ -101,7 +101,7 @@ export class HandleUpload extends BasePlugin {
       // public file drop
       const publicLinkToken = queryItemAsString(unref(this.route).params.token)
       let endpoint = urlJoin(
-        this.clientService.webdav.getPublicFileUrl(this.space, publicLinkToken),
+        this.clientService.webdav.getPublicFileUrl(unref(this.space), publicLinkToken),
         { trailingSlash: true }
       )
 
@@ -142,7 +142,7 @@ export class HandleUpload extends BasePlugin {
         topLevelFolderId = topLevelFolderIds[topLevelDirectory]
       }
 
-      const webDavUrl = this.space.getWebDavUrl({
+      const webDavUrl = unref(this.space).getWebDavUrl({
         path: currentFolderPath.split('/').map(encodeURIComponent).join('/')
       })
 
@@ -158,10 +158,10 @@ export class HandleUpload extends BasePlugin {
         name: file.name,
         mtime: file.data.lastModified / 1000,
         // current path & space
-        spaceId: this.space.id,
-        spaceName: this.space.name,
-        driveAlias: this.space.driveAlias,
-        driveType: this.space.driveType,
+        spaceId: unref(this.space).id,
+        spaceName: unref(this.space).name,
+        driveAlias: unref(this.space).driveAlias,
+        driveType: unref(this.space).driveType,
         currentFolder: currentFolderPath,
         currentFolderId,
         // upload data
@@ -262,7 +262,7 @@ export class HandleUpload extends BasePlugin {
    */
   async createDirectoryTree(filesToUpload: UppyResource[]): Promise<UppyResource[]> {
     const { webdav } = this.clientService
-    const space = this.space
+    const space = unref(this.space)
     const { id: currentFolderId, path: currentFolderPath } = this.resourcesStore.currentFolder
 
     const routeName = filesToUpload[0].meta.routeName

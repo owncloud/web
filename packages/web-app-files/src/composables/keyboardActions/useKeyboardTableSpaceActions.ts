@@ -6,10 +6,13 @@ import {
   useResourcesStore
 } from '@ownclouders/web-pkg'
 import { SpaceResource } from '@ownclouders/web-client'
-import { unref } from 'vue'
+import { Ref, unref } from 'vue'
 import { useFileActionsPaste } from '@ownclouders/web-pkg'
 
-export const useKeyboardTableSpaceActions = (keyActions: KeyboardActions, space: SpaceResource) => {
+export const useKeyboardTableSpaceActions = (
+  keyActions: KeyboardActions,
+  space: Ref<SpaceResource>
+) => {
   const { copyResources, cutResources } = useClipboardStore()
   const resourcesStore = useResourcesStore()
 
@@ -21,7 +24,7 @@ export const useKeyboardTableSpaceActions = (keyActions: KeyboardActions, space:
   })
 
   keyActions.bindKeyAction({ modifier: Modifier.Ctrl, primary: Key.V }, () => {
-    pasteFileAction({ space: space })
+    pasteFileAction({ space: unref(space) })
   })
 
   keyActions.bindKeyAction({ modifier: Modifier.Ctrl, primary: Key.X }, () => {

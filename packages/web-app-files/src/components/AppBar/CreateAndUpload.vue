@@ -163,7 +163,7 @@
       <oc-button
         :disabled="uploadOrFileCreationBlocked"
         class="paste-files-btn"
-        @click="pasteFileAction({ space })"
+        @click="pasteFileAction"
       >
         <oc-icon fill-type="line" name="clipboard" />
         <span v-text="$gettext('Paste here')" />
@@ -274,6 +274,8 @@ export default defineComponent({
 
     const areFileExtensionsShown = computed(() => unref(resourcesStore.areFileExtensionsShown))
 
+    const space = computed(() => props.space)
+
     useUpload({ uppyService })
 
     if (!uppyService.getPlugin('HandleUpload')) {
@@ -281,7 +283,7 @@ export default defineComponent({
         clientService,
         language,
         route,
-        space: props.space,
+        space,
         userStore,
         spacesStore,
         messageStore,
@@ -293,20 +295,17 @@ export default defineComponent({
     let uploadCompletedSub: string
 
     const { actions: pasteFileActions } = useFileActionsPaste()
-    const pasteFileAction = unref(pasteFileActions)[0].handler
+    const pasteFileAction = () => {
+      return unref(pasteFileActions)[0].handler({ space: unref(space) })
+    }
 
-    const { actions: createNewFolder } = useFileActionsCreateNewFolder({
-      space: props.space
-    })
+    const { actions: createNewFolder } = useFileActionsCreateNewFolder({ space })
     const createNewFolderAction = computed(() => unref(createNewFolder)[0].handler)
 
-    const { actions: createNewShortcut } = useFileActionsCreateNewShortcut({ space: props.space })
-
+    const { actions: createNewShortcut } = useFileActionsCreateNewShortcut({ space })
     const createNewShortcutAction = computed(() => unref(createNewShortcut)[0].handler)
 
-    const { actions: createNewFileActions } = useFileActionsCreateNewFile({
-      space: props.space
-    })
+    const { actions: createNewFileActions } = useFileActionsCreateNewFile({ space })
 
     const appFileActions = computed(() =>
       unref(createNewFileActions).filter(({ isExternal }) => !isExternal)
@@ -361,7 +360,7 @@ export default defineComponent({
         }
 
         const { spaceId, currentFolder, currentFolderId, driveType } = file.meta
-        if (!isPublicSpaceResource(props.space)) {
+        if (!isPublicSpaceResource(unref(space))) {
           const isOwnSpace = spacesStore.spaces
             .find(({ id }) => id === spaceId)
             ?.isOwner(userStore.user)
@@ -378,10 +377,10 @@ export default defineComponent({
         }
 
         const sameFolder =
-          props.itemId && !isShareSpaceResource(props.space)
+          props.itemId && !isShareSpaceResource(unref(space))
             ? props.itemId.toString().startsWith(currentFolderId.toString())
             : currentFolder === props.item
-        const fileIsInCurrentPath = spaceId === props.space.id && sameFolder
+        const fileIsInCurrentPath = spaceId === unref(space).id && sameFolder
         if (fileIsInCurrentPath) {
           eventBus.publish('app.files.list.load')
         }
@@ -485,10 +484,6 @@ export default defineComponent({
 
     uploadOrFileCreationBlocked() {
       return !this.canUpload
-    },
-
-    loadIndicatorsForNewFile() {
-      return this.isSpacesGenericLocation && this.space.driveType !== 'share'
     },
 
     folderIconResource() {

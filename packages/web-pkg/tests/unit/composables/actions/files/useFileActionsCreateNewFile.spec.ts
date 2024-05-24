@@ -1,5 +1,5 @@
 import { mock } from 'vitest-mock-extended'
-import { unref } from 'vue'
+import { ref, unref } from 'vue'
 import { useFileActionsCreateNewFile } from '../../../../../src/composables/actions'
 import { useModals } from '../../../../../src/composables/piniaStores'
 import { SpaceResource } from '@ownclouders/web-client'
@@ -98,7 +98,7 @@ function getWrapper({
   return {
     wrapper: getComposableWrapper(
       () => {
-        const instance = useFileActionsCreateNewFile({ space })
+        const instance = useFileActionsCreateNewFile({ space: ref(space) })
         setup(instance)
       },
       {

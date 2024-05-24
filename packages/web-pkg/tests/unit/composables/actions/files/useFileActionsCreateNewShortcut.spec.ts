@@ -1,5 +1,5 @@
 import { mock } from 'vitest-mock-extended'
-import { unref } from 'vue'
+import { ref, unref } from 'vue'
 import { defaultComponentMocks, RouteLocation, getComposableWrapper } from 'web-test-helpers'
 import { useFileActionsCreateNewShortcut, useModals } from '../../../../../src/composables'
 import { Resource, SpaceResource } from '@ownclouders/web-client'
@@ -55,7 +55,7 @@ function getWrapper({
   return {
     wrapper: getComposableWrapper(
       () => {
-        const instance = useFileActionsCreateNewShortcut({ space: mock<SpaceResource>() })
+        const instance = useFileActionsCreateNewShortcut({ space: ref(mock<SpaceResource>()) })
         setup(instance)
       },
       {
