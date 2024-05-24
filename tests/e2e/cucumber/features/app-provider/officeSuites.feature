@@ -9,6 +9,7 @@ Feature: Integrate with online office suites like Collabora and OnlyOffice
     Given "Admin" creates following users using API
       | id    |
       | Alice |
+      | Brian |
     And "Alice" logs in
     And "Alice" opens the "files" app
 
@@ -26,6 +27,10 @@ Feature: Integrate with online office suites like Collabora and OnlyOffice
     And "Anonymous" opens the public link "Link"
     And "Anonymous" unlocks the public link with password "%public%"
     Then "Anonymous" should see the content "OpenDocument Content" in editor "Collabora"
+    When "Alice" edits the following resource
+      | resource         | type         | content                           |
+      | OpenDocument.odt | OpenDocument | Alice Edited OpenDocument Content |
+    Then "Anonymous" should see the content "Alice Edited OpenDocument Content" in editor "Collabora"
     When "Anonymous" edits the following resource
       | resource         | type         | content                     |
       | OpenDocument.odt | OpenDocument | Edited OpenDocument Content |
@@ -37,6 +42,37 @@ Feature: Integrate with online office suites like Collabora and OnlyOffice
     Then "Anonymous" should not be able to edit content of following resource
       | resource         | type         | content                     |
       | OpenDocument.odt | OpenDocument | Edited OpenDocument Content |
+
+    When "Alice" shares the following resource using the sidebar panel
+      | resource         | recipient | type | role     | resourceType |
+      | OpenDocument.odt | Brian     | user | Can view | file         |
+    And "Brian" logs in
+    And "Brian" navigates to the shared with me page
+    And "Brian" opens the following file in Collabora
+      | resource         |
+      | OpenDocument.odt |
+    Then "Brian" should not be able to edit content of following resource
+      | resource         | type         | content                     |
+      | OpenDocument.odt | OpenDocument | Edited OpenDocument Content |
+    And "Brian" closes the file viewer
+    When "Alice" updates following sharee role
+      | resource         | recipient | type  | role     | resourceType |
+      | OpenDocument.odt | Brian     | user  | Can edit | file         |
+    And "Alice" opens the following file in Collabora
+      | resource         |
+      | OpenDocument.odt |
+    And "Brian" opens the following file in Collabora
+      | resource         |
+      | OpenDocument.odt |
+    And "Alice" edits the following resource
+      | resource         | type         | content                           |
+      | OpenDocument.odt | OpenDocument | Alice Edited OpenDocument Content |
+    Then "Brian" should see the content "Alice Edited OpenDocument Content" in editor "Collabora"
+    When "Brian" edits the following resource
+      | resource         | type         | content                           |
+      | OpenDocument.odt | OpenDocument | Brian Edited OpenDocument Content |
+    Then "Alice" should see the content "Brian Edited OpenDocument Content" in editor "Collabora"
+    And "Brian" logs out
     And "Alice" logs out
 
 
@@ -53,6 +89,10 @@ Feature: Integrate with online office suites like Collabora and OnlyOffice
     And "Anonymous" opens the public link "Link"
     And "Anonymous" unlocks the public link with password "%public%"
     Then "Anonymous" should see the content "Microsoft Word Content" in editor "OnlyOffice"
+    When "Alice" edits the following resource
+      | resource           | type           | content                             |
+      | MicrosoftWord.docx | Microsoft Word | Alice Edited Microsoft Word Content |
+    Then "Anonymous" should see the content "Alice Edited Microsoft Word Content" in editor "OnlyOffice"
     When "Anonymous" edits the following resource
       | resource           | type           | content                       |
       | MicrosoftWord.docx | Microsoft Word | Edited Microsoft Word Content |
@@ -64,7 +104,38 @@ Feature: Integrate with online office suites like Collabora and OnlyOffice
     Then "Anonymous" should not be able to edit content of following resource
       | resource           | type           | content                       |
       | MicrosoftWord.docx | Microsoft Word | Edited Microsoft Word Content |
+
+    When "Alice" shares the following resource using the sidebar panel
+      | resource           | recipient | type | role     | resourceType |
+      | MicrosoftWord.docx | Brian     | user | Can view | file         |
+    And "Brian" logs in
+    And "Brian" navigates to the shared with me page
+    And "Brian" opens the following file in OnlyOffice
+      | resource           |
+      | MicrosoftWord.docx |
+    Then "Brian" should not be able to edit content of following resource
+      | resource           | type           | content                       |
+      | MicrosoftWord.docx | Microsoft Word | Edited Microsoft Word Content |
+    And "Brian" closes the file viewer
+    When "Alice" updates following sharee role
+      | resource           | recipient | type  | role     | resourceType |
+      | MicrosoftWord.docx | Brian     | user  | Can edit | file         |
+    And "Alice" opens the following file in OnlyOffice
+      | resource           |
+      | MicrosoftWord.docx |
+    And "Brian" opens the following file in OnlyOffice
+      | resource           |
+      | MicrosoftWord.docx |
+    And "Alice" edits the following resource
+      | resource           | type           | content                             |
+      | MicrosoftWord.docx | Microsoft Word | Alice Edited Microsoft Word Content |
+    Then "Brian" should see the content "Alice Edited Microsoft Word Content" in editor "OnlyOffice"
+    When "Brian" edits the following resource
+      | resource           | type           | content                             |
+      | MicrosoftWord.docx | Microsoft Word | Brian Edited Microsoft Word Content |
+    Then "Alice" should see the content "Brian Edited Microsoft Word Content" in editor "OnlyOffice"
     And "Alice" logs out
+    And "Brian" logs out
 
   # Please enable this code again after moving the new collaboration server to the web repository
   # Scenario: open a secure view file with Collabora
@@ -84,8 +155,8 @@ Feature: Integrate with online office suites like Collabora and OnlyOffice
   #   When "Brian" opens the following file in Collabora
   #     | resource           |
   #     | secureDocument.odt |
-    
-  #   # we copy the contents of the file and compare the clipboard with the expected contents. 
+
+  #   # we copy the contents of the file and compare the clipboard with the expected contents.
   #   # In case the user does not have download permissions and tries to copy file content, the clipboard should be set to “Copying from document disabled”.
   #   Then "Brian" should see the content "Copying from the document disabled" in editor "Collabora"
   #   And "Brian" logs out

@@ -399,6 +399,7 @@ export const fillContentOfDocument = async ({
       break
     case 'OnlyOffice':
       const innerIframe = editorMainFrame.frameLocator(onlyOfficeInnerFrameSelector)
+      await innerIframe.locator(onlyofficeDocTextAreaSelector).focus()
       await page.keyboard.press('Control+A')
       await innerIframe.locator(onlyofficeDocTextAreaSelector).fill(text)
       break
