@@ -1908,6 +1908,8 @@ def e2eTestsOnKeycloak(ctx):
                      },
                      "commands": [
                          "pnpm test:e2e:cucumber tests/e2e/cucumber/features/journeys",
+                         "pnpm test:e2e:cucumber tests/e2e/cucumber/features/admin-settings/users.feature:20",
+                         "pnpm test:e2e:cucumber tests/e2e/cucumber/features/admin-settings/spaces.feature",
                      ],
                  },
              ] + \
