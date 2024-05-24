@@ -34,6 +34,7 @@ import { Resource } from '@ownclouders/web-client'
 import { useGettext } from 'vue3-gettext'
 import { unref } from 'vue'
 import { fileSideBarExtensionPoint } from '../../extensionPoints'
+import AudioMetaPanel from '../../components/SideBar/Audio/AudioMetaPanel.vue'
 import { isEmpty } from 'lodash-es'
 
 export const useSideBarPanels = (): SidebarPanelExtension<SpaceResource, Resource, Resource>[] => {
@@ -158,6 +159,27 @@ export const useSideBarPanels = (): SidebarPanelExtension<SpaceResource, Resourc
             return false
           }
           return !isEmpty(item.image) || !isEmpty(item.photo)
+        }
+      }
+    },
+    {
+      id: 'com.github.owncloud.web.files.sidebar-panel.audio-meta',
+      type: 'sidebarPanel',
+      extensionPointIds: ['global.files.sidebar'],
+      panel: {
+        name: 'audio-meta',
+        icon: 'music',
+        title: () => $gettext('Audio Info'),
+        component: AudioMetaPanel,
+        isVisible: ({ items }) => {
+          if (items?.length !== 1) {
+            return false
+          }
+          const item = items[0]
+          if (item.type !== 'file') {
+            return false
+          }
+          return !isEmpty(item.audio)
         }
       }
     },

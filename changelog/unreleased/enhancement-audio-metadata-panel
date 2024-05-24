@@ -1,0 +1,7 @@
+Enhancement: Audio metadata panel
+
+We've added a right sidebar panel with the name `Audio Info`, which display `audio` metadata if present on the given resource.
+It is registered by the files app and becomes visible in the global right sidebar in all file contexts, e.g. file listing 
+with single select on an audio file with indexed id3 information or when listening to an audio file in the preview app.
+
+https://github.com/owncloud/web/pull/10956
