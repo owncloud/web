@@ -151,6 +151,8 @@ export default defineComponent({
     const { $gettext } = useGettext()
     const { can } = useAbility()
 
+    const space = computed(() => props.space)
+
     const { actions: acceptShareActions } = useFileActionsAcceptShare({ store })
     const { actions: hideShareActions } = useFileActionsToggleHideShare({ store })
     const { actions: copyActions } = useFileActionsCopy({ store })
@@ -204,7 +206,7 @@ export default defineComponent({
       }
 
       return actions.filter((item) =>
-        item.isEnabled({ space: props.space, resources: store.getters['Files/selectedFiles'] })
+        item.isEnabled({ space: unref(space), resources: store.getters['Files/selectedFiles'] })
       )
     })
 
@@ -233,12 +235,10 @@ export default defineComponent({
     })
 
     const breadcrumbTruncationOffset = computed(() => {
-      if (!props.space) {
+      if (!unref(space)) {
         return 2
       }
-      return isProjectSpaceResource(unref(props.space)) || isShareSpaceResource(unref(props.space))
-        ? 3
-        : 2
+      return isProjectSpaceResource(unref(space)) || isShareSpaceResource(unref(space)) ? 3 : 2
     })
     const fileDroppedBreadcrumb = async (data) => {
       emit(EVENT_ITEM_DROPPED, data)
@@ -249,7 +249,7 @@ export default defineComponent({
       if (unref(routeMetaTitle)) {
         return $gettext(unref(routeMetaTitle))
       }
-      return props.space?.name || ''
+      return unref(space)?.name || ''
     })
 
     return {

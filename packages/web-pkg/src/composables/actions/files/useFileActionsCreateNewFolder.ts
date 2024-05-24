@@ -1,6 +1,6 @@
 import { Resource, SpaceResource } from '@ownclouders/web-client/src/helpers'
 import { Store } from 'vuex'
-import { computed, nextTick, unref } from 'vue'
+import { computed, nextTick, Ref, unref } from 'vue'
 import { useClientService } from '../../clientService'
 import { useRouter } from '../../router'
 import { useStore } from '../../store'
@@ -17,7 +17,7 @@ import { AncestorMetaData } from '../../../types'
 export const useFileActionsCreateNewFolder = ({
   store,
   space
-}: { store?: Store<any>; space?: SpaceResource } = {}) => {
+}: { store?: Store<any>; space?: Ref<SpaceResource> } = {}) => {
   store = store || useStore()
   const router = useRouter()
   const { $gettext } = useGettext()
@@ -57,7 +57,9 @@ export const useFileActionsCreateNewFolder = ({
   }
 
   const loadIndicatorsForNewFile = computed(() => {
-    return isLocationSpacesActive(router, 'files-spaces-generic') && space.driveType !== 'share'
+    return (
+      isLocationSpacesActive(router, 'files-spaces-generic') && unref(space).driveType !== 'share'
+    )
   })
 
   const addNewFolder = async (folderName) => {
@@ -65,7 +67,7 @@ export const useFileActionsCreateNewFolder = ({
 
     try {
       const path = join(unref(currentFolder).path, folderName)
-      const resource = await (clientService.webdav as WebDAV).createFolder(space, {
+      const resource = await (clientService.webdav as WebDAV).createFolder(unref(space), {
         path
       })
 

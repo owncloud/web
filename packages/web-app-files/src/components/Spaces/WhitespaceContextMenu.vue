@@ -45,15 +45,17 @@ export default defineComponent({
   setup(props) {
     const { $gettext } = useGettext()
     const store = useStore()
+
+    const space = computed(() => props.space)
     const contextMenuLabel = computed(() => $gettext('Show context menu'))
     const currentFolder = computed(() => store.getters['Files/currentFolder'])
     const actionOptions = computed(() => ({
-      space: props.space,
+      space: unref(space),
       resources: [currentFolder.value]
     }))
     const { actions: createNewFolderAction } = useFileActionsCreateNewFolder({
       store,
-      space: props.space
+      space
     })
     const { actions: showDetailsAction } = useFileActionsShowDetails({ store })
     const { actions: pasteAction } = useFileActionsPaste({ store })

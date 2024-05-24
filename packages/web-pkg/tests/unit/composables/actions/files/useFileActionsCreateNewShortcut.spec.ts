@@ -1,5 +1,5 @@
 import { mock } from 'jest-mock-extended'
-import { unref } from 'vue'
+import { ref, unref } from 'vue'
 import {
   createStore,
   defaultComponentMocks,
@@ -72,7 +72,7 @@ function getWrapper({
   return {
     wrapper: getComposableWrapper(
       () => {
-        const instance = useFileActionsCreateNewShortcut({ space: mock<SpaceResource>() })
+        const instance = useFileActionsCreateNewShortcut({ space: ref(mock<SpaceResource>()) })
         setup(instance, { storeOptions })
       },
       {

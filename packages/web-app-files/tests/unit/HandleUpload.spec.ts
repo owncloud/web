@@ -43,10 +43,10 @@ describe('HandleUpload', () => {
 
     expect(processedFiles[0].tus.endpoint).toEqual('/')
     expect(processedFiles[0].meta.name).toEqual(fileToUpload.name)
-    expect(processedFiles[0].meta.spaceId).toEqual(mocks.opts.space.id)
-    expect(processedFiles[0].meta.spaceName).toEqual(mocks.opts.space.name)
-    expect(processedFiles[0].meta.driveAlias).toEqual(mocks.opts.space.driveAlias)
-    expect(processedFiles[0].meta.driveType).toEqual(mocks.opts.space.driveType)
+    expect(processedFiles[0].meta.spaceId).toEqual(unref(mocks.opts.space).id)
+    expect(processedFiles[0].meta.spaceName).toEqual(unref(mocks.opts.space).name)
+    expect(processedFiles[0].meta.driveAlias).toEqual(unref(mocks.opts.space).driveAlias)
+    expect(processedFiles[0].meta.driveType).toEqual(unref(mocks.opts.space).driveType)
     expect(processedFiles[0].meta.currentFolder).toEqual(currentFolder.path)
     expect(processedFiles[0].meta.currentFolderId).toEqual(currentFolder.id)
     expect(processedFiles[0].meta.tusEndpoint).toEqual(currentFolder.path)
@@ -74,10 +74,10 @@ describe('HandleUpload', () => {
           isFolder: true,
           type: 'folder',
           meta: expect.objectContaining({
-            spaceId: mocks.opts.space.id,
-            spaceName: mocks.opts.space.name,
-            driveAlias: mocks.opts.space.driveAlias,
-            driveType: mocks.opts.space.driveType,
+            spaceId: unref(mocks.opts.space).id,
+            spaceName: unref(mocks.opts.space).name,
+            driveAlias: unref(mocks.opts.space).driveAlias,
+            driveType: unref(mocks.opts.space).driveType,
             currentFolder: currentFolder.path,
             currentFolderId: currentFolder.id,
             relativeFolder: '',
@@ -89,10 +89,13 @@ describe('HandleUpload', () => {
         })
       )
       expect(mocks.opts.clientService.webdav.createFolder).toHaveBeenCalledTimes(1)
-      expect(mocks.opts.clientService.webdav.createFolder).toHaveBeenCalledWith(mocks.opts.space, {
-        path: relativeFolder,
-        fetchFolder: true
-      })
+      expect(mocks.opts.clientService.webdav.createFolder).toHaveBeenCalledWith(
+        unref(mocks.opts.space),
+        {
+          path: relativeFolder,
+          fetchFolder: true
+        }
+      )
       expect(result.length).toBe(1)
     })
     it('filters out files whose folders could not be created', async () => {
@@ -280,7 +283,7 @@ const getWrapper = ({
     language: mock<Language>(),
     route: ref(route),
     store,
-    space: mock<SpaceResource>(),
+    space: ref(mock<SpaceResource>()),
     uppyService: mock<UppyService>(),
     conflictHandlingEnabled,
     directoryTreeCreateEnabled,

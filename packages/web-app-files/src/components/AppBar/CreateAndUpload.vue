@@ -169,7 +169,7 @@
       <oc-button
         :disabled="uploadOrFileCreationBlocked"
         class="paste-files-btn"
-        @click="pasteFileAction({ space })"
+        @click="pasteFileAction"
       >
         <oc-icon fill-type="line" name="clipboard" />
         <span v-text="$gettext('Paste here')" />
@@ -262,6 +262,8 @@ export default defineComponent({
     const hasSpaces = useCapabilitySpacesEnabled(store)
     const areFileExtensionsShown = computed(() => unref(store.state.Files.areFileExtensionsShown))
 
+    const space = computed(() => props.space)
+
     useUpload({ uppyService })
 
     if (!uppyService.getPlugin('HandleUpload')) {
@@ -270,7 +272,7 @@ export default defineComponent({
         hasSpaces,
         language,
         route,
-        space: props.space,
+        space,
         store,
         uppyService
       })
@@ -279,15 +281,18 @@ export default defineComponent({
     let uploadCompletedSub
 
     const { actions: pasteFileActions } = useFileActionsPaste({ store })
-    const pasteFileAction = unref(pasteFileActions)[0].handler
+
+    const pasteFileAction = () => {
+      return unref(pasteFileActions)[0].handler({ space: unref(space) })
+    }
 
     const { actions: createNewFolder } = useFileActionsCreateNewFolder({
       store,
-      space: props.space
+      space
     })
     const createNewFolderAction = computed(() => unref(createNewFolder)[0].handler)
 
-    const { actions: createNewShortcut } = useFileActionsCreateNewShortcut({ space: props.space })
+    const { actions: createNewShortcut } = useFileActionsCreateNewShortcut({ space })
 
     const createNewShortcutAction = computed(() => unref(createNewShortcut)[0].handler)
 
@@ -295,7 +300,7 @@ export default defineComponent({
 
     const { actions: createNewFileActions } = useFileActionsCreateNewFile({
       store,
-      space: props.space,
+      space,
       newFileHandlers: newFileHandlers
     })
 
@@ -309,7 +314,7 @@ export default defineComponent({
 
     const { actions: createNewFileMimeTypeActions } = useFileActionsCreateNewFile({
       store,
-      space: props.space,
+      space,
       mimetypesAllowedForCreation: mimetypesAllowedForCreation
     })
 
@@ -383,10 +388,10 @@ export default defineComponent({
         }
 
         const sameFolder =
-          props.itemId && !isShareSpaceResource(props.space)
+          props.itemId && !isShareSpaceResource(unref(space))
             ? props.itemId.toString().startsWith(currentFolderId.toString())
             : currentFolder === props.item
-        const fileIsInCurrentPath = spaceId === props.space.id && sameFolder
+        const fileIsInCurrentPath = spaceId === unref(space).id && sameFolder
         if (fileIsInCurrentPath) {
           eventBus.publish('app.files.list.load')
         }
