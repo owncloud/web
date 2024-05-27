@@ -26,6 +26,10 @@ Feature: Integrate with online office suites like Collabora and OnlyOffice
     And "Anonymous" opens the public link "Link"
     And "Anonymous" unlocks the public link with password "%public%"
     Then "Anonymous" should see the content "OpenDocument Content" in editor "Collabora"
+    When "Alice" edits the following resource
+      | resource         | type         | content                           |
+      | OpenDocument.odt | OpenDocument | Alice Edited OpenDocument Content |
+    Then "Anonymous" should see the content "Alice Edited OpenDocument Content" in editor "Collabora"
     When "Anonymous" edits the following resource
       | resource         | type         | content                     |
       | OpenDocument.odt | OpenDocument | Edited OpenDocument Content |
@@ -53,6 +57,10 @@ Feature: Integrate with online office suites like Collabora and OnlyOffice
     And "Anonymous" opens the public link "Link"
     And "Anonymous" unlocks the public link with password "%public%"
     Then "Anonymous" should see the content "Microsoft Word Content" in editor "OnlyOffice"
+    When "Alice" edits the following resource
+      | resource           | type           | content                             |
+      | MicrosoftWord.docx | Microsoft Word | Alice Edited Microsoft Word Content |
+    Then "Anonymous" should see the content "Alice Edited Microsoft Word Content" in editor "OnlyOffice"
     When "Anonymous" edits the following resource
       | resource           | type           | content                       |
       | MicrosoftWord.docx | Microsoft Word | Edited Microsoft Word Content |
