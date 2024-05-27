@@ -10,7 +10,10 @@ Summary
 
 * Bugfix - Vertical scroll for OcModal on small screens: [#10814](https://github.com/owncloud/web/issues/10814)
 * Bugfix - Context menu empty in tiles view: [#10900](https://github.com/owncloud/web/pull/10900)
+* Bugfix - Resource deselection on right-click: [#10918](https://github.com/owncloud/web/issues/10918)
+* Bugfix - Resources with name consist of number won't show up in trash bin: [#10920](https://github.com/owncloud/web/pull/10920)
 * Bugfix - Disable search in public link context: [#10928](https://github.com/owncloud/web/pull/10928)
+* Bugfix - Space not updating on navigation: [#10941](https://github.com/owncloud/web/issues/10941)
 * Change - Portal target removed: [#10758](https://github.com/owncloud/web/pull/10758)
 * Change - Disable opening files in embed mode: [#10786](https://github.com/owncloud/web/pull/10786)
 * Enhancement - Accessibility improvements: [#5383](https://github.com/owncloud/web/issues/5383)
@@ -41,6 +44,22 @@ Details
    https://github.com/owncloud/web/issues/10793
    https://github.com/owncloud/web/pull/10900
 
+* Bugfix - Resource deselection on right-click: [#10918](https://github.com/owncloud/web/issues/10918)
+
+   We've fixed an issue where right-clicking any empty space inside the files table
+   would reset the current selection.
+
+   https://github.com/owncloud/web/issues/10918
+   https://github.com/owncloud/web/pull/10936
+
+* Bugfix - Resources with name consist of number won't show up in trash bin: [#10920](https://github.com/owncloud/web/pull/10920)
+
+   We've fixed a bug, where deleted resources that have only numbers in name like
+   "123" won't show up in the trash bin
+
+   https://github.com/owncloud/web/issues/10917
+   https://github.com/owncloud/web/pull/10920
+
 * Bugfix - Disable search in public link context: [#10928](https://github.com/owncloud/web/pull/10928)
 
    We've fixed a bug where the search was visible in the public link context but
@@ -49,6 +68,15 @@ Details
 
    https://github.com/owncloud/web/issues/10915
    https://github.com/owncloud/web/pull/10928
+
+* Bugfix - Space not updating on navigation: [#10941](https://github.com/owncloud/web/issues/10941)
+
+   We've fixed an issue where the current space did not update when navigating from
+   one space into another directly, e.g. via search results. That could lead to
+   uploads and file actions not working properly.
+
+   https://github.com/owncloud/web/issues/10941
+   https://github.com/owncloud/web/pull/10943
 
 * Change - Portal target removed: [#10758](https://github.com/owncloud/web/pull/10758)
 
