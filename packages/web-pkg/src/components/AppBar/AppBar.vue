@@ -158,6 +158,8 @@ export default defineComponent({
     const resourcesStore = useResourcesStore()
     const { selectedResources } = storeToRefs(resourcesStore)
 
+    const space = computed(() => props.space)
+
     const { actions: enableSyncActions } = useFileActionsEnableSync()
     const { actions: hideShareActions } = useFileActionsToggleHideShare()
     const { actions: copyActions } = useFileActionsCopy()
@@ -219,7 +221,7 @@ export default defineComponent({
       }
 
       return actions.filter((item) =>
-        item.isVisible({ space: props.space, resources: resourcesStore.selectedResources })
+        item.isVisible({ space: unref(space), resources: resourcesStore.selectedResources })
       )
     })
 
@@ -246,12 +248,10 @@ export default defineComponent({
     })
 
     const breadcrumbTruncationOffset = computed(() => {
-      if (!props.space) {
+      if (!unref(space)) {
         return 2
       }
-      return isProjectSpaceResource(unref(props.space)) || isShareSpaceResource(unref(props.space))
-        ? 3
-        : 2
+      return isProjectSpaceResource(unref(space)) || isShareSpaceResource(unref(space)) ? 3 : 2
     })
     const fileDroppedBreadcrumb = (data: RouteLocationRaw) => {
       emit(EVENT_ITEM_DROPPED, data)
@@ -262,7 +262,7 @@ export default defineComponent({
       if (unref(routeMetaTitle)) {
         return $gettext(unref(routeMetaTitle))
       }
-      return props.space?.name || ''
+      return unref(space)?.name || ''
     })
 
     return {

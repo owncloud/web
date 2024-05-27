@@ -1,11 +1,11 @@
-import { computed, unref } from 'vue'
+import { computed, Ref, unref } from 'vue'
 import { FileAction, useModals, useResourcesStore } from '../../../composables'
 import { CreateShortcutModal } from '../../../components'
 import { useGettext } from 'vue3-gettext'
 import { storeToRefs } from 'pinia'
 import { SpaceResource } from '@ownclouders/web-client'
 
-export const useFileActionsCreateNewShortcut = ({ space }: { space: SpaceResource }) => {
+export const useFileActionsCreateNewShortcut = ({ space }: { space: Ref<SpaceResource> }) => {
   const { dispatchModal } = useModals()
   const { $gettext } = useGettext()
 
@@ -22,7 +22,7 @@ export const useFileActionsCreateNewShortcut = ({ space }: { space: SpaceResourc
             title: $gettext('Create a Shortcut'),
             confirmText: $gettext('Create'),
             customComponent: CreateShortcutModal,
-            customComponentAttrs: () => ({ space })
+            customComponentAttrs: () => ({ space: unref(space) })
           })
         },
         label: () => {

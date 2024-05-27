@@ -1,5 +1,5 @@
 import { mock } from 'vitest-mock-extended'
-import { nextTick, unref } from 'vue'
+import { nextTick, ref, unref } from 'vue'
 import { useFileActionsCreateNewFolder } from '../../../../../src/composables/actions'
 import {
   useMessages,
@@ -137,7 +137,7 @@ function getWrapper({
   return {
     wrapper: getComposableWrapper(
       () => {
-        const instance = useFileActionsCreateNewFolder({ space })
+        const instance = useFileActionsCreateNewFolder({ space: ref(space) })
         setup(instance)
       },
       {

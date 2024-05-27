@@ -1,5 +1,5 @@
 import { SpaceResource, isShareSpaceResource } from '@ownclouders/web-client'
-import { computed, nextTick, unref } from 'vue'
+import { computed, nextTick, Ref, unref } from 'vue'
 import { useClientService } from '../../clientService'
 import { useRouter } from '../../router'
 import { FileAction } from '../../../'
@@ -17,7 +17,7 @@ import {
 } from '../../../composables/piniaStores'
 import { storeToRefs } from 'pinia'
 
-export const useFileActionsCreateNewFolder = ({ space }: { space?: SpaceResource } = {}) => {
+export const useFileActionsCreateNewFolder = ({ space }: { space?: Ref<SpaceResource> } = {}) => {
   const { showMessage, showErrorMessage } = useMessages()
   const router = useRouter()
   const { dispatchModal } = useModals()
@@ -57,7 +57,9 @@ export const useFileActionsCreateNewFolder = ({ space }: { space?: SpaceResource
   }
 
   const loadIndicatorsForNewFile = computed(() => {
-    return isLocationSpacesActive(router, 'files-spaces-generic') && space.driveType !== 'share'
+    return (
+      isLocationSpacesActive(router, 'files-spaces-generic') && unref(space).driveType !== 'share'
+    )
   })
 
   const addNewFolder = async (folderName: string) => {
@@ -65,11 +67,11 @@ export const useFileActionsCreateNewFolder = ({ space }: { space?: SpaceResource
 
     try {
       const path = join(unref(currentFolder).path, folderName)
-      const resource = await clientService.webdav.createFolder(space, { path })
+      const resource = await clientService.webdav.createFolder(unref(space), { path })
 
       if (unref(loadIndicatorsForNewFile)) {
         resource.indicators = getIndicators({
-          space,
+          space: unref(space),
           resource,
           ancestorMetaData: unref(ancestorMetaData),
           user: userRoleStore.user
@@ -77,8 +79,8 @@ export const useFileActionsCreateNewFolder = ({ space }: { space?: SpaceResource
       }
 
       // FIXME: move to buildResource as soon as it has space context
-      if (isShareSpaceResource(space)) {
-        resource.remoteItemId = space.id
+      if (isShareSpaceResource(unref(space))) {
+        resource.remoteItemId = unref(space).id
       }
 
       resourcesStore.upsertResource(resource)

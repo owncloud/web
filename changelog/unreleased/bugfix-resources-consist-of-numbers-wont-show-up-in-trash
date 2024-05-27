@@ -1,0 +1,6 @@
+Bugfix: Resources with name consist of number won't show up in trash bin
+
+We've fixed a bug, where deleted resources that have only numbers in name like "123" won't show up in the trash bin
+
+https://github.com/owncloud/web/pull/10920
+https://github.com/owncloud/web/issues/10917

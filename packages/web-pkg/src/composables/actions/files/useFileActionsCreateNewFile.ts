@@ -1,5 +1,5 @@
 import { Resource, SpaceResource, extractNameWithoutExtension } from '@ownclouders/web-client'
-import { computed, unref } from 'vue'
+import { computed, Ref, unref } from 'vue'
 import { useClientService } from '../../clientService'
 import { useRouter } from '../../router'
 import { FileAction, FileActionOptions } from '../types'
@@ -20,7 +20,7 @@ import {
 import { ApplicationFileExtension } from '../../../apps'
 import { storeToRefs } from 'pinia'
 
-export const useFileActionsCreateNewFile = ({ space }: { space?: SpaceResource } = {}) => {
+export const useFileActionsCreateNewFile = ({ space }: { space?: Ref<SpaceResource> } = {}) => {
   const { showMessage, showErrorMessage } = useMessages()
   const userStore = useUserStore()
   const router = useRouter()
@@ -70,13 +70,15 @@ export const useFileActionsCreateNewFile = ({ space }: { space?: SpaceResource }
   }
 
   const loadIndicatorsForNewFile = computed(() => {
-    return isLocationSpacesActive(router, 'files-spaces-generic') && space.driveType !== 'share'
+    return (
+      isLocationSpacesActive(router, 'files-spaces-generic') && unref(space).driveType !== 'share'
+    )
   })
 
   const openFile = (resource: Resource, appFileExtension: ApplicationFileExtension) => {
     if (loadIndicatorsForNewFile.value) {
       resource.indicators = getIndicators({
-        space,
+        space: unref(space),
         resource,
         ancestorMetaData: unref(ancestorMetaData),
         user: userStore.user
@@ -85,7 +87,7 @@ export const useFileActionsCreateNewFile = ({ space }: { space?: SpaceResource }
 
     resourcesStore.upsertResource(resource)
 
-    return openEditor(appFileExtension, space, resource, EDITOR_MODE_CREATE)
+    return openEditor(appFileExtension, unref(space), resource, EDITOR_MODE_CREATE)
   }
 
   const handler = (
@@ -124,12 +126,12 @@ export const useFileActionsCreateNewFile = ({ space }: { space?: SpaceResource }
           if (appFileExtension.createFileHandler) {
             resource = await appFileExtension.createFileHandler({
               fileName,
-              space,
+              space: unref(space),
               currentFolder: unref(currentFolder)
             })
           } else {
             const path = join(unref(currentFolder).path, fileName)
-            resource = await (clientService.webdav as WebDAV).putFileContents(space, {
+            resource = await (clientService.webdav as WebDAV).putFileContents(unref(space), {
               path
             })
           }
