@@ -1072,6 +1072,9 @@ importers:
       mark.js:
         specifier: ^8.11.1
         version: 8.11.1
+      oidc-client-ts:
+        specifier: ^2.4.0
+        version: 2.4.0
       p-queue:
         specifier: ^6.6.2
         version: 6.6.2

@@ -123,17 +123,8 @@ export class AuthService {
 
       if (!this.userManager.areEventHandlersRegistered) {
         this.userManager.events.addAccessTokenExpired((...args): void => {
-          const handleExpirationError = () => {
-            console.error('AccessToken Expired：', ...args)
-            this.handleAuthError(unref(this.router.currentRoute))
-          }
-
-          /**
-           * The silent token renewal can fail in some scenarios with a slow network connection
-           * because the iFrame times out. To overcome this issue, we retry the silent signin
-           * here, which should work eventually as soon as the network connection is stable enough.
-           */
-          this.userManager.signinSilent().catch(handleExpirationError)
+          console.error('AccessToken Expired：', ...args)
+          this.handleAuthError(unref(this.router.currentRoute))
         })
 
         this.userManager.events.addAccessTokenExpiring((...args) => {

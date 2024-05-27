@@ -1,4 +1,5 @@
 import { ref, unref } from 'vue'
+import { ErrorTimeout } from 'oidc-client-ts'
 import { AuthServiceInterface } from '../../authContext'
 import { WebWorker, useWebWorkersStore } from '../../piniaStores/webWorkers'
 import TokenWorker from './worker?worker'
@@ -14,8 +15,14 @@ export const useTokenTimerWorker = ({ authService }: { authService: AuthServiceI
     worker.value = createWorker(TokenWorker as unknown as string)
 
     unref(unref(worker).worker).onmessage = () => {
-      authService.signinSilent().catch((e) => {
-        console.error('token renewal failed:', e)
+      authService.signinSilent().catch((error) => {
+        if (error instanceof ErrorTimeout) {
+          console.warn('token renewal timed out, retrying in 5 seconds...')
+          unref(worker).post(JSON.stringify({ topic: 'set', expiry: 5, expiryThreshold: 0 }))
+          return
+        }
+
+        console.error('token renewal error:', error)
       })
     }
   }

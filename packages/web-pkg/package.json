@@ -69,6 +69,7 @@
     "lodash-es": "^4.17.21",
     "luxon": "3.2.1",
     "mark.js": "^8.11.1",
+    "oidc-client-ts": "^2.4.0",
     "p-queue": "^6.6.2",
     "password-sheriff": "^1.1.1",
     "pinia": "2.1.7",
