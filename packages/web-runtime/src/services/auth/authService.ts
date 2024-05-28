@@ -6,7 +6,8 @@ import {
   UserStore,
   CapabilityStore,
   ConfigStore,
-  useTokenTimerWorker
+  useTokenTimerWorker,
+  AuthServiceInterface
 } from '@ownclouders/web-pkg'
 import { RouteLocation, Router } from 'vue-router'
 import {
@@ -22,7 +23,7 @@ import { Language } from 'vue3-gettext'
 import { PublicLinkType } from '@ownclouders/web-client'
 import { WebWorkersStore } from '@ownclouders/web-pkg'
 
-export class AuthService {
+export class AuthService implements AuthServiceInterface {
   private clientService: ClientService
   private configStore: ConfigStore
   private router: Router
@@ -314,12 +315,17 @@ export class AuthService {
   }
 
   public async logoutUser() {
+    const endSessionEndpoint = await this.userManager.metadataService?.getEndSessionEndpoint()
+    if (!endSessionEndpoint) {
+      return await this.userManager.removeUser()
+    }
+
     const u = await this.userManager.getUser()
     if (u && u.id_token) {
       return this.userManager.signoutRedirect({ id_token_hint: u.id_token })
-    } else {
-      await this.userManager.removeUser()
     }
+
+    return await this.userManager.removeUser()
   }
 
   private resetStateAfterUserLogout() {
