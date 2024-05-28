@@ -12,9 +12,9 @@ Feature: lock
       | Brian |
       | Carol |
     And "Alice" logs in
-    And "Alice" creates the following files into personal space using API
-      | pathToFile | content      |
-      | test.odt   | some content |
+    When "Alice" creates the following resources
+      | resource | type         | content      |
+      | test.odt | OpenDocument | some content |
     And "Alice" shares the following resource using API
       | resource | recipient | type | role     |
       | test.odt | Brian     | user | Can edit |

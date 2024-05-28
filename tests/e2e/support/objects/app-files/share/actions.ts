@@ -61,10 +61,10 @@ export const openSharingPanel = async function (
   }
 }
 
-/**/
+export type ActionViaType = 'SIDEBAR_PANEL' | 'QUICK_ACTION' | 'URL_NAVIGATION'
 
 export interface createShareArgs extends ShareArgs {
-  via?: 'SIDEBAR_PANEL' | 'QUICK_ACTION' | 'URL_NAVIGATION'
+  via: ActionViaType
 }
 
 export const createShare = async (args: createShareArgs): Promise<void> => {

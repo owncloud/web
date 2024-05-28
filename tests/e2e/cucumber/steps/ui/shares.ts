@@ -6,6 +6,7 @@ import {
   CollaboratorType,
   ICollaborator
 } from '../../../support/objects/app-files/share/collaborator'
+import { ActionViaType } from '../../../support/objects/app-files/share/actions'
 
 const parseShareTable = function (
   stepTable: DataTable,
@@ -40,16 +41,26 @@ When(
     const shareObject = new objects.applicationFiles.Share({ page })
     const shareInfo = parseShareTable(stepTable, this.usersEnvironment)
 
+    let via: ActionViaType
+    switch (actionType) {
+      case 'quick action':
+        via = 'QUICK_ACTION'
+        break
+      case 'sidebar panel':
+        via = 'SIDEBAR_PANEL'
+        break
+      case 'direct url navigation':
+        via = 'URL_NAVIGATION'
+        break
+      default:
+        throw new Error(`Unknown action type: ${actionType}`)
+    }
+
     for (const resource of Object.keys(shareInfo)) {
       await shareObject.create({
         resource,
         recipients: shareInfo[resource],
-        via:
-          actionType === 'quick action'
-            ? 'QUICK_ACTION'
-            : 'sidebar panel'
-              ? 'SIDEBAR_PANEL'
-              : 'URL_NAVIGATION'
+        via
       })
     }
   }
