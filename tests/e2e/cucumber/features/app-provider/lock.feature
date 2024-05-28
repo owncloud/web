@@ -13,8 +13,8 @@ Feature: lock
       | Carol |
     And "Alice" logs in
     When "Alice" creates the following resources
-      | resource | type         | content              |
-      | test.odt | OpenDocument | OpenDocument Content |
+      | resource | type         | content      |
+      | test.odt | OpenDocument | some content |
     And "Alice" shares the following resource using API
       | resource | recipient | type | role     |
       | test.odt | Brian     | user | Can edit |
