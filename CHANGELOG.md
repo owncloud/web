@@ -1,262 +1,9 @@
-Changelog for ownCloud Web [unreleased] (UNRELEASED)
-=======================================
-The following sections list the changes in ownCloud web unreleased relevant to
-ownCloud admins and users.
-
-[unreleased]: https://github.com/owncloud/web/compare/v8.0.2...master
-
-Summary
--------
-
-* Bugfix - Vertical scroll for OcModal on small screens: [#10814](https://github.com/owncloud/web/issues/10814)
-* Bugfix - Context menu empty in tiles view: [#10900](https://github.com/owncloud/web/pull/10900)
-* Bugfix - Resource deselection on right-click: [#10918](https://github.com/owncloud/web/issues/10918)
-* Bugfix - Resources with name consist of number won't show up in trash bin: [#10920](https://github.com/owncloud/web/pull/10920)
-* Bugfix - Disable search in public link context: [#10928](https://github.com/owncloud/web/pull/10928)
-* Bugfix - Space not updating on navigation: [#10941](https://github.com/owncloud/web/issues/10941)
-* Change - Portal target removed: [#10758](https://github.com/owncloud/web/pull/10758)
-* Change - Disable opening files in embed mode: [#10786](https://github.com/owncloud/web/pull/10786)
-* Enhancement - Accessibility improvements: [#5383](https://github.com/owncloud/web/issues/5383)
-* Enhancement - Search providers extension point: [#10758](https://github.com/owncloud/web/pull/10758)
-* Enhancement - Add SSE event for moving: [#10798](https://github.com/owncloud/web/pull/10798)
-* Enhancement - Ability to theme sharing role icons: [#10801](https://github.com/owncloud/web/pull/10801)
-* Enhancement - Add SSE event for moving: [#10807](https://github.com/owncloud/web/pull/10807)
-* Enhancement - Show loading spinner while searching or filtering users: [#10874](https://github.com/owncloud/web/pull/10874)
-* Enhancement - Display hidden resources information in files list: [#10907](https://github.com/owncloud/web/pull/10907)
-* Enhancement - Add loading spinner to admin settings spaces and groups: [#10929](https://github.com/owncloud/web/pull/10929)
-
-Details
--------
-
-* Bugfix - Vertical scroll for OcModal on small screens: [#10814](https://github.com/owncloud/web/issues/10814)
-
-   We've fixed an issue where modals were not scrollable on screens with small
-   heights.
-
-   https://github.com/owncloud/web/issues/10814
-   https://github.com/owncloud/web/pull/10816
-
-* Bugfix - Context menu empty in tiles view: [#10900](https://github.com/owncloud/web/pull/10900)
-
-   We've fixed a bug where the context menu was empty in the tiles view after
-   clicking the show context menu button
-
-   https://github.com/owncloud/web/issues/10793
-   https://github.com/owncloud/web/pull/10900
-
-* Bugfix - Resource deselection on right-click: [#10918](https://github.com/owncloud/web/issues/10918)
-
-   We've fixed an issue where right-clicking any empty space inside the files table
-   would reset the current selection.
-
-   https://github.com/owncloud/web/issues/10918
-   https://github.com/owncloud/web/pull/10936
-
-* Bugfix - Resources with name consist of number won't show up in trash bin: [#10920](https://github.com/owncloud/web/pull/10920)
-
-   We've fixed a bug, where deleted resources that have only numbers in name like
-   "123" won't show up in the trash bin
-
-   https://github.com/owncloud/web/issues/10917
-   https://github.com/owncloud/web/pull/10920
-
-* Bugfix - Disable search in public link context: [#10928](https://github.com/owncloud/web/pull/10928)
-
-   We've fixed a bug where the search was visible in the public link context but
-   not usable, since we are not able yet to provide searching in this context.
-   Therefore the search was disabled in the public link context.
-
-   https://github.com/owncloud/web/issues/10915
-   https://github.com/owncloud/web/pull/10928
-
-* Bugfix - Space not updating on navigation: [#10941](https://github.com/owncloud/web/issues/10941)
-
-   We've fixed an issue where the current space did not update when navigating from
-   one space into another directly, e.g. via search results. That could lead to
-   uploads and file actions not working properly.
-
-   https://github.com/owncloud/web/issues/10941
-   https://github.com/owncloud/web/pull/10943
-
-* Change - Portal target removed: [#10758](https://github.com/owncloud/web/pull/10758)
-
-   BREAKING CHANGE for developers: The (undocumented) portal target
-   `app.runtime.header` is not available anymore. Please use the extension point
-   `app.runtime.header.center` with `customComponent` extensions instead (for
-   details see below).
-
-   The portal target `app.runtime.header` has been removed in favour of a new
-   extension point with the id `app.runtime.header.center`. The extension point is
-   capable of mounting extensions of type `customComponent`. The search bar, which
-   was previously using this portal target, was rewired into an extension. Other
-   `portal` instances which used this portal target won't work anymore and need to
-   be ported to the `customComponent` extension type instead.
-
-   https://github.com/owncloud/web/pull/10758
-
-* Change - Disable opening files in embed mode: [#10786](https://github.com/owncloud/web/pull/10786)
-
-   We have disabled to open files in the embed mode, since opening or editing files
-   is not in scope of the embed mode.
-
-   https://github.com/owncloud/web/issues/10635
-   https://github.com/owncloud/web/pull/10786
-
-* Enhancement - Accessibility improvements: [#5383](https://github.com/owncloud/web/issues/5383)
-
-   Across the board, we have implemented improvements in regards of accessibility
-   for the web UI.
-
-   https://github.com/owncloud/web/issues/5383
-   https://github.com/owncloud/web/issues/5391
-   https://github.com/owncloud/web/issues/10731
-   https://github.com/owncloud/web/pull/10802
-
-* Enhancement - Search providers extension point: [#10758](https://github.com/owncloud/web/pull/10758)
-
-   We've added a new extension point with the id `app.search.provider` and for the
-   extensionType `search` that can be used to register additional search providers.
-   All search providers that are registered for this extension point will be used
-   by the global search automatically.
-
-   https://github.com/owncloud/web/pull/10758
-
-* Enhancement - Add SSE event for moving: [#10798](https://github.com/owncloud/web/pull/10798)
-
-   We've added Server-Sent Events (SSE) for moving resources. When the user moves
-   files or folders, everyone with access to them instantly sees the changes across
-   their browsers and devices.
-
-   https://github.com/owncloud/web/issues/10780
-   https://github.com/owncloud/web/pull/10798
-
-* Enhancement - Ability to theme sharing role icons: [#10801](https://github.com/owncloud/web/pull/10801)
-
-   We've added the ability to theme the sharing role icons. This is useful for
-   custom themes that want to customize the look of the sharing role dropdown.
-
-   https://github.com/owncloud/ocis/issues/8844
-   https://github.com/owncloud/web/pull/10801
-
-* Enhancement - Add SSE event for moving: [#10807](https://github.com/owncloud/web/pull/10807)
-
-   We've added Server-Sent Events (SSE) for sharing. This notifies the user when
-   they received or revoked access to a share or membership to a space.
-
-   https://github.com/owncloud/web/issues/10647
-   https://github.com/owncloud/web/pull/10807
-
-* Enhancement - Show loading spinner while searching or filtering users: [#10874](https://github.com/owncloud/web/pull/10874)
-
-   While searching or filtering users in the admin settings, there will be shown a
-   loading spinner, to indicate the request is processing.
-
-   https://github.com/owncloud/web/issues/10821
-   https://github.com/owncloud/web/pull/10874
-
-* Enhancement - Display hidden resources information in files list: [#10907](https://github.com/owncloud/web/pull/10907)
-
-   We've added the ability for the user to see how many files and folders are
-   hidden in the files list footer.
-
-   https://github.com/owncloud/web/issues/9036
-   https://github.com/owncloud/web/pull/10907
-
-* Enhancement - Add loading spinner to admin settings spaces and groups: [#10929](https://github.com/owncloud/web/pull/10929)
-
-   We've added a loading spinner to the spaces and groups view in the admin
-   settings to indicate loading task, when the server needs time to respond.
-
-   https://github.com/owncloud/web/issues/10922
-   https://github.com/owncloud/web/pull/10929
-
-Changelog for ownCloud Web [8.0.2] (2024-05-14)
-=======================================
-The following sections list the changes in ownCloud web 8.0.2 relevant to
-ownCloud admins and users.
-
-[8.0.2]: https://github.com/owncloud/web/compare/v9.0.0...v8.0.2
-
-Summary
--------
-
-* Bugfix - Folder replace: [#10515](https://github.com/owncloud/web/issues/10515)
-* Bugfix - Hidden right sidebar on small screens: [#10598](https://github.com/owncloud/web/issues/10598)
-* Bugfix - Scope loss when showing search results: [#10634](https://github.com/owncloud/web/issues/10634)
-* Bugfix - Theme loading without matching theme: [#10657](https://github.com/owncloud/web/issues/10657)
-* Bugfix - Flickering loading indicator: [#10763](https://github.com/owncloud/web/pull/10763)
-* Bugfix - Download files with special chars in name: [#10810](https://github.com/owncloud/web/issues/10810)
-* Bugfix - IDP logout issues: [#10881](https://github.com/owncloud/web/pull/10881)
-
-Details
--------
-
-* Bugfix - Folder replace: [#10515](https://github.com/owncloud/web/issues/10515)
-
-   The "Replace" conflict option, which previously didn't work at all when trying
-   to copy/move a folder, has been fixed.
-
-   https://github.com/owncloud/web/issues/10515
-   https://github.com/owncloud/web/pull/10597
-
-* Bugfix - Hidden right sidebar on small screens: [#10598](https://github.com/owncloud/web/issues/10598)
-
-   The issue causing the right sidebar to not display on screens smaller than 960px
-   has been fixed.
-
-   https://github.com/owncloud/web/issues/10598
-   https://github.com/owncloud/web/pull/10643
-
-* Bugfix - Scope loss when showing search results: [#10634](https://github.com/owncloud/web/issues/10634)
-
-   Clicking "Show n results" in the search preview no longer loses the search
-   scope.
-
-   https://github.com/owncloud/web/issues/10634
-   https://github.com/owncloud/web/pull/10653
-
-* Bugfix - Theme loading without matching theme: [#10657](https://github.com/owncloud/web/issues/10657)
-
-   We've fixed an issue where theme loading would break when there was no matching
-   oC theme found for the user's OS setting. For example, this occurred when a
-   user's OS setting was configured to "dark," but the instance of oC did not offer
-   a dark theme.
-
-   https://github.com/owncloud/web/issues/10657
-   https://github.com/owncloud/web/pull/10659
-
-* Bugfix - Flickering loading indicator: [#10763](https://github.com/owncloud/web/pull/10763)
-
-   The flickering loading indicator when batch deleting a lot of files has been
-   fixed.
-
-   We also added a request limit that stops the network from being overrun with
-   concurrent requests.
-
-   https://github.com/owncloud/web/pull/10763
-
-* Bugfix - Download files with special chars in name: [#10810](https://github.com/owncloud/web/issues/10810)
-
-   We've fixed a bug where having a `#` in the filename resulted in requests going
-   to cut off urls.
-
-   https://github.com/owncloud/web/issues/10810
-   https://github.com/owncloud/web/pull/10813
-   https://github.com/owncloud/web/pull/10817
-
-* Bugfix - IDP logout issues: [#10881](https://github.com/owncloud/web/pull/10881)
-
-   Falsely showing the logout page after opening ownCloud Web with an expired token
-   has been fixed.
-
-   https://github.com/owncloud/web/pull/10881
-
-Changelog for ownCloud Web [9.0.0] (2024-04-16)
+Changelog for ownCloud Web [9.0.0] (2024-05-28)
 =======================================
 The following sections list the changes in ownCloud web 9.0.0 relevant to
 ownCloud admins and users.
 
-[9.0.0]: https://github.com/owncloud/web/compare/v8.0.1...v9.0.0
+[9.0.0]: https://github.com/owncloud/web/compare/v8.0.2...v9.0.0
 
 Summary
 -------
@@ -269,6 +16,12 @@ Summary
 * Bugfix - Apply sandbox attribute to iframe in app-external extension: [#10706](https://github.com/owncloud/web/pull/10706)
 * Bugfix - Versions loaded multiple times when opening sidebar: [#10746](https://github.com/owncloud/web/pull/10746)
 * Bugfix - Incoming notifications broken while notification center is open: [#10760](https://github.com/owncloud/web/pull/10760)
+* Bugfix - Vertical scroll for OcModal on small screens: [#10814](https://github.com/owncloud/web/issues/10814)
+* Bugfix - Context menu empty in tiles view: [#10900](https://github.com/owncloud/web/pull/10900)
+* Bugfix - Resource deselection on right-click: [#10918](https://github.com/owncloud/web/issues/10918)
+* Bugfix - Resources with name consist of number won't show up in trash bin: [#10920](https://github.com/owncloud/web/pull/10920)
+* Bugfix - Disable search in public link context: [#10928](https://github.com/owncloud/web/pull/10928)
+* Bugfix - Space not updating on navigation: [#10941](https://github.com/owncloud/web/issues/10941)
 * Change - Remove deprecated code: [#7338](https://github.com/owncloud/web/issues/7338)
 * Change - Remove skeleton app: [#9892](https://github.com/owncloud/web/issues/9892)
 * Change - Remove deprecated extension point for adding quick actions: [#10102](https://github.com/owncloud/web/pull/10102)
@@ -277,6 +30,9 @@ Summary
 * Change - Remove ocs user: [#10240](https://github.com/owncloud/web/pull/10240)
 * Change - Registering app file editors: [#10330](https://github.com/owncloud/web/pull/10330)
 * Change - Add extensionPoint concept: [#10443](https://github.com/owncloud/web/pull/10443)
+* Change - Portal target removed: [#10758](https://github.com/owncloud/web/pull/10758)
+* Change - Disable opening files in embed mode: [#10786](https://github.com/owncloud/web/pull/10786)
+* Enhancement - Accessibility improvements: [#5383](https://github.com/owncloud/web/issues/5383)
 * Enhancement - Icon for .dcm files: [#9215](https://github.com/owncloud/web/issues/9215)
 * Enhancement - Tile sizes: [#10018](https://github.com/owncloud/web/issues/10018)
 * Enhancement - Enable user preferences in public links: [#10207](https://github.com/owncloud/web/pull/10207)
@@ -295,7 +51,14 @@ Summary
 * Enhancement - Remember right side bar state: [#10612](https://github.com/owncloud/web/pull/10612)
 * Enhancement - Add details panel to trash: [#10624](https://github.com/owncloud/web/pull/10624)
 * Enhancement - Implement Server-Sent Events (SSE) for File Creation: [#10709](https://github.com/owncloud/web/pull/10709)
+* Enhancement - Search providers extension point: [#10758](https://github.com/owncloud/web/pull/10758)
 * Enhancement - Implement Server-Sent Events (SSE) for file updates: [#10782](https://github.com/owncloud/web/pull/10782)
+* Enhancement - Add SSE event for moving: [#10798](https://github.com/owncloud/web/pull/10798)
+* Enhancement - Ability to theme sharing role icons: [#10801](https://github.com/owncloud/web/pull/10801)
+* Enhancement - Add SSE event for moving: [#10807](https://github.com/owncloud/web/pull/10807)
+* Enhancement - Show loading spinner while searching or filtering users: [#10874](https://github.com/owncloud/web/pull/10874)
+* Enhancement - Display hidden resources information in files list: [#10907](https://github.com/owncloud/web/pull/10907)
+* Enhancement - Add loading spinner to admin settings spaces and groups: [#10929](https://github.com/owncloud/web/pull/10929)
 
 Details
 -------
@@ -361,6 +124,56 @@ Details
 
    https://github.com/owncloud/web/issues/10602
    https://github.com/owncloud/web/pull/10760
+
+* Bugfix - Vertical scroll for OcModal on small screens: [#10814](https://github.com/owncloud/web/issues/10814)
+
+   We've fixed an issue where modals were not scrollable on screens with small
+   heights.
+
+   https://github.com/owncloud/web/issues/10814
+   https://github.com/owncloud/web/pull/10816
+
+* Bugfix - Context menu empty in tiles view: [#10900](https://github.com/owncloud/web/pull/10900)
+
+   We've fixed a bug where the context menu was empty in the tiles view after
+   clicking the show context menu button
+
+   https://github.com/owncloud/web/issues/10793
+   https://github.com/owncloud/web/pull/10900
+
+* Bugfix - Resource deselection on right-click: [#10918](https://github.com/owncloud/web/issues/10918)
+
+   We've fixed an issue where right-clicking any empty space inside the files table
+   would reset the current selection.
+
+   https://github.com/owncloud/web/issues/10918
+   https://github.com/owncloud/web/pull/10936
+
+* Bugfix - Resources with name consist of number won't show up in trash bin: [#10920](https://github.com/owncloud/web/pull/10920)
+
+   We've fixed a bug, where deleted resources that have only numbers in name like
+   "123" won't show up in the trash bin
+
+   https://github.com/owncloud/web/issues/10917
+   https://github.com/owncloud/web/pull/10920
+
+* Bugfix - Disable search in public link context: [#10928](https://github.com/owncloud/web/pull/10928)
+
+   We've fixed a bug where the search was visible in the public link context but
+   not usable, since we are not able yet to provide searching in this context.
+   Therefore the search was disabled in the public link context.
+
+   https://github.com/owncloud/web/issues/10915
+   https://github.com/owncloud/web/pull/10928
+
+* Bugfix - Space not updating on navigation: [#10941](https://github.com/owncloud/web/issues/10941)
+
+   We've fixed an issue where the current space did not update when navigating from
+   one space into another directly, e.g. via search results. That could lead to
+   uploads and file actions not working properly.
+
+   https://github.com/owncloud/web/issues/10941
+   https://github.com/owncloud/web/pull/10943
 
 * Change - Remove deprecated code: [#7338](https://github.com/owncloud/web/issues/7338)
 
@@ -513,6 +326,40 @@ Details
 
    https://github.com/owncloud/web/pull/10443
    https://github.com/owncloud/web/pull/10758
+
+* Change - Portal target removed: [#10758](https://github.com/owncloud/web/pull/10758)
+
+   BREAKING CHANGE for developers: The (undocumented) portal target
+   `app.runtime.header` is not available anymore. Please use the extension point
+   `app.runtime.header.center` with `customComponent` extensions instead (for
+   details see below).
+
+   The portal target `app.runtime.header` has been removed in favour of a new
+   extension point with the id `app.runtime.header.center`. The extension point is
+   capable of mounting extensions of type `customComponent`. The search bar, which
+   was previously using this portal target, was rewired into an extension. Other
+   `portal` instances which used this portal target won't work anymore and need to
+   be ported to the `customComponent` extension type instead.
+
+   https://github.com/owncloud/web/pull/10758
+
+* Change - Disable opening files in embed mode: [#10786](https://github.com/owncloud/web/pull/10786)
+
+   We have disabled to open files in the embed mode, since opening or editing files
+   is not in scope of the embed mode.
+
+   https://github.com/owncloud/web/issues/10635
+   https://github.com/owncloud/web/pull/10786
+
+* Enhancement - Accessibility improvements: [#5383](https://github.com/owncloud/web/issues/5383)
+
+   Across the board, we have implemented improvements in regards of accessibility
+   for the web UI.
+
+   https://github.com/owncloud/web/issues/5383
+   https://github.com/owncloud/web/issues/5391
+   https://github.com/owncloud/web/issues/10731
+   https://github.com/owncloud/web/pull/10802
 
 * Enhancement - Icon for .dcm files: [#9215](https://github.com/owncloud/web/issues/9215)
 
@@ -690,6 +537,15 @@ Details
    https://github.com/owncloud/web/issues/9782
    https://github.com/owncloud/web/pull/10709
 
+* Enhancement - Search providers extension point: [#10758](https://github.com/owncloud/web/pull/10758)
+
+   We've added a new extension point with the id `app.search.provider` and for the
+   extensionType `search` that can be used to register additional search providers.
+   All search providers that are registered for this extension point will be used
+   by the global search automatically.
+
+   https://github.com/owncloud/web/pull/10758
+
 * Enhancement - Implement Server-Sent Events (SSE) for file updates: [#10782](https://github.com/owncloud/web/pull/10782)
 
    We've implemented Server-Sent Events (SSE) to notify users in real-time about
@@ -698,6 +554,136 @@ Details
 
    https://github.com/owncloud/web/issues/10779
    https://github.com/owncloud/web/pull/10782
+
+* Enhancement - Add SSE event for moving: [#10798](https://github.com/owncloud/web/pull/10798)
+
+   We've added Server-Sent Events (SSE) for moving resources. When the user moves
+   files or folders, everyone with access to them instantly sees the changes across
+   their browsers and devices.
+
+   https://github.com/owncloud/web/issues/10780
+   https://github.com/owncloud/web/pull/10798
+
+* Enhancement - Ability to theme sharing role icons: [#10801](https://github.com/owncloud/web/pull/10801)
+
+   We've added the ability to theme the sharing role icons. This is useful for
+   custom themes that want to customize the look of the sharing role dropdown.
+
+   https://github.com/owncloud/ocis/issues/8844
+   https://github.com/owncloud/web/pull/10801
+
+* Enhancement - Add SSE event for moving: [#10807](https://github.com/owncloud/web/pull/10807)
+
+   We've added Server-Sent Events (SSE) for sharing. This notifies the user when
+   they received or revoked access to a share or membership to a space.
+
+   https://github.com/owncloud/web/issues/10647
+   https://github.com/owncloud/web/pull/10807
+
+* Enhancement - Show loading spinner while searching or filtering users: [#10874](https://github.com/owncloud/web/pull/10874)
+
+   While searching or filtering users in the admin settings, there will be shown a
+   loading spinner, to indicate the request is processing.
+
+   https://github.com/owncloud/web/issues/10821
+   https://github.com/owncloud/web/pull/10874
+
+* Enhancement - Display hidden resources information in files list: [#10907](https://github.com/owncloud/web/pull/10907)
+
+   We've added the ability for the user to see how many files and folders are
+   hidden in the files list footer.
+
+   https://github.com/owncloud/web/issues/9036
+   https://github.com/owncloud/web/pull/10907
+
+* Enhancement - Add loading spinner to admin settings spaces and groups: [#10929](https://github.com/owncloud/web/pull/10929)
+
+   We've added a loading spinner to the spaces and groups view in the admin
+   settings to indicate loading task, when the server needs time to respond.
+
+   https://github.com/owncloud/web/issues/10922
+   https://github.com/owncloud/web/pull/10929
+
+Changelog for ownCloud Web [8.0.2] (2024-05-14)
+=======================================
+The following sections list the changes in ownCloud web 8.0.2 relevant to
+ownCloud admins and users.
+
+[8.0.2]: https://github.com/owncloud/web/compare/v8.0.1...v8.0.2
+
+Summary
+-------
+
+* Bugfix - Folder replace: [#10515](https://github.com/owncloud/web/issues/10515)
+* Bugfix - Hidden right sidebar on small screens: [#10598](https://github.com/owncloud/web/issues/10598)
+* Bugfix - Scope loss when showing search results: [#10634](https://github.com/owncloud/web/issues/10634)
+* Bugfix - Theme loading without matching theme: [#10657](https://github.com/owncloud/web/issues/10657)
+* Bugfix - Flickering loading indicator: [#10763](https://github.com/owncloud/web/pull/10763)
+* Bugfix - Download files with special chars in name: [#10810](https://github.com/owncloud/web/issues/10810)
+* Bugfix - IDP logout issues: [#10881](https://github.com/owncloud/web/pull/10881)
+
+Details
+-------
+
+* Bugfix - Folder replace: [#10515](https://github.com/owncloud/web/issues/10515)
+
+   The "Replace" conflict option, which previously didn't work at all when trying
+   to copy/move a folder, has been fixed.
+
+   https://github.com/owncloud/web/issues/10515
+   https://github.com/owncloud/web/pull/10597
+
+* Bugfix - Hidden right sidebar on small screens: [#10598](https://github.com/owncloud/web/issues/10598)
+
+   The issue causing the right sidebar to not display on screens smaller than 960px
+   has been fixed.
+
+   https://github.com/owncloud/web/issues/10598
+   https://github.com/owncloud/web/pull/10643
+
+* Bugfix - Scope loss when showing search results: [#10634](https://github.com/owncloud/web/issues/10634)
+
+   Clicking "Show n results" in the search preview no longer loses the search
+   scope.
+
+   https://github.com/owncloud/web/issues/10634
+   https://github.com/owncloud/web/pull/10653
+
+* Bugfix - Theme loading without matching theme: [#10657](https://github.com/owncloud/web/issues/10657)
+
+   We've fixed an issue where theme loading would break when there was no matching
+   oC theme found for the user's OS setting. For example, this occurred when a
+   user's OS setting was configured to "dark," but the instance of oC did not offer
+   a dark theme.
+
+   https://github.com/owncloud/web/issues/10657
+   https://github.com/owncloud/web/pull/10659
+
+* Bugfix - Flickering loading indicator: [#10763](https://github.com/owncloud/web/pull/10763)
+
+   The flickering loading indicator when batch deleting a lot of files has been
+   fixed.
+
+   We also added a request limit that stops the network from being overrun with
+   concurrent requests.
+
+   https://github.com/owncloud/web/pull/10763
+
+* Bugfix - Download files with special chars in name: [#10810](https://github.com/owncloud/web/issues/10810)
+
+   We've fixed a bug where having a `#` in the filename resulted in requests going
+   to cut off urls.
+
+   https://github.com/owncloud/web/issues/10810
+   https://github.com/owncloud/web/pull/10813
+   https://github.com/owncloud/web/pull/10817
+
+* Bugfix - IDP logout issues: [#10881](https://github.com/owncloud/web/pull/10881)
+
+   Falsely showing the logout page after opening ownCloud Web with an expired token
+   has been fixed.
+
+   https://github.com/owncloud/web/pull/10881
 
 Changelog for ownCloud Web [8.0.1] (2024-03-12)
 =======================================
