@@ -26,7 +26,7 @@ export default defineConfig({
     environment: 'happy-dom',
     clearMocks: true,
     include: ['**/*.spec.ts'],
-    setupFiles: ['tests/unit/config/vitest.init.ts', 'core-js'],
+    setupFiles: ['tests/unit/config/vitest.init.ts', 'core-js', '@vitest/web-worker'],
     exclude: [
       '**/node_modules/**',
       '**/dist/**',
