@@ -109,15 +109,6 @@ const pauseResumeUploadButton = '#pause-upload-info-btn'
 const cancelUploadButton = '#cancel-upload-info-btn'
 const uploadPauseTooltip = '//div[text()="Pause upload"]'
 const uploadResumeTooltip = '//div[text()="Resume upload"]'
-const collaboraEditorSaveSelector = '.notebookbar-shortcuts-bar #save'
-const onlyOfficeInnerFrameSelector = '[name="frameEditor"]'
-const onlyOfficeSaveButtonSelector = '#slot-btn-dt-save > button'
-const collaboraDocTextAreaSelector = '#clipboard-area'
-const onlyofficeDocTextAreaSelector = '#area_id'
-const collaboraWelcomeModalIframe = '.iframe-welcome-modal'
-const onlyOfficeCanvasEditorSelector = '#id_viewer_overlay'
-const onlyOfficeCanvasCursorSelector = '#id_target_cursor'
-const collaboraCanvasEditorSelector = '.leaflet-layer'
 const filesContextMenuAction = 'div[id^="context-menu-drop"] button.oc-files-actions-%s-trigger'
 const highlightedFileRowSelector = '#files-space-table tr.oc-table-highlighted'
 const emptyTrashbinButtonSelector = '.oc-files-actions-empty-trash-bin-trigger'
@@ -128,8 +119,22 @@ const keepBothButton = '.oc-modal-body-actions-confirm'
 const mediaNavigationButton = `//button[contains(@class, "preview-controls-%s")]`
 const sideBarActions =
   '//ul[@id="oc-files-actions-sidebar"]//span[@class="oc-files-context-action-label"]'
+
+// online office locators
+// Collabora
 const collaboraDocPermissionModeSelector = '#PermissionMode'
+const collaboraEditorSaveSelector = '.notebookbar-shortcuts-bar #save'
+const collaboraDocTextAreaSelector = '#clipboard-area'
+const collaboraWelcomeModalIframe = '.iframe-welcome-modal'
+const collaboraCanvasEditorSelector = '.leaflet-layer'
+// OnlyOffice
 const onlyOfficeFileTitleSelector = `//section[@id="box-doc-name"]/input[@id="rib-doc-name"]`
+const onlyOfficeInnerFrameSelector = '[name="frameEditor"]'
+const onlyOfficeSaveButtonSelector = '#slot-btn-dt-save > button'
+const onlyofficeDocTextAreaSelector = '#area_id'
+const onlyOfficeCanvasEditorSelector = '#id_viewer_overlay'
+const onlyOfficeCanvasCursorSelector = '#id_target_cursor'
+// const onlyOfficeAppErrorPanel = '.app-error-panel'
 
 export const clickResource = async ({
   page,
@@ -1656,6 +1661,12 @@ export const openFileInViewer = async (args: openFileInViewerArgs): Promise<void
         ),
         page.locator(util.format(resourceNameSelector, name)).click()
       ])
+
+      // wait for the iframe to load
+      const onlyOfficeIframe = page
+        .frameLocator(externalEditorIframe)
+        .frameLocator(onlyOfficeInnerFrameSelector)
+      await onlyOfficeIframe.locator(onlyofficeDocTextAreaSelector).waitFor()
       break
     case 'Collabora':
       await Promise.all([
