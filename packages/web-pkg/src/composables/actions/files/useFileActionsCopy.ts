@@ -84,6 +84,9 @@ export const useFileActionsCopy = () => {
             }
           }
 
+          if (!unref(resources)[0].canDownload()) {
+            return false
+          }
           // copy can't be restricted in authenticated context, because
           // a user always has their home dir with write access
           return true

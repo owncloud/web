@@ -142,7 +142,7 @@ export function buildResource(resource: WebDavResponseResource): Resource {
       return this.permissions.indexOf(DavPermission.FolderCreateable) >= 0
     },
     canDownload: function () {
-      return true
+      return this.permissions.indexOf(DavPermission.SecureView) == -1
     },
     canBeDeleted: function () {
       return this.permissions.indexOf(DavPermission.Deletable) >= 0
@@ -169,6 +169,9 @@ export function buildResource(resource: WebDavResponseResource): Resource {
     },
     isReceivedShare: function () {
       return this.permissions.indexOf(DavPermission.Shared) >= 0
+    },
+    isReceivedSecureViewShare: function () {
+      return this.permissions.indexOf(DavPermission.SecureView) >= 0
     },
     isShareRoot(): boolean {
       return resource.props[DavProperty.ShareRoot]

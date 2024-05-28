@@ -97,6 +97,7 @@ export interface Resource {
   getDomSelector?(): string
 
   isReceivedShare?(): boolean
+  isReceivedSecureViewShare?(): boolean
   isShareRoot?(): boolean
   isMounted?(): boolean
 }

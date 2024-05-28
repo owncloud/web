@@ -77,7 +77,7 @@ export class PreviewService {
     const { space, resource } = options
     const serverSupportsPreview = this.available && this.isMimetypeSupported(resource.mimeType)
     const resourceSupportsPreview = resource.type !== 'folder' && resource.extension
-    if (!serverSupportsPreview || !resourceSupportsPreview) {
+    if (!serverSupportsPreview || !resourceSupportsPreview || !resource.canDownload()) {
       return undefined
     }
 
