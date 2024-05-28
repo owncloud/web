@@ -13,6 +13,7 @@ import { buildWebDavSpacesPath } from '../space'
 import { DriveItem, Identity, Permission, UnifiedRoleDefinition, User } from '../../graph/generated'
 import { urlJoin } from '../../utils'
 import { uniq } from 'lodash-es'
+import { GraphShareRoleIdMap } from './constants'
 
 export const isShareResource = (resource: Resource): resource is ShareResource => {
   return Object.hasOwn(resource, 'sharedWith')
@@ -139,7 +140,9 @@ export function buildIncomingShareResource({
     sharePermissions,
     outgoing: false,
     canRename: () => driveItem['@client.synchronize'],
-    canDownload: () => sharePermissions.includes(GraphSharePermission.readBasic),
+    canDownload: () =>
+      sharePermissions.includes(GraphSharePermission.readBasic) &&
+      !shareRoles.some((shareRole) => shareRole.id === GraphShareRoleIdMap.SecureViewer),
     canUpload: () => sharePermissions.includes(GraphSharePermission.createUpload),
     canCreate: () => sharePermissions.includes(GraphSharePermission.createChildren),
     canBeDeleted: () => sharePermissions.includes(GraphSharePermission.deleteStandard),

@@ -15,5 +15,6 @@ export const GraphShareRoleIdMap = {
   FileEditor: '2d00ce52-1fc2-4dbc-8b95-a73b73395f5a',
   FolderEditor: 'fb6c3e19-e378-47e5-b277-9732f9de6e21',
   SpaceEditor: '58c63c02-1d89-4572-916a-870abc5a1b7d',
-  SpaceManager: '312c0871-5ef7-4b3a-85b6-0e4074c64049'
+  SpaceManager: '312c0871-5ef7-4b3a-85b6-0e4074c64049',
+  SecureViewer: 'aa97fe03-7980-45ac-9e50-b325749fd7e6'
 } as const
