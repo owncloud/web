@@ -13,6 +13,10 @@ export const useClipboardStore = defineStore('clipboard', () => {
   const resources = ref<Resource[]>([])
 
   const copyResources = (r: Resource[]) => {
+    if (!r[0].canDownload()) {
+      return
+    }
+
     action.value = ClipboardActions.Copy
     resources.value = r
 
@@ -20,6 +24,10 @@ export const useClipboardStore = defineStore('clipboard', () => {
   }
 
   const cutResources = (r: Resource[]) => {
+    if (!r[0].canDownload()) {
+      return
+    }
+
     action.value = ClipboardActions.Cut
     resources.value = r
 
