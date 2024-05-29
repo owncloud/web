@@ -31,7 +31,6 @@ export const useSpaceActionsSetIcon = () => {
       title: $gettext('Set icon for %{space}', { space: resources[0].name }),
       hideConfirmButton: true,
       customComponent: EmojiPickerModal,
-      focusTrapInitial: 'em-emoji-picker',
       onConfirm: (emoji: string) => setIconSpace(resources[0], emoji)
     })
   }
