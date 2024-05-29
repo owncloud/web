@@ -1,7 +1,7 @@
 import { computed, unref } from 'vue'
 import { useGettext } from 'vue3-gettext'
 import { FileAction, FileActionOptions } from '../../actions'
-import { CreateLinkModal } from '../../../components'
+import CreateLinkModal from '../../../components/CreateLinkModal.vue'
 import { useAbility } from '../../ability'
 import { LinkShare, isProjectSpaceResource } from '@ownclouders/web-client'
 import { useLinkTypes } from '../../links'

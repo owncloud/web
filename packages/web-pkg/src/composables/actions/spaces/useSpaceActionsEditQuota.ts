@@ -3,7 +3,7 @@ import { SpaceAction, SpaceActionOptions } from '../types'
 import { useGettext } from 'vue3-gettext'
 import { useAbility } from '../../ability'
 import { SpaceResource, isProjectSpaceResource, isSpaceResource } from '@ownclouders/web-client'
-import { QuotaModal } from '../../../components'
+import QuotaModal from '../../../components/Spaces/QuotaModal.vue'
 import { useModals } from '../../piniaStores'
 
 export const useSpaceActionsEditQuota = () => {

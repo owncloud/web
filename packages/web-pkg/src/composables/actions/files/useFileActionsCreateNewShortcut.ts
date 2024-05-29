@@ -1,6 +1,6 @@
 import { computed, Ref, unref } from 'vue'
 import { FileAction, useModals, useResourcesStore } from '../../../composables'
-import { CreateShortcutModal } from '../../../components'
+import CreateShortcutModal from '../../../components/CreateShortcutModal.vue'
 import { useGettext } from 'vue3-gettext'
 import { storeToRefs } from 'pinia'
 import { SpaceResource } from '@ownclouders/web-client'

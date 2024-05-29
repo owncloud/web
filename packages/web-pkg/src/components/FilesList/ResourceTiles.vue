@@ -143,7 +143,8 @@ import {
 } from '../../helpers'
 import { eventBus } from '../../services'
 import { ImageDimension } from '../../constants'
-import { ResourceTile, ResourceGhostElement } from './index'
+import ResourceTile from './ResourceTile.vue'
+import ResourceGhostElement from './ResourceGhostElement.vue'
 import {
   FolderViewModeConstants,
   SortDir,

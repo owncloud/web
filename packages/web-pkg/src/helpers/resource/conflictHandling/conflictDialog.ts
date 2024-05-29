@@ -1,8 +1,9 @@
 import { join } from 'path'
 import { Resource } from '@ownclouders/web-client'
-import { ResolveConflict, ResolveStrategy } from '.'
+import { ResolveConflict, ResolveStrategy } from './types'
 import { useModals } from '../../../composables'
-import { SpaceMoveInfoModal, ResourceConflictModal } from '../../../components'
+import SpaceMoveInfoModal from '../../../components/Modals/SpaceMoveInfoModal.vue'
+import ResourceConflictModal from '../../../components/Modals/ResourceConflictModal.vue'
 
 export interface FileConflict {
   resource: Resource

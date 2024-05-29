@@ -28,9 +28,10 @@
 <script lang="ts">
 import { computed, defineComponent, PropType, provide, readonly, ref, unref, watch } from 'vue'
 import PQueue from 'p-queue'
-import { SideBarPanelContext, SideBar as InnerSideBar } from '../SideBar'
-import { SpaceInfo } from './Spaces'
-import { FileInfo } from './Files'
+import { SideBarPanelContext } from '../SideBar/types'
+import InnerSideBar from '../SideBar/SideBar.vue'
+import SpaceInfo from './Spaces/SpaceInfo.vue'
+import FileInfo from './Files/FileInfo.vue'
 import {
   isLocationCommonActive,
   isLocationSharesActive,

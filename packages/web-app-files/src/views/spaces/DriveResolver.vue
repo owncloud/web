@@ -37,7 +37,7 @@ import { locationPublicUpload } from '@ownclouders/web-pkg'
 import { createFileRouteOptions } from '@ownclouders/web-pkg'
 import { AppLoadingSpinner } from '@ownclouders/web-pkg'
 import { dirname } from 'path'
-import AppBanner from '@ownclouders/web-pkg/src/components/AppBanner.vue'
+import { AppBanner } from '@ownclouders/web-pkg'
 
 export default defineComponent({
   components: {
