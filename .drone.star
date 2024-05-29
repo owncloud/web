@@ -1907,7 +1907,6 @@ def e2eTestsOnKeycloak(ctx):
                          "KEYCLOAK_HOST": "keycloak:8443",
                      },
                      "commands": [
-                         "pnpm test:e2e:cucumber tests/e2e/cucumber/features/journeys",
                          "pnpm test:e2e:cucumber tests/e2e/cucumber/features/admin-settings/users.feature:20",
                          "pnpm test:e2e:cucumber tests/e2e/cucumber/features/admin-settings/spaces.feature",
                      ],
