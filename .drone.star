@@ -1,8 +1,3 @@
-# UI Test suite types
-FULL = 1
-FEDERATED = 2
-NOTIFICATIONS = 3
-
 ALPINE_GIT = "alpine/git:latest"
 APACHE_TIKA = "apache/tika:2.8.0.0"
 COLLABORA_CODE = "collabora/code:23.05.6.5.1"
@@ -36,7 +31,6 @@ WEB_PUBLISH_NPM_ORGANIZATION = "@ownclouders"
 
 dir = {
     "base": "/var/www/owncloud",
-    "federated": "/var/www/owncloud/federated",
     "server": "/var/www/owncloud/server",
     "web": "/var/www/owncloud/web",
     "ocis": "/var/www/owncloud/ocis",
@@ -45,7 +39,6 @@ dir = {
     "ocisConfig": "/var/www/owncloud/web/tests/drone/config-ocis.json",
     "ocisIdentifierRegistrationConfig": "/var/www/owncloud/web/tests/drone/identifier-registration.yml",
     "ocisRevaDataRoot": "/srv/app/tmp/ocis/owncloud/data/",
-    "testingDataDir": "/srv/app/testing/data/",
 }
 
 config = {
@@ -578,8 +571,7 @@ def e2eTests(ctx):
                      (tikaService() if params["tikaNeeded"] else []) + \
                      ocisService("e2e-tests", tika_enabled = params["tikaNeeded"])
 
-        steps += getSkeletonFiles() + \
-                 [{
+        steps += [{
                      "name": "e2e-tests",
                      "image": OC_CI_NODEJS,
                      "environment": environment,
@@ -872,19 +864,6 @@ def documentation(ctx):
             },
         },
     ]
-
-def getSkeletonFiles():
-    return [{
-        "name": "setup-skeleton-files",
-        "image": OC_CI_PHP,
-        "commands": [
-            "git clone https://github.com/owncloud/testing.git /srv/app/testing",
-        ],
-        "volumes": [{
-            "name": "gopath",
-            "path": dir["app"],
-        }],
-    }]
 
 def webService():
     return [{
