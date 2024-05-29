@@ -68,6 +68,25 @@ describe('PreviewService', () => {
       })
       expect(preview).toBeUndefined()
     })
+    it('does not load preview if "canDownload" is false', async () => {
+      const objectUrl = 'objectUrl'
+      const supportedMimeTypes = ['image/png']
+      const { previewService } = getWrapper({
+        supportedMimeTypes,
+        version: '1'
+      })
+      window.URL.createObjectURL = vi.fn().mockImplementation(() => objectUrl)
+      const preview = await previewService.loadPreview({
+        space: mock<SpaceResource>(),
+        resource: mock<Resource>({
+          mimeType: supportedMimeTypes[0],
+          webDavPath: '/',
+          etag: '',
+          canDownload: () => false
+        })
+      })
+      expect(preview).toEqual(undefined)
+    })
     describe('private files', () => {
       it('loads preview', async () => {
         const objectUrl = 'objectUrl'
@@ -79,7 +98,12 @@ describe('PreviewService', () => {
         window.URL.createObjectURL = vi.fn().mockImplementation(() => objectUrl)
         const preview = await previewService.loadPreview({
           space: mock<SpaceResource>(),
-          resource: mock<Resource>({ mimeType: supportedMimeTypes[0], webDavPath: '/', etag: '' })
+          resource: mock<Resource>({
+            mimeType: supportedMimeTypes[0],
+            webDavPath: '/',
+            etag: '',
+            canDownload: () => true
+          })
         })
         expect(preview).toEqual(objectUrl)
       })
@@ -94,7 +118,8 @@ describe('PreviewService', () => {
           id: '1',
           mimeType: supportedMimeTypes[0],
           webDavPath: '/',
-          etag: ''
+          etag: '',
+          canDownload: () => true
         })
         window.URL.createObjectURL = vi.fn().mockImplementation(() => objectUrl)
         const preview = await previewService.loadPreview(
@@ -121,7 +146,12 @@ describe('PreviewService', () => {
         })
         const preview = await previewService.loadPreview({
           space: mock<SpaceResource>({ driveType: 'public' }),
-          resource: mock<Resource>({ mimeType: supportedMimeTypes[0], downloadURL, etag: '' })
+          resource: mock<Resource>({
+            mimeType: supportedMimeTypes[0],
+            downloadURL,
+            etag: '',
+            canDownload: () => true
+          })
         })
         expect(preview).toEqual(`${downloadURL}?scalingup=0&preview=1&a=1`)
       })

@@ -116,7 +116,7 @@ export const useFileActions = () => {
               return false
             }
 
-            if (resources[0].isReceivedSecureViewShare() && !fileExtension.supportsSecureView) {
+            if (resources[0].isReceivedSecureViewShare() && !fileExtension.secureView) {
               return false
             }
 
