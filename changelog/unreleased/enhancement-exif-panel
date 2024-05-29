@@ -1,6 +1,6 @@
 Enhancement: EXIF metadata panel
 
-We've added a right sidebar panel with the name `Image Info`, which display `image`, `photo` and `location`
+We've added a right sidebar panel with the name `Image Info`, which displays `image`, `photo` and `location`
 metadata if present on the given resource. It is registered by the files app and becomes visible in the global right sidebar
 in all file contexts, e.g. file listing with single select on an image or the preview app displaying an image.
 

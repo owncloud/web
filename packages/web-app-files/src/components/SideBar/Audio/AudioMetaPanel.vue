@@ -69,14 +69,14 @@ export default defineComponent({
 
     const duration = computed(() => {
       const milliseconds = unref(resource).audio.duration
-      if (milliseconds) {
-        const d = Duration.fromMillis(milliseconds)
-        if (d.hours > 0) {
-          return d.toFormat('hh:mm:ss')
-        }
-        return d.toFormat('mm:ss')
+      if (!milliseconds) {
+        return ''
       }
-      return ''
+      const d = Duration.fromMillis(milliseconds)
+      if (d.hours > 0) {
+        return d.toFormat('hh:mm:ss')
+      }
+      return d.toFormat('mm:ss')
     })
 
     const track = computed(() => {
