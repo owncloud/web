@@ -170,9 +170,6 @@ export function buildResource(resource: WebDavResponseResource): Resource {
     isReceivedShare: function () {
       return this.permissions.indexOf(DavPermission.Shared) >= 0
     },
-    isReceivedSecureViewShare: function () {
-      return this.permissions.indexOf(DavPermission.SecureView) >= 0
-    },
     isShareRoot(): boolean {
       return resource.props[DavProperty.ShareRoot]
         ? resource.filename.split('/').length === 3

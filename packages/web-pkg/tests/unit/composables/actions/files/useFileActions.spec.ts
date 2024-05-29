@@ -2,6 +2,8 @@ import { mock } from 'vitest-mock-extended'
 import { useFileActions } from '../../../../../src/composables/actions'
 import { defaultComponentMocks, RouteLocation, getComposableWrapper } from 'web-test-helpers'
 import { computed, unref } from 'vue'
+import { describe } from 'vitest'
+import { Resource } from '@ownclouders/web-client'
 
 const mockUseEmbedMode = vi.fn().mockReturnValue({ isEnabled: computed(() => false) })
 vi.mock('../../../../../src/composables/embedMode', () => ({
@@ -13,18 +15,42 @@ describe('fileActions', () => {
     it('should provide a list of editors', () => {
       getWrapper({
         setup: ({ editorActions }) => {
-          expect(unref(editorActions).length).toBeTruthy()
+          expect(unref(editorActions).length).toEqual(2)
         }
       })
     })
     it('should provide an empty list if embed mode is enabled', () => {
-      mockUseEmbedMode.mockReturnValue({
+      mockUseEmbedMode.mockReturnValueOnce({
         isEnabled: computed(() => true)
       })
       getWrapper({
         setup: ({ editorActions }) => {
           expect(unref(editorActions).length).toBeFalsy()
         }
+      })
+    })
+  })
+  describe('secure view context', () => {
+    describe('computed property "editorActions"', () => {
+      it('only displays editors that support secure view', () => {
+        getWrapper({
+          setup: ({ editorActions }) => {
+            const secureViewResource = mock<Resource>({
+              id: '1',
+              canDownload: () => false,
+              mimeType: 'text/txt',
+              extension: 'txt'
+            })
+            const actions = unref(editorActions)
+            expect(actions.length).toEqual(2)
+            expect(
+              actions[0].isVisible({ resources: [secureViewResource], space: null })
+            ).toBeFalsy()
+            expect(
+              actions[1].isVisible({ resources: [secureViewResource], space: null })
+            ).toBeTruthy()
+          }
+        })
       })
     })
   })
@@ -67,6 +93,15 @@ function getWrapper({ setup }: { setup: (instance: ReturnType<typeof useFileActi
                       extension: 'txt'
                     }
                   ]
+                },
+                external: {
+                  applicationMenu: {
+                    enabled: () => true
+                  },
+                  defaultExtension: '',
+                  icon: 'check_box_outline_blank',
+                  name: 'External',
+                  id: 'external'
                 }
               },
               fileExtensions: [
@@ -74,6 +109,16 @@ function getWrapper({ setup }: { setup: (instance: ReturnType<typeof useFileActi
                   app: 'text-editor',
                   extension: 'txt',
                   hasPriority: false
+                },
+                {
+                  app: 'external',
+                  label: 'Open in Collabora',
+                  mimeType: 'text/txt',
+                  routeName: 'external-apps',
+                  icon: 'https://host.docker.internal:9980/favicon.ico',
+                  name: 'Collabora',
+                  hasPriority: false,
+                  secureView: true
                 }
               ]
             }
