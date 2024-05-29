@@ -1,59 +1,40 @@
 <template>
   <div id="files-sidebar-panel-exif">
     <dl class="exif-data-list">
-      <template v-if="dimensions">
-        <dt v-text="$gettext('Dimensions')" />
-        <dd v-text="dimensions" />
-      </template>
-      <template v-if="cameraMake">
-        <dt v-text="$gettext('Device make')" />
-        <dd v-text="cameraMake" />
-      </template>
-      <template v-if="cameraModel">
-        <dt v-text="$gettext('Device model')" />
-        <dd v-text="cameraModel" />
-      </template>
-      <template v-if="focalLength">
-        <dt v-text="$gettext('Focal length')" />
-        <dd v-text="focalLength" />
-      </template>
-      <template v-if="fNumber">
-        <dt v-text="$gettext('F number')" />
-        <dd v-text="fNumber" />
-      </template>
-      <template v-if="exposureTime">
-        <dt v-text="$gettext('Exposure time')" />
-        <dd v-text="exposureTime" />
-      </template>
-      <template v-if="iso">
-        <dt v-text="$gettext('ISO')" />
-        <dd v-text="iso" />
-      </template>
-      <template v-if="orientation">
-        <dt v-text="$gettext('Orientation')" />
-        <dd v-text="orientation" />
-      </template>
-      <template v-if="takenDateTime">
-        <dt v-text="$gettext('Taken time')" />
-        <dd v-text="takenDateTime" />
-      </template>
-      <template v-if="location">
-        <dt v-text="$gettext('Location')" />
-        <dd v-if="isCopyToClipboardSupported">
-          <span>{{ location }}</span>
-          <oc-button
-            v-oc-tooltip="copyLocationToClipboardLabel"
-            size="small"
-            appearance="raw"
-            class="oc-ml-s"
-            :aria-label="copyLocationToClipboardLabel"
-            @click="copyLocationToClipboard"
-          >
-            <oc-icon size="small" :name="isCopiedToClipboard ? 'checkbox-circle' : 'file-copy'" />
-          </oc-button>
-        </dd>
-        <dd v-else v-text="location" />
-      </template>
+      <dt v-text="$gettext('Dimensions')" />
+      <dd v-text="dimensions" />
+      <dt v-text="$gettext('Device make')" />
+      <dd v-text="cameraMake" />
+      <dt v-text="$gettext('Device model')" />
+      <dd v-text="cameraModel" />
+      <dt v-text="$gettext('Focal length')" />
+      <dd v-text="focalLength" />
+      <dt v-text="$gettext('F number')" />
+      <dd v-text="fNumber" />
+      <dt v-text="$gettext('Exposure time')" />
+      <dd v-text="exposureTime" />
+      <dt v-text="$gettext('ISO')" />
+      <dd v-text="iso" />
+      <dt v-text="$gettext('Orientation')" />
+      <dd v-text="orientation" />
+      <dt v-text="$gettext('Taken time')" />
+      <dd v-text="takenDateTime" />
+      <dt v-text="$gettext('Location')" />
+      <dd v-if="isCopyToClipboardSupported">
+        <span>{{ location }}</span>
+        <oc-button
+          v-if="location"
+          v-oc-tooltip="copyLocationToClipboardLabel"
+          size="small"
+          appearance="raw"
+          class="oc-ml-s"
+          :aria-label="copyLocationToClipboardLabel"
+          @click="copyLocationToClipboard"
+        >
+          <oc-icon size="small" :name="isCopiedToClipboard ? 'checkbox-circle' : 'file-copy'" />
+        </oc-button>
+      </dd>
+      <dd v-else v-text="location" />
     </dl>
   </div>
 </template>
@@ -83,7 +64,7 @@ export default defineComponent({
       const width = image?.width
       const height = image?.height
       if (!width || !height) {
-        return ''
+        return '-'
       }
       if ([5, 6, 7, 8].includes(unref(resource).photo?.orientation)) {
         return `${height}x${width}`
@@ -92,50 +73,50 @@ export default defineComponent({
     })
 
     const cameraMake = computed(() => {
-      return unref(resource).photo?.cameraMake
+      return unref(resource).photo?.cameraMake || '-'
     })
 
     const cameraModel = computed(() => {
-      return unref(resource).photo?.cameraModel
+      return unref(resource).photo?.cameraModel || '-'
     })
 
     const focalLength = computed(() => {
       const photo = unref(resource).photo
-      return photo?.focalLength ? `${photo.focalLength} mm` : ''
+      return photo?.focalLength ? `${photo.focalLength} mm` : '-'
     })
 
     const fNumber = computed(() => {
       const photo = unref(resource).photo
-      return photo?.fNumber ? `f/${photo.fNumber}` : ''
+      return photo?.fNumber ? `f/${photo.fNumber}` : '-'
     })
 
     const exposureTime = computed(() => {
       const photo = unref(resource).photo
       return photo?.exposureDenominator
         ? `${photo.exposureNumerator}/${photo.exposureDenominator}`
-        : ''
+        : '-'
     })
 
     const iso = computed(() => {
-      return unref(resource).photo?.iso
+      return unref(resource).photo?.iso || '-'
     })
 
     const orientation = computed(() => {
-      return unref(resource).photo?.orientation
+      return unref(resource).photo?.orientation || '-'
     })
 
     const takenDateTime = computed(() => {
       const photo = unref(resource).photo
-      return photo?.takenDateTime ? formatDateFromISO(photo.takenDateTime, currentLanguage) : ''
+      return photo?.takenDateTime ? formatDateFromISO(photo.takenDateTime, currentLanguage) : '-'
     })
 
+    const isLocationVisible = computed(() => {
+      return config.options.sidebar?.exif?.showLocation !== false
+    })
     const location = computed(() => {
       const l = unref(resource).location
       if (!l?.latitude || !l?.longitude) {
-        return ''
-      }
-      if (config.options.sidebar?.exif?.showLocation === false) {
-        return ''
+        return '-'
       }
       return `${l.latitude}, ${l.longitude}`
     })
@@ -161,6 +142,7 @@ export default defineComponent({
       orientation,
       takenDateTime,
       location,
+      isLocationVisible,
       isCopyToClipboardSupported,
       isCopiedToClipboard,
       copyLocationToClipboardLabel,

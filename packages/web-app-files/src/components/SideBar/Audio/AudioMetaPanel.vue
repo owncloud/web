@@ -1,38 +1,22 @@
 <template>
   <div id="files-sidebar-panel-audio">
     <dl class="audio-data-list">
-      <template v-if="title">
-        <dt v-text="$gettext('Title')" />
-        <dd v-text="title" />
-      </template>
-      <template v-if="duration">
-        <dt v-text="$gettext('Duration')" />
-        <dd v-text="duration" />
-      </template>
-      <template v-if="artist">
-        <dt v-text="$gettext('Authors')" />
-        <dd v-text="artist" />
-      </template>
-      <template v-if="album">
-        <dt v-text="$gettext('Album')" />
-        <dd v-text="album" />
-      </template>
-      <template v-if="genre">
-        <dt v-text="$gettext('Genre')" />
-        <dd v-text="genre" />
-      </template>
-      <template v-if="year">
-        <dt v-text="$gettext('Year recorded')" />
-        <dd v-text="year" />
-      </template>
-      <template v-if="track">
-        <dt v-text="$gettext('Track')" />
-        <dd v-text="track" />
-      </template>
-      <template v-if="disc">
-        <dt v-text="$gettext('Disc')" />
-        <dd v-text="disc" />
-      </template>
+      <dt v-text="$gettext('Title')" />
+      <dd v-text="title" />
+      <dt v-text="$gettext('Duration')" />
+      <dd v-text="duration" />
+      <dt v-text="$gettext('Authors')" />
+      <dd v-text="artist" />
+      <dt v-text="$gettext('Album')" />
+      <dd v-text="album" />
+      <dt v-text="$gettext('Genre')" />
+      <dd v-text="genre" />
+      <dt v-text="$gettext('Year recorded')" />
+      <dd v-text="year" />
+      <dt v-text="$gettext('Track')" />
+      <dd v-text="track" />
+      <dt v-text="$gettext('Disc')" />
+      <dd v-text="disc" />
     </dl>
   </div>
 </template>
@@ -48,29 +32,29 @@ export default defineComponent({
     const resource = inject<Ref<Resource>>('resource')
 
     const album = computed(() => {
-      return unref(resource).audio.album
+      return unref(resource).audio.album || '-'
     })
 
     const artist = computed(() => {
-      return unref(resource).audio.artist
+      return unref(resource).audio.artist || '-'
     })
 
     const albumArtist = computed(() => {
-      return unref(resource).audio.albumArtist
+      return unref(resource).audio.albumArtist || '-'
     })
 
     const genre = computed(() => {
-      return unref(resource).audio.genre
+      return unref(resource).audio.genre || '-'
     })
 
     const title = computed(() => {
-      return unref(resource).audio.title
+      return unref(resource).audio.title || '-'
     })
 
     const duration = computed(() => {
       const milliseconds = unref(resource).audio.duration
       if (!milliseconds) {
-        return ''
+        return '-'
       }
       const d = Duration.fromMillis(milliseconds)
       if (d.hours > 0) {
@@ -84,7 +68,7 @@ export default defineComponent({
       if (audio.track && audio.trackCount) {
         return `${audio.track} / ${audio.trackCount}`
       }
-      return audio.track
+      return audio.track || '-'
     })
 
     const disc = computed(() => {
@@ -92,11 +76,11 @@ export default defineComponent({
       if (audio.disc && audio.discCount) {
         return `${audio.disc} / ${audio.discCount}`
       }
-      return audio.disc
+      return audio.disc || '-'
     })
 
     const year = computed(() => {
-      return unref(resource).audio?.year
+      return unref(resource).audio?.year || '-'
     })
 
     return {
