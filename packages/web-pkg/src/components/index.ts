@@ -1,3 +1,5 @@
+import { defineAsyncComponent } from 'vue'
+
 export * from './AppBar'
 export * from './AppTemplates'
 export * from './ContextActions'
@@ -25,4 +27,8 @@ export { default as ViewOptions } from './ViewOptions.vue'
 export { default as PortalTarget } from './PortalTarget.vue'
 export { default as CreateShortcutModal } from './CreateShortcutModal.vue'
 export { default as CreateLinkModal } from './CreateLinkModal.vue'
-export { default as TextEditor } from './TextEditor.vue'
+
+// async component to avoid loading the huge toastjs package on page load
+export const TextEditor = defineAsyncComponent(
+  async () => (await import('./TextEditor.vue')).default
+)
