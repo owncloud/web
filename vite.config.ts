@@ -153,13 +153,8 @@ export default defineConfig(({ mode, command }) => {
           input,
           output: {
             dir: 'dist',
-            chunkFileNames: join('js', 'chunks', '[name]-[hash].mjs'),
-            entryFileNames: join('js', '[name]-[hash].mjs'),
-            manualChunks: (id: string) => {
-              if (id.includes('node_modules')) {
-                return 'vendor'
-              }
-            }
+            chunkFileNames: join('js', 'chunks', `[name]-[hash].mjs`),
+            entryFileNames: join('js', '[name]-[hash].mjs')
           }
         },
         target: browserslistToEsbuild()
