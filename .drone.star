@@ -175,7 +175,7 @@ def stagePipelines(ctx):
 
     e2e_pipelines = e2eTests(ctx)
     keycloak_pipelines = e2eTestsOnKeycloak(ctx)
-    return keycloak_pipelines
+    return unit_test_pipelines + buildAndTestDesignSystem(ctx) + pipelinesDependsOn(e2e_pipelines + keycloak_pipelines, unit_test_pipelines)
 
 def afterPipelines(ctx):
     return build(ctx) + pipelinesDependsOn(notify(), build(ctx))
@@ -1856,6 +1856,11 @@ def keycloakService():
     ]
 
 def e2eTestsOnKeycloak(ctx):
+    e2e_Keycloak_tests = [
+        "journeys",
+        "admin-settings/users.feature:20",
+    ]
+
     e2e_volumes = [
         {
             "name": "uploads",
@@ -1907,8 +1912,8 @@ def e2eTestsOnKeycloak(ctx):
                          "KEYCLOAK_HOST": "keycloak:8443",
                      },
                      "commands": [
-                         "pnpm test:e2e:cucumber tests/e2e/cucumber/features/admin-settings/users.feature:20",
-                         "pnpm test:e2e:cucumber tests/e2e/cucumber/features/admin-settings/spaces.feature",
+                         "cd tests/e2e",
+                         "bash run-e2e.sh %s" % " ".join(["cucumber/features/" + tests for tests in e2e_Keycloak_tests]),
                      ],
                  },
              ] + \

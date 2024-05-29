@@ -5,10 +5,6 @@ Feature: spaces management
       | id    |
       | Alice |
       | Brian |
-    And "Alice" logs in
-    And "Brian" logs in
-    And "Alice" logs out
-    When "Brian" logs out
     And "Admin" assigns following roles to the users using API
       | id    | role        |
       | Alice | Space Admin |
@@ -43,8 +39,6 @@ Feature: spaces management
     Given "Admin" creates following user using API
       | id    |
       | Alice |
-    And "Alice" logs in
-    And "Alice" logs out
     And "Admin" assigns following roles to the users using API
       | id    | role        |
       | Alice | Space Admin |
@@ -104,8 +98,6 @@ Feature: spaces management
       | Carol |
       | David |
       | Edith |
-    And "Alice" logs in
-    And "Alice" logs out
     And "Admin" assigns following roles to the users using API
       | id    | role        |
       | Alice | Space Admin |
@@ -138,12 +130,6 @@ Feature: spaces management
       | Alice |
       | Brian |
       | Carol |
-    And "Alice" logs in
-    And "Brian" logs in
-    And "Carol" logs in
-    And "Alice" logs out
-    When "Brian" logs out
-    When "Carol" logs out
     And "Admin" assigns following roles to the users using API
       | id    | role        |
       | Alice | Admin       |

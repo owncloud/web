@@ -8,7 +8,8 @@ import {
 import {
   createUser as keycloakCreateUser,
   deleteUser as keycloakDeleteUser,
-  assignRole as keycloakAssignRole
+  assignRole as keycloakAssignRole,
+  unAssignRole as keycloakUnAssignRole
 } from '../keycloak'
 import { config } from '../../../config'
 import { UsersEnvironment } from '../../environment'
@@ -43,5 +44,13 @@ export const assignRole = async ({
   } else {
     const id = await getUserId({ user, admin })
     await graphAssignRole(admin, id, role)
+  }
+}
+
+export const unAssignRole = async ({ admin, user }: { admin: User; user: User }): Promise<void> => {
+  if (config.keycloak) {
+    const usersEnvironment = new UsersEnvironment()
+    const createdUser = usersEnvironment.getCreatedUser({ key: user.id })
+    await keycloakUnAssignRole({ admin, uuid: createdUser.uuid, role: createdUser.role })
   }
 }
