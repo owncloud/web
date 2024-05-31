@@ -1856,6 +1856,11 @@ def keycloakService():
     ]
 
 def e2eTestsOnKeycloak(ctx):
+    e2e_Keycloak_tests = [
+        "journeys",
+        "admin-settings/users.feature:20",
+    ]
+
     e2e_volumes = [
         {
             "name": "uploads",
@@ -1907,7 +1912,8 @@ def e2eTestsOnKeycloak(ctx):
                          "KEYCLOAK_HOST": "keycloak:8443",
                      },
                      "commands": [
-                         "pnpm test:e2e:cucumber tests/e2e/cucumber/features/journeys",
+                         "cd tests/e2e",
+                         "bash run-e2e.sh %s" % " ".join(["cucumber/features/" + tests for tests in e2e_Keycloak_tests]),
                      ],
                  },
              ] + \

@@ -46,11 +46,12 @@ export const createUser = async ({ user, admin }: { user: User; admin: User }): 
   const uuid = getUserIdFromResponse(creationRes)
 
   // assign realmRoles to user
-  const roleRes = await assignRole({ admin, uuid, role: 'User' })
+  const defaultNewUserRole = 'User'
+  const roleRes = await assignRole({ admin, uuid, role: defaultNewUserRole })
   checkResponseStatus(roleRes, 'Failed while assigning roles to user')
 
   const usersEnvironment = new UsersEnvironment()
-  usersEnvironment.storeCreatedUser({ user: { ...user, uuid } })
+  usersEnvironment.storeCreatedUser({ user: { ...user, uuid, role: defaultNewUserRole } })
 
   // initialize user
   await initializeUser(user.id)
@@ -67,6 +68,7 @@ export const assignRole = async ({
   uuid: string
   role: string
 }) => {
+  // can assign multiple realm role at once
   return request({
     method: 'POST',
     path: join(realmBasePath, 'users', uuid, 'role-mappings', 'realm'),
@@ -77,6 +79,27 @@ export const assignRole = async ({
     user: admin,
     header: { 'Content-Type': 'application/json' }
   })
+}
+
+export const unAssignRole = async ({
+  admin,
+  uuid,
+  role
+}: {
+  admin: User
+  uuid: string
+  role: string
+}) => {
+  // can't unassign multiple realm roles at once
+  const response = await request({
+    method: 'DELETE',
+    path: join(realmBasePath, 'users', uuid, 'role-mappings', 'realm'),
+    body: JSON.stringify([await getRealmRole(ocisKeycloakUserRoles[role], admin)]),
+    user: admin,
+    header: { 'Content-Type': 'application/json' }
+  })
+  checkResponseStatus(response, 'Can not delete existing role ')
+  return response
 }
 
 const initializeUser = async (username: string): Promise<void> => {

@@ -27,6 +27,7 @@ export interface User {
   displayName: string
   password: string
   email: string
+  role?: string
 }
 
 export interface File {
