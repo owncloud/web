@@ -143,13 +143,13 @@
 import { storeToRefs } from 'pinia'
 import { defineComponent, PropType, ComponentPublicInstance, computed, unref } from 'vue'
 import { filesize } from 'filesize'
-import { authService } from '../../services/auth'
 import {
   useRoute,
   useSpacesStore,
   useThemeStore,
   useUserStore,
-  routeToContextQuery
+  routeToContextQuery,
+  useAuthService
 } from '@ownclouders/web-pkg'
 import { OcDrop } from 'design-system/src/components'
 import { MenuItem } from '../../helpers/menuItems'
@@ -167,6 +167,7 @@ export default defineComponent({
     const userStore = useUserStore()
     const themeStore = useThemeStore()
     const spacesStore = useSpacesStore()
+    const authService = useAuthService()
 
     const { user } = storeToRefs(userStore)
 
@@ -181,6 +182,9 @@ export default defineComponent({
         query: { redirectUrl: unref(route).fullPath }
       }
     })
+    const logout = () => {
+      authService.logoutUser()
+    }
 
     const imprintUrl = computed(() => themeStore.currentTheme.common.urls.imprint)
     const privacyUrl = computed(() => themeStore.currentTheme.common.urls.privacy)
@@ -195,7 +199,8 @@ export default defineComponent({
       loginLink,
       imprintUrl,
       privacyUrl,
-      quota
+      quota,
+      logout
     }
   },
   computed: {
@@ -249,11 +254,6 @@ export default defineComponent({
       onShown: () =>
         (this.$refs.menu as ComponentPublicInstance).$el.querySelector('a:first-of-type').focus()
     })
-  },
-  methods: {
-    logout() {
-      authService.logoutUser()
-    }
   }
 })
 </script>

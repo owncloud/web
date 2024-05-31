@@ -37,7 +37,6 @@ export interface UserManagerOptions {
 }
 
 export class UserManager extends OidcUserManager {
-  private readonly storePrefix
   private clientService: ClientService
   private configStore: ConfigStore
   private userStore: UserStore
@@ -111,7 +110,6 @@ export class UserManager extends OidcUserManager {
     Log.setLevel(Log.WARN)
 
     super(openIdConfig)
-    this.storePrefix = storePrefix
     this.browserStorage = browserStorage
     this.clientService = options.clientService
     this.configStore = options.configStore

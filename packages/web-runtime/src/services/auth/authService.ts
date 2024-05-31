@@ -6,7 +6,8 @@ import {
   UserStore,
   CapabilityStore,
   ConfigStore,
-  useTokenTimerWorker
+  useTokenTimerWorker,
+  AuthServiceInterface
 } from '@ownclouders/web-pkg'
 import { RouteLocation, Router } from 'vue-router'
 import {
@@ -22,7 +23,7 @@ import { Language } from 'vue3-gettext'
 import { PublicLinkType } from '@ownclouders/web-client'
 import { WebWorkersStore } from '@ownclouders/web-pkg'
 
-export class AuthService {
+export class AuthService implements AuthServiceInterface {
   private clientService: ClientService
   private configStore: ConfigStore
   private router: Router
@@ -151,7 +152,7 @@ export class AuthService {
         this.userManager.events.addUserUnloaded(async () => {
           console.log('user unloaded…')
           this.tokenTimerWorker?.resetTokenTimer()
-          await this.resetStateAfterUserLogout()
+          this.resetStateAfterUserLogout()
 
           if (this.userManager.unloadReason === 'authError') {
             this.hasAuthErrorOccurred = true
@@ -167,7 +168,6 @@ export class AuthService {
             if (oAuth2.logoutUrl) {
               return (window.location = oAuth2.logoutUrl as any)
             }
-            return (window.location = `${this.configStore.serverUrl}/index.php/logout` as any)
           }
         })
         this.userManager.events.addSilentRenewError(async (error) => {
@@ -314,12 +314,18 @@ export class AuthService {
   }
 
   public async logoutUser() {
+    const endSessionEndpoint = await this.userManager.metadataService?.getEndSessionEndpoint()
+    if (!endSessionEndpoint) {
+      await this.userManager.removeUser()
+      return this.router.push({ name: 'logout' })
+    }
+
     const u = await this.userManager.getUser()
     if (u && u.id_token) {
       return this.userManager.signoutRedirect({ id_token_hint: u.id_token })
-    } else {
-      await this.userManager.removeUser()
     }
+
+    return await this.userManager.removeUser()
   }
 
   private resetStateAfterUserLogout() {
@@ -328,7 +334,7 @@ export class AuthService {
     this.authStore.clearUserContext()
   }
 
-  private handleDelegatedTokenUpdate(event: MessageEvent): void {
+  private handleDelegatedTokenUpdate(event: MessageEvent) {
     if (
       this.configStore.options.embed?.delegateAuthenticationOrigin &&
       event.origin !== this.configStore.options.embed.delegateAuthenticationOrigin
@@ -341,7 +347,7 @@ export class AuthService {
     }
 
     console.debug('[authService:handleDelegatedTokenUpdate] - going to update the access_token')
-    this.userManager.updateContext(event.data, false)
+    return this.userManager.updateContext(event.data, false)
   }
 }
 

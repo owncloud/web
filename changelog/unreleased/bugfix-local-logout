@@ -1,0 +1,8 @@
+Bugfix: Local logout if IdP has no logout support
+
+Some IdPs don't support a logout endpoint. In those cases the web UI ran into a fatal error and showed an empty screen without
+further redirects. Fixed by forgetting the currently authenticated user when the OpenID Connect configuration doesn't contain
+an `endSessionEndpoint` url.
+
+https://github.com/owncloud/web/pull/10974
+https://github.com/owncloud/enterprise/issues/6631
