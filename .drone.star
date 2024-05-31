@@ -1,8 +1,3 @@
-# UI Test suite types
-FULL = 1
-FEDERATED = 2
-NOTIFICATIONS = 3
-
 ALPINE_GIT = "alpine/git:latest"
 APACHE_TIKA = "apache/tika:2.8.0.0"
 COLLABORA_CODE = "collabora/code:23.05.6.5.1"
@@ -16,7 +11,6 @@ OC_CI_DRONE_SKIP_PIPELINE = "owncloudci/drone-skip-pipeline"
 OC_CI_GOLANG = "owncloudci/golang:1.22"
 OC_CI_HUGO = "owncloudci/hugo:0.115.2"
 OC_CI_NODEJS = "owncloudci/nodejs:18"
-OC_CI_PHP = "owncloudci/php:7.4"
 OC_CI_WAIT_FOR = "owncloudci/wait-for:latest"
 OC_UBUNTU = "owncloud/ubuntu:20.04"
 ONLYOFFICE_DOCUMENT_SERVER = "onlyoffice/documentserver:7.5.1"
@@ -36,8 +30,6 @@ WEB_PUBLISH_NPM_ORGANIZATION = "@ownclouders"
 
 dir = {
     "base": "/var/www/owncloud",
-    "federated": "/var/www/owncloud/federated",
-    "server": "/var/www/owncloud/server",
     "web": "/var/www/owncloud/web",
     "ocis": "/var/www/owncloud/ocis",
     "commentsFile": "/var/www/owncloud/web/comments.file",
@@ -45,7 +37,6 @@ dir = {
     "ocisConfig": "/var/www/owncloud/web/tests/drone/config-ocis.json",
     "ocisIdentifierRegistrationConfig": "/var/www/owncloud/web/tests/drone/identifier-registration.yml",
     "ocisRevaDataRoot": "/srv/app/tmp/ocis/owncloud/data/",
-    "testingDataDir": "/srv/app/testing/data/",
 }
 
 config = {
@@ -123,10 +114,6 @@ web_workspace = {
     "base": dir["base"],
     "path": config["app"],
 }
-
-def Diff(li1, li2):
-    li_dif = [i for i in li1 + li2 if i not in li1 or i not in li2]
-    return li_dif
 
 def main(ctx):
     before = beforePipelines(ctx)
@@ -542,10 +529,9 @@ def e2eTests(ctx):
             "HEADLESS": "true",
             "RETRY": "1",
             "REPORT_TRACING": params["reportTracing"],
+            "BASE_URL_OCIS": "ocis:9200",
         }
 
-        services = []
-        depends_on = []
         steps = skipIfUnchanged(ctx, "e2e-tests") + \
                 restoreBuildArtifactCache(ctx, "pnpm", ".pnpm-store") + \
                 restoreBuildArtifactCache(ctx, "playwright", ".playwright") + \
@@ -558,12 +544,6 @@ def e2eTests(ctx):
         else:
             steps += restoreOcisCache()
 
-        # oCIS specific environment variables
-        environment["BASE_URL_OCIS"] = "ocis:9200"
-
-        # oCIS specific dependencies
-        depends_on = ["cache-ocis"]
-
         if suite == "oCIS-app-provider":
             # app-provider specific steps
             steps += collaboraService() + \
@@ -574,12 +554,10 @@ def e2eTests(ctx):
                      appProviderService("onlyoffice")
         else:
             # oCIS specific steps
-            steps += copyFilesForUpload() + \
-                     (tikaService() if params["tikaNeeded"] else []) + \
+            steps += (tikaService() if params["tikaNeeded"] else []) + \
                      ocisService("e2e-tests", tika_enabled = params["tikaNeeded"])
 
-        steps += getSkeletonFiles() + \
-                 [{
+        steps += [{
                      "name": "e2e-tests",
                      "image": OC_CI_NODEJS,
                      "environment": environment,
@@ -597,8 +575,7 @@ def e2eTests(ctx):
             "name": "e2e-tests-%s" % suite,
             "workspace": e2e_workspace,
             "steps": steps,
-            "services": services,
-            "depends_on": depends_on,
+            "depends_on": ["cache-ocis"],
             "trigger": e2e_trigger,
             "volumes": e2e_volumes,
         })
@@ -873,33 +850,6 @@ def documentation(ctx):
         },
     ]
 
-def getSkeletonFiles():
-    return [{
-        "name": "setup-skeleton-files",
-        "image": OC_CI_PHP,
-        "commands": [
-            "git clone https://github.com/owncloud/testing.git /srv/app/testing",
-        ],
-        "volumes": [{
-            "name": "gopath",
-            "path": dir["app"],
-        }],
-    }]
-
-def webService():
-    return [{
-        "name": "web",
-        "image": OC_CI_PHP,
-        "environment": {
-            "APACHE_WEBROOT": "%s/dist" % dir["web"],
-            "APACHE_LOGGING_PATH": "/dev/null",
-        },
-        "commands": [
-            "mkdir -p %s/dist" % dir["web"],
-            "/usr/local/bin/apachectl -D FOREGROUND",
-        ],
-    }]
-
 def ocisService(type, tika_enabled = False, enforce_password_public_link = False):
     environment = {
         "IDM_ADMIN_PASSWORD": "admin",  # override the random admin password from `ocis init`
@@ -1001,21 +951,6 @@ def checkForExistingOcisCache(ctx):
             ],
         },
     ]
-
-def copyFilesForUpload():
-    return [{
-        "name": "copy-files-for-upload",
-        "image": OC_CI_PHP,
-        "volumes": [{
-            "name": "uploads",
-            "path": "/filesForUpload",
-        }],
-        "commands": [
-            "ls -la /filesForUpload",
-            "cp -a %s/tests/e2e/filesForUpload/. /filesForUpload" % dir["web"],
-            "ls -la /filesForUpload",
-        ],
-    }]
 
 def cacheOcisPipeline(ctx):
     steps = []
