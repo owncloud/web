@@ -30,7 +30,6 @@ WEB_PUBLISH_NPM_ORGANIZATION = "@ownclouders"
 
 dir = {
     "base": "/var/www/owncloud",
-    "server": "/var/www/owncloud/server",
     "web": "/var/www/owncloud/web",
     "ocis": "/var/www/owncloud/ocis",
     "commentsFile": "/var/www/owncloud/web/comments.file",
