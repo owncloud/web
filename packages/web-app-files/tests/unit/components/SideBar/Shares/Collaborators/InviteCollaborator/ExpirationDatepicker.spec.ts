@@ -3,7 +3,7 @@ import { ShareTypes } from '@ownclouders/web-client'
 import merge from 'lodash-es/merge'
 import { DateTime } from 'luxon'
 import { defaultPlugins, mount } from 'web-test-helpers'
-import { nextTick } from 'vue'
+import { defineComponent, nextTick } from 'vue'
 import { useCapabilityStore } from '@ownclouders/web-pkg'
 
 const bareCapabilities = {
@@ -41,6 +41,10 @@ const enforcedCapabilities = merge({}, enabledCapabilities, {
       enforced: true
     }
   }
+})
+
+const DatePickerComponent = defineComponent({
+  template: '<div id="foo"><slot></slot></div>'
 })
 
 describe('InviteCollaborator ExpirationDatepicker', () => {
@@ -229,7 +233,7 @@ const createWrapper = ({ sharingCapabilities = {}, stubOcDatepicker = false } = 
   return {
     wrapper: mount(ExpirationDatepicker, {
       global: {
-        stubs: { OcDatepicker: stubOcDatepicker },
+        stubs: { OcDatepicker: stubOcDatepicker, DatePicker: DatePickerComponent },
         plugins: [...defaultPlugins({ piniaOptions: { capabilityState: { capabilities } } })]
       }
     })

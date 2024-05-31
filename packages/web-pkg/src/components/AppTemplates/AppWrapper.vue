@@ -40,7 +40,7 @@ import { onBeforeRouteLeave, useRouter } from 'vue-router'
 import AppTopBar from '../AppTopBar.vue'
 import ErrorScreen from './PartialViews/ErrorScreen.vue'
 import LoadingScreen from './PartialViews/LoadingScreen.vue'
-import { FileSideBar } from '../SideBar'
+import FileSideBar from '../SideBar/FileSideBar.vue'
 import {
   UrlForResourceOptions,
   queryItemAsString,

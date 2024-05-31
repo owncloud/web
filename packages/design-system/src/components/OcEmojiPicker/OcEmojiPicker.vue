@@ -1,11 +1,11 @@
 <template>
-  <div ref="emojiPickerRef"></div>
+  <div v-if="isLoading" class="oc-flex oc-flex-center"><oc-spinner size="large" /></div>
+  <div v-else ref="emojiPickerRef"></div>
 </template>
 
 <script lang="ts">
 import { defineComponent, nextTick, ref, unref, watch } from 'vue'
 import { useGettext } from 'vue3-gettext'
-import { Picker } from 'emoji-mart'
 
 /**
  * Emoji Picker
@@ -28,9 +28,13 @@ export default defineComponent({
     const { $gettext, current: currentLanguage } = useGettext()
     const emojiPickerRef = ref<HTMLElement>()
 
+    const isLoading = ref(true)
+
     watch(
       [() => props.theme, currentLanguage],
       async () => {
+        isLoading.value = true
+
         await nextTick()
         const i18n = {
           search: $gettext('Search'),
@@ -62,22 +66,33 @@ export default defineComponent({
           }
         }
 
+        const data = (await import('@emoji-mart/data')).default
+
         const pickerOptions = {
           onEmojiSelect: (emoji: any) => emit('emojiSelect', emoji.native),
           onClickOutside: () => emit('clickOutside'),
           i18n,
-          theme: props.theme
+          theme: props.theme,
+          data
         }
+
+        // lazy loading to avoid loading the whole package on page load
+        const { Picker } = await import('emoji-mart')
         const picker = new Picker(pickerOptions)
+
+        isLoading.value = false
+        await nextTick()
 
         unref(emojiPickerRef).innerHTML = ''
         unref(emojiPickerRef).appendChild(picker as any)
+        unref(emojiPickerRef).focus()
       },
       { immediate: true }
     )
 
     return {
-      emojiPickerRef
+      emojiPickerRef,
+      isLoading
     }
   }
 })

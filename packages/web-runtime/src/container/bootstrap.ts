@@ -51,10 +51,7 @@ import { getQueryParam } from '../helpers/url'
 import PQueue from 'p-queue'
 import { storeToRefs } from 'pinia'
 import { getExtensionNavItems } from '../helpers/navItems'
-import {
-  RawConfigSchema,
-  SentryConfig
-} from '@ownclouders/web-pkg/src/composables/piniaStores/config/types'
+import { RawConfigSchema, SentryConfig } from '@ownclouders/web-pkg'
 import {
   onSSEFileLockingEvent,
   onSSEItemRenamedEvent,

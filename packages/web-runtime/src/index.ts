@@ -1,4 +1,9 @@
-import { DesignSystem as designSystem, pages, translations, supportedLanguages } from './defaults'
+import {
+  DesignSystem as designSystem,
+  pages,
+  loadTranslations,
+  supportedLanguages
+} from './defaults'
 import { router } from './router'
 import { PortalTarget } from '@ownclouders/web-pkg'
 import { createHead } from '@vueuse/head'
@@ -74,6 +79,7 @@ export const bootstrapApp = async (configurationPath: string): Promise<void> => 
 
   app.use(abilitiesPlugin, createMongoAbility([]), { useGlobalProperties: true })
 
+  const translations = await loadTranslations()
   const gettext = announceTranslations({
     app,
     availableLanguages: supportedLanguages,
@@ -280,6 +286,7 @@ export const bootstrapErrorApp = async (err: Error): Promise<void> => {
   const app = createApp(pages.failure)
   await announceTheme({ app, designSystem, configStore })
   console.error(err)
+  const translations = await loadTranslations()
   announceTranslations({
     app,
     availableLanguages: supportedLanguages,

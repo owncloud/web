@@ -6,7 +6,7 @@ import {
   User,
   ErrorResponse
 } from 'oidc-client-ts'
-import { buildUrl } from '@ownclouders/web-pkg/src/helpers/router/buildUrl'
+import { buildUrl } from '@ownclouders/web-pkg'
 import { getAbilities } from './abilities'
 import { AuthStore, UserStore, CapabilityStore, ConfigStore } from '@ownclouders/web-pkg'
 import { ClientService } from '@ownclouders/web-pkg'

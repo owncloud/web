@@ -14,12 +14,18 @@
 </template>
 
 <script lang="ts">
-import { computed, defineComponent } from 'vue'
+import {
+  computed,
+  ComponentPublicInstance,
+  defineComponent,
+  defineAsyncComponent,
+  ref,
+  unref,
+  watch
+} from 'vue'
 import { Modifier } from '@popperjs/core'
-
-// @ts-ignore
-import { DatePicker } from 'v-calendar'
 import 'v-calendar/dist/style.css'
+import OcSpinner from '../OcSpinner/OcSpinner.vue'
 
 /**
  * Datepicker component based on [v-calendar](https://vcalendar.io/). For detailed documentation, please visit https://vcalendar.io/vue-3.html
@@ -29,10 +35,20 @@ export default defineComponent({
   status: 'ready',
   release: '1.0.0',
 
-  components: { DatePicker },
+  components: {
+    DatePicker: defineAsyncComponent({
+      loader: async () => {
+        const { DatePicker } = await import('v-calendar')
+        return DatePicker
+      },
+      loadingComponent: OcSpinner
+    })
+  },
 
   inheritAttrs: true,
   setup() {
+    const datePicker = ref<ComponentPublicInstance>()
+
     const popperOpts = computed(() => {
       return {
         modifiers: [
@@ -57,10 +73,18 @@ export default defineComponent({
       }
     })
 
-    return { popperOpts }
-  },
-  mounted() {
-    this.$el.__datePicker = this.$refs.datePicker
+    watch(
+      datePicker,
+      () => {
+        if (unref(datePicker)) {
+          // for e2e tests
+          unref(datePicker).$el.__datePicker = unref(datePicker)
+        }
+      },
+      { immediate: true }
+    )
+
+    return { popperOpts, datePicker }
   }
 })
 </script>

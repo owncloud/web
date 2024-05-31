@@ -11,9 +11,6 @@ import { useService } from '@ownclouders/web-pkg'
 import { computed, nextTick, unref } from 'vue'
 import type { UppyService } from '@ownclouders/web-pkg'
 import '@uppy/dashboard/dist/style.min.css'
-import Dashboard from '@uppy/dashboard'
-import OneDrive from '@uppy/onedrive'
-import GoogleDrive from '@uppy/google-drive'
 import { Extension } from '@ownclouders/web-pkg'
 import { ApplicationSetupOptions } from '@ownclouders/web-pkg'
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
@@ -63,7 +60,15 @@ export const extensions = ({ applicationConfig }: ApplicationSetupOptions) => {
     removeUppyPlugins()
   })
 
+  const getUppyPlugins = async () => {
+    // lazy loading to avoid loading these on page load
+    const Dashboard = (await import('@uppy/dashboard')).default
+    const OneDrive = (await import('@uppy/onedrive')).default
+    const GoogleDrive = (await import('@uppy/google-drive')).default
+    return { Dashboard, OneDrive, GoogleDrive }
+  }
   const handler = async () => {
+    const { Dashboard, OneDrive, GoogleDrive } = await getUppyPlugins()
     const renderDarkTheme = currentTheme.value.isDark
 
     dispatchModal({
