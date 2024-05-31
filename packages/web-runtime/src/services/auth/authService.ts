@@ -152,7 +152,7 @@ export class AuthService implements AuthServiceInterface {
         this.userManager.events.addUserUnloaded(async () => {
           console.log('user unloaded…')
           this.tokenTimerWorker?.resetTokenTimer()
-          await this.resetStateAfterUserLogout()
+          this.resetStateAfterUserLogout()
 
           if (this.userManager.unloadReason === 'authError') {
             this.hasAuthErrorOccurred = true
@@ -168,7 +168,6 @@ export class AuthService implements AuthServiceInterface {
             if (oAuth2.logoutUrl) {
               return (window.location = oAuth2.logoutUrl as any)
             }
-            return (window.location = `${this.configStore.serverUrl}/index.php/logout` as any)
           }
         })
         this.userManager.events.addSilentRenewError(async (error) => {
@@ -317,7 +316,8 @@ export class AuthService implements AuthServiceInterface {
   public async logoutUser() {
     const endSessionEndpoint = await this.userManager.metadataService?.getEndSessionEndpoint()
     if (!endSessionEndpoint) {
-      return await this.userManager.removeUser()
+      await this.userManager.removeUser()
+      return this.router.push({ name: 'logout' })
     }
 
     const u = await this.userManager.getUser()
@@ -334,7 +334,7 @@ export class AuthService implements AuthServiceInterface {
     this.authStore.clearUserContext()
   }
 
-  private handleDelegatedTokenUpdate(event: MessageEvent): void {
+  private handleDelegatedTokenUpdate(event: MessageEvent) {
     if (
       this.configStore.options.embed?.delegateAuthenticationOrigin &&
       event.origin !== this.configStore.options.embed.delegateAuthenticationOrigin
@@ -347,7 +347,7 @@ export class AuthService implements AuthServiceInterface {
     }
 
     console.debug('[authService:handleDelegatedTokenUpdate] - going to update the access_token')
-    this.userManager.updateContext(event.data, false)
+    return this.userManager.updateContext(event.data, false)
   }
 }
 

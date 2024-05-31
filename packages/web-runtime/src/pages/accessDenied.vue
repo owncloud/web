@@ -82,7 +82,6 @@ export default defineComponent({
         }
       }
       return {
-        name: 'login',
         type: 'router-link',
         to: {
           name: 'login',
