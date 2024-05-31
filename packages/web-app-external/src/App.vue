@@ -106,7 +106,7 @@ export default defineComponent({
         const query = stringify({
           file_id: fileId,
           lang: language.current,
-          ...(unref(applicationName) && { app_name: unref(applicationName) }),
+          ...(unref(applicationName) && { app_name: encodeURIComponent(unref(applicationName)) }),
           ...(viewMode && { view_mode: viewMode })
         })
 
