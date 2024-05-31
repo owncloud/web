@@ -1,3 +1,28 @@
+Changelog for ownCloud Web [unreleased] (UNRELEASED)
+=======================================
+The following sections list the changes in ownCloud web unreleased relevant to
+ownCloud admins and users.
+
+[unreleased]: https://github.com/owncloud/web/compare/v9.0.0...master
+
+Summary
+-------
+
+* Bugfix - Local logout if IdP has no logout support: [#10974](https://github.com/owncloud/web/pull/10974)
+
+Details
+-------
+
+* Bugfix - Local logout if IdP has no logout support: [#10974](https://github.com/owncloud/web/pull/10974)
+
+   Some IdPs don't support a logout endpoint. In those cases the web UI ran into a
+   fatal error and showed an empty screen without further redirects. Fixed by
+   forgetting the currently authenticated user when the OpenID Connect
+   configuration doesn't contain an `endSessionEndpoint` url.
+
+   https://github.com/owncloud/enterprise/issues/6631
+   https://github.com/owncloud/web/pull/10974
+
 Changelog for ownCloud Web [9.0.0] (2024-05-28)
 =======================================
 The following sections list the changes in ownCloud web 9.0.0 relevant to
