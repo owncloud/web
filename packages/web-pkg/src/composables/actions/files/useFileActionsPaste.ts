@@ -7,21 +7,21 @@ import { computed, unref } from 'vue'
 import { useGettext } from 'vue3-gettext'
 import { useGetMatchingSpace } from '../../spaces'
 import { useClientService } from '../../clientService'
-import { useLoadingService } from '../../loadingService'
 import { useRouter } from '../../router'
 import { FileAction, FileActionOptions } from '../types'
 import { Resource, SpaceResource, isShareSpaceResource } from '@ownclouders/web-client'
 import { useClipboardStore, useResourcesStore } from '../../piniaStores'
 import { ClipboardActions, ResourceTransfer, TransferType } from '../../../helpers'
 import { storeToRefs } from 'pinia'
+import { usePasteWorker } from '../../webWorkers/pasteWorker'
 
 export const useFileActionsPaste = () => {
   const router = useRouter()
   const clientService = useClientService()
-  const loadingService = useLoadingService()
   const { getMatchingSpace } = useGetMatchingSpace()
   const { $gettext, $ngettext } = useGettext()
   const clipboardStore = useClipboardStore()
+  const { startWorker } = usePasteWorker()
 
   const resourcesStore = useResourcesStore()
   const { currentFolder } = storeToRefs(resourcesStore)
@@ -37,7 +37,15 @@ export const useFileActionsPaste = () => {
     return $gettext('Ctrl + V')
   })
 
-  const pasteSelectedFiles = ({
+  const transferType = computed(() => {
+    if (clipboardStore.action === ClipboardActions.Cut) {
+      return TransferType.MOVE
+    }
+
+    return TransferType.COPY
+  })
+
+  const pasteSelectedFiles = async ({
     targetSpace,
     sourceSpace,
     resources
@@ -46,28 +54,37 @@ export const useFileActionsPaste = () => {
     sourceSpace: SpaceResource
     resources: Resource[]
   }) => {
-    const copyMove = new ResourceTransfer(
+    const resourceTransfer = new ResourceTransfer(
       sourceSpace,
       resources,
       targetSpace,
       unref(currentFolder),
       currentFolder,
       clientService,
-      loadingService,
       $gettext,
       $ngettext
     )
-    let movedResourcesPromise: Promise<Resource[]>
-    if (clipboardStore.action === ClipboardActions.Cut) {
-      movedResourcesPromise = copyMove.perform(TransferType.MOVE)
+
+    const transferData = await resourceTransfer.getTransferData(unref(transferType))
+    if (!transferData.length) {
+      return
     }
-    if (clipboardStore.action === ClipboardActions.Copy) {
-      movedResourcesPromise = copyMove.perform(TransferType.COPY)
-    }
-    return movedResourcesPromise.then((movedResources) => {
-      const loadingResources = []
+
+    const originalCurrentFolderId = unref(currentFolder)?.id
+
+    startWorker(transferData, async ({ successful, failed }) => {
+      resourceTransfer.showResultMessage(failed, successful, unref(transferType))
+
+      // user has navigated to another location meanwhile -> no need to update store
+      if (unref(currentFolder) && originalCurrentFolderId !== unref(currentFolder).id) {
+        return
+      }
+
+      // handle store update, fetch resources first
+      const loadingResources: Promise<void>[] = []
       const fetchedResources: Resource[] = []
-      for (const resource of movedResources) {
+
+      for (const resource of successful) {
         loadingResources.push(
           (async () => {
             const movedResource = await clientService.webdav.getFileInfo(targetSpace, resource)
@@ -76,17 +93,17 @@ export const useFileActionsPaste = () => {
         )
       }
 
-      return Promise.all(loadingResources).then(() => {
-        // FIXME: move to buildResource as soon as it has space context
-        if (isShareSpaceResource(targetSpace)) {
-          fetchedResources.forEach((r) => {
-            r.remoteItemId = targetSpace.id
-          })
-        }
+      await Promise.allSettled(loadingResources)
 
-        resourcesStore.upsertResources(fetchedResources)
-        resourcesStore.loadIndicators(targetSpace, unref(currentFolder).path)
-      })
+      // FIXME: move to buildResource as soon as it has space context
+      if (isShareSpaceResource(targetSpace)) {
+        fetchedResources.forEach((r) => {
+          r.remoteItemId = targetSpace.id
+        })
+      }
+
+      resourcesStore.upsertResources(fetchedResources)
+      resourcesStore.loadIndicators(targetSpace, unref(currentFolder).path)
     })
   }
 

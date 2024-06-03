@@ -163,7 +163,9 @@ import {
   useExtensionRegistry,
   useFileActions,
   useFileActionsCreateNewFolder,
+  usePasteWorker,
   useResourcesStore,
+  useRouter,
   useUserStore
 } from '@ownclouders/web-pkg'
 
@@ -254,10 +256,12 @@ export default defineComponent({
   },
 
   setup(props) {
+    const router = useRouter()
     const userStore = useUserStore()
     const { $gettext, $ngettext } = useGettext()
     const openWithDefaultAppQuery = useRouteQuery('openWithDefaultApp')
     const clientService = useClientService()
+    const { startWorker } = usePasteWorker()
     const { breadcrumbsFromPath, concatBreadcrumbs } = useBreadcrumbsFromPath()
     const { openWithDefaultApp } = useOpenWithDefaultApp()
 
@@ -530,6 +534,61 @@ export default defineComponent({
 
     const createNewFolderAction = computed(() => unref(createNewFolder)[0].handler)
 
+    const fileDropped = async (fileTarget: string | { name: string; path: string }) => {
+      const selectedResources = unref(resourcesViewDefaults.selectedResources)
+      const paginatedResources = unref(resourcesViewDefaults.paginatedResources)
+
+      const selected = [...selectedResources]
+      let targetFolder: Resource = null
+      if (typeof fileTarget === 'string') {
+        targetFolder = paginatedResources.find((e) => e.id === fileTarget)
+        const isTargetSelected = selected.some((e) => e.id === fileTarget)
+        if (isTargetSelected) {
+          return
+        }
+      } else if (fileTarget instanceof Object) {
+        const spaceRootRoutePath = router.resolve(
+          createLocationSpaces('files-spaces-generic', {
+            params: {
+              driveAliasAndItem: unref(space).driveAlias
+            }
+          })
+        ).path
+
+        const splitIndex = fileTarget.path.indexOf(spaceRootRoutePath) + spaceRootRoutePath.length
+        const path = decodeURIComponent(fileTarget.path.slice(splitIndex, fileTarget.path.length))
+
+        try {
+          targetFolder = await clientService.webdav.getFileInfo(unref(space), { path })
+        } catch (e) {
+          console.error(e)
+          return
+        }
+      }
+
+      if (!targetFolder || targetFolder.type !== 'folder') {
+        return
+      }
+
+      const resourceTransfer = new ResourceTransfer(
+        unref(space),
+        selected,
+        unref(space),
+        targetFolder,
+        currentFolder,
+        clientService,
+        $gettext,
+        $ngettext
+      )
+
+      const transferData = await resourceTransfer.getTransferData(TransferType.MOVE)
+
+      startWorker(transferData, ({ successful }) => {
+        removeResources(successful)
+        resetSelection()
+      })
+    }
+
     return {
       ...useFileActions(),
       ...resourcesViewDefaults,
@@ -550,16 +609,14 @@ export default defineComponent({
         $gettext('Drag files and folders here or use the "New" or "Upload" buttons to add files')
       ),
       whitespaceContextMenu,
-      clientService,
       createNewFolderAction,
       isEmbedModeEnabled,
       currentFolder,
       totalResourcesCount,
       totalResourcesSize,
-      removeResources,
-      resetSelection,
       updateResourceField,
-      areHiddenFilesShown
+      areHiddenFilesShown,
+      fileDropped
     }
   },
 
@@ -616,57 +673,6 @@ export default defineComponent({
   },
 
   methods: {
-    async fileDropped(fileTarget: string | { name: string; path: string }) {
-      const selected = [...this.selectedResources]
-      let targetFolder = null
-      if (typeof fileTarget === 'string') {
-        targetFolder = this.paginatedResources.find((e) => e.id === fileTarget)
-        const isTargetSelected = selected.some((e) => e.id === fileTarget)
-        if (isTargetSelected) {
-          return
-        }
-      } else if (fileTarget instanceof Object) {
-        const spaceRootRoutePath = this.$router.resolve(
-          createLocationSpaces('files-spaces-generic', {
-            params: {
-              driveAliasAndItem: this.space.driveAlias
-            }
-          })
-        ).path
-
-        const splitIndex = fileTarget.path.indexOf(spaceRootRoutePath) + spaceRootRoutePath.length
-        const path = decodeURIComponent(fileTarget.path.slice(splitIndex, fileTarget.path.length))
-
-        try {
-          targetFolder = await this.clientService.webdav.getFileInfo(this.space, { path })
-        } catch (e) {
-          console.error(e)
-          return
-        }
-      }
-      if (!targetFolder) {
-        return
-      }
-      if (targetFolder.type !== 'folder') {
-        return
-      }
-
-      const copyMove = new ResourceTransfer(
-        this.space,
-        selected,
-        this.space,
-        targetFolder,
-        computed(() => this.currentFolder),
-        this.$clientService,
-        this.$loadingService,
-        this.$gettext,
-        this.$ngettext
-      )
-      const movedResources = await copyMove.perform(TransferType.MOVE)
-      this.removeResources(movedResources)
-      this.resetSelection()
-    },
-
     rowMounted(
       resource: Resource,
       component: ComponentPublicInstance<unknown>,

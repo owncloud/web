@@ -1,17 +1,12 @@
-import { Resource } from '@ownclouders/web-client'
 import { basename, join } from 'path'
-import { SpaceResource } from '@ownclouders/web-client'
-import {
-  ConflictDialog,
-  FileConflict,
-  ResolveStrategy,
-  TransferType,
-  isResourceBeeingMovedToSameLocation,
-  resolveFileNameDuplicate
-} from '.'
-import { ClientService, LoadingService, LoadingTaskCallbackArguments } from '../../../services'
+import type { Resource, SpaceResource } from '@ownclouders/web-client'
+import { ResolveStrategy, TransferType, type TransferData } from './types'
+import { ConflictDialog } from './conflictDialog'
+import { resolveFileNameDuplicate, isResourceBeeingMovedToSameLocation } from './conflictUtils'
+import type { ClientService } from '../../../services'
 import { useMessages } from '../../../composables'
 import { Ref, unref } from 'vue'
+import type { Language } from 'vue3-gettext'
 
 export class ResourceTransfer extends ConflictDialog {
   constructor(
@@ -21,23 +16,8 @@ export class ResourceTransfer extends ConflictDialog {
     private targetFolder: Resource,
     private currentFolder: Ref<Resource>,
     private clientService: ClientService,
-    private loadingService: LoadingService,
-    $gettext: (
-      msgid: string,
-      parameters?: {
-        [key: string]: string
-      },
-      disableHtmlEscaping?: boolean
-    ) => string,
-    $ngettext: (
-      msgid: string,
-      plural: string,
-      n: number,
-      parameters?: {
-        [key: string]: string
-      },
-      disableHtmlEscaping?: boolean
-    ) => string
+    $gettext: Language['$gettext'],
+    $ngettext: Language['$ngettext']
   ) {
     super($gettext, $ngettext)
   }
@@ -63,7 +43,7 @@ export class ResourceTransfer extends ConflictDialog {
   }
 
   showResultMessage(
-    errors: (Error & { resourceName: string })[],
+    errors: { resourceName: string; error: Error }[],
     movedResources: Array<Resource>,
     transferType: TransferType
   ) {
@@ -111,10 +91,14 @@ export class ResourceTransfer extends ConflictDialog {
           : this.$gettext('Failed to move "%{name}"', { name: errors[0]?.resourceName }, true)
     }
     const messageStore = useMessages()
-    messageStore.showErrorMessage({ title, errors })
+    messageStore.showErrorMessage({ title, errors: errors.map(({ error }) => error) })
   }
 
-  async perform(transferType: TransferType): Promise<Resource[]> {
+  /**
+   * Gathers transfer data after resolving all potential conflicts.
+   * This data can then be used to feed the web worker for pasting resources.
+   */
+  async getTransferData(transferType: TransferType) {
     if (this.hasRecursion()) {
       this.showRecursionErrorMessage()
       return []
@@ -137,14 +121,60 @@ export class ResourceTransfer extends ConflictDialog {
       targetFolderResources
     )
 
-    return this.loadingService.addTask(
-      ({ setProgress }) => {
-        return this.moveResources(resolvedConflicts, targetFolderResources, transferType, {
-          setProgress
-        })
-      },
-      { indeterminate: transferType === TransferType.COPY }
-    )
+    const result: TransferData[] = []
+
+    for (const resourceToMove of this.resourcesToMove) {
+      // shallow copy of resources to prevent modifying existing rows
+      const resource = { ...resourceToMove }
+      const { id, name, extension } = resource
+
+      const hasConflict = resolvedConflicts.some((e) => e.resource.id === id)
+      let targetName = name
+      let overwriteTarget = false
+
+      if (hasConflict) {
+        const resolveStrategy = resolvedConflicts.find((e) => e.resource.id === id)?.strategy
+        if (resolveStrategy === ResolveStrategy.SKIP) {
+          continue
+        }
+        if (resolveStrategy === ResolveStrategy.REPLACE) {
+          if (this.isOverwritingParentFolder(resource, this.targetFolder, targetFolderResources)) {
+            const error = new Error()
+            this.showResultMessage([{ error, resourceName: name }], [], transferType)
+            continue
+          }
+          overwriteTarget = true
+        }
+        if (resolveStrategy === ResolveStrategy.KEEP_BOTH) {
+          targetName = resolveFileNameDuplicate(name, extension, targetFolderResources)
+          resource.name = targetName
+        }
+      }
+
+      if (
+        isResourceBeeingMovedToSameLocation(
+          this.sourceSpace,
+          resource,
+          this.targetSpace,
+          this.targetFolder
+        ) &&
+        overwriteTarget
+      ) {
+        continue
+      }
+
+      result.push({
+        resource,
+        sourceSpace: this.sourceSpace,
+        targetSpace: this.targetSpace,
+        targetFolder: this.targetFolder,
+        path: join(this.targetFolder.path, targetName),
+        overwrite: overwriteTarget,
+        transferType
+      })
+    }
+
+    return result
   }
 
   // This is for an edge case if a user moves a subfolder with the same name as the parent folder into the parent of the parent folder (which is not possible because of the backend)
@@ -164,88 +194,5 @@ export class ResourceTransfer extends ConflictDialog {
     const folderName = basename(resource.path)
     const newPath = join(targetFolder.path, folderName)
     return targetFolderResources.some((resource) => resource.path === newPath)
-  }
-
-  private async moveResources(
-    resolvedConflicts: FileConflict[],
-    targetFolderResources: Resource[],
-    transferType: TransferType,
-    { setProgress }: LoadingTaskCallbackArguments
-  ) {
-    const movedResources: Resource[] = []
-    const errors = []
-
-    for (const [i, resourceToMove] of this.resourcesToMove.entries()) {
-      // shallow copy of resources to prevent modifying existing rows
-      const resource = { ...resourceToMove }
-
-      const hasConflict = resolvedConflicts.some((e) => e.resource.id === resource.id)
-      let targetName = resource.name
-      let overwriteTarget = false
-      if (hasConflict) {
-        const resolveStrategy = resolvedConflicts.find((e) => e.resource.id === resource.id)
-          ?.strategy
-        if (resolveStrategy === ResolveStrategy.SKIP) {
-          continue
-        }
-        if (resolveStrategy === ResolveStrategy.REPLACE) {
-          if (this.isOverwritingParentFolder(resource, this.targetFolder, targetFolderResources)) {
-            errors.push({ resourceName: resource.name })
-            continue
-          }
-          overwriteTarget = true
-        }
-        if (resolveStrategy === ResolveStrategy.KEEP_BOTH) {
-          targetName = resolveFileNameDuplicate(resource.name, resource.extension, [
-            ...movedResources,
-            ...targetFolderResources
-          ])
-          resource.name = targetName
-        }
-      }
-      try {
-        if (
-          isResourceBeeingMovedToSameLocation(
-            this.sourceSpace,
-            resource,
-            this.targetSpace,
-            this.targetFolder
-          ) &&
-          overwriteTarget
-        ) {
-          continue
-        }
-        if (transferType === TransferType.COPY) {
-          await this.clientService.webdav.copyFiles(
-            this.sourceSpace,
-            resource,
-            this.targetSpace,
-            { path: join(this.targetFolder.path, targetName) },
-            { overwrite: overwriteTarget }
-          )
-          resource.id = undefined
-          resource.fileId = undefined
-        } else if (transferType === TransferType.MOVE) {
-          await this.clientService.webdav.moveFiles(
-            this.sourceSpace,
-            resource,
-            this.targetSpace,
-            { path: join(this.targetFolder.path, targetName) },
-            { overwrite: overwriteTarget }
-          )
-        }
-        resource.path = join(this.targetFolder.path, resource.name)
-        resource.webDavPath = join(this.targetFolder.webDavPath, resource.name)
-        movedResources.push(resource)
-      } catch (error) {
-        console.error(error)
-        error.resourceName = resource.name
-        errors.push(error)
-      } finally {
-        setProgress({ total: this.resourcesToMove.length, current: i + 1 })
-      }
-    }
-    this.showResultMessage(errors, movedResources, transferType)
-    return movedResources
   }
 }

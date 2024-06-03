@@ -1,3 +1,5 @@
+import type { Resource, SpaceResource } from '@ownclouders/web-client'
+
 export enum ResolveStrategy {
   SKIP,
   REPLACE,
@@ -12,4 +14,14 @@ export interface ResolveConflict {
 export enum TransferType {
   COPY,
   MOVE
+}
+
+export type TransferData = {
+  resource: Resource
+  sourceSpace: SpaceResource
+  targetSpace: SpaceResource
+  targetFolder: Resource
+  path: string
+  overwrite: boolean
+  transferType: TransferType
 }

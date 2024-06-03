@@ -4,6 +4,7 @@ import { ResolveConflict, ResolveStrategy } from './types'
 import { useModals } from '../../../composables'
 import SpaceMoveInfoModal from '../../../components/Modals/SpaceMoveInfoModal.vue'
 import ResourceConflictModal from '../../../components/Modals/ResourceConflictModal.vue'
+import type { Language } from 'vue3-gettext'
 
 export interface FileConflict {
   resource: Resource
@@ -13,22 +14,8 @@ export interface FileConflict {
 export class ConflictDialog {
   /* eslint-disable no-useless-constructor */
   constructor(
-    protected $gettext: (
-      msgid: string,
-      parameters?: {
-        [key: string]: string
-      },
-      disableHtmlEscaping?: boolean
-    ) => string,
-    protected $ngettext: (
-      msgid: string,
-      plural: string,
-      n: number,
-      parameters?: {
-        [key: string]: string
-      },
-      disableHtmlEscaping?: boolean
-    ) => string
+    protected $gettext: Language['$gettext'],
+    protected $ngettext: Language['$ngettext']
   ) {}
 
   async resolveAllConflicts(
