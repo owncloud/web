@@ -2,7 +2,8 @@ import { z } from 'zod'
 
 const AppProviderSchema = z.object({
   icon: z.string(),
-  name: z.string()
+  name: z.string(),
+  secure_view: z.boolean().optional()
 })
 
 const MimeTypeSchema = z.object({

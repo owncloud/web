@@ -69,6 +69,7 @@ export default defineWebApplication({
                 icon: provider.icon,
                 name: provider.name,
                 mimeType: mimeType.mime_type,
+                secureView: provider.secure_view,
                 routeName: 'external-apps',
                 hasPriority: mimeType.default_application === provider.name,
                 ...(mimeType.allow_creation && { newFileMenu: { menuTitle: () => mimeType.name } }),
