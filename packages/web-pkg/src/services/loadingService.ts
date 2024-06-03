@@ -67,6 +67,12 @@ export class LoadingService {
       active: false,
       ...(!indeterminate && { state: { total: 0, current: 0 } })
     }
+
+    // If no tasks are in progress, attach an event listener for 'beforeunload'.
+    if (!this.tasks.length) {
+      window.addEventListener('beforeunload', this.onBeforeUnload)
+    }
+
     this.tasks.push(task)
 
     const debounced = debounce(() => {
@@ -88,6 +94,11 @@ export class LoadingService {
 
   private removeTask(id: string): void {
     this.tasks = this.tasks.filter((e) => e.id !== id)
+
+    if (!this.tasks.length) {
+      window.removeEventListener('beforeunload', this.onBeforeUnload)
+    }
+
     eventBus.publish(LoadingEventTopics.remove)
   }
 
@@ -106,5 +117,9 @@ export class LoadingService {
     task.state.total = total
     task.state.current = current
     eventBus.publish(LoadingEventTopics.setProgress)
+  }
+
+  private onBeforeUnload(e: BeforeUnloadEvent) {
+    e.preventDefault()
   }
 }
