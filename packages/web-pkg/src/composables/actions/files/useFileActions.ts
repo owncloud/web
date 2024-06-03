@@ -116,6 +116,10 @@ export const useFileActions = () => {
               return false
             }
 
+            if (!resources[0].canDownload() && !fileExtension.secureView) {
+              return false
+            }
+
             if (!unref(isSearchActive) && isLocationTrashActive(router, 'files-trash-generic')) {
               return false
             }

@@ -11,6 +11,7 @@ export abstract class DavPermission {
   static readonly FileUpdateable: string = 'W'
   static readonly FolderCreateable: string = 'CK'
   static readonly Deny: string = 'Z'
+  static readonly SecureView: string = 'X'
 }
 
 export enum DavMethod {

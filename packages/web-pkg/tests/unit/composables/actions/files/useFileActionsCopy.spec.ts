@@ -4,6 +4,7 @@ import { Resource, SpaceResource } from '@ownclouders/web-client'
 import { defaultComponentMocks, RouteLocation, getComposableWrapper } from 'web-test-helpers'
 import { useFileActionsCopy } from '../../../../../src/composables/actions/files'
 import { useClipboardStore } from '../../../../../src/composables/piniaStores'
+import { describe } from 'vitest'
 
 describe('copy', () => {
   describe('search context', () => {
@@ -34,6 +35,36 @@ describe('copy', () => {
               )
             }
           })
+        })
+      })
+    })
+  })
+  describe('computed property "actions"', () => {
+    describe('isVisible', () => {
+      it('returns true if "canDownload" is true', () => {
+        getWrapper({
+          searchLocation: false,
+          setup: ({ actions }) => {
+            expect(
+              unref(actions)[0].isVisible({
+                space: null,
+                resources: [mock<Resource>({ id: '1', canDownload: () => true })]
+              })
+            ).toBeTruthy()
+          }
+        })
+      })
+      it('returns false if "canDownload" is false', () => {
+        getWrapper({
+          searchLocation: false,
+          setup: ({ actions }) => {
+            expect(
+              unref(actions)[0].isVisible({
+                space: null,
+                resources: [mock<Resource>({ id: '1', canDownload: () => false })]
+              })
+            ).toBeFalsy()
+          }
         })
       })
     })

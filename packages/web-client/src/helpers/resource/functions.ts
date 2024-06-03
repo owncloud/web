@@ -142,7 +142,7 @@ export function buildResource(resource: WebDavResponseResource): Resource {
       return this.permissions.indexOf(DavPermission.FolderCreateable) >= 0
     },
     canDownload: function () {
-      return true
+      return this.permissions.indexOf(DavPermission.SecureView) === -1
     },
     canBeDeleted: function () {
       return this.permissions.indexOf(DavPermission.Deletable) >= 0

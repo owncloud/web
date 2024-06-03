@@ -60,6 +60,7 @@ export interface ApplicationFileExtension {
   mimeType?: string
   newFileMenu?: { menuTitle: () => string }
   routeName?: string
+  secureView?: boolean
 }
 
 /** ApplicationInformation describes required information of an application */

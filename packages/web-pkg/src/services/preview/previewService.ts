@@ -76,7 +76,8 @@ export class PreviewService {
   ): Promise<string | undefined> {
     const { space, resource } = options
     const serverSupportsPreview = this.available && this.isMimetypeSupported(resource.mimeType)
-    const resourceSupportsPreview = resource.type !== 'folder' && resource.extension
+    const resourceSupportsPreview =
+      resource.type !== 'folder' && resource.extension && resource.canDownload()
     if (!serverSupportsPreview || !resourceSupportsPreview) {
       return undefined
     }
