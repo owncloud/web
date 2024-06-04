@@ -2,39 +2,41 @@
   <div id="files-sidebar-panel-exif">
     <dl class="exif-data-list">
       <dt v-text="$gettext('Dimensions')" />
-      <dd v-text="dimensions" />
+      <dd data-testid="exif-panel-dimensions" v-text="dimensions" />
       <dt v-text="$gettext('Device make')" />
-      <dd v-text="cameraMake" />
+      <dd data-testid="exif-panel-cameraMake" v-text="cameraMake" />
       <dt v-text="$gettext('Device model')" />
-      <dd v-text="cameraModel" />
+      <dd data-testid="exif-panel-cameraModel" v-text="cameraModel" />
       <dt v-text="$gettext('Focal length')" />
-      <dd v-text="focalLength" />
+      <dd data-testid="exif-panel-focalLength" v-text="focalLength" />
       <dt v-text="$gettext('F number')" />
-      <dd v-text="fNumber" />
+      <dd data-testid="exif-panel-fNumber" v-text="fNumber" />
       <dt v-text="$gettext('Exposure time')" />
-      <dd v-text="exposureTime" />
+      <dd data-testid="exif-panel-exposureTime" v-text="exposureTime" />
       <dt v-text="$gettext('ISO')" />
-      <dd v-text="iso" />
+      <dd data-testid="exif-panel-iso" v-text="iso" />
       <dt v-text="$gettext('Orientation')" />
-      <dd v-text="orientation" />
+      <dd data-testid="exif-panel-orientation" v-text="orientation" />
       <dt v-text="$gettext('Taken time')" />
-      <dd v-text="takenDateTime" />
-      <dt v-text="$gettext('Location')" />
-      <dd v-if="isCopyToClipboardSupported">
-        <span>{{ location }}</span>
-        <oc-button
-          v-if="location"
-          v-oc-tooltip="copyLocationToClipboardLabel"
-          size="small"
-          appearance="raw"
-          class="oc-ml-s"
-          :aria-label="copyLocationToClipboardLabel"
-          @click="copyLocationToClipboard"
-        >
-          <oc-icon size="small" :name="isCopiedToClipboard ? 'checkbox-circle' : 'file-copy'" />
-        </oc-button>
-      </dd>
-      <dd v-else v-text="location" />
+      <dd data-testid="exif-panel-takenDateTime" v-text="takenDateTime" />
+      <template v-if="isLocationVisible">
+        <dt v-text="$gettext('Location')" />
+        <dd v-if="isCopyToClipboardAvailable" data-testid="exif-panel-location">
+          <span>{{ location }}</span>
+          <oc-button
+            v-if="location"
+            v-oc-tooltip="copyLocationToClipboardLabel"
+            size="small"
+            appearance="raw"
+            class="oc-ml-s"
+            :aria-label="copyLocationToClipboardLabel"
+            @click="copyLocationToClipboard"
+          >
+            <oc-icon size="small" :name="isCopiedToClipboard ? 'checkbox-circle' : 'file-copy'" />
+          </oc-button>
+        </dd>
+        <dd v-else data-testid="exif-panel-location" v-text="location" />
+      </template>
     </dl>
   </div>
 </template>
@@ -67,6 +69,7 @@ export default defineComponent({
         return '-'
       }
       if ([5, 6, 7, 8].includes(unref(resource).photo?.orientation)) {
+        // these orientations indicate portrait mode. tika normalizes width and height according to orientation.
         return `${height}x${width}`
       }
       return `${width}x${height}`
@@ -121,6 +124,13 @@ export default defineComponent({
       return `${l.latitude}, ${l.longitude}`
     })
 
+    const isCopyToClipboardAvailable = computed(() => {
+      if (!unref(isCopyToClipboardSupported)) {
+        return false
+      }
+      const l = unref(resource).location
+      return l?.latitude && l?.longitude
+    })
     const copyLocationToClipboard = () => {
       copyToClipboard(unref(location))
       showMessage({
@@ -143,7 +153,7 @@ export default defineComponent({
       takenDateTime,
       location,
       isLocationVisible,
-      isCopyToClipboardSupported,
+      isCopyToClipboardAvailable,
       isCopiedToClipboard,
       copyLocationToClipboardLabel,
       copyLocationToClipboard
