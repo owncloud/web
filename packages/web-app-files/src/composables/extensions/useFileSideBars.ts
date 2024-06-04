@@ -7,6 +7,7 @@ import SharesPanel from '../../components/SideBar/Shares/SharesPanel.vue'
 import NoSelection from '../../components/SideBar/NoSelection.vue'
 import TrashNoSelection from '../../components/SideBar/TrashNoSelection.vue'
 import SpaceActions from '../../components/SideBar/Actions/SpaceActions.vue'
+import ActivitiesPanel from '../../components/SideBar/ActivitiesPanel.vue'
 import {
   SpaceDetails,
   SpaceDetailsMultiple,
@@ -283,6 +284,30 @@ export const useSideBarPanels = (): SidebarPanelExtension<SpaceResource, Resourc
             return false
           }
           return items[0].type !== 'folder'
+        }
+      }
+    },
+    {
+      id: 'com.github.owncloud.web.files.sidebar-panel.activities',
+      type: 'sidebarPanel',
+      extensionPointIds: [fileSideBarExtensionPoint.id],
+      panel: {
+        name: 'activities',
+        icon: 'pulse',
+        title: () => $gettext('Activities'),
+        component: ActivitiesPanel,
+        isVisible: ({ items, root }) => {
+          if (items?.length !== 1) {
+            return false
+          }
+          const userIsSpaceMember =
+            (isProjectSpaceResource(root) && root.isMember(userStore.user)) ||
+            (isPersonalSpaceResource(root) && root.isOwner(userStore.user))
+
+          if (isLocationTrashActive(router, 'files-trash-generic') || !userIsSpaceMember) {
+            return false
+          }
+          return true
         }
       }
     },

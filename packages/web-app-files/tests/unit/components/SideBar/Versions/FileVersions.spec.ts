@@ -48,7 +48,7 @@ describe('FileVersions', () => {
     const { wrapper } = getMountedWrapper({ mountType: shallowMount, versions: [] })
     const noVersionsMessageElement = wrapper.find(selectors.noVersionsMessage)
 
-    expect(noVersionsMessageElement.text()).toBe('No Versions available for this file')
+    expect(noVersionsMessageElement.text()).toBe('No versions available for this file')
   })
 
   describe('when the file has versions', () => {

@@ -1,0 +1,15 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`ActivitiesPanel > should render a list of activities when data is present 1`] = `
+"<div>
+  <div class="oc-ml-s">
+    <ul class="timeline">
+      <li><span><span class="oc-text-bold">Marie Curie</span> created <span class="oc-text-bold">new folder</span>.</span> <span class="oc-text-muted oc-text-small oc-mt-s">Jul 29, 2024, 6:34 PM</span></li>
+      <li><span><span class="oc-text-bold">Albert Einstein</span> moved <span class="oc-text-bold">textfile.txt</span>.</span> <span class="oc-text-muted oc-text-small oc-mt-s">Jul 29, 2023, 6:34 PM</span></li>
+      <li><span><span class="oc-text-bold">Robert Oppenheimer</span> deleted <span class="oc-text-bold">atom plans.pdf</span>.</span> <span class="oc-text-muted oc-text-small oc-mt-s">Jul 29, 2022, 6:34 PM</span></li>
+      <li><span><span class="oc-text-bold">Albert Schweitzer</span> removed <span class="oc-text-bold">Selfie.png</span>.</span> <span class="oc-text-muted oc-text-small oc-mt-s">Jul 29, 2021, 6:34 PM</span></li>
+    </ul>
+    <p class="oc-text-muted oc-text-small">(Showing latest 200 activities)</p>
+  </div>
+</div>"
+`;
