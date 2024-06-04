@@ -1,6 +1,6 @@
 import { unref } from 'vue'
 import { useWebWorkersStore } from '../../piniaStores/webWorkers'
-import { Resource, SpaceResource } from '@ownclouders/web-client'
+import type { Resource, SpaceResource } from '@ownclouders/web-client'
 import { useConfigStore } from '../../piniaStores'
 import { useLoadingService } from '../../loadingService'
 import { useRequestHeaders } from '../../requestHeaders'
@@ -11,14 +11,22 @@ type WorkerReturnData = {
   failed: { resource: Resource; status: number }[]
 }
 
-export const useDeleteWorker = () => {
+export type DelteWorkerTopics = 'fileListDelete' | 'trashBinDelete' | 'tokenUpdate'
+
+export const useDeleteWorker = ({
+  concurrentRequests = 4
+}: { concurrentRequests?: number } = {}) => {
   const configStore = useConfigStore()
   const loadingService = useLoadingService()
   const { headers } = useRequestHeaders()
   const { createWorker, terminateWorker } = useWebWorkersStore()
 
   const startWorker = (
-    { space, resources }: { space: SpaceResource; resources: Resource[] },
+    {
+      topic,
+      space,
+      resources
+    }: { topic: DelteWorkerTopics; space: SpaceResource; resources: Resource[] },
     callback: (result: WorkerReturnData) => void
   ) => {
     const worker = createWorker<WorkerReturnData>(DeleteWorker as unknown as string, {
@@ -40,15 +48,24 @@ export const useDeleteWorker = () => {
         })
     )
 
-    worker.post(getWorkerData({ space, resources }))
+    worker.post(getWorkerData({ topic, space, resources }))
   }
 
-  const getWorkerData = ({ space, resources }: { space: SpaceResource; resources: Resource[] }) => {
+  const getWorkerData = ({
+    topic,
+    space,
+    resources
+  }: {
+    topic: DelteWorkerTopics
+    space: SpaceResource
+    resources: Resource[]
+  }) => {
     return JSON.stringify({
-      topic: 'startProcess',
+      topic,
       data: {
         space,
         resources,
+        concurrentRequests,
         baseUrl: configStore.serverUrl,
         headers: unref(headers)
       }

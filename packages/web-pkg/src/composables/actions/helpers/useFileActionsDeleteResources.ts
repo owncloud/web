@@ -1,7 +1,6 @@
 import { cloneStateObject } from '../../../helpers/store'
 import { isSameResource } from '../../../helpers/resource'
 import { Resource, SpaceResource } from '@ownclouders/web-client'
-import PQueue from 'p-queue'
 import { isLocationSpacesActive } from '../../../router'
 import { dirname } from 'path'
 import { createFileRouteOptions } from '../../../helpers'
@@ -26,7 +25,6 @@ import { useDeleteWorker } from '../../webWorkers'
 export const useFileActionsDeleteResources = () => {
   const configStore = useConfigStore()
   const messageStore = useMessages()
-  const { showMessage, showErrorMessage } = messageStore
   const router = useRouter()
   const language = useGettext()
   const { getMatchingSpace } = useGetMatchingSpace()
@@ -34,16 +32,14 @@ export const useFileActionsDeleteResources = () => {
   const clientService = useClientService()
   const { dispatchModal } = useModals()
   const spacesStore = useSpacesStore()
-  const { startWorker } = useDeleteWorker()
+  const { startWorker } = useDeleteWorker({
+    concurrentRequests: configStore.options.concurrentRequests.resourceBatchActions
+  })
 
   const resourcesStore = useResourcesStore()
   const { currentFolder } = storeToRefs(resourcesStore)
 
-  const queue = new PQueue({
-    concurrency: configStore.options.concurrentRequests.resourceBatchActions
-  })
-  const deleteOps: Promise<void>[] = []
-  const resourcesToDelete = ref([])
+  const resourcesToDelete = ref<Resource[]>([])
 
   const currentPageQuery = useRouteQuery('page', '1')
   const currentPage = computed(() => {
@@ -114,52 +110,42 @@ export const useFileActionsDeleteResources = () => {
     )
   })
 
-  const trashbin_deleteOp = (space: SpaceResource, resource: Resource) => {
-    return clientService.webdav
-      .clearTrashBin(space, {
-        id: resource.id
-      })
-      .then(() => {
-        resourcesStore.removeResources([resource])
-        resourcesStore.resetSelection()
+  const trashbin_delete = (space: SpaceResource) => {
+    const originalRoute = unref(router.currentRoute)
 
-        const translated = $gettext(
-          '"%{file}" was deleted successfully',
-          { file: resource.name },
-          true
-        )
-        showMessage({ title: translated })
-      })
-      .catch((error) => {
-        if (error.statusCode === 423) {
-          // TODO: we need a may retry option ....
-          const p = queue.add(() => {
-            return trashbin_deleteOp(space, resource)
-          })
-          deleteOps.push(p)
-          return
+    startWorker(
+      { topic: 'trashBinDelete', space, resources: unref(resources) },
+      ({ successful, failed }) => {
+        if (successful.length) {
+          const title =
+            successful.length === 1 && unref(resources).length === 1
+              ? $gettext('"%{item}" was deleted successfully', { item: successful[0].name })
+              : $ngettext(
+                  '%{itemCount} item was deleted successfully',
+                  '%{itemCount} items were deleted successfully',
+                  successful.length,
+                  { itemCount: successful.length.toString() },
+                  true
+                )
+
+          messageStore.showMessage({ title })
         }
 
-        console.error(error)
-        const translated = $gettext('Failed to delete "%{file}"', { file: resource.name }, true)
-        showErrorMessage({
-          title: translated,
-          errors: [error]
+        failed.forEach(({ resource }) => {
+          const title = $gettext('Failed to delete "%{item}"', { item: resource.name })
+          messageStore.showErrorMessage({ title, errors: [new Error()] })
         })
-      })
-  }
 
-  const trashbin_delete = async (space: SpaceResource) => {
-    // TODO: use clear all if all files are selected
-    // FIXME: Implement proper batch delete and add loading indicator
-    for (const file of unref(resources)) {
-      const p = queue.add(() => {
-        return trashbin_deleteOp(space, file)
-      })
-      deleteOps.push(p)
-    }
-
-    await Promise.all(deleteOps)
+        // user hasn't navigated to another location meanwhile
+        if (
+          originalRoute.name === unref(router.currentRoute).name &&
+          originalRoute.query?.fileId === unref(router.currentRoute).query?.fileId
+        ) {
+          resourcesStore.removeResources(successful)
+          resourcesStore.resetSelection()
+        }
+      }
+    )
   }
 
   const filesList_delete = (resources: Resource[]) => {
@@ -188,7 +174,7 @@ export const useFileActionsDeleteResources = () => {
     return Object.values(resourceSpaceMapping).map(
       ({ space: spaceForDeletion, resources: resourcesForDeletion }) => {
         startWorker(
-          { space: spaceForDeletion, resources: resourcesForDeletion },
+          { topic: 'fileListDelete', space: spaceForDeletion, resources: resourcesForDeletion },
           async ({ successful, failed }) => {
             if (successful.length) {
               const title =
@@ -278,7 +264,6 @@ export const useFileActionsDeleteResources = () => {
 
   return {
     displayDialog,
-    // HACK: exported for unit tests:
     filesList_delete
   }
 }
