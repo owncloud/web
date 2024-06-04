@@ -9,6 +9,7 @@ export interface ActorsOptions {
     reportVideo: boolean
     reportHar: boolean
     reportTracing: boolean
+    failOnUncaughtConsoleError: boolean
   }
 }
 
