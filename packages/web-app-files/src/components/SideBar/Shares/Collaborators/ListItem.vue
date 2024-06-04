@@ -208,9 +208,7 @@ export default defineComponent({
     const { user } = storeToRefs(userStore)
 
     const sharedParentDir = computed(() => {
-      return queryItemAsString(props.sharedParentRoute?.params?.driveAliasAndItem)
-        .split('/')
-        .pop()
+      return queryItemAsString(props.sharedParentRoute?.params?.driveAliasAndItem).split('/').pop()
     })
 
     const shareDate = computed(() => {

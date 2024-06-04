@@ -22,6 +22,15 @@ export class ActorEnvironment extends EventEmitter implements Actor {
     }
 
     this.page = await this.context.newPage()
+
+    this.page.on('pageerror', (exception) => {
+      console.log(`Uncaught exception: "${exception}"`)
+    })
+    this.page.on('console', (msg) => {
+      if (msg.type() === 'error') {
+        console.log(`Console error: "${msg.text()}"`)
+      }
+    })
   }
 
   public async newPage(newPage: Page): Promise<Page> {
