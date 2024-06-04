@@ -216,15 +216,13 @@ export const bootstrapApp = async (configurationPath: string): Promise<void> => 
       await spacesStore.loadSpaces({ graphClient: clientService.graphAuthenticated })
       const personalSpace = spacesStore.spaces.find(isPersonalSpaceResource)
 
-      if (!personalSpace) {
-        return
+      if (personalSpace) {
+        spacesStore.updateSpaceField({
+          id: personalSpace.id,
+          field: 'name',
+          value: app.config.globalProperties.$gettext('Personal')
+        })
       }
-
-      spacesStore.updateSpaceField({
-        id: personalSpace.id,
-        field: 'name',
-        value: app.config.globalProperties.$gettext('Personal')
-      })
 
       // load sharing roles from graph API
       const { data } =
