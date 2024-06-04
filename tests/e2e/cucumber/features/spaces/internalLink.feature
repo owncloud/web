@@ -21,8 +21,8 @@ Feature: internal link share in project space
       | myfolder/plan.txt | secret plan |
     And "Alice" adds the following members to the space "Marketing" using API
       | user  | role     | shareType |
-      | Brian | Can edit | space     |
-      | Carol | Can view | space     |
+      | Brian | Can edit | user      |
+      | Carol | Can view | user      |
     And "Alice" navigates to the project space "marketing.1"
     # internal link to space
 

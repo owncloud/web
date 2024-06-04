@@ -35,7 +35,7 @@ Feature: Download
       | emptyFolder    | folder |
       | testavatar.jpg | file   |
     And "Alice" opens the following file in mediaviewer
-      | resource        |
+      | resource       |
       | testavatar.jpg |
     And "Alice" downloads the following resources using the preview topbar
       | resource       | type |

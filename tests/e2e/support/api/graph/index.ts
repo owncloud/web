@@ -8,10 +8,4 @@ export {
   assignRole,
   getUserId
 } from './userManagement'
-export {
-  getPersonalSpaceId,
-  createSpace,
-  getSpaceIdBySpaceName,
-  disableSpace,
-  deleteSpace
-} from './spaces'
+export { createSpace, disableSpace, deleteSpace, getSpaceIdBySpaceName } from './spaces'

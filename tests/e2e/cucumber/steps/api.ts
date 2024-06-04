@@ -91,8 +91,7 @@ Given(
         path: info.resource,
         shareType: info.type,
         shareWith: info.recipient,
-        role: info.role,
-        name: info.name
+        role: info.role
       })
     }
   }
@@ -267,7 +266,7 @@ Given(
   ): Promise<void> {
     const user = this.usersEnvironment.getUser({ key: stepUser })
     for (const info of stepTable.hashes()) {
-      await api.dav.addMembersToTheProjectSpace({
+      await api.share.addMembersToTheProjectSpace({
         user,
         spaceName: space,
         shareWith: info.user,

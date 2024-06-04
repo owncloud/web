@@ -1,10 +1,9 @@
 import { checkResponseStatus, request } from '../http'
 import { User } from '../../types'
 import join from 'join-path'
-import { getPersonalSpaceId, getSpaceIdBySpaceName } from '../graph'
+import { getSpaceIdBySpaceName } from '../graph'
 import convert from 'xml-js'
 import _ from 'lodash/object'
-import { createShare } from '../share'
 import { createTagsForResource } from '../graph/utils'
 
 export const folderExists = async ({
@@ -88,7 +87,8 @@ export const uploadFileInPersonalSpace = async ({
   content: string | Buffer
   mtimeDeltaDays?: string
 }): Promise<void> => {
-  const webDavEndPathToRoot = 'spaces/' + (await getPersonalSpaceId({ user }))
+  const webDavEndPathToRoot =
+    'spaces/' + (await getSpaceIdBySpaceName({ user, spaceType: 'personal' }))
   await createFile({ user, pathToFile, content, webDavEndPathToRoot, mtimeDeltaDays })
 }
 
@@ -113,7 +113,8 @@ export const createFolderInsidePersonalSpace = async ({
   user: User
   folder: string
 }): Promise<void> => {
-  const webDavEndPathToRoot = 'spaces/' + (await getPersonalSpaceId({ user }))
+  const webDavEndPathToRoot =
+    'spaces/' + (await getSpaceIdBySpaceName({ user, spaceType: 'personal' }))
   await createFolder({ user, folder, webDavEndPathToRoot })
 }
 
@@ -214,23 +215,6 @@ export const getIdOfFileInsideSpace = async ({
     // extract file id form the response
     return _.get(fileDataResponse, '[d:propstat][0][d:prop][oc:fileid]')._text
   }
-}
-
-export const addMembersToTheProjectSpace = async ({
-  user,
-  spaceName,
-  shareWith,
-  shareType,
-  role
-}: {
-  user: User
-  spaceName: string
-  shareWith: string
-  shareType: string
-  role: string
-}): Promise<void> => {
-  const space_ref = await getSpaceIdBySpaceName({ user, spaceType: 'project', spaceName })
-  await createShare({ user, path: null, shareWith, shareType, role, name: null, space_ref })
 }
 
 export const addTagToResource = async ({

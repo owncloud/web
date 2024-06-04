@@ -44,7 +44,7 @@ Feature: server sent events
     # space-member-added
     When "Alice" adds the following members to the space "Marketing" using API
       | user  | role     | shareType |
-      | Brian | Can view | space     |
+      | Brian | Can view | user      |
     Then "Alice" should get "space-member-added" SSE event
     And "Brian" should get "userlog-notification" SSE event
     And "Brian" should get "space-member-added" SSE event
@@ -173,8 +173,8 @@ Feature: server sent events
       | name      | id        |
       | Marketing | marketing |
     And "Alice" adds the following members to the space "Marketing" using API
-      | user  | role     | shareType |
-      | Brian | Can edit | space     |
+      | user  | role     | shareType | 
+      | Brian | Can edit | user      |
     And "Alice" creates the following folder in space "Marketing" using API
       | name         |
       | space-folder |

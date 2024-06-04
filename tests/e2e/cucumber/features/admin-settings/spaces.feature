@@ -106,10 +106,10 @@ Feature: spaces management
       | team A | team.a |
     And "Admin" adds the following members to the space "team A" using API
       | user  | role     | shareType |
-      | Brian | Can edit | space     |
-      | Carol | Can view | space     |
-      | David | Can view | space     |
-      | Edith | Can view | space     |
+      | Brian | Can edit | user      |
+      | Carol | Can view | user      |
+      | David | Can view | user      |
+      | Edith | Can view | user      |
     When "Alice" logs in
     And "Alice" opens the "admin-settings" app
     And "Alice" navigates to the project spaces management page

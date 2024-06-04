@@ -2,7 +2,7 @@ Feature: Group actions
   As a user
   I want to check group operations like:
   - sharing a resource by several users
-  - accepting multiple shares by using a batch action 
+  - accepting multiple shares by using a batch action
 
   Scenario: copy and move resources in personal space
     Given "Admin" creates following user using API
@@ -25,7 +25,7 @@ Feature: Group actions
     And "Brian" logs in
     # disabling auto accepting to check accepting share
     And "Brian" disables auto-accepting using API
-    
+
     And "Alice" logs in
     And "Alice" creates the following folders in personal space using API
       | name                   |
