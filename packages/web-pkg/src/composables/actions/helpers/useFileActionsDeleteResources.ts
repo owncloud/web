@@ -18,7 +18,6 @@ import {
   useModals,
   useSpacesStore,
   useConfigStore,
-  useSharesStore,
   useResourcesStore
 } from '../../piniaStores'
 import { storeToRefs } from 'pinia'
@@ -35,7 +34,6 @@ export const useFileActionsDeleteResources = () => {
   const clientService = useClientService()
   const { dispatchModal } = useModals()
   const spacesStore = useSpacesStore()
-  const sharesStore = useSharesStore()
   const { startWorker } = useDeleteWorker()
 
   const resourcesStore = useResourcesStore()
@@ -69,7 +67,7 @@ export const useFileActionsDeleteResources = () => {
     if (currentResources.length === 1) {
       if (isFolder) {
         title = $gettext(
-          'Permanently delete folder %{name}',
+          'Permanently delete folder "%{name}"',
           {
             name: currentResources[0].name
           },
@@ -77,7 +75,7 @@ export const useFileActionsDeleteResources = () => {
         )
       } else {
         title = $gettext(
-          'Permanently delete file %{name}',
+          'Permanently delete file "%{name}"',
           {
             name: currentResources[0].name
           },
