@@ -265,16 +265,16 @@ export function buildSpace(
       return urlJoin(webDavTrashUrl, path)
     },
     isViewer(user: User): boolean {
-      return this.spaceRoles.viewer.map((r) => r.isMember(user)).some(Boolean)
+      return this.spaceRoles.viewer.some((r) => r.isMember(user))
     },
     isEditor(user: User): boolean {
-      return this.spaceRoles.editor.map((r) => r.isMember(user)).some(Boolean)
+      return this.spaceRoles.editor.some((r) => r.isMember(user))
     },
     isManager(user: User): boolean {
-      return this.spaceRoles.manager.map((r) => r.isMember(user)).some(Boolean)
+      return this.spaceRoles.manager.some((r) => r.isMember(user))
     },
     isSecureViewer(user: User): boolean {
-      return this.spaceRoles['secure-viewer'].map((r) => r.isMember(user)).some(Boolean)
+      return this.spaceRoles['secure-viewer'].some((r) => r.isMember(user))
     },
     isMember(user: User): boolean {
       return this.isViewer(user) || this.isEditor(user) || this.isManager(user)
