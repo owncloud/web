@@ -3,11 +3,13 @@ import { mock } from 'vitest-mock-extended'
 import { defaultComponentMocks, getComposableWrapper, RouteLocation } from 'web-test-helpers'
 import { useMessages, useResourcesStore } from '../../../../../src/composables/piniaStores'
 import { unref } from 'vue'
-import { Resource } from '@ownclouders/web-client'
+import { HttpError, Resource } from '@ownclouders/web-client'
 import { ProjectSpaceResource, SpaceResource } from '@ownclouders/web-client'
-import { LoadingTaskCallbackArguments } from '../../../../../src/services/loadingService'
 import { Drive } from '@ownclouders/web-client/graph/generated'
 import { AxiosResponse } from 'axios'
+import { useRestoreWorker } from '../../../../../src/composables/webWorkers/restoreWorker'
+
+vi.mock('../../../../../src/composables/webWorkers/restoreWorker')
 
 describe('restore', () => {
   describe('isVisible property', () => {
@@ -72,14 +74,11 @@ describe('restore', () => {
 
   describe('method "restoreResources"', () => {
     it('should show message on success', () => {
+      const resourcesToRestore = [{ id: '1', path: '/1' }]
+
       getWrapper({
-        setup: async ({ restoreResources }, { space }) => {
-          await restoreResources(
-            space,
-            [{ id: '1', path: '/1' }],
-            [],
-            mock<LoadingTaskCallbackArguments>()
-          )
+        setup: ({ restoreResources }, { space }) => {
+          restoreResources(space, resourcesToRestore, [])
 
           const { showMessage } = useMessages()
           expect(showMessage).toHaveBeenCalledTimes(1)
@@ -87,79 +86,79 @@ describe('restore', () => {
           const { removeResources, resetSelection } = useResourcesStore()
           expect(removeResources).toHaveBeenCalledTimes(1)
           expect(resetSelection).toHaveBeenCalledTimes(1)
-        }
+        },
+        restoreResult: { successful: resourcesToRestore, failed: [] }
       })
     })
 
     it('should show message on error', () => {
       vi.spyOn(console, 'error').mockImplementation(() => undefined)
+      const resourcesToRestore = [{ id: '1', path: '/1' }]
 
       getWrapper({
-        resolveClearTrashBin: false,
-        setup: async ({ restoreResources }, { space }) => {
-          await restoreResources(
-            space,
-            [{ id: '1', path: '/1' }],
-            [],
-            mock<LoadingTaskCallbackArguments>()
-          )
+        setup: ({ restoreResources }, { space }) => {
+          restoreResources(space, resourcesToRestore, [])
 
           const { showErrorMessage } = useMessages()
           expect(showErrorMessage).toHaveBeenCalledTimes(1)
 
           const { removeResources } = useResourcesStore()
           expect(removeResources).toHaveBeenCalledTimes(0)
+        },
+        restoreResult: {
+          successful: [],
+          failed: [{ resource: resourcesToRestore[0], error: new HttpError('', undefined) }]
         }
       })
     })
+  })
 
-    it('should request parent folder on collecting restore conflicts', () => {
-      getWrapper({
-        setup: async ({ collectConflicts }, { space, clientService }) => {
-          const resource = { id: '1', path: '1', name: '1' } as Resource
-          await collectConflicts(space, [resource])
+  it('should request parent folder on collecting restore conflicts', () => {
+    getWrapper({
+      setup: async ({ collectConflicts }, { space, clientService }) => {
+        const resource = { id: '1', path: '1', name: '1' } as Resource
+        await collectConflicts(space, [resource])
 
-          expect(clientService.webdav.listFiles).toHaveBeenCalledWith(expect.anything(), {
-            path: '.'
-          })
-        }
-      })
+        expect(clientService.webdav.listFiles).toHaveBeenCalledWith(expect.anything(), {
+          path: '.'
+        })
+      }
     })
+  })
 
-    it('should find conflict within resources', () => {
-      getWrapper({
-        setup: async ({ collectConflicts }, { space }) => {
-          const resourceOne = { id: '1', path: '1', name: '1' } as Resource
-          const resourceTwo = { id: '2', path: '1', name: '1' } as Resource
-          const { conflicts } = await collectConflicts(space, [resourceOne, resourceTwo])
+  it('should find conflict within resources', () => {
+    getWrapper({
+      setup: async ({ collectConflicts }, { space }) => {
+        const resourceOne = { id: '1', path: '1', name: '1' } as Resource
+        const resourceTwo = { id: '2', path: '1', name: '1' } as Resource
+        const { conflicts } = await collectConflicts(space, [resourceOne, resourceTwo])
 
-          expect(conflicts).toContain(resourceTwo)
-        }
-      })
+        expect(conflicts).toContain(resourceTwo)
+      }
     })
+  })
 
-    it('should add files without conflict to resolved resources', () => {
-      getWrapper({
-        setup: async ({ collectConflicts }, { space }) => {
-          const resource = { id: '1', path: '1', name: '1' } as Resource
-          const { resolvedResources } = await collectConflicts(space, [resource])
+  it('should add files without conflict to resolved resources', () => {
+    getWrapper({
+      setup: async ({ collectConflicts }, { space }) => {
+        const resource = { id: '1', path: '1', name: '1' } as Resource
+        const { resolvedResources } = await collectConflicts(space, [resource])
 
-          expect(resolvedResources).toContain(resource)
-        }
-      })
+        expect(resolvedResources).toContain(resource)
+      }
     })
   })
 })
 
 function getWrapper({
   invalidLocation = false,
-  resolveClearTrashBin: resolveRestore = true,
   driveType = 'personal',
+  restoreResult = { successful: [], failed: [] },
   setup
 }: {
   invalidLocation?: boolean
-  resolveClearTrashBin?: boolean
   driveType?: string
+  restoreResult?: { successful: Resource[]; failed: { resource: Resource; error: HttpError }[] }
   setup: (
     instance: ReturnType<typeof useFileActionsRestore>,
     {
@@ -171,6 +170,12 @@ function getWrapper({
     }
   ) => void
 }) {
+  vi.mocked(useRestoreWorker).mockReturnValue({
+    startWorker: vi.fn().mockImplementation((_, callback) => {
+      callback(restoreResult)
+    })
+  })
+
   const mocks = {
     ...defaultComponentMocks({
       currentRoute: mock<RouteLocation>({
@@ -186,11 +191,6 @@ function getWrapper({
   mocks.$clientService.webdav.listFiles.mockImplementation(() => {
     return Promise.resolve({ resource: mock<Resource>(), children: [] })
   })
-  if (resolveRestore) {
-    mocks.$clientService.webdav.restoreFile.mockResolvedValue(undefined)
-  } else {
-    mocks.$clientService.webdav.restoreFile.mockRejectedValue(new Error(''))
-  }
   mocks.$clientService.graphAuthenticated.drives.getDrive.mockResolvedValue(
     mock<AxiosResponse>({ data: { value: mock<Drive>() } })
   )
