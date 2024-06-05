@@ -2,21 +2,21 @@
   <div id="files-sidebar-panel-audio">
     <dl class="audio-data-list">
       <dt v-text="$gettext('Title')" />
-      <dd v-text="title" />
+      <dd data-testid="audio-panel-title" v-text="title" />
       <dt v-text="$gettext('Duration')" />
-      <dd v-text="duration" />
+      <dd data-testid="audio-panel-duration" v-text="duration" />
       <dt v-text="$gettext('Authors')" />
-      <dd v-text="artist" />
+      <dd data-testid="audio-panel-artist" v-text="artist" />
       <dt v-text="$gettext('Album')" />
-      <dd v-text="album" />
+      <dd data-testid="audio-panel-album" v-text="album" />
       <dt v-text="$gettext('Genre')" />
-      <dd v-text="genre" />
+      <dd data-testid="audio-panel-genre" v-text="genre" />
       <dt v-text="$gettext('Year recorded')" />
-      <dd v-text="year" />
+      <dd data-testid="audio-panel-year" v-text="year" />
       <dt v-text="$gettext('Track')" />
-      <dd v-text="track" />
+      <dd data-testid="audio-panel-track" v-text="track" />
       <dt v-text="$gettext('Disc')" />
-      <dd v-text="disc" />
+      <dd data-testid="audio-panel-disc" v-text="disc" />
     </dl>
   </div>
 </template>
