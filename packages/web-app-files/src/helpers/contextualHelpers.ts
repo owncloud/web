@@ -126,7 +126,7 @@ export const shareViaIndirectLinkHelp = (options: ContextualHelperOptions) =>
         },
         {
           text: $gettext(
-            'Indirect links can only be edited in their parent folder. Click on the folder icon below the link to navgate to the parent folder.'
+            'Indirect links can only be edited in their parent folder. Click on the folder icon below the link to navigate to the parent folder.'
           )
         }
       ],
