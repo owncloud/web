@@ -71,7 +71,7 @@ const convertObjectToCamelCaseKeys = (data: Record<string, any>) => {
   if (!data) {
     return data
   }
-  const converted = {}
+  const converted: Record<string, any> = {}
   Object.keys(data).forEach((key) => {
     converted[camelCase(key)] = data[key]
   })
@@ -126,7 +126,7 @@ export function buildResource(resource: WebDavResponseResource): Resource {
     webDavPath: resource.filename,
     type: isFolder ? 'folder' : resource.type,
     isFolder,
-    locked: activeLock ? true : false,
+    locked: !!activeLock,
     lockOwnerName,
     lockTime,
     processing: resource.processing || false,
