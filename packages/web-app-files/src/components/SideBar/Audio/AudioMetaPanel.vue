@@ -80,7 +80,7 @@ export default defineComponent({
     })
 
     const year = computed(() => {
-      return unref(resource).audio?.year || '-'
+      return unref(resource).audio.year || '-'
     })
 
     return {
