@@ -103,6 +103,16 @@
               :options="languageOptions"
               @update:model-value="updateSelectedLanguage"
             />
+            <div class="oc-mt-s">
+              <a
+                href="https://explore.transifex.com/owncloud-org/"
+                target="_blank"
+                class="oc-flex oc-flex-middle"
+              >
+                <span v-text="$gettext('Help translate')" />
+                <oc-icon name="external-link" size="small" class="oc-ml-xs" />
+              </a>
+            </div>
           </dd>
         </div>
         <div class="account-page-info-theme oc-mb oc-width-1-2@m oc-width-1-1@s">
