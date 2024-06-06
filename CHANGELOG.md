@@ -9,6 +9,8 @@ Summary
 -------
 
 * Bugfix - Local logout if IdP has no logout support: [#10974](https://github.com/owncloud/web/pull/10974)
+* Enhancement - Audio metadata panel: [#10956](https://github.com/owncloud/web/pull/10956)
+* Enhancement - EXIF metadata panel: [#10956](https://github.com/owncloud/web/pull/10956)
 
 Details
 -------
@@ -22,6 +24,26 @@ Details
 
    https://github.com/owncloud/enterprise/issues/6631
    https://github.com/owncloud/web/pull/10974
+
+* Enhancement - Audio metadata panel: [#10956](https://github.com/owncloud/web/pull/10956)
+
+   We've added a right sidebar panel with the name `Audio Info`, which display
+   `audio` metadata if present on the given resource. It is registered by the files
+   app and becomes visible in the global right sidebar in all file contexts, e.g.
+   file listing with single select on an audio file with indexed id3 information or
+   when listening to an audio file in the preview app.
+
+   https://github.com/owncloud/web/pull/10956
+
+* Enhancement - EXIF metadata panel: [#10956](https://github.com/owncloud/web/pull/10956)
+
+   We've added a right sidebar panel with the name `Image Info`, which displays
+   `image`, `photo` and `location` metadata if present on the given resource. It is
+   registered by the files app and becomes visible in the global right sidebar in
+   all file contexts, e.g. file listing with single select on an image or the
+   preview app displaying an image.
+
+   https://github.com/owncloud/web/pull/10956
 
 Changelog for ownCloud Web [9.0.0] (2024-05-28)
 =======================================
