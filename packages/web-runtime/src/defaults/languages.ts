@@ -10,6 +10,7 @@ export const supportedLanguages = {
   it: 'Italiano - Italian',
   nl: 'Nederlands - Dutch',
   ko: '한국어 - Korean',
+  ru: 'русский - Russian',
   sq: 'Shqipja - Albanian',
   sv: 'Svenska - Swedish',
   tr: 'Türkçe - Turkish',

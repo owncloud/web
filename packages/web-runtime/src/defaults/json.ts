@@ -4,8 +4,7 @@
  */
 import CoreTranslations from '../../l10n/translations.json'
 import ClientTranslations from '@ownclouders/web-client/l10n'
-// FIXME:
-import PkgTranslations from '../../../web-pkg/l10n/translations.json'
+import PkgTranslations from '@ownclouders/web-pkg/l10n/translations.json'
 import OdsTranslations from 'design-system/l10n/translations.json'
 
 export const coreTranslations = CoreTranslations

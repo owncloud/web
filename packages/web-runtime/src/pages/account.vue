@@ -99,9 +99,20 @@
               :placeholder="$gettext('Please choose...')"
               :model-value="selectedLanguageValue"
               :clearable="false"
+              :searchable="true"
               :options="languageOptions"
               @update:model-value="updateSelectedLanguage"
             />
+            <div class="oc-mt-s">
+              <a
+                href="https://explore.transifex.com/owncloud-org/"
+                target="_blank"
+                class="oc-flex oc-flex-middle"
+              >
+                <span v-text="$gettext('Help translate')" />
+                <oc-icon name="external-link" size="small" class="oc-ml-xs" />
+              </a>
+            </div>
           </dd>
         </div>
         <div class="account-page-info-theme oc-mb oc-width-1-2@m oc-width-1-1@s">
@@ -203,7 +214,7 @@ import ThemeSwitcher from '../components/Account/ThemeSwitcher.vue'
 import ExtensionPreference from '../components/Account/ExtensionPreference.vue'
 import { AppLoadingSpinner } from '@ownclouders/web-pkg'
 import { SSEAdapter } from '@ownclouders/web-client/sse'
-import { supportedLanguages } from '../defaults/languages'
+import { supportedLanguages } from '../defaults'
 import { User } from '@ownclouders/web-client/graph/generated'
 import { isEmpty } from 'lodash-es'
 import { call } from '@ownclouders/web-client'
