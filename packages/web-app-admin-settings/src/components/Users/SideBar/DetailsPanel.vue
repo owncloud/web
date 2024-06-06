@@ -109,7 +109,11 @@ export default defineComponent({
     }
   },
   setup(props) {
-    const { $gettext, current: currentLanguage } = useGettext()
+    const language = useGettext()
+    const { $gettext } = language
+    const currentLanguage = computed(() => {
+      return language.current
+    })
 
     return {
       $gettext,

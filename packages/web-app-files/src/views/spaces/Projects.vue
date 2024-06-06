@@ -226,7 +226,8 @@ export default defineComponent({
     const route = useRoute()
     const clientService = useClientService()
     const { can } = useAbility()
-    const { current: currentLanguage, $gettext } = useGettext()
+    const language = useGettext()
+    const { $gettext } = language
     const filterTerm = ref('')
     const markInstance = ref(undefined)
     const imageContentObject = ref<Record<string, { fileId: string; data: string }>>({})
@@ -357,19 +358,19 @@ export default defineComponent({
         return $gettext('Unrestricted')
       }
 
-      return formatFileSize(space.spaceQuota.total, currentLanguage)
+      return formatFileSize(space.spaceQuota.total, language.current)
     }
     const getUsedQuota = (space: SpaceResource) => {
       if (space.spaceQuota.used === undefined) {
         return '-'
       }
-      return formatFileSize(space.spaceQuota.used, currentLanguage)
+      return formatFileSize(space.spaceQuota.used, language.current)
     }
     const getRemainingQuota = (space: SpaceResource) => {
       if (space.spaceQuota.remaining === undefined) {
         return '-'
       }
-      return formatFileSize(space.spaceQuota.remaining, currentLanguage)
+      return formatFileSize(space.spaceQuota.remaining, language.current)
     }
     const getMemberCount = (space: SpaceResource) => {
       return Object.values(space.spaceRoles).flat().length

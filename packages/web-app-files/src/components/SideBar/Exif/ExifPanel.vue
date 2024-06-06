@@ -53,7 +53,8 @@ export default defineComponent({
   setup() {
     const resource = inject<Ref<Resource>>('resource')
     const config = useConfigStore()
-    const { current: currentLanguage, $gettext } = useGettext()
+    const language = useGettext()
+    const { $gettext } = language
     const { showMessage } = useMessages()
     const {
       copy: copyToClipboard,
@@ -110,7 +111,7 @@ export default defineComponent({
 
     const takenDateTime = computed(() => {
       const photo = unref(resource).photo
-      return photo?.takenDateTime ? formatDateFromISO(photo.takenDateTime, currentLanguage) : '-'
+      return photo?.takenDateTime ? formatDateFromISO(photo.takenDateTime, language.current) : '-'
     })
 
     const isLocationVisible = computed(() => {

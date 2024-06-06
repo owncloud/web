@@ -47,13 +47,14 @@ export default defineComponent({
     }
   },
   setup(props) {
-    const { $gettext, $ngettext, current: currentLanguage } = useGettext()
+    const language = useGettext()
+    const { $gettext, $ngettext } = language
     const totalSelectedSpaceQuotaTotal = computed(() => {
       let total = 0
       props.selectedSpaces.forEach((space) => {
         total += space.spaceQuota.total
       })
-      return formatFileSize(total, currentLanguage)
+      return formatFileSize(total, language.current)
     })
     const totalSelectedSpaceQuotaRemaining = computed(() => {
       let remaining = 0
@@ -63,7 +64,7 @@ export default defineComponent({
         }
         remaining += space.spaceQuota.remaining
       })
-      return formatFileSize(remaining, currentLanguage)
+      return formatFileSize(remaining, language.current)
     })
     const totalSelectedSpaceQuotaUsed = computed(() => {
       let used = 0
@@ -73,7 +74,7 @@ export default defineComponent({
         }
         used += space.spaceQuota.used
       })
-      return formatFileSize(used, currentLanguage)
+      return formatFileSize(used, language.current)
     })
     const totalEnabledSpaces = computed(() => {
       return props.selectedSpaces.filter((s) => !s.disabled).length

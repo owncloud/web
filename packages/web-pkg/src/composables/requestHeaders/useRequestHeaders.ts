@@ -8,7 +8,7 @@ import { useClientService } from '../clientService'
 export const useRequestHeaders = () => {
   const authStore = useAuthStore()
   const clientService = useClientService()
-  const { current: currentLanguage } = useGettext()
+  const language = useGettext()
 
   const headers = computed<Record<string, string>>(() => {
     const auth = new Auth({
@@ -18,7 +18,7 @@ export const useRequestHeaders = () => {
     })
 
     return {
-      'Accept-Language': currentLanguage,
+      'Accept-Language': language.current,
       'Initiator-ID': clientService.initiatorId,
       'X-Request-ID': uuidV4(),
       ...auth.getHeaders()

@@ -27,7 +27,7 @@
 </template>
 
 <script lang="ts">
-import { computed, unref } from 'vue'
+import { computed, defineComponent, unref } from 'vue'
 import {
   FileAction,
   useAbility,
@@ -40,10 +40,10 @@ import { Resource } from '@ownclouders/web-client'
 import { useGettext } from 'vue3-gettext'
 import { storeToRefs } from 'pinia'
 
-export default {
+export default defineComponent({
   setup() {
     const ability = useAbility()
-    const language = useGettext()
+    const { $gettext } = useGettext()
     const { isLocationPicker, postMessage } = useEmbedMode()
     const spacesStore = useSpacesStore()
     const { currentSpace: space } = storeToRefs(spacesStore)
@@ -67,7 +67,7 @@ export default {
     const canCreatePublicLinks = computed<boolean>(() => ability.can('create-all', 'PublicLink'))
 
     const selectLabel = computed<string>(() =>
-      isLocationPicker.value ? language.$gettext('Choose') : language.$gettext('Attach as copy')
+      isLocationPicker.value ? $gettext('Choose') : $gettext('Attach as copy')
     )
 
     const emitSelect = (): void => {
@@ -93,7 +93,7 @@ export default {
       createLinkAction
     }
   }
-}
+})
 </script>
 
 <style scoped>

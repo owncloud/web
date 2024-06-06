@@ -77,7 +77,7 @@ export default defineComponent({
   },
   setup(props) {
     const clientService = useClientService()
-    const { current: currentLanguage } = useGettext()
+    const language = useGettext()
     const { downloadFile } = useDownloadFile({ clientService })
     const { updateResourceField } = useResourcesStore()
 
@@ -118,13 +118,13 @@ export default defineComponent({
       return downloadFile(unref(space), unref(resource), version.name)
     }
     const formatVersionDateRelative = (version: Resource) => {
-      return formatRelativeDateFromHTTP(version.mdate, currentLanguage)
+      return formatRelativeDateFromHTTP(version.mdate, language.current)
     }
     const formatVersionDate = (version: Resource) => {
-      return formatDateFromJSDate(new Date(version.mdate), currentLanguage)
+      return formatDateFromJSDate(new Date(version.mdate), language.current)
     }
     const formatVersionFileSize = (version: Resource) => {
-      return formatFileSize(version.size, currentLanguage)
+      return formatFileSize(version.size, language.current)
     }
 
     return {

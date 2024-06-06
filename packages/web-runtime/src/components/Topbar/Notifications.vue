@@ -101,7 +101,7 @@ export default {
     const spacesStore = useSpacesStore()
     const capabilityStore = useCapabilityStore()
     const clientService = useClientService()
-    const { current: currentLanguage } = useGettext()
+    const language = useGettext()
 
     const notifications = ref<Notification[]>([])
     const notificationsInterval = ref()
@@ -111,10 +111,10 @@ export default {
     })
 
     const formatDate = (date: string) => {
-      return formatDateFromISO(date, currentLanguage)
+      return formatDateFromISO(date, language.current)
     }
     const formatDateRelative = (date: string) => {
-      return formatRelativeDateFromISO(date, currentLanguage)
+      return formatRelativeDateFromISO(date, language.current)
     }
 
     const messageParameters = [

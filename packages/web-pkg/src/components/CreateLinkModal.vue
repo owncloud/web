@@ -187,7 +187,8 @@ export default defineComponent({
   emits: ['cancel', 'confirm'],
   setup(props, { expose }) {
     const clientService = useClientService()
-    const { $gettext, current: currentLanguage } = useGettext()
+    const language = useGettext()
+    const { $gettext } = language
     const passwordPolicyService = usePasswordPolicyService()
     const { isEnabled: isEmbedEnabled, postMessage } = useEmbedMode()
     const { expirationRules } = useExpirationRules()
@@ -227,14 +228,14 @@ export default defineComponent({
     const selectedExpiryDateRelative = computed(() =>
       formatRelativeDateFromDateTime(
         DateTime.fromJSDate(new Date(unref(selectedExpiry))).endOf('day'),
-        currentLanguage
+        language.current
       )
     )
 
     const selectedExpiryDate = computed(() =>
       formatRelativeDateFromDateTime(
         DateTime.fromJSDate(new Date(unref(selectedExpiry))).endOf('day'),
-        currentLanguage
+        language.current
       )
     )
 
