@@ -1,10 +1,9 @@
 import FileDetails from '../../../../../src/components/SideBar/Details/FileDetails.vue'
 import { Resource, ShareResource, ShareTypes } from '@ownclouders/web-client'
-import { defaultComponentMocks, defaultPlugins, RouteLocation } from 'web-test-helpers'
+import { mount, defaultComponentMocks, defaultPlugins, RouteLocation } from 'web-test-helpers'
 import { mock, mockDeep } from 'vitest-mock-extended'
 import { SpaceResource } from '@ownclouders/web-client'
 import { AncestorMetaData } from '@ownclouders/web-pkg/'
-import { mount } from '@vue/test-utils'
 import { User } from '@ownclouders/web-client/graph/generated'
 
 const getResourceMock = ({
