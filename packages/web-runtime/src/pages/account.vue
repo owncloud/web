@@ -99,6 +99,7 @@
               :placeholder="$gettext('Please choose...')"
               :model-value="selectedLanguageValue"
               :clearable="false"
+              :searchable="true"
               :options="languageOptions"
               @update:model-value="updateSelectedLanguage"
             />
