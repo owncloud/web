@@ -420,8 +420,17 @@ export default defineComponent({
     })
 
     const footerTextTotal = computed(() => {
-      return $gettext('%{spaceCount} spaces in total', {
-        spaceCount: unref(spaces).length.toString()
+      const disabledSpaces = unref(spaces).filter((space) => space.disabled === true)
+
+      if (!disabledSpaces.length) {
+        return $gettext('%{spaceCount} spaces in total', {
+          spaceCount: unref(spaces).length.toString()
+        })
+      }
+
+      return $gettext('%{spaceCount} spaces in total (including %{disabledSpaceCount} disabled)', {
+        spaceCount: unref(spaces).length.toString(),
+        disabledSpaceCount: disabledSpaces.length.toString()
       })
     })
     const footerTextFilter = computed(() => {
