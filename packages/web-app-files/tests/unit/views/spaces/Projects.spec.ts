@@ -41,6 +41,7 @@ const spacesResources = [
     path: '',
     type: 'space',
     isFolder: true,
+    disabled: false,
     getDriveAliasAndItem: () => '1'
   },
   {
@@ -51,6 +52,18 @@ const spacesResources = [
     path: '',
     type: 'space',
     isFolder: true,
+    disabled: false,
+    getDriveAliasAndItem: () => '2'
+  },
+  {
+    id: '3',
+    name: 'Some disabled space',
+    driveType: 'project',
+    description: 'desc',
+    path: '',
+    type: 'space',
+    isFolder: true,
+    disabled: true,
     getDriveAliasAndItem: () => '2'
   }
 ] as unknown as SpaceResource[]
@@ -91,6 +104,16 @@ describe('Projects view', () => {
       await nextTick()
       expect(wrapper.vm.items).toEqual([spacesResources[1]])
     })
+    it('shows only enabled spaces if filter applied', async () => {
+      const { wrapper } = getMountedWrapper({ spaces: spacesResources })
+      await nextTick()
+      expect(wrapper.vm.items.length).toEqual(2)
+    })
+    it('shows all spaces if onlyEnabled filter is not applied', async () => {
+      const { wrapper } = getMountedWrapper({ spaces: spacesResources, onlyEnabledSpaces: false })
+      await nextTick()
+      expect(wrapper.vm.items.length).toEqual(3)
+    })
   })
   it('should display the "Create Space"-button when permission given', () => {
     const { wrapper } = getMountedWrapper({
@@ -105,15 +128,18 @@ function getMountedWrapper({
   mocks = {},
   spaces = [],
   abilities = [],
-  stubAppBar = true
+  stubAppBar = true,
+  onlyEnabledSpaces = true
 }: {
   mocks?: Record<string, unknown>
   spaces?: SpaceResource[]
   abilities?: AbilityRule[]
   stubAppBar?: boolean
+  onlyEnabledSpaces?: boolean
 } = {}) {
   const plugins = defaultPlugins({ abilities, piniaOptions: { spacesState: { spaces } } })
 
+  vi.mocked(queryItemAsString).mockImplementationOnce(() => onlyEnabledSpaces.toString())
   vi.mocked(queryItemAsString).mockImplementationOnce(() => '1')
   vi.mocked(queryItemAsString).mockImplementationOnce(() => '100')
 
