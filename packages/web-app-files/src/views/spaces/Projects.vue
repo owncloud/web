@@ -303,7 +303,7 @@ export default defineComponent({
       fields: sortFields
     })
     const filter = (spaces: Array<ProjectSpaceResource>, filterTerm: string) => {
-      const isEnabledOnlySearch = queryItemAsString(unref(enabledOnlyParam)) == 'true'
+      const isEnabledOnlySearch = queryItemAsString(unref(enabledOnlyParam)) === 'true'
 
       if (isEnabledOnlySearch) {
         spaces = spaces.filter((space) => space.disabled !== true)
