@@ -1,6 +1,6 @@
 <template>
   <div class="oc-modal-background" aria-labelledby="oc-modal-title">
-    <focus-trap :active="true" :initial-focus="initialFocusRef">
+    <focus-trap :active="true" :initial-focus="initialFocusRef" :tabbable-options="tabbableOptions">
       <div
         :id="elementId"
         ref="ocModal"
@@ -80,12 +80,12 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, PropType, ComponentPublicInstance, ref, watch } from 'vue'
+import { defineComponent, PropType, ComponentPublicInstance, ref, watch, computed } from 'vue'
 import OcButton from '../OcButton/OcButton.vue'
 import OcIcon from '../OcIcon/OcIcon.vue'
 import OcTextInput from '../OcTextInput/OcTextInput.vue'
 import { FocusTrap } from 'focus-trap-vue'
-import { FocusTargetOrFalse, FocusTargetValueOrFalse } from 'focus-trap'
+import { FocusTargetOrFalse, FocusTargetValueOrFalse, FocusTrapTabbableOptions } from 'focus-trap'
 
 /**
  * Modals are generally used to force the user to focus on confirming or completing a single action.
@@ -275,7 +275,7 @@ export default defineComponent({
      * Can be `#id, .class`.
      */
     focusTrapInitial: {
-      type: String,
+      type: [String, Boolean],
       required: false,
       default: null
     },
@@ -301,6 +301,13 @@ export default defineComponent({
   setup(props) {
     const showSpinner = ref(false)
     const buttonConfirmAppearance = ref('filled')
+
+    const tabbableOptions = computed((): FocusTrapTabbableOptions => {
+      // Enable shadowDom support for e.G emoji-picker
+      return {
+        getShadowRoot: true
+      }
+    })
 
     const resetLoadingState = () => {
       showSpinner.value = false
@@ -330,7 +337,8 @@ export default defineComponent({
 
     return {
       showSpinner,
-      buttonConfirmAppearance
+      buttonConfirmAppearance,
+      tabbableOptions
     }
   },
   data() {
@@ -340,7 +348,7 @@ export default defineComponent({
   },
   computed: {
     initialFocusRef(): FocusTargetOrFalse {
-      if (this.focusTrapInitial) {
+      if (this.focusTrapInitial || this.focusTrapInitial === false) {
         return this.focusTrapInitial
       }
       return () => {
