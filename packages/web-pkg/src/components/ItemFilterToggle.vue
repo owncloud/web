@@ -39,7 +39,7 @@ export default defineComponent({
       return router.push({
         query: {
           ...omit(unref(currentRoute).query, [queryParam]),
-          ...(unref(filterActive) && { [queryParam]: 'true' })
+          [queryParam]: unref(filterActive).toString()
         }
       })
     }

@@ -36,7 +36,20 @@
           </template>
         </no-content-message>
         <div v-else class="spaces-list oc-mt-l">
-          <div class="spaces-list-filters oc-flex oc-flex-right oc-px-m oc-mb-m">
+          <div
+            class="spaces-list-filters oc-flex oc-flex-between oc-flex-wrap oc-flex-bottom oc-mx-m oc-mb-m"
+          >
+            <div class="oc-flex">
+              <div class="oc-mr-m oc-flex oc-flex-middle">
+                <oc-icon name="filter-2" class="oc-mr-xs" />
+                <span v-text="$gettext('Filter:')" />
+              </div>
+              <item-filter-toggle
+                :filter-label="$gettext('Enabled only')"
+                filter-name="enabledOnly"
+                class="spaces-list-filter-enabled-only oc-mr-s"
+              />
+            </div>
             <oc-text-input
               id="spaces-filter"
               v-model="filterTerm"
@@ -159,7 +172,10 @@ import {
   useConfigStore,
   useResourcesStore,
   useSpacesStore,
-  useExtensionRegistry
+  useExtensionRegistry,
+  ItemFilterToggle,
+  useRouteQuery,
+  queryItemAsString
 } from '@ownclouders/web-pkg'
 
 import { AppBar } from '@ownclouders/web-pkg'
@@ -185,7 +201,6 @@ import SpaceContextActions from '../../components/Spaces/SpaceContextActions.vue
 import {
   isProjectSpaceResource,
   ProjectSpaceResource,
-  Resource,
   SpaceResource
 } from '@ownclouders/web-client'
 import FilesViewWrapper from '../../components/FilesViewWrapper.vue'
@@ -208,6 +223,7 @@ import { folderViewsProjectSpacesExtensionPoint } from '../../extensionPoints'
 
 export default defineComponent({
   components: {
+    ItemFilterToggle,
     AppBar,
     AppLoadingSpinner,
     CreateSpace,
@@ -232,6 +248,8 @@ export default defineComponent({
     const imageContentObject = ref<Record<string, { fileId: string; data: string }>>({})
     const previewService = usePreviewService()
     const configStore = useConfigStore()
+    const enabledOnlyParam = useRouteQuery('q_enabledOnly')
+    enabledOnlyParam.value = unref(enabledOnlyParam) || 'true'
 
     const { setSelection, initResourceList, clearResourceList } = useResourcesStore()
 
@@ -284,10 +302,17 @@ export default defineComponent({
       items: runtimeSpaces,
       fields: sortFields
     })
-    const filter = (spaces: Array<Resource>, filterTerm: string) => {
+    const filter = (spaces: Array<ProjectSpaceResource>, filterTerm: string) => {
+      const isEnabledOnlySearch = queryItemAsString(unref(enabledOnlyParam)) === 'true'
+
+      if (isEnabledOnlySearch) {
+        spaces = spaces.filter((space) => space.disabled !== true)
+      }
+
       if (!(filterTerm || '').trim()) {
         return spaces
       }
+
       const searchEngine = new Fuse(spaces, { ...defaultFuseOptions, keys: ['name'] })
       return searchEngine.search(filterTerm).map((r) => r.item)
     }
@@ -395,8 +420,17 @@ export default defineComponent({
     })
 
     const footerTextTotal = computed(() => {
-      return $gettext('%{spaceCount} spaces in total', {
-        spaceCount: unref(spaces).length.toString()
+      const disabledSpaces = unref(spaces).filter((space) => space.disabled === true)
+
+      if (!disabledSpaces.length) {
+        return $gettext('%{spaceCount} spaces in total', {
+          spaceCount: unref(spaces).length.toString()
+        })
+      }
+
+      return $gettext('%{spaceCount} spaces in total (including %{disabledSpaceCount} disabled)', {
+        spaceCount: unref(spaces).length.toString(),
+        disabledSpaceCount: disabledSpaces.length.toString()
       })
     })
     const footerTextFilter = computed(() => {
