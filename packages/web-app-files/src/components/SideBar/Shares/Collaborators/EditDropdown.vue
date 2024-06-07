@@ -150,6 +150,7 @@ export default defineComponent({
     const capabilityStore = useCapabilityStore()
     const capabilityRefs = storeToRefs(capabilityStore)
     const language = useGettext()
+    const { $gettext } = language
     const configStore = useConfigStore()
 
     const toggleShareDenied = (value: boolean) => {
@@ -158,7 +159,7 @@ export default defineComponent({
 
     const dropButtonTooltip = computed(() => {
       if (props.isLocked) {
-        return language.$gettext('Resource is temporarily locked, unable to manage share')
+        return $gettext('Resource is temporarily locked, unable to manage share')
       }
 
       return ''

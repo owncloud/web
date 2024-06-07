@@ -62,6 +62,8 @@ export const onSSESpaceMemberRemovedEvent = async ({
     return
   }
 
+  const { $gettext } = language
+
   spacesStore.removeSpace(removedSpace)
 
   if (
@@ -70,7 +72,7 @@ export const onSSESpaceMemberRemovedEvent = async ({
   ) {
     // Fixme: Message triggers when user membership was revoked, but still is in a group membership, which is wrong
     return messageStore.showMessage({
-      title: language.$gettext(
+      title: $gettext(
         'Your access to this space has been revoked. Please navigate to another location.'
       )
     })
@@ -219,6 +221,7 @@ export const onSSEShareRemovedEvent = async ({
     // If initiated by current client (browser tab), action unnecessary. Web manages its own logic, return early.
     return
   }
+  const { $gettext } = language
 
   if (
     isLocationSpacesActive(router, 'files-spaces-generic') &&
@@ -227,7 +230,7 @@ export const onSSEShareRemovedEvent = async ({
   ) {
     // Fixme: Message triggers when user share was revoked, but still is in a group share, which is wrong
     return messageStore.showMessage({
-      title: language.$gettext(
+      title: $gettext(
         'Your access to this share has been revoked. Please navigate to another location.'
       )
     })

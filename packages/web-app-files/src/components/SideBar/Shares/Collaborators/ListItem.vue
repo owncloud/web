@@ -199,7 +199,8 @@ export default defineComponent({
     const { showMessage, showErrorMessage } = useMessages()
     const userStore = useUserStore()
     const clientService = useClientService()
-    const { $gettext, current: currentLanguage } = useGettext()
+    const language = useGettext()
+    const { $gettext } = language
     const { dispatchModal } = useModals()
 
     const { updateShare } = useSharesStore()
@@ -214,7 +215,7 @@ export default defineComponent({
     })
 
     const shareDate = computed(() => {
-      return formatDateFromDateTime(DateTime.fromISO(props.share.createdDateTime), currentLanguage)
+      return formatDateFromDateTime(DateTime.fromISO(props.share.createdDateTime), language.current)
     })
 
     const setDenyShare = (value: boolean) => {

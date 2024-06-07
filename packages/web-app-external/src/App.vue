@@ -57,11 +57,11 @@ export default defineComponent({
   emits: ['update:applicationName'],
   setup(props, { emit }) {
     const language = useGettext()
+    const { $gettext } = language
     const { showErrorMessage } = useMessages()
     const capabilityStore = useCapabilityStore()
     const configStore = useConfigStore()
 
-    const { $gettext } = language
     const { makeRequest } = useRequest()
 
     const appNameQuery = useRouteQuery('app')
@@ -128,13 +128,11 @@ export default defineComponent({
               errorPopup(response.data?.message)
           }
 
-          const error = new Error('Error fetching app information')
-          throw error
+          throw new Error('Error fetching app information')
         }
 
         if (!response.data.app_url || !response.data.method) {
-          const error = new Error('Error in app server response')
-          throw error
+          throw new Error('Error in app server response')
         }
 
         appUrl.value = response.data.app_url

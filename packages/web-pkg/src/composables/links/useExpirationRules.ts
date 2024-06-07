@@ -5,9 +5,11 @@ import { useCapabilityStore } from '../piniaStores'
 
 export const useExpirationRules = () => {
   const capabilityStore = useCapabilityStore()
-  const { current: currentLanguage } = useGettext()
+  const language = useGettext()
 
-  const expirationRules = computed(() => getExpirationRules({ capabilityStore, currentLanguage }))
+  const expirationRules = computed(() =>
+    getExpirationRules({ capabilityStore, currentLanguage: language.current })
+  )
 
   return { expirationRules }
 }

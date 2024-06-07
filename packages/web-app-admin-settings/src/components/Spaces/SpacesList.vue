@@ -162,7 +162,8 @@ export default defineComponent({
   setup() {
     const router = useRouter()
     const route = useRoute()
-    const { $gettext, current: currentLanguage } = useGettext()
+    const language = useGettext()
+    const { $gettext } = language
 
     const { y: fileListHeaderY } = useFileListHeaderPosition('#admin-settings-app-bar')
     const contextMenuButtonRef = ref(undefined)
@@ -358,29 +359,29 @@ export default defineComponent({
       return managerStr
     }
     const formatDate = (date: string) => {
-      return formatDateFromJSDate(new Date(date), currentLanguage)
+      return formatDateFromJSDate(new Date(date), language.current)
     }
     const formatDateRelative = (date: string) => {
-      return formatRelativeDateFromJSDate(new Date(date), currentLanguage)
+      return formatRelativeDateFromJSDate(new Date(date), language.current)
     }
     const getTotalQuota = (space: SpaceResource) => {
       if (space.spaceQuota.total === 0) {
         return $gettext('Unrestricted')
       }
 
-      return formatFileSize(space.spaceQuota.total, currentLanguage)
+      return formatFileSize(space.spaceQuota.total, language.current)
     }
     const getUsedQuota = (space: SpaceResource) => {
       if (space.spaceQuota.used === undefined) {
         return '-'
       }
-      return formatFileSize(space.spaceQuota.used, currentLanguage)
+      return formatFileSize(space.spaceQuota.used, language.current)
     }
     const getRemainingQuota = (space: SpaceResource) => {
       if (space.spaceQuota.remaining === undefined) {
         return '-'
       }
-      return formatFileSize(space.spaceQuota.remaining, currentLanguage)
+      return formatFileSize(space.spaceQuota.remaining, language.current)
     }
     const getMemberCount = (space: SpaceResource) => {
       return (

@@ -25,13 +25,14 @@ export default defineComponent({
   },
   emits: ['emojiSelect', 'clickOutside'],
   setup(props, { emit }) {
-    const { $gettext, current: currentLanguage } = useGettext()
+    const language = useGettext()
+    const { $gettext } = language
     const emojiPickerRef = ref<HTMLElement>()
 
     const isLoading = ref(true)
 
     watch(
-      [() => props.theme, currentLanguage],
+      [() => props.theme, language.current],
       async () => {
         isLoading.value = true
 

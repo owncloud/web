@@ -44,7 +44,7 @@ export default defineComponent({
   },
   emits: ['update:currentContent'],
   setup(props, { emit }) {
-    const { current: currentLanguage } = useGettext()
+    const language = useGettext()
     const themeStore = useThemeStore()
     const toastUiEditorRef = ref()
     // Should not be a ref, otherwise functions like setMarkdown won't work
@@ -68,7 +68,7 @@ export default defineComponent({
         initialValue: props.currentContent,
         useCommandShortcut: false,
         hideModeSwitch: true,
-        language: currentLanguage,
+        language: language.current,
         height: '100%',
         plugins: [codeSyntaxHighlight],
         viewer: props.isReadOnly,

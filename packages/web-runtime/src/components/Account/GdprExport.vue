@@ -55,7 +55,8 @@ export default defineComponent({
     const { showMessage, showErrorMessage } = useMessages()
     const userStore = useUserStore()
     const spacesStore = useSpacesStore()
-    const { $gettext, current: currentLanguage } = useGettext()
+    const language = useGettext()
+    const { $gettext } = language
     const clientService = useClientService()
     const { downloadFile } = useDownloadFile()
 
@@ -115,7 +116,7 @@ export default defineComponent({
     }
 
     const exportDate = computed(() => {
-      return formatDateFromJSDate(new Date(unref(exportFile).mdate), currentLanguage)
+      return formatDateFromJSDate(new Date(unref(exportFile).mdate), language.current)
     })
 
     onMounted(() => {

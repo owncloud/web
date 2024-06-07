@@ -153,13 +153,14 @@ export const onSSEItemTrashedEvent = ({
     // If initiated by current client (browser tab), action unnecessary. Web manages its own logic, return early.
     return
   }
+  const { $gettext } = language
 
   const currentFolder = resourcesStore.currentFolder
   const resourceIsCurrentFolder = currentFolder?.id === sseData.itemid
 
   if (resourceIsCurrentFolder) {
     return messageStore.showMessage({
-      title: language.$gettext(
+      title: $gettext(
         'The folder you were accessing has been removed. Please navigate to another location.'
       )
     })
