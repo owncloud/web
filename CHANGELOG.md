@@ -11,6 +11,7 @@ Summary
 * Bugfix - Local logout if IdP has no logout support: [#10974](https://github.com/owncloud/web/pull/10974)
 * Enhancement - Audio metadata panel: [#10956](https://github.com/owncloud/web/pull/10956)
 * Enhancement - EXIF metadata panel: [#10956](https://github.com/owncloud/web/pull/10956)
+* Enhancement - Add enabled only filter to spaces overview: [#11004](https://github.com/owncloud/web/pull/11004)
 
 Details
 -------
@@ -44,6 +45,15 @@ Details
    preview app displaying an image.
 
    https://github.com/owncloud/web/pull/10956
+
+* Enhancement - Add enabled only filter to spaces overview: [#11004](https://github.com/owncloud/web/pull/11004)
+
+   We've added an 'enabled only' filter to the spaces overview which is on by
+   default. This helps the user to manage spaces efficiently, even if there are a
+   lot of disabled spaces.
+
+   https://github.com/owncloud/web/issues/11001
+   https://github.com/owncloud/web/pull/11004
 
 Changelog for ownCloud Web [9.0.0] (2024-05-28)
 =======================================
