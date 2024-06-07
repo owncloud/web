@@ -497,6 +497,7 @@ def e2eTests(ctx):
         "db": "mysql:5.5",
         "suites": [],
         "tikaNeeded": False,
+        "failOnUncaughtConsoleError": "false",
     }
 
     e2e_trigger = {
@@ -524,12 +525,15 @@ def e2eTests(ctx):
 
         if ("with-tracing" in ctx.build.title.lower()):
             params["reportTracing"] = "true"
+        if ("check-console-errors" in ctx.build.title.lower()):
+            params["failOnUncaughtConsoleError"] = "true"
 
         environment = {
             "HEADLESS": "true",
             "RETRY": "1",
             "REPORT_TRACING": params["reportTracing"],
             "BASE_URL_OCIS": "ocis:9200",
+            "FAIL_ON_UNCAUGHT_CONSOLE_ERR": params["failOnUncaughtConsoleError"],
         }
 
         steps = skipIfUnchanged(ctx, "e2e-tests") + \

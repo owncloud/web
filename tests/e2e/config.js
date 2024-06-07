@@ -38,5 +38,6 @@ exports.config = {
   reportDir: process.env.REPORT_DIR || 'reports/e2e',
   reportVideo: process.env.REPORT_VIDEO === 'true',
   reportHar: process.env.REPORT_HAR === 'true',
-  reportTracing: process.env.REPORT_TRACING === 'true'
+  reportTracing: process.env.REPORT_TRACING === 'true',
+  failOnUncaughtConsoleError: process.env.FAIL_ON_UNCAUGHT_CONSOLE_ERR === 'true'
 }

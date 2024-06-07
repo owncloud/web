@@ -1,6 +1,6 @@
 import { Actor } from '../../types'
 import { ActorOptions, buildBrowserContextOptions } from './shared'
-import { BrowserContext, Page } from '@playwright/test'
+import { BrowserContext, Page, expect } from '@playwright/test'
 import path from 'path'
 import EventEmitter from 'events'
 
@@ -22,6 +22,14 @@ export class ActorEnvironment extends EventEmitter implements Actor {
     }
 
     this.page = await this.context.newPage()
+
+    this.page.on('pageerror', (exception) => {
+      console.log(`[UNCAUGHT EXCEPTION] "${exception}"`)
+      // make the test fail if FAIL_ON_UNCAUGHT_CONSOLE_ERR=true
+      if (this.options.context.failOnUncaughtConsoleError) {
+        expect(exception).not.toBeDefined()
+      }
+    })
   }
 
   public async newPage(newPage: Page): Promise<Page> {
