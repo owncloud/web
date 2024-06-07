@@ -4,7 +4,7 @@
     ref="drawIoEditor"
     :src="iframeSource"
     :title="$gettext('Draw.io editor')"
-    sandbox="allow-scripts allow-same-origin"
+    sandbox="allow-scripts"
   />
 </template>
 

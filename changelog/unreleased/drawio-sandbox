@@ -1,0 +1,7 @@
+Enhancement: Execute drawio with a miniman iframe sandbox
+
+Starting with v24.5.2 drawio can be properly sanboxed
+
+https://github.com/owncloud/web/issues/10716
+https://github.com/jgraph/drawio/issues/4340
+https://github.com/owncloud/web/pull/11010
