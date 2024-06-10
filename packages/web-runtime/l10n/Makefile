@@ -31,7 +31,7 @@ translations: ./translations.json
 ./translations.json:
 	@for app in $(APPS); \
 	do \
-		(cd $$app && ls -l l10n/locale/** && cat l10n/locale/de/app.po && pnpm exec vue-gettext-compile --config ../../gettext.config.cjs); \
+		(cd $$app && pnpm exec vue-gettext-compile --config ../../gettext.config.cjs); \
 	done; \
 
 .PHONY: push
@@ -47,7 +47,6 @@ pull:
 	@for app in $(APPS); \
 	do \
 		cd $$app/l10n; \
+		rm locale/**/app.po; \
 		tx pull -a; \
-		ls -l locale/**; \
-		cat l10n/locale/de/app.po; \
 	done; \
