@@ -20,7 +20,6 @@ extract: ./template.pot
 # Generate .po files for each available language.
 	@for app in $(APPS); \
 	do \
-		export OUT_DIR=$$app/l10n; \
 		(cd $$app && pnpm exec vue-gettext-extract --config ../../gettext.config.cjs); \
 	done;
 
@@ -32,16 +31,14 @@ translations: ./translations.json
 ./translations.json:
 	@for app in $(APPS); \
 	do \
-		export OUT_DIR=$$app/l10n; \
-		(cd $$app && pnpm exec vue-gettext-compile --config ../../gettext.config.cjs); \
+		(cd $$app && ls -l l10n/locale/** && cat l10n/locale/de/app.po && pnpm exec vue-gettext-compile --config ../../gettext.config.cjs); \
 	done; \
 
 .PHONY: push
 push:
 	@for app in $(APPS); \
 	do \
-		export OUT_DIR=$$app/l10n; \
-		cd $$OUT_DIR; \
+		cd $$app/l10n; \
 		tx push -s; \
 	done; \
 
@@ -49,7 +46,7 @@ push:
 pull:
 	@for app in $(APPS); \
 	do \
-		export OUT_DIR=$$app/l10n; \
-		cd $$OUT_DIR; \
+		cd $$app/l10n; \
 		tx pull -a; \
+		ls -l locale/**; \
 	done; \
