@@ -56,8 +56,8 @@ Feature: Integrate with online office suites like Collabora and OnlyOffice
       | OpenDocument.odt | OpenDocument | Edited OpenDocument Content |
     And "Brian" closes the file viewer
     When "Alice" updates following sharee role
-      | resource         | recipient | type  | role     | resourceType |
-      | OpenDocument.odt | Brian     | user  | Can edit | file         |
+      | resource         | recipient | type | role     | resourceType |
+      | OpenDocument.odt | Brian     | user | Can edit | file         |
     And "Alice" opens the following file in Collabora
       | resource         |
       | OpenDocument.odt |
@@ -161,3 +161,97 @@ Feature: Integrate with online office suites like Collabora and OnlyOffice
   #   # In case the user does not have download permissions and tries to copy file content, the clipboard should be set to “Copying from document disabled”.
   #   Then "Brian" should see the content "Copying from the document disabled" in editor "Collabora"
   #   And "Brian" logs out
+
+
+  Scenario: public creates a Microsoft Word file with OnlyOffice
+    Given "Admin" assigns following roles to the users using API
+      | id    | role        |
+      | Alice | Space Admin |
+    And "Alice" creates the following project space using API
+      | name      | id          |
+      | Marketing | marketing.1 |
+    And "Alice" creates the following folder in space "Marketing" using API
+      | name     |
+      | myfolder |
+    When "Alice" navigates to the project space "marketing.1"
+    And "Alice" creates a public link for the space with password "%public%" using the sidebar panel
+    And "Alice" renames the most recently created public link of space to "spaceLink"
+    And "Alice" edits the public link named "spaceLink" of the space changing role to "Can edit"
+    And "Alice" creates a public link of following resource using the sidebar panel
+      | resource | role     | password |
+      | myfolder | Can edit | %public% |
+
+    # public create .docx file using spaceLink
+    When "Anonymous" opens the public link "spaceLink"
+    And "Anonymous" unlocks the public link with password "%public%"
+    And "Anonymous" creates the following resources
+      | resource            | type           | content                                                      |
+      | usingSpaceLink.docx | Microsoft Word | public can create files in the project space using spaceLink |
+
+    # public create .docx file using folderLink
+    When "Anonymous" opens the public link "Link"
+    And "Anonymous" unlocks the public link with password "%public%"
+    And "Anonymous" creates the following resources
+      | resource             | type           | content                |
+      | usingFolderLink.docx | Microsoft Word | Microsoft Word Content |
+
+    When "Alice" navigates to the project space "marketing.1"
+    And "Alice" opens the following file in OnlyOffice
+      | resource           |
+      | usingSpaceLink.docx |
+    Then "Alice" should see the content "public can create files in the project space using spaceLink" in editor "OnlyOffice"
+    And "Alice" closes the file viewer
+
+    When "Alice" opens folder "myfolder"
+    And "Alice" opens the following file in OnlyOffice
+      | resource           |
+      | usingFolderLink.docx |
+    Then "Alice" should see the content "Microsoft Word Content" in editor "OnlyOffice"
+    And "Alice" logs out
+
+
+  Scenario: public creates a Microsoft Word file with Collabora
+    Given "Admin" assigns following roles to the users using API
+      | id    | role        |
+      | Alice | Space Admin |
+    And "Alice" creates the following project space using API
+      | name      | id          |
+      | Marketing | marketing.1 |
+    And "Alice" creates the following folder in space "Marketing" using API
+      | name     |
+      | myfolder |
+    When "Alice" navigates to the project space "marketing.1"
+    And "Alice" creates a public link for the space with password "%public%" using the sidebar panel
+    And "Alice" renames the most recently created public link of space to "spaceLink"
+    And "Alice" edits the public link named "spaceLink" of the space changing role to "Can edit"
+    And "Alice" creates a public link of following resource using the sidebar panel
+      | resource | role     | password |
+      | myfolder | Can edit | %public% |
+
+    # public create .docx file using spaceLink
+    When "Anonymous" opens the public link "spaceLink"
+    And "Anonymous" unlocks the public link with password "%public%"
+    And "Anonymous" creates the following resources
+      | resource            | type           | content                                                      |
+      | usingSpaceLink.odt | OpenDocument | public can create files in the project space using spaceLink |
+
+    # public create .docx file using folderLink
+    When "Anonymous" opens the public link "Link"
+    And "Anonymous" unlocks the public link with password "%public%"
+    And "Anonymous" creates the following resources
+      | resource             | type           | content                |
+      | usingFolderLink.odt | OpenDocument | OpenDocument Content |
+
+    When "Alice" navigates to the project space "marketing.1"
+    And "Alice" opens the following file in Collabora
+      | resource           |
+      | usingSpaceLink.odt |
+    Then "Alice" should see the content "public can create files in the project space using spaceLink" in editor "Collabora"
+    And "Alice" closes the file viewer
+
+    When "Alice" opens folder "myfolder"
+    And "Alice" opens the following file in Collabora
+      | resource           |
+      | usingFolderLink.odt |
+    Then "Alice" should see the content "OpenDocument Content" in editor "Collabora"
+    And "Alice" logs out
