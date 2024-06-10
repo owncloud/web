@@ -49,4 +49,5 @@ pull:
 		cd $$app/l10n; \
 		tx pull -a; \
 		ls -l locale/**; \
+		cat l10n/locale/de/app.po; \
 	done; \
