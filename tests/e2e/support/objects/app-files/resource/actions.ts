@@ -399,13 +399,13 @@ export const fillContentOfDocument = async ({
       break
     case 'Collabora':
       await editorMainFrame.locator(collaboraDocTextAreaSelector).focus()
-      await page.keyboard.press('Control+A')
+      await page.keyboard.press('ControlOrMeta+A')
       await editorMainFrame.locator(collaboraDocTextAreaSelector).fill(text)
       break
     case 'OnlyOffice':
       const innerIframe = editorMainFrame.frameLocator(onlyOfficeInnerFrameSelector)
       await innerIframe.locator(onlyofficeDocTextAreaSelector).focus()
-      await page.keyboard.press('Control+A')
+      await page.keyboard.press('ControlOrMeta+A')
       await innerIframe.locator(onlyofficeDocTextAreaSelector).fill(text)
       break
     default:
@@ -445,8 +445,8 @@ export const openAndGetContentOfDocument = async ({
       )
   }
   // copying and getting the value with keyboard requires some
-  await page.keyboard.press('Control+A', { delay: 200 })
-  await page.keyboard.press('Control+C', { delay: 200 })
+  await page.keyboard.press('ControlOrMeta+A', { delay: 200 })
+  await page.keyboard.press('ControlOrMeta+C', { delay: 200 })
   return await page.evaluate(() => navigator.clipboard.readText())
 }
 
@@ -888,7 +888,7 @@ export const moveOrCopyMultipleResources = async (
     }
     case 'keyboard': {
       const keyValue = action === 'copy' ? 'c' : 'x'
-      await page.keyboard.press(`Control+${keyValue}`)
+      await page.keyboard.press(`ControlOrMeta+${keyValue}`)
       await page.locator(breadcrumbRoot).click()
       const newLocationPath = newLocation.split('/')
       for (const path of newLocationPath) {
@@ -896,7 +896,7 @@ export const moveOrCopyMultipleResources = async (
           await clickResource({ page, path: path })
         }
       }
-      await page.keyboard.press('Control+v')
+      await page.keyboard.press('ControlOrMeta+v')
       break
     }
     case 'drag-drop': {
@@ -960,7 +960,7 @@ export const moveOrCopyResource = async (args: moveOrCopyResourceArgs): Promise<
       const resourceCheckbox = page.locator(util.format(checkBox, resourceBase))
       await resourceCheckbox.check()
       const keyValue = action === 'copy' ? 'c' : 'x'
-      await page.keyboard.press(`Control+${keyValue}`)
+      await page.keyboard.press(`ControlOrMeta+${keyValue}`)
       await page.locator(breadcrumbRoot).click()
       const newLocationPath = newLocation.split('/')
       for (const path of newLocationPath) {
@@ -975,7 +975,7 @@ export const moveOrCopyResource = async (args: moveOrCopyResourceArgs): Promise<
             resp.status() === 201 &&
             resp.request().method() === action.toUpperCase()
         ),
-        page.keyboard.press('Control+v')
+        page.keyboard.press('ControlOrMeta+v')
       ])
       break
     }
