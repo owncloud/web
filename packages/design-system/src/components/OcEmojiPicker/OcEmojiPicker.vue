@@ -1,5 +1,7 @@
 <template>
-  <div v-if="isLoading" class="oc-flex oc-flex-center"><oc-spinner size="large" /></div>
+  <div v-if="isLoading" class="oc-flex oc-flex-center">
+    <oc-spinner size="large" />
+  </div>
   <div v-else ref="emojiPickerRef"></div>
 </template>
 
@@ -73,8 +75,9 @@ export default defineComponent({
           onEmojiSelect: (emoji: any) => emit('emojiSelect', emoji.native),
           onClickOutside: () => emit('clickOutside'),
           i18n,
-          theme: props.theme,
-          data
+          data,
+          autoFocus: true,
+          theme: props.theme
         }
 
         // lazy loading to avoid loading the whole package on page load
@@ -86,7 +89,6 @@ export default defineComponent({
 
         unref(emojiPickerRef).innerHTML = ''
         unref(emojiPickerRef).appendChild(picker as any)
-        unref(emojiPickerRef).focus()
       },
       { immediate: true }
     )

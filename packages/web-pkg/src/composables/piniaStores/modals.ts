@@ -41,7 +41,7 @@ export type Modal = {
   inputLabel?: string
   inputError?: string
   inputDescription?: string
-  focusTrapInitial?: string
+  focusTrapInitial?: string | false
   contextualHelperLabel?: string
   contextualHelperData?: ContextualHelperData
   customComponent?: CustomModalComponent
