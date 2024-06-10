@@ -19,7 +19,8 @@ Feature: language settings
     And "Brian" logs out
     And "Alice" logs in
     And "Alice" opens the user menu
-    And "Alice" changes the language to "Deutsch - German"
+    When "Alice" changes the language to "Deutsch - German"
+    And "Alice" reloads the page
     Then "Alice" should see the following account page title "Konto"
     When "Alice" logs out
     And "Alice" logs in
@@ -47,4 +48,5 @@ Feature: language settings
     And "Anonymous" unlocks the public link with password "%public%"
     And "Anonymous" opens the user menu
     And "Anonymous" changes the language to "Deutsch - German"
+    And "Anonymous" reloads the page
     Then "Anonymous" should see the following account page title "Konto"

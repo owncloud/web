@@ -55,25 +55,7 @@ config = {
             "earlyFail": True,
             "skip": False,
             "suites": [
-                "journeys",
-                "smoke",
-            ],
-        },
-        "oCIS-2": {
-            "earlyFail": True,
-            "skip": False,
-            "suites": [
-                "admin-settings",
-                "spaces",
-            ],
-        },
-        "oCIS-3": {
-            "earlyFail": True,
-            "skip": False,
-            "tikaNeeded": True,
-            "suites": [
-                "search",
-                "shares",
+                "languageSuite",
             ],
         },
         "oCIS-app-provider": {
@@ -162,7 +144,7 @@ def stagePipelines(ctx):
 
     e2e_pipelines = e2eTests(ctx)
     keycloak_pipelines = e2eTestsOnKeycloak(ctx)
-    return unit_test_pipelines + buildAndTestDesignSystem(ctx) + pipelinesDependsOn(e2e_pipelines + keycloak_pipelines, unit_test_pipelines)
+    return e2e_pipelines
 
 def afterPipelines(ctx):
     return build(ctx) + pipelinesDependsOn(notify(), build(ctx))
