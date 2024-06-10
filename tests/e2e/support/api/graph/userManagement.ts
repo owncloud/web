@@ -3,7 +3,7 @@ import { Group, Me, User } from '../../types'
 import join from 'join-path'
 import { config } from '../../../config'
 import { getApplicationEntity } from './utils'
-import { userRoleStore } from '../../store'
+import {createdUserStore, userRoleStore} from '../../store'
 import { UsersEnvironment } from '../../environment'
 
 export const me = async ({ user }: { user: User }): Promise<Me> => {
@@ -133,8 +133,9 @@ export const addUserToGroup = async ({
   group: Group
   admin: User
 }): Promise<void> => {
-  const groupId = await getGroupId({ group, admin })
-  const userId = await getUserId({ user, admin })
+    const usersEnvironment = new UsersEnvironment()
+  const userId = usersEnvironment.getCreatedUser({ key: user.id }).uuid
+  const groupId = usersEnvironment.getCreatedGroup({ key:group.id }).uuid
   const body = JSON.stringify({
     '@odata.id': join(config.backendUrl, 'graph', 'v1.0', 'users', userId)
   })

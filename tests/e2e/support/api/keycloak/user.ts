@@ -1,6 +1,6 @@
 import join from 'join-path'
 import { getUserIdFromResponse, request, realmBasePath } from './utils'
-import { deleteUser as graphDeleteUser } from '../graph'
+import {deleteUser as graphDeleteUser, getUserId} from '../graph'
 import { checkResponseStatus } from '../http'
 import { User, KeycloakRealmRole } from '../../types'
 import { UsersEnvironment } from '../../environment'
@@ -51,11 +51,12 @@ export const createUser = async ({ user, admin }: { user: User; admin: User }): 
   checkResponseStatus(roleRes, 'Failed while assigning roles to user')
 
   const usersEnvironment = new UsersEnvironment()
-  usersEnvironment.storeCreatedUser({ user: { ...user, uuid, role: defaultNewUserRole } })
+    usersEnvironment.storeCreatedKeycloakUser({ user: { ...user, uuid, role: defaultNewUserRole } })
 
   // initialize user
   await initializeUser(user.id)
 
+    usersEnvironment.storeCreatedUser({ user: { ...user, uuid:(await getUserId({user, admin})), role: defaultNewUserRole } })
   return user
 }
 

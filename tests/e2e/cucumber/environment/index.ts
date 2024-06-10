@@ -18,7 +18,8 @@ import {
   createdSpaceStore,
   createdLinkStore,
   createdGroupStore,
-  createdUserStore
+  createdUserStore,
+    KeycloakCreatedUser
 } from '../../support/store'
 import { Group, User } from '../../support/types'
 import { getTokenFromLogin } from '../../support/utils/tokenHelper'
@@ -138,12 +139,16 @@ AfterAll(() => state.browser && state.browser.close())
 setWorldConstructor(World)
 
 const cleanUpUser = async (adminUser: User) => {
+    let createdUser
+  if (config.keycloak){
+       createdUser = KeycloakCreatedUser
+  } else  createdUser = createdUserStore
   const requests: Promise<User>[] = []
-  createdUserStore.forEach((user) => {
+    createdUser.forEach((user) => {
     requests.push(api.provision.deleteUser({ user, admin: adminUser }))
   })
   await Promise.all(requests)
-  createdUserStore.clear()
+    createdUser.clear()
 }
 
 const cleanUpSpaces = async (adminUser: User) => {
