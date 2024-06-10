@@ -277,7 +277,10 @@ export default defineComponent({
     focusTrapInitial: {
       type: [String, Boolean],
       required: false,
-      default: null
+      default: null,
+      validator: (focusTrapInitial: string | boolean) => {
+        return !(typeof focusTrapInitial === 'boolean' && focusTrapInitial === true)
+      }
     },
     /**
      * Hide the actions at the bottom of the modal
@@ -349,7 +352,7 @@ export default defineComponent({
   computed: {
     initialFocusRef(): FocusTargetOrFalse {
       if (this.focusTrapInitial || this.focusTrapInitial === false) {
-        return this.focusTrapInitial
+        return this.focusTrapInitial as FocusTargetOrFalse
       }
       return () => {
         // FIXME: according to the types it's incorrect to pass this.$refs.ocModalInput
