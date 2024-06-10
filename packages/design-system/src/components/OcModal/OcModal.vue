@@ -303,7 +303,7 @@ export default defineComponent({
     const buttonConfirmAppearance = ref('filled')
 
     const tabbableOptions = computed((): FocusTrapTabbableOptions => {
-      // Enable shadowDom support for e.G emoji-picker
+      // Enable shadow DOM support for e.g. emoji-picker
       return {
         getShadowRoot: true
       }
