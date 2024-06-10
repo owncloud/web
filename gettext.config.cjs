@@ -4,7 +4,7 @@ module.exports = {
     include: ['**/*.js', '**/*.ts', '**/*.vue']
   },
   output: {
-    locales: ['bg', 'cs', 'de', 'es', 'fr', 'it', 'nl', 'ko', 'ru', 'sq', 'sv', 'tr', 'zh'],
+    locales: ['af', 'ar', 'bs', 'bg', 'cs', 'de', 'el', 'es', 'et', 'fr', 'gl', 'he', 'hr', 'id', 'it', 'ja', 'nl', 'pl', 'pt', 'ka', 'ko', 'ro', 'ru', 'si', 'sk', 'sq', 'sv', 'sr', 'ta', 'tr', 'ug', 'uk', 'zh'],
     path: './l10n/locale',
     potPath: '../template.pot',
     jsonPath: "../translations.json",
