@@ -555,6 +555,7 @@ def e2eTests(ctx):
 
         if "app-provider" in suite:
             environment["FAIL_ON_UNCAUGHT_CONSOLE_ERR"] = False
+
             # app-provider specific steps
             steps += collaboraService() + \
                      onlyofficeService() + \
