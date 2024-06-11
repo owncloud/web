@@ -134,7 +134,8 @@ const onlyOfficeSaveButtonSelector = '#slot-btn-dt-save > button'
 const onlyofficeDocTextAreaSelector = '#area_id'
 const onlyOfficeCanvasEditorSelector = '#id_viewer_overlay'
 const onlyOfficeCanvasCursorSelector = '#id_target_cursor'
-// const onlyOfficeAppErrorPanel = '.app-error-panel'
+const onlyOfficeInfoDialog = '.alert .info-box'
+const onlyOfficeInfoDialogConfirm = `${onlyOfficeInfoDialog} button[result="ok"]`
 
 export const clickResource = async ({
   page,
@@ -1681,6 +1682,10 @@ export const openFileInViewer = async (args: openFileInViewerArgs): Promise<void
         .frameLocator(externalEditorIframe)
         .frameLocator(onlyOfficeInnerFrameSelector)
       await onlyOfficeIframe.locator(onlyofficeDocTextAreaSelector).waitFor()
+
+      if (await onlyOfficeIframe.locator(onlyOfficeInfoDialog).isVisible()) {
+        await onlyOfficeIframe.locator(onlyOfficeInfoDialogConfirm).click()
+      }
       break
     case 'Collabora':
       await Promise.all([

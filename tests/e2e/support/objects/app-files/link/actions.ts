@@ -1,7 +1,6 @@
 import { Page, expect } from '@playwright/test'
 import util from 'util'
 import { sidebar } from '../utils'
-import { showShareIndicator } from '../resource/utils'
 import { getActualExpiryDate } from '../../../utils/datePicker'
 import { clickResource } from '../resource/actions'
 
@@ -140,8 +139,6 @@ export const createLink = async (args: createLinkArgs): Promise<string> => {
     ),
     page.locator(editPublicLinkRenameConfirm).click()
   ])
-  await showShareIndicator({ page, buttonLabel: 'link-direct', resource: resourceName }).waitFor()
-
   await clearCurrentPopup(page)
   return await getRecentLinkUrl(page)
 }
