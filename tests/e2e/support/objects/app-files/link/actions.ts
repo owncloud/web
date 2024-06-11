@@ -109,10 +109,9 @@ const getRecentLinkName = async (page: Page): Promise<string> => {
 
 export const createLink = async (args: createLinkArgs): Promise<string> => {
   const { space, page, resource, password, role } = args
-  let resourceName = ''
   if (!space) {
     const resourcePaths = resource.split('/')
-    resourceName = resourcePaths.pop()
+    const resourceName = resourcePaths.pop()
     if (resourcePaths.length) {
       await clickResource({ page: page, path: resourcePaths.join('/') })
     }

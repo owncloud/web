@@ -1681,11 +1681,13 @@ export const openFileInViewer = async (args: openFileInViewerArgs): Promise<void
       const onlyOfficeIframe = page
         .frameLocator(externalEditorIframe)
         .frameLocator(onlyOfficeInnerFrameSelector)
-      await onlyOfficeIframe.locator(onlyofficeDocTextAreaSelector).waitFor()
 
+      // close the info dialog if visible
       if (await onlyOfficeIframe.locator(onlyOfficeInfoDialog).isVisible()) {
         await onlyOfficeIframe.locator(onlyOfficeInfoDialogConfirm).click()
       }
+
+      await onlyOfficeIframe.locator(onlyofficeDocTextAreaSelector).waitFor()
       break
     case 'Collabora':
       await Promise.all([
