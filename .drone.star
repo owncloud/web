@@ -547,9 +547,7 @@ def e2eTests(ctx):
 
         steps = skipIfUnchanged(ctx, "e2e-tests") + \
                 restoreBuildArtifactCache(ctx, "pnpm", ".pnpm-store") + \
-                restoreBuildArtifactCache(ctx, "playwright", ".playwright") + \
                 installPnpm() + \
-                installPlaywright() + \
                 restoreBuildArtifactCache(ctx, "web-dist", "dist")
 
         if ctx.build.event == "cron":
@@ -557,7 +555,7 @@ def e2eTests(ctx):
         else:
             steps += restoreOcisCache()
 
-        if suite == "oCIS-app-provider":
+        if "app-provider" in suite:
             # app-provider specific steps
             steps += collaboraService() + \
                      onlyofficeService() + \
@@ -653,7 +651,7 @@ def installPlaywright():
             "PLAYWRIGHT_BROWSERS_PATH": ".playwright",
         },
         "commands": [
-            "pnpm exec playwright install --with-deps",
+            "pnpm exec playwright install chromium --with-deps",
         ],
     }]
 
@@ -1712,7 +1710,6 @@ def buildAndTestDesignSystem(ctx):
     steps = restoreBuildArtifactCache(ctx, "pnpm", ".pnpm-store") + \
             restoreBuildArtifactCache(ctx, "playwright", ".playwright") + \
             installPnpm() + \
-            installPlaywright() + \
             buildDesignSystemDocs() + \
             runDesignSystemDocsE2eTests()
 
@@ -1836,9 +1833,7 @@ def e2eTestsOnKeycloak(ctx):
         return []
 
     steps = restoreBuildArtifactCache(ctx, "pnpm", ".pnpm-store") + \
-            restoreBuildArtifactCache(ctx, "playwright", ".playwright") + \
             installPnpm() + \
-            installPlaywright() + \
             keycloakService() + \
             restoreBuildArtifactCache(ctx, "web-dist", "dist")
     if ctx.build.event == "cron":
