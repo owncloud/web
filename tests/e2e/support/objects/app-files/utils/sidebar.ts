@@ -60,9 +60,7 @@ export const openPanel = async ({ page, name }: { page: Page; name: string }): P
   const currentPanel = page.locator('.sidebar-panel.is-active')
   const backButton = currentPanel.locator('.header__back')
 
-  const hasBackButton = await backButton.count()
-  console.log(hasBackButton)
-  if (hasBackButton) {
+  if (await backButton.count()) {
     await backButton.click()
     await locatorUtils.waitForEvent(currentPanel, 'transitionend')
   }
