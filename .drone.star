@@ -51,7 +51,7 @@ config = {
     ],
     "pnpmlint": True,
     "e2e": {
-        "oCIS-1": {
+        "1": {
             "earlyFail": True,
             "skip": False,
             "suites": [
@@ -59,7 +59,7 @@ config = {
                 "smoke",
             ],
         },
-        "oCIS-2": {
+        "2": {
             "earlyFail": True,
             "skip": False,
             "suites": [
@@ -67,7 +67,7 @@ config = {
                 "spaces",
             ],
         },
-        "oCIS-3": {
+        "3": {
             "earlyFail": True,
             "skip": False,
             "tikaNeeded": True,
@@ -76,7 +76,16 @@ config = {
                 "shares",
             ],
         },
-        "oCIS-app-provider": {
+        "4": {
+            "earlyFail": True,
+            "skip": False,
+            "suites": [
+                "navigation",
+                "user-settings",
+                "file-action",
+            ],
+        },
+        "app-provider": {
             "skip": False,
             "suites": [
                 "app-provider",
