@@ -350,7 +350,12 @@ const createDocumentFile = async (
   await Promise.all([
     page.waitForLoadState(),
     page.waitForURL('**/external/personal/**'),
-    page.waitForResponse((resp) => resp.status() === 200 && resp.request().method() === 'POST'),
+    page.waitForResponse(
+      (resp) =>
+        resp.status() === 200 &&
+        resp.request().method() === 'POST' &&
+        resp.request().url().includes('/app/open?')
+    ),
     page.locator(util.format(actionConfirmationButton, 'Create')).click()
   ])
   const editorMainFrame = page.frameLocator(externalEditorIframe)
@@ -381,6 +386,10 @@ const createDocumentFile = async (
         "Editor should be either 'Collabora' or 'OnlyOffice' but found " + editorToOpen
       )
   }
+  await Promise.all([
+    page.waitForResponse((res) => res.status() === 207 && res.request().method() === 'PROPFIND'),
+    editor.close(page)
+  ])
 }
 
 export const fillContentOfDocument = async ({
