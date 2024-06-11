@@ -8,7 +8,8 @@ export class Projects {
   }
 
   async navigate(): Promise<void> {
-    await this.#page.locator('//a[@data-nav-name="files-spaces-projects"]').click()
+    await this.#page.locator('a[data-nav-name="files-spaces-projects"]').click()
     await this.#page.locator('#app-loading-spinner').waitFor({ state: 'detached' })
+    await this.#page.locator(':is(div.spaces-list, #files-spaces-empty)').waitFor()
   }
 }

@@ -1523,6 +1523,11 @@ export const getDisplayedResourcesFromShares = async (page: Page): Promise<strin
 export const getDisplayedResourcesFromTrashbin = async (page: Page): Promise<string[]> => {
   const files = []
   const result = page.locator('[data-test-resource-path]')
+  try {
+    await result.first().waitFor({ timeout: config.minTimeout * 1000 })
+  } catch (err) {
+    console.log('Trashbin is empty')
+  }
 
   const count = await result.count()
   for (let i = 0; i < count; i++) {
