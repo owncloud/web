@@ -1677,10 +1677,12 @@ export const openFileInViewer = async (args: openFileInViewerArgs): Promise<void
         page.locator(util.format(resourceNameSelector, name)).click()
       ])
 
-      // wait for the iframe to load
       const onlyOfficeIframe = page
         .frameLocator(externalEditorIframe)
         .frameLocator(onlyOfficeInnerFrameSelector)
+
+      // wait for the iframe to load
+      await onlyOfficeIframe.locator('div#viewport').waitFor()
 
       // close the info dialog if visible
       if (await onlyOfficeIframe.locator(onlyOfficeInfoDialog).isVisible()) {
