@@ -472,12 +472,17 @@ export default defineComponent({
       }
 
       const options: FolderLoaderOptions = { loadShares: !isPublicSpaceResource(unref(space)) }
-      await resourcesViewDefaults.loadResourcesTask.perform(
-        unref(space),
-        path || props.item,
-        fileId || props.itemId,
-        options
-      )
+
+      try {
+        await resourcesViewDefaults.loadResourcesTask.perform(
+          unref(space),
+          path || props.item,
+          fileId || props.itemId,
+          options
+        )
+      } catch (e) {
+        console.error(e)
+      }
 
       resourcesViewDefaults.scrollToResourceFromRoute(
         [unref(currentFolder), ...unref(resourcesViewDefaults.paginatedResources)],

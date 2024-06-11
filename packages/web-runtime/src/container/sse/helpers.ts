@@ -21,7 +21,7 @@ export const isItemInCurrentFolder = ({
   parentFolderId: string
 }) => {
   const currentFolder = resourcesStore.currentFolder
-  if (!currentFolder) {
+  if (!currentFolder || !currentFolder.id) {
     return false
   }
 

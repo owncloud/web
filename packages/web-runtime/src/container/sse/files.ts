@@ -19,9 +19,13 @@ export const onSSEItemRenamedEvent = async ({
   const resource = resourceIsCurrentFolder
     ? currentFolder
     : resourcesStore.resources.find((f) => f.id === sseData.itemid)
+
+  if (!resource) {
+    return
+  }
   const space = spacesStore.spaces.find((s) => s.id === resource.storageId)
 
-  if (!resource || !space) {
+  if (!space) {
     return
   }
 

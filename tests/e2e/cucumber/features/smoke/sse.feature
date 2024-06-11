@@ -115,6 +115,7 @@ Feature: server sent events
 
     # space-member-removed
     When "Brian" navigates to the projects space page
+    And "Alice" navigates to the project space "marketing"
     And "Alice" removes access to following users from the project space
       | user  |
       | Brian |

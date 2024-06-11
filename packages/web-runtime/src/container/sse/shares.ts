@@ -68,7 +68,7 @@ export const onSSESpaceMemberRemovedEvent = async ({
 
   if (
     isLocationSpacesActive(router, 'files-spaces-generic') &&
-    removedSpace.id === resourcesStore.currentFolder.storageId
+    removedSpace.id === resourcesStore.currentFolder?.storageId
   ) {
     // Fixme: Message triggers when user membership was revoked, but still is in a group membership, which is wrong
     return messageStore.showMessage({
