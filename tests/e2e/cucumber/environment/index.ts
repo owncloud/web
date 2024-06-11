@@ -5,8 +5,7 @@ import {
   setWorldConstructor,
   ITestCaseHookParameter,
   AfterAll,
-  After,
-  Status
+  After
 } from '@cucumber/cucumber'
 import pino from 'pino'
 import { Browser, chromium, firefox, webkit } from '@playwright/test'
@@ -117,9 +116,7 @@ After(async function (this: World, { result, willBeRetried }: ITestCaseHookParam
   config.reportHar = willBeRetried || defaults.reportHar
   config.reportTracing = willBeRetried || defaults.reportTracing
 
-  if (result.status !== Status.PASSED) {
-    await this.actorsEnvironment.close()
-  }
+  await this.actorsEnvironment.close()
 
   // refresh keycloak admin access token
   if (config.keycloak) {
