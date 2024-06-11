@@ -135,7 +135,7 @@ const onlyofficeDocTextAreaSelector = '#area_id'
 const onlyOfficeCanvasEditorSelector = '#id_viewer_overlay'
 const onlyOfficeCanvasCursorSelector = '#id_target_cursor'
 const onlyOfficeInfoDialog = '.alert .info-box'
-const onlyOfficeInfoDialogConfirm = `${onlyOfficeInfoDialog} button[result="ok"]`
+const onlyOfficeInfoDialogConfirm = `.alert button[result="ok"]`
 
 export const clickResource = async ({
   page,
@@ -1691,7 +1691,6 @@ export const openFileInViewer = async (args: openFileInViewerArgs): Promise<void
           .waitFor({ timeout: config.minTimeout * 1000 })
         await onlyOfficeIframe.locator(onlyOfficeInfoDialogConfirm).click()
       } catch (err) {
-        console.log(err)
         console.log('No info dialog. Continue...')
       }
 
