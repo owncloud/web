@@ -481,7 +481,7 @@ export default defineComponent({
           options
         )
       } catch (e) {
-        console.log(e)
+        console.error(e)
       }
 
       resourcesViewDefaults.scrollToResourceFromRoute(
