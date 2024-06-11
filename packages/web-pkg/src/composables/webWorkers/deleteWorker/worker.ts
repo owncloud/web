@@ -1,7 +1,7 @@
-import axios, { AxiosInstance } from 'axios'
+import axios, { type AxiosInstance } from 'axios'
 import PQueue from 'p-queue'
-import { Resource, client, SpaceResource } from '@ownclouders/web-client'
-import { WorkerTopic } from '../../piniaStores/webWorkers'
+import { type Resource, client, type SpaceResource } from '@ownclouders/web-client'
+import type { DeleteWorkerTopic } from './useDeleteWorker'
 
 type MessageData = {
   baseUrl?: string
@@ -9,10 +9,11 @@ type MessageData = {
   headers?: Record<string, string>
   space?: SpaceResource
   resources?: Resource[]
+  concurrentRequests?: number
 }
 
 type Message = {
-  topic: WorkerTopic
+  topic: DeleteWorkerTopic
   data: MessageData
 }
 
@@ -32,36 +33,46 @@ self.onmessage = async (e: MessageEvent) => {
     return
   }
 
-  const { baseUrl, headers, space, resources } = data
+  const { baseUrl, headers, space, resources, concurrentRequests } = data
 
   axiosClient = axios.create({ headers })
   const { webdav } = client({ axiosClient, baseURI: baseUrl })
 
   const successful: Resource[] = []
   const failed: { resource: Resource; status: number }[] = []
-  const queue = new PQueue({ concurrency: 2 })
+  const queue = new PQueue({ concurrency: concurrentRequests })
 
-  const doDelete = (path: string) => webdav.deleteFile(space, { path })
+  const doDelete = (r: Resource) => {
+    if (topic === 'fileListDelete') {
+      return webdav.deleteFile(space, { path: r.path })
+    }
+
+    return webdav.clearTrashBin(space, { id: r.id })
+  }
 
   const promises = resources.map((r) => {
     return queue.add(async () => {
-      const { status } = await doDelete(r.path)
+      try {
+        const { status } = await doDelete(r)
 
-      if (status === 204) {
-        successful.push(r)
-        return
-      }
-
-      if (status === 423) {
-        // retry
-        const { status: retryStatus } = await doDelete(r.path)
-        if (retryStatus === 204) {
+        if (status === 204) {
           successful.push(r)
           return
         }
-      }
 
-      failed.push({ status, resource: r })
+        if (status === 423) {
+          // retry
+          const { status: retryStatus } = await doDelete(r)
+          if (retryStatus === 204) {
+            successful.push(r)
+            return
+          }
+        }
+
+        failed.push({ status, resource: r })
+      } catch (error) {
+        failed.push({ status: error.statusCode, resource: r })
+      }
     })
   })
 
