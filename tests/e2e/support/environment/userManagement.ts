@@ -12,17 +12,17 @@ export class UsersEnvironment {
     return dummyUserStore.get(userKey)
   }
 
-  createUser({ key, user }: { key: string; user: User }): User {
-    const userKey = key.toLowerCase()
-
-    if (dummyUserStore.has(userKey)) {
-      throw new Error(`user with key '${userKey}' already exists`)
-    }
-
-    dummyUserStore.set(userKey, user)
-
-    return user
-  }
+  // createUser({ key, user }: { key: string; user: User }): User {
+  //   const userKey = key.toLowerCase()
+  //
+  //   if (dummyUserStore.has(userKey)) {
+  //     throw new Error(`user with key '${userKey}' already exists`)
+  //   }
+  //
+  //   dummyUserStore.set(userKey, user)
+  //
+  //   return user
+  // }
 
   storeCreatedUser({ user }: { user: User }): User {
     if (createdUserStore.has(user.id)) {

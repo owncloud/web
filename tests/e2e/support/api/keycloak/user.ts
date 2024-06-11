@@ -43,19 +43,21 @@ export const createUser = async ({ user, admin }: { user: User; admin: User }): 
   checkResponseStatus(creationRes, 'Failed while creating user')
 
   // created user id
-  const uuid = getUserIdFromResponse(creationRes)
+  const keycloakUuid = getUserIdFromResponse(creationRes)
 
   // assign realmRoles to user
   const defaultNewUserRole = 'User'
-  const roleRes = await assignRole({ admin, uuid, role: defaultNewUserRole })
+  const roleRes = await assignRole({ admin, uuid: keycloakUuid, role: defaultNewUserRole })
   checkResponseStatus(roleRes, 'Failed while assigning roles to user')
 
   const usersEnvironment = new UsersEnvironment()
-    usersEnvironment.storeCreatedKeycloakUser({ user: { ...user, uuid, role: defaultNewUserRole } })
+    //stored keycloak user information on storage
+    usersEnvironment.storeCreatedKeycloakUser({ user: { ...user, uuid: keycloakUuid, role: defaultNewUserRole } })
 
-  // initialize user
+  // initialize user on Ocis web
   await initializeUser(user.id)
 
+    //stored ocis user information on storage
     usersEnvironment.storeCreatedUser({ user: { ...user, uuid:(await getUserId({user, admin})), role: defaultNewUserRole } })
   return user
 }
@@ -114,7 +116,12 @@ const initializeUser = async (username: string): Promise<void> => {
 export const deleteUser = async ({ user, admin }: { user: User; admin: User }): Promise<User> => {
   // first delete ocis user
   // deletes the user data
-  await graphDeleteUser({ user, admin })
+    const usersEnvironment = new UsersEnvironment()
+    const ocisUser = usersEnvironment.getCreatedUser({key: user.id})
+    console.log("OcisUser ------")
+    console.log(ocisUser)
+    // path: join('graph', 'v1.0', 'users', user.id),
+  await graphDeleteUser({ user: ocisUser, admin })
 
   const response = await request({
     method: 'DELETE',

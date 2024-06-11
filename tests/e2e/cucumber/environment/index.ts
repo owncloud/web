@@ -15,11 +15,11 @@ import { api, environment } from '../../support'
 import { World } from './world'
 import { state } from './shared'
 import {
-  createdSpaceStore,
-  createdLinkStore,
-  createdGroupStore,
-  createdUserStore,
-    KeycloakCreatedUser
+    createdSpaceStore,
+    createdLinkStore,
+    createdGroupStore,
+    createdUserStore,
+    KeycloakCreatedUser, keycloakRealmRoles
 } from '../../support/store'
 import { Group, User } from '../../support/types'
 import { getTokenFromLogin } from '../../support/utils/tokenHelper'
@@ -145,10 +145,19 @@ const cleanUpUser = async (adminUser: User) => {
   } else  createdUser = createdUserStore
   const requests: Promise<User>[] = []
     createdUser.forEach((user) => {
+        console.log(createdUserStore.get(user.id))
     requests.push(api.provision.deleteUser({ user, admin: adminUser }))
   })
   await Promise.all(requests)
-    createdUser.clear()
+    // console.log("before")
+    // console.log(createdUserStore)
+    createdUserStore.clear()
+    KeycloakCreatedUser.clear()
+    console.log("--------after-------------------------")
+    // api.provision.getUser()
+    createdUser.forEach((user) => {
+        console.log(createdUserStore.get(user.id))
+    })
 }
 
 const cleanUpSpaces = async (adminUser: User) => {
