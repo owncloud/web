@@ -534,15 +534,13 @@ def e2eTests(ctx):
 
         if ("with-tracing" in ctx.build.title.lower()):
             params["reportTracing"] = "true"
-        if ("check-console-errors" in ctx.build.title.lower()):
-            params["failOnUncaughtConsoleError"] = "true"
 
         environment = {
             "HEADLESS": "true",
             "RETRY": "1",
             "REPORT_TRACING": params["reportTracing"],
             "BASE_URL_OCIS": "ocis:9200",
-            "FAIL_ON_UNCAUGHT_CONSOLE_ERR": params["failOnUncaughtConsoleError"],
+            "FAIL_ON_UNCAUGHT_CONSOLE_ERR": "true",
         }
 
         steps = skipIfUnchanged(ctx, "e2e-tests") + \
@@ -556,6 +554,7 @@ def e2eTests(ctx):
             steps += restoreOcisCache()
 
         if "app-provider" in suite:
+            environment["FAIL_ON_UNCAUGHT_CONSOLE_ERR"] = False
             # app-provider specific steps
             steps += collaboraService() + \
                      onlyofficeService() + \
