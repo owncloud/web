@@ -1685,8 +1685,13 @@ export const openFileInViewer = async (args: openFileInViewerArgs): Promise<void
       await onlyOfficeIframe.locator('div#viewport').waitFor()
 
       // close the info dialog if visible
-      if (await onlyOfficeIframe.locator(onlyOfficeInfoDialog).isVisible()) {
+      try {
+        await onlyOfficeIframe
+          .locator(onlyOfficeInfoDialog)
+          .waitFor({ timeout: config.minTimeout * 1000 })
         await onlyOfficeIframe.locator(onlyOfficeInfoDialogConfirm).click()
+      } catch (err) {
+        console.log('No info dialog. Continue...')
       }
 
       await onlyOfficeIframe.locator(onlyofficeDocTextAreaSelector).waitFor()
