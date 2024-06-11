@@ -11,7 +11,7 @@ type WorkerReturnData = {
   failed: { resource: Resource; status: number }[]
 }
 
-export type DeleteWorkerTopics = 'fileListDelete' | 'trashBinDelete' | 'tokenUpdate'
+export type DeleteWorkerTopic = 'fileListDelete' | 'trashBinDelete' | 'tokenUpdate'
 
 export const useDeleteWorker = ({
   concurrentRequests = 4
@@ -26,7 +26,7 @@ export const useDeleteWorker = ({
       topic,
       space,
       resources
-    }: { topic: DeleteWorkerTopics; space: SpaceResource; resources: Resource[] },
+    }: { topic: DeleteWorkerTopic; space: SpaceResource; resources: Resource[] },
     callback: (result: WorkerReturnData) => void
   ) => {
     const worker = createWorker<WorkerReturnData>(DeleteWorker as unknown as string, {
@@ -56,7 +56,7 @@ export const useDeleteWorker = ({
     space,
     resources
   }: {
-    topic: DeleteWorkerTopics
+    topic: DeleteWorkerTopic
     space: SpaceResource
     resources: Resource[]
   }) => {

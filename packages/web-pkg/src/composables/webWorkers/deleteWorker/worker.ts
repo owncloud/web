@@ -1,7 +1,7 @@
 import axios, { type AxiosInstance } from 'axios'
 import PQueue from 'p-queue'
 import { type Resource, client, type SpaceResource } from '@ownclouders/web-client'
-import type { DeleteWorkerTopics } from './useDeleteWorker'
+import type { DeleteWorkerTopic } from './useDeleteWorker'
 
 type MessageData = {
   baseUrl?: string
@@ -13,7 +13,7 @@ type MessageData = {
 }
 
 type Message = {
-  topic: DeleteWorkerTopics
+  topic: DeleteWorkerTopic
   data: MessageData
 }
 
