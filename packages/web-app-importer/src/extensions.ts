@@ -24,7 +24,9 @@ export const extensions = ({ applicationConfig }: ApplicationSetupOptions) => {
   const authStore = useAuthStore()
   const themeStore = useThemeStore()
   const { currentTheme } = storeToRefs(themeStore)
-  const { dispatchModal, removeModal, activeModal } = useModals()
+  const modals = useModals()
+  const { dispatchModal, removeModal } = modals
+  const { activeModal } = storeToRefs(modals)
 
   const resourcesStore = useResourcesStore()
   const { currentFolder } = storeToRefs(resourcesStore)
