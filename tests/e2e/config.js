@@ -39,6 +39,5 @@ exports.config = {
   reportVideo: process.env.REPORT_VIDEO === 'true',
   reportHar: process.env.REPORT_HAR === 'true',
   reportTracing: process.env.REPORT_TRACING === 'true',
-  reportTracingOnFail: process.env.REPORT_TRACING_ON_FAIL === 'true',
   failOnUncaughtConsoleError: process.env.FAIL_ON_UNCAUGHT_CONSOLE_ERR === 'true'
 }
