@@ -526,7 +526,7 @@ def e2eTests(ctx):
         for item in default:
             params[item] = matrix[item] if item in matrix else default[item]
 
-        if suite == "oCIS-app-provider" and not "full-ci" in ctx.build.title.lower() and ctx.build.event != "cron":
+        if "app-provider" in suite and not "full-ci" in ctx.build.title.lower() and ctx.build.event != "cron":
             continue
 
         if params["skip"]:
