@@ -86,6 +86,8 @@ export default class Collaborator {
   private static readonly collaboratorExpirationDatepicker =
     '.collaborator-edit-dropdown-options-list .files-recipient-expiration-datepicker:not(.vc-container)'
   private static readonly expirationDatepickerDaySelect = '.vc-day.id-%s'
+  private static readonly collaboratorDropdownItem =
+    'div[data-testid="new-collaborators-form"] div[data-testid="recipient-autocomplete-item-%s"]'
 
   static async addCollaborator(args: CollaboratorArgs): Promise<void> {
     const {
@@ -100,7 +102,10 @@ export default class Collaborator {
     ])
     await collaboratorInputLocator.focus()
     await page.locator('.vs--open').waitFor()
-    await page.locator('.vs__dropdown-option').click()
+    // await page.locator('.vs__dropdown-option').click()
+    await page
+      .locator(util.format(Collaborator.collaboratorDropdownItem, collaborator.displayName))
+      .click()
   }
 
   static async sendInvitation(page: Page, collaborators: string[]): Promise<void> {
