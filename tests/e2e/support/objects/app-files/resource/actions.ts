@@ -134,7 +134,8 @@ const onlyOfficeSaveButtonSelector = '#slot-btn-dt-save > button'
 const onlyofficeDocTextAreaSelector = '#area_id'
 const onlyOfficeCanvasEditorSelector = '#id_viewer_overlay'
 const onlyOfficeCanvasCursorSelector = '#id_target_cursor'
-// const onlyOfficeAppErrorPanel = '.app-error-panel'
+const onlyOfficeInfoDialog = '.alert .info-box'
+const onlyOfficeInfoDialogConfirm = `.alert button[result="ok"]`
 
 export const clickResource = async ({
   page,
@@ -350,7 +351,12 @@ const createDocumentFile = async (
   await Promise.all([
     page.waitForLoadState(),
     page.waitForURL('**/external/personal/**'),
-    page.waitForResponse((resp) => resp.status() === 200 && resp.request().method() === 'POST'),
+    page.waitForResponse(
+      (resp) =>
+        resp.status() === 200 &&
+        resp.request().method() === 'POST' &&
+        resp.request().url().includes('/app/open?')
+    ),
     page.locator(util.format(actionConfirmationButton, 'Create')).click()
   ])
   const editorMainFrame = page.frameLocator(externalEditorIframe)
@@ -381,6 +387,10 @@ const createDocumentFile = async (
         "Editor should be either 'Collabora' or 'OnlyOffice' but found " + editorToOpen
       )
   }
+  await Promise.all([
+    page.waitForResponse((res) => res.status() === 207 && res.request().method() === 'PROPFIND'),
+    editor.close(page)
+  ])
 }
 
 export const fillContentOfDocument = async ({
@@ -1523,6 +1533,11 @@ export const getDisplayedResourcesFromShares = async (page: Page): Promise<strin
 export const getDisplayedResourcesFromTrashbin = async (page: Page): Promise<string[]> => {
   const files = []
   const result = page.locator('[data-test-resource-path]')
+  try {
+    await result.first().waitFor({ timeout: config.minTimeout * 1000 })
+  } catch (err) {
+    console.log('Trashbin is empty')
+  }
 
   const count = await result.count()
   for (let i = 0; i < count; i++) {
@@ -1662,10 +1677,25 @@ export const openFileInViewer = async (args: openFileInViewerArgs): Promise<void
         page.locator(util.format(resourceNameSelector, name)).click()
       ])
 
-      // wait for the iframe to load
       const onlyOfficeIframe = page
         .frameLocator(externalEditorIframe)
         .frameLocator(onlyOfficeInnerFrameSelector)
+
+      // wait for the iframe to load
+      await onlyOfficeIframe.locator('div#viewport').waitFor()
+
+      // close the info dialog if visible
+      try {
+        await onlyOfficeIframe
+          .locator(onlyOfficeInfoDialog)
+          .waitFor({ timeout: config.minTimeout * 1000 })
+        await onlyOfficeIframe.locator(onlyOfficeInfoDialogConfirm).click()
+        // NOTE: page reload is required if the info dialog appears
+        await page.reload()
+      } catch (err) {
+        console.log('No info dialog. Continue...')
+      }
+
       await onlyOfficeIframe.locator(onlyofficeDocTextAreaSelector).waitFor()
       break
     case 'Collabora':

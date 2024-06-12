@@ -105,6 +105,7 @@ Feature: Integrate with online office suites like Collabora and OnlyOffice
       | resource           | type           | content                       |
       | MicrosoftWord.docx | Microsoft Word | Edited Microsoft Word Content |
 
+    And for "Alice" file "MicrosoftWord.docx" should not be locked
     When "Alice" shares the following resource using the sidebar panel
       | resource           | recipient | type | role     | resourceType |
       | MicrosoftWord.docx | Brian     | user | Can view | file         |
