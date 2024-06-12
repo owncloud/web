@@ -109,8 +109,8 @@
                 target="_blank"
                 class="oc-flex oc-flex-middle"
               >
+                <oc-icon name="service" size="1" class="oc-mr-xs"></oc-icon>
                 <span v-text="$gettext('Help translate')" />
-                <oc-icon name="external-link" size="small" class="oc-ml-xs" />
               </a>
             </div>
           </dd>
@@ -545,6 +545,7 @@ export default defineComponent({
 dd {
   margin-left: 0;
 }
+
 main {
   overflow-y: auto;
 }
