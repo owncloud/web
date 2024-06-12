@@ -81,7 +81,7 @@ function getWrapper({
 }: { spaces?: SpaceResource[]; selectedSpaces?: SpaceResource[] } = {}) {
   const $clientService = mockDeep<ClientService>()
   $clientService.graphAuthenticated.drives.listAllDrives.mockResolvedValue(
-    mockAxiosResolve({ value: spaces.map((s) => mock<Drive>()) })
+    mockAxiosResolve({ value: spaces.map(() => mock<Drive>()) })
   )
   const mocks = {
     ...defaultComponentMocks(),
