@@ -15,11 +15,11 @@ import { api, environment } from '../../support'
 import { World } from './world'
 import { state } from './shared'
 import {
-    createdSpaceStore,
-    createdLinkStore,
-    createdGroupStore,
-    createdUserStore,
-    KeycloakCreatedUser, keycloakRealmRoles
+  createdSpaceStore,
+  createdLinkStore,
+  createdGroupStore,
+  createdUserStore,
+  KeycloakCreatedUser
 } from '../../support/store'
 import { Group, User } from '../../support/types'
 import { getTokenFromLogin } from '../../support/utils/tokenHelper'
@@ -139,25 +139,24 @@ AfterAll(() => state.browser && state.browser.close())
 setWorldConstructor(World)
 
 const cleanUpUser = async (adminUser: User) => {
-    let createdUser
-  if (config.keycloak){
-       createdUser = KeycloakCreatedUser
-  } else  createdUser = createdUserStore
+  let createdUser
+  if (config.keycloak) {
+    createdUser = KeycloakCreatedUser
+  } else {
+    createdUser = createdUserStore
+  }
   const requests: Promise<User>[] = []
-    createdUser.forEach((user) => {
-        console.log(createdUserStore.get(user.id))
+  createdUser.forEach((user) => {
+    console.log(createdUserStore.get(user.id))
     requests.push(api.provision.deleteUser({ user, admin: adminUser }))
   })
   await Promise.all(requests)
-    // console.log("before")
-    // console.log(createdUserStore)
-    createdUserStore.clear()
-    KeycloakCreatedUser.clear()
-    console.log("--------after-------------------------")
-    // api.provision.getUser()
-    createdUser.forEach((user) => {
-        console.log(createdUserStore.get(user.id))
-    })
+  // console.log("before")
+  // console.log(createdUserStore)
+  createdUserStore.clear()
+  KeycloakCreatedUser.clear()
+  console.log('--------after-------------------------')
+  // api.provision.getUser()
 }
 
 const cleanUpSpaces = async (adminUser: User) => {

@@ -225,10 +225,10 @@ Then(
     for (const { user } of stepTable.hashes()) {
       switch (action) {
         case 'should':
-          expect(users).toContain(this.usersEnvironment.getCreatedUser({ key:user }).uuid)
+          expect(users).toContain(this.usersEnvironment.getCreatedUser({ key: user }).uuid)
           break
         case 'should not':
-          expect(users).not.toContain(this.usersEnvironment.getCreatedUser({ key:user }).uuid)
+          expect(users).not.toContain(this.usersEnvironment.getCreatedUser({ key: user }).uuid)
           break
         default:
           throw new Error(`'${action}' not implemented`)
@@ -263,7 +263,7 @@ When(
     const userIds = []
 
     for (const { user } of stepTable.hashes()) {
-      userIds.push(this.usersEnvironment.getCreatedUser({key:user}).uuid)
+      userIds.push(this.usersEnvironment.getCreatedUser({ key: user }).uuid)
       await usersObject.select({ key: user })
     }
 

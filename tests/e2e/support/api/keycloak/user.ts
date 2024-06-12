@@ -1,6 +1,6 @@
 import join from 'join-path'
 import { getUserIdFromResponse, request, realmBasePath } from './utils'
-import {deleteUser as graphDeleteUser, getUserId} from '../graph'
+import { deleteUser as graphDeleteUser, getUserId } from '../graph'
 import { checkResponseStatus } from '../http'
 import { User, KeycloakRealmRole } from '../../types'
 import { UsersEnvironment } from '../../environment'
@@ -51,14 +51,18 @@ export const createUser = async ({ user, admin }: { user: User; admin: User }): 
   checkResponseStatus(roleRes, 'Failed while assigning roles to user')
 
   const usersEnvironment = new UsersEnvironment()
-    //stored keycloak user information on storage
-    usersEnvironment.storeCreatedKeycloakUser({ user: { ...user, uuid: keycloakUuid, role: defaultNewUserRole } })
+  //stored keycloak user information on storage
+  usersEnvironment.storeCreatedKeycloakUser({
+    user: { ...user, uuid: keycloakUuid, role: defaultNewUserRole }
+  })
 
   // initialize user on Ocis web
   await initializeUser(user.id)
 
-    //stored ocis user information on storage
-    usersEnvironment.storeCreatedUser({ user: { ...user, uuid:(await getUserId({user, admin})), role: defaultNewUserRole } })
+  //stored ocis user information on storage
+  usersEnvironment.storeCreatedUser({
+    user: { ...user, uuid: await getUserId({ user, admin }), role: defaultNewUserRole }
+  })
   return user
 }
 
@@ -116,11 +120,11 @@ const initializeUser = async (username: string): Promise<void> => {
 export const deleteUser = async ({ user, admin }: { user: User; admin: User }): Promise<User> => {
   // first delete ocis user
   // deletes the user data
-    const usersEnvironment = new UsersEnvironment()
-    const ocisUser = usersEnvironment.getCreatedUser({key: user.id})
-    console.log("OcisUser ------")
-    console.log(ocisUser) 
-    // path: join('graph', 'v1.0', 'users', user.id),
+  const usersEnvironment = new UsersEnvironment()
+  const ocisUser = usersEnvironment.getCreatedUser({ key: user.id })
+  console.log('OcisUser ------')
+  console.log(ocisUser)
+  // path: join('graph', 'v1.0', 'users', user.id),
   await graphDeleteUser({ user: ocisUser, admin })
 
   const response = await request({

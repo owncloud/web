@@ -3,7 +3,7 @@ import { Group, Me, User } from '../../types'
 import join from 'join-path'
 import { config } from '../../../config'
 import { getApplicationEntity } from './utils'
-import {createdUserStore, userRoleStore} from '../../store'
+import { userRoleStore } from '../../store'
 import { UsersEnvironment } from '../../environment'
 
 export const me = async ({ user }: { user: User }): Promise<Me> => {
@@ -92,19 +92,19 @@ export const createGroup = async ({
   return group
 }
 
-const getGroupId = async ({ group, admin }: { group: Group; admin: User }): Promise<string> => {
-  let groupId = ''
-  const response = await request({
-    method: 'GET',
-    path: join('graph', 'v1.0', 'groups', group.displayName),
-    user: admin
-  })
-  if (response.ok) {
-    const resBody = (await response.json()) as Group
-    groupId = resBody.id
-  }
-  return groupId
-}
+// const getGroupId = async ({ group, admin }: { group: Group; admin: User }): Promise<string> => {
+//   let groupId = ''
+//   const response = await request({
+//     method: 'GET',
+//     path: join('graph', 'v1.0', 'groups', group.displayName),
+//     user: admin
+//   })
+//   if (response.ok) {
+//     const resBody = (await response.json()) as Group
+//     groupId = resBody.id
+//   }
+//   return groupId
+// }
 
 export const deleteGroup = async ({
   group,
@@ -133,9 +133,9 @@ export const addUserToGroup = async ({
   group: Group
   admin: User
 }): Promise<void> => {
-    const usersEnvironment = new UsersEnvironment()
+  const usersEnvironment = new UsersEnvironment()
   const userId = usersEnvironment.getCreatedUser({ key: user.id }).uuid
-  const groupId = usersEnvironment.getCreatedGroup({ key:group.id }).uuid
+  const groupId = usersEnvironment.getCreatedGroup({ key: group.id }).uuid
   const body = JSON.stringify({
     '@odata.id': join(config.backendUrl, 'graph', 'v1.0', 'users', userId)
   })

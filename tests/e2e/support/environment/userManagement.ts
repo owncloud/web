@@ -1,5 +1,11 @@
 import { Group, User } from '../types'
-import { dummyUserStore, dummyGroupStore, createdUserStore, createdGroupStore, KeycloakCreatedUser } from '../store'
+import {
+  dummyUserStore,
+  dummyGroupStore,
+  createdUserStore,
+  createdGroupStore,
+  KeycloakCreatedUser
+} from '../store'
 
 export class UsersEnvironment {
   getUser({ key }: { key: string }): User {
@@ -93,31 +99,29 @@ export class UsersEnvironment {
   }
 
   storeCreatedKeycloakUser({ user }: { user: User }): User {
-        if (KeycloakCreatedUser.has(user.id)) {
-            throw new Error(`user '${user.id}' already exists`)
-        }
-      KeycloakCreatedUser.set(user.id, user)
-        return user
+    if (KeycloakCreatedUser.has(user.id)) {
+      throw new Error(`user '${user.id}' already exists`)
+    }
+    KeycloakCreatedUser.set(user.id, user)
+    return user
+  }
+
+  getCreatedKeycloakUser({ key }: { key: string }): User {
+    const userKey = key.toLowerCase()
+    if (!KeycloakCreatedUser.has(userKey)) {
+      throw new Error(`user with key '${userKey}' not found`)
     }
 
+    return KeycloakCreatedUser.get(userKey)
+  }
 
-    getCreatedKeycloakUser({ key }: { key: string }): User {
-        const userKey = key.toLowerCase()
-        if (!KeycloakCreatedUser.has(userKey)) {
-            throw new Error(`user with key '${userKey}' not found`)
-        }
+  removeCreatedKeycloakUser({ key }: { key: string }): boolean {
+    const userKey = key.toLowerCase()
 
-        return KeycloakCreatedUser.get(userKey)
+    if (!KeycloakCreatedUser.has(userKey)) {
+      throw new Error(`user '${userKey}' not found`)
     }
 
-
-    removeCreatedKeycloakUser({ key }: { key: string }): boolean {
-        const userKey = key.toLowerCase()
-
-        if (!KeycloakCreatedUser.has(userKey)) {
-            throw new Error(`user '${userKey}' not found`)
-        }
-
-        return KeycloakCreatedUser.delete(userKey)
-    }
+    return KeycloakCreatedUser.delete(userKey)
+  }
 }
