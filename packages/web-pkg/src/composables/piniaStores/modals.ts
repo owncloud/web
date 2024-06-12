@@ -78,6 +78,10 @@ export const useModals = defineStore('modals', () => {
     modals.value = unref(modals).filter((modal) => modal.id !== id)
   }
 
+  const removeAllModals = () => {
+    modals.value = []
+  }
+
   const setModalActive = (id: Modal['id']) => {
     const foundIdx = unref(modals).findIndex((modal) => modal.id === id)
     if (foundIdx < 0) {
@@ -89,5 +93,15 @@ export const useModals = defineStore('modals', () => {
     modals.value.push(modal)
   }
 
-  return { modals, activeModal, dispatchModal, updateModal, removeModal, setModalActive }
+  return {
+    modals,
+    activeModal,
+    dispatchModal,
+    updateModal,
+    removeModal,
+    removeAllModals,
+    setModalActive
+  }
 })
+
+export type ModalStore = ReturnType<typeof useModals>
