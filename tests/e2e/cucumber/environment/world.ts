@@ -28,6 +28,7 @@ export class World extends CucumberWorld {
         reportDir: config.reportDir,
         reportHar: config.reportHar,
         reportTracing: config.reportTracing,
+        reportTracingOnFail: config.reportTracingOnFail,
         reportVideo: config.reportVideo,
         failOnUncaughtConsoleError: config.failOnUncaughtConsoleError
       },

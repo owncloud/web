@@ -17,7 +17,7 @@ export class ActorEnvironment extends EventEmitter implements Actor {
   async setup(): Promise<void> {
     this.context = await this.options.browser.newContext(buildBrowserContextOptions(this.options))
 
-    if (this.options.context.reportTracing) {
+    if (this.options.context.reportTracing || this.options.context.reportTracingOnFail) {
       await this.context.tracing.start({ screenshots: true, snapshots: true, sources: true })
     }
 
@@ -41,7 +41,7 @@ export class ActorEnvironment extends EventEmitter implements Actor {
   }
 
   async close(): Promise<void> {
-    if (this.options.context.reportTracing) {
+    if (this.options.context.reportTracing || this.options.context.reportTracingOnFail) {
       await this.context?.tracing.stop({
         path: path.join(
           this.options.context.reportDir,
