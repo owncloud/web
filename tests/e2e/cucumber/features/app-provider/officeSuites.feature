@@ -83,9 +83,6 @@ Feature: Integrate with online office suites like Collabora and OnlyOffice
     And "Alice" creates a public link of following resource using the sidebar panel
       | resource           | role     | password |
       | MicrosoftWord.docx | Can edit | %public% |
-    And "Alice" shares the following resource using the sidebar panel
-      | resource           | recipient | type | role     | resourceType |
-      | MicrosoftWord.docx | Brian     | user | Can view | file         |
     And "Alice" opens the following file in OnlyOffice
       | resource           |
       | MicrosoftWord.docx |
@@ -108,7 +105,11 @@ Feature: Integrate with online office suites like Collabora and OnlyOffice
       | resource           | type           | content                       |
       | MicrosoftWord.docx | Microsoft Word | Edited Microsoft Word Content |
 
-    When "Brian" logs in
+    And for "Alice" file "MicrosoftWord.docx" should not be locked
+    When "Alice" shares the following resource using the sidebar panel
+      | resource           | recipient | type | role     | resourceType |
+      | MicrosoftWord.docx | Brian     | user | Can view | file         |
+    And "Brian" logs in
     And "Brian" navigates to the shared with me page
     And "Brian" opens the following file in OnlyOffice
       | resource           |
