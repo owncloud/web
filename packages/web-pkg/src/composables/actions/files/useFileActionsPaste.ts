@@ -75,6 +75,10 @@ export const useFileActionsPaste = () => {
     startWorker(transferData, async ({ successful, failed }) => {
       resourceTransfer.showResultMessage(failed, successful, unref(transferType))
 
+      if (!successful.length) {
+        return
+      }
+
       // user has navigated to another location meanwhile -> no need to update store
       if (unref(currentFolder) && originalCurrentFolderId !== unref(currentFolder).id) {
         return
