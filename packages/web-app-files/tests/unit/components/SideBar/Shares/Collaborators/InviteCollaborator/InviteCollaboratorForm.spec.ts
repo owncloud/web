@@ -15,7 +15,6 @@ import {
   ShareRole
 } from '@ownclouders/web-client'
 import { Group, User } from '@ownclouders/web-client/graph/generated'
-import { AxiosResponse } from 'axios'
 import OcButton from 'design-system/src/components/OcButton/OcButton.vue'
 
 vi.mock('lodash-es', () => ({ debounce: (fn: any) => fn() }))
@@ -170,9 +169,7 @@ function getWrapper({
   })
 
   mocks.$clientService.graphAuthenticated.users.listUsers.mockResolvedValue(users)
-  mocks.$clientService.graphAuthenticated.groups.listGroups.mockResolvedValue(
-    mock<AxiosResponse>({ data: { value: groups } })
-  )
+  mocks.$clientService.graphAuthenticated.groups.listGroups.mockResolvedValue(groups)
 
   const capabilities = { files_sharing: { federation: { incoming: true, outgoing: true } } }
 

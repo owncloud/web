@@ -174,6 +174,7 @@ import { omit } from 'lodash-es'
 import { storeToRefs } from 'pinia'
 
 import { useUserSettingsStore } from '../composables/stores/userSettings'
+import { call } from '@ownclouders/web-client'
 
 export default defineComponent({
   name: 'UsersView',
@@ -231,16 +232,18 @@ export default defineComponent({
     let editQuotaActionEventToken: string
 
     const loadGroupsTask = useTask(function* (signal) {
-      const groupsResponse = yield clientService.graphAuthenticated.groups.listGroups(
-        'displayName',
-        ['members']
+      groups.value = yield* call(
+        clientService.graphAuthenticated.groups.listGroups({
+          orderBy: ['displayName'],
+          expand: ['members']
+        })
       )
-      groups.value = groupsResponse.data.value
     })
 
     const loadAppRolesTask = useTask(function* (signal) {
-      const applicationsResponse =
-        yield clientService.graphAuthenticated.applications.listApplications()
+      const applicationsResponse = yield* call(
+        clientService.graphAuthenticated.applications.listApplications()
+      )
       roles.value = applicationsResponse.data.value[0].appRoles
       applicationId.value = applicationsResponse.data.value[0].id
     })
