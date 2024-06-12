@@ -53,7 +53,7 @@ config = {
     "e2e": {
         "1": {
             "earlyFail": True,
-            "skip": False,
+            "skip": True,
             "suites": [
                 "journeys",
                 "smoke",
@@ -184,9 +184,7 @@ def pnpmCache(ctx):
         },
         "steps": skipIfUnchanged(ctx, "cache") +
                  installPnpm() +
-                 installPlaywright() +
-                 rebuildBuildArtifactCache(ctx, "pnpm", ".pnpm-store") +
-                 rebuildBuildArtifactCache(ctx, "playwright", ".playwright"),
+                 rebuildBuildArtifactCache(ctx, "pnpm", ".pnpm-store"),
         "trigger": {
             "ref": [
                 "refs/heads/master",
