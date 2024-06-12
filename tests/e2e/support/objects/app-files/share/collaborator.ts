@@ -98,7 +98,7 @@ export default class Collaborator {
     await collaboratorInputLocator.click()
     await Promise.all([
       page.waitForResponse((resp) => resp.url().includes('groups') && resp.status() === 200),
-      collaboratorInputLocator.pressSequentially(collaborator.id)
+      collaboratorInputLocator.fill(collaborator.id)
     ])
     await collaboratorInputLocator.focus()
     await page.locator('.vs--open').waitFor()

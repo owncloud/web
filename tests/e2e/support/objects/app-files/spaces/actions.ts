@@ -5,7 +5,6 @@ import { sidebar, editor } from '../utils'
 import Collaborator, { ICollaborator } from '../share/collaborator'
 import { createLink } from '../link/actions'
 import { File } from '../../../types'
-// import { locatorUtils } from '../../../utils'
 
 const newSpaceMenuButton = '#new-space-menu-btn'
 const spaceNameInputField = '.oc-modal input'
@@ -23,8 +22,6 @@ const editSpacesDescription = '.oc-files-actions-edit-readme-content-trigger:vis
 const spacesDescriptionInputArea = '.md-mode .ProseMirror'
 const spacesDescriptionSaveTextFileInEditorButton = '#app-save-action:visible'
 const spaceHeaderSelector = '.space-header'
-// const sidebarSpaceMembersButton = '#sidebar-panel-space-share-select'
-// const sidebarSpaceMembersPanel = '#sidebar-panel-space-share'
 
 export const openActionsPanel = async (page: Page): Promise<void> => {
   await sidebar.open({ page })
@@ -34,12 +31,6 @@ export const openActionsPanel = async (page: Page): Promise<void> => {
 export const openSharingPanel = async (page: Page): Promise<void> => {
   await sidebar.open({ page })
   await sidebar.openPanel({ page, name: 'space-share' })
-
-  // const panelSelector = page.locator(sidebarSpaceMembersButton)
-  // const nextPanel = page.locator(sidebarSpaceMembersPanel)
-
-  // await Promise.all([locatorUtils.waitForEvent(nextPanel, 'transitionend'), panelSelector.click()])
-  // await nextPanel.waitFor()
 }
 
 /**/

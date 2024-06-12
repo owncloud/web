@@ -1690,7 +1690,7 @@ export const openFileInViewer = async (args: openFileInViewerArgs): Promise<void
           .locator(onlyOfficeInfoDialog)
           .waitFor({ timeout: config.minTimeout * 1000 })
         await onlyOfficeIframe.locator(onlyOfficeInfoDialogConfirm).click()
-        // NOTE:
+        // NOTE: page reload is required if the info dialog appears
         await page.reload()
       } catch (err) {
         console.log('No info dialog. Continue...')
