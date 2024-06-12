@@ -9,19 +9,10 @@ import { buildSpace, Resource, SpaceResource } from '@ownclouders/web-client'
 import { ListFilesResult } from '@ownclouders/web-client/webdav'
 import { Drive } from '@ownclouders/web-client/graph/generated'
 import { createTestingPinia } from 'web-test-helpers'
-import {
-  ClientService,
-  LoadingService,
-  LoadingTaskCallbackArguments
-} from '../../../../../src/services'
+import { ClientService } from '../../../../../src/services'
 import { computed } from 'vue'
 
 const clientServiceMock = mockDeep<ClientService>()
-const loadingServiceMock = mock<LoadingService>({
-  addTask: (callback) => {
-    return callback(mock<LoadingTaskCallbackArguments>())
-  }
-})
 let resourcesToMove: Resource[]
 let sourceSpace: SpaceResource
 let targetSpace: SpaceResource
@@ -75,11 +66,10 @@ describe('resourcesTransfer', () => {
       resourcesToMove[0],
       computed(() => mock<Resource>()),
       clientServiceMock,
-      loadingServiceMock,
       vi.fn(),
       vi.fn()
     )
-    const result = await resourcesTransfer.perform(TransferType.COPY)
+    const result = await resourcesTransfer.getTransferData(TransferType.COPY)
     expect(result.length).toBe(0)
   })
 
@@ -101,23 +91,17 @@ describe('resourcesTransfer', () => {
           targetFolder,
           computed(() => mock<Resource>()),
           clientServiceMock,
-          loadingServiceMock,
           vi.fn(),
           vi.fn()
         )
-        const movedResources = await resourcesTransfer.perform(action)
+        const transferData = await resourcesTransfer.getTransferData(action)
 
-        const fn =
-          action === TransferType.COPY
-            ? clientServiceMock.webdav.copyFiles
-            : clientServiceMock.webdav.moveFiles
-        expect(fn).toHaveBeenCalledTimes(resourcesToMove.length)
-        expect(movedResources.length).toBe(resourcesToMove.length)
+        expect(transferData.length).toBe(resourcesToMove.length)
 
         for (let i = 0; i < resourcesToMove.length; i++) {
           const input = resourcesToMove[i]
-          const output = movedResources[i]
-          expect(input.name).toBe(output.name)
+          const output = transferData[i]
+          expect(input.name).toBe(output.resource.name)
         }
       }
     )
@@ -138,7 +122,6 @@ describe('resourcesTransfer', () => {
       resourcesToMove[0],
       computed(() => mock<Resource>()),
       clientServiceMock,
-      loadingServiceMock,
       vi.fn(),
       vi.fn()
     )
@@ -165,7 +148,6 @@ describe('resourcesTransfer', () => {
       resourcesToMove[0],
       computed(() => mock<Resource>()),
       clientServiceMock,
-      loadingServiceMock,
       vi.fn(),
       vi.fn()
     )
