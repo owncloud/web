@@ -1,10 +1,5 @@
 import LoginModal from '../../../../src/components/Users/LoginModal.vue'
-import {
-  defaultComponentMocks,
-  defaultPlugins,
-  mockAxiosResolve,
-  shallowMount
-} from 'web-test-helpers'
+import { defaultComponentMocks, defaultPlugins, shallowMount } from 'web-test-helpers'
 import { mock } from 'vitest-mock-extended'
 import { User } from '@ownclouders/web-client/graph/generated'
 import { Modal, useMessages } from '@ownclouders/web-pkg'
@@ -27,10 +22,10 @@ describe('LoginModal', () => {
       const users = [mock<User>(), mock<User>()]
       const { wrapper, mocks } = getWrapper(users)
       mocks.$clientService.graphAuthenticated.users.editUser.mockResolvedValue(
-        mockAxiosResolve({ id: 'e3515ffb-d264-4dfc-8506-6c239f6673b5' })
+        mock<User>({ id: 'e3515ffb-d264-4dfc-8506-6c239f6673b5' })
       )
       mocks.$clientService.graphAuthenticated.users.getUser.mockResolvedValue(
-        mockAxiosResolve({ id: 'e3515ffb-d264-4dfc-8506-6c239f6673b5' })
+        mock<User>({ id: 'e3515ffb-d264-4dfc-8506-6c239f6673b5' })
       )
 
       await wrapper.vm.onConfirm()
@@ -46,10 +41,10 @@ describe('LoginModal', () => {
       const users = [mock<User>({ id: '1' }), mock<User>()]
       const { wrapper, mocks } = getWrapper(users)
       mocks.$clientService.graphAuthenticated.users.editUser.mockResolvedValue(
-        mockAxiosResolve({ id: 'e3515ffb-d264-4dfc-8506-6c239f6673b5' })
+        mock<User>({ id: 'e3515ffb-d264-4dfc-8506-6c239f6673b5' })
       )
       mocks.$clientService.graphAuthenticated.users.getUser.mockResolvedValue(
-        mockAxiosResolve({ id: 'e3515ffb-d264-4dfc-8506-6c239f6673b5' })
+        mock<User>({ id: 'e3515ffb-d264-4dfc-8506-6c239f6673b5' })
       )
 
       await wrapper.vm.onConfirm()

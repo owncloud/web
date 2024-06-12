@@ -1,10 +1,5 @@
 import AddToGroupsModal from '../../../../src/components/Users/AddToGroupsModal.vue'
-import {
-  defaultComponentMocks,
-  defaultPlugins,
-  mockAxiosResolve,
-  shallowMount
-} from 'web-test-helpers'
+import { defaultComponentMocks, defaultPlugins, shallowMount } from 'web-test-helpers'
 import { mock } from 'vitest-mock-extended'
 import { Group, User } from '@ownclouders/web-client/graph/generated'
 import { Modal, useMessages } from '@ownclouders/web-pkg'
@@ -23,7 +18,7 @@ describe('AddToGroupsModal', () => {
       const { wrapper, mocks } = getWrapper({ users, groups })
       mocks.$clientService.graphAuthenticated.groups.addMember.mockResolvedValue(undefined)
       mocks.$clientService.graphAuthenticated.users.getUser.mockResolvedValue(
-        mockAxiosResolve({ id: 'e3515ffb-d264-4dfc-8506-6c239f6673b5' })
+        mock<User>({ id: 'e3515ffb-d264-4dfc-8506-6c239f6673b5' })
       )
 
       wrapper.vm.selectedOptions = groups

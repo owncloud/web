@@ -6,8 +6,7 @@ import {
   shallowMount
 } from 'web-test-helpers'
 import { mock } from 'vitest-mock-extended'
-import { Group } from '@ownclouders/web-client/graph/generated'
-import { AxiosResponse } from 'axios'
+import { Group, User } from '@ownclouders/web-client/graph/generated'
 import { CapabilityStore } from '@ownclouders/web-pkg'
 import GroupSelect from '../../../../../src/components/Users/GroupSelect.vue'
 
@@ -93,7 +92,7 @@ describe('EditPanel', () => {
       const { wrapper, mocks } = getWrapper()
       const graphMock = mocks.$clientService.graphAuthenticated
       const getUserStub = graphMock.users.getUser.mockResolvedValue(
-        mock<AxiosResponse>({ data: { onPremisesSamAccountName: 'jan' } })
+        mock<User>({ onPremisesSamAccountName: 'jan' })
       )
       wrapper.vm.editUser.onPremisesSamAccountName = 'jan'
       expect(await wrapper.vm.validateUserName()).toBeFalsy()

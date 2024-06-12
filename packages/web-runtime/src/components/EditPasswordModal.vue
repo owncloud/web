@@ -62,7 +62,10 @@ export default defineComponent({
 
     const onConfirm = () => {
       return clientService.graphAuthenticated.users
-        .changeOwnPassword(unref(currentPassword).trim(), unref(newPassword).trim())
+        .changeOwnPassword({
+          currentPassword: unref(currentPassword).trim(),
+          newPassword: unref(newPassword).trim()
+        })
         .then(() => {
           showMessage({ title: $gettext('Password was changed successfully') })
         })

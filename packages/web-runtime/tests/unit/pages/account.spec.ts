@@ -7,7 +7,6 @@ import {
   mockAxiosReject
 } from 'web-test-helpers'
 import { mock } from 'vitest-mock-extended'
-import { AxiosResponse } from 'axios'
 import {
   Extension,
   ExtensionPoint,
@@ -184,9 +183,7 @@ describe('account page', () => {
       const { wrapper, mocks } = getWrapper({})
       await blockLoadingState(wrapper)
 
-      mocks.$clientService.graphAuthenticated.users.editMe.mockResolvedValueOnce(
-        mockAxiosResolve({})
-      )
+      mocks.$clientService.graphAuthenticated.users.editMe.mockResolvedValueOnce(undefined)
       await wrapper.vm.updateSelectedLanguage({ value: 'en' } as LanguageOption)
       const { showMessage } = useMessages()
       expect(showMessage).toHaveBeenCalled()
@@ -197,9 +194,7 @@ describe('account page', () => {
       const { wrapper, mocks } = getWrapper({})
       await blockLoadingState(wrapper)
 
-      mocks.$clientService.graphAuthenticated.users.editMe.mockImplementation(() =>
-        mockAxiosReject('err')
-      )
+      mocks.$clientService.graphAuthenticated.users.editMe.mockRejectedValue(new Error())
       await wrapper.vm.updateSelectedLanguage({ value: 'en' } as LanguageOption)
       const { showErrorMessage } = useMessages()
       expect(showErrorMessage).toHaveBeenCalled()
@@ -340,9 +335,7 @@ function getWrapper({
 
     return Promise.resolve(mockAxiosResolve(response))
   })
-  mocks.$clientService.graphAuthenticated.users.getMe.mockResolvedValue(
-    mock<AxiosResponse>({ data: { id: '1' } })
-  )
+  mocks.$clientService.graphAuthenticated.users.getMe.mockResolvedValue(mock<User>({ id: '1' }))
 
   return {
     mocks,

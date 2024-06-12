@@ -278,7 +278,7 @@ export default defineComponent({
           await onUpdateUserAppRoleAssignments(user, editUser)
         }
 
-        const { data: updatedUser } = await client.users.getUser(user.id)
+        const updatedUser = await client.users.getUser(user.id)
         userSettingsStore.upsertUser(updatedUser)
 
         eventBus.publish('sidebar.entity.saved')

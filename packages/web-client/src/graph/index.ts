@@ -2,19 +2,13 @@ import { AxiosInstance, AxiosPromise, AxiosResponse } from 'axios'
 import {
   CollectionOfDrives,
   CollectionOfGroup,
-  CollectionOfUser,
   Configuration,
   Drive,
   DrivesApiFactory,
   Group,
   GroupApiFactory,
   GroupsApiFactory,
-  MeChangepasswordApiFactory,
   MeDrivesApi,
-  MeUserApiFactory,
-  User,
-  UserApiFactory,
-  UsersApiFactory,
   TagsApiFactory,
   CollectionOfTags,
   TagAssignment,
@@ -22,9 +16,6 @@ import {
   DrivesGetDrivesApi,
   CollectionOfApplications,
   ApplicationsApiFactory,
-  UserAppRoleAssignmentApiFactory,
-  AppRoleAssignment,
-  ExportPersonalDataRequest,
   MeDriveApiFactory,
   RoleManagementApiFactory,
   UnifiedRoleDefinition,
@@ -40,6 +31,7 @@ import {
   CollectionOfPermissions,
   CollectionOfPermissionsWithAllowedValues
 } from './generated'
+import { type GraphUsers, UsersFactory } from './users'
 
 export interface Graph {
   applications: {
@@ -68,29 +60,7 @@ export interface Graph {
     ) => AxiosPromise<DriveItem>
     createDriveItem: (driveId: string, driveItem: DriveItem) => AxiosPromise<DriveItem>
   }
-  users: {
-    getUser: (userId: string) => AxiosPromise<User>
-    createUser: (user: User) => AxiosPromise<User>
-    getMe: () => AxiosPromise<User>
-    editMe: (user: User) => AxiosPromise<User>
-    changeOwnPassword: (currentPassword: string, newPassword: string) => AxiosPromise<void>
-    editUser: (userId: string, user: User) => AxiosPromise<User>
-    deleteUser: (userId: string) => AxiosPromise<void>
-    listUsers: (
-      orderBy?: string,
-      filter?: string,
-      expand?: Array<'drive' | 'drives' | 'memberOf' | 'appRoleAssignments'>,
-      search?: string
-    ) => AxiosPromise<CollectionOfUser>
-    createUserAppRoleAssignment: (
-      userId: string,
-      appRoleAssignment: AppRoleAssignment
-    ) => AxiosPromise<AppRoleAssignment>
-    exportPersonalData: (
-      userId: string,
-      exportPersonalDataRequest?: ExportPersonalDataRequest
-    ) => AxiosPromise<void>
-  }
+  users: GraphUsers
   groups: {
     listGroups: (
       orderBy?: string,
@@ -170,21 +140,8 @@ export const graph = (baseURI: string, axiosClient: AxiosInstance): Graph => {
 
   const meDrivesApi = new MeDrivesApi(config, config.basePath, axiosClient)
   const allDrivesApi = new DrivesGetDrivesApi(config, config.basePath, axiosClient)
-  const meUserApiFactory = MeUserApiFactory(config, config.basePath, axiosClient)
   const meDriveApiFactory = MeDriveApiFactory(config, config.basePath, axiosClient)
-  const meChangepasswordApiFactory = MeChangepasswordApiFactory(
-    config,
-    config.basePath,
-    axiosClient
-  )
   const applicationsApiFactory = ApplicationsApiFactory(config, config.basePath, axiosClient)
-  const userApiFactory = UserApiFactory(config, config.basePath, axiosClient)
-  const usersApiFactory = UsersApiFactory(config, config.basePath, axiosClient)
-  const userAppRoleAssignmentApiFactory = UserAppRoleAssignmentApiFactory(
-    config,
-    config.basePath,
-    axiosClient
-  )
   const groupApiFactory = GroupApiFactory(config, config.basePath, axiosClient)
   const groupsApiFactory = GroupsApiFactory(config, config.basePath, axiosClient)
   const drivesApiFactory = DrivesApiFactory(config, config.basePath, axiosClient)
@@ -234,38 +191,7 @@ export const graph = (baseURI: string, axiosClient: AxiosInstance): Graph => {
       createDriveItem: (driveId: string, driveItem: DriveItem) =>
         drivesRootApiFactory.createDriveItem(driveId, driveItem)
     },
-    users: {
-      getUser: (userId: string) =>
-        userApiFactory.getUser(
-          userId,
-          new Set<any>([]),
-          new Set<any>(['drive', 'memberOf', 'appRoleAssignments'])
-        ),
-      createUser: (user: User) => usersApiFactory.createUser(user),
-      getMe: () => meUserApiFactory.getOwnUser(new Set<any>(['memberOf'])),
-      editMe: (user: User) => meUserApiFactory.updateOwnUser(user),
-      changeOwnPassword: (currentPassword, newPassword) =>
-        meChangepasswordApiFactory.changeOwnPassword({ currentPassword, newPassword }),
-      editUser: (userId: string, user: User) => userApiFactory.updateUser(userId, user),
-      deleteUser: (userId: string) => userApiFactory.deleteUser(userId),
-      listUsers: (
-        orderBy?: any,
-        filter?: string,
-        expand?: Array<'drive' | 'drives' | 'memberOf' | 'appRoleAssignments'>,
-        search: string = ''
-      ) =>
-        usersApiFactory.listUsers(
-          search,
-          filter,
-          orderBy ? new Set<any>([orderBy]) : null,
-          null,
-          expand ? new Set<any>(expand) : null
-        ),
-      createUserAppRoleAssignment: (userId: string, appRoleAssignment: AppRoleAssignment) =>
-        userAppRoleAssignmentApiFactory.userCreateAppRoleAssignments(userId, appRoleAssignment),
-      exportPersonalData: (userId: string, exportPersonalDataRequest?: ExportPersonalDataRequest) =>
-        userApiFactory.exportPersonalData(userId, exportPersonalDataRequest)
-    },
+    users: UsersFactory({ axiosClient, config }),
     groups: {
       createGroup: (group: Group) => groupsApiFactory.createGroup(group),
       editGroup: (groupId: string, group: Group) => groupApiFactory.updateGroup(groupId, group),

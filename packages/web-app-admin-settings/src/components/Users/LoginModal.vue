@@ -132,12 +132,12 @@ export default defineComponent({
       try {
         const usersResponse = await Promise.all(
           succeeded.map(({ value }) => {
-            return client.users.getUser(value.data.id)
+            return client.users.getUser(value.id)
           })
         )
 
-        usersResponse.forEach(({ data }) => {
-          userSettingsStore.upsertUser(data)
+        usersResponse.forEach((user) => {
+          userSettingsStore.upsertUser(user)
         })
       } catch (e) {
         console.error(e)

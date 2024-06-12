@@ -270,12 +270,12 @@ export default defineComponent({
         .filter(Boolean)
         .join(' and ')
 
-      const usersResponse = yield clientService.graphAuthenticated.users.listUsers(
-        'displayName',
+      const usersResponse = yield clientService.graphAuthenticated.users.listUsers({
+        orderBy: ['displayName'],
         filter,
-        ['appRoleAssignments']
-      )
-      userSettingsStore.setUsers(usersResponse.data.value || [])
+        expand: ['appRoleAssignments']
+      })
+      userSettingsStore.setUsers(usersResponse || [])
     })
 
     const isLoading = computed(() => {
@@ -306,7 +306,7 @@ export default defineComponent({
         return
       }
 
-      const { data } = yield clientService.graphAuthenticated.users.getUser(user.id)
+      const data = yield clientService.graphAuthenticated.users.getUser(user.id)
       unref(additionalUserDataLoadedForUserIds).push(user.id)
 
       Object.assign(user, data)

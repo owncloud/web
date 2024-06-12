@@ -3,13 +3,12 @@ import {
   defaultComponentMocks,
   defaultPlugins,
   mockAxiosReject,
-  mockAxiosResolve,
   shallowMount
 } from 'web-test-helpers'
 import { mock } from 'vitest-mock-extended'
-import { AxiosResponse } from 'axios'
 import { Modal, eventBus, useMessages } from '@ownclouders/web-pkg'
 import { useUserSettingsStore } from '../../../../src/composables/stores/userSettings'
+import { User } from '@ownclouders/web-client/graph/generated'
 
 describe('CreateUserModal', () => {
   describe('computed method "isFormInvalid"', () => {
@@ -52,7 +51,7 @@ describe('CreateUserModal', () => {
       const { wrapper, mocks } = getWrapper()
       const graphMock = mocks.$clientService.graphAuthenticated
       const getUserStub = graphMock.users.getUser.mockResolvedValue(
-        mock<AxiosResponse>({ data: { onPremisesSamAccountName: 'jan' } })
+        mock<User>({ onPremisesSamAccountName: 'jan' })
       )
       wrapper.vm.user.onPremisesSamAccountName = 'jan'
       expect(await wrapper.vm.validateUserName()).toBeFalsy()
@@ -141,10 +140,10 @@ describe('CreateUserModal', () => {
       wrapper.vm.validatePassword()
 
       mocks.$clientService.graphAuthenticated.users.createUser.mockResolvedValue(
-        mockAxiosResolve({ id: 'e3515ffb-d264-4dfc-8506-6c239f6673b5' })
+        mock<User>({ id: 'e3515ffb-d264-4dfc-8506-6c239f6673b5' })
       )
       mocks.$clientService.graphAuthenticated.users.getUser.mockResolvedValueOnce(
-        mockAxiosResolve({ id: 'e3515ffb-d264-4dfc-8506-6c239f6673b5' })
+        mock<User>({ id: 'e3515ffb-d264-4dfc-8506-6c239f6673b5' })
       )
 
       await wrapper.vm.onConfirm()
@@ -171,7 +170,7 @@ describe('CreateUserModal', () => {
       wrapper.vm.validatePassword()
 
       mocks.$clientService.graphAuthenticated.users.createUser.mockResolvedValue(
-        mockAxiosResolve({ id: 'e3515ffb-d264-4dfc-8506-6c239f6673b5' })
+        mock<User>({ id: 'e3515ffb-d264-4dfc-8506-6c239f6673b5' })
       )
       const eventSpy = vi.spyOn(eventBus, 'publish')
       await wrapper.vm.onConfirm()
