@@ -157,8 +157,9 @@ services:
       - uppy_companion_datadir:/tmp/companion/
     labels:
       traefik.enable: true
-      traefik.http.routers.companion.rule: PathPrefix(`/companion`)
-      traefik.http.routers.companion.entrypoints: websecure
+      traefik.http.routers.companion.tls: true
+      traefik.http.routers.companion.rule: Host(`host.docker.internal`) && PathPrefix(`/companion`)
+      traefik.http.routers.companion.entrypoints: ocis
       traefik.http.services.companion.loadbalancer.server.port: 3020
 
   ocis-appprovider-collabora:
