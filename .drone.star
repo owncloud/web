@@ -51,7 +51,7 @@ config = {
     ],
     "pnpmlint": True,
     "e2e": {
-        "oCIS-1": {
+        "1": {
             "earlyFail": True,
             "skip": False,
             "suites": [
@@ -59,7 +59,7 @@ config = {
                 "smoke",
             ],
         },
-        "oCIS-2": {
+        "2": {
             "earlyFail": True,
             "skip": False,
             "suites": [
@@ -67,7 +67,7 @@ config = {
                 "spaces",
             ],
         },
-        "oCIS-3": {
+        "3": {
             "earlyFail": True,
             "skip": False,
             "tikaNeeded": True,
@@ -76,7 +76,16 @@ config = {
                 "shares",
             ],
         },
-        "oCIS-app-provider": {
+        "4": {
+            "earlyFail": True,
+            "skip": False,
+            "suites": [
+                "navigation",
+                "user-settings",
+                "file-action",
+            ],
+        },
+        "app-provider": {
             "skip": False,
             "suites": [
                 "app-provider",
@@ -517,7 +526,7 @@ def e2eTests(ctx):
         for item in default:
             params[item] = matrix[item] if item in matrix else default[item]
 
-        if suite == "oCIS-app-provider" and not "full-ci" in ctx.build.title.lower() and ctx.build.event != "cron":
+        if "app-provider" in suite and not "full-ci" in ctx.build.title.lower() and ctx.build.event != "cron":
             continue
 
         if params["skip"]:
@@ -538,9 +547,7 @@ def e2eTests(ctx):
 
         steps = skipIfUnchanged(ctx, "e2e-tests") + \
                 restoreBuildArtifactCache(ctx, "pnpm", ".pnpm-store") + \
-                restoreBuildArtifactCache(ctx, "playwright", ".playwright") + \
                 installPnpm() + \
-                installPlaywright() + \
                 restoreBuildArtifactCache(ctx, "web-dist", "dist")
 
         if ctx.build.event == "cron":
@@ -548,7 +555,7 @@ def e2eTests(ctx):
         else:
             steps += restoreOcisCache()
 
-        if suite == "oCIS-app-provider":
+        if "app-provider" in suite:
             # app-provider specific steps
             steps += collaboraService() + \
                      onlyofficeService() + \
@@ -644,7 +651,7 @@ def installPlaywright():
             "PLAYWRIGHT_BROWSERS_PATH": ".playwright",
         },
         "commands": [
-            "pnpm exec playwright install --with-deps",
+            "pnpm exec playwright install chromium --with-deps",
         ],
     }]
 
@@ -1703,7 +1710,6 @@ def buildAndTestDesignSystem(ctx):
     steps = restoreBuildArtifactCache(ctx, "pnpm", ".pnpm-store") + \
             restoreBuildArtifactCache(ctx, "playwright", ".playwright") + \
             installPnpm() + \
-            installPlaywright() + \
             buildDesignSystemDocs() + \
             runDesignSystemDocsE2eTests()
 
@@ -1827,9 +1833,7 @@ def e2eTestsOnKeycloak(ctx):
         return []
 
     steps = restoreBuildArtifactCache(ctx, "pnpm", ".pnpm-store") + \
-            restoreBuildArtifactCache(ctx, "playwright", ".playwright") + \
             installPnpm() + \
-            installPlaywright() + \
             keycloakService() + \
             restoreBuildArtifactCache(ctx, "web-dist", "dist")
     if ctx.build.event == "cron":
