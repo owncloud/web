@@ -102,7 +102,6 @@ export default class Collaborator {
     ])
     await collaboratorInputLocator.focus()
     await page.locator('.vs--open').waitFor()
-    // await page.locator('.vs__dropdown-option').click()
     await page
       .locator(util.format(Collaborator.collaboratorDropdownItem, collaborator.displayName))
       .click()
