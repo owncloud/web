@@ -350,7 +350,7 @@ const createDocumentFile = async (
   await page.locator(resourceNameInput).fill(name)
   await Promise.all([
     page.waitForLoadState(),
-    page.waitForURL('**/external/personal/**'),
+    page.waitForURL('**/external/**'),
     page.waitForResponse(
       (resp) =>
         resp.status() === 200 &&
