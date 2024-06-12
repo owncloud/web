@@ -109,7 +109,7 @@
                 target="_blank"
                 class="oc-flex oc-flex-middle"
               >
-                <oc-icon name="service" size="1" class="oc-mr-xs"></oc-icon>
+                <oc-icon name="service" class="oc-mr-xs"></oc-icon>
                 <span v-text="$gettext('Help translate')" />
               </a>
             </div>
