@@ -7,9 +7,9 @@ import {
   shallowMount
 } from 'web-test-helpers'
 import { mock } from 'vitest-mock-extended'
-import { AxiosResponse } from 'axios'
 import { Modal, eventBus, useMessages } from '@ownclouders/web-pkg'
 import { useGroupSettingsStore } from '../../../../src/composables'
+import { Group } from '@ownclouders/web-client/graph/generated'
 
 describe('CreateGroupModal', () => {
   describe('computed method "isFormInvalid"', () => {
@@ -42,7 +42,7 @@ describe('CreateGroupModal', () => {
       const graphMock = mocks.$clientService.graphAuthenticated
       wrapper.vm.group.displayName = 'admins'
       const getGroupSub = graphMock.groups.getGroup.mockResolvedValue(
-        mock<AxiosResponse>({ data: { displayName: 'admins' } })
+        mock<Group>({ displayName: 'admins' })
       )
       expect(await wrapper.vm.validateDisplayName()).toBeFalsy()
       expect(getGroupSub).toHaveBeenCalled()
@@ -78,7 +78,7 @@ describe('CreateGroupModal', () => {
       await wrapper.vm.validateDisplayName()
 
       mocks.$clientService.graphAuthenticated.groups.createGroup.mockResolvedValueOnce(
-        mockAxiosResolve({ id: 'e3515ffb-d264-4dfc-8506-6c239f6673b5' })
+        mock<Group>({ id: 'e3515ffb-d264-4dfc-8506-6c239f6673b5' })
       )
 
       await wrapper.vm.onConfirm()

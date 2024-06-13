@@ -11,7 +11,7 @@ import { defineComponent, PropType, ref, unref, watch } from 'vue'
 import { useGettext } from 'vue3-gettext'
 import { Group, User } from '@ownclouders/web-client/graph/generated'
 import GroupSelect from './GroupSelect.vue'
-import { useClientService, Modal, useMessages, useConfigStore } from '@ownclouders/web-pkg'
+import { useClientService, Modal, useMessages } from '@ownclouders/web-pkg'
 import { useUserSettingsStore } from '../../composables/stores/userSettings'
 
 export default defineComponent({
@@ -32,7 +32,6 @@ export default defineComponent({
   setup(props, { emit, expose }) {
     const { showMessage, showErrorMessage } = useMessages()
     const clientService = useClientService()
-    const configStore = useConfigStore()
     const { $gettext, $ngettext } = useGettext()
     const userSettingsStore = useUserSettingsStore()
 
@@ -55,7 +54,7 @@ export default defineComponent({
       const promises = unref(selectedOptions).reduce((acc, group) => {
         for (const user of props.users) {
           if (!user.memberOf.find((userGroup) => userGroup.id === group.id)) {
-            acc.push(client.groups.addMember(group.id, user.id, configStore.serverUrl))
+            acc.push(client.groups.addMember(group.id, user.id))
             if (!usersToFetch.includes(user.id)) {
               usersToFetch.push(user.id)
             }

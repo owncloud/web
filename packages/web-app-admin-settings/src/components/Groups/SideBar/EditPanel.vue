@@ -63,7 +63,7 @@ export default defineComponent({
       try {
         const client = clientService.graphAuthenticated
         await client.groups.editGroup(editGroup.id, editGroup)
-        const { data: updatedGroup } = await client.groups.getGroup(editGroup.id)
+        const updatedGroup = await client.groups.getGroup(editGroup.id)
         groupSettingsStore.upsertGroup(updatedGroup)
 
         eventBus.publish('sidebar.entity.saved')

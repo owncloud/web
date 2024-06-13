@@ -1,6 +1,5 @@
 import Groups from '../../../src/views/Groups.vue'
-import { mockAxiosResolve } from 'web-test-helpers/src/mocks'
-import { mockDeep } from 'vitest-mock-extended'
+import { mock, mockDeep } from 'vitest-mock-extended'
 import { ClientService } from '@ownclouders/web-pkg'
 import { defaultComponentMocks, defaultPlugins, mount } from 'web-test-helpers'
 import { Group } from '@ownclouders/web-client/graph/generated'
@@ -8,9 +7,9 @@ import { Group } from '@ownclouders/web-client/graph/generated'
 const selectors = { batchActionsStub: 'batch-actions-stub' }
 const getClientServiceMock = () => {
   const clientService = mockDeep<ClientService>()
-  clientService.graphAuthenticated.groups.listGroups.mockResolvedValue(
-    mockAxiosResolve({ value: [{ id: '1', name: 'users', groupTypes: [] }] })
-  )
+  clientService.graphAuthenticated.groups.listGroups.mockResolvedValue([
+    mock<Group>({ id: '1', displayName: 'users', groupTypes: [] })
+  ])
   return clientService
 }
 vi.mock('@ownclouders/web-pkg', async (importOriginal) => ({

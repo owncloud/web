@@ -119,7 +119,6 @@ import {
   useCapabilityStore,
   useEventBus,
   useMessages,
-  useConfigStore,
   useSpacesStore
 } from '@ownclouders/web-pkg'
 import GroupSelect from '../GroupSelect.vue'
@@ -171,7 +170,6 @@ export default defineComponent({
     const clientService = useClientService()
     const userStore = useUserStore()
     const userSettingsStore = useUserSettingsStore()
-    const configStore = useConfigStore()
     const spacesStore = useSpacesStore()
     const eventBus = useEventBus()
     const { showErrorMessage } = useMessages()
@@ -222,7 +220,7 @@ export default defineComponent({
       const requests = []
 
       for (const groupToAdd of groupsToAdd) {
-        requests.push(client.groups.addMember(groupToAdd.id, user.id, configStore.serverUrl))
+        requests.push(client.groups.addMember(groupToAdd.id, user.id))
       }
       for (const groupToDelete of groupsToDelete) {
         requests.push(client.groups.deleteMember(groupToDelete.id, user.id))

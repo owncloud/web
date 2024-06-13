@@ -74,8 +74,8 @@ import { Group } from '@ownclouders/web-client/graph/generated'
 import { computed, defineComponent, ref, unref, onBeforeUnmount, onMounted } from 'vue'
 import { useTask } from 'vue-concurrency'
 import { useGettext } from 'vue3-gettext'
-
 import { storeToRefs } from 'pinia'
+import { call } from '@ownclouders/web-client'
 
 export default defineComponent({
   components: {
@@ -101,10 +101,13 @@ export default defineComponent({
     const createGroupAction = computed(() => unref(createGroupActions)[0])
 
     const loadResourcesTask = useTask(function* (signal) {
-      const response = yield clientService.graphAuthenticated.groups.listGroups('displayName', [
-        'members'
-      ])
-      groupSettingsStore.setGroups(response.data.value || [])
+      const loadedGroups = yield* call(
+        clientService.graphAuthenticated.groups.listGroups({
+          orderBy: ['displayName'],
+          expand: ['members']
+        })
+      )
+      groupSettingsStore.setGroups(loadedGroups || [])
     })
 
     const { actions: deleteActions } = useGroupActionsDelete()

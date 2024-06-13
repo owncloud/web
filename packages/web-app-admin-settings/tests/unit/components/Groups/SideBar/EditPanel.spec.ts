@@ -1,14 +1,8 @@
 import EditPanel from '../../../../../src/components/Groups/SideBar/EditPanel.vue'
-import {
-  defaultComponentMocks,
-  defaultPlugins,
-  mockAxiosReject,
-  mockAxiosResolve,
-  mount
-} from 'web-test-helpers'
+import { defaultComponentMocks, defaultPlugins, mockAxiosReject, mount } from 'web-test-helpers'
 import { mock } from 'vitest-mock-extended'
-import { AxiosResponse } from 'axios'
 import { eventBus, useMessages } from '@ownclouders/web-pkg'
+import { Group } from '@ownclouders/web-client/graph/generated'
 
 describe('EditPanel', () => {
   it('renders all available inputs', () => {
@@ -56,7 +50,7 @@ describe('EditPanel', () => {
       wrapper.vm.editGroup.displayName = 'users'
       const graphMock = mocks.$clientService.graphAuthenticated
       const getGroupStub = graphMock.groups.getGroup.mockResolvedValue(
-        mock<AxiosResponse>({ data: { displayName: 'group' } })
+        mock<Group>({ displayName: 'group' })
       )
       expect(await wrapper.vm.validateDisplayName()).toBeFalsy()
       expect(getGroupStub).toHaveBeenCalled()
@@ -68,9 +62,9 @@ describe('EditPanel', () => {
       const { wrapper, mocks } = getWrapper()
 
       const clientService = mocks.$clientService
-      clientService.graphAuthenticated.groups.editGroup.mockResolvedValue(mockAxiosResolve())
+      clientService.graphAuthenticated.groups.editGroup.mockResolvedValue()
       clientService.graphAuthenticated.groups.getGroup.mockResolvedValue(
-        mockAxiosResolve({ id: '1', displayName: 'administrators' })
+        mock<Group>({ id: '1', displayName: 'administrators' })
       )
 
       const editGroup = {
@@ -90,7 +84,7 @@ describe('EditPanel', () => {
       vi.spyOn(console, 'error').mockImplementation(() => undefined)
       const { wrapper, mocks } = getWrapper()
       const clientService = mocks.$clientService
-      clientService.graphAuthenticated.groups.editGroup.mockImplementation(() => mockAxiosReject())
+      clientService.graphAuthenticated.groups.editGroup.mockRejectedValue(undefined)
       await wrapper.vm.onEditGroup({})
 
       const { showErrorMessage } = useMessages()

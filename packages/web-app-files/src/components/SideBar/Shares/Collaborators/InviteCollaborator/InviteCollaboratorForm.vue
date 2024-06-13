@@ -293,8 +293,8 @@ export default defineComponent({
         client.users.listUsers({ orderBy: ['displayName'], search: `"${query}"` })
       )
 
-      const { data: groupData } = yield* call(
-        client.groups.listGroups('displayName', null, `"${query}"`)
+      const groupData = yield* call(
+        client.groups.listGroups({ orderBy: ['displayName'], search: `"${query}"` })
       )
 
       const users = (userData || []).map((u) => ({
@@ -302,7 +302,7 @@ export default defineComponent({
         shareType: ShareTypes.user.value
       })) as CollaboratorAutoCompleteItem[]
 
-      const groups = (groupData.value || []).map((u) => ({
+      const groups = (groupData || []).map((u) => ({
         ...u,
         shareType: ShareTypes.group.value
       })) as CollaboratorAutoCompleteItem[]

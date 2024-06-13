@@ -61,9 +61,9 @@ export default defineComponent({
 
       try {
         const client = clientService.graphAuthenticated
-        const response = await client.groups.createGroup(unref(group))
+        const createdGroup = await client.groups.createGroup(unref(group))
         showMessage({ title: $gettext('Group was created successfully') })
-        groupSettingsStore.upsertGroup(response?.data)
+        groupSettingsStore.upsertGroup(createdGroup)
       } catch (error) {
         console.error(error)
         showErrorMessage({
