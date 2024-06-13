@@ -105,12 +105,12 @@
             />
             <div class="oc-mt-s">
               <a
-                href="https://explore.transifex.com/owncloud-org/"
+                href="https://explore.transifex.com/owncloud-org/owncloud-web/"
                 target="_blank"
                 class="oc-flex oc-flex-middle"
               >
+                <oc-icon name="service" class="oc-mr-xs"></oc-icon>
                 <span v-text="$gettext('Help translate')" />
-                <oc-icon name="external-link" size="small" class="oc-ml-xs" />
               </a>
             </div>
           </dd>
@@ -545,6 +545,7 @@ export default defineComponent({
 dd {
   margin-left: 0;
 }
+
 main {
   overflow-y: auto;
 }
