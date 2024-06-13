@@ -122,9 +122,7 @@ export const deleteUser = async ({ user, admin }: { user: User; admin: User }): 
   // deletes the user data
   const usersEnvironment = new UsersEnvironment()
   const ocisUser = usersEnvironment.getCreatedUser({ key: user.id })
-  console.log('OcisUser ------')
-  console.log(ocisUser)
-  // path: join('graph', 'v1.0', 'users', user.id),
+
   await graphDeleteUser({ user: ocisUser, admin })
 
   const response = await request({

@@ -92,20 +92,6 @@ export const createGroup = async ({
   return group
 }
 
-// const getGroupId = async ({ group, admin }: { group: Group; admin: User }): Promise<string> => {
-//   let groupId = ''
-//   const response = await request({
-//     method: 'GET',
-//     path: join('graph', 'v1.0', 'groups', group.displayName),
-//     user: admin
-//   })
-//   if (response.ok) {
-//     const resBody = (await response.json()) as Group
-//     groupId = resBody.id
-//   }
-//   return groupId
-// }
-
 export const deleteGroup = async ({
   group,
   admin
