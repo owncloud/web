@@ -6,13 +6,13 @@ import {
   User,
   ErrorResponse
 } from 'oidc-client-ts'
-import { buildUrl } from '@ownclouders/web-pkg'
+import { buildUrl, useAppsStore } from '@ownclouders/web-pkg'
 import { getAbilities } from './abilities'
 import { AuthStore, UserStore, CapabilityStore, ConfigStore } from '@ownclouders/web-pkg'
 import { ClientService } from '@ownclouders/web-pkg'
 import { Ability } from '@ownclouders/web-client'
 import { Language } from 'vue3-gettext'
-import { setCurrentLanguage } from 'web-runtime/src/helpers/language'
+import { loadAppTranslations, setCurrentLanguage } from 'web-runtime/src/helpers/language'
 import { router } from 'web-runtime/src/router'
 import { SSEAdapter } from '@ownclouders/web-client/sse'
 import { User as OcUser } from '@ownclouders/web-client/graph/generated'
@@ -202,6 +202,14 @@ export class UserManager extends OidcUserManager {
     })
 
     if (graphUser.preferredLanguage) {
+      const appsStore = useAppsStore()
+
+      loadAppTranslations({
+        apps: appsStore.apps,
+        gettext: this.language,
+        lang: graphUser.preferredLanguage
+      })
+
       setCurrentLanguage({
         language: this.language,
         languageSetting: graphUser.preferredLanguage

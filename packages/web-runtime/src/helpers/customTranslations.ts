@@ -1,12 +1,13 @@
 import { ConfigStore } from '@ownclouders/web-pkg'
 import { v4 as uuidV4 } from 'uuid'
 import merge from 'lodash-es/merge'
+import { Translations } from 'vue3-gettext'
 
 export const loadCustomTranslations = async ({
   configStore
 }: {
   configStore: ConfigStore
-}): Promise<unknown> => {
+}): Promise<Translations> => {
   const customTranslations = {}
   for (const customTranslation of configStore.customTranslations) {
     const customTranslationResponse = await fetch(customTranslation.url, {

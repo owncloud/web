@@ -9,7 +9,6 @@ import { PortalTarget } from '@ownclouders/web-pkg'
 import { createHead } from '@vueuse/head'
 import { abilitiesPlugin } from '@casl/vue'
 import { createMongoAbility } from '@casl/ability'
-import merge from 'lodash-es/merge'
 
 import {
   announceConfiguration,
@@ -30,9 +29,9 @@ import {
   announceLoadingService,
   announcePreviewService,
   announcePasswordPolicyService,
-  announceAdditionalTranslations,
   registerSSEEventListeners,
-  setViewOptions
+  setViewOptions,
+  announceGettext
 } from './container/bootstrap'
 import { applicationStore } from './container/store'
 import {
@@ -79,15 +78,11 @@ export const bootstrapApp = async (configurationPath: string): Promise<void> => 
 
   app.use(abilitiesPlugin, createMongoAbility([]), { useGlobalProperties: true })
 
-  const translations = await loadTranslations()
-  const gettext = announceTranslations({
-    app,
-    availableLanguages: supportedLanguages,
-    translations
-  })
-  announceUppyService({ app })
+  const gettext = announceGettext({ app, availableLanguages: supportedLanguages })
 
+  announceUppyService({ app })
   announceClientService({ app, configStore, authStore })
+
   // TODO: move to announceArchiverService function
   app.config.globalProperties.$archiverService = new ArchiverService(
     app.config.globalProperties.$clientService,
@@ -125,23 +120,18 @@ export const bootstrapApp = async (configurationPath: string): Promise<void> => 
   })
   app.component('PortalTarget', PortalTarget)
 
-  const applicationsPromise = initializeApplications({
-    app,
-    configStore,
-    supportedLanguages,
-    router,
-    gettext
-  })
-
+  const applicationsPromise = initializeApplications({ app, configStore, router })
+  const translationsPromise = loadTranslations()
   const customTranslationsPromise = loadCustomTranslations({ configStore })
   const themePromise = announceTheme({ app, designSystem, configStore })
-  const [customTranslations] = await Promise.all([
+  const [coreTranslations, customTranslations] = await Promise.all([
+    translationsPromise,
     customTranslationsPromise,
     applicationsPromise,
     themePromise
   ])
 
-  announceAdditionalTranslations({ gettext, translations: merge(customTranslations) })
+  announceTranslations({ appsStore, gettext, coreTranslations, customTranslations })
 
   announceAuthService({
     app,
@@ -285,11 +275,8 @@ export const bootstrapErrorApp = async (err: Error): Promise<void> => {
   await announceTheme({ app, designSystem, configStore })
   console.error(err)
   const translations = await loadTranslations()
-  announceTranslations({
-    app,
-    availableLanguages: supportedLanguages,
-    translations
-  })
+  const gettext = announceGettext({ app, availableLanguages: supportedLanguages })
+  announceTranslations({ gettext, coreTranslations: translations })
   app.mount('#owncloud')
 }
 ;(window as any).runtimeLoaded({

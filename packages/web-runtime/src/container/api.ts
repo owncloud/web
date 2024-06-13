@@ -8,10 +8,9 @@ import {
   ExtensionRegistry,
   SidebarNavExtension
 } from '@ownclouders/web-pkg'
-import { isEqual, isObject, isArray, merge } from 'lodash-es'
+import { isEqual, isObject, isArray } from 'lodash-es'
 import { App, Component, computed, h } from 'vue'
-import { ApplicationTranslations, AppNavigationItem } from '@ownclouders/web-pkg'
-import type { Language } from 'vue3-gettext'
+import { AppNavigationItem } from '@ownclouders/web-pkg'
 
 /**
  * inject application specific routes into runtime
@@ -97,29 +96,6 @@ const announceNavigationItems = (
 }
 
 /**
- * inject application specific translations into runtime
- *
- * @param translations
- * @param appTranslations
- * @param supportedLanguages
- */
-const announceTranslations = (
-  supportedLanguages: { [key: string]: string },
-  gettext: Language,
-  appTranslations: ApplicationTranslations
-): void => {
-  if (!isObject(gettext.translations)) {
-    throw new ApiError("translations can't be blank")
-  }
-
-  Object.keys(supportedLanguages).forEach((lang) => {
-    if (gettext.translations[lang] && appTranslations[lang]) {
-      gettext.translations = merge(gettext.translations, { [lang]: appTranslations[lang] })
-    }
-  })
-}
-
-/**
  * open a wormhole portal, this wraps vue-portal
  *
  * @param instance
@@ -165,27 +141,16 @@ const requestRouter = (router: Router): Router => {
  * specific data to the implementations.
  *
  * each application get its own provisioned api!
- *
- * @param applicationName
- * @param applicationId
- * @param store
- * @param router
- * @param translations
- * @param supportedLanguages
  */
 export const buildRuntimeApi = ({
   applicationName,
   applicationId,
   router,
-  gettext,
-  supportedLanguages,
   extensionRegistry
 }: {
   applicationName: string
   applicationId: string
-  gettext: Language
   router: Router
-  supportedLanguages: { [key: string]: string }
   extensionRegistry: ExtensionRegistry
 }): RuntimeApi => {
   if (!applicationName) {
@@ -201,8 +166,6 @@ export const buildRuntimeApi = ({
       announceRoutes(applicationId, router, routes),
     announceNavigationItems: (navigationItems: AppNavigationItem[]): void =>
       announceNavigationItems(applicationId, extensionRegistry, navigationItems),
-    announceTranslations: (appTranslations: ApplicationTranslations): void =>
-      announceTranslations(supportedLanguages, gettext, appTranslations),
     requestRouter: (): Router => requestRouter(router),
     openPortal: (
       instance: App,
