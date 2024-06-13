@@ -2,7 +2,7 @@ Enhancement: Faster page loading times
 
 We've massively decreased the initial page loading times. This is especially noticeable with slower network connections.
 
-According to the lighthouse performance metrics, we improved from a score of 60 to 94.
+According to the lighthouse performance metrics, we improved from a score of 60 to 94 out of 100.
 
 This has been achieved by taking several different actions:
 
