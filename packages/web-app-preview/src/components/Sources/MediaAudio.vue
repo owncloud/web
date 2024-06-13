@@ -3,7 +3,7 @@
     <audio :key="`media-audio-${file.id}`" controls preload="preload" :autoplay="isAutoPlayEnabled">
       <source :src="file.url" :type="file.mimeType" />
     </audio>
-    <p v-if="audioText" v-text="audioText"></p>
+    <p class="oc-text-muted oc-text-small" v-if="audioText" v-text="audioText"></p>
   </div>
 </template>
 <script lang="ts">
