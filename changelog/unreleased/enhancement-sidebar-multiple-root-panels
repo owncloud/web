@@ -1,0 +1,7 @@
+Enhancement: Multiple sidebar root panels
+
+The right sidebar now supports rendering multiple root panels. Since all panels determine their visibility individually it can happen
+that e.g. for a given file type multiple root panels would be available. Previously we only rendered the first one. Now we render all
+of them below each other, separated by a fine horizontal line.
+
+https://github.com/owncloud/web/pull/11037

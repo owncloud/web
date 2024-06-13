@@ -3,14 +3,14 @@
     id="app-sidebar"
     data-testid="app-sidebar"
     :class="{
-      'has-active-sub-panel': !!activeAvailablePanelName,
+      'has-active-sub-panel': hasActiveSubPanel,
       'oc-flex oc-flex-center oc-flex-middle': loading
     }"
   >
     <oc-spinner v-if="loading" />
     <template v-else>
       <div
-        v-for="panel in panels"
+        v-for="panel in displayPanels"
         :id="`sidebar-panel-${panel.name}`"
         :key="`panel-${panel.name}`"
         ref="panelContainer"
@@ -18,9 +18,8 @@
         :tabindex="activePanelName === panel.name ? -1 : null"
         class="sidebar-panel"
         :class="{
-          'is-active-sub-panel': activeAvailablePanelName === panel.name,
-          'is-active-default-panel': panel.isRoot?.(panelContext) && activePanelName === panel.name,
-          'sidebar-panel-default': panel.isRoot?.(panelContext)
+          'is-active-sub-panel': hasActiveSubPanel && activeSubPanelName === panel.name, // only one specific sub panel can be active
+          'is-active-root-panel': hasActiveRootPanel && panel.isRoot?.(panelContext) // all root panels are active if no sub panel is active
         }"
       >
         <div
@@ -62,8 +61,11 @@
           >
             <slot name="body">
               <component
-                :is="panel.component"
-                v-bind="panel.componentAttrs?.(panelContext) || {}"
+                :is="p.component"
+                v-for="(p, index) in panel.isRoot?.(panelContext) ? rootPanels : [panel]"
+                :key="`sidebar-panel-${p.name}`"
+                :class="{ 'multi-root-panel-separator oc-mt oc-pt-s': index > 0 }"
+                v-bind="p.componentAttrs?.(panelContext) || {}"
               />
             </slot>
           </div>
@@ -93,8 +95,9 @@
 
 <script lang="ts">
 import { VisibilityObserver } from '../../observer'
-import { computed, defineComponent, PropType, unref } from 'vue'
+import { computed, defineComponent, nextTick, PropType, ref, unref, watch } from 'vue'
 import { SideBarPanel, SideBarPanelContext } from './types'
+import { useGettext } from 'vue3-gettext'
 
 let visibilityObserver: VisibilityObserver
 let hiddenObserver: VisibilityObserver
@@ -125,57 +128,102 @@ export default defineComponent({
   },
   emits: ['close', 'selectPanel'],
   setup(props) {
-    const panels = computed(() =>
-      props.availablePanels.filter((p) => p.isVisible(props.panelContext))
+    const { $gettext } = useGettext()
+
+    const rootPanels = computed(() => {
+      return props.availablePanels.filter(
+        (p) => p.isVisible(props.panelContext) && p.isRoot?.(props.panelContext)
+      )
+    })
+    const subPanels = computed(() =>
+      props.availablePanels.filter(
+        (p) => p.isVisible(props.panelContext) && !p.isRoot?.(props.panelContext)
+      )
     )
-    const subPanels = computed(() => unref(panels).filter((p) => !p.isRoot?.(props.panelContext)))
+    const displayPanels = computed<SideBarPanel<unknown, unknown, unknown>[]>(() => {
+      if (unref(rootPanels).length) {
+        return [unref(rootPanels)[0], ...unref(subPanels)]
+      }
+      return unref(subPanels)
+    })
+
+    const activeSubPanelName = computed(() => {
+      const panelName = props.activePanel?.split('#')[0]
+      if (!panelName) {
+        return null
+      }
+      if (
+        !unref(subPanels)
+          .map((p) => p.name)
+          .includes(panelName)
+      ) {
+        return null
+      }
+      return panelName
+    })
+    const hasActiveSubPanel = computed(() => {
+      return unref(activeSubPanelName) !== null
+    })
+    const hasActiveRootPanel = computed(() => {
+      return unref(activeSubPanelName) === null
+    })
+
+    const oldPanelName = ref<string>(null)
+    const clearOldPanelName = () => {
+      oldPanelName.value = null
+    }
+    const setOldPanelName = (name: string) => {
+      oldPanelName.value = name
+    }
+    const activePanelName = computed<string>(() => {
+      if (unref(hasActiveSubPanel)) {
+        return unref(activeSubPanelName)
+      }
+      return unref(rootPanels)[0].name
+    })
+    const focussedElementId = ref<string>('')
+    watch(
+      activePanelName,
+      (panelName) => {
+        nextTick(() => {
+          focussedElementId.value = panelName ? `sidebar-panel-${panelName}` : null
+        })
+      },
+      { immediate: true }
+    )
+
+    const accessibleLabelBack = computed(() => {
+      if (unref(rootPanels).length === 1) {
+        return $gettext('Back to %{panel} panel', {
+          panel: unref(rootPanels)[0].title(props.panelContext)
+        })
+      }
+      return $gettext('Back to main panels')
+    })
 
     return {
-      panels,
-      subPanels
+      displayPanels,
+      rootPanels,
+      subPanels,
+      activeSubPanelName,
+      activePanelName,
+      oldPanelName,
+      clearOldPanelName,
+      setOldPanelName,
+      hasActiveSubPanel,
+      hasActiveRootPanel,
+      accessibleLabelBack,
+      focussedElementId
     }
   },
 
   data() {
     return {
-      focused: undefined,
-      oldPanelName: null,
       selectedFile: {}
     }
   },
 
-  computed: {
-    activeAvailablePanelName() {
-      const panelName = this.activePanel?.split('#')[0]
-      if (!panelName) {
-        return null
-      }
-      if (!this.panels.map((p) => p.name).includes(panelName)) {
-        return null
-      }
-      return panelName
-    },
-    activePanelName() {
-      return this.activeAvailablePanelName || this.rootPanel?.name
-    },
-    rootPanel() {
-      return this.panels.find((panel) => panel.isRoot?.(this.panelContext))
-    },
-    accessibleLabelBack() {
-      return this.$gettext('Back to %{panel} panel', {
-        panel: this.rootPanel.title(this.panelContext)
-      })
-    }
-  },
   watch: {
-    activePanelName: {
-      handler: function (panel, select) {
-        this.$nextTick(() => {
-          this.focused = panel ? `#sidebar-panel-${panel}` : `#sidebar-panel-select-${select}`
-        })
-      },
-      immediate: true
-    },
     isOpen: {
       handler: function (isOpen) {
         if (!isOpen) {
@@ -215,14 +263,14 @@ export default defineComponent({
         threshold: 0.05
       })
       const doFocus = () => {
-        const selector = document.querySelector(this.focused)
-        if (!selector) {
+        if (!this.focussedElementId) {
           return
         }
-        selector.focus()
-      }
-      const clearOldPanelName = () => {
-        this.oldPanelName = null
+        const element = document.getElementById(this.focussedElementId)
+        if (!element) {
+          return
+        }
+        element.focus()
       }
 
       if (!this.$refs.panelContainer) {
@@ -237,22 +285,18 @@ export default defineComponent({
           onExit: doFocus
         })
         hiddenObserver.observe(panel, {
-          onExit: clearOldPanelName
+          onExit: this.clearOldPanelName
         })
       })
     },
 
-    setOldPanelName() {
-      this.oldPanelName = this.activePanelName
-    },
-
     openPanel(panel: string) {
-      this.setOldPanelName()
+      this.setOldPanelName(this.activePanelName)
       this.setSidebarPanel(panel)
     },
 
     closePanel() {
-      this.setOldPanelName()
+      this.setOldPanelName(this.activePanelName)
       this.resetSidebarPanel()
     }
   }
@@ -307,17 +351,14 @@ export default defineComponent({
     transition-duration: 0.001ms !important;
   }
 
-  &.sidebar-panel-default {
-    &.has-active-sub-panel & {
-      transform: translateX(-30%);
-      visibility: hidden;
-    }
-  }
-
-  &.is-active-default-panel,
+  &.is-active-root-panel,
   &.is-active-sub-panel {
     visibility: unset;
     transform: translateX(0);
+  }
+
+  .multi-root-panel-separator {
+    border-top: 1px solid var(--oc-color-border);
   }
 
   &__header {
