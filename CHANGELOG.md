@@ -1,93 +1,4 @@
-Changelog for ownCloud Web [unreleased] (UNRELEASED)
-=======================================
-The following sections list the changes in ownCloud web unreleased relevant to
-ownCloud admins and users.
-
-[unreleased]: https://github.com/owncloud/web/compare/v9.0.0...master
-
-Summary
--------
-
-* Bugfix - Local logout if IdP has no logout support: [#10974](https://github.com/owncloud/web/pull/10974)
-* Enhancement - Audio metadata panel: [#10956](https://github.com/owncloud/web/pull/10956)
-* Enhancement - EXIF metadata panel: [#10956](https://github.com/owncloud/web/pull/10956)
-* Enhancement - Faster page loading times: [#10976](https://github.com/owncloud/web/pull/10976)
-* Enhancement - Add enabled only filter to spaces overview: [#11004](https://github.com/owncloud/web/pull/11004)
-* Enhancement - Multiple sidebar root panels: [#11037](https://github.com/owncloud/web/pull/11037)
-
-Details
--------
-
-* Bugfix - Local logout if IdP has no logout support: [#10974](https://github.com/owncloud/web/pull/10974)
-
-   Some IdPs don't support a logout endpoint. In those cases the web UI ran into a
-   fatal error and showed an empty screen without further redirects. Fixed by
-   forgetting the currently authenticated user when the OpenID Connect
-   configuration doesn't contain an `endSessionEndpoint` url.
-
-   https://github.com/owncloud/enterprise/issues/6631
-   https://github.com/owncloud/web/pull/10974
-
-* Enhancement - Audio metadata panel: [#10956](https://github.com/owncloud/web/pull/10956)
-
-   We've added a right sidebar panel with the name `Audio Info`, which display
-   `audio` metadata if present on the given resource. It is registered by the files
-   app and becomes visible in the global right sidebar in all file contexts, e.g.
-   file listing with single select on an audio file with indexed id3 information or
-   when listening to an audio file in the preview app.
-
-   https://github.com/owncloud/web/pull/10956
-
-* Enhancement - EXIF metadata panel: [#10956](https://github.com/owncloud/web/pull/10956)
-
-   We've added a right sidebar panel with the name `Image Info`, which displays
-   `image`, `photo` and `location` metadata if present on the given resource. It is
-   registered by the files app and becomes visible in the global right sidebar in
-   all file contexts, e.g. file listing with single select on an image or the
-   preview app displaying an image.
-
-   https://github.com/owncloud/web/pull/10956
-
-* Enhancement - Faster page loading times: [#10976](https://github.com/owncloud/web/pull/10976)
-
-   We've massively decreased the initial page loading times. This is especially
-   noticeable with slower network connections.
-
-   According to the lighthouse performance metrics, we improved from a score of 60
-   to 94 out of 100.
-
-   This has been achieved by taking several different actions:
-
-   - Lazy load large dependencies - Improve chunking - Enable server side
-   compression - Reduce the size of the main font we're using - Only register
-   translations for the currently selected language
-
-   https://github.com/owncloud/web/issues/7964
-   https://github.com/owncloud/web/issues/11035
-   https://github.com/owncloud/web/pull/10976
-   https://github.com/owncloud/web/pull/10979
-   https://github.com/owncloud/web/pull/11040
-
-* Enhancement - Add enabled only filter to spaces overview: [#11004](https://github.com/owncloud/web/pull/11004)
-
-   We've added an 'enabled only' filter to the spaces overview which is on by
-   default. This helps the user to manage spaces efficiently, even if there are a
-   lot of disabled spaces.
-
-   https://github.com/owncloud/web/issues/11001
-   https://github.com/owncloud/web/pull/11004
-
-* Enhancement - Multiple sidebar root panels: [#11037](https://github.com/owncloud/web/pull/11037)
-
-   The right sidebar now supports rendering multiple root panels. Since all panels
-   determine their visibility individually it can happen that e.g. for a given file
-   type multiple root panels would be available. Previously we only rendered the
-   first one. Now we render all of them below each other, separated by a fine
-   horizontal line.
-
-   https://github.com/owncloud/web/pull/11037
-
-Changelog for ownCloud Web [9.0.0] (2024-05-28)
+Changelog for ownCloud Web [9.0.0] (2024-06-13)
 =======================================
 The following sections list the changes in ownCloud web 9.0.0 relevant to
 ownCloud admins and users.
@@ -111,6 +22,7 @@ Summary
 * Bugfix - Resources with name consist of number won't show up in trash bin: [#10920](https://github.com/owncloud/web/pull/10920)
 * Bugfix - Disable search in public link context: [#10928](https://github.com/owncloud/web/pull/10928)
 * Bugfix - Space not updating on navigation: [#10941](https://github.com/owncloud/web/issues/10941)
+* Bugfix - Local logout if IdP has no logout support: [#10974](https://github.com/owncloud/web/pull/10974)
 * Change - Remove deprecated code: [#7338](https://github.com/owncloud/web/issues/7338)
 * Change - Remove skeleton app: [#9892](https://github.com/owncloud/web/issues/9892)
 * Change - Remove deprecated extension point for adding quick actions: [#10102](https://github.com/owncloud/web/pull/10102)
@@ -148,6 +60,11 @@ Summary
 * Enhancement - Show loading spinner while searching or filtering users: [#10874](https://github.com/owncloud/web/pull/10874)
 * Enhancement - Display hidden resources information in files list: [#10907](https://github.com/owncloud/web/pull/10907)
 * Enhancement - Add loading spinner to admin settings spaces and groups: [#10929](https://github.com/owncloud/web/pull/10929)
+* Enhancement - Audio metadata panel: [#10956](https://github.com/owncloud/web/pull/10956)
+* Enhancement - EXIF metadata panel: [#10956](https://github.com/owncloud/web/pull/10956)
+* Enhancement - Faster page loading times: [#10976](https://github.com/owncloud/web/pull/10976)
+* Enhancement - Add enabled only filter to spaces overview: [#11004](https://github.com/owncloud/web/pull/11004)
+* Enhancement - Multiple sidebar root panels: [#11037](https://github.com/owncloud/web/pull/11037)
 
 Details
 -------
@@ -263,6 +180,16 @@ Details
 
    https://github.com/owncloud/web/issues/10941
    https://github.com/owncloud/web/pull/10943
+
+* Bugfix - Local logout if IdP has no logout support: [#10974](https://github.com/owncloud/web/pull/10974)
+
+   Some IdPs don't support a logout endpoint. In those cases the web UI ran into a
+   fatal error and showed an empty screen without further redirects. Fixed by
+   forgetting the currently authenticated user when the OpenID Connect
+   configuration doesn't contain an `endSessionEndpoint` url.
+
+   https://github.com/owncloud/enterprise/issues/6631
+   https://github.com/owncloud/web/pull/10974
 
 * Change - Remove deprecated code: [#7338](https://github.com/owncloud/web/issues/7338)
 
@@ -692,6 +619,65 @@ Details
 
    https://github.com/owncloud/web/issues/10922
    https://github.com/owncloud/web/pull/10929
+
+* Enhancement - Audio metadata panel: [#10956](https://github.com/owncloud/web/pull/10956)
+
+   We've added a right sidebar panel with the name `Audio Info`, which display
+   `audio` metadata if present on the given resource. It is registered by the files
+   app and becomes visible in the global right sidebar in all file contexts, e.g.
+   file listing with single select on an audio file with indexed id3 information or
+   when listening to an audio file in the preview app.
+
+   https://github.com/owncloud/web/pull/10956
+
+* Enhancement - EXIF metadata panel: [#10956](https://github.com/owncloud/web/pull/10956)
+
+   We've added a right sidebar panel with the name `Image Info`, which displays
+   `image`, `photo` and `location` metadata if present on the given resource. It is
+   registered by the files app and becomes visible in the global right sidebar in
+   all file contexts, e.g. file listing with single select on an image or the
+   preview app displaying an image.
+
+   https://github.com/owncloud/web/pull/10956
+
+* Enhancement - Faster page loading times: [#10976](https://github.com/owncloud/web/pull/10976)
+
+   We've massively decreased the initial page loading times. This is especially
+   noticeable with slower network connections.
+
+   According to the lighthouse performance metrics, we improved from a score of 60
+   to 94 out of 100.
+
+   This has been achieved by taking several different actions:
+
+   - Lazy load large dependencies - Improve chunking - Enable server side
+   compression - Reduce the size of the main font we're using - Only register
+   translations for the currently selected language
+
+   https://github.com/owncloud/web/issues/7964
+   https://github.com/owncloud/web/issues/11035
+   https://github.com/owncloud/web/pull/10976
+   https://github.com/owncloud/web/pull/10979
+   https://github.com/owncloud/web/pull/11040
+
+* Enhancement - Add enabled only filter to spaces overview: [#11004](https://github.com/owncloud/web/pull/11004)
+
+   We've added an 'enabled only' filter to the spaces overview which is on by
+   default. This helps the user to manage spaces efficiently, even if there are a
+   lot of disabled spaces.
+
+   https://github.com/owncloud/web/issues/11001
+   https://github.com/owncloud/web/pull/11004
+
+* Enhancement - Multiple sidebar root panels: [#11037](https://github.com/owncloud/web/pull/11037)
+
+   The right sidebar now supports rendering multiple root panels. Since all panels
+   determine their visibility individually it can happen that e.g. for a given file
+   type multiple root panels would be available. Previously we only rendered the
+   first one. Now we render all of them below each other, separated by a fine
+   horizontal line.
+
+   https://github.com/owncloud/web/pull/11037
 
 Changelog for ownCloud Web [8.0.2] (2024-05-14)
 =======================================
