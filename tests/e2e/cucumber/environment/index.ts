@@ -140,14 +140,8 @@ AfterAll(() => state.browser && state.browser.close())
 setWorldConstructor(World)
 
 const cleanUpUser = async (adminUser: User) => {
-  let createdUser
-  if (config.keycloak) {
-    createdUser = keycloakCreatedUser
-  } else {
-    createdUser = createdUserStore
-  }
   const requests: Promise<User>[] = []
-  createdUser.forEach((user) => {
+  createdUserStore.forEach((user) => {
     requests.push(api.provision.deleteUser({ user, admin: adminUser }))
   })
   await Promise.all(requests)

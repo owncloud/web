@@ -100,7 +100,7 @@ export class UsersEnvironment {
 
   storeCreatedKeycloakUser({ user }: { user: User }): User {
     if (keycloakCreatedUser.has(user.id)) {
-      throw new Error(`user '${user.id}' already exists`)
+      throw new Error(`Keycloak user '${user.id}' already exists`)
     }
     keycloakCreatedUser.set(user.id, user)
     return user
@@ -109,7 +109,7 @@ export class UsersEnvironment {
   getCreatedKeycloakUser({ key }: { key: string }): User {
     const userKey = key.toLowerCase()
     if (!keycloakCreatedUser.has(userKey)) {
-      throw new Error(`user with key '${userKey}' not found`)
+      throw new Error(`Keycloak user with key '${userKey}' not found`)
     }
 
     return keycloakCreatedUser.get(userKey)
@@ -119,7 +119,7 @@ export class UsersEnvironment {
     const userKey = key.toLowerCase()
 
     if (!keycloakCreatedUser.has(userKey)) {
-      throw new Error(`user '${userKey}' not found`)
+      throw new Error(`Keycloak user with key '${userKey}' not found`)
     }
 
     return keycloakCreatedUser.delete(userKey)

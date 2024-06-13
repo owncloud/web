@@ -57,9 +57,10 @@ export const createUser = async ({ user, admin }: { user: User; admin: User }): 
   })
 
   // initialize user on Ocis web
+  // need login to have the user created by keycloak appear on Ocis web
   await initializeUser(user.id)
 
-  //stored ocis user information on storage
+  //store ocis user information
   usersEnvironment.storeCreatedUser({
     user: { ...user, uuid: await getUserId({ user, admin }), role: defaultNewUserRole }
   })
@@ -120,14 +121,13 @@ const initializeUser = async (username: string): Promise<void> => {
 export const deleteUser = async ({ user, admin }: { user: User; admin: User }): Promise<User> => {
   // first delete ocis user
   // deletes the user data
+  await graphDeleteUser({ user: user, admin })
+
   const usersEnvironment = new UsersEnvironment()
-  const ocisUser = usersEnvironment.getCreatedUser({ key: user.id })
-
-  await graphDeleteUser({ user: ocisUser, admin })
-
+  const keyclockUser = usersEnvironment.getCreatedKeycloakUser({ key: user.id })
   const response = await request({
     method: 'DELETE',
-    path: join(realmBasePath, 'users', user.uuid),
+    path: join(realmBasePath, 'users', keyclockUser.uuid),
     user: admin
   })
   checkResponseStatus(response, 'Failed to delete keycloak user: ' + user.id)
