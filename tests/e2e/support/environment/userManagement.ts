@@ -4,7 +4,7 @@ import {
   dummyGroupStore,
   createdUserStore,
   createdGroupStore,
-  KeycloakCreatedUser
+  keycloakCreatedUser
 } from '../store'
 
 export class UsersEnvironment {
@@ -99,29 +99,29 @@ export class UsersEnvironment {
   }
 
   storeCreatedKeycloakUser({ user }: { user: User }): User {
-    if (KeycloakCreatedUser.has(user.id)) {
+    if (keycloakCreatedUser.has(user.id)) {
       throw new Error(`user '${user.id}' already exists`)
     }
-    KeycloakCreatedUser.set(user.id, user)
+    keycloakCreatedUser.set(user.id, user)
     return user
   }
 
   getCreatedKeycloakUser({ key }: { key: string }): User {
     const userKey = key.toLowerCase()
-    if (!KeycloakCreatedUser.has(userKey)) {
+    if (!keycloakCreatedUser.has(userKey)) {
       throw new Error(`user with key '${userKey}' not found`)
     }
 
-    return KeycloakCreatedUser.get(userKey)
+    return keycloakCreatedUser.get(userKey)
   }
 
   removeCreatedKeycloakUser({ key }: { key: string }): boolean {
     const userKey = key.toLowerCase()
 
-    if (!KeycloakCreatedUser.has(userKey)) {
+    if (!keycloakCreatedUser.has(userKey)) {
       throw new Error(`user '${userKey}' not found`)
     }
 
-    return KeycloakCreatedUser.delete(userKey)
+    return keycloakCreatedUser.delete(userKey)
   }
 }
