@@ -49,7 +49,6 @@ export class Users {
     for (const user of users) {
       userIds.push(this.#usersEnvironment.getCreatedUser({ key: user }).uuid)
     }
-    console.log(userIds)
     await po.changeQuotaUsingBatchAction({ page: this.#page, value, userIds })
   }
   async getDisplayedUsers(): Promise<string[]> {

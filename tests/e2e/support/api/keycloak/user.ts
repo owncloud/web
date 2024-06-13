@@ -131,7 +131,12 @@ export const deleteUser = async ({ user, admin }: { user: User; admin: User }): 
     user: admin
   })
   checkResponseStatus(response, 'Failed to delete keycloak user: ' + user.id)
-
+  if (response.ok) {
+    try {
+      const usersEnvironment = new UsersEnvironment()
+      usersEnvironment.removeCreatedKeycloakUser({ key: user.id })
+    } catch (e) {}
+  }
   return user
 }
 
