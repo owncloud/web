@@ -351,13 +351,6 @@ export default defineComponent({
     transition-duration: 0.001ms !important;
   }
 
-  &.is-active-root-panel {
-    &.has-active-sub-panel & {
-      transform: translateX(-30%);
-      visibility: hidden;
-    }
-  }
-
   &.is-active-root-panel,
   &.is-active-sub-panel {
     visibility: unset;
