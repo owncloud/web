@@ -60,6 +60,7 @@
             <media-audio
               v-else-if="activeMediaFileCached.isAudio"
               :file="activeMediaFileCached"
+              :resource="activeFilteredFile"
               :is-auto-play-enabled="isAutoPlayEnabled"
             />
           </div>
