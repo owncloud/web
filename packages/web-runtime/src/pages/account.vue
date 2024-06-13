@@ -195,6 +195,7 @@ import EditPasswordModal from '../components/EditPasswordModal.vue'
 import { SettingsBundle, LanguageOption, SettingsValue } from '../helpers/settings'
 import { computed, defineComponent, onMounted, unref, ref } from 'vue'
 import {
+  useAppsStore,
   useAuthStore,
   useCapabilityStore,
   useClientService,
@@ -208,7 +209,7 @@ import {
 } from '@ownclouders/web-pkg'
 import { useTask } from 'vue-concurrency'
 import { useGettext } from 'vue3-gettext'
-import { setCurrentLanguage } from 'web-runtime/src/helpers/language'
+import { setCurrentLanguage, loadAppTranslations } from 'web-runtime/src/helpers/language'
 import GdprExport from '../components/Account/GdprExport.vue'
 import ThemeSwitcher from '../components/Account/ThemeSwitcher.vue'
 import ExtensionPreference from '../components/Account/ExtensionPreference.vue'
@@ -235,6 +236,7 @@ export default defineComponent({
     const { $gettext } = language
     const clientService = useClientService()
     const resourcesStore = useResourcesStore()
+    const appsStore = useAppsStore()
 
     const valuesList = ref<SettingsValue[]>()
     const graphUser = ref<User>()
@@ -401,6 +403,12 @@ export default defineComponent({
 
     const updateSelectedLanguage = async (option: LanguageOption) => {
       try {
+        loadAppTranslations({
+          apps: appsStore.apps,
+          gettext: language,
+          lang: option.value
+        })
+
         selectedLanguageValue.value = option
         setCurrentLanguage({
           language,

@@ -3,7 +3,7 @@ import { buildApplication, NextApplication } from './application'
 import { RouteLocationRaw, Router, RouteRecordNormalized } from 'vue-router'
 import { App, watch } from 'vue'
 import { loadTheme } from '../helpers/theme'
-import { createGettext, GetTextOptions, Language } from 'vue3-gettext'
+import { createGettext, GetTextOptions, Language, Translations } from 'vue3-gettext'
 import { getBackendVersion, getWebVersion } from './versions'
 import {
   useModals,
@@ -74,6 +74,7 @@ import {
   onSSELinkUpdatedEvent
 } from './sse'
 import { useWebWorkersStore, WebWorkersStore } from '@ownclouders/web-pkg'
+import { loadAppTranslations } from '../helpers/language'
 
 const getEmbedConfigFromQuery = (
   doesEmbedEnabledOptionExists: boolean
@@ -170,26 +171,15 @@ export const announceClient = async (configStore: ConfigStore): Promise<void> =>
  * announce applications to the runtime, it takes care that all requirements are fulfilled and then:
  * - bulk build all applications
  * - bulk register all applications, no other application is guaranteed to be registered here, don't request one
- *
- * @param app
- * @param configStore
- * @param store
- * @param router
- * @param translations
- * @param supportedLanguages
  */
 export const initializeApplications = async ({
   app,
   configStore,
-  router,
-  gettext,
-  supportedLanguages
+  router
 }: {
   app: App
   configStore: ConfigStore
   router: Router
-  gettext: Language
-  supportedLanguages: { [key: string]: string }
 }): Promise<NextApplication[]> => {
   type RawApplication = {
     path?: string
@@ -209,9 +199,7 @@ export const initializeApplications = async ({
         app,
         applicationPath: rawApplication.path,
         applicationConfig: rawApplication.config,
-        supportedLanguages,
         router,
-        gettext,
         configStore
       })
     )
@@ -361,18 +349,12 @@ export const announcePiniaStores = () => {
   }
 }
 
-/**
- * announce runtime translations by injecting them into the getTextPlugin
- *
- * @param vue
- * @param options
- */
-export const announceTranslations = ({
+export const announceGettext = ({
   app,
   ...options
 }: {
   app: App
-} & Partial<GetTextOptions>): Language => {
+} & Partial<GetTextOptions>) => {
   const gettext = createGettext({
     defaultLanguage: navigator.language.substring(0, 2),
     silent: true,
@@ -382,13 +364,26 @@ export const announceTranslations = ({
   return gettext
 }
 
-export const announceAdditionalTranslations = ({
+export const announceTranslations = ({
   gettext,
-  translations
+  coreTranslations,
+  customTranslations,
+  appsStore
 }: {
   gettext: Language
-} & Pick<GetTextOptions, 'translations'>): void => {
-  gettext.translations = merge(gettext.translations, translations)
+  coreTranslations: Translations
+  customTranslations?: Translations
+  appsStore?: AppsStore
+}) => {
+  gettext.translations = merge(coreTranslations, customTranslations || {})
+
+  if (appsStore) {
+    loadAppTranslations({
+      apps: appsStore.apps,
+      gettext,
+      lang: gettext.current
+    })
+  }
 }
 
 /**

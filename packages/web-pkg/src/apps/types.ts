@@ -3,6 +3,7 @@ import { RouteLocationRaw, Router, RouteRecordRaw } from 'vue-router'
 import { Extension, ExtensionPoint } from '../composables/piniaStores'
 import { IconFillType } from '../helpers'
 import { Resource, SpaceResource } from '@ownclouders/web-client'
+import { Translations } from 'vue3-gettext'
 
 export interface AppReadyHookArgs {
   globalProperties: ComponentCustomProperties & Record<string, any>
@@ -77,6 +78,7 @@ export interface ApplicationInformation {
   defaultExtension?: string
   type?: string
   applicationMenu?: ApplicationMenuItem
+  translations?: Translations
 }
 
 /**

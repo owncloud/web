@@ -7,7 +7,6 @@ import { Router } from 'vue-router'
 import { RuntimeError, useAppsStore } from '@ownclouders/web-pkg'
 import { AppConfigObject, AppReadyHookArgs, ClassicApplicationScript } from '@ownclouders/web-pkg'
 import { useExtensionRegistry } from '@ownclouders/web-pkg'
-import type { Language } from 'vue3-gettext'
 
 /**
  * this wraps a classic application structure into a next application format.
@@ -24,14 +23,13 @@ class ClassicApplication extends NextApplication {
   }
 
   initialize(): Promise<void> {
-    const { routes, navItems, translations } = this.applicationScript
+    const { routes, navItems } = this.applicationScript
     const { globalProperties } = this.app.config
     const _routes = typeof routes === 'function' ? routes(globalProperties) : routes
     const _navItems = typeof navItems === 'function' ? navItems(globalProperties) : navItems
 
     routes && this.runtimeApi.announceRoutes(_routes)
     navItems && this.runtimeApi.announceNavigationItems(_navItems)
-    translations && this.runtimeApi.announceTranslations(translations)
 
     return Promise.resolve(undefined)
   }
@@ -64,28 +62,16 @@ class ClassicApplication extends NextApplication {
   }
 }
 
-/**
- *
- * @param app
- * @param applicationPath
- * @param router
- * @param translations
- * @param supportedLanguages
- */
 export const convertClassicApplication = ({
   app,
   applicationScript,
   applicationConfig,
-  router,
-  gettext,
-  supportedLanguages
+  router
 }: {
   app: App
   applicationScript: ClassicApplicationScript
   applicationConfig: AppConfigObject
   router: Router
-  gettext: Language
-  supportedLanguages: { [key: string]: string }
 }): NextApplication => {
   if (applicationScript.setup) {
     applicationScript = app.runWithContext(() => {
@@ -117,13 +103,11 @@ export const convertClassicApplication = ({
     applicationName,
     applicationId,
     router,
-    gettext,
-    supportedLanguages,
     extensionRegistry
   })
 
   const appsStore = useAppsStore()
-  appsStore.registerApp(applicationScript.appInfo)
+  appsStore.registerApp(applicationScript.appInfo, applicationScript.translations)
 
   if (applicationScript.extensions) {
     extensionRegistry.registerExtensions(applicationScript.extensions)

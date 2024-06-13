@@ -4,7 +4,6 @@ import { convertClassicApplication } from './classic'
 import { RuntimeError, ConfigStore } from '@ownclouders/web-pkg'
 import { applicationStore } from '../store'
 import { isObject } from 'lodash-es'
-import type { Language } from 'vue3-gettext'
 
 // import modules to provide them to applications
 import * as vue from 'vue' // eslint-disable-line
@@ -65,26 +64,20 @@ const loadScriptRequireJS = <T>(moduleUri: string) => {
 }
 /**
  * sniffs arguments and decides if given manifest is of next or current application style.
- *
- * @param args
  */
 export const buildApplication = async ({
   app,
   applicationPath,
   applicationConfig,
   router,
-  gettext,
-  supportedLanguages,
   configStore
 }: {
   app: App
   applicationPath: string
   applicationConfig: AppConfigObject
   router: Router
-  gettext: Language
-  supportedLanguages: { [key: string]: string }
   configStore: ConfigStore
-}): Promise<NextApplication> => {
+}) => {
   if (applicationStore.has(applicationPath)) {
     throw new RuntimeError('application already announced', applicationPath)
   }
@@ -128,14 +121,7 @@ export const buildApplication = async ({
     if (!isObject(applicationScript.appInfo) && !applicationScript.setup) {
       throw new RuntimeError('next applications not implemented yet, stay tuned')
     } else {
-      application = convertClassicApplication({
-        app,
-        applicationScript,
-        applicationConfig,
-        router,
-        gettext,
-        supportedLanguages
-      })
+      application = convertClassicApplication({ app, applicationScript, applicationConfig, router })
     }
   } catch (err) {
     throw new RuntimeError('cannot create application', err.message, applicationPath)
