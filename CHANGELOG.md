@@ -11,6 +11,7 @@ Summary
 * Bugfix - Local logout if IdP has no logout support: [#10974](https://github.com/owncloud/web/pull/10974)
 * Enhancement - Audio metadata panel: [#10956](https://github.com/owncloud/web/pull/10956)
 * Enhancement - EXIF metadata panel: [#10956](https://github.com/owncloud/web/pull/10956)
+* Enhancement - Faster page loading times: [#10976](https://github.com/owncloud/web/pull/10976)
 * Enhancement - Add enabled only filter to spaces overview: [#11004](https://github.com/owncloud/web/pull/11004)
 * Enhancement - Multiple sidebar root panels: [#11037](https://github.com/owncloud/web/pull/11037)
 
@@ -46,6 +47,26 @@ Details
    preview app displaying an image.
 
    https://github.com/owncloud/web/pull/10956
+
+* Enhancement - Faster page loading times: [#10976](https://github.com/owncloud/web/pull/10976)
+
+   We've massively decreased the initial page loading times. This is especially
+   noticeable with slower network connections.
+
+   According to the lighthouse performance metrics, we improved from a score of 60
+   to 94 out of 100.
+
+   This has been achieved by taking several different actions:
+
+   - Lazy load large dependencies - Improve chunking - Enable server side
+   compression - Reduce the size of the main font we're using - Only register
+   translations for the currently selected language
+
+   https://github.com/owncloud/web/issues/7964
+   https://github.com/owncloud/web/issues/11035
+   https://github.com/owncloud/web/pull/10976
+   https://github.com/owncloud/web/pull/10979
+   https://github.com/owncloud/web/pull/11040
 
 * Enhancement - Add enabled only filter to spaces overview: [#11004](https://github.com/owncloud/web/pull/11004)
 
