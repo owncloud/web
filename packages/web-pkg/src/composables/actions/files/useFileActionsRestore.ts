@@ -15,13 +15,12 @@ import {
 } from '../../../helpers/resource'
 import { urlJoin } from '@ownclouders/web-client'
 import { useClientService } from '../../clientService'
-import { useLoadingService } from '../../loadingService'
 import { useRouter } from '../../router'
-import { computed } from 'vue'
+import { computed, unref } from 'vue'
 import { useGettext } from 'vue3-gettext'
-import { FileAction, FileActionOptions } from '../types'
-import { LoadingTaskCallbackArguments } from '../../../services'
+import type { FileAction, FileActionOptions } from '../types'
 import { useMessages, useSpacesStore, useUserStore, useResourcesStore } from '../../piniaStores'
+import { useRestoreWorker } from '../../webWorkers/restoreWorker'
 
 export const useFileActionsRestore = () => {
   const { showMessage, showErrorMessage } = useMessages()
@@ -29,10 +28,11 @@ export const useFileActionsRestore = () => {
   const router = useRouter()
   const { $gettext, $ngettext } = useGettext()
   const clientService = useClientService()
-  const loadingService = useLoadingService()
   const spacesStore = useSpacesStore()
   const resourcesStore = useResourcesStore()
+  const { startWorker } = useRestoreWorker()
 
+  // FIXME: use ConflictDialog class for this
   const collectConflicts = async (space: SpaceResource, sortedResources: Resource[]) => {
     const existingResourcesCache: Record<string, Resource[]> = {}
     const conflicts: Resource[] = []
@@ -74,12 +74,13 @@ export const useFileActionsRestore = () => {
     }
   }
 
+  // FIXME: use ConflictDialog class for this
   const collectResolveStrategies = async (conflicts: Resource[]) => {
     let count = 0
     const resolvedConflicts = []
     const allConflictsCount = conflicts.length
     let doForAllConflicts = false
-    let allConflictsStrategy
+    let allConflictsStrategy: ResolveStrategy
     for (const conflict of conflicts) {
       const isFolder = conflict.type === 'folder'
       if (doForAllConflicts) {
@@ -109,105 +110,58 @@ export const useFileActionsRestore = () => {
     return resolvedConflicts
   }
 
-  const createFolderStructure = async (
-    space: SpaceResource,
-    path: string,
-    existingPaths: string[]
-  ) => {
-    const { webdav } = clientService
-
-    const pathSegments = path.split('/').filter(Boolean)
-    let parentPath = ''
-    for (const subFolder of pathSegments) {
-      const folderPath = urlJoin(parentPath, subFolder)
-      if (existingPaths.includes(folderPath)) {
-        parentPath = urlJoin(parentPath, subFolder)
-        continue
-      }
-
-      try {
-        await webdav.createFolder(space, { path: folderPath })
-      } catch (ignored) {}
-
-      existingPaths.push(folderPath)
-      parentPath = folderPath
-    }
-
-    return {
-      existingPaths
-    }
-  }
-
-  const restoreResources = async (
+  const restoreResources = (
     space: SpaceResource,
     resources: Resource[],
-    missingFolderPaths: string[],
-    { setProgress }: LoadingTaskCallbackArguments
+    missingFolderPaths: string[]
   ) => {
-    const restoredResources: Resource[] = []
-    const failedResources: Resource[] = []
-    const errors: Error[] = []
+    const originalRoute = unref(router.currentRoute)
 
-    let createdFolderPaths: string[] = []
-    for (const [i, resource] of resources.entries()) {
-      const parentPath = dirname(resource.path)
-      if (missingFolderPaths.includes(parentPath)) {
-        const { existingPaths } = await createFolderStructure(space, parentPath, createdFolderPaths)
-        createdFolderPaths = existingPaths
-      }
+    startWorker({ space, resources, missingFolderPaths }, async ({ successful, failed }) => {
+      if (successful.length) {
+        let title: string
+        if (successful.length === 1) {
+          title = $gettext('%{resource} was restored successfully', {
+            resource: successful[0].name
+          })
+        } else {
+          title = $gettext('%{resourceCount} files restored successfully', {
+            resourceCount: successful.length.toString()
+          })
+        }
+        showMessage({ title })
 
-      try {
-        await clientService.webdav.restoreFile(space, resource, resource, {
-          overwrite: true
-        })
-        restoredResources.push(resource)
-      } catch (e) {
-        console.error(e)
-        errors.push(e)
-        failedResources.push(resource)
-      } finally {
-        setProgress({ total: resources.length, current: i + 1 })
-      }
-    }
+        // user hasn't navigated to another location meanwhile
+        if (
+          originalRoute.name === unref(router.currentRoute).name &&
+          originalRoute.query?.fileId === unref(router.currentRoute).query?.fileId
+        ) {
+          resourcesStore.removeResources(successful)
+          resourcesStore.resetSelection()
+        }
 
-    // success handler (for partial and full success)
-    if (restoredResources.length) {
-      resourcesStore.removeResources(restoredResources)
-      resourcesStore.resetSelection()
-      let title: string
-      if (restoredResources.length === 1) {
-        title = $gettext('%{resource} was restored successfully', {
-          resource: restoredResources[0].name
-        })
-      } else {
-        title = $gettext('%{resourceCount} files restored successfully', {
-          resourceCount: restoredResources.length.toString()
+        // Reload quota
+        const graphClient = clientService.graphAuthenticated
+        const driveResponse = await graphClient.drives.getDrive(space.id)
+        spacesStore.updateSpaceField({
+          id: driveResponse.data.id,
+          field: 'spaceQuota',
+          value: driveResponse.data.quota
         })
       }
-      showMessage({ title })
-    }
 
-    // failure handler (for partial and full failure)
-    if (failedResources.length) {
-      let translated
-      const translateParams: Record<string, string> = {}
-      if (failedResources.length === 1) {
-        translateParams.resource = failedResources[0].name
-        translated = $gettext('Failed to restore "%{resource}"', translateParams, true)
-      } else {
-        translateParams.resourceCount = failedResources.length.toString()
-        translated = $gettext('Failed to restore %{resourceCount} files', translateParams, true)
+      if (failed.length) {
+        let translated: string
+        const translateParams: Record<string, string> = {}
+        if (failed.length === 1) {
+          translateParams.resource = failed[0].resource.name
+          translated = $gettext('Failed to restore "%{resource}"', translateParams, true)
+        } else {
+          translateParams.resourceCount = failed.length.toString()
+          translated = $gettext('Failed to restore %{resourceCount} files', translateParams, true)
+        }
+        showErrorMessage({ title: translated, errors: failed.map(({ error }) => error) })
       }
-      showErrorMessage({ title: translated, errors })
-    }
-
-    // Reload quota
-    const graphClient = clientService.graphAuthenticated
-    const driveResponse = await graphClient.drives.getDrive(space.id)
-    spacesStore.updateSpaceField({
-      id: driveResponse.data.id,
-      field: 'spaceQuota',
-      value: driveResponse.data.quota
     })
   }
 
@@ -245,12 +199,8 @@ export const useFileActionsRestore = () => {
       resource.path = urlJoin(parentPath, resolvedName)
       resolvedResources.push(resource)
     }
-    return loadingService.addTask(
-      ({ setProgress }) => {
-        return restoreResources(space, resolvedResources, missingFolderPaths, { setProgress })
-      },
-      { indeterminate: false }
-    )
+
+    return restoreResources(space, resolvedResources, missingFolderPaths)
   }
 
   const actions = computed((): FileAction[] => [

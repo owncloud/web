@@ -1,4 +1,5 @@
 export * from './call'
+export * from './httpError'
 export * from './item'
 export * from './publicLink'
 export * from './resource'
