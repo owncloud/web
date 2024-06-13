@@ -44,9 +44,9 @@
       }
       #loading {
         display: inline-block;
-        width: 50px;
-        height: 50px;
-        border: 2px solid #4c5f79;
+        height: 34px;
+        width: 34px;
+        border: 1px solid #4c5f79;
         border-radius: 50%;
         border-top-color: #fff;
         animation: spin 1s ease-in-out infinite;
@@ -125,7 +125,7 @@
 
       var loaderTimer = setTimeout(function () {
         loader.classList.remove('splash-hide')
-      }, 1000);
+      }, 500);
 
       function displayError() {
         loader.classList.remove('splash-hide')
@@ -134,7 +134,7 @@
 
       function displayBrowserError() {
         clearTimeout(loaderTimer)
-        loader.classList.add('splash-hide')
+        removeLoadingSpinner()
         browserError.classList.remove('splash-hide')
       }
 
@@ -144,14 +144,22 @@
         init()
       }
 
+      function removeLoadingSpinner() {
+        if (!loader.classList.contains('splash-hide')) {
+          loader.classList.add('splash-hide')
+        }
+      }
+
       function init() {
         if (typeof requirejs === 'undefined') {
           displayError()
         } else {
           window.runtimeLoaded = function(runtime) {
             clearTimeout(loaderTimer)
-            document.getElementById('splash-loading').classList.add('splash-hide')
-            runtime.bootstrapApp('config.json').catch(runtime.bootstrapErrorApp)
+            runtime.bootstrapApp('config.json', removeLoadingSpinner).catch((error) => {
+              removeLoadingSpinner()
+              runtime.bootstrapErrorApp(error)
+            })
           }
         }
       }
