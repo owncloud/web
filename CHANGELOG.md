@@ -12,6 +12,7 @@ Summary
 * Enhancement - Audio metadata panel: [#10956](https://github.com/owncloud/web/pull/10956)
 * Enhancement - EXIF metadata panel: [#10956](https://github.com/owncloud/web/pull/10956)
 * Enhancement - Add enabled only filter to spaces overview: [#11004](https://github.com/owncloud/web/pull/11004)
+* Enhancement - Multiple sidebar root panels: [#11037](https://github.com/owncloud/web/pull/11037)
 
 Details
 -------
@@ -54,6 +55,16 @@ Details
 
    https://github.com/owncloud/web/issues/11001
    https://github.com/owncloud/web/pull/11004
+
+* Enhancement - Multiple sidebar root panels: [#11037](https://github.com/owncloud/web/pull/11037)
+
+   The right sidebar now supports rendering multiple root panels. Since all panels
+   determine their visibility individually it can happen that e.g. for a given file
+   type multiple root panels would be available. Previously we only rendered the
+   first one. Now we render all of them below each other, separated by a fine
+   horizontal line.
+
+   https://github.com/owncloud/web/pull/11037
 
 Changelog for ownCloud Web [9.0.0] (2024-05-28)
 =======================================
