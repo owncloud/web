@@ -105,7 +105,7 @@
             />
             <div class="oc-mt-s">
               <a
-                href="https://explore.transifex.com/owncloud-org/"
+                href="https://explore.transifex.com/owncloud-org/owncloud-web/"
                 target="_blank"
                 class="oc-flex oc-flex-middle"
               >
