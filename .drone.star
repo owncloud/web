@@ -1508,10 +1508,6 @@ def uploadTracingResult(ctx):
         },
         "when": {
             "status": status,
-            "event": [
-                "pull_request",
-                "cron",
-            ],
         },
     }]
 
@@ -1531,10 +1527,6 @@ def logTracingResult(ctx, suite):
         ],
         "when": {
             "status": status,
-            "event": [
-                "pull_request",
-                "cron",
-            ],
         },
     }]
 
