@@ -12,19 +12,6 @@ interface DrivesResponse {
   value: Space[]
 }
 
-export const getPersonalSpaceId = async ({ user }: { user: User }): Promise<string> => {
-  const response = await request({
-    method: 'GET',
-    path: join('graph', 'v1.0', 'me', 'drives', "?$filter=driveType eq 'personal'"),
-    user: user
-  })
-
-  checkResponseStatus(response, 'Failed while geting personal space')
-
-  const resBody = (await response.json()) as DrivesResponse
-  return resBody.value[0].id
-}
-
 export const getSpaceIdBySpaceName = async ({
   user,
   spaceType,
@@ -32,18 +19,21 @@ export const getSpaceIdBySpaceName = async ({
 }: {
   user: User
   spaceType: string
-  spaceName: string
+  spaceName?: string
 }): Promise<string> => {
   const response = await request({
     method: 'GET',
-    path: join('graph', 'v1.0', 'me', 'drives', `?$filter=driveType eq '${spaceType}'`),
+    path: join('graph', 'v1.0', 'me', 'drives'),
     user: user
   })
   checkResponseStatus(response, 'Failed while fetching spaces')
   // search for the space with the space name
   const resBody = (await response.json()) as DrivesResponse
+  if (spaceType === 'personal') {
+    spaceName = user.displayName
+  }
   for (const spaceProject of resBody.value) {
-    if (spaceProject.name === spaceName) {
+    if (spaceProject.driveType === spaceType && spaceProject.name === spaceName) {
       return spaceProject.id
     }
   }

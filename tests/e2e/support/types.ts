@@ -9,6 +9,7 @@ export interface Link {
 export interface Space {
   name: string
   id: string
+  driveType?: string
 }
 
 export interface Actor {
