@@ -1,0 +1,8 @@
+Enhancement: Add include disabled filter to spaces overview
+
+We've added an 'include disabled' filter to the spaces overview which is off by default.
+This helps the user to manage spaces efficiently, even if there are a lot of disabled spaces.
+
+https://github.com/owncloud/web/pull/11004
+https://github.com/owncloud/web/pull/11049
+https://github.com/owncloud/web/issues/11001

@@ -9,10 +9,10 @@ exports[`Projects view > different files view states > lists all available proje
         <div class="spaces-list-filters oc-flex oc-flex-between oc-flex-wrap oc-flex-bottom oc-mx-m oc-mb-m">
           <div class="oc-flex">
             <div class="oc-mr-m oc-flex oc-flex-middle"><span class="oc-icon oc-icon-m oc-icon-passive oc-mr-xs"><!----></span> <span>Filter:</span></div>
-            <div class="item-filter oc-flex item-filter-enabledOnly spaces-list-filter-enabled-only oc-mr-s">
+            <div class="item-filter oc-flex item-filter-includeDisabled spaces-list-filter-include-disabled oc-mr-s">
               <div class="oc-filter-chip oc-flex oc-filter-chip-toggle"><button type="button" class="oc-button oc-rounded oc-button-m oc-button-justify-content-center oc-button-gap-m oc-button-passive oc-button-passive-raw oc-filter-chip-button oc-pill" id="oc-filter-chip-1">
                   <!--v-if-->
-                  <!-- @slot Content of the button --> <span class="oc-icon oc-icon-s oc-icon-passive oc-filter-check-icon-inactive"><!----></span> <span class="oc-text-truncate oc-filter-chip-label">Enabled only</span>
+                  <!-- @slot Content of the button --> <span class="oc-icon oc-icon-s oc-icon-passive oc-filter-check-icon-inactive"><!----></span> <span class="oc-text-truncate oc-filter-chip-label">Include disabled</span>
                   <!--v-if-->
                   <!--v-if-->
                 </button>
@@ -30,7 +30,7 @@ exports[`Projects view > different files view states > lists all available proje
             <!--v-if-->
           </div>
         </div>
-        <div class="resource-table" selectedids="" resource-type="space" are-thumbnails-displayed="true" resources="[object Object],[object Object],[object Object]" fields-displayed="image,name,manager,members,totalQuota,usedQuota,remainingQuota,status,mdate" sort-fields="[object Object],[object Object],[object Object],[object Object],[object Object],[object Object],[object Object],[object Object],[object Object]" sort-by="undefined" sort-dir="desc" header-position="0" view-size="NaN"></div>
+        <div class="resource-table" selectedids="" resource-type="space" are-thumbnails-displayed="true" resources="[object Object],[object Object]" fields-displayed="image,name,manager,members,totalQuota,usedQuota,remainingQuota,status,mdate" sort-fields="[object Object],[object Object],[object Object],[object Object],[object Object],[object Object],[object Object],[object Object],[object Object]" sort-by="undefined" sort-dir="desc" header-position="0" view-size="NaN"></div>
       </div>
     </div>
   </div>
