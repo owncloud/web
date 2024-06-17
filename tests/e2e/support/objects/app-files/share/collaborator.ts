@@ -257,15 +257,15 @@ export default class Collaborator {
       },
       { newExpiryDate }
     )
-    await page
-      .locator(
-        util.format(
-          Collaborator.expirationDatepickerDaySelect,
-          newExpiryDate.toISOString().split('T')[0]
-        )
+
+    const date = page.locator(
+      util.format(
+        Collaborator.expirationDatepickerDaySelect,
+        newExpiryDate.toISOString().split('T')[0]
       )
-      .first()
-      .click()
+    )
+    await page.waitForTimeout(500)
+    await date.first().click()
   }
 
   static async removeExpirationDateFromCollaborator(
