@@ -35,7 +35,7 @@ export const loadAppTranslations = ({
   const appTranslations: Translations = {}
   Object.values(apps).forEach((app) => {
     const { translations } = app
-    if (gettext.translations[lang] && translations[lang]) {
+    if (gettext.translations[lang] && translations?.[lang]) {
       Object.assign(appTranslations, translations[lang])
     }
   })
