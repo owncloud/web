@@ -45,9 +45,9 @@
                 <span v-text="$gettext('Filter:')" />
               </div>
               <item-filter-toggle
-                :filter-label="$gettext('Enabled only')"
-                filter-name="enabledOnly"
-                class="spaces-list-filter-enabled-only oc-mr-s"
+                :filter-label="$gettext('Include disabled')"
+                filter-name="includeDisabled"
+                class="spaces-list-filter-include-disabled oc-mr-s"
               />
             </div>
             <oc-text-input
@@ -249,8 +249,7 @@ export default defineComponent({
     const imageContentObject = ref<Record<string, { fileId: string; data: string }>>({})
     const previewService = usePreviewService()
     const configStore = useConfigStore()
-    const enabledOnlyParam = useRouteQuery('q_enabledOnly')
-    enabledOnlyParam.value = unref(enabledOnlyParam) || 'true'
+    const includeDisabledParam = useRouteQuery('q_includeDisabled')
 
     const { setSelection, initResourceList, clearResourceList } = useResourcesStore()
 
@@ -304,9 +303,9 @@ export default defineComponent({
       fields: sortFields
     })
     const filter = (spaces: Array<ProjectSpaceResource>, filterTerm: string) => {
-      const isEnabledOnlySearch = queryItemAsString(unref(enabledOnlyParam)) === 'true'
+      const includeDisabled = queryItemAsString(unref(includeDisabledParam)) === 'true'
 
-      if (isEnabledOnlySearch) {
+      if (!includeDisabled) {
         spaces = spaces.filter((space) => space.disabled !== true)
       }
 

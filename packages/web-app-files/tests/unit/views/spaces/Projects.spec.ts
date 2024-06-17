@@ -104,13 +104,13 @@ describe('Projects view', () => {
       await nextTick()
       expect(wrapper.vm.items).toEqual([spacesResources[1]])
     })
-    it('shows only enabled spaces if filter applied', async () => {
+    it('shows only enabled spaces if includeDisabled filter is not applied', async () => {
       const { wrapper } = getMountedWrapper({ spaces: spacesResources })
       await nextTick()
       expect(wrapper.vm.items.length).toEqual(2)
     })
-    it('shows all spaces if onlyEnabled filter is not applied', async () => {
-      const { wrapper } = getMountedWrapper({ spaces: spacesResources, onlyEnabledSpaces: false })
+    it('shows all spaces if includeDisabled filter is applied', async () => {
+      const { wrapper } = getMountedWrapper({ spaces: spacesResources, includeDisabled: true })
       await nextTick()
       expect(wrapper.vm.items.length).toEqual(3)
     })
@@ -129,19 +129,17 @@ function getMountedWrapper({
   spaces = [],
   abilities = [],
   stubAppBar = true,
-  onlyEnabledSpaces = true
+  includeDisabled = false
 }: {
   mocks?: Record<string, unknown>
   spaces?: SpaceResource[]
   abilities?: AbilityRule[]
   stubAppBar?: boolean
-  onlyEnabledSpaces?: boolean
+  includeDisabled?: boolean
 } = {}) {
   const plugins = defaultPlugins({ abilities, piniaOptions: { spacesState: { spaces } } })
 
-  vi.mocked(queryItemAsString).mockImplementationOnce(() => onlyEnabledSpaces.toString())
-  vi.mocked(queryItemAsString).mockImplementationOnce(() => '1')
-  vi.mocked(queryItemAsString).mockImplementationOnce(() => '100')
+  vi.mocked(queryItemAsString).mockImplementation(() => includeDisabled.toString())
 
   const extensions = [
     {
