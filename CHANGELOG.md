@@ -1,4 +1,4 @@
-Changelog for ownCloud Web [9.0.0] (2024-06-13)
+Changelog for ownCloud Web [9.0.0] (2024-06-17)
 =======================================
 The following sections list the changes in ownCloud web 9.0.0 relevant to
 ownCloud admins and users.
