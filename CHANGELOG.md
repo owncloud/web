@@ -63,7 +63,7 @@ Summary
 * Enhancement - Audio metadata panel: [#10956](https://github.com/owncloud/web/pull/10956)
 * Enhancement - EXIF metadata panel: [#10956](https://github.com/owncloud/web/pull/10956)
 * Enhancement - Faster page loading times: [#10976](https://github.com/owncloud/web/pull/10976)
-* Enhancement - Add enabled only filter to spaces overview: [#11004](https://github.com/owncloud/web/pull/11004)
+* Enhancement - Add include disabled filter to spaces overview: [#11004](https://github.com/owncloud/web/pull/11004)
 * Enhancement - Multiple sidebar root panels: [#11037](https://github.com/owncloud/web/pull/11037)
 
 Details
@@ -660,14 +660,15 @@ Details
    https://github.com/owncloud/web/pull/10979
    https://github.com/owncloud/web/pull/11040
 
-* Enhancement - Add enabled only filter to spaces overview: [#11004](https://github.com/owncloud/web/pull/11004)
+* Enhancement - Add include disabled filter to spaces overview: [#11004](https://github.com/owncloud/web/pull/11004)
 
-   We've added an 'enabled only' filter to the spaces overview which is on by
+   We've added an 'include disabled' filter to the spaces overview which is off by
    default. This helps the user to manage spaces efficiently, even if there are a
    lot of disabled spaces.
 
    https://github.com/owncloud/web/issues/11001
    https://github.com/owncloud/web/pull/11004
+   https://github.com/owncloud/web/pull/11049
 
 * Enhancement - Multiple sidebar root panels: [#11037](https://github.com/owncloud/web/pull/11037)
 
