@@ -9,6 +9,7 @@ Summary
 -------
 
 * Bugfix - Resetting user after logout: [#11058](https://github.com/owncloud/web/pull/11058)
+* Bugfix - Admin settings UI update after save: [#11059](https://github.com/owncloud/web/pull/11059)
 * Enhancement - Consistent initial loading spinner: [#11054](https://github.com/owncloud/web/pull/11054)
 
 Details
@@ -20,6 +21,14 @@ Details
 
    https://github.com/owncloud/web/issues/11055
    https://github.com/owncloud/web/pull/11058
+
+* Bugfix - Admin settings UI update after save: [#11059](https://github.com/owncloud/web/pull/11059)
+
+   We've fixed a bug where the UI would not display changes made in the admin
+   settings until re-loading the entire page.
+
+   https://github.com/owncloud/web/issues/11033
+   https://github.com/owncloud/web/pull/11059
 
 * Enhancement - Consistent initial loading spinner: [#11054](https://github.com/owncloud/web/pull/11054)
 
