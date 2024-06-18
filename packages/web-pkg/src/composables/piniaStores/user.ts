@@ -11,9 +11,14 @@ export const useUserStore = defineStore('user', () => {
     sentrySetUser({ username: data.onPremisesSamAccountName })
   }
 
+  const reset = () => {
+    user.value = null
+  }
+
   return {
     user,
-    setUser
+    setUser,
+    reset
   }
 })
 

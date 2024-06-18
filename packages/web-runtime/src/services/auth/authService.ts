@@ -330,7 +330,7 @@ export class AuthService implements AuthServiceInterface {
 
   private resetStateAfterUserLogout() {
     // TODO: create UserUnloadTask interface and allow registering unload-tasks in the authService
-    this.userStore.$reset()
+    this.userStore.reset()
     this.authStore.clearUserContext()
   }
 

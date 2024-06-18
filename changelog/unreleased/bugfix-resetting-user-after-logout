@@ -1,0 +1,6 @@
+Bugfix: Resetting user after logout
+
+We've fixed a bug where the current user would not be resetted after logout.
+
+https://github.com/owncloud/web/pull/11058
+https://github.com/owncloud/web/issues/11055
