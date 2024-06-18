@@ -50,7 +50,7 @@ import { ArchiverService } from '@ownclouders/web-pkg'
 import { UnifiedRoleDefinition } from '@ownclouders/web-client/graph/generated'
 import { extensionPoints } from './extensionPoints'
 
-export const bootstrapApp = async (configurationPath: string): Promise<void> => {
+export const bootstrapApp = async (configurationPath: string, appsReadyCallback: () => void) => {
   const pinia = createPinia()
   const app = createApp(pages.success)
   app.use(pinia)
@@ -168,6 +168,7 @@ export const bootstrapApp = async (configurationPath: string): Promise<void> => 
       }
       announceVersions({ capabilityStore })
       await announceApplicationsReady({ app, appsStore, applications })
+      appsReadyCallback()
     },
     {
       immediate: true
