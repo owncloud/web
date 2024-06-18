@@ -51,8 +51,8 @@ export class Users {
     }
     await po.changeQuotaUsingBatchAction({ page: this.#page, value, userIds })
   }
-  async getDisplayedUsers(): Promise<string[]> {
-    return await po.getDisplayedUsers({ page: this.#page })
+  getDisplayedUsers(): Promise<string[]> {
+    return po.getDisplayedUsers({ page: this.#page })
   }
   async select({ key }: { key: string }): Promise<void> {
     await po.selectUser({
