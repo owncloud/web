@@ -25,7 +25,7 @@ import { defineComponent, PropType } from 'vue'
 import ActionMenuItem from './ActionMenuItem.vue'
 import { Action, ActionOptions } from '../../composables'
 
-type MenuSection = {
+export type MenuSection = {
   name: string
   items: Action[]
 }

@@ -18,26 +18,7 @@
           />
         </div>
         <div class="oc-flex main-actions">
-          <template v-if="mainActions.length && resource">
-            <context-action-menu
-              :menu-sections="[
-                {
-                  name: 'main-actions',
-                  items: mainActions
-                    .filter((action) => action.isVisible())
-                    .map((action) => {
-                      return { ...action, class: 'oc-p-xs', hideLabel: true }
-                    })
-                }
-              ]"
-              :action-options="{
-                resources: [resource]
-              }"
-              appearance="raw-inverse"
-              variation="brand"
-            />
-          </template>
-          <template v-if="dropDownActions.length">
+          <template v-if="dropDownMenuSections.length">
             <oc-button
               id="oc-openfile-contextmenu-trigger"
               v-oc-tooltip="contextMenuLabel"
@@ -57,10 +38,29 @@
               @click.stop.prevent
             >
               <context-action-menu
-                :menu-sections="[{ name: 'dropdown-actions', items: dropDownActions }]"
-                :action-options="{ resources: [resource] }"
+                :menu-sections="dropDownMenuSections"
+                :action-options="dropDownActionOptions"
               />
             </oc-drop>
+          </template>
+          <template v-if="mainActions.length && resource">
+            <context-action-menu
+              :menu-sections="[
+                {
+                  name: 'main-actions',
+                  items: mainActions
+                    .filter((action) => action.isVisible())
+                    .map((action) => {
+                      return { ...action, class: 'oc-p-xs', hideLabel: true }
+                    })
+                }
+              ]"
+              :action-options="{
+                resources: [resource]
+              }"
+              appearance="raw-inverse"
+              variation="brand"
+            />
           </template>
           <oc-button
             id="app-top-bar-close"
@@ -80,9 +80,15 @@
 
 <script lang="ts">
 import { computed, defineComponent, PropType, unref } from 'vue'
-import ContextActionMenu from './ContextActions/ContextActionMenu.vue'
+import ContextActionMenu, { MenuSection } from './ContextActions/ContextActionMenu.vue'
 import { useGettext } from 'vue3-gettext'
-import { Action, useFolderLink, useGetMatchingSpace, useResourcesStore } from '../composables'
+import {
+  Action,
+  FileActionOptions,
+  useFolderLink,
+  useGetMatchingSpace,
+  useResourcesStore
+} from '../composables'
 import ResourceListItem from './FilesList/ResourceListItem.vue'
 import { Resource, isPublicSpaceResource, isShareSpaceResource } from '@ownclouders/web-client'
 
@@ -93,9 +99,16 @@ export default defineComponent({
     ResourceListItem
   },
   props: {
-    dropDownActions: {
-      type: Array as PropType<Action[]>,
-      default: (): Action[] => []
+    dropDownMenuSections: {
+      type: Array as PropType<MenuSection[]>,
+      default: (): MenuSection[] => []
+    },
+    dropDownActionOptions: {
+      type: Object as PropType<FileActionOptions>,
+      default: (): FileActionOptions => ({
+        space: null,
+        resources: []
+      })
     },
     mainActions: {
       type: Array as PropType<Action[]>,

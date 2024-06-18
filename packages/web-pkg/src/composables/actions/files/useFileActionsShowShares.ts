@@ -2,7 +2,7 @@ import { isLocationTrashActive } from '../../../router'
 import { ShareResource } from '@ownclouders/web-client'
 import { eventBus } from '../../../services'
 import { SideBarEventTopics } from '../../sideBar'
-import { computed, unref } from 'vue'
+import { computed } from 'vue'
 import { useGettext } from 'vue3-gettext'
 import { useIsFilesAppActive } from '../helpers'
 import { useRouter } from '../../router'
@@ -29,11 +29,6 @@ export const useFileActionsShowShares = () => {
       label: () => $gettext('Share'),
       handler,
       isVisible: ({ space, resources }) => {
-        // sidebar is currently only available inside files app
-        if (!unref(isFilesAppActive)) {
-          return false
-        }
-
         if (isLocationTrashActive(router, 'files-trash-generic')) {
           return false
         }
