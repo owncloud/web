@@ -1,0 +1,7 @@
+Enhancement: add action drop down top app top bar
+
+We've added an action drop down with various file actions to the app top bar,
+so the user can now call different actions like download, directly from the app.
+
+https://github.com/owncloud/web/pull/11057
+https://github.com/owncloud/web/issues/11019
