@@ -1,0 +1,6 @@
+Bugfix: Admin settings UI update after save
+
+We've fixed a bug where the UI would not display changes made in the admin settings until re-loading the entire page.
+
+https://github.com/owncloud/web/pull/11059
+https://github.com/owncloud/web/issues/11033
