@@ -1,3 +1,30 @@
+Changelog for ownCloud Web [unreleased] (UNRELEASED)
+=======================================
+The following sections list the changes in ownCloud web unreleased relevant to
+ownCloud admins and users.
+
+[unreleased]: https://github.com/owncloud/web/compare/v9.0.0...master
+
+Summary
+-------
+
+* Enhancement - Consistent initial loading spinner: [#11054](https://github.com/owncloud/web/pull/11054)
+
+Details
+-------
+
+* Enhancement - Consistent initial loading spinner: [#11054](https://github.com/owncloud/web/pull/11054)
+
+   We have updated the loading spinner on the initial page load to run continuously
+   during the client bootstrap. Previously, the spinner would appear and disappear
+   multiple times.
+
+   Additionally, we have aligned the spinner's design with our other loading
+   spinners and reduced the delay before it appears from 1 second to 0.5 seconds.
+
+   https://github.com/owncloud/web/issues/11041
+   https://github.com/owncloud/web/pull/11054
+
 Changelog for ownCloud Web [9.0.0] (2024-06-17)
 =======================================
 The following sections list the changes in ownCloud web 9.0.0 relevant to
