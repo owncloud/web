@@ -11,6 +11,7 @@ Summary
 * Bugfix - Resetting user after logout: [#11058](https://github.com/owncloud/web/pull/11058)
 * Bugfix - Admin settings UI update after save: [#11059](https://github.com/owncloud/web/pull/11059)
 * Enhancement - Consistent initial loading spinner: [#11054](https://github.com/owncloud/web/pull/11054)
+* Enhancement - Add action drop down top app top bar: [#11057](https://github.com/owncloud/web/pull/11057)
 
 Details
 -------
@@ -41,6 +42,14 @@ Details
 
    https://github.com/owncloud/web/issues/11041
    https://github.com/owncloud/web/pull/11054
+
+* Enhancement - Add action drop down top app top bar: [#11057](https://github.com/owncloud/web/pull/11057)
+
+   We've added an action drop down with various file actions to the app top bar, so
+   the user can now call different actions like download, directly from the app.
+
+   https://github.com/owncloud/web/issues/11019
+   https://github.com/owncloud/web/pull/11057
 
 Changelog for ownCloud Web [9.0.0] (2024-06-17)
 =======================================
