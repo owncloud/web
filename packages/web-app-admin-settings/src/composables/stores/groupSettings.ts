@@ -11,9 +11,9 @@ export const useGroupSettingsStore = defineStore('groupSettings', () => {
   }
 
   const upsertGroup = (group: Group) => {
-    const existing = unref(groups).some(({ id }) => id === group.id)
+    const existing = unref(groups).find(({ id }) => id === group.id)
     if (existing) {
-      Object.assign(existing, { ...group, members: [] })
+      Object.assign(existing, group)
       return
     }
     unref(groups).push({ ...group, members: [] })

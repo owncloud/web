@@ -11,7 +11,7 @@ export const useUserSettingsStore = defineStore('userSettings', () => {
   }
 
   const upsertUser = (user: User) => {
-    const existing = unref(users).some(({ id }) => id === user.id)
+    const existing = unref(users).find(({ id }) => id === user.id)
     if (existing) {
       Object.assign(existing, user)
       return
