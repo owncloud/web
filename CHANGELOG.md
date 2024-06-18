@@ -8,10 +8,18 @@ ownCloud admins and users.
 Summary
 -------
 
+* Bugfix - Resetting user after logout: [#11058](https://github.com/owncloud/web/pull/11058)
 * Enhancement - Consistent initial loading spinner: [#11054](https://github.com/owncloud/web/pull/11054)
 
 Details
 -------
+
+* Bugfix - Resetting user after logout: [#11058](https://github.com/owncloud/web/pull/11058)
+
+   We've fixed a bug where the current user would not be resetted after logout.
+
+   https://github.com/owncloud/web/issues/11055
+   https://github.com/owncloud/web/pull/11058
 
 * Enhancement - Consistent initial loading spinner: [#11054](https://github.com/owncloud/web/pull/11054)
 
