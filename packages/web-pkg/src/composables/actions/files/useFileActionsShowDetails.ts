@@ -1,9 +1,8 @@
 import { isLocationTrashActive } from '../../../router'
 import { eventBus } from '../../../services/eventBus'
 import { SideBarEventTopics } from '../../sideBar'
-import { computed, unref } from 'vue'
+import { computed } from 'vue'
 import { useGettext } from 'vue3-gettext'
-import { useIsFilesAppActive } from '../helpers'
 import { useRouter } from '../../router'
 import { FileAction } from '../types'
 import { useResourcesStore } from '../../piniaStores'
@@ -13,7 +12,6 @@ export const useFileActionsShowDetails = () => {
   const resourcesStore = useResourcesStore()
 
   const { $gettext } = useGettext()
-  const isFilesAppActive = useIsFilesAppActive()
 
   const actions = computed((): FileAction[] => [
     {
@@ -25,11 +23,6 @@ export const useFileActionsShowDetails = () => {
       // we don't have details in the trashbin, yet.
       // remove trashbin route rule once we have them.
       isVisible: ({ resources }) => {
-        // sidebar is currently only available inside files app
-        if (!unref(isFilesAppActive)) {
-          return false
-        }
-
         if (isLocationTrashActive(router, 'files-trash-generic')) {
           return false
         }

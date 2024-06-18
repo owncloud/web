@@ -4,6 +4,8 @@
     <app-top-bar
       v-if="!loading && !loadingError"
       :main-actions="fileActions"
+      :drop-down-menu-sections="dropDownMenuSections"
+      :drop-down-action-options="dropDownActionOptions"
       :resource="resource"
       @close="closeApp"
     />
@@ -57,11 +59,16 @@ import {
   useAppsStore,
   useConfigStore,
   useResourcesStore,
-  FileContentOptions
+  FileContentOptions,
+  useFileActionsCopyQuickLink,
+  useFileActionsDownloadFile,
+  useFileActionsShowDetails,
+  useFileActionsShowShares,
+  FileActionOptions,
+  FileAction
 } from '../../composables'
 import {
   Action,
-  ActionOptions,
   Modifier,
   Key,
   useAppMeta,
@@ -126,6 +133,11 @@ export default defineComponent({
     const spacesStore = useSpacesStore()
     const configStore = useConfigStore()
     const resourcesStore = useResourcesStore()
+
+    const { actions: createQuickLinkActions } = useFileActionsCopyQuickLink()
+    const { actions: downloadFileActions } = useFileActionsDownloadFile()
+    const { actions: showDetailsActions } = useFileActionsShowDetails()
+    const { actions: showSharesActions } = useFileActionsShowShares()
 
     const applicationName = ref('')
     const resource: Ref<Resource> = ref()
@@ -411,21 +423,76 @@ export default defineComponent({
       save()
     })
 
-    const fileActions = computed((): Action<ActionOptions>[] => [
-      {
-        name: 'save-file',
-        disabledTooltip: () => '',
-        isVisible: () => unref(isEditor),
-        isDisabled: () => isReadOnly.value || !isDirty.value,
-        componentType: 'button',
-        icon: 'save',
-        id: 'app-save-action',
-        label: () => 'Save',
-        handler: () => {
-          save()
+    const fileActionsSave = computed<FileAction[]>(() => {
+      return [
+        {
+          name: 'save-file',
+          disabledTooltip: () => '',
+          isVisible: () => unref(isEditor),
+          isDisabled: () => isReadOnly.value || !isDirty.value,
+          componentType: 'button',
+          icon: 'save',
+          id: 'app-save-action',
+          label: () => 'Save',
+          handler: () => {
+            save()
+          }
         }
+      ]
+    })
+
+    const actionOptions = computed<FileActionOptions>(() => {
+      return {
+        space: unref(space),
+        resources: [unref(resource)]
       }
-    ])
+    })
+
+    const menuItemsContext = computed(() => {
+      return [...unref(fileActionsSave)].filter((item) => item.isVisible(unref(actionOptions)))
+    })
+    const menuItemsShare = computed(() => {
+      return [...unref(showSharesActions), ...unref(createQuickLinkActions)].filter((item) =>
+        item.isVisible(unref(actionOptions))
+      )
+    })
+    const menuItemsActions = computed(() => {
+      return [...unref(downloadFileActions)].filter((item) => item.isVisible(unref(actionOptions)))
+    })
+    const menuItemsSidebar = computed(() => {
+      return [...unref(showDetailsActions)].filter((item) => item.isVisible(unref(actionOptions)))
+    })
+    const dropDownMenuSections = computed(() => {
+      const sections = []
+
+      if (unref(menuItemsContext).length) {
+        sections.push({
+          name: 'context',
+          items: unref(menuItemsContext)
+        })
+      }
+      if (unref(menuItemsShare).length) {
+        sections.push({
+          name: 'share',
+          items: unref(menuItemsShare)
+        })
+      }
+      if (unref(menuItemsActions).length) {
+        sections.push({
+          name: 'actions',
+          items: unref(menuItemsActions)
+        })
+      }
+      if (unref(menuItemsSidebar).length) {
+        sections.push({
+          name: 'sidebar',
+          items: unref(menuItemsSidebar)
+        })
+      }
+      return sections
+    })
+
+    const fileActions = computed((): Action[] => [...unref(fileActionsSave)])
 
     onBeforeRouteLeave((_to, _from, next) => {
       if (unref(isDirty)) {
@@ -472,6 +539,8 @@ export default defineComponent({
 
     return {
       ...useSideBar(),
+      dropDownMenuSections,
+      dropDownActionOptions: actionOptions,
       isEditor,
       closeApp,
       fileActions,
