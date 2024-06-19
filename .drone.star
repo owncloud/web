@@ -1796,7 +1796,13 @@ def e2eTestsOnKeycloak(ctx):
     e2e_Keycloak_tests = [
         "journeys",
         "admin-settings/users.feature:20",
+        "admin-settings/users.feature:43",
+        "admin-settings/users.feature:106",
+        "admin-settings/users.feature:131",
+        "admin-settings/users.feature:185",
         "admin-settings/spaces.feature",
+        "admin-settings/groups.feature",
+        "admin-settings/general.feature",
     ]
 
     e2e_volumes = [

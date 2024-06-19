@@ -122,6 +122,7 @@ After(async function (this: World, { result, willBeRetried }: ITestCaseHookParam
   // refresh keycloak admin access token
   if (config.keycloak) {
     await refreshToken({ user: this.usersEnvironment.getUser({ key: 'admin' }) })
+    await setAdminToken(state.browser)
   }
 
   await cleanUpUser(this.usersEnvironment.getUser({ key: 'admin' }))
