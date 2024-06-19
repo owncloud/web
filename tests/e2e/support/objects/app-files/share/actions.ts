@@ -7,7 +7,9 @@ import { clearCurrentPopup, createLinkArgs } from '../link/actions'
 import { config } from '../../../../config.js'
 import { createdLinkStore } from '../../../store'
 import { User } from '../../../types'
+import { locatorUtils } from '../../../utils'
 
+const invitePanel = '//*[@id="oc-files-sharing-sidebar"]'
 const quickShareButton =
   '//*[@data-test-resource-name="%s"]/ancestor::tr//button[contains(@class, "files-quick-action-show-shares")]'
 const noPermissionToShareLabel =
@@ -76,7 +78,10 @@ export const createShare = async (args: createShareArgs): Promise<void> => {
 
   if (expirationDate) {
     await page.locator(showMoreOptionsButton).click()
-    await page.getByTestId(calendarDatePickerId).click()
+    await Promise.all([
+      locatorUtils.waitForEvent(page.locator(invitePanel), 'transitionend'),
+      page.getByTestId(calendarDatePickerId).click()
+    ])
     await Collaborator.setExpirationDate(page, expirationDate)
   }
   await Collaborator.inviteCollaborators({ page, collaborators: recipients })
