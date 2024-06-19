@@ -1,0 +1,6 @@
+Enhancement: Decrease text editor loading times
+
+We've decreased the loading times of the text and markdown editor by loading the necessary parts only.
+
+https://github.com/owncloud/web/pull/11060
+https://github.com/owncloud/web/issues/10982
