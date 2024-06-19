@@ -36,9 +36,9 @@ export interface AppFileHandlingResult {
 }
 
 export function useAppFileHandling({
-  clientService: { webdav }
+  clientService
 }: AppFileHandlingOptions): AppFileHandlingResult {
-  const clientService = useClientService()
+  clientService = clientService || useClientService()
   const capabilityStore = useCapabilityStore()
   const userStore = useUserStore()
 
@@ -63,7 +63,7 @@ export function useAppFileHandling({
     fileContext: MaybeRef<FileContext>,
     options: { responseType?: 'arraybuffer' | 'blob' | 'text' } & Record<string, any>
   ) => {
-    return webdav.getFileContents(
+    return clientService.webdav.getFileContents(
       unref(unref(fileContext).space),
       {
         path: unref(unref(fileContext).item)
@@ -78,7 +78,7 @@ export function useAppFileHandling({
     fileContext: MaybeRef<FileContext>,
     options: ListFilesOptions = {}
   ): Promise<Resource> => {
-    return webdav.getFileInfo(
+    return clientService.webdav.getFileInfo(
       unref(unref(fileContext).space),
       {
         path: unref(unref(fileContext).item),
@@ -92,7 +92,7 @@ export function useAppFileHandling({
     fileContext: MaybeRef<FileContext>,
     options: { content?: string } & Record<string, any>
   ) => {
-    return webdav.putFileContents(unref(unref(fileContext).space), {
+    return clientService.webdav.putFileContents(unref(unref(fileContext).space), {
       path: unref(unref(fileContext).item),
       ...options
     })
