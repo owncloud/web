@@ -10,13 +10,17 @@ export class Users {
     this.#page = page
   }
 
+  getUUID({ key }: { key: string }): string {
+    return this.#usersEnvironment.getCreatedUser({ key }).uuid
+  }
+
   async allowLogin({ key, action }: { key: string; action: string }): Promise<void> {
-    const uuid = this.#usersEnvironment.getCreatedUser({ key }).uuid
+    const uuid = this.getUUID({ key })
     await po.openEditPanel({ page: this.#page, uuid, action })
     await po.changeAccountEnabled({ uuid, value: true, page: this.#page })
   }
   async forbidLogin({ key, action }: { key: string; action: string }): Promise<void> {
-    const uuid = this.#usersEnvironment.getCreatedUser({ key }).uuid
+    const uuid = this.getUUID({ key })
     await po.openEditPanel({ page: this.#page, uuid, action })
     await po.changeAccountEnabled({ uuid, value: false, page: this.#page })
   }
@@ -29,13 +33,13 @@ export class Users {
     value: string
     action: string
   }): Promise<void> {
-    const uuid = this.#usersEnvironment.getCreatedUser({ key }).uuid
+    const uuid = this.getUUID({ key })
     await po.openEditPanel({ page: this.#page, uuid, action })
     await po.changeQuota({ uuid, value, page: this.#page })
   }
 
   async selectUser({ key }: { key: string }): Promise<void> {
-    const uuid = this.#usersEnvironment.getCreatedUser({ key }).uuid
+    const uuid = this.getUUID({ key })
     await po.selectUser({ page: this.#page, uuid })
   }
   async changeQuotaUsingBatchAction({
@@ -47,7 +51,7 @@ export class Users {
   }): Promise<void> {
     const userIds = []
     for (const user of users) {
-      userIds.push(this.#usersEnvironment.getCreatedUser({ key: user }).uuid)
+      userIds.push(this.getUUID({ key: user }))
     }
     await po.changeQuotaUsingBatchAction({ page: this.#page, value, userIds })
   }
@@ -57,7 +61,7 @@ export class Users {
   async select({ key }: { key: string }): Promise<void> {
     await po.selectUser({
       page: this.#page,
-      uuid: this.#usersEnvironment.getCreatedUser({ key }).uuid
+      uuid: this.getUUID({ key })
     })
   }
   async addToGroupsBatchAtion({
@@ -92,7 +96,7 @@ export class Users {
     value: string
     action: string
   }): Promise<void> {
-    const uuid = this.#usersEnvironment.getCreatedUser({ key }).uuid
+    const uuid = this.getUUID({ key })
 
     await po.openEditPanel({ page: this.#page, uuid, action })
     await po.changeUser({ uuid, attribute: attribute, value: value, page: this.#page })
@@ -115,7 +119,7 @@ export class Users {
     groups: string[]
     action: string
   }): Promise<void> {
-    const uuid = this.#usersEnvironment.getCreatedUser({ key }).uuid
+    const uuid = this.getUUID({ key })
     await po.openEditPanel({ page: this.#page, uuid, action })
     await po.addUserToGroups({ page: this.#page, userId: uuid, groups })
   }
@@ -128,14 +132,14 @@ export class Users {
     groups: string[]
     action: string
   }): Promise<void> {
-    const uuid = this.#usersEnvironment.getCreatedUser({ key }).uuid
+    const uuid = this.getUUID({ key })
     await po.openEditPanel({ page: this.#page, uuid, action })
     await po.removeUserFromGroups({ page: this.#page, userId: uuid, groups })
   }
   async deleteUserUsingContextMenu({ key }: { key: string }): Promise<void> {
     await po.deleteUserUsingContextMenu({
       page: this.#page,
-      uuid: this.#usersEnvironment.getCreatedUser({ key }).uuid
+      uuid: this.getUUID({ key })
     })
   }
   async deleteUserUsingBatchAction({ userIds }: { userIds: string[] }): Promise<void> {
@@ -169,7 +173,7 @@ export class Users {
   async openEditPanel({ key, action }: { key: string; action: string }): Promise<void> {
     await po.openEditPanel({
       page: this.#page,
-      uuid: this.#usersEnvironment.getCreatedUser({ key }).uuid,
+      uuid: this.getUUID({ key }),
       action
     })
   }

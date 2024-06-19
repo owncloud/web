@@ -225,10 +225,10 @@ Then(
     for (const { user } of stepTable.hashes()) {
       switch (action) {
         case 'should':
-          expect(users).toContain(this.usersEnvironment.getCreatedUser({ key: user }).uuid)
+          expect(users).toContain(usersObject.getUUID({ key: user }))
           break
         case 'should not':
-          expect(users).not.toContain(this.usersEnvironment.getCreatedUser({ key: user }).uuid)
+          expect(users).not.toContain(usersObject.getUUID({ key: user }))
           break
         default:
           throw new Error(`'${action}' not implemented`)
@@ -263,7 +263,7 @@ When(
     const userIds = []
 
     for (const { user } of stepTable.hashes()) {
-      userIds.push(this.usersEnvironment.getCreatedUser({ key: user }).uuid)
+      userIds.push(usersObject.getUUID({ key: user }))
       await usersObject.select({ key: user })
     }
 
@@ -347,7 +347,7 @@ When(
     switch (actionType) {
       case 'batch actions':
         for (const { id: user } of stepTable.hashes()) {
-          userIds.push(this.usersEnvironment.getCreatedUser({ key: user }).uuid)
+          userIds.push(usersObject.getUUID({ key: user }))
           await usersObject.selectUser({ key: user })
         }
         await usersObject.deleteUserUsingBatchAction({ userIds })

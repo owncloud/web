@@ -56,8 +56,7 @@ export const createUser = async ({ user, admin }: { user: User; admin: User }): 
     user: { ...user, uuid: keycloakUUID, role: defaultNewUserRole }
   })
 
-  // initialize user on Ocis web
-  // need login to have the user created by keycloak appear on Ocis web
+  // login to initialize the user in oCIS Web
   await initializeUser(user.id)
 
   // store oCIS user information
@@ -135,7 +134,9 @@ export const deleteUser = async ({ user, admin }: { user: User; admin: User }): 
     try {
       const usersEnvironment = new UsersEnvironment()
       usersEnvironment.removeCreatedKeycloakUser({ key: user.id })
-    } catch (e) {}
+    } catch (e) {
+      console.error('Error removing Keycloak user:', e)
+    }
   }
   return user
 }
