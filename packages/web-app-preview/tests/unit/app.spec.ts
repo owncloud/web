@@ -1,15 +1,8 @@
 import App from '../../src/App.vue'
-import { nextTick, ref } from 'vue'
+import { nextTick } from 'vue'
 import { defaultComponentMocks, defaultPlugins, shallowMount } from 'web-test-helpers'
-import { useAppDefaultsMock } from 'web-test-helpers/src/mocks/useAppDefaultsMock'
-import { FileContext, useAppDefaults } from '@ownclouders/web-pkg'
+import { FileContext } from '@ownclouders/web-pkg'
 import { mock } from 'vitest-mock-extended'
-
-vi.mock('@ownclouders/web-pkg', async (importOriginal) => ({
-  ...(await importOriginal<any>()),
-  useAppDefaults: vi.fn(),
-  useAppFileHandling: vi.fn()
-}))
 
 const activeFiles = [
   {
@@ -86,26 +79,25 @@ describe('Preview app', () => {
 })
 
 function createShallowMountWrapper() {
-  vi.mocked(useAppDefaults).mockImplementation(() =>
-    useAppDefaultsMock({
-      currentFileContext: ref(
-        mock<FileContext>({
+  const mocks = defaultComponentMocks()
+  mocks.$previewService.loadPreview.mockResolvedValue('')
+  return {
+    wrapper: shallowMount(App, {
+      props: {
+        currentFileContext: mock<FileContext>({
           path: 'personal/admin/bear.png',
           space: {
             getDriveAliasAndItem: vi.fn().mockImplementation((file) => {
               return activeFiles.find((filteredFile) => filteredFile.id == file.id)?.path
             })
           }
-        })
-      ),
-      activeFiles: ref(activeFiles)
-    })
-  )
-
-  const mocks = defaultComponentMocks()
-  mocks.$previewService.loadPreview.mockResolvedValue('')
-  return {
-    wrapper: shallowMount(App, {
+        }),
+        activeFiles,
+        isFolderLoading: true,
+        revokeUrl: vi.fn(),
+        getUrlForResource: vi.fn(),
+        loadFolderForFileContext: vi.fn()
+      },
       global: {
         plugins: [...defaultPlugins()],
         mocks,

@@ -2,7 +2,7 @@
   <main :id="applicationId" class="oc-height-1-1" @keydown.esc="closeApp">
     <h1 class="oc-invisible-sr" v-text="pageTitle" />
     <app-top-bar
-      v-if="!loading && !loadingError"
+      v-if="!loading && !loadingError && resource"
       :main-actions="fileActions"
       :drop-down-menu-sections="dropDownMenuSections"
       :drop-down-action-options="dropDownActionOptions"
@@ -139,12 +139,17 @@ export default defineComponent({
     const { actions: showDetailsActions } = useFileActionsShowDetails()
     const { actions: showSharesActions } = useFileActionsShowShares()
 
+    const noResourceLoading = computed(() => {
+      // component has its own way to load the resource(s)
+      return Boolean(props.wrappedComponent.emits?.includes('update:resource'))
+    })
+
     const applicationName = ref('')
     const resource: Ref<Resource> = ref()
     const space: Ref<SpaceResource> = ref()
     const currentETag = ref('')
     const url = ref('')
-    const loading = ref(true)
+    const loading = ref(!unref(noResourceLoading))
     const loadingError: Ref<Error> = ref()
     const isReadOnly = ref(false)
     const serverContent = ref()
@@ -184,7 +189,10 @@ export default defineComponent({
       getUrlForResource,
       putFileContents,
       replaceInvalidFileRoute,
-      revokeUrl
+      revokeUrl,
+      activeFiles,
+      loadFolderForFileContext,
+      isFolderLoading
     } = useAppDefaults({
       applicationId: props.applicationId
     })
@@ -306,7 +314,9 @@ export default defineComponent({
     watch(
       currentFileContext,
       () => {
-        loadFileTask.perform()
+        if (!unref(noResourceLoading)) {
+          loadFileTask.perform()
+        }
       },
       { immediate: true }
     )
@@ -520,12 +530,19 @@ export default defineComponent({
       url: unref(url),
       space: unref(unref(currentFileContext).space),
       resource: unref(resource),
+      activeFiles: unref(activeFiles),
       isDirty: unref(isDirty),
       isReadOnly: unref(isReadOnly),
       applicationConfig: unref(applicationConfig),
       currentFileContext: unref(currentFileContext),
       currentContent: unref(currentContent),
+      isFolderLoading: unref(isFolderLoading),
 
+      'onUpdate:resource': (value: Resource) => {
+        resource.value = value
+        space.value = unref(unref(currentFileContext).space)
+        selectedResources.value = [value]
+      },
       'onUpdate:currentContent': (value: unknown) => {
         currentContent.value = value
       },
@@ -534,7 +551,10 @@ export default defineComponent({
       },
 
       onSave: save,
-      onClose: closeApp
+      onClose: closeApp,
+      loadFolderForFileContext,
+      revokeUrl,
+      getUrlForResource
     }))
 
     return {

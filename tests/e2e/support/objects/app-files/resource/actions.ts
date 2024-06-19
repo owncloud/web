@@ -18,7 +18,8 @@ const downloadFileButtonSideBar =
 const downloadFolderButtonSideBar =
   '#oc-files-actions-sidebar .oc-files-actions-download-archive-trigger'
 const downloadButtonBatchAction = '.oc-files-actions-download-archive-trigger'
-const downloadPreviewButton = '#preview-download'
+const appBarContextMenu = '#oc-openfile-contextmenu-trigger'
+const appBarDownloadFileButton = '#oc-openfile-contextmenu .oc-files-actions-download-file-trigger'
 const deleteButtonBatchAction = '.oc-files-actions-delete-trigger'
 const createSpaceFromResourceAction = '.oc-files-actions-create-space-from-resource-trigger'
 const checkBox = `//*[@data-test-resource-name="%s"]//ancestor::tr//input`
@@ -757,9 +758,14 @@ export const downloadResources = async (args: downloadResourcesArgs): Promise<Do
     }
 
     case 'PREVIEW_TOPBAR':
+      await Promise.all([
+        page.locator(appBarDownloadFileButton).waitFor(),
+        page.locator(appBarContextMenu).click()
+      ])
+
       const [download] = await Promise.all([
         page.waitForEvent('download'),
-        page.locator(downloadPreviewButton).click()
+        page.locator(appBarDownloadFileButton).click()
       ])
       downloads.push(download)
       break
