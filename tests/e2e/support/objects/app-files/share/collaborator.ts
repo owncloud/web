@@ -3,6 +3,7 @@ import { startCase } from 'lodash'
 import util from 'util'
 import { Group, User } from '../../../types'
 import { getActualExpiryDate } from '../../../utils/datePicker'
+import { locatorUtils } from '../../../utils'
 
 export interface ICollaborator {
   collaborator: User | Group
@@ -77,7 +78,7 @@ export default class Collaborator {
   private static readonly denyShareCollaboratorButton =
     '%s//ul[contains(@class,"collaborator-edit-dropdown-options-list")]//span[contains(@class,"deny-share")]//button[contains(@aria-checked,"%s")]'
   private static readonly setExpirationDateCollaboratorButton =
-    '%s//ul[contains(@class,"collaborator-edit-dropdown-options-list")]//button[contains(@class,"files-collaborators-expiration-button")]'
+    '%s//ul[contains(@class,"collaborator-edit-dropdown-options-list")]//button[@data-testid="recipient-datepicker-btn"]'
   private static readonly removeExpirationDateCollaboratorButton =
     '%s//ul[contains(@class,"collaborator-edit-dropdown-options-list")]//button[contains(@class,"remove-expiration-date")]'
   private static readonly showAccessDetailsButton =
@@ -239,9 +240,14 @@ export default class Collaborator {
     await page
       .locator(util.format(Collaborator.collaboratorEditDropdownButton, collaboratorRow))
       .click()
-    await page
-      .locator(util.format(Collaborator.setExpirationDateCollaboratorButton, collaboratorRow))
-      .click()
+
+    const panel = page.locator(Collaborator.invitePanel)
+    await Promise.all([
+      locatorUtils.waitForEvent(panel, 'transitionend'),
+      page
+        .locator(util.format(Collaborator.setExpirationDateCollaboratorButton, collaboratorRow))
+        .click()
+    ])
 
     await Collaborator.setExpirationDate(page, expirationDate)
   }
@@ -258,14 +264,15 @@ export default class Collaborator {
       { newExpiryDate }
     )
 
-    const date = page.locator(
-      util.format(
-        Collaborator.expirationDatepickerDaySelect,
-        newExpiryDate.toISOString().split('T')[0]
+    await page
+      .locator(
+        util.format(
+          Collaborator.expirationDatepickerDaySelect,
+          newExpiryDate.toISOString().split('T')[0]
+        )
       )
-    )
-    await page.waitForTimeout(500)
-    await date.first().click()
+      .first()
+      .click()
   }
 
   static async removeExpirationDateFromCollaborator(
