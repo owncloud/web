@@ -1,0 +1,6 @@
+Bugfix: Editor save after token renewal
+
+We've fixed a bug where saving changes in an editor would not work after the access token has been renewed.
+
+https://github.com/owncloud/web/pull/11068
+https://github.com/owncloud/web/issues/11062
