@@ -13,6 +13,7 @@ Summary
 * Bugfix - Editor save after token renewal: [#11068](https://github.com/owncloud/web/pull/11068)
 * Enhancement - Consistent initial loading spinner: [#11054](https://github.com/owncloud/web/pull/11054)
 * Enhancement - Add action drop down top app top bar: [#11057](https://github.com/owncloud/web/pull/11057)
+* Enhancement - Decrease text editor loading times: [#11060](https://github.com/owncloud/web/pull/11060)
 
 Details
 -------
@@ -59,6 +60,14 @@ Details
 
    https://github.com/owncloud/web/issues/11019
    https://github.com/owncloud/web/pull/11057
+
+* Enhancement - Decrease text editor loading times: [#11060](https://github.com/owncloud/web/pull/11060)
+
+   We've decreased the loading times of the text and markdown editor by loading the
+   necessary parts only.
+
+   https://github.com/owncloud/web/issues/10982
+   https://github.com/owncloud/web/pull/11060
 
 Changelog for ownCloud Web [9.0.0] (2024-06-17)
 =======================================
