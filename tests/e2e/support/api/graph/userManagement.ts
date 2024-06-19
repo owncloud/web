@@ -92,20 +92,6 @@ export const createGroup = async ({
   return group
 }
 
-const getGroupId = async ({ group, admin }: { group: Group; admin: User }): Promise<string> => {
-  let groupId = ''
-  const response = await request({
-    method: 'GET',
-    path: join('graph', 'v1.0', 'groups', group.displayName),
-    user: admin
-  })
-  if (response.ok) {
-    const resBody = (await response.json()) as Group
-    groupId = resBody.id
-  }
-  return groupId
-}
-
 export const deleteGroup = async ({
   group,
   admin
@@ -133,8 +119,9 @@ export const addUserToGroup = async ({
   group: Group
   admin: User
 }): Promise<void> => {
-  const groupId = await getGroupId({ group, admin })
-  const userId = await getUserId({ user, admin })
+  const usersEnvironment = new UsersEnvironment()
+  const userId = usersEnvironment.getCreatedUser({ key: user.id }).uuid
+  const groupId = usersEnvironment.getCreatedGroup({ key: group.id }).uuid
   const body = JSON.stringify({
     '@odata.id': join(config.backendUrl, 'graph', 'v1.0', 'users', userId)
   })

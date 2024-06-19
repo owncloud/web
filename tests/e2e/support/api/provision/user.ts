@@ -39,7 +39,7 @@ export const assignRole = async ({
 }): Promise<void> => {
   if (config.keycloak) {
     const usersEnvironment = new UsersEnvironment()
-    const createdUser = usersEnvironment.getCreatedUser({ key: user.id })
+    const createdUser = usersEnvironment.getCreatedKeycloakUser({ key: user.id })
     await keycloakAssignRole({ admin, uuid: createdUser.uuid, role })
   } else {
     const id = await getUserId({ user, admin })
@@ -50,7 +50,7 @@ export const assignRole = async ({
 export const unAssignRole = async ({ admin, user }: { admin: User; user: User }): Promise<void> => {
   if (config.keycloak) {
     const usersEnvironment = new UsersEnvironment()
-    const createdUser = usersEnvironment.getCreatedUser({ key: user.id })
+    const createdUser = usersEnvironment.getCreatedKeycloakUser({ key: user.id })
     await keycloakUnAssignRole({ admin, uuid: createdUser.uuid, role: createdUser.role })
   }
 }

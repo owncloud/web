@@ -18,11 +18,12 @@ import {
   createdSpaceStore,
   createdLinkStore,
   createdGroupStore,
-  createdUserStore
+  createdUserStore,
+  keycloakCreatedUser
 } from '../../support/store'
 import { Group, User } from '../../support/types'
 import { getTokenFromLogin } from '../../support/utils/tokenHelper'
-import { createdTokenStore } from '../../support/store/token'
+import { createdTokenStore, keycloakTokenStore } from '../../support/store/token'
 import { removeTempUploadDirectory } from '../../support/utils/runtimeFs'
 import { refreshToken, setupKeycloakAdminUser } from '../../support/api/keycloak'
 import { closeSSEConnections } from '../../support/environment/sse'
@@ -129,6 +130,7 @@ After(async function (this: World, { result, willBeRetried }: ITestCaseHookParam
 
   createdLinkStore.clear()
   createdTokenStore.clear()
+  keycloakTokenStore.clear()
   removeTempUploadDirectory()
   closeSSEConnections()
 })
@@ -144,6 +146,7 @@ const cleanUpUser = async (adminUser: User) => {
   })
   await Promise.all(requests)
   createdUserStore.clear()
+  keycloakCreatedUser.clear()
 }
 
 const cleanUpSpaces = async (adminUser: User) => {

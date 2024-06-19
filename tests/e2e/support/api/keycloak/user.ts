@@ -1,6 +1,6 @@
 import join from 'join-path'
 import { getUserIdFromResponse, request, realmBasePath } from './utils'
-import { deleteUser as graphDeleteUser } from '../graph'
+import { deleteUser as graphDeleteUser, getUserId } from '../graph'
 import { checkResponseStatus } from '../http'
 import { User, KeycloakRealmRole } from '../../types'
 import { UsersEnvironment } from '../../environment'
@@ -43,19 +43,26 @@ export const createUser = async ({ user, admin }: { user: User; admin: User }): 
   checkResponseStatus(creationRes, 'Failed while creating user')
 
   // created user id
-  const uuid = getUserIdFromResponse(creationRes)
+  const keycloakUUID = getUserIdFromResponse(creationRes)
 
   // assign realmRoles to user
   const defaultNewUserRole = 'User'
-  const roleRes = await assignRole({ admin, uuid, role: defaultNewUserRole })
+  const roleRes = await assignRole({ admin, uuid: keycloakUUID, role: defaultNewUserRole })
   checkResponseStatus(roleRes, 'Failed while assigning roles to user')
 
   const usersEnvironment = new UsersEnvironment()
-  usersEnvironment.storeCreatedUser({ user: { ...user, uuid, role: defaultNewUserRole } })
+  // stored keycloak user information on storage
+  usersEnvironment.storeCreatedKeycloakUser({
+    user: { ...user, uuid: keycloakUUID, role: defaultNewUserRole }
+  })
 
-  // initialize user
+  // login to initialize the user in oCIS Web
   await initializeUser(user.id)
 
+  // store oCIS user information
+  usersEnvironment.storeCreatedUser({
+    user: { ...user, uuid: await getUserId({ user, admin }), role: defaultNewUserRole }
+  })
   return user
 }
 
@@ -115,13 +122,22 @@ export const deleteUser = async ({ user, admin }: { user: User; admin: User }): 
   // deletes the user data
   await graphDeleteUser({ user, admin })
 
+  const usersEnvironment = new UsersEnvironment()
+  const keyclockUser = usersEnvironment.getCreatedKeycloakUser({ key: user.id })
   const response = await request({
     method: 'DELETE',
-    path: join(realmBasePath, 'users', user.uuid),
+    path: join(realmBasePath, 'users', keyclockUser.uuid),
     user: admin
   })
   checkResponseStatus(response, 'Failed to delete keycloak user: ' + user.id)
-
+  if (response.ok) {
+    try {
+      const usersEnvironment = new UsersEnvironment()
+      usersEnvironment.removeCreatedKeycloakUser({ key: user.id })
+    } catch (e) {
+      console.error('Error removing Keycloak user:', e)
+    }
+  }
   return user
 }
 

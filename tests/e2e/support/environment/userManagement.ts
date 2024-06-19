@@ -1,5 +1,11 @@
 import { Group, User } from '../types'
-import { dummyUserStore, dummyGroupStore, createdUserStore, createdGroupStore } from '../store'
+import {
+  dummyUserStore,
+  dummyGroupStore,
+  createdUserStore,
+  createdGroupStore,
+  keycloakCreatedUser
+} from '../store'
 
 export class UsersEnvironment {
   getUser({ key }: { key: string }): User {
@@ -90,5 +96,32 @@ export class UsersEnvironment {
     createdGroupStore.set(group.id, group)
 
     return group
+  }
+
+  storeCreatedKeycloakUser({ user }: { user: User }): User {
+    if (keycloakCreatedUser.has(user.id)) {
+      throw new Error(`Keycloak user '${user.id}' already exists`)
+    }
+    keycloakCreatedUser.set(user.id, user)
+    return user
+  }
+
+  getCreatedKeycloakUser({ key }: { key: string }): User {
+    const userKey = key.toLowerCase()
+    if (!keycloakCreatedUser.has(userKey)) {
+      throw new Error(`Keycloak user with key '${userKey}' not found`)
+    }
+
+    return keycloakCreatedUser.get(userKey)
+  }
+
+  removeCreatedKeycloakUser({ key }: { key: string }): boolean {
+    const userKey = key.toLowerCase()
+
+    if (!keycloakCreatedUser.has(userKey)) {
+      throw new Error(`Keycloak user with key '${userKey}' not found`)
+    }
+
+    return keycloakCreatedUser.delete(userKey)
   }
 }
