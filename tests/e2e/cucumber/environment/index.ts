@@ -135,7 +135,13 @@ After(async function (this: World, { result, willBeRetried }: ITestCaseHookParam
   closeSSEConnections()
 })
 
-AfterAll(() => state.browser && state.browser.close())
+AfterAll(async () => {
+  closeSSEConnections()
+
+  if (state.browser) {
+    await state.browser.close()
+  }
+})
 
 setWorldConstructor(World)
 

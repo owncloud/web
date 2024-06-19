@@ -3,10 +3,13 @@ import { getAuthHeader } from '../api/http'
 import { User } from '../types'
 
 const sseEventStore: Record<string, string[]> = {}
-const ctrl = new AbortController()
+const sseConnections = []
 
 export const listenSSE = (baseUrl: string, user: User): Promise<void> => {
   const sseUrl = new URL('ocs/v2.php/apps/notifications/api/v1/notifications/sse', baseUrl).href
+
+  const ctrl = new AbortController()
+  sseConnections.push(ctrl)
 
   return fetchEventSource(sseUrl, {
     headers: {
@@ -46,5 +49,7 @@ export const getSSEEvents = (user: string): Array<string> => {
 }
 
 export const closeSSEConnections = () => {
-  ctrl.abort()
+  Object.keys(sseEventStore).forEach((key) => delete sseEventStore[key])
+  sseConnections.forEach((connection) => connection.abort())
+  sseConnections.length = 0
 }
