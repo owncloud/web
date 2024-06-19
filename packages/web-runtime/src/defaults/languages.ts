@@ -1,4 +1,4 @@
-//Please also make language adjustments in packages/web-pkg/src/components/TextEditor.vue
+//Please also make language adjustments in packages/web-pkg/src/components/TextEditor/l18n.ts
 
 export const supportedLanguages = {
   af: 'Afrikaans - Afrikaans',

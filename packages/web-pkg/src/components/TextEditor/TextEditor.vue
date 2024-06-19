@@ -13,9 +13,9 @@ import '@toast-ui/editor/dist/theme/toastui-editor-dark.css'
 // @ts-ignore
 import { Editor, EditorCore, EditorOptions } from '@toast-ui/editor'
 import { useGettext } from 'vue3-gettext'
-import { useThemeStore } from '../composables'
-import { AppConfigObject } from '../apps'
-import AppLoadingSpinner from './AppLoadingSpinner.vue'
+import { useThemeStore } from '../../composables'
+import { AppConfigObject } from '../../apps'
+import AppLoadingSpinner from './../AppLoadingSpinner.vue'
 
 export default defineComponent({
   name: 'TextEditor',
@@ -50,32 +50,6 @@ export default defineComponent({
       )
     })
 
-    const loadTranslations = () => {
-      return Promise.all([
-        import('@toast-ui/editor/dist/i18n/ar'),
-        import('@toast-ui/editor/dist/i18n/cs-cz'),
-        import('@toast-ui/editor/dist/i18n/de-de'),
-        import('@toast-ui/editor/dist/i18n/en-us'),
-        import('@toast-ui/editor/dist/i18n/es-es'),
-        import('@toast-ui/editor/dist/i18n/fi-fi'),
-        import('@toast-ui/editor/dist/i18n/fr-fr'),
-        import('@toast-ui/editor/dist/i18n/gl-es'),
-        import('@toast-ui/editor/dist/i18n/hr-hr'),
-        import('@toast-ui/editor/dist/i18n/it-it'),
-        import('@toast-ui/editor/dist/i18n/ja-jp'),
-        import('@toast-ui/editor/dist/i18n/ko-kr'),
-        import('@toast-ui/editor/dist/i18n/nb-no'),
-        import('@toast-ui/editor/dist/i18n/nl-nl'),
-        import('@toast-ui/editor/dist/i18n/pl-pl'),
-        import('@toast-ui/editor/dist/i18n/ru-ru'),
-        import('@toast-ui/editor/dist/i18n/sv-se'),
-        import('@toast-ui/editor/dist/i18n/tr-tr'),
-        import('@toast-ui/editor/dist/i18n/uk-ua'),
-        import('@toast-ui/editor/dist/i18n/zh-cn'),
-        import('@toast-ui/editor/dist/i18n/zh-tw')
-      ])
-    }
-
     const loadSyntaxHighlighting = async () => {
       const [plugin] = await Promise.all([
         import(
@@ -98,7 +72,7 @@ export default defineComponent({
         codeSyntaxHighlight = await loadSyntaxHighlighting()
 
         if (!props.isReadOnly) {
-          await loadTranslations()
+          await import('./l18n')
         }
       }
 
