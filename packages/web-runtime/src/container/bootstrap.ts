@@ -85,11 +85,17 @@ const getEmbedConfigFromQuery = (
     config.enabled = getQueryParam('embed') === 'true'
   }
 
-  // Can enable location picker in embed mode
+  // Can enable location picker or file picker in embed mode
   const embedTarget = getQueryParam('embed-target')
 
   if (embedTarget) {
     config.target = embedTarget
+  }
+
+  const embedExtensions = getQueryParam('embed-extensions')
+
+  if (embedExtensions) {
+    config.extensions = embedExtensions.split(',')
   }
 
   const delegateAuthentication = getQueryParam('embed-delegate-authentication')

@@ -37,7 +37,7 @@
     @sort="sort"
     @update:model-value="$emit('update:modelValue', $event)"
   >
-    <template v-if="!isLocationPicker" #selectHeader>
+    <template v-if="!isLocationPicker && !isFilePicker" #selectHeader>
       <div class="resource-table-select-all">
         <oc-checkbox
           id="resource-table-select-all"
@@ -49,7 +49,7 @@
         />
       </div>
     </template>
-    <template v-if="!isLocationPicker" #select="{ item }">
+    <template v-if="!isLocationPicker && !isFilePicker" #select="{ item }">
       <oc-checkbox
         :id="`resource-table-select-${resourceDomSelector(item)}`"
         :label="getResourceCheckboxLabel(item)"
@@ -505,7 +505,12 @@ export default defineComponent({
     const router = useRouter()
     const capabilityStore = useCapabilityStore()
     const { getMatchingSpace } = useGetMatchingSpace()
-    const { isLocationPicker, isEnabled: isEmbedModeEnabled } = useEmbedMode()
+    const {
+      isLocationPicker,
+      isFilePicker,
+      isEnabled: isEmbedModeEnabled,
+      extensions: embedModeExtensions
+    } = useEmbedMode()
 
     const configStore = useConfigStore()
     const { options: configOptions } = storeToRefs(configStore)
@@ -535,6 +540,14 @@ export default defineComponent({
     const getTagToolTip = (text: string) => (text.length > 7 ? text : '')
 
     const isResourceDisabled = (resource: Resource) => {
+      if (
+        unref(isEmbedModeEnabled) &&
+        unref(embedModeExtensions)?.length &&
+        !unref(embedModeExtensions).includes(resource.extension) &&
+        !resource.isFolder
+      ) {
+        return true
+      }
       return resource.processing === true
     }
 
@@ -574,6 +587,7 @@ export default defineComponent({
         space: ref(props.space),
         targetRouteCallback: computed(() => props.targetRouteCallback)
       }),
+      isFilePicker,
       isLocationPicker,
       isEmbedModeEnabled,
       toggleSelection,

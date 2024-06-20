@@ -62,6 +62,7 @@
         >
           <template #selection>
             <oc-checkbox
+              v-if="!isLocationPicker && !isFilePicker"
               :label="getResourceCheckboxLabel(resource)"
               :hide-label="true"
               size="large"
@@ -220,7 +221,7 @@ export default defineComponent({
     const { $gettext } = useGettext()
     const resourcesStore = useResourcesStore()
     const { emit } = context
-    const { isEnabled: isEmbedModeEnabled } = useEmbedMode()
+    const { isEnabled: isEmbedModeEnabled, isLocationPicker, isFilePicker } = useEmbedMode()
     const viewSizeMax = useViewSizeMax()
     const viewSizeCurrent = computed(() => {
       return Math.min(unref(viewSizeMax), props.viewSize)
@@ -522,7 +523,9 @@ export default defineComponent({
       fileDropped,
       setDropStyling,
       ghostTilesCount,
-      getIndicators
+      getIndicators,
+      isFilePicker,
+      isLocationPicker
     }
   },
   data() {

@@ -87,7 +87,8 @@ const OptionsConfigSchema = z.object({
       target: z.string().optional(),
       messagesOrigin: z.string().optional(),
       delegateAuthentication: z.boolean().optional(),
-      delegateAuthenticationOrigin: z.string().optional()
+      delegateAuthenticationOrigin: z.string().optional(),
+      extensions: z.array(z.string()).optional()
     })
     .optional(),
   feedbackLink: z

@@ -51,6 +51,30 @@ describe('useEmbedMode', () => {
     })
   })
 
+  describe('isFilePicker', () => {
+    it('when target is not file should return false', () => {
+      getComposableWrapper(
+        () => {
+          const { isFilePicker } = useEmbedMode()
+
+          expect(unref(isFilePicker)).toStrictEqual(false)
+        },
+        getWrapperOptions({ target: 'resources' })
+      )
+    })
+
+    it('when target is file should return true', () => {
+      getComposableWrapper(
+        () => {
+          const { isFilePicker } = useEmbedMode()
+
+          expect(unref(isFilePicker)).toStrictEqual(true)
+        },
+        getWrapperOptions({ target: 'file' })
+      )
+    })
+  })
+
   describe('messagesTargetOrigin', () => {
     it('when messagesOrigin is set should return it', () => {
       getComposableWrapper(
