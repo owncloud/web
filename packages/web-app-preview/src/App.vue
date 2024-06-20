@@ -1,123 +1,100 @@
 <template>
-  <app-banner :file-id="fileId"></app-banner>
-  <main
-    id="preview"
+  <div v-if="loading" class="oc-width-1-1">
+    <div class="oc-position-center">
+      <oc-spinner :aria-label="$gettext('Loading media file')" size="xlarge" />
+    </div>
+  </div>
+  <oc-icon
+    v-else-if="isFileContentError"
+    name="file-damage"
+    variation="danger"
+    size="xlarge"
+    class="oc-position-center"
+    :accessible-label="$gettext('Failed to load media file')"
+  />
+  <div
+    v-else
     ref="preview"
-    class="oc-width-1-1"
+    class="oc-flex oc-width-1-1 oc-height-1-1"
     tabindex="-1"
     @keydown.left="prev"
     @keydown.right="next"
-    @keydown.esc="closeApp"
   >
-    <h1 class="oc-invisible-sr" v-text="pageTitle" />
-    <app-top-bar
-      v-if="!isFileContentError"
-      :resource="activeFilteredFile"
-      :main-actions="fileActions"
-      @close="closeApp"
-    />
-
-    <div class="oc-flex oc-width-1-1 oc-height-1-1">
-      <div
-        v-if="isFolderLoading || isFileContentLoading"
-        class="oc-width-1-1"
-        :class="{ 'preview-sidebar-open': isSideBarOpen }"
-      >
-        <div class="oc-position-center">
-          <oc-spinner :aria-label="$gettext('Loading media file')" size="xlarge" />
-        </div>
+    <div class="stage" :class="{ lightbox: isFullScreenModeActivated }">
+      <div v-show="activeMediaFileCached" class="stage_media">
+        <media-image
+          v-if="activeMediaFileCached.isImage"
+          :file="activeMediaFileCached"
+          :current-image-rotation="currentImageRotation"
+          :current-image-zoom="currentImageZoom"
+          :current-image-position-x="currentImagePositionX"
+          :current-image-position-y="currentImagePositionY"
+          @pan-zoom-change="onPanZoomChanged"
+        />
+        <media-video
+          v-else-if="activeMediaFileCached.isVideo"
+          :file="activeMediaFileCached"
+          :is-auto-play-enabled="isAutoPlayEnabled"
+        />
+        <media-audio
+          v-else-if="activeMediaFileCached.isAudio"
+          :file="activeMediaFileCached"
+          :resource="activeFilteredFile"
+          :is-auto-play-enabled="isAutoPlayEnabled"
+        />
       </div>
-      <oc-icon
-        v-else-if="isFileContentError"
-        name="file-damage"
-        variation="danger"
-        size="xlarge"
-        class="oc-position-center"
-        :class="{ 'preview-sidebar-open': isSideBarOpen }"
-        :accessible-label="$gettext('Failed to load media file')"
+      <media-controls
+        class="stage_controls"
+        :files="filteredFiles"
+        :active-index="activeIndex"
+        :is-full-screen-mode-activated="isFullScreenModeActivated"
+        :is-folder-loading="isFolderLoading"
+        :is-image="activeMediaFileCached?.isImage"
+        :current-image-rotation="currentImageRotation"
+        :current-image-zoom="currentImageZoom"
+        @set-rotation="currentImageRotation = $event"
+        @set-zoom="currentImageZoom = $event"
+        @reset-image="resetImage"
+        @toggle-full-screen="toggleFullscreenMode"
+        @toggle-previous="prev"
+        @toggle-next="next"
       />
-      <div
-        v-else
-        class="oc-flex oc-width-1-1 oc-height-1-1"
-        :class="{ 'preview-sidebar-open': isSideBarOpen }"
-      >
-        <div class="stage" :class="{ lightbox: isFullScreenModeActivated }">
-          <div v-show="activeMediaFileCached" class="stage_media">
-            <media-image
-              v-if="activeMediaFileCached.isImage"
-              :file="activeMediaFileCached"
-              :current-image-rotation="currentImageRotation"
-              :current-image-zoom="currentImageZoom"
-              :current-image-position-x="currentImagePositionX"
-              :current-image-position-y="currentImagePositionY"
-              @pan-zoom-change="onPanZoomChanged"
-            />
-            <media-video
-              v-else-if="activeMediaFileCached.isVideo"
-              :file="activeMediaFileCached"
-              :is-auto-play-enabled="isAutoPlayEnabled"
-            />
-            <media-audio
-              v-else-if="activeMediaFileCached.isAudio"
-              :file="activeMediaFileCached"
-              :resource="activeFilteredFile"
-              :is-auto-play-enabled="isAutoPlayEnabled"
-            />
-          </div>
-          <media-controls
-            class="stage_controls"
-            :files="filteredFiles"
-            :active-index="activeIndex"
-            :is-full-screen-mode-activated="isFullScreenModeActivated"
-            :is-folder-loading="isFolderLoading"
-            :is-image="activeMediaFileCached?.isImage"
-            :current-image-rotation="currentImageRotation"
-            :current-image-zoom="currentImageZoom"
-            @set-rotation="currentImageRotation = $event"
-            @set-zoom="currentImageZoom = $event"
-            @reset-image="resetImage"
-            @toggle-full-screen="toggleFullscreenMode"
-            @toggle-previous="prev"
-            @toggle-next="next"
-          />
-        </div>
-      </div>
-      <file-side-bar :is-open="isSideBarOpen" :active-panel="sideBarActivePanel" :space="space" />
     </div>
-  </main>
+  </div>
 </template>
 <script lang="ts">
-import { computed, defineComponent, ref, Ref, unref } from 'vue'
+import {
+  computed,
+  defineComponent,
+  ref,
+  Ref,
+  unref,
+  PropType,
+  nextTick,
+  getCurrentInstance,
+  watch
+} from 'vue'
 import { RouteLocationRaw } from 'vue-router'
 import { Resource } from '@ownclouders/web-client'
 import {
-  AppTopBar,
-  FileSideBar,
+  AppFileHandlingResult,
+  AppFolderHandlingResult,
+  FileContext,
   ProcessorType,
   SortDir,
   useAppsStore,
-  useSelectedResources,
-  useSideBar
-} from '@ownclouders/web-pkg'
-import {
   queryItemAsString,
   sortHelper,
-  useAppDefaults,
   useRoute,
   useRouteQuery,
   useRouter
 } from '@ownclouders/web-pkg'
-import { Action, ActionOptions } from '@ownclouders/web-pkg'
-import { useDownloadFile } from '@ownclouders/web-pkg'
 import { createFileRouteOptions } from '@ownclouders/web-pkg'
 import MediaControls from './components/MediaControls.vue'
 import MediaAudio from './components/Sources/MediaAudio.vue'
 import MediaImage from './components/Sources/MediaImage.vue'
 import MediaVideo from './components/Sources/MediaVideo.vue'
 import { CachedFile } from './helpers/types'
-import { AppBanner } from '@ownclouders/web-pkg'
-import { watch } from 'vue'
-import { getCurrentInstance } from 'vue'
 import { getMimeTypes } from './mimeTypes'
 import { PanzoomEventDetail } from '@panzoom/panzoom'
 
@@ -126,35 +103,46 @@ export const appId = 'preview'
 export default defineComponent({
   name: 'Preview',
   components: {
-    AppBanner,
-    AppTopBar,
-    FileSideBar,
     MediaControls,
     MediaAudio,
     MediaImage,
     MediaVideo
   },
-  setup() {
+  props: {
+    activeFiles: { type: Object as PropType<Resource[]>, required: true },
+    currentFileContext: { type: Object as PropType<FileContext>, required: true },
+    loadFolderForFileContext: {
+      type: Function as PropType<AppFolderHandlingResult['loadFolderForFileContext']>,
+      required: true
+    },
+    getUrlForResource: {
+      type: Function as PropType<AppFileHandlingResult['getUrlForResource']>,
+      required: true
+    },
+    revokeUrl: { type: Function as PropType<AppFileHandlingResult['revokeUrl']>, required: true },
+    isFolderLoading: { type: Boolean, required: true }
+  },
+  emits: ['update:resource'],
+  setup(props, { emit }) {
     const router = useRouter()
     const route = useRoute()
     const appsStore = useAppsStore()
-    const appDefaults = useAppDefaults({ applicationId: 'preview' })
     const contextRouteQuery = useRouteQuery('contextRouteQuery') as unknown as Ref<
       Record<string, string>
     >
-    const { downloadFile } = useDownloadFile()
 
-    const activeIndex = ref()
+    const activeIndex = ref<number>()
     const cachedFiles = ref<CachedFile[]>([])
     const folderLoaded = ref(false)
     const isFileContentError = ref(false)
     const isAutoPlayEnabled = ref(true)
-    const toPreloadImageIds = ref([])
+    const toPreloadImageIds = ref<string[]>([])
     const currentImageZoom = ref(1)
     const currentImageRotation = ref(0)
     const currentImagePositionX = ref(0)
     const currentImagePositionY = ref(0)
     const preloadImageCount = ref(10)
+    const preview = ref<HTMLElement>()
 
     const mimeTypes = computed(() => {
       return getMimeTypes(appsStore.externalAppConfig[appId]?.mimeTypes)
@@ -172,11 +160,6 @@ export default defineComponent({
       }
       return (unref(contextRouteQuery)['sort-dir'] as SortDir) ?? SortDir.Asc
     })
-
-    const { activeFiles, currentFileContext, closed } = appDefaults
-
-    const fileId = computed(() => unref(unref(currentFileContext).itemId))
-    const space = computed(() => unref(unref(currentFileContext).space))
 
     const isFullScreenModeActivated = ref(false)
     const toggleFullscreenMode = () => {
@@ -205,12 +188,12 @@ export default defineComponent({
       currentImagePositionY.value = 0
     }
 
-    const filteredFiles = computed<Resource[]>(() => {
-      if (!unref(activeFiles)) {
+    const filteredFiles = computed(() => {
+      if (!props.activeFiles) {
         return []
       }
 
-      const files = unref(activeFiles).filter((file) => {
+      const files = props.activeFiles.filter((file) => {
         return unref(mimeTypes).includes(file.mimeType?.toLowerCase())
       })
 
@@ -226,12 +209,12 @@ export default defineComponent({
     const updateLocalHistory = () => {
       // this is a rare edge case when browsing quickly through a lot of files
       // we workaround context being null, when useDriveResolver is in loading state
-      if (!unref(currentFileContext)) {
+      if (!props.currentFileContext) {
         return
       }
 
       const { params, query } = createFileRouteOptions(
-        unref(unref(currentFileContext).space),
+        unref(props.currentFileContext.space),
         unref(activeFilteredFile)
       )
       router.replace({
@@ -242,65 +225,51 @@ export default defineComponent({
     }
     const isFileContentLoading = ref(true)
 
-    const triggerActiveFileDownload = () => {
-      if (unref(isFileContentLoading)) {
-        return
-      }
-      downloadFile(unref(space), unref(activeFilteredFile))
-    }
-
-    const fileActions: Action<ActionOptions>[] = [
-      {
-        name: 'download-file',
-        isVisible: () => true,
-        componentType: 'button',
-        icon: 'file-download',
-        id: 'preview-download',
-        label: () => 'Download',
-        handler: () => {
-          triggerActiveFileDownload()
-        }
-      }
-    ]
-
     const instance = getCurrentInstance()
     watch(
-      currentFileContext,
+      props.currentFileContext,
       async () => {
-        if (!unref(currentFileContext) || unref(closed)) {
+        if (!props.currentFileContext) {
           return
         }
 
         if (!unref(folderLoaded)) {
-          await appDefaults.loadFolderForFileContext(unref(currentFileContext))
+          await props.loadFolderForFileContext(props.currentFileContext)
           folderLoaded.value = true
         }
 
-        ;(instance.proxy as any).setActiveFile(unref(unref(currentFileContext).driveAliasAndItem))
+        ;(instance.proxy as any).setActiveFile(unref(props.currentFileContext.driveAliasAndItem))
       },
       { immediate: true }
     )
 
-    const { selectedResources } = useSelectedResources()
     watch(activeFilteredFile, (file) => {
-      selectedResources.value = [file]
+      emit('update:resource', file)
     })
 
+    const loading = computed(() => props.isFolderLoading || unref(isFileContentLoading))
+
+    watch(
+      loading,
+      async () => {
+        if (!unref(loading)) {
+          await nextTick()
+          unref(preview).focus()
+        }
+      },
+      { immediate: true }
+    )
+
     return {
-      ...useSideBar(),
-      ...appDefaults,
       activeFilteredFile,
       activeIndex,
       activeMediaFileCached,
       cachedFiles,
       filteredFiles,
-      fileActions,
       isFileContentLoading,
       isFullScreenModeActivated,
       toggleFullscreenMode,
       updateLocalHistory,
-      fileId,
-      space,
       resetImage,
       isFileContentError,
       isAutoPlayEnabled,
@@ -310,15 +279,12 @@ export default defineComponent({
       currentImagePositionX,
       currentImagePositionY,
       onPanZoomChanged,
-      preloadImageCount
+      preloadImageCount,
+      preview,
+      loading
     }
   },
   computed: {
-    pageTitle() {
-      return this.$gettext('Preview for %{currentMediumName}', {
-        currentMediumName: this.activeFilteredFile?.name
-      })
-    },
     thumbDimensions() {
       switch (true) {
         case window.innerWidth <= 1024:
@@ -364,7 +330,6 @@ export default defineComponent({
     // keep a local history for this component
     window.addEventListener('popstate', this.handleLocalHistoryEvent)
     document.addEventListener('fullscreenchange', this.handleFullScreenChangeEvent)
-    ;(this.$refs.preview as HTMLElement).focus()
   },
 
   beforeUnmount() {
@@ -413,7 +378,7 @@ export default defineComponent({
 
       try {
         const loadRawFile = !this.isActiveFileTypeImage
-        let mediaUrl
+        let mediaUrl: string
         if (loadRawFile) {
           mediaUrl = await this.getUrlForResource(
             unref(this.currentFileContext.space),
@@ -558,12 +523,6 @@ export default defineComponent({
   &_controls {
     height: auto;
     margin: 10px auto;
-  }
-}
-
-@media (max-width: $oc-breakpoint-medium-default) {
-  .preview-sidebar-open {
-    display: none;
   }
 }
 </style>

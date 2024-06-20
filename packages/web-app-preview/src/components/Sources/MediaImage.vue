@@ -49,6 +49,7 @@ export default defineComponent({
 
     const initPanzoom = async () => {
       if (unref(panzoom)) {
+        await nextTick()
         ;(unref(img) as unknown as HTMLElement).removeEventListener(
           'panzoomchange',
           onPanZoomChange

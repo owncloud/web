@@ -1,4 +1,4 @@
-import { defineWebApplication } from '@ownclouders/web-pkg'
+import { AppWrapperRoute, defineWebApplication } from '@ownclouders/web-pkg'
 import translations from '../l10n/translations.json'
 import * as app from './App.vue'
 import { useGettext } from 'vue3-gettext'
@@ -13,7 +13,12 @@ export default defineWebApplication({
     const routes = [
       {
         path: '/:driveAliasAndItem(.*)?',
-        component: App,
+        component: AppWrapperRoute(App, {
+          applicationId: appId,
+          urlForResourceOptions: {
+            disposition: 'inline'
+          }
+        }),
         name: 'media',
         meta: {
           authContext: 'hybrid',
