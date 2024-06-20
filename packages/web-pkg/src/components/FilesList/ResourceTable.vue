@@ -542,7 +542,7 @@ export default defineComponent({
     const isResourceDisabled = (resource: Resource) => {
       if (
         unref(isEmbedModeEnabled) &&
-        unref(embedModeExtensions).length &&
+        unref(embedModeExtensions)?.length &&
         !unref(embedModeExtensions).includes(resource.extension) &&
         !resource.isFolder
       ) {
