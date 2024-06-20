@@ -173,7 +173,7 @@ Feature: server sent events
       | name      | id        |
       | Marketing | marketing |
     And "Alice" adds the following members to the space "Marketing" using API
-      | user  | role     | shareType | 
+      | user  | role     | shareType |
       | Brian | Can edit | user      |
     And "Alice" creates the following folder in space "Marketing" using API
       | name         |
@@ -181,7 +181,7 @@ Feature: server sent events
     When "Alice" navigates to the project space "marketing"
     And "Brian" logs in
     And "Brian" navigates to the project space "marketing"
-   
+
     # postprocessing-finished - upload file
     When "Brian" uploads the following resources
       | resource   |

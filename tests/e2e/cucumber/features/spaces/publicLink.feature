@@ -31,7 +31,7 @@ Feature: spaces public link
       | resource       |
       | simple.pdf     |
       | testavatar.jpg |
-    And "Alice" creates a public link for the space with password "%public%" using the sidebar panel
+    And "Alice" creates a public link for the space "team" with password "%public%" using the sidebar panel
     And "Alice" renames the most recently created public link of space to "spaceLink"
     And "Alice" creates a public link of following resource using the sidebar panel
       | resource    | password |
@@ -131,7 +131,7 @@ Feature: spaces public link
       | name        | content   |
       | example.txt | some text |
     And "Alice" navigates to the project space "team.1"
-    And "Alice" creates a public link for the space with password "%public%" using the sidebar panel
+    And "Alice" creates a public link for the space "team" with password "%public%" using the sidebar panel
     And "Alice" renames the most recently created public link of space to "spaceLink"
     And "Alice" edits the public link named "spaceLink" of the space changing role to "Can edit"
     And "Alice" logs out

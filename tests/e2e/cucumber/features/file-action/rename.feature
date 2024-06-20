@@ -18,10 +18,10 @@ Feature: rename
     And "Alice" shares the following resource using API
       | resource | recipient | type | role     |
       | folder   | Brian     | user | Can edit |
-    And "Alice" opens the "files" app
-    And "Alice" creates a public link of following resource using the sidebar panel
+    And "Alice" creates a public link of following resource using API
       | resource | role     | password |
       | folder   | Can edit | %public% |
+    And "Alice" opens the "files" app
     And "Brian" logs in
     And "Brian" navigates to the shared with me page
     And "Brian" opens folder "folder"

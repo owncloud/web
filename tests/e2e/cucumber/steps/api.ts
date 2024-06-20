@@ -1,6 +1,6 @@
 import { Given, DataTable } from '@cucumber/cucumber'
 import { World } from '../environment'
-import { api } from '../../support'
+import { api, objects } from '../../support'
 import fs from 'fs'
 import { Space } from '../../support/types'
 
@@ -284,5 +284,36 @@ Given(
     for (const info of stepTable.hashes()) {
       await api.dav.addTagToResource({ user, resource: info.resource, tags: info.tags })
     }
+  }
+)
+
+Given(
+  '{string} creates a public link of following resource using API',
+  async function (this: World, stepUser: string, stepTable: DataTable) {
+    const { page } = this.actorsEnvironment.getActor({ key: stepUser })
+    const user = this.usersEnvironment.getUser({ key: stepUser })
+    const linkObject = new objects.applicationFiles.Link({ page })
+
+    for (const info of stepTable.hashes()) {
+      await api.share.createLinkShare({
+        user,
+        path: info.resource,
+        password: info.password === '%public%' ? linkObject.securePassword : info.password,
+        name: 'Link',
+        role: info.role,
+        spaceName: info.space
+      })
+    }
+  }
+)
+
+Given(
+  '{string} creates a public link for the space {string} with password {string} using API',
+  async function (this: World, stepUser: string, space: string, password: string): Promise<void> {
+    const { page } = this.actorsEnvironment.getActor({ key: stepUser })
+    const linkObject = new objects.applicationFiles.Link({ page })
+    password = password === '%public%' ? linkObject.securePassword : password
+    const user = this.usersEnvironment.getUser({ key: stepUser })
+    await api.share.createSpaceLinkShare({ user, spaceName: space, password, name: 'Link' })
   }
 )

@@ -21,8 +21,13 @@ When(
 )
 
 When(
-  '{string} creates a public link for the space with password {string} using the sidebar panel',
-  async function (this: World, stepUser: string, password: string): Promise<void> {
+  '{string} creates a public link for the space {string} with password {string} using the sidebar panel',
+  async function (
+    this: World,
+    stepUser: string,
+    spaceName: string,
+    password: string
+  ): Promise<void> {
     const { page } = this.actorsEnvironment.getActor({ key: stepUser })
     const spaceObject = new objects.applicationFiles.Spaces({ page })
     const linkObject = new objects.applicationFiles.Link({ page })

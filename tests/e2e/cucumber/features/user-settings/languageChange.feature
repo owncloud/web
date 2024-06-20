@@ -38,10 +38,10 @@ Feature: language settings
       | localFile                | to        |
       | filesForUpload/lorem.txt | lorem.txt |
 
-    And "Alice" opens the "files" app
-    And "Alice" creates a public link of following resource using the sidebar panel
+    And "Alice" creates a public link of following resource using API
       | resource     | password |
       | folderPublic | %public% |
+    And "Alice" opens the "files" app
     And "Alice" logs out
     When "Anonymous" opens the public link "Link"
     And "Anonymous" unlocks the public link with password "%public%"
