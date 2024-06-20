@@ -17,10 +17,13 @@ import { SideBarEventTopics } from '../../../../src/composables/sideBar'
 import { mock } from 'vitest-mock-extended'
 import { computed } from 'vue'
 import { Identity } from '@ownclouders/web-client/graph/generated'
+import { describe } from 'vitest'
 
-const mockUseEmbedMode = vi
-  .fn()
-  .mockReturnValue({ isLocationPicker: computed(() => false), isEnabled: computed(() => false) })
+const mockUseEmbedMode = vi.fn().mockReturnValue({
+  isLocationPicker: computed(() => false),
+  isFilePicker: computed(() => false),
+  isEnabled: computed(() => false)
+})
 
 vi.mock('../../../../src/helpers/contextMenuDropdown')
 vi.mock('../../../../src/composables/embedMode', () => ({
@@ -320,6 +323,31 @@ describe('ResourceTable', () => {
       })
     })
 
+    describe('embed mode extensions', () => {
+      it('does not set folders disabled ', async () => {
+        mockUseEmbedMode.mockReturnValue({
+          isEnabled: computed(() => true),
+          extensions: computed(() => ['txt'])
+        })
+
+        const { wrapper } = getMountedWrapper()
+        const trFolder = await wrapper.find('.oc-tbody-tr-documents')
+        expect(trFolder.classes().includes('oc-table-disabled')).toBeFalsy()
+      })
+      it('sets files disabled if does not occur in it', async () => {
+        mockUseEmbedMode.mockReturnValue({
+          isEnabled: computed(() => true),
+          extensions: computed(() => ['txt'])
+        })
+
+        const { wrapper } = getMountedWrapper()
+        const trTxt = await wrapper.find('.oc-tbody-tr-notes')
+        const trJpg = await wrapper.find('.oc-tbody-tr-forest')
+        expect(trTxt.classes().includes('oc-table-disabled')).toBeFalsy()
+        expect(trJpg.classes().includes('oc-table-disabled')).toBeTruthy()
+      })
+    })
+
     describe('embed mode location target', () => {
       it('should not hide checkboxes when embed mode does not have location as target', () => {
         mockUseEmbedMode.mockReturnValue({
@@ -331,10 +359,30 @@ describe('ResourceTable', () => {
         expect(wrapper.find('.resource-table-select-all').exists()).toBe(true)
         expect(wrapper.find('.resource-table-select-all .oc-checkbox').exists()).toBe(true)
       })
+      it('should not hide checkboxes when embed mode does not have file as target', () => {
+        mockUseEmbedMode.mockReturnValue({
+          isFilePicker: computed(() => false)
+        })
+
+        const { wrapper } = getMountedWrapper()
+
+        expect(wrapper.find('.resource-table-select-all').exists()).toBe(true)
+        expect(wrapper.find('.resource-table-select-all .oc-checkbox').exists()).toBe(true)
+      })
 
       it('should hide checkboxes when embed mode has location as target', () => {
         mockUseEmbedMode.mockReturnValue({
           isLocationPicker: computed(() => true)
+        })
+
+        const { wrapper } = getMountedWrapper()
+
+        expect(wrapper.find('.resource-table-select-all').exists()).toBe(false)
+        expect(wrapper.find('.resource-table-select-all .oc-checkbox').exists()).toBe(false)
+      })
+      it('should hide checkboxes when embed mode has file as target', () => {
+        mockUseEmbedMode.mockReturnValue({
+          isFilePicker: computed(() => true)
         })
 
         const { wrapper } = getMountedWrapper()
