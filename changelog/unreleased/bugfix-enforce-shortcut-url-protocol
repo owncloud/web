@@ -1,0 +1,6 @@
+Bugfix: Enforce shortcut URL protocol
+
+We've fixed a bug where the protocol in shortcut URLs was not enforced. Now, the shortcut URL always starts `https://` if no protocol is provided by the user.
+
+https://github.com/owncloud/web/issues/11063
+https://github.com/owncloud/web/pull/11076
