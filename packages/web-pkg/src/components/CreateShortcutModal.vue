@@ -178,14 +178,16 @@ export default defineComponent({
     const isDropOpen = ref(false)
     let markInstance: Mark = null
 
-    const dropItemUrl = computed(() => {
-      let url = unref(inputUrl).trim()
-
+    const getInputUrlWithProtocol = (input: string) => {
+      let url = input.trim()
       if (isMaybeUrl(url)) {
         return url
       }
-
       return `https://${url}`
+    }
+
+    const dropItemUrl = computed(() => {
+      return getInputUrlWithProtocol(unref(inputUrl))
     })
 
     const fileAlreadyExists = computed(
@@ -360,7 +362,9 @@ export default defineComponent({
     const onConfirm = async () => {
       try {
         // Omit possible xss code
-        const sanitizedUrl = DOMPurify.sanitize(unref(inputUrl), { USE_PROFILES: { html: true } })
+        const sanitizedUrl = DOMPurify.sanitize(getInputUrlWithProtocol(unref(inputUrl)), {
+          USE_PROFILES: { html: true }
+        })
 
         const content = `[InternetShortcut]\nURL=${sanitizedUrl}`
         const path = urlJoin(unref(currentFolder).path, `${unref(inputFilename)}.url`)
