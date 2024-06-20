@@ -269,7 +269,7 @@ services:
       - traefik
 
   wopiserver:
-    image: cs3org/wopiserver:v10.3.0
+    image: cs3org/wopiserver:v10.5.1
     environment:
       WOPISERVER_INSECURE: true
       WOPISECRET: ${WOPI_JWT_SECRET:-LoremIpsum567}
