@@ -10,6 +10,14 @@ export const useEmbedMode = () => {
     return configStore.options.embed?.target === 'location'
   })
 
+  const isFilePicker = computed(() => {
+    return configStore.options.embed?.target === 'file'
+  })
+
+  const extensions = computed(() => {
+    return configStore.options.embed?.extensions
+  })
+
   const messagesTargetOrigin = computed(() => configStore.options.embed?.messagesOrigin)
 
   const isDelegatingAuthentication = computed(
@@ -41,8 +49,10 @@ export const useEmbedMode = () => {
   return {
     isEnabled,
     isLocationPicker,
+    isFilePicker,
     messagesTargetOrigin,
     isDelegatingAuthentication,
+    extensions,
     postMessage,
     verifyDelegatedAuthenticationOrigin
   }
