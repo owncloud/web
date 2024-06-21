@@ -1,9 +1,4 @@
-import {
-  DesignSystem as designSystem,
-  pages,
-  loadTranslations,
-  supportedLanguages
-} from './defaults'
+import { loadDesignSystem, pages, loadTranslations, supportedLanguages } from './defaults'
 import { router } from './router'
 import { PortalTarget } from '@ownclouders/web-pkg'
 import { createHead } from '@vueuse/head'
@@ -31,7 +26,8 @@ import {
   announcePasswordPolicyService,
   registerSSEEventListeners,
   setViewOptions,
-  announceGettext
+  announceGettext,
+  announceArchiverService
 } from './container/bootstrap'
 import { applicationStore } from './container/store'
 import {
@@ -41,18 +37,20 @@ import {
   PublicSpaceResource
 } from '@ownclouders/web-client'
 import { loadCustomTranslations } from 'web-runtime/src/helpers/customTranslations'
-import { computed, createApp, watch } from 'vue'
+import { createApp, watch } from 'vue'
 import PortalVue, { createWormhole } from 'portal-vue'
 import { createPinia } from 'pinia'
 import Avatar from './components/Avatar.vue'
 import focusMixin from './mixins/focusMixin'
-import { ArchiverService } from '@ownclouders/web-pkg'
 import { UnifiedRoleDefinition } from '@ownclouders/web-client/graph/generated'
 import { extensionPoints } from './extensionPoints'
+import { isSilentRedirectRoute } from './helpers/silentRedirect'
 
 export const bootstrapApp = async (configurationPath: string, appsReadyCallback: () => void) => {
+  const isSilentRedirect = isSilentRedirectRoute()
+
   const pinia = createPinia()
-  const app = createApp(pages.success)
+  const app = createApp(isSilentRedirect ? pages.tokenRenewal : pages.success)
   app.use(pinia)
 
   const {
@@ -74,65 +72,12 @@ export const bootstrapApp = async (configurationPath: string, appsReadyCallback:
   app.provide('$router', router)
 
   await announceConfiguration({ path: configurationPath, configStore })
-  startSentry(configStore, app)
 
   app.use(abilitiesPlugin, createMongoAbility([]), { useGlobalProperties: true })
 
   const gettext = announceGettext({ app, availableLanguages: supportedLanguages })
 
-  announceUppyService({ app })
   announceClientService({ app, configStore, authStore })
-
-  // TODO: move to announceArchiverService function
-  app.config.globalProperties.$archiverService = new ArchiverService(
-    app.config.globalProperties.$clientService,
-    userStore,
-    configStore.serverUrl,
-    computed(
-      () =>
-        capabilityStore.filesArchivers || [
-          {
-            enabled: true,
-            version: '1.0.0',
-            formats: ['tar', 'zip'],
-            archiver_url: `${configStore.serverUrl}index.php/apps/files/ajax/download.php`
-          }
-        ]
-    )
-  )
-  app.provide('$archiverService', app.config.globalProperties.$archiverService)
-  announceLoadingService({ app })
-  announcePreviewService({
-    app,
-    configStore,
-    userStore,
-    authStore,
-    capabilityStore
-  })
-  announcePasswordPolicyService({ app })
-  await announceClient(configStore)
-
-  app.config.globalProperties.$wormhole = createWormhole()
-  app.use(PortalVue, {
-    wormhole: app.config.globalProperties.$wormhole,
-    // do not register portal-target component so we can register our own wrapper
-    portalTargetName: false
-  })
-  app.component('PortalTarget', PortalTarget)
-
-  const applicationsPromise = initializeApplications({ app, configStore, router })
-  const translationsPromise = loadTranslations()
-  const customTranslationsPromise = loadCustomTranslations({ configStore })
-  const themePromise = announceTheme({ app, designSystem, configStore })
-  const [coreTranslations, customTranslations] = await Promise.all([
-    translationsPromise,
-    customTranslationsPromise,
-    applicationsPromise,
-    themePromise
-  ])
-
-  announceTranslations({ appsStore, gettext, coreTranslations, customTranslations })
-
   announceAuthService({
     app,
     configStore,
@@ -142,9 +87,49 @@ export const bootstrapApp = async (configurationPath: string, appsReadyCallback:
     capabilityStore,
     webWorkersStore
   })
-  announceCustomStyles({ configStore })
-  announceCustomScripts({ configStore })
-  announceDefaults({ appsStore, router, extensionRegistry, configStore })
+
+  if (!isSilentRedirect) {
+    const designSystem = await loadDesignSystem()
+
+    announceUppyService({ app })
+    startSentry(configStore, app)
+    announceArchiverService({ app, configStore, userStore, capabilityStore })
+    announceLoadingService({ app })
+    announcePreviewService({
+      app,
+      configStore,
+      userStore,
+      authStore,
+      capabilityStore
+    })
+    announcePasswordPolicyService({ app })
+    await announceClient(configStore)
+
+    app.config.globalProperties.$wormhole = createWormhole()
+    app.use(PortalVue, {
+      wormhole: app.config.globalProperties.$wormhole,
+      // do not register portal-target component so we can register our own wrapper
+      portalTargetName: false
+    })
+    app.component('PortalTarget', PortalTarget)
+
+    const applicationsPromise = initializeApplications({ app, configStore, router })
+    const translationsPromise = loadTranslations()
+    const customTranslationsPromise = loadCustomTranslations({ configStore })
+    const themePromise = announceTheme({ app, designSystem, configStore })
+    const [coreTranslations, customTranslations] = await Promise.all([
+      translationsPromise,
+      customTranslationsPromise,
+      applicationsPromise,
+      themePromise
+    ])
+
+    announceTranslations({ appsStore, gettext, coreTranslations, customTranslations })
+
+    announceCustomStyles({ configStore })
+    announceCustomScripts({ configStore })
+    announceDefaults({ appsStore, router, extensionRegistry, configStore })
+  }
 
   app.use(router)
   app.use(createHead())
@@ -153,6 +138,10 @@ export const bootstrapApp = async (configurationPath: string, appsReadyCallback:
   app.mixin(focusMixin)
 
   app.mount('#owncloud')
+
+  if (isSilentRedirect) {
+    return
+  }
 
   setViewOptions({ resourcesStore })
 
@@ -273,6 +262,7 @@ export const bootstrapErrorApp = async (err: Error): Promise<void> => {
   const { capabilityStore, configStore } = announcePiniaStores()
   announceVersions({ capabilityStore })
   const app = createApp(pages.failure)
+  const designSystem = await loadDesignSystem()
   await announceTheme({ app, designSystem, configStore })
   console.error(err)
   const translations = await loadTranslations()

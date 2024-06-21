@@ -1,7 +1,7 @@
 import { registerClient } from '../services/clientRegistration'
 import { buildApplication, NextApplication } from './application'
 import { RouteLocationRaw, Router, RouteRecordNormalized } from 'vue-router'
-import { App, watch } from 'vue'
+import { App, computed, watch } from 'vue'
 import { loadTheme } from '../helpers/theme'
 import { createGettext, GetTextOptions, Language, Translations } from 'vue3-gettext'
 import { getBackendVersion, getWebVersion } from './versions'
@@ -28,7 +28,8 @@ import {
   ResourcesStore,
   SpacesStore,
   MessageStore,
-  SharesStore
+  SharesStore,
+  ArchiverService
 } from '@ownclouders/web-pkg'
 import { authService } from '../services/auth'
 import {
@@ -75,6 +76,7 @@ import {
 } from './sse'
 import { useWebWorkersStore, WebWorkersStore } from '@ownclouders/web-pkg'
 import { loadAppTranslations } from '../helpers/language'
+import { urlJoin } from '@ownclouders/web-client'
 
 const getEmbedConfigFromQuery = (
   doesEmbedEnabledOptionExists: boolean
@@ -414,6 +416,37 @@ export const announceClientService = ({
   })
   app.config.globalProperties.$clientService = clientService
   app.provide('$clientService', clientService)
+}
+
+export const announceArchiverService = ({
+  app,
+  configStore,
+  userStore,
+  capabilityStore
+}: {
+  app: App
+  configStore: ConfigStore
+  userStore: UserStore
+  capabilityStore: CapabilityStore
+}): void => {
+  app.config.globalProperties.$archiverService = new ArchiverService(
+    app.config.globalProperties.$clientService,
+    userStore,
+    configStore.serverUrl,
+    computed(
+      () =>
+        capabilityStore.filesArchivers || [
+          {
+            enabled: true,
+            version: '1.0.0',
+            formats: ['tar', 'zip'],
+            archiver_url: urlJoin(configStore.serverUrl, 'index.php/apps/files/ajax/download.php')
+          }
+        ]
+    )
+  )
+
+  app.provide('$archiverService', app.config.globalProperties.$archiverService)
 }
 
 /**

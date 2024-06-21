@@ -1,0 +1,6 @@
+Enhancement: Reduce network load on token renewal
+
+We've reduced the network load on token renewal, resulting in better overall performance of the Web client and less token renewal failures on slow network connections.
+
+https://github.com/owncloud/web/pull/11077
+https://github.com/owncloud/web/issues/11069

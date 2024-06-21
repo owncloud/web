@@ -22,6 +22,7 @@ import { Ability } from '@ownclouders/web-client'
 import { Language } from 'vue3-gettext'
 import { PublicLinkType } from '@ownclouders/web-client'
 import { WebWorkersStore } from '@ownclouders/web-pkg'
+import { isSilentRedirectRoute } from '../../helpers/silentRedirect'
 
 export class AuthService implements AuthServiceInterface {
   private clientService: ClientService
@@ -109,7 +110,9 @@ export class AuthService implements AuthServiceInterface {
         accessTokenExpiryThreshold: this.accessTokenExpiryThreshold
       })
 
-      if (!this.tokenTimerWorker) {
+      // don't load worker in the silent redirect iframe
+      const isSilentRedirect = isSilentRedirectRoute()
+      if (!this.tokenTimerWorker && !isSilentRedirect) {
         const { options } = this.configStore
 
         if (!options.embed?.enabled || !options.embed?.delegateAuthentication) {

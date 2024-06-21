@@ -1,5 +1,4 @@
 import { getSizeClass } from './utils/sizeClasses'
-import './utils/webFontLoader'
 import { App } from 'vue'
 
 import * as components from './components'
@@ -20,6 +19,8 @@ export const applyCustomProp = (key: string, value: string | undefined) => {
 
 export default {
   install(app: App, options: any = {}) {
+    import('./utils/webFontLoader')
+
     const themeOptions = options.tokens
     initializeCustomProps(themeOptions?.breakpoints, 'breakpoint-')
     initializeCustomProps(themeOptions?.colorPalette, 'color-')
