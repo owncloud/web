@@ -47,6 +47,7 @@
       <oc-icon name="search" fill-type="line"></oc-icon>
     </oc-button>
     <oc-drop
+      v-if="showDrop"
       id="files-global-search-options"
       ref="optionsDropRef"
       mode="manual"
@@ -109,8 +110,7 @@ import {
   queryItemAsString,
   useAuthStore,
   useCapabilityStore,
-  useResourcesStore,
-  useEmbedMode
+  useResourcesStore
 } from '@ownclouders/web-pkg'
 import Mark from 'mark.js'
 import { storeToRefs } from 'pinia'
@@ -139,8 +139,6 @@ export default defineComponent({
 
     const resourcesStore = useResourcesStore()
     const { currentFolder } = storeToRefs(resourcesStore)
-
-    const { isEnabled: isEmbedEnabled } = useEmbedMode()
 
     const locationFilterId = ref(SearchLocationFilterConstants.allFiles)
     const optionsDropRef = ref(null)
@@ -242,7 +240,7 @@ export default defineComponent({
       }
 
       if (unref(optionsDrop)) {
-        unref(optionsDrop).hide()
+        unref(optionsDrop)?.hide()
       }
 
       if (unref(activePreviewIndex) === null) {
@@ -250,7 +248,7 @@ export default defineComponent({
       }
       if (unref(activePreviewIndex) !== null) {
         unref(optionsDrop)
-          .$el.querySelectorAll('.preview')
+          ?.$el.querySelectorAll('.preview')
           [unref(activePreviewIndex)].firstChild.click()
       }
     }
@@ -286,7 +284,7 @@ export default defineComponent({
       if (!unref(term)) {
         return
       }
-      unref(optionsDrop).show()
+      unref(optionsDrop)?.show()
       await search()
     }
 
@@ -294,9 +292,9 @@ export default defineComponent({
       restoreSearchFromRoute.value = false
       term.value = input
       if (!unref(term)) {
-        return unref(optionsDrop).hide()
+        return unref(optionsDrop)?.hide()
       }
-      return unref(optionsDrop).show()
+      return unref(optionsDrop)?.show()
     }
 
     const debouncedSearch = debounce(search, 500)
@@ -307,6 +305,12 @@ export default defineComponent({
         return
       }
       debouncedSearch()
+    })
+
+    const showDrop = computed(() => {
+      return unref(availableProviders).some(
+        (provider) => provider?.previewSearch?.available === true
+      )
     })
 
     return {
@@ -332,7 +336,7 @@ export default defineComponent({
       showPreview,
       updateTerm,
       getSearchResultLocation,
-      isEmbedEnabled
+      showDrop
     }
   },
 
@@ -354,12 +358,7 @@ export default defineComponent({
        * since we are not able to provide search in the public link yet.
        * Enable as soon this feature is available.
        */
-      return (
-        this.availableProviders.length &&
-        this.userContextReady &&
-        !this.publicLinkContextReady &&
-        !this.isEmbedEnabled
-      )
+      return this.availableProviders.length && this.userContextReady && !this.publicLinkContextReady
     },
     displayProviders() {
       /**
@@ -515,7 +514,7 @@ export default defineComponent({
       this.showCancelButton = false
     },
     hideOptionsDrop() {
-      this.optionsDrop.hide()
+      this.optionsDrop?.hide()
     }
   }
 })

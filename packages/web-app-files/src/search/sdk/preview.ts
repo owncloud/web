@@ -1,4 +1,10 @@
-import { SearchFunction, SearchPreview, SearchResult } from '@ownclouders/web-pkg'
+import {
+  CapabilityStore,
+  ConfigStore,
+  SearchFunction,
+  SearchPreview,
+  SearchResult
+} from '@ownclouders/web-pkg'
 import { Component, unref } from 'vue'
 import { Router } from 'vue-router'
 import { ResourcePreview } from '@ownclouders/web-pkg'
@@ -9,11 +15,13 @@ export default class Preview implements SearchPreview {
   public readonly component: Component
   private readonly router: Router
   private readonly searchFunction: SearchFunction
+  private readonly configStore: ConfigStore
 
-  constructor(router: Router, searchFunction: SearchFunction) {
+  constructor(router: Router, searchFunction: SearchFunction, configStore: ConfigStore) {
     this.component = ResourcePreview
     this.router = router
     this.searchFunction = searchFunction
+    this.configStore = configStore
   }
 
   public search(term: string): Promise<SearchResult> {
@@ -21,6 +29,9 @@ export default class Preview implements SearchPreview {
   }
 
   public get available(): boolean {
-    return unref(this.router.currentRoute).name !== 'search-provider-list'
+    return (
+      unref(this.router.currentRoute).name !== 'search-provider-list' &&
+      !this.configStore.options.embed?.enabled
+    )
   }
 }

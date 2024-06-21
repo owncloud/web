@@ -3,6 +3,7 @@ import List from './list'
 import { Router } from 'vue-router'
 import {
   CapabilityStore,
+  ConfigStore,
   SearchFunction,
   SearchList,
   SearchPreview,
@@ -19,11 +20,17 @@ export default class Provider implements SearchProvider {
   public readonly previewSearch: SearchPreview
   public readonly listSearch: SearchList
   private readonly capabilityStore: CapabilityStore
+  private readonly configStore: ConfigStore
 
-  constructor(capabilityStore: CapabilityStore, router: Router, searchFunction: SearchFunction) {
+  constructor(
+    capabilityStore: CapabilityStore,
+    router: Router,
+    searchFunction: SearchFunction,
+    configStore: ConfigStore
+  ) {
     this.id = 'files.sdk'
     this.displayName = $gettext('Files')
-    this.previewSearch = new Preview(router, searchFunction)
+    this.previewSearch = new Preview(router, searchFunction, configStore)
     this.listSearch = new List(searchFunction)
     this.capabilityStore = capabilityStore
   }
