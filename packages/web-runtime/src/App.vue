@@ -36,11 +36,22 @@ export default defineComponent({
 
     const activeRoute = computed(() => router.resolve(unref(router.currentRoute)))
 
-    const { layout } = useLayout({ router })
+    const { layout, layoutType } = useLayout({ router })
 
     watch(
       () => unref(activeRoute),
       (newRoute, oldRoute) => {
+        /**
+         * Hide global loading spinner. It usually gets hidden after all apps
+         * have been loaded, but in some scenarios (plain layouts) we never load them.
+         */
+        if (unref(layoutType) !== 'application') {
+          const loader = document.getElementById('splash-loading')
+          if (!loader?.classList.contains('splash-hide')) {
+            loader.classList.add('splash-hide')
+          }
+        }
+
         const getAppContextFromRoute = (route: RouteLocation): string[] => {
           return route?.path?.split('/').slice(1, 4)
         }
