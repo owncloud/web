@@ -109,7 +109,8 @@ import {
   queryItemAsString,
   useAuthStore,
   useCapabilityStore,
-  useResourcesStore
+  useResourcesStore,
+  useEmbedMode
 } from '@ownclouders/web-pkg'
 import Mark from 'mark.js'
 import { storeToRefs } from 'pinia'
@@ -138,6 +139,8 @@ export default defineComponent({
 
     const resourcesStore = useResourcesStore()
     const { currentFolder } = storeToRefs(resourcesStore)
+
+    const { isEnabled: isEmbedEnabled } = useEmbedMode()
 
     const locationFilterId = ref(SearchLocationFilterConstants.allFiles)
     const optionsDropRef = ref(null)
@@ -328,7 +331,8 @@ export default defineComponent({
       search,
       showPreview,
       updateTerm,
-      getSearchResultLocation
+      getSearchResultLocation,
+      isEmbedEnabled
     }
   },
 
@@ -350,7 +354,12 @@ export default defineComponent({
        * since we are not able to provide search in the public link yet.
        * Enable as soon this feature is available.
        */
-      return this.availableProviders.length && this.userContextReady && !this.publicLinkContextReady
+      return (
+        this.availableProviders.length &&
+        this.userContextReady &&
+        !this.publicLinkContextReady &&
+        !this.isEmbedEnabled
+      )
     },
     displayProviders() {
       /**
