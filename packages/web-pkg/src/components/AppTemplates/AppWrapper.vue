@@ -136,8 +136,6 @@ export default defineComponent({
     const configStore = useConfigStore()
     const resourcesStore = useResourcesStore()
 
-    console.log(resourcesStore)
-
     const { actions: openWithAppActions } = useFileActionsOpenWithApp({
       appId: props.applicationId
     })

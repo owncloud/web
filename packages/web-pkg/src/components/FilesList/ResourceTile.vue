@@ -4,8 +4,8 @@
     :data-item-id="resource.id"
     :class="{
       'oc-tile-card-selected': isResourceSelected,
-      'oc-tile-card-disabled': resource.processing,
-      'state-trashed': resourceDisabled
+      'oc-tile-card-disabled': isResourceDisabled && !isProjectSpaceResource(resource),
+      'state-trashed': isResourceDisabled && isProjectSpaceResource(resource)
     }"
     @contextmenu="$emit('contextmenu', $event)"
   >
@@ -21,7 +21,7 @@
         <slot name="selection" :item="resource" />
       </div>
       <oc-tag
-        v-if="resourceDisabled"
+        v-if="isResourceDisabled && isProjectSpaceResource(resource)"
         class="resource-disabled-indicator oc-position-absolute"
         type="span"
       >
@@ -85,7 +85,7 @@ import { computed, defineComponent, PropType } from 'vue'
 import ResourceIcon from './ResourceIcon.vue'
 import ResourceListItem from './ResourceListItem.vue'
 import ResourceLink from './ResourceLink.vue'
-import { Resource } from '@ownclouders/web-client'
+import { isProjectSpaceResource, Resource } from '@ownclouders/web-client'
 import { useGettext } from 'vue3-gettext'
 import { isSpaceResource } from '@ownclouders/web-client'
 import { isResourceTxtFileAlmostEmpty } from '../../helpers'
@@ -114,6 +114,11 @@ export default defineComponent({
       type: Boolean,
       required: false,
       default: true
+    },
+    isResourceDisabled: {
+      type: Boolean,
+      required: false,
+      default: false
     },
     isExtensionDisplayed: {
       type: Boolean,
@@ -158,11 +163,6 @@ export default defineComponent({
       }
       return null
     })
-
-    const resourceDisabled = computed(() => {
-      return isSpaceResource(props.resource) && props.resource.disabled === true
-    })
-
     const resourceDescription = computed(() => {
       if (isSpaceResource(props.resource)) {
         return props.resource.description
@@ -178,11 +178,11 @@ export default defineComponent({
       statusIconAttrs,
       showStatusIcon,
       tooltipLabelIcon,
-      resourceDisabled,
       resourceDescription,
       shouldDisplayThumbnails
     }
-  }
+  },
+  methods: { isProjectSpaceResource }
 })
 </script>
 

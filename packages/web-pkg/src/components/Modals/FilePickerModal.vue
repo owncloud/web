@@ -3,17 +3,26 @@
   <iframe
     v-show="!isLoading"
     class="oc-width-1-1 oc-height-1-1"
+    :title="iframeTitle"
     :src="iframeSrc"
     @load="onLoad"
   ></iframe>
 </template>
 
 <script lang="ts">
-import { defineComponent, PropType, ref } from 'vue'
-import { Modal, useRouter } from '../../composables'
+import { defineComponent, onBeforeUnmount, onMounted, PropType, ref } from 'vue'
+import {
+  EDITOR_MODE_EDIT,
+  Modal,
+  useGetMatchingSpace,
+  useModals,
+  useRouter,
+  useThemeStore
+} from '../../composables'
 import { ApplicationInformation } from '../../apps'
 import { RouteLocationRaw } from 'vue-router'
 import AppLoadingSpinner from '../AppLoadingSpinner.vue'
+import { Resource } from '@ownclouders/web-client'
 
 export default defineComponent({
   name: 'FilePickerModal',
@@ -23,14 +32,19 @@ export default defineComponent({
     app: { type: Object as PropType<ApplicationInformation>, required: true },
     parentFolderLink: { type: Object as PropType<RouteLocationRaw>, required: true }
   },
-  emits: ['confirm'],
   setup(props, { emit }) {
     const isLoading = ref(true)
     const router = useRouter()
+    const { removeModal } = useModals()
+    const { getMatchingSpace } = useGetMatchingSpace()
+    const themeStore = useThemeStore()
     const parentFolderRoute = router.resolve(props.parentFolderLink)
-    const availableExtensions = (props.app as ApplicationInformation).extensions.map(
-      (e) => e.extension
+
+    const availableExtensions = (props.app as ApplicationInformation).extensions.map((e) =>
+      e.extension ? e.extension : e.mimeType
     )
+
+    const iframeTitle = themeStore.currentTheme.name
     const iframeUrl = new URL(parentFolderRoute.href, window.location.origin)
     iframeUrl.searchParams.append('embed', 'true')
     iframeUrl.searchParams.append('embed-target', 'file')
@@ -40,11 +54,42 @@ export default defineComponent({
       isLoading.value = false
     }
 
-    console.log(iframeUrl.href)
+    const onFilePick = ({ data }: MessageEvent) => {
+      if (data.name !== 'owncloud-embed:file-pick') {
+        return
+      }
+
+      const resource: Resource = data.data
+      const space = getMatchingSpace(resource)
+
+      const editorRoute = router.resolve({
+        name: (props.app as ApplicationInformation).id,
+        params: {
+          driveAliasAndItem: space.getDriveAliasAndItem(resource),
+          filePath: resource.path,
+          fileId: resource.fileId,
+          EDITOR_MODE_EDIT
+        }
+      })
+
+      const editorRouteUrl = new URL(editorRoute.href, window.location.origin)
+
+      removeModal(props.modal.id)
+      window.open(editorRouteUrl.href, '_blank')
+    }
+
+    onMounted(() => {
+      window.addEventListener('message', onFilePick)
+    })
+
+    onBeforeUnmount(() => {
+      window.removeEventListener('message', onFilePick)
+    })
 
     return {
       isLoading,
       onLoad,
+      iframeTitle,
       iframeSrc: iframeUrl.href
     }
   }
@@ -54,12 +99,17 @@ export default defineComponent({
 <style lang="scss">
 .open-with-app-modal {
   max-width: 80vw;
+  border: none;
+
+  .oc-modal-title {
+    border-bottom: none;
+  }
 
   .oc-modal-body {
     padding: 0;
 
     &-message {
-      height: 600px;
+      height: 60vh;
     }
   }
 }

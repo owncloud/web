@@ -3,7 +3,7 @@ import { RouteLocation, Router } from 'vue-router'
 import { mock } from 'vitest-mock-extended'
 import { ref } from 'vue'
 import { createTestingPinia } from 'web-test-helpers/src'
-import { useCapabilityStore } from '@ownclouders/web-pkg'
+import { ConfigStore, useCapabilityStore } from '@ownclouders/web-pkg'
 
 const getStore = (reports: string[] = []) => {
   createTestingPinia({
@@ -14,7 +14,7 @@ const getStore = (reports: string[] = []) => {
 
 describe('SDKProvider', () => {
   it('is only available if announced via capabilities', () => {
-    const search = new SDKSearch(getStore(), mock<Router>(), vi.fn())
+    const search = new SDKSearch(getStore(), mock<Router>(), vi.fn(), mock<ConfigStore>())
     expect(search.available).toBe(false)
   })
 
@@ -30,7 +30,8 @@ describe('SDKProvider', () => {
           mock<Router>({
             currentRoute: ref(mock<RouteLocation>({ name: v.route }))
           }),
-          vi.fn()
+          vi.fn(),
+          mock<ConfigStore>()
         )
 
         expect(!!search.previewSearch.available).toBe(!!v.available)

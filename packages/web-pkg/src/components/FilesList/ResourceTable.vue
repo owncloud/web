@@ -508,6 +508,7 @@ export default defineComponent({
     const {
       isLocationPicker,
       isFilePicker,
+      postMessage,
       isEnabled: isEmbedModeEnabled,
       extensions: embedModeExtensions
     } = useEmbedMode()
@@ -540,13 +541,12 @@ export default defineComponent({
     const getTagToolTip = (text: string) => (text.length > 7 ? text : '')
 
     const isResourceDisabled = (resource: Resource) => {
-      if (
-        unref(isEmbedModeEnabled) &&
-        unref(embedModeExtensions)?.length &&
-        !unref(embedModeExtensions).includes(resource.extension) &&
-        !resource.isFolder
-      ) {
-        return true
+      if (unref(isEmbedModeEnabled) && unref(embedModeExtensions)?.length) {
+        return (
+          !unref(embedModeExtensions).includes(resource.extension) &&
+          !unref(embedModeExtensions).includes(resource.mimeType) &&
+          !resource.isFolder
+        )
       }
       return resource.processing === true
     }
@@ -587,6 +587,7 @@ export default defineComponent({
         space: ref(props.space),
         targetRouteCallback: computed(() => props.targetRouteCallback)
       }),
+      postMessage,
       isFilePicker,
       isLocationPicker,
       isEmbedModeEnabled,
@@ -988,6 +989,13 @@ export default defineComponent({
        */
       const resource = data[0]
 
+      if (this.isEmbedModeEnabled && this.isFilePicker) {
+        return this.postMessage<Resource>(
+          'owncloud-embed:file-pick',
+          JSON.parse(JSON.stringify(resource))
+        )
+      }
+
       if (this.isResourceDisabled(resource)) {
         return
       }
@@ -1054,7 +1062,7 @@ export default defineComponent({
         return false
       }
 
-      if (this.isEmbedModeEnabled && !resource.isFolder) {
+      if (this.isEmbedModeEnabled && !this.isFilePicker && !resource.isFolder) {
         return false
       }
 

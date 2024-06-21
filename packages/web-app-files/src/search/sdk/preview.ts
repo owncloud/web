@@ -1,10 +1,4 @@
-import {
-  CapabilityStore,
-  ConfigStore,
-  SearchFunction,
-  SearchPreview,
-  SearchResult
-} from '@ownclouders/web-pkg'
+import { ConfigStore, SearchFunction, SearchPreview, SearchResult } from '@ownclouders/web-pkg'
 import { Component, unref } from 'vue'
 import { Router } from 'vue-router'
 import { ResourcePreview } from '@ownclouders/web-pkg'
@@ -31,7 +25,7 @@ export default class Preview implements SearchPreview {
   public get available(): boolean {
     return (
       unref(this.router.currentRoute).name !== 'search-provider-list' &&
-      !this.configStore.options.embed?.enabled
+      !this.configStore.options?.embed?.enabled
     )
   }
 }

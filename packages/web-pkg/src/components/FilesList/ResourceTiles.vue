@@ -46,6 +46,7 @@
           :resource-route="getRoute(resource)"
           :is-resource-selected="isResourceSelected(resource)"
           :is-resource-clickable="isResourceClickable(resource)"
+          :is-resource-disabled="isResourceDisabled(resource)"
           :is-extension-displayed="areFileExtensionsShown"
           :resource-icon-size="resourceIconSize"
           :draggable="dragDrop"
@@ -221,7 +222,13 @@ export default defineComponent({
     const { $gettext } = useGettext()
     const resourcesStore = useResourcesStore()
     const { emit } = context
-    const { isEnabled: isEmbedModeEnabled, isLocationPicker, isFilePicker } = useEmbedMode()
+    const {
+      isEnabled: isEmbedModeEnabled,
+      extensions: embedModeExtensions,
+      isLocationPicker,
+      isFilePicker,
+      postMessage
+    } = useEmbedMode()
     const viewSizeMax = useViewSizeMax()
     const viewSizeCurrent = computed(() => {
       return Math.min(unref(viewSizeMax), props.viewSize)
@@ -268,6 +275,13 @@ export default defineComponent({
     }
 
     const emitTileClick = (resource: Resource) => {
+      if (unref(isEmbedModeEnabled) && unref(isFilePicker)) {
+        return postMessage<Resource>(
+          'owncloud-embed:file-pick',
+          JSON.parse(JSON.stringify(resource))
+        )
+      }
+
       if (isSpaceResource(resource) && resource.disabled) {
         showMessage({
           title: $gettext('Disabled spaces cannot be entered'),
@@ -297,7 +311,23 @@ export default defineComponent({
     }
 
     const isResourceClickable = (resource: Resource) => {
-      return !(unref(isEmbedModeEnabled) && !resource.isFolder)
+      return !(unref(isEmbedModeEnabled) && !unref(isFilePicker) && !resource.isFolder)
+    }
+
+    const isResourceDisabled = (resource: Resource) => {
+      if (unref(isEmbedModeEnabled) && unref(embedModeExtensions)?.length) {
+        return (
+          !unref(embedModeExtensions).includes(resource.extension) &&
+          !unref(embedModeExtensions).includes(resource.mimeType) &&
+          !resource.isFolder
+        )
+      }
+
+      if (isSpaceResource(resource) && resource.disabled) {
+        return true
+      }
+
+      return resource.processing === true
     }
 
     const emitSelect = (selectedIds: string[]) => {
@@ -525,7 +555,8 @@ export default defineComponent({
       ghostTilesCount,
       getIndicators,
       isFilePicker,
-      isLocationPicker
+      isLocationPicker,
+      isResourceDisabled
     }
   },
   data() {

@@ -20,7 +20,6 @@ export default class Provider implements SearchProvider {
   public readonly previewSearch: SearchPreview
   public readonly listSearch: SearchList
   private readonly capabilityStore: CapabilityStore
-  private readonly configStore: ConfigStore
 
   constructor(
     capabilityStore: CapabilityStore,
