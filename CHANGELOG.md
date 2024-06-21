@@ -14,6 +14,7 @@ Summary
 * Enhancement - Consistent initial loading spinner: [#11054](https://github.com/owncloud/web/pull/11054)
 * Enhancement - Add action drop down top app top bar: [#11057](https://github.com/owncloud/web/pull/11057)
 * Enhancement - Decrease text editor loading times: [#11060](https://github.com/owncloud/web/pull/11060)
+* Enhancement - Reduce network load on token renewal: [#11077](https://github.com/owncloud/web/pull/11077)
 
 Details
 -------
@@ -68,6 +69,15 @@ Details
 
    https://github.com/owncloud/web/issues/10982
    https://github.com/owncloud/web/pull/11060
+
+* Enhancement - Reduce network load on token renewal: [#11077](https://github.com/owncloud/web/pull/11077)
+
+   We've reduced the network load on token renewal, resulting in better overall
+   performance of the Web client and less token renewal failures on slow network
+   connections.
+
+   https://github.com/owncloud/web/issues/11069
+   https://github.com/owncloud/web/pull/11077
 
 Changelog for ownCloud Web [8.0.3] (2024-06-20)
 =======================================
