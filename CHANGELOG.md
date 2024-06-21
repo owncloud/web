@@ -3,7 +3,7 @@ Changelog for ownCloud Web [unreleased] (UNRELEASED)
 The following sections list the changes in ownCloud web unreleased relevant to
 ownCloud admins and users.
 
-[unreleased]: https://github.com/owncloud/web/compare/v9.0.0...master
+[unreleased]: https://github.com/owncloud/web/compare/v8.0.3...master
 
 Summary
 -------
@@ -69,6 +69,66 @@ Details
    https://github.com/owncloud/web/issues/10982
    https://github.com/owncloud/web/pull/11060
 
+Changelog for ownCloud Web [8.0.3] (2024-06-20)
+=======================================
+The following sections list the changes in ownCloud web 8.0.3 relevant to
+ownCloud admins and users.
+
+[8.0.3]: https://github.com/owncloud/web/compare/v9.0.0...v8.0.3
+
+Summary
+-------
+
+* Bugfix - Vertical scroll for OcModal on small screens: [#10814](https://github.com/owncloud/web/issues/10814)
+* Bugfix - Resource deselection on right-click: [#10918](https://github.com/owncloud/web/issues/10918)
+* Bugfix - Resources with name consist of number won't show up in trash bin: [#10920](https://github.com/owncloud/web/pull/10920)
+* Bugfix - Space not updating on navigation: [#10941](https://github.com/owncloud/web/issues/10941)
+* Bugfix - Enforce shortcut URL protocol: [#11063](https://github.com/owncloud/web/issues/11063)
+
+Details
+-------
+
+* Bugfix - Vertical scroll for OcModal on small screens: [#10814](https://github.com/owncloud/web/issues/10814)
+
+   We've fixed an issue where modals were not scrollable on screens with small
+   heights.
+
+   https://github.com/owncloud/web/issues/10814
+   https://github.com/owncloud/web/pull/10816
+
+* Bugfix - Resource deselection on right-click: [#10918](https://github.com/owncloud/web/issues/10918)
+
+   We've fixed an issue where right-clicking any empty space inside the files table
+   would reset the current selection.
+
+   https://github.com/owncloud/web/issues/10918
+   https://github.com/owncloud/web/pull/10936
+
+* Bugfix - Resources with name consist of number won't show up in trash bin: [#10920](https://github.com/owncloud/web/pull/10920)
+
+   We've fixed a bug, where deleted resources that have only numbers in name like
+   "123" won't show up in the trash bin
+
+   https://github.com/owncloud/web/issues/10917
+   https://github.com/owncloud/web/pull/10920
+
+* Bugfix - Space not updating on navigation: [#10941](https://github.com/owncloud/web/issues/10941)
+
+   We've fixed an issue where the current space did not update when navigating from
+   one space into another directly, e.g. via search results. That could lead to
+   uploads and file actions not working properly.
+
+   https://github.com/owncloud/web/issues/10941
+   https://github.com/owncloud/web/pull/10943
+
+* Bugfix - Enforce shortcut URL protocol: [#11063](https://github.com/owncloud/web/issues/11063)
+
+   We've fixed a bug where the protocol in shortcut URLs was not enforced. Now, the
+   shortcut URL always starts `https://` if no protocol is provided by the user.
+
+   https://github.com/owncloud/web/issues/11063
+   https://github.com/owncloud/web/pull/11076
+
 Changelog for ownCloud Web [9.0.0] (2024-06-17)
 =======================================
 The following sections list the changes in ownCloud web 9.0.0 relevant to
@@ -87,12 +147,8 @@ Summary
 * Bugfix - Apply sandbox attribute to iframe in app-external extension: [#10706](https://github.com/owncloud/web/pull/10706)
 * Bugfix - Versions loaded multiple times when opening sidebar: [#10746](https://github.com/owncloud/web/pull/10746)
 * Bugfix - Incoming notifications broken while notification center is open: [#10760](https://github.com/owncloud/web/pull/10760)
-* Bugfix - Vertical scroll for OcModal on small screens: [#10814](https://github.com/owncloud/web/issues/10814)
 * Bugfix - Context menu empty in tiles view: [#10900](https://github.com/owncloud/web/pull/10900)
-* Bugfix - Resource deselection on right-click: [#10918](https://github.com/owncloud/web/issues/10918)
-* Bugfix - Resources with name consist of number won't show up in trash bin: [#10920](https://github.com/owncloud/web/pull/10920)
 * Bugfix - Disable search in public link context: [#10928](https://github.com/owncloud/web/pull/10928)
-* Bugfix - Space not updating on navigation: [#10941](https://github.com/owncloud/web/issues/10941)
 * Bugfix - Local logout if IdP has no logout support: [#10974](https://github.com/owncloud/web/pull/10974)
 * Change - Remove deprecated code: [#7338](https://github.com/owncloud/web/issues/7338)
 * Change - Remove skeleton app: [#9892](https://github.com/owncloud/web/issues/9892)
@@ -202,14 +258,6 @@ Details
    https://github.com/owncloud/web/issues/10602
    https://github.com/owncloud/web/pull/10760
 
-* Bugfix - Vertical scroll for OcModal on small screens: [#10814](https://github.com/owncloud/web/issues/10814)
-
-   We've fixed an issue where modals were not scrollable on screens with small
-   heights.
-
-   https://github.com/owncloud/web/issues/10814
-   https://github.com/owncloud/web/pull/10816
-
 * Bugfix - Context menu empty in tiles view: [#10900](https://github.com/owncloud/web/pull/10900)
 
    We've fixed a bug where the context menu was empty in the tiles view after
@@ -217,22 +265,6 @@ Details
 
    https://github.com/owncloud/web/issues/10793
    https://github.com/owncloud/web/pull/10900
-
-* Bugfix - Resource deselection on right-click: [#10918](https://github.com/owncloud/web/issues/10918)
-
-   We've fixed an issue where right-clicking any empty space inside the files table
-   would reset the current selection.
-
-   https://github.com/owncloud/web/issues/10918
-   https://github.com/owncloud/web/pull/10936
-
-* Bugfix - Resources with name consist of number won't show up in trash bin: [#10920](https://github.com/owncloud/web/pull/10920)
-
-   We've fixed a bug, where deleted resources that have only numbers in name like
-   "123" won't show up in the trash bin
-
-   https://github.com/owncloud/web/issues/10917
-   https://github.com/owncloud/web/pull/10920
 
 * Bugfix - Disable search in public link context: [#10928](https://github.com/owncloud/web/pull/10928)
 
@@ -242,15 +274,6 @@ Details
 
    https://github.com/owncloud/web/issues/10915
    https://github.com/owncloud/web/pull/10928
-
-* Bugfix - Space not updating on navigation: [#10941](https://github.com/owncloud/web/issues/10941)
-
-   We've fixed an issue where the current space did not update when navigating from
-   one space into another directly, e.g. via search results. That could lead to
-   uploads and file actions not working properly.
-
-   https://github.com/owncloud/web/issues/10941
-   https://github.com/owncloud/web/pull/10943
 
 * Bugfix - Local logout if IdP has no logout support: [#10974](https://github.com/owncloud/web/pull/10974)
 
