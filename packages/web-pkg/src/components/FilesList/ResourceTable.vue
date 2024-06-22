@@ -510,7 +510,7 @@ export default defineComponent({
       isFilePicker,
       postMessage,
       isEnabled: isEmbedModeEnabled,
-      extensions: embedModeExtensions
+      fileTypes: embedModeFileTypes
     } = useEmbedMode()
 
     const configStore = useConfigStore()
@@ -541,10 +541,10 @@ export default defineComponent({
     const getTagToolTip = (text: string) => (text.length > 7 ? text : '')
 
     const isResourceDisabled = (resource: Resource) => {
-      if (unref(isEmbedModeEnabled) && unref(embedModeExtensions)?.length) {
+      if (unref(isEmbedModeEnabled) && unref(embedModeFileTypes)?.length) {
         return (
-          !unref(embedModeExtensions).includes(resource.extension) &&
-          !unref(embedModeExtensions).includes(resource.mimeType) &&
+          !unref(embedModeFileTypes).includes(resource.extension) &&
+          !unref(embedModeFileTypes).includes(resource.mimeType) &&
           !resource.isFolder
         )
       }

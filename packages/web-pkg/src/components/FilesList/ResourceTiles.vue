@@ -224,7 +224,7 @@ export default defineComponent({
     const { emit } = context
     const {
       isEnabled: isEmbedModeEnabled,
-      extensions: embedModeExtensions,
+      fileTypes: embedModeFileTypes,
       isLocationPicker,
       isFilePicker,
       postMessage
@@ -315,10 +315,10 @@ export default defineComponent({
     }
 
     const isResourceDisabled = (resource: Resource) => {
-      if (unref(isEmbedModeEnabled) && unref(embedModeExtensions)?.length) {
+      if (unref(isEmbedModeEnabled) && unref(embedModeFileTypes)?.length) {
         return (
-          !unref(embedModeExtensions).includes(resource.extension) &&
-          !unref(embedModeExtensions).includes(resource.mimeType) &&
+          !unref(embedModeFileTypes).includes(resource.extension) &&
+          !unref(embedModeFileTypes).includes(resource.mimeType) &&
           !resource.isFolder
         )
       }

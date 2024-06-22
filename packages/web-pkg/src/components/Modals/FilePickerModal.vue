@@ -40,7 +40,7 @@ export default defineComponent({
     const themeStore = useThemeStore()
     const parentFolderRoute = router.resolve(props.parentFolderLink)
 
-    const availableExtensions = (props.app as ApplicationInformation).extensions.map((e) =>
+    const availableFileTypes = (props.app as ApplicationInformation).extensions.map((e) =>
       e.extension ? e.extension : e.mimeType
     )
 
@@ -48,7 +48,7 @@ export default defineComponent({
     const iframeUrl = new URL(parentFolderRoute.href, window.location.origin)
     iframeUrl.searchParams.append('embed', 'true')
     iframeUrl.searchParams.append('embed-target', 'file')
-    iframeUrl.searchParams.append('embed-extensions', availableExtensions.join(','))
+    iframeUrl.searchParams.append('embed-file-types', availableFileTypes.join(','))
 
     const onLoad = () => {
       isLoading.value = false
