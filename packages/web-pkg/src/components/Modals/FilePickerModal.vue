@@ -44,7 +44,7 @@ export default defineComponent({
       e.extension ? e.extension : e.mimeType
     )
 
-    const iframeTitle = themeStore.currentTheme.name
+    const iframeTitle = themeStore.currentTheme.common?.name
     const iframeUrl = new URL(parentFolderRoute.href, window.location.origin)
     iframeUrl.searchParams.append('embed', 'true')
     iframeUrl.searchParams.append('embed-target', 'file')
