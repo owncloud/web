@@ -94,7 +94,7 @@ combination of both. If the embed-file-types parameter is not provided, all file
 
 ```html
 
-<iframe src="https://my-owncloud-web-instance?embed=true&embed-target=file?embed-file-types=txt,image/png"></iframe>
+<iframe src="https://my-owncloud-web-instance?embed=true&embed-target=file&embed-file-types=txt,image/png"></iframe>
 
 <script>
     function selectEventHandler(event) {
