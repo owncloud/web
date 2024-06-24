@@ -306,14 +306,3 @@ Given(
     }
   }
 )
-
-Given(
-  '{string} creates a public link for the space {string} with password {string} using API',
-  async function (this: World, stepUser: string, space: string, password: string): Promise<void> {
-    const { page } = this.actorsEnvironment.getActor({ key: stepUser })
-    const linkObject = new objects.applicationFiles.Link({ page })
-    password = password === '%public%' ? linkObject.securePassword : password
-    const user = this.usersEnvironment.getUser({ key: stepUser })
-    await api.share.createSpaceLinkShare({ user, spaceName: space, password, name: 'Link' })
-  }
-)

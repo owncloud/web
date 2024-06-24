@@ -26,7 +26,7 @@ Feature: internal link share in project space
     And "Alice" navigates to the project space "marketing.1"
     # internal link to space
 
-    And "Alice" creates a public link for the space "Marketing" with password "%public%" using the sidebar panel
+    And "Alice" creates a public link for the space with password "%public%" using the sidebar panel
     And "Alice" renames the most recently created public link of space to "spaceLink"
     And "Alice" edits the public link named "spaceLink" of the space changing role to "Invited people"
     # internal link to folder

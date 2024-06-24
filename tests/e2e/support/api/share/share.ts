@@ -35,7 +35,7 @@ export const shareRoles: Readonly<{
   'Secret File Drop': 'uploader'
 } as const
 
-export const sharingLinkType: Readonly<{
+export const linkShareRoles: Readonly<{
   'Invited people': string
   'Can view': string
   'Can upload': string
@@ -199,8 +199,8 @@ export const createLinkShare = async ({
   path,
   password,
   name,
-  role,
-  spaceName
+  role = 'Can view',
+  spaceName = 'Personal'
 }: {
   user: User
   path: string
@@ -209,25 +209,33 @@ export const createLinkShare = async ({
   role?: string
   spaceName?: string
 }): Promise<void> => {
+  let spaceType
+  if (spaceName.toLowerCase() === 'personal') {
+    spaceType = spaceName.toLowerCase()
+    spaceName = user.displayName
+  } else {
+    spaceType = 'project'
+  }
+
   const driveId: string = await getSpaceIdBySpaceName({
     user,
-    spaceType: spaceName ? 'project' : 'personal',
-    spaceName: spaceName ? spaceName : user.displayName
+    spaceType,
+    spaceName
   })
   const itemId: string = await getIdOfFileInsideSpace({
     user,
     pathToFileName: path,
-    spaceType: spaceName ? 'project' : 'personal',
-    spaceName: spaceName ? spaceName : user.displayName
+    spaceType,
+    spaceName
   })
 
-  const roleType: string = sharingLinkType[role as keyof typeof sharingLinkType]
+  const roleType: string = linkShareRoles[role as keyof typeof linkShareRoles]
 
   const response = await request({
     method: 'POST',
     path: join('graph', 'v1beta1', 'drives', driveId, 'items', itemId, 'createLink'),
     body: JSON.stringify({
-      type: role ? roleType : 'view',
+      type: roleType,
       password,
       displayName: name
     }),
@@ -243,43 +251,4 @@ export const createLinkShare = async ({
   })
 
   checkResponseStatus(response, 'Failed while creating public link share')
-}
-
-export const createSpaceLinkShare = async ({
-  user,
-  spaceName,
-  password,
-  name
-}: {
-  user: User
-  password: string
-  name: string
-  spaceName: string
-}): Promise<void> => {
-  const driveId: string = await getSpaceIdBySpaceName({
-    user,
-    spaceType: 'project',
-    spaceName
-  })
-
-  const response = await request({
-    method: 'POST',
-    path: join('graph', 'v1beta1', 'drives', driveId, 'root', 'createLink'),
-    body: JSON.stringify({
-      type: 'view',
-      password,
-      displayName: name
-    }),
-    user
-  })
-
-  const responseData = await response.json()
-  const webUrl = responseData.link.webUrl
-  const linksEnvironment: LinksEnvironment = new LinksEnvironment()
-  linksEnvironment.createLink({
-    key: name,
-    link: { name: name, url: webUrl }
-  })
-
-  checkResponseStatus(response, 'Failed while creating public link share for space')
 }
