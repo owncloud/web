@@ -6,6 +6,7 @@ export * from './Filters'
 export * from './Modals'
 export * from './SideBar'
 export * from './Search'
+export * from './ComponentLoader'
 export * from './Spaces'
 export * from './TextEditor'
 

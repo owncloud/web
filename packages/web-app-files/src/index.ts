@@ -1,15 +1,7 @@
-import App from './App.vue'
-import Favorites from './views/Favorites.vue'
-import FilesDrop from './views/FilesDrop.vue'
-import SharedWithMe from './views/shares/SharedWithMe.vue'
-import SharedWithOthers from './views/shares/SharedWithOthers.vue'
-import SharedViaLink from './views/shares/SharedViaLink.vue'
-import SpaceDriveResolver from './views/spaces/DriveResolver.vue'
-import SpaceProjects from './views/spaces/Projects.vue'
-import TrashOverview from './views/trash/Overview.vue'
 import translations from '../l10n/translations.json'
 import {
   ApplicationInformation,
+  ComponentLoader,
   defineWebApplication,
   useCapabilityStore,
   useSpacesStore,
@@ -18,9 +10,6 @@ import {
 import { extensions } from './extensions'
 import { buildRoutes } from '@ownclouders/web-pkg'
 import { AppNavigationItem } from '@ownclouders/web-pkg'
-
-// dirty: importing view from other extension within project
-import SearchResults from '../../web-app-search/src/views/List.vue'
 import { isPersonalSpaceResource, isShareSpaceResource } from '@ownclouders/web-client'
 import { ComponentCustomProperties } from 'vue'
 import { extensionPoints } from './extensionPoints'
@@ -140,21 +129,36 @@ export default defineWebApplication({
         }
       },
       routes: buildRoutes({
-        App,
-        Favorites,
-        FilesDrop,
-        SearchResults,
+        App: ComponentLoader(async () => (await import('./App.vue')).default),
+        Favorites: ComponentLoader(async () => (await import('./views/Favorites.vue')).default),
+        FilesDrop: ComponentLoader(async () => (await import('./views/FilesDrop.vue')).default),
+        SearchResults: ComponentLoader(
+          // FIXME: import from another app
+          async () => (await import('../../web-app-search/src/views/List.vue')).default
+        ),
         Shares: {
-          SharedViaLink,
-          SharedWithMe,
-          SharedWithOthers
+          SharedViaLink: ComponentLoader(
+            async () => (await import('./views/shares/SharedViaLink.vue')).default
+          ),
+          SharedWithMe: ComponentLoader(
+            async () => (await import('./views/shares/SharedWithMe.vue')).default
+          ),
+          SharedWithOthers: ComponentLoader(
+            async () => (await import('./views/shares/SharedWithOthers.vue')).default
+          )
         },
         Spaces: {
-          DriveResolver: SpaceDriveResolver,
-          Projects: SpaceProjects
+          DriveResolver: ComponentLoader(
+            async () => (await import('./views/spaces/DriveResolver.vue')).default
+          ),
+          Projects: ComponentLoader(
+            async () => (await import('./views/spaces/Projects.vue')).default
+          )
         },
         Trash: {
-          Overview: TrashOverview
+          Overview: ComponentLoader(
+            async () => (await import('./views/trash/Overview.vue')).default
+          )
         }
       }),
       navItems,

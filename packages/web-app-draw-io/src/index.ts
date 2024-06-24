@@ -1,7 +1,11 @@
 import { Resource } from '@ownclouders/web-client'
-import { AppWrapperRoute, defineWebApplication, useUserStore } from '@ownclouders/web-pkg'
+import {
+  AppWrapperRoute,
+  ComponentLoader,
+  defineWebApplication,
+  useUserStore
+} from '@ownclouders/web-pkg'
 import translations from '../l10n/translations.json'
-import App from './App.vue'
 import { useGettext } from 'vue3-gettext'
 
 const applicationId = 'draw-io'
@@ -15,11 +19,14 @@ export default defineWebApplication({
       {
         name: 'draw-io',
         path: '/:driveAliasAndItem(.*)?',
-        component: AppWrapperRoute(App, {
-          applicationId,
-          importResourceWithExtension(resource: Resource) {
-            return resource.extension === 'vsdx' ? 'drawio' : null
-          }
+        component: ComponentLoader(async () => {
+          const App = (await import('./App.vue')).default
+          return AppWrapperRoute(App, {
+            applicationId,
+            importResourceWithExtension(resource: Resource) {
+              return resource.extension === 'vsdx' ? 'drawio' : null
+            }
+          })
         }),
         meta: {
           authContext: 'hybrid',

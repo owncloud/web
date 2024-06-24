@@ -1,38 +1,34 @@
-import App from './App.vue'
-import List from './views/List.vue'
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-ignore
 import translations from '../l10n/translations.json'
-import { ApplicationInformation, defineWebApplication } from '@ownclouders/web-pkg'
+import { ApplicationInformation, ComponentLoader, defineWebApplication } from '@ownclouders/web-pkg'
 import { extensions } from './extensions'
 import { extensionPoints } from './extensionPoints'
-
-// just a dummy function to trick gettext tools
-const $gettext = (msg: string) => {
-  return msg
-}
-
-const appInfo: ApplicationInformation = {
-  name: $gettext('Search'),
-  id: 'search',
-  icon: 'folder',
-  isFileEditor: false
-}
+import { useGettext } from 'vue3-gettext'
 
 export default defineWebApplication({
   setup() {
+    const { $gettext } = useGettext()
+
+    const appInfo: ApplicationInformation = {
+      name: $gettext('Search'),
+      id: 'search',
+      icon: 'folder',
+      isFileEditor: false
+    }
+
     return {
       appInfo,
       routes: [
         {
           name: 'search',
           path: '/',
-          component: App,
+          component: ComponentLoader(async () => (await import('./App.vue')).default),
           children: [
             {
               name: 'provider-list',
               path: 'list/:page?',
-              component: List,
+              component: ComponentLoader(async () => (await import('./views/List.vue')).default),
               meta: {
                 authContext: 'user',
                 contextQueryItems: ['term', 'provider']

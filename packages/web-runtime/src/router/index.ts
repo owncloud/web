@@ -1,10 +1,4 @@
-import AccessDeniedPage from '../pages/accessDenied.vue'
-import Account from '../pages/account.vue'
-import LoginPage from '../pages/login.vue'
-import LogoutPage from '../pages/logout.vue'
 import OidcCallbackPage from '../pages/oidcCallback.vue'
-import ResolvePublicLinkPage from '../pages/resolvePublicLink.vue'
-import ResolvePrivateLinkPage from '../pages/resolvePrivateLink.vue'
 import { setupAuthGuard } from './setupAuthGuard'
 import { patchRouter } from './patchCleanPath'
 import {
@@ -13,10 +7,8 @@ import {
   createRouter,
   RouteLocationNormalizedLoaded
 } from 'vue-router'
-
-// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-// @ts-ignore
 import qs from 'qs'
+import { ComponentLoader } from '@ownclouders/web-pkg'
 
 export * from './helpers'
 export { createRouter } from 'vue-router'
@@ -31,13 +23,13 @@ const routes = [
   {
     path: '/login',
     name: 'login',
-    component: LoginPage,
+    component: ComponentLoader(async () => (await import('../pages/login.vue')).default),
     meta: { title: $gettext('Login'), authContext: 'anonymous' }
   },
   {
     path: '/logout',
     name: 'logout',
-    component: LogoutPage,
+    component: ComponentLoader(async () => (await import('../pages/logout.vue')).default),
     meta: { title: $gettext('Logout'), authContext: 'anonymous' }
   },
   {
@@ -55,31 +47,37 @@ const routes = [
   {
     path: '/f/:fileId',
     name: 'resolvePrivateLink',
-    component: ResolvePrivateLinkPage,
+    component: ComponentLoader(
+      async () => (await import('../pages/resolvePrivateLink.vue')).default
+    ),
     meta: { title: $gettext('Private link'), authContext: 'user' }
   },
   {
     path: '/s/:token/:driveAliasAndItem(.*)?',
     name: 'resolvePublicLink',
-    component: ResolvePublicLinkPage,
+    component: ComponentLoader(
+      async () => (await import('../pages/resolvePublicLink.vue')).default
+    ),
     meta: { title: $gettext('Public link'), authContext: 'anonymous' }
   },
   {
     path: '/o/:token/:driveAliasAndItem(.*)?',
     name: 'resolvePublicOcmLink',
-    component: ResolvePublicLinkPage,
+    component: ComponentLoader(
+      async () => (await import('../pages/resolvePublicLink.vue')).default
+    ),
     meta: { title: $gettext('OCM link'), authContext: 'anonymous' }
   },
   {
     path: '/access-denied',
     name: 'accessDenied',
-    component: AccessDeniedPage,
+    component: ComponentLoader(async () => (await import('../pages/accessDenied.vue')).default),
     meta: { title: $gettext('Access denied'), authContext: 'anonymous' }
   },
   {
     path: '/account',
     name: 'account',
-    component: Account,
+    component: ComponentLoader(async () => (await import('../pages/account.vue')).default),
     meta: { title: $gettext('Account'), authContext: 'hybrid' }
   }
 ]

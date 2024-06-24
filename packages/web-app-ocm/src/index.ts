@@ -1,5 +1,9 @@
-import App from './views/App.vue'
-import { defineWebApplication, useRouter, useUserStore } from '@ownclouders/web-pkg'
+import {
+  ComponentLoader,
+  defineWebApplication,
+  useRouter,
+  useUserStore
+} from '@ownclouders/web-pkg'
 import translations from '../l10n/translations.json'
 import { extensions } from './extensions'
 import { RouteRecordRaw } from 'vue-router'
@@ -15,7 +19,7 @@ const routes: RouteRecordRaw[] = [
   {
     path: '/invitations',
     name: 'ocm-app-invitations',
-    component: App,
+    component: ComponentLoader(async () => (await import('./views/App.vue')).default),
     meta: {
       patchCleanPath: true,
       title: 'Invitations'

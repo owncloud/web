@@ -1,11 +1,8 @@
 import translations from '../l10n/translations.json'
-import General from './views/General.vue'
-import Users from './views/Users.vue'
-import Groups from './views/Groups.vue'
-import Spaces from './views/Spaces.vue'
 import { Ability } from '@ownclouders/web-client'
 import {
   AppNavigationItem,
+  ComponentLoader,
   defineWebApplication,
   useAbility,
   useUserStore
@@ -41,7 +38,7 @@ export const routes = ({ $ability }: { $ability: Ability }): RouteRecordRaw[] =>
   {
     path: '/general',
     name: 'admin-settings-general',
-    component: General,
+    component: ComponentLoader(async () => (await import('./views/General.vue')).default),
     beforeEnter: (to, from, next) => {
       if (!$ability.can('read-all', 'Setting')) {
         next({ path: '/' })
@@ -56,7 +53,7 @@ export const routes = ({ $ability }: { $ability: Ability }): RouteRecordRaw[] =>
   {
     path: '/users',
     name: 'admin-settings-users',
-    component: Users,
+    component: ComponentLoader(async () => (await import('./views/Users.vue')).default),
     beforeEnter: (to, from, next) => {
       if (!$ability.can('read-all', 'Account')) {
         next({ path: '/' })
@@ -71,7 +68,7 @@ export const routes = ({ $ability }: { $ability: Ability }): RouteRecordRaw[] =>
   {
     path: '/groups',
     name: 'admin-settings-groups',
-    component: Groups,
+    component: ComponentLoader(async () => (await import('./views/Groups.vue')).default),
     beforeEnter: (to, from, next) => {
       if (!$ability.can('read-all', 'Group')) {
         next({ path: '/' })
@@ -86,7 +83,7 @@ export const routes = ({ $ability }: { $ability: Ability }): RouteRecordRaw[] =>
   {
     path: '/spaces',
     name: 'admin-settings-spaces',
-    component: Spaces,
+    component: ComponentLoader(async () => (await import('./views/Spaces.vue')).default),
     beforeEnter: (to, from, next) => {
       if (!$ability.can('read-all', 'Drive')) {
         next({ path: '/' })

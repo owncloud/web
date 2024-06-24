@@ -1,23 +1,25 @@
-import { AppWrapperRoute, defineWebApplication } from '@ownclouders/web-pkg'
+import { AppWrapperRoute, ComponentLoader, defineWebApplication } from '@ownclouders/web-pkg'
 import translations from '../l10n/translations.json'
-import * as app from './App.vue'
 import { useGettext } from 'vue3-gettext'
 import { getMimeTypes } from './mimeTypes'
-
-const { default: App, appId } = app
 
 export default defineWebApplication({
   setup({ applicationConfig }) {
     const { $gettext } = useGettext()
 
+    const appId = 'preview'
+
     const routes = [
       {
         path: '/:driveAliasAndItem(.*)?',
-        component: AppWrapperRoute(App, {
-          applicationId: appId,
-          urlForResourceOptions: {
-            disposition: 'inline'
-          }
+        component: ComponentLoader(async () => {
+          const App = (await import('./App.vue')).default
+          return AppWrapperRoute(App, {
+            applicationId: appId,
+            urlForResourceOptions: {
+              disposition: 'inline'
+            }
+          })
         }),
         name: 'media',
         meta: {

@@ -1,6 +1,6 @@
 import { useGettext } from 'vue3-gettext'
 import translations from '../l10n/translations.json'
-import { AppWrapperRoute, defineWebApplication } from '@ownclouders/web-pkg'
+import { AppWrapperRoute, ComponentLoader, defineWebApplication } from '@ownclouders/web-pkg'
 
 export default defineWebApplication({
   setup() {
@@ -11,7 +11,7 @@ export default defineWebApplication({
     const routes = [
       {
         path: '/:driveAliasAndItem(.*)?',
-        component: async () => {
+        component: ComponentLoader(async () => {
           // lazy loading to avoid loading the epubjs package on page load
           const EpubReader = (await import('./App.vue')).default
           return AppWrapperRoute(EpubReader, {
@@ -20,7 +20,7 @@ export default defineWebApplication({
               responseType: 'blob'
             }
           })
-        },
+        }),
         name: 'epub-reader',
         meta: {
           authContext: 'hybrid',

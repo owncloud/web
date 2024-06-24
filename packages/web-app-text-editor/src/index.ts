@@ -1,9 +1,9 @@
 import { useGettext } from 'vue3-gettext'
 import translations from '../l10n/translations.json'
-import TextEditor from './App.vue'
 import {
   AppWrapperRoute,
   ApplicationFileExtension,
+  ComponentLoader,
   defineWebApplication,
   useUserStore
 } from '@ownclouders/web-pkg'
@@ -81,8 +81,11 @@ export default defineWebApplication({
     const routes = [
       {
         path: '/:driveAliasAndItem(.*)?',
-        component: AppWrapperRoute(TextEditor, {
-          applicationId: appId
+        component: ComponentLoader(async () => {
+          const TextEditor = (await import('./App.vue')).default
+          return AppWrapperRoute(TextEditor, {
+            applicationId: appId
+          })
         }),
         name: 'text-editor',
         meta: {

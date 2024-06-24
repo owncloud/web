@@ -1,5 +1,5 @@
+import { ComponentLoader } from '@ownclouders/web-pkg'
 import translations from '../l10n/translations.json'
-import Resolve from './views/Resolve.vue'
 
 // just a dummy function to trick gettext tools
 function $gettext(msg: string) {
@@ -27,7 +27,7 @@ const routes = () => [
   {
     path: '/resolve',
     name: 'webfinger-resolve',
-    component: Resolve,
+    component: ComponentLoader(async () => (await import('./views/Resolve.vue')).default),
     meta: {
       authContext: 'idp',
       title: $gettext('Resolve destination'),

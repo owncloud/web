@@ -98,7 +98,7 @@ import { CachedFile } from './helpers/types'
 import { getMimeTypes } from './mimeTypes'
 import { PanzoomEventDetail } from '@panzoom/panzoom'
 
-export const appId = 'preview'
+const appId = 'preview'
 
 export default defineComponent({
   name: 'Preview',

@@ -4,10 +4,10 @@ import {
   useCapabilityStore,
   useAppsStore,
   useClientService,
-  useRequest
+  useRequest,
+  ComponentLoader
 } from '@ownclouders/web-pkg'
 import translations from '../l10n/translations.json'
-import App from './App.vue'
 import { stringify } from 'qs'
 import { Resource, SpaceResource } from '@ownclouders/web-client'
 import { join } from 'path'
@@ -23,8 +23,11 @@ const routes = [
   {
     name: 'apps',
     path: '/:driveAliasAndItem(.*)?',
-    component: AppWrapperRoute(App, {
-      applicationId: appInfo.id
+    component: ComponentLoader(async () => {
+      const App = (await import('./App.vue')).default
+      return AppWrapperRoute(App, {
+        applicationId: appInfo.id
+      })
     }),
     meta: {
       authContext: 'hybrid',
