@@ -468,6 +468,9 @@ importers:
       v-calendar:
         specifier: github:dschmidt/v-calendar#3ce6e3b8afd5491cb53ee811281d5fa8a45b044d
         version: https://codeload.github.com/dschmidt/v-calendar/tar.gz/3ce6e3b8afd5491cb53ee811281d5fa8a45b044d(vue@3.4.21(typescript@5.4.5))
+      vs-vue3-select:
+        specifier: ^1.3.5
+        version: 1.3.5(vue@3.4.21(typescript@5.4.5))
       vue:
         specifier: 3.4.21
         version: 3.4.21(typescript@5.4.5)
@@ -480,9 +483,6 @@ importers:
       vue-router:
         specifier: 4.2.5
         version: 4.2.5(vue@3.4.21(typescript@5.4.5))
-      vue-select:
-        specifier: 4.0.0-beta.6
-        version: 4.0.0-beta.6(vue@3.4.21(typescript@5.4.5))
       vue-style-loader:
         specifier: ^4.1.3
         version: 4.1.3
@@ -1238,7 +1238,7 @@ importers:
         version: 9.0.1
       vs-vue3-select:
         specifier: ^1.3.5
-        version: 1.3.5(vue@3.4.21)
+        version: 1.3.5(vue@3.4.21(typescript@5.4.5))
       vue:
         specifier: 3.4.21
         version: 3.4.21(typescript@5.4.5)
@@ -1251,9 +1251,6 @@ importers:
       vue-router:
         specifier: 4.2.5
         version: 4.2.5(vue@3.4.21(typescript@5.4.5))
-      vue-select:
-        specifier: 4.0.0-beta.6
-        version: 4.0.0-beta.6(vue@3.4.21(typescript@5.4.5))
       vue3-gettext:
         specifier: 2.4.0
         version: 2.4.0(patch_hash=x32qkm4z6srz5xuveescagpdyu)(@vue/compiler-sfc@3.4.21)(vue@3.4.21(typescript@5.4.5))
@@ -2880,8 +2877,8 @@ packages:
   '@types/istanbul-lib-coverage@2.0.6':
     resolution: {integrity: sha512-2QF/t/auWm0lsy8XtKVPG19v3sSOQlJe/YHZgfjb/KBBHOGSV+J2q/S671rcq9uTBrLAXmZpqJiaQbMT+zNU1w==}
 
-  '@types/jquery@3.5.29':
-    resolution: {integrity: sha512-oXQQC9X9MOPRrMhPHHOsXqeQDnWeCDT3PelUIg/Oy8FAbzSZtFHRjc7IpbfFVmpLtJ+UOoywpRsuO5Jxjybyeg==}
+  '@types/jquery@3.5.30':
+    resolution: {integrity: sha512-nbWKkkyb919DOUxjmRVk8vwtDb0/k8FKncmUKFi+NY+QXqWltooxTrswvz4LspQwxvLdvzBN1TImr6cw3aQx2A==}
 
   '@types/json-schema@7.0.15':
     resolution: {integrity: sha512-5+fP8P8MFNC+AyZCDxrB2pkZFPGzqQWUzpSeuuVLvm8VMcorNYavBqoFcxK8bQz4Qsbn4oUEEem4wDLfcysGHA==}
@@ -3364,7 +3361,6 @@ packages:
 
   abab@2.0.6:
     resolution: {integrity: sha512-j2afSsaIENvHZN2B8GOpF566vZ5WVk5opAiMTvWgaQT8DkbOqsTfvNAvHoRGU2zzP8cPoqys+xHTRDWW8L+/BA==}
-    deprecated: Use your platform's native atob() and btoa() methods instead
 
   abbrev@1.1.1:
     resolution: {integrity: sha512-nne9/IiQ/hzIhY6pdDnbBtz7DjPTKrY00P/zvPSm5pOFkl6xuGrGnXn/VtTNNfNtAfZ9/1RtehkszU9qcTii0Q==}
@@ -4504,7 +4500,6 @@ packages:
 
   debuglog@1.0.1:
     resolution: {integrity: sha512-syBZ+rnAK3EgMsH2aYEOLUW7mZSY9Gb+0wUMCFsZvcmiz+HigA0LOcq/HoQqVuGG+EKykunc7QG2bzrponfaSw==}
-    deprecated: Package no longer supported. Contact Support at https://www.npmjs.com/support for more info.
 
   decamelize@1.2.0:
     resolution: {integrity: sha512-z2S+W9X73hAUUki+N+9Za2lBlun89zigOyGrsax+KUQ6wKW4ZoWpEYBkGhQjwAjjDCkWxhY0VKEhk8wzY7F5cA==}
@@ -4690,7 +4685,6 @@ packages:
   domexception@4.0.0:
     resolution: {integrity: sha512-A2is4PLG+eeSfoTMA95/s4pvAoSo2mKtiM5jlHkAVewmiO8ISFTFKZjH7UAM1Atli/OT/7JHOrJRJiMKUZKYBw==}
     engines: {node: '>=12'}
-    deprecated: Use your platform's native DOMException instead
 
   domhandler@3.3.0:
     resolution: {integrity: sha512-J1C5rIANUbuYK+FuFL98650rihynUOEzRLxW+90bKZRWB6A1X1Tf82GxR1qAWLyfNPRvjqfip3Q5tdYlmAa9lA==}
@@ -8175,7 +8169,6 @@ packages:
 
   reflect-metadata@0.2.1:
     resolution: {integrity: sha512-i5lLI6iw9AU3Uu4szRNPPEkomnkjRTaVt9hy/bn5g/oSzekBSMeLZblcjP74AW0vBabqERLLIrz+gR8QYR54Tw==}
-    deprecated: This version has a critical bug in fallback handling. Please upgrade to reflect-metadata@0.2.2 or newer.
 
   regenerate-unicode-properties@10.1.1:
     resolution: {integrity: sha512-X007RyZLsCJVVrjgEFVpLUTZwyOZk3oiL75ZcuYjlIWd6rNJtOjkBwQc5AsRrpbKVkxN6sklw/k/9m2jJYOf8Q==}
@@ -9658,6 +9651,11 @@ packages:
     resolution: {integrity: sha512-Dhxzh5HZuiHQhbvTW9AMetFfBHDMYpo23Uo9btPXgdYP+3T5S+p+jgNy7spra+veYhBP2dCSgxR/i2Y02h5/6w==}
     engines: {node: '>=0.10.0'}
 
+  vs-vue3-select@1.3.5:
+    resolution: {integrity: sha512-XtYUs1H8tXXNe8ANtopKeuEaX+nfIyqarA37p1G2Jhpbz1Aaru29JpeRBpmfH9J4RF8tmuCxgoAn8U1z0aPBvA==}
+    peerDependencies:
+      vue: 3.x
+
   vue-component-type-helpers@2.0.13:
     resolution: {integrity: sha512-xNO5B7DstNWETnoYflLkVgh8dK8h2ZDgxY1M2O0zrqGeBNq5yAZ8a10yCS9+HnixouNGYNX+ggU9MQQq86HTpg==}
 
@@ -9756,11 +9754,6 @@ packages:
     resolution: {integrity: sha512-DIUpKcyg4+PTQKfFPX88UWhlagBEBEfJ5A8XDXRJLUnZOvcpMF8o/dnL90vpVkGaPbjvXazV/rC1qBKrZlFugw==}
     peerDependencies:
       vue: ^3.2.0
-
-  vue-select@4.0.0-beta.6:
-    resolution: {integrity: sha512-K+zrNBSpwMPhAxYLTCl56gaMrWZGgayoWCLqe5rWwkB8aUbAUh7u6sXjIR7v4ckp2WKC7zEEUY27g6h1MRsIHw==}
-    peerDependencies:
-      vue: 3.x
 
   vue-style-loader@4.1.3:
     resolution: {integrity: sha512-sFuh0xfbtpRlKfm39ss/ikqs9AbKCoXZBpHeVZ8Tx650o0k0q/YCM7FRvigtxpACezfq6af+a7JeqVTWvncqDg==}
@@ -11075,10 +11068,10 @@ snapshots:
       '@cucumber/ci-environment': 9.1.0
       '@cucumber/cucumber-expressions': 16.1.1
       '@cucumber/gherkin': 26.0.3
-      '@cucumber/gherkin-streams': 5.0.1(@cucumber/gherkin@26.0.3)(@cucumber/message-streams@4.0.1(@cucumber/messages@24.0.1))(@cucumber/messages@21.0.1)
+      '@cucumber/gherkin-streams': 5.0.1(@cucumber/gherkin@26.0.3)(@cucumber/message-streams@4.0.1(@cucumber/messages@21.0.1))(@cucumber/messages@21.0.1)
       '@cucumber/gherkin-utils': 8.0.2
       '@cucumber/html-formatter': 20.2.1(@cucumber/messages@21.0.1)
-      '@cucumber/message-streams': 4.0.1(@cucumber/messages@21.0.1)
+      '@cucumber/message-streams': 4.0.1(@cucumber/messages@24.0.1)
       '@cucumber/messages': 21.0.1
       '@cucumber/tag-expressions': 5.0.1
       assertion-error-formatter: 3.0.0
@@ -11113,10 +11106,10 @@ snapshots:
       yaml: 2.3.4
       yup: 0.32.11
 
-  '@cucumber/gherkin-streams@5.0.1(@cucumber/gherkin@26.0.3)(@cucumber/message-streams@4.0.1(@cucumber/messages@24.0.1))(@cucumber/messages@21.0.1)':
+  '@cucumber/gherkin-streams@5.0.1(@cucumber/gherkin@26.0.3)(@cucumber/message-streams@4.0.1(@cucumber/messages@21.0.1))(@cucumber/messages@21.0.1)':
     dependencies:
       '@cucumber/gherkin': 26.0.3
-      '@cucumber/message-streams': 4.0.1(@cucumber/messages@21.0.1)
+      '@cucumber/message-streams': 4.0.1(@cucumber/messages@24.0.1)
       '@cucumber/messages': 21.0.1
       commander: 9.1.0
       source-map-support: 0.5.21
@@ -11157,13 +11150,13 @@ snapshots:
     dependencies:
       '@cucumber/messages': 22.0.0
 
-  '@cucumber/message-streams@4.0.1(@cucumber/messages@21.0.1)':
-    dependencies:
-      '@cucumber/messages': 21.0.1
-
   '@cucumber/message-streams@4.0.1(@cucumber/messages@22.0.0)':
     dependencies:
       '@cucumber/messages': 22.0.0
+
+  '@cucumber/message-streams@4.0.1(@cucumber/messages@24.0.1)':
+    dependencies:
+      '@cucumber/messages': 24.0.1
 
   '@cucumber/messages@19.1.4':
     dependencies:
@@ -11874,7 +11867,7 @@ snapshots:
 
   '@types/istanbul-lib-coverage@2.0.6': {}
 
-  '@types/jquery@3.5.29':
+  '@types/jquery@3.5.30':
     dependencies:
       '@types/sizzle': 2.3.8
 
@@ -11896,7 +11889,7 @@ snapshots:
 
   '@types/mark.js@8.11.12':
     dependencies:
-      '@types/jquery': 3.5.29
+      '@types/jquery': 3.5.30
 
   '@types/mdast@3.0.15':
     dependencies:
@@ -19565,6 +19558,10 @@ snapshots:
 
   void-elements@3.1.0: {}
 
+  vs-vue3-select@1.3.5(vue@3.4.21(typescript@5.4.5)):
+    dependencies:
+      vue: 3.4.21(typescript@5.4.5)
+
   vue-component-type-helpers@2.0.13: {}
 
   vue-concurrency@5.0.1(vue@3.4.21(typescript@5.4.5)):
@@ -19682,10 +19679,6 @@ snapshots:
   vue-router@4.2.5(vue@3.4.21(typescript@5.4.5)):
     dependencies:
       '@vue/devtools-api': 6.5.1
-      vue: 3.4.21(typescript@5.4.5)
-
-  vue-select@4.0.0-beta.6(vue@3.4.21(typescript@5.4.5)):
-    dependencies:
       vue: 3.4.21(typescript@5.4.5)
 
   vue-style-loader@4.1.3:
