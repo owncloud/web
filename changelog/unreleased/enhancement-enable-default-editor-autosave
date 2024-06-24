@@ -1,0 +1,6 @@
+Enhancement: Enable default autosave in editors
+
+Autosaving every 2 minutes in any editor is now the default behaviour.
+
+https://github.com/owncloud/web/pull/11093
+https://github.com/owncloud/web/issues/11090
