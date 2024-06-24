@@ -61,6 +61,7 @@ const initOrUpdate = (el: HTMLElement & { tooltip: any }, { value = {} }: any) =
   const props = merge.all([
     {
       ignoreAttributes: true,
+      interactive: true,
       aria: {
         content: null,
         expanded: false
