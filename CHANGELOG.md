@@ -52,7 +52,9 @@ Details
    spinners and reduced the delay before it appears from 1 second to 0.5 seconds.
 
    https://github.com/owncloud/web/issues/11041
+   https://github.com/owncloud/web/issues/11083
    https://github.com/owncloud/web/pull/11054
+   https://github.com/owncloud/web/pull/11084
 
 * Enhancement - Add action drop down top app top bar: [#11057](https://github.com/owncloud/web/pull/11057)
 
