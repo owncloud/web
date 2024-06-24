@@ -17,12 +17,15 @@ import {
   useGetMatchingSpace,
   useModals,
   useRouter,
-  useThemeStore
+  useThemeStore,
+  useConfigStore,
+  routeToContextQuery
 } from '../../composables'
 import { ApplicationInformation } from '../../apps'
 import { RouteLocationRaw } from 'vue-router'
 import AppLoadingSpinner from '../AppLoadingSpinner.vue'
-import { Resource } from '@ownclouders/web-client'
+import { isShareSpaceResource, Resource } from '@ownclouders/web-client'
+import { unref } from 'vue'
 
 export default defineComponent({
   name: 'FilePickerModal',
@@ -32,12 +35,13 @@ export default defineComponent({
     app: { type: Object as PropType<ApplicationInformation>, required: true },
     parentFolderLink: { type: Object as PropType<RouteLocationRaw>, required: true }
   },
-  setup(props, { emit }) {
+  setup: function (props) {
     const isLoading = ref(true)
     const router = useRouter()
     const { removeModal } = useModals()
     const { getMatchingSpace } = useGetMatchingSpace()
     const themeStore = useThemeStore()
+    const configStore = useConfigStore()
     const parentFolderRoute = router.resolve(props.parentFolderLink)
 
     const availableFileTypes = (props.app as ApplicationInformation).extensions.map((e) =>
@@ -61,14 +65,21 @@ export default defineComponent({
 
       const resource: Resource = data.data
       const space = getMatchingSpace(resource)
+      const remoteItemId = isShareSpaceResource(space) ? space.id : undefined
 
       const editorRoute = router.resolve({
-        name: (props.app as ApplicationInformation).id,
+        name: unref(router.currentRoute).name,
         params: {
           driveAliasAndItem: space.getDriveAliasAndItem(resource),
           filePath: resource.path,
           fileId: resource.fileId,
           EDITOR_MODE_EDIT
+        },
+        query: {
+          ...(remoteItemId && { shareId: remoteItemId }),
+          ...(resource.fileId &&
+            configStore.options.routing.idBased && { fileId: resource.fileId }),
+          ...routeToContextQuery(unref(router.currentRoute))
         }
       })
 
