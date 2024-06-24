@@ -5,4 +5,6 @@ We have updated the loading spinner on the initial page load to run continuously
 Additionally, we have aligned the spinner's design with our other loading spinners and reduced the delay before it appears from 1 second to 0.5 seconds.
 
 https://github.com/owncloud/web/pull/11054
+https://github.com/owncloud/web/pull/11084
 https://github.com/owncloud/web/issues/11041
+https://github.com/owncloud/web/issues/11083
