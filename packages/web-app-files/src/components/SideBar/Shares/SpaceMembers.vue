@@ -86,7 +86,7 @@ import {
 } from '@ownclouders/web-pkg'
 import { defineComponent, inject, ref, Ref } from 'vue'
 import { shareSpaceAddMemberHelp } from '../../../helpers/contextualHelpers'
-import { ProjectSpaceResource, CollaboratorShare, buildSpace } from '@ownclouders/web-client'
+import { ProjectSpaceResource, CollaboratorShare } from '@ownclouders/web-client'
 import { useClientService } from '@ownclouders/web-pkg'
 import Fuse from 'fuse.js'
 import Mark from 'mark.js'
@@ -223,8 +223,8 @@ export default defineComponent({
 
             if (!currentUserRemoved) {
               const client = this.clientService.graphAuthenticated
-              const graphResponse = await client.drives.getDrive(share.resourceId)
-              this.upsertSpace(buildSpace(graphResponse.data))
+              const space = await client.drives.getDrive(share.resourceId)
+              this.upsertSpace(space)
             }
 
             this.removeSpaceMember({ member: share })

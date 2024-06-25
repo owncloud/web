@@ -5,8 +5,6 @@ import { useMessages, useResourcesStore } from '../../../../../src/composables/p
 import { unref } from 'vue'
 import { HttpError, Resource, TrashResource } from '@ownclouders/web-client'
 import { ProjectSpaceResource, SpaceResource } from '@ownclouders/web-client'
-import { Drive } from '@ownclouders/web-client/graph/generated'
-import { AxiosResponse } from 'axios'
 import { useRestoreWorker } from '../../../../../src/composables/webWorkers/restoreWorker'
 
 vi.mock('../../../../../src/composables/webWorkers/restoreWorker')
@@ -191,9 +189,7 @@ function getWrapper({
   mocks.$clientService.webdav.listFiles.mockImplementation(() => {
     return Promise.resolve({ resource: mock<Resource>(), children: [] })
   })
-  mocks.$clientService.graphAuthenticated.drives.getDrive.mockResolvedValue(
-    mock<AxiosResponse>({ data: { value: mock<Drive>() } })
-  )
+  mocks.$clientService.graphAuthenticated.drives.getDrive.mockResolvedValue(mock<SpaceResource>())
 
   return {
     mocks,

@@ -1,12 +1,7 @@
 import { useSpaceActionsRestore } from '../../../../../src/composables/actions/spaces'
 import { buildSpace, SpaceResource } from '@ownclouders/web-client'
 import { mock } from 'vitest-mock-extended'
-import {
-  defaultComponentMocks,
-  mockAxiosResolve,
-  RouteLocation,
-  getComposableWrapper
-} from 'web-test-helpers'
+import { defaultComponentMocks, RouteLocation, getComposableWrapper } from 'web-test-helpers'
 import { unref } from 'vue'
 import { Drive } from '@ownclouders/web-client/graph/generated'
 import { useMessages, useModals } from '../../../../../src/composables/piniaStores'
@@ -102,7 +97,9 @@ describe('restore', () => {
     it('should show message on success', () => {
       getWrapper({
         setup: async ({ restoreSpaces }, { clientService }) => {
-          clientService.graphAuthenticated.drives.updateDrive.mockResolvedValue(mockAxiosResolve())
+          clientService.graphAuthenticated.drives.updateDrive.mockResolvedValue(
+            mock<SpaceResource>()
+          )
           await restoreSpaces([mock<SpaceResource>({ id: '1', canRestore: () => true })])
 
           const { showMessage } = useMessages()

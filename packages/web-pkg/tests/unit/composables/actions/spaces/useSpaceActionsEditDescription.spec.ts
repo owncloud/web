@@ -1,11 +1,6 @@
 import { useSpaceActionsEditDescription } from '../../../../../src/composables/actions'
 import { useMessages, useModals } from '../../../../../src/composables/piniaStores'
-import {
-  defaultComponentMocks,
-  mockAxiosResolve,
-  RouteLocation,
-  getComposableWrapper
-} from 'web-test-helpers'
+import { defaultComponentMocks, RouteLocation, getComposableWrapper } from 'web-test-helpers'
 import { mock } from 'vitest-mock-extended'
 import { unref } from 'vue'
 import { SpaceResource } from '@ownclouders/web-client'
@@ -38,7 +33,9 @@ describe('editDescription', () => {
     it('should show message on success', () => {
       getWrapper({
         setup: async ({ editDescriptionSpace }, { clientService }) => {
-          clientService.graphAuthenticated.drives.updateDrive.mockResolvedValue(mockAxiosResolve())
+          clientService.graphAuthenticated.drives.updateDrive.mockResolvedValue(
+            mock<SpaceResource>()
+          )
           await editDescriptionSpace(mock<SpaceResource>(), 'doesntmatter')
 
           const { showMessage } = useMessages()

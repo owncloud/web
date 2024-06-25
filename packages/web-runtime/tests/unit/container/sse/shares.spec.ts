@@ -20,8 +20,8 @@ import {
   onSSESpaceShareUpdatedEvent
 } from '../../../../src/container/sse'
 import { mock, mockDeep } from 'vitest-mock-extended'
-import { Drive, DriveItem, User } from '@ownclouders/web-client/graph/generated'
-import { ShareTypes, buildSpace, Resource, SpaceResource } from '@ownclouders/web-client'
+import { DriveItem, User } from '@ownclouders/web-client/graph/generated'
+import { ShareTypes, Resource, SpaceResource } from '@ownclouders/web-client'
 import { createTestingPinia, mockAxiosResolve, defaultComponentMocks } from 'web-test-helpers'
 import { Language } from 'vue3-gettext'
 import PQueue from 'p-queue'
@@ -31,52 +31,40 @@ import { RouteLocation } from 'vue-router'
 describe('shares events', () => {
   describe('onSSESpaceMemberAddedEvent', () => {
     it('calls "upsertSpace" when space member has been added', async () => {
-      const drive = mockDeep<Drive>({ id: 'space1', root: { permissions: [] } })
+      const space = mock<SpaceResource>({ id: 'space1' })
       const mocks = getMocks({ currentRouteFilesSpacesGeneric: true })
       const sseData = mock<EventSchemaType>({
-        itemid: drive.id,
-        spaceid: drive.id
+        itemid: space.id,
+        spaceid: space.id
       })
-      mocks.clientService.graphAuthenticated.drives.getDrive.mockResolvedValue(
-        mockDeep<AxiosResponse>({
-          data: drive
-        })
-      )
+      mocks.clientService.graphAuthenticated.drives.getDrive.mockResolvedValue(space)
       await onSSESpaceMemberAddedEvent({ sseData, ...mocks })
       expect(mocks.clientService.graphAuthenticated.drives.getDrive).toHaveBeenCalled()
       expect(mocks.spacesStore.upsertSpace).toHaveBeenCalled()
       expect(mocks.resourcesStore.upsertResource).not.toHaveBeenCalled()
     })
     it('calls "upsertResource" when space member has been added and current route equals "files-spaces-projects"', async () => {
-      const drive = mockDeep<Drive>({ id: 'space1', root: { permissions: [] } })
+      const space = mock<SpaceResource>({ id: 'space1' })
       const mocks = getMocks({ currentRouteFilesSpacesProjects: true })
       const sseData = mock<EventSchemaType>({
-        itemid: drive.id,
-        spaceid: drive.id
+        itemid: space.id,
+        spaceid: space.id
       })
-      mocks.clientService.graphAuthenticated.drives.getDrive.mockResolvedValue(
-        mockDeep<AxiosResponse>({
-          data: drive
-        })
-      )
+      mocks.clientService.graphAuthenticated.drives.getDrive.mockResolvedValue(space)
       await onSSESpaceMemberAddedEvent({ sseData, ...mocks })
       expect(mocks.clientService.graphAuthenticated.drives.getDrive).toHaveBeenCalled()
       expect(mocks.spacesStore.upsertSpace).toHaveBeenCalled()
       expect(mocks.resourcesStore.upsertResource).toHaveBeenCalled()
     })
     it('does not trigger any action when initiator ids are identical', async () => {
-      const drive = mockDeep<Drive>({ id: 'space1', root: { permissions: [] } })
+      const space = mock<SpaceResource>({ id: 'space1' })
       const mocks = getMocks({ currentRouteFilesSpacesProjects: true })
       const sseData = mock<EventSchemaType>({
-        itemid: drive.id,
-        spaceid: drive.id,
+        itemid: space.id,
+        spaceid: space.id,
         initiatorid: 'local1'
       })
-      mocks.clientService.graphAuthenticated.drives.getDrive.mockResolvedValue(
-        mock<AxiosResponse>({
-          data: drive
-        })
-      )
+      mocks.clientService.graphAuthenticated.drives.getDrive.mockResolvedValue(space)
       await onSSESpaceMemberAddedEvent({ sseData, ...mocks })
       expect(mocks.clientService.graphAuthenticated.drives.getDrive).not.toHaveBeenCalled()
       expect(mocks.spacesStore.upsertSpace).not.toHaveBeenCalled()
@@ -85,18 +73,14 @@ describe('shares events', () => {
   })
   describe('onSSESpaceMemberRemovedEvent', () => {
     it('calls "upsertSpace" when space member has been removed and current user is not affected', async () => {
-      const drive = mockDeep<Drive>({ id: 'space1', root: { permissions: [] } })
+      const space = mock<SpaceResource>({ id: 'space1' })
       const mocks = getMocks()
       const sseData = mock<EventSchemaType>({
-        itemid: drive.id,
-        spaceid: drive.id,
+        itemid: space.id,
+        spaceid: space.id,
         affecteduserids: ['2']
       })
-      mocks.clientService.graphAuthenticated.drives.getDrive.mockResolvedValue(
-        mockDeep<AxiosResponse>({
-          data: drive
-        })
-      )
+      mocks.clientService.graphAuthenticated.drives.getDrive.mockResolvedValue(space)
       await onSSESpaceMemberRemovedEvent({ sseData, ...mocks })
       expect(mocks.clientService.graphAuthenticated.drives.getDrive).toHaveBeenCalled()
       expect(mocks.spacesStore.upsertSpace).toHaveBeenCalled()
@@ -104,18 +88,14 @@ describe('shares events', () => {
       expect(mocks.messageStore.showMessage).not.toHaveBeenCalled()
     })
     it('calls "removeSpace" when space member has been removed and current user is affected', async () => {
-      const drive = mockDeep<Drive>({ id: 'space1', root: { permissions: [] } })
-      const mocks = getMocks({ currentRouteFilesSpacesProjects: true, spaces: [buildSpace(drive)] })
+      const space = mock<SpaceResource>({ id: 'space1' })
+      const mocks = getMocks({ currentRouteFilesSpacesProjects: true, spaces: [space] })
       const sseData = mock<EventSchemaType>({
-        itemid: drive.id,
-        spaceid: drive.id,
+        itemid: space.id,
+        spaceid: space.id,
         affecteduserids: ['1']
       })
-      mocks.clientService.graphAuthenticated.drives.getDrive.mockResolvedValue(
-        mock<AxiosResponse>({
-          data: drive
-        })
-      )
+      mocks.clientService.graphAuthenticated.drives.getDrive.mockResolvedValue(space)
       await onSSESpaceMemberRemovedEvent({ sseData, ...mocks })
       expect(mocks.clientService.graphAuthenticated.drives.getDrive).not.toHaveBeenCalled()
       expect(mocks.spacesStore.upsertSpace).not.toHaveBeenCalled()
@@ -123,18 +103,14 @@ describe('shares events', () => {
       expect(mocks.messageStore.showMessage).not.toHaveBeenCalled()
     })
     it('calls "showMessage" when space member has been removed and current user is affected and navigated to space', async () => {
-      const drive = mockDeep<Drive>({ id: 'space1', root: { permissions: [] } })
-      const mocks = getMocks({ currentRouteFilesSpacesGeneric: true, spaces: [buildSpace(drive)] })
+      const space = mock<SpaceResource>({ id: 'space1' })
+      const mocks = getMocks({ currentRouteFilesSpacesGeneric: true, spaces: [space] })
       const sseData = mock<EventSchemaType>({
-        itemid: drive.id,
-        spaceid: drive.id,
+        itemid: space.id,
+        spaceid: space.id,
         affecteduserids: ['1']
       })
-      mocks.clientService.graphAuthenticated.drives.getDrive.mockResolvedValue(
-        mock<AxiosResponse>({
-          data: drive
-        })
-      )
+      mocks.clientService.graphAuthenticated.drives.getDrive.mockResolvedValue(space)
       await onSSESpaceMemberRemovedEvent({ sseData, ...mocks })
       expect(mocks.clientService.graphAuthenticated.drives.getDrive).not.toHaveBeenCalled()
       expect(mocks.spacesStore.upsertSpace).not.toHaveBeenCalled()
@@ -142,19 +118,15 @@ describe('shares events', () => {
       expect(mocks.messageStore.showMessage).toHaveBeenCalled()
     })
     it('does not trigger any action when initiator ids are identical', async () => {
-      const drive = mockDeep<Drive>({ id: 'space1', root: { permissions: [] } })
-      const mocks = getMocks({ currentRouteFilesSpacesProjects: true, spaces: [buildSpace(drive)] })
+      const space = mock<SpaceResource>({ id: 'space1' })
+      const mocks = getMocks({ currentRouteFilesSpacesProjects: true, spaces: [space] })
       const sseData = mock<EventSchemaType>({
-        itemid: drive.id,
-        spaceid: drive.id,
+        itemid: space.id,
+        spaceid: space.id,
         affecteduserids: ['1'],
         initiatorid: 'local1'
       })
-      mocks.clientService.graphAuthenticated.drives.getDrive.mockResolvedValue(
-        mock<AxiosResponse>({
-          data: drive
-        })
-      )
+      mocks.clientService.graphAuthenticated.drives.getDrive.mockResolvedValue(space)
       await onSSESpaceMemberRemovedEvent({ sseData, ...mocks })
       expect(mocks.clientService.graphAuthenticated.drives.getDrive).not.toHaveBeenCalled()
       expect(mocks.spacesStore.upsertSpace).not.toHaveBeenCalled()
@@ -164,18 +136,14 @@ describe('shares events', () => {
   })
   describe('onSSESpaceShareUpdatedEvent', () => {
     it('calls "upsertSpace" when space share has been updated', async () => {
-      const drive = mockDeep<Drive>({ id: 'space1', root: { permissions: [] } })
+      const space = mock<SpaceResource>({ id: 'space1' })
       const mocks = getMocks()
       const sseData = mock<EventSchemaType>({
-        itemid: drive.id,
-        spaceid: drive.id,
+        itemid: space.id,
+        spaceid: space.id,
         affecteduserids: ['2']
       })
-      mocks.clientService.graphAuthenticated.drives.getDrive.mockResolvedValue(
-        mockDeep<AxiosResponse>({
-          data: drive
-        })
-      )
+      mocks.clientService.graphAuthenticated.drives.getDrive.mockResolvedValue(space)
       const busStub = vi.spyOn(eventBus, 'publish')
       await onSSESpaceShareUpdatedEvent({ sseData, ...mocks })
       expect(mocks.clientService.graphAuthenticated.drives.getDrive).toHaveBeenCalled()
@@ -183,18 +151,14 @@ describe('shares events', () => {
       expect(busStub).not.toHaveBeenCalled()
     })
     it('calls "eventBus.publish" when space share has been updated and current user is affected and navigated to space', async () => {
-      const drive = mockDeep<Drive>({ id: 'space1', root: { permissions: [] } })
-      const mocks = getMocks({ currentRouteFilesSpacesGeneric: true, spaces: [buildSpace(drive)] })
+      const space = mock<SpaceResource>({ id: 'space1' })
+      const mocks = getMocks({ currentRouteFilesSpacesGeneric: true, spaces: [space] })
       const sseData = mock<EventSchemaType>({
-        itemid: drive.id,
-        spaceid: drive.id,
+        itemid: space.id,
+        spaceid: space.id,
         affecteduserids: ['1']
       })
-      mocks.clientService.graphAuthenticated.drives.getDrive.mockResolvedValue(
-        mock<AxiosResponse>({
-          data: drive
-        })
-      )
+      mocks.clientService.graphAuthenticated.drives.getDrive.mockResolvedValue(space)
       const busStub = vi.spyOn(eventBus, 'publish')
       await onSSESpaceShareUpdatedEvent({ sseData, ...mocks })
       expect(mocks.clientService.graphAuthenticated.drives.getDrive).toHaveBeenCalled()
@@ -202,19 +166,15 @@ describe('shares events', () => {
       expect(busStub).toHaveBeenCalled()
     })
     it('does not trigger any action when initiator ids are identical', async () => {
-      const drive = mockDeep<Drive>({ id: 'space1', root: { permissions: [] } })
-      const mocks = getMocks({ currentRouteFilesSpacesGeneric: true, spaces: [buildSpace(drive)] })
+      const space = mock<SpaceResource>({ id: 'space1' })
+      const mocks = getMocks({ currentRouteFilesSpacesGeneric: true, spaces: [space] })
       const sseData = mock<EventSchemaType>({
-        itemid: drive.id,
-        spaceid: drive.id,
+        itemid: space.id,
+        spaceid: space.id,
         affecteduserids: ['1'],
         initiatorid: 'local1'
       })
-      mocks.clientService.graphAuthenticated.drives.getDrive.mockResolvedValue(
-        mock<AxiosResponse>({
-          data: drive
-        })
-      )
+      mocks.clientService.graphAuthenticated.drives.getDrive.mockResolvedValue(space)
       const busStub = vi.spyOn(eventBus, 'publish')
       await onSSESpaceShareUpdatedEvent({ sseData, ...mocks })
       expect(mocks.clientService.graphAuthenticated.drives.getDrive).not.toHaveBeenCalled()

@@ -2,12 +2,7 @@ import { useFileActionsSetImage } from '../../../../../src'
 import { useMessages } from '../../../../../src/composables/piniaStores'
 import { buildSpace, Resource, SpaceResource } from '@ownclouders/web-client'
 import { mock } from 'vitest-mock-extended'
-import {
-  defaultComponentMocks,
-  RouteLocation,
-  getComposableWrapper,
-  mockAxiosResolve
-} from 'web-test-helpers'
+import { defaultComponentMocks, RouteLocation, getComposableWrapper } from 'web-test-helpers'
 import { unref } from 'vue'
 import { Drive } from '@ownclouders/web-client/graph/generated'
 
@@ -101,14 +96,11 @@ describe('setImage', () => {
 
   describe('handler', () => {
     it('should show message on success', () => {
-      const driveMock = mock<Drive>({ special: [{ specialFolder: { name: 'image' } }] })
-
       const space = mock<SpaceResource>({ id: '1' })
+
       getWrapper({
         setup: async ({ actions }, { clientService }) => {
-          clientService.graphAuthenticated.drives.updateDrive.mockResolvedValue(
-            mockAxiosResolve(driveMock)
-          )
+          clientService.graphAuthenticated.drives.updateDrive.mockResolvedValue(space)
           await unref(actions)[0].handler({
             space,
             resources: [

@@ -1,12 +1,7 @@
 import { useSpaceActionsRename } from '../../../../../src/composables/actions/spaces'
 import { useMessages, useModals } from '../../../../../src/composables/piniaStores'
 import { mock } from 'vitest-mock-extended'
-import {
-  defaultComponentMocks,
-  mockAxiosResolve,
-  RouteLocation,
-  getComposableWrapper
-} from 'web-test-helpers'
+import { defaultComponentMocks, RouteLocation, getComposableWrapper } from 'web-test-helpers'
 import { unref } from 'vue'
 import { SpaceResource } from '@ownclouders/web-client'
 
@@ -39,7 +34,9 @@ describe('rename', () => {
     it('should show message on success', () => {
       getWrapper({
         setup: async ({ renameSpace }, { clientService }) => {
-          clientService.graphAuthenticated.drives.updateDrive.mockResolvedValue(mockAxiosResolve())
+          clientService.graphAuthenticated.drives.updateDrive.mockResolvedValue(
+            mock<SpaceResource>()
+          )
           await renameSpace(mock<SpaceResource>({ id: '1' }), 'renamed space')
 
           const { showMessage } = useMessages()

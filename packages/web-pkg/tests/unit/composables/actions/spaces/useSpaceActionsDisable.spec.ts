@@ -1,12 +1,7 @@
 import { useSpaceActionsDisable } from '../../../../../src/composables/actions/spaces'
 import { useMessages, useModals } from '../../../../../src/composables/piniaStores'
 import { buildSpace, SpaceResource } from '@ownclouders/web-client'
-import {
-  defaultComponentMocks,
-  mockAxiosResolve,
-  RouteLocation,
-  getComposableWrapper
-} from 'web-test-helpers'
+import { defaultComponentMocks, RouteLocation, getComposableWrapper } from 'web-test-helpers'
 import { mock } from 'vitest-mock-extended'
 import { unref } from 'vue'
 import { Drive } from '@ownclouders/web-client/graph/generated'
@@ -102,7 +97,7 @@ describe('disable', () => {
     it('should show message on success', () => {
       getWrapper({
         setup: async ({ disableSpaces }, { clientService }) => {
-          clientService.graphAuthenticated.drives.disableDrive.mockResolvedValue(mockAxiosResolve())
+          clientService.graphAuthenticated.drives.disableDrive.mockResolvedValue()
           await disableSpaces([
             mock<SpaceResource>({ id: '1', canDisable: () => true, driveType: 'project' })
           ])

@@ -1,11 +1,6 @@
 import { AxiosInstance, AxiosPromise, AxiosResponse } from 'axios'
 import {
-  CollectionOfDrives,
   Configuration,
-  Drive,
-  DrivesApiFactory,
-  MeDrivesApi,
-  DrivesGetDrivesApi,
   MeDriveApiFactory,
   RoleManagementApiFactory,
   UnifiedRoleDefinition,
@@ -24,6 +19,7 @@ import {
 import { type GraphUsers, UsersFactory } from './users'
 import { type GraphGroups, GroupsFactory } from './groups'
 import { ApplicationsFactory, GraphApplications } from './applications'
+import { DrivesFactory, GraphDrives } from './drives'
 import { TagsFactory, GraphTags } from './tags'
 import { ActivitiesFactory, GraphActivities } from './activities'
 
@@ -31,16 +27,9 @@ export interface Graph {
   activities: GraphActivities
   applications: GraphApplications
   tags: GraphTags
-  drives: {
-    listMyDrives: (orderBy?: string, filter?: string) => Promise<AxiosResponse<CollectionOfDrives>>
-    listAllDrives: (orderBy?: string, filter?: string) => Promise<AxiosResponse<CollectionOfDrives>>
+  drives: GraphDrives & {
     listSharedWithMe: () => AxiosPromise<CollectionOfDriveItems1>
     listSharedByMe: () => AxiosPromise<CollectionOfDriveItems1>
-    getDrive: (id: string) => AxiosPromise<Drive>
-    createDrive: (drive: Drive, options: any) => AxiosPromise<Drive>
-    updateDrive: (id: string, drive: Drive, options: any) => AxiosPromise<Drive>
-    disableDrive: (id: string) => AxiosPromise<void>
-    deleteDrive: (id: string) => AxiosPromise<void>
     deleteDriveItem: (driveId: string, itemId: string) => AxiosPromise<void>
     updateDriveItem: (
       driveId: string,
@@ -115,10 +104,7 @@ export const graph = (baseURI: string, axiosClient: AxiosInstance): Graph => {
     basePath: url.href
   })
 
-  const meDrivesApi = new MeDrivesApi(config, config.basePath, axiosClient)
-  const allDrivesApi = new DrivesGetDrivesApi(config, config.basePath, axiosClient)
   const meDriveApiFactory = MeDriveApiFactory(config, config.basePath, axiosClient)
-  const drivesApiFactory = DrivesApiFactory(config, config.basePath, axiosClient)
   const roleManagementApiFactory = RoleManagementApiFactory(config, config.basePath, axiosClient)
   const driveItemApiFactory = DriveItemApiFactory(config, config.basePath, axiosClient)
   const drivesRootApiFactory = DrivesRootApiFactory(config, config.basePath, axiosClient)
@@ -133,24 +119,11 @@ export const graph = (baseURI: string, axiosClient: AxiosInstance): Graph => {
     applications: ApplicationsFactory({ axiosClient, config }),
     tags: TagsFactory({ axiosClient, config }),
     drives: {
-      listMyDrives: (orderBy?: string, filter?: string) =>
-        meDrivesApi.listMyDrives(orderBy, filter),
-      listAllDrives: (orderBy?: string, filter?: string) =>
-        allDrivesApi.listAllDrives(orderBy, filter),
+      ...DrivesFactory({ axiosClient, config }),
+
+      // TODO: split into DriveItemsFactory
       listSharedWithMe: () => meDriveApiFactory.listSharedWithMe(),
       listSharedByMe: () => meDriveApiFactory.listSharedByMe(),
-      getDrive: (id: string) => drivesApiFactory.getDrive(id),
-      createDrive: (drive: Drive, options: any): AxiosPromise<Drive> =>
-        drivesApiFactory.createDrive(drive, options),
-      updateDrive: (id: string, drive: Drive, options: any): AxiosPromise<Drive> =>
-        drivesApiFactory.updateDrive(id, drive, options),
-      disableDrive: (id: string): AxiosPromise<void> => drivesApiFactory.deleteDrive(id, '', {}),
-      deleteDrive: (id: string): AxiosPromise<void> =>
-        drivesApiFactory.deleteDrive(id, '', {
-          headers: {
-            Purge: 'T'
-          }
-        }),
       deleteDriveItem: (driveId: string, itemId: string) =>
         driveItemApiFactory.deleteDriveItem(driveId, itemId),
       updateDriveItem: (driveId: string, itemId: string, driveItem: DriveItem) =>

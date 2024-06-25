@@ -159,7 +159,7 @@ import { DateTime } from 'luxon'
 import { OcDrop } from 'design-system/src/components'
 import { useTask } from 'vue-concurrency'
 import { useGettext } from 'vue3-gettext'
-import { buildSpace, isProjectSpaceResource } from '@ownclouders/web-client'
+import { isProjectSpaceResource } from '@ownclouders/web-client'
 
 // just a dummy function to trick gettext tools
 const $gettext = (str: string) => {
@@ -377,11 +377,11 @@ export default defineComponent({
       const results = await Promise.allSettled(savePromises)
 
       if (isProjectSpaceResource(unref(resource))) {
-        const graphResponse = await clientService.graphAuthenticated.drives.getDrive(
+        const updatedSpace = await clientService.graphAuthenticated.drives.getDrive(
           unref(resource).id
         )
 
-        upsertSpace(buildSpace(graphResponse.data))
+        upsertSpace(updatedSpace)
 
         addedShares.forEach((member) => {
           upsertSpaceMember({ member })

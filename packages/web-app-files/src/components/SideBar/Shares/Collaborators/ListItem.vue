@@ -151,7 +151,7 @@ import { OcInfoDrop, OcDrop } from 'design-system/src/components'
 import { RouteLocationNamedRaw } from 'vue-router'
 import { useGettext } from 'vue3-gettext'
 import { SpaceResource } from '@ownclouders/web-client'
-import { buildSpace, isProjectSpaceResource } from '@ownclouders/web-client'
+import { isProjectSpaceResource } from '@ownclouders/web-client'
 import { ContextualHelperDataListItem } from 'design-system/src/helpers'
 
 export default defineComponent({
@@ -425,9 +425,9 @@ export default defineComponent({
 
         if (isProjectSpaceResource(this.resource)) {
           const client = this.clientService.graphAuthenticated
-          const graphResponse = await client.drives.getDrive(this.resource.id)
+          const space = await client.drives.getDrive(this.resource.id)
 
-          this.upsertSpace(buildSpace(graphResponse.data))
+          this.upsertSpace(space)
           this.upsertSpaceMember({ member: share })
         }
 

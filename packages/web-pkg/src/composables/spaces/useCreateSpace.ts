@@ -1,22 +1,14 @@
-import { buildSpace, extractStorageId, SpaceResource } from '@ownclouders/web-client'
+import { extractStorageId, SpaceResource } from '@ownclouders/web-client'
 import { useClientService } from '../clientService'
-import { useConfigStore, useResourcesStore } from '../piniaStores'
+import { useResourcesStore } from '../piniaStores'
 
 export const useCreateSpace = () => {
   const clientService = useClientService()
-  const configStore = useConfigStore()
   const resourcesStore = useResourcesStore()
 
-  const createSpace = async (name: string) => {
+  const createSpace = (name: string) => {
     const { graphAuthenticated } = clientService
-    const { data: createdSpace } = await graphAuthenticated.drives.createDrive(
-      { name },
-      { params: { template: 'default' } }
-    )
-    return buildSpace({
-      ...createdSpace,
-      serverUrl: configStore.serverUrl
-    })
+    return graphAuthenticated.drives.createDrive({ name }, { params: { template: 'default' } })
   }
 
   const createDefaultMetaFolder = async (space: SpaceResource) => {

@@ -1,23 +1,18 @@
 import QuotaModal from '../../../../src/components/Spaces/QuotaModal.vue'
-import {
-  defaultComponentMocks,
-  defaultPlugins,
-  defaultStubs,
-  mount,
-  mockAxiosResolve
-} from 'web-test-helpers'
+import { defaultComponentMocks, defaultPlugins, defaultStubs, mount } from 'web-test-helpers'
 import { useMessages, useSpacesStore } from '../../../../src/composables/piniaStores'
 import { SpaceResource } from '@ownclouders/web-client'
+import { mock } from 'vitest-mock-extended'
 
 describe('QuotaModal', () => {
   describe('method "editQuota"', () => {
     it('should show message on success', async () => {
       const { wrapper, mocks } = getWrapper()
       mocks.$clientService.graphAuthenticated.drives.updateDrive.mockResolvedValue(
-        mockAxiosResolve({
+        mock<SpaceResource>({
           id: '1fe58d8b-aa69-4c22-baf7-97dd57479f22',
           name: 'any',
-          quota: {
+          spaceQuota: {
             remaining: 9999999836,
             state: 'normal',
             total: 10000000000,

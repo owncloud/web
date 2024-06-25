@@ -10,8 +10,7 @@ import {
   mount,
   defaultStubs,
   defaultComponentMocks,
-  nextTicks,
-  mockAxiosResolve
+  nextTicks
 } from 'web-test-helpers'
 import { useMessages, useSharesStore, useSpacesStore } from '@ownclouders/web-pkg'
 import EditDropdown from '../../../../../../src/components/SideBar/Shares/Collaborators/EditDropdown.vue'
@@ -232,9 +231,7 @@ function createWrapper({
   resource?: Resource
 } = {}) {
   const mocks = defaultComponentMocks()
-  mocks.$clientService.graphAuthenticated.drives.getDrive.mockResolvedValue(
-    mockAxiosResolve(undefined)
-  )
+  mocks.$clientService.graphAuthenticated.drives.getDrive.mockResolvedValue(undefined)
 
   return {
     wrapper: mount(ListItem, {

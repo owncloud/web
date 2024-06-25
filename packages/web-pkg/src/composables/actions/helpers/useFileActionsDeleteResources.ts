@@ -224,11 +224,11 @@ export const useFileActionsDeleteResources = () => {
               !['public', 'share'].includes(spaceForDeletion?.driveType)
             ) {
               const graphClient = clientService.graphAuthenticated
-              const driveResponse = await graphClient.drives.getDrive(unref(resources)[0].storageId)
+              const updatedSpace = await graphClient.drives.getDrive(unref(resources)[0].storageId)
               spacesStore.updateSpaceField({
-                id: driveResponse.data.id,
+                id: updatedSpace.id,
                 field: 'spaceQuota',
-                value: driveResponse.data.quota
+                value: updatedSpace.spaceQuota
               })
             }
 

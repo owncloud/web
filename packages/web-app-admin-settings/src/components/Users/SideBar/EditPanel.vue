@@ -123,13 +123,7 @@ import {
 } from '@ownclouders/web-pkg'
 import GroupSelect from '../GroupSelect.vue'
 import { cloneDeep, isEmpty, isEqual, omit } from 'lodash-es'
-import {
-  AppRole,
-  AppRoleAssignment,
-  Drive,
-  Group,
-  User
-} from '@ownclouders/web-client/graph/generated'
+import { AppRole, AppRoleAssignment, Group, User } from '@ownclouders/web-client/graph/generated'
 import { MaybeRef, useClientService } from '@ownclouders/web-pkg'
 import { storeToRefs } from 'pinia'
 import { diff } from 'deep-object-diff'
@@ -231,18 +225,17 @@ export default defineComponent({
 
     const onUpdateUserDrive = async (editUser: User) => {
       const client = clientService.graphAuthenticated
-      const updateDriveResponse = await client.drives.updateDrive(
-        editUser.drive.id,
-        { quota: { total: editUser.drive.quota.total } } as Drive,
-        {}
-      )
+      const updateSpace = await client.drives.updateDrive(editUser.drive.id, {
+        name: editUser.drive.name,
+        quota: { total: editUser.drive.quota.total }
+      })
 
       if (editUser.id === userStore.user.id) {
         // Load current user quota
         spacesStore.updateSpaceField({
           id: editUser.drive.id,
           field: 'spaceQuota',
-          value: updateDriveResponse.data.quota
+          value: updateSpace.spaceQuota
         })
       }
     }

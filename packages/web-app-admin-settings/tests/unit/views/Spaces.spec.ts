@@ -1,12 +1,10 @@
-import { mockAxiosResolve } from 'web-test-helpers/src/mocks'
 import { SpaceResource } from '@ownclouders/web-client'
 import { Graph } from '@ownclouders/web-client/graph'
-import { mock, mockDeep } from 'vitest-mock-extended'
+import { mockDeep } from 'vitest-mock-extended'
 import { ClientService, useAppDefaults } from '@ownclouders/web-pkg'
 import { defaultComponentMocks, defaultPlugins, mount } from 'web-test-helpers'
 import Spaces from '../../../src/views/Spaces.vue'
 import { useAppDefaultsMock } from 'web-test-helpers/src/mocks/useAppDefaultsMock'
-import { Drive } from '@ownclouders/web-client/graph/generated'
 
 vi.mock('@ownclouders/web-pkg', async (importOriginal) => ({
   ...(await importOriginal<any>()),
@@ -39,7 +37,7 @@ describe('Spaces view', () => {
   })
   it('should render no content message if no spaces found', async () => {
     const graph = mockDeep<Graph>()
-    graph.drives.listAllDrives.mockResolvedValue(mockAxiosResolve({ value: [] }))
+    graph.drives.listAllDrives.mockResolvedValue([])
     const { wrapper } = getWrapper({ spaces: [] })
     await wrapper.vm.loadResourcesTask.last
     expect(wrapper.find(selectors.noContentMessageStub).exists()).toBeTruthy()
@@ -80,9 +78,7 @@ function getWrapper({
   selectedSpaces = []
 }: { spaces?: SpaceResource[]; selectedSpaces?: SpaceResource[] } = {}) {
   const $clientService = mockDeep<ClientService>()
-  $clientService.graphAuthenticated.drives.listAllDrives.mockResolvedValue(
-    mockAxiosResolve({ value: spaces.map(() => mock<Drive>()) })
-  )
+  $clientService.graphAuthenticated.drives.listAllDrives.mockResolvedValue(spaces)
   const mocks = {
     ...defaultComponentMocks(),
     $clientService

@@ -1,12 +1,7 @@
 import { useSpaceActionsDuplicate } from '../../../../../src/composables/actions/spaces'
 import { AbilityRule, SpaceResource } from '@ownclouders/web-client'
 import { mock } from 'vitest-mock-extended'
-import {
-  defaultComponentMocks,
-  mockAxiosResolve,
-  RouteLocation,
-  getComposableWrapper
-} from 'web-test-helpers'
+import { defaultComponentMocks, RouteLocation, getComposableWrapper } from 'web-test-helpers'
 import { unref } from 'vue'
 import { ListFilesResult } from '@ownclouders/web-client/webdav'
 import {
@@ -109,10 +104,9 @@ describe('restore', () => {
       getWrapper({
         setup: async ({ duplicateSpace }, { clientService }) => {
           clientService.graphAuthenticated.drives.createDrive.mockResolvedValue(
-            mockAxiosResolve({
+            mock<SpaceResource>({
               id: '1',
-              name: 'Moon (1)',
-              special: []
+              name: 'Moon (1)'
             })
           )
           clientService.webdav.listFiles.mockResolvedValue({ children: [] } as ListFilesResult)
@@ -139,10 +133,9 @@ describe('restore', () => {
         currentRouteName: 'files-spaces-projects',
         setup: async ({ duplicateSpace }, { clientService }) => {
           clientService.graphAuthenticated.drives.createDrive.mockResolvedValue(
-            mockAxiosResolve({
+            mock<SpaceResource>({
               id: '1',
-              name: 'Moon (1)',
-              special: []
+              name: 'Moon (1)'
             })
           )
           clientService.webdav.listFiles.mockResolvedValue({ children: [] } as ListFilesResult)

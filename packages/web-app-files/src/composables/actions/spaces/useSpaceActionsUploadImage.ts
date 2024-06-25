@@ -1,6 +1,5 @@
 import { computed, unref, VNodeRef } from 'vue'
 import { SpaceResource } from '@ownclouders/web-client'
-import { Drive } from '@ownclouders/web-client/graph/generated'
 import {
   useClientService,
   useLoadingService,
@@ -13,7 +12,6 @@ import { eventBus } from '@ownclouders/web-pkg'
 import { useGettext } from 'vue3-gettext'
 import { SpaceAction, SpaceActionOptions } from '@ownclouders/web-pkg'
 import { useCreateSpace } from '@ownclouders/web-pkg'
-import { buildSpace } from '@ownclouders/web-client'
 
 export const useSpaceActionsUploadImage = ({ spaceImageInput }: { spaceImageInput: VNodeRef }) => {
   const userStore = useUserStore()
@@ -75,28 +73,18 @@ export const useSpaceActionsUploadImage = ({ spaceImageInput }: { spaceImageInpu
           overwrite: true
         })
 
-        const { data } = await graphClient.drives.updateDrive(
-          selectedSpace.id.toString(),
-          {
-            special: [
-              {
-                specialFolder: {
-                  name: 'image'
-                },
-                id: fileId
-              }
-            ]
-          } as Drive,
-          {}
-        )
+        const updatedSpace = await graphClient.drives.updateDrive(selectedSpace.id, {
+          name: selectedSpace.name,
+          special: [{ specialFolder: { name: 'image' }, id: fileId }]
+        })
 
         spacesStore.updateSpaceField({
-          id: selectedSpace.id.toString(),
+          id: selectedSpace.id,
           field: 'spaceImageData',
-          value: data.special.find((special) => special.specialFolder.name === 'image')
+          value: updatedSpace.spaceImageData
         })
         showMessage({ title: $gettext('Space image was uploaded successfully') })
-        eventBus.publish('app.files.spaces.uploaded-image', buildSpace(data))
+        eventBus.publish('app.files.spaces.uploaded-image', updatedSpace)
       } catch (error) {
         console.error(error)
         showErrorMessage({

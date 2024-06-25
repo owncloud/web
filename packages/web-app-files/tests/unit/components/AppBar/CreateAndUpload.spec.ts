@@ -1,7 +1,6 @@
 import CreateAndUpload from 'web-app-files/src/components/AppBar/CreateAndUpload.vue'
 import { mock } from 'vitest-mock-extended'
 import { Resource, SpaceResource } from '@ownclouders/web-client'
-import { Drive } from '@ownclouders/web-client/graph/generated'
 import {
   FileAction,
   useFileActionsCreateNewFile,
@@ -13,12 +12,7 @@ import {
   useExtensionRegistry
 } from '@ownclouders/web-pkg'
 import { eventBus, UppyResource } from '@ownclouders/web-pkg'
-import {
-  defaultPlugins,
-  shallowMount,
-  defaultComponentMocks,
-  mockAxiosResolve
-} from 'web-test-helpers'
+import { defaultPlugins, shallowMount, defaultComponentMocks } from 'web-test-helpers'
 import { RouteLocation } from 'vue-router'
 import { ref } from 'vue'
 import { OcButton } from 'design-system/src/components'
@@ -124,7 +118,7 @@ describe('CreateAndUpload component', () => {
       ]
       const { wrapper, mocks } = getWrapper({ spaces })
       const graphMock = mocks.$clientService.graphAuthenticated
-      graphMock.drives.getDrive.mockResolvedValue(mockAxiosResolve<Drive>())
+      graphMock.drives.getDrive.mockResolvedValue(mock<SpaceResource>())
       await wrapper.vm.onUploadComplete({ successful: [file], failed: [] })
       const spacesStore = useSpacesStore()
       expect(spacesStore.updateSpaceField).toHaveBeenCalledTimes(updated)
@@ -138,7 +132,7 @@ describe('CreateAndUpload component', () => {
         meta: { driveType: 'project', spaceId: space.id, currentFolderId: itemId }
       })
       const graphMock = mocks.$clientService.graphAuthenticated
-      graphMock.drives.getDrive.mockResolvedValue(mockAxiosResolve<Drive>())
+      graphMock.drives.getDrive.mockResolvedValue(mock<SpaceResource>())
       await wrapper.vm.onUploadComplete({ successful: [file], failed: [] })
       expect(eventSpy).toHaveBeenCalled()
     })

@@ -6,9 +6,7 @@ import { useLoadingService } from '../../loadingService'
 import { useGettext } from 'vue3-gettext'
 import { useMessages, useModals, useSpacesStore, useUserStore } from '../../piniaStores'
 import { useCreateSpace } from '../../spaces'
-import { buildSpace } from '@ownclouders/web-client'
 import { eventBus } from '../../../services'
-import { Drive } from '@ownclouders/web-client/graph/generated'
 import { blobToArrayBuffer, canvasToBlob } from '../../../helpers'
 import EmojiPickerModal from '../../../components/Modals/EmojiPickerModal.vue'
 
@@ -84,28 +82,18 @@ export const useSpaceActionsSetIcon = () => {
           overwrite: true
         })
 
-        const { data } = await graphClient.drives.updateDrive(
-          space.id.toString(),
-          {
-            special: [
-              {
-                specialFolder: {
-                  name: 'image'
-                },
-                id: fileId
-              }
-            ]
-          } as Drive,
-          {}
-        )
+        const updatedSpace = await graphClient.drives.updateDrive(space.id, {
+          name: space.name,
+          special: [{ specialFolder: { name: 'image' }, id: fileId }]
+        })
 
         spacesStore.updateSpaceField({
           id: space.id.toString(),
           field: 'spaceImageData',
-          value: data.special.find((special) => special.specialFolder.name === 'image')
+          value: updatedSpace.spaceImageData
         })
         showMessage({ title: $gettext('Space icon was set successfully') })
-        eventBus.publish('app.files.spaces.uploaded-image', buildSpace(data))
+        eventBus.publish('app.files.spaces.uploaded-image', updatedSpace)
       } catch (error) {
         console.error(error)
         showErrorMessage({

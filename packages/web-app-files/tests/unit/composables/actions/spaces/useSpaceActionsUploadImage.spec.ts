@@ -1,15 +1,9 @@
 import { useSpaceActionsUploadImage } from 'web-app-files/src/composables/actions/spaces/useSpaceActionsUploadImage'
 import { mock } from 'vitest-mock-extended'
-import {
-  defaultComponentMocks,
-  RouteLocation,
-  getComposableWrapper,
-  mockAxiosResolve
-} from 'web-test-helpers'
+import { defaultComponentMocks, RouteLocation, getComposableWrapper } from 'web-test-helpers'
 import { unref, VNodeRef } from 'vue'
 import { eventBus, useMessages } from '@ownclouders/web-pkg'
 import { Resource, SpaceResource } from '@ownclouders/web-client'
-import { Drive } from '@ownclouders/web-client/graph/generated'
 
 describe('uploadImage', () => {
   describe('method "uploadImageSpace"', () => {
@@ -17,10 +11,8 @@ describe('uploadImage', () => {
       getWrapper({
         setup: async ({ uploadImageSpace }, { clientService }) => {
           const busStub = vi.spyOn(eventBus, 'publish')
-          const driveMock = mock<Drive>({ special: [{ specialFolder: { name: 'image' } }] })
-          clientService.graphAuthenticated.drives.updateDrive.mockResolvedValue(
-            mockAxiosResolve(driveMock)
-          )
+          const spaceMock = mock<SpaceResource>({ spaceImageData: {} })
+          clientService.graphAuthenticated.drives.updateDrive.mockResolvedValue(spaceMock)
           clientService.webdav.putFileContents.mockResolvedValue(
             mock<Resource>({
               fileId:

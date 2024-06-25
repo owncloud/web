@@ -1,7 +1,6 @@
 import {
   buildIncomingShareResource,
   buildOutgoingShareResource,
-  buildSpace,
   ShareTypes
 } from '@ownclouders/web-client'
 import {
@@ -25,8 +24,7 @@ export const onSSESpaceMemberAddedEvent = async ({
     return
   }
 
-  const { data } = await clientService.graphAuthenticated.drives.getDrive(sseData.itemid)
-  const space = buildSpace(data)
+  const space = await clientService.graphAuthenticated.drives.getDrive(sseData.itemid)
   spacesStore.upsertSpace(space)
 
   if (!isLocationSpacesActive(router, 'files-spaces-projects')) {
@@ -52,8 +50,7 @@ export const onSSESpaceMemberRemovedEvent = async ({
   }
 
   if (!sseData.affecteduserids?.includes(userStore.user.id)) {
-    const { data } = await clientService.graphAuthenticated.drives.getDrive(sseData.itemid)
-    const space = buildSpace(data)
+    const space = await clientService.graphAuthenticated.drives.getDrive(sseData.itemid)
     return spacesStore.upsertSpace(space)
   }
 
@@ -96,8 +93,7 @@ export const onSSESpaceShareUpdatedEvent = async ({
     return
   }
 
-  const { data } = await clientService.graphAuthenticated.drives.getDrive(sseData.itemid)
-  const space = buildSpace(data)
+  const space = await clientService.graphAuthenticated.drives.getDrive(sseData.itemid)
   spacesStore.upsertSpace(space)
 
   if (

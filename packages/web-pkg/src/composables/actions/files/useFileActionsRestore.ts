@@ -143,11 +143,11 @@ export const useFileActionsRestore = () => {
 
         // Reload quota
         const graphClient = clientService.graphAuthenticated
-        const driveResponse = await graphClient.drives.getDrive(space.id)
+        const updatedSpace = await graphClient.drives.getDrive(space.id)
         spacesStore.updateSpaceField({
-          id: driveResponse.data.id,
+          id: updatedSpace.id,
           field: 'spaceQuota',
-          value: driveResponse.data.quota
+          value: updatedSpace.spaceQuota
         })
       }
 

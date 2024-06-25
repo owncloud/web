@@ -1,12 +1,7 @@
 import { useSpaceActionsDelete } from '../../../../../src/composables/actions'
 import { useMessages, useModals } from '../../../../../src/composables/piniaStores'
 import { buildSpace, SpaceResource } from '@ownclouders/web-client'
-import {
-  defaultComponentMocks,
-  mockAxiosResolve,
-  RouteLocation,
-  getComposableWrapper
-} from 'web-test-helpers'
+import { defaultComponentMocks, RouteLocation, getComposableWrapper } from 'web-test-helpers'
 import { mock } from 'vitest-mock-extended'
 import { unref } from 'vue'
 import { Drive } from '@ownclouders/web-client/graph/generated'
@@ -104,7 +99,7 @@ describe('delete', () => {
     it('should show message on success', () => {
       getWrapper({
         setup: async ({ deleteSpaces }, { clientService }) => {
-          clientService.graphAuthenticated.drives.deleteDrive.mockResolvedValue(mockAxiosResolve())
+          clientService.graphAuthenticated.drives.deleteDrive.mockResolvedValue()
 
           await deleteSpaces([
             mock<SpaceResource>({ id: '1', canBeDeleted: () => true, driveType: 'project' })
