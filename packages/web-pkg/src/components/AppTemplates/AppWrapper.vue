@@ -51,7 +51,8 @@ import {
   useRouteQuery,
   useStore,
   useSelectedResources,
-  useSideBar
+  useSideBar,
+  useLoadingService
 } from '../../composables'
 import {
   Action,
@@ -106,6 +107,7 @@ export default defineComponent({
     const router = useRouter()
     const currentRoute = useRoute()
     const clientService = useClientService()
+    const loadingService = useLoadingService()
     const { getResourceContext } = useGetResourceContext()
     const { selectedResources } = useSelectedResources({ store })
 
@@ -280,12 +282,6 @@ export default defineComponent({
       { immediate: true }
     )
 
-    onBeforeUnmount(() => {
-      if (unref(hasProp('url'))) {
-        revokeUrl(url.value)
-      }
-    })
-
     const errorPopup = (error: HttpError) => {
       console.error(error)
       store.dispatch('showErrorMessage', {
@@ -378,6 +374,14 @@ export default defineComponent({
       }
     })
     onBeforeUnmount(() => {
+      if (!loadingService.isLoading) {
+        window.removeEventListener('beforeunload', preventUnload)
+      }
+
+      if (unref(hasProp('url'))) {
+        revokeUrl(url.value)
+      }
+
       if (!unref(isEditor)) {
         return
       }
