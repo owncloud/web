@@ -1,3 +1,4 @@
+export * from './appProvider'
 export * from './archiver'
 export * from './cache'
 export * from './client'

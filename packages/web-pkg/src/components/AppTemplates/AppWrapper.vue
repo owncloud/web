@@ -144,7 +144,6 @@ export default defineComponent({
       return Boolean(props.wrappedComponent.emits?.includes('update:resource'))
     })
 
-    const applicationName = ref('')
     const resource: Ref<Resource> = ref()
     const space: Ref<SpaceResource> = ref()
     const currentETag = ref('')
@@ -203,7 +202,7 @@ export default defineComponent({
       const { name: appName } = unref(applicationMeta)
 
       return $gettext(`%{appName} for %{fileName}`, {
-        appName: unref(applicationName) || $gettext(appName),
+        appName: $gettext(appName),
         fileName: unref(unref(currentFileContext).fileName)
       })
     })
@@ -545,9 +544,6 @@ export default defineComponent({
       },
       'onUpdate:currentContent': (value: unknown) => {
         currentContent.value = value
-      },
-      'onUpdate:applicationName': (value: string) => {
-        applicationName.value = value
       },
 
       onSave: save,
