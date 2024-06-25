@@ -51,7 +51,6 @@
               :menu-sections="[
                 {
                   name: 'main-actions',
-
                   items: mainActions
                     .filter((action) => action.isVisible())
                     .map((action) => {
@@ -130,7 +129,7 @@ export default defineComponent({
     }
   },
   emits: ['close'],
-  setup: function (props) {
+  setup(props) {
     const { $gettext, current: currentLanguage } = useGettext()
     const { getMatchingSpace } = useGetMatchingSpace()
     const resourcesStore = useResourcesStore()
