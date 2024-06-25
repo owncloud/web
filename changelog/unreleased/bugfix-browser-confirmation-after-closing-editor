@@ -1,6 +1,6 @@
 Bugfix: Browser confirmation dialog after closing editor
 
-We've fixed a bug where the browser falsey asked the user for confirmation when closing or reloading the page after an editor with unsaved chages had been closed.
+We've fixed a bug where the browser falsely asked the user for confirmation when closing or reloading the page after an editor with unsaved changes had been closed.
 
 https://github.com/owncloud/web/issues/11092
 https://github.com/owncloud/web/pull/11094
