@@ -15,6 +15,7 @@ Summary
 * Enhancement - Add action drop down top app top bar: [#11057](https://github.com/owncloud/web/pull/11057)
 * Enhancement - Decrease text editor loading times: [#11060](https://github.com/owncloud/web/pull/11060)
 * Enhancement - Reduce network load on token renewal: [#11077](https://github.com/owncloud/web/pull/11077)
+* Enhancement - Enable default autosave in editors: [#11093](https://github.com/owncloud/web/pull/11093)
 
 Details
 -------
@@ -80,6 +81,13 @@ Details
 
    https://github.com/owncloud/web/issues/11069
    https://github.com/owncloud/web/pull/11077
+
+* Enhancement - Enable default autosave in editors: [#11093](https://github.com/owncloud/web/pull/11093)
+
+   Autosaving every 2 minutes in any editor is now the default behaviour.
+
+   https://github.com/owncloud/web/issues/11090
+   https://github.com/owncloud/web/pull/11093
 
 Changelog for ownCloud Web [8.0.3] (2024-06-20)
 =======================================
