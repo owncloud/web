@@ -1179,10 +1179,7 @@ export default defineComponent({
   }
 
   &-people {
-    position: absolute;
-    right: var(--oc-space-xsmall);
-    top: 50%;
-    transform: translateY(-50%);
+    margin-right: -5px;
   }
 
   &-actions {
