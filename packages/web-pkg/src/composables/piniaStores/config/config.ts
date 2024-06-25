@@ -23,7 +23,7 @@ const defaultOptions = {
   displayResourcesLazy: true,
   displayThumbnails: true,
   editor: {
-    autosaveEnabled: false,
+    autosaveEnabled: true,
     autosaveInterval: 120
   },
   embed: {
