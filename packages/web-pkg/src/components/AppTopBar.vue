@@ -43,11 +43,15 @@
               />
             </oc-drop>
           </template>
+          <span v-if="hasAutosave" class="oc-flex oc-flex-middle">
+            <oc-icon name="refresh" color="white" v-oc-tooltip="autoSaveTooltipText" />
+          </span>
           <template v-if="mainActions.length && resource">
             <context-action-menu
               :menu-sections="[
                 {
                   name: 'main-actions',
+
                   items: mainActions
                     .filter((action) => action.isVisible())
                     .map((action) => {
@@ -85,12 +89,14 @@ import { useGettext } from 'vue3-gettext'
 import {
   Action,
   FileActionOptions,
+  useConfigStore,
   useFolderLink,
   useGetMatchingSpace,
   useResourcesStore
 } from '../composables'
 import ResourceListItem from './FilesList/ResourceListItem.vue'
 import { Resource, isPublicSpaceResource, isShareSpaceResource } from '@ownclouders/web-client'
+import { Duration } from 'luxon'
 
 export default defineComponent({
   name: 'AppTopBar',
@@ -114,20 +120,33 @@ export default defineComponent({
       type: Array as PropType<Action[]>,
       default: (): Action[] => []
     },
+    isEditor: {
+      type: Boolean,
+      default: false
+    },
     resource: {
       type: Object as PropType<Resource>,
       default: null
     }
   },
   emits: ['close'],
-  setup(props) {
-    const { $gettext } = useGettext()
+  setup: function (props) {
+    const { $gettext, current: currentLanguage } = useGettext()
     const { getMatchingSpace } = useGetMatchingSpace()
     const resourcesStore = useResourcesStore()
+    const configStore = useConfigStore()
 
     const areFileExtensionsShown = computed(() => resourcesStore.areFileExtensionsShown)
     const contextMenuLabel = computed(() => $gettext('Show context menu'))
     const closeButtonLabel = computed(() => $gettext('Close'))
+    const hasAutosave = computed(() => props.isEditor && configStore.options.editor.autosaveEnabled)
+    const autoSaveTooltipText = computed(() => {
+      const duration = Duration.fromObject(
+        { seconds: configStore.options.editor.autosaveInterval },
+        { locale: currentLanguage }
+      )
+      return $gettext(`Autosave (every %{ duration })`, { duration: duration.toHuman() })
+    })
 
     const { getParentFolderName, getParentFolderLinkIconAdditionalAttributes, getPathPrefix } =
       useFolderLink()
@@ -158,7 +177,9 @@ export default defineComponent({
       closeButtonLabel,
       parentFolderName,
       parentFolderLinkIconAdditionalAttributes,
-      areFileExtensionsShown
+      areFileExtensionsShown,
+      hasAutosave,
+      autoSaveTooltipText
     }
   }
 })
