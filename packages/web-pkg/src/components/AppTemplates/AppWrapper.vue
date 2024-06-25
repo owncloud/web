@@ -419,6 +419,7 @@ export default defineComponent({
           message: $gettext('Your changes were not saved. Do you want to save them?'),
           cancelText: $gettext("Don't Save"),
           confirmText: $gettext('Save'),
+          focusTrapInitial: '.oc-modal-body-actions-confirm',
           onCancel() {
             store.dispatch('hideModal')
             next()
