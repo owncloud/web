@@ -11,6 +11,7 @@ Summary
 * Bugfix - Resetting user after logout: [#11058](https://github.com/owncloud/web/pull/11058)
 * Bugfix - Admin settings UI update after save: [#11059](https://github.com/owncloud/web/pull/11059)
 * Bugfix - Editor save after token renewal: [#11068](https://github.com/owncloud/web/pull/11068)
+* Enhancement - Accessibility improvements: [#5387](https://github.com/owncloud/web/issues/5387)
 * Enhancement - Consistent initial loading spinner: [#11054](https://github.com/owncloud/web/pull/11054)
 * Enhancement - Add action drop down top app top bar: [#11057](https://github.com/owncloud/web/pull/11057)
 * Enhancement - Decrease text editor loading times: [#11060](https://github.com/owncloud/web/pull/11060)
@@ -42,6 +43,14 @@ Details
 
    https://github.com/owncloud/web/issues/11062
    https://github.com/owncloud/web/pull/11068
+
+* Enhancement - Accessibility improvements: [#5387](https://github.com/owncloud/web/issues/5387)
+
+   Across the board, we have implemented improvements in regards of accessibility
+   for the web UI.
+
+   https://github.com/owncloud/web/issues/5387
+   https://github.com/owncloud/web/pull/11087
 
 * Enhancement - Consistent initial loading spinner: [#11054](https://github.com/owncloud/web/pull/11054)
 
