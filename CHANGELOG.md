@@ -50,7 +50,9 @@ Details
    for the web UI.
 
    https://github.com/owncloud/web/issues/5387
+   https://github.com/owncloud/web/issues/5398
    https://github.com/owncloud/web/pull/11087
+   https://github.com/owncloud/web/pull/11096
 
 * Enhancement - Consistent initial loading spinner: [#11054](https://github.com/owncloud/web/pull/11054)
 
