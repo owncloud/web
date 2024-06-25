@@ -71,6 +71,7 @@
     <oc-button
       v-if="!onlyInternalLinksAllowed"
       id="link-modal-context-menu-toggle"
+      :aria-label="$gettext('More options')"
       appearance="raw"
     >
       <oc-icon name="more-2" />

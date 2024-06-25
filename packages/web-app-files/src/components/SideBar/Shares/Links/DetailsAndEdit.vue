@@ -60,6 +60,7 @@
       <div v-if="isModifiable">
         <oc-button
           :id="`edit-public-link-dropdown-toggl-${linkShare.id}`"
+          :aria-label="$gettext('More options')"
           appearance="raw"
           class="edit-drop-trigger"
           :data-testid="`files-link-id-${linkShare.id}-btn-edit`"
