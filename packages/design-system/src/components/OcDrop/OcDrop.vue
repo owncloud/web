@@ -174,9 +174,6 @@ export default defineComponent({
       theme: 'none',
       maxWidth: 416,
       offset: this.offset ?? 0,
-      aria: {
-        content: 'describedby'
-      },
       ...(!this.isNested && {
         onShow: (instance: ReferenceElement) => {
           this.$emit('showDrop')
