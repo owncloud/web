@@ -6,6 +6,7 @@
       :main-actions="fileActions"
       :drop-down-menu-sections="dropDownMenuSections"
       :drop-down-action-options="dropDownActionOptions"
+      :is-editor="isEditor"
       :resource="resource"
       @close="closeApp"
     />

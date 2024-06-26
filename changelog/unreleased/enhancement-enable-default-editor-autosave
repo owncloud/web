@@ -1,6 +1,8 @@
 Enhancement: Enable default autosave in editors
 
 Autosaving every 2 minutes in any editor is now the default behaviour.
+We also show an indicator in the respective app, when autosave is enabled.
 
 https://github.com/owncloud/web/pull/11093
+https://github.com/owncloud/web/pull/11095
 https://github.com/owncloud/web/issues/11090
