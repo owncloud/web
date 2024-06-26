@@ -120,8 +120,7 @@ export const bootstrapApp = async (configurationPath: string, appsReadyCallback:
       app,
       configStore,
       router,
-      appProviderService,
-      dynamicApps: false
+      appProviderService
     })
     const translationsPromise = loadTranslations()
     const customTranslationsPromise = loadCustomTranslations({ configStore })

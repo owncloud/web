@@ -13,18 +13,43 @@ import { Resource, SpaceResource } from '@ownclouders/web-client'
 import { join } from 'path'
 import { useGettext } from 'vue3-gettext'
 import { useAppProviderService } from '@ownclouders/web-pkg/src/composables/appProviderService'
+import Redirect from './Redirect.vue'
+import { useApplicationReadyStore } from './piniaStores'
 
 export default defineWebApplication({
   setup(options: any) {
-    if (!Object.hasOwn(options, 'appName')) {
-      throw new Error('appName is required for the external app')
-    }
-
     const capabilityStore = useCapabilityStore()
     const { makeRequest } = useRequest()
     const clientService = useClientService()
     const { $gettext } = useGettext()
     const appProviderService = useAppProviderService()
+
+    if (!Object.hasOwn(options, 'appName')) {
+      const appInfo: ApplicationInformation = {
+        name: $gettext('External'),
+        id: 'external'
+      }
+      const routes = [
+        {
+          name: 'apps',
+          path: '/:driveAliasAndItem(.*)?',
+          component: Redirect,
+          meta: {
+            authContext: 'hybrid',
+            title: $gettext('Redirecting to external app'),
+            patchCleanPath: true
+          }
+        }
+      ]
+      return {
+        appInfo,
+        routes,
+        ready: () => {
+          const applicationReadyStore = useApplicationReadyStore()
+          applicationReadyStore.setReady()
+        }
+      }
+    }
 
     const { appName } = options
     const appId = `external-${appName.toLowerCase()}`

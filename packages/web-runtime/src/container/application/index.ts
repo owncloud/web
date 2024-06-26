@@ -68,6 +68,7 @@ const loadScriptRequireJS = <T>(moduleUri: string) => {
 export const buildApplication = async ({
   app,
   appName,
+  applicationKey,
   applicationPath,
   applicationConfig,
   router,
@@ -75,13 +76,14 @@ export const buildApplication = async ({
 }: {
   app: App
   appName?: string
+  applicationKey: string
   applicationPath: string
   applicationConfig: AppConfigObject
   router: Router
   configStore: ConfigStore
 }) => {
-  if (applicationStore.has(applicationPath)) {
-    throw new RuntimeError('application already announced', applicationPath)
+  if (applicationStore.has(applicationKey)) {
+    throw new RuntimeError('application already announced', applicationKey, applicationPath)
   }
 
   let applicationScript: ClassicApplicationScript
@@ -135,7 +137,7 @@ export const buildApplication = async ({
     throw new RuntimeError('cannot create application', err.message, applicationPath)
   }
 
-  applicationStore.set(applicationPath, application)
+  applicationStore.set(applicationKey, application)
 
   return application
 }

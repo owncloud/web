@@ -204,6 +204,7 @@ export const initializeApplications = async ({
         buildApplication({
           app,
           appName,
+          applicationKey: `web-app-external-${appName}`,
           applicationPath: 'web-app-external',
           applicationConfig: {},
           router,
@@ -213,17 +214,16 @@ export const initializeApplications = async ({
     )
   } else {
     const rawApplications: RawApplication[] = [
-      ...configStore.apps
-        .filter((application) => (application === 'external') === dynamicApps)
-        .map((application) => ({
-          path: `web-app-${application}`
-        })),
+      ...configStore.apps.map((application) => ({
+        path: `web-app-${application}`
+      })),
       ...configStore.externalApps
     ]
     applicationResults = await Promise.allSettled(
       rawApplications.map((rawApplication) =>
         buildApplication({
           app,
+          applicationKey: rawApplication.path,
           applicationPath: rawApplication.path,
           applicationConfig: rawApplication.config,
           router,
