@@ -104,9 +104,6 @@ enum KeyCode {
 export default defineComponent({
   name: 'TagsSelect',
   props: {
-    /**
-     * The resource
-     */
     resource: {
       type: Object as PropType<Resource>,
       required: true

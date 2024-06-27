@@ -1784,7 +1784,7 @@ export const checkThatFileVersionIsNotAvailable = async (
   ])
 
   await sidebar.openPanel({ page, name: 'versions' })
-  await expect(page.locator(fileVersionSidebar)).toHaveText('No Versions available for this file')
+  await expect(page.locator(fileVersionSidebar)).toHaveText('No versions available for this file')
 }
 
 export const checkThatFileVersionPanelIsNotAvailable = async (

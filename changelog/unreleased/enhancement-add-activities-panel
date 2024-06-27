@@ -1,0 +1,6 @@
+Enhancement: Activities sidebar app panel
+We have added a sidebar app panel to display activities performed on a resource.
+This provides a clear overview of actions taken on a resource.
+
+https://github.com/owncloud/web/pull/10996
+https://github.com/owncloud/web/issues/10800

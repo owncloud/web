@@ -48,7 +48,7 @@
       </li>
     </ul>
     <div v-else>
-      <p v-translate data-testid="file-versions-no-versions">No Versions available for this file</p>
+      <p v-translate data-testid="file-versions-no-versions">No versions available for this file</p>
     </div>
   </div>
 </template>
