@@ -20,7 +20,17 @@
 </template>
 
 <script lang="ts">
-import { computed, defineComponent, inject, onBeforeUnmount, onMounted, Ref, ref, unref } from 'vue'
+import {
+  computed,
+  defineComponent,
+  inject,
+  onBeforeUnmount,
+  onMounted,
+  Ref,
+  ref,
+  unref,
+  watch
+} from 'vue'
 import { useGettext } from 'vue3-gettext'
 import {
   AppLoadingSpinner,
@@ -40,7 +50,7 @@ export default defineComponent({
   setup() {
     const rootElement = ref<HTMLElement>()
     const { $gettext, current: currentLanguage } = useGettext()
-    const { graphAuthenticated } = useClientService()
+    const clientService = useClientService()
     const resource = inject<Ref<Resource>>('resource')
     const activities = ref<Activity[]>([])
     const activitiesLimit = 200
@@ -55,13 +65,13 @@ export default defineComponent({
       const {
         data: { value: activitiesResponse }
       } = yield* call(
-        graphAuthenticated.activities.listActivities(
+        clientService.graphAuthenticated.activities.listActivities(
           `itemid:${unref(resource).id} AND limit:${activitiesLimit} AND sort:desc`
         )
       )
 
       activities.value = activitiesResponse
-    })
+    }).restartable()
 
     const isLoading = computed(() => {
       return loadActivitiesTask.isRunning || !loadActivitiesTask.last
@@ -70,10 +80,7 @@ export default defineComponent({
     const getHtmlFromActivity = (activity: Activity) => {
       let message = activity.template.message
       for (const [key, value] of Object.entries(activity.template.variables)) {
-        message = message.replace(
-          `{${key}}`,
-          `<strong>${value.displayName || value.name}</strong>`
-        )
+        message = message.replace(`{${key}}`, `<strong>${value.displayName || value.name}</strong>`)
       }
       return message
     }
@@ -83,9 +90,29 @@ export default defineComponent({
       return formatDateFromDateTime(dateTime, currentLanguage)
     }
 
+    const isVisible = ref(false)
+    watch(
+      [resource, isVisible],
+      () => {
+        if (!unref(isVisible)) {
+          return
+        }
+        loadActivitiesTask.perform()
+      },
+      {
+        immediate: true,
+        deep: true
+      }
+    )
+
     onMounted(() => {
       visibilityObserver.observe(unref(rootElement), {
-        onEnter: () => loadActivitiesTask.perform()
+        onEnter: () => {
+          isVisible.value = true
+        },
+        onExit: () => {
+          isVisible.value = false
+        }
       })
     })
 
