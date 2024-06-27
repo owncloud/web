@@ -43,7 +43,8 @@ describe('initialize applications', () => {
     const applications = await initializeApplications({
       app: createApp(defineComponent({})),
       configStore,
-      router: undefined
+      router: undefined,
+      appProviderService: undefined
     })
 
     expect(buildApplicationMock).toHaveBeenCalledTimes(4)
