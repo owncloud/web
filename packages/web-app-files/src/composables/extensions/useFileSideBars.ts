@@ -288,30 +288,6 @@ export const useSideBarPanels = (): SidebarPanelExtension<SpaceResource, Resourc
       }
     },
     {
-      id: 'com.github.owncloud.web.files.sidebar-panel.activities',
-      type: 'sidebarPanel',
-      extensionPointIds: [fileSideBarExtensionPoint.id],
-      panel: {
-        name: 'activities',
-        icon: 'pulse',
-        title: () => $gettext('Activities'),
-        component: ActivitiesPanel,
-        isVisible: ({ items, root }) => {
-          if (items?.length !== 1) {
-            return false
-          }
-          const userIsSpaceMember =
-            (isProjectSpaceResource(root) && root.isMember(userStore.user)) ||
-            (isPersonalSpaceResource(root) && root.isOwner(userStore.user))
-
-          if (isLocationTrashActive(router, 'files-trash-generic') || !userIsSpaceMember) {
-            return false
-          }
-          return true
-        }
-      }
-    },
-    {
       id: 'com.github.owncloud.web.files.sidebar-panel.projects.no-selection',
       type: 'sidebarPanel',
       extensionPointIds: [fileSideBarExtensionPoint.id],
@@ -408,6 +384,26 @@ export const useSideBarPanels = (): SidebarPanelExtension<SpaceResource, Resourc
         }),
         isVisible: ({ items }) => {
           return items?.length === 1 && isProjectSpaceResource(items[0])
+        }
+      }
+    },
+    {
+      id: 'com.github.owncloud.web.files.sidebar-panel.activities',
+      type: 'sidebarPanel',
+      extensionPointIds: [fileSideBarExtensionPoint.id],
+      panel: {
+        name: 'activities',
+        icon: 'pulse',
+        title: () => $gettext('Activities'),
+        component: ActivitiesPanel,
+        isVisible: ({ items, root }) => {
+          if (items?.length !== 1) {
+            return false
+          }
+          if (isLocationTrashActive(router, 'files-trash-generic')) {
+            return false
+          }
+          return true
         }
       }
     }
