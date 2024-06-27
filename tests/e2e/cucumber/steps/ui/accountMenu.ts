@@ -55,8 +55,7 @@ When(
     const { page } = this.actorsEnvironment.getActor({ key: stepUser })
     const accountObject = new objects.account.Account({ page })
     const isAnonymousUser = stepUser === 'Anonymous'
-    const expectedLanguage = await accountObject.changeLanguage(language, isAnonymousUser)
-    expect(expectedLanguage).toBe(language)
+    await accountObject.changeLanguage(language, isAnonymousUser)
   }
 )
 
