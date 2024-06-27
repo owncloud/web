@@ -31,6 +31,16 @@ export default defineWebApplication({
       }
       const routes = [
         {
+          name: 'catch-all',
+          path: '-:appCatchAll/:driveAliasAndItem(.*)?',
+          component: Redirect,
+          meta: {
+            authContext: 'hybrid',
+            title: $gettext('Redirecting to external app'),
+            patchCleanPath: true
+          }
+        },
+        {
           name: 'apps',
           path: '/:driveAliasAndItem(.*)?',
           component: Redirect,

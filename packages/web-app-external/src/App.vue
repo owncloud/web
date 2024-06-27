@@ -64,7 +64,7 @@ export default defineComponent({
     resource: { type: Object as PropType<Resource>, required: true },
     isReadOnly: { type: Boolean, required: true }
   },
-  setup(props, { emit }) {
+  setup(props) {
     const language = useGettext()
     const { $gettext } = language
     const { showErrorMessage } = useMessages()

@@ -14,7 +14,7 @@
 
 <script lang="ts">
 import { computed, defineComponent, unref, watch } from 'vue'
-import { queryItemAsString, useRouteMeta, useRouteQuery } from '@ownclouders/web-pkg'
+import { queryItemAsString, useRouteMeta, useRouteParam, useRouteQuery } from '@ownclouders/web-pkg'
 import { useRouter } from 'vue-router'
 import { omit } from 'lodash-es'
 import { useGettext } from 'vue3-gettext'
@@ -26,7 +26,11 @@ export default defineComponent({
     const { $gettext } = useGettext()
 
     const appNameQuery = useRouteQuery('app')
+    const appNameParam = useRouteParam('appCatchAll')
     const appName = computed(() => {
+      if (unref(appNameParam)) {
+        return unref(appNameParam)
+      }
       return queryItemAsString(unref(appNameQuery))
     })
     const router = useRouter()
