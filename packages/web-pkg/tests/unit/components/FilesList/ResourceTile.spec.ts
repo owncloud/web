@@ -16,7 +16,7 @@ describe('OcTile component', () => {
     expect(wrapper.html()).toMatchSnapshot()
   })
   it('renders disabled space correctly', () => {
-    const wrapper = getWrapper({ resource: getSpaceMock(true) })
+    const wrapper = getWrapper({ resource: getSpaceMock(true), isResourceDisabled: true })
     expect(wrapper.html()).toMatchSnapshot()
   })
   it('renders selected resource correctly', () => {
