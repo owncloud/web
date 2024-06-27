@@ -75,10 +75,10 @@ export default defineComponent({
     const { makeRequest } = useRequest()
 
     const appName = computed(() => {
-      const lowerCaseAppName = route.path
-        .split('/')
-        .find((item) => item.startsWith('external-'))
+      const lowerCaseAppName = unref(route)
+        .name.toString()
         .replace('external-', '')
+        .replace('-apps', '')
       return appProviderService.appNames.find(
         (appName) => appName.toLowerCase() === lowerCaseAppName
       )

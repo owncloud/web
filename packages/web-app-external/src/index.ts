@@ -31,6 +31,8 @@ export default defineWebApplication({
       }
       const routes = [
         {
+          // catch-all route for page reloads, because dynamic external app routes are not available immediately on page reload.
+          // can be deleted as soon as app provider apps are not loaded after login anymore (app provider listing endpoint must be hardcoded and public)
           name: 'catch-all',
           path: '-:appCatchAll/:driveAliasAndItem(.*)?',
           component: Redirect,
@@ -41,6 +43,7 @@ export default defineWebApplication({
           }
         },
         {
+          // fallback route for old external-app URLs, in case someone made a bookmark. Can be removed with the next major release.
           name: 'apps',
           path: '/:driveAliasAndItem(.*)?',
           component: Redirect,
