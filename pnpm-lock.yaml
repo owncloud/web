@@ -680,6 +680,9 @@ importers:
       '@ownclouders/web-pkg':
         specifier: workspace:*
         version: link:../web-pkg
+      lodash-es:
+        specifier: 4.17.21
+        version: 4.17.21
       pinia:
         specifier: 2.1.7
         version: 2.1.7(typescript@5.4.5)(vue@3.4.21(typescript@5.4.5))
