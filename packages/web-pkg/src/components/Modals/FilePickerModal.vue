@@ -18,8 +18,7 @@ import {
   useModals,
   useRouter,
   useThemeStore,
-  useConfigStore,
-  routeToContextQuery
+  useFileActions
 } from '../../composables'
 import { ApplicationInformation } from '../../apps'
 import { RouteLocationRaw } from 'vue-router'
@@ -41,7 +40,7 @@ export default defineComponent({
     const { removeModal } = useModals()
     const { getMatchingSpace } = useGetMatchingSpace()
     const themeStore = useThemeStore()
-    const configStore = useConfigStore()
+    const { getEditorRouteOpts } = useFileActions()
     const parentFolderRoute = router.resolve(props.parentFolderLink)
 
     const availableFileTypes = (props.app as ApplicationInformation).extensions.map((e) =>
@@ -67,22 +66,14 @@ export default defineComponent({
       const space = getMatchingSpace(resource)
       const remoteItemId = isShareSpaceResource(space) ? space.id : undefined
 
-      const editorRoute = router.resolve({
-        name: unref(router.currentRoute).name,
-        params: {
-          driveAliasAndItem: space.getDriveAliasAndItem(resource),
-          filePath: resource.path,
-          fileId: resource.fileId,
-          EDITOR_MODE_EDIT
-        },
-        query: {
-          ...(remoteItemId && { shareId: remoteItemId }),
-          ...(resource.fileId &&
-            configStore.options.routing.idBased && { fileId: resource.fileId }),
-          ...routeToContextQuery(unref(router.currentRoute))
-        }
-      })
-
+      const routeOpts = getEditorRouteOpts(
+        unref(router.currentRoute).name,
+        space,
+        resource,
+        EDITOR_MODE_EDIT,
+        remoteItemId
+      )
+      const editorRoute = router.resolve(routeOpts)
       const editorRouteUrl = new URL(editorRoute.href, window.location.origin)
 
       removeModal(props.modal.id)
