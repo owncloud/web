@@ -1,4 +1,4 @@
-import { Page } from '@playwright/test'
+import { Page, expect } from '@playwright/test'
 import util from 'util'
 import config from '../../../config'
 
@@ -82,7 +82,7 @@ export const changeLanguage = async (args: {
   page: Page
   language: string
   isAnonymousUser: boolean
-}): Promise<string> => {
+}): Promise<void> => {
   const { page, language, isAnonymousUser } = args
   await page.locator(languageInput).waitFor()
   await page.locator(languageInput).click()
@@ -103,7 +103,7 @@ export const changeLanguage = async (args: {
   promises.push(page.locator(util.format(languageValueDropDown, language)).press('Enter'))
   await Promise.all(promises)
 
-  return (await page.locator(languageValue).textContent()).trim()
+  await expect(page.locator(languageValue)).toHaveText(language)
 }
 
 export const getTitle = (args: { page: Page }): Promise<string> => {
