@@ -1,5 +1,6 @@
 import { Page } from '@playwright/test'
 import util from 'util'
+import config from '../../../config'
 
 const accountMenuButton = '.oc-topbar-avatar'
 const quotaValue = '.storage-wrapper-quota'
@@ -46,19 +47,16 @@ export const requestGdprExport = async (args: { page: Page }): Promise<void> => 
         resp.status() === 202 &&
         resp.request().method() === 'POST'
     ),
-    // not waiting for the generation report
-    page.route('**/.personal_data_export.json', async (route) => {
-      const response = await route.fetch()
-      let body = await response.text()
-      body = body.replace(
-        '<d:status>HTTP/1.1 425 TOO EARLY</d:status>',
-        '<d:status>HTTP/1.1 200 OK</d:status>'
-      )
-      await route.fulfill({
-        response,
-        body
-      })
-    }),
+    page.waitForResponse(
+      (resp) =>
+        resp.url().endsWith('.personal_data_export.json') &&
+        resp.status() === 207 &&
+        resp.request().method() === 'PROPFIND' &&
+        resp.text().then((text) => text.includes('HTTP/1.1 200 OK')),
+      // generating GDPR report can take a while
+      // so we need to increase the timeout to 60 seconds
+      { timeout: config.timeout * 1000 }
+    ),
     page.locator(requestExportButton).click()
   ])
 }
