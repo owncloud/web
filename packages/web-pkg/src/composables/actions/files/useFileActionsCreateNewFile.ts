@@ -184,7 +184,7 @@ export const useFileActionsCreateNewFile = ({ space }: { space?: Ref<SpaceResour
         componentType: 'button',
         class: 'oc-files-actions-create-new-file',
         ext: appFileExtension.extension,
-        isExternal: appFileExtension.app === 'external'
+        isExternal: appFileExtension.app?.startsWith('external-')
       })
     }
 

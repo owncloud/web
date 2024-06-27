@@ -64,11 +64,13 @@ class ClassicApplication extends NextApplication {
 
 export const convertClassicApplication = ({
   app,
+  appName,
   applicationScript,
   applicationConfig,
   router
 }: {
   app: App
+  appName?: string
   applicationScript: ClassicApplicationScript
   applicationConfig: AppConfigObject
   router: Router
@@ -76,6 +78,7 @@ export const convertClassicApplication = ({
   if (applicationScript.setup) {
     applicationScript = app.runWithContext(() => {
       return applicationScript.setup({
+        ...(appName && { appName }),
         ...(applicationConfig && { applicationConfig })
       })
     })

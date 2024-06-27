@@ -1,6 +1,7 @@
 export * from './ability'
 export * from './actions'
 export * from './appDefaults'
+export * from './appProviderService'
 export * from './archiverService'
 export * from './authContext'
 export * from './breadcrumbs'

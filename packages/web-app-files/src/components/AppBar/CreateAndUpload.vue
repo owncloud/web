@@ -30,43 +30,29 @@
               <span v-text="$gettext('Folder')" />
             </oc-button>
           </li>
-          <template v-if="externalFileActions">
+          <template v-for="(group, groupIndex) in createFileActionsGroups">
             <li
-              v-for="(fileAction, key) in externalFileActions"
-              :key="`file-creation-item-external-${key}`"
+              v-for="(fileAction, fileActionIndex) in group"
+              :key="`file-creation-item-${groupIndex}-${fileActionIndex}`"
               class="create-list-file oc-menu-item-hover"
+              :class="{ 'top-separator': fileActionIndex === 0 }"
             >
-              <oc-button appearance="raw" @click="fileAction.handler">
+              <oc-button
+                appearance="raw"
+                :class="['new-file-btn-' + fileAction.ext]"
+                @click="fileAction.handler"
+              >
                 <resource-icon :resource="getIconResource(fileAction)" size="medium" />
-                <span class="create-list-file-item-text" v-text="fileAction.label()" />
+                <span class="create-list-file-item-text">{{ fileAction.label() }}</span>
                 <span
                   v-if="areFileExtensionsShown && fileAction.ext"
                   class="create-list-file-item-extension"
-                  v-text="fileAction.ext"
-                />
+                >
+                  {{ fileAction.ext }}
+                </span>
               </oc-button>
             </li>
           </template>
-          <li v-if="externalFileActions.length && appFileActions.length" class="bottom-seperator" />
-          <li
-            v-for="(fileAction, key) in appFileActions"
-            :key="`file-creation-item-${key}`"
-            class="create-list-file oc-menu-item-hover"
-          >
-            <oc-button
-              appearance="raw"
-              :class="['new-file-btn-' + fileAction.ext]"
-              @click="fileAction.handler"
-            >
-              <resource-icon :resource="getIconResource(fileAction)" size="medium" />
-              <span class="create-list-file-item-text">{{ fileAction.label() }}</span>
-              <span
-                v-if="areFileExtensionsShown && fileAction.ext"
-                class="create-list-file-item-extension"
-                >{{ fileAction.ext }}</span
-              >
-            </oc-button>
-          </li>
           <li class="create-list-shortcut oc-menu-item-hover">
             <oc-button id="new-shortcut-btn" appearance="raw" @click="createNewShortcutAction">
               <oc-icon name="external-link" size="medium" />
@@ -307,13 +293,21 @@ export default defineComponent({
 
     const { actions: createNewFileActions } = useFileActionsCreateNewFile({ space })
 
-    const appFileActions = computed(() =>
-      unref(createNewFileActions).filter(({ isExternal }) => !isExternal)
-    )
-
-    const externalFileActions = computed(() =>
-      unref(createNewFileActions).filter(({ isExternal }) => isExternal)
-    )
+    const createFileActionsGroups = computed(() => {
+      const result = []
+      const externalFileActions = unref(createNewFileActions).filter(({ isExternal }) => isExternal)
+      if (externalFileActions.length) {
+        result.push(externalFileActions)
+      }
+      const appFileActions = unref(createNewFileActions).filter(({ isExternal }) => !isExternal)
+      if (appFileActions.length) {
+        result.push(appFileActions)
+      }
+      return result
+    })
+    const createFileActionsAvailable = computed(() => {
+      return unref(createFileActionsGroups).some((group) => group.length > 0)
+    })
 
     const extensionRegistry = useExtensionRegistry()
     const extensionActions = computed(() => {
@@ -420,8 +414,8 @@ export default defineComponent({
       canUpload,
       currentFolder,
       createNewFolder,
-      appFileActions,
-      externalFileActions,
+      createFileActionsGroups,
+      createFileActionsAvailable,
       createNewFolderAction,
       createNewShortcutAction,
       extensionActions,
@@ -449,9 +443,6 @@ export default defineComponent({
       return !(this.uploadOrFileCreationBlocked && this.isPublicLocation)
     },
 
-    createFileActionsAvailable() {
-      return this.appFileActions.length > 0 || this.externalFileActions.length > 0
-    },
     newButtonTooltip() {
       if (!this.canUpload) {
         return this.$gettext('You have no permission to create new files!')
@@ -501,6 +492,10 @@ export default defineComponent({
 #create-list {
   li {
     border: 1px solid transparent;
+    &.top-separator {
+      padding-top: 1px;
+      border-top: 1px solid var(--oc-color-border) !important;
+    }
 
     button {
       display: inline-flex;
@@ -508,18 +503,6 @@ export default defineComponent({
       justify-content: left;
       width: 100%;
     }
-  }
-
-  .create-list-folder {
-    border-bottom: 1px solid var(--oc-color-border);
-  }
-
-  .create-list-folder button {
-    margin-bottom: 8px;
-  }
-
-  .create-list-file:nth-child(2) button {
-    margin-top: 6px;
   }
 }
 
@@ -560,11 +543,6 @@ export default defineComponent({
 
 #extension-list {
   border-top: 1px solid var(--oc-color-border);
-}
-
-.bottom-seperator {
-  border-bottom: 1px solid var(--oc-color-border) !important;
-  margin-bottom: 8px;
 }
 
 #clipboard-btns {

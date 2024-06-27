@@ -29,30 +29,30 @@ import {
   SpacesStore,
   MessageStore,
   SharesStore,
-  ArchiverService
-} from '@ownclouders/web-pkg'
-import { authService } from '../services/auth'
-import {
+  ArchiverService,
+  RawConfigSchema,
+  SentryConfig,
+  AppProviderService,
+  WebWorkersStore,
+  useWebWorkersStore,
   ClientService,
   LoadingService,
   PasswordPolicyService,
   PreviewService,
-  UppyService
-} from '@ownclouders/web-pkg'
-import { init as sentryInit } from '@sentry/vue'
-import { v4 as uuidV4 } from 'uuid'
-import { merge } from 'lodash-es'
-import {
+  UppyService,
   AppConfigObject,
   resourceIconMappingInjectionKey,
   ResourceIconMapping
 } from '@ownclouders/web-pkg'
+import { authService } from '../services/auth'
+import { init as sentryInit } from '@sentry/vue'
+import { v4 as uuidV4 } from 'uuid'
+import { merge } from 'lodash-es'
 import { MESSAGE_TYPE } from '@ownclouders/web-client/sse'
 import { getQueryParam } from '../helpers/url'
 import PQueue from 'p-queue'
 import { storeToRefs } from 'pinia'
 import { getExtensionNavItems } from '../helpers/navItems'
-import { RawConfigSchema, SentryConfig } from '@ownclouders/web-pkg'
 import {
   onSSEFileLockingEvent,
   onSSEItemRenamedEvent,
@@ -74,7 +74,6 @@ import {
   SseEventWrapperOptions,
   onSSELinkUpdatedEvent
 } from './sse'
-import { useWebWorkersStore, WebWorkersStore } from '@ownclouders/web-pkg'
 import { loadAppTranslations } from '../helpers/language'
 import { urlJoin } from '@ownclouders/web-client'
 
@@ -183,35 +182,56 @@ export const announceClient = async (configStore: ConfigStore): Promise<void> =>
 export const initializeApplications = async ({
   app,
   configStore,
-  router
+  router,
+  appProviderService,
+  dynamicApps
 }: {
   app: App
   configStore: ConfigStore
   router: Router
+  appProviderService: AppProviderService
+  dynamicApps?: boolean
 }): Promise<NextApplication[]> => {
   type RawApplication = {
     path?: string
     config?: AppConfigObject
   }
 
-  const rawApplications: RawApplication[] = [
-    ...rewriteDeprecatedAppNames(configStore).map((application) => ({
-      path: `web-app-${application}`
-    })),
-    ...configStore.externalApps
-  ]
-
-  const applicationResults = await Promise.allSettled(
-    rawApplications.map((rawApplication) =>
-      buildApplication({
-        app,
-        applicationPath: rawApplication.path,
-        applicationConfig: rawApplication.config,
-        router,
-        configStore
-      })
+  let applicationResults: PromiseSettledResult<NextApplication>[] = []
+  if (dynamicApps) {
+    applicationResults = await Promise.allSettled(
+      appProviderService.appNames.map((appName) =>
+        buildApplication({
+          app,
+          appName,
+          applicationKey: `web-app-external-${appName}`,
+          applicationPath: 'web-app-external',
+          applicationConfig: {},
+          router,
+          configStore
+        })
+      )
     )
-  )
+  } else {
+    const rawApplications: RawApplication[] = [
+      ...configStore.apps.map((application) => ({
+        path: `web-app-${application}`
+      })),
+      ...configStore.externalApps
+    ]
+    applicationResults = await Promise.allSettled(
+      rawApplications.map((rawApplication) =>
+        buildApplication({
+          app,
+          applicationKey: rawApplication.path,
+          applicationPath: rawApplication.path,
+          applicationConfig: rawApplication.config,
+          router,
+          configStore
+        })
+      )
+    )
+  }
 
   const applications = applicationResults.reduce<NextApplication[]>((acc, applicationResult) => {
     // we don't want to fail hard with the full system when one specific application can't get loaded. only log the error.
@@ -408,7 +428,7 @@ export const announceClientService = ({
   app: App
   configStore: ConfigStore
   authStore: AuthStore
-}): void => {
+}): ClientService => {
   const clientService = new ClientService({
     configStore,
     language: app.config.globalProperties.$language,
@@ -416,6 +436,7 @@ export const announceClientService = ({
   })
   app.config.globalProperties.$clientService = clientService
   app.provide('$clientService', clientService)
+  return clientService
 }
 
 export const announceArchiverService = ({
@@ -541,6 +562,28 @@ export const announceAuthService = ({
   )
   app.config.globalProperties.$authService = authService
   app.provide('$authService', authService)
+}
+
+/**
+ * Announce the app provider service (collaborative apps)
+ *
+ * @param app
+ * @param capabilityStore
+ * @param clientService
+ */
+export const announceAppProviderService = ({
+  app,
+  capabilityStore,
+  clientService
+}: {
+  app: App
+  capabilityStore: CapabilityStore
+  clientService: ClientService
+}): AppProviderService => {
+  const appProviderService = new AppProviderService(capabilityStore, clientService)
+  app.config.globalProperties.$appProviderService = appProviderService
+  app.provide('$appProviderService', appProviderService)
+  return appProviderService
 }
 
 /**

@@ -1,15 +1,16 @@
 import { mock } from 'vitest-mock-extended'
 import { defaultPlugins, shallowMount } from 'web-test-helpers'
-import { useRequest, useRouteQuery } from '@ownclouders/web-pkg'
+import { AppProviderService, useRequest, useRoute } from '@ownclouders/web-pkg'
 import { ref } from 'vue'
 
 import { Resource } from '@ownclouders/web-client'
 import App from '../../src/App.vue'
+import { RouteLocation } from 'vue-router'
 
 vi.mock('@ownclouders/web-pkg', async (importOriginal) => ({
   ...(await importOriginal<any>()),
   useRequest: vi.fn(),
-  useRouteQuery: vi.fn()
+  useRoute: vi.fn()
 }))
 
 const appUrl = 'https://example.test/d12ab86/loe009157-MzBw'
@@ -75,8 +76,12 @@ function createShallowMountWrapper(makeRequest = vi.fn().mockResolvedValue({ sta
   vi.mocked(useRequest).mockImplementation(() => ({
     makeRequest
   }))
-
-  vi.mocked(useRouteQuery).mockImplementation(() => ref('example-app'))
+  vi.mocked(useRoute).mockImplementation(() =>
+    ref(mock<RouteLocation>({ name: 'external-example-app-apps' }))
+  )
+  const mocks = {
+    $appProviderService: mock<AppProviderService>({ appNames: ['example-app'] })
+  }
 
   const capabilities = {
     files: {
@@ -99,7 +104,9 @@ function createShallowMountWrapper(makeRequest = vi.fn().mockResolvedValue({ sta
               configState: { options: { editor: { openAsPreview: true } } }
             }
           })
-        ]
+        ],
+        provide: mocks,
+        mocks
       }
     })
   }

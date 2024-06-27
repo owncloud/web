@@ -26,7 +26,17 @@
 
 <script lang="ts">
 import { stringify } from 'qs'
-import { PropType, computed, defineComponent, unref, nextTick, ref, watch, VNodeRef } from 'vue'
+import {
+  PropType,
+  computed,
+  defineComponent,
+  unref,
+  nextTick,
+  ref,
+  watch,
+  VNodeRef,
+  onMounted
+} from 'vue'
 import { useTask } from 'vue-concurrency'
 import { useGettext } from 'vue3-gettext'
 
@@ -34,12 +44,12 @@ import { Resource, SpaceResource } from '@ownclouders/web-client'
 import { urlJoin } from '@ownclouders/web-client'
 import {
   isSameResource,
-  queryItemAsString,
   useCapabilityStore,
   useConfigStore,
   useMessages,
   useRequest,
-  useRouteQuery
+  useAppProviderService,
+  useRoute
 } from '@ownclouders/web-pkg'
 import {
   isProjectSpaceResource,
@@ -54,31 +64,34 @@ export default defineComponent({
     resource: { type: Object as PropType<Resource>, required: true },
     isReadOnly: { type: Boolean, required: true }
   },
-  emits: ['update:applicationName'],
-  setup(props, { emit }) {
+  setup(props) {
     const language = useGettext()
     const { $gettext } = language
     const { showErrorMessage } = useMessages()
     const capabilityStore = useCapabilityStore()
     const configStore = useConfigStore()
-
+    const route = useRoute()
+    const appProviderService = useAppProviderService()
     const { makeRequest } = useRequest()
 
-    const appNameQuery = useRouteQuery('app')
+    const appName = computed(() => {
+      const lowerCaseAppName = unref(route)
+        .name.toString()
+        .replace('external-', '')
+        .replace('-apps', '')
+      return appProviderService.appNames.find(
+        (appName) => appName.toLowerCase() === lowerCaseAppName
+      )
+    })
+
     const appUrl = ref()
     const formParameters = ref({})
     const method = ref()
     const subm: VNodeRef = ref()
 
-    const applicationName = computed(() => {
-      const appName = queryItemAsString(unref(appNameQuery))
-      emit('update:applicationName', appName)
-      return appName
-    })
-
     const iFrameTitle = computed(() => {
       return $gettext('"%{appName}" app content area', {
-        appName: unref(applicationName)
+        appName: unref(appName)
       })
     })
 
@@ -106,7 +119,7 @@ export default defineComponent({
         const query = stringify({
           file_id: fileId,
           lang: language.current,
-          ...(unref(applicationName) && { app_name: encodeURIComponent(unref(applicationName)) }),
+          ...(unref(appName) && { app_name: encodeURIComponent(unref(appName)) }),
           ...(viewMode && { view_mode: viewMode })
         })
 
@@ -168,19 +181,13 @@ export default defineComponent({
         }
       } catch (e) {}
     }
-    watch(
-      applicationName,
-      (newAppName, oldAppName) => {
-        if (determineOpenAsPreview(newAppName) && newAppName !== oldAppName) {
-          window.addEventListener('message', catchClickMicrosoftEdit)
-        } else {
-          window.removeEventListener('message', catchClickMicrosoftEdit)
-        }
-      },
-      {
-        immediate: true
+    onMounted(() => {
+      if (determineOpenAsPreview(unref(appName))) {
+        window.addEventListener('message', catchClickMicrosoftEdit)
+      } else {
+        window.removeEventListener('message', catchClickMicrosoftEdit)
       }
-    )
+    })
 
     watch(
       [props.resource],
@@ -191,7 +198,7 @@ export default defineComponent({
 
         let viewMode = props.isReadOnly ? 'view' : 'write'
         if (
-          determineOpenAsPreview(unref(applicationName)) &&
+          determineOpenAsPreview(unref(appName)) &&
           (isShareSpaceResource(props.space) ||
             isPublicSpaceResource(props.space) ||
             isProjectSpaceResource(props.space))

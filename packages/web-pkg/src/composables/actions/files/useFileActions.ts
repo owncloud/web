@@ -170,7 +170,6 @@ export const useFileActions = () => {
       query: {
         ...(remoteItemId && { shareId: remoteItemId }),
         ...(resource.fileId && configStore.options.routing.idBased && { fileId: resource.fileId }),
-        ...(appFileExtension.app === 'external' && { app: appFileExtension.name }),
         ...routeToContextQuery(unref(router.currentRoute))
       }
     }

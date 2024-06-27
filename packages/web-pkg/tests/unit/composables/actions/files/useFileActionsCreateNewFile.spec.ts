@@ -109,6 +109,7 @@ function getWrapper({
             appsState: {
               fileExtensions: [
                 mock<ApplicationFileExtension>({
+                  app: 'text-editor',
                   extension: '.txt',
                   newFileMenu: { menuTitle: vi.fn() }
                 })

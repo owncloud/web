@@ -1,6 +1,6 @@
 import { loadDesignSystem, pages, loadTranslations, supportedLanguages } from './defaults'
 import { router } from './router'
-import { PortalTarget } from '@ownclouders/web-pkg'
+import { PortalTarget, AppProviderService } from '@ownclouders/web-pkg'
 import { createHead } from '@vueuse/head'
 import { abilitiesPlugin } from '@casl/vue'
 import { createMongoAbility } from '@casl/ability'
@@ -27,7 +27,8 @@ import {
   registerSSEEventListeners,
   setViewOptions,
   announceGettext,
-  announceArchiverService
+  announceArchiverService,
+  announceAppProviderService
 } from './container/bootstrap'
 import { applicationStore } from './container/store'
 import {
@@ -77,7 +78,7 @@ export const bootstrapApp = async (configurationPath: string, appsReadyCallback:
 
   const gettext = announceGettext({ app, availableLanguages: supportedLanguages })
 
-  announceClientService({ app, configStore, authStore })
+  const clientService = announceClientService({ app, configStore, authStore })
   announceAuthService({
     app,
     configStore,
@@ -88,11 +89,13 @@ export const bootstrapApp = async (configurationPath: string, appsReadyCallback:
     webWorkersStore
   })
 
+  let appProviderService: AppProviderService
   if (!isSilentRedirect) {
     const designSystem = await loadDesignSystem()
 
     announceUppyService({ app })
     startSentry(configStore, app)
+    appProviderService = announceAppProviderService({ app, capabilityStore, clientService })
     announceArchiverService({ app, configStore, userStore, capabilityStore })
     announceLoadingService({ app })
     announcePreviewService({
@@ -113,7 +116,12 @@ export const bootstrapApp = async (configurationPath: string, appsReadyCallback:
     })
     app.component('PortalTarget', PortalTarget)
 
-    const applicationsPromise = initializeApplications({ app, configStore, router })
+    const applicationsPromise = initializeApplications({
+      app,
+      configStore,
+      router,
+      appProviderService
+    })
     const translationsPromise = loadTranslations()
     const customTranslationsPromise = loadCustomTranslations({ configStore })
     const themePromise = announceTheme({ app, designSystem, configStore })
@@ -156,7 +164,22 @@ export const bootstrapApp = async (configurationPath: string, appsReadyCallback:
         return
       }
       announceVersions({ capabilityStore })
-      await announceApplicationsReady({ app, appsStore, applications })
+
+      await appProviderService.loadData()
+      const appProviderApps = await initializeApplications({
+        app,
+        configStore,
+        router,
+        appProviderService,
+        dynamicApps: true
+      })
+      appProviderApps.forEach((application) => application.mounted(app))
+
+      await announceApplicationsReady({
+        app,
+        appsStore,
+        applications: [...applications, ...appProviderApps]
+      })
       appsReadyCallback()
     },
     {
