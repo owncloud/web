@@ -12,8 +12,9 @@ Summary
 * Bugfix - Admin settings UI update after save: [#11059](https://github.com/owncloud/web/pull/11059)
 * Bugfix - Editor save after token renewal: [#11068](https://github.com/owncloud/web/pull/11068)
 * Enhancement - Accessibility improvements: [#5387](https://github.com/owncloud/web/issues/5387)
+* Enhancement - Activities sidebar app panel: [#10996](https://github.com/owncloud/web/pull/10996)
 * Enhancement - Consistent initial loading spinner: [#11054](https://github.com/owncloud/web/pull/11054)
-* Enhancement - Add action drop down top app top bar: [#11057](https://github.com/owncloud/web/pull/11057)
+* Enhancement - Add action drop down to app top bar: [#11057](https://github.com/owncloud/web/pull/11057)
 * Enhancement - Decrease text editor loading times: [#11060](https://github.com/owncloud/web/pull/11060)
 * Enhancement - Reduce network load on token renewal: [#11077](https://github.com/owncloud/web/pull/11077)
 * Enhancement - Enable default autosave in editors: [#11093](https://github.com/owncloud/web/pull/11093)
@@ -54,6 +55,14 @@ Details
    https://github.com/owncloud/web/pull/11087
    https://github.com/owncloud/web/pull/11096
 
+* Enhancement - Activities sidebar app panel: [#10996](https://github.com/owncloud/web/pull/10996)
+
+   We have added a sidebar app panel to display activities performed on a resource.
+   This provides a clear overview of actions taken on a resource.
+
+   https://github.com/owncloud/web/issues/10800
+   https://github.com/owncloud/web/pull/10996
+
 * Enhancement - Consistent initial loading spinner: [#11054](https://github.com/owncloud/web/pull/11054)
 
    We have updated the loading spinner on the initial page load to run continuously
@@ -68,7 +77,7 @@ Details
    https://github.com/owncloud/web/pull/11054
    https://github.com/owncloud/web/pull/11084
 
-* Enhancement - Add action drop down top app top bar: [#11057](https://github.com/owncloud/web/pull/11057)
+* Enhancement - Add action drop down to app top bar: [#11057](https://github.com/owncloud/web/pull/11057)
 
    We've added an action drop down with various file actions to the app top bar, so
    the user can now call different actions like download, directly from the app.
