@@ -9,25 +9,24 @@ exports[`CreateAndUpload component > action buttons > should show and be enabled
           <!-- @slot Content of the button -->
           <resource-icon-stub resource="[object Object]" size="medium"></resource-icon-stub> <span>Folder</span>
         </button></li>
-      <li class="create-list-file oc-menu-item-hover"><button type="button" class="oc-button oc-rounded oc-button-m oc-button-justify-content-center oc-button-gap-m oc-button-passive oc-button-passive-raw">
+      <li class="create-list-file oc-menu-item-hover top-separator"><button type="button" class="oc-button oc-rounded oc-button-m oc-button-justify-content-center oc-button-gap-m oc-button-passive oc-button-passive-raw new-file-btn-txt">
           <!--v-if-->
           <!-- @slot Content of the button -->
           <resource-icon-stub resource="[object Object]" size="medium"></resource-icon-stub> <span class="create-list-file-item-text">Plain text file</span>
           <!--v-if-->
         </button></li>
-      <li class="create-list-file oc-menu-item-hover"><button type="button" class="oc-button oc-rounded oc-button-m oc-button-justify-content-center oc-button-gap-m oc-button-passive oc-button-passive-raw">
+      <li class="create-list-file oc-menu-item-hover"><button type="button" class="oc-button oc-rounded oc-button-m oc-button-justify-content-center oc-button-gap-m oc-button-passive oc-button-passive-raw new-file-btn-md">
           <!--v-if-->
           <!-- @slot Content of the button -->
           <resource-icon-stub resource="[object Object]" size="medium"></resource-icon-stub> <span class="create-list-file-item-text">Mark-down file</span>
           <!--v-if-->
         </button></li>
-      <li class="create-list-file oc-menu-item-hover"><button type="button" class="oc-button oc-rounded oc-button-m oc-button-justify-content-center oc-button-gap-m oc-button-passive oc-button-passive-raw">
+      <li class="create-list-file oc-menu-item-hover"><button type="button" class="oc-button oc-rounded oc-button-m oc-button-justify-content-center oc-button-gap-m oc-button-passive oc-button-passive-raw new-file-btn-drawio">
           <!--v-if-->
           <!-- @slot Content of the button -->
           <resource-icon-stub resource="[object Object]" size="medium"></resource-icon-stub> <span class="create-list-file-item-text">Draw.io document</span>
           <!--v-if-->
         </button></li>
-      <!--v-if-->
       <li class="create-list-shortcut oc-menu-item-hover"><button type="button" class="oc-button oc-rounded oc-button-m oc-button-justify-content-center oc-button-gap-m oc-button-passive oc-button-passive-raw" id="new-shortcut-btn">
           <!--v-if-->
           <!-- @slot Content of the button -->
@@ -60,25 +59,24 @@ exports[`CreateAndUpload component > file handlers > should show entries for all
           <!-- @slot Content of the button -->
           <resource-icon-stub resource="[object Object]" size="medium"></resource-icon-stub> <span>Folder</span>
         </button></li>
-      <li class="create-list-file oc-menu-item-hover"><button type="button" class="oc-button oc-rounded oc-button-m oc-button-justify-content-center oc-button-gap-m oc-button-passive oc-button-passive-raw">
+      <li class="create-list-file oc-menu-item-hover top-separator"><button type="button" class="oc-button oc-rounded oc-button-m oc-button-justify-content-center oc-button-gap-m oc-button-passive oc-button-passive-raw new-file-btn-txt">
           <!--v-if-->
           <!-- @slot Content of the button -->
           <resource-icon-stub resource="[object Object]" size="medium"></resource-icon-stub> <span class="create-list-file-item-text">Plain text file</span>
           <!--v-if-->
         </button></li>
-      <li class="create-list-file oc-menu-item-hover"><button type="button" class="oc-button oc-rounded oc-button-m oc-button-justify-content-center oc-button-gap-m oc-button-passive oc-button-passive-raw">
+      <li class="create-list-file oc-menu-item-hover"><button type="button" class="oc-button oc-rounded oc-button-m oc-button-justify-content-center oc-button-gap-m oc-button-passive oc-button-passive-raw new-file-btn-md">
           <!--v-if-->
           <!-- @slot Content of the button -->
           <resource-icon-stub resource="[object Object]" size="medium"></resource-icon-stub> <span class="create-list-file-item-text">Mark-down file</span>
           <!--v-if-->
         </button></li>
-      <li class="create-list-file oc-menu-item-hover"><button type="button" class="oc-button oc-rounded oc-button-m oc-button-justify-content-center oc-button-gap-m oc-button-passive oc-button-passive-raw">
+      <li class="create-list-file oc-menu-item-hover"><button type="button" class="oc-button oc-rounded oc-button-m oc-button-justify-content-center oc-button-gap-m oc-button-passive oc-button-passive-raw new-file-btn-drawio">
           <!--v-if-->
           <!-- @slot Content of the button -->
           <resource-icon-stub resource="[object Object]" size="medium"></resource-icon-stub> <span class="create-list-file-item-text">Draw.io document</span>
           <!--v-if-->
         </button></li>
-      <!--v-if-->
       <li class="create-list-shortcut oc-menu-item-hover"><button type="button" class="oc-button oc-rounded oc-button-m oc-button-justify-content-center oc-button-gap-m oc-button-passive oc-button-passive-raw" id="new-shortcut-btn">
           <!--v-if-->
           <!-- @slot Content of the button -->

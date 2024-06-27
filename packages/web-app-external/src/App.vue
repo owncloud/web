@@ -47,15 +47,15 @@ import {
   useCapabilityStore,
   useConfigStore,
   useMessages,
-  useRequest
+  useRequest,
+  useAppProviderService,
+  useRoute
 } from '@ownclouders/web-pkg'
 import {
   isProjectSpaceResource,
   isPublicSpaceResource,
   isShareSpaceResource
 } from '@ownclouders/web-client'
-import { useRoute } from 'vue-router'
-import { useAppProviderService } from '@ownclouders/web-pkg/src/composables/appProviderService'
 
 export default defineComponent({
   name: 'ExternalApp',
