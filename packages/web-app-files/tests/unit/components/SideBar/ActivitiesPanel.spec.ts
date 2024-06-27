@@ -3,6 +3,7 @@ import { defaultComponentMocks, defaultPlugins, mount } from 'web-test-helpers'
 import { AxiosResponse } from 'axios'
 import { Resource } from '@ownclouders/web-client'
 import { mock } from 'vitest-mock-extended'
+import { nextTick } from 'vue'
 
 const defaultActivities = [
   {
@@ -85,17 +86,21 @@ const defaultActivities = [
 describe('ActivitiesPanel', () => {
   it('should show no activities message if there is no data', async () => {
     const { wrapper } = getMountedWrapper({ activities: [] })
-    wrapper.vm.loadActivitiesTask.perform()
+    wrapper.vm.isVisible = true
+    await nextTick()
     await wrapper.vm.loadActivitiesTask.last
     expect(wrapper.html()).toContain('No activities available for this resource')
   })
-  it('should show loading spinner when fetching data', () => {
+  it('should show loading spinner when fetching data', async () => {
     const { wrapper } = getMountedWrapper()
+    wrapper.vm.isVisible = true
+    await nextTick()
     expect(wrapper.find('#app-loading-spinner').exists()).toBeTruthy()
   })
   it('should render a list of activities when data is present', async () => {
     const { wrapper } = getMountedWrapper()
-    wrapper.vm.loadActivitiesTask.perform()
+    wrapper.vm.isVisible = true
+    await nextTick()
     await wrapper.vm.loadActivitiesTask.last
     expect(wrapper.html()).toMatchSnapshot()
   })

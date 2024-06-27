@@ -126,6 +126,7 @@ export default defineComponent({
       activitiesLimit,
       activitiesLimitText,
       isLoading,
+      isVisible,
       loadActivitiesTask,
       getHtmlFromActivity,
       getTimeFromActivity
