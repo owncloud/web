@@ -1,5 +1,5 @@
 <template>
-  <oc-button id="context-menu-trigger-whitespace" appearance="raw">
+  <oc-button id="context-menu-trigger-whitespace" aria-hidden appearance="raw">
     <oc-drop
       drop-id="context-menu-drop-whitespace"
       toggle="#context-menu-trigger-whitespace"
