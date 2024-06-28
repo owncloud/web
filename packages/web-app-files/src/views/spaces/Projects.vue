@@ -16,10 +16,7 @@
           <create-space v-if="hasCreatePermission" class="oc-mr-s" />
           <div v-if="!selectedResourcesIds?.length" class="oc-flex oc-flex-middle oc-pl-s">
             <span v-text="$gettext('Learn about spaces')" />
-            <oc-contextual-helper
-              :text="$gettext('Spaces are special folders built for collaboration.')"
-              class="oc-ml-xs"
-            />
+            <oc-contextual-helper :text="spacesHelpText" class="oc-ml-xs" />
           </div>
         </template>
       </app-bar>
@@ -482,6 +479,15 @@ export default defineComponent({
       return unref(viewModes).find((v) => v.name === viewModeName)
     })
 
+    const spacesHelpText = computed(() => {
+      return $gettext(
+        `Spaces are special folders for making files accessible to a team.
+        Spaces belong to a team and not to a single person. Even if members are removed, the files remain in the Space so that the team can continue to work on the files.
+        Members with the Manager role can add or remove other members from the Space.
+        A Space can have multiple Managers. Each Space has at least one Manager.`
+      )
+    })
+
     return {
       ...useSideBar(),
       spaces,
@@ -516,7 +522,8 @@ export default defineComponent({
       rowMounted,
       setSelection,
       viewSize,
-      fileListHeaderY
+      fileListHeaderY,
+      spacesHelpText
     }
   },
   computed: {
