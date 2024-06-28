@@ -14,7 +14,13 @@
 
 <script lang="ts">
 import { computed, defineComponent, unref, watch } from 'vue'
-import { queryItemAsString, useRouteMeta, useRouteParam, useRouteQuery } from '@ownclouders/web-pkg'
+import {
+  queryItemAsString,
+  useAppProviderService,
+  useRouteMeta,
+  useRouteParam,
+  useRouteQuery
+} from '@ownclouders/web-pkg'
 import { useRouter } from 'vue-router'
 import { omit } from 'lodash-es'
 import { useGettext } from 'vue3-gettext'
@@ -24,6 +30,9 @@ import { storeToRefs } from 'pinia'
 export default defineComponent({
   setup() {
     const { $gettext } = useGettext()
+    const appProviderService = useAppProviderService()
+    const router = useRouter()
+    const { isReady } = storeToRefs(useApplicationReadyStore())
 
     const appNameQuery = useRouteQuery('app')
     const appNameParam = useRouteParam('appCatchAll')
@@ -31,10 +40,14 @@ export default defineComponent({
       if (unref(appNameParam)) {
         return unref(appNameParam)
       }
-      return queryItemAsString(unref(appNameQuery))
+      if (unref(appNameQuery)) {
+        return queryItemAsString(unref(appNameQuery))
+      }
+      if (unref(isReady)) {
+        return appProviderService.appNames?.[0]
+      }
+      return ''
     })
-    const router = useRouter()
-    const { isReady } = storeToRefs(useApplicationReadyStore())
 
     watch(
       isReady,
