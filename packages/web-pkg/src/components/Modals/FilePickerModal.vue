@@ -92,7 +92,8 @@ export default defineComponent({
       isLoading,
       onLoad,
       iframeTitle,
-      iframeSrc: iframeUrl.href
+      iframeSrc: iframeUrl.href,
+      onFilePick
     }
   }
 })
