@@ -56,7 +56,7 @@ export default defineComponent({
     const activitiesLimit = 200
 
     const activitiesFooterText = computed(() => {
-      return $gettext('%{activitiesCount} activities in total', {
+      return $gettext('Showing %{activitiesCount} activities', {
         activitiesCount: unref(activities).length.toString()
       })
     })
