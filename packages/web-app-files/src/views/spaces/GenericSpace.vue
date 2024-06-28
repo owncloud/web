@@ -15,8 +15,17 @@
         @item-dropped="fileDropped"
       >
         <template #actions="{ limitedScreenSpace }">
+          <create-and-upload
+            v-if="!isEmbedModeEnabled"
+            key="create-and-upload-actions"
+            data-testid="actions-create-and-upload"
+            :space="space"
+            :item="item"
+            :item-id="itemId"
+            :limited-screen-space="limitedScreenSpace"
+          />
           <oc-button
-            v-if="isEmbedModeEnabled"
+            v-if="isEmbedModeEnabled && !isFilePicker"
             key="new-folder-btn"
             v-oc-tooltip="limitedScreenSpace ? $gettext('New folder') : ''"
             class="oc-mr-s"
@@ -30,16 +39,6 @@
             <oc-icon name="add" />
             <span v-if="!limitedScreenSpace" v-text="$gettext('New folder')" />
           </oc-button>
-
-          <create-and-upload
-            v-else
-            key="create-and-upload-actions"
-            data-testid="actions-create-and-upload"
-            :space="space"
-            :item="item"
-            :item-id="itemId"
-            :limited-screen-space="limitedScreenSpace"
-          />
         </template>
       </app-bar>
       <app-loading-spinner v-if="areResourcesLoading" />
@@ -269,7 +268,7 @@ export default defineComponent({
 
     const { actions: createNewFolder } = useFileActionsCreateNewFolder({ space })
 
-    const { isEnabled: isEmbedModeEnabled } = useEmbedMode()
+    const { isEnabled: isEmbedModeEnabled, isFilePicker } = useEmbedMode()
 
     const configStore = useConfigStore()
     const { options: configOptions } = storeToRefs(configStore)
@@ -616,6 +615,7 @@ export default defineComponent({
       whitespaceContextMenu,
       createNewFolderAction,
       isEmbedModeEnabled,
+      isFilePicker,
       currentFolder,
       totalResourcesCount,
       totalResourcesSize,
