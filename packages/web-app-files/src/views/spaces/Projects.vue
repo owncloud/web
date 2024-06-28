@@ -481,11 +481,10 @@ export default defineComponent({
 
     const spacesHelpText = computed(() => {
       return $gettext(
-        'Spaces are special folders for making files accessible to a team. ' +
-          'Spaces belong to a team and not to a single person. Even if members are removed, ' +
-          'the files remain in the Space so that the team can continue to work on the files. ' +
-          'Members with the Manager role can add or remove other members from the Space. A Space can have multiple Managers. ' +
-          'Each Space has at least one Manager.'
+        `Spaces are special folders for making files accessible to a team.
+        Spaces belong to a team and not to a single person. Even if members are removed, the files remain in the Space so that the team can continue to work on the files.
+        Members with the Manager role can add or remove other members from the Space.
+        A Space can have multiple Managers. Each Space has at least one Manager.`
       )
     })
 
