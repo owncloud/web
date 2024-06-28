@@ -29,6 +29,7 @@
       :contextual-helper-label="modal.contextualHelperLabel"
       :contextual-helper-data="modal.contextualHelperData"
       :hide-actions="modal.hideActions"
+      :focus-trap-initial="modal.focusTrapInitial"
       @cancel="onModalCancel"
       @confirm="onModalConfirm"
       @input="modal.onInput"

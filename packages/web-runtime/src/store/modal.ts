@@ -80,6 +80,7 @@ const mutations = {
     state.customComponentAttrs = modal.customComponentAttrs
     state.customContent = modal.customContent || ''
     state.hideActions = modal.hideActions || false
+    state.focusTrapInitial = modal.focusTrapInitial
   },
 
   HIDE_MODAL(state) {
