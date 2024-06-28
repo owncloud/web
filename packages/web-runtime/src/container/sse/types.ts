@@ -13,7 +13,7 @@ import { Language } from 'vue3-gettext'
 import PQueue from 'p-queue'
 
 export const eventSchema = z.object({
-  itemid: z.string(),
+  itemid: z.string().optional(),
   parentitemid: z.string().optional(),
   spaceid: z.string().optional(),
   initiatorid: z.string().optional(),

@@ -19,7 +19,8 @@ export enum MESSAGE_TYPE {
   SHARE_UPDATED = 'share-updated',
   LINK_CREATED = 'link-created',
   LINK_REMOVED = 'link-removed',
-  LINK_UPDATED = 'link-updated'
+  LINK_UPDATED = 'link-updated',
+  BACKCHANNEL_LOGOUT = 'backchannel-logout'
 }
 
 export class RetriableError extends Error {
