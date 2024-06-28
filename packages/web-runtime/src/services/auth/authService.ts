@@ -84,6 +84,18 @@ export class AuthService {
       })
     }
 
+    if (isPublicLinkContextRequired(this.router, to)) {
+      const user = await this.userManager.getUser()
+
+      if (user?.expired) {
+        try {
+          await this.userManager.signinSilent()
+        } catch (e) {
+          await this.userManager.removeUser()
+        }
+      }
+    }
+
     if (!isAnonymousContext(this.router, to)) {
       const fetchUserData = !isIdpContextRequired(this.router, to)
 

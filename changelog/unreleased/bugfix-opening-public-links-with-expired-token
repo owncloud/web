@@ -1,0 +1,5 @@
+Bugfix: Opening public links with an expired token
+
+We've fixed a bug where opening public links with an expired token would falsely show the access denied page. Instead, Web now tries to login the user. If that doesn't work, the expired user session gets removed.
+
+https://github.com/owncloud/web/pull/11086
