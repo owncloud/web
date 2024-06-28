@@ -49,16 +49,21 @@ export default defineComponent({
   components: { AppLoadingSpinner },
   setup() {
     const rootElement = ref<HTMLElement>()
-    const { $gettext, current: currentLanguage } = useGettext()
+    const { $ngettext, current: currentLanguage } = useGettext()
     const clientService = useClientService()
     const resource = inject<Ref<Resource>>('resource')
     const activities = ref<Activity[]>([])
     const activitiesLimit = 200
 
     const activitiesFooterText = computed(() => {
-      return $gettext('Showing %{activitiesCount} activities', {
-        activitiesCount: unref(activities).length.toString()
-      })
+      return $ngettext(
+        'Showing %{activitiesCount} activity',
+        'Showing %{activitiesCount} activities',
+        unref(activities).length,
+        {
+          activitiesCount: unref(activities).length.toString()
+        }
+      )
     })
 
     const loadActivitiesTask = useTask(function* (signal) {
