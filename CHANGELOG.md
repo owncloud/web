@@ -54,6 +54,7 @@ Details
    https://github.com/owncloud/web/issues/5398
    https://github.com/owncloud/web/pull/11087
    https://github.com/owncloud/web/pull/11096
+   https://github.com/owncloud/web/pull/11098
 
 * Enhancement - Activities sidebar app panel: [#10996](https://github.com/owncloud/web/pull/10996)
 
