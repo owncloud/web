@@ -6,7 +6,7 @@
 
 <script lang="ts">
 import { defineComponent } from 'vue'
-import { useResourceContents } from '../../composables'
+import { useResourceContents } from '@ownclouders/web-pkg'
 
 export default defineComponent({
   setup: () => {

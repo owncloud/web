@@ -1,13 +1,10 @@
 import { computed, unref } from 'vue'
-import {
-  useResourcesStore,
-  formatFileSize,
-  isLocationSharesActive,
-  useRouter
-} from '@ownclouders/web-pkg'
-
 import { storeToRefs } from 'pinia'
 import { useGettext } from 'vue3-gettext'
+import { useResourcesStore } from '../piniaStores'
+import { useRouter } from '../router'
+import { isLocationSharesActive } from '../../router'
+import { formatFileSize } from '../../helpers'
 
 export const useResourceContents = () => {
   const resourcesStore = useResourcesStore()

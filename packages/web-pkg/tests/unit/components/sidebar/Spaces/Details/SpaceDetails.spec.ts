@@ -3,10 +3,12 @@ import {
   CollaboratorShare,
   ShareRole,
   GraphShareRoleIdMap,
-  SpaceResource
+  SpaceResource,
+  Resource
 } from '@ownclouders/web-client'
 import { mock } from 'vitest-mock-extended'
-import { defaultPlugins, shallowMount } from 'web-test-helpers'
+import { defaultComponentMocks, defaultPlugins, shallowMount } from 'web-test-helpers'
+import { RouteLocation } from 'vue-router'
 
 const spaceMock = {
   type: 'space',
@@ -57,6 +59,12 @@ describe('Details SideBar Panel', () => {
 })
 
 function createWrapper({ spaceResource = spaceMock, props = {} } = {}) {
+  const mocks = {
+    ...defaultComponentMocks({
+      currentRoute: mock<RouteLocation>({ name: 'files-spaces-generic' })
+    })
+  }
+
   return {
     wrapper: shallowMount(SpaceDetails, {
       props: { ...props },
@@ -66,11 +74,13 @@ function createWrapper({ spaceResource = spaceMock, props = {} } = {}) {
             piniaOptions: {
               userState: { user: { id: '1', onPremisesSamAccountName: 'marie' } },
               spacesState: { spaceMembers: [spaceShare] },
-              sharesState: { collaboratorShares: [spaceShare] }
+              sharesState: { collaboratorShares: [spaceShare] },
+              resourcesStore: { resources: [mock<Resource>({ name: 'file1', type: 'file' })] }
             }
           })
         ],
-        provide: { resource: spaceResource }
+        mocks,
+        provide: { resource: spaceResource, ...mocks }
       }
     })
   }

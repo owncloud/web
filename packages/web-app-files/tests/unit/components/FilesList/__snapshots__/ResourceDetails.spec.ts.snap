@@ -35,7 +35,7 @@ exports[`ResourceDetails component > renders resource details correctly 1`] = `
           </tr>
           <tr data-v-5080a6a4="" data-testid="sizeInfo">
             <th data-v-5080a6a4="" scope="col" class="oc-pr-s oc-font-semibold">Size</th>
-            <td data-v-5080a6a4="">0 items in total (0 files, 0 folders)</td>
+            <td data-v-5080a6a4="">24 kB</td>
           </tr>
           <!--v-if-->
           <!--v-if-->

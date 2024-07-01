@@ -66,6 +66,10 @@
           <space-quota :space-quota="resource.spaceQuota" />
         </td>
       </tr>
+      <tr v-if="showSize" data-testid="sizeInfo">
+        <th scope="col" class="oc-pr-s oc-font-semibold" v-text="$gettext('Size')" />
+        <td v-text="resourceContentsText" />
+      </tr>
       <web-dav-details v-if="showWebDavDetails" :space="resource" />
       <portal-target
         name="app.files.sidebar.space.details.table"
@@ -86,7 +90,9 @@ import {
   useUserStore,
   useSpacesStore,
   useSharesStore,
-  useResourcesStore
+  useResourcesStore,
+  useResourceContents,
+  useRouter
 } from '../../../../composables'
 import SpaceQuota from '../../../SpaceQuota.vue'
 import WebDavDetails from '../../WebDavDetails.vue'
@@ -95,6 +101,7 @@ import { eventBus } from '../../../../services/eventBus'
 import { SideBarEventTopics } from '../../../../composables'
 import { ImageDimension } from '../../../../constants'
 import { ProcessorType } from '../../../../services'
+import { isLocationSpacesActive } from '../../../../router'
 
 export default defineComponent({
   name: 'SpaceDetails',
@@ -117,6 +124,8 @@ export default defineComponent({
     const clientService = useClientService()
     const spacesStore = useSpacesStore()
     const resourcesStore = useResourcesStore()
+    const { resourceContentsText } = useResourceContents()
+    const router = useRouter()
 
     const sharesStore = useSharesStore()
     const { spaceMembers } = storeToRefs(spacesStore)
@@ -146,6 +155,13 @@ export default defineComponent({
 
     const linkShareCount = computed(() => sharesStore.linkShares.length)
     const showWebDavDetails = computed(() => resourcesStore.areWebDavDetailsShown)
+    const showSize = computed(() => {
+      if (isLocationSpacesActive(router, 'files-spaces-projects')) {
+        // project spaces overview has its own "no selection" panel
+        return false
+      }
+      return true
+    })
 
     return {
       loadImageTask,
@@ -154,7 +170,9 @@ export default defineComponent({
       linkShareCount,
       showWebDavDetails,
       user,
-      spaceMembers
+      spaceMembers,
+      resourceContentsText,
+      showSize
     }
   },
   computed: {

@@ -137,10 +137,16 @@ import {
   useCapabilityStore,
   useConfigStore,
   useResourcesStore,
-  formatDateFromJSDate
+  formatDateFromJSDate,
+  useResourceContents
 } from '@ownclouders/web-pkg'
 import upperFirst from 'lodash-es/upperFirst'
-import { isPersonalSpaceResource, isShareResource, ShareTypes } from '@ownclouders/web-client'
+import {
+  isPersonalSpaceResource,
+  isProjectSpaceResource,
+  isShareResource,
+  ShareTypes
+} from '@ownclouders/web-client'
 import { usePreviewService, useGetMatchingSpace } from '@ownclouders/web-pkg'
 import { getIndicators } from '@ownclouders/web-pkg'
 import {
@@ -159,7 +165,6 @@ import { tagsHelper } from '../../../helpers/contextualHelpers'
 import { ContextualHelper } from '@ownclouders/design-system/src/helpers'
 import TagsSelect from './TagsSelect.vue'
 import { WebDavDetails } from '@ownclouders/web-pkg'
-import { useResourceContents } from '../../../composables'
 
 export default defineComponent({
   name: 'FileDetails',
@@ -348,10 +353,7 @@ export default defineComponent({
       return this.resource.owner?.displayName
     },
     resourceSize() {
-      console.log(this.space, 'space')
-      console.log(this.resource, 'resource')
-      return this.resourceContentsText
-      if (isPersonalSpaceResource(this.space) && this.resource.id === this.space.id) {
+      if (isPersonalSpaceResource(this.space) && this.resource.path === '/') {
         return this.resourceContentsText
       }
 
