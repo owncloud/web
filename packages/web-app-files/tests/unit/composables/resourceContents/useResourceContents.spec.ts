@@ -20,6 +20,23 @@ describe('resourceContents', () => {
         }
       })
     })
+    it('should contain hidden count when areHiddenFilesShown equals false', () => {
+      const resources = [
+        mock<Resource>({ isFolder: true, type: 'folder', name: 'folder1' }),
+        mock<Resource>({ isFolder: true, type: 'folder', name: '.hiddenFolder1' }),
+        mock<Resource>({ isFolder: false, type: 'file', name: 'file1' }),
+        mock<Resource>({ isFolder: false, type: 'file', name: '.hiddenFile1' })
+      ]
+      getWrapper({
+        resources,
+        areHiddenFilesShown: false,
+        setup: ({ resourceContentsText }) => {
+          expect(unref(resourceContentsText)).toBe(
+            '4 items in total (2 files including 1 hidden, 2 folders including 1 hidden)'
+          )
+        }
+      })
+    })
     it.each([
       { prop: { resources: [] }, expectedText: '0 items in total (0 files, 0 folders)' },
       {
@@ -139,10 +156,12 @@ describe('resourceContents', () => {
 })
 
 function getWrapper({
+  areHiddenFilesShown = true,
   currentRouteName = 'files-spaces-generic',
   resources = [],
   setup
 }: {
+  areHiddenFilesShown: boolean
   currentRouteName?: string
   resources: Resource[]
   setup: (instance: ReturnType<typeof useResourceContents>) => void
@@ -161,7 +180,7 @@ function getWrapper({
         mocks,
         pluginOptions: {
           piniaOptions: {
-            resourcesStore: { resources }
+            resourcesStore: { resources, areHiddenFilesShown }
           }
         },
         provide: mocks
