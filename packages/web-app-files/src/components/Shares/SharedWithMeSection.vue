@@ -77,12 +77,7 @@
             <oc-icon :name="'arrow-' + (showMore ? 'up' : 'down') + '-s'" fill-type="line" />
           </oc-button>
         </div>
-        <list-info
-          v-else
-          class="oc-width-1-1 oc-my-s"
-          :files="countFiles"
-          :folders="countFolders"
-        />
+        <list-info v-else class="oc-width-1-1 oc-my-s" />
       </template>
     </resource-table>
   </div>

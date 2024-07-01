@@ -131,13 +131,7 @@
               class="oc-text-nowrap oc-text-center oc-width-1-1 oc-my-s"
               v-text="searchResultExceedsLimitText"
             />
-            <list-info
-              v-else-if="paginatedResources.length > 0"
-              class="oc-width-1-1 oc-my-s"
-              :files="totalResourcesCount.files"
-              :folders="totalResourcesCount.folders"
-              :size="totalResourcesSize"
-            />
+            <list-info v-else-if="paginatedResources.length > 0" class="oc-width-1-1 oc-my-s" />
           </template>
         </resource-table>
       </template>

@@ -9,7 +9,7 @@
       :data-test-size="size"
       class="oc-text-muted"
     >
-      {{ text }}
+      {{ resourceContentsText }}
     </p>
   </div>
 </template>
@@ -17,6 +17,7 @@
 <script lang="ts">
 import { defineComponent } from 'vue'
 import { formatFileSize } from '@ownclouders/web-pkg'
+import { useResourceContents } from '../../composables'
 
 export default defineComponent({
   props: {
@@ -61,6 +62,11 @@ export default defineComponent({
       required: false,
       default: false
     }
+  },
+  setup: () => {
+    const { resourceContentsText } = useResourceContents()
+
+    return { resourceContentsText }
   },
   computed: {
     items() {

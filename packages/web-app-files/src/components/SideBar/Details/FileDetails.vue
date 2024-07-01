@@ -140,7 +140,7 @@ import {
   formatDateFromJSDate
 } from '@ownclouders/web-pkg'
 import upperFirst from 'lodash-es/upperFirst'
-import { isShareResource, ShareTypes } from '@ownclouders/web-client'
+import { isPersonalSpaceResource, isShareResource, ShareTypes } from '@ownclouders/web-client'
 import { usePreviewService, useGetMatchingSpace } from '@ownclouders/web-pkg'
 import { getIndicators } from '@ownclouders/web-pkg'
 import {
@@ -159,6 +159,7 @@ import { tagsHelper } from '../../../helpers/contextualHelpers'
 import { ContextualHelper } from '@ownclouders/design-system/src/helpers'
 import TagsSelect from './TagsSelect.vue'
 import { WebDavDetails } from '@ownclouders/web-pkg'
+import { useResourceContents } from '../../../composables'
 
 export default defineComponent({
   name: 'FileDetails',
@@ -180,6 +181,7 @@ export default defineComponent({
     const userStore = useUserStore()
     const capabilityStore = useCapabilityStore()
     const { getMatchingSpace } = useGetMatchingSpace()
+    const { resourceContentsText } = useResourceContents()
 
     const language = useGettext()
 
@@ -296,6 +298,7 @@ export default defineComponent({
       sharedAncestor,
       sharedAncestorRoute,
       formatDateRelative,
+      resourceContentsText,
       contextualHelper,
       showWebDavDetails,
       versions,
@@ -345,6 +348,13 @@ export default defineComponent({
       return this.resource.owner?.displayName
     },
     resourceSize() {
+      console.log(this.space, 'space')
+      console.log(this.resource, 'resource')
+      return this.resourceContentsText
+      if (isPersonalSpaceResource(this.space) && this.resource.id === this.space.id) {
+        return this.resourceContentsText
+      }
+
       return formatFileSize(this.resource.size, this.$language.current)
     },
     showSize() {

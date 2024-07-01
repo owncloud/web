@@ -398,7 +398,7 @@ export default defineComponent({
             this.showMessage({
               title: this.$gettext('Share was removed successfully')
             })
-            if (lastShareId && isLocationSharesActive(this.$router, 'files-shares-with-others')) {
+            if (lastShareId && isLocationSharesActive(this.$router, 'files-shares-via-link')) {
               this.removeResources([{ id: lastShareId }] as Resource[])
             }
           } catch (error) {
