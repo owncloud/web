@@ -75,7 +75,7 @@ export const useResourceContents = () => {
       unref(totalResourcesCount).spaces
     const itemSize = formatFileSize(unref(totalResourcesSize), currentLanguage)
     const size = parseFloat(unref(totalResourcesSize)?.toString())
-    const showSpaces = isLocationSharesActive(router, 'files-shares-with-me')
+    const showSpaces = isLocationSharesActive(router, 'files-shares-via-link')
 
     if (showSpaces) {
       return size > 0

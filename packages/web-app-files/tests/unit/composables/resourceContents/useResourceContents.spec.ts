@@ -1,12 +1,25 @@
 import { useResourceContents } from 'web-app-files/src/composables/resourceContents/useResourceContents'
 import { mock } from 'vitest-mock-extended'
-import { defaultComponentMocks, getComposableWrapper } from 'web-test-helpers'
+import { defaultComponentMocks, getComposableWrapper, RouteLocation } from 'web-test-helpers'
 import { unref } from 'vue'
-import { Resource } from '@ownclouders/web-client'
+import { Resource, SpaceResource } from '@ownclouders/web-client'
 import { describe } from 'vitest'
 
 describe('resourceContents', () => {
   describe('resourceContentsText', () => {
+    it('should contain space count when route equals "files-shares-via-link"', () => {
+      const resources = [
+        mock<Resource>({ isFolder: true, type: 'folder', name: 'folder1' }),
+        mock<SpaceResource>({ driveType: 'project' })
+      ]
+      getWrapper({
+        currentRouteName: 'files-shares-via-link',
+        resources,
+        setup: ({ resourceContentsText }) => {
+          expect(unref(resourceContentsText)).toBe('2 items in total (0 files, 1 folder, 1 space)')
+        }
+      })
+    })
     it.each([
       { prop: { resources: [] }, expectedText: '0 items in total (0 files, 0 folders)' },
       {
@@ -126,13 +139,17 @@ describe('resourceContents', () => {
 })
 
 function getWrapper({
+  currentRouteName = 'files-spaces-generic',
   resources = [],
   setup
 }: {
+  currentRouteName?: string
   resources: Resource[]
   setup: (instance: ReturnType<typeof useResourceContents>) => void
 }) {
-  const mocks = defaultComponentMocks()
+  const mocks = {
+    ...defaultComponentMocks({ currentRoute: { name: currentRouteName } })
+  }
 
   return {
     wrapper: getComposableWrapper(
