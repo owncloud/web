@@ -156,11 +156,7 @@ export default defineComponent({
     const linkShareCount = computed(() => sharesStore.linkShares.length)
     const showWebDavDetails = computed(() => resourcesStore.areWebDavDetailsShown)
     const showSize = computed(() => {
-      if (isLocationSpacesActive(router, 'files-spaces-projects')) {
-        // project spaces overview has its own "no selection" panel
-        return false
-      }
-      return true
+      return !isLocationSpacesActive(router, 'files-spaces-projects')
     })
 
     return {

@@ -141,12 +141,7 @@ import {
   useResourceContents
 } from '@ownclouders/web-pkg'
 import upperFirst from 'lodash-es/upperFirst'
-import {
-  isPersonalSpaceResource,
-  isProjectSpaceResource,
-  isShareResource,
-  ShareTypes
-} from '@ownclouders/web-client'
+import { isPersonalSpaceResource, isShareResource, ShareTypes } from '@ownclouders/web-client'
 import { usePreviewService, useGetMatchingSpace } from '@ownclouders/web-pkg'
 import { getIndicators } from '@ownclouders/web-pkg'
 import {
