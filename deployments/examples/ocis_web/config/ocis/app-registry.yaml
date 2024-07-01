@@ -33,21 +33,21 @@ app_registry:
       name: Microsoft Word
       description: Microsoft Word document
       icon: ""
-      default_app: OnlyOffice
+      default_app: Collabora
       allow_creation: true
     - mime_type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet
       extension: xlsx
       name: Microsoft Excel
       description: Microsoft Excel document
       icon: ""
-      default_app: OnlyOffice
+      default_app: Collabora
       allow_creation: true
     - mime_type: application/vnd.openxmlformats-officedocument.presentationml.presentation
       extension: pptx
       name: Microsoft PowerPoint
       description: Microsoft PowerPoint document
       icon: ""
-      default_app: OnlyOffice
+      default_app: Collabora
       allow_creation: true
     - mime_type: application/vnd.jupyter
       extension: ipynb

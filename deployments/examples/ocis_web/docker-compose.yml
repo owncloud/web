@@ -1,22 +1,21 @@
 ---
-version: '3.7'
 
 services:
   traefik:
-    image: traefik:v2.9.1
+    image: traefik:v3.0.3
     networks:
       ocis-net:
         aliases:
           - ${OCIS_DOMAIN:-ocis.owncloud.test}
           - ${WOPISERVER_DOMAIN:-wopiserver.owncloud.test}
           - ${COLLABORA_DOMAIN:-collabora.owncloud.test}
-          - ${ONLYOFFICE_DOMAIN:-onlyoffice.owncloud.test}
     command:
       - '--log.level=${TRAEFIK_LOG_LEVEL:-ERROR}'
       # letsencrypt configuration
       - '--certificatesResolvers.http.acme.email=${TRAEFIK_ACME_MAIL:-example@example.org}'
       - '--certificatesResolvers.http.acme.storage=/certs/acme.json'
       - '--certificatesResolvers.http.acme.httpChallenge.entryPoint=http'
+      - "--certificatesresolvers.http.acme.caserver=${TRAEFIK_ACME_CASERVER:-https://acme-v02.api.letsencrypt.org/directory}"
       # enable dashboard
       - '--api.dashboard=true'
       # define entrypoints
@@ -42,11 +41,11 @@ services:
       - 'traefik.http.routers.traefik.tls.certresolver=http'
       - 'traefik.http.routers.traefik.service=api@internal'
     logging:
-      driver: 'local'
+      driver: ${LOG_DRIVER:-local}
     restart: always
 
   ocis:
-    image: owncloud/ocis:${OCIS_DOCKER_TAG:-latest}
+    image: ${OCIS_DOCKER_IMAGE:-owncloud/ocis-rolling}:${OCIS_DOCKER_TAG:-master}
     networks:
       ocis-net:
     entrypoint:
@@ -58,6 +57,8 @@ services:
     environment:
       OCIS_URL: https://${OCIS_DOMAIN:-ocis.owncloud.test}
       OCIS_LOG_LEVEL: ${OCIS_LOG_LEVEL:-error} # make oCIS less verbose
+      OCIS_LOG_COLOR: "${LOG_PRETTY:-false}"
+      OCIS_LOG_PRETTY: "${LOG_PRETTY:-false}"
       PROXY_TLS: 'false' # do not use SSL between Traefik and oCIS
       GATEWAY_GRPC_ADDR: 0.0.0.0:9142 # make the REVA gateway accessible to the app drivers
       # INSECURE: needed if oCIS / Traefik is using self generated certificates
@@ -68,16 +69,34 @@ services:
       IDM_ADMIN_PASSWORD: '${ADMIN_PASSWORD:-admin}' # this overrides the admin password from the configuration file
       # demo users
       IDM_CREATE_DEMO_USERS: '${DEMO_USERS:-false}'
+      # enable the notifications service
+      OCIS_ADD_RUN_SERVICES: "notifications"
+      NOTIFICATIONS_SMTP_HOST: inbucket
+      NOTIFICATIONS_SMTP_PORT: 2500
+      NOTIFICATIONS_SMTP_SENDER: oCIS notifications <notifications@${OCIS_DOMAIN:-ocis.owncloud.test}>
+      NOTIFICATIONS_SMTP_USERNAME: notifications@${OCIS_DOMAIN:-ocis.owncloud.test}
+      NOTIFICATIONS_SMTP_INSECURE: "true" # the mail catcher uses self signed certificates
       # fulltext search
       SEARCH_EXTRACTOR_TYPE: tika
       SEARCH_EXTRACTOR_TIKA_TIKA_URL: http://tika:9998
       # denial shares
       FRONTEND_OCS_ENABLE_DENIALS: '${SHARE_DENIALS:-false}'
       # make the registry available to the app provider containers
-      MICRO_REGISTRY: 'mdns'
+      NATS_NATS_HOST: 0.0.0.0
+      # CSP configs
+      PROXY_CSP_CONFIG_FILE_LOCATION: /etc/ocis/csp.yaml
+      # these two vars are needed in the csp config file to include the web office apps and the importer
+      COLLABORA_DOMAIN: ${COLLABORA_DOMAIN:-collabora.owncloud.test}
+      COMPANION_DOMAIN: ${COMPANION_DOMAIN:-companion.owncloud.test}
+      # enable to allow using the banned passwords list
+      OCIS_PASSWORD_POLICY_BANNED_PASSWORDS_LIST: banned-password-list.txt
+      # make collabora the secure view app
+      FRONTEND_APP_HANDLER_SECURE_VIEW_APP_ADDR: com.owncloud.api.collaboration.Collabora
     volumes:
       - ./config/ocis/proxy.yaml:/etc/ocis/proxy.yaml
       - ./config/ocis/app-registry.yaml:/etc/ocis/app-registry.yaml
+      - ./config/ocis/csp.yaml:/etc/ocis/csp.yaml
+      - ./config/ocis/banned-password-list.txt:/etc/ocis/banned-password-list.txt
       - ocis-config:/etc/ocis
       - ocis-data:/var/lib/ocis
     labels:
@@ -88,7 +107,7 @@ services:
       - 'traefik.http.routers.ocis.service=ocis'
       - 'traefik.http.services.ocis.loadbalancer.server.port=9200'
     logging:
-      driver: 'local'
+      driver: ${LOG_DRIVER:-local}
     restart: always
 
   web:
@@ -96,97 +115,47 @@ services:
     networks:
       ocis-net:
     logging:
-      driver: 'local'
+      driver: ${LOG_DRIVER:-local}
     restart: always
 
-  ocis-appprovider-collabora:
-    image: owncloud/ocis:${OCIS_DOCKER_TAG:-latest}
+  collaboration:
+    image: ${OCIS_DOCKER_IMAGE:-owncloud/ocis-rolling}:${OCIS_DOCKER_TAG:-master}
     networks:
       ocis-net:
-    command: app-provider server
-    environment:
-      # use the internal service name of the gateway
-      REVA_GATEWAY: ${REVA_GATEWAY:-com.owncloud.api.gateway}
-      APP_PROVIDER_GRPC_ADDR: 0.0.0.0:9164
-      # configure the service name to avoid collision with onlyoffice
-      APP_PROVIDER_SERVICE_NAME: app-provider-collabora
-      # use the internal service name
-      APP_PROVIDER_EXTERNAL_ADDR: com.owncloud.api.app-provider-collabora
-      APP_PROVIDER_DRIVER: wopi
-      APP_PROVIDER_WOPI_APP_NAME: Collabora
-      APP_PROVIDER_WOPI_APP_ICON_URI: https://${COLLABORA_DOMAIN:-collabora.owncloud.test}/favicon.ico
-      APP_PROVIDER_WOPI_APP_URL: https://${COLLABORA_DOMAIN:-collabora.owncloud.test}
-      APP_PROVIDER_WOPI_INSECURE: '${INSECURE:-false}'
-      APP_PROVIDER_WOPI_WOPI_SERVER_EXTERNAL_URL: https://${WOPISERVER_DOMAIN:-wopiserver.owncloud.test}
-      APP_PROVIDER_WOPI_FOLDER_URL_BASE_URL: https://${OCIS_DOMAIN:-ocis.owncloud.test}
-      # share the registry with the ocis container
-      MICRO_REGISTRY: 'mdns'
-    volumes:
-      - ocis-config:/etc/ocis
-    logging:
-      driver: 'local'
-    restart: always
-
-  ocis-appprovider-onlyoffice:
-    image: owncloud/ocis:${OCIS_DOCKER_TAG:-latest}
-    networks:
-      ocis-net:
-    user: '0' # needed for apk add in entrypoint script
+    depends_on:
+      ocis:
+        condition: service_started
+      collabora:
+        condition: service_healthy
     entrypoint:
       - /bin/sh
-      - /entrypoint-override.sh
-    #command: app-provider server
+    command: [ "-c", "ocis collaboration server" ]
     environment:
-      # use the internal service name of the gateway
-      REVA_GATEWAY: ${REVA_GATEWAY:-com.owncloud.api.gateway}
-      APP_PROVIDER_GRPC_ADDR: 0.0.0.0:9164
-      # configure the service name to avoid collision with collabora
-      APP_PROVIDER_SERVICE_NAME: app-provider-onlyoffice
-      # use the internal service name
-      APP_PROVIDER_EXTERNAL_ADDR: com.owncloud.api.app-provider-onlyoffice
-      APP_PROVIDER_DRIVER: wopi
-      APP_PROVIDER_WOPI_APP_NAME: OnlyOffice
-      APP_PROVIDER_WOPI_APP_ICON_URI: https://${ONLYOFFICE_DOMAIN:-onlyoffice.owncloud.test}/web-apps/apps/documenteditor/main/resources/img/favicon.ico
-      APP_PROVIDER_WOPI_APP_URL: https://${ONLYOFFICE_DOMAIN:-onlyoffice.owncloud.test}
-      APP_PROVIDER_WOPI_INSECURE: '${INSECURE:-false}'
-      APP_PROVIDER_WOPI_WOPI_SERVER_EXTERNAL_URL: https://${WOPISERVER_DOMAIN:-wopiserver.owncloud.test}
-      APP_PROVIDER_WOPI_FOLDER_URL_BASE_URL: https://${OCIS_DOMAIN:-ocis.owncloud.test}
-      # share the registry with the ocis container
-      MICRO_REGISTRY: 'mdns'
+      COLLABORATION_GRPC_ADDR: 0.0.0.0:9301
+      COLLABORATION_HTTP_ADDR: 0.0.0.0:9300
+      COLLABORATION_WOPI_SRC: https://${WOPISERVER_DOMAIN:-wopiserver.owncloud.test}
+      COLLABORATION_APP_NAME: "Collabora"
+      COLLABORATION_APP_ADDR: https://${COLLABORA_DOMAIN:-collabora.owncloud.test}
+      COLLABORATION_APP_ICON: https://${COLLABORA_DOMAIN:-collabora.owncloud.test}/favicon.ico
+      COLLABORATION_APP_INSECURE: "${INSECURE:-true}"
+      COLLABORATION_CS3API_DATAGATEWAY_INSECURE: "${INSECURE:-true}"
+      COLLABORATION_LOG_LEVEL: ${LOG_LEVEL:-info}
+      MICRO_REGISTRY_ADDRESS: "ocis:9233"
     volumes:
-      - ./config/ocis-appprovider-onlyoffice/entrypoint-override.sh:/entrypoint-override.sh
       - ocis-config:/etc/ocis
-    logging:
-      driver: 'local'
-    restart: always
-  wopiserver:
-    image: cs3org/wopiserver:${WOPISERVER_DOCKER_TAG:-v10.2.1}
-    networks:
-      ocis-net:
-    entrypoint:
-      - /bin/sh
-      - /entrypoint-override.sh
-    environment:
-      WOPISERVER_INSECURE: '${INSECURE:-false}'
-      WOPISECRET: ${WOPI_JWT_SECRET:-LoremIpsum567}
-      WOPISERVER_DOMAIN: ${WOPISERVER_DOMAIN:-wopiserver.owncloud.test}
-    volumes:
-      - ./config/wopiserver/entrypoint-override.sh:/entrypoint-override.sh
-      - ./config/wopiserver/wopiserver.conf.dist:/etc/wopi/wopiserver.conf.dist
-      - wopi-recovery:/var/spool/wopirecovery
     labels:
-      - 'traefik.enable=true'
-      - 'traefik.http.routers.wopiserver.entrypoints=https'
-      - 'traefik.http.routers.wopiserver.rule=Host(`${WOPISERVER_DOMAIN:-wopiserver.owncloud.test}`)'
-      - 'traefik.http.routers.wopiserver.tls.certresolver=http'
-      - 'traefik.http.routers.wopiserver.service=wopiserver'
-      - 'traefik.http.services.wopiserver.loadbalancer.server.port=8880'
+      - "traefik.enable=true"
+      - "traefik.http.routers.collaboration.entrypoints=https"
+      - "traefik.http.routers.collaboration.rule=Host(`${WOPISERVER_DOMAIN:-wopiserver.owncloud.test}`)"
+      - "traefik.http.routers.collaboration.tls.certresolver=http"
+      - "traefik.http.routers.collaboration.service=collaboration"
+      - "traefik.http.services.collaboration.loadbalancer.server.port=9300"
     logging:
-      driver: 'local'
+      driver: ${LOG_DRIVER:-local}
     restart: always
 
   collabora:
-    image: collabora/code:23.05.5.4.1
+    image: collabora/code:23.05.7.5.1
     networks:
       ocis-net:
     environment:
@@ -205,35 +174,11 @@ services:
       - 'traefik.http.routers.collabora.service=collabora'
       - 'traefik.http.services.collabora.loadbalancer.server.port=9980'
     logging:
-      driver: 'local'
+      driver: ${LOG_DRIVER:-local}
     restart: always
+    healthcheck:
+      test: [ "CMD", "curl", "-f", "http://localhost:9980/hosting/discovery" ]
 
-  onlyoffice:
-    image: onlyoffice/documentserver:7.5.1
-    networks:
-      ocis-net:
-    entrypoint:
-      - /bin/sh
-      - /entrypoint-override.sh
-    environment:
-      WOPI_ENABLED: 'true'
-      USE_UNAUTHORIZED_STORAGE: '${INSECURE:-false}' # self signed certificates
-    volumes:
-      - ./config/onlyoffice/entrypoint-override.sh:/entrypoint-override.sh
-      - ./config/onlyoffice/local.json:/etc/onlyoffice/documentserver/local.dist.json
-    labels:
-      - 'traefik.enable=true'
-      - 'traefik.http.routers.onlyoffice.entrypoints=https'
-      - 'traefik.http.routers.onlyoffice.rule=Host(`${ONLYOFFICE_DOMAIN:-onlyoffice.owncloud.test}`)'
-      - 'traefik.http.routers.onlyoffice.tls.certresolver=http'
-      - 'traefik.http.routers.onlyoffice.service=onlyoffice'
-      - 'traefik.http.services.onlyoffice.loadbalancer.server.port=80'
-      # websockets can't be opened when this is ommitted
-      - 'traefik.http.middlewares.onlyoffice.headers.customrequestheaders.X-Forwarded-Proto=https'
-      - 'traefik.http.routers.onlyoffice.middlewares=onlyoffice'
-    logging:
-      driver: 'local'
-    restart: always
 
   tika:
     image: ${TIKA_IMAGE:-apache/tika:latest-full}
@@ -241,11 +186,33 @@ services:
       ocis-net:
     restart: always
 
+  inbucket:
+    image: inbucket/inbucket
+    networks:
+      - ocis-net
+    entrypoint:
+      - /bin/sh
+    command: [ "-c", "apk add openssl; openssl req -subj '/CN=inbucket.test' -x509 -sha256 -nodes -days 365 -newkey rsa:2048 -keyout /tmp/server.key -out /tmp/server.crt; /start-inbucket.sh" ]
+    environment:
+      INBUCKET_SMTP_TLSENABLED: "true"
+      INBUCKET_SMTP_TLSPRIVKEY: /tmp/server.key
+      INBUCKET_SMTP_TLSCERT: /tmp/server.crt
+      INBUCKET_STORAGE_MAILBOXMSGCAP: 1000
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.inbucket.entrypoints=https"
+      - "traefik.http.routers.inbucket.rule=Host(`${INBUCKET_DOMAIN:-mail.owncloud.test}`)"
+      - "traefik.http.routers.inbucket.tls.certresolver=http"
+      - "traefik.http.routers.inbucket.service=inbucket"
+      - "traefik.http.services.inbucket.loadbalancer.server.port=9000"
+    logging:
+      driver: ${LOG_DRIVER:-local}
+    restart: always
+
 volumes:
   certs:
   ocis-config:
   ocis-data:
-  wopi-recovery:
 
 networks:
   ocis-net:
