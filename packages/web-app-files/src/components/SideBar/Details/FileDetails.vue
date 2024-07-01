@@ -357,7 +357,7 @@ export default defineComponent({
       return formatFileSize(this.resource.size, this.$language.current)
     },
     showSize() {
-      return this.resourceSize !== '?'
+      return formatFileSize(this.resource.size, this.$language.current) !== '?'
     },
     showVersions() {
       if (this.resource.type === 'folder' || this.publicLinkContextReady) {
