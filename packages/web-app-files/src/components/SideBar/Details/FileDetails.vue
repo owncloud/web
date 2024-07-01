@@ -181,7 +181,7 @@ export default defineComponent({
     const userStore = useUserStore()
     const capabilityStore = useCapabilityStore()
     const { getMatchingSpace } = useGetMatchingSpace()
-    const { resourceContentsText } = useResourceContents()
+    const { resourceContentsText } = useResourceContents({ showSizeInformation: false })
 
     const language = useGettext()
 
@@ -349,7 +349,9 @@ export default defineComponent({
     },
     resourceSize() {
       if (isPersonalSpaceResource(this.space) && this.resource.path === '/') {
-        return this.resourceContentsText
+        return `${formatFileSize(this.resource.size, this.$language.current)}, ${
+          this.resourceContentsText
+        }`
       }
 
       return formatFileSize(this.resource.size, this.$language.current)

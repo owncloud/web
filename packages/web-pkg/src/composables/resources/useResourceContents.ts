@@ -6,7 +6,11 @@ import { useRouter } from '../router'
 import { isLocationSharesActive } from '../../router'
 import { formatFileSize } from '../../helpers'
 
-export const useResourceContents = () => {
+export const useResourceContents = ({
+  showSizeInformation = true
+}: {
+  showSizeInformation?: boolean
+} = {}) => {
   const resourcesStore = useResourcesStore()
   const { current: currentLanguage, $gettext, $ngettext } = useGettext()
   const router = useRouter()
@@ -72,17 +76,16 @@ export const useResourceContents = () => {
       unref(totalResourcesCount).spaces
     const itemSize = formatFileSize(unref(totalResourcesSize), currentLanguage)
     const size = parseFloat(unref(totalResourcesSize)?.toString())
+    const showSize = showSizeInformation && size > 0
     const showSpaces = isLocationSharesActive(router, 'files-shares-via-link')
 
-    const itemTemplate =
-      size > 0
-        ? $gettext('%{ itemsCount } item with %{ itemSize } in total')
-        : $gettext('%{ itemsCount } item in total')
+    const itemTemplate = showSize
+      ? $gettext('%{ itemsCount } item with %{ itemSize } in total')
+      : $gettext('%{ itemsCount } item in total')
 
-    const pluralTemplate =
-      size > 0
-        ? $gettext('%{ itemsCount } items with %{ itemSize } in total')
-        : $gettext('%{ itemsCount } items in total')
+    const pluralTemplate = showSize
+      ? $gettext('%{ itemsCount } items with %{ itemSize } in total')
+      : $gettext('%{ itemsCount } items in total')
 
     const detailsTemplate = showSpaces
       ? '(%{ filesStr}, %{ foldersStr}, %{ spacesStr})'

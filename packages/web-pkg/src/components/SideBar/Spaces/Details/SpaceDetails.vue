@@ -68,7 +68,7 @@
       </tr>
       <tr v-if="showSize" data-testid="sizeInfo">
         <th scope="col" class="oc-pr-s oc-font-semibold" v-text="$gettext('Size')" />
-        <td v-text="resourceContentsText" />
+        <td v-text="size" />
       </tr>
       <web-dav-details v-if="showWebDavDetails" :space="resource" />
       <portal-target
@@ -96,12 +96,13 @@ import {
 } from '../../../../composables'
 import SpaceQuota from '../../../SpaceQuota.vue'
 import WebDavDetails from '../../WebDavDetails.vue'
-import { formatDateFromISO } from '../../../../helpers'
+import { formatDateFromISO, formatFileSize } from '../../../../helpers'
 import { eventBus } from '../../../../services/eventBus'
 import { SideBarEventTopics } from '../../../../composables'
 import { ImageDimension } from '../../../../constants'
 import { ProcessorType } from '../../../../services'
 import { isLocationSpacesActive } from '../../../../router'
+import { useGettext } from 'vue3-gettext'
 
 export default defineComponent({
   name: 'SpaceDetails',
@@ -124,8 +125,9 @@ export default defineComponent({
     const clientService = useClientService()
     const spacesStore = useSpacesStore()
     const resourcesStore = useResourcesStore()
-    const { resourceContentsText } = useResourceContents()
+    const { resourceContentsText } = useResourceContents({ showSizeInformation: false })
     const router = useRouter()
+    const { current: currentLanguage } = useGettext()
 
     const sharesStore = useSharesStore()
     const { spaceMembers } = storeToRefs(spacesStore)
@@ -158,6 +160,11 @@ export default defineComponent({
     const showSize = computed(() => {
       return !isLocationSpacesActive(router, 'files-spaces-projects')
     })
+    const size = computed(() => {
+      return `${formatFileSize(unref(resource).size, currentLanguage)}, ${unref(
+        resourceContentsText
+      )}`
+    })
 
     return {
       loadImageTask,
@@ -168,7 +175,8 @@ export default defineComponent({
       user,
       spaceMembers,
       resourceContentsText,
-      showSize
+      showSize,
+      size
     }
   },
   computed: {
