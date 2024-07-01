@@ -27,7 +27,7 @@ export const useResourceContents = () => {
       }
     )
 
-    if (unref(areHiddenFilesShown) && unref(totalResourcesCount).hiddenFiles) {
+    if (!unref(areHiddenFilesShown) && unref(totalResourcesCount).hiddenFiles) {
       filesStr = $ngettext(
         '%{ filesCount } file including %{ filesHiddenCount } hidden',
         '%{ filesCount } files including %{ filesHiddenCount } hidden',
@@ -48,7 +48,7 @@ export const useResourceContents = () => {
       }
     )
 
-    if (unref(areHiddenFilesShown) && unref(totalResourcesCount).hiddenFolders) {
+    if (!unref(areHiddenFilesShown) && unref(totalResourcesCount).hiddenFolders) {
       foldersStr = $ngettext(
         '%{ foldersCount } folder including %{ foldersHiddenCount } hidden',
         '%{ foldersCount } folders including %{ foldersHiddenCount } hidden',
