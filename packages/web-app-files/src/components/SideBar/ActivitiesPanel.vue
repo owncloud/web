@@ -2,7 +2,7 @@
   <div ref="rootElement">
     <app-loading-spinner v-if="isLoading" />
     <template v-else>
-      <p v-if="!activities.length" v-text="$gettext('No activities available for this resource')" />
+      <p v-if="!activities.length" v-text="$gettext('No activities')" />
       <div v-else class="oc-ml-s">
         <ul class="timeline">
           <li v-for="activity in activities" :key="activity.id">
@@ -13,7 +13,7 @@
             />
           </li>
         </ul>
-        <p class="oc-text-muted oc-text-small" v-text="activitiesLimitText" />
+        <p class="oc-text-muted oc-text-small" v-text="activitiesFooterText" />
       </div>
     </template>
   </div>
@@ -49,16 +49,21 @@ export default defineComponent({
   components: { AppLoadingSpinner },
   setup() {
     const rootElement = ref<HTMLElement>()
-    const { $gettext, current: currentLanguage } = useGettext()
+    const { $ngettext, current: currentLanguage } = useGettext()
     const clientService = useClientService()
     const resource = inject<Ref<Resource>>('resource')
     const activities = ref<Activity[]>([])
     const activitiesLimit = 200
 
-    const activitiesLimitText = computed(() => {
-      return $gettext('(Showing latest %{activitiesLimit} activities)', {
-        activitiesLimit: activitiesLimit.toString()
-      })
+    const activitiesFooterText = computed(() => {
+      return $ngettext(
+        'Showing %{activitiesCount} activity',
+        'Showing %{activitiesCount} activities',
+        unref(activities).length,
+        {
+          activitiesCount: unref(activities).length.toString()
+        }
+      )
     })
 
     const loadActivitiesTask = useTask(function* (signal) {
@@ -124,7 +129,7 @@ export default defineComponent({
       rootElement,
       activities,
       activitiesLimit,
-      activitiesLimitText,
+      activitiesFooterText,
       isLoading,
       isVisible,
       loadActivitiesTask,

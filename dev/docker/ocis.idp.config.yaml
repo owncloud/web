@@ -23,13 +23,11 @@ clients:
       - https://ocis.owncloud.test:10200
       - https://ocis.owncloud.test:10201
 
-  - id: filepicker
-    name: ownCloud file picker
-    application_type: ""
+  - id: "xdXOt13JKxym1B1QcEncf2XDkLAexMBFwiT9j6EfhhHFJhs2KM9jbjTmf8JBXE69"
+    name: ownCloud desktop client
+    application_type: "native"
     trusted: true
-    secret: ""
+    secret: "UBntmLjC2yYCeHwsyj73Uwo9TAaecAetRwMw0xYcvNL9yRdLSUi0hUAHfvCHFeFh"
     redirect_uris:
-      - https://host.docker.internal:3000
-      - https://host.docker.internal:3000?redirect=true
-    origins:
-      - https://host.docker.internal:3000
+      - http://localhost
+      - http://127.0.0.1

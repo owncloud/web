@@ -71,8 +71,9 @@ import {
   onSSELinkCreatedEvent,
   onSSELinkRemovedEvent,
   sseEventWrapper,
-  SseEventWrapperOptions,
-  onSSELinkUpdatedEvent
+  onSSELinkUpdatedEvent,
+  onSSEBackchannelLogoutEvent,
+  SseEventWrapperOptions
 } from './sse'
 import { loadAppTranslations } from '../helpers/language'
 import { urlJoin } from '@ownclouders/web-client'
@@ -926,6 +927,15 @@ export const registerSSEEventListeners = ({
       msg,
       ...sseEventWrapperOptions,
       method: onSSELinkUpdatedEvent
+    })
+  )
+
+  clientService.sseAuthenticated.addEventListener(MESSAGE_TYPE.BACKCHANNEL_LOGOUT, (msg) =>
+    sseEventWrapper({
+      topic: MESSAGE_TYPE.BACKCHANNEL_LOGOUT,
+      msg,
+      ...sseEventWrapperOptions,
+      method: onSSEBackchannelLogoutEvent
     })
   )
 }

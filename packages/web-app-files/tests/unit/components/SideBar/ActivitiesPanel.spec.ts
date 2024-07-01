@@ -89,7 +89,7 @@ describe('ActivitiesPanel', () => {
     wrapper.vm.isVisible = true
     await nextTick()
     await wrapper.vm.loadActivitiesTask.last
-    expect(wrapper.html()).toContain('No activities available for this resource')
+    expect(wrapper.html()).toContain('No activities')
   })
   it('should show loading spinner when fetching data', async () => {
     const { wrapper } = getMountedWrapper()
