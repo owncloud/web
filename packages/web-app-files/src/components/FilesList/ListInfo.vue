@@ -11,7 +11,6 @@ import { useResourceContents } from '../../composables'
 export default defineComponent({
   setup: () => {
     const { resourceContentsText } = useResourceContents()
-
     return { resourceContentsText }
   }
 })
