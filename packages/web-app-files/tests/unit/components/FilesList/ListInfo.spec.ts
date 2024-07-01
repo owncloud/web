@@ -14,22 +14,25 @@ function getWrapper() {
   const resources = [
     mock<Resource>({
       isFolder: false,
+      size: 10000,
       type: 'file',
-      size: 10000000,
       name: 'file1'
     }),
     mock<Resource>({
       isFolder: false,
+      size: 5,
       type: 'file',
       name: 'file2'
     }),
     mock<Resource>({
       isFolder: true,
+      size: 40000,
       type: 'folder',
       name: 'folder1'
     }),
     mock<Resource>({
       isFolder: true,
+      size: 0,
       type: 'folder',
       name: 'folder2'
     })
