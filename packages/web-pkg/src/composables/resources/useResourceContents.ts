@@ -74,59 +74,30 @@ export const useResourceContents = () => {
     const size = parseFloat(unref(totalResourcesSize)?.toString())
     const showSpaces = isLocationSharesActive(router, 'files-shares-via-link')
 
-    if (showSpaces) {
-      return size > 0
-        ? $ngettext(
-            '%{ itemsCount } item with %{ itemSize } in total (%{ filesStr}, %{foldersStr}, %{spacesStr})',
-            '%{ itemsCount } items with %{ itemSize } in total (%{ filesStr}, %{foldersStr}, %{spacesStr})',
-            totalItemsCount,
-            {
-              itemsCount: totalItemsCount.toString(),
-              itemSize,
-              filesStr,
-              foldersStr,
-              spacesStr
-            }
-          )
-        : $ngettext(
-            '%{ itemsCount } item in total (%{ filesStr}, %{foldersStr}, %{spacesStr})',
-            '%{ itemsCount } items in total (%{ filesStr}, %{foldersStr}, %{spacesStr})',
-            totalItemsCount,
-            {
-              itemsCount: totalItemsCount.toString(),
-              itemSize,
-              filesStr,
-              foldersStr,
-              spacesStr
-            }
-          )
-    } else {
-      return size > 0
-        ? $ngettext(
-            '%{ itemsCount } item with %{ itemSize } in total (%{ filesStr}, %{foldersStr})',
-            '%{ itemsCount } items with %{ itemSize } in total (%{ filesStr}, %{foldersStr})',
-            totalItemsCount,
-            {
-              itemsCount: totalItemsCount.toString(),
-              itemSize,
-              filesStr,
-              foldersStr,
-              spacesStr
-            }
-          )
-        : $ngettext(
-            '%{ itemsCount } item in total (%{ filesStr}, %{foldersStr})',
-            '%{ itemsCount } items in total (%{ filesStr}, %{foldersStr})',
-            totalItemsCount,
-            {
-              itemsCount: totalItemsCount.toString(),
-              itemSize,
-              filesStr,
-              foldersStr,
-              spacesStr
-            }
-          )
-    }
+    const itemTemplate =
+      size > 0
+        ? '%{ itemsCount } item with %{ itemSize } in total'
+        : '%{ itemsCount } item in total'
+
+    const pluralTemplate =
+      size > 0
+        ? '%{ itemsCount } items with %{ itemSize } in total'
+        : '%{ itemsCount } items in total'
+
+    const detailsTemplate = showSpaces
+      ? '(%{ filesStr}, %{ foldersStr}, %{ spacesStr})'
+      : '(%{ filesStr}, %{ foldersStr})'
+
+    const singleTemplate = `${itemTemplate} ${detailsTemplate}`
+    const pluralizedTemplate = `${pluralTemplate} ${detailsTemplate}`
+
+    return $ngettext(singleTemplate, pluralizedTemplate, totalItemsCount, {
+      itemsCount: totalItemsCount.toString(),
+      itemSize,
+      filesStr,
+      foldersStr,
+      spacesStr
+    })
   })
 
   return {
