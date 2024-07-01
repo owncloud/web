@@ -161,13 +161,15 @@ function getWrapper({
   resources = [],
   setup
 }: {
-  areHiddenFilesShown: boolean
+  areHiddenFilesShown?: boolean
   currentRouteName?: string
   resources: Resource[]
   setup: (instance: ReturnType<typeof useResourceContents>) => void
 }) {
   const mocks = {
-    ...defaultComponentMocks({ currentRoute: { name: currentRouteName } })
+    ...defaultComponentMocks({
+      currentRoute: mock<RouteLocation>({ name: currentRouteName })
+    })
   }
 
   return {
