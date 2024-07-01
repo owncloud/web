@@ -8,7 +8,7 @@ import { formatFileSize } from '../../helpers'
 
 export const useResourceContents = () => {
   const resourcesStore = useResourcesStore()
-  const { current: currentLanguage, $ngettext } = useGettext()
+  const { current: currentLanguage, $gettext, $ngettext } = useGettext()
   const router = useRouter()
 
   const { totalResourcesCount, totalResourcesSize, areHiddenFilesShown } =
@@ -76,13 +76,13 @@ export const useResourceContents = () => {
 
     const itemTemplate =
       size > 0
-        ? '%{ itemsCount } item with %{ itemSize } in total'
-        : '%{ itemsCount } item in total'
+        ? $gettext('%{ itemsCount } item with %{ itemSize } in total')
+        : $gettext('%{ itemsCount } item in total')
 
     const pluralTemplate =
       size > 0
-        ? '%{ itemsCount } items with %{ itemSize } in total'
-        : '%{ itemsCount } items in total'
+        ? $gettext('%{ itemsCount } items with %{ itemSize } in total')
+        : $gettext('%{ itemsCount } items in total')
 
     const detailsTemplate = showSpaces
       ? '(%{ filesStr}, %{ foldersStr}, %{ spacesStr})'
