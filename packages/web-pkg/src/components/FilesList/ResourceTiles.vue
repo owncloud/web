@@ -311,7 +311,11 @@ export default defineComponent({
     }
 
     const isResourceClickable = (resource: Resource) => {
-      return !(unref(isEmbedModeEnabled) && !unref(isFilePicker) && !resource.isFolder)
+      if (unref(isEmbedModeEnabled) && !unref(isFilePicker) && !resource.isFolder) {
+        return false
+      }
+
+      return true
     }
 
     const isResourceDisabled = (resource: Resource) => {
