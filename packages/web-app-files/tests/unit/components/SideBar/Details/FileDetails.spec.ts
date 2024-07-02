@@ -231,7 +231,7 @@ function createWrapper({
               userState: { user },
               authState: { publicLinkContextReady: isPublicLinkContext },
               capabilityState: { capabilities },
-              resourcesStore: { ancestorMetaData }
+              resourcesStore: { ancestorMetaData, currentFolder: mock<Resource>() }
             }
           })
         ],

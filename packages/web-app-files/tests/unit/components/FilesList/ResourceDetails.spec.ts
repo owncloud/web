@@ -71,7 +71,11 @@ describe('ResourceDetails component', () => {
         },
         global: {
           mocks,
-          plugins: [...defaultPlugins()],
+          plugins: [
+            ...defaultPlugins({
+              piniaOptions: { resourcesStore: { currentFolder: mock<Resource>() } }
+            })
+          ],
           provide: {
             ...mocks,
             space,

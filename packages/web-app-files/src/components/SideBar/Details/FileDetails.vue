@@ -141,7 +141,7 @@ import {
   useResourceContents
 } from '@ownclouders/web-pkg'
 import upperFirst from 'lodash-es/upperFirst'
-import { isPersonalSpaceResource, isShareResource, ShareTypes } from '@ownclouders/web-client'
+import { isShareResource, ShareTypes } from '@ownclouders/web-client'
 import { usePreviewService, useGetMatchingSpace } from '@ownclouders/web-pkg'
 import { getIndicators } from '@ownclouders/web-pkg'
 import {
@@ -186,7 +186,7 @@ export default defineComponent({
     const language = useGettext()
 
     const resourcesStore = useResourcesStore()
-    const { ancestorMetaData } = storeToRefs(resourcesStore)
+    const { ancestorMetaData, currentFolder } = storeToRefs(resourcesStore)
 
     const { user } = storeToRefs(userStore)
 
@@ -299,6 +299,7 @@ export default defineComponent({
       sharedAncestorRoute,
       formatDateRelative,
       resourceContentsText,
+      currentFolder,
       contextualHelper,
       showWebDavDetails,
       versions,
@@ -348,7 +349,7 @@ export default defineComponent({
       return this.resource.owner?.displayName
     },
     resourceSize() {
-      if (isPersonalSpaceResource(this.space) && this.resource.path === '/') {
+      if (this.resource.id === this.currentFolder.id) {
         return `${formatFileSize(this.resource.size, this.$language.current)}, ${
           this.resourceContentsText
         }`
