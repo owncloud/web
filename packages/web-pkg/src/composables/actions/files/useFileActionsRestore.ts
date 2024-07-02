@@ -5,7 +5,8 @@ import {
   Resource,
   isProjectSpaceResource,
   extractExtensionFromFile,
-  SpaceResource
+  SpaceResource,
+  isTrashResource
 } from '@ownclouders/web-client'
 import {
   ResolveStrategy,
@@ -213,7 +214,7 @@ export const useFileActionsRestore = () => {
         if (!isLocationTrashActive(router, 'files-trash-generic')) {
           return false
         }
-        if (!resources.every((r) => r.canBeRestored())) {
+        if (!resources.every((r) => isTrashResource(r) && r.canBeRestored())) {
           return false
         }
 

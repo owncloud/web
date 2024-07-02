@@ -243,7 +243,7 @@ import {
   ComponentPublicInstance
 } from 'vue'
 import { useWindowSize } from '@vueuse/core'
-import { IncomingShareResource, Resource } from '@ownclouders/web-client'
+import { IncomingShareResource, Resource, TrashResource } from '@ownclouders/web-client'
 import { extractDomSelector, SpaceResource } from '@ownclouders/web-client'
 import { ShareTypes, isShareResource } from '@ownclouders/web-client'
 
@@ -756,9 +756,9 @@ export default defineComponent({
               wrap: 'nowrap',
               width: 'shrink',
               accessibleLabelCallback: (item) =>
-                this.formatDateRelative((item as Resource).ddate) +
+                this.formatDateRelative((item as TrashResource).ddate) +
                 ' (' +
-                this.formatDate((item as Resource).ddate) +
+                this.formatDate((item as TrashResource).ddate) +
                 ')'
             }
           ] as FieldType[]

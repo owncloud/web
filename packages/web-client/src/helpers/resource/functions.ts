@@ -1,11 +1,15 @@
 import path, { basename, dirname } from 'path'
 import { urlJoin } from '../../utils'
 import { DavPermission, DavProperty } from '../../webdav/constants'
-import { Resource, ResourceIndicator, WebDavResponseResource } from './types'
+import { Resource, ResourceIndicator, TrashResource, WebDavResponseResource } from './types'
 import { camelCase } from 'lodash-es'
 
 const fileExtensions = {
   complex: ['tar.bz2', 'tar.gz', 'tar.xz']
+}
+
+export const isTrashResource = (resource: Resource): resource is TrashResource => {
+  return Object.hasOwn(resource, 'ddate')
 }
 
 export const extractDomSelector = (str: string): string => {
@@ -202,7 +206,7 @@ export function buildResource(resource: WebDavResponseResource): Resource {
   return r
 }
 
-export function buildDeletedResource(resource: WebDavResponseResource): Resource {
+export function buildDeletedResource(resource: WebDavResponseResource): TrashResource {
   const isFolder = resource.type === 'directory'
   const fullName = resource.props[DavProperty.TrashbinOriginalFilename]?.toString()
   const extension = extractExtensionFromFile({ name: fullName, type: resource.type } as Resource)

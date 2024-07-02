@@ -1,0 +1,7 @@
+Bugfix: Trash bin breaking on navigation
+
+We've fixed a bug where the trash bin would break when navigating into the parent folder of a resource.
+
+https://github.com/owncloud/web/pull/11132
+https://github.com/owncloud/web/issues/11100
+https://github.com/owncloud/web/issues/10686
