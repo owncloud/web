@@ -29,6 +29,10 @@ exports[`Details SideBar Panel > displays the details side panel 1`] = `
         <space-quota-stub data-v-c7ea2f9c="" spacequota="[object Object]"></space-quota-stub>
       </td>
     </tr>
+    <tr data-v-c7ea2f9c="" data-testid="sizeInfo">
+      <th data-v-c7ea2f9c="" scope="col" class="oc-pr-s oc-font-semibold">Size</th>
+      <td data-v-c7ea2f9c="">?, 1 item in total (1 file, 0 folders)</td>
+    </tr>
     <!--v-if-->
     <portal-target data-v-c7ea2f9c="" name="app.files.sidebar.space.details.table" slot-props="[object Object]" multiple="true"></portal-target>
   </table>

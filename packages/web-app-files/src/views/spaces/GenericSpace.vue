@@ -102,16 +102,7 @@
 
               <template #footer>
                 <pagination :pages="paginationPages" :current-page="paginationPage" />
-                <list-info
-                  v-if="paginatedResources.length > 0"
-                  class="oc-width-1-1 oc-my-s"
-                  :files="totalResourcesCount.files"
-                  :hidden-files="totalResourcesCount.hiddenFiles"
-                  :folders="totalResourcesCount.folders"
-                  :hidden-folders="totalResourcesCount.hiddenFolders"
-                  :size="totalResourcesSize"
-                  :show-hidden-items="!areHiddenFilesShown"
-                />
+                <list-info v-if="paginatedResources.length > 0" class="oc-width-1-1 oc-my-s" />
               </template>
               <template #quickActions="{ resource }">
                 <quick-actions

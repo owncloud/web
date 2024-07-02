@@ -131,13 +131,7 @@
               class="oc-text-nowrap oc-text-center oc-width-1-1 oc-my-s"
               v-text="searchResultExceedsLimitText"
             />
-            <list-info
-              v-else-if="paginatedResources.length > 0"
-              class="oc-width-1-1 oc-my-s"
-              :files="totalResourcesCount.files"
-              :folders="totalResourcesCount.folders"
-              :size="totalResourcesSize"
-            />
+            <list-info v-else-if="paginatedResources.length > 0" class="oc-width-1-1 oc-my-s" />
           </template>
         </resource-table>
       </template>
@@ -259,7 +253,7 @@ export default defineComponent({
 
     const resourcesStore = useResourcesStore()
     const { initResourceList, clearResourceList, updateResourceField } = resourcesStore
-    const { totalResourcesCount, totalResourcesSize } = storeToRefs(resourcesStore)
+    const { totalResourcesCount } = storeToRefs(resourcesStore)
 
     const configStore = useConfigStore()
     const { options: configOptions } = storeToRefs(configStore)
@@ -493,8 +487,7 @@ export default defineComponent({
       initResourceList,
       clearResourceList,
       updateResourceField,
-      totalResourcesCount,
-      totalResourcesSize
+      totalResourcesCount
     }
   },
   computed: {

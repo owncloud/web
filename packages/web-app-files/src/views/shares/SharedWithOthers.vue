@@ -64,12 +64,7 @@
           </template>
           <template #footer>
             <pagination :pages="paginationPages" :current-page="paginationPage" />
-            <list-info
-              v-if="filteredItems.length > 0"
-              class="oc-width-1-1 oc-my-s"
-              :files="totalResourcesCount.files"
-              :folders="totalResourcesCount.folders"
-            />
+            <list-info v-if="filteredItems.length > 0" class="oc-width-1-1 oc-my-s" />
           </template>
         </resource-table>
       </template>
@@ -138,7 +133,6 @@ export default defineComponent({
 
     const resourcesStore = useResourcesStore()
     const { updateResourceField } = resourcesStore
-    const { totalResourcesCount } = storeToRefs(resourcesStore)
 
     const resourcesViewDefaults = useResourcesViewDefaults<OutgoingShareResource, any, any[]>()
     const { sortBy, sortDir, loadResourcesTask, selectedResourcesIds, paginatedResources } =
@@ -191,7 +185,6 @@ export default defineComponent({
       filteredItems,
       shareTypes,
       getMatchingSpace,
-      totalResourcesCount,
       updateResourceField,
 
       // CERN

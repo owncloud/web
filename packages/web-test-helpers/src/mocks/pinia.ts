@@ -56,6 +56,7 @@ export type PiniaMockOptions = {
     ancestorMetaData?: AncestorMetaData
     selectedIds?: string[]
     areFileExtensionsShown?: boolean
+    areHiddenFilesShown?: boolean
   }
   sharesState?: {
     collaboratorShares?: CollaboratorShare[]

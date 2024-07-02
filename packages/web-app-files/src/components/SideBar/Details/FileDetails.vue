@@ -137,7 +137,8 @@ import {
   useCapabilityStore,
   useConfigStore,
   useResourcesStore,
-  formatDateFromJSDate
+  formatDateFromJSDate,
+  useResourceContents
 } from '@ownclouders/web-pkg'
 import upperFirst from 'lodash-es/upperFirst'
 import { isShareResource, ShareTypes } from '@ownclouders/web-client'
@@ -180,11 +181,12 @@ export default defineComponent({
     const userStore = useUserStore()
     const capabilityStore = useCapabilityStore()
     const { getMatchingSpace } = useGetMatchingSpace()
+    const { resourceContentsText } = useResourceContents({ showSizeInformation: false })
 
     const language = useGettext()
 
     const resourcesStore = useResourcesStore()
-    const { ancestorMetaData } = storeToRefs(resourcesStore)
+    const { ancestorMetaData, currentFolder } = storeToRefs(resourcesStore)
 
     const { user } = storeToRefs(userStore)
 
@@ -296,6 +298,8 @@ export default defineComponent({
       sharedAncestor,
       sharedAncestorRoute,
       formatDateRelative,
+      resourceContentsText,
+      currentFolder,
       contextualHelper,
       showWebDavDetails,
       versions,
@@ -345,10 +349,16 @@ export default defineComponent({
       return this.resource.owner?.displayName
     },
     resourceSize() {
+      if (this.resource.id === this.currentFolder?.id) {
+        return `${formatFileSize(this.resource.size, this.$language.current)}, ${
+          this.resourceContentsText
+        }`
+      }
+
       return formatFileSize(this.resource.size, this.$language.current)
     },
     showSize() {
-      return this.resourceSize !== '?'
+      return formatFileSize(this.resource.size, this.$language.current) !== '?'
     },
     showVersions() {
       if (this.resource.type === 'folder' || this.publicLinkContextReady) {

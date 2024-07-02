@@ -50,7 +50,7 @@ describe('ResourceDetails component', () => {
     const file = {
       id: '0',
       name: 'image.jpg',
-      path: '/',
+      path: '/image.jpg',
       size: 24064,
       mdate: 'Wed, 21 Oct 2015 07:28:00 GMT',
       mimeType: 'image/jpg',
@@ -71,7 +71,11 @@ describe('ResourceDetails component', () => {
         },
         global: {
           mocks,
-          plugins: [...defaultPlugins()],
+          plugins: [
+            ...defaultPlugins({
+              piniaOptions: { resourcesStore: { currentFolder: mock<Resource>() } }
+            })
+          ],
           provide: {
             ...mocks,
             space,

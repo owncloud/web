@@ -77,12 +77,7 @@
             <oc-icon :name="'arrow-' + (showMore ? 'up' : 'down') + '-s'" fill-type="line" />
           </oc-button>
         </div>
-        <list-info
-          v-else
-          class="oc-width-1-1 oc-my-s"
-          :files="countFiles"
-          :folders="countFolders"
-        />
+        <list-info v-else class="oc-width-1-1 oc-my-s" />
       </template>
     </resource-table>
   </div>
@@ -229,12 +224,6 @@ export default defineComponent({
   computed: {
     displayedFields() {
       return ['name', 'syncEnabled', 'sharedBy', 'sdate', 'sharedWith']
-    },
-    countFiles() {
-      return this.items.filter((s) => s.type !== 'folder').length
-    },
-    countFolders() {
-      return this.items.filter((s) => s.type === 'folder').length
     },
     toggleMoreLabel() {
       return this.showMore ? this.$gettext('Show less') : this.$gettext('Show more')

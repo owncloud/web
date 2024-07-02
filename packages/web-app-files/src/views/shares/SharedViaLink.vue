@@ -41,14 +41,7 @@
           </template>
           <template #footer>
             <pagination :pages="paginationPages" :current-page="paginationPage" />
-            <list-info
-              v-if="paginatedResources.length > 0"
-              class="oc-width-1-1 oc-my-s"
-              :files="totalResourcesCount.files"
-              :folders="totalResourcesCount.folders"
-              :spaces="totalResourcesCount.spaces"
-              :show-spaces="hasProjectSpaces"
-            />
+            <list-info v-if="paginatedResources.length > 0" class="oc-width-1-1 oc-my-s" />
           </template>
         </resource-table>
       </template>
@@ -64,7 +57,6 @@
 <script lang="ts">
 import {
   FileSideBar,
-  useCapabilityStore,
   useConfigStore,
   useFileActions,
   useResourcesStore
@@ -107,8 +99,6 @@ export default defineComponent({
   },
 
   setup() {
-    const capabilityStore = useCapabilityStore()
-    const capabilityRefs = storeToRefs(capabilityStore)
     const { getMatchingSpace } = useGetMatchingSpace()
     const configStore = useConfigStore()
     const { options: configOptions } = storeToRefs(configStore)
@@ -147,8 +137,7 @@ export default defineComponent({
       configOptions,
       getMatchingSpace,
       totalResourcesCount,
-      updateResourceField,
-      hasProjectSpaces: capabilityRefs.spacesProjects
+      updateResourceField
     }
   },
 
