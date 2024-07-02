@@ -190,7 +190,8 @@ export const useSideBarPanels = (): SidebarPanelExtension<SpaceResource, Resourc
       extensionPointIds: [fileSideBarExtensionPoint.id],
       panel: {
         name: 'actions',
-        icon: 'slideshow-3',
+        icon: 'play-circle',
+        iconFillType: 'line',
         title: () => $gettext('Actions'),
         component: FileActions,
         isRoot: () => false,
@@ -345,7 +346,8 @@ export const useSideBarPanels = (): SidebarPanelExtension<SpaceResource, Resourc
       extensionPointIds: [fileSideBarExtensionPoint.id],
       panel: {
         name: 'space-actions',
-        icon: 'slideshow-3',
+        icon: 'play-circle',
+        iconFillType: 'line',
         title: () => $gettext('Actions'),
         component: SpaceActions,
         isVisible: ({ items }) => {
