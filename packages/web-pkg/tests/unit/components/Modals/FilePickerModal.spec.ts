@@ -3,7 +3,6 @@ import { defaultComponentMocks, defaultPlugins, shallowMount } from 'web-test-he
 import { mock } from 'vitest-mock-extended'
 import { Resource, SpaceResource } from '@ownclouders/web-client'
 import { Modal, useModals } from '../../../../src/composables/piniaStores'
-import { describe } from 'vitest'
 
 window.open = vi.fn()
 
