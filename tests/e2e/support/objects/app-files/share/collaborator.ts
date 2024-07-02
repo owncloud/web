@@ -199,7 +199,7 @@ export default class Collaborator {
       page.locator(Collaborator.removeCollaboratorConfirmationButton).click()
     ])
     if (removeOwnSpaceAccess) {
-      await page.waitForNavigation()
+      await page.waitForURL(/.*\/files\/spaces.*/)
     }
   }
 
