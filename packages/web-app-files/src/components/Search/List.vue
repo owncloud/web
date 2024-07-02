@@ -253,7 +253,7 @@ export default defineComponent({
 
     const resourcesStore = useResourcesStore()
     const { initResourceList, clearResourceList, updateResourceField } = resourcesStore
-    const { totalResourcesCount, totalResourcesSize } = storeToRefs(resourcesStore)
+    const { totalResourcesCount } = storeToRefs(resourcesStore)
 
     const configStore = useConfigStore()
     const { options: configOptions } = storeToRefs(configStore)
@@ -487,8 +487,7 @@ export default defineComponent({
       initResourceList,
       clearResourceList,
       updateResourceField,
-      totalResourcesCount,
-      totalResourcesSize
+      totalResourcesCount
     }
   },
   computed: {

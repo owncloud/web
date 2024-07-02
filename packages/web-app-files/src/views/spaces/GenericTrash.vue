@@ -56,14 +56,7 @@
 <script lang="ts">
 import { storeToRefs } from 'pinia'
 
-import {
-  AppBar,
-  ContextActions,
-  FileSideBar,
-  useUserStore,
-  useCapabilityStore,
-  useResourcesStore
-} from '@ownclouders/web-pkg'
+import { AppBar, ContextActions, FileSideBar, useUserStore } from '@ownclouders/web-pkg'
 import FilesViewWrapper from '../../components/FilesViewWrapper.vue'
 import ListInfo from '../../components/FilesList/ListInfo.vue'
 import { ResourceTable } from '@ownclouders/web-pkg'
@@ -110,13 +103,8 @@ export default defineComponent({
 
   setup(props) {
     const { $gettext } = useGettext()
-    const capabilityStore = useCapabilityStore()
-    const capabilityRefs = storeToRefs(capabilityStore)
     const userStore = useUserStore()
     const { user } = storeToRefs(userStore)
-
-    const resourcesStore = useResourcesStore()
-    const { totalResourcesCount } = storeToRefs(resourcesStore)
 
     let loadResourcesEventToken: string
     const noContentMessage = computed(() => {
@@ -157,8 +145,7 @@ export default defineComponent({
     return {
       ...resourcesViewDefaults,
       user,
-      noContentMessage,
-      totalResourcesCount
+      noContentMessage
     }
   },
 

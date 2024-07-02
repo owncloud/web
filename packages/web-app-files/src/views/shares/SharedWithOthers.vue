@@ -133,7 +133,6 @@ export default defineComponent({
 
     const resourcesStore = useResourcesStore()
     const { updateResourceField } = resourcesStore
-    const { totalResourcesCount } = storeToRefs(resourcesStore)
 
     const resourcesViewDefaults = useResourcesViewDefaults<OutgoingShareResource, any, any[]>()
     const { sortBy, sortDir, loadResourcesTask, selectedResourcesIds, paginatedResources } =
@@ -186,7 +185,6 @@ export default defineComponent({
       filteredItems,
       shareTypes,
       getMatchingSpace,
-      totalResourcesCount,
       updateResourceField,
 
       // CERN

@@ -57,7 +57,6 @@
 <script lang="ts">
 import {
   FileSideBar,
-  useCapabilityStore,
   useConfigStore,
   useFileActions,
   useResourcesStore
@@ -100,8 +99,6 @@ export default defineComponent({
   },
 
   setup() {
-    const capabilityStore = useCapabilityStore()
-    const capabilityRefs = storeToRefs(capabilityStore)
     const { getMatchingSpace } = useGetMatchingSpace()
     const configStore = useConfigStore()
     const { options: configOptions } = storeToRefs(configStore)
@@ -140,8 +137,7 @@ export default defineComponent({
       configOptions,
       getMatchingSpace,
       totalResourcesCount,
-      updateResourceField,
-      hasProjectSpaces: capabilityRefs.spacesProjects
+      updateResourceField
     }
   },
 
