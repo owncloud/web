@@ -179,10 +179,10 @@ export default defineComponent({
       showStatusIcon,
       tooltipLabelIcon,
       resourceDescription,
-      shouldDisplayThumbnails
+      shouldDisplayThumbnails,
+      isProjectSpaceResource
     }
-  },
-  methods: { isProjectSpaceResource }
+  }
 })
 </script>
 
