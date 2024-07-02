@@ -225,12 +225,6 @@ export default defineComponent({
     displayedFields() {
       return ['name', 'syncEnabled', 'sharedBy', 'sdate', 'sharedWith']
     },
-    countFiles() {
-      return this.items.filter((s) => s.type !== 'folder').length
-    },
-    countFolders() {
-      return this.items.filter((s) => s.type === 'folder').length
-    },
     toggleMoreLabel() {
       return this.showMore ? this.$gettext('Show less') : this.$gettext('Show more')
     },

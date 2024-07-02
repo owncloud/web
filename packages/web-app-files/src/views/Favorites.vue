@@ -116,7 +116,6 @@ export default defineComponent({
 
     const resourcesStore = useResourcesStore()
     const { updateResourceField } = resourcesStore
-    const { totalResourcesCount, totalResourcesSize } = storeToRefs(resourcesStore)
 
     const resourcesViewDefaults = useResourcesViewDefaults<Resource, any, any[]>()
 
@@ -163,8 +162,6 @@ export default defineComponent({
       getMatchingSpace,
       viewModes,
       updateResourceField,
-      totalResourcesCount,
-      totalResourcesSize,
       appBarRef,
       folderView,
       folderViewStyle

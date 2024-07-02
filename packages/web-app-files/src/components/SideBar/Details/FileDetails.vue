@@ -349,7 +349,7 @@ export default defineComponent({
       return this.resource.owner?.displayName
     },
     resourceSize() {
-      if (this.resource.id === this.currentFolder.id) {
+      if (this.resource.id === this.currentFolder?.id) {
         return `${formatFileSize(this.resource.size, this.$language.current)}, ${
           this.resourceContentsText
         }`
