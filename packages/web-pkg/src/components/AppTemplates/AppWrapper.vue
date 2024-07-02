@@ -66,7 +66,8 @@ import {
   useFileActionsShowDetails,
   useFileActionsShowShares,
   FileActionOptions,
-  FileAction
+  FileAction,
+  useLoadingService
 } from '../../composables'
 import {
   Action,
@@ -128,6 +129,7 @@ export default defineComponent({
     const router = useRouter()
     const currentRoute = useRoute()
     const clientService = useClientService()
+    const loadingService = useLoadingService()
     const { getResourceContext } = useGetResourceContext()
     const { selectedResources } = useSelectedResources()
     const { dispatchModal } = useModals()
@@ -321,12 +323,6 @@ export default defineComponent({
       { immediate: true }
     )
 
-    onBeforeUnmount(() => {
-      if (unref(hasProp('url'))) {
-        revokeUrl(url.value)
-      }
-    })
-
     const errorPopup = (error: HttpError) => {
       console.error(error)
       showErrorMessage({
@@ -405,18 +401,23 @@ export default defineComponent({
       }
       const editorOptions = configStore.options.editor
       if (editorOptions.autosaveEnabled) {
-        autosaveIntervalId = setInterval(
-          async () => {
-            if (isDirty.value) {
-              await save()
-              autosavePopup()
-            }
-          },
-          (editorOptions.autosaveInterval || 120) * 1000
-        )
+        autosaveIntervalId = setInterval(async () => {
+          if (isDirty.value) {
+            await save()
+            autosavePopup()
+          }
+        }, (editorOptions.autosaveInterval || 120) * 1000)
       }
     })
     onBeforeUnmount(() => {
+      if (!loadingService.isLoading) {
+        window.removeEventListener('beforeunload', preventUnload)
+      }
+
+      if (unref(hasProp('url'))) {
+        revokeUrl(url.value)
+      }
+
       if (!unref(isEditor)) {
         return
       }
@@ -513,6 +514,7 @@ export default defineComponent({
           message: $gettext('Your changes were not saved. Do you want to save them?'),
           cancelText: $gettext("Don't Save"),
           confirmText: $gettext('Save'),
+          focusTrapInitial: '.oc-modal-body-actions-confirm',
           onCancel() {
             next()
           },
