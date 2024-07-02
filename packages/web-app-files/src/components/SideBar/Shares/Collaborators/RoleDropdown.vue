@@ -274,20 +274,5 @@ export default defineComponent({
   &-role-select-btn {
     max-width: 100%;
   }
-
-  &-custom-permissions-drop-cancel-confirm-btns {
-    background: var(--oc-color-background-hover);
-    text-align: right;
-  }
-}
-
-.files-collaborators-permission-checkbox::v-deep {
-  .oc-checkbox {
-    border: 2px solid var(--oc-color-border);
-  }
-
-  label {
-    margin-left: var(--oc-space-small);
-  }
 }
 </style>
