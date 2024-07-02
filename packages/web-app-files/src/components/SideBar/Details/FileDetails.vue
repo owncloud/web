@@ -141,7 +141,7 @@ import {
   useResourceContents
 } from '@ownclouders/web-pkg'
 import upperFirst from 'lodash-es/upperFirst'
-import { isShareResource, ShareTypes } from '@ownclouders/web-client'
+import { isShareResource, isTrashResource, ShareTypes } from '@ownclouders/web-client'
 import { usePreviewService, useGetMatchingSpace } from '@ownclouders/web-pkg'
 import { getIndicators } from '@ownclouders/web-pkg'
 import {
@@ -258,11 +258,15 @@ export default defineComponent({
     })
 
     const hasDeletionDate = computed(() => {
-      return unref(resource).ddate
+      return isTrashResource(unref(resource))
     })
 
     const capitalizedDeletionDate = computed(() => {
-      const displayDate = formatDateFromJSDate(new Date(unref(resource).ddate), language.current)
+      const item = unref(resource)
+      if (!isTrashResource(item)) {
+        return ''
+      }
+      const displayDate = formatDateFromJSDate(new Date(item.ddate), language.current)
       return upperFirst(displayDate)
     })
 

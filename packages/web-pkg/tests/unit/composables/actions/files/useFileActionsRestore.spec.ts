@@ -3,7 +3,7 @@ import { mock } from 'vitest-mock-extended'
 import { defaultComponentMocks, getComposableWrapper, RouteLocation } from 'web-test-helpers'
 import { useMessages, useResourcesStore } from '../../../../../src/composables/piniaStores'
 import { unref } from 'vue'
-import { HttpError, Resource } from '@ownclouders/web-client'
+import { HttpError, Resource, TrashResource } from '@ownclouders/web-client'
 import { ProjectSpaceResource, SpaceResource } from '@ownclouders/web-client'
 import { Drive } from '@ownclouders/web-client/graph/generated'
 import { AxiosResponse } from 'axios'
@@ -16,12 +16,7 @@ describe('restore', () => {
     it('should be false when no resource is given', () => {
       getWrapper({
         setup: ({ actions }, { space }) => {
-          expect(
-            unref(actions)[0].isVisible({
-              space,
-              resources: [] as Resource[]
-            })
-          ).toBe(false)
+          expect(unref(actions)[0].isVisible({ space, resources: [] })).toBe(false)
         }
       })
     })
@@ -31,7 +26,7 @@ describe('restore', () => {
           expect(
             unref(actions)[0].isVisible({
               space,
-              resources: [{ canBeRestored: () => true }] as Resource[]
+              resources: [{ canBeRestored: () => true, ddate: '2020-01-01' }] as TrashResource[]
             })
           ).toBe(true)
         }
@@ -43,7 +38,7 @@ describe('restore', () => {
           expect(
             unref(actions)[0].isVisible({
               space,
-              resources: [{ canBeRestored: () => false }] as Resource[]
+              resources: [{ canBeRestored: () => false }] as TrashResource[]
             })
           ).toBe(false)
         }
@@ -53,7 +48,9 @@ describe('restore', () => {
       getWrapper({
         invalidLocation: true,
         setup: ({ actions }, { space }) => {
-          expect(unref(actions)[0].isVisible({ space, resources: [{}] as Resource[] })).toBe(false)
+          expect(unref(actions)[0].isVisible({ space, resources: [{}] as TrashResource[] })).toBe(
+            false
+          )
         }
       })
     })
@@ -64,7 +61,7 @@ describe('restore', () => {
           expect(
             unref(actions)[0].isVisible({
               space,
-              resources: [{ canBeRestored: () => true }] as Resource[]
+              resources: [{ canBeRestored: () => true }] as TrashResource[]
             })
           ).toBe(false)
         }
@@ -74,7 +71,7 @@ describe('restore', () => {
 
   describe('method "restoreResources"', () => {
     it('should show message on success', () => {
-      const resourcesToRestore = [{ id: '1', path: '/1' }]
+      const resourcesToRestore = [{ id: '1', path: '/1' }] as TrashResource[]
 
       getWrapper({
         setup: ({ restoreResources }, { space }) => {
@@ -93,7 +90,7 @@ describe('restore', () => {
 
     it('should show message on error', () => {
       vi.spyOn(console, 'error').mockImplementation(() => undefined)
-      const resourcesToRestore = [{ id: '1', path: '/1' }]
+      const resourcesToRestore = [{ id: '1', path: '/1' }] as TrashResource[]
 
       getWrapper({
         setup: ({ restoreResources }, { space }) => {
@@ -116,7 +113,7 @@ describe('restore', () => {
   it('should request parent folder on collecting restore conflicts', () => {
     getWrapper({
       setup: async ({ collectConflicts }, { space, clientService }) => {
-        const resource = { id: '1', path: '1', name: '1' } as Resource
+        const resource = { id: '1', path: '1', name: '1' } as TrashResource
         await collectConflicts(space, [resource])
 
         expect(clientService.webdav.listFiles).toHaveBeenCalledWith(expect.anything(), {
@@ -129,8 +126,8 @@ describe('restore', () => {
   it('should find conflict within resources', () => {
     getWrapper({
       setup: async ({ collectConflicts }, { space }) => {
-        const resourceOne = { id: '1', path: '1', name: '1' } as Resource
-        const resourceTwo = { id: '2', path: '1', name: '1' } as Resource
+        const resourceOne = { id: '1', path: '1', name: '1' } as TrashResource
+        const resourceTwo = { id: '2', path: '1', name: '1' } as TrashResource
         const { conflicts } = await collectConflicts(space, [resourceOne, resourceTwo])
 
         expect(conflicts).toContain(resourceTwo)
@@ -141,7 +138,7 @@ describe('restore', () => {
   it('should add files without conflict to resolved resources', () => {
     getWrapper({
       setup: async ({ collectConflicts }, { space }) => {
-        const resource = { id: '1', path: '1', name: '1' } as Resource
+        const resource = { id: '1', path: '1', name: '1' } as TrashResource
         const { resolvedResources } = await collectConflicts(space, [resource])
 
         expect(resolvedResources).toContain(resource)
@@ -158,7 +155,10 @@ function getWrapper({
 }: {
   invalidLocation?: boolean
   driveType?: string
-  restoreResult?: { successful: Resource[]; failed: { resource: Resource; error: HttpError }[] }
+  restoreResult?: {
+    successful: TrashResource[]
+    failed: { resource: TrashResource; error: HttpError }[]
+  }
   setup: (
     instance: ReturnType<typeof useFileActionsRestore>,
     {

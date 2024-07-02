@@ -78,7 +78,6 @@ export interface Resource {
   privateLink?: string
   owner?: Identity
   extension?: string
-  ddate?: string
 
   // necessary for incoming share resources and resources inside shares
   remoteItemId?: string
@@ -90,7 +89,6 @@ export interface Resource {
   canShare?(args?: { user?: User; ability?: Ability }): boolean
   canRename?(args?: { user?: User; ability?: Ability }): boolean
   canBeDeleted?(args?: { user?: User; ability?: Ability }): boolean
-  canBeRestored?(): boolean
   canDeny?(): boolean
   canRemoveFromTrashbin?({ user }: { user?: User }): boolean
   canEditTags?(): boolean
@@ -116,6 +114,11 @@ export interface FolderResource extends Resource {
 
 export interface FileResource extends Resource {
   __fileResource?: any
+}
+
+export interface TrashResource extends Resource {
+  ddate: string
+  canBeRestored(): boolean
 }
 
 export interface WebDavResponseTusSupport {

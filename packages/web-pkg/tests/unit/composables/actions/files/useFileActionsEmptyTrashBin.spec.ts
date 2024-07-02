@@ -3,7 +3,7 @@ import { useMessages, useModals } from '../../../../../src/composables/piniaStor
 import { mock } from 'vitest-mock-extended'
 import { getComposableWrapper, defaultComponentMocks, RouteLocation } from 'web-test-helpers'
 import { unref } from 'vue'
-import { ProjectSpaceResource, Resource } from '@ownclouders/web-client'
+import { ProjectSpaceResource, TrashResource } from '@ownclouders/web-client'
 import { FileActionOptions } from '../../../../../src/composables/actions'
 
 describe('emptyTrashBin', () => {
@@ -23,7 +23,7 @@ describe('emptyTrashBin', () => {
           expect(
             unref(actions)[0].isVisible({
               space,
-              resources: [{ canBeRestored: () => true }] as Resource[]
+              resources: [{ canBeRestored: () => true }] as TrashResource[]
             })
           ).toBe(false)
         }
