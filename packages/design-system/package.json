@@ -100,7 +100,7 @@
     "tinycolor2": "^1.6.0",
     "tippy.js": "^6.3.7",
     "ts-loader": "^9.5.1",
-    "typescript": "5.4.5",
+    "typescript": "5.5.3",
     "url": "^0.11.3",
     "url-loader": "^4.1.1",
     "v-calendar": "github:dschmidt/v-calendar#3ce6e3b8afd5491cb53ee811281d5fa8a45b044d",
