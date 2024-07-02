@@ -39,7 +39,7 @@ describe('FilePickerModal', () => {
   })
 })
 
-function getWrapper({ props = {} }: { props?: PartialComponentProps<typeof FilePickerModal> } = {}) {
+function getWrapper() {
   const mocks = defaultComponentMocks()
 
   return {
