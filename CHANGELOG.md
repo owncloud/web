@@ -1,3 +1,27 @@
+Changelog for ownCloud Web [unreleased] (UNRELEASED)
+=======================================
+The following sections list the changes in ownCloud web unreleased relevant to
+ownCloud admins and users.
+
+[unreleased]: https://github.com/owncloud/web/compare/v9.1.0...master
+
+Summary
+-------
+
+* Bugfix - Trash bin breaking on navigation: [#11132](https://github.com/owncloud/web/pull/11132)
+
+Details
+-------
+
+* Bugfix - Trash bin breaking on navigation: [#11132](https://github.com/owncloud/web/pull/11132)
+
+   We've fixed a bug where the trash bin would break when navigating into the
+   parent folder of a resource.
+
+   https://github.com/owncloud/web/issues/11100
+   https://github.com/owncloud/web/issues/10686
+   https://github.com/owncloud/web/pull/11132
+
 Changelog for ownCloud Web [9.1.0] (2024-06-28)
 =======================================
 The following sections list the changes in ownCloud web 9.1.0 relevant to
