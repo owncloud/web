@@ -1,0 +1,6 @@
+Bugfix: Keyboard navigation breaking
+
+We've fixed a bug where the keyboard navigation would break in certain scenarios, e.g. when opening a folder from the search results.
+
+https://github.com/owncloud/web/issues/10942
+https://github.com/owncloud/web/pull/11099
