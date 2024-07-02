@@ -1,0 +1,6 @@
+Bugfix: Button focus when closing editor
+
+When closing an editor with unsaved changes, the modal now correctly focuses the primary "Save"-button.
+
+https://github.com/owncloud/web/issues/11091
+https://github.com/owncloud/web/pull/11094
