@@ -82,6 +82,35 @@ By default, the Embed mode allows users to select resources. In certain cases (e
 </script>
 ```
 
+## File picker
+
+The File Picker mode in ownCloud Web is designed for embedding an interface that allows users to pick a single file.
+This mode can be configured to restrict the file types that users can select. To enable the File Picker mode, you need
+to include the embed-target=file query parameter in the iframe URL. Furthermore, you can specify allowed file types
+using the embed-file-types parameter. The file types can be specified using file extensions, MIME types, or a
+combination of both. If the embed-file-types parameter is not provided, all file types will be selectable by default.
+
+### Example
+
+```html
+
+<iframe src="https://my-owncloud-web-instance?embed=true&embed-target=file&embed-file-types=txt,image/png"></iframe>
+
+<script>
+    function selectEventHandler(event) {
+        if (event.data?.name !== 'owncloud-embed:file-pick') {
+            return
+        }
+
+        const file = event.data.data
+
+        doSomethingWithPickedFile(file)
+    }
+
+    window.addEventListener('message', selectEventHandler)
+</script>
+```
+
 ## Delegate authentication
 
 If you already have a valid `access_token` that can be used to call the API from within the Embed mode and do not want to force the user to authenticate again, you can delegate the authentication. Delegating authentication will disable internal login form in ownCloud Web and will instead use events to obtain the token and update it.

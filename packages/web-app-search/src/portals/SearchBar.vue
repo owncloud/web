@@ -47,6 +47,7 @@
       <oc-icon name="search" fill-type="line"></oc-icon>
     </oc-button>
     <oc-drop
+      v-if="showDrop"
       id="files-global-search-options"
       ref="optionsDropRef"
       mode="manual"
@@ -239,7 +240,7 @@ export default defineComponent({
       }
 
       if (unref(optionsDrop)) {
-        unref(optionsDrop).hide()
+        unref(optionsDrop)?.hide()
       }
 
       if (unref(activePreviewIndex) === null) {
@@ -247,7 +248,7 @@ export default defineComponent({
       }
       if (unref(activePreviewIndex) !== null) {
         unref(optionsDrop)
-          .$el.querySelectorAll('.preview')
+          ?.$el.querySelectorAll('.preview')
           [unref(activePreviewIndex)].firstChild.click()
       }
     }
@@ -283,7 +284,7 @@ export default defineComponent({
       if (!unref(term)) {
         return
       }
-      unref(optionsDrop).show()
+      unref(optionsDrop)?.show()
       await search()
     }
 
@@ -291,9 +292,9 @@ export default defineComponent({
       restoreSearchFromRoute.value = false
       term.value = input
       if (!unref(term)) {
-        return unref(optionsDrop).hide()
+        return unref(optionsDrop)?.hide()
       }
-      return unref(optionsDrop).show()
+      return unref(optionsDrop)?.show()
     }
 
     const debouncedSearch = debounce(search, 500)
@@ -304,6 +305,12 @@ export default defineComponent({
         return
       }
       debouncedSearch()
+    })
+
+    const showDrop = computed(() => {
+      return unref(availableProviders).some(
+        (provider) => provider?.previewSearch?.available === true
+      )
     })
 
     return {
@@ -328,7 +335,8 @@ export default defineComponent({
       search,
       showPreview,
       updateTerm,
-      getSearchResultLocation
+      getSearchResultLocation,
+      showDrop
     }
   },
 
@@ -506,7 +514,7 @@ export default defineComponent({
       this.showCancelButton = false
     },
     hideOptionsDrop() {
-      this.optionsDrop.hide()
+      this.optionsDrop?.hide()
     }
   }
 })

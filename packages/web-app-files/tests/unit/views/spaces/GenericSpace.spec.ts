@@ -253,6 +253,20 @@ describe('GenericSpace view', () => {
       expect(wrapper.find(selectors.btnCreateFolder).exists()).toBe(true)
     })
 
+    it('should not render create folder button when in embed mode but is file picker', () => {
+      mockUseEmbedMode.mockReturnValue({
+        isEnabled: computed(() => true),
+        isFilePicker: computed(() => true)
+      })
+
+      const { wrapper } = getMountedWrapper({
+        stubs: { 'app-bar': AppBarStub, CreateAndUpload: true }
+      })
+
+      expect(wrapper.find(selectors.actionsCreateAndUpload).exists()).toBe(false)
+      expect(wrapper.find(selectors.btnCreateFolder).exists()).toBe(false)
+    })
+
     it('should not render create and upload actions when in embed mode', () => {
       mockUseEmbedMode.mockReturnValue({
         isEnabled: computed(() => true)

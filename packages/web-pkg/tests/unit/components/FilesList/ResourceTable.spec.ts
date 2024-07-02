@@ -319,11 +319,11 @@ describe('ResourceTable', () => {
       })
     })
 
-    describe('embed mode extensions', () => {
+    describe('embed mode file types', () => {
       it('does not set folders disabled ', async () => {
         mockUseEmbedMode.mockReturnValue({
           isEnabled: computed(() => true),
-          extensions: computed(() => ['txt'])
+          fileTypes: computed(() => ['txt'])
         })
 
         const { wrapper } = getMountedWrapper()
@@ -333,7 +333,7 @@ describe('ResourceTable', () => {
       it('sets files disabled if does not occur in it', async () => {
         mockUseEmbedMode.mockReturnValue({
           isEnabled: computed(() => true),
-          extensions: computed(() => ['txt'])
+          fileTypes: computed(() => ['txt'])
         })
 
         const { wrapper } = getMountedWrapper()
