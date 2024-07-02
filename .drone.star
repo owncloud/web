@@ -1064,11 +1064,9 @@ def cacheOcis():
 
 def example_deploys(ctx):
     on_merge_deploy = [
-        "ocis_web/latest.yml",
+        "ocis_web/master.yml",
     ]
-    nightly_deploy = [
-        "ocis_web/daily.yml",
-    ]
+    nightly_deploy = []
 
     # if on master branch:
     configs = on_merge_deploy
