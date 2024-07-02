@@ -202,7 +202,8 @@ export default defineComponent({
       },
       {
         name: 'SpaceActions',
-        icon: 'slideshow-3',
+        icon: 'play-circle',
+        iconFillType: 'line',
         title: () => $gettext('Actions'),
         component: ActionsPanel,
         isVisible: ({ items }) => items.length === 1
