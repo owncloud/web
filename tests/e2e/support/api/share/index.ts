@@ -1,1 +1,1 @@
-export { createShare, addMembersToTheProjectSpace } from './share'
+export { createShare, addMembersToTheProjectSpace, createLinkShare } from './share'

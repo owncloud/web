@@ -119,8 +119,8 @@ Feature: Integrate with online office suites like Collabora and OnlyOffice
       | MicrosoftWord.docx | Microsoft Word | Edited Microsoft Word Content |
     And "Brian" closes the file viewer
     When "Alice" updates following sharee role
-      | resource           | recipient | type  | role     | resourceType |
-      | MicrosoftWord.docx | Brian     | user  | Can edit | file         |
+      | resource           | recipient | type | role     | resourceType |
+      | MicrosoftWord.docx | Brian     | user | Can edit | file         |
     And "Alice" opens the following file in OnlyOffice
       | resource           |
       | MicrosoftWord.docx |
@@ -197,14 +197,14 @@ Feature: Integrate with online office suites like Collabora and OnlyOffice
 
     When "Alice" navigates to the project space "marketing.1"
     And "Alice" opens the following file in OnlyOffice
-      | resource           |
+      | resource            |
       | usingSpaceLink.docx |
     Then "Alice" should see the content "public can create files in the project space using spaceLink" in editor "OnlyOffice"
     And "Alice" closes the file viewer
 
     When "Alice" opens folder "myfolder"
     And "Alice" opens the following file in OnlyOffice
-      | resource           |
+      | resource             |
       | usingFolderLink.docx |
     Then "Alice" should see the content "Microsoft Word Content" in editor "OnlyOffice"
     And "Alice" logs out
@@ -232,14 +232,14 @@ Feature: Integrate with online office suites like Collabora and OnlyOffice
     When "Anonymous" opens the public link "spaceLink"
     And "Anonymous" unlocks the public link with password "%public%"
     And "Anonymous" creates the following resources
-      | resource            | type           | content                                                      |
+      | resource           | type         | content                                                      |
       | usingSpaceLink.odt | OpenDocument | public can create files in the project space using spaceLink |
 
     # public create .docx file using folderLink
     When "Anonymous" opens the public link "Link"
     And "Anonymous" unlocks the public link with password "%public%"
     And "Anonymous" creates the following resources
-      | resource             | type           | content                |
+      | resource            | type         | content              |
       | usingFolderLink.odt | OpenDocument | OpenDocument Content |
 
     When "Alice" navigates to the project space "marketing.1"
@@ -251,7 +251,7 @@ Feature: Integrate with online office suites like Collabora and OnlyOffice
 
     When "Alice" opens folder "myfolder"
     And "Alice" opens the following file in Collabora
-      | resource           |
+      | resource            |
       | usingFolderLink.odt |
     Then "Alice" should see the content "OpenDocument Content" in editor "Collabora"
     And "Alice" logs out

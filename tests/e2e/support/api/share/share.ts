@@ -3,7 +3,7 @@ import { checkResponseStatus, request } from '../http'
 import { Group, User } from '../../types'
 import { getSpaceIdBySpaceName } from '../graph'
 import { getIdOfFileInsideSpace } from '../davSpaces'
-import { UsersEnvironment } from '../../environment'
+import { LinksEnvironment, UsersEnvironment } from '../../environment'
 
 export const shareTypes: Readonly<{
   user: string
@@ -33,6 +33,20 @@ export const shareRoles: Readonly<{
   'Can edit': 'editor',
   'Can view': 'viewer',
   'Secret File Drop': 'uploader'
+} as const
+
+export const linkShareRoles: Readonly<{
+  'Invited people': string
+  'Can view': string
+  'Can upload': string
+  'Can edit': string
+  'Secret File Drop': string
+}> = {
+  'Invited people': 'internal',
+  'Can view': 'view',
+  'Can upload': 'upload',
+  'Can edit': 'edit',
+  'Secret File Drop': 'createOnly'
 } as const
 
 const getPermissionsRoleIdByName = (permissionsRole: string): string => {
@@ -178,4 +192,63 @@ export const addMembersToTheProjectSpace = async ({
   })
 
   checkResponseStatus(response, 'Failed while adding members to project space')
+}
+
+export const createLinkShare = async ({
+  user,
+  path,
+  password,
+  name,
+  role = 'Can view',
+  spaceName = 'Personal'
+}: {
+  user: User
+  path: string
+  password: string
+  name: string
+  role?: string
+  spaceName?: string
+}): Promise<void> => {
+  let spaceType
+  if (spaceName.toLowerCase() === 'personal') {
+    spaceType = spaceName.toLowerCase()
+    spaceName = user.displayName
+  } else {
+    spaceType = 'project'
+  }
+
+  const driveId: string = await getSpaceIdBySpaceName({
+    user,
+    spaceType,
+    spaceName
+  })
+  const itemId: string = await getIdOfFileInsideSpace({
+    user,
+    pathToFileName: path,
+    spaceType,
+    spaceName
+  })
+
+  const roleType: string = linkShareRoles[role as keyof typeof linkShareRoles]
+
+  const response = await request({
+    method: 'POST',
+    path: join('graph', 'v1beta1', 'drives', driveId, 'items', itemId, 'createLink'),
+    body: JSON.stringify({
+      type: roleType,
+      password,
+      displayName: name
+    }),
+    user
+  })
+
+  const responseData = await response.json()
+  const webUrl = responseData.link.webUrl
+  const linksEnvironment: LinksEnvironment = new LinksEnvironment()
+  linksEnvironment.createLink({
+    key: name,
+    link: { name: name, url: webUrl }
+  })
+
+  checkResponseStatus(response, 'Failed while creating public link share')
 }
