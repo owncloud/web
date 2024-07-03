@@ -18,9 +18,9 @@
   "peerDependencies": {
     "@ownclouders/web-client": "workspace:*",
     "@ownclouders/web-pkg": "workspace:*",
-    "@uppy/core": "3.3.0",
-    "@uppy/dashboard": "3.4.1",
-    "@uppy/onedrive": "3.1.1",
+    "@uppy/core": "3.13.1",
+    "@uppy/dashboard": "3.9.1",
+    "@uppy/onedrive": "3.4.0",
     "@vueuse/core": "^10.3.0",
     "axios": "1.6.8",
     "design-system": "workspace:@ownclouders/design-system@*",
