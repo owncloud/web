@@ -34,11 +34,15 @@ export default defineComponent({
     const router = useRouter()
     const { isReady } = storeToRefs(useApplicationReadyStore())
 
-    const appNameQuery = useRouteQuery('app')
+    const appQuery = useRouteQuery('app')
+    const appNameQuery = useRouteQuery('appName')
     const appNameParam = useRouteParam('appCatchAll')
     const appName = computed(() => {
       if (unref(appNameParam)) {
         return unref(appNameParam)
+      }
+      if (unref(appQuery)) {
+        return queryItemAsString(unref(appQuery))
       }
       if (unref(appNameQuery)) {
         return queryItemAsString(unref(appNameQuery))
