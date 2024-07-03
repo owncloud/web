@@ -3,7 +3,7 @@ Changelog for ownCloud Web [unreleased] (UNRELEASED)
 The following sections list the changes in ownCloud web unreleased relevant to
 ownCloud admins and users.
 
-[unreleased]: https://github.com/owncloud/web/compare/v9.1.0...master
+[unreleased]: https://github.com/owncloud/web/compare/v8.0.4...master
 
 Summary
 -------
@@ -21,6 +21,57 @@ Details
    https://github.com/owncloud/web/issues/11100
    https://github.com/owncloud/web/issues/10686
    https://github.com/owncloud/web/pull/11132
+
+Changelog for ownCloud Web [8.0.4] (2024-07-02)
+=======================================
+The following sections list the changes in ownCloud web 8.0.4 relevant to
+ownCloud admins and users.
+
+[8.0.4]: https://github.com/owncloud/web/compare/v9.1.0...v8.0.4
+
+Summary
+-------
+
+* Bugfix - Keyboard navigation breaking: [#10942](https://github.com/owncloud/web/issues/10942)
+* Bugfix - Opening public links with an expired token: [#11086](https://github.com/owncloud/web/pull/11086)
+* Bugfix - Button focus when closing editor: [#11091](https://github.com/owncloud/web/issues/11091)
+* Bugfix - Browser confirmation dialog after closing editor: [#11092](https://github.com/owncloud/web/issues/11092)
+
+Details
+-------
+
+* Bugfix - Keyboard navigation breaking: [#10942](https://github.com/owncloud/web/issues/10942)
+
+   We've fixed a bug where the keyboard navigation would break in certain
+   scenarios, e.g. when opening a folder from the search results.
+
+   https://github.com/owncloud/web/issues/10942
+   https://github.com/owncloud/web/pull/11099
+
+* Bugfix - Opening public links with an expired token: [#11086](https://github.com/owncloud/web/pull/11086)
+
+   We've fixed a bug where opening public links with an expired token would falsely
+   show the access denied page. Instead, Web now tries to login the user. If that
+   doesn't work, the expired user session gets removed.
+
+   https://github.com/owncloud/web/pull/11086
+
+* Bugfix - Button focus when closing editor: [#11091](https://github.com/owncloud/web/issues/11091)
+
+   When closing an editor with unsaved changes, the modal now correctly focuses the
+   primary "Save"-button.
+
+   https://github.com/owncloud/web/issues/11091
+   https://github.com/owncloud/web/pull/11094
+
+* Bugfix - Browser confirmation dialog after closing editor: [#11092](https://github.com/owncloud/web/issues/11092)
+
+   We've fixed a bug where the browser falsely asked the user for confirmation when
+   closing or reloading the page after an editor with unsaved changes had been
+   closed.
+
+   https://github.com/owncloud/web/issues/11092
+   https://github.com/owncloud/web/pull/11094
 
 Changelog for ownCloud Web [9.1.0] (2024-06-28)
 =======================================
