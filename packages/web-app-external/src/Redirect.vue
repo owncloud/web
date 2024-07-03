@@ -62,7 +62,7 @@ export default defineComponent({
 
         router.replace({
           name: `external-${unref(appName).toLowerCase()}-apps`,
-          query: omit(unref(router.currentRoute).query, 'app')
+          query: omit(unref(router.currentRoute).query, ['app', 'appName'])
         })
       },
       { immediate: true }
