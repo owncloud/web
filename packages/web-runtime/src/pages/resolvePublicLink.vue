@@ -3,17 +3,7 @@
     class="oc-link-resolve oc-height-viewport oc-flex oc-flex-column oc-flex-center oc-flex-middle"
   >
     <div class="oc-card oc-text-center oc-width-large">
-      <template v-if="isLoading">
-        <div class="oc-card-header">
-          <h2 key="public-link-loading">
-            <span v-text="$gettext('Loading public link…')" />
-          </h2>
-        </div>
-        <div class="oc-card-body">
-          <oc-spinner :aria-hidden="true" />
-        </div>
-      </template>
-      <template v-else-if="errorMessage">
+      <template v-if="errorMessage">
         <div class="oc-card-header oc-link-resolve-error-title">
           <h2 key="public-link-error">
             <span v-text="$gettext('An error occurred while loading the public link')" />
@@ -50,6 +40,16 @@
             </oc-button>
           </div>
         </form>
+      </template>
+      <template v-else>
+        <div class="oc-card-header">
+          <h2 key="public-link-loading">
+            <span v-text="$gettext('Loading public link…')" />
+          </h2>
+        </div>
+        <div class="oc-card-body">
+          <oc-spinner :aria-hidden="true" />
+        </div>
       </template>
       <div class="oc-card-footer oc-pt-rm">
         <p>{{ footerSlogan }}</p>
@@ -278,23 +278,6 @@ export default defineComponent({
       router.push(targetLocation)
     })
 
-    const isLoading = computed<boolean>(() => {
-      if (unref(errorMessage)) {
-        return false
-      }
-      if (
-        loadTokenInfoTask.isRunning ||
-        !loadTokenInfoTask.last ||
-        isPasswordRequiredTask.isRunning ||
-        !isPasswordRequiredTask.last
-      ) {
-        return true
-      }
-      if (!unref(isPasswordRequired)) {
-        return resolvePublicLinkTask.isRunning || !resolvePublicLinkTask.last
-      }
-      return false
-    })
     const errorMessage = computed<string>(() => {
       if (resolvePublicLinkTask.isError && resolvePublicLinkTask.last.error.statusCode !== 401) {
         return resolvePublicLinkTask.last.error.message
@@ -339,7 +322,6 @@ export default defineComponent({
       wrongPassword,
       passwordFieldLabel,
       wrongPasswordMessage,
-      isLoading,
       errorMessage,
       footerSlogan,
       loadTokenInfoTask,

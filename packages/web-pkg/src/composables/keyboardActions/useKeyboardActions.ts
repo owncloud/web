@@ -49,11 +49,11 @@ const areCustomKeyBindingsDisabled = () => {
   ) {
     return true
   }
-  const closestSelectionEl = window.getSelection().focusNode as HTMLElement
+  const closestSelectionEl = document.activeElement
   if (!closestSelectionEl) {
     return false
   }
-  let customKeyBindings
+  let customKeyBindings: Element
   try {
     customKeyBindings = closestSelectionEl?.closest("[data-custom-key-bindings-disabled='true']")
   } catch {
