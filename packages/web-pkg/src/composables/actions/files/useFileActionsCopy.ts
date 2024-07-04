@@ -66,7 +66,7 @@ export const useFileActionsCopy = () => {
           }
 
           if (isLocationPublicActive(router, 'files-public-link')) {
-            return unref(currentFolder).canCreate()
+            return unref(currentFolder)?.canCreate()
           }
 
           if (

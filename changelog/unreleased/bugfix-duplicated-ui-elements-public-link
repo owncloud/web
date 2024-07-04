@@ -1,0 +1,6 @@
+Bugfix: Duplicated elements on public link page
+
+We've fixed a bug where clicking the ownCloud logo on a public link page would lead to certain UI elements being duplicated.
+
+https://github.com/owncloud/web/pull/11137
+https://github.com/owncloud/web/issues/10371

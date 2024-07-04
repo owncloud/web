@@ -162,7 +162,7 @@ export const useFileActionsPaste = () => {
         }
 
         if (isLocationPublicActive(router, 'files-public-link') && unref(currentFolder)) {
-          return unref(currentFolder).canCreate()
+          return unref(currentFolder)?.canCreate()
         }
 
         // copy can't be restricted in authenticated context, because

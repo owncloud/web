@@ -63,7 +63,18 @@ import MobileNav from '../components/MobileNav.vue'
 import { NavItem, getExtensionNavItems } from '../helpers/navItems'
 import { LoadingIndicator } from '@ownclouders/web-pkg'
 import { useActiveApp, useRoute, useRouteMeta, useSpacesLoading } from '@ownclouders/web-pkg'
-import { computed, defineComponent, provide, ref, toRef, unref, watch } from 'vue'
+import {
+  computed,
+  defineComponent,
+  nextTick,
+  onBeforeUnmount,
+  onMounted,
+  provide,
+  ref,
+  toRef,
+  unref,
+  watch
+} from 'vue'
 import { useRouter } from 'vue-router'
 import { useGettext } from 'vue3-gettext'
 
@@ -200,14 +211,25 @@ export default defineComponent({
     const extensionPoints = computed<ExtensionPoint<Extension>[]>(() => [progressBarExtensionPoint])
     extensionRegistry.registerExtensionPoints(extensionPoints)
 
+    onMounted(async () => {
+      await nextTick()
+      window.addEventListener('resize', onResize)
+      onResize()
+    })
+
+    onBeforeUnmount(() => {
+      window.removeEventListener('resize', onResize)
+
+      extensionRegistry.unregisterExtensions([progressBarExtensionId])
+      extensionRegistry.unregisterExtensionPoints(unref(extensionPoints).flatMap((e) => e.id))
+    })
+
     return {
       apps,
-      defaultProgressBarExtension,
       progressBarExtensionPoint,
       isSidebarVisible,
       isLoading,
       navItems,
-      onResize,
       isMobileWidth,
       navBarClosed,
       setNavBarClosed
@@ -239,15 +261,6 @@ export default defineComponent({
           (b.applicationMenu?.priority || Number.MAX_SAFE_INTEGER)
       )
     }
-  },
-  mounted() {
-    this.$nextTick(() => {
-      window.addEventListener('resize', this.onResize)
-      this.onResize()
-    })
-  },
-  beforeUnmount() {
-    window.removeEventListener('resize', this.onResize)
   }
 })
 </script>
