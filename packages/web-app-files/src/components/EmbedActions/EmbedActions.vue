@@ -1,6 +1,10 @@
 <template>
   <section class="files-embed-actions">
-    <oc-button data-testid="button-cancel" appearance="raw-inverse" @click="emitCancel"
+    <oc-button
+      data-testid="button-cancel"
+      appearance="raw-inverse"
+      variation="brand"
+      @click="emitCancel"
       >{{ $gettext('Cancel') }}
     </oc-button>
     <oc-button
