@@ -88,6 +88,7 @@ import {
 import { DavPermission } from '@ownclouders/web-client/webdav'
 import { HttpError } from '@ownclouders/web-client'
 import { dirname } from 'path'
+import { useFileActionsOpenWithApp } from '../../composables/actions/files/useFileActionsOpenWithApp'
 
 export default defineComponent({
   name: 'AppWrapper',
@@ -137,6 +138,9 @@ export default defineComponent({
     const configStore = useConfigStore()
     const resourcesStore = useResourcesStore()
 
+    const { actions: openWithAppActions } = useFileActionsOpenWithApp({
+      appId: props.applicationId
+    })
     const { actions: createQuickLinkActions } = useFileActionsCopyQuickLink()
     const { actions: downloadFileActions } = useFileActionsDownloadFile()
     const { actions: showDetailsActions } = useFileActionsShowDetails()
@@ -463,7 +467,9 @@ export default defineComponent({
     })
 
     const menuItemsContext = computed(() => {
-      return [...unref(fileActionsSave)].filter((item) => item.isVisible(unref(actionOptions)))
+      return [...unref(openWithAppActions), ...unref(fileActionsSave)].filter((item) =>
+        item.isVisible(unref(actionOptions))
+      )
     })
     const menuItemsShare = computed(() => {
       return [...unref(showSharesActions), ...unref(createQuickLinkActions)].filter((item) =>

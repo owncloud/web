@@ -27,10 +27,10 @@ exports[`OcTile component > renders default space correctly 1`] = `
 `;
 
 exports[`OcTile component > renders disabled space correctly 1`] = `
-"<div class="oc-tile-card oc-card oc-card-default oc-rounded state-trashed">
+"<div class="oc-tile-card oc-card oc-card-default oc-rounded oc-tile-card-disabled">
   <resource-link-stub resource="[object Object]" folderlink="[object Object]" isresourceclickable="true" class="oc-card-media-top oc-flex oc-flex-center oc-flex-middle oc-m-rm" tabindex="-1">
     <div class="oc-tile-card-selection"></div>
-    <oc-tag-stub type="span" size="medium" rounded="false" class="resource-disabled-indicator oc-position-absolute"><span>Disabled</span></oc-tag-stub>
+    <!--v-if-->
     <div class="oc-tile-card-preview oc-flex oc-flex-middle oc-flex-center">
       <div class="oc-tile-card-hover"></div>
       <resource-icon-stub resource="[object Object]" size="xlarge" class="tile-default-image oc-pt-xs"></resource-icon-stub>

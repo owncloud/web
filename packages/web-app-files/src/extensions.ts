@@ -1,6 +1,7 @@
 import {
   Extension,
   useCapabilityStore,
+  useConfigStore,
   useFileActionsCopyQuickLink,
   useFileActionsShowShares,
   useRouter,
@@ -14,6 +15,7 @@ import { quickActionsExtensionPoint } from './extensionPoints'
 
 export const extensions = () => {
   const capabilityStore = useCapabilityStore()
+  const configStore = useConfigStore()
   const router = useRouter()
   const { search: searchFunction } = useSearch()
 
@@ -30,7 +32,7 @@ export const extensions = () => {
       id: 'com.github.owncloud.web.files.search',
       extensionPointIds: ['app.search.provider'],
       type: 'search',
-      searchProvider: new SDKSearch(capabilityStore, router, searchFunction)
+      searchProvider: new SDKSearch(capabilityStore, router, searchFunction, configStore)
     },
     {
       id: 'com.github.owncloud.web.files.quick-action.collaborator',
