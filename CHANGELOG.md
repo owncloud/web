@@ -30,6 +30,7 @@ Details
 
    https://github.com/owncloud/web/issues/11013
    https://github.com/owncloud/web/pull/11085
+   https://github.com/owncloud/web/pull/11140
 
 Changelog for ownCloud Web [8.0.4] (2024-07-02)
 =======================================
