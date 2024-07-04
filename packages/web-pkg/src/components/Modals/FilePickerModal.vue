@@ -61,7 +61,6 @@ export default defineComponent({
 
     const onLoad = () => {
       isLoading.value = false
-      console.log(iframeRef)
       unref(iframeRef).contentWindow.focus()
     }
 
