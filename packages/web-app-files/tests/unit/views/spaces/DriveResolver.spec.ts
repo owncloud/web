@@ -50,6 +50,7 @@ describe('DriveResolver view', () => {
   it('redirects to the public drop page in a public context with "upload-only"-permissions', async () => {
     const space = mock<SpaceResource>({
       id: '1',
+      fileId: '1',
       getDriveAliasAndItem: vi.fn(),
       driveType: 'public'
     })

@@ -71,6 +71,7 @@ import {
   useRouteParam,
   useRouteQuery,
   useRouter,
+  useSpacesStore,
   useThemeStore
 } from '@ownclouders/web-pkg'
 import { useTask } from 'vue-concurrency'
@@ -98,6 +99,7 @@ export default defineComponent({
     const token = useRouteParam('token')
     const redirectUrl = useRouteQuery('redirectUrl')
     const themeStore = useThemeStore()
+    const spacesStore = useSpacesStore()
 
     const { currentTheme } = storeToRefs(themeStore)
     const password = ref('')
@@ -129,16 +131,13 @@ export default defineComponent({
       return queryItemAsString(unref(detailsQuery))
     })
 
+    const loadedSpace = ref<PublicSpaceResource>()
     const isPasswordRequired = ref(false)
     const isInternalLink = ref(false)
 
-    const loadLinkMetaDataTask = useTask(function* () {
+    const loadPublicSpaceTask = useTask(function* () {
       try {
-        let space: PublicSpaceResource = {
-          ...unref(publicLinkSpace),
-          publicLinkPassword: null
-        }
-        yield clientService.webdav.getFileInfo(space)
+        loadedSpace.value = yield clientService.webdav.getFileInfo(unref(publicLinkSpace))
       } catch (error) {
         // FIXME: check for error codes as soon as the server supports them
         if (error.statusCode === 401) {
@@ -158,15 +157,15 @@ export default defineComponent({
         throw error
       }
     })
-    const loadPublicLinkTask = useTask(function* () {
+
+    const verifyPasswordTask = useTask(function* () {
       try {
-        const resource = yield clientService.webdav.getFileInfo(unref(publicLinkSpace))
-        if (!isPublicSpaceResource(resource)) {
+        loadedSpace.value = yield clientService.webdav.getFileInfo(unref(publicLinkSpace))
+        if (!isPublicSpaceResource(unref(loadedSpace))) {
           const e: any = new Error($gettext('The resource is not a public link.'))
-          e.resource = resource
+          e.resource = unref(loadedSpace)
           throw e
         }
-        return resource
       } catch (e) {
         if (e.statusCode === 401) {
           throw e
@@ -175,8 +174,8 @@ export default defineComponent({
       }
     })
     const wrongPassword = computed(() => {
-      if (loadPublicLinkTask.isError) {
-        return loadPublicLinkTask.last.error.statusCode === 401
+      if (verifyPasswordTask.isError) {
+        return verifyPasswordTask.last.error.statusCode === 401
       }
       return false
     })
@@ -193,19 +192,19 @@ export default defineComponent({
 
       yield authService.resolvePublicLink(
         unref(token),
-        unref(passwordRequired),
-        unref(passwordRequired) ? unref(password) : '',
+        passwordRequired,
+        passwordRequired ? unref(password) : '',
         unref(publicLinkType)
       )
 
-      let publicLink: PublicSpaceResource
-
-      try {
-        publicLink = yield loadPublicLinkTask.perform()
-      } catch (e) {
-        authStore.clearPublicLinkContext()
-        console.error(e, e.resource)
-        return
+      if (passwordRequired) {
+        try {
+          yield verifyPasswordTask.perform()
+        } catch (e) {
+          authStore.clearPublicLinkContext()
+          console.error(e, e.resource)
+          return
+        }
       }
 
       const url = queryItemAsString(unref(redirectUrl))
@@ -214,37 +213,29 @@ export default defineComponent({
         return
       }
 
-      let fileId: string
-      const { resource, children } = yield clientService.webdav.listFiles(unref(publicLinkSpace), {
-        path: unref(item)
-      })
-      if (children.length === 1) {
-        // single shared file which means the actual resource is the first and only child element
-        fileId = children[0].fileId
-      } else {
-        fileId = resource.fileId
-      }
-
-      if (publicLink.publicLinkPermission === SharePermissionBit.Create) {
+      if (unref(loadedSpace).publicLinkPermission === SharePermissionBit.Create) {
         router.push({
           name: 'files-public-upload',
           params: { token: unref(token) },
-          query: { ...(!!fileId && { fileId }) }
+          query: { fileId: unref(publicLinkSpace).fileId }
         })
         return
       }
 
       let scrollTo: string
+      let fileId: string
       let path: string
 
-      if (['folder', 'space'].includes(resource.type)) {
-        fileId = resource.fileId
+      if (['folder', 'space'].includes(unref(loadedSpace).type)) {
+        fileId = unref(loadedSpace).fileId
         path = unref(item)
       } else {
-        fileId = resource.parentFolderId
-        scrollTo = resource.fileId
+        fileId = unref(loadedSpace).parentFolderId
+        scrollTo = unref(loadedSpace).fileId
         path = dirname(unref(item))
       }
+
+      spacesStore.upsertSpace(unref(loadedSpace))
 
       const driveAliasAndItem = urlJoin(unref(isOcmLink) ? `ocm/` : `public/`, unref(token), path)
       const targetLocation: RouteLocationNamedRaw = {
@@ -270,8 +261,8 @@ export default defineComponent({
         return resolvePublicLinkTask.last.error.message
       }
 
-      if (loadLinkMetaDataTask.isError) {
-        return loadLinkMetaDataTask.last.error.message
+      if (loadPublicSpaceTask.isError) {
+        return loadPublicSpaceTask.last.error.message
       }
       return null
     })
@@ -282,7 +273,7 @@ export default defineComponent({
         return
       }
 
-      await loadLinkMetaDataTask.perform()
+      await loadPublicSpaceTask.perform()
       if (!unref(isPasswordRequired)) {
         await resolvePublicLinkTask.perform(false)
       }
@@ -300,7 +291,6 @@ export default defineComponent({
     })
 
     return {
-      token,
       isPasswordRequired,
       password,
       wrongPassword,
@@ -309,7 +299,7 @@ export default defineComponent({
       errorMessage,
       footerSlogan,
       resolvePublicLinkTask,
-      loadLinkMetaDataTask
+      loadPublicSpaceTask
     }
   }
 })

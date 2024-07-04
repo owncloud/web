@@ -150,14 +150,22 @@ export default defineComponent({
           }
         }
 
-        let publicSpace = (await getSpaceResource()) as PublicSpaceResource
+        /**
+         * This is to make sure that an already resolved public link still resolves correctly
+         * upon reload if the link type has been changed to "Uploader" meanwhile.
+         * If the space ids differ, it means we're coming from the public link resolving page,
+         * which already handled a potential link of type "Uploader".
+         **/
+        if (space.fileId === space.id) {
+          let publicSpace = (await getSpaceResource()) as PublicSpaceResource
 
-        // FIXME: check for type once https://github.com/owncloud/ocis/issues/8740 is resolved
-        if (publicSpace.publicLinkPermission === SharePermissionBit.Create) {
-          router.push({
-            name: locationPublicUpload.name,
-            params: { token: space.id.toString() }
-          })
+          // FIXME: check for type once https://github.com/owncloud/ocis/issues/8740 is resolved
+          if (publicSpace.publicLinkPermission === SharePermissionBit.Create) {
+            router.push({
+              name: locationPublicUpload.name,
+              params: { token: space.id.toString() }
+            })
+          }
         }
       }
 
