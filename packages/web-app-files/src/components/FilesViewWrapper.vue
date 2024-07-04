@@ -5,13 +5,13 @@
     </div>
   </div>
 
-  <portal v-if="showEmbedActions" to="app.runtime.footer">
+  <portal v-if="isEmbedModeEnabled" to="app.runtime.footer">
     <embed-actions />
   </portal>
 </template>
 
 <script lang="ts">
-import { computed, defineComponent, unref } from 'vue'
+import { defineComponent } from 'vue'
 import { useEmbedMode } from '@ownclouders/web-pkg'
 import EmbedActions from './EmbedActions/EmbedActions.vue'
 
@@ -19,12 +19,9 @@ export default defineComponent({
   components: { EmbedActions },
   inheritAttrs: false,
   setup() {
-    const { isEnabled: isEmbedModeEnabled, isFilePicker } = useEmbedMode()
-    const showEmbedActions = computed(() => {
-      return unref(isEmbedModeEnabled) && !unref(isFilePicker)
-    })
+    const { isEnabled: isEmbedModeEnabled } = useEmbedMode()
 
-    return { showEmbedActions }
+    return { isEmbedModeEnabled }
   }
 })
 </script>

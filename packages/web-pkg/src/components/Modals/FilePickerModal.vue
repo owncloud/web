@@ -80,12 +80,22 @@ export default defineComponent({
       window.open(editorRouteUrl.href, '_blank')
     }
 
+    const onCancel = ({ data }: MessageEvent) => {
+      if (data.name !== 'owncloud-embed:cancel') {
+        return
+      }
+
+      removeModal(props.modal.id)
+    }
+
     onMounted(() => {
       window.addEventListener('message', onFilePick)
+      window.addEventListener('message', onCancel)
     })
 
     onBeforeUnmount(() => {
       window.removeEventListener('message', onFilePick)
+      window.removeEventListener('message', onCancel)
     })
 
     return {
@@ -103,9 +113,10 @@ export default defineComponent({
 .open-with-app-modal {
   max-width: 80vw;
   border: none;
+  overflow: hidden;
 
   .oc-modal-title {
-    border-bottom: none;
+    display: none;
   }
 
   .oc-modal-body {
@@ -113,6 +124,7 @@ export default defineComponent({
 
     &-message {
       height: 60vh;
+      margin: 0;
     }
   }
 }

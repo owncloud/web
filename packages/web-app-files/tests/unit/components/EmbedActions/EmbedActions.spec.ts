@@ -2,13 +2,18 @@ import { defaultPlugins, shallowMount } from 'web-test-helpers'
 import EmbedActions from 'web-app-files/src/components/EmbedActions/EmbedActions.vue'
 import { FileAction, useEmbedMode, useFileActionsCreateLink } from '@ownclouders/web-pkg'
 import { mock } from 'vitest-mock-extended'
-import { ref } from 'vue'
+import { computed, ref } from 'vue'
 import { Resource } from '@ownclouders/web-client'
 
+const mockUseEmbedMode = vi.fn().mockReturnValue({
+  isLocationPicker: computed(() => false),
+  isFilePicker: computed(() => false),
+  isEnabled: computed(() => false)
+})
 vi.mock('@ownclouders/web-pkg', async (importOriginal) => ({
   ...(await importOriginal<any>()),
   useFileActionsCreateLink: vi.fn(),
-  useEmbedMode: vi.fn()
+  useEmbedMode: vi.fn().mockImplementation(() => mockUseEmbedMode())
 }))
 
 const selectors = Object.freeze({

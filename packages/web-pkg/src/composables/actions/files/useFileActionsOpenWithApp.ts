@@ -22,13 +22,13 @@ export const useFileActionsOpenWithApp = ({ appId }: { appId: string }) => {
     dispatchModal({
       elementClass: 'open-with-app-modal',
       title: $gettext('Open file in %{app}', { app: app.name }),
-      hideConfirmButton: true,
       customComponent: FilePickerModal,
+      hideActions: true,
       customComponentAttrs: () => ({
         app,
         parentFolderLink
       }),
-      focusTrapInitial: false
+      focusTrapInitial: null
     })
   }
 

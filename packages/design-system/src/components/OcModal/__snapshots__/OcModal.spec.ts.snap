@@ -2,7 +2,7 @@
 
 exports[`OcModal > displays input 1`] = `
 "<div class="oc-modal-background" aria-labelledby="oc-modal-title">
-  <focus-trap-stub tabbableoptions="[object Object]" active="true" escapedeactivates="true" returnfocusondeactivate="true" allowoutsideclick="true" clickoutsidedeactivates="false" initialfocus="[Function]" delayinitialfocus="true" preventscroll="false" setreturnfocus="false">
+  <focus-trap-stub tabbableoptions="[object Object]" active="false" escapedeactivates="true" returnfocusondeactivate="true" allowoutsideclick="true" clickoutsidedeactivates="false" initialfocus="[Function]" delayinitialfocus="true" preventscroll="false" setreturnfocus="false">
     <div class="oc-modal oc-modal-passive" tabindex="0" role="dialog" aria-modal="true">
       <div class="oc-modal-title">
         <!--v-if-->
@@ -26,7 +26,7 @@ exports[`OcModal > displays input 1`] = `
 
 exports[`OcModal > displays loading state 1`] = `
 "<div class="oc-modal-background" aria-labelledby="oc-modal-title">
-  <focus-trap-stub tabbableoptions="[object Object]" active="true" escapedeactivates="true" returnfocusondeactivate="true" allowoutsideclick="true" clickoutsidedeactivates="false" initialfocus="[Function]" delayinitialfocus="true" preventscroll="false" setreturnfocus="false">
+  <focus-trap-stub tabbableoptions="[object Object]" active="false" escapedeactivates="true" returnfocusondeactivate="true" allowoutsideclick="true" clickoutsidedeactivates="false" initialfocus="[Function]" delayinitialfocus="true" preventscroll="false" setreturnfocus="false">
     <div class="oc-modal oc-modal-passive" tabindex="0" role="dialog" aria-modal="true">
       <div class="oc-modal-title">
         <!--v-if-->
@@ -50,7 +50,7 @@ exports[`OcModal > displays loading state 1`] = `
 
 exports[`OcModal > hides icon if not specified 1`] = `
 "<div class="oc-modal-background" aria-labelledby="oc-modal-title">
-  <focus-trap-stub tabbableoptions="[object Object]" active="true" escapedeactivates="true" returnfocusondeactivate="true" allowoutsideclick="true" clickoutsidedeactivates="false" initialfocus="[Function]" delayinitialfocus="true" preventscroll="false" setreturnfocus="false">
+  <focus-trap-stub tabbableoptions="[object Object]" active="false" escapedeactivates="true" returnfocusondeactivate="true" allowoutsideclick="true" clickoutsidedeactivates="false" initialfocus="[Function]" delayinitialfocus="true" preventscroll="false" setreturnfocus="false">
     <div class="oc-modal oc-modal-passive" tabindex="0" role="dialog" aria-modal="true">
       <div class="oc-modal-title">
         <!--v-if-->
@@ -74,7 +74,7 @@ exports[`OcModal > hides icon if not specified 1`] = `
 
 exports[`OcModal > matches snapshot 1`] = `
 "<div class="oc-modal-background" aria-labelledby="oc-modal-title">
-  <focus-trap-stub tabbableoptions="[object Object]" active="true" escapedeactivates="true" returnfocusondeactivate="true" allowoutsideclick="true" clickoutsidedeactivates="false" initialfocus="[Function]" delayinitialfocus="true" preventscroll="false" setreturnfocus="false">
+  <focus-trap-stub tabbableoptions="[object Object]" active="false" escapedeactivates="true" returnfocusondeactivate="true" allowoutsideclick="true" clickoutsidedeactivates="false" initialfocus="[Function]" delayinitialfocus="true" preventscroll="false" setreturnfocus="false">
     <div class="oc-modal oc-modal-passive" tabindex="0" role="dialog" aria-modal="true">
       <div class="oc-modal-title">
         <oc-icon-stub name="info" filltype="fill" accessiblelabel="" type="span" size="medium" variation="passive" color=""></oc-icon-stub>
@@ -98,7 +98,7 @@ exports[`OcModal > matches snapshot 1`] = `
 
 exports[`OcModal > overrides props message with slot 1`] = `
 "<div class="oc-modal-background" aria-labelledby="oc-modal-title">
-  <focus-trap-stub tabbableoptions="[object Object]" active="true" escapedeactivates="true" returnfocusondeactivate="true" allowoutsideclick="true" clickoutsidedeactivates="false" initialfocus="[Function]" delayinitialfocus="true" preventscroll="false" setreturnfocus="false">
+  <focus-trap-stub tabbableoptions="[object Object]" active="false" escapedeactivates="true" returnfocusondeactivate="true" allowoutsideclick="true" clickoutsidedeactivates="false" initialfocus="[Function]" delayinitialfocus="true" preventscroll="false" setreturnfocus="false">
     <div class="oc-modal oc-modal-passive" tabindex="0" role="dialog" aria-modal="true">
       <div class="oc-modal-title">
         <!--v-if-->

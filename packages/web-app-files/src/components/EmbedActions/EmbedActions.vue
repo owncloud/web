@@ -1,10 +1,10 @@
 <template>
   <section class="files-embed-actions">
-    <oc-button data-testid="button-cancel" appearance="raw-inverse" @click="emitCancel">{{
-      $gettext('Cancel')
-    }}</oc-button>
+    <oc-button data-testid="button-cancel" appearance="raw-inverse" @click="emitCancel"
+      >{{ $gettext('Cancel') }}
+    </oc-button>
     <oc-button
-      v-if="!isLocationPicker"
+      v-if="!isLocationPicker && !isFilePicker"
       key="btn-share"
       data-testid="button-share"
       variation="inverse"
@@ -13,16 +13,17 @@
         areSelectActionsDisabled || !createLinkAction.isVisible({ resources: selectedFiles, space })
       "
       @click="createLinkAction.handler({ resources: selectedFiles, space })"
-      >{{ $gettext('Share link(s)') }}</oc-button
-    >
+      >{{ $gettext('Share link(s)') }}
+    </oc-button>
     <oc-button
+      v-if="!isFilePicker"
       data-testid="button-select"
       variation="inverse"
       appearance="filled"
       :disabled="areSelectActionsDisabled"
       @click="emitSelect"
-      >{{ selectLabel }}</oc-button
-    >
+      >{{ selectLabel }}
+    </oc-button>
   </section>
 </template>
 
@@ -44,7 +45,8 @@ export default defineComponent({
   setup() {
     const ability = useAbility()
     const { $gettext } = useGettext()
-    const { isLocationPicker, postMessage } = useEmbedMode()
+    const { isLocationPicker, isFilePicker, postMessage } = useEmbedMode()
+    console.log(unref(isFilePicker))
     const spacesStore = useSpacesStore()
     const { currentSpace: space } = storeToRefs(spacesStore)
 
@@ -86,6 +88,7 @@ export default defineComponent({
       areSelectActionsDisabled,
       canCreatePublicLinks,
       isLocationPicker,
+      isFilePicker,
       selectLabel,
       emitCancel,
       emitSelect,
