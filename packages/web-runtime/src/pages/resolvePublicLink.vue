@@ -140,6 +140,7 @@ export default defineComponent({
         }
         yield clientService.webdav.getFileInfo(space)
       } catch (error) {
+        // FIXME: check for error codes as soon as the server supports them
         if (error.statusCode === 401) {
           if (error.message === "No 'Authorization: Basic' header found") {
             isPasswordRequired.value = true
