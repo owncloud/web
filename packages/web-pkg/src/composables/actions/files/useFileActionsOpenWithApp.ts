@@ -28,7 +28,7 @@ export const useFileActionsOpenWithApp = ({ appId }: { appId: string }) => {
         app,
         parentFolderLink
       }),
-      focusTrapInitial: 'oc-modal-body-message'
+      focusTrapInitial: false
     })
   }
 
