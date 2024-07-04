@@ -11,6 +11,7 @@ import {
 } from '@ownclouders/web-client'
 import { defaultPlugins, mount, PartialComponentProps } from 'web-test-helpers'
 import { CapabilityStore } from '../../../../src/composables/piniaStores'
+import { useCanBeOpenedWithSecureView } from '../../../../src/composables/resources'
 import { displayPositionedDropdown } from '../../../../src/helpers/contextMenuDropdown'
 import { eventBus } from '../../../../src/services/eventBus'
 import { SideBarEventTopics } from '../../../../src/composables/sideBar'
@@ -28,6 +29,11 @@ const mockUseEmbedMode = vi.fn().mockReturnValue({
 vi.mock('../../../../src/helpers/contextMenuDropdown')
 vi.mock('../../../../src/composables/embedMode', () => ({
   useEmbedMode: vi.fn().mockImplementation(() => mockUseEmbedMode())
+}))
+
+vi.mock('../../../../src/composables/resources', async (importOriginal) => ({
+  ...(await importOriginal<any>()),
+  useCanBeOpenedWithSecureView: vi.fn()
 }))
 
 const router = {
@@ -121,7 +127,8 @@ const resourcesWithAllFields = [
     sharePermissions: [],
     shareTypes: [],
     canRename: vi.fn(),
-    getDomSelector: () => extractDomSelector('forest')
+    getDomSelector: () => extractDomSelector('forest'),
+    canDownload: () => true
   },
   {
     id: 'notes',
@@ -146,7 +153,8 @@ const resourcesWithAllFields = [
     sharePermissions: [],
     shareTypes: [],
     canRename: vi.fn(),
-    getDomSelector: () => extractDomSelector('notes')
+    getDomSelector: () => extractDomSelector('notes'),
+    canDownload: () => true
   },
   {
     id: 'documents',
@@ -170,7 +178,8 @@ const resourcesWithAllFields = [
     sharePermissions: [],
     shareTypes: [],
     canRename: vi.fn(),
-    getDomSelector: () => extractDomSelector('documents')
+    getDomSelector: () => extractDomSelector('documents'),
+    canDownload: () => true
   },
   {
     id: 'another-one==',
@@ -194,7 +203,8 @@ const resourcesWithAllFields = [
     shareTypes: [],
     tags: [],
     canRename: vi.fn(),
-    getDomSelector: () => extractDomSelector('another-one==')
+    getDomSelector: () => extractDomSelector('another-one=='),
+    canDownload: () => true
   }
 ] as IncomingShareResource[]
 
@@ -225,6 +235,7 @@ const processingResourcesWithAllFields = [
     shareTypes: [],
     canRename: vi.fn(),
     getDomSelector: () => extractDomSelector('forest'),
+    canDownload: () => true,
     processing: true
   },
   {
@@ -251,6 +262,7 @@ const processingResourcesWithAllFields = [
     shareTypes: [],
     canRename: vi.fn(),
     getDomSelector: () => extractDomSelector('notes'),
+    canDownload: () => true,
     processing: true
   }
 ] as IncomingShareResource[]
@@ -417,6 +429,22 @@ describe('ResourceTable', () => {
       await tr.trigger('click')
       expect(wrapper.emitted().fileClick).toBeUndefined()
     })
+
+    it('does not emit fileClick event if file can not be opened via secure view', async () => {
+      const { wrapper } = getMountedWrapper({
+        canBeOpenedWithSecureView: false,
+        resources: [
+          {
+            ...resourcesWithAllFields[0],
+            isFolder: false,
+            canDownload: () => false
+          }
+        ]
+      })
+      const tr = await wrapper.find('.oc-tbody-tr-forest .oc-resource-name')
+      await tr.trigger('click')
+      expect(wrapper.emitted().fileClick).toBeUndefined()
+    })
   })
 
   describe('resource details', () => {
@@ -579,16 +607,22 @@ function getMountedWrapper({
   props = {},
   userContextReady = true,
   addProcessingResources = false,
+  canBeOpenedWithSecureView = true,
   resources = resourcesWithAllFields
 }: {
   props?: PartialComponentProps<typeof ResourceTable>
   userContextReady?: boolean
   addProcessingResources?: boolean
+  canBeOpenedWithSecureView?: boolean
   resources?: Resource[]
 } = {}) {
   const capabilities = {
     files: { tags: true }
   } satisfies Partial<CapabilityStore['capabilities']>
+
+  vi.mocked(useCanBeOpenedWithSecureView).mockReturnValue({
+    canBeOpenedWithSecureView: () => canBeOpenedWithSecureView
+  })
 
   return {
     wrapper: mount(ResourceTable, {

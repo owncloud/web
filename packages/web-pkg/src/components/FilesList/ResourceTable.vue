@@ -258,7 +258,8 @@ import {
   useConfigStore,
   useClipboardStore,
   useResourcesStore,
-  useRouter
+  useRouter,
+  useCanBeOpenedWithSecureView
 } from '../../composables'
 import ResourceListItem from './ResourceListItem.vue'
 import ResourceGhostElement from './ResourceGhostElement.vue'
@@ -505,6 +506,7 @@ export default defineComponent({
     const router = useRouter()
     const capabilityStore = useCapabilityStore()
     const { getMatchingSpace } = useGetMatchingSpace()
+    const { canBeOpenedWithSecureView } = useCanBeOpenedWithSecureView()
     const {
       isLocationPicker,
       isFilePicker,
@@ -559,6 +561,24 @@ export default defineComponent({
       )
     })
 
+    const isResourceClickable = (resource: Resource) => {
+      if (!props.areResourcesClickable) {
+        return false
+      }
+
+      if (!resource.isFolder) {
+        if (!resource.canDownload() && !canBeOpenedWithSecureView(resource)) {
+          return false
+        }
+
+        if (unref(isEmbedModeEnabled) && !unref(isFilePicker)) {
+          return false
+        }
+      }
+
+      return !unref(disabledResources).includes(resource.id)
+    }
+
     return {
       router,
       configOptions,
@@ -593,7 +613,8 @@ export default defineComponent({
       isEmbedModeEnabled,
       toggleSelection,
       areFileExtensionsShown,
-      latestSelectedId
+      latestSelectedId,
+      isResourceClickable
     }
   },
   data() {
@@ -1056,17 +1077,6 @@ export default defineComponent({
        * @property {object} resource resource for which the event is triggered
        */
       this.$emit('fileClick', { space, resources: [resource] })
-    },
-    isResourceClickable(resource: Resource) {
-      if (!this.areResourcesClickable) {
-        return false
-      }
-
-      if (this.isEmbedModeEnabled && !this.isFilePicker && !resource.isFolder) {
-        return false
-      }
-
-      return !this.disabledResources.includes(resource.id)
     },
     getResourceCheckboxLabel(resource: Resource) {
       if (resource.type === 'folder') {

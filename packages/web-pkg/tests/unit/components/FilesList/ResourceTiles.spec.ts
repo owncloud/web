@@ -6,6 +6,7 @@ import { mock } from 'vitest-mock-extended'
 import { ComponentPublicInstance, computed } from 'vue'
 import { extractDomSelector } from '@ownclouders/web-client'
 import OcDrop from 'design-system/src/components/OcDrop/OcDrop.vue'
+import { useCanBeOpenedWithSecureView } from '../../../../src/composables/resources'
 
 vi.mock('../../../../src/composables/viewMode', async (importOriginal) => ({
   ...(await importOriginal<any>()),
@@ -17,6 +18,11 @@ vi.mock('../../../../src/composables/viewMode', async (importOriginal) => ({
 const mockUseEmbedMode = vi.fn().mockReturnValue({ isEnabled: computed(() => false) })
 vi.mock('../../../../src/composables/embedMode', () => ({
   useEmbedMode: vi.fn().mockImplementation(() => mockUseEmbedMode())
+}))
+
+vi.mock('../../../../src/composables/resources', async (importOriginal) => ({
+  ...(await importOriginal<any>()),
+  useCanBeOpenedWithSecureView: vi.fn()
 }))
 
 const spacesResources = [
@@ -57,7 +63,8 @@ const resources = [
     syncEnabled: true,
     outgoing: false,
     canRename: vi.fn(),
-    getDomSelector: () => extractDomSelector('forest')
+    getDomSelector: () => extractDomSelector('forest'),
+    canDownload: () => true
   }
 ]
 
@@ -91,37 +98,52 @@ describe('ResourceTiles component', () => {
     })
   })
   it('renders an array of spaces correctly', async () => {
-    const { wrapper } = getWrapper({ resources: spacesResources })
+    const { wrapper } = getWrapper({ props: { resources: spacesResources } })
     await wrapper.vm.$nextTick()
     expect(wrapper.html()).toMatchSnapshot()
   })
 
   it('renders a footer slot', () => {
-    const { wrapper } = getWrapper({}, { footer: 'Hello, ResourceTiles footer!' })
+    const { wrapper } = getWrapper({ slots: { footer: 'Hello, ResourceTiles footer!' } })
     expect(wrapper.html()).toMatchSnapshot()
   })
 
-  it('emits fileClick event upon click on tile', async () => {
-    const { wrapper } = getWrapper({ resources: resources })
-    await wrapper.find('.oc-tiles-item .oc-resource-name').trigger('click')
-    expect(
-      wrapper.emitted<{ resources: Resource[] }[]>('fileClick')[0][0].resources[0].name
-    ).toMatch('forest.jpg')
-  })
-
-  it('does not emit fileClick event upon click on tile when embed mode is enabled', async () => {
-    mockUseEmbedMode.mockReturnValue({
-      isEnabled: computed(() => true)
+  describe('file click', () => {
+    it('emits fileClick event upon click on tile', async () => {
+      const { wrapper } = getWrapper({ props: { resources } })
+      await wrapper.find('.oc-tiles-item .oc-resource-name').trigger('click')
+      expect(
+        wrapper.emitted<{ resources: Resource[] }[]>('fileClick')[0][0].resources[0].name
+      ).toMatch('forest.jpg')
     })
-    const { wrapper } = getWrapper({ resources: resources })
-    await wrapper.find('.oc-tiles-item .oc-resource-name').trigger('click')
-    expect(wrapper.emitted().fileClick).toBeUndefined()
+
+    it('does not emit fileClick event upon click on tile when embed mode is enabled', async () => {
+      mockUseEmbedMode.mockReturnValue({
+        isEnabled: computed(() => true)
+      })
+      const { wrapper } = getWrapper({ props: { resources } })
+      await wrapper.find('.oc-tiles-item .oc-resource-name').trigger('click')
+      expect(wrapper.emitted().fileClick).toBeUndefined()
+    })
+
+    it('does not emit fileClick event if file can not be opened via secure view', async () => {
+      const { wrapper } = getWrapper({
+        canBeOpenedWithSecureView: false,
+        props: {
+          resources: [{ ...resources[0], isFolder: false, canDownload: () => false }]
+        }
+      })
+      await wrapper.find('.oc-tiles-item .oc-resource-name').trigger('click')
+      expect(wrapper.emitted().fileClick).toBeUndefined()
+    })
   })
 
   it('emits update:selectedIds event on resource selection and sets the selection', () => {
     const { wrapper } = getWrapper({
-      resources: spacesResources,
-      selectedIds: [spacesResources[0].id]
+      props: {
+        resources: spacesResources,
+        selectedIds: [spacesResources[0].id]
+      }
     })
     wrapper.vm.toggleSelection(spacesResources[0])
     expect(
@@ -132,21 +154,23 @@ describe('ResourceTiles component', () => {
 
   describe('sorting', () => {
     it('renders the label of the first sort field as default', () => {
-      const { wrapper } = getWrapper({ sortFields })
+      const { wrapper } = getWrapper({ props: { sortFields } })
       expect(wrapper.find('#oc-tiles-sort-btn').text()).toEqual(sortFields[0].label)
     })
     it('renders the label of the current sort field as default', () => {
       const sortField = sortFields[2]
       const { wrapper } = getWrapper({
-        sortFields,
-        sortBy: sortField.name,
-        sortDir: sortField.sortDir
+        props: {
+          sortFields,
+          sortBy: sortField.name,
+          sortDir: sortField.sortDir
+        }
       })
       expect(wrapper.find('#oc-tiles-sort-btn').text()).toEqual(sortField.label)
     })
     it('emits the "sort"-event', async () => {
       const index = 2
-      const { wrapper } = getWrapper({ sortFields })
+      const { wrapper } = getWrapper({ props: { sortFields } })
       ;(wrapper.vm.$refs.sortDrop as ComponentPublicInstance<typeof OcDrop>).tippy = {
         hide: vi.fn()
       }
@@ -184,15 +208,21 @@ describe('ResourceTiles component', () => {
     { viewSize: 5, expected: 'xxxlarge' },
     { viewSize: 6, expected: 'xxxlarge' }
   ])('passes the "viewSize" to the OcTile component', async (data) => {
-    const { wrapper } = getWrapper({ resources: spacesResources, viewSize: data.viewSize })
+    const { wrapper } = getWrapper({
+      props: { resources: spacesResources, viewSize: data.viewSize }
+    })
     await wrapper.vm.$nextTick()
     expect(wrapper.findComponent({ name: 'resource-tile' }).props('resourceIconSize')).toEqual(
       data.expected
     )
   })
 
-  function getWrapper(props = {}, slots = {}) {
+  function getWrapper({ props = {}, slots = {}, canBeOpenedWithSecureView = true } = {}) {
     const mocks = defaultComponentMocks()
+
+    vi.mocked(useCanBeOpenedWithSecureView).mockReturnValue({
+      canBeOpenedWithSecureView: () => canBeOpenedWithSecureView
+    })
 
     return {
       wrapper: mount(ResourceTiles, {

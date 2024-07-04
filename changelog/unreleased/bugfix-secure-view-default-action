@@ -1,0 +1,6 @@
+Bugfix: Secure view default action
+
+Clicking files that have been shared via secure view without having a compatible app to view such (or the file type is not supported) is no longer possible. This prevents errors and other file actions from falsely registering themselves as default.
+
+https://github.com/owncloud/web/pull/11139
+https://github.com/owncloud/web/issues/11138
