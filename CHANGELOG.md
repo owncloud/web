@@ -9,6 +9,7 @@ Summary
 -------
 
 * Bugfix - Trash bin breaking on navigation: [#11132](https://github.com/owncloud/web/pull/11132)
+* Enhancement - Open file directly from app: [#11085](https://github.com/owncloud/web/pull/11085)
 
 Details
 -------
@@ -21,6 +22,14 @@ Details
    https://github.com/owncloud/web/issues/11100
    https://github.com/owncloud/web/issues/10686
    https://github.com/owncloud/web/pull/11132
+
+* Enhancement - Open file directly from app: [#11085](https://github.com/owncloud/web/pull/11085)
+
+   We've added an 'Open' item to the drop down menu in the app top bar, so the user
+   can open a different file directly from the opened app.
+
+   https://github.com/owncloud/web/issues/11013
+   https://github.com/owncloud/web/pull/11085
 
 Changelog for ownCloud Web [8.0.4] (2024-07-02)
 =======================================
