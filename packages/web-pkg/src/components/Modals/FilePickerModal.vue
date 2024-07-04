@@ -8,6 +8,7 @@
       :title="iframeTitle"
       :src="iframeSrc"
       @load="onLoad"
+      tabindex="0"
     ></iframe>
   </div>
 </template>
