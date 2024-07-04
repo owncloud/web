@@ -1,0 +1,6 @@
+Bugfix: Tooltips in trashbin covered
+
+We fixed an issue where the parent folder tooltip in the trashbin table view was partially hidden behind other elements.
+
+https://github.com/owncloud/web/issues/11135
+https://github.com/owncloud/web/pull/11141
