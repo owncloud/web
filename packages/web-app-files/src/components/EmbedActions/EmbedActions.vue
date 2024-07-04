@@ -46,7 +46,6 @@ export default defineComponent({
     const ability = useAbility()
     const { $gettext } = useGettext()
     const { isLocationPicker, isFilePicker, postMessage } = useEmbedMode()
-    console.log(unref(isFilePicker))
     const spacesStore = useSpacesStore()
     const { currentSpace: space } = storeToRefs(spacesStore)
 

@@ -1,6 +1,10 @@
 <template>
   <div class="oc-modal-background" aria-labelledby="oc-modal-title">
-    <focus-trap :active="false" :initial-focus="initialFocusRef" :tabbable-options="tabbableOptions">
+    <focus-trap
+      :active="false"
+      :initial-focus="initialFocusRef"
+      :tabbable-options="tabbableOptions"
+    >
       <div
         :id="elementId"
         ref="ocModal"

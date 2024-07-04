@@ -2,18 +2,13 @@ import { defaultPlugins, shallowMount } from 'web-test-helpers'
 import EmbedActions from 'web-app-files/src/components/EmbedActions/EmbedActions.vue'
 import { FileAction, useEmbedMode, useFileActionsCreateLink } from '@ownclouders/web-pkg'
 import { mock } from 'vitest-mock-extended'
-import { computed, ref } from 'vue'
+import { ref } from 'vue'
 import { Resource } from '@ownclouders/web-client'
 
-const mockUseEmbedMode = vi.fn().mockReturnValue({
-  isLocationPicker: computed(() => false),
-  isFilePicker: computed(() => false),
-  isEnabled: computed(() => false)
-})
 vi.mock('@ownclouders/web-pkg', async (importOriginal) => ({
   ...(await importOriginal<any>()),
   useFileActionsCreateLink: vi.fn(),
-  useEmbedMode: vi.fn().mockImplementation(() => mockUseEmbedMode())
+  useEmbedMode: vi.fn()
 }))
 
 const selectors = Object.freeze({
@@ -24,6 +19,11 @@ const selectors = Object.freeze({
 
 describe('EmbedActions', () => {
   describe('select action', () => {
+    it('should hide select action when embedTarget is set to file', () => {
+      const { wrapper } = getWrapper({ isFilePicker: true })
+
+      expect(wrapper.find(selectors.btnSelect).exists()).toBe(false)
+    })
     it('should disable select action when no resources are selected', () => {
       const { wrapper } = getWrapper()
 
@@ -98,6 +98,12 @@ describe('EmbedActions', () => {
       expect(wrapper.find(selectors.btnShare).exists()).toBe(false)
     })
 
+    it('should hide share action when embedTarget is set to file', () => {
+      const { wrapper } = getWrapper({ isFilePicker: true })
+
+      expect(wrapper.find(selectors.btnShare).exists()).toBe(false)
+    })
+
     it('should call the handler of the "Create Link"-action', async () => {
       const { wrapper, mocks } = getWrapper({ selectedIds: ['1'] })
       await wrapper.find(selectors.btnShare).trigger('click')
@@ -111,12 +117,14 @@ function getWrapper(
     selectedIds = [],
     currentFolder = undefined,
     createLinksActionEnabled = true,
-    isLocationPicker = false
+    isLocationPicker = false,
+    isFilePicker = false
   }: {
     selectedIds?: string[]
     currentFolder?: Resource
     createLinksActionEnabled?: boolean
     isLocationPicker?: boolean
+    isFilePicker?: boolean
   } = {
     selectedIds: []
   }
@@ -125,6 +133,7 @@ function getWrapper(
   vi.mocked(useEmbedMode).mockReturnValue(
     mock<ReturnType<typeof useEmbedMode>>({
       isLocationPicker: ref(isLocationPicker),
+      isFilePicker: ref(isFilePicker),
       postMessage: postMessageMock
     })
   )

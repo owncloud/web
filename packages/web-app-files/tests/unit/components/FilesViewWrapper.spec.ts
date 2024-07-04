@@ -9,8 +9,6 @@ const selectors = {
 }
 
 const mockUseEmbedMode = vi.fn().mockReturnValue({
-  isLocationPicker: computed(() => false),
-  isFilePicker: computed(() => false),
   isEnabled: computed(() => false)
 })
 
@@ -32,14 +30,6 @@ describe('FilesViewWrapper', () => {
     it('does not render when embed mode is disabled', () => {
       mockUseEmbedMode.mockReturnValue({
         isEnabled: computed(() => false)
-      })
-      const { wrapper } = getWrapper()
-      expect(wrapper.findComponent(selectors.embedActionsStub).exists()).toBeFalsy()
-    })
-    it('does not render when embed mode has target file', () => {
-      mockUseEmbedMode.mockReturnValue({
-        isEnabled: computed(() => true),
-        isFilePicker: computed(() => true)
       })
       const { wrapper } = getWrapper()
       expect(wrapper.findComponent(selectors.embedActionsStub).exists()).toBeFalsy()
