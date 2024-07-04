@@ -1,12 +1,16 @@
 <template>
-  <app-loading-spinner v-if="isLoading" />
-  <iframe
-    v-show="!isLoading"
-    class="oc-width-1-1 oc-height-1-1"
-    :title="iframeTitle"
-    :src="iframeSrc"
-    @load="onLoad"
-  ></iframe>
+  <div class="oc-height-1-1" tabindex="0">
+    <app-loading-spinner v-if="isLoading" />
+    <iframe
+      v-show="!isLoading"
+      ref="iframeRef"
+      class="oc-width-1-1 oc-height-1-1"
+      :title="iframeTitle"
+      :src="iframeSrc"
+      @load="onLoad"
+      tabindex="0"
+    ></iframe>
+  </div>
 </template>
 
 <script lang="ts">
@@ -25,6 +29,7 @@ import { RouteLocationRaw } from 'vue-router'
 import AppLoadingSpinner from '../AppLoadingSpinner.vue'
 import { isShareSpaceResource, Resource } from '@ownclouders/web-client'
 import { unref } from 'vue'
+import { HTMLIFrameElement } from 'happy-dom'
 
 export default defineComponent({
   name: 'FilePickerModal',
@@ -35,6 +40,7 @@ export default defineComponent({
     parentFolderLink: { type: Object as PropType<RouteLocationRaw>, required: true }
   },
   setup(props) {
+    const iframeRef = ref<HTMLIFrameElement>()
     const isLoading = ref(true)
     const router = useRouter()
     const { removeModal } = useModals()
@@ -55,6 +61,7 @@ export default defineComponent({
 
     const onLoad = () => {
       isLoading.value = false
+      unref(iframeRef).contentWindow.focus()
     }
 
     const onFilePick = ({ data }: MessageEvent) => {
@@ -80,12 +87,22 @@ export default defineComponent({
       window.open(editorRouteUrl.href, '_blank')
     }
 
+    const onCancel = ({ data }: MessageEvent) => {
+      if (data.name !== 'owncloud-embed:cancel') {
+        return
+      }
+
+      removeModal(props.modal.id)
+    }
+
     onMounted(() => {
       window.addEventListener('message', onFilePick)
+      window.addEventListener('message', onCancel)
     })
 
     onBeforeUnmount(() => {
       window.removeEventListener('message', onFilePick)
+      window.removeEventListener('message', onCancel)
     })
 
     return {
@@ -93,6 +110,7 @@ export default defineComponent({
       onLoad,
       iframeTitle,
       iframeSrc: iframeUrl.href,
+      iframeRef,
       onFilePick
     }
   }
@@ -103,9 +121,10 @@ export default defineComponent({
 .open-with-app-modal {
   max-width: 80vw;
   border: none;
+  overflow: hidden;
 
   .oc-modal-title {
-    border-bottom: none;
+    display: none;
   }
 
   .oc-modal-body {
@@ -113,6 +132,7 @@ export default defineComponent({
 
     &-message {
       height: 60vh;
+      margin: 0;
     }
   }
 }
