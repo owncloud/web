@@ -1,12 +1,14 @@
 <template>
-  <app-loading-spinner v-if="isLoading" />
-  <iframe
-    v-show="!isLoading"
-    class="oc-width-1-1 oc-height-1-1"
-    :title="iframeTitle"
-    :src="iframeSrc"
-    @load="onLoad"
-  ></iframe>
+  <div class="oc-height-1-1" tabindex="0">
+    <app-loading-spinner v-if="isLoading" />
+    <iframe
+      v-show="!isLoading"
+      class="oc-width-1-1 oc-height-1-1"
+      :title="iframeTitle"
+      :src="iframeSrc"
+      @load="onLoad"
+    ></iframe>
+  </div>
 </template>
 
 <script lang="ts">
