@@ -9,6 +9,7 @@ Summary
 -------
 
 * Bugfix - Trash bin breaking on navigation: [#11132](https://github.com/owncloud/web/pull/11132)
+* Bugfix - Secure view default action: [#11139](https://github.com/owncloud/web/pull/11139)
 * Enhancement - Open file directly from app: [#11085](https://github.com/owncloud/web/pull/11085)
 
 Details
@@ -22,6 +23,16 @@ Details
    https://github.com/owncloud/web/issues/11100
    https://github.com/owncloud/web/issues/10686
    https://github.com/owncloud/web/pull/11132
+
+* Bugfix - Secure view default action: [#11139](https://github.com/owncloud/web/pull/11139)
+
+   Clicking files that have been shared via secure view without having a compatible
+   app to view such (or the file type is not supported) is no longer possible. This
+   prevents errors and other file actions from falsely registering themselves as
+   default.
+
+   https://github.com/owncloud/web/issues/11138
+   https://github.com/owncloud/web/pull/11139
 
 * Enhancement - Open file directly from app: [#11085](https://github.com/owncloud/web/pull/11085)
 
