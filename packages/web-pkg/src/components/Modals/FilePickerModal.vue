@@ -34,7 +34,7 @@ export default defineComponent({
     app: { type: Object as PropType<ApplicationInformation>, required: true },
     parentFolderLink: { type: Object as PropType<RouteLocationRaw>, required: true }
   },
-  setup: function (props) {
+  setup(props) {
     const isLoading = ref(true)
     const router = useRouter()
     const { removeModal } = useModals()
