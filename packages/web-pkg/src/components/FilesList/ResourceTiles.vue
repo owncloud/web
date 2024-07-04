@@ -156,7 +156,8 @@ import {
   useTileSize,
   useResourcesStore,
   useViewSizeMax,
-  useEmbedMode
+  useEmbedMode,
+  useCanBeOpenedWithSecureView
 } from '../../composables'
 
 type ResourceTileRef = ComponentPublicInstance<typeof ResourceTile>
@@ -221,6 +222,7 @@ export default defineComponent({
     const { showMessage } = useMessages()
     const { $gettext } = useGettext()
     const resourcesStore = useResourcesStore()
+    const { canBeOpenedWithSecureView } = useCanBeOpenedWithSecureView()
     const { emit } = context
     const {
       isEnabled: isEmbedModeEnabled,
@@ -311,7 +313,15 @@ export default defineComponent({
     }
 
     const isResourceClickable = (resource: Resource) => {
-      if (unref(isEmbedModeEnabled) && !unref(isFilePicker) && !resource.isFolder) {
+      if (resource.isFolder) {
+        return true
+      }
+
+      if (!resource.canDownload() && !canBeOpenedWithSecureView(resource)) {
+        return false
+      }
+
+      if (unref(isEmbedModeEnabled) && !unref(isFilePicker)) {
         return false
       }
 
