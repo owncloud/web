@@ -3,6 +3,7 @@
     <app-loading-spinner v-if="isLoading" />
     <iframe
       v-show="!isLoading"
+      ref="iframeRef"
       class="oc-width-1-1 oc-height-1-1"
       :title="iframeTitle"
       :src="iframeSrc"
@@ -27,6 +28,7 @@ import { RouteLocationRaw } from 'vue-router'
 import AppLoadingSpinner from '../AppLoadingSpinner.vue'
 import { isShareSpaceResource, Resource } from '@ownclouders/web-client'
 import { unref } from 'vue'
+import { HTMLIFrameElement } from 'happy-dom'
 
 export default defineComponent({
   name: 'FilePickerModal',
@@ -37,6 +39,7 @@ export default defineComponent({
     parentFolderLink: { type: Object as PropType<RouteLocationRaw>, required: true }
   },
   setup(props) {
+    const iframeRef = ref<HTMLIFrameElement>()
     const isLoading = ref(true)
     const router = useRouter()
     const { removeModal } = useModals()
@@ -57,6 +60,8 @@ export default defineComponent({
 
     const onLoad = () => {
       isLoading.value = false
+      console.log(iframeRef)
+      unref(iframeRef).contentWindow.focus()
     }
 
     const onFilePick = ({ data }: MessageEvent) => {
@@ -105,6 +110,7 @@ export default defineComponent({
       onLoad,
       iframeTitle,
       iframeSrc: iframeUrl.href,
+      iframeRef,
       onFilePick
     }
   }

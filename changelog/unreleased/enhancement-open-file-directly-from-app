@@ -4,4 +4,5 @@ We've added an 'Open' item to the drop down menu in the app top bar,
 so the user can open a different file directly from the opened app.
 
 https://github.com/owncloud/web/pull/11085
+https://github.com/owncloud/web/pull/11140
 https://github.com/owncloud/web/issues/11013
