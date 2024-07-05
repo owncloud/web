@@ -10,6 +10,7 @@ Summary
 
 * Bugfix - Trash bin breaking on navigation: [#11132](https://github.com/owncloud/web/pull/11132)
 * Bugfix - Tooltips in trashbin covered: [#11135](https://github.com/owncloud/web/issues/11135)
+* Bugfix - Duplicated elements on public link page: [#11137](https://github.com/owncloud/web/pull/11137)
 * Bugfix - Secure view default action: [#11139](https://github.com/owncloud/web/pull/11139)
 * Enhancement - Open file directly from app: [#11085](https://github.com/owncloud/web/pull/11085)
 
@@ -32,6 +33,14 @@ Details
 
    https://github.com/owncloud/web/issues/11135
    https://github.com/owncloud/web/pull/11141
+
+* Bugfix - Duplicated elements on public link page: [#11137](https://github.com/owncloud/web/pull/11137)
+
+   We've fixed a bug where clicking the ownCloud logo on a public link page would
+   lead to certain UI elements being duplicated.
+
+   https://github.com/owncloud/web/issues/10371
+   https://github.com/owncloud/web/pull/11137
 
 * Bugfix - Secure view default action: [#11139](https://github.com/owncloud/web/pull/11139)
 
