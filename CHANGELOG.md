@@ -9,6 +9,7 @@ Summary
 -------
 
 * Bugfix - Trash bin breaking on navigation: [#11132](https://github.com/owncloud/web/pull/11132)
+* Bugfix - Tooltips in trashbin covered: [#11135](https://github.com/owncloud/web/issues/11135)
 * Bugfix - Secure view default action: [#11139](https://github.com/owncloud/web/pull/11139)
 * Enhancement - Open file directly from app: [#11085](https://github.com/owncloud/web/pull/11085)
 
@@ -23,6 +24,14 @@ Details
    https://github.com/owncloud/web/issues/11100
    https://github.com/owncloud/web/issues/10686
    https://github.com/owncloud/web/pull/11132
+
+* Bugfix - Tooltips in trashbin covered: [#11135](https://github.com/owncloud/web/issues/11135)
+
+   We fixed an issue where the parent folder tooltip in the trashbin table view was
+   partially hidden behind other elements.
+
+   https://github.com/owncloud/web/issues/11135
+   https://github.com/owncloud/web/pull/11141
 
 * Bugfix - Secure view default action: [#11139](https://github.com/owncloud/web/pull/11139)
 
