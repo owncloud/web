@@ -1,21 +1,54 @@
-Changelog for ownCloud Web [unreleased] (UNRELEASED)
+Changelog for ownCloud Web [9.1.0] (2024-07-05)
 =======================================
-The following sections list the changes in ownCloud web unreleased relevant to
+The following sections list the changes in ownCloud web 9.1.0 relevant to
 ownCloud admins and users.
 
-[unreleased]: https://github.com/owncloud/web/compare/v8.0.4...master
+[9.1.0]: https://github.com/owncloud/web/compare/v8.0.4...v9.1.0
 
 Summary
 -------
 
+* Bugfix - Resetting user after logout: [#11058](https://github.com/owncloud/web/pull/11058)
+* Bugfix - Admin settings UI update after save: [#11059](https://github.com/owncloud/web/pull/11059)
+* Bugfix - Editor save after token renewal: [#11068](https://github.com/owncloud/web/pull/11068)
 * Bugfix - Trash bin breaking on navigation: [#11132](https://github.com/owncloud/web/pull/11132)
 * Bugfix - Tooltips in trashbin covered: [#11135](https://github.com/owncloud/web/issues/11135)
 * Bugfix - Duplicated elements on public link page: [#11137](https://github.com/owncloud/web/pull/11137)
 * Bugfix - Secure view default action: [#11139](https://github.com/owncloud/web/pull/11139)
+* Enhancement - Accessibility improvements: [#5387](https://github.com/owncloud/web/issues/5387)
+* Enhancement - Activities sidebar app panel: [#10996](https://github.com/owncloud/web/pull/10996)
+* Enhancement - Consistent initial loading spinner: [#11054](https://github.com/owncloud/web/pull/11054)
+* Enhancement - Add action drop down to app top bar: [#11057](https://github.com/owncloud/web/pull/11057)
+* Enhancement - Decrease text editor loading times: [#11060](https://github.com/owncloud/web/pull/11060)
+* Enhancement - Reduce network load on token renewal: [#11077](https://github.com/owncloud/web/pull/11077)
 * Enhancement - Open file directly from app: [#11085](https://github.com/owncloud/web/pull/11085)
+* Enhancement - Enable default autosave in editors: [#11093](https://github.com/owncloud/web/pull/11093)
 
 Details
 -------
+
+* Bugfix - Resetting user after logout: [#11058](https://github.com/owncloud/web/pull/11058)
+
+   We've fixed a bug where the current user would not be resetted after logout.
+
+   https://github.com/owncloud/web/issues/11055
+   https://github.com/owncloud/web/pull/11058
+
+* Bugfix - Admin settings UI update after save: [#11059](https://github.com/owncloud/web/pull/11059)
+
+   We've fixed a bug where the UI would not display changes made in the admin
+   settings until re-loading the entire page.
+
+   https://github.com/owncloud/web/issues/11033
+   https://github.com/owncloud/web/pull/11059
+
+* Bugfix - Editor save after token renewal: [#11068](https://github.com/owncloud/web/pull/11068)
+
+   We've fixed a bug where saving changes in an editor would not work after the
+   access token has been renewed.
+
+   https://github.com/owncloud/web/issues/11062
+   https://github.com/owncloud/web/pull/11068
 
 * Bugfix - Trash bin breaking on navigation: [#11132](https://github.com/owncloud/web/pull/11132)
 
@@ -51,113 +84,6 @@ Details
 
    https://github.com/owncloud/web/issues/11138
    https://github.com/owncloud/web/pull/11139
-
-* Enhancement - Open file directly from app: [#11085](https://github.com/owncloud/web/pull/11085)
-
-   We've added an 'Open' item to the drop down menu in the app top bar, so the user
-   can open a different file directly from the opened app.
-
-   https://github.com/owncloud/web/issues/11013
-   https://github.com/owncloud/web/pull/11085
-   https://github.com/owncloud/web/pull/11140
-
-Changelog for ownCloud Web [8.0.4] (2024-07-02)
-=======================================
-The following sections list the changes in ownCloud web 8.0.4 relevant to
-ownCloud admins and users.
-
-[8.0.4]: https://github.com/owncloud/web/compare/v9.1.0...v8.0.4
-
-Summary
--------
-
-* Bugfix - Keyboard navigation breaking: [#10942](https://github.com/owncloud/web/issues/10942)
-* Bugfix - Opening public links with an expired token: [#11086](https://github.com/owncloud/web/pull/11086)
-* Bugfix - Button focus when closing editor: [#11091](https://github.com/owncloud/web/issues/11091)
-* Bugfix - Browser confirmation dialog after closing editor: [#11092](https://github.com/owncloud/web/issues/11092)
-
-Details
--------
-
-* Bugfix - Keyboard navigation breaking: [#10942](https://github.com/owncloud/web/issues/10942)
-
-   We've fixed a bug where the keyboard navigation would break in certain
-   scenarios, e.g. when opening a folder from the search results.
-
-   https://github.com/owncloud/web/issues/10942
-   https://github.com/owncloud/web/pull/11099
-
-* Bugfix - Opening public links with an expired token: [#11086](https://github.com/owncloud/web/pull/11086)
-
-   We've fixed a bug where opening public links with an expired token would falsely
-   show the access denied page. Instead, Web now tries to login the user. If that
-   doesn't work, the expired user session gets removed.
-
-   https://github.com/owncloud/web/pull/11086
-
-* Bugfix - Button focus when closing editor: [#11091](https://github.com/owncloud/web/issues/11091)
-
-   When closing an editor with unsaved changes, the modal now correctly focuses the
-   primary "Save"-button.
-
-   https://github.com/owncloud/web/issues/11091
-   https://github.com/owncloud/web/pull/11094
-
-* Bugfix - Browser confirmation dialog after closing editor: [#11092](https://github.com/owncloud/web/issues/11092)
-
-   We've fixed a bug where the browser falsely asked the user for confirmation when
-   closing or reloading the page after an editor with unsaved changes had been
-   closed.
-
-   https://github.com/owncloud/web/issues/11092
-   https://github.com/owncloud/web/pull/11094
-
-Changelog for ownCloud Web [9.1.0] (2024-06-28)
-=======================================
-The following sections list the changes in ownCloud web 9.1.0 relevant to
-ownCloud admins and users.
-
-[9.1.0]: https://github.com/owncloud/web/compare/v8.0.3...v9.1.0
-
-Summary
--------
-
-* Bugfix - Resetting user after logout: [#11058](https://github.com/owncloud/web/pull/11058)
-* Bugfix - Admin settings UI update after save: [#11059](https://github.com/owncloud/web/pull/11059)
-* Bugfix - Editor save after token renewal: [#11068](https://github.com/owncloud/web/pull/11068)
-* Enhancement - Accessibility improvements: [#5387](https://github.com/owncloud/web/issues/5387)
-* Enhancement - Activities sidebar app panel: [#10996](https://github.com/owncloud/web/pull/10996)
-* Enhancement - Consistent initial loading spinner: [#11054](https://github.com/owncloud/web/pull/11054)
-* Enhancement - Add action drop down to app top bar: [#11057](https://github.com/owncloud/web/pull/11057)
-* Enhancement - Decrease text editor loading times: [#11060](https://github.com/owncloud/web/pull/11060)
-* Enhancement - Reduce network load on token renewal: [#11077](https://github.com/owncloud/web/pull/11077)
-* Enhancement - Enable default autosave in editors: [#11093](https://github.com/owncloud/web/pull/11093)
-
-Details
--------
-
-* Bugfix - Resetting user after logout: [#11058](https://github.com/owncloud/web/pull/11058)
-
-   We've fixed a bug where the current user would not be resetted after logout.
-
-   https://github.com/owncloud/web/issues/11055
-   https://github.com/owncloud/web/pull/11058
-
-* Bugfix - Admin settings UI update after save: [#11059](https://github.com/owncloud/web/pull/11059)
-
-   We've fixed a bug where the UI would not display changes made in the admin
-   settings until re-loading the entire page.
-
-   https://github.com/owncloud/web/issues/11033
-   https://github.com/owncloud/web/pull/11059
-
-* Bugfix - Editor save after token renewal: [#11068](https://github.com/owncloud/web/pull/11068)
-
-   We've fixed a bug where saving changes in an editor would not work after the
-   access token has been renewed.
-
-   https://github.com/owncloud/web/issues/11062
-   https://github.com/owncloud/web/pull/11068
 
 * Enhancement - Accessibility improvements: [#5387](https://github.com/owncloud/web/issues/5387)
 
@@ -217,6 +143,15 @@ Details
    https://github.com/owncloud/web/issues/11069
    https://github.com/owncloud/web/pull/11077
 
+* Enhancement - Open file directly from app: [#11085](https://github.com/owncloud/web/pull/11085)
+
+   We've added an 'Open' item to the drop down menu in the app top bar, so the user
+   can open a different file directly from the opened app.
+
+   https://github.com/owncloud/web/issues/11013
+   https://github.com/owncloud/web/pull/11085
+   https://github.com/owncloud/web/pull/11140
+
 * Enhancement - Enable default autosave in editors: [#11093](https://github.com/owncloud/web/pull/11093)
 
    Autosaving every 2 minutes in any editor is now the default behaviour. We also
@@ -225,6 +160,57 @@ Details
    https://github.com/owncloud/web/issues/11090
    https://github.com/owncloud/web/pull/11093
    https://github.com/owncloud/web/pull/11095
+
+Changelog for ownCloud Web [8.0.4] (2024-07-02)
+=======================================
+The following sections list the changes in ownCloud web 8.0.4 relevant to
+ownCloud admins and users.
+
+[8.0.4]: https://github.com/owncloud/web/compare/v8.0.3...v8.0.4
+
+Summary
+-------
+
+* Bugfix - Keyboard navigation breaking: [#10942](https://github.com/owncloud/web/issues/10942)
+* Bugfix - Opening public links with an expired token: [#11086](https://github.com/owncloud/web/pull/11086)
+* Bugfix - Button focus when closing editor: [#11091](https://github.com/owncloud/web/issues/11091)
+* Bugfix - Browser confirmation dialog after closing editor: [#11092](https://github.com/owncloud/web/issues/11092)
+
+Details
+-------
+
+* Bugfix - Keyboard navigation breaking: [#10942](https://github.com/owncloud/web/issues/10942)
+
+   We've fixed a bug where the keyboard navigation would break in certain
+   scenarios, e.g. when opening a folder from the search results.
+
+   https://github.com/owncloud/web/issues/10942
+   https://github.com/owncloud/web/pull/11099
+
+* Bugfix - Opening public links with an expired token: [#11086](https://github.com/owncloud/web/pull/11086)
+
+   We've fixed a bug where opening public links with an expired token would falsely
+   show the access denied page. Instead, Web now tries to login the user. If that
+   doesn't work, the expired user session gets removed.
+
+   https://github.com/owncloud/web/pull/11086
+
+* Bugfix - Button focus when closing editor: [#11091](https://github.com/owncloud/web/issues/11091)
+
+   When closing an editor with unsaved changes, the modal now correctly focuses the
+   primary "Save"-button.
+
+   https://github.com/owncloud/web/issues/11091
+   https://github.com/owncloud/web/pull/11094
+
+* Bugfix - Browser confirmation dialog after closing editor: [#11092](https://github.com/owncloud/web/issues/11092)
+
+   We've fixed a bug where the browser falsely asked the user for confirmation when
+   closing or reloading the page after an editor with unsaved changes had been
+   closed.
+
+   https://github.com/owncloud/web/issues/11092
+   https://github.com/owncloud/web/pull/11094
 
 Changelog for ownCloud Web [8.0.3] (2024-06-20)
 =======================================
