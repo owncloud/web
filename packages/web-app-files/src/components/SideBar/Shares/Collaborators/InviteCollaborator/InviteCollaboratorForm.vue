@@ -290,11 +290,11 @@ export default defineComponent({
     const fetchRecipientsTask = useTask(function* (signal, query: string) {
       const client = clientService.graphAuthenticated
       const userData = yield* call(
-        client.users.listUsers({ orderBy: ['displayName'], search: `"${query}"` })
+        client.users.listUsers({ orderBy: ['displayName'], search: `"${query}"` }, { signal })
       )
 
       const groupData = yield* call(
-        client.groups.listGroups({ orderBy: ['displayName'], search: `"${query}"` })
+        client.groups.listGroups({ orderBy: ['displayName'], search: `"${query}"` }, { signal })
       )
 
       const users = (userData || []).map((u) => ({

@@ -233,12 +233,15 @@ export default defineComponent({
 
     const loadGroupsTask = useTask(function* (signal) {
       groups.value = yield* call(
-        clientService.graphAuthenticated.groups.listGroups({
-          orderBy: ['displayName'],
-          expand: ['members']
-        })
+        clientService.graphAuthenticated.groups.listGroups(
+          {
+            orderBy: ['displayName'],
+            expand: ['members']
+          },
+          { signal }
+        )
       )
-    })
+    }).restartable()
 
     const loadAppRolesTask = useTask(function* (signal) {
       const applicationsResponse = yield* call(
@@ -273,11 +276,14 @@ export default defineComponent({
         .filter(Boolean)
         .join(' and ')
 
-      const usersResponse = yield clientService.graphAuthenticated.users.listUsers({
-        orderBy: ['displayName'],
-        filter,
-        expand: ['appRoleAssignments']
-      })
+      const usersResponse = yield clientService.graphAuthenticated.users.listUsers(
+        {
+          orderBy: ['displayName'],
+          filter,
+          expand: ['appRoleAssignments']
+        },
+        { signal }
+      )
       userSettingsStore.setUsers(usersResponse || [])
     })
 
