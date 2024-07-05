@@ -27,8 +27,7 @@ describe('PasswordPolicyService', () => {
             min_lowercase_characters: 2,
             min_uppercase_characters: 2,
             min_digits: 2,
-            min_special_characters: 2,
-            max_characters: 72
+            min_special_characters: 2
           } as PasswordPolicyCapability,
           [
             'atLeastCharacters',
@@ -72,11 +71,6 @@ describe('PasswordPolicyService', () => {
             { min_special_characters: 2 } as PasswordPolicyCapability,
             ['', '!', 'ownCloud!', 'ownCloud!#'],
             [false, false, false, true]
-          ],
-          [
-            { max_characters: 2 } as PasswordPolicyCapability,
-            ['ownCloud', 'ownC', 'ow', 'o'],
-            [false, false, true, true]
           ],
           [
             {
