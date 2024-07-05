@@ -1,6 +1,6 @@
 import { SpaceResource } from '../helpers'
 import { WebDavOptions } from './types'
-import { DAV } from './client'
+import { DAV, DAVRequestOptions } from './client'
 
 export const MoveFilesFactory = (dav: DAV, options: WebDavOptions) => {
   return {
@@ -9,12 +9,12 @@ export const MoveFilesFactory = (dav: DAV, options: WebDavOptions) => {
       { path: sourcePath }: { path: string },
       targetSpace: SpaceResource,
       { path: targetPath }: { path: string },
-      options?: { overwrite?: boolean }
+      { overwrite, ...opts }: { overwrite?: boolean } & DAVRequestOptions = {}
     ) {
       return dav.move(
         `${sourceSpace.webDavPath}/${sourcePath || ''}`,
         `${targetSpace.webDavPath}/${targetPath || ''}`,
-        { overwrite: options?.overwrite || false }
+        { overwrite: overwrite || false, ...opts }
       )
     }
   }

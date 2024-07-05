@@ -2,8 +2,8 @@ import { urlJoin } from '../utils'
 import { SpaceResource } from '../helpers'
 import { GetFileInfoFactory } from './getFileInfo'
 import { WebDavOptions } from './types'
-import { DAV } from './client'
-import { Headers, ProgressEventCallback } from 'webdav'
+import { DAV, DAVRequestOptions } from './client'
+import { ProgressEventCallback } from 'webdav'
 
 export const PutFileContentsFactory = (
   dav: DAV,
@@ -17,23 +17,22 @@ export const PutFileContentsFactory = (
         path,
         content = '',
         previousEntityTag = '',
-        headers = {},
         overwrite,
-        onUploadProgress = null
+        onUploadProgress = null,
+        ...opts
       }: {
         path?: string
         content?: string | ArrayBuffer
         previousEntityTag?: string
-        headers?: Headers
         overwrite?: boolean
         onUploadProgress?: ProgressEventCallback
-      }
+      } & DAVRequestOptions
     ) {
       await dav.put(urlJoin(space.webDavPath, path), content, {
         previousEntityTag,
         overwrite,
         onUploadProgress,
-        headers
+        ...opts
       })
 
       return getFileInfoFactory.getFileInfo(space, { path })

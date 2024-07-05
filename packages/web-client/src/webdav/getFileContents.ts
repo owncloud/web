@@ -1,7 +1,7 @@
 import { urlJoin } from '../utils'
 import { SpaceResource } from '../helpers'
 import { WebDavOptions } from './types'
-import { DAV } from './client'
+import { DAV, DAVRequestOptions } from './client'
 import { HttpError } from '../errors'
 import { ResponseType } from 'axios'
 
@@ -17,18 +17,22 @@ export const GetFileContentsFactory = (dav: DAV, { axiosClient }: WebDavOptions)
       { path }: { path?: string },
       {
         responseType = 'text',
-        noCache = true
+        noCache = true,
+        headers,
+        ...opts
       }: {
         responseType?: ResponseType
         noCache?: boolean
-      } = {}
+      } & DAVRequestOptions = {}
     ): Promise<GetFileContentsResponse> {
       try {
         const response = await axiosClient.get(dav.getFileUrl(urlJoin(space.webDavPath, path)), {
           responseType,
           headers: {
-            ...(noCache && { 'Cache-Control': 'no-cache' })
-          }
+            ...(noCache && { 'Cache-Control': 'no-cache' }),
+            ...(headers || {})
+          },
+          ...opts
         })
         return {
           response,

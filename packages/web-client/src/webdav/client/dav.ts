@@ -1,6 +1,7 @@
 import {
   Headers,
   ProgressEventCallback,
+  RequestOptions,
   RequestOptionsCustom,
   WebDAVClient,
   createClient
@@ -25,6 +26,11 @@ export interface DavResult {
   result: Response
 }
 
+export type DAVRequestOptions = {
+  headers?: Headers
+  signal?: AbortSignal
+}
+
 export class DAV {
   private client: WebDAVClient
   private axiosClient: AxiosInstance
@@ -36,8 +42,8 @@ export class DAV {
     this.axiosClient = axiosClient
   }
 
-  public mkcol(path: string, { headers = {} }: { headers?: Headers } = {}) {
-    return this.request(DavMethod.mkcol, path, { headers })
+  public mkcol(path: string, opts: DAVRequestOptions = {}) {
+    return this.request(path, { method: DavMethod.mkcol, ...opts })
   }
 
   public async propfind(
@@ -45,13 +51,16 @@ export class DAV {
     {
       depth = 1,
       properties = [],
-      headers = {}
-    }: { depth?: number; properties?: DavPropertyValue[]; headers?: Headers } = {}
+      headers = {},
+      ...opts
+    }: { depth?: number; properties?: DavPropertyValue[] } & DAVRequestOptions = {}
   ) {
     const requestHeaders = { ...headers, Depth: depth.toString() }
-    const { body, result } = await this.request(DavMethod.propfind, path, {
-      body: buildPropFindBody(properties),
-      headers: requestHeaders
+    const { body, result } = await this.request(path, {
+      method: DavMethod.propfind,
+      data: buildPropFindBody(properties),
+      headers: requestHeaders,
+      ...opts
     })
 
     if (body?.length) {
@@ -69,18 +78,18 @@ export class DAV {
       filterRules = null,
       limit = 30,
       properties,
-      headers = {}
+      ...opts
     }: {
       pattern?: string
       filterRules?: Partial<Record<DavPropertyValue, unknown>>
       limit?: number
       properties?: DavPropertyValue[]
-      headers?: Headers
-    } = {}
+    } & DAVRequestOptions = {}
   ) {
-    const { body, result } = await this.request(DavMethod.report, path, {
-      body: buildPropFindBody(properties, { pattern, filterRules, limit }),
-      headers
+    const { body, result } = await this.request(path, {
+      method: DavMethod.report,
+      data: buildPropFindBody(properties, { pattern, filterRules, limit }),
+      ...opts
     })
 
     return {
@@ -92,22 +101,26 @@ export class DAV {
   public copy(
     source: string,
     target: string,
-    { overwrite = false, headers = {} }: { overwrite?: boolean; headers?: Headers } = {}
+    { overwrite = false, headers = {}, ...opts }: { overwrite?: boolean } & DAVRequestOptions = {}
   ) {
     const targetUrl = urlJoin(this.davPath, encodePath(target))
-    return this.request(DavMethod.copy, source, {
-      headers: { ...headers, Destination: targetUrl, overwrite: overwrite ? 'T' : 'F' }
+    return this.request(source, {
+      method: DavMethod.copy,
+      headers: { ...headers, Destination: targetUrl, overwrite: overwrite ? 'T' : 'F' },
+      ...opts
     })
   }
 
   public move(
     source: string,
     target: string,
-    { overwrite = false, headers = {} }: { overwrite?: boolean; headers?: Headers } = {}
+    { overwrite = false, headers = {}, ...opts }: { overwrite?: boolean } & DAVRequestOptions = {}
   ) {
     const targetUrl = urlJoin(this.davPath, encodePath(target))
-    return this.request(DavMethod.move, source, {
-      headers: { ...headers, Destination: targetUrl, overwrite: overwrite ? 'T' : 'F' }
+    return this.request(source, {
+      method: DavMethod.move,
+      headers: { ...headers, Destination: targetUrl, overwrite: overwrite ? 'T' : 'F' },
+      ...opts
     })
   }
 
@@ -118,13 +131,13 @@ export class DAV {
       headers = {},
       onUploadProgress,
       previousEntityTag,
-      overwrite
+      overwrite,
+      ...opts
     }: {
-      headers?: Headers
       onUploadProgress?: ProgressEventCallback
       previousEntityTag?: string
       overwrite?: boolean
-    } = {}
+    } & DAVRequestOptions = {}
   ) {
     const requestHeaders = { ...headers }
     if (previousEntityTag) {
@@ -135,24 +148,26 @@ export class DAV {
       requestHeaders['If-None-Match'] = '*'
     }
 
-    return this.request(DavMethod.put, path, {
-      body: content,
+    return this.request(path, {
+      method: DavMethod.put,
+      data: content,
       headers: requestHeaders,
-      options: { onUploadProgress }
+      onUploadProgress,
+      ...opts
     })
   }
 
-  public delete(path: string, { headers = {} }: { headers?: Headers } = {}) {
-    return this.request(DavMethod.delete, path, { headers })
+  public delete(path: string, opts: DAVRequestOptions = {}) {
+    return this.request(path, { method: DavMethod.delete, ...opts })
   }
 
   public propPatch(
     path: string,
     properties: Partial<Record<DavPropertyValue, unknown>>,
-    { headers = {} }: { headers?: Headers } = {}
+    opts: DAVRequestOptions = {}
   ) {
     const body = buildPropPatchBody(properties)
-    return this.request(DavMethod.proppatch, path, { body, headers })
+    return this.request(path, { method: DavMethod.proppatch, data: body, ...opts })
   }
 
   public getFileUrl(path: string) {
@@ -175,28 +190,14 @@ export class DAV {
     }
   }
 
-  private async request(
-    method: DavMethod,
-    path: string,
-    {
-      body,
-      headers,
-      options
-    }: {
-      body?: string | ArrayBuffer
-      headers?: Headers
-      options?: Partial<RequestOptionsCustom>
-    } = {}
-  ): Promise<DavResult> {
+  private async request(path: string, options: RequestOptionsCustom): Promise<DavResult> {
     const url = urlJoin(this.davPath, encodePath(path), { leadingSlash: true })
 
     const requestOptions = {
+      ...options,
       url,
-      method,
-      headers: this.buildHeaders(headers),
-      data: body,
-      ...options
-    } as RequestOptionsCustom
+      headers: this.buildHeaders(options.headers || {})
+    } as RequestOptions
 
     try {
       const result = (await this.client.customRequest('', requestOptions)) as unknown as Response
