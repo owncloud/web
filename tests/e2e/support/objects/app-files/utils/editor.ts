@@ -8,7 +8,7 @@ const imageViewer = '.stage'
 
 export const close = (page: Page): Promise<unknown> => {
   return Promise.all([
-    page.waitForNavigation(),
+    page.waitForURL(/.*\/files\/(spaces|shares|link|search)\/.*/),
     page.locator(closeTextEditorOrViewerButton).click()
   ])
 }
