@@ -51,7 +51,7 @@
   <portal v-if="showPasswordPolicyInformation" to="app.design-system.password-policy">
     <div class="oc-text-small oc-flex oc-flex-column">
       <span v-text="$gettext('Please enter a password that meets the following criteria:')" />
-      <div class="oc-flex">
+      <div class="oc-flex oc-text-input-password-policy-rule-wrapper">
         <div
           v-for="(testedRule, index) in testedPasswordPolicy.rules"
           :key="index"
@@ -233,10 +233,10 @@ export default defineComponent({
     }
   }
 
-  &-policy-rule {
-    &:not(:first-child) {
-      margin-left: var(--oc-space-small);
-    }
+  &-policy-rule-wrapper {
+    flex-direction: row;
+    flex-wrap: wrap;
+    column-gap: var(--oc-space-small);
   }
 }
 </style>
