@@ -11,6 +11,11 @@ export const useExtensionRegistry = defineStore('extensionRegistry', () => {
   const registerExtensions = (e: Ref<Extension[]>) => {
     extensions.value.push(e)
   }
+  const unregisterExtensions = (ids: string[]) => {
+    extensions.value = unref(extensions)
+      .map((e) => ref(unref(e).filter(({ id }) => !ids.includes(id))))
+      .filter((e) => unref(e).length)
+  }
   const requestExtensions = <T extends Extension>(extensionPoint: ExtensionPoint<T>) => {
     if (!extensionPoint.id || !extensionPoint.extensionType) {
       throw new Error('ExtensionPoint must have an id and an extensionType')
@@ -29,6 +34,11 @@ export const useExtensionRegistry = defineStore('extensionRegistry', () => {
   const extensionPoints = ref<Ref<ExtensionPoint<Extension>[]>[]>([])
   const registerExtensionPoints = <T extends Extension>(e: Ref<ExtensionPoint<T>[]>) => {
     extensionPoints.value.push(e)
+  }
+  const unregisterExtensionPoints = (ids: string[]) => {
+    extensionPoints.value = unref(extensionPoints)
+      .map((e) => ref(unref(e).filter(({ id }) => !ids.includes(id))))
+      .filter((e) => unref(e).length)
   }
   const getExtensionPoints = <T extends ExtensionPoint<Extension>>(
     options: {
@@ -52,9 +62,11 @@ export const useExtensionRegistry = defineStore('extensionRegistry', () => {
   return {
     extensions,
     registerExtensions,
+    unregisterExtensions,
     requestExtensions,
     extensionPoints,
     registerExtensionPoints,
+    unregisterExtensionPoints,
     getExtensionPoints
   }
 })

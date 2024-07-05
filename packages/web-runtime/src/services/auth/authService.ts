@@ -93,7 +93,8 @@ export class AuthService implements AuthServiceInterface {
       if (publicLinkToken) {
         await this.publicLinkManager.updateContext(publicLinkToken)
       }
-    } else {
+    } else if (to.name !== 'resolvePublicLink') {
+      // no need to clear public context if we're routing the to public link resolving page
       this.publicLinkManager.clearContext()
     }
 

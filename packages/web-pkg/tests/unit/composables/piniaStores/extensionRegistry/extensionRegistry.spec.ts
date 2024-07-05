@@ -132,6 +132,36 @@ describe('useExtensionRegistry', () => {
         }
       })
     })
+
+    it('unregisters extensions', () => {
+      const extensionPoint: ExtensionPoint<CustomComponentExtension> = mock<
+        ExtensionPoint<CustomComponentExtension>
+      >({
+        id: 'extension-point-id',
+        extensionType: 'customComponent'
+      })
+
+      const extension = mock<Extension>({
+        id: 'foo-1',
+        type: 'customComponent',
+        extensionPointIds: [extensionPoint.id]
+      })
+      const extensions = computed(() => [extension])
+
+      getWrapper({
+        setup: (instance) => {
+          instance.registerExtensions(extensions)
+
+          const result1 = instance.requestExtensions(extensionPoint)
+          expect(result1.length).toBe(1)
+
+          instance.unregisterExtensions([extension.id])
+
+          const result2 = instance.requestExtensions(extensionPoint)
+          expect(result2.length).toBe(0)
+        }
+      })
+    })
   })
 
   describe('register and get extensionPoints', () => {
@@ -193,6 +223,29 @@ describe('useExtensionRegistry', () => {
 
           const result2 = instance.getExtensionPoints({ extensionType: 'sidebarPanel' })
           expect(result2.map((ep) => ep.id)).toEqual([unref(extensionPoints)[1].id])
+        }
+      })
+    })
+
+    it('unregisters extension points', () => {
+      const extensionPoint = mock<ExtensionPoint<CustomComponentExtension>>({
+        id: 'foo-1',
+        extensionType: 'customComponent'
+      })
+
+      const extensionPoints = computed<ExtensionPoint<Extension>[]>(() => [extensionPoint])
+
+      getWrapper({
+        setup: (instance) => {
+          instance.registerExtensionPoints(extensionPoints)
+
+          const result1 = instance.getExtensionPoints({ extensionType: 'customComponent' })
+          expect(result1.length).toBe(1)
+
+          instance.unregisterExtensionPoints([extensionPoint.id])
+
+          const result2 = instance.getExtensionPoints({ extensionType: 'customComponent' })
+          expect(result2.length).toBe(0)
         }
       })
     })
