@@ -35,7 +35,7 @@ describe('OcTextInput', () => {
       rules: [
         {
           code: 'minLength',
-          message: 'At least %{param1} characters',
+          message: '%{param1}+ letters',
           format: ['8'],
           verified: passwordPolicy.pass
         }
