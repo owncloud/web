@@ -12,7 +12,6 @@
       v-model="password"
       :type="showPassword ? 'text' : 'password'"
       :disabled="disabled"
-      @input="onPasswordEntered"
     />
     <oc-button
       v-if="password && !disabled"
@@ -125,12 +124,11 @@ export default defineComponent({
     const { $gettext } = useGettext()
     const password = ref(props.value)
     const showPassword = ref(false)
-    const passwordEntered = ref(false)
     const copyPasswordIconInitial = 'file-copy'
     const copyPasswordIcon = ref(copyPasswordIconInitial)
 
     const showPasswordPolicyInformation = computed(() => {
-      return !!(Object.keys(props.passwordPolicy?.rules || {}).length && unref(passwordEntered))
+      return !!Object.keys(props.passwordPolicy?.rules || {}).length
     })
 
     const testedPasswordPolicy = computed(() => {
@@ -160,10 +158,6 @@ export default defineComponent({
       emit('passwordGenerated', password.value)
     }
 
-    const onPasswordEntered = () => {
-      passwordEntered.value = true
-    }
-
     const focus = () => {
       unref(passwordInput).focus()
     }
@@ -189,7 +183,6 @@ export default defineComponent({
       copyPasswordIcon,
       showPasswordPolicyInformation,
       testedPasswordPolicy,
-      onPasswordEntered,
       generatePassword,
       getPasswordPolicyRuleMessage,
       copyPasswordToClipboard
