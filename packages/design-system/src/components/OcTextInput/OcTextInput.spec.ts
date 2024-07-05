@@ -31,7 +31,7 @@ describe('OcTextInput', () => {
     passwordPolicy = { active: false, pass: false }
   ) {
     const passwordPolicyMock = mock<PasswordPolicy>()
-    passwordPolicyMock.missing.mockReturnValueOnce({
+    passwordPolicyMock.missing.mockReturnValue({
       rules: [
         {
           code: 'minLength',
