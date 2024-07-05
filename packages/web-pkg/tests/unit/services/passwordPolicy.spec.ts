@@ -22,10 +22,6 @@ describe('PasswordPolicyService', () => {
         [{ min_digits: 2 } as PasswordPolicyCapability, ['atLeastDigits']],
         [{ min_special_characters: 2 } as PasswordPolicyCapability, ['mustContain']],
         [
-          { max_characters: 72 } as PasswordPolicyCapability,
-          ['mustNotBeEmpty', 'atMostCharacters']
-        ],
-        [
           {
             min_characters: 2,
             min_lowercase_characters: 2,
@@ -39,8 +35,7 @@ describe('PasswordPolicyService', () => {
             'atLeastUppercaseCharacters',
             'atLeastLowercaseCharacters',
             'atLeastDigits',
-            'mustContain',
-            'atMostCharacters'
+            'mustContain'
           ]
         ]
       ])('capability "%s"', (capability: PasswordPolicyCapability, expected: Array<string>) => {

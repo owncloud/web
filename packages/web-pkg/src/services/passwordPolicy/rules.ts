@@ -16,8 +16,11 @@ export interface PasswordPolicyRuleExplained {
 
 export interface PasswordPolicyRule {
   assert(options: PasswordPolicyRuleOptions, password: string): boolean
+
   explain(options: PasswordPolicyRuleOptions, verified?: boolean): PasswordPolicyRuleExplained
+
   missing(options: PasswordPolicyRuleOptions, password: string): PasswordPolicyRuleExplained
+
   validate(options?: PasswordPolicyRuleOptions): boolean
 }
 
@@ -49,17 +52,21 @@ export class MustNotBeEmptyRule implements PasswordPolicyRule {
     return this.explain(options, this.assert(options, password))
   }
 }
-export class MustContainRule implements PasswordPolicyRule {
-  protected $gettext
 
-  constructor({ $gettext }: Language) {
-    this.$gettext = $gettext
+export class MustContainRule implements PasswordPolicyRule {
+  protected $ngettext
+
+  constructor({ $ngettext }: Language) {
+    this.$ngettext = $ngettext
   }
 
   explain(options: PasswordPolicyRuleOptions, verified: boolean): PasswordPolicyRuleExplained {
     return {
       code: 'mustContain',
-      message: this.$gettext('At least %{param1} of the special characters: %{param2}'),
+      message: this.$ngettext(
+        '%{param1}+ special character (%{param2})',
+        '%{param1}+ special characters (%{param2})'
+      ),
       format: [options.minLength, options.characters],
       ...(isBoolean(verified) && { verified })
     }
@@ -88,10 +95,12 @@ export class MustContainRule implements PasswordPolicyRule {
 
     return true
   }
+
   missing(options: PasswordPolicyRuleOptions, password: string) {
     return this.explain(options, this.assert(options, password))
   }
 }
+
 export class AtMostBaseRule implements PasswordPolicyRule {
   protected $ngettext
 
@@ -123,29 +132,6 @@ export class AtMostBaseRule implements PasswordPolicyRule {
 
   missing(options: PasswordPolicyRuleOptions, password: string): PasswordPolicyRuleExplained {
     return this.explain(options, this.assert(options, password))
-  }
-}
-
-export class AtMostCharactersRule extends AtMostBaseRule {
-  constructor(args: Language) {
-    super(args)
-  }
-
-  explain(options: PasswordPolicyRuleOptions, verified: boolean): PasswordPolicyRuleExplained {
-    return {
-      code: 'atMostCharacters',
-      message: this.$ngettext(
-        'At most %{param1} character long',
-        'At most %{param1} characters long',
-        options.maxLength
-      ),
-      format: [options.maxLength],
-      ...(isBoolean(verified) && { verified })
-    }
-  }
-
-  assert(options: PasswordPolicyRuleOptions, password: string): boolean {
-    return password.length <= options.maxLength
   }
 }
 
@@ -191,11 +177,7 @@ export class AtLeastCharactersRule extends AtLeastBaseRule implements PasswordPo
   explain(options: PasswordPolicyRuleOptions, verified: boolean): PasswordPolicyRuleExplained {
     return {
       code: 'atLeastCharacters',
-      message: this.$ngettext(
-        'At least %{param1} character long',
-        'At least %{param1} characters long',
-        options.minLength
-      ),
+      message: this.$ngettext('%{param1}+ letter', '%{param1}+ letters', options.minLength),
       format: [options.minLength],
       ...(isBoolean(verified) && { verified })
     }
@@ -215,8 +197,8 @@ export class AtLeastUppercaseCharactersRule extends AtLeastBaseRule {
     return {
       code: 'atLeastUppercaseCharacters',
       message: this.$ngettext(
-        'At least %{param1} uppercase character',
-        'At least %{param1} uppercase characters',
+        '%{param1}+ uppercase letter',
+        '%{param1}+ uppercase letters',
         options.minLength
       ),
       format: [options.minLength],
@@ -239,8 +221,8 @@ export class AtLeastLowercaseCharactersRule extends AtLeastBaseRule {
     return {
       code: 'atLeastLowercaseCharacters',
       message: this.$ngettext(
-        'At least %{param1} lowercase character',
-        'At least %{param1} lowercase characters',
+        '%{param1}+ lowercase letter',
+        '%{param1}+ lowercase letters',
         options.minLength
       ),
       format: [options.minLength],
@@ -262,11 +244,7 @@ export class AtLeastDigitsRule extends AtLeastBaseRule {
   explain(options: PasswordPolicyRuleOptions, verified: boolean): PasswordPolicyRuleExplained {
     return {
       code: 'atLeastDigits',
-      message: this.$ngettext(
-        'At least %{param1} number',
-        'At least %{param1} numbers',
-        options.minLength
-      ),
+      message: this.$ngettext('%{param1}+ number', '%{param1}+ numbers', options.minLength),
       format: [options.minLength],
       ...(isBoolean(verified) && { verified })
     }
