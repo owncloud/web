@@ -10,6 +10,7 @@ export interface PasswordPolicyRuleOptions {
 export interface PasswordPolicyRuleExplained {
   code: string
   message: string
+  helperMessage?: string
   format: (number | string)[]
   verified?: boolean
 }
@@ -54,20 +55,26 @@ export class MustNotBeEmptyRule implements PasswordPolicyRule {
 }
 
 export class MustContainRule implements PasswordPolicyRule {
+  protected $gettext
   protected $ngettext
 
-  constructor({ $ngettext }: Language) {
+  constructor({ $ngettext, $gettext }: Language) {
+    this.$gettext = $gettext
     this.$ngettext = $ngettext
   }
 
   explain(options: PasswordPolicyRuleOptions, verified: boolean): PasswordPolicyRuleExplained {
     return {
       code: 'mustContain',
-      message: this.$ngettext(
-        '%{param1}+ special character (%{param2})',
-        '%{param1}+ special characters (%{param2})'
+      helperMessage: this.$gettext(
+        'Valid special characters: %{characters}',
+        {
+          characters: options.characters
+        },
+        true
       ),
-      format: [options.minLength, options.characters],
+      message: this.$ngettext('%{param1}+ special character', '%{param1}+ special characters'),
+      format: [options.minLength],
       ...(isBoolean(verified) && { verified })
     }
   }

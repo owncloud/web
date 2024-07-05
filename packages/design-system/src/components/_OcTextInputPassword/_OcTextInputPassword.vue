@@ -58,7 +58,8 @@
         >
           <oc-icon
             size="small"
-            :name="testedRule.verified ? 'check' : 'close'"
+            class="oc-mr-xs"
+            :name="testedRule.verified ? 'checkbox-circle' : 'close-circle'"
             :variation="testedRule.verified ? 'success' : 'danger'"
           />
           <span
@@ -68,6 +69,7 @@
             ]"
             v-text="getPasswordPolicyRuleMessage(testedRule)"
           ></span>
+          <oc-contextual-helper v-if="testedRule.helperMessage" :text="testedRule.helperMessage" />
         </div>
       </div>
     </div>

@@ -2,6 +2,7 @@ export interface ContextualHelperDataListItem {
   text: string
   headline?: boolean
 }
+
 export interface ContextualHelperData {
   title?: string
   text?: string
@@ -17,6 +18,7 @@ export interface ContextualHelper {
 export interface PasswordPolicyRule {
   code: string
   message: string
+  helperMessage?: string
   format: (number | string)[]
   verified: boolean
 }
