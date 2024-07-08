@@ -48,7 +48,7 @@
     </oc-button>
   </div>
   <portal v-if="showPasswordPolicyInformation" to="app.design-system.password-policy">
-    <div class="oc-flex oc-text-small oc-text-input-password-policy-rule-wrapper oc-pt-xs">
+    <div class="oc-flex oc-text-small oc-text-input-password-policy-rule-wrapper oc-pt-s">
       <div
         v-for="(testedRule, index) in testedPasswordPolicy.rules"
         :key="index"
