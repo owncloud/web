@@ -102,13 +102,16 @@ export default defineComponent({
 
     const loadResourcesTask = useTask(function* (signal) {
       const loadedGroups = yield* call(
-        clientService.graphAuthenticated.groups.listGroups({
-          orderBy: ['displayName'],
-          expand: ['members']
-        })
+        clientService.graphAuthenticated.groups.listGroups(
+          {
+            orderBy: ['displayName'],
+            expand: ['members']
+          },
+          { signal }
+        )
       )
       groupSettingsStore.setGroups(loadedGroups || [])
-    })
+    }).restartable()
 
     const { actions: deleteActions } = useGroupActionsDelete()
     const batchActions = computed(() => {

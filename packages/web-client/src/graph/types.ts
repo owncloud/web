@@ -9,4 +9,5 @@ export interface GraphFactoryOptions {
 export interface GraphRequestOptions {
   headers?: Record<string, string>
   params?: Record<string, string>
+  signal?: AbortSignal
 }

@@ -185,11 +185,15 @@ describe('Users view', () => {
           .vm.$emit('selectionChange', [{ id: '1' }])
         await wrapper.vm.$nextTick()
         expect(clientService.graphAuthenticated.users.listUsers).toHaveBeenCalledTimes(2)
-        expect(clientService.graphAuthenticated.users.listUsers).toHaveBeenNthCalledWith(2, {
-          orderBy: ['displayName'],
-          filter: "(memberOf/any(m:m/id eq '1'))",
-          expand: ['appRoleAssignments']
-        })
+        expect(clientService.graphAuthenticated.users.listUsers).toHaveBeenNthCalledWith(
+          2,
+          {
+            orderBy: ['displayName'],
+            filter: "(memberOf/any(m:m/id eq '1'))",
+            expand: ['appRoleAssignments']
+          },
+          expect.anything()
+        )
       })
       it('does filter initially if group ids are given via query param', async () => {
         const groupIdsQueryParam = '1+2'
@@ -200,11 +204,14 @@ describe('Users view', () => {
           groupFilterQuery: groupIdsQueryParam
         })
         await wrapper.vm.loadResourcesTask.last
-        expect(clientService.graphAuthenticated.users.listUsers).toHaveBeenCalledWith({
-          orderBy: ['displayName'],
-          filter: "(memberOf/any(m:m/id eq '1') or memberOf/any(m:m/id eq '2'))",
-          expand: ['appRoleAssignments']
-        })
+        expect(clientService.graphAuthenticated.users.listUsers).toHaveBeenCalledWith(
+          {
+            orderBy: ['displayName'],
+            filter: "(memberOf/any(m:m/id eq '1') or memberOf/any(m:m/id eq '2'))",
+            expand: ['appRoleAssignments']
+          },
+          expect.anything()
+        )
       })
     })
     describe('roles', () => {
@@ -218,11 +225,15 @@ describe('Users view', () => {
           .vm.$emit('selectionChange', [{ id: '1' }])
         await wrapper.vm.$nextTick()
         expect(clientService.graphAuthenticated.users.listUsers).toHaveBeenCalledTimes(2)
-        expect(clientService.graphAuthenticated.users.listUsers).toHaveBeenNthCalledWith(2, {
-          orderBy: ['displayName'],
-          filter: "(appRoleAssignments/any(m:m/appRoleId eq '1'))",
-          expand: ['appRoleAssignments']
-        })
+        expect(clientService.graphAuthenticated.users.listUsers).toHaveBeenNthCalledWith(
+          2,
+          {
+            orderBy: ['displayName'],
+            filter: "(appRoleAssignments/any(m:m/appRoleId eq '1'))",
+            expand: ['appRoleAssignments']
+          },
+          expect.anything()
+        )
       })
       it('does filter initially if role ids are given via query param', async () => {
         const roleIdsQueryParam = '1+2'
@@ -233,12 +244,15 @@ describe('Users view', () => {
           roleFilterQuery: roleIdsQueryParam
         })
         await wrapper.vm.loadResourcesTask.last
-        expect(clientService.graphAuthenticated.users.listUsers).toHaveBeenCalledWith({
-          orderBy: ['displayName'],
-          filter:
-            "(appRoleAssignments/any(m:m/appRoleId eq '1') or appRoleAssignments/any(m:m/appRoleId eq '2'))",
-          expand: ['appRoleAssignments']
-        })
+        expect(clientService.graphAuthenticated.users.listUsers).toHaveBeenCalledWith(
+          {
+            orderBy: ['displayName'],
+            filter:
+              "(appRoleAssignments/any(m:m/appRoleId eq '1') or appRoleAssignments/any(m:m/appRoleId eq '2'))",
+            expand: ['appRoleAssignments']
+          },
+          expect.anything()
+        )
       })
     })
     describe('displayName', () => {
@@ -251,11 +265,14 @@ describe('Users view', () => {
           displayNameFilterQuery: displayNameFilterQueryParam
         })
         await wrapper.vm.loadResourcesTask.last
-        expect(clientService.graphAuthenticated.users.listUsers).toHaveBeenCalledWith({
-          orderBy: ['displayName'],
-          filter: "contains(displayName,'Albert')",
-          expand: ['appRoleAssignments']
-        })
+        expect(clientService.graphAuthenticated.users.listUsers).toHaveBeenCalledWith(
+          {
+            orderBy: ['displayName'],
+            filter: "contains(displayName,'Albert')",
+            expand: ['appRoleAssignments']
+          },
+          expect.anything()
+        )
       })
     })
   })
