@@ -14,8 +14,12 @@ exports[`OcTextInput > password input field > password policy > displays error s
       <!--v-if-->
     </div>
     <portal to="app.design-system.password-policy">
-      <div class="oc-text-small oc-flex oc-flex-column"><span>Please enter a password that meets the following criteria:</span>
-        <div class="oc-flex oc-flex-middle"><span class="oc-icon oc-icon-s oc-icon-danger"><!----></span> <span class="oc-text-input-danger">At least 8 characters</span></div>
+      <div class="oc-text-small"><span>Please enter a password that meets the following criteria:</span>
+        <div class="oc-flex oc-text-input-password-policy-rule-wrapper">
+          <div class="oc-flex oc-flex-middle oc-text-input-password-policy-rule"><span class="oc-icon oc-icon-s oc-icon-danger oc-mr-xs"><!----></span> <span class="oc-text-input-danger">8+ letters</span>
+            <!--v-if-->
+          </div>
+        </div>
       </div>
     </portal>
     <!--v-if-->
@@ -39,8 +43,12 @@ exports[`OcTextInput > password input field > password policy > displays success
       <!--v-if-->
     </div>
     <portal to="app.design-system.password-policy">
-      <div class="oc-text-small oc-flex oc-flex-column"><span>Please enter a password that meets the following criteria:</span>
-        <div class="oc-flex oc-flex-middle"><span class="oc-icon oc-icon-s oc-icon-success"><!----></span> <span class="oc-text-input-success">At least 8 characters</span></div>
+      <div class="oc-text-small"><span>Please enter a password that meets the following criteria:</span>
+        <div class="oc-flex oc-text-input-password-policy-rule-wrapper">
+          <div class="oc-flex oc-flex-middle oc-text-input-password-policy-rule"><span class="oc-icon oc-icon-s oc-icon-success oc-mr-xs"><!----></span> <span class="oc-text-input-success">8+ letters</span>
+            <!--v-if-->
+          </div>
+        </div>
       </div>
     </portal>
     <!--v-if-->

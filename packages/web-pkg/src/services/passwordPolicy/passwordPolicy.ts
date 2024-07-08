@@ -4,7 +4,6 @@ import {
   AtLeastDigitsRule,
   AtLeastLowercaseCharactersRule,
   AtLeastUppercaseCharactersRule,
-  AtMostCharactersRule,
   MustContainRule,
   MustNotBeEmptyRule
 } from './rules'
@@ -88,8 +87,7 @@ export class PasswordPolicyService {
       atLeastUppercaseCharacters: new AtLeastUppercaseCharactersRule({ ...this.language }),
       atLeastLowercaseCharacters: new AtLeastLowercaseCharactersRule({ ...this.language }),
       atLeastDigits: new AtLeastDigitsRule({ ...this.language }),
-      mustContain: new MustContainRule({ ...this.language }),
-      atMostCharacters: new AtMostCharactersRule({ ...this.language })
+      mustContain: new MustContainRule({ ...this.language })
     }
     const rules = {} as Record<string, unknown>
 
@@ -122,10 +120,6 @@ export class PasswordPolicyService {
         minLength: this.capability.min_special_characters,
         characters: ' "!#\\$%&\'()*+,-./:;<=>?@[\\]^_`{|}~"'
       }
-    }
-
-    if (this.capability.max_characters) {
-      rules.atMostCharacters = { maxLength: this.capability.max_characters }
     }
 
     this.policy = new PasswordPolicy(rules, ruleset)

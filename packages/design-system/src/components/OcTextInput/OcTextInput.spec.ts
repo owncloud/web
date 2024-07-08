@@ -31,11 +31,11 @@ describe('OcTextInput', () => {
     passwordPolicy = { active: false, pass: false }
   ) {
     const passwordPolicyMock = mock<PasswordPolicy>()
-    passwordPolicyMock.missing.mockReturnValueOnce({
+    passwordPolicyMock.missing.mockReturnValue({
       rules: [
         {
           code: 'minLength',
-          message: 'At least %{param1} characters',
+          message: '%{param1}+ letters',
           format: ['8'],
           verified: passwordPolicy.pass
         }

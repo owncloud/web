@@ -7,8 +7,8 @@
       class="oc-width-1-1 oc-height-1-1"
       :title="iframeTitle"
       :src="iframeSrc"
-      @load="onLoad"
       tabindex="0"
+      @load="onLoad"
     ></iframe>
   </div>
 </template>
