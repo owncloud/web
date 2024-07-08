@@ -14,7 +14,6 @@ export const OCM_PROVIDER_ID = '89f37a33-858b-45fa-8890-a1f2b27d90e1'
 
 export interface SpaceRole extends Identity {
   kind: 'user' | 'group'
-
   isMember(u: User): boolean
 }
 
@@ -39,31 +38,20 @@ export interface SpaceResource extends Resource {
   webUrl: string
 
   canDisable(args?: { user?: User; ability?: Ability }): boolean
-
   canEditDescription(args?: { user?: User; ability?: Ability }): boolean
-
   canEditImage(args?: { user?: User }): boolean
-
   canEditReadme(args?: { user?: User }): boolean
-
   canRestore(args?: { user?: User; ability?: Ability }): boolean
 
   getWebDavUrl({ path }: { path: string }): string
-
   getWebDavTrashUrl({ path }: { path: string }): string
-
   getDriveAliasAndItem(resource: Resource): string
 
   isViewer(user: User): boolean
-
   isSecureViewer(user: User): boolean
-
   isEditor(user: User): boolean
-
   isManager(user: User): boolean
-
   isMember(user: User): boolean
-
   isOwner(user: User): boolean
 }
 
@@ -74,7 +62,6 @@ export const isSpaceResource = (resource: Resource): resource is SpaceResource =
 export interface PersonalSpaceResource extends SpaceResource {
   __personalSpaceResource?: any
 }
-
 export const isPersonalSpaceResource = (resource: Resource): resource is PersonalSpaceResource => {
   return (resource as SpaceResource)?.driveType === 'personal'
 }
@@ -82,17 +69,14 @@ export const isPersonalSpaceResource = (resource: Resource): resource is Persona
 export interface ProjectSpaceResource extends SpaceResource {
   __projectSpaceResource?: any
 }
-
 export const isProjectSpaceResource = (resource: Resource): resource is ProjectSpaceResource => {
   return (resource as SpaceResource)?.driveType === 'project'
 }
 
 export interface ShareSpaceResource extends SpaceResource {
   __shareSpaceResource?: any
-
   rename(newName: string): void
 }
-
 export const isShareSpaceResource = (resource: Resource): resource is ShareSpaceResource => {
   return (resource as SpaceResource)?.driveType === 'share'
 }
@@ -100,7 +84,6 @@ export const isShareSpaceResource = (resource: Resource): resource is ShareSpace
 export interface MountPointSpaceResource extends SpaceResource {
   __mountPointSpaceResource?: any
 }
-
 export const isMountPointSpaceResource = (
   resource: Resource
 ): resource is MountPointSpaceResource => {
@@ -115,7 +98,6 @@ export interface PublicSpaceResource extends SpaceResource {
   publicLinkShareDate?: string
   publicLinkShareOwner?: string
 }
-
 export const isPublicSpaceResource = (resource: Resource): resource is PublicSpaceResource => {
   return (resource as SpaceResource)?.driveType === 'public'
 }
