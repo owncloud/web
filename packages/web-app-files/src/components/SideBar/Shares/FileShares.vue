@@ -20,11 +20,7 @@
       v-text="noSharePermsMessage"
     />
     <template v-if="hasSharees">
-      <div
-        v-if="hasSharees"
-        id="files-collaborators-headline"
-        class="oc-flex oc-flex-middle oc-flex-between"
-      >
+      <div id="files-collaborators-headline" class="oc-flex oc-flex-middle oc-flex-between">
         <h4 class="oc-text-bold oc-my-rm" v-text="sharedWithLabel" />
         <CopyPrivateLink :resource="resource" />
       </div>
