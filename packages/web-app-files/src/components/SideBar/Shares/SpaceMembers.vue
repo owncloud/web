@@ -2,7 +2,7 @@
   <div id="oc-files-sharing-sidebar" class="oc-position-relative">
     <div class="oc-flex oc-flex-between oc-flex-center oc-flex-middle">
       <div class="oc-flex oc-py-s">
-        <h3 v-translate class="oc-text-bold oc-text-medium oc-m-rm">Members</h3>
+        <h3 v-translate class="oc-text-bold oc-text-medium oc-m-rm">Add members</h3>
         <oc-contextual-helper v-if="helpersEnabled" class="oc-pl-xs" v-bind="spaceAddMemberHelp" />
       </div>
       <div class="oc-flex">
@@ -43,6 +43,11 @@
       class="oc-my-s"
     />
     <template v-if="hasCollaborators">
+      <div id="files-collaborators-headline" class="oc-flex oc-flex-middle oc-flex-between">
+        <h4 class="oc-text-bold oc-my-rm" v-text="$gettext('Members')" />
+        <CopyPrivateLink :resource="resource" />
+      </div>
+
       <ul
         id="files-collaborators-list"
         ref="collaboratorList"
@@ -85,10 +90,12 @@ import { useClientService } from '@ownclouders/web-pkg'
 import Fuse from 'fuse.js'
 import Mark from 'mark.js'
 import { defaultFuseOptions } from '@ownclouders/web-pkg'
+import CopyPrivateLink from '../../Shares/CopyPrivateLink.vue'
 
 export default defineComponent({
   name: 'SpaceMembers',
   components: {
+    CopyPrivateLink,
     CollaboratorListItem,
     InviteCollaboratorForm
   },
@@ -247,7 +254,8 @@ export default defineComponent({
 .space-members-filter {
   max-width: 160px;
 }
-.avatars-wrapper {
+
+#files-collaborators-headline {
   height: 40px;
 }
 </style>

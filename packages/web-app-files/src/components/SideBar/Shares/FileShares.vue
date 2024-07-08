@@ -21,6 +21,7 @@
     />
     <div v-if="hasSharees" class="avatars-wrapper oc-flex oc-flex-middle oc-flex-between">
       <h4 class="oc-text-bold oc-my-rm" v-text="sharedWithLabel" />
+      <CopyPrivateLink :resource="resource"/>
     </div>
     <template v-if="hasSharees">
       <portal-target
@@ -123,10 +124,12 @@ import {
   isSpaceResource
 } from '@ownclouders/web-client'
 import { getSharedAncestorRoute } from '@ownclouders/web-pkg'
+import CopyPrivateLink from "../../Shares/CopyPrivateLink.vue";
 
 export default defineComponent({
   name: 'FileShares',
   components: {
+    CopyPrivateLink,
     InviteCollaboratorForm,
     CollaboratorListItem
   },

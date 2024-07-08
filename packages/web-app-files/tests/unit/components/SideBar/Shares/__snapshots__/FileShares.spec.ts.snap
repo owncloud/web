@@ -9,6 +9,7 @@ exports[`FileShares > collaborators list > renders sharedWithLabel and sharee li
   <invite-collaborator-form-stub savebuttonlabel="Share" invitelabel="" class="oc-my-s"></invite-collaborator-form-stub>
   <div class="avatars-wrapper oc-flex oc-flex-middle oc-flex-between">
     <h4 class="oc-text-bold oc-my-rm">Shared with</h4>
+    <copy-private-link-stub resource="undefined"></copy-private-link-stub>
   </div>
   <portal-target name="app.files.sidebar.sharing.shared-with.top" slot-props="[object Object]" multiple="true"></portal-target>
   <ul id="files-collaborators-list" class="oc-list oc-list-divider oc-overflow-hidden oc-m-rm" aria-label="Share receivers">
@@ -43,6 +44,7 @@ exports[`FileShares > current space > loads space members if a space is given an
   <invite-collaborator-form-stub savebuttonlabel="Share" invitelabel="" class="oc-my-s"></invite-collaborator-form-stub>
   <div class="avatars-wrapper oc-flex oc-flex-middle oc-flex-between">
     <h4 class="oc-text-bold oc-my-rm">Shared with</h4>
+    <copy-private-link-stub resource="undefined"></copy-private-link-stub>
   </div>
   <portal-target name="app.files.sidebar.sharing.shared-with.top" slot-props="[object Object]" multiple="true"></portal-target>
   <ul id="files-collaborators-list" class="oc-list oc-list-divider oc-overflow-hidden oc-mb-l" aria-label="Share receivers">
