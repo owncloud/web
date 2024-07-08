@@ -10,7 +10,7 @@
         :applications-list="appMenuItems"
       />
       <router-link
-        v-if="!isFilePicker"
+        v-if="!hideLogo"
         ref="navigationSidebarLogo"
         :to="homeLink"
         class="oc-width-1-1"
@@ -56,10 +56,12 @@ import SideBarToggle from './SideBarToggle.vue'
 import {
   ApplicationInformation,
   CustomComponentTarget,
+  queryItemAsString,
   useAuthStore,
   useCapabilityStore,
   useConfigStore,
   useEmbedMode,
+  useRouteQuery,
   useRouter,
   useThemeStore
 } from '@ownclouders/web-pkg'
@@ -95,9 +97,14 @@ export default {
     const authStore = useAuthStore()
     const language = useGettext()
     const router = useRouter()
-    const { isEnabled: isEmbedModeEnabled, isFilePicker } = useEmbedMode()
+    const { isEnabled: isEmbedModeEnabled } = useEmbedMode()
 
     const logoWidth = ref('150px')
+    const hideLogoQuery = useRouteQuery('hide-logo', 'false')
+    const hideLogo = computed(() => {
+      return queryItemAsString(unref(hideLogoQuery)) === 'true'
+    })
+
     const isNotificationBellEnabled = computed(() => {
       return (
         authStore.userContextReady && capabilityStore.notificationsOcsEndpoints.includes('list')
@@ -214,13 +221,13 @@ export default {
       isNotificationBellEnabled,
       userMenuItems,
       appMenuItems,
+      hideLogo,
       logoWidth,
       isEmbedModeEnabled,
       isSideBarToggleVisible,
       isSideBarToggleDisabled,
       homeLink,
       topBarCenterExtensionPoint,
-      isFilePicker
     }
   },
   computed: {
