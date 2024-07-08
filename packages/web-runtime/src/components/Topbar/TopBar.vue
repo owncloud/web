@@ -9,7 +9,12 @@
         v-if="appMenuItems.length && !isEmbedModeEnabled"
         :applications-list="appMenuItems"
       />
-      <router-link ref="navigationSidebarLogo" :to="homeLink" class="oc-width-1-1">
+      <router-link
+        v-if="!isFilePicker"
+        ref="navigationSidebarLogo"
+        :to="homeLink"
+        class="oc-width-1-1"
+      >
         <oc-img
           v-oc-tooltip="$gettext('Back to home')"
           :src="currentTheme.logo.topbar"
@@ -90,7 +95,7 @@ export default {
     const authStore = useAuthStore()
     const language = useGettext()
     const router = useRouter()
-    const { isEnabled: isEmbedModeEnabled } = useEmbedMode()
+    const { isEnabled: isEmbedModeEnabled, isFilePicker } = useEmbedMode()
 
     const logoWidth = ref('150px')
     const isNotificationBellEnabled = computed(() => {
@@ -214,7 +219,8 @@ export default {
       isSideBarToggleVisible,
       isSideBarToggleDisabled,
       homeLink,
-      topBarCenterExtensionPoint
+      topBarCenterExtensionPoint,
+      isFilePicker
     }
   },
   computed: {
