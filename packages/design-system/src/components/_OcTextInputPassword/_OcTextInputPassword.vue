@@ -48,29 +48,26 @@
     </oc-button>
   </div>
   <portal v-if="showPasswordPolicyInformation" to="app.design-system.password-policy">
-    <div class="oc-text-small">
-      <span v-text="$gettext('Please enter a password that meets the following criteria:')" />
-      <div class="oc-flex oc-text-input-password-policy-rule-wrapper">
-        <div
-          v-for="(testedRule, index) in testedPasswordPolicy.rules"
-          :key="index"
-          class="oc-flex oc-flex-middle oc-text-input-password-policy-rule"
-        >
-          <oc-icon
-            size="small"
-            class="oc-mr-xs"
-            :name="testedRule.verified ? 'checkbox-circle' : 'close-circle'"
-            :variation="testedRule.verified ? 'success' : 'danger'"
-          />
-          <span
-            :class="[
-              { 'oc-text-input-success': testedRule.verified },
-              { 'oc-text-input-danger': !testedRule.verified }
-            ]"
-            v-text="getPasswordPolicyRuleMessage(testedRule)"
-          ></span>
-          <oc-contextual-helper v-if="testedRule.helperMessage" :text="testedRule.helperMessage" />
-        </div>
+    <div class="oc-flex oc-text-small oc-text-input-password-policy-rule-wrapper oc-pt-xs">
+      <div
+        v-for="(testedRule, index) in testedPasswordPolicy.rules"
+        :key="index"
+        class="oc-flex oc-flex-middle oc-text-input-password-policy-rule"
+      >
+        <oc-icon
+          size="small"
+          class="oc-mr-xs"
+          :name="testedRule.verified ? 'checkbox-circle' : 'close-circle'"
+          :variation="testedRule.verified ? 'success' : 'danger'"
+        />
+        <span
+          :class="[
+            { 'oc-text-input-success': testedRule.verified },
+            { 'oc-text-input-danger': !testedRule.verified }
+          ]"
+          v-text="getPasswordPolicyRuleMessage(testedRule)"
+        ></span>
+        <oc-contextual-helper v-if="testedRule.helperMessage" :text="testedRule.helperMessage" />
       </div>
     </div>
   </portal>

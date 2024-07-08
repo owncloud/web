@@ -56,11 +56,9 @@ export class MustNotBeEmptyRule implements PasswordPolicyRule {
 
 export class MustContainRule implements PasswordPolicyRule {
   protected $gettext
-  protected $ngettext
 
-  constructor({ $ngettext, $gettext }: Language) {
+  constructor({ $gettext }: Language) {
     this.$gettext = $gettext
-    this.$ngettext = $ngettext
   }
 
   explain(options: PasswordPolicyRuleOptions, verified: boolean): PasswordPolicyRuleExplained {
@@ -73,7 +71,7 @@ export class MustContainRule implements PasswordPolicyRule {
         },
         true
       ),
-      message: this.$ngettext('%{param1}+ special character', '%{param1}+ special characters'),
+      message: this.$gettext('%{param1}+ special characters'),
       format: [options.minLength],
       ...(isBoolean(verified) && { verified })
     }
@@ -108,45 +106,11 @@ export class MustContainRule implements PasswordPolicyRule {
   }
 }
 
-export class AtMostBaseRule implements PasswordPolicyRule {
-  protected $ngettext
-
-  constructor({ $ngettext }: Language) {
-    this.$ngettext = $ngettext
-  }
-
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  assert(options: PasswordPolicyRuleOptions, password: string): boolean {
-    throw new Error('Method not implemented.')
-  }
-
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  explain(options: PasswordPolicyRuleOptions, verified?: boolean): PasswordPolicyRuleExplained {
-    throw new Error('Method not implemented.')
-  }
-
-  validate(options: PasswordPolicyRuleOptions): boolean {
-    if (!isObject(options)) {
-      throw new Error('options should be an object')
-    }
-
-    if (!isNumber(options.maxLength) || isNaN(options.maxLength)) {
-      throw new Error('maxLength should be a non-zero number')
-    }
-
-    return true
-  }
-
-  missing(options: PasswordPolicyRuleOptions, password: string): PasswordPolicyRuleExplained {
-    return this.explain(options, this.assert(options, password))
-  }
-}
-
 export class AtLeastBaseRule implements PasswordPolicyRule {
-  protected $ngettext
+  protected $gettext
 
-  constructor({ $ngettext }: Language) {
-    this.$ngettext = $ngettext
+  constructor({ $gettext }: Language) {
+    this.$gettext = $gettext
   }
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -184,7 +148,7 @@ export class AtLeastCharactersRule extends AtLeastBaseRule implements PasswordPo
   explain(options: PasswordPolicyRuleOptions, verified: boolean): PasswordPolicyRuleExplained {
     return {
       code: 'atLeastCharacters',
-      message: this.$ngettext('%{param1}+ letter', '%{param1}+ letters', options.minLength),
+      message: this.$gettext('%{param1}+ letters'),
       format: [options.minLength],
       ...(isBoolean(verified) && { verified })
     }
@@ -203,11 +167,7 @@ export class AtLeastUppercaseCharactersRule extends AtLeastBaseRule {
   explain(options: PasswordPolicyRuleOptions, verified: boolean): PasswordPolicyRuleExplained {
     return {
       code: 'atLeastUppercaseCharacters',
-      message: this.$ngettext(
-        '%{param1}+ uppercase letter',
-        '%{param1}+ uppercase letters',
-        options.minLength
-      ),
+      message: this.$gettext('%{param1}+ uppercase letters'),
       format: [options.minLength],
       ...(isBoolean(verified) && { verified })
     }
@@ -227,11 +187,7 @@ export class AtLeastLowercaseCharactersRule extends AtLeastBaseRule {
   explain(options: PasswordPolicyRuleOptions, verified: boolean): PasswordPolicyRuleExplained {
     return {
       code: 'atLeastLowercaseCharacters',
-      message: this.$ngettext(
-        '%{param1}+ lowercase letter',
-        '%{param1}+ lowercase letters',
-        options.minLength
-      ),
+      message: this.$gettext('%{param1}+ lowercase letters'),
       format: [options.minLength],
       ...(isBoolean(verified) && { verified })
     }
@@ -251,7 +207,7 @@ export class AtLeastDigitsRule extends AtLeastBaseRule {
   explain(options: PasswordPolicyRuleOptions, verified: boolean): PasswordPolicyRuleExplained {
     return {
       code: 'atLeastDigits',
-      message: this.$ngettext('%{param1}+ number', '%{param1}+ numbers', options.minLength),
+      message: this.$gettext('%{param1}+ numbers'),
       format: [options.minLength],
       ...(isBoolean(verified) && { verified })
     }
