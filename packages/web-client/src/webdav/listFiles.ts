@@ -12,17 +12,15 @@ import {
   SpaceResource
 } from '../helpers'
 import { urlJoin } from '../utils'
-import { DAV } from './client'
+import { DAV, DAVRequestOptions } from './client'
 import { GetPathForFileIdFactory } from './getPathForFileId'
 import { WebDavOptions } from './types'
-import { Headers } from 'webdav'
 
 export type ListFilesOptions = {
   depth?: number
   davProperties?: DavPropertyValue[]
   isTrash?: boolean
-  headers?: Headers
-}
+} & DAVRequestOptions
 
 export const ListFilesFactory = (
   dav: DAV,
@@ -33,14 +31,14 @@ export const ListFilesFactory = (
     async listFiles(
       space: SpaceResource,
       { path, fileId }: { path?: string; fileId?: string | number } = {},
-      { depth = 1, davProperties, isTrash = false, headers }: ListFilesOptions = {}
+      { depth = 1, davProperties, isTrash = false, ...opts }: ListFilesOptions = {}
     ): Promise<ListFilesResult> {
       let webDavResources: WebDavResponseResource[]
       if (isPublicSpaceResource(space)) {
         webDavResources = await dav.propfind(urlJoin(space.webDavPath, path), {
           depth,
           properties: davProperties || DavProperties.PublicLink,
-          headers
+          ...opts
         })
 
         // FIXME: strip out token, ooof
@@ -110,7 +108,7 @@ export const ListFilesFactory = (
         webDavResources = await dav.propfind(webDavPath, {
           depth,
           properties: davProperties || DavProperties.Default,
-          headers
+          ...opts
         })
         if (isTrash) {
           return {

@@ -1,7 +1,7 @@
 import { isPublicSpaceResource, SpaceResource } from '../helpers'
 import { WebDavOptions } from './types'
 import { urlJoin } from '../utils'
-import { DAV } from './client'
+import { DAV, DAVRequestOptions } from './client'
 
 export const RestoreFileFactory = (dav: DAV, options: WebDavOptions) => {
   return {
@@ -9,14 +9,17 @@ export const RestoreFileFactory = (dav: DAV, options: WebDavOptions) => {
       space: SpaceResource,
       { id }: { id: string },
       { path: restorePath }: { path: string },
-      { overwrite }: { overwrite?: boolean }
+      { overwrite, ...opts }: { overwrite?: boolean } & DAVRequestOptions = {}
     ) {
       if (isPublicSpaceResource(space)) {
         return
       }
 
       const restoreWebDavPath = urlJoin(space.webDavPath, restorePath)
-      return dav.move(urlJoin(space.webDavTrashPath, id), restoreWebDavPath, { overwrite })
+      return dav.move(urlJoin(space.webDavTrashPath, id), restoreWebDavPath, {
+        overwrite,
+        ...opts
+      })
     }
   }
 }

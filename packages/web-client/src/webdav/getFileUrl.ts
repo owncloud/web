@@ -2,7 +2,7 @@ import { Resource, SpaceResource } from '../helpers'
 import { urlJoin } from '../utils'
 import { GetFileContentsFactory } from './getFileContents'
 import { WebDavOptions } from './types'
-import { DAV } from './client'
+import { DAV, DAVRequestOptions } from './client'
 import { ocs } from '../ocs'
 
 export const GetFileUrlFactory = (
@@ -20,7 +20,8 @@ export const GetFileUrlFactory = (
         signUrlTimeout = 86400,
         version = null,
         doHeadRequest = false,
-        username = ''
+        username = '',
+        ...opts
       }: {
         disposition?: 'inline' | 'attachment'
         isUrlSigningEnabled?: boolean
@@ -28,7 +29,7 @@ export const GetFileUrlFactory = (
         version?: string
         doHeadRequest?: boolean
         username?: string
-      }
+      } & DAVRequestOptions
     ): Promise<string> {
       const inlineDisposition = disposition === 'inline'
       const { path } = resource
@@ -67,7 +68,8 @@ export const GetFileUrlFactory = (
 
       if (!signed || inlineDisposition) {
         const response = await getFileContentsFactory.getFileContents(space, resource, {
-          responseType: 'blob'
+          responseType: 'blob',
+          ...opts
         })
         downloadURL = URL.createObjectURL(response.body)
       }
