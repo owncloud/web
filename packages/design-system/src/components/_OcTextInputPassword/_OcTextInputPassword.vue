@@ -48,7 +48,7 @@
     </oc-button>
   </div>
   <portal v-if="showPasswordPolicyInformation" to="app.design-system.password-policy">
-    <div class="oc-text-small oc-flex oc-flex-column">
+    <div class="oc-text-small">
       <span v-text="$gettext('Please enter a password that meets the following criteria:')" />
       <div class="oc-flex oc-text-input-password-policy-rule-wrapper">
         <div
