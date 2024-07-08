@@ -9,7 +9,7 @@
         v-if="appMenuItems.length && !isEmbedModeEnabled"
         :applications-list="appMenuItems"
       />
-      <router-link ref="navigationSidebarLogo" :to="homeLink" class="oc-width-1-1">
+      <router-link v-if="!hideLogo" ref="navigationSidebarLogo" :to="homeLink" class="oc-width-1-1">
         <oc-img
           v-oc-tooltip="$gettext('Back to home')"
           :src="currentTheme.logo.topbar"
@@ -51,10 +51,12 @@ import SideBarToggle from './SideBarToggle.vue'
 import {
   ApplicationInformation,
   CustomComponentTarget,
+  queryItemAsString,
   useAuthStore,
   useCapabilityStore,
   useConfigStore,
   useEmbedMode,
+  useRouteQuery,
   useRouter,
   useThemeStore
 } from '@ownclouders/web-pkg'
@@ -93,6 +95,11 @@ export default {
     const { isEnabled: isEmbedModeEnabled } = useEmbedMode()
 
     const logoWidth = ref('150px')
+    const hideLogoQuery = useRouteQuery('hide-logo', 'false')
+    const hideLogo = computed(() => {
+      return queryItemAsString(unref(hideLogoQuery)) === 'true'
+    })
+
     const isNotificationBellEnabled = computed(() => {
       return (
         authStore.userContextReady && capabilityStore.notificationsOcsEndpoints.includes('list')
@@ -209,6 +216,7 @@ export default {
       isNotificationBellEnabled,
       userMenuItems,
       appMenuItems,
+      hideLogo,
       logoWidth,
       isEmbedModeEnabled,
       isSideBarToggleVisible,

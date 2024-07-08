@@ -11,7 +11,7 @@ describe('FilePickerModal', () => {
     it('sets the iframe src correctly', () => {
       const { wrapper } = getWrapper()
       expect(wrapper.vm.iframeSrc).toEqual(
-        'http://localhost:3000/files-spaces-generic?embed=true&embed-target=file&embed-file-types=text%2Cmd%2Ctext%2Frtf'
+        'http://localhost:3000/files-spaces-generic?hide-logo=true&embed=true&embed-target=file&embed-file-types=text%2Cmd%2Ctext%2Frtf'
       )
     })
     it('sets the iframe title correctly', () => {
