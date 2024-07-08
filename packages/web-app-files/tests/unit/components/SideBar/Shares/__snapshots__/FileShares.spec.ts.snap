@@ -54,7 +54,10 @@ exports[`FileShares > current space > loads space members if a space is given an
     <portal-target name="app.files.sidebar.sharing.shared-with.bottom" slot-props="[object Object]" multiple="true"></portal-target>
   </ul>
   <!--v-if-->
-  <h4 class="oc-text-bold oc-my-s">Space members</h4>
+  <div class="oc-flex oc-flex-middle oc-flex-between">
+    <h4 class="oc-text-bold oc-my-s">Space members</h4>
+    <!--v-if-->
+  </div>
   <ul id="space-collaborators-list" class="oc-list oc-list-divider oc-overflow-hidden oc-m-rm" aria-label="Space members">
     <li>
       <collaborator-list-item-stub share="[object Object]" issharedenied="false" modifiable="false" resourcename="[Function]" deniable="false" islocked="false" isspaceshare="true"></collaborator-list-item-stub>
