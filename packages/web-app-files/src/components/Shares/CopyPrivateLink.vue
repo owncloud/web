@@ -28,8 +28,6 @@ export default defineComponent({
     const { copy, copied } = useClipboard({ legacy: true, copiedDuring: 550 })
 
     const copyLinkToClipboard = () => {
-      console.log(props.resource)
-
       const link = isProjectSpaceResource(props.resource)
         ? props.resource.webUrl
         : props.resource.privateLink
