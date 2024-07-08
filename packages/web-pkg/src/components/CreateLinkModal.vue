@@ -44,7 +44,7 @@
       :key="passwordInputKey"
       :model-value="password.value"
       type="password"
-      :password-policy="passwordPolicy"
+      :password-policy="!selectedLinkTypeIsInternal ? passwordPolicy : null"
       :generate-password-method="generatePasswordMethod"
       :error-message="password.error"
       :description-message="
@@ -52,7 +52,6 @@
           ? $gettext('Password cannot be set for internal links')
           : undefined
       "
-      :fix-message-line="true"
       :label="passwordEnforced ? `${$gettext('Password')}*` : $gettext('Password')"
       class="link-modal-password-input oc-mt-l"
       :disabled="selectedLinkTypeIsInternal"
