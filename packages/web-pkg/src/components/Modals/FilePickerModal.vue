@@ -29,7 +29,6 @@ import { RouteLocationRaw } from 'vue-router'
 import AppLoadingSpinner from '../AppLoadingSpinner.vue'
 import { isShareSpaceResource, Resource } from '@ownclouders/web-client'
 import { unref } from 'vue'
-import { HTMLIFrameElement } from 'happy-dom'
 
 export default defineComponent({
   name: 'FilePickerModal',
