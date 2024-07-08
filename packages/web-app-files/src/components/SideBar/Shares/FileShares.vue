@@ -19,11 +19,15 @@
       data-testid="files-collaborators-no-share-permissions-message"
       v-text="noSharePermsMessage"
     />
-    <div v-if="hasSharees" class="avatars-wrapper oc-flex oc-flex-middle oc-flex-between">
-      <h4 class="oc-text-bold oc-my-rm" v-text="sharedWithLabel" />
-      <CopyPrivateLink :resource="resource" />
-    </div>
     <template v-if="hasSharees">
+      <div
+        v-if="hasSharees"
+        id="files-collaborators-headline"
+        class="oc-flex oc-flex-middle oc-flex-between"
+      >
+        <h4 class="oc-text-bold oc-my-rm" v-text="sharedWithLabel" />
+        <CopyPrivateLink :resource="resource" />
+      </div>
       <portal-target
         name="app.files.sidebar.sharing.shared-with.top"
         :slot-props="{ space, resource }"
@@ -448,8 +452,8 @@ export default defineComponent({
 })
 </script>
 
-<style>
-.avatars-wrapper {
+<style lang="scss" scoped>
+#files-collaborators-headline {
   height: 40px;
 }
 </style>
