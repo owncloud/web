@@ -31,7 +31,7 @@ export const useFileActionsToggleHideShare = () => {
       triggerPromises.push(
         triggerQueue.add(async () => {
           try {
-            await clientService.graphAuthenticated.drives.updateDriveItem(
+            await clientService.graphAuthenticated.driveItems.updateDriveItem(
               resource.driveId,
               resource.id,
               { '@UI.Hidden': hidden }

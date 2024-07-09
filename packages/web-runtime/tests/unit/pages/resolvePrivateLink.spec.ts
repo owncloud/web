@@ -1,14 +1,8 @@
 import resolvePrivateLink from '../../../src/pages/resolvePrivateLink.vue'
-import {
-  defaultPlugins,
-  defaultComponentMocks,
-  shallowMount,
-  mockAxiosResolve
-} from 'web-test-helpers'
+import { defaultPlugins, defaultComponentMocks, shallowMount } from 'web-test-helpers'
 import { mock } from 'vitest-mock-extended'
 import { queryItemAsString, useGetResourceContext } from '@ownclouders/web-pkg'
 import { Resource, SHARE_JAIL_ID, SpaceResource } from '@ownclouders/web-client'
-import { DriveItem } from '@ownclouders/web-client/graph/generated'
 
 vi.mock('@ownclouders/web-pkg', async (importOriginal) => ({
   ...(await importOriginal<any>()),
@@ -183,11 +177,9 @@ function getWrapper({
   })
 
   const mocks = { ...defaultComponentMocks() }
-  mocks.$clientService.graphAuthenticated.drives.listSharedWithMe.mockResolvedValue(
-    mockAxiosResolve({
-      value: [{ remoteItem: { id: '1' }, '@UI.Hidden': hiddenShare } as DriveItem]
-    })
-  )
+  mocks.$clientService.graphAuthenticated.driveItems.listSharedWithMe.mockResolvedValue([
+    { remoteItem: { id: '1' }, '@UI.Hidden': hiddenShare }
+  ])
 
   return {
     mocks,

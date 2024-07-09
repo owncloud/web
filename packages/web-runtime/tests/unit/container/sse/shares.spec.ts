@@ -22,10 +22,9 @@ import {
 import { mock, mockDeep } from 'vitest-mock-extended'
 import { DriveItem, User } from '@ownclouders/web-client/graph/generated'
 import { ShareTypes, Resource, SpaceResource } from '@ownclouders/web-client'
-import { createTestingPinia, mockAxiosResolve, defaultComponentMocks } from 'web-test-helpers'
+import { createTestingPinia, defaultComponentMocks } from 'web-test-helpers'
 import { Language } from 'vue3-gettext'
 import PQueue from 'p-queue'
-import { AxiosResponse } from 'axios'
 import { RouteLocation } from 'vue-router'
 
 describe('shares events', () => {
@@ -203,8 +202,12 @@ describe('shares events', () => {
       expect(mocks.clientService.webdav.getFileInfo).toHaveBeenCalled()
       expect(mocks.resourcesStore.upsertResource).toHaveBeenCalled()
       expect(mocks.resourcesStore.updateResourceField).toHaveBeenCalled()
-      expect(mocks.clientService.graphAuthenticated.drives.listSharedWithMe).not.toHaveBeenCalled()
-      expect(mocks.clientService.graphAuthenticated.drives.listSharedByMe).not.toHaveBeenCalled()
+      expect(
+        mocks.clientService.graphAuthenticated.driveItems.listSharedWithMe
+      ).not.toHaveBeenCalled()
+      expect(
+        mocks.clientService.graphAuthenticated.driveItems.listSharedByMe
+      ).not.toHaveBeenCalled()
     })
 
     it('calls "upsertResource" when resource has been shared and current route equals "files-shares-with-me"', async () => {
@@ -222,17 +225,17 @@ describe('shares events', () => {
       const sseData = mock<EventSchemaType>({
         itemid: sharedDrive.remoteItem.id
       })
-      mocks.clientService.graphAuthenticated.drives.listSharedWithMe.mockResolvedValue(
-        mockAxiosResolve({
-          value: [sharedDrive]
-        })
-      )
+      mocks.clientService.graphAuthenticated.driveItems.listSharedWithMe.mockResolvedValue([
+        sharedDrive
+      ])
       await onSSEShareCreatedEvent({ sseData, ...mocks })
-      expect(mocks.clientService.graphAuthenticated.drives.listSharedWithMe).toHaveBeenCalled()
+      expect(mocks.clientService.graphAuthenticated.driveItems.listSharedWithMe).toHaveBeenCalled()
       expect(mocks.resourcesStore.upsertResource).toHaveBeenCalled()
       expect(mocks.resourcesStore.updateResourceField).not.toHaveBeenCalled()
       expect(mocks.clientService.webdav.getFileInfo).not.toHaveBeenCalled()
-      expect(mocks.clientService.graphAuthenticated.drives.listSharedByMe).not.toHaveBeenCalled()
+      expect(
+        mocks.clientService.graphAuthenticated.driveItems.listSharedByMe
+      ).not.toHaveBeenCalled()
     })
     it('calls "upsertResource" when resource has been shared and current route equals "files-shares-with-others"', async () => {
       const sharedDrive = mockDeep<DriveItem>({
@@ -246,17 +249,17 @@ describe('shares events', () => {
       const sseData = mock<EventSchemaType>({
         itemid: sharedDrive.id
       })
-      mocks.clientService.graphAuthenticated.drives.listSharedByMe.mockResolvedValue(
-        mockDeep<AxiosResponse>({
-          data: { value: [sharedDrive] }
-        })
-      )
+      mocks.clientService.graphAuthenticated.driveItems.listSharedByMe.mockResolvedValue([
+        sharedDrive
+      ])
       await onSSEShareCreatedEvent({ sseData, ...mocks })
-      expect(mocks.clientService.graphAuthenticated.drives.listSharedByMe).toHaveBeenCalled()
+      expect(mocks.clientService.graphAuthenticated.driveItems.listSharedByMe).toHaveBeenCalled()
       expect(mocks.resourcesStore.upsertResource).toHaveBeenCalled()
       expect(mocks.resourcesStore.updateResourceField).not.toHaveBeenCalled()
       expect(mocks.clientService.webdav.getFileInfo).not.toHaveBeenCalled()
-      expect(mocks.clientService.graphAuthenticated.drives.listSharedWithMe).not.toHaveBeenCalled()
+      expect(
+        mocks.clientService.graphAuthenticated.driveItems.listSharedWithMe
+      ).not.toHaveBeenCalled()
     })
     it('does not trigger any action when initiator ids are identical', async () => {
       const sharedResource = mock<Resource>({
@@ -276,8 +279,12 @@ describe('shares events', () => {
       expect(mocks.clientService.webdav.getFileInfo).not.toHaveBeenCalled()
       expect(mocks.resourcesStore.upsertResource).not.toHaveBeenCalled()
       expect(mocks.resourcesStore.updateResourceField).not.toHaveBeenCalled()
-      expect(mocks.clientService.graphAuthenticated.drives.listSharedWithMe).not.toHaveBeenCalled()
-      expect(mocks.clientService.graphAuthenticated.drives.listSharedByMe).not.toHaveBeenCalled()
+      expect(
+        mocks.clientService.graphAuthenticated.driveItems.listSharedWithMe
+      ).not.toHaveBeenCalled()
+      expect(
+        mocks.clientService.graphAuthenticated.driveItems.listSharedByMe
+      ).not.toHaveBeenCalled()
     })
   })
   describe('onSSEShareUpdatedEvent', () => {
@@ -296,7 +303,9 @@ describe('shares events', () => {
       const busStub = vi.spyOn(eventBus, 'publish')
       await onSSEShareUpdatedEvent({ sseData, ...mocks })
       expect(busStub).toHaveBeenCalled()
-      expect(mocks.clientService.graphAuthenticated.drives.listSharedWithMe).not.toHaveBeenCalled()
+      expect(
+        mocks.clientService.graphAuthenticated.driveItems.listSharedWithMe
+      ).not.toHaveBeenCalled()
       expect(mocks.resourcesStore.upsertResource).not.toHaveBeenCalled()
     })
     it('calls "upsertResource" when share has been updated and current route equals "files-shares-with-me"', async () => {
@@ -314,14 +323,12 @@ describe('shares events', () => {
       const sseData = mock<EventSchemaType>({
         itemid: sharedDrive.remoteItem.id
       })
-      mocks.clientService.graphAuthenticated.drives.listSharedWithMe.mockResolvedValue(
-        mockAxiosResolve({
-          value: [sharedDrive]
-        })
-      )
+      mocks.clientService.graphAuthenticated.driveItems.listSharedWithMe.mockResolvedValue([
+        sharedDrive
+      ])
       const busStub = vi.spyOn(eventBus, 'publish')
       await onSSEShareUpdatedEvent({ sseData, ...mocks })
-      expect(mocks.clientService.graphAuthenticated.drives.listSharedWithMe).toHaveBeenCalled()
+      expect(mocks.clientService.graphAuthenticated.driveItems.listSharedWithMe).toHaveBeenCalled()
       expect(mocks.resourcesStore.upsertResource).toHaveBeenCalled()
       expect(busStub).not.toHaveBeenCalled()
     })
@@ -341,7 +348,9 @@ describe('shares events', () => {
       const busStub = vi.spyOn(eventBus, 'publish')
       await onSSEShareUpdatedEvent({ sseData, ...mocks })
       expect(busStub).not.toHaveBeenCalled()
-      expect(mocks.clientService.graphAuthenticated.drives.listSharedWithMe).not.toHaveBeenCalled()
+      expect(
+        mocks.clientService.graphAuthenticated.driveItems.listSharedWithMe
+      ).not.toHaveBeenCalled()
       expect(mocks.resourcesStore.upsertResource).not.toHaveBeenCalled()
     })
   })
@@ -503,7 +512,9 @@ describe('shares events', () => {
       expect(mocks.clientService.webdav.getFileInfo).toHaveBeenCalled()
       expect(mocks.resourcesStore.upsertResource).toHaveBeenCalled()
       expect(mocks.resourcesStore.updateResourceField).toHaveBeenCalled()
-      expect(mocks.clientService.graphAuthenticated.drives.listSharedByMe).not.toHaveBeenCalled()
+      expect(
+        mocks.clientService.graphAuthenticated.driveItems.listSharedByMe
+      ).not.toHaveBeenCalled()
     })
     it('calls "upsertResource" when resource has been shared via link and current route equals "files-shares-via-link"', async () => {
       const sharedDrive = mockDeep<DriveItem>({
@@ -517,13 +528,11 @@ describe('shares events', () => {
       const sseData = mock<EventSchemaType>({
         itemid: sharedDrive.id
       })
-      mocks.clientService.graphAuthenticated.drives.listSharedByMe.mockResolvedValue(
-        mockDeep<AxiosResponse>({
-          data: { value: [sharedDrive] }
-        })
-      )
+      mocks.clientService.graphAuthenticated.driveItems.listSharedByMe.mockResolvedValue([
+        sharedDrive
+      ])
       await onSSELinkCreatedEvent({ sseData, ...mocks })
-      expect(mocks.clientService.graphAuthenticated.drives.listSharedByMe).toHaveBeenCalled()
+      expect(mocks.clientService.graphAuthenticated.driveItems.listSharedByMe).toHaveBeenCalled()
       expect(mocks.resourcesStore.upsertResource).toHaveBeenCalled()
       expect(mocks.resourcesStore.updateResourceField).not.toHaveBeenCalled()
       expect(mocks.clientService.webdav.getFileInfo).not.toHaveBeenCalled()
@@ -549,7 +558,9 @@ describe('shares events', () => {
       expect(mocks.clientService.webdav.getFileInfo).not.toHaveBeenCalled()
       expect(mocks.resourcesStore.upsertResource).not.toHaveBeenCalled()
       expect(mocks.resourcesStore.updateResourceField).not.toHaveBeenCalled()
-      expect(mocks.clientService.graphAuthenticated.drives.listSharedByMe).not.toHaveBeenCalled()
+      expect(
+        mocks.clientService.graphAuthenticated.driveItems.listSharedByMe
+      ).not.toHaveBeenCalled()
     })
   })
   describe('onSSELinkRemovedEvent', () => {

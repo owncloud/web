@@ -150,8 +150,8 @@ export const onSSEShareCreatedEvent = async ({
 
   if (isLocationSharesActive(router, 'files-shares-with-me')) {
     // FIXME: get drive item by id as soon as server supports it
-    const { data } = await clientService.graphAuthenticated.drives.listSharedWithMe()
-    const driveItem = data.value.find(({ remoteItem }) => remoteItem.id === sseData.itemid)
+    const driveItems = await clientService.graphAuthenticated.driveItems.listSharedWithMe()
+    const driveItem = driveItems.find(({ remoteItem }) => remoteItem.id === sseData.itemid)
     if (!driveItem) {
       return
     }
@@ -161,8 +161,8 @@ export const onSSEShareCreatedEvent = async ({
 
   if (isLocationSharesActive(router, 'files-shares-with-others')) {
     // FIXME: get drive item by id as soon as server supports it
-    const { data } = await clientService.graphAuthenticated.drives.listSharedByMe()
-    const driveItem = data.value.find(({ id }) => id === sseData.itemid)
+    const driveItems = await clientService.graphAuthenticated.driveItems.listSharedByMe()
+    const driveItem = driveItems.find(({ id }) => id === sseData.itemid)
     if (!driveItem) {
       return
     }
@@ -193,8 +193,8 @@ export const onSSEShareUpdatedEvent = async ({
 
   if (isLocationSharesActive(router, 'files-shares-with-me')) {
     // FIXME: get drive item by id as soon as server supports it
-    const { data } = await clientService.graphAuthenticated.drives.listSharedWithMe()
-    const driveItem = data.value.find(({ remoteItem }) => remoteItem.id === sseData.itemid)
+    const driveItems = await clientService.graphAuthenticated.driveItems.listSharedWithMe()
+    const driveItem = driveItems.find(({ remoteItem }) => remoteItem.id === sseData.itemid)
     if (!driveItem) {
       return
     }
@@ -332,8 +332,8 @@ export const onSSELinkCreatedEvent = async ({
 
   if (isLocationSharesActive(router, 'files-shares-via-link')) {
     // FIXME: get drive item by id as soon as server supports it
-    const { data } = await clientService.graphAuthenticated.drives.listSharedByMe()
-    const driveItem = data.value.find(({ id }) => id === sseData.itemid)
+    const driveItems = await clientService.graphAuthenticated.driveItems.listSharedByMe()
+    const driveItem = driveItems.find(({ id }) => id === sseData.itemid)
     if (!driveItem) {
       return
     }

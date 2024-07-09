@@ -1,13 +1,9 @@
-import { AxiosInstance, AxiosPromise, AxiosResponse } from 'axios'
+import { AxiosInstance, AxiosPromise } from 'axios'
 import {
   Configuration,
-  MeDriveApiFactory,
   RoleManagementApiFactory,
   UnifiedRoleDefinition,
-  CollectionOfDriveItems1,
-  DriveItemApiFactory,
   DrivesRootApiFactory,
-  DriveItem,
   DrivesPermissionsApiFactory,
   Permission,
   DriveItemCreateLink,
@@ -20,6 +16,7 @@ import { type GraphUsers, UsersFactory } from './users'
 import { type GraphGroups, GroupsFactory } from './groups'
 import { ApplicationsFactory, GraphApplications } from './applications'
 import { DrivesFactory, GraphDrives } from './drives'
+import { DriveItemsFactory, GraphDriveItems } from './driveItems'
 import { TagsFactory, GraphTags } from './tags'
 import { ActivitiesFactory, GraphActivities } from './activities'
 
@@ -27,17 +24,8 @@ export interface Graph {
   activities: GraphActivities
   applications: GraphApplications
   tags: GraphTags
-  drives: GraphDrives & {
-    listSharedWithMe: () => AxiosPromise<CollectionOfDriveItems1>
-    listSharedByMe: () => AxiosPromise<CollectionOfDriveItems1>
-    deleteDriveItem: (driveId: string, itemId: string) => AxiosPromise<void>
-    updateDriveItem: (
-      driveId: string,
-      itemId: string,
-      driveItem: DriveItem
-    ) => AxiosPromise<DriveItem>
-    createDriveItem: (driveId: string, driveItem: DriveItem) => AxiosPromise<DriveItem>
-  }
+  drives: GraphDrives
+  driveItems: GraphDriveItems
   users: GraphUsers
   groups: GraphGroups
   roleManagement: {
@@ -104,9 +92,7 @@ export const graph = (baseURI: string, axiosClient: AxiosInstance): Graph => {
     basePath: url.href
   })
 
-  const meDriveApiFactory = MeDriveApiFactory(config, config.basePath, axiosClient)
   const roleManagementApiFactory = RoleManagementApiFactory(config, config.basePath, axiosClient)
-  const driveItemApiFactory = DriveItemApiFactory(config, config.basePath, axiosClient)
   const drivesRootApiFactory = DrivesRootApiFactory(config, config.basePath, axiosClient)
   const drivesPermissionsApiFactory = DrivesPermissionsApiFactory(
     config,
@@ -118,19 +104,8 @@ export const graph = (baseURI: string, axiosClient: AxiosInstance): Graph => {
     activities: ActivitiesFactory({ axiosClient, config }),
     applications: ApplicationsFactory({ axiosClient, config }),
     tags: TagsFactory({ axiosClient, config }),
-    drives: {
-      ...DrivesFactory({ axiosClient, config }),
-
-      // TODO: split into DriveItemsFactory
-      listSharedWithMe: () => meDriveApiFactory.listSharedWithMe(),
-      listSharedByMe: () => meDriveApiFactory.listSharedByMe(),
-      deleteDriveItem: (driveId: string, itemId: string) =>
-        driveItemApiFactory.deleteDriveItem(driveId, itemId),
-      updateDriveItem: (driveId: string, itemId: string, driveItem: DriveItem) =>
-        driveItemApiFactory.updateDriveItem(driveId, itemId, driveItem),
-      createDriveItem: (driveId: string, driveItem: DriveItem) =>
-        drivesRootApiFactory.createDriveItem(driveId, driveItem)
-    },
+    drives: DrivesFactory({ axiosClient, config }),
+    driveItems: DriveItemsFactory({ axiosClient, config }),
     users: UsersFactory({ axiosClient, config }),
     groups: GroupsFactory({ axiosClient, config }),
     roleManagement: {

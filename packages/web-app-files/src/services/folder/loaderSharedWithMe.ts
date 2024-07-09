@@ -25,9 +25,7 @@ export class FolderLoaderSharedWithMe implements FolderLoader {
         yield spacesStore.loadMountPoints({ graphClient: clientService.graphAuthenticated })
       }
 
-      const {
-        data: { value }
-      } = yield* call(clientService.graphAuthenticated.drives.listSharedWithMe())
+      const value = yield* call(clientService.graphAuthenticated.driveItems.listSharedWithMe())
 
       const resources = value.map((driveItem) =>
         buildIncomingShareResource({ driveItem, graphRoles: sharesStore.graphRoles })
