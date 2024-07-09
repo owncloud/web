@@ -153,8 +153,12 @@ export default defineComponent({
         /**
          * This is to make sure that an already resolved public link still resolves correctly
          * upon reload if the link type has been changed to "Uploader" meanwhile.
-         * If the space ids differ, it means we're coming from the public link resolving page,
-         * which already handled a potential link of type "Uploader".
+         * If the space ids differ, it means we're coming from the resolvePublicLink page
+         * that already feetched the space. Hence the fileId and the id differ.
+         * It also means the resolvePublicLink page already handled a link of type "Uploader".
+         *
+         * Ideally we would redirect the user via the resolvePublicLink page, but we didn't
+         * find an easy way to do that.
          **/
         if (space.fileId === space.id) {
           let publicSpace = (await getSpaceResource()) as PublicSpaceResource
