@@ -22,7 +22,7 @@
     <template v-if="hasSharees">
       <div id="files-collaborators-headline" class="oc-flex oc-flex-middle oc-flex-between">
         <h4 class="oc-text-bold oc-my-rm" v-text="sharedWithLabel" />
-        <CopyPrivateLink :resource="resource" />
+        <copy-private-link :resource="resource" />
       </div>
       <portal-target
         name="app.files.sidebar.sharing.shared-with.top"
@@ -67,7 +67,7 @@
     <template v-if="showSpaceMembers">
       <div class="oc-flex oc-flex-middle oc-flex-between">
         <h4 class="oc-text-bold oc-my-s" v-text="spaceMemberLabel" />
-        <CopyPrivateLink v-if="!hasSharees" :resource="resource" />
+        <copy-private-link v-if="!hasSharees" :resource="resource" />
       </div>
       <ul
         id="space-collaborators-list"

@@ -45,7 +45,7 @@
     <template v-if="hasCollaborators">
       <div id="files-collaborators-headline" class="oc-flex oc-flex-middle oc-flex-between">
         <h4 class="oc-text-bold oc-my-rm" v-text="$gettext('Members')" />
-        <CopyPrivateLink :resource="resource" />
+        <copy-private-link :resource="resource" />
       </div>
 
       <ul

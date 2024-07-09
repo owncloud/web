@@ -1,10 +1,10 @@
 import { mock } from 'vitest-mock-extended'
 import { Resource } from '@ownclouders/web-client'
 import { defaultPlugins, mount } from 'web-test-helpers'
-import PrivateLinkItem from 'web-app-files/src/components/SideBar/PrivateLinkItem.vue'
+import CopyPrivateLink from 'web-app-files/src/components/Shares/CopyPrivateLink.vue'
 import { useMessages } from '@ownclouders/web-pkg'
 
-const folder = mock<Resource>({
+const resource = mock<Resource>({
   type: 'folder',
   owner: {
     id: 'marie',
@@ -41,9 +41,9 @@ describe('PrivateLinkItem', () => {
     const { showMessage } = useMessages()
     expect(showMessage).not.toHaveBeenCalled()
 
-    await wrapper.trigger('click')
+    await wrapper.find('button').trigger('click')
     expect(wrapper.html()).toMatchSnapshot()
-    expect(window.navigator.clipboard.writeText).toHaveBeenCalledWith(folder.privateLink)
+    expect(window.navigator.clipboard.writeText).toHaveBeenCalledWith(resource.privateLink)
     expect(showMessage).toHaveBeenCalledTimes(1)
 
     vi.advanceTimersByTime(550)
@@ -55,15 +55,13 @@ describe('PrivateLinkItem', () => {
 })
 
 function getWrapper() {
-  const capabilities = { files: { privateLinks: true } }
-
   return {
-    wrapper: mount(PrivateLinkItem, {
+    wrapper: mount(CopyPrivateLink, {
+      props: {
+        resource
+      },
       global: {
-        plugins: [...defaultPlugins({ piniaOptions: { capabilityState: { capabilities } } })],
-        provide: {
-          resource: folder
-        }
+        plugins: [...defaultPlugins()]
       }
     })
   }

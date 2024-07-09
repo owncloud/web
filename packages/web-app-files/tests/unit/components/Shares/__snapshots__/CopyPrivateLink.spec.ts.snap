@@ -1,0 +1,73 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`PrivateLinkItem > should render a button 1`] = `
+"<div class="oc-flex oc-flex-middle"><button type="button" class="oc-button oc-rounded oc-button-m oc-button-justify-content-center oc-button-gap-undefined oc-button-passive oc-button-passive-raw">
+    <!--v-if-->
+    <!-- @slot Content of the button --> <span class="oc-icon oc-icon-s oc-icon-passive"><!----></span> <span class="oc-ml-xs">Permanent link</span>
+  </button>
+  <div class="oc-contextual-helper oc-ml-xs"><button type="button" aria-label="Show more information" class="oc-button oc-rounded oc-button-m oc-button-justify-content-center oc-button-gap-m oc-button-passive oc-button-passive-raw" id="oc-contextual-helper-1-button">
+      <!--v-if-->
+      <!-- @slot Content of the button --> <span class="oc-icon oc-icon-s oc-icon-passive"><!----></span>
+    </button>
+    <div id="oc-contextual-helper-1" class="oc-drop oc-box-shadow-medium oc-rounded oc-width-1-1 oc-info-drop">
+      <div class="oc-card oc-card-body oc-background-secondary oc-p-m">
+        <div class="info-drop-content">
+          <!--v-if-->
+          <p class="info-text">Copy the link to point your team to this share. Works only for people with existing access.</p>
+          <!--v-if-->
+          <!--v-if-->
+          <!--v-if-->
+        </div>
+      </div>
+    </div>
+  </div>
+</div>"
+`;
+
+exports[`PrivateLinkItem > upon clicking it should copy the private link to the clipboard button, render a success message and change icon for half a second 1`] = `
+"<div class="oc-flex oc-flex-middle"><button type="button" class="oc-button oc-rounded oc-button-m oc-button-justify-content-center oc-button-gap-undefined oc-button-passive oc-button-passive-raw">
+    <!--v-if-->
+    <!-- @slot Content of the button --> <span class="oc-icon oc-icon-s oc-icon-passive"><!----></span> <span class="oc-ml-xs">Permanent link</span>
+  </button>
+  <div class="oc-contextual-helper oc-ml-xs"><button type="button" aria-label="Show more information" class="oc-button oc-rounded oc-button-m oc-button-justify-content-center oc-button-gap-m oc-button-passive oc-button-passive-raw" id="oc-contextual-helper-2-button">
+      <!--v-if-->
+      <!-- @slot Content of the button --> <span class="oc-icon oc-icon-s oc-icon-passive"><!----></span>
+    </button>
+    <div id="oc-contextual-helper-2" class="oc-drop oc-box-shadow-medium oc-rounded oc-width-1-1 oc-info-drop">
+      <div class="oc-card oc-card-body oc-background-secondary oc-p-m">
+        <div class="info-drop-content">
+          <!--v-if-->
+          <p class="info-text">Copy the link to point your team to this share. Works only for people with existing access.</p>
+          <!--v-if-->
+          <!--v-if-->
+          <!--v-if-->
+        </div>
+      </div>
+    </div>
+  </div>
+</div>"
+`;
+
+exports[`PrivateLinkItem > upon clicking it should copy the private link to the clipboard button, render a success message and change icon for half a second 2`] = `
+"<div class="oc-flex oc-flex-middle"><button type="button" class="oc-button oc-rounded oc-button-m oc-button-justify-content-center oc-button-gap-undefined oc-button-passive oc-button-passive-raw">
+    <!--v-if-->
+    <!-- @slot Content of the button --> <span class="oc-icon oc-icon-s oc-icon-passive"><!----></span> <span class="oc-ml-xs">Permanent link</span>
+  </button>
+  <div class="oc-contextual-helper oc-ml-xs"><button type="button" aria-label="Show more information" class="oc-button oc-rounded oc-button-m oc-button-justify-content-center oc-button-gap-m oc-button-passive oc-button-passive-raw" id="oc-contextual-helper-2-button">
+      <!--v-if-->
+      <!-- @slot Content of the button --> <span class="oc-icon oc-icon-s oc-icon-passive"><!----></span>
+    </button>
+    <div id="oc-contextual-helper-2" class="oc-drop oc-box-shadow-medium oc-rounded oc-width-1-1 oc-info-drop">
+      <div class="oc-card oc-card-body oc-background-secondary oc-p-m">
+        <div class="info-drop-content">
+          <!--v-if-->
+          <p class="info-text">Copy the link to point your team to this share. Works only for people with existing access.</p>
+          <!--v-if-->
+          <!--v-if-->
+          <!--v-if-->
+        </div>
+      </div>
+    </div>
+  </div>
+</div>"
+`;
