@@ -9,7 +9,6 @@ import {
 } from '@ownclouders/web-client'
 import { defineStore } from 'pinia'
 import { Ref, ref, unref } from 'vue'
-import { AxiosResponse } from 'axios'
 import {
   AddLinkOptions,
   AddShareOptions,
@@ -21,12 +20,9 @@ import {
 import { useResourcesStore } from '../resources'
 import { useThemeStore } from '../theme'
 import { Permission, UnifiedRoleDefinition } from '@ownclouders/web-client/graph/generated'
-import { useUserStore } from '../user'
-import { buildLinkShare, buildCollaboratorShare } from '@ownclouders/web-client'
 
 export const useSharesStore = defineStore('shares', () => {
   const resourcesStore = useResourcesStore()
-  const userStore = useUserStore()
   const { getRoleIcon: getThemeRoleIcon } = useThemeStore()
   const loading = ref(false)
   const collaboratorShares = ref<CollaboratorShare[]>([]) as Ref<CollaboratorShare[]>
@@ -148,44 +144,21 @@ export const useSharesStore = defineStore('shares', () => {
     }
   }
 
-  const addShare = async ({
-    clientService,
-    space,
-    resource,
-    options
-  }: AddShareOptions): Promise<CollaboratorShare[]> => {
+  const addShare = async ({ clientService, space, resource, options }: AddShareOptions) => {
     const client = clientService.graphAuthenticated.permissions
-    let permissions: Permission[] = []
 
-    if (isSpaceResource(resource)) {
-      const {
-        data: { value }
-      } = await client.inviteSpaceRoot(space.id, options)
-      permissions = value
-    } else {
-      const {
-        data: { value }
-      } = await client.invite(space.id, resource.id, options)
-      permissions = value
-    }
+    const share = await client.createInvite(
+      space.id,
+      resource.id,
+      options,
+      isSpaceResource(resource),
+      unref(graphRoles)
+    )
 
-    const builtShares: CollaboratorShare[] = []
-
-    permissions.forEach((graphPermission) => {
-      builtShares.push(
-        buildCollaboratorShare({
-          graphPermission,
-          graphRoles: unref(graphRoles),
-          resourceId: resource.id,
-          user: userStore.user
-        })
-      )
-    })
-
-    addCollaboratorShares(builtShares)
-    updateFileShareTypes(resource.id)
+    addCollaboratorShares([share])
+    updateFileShareTypes(resource.path)
     resourcesStore.loadIndicators(space, resource.id)
-    return builtShares
+    return share
   }
 
   const updateShare = async ({
@@ -196,36 +169,21 @@ export const useSharesStore = defineStore('shares', () => {
     options
   }: UpdateShareOptions) => {
     const client = clientService.graphAuthenticated.permissions
-    let permission: Permission
 
     const payload = {
       roles: options.roles,
       expirationDateTime: options.expirationDateTime
     } satisfies Permission
 
-    if (isSpaceResource(resource)) {
-      const { data } = await client.updatePermissionSpaceRoot(
-        space.id,
-        collaboratorShare.id,
-        payload
-      )
-      permission = data
-    } else {
-      const { data } = await client.updatePermission(
-        space.id,
-        resource.id,
-        collaboratorShare.id,
-        payload
-      )
-      permission = data
-    }
+    const share = await client.updatePermission<CollaboratorShare>(
+      space.id,
+      resource.id,
+      collaboratorShare.id,
+      payload,
+      isSpaceResource(resource),
+      unref(graphRoles)
+    )
 
-    const share = buildCollaboratorShare({
-      graphPermission: permission,
-      graphRoles: unref(graphRoles),
-      resourceId: resource.id,
-      user: userStore.user
-    })
     upsertCollaboratorShare(share)
     return share
   }
@@ -239,11 +197,12 @@ export const useSharesStore = defineStore('shares', () => {
   }: DeleteShareOptions) => {
     const client = clientService.graphAuthenticated.permissions
 
-    if (isSpaceResource(resource)) {
-      await client.deletePermissionSpaceRoot(space.id, collaboratorShare.id)
-    } else {
-      await client.deletePermission(space.id, resource.id, collaboratorShare.id)
-    }
+    await client.deletePermission(
+      space.id,
+      resource.id,
+      collaboratorShare.id,
+      isSpaceResource(resource)
+    )
 
     removeCollaboratorShare(collaboratorShare)
     updateFileShareTypes(resource.id)
@@ -254,21 +213,7 @@ export const useSharesStore = defineStore('shares', () => {
 
   const addLink = async ({ clientService, space, resource, options }: AddLinkOptions) => {
     const client = clientService.graphAuthenticated.permissions
-    let permission: Permission
-
-    if (isSpaceResource(resource)) {
-      const { data } = await client.createLinkSpaceRoot(space.id, options)
-      permission = data
-    } else {
-      const { data } = await client.createLink(space.id, resource.id, options)
-      permission = data
-    }
-
-    const link = buildLinkShare({
-      graphPermission: permission,
-      user: userStore.user,
-      resourceId: resource.id
-    })
+    const link = await client.createLink(space.id, resource.id, options, isSpaceResource(resource))
 
     const selectedFiles = resourcesStore.selectedResources
     const fileIsSelected =
@@ -305,18 +250,16 @@ export const useSharesStore = defineStore('shares', () => {
     options
   }: UpdateLinkOptions) => {
     const client = clientService.graphAuthenticated.permissions
-    let response: AxiosResponse<Permission>
+    let link: LinkShare
 
     if (Object.hasOwn(options, 'password')) {
-      if (isSpaceResource(resource)) {
-        response = await client.setPermissionPasswordSpaceRoot(space.id, linkShare.id, {
-          password: options.password
-        })
-      } else {
-        response = await client.setPermissionPassword(space.id, resource.id, linkShare.id, {
-          password: options.password
-        })
-      }
+      link = await client.setPermissionPassword(
+        space.id,
+        resource.id,
+        linkShare.id,
+        { password: options.password },
+        isSpaceResource(resource)
+      )
 
       linkShare.hasPassword = !!options.password
     } else {
@@ -330,18 +273,15 @@ export const useSharesStore = defineStore('shares', () => {
         expirationDateTime: options.expirationDateTime
       } satisfies Permission
 
-      if (isSpaceResource(resource)) {
-        response = await client.updatePermissionSpaceRoot(space.id, linkShare.id, payload)
-      } else {
-        response = await client.updatePermission(space.id, resource.id, linkShare.id, payload)
-      }
+      link = await client.updatePermission<LinkShare>(
+        space.id,
+        resource.id,
+        linkShare.id,
+        payload,
+        isSpaceResource(resource)
+      )
     }
 
-    const link = buildLinkShare({
-      graphPermission: response.data,
-      user: userStore.user,
-      resourceId: resource.id
-    })
     upsertLinkShare(link)
     return link
   }
@@ -354,12 +294,7 @@ export const useSharesStore = defineStore('shares', () => {
     loadIndicators = false
   }: DeleteLinkOptions) => {
     const client = clientService.graphAuthenticated.permissions
-
-    if (isSpaceResource(resource)) {
-      await client.deletePermissionSpaceRoot(space.id, linkShare.id)
-    } else {
-      await client.deletePermission(space.id, resource.id, linkShare.id)
-    }
+    await client.deletePermission(space.id, resource.id, linkShare.id, isSpaceResource(resource))
 
     removeLinkShare(linkShare)
     updateFileShareTypes(resource.id)

@@ -27,6 +27,16 @@ export const isIncomingShareResource = (resource: Resource): resource is Incomin
   return isShareResource(resource) && !resource.outgoing
 }
 
+export const isCollaboratorShare = (
+  share: CollaboratorShare | LinkShare
+): share is CollaboratorShare => {
+  return Object.hasOwn(share, 'role')
+}
+
+export const isLinkShare = (share: CollaboratorShare | LinkShare): share is LinkShare => {
+  return !Object.hasOwn(share, 'role')
+}
+
 export const getShareResourceRoles = ({
   driveItem,
   graphRoles
@@ -231,13 +241,11 @@ export function buildCollaboratorShare({
   graphPermission,
   graphRoles,
   resourceId,
-  user,
   indirect = false
 }: {
   graphPermission: Permission
   graphRoles: UnifiedRoleDefinition[]
   resourceId: string
-  user: User
   indirect?: boolean
 }): CollaboratorShare {
   const role = graphRoles.find(({ id }) => id === graphPermission.roles?.[0])
@@ -248,7 +256,7 @@ export function buildCollaboratorShare({
     indirect,
     shareType: graphPermission.grantedToV2.group ? ShareTypes.group.value : ShareTypes.user.value,
     role,
-    sharedBy: { id: user.id, displayName: user.displayName },
+    sharedBy: { id: '', displayName: '' }, // FIXME: see https://github.com/owncloud/ocis/issues/9571
     sharedWith: graphPermission.grantedToV2.user || graphPermission.grantedToV2.group,
     permissions: (graphPermission['@libre.graph.permissions.actions']
       ? graphPermission['@libre.graph.permissions.actions']
@@ -260,12 +268,10 @@ export function buildCollaboratorShare({
 
 export function buildLinkShare({
   graphPermission,
-  user,
   resourceId,
   indirect = false
 }: {
   graphPermission: Permission
-  user: User
   resourceId: string
   indirect?: boolean
 }): LinkShare {
@@ -274,7 +280,7 @@ export function buildLinkShare({
     resourceId,
     indirect,
     shareType: ShareTypes.link.value,
-    sharedBy: { id: user.id, displayName: user.displayName },
+    sharedBy: { id: '', displayName: '' }, // FIXME: see https://github.com/owncloud/ocis/issues/9571
     hasPassword: graphPermission.hasPassword,
     createdDateTime: graphPermission.createdDateTime,
     expirationDateTime: graphPermission.expirationDateTime,

@@ -1,4 +1,4 @@
-import { LinkShare } from '@ownclouders/web-client'
+import { isLinkShare, LinkShare } from '@ownclouders/web-client'
 import { computed, unref } from 'vue'
 import { useClientService } from '../../clientService'
 import { useGettext } from 'vue3-gettext'
@@ -7,10 +7,8 @@ import { useCanShare } from '../../shares'
 import { useClipboard } from '../../clipboard'
 import { Resource, SpaceResource } from '@ownclouders/web-client'
 import { useFileActionsCreateLink } from './useFileActionsCreateLink'
-import { useMessages, useUserStore } from '../../piniaStores'
-import { buildLinkShare } from '@ownclouders/web-client'
+import { useMessages } from '../../piniaStores'
 import { isSpaceResource } from '@ownclouders/web-client'
-import { CollectionOfPermissionsWithAllowedValues } from '@ownclouders/web-client/graph/generated'
 
 export const useFileActionsCopyQuickLink = () => {
   const { showMessage, showErrorMessage } = useMessages()
@@ -19,7 +17,6 @@ export const useFileActionsCopyQuickLink = () => {
   const clientService = useClientService()
   const { canShare } = useCanShare()
   const { copyToClipboard } = useClipboard()
-  const userStore = useUserStore()
 
   const onLinkCreatedCallback = async (result: PromiseSettledResult<LinkShare>[]) => {
     const link = result.find(
@@ -57,23 +54,16 @@ export const useFileActionsCopyQuickLink = () => {
   }: {
     space: SpaceResource
     resource: Resource
-  }): Promise<LinkShare> => {
+  }) => {
     const client = clientService.graphAuthenticated.permissions
-    let data: CollectionOfPermissionsWithAllowedValues
 
-    if (isSpaceResource(resource)) {
-      const response = await client.listPermissionsSpaceRoot(space.id)
-      data = response.data
-    } else {
-      const response = await client.listPermissions(space.id, resource.id)
-      data = response.data
-    }
+    const { shares } = await client.listPermissions(
+      space.id,
+      resource.id,
+      isSpaceResource(resource)
+    )
 
-    const permissions = data.value || []
-    const graphPermission = permissions.find((p) => p.link?.['@libre.graph.quickLink'])
-    return graphPermission
-      ? buildLinkShare({ graphPermission, user: userStore.user, resourceId: resource.id })
-      : null
+    return shares.filter(isLinkShare).find(({ isQuickLink }) => isQuickLink)
   }
 
   const handler = async ({ space, resources }: FileActionOptions) => {

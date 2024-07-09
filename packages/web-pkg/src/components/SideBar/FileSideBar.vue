@@ -57,20 +57,15 @@ import {
   isProjectSpaceResource,
   SpaceResource,
   Resource,
-  CollaboratorShare,
-  LinkShare,
   ShareRole,
   call,
   isSpaceResource,
-  isPersonalSpaceResource
+  isPersonalSpaceResource,
+  isCollaboratorShare,
+  isLinkShare
 } from '@ownclouders/web-client'
 import { storeToRefs } from 'pinia'
 import { useTask } from 'vue-concurrency'
-import { buildCollaboratorShare, buildLinkShare } from '@ownclouders/web-client'
-import {
-  CollectionOfPermissionsWithAllowedValues,
-  Permission
-} from '@ownclouders/web-client/graph/generated'
 
 export default defineComponent({
   name: 'FileSideBar',
@@ -201,56 +196,22 @@ export default defineComponent({
 
       const { collaboratorShares: collaboratorCache, linkShares: linkCache } = sharesStore
       const client = clientService.graphAuthenticated.permissions
-      let data: CollectionOfPermissionsWithAllowedValues
-
-      if (isSpaceResource(resource)) {
-        const response = yield* call(client.listPermissionsSpaceRoot(props.space?.id))
-        data = response.data
-      } else {
-        const response = yield* call(client.listPermissions(props.space?.id, resource.id))
-        data = response.data
-      }
-
-      const allowedValues = data['@libre.graph.permissions.roles.allowedValues']
-      availableShareRoles.value =
-        sharesStore.graphRoles.filter((r) => allowedValues?.map(({ id }) => id).includes(r.id)) ||
-        []
-
-      const permissions = data.value || []
-
-      const loadedCollaboratorShares: CollaboratorShare[] = []
-      const loadedLinkShares: LinkShare[] = []
-
-      const buildShares = ({
-        p,
-        resourceId,
-        indirect = false
-      }: {
-        p: Permission[]
-        resourceId: string
-        indirect?: boolean
-      }) => {
-        p.forEach((graphPermission) => {
-          if (!!graphPermission.link) {
-            loadedLinkShares.push(
-              buildLinkShare({ graphPermission, user: userStore.user, resourceId, indirect })
-            )
-            return
-          }
-          loadedCollaboratorShares.push(
-            buildCollaboratorShare({
-              graphPermission,
-              graphRoles: sharesStore.graphRoles,
-              resourceId,
-              user: userStore.user,
-              indirect
-            })
-          )
-        })
-      }
 
       // load direct shares
-      buildShares({ p: permissions, resourceId: resource.id })
+      const { shares, allowedRoles } = yield* call(
+        client.listPermissions(
+          props.space?.id,
+          resource.id,
+          isSpaceResource(resource),
+          sharesStore.graphRoles
+        )
+      )
+
+      const loadedCollaboratorShares = shares.filter(isCollaboratorShare)
+      const loadedLinkShares = shares.filter(isLinkShare)
+
+      availableShareRoles.value =
+        sharesStore.graphRoles.filter((r) => allowedRoles?.map(({ id }) => id).includes(r.id)) || []
 
       // use cache for indirect shares
       const useCache = !unref(isFlatFileList) && !unref(isProjectsLocation)
@@ -292,11 +253,11 @@ export default defineComponent({
       const promises = ancestorIds.map((id) => {
         return queue.add(() =>
           clientService.graphAuthenticated.permissions
-            .listPermissions(props.space?.id, id)
-            .then((value) => {
-              const data = value.data
-              const permissions = data.value || []
-              buildShares({ p: permissions, resourceId: id, indirect: true })
+            .listPermissions(props.space?.id, id, false, sharesStore.graphRoles)
+            .then((result) => {
+              const indirectShares = result.shares.map((s) => ({ ...s, indirect: true }))
+              loadedCollaboratorShares.push(...indirectShares.filter(isCollaboratorShare))
+              loadedLinkShares.push(...indirectShares.filter(isLinkShare))
             })
         )
       })
