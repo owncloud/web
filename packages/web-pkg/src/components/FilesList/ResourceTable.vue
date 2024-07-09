@@ -705,7 +705,7 @@ export default defineComponent({
             },
             {
               name: 'syncEnabled',
-              title: this.$gettext('Status'),
+              title: this.$gettext('Info'),
               type: 'slot',
               alignH: 'right',
               wrap: 'nowrap',
