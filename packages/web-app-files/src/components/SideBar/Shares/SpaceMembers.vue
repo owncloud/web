@@ -45,7 +45,7 @@
     <template v-if="hasCollaborators">
       <div id="files-collaborators-headline" class="oc-flex oc-flex-middle oc-flex-between">
         <h4 class="oc-text-bold oc-my-rm" v-text="$gettext('Members')" />
-        <copy-private-link :resource="resource" />
+        <copy-private-link v-if="filesPrivateLinks" :resource="resource" />
       </div>
 
       <ul
@@ -76,6 +76,7 @@ import {
   createLocationSpaces,
   isLocationSpacesActive,
   useCanShare,
+  useCapabilityStore,
   useConfigStore,
   useMessages,
   useModals,
@@ -108,6 +109,8 @@ export default defineComponent({
     const spacesStore = useSpacesStore()
     const { upsertSpace, removeSpaceMember } = spacesStore
     const { spaceMembers } = storeToRefs(spacesStore)
+    const capabilityStore = useCapabilityStore()
+    const { filesPrivateLinks } = storeToRefs(capabilityStore)
 
     const configStore = useConfigStore()
     const { options: configOptions } = storeToRefs(configStore)
@@ -129,6 +132,7 @@ export default defineComponent({
       removeSpaceMember,
       canShare,
       markInstance,
+      filesPrivateLinks,
       ...useMessages()
     }
   },

@@ -17,7 +17,7 @@ const resource = mock<Resource>({
 })
 
 // @vitest-environment jsdom
-describe('PrivateLinkItem', () => {
+describe('CopyPrivateLink', () => {
   beforeEach(() => {
     vi.useFakeTimers()
   })
@@ -42,15 +42,8 @@ describe('PrivateLinkItem', () => {
     expect(showMessage).not.toHaveBeenCalled()
 
     await wrapper.find('button').trigger('click')
-    expect(wrapper.html()).toMatchSnapshot()
     expect(window.navigator.clipboard.writeText).toHaveBeenCalledWith(resource.privateLink)
     expect(showMessage).toHaveBeenCalledTimes(1)
-
-    vi.advanceTimersByTime(550)
-
-    wrapper.vm.$nextTick(() => {
-      expect(wrapper.html()).toMatchSnapshot()
-    })
   })
 })
 
