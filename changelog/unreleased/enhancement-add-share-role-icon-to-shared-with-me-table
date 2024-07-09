@@ -1,0 +1,7 @@
+Enhancement: Add share role icon to shared with me table
+
+We've added the respective share role icon with a tooltip that contains the share role name to each share column,
+so the user knows which permission they have in a share.
+
+https://github.com/owncloud/web/pull/11166
+https://github.com/owncloud/web/issues/11101
