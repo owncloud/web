@@ -194,7 +194,7 @@ export function buildSpace(
     starred: false,
     etag: '',
     shareTypes: [] as number[],
-    privateLink: '',
+    privateLink: data.webUrl,
     downloadURL: '',
     owner: data.owner?.user,
     disabled,

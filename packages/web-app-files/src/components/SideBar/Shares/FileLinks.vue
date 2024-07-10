@@ -1,6 +1,6 @@
 <template>
   <div id="oc-files-file-link" class="oc-position-relative">
-    <div class="oc-flex">
+    <div class="oc-flex oc-flex-middle">
       <h3 class="oc-text-bold oc-text-medium oc-m-rm" v-text="linksHeading" />
       <oc-contextual-helper v-if="helpersEnabled" class="oc-pl-xs" v-bind="viaLinkHelp" />
     </div>

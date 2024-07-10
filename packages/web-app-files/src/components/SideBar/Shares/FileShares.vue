@@ -19,10 +19,11 @@
       data-testid="files-collaborators-no-share-permissions-message"
       v-text="noSharePermsMessage"
     />
-    <div v-if="hasSharees" class="avatars-wrapper oc-flex oc-flex-middle oc-flex-between">
-      <h4 class="oc-text-bold oc-my-rm" v-text="sharedWithLabel" />
-    </div>
     <template v-if="hasSharees">
+      <div id="files-collaborators-headline" class="oc-flex oc-flex-middle oc-flex-between">
+        <h4 class="oc-text-bold oc-my-rm" v-text="sharedWithLabel" />
+        <copy-private-link v-if="filesPrivateLinks" :resource="resource" />
+      </div>
       <portal-target
         name="app.files.sidebar.sharing.shared-with.top"
         :slot-props="{ space, resource }"
@@ -64,7 +65,10 @@
       </div>
     </template>
     <template v-if="showSpaceMembers">
-      <h4 class="oc-text-bold oc-my-s" v-text="spaceMemberLabel" />
+      <div class="oc-flex oc-flex-middle oc-flex-between">
+        <h4 class="oc-text-bold oc-my-s" v-text="spaceMemberLabel" />
+        <copy-private-link v-if="filesPrivateLinks && !hasSharees" :resource="resource" />
+      </div>
       <ul
         id="space-collaborators-list"
         class="oc-list oc-list-divider oc-overflow-hidden oc-m-rm"
@@ -123,10 +127,12 @@ import {
   isSpaceResource
 } from '@ownclouders/web-client'
 import { getSharedAncestorRoute } from '@ownclouders/web-pkg'
+import CopyPrivateLink from '../../Shares/CopyPrivateLink.vue'
 
 export default defineComponent({
   name: 'FileShares',
   components: {
+    CopyPrivateLink,
     InviteCollaboratorForm,
     CollaboratorListItem
   },
@@ -214,6 +220,7 @@ export default defineComponent({
       toggleMemberListCollapsed,
       currentUserIsMemberOfSpace,
       hasShareCanDenyAccess: capabilityRefs.sharingDenyAccess,
+      filesPrivateLinks: capabilityRefs.filesPrivateLinks,
       getSharedAncestor,
       configStore,
       configOptions,
@@ -442,8 +449,8 @@ export default defineComponent({
 })
 </script>
 
-<style>
-.avatars-wrapper {
+<style lang="scss" scoped>
+#files-collaborators-headline {
   height: 40px;
 }
 </style>
