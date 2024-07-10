@@ -67,15 +67,12 @@ export default defineComponent({
     })
 
     const loadActivitiesTask = useTask(function* (signal) {
-      const {
-        data: { value: activitiesResponse }
-      } = yield* call(
+      activities.value = yield* call(
         clientService.graphAuthenticated.activities.listActivities(
-          `itemid:${unref(resource).id} AND limit:${activitiesLimit} AND sort:desc`
+          `itemid:${unref(resource).id} AND limit:${activitiesLimit} AND sort:desc`,
+          { signal }
         )
       )
-
-      activities.value = activitiesResponse
     }).restartable()
 
     const isLoading = computed(() => {

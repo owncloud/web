@@ -19,16 +19,16 @@ import {
   DriveItemInvite,
   SharingLinkPassword,
   CollectionOfPermissions,
-  CollectionOfPermissionsWithAllowedValues,
-  ActivitiesApiFactory,
-  CollectionOfActivities
+  CollectionOfPermissionsWithAllowedValues
 } from './generated'
 import { type GraphUsers, UsersFactory } from './users'
 import { type GraphGroups, GroupsFactory } from './groups'
 import { ApplicationsFactory, GraphApplications } from './applications'
 import { TagsFactory, GraphTags } from './tags'
+import { ActivitiesFactory, GraphActivities } from './activities'
 
 export interface Graph {
+  activities: GraphActivities
   applications: GraphApplications
   tags: GraphTags
   drives: {
@@ -106,9 +106,6 @@ export interface Graph {
       sharingLinkPassword: SharingLinkPassword
     ) => AxiosPromise<Permission>
   }
-  activities: {
-    listActivities: (kql: string) => AxiosPromise<CollectionOfActivities>
-  }
 }
 
 export const graph = (baseURI: string, axiosClient: AxiosInstance): Graph => {
@@ -130,9 +127,9 @@ export const graph = (baseURI: string, axiosClient: AxiosInstance): Graph => {
     config.basePath,
     axiosClient
   )
-  const activitiesApiFactory = ActivitiesApiFactory(config, config.basePath, axiosClient)
 
   return <Graph>{
+    activities: ActivitiesFactory({ axiosClient, config }),
     applications: ApplicationsFactory({ axiosClient, config }),
     tags: TagsFactory({ axiosClient, config }),
     drives: {
@@ -206,9 +203,6 @@ export const graph = (baseURI: string, axiosClient: AxiosInstance): Graph => {
         permId: string,
         sharingLinkPassword: SharingLinkPassword
       ) => drivesRootApiFactory.setPermissionPasswordSpaceRoot(driveId, permId, sharingLinkPassword)
-    },
-    activities: {
-      listActivities: (kql: string) => activitiesApiFactory.getActivities(kql)
     }
   }
 }

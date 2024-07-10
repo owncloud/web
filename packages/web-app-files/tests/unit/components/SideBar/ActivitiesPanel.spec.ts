@@ -1,6 +1,5 @@
 import ActivitiesPanel from 'web-app-files/src/components/SideBar/ActivitiesPanel.vue'
 import { defaultComponentMocks, defaultPlugins, mount } from 'web-test-helpers'
-import { AxiosResponse } from 'axios'
 import { Resource } from '@ownclouders/web-client'
 import { mock } from 'vitest-mock-extended'
 import { nextTick } from 'vue'
@@ -114,9 +113,7 @@ function getMountedWrapper({
   const mocks = {
     ...defaultComponentMocks()
   }
-  mocks.$clientService.graphAuthenticated.activities.listActivities.mockResolvedValue({
-    data: { value: activities }
-  } as AxiosResponse<any>)
+  mocks.$clientService.graphAuthenticated.activities.listActivities.mockResolvedValue(activities)
 
   return {
     wrapper: mount(ActivitiesPanel, {
