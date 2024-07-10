@@ -89,7 +89,7 @@
             v-oc-tooltip="spaceDetailsLabel"
             :aria-label="spaceDetailsLabel"
             appearance="raw"
-            class="oc-mr-xs quick-action-button spaces-table-btn-detail oc-p-xs"
+            class="oc-mr-xs quick-action-button spaces-table-btn-details oc-p-xs"
             @click.stop.prevent="showDetailsForSpace(item)"
           >
             <oc-icon name="information" fill-type="line" />
