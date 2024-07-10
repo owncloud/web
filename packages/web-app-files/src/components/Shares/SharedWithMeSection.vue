@@ -41,6 +41,7 @@
             v-oc-tooltip="$gettext(resource.shareRoles[0].displayName)"
             :name="resource.shareRoles[0].icon"
             fill-type="line"
+            size="small"
           />
           <oc-icon
             v-if="resource.syncEnabled"
@@ -48,6 +49,7 @@
             :accessible-label="$gettext('Synced with your devices')"
             name="loop-right"
             class="sync-enabled oc-ml-s"
+            size="small"
           />
         </div>
       </template>
@@ -59,13 +61,12 @@
       </template>
       <template #quickActions="{ resource }">
         <oc-button
-          size="small"
+          v-oc-tooltip="hideShareAction.label({ space: null, resources: [resource] })"
           appearance="raw"
-          :class="['oc-ml-s', 'oc-p-s', hideShareAction.class]"
+          :class="['oc-p-s', hideShareAction.class]"
           @click.stop="hideShareAction.handler({ space: null, resources: [resource] })"
         >
-          <oc-icon size="small" :name="resource.hidden ? 'eye' : 'eye-off'" fill-type="line" />
-          <span>{{ hideShareAction.label({ space: null, resources: [resource] }) }}</span>
+          <oc-icon :name="resource.hidden ? 'eye' : 'eye-off'" fill-type="line" />
         </oc-button>
       </template>
       <template #footer>
