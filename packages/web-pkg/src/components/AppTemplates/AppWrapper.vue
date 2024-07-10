@@ -466,6 +466,22 @@ export default defineComponent({
       }
     })
 
+    const originalDownloadFileActionHandler = unref(downloadFileActions)[0].handler
+
+    /**
+     * The interceptor is used to save the file automatically when in dirty state,
+     * so the downloaded file equals the current state
+     */
+    const downloadFileActionInterceptor = async (args: FileActionOptions) => {
+      if (unref(isDirty)) {
+        await save()
+        autosavePopup()
+      }
+      originalDownloadFileActionHandler(args)
+    }
+
+    unref(downloadFileActions)[0].handler = downloadFileActionInterceptor
+
     const menuItemsContext = computed(() => {
       return [...unref(openWithAppActions), ...unref(fileActionsSave)].filter((item) =>
         item.isVisible(unref(actionOptions))
