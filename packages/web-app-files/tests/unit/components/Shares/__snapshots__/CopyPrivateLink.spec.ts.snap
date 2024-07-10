@@ -13,7 +13,7 @@ exports[`CopyPrivateLink > should render a button 1`] = `
       <div class="oc-card oc-card-body oc-background-secondary oc-p-m">
         <div class="info-drop-content">
           <!--v-if-->
-          <p class="info-text">Copy the link to point your team to this share. Works only for people with existing access.</p>
+          <p class="info-text">Copy the link to point your team to this item. Works only for people with existing access.</p>
           <!--v-if-->
           <!--v-if-->
           <!--v-if-->

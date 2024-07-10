@@ -41,7 +41,7 @@ export default defineComponent({
 
     const helperText = computed(() => {
       return $gettext(
-        'Copy the link to point your team to this share. Works only for people with existing access.'
+        'Copy the link to point your team to this item. Works only for people with existing access.'
       )
     })
 
