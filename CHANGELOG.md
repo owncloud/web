@@ -1,3 +1,27 @@
+Changelog for ownCloud Web [unreleased] (UNRELEASED)
+=======================================
+The following sections list the changes in ownCloud web unreleased relevant to
+ownCloud admins and users.
+
+[unreleased]: https://github.com/owncloud/web/compare/v9.1.0...master
+
+Summary
+-------
+
+* Enhancement - Add share role icon to shared with me table: [#11166](https://github.com/owncloud/web/pull/11166)
+
+Details
+-------
+
+* Enhancement - Add share role icon to shared with me table: [#11166](https://github.com/owncloud/web/pull/11166)
+
+   We've added the respective share role icon with a tooltip that contains the
+   share role name to each share column, so the user knows which permission they
+   have in a share.
+
+   https://github.com/owncloud/web/issues/11101
+   https://github.com/owncloud/web/pull/11166
+
 Changelog for ownCloud Web [9.1.0] (2024-07-05)
 =======================================
 The following sections list the changes in ownCloud web 9.1.0 relevant to
