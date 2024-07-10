@@ -10,7 +10,7 @@
 
 <script lang="ts">
 import { computed, defineComponent, PropType } from 'vue'
-import { isProjectSpaceResource, Resource } from '@ownclouders/web-client'
+import { Resource } from '@ownclouders/web-client'
 import { useGettext } from 'vue3-gettext'
 import { useClipboard } from '@vueuse/core'
 import { useMessages } from '@ownclouders/web-pkg'
