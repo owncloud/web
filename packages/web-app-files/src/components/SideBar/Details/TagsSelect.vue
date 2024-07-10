@@ -142,10 +142,8 @@ export default defineComponent({
       eventBus.publish(SideBarEventTopics.close)
     }
 
-    const loadAvailableTagsTask = useTask(function* () {
-      const {
-        data: { value: tags = [] }
-      } = yield* call(clientService.graphAuthenticated.tags.getTags())
+    const loadAvailableTagsTask = useTask(function* (signal) {
+      const tags = yield* call(clientService.graphAuthenticated.tags.listTags({ signal }))
 
       allTags = tags
       const selectedLabels = new Set(unref(selectedTags).map((o) => o.label))

@@ -5,10 +5,6 @@ import {
   Drive,
   DrivesApiFactory,
   MeDrivesApi,
-  TagsApiFactory,
-  CollectionOfTags,
-  TagAssignment,
-  TagUnassignment,
   DrivesGetDrivesApi,
   MeDriveApiFactory,
   RoleManagementApiFactory,
@@ -30,14 +26,11 @@ import {
 import { type GraphUsers, UsersFactory } from './users'
 import { type GraphGroups, GroupsFactory } from './groups'
 import { ApplicationsFactory, GraphApplications } from './applications'
+import { TagsFactory, GraphTags } from './tags'
 
 export interface Graph {
   applications: GraphApplications
-  tags: {
-    getTags: () => AxiosPromise<CollectionOfTags>
-    assignTags: (tagAssignment?: TagAssignment) => AxiosPromise<void>
-    unassignTags: (tagUnassignment?: TagUnassignment) => AxiosPromise<void>
-  }
+  tags: GraphTags
   drives: {
     listMyDrives: (orderBy?: string, filter?: string) => Promise<AxiosResponse<CollectionOfDrives>>
     listAllDrives: (orderBy?: string, filter?: string) => Promise<AxiosResponse<CollectionOfDrives>>
@@ -129,7 +122,6 @@ export const graph = (baseURI: string, axiosClient: AxiosInstance): Graph => {
   const allDrivesApi = new DrivesGetDrivesApi(config, config.basePath, axiosClient)
   const meDriveApiFactory = MeDriveApiFactory(config, config.basePath, axiosClient)
   const drivesApiFactory = DrivesApiFactory(config, config.basePath, axiosClient)
-  const tagsApiFactory = TagsApiFactory(config, config.basePath, axiosClient)
   const roleManagementApiFactory = RoleManagementApiFactory(config, config.basePath, axiosClient)
   const driveItemApiFactory = DriveItemApiFactory(config, config.basePath, axiosClient)
   const drivesRootApiFactory = DrivesRootApiFactory(config, config.basePath, axiosClient)
@@ -142,12 +134,7 @@ export const graph = (baseURI: string, axiosClient: AxiosInstance): Graph => {
 
   return <Graph>{
     applications: ApplicationsFactory({ axiosClient, config }),
-    tags: {
-      getTags: () => tagsApiFactory.getTags(),
-      assignTags: (tagAssignment: TagAssignment) => tagsApiFactory.assignTags(tagAssignment),
-      unassignTags: (tagUnassignment: TagUnassignment) =>
-        tagsApiFactory.unassignTags(tagUnassignment)
-    },
+    tags: TagsFactory({ axiosClient, config }),
     drives: {
       listMyDrives: (orderBy?: string, filter?: string) =>
         meDrivesApi.listMyDrives(orderBy, filter),

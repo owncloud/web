@@ -1,4 +1,4 @@
-import { defaultComponentMocks, mount, defaultPlugins, mockAxiosResolve } from 'web-test-helpers'
+import { defaultComponentMocks, mount, defaultPlugins } from 'web-test-helpers'
 import TagsSelect from 'web-app-files/src/components/SideBar/Details/TagsSelect.vue'
 import { mock, mockDeep } from 'vitest-mock-extended'
 import { Resource } from '@ownclouders/web-client'
@@ -16,9 +16,7 @@ describe('Tag Select', () => {
     const tags = 'a,b,c'
     const resource = mock<Resource>({ tags: [] })
     const clientService = mockDeep<ClientService>()
-    clientService.graphAuthenticated.tags.getTags.mockResolvedValueOnce(
-      mockAxiosResolve({ value: tags.split(',') })
-    )
+    clientService.graphAuthenticated.tags.listTags.mockResolvedValueOnce(tags.split(','))
 
     const { wrapper } = createWrapper(resource, clientService)
     await wrapper.vm.loadAvailableTagsTask.last
