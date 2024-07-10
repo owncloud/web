@@ -10,8 +10,6 @@ import {
   TagAssignment,
   TagUnassignment,
   DrivesGetDrivesApi,
-  CollectionOfApplications,
-  ApplicationsApiFactory,
   MeDriveApiFactory,
   RoleManagementApiFactory,
   UnifiedRoleDefinition,
@@ -31,11 +29,10 @@ import {
 } from './generated'
 import { type GraphUsers, UsersFactory } from './users'
 import { type GraphGroups, GroupsFactory } from './groups'
+import { ApplicationsFactory, GraphApplications } from './applications'
 
 export interface Graph {
-  applications: {
-    listApplications: () => AxiosPromise<CollectionOfApplications>
-  }
+  applications: GraphApplications
   tags: {
     getTags: () => AxiosPromise<CollectionOfTags>
     assignTags: (tagAssignment?: TagAssignment) => AxiosPromise<void>
@@ -131,7 +128,6 @@ export const graph = (baseURI: string, axiosClient: AxiosInstance): Graph => {
   const meDrivesApi = new MeDrivesApi(config, config.basePath, axiosClient)
   const allDrivesApi = new DrivesGetDrivesApi(config, config.basePath, axiosClient)
   const meDriveApiFactory = MeDriveApiFactory(config, config.basePath, axiosClient)
-  const applicationsApiFactory = ApplicationsApiFactory(config, config.basePath, axiosClient)
   const drivesApiFactory = DrivesApiFactory(config, config.basePath, axiosClient)
   const tagsApiFactory = TagsApiFactory(config, config.basePath, axiosClient)
   const roleManagementApiFactory = RoleManagementApiFactory(config, config.basePath, axiosClient)
@@ -145,9 +141,7 @@ export const graph = (baseURI: string, axiosClient: AxiosInstance): Graph => {
   const activitiesApiFactory = ActivitiesApiFactory(config, config.basePath, axiosClient)
 
   return <Graph>{
-    applications: {
-      listApplications: () => applicationsApiFactory.listApplications()
-    },
+    applications: ApplicationsFactory({ axiosClient, config }),
     tags: {
       getTags: () => tagsApiFactory.getTags(),
       assignTags: (tagAssignment: TagAssignment) => tagsApiFactory.assignTags(tagAssignment),
