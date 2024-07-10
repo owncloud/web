@@ -28,11 +28,7 @@ export default defineComponent({
     const { copy, copied } = useClipboard({ legacy: true, copiedDuring: 550 })
 
     const copyLinkToClipboard = () => {
-      const link = isProjectSpaceResource(props.resource)
-        ? props.resource.webUrl
-        : props.resource.privateLink
-
-      copy(link)
+      copy(props.resource.privateLink)
       showMessage({
         title: $gettext('Permanent link copied'),
         desc: $gettext('The permanent link has been copied to your clipboard.')

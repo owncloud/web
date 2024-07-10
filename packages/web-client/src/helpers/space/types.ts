@@ -35,7 +35,6 @@ export interface SpaceResource extends Resource {
   spaceImageData: DriveItem
   spaceReadmeData: DriveItem
   webDavTrashPath: string
-  webUrl: string
 
   canDisable(args?: { user?: User; ability?: Ability }): boolean
   canEditDescription(args?: { user?: User; ability?: Ability }): boolean
