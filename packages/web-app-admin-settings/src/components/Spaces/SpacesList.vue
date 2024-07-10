@@ -73,14 +73,13 @@
         />
       </template>
       <template #status="{ item }">
-        <span v-if="item.disabled" class="oc-flex oc-flex-middle">
-          <oc-icon name="stop-circle" fill-type="line" class="oc-mr-s" /><span
-            v-text="$gettext('Disabled')"
-          />
-        </span>
-        <span v-else class="oc-flex oc-flex-middle">
-          <oc-icon name="play-circle" fill-type="line" class="oc-mr-s" /><span
-            v-text="$gettext('Enabled')"
+        <span class="oc-flex oc-flex-middle">
+          <oc-icon
+            v-oc-tooltip="item.disabled ? $gettext('Disabled') : $gettext('Enabled')"
+            :name="item.disabled ? 'stop-circle' : 'play-circle'"
+            size="small"
+            fill-type="line"
+            class="oc-mr-s"
           />
         </span>
       </template>
@@ -155,9 +154,11 @@ import {
 } from '../../composables/keyboardActions'
 import { useSpaceSettingsStore } from '../../composables'
 import { storeToRefs } from 'pinia'
+import { $gettext } from '@ownclouders/web-pkg/src/router/utils'
 
 export default defineComponent({
   name: 'SpacesList',
+  methods: { $gettext },
   components: { ContextMenuQuickAction, Pagination },
   setup() {
     const router = useRouter()
@@ -300,6 +301,12 @@ export default defineComponent({
         tdClass: 'mark-element'
       },
       {
+        name: 'status',
+        title: $gettext('Status'),
+        type: 'slot',
+        sortable: true
+      },
+      {
         name: 'manager',
         title: $gettext('Manager'),
         type: 'slot'
@@ -334,12 +341,7 @@ export default defineComponent({
         type: 'slot',
         sortable: true
       },
-      {
-        name: 'status',
-        title: $gettext('Status'),
-        type: 'slot',
-        sortable: true
-      },
+
       {
         name: 'actions',
         title: $gettext('Actions'),
