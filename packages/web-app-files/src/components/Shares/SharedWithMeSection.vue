@@ -38,11 +38,16 @@
           class="oc-text-nowrap oc-flex oc-flex-middle oc-flex-right"
         >
           <oc-icon
+            v-oc-tooltip="$gettext(resource.shareRoles[0].displayName)"
+            :name="resource.shareRoles[0].icon"
+            fill-type="line"
+          />
+          <oc-icon
             v-if="resource.syncEnabled"
             v-oc-tooltip="$gettext('Synced with your devices')"
             :accessible-label="$gettext('Synced with your devices')"
             name="loop-right"
-            class="sync-enabled"
+            class="sync-enabled oc-ml-s"
           />
         </div>
       </template>
