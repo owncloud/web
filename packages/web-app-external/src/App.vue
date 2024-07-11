@@ -5,7 +5,6 @@
     class="oc-width-1-1 oc-height-1-1"
     :title="iFrameTitle"
     allowfullscreen
-    sandbox="allow-scripts allow-same-origin"
   />
   <div v-if="appUrl && method === 'POST' && formParameters" class="oc-height-1-1 oc-width-1-1">
     <form :action="appUrl" target="app-iframe" method="post">
@@ -19,7 +18,6 @@
       class="oc-width-1-1 oc-height-1-1"
       :title="iFrameTitle"
       allowfullscreen
-      sandbox="allow-scripts allow-same-origin"
     />
   </div>
 </template>
