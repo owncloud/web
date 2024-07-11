@@ -25,6 +25,10 @@ exports[`SpacesList > should render all spaces in a table 1`] = `
             <!--v-if-->
             <!-- @slot Content of the button --> <span class="oc-icon oc-icon-s oc-icon-passive"><!----></span>
           </button></th>
+        <th class="oc-table-cell oc-table-cell-align-left oc-table-cell-align-middle oc-table-cell-width-auto oc-text-nowrap oc-th oc-table-header-cell oc-table-header-cell-status" style="top: 0px;" aria-sort="none"><span class="oc-table-thead-content header-text">Status</span> <button type="button" aria-label="Sort by status" class="oc-button oc-rounded oc-button-m oc-button-justify-content-center oc-button-gap-m oc-button-passive oc-button-passive-raw oc-invisible-sr oc-button-sort">
+            <!--v-if-->
+            <!-- @slot Content of the button --> <span class="oc-icon oc-icon-s oc-icon-passive"><!----></span>
+          </button></th>
         <th class="oc-table-cell oc-table-cell-align-left oc-table-cell-align-middle oc-table-cell-width-auto oc-text-nowrap oc-th oc-table-header-cell oc-table-header-cell-manager" style="top: 0px;"><span class="oc-table-thead-content header-text">Manager</span>
           <!--v-if-->
         </th>
@@ -48,10 +52,6 @@ exports[`SpacesList > should render all spaces in a table 1`] = `
             <!--v-if-->
             <!-- @slot Content of the button --> <span class="oc-icon oc-icon-s oc-icon-passive"><!----></span>
           </button></th>
-        <th class="oc-table-cell oc-table-cell-align-left oc-table-cell-align-middle oc-table-cell-width-auto oc-text-nowrap oc-th oc-table-header-cell oc-table-header-cell-status" style="top: 0px;" aria-sort="none"><span class="oc-table-thead-content header-text">Status</span> <button type="button" aria-label="Sort by status" class="oc-button oc-rounded oc-button-m oc-button-justify-content-center oc-button-gap-m oc-button-passive oc-button-passive-raw oc-invisible-sr oc-button-sort">
-            <!--v-if-->
-            <!-- @slot Content of the button --> <span class="oc-icon oc-icon-s oc-icon-passive"><!----></span>
-          </button></th>
         <th class="oc-table-cell oc-table-cell-align-right oc-table-cell-align-middle oc-table-cell-width-auto oc-text-nowrap oc-th oc-table-header-cell oc-table-header-cell-actions oc-pr-s" style="top: 0px;"><span class="oc-table-thead-content header-text">Actions</span>
           <!--v-if-->
         </th>
@@ -64,15 +64,15 @@ exports[`SpacesList > should render all spaces in a table 1`] = `
         </td>
         <td class="oc-table-cell oc-table-cell-align-left oc-table-cell-align-middle oc-table-cell-width-shrink oc-td oc-table-data-cell oc-table-data-cell-icon"><span class="oc-icon oc-icon-m oc-icon-passive"><!----></span></td>
         <td class="oc-table-cell oc-table-cell-align-left oc-table-cell-align-middle oc-table-cell-width-auto oc-td oc-table-data-cell oc-table-data-cell-name mark-element"><span class="spaces-table-space-name" data-test-space-name="1 Some space">1 Some space</span></td>
+        <td class="oc-table-cell oc-table-cell-align-left oc-table-cell-align-middle oc-table-cell-width-auto oc-td oc-table-data-cell oc-table-data-cell-status"><span class="oc-flex oc-flex-middle"><span class="oc-icon oc-icon-s oc-icon-passive oc-mr-s"><!----></span></span></td>
         <td class="oc-table-cell oc-table-cell-align-left oc-table-cell-align-middle oc-table-cell-width-auto oc-td oc-table-data-cell oc-table-data-cell-manager">user1, user2... +1</td>
         <td class="oc-table-cell oc-table-cell-align-left oc-table-cell-align-middle oc-table-cell-width-auto oc-td oc-table-data-cell oc-table-data-cell-members">3</td>
         <td class="oc-table-cell oc-table-cell-align-left oc-table-cell-align-middle oc-table-cell-width-auto oc-td oc-table-data-cell oc-table-data-cell-totalQuota">1 GB</td>
         <td class="oc-table-cell oc-table-cell-align-left oc-table-cell-align-middle oc-table-cell-width-auto oc-td oc-table-data-cell oc-table-data-cell-usedQuota">0 B</td>
         <td class="oc-table-cell oc-table-cell-align-left oc-table-cell-align-middle oc-table-cell-width-auto oc-td oc-table-data-cell oc-table-data-cell-remainingQuota">1 GB</td>
         <td class="oc-table-cell oc-table-cell-align-left oc-table-cell-align-middle oc-table-cell-width-auto oc-td oc-table-data-cell oc-table-data-cell-mdate"><span tabindex="0"></span></td>
-        <td class="oc-table-cell oc-table-cell-align-left oc-table-cell-align-middle oc-table-cell-width-auto oc-td oc-table-data-cell oc-table-data-cell-status"><span class="oc-flex oc-flex-middle"><span class="oc-icon oc-icon-m oc-icon-passive oc-mr-s"><!----></span><span>Enabled</span></span></td>
         <td class="oc-table-cell oc-table-cell-align-right oc-table-cell-align-middle oc-table-cell-width-auto oc-td oc-table-data-cell oc-table-data-cell-actions oc-pr-s">
-          <div class="spaces-list-actions"><button type="button" aria-label="Show details" class="oc-button oc-rounded oc-button-m oc-button-justify-content-center oc-button-gap-m oc-button-passive oc-button-passive-raw spaces-table-btn-details">
+          <div class="spaces-list-actions"><button type="button" aria-label="Show details" class="oc-button oc-rounded oc-button-m oc-button-justify-content-center oc-button-gap-m oc-button-passive oc-button-passive-raw oc-mr-xs quick-action-button spaces-table-btn-details oc-p-xs">
               <!--v-if-->
               <!-- @slot Content of the button --> <span class="oc-icon oc-icon-m oc-icon-passive"><!----></span>
             </button> <button type="button" aria-label="Show context menu" class="oc-button oc-rounded oc-button-m oc-button-justify-content-center oc-button-gap-m oc-button-passive oc-button-passive-raw spaces-table-btn-action-dropdown" id="context-menu-trigger-1">
@@ -90,15 +90,15 @@ exports[`SpacesList > should render all spaces in a table 1`] = `
         </td>
         <td class="oc-table-cell oc-table-cell-align-left oc-table-cell-align-middle oc-table-cell-width-shrink oc-td oc-table-data-cell oc-table-data-cell-icon"><span class="oc-icon oc-icon-m oc-icon-passive"><!----></span></td>
         <td class="oc-table-cell oc-table-cell-align-left oc-table-cell-align-middle oc-table-cell-width-auto oc-td oc-table-data-cell oc-table-data-cell-name mark-element"><span class="spaces-table-space-name" data-test-space-name="2 Another space">2 Another space</span></td>
+        <td class="oc-table-cell oc-table-cell-align-left oc-table-cell-align-middle oc-table-cell-width-auto oc-td oc-table-data-cell oc-table-data-cell-status"><span class="oc-flex oc-flex-middle"><span class="oc-icon oc-icon-s oc-icon-passive oc-mr-s"><!----></span></span></td>
         <td class="oc-table-cell oc-table-cell-align-left oc-table-cell-align-middle oc-table-cell-width-auto oc-td oc-table-data-cell oc-table-data-cell-manager">user1, user2... +1</td>
         <td class="oc-table-cell oc-table-cell-align-left oc-table-cell-align-middle oc-table-cell-width-auto oc-td oc-table-data-cell oc-table-data-cell-members">5</td>
         <td class="oc-table-cell oc-table-cell-align-left oc-table-cell-align-middle oc-table-cell-width-auto oc-td oc-table-data-cell oc-table-data-cell-totalQuota">2 GB</td>
         <td class="oc-table-cell oc-table-cell-align-left oc-table-cell-align-middle oc-table-cell-width-auto oc-td oc-table-data-cell oc-table-data-cell-usedQuota">500 MB</td>
         <td class="oc-table-cell oc-table-cell-align-left oc-table-cell-align-middle oc-table-cell-width-auto oc-td oc-table-data-cell oc-table-data-cell-remainingQuota">1.5 GB</td>
         <td class="oc-table-cell oc-table-cell-align-left oc-table-cell-align-middle oc-table-cell-width-auto oc-td oc-table-data-cell oc-table-data-cell-mdate"><span tabindex="0"></span></td>
-        <td class="oc-table-cell oc-table-cell-align-left oc-table-cell-align-middle oc-table-cell-width-auto oc-td oc-table-data-cell oc-table-data-cell-status"><span class="oc-flex oc-flex-middle"><span class="oc-icon oc-icon-m oc-icon-passive oc-mr-s"><!----></span><span>Disabled</span></span></td>
         <td class="oc-table-cell oc-table-cell-align-right oc-table-cell-align-middle oc-table-cell-width-auto oc-td oc-table-data-cell oc-table-data-cell-actions oc-pr-s">
-          <div class="spaces-list-actions"><button type="button" aria-label="Show details" class="oc-button oc-rounded oc-button-m oc-button-justify-content-center oc-button-gap-m oc-button-passive oc-button-passive-raw spaces-table-btn-details">
+          <div class="spaces-list-actions"><button type="button" aria-label="Show details" class="oc-button oc-rounded oc-button-m oc-button-justify-content-center oc-button-gap-m oc-button-passive oc-button-passive-raw oc-mr-xs quick-action-button spaces-table-btn-details oc-p-xs">
               <!--v-if-->
               <!-- @slot Content of the button --> <span class="oc-icon oc-icon-m oc-icon-passive"><!----></span>
             </button> <button type="button" aria-label="Show context menu" class="oc-button oc-rounded oc-button-m oc-button-justify-content-center oc-button-gap-m oc-button-passive oc-button-passive-raw spaces-table-btn-action-dropdown" id="context-menu-trigger-2">

@@ -70,7 +70,7 @@
           v-oc-tooltip="$gettext('Show details')"
           :aria-label="$gettext('Show details')"
           appearance="raw"
-          class="oc-mr-xs groups-table-btn-details oc-p-xs"
+          class="oc-mr-xs quick-action-button groups-table-btn-details oc-p-xs"
           @click="showDetails(item)"
         >
           <oc-icon name="information" fill-type="line" />
