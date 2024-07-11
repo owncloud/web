@@ -1,5 +1,5 @@
 import { urlJoin } from '../utils'
-import { SpaceResource } from '../helpers'
+import { extractNodeId, isPublicSpaceResource, SpaceResource } from '../helpers'
 import { WebDavOptions } from './types'
 import { DAV, DAVRequestOptions } from './client'
 import { HttpError } from '../errors'
@@ -14,7 +14,7 @@ export const GetFileContentsFactory = (dav: DAV, { axiosClient }: WebDavOptions)
   return {
     async getFileContents(
       space: SpaceResource,
-      { path }: { path?: string },
+      { fileId, path }: { fileId?: string; path?: string },
       {
         responseType = 'text',
         noCache = true,
@@ -25,8 +25,13 @@ export const GetFileContentsFactory = (dav: DAV, { axiosClient }: WebDavOptions)
         noCache?: boolean
       } & DAVRequestOptions = {}
     ): Promise<GetFileContentsResponse> {
+      let webDavPath = urlJoin(space.webDavPath, path)
+      if (fileId && !isPublicSpaceResource(space)) {
+        webDavPath = `${space.webDavPath}!${extractNodeId(fileId)}`
+      }
+
       try {
-        const response = await axiosClient.get(dav.getFileUrl(urlJoin(space.webDavPath, path)), {
+        const response = await axiosClient.get(dav.getFileUrl(webDavPath), {
           responseType,
           headers: {
             ...(noCache && { 'Cache-Control': 'no-cache' }),

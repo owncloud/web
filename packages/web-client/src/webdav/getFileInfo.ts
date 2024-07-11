@@ -10,7 +10,7 @@ export const GetFileInfoFactory = (
   return {
     async getFileInfo(
       space: SpaceResource,
-      resource?: { path?: string; fileId?: string | number },
+      resource?: { path?: string; fileId?: string },
       options?: ListFilesOptions
     ): Promise<Resource> {
       return (

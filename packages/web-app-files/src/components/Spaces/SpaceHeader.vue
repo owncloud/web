@@ -188,11 +188,11 @@ export default defineComponent({
         }
 
         const fileContentsResponse = await getFileContents(props.space, {
-          path: `.space/${props.space.spaceReadmeData.name}`
+          fileId: props.space.spaceReadmeData.id
         })
 
         const fileInfoResponse = await getFileInfo(props.space, {
-          path: `.space/${props.space.spaceReadmeData.name}`
+          fileId: props.space.spaceReadmeData.id
         })
 
         unobserveMarkdownContainerResize()

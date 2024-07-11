@@ -135,7 +135,7 @@ import {
 } from 'vue'
 import { RouteLocationNamedRaw } from 'vue-router'
 import { useGettext } from 'vue3-gettext'
-import { Resource } from '@ownclouders/web-client'
+import { Resource, urlJoin } from '@ownclouders/web-client'
 import {
   isPersonalSpaceResource,
   isProjectSpaceResource,
@@ -266,8 +266,13 @@ export default defineComponent({
 
     const resourcesStore = useResourcesStore()
     const { removeResources, resetSelection, updateResourceField } = resourcesStore
-    const { currentFolder, totalResourcesCount, totalResourcesSize, areHiddenFilesShown } =
-      storeToRefs(resourcesStore)
+    const {
+      currentFolder,
+      totalResourcesCount,
+      totalResourcesSize,
+      areHiddenFilesShown,
+      ancestorMetaData
+    } = storeToRefs(resourcesStore)
 
     let loadResourcesEventToken: string
 
@@ -285,10 +290,15 @@ export default defineComponent({
     })
 
     const resourceTargetRouteCallback = ({
-      path,
-      fileId
+      fileId,
+      resource
     }: CreateTargetRouteOptions): RouteLocationNamedRaw => {
-      const { params, query } = createFileRouteOptions(unref(space), { path, fileId })
+      const latest = Object.values(unref(ancestorMetaData))?.pop()
+      const { params, query } = createFileRouteOptions(unref(space), {
+        path: urlJoin(latest?.path || '', resource.name),
+        fileId
+      })
+
       if (isPublicSpaceResource(unref(space))) {
         return createLocationPublic('files-public-link', { params, query })
       }
@@ -392,8 +402,12 @@ export default defineComponent({
       return concatBreadcrumbs(
         ...rootBreadcrumbItems,
         spaceBreadcrumbItem,
-        // FIXME: needs file ids for each parent folder path
-        ...breadcrumbsFromPath({ route: unref(route), space, resourcePath: props.item })
+        ...breadcrumbsFromPath({
+          route: unref(route),
+          space,
+          resourcePath: props.item,
+          ancestorMetaData
+        })
       )
     })
 
@@ -554,6 +568,7 @@ export default defineComponent({
         const path = decodeURIComponent(fileTarget.path.slice(splitIndex, fileTarget.path.length))
 
         try {
+          // we only have path info here because that comes from the breadcrumb
           targetFolder = await clientService.webdav.getFileInfo(unref(space), { path })
         } catch (e) {
           console.error(e)

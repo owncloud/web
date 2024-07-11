@@ -5,7 +5,7 @@ import * as uuid from 'uuid'
 import { Language } from 'vue3-gettext'
 import { Ref, unref } from 'vue'
 import { RouteLocationNormalizedLoaded } from 'vue-router'
-import { SpaceResource } from '@ownclouders/web-client'
+import { extractNodeId, SpaceResource } from '@ownclouders/web-client'
 import { urlJoin } from '@ownclouders/web-client'
 import { UploadResourceConflict } from './helpers/resource'
 import {
@@ -142,9 +142,7 @@ export class HandleUpload extends BasePlugin {
         topLevelFolderId = topLevelFolderIds[topLevelDirectory]
       }
 
-      const webDavUrl = unref(this.space).getWebDavUrl({
-        path: currentFolderPath.split('/').map(encodeURIComponent).join('/')
-      })
+      const webDavUrl = unref(this.space).getWebDavUrl(currentFolderId)
 
       let endpoint = urlJoin(webDavUrl, directory.split('/').map(encodeURIComponent).join('/'))
       if (!this.uppy.getPlugin('Tus')) {

@@ -223,7 +223,7 @@ export default defineComponent({
     const addMissingDriveAliasAndItem = async () => {
       const id = unref(fileId)
       const { space, path } = await getResourceContext(id)
-      const driveAliasAndItem = space.getDriveAliasAndItem({ path } as Resource)
+      const driveAliasAndItem = space.getDriveAliasAndItem(path)
 
       if (isPersonalSpaceResource(space)) {
         return router.push({
@@ -343,10 +343,14 @@ export default defineComponent({
     const saveFileTask = useTask(function* () {
       const newContent = unref(currentContent)
       try {
-        const putFileContentsResponse = yield putFileContents(currentFileContext, {
-          content: newContent,
-          previousEntityTag: unref(currentETag)
-        })
+        const putFileContentsResponse = yield putFileContents(
+          currentFileContext,
+          {
+            content: newContent,
+            previousEntityTag: unref(currentETag)
+          },
+          unref(resource).parentFolderId
+        )
         serverContent.value = newContent
         currentETag.value = putFileContentsResponse.etag
         resourcesStore.upsertResource(putFileContentsResponse)
@@ -405,15 +409,12 @@ export default defineComponent({
       }
       const editorOptions = configStore.options.editor
       if (editorOptions.autosaveEnabled) {
-        autosaveIntervalId = setInterval(
-          async () => {
-            if (isDirty.value) {
-              await save()
-              autosavePopup()
-            }
-          },
-          (editorOptions.autosaveInterval || 120) * 1000
-        )
+        autosaveIntervalId = setInterval(async () => {
+          if (isDirty.value) {
+            await save()
+            autosavePopup()
+          }
+        }, (editorOptions.autosaveInterval || 120) * 1000)
       }
     })
     onBeforeUnmount(() => {

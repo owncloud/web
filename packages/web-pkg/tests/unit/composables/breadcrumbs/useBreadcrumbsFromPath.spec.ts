@@ -12,7 +12,8 @@ describe('useBreadcrumbsFromPath', () => {
       const breadCrumbs = breadcrumbsFromPath({
         route: { path: '/files/spaces/personal/home/test' } as RouteLocation,
         space: ref(mock<SpaceResource>()),
-        resourcePath: '/test'
+        resourcePath: '/test',
+        ancestorMetaData: ref({})
       })
       expect(breadCrumbs).toEqual([
         {
@@ -34,7 +35,8 @@ describe('useBreadcrumbsFromPath', () => {
       const breadCrumbsFromPath = breadcrumbsFromPath({
         route: { path: '/app/foo/bar?all=500' } as RouteLocation,
         space: ref(mock<SpaceResource>()),
-        resourcePath: '/bar'
+        resourcePath: '/bar',
+        ancestorMetaData: ref({})
       })
       const result = concatBreadcrumbs(...initialBreadCrumbs, ...breadCrumbsFromPath)
       expect(result[0]).toMatchObject({ text: 'Foo' })

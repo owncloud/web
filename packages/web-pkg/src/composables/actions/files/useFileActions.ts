@@ -35,6 +35,7 @@ import { Resource, SpaceResource } from '@ownclouders/web-client'
 import { storeToRefs } from 'pinia'
 import { useEmbedMode } from '../../embedMode'
 import { RouteRecordName } from 'vue-router'
+import { useResourcePath } from '../../resources'
 
 export const EDITOR_MODE_EDIT = 'edit'
 export const EDITOR_MODE_CREATE = 'create'
@@ -50,6 +51,7 @@ export const useFileActions = () => {
   const { $gettext } = useGettext()
   const isSearchActive = useIsSearchActive()
   const { isEnabled: isEmbedModeEnabled } = useEmbedMode()
+  const { getResourcePath } = useResourcePath()
 
   const { openUrl } = useWindowOpen()
 
@@ -160,11 +162,12 @@ export const useFileActions = () => {
     mode: string,
     remoteItemId: string
   ) => {
+    const path = getResourcePath(space, resource)
     return {
       name: routeName,
       params: {
-        driveAliasAndItem: space.getDriveAliasAndItem(resource),
-        filePath: resource.path,
+        driveAliasAndItem: space.getDriveAliasAndItem(path),
+        filePath: path,
         fileId: resource.fileId,
         mode
       },
@@ -185,10 +188,9 @@ export const useFileActions = () => {
     const remoteItemId = isShareSpaceResource(space) ? space.id : undefined
     const routeName = appFileExtension.routeName || appFileExtension.app
     const routeOpts = getEditorRouteOpts(routeName, space, resource, mode, remoteItemId)
-
     if (configStore.options.openAppsInTab) {
       const path = router.resolve(routeOpts).href
-      const target = `${appFileExtension.routeName}-${resource.path}`
+      const target = `${appFileExtension.routeName}-${resource.id}`
 
       openUrl(path, target, true)
       return

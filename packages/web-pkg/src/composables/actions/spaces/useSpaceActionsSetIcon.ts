@@ -5,7 +5,7 @@ import { useClientService } from '../../clientService'
 import { useLoadingService } from '../../loadingService'
 import { useGettext } from 'vue3-gettext'
 import { useMessages, useModals, useSpacesStore, useUserStore } from '../../piniaStores'
-import { useCreateSpace } from '../../spaces'
+import { useCreateSpace, useSpaceHelpers } from '../../spaces'
 import { buildSpace } from '@ownclouders/web-client'
 import { eventBus } from '../../../services'
 import { Drive } from '@ownclouders/web-client/graph/generated'
@@ -21,6 +21,8 @@ export const useSpaceActionsSetIcon = () => {
   const spacesStore = useSpacesStore()
   const { createDefaultMetaFolder } = useCreateSpace()
   const { dispatchModal } = useModals()
+  const { getDefaultMetaFolder } = useSpaceHelpers()
+
   const handler = ({ resources }: SpaceActionOptions) => {
     if (resources.length !== 1) {
       return
@@ -65,10 +67,9 @@ export const useSpaceActionsSetIcon = () => {
     const graphClient = clientService.graphAuthenticated
     const content = await generateEmojiImage(emoji)
 
-    try {
-      await clientService.webdav.getFileInfo(space, { path: '.space' })
-    } catch (_) {
-      await createDefaultMetaFolder(space)
+    let metaFolder = await getDefaultMetaFolder(space)
+    if (!metaFolder) {
+      metaFolder = await createDefaultMetaFolder(space, metaFolder.id)
     }
 
     return loadingService.addTask(async () => {
@@ -78,7 +79,8 @@ export const useSpaceActionsSetIcon = () => {
 
       try {
         const { fileId } = await clientService.webdav.putFileContents(space, {
-          path: `/.space/emoji.png`,
+          fileId: metaFolder.id,
+          fileName: 'emoji.png',
           content,
           headers,
           overwrite: true

@@ -227,7 +227,7 @@ export default defineComponent({
     const sharedAncestor = computed(() => {
       return Object.values(unref(ancestorMetaData)).find(
         (a) =>
-          a.path !== unref(resource).path &&
+          a.id !== unref(resource).id &&
           ShareTypes.containsAnyValue(ShareTypes.authenticated, a.shareTypes)
       )
     })

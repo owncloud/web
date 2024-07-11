@@ -12,12 +12,14 @@ import path, { dirname } from 'path'
 import { ResourceRouteResolverOptions, useResourceRouteResolver } from '../filesList'
 import { createLocationShares, createLocationSpaces } from '../../router'
 import { useCapabilityStore } from '../piniaStores'
+import { useResourcePath } from '../resources'
 
 export const useFolderLink = (options: ResourceRouteResolverOptions = {}) => {
   const capabilityStore = useCapabilityStore()
   const { $gettext } = useGettext()
   const { getInternalSpace, getMatchingSpace, isResourceAccessible } = useGetMatchingSpace()
   const { createFolderLink } = useResourceRouteResolver(options)
+  const { getResourcePath } = useResourcePath()
 
   const getPathPrefix = (resource: Resource) => {
     const space = unref(options.space) || getMatchingSpace(resource)
@@ -42,11 +44,12 @@ export const useFolderLink = (options: ResourceRouteResolverOptions = {}) => {
 
   const getParentFolderLink = (resource: Resource) => {
     const space = unref(options.space) || getMatchingSpace(resource)
+    const path = getResourcePath(space, resource)
     const parentFolderAccessible = isResourceAccessible({
       space,
-      path: dirname(resource.path)
+      path: dirname(path)
     })
-    if ((resource.remoteItemId && resource.path === '/') || !parentFolderAccessible) {
+    if ((resource.remoteItemId && path === '/') || !parentFolderAccessible) {
       return createLocationShares('files-shares-with-me')
     }
     if (isProjectSpaceResource(resource)) {
@@ -54,7 +57,7 @@ export const useFolderLink = (options: ResourceRouteResolverOptions = {}) => {
     }
 
     return createFolderLink({
-      path: dirname(resource.path),
+      path: dirname(path),
       ...(resource.parentFolderId && { fileId: resource.parentFolderId }),
       resource
     })
@@ -62,14 +65,15 @@ export const useFolderLink = (options: ResourceRouteResolverOptions = {}) => {
 
   const getParentFolderName = (resource: Resource) => {
     const space = unref(options.space) || getMatchingSpace(resource)
+    const path = getResourcePath(space, resource)
     const parentFolderAccessible = isResourceAccessible({
       space,
-      path: dirname(resource.path)
+      path: dirname(path)
     })
     if (isShareRoot(resource) || !parentFolderAccessible) {
       return $gettext('Shared with me')
     }
-    const parentFolder = extractParentFolderName(resource)
+    const parentFolder = extractParentFolderName(path)
     if (parentFolder) {
       return parentFolder
     }

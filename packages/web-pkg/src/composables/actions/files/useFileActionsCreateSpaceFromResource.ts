@@ -5,7 +5,7 @@ import { FileAction, FileActionOptions } from '../../actions'
 import { useAbility } from '../../ability'
 import { useClientService } from '../../clientService'
 import { useRouter } from '../../router'
-import { Resource, SpaceResource, isPersonalSpaceResource } from '@ownclouders/web-client'
+import { Resource, SpaceResource, isPersonalSpaceResource, urlJoin } from '@ownclouders/web-client'
 import { isLocationSpacesActive } from '../../../router'
 import { useCreateSpace } from '../../spaces'
 import { useSpaceHelpers } from '../../spaces'
@@ -52,8 +52,10 @@ export const useFileActionsCreateSpaceFromResource = () => {
       spacesStore.upsertSpace(createdSpace)
 
       if (resources.length === 1 && resources[0].isFolder) {
-        //If a single folder is selected we copy it's content to the Space's root folder
-        resources = (await webdav.listFiles(space, { path: resources[0].path })).children
+        // if a single folder is selected we copy it's content to the Space's root folder
+        const originalFolderName = resources[0].name
+        resources = (await webdav.listFiles(space, { fileId: resources[0].id })).children
+        resources.forEach((r) => (r.path = urlJoin(originalFolderName, r.path)))
       }
 
       for (const resource of resources) {

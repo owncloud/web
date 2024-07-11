@@ -130,9 +130,9 @@ export const useFileActionsCreateNewFile = ({ space }: { space?: Ref<SpaceResour
               currentFolder: unref(currentFolder)
             })
           } else {
-            const path = join(unref(currentFolder).path, fileName)
-            resource = await (clientService.webdav as WebDAV).putFileContents(unref(space), {
-              path
+            resource = await clientService.webdav.putFileContents(unref(space), {
+              fileId: unref(currentFolder).id,
+              fileName
             })
           }
 

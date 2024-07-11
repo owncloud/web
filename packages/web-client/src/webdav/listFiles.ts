@@ -1,6 +1,7 @@
 import {
   buildDeletedResource,
   buildResource,
+  extractNodeId,
   Resource,
   WebDavResponseResource
 } from '../helpers/resource'
@@ -30,7 +31,7 @@ export const ListFilesFactory = (
   return {
     async listFiles(
       space: SpaceResource,
-      { path, fileId }: { path?: string; fileId?: string | number } = {},
+      { path, fileId }: { path?: string; fileId?: string } = {},
       { depth = 1, davProperties, isTrash = false, ...opts }: ListFilesOptions = {}
     ): Promise<ListFilesResult> {
       let webDavResources: WebDavResponseResource[]
@@ -103,6 +104,9 @@ export const ListFilesFactory = (
         let webDavPath = urlJoin(space.webDavPath, path)
         if (isTrash) {
           webDavPath = buildWebDavSpacesTrashPath(space.id.toString())
+        }
+        if (fileId) {
+          webDavPath = `${space.webDavPath}!${extractNodeId(fileId)}`
         }
 
         webDavResources = await dav.propfind(webDavPath, {

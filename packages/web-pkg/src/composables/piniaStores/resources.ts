@@ -1,22 +1,19 @@
 import { defineStore } from 'pinia'
 import { Ref, computed, ref, unref } from 'vue'
 import {
-  extractStorageId,
-  isMountPointSpaceResource,
+  extractNodeId,
   isProjectSpaceResource,
+  isPublicSpaceResource,
   SpaceResource,
+  urlJoin,
   type Resource
 } from '@ownclouders/web-client'
-import { getIndicators, getParentPaths } from '../../helpers'
+import { getIndicators } from '../../helpers'
 import { AncestorMetaData, AncestorMetaDataValue } from '../../types'
-import { DavProperty, WebDAV } from '@ownclouders/web-client/webdav'
-import { useSpacesStore } from './spaces'
+import { WebDAV } from '@ownclouders/web-client/webdav'
 import { useUserStore } from './user'
-import { useConfigStore } from './config'
 
 export const useResourcesStore = defineStore('resources', () => {
-  const configStore = useConfigStore()
-  const spacesStore = useSpacesStore()
   const userStore = useUserStore()
 
   const resources = ref<Resource[]>([]) as Ref<Resource[]>
@@ -182,8 +179,8 @@ export const useResourcesStore = defineStore('resources', () => {
     window.localStorage.setItem('oc_webDavDetailsShown', value.toString())
   }
 
-  const loadIndicators = (space: SpaceResource, path: string) => {
-    const files = unref(resources).filter((f) => f.path.startsWith(path))
+  const loadIndicators = (space: SpaceResource, id: string) => {
+    const files = unref(resources).filter((f) => [f.id, f.parentFolderId].includes(id))
     for (const resource of files) {
       const indicators = getIndicators({
         space,
@@ -221,7 +218,7 @@ export const useResourcesStore = defineStore('resources', () => {
     }
   }
 
-  const loadAncestorMetaData = ({
+  const loadAncestorMetaData = async ({
     folder,
     space,
     client
@@ -230,65 +227,83 @@ export const useResourcesStore = defineStore('resources', () => {
     space: SpaceResource
     client: WebDAV
   }) => {
-    const data: AncestorMetaData = {
-      [folder.path]: {
-        id: folder.fileId,
-        shareTypes: folder.shareTypes,
-        parentFolderId: folder.parentFolderId,
-        spaceId: space.id,
-        path: folder.path
-      }
-    }
-    const promises = []
-    const davProperties = [DavProperty.FileId, DavProperty.ShareTypes, DavProperty.FileParent]
-    const parentPaths = getParentPaths(folder.path)
-    const spaces = spacesStore.spaces
-
-    const getMountPoints = () =>
-      spaces.filter(
-        (s) =>
-          isMountPointSpaceResource(s) && extractStorageId(s.root.remoteItem.rootId) === space.id
-      )
-
-    let fullyAccessibleSpace = true
-    if (configStore.options.routing.fullShareOwnerPaths) {
-      // keep logic in sync with "isResourceAccessible" from useGetMatchingSpace
-      const projectSpace = spaces.find((s) => isProjectSpaceResource(s) && s.id === space.id)
-      fullyAccessibleSpace = space.isOwner(userStore.user) || projectSpace?.isMember(userStore.user)
+    const currentFolderData: AncestorMetaDataValue = {
+      id: folder.fileId,
+      shareTypes: folder.shareTypes,
+      parentFolderId: folder.parentFolderId,
+      spaceId: space.id,
+      name: folder.name,
+      storageId: folder.storageId,
+      // gets injected later, we don't know that yet because id-based dav requests return '/' as path
+      path: undefined
     }
 
-    for (const path of parentPaths) {
-      const cachedData = unref(ancestorMetaData)[path] ?? null
-      if (cachedData?.spaceId === space.id) {
-        data[path] = cachedData
-        continue
-      }
-
-      // keep logic in sync with "isResourceAccessible" from useGetMatchingSpace
-      if (
-        !fullyAccessibleSpace &&
-        !getMountPoints().find((m) => path.startsWith(m.root.remoteItem.path))
-      ) {
-        // no access to the parent resource
-        break
-      }
-
-      promises.push(
-        client.listFiles(space, { path }, { depth: 0, davProperties }).then(({ resource }) => {
-          data[path] = {
-            id: resource.fileId,
-            shareTypes: resource.shareTypes,
-            parentFolderId: resource.parentFolderId,
-            spaceId: space.id,
-            path
-          }
-        })
-      )
+    let isSpaceRoot = folder.parentFolderId === folder.storageId
+    if (isPublicSpaceResource(space)) {
+      // space root on public spaces has a 3-part parentFolderId
+      const spaceId = folder.storageId.split('$').pop()
+      const fullStorageId = `${folder.storageId}!${spaceId}`
+      isSpaceRoot = folder.parentFolderId === fullStorageId
     }
 
-    return Promise.all(promises).then(() => {
-      setAncestorMetaData(data)
+    if (isSpaceRoot) {
+      currentFolderData.path = '/'
+      // folder is space root, meaning there are no other ancestors
+      setAncestorMetaData({ ['/']: currentFolderData })
+      return
+    }
+
+    const data: AncestorMetaDataValue[] = [currentFolderData]
+
+    if (folder.parentFolderId) {
+      const cache = Object.values(unref(ancestorMetaData))
+
+      const loadDataForAncestor = async (parentFolderId: string) => {
+        const isSpaceRoot = space.id.endsWith(extractNodeId(parentFolderId))
+
+        let resource: Resource
+        const cachedResource = cache.find(({ id }) => id === parentFolderId)
+        if (cachedResource?.spaceId === space.id) {
+          resource = cachedResource
+        } else if (isSpaceRoot) {
+          // const nodeId = space.id.split('$').pop()
+          // resource = { ...space, id: `${space.id}!${nodeId}` }
+          resource = space
+        } else {
+          const response = await client.listFiles(space, { fileId: parentFolderId }, { depth: 0 })
+          resource = response.resource
+        }
+
+        data.push({
+          id: resource.id,
+          shareTypes: resource.shareTypes,
+          parentFolderId: resource.parentFolderId,
+          spaceId: space.id,
+          name: resource.name,
+          storageId: resource.storageId,
+          path: ''
+        } as AncestorMetaDataValue)
+
+        if (resource.parentFolderId !== resource.storageId && !isSpaceRoot) {
+          return loadDataForAncestor(resource.parentFolderId)
+        }
+      }
+
+      await loadDataForAncestor(folder.parentFolderId)
+    }
+
+    let path = ''
+    const dataWithPathInjected = data.reverse().map((d, i) => {
+      path = i === 0 ? '/' : urlJoin(path, d.name)
+      return { ...d, path }
     })
+
+    const ancestorData: AncestorMetaData = {}
+    dataWithPathInjected.forEach((ancestor) => {
+      ancestorData[ancestor.path] = ancestor
+    })
+
+    setAncestorMetaData(ancestorData)
   }
 
   return {

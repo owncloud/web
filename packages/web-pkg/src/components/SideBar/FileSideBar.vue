@@ -386,7 +386,7 @@ export default defineComponent({
         // shared resources look different, hence we need to fetch the actual resource here
         try {
           let fullResource = await clientService.webdav.getFileInfo(props.space, {
-            path: resource.path
+            fileId: resource.id
           })
 
           // make sure props from the share (=resource) are available on the full resource as well

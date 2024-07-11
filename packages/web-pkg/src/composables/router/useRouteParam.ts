@@ -2,9 +2,14 @@ import { computed, Ref, unref } from 'vue'
 import { useRouter } from './useRouter'
 import { ParamValue } from './types'
 import { queryItemAsString } from '../appDefaults'
+import { Router } from 'vue-router'
 
-export const useRouteParam = (name: string, defaultValue?: ParamValue): Ref<ParamValue> => {
-  const router = useRouter()
+export const useRouteParam = (
+  name: string,
+  defaultValue?: ParamValue,
+  router?: Router
+): Ref<ParamValue> => {
+  router = router || useRouter()
 
   return computed({
     get() {

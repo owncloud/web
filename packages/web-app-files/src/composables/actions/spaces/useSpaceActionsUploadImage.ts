@@ -7,7 +7,8 @@ import {
   usePreviewService,
   useUserStore,
   useMessages,
-  useSpacesStore
+  useSpacesStore,
+  useSpaceHelpers
 } from '@ownclouders/web-pkg'
 import { eventBus } from '@ownclouders/web-pkg'
 import { useGettext } from 'vue3-gettext'
@@ -24,6 +25,7 @@ export const useSpaceActionsUploadImage = ({ spaceImageInput }: { spaceImageInpu
   const previewService = usePreviewService()
   const spacesStore = useSpacesStore()
   const { createDefaultMetaFolder } = useCreateSpace()
+  const { getDefaultMetaFolder } = useSpaceHelpers()
 
   let selectedSpace: SpaceResource = null
   const handler = ({ resources }: SpaceActionOptions) => {
@@ -47,10 +49,9 @@ export const useSpaceActionsUploadImage = ({ spaceImageInput }: { spaceImageInpu
       return showErrorMessage({ title: $gettext('The file type is unsupported') })
     }
 
-    try {
-      await clientService.webdav.getFileInfo(selectedSpace, { path: '.space' })
-    } catch (_) {
-      await createDefaultMetaFolder(selectedSpace)
+    let metaFolder = await getDefaultMetaFolder(selectedSpace)
+    if (!metaFolder) {
+      metaFolder = await createDefaultMetaFolder(selectedSpace, metaFolder.id)
     }
 
     return loadingService.addTask(async () => {
@@ -69,7 +70,8 @@ export const useSpaceActionsUploadImage = ({ spaceImageInput }: { spaceImageInpu
 
       try {
         const { fileId } = await clientService.webdav.putFileContents(selectedSpace, {
-          path: `/.space/${file.name}`,
+          fileId: metaFolder.id,
+          fileName: file.name,
           content,
           headers,
           overwrite: true

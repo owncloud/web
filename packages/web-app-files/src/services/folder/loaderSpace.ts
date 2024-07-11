@@ -7,14 +7,15 @@ import {
   isPersonalSpaceResource,
   isPublicSpaceResource,
   isShareSpaceResource,
-  SpaceResource
+  SpaceResource,
+  urlJoin
 } from '@ownclouders/web-client'
 import { unref } from 'vue'
 import { FolderLoaderOptions } from './types'
 import { authService } from 'web-runtime/src/services/auth'
 import { useFileRouteReplace } from '@ownclouders/web-pkg'
 import { IncomingShareResource } from '@ownclouders/web-client'
-import { getIndicators } from '@ownclouders/web-pkg'
+import { getIndicators, useResourcePath } from '@ownclouders/web-pkg'
 
 export class FolderLoaderSpace implements FolderLoader {
   public isEnabled(): boolean {
@@ -36,13 +37,14 @@ export class FolderLoaderSpace implements FolderLoader {
     const { router, clientService, resourcesStore, userStore } = context
     const { webdav } = clientService
     const { replaceInvalidFileRoute } = useFileRouteReplace({ router })
+    const { getResourcePath } = useResourcePath({ router })
 
     return useTask(function* (
       signal1,
       signal2,
       space: SpaceResource,
       path: string = null,
-      fileId: string | number = null,
+      fileId: string = null,
       options: FolderLoaderOptions = {}
     ) {
       try {
@@ -68,7 +70,7 @@ export class FolderLoaderSpace implements FolderLoader {
             } as IncomingShareResource
           } else if (!isPersonalSpaceResource(space) && !isPublicSpaceResource(space)) {
             // note: in the future we might want to show the space as root for personal spaces as well (to show quota and the like). Currently not needed.
-            currentFolder = space
+            currentFolder = { ...space, parentFolderId: currentFolder.parentFolderId }
           }
         }
 
@@ -90,6 +92,14 @@ export class FolderLoaderSpace implements FolderLoader {
         if (isShareSpaceResource(space)) {
           resources.forEach((r) => (r.remoteItemId = space.id))
         }
+
+        /**
+         * Inject full paths into the resources since id-based requests return no path.
+         * This currently acts as a fall-back because some webdav operations still require
+         * to work with full paths. Ideally we remove this or only use it where needed.
+         **/
+        currentFolder.path = getResourcePath(space, currentFolder)
+        resources.forEach((r) => (r.path = urlJoin(currentFolder.path, r.name)))
 
         resourcesStore.initResourceList({ currentFolder, resources })
       } catch (error) {

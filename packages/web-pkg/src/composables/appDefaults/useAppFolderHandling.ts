@@ -46,7 +46,7 @@ export function useAppFolderHandling({
       const space = unref(context.space)
 
       const pathResource = await getFileInfo(context, {
-        davProperties: [DavProperty.FileId]
+        davProperties: [DavProperty.FileId, DavProperty.FileParent]
       })
       replaceInvalidFileRoute({
         space,
@@ -66,9 +66,8 @@ export function useAppFolderHandling({
         return
       }
 
-      const path = dirname(pathResource.path)
       const { resource, children } = await webdav.listFiles(space, {
-        path
+        fileId: pathResource.parentFolderId
       })
 
       if (resource.type === 'file') {

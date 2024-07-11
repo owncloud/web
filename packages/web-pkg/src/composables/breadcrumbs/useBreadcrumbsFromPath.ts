@@ -7,6 +7,7 @@ import { SpaceResource } from '@ownclouders/web-client'
 import { urlJoin } from '@ownclouders/web-client'
 import { useGetMatchingSpace } from '../spaces'
 import { Ref, unref } from 'vue'
+import { AncestorMetaData, AncestorMetaDataValue } from '../../types'
 
 export const useBreadcrumbsFromPath = () => {
   const { isResourceAccessible } = useGetMatchingSpace()
@@ -14,11 +15,13 @@ export const useBreadcrumbsFromPath = () => {
   const breadcrumbsFromPath = ({
     route,
     space,
-    resourcePath
+    resourcePath,
+    ancestorMetaData
   }: {
     route: RouteLocation
     space: Ref<SpaceResource>
     resourcePath: string
+    ancestorMetaData: Ref<AncestorMetaData>
   }): BreadcrumbItem[] => {
     const pathSplit = (p = '') => p.split('/').filter(Boolean)
     const current = pathSplit(route.path)
@@ -30,6 +33,13 @@ export const useBreadcrumbsFromPath = () => {
         path: urlJoin(...resource.slice(0, i + 1), { leadingSlash: true })
       })
 
+      let ancestor: AncestorMetaDataValue
+      if (isAccessible) {
+        // use ancestor to retrieve fileId
+        const path = urlJoin(...resource.slice(0, i + 1), { leadingSlash: true })
+        ancestor = unref(ancestorMetaData)[path]
+      }
+
       return {
         id: uuidv4(),
         allowContextActions: true,
@@ -37,7 +47,10 @@ export const useBreadcrumbsFromPath = () => {
         ...(isAccessible && {
           to: {
             path: '/' + [...current].splice(0, current.length - resource.length + i + 1).join('/'),
-            query: omit(route.query, 'fileId', 'page') // TODO: we need the correct fileId in the query. until we have that we must omit it because otherwise we would correct the path to the one of the (wrong) fileId.
+            query: {
+              ...omit(route.query, 'page'),
+              ...(ancestor && { fileId: ancestor.id })
+            }
           }
         }),
         isStaticNav: false

@@ -68,7 +68,7 @@
       >
         <slot name="image" :resource="item" />
         <resource-list-item
-          :key="`${item.path}-${resourceDomSelector(item)}-${item.thumbnail}`"
+          :key="`${item.id}-${resourceDomSelector(item)}-${item.thumbnail}`"
           :resource="item"
           :path-prefix="getPathPrefix(item)"
           :is-path-displayed="arePathsDisplayed"

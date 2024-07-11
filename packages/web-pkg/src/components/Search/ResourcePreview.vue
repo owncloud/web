@@ -49,13 +49,7 @@ export default defineComponent({
   setup(props) {
     const { triggerDefaultAction } = useFileActions()
     const { getMatchingSpace } = useGetMatchingSpace()
-    const {
-      getPathPrefix,
-      getParentFolderName,
-      getParentFolderLink,
-      getParentFolderLinkIconAdditionalAttributes,
-      getFolderLink
-    } = useFolderLink()
+
     const configStore = useConfigStore()
     const { options: configOptions } = storeToRefs(configStore)
     const resourcesStore = useResourcesStore()
@@ -75,6 +69,14 @@ export default defineComponent({
     })
 
     const space = computed(() => getMatchingSpace(unref(resource)))
+
+    const {
+      getPathPrefix,
+      getParentFolderName,
+      getParentFolderLink,
+      getParentFolderLinkIconAdditionalAttributes,
+      getFolderLink
+    } = useFolderLink({ space })
 
     const resourceDisabled = computed(() => {
       const res = unref(resource)

@@ -40,9 +40,6 @@ export const useFileActionsRename = () => {
     newName: string,
     parentResources: Resource[] = undefined
   ) => {
-    const newPath =
-      resource.path.substring(0, resource.path.length - resource.name.length) + newName
-
     if (!newName) {
       return $gettext('The name cannot be empty')
     }
@@ -63,8 +60,8 @@ export const useFileActionsRename = () => {
       return $gettext('The name cannot end with whitespace')
     }
 
-    const exists = resourcesStore.resources.find(
-      (file) => file.path === newPath && resource.name !== newName
+    const exists = resourcesStore.resources.some(
+      (file) => file.parentFolderId === resource.parentFolderId && file.name === newName
     )
     if (exists) {
       const translated = $gettext('The name "%{name}" is already taken')
@@ -72,8 +69,8 @@ export const useFileActionsRename = () => {
     }
 
     if (parentResources) {
-      const exists = parentResources.find(
-        (file) => file.path === newPath && resource.name !== newName
+      const exists = parentResources.some(
+        (file) => file.parentFolderId === resource.parentFolderId && file.name === newName
       )
 
       if (exists) {
@@ -153,8 +150,9 @@ export const useFileActionsRename = () => {
     const currentFolder = resourcesStore.currentFolder
     let parentResources: Resource[]
     if (isSameResource(resources[0], currentFolder)) {
-      const parentPath = dirname(currentFolder.path)
-      parentResources = (await clientService.webdav.listFiles(space, { path: parentPath })).children
+      parentResources = (
+        await clientService.webdav.listFiles(space, { fileId: currentFolder.parentFolderId })
+      ).children
     }
 
     const areFileExtensionsShown = resourcesStore.areFileExtensionsShown

@@ -42,9 +42,9 @@ export interface SpaceResource extends Resource {
   canEditReadme(args?: { user?: User }): boolean
   canRestore(args?: { user?: User; ability?: Ability }): boolean
 
-  getWebDavUrl({ path }: { path: string }): string
-  getWebDavTrashUrl({ path }: { path: string }): string
-  getDriveAliasAndItem(resource: Resource): string
+  getWebDavUrl(fileId: string): string
+  getWebDavTrashUrl(fileId: string): string
+  getDriveAliasAndItem(path: string): string
 
   isViewer(user: User): boolean
   isSecureViewer(user: User): boolean

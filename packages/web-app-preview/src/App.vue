@@ -87,7 +87,8 @@ import {
   sortHelper,
   useRoute,
   useRouteQuery,
-  useRouter
+  useRouter,
+  useResourcePath
 } from '@ownclouders/web-pkg'
 import { createFileRouteOptions } from '@ownclouders/web-pkg'
 import MediaControls from './components/MediaControls.vue'
@@ -127,6 +128,7 @@ export default defineComponent({
     const router = useRouter()
     const route = useRoute()
     const appsStore = useAppsStore()
+    const { getResourcePath } = useResourcePath()
     const contextRouteQuery = useRouteQuery('contextRouteQuery') as unknown as Ref<
       Record<string, string>
     >
@@ -281,7 +283,8 @@ export default defineComponent({
       onPanZoomChanged,
       preloadImageCount,
       preview,
-      loading
+      loading,
+      getResourcePath
     }
   },
   computed: {
@@ -343,9 +346,11 @@ export default defineComponent({
 
   methods: {
     setActiveFile(driveAliasAndItem: string) {
+      const space = unref(this.currentFileContext.space)
+
       for (let i = 0; i < this.filteredFiles.length; i++) {
         if (
-          unref(this.currentFileContext.space)?.getDriveAliasAndItem(this.filteredFiles[i]) ===
+          space?.getDriveAliasAndItem(this.getResourcePath(space, this.filteredFiles[i])) ===
           driveAliasAndItem
         ) {
           this.activeIndex = i

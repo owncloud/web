@@ -107,8 +107,8 @@ export default defineWebApplication({
               throw new Error(`An error has occurred: ${response.status}`)
             }
 
-            const path = join(currentFolder.path, fileName) || ''
-            return clientService.webdav.getFileInfo(space, { path })
+            const fileId = response.data['file_id']
+            return clientService.webdav.getFileInfo(space, { fileId })
           }
         }
       })

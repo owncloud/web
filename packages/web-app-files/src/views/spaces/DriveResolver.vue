@@ -82,7 +82,7 @@ export default defineComponent({
       if (internalSpace) {
         const resource = await clientService.webdav.getFileInfo(
           internalSpace,
-          { path },
+          { fileId: unref(fileId) },
           { headers: { Authorization: `Bearer ${authStore.accessToken}` } }
         )
 

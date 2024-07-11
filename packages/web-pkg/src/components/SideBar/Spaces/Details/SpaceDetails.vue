@@ -83,7 +83,7 @@
 import { storeToRefs } from 'pinia'
 import { defineComponent, inject, ref, Ref, computed, unref } from 'vue'
 import { useTask } from 'vue-concurrency'
-import { getRelativeSpecialFolderSpacePath, SpaceResource } from '@ownclouders/web-client'
+import { SpaceResource } from '@ownclouders/web-client'
 import {
   usePreviewService,
   useClientService,
@@ -144,7 +144,7 @@ export default defineComponent({
       }
 
       const imageResource = yield clientService.webdav.getFileInfo(unref(resource), {
-        path: getRelativeSpecialFolderSpacePath(unref(resource), 'image')
+        fileId: unref(resource).spaceImageData.id
       })
 
       spaceImage.value = yield previewService.loadPreview({

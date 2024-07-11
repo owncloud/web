@@ -31,7 +31,8 @@ export interface AppFileHandlingResult {
   getFileContents(fileContext: MaybeRef<FileContext>, options?: FileContentOptions): Promise<any>
   putFileContents(
     fileContext: MaybeRef<FileContext>,
-    putFileOptions: { content?: string } & Record<string, any>
+    putFileOptions: { content?: string } & Record<string, any>,
+    parentFolderId?: string
   ): Promise<FileResource>
 }
 
@@ -66,6 +67,7 @@ export function useAppFileHandling({
     return clientService.webdav.getFileContents(
       unref(unref(fileContext).space),
       {
+        fileId: unref(unref(fileContext).itemId),
         path: unref(unref(fileContext).item)
       },
       {
@@ -90,10 +92,13 @@ export function useAppFileHandling({
 
   const putFileContents = (
     fileContext: MaybeRef<FileContext>,
-    options: { content?: string } & Record<string, any>
+    options: { content?: string } & Record<string, any>,
+    parentFolderId?: string
   ) => {
     return clientService.webdav.putFileContents(unref(unref(fileContext).space), {
       path: unref(unref(fileContext).item),
+      fileId: parentFolderId,
+      fileName: unref(unref(fileContext).fileName),
       ...options
     })
   }

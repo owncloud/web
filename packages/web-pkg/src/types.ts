@@ -4,6 +4,8 @@ export interface AncestorMetaDataValue {
   parentFolderId: string
   spaceId: string
   path: string
+  name: string
+  storageId: string
 }
 
 export type AncestorMetaData = Record<string, AncestorMetaDataValue>

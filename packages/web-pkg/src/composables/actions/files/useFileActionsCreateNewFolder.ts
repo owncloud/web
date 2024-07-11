@@ -67,7 +67,11 @@ export const useFileActionsCreateNewFolder = ({ space }: { space?: Ref<SpaceReso
 
     try {
       const path = join(unref(currentFolder).path, folderName)
-      const resource = await clientService.webdav.createFolder(unref(space), { path })
+      const resource = await clientService.webdav.createFolder(unref(space), {
+        path,
+        fileId: unref(currentFolder).id,
+        folderName
+      })
 
       if (unref(loadIndicatorsForNewFile)) {
         resource.indicators = getIndicators({

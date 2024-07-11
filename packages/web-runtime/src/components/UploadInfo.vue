@@ -607,7 +607,7 @@ export default defineComponent({
         meta: { spaceName, driveType }
       } = file
 
-      const parentFolder = extractParentFolderName(file as Resource)
+      const parentFolder = extractParentFolderName(file.path)
       if (parentFolder) {
         return parentFolder
       }

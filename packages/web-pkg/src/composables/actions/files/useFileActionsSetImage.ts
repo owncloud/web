@@ -9,6 +9,7 @@ import { FileAction, FileActionOptions } from '../types'
 import { Drive } from '@ownclouders/web-client/graph/generated'
 import { buildSpace } from '@ownclouders/web-client'
 import { useMessages, useSpacesStore, useUserStore } from '../../piniaStores'
+import { useCreateSpace, useSpaceHelpers } from '../../spaces'
 
 export const useFileActionsSetImage = () => {
   const { showMessage, showErrorMessage } = useMessages()
@@ -19,19 +20,20 @@ export const useFileActionsSetImage = () => {
   const loadingService = useLoadingService()
   const previewService = usePreviewService()
   const spacesStore = useSpacesStore()
+  const { createDefaultMetaFolder } = useCreateSpace()
+  const { getDefaultMetaFolder } = useSpaceHelpers()
 
   const handler = async ({ space, resources }: FileActionOptions) => {
     const graphClient = clientService.graphAuthenticated
     const storageId = space?.id as string
     const sourcePath = resources[0].path
     const destinationPath = `/.space/${resources[0].name}`
-    const { copyFiles, getFileInfo, createFolder } = clientService.webdav
+    const { copyFiles, getFileInfo } = clientService.webdav
 
     try {
-      try {
-        await getFileInfo(space, { path: '.space' })
-      } catch (_) {
-        await createFolder(space, { path: '.space' })
+      let metaFolder = await getDefaultMetaFolder(space)
+      if (!metaFolder) {
+        metaFolder = await createDefaultMetaFolder(space, metaFolder.id)
       }
 
       if (sourcePath !== destinationPath) {

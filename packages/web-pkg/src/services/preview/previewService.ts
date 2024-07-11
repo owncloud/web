@@ -1,8 +1,7 @@
 import isEqual from 'lodash-es/isEqual'
 import { cacheService } from '../cache'
 import { ClientService } from '../client'
-import { encodePath } from '../../utils'
-import { isPublicSpaceResource } from '@ownclouders/web-client'
+import { isPublicSpaceResource, urlJoin } from '@ownclouders/web-client'
 import { BuildQueryStringOptions, LoadPreviewOptions } from '.'
 import { AuthStore, CapabilityStore, ConfigStore, UserStore } from '../../composables'
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
@@ -137,13 +136,13 @@ export class PreviewService {
       return this.cacheFactory(options)
     }
 
-    const url = [
-      this.configStore.serverUrl,
-      'remote.php/dav',
-      encodePath(resource.webDavPath),
-      '?',
-      this.buildQueryString({ etag: resource.etag, dimensions, processor })
-    ].join('')
+    const baseUrl = urlJoin(this.configStore.serverUrl, 'remote.php/dav/spaces', resource.id)
+    const url = `${baseUrl}?${this.buildQueryString({
+      etag: resource.etag,
+      dimensions,
+      processor
+    })}`
+
     const { data } = await this.clientService.httpAuthenticated.get<Blob>(url, {
       responseType: 'blob'
     })

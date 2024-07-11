@@ -157,7 +157,8 @@ import {
   useResourcesStore,
   useViewSizeMax,
   useEmbedMode,
-  useCanBeOpenedWithSecureView
+  useCanBeOpenedWithSecureView,
+  useFolderLink
 } from '../../composables'
 
 type ResourceTileRef = ComponentPublicInstance<typeof ResourceTile>
@@ -223,6 +224,7 @@ export default defineComponent({
     const { $gettext } = useGettext()
     const resourcesStore = useResourcesStore()
     const { canBeOpenedWithSecureView } = useCanBeOpenedWithSecureView()
+    const { getFolderLink } = useFolderLink()
     const { emit } = context
     const {
       isEnabled: isEmbedModeEnabled,
@@ -267,11 +269,7 @@ export default defineComponent({
             )
       }
       if (resource.type === 'folder') {
-        return resourceRouteResolver.createFolderLink({
-          path: resource.path,
-          fileId: resource.fileId,
-          resource: resource
-        })
+        return getFolderLink(resource)
       }
       return { path: '' }
     }

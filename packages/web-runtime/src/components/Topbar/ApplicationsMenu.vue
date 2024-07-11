@@ -103,12 +103,10 @@ export default defineComponent({
     const onEditorApplicationClick = async (item: MenuItem) => {
       let destinationSpace = unref(currentFolder) ? getMatchingSpace(unref(currentFolder)) : null
       let destinationFiles = unref(resources)
-      let filePath = unref(currentFolder)?.path
 
       if (!destinationSpace || !unref(currentFolder).canCreate()) {
         destinationSpace = spacesStore.personalSpace
         destinationFiles = (await clientService.webdav.listFiles(destinationSpace)).children
-        filePath = ''
       }
 
       let fileName = $gettext('New file') + `.${item.defaultExtension}`
@@ -118,7 +116,8 @@ export default defineComponent({
       }
 
       const emptyResource = await clientService.webdav.putFileContents(destinationSpace, {
-        path: urlJoin(filePath, fileName)
+        fileId: unref(currentFolder).id,
+        fileName
       })
 
       const space = getMatchingSpace(emptyResource)

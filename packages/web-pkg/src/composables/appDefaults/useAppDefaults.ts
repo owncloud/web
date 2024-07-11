@@ -1,7 +1,7 @@
 import { computed, unref, Ref } from 'vue'
 import { useRouter, useRoute, useRouteParam } from '../router'
 import { ClientService } from '../../services'
-import { basename } from 'path'
+import { basename, dirname } from 'path'
 
 import { FileContext } from './types'
 import {

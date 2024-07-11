@@ -47,6 +47,7 @@ export const useFileActionsRestore = () => {
         existingResources = existingResourcesCache[parentPath]
       } else {
         try {
+          // FIXME: needs fileParentId on trashed resources to be able to use id here
           existingResources = (
             await clientService.webdav.listFiles(space, {
               path: parentPath

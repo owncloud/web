@@ -273,8 +273,8 @@ export default defineComponent({
         unref(activeDropItemIndex) !== null
           ? unref(activeDropItemIndex)
           : previous
-            ? elements.length
-            : -1
+          ? elements.length
+          : -1
       const increment = previous ? -1 : 1
 
       do {
@@ -367,9 +367,9 @@ export default defineComponent({
         })
 
         const content = `[InternetShortcut]\nURL=${sanitizedUrl}`
-        const path = urlJoin(unref(currentFolder).path, `${unref(inputFilename)}.url`)
         const resource = await clientService.webdav.putFileContents(props.space, {
-          path,
+          fileId: unref(currentFolder).id,
+          fileName: `${unref(inputFilename)}.url`,
           content
         })
         resourcesStore.upsertResource(resource)
