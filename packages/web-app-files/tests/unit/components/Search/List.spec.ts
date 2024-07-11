@@ -5,7 +5,7 @@ import { useResourcesViewDefaults } from 'web-app-files/src/composables'
 import { useResourcesViewDefaultsMock } from 'web-app-files/tests/mocks/useResourcesViewDefaultsMock'
 import { createRouter, createMemoryHistory } from 'vue-router'
 
-import { defaultComponentMocks, defaultPlugins, mockAxiosResolve } from 'web-test-helpers/src'
+import { defaultComponentMocks, defaultPlugins } from 'web-test-helpers/src'
 import { AppBar, ItemFilter, queryItemAsString, useResourcesStore } from '@ownclouders/web-pkg'
 import { ref } from 'vue'
 import { Resource } from '@ownclouders/web-client'
@@ -239,9 +239,7 @@ function getWrapper({
     ...defaultComponentMocks(),
     ...mocks
   }
-  localMocks.$clientService.graphAuthenticated.tags.getTags.mockResolvedValue(
-    mockAxiosResolve({ value: availableTags })
-  )
+  localMocks.$clientService.graphAuthenticated.tags.listTags.mockResolvedValue(availableTags)
 
   const capabilities = {
     files: { tags: true },

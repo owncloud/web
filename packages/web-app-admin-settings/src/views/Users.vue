@@ -244,11 +244,11 @@ export default defineComponent({
     }).restartable()
 
     const loadAppRolesTask = useTask(function* (signal) {
-      const applicationsResponse = yield* call(
-        clientService.graphAuthenticated.applications.listApplications()
+      const applications = yield* call(
+        clientService.graphAuthenticated.applications.listApplications({ signal })
       )
-      roles.value = applicationsResponse.data.value[0].appRoles
-      applicationId.value = applicationsResponse.data.value[0].id
+      roles.value = applications[0].appRoles
+      applicationId.value = applications[0].id
     })
 
     const loadUsersTask = useTask(function* (signal) {

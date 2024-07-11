@@ -290,10 +290,8 @@ export default defineComponent({
       )
     })
 
-    const loadAvailableTagsTask = useTask(function* () {
-      const {
-        data: { value: tags = [] }
-      } = yield* call(clientService.graphAuthenticated.tags.getTags())
+    const loadAvailableTagsTask = useTask(function* (signal) {
+      const tags = yield* call(clientService.graphAuthenticated.tags.listTags({ signal }))
       availableTags.value = [...tags.map((t) => ({ id: t, label: t }))]
     })
 

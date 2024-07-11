@@ -5,13 +5,7 @@ import {
   Drive,
   DrivesApiFactory,
   MeDrivesApi,
-  TagsApiFactory,
-  CollectionOfTags,
-  TagAssignment,
-  TagUnassignment,
   DrivesGetDrivesApi,
-  CollectionOfApplications,
-  ApplicationsApiFactory,
   MeDriveApiFactory,
   RoleManagementApiFactory,
   UnifiedRoleDefinition,
@@ -25,22 +19,18 @@ import {
   DriveItemInvite,
   SharingLinkPassword,
   CollectionOfPermissions,
-  CollectionOfPermissionsWithAllowedValues,
-  ActivitiesApiFactory,
-  CollectionOfActivities
+  CollectionOfPermissionsWithAllowedValues
 } from './generated'
 import { type GraphUsers, UsersFactory } from './users'
 import { type GraphGroups, GroupsFactory } from './groups'
+import { ApplicationsFactory, GraphApplications } from './applications'
+import { TagsFactory, GraphTags } from './tags'
+import { ActivitiesFactory, GraphActivities } from './activities'
 
 export interface Graph {
-  applications: {
-    listApplications: () => AxiosPromise<CollectionOfApplications>
-  }
-  tags: {
-    getTags: () => AxiosPromise<CollectionOfTags>
-    assignTags: (tagAssignment?: TagAssignment) => AxiosPromise<void>
-    unassignTags: (tagUnassignment?: TagUnassignment) => AxiosPromise<void>
-  }
+  activities: GraphActivities
+  applications: GraphApplications
+  tags: GraphTags
   drives: {
     listMyDrives: (orderBy?: string, filter?: string) => Promise<AxiosResponse<CollectionOfDrives>>
     listAllDrives: (orderBy?: string, filter?: string) => Promise<AxiosResponse<CollectionOfDrives>>
@@ -116,9 +106,6 @@ export interface Graph {
       sharingLinkPassword: SharingLinkPassword
     ) => AxiosPromise<Permission>
   }
-  activities: {
-    listActivities: (kql: string) => AxiosPromise<CollectionOfActivities>
-  }
 }
 
 export const graph = (baseURI: string, axiosClient: AxiosInstance): Graph => {
@@ -131,9 +118,7 @@ export const graph = (baseURI: string, axiosClient: AxiosInstance): Graph => {
   const meDrivesApi = new MeDrivesApi(config, config.basePath, axiosClient)
   const allDrivesApi = new DrivesGetDrivesApi(config, config.basePath, axiosClient)
   const meDriveApiFactory = MeDriveApiFactory(config, config.basePath, axiosClient)
-  const applicationsApiFactory = ApplicationsApiFactory(config, config.basePath, axiosClient)
   const drivesApiFactory = DrivesApiFactory(config, config.basePath, axiosClient)
-  const tagsApiFactory = TagsApiFactory(config, config.basePath, axiosClient)
   const roleManagementApiFactory = RoleManagementApiFactory(config, config.basePath, axiosClient)
   const driveItemApiFactory = DriveItemApiFactory(config, config.basePath, axiosClient)
   const drivesRootApiFactory = DrivesRootApiFactory(config, config.basePath, axiosClient)
@@ -142,18 +127,11 @@ export const graph = (baseURI: string, axiosClient: AxiosInstance): Graph => {
     config.basePath,
     axiosClient
   )
-  const activitiesApiFactory = ActivitiesApiFactory(config, config.basePath, axiosClient)
 
   return <Graph>{
-    applications: {
-      listApplications: () => applicationsApiFactory.listApplications()
-    },
-    tags: {
-      getTags: () => tagsApiFactory.getTags(),
-      assignTags: (tagAssignment: TagAssignment) => tagsApiFactory.assignTags(tagAssignment),
-      unassignTags: (tagUnassignment: TagUnassignment) =>
-        tagsApiFactory.unassignTags(tagUnassignment)
-    },
+    activities: ActivitiesFactory({ axiosClient, config }),
+    applications: ApplicationsFactory({ axiosClient, config }),
+    tags: TagsFactory({ axiosClient, config }),
     drives: {
       listMyDrives: (orderBy?: string, filter?: string) =>
         meDrivesApi.listMyDrives(orderBy, filter),
@@ -225,9 +203,6 @@ export const graph = (baseURI: string, axiosClient: AxiosInstance): Graph => {
         permId: string,
         sharingLinkPassword: SharingLinkPassword
       ) => drivesRootApiFactory.setPermissionPasswordSpaceRoot(driveId, permId, sharingLinkPassword)
-    },
-    activities: {
-      listActivities: (kql: string) => activitiesApiFactory.getActivities(kql)
     }
   }
 }

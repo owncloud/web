@@ -2,7 +2,6 @@ import Users from '../../../src/views/Users.vue'
 import { ItemFilter, OptionsConfig, UserAction, useAppDefaults } from '@ownclouders/web-pkg'
 import { mock, mockDeep } from 'vitest-mock-extended'
 import { defaultComponentMocks, defaultPlugins, mount, shallowMount } from 'web-test-helpers'
-import { AxiosResponse } from 'axios'
 import { ClientService, queryItemAsString } from '@ownclouders/web-pkg'
 import { User } from '@ownclouders/web-client/graph/generated'
 import { useAppDefaultsMock } from 'web-test-helpers/src/mocks/useAppDefaultsMock'
@@ -77,7 +76,7 @@ const getClientService = () => {
   clientService.graphAuthenticated.users.editUser.mockResolvedValue(mock<User>(getDefaultUser()))
   clientService.graphAuthenticated.groups.listGroups.mockResolvedValue([])
   clientService.graphAuthenticated.applications.listApplications.mockResolvedValue(
-    mock<AxiosResponse>({ data: { value: getDefaultApplications() } })
+    getDefaultApplications()
   )
   return clientService
 }
