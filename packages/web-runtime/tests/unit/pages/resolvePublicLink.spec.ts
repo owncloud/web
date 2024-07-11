@@ -33,20 +33,20 @@ describe('resolvePublicLink', () => {
   describe('password required form', () => {
     it('should display if password is required', async () => {
       const { wrapper } = getWrapper({ passwordRequired: true })
-      await wrapper.vm.loadLinkMetaDataTask.last
+      await wrapper.vm.loadPublicSpaceTask.last
 
       expect(wrapper.find('form').html()).toMatchSnapshot()
     })
     describe('submit button', () => {
       it('should be set as disabled if "password" is empty', async () => {
         const { wrapper } = getWrapper({ passwordRequired: true })
-        await wrapper.vm.loadLinkMetaDataTask.last
+        await wrapper.vm.loadPublicSpaceTask.last
 
         expect(wrapper.find(selectors.submitButton).attributes().disabled).toBe('true')
       })
       it('should be set as enabled if "password" is not empty', async () => {
         const { wrapper } = getWrapper({ passwordRequired: true })
-        await wrapper.vm.loadLinkMetaDataTask.last
+        await wrapper.vm.loadPublicSpaceTask.last
         wrapper.vm.password = 'password'
         await wrapper.vm.$nextTick()
 
@@ -55,7 +55,7 @@ describe('resolvePublicLink', () => {
       it('should resolve the public link on click', async () => {
         const resolvePublicLinkSpy = vi.spyOn(authService, 'resolvePublicLink')
         const { wrapper } = getWrapper({ passwordRequired: true })
-        await wrapper.vm.loadLinkMetaDataTask.last
+        await wrapper.vm.loadPublicSpaceTask.last
 
         wrapper.vm.password = 'password'
         await wrapper.vm.$nextTick()
@@ -69,7 +69,7 @@ describe('resolvePublicLink', () => {
   describe('internal link', () => {
     it('redirects the user to the login page', async () => {
       const { wrapper, mocks } = getWrapper({ isInternalLink: true })
-      await wrapper.vm.loadLinkMetaDataTask.last
+      await wrapper.vm.loadPublicSpaceTask.last
 
       expect(mocks.$router.push).toHaveBeenCalledWith({
         name: 'login',
@@ -86,7 +86,7 @@ function getWrapper({
   const $clientService = mockDeep<ClientService>()
   const spaceResource = mockDeep<SpaceResource>({ driveType: 'public' })
 
-  // loadLinkMetaDataTask response
+  // loadPublicSpaceTask response
   if (passwordRequired) {
     $clientService.webdav.getFileInfo.mockRejectedValueOnce(
       new HttpError("No 'Authorization: Basic' header found", undefined, 401)
@@ -95,8 +95,6 @@ function getWrapper({
     $clientService.webdav.getFileInfo.mockRejectedValueOnce(
       new HttpError("No 'Authorization: Bearer' header found", undefined, 401)
     )
-  } else {
-    $clientService.webdav.getFileInfo.mockResolvedValueOnce(spaceResource)
   }
 
   $clientService.webdav.getFileInfo.mockResolvedValueOnce(spaceResource)
