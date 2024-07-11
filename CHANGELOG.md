@@ -1,3 +1,28 @@
+Changelog for ownCloud Web [unreleased] (UNRELEASED)
+=======================================
+The following sections list the changes in ownCloud web unreleased relevant to
+ownCloud admins and users.
+
+[unreleased]: https://github.com/owncloud/web/compare/v9.2.0...master
+
+Summary
+-------
+
+* Bugfix - Downloading files via the app top bar doesn't reflect the current state: [#11174](https://github.com/owncloud/web/pull/11174)
+
+Details
+-------
+
+* Bugfix - Downloading files via the app top bar doesn't reflect the current state: [#11174](https://github.com/owncloud/web/pull/11174)
+
+   We've fixed a bug where downloading a file via the app top bar does reflect the
+   last saved state, but not the the current state of the respective file. This
+   happened when the user opened a text file in web and entered new text without
+   saving it.
+
+   https://github.com/owncloud/web/issues/11072
+   https://github.com/owncloud/web/pull/11174
+
 Changelog for ownCloud Web [9.2.0] (2024-07-11)
 =======================================
 The following sections list the changes in ownCloud web 9.2.0 relevant to
