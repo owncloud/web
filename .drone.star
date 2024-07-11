@@ -560,9 +560,8 @@ def e2eTests(ctx):
             steps += collaboraService() + \
                      onlyofficeService() + \
                      ocisService("app-provider") + \
-                     wopiServer() + \
-                     appProviderService("collabora") + \
-                     appProviderService("onlyoffice")
+                     wopiCollaborationService("collabora") + \
+                     wopiCollaborationService("onlyoffice")
         else:
             # oCIS specific steps
             steps += (tikaService() if params["tikaNeeded"] else []) + \
@@ -1545,28 +1544,6 @@ def tikaService():
         },
     ]
 
-def wopiServer():
-    return [
-        {
-            "name": "wopiserver",
-            "type": "docker",
-            "image": CS3ORG_WOPI_SERVER,
-            "detach": True,
-            "commands": [
-                "echo 'LoremIpsum567' > /etc/wopi/wopisecret",
-                "cp %s/tests/drone/wopiserver/wopiserver.conf /etc/wopi/wopiserver.conf" % dir["web"],
-                "/app/wopiserver.py",
-            ],
-        },
-        {
-            "name": "wait-for-wopi-server",
-            "image": OC_CI_WAIT_FOR,
-            "commands": [
-                "wait-for -it wopiserver:8880 -t 300",
-            ],
-        },
-    ]
-
 def collaboraService():
     return [
         {
@@ -1618,35 +1595,31 @@ def onlyofficeService():
         },
     ]
 
-def appProviderService(name):
+def wopiCollaborationService(name):
+    service_name = "wopi-%s" % name
     environment = {
-        "APP_PROVIDER_LOG_LEVEL": "error",
-        "REVA_GATEWAY": "com.owncloud.api.gateway",
-        "APP_PROVIDER_GRPC_ADDR": "0.0.0.0:9164",
-        "APP_PROVIDER_DRIVER": "wopi",
-        "APP_PROVIDER_WOPI_INSECURE": True,
-        "APP_PROVIDER_WOPI_WOPI_SERVER_EXTERNAL_URL": "http://wopiserver:8880",
-        "APP_PROVIDER_WOPI_FOLDER_URL_BASE_URL": "https://ocis:9200",
         "MICRO_REGISTRY": "nats-js-kv",
         "MICRO_REGISTRY_ADDRESS": "ocis:9233",
+        "COLLABORATION_GRPC_ADDR": "0.0.0.0:9301",
+        "COLLABORATION_HTTP_ADDR": "0.0.0.0:9300",
+        "COLLABORATION_APP_INSECURE": True,
+        "COLLABORATION_CS3API_DATAGATEWAY_INSECURE": True,
     }
 
     if name == "collabora":
-        environment["APP_PROVIDER_SERVICE_NAME"] = "app-provider-collabora"
-        environment["APP_PROVIDER_EXTERNAL_ADDR"] = "com.owncloud.api.app-provider-collabora"
-        environment["APP_PROVIDER_WOPI_APP_NAME"] = "Collabora"
-        environment["APP_PROVIDER_WOPI_APP_ICON_URI"] = "https://collabora:9980/favicon.ico"
-        environment["APP_PROVIDER_WOPI_APP_URL"] = "https://collabora:9980"
+        environment["COLLABORATION_APP_NAME"] = "Collabora"
+        environment["COLLABORATION_APP_ADDR"] = "https://collabora:9980"
+        environment["COLLABORATION_APP_ICON"] = "https://collabora:9980/favicon.ico"
     elif name == "onlyoffice":
-        environment["APP_PROVIDER_SERVICE_NAME"] = "app-provider-onlyoffice"
-        environment["APP_PROVIDER_EXTERNAL_ADDR"] = "com.owncloud.api.app-provider-onlyoffice"
-        environment["APP_PROVIDER_WOPI_APP_NAME"] = "OnlyOffice"
-        environment["APP_PROVIDER_WOPI_APP_ICON_URI"] = "https://onlyoffice/web-apps/apps/documenteditor/main/resources/img/favicon.ico"
-        environment["APP_PROVIDER_WOPI_APP_URL"] = "https://onlyoffice"
+        environment["COLLABORATION_APP_NAME"] = "OnlyOffice"
+        environment["COLLABORATION_APP_ADDR"] = "https://onlyoffice"
+        environment["COLLABORATION_APP_ICON"] = "https://onlyoffice/web-apps/apps/documenteditor/main/resources/img/favicon.ico"
+
+    environment["COLLABORATION_WOPI_SRC"] = "http://%s:9300" % service_name
 
     return [
         {
-            "name": "%s-app-provider" % name,
+            "name": service_name,
             "image": OC_CI_GOLANG,
             "detach": True,
             "environment": environment,
