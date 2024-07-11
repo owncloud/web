@@ -163,76 +163,55 @@ services:
       traefik.http.routers.companion.entrypoints: ocis
       traefik.http.services.companion.loadbalancer.server.port: 3020
 
-  ocis-appprovider-collabora:
+  collaboration:
     image: ${OCIS_IMAGE:-owncloud/ocis-rolling:master}
-    command: app-provider server
-    environment:
-      APP_PROVIDER_LOG_LEVEL: error
-      # use the internal service name of the gateway
-      REVA_GATEWAY: ${REVA_GATEWAY:-com.owncloud.api.gateway}
-      # STORAGE_GATEWAY_ENDPOINT: host.docker.internal:9142
-      APP_PROVIDER_GRPC_ADDR: 0.0.0.0:9164
-      # configure the service name to avoid collision with onlyoffice
-      APP_PROVIDER_SERVICE_NAME: app-provider-collabora
-      # use the internal service name
-      APP_PROVIDER_EXTERNAL_ADDR: com.owncloud.api.app-provider-collabora
-      APP_PROVIDER_DRIVER: wopi
-      APP_PROVIDER_WOPI_APP_NAME: Collabora
-      APP_PROVIDER_WOPI_APP_ICON_URI: https://${COLLABORA_DOMAIN:-host.docker.internal:9980}/favicon.ico
-      APP_PROVIDER_WOPI_APP_URL: https://${COLLABORA_DOMAIN:-host.docker.internal:9980}
-      APP_PROVIDER_WOPI_INSECURE: true
-      APP_PROVIDER_WOPI_WOPI_SERVER_EXTERNAL_URL: https://${WOPISERVER_DOMAIN:-host.docker.internal:8880}
-      APP_PROVIDER_WOPI_FOLDER_URL_BASE_URL: https://${OCIS_DOMAIN:-host.docker.internal:9200}
-      # share the registry with the ocis container
-      MICRO_REGISTRY: 'nats-js-kv'
-      MICRO_REGISTRY_ADDRESS: http://ocis:9233
-    volumes:
-      - ocis-config:/etc/ocis
-    extra_hosts:
-      - host.docker.internal:${DOCKER_HOST:-host-gateway}
-    restart: always
-
-  ocis-appprovider-onlyoffice:
-    image: ${OCIS_IMAGE:-owncloud/ocis-rolling:master}
-    user: '0' # needed for apk add in entrypoint script
+    depends_on:
+      ocis:
+        condition: service_started
+      collabora:
+        condition: service_healthy
     entrypoint:
       - /bin/sh
-      - /entrypoint-override.sh
+    command: ['-c', 'ocis collaboration server']
     environment:
-      APP_PROVIDER_LOG_LEVEL: error
-      # use the internal service name of the gateway
-      REVA_GATEWAY: ${REVA_GATEWAY:-com.owncloud.api.gateway}
-      APP_PROVIDER_GRPC_ADDR: 0.0.0.0:9164
-      # configure the service name to avoid collision with collabora
-      APP_PROVIDER_SERVICE_NAME: app-provider-onlyoffice
-      # use the internal service name
-      APP_PROVIDER_EXTERNAL_ADDR: com.owncloud.api.app-provider-onlyoffice
-      APP_PROVIDER_DRIVER: wopi
-      APP_PROVIDER_WOPI_APP_NAME: OnlyOffice
-      APP_PROVIDER_WOPI_APP_ICON_URI: https://${ONLYOFFICE_DOMAIN:-host.docker.internal:9981}/web-apps/apps/documenteditor/main/resources/img/favicon.ico
-      APP_PROVIDER_WOPI_APP_URL: https://${ONLYOFFICE_DOMAIN:-host.docker.internal:9981}
-      APP_PROVIDER_WOPI_INSECURE: true
-      APP_PROVIDER_WOPI_WOPI_SERVER_EXTERNAL_URL: https://${WOPISERVER_DOMAIN:-host.docker.internal:8880}
-      APP_PROVIDER_WOPI_FOLDER_URL_BASE_URL: https://${OCIS_DOMAIN:-host.docker.internal:9200}
-      # share the registry with the ocis container
-      MICRO_REGISTRY: 'nats-js-kv'
-      MICRO_REGISTRY_ADDRESS: http://ocis:9233
-    volumes:
-      - ./dev/docker/ocis-appprovider-onlyoffice/entrypoint-override.sh:/entrypoint-override.sh
-      - ocis-config:/etc/ocis
+      COLLABORATION_GRPC_ADDR: 0.0.0.0:9301
+      COLLABORATION_HTTP_ADDR: 0.0.0.0:9300
+      MICRO_REGISTRY: nats-js-kv
+      MICRO_REGISTRY_ADDRESS: ocis:9233
+      COLLABORATION_WOPI_SRC: https://${WOPISERVER_DOMAIN:-host.docker.internal:9300}
+      COLLABORATION_APP_NAME: Collabora
+      COLLABORATION_APP_ADDR: https://${COLLABORA_DOMAIN:-host.docker.internal:9980}
+      COLLABORATION_APP_ICON: https://${COLLABORA_DOMAIN:-host.docker.internal:9980}/favicon.ico
+      COLLABORATION_APP_INSECURE: ${INSECURE:-true}
+      COLLABORATION_CS3API_DATAGATEWAY_INSECURE: ${INSECURE:-true}
+      COLLABORATION_LOG_LEVEL: ${LOG_LEVEL:-info}
     extra_hosts:
       - host.docker.internal:${DOCKER_HOST:-host-gateway}
+    volumes:
+      - ocis-config:/etc/ocis
+    labels:
+      traefik.enable: true
+      traefik.http.routers.collaboration.tls: true
+      traefik.http.routers.collaboration.rule: PathPrefix(`/`)
+      traefik.http.routers.collaboration.entrypoints: collaboration
+      traefik.http.services.collaboration.loadbalancer.server.port: 9300
+    logging:
+      driver: ${LOG_DRIVER:-local}
     restart: always
 
   collabora:
     image: collabora/code:23.05.9.4.1
     environment:
-      DONT_GEN_SSL_CERT: 'YES'
-      extra_params: --o:ssl.enable=false --o:ssl.termination=true --o:welcome.enable=false --o:net.frame_ancestors=https://host.docker.internal:9200
+      DONT_GEN_SSL_CERT: YES
+      extra_params: --o:ssl.enable=false --o:ssl.termination=true --o:welcome.enable=false --o:net.frame_ancestors=${OCIS_URL:-https://host.docker.internal:9200}
+      username: ${COLLABORA_ADMIN_USER:-admin}
+      password: ${COLLABORA_ADMIN_PASSWORD:-admin}
     cap_add:
       - MKNOD
     extra_hosts:
       - host.docker.internal:${DOCKER_HOST:-host-gateway}
+    healthcheck:
+      test: ['CMD', 'curl', '-f', 'http://localhost:9980/hosting/discovery']
     labels:
       traefik.enable: true
       traefik.http.routers.collabora.tls: true
@@ -242,6 +221,42 @@ services:
     restart: always
     depends_on:
       - traefik
+
+  collaboration-oo:
+    image: ${OCIS_IMAGE:-owncloud/ocis-rolling:master}
+    depends_on:
+      ocis:
+        condition: service_started
+      onlyoffice:
+        condition: service_healthy
+    entrypoint:
+      - /bin/sh
+    command: ['-c', 'ocis collaboration server']
+    environment:
+      COLLABORATION_GRPC_ADDR: 0.0.0.0:9303
+      COLLABORATION_HTTP_ADDR: 0.0.0.0:9302
+      MICRO_REGISTRY: nats-js-kv
+      MICRO_REGISTRY_ADDRESS: ocis:9233
+      COLLABORATION_WOPI_SRC: https://${WOPISERVER_ONLYOFFICE_DOMAIN:-host.docker.internal:9302}
+      COLLABORATION_APP_NAME: OnlyOffice
+      COLLABORATION_APP_ADDR: https://${ONLYOFFICE_DOMAIN:-host.docker.internal:9981}
+      COLLABORATION_APP_ICON: https://${ONLYOFFICE_DOMAIN:-host.docker.internal:9981}/web-apps/apps/documenteditor/main/resources/img/favicon.ico
+      COLLABORATION_APP_INSECURE: ${INSECURE:-true}
+      COLLABORATION_CS3API_DATAGATEWAY_INSECURE: ${INSECURE:-true}
+      COLLABORATION_LOG_LEVEL: ${LOG_LEVEL:-info}
+    extra_hosts:
+      - host.docker.internal:${DOCKER_HOST:-host-gateway}
+    volumes:
+      - ocis-config:/etc/ocis
+    labels:
+      traefik.enable: true
+      traefik.http.routers.collaboration-oo.tls: true
+      traefik.http.routers.collaboration-oo.rule: PathPrefix(`/`)
+      traefik.http.routers.collaboration-oo.entrypoints: collaboration-oo
+      traefik.http.services.collaboration-oo.loadbalancer.server.port: 9302
+    logging:
+      driver: ${LOG_DRIVER:-local}
+    restart: always
 
   onlyoffice:
     image: onlyoffice/documentserver:7.5.1
@@ -256,6 +271,8 @@ services:
       - ./dev/docker/onlyoffice/local.json:/etc/onlyoffice/documentserver/local.dist.json
     extra_hosts:
       - host.docker.internal:${DOCKER_HOST:-host-gateway}
+    healthcheck:
+      test: ['CMD', 'curl', '-f', 'http://localhost/hosting/discovery']
     labels:
       traefik.enable: true
       traefik.http.routers.onlyoffice.tls: true
@@ -265,29 +282,6 @@ services:
       traefik.http.middlewares.onlyoffice.headers.customrequestheaders.X-Forwarded-Proto: https
       traefik.http.routers.onlyoffice.middlewares: onlyoffice
     restart: always
-    depends_on:
-      - traefik
-
-  wopiserver:
-    image: cs3org/wopiserver:v10.3.0
-    environment:
-      WOPISERVER_INSECURE: true
-      WOPISECRET: ${WOPI_JWT_SECRET:-LoremIpsum567}
-      WOPISERVER_DOMAIN: ${WOPISERVER_DOMAIN:-host.docker.internal:8880}
-    volumes:
-      - ./dev/docker/wopiserver/entrypoint-override.sh:/entrypoint-override.sh
-      - ./dev/docker/wopiserver/wopiserver.conf.dist:/etc/wopi/wopiserver.conf.dist
-    entrypoint:
-      - /bin/sh
-      - /entrypoint-override.sh
-    extra_hosts:
-      - host.docker.internal:${DOCKER_HOST:-host-gateway}
-    labels:
-      traefik.enable: true
-      traefik.http.routers.wopiserver.tls: true
-      traefik.http.routers.wopiserver.rule: PathPrefix(`/`)
-      traefik.http.routers.wopiserver.entrypoints: wopi
-      traefik.http.services.wopiserver.loadbalancer.server.port: 8880
     depends_on:
       - traefik
 
@@ -313,6 +307,8 @@ services:
       - '--entrypoints.ocis-federated.address=:10200'
       - '--entrypoints.collabora.address=:9980'
       - '--entrypoints.wopi.address=:8880'
+      - '--entrypoints.collaboration.address=:9300'
+      - '--entrypoints.collaboration-oo.address=:9302'
       - '--entrypoints.websecure.address=:443'
       - '--entrypoints.websecure.http.middlewares=https_config@docker'
       - '--entrypoints.websecure.http.tls.options=default'
@@ -334,6 +330,8 @@ services:
       - '80:80'
       - '8090:8080'
       - '9200:9200'
+      - '9300:9300'
+      - '9302:9302'
       - '10200:10200'
       - '9980:9980'
       - '8880:8880'
