@@ -4,7 +4,7 @@
     ref="drawIoEditor"
     :src="iframeSource"
     :title="$gettext('Draw.io editor')"
-    sandbox="allow-scripts allow-same-origin"
+    sandbox="allow-scripts"
   />
 </template>
 
@@ -73,6 +73,7 @@ export default defineComponent({
         stealth: 1,
         spin: 1,
         proto: 'json',
+        mode: 'ocis',
         ui: unref(config).theme
       })
 
