@@ -1606,7 +1606,7 @@ def wopiCollaborationService(name):
             "detach": True,
             "environment": environment,
             "commands": [
-                "./ocis app-provider server",
+                "./ocis collaboration server",
             ],
             "volumes": [
                 {
