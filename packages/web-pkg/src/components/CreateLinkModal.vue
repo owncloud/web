@@ -77,6 +77,7 @@
     </oc-button>
     <oc-drop
       v-if="!onlyInternalLinksAllowed"
+      ref="contextMenuDrop"
       drop-id="link-modal-context-menu-drop"
       toggle="#link-modal-context-menu-toggle"
       padding-size="small"
@@ -151,7 +152,8 @@ import {
   ref,
   reactive,
   unref,
-  onMounted
+  onMounted,
+  watch
 } from 'vue'
 import {
   usePasswordPolicyService,
@@ -165,7 +167,7 @@ import {
 import { LinkShare, SpaceResource } from '@ownclouders/web-client'
 import { Resource } from '@ownclouders/web-client'
 import { formatRelativeDateFromDateTime } from '../helpers'
-import { OcButton } from 'design-system/src/components'
+import { OcButton, OcDrop } from 'design-system/src/components'
 import { SharingLinkType } from '@ownclouders/web-client/graph/generated'
 
 type RoleRef = ComponentPublicInstance<typeof OcButton>
@@ -199,6 +201,7 @@ export default defineComponent({
       isPasswordEnforcedForLinkType
     } = useLinkTypes()
     const { addLink } = useSharesStore()
+    const contextMenuDrop = ref<InstanceType<typeof OcDrop>>()
 
     const passwordPolicy = passwordPolicyService.getPolicy()
 
@@ -343,8 +346,13 @@ export default defineComponent({
       }
     })
 
+    watch(selectedExpiry, () => {
+      unref(contextMenuDrop).hide()
+    })
+
     return {
       roleRefs,
+      contextMenuDrop,
       password,
       passwordEnforced,
       passwordPolicy,
