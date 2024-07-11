@@ -129,7 +129,6 @@ const collaboraDocTextAreaSelector = '#clipboard-area'
 const collaboraWelcomeModalIframe = '.iframe-welcome-modal'
 const collaboraCanvasEditorSelector = '.leaflet-layer'
 // OnlyOffice
-const onlyOfficeFileTitleSelector = `//section[@id="box-doc-name"]/input[@id="rib-doc-name"]`
 const onlyOfficeInnerFrameSelector = '[name="frameEditor"]'
 const onlyOfficeSaveButtonSelector = '#slot-btn-dt-save > button'
 const onlyofficeDocTextAreaSelector = '#area_id'
@@ -2008,9 +2007,11 @@ export const canEditContent = async ({
     case 'Microsoft Word':
       // By Default when "Microsoft Word document" is created, it is opened with "OnlyOffice" if both app-provider services are running together
       const innerFrame = editorMainFrame.frameLocator(onlyOfficeInnerFrameSelector)
-      await innerFrame.locator(onlyOfficeCanvasEditorSelector).click()
-      const onlyOfficeDocTitle = await innerFrame.locator(onlyOfficeFileTitleSelector).inputValue()
-      // title appears as "MicrosoftWord.docx (read only)"
-      return !onlyOfficeDocTitle.endsWith('(read only)')
+      try {
+        await expect(innerFrame.locator(onlyOfficeSaveButtonSelector)).toBeVisible()
+        return true
+      } catch (e) {
+        return false
+      }
   }
 }
