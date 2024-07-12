@@ -559,10 +559,11 @@ def e2eTests(ctx):
             # app-provider specific steps
             steps += collaboraService() + \
                      onlyofficeService() + \
+                     waitForServices("online-offices", ["collabora:9980", "onlyoffice:443"]) + \
                      ocisService("app-provider") + \
-                     wopiServer() + \
-                     appProviderService("collabora") + \
-                     appProviderService("onlyoffice")
+                     wopiCollaborationService("collabora") + \
+                     wopiCollaborationService("onlyoffice") + \
+                     waitForServices("wopi", ["wopi-collabora:9300", "wopi-onlyoffice:9300"])
         else:
             # oCIS specific steps
             steps += (tikaService() if params["tikaNeeded"] else []) + \
@@ -936,14 +937,7 @@ def ocisService(type, tika_enabled = False, enforce_password_public_link = False
                 "path": "/root/.ocis/config",
             }],
         },
-        {
-            "name": "wait-for-ocis-server",
-            "image": OC_CI_WAIT_FOR,
-            "commands": [
-                "wait-for -it ocis:9200 -t 300",
-            ],
-        },
-    ]
+    ] + waitForServices("ocis", ["ocis:9200"])
 
 def checkForExistingOcisCache(ctx):
     web_repo_path = "https://raw.githubusercontent.com/owncloud/web/%s" % ctx.build.commit
@@ -1528,44 +1522,23 @@ def logTracingResult(ctx, suite):
         },
     }]
 
-def tikaService():
-    return [
-        {
-            "name": "tika",
-            "type": "docker",
-            "image": APACHE_TIKA,
-            "detach": True,
-        },
-        {
-            "name": "wait-for-tika-service",
-            "image": OC_CI_WAIT_FOR,
-            "commands": [
-                "wait-for -it tika:9998 -t 300",
-            ],
-        },
-    ]
+def waitForServices(name, services = []):
+    services = ",".join(services)
+    return [{
+        "name": "wait-for-%s" % name,
+        "image": OC_CI_WAIT_FOR,
+        "commands": [
+            "wait-for -it %s -t 300" % services,
+        ],
+    }]
 
-def wopiServer():
-    return [
-        {
-            "name": "wopiserver",
-            "type": "docker",
-            "image": CS3ORG_WOPI_SERVER,
-            "detach": True,
-            "commands": [
-                "echo 'LoremIpsum567' > /etc/wopi/wopisecret",
-                "cp %s/tests/drone/wopiserver/wopiserver.conf /etc/wopi/wopiserver.conf" % dir["web"],
-                "/app/wopiserver.py",
-            ],
-        },
-        {
-            "name": "wait-for-wopi-server",
-            "image": OC_CI_WAIT_FOR,
-            "commands": [
-                "wait-for -it wopiserver:8880 -t 300",
-            ],
-        },
-    ]
+def tikaService():
+    return [{
+        "name": "tika",
+        "type": "docker",
+        "image": APACHE_TIKA,
+        "detach": True,
+    }] + waitForServices("tika", ["tika:9998"])
 
 def collaboraService():
     return [
@@ -1578,13 +1551,6 @@ def collaboraService():
                 "DONT_GEN_SSL_CERT": "set",
                 "extra_params": "--o:ssl.enable=true --o:ssl.termination=true --o:welcome.enable=false --o:net.frame_ancestors=https://ocis:9200",
             },
-        },
-        {
-            "name": "wait-for-collabora-service",
-            "image": OC_CI_WAIT_FOR,
-            "commands": [
-                "wait-for -it collabora:9980 -t 300",
-            ],
         },
     ]
 
@@ -1609,49 +1575,38 @@ def onlyofficeService():
                 "/app/ds/run-document-server.sh",
             ],
         },
-        {
-            "name": "wait-for-onlyoffice-service",
-            "image": OC_CI_WAIT_FOR,
-            "commands": [
-                "wait-for -it onlyoffice:443 -t 300",
-            ],
-        },
     ]
 
-def appProviderService(name):
+def wopiCollaborationService(name):
+    service_name = "wopi-%s" % name
     environment = {
-        "APP_PROVIDER_LOG_LEVEL": "error",
-        "REVA_GATEWAY": "com.owncloud.api.gateway",
-        "APP_PROVIDER_GRPC_ADDR": "0.0.0.0:9164",
-        "APP_PROVIDER_DRIVER": "wopi",
-        "APP_PROVIDER_WOPI_INSECURE": True,
-        "APP_PROVIDER_WOPI_WOPI_SERVER_EXTERNAL_URL": "http://wopiserver:8880",
-        "APP_PROVIDER_WOPI_FOLDER_URL_BASE_URL": "https://ocis:9200",
         "MICRO_REGISTRY": "nats-js-kv",
         "MICRO_REGISTRY_ADDRESS": "ocis:9233",
+        "COLLABORATION_GRPC_ADDR": "0.0.0.0:9301",
+        "COLLABORATION_HTTP_ADDR": "0.0.0.0:9300",
+        "COLLABORATION_APP_INSECURE": True,
+        "COLLABORATION_CS3API_DATAGATEWAY_INSECURE": True,
     }
 
     if name == "collabora":
-        environment["APP_PROVIDER_SERVICE_NAME"] = "app-provider-collabora"
-        environment["APP_PROVIDER_EXTERNAL_ADDR"] = "com.owncloud.api.app-provider-collabora"
-        environment["APP_PROVIDER_WOPI_APP_NAME"] = "Collabora"
-        environment["APP_PROVIDER_WOPI_APP_ICON_URI"] = "https://collabora:9980/favicon.ico"
-        environment["APP_PROVIDER_WOPI_APP_URL"] = "https://collabora:9980"
+        environment["COLLABORATION_APP_NAME"] = "Collabora"
+        environment["COLLABORATION_APP_ADDR"] = "https://collabora:9980"
+        environment["COLLABORATION_APP_ICON"] = "https://collabora:9980/favicon.ico"
     elif name == "onlyoffice":
-        environment["APP_PROVIDER_SERVICE_NAME"] = "app-provider-onlyoffice"
-        environment["APP_PROVIDER_EXTERNAL_ADDR"] = "com.owncloud.api.app-provider-onlyoffice"
-        environment["APP_PROVIDER_WOPI_APP_NAME"] = "OnlyOffice"
-        environment["APP_PROVIDER_WOPI_APP_ICON_URI"] = "https://onlyoffice/web-apps/apps/documenteditor/main/resources/img/favicon.ico"
-        environment["APP_PROVIDER_WOPI_APP_URL"] = "https://onlyoffice"
+        environment["COLLABORATION_APP_NAME"] = "OnlyOffice"
+        environment["COLLABORATION_APP_ADDR"] = "https://onlyoffice"
+        environment["COLLABORATION_APP_ICON"] = "https://onlyoffice/web-apps/apps/documenteditor/main/resources/img/favicon.ico"
+
+    environment["COLLABORATION_WOPI_SRC"] = "http://%s:9300" % service_name
 
     return [
         {
-            "name": "%s-app-provider" % name,
+            "name": service_name,
             "image": OC_CI_GOLANG,
             "detach": True,
             "environment": environment,
             "commands": [
-                "./ocis app-provider server",
+                "./ocis collaboration server",
             ],
             "volumes": [
                 {
@@ -1729,66 +1684,50 @@ def postgresService():
     ]
 
 def keycloakService():
-    return [
-        {
-            "name": "generate-keycloak-certs",
-            "image": OC_CI_NODEJS,
-            "commands": [
-                "mkdir -p keycloak-certs",
-                "openssl req -x509 -newkey rsa:2048 -keyout keycloak-certs/keycloakkey.pem -out keycloak-certs/keycloakcrt.pem -nodes -days 365 -subj '/CN=keycloak'",
-                "chmod -R 777 keycloak-certs",
-            ],
-            "volumes": [
-                {
-                    "name": "certs",
-                    "path": "/keycloak-certs",
-                },
-            ],
-        },
-        {
-            "name": "wait-for-postgres",
-            "image": OC_CI_WAIT_FOR,
-            "commands": [
-                "wait-for -it postgres:5432 -t 300",
-            ],
-        },
-        {
-            "name": "keycloak",
-            "image": KEYCLOAK,
-            "detach": True,
-            "environment": {
-                "OCIS_DOMAIN": "ocis:9200",
-                "KC_HOSTNAME": "keycloak:8443",
-                "KC_DB": "postgres",
-                "KC_DB_URL": "jdbc:postgresql://postgres:5432/keycloak",
-                "KC_DB_USERNAME": "keycloak",
-                "KC_DB_PASSWORD": "keycloak",
-                "KC_FEATURES": "impersonation",
-                "KEYCLOAK_ADMIN": "admin",
-                "KEYCLOAK_ADMIN_PASSWORD": "admin",
-                "KC_HTTPS_CERTIFICATE_FILE": "./keycloak-certs/keycloakcrt.pem",
-                "KC_HTTPS_CERTIFICATE_KEY_FILE": "./keycloak-certs/keycloakkey.pem",
-            },
-            "commands": [
-                "mkdir -p /opt/keycloak/data/import",
-                "cp tests/drone/ocis_keycloak/ocis-ci-realm.dist.json /opt/keycloak/data/import/ocis-realm.json",
-                "/opt/keycloak/bin/kc.sh start-dev --proxy=edge --spi-connections-http-client-default-disable-trust-manager=true --import-realm --health-enabled=true",
-            ],
-            "volumes": [
-                {
-                    "name": "certs",
-                    "path": "/keycloak-certs",
-                },
-            ],
-        },
-        {
-            "name": "wait-for-keycloak",
-            "image": OC_CI_WAIT_FOR,
-            "commands": [
-                "wait-for -it keycloak:8443 -t 300",
-            ],
-        },
-    ]
+    return [{
+               "name": "generate-keycloak-certs",
+               "image": OC_CI_NODEJS,
+               "commands": [
+                   "mkdir -p keycloak-certs",
+                   "openssl req -x509 -newkey rsa:2048 -keyout keycloak-certs/keycloakkey.pem -out keycloak-certs/keycloakcrt.pem -nodes -days 365 -subj '/CN=keycloak'",
+                   "chmod -R 777 keycloak-certs",
+               ],
+               "volumes": [
+                   {
+                       "name": "certs",
+                       "path": "/keycloak-certs",
+                   },
+               ],
+           }] + waitForServices("postgres", ["postgres:5432"]) + \
+           [{
+               "name": "keycloak",
+               "image": KEYCLOAK,
+               "detach": True,
+               "environment": {
+                   "OCIS_DOMAIN": "ocis:9200",
+                   "KC_HOSTNAME": "keycloak:8443",
+                   "KC_DB": "postgres",
+                   "KC_DB_URL": "jdbc:postgresql://postgres:5432/keycloak",
+                   "KC_DB_USERNAME": "keycloak",
+                   "KC_DB_PASSWORD": "keycloak",
+                   "KC_FEATURES": "impersonation",
+                   "KEYCLOAK_ADMIN": "admin",
+                   "KEYCLOAK_ADMIN_PASSWORD": "admin",
+                   "KC_HTTPS_CERTIFICATE_FILE": "./keycloak-certs/keycloakcrt.pem",
+                   "KC_HTTPS_CERTIFICATE_KEY_FILE": "./keycloak-certs/keycloakkey.pem",
+               },
+               "commands": [
+                   "mkdir -p /opt/keycloak/data/import",
+                   "cp tests/drone/ocis_keycloak/ocis-ci-realm.dist.json /opt/keycloak/data/import/ocis-realm.json",
+                   "/opt/keycloak/bin/kc.sh start-dev --proxy=edge --spi-connections-http-client-default-disable-trust-manager=true --import-realm --health-enabled=true",
+               ],
+               "volumes": [
+                   {
+                       "name": "certs",
+                       "path": "/keycloak-certs",
+                   },
+               ],
+           }] + waitForServices("keycloack", ["keycloak:8443"])
 
 def e2eTestsOnKeycloak(ctx):
     e2e_Keycloak_tests = [
