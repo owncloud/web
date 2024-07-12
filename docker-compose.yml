@@ -95,7 +95,7 @@ services:
       PROXY_CSP_CONFIG_FILE_LOCATION: /etc/ocis/csp.yaml
       ONLYOFFICE_DOMAIN: host.docker.internal:9981
       COLLABORA_DOMAIN: host.docker.internal:9980
-      FRONTEND_APP_HANDLER_SECURE_VIEW_APP_ADDR: com.owncloud.api.app-provider-collabora
+      FRONTEND_APP_HANDLER_SECURE_VIEW_APP_ADDR: com.owncloud.api.collaboration.Collabora
     labels:
       traefik.enable: true
       traefik.http.routers.ocis.tls: true

@@ -899,6 +899,7 @@ def ocisService(type, tika_enabled = False, enforce_password_public_link = False
         environment["NATS_NATS_PORT"] = 9233
         environment["COLLABORA_DOMAIN"] = "collabora:9980"
         environment["ONLYOFFICE_DOMAIN"] = "onlyoffice:443"
+        environment["FRONTEND_APP_HANDLER_SECURE_VIEW_APP_ADDR"] = "com.owncloud.api.collaboration.Collabora"
     else:
         environment["WEB_UI_CONFIG_FILE"] = "%s" % dir["ocisConfig"]
 
