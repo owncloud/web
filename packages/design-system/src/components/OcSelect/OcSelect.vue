@@ -17,13 +17,13 @@
       class="oc-select"
       :class="{ 'oc-select-position-fixed': positionFixed }"
       style="background: transparent"
+      :dropdown-should-open="selectDropdownShouldOpen"
       :map-keydown="selectMapKeydown"
       v-bind="additionalAttributes"
       @update:model-value="$emit('update:modelValue', $event)"
       @click="onSelectClick()"
       @search:blur="onSelectBlur()"
       @keydown="onSelectKeyDown($event)"
-      @open="onOpen"
     >
       <template #search="{ attributes, events }">
         <input class="vs__search" v-bind="attributes" @input="userInput" v-on="events" />
@@ -102,7 +102,8 @@ import {
   VNodeRef,
   PropType,
   nextTick,
-  onBeforeUnmount
+  onBeforeUnmount,
+  watch
 } from 'vue'
 import { useGettext } from 'vue3-gettext'
 import 'vue-select/dist/vue-select.css'
@@ -368,14 +369,7 @@ export default defineComponent({
       setDropdownEnabled(true)
     }
 
-    const onOpen = () => {
-      if (props.positionFixed) {
-        setDropdownPosition()
-      }
-    }
-
-    const setDropdownPosition = async () => {
-      await nextTick()
+    const setDropdownPosition = () => {
       const dropdownMenu = unref(select).$refs.dropdownMenu
       if (!dropdownMenu) {
         return
@@ -387,6 +381,13 @@ export default defineComponent({
       dropdownMenu.style.left = `${toggleClientRect.left}px`
     }
 
+    watch(dropdownEnabled, async () => {
+      if (props.positionFixed && unref(dropdownEnabled)) {
+        await nextTick()
+        setDropdownPosition()
+      }
+    })
+
     onMounted(() => {
       if (props.positionFixed) {
         window.addEventListener('resize', setDropdownPosition)
@@ -394,7 +395,7 @@ export default defineComponent({
     })
 
     onBeforeUnmount(() => {
-      if (props) {
+      if (props.positionFixed) {
         window.removeEventListener('resize', setDropdownPosition)
       }
     })
@@ -406,8 +407,7 @@ export default defineComponent({
       selectMapKeydown,
       onSelectKeyDown,
       onSelectBlur,
-      onSelectClick,
-      onOpen
+      onSelectClick
     }
   },
   computed: {
