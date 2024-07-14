@@ -158,7 +158,6 @@ import { $gettext } from '@ownclouders/web-pkg/src/router/utils'
 
 export default defineComponent({
   name: 'SpacesList',
-  methods: { $gettext },
   components: { ContextMenuQuickAction, Pagination },
   setup() {
     const router = useRouter()
@@ -539,7 +538,8 @@ export default defineComponent({
       selectSpaces,
       unselectAllSpaces
     }
-  }
+  },
+  methods: { $gettext }
 })
 </script>
 

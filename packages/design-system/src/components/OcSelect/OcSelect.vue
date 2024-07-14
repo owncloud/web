@@ -15,14 +15,15 @@
       :clearable="clearable"
       :multiple="multiple"
       class="oc-select"
+      :class="{ 'oc-select-position-fixed': positionFixed }"
       style="background: transparent"
-      :dropdown-should-open="selectDropdownShouldOpen"
       :map-keydown="selectMapKeydown"
       v-bind="additionalAttributes"
       @update:model-value="$emit('update:modelValue', $event)"
       @click="onSelectClick()"
       @search:blur="onSelectBlur()"
       @keydown="onSelectKeyDown($event)"
+      @open="onOpen"
     >
       <template #search="{ attributes, events }">
         <input class="vs__search" v-bind="attributes" @input="userInput" v-on="events" />
@@ -30,7 +31,9 @@
       <template v-for="(index, name) in $slots" #[name]="data">
         <slot v-if="name !== 'search'" :name="name" v-bind="data" />
       </template>
-      <template #no-options><div v-text="$gettext('No options available.')" /></template>
+      <template #no-options>
+        <div v-text="$gettext('No options available.')" />
+      </template>
       <template #spinner="{ loading: loadingSpinner }">
         <oc-spinner v-if="loadingSpinner" />
       </template>
@@ -97,7 +100,9 @@ import {
   ref,
   unref,
   VNodeRef,
-  PropType
+  PropType,
+  nextTick,
+  onBeforeUnmount
 } from 'vue'
 import { useGettext } from 'vue3-gettext'
 import 'vue-select/dist/vue-select.css'
@@ -280,6 +285,15 @@ export default defineComponent({
     readOnly: {
       type: Boolean,
       default: false
+    },
+    /**
+     * Sets the dropdown menu to position: fixed.
+     * Use in modals, so the dropdown will be able to overflow.
+     * Positioning will be computed automatically
+     */
+    positionFixed: {
+      type: Boolean,
+      default: false
     }
   },
   emits: ['search:input', 'update:modelValue'],
@@ -354,6 +368,37 @@ export default defineComponent({
       setDropdownEnabled(true)
     }
 
+    const onOpen = () => {
+      if (props.positionFixed) {
+        setDropdownPosition()
+      }
+    }
+
+    const setDropdownPosition = async () => {
+      await nextTick()
+      const dropdownMenu = unref(select).$refs.dropdownMenu
+      if (!dropdownMenu) {
+        return
+      }
+      const toggleClientRect = unref(select).$refs.toggle.getBoundingClientRect()
+
+      dropdownMenu.style.width = `${toggleClientRect.width}px`
+      dropdownMenu.style.top = `${toggleClientRect.top + toggleClientRect.height + 1}px`
+      dropdownMenu.style.left = `${toggleClientRect.left}px`
+    }
+
+    onMounted(() => {
+      if (props.positionFixed) {
+        window.addEventListener('resize', setDropdownPosition)
+      }
+    })
+
+    onBeforeUnmount(() => {
+      if (props) {
+        window.removeEventListener('resize', setDropdownPosition)
+      }
+    })
+
     return {
       select,
       userInput,
@@ -361,7 +406,8 @@ export default defineComponent({
       selectMapKeydown,
       onSelectKeyDown,
       onSelectBlur,
-      onSelectClick
+      onSelectClick,
+      onOpen
     }
   },
   computed: {
@@ -423,6 +469,12 @@ export default defineComponent({
   padding: 1px 0;
   color: var(--oc-color-input-text-default);
 
+  &-position-fixed {
+    .vs__dropdown-menu {
+      position: fixed;
+    }
+  }
+
   .vs {
     &__search {
       color: var(--oc-color-input-text-default);
@@ -469,6 +521,7 @@ export default defineComponent({
     &__deselect {
       fill: var(--oc-color-input-text-default);
     }
+
     &__deselect {
       margin: 0 var(--oc-space-small);
     }
@@ -572,6 +625,7 @@ export default defineComponent({
   &.vs--open .vs__selected {
     opacity: 0.8 !important;
   }
+
   .vs__selected-options > *:not(input) {
     background-color: transparent !important;
   }
@@ -584,7 +638,7 @@ For detailed documentation (props, slots, events, etc.), please visit https://vu
 ```js
 <template>
   <div class="oc-docs-width-medium">
-    <oc-select label="Custom label" v-model="selected" :options="['Bannana', 'Orange', 'Pear']" />
+    <oc-select label="Custom label" v-model="selected" :options="['Bannana', 'Orange', 'Pear']"/>
   </div>
 </template>
 <script>
@@ -603,7 +657,7 @@ prevent clearing the selected value by hitting `delete`.
 ```js
 <template>
   <div class="oc-docs-width-medium">
-    <oc-select v-model="selected" :options="['Apple', 'Bannana', 'Orange', 'Pear']" :clearable="false" />
+    <oc-select v-model="selected" :options="['Apple', 'Bannana', 'Orange', 'Pear']" :clearable="false"/>
   </div>
 </template>
 <script>
@@ -619,7 +673,7 @@ prevent clearing the selected value by hitting `delete`.
 ```js
 <template>
   <div class="oc-docs-width-medium">
-    <oc-select v-model="selected" :multiple="true" :options="options" />
+    <oc-select v-model="selected" :multiple="true" :options="options"/>
   </div>
 </template>
 <script>
@@ -644,7 +698,7 @@ To prevent user from filtering options by typing a serach query into the `oc-sel
 ```js
 <template>
   <div class="oc-docs-width-medium">
-    <oc-select v-model="selected" :options="['Apple', 'Bannana', 'Orange', 'Pear']" :searchable="false" />
+    <oc-select v-model="selected" :options="['Apple', 'Bannana', 'Orange', 'Pear']" :searchable="false"/>
   </div>
 </template>
 <script>
@@ -657,7 +711,8 @@ To prevent user from filtering options by typing a serach query into the `oc-sel
 ```
 
 ### Use objects as options
-If we want to select from a list of option objects, we can use `option-label` to select the key of the object to use as label.
+If we want to select from a list of option objects, we can use `option-label` to select the key of the object to use as
+label.
 
 ```js
 <template>
@@ -672,31 +727,29 @@ If we want to select from a list of option objects, we can use `option-label` to
   </div>
 </template>
 <script>
-const options = [
-  {
-    title: 'Apple',
-    desc: 'An apple is an edible fruit produced by an apple tree (Malus domestica)'
-  },
-  {
-    title: 'Bannana',
-    desc: 'Bannana is a genus of goblin spiders (family Oonopidae) native to Xishuangbanna prefecture, Yunnan Province, China, where it lives in the leaf-litter of tropical rainforest'
-  },
-  {
-    title: 'Orange',
-    desc: 'The orange is the fruit of various citrus species in the family Rutaceae'
-  },
-]
+  const options = [
+    {
+      title: 'Apple',
+      desc: 'An apple is an edible fruit produced by an apple tree (Malus domestica)'
+    },
+    {
+      title: 'Bannana',
+      desc: 'Bannana is a genus of goblin spiders (family Oonopidae) native to Xishuangbanna prefecture, Yunnan Province, China, where it lives in the leaf-litter of tropical rainforest'
+    },
+    {
+      title: 'Orange',
+      desc: 'The orange is the fruit of various citrus species in the family Rutaceae'
+    },
+  ]
 
-export default {
-  data: () => ({
-    selected: options[1],
-    options
-  })
-}
+  export default {
+    data: () => ({
+      selected: options[1],
+      options
+    })
+  }
 </script>
 ```
-
-
 
 
 ### Using slots to display complex options
@@ -716,15 +769,15 @@ It is important to specify the `option-label` prop on the `oc-select` to make fi
     >
       <template v-slot:option="{ title, desc }">
         <span class="option">
-          <strong v-text="title" />
+          <strong v-text="title"/>
         </span>
-        <span class="option" v-text="desc" />
+        <span class="option" v-text="desc"/>
       </template>
       <template #no-options>
         Your search query hasn't returned any results.
       </template>
       <template #selected-option="{ title, desc }">
-        <strong class="oc-mr-s" v-text="title" /> <small v-text="desc.slice(0, 20) + '...'" />
+        <strong class="oc-mr-s" v-text="title"/> <small v-text="desc.slice(0, 20) + '...'"/>
       </template>
     </oc-select>
     <p>
@@ -764,6 +817,6 @@ It is important to specify the `option-label` prop on the `oc-select` to make fi
 
 ## Loading spinner
 ```js
-<oc-select :options="['Apple', 'Bannana', 'Orange', 'Pear']" :multiple="true" :loading="true" />
+<oc-select :options="['Apple', 'Bannana', 'Orange', 'Pear']" :multiple="true" :loading="true"/>
 ```
 </docs>
