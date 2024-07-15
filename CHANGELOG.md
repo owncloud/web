@@ -9,6 +9,7 @@ Summary
 -------
 
 * Bugfix - Downloading files via the app top bar doesn't reflect the current state: [#11174](https://github.com/owncloud/web/pull/11174)
+* Bugfix - Images stretched in preview app in Safari browser: [#11186](https://github.com/owncloud/web/pull/11186)
 
 Details
 -------
@@ -22,6 +23,14 @@ Details
 
    https://github.com/owncloud/web/issues/11072
    https://github.com/owncloud/web/pull/11174
+
+* Bugfix - Images stretched in preview app in Safari browser: [#11186](https://github.com/owncloud/web/pull/11186)
+
+   We've fixed a bug, where images have been stretched in the preview app while
+   using the Safari browser.
+
+   https://github.com/owncloud/web/issues/10511
+   https://github.com/owncloud/web/pull/11186
 
 Changelog for ownCloud Web [9.2.0] (2024-07-11)
 =======================================
