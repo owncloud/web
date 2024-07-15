@@ -24,6 +24,7 @@
       @click="onSelectClick()"
       @search:blur="onSelectBlur()"
       @keydown="onSelectKeyDown($event)"
+      @open="onOpen"
     >
       <template #search="{ attributes, events }">
         <input class="vs__search" v-bind="attributes" @input="userInput" v-on="events" />
@@ -374,19 +375,30 @@ export default defineComponent({
       if (!dropdownMenu) {
         return
       }
-      const toggleClientRect = unref(select).$refs.toggle.getBoundingClientRect()
 
+      const toggleClientRect = unref(select).$refs.toggle.getBoundingClientRect()
+      const dropdownMenuBottomOffset = 25
+      const dropdownMenuMaxHeight = Math.min(
+        window.innerHeight - toggleClientRect.bottom - dropdownMenuBottomOffset,
+        window.innerHeight
+      )
+
+      dropdownMenu.style.maxHeight = `${dropdownMenuMaxHeight}px`
       dropdownMenu.style.width = `${toggleClientRect.width}px`
       dropdownMenu.style.top = `${toggleClientRect.top + toggleClientRect.height + 1}px`
       dropdownMenu.style.left = `${toggleClientRect.left}px`
     }
 
-    watch(dropdownEnabled, async () => {
-      if (props.positionFixed && unref(dropdownEnabled)) {
-        await nextTick()
-        setDropdownPosition()
-      }
-    })
+    watch(
+      dropdownEnabled,
+      async () => {
+        if (props.positionFixed && unref(dropdownEnabled)) {
+          await nextTick()
+          setDropdownPosition()
+        }
+      },
+      { immediate: true }
+    )
 
     onMounted(() => {
       if (props.positionFixed) {
@@ -472,6 +484,7 @@ export default defineComponent({
   &-position-fixed {
     .vs__dropdown-menu {
       position: fixed;
+      overflow-y: auto;
     }
   }
 
