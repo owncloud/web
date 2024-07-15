@@ -1,0 +1,6 @@
+Bugfix: Images stretched in preview app in Safari browser
+
+We've fixed a bug, where images have been stretched in the preview app while using the Safari browser.
+
+https://github.com/owncloud/web/pull/11186
+https://github.com/owncloud/web/issues/10511
