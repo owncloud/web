@@ -136,6 +136,7 @@ export const onSSEShareCreatedEvent = async ({
     }
 
     const resource = await clientService.webdav.getFileInfo(space, {
+      path: '',
       fileId: sseData.itemid
     })
 
@@ -249,6 +250,7 @@ export const onSSEShareRemovedEvent = async ({
     }
 
     const resource = await clientService.webdav.getFileInfo(space, {
+      path: '',
       fileId: sseData.itemid
     })
 
@@ -272,6 +274,7 @@ export const onSSEShareRemovedEvent = async ({
     }
 
     const resource = await clientService.webdav.getFileInfo(space, {
+      path: '',
       fileId: sseData.itemid
     })
 
@@ -318,6 +321,7 @@ export const onSSELinkCreatedEvent = async ({
     }
 
     const resource = await clientService.webdav.getFileInfo(space, {
+      path: '',
       fileId: sseData.itemid
     })
 
@@ -372,6 +376,7 @@ export const onSSELinkRemovedEvent = async ({
   }
 
   const resource = await clientService.webdav.getFileInfo(space, {
+    path: '',
     fileId: sseData.itemid
   })
 

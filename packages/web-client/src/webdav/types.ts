@@ -14,7 +14,6 @@ import { RestoreFileVersionFactory } from './restoreFileVersion'
 import { ClearTrashBinFactory } from './clearTrashBin'
 import { SearchFactory } from './search'
 import { GetPathForFileIdFactory } from './getPathForFileId'
-import { ListFilesByIdFactory } from './listFilesById'
 import { SetFavoriteFactory } from './setFavorite'
 import { ListFavoriteFilesFactory } from './listFavoriteFiles'
 import { AxiosInstance } from 'axios'
@@ -30,7 +29,6 @@ export interface WebDAV {
   getPublicFileUrl: ReturnType<typeof GetPublicFileUrlFactory>['getPublicFileUrl']
   revokeUrl: ReturnType<typeof GetFileUrlFactory>['revokeUrl']
   listFiles: ReturnType<typeof ListFilesFactory>['listFiles']
-  listFilesById: ReturnType<typeof ListFilesByIdFactory>['listFilesById']
   createFolder: ReturnType<typeof CreateFolderFactory>['createFolder']
   getFileContents: ReturnType<typeof GetFileContentsFactory>['getFileContents']
   putFileContents: ReturnType<typeof PutFileContentsFactory>['putFileContents']

@@ -42,7 +42,7 @@ export class FolderLoaderSpace implements FolderLoader {
       signal2,
       space: SpaceResource,
       path: string = null,
-      fileId: string | number = null,
+      fileId: string = null,
       options: FolderLoaderOptions = {}
     ) {
       try {
