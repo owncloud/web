@@ -103,7 +103,8 @@ import {
   PropType,
   nextTick,
   onBeforeUnmount,
-  watch
+  watch,
+  computed
 } from 'vue'
 import { useGettext } from 'vue3-gettext'
 import 'vue-select/dist/vue-select.css'
@@ -388,16 +389,16 @@ export default defineComponent({
       dropdownMenu.style.left = `${toggleClientRect.left}px`
     }
 
-    watch(
-      dropdownEnabled,
-      async () => {
-        if (props.positionFixed && unref(dropdownEnabled)) {
-          await nextTick()
-          setDropdownPosition()
-        }
-      },
-      { immediate: true }
-    )
+    const dropdownOpen = computed(() => {
+      return unref(select)?.dropdownOpen
+    })
+
+    watch(dropdownOpen, async () => {
+      if (props.positionFixed && unref(dropdownOpen)) {
+        await nextTick()
+        setDropdownPosition()
+      }
+    })
 
     onMounted(() => {
       if (props.positionFixed) {
