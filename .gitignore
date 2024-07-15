@@ -59,7 +59,8 @@ tests/report/cucumber_report.html
 # third party licenses
 /third-party-licenses
 
-# dev setup certificates
+# dev setup
 /dev/docker/ocis-ca
 /dev/docker/traefik/certificates
 docker-compose.override.yml
+/dev/docker/apps

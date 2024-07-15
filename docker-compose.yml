@@ -16,6 +16,7 @@ x-ocis-server: &ocis-service
 
     # WEB
     WEB_ASSET_CORE_PATH: ${WEB_ASSET_CORE_PATH:-/web/dist}
+    WEB_ASSET_APPS_PATH: ${WEB_ASSET_APPS_PATH:-/web/apps}
     WEB_UI_THEME_PATH: ${WEB_UI_THEME_PATH:-/themes/owncloud/theme.json}
     WEB_UI_CONFIG_FILE: ${WEB_UI_CONFIG_FILE:-/web/config.json}
 
@@ -110,6 +111,7 @@ services:
       - ./dev/docker/ocis.idp.config.yaml:/etc/ocis/idp.yaml
       - ./dev/docker/ocis-ca:/var/lib/ocis/proxy
       - ./dev/docker/ocis.storage.ocmproviders.json:/etc/ocis/ocmproviders.json
+      - ./dev/docker/apps:/web/apps
       - ./dist:/web/dist
       - ./dev/docker/ocis/app-registry.yaml:/etc/ocis/app-registry.yaml
       - ocis-config:/etc/ocis
