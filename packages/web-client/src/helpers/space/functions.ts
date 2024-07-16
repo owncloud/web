@@ -25,6 +25,17 @@ export function buildWebDavSpacesTrashPath(storageId: string, path = '') {
   })
 }
 
+export function getRelativeSpecialFolderSpacePath(space: SpaceResource, type: 'image' | 'readme') {
+  const typeMap = { image: 'spaceImageData', readme: 'spaceReadmeData' } as const
+  const specialProp = space[typeMap[type]]
+  const webDavPathComponents = decodeURI(specialProp.webDavUrl).split('/')
+  const idComponent = webDavPathComponents.find((c) => c.startsWith(space.id))
+  if (!idComponent) {
+    return ''
+  }
+  return webDavPathComponents.slice(webDavPathComponents.indexOf(idComponent) + 1).join('/')
+}
+
 export type PublicLinkType = 'ocm' | 'public-link'
 export function buildPublicSpaceResource(
   data: any & { publicLinkType: PublicLinkType }
@@ -38,8 +49,8 @@ export function buildPublicSpaceResource(
   const publicLinkShareDate = data.props?.[DavProperty.PublicLinkShareDate]
   const publicLinkShareOwner = data.props?.[DavProperty.PublicLinkShareOwner]
 
-  let driveAlias: string
-  let webDavPath: string
+  let driveAlias
+  let webDavPath
   if (data.publicLinkType === 'ocm') {
     driveAlias = `ocm/${data.id}`
     webDavPath = buildWebDavOcmPath(data.id)
@@ -242,16 +253,16 @@ export function buildSpace(
     },
     canDeny: () => false,
     getDomSelector: () => extractDomSelector(data.id),
-    getDriveAliasAndItem(path: string): string {
+    getDriveAliasAndItem({ path }: Resource): string {
       return urlJoin(this.driveAlias, path, {
         leadingSlash: false
       })
     },
-    getWebDavUrl(fileId: string): string {
-      return `${webDavUrl}!${extractNodeId(fileId)}`
+    getWebDavUrl({ path }: { path: string }): string {
+      return urlJoin(webDavUrl, path)
     },
-    getWebDavTrashUrl(fileId: string): string {
-      return `${webDavTrashUrl}!${extractNodeId(fileId)}`
+    getWebDavTrashUrl({ path }: { path: string }): string {
+      return urlJoin(webDavTrashUrl, path)
     },
     isViewer(user: User): boolean {
       return this.spaceRoles.viewer.some((r) => r.isMember(user))

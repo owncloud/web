@@ -1,7 +1,6 @@
 import {
   buildDeletedResource,
   buildResource,
-  extractNodeId,
   Resource,
   WebDavResponseResource
 } from '../helpers/resource'
@@ -16,6 +15,7 @@ import { urlJoin } from '../utils'
 import { DAV, DAVRequestOptions } from './client'
 import { GetPathForFileIdFactory } from './getPathForFileId'
 import { WebDavOptions } from './types'
+import { getWebDavPath } from './utils'
 
 export type ListFilesOptions = {
   depth?: number
@@ -96,17 +96,16 @@ export const ListFilesFactory = (
       }
 
       const listFilesCorrectedPath = async () => {
-        const correctPath = await pathForFileIdFactory.getPathForFileId(fileId.toString())
+        const correctPath = await pathForFileIdFactory.getPathForFileId(fileId)
         return this.listFiles(space, { path: correctPath }, { depth, davProperties })
       }
 
       try {
-        let webDavPath = urlJoin(space.webDavPath, path)
+        let webDavPath = ''
         if (isTrash) {
-          webDavPath = buildWebDavSpacesTrashPath(space.id.toString())
-        }
-        if (fileId) {
-          webDavPath = `${space.webDavPath}!${extractNodeId(fileId)}`
+          webDavPath = buildWebDavSpacesTrashPath(space.id)
+        } else {
+          webDavPath = getWebDavPath(space, { fileId, path })
         }
 
         webDavResources = await dav.propfind(webDavPath, {

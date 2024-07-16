@@ -36,6 +36,7 @@ const def = <V, T>(v: V): M<V, T> => ({
   value: v,
   type: null
 })
+const defStringOrNumber = <V>(v: V) => def<V, string | number>(v)
 const defString = <V>(v: V) => def<V, string>(v)
 const defNumber = <V>(v: V) => def<V, number>(v)
 const defStringArray = <V>(v: V) => def<V, string[]>(v)
@@ -52,7 +53,7 @@ const DavPropertyMapping = {
   ContentLength: defNumber('getcontentlength' as const),
   ContentSize: defNumber('size' as const),
   LastModifiedDate: defString('getlastmodified' as const),
-  Tags: defString('tags' as const),
+  Tags: defStringOrNumber('tags' as const),
   Audio: {
     value: 'audio',
     type: null as Audio

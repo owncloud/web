@@ -1,22 +1,36 @@
-import { urlJoin } from '../utils'
 import { SpaceResource } from '../helpers'
 import { DAV, DAVRequestOptions } from './client'
 import { WebDavOptions } from './types'
+import { getWebDavPath } from './utils'
 
 export const CopyFilesFactory = (dav: DAV, options: WebDavOptions) => {
   return {
     copyFiles(
       sourceSpace: SpaceResource,
-      { path: sourcePath }: { path: string },
+      { path: sourcePath, fileId: sourceFileId }: { path?: string; fileId?: string },
       targetSpace: SpaceResource,
-      { path: targetPath }: { path: string },
+      {
+        path: targetPath,
+        parentFolderId,
+        name
+      }: { path?: string; parentFolderId?: string; name?: string },
       { overwrite, ...opts }: { overwrite?: boolean } & DAVRequestOptions = {}
     ) {
-      return dav.copy(
-        urlJoin(sourceSpace.webDavPath, sourcePath),
-        urlJoin(targetSpace.webDavPath, targetPath),
-        { overwrite: overwrite || false, ...opts }
-      )
+      const sourceWebDavPath = getWebDavPath(sourceSpace, {
+        fileId: sourceFileId,
+        path: sourcePath
+      })
+
+      const targetWebDavPath = getWebDavPath(targetSpace, {
+        fileId: parentFolderId,
+        path: targetPath,
+        name
+      })
+
+      return dav.copy(sourceWebDavPath, targetWebDavPath, {
+        overwrite: overwrite || false,
+        ...opts
+      })
     }
   }
 }

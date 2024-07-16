@@ -1,8 +1,15 @@
-import { extractNodeId, FolderResource, isPublicSpaceResource, SpaceResource } from '../helpers'
+import { FolderResource, SpaceResource } from '../helpers'
 import { GetFileInfoFactory } from './getFileInfo'
-import { urlJoin } from '../utils'
 import { DAV, DAVRequestOptions } from './client/dav'
 import { WebDavOptions } from './types'
+import { getWebDavPath } from './utils'
+
+type CreateFolderOptions = {
+  path: string
+  parentFolderId?: string
+  folderName?: string
+  fetchFolder?: boolean
+} & DAVRequestOptions
 
 export const CreateFolderFactory = (
   dav: DAV,
@@ -12,28 +19,13 @@ export const CreateFolderFactory = (
   return {
     async createFolder(
       space: SpaceResource,
-      {
-        path,
-        fileId,
-        folderName,
-        fetchFolder = true,
-        ...opts
-      }: {
-        fileId?: string
-        path?: string
-        folderName?: string
-        fetchFolder?: boolean
-      } & DAVRequestOptions
+      { path, parentFolderId, folderName, fetchFolder = true, ...opts }: CreateFolderOptions
     ): Promise<FolderResource> {
-      let webDavPath = urlJoin(space.webDavPath, path)
-      if (fileId && !isPublicSpaceResource(space)) {
-        webDavPath = urlJoin(`${space.webDavPath}!${extractNodeId(fileId)}`, folderName)
-      }
-
+      const webDavPath = getWebDavPath(space, { fileId: parentFolderId, path, name: folderName })
       await dav.mkcol(webDavPath)
 
       if (fetchFolder) {
-        // mkcol doesn't return a fileId, hence we need to use the path to fetch the folder
+        // FIXME: mkcol doesn't return a fileId: https://github.com/owncloud/ocis/issues/9618
         return getFileInfoFactory.getFileInfo(space, { path }, opts)
       }
     }
