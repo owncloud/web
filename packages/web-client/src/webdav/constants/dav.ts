@@ -36,7 +36,7 @@ const def = <V, T>(v: V): M<V, T> => ({
   value: v,
   type: null
 })
-const defStringOrNumber = <V>(v: V) => def<V, string|number>(v)
+const defStringOrNumber = <V>(v: V) => def<V, string | number>(v)
 const defString = <V>(v: V) => def<V, string>(v)
 const defNumber = <V>(v: V) => def<V, number>(v)
 const defStringArray = <V>(v: V) => def<V, string[]>(v)
