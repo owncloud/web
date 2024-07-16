@@ -2,18 +2,18 @@ import {
   Resource,
   buildShareSpaceResource,
   isMountPointSpaceResource,
-  OCM_PROVIDER_ID
+  OCM_PROVIDER_ID,
+  buildSpace
 } from '@ownclouders/web-client'
 import { computed, unref } from 'vue'
 import { useClientService } from '../clientService'
 import { urlJoin } from '@ownclouders/web-client'
-import { useLoadFileInfoById } from './useLoadFileInfoById'
 import { useSpacesStore, useConfigStore } from '../piniaStores'
+import { DavProperty } from '@ownclouders/web-client/webdav'
 
 export const useGetResourceContext = () => {
   const clientService = useClientService()
   const configStore = useConfigStore()
-  const { loadFileInfoByIdTask } = useLoadFileInfoById({ clientService })
   const spacesStore = useSpacesStore()
 
   const spaces = computed(() => spacesStore.spaces)
@@ -25,6 +25,18 @@ export const useGetResourceContext = () => {
     return unref(spaces).find(
       (space) => isMountPointSpaceResource(space) && space.root?.remoteItem?.id === id
     )
+  }
+
+  const loadFileInfoById = (fileId: string) => {
+    const davProperties = [
+      DavProperty.FileId,
+      DavProperty.FileParent,
+      DavProperty.Name,
+      DavProperty.ResourceType
+    ]
+
+    const tmpSpace = buildSpace({ id: fileId, name: '' })
+    return clientService.webdav.getFileInfo(tmpSpace, { fileId }, { davProperties })
   }
 
   // get context for a resource when only having its id. be careful, this might be very expensive!
@@ -44,12 +56,12 @@ export const useGetResourceContext = () => {
     await spacesStore.loadMountPoints({ graphClient: clientService.graphAuthenticated })
 
     let mountPoint = getMatchingMountPoint(id)
-    resource = await loadFileInfoByIdTask.perform(id)
+    resource = await loadFileInfoById(id)
     const sharePathSegments = mountPoint ? [] : [unref(resource).name]
     let tmpResource = unref(resource)
 
     while (!mountPoint) {
-      tmpResource = await loadFileInfoByIdTask.perform(tmpResource.parentFolderId)
+      tmpResource = await loadFileInfoById(tmpResource.parentFolderId)
       mountPoint = getMatchingMountPoint(tmpResource.id)
       if (!mountPoint) {
         sharePathSegments.unshift(tmpResource.name)

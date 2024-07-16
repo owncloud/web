@@ -32,16 +32,14 @@ export const GetFileUrlFactory = (
       } & DAVRequestOptions
     ): Promise<string> {
       const inlineDisposition = disposition === 'inline'
-      const { path } = resource
       let { downloadURL } = resource
 
       let signed = true
       if (!downloadURL && !inlineDisposition) {
         // compute unsigned url
-        const webDavPath = space ? urlJoin(space.webDavPath, path) : resource.webDavPath
         downloadURL = version
           ? dav.getFileUrl(urlJoin('meta', resource.fileId, 'v', version))
-          : dav.getFileUrl(webDavPath)
+          : dav.getFileUrl(resource.webDavPath)
 
         if (username && doHeadRequest) {
           await axiosClient.head(downloadURL)

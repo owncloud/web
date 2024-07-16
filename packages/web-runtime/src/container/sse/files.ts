@@ -30,6 +30,7 @@ export const onSSEItemRenamedEvent = async ({
   }
 
   const updatedResource = await clientService.webdav.getFileInfo(space, {
+    path: '',
     fileId: sseData.itemid
   })
 
@@ -61,6 +62,7 @@ export const onSSEFileLockingEvent = async ({
   }
 
   const updatedResource = await clientService.webdav.getFileInfo(space, {
+    path: '',
     fileId: sseData.itemid
   })
 
@@ -89,6 +91,10 @@ export const onSSEProcessingFinishedEvent = async ({
     return false
   }
   const resource = resourcesStore.resources.find((f) => f.id === sseData.itemid)
+  const space = spacesStore.spaces.find((s) => s.id === sseData.spaceid)
+  if (!space) {
+    return
+  }
 
   /**
    * If resource is not loaded, it suggests an upload is in progress.
@@ -103,7 +109,8 @@ export const onSSEProcessingFinishedEvent = async ({
     }
 
     return resourceQueue.add(async () => {
-      const { resource } = await clientService.webdav.listFilesById({
+      const { resource } = await clientService.webdav.listFiles(space, {
+        path: '',
         fileId: sseData.itemid
       })
       resourcesStore.upsertResource(resource)
@@ -121,12 +128,8 @@ export const onSSEProcessingFinishedEvent = async ({
     })
   }
 
-  const space = spacesStore.spaces.find((s) => s.id === sseData.spaceid)
-  if (!space) {
-    return
-  }
-
   const updatedResource = await clientService.webdav.getFileInfo(space, {
+    path: '',
     fileId: sseData.itemid
   })
   resourcesStore.upsertResource(updatedResource)
@@ -197,6 +200,7 @@ export const onSSEItemRestoredEvent = async ({
   }
 
   const resource = await clientService.webdav.getFileInfo(space, {
+    path: '',
     fileId: sseData.itemid
   })
 
@@ -239,6 +243,7 @@ export const onSSEItemMovedEvent = async ({
   }
 
   const resource = await clientService.webdav.getFileInfo(space, {
+    path: '',
     fileId: sseData.itemid
   })
 
@@ -285,6 +290,7 @@ export const onSSEFileTouchedEvent = async ({
   }
 
   const resource = await clientService.webdav.getFileInfo(space, {
+    path: '',
     fileId: sseData.itemid
   })
 
@@ -316,6 +322,7 @@ export const onSSEFolderCreatedEvent = async ({
   }
 
   const resource = await clientService.webdav.getFileInfo(space, {
+    path: '',
     fileId: sseData.itemid
   })
 
