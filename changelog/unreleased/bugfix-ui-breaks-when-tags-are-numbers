@@ -1,0 +1,6 @@
+Bugfix: UI breaks when tags are numbers
+
+We fixed a bug where the UI breaks when tags only consists of numbers
+
+https://github.com/owncloud/web/pull/11194
+https://github.com/owncloud/web/issues/11193
