@@ -151,7 +151,7 @@ export function buildResource(resource: WebDavResponseResource): Resource {
       id: resource.props[DavProperty.OwnerId],
       displayName: resource.props[DavProperty.OwnerDisplayName]
     },
-    tags: (resource.props[DavProperty.Tags] || '').split(',').filter(Boolean),
+    tags: (resource.props[DavProperty.Tags] || '').toString().split(',').filter(Boolean),
     audio: convertObjectToCamelCaseKeys(resource.props[DavProperty.Audio]),
     location: convertObjectToCamelCaseKeys(resource.props[DavProperty.Location]),
     image: convertObjectToCamelCaseKeys(resource.props[DavProperty.Image]),
