@@ -163,7 +163,7 @@ export const announceConfiguration = async ({
  *
  * @param configStore
  */
-export const announceClient = async (configStore: ConfigStore): Promise<void> => {
+export const announceAuthClient = async (configStore: ConfigStore): Promise<void> => {
   const openIdConnect = configStore.openIdConnect || {}
 
   if (!openIdConnect.dynamic) {
@@ -185,13 +185,13 @@ export const initializeApplications = async ({
   configStore,
   router,
   appProviderService,
-  dynamicApps
+  appProviderApps
 }: {
   app: App
   configStore: ConfigStore
   router: Router
   appProviderService: AppProviderService
-  dynamicApps?: boolean
+  appProviderApps?: boolean
 }): Promise<NextApplication[]> => {
   type RawApplication = {
     path?: string
@@ -199,7 +199,7 @@ export const initializeApplications = async ({
   }
 
   let applicationResults: PromiseSettledResult<NextApplication>[] = []
-  if (dynamicApps) {
+  if (appProviderApps) {
     applicationResults = await Promise.allSettled(
       appProviderService.appNames.map((appName) =>
         buildApplication({
@@ -574,14 +574,14 @@ export const announceAuthService = ({
  */
 export const announceAppProviderService = ({
   app,
-  capabilityStore,
+  serverUrl,
   clientService
 }: {
   app: App
-  capabilityStore: CapabilityStore
+  serverUrl: string
   clientService: ClientService
 }): AppProviderService => {
-  const appProviderService = new AppProviderService(capabilityStore, clientService)
+  const appProviderService = new AppProviderService(serverUrl, clientService)
   app.config.globalProperties.$appProviderService = appProviderService
   app.provide('$appProviderService', appProviderService)
   return appProviderService
