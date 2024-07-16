@@ -75,7 +75,7 @@ export class FolderService {
 
     const loader = this.loaders.find((l) => l.isEnabled() && l.isActive(unref(router)))
     if (!loader) {
-      console.error('No folder loader found for route')
+      console.debug('No folder loader found for route')
       return
     }
 
