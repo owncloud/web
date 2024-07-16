@@ -24,5 +24,5 @@ export const getWebDavPath = (
     return urlJoin('spaces', fileId, name || '')
   }
 
-  throw new Error('either a fileId or a path must be provided')
+  return space.webDavPath
 }
