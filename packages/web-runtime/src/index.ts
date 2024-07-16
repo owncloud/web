@@ -1,6 +1,6 @@
 import { loadDesignSystem, pages, loadTranslations, supportedLanguages } from './defaults'
 import { router } from './router'
-import { PortalTarget, AppProviderService } from '@ownclouders/web-pkg'
+import { PortalTarget } from '@ownclouders/web-pkg'
 import { createHead } from '@vueuse/head'
 import { abilitiesPlugin } from '@casl/vue'
 import { createMongoAbility } from '@casl/ability'
@@ -9,7 +9,7 @@ import {
   announceConfiguration,
   initializeApplications,
   announceApplicationsReady,
-  announceClient,
+  announceAuthClient,
   announceDefaults,
   announceClientService,
   announceTheme,
@@ -89,13 +89,16 @@ export const bootstrapApp = async (configurationPath: string, appsReadyCallback:
     webWorkersStore
   })
 
-  let appProviderService: AppProviderService
   if (!isSilentRedirect) {
     const designSystem = await loadDesignSystem()
 
     announceUppyService({ app })
     startSentry(configStore, app)
-    appProviderService = announceAppProviderService({ app, capabilityStore, clientService })
+    const appProviderService = announceAppProviderService({
+      app,
+      serverUrl: configStore.serverUrl,
+      clientService
+    })
     announceArchiverService({ app, configStore, userStore, capabilityStore })
     announceLoadingService({ app })
     announcePreviewService({
@@ -106,7 +109,7 @@ export const bootstrapApp = async (configurationPath: string, appsReadyCallback:
       capabilityStore
     })
     announcePasswordPolicyService({ app })
-    await announceClient(configStore)
+    await announceAuthClient(configStore)
 
     app.config.globalProperties.$wormhole = createWormhole()
     app.use(PortalVue, {
@@ -131,6 +134,19 @@ export const bootstrapApp = async (configurationPath: string, appsReadyCallback:
       applicationsPromise,
       themePromise
     ])
+
+    // Important: has to happen AFTER native applications are loaded.
+    // Reason: the `external` app serves as a blueprint for creating the app provider apps.
+    if (applicationStore.has('web-app-external')) {
+      await appProviderService.loadData()
+      await initializeApplications({
+        app,
+        configStore,
+        router,
+        appProviderService,
+        appProviderApps: true
+      })
+    }
 
     announceTranslations({ appsStore, gettext, coreTranslations, customTranslations })
 
@@ -165,20 +181,10 @@ export const bootstrapApp = async (configurationPath: string, appsReadyCallback:
       }
       announceVersions({ capabilityStore })
 
-      await appProviderService.loadData()
-      const appProviderApps = await initializeApplications({
-        app,
-        configStore,
-        router,
-        appProviderService,
-        dynamicApps: true
-      })
-      appProviderApps.forEach((application) => application.mounted(app))
-
       await announceApplicationsReady({
         app,
         appsStore,
-        applications: [...applications, ...appProviderApps]
+        applications
       })
       appsReadyCallback()
     },

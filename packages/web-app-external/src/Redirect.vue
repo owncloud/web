@@ -18,7 +18,6 @@ import {
   queryItemAsString,
   useAppProviderService,
   useRouteMeta,
-  useRouteParam,
   useRouteQuery
 } from '@ownclouders/web-pkg'
 import { useRouter } from 'vue-router'
@@ -36,11 +35,7 @@ export default defineComponent({
 
     const appQuery = useRouteQuery('app')
     const appNameQuery = useRouteQuery('appName')
-    const appNameParam = useRouteParam('appCatchAll')
     const appName = computed(() => {
-      if (unref(appNameParam)) {
-        return unref(appNameParam)
-      }
       if (unref(appQuery)) {
         return queryItemAsString(unref(appQuery))
       }

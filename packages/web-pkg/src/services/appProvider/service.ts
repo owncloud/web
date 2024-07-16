@@ -1,29 +1,23 @@
 import { MimeType, MimeTypesToAppsSchema } from './schemas'
 import { ref, unref } from 'vue'
-import { CapabilityStore } from '../../composables'
 import { ClientService } from '../client'
+import { urlJoin } from '@ownclouders/web-client'
 
 export class AppProviderService {
   private _mimeTypes = ref<MimeType[]>([])
-  private capabilityStore: CapabilityStore
-  private clientService: ClientService
+  private readonly serverUrl: string
+  private readonly clientService: ClientService
 
-  constructor(capabilityStore: CapabilityStore, clientService: ClientService) {
-    this.capabilityStore = capabilityStore
+  constructor(serverUrl: string, clientService: ClientService) {
+    this.serverUrl = serverUrl
     this.clientService = clientService
   }
 
   public async loadData(): Promise<void> {
-    const appProviderCapability = this.capabilityStore.filesAppProviders.find(
-      (appProvider) => appProvider.enabled
-    )
-    if (!appProviderCapability) {
-      return
-    }
-
+    const appListUrl = urlJoin(this.serverUrl, 'app', 'list')
     const {
       data: { 'mime-types': mimeTypes }
-    } = await this.clientService.httpUnAuthenticated.get(appProviderCapability.apps_url, {
+    } = await this.clientService.httpUnAuthenticated.get(appListUrl, {
       schema: MimeTypesToAppsSchema
     })
     this._mimeTypes.value = mimeTypes
