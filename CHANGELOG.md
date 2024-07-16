@@ -10,6 +10,7 @@ Summary
 
 * Bugfix - Downloading files via the app top bar doesn't reflect the current state: [#11174](https://github.com/owncloud/web/pull/11174)
 * Bugfix - Images stretched in preview app in Safari browser: [#11186](https://github.com/owncloud/web/pull/11186)
+* Bugfix - UI breaks when tags are numbers: [#11194](https://github.com/owncloud/web/pull/11194)
 
 Details
 -------
@@ -31,6 +32,13 @@ Details
 
    https://github.com/owncloud/web/issues/10511
    https://github.com/owncloud/web/pull/11186
+
+* Bugfix - UI breaks when tags are numbers: [#11194](https://github.com/owncloud/web/pull/11194)
+
+   We fixed a bug where the UI breaks when tags only consists of numbers
+
+   https://github.com/owncloud/web/issues/11193
+   https://github.com/owncloud/web/pull/11194
 
 Changelog for ownCloud Web [9.2.0] (2024-07-11)
 =======================================
