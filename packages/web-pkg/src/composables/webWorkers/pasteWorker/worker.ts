@@ -46,18 +46,18 @@ self.onmessage = async (e: MessageEvent) => {
   const doCopy = (transferData: TransferData) =>
     webdav.copyFiles(
       transferData.sourceSpace,
-      transferData.resource,
+      { fileId: transferData.resource.id },
       transferData.targetSpace,
-      { path: transferData.path },
+      { parentFolderId: transferData.targetFolder.id, name: transferData.targetName },
       { overwrite: transferData.overwrite }
     )
 
   const doMove = (transferData: TransferData) =>
     webdav.moveFiles(
       transferData.sourceSpace,
-      transferData.resource,
+      { fileId: transferData.resource.id },
       transferData.targetSpace,
-      { path: transferData.path },
+      { parentFolderId: transferData.targetFolder.id, name: transferData.targetName },
       { overwrite: transferData.overwrite }
     )
 

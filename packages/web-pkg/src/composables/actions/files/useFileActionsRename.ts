@@ -2,7 +2,6 @@ import { isSameResource } from '../../../helpers/resource'
 import { isLocationTrashActive, isLocationSharesActive } from '../../../router'
 import { Resource } from '@ownclouders/web-client'
 import { dirname, join } from 'path'
-import { WebDAV } from '@ownclouders/web-client/webdav'
 import {
   SpaceResource,
   isShareSpaceResource,
@@ -90,8 +89,9 @@ export const useFileActionsRename = () => {
 
     try {
       const newPath = join(dirname(resource.path), newName)
-      await (clientService.webdav as WebDAV).moveFiles(space, resource, space, {
-        path: newPath
+      await clientService.webdav.moveFiles(space, { fileId: resource.id }, space, {
+        parentFolderId: resource.parentFolderId,
+        name: newName
       })
 
       const isCurrentFolder = isSameResource(resource, currentFolder)

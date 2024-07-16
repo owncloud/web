@@ -274,16 +274,19 @@ export default defineComponent({
         const newExtension = props.importResourceWithExtension(unref(resource))
         if (newExtension) {
           const timestamp = DateTime.local().toFormat('yyyyMMddHHmmss')
-          const targetPath = `${unref(resource).name}_${timestamp}.${newExtension}`
+          const name = `${unref(resource).name}_${timestamp}.${newExtension}`
           if (
-            !(yield clientService.webdav.copyFiles(unref(space), unref(resource), unref(space), {
-              path: targetPath
-            }))
+            !(yield clientService.webdav.copyFiles(
+              unref(space),
+              { fileId: unref(resource).id },
+              unref(space),
+              { parentFolderId: unref(resource).parentFolderId, name }
+            ))
           ) {
             throw new Error($gettext('Importing failed'))
           }
 
-          resource.value = { path: targetPath } as Resource
+          resource.value = { path: name } as Resource
         }
 
         if (replaceInvalidFileRoute(currentFileContext, unref(resource))) {
