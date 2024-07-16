@@ -4,6 +4,7 @@
     :label="$gettext('Quota')"
     :total-quota="selectedOption"
     :max-quota="maxQuota"
+    :position-fixed="true"
     @selected-option-change="changeSelectedQuotaOption"
   />
   <div v-if="warningMessage" class="oc-mt-s">

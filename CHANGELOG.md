@@ -3,7 +3,49 @@ Changelog for ownCloud Web [unreleased] (UNRELEASED)
 The following sections list the changes in ownCloud web unreleased relevant to
 ownCloud admins and users.
 
-[unreleased]: https://github.com/owncloud/web/compare/v9.1.0...master
+[unreleased]: https://github.com/owncloud/web/compare/v9.2.0...master
+
+Summary
+-------
+
+* Bugfix - Downloading files via the app top bar doesn't reflect the current state: [#11174](https://github.com/owncloud/web/pull/11174)
+* Bugfix - Images stretched in preview app in Safari browser: [#11186](https://github.com/owncloud/web/pull/11186)
+* Bugfix - UI breaks when tags are numbers: [#11194](https://github.com/owncloud/web/pull/11194)
+
+Details
+-------
+
+* Bugfix - Downloading files via the app top bar doesn't reflect the current state: [#11174](https://github.com/owncloud/web/pull/11174)
+
+   We've fixed a bug where downloading a file via the app top bar does reflect the
+   last saved state, but not the the current state of the respective file. This
+   happened when the user opened a text file in web and entered new text without
+   saving it.
+
+   https://github.com/owncloud/web/issues/11072
+   https://github.com/owncloud/web/pull/11174
+
+* Bugfix - Images stretched in preview app in Safari browser: [#11186](https://github.com/owncloud/web/pull/11186)
+
+   We've fixed a bug, where images have been stretched in the preview app while
+   using the Safari browser.
+
+   https://github.com/owncloud/web/issues/10511
+   https://github.com/owncloud/web/pull/11186
+
+* Bugfix - UI breaks when tags are numbers: [#11194](https://github.com/owncloud/web/pull/11194)
+
+   We fixed a bug where the UI breaks when tags only consists of numbers
+
+   https://github.com/owncloud/web/issues/11193
+   https://github.com/owncloud/web/pull/11194
+
+Changelog for ownCloud Web [9.2.0] (2024-07-11)
+=======================================
+The following sections list the changes in ownCloud web 9.2.0 relevant to
+ownCloud admins and users.
+
+[9.2.0]: https://github.com/owncloud/web/compare/v9.1.0...v9.2.0
 
 Summary
 -------

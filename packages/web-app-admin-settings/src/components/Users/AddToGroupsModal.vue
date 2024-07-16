@@ -2,6 +2,7 @@
   <group-select
     :selected-groups="selectedOptions"
     :group-options="groups"
+    :position-fixed="true"
     @selected-option-change="changeSelectedGroupOption"
   />
 </template>

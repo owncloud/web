@@ -118,6 +118,7 @@ export default defineComponent({
 </script>
 <style lang="scss" scoped>
 img {
+  object-fit: contain;
   max-width: 80%;
   max-height: 80%;
   cursor: move;

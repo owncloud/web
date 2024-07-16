@@ -8,6 +8,7 @@
       :warning-message="
         currentUserSelected ? $gettext('Your own login status will remain unchanged.') : ''
       "
+      :position-fixed="true"
       @update:model-value="changeSelectedOption"
     />
   </div>
