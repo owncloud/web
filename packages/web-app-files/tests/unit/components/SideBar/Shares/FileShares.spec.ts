@@ -191,6 +191,7 @@ function getWrapper({
         plugins: [
           ...defaultPlugins({
             piniaOptions: {
+              stubActions: false,
               userState: { user },
               spacesState: { spaceMembers },
               capabilityState: { capabilities },

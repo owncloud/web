@@ -138,7 +138,7 @@ export const useSharesStore = defineStore('shares', () => {
       value: computeShareTypes(allShares.filter((s) => !s.indirect))
     })
 
-    const ancestorEntry = Object.values(resourcesStore.ancestorMetaData).find((a) => a.id === id)
+    const ancestorEntry = resourcesStore.getAncestorById(id)
     if (ancestorEntry) {
       resourcesStore.updateAncestorField({
         path: ancestorEntry.path,

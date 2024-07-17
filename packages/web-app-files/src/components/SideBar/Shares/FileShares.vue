@@ -145,8 +145,7 @@ export default defineComponent({
     const { canShare } = useCanShare()
 
     const resourcesStore = useResourcesStore()
-    const { removeResources } = resourcesStore
-    const { ancestorMetaData } = storeToRefs(resourcesStore)
+    const { removeResources, getAncestorById } = resourcesStore
 
     const spacesStore = useSpacesStore()
     const { spaceMembers } = storeToRefs(spacesStore)
@@ -174,10 +173,6 @@ export default defineComponent({
     const currentUserIsMemberOfSpace = computed(() => {
       return unref(spaceMembers).some((member) => member.sharedWith?.id === unref(user)?.id)
     })
-
-    const getSharedAncestor = (fileId: string) => {
-      return Object.values(unref(ancestorMetaData)).find((a) => a.id === fileId)
-    }
 
     const matchingSpace = computed(() => {
       return getMatchingSpace(unref(resource))
@@ -221,14 +216,13 @@ export default defineComponent({
       currentUserIsMemberOfSpace,
       hasShareCanDenyAccess: capabilityRefs.sharingDenyAccess,
       filesPrivateLinks: capabilityRefs.filesPrivateLinks,
-      getSharedAncestor,
+      getAncestorById,
       configStore,
       configOptions,
       dispatchModal,
       spaceMembers,
       removeResources,
       collaborators,
-      ancestorMetaData,
       canShare,
       ...useMessages()
     }
@@ -423,7 +417,7 @@ export default defineComponent({
       if (!collaborator.indirect) {
         return null
       }
-      const sharedAncestor = this.getSharedAncestor(collaborator.resourceId)
+      const sharedAncestor = this.getAncestorById(collaborator.resourceId)
       if (!sharedAncestor) {
         return null
       }

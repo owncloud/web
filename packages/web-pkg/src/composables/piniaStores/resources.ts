@@ -291,6 +291,10 @@ export const useResourcesStore = defineStore('resources', () => {
     })
   }
 
+  const getAncestorById = (id: string) => {
+    return Object.values(unref(ancestorMetaData)).find((a) => id === a.id)
+  }
+
   return {
     resources,
     currentFolder,
@@ -333,7 +337,8 @@ export const useResourcesStore = defineStore('resources', () => {
     ancestorMetaData,
     setAncestorMetaData,
     updateAncestorField,
-    loadAncestorMetaData
+    loadAncestorMetaData,
+    getAncestorById
   }
 })
 
