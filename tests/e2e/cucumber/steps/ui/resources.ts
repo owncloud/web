@@ -912,3 +912,24 @@ Then(
     }
   }
 )
+
+Then(
+  /^"([^"]*)" (should|should not) see following actions for (?:folder|file) "([^"]*)"$/,
+  async function (
+    this: World,
+    stepUser: string,
+    actionType: string,
+    resource: string,
+    stepTable: DataTable
+  ): Promise<void> {
+    const { page } = this.actorsEnvironment.getActor({ key: stepUser })
+    const resourceObject = new objects.applicationFiles.Resource({ page })
+    for (const info of stepTable.hashes()) {
+      if (actionType === 'should') {
+        expect(await resourceObject.getAllAvailableActions({ resource })).toContain(info.action)
+      } else {
+        expect(await resourceObject.getAllAvailableActions({ resource })).not.toContain(info.action)
+      }
+    }
+  }
+)
