@@ -652,7 +652,7 @@ export default defineComponent({
       }
 
       return false
-    }
+    },
 
     isSpaceFrontpage() {
       return isProjectSpaceResource(this.space) && this.item === '/'
