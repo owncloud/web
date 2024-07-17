@@ -2015,3 +2015,15 @@ export const canEditContent = async ({
       }
   }
 }
+
+export const getAllAvailableActions = async ({
+  page,
+  resource
+}: {
+  page: Page
+  resource: string
+}): Promise<string[]> => {
+  await sidebar.open({ page: page, resource })
+  await sidebar.openPanel({ page: page, name: 'actions' })
+  return await page.getByTestId('action-label').allTextContents()
+}

@@ -338,4 +338,8 @@ export class Resource {
   async canEditContent({ type }: { type: string }): Promise<boolean> {
     return await po.canEditContent({ page: this.#page, type })
   }
+
+  async getAllAvailableActions({ resource }: { resource: string }): Promise<string[]> {
+    return await po.getAllAvailableActions({ page: this.#page, resource })
+  }
 }

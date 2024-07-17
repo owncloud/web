@@ -139,53 +139,6 @@ Feature: Integrate with online office suites like Collabora and OnlyOffice
     And "Brian" logs out
 
 
-  Scenario: open a secure view file with Collabora
-    Given "Alice" creates the following folder in personal space using API
-      | name          |
-      | shared folder |
-    And "Alice" uploads the following resource
-      | resource        | to            |
-      | simple.pdf      | shared folder |
-      | testavatar.jpeg | shared folder |
-      | lorem.txt       | shared folder |
-    And "Alice" creates the following resources
-      | resource           | type         | content                 |
-      | secureDocument.odt | OpenDocument | very important document |
-
-    And "Alice" shares the following resources using the sidebar panel
-      | resource           | recipient | type | role              |
-      | secureDocument.odt | Brian     | user | Can view (secure) |
-      | shared folder      | Brian     | user | Can view (secure) |
-    And "Alice" logs out
-
-    And "Brian" logs in
-    And "Brian" navigates to the shared with me page
-    When "Brian" opens the following file in Collabora
-      | resource           |
-      | secureDocument.odt |
-
-    # we copy the contents of the file and compare the clipboard with the expected contents.
-    # In case the user does not have download permissions and tries to copy file content, the clipboard should be set to “Copying from document disabled”.
-    Then "Brian" should see the content "Copying from the document disabled" in editor "Collabora"
-    And "Brian" closes the file viewer
-    When "Brian" opens folder "shared folder"
-    And "Brian" opens the following file in Collabora
-      | resource   |
-      | simple.pdf |
-    Then "Brian" should see the content "Copying from the document disabled" in editor "Collabora"
-    And "Brian" closes the file viewer
-    And "Brian" opens the following file in Collabora
-      | resource        |
-      | testavatar.jpeg |
-    Then "Brian" should see the content "Copying from the document disabled" in editor "Collabora"
-    And "Brian" closes the file viewer
-    And "Brian" opens the following file in Collabora
-      | resource  |
-      | lorem.txt |
-    Then "Brian" should see the content "Copying from the document disabled" in editor "Collabora"
-    And "Brian" logs out
-
-
   Scenario: public creates a Microsoft Word file with OnlyOffice
     Given "Admin" assigns following roles to the users using API
       | id    | role        |
