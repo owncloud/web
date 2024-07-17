@@ -212,6 +212,6 @@ When(
     const { page } = this.actorsEnvironment.getActor({ key: stepUser })
     const spacesObject = new objects.applicationFiles.Spaces({ page })
     const downloadedResource = await spacesObject.downloadSpace()
-    expect(downloadedResource).toContain('download.tar')
+    expect(downloadedResource).toContain('download.zip')
   }
 )
