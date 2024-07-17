@@ -77,8 +77,7 @@ type ConfigJsonResponseBody = {
 const getConfigJson = async (url: string) => {
   const configJson = (await getJson(url)) as ConfigJsonResponseBody
 
-  // enable previews and enable lazy resources, which are disabled for fast tests
-  configJson.options.disablePreviews = false
+  // enable lazy resources, which are disabled for fast tests
   configJson.options.displayResourcesLazy = true
 
   return configJson

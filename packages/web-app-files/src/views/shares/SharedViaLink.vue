@@ -23,7 +23,6 @@
           v-model:selectedIds="selectedResourcesIds"
           :is-side-bar-open="isSideBarOpen"
           :fields-displayed="['name', 'sdate']"
-          :are-thumbnails-displayed="displayThumbnails"
           :are-paths-displayed="true"
           :resources="paginatedResources"
           :header-position="fileListHeaderY"
@@ -148,10 +147,6 @@ export default defineComponent({
 
     isEmpty() {
       return this.paginatedResources.length < 1
-    },
-
-    displayThumbnails() {
-      return !this.configOptions.disablePreviews
     }
   },
 
@@ -166,10 +161,6 @@ export default defineComponent({
 
   methods: {
     rowMounted(resource: Resource, component: ComponentPublicInstance<unknown>) {
-      if (!this.displayThumbnails) {
-        return
-      }
-
       const loadPreview = async () => {
         const preview = await this.$previewService.loadPreview(
           {

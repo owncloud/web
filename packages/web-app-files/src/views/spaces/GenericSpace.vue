@@ -78,7 +78,6 @@
               :view-mode="viewMode"
               :target-route-callback="resourceTargetRouteCallback"
               :space="space"
-              :are-thumbnails-displayed="displayThumbnails"
               :drag-drop="true"
               :sort-by="sortBy"
               :sort-dir="sortDir"
@@ -653,11 +652,7 @@ export default defineComponent({
       }
 
       return false
-    },
-
-    displayThumbnails() {
-      return !this.configOptions.disablePreviews
-    },
+    }
 
     isSpaceFrontpage() {
       return isProjectSpaceResource(this.space) && this.item === '/'
@@ -683,10 +678,6 @@ export default defineComponent({
       component: ComponentPublicInstance<unknown>,
       dimensions: [number, number]
     ) {
-      if (!this.displayThumbnails) {
-        return
-      }
-
       const loadPreview = async () => {
         const processor =
           this.viewMode === FolderViewModeConstants.name.tiles

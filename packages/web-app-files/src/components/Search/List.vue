@@ -98,7 +98,6 @@
           :header-position="fileListHeaderY"
           :resources="paginatedResources"
           :are-paths-displayed="true"
-          :are-thumbnails-displayed="displayThumbnails"
           :has-actions="true"
           :is-selectable="true"
           :sort-by="sortBy"
@@ -489,9 +488,6 @@ export default defineComponent({
     }
   },
   computed: {
-    displayThumbnails() {
-      return !this.configOptions.disablePreviews
-    },
     itemCount() {
       return this.totalResourcesCount.files + this.totalResourcesCount.folders
     },
@@ -544,10 +540,6 @@ export default defineComponent({
   },
   methods: {
     rowMounted(resource: Resource, component: ComponentPublicInstance<unknown>) {
-      if (!this.displayThumbnails) {
-        return
-      }
-
       const loadPreview = async () => {
         const preview = await this.$previewService.loadPreview(
           {

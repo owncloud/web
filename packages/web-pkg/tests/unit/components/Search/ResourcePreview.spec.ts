@@ -100,7 +100,6 @@ function getWrapper({
           ...defaultPlugins({
             piniaOptions: {
               capabilityState: { capabilities },
-              configState: { options: { disablePreviews: true } },
               resourcesStore: { areFileExtensionsShown }
             }
           })

@@ -26,7 +26,6 @@
           :is-side-bar-open="isSideBarOpen"
           :fields-displayed="['name', 'ddate']"
           :are-paths-displayed="true"
-          :are-thumbnails-displayed="false"
           :resources="paginatedResources"
           :are-resources-clickable="false"
           :header-position="fileListHeaderY"

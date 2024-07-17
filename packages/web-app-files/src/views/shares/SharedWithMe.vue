@@ -69,7 +69,6 @@
         </div>
         <shared-with-me-section
           id="files-shared-with-me-view"
-          :display-thumbnails="displayThumbnails"
           :file-list-header-y="fileListHeaderY"
           :items="items"
           :is-side-bar-open="isSideBarOpen"
@@ -225,8 +224,6 @@ export default defineComponent({
 
     const { getMatchingSpace } = useGetMatchingSpace()
 
-    const displayThumbnails = computed(() => !configStore.options.disablePreviews)
-
     const selectedShareSpace = computed(() => {
       if (unref(selectedResources).length !== 1) {
         return null
@@ -275,7 +272,6 @@ export default defineComponent({
 
       areHiddenFilesShown,
       visibilityOptions,
-      displayThumbnails,
       hiddenShares,
       setAreHiddenFilesShown,
       shareSectionTitle,

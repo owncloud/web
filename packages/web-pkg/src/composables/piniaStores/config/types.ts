@@ -66,9 +66,7 @@ const OptionsConfigSchema = z.object({
   defaultExtension: z.string().optional(),
   disabledExtensions: z.array(z.string()).optional(),
   disableFeedbackLink: z.boolean().optional(),
-  disablePreviews: z.boolean().optional(),
   displayResourcesLazy: z.boolean().optional(),
-  displayThumbnails: z.boolean().optional(),
   accountEditLink: z
     .object({
       href: z.string().optional()

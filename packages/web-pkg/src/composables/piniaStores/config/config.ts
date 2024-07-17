@@ -19,9 +19,7 @@ const defaultOptions = {
   contextHelpersReadMore: true,
   defaultExtension: 'files',
   disabledExtensions: [] as string[],
-  disablePreviews: false,
   displayResourcesLazy: true,
-  displayThumbnails: true,
   editor: {
     autosaveEnabled: true,
     autosaveInterval: 120

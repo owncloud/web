@@ -10,7 +10,6 @@
   },
   "options": {
     "topCenterNotifications": true,
-    "disablePreviews": true,
     "displayResourcesLazy": false,
     "sidebar": {
       "shares": {

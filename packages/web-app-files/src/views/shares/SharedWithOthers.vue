@@ -45,7 +45,6 @@
           v-model:selectedIds="selectedResourcesIds"
           :is-side-bar-open="isSideBarOpen"
           :fields-displayed="['name', 'sharedWith', 'sdate']"
-          :are-thumbnails-displayed="displayThumbnails"
           :are-paths-displayed="true"
           :resources="filteredItems"
           :header-position="fileListHeaderY"
@@ -195,10 +194,6 @@ export default defineComponent({
   computed: {
     isEmpty() {
       return this.paginatedResources.length < 1
-    },
-
-    displayThumbnails() {
-      return !this.configOptions.disablePreviews
     }
   },
 
