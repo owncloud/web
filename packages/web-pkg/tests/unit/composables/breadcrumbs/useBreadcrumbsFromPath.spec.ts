@@ -3,6 +3,7 @@ import { SpaceResource } from '@ownclouders/web-client'
 import { RouteLocation, getComposableWrapper } from 'web-test-helpers/src'
 import { useBreadcrumbsFromPath } from '../../../../src/composables/breadcrumbs'
 import { ref } from 'vue'
+import { AncestorMetaData } from '../../../../src/types'
 
 describe('useBreadcrumbsFromPath', () => {
   describe('builds an array of breadcrumbitems', () => {
@@ -12,7 +13,8 @@ describe('useBreadcrumbsFromPath', () => {
       const breadCrumbs = breadcrumbsFromPath({
         route: { path: '/files/spaces/personal/home/test' } as RouteLocation,
         space: ref(mock<SpaceResource>()),
-        resourcePath: '/test'
+        resourcePath: '/test',
+        ancestorMetaData: ref(mock<AncestorMetaData>())
       })
       expect(breadCrumbs).toEqual([
         {
@@ -34,7 +36,8 @@ describe('useBreadcrumbsFromPath', () => {
       const breadCrumbsFromPath = breadcrumbsFromPath({
         route: { path: '/app/foo/bar?all=500' } as RouteLocation,
         space: ref(mock<SpaceResource>()),
-        resourcePath: '/bar'
+        resourcePath: '/bar',
+        ancestorMetaData: ref(mock<AncestorMetaData>())
       })
       const result = concatBreadcrumbs(...initialBreadCrumbs, ...breadCrumbsFromPath)
       expect(result[0]).toMatchObject({ text: 'Foo' })
