@@ -3,10 +3,10 @@ import { computed } from 'vue'
 import { useGettext } from 'vue3-gettext'
 
 import { useOpenWithDefaultApp } from '../useOpenWithDefaultApp'
-import { getRelativeSpecialFolderSpacePath } from '@ownclouders/web-client'
+import { getRelativeSpecialFolderSpacePath, Resource } from '@ownclouders/web-client'
 import { useClientService } from '../../clientService'
 import { useSpacesStore, useUserStore } from '../../piniaStores'
-import { useCreateSpace } from '../../spaces'
+import { useCreateSpace, useSpaceHelpers } from '../../spaces'
 
 export const useSpaceActionsEditReadmeContent = () => {
   const clientService = useClientService()
@@ -15,15 +15,18 @@ export const useSpaceActionsEditReadmeContent = () => {
   const userStore = useUserStore()
   const spacesStore = useSpacesStore()
   const { $gettext } = useGettext()
+  const { getDefaultMetaFolder } = useSpaceHelpers()
 
   const handler = async ({ resources }: SpaceActionOptions) => {
-    let markdownResource = null
-    try {
-      await clientService.webdav.getFileInfo(resources[0], { path: '.space' })
-    } catch (_) {
-      await createDefaultMetaFolder(resources[0])
+    let markdownResource: Resource = null
+
+    let metaFolder = await getDefaultMetaFolder(resources[0])
+    if (!metaFolder) {
+      metaFolder = await createDefaultMetaFolder(resources[0])
       markdownResource = await clientService.webdav.putFileContents(resources[0], {
-        path: '.space/readme.md'
+        path: '.space/readme.md',
+        parentFolderId: metaFolder.id,
+        fileName: 'readme.md'
       })
 
       const updatedSpace = await clientService.graphAuthenticated.drives.updateDrive(
@@ -42,6 +45,7 @@ export const useSpaceActionsEditReadmeContent = () => {
     }
 
     if (!markdownResource) {
+      console.log(345)
       markdownResource = await clientService.webdav.getFileInfo(resources[0], {
         path: getRelativeSpecialFolderSpacePath(resources[0], 'readme')
       })

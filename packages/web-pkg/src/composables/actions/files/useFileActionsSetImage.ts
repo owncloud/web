@@ -7,6 +7,7 @@ import { useGettext } from 'vue3-gettext'
 import { computed } from 'vue'
 import { FileAction, FileActionOptions } from '../types'
 import { useMessages, useSpacesStore, useUserStore } from '../../piniaStores'
+import { useCreateSpace, useSpaceHelpers } from '../../spaces'
 
 export const useFileActionsSetImage = () => {
   const { showMessage, showErrorMessage } = useMessages()
@@ -17,36 +18,34 @@ export const useFileActionsSetImage = () => {
   const loadingService = useLoadingService()
   const previewService = usePreviewService()
   const spacesStore = useSpacesStore()
+  const { createDefaultMetaFolder } = useCreateSpace()
+  const { getDefaultMetaFolder } = useSpaceHelpers()
 
   const handler = async ({ space, resources }: FileActionOptions) => {
     const graphClient = clientService.graphAuthenticated
-    const storageId = space?.id as string
-    const sourcePath = resources[0].path
-    const destinationPath = `/.space/${resources[0].name}`
-    const { copyFiles, getFileInfo, createFolder } = clientService.webdav
+    const storageId = space?.id
+    const { copyFiles, getFileInfo } = clientService.webdav
 
     try {
-      try {
-        await getFileInfo(space, { path: '.space' })
-      } catch (_) {
-        await createFolder(space, { path: '.space' })
+      let metaFolder = await getDefaultMetaFolder(space)
+      if (!metaFolder) {
+        metaFolder = await createDefaultMetaFolder(space)
       }
 
-      if (sourcePath !== destinationPath) {
+      if (resources[0].id !== space.spaceImageData?.id) {
         await copyFiles(
           space,
-          { path: sourcePath },
+          { fileId: resources[0].id },
           space,
-          { path: destinationPath },
+          { parentFolderId: metaFolder.id, name: resources[0].name },
           { overwrite: true }
         )
       }
 
-      const file = await getFileInfo(space, { path: destinationPath })
-
+      const { fileId } = await getFileInfo(space, { fileId: resources[0].id })
       const updatedSpace = await graphClient.drives.updateDrive(storageId, {
         name: space.name,
-        special: [{ specialFolder: { name: 'image' }, id: file.id }]
+        special: [{ specialFolder: { name: 'image' }, id: fileId }]
       })
 
       spacesStore.updateSpaceField({

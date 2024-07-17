@@ -16,6 +16,8 @@ export const useCreateSpace = () => {
     if (extractStorageId(spaceFolder.parentFolderId) === resourcesStore.currentFolder?.id) {
       resourcesStore.upsertResource(spaceFolder)
     }
+
+    return spaceFolder
   }
 
   return { createSpace, createDefaultMetaFolder }
