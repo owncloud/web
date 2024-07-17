@@ -225,7 +225,7 @@ export default defineComponent({
 
     const { getMatchingSpace } = useGetMatchingSpace()
 
-    const displayThumbnails = computed(() => configStore.options.disablePreviews)
+    const displayThumbnails = computed(() => !configStore.options.disablePreviews)
 
     const selectedShareSpace = computed(() => {
       if (unref(selectedResources).length !== 1) {
