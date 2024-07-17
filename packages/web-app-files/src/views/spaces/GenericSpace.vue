@@ -266,8 +266,13 @@ export default defineComponent({
 
     const resourcesStore = useResourcesStore()
     const { removeResources, resetSelection, updateResourceField } = resourcesStore
-    const { currentFolder, totalResourcesCount, totalResourcesSize, areHiddenFilesShown } =
-      storeToRefs(resourcesStore)
+    const {
+      currentFolder,
+      totalResourcesCount,
+      totalResourcesSize,
+      areHiddenFilesShown,
+      ancestorMetaData
+    } = storeToRefs(resourcesStore)
 
     let loadResourcesEventToken: string
 
@@ -392,8 +397,12 @@ export default defineComponent({
       return concatBreadcrumbs(
         ...rootBreadcrumbItems,
         spaceBreadcrumbItem,
-        // FIXME: needs file ids for each parent folder path
-        ...breadcrumbsFromPath({ route: unref(route), space, resourcePath: props.item })
+        ...breadcrumbsFromPath({
+          route: unref(route),
+          space,
+          resourcePath: props.item,
+          ...(configStore.options.routing.idBased && { ancestorMetaData })
+        })
       )
     })
 
