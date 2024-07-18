@@ -96,7 +96,6 @@ const OptionsConfigSchema = z.object({
       href: z.string().optional()
     })
     .optional(),
-  hoverableQuickActions: z.boolean().optional(),
   isRunningOnEos: z.boolean().optional(),
   loginUrl: z.string().optional(),
   logoutUrl: z.string().optional(),

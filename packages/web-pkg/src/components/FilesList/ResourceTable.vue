@@ -3,7 +3,6 @@
     v-bind="$attrs"
     id="files-space-table"
     :class="[
-      hoverableQuickActions && 'hoverable-quick-actions',
       {
         condensed: viewMode === FolderViewModeConstants.name.condensedTable,
         'files-table': resourceType === 'file',
@@ -841,9 +840,6 @@ export default defineComponent({
     contextMenuLabel() {
       return this.$gettext('Show context menu')
     },
-    hoverableQuickActions() {
-      return this.configOptions.hoverableQuickActions
-    },
     dragSelection() {
       const selection = [...this.selectedResources]
       selection.splice(
@@ -1212,23 +1208,6 @@ export default defineComponent({
     align-items: center;
     display: flex;
     justify-content: center;
-  }
-}
-
-.hoverable-quick-actions.files-table {
-  @media (pointer: fine) {
-    tr:not([class*='oc-table-highlighted']) {
-      .resource-table-edit-name,
-      .resource-table-actions div:first-child {
-        visibility: hidden;
-      }
-    }
-    tr:not([class*='oc-table-highlighted']):hover {
-      .resource-table-edit-name,
-      .resource-table-actions div:first-child {
-        visibility: visible;
-      }
-    }
   }
 }
 

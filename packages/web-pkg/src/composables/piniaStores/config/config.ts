@@ -28,7 +28,6 @@ const defaultOptions = {
     enabled: false,
     target: 'resources'
   },
-  hoverableQuickActions: false,
   ocm: {},
   openAppsInTab: false,
   openLinksWithDefaultApp: true,
