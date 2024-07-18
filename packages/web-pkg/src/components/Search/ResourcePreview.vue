@@ -121,7 +121,7 @@ export default defineComponent({
   },
   computed: {
     displayThumbnails() {
-      return !this.configOptions.disablePreviews && !isResourceTxtFileAlmostEmpty(this.resource)
+      return !isResourceTxtFileAlmostEmpty(this.resource)
     }
   },
   mounted() {

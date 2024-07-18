@@ -39,7 +39,15 @@ export class PreviewService {
     this.capability = capabilityStore.filesThumbnail || {
       enabled: true,
       version: 'v0.1',
-      supportedMimeTypes: configStore.options.previewFileMimeTypes || []
+      supportedMimeTypes: [
+        'image/gif',
+        'image/png',
+        'image/jpeg',
+        'text/plain',
+        'image/tiff',
+        'image/bmp',
+        'image/x-ms-bmp'
+      ]
     }
   }
 

@@ -58,7 +58,6 @@
             :is="folderView.component"
             v-model:selectedIds="selectedResourcesIds"
             resource-type="space"
-            :are-thumbnails-displayed="true"
             :resources="paginatedItems"
             :fields-displayed="tableDisplayFields"
             :sort-fields="sortFields"
@@ -436,14 +435,12 @@ export default defineComponent({
       })
     })
 
-    const displayThumbnails = computed(() => configStore.options.displayThumbnails)
-
     const rowMounted = (space: SpaceResource) => {
       loadPreview(space)
     }
 
     const loadPreview = async (space: SpaceResource) => {
-      if (!unref(displayThumbnails) || !space.spaceImageData) {
+      if (!space.spaceImageData) {
         return
       }
 

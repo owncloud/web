@@ -864,7 +864,7 @@ export default defineComponent({
       return this.clipboardResources.some((r) => r.id === resource.id)
     },
     shouldDisplayThumbnails(item: Resource) {
-      return this.areThumbnailsDisplayed && !isResourceTxtFileAlmostEmpty(item)
+      return !isResourceTxtFileAlmostEmpty(item)
     },
     getTagLink(tag: string) {
       const currentTerm = unref(this.router.currentRoute).query?.term

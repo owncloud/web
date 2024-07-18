@@ -66,9 +66,7 @@ const OptionsConfigSchema = z.object({
   defaultExtension: z.string().optional(),
   disabledExtensions: z.array(z.string()).optional(),
   disableFeedbackLink: z.boolean().optional(),
-  disablePreviews: z.boolean().optional(),
   displayResourcesLazy: z.boolean().optional(),
-  displayThumbnails: z.boolean().optional(),
   accountEditLink: z
     .object({
       href: z.string().optional()
@@ -109,7 +107,6 @@ const OptionsConfigSchema = z.object({
     .optional(),
   openAppsInTab: z.boolean().optional(),
   openLinksWithDefaultApp: z.boolean().optional(),
-  previewFileMimeTypes: z.array(z.string()).optional(),
   routing: z
     .object({
       fullShareOwnerPaths: z.boolean().optional(),

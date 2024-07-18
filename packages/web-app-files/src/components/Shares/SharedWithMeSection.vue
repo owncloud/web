@@ -20,7 +20,6 @@
       :is-side-bar-open="isSideBarOpen"
       :fields-displayed="displayedFields"
       sidebar-closed
-      :are-thumbnails-displayed="displayThumbnails"
       :resources="resourceItems"
       :are-resources-clickable="resourceClickable"
       :target-route-callback="resourceTargetRouteCallback"
@@ -165,10 +164,6 @@ export default defineComponent({
       default: 3
     },
     resourceClickable: {
-      type: Boolean,
-      default: true
-    },
-    displayThumbnails: {
       type: Boolean,
       default: true
     },

@@ -78,7 +78,6 @@
               :view-mode="viewMode"
               :target-route-callback="resourceTargetRouteCallback"
               :space="space"
-              :are-thumbnails-displayed="displayThumbnails"
               :drag-drop="true"
               :sort-by="sortBy"
               :sort-dir="sortDir"
@@ -145,6 +144,7 @@ import {
 } from '@ownclouders/web-client'
 
 import {
+  isResourceTxtFileAlmostEmpty,
   ProcessorType,
   ResourceTransfer,
   TransferType,
@@ -621,7 +621,8 @@ export default defineComponent({
       totalResourcesSize,
       updateResourceField,
       areHiddenFilesShown,
-      fileDropped
+      fileDropped,
+      isResourceTxtFileAlmostEmpty
     }
   },
 
@@ -655,10 +656,6 @@ export default defineComponent({
       return false
     },
 
-    displayThumbnails() {
-      return !this.configOptions.disablePreviews
-    },
-
     isSpaceFrontpage() {
       return isProjectSpaceResource(this.space) && this.item === '/'
     }
@@ -683,11 +680,11 @@ export default defineComponent({
       component: ComponentPublicInstance<unknown>,
       dimensions: [number, number]
     ) {
-      if (!this.displayThumbnails) {
-        return
-      }
-
       const loadPreview = async () => {
+        if (this.isResourceTxtFileAlmostEmpty(resource)) {
+          return
+        }
+
         const processor =
           this.viewMode === FolderViewModeConstants.name.tiles
             ? ProcessorType.enum.fit

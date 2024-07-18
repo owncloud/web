@@ -19,9 +19,7 @@ const defaultOptions = {
   contextHelpersReadMore: true,
   defaultExtension: 'files',
   disabledExtensions: [] as string[],
-  disablePreviews: false,
   displayResourcesLazy: true,
-  displayThumbnails: true,
   editor: {
     autosaveEnabled: true,
     autosaveInterval: 120
@@ -34,7 +32,6 @@ const defaultOptions = {
   ocm: {},
   openAppsInTab: false,
   openLinksWithDefaultApp: true,
-  previewFileMimeTypes: [] as string[],
   routing: {
     idBased: true
   },

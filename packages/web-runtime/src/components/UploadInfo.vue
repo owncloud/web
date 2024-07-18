@@ -118,7 +118,6 @@
               class="oc-ml-s"
               :resource="item as Resource"
               :is-path-displayed="true"
-              :is-thumbnail-displayed="displayThumbnails"
               :is-resource-clickable="isResourceClickable(item)"
               :parent-folder-name="parentFolderName(item)"
               :folder-link="folderLink(item)"
@@ -302,9 +301,6 @@ export default defineComponent({
         this.successful.length,
         { successfulUploads: this.successful.length.toString() }
       )
-    },
-    displayThumbnails() {
-      return !this.configOptions.disablePreviews
     },
     uploadsPausable() {
       return this.$uppyService.tusActive()
