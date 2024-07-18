@@ -6,8 +6,6 @@ import { useRouter } from '../../router'
 import { useGettext } from 'vue3-gettext'
 import { computed } from 'vue'
 import { FileAction, FileActionOptions } from '../types'
-import { Drive } from '@ownclouders/web-client/graph/generated'
-import { buildSpace } from '@ownclouders/web-client'
 import { useMessages, useSpacesStore, useUserStore } from '../../piniaStores'
 
 export const useFileActionsSetImage = () => {
@@ -46,25 +44,15 @@ export const useFileActionsSetImage = () => {
 
       const file = await getFileInfo(space, { path: destinationPath })
 
-      const { data: updatedDriveData } = await graphClient.drives.updateDrive(
-        storageId,
-        {
-          special: [
-            {
-              specialFolder: {
-                name: 'image'
-              },
-              id: file.id as string
-            }
-          ]
-        } as Drive,
-        {}
-      )
+      const updatedSpace = await graphClient.drives.updateDrive(storageId, {
+        name: space.name,
+        special: [{ specialFolder: { name: 'image' }, id: file.id }]
+      })
 
       spacesStore.updateSpaceField({
         id: storageId,
         field: 'spaceImageData',
-        value: buildSpace(updatedDriveData).spaceImageData
+        value: updatedSpace.spaceImageData
       })
 
       showMessage({ title: $gettext('Space image was set successfully') })

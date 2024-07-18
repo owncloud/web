@@ -361,11 +361,11 @@ export default defineComponent({
 
           if (driveType === 'project' || isOwnSpace) {
             const client = clientService.graphAuthenticated
-            const driveResponse = await client.drives.getDrive(spaceId)
+            const updatedSpace = await client.drives.getDrive(spaceId)
             spacesStore.updateSpaceField({
-              id: driveResponse.data.id,
+              id: updatedSpace.id,
               field: 'spaceQuota',
-              value: driveResponse.data.quota
+              value: updatedSpace.spaceQuota
             })
           }
         }

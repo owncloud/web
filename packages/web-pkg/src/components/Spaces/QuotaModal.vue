@@ -32,7 +32,6 @@ import {
 } from '../../composables'
 import { useRouter } from '../../composables/router'
 import { eventBus } from '../../services'
-import { Drive } from '@ownclouders/web-client/graph/generated'
 import { storeToRefs } from 'pinia'
 import { ContextualHelperData } from 'design-system/src/helpers'
 
@@ -135,28 +134,32 @@ export default defineComponent({
     const onConfirm = async () => {
       const client = clientService.graphAuthenticated
       const requests = props.spaces.map(async (space): Promise<void> => {
-        const { data: driveData } = await client.drives.updateDrive(
-          space.id.toString(),
-          { quota: { total: unref(selectedOption) } } as Drive,
+        const updatedSpace = await client.drives.updateDrive(
+          space.id,
+          { name: space.name, quota: { total: unref(selectedOption) } },
           {}
         )
         if (unref(router.currentRoute).name === 'admin-settings-spaces') {
           eventBus.publish('app.admin-settings.spaces.space.quota.updated', {
             spaceId: space.id,
-            quota: driveData.quota
+            quota: updatedSpace.spaceQuota
           })
         }
         if (unref(router.currentRoute).name === 'admin-settings-users') {
           eventBus.publish('app.admin-settings.users.user.quota.updated', {
             spaceId: space.id,
-            quota: driveData.quota
+            quota: updatedSpace.spaceQuota
           })
         }
-        spacesStore.updateSpaceField({ id: space.id, field: 'spaceQuota', value: driveData.quota })
+        spacesStore.updateSpaceField({
+          id: space.id,
+          field: 'spaceQuota',
+          value: updatedSpace.spaceQuota
+        })
         updateResourceField<SpaceResource>({
           id: space.id,
           field: 'spaceQuota',
-          value: driveData.quota
+          value: updatedSpace.spaceQuota
         })
       })
       const results = await Promise.allSettled<Array<unknown>>(requests)

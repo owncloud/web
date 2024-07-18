@@ -70,10 +70,9 @@ import {
   useSpaceActionsDisable,
   useSpaceActionsRestore,
   useSpaceActionsEditQuota,
-  useConfigStore,
   AppLoadingSpinner
 } from '@ownclouders/web-pkg'
-import { buildSpace, call, SpaceResource } from '@ownclouders/web-client'
+import { call, SpaceResource } from '@ownclouders/web-client'
 import { computed, defineComponent, onBeforeUnmount, onMounted, ref, unref } from 'vue'
 import { useTask } from 'vue-concurrency'
 import { useGettext } from 'vue3-gettext'
@@ -101,7 +100,6 @@ export default defineComponent({
     const clientService = useClientService()
     const { $gettext } = useGettext()
     const { isSideBarOpen, sideBarActivePanel } = useSideBar()
-    const configStore = useConfigStore()
 
     const loadResourcesEventToken = ref(null)
     let updateQuotaForSpaceEventToken: string
@@ -120,13 +118,11 @@ export default defineComponent({
     })
 
     const loadResourcesTask = useTask(function* (signal) {
-      const {
-        data: { value: drivesResponse }
-      } = yield* call(
-        clientService.graphAuthenticated.drives.listAllDrives('name asc', 'driveType eq project')
-      )
-      const drives = drivesResponse.map((space) =>
-        buildSpace({ ...space, serverUrl: configStore.serverUrl })
+      const drives = yield* call(
+        clientService.graphAuthenticated.drives.listAllDrives({
+          orderBy: 'name asc',
+          filter: 'driveType eq project'
+        })
       )
       spaceSettingsStore.setSpaces(drives)
     })

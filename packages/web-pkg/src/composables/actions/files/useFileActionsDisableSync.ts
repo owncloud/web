@@ -34,7 +34,7 @@ export const useFileActionsDisableSync = () => {
         triggerQueue.add(async () => {
           try {
             const { graphAuthenticated } = clientService
-            await graphAuthenticated.drives.deleteDriveItem(resource.driveId, resource.id)
+            await graphAuthenticated.driveItems.deleteDriveItem(resource.driveId, resource.id)
 
             updateResourceField<IncomingShareResource>({
               id: resource.id,

@@ -1,11 +1,6 @@
 import { useSpaceActionsSetIcon } from '../../../../../src/composables/actions/spaces/useSpaceActionsSetIcon'
 import { useMessages, useModals } from '../../../../../src/composables/piniaStores'
-import {
-  defaultComponentMocks,
-  mockAxiosResolve,
-  RouteLocation,
-  getComposableWrapper
-} from 'web-test-helpers'
+import { defaultComponentMocks, RouteLocation, getComposableWrapper } from 'web-test-helpers'
 import { unref } from 'vue'
 import { SpaceResource } from '@ownclouders/web-client'
 import { mock } from 'vitest-mock-extended'
@@ -91,7 +86,9 @@ describe('setIcon', () => {
     it('should show message on success', () => {
       getWrapper({
         setup: async ({ setIconSpace }, { clientService }) => {
-          clientService.graphAuthenticated.drives.updateDrive.mockResolvedValue(mockAxiosResolve())
+          clientService.graphAuthenticated.drives.updateDrive.mockResolvedValue(
+            mock<SpaceResource>()
+          )
           await setIconSpace(mock<SpaceResource>(), '🐻')
 
           const { showMessage } = useMessages()

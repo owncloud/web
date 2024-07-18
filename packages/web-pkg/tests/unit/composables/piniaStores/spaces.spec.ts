@@ -16,7 +16,6 @@ import {
 import { Graph } from '@ownclouders/web-client/graph'
 import {
   CollectionOfPermissionsWithAllowedValues,
-  Drive,
   Permission,
   User
 } from '@ownclouders/web-client/graph/generated'
@@ -187,22 +186,20 @@ describe('spaces', () => {
     it('correctly loads personal and project spaces', () => {
       getWrapper({
         setup: async (instance) => {
-          const drives = [mock<Drive>({ id: '1' })]
+          const spaces = [mock<SpaceResource>({ id: '1' })]
           const graphClient = mockDeep<Graph>()
-          graphClient.drives.listMyDrives.mockResolvedValue(mockAxiosResolve({ value: drives }))
+          graphClient.drives.listMyDrives.mockResolvedValue(spaces)
           await instance.loadSpaces({ graphClient })
 
           expect(graphClient.drives.listMyDrives).toHaveBeenCalledTimes(2)
-          expect(graphClient.drives.listMyDrives).toHaveBeenNthCalledWith(
-            1,
-            'name asc',
-            'driveType eq personal'
-          )
-          expect(graphClient.drives.listMyDrives).toHaveBeenNthCalledWith(
-            2,
-            'name asc',
-            'driveType eq project'
-          )
+          expect(graphClient.drives.listMyDrives).toHaveBeenNthCalledWith(1, {
+            orderBy: 'name asc',
+            filter: 'driveType eq personal'
+          })
+          expect(graphClient.drives.listMyDrives).toHaveBeenNthCalledWith(2, {
+            orderBy: 'name asc',
+            filter: 'driveType eq project'
+          })
           expect(instance.spaces.length).toBe(2)
           expect(instance.spacesLoading).toBeFalsy()
           expect(instance.spacesInitialized).toBeTruthy()
@@ -214,16 +211,16 @@ describe('spaces', () => {
     it('correctly loads mount points', () => {
       getWrapper({
         setup: async (instance) => {
-          const drives = [mock<Drive>({ id: '1' })]
+          const spaces = [mock<SpaceResource>({ id: '1' })]
           const graphClient = mockDeep<Graph>()
-          graphClient.drives.listMyDrives.mockResolvedValue(mockAxiosResolve({ value: drives }))
+          graphClient.drives.listMyDrives.mockResolvedValue(spaces)
           await instance.loadMountPoints({ graphClient })
 
           expect(graphClient.drives.listMyDrives).toHaveBeenCalledTimes(1)
-          expect(graphClient.drives.listMyDrives).toHaveBeenCalledWith(
-            'name asc',
-            'driveType eq mountpoint'
-          )
+          expect(graphClient.drives.listMyDrives).toHaveBeenCalledWith({
+            orderBy: 'name asc',
+            filter: 'driveType eq mountpoint'
+          })
           expect(instance.spaces.length).toBe(1)
           expect(instance.mountPointsInitialized).toBeTruthy()
         }
@@ -234,16 +231,16 @@ describe('spaces', () => {
     it('correctly reloads project spaces', () => {
       getWrapper({
         setup: async (instance) => {
-          const drives = [mock<Drive>({ id: '1' })]
+          const spaces = [mock<SpaceResource>({ id: '1' })]
           const graphClient = mockDeep<Graph>()
-          graphClient.drives.listMyDrives.mockResolvedValue(mockAxiosResolve({ value: drives }))
+          graphClient.drives.listMyDrives.mockResolvedValue(spaces)
           await instance.reloadProjectSpaces({ graphClient })
 
           expect(graphClient.drives.listMyDrives).toHaveBeenCalledTimes(1)
-          expect(graphClient.drives.listMyDrives).toHaveBeenCalledWith(
-            'name asc',
-            'driveType eq project'
-          )
+          expect(graphClient.drives.listMyDrives).toHaveBeenCalledWith({
+            orderBy: 'name asc',
+            filter: 'driveType eq project'
+          })
           expect(instance.spaces.length).toBe(1)
         }
       })

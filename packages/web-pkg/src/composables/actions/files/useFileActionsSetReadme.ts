@@ -3,8 +3,6 @@ import { useGettext } from 'vue3-gettext'
 import { useClientService } from '../../clientService'
 import { useRouter } from '../../router'
 import { FileAction, FileActionOptions } from '../types'
-import { Drive } from '@ownclouders/web-client/graph/generated'
-import { buildSpace } from '@ownclouders/web-client'
 import { useMessages, useSpacesStore, useUserStore } from '../../piniaStores'
 import { useCreateSpace } from '../../spaces'
 
@@ -33,24 +31,15 @@ export const useFileActionsSetReadme = () => {
         content: fileContent
       })
       const file = await webdav.getFileInfo(space, { path: '.space/readme.md' })
-      const { data: updatedDriveData } = await graphAuthenticated.drives.updateDrive(
-        space.id as string,
-        {
-          special: [
-            {
-              specialFolder: {
-                name: 'readme'
-              },
-              id: file.id
-            }
-          ]
-        } as Drive,
-        {}
-      )
+      const updatedSpace = await graphAuthenticated.drives.updateDrive(space.id, {
+        name: space.name,
+        special: [{ specialFolder: { name: 'readme' }, id: file.id }]
+      })
+
       spacesStore.updateSpaceField({
         id: space.id,
         field: 'spaceReadmeData',
-        value: buildSpace(updatedDriveData).spaceReadmeData
+        value: updatedSpace.spaceReadmeData
       })
       showMessage({ title: $gettext('Space description was set successfully') })
     } catch (error) {

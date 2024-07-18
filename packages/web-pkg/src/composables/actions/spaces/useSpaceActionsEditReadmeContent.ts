@@ -3,11 +3,10 @@ import { computed } from 'vue'
 import { useGettext } from 'vue3-gettext'
 
 import { useOpenWithDefaultApp } from '../useOpenWithDefaultApp'
-import { buildSpace, getRelativeSpecialFolderSpacePath } from '@ownclouders/web-client'
+import { getRelativeSpecialFolderSpacePath } from '@ownclouders/web-client'
 import { useClientService } from '../../clientService'
-import { useConfigStore, useSpacesStore, useUserStore } from '../../piniaStores'
+import { useSpacesStore, useUserStore } from '../../piniaStores'
 import { useCreateSpace } from '../../spaces'
-import { Drive } from '@ownclouders/web-client/graph/generated'
 
 export const useSpaceActionsEditReadmeContent = () => {
   const clientService = useClientService()
@@ -15,7 +14,6 @@ export const useSpaceActionsEditReadmeContent = () => {
   const { createDefaultMetaFolder } = useCreateSpace()
   const userStore = useUserStore()
   const spacesStore = useSpacesStore()
-  const configStore = useConfigStore()
   const { $gettext } = useGettext()
 
   const handler = async ({ resources }: SpaceActionOptions) => {
@@ -28,25 +26,18 @@ export const useSpaceActionsEditReadmeContent = () => {
         path: '.space/readme.md'
       })
 
-      const { data: updatedDriveData } = await clientService.graphAuthenticated.drives.updateDrive(
+      const updatedSpace = await clientService.graphAuthenticated.drives.updateDrive(
         resources[0].id,
         {
-          special: [
-            {
-              specialFolder: {
-                name: 'readme'
-              },
-              id: markdownResource.id
-            }
-          ]
-        } as Drive,
-        {}
+          name: resources[0].name,
+          special: [{ specialFolder: { name: 'readme' }, id: markdownResource.id }]
+        }
       )
 
       spacesStore.updateSpaceField({
         id: resources[0].id,
         field: 'spaceReadmeData',
-        value: buildSpace({ ...updatedDriveData, serverUrl: configStore.serverUrl }).spaceReadmeData
+        value: updatedSpace.spaceReadmeData
       })
     }
 

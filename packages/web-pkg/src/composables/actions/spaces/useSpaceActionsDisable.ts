@@ -30,7 +30,7 @@ export const useSpaceActionsDisable = () => {
 
     const client = clientService.graphAuthenticated
     const promises = spaces.map((space) =>
-      client.drives.disableDrive(space.id.toString()).then(() => {
+      client.drives.disableDrive(space.id).then(() => {
         if (currentRoute.name === 'files-spaces-generic') {
           router.push({ name: 'files-spaces-projects' })
         }

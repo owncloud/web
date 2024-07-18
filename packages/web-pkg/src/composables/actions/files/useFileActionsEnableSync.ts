@@ -32,7 +32,7 @@ export const useFileActionsEnableSync = () => {
         triggerQueue.add(async () => {
           try {
             const { graphAuthenticated } = clientService
-            await graphAuthenticated.drives.createDriveItem(resource.driveId, {
+            await graphAuthenticated.driveItems.createDriveItem(resource.driveId, {
               name: resource.name,
               remoteItem: { id: resource.fileId }
             })

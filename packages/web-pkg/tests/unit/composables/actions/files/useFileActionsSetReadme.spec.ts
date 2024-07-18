@@ -2,13 +2,7 @@ import { useFileActionsSetReadme } from '../../../../../src'
 import { useMessages } from '../../../../../src/composables/piniaStores'
 import { buildSpace, FileResource, SpaceResource } from '@ownclouders/web-client'
 import { mock } from 'vitest-mock-extended'
-
-import {
-  defaultComponentMocks,
-  RouteLocation,
-  getComposableWrapper,
-  mockAxiosResolve
-} from 'web-test-helpers'
+import { defaultComponentMocks, RouteLocation, getComposableWrapper } from 'web-test-helpers'
 import { unref } from 'vue'
 import { GetFileContentsResponse } from '@ownclouders/web-client/webdav'
 import { Drive } from '@ownclouders/web-client/graph/generated'
@@ -173,22 +167,20 @@ function getWrapper({
   )
 
   mocks.$clientService.graphAuthenticated.drives.updateDrive.mockResolvedValue(
-    mockAxiosResolve({
+    mock<SpaceResource>({
       id: '1',
       name: 'space',
-      special: [
-        {
-          eTag: '6721ccbd5754e8b46ddccebad12fa23f',
-          file: {
-            mimeType: 'text/markdown'
-          },
-          id: '1',
-          name: 'readme.md',
-          specialFolder: {
-            name: 'readme'
-          }
+      spaceReadmeData: {
+        eTag: '6721ccbd5754e8b46ddccebad12fa23f',
+        file: {
+          mimeType: 'text/markdown'
+        },
+        id: '1',
+        name: 'readme.md',
+        specialFolder: {
+          name: 'readme'
         }
-      ]
+      }
     })
   )
 

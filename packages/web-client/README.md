@@ -40,14 +40,10 @@ const { graph, ocs, webdav } = client({ axiosClient, baseURI })
 
 ### Graph
 
-The following example demonstrates how to retrieve all drives accessible to the user and subsequently convert them into a `SpaceResource`. Such a resource can then be used to e.g. fetch files and folders (see example down below).
+The following example demonstrates how to retrieve all spaces accessible to the user. A `SpaceResource` can then be used to e.g. fetch files and folders (see example down below).
 
 ```
-import { buildSpace } from '@ownclouders/web-client'
-
-const myDrives = await graph.drives.listMyDrives()
-
-const spaceResources = myDrives.data.value.map(buildSpace)
+const mySpaces = await graph.drives.listMyDrives()
 ```
 
 ### OCS

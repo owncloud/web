@@ -1,4 +1,3 @@
-import { Drive } from '@ownclouders/web-client/graph/generated'
 import { computed, unref } from 'vue'
 import { SpaceAction, SpaceActionOptions } from '../types'
 import { useRoute } from '../../router'
@@ -21,7 +20,7 @@ export const useSpaceActionsEditDescription = () => {
   const editDescriptionSpace = (space: SpaceResource, description: string) => {
     const graphClient = clientService.graphAuthenticated
     return graphClient.drives
-      .updateDrive(space.id as string, { description } as Drive, {})
+      .updateDrive(space.id, { name: space.name, description })
       .then(() => {
         spacesStore.updateSpaceField({ id: space.id, field: 'description', value: description })
         if (unref(route).name === 'admin-settings-spaces') {

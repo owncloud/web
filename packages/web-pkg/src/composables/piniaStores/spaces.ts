@@ -36,23 +36,20 @@ export const getSpacesByType = async ({
   driveType: string
   configStore: ConfigStore
 }) => {
-  const graphResponse = await graphClient.drives.listMyDrives(
-    'name asc',
-    `driveType eq ${driveType}`
-  )
-  if (!graphResponse.data) {
+  const mountpoints = await graphClient.drives.listMyDrives({
+    orderBy: 'name asc',
+    filter: `driveType eq ${driveType}`
+  })
+  if (!mountpoints.length) {
     return []
   }
 
-  const mountpoints = graphResponse.data.value.map((space) =>
-    buildSpace({ ...space, serverUrl: configStore.serverUrl })
-  )
   if (driveType !== 'mountpoint' || !configStore.options.routing?.fullShareOwnerPaths) {
     return mountpoints
   }
 
   const rootSpaceDriveAliasMapping: Record<string, string> = {}
-  graphResponse.data.value.forEach((space) => {
+  mountpoints.forEach((space) => {
     const { rootId, driveAlias } = space.root.remoteItem
     rootSpaceDriveAliasMapping[rootId] = driveAlias
   })

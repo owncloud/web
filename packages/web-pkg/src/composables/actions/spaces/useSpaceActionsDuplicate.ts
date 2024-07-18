@@ -5,7 +5,7 @@ import { useGettext } from 'vue3-gettext'
 import { useAbility } from '../../ability'
 import { useClientService } from '../../clientService'
 import { useLoadingService } from '../../loadingService'
-import { buildSpace, isProjectSpaceResource } from '@ownclouders/web-client'
+import { isProjectSpaceResource } from '@ownclouders/web-client'
 import { Drive } from '@ownclouders/web-client/graph/generated'
 import { resolveFileNameDuplicate } from '../../../helpers/resource/conflictHandling'
 import PQueue from 'p-queue'
@@ -31,7 +31,7 @@ export const useSpaceActionsDuplicate = () => {
     const duplicatedSpaceName = resolveFileNameDuplicate(existingSpace.name, '', projectSpaces)
 
     try {
-      const { data: createdSpace } = await clientService.graphAuthenticated.drives.createDrive(
+      let duplicatedSpace = await clientService.graphAuthenticated.drives.createDrive(
         {
           name: duplicatedSpaceName,
           description: existingSpace.description,
@@ -39,7 +39,6 @@ export const useSpaceActionsDuplicate = () => {
         },
         {}
       )
-      let duplicatedSpace = buildSpace(createdSpace)
 
       const existingSpaceFiles = await clientService.webdav.listFiles(existingSpace)
 
@@ -90,13 +89,10 @@ export const useSpaceActionsDuplicate = () => {
           })
         }
 
-        const { data: updatedDriveData } =
-          await clientService.graphAuthenticated.drives.updateDrive(
-            duplicatedSpace.id.toString(),
-            specialRequestData as Drive,
-            {}
-          )
-        duplicatedSpace = buildSpace(updatedDriveData)
+        duplicatedSpace = await clientService.graphAuthenticated.drives.updateDrive(
+          duplicatedSpace.id,
+          specialRequestData
+        )
       }
 
       spacesStore.upsertSpace(duplicatedSpace)

@@ -30,15 +30,11 @@ export const useSpaceActionsRestore = () => {
     const client = clientService.graphAuthenticated
     const promises = spaces.map((space) =>
       client.drives
-        .updateDrive(space.id.toString(), {} as any, {
-          headers: {
-            Restore: true
-          }
-        })
+        .updateDrive(space.id, { name: space.name }, { headers: { Restore: 'true' } })
         .then((updatedSpace) => {
           if (unref(route).name === 'admin-settings-spaces') {
             space.disabled = false
-            space.spaceQuota = updatedSpace.data.quota
+            space.spaceQuota = updatedSpace.spaceQuota
           }
           spacesStore.updateSpaceField({ id: space.id, field: 'disabled', value: false })
           return true
