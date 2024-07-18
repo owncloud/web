@@ -34,7 +34,6 @@ const defaultOptions = {
     idBased: true
   },
   runningOnEos: false,
-  sharingRecipientsPerPage: 200,
   sidebar: {
     shares: {
       showAllOnLoad: false
