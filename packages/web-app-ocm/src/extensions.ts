@@ -62,7 +62,7 @@ export const extensions = () => {
             return false
           }
           return (
-            configStore.options.ocm.openRemotely &&
+            configStore.options.cernFeatures &&
             resources[0]?.storageId?.startsWith(OCM_PROVIDER_ID)
           )
         },

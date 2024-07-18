@@ -181,7 +181,7 @@ export default defineComponent({
     })
 
     const resolvePublicLinkTask = useTask(function* (signal, passwordRequired: boolean) {
-      if (unref(isOcmLink) && !configStore.options.ocm.openRemotely) {
+      if (unref(isOcmLink) && !configStore.options.cernFeatures) {
         throw new Error($gettext('Opening files from remote is disabled'))
       }
 
