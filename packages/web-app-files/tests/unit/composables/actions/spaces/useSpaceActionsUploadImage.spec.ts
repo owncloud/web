@@ -2,8 +2,13 @@ import { useSpaceActionsUploadImage } from 'web-app-files/src/composables/action
 import { mock } from 'vitest-mock-extended'
 import { defaultComponentMocks, RouteLocation, getComposableWrapper } from 'web-test-helpers'
 import { unref, VNodeRef } from 'vue'
-import { eventBus, useMessages } from '@ownclouders/web-pkg'
+import { eventBus, useMessages, useSpaceHelpers } from '@ownclouders/web-pkg'
 import { Resource, SpaceResource } from '@ownclouders/web-client'
+
+vi.mock('@ownclouders/web-pkg', async (importOriginal) => ({
+  ...(await importOriginal<any>()),
+  useSpaceHelpers: vi.fn()
+}))
 
 describe('uploadImage', () => {
   describe('method "uploadImageSpace"', () => {
@@ -80,6 +85,11 @@ function getWrapper({
     }
   ) => void
 }) {
+  vi.mocked(useSpaceHelpers).mockReturnValue({
+    checkSpaceNameModalInput: vi.fn(),
+    getDefaultMetaFolder: () => new Promise(() => mock<Resource>())
+  })
+
   const mocks = {
     ...defaultComponentMocks({
       currentRoute: mock<RouteLocation>({ name: 'files-spaces-generic' })

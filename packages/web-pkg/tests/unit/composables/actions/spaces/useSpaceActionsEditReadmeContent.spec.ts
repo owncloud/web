@@ -2,15 +2,20 @@ import {
   useOpenWithDefaultApp,
   useSpaceActionsEditReadmeContent
 } from '../../../../../src/composables/actions'
-import { SpaceResource, buildSpace } from '@ownclouders/web-client'
+import { Resource, SpaceResource, buildSpace } from '@ownclouders/web-client'
 import { getComposableWrapper } from 'web-test-helpers'
 import { unref } from 'vue'
 import { mock, mockDeep } from 'vitest-mock-extended'
 import { Drive } from '@ownclouders/web-client/graph/generated'
-import { ClientService } from '../../../../../src'
+import { ClientService } from '../../../../../src/services'
+import { useSpaceHelpers } from '../../../../../src/composables/spaces/useSpaceHelpers'
 
 vi.mock('../../../../../src/composables/actions/useOpenWithDefaultApp', () => ({
   useOpenWithDefaultApp: vi.fn()
+}))
+
+vi.mock('../../../../../src/composables/spaces/useSpaceHelpers', () => ({
+  useSpaceHelpers: vi.fn()
 }))
 
 describe('editReadmeContent', () => {
@@ -88,6 +93,11 @@ function getWrapper({
       openWithDefaultApp
     })
   )
+
+  vi.mocked(useSpaceHelpers).mockReturnValue({
+    checkSpaceNameModalInput: vi.fn(),
+    getDefaultMetaFolder: () => new Promise(() => mock<Resource>())
+  })
 
   const mocks = { openWithDefaultApp }
 
