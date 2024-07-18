@@ -19,7 +19,6 @@ const defaultOptions = {
   contextHelpersReadMore: true,
   defaultExtension: 'files',
   disabledExtensions: [] as string[],
-  displayResourcesLazy: true,
   editor: {
     autosaveEnabled: true,
     autosaveInterval: 120
@@ -45,7 +44,6 @@ const defaultOptions = {
     }
   },
   tokenStorageLocal: true,
-  topCenterNotifications: false,
   userListRequiresFilter: false
 } satisfies Partial<OptionsConfig>
 

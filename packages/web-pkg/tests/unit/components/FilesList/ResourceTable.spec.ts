@@ -633,6 +633,7 @@ function getMountedWrapper({
         ],
         selection: [],
         hover: false,
+        lazy: false,
         space: mock<SpaceResource>({
           getDriveAliasAndItem: vi.fn()
         }),
@@ -644,8 +645,7 @@ function getMountedWrapper({
           ...defaultPlugins({
             piniaOptions: {
               authState: { userContextReady },
-              capabilityState: { capabilities },
-              configState: { options: { displayResourcesLazy: false } }
+              capabilityState: { capabilities }
             }
           })
         ],

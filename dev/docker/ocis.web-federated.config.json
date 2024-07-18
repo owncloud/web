@@ -9,8 +9,6 @@
     "scope": "openid profile email"
   },
   "options": {
-    "topCenterNotifications": true,
-    "displayResourcesLazy": false,
     "sidebar": {
       "shares": {
         "showAllOnLoad": true

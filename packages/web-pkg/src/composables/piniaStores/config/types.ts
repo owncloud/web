@@ -66,7 +66,6 @@ const OptionsConfigSchema = z.object({
   defaultExtension: z.string().optional(),
   disabledExtensions: z.array(z.string()).optional(),
   disableFeedbackLink: z.boolean().optional(),
-  displayResourcesLazy: z.boolean().optional(),
   accountEditLink: z
     .object({
       href: z.string().optional()
@@ -129,7 +128,6 @@ const OptionsConfigSchema = z.object({
     })
     .optional(),
   tokenStorageLocal: z.boolean().optional(),
-  topCenterNotifications: z.boolean().optional(),
   upload: z
     .object({
       companionUrl: z.string().optional(),
