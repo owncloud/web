@@ -20,11 +20,6 @@
     "epub-reader"
   ],
   "options": {
-    "upload": {
-      "xhr": {
-        "timeout": 60000
-      }
-    },
     "contextHelpersReadMore": true
   }
 }

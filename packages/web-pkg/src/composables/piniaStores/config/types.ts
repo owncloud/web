@@ -125,12 +125,7 @@ const OptionsConfigSchema = z.object({
   tokenStorageLocal: z.boolean().optional(),
   upload: z
     .object({
-      companionUrl: z.string().optional(),
-      xhr: z
-        .object({
-          timeout: z.number().optional()
-        })
-        .optional()
+      companionUrl: z.string().optional()
     })
     .optional(),
   userListRequiresFilter: z.boolean().optional()

@@ -63,7 +63,6 @@ Depending on the backend you are using, there are sample config files provided i
 - `options.cernFeatures` Enabling this will activate CERN-specific features. Defaults to `false`.
 - `option.routing` This accepts an object with the following fields to customize the routing behaviour:
     - `options.routing.idBased` Enable or disable fileIds being added to the URL. Defaults to `true` because otherwise e.g. spaces with name clashes can't be resolved correctly. Only disable this if you can guarantee server side that spaces of the same namespace can't have name clashes.
-- `options.upload.xhr.timeout` Specifies the timeout for XHR uploads in milliseconds.
 - `options.editor.autosaveEnabled` Specifies if the autosave for the editor apps is enabled.
 - `options.editor.autosaveInterval` Specifies the time interval for the autosave of editor apps in seconds.
 - `options.editor.openAsPreview` Specifies if non-personal files i.e. files in shares, spaces or public links are being opened in read only mode so the user needs to manually switch to edit mode. Can be set to `true`, `false` or an array of web app/editor names.
