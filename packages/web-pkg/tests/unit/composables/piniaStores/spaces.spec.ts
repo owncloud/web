@@ -1,4 +1,4 @@
-import { getComposableWrapper, mockAxiosResolve } from 'web-test-helpers'
+import { getComposableWrapper } from 'web-test-helpers'
 import {
   useSpacesStore,
   sortSpaceMembers,
@@ -14,11 +14,7 @@ import {
   SpaceResource
 } from '@ownclouders/web-client'
 import { Graph } from '@ownclouders/web-client/graph'
-import {
-  CollectionOfPermissionsWithAllowedValues,
-  Permission,
-  User
-} from '@ownclouders/web-client/graph/generated'
+import { User } from '@ownclouders/web-client/graph/generated'
 import { ClientService } from '../../../../src/services'
 
 describe('spaces', () => {
@@ -280,13 +276,16 @@ describe('spaces', () => {
     it('loads space members and sets them', () => {
       getWrapper({
         setup: async (instance) => {
-          const permission = mock<Permission>({ id: '1', link: undefined, roles: ['roleId'] })
+          const share = mock<CollaboratorShare>({
+            id: '1',
+            role: mock<ShareRole>({ id: 'roleId' })
+          })
           const clientService = mockDeep<ClientService>()
-          clientService.graphAuthenticated.permissions.listPermissionsSpaceRoot.mockResolvedValue(
-            mockAxiosResolve(
-              mock<CollectionOfPermissionsWithAllowedValues>({ value: [permission] })
-            )
-          )
+          clientService.graphAuthenticated.permissions.listPermissions.mockResolvedValue({
+            shares: [share],
+            allowedActions: [],
+            allowedRoles: []
+          })
 
           const userStore = useUserStore()
           userStore.user = mock<User>()
@@ -299,11 +298,9 @@ describe('spaces', () => {
             space: mock<SpaceResource>()
           })
 
-          expect(
-            clientService.graphAuthenticated.permissions.listPermissionsSpaceRoot
-          ).toHaveBeenCalled()
+          expect(clientService.graphAuthenticated.permissions.listPermissions).toHaveBeenCalled()
           expect(instance.spaceMembers.length).toBe(1)
-          expect(instance.spaceMembers[0].id).toBe(permission.id)
+          expect(instance.spaceMembers[0].id).toBe(share.id)
         }
       })
     })

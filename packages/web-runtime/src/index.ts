@@ -43,7 +43,6 @@ import PortalVue, { createWormhole } from 'portal-vue'
 import { createPinia } from 'pinia'
 import Avatar from './components/Avatar.vue'
 import focusMixin from './mixins/focusMixin'
-import { UnifiedRoleDefinition } from '@ownclouders/web-client/graph/generated'
 import { extensionPoints } from './extensionPoints'
 import { isSilentRedirectRoute } from './helpers/silentRedirect'
 
@@ -234,11 +233,9 @@ export const bootstrapApp = async (configurationPath: string, appsReadyCallback:
       }
 
       // load sharing roles from graph API
-      const { data } =
-        await clientService.graphAuthenticated.roleManagement.listPermissionRoleDefinitions()
-
-      // FIXME: graph type is wrong
-      sharesStore.setGraphRoles(data as UnifiedRoleDefinition[])
+      const graphRoleDefinitions =
+        await clientService.graphAuthenticated.permissions.listRoleDefinitions()
+      sharesStore.setGraphRoles(graphRoleDefinitions)
     },
     {
       immediate: true

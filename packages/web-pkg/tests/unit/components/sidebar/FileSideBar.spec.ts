@@ -1,16 +1,9 @@
 import FileSideBar from '../../../../src/components/SideBar/FileSideBar.vue'
-import {
-  CollaboratorShare,
-  Resource,
-  SpaceResource,
-  buildCollaboratorShare,
-  buildLinkShare
-} from '@ownclouders/web-client'
+import { CollaboratorShare, LinkShare, Resource, SpaceResource } from '@ownclouders/web-client'
 import { mock } from 'vitest-mock-extended'
 import {
   defaultComponentMocks,
   defaultPlugins,
-  mockAxiosResolve,
   RouteLocation,
   shallowMount
 } from 'web-test-helpers'
@@ -22,11 +15,6 @@ import {
   useSharesStore,
   useSpacesStore
 } from '../../../../src/composables/piniaStores'
-import {
-  CollectionOfPermissionsWithAllowedValues,
-  Permission,
-  SharingLink
-} from '@ownclouders/web-client/graph/generated'
 import { AncestorMetaDataValue } from '../../../../src'
 
 const InnerSideBarComponent = defineComponent({
@@ -35,12 +23,6 @@ const InnerSideBarComponent = defineComponent({
 })
 
 vi.mock('../../../../src/composables/selection', () => ({ useSelectedResources: vi.fn() }))
-
-vi.mock('@ownclouders/web-client', async (importOriginal) => ({
-  ...(await importOriginal<any>()),
-  buildLinkShare: vi.fn((share) => share),
-  buildCollaboratorShare: vi.fn((share) => share)
-}))
 
 const selectors = {
   sideBar: '.files-side-bar',
@@ -103,9 +85,11 @@ describe('FileSideBar', () => {
       const resource = mock<Resource>()
       const { wrapper, mocks } = createWrapper()
 
-      mocks.$clientService.graphAuthenticated.permissions.listPermissions.mockResolvedValue(
-        mockAxiosResolve(mock<CollectionOfPermissionsWithAllowedValues>({ value: [] }))
-      )
+      mocks.$clientService.graphAuthenticated.permissions.listPermissions.mockResolvedValue({
+        shares: [],
+        allowedActions: [],
+        allowedRoles: []
+      })
 
       const { setLoading } = useSharesStore()
       await wrapper.vm.loadSharesTask.perform(resource)
@@ -116,23 +100,16 @@ describe('FileSideBar', () => {
       const resource = mock<Resource>()
       const { wrapper, mocks } = createWrapper()
 
-      const collaboratorShare = { link: undefined } as Permission
-      const linkShare = { link: mock<SharingLink>() } as Permission
-      mocks.$clientService.graphAuthenticated.permissions.listPermissions.mockResolvedValue(
-        mockAxiosResolve(
-          mock<CollectionOfPermissionsWithAllowedValues>({ value: [collaboratorShare, linkShare] })
-        )
-      )
+      const collaboratorShare = { id: '1', role: {} } as unknown as CollaboratorShare
+      const linkShare = { id: '2' } as unknown as LinkShare
+      mocks.$clientService.graphAuthenticated.permissions.listPermissions.mockResolvedValue({
+        shares: [collaboratorShare, linkShare],
+        allowedActions: [],
+        allowedRoles: []
+      })
 
       const { setCollaboratorShares, setLinkShares } = useSharesStore()
       await wrapper.vm.loadSharesTask.perform(resource)
-
-      expect(buildCollaboratorShare).toHaveBeenCalledWith(
-        expect.objectContaining({ graphPermission: collaboratorShare })
-      )
-      expect(buildLinkShare).toHaveBeenCalledWith(
-        expect.objectContaining({ graphPermission: linkShare })
-      )
 
       expect(setCollaboratorShares).toHaveBeenCalledWith([expect.anything()])
       expect(setLinkShares).toHaveBeenCalledWith([expect.anything()])
@@ -141,16 +118,18 @@ describe('FileSideBar', () => {
       const resource = mock<Resource>()
       const { wrapper, mocks } = createWrapper()
 
-      mocks.$clientService.graphAuthenticated.permissions.listPermissions.mockResolvedValueOnce(
-        mockAxiosResolve(mock<CollectionOfPermissionsWithAllowedValues>({ value: [] }))
-      )
+      mocks.$clientService.graphAuthenticated.permissions.listPermissions.mockResolvedValueOnce({
+        shares: [],
+        allowedActions: [],
+        allowedRoles: []
+      })
 
-      const collaboratorShare = { link: undefined } as Permission
-      mocks.$clientService.graphAuthenticated.permissions.listPermissions.mockResolvedValueOnce(
-        mockAxiosResolve(
-          mock<CollectionOfPermissionsWithAllowedValues>({ value: [collaboratorShare] })
-        )
-      )
+      const collaboratorShare = { id: '1', role: {} } as unknown as CollaboratorShare
+      mocks.$clientService.graphAuthenticated.permissions.listPermissions.mockResolvedValueOnce({
+        shares: [collaboratorShare],
+        allowedActions: [],
+        allowedRoles: []
+      })
 
       const resourcesStore = useResourcesStore()
       resourcesStore.ancestorMetaData = { '/foo': mock<AncestorMetaDataValue>({ id: '1' }) }
@@ -160,18 +139,16 @@ describe('FileSideBar', () => {
       expect(
         mocks.$clientService.graphAuthenticated.permissions.listPermissions
       ).toHaveBeenCalledTimes(2)
-
-      expect(buildCollaboratorShare).toHaveBeenCalledWith(
-        expect.objectContaining({ graphPermission: collaboratorShare })
-      )
     })
     it('calls "setSpaceMembers" for space resources', async () => {
       const resource = mock<SpaceResource>({ id: '1', driveType: 'project' })
       const { wrapper, mocks } = createWrapper()
 
-      mocks.$clientService.graphAuthenticated.permissions.listPermissions.mockResolvedValue(
-        mockAxiosResolve(mock<CollectionOfPermissionsWithAllowedValues>({ value: [] }))
-      )
+      mocks.$clientService.graphAuthenticated.permissions.listPermissions.mockResolvedValue({
+        shares: [],
+        allowedActions: [],
+        allowedRoles: []
+      })
 
       const { setSpaceMembers } = useSpacesStore()
       await wrapper.vm.loadSharesTask.perform(resource)
@@ -183,9 +160,11 @@ describe('FileSideBar', () => {
       const space = mock<SpaceResource>({ id: '1', driveType: 'project' })
       const { wrapper, mocks } = createWrapper({ space })
 
-      mocks.$clientService.graphAuthenticated.permissions.listPermissions.mockResolvedValue(
-        mockAxiosResolve(mock<CollectionOfPermissionsWithAllowedValues>({ value: [] }))
-      )
+      mocks.$clientService.graphAuthenticated.permissions.listPermissions.mockResolvedValue({
+        shares: [],
+        allowedActions: [],
+        allowedRoles: []
+      })
 
       const { loadSpaceMembers } = useSpacesStore()
       await wrapper.vm.loadSharesTask.perform(resource)
@@ -197,9 +176,11 @@ describe('FileSideBar', () => {
         const resource = mock<Resource>()
         const { wrapper, mocks } = createWrapper()
 
-        mocks.$clientService.graphAuthenticated.permissions.listPermissions.mockResolvedValue(
-          mockAxiosResolve(mock<CollectionOfPermissionsWithAllowedValues>({ value: [] }))
-        )
+        mocks.$clientService.graphAuthenticated.permissions.listPermissions.mockResolvedValue({
+          shares: [],
+          allowedActions: [],
+          allowedRoles: []
+        })
 
         const sharesStore = useSharesStore()
         sharesStore.collaboratorShares = [mock<CollaboratorShare>()]
@@ -212,9 +193,11 @@ describe('FileSideBar', () => {
         const resource = mock<Resource>()
         const { wrapper, mocks } = createWrapper({ currentRouteName: 'files-shares-with-me' })
 
-        mocks.$clientService.graphAuthenticated.permissions.listPermissions.mockResolvedValue(
-          mockAxiosResolve(mock<CollectionOfPermissionsWithAllowedValues>({ value: [] }))
-        )
+        mocks.$clientService.graphAuthenticated.permissions.listPermissions.mockResolvedValue({
+          shares: [],
+          allowedActions: [],
+          allowedRoles: []
+        })
 
         const sharesStore = useSharesStore()
         sharesStore.collaboratorShares = [mock<CollaboratorShare>()]
@@ -227,9 +210,11 @@ describe('FileSideBar', () => {
         const resource = mock<Resource>()
         const { wrapper, mocks } = createWrapper({ currentRouteName: 'files-spaces-projects' })
 
-        mocks.$clientService.graphAuthenticated.permissions.listPermissions.mockResolvedValue(
-          mockAxiosResolve(mock<CollectionOfPermissionsWithAllowedValues>({ value: [] }))
-        )
+        mocks.$clientService.graphAuthenticated.permissions.listPermissions.mockResolvedValue({
+          shares: [],
+          allowedActions: [],
+          allowedRoles: []
+        })
 
         const sharesStore = useSharesStore()
         sharesStore.collaboratorShares = [mock<CollaboratorShare>()]

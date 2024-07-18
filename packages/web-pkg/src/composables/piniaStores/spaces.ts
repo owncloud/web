@@ -1,6 +1,6 @@
 import { defineStore } from 'pinia'
 import { computed, ref, unref } from 'vue'
-import { SpaceResource } from '@ownclouders/web-client'
+import { isCollaboratorShare, SpaceResource } from '@ownclouders/web-client'
 import { Graph } from '@ownclouders/web-client/graph'
 import {
   GraphShareRoleIdMap,
@@ -12,7 +12,6 @@ import {
 import type { CollaboratorShare } from '@ownclouders/web-client'
 import { useUserStore } from './user'
 import { ConfigStore, useConfigStore } from './config'
-import { buildCollaboratorShare } from '@ownclouders/web-client'
 import { useSharesStore } from './shares'
 
 export const sortSpaceMembers = (shares: CollaboratorShare[]) => {
@@ -191,24 +190,14 @@ export const useSpacesStore = defineStore('spaces', () => {
     space: SpaceResource
   }) => {
     spaceMembers.value = []
-    const spaceShares: CollaboratorShare[] = []
 
-    const { data } = await graphClient.permissions.listPermissionsSpaceRoot(space.id)
+    const { shares } = await graphClient.permissions.listPermissions(
+      space.id,
+      space.id,
+      sharesStore.graphRoles
+    )
 
-    const permissions = data.value || []
-    permissions.forEach((graphPermission) => {
-      if (!graphPermission.link) {
-        spaceShares.push(
-          buildCollaboratorShare({
-            graphPermission,
-            graphRoles: sharesStore.graphRoles,
-            resourceId: space.id,
-            user: userStore.user
-          })
-        )
-      }
-    })
-
+    const spaceShares = shares.filter(isCollaboratorShare)
     spaceMembers.value = sortSpaceMembers(spaceShares)
   }
 

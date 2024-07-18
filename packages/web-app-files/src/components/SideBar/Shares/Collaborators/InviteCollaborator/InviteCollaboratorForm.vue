@@ -348,7 +348,7 @@ export default defineComponent({
         savePromises.push(
           saveQueue.add(async () => {
             try {
-              const shares = await addShare({
+              const share = await addShare({
                 clientService,
                 space: unref(space),
                 resource: unref(resource),
@@ -364,7 +364,7 @@ export default defineComponent({
                 }
               })
 
-              addedShares.push(...shares)
+              addedShares.push(share)
             } catch (error) {
               console.error(error)
               errors.push({ displayName, error })

@@ -204,7 +204,6 @@ describe('share helper functions', () => {
       { id: '2', rolePermissions: [{ allowedResourceActions: ['edit'] }] }
     ] as UnifiedRoleDefinition[]
 
-    const user = { id: '1', displayName: 'user1' } as User
     const resourceId = '1'
 
     it('sets ids based on the permission and the given resource id', () => {
@@ -213,8 +212,7 @@ describe('share helper functions', () => {
       const result = buildCollaboratorShare({
         graphPermission,
         graphRoles,
-        resourceId,
-        user
+        resourceId
       })
 
       expect(result.id).toEqual(graphPermission.id)
@@ -230,8 +228,7 @@ describe('share helper functions', () => {
         const result = buildCollaboratorShare({
           graphPermission,
           graphRoles,
-          resourceId,
-          user
+          resourceId
         })
 
         expect(result.shareType).toEqual(ShareTypes.user.value)
@@ -245,8 +242,7 @@ describe('share helper functions', () => {
         const result = buildCollaboratorShare({
           graphPermission,
           graphRoles,
-          resourceId,
-          user
+          resourceId
         })
 
         expect(result.shareType).toEqual(ShareTypes.group.value)
@@ -262,8 +258,7 @@ describe('share helper functions', () => {
         const result = buildCollaboratorShare({
           graphPermission,
           graphRoles,
-          resourceId,
-          user
+          resourceId
         })
 
         expect(result.permissions).toEqual(permissions)
@@ -277,8 +272,7 @@ describe('share helper functions', () => {
         const result = buildCollaboratorShare({
           graphPermission,
           graphRoles,
-          resourceId,
-          user
+          resourceId
         })
 
         expect(result.permissions).toEqual(
@@ -291,19 +285,18 @@ describe('share helper functions', () => {
   })
 
   describe('buildLinkShare', () => {
-    const user = { id: '1', displayName: 'user1' } as User
     const resourceId = '1'
 
     it('sets ids based on the permission and the given resource id', () => {
       const graphPermission = mock<Permission>({ '@libre.graph.permissions.actions': [] })
-      const result = buildLinkShare({ graphPermission, resourceId, user })
+      const result = buildLinkShare({ graphPermission, resourceId })
 
       expect(result.id).toEqual(graphPermission.id)
       expect(result.resourceId).toEqual(resourceId)
     })
     it('sets the sharing link type', () => {
       const graphPermission = mock<Permission>({ '@libre.graph.permissions.actions': [] })
-      const result = buildLinkShare({ graphPermission, resourceId, user })
+      const result = buildLinkShare({ graphPermission, resourceId })
 
       expect(result.shareType).toEqual(ShareTypes.link.value)
     })

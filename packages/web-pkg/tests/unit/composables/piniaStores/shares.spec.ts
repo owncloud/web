@@ -1,4 +1,4 @@
-import { createTestingPinia, getComposableWrapper, mockAxiosResolve } from 'web-test-helpers'
+import { createTestingPinia, getComposableWrapper } from 'web-test-helpers'
 import {
   AddLinkOptions,
   AddShareOptions,
@@ -11,15 +11,8 @@ import {
 } from '../../../../src/composables/piniaStores'
 import { mock, mockDeep } from 'vitest-mock-extended'
 import { ClientService } from '../../../../src/services'
-import { Resource, SpaceResource } from '@ownclouders/web-client'
-import { Permission, User } from '@ownclouders/web-client/graph/generated'
-import { buildCollaboratorShare, buildLinkShare } from '@ownclouders/web-client'
-
-vi.mock('@ownclouders/web-client', async (importOriginal) => ({
-  ...(await importOriginal<any>()),
-  buildLinkShare: vi.fn((share) => share),
-  buildCollaboratorShare: vi.fn((share) => share)
-}))
+import { CollaboratorShare, LinkShare, Resource } from '@ownclouders/web-client'
+import { User } from '@ownclouders/web-client/graph/generated'
 
 describe('useSharesStore', () => {
   beforeEach(() => {
@@ -34,42 +27,19 @@ describe('useSharesStore', () => {
       getWrapper({
         setup: async (instance) => {
           const resource = { id: '1' } as Resource
-          const permission = { id: '1' } as Permission
+          const share = mock<CollaboratorShare>({ id: '1' })
           const user = { id: '1' } as User
 
           const clientService = mockDeep<ClientService>()
-          clientService.graphAuthenticated.permissions.invite.mockResolvedValue(
-            mockAxiosResolve({ value: [permission] })
-          )
+          clientService.graphAuthenticated.permissions.createInvite.mockResolvedValue(share)
 
           const userStore = useUserStore()
           userStore.user = user
 
           await instance.addShare(mock<AddShareOptions>({ clientService, resource }))
 
-          expect(clientService.graphAuthenticated.permissions.invite).toHaveBeenCalledTimes(1)
+          expect(clientService.graphAuthenticated.permissions.createInvite).toHaveBeenCalledTimes(1)
           expect(instance.collaboratorShares.length).toBe(1)
-          expect(buildCollaboratorShare).toHaveBeenCalledWith({
-            graphPermission: permission,
-            graphRoles: [],
-            resourceId: resource.id,
-            user
-          })
-        }
-      })
-    })
-    it('calls the graph root endpoint for spaces', () => {
-      getWrapper({
-        setup: async (instance) => {
-          const resource = { id: '1', type: 'space' } as SpaceResource
-
-          const clientService = mockDeep<ClientService>()
-          const client = clientService.graphAuthenticated.permissions
-          client.inviteSpaceRoot.mockResolvedValue(mockAxiosResolve({ value: [] }))
-
-          await instance.addShare(mock<AddShareOptions>({ clientService, resource }))
-
-          expect(client.inviteSpaceRoot).toHaveBeenCalledTimes(1)
         }
       })
     })
@@ -79,13 +49,11 @@ describe('useSharesStore', () => {
       getWrapper({
         setup: async (instance) => {
           const resource = { id: '1' } as Resource
-          const permission = { id: '1' } as Permission
+          const share = mock<CollaboratorShare>({ id: '1' })
           const user = { id: '1' } as User
 
           const clientService = mockDeep<ClientService>()
-          clientService.graphAuthenticated.permissions.updatePermission.mockResolvedValue(
-            mockAxiosResolve(permission)
-          )
+          clientService.graphAuthenticated.permissions.updatePermission.mockResolvedValue(share)
 
           const userStore = useUserStore()
           userStore.user = user
@@ -95,27 +63,6 @@ describe('useSharesStore', () => {
           expect(
             clientService.graphAuthenticated.permissions.updatePermission
           ).toHaveBeenCalledTimes(1)
-          expect(buildCollaboratorShare).toHaveBeenCalledWith({
-            graphPermission: permission,
-            graphRoles: [],
-            resourceId: resource.id,
-            user
-          })
-        }
-      })
-    })
-    it('calls the graph root endpoint for spaces', () => {
-      getWrapper({
-        setup: async (instance) => {
-          const resource = { id: '1', type: 'space' } as SpaceResource
-
-          const clientService = mockDeep<ClientService>()
-          const client = clientService.graphAuthenticated.permissions
-          client.updatePermissionSpaceRoot.mockResolvedValue(mockAxiosResolve())
-
-          await instance.updateShare(mock<UpdateShareOptions>({ clientService, resource }))
-
-          expect(client.updatePermissionSpaceRoot).toHaveBeenCalledTimes(1)
         }
       })
     })
@@ -136,21 +83,6 @@ describe('useSharesStore', () => {
         }
       })
     })
-    it('calls the graph root endpoint for spaces', () => {
-      getWrapper({
-        setup: async (instance) => {
-          const resource = { id: '1', type: 'space' } as SpaceResource
-
-          const clientService = mockDeep<ClientService>()
-          const client = clientService.graphAuthenticated.permissions
-          client.deletePermissionSpaceRoot.mockResolvedValue(mockAxiosResolve())
-
-          await instance.deleteShare(mock<DeleteShareOptions>({ clientService, resource }))
-
-          expect(client.deletePermissionSpaceRoot).toHaveBeenCalledTimes(1)
-        }
-      })
-    })
   })
 
   describe('addLink', () => {
@@ -158,13 +90,11 @@ describe('useSharesStore', () => {
       getWrapper({
         setup: async (instance) => {
           const resource = { id: '1' } as Resource
-          const permission = { id: '1' } as Permission
+          const link = mock<LinkShare>({ id: '1' })
           const user = { id: '1' } as User
 
           const clientService = mockDeep<ClientService>()
-          clientService.graphAuthenticated.permissions.createLink.mockResolvedValue(
-            mockAxiosResolve(permission)
-          )
+          clientService.graphAuthenticated.permissions.createLink.mockResolvedValue(link)
 
           const userStore = useUserStore()
           userStore.user = user
@@ -173,26 +103,6 @@ describe('useSharesStore', () => {
 
           expect(clientService.graphAuthenticated.permissions.createLink).toHaveBeenCalledTimes(1)
           expect(instance.linkShares.length).toBe(1)
-          expect(buildLinkShare).toHaveBeenCalledWith({
-            graphPermission: permission,
-            resourceId: resource.id,
-            user
-          })
-        }
-      })
-    })
-    it('calls the graph root endpoint for spaces', () => {
-      getWrapper({
-        setup: async (instance) => {
-          const resource = { id: '1', type: 'space' } as SpaceResource
-
-          const clientService = mockDeep<ClientService>()
-          const client = clientService.graphAuthenticated.permissions
-          client.createLinkSpaceRoot.mockResolvedValue(mockAxiosResolve())
-
-          await instance.addLink(mock<AddLinkOptions>({ clientService, resource }))
-
-          expect(client.createLinkSpaceRoot).toHaveBeenCalledTimes(1)
         }
       })
     })
@@ -202,13 +112,11 @@ describe('useSharesStore', () => {
       getWrapper({
         setup: async (instance) => {
           const resource = { id: '1' } as Resource
-          const permission = { id: '1' } as Permission
+          const link = mock<LinkShare>({ id: '1' })
           const user = { id: '1' } as User
 
           const clientService = mockDeep<ClientService>()
-          clientService.graphAuthenticated.permissions.updatePermission.mockResolvedValue(
-            mockAxiosResolve(permission)
-          )
+          clientService.graphAuthenticated.permissions.updatePermission.mockResolvedValue(link)
 
           const userStore = useUserStore()
           userStore.user = user
@@ -218,26 +126,6 @@ describe('useSharesStore', () => {
           expect(
             clientService.graphAuthenticated.permissions.updatePermission
           ).toHaveBeenCalledTimes(1)
-          expect(buildLinkShare).toHaveBeenCalledWith({
-            graphPermission: permission,
-            resourceId: resource.id,
-            user
-          })
-        }
-      })
-    })
-    it('calls the graph root endpoint for spaces', () => {
-      getWrapper({
-        setup: async (instance) => {
-          const resource = { id: '1', type: 'space' } as SpaceResource
-
-          const clientService = mockDeep<ClientService>()
-          const client = clientService.graphAuthenticated.permissions
-          client.updatePermissionSpaceRoot.mockResolvedValue(mockAxiosResolve())
-
-          await instance.updateLink(mock<UpdateLinkOptions>({ clientService, resource }))
-
-          expect(client.updatePermissionSpaceRoot).toHaveBeenCalledTimes(1)
         }
       })
     })
@@ -255,21 +143,6 @@ describe('useSharesStore', () => {
           expect(
             clientService.graphAuthenticated.permissions.deletePermission
           ).toHaveBeenCalledTimes(1)
-        }
-      })
-    })
-    it('calls the graph root endpoint for spaces', () => {
-      getWrapper({
-        setup: async (instance) => {
-          const resource = { id: '1', type: 'space' } as SpaceResource
-
-          const clientService = mockDeep<ClientService>()
-          const client = clientService.graphAuthenticated.permissions
-          client.deletePermissionSpaceRoot.mockResolvedValue(mockAxiosResolve())
-
-          await instance.deleteLink(mock<DeleteLinkOptions>({ clientService, resource }))
-
-          expect(client.deletePermissionSpaceRoot).toHaveBeenCalledTimes(1)
         }
       })
     })

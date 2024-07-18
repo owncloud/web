@@ -138,7 +138,7 @@ describe('InviteCollaboratorForm', () => {
       wrapper.vm.selectedCollaborators = [mock<CollaboratorAutoCompleteItem>()]
 
       const { addShare } = useSharesStore()
-      vi.mocked(addShare).mockResolvedValue([])
+      vi.mocked(addShare).mockResolvedValue(undefined)
 
       await wrapper.vm.$nextTick()
       await wrapper.vm.share()

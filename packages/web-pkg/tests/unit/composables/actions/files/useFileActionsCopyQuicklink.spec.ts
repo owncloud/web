@@ -3,16 +3,14 @@ import {
   useFileActionsCopyQuickLink,
   useFileActionsCreateLink
 } from '../../../../../src/composables/actions/files'
-import { defaultComponentMocks, getComposableWrapper, mockAxiosResolve } from 'web-test-helpers'
+import { defaultComponentMocks, getComposableWrapper } from 'web-test-helpers'
 import { mock } from 'vitest-mock-extended'
 import { FileAction } from '../../../../../src/composables/actions'
 import { useCanShare } from '../../../../../src/composables/shares'
 import { Resource, SpaceResource } from '@ownclouders/web-client'
 import { LinkShare } from '@ownclouders/web-client'
-import { buildLinkShare } from '@ownclouders/web-client'
 import { useClipboard } from '../../../../../src/composables/clipboard'
 import { useMessages } from '../../../../../src/composables/piniaStores'
-import { Permission } from '@ownclouders/web-client/graph/generated'
 
 vi.mock('../../../../../src/composables/shares', () => ({
   useCanShare: vi.fn()
@@ -24,11 +22,6 @@ vi.mock('../../../../../src/composables/actions/files/useFileActionsCreateLink',
 
 vi.mock('../../../../../src/composables/clipboard', () => ({
   useClipboard: vi.fn()
-}))
-
-vi.mock('@ownclouders/web-client', async (importOriginal) => ({
-  ...(await importOriginal<any>()),
-  buildLinkShare: vi.fn()
 }))
 
 describe('useFileActionsCopyQuickLink', () => {
@@ -98,7 +91,7 @@ describe('useFileActionsCopyQuickLink', () => {
           })
           expect(mocks.createLinkMock).toHaveBeenCalledTimes(1)
           expect(
-            mocks.$clientService.graphAuthenticated.permissions.listPermissionsSpaceRoot
+            mocks.$clientService.graphAuthenticated.permissions.listPermissions
           ).toHaveBeenCalled()
         }
       })
@@ -125,17 +118,16 @@ function getWrapper({
     ])
   })
   vi.mocked(useCanShare).mockReturnValue({ canShare: vi.fn(() => canShare) })
-  vi.mocked(buildLinkShare).mockReturnValue(mock<LinkShare>({ isQuickLink: quickLinkExists }))
   vi.mocked(useClipboard).mockReturnValue({ copyToClipboard: vi.fn() })
 
   const mocks = { ...defaultComponentMocks(), createLinkMock }
 
-  const resolvedData = mockAxiosResolve({
-    value: [mock<Permission>({ link: { '@libre.graph.quickLink': quickLinkExists } })]
-  })
   const graphClientMock = mocks.$clientService.graphAuthenticated
-  graphClientMock.permissions.listPermissions.mockResolvedValue(resolvedData)
-  graphClientMock.permissions.listPermissionsSpaceRoot.mockResolvedValue(resolvedData)
+  graphClientMock.permissions.listPermissions.mockResolvedValue({
+    shares: [mock<LinkShare>({ isQuickLink: quickLinkExists })],
+    allowedActions: [],
+    allowedRoles: []
+  })
 
   return {
     wrapper: getComposableWrapper(
