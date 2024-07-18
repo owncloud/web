@@ -64,8 +64,6 @@ Depending on the backend you are using, there are sample config files provided i
     - `options.sidebar.exif.showLocation` Sets the `location` data in the exif panel to visible or hidden. One might want to hide the location info when a map view of the location is available from another app (the GPX Viewer app provides such a sidebar panel).  
 - `options.runningOnEos` Set this option to `true` if running on an [EOS storage backend](https://eos-web.web.cern.ch/eos-web/) to enable its specific features. Defaults to `false`, and we recommend reaching out to [the ownCloud web team](https://talk.owncloud.com/channel/web) if you're not CERN and thinking about enabling this feature flag.
 - `options.cernFeatures` Enabling this will activate CERN-specific features. Defaults to `false`.
-- `options.hoverableQuickActions` Set this option to `true` to hide the quick actions (buttons appearing on file rows), and only show them when the user
-  hovers the row with his mouse. Defaults to `false`.
 - `option.routing` This accepts an object with the following fields to customize the routing behaviour:
     - `options.routing.idBased` Enable or disable fileIds being added to the URL. Defaults to `true` because otherwise e.g. spaces with name clashes can't be resolved correctly. Only disable this if you can guarantee server side that spaces of the same namespace can't have name clashes.
 - `options.upload.xhr.timeout` Specifies the timeout for XHR uploads in milliseconds.
