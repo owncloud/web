@@ -110,38 +110,14 @@ describe('Exif SideBar Panel', () => {
       const { wrapper } = createWrapper({ resource })
       expect(wrapper.find(locationSelector).text()).toEqual('-')
     })
-    it("doesn't show the location at all if forbidden in config", () => {
-      const resource = mock<Resource>({
-        location: mock<GeoCoordinates>({
-          latitude: 51.30044714422953,
-          longitude: 7.373170282627126
-        })
-      })
-      const { wrapper } = createWrapper({ resource, locationForbidden: true })
-      expect(wrapper.find(locationSelector).exists()).toBeFalsy()
-    })
   })
 })
 
-function createWrapper({
-  resource,
-  locationForbidden
-}: {
-  resource: Resource
-  locationForbidden?: boolean
-}) {
+function createWrapper({ resource }: { resource: Resource }) {
   return {
     wrapper: shallowMount(ExifPanel, {
       global: {
-        plugins: [
-          ...defaultPlugins({
-            piniaOptions: {
-              configState: {
-                options: { sidebar: { exif: { showLocation: locationForbidden !== true } } }
-              }
-            }
-          })
-        ],
+        plugins: [...defaultPlugins({})],
         provide: {
           resource
         }
