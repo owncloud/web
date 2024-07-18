@@ -1,5 +1,5 @@
 <template>
-  <oc-notifications :position="notificationPosition">
+  <oc-notifications position="default">
     <oc-notification-message
       v-for="item in limitedMessages"
       :key="item.id"
@@ -14,21 +14,13 @@
 </template>
 
 <script lang="ts">
-import { Message, useConfigStore, useMessages } from '@ownclouders/web-pkg'
+import { Message, useMessages } from '@ownclouders/web-pkg'
 import { computed, defineComponent } from 'vue'
 
 export default defineComponent({
   name: 'MessageBar',
   setup() {
     const messageStore = useMessages()
-    const configStore = useConfigStore()
-
-    const notificationPosition = computed(() => {
-      if (configStore.options.topCenterNotifications) {
-        return 'top-center'
-      }
-      return 'default'
-    })
 
     const limitedMessages = computed(() => {
       return messageStore.messages ? messageStore.messages.slice(0, 5) : []
@@ -38,7 +30,7 @@ export default defineComponent({
       messageStore.removeMessage(message)
     }
 
-    return { notificationPosition, limitedMessages, deleteMessage }
+    return { limitedMessages, deleteMessage }
   }
 })
 </script>

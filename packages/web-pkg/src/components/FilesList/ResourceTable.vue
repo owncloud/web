@@ -25,7 +25,7 @@
     :selection="selectedResources"
     :sort-by="sortBy"
     :sort-dir="sortDir"
-    :lazy="lazyLoading"
+    :lazy="lazy"
     :grouping-settings="groupingSettings"
     padding-x="medium"
     @highlight="fileClicked"
@@ -484,6 +484,12 @@ export default defineComponent({
     resourceType: {
       type: String as PropType<'file' | 'space'>,
       default: 'file'
+    } /**
+     * Determines if the table content should be loaded lazily.
+     */,
+    lazy: {
+      type: Boolean,
+      default: true
     },
     /**
      * This is only relevant for CERN and can be ignored in any other cases.
@@ -825,9 +831,6 @@ export default defineComponent({
       }
 
       return fields
-    },
-    lazyLoading() {
-      return this.configOptions.displayResourcesLazy
     },
     areAllResourcesSelected() {
       return this.selectedResources.length === this.resources.length - this.disabledResources.length
