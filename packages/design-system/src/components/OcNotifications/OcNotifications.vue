@@ -29,7 +29,7 @@ export default defineComponent({
     position: {
       type: String,
       required: false,
-      default: 'top-center',
+      default: 'default',
       validator: (value: string) => {
         return ['default', 'top-left', 'top-center', 'top-right'].includes(value)
       }
