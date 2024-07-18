@@ -352,7 +352,7 @@ services:
       - 'wait-for -it tika:9998 -t 300'
 
   tika:
-    image: apache/tika:2.9.1.0
+    image: apache/tika:2.9.2.1
     container_name: web_tika
     ports:
       - 9998:9998
