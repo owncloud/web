@@ -47,9 +47,6 @@ Depending on the backend you are using, there are sample config files provided i
 #### Options
 
 - `options.openAppsInTab` Configures whether apps and extensions generally should open in a new tab. Defaults to false.
-- `options.disablePreviews` Set this option to `true` to disable previews in all the different file listing views. The only list view that is not affected
-  by this is the trash bin, as that doesn't allow showing previews at all.
-- `options.previewFileMimeTypes` Specifies which mimeTypes will be previewed in the ui. For example to only preview jpg and text files set this option to `["image/jpeg", "text/plain"]`.
 - `options.accountEditLink` This accepts an object with the following optional fields to have a link on the account page:
     - `options.accountEditLink.href` Set a different target URL for the edit link. Make sure to prepend it with `http(s)://`.
 - `options.disableFeedbackLink` Set this option to `true` to disable the feedback link in the topbar. Keeping it enabled (value `false` or absence of the option)
