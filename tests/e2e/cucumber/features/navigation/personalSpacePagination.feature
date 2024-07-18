@@ -3,7 +3,7 @@ Feature: check files pagination in personal space
   I want to navigate a large number of files using pagination
   So that I do not have to scroll deep down
 
-  # please enable step again after fixing https://github.com/owncloud/ocis/issues/9648
+  # please enable test again after fixing https://github.com/owncloud/ocis/issues/9648
   # and delete personalSpacePagination.feature:29 test
   # Scenario: pagination
   #   Given "Admin" creates following user using API
