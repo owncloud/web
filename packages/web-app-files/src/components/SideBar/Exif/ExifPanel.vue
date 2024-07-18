@@ -148,7 +148,6 @@ export default defineComponent({
       orientation,
       takenDateTime,
       location,
-      isLocationVisible,
       isCopyToClipboardAvailable,
       isCopiedToClipboard,
       copyLocationToClipboardLabel,
