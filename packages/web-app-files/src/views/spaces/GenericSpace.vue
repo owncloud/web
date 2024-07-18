@@ -144,6 +144,7 @@ import {
 } from '@ownclouders/web-client'
 
 import {
+  isResourceTxtFileAlmostEmpty,
   ProcessorType,
   ResourceTransfer,
   TransferType,
@@ -620,7 +621,8 @@ export default defineComponent({
       totalResourcesSize,
       updateResourceField,
       areHiddenFilesShown,
-      fileDropped
+      fileDropped,
+      isResourceTxtFileAlmostEmpty
     }
   },
 
@@ -679,6 +681,10 @@ export default defineComponent({
       dimensions: [number, number]
     ) {
       const loadPreview = async () => {
+        if (this.isResourceTxtFileAlmostEmpty(resource)) {
+          return
+        }
+
         const processor =
           this.viewMode === FolderViewModeConstants.name.tiles
             ? ProcessorType.enum.fit
