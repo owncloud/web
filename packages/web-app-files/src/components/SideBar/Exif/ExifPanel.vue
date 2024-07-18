@@ -19,24 +19,22 @@
       <dd data-testid="exif-panel-orientation" v-text="orientation" />
       <dt v-text="$gettext('Taken time')" />
       <dd data-testid="exif-panel-takenDateTime" v-text="takenDateTime" />
-      <template v-if="isLocationVisible">
-        <dt v-text="$gettext('Location')" />
-        <dd v-if="isCopyToClipboardAvailable" data-testid="exif-panel-location">
-          <span>{{ location }}</span>
-          <oc-button
-            v-if="location"
-            v-oc-tooltip="copyLocationToClipboardLabel"
-            size="small"
-            appearance="raw"
-            class="oc-ml-s"
-            :aria-label="copyLocationToClipboardLabel"
-            @click="copyLocationToClipboard"
-          >
-            <oc-icon size="small" :name="isCopiedToClipboard ? 'checkbox-circle' : 'file-copy'" />
-          </oc-button>
-        </dd>
-        <dd v-else data-testid="exif-panel-location" v-text="location" />
-      </template>
+      <dt v-text="$gettext('Location')" />
+      <dd v-if="isCopyToClipboardAvailable" data-testid="exif-panel-location">
+        <span>{{ location }}</span>
+        <oc-button
+          v-if="location"
+          v-oc-tooltip="copyLocationToClipboardLabel"
+          size="small"
+          appearance="raw"
+          class="oc-ml-s"
+          :aria-label="copyLocationToClipboardLabel"
+          @click="copyLocationToClipboard"
+        >
+          <oc-icon size="small" :name="isCopiedToClipboard ? 'checkbox-circle' : 'file-copy'" />
+        </oc-button>
+      </dd>
+      <dd v-else data-testid="exif-panel-location" v-text="location" />
     </dl>
   </div>
 </template>
@@ -114,9 +112,6 @@ export default defineComponent({
       return photo?.takenDateTime ? formatDateFromISO(photo.takenDateTime, language.current) : '-'
     })
 
-    const isLocationVisible = computed(() => {
-      return config.options.sidebar?.exif?.showLocation !== false
-    })
     const location = computed(() => {
       const l = unref(resource).location
       if (!l?.latitude || !l?.longitude) {
@@ -167,14 +162,17 @@ export default defineComponent({
 .exif-data-list {
   display: grid;
   grid-template-columns: auto minmax(0, 1fr);
+
   dt,
   dd {
     margin-bottom: var(--oc-space-small);
   }
+
   dt {
     font-weight: bold;
     white-space: nowrap;
   }
+
   dd {
     margin-inline-start: var(--oc-space-medium);
   }

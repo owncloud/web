@@ -39,9 +39,6 @@ const defaultOptions = {
   sidebar: {
     shares: {
       showAllOnLoad: false
-    },
-    exif: {
-      showLocation: true
     }
   },
   tokenStorageLocal: true,
