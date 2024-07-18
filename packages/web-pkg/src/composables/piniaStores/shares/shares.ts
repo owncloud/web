@@ -115,7 +115,7 @@ export const useSharesStore = defineStore('shares', () => {
     loading.value = value
   }
 
-  const updateFileShareTypes = (path: string) => {
+  const updateFileShareTypes = (id: string) => {
     const computeShareTypes = (shares: Share[]) => {
       const shareTypes = new Set<number>()
       shares.forEach((share) => {
@@ -125,7 +125,7 @@ export const useSharesStore = defineStore('shares', () => {
     }
 
     const file = [...resourcesStore.resources, resourcesStore.currentFolder].find(
-      (f) => f?.path === path
+      (f) => f?.id === id
     )
     if (!file || isProjectSpaceResource(file)) {
       return
@@ -138,7 +138,7 @@ export const useSharesStore = defineStore('shares', () => {
       value: computeShareTypes(allShares.filter((s) => !s.indirect))
     })
 
-    const ancestorEntry = resourcesStore.ancestorMetaData[file.path] ?? null
+    const ancestorEntry = resourcesStore.getAncestorById(id)
     if (ancestorEntry) {
       resourcesStore.updateAncestorField({
         path: ancestorEntry.path,
@@ -183,8 +183,8 @@ export const useSharesStore = defineStore('shares', () => {
     })
 
     addCollaboratorShares(builtShares)
-    updateFileShareTypes(resource.path)
-    resourcesStore.loadIndicators(space, resource.path)
+    updateFileShareTypes(resource.id)
+    resourcesStore.loadIndicators(space, resource.id)
     return builtShares
   }
 
@@ -246,9 +246,9 @@ export const useSharesStore = defineStore('shares', () => {
     }
 
     removeCollaboratorShare(collaboratorShare)
-    updateFileShareTypes(resource.path)
+    updateFileShareTypes(resource.id)
     if (loadIndicators) {
-      resourcesStore.loadIndicators(space, resource.path)
+      resourcesStore.loadIndicators(space, resource.id)
     }
   }
 
@@ -276,7 +276,7 @@ export const useSharesStore = defineStore('shares', () => {
       (selectedFiles.length === 0 && resourcesStore.currentFolder.fileId === resource.fileId)
 
     upsertLinkShare(link)
-    updateFileShareTypes(resource.path)
+    updateFileShareTypes(resource.id)
 
     if (!fileIsSelected) {
       // we might need to update the share types for the ancestor resource as well
@@ -293,7 +293,7 @@ export const useSharesStore = defineStore('shares', () => {
       }
     }
 
-    resourcesStore.loadIndicators(space, resource.path)
+    resourcesStore.loadIndicators(space, resource.id)
     return link
   }
 
@@ -362,9 +362,9 @@ export const useSharesStore = defineStore('shares', () => {
     }
 
     removeLinkShare(linkShare)
-    updateFileShareTypes(resource.path)
+    updateFileShareTypes(resource.id)
     if (loadIndicators) {
-      resourcesStore.loadIndicators(space, resource.path)
+      resourcesStore.loadIndicators(space, resource.id)
     }
   }
 

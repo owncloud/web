@@ -182,8 +182,8 @@ export const useResourcesStore = defineStore('resources', () => {
     window.localStorage.setItem('oc_webDavDetailsShown', value.toString())
   }
 
-  const loadIndicators = (space: SpaceResource, path: string) => {
-    const files = unref(resources).filter((f) => f.path.startsWith(path))
+  const loadIndicators = (space: SpaceResource, id: string) => {
+    const files = unref(resources).filter((f) => [f.id, f.parentFolderId].includes(id))
     for (const resource of files) {
       const indicators = getIndicators({
         space,
@@ -291,6 +291,10 @@ export const useResourcesStore = defineStore('resources', () => {
     })
   }
 
+  const getAncestorById = (id: string) => {
+    return Object.values(unref(ancestorMetaData)).find((a) => id === a.id)
+  }
+
   return {
     resources,
     currentFolder,
@@ -333,7 +337,8 @@ export const useResourcesStore = defineStore('resources', () => {
     ancestorMetaData,
     setAncestorMetaData,
     updateAncestorField,
-    loadAncestorMetaData
+    loadAncestorMetaData,
+    getAncestorById
   }
 })
 
