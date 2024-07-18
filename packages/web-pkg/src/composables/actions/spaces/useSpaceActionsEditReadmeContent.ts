@@ -18,6 +18,7 @@ export const useSpaceActionsEditReadmeContent = () => {
   const { getDefaultMetaFolder } = useSpaceHelpers()
 
   const createReadme = async (space: SpaceResource, metaFolder: Resource) => {
+    // FIXME: remove path as soon as we make the full switch to id-based dav requests
     const markdownResource = await clientService.webdav.putFileContents(space, {
       path: '.space/readme.md',
       parentFolderId: metaFolder.id,
