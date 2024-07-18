@@ -107,7 +107,6 @@ const OptionsConfigSchema = z.object({
     .optional(),
   openAppsInTab: z.boolean().optional(),
   openLinksWithDefaultApp: z.boolean().optional(),
-  previewFileMimeTypes: z.array(z.string()).optional(),
   routing: z
     .object({
       fullShareOwnerPaths: z.boolean().optional(),

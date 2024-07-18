@@ -32,7 +32,6 @@ const defaultOptions = {
   ocm: {},
   openAppsInTab: false,
   openLinksWithDefaultApp: true,
-  previewFileMimeTypes: [] as string[],
   routing: {
     idBased: true
   },
