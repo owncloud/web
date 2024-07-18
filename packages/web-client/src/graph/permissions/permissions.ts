@@ -48,10 +48,10 @@ export const PermissionsFactory = ({
       }) as T
     },
 
-    async listPermissions(driveId, itemId, isSpaceRoot, graphRoles, requestOptions) {
+    async listPermissions(driveId, itemId, graphRoles, requestOptions) {
       let responseData: CollectionOfPermissionsWithAllowedValues
 
-      if (isSpaceRoot) {
+      if (driveId === itemId) {
         const { data } = await drivesRootApiFactory.listPermissionsSpaceRoot(
           driveId,
           requestOptions
@@ -90,13 +90,12 @@ export const PermissionsFactory = ({
       itemId: string,
       permId: string,
       data: Permission,
-      isSpaceRoot: boolean,
       graphRoles: UnifiedRoleDefinition[],
       requestOptions: GraphRequestOptions
     ): Promise<T> {
       let permission: Permission
 
-      if (isSpaceRoot) {
+      if (driveId === itemId) {
         const { data: perm } = await drivesRootApiFactory.updatePermissionSpaceRoot(
           driveId,
           permId,
@@ -128,8 +127,8 @@ export const PermissionsFactory = ({
       }) as T
     },
 
-    async deletePermission(driveId, itemId, permId, isSpaceRoot, requestOptions) {
-      if (isSpaceRoot) {
+    async deletePermission(driveId, itemId, permId, requestOptions) {
+      if (driveId === itemId) {
         await drivesRootApiFactory.deletePermissionSpaceRoot(driveId, permId, requestOptions)
         return
       }
@@ -137,10 +136,10 @@ export const PermissionsFactory = ({
       await drivesPermissionsApiFactory.deletePermission(driveId, itemId, permId, requestOptions)
     },
 
-    async createInvite(driveId, itemId, data, isSpaceRoot, graphRoles, requestOptions) {
+    async createInvite(driveId, itemId, data, graphRoles, requestOptions) {
       let permission: Permission | undefined
 
-      if (isSpaceRoot) {
+      if (driveId === itemId) {
         const { data: perm } = await drivesRootApiFactory.inviteSpaceRoot(
           driveId,
           data,
@@ -170,10 +169,10 @@ export const PermissionsFactory = ({
       })
     },
 
-    async createLink(driveId, itemId, data, isSpaceRoot, requestOptions) {
+    async createLink(driveId, itemId, data, requestOptions) {
       let permission: Permission
 
-      if (isSpaceRoot) {
+      if (driveId === itemId) {
         const { data: perm } = await drivesRootApiFactory.createLinkSpaceRoot(
           driveId,
           data,
@@ -195,10 +194,10 @@ export const PermissionsFactory = ({
       return buildLinkShare({ graphPermission: permission, resourceId: itemId })
     },
 
-    async setPermissionPassword(driveId, itemId, permId, data, isSpaceRoot, requestOptions) {
+    async setPermissionPassword(driveId, itemId, permId, data, requestOptions) {
       let permission: Permission
 
-      if (isSpaceRoot) {
+      if (driveId === itemId) {
         const { data: perm } = await drivesRootApiFactory.setPermissionPasswordSpaceRoot(
           driveId,
           permId,

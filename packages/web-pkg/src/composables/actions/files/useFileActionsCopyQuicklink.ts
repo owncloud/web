@@ -8,7 +8,6 @@ import { useClipboard } from '../../clipboard'
 import { Resource, SpaceResource } from '@ownclouders/web-client'
 import { useFileActionsCreateLink } from './useFileActionsCreateLink'
 import { useMessages } from '../../piniaStores'
-import { isSpaceResource } from '@ownclouders/web-client'
 
 export const useFileActionsCopyQuickLink = () => {
   const { showMessage, showErrorMessage } = useMessages()
@@ -56,13 +55,7 @@ export const useFileActionsCopyQuickLink = () => {
     resource: Resource
   }) => {
     const client = clientService.graphAuthenticated.permissions
-
-    const { shares } = await client.listPermissions(
-      space.id,
-      resource.id,
-      isSpaceResource(resource)
-    )
-
+    const { shares } = await client.listPermissions(space.id, resource.id)
     return shares.filter(isLinkShare).find(({ isQuickLink }) => isQuickLink)
   }
 

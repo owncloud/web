@@ -199,12 +199,7 @@ export default defineComponent({
 
       // load direct shares
       const { shares, allowedRoles } = yield* call(
-        client.listPermissions(
-          props.space?.id,
-          resource.id,
-          isSpaceResource(resource),
-          sharesStore.graphRoles
-        )
+        client.listPermissions(props.space?.id, resource.id, sharesStore.graphRoles)
       )
 
       const loadedCollaboratorShares = shares.filter(isCollaboratorShare)
@@ -253,7 +248,7 @@ export default defineComponent({
       const promises = ancestorIds.map((id) => {
         return queue.add(() =>
           clientService.graphAuthenticated.permissions
-            .listPermissions(props.space?.id, id, false, sharesStore.graphRoles)
+            .listPermissions(props.space?.id, id, sharesStore.graphRoles)
             .then((result) => {
               const indirectShares = result.shares.map((s) => ({ ...s, indirect: true }))
               loadedCollaboratorShares.push(...indirectShares.filter(isCollaboratorShare))

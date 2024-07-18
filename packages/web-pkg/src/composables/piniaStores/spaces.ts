@@ -194,7 +194,6 @@ export const useSpacesStore = defineStore('spaces', () => {
     const { shares } = await graphClient.permissions.listPermissions(
       space.id,
       space.id,
-      true,
       sharesStore.graphRoles
     )
 

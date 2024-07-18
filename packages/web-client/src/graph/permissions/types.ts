@@ -27,7 +27,6 @@ export interface GraphPermissions {
   listPermissions(
     driveId: string,
     itemId: string,
-    isSpaceRoot?: boolean,
     graphRoles?: UnifiedRoleDefinition[],
     requestOptions?: GraphRequestOptions
   ): Promise<ListPermissionsResponse>
@@ -36,7 +35,6 @@ export interface GraphPermissions {
     itemId: string,
     permId: string,
     data: Permission,
-    isSpaceRoot?: boolean,
     graphRoles?: UnifiedRoleDefinition[],
     requestOptions?: GraphRequestOptions
   ): Promise<T>
@@ -44,14 +42,12 @@ export interface GraphPermissions {
     driveId: string,
     itemId: string,
     permId: string,
-    isSpaceRoot?: boolean,
     requestOptions?: GraphRequestOptions
   ): Promise<void>
   createInvite(
     driveId: string,
     itemId: string,
     data: DriveItemInvite,
-    isSpaceRoot?: boolean,
     graphRoles?: UnifiedRoleDefinition[],
     requestOptions?: GraphRequestOptions
   ): Promise<CollaboratorShare>
@@ -59,7 +55,6 @@ export interface GraphPermissions {
     driveId: string,
     itemId: string,
     data: DriveItemCreateLink,
-    isSpaceRoot?: boolean,
     requestOptions?: GraphRequestOptions
   ): Promise<LinkShare>
   setPermissionPassword(
@@ -67,7 +62,6 @@ export interface GraphPermissions {
     itemId: string,
     permId: string,
     data: SharingLinkPassword,
-    isSpaceRoot?: boolean,
     requestOptions?: GraphRequestOptions
   ): Promise<LinkShare>
   listRoleDefinitions(requestOptions?: GraphRequestOptions): Promise<UnifiedRoleDefinition[]>
