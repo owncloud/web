@@ -18,12 +18,12 @@ describe('useConfigStore', () => {
     it('sets given options and overwrites defaults', () => {
       getWrapper({
         setup: (instance) => {
-          expect(instance.options.openLinksWithDefaultApp).toBeTruthy()
+          expect(instance.options.contextHelpersReadMore).toBeTruthy()
 
-          const data = { options: { openLinksWithDefaultApp: false } } as RawConfig
+          const data = { options: { contextHelpersReadMore: false } } as RawConfig
           instance.loadConfig(data)
 
-          expect(instance.options.openLinksWithDefaultApp).toBeFalsy()
+          expect(instance.options.contextHelpersReadMore).toBeFalsy()
         }
       })
     })
@@ -34,7 +34,7 @@ describe('useConfigStore', () => {
           const data = {
             server: 'https://foo.bar',
             theme: undefined,
-            options: { openLinksWithDefaultApp: false },
+            options: { contextHelpersReadMore: false },
             external_apps: [externalApp]
           } as RawConfig
 
