@@ -4,7 +4,7 @@ import { useClientService } from '../../clientService'
 import { useRouter } from '../../router'
 import { FileAction, FileActionOptions } from '../types'
 import { useMessages, useSpacesStore, useUserStore } from '../../piniaStores'
-import { useCreateSpace } from '../../spaces'
+import { useCreateSpace, useSpaceHelpers } from '../../spaces'
 
 export const useFileActionsSetReadme = () => {
   const { showMessage, showErrorMessage } = useMessages()
@@ -14,26 +14,27 @@ export const useFileActionsSetReadme = () => {
   const clientService = useClientService()
   const spacesStore = useSpacesStore()
   const { createDefaultMetaFolder } = useCreateSpace()
+  const { getDefaultMetaFolder } = useSpaceHelpers()
 
   const handler = async ({ space, resources }: FileActionOptions) => {
     try {
       const { graphAuthenticated, webdav } = clientService
       const fileContent = (await webdav.getFileContents(space, { path: resources[0].path })).body
 
-      try {
-        await webdav.getFileInfo(space, { path: '.space' })
-      } catch (_) {
-        await createDefaultMetaFolder(space)
+      let metaFolder = await getDefaultMetaFolder(space)
+      if (!metaFolder) {
+        metaFolder = await createDefaultMetaFolder(space)
       }
 
-      await webdav.putFileContents(space, {
-        path: `/.space/readme.md`,
+      const { fileId } = await webdav.putFileContents(space, {
+        parentFolderId: metaFolder.id,
+        fileName: 'readme.md',
         content: fileContent
       })
-      const file = await webdav.getFileInfo(space, { path: '.space/readme.md' })
+
       const updatedSpace = await graphAuthenticated.drives.updateDrive(space.id, {
         name: space.name,
-        special: [{ specialFolder: { name: 'readme' }, id: file.id }]
+        special: [{ specialFolder: { name: 'readme' }, id: fileId }]
       })
 
       spacesStore.updateSpaceField({

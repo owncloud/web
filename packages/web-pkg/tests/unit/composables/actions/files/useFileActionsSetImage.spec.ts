@@ -5,6 +5,11 @@ import { mock } from 'vitest-mock-extended'
 import { defaultComponentMocks, RouteLocation, getComposableWrapper } from 'web-test-helpers'
 import { unref } from 'vue'
 import { Drive } from '@ownclouders/web-client/graph/generated'
+import { useSpaceHelpers } from '../../../../../src/composables/spaces/useSpaceHelpers'
+
+vi.mock('../../../../../src/composables/spaces/useSpaceHelpers', () => ({
+  useSpaceHelpers: vi.fn()
+}))
 
 describe('setImage', () => {
   describe('isVisible property', () => {
@@ -150,6 +155,11 @@ function getWrapper({
   ) => void
   isMimetypeSupported?: boolean
 }) {
+  vi.mocked(useSpaceHelpers).mockReturnValue({
+    checkSpaceNameModalInput: vi.fn(),
+    getDefaultMetaFolder: () => new Promise(() => mock<Resource>())
+  })
+
   const mocks = {
     ...defaultComponentMocks({
       currentRoute: mock<RouteLocation>({ name: 'files-spaces-generic' })

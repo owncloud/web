@@ -1,11 +1,16 @@
 import { useFileActionsSetReadme } from '../../../../../src'
 import { useMessages } from '../../../../../src/composables/piniaStores'
-import { buildSpace, FileResource, SpaceResource } from '@ownclouders/web-client'
+import { buildSpace, FileResource, Resource, SpaceResource } from '@ownclouders/web-client'
 import { mock } from 'vitest-mock-extended'
 import { defaultComponentMocks, RouteLocation, getComposableWrapper } from 'web-test-helpers'
 import { unref } from 'vue'
 import { GetFileContentsResponse } from '@ownclouders/web-client/webdav'
 import { Drive } from '@ownclouders/web-client/graph/generated'
+import { useSpaceHelpers } from '../../../../../src/composables/spaces/useSpaceHelpers'
+
+vi.mock('../../../../../src/composables/spaces/useSpaceHelpers', () => ({
+  useSpaceHelpers: vi.fn()
+}))
 
 describe('setReadme', () => {
   describe('isVisible property', () => {
@@ -146,6 +151,11 @@ function getWrapper({
   space?: SpaceResource
   setup: (instance: ReturnType<typeof useFileActionsSetReadme>) => void
 }) {
+  vi.mocked(useSpaceHelpers).mockReturnValue({
+    checkSpaceNameModalInput: vi.fn(),
+    getDefaultMetaFolder: () => new Promise(() => mock<Resource>())
+  })
+
   const mocks = {
     ...defaultComponentMocks({
       currentRoute: mock<RouteLocation>({ name: 'files-spaces-generic' })

@@ -1,7 +1,10 @@
+import { SpaceResource } from '@ownclouders/web-client'
 import { useGettext } from 'vue3-gettext'
+import { useClientService } from '../clientService'
 
 export const useSpaceHelpers = () => {
   const { $gettext } = useGettext()
+  const clientService = useClientService()
 
   const checkSpaceNameModalInput = (name: string, setError: (value: string) => void) => {
     if (name.trim() === '') {
@@ -18,5 +21,10 @@ export const useSpaceHelpers = () => {
     return setError(null)
   }
 
-  return { checkSpaceNameModalInput }
+  const getDefaultMetaFolder = async (space: SpaceResource) => {
+    const { children } = await clientService.webdav.listFiles(space)
+    return children.find(({ name }) => name === '.space')
+  }
+
+  return { checkSpaceNameModalInput, getDefaultMetaFolder }
 }
