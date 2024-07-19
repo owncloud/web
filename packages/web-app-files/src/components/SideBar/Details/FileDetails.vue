@@ -141,7 +141,12 @@ import {
   useResourceContents
 } from '@ownclouders/web-pkg'
 import upperFirst from 'lodash-es/upperFirst'
-import { isShareResource, isTrashResource, ShareTypes } from '@ownclouders/web-client'
+import {
+  isShareResource,
+  isShareSpaceResource,
+  isTrashResource,
+  ShareTypes
+} from '@ownclouders/web-client'
 import { usePreviewService, useGetMatchingSpace } from '@ownclouders/web-pkg'
 import { getIndicators } from '@ownclouders/web-pkg'
 import {
@@ -184,6 +189,7 @@ export default defineComponent({
     const { resourceContentsText } = useResourceContents({ showSizeInformation: false })
 
     const language = useGettext()
+    const { $gettext, current: currentLanguage } = language
 
     const resourcesStore = useResourcesStore()
     const { ancestorMetaData, currentFolder } = storeToRefs(resourcesStore)
@@ -279,6 +285,90 @@ export default defineComponent({
       })
     })
 
+    const hasAnyShares = computed(() => {
+      return (
+        unref(resource).shareTypes?.length > 0 ||
+        unref(resource).indicators?.length > 0 ||
+        unref(sharedAncestor)
+      )
+    })
+    const sharedViaTooltip = computed(() => {
+      return $gettext("Navigate to '%{folder}'", { folder: unref(sharedAncestor).path || '' }, true)
+    })
+    const showSharedBy = computed(() => {
+      return unref(showShares) && !unref(ownedByCurrentUser) && unref(sharedByDisplayNames)
+    })
+    const showSharedVia = computed(() => {
+      return unref(showShares) && unref(sharedAncestor) && !isShareSpaceResource(unref(space))
+    })
+    const showShares = computed(() => {
+      if (unref(publicLinkContextReady)) {
+        return false
+      }
+      return unref(hasAnyShares)
+    })
+    const ownedByCurrentUser = computed(() => {
+      return unref(resource).owner?.id === unref(user)?.id
+    })
+    const sharedByDisplayNames = computed(() => {
+      const res = unref(resource)
+      if (!isShareResource(res)) {
+        return ''
+      }
+      return res.sharedBy?.map(({ displayName }) => displayName).join(', ')
+    })
+    const hasContent = computed(() => {
+      return (
+        unref(hasTimestamp) ||
+        unref(ownerDisplayName) ||
+        unref(showSize) ||
+        unref(showShares) ||
+        unref(showVersions) ||
+        unref(hasDeletionDate)
+      )
+    })
+    const detailSharingInformation = computed(() => {
+      if (unref(resource).type === 'folder') {
+        return $gettext('This folder has been shared.')
+      }
+      return $gettext('This file has been shared.')
+    })
+    const hasTimestamp = computed(() => {
+      return unref(resource).mdate?.length > 0
+    })
+    const ownerDisplayName = computed(() => {
+      return unref(resource).owner?.displayName
+    })
+    const resourceSize = computed(() => {
+      if (unref(resource).id === unref(currentFolder)?.id) {
+        return `${formatFileSize(unref(resource).size, currentLanguage)}, ${unref(
+          resourceContentsText
+        )}`
+      }
+
+      return formatFileSize(unref(resource).size, currentLanguage)
+    })
+    const showSize = computed(() => {
+      return formatFileSize(unref(resource).size, currentLanguage) !== '?'
+    })
+    const showVersions = computed(() => {
+      if (unref(resource).type === 'folder' || unref(publicLinkContextReady)) {
+        return
+      }
+      return unref(versions).length > 0
+    })
+    const seeVersionsLabel = computed(() => {
+      return $gettext('See all versions')
+    })
+    const capitalizedTimestamp = computed(() => {
+      const displayDate = formatDateFromHTTP(unref(resource).mdate, currentLanguage)
+      return upperFirst(displayDate)
+    })
+
+    const expandVersionsPanel = () => {
+      eventBus.publish(SideBarEventTopics.setActivePanel, 'versions')
+    }
+
     watch(
       resource,
       () => {
@@ -290,7 +380,6 @@ export default defineComponent({
     )
 
     return {
-      user,
       preview,
       publicLinkContextReady,
       space,
@@ -303,100 +392,25 @@ export default defineComponent({
       sharedAncestorRoute,
       formatDateRelative,
       resourceContentsText,
-      currentFolder,
       contextualHelper,
       showWebDavDetails,
       versions,
-      shareIndicators
-    }
-  },
-  computed: {
-    hasContent() {
-      return (
-        this.hasTimestamp ||
-        this.ownerDisplayName ||
-        this.showSize ||
-        this.showShares ||
-        this.showVersions ||
-        this.hasDeletionDate
-      )
-    },
-    sharedViaTooltip() {
-      return this.$gettext(
-        "Navigate to '%{folder}'",
-        { folder: this.sharedAncestor.path || '' },
-        true
-      )
-    },
-    showSharedBy() {
-      return this.showShares && !this.ownedByCurrentUser && this.sharedByDisplayNames
-    },
-    showSharedVia() {
-      return this.showShares && this.sharedAncestor
-    },
-    showShares() {
-      if (this.publicLinkContextReady) {
-        return false
-      }
-      return this.hasAnyShares
-    },
-    detailSharingInformation() {
-      if (this.resource.type === 'folder') {
-        return this.$gettext('This folder has been shared.')
-      }
-      return this.$gettext('This file has been shared.')
-    },
-    hasTimestamp() {
-      return this.resource.mdate?.length > 0
-    },
-    ownerDisplayName() {
-      return this.resource.owner?.displayName
-    },
-    resourceSize() {
-      if (this.resource.id === this.currentFolder?.id) {
-        return `${formatFileSize(this.resource.size, this.$language.current)}, ${
-          this.resourceContentsText
-        }`
-      }
-
-      return formatFileSize(this.resource.size, this.$language.current)
-    },
-    showSize() {
-      return formatFileSize(this.resource.size, this.$language.current) !== '?'
-    },
-    showVersions() {
-      if (this.resource.type === 'folder' || this.publicLinkContextReady) {
-        return
-      }
-      return this.versions.length > 0
-    },
-    seeVersionsLabel() {
-      return this.$gettext('See all versions')
-    },
-    capitalizedTimestamp() {
-      const displayDate = formatDateFromHTTP(this.resource.mdate, this.$language.current)
-      return upperFirst(displayDate)
-    },
-    hasAnyShares() {
-      return (
-        this.resource.shareTypes?.length > 0 ||
-        this.resource.indicators?.length > 0 ||
-        this.sharedAncestor
-      )
-    },
-    ownedByCurrentUser() {
-      return this.resource.owner?.id === this.user?.id
-    },
-    sharedByDisplayNames() {
-      if (!isShareResource(this.resource)) {
-        return ''
-      }
-      return this.resource.sharedBy?.map(({ displayName }) => displayName).join(', ')
-    }
-  },
-  methods: {
-    expandVersionsPanel() {
-      eventBus.publish(SideBarEventTopics.setActivePanel, 'versions')
+      capitalizedTimestamp,
+      shareIndicators,
+      seeVersionsLabel,
+      resourceSize,
+      showVersions,
+      showSize,
+      showSharedVia,
+      showSharedBy,
+      hasTimestamp,
+      hasContent,
+      detailSharingInformation,
+      sharedViaTooltip,
+      sharedByDisplayNames,
+      ownerDisplayName,
+      ownedByCurrentUser,
+      expandVersionsPanel
     }
   }
 })
