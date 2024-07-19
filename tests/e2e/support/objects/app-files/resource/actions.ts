@@ -136,6 +136,9 @@ const onlyOfficeCanvasEditorSelector = '#id_viewer_overlay'
 const onlyOfficeCanvasCursorSelector = '#id_target_cursor'
 const onlyOfficeInfoDialog = '.alert .info-box'
 const onlyOfficeInfoDialogConfirm = `.alert button[result="ok"]`
+const fileThumbnail = `//span[@data-test-resource-name="%s"]/ancestor::tr[contains(@class, "oc-tbody-tr")]//img[contains(@class,"oc-resource-thumbnail")]`
+const fileIconWrapper = '#oc-file-details-sidebar .details-icon-wrapper'
+const fileIconPreview = '#oc-file-details-sidebar .details-preview'
 
 export const clickResource = async ({
   page,
@@ -2026,4 +2029,33 @@ export const getAllAvailableActions = async ({
   await sidebar.open({ page: page, resource })
   await sidebar.openPanel({ page: page, name: 'actions' })
   return await page.getByTestId('action-label').allTextContents()
+}
+
+export const getFileThumbnailLocator = (args: { page: Page; resource: string }): Locator => {
+  const { page, resource } = args
+  return page.locator(util.format(fileThumbnail, resource))
+}
+
+export const shouldSeeFilePreview = async ({
+  page,
+  resource
+}: {
+  page: Page
+  resource: string
+}): Promise<void> => {
+  await sidebar.open({ page: page, resource })
+  await expect(page.locator(fileIconPreview)).toHaveCSS('background-image', /blob/)
+  await sidebar.close({ page: page })
+}
+
+export const shouldNotSeeFilePreview = async ({
+  page,
+  resource
+}: {
+  page: Page
+  resource: string
+}): Promise<void> => {
+  await sidebar.open({ page: page, resource })
+  await expect(page.locator(fileIconWrapper)).toBeVisible()
+  await sidebar.close({ page: page })
 }

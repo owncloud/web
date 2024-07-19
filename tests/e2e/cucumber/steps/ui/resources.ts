@@ -933,3 +933,26 @@ Then(
     }
   }
 )
+
+Then(
+  /^"([^"]*)" (should|should not) see (thumbnail and preview|preview) for file "([^"]*)"$/,
+  async function (
+    this: World,
+    stepUser: string,
+    actionType: string,
+    action: string,
+    resource: string
+  ): Promise<void> {
+    const { page } = this.actorsEnvironment.getActor({ key: stepUser })
+    const resourceObject = new objects.applicationFiles.Resource({ page })
+    if (actionType === 'should') {
+      action === 'thumbnail and preview' &&
+        (await expect(resourceObject.getFileThumbnailLocator(resource)).toBeVisible())
+      await resourceObject.shouldSeeFilePreview({ resource })
+    } else {
+      action === 'thumbnail and preview' &&
+        (await expect(resourceObject.getFileThumbnailLocator(resource)).not.toBeVisible())
+      await resourceObject.shouldNotSeeFilePreview({ resource })
+    }
+  }
+)

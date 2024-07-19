@@ -100,6 +100,10 @@ Feature: share
       | test_video.mp4  |
       | testavatar.jpeg |
       | testavatar.png  |
+    Then "Alice" should see thumbnail and preview for file "sampleGif.gif"
+    And "Alice" should see thumbnail and preview for file "testavatar.jpeg"
+    And "Alice" should see thumbnail and preview for file "testavatar.png"
+    And "Alice" should see preview for file "shareToBrian.txt"
     When "Alice" opens a file "testavatar.png" in the media-viewer using the sidebar panel
     Then "Alice" is in a media-viewer
     When "Alice" closes the file viewer

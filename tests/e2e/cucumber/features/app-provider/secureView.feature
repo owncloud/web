@@ -18,11 +18,11 @@ Feature: Secure view
     Given "Alice" creates the following folder in personal space using API
       | name          |
       | shared folder |
-    And "Alice" uploads the following resource
-      | resource        | to            |
-      | simple.pdf      | shared folder |
-      | testavatar.jpeg | shared folder |
-      | lorem.txt       | shared folder |
+    And "Alice" uploads the following local file into personal space using API
+      | localFile                      | to                            |
+      | filesForUpload/simple.pdf      | shared folder/simple.pdf      |
+      | filesForUpload/testavatar.jpeg | shared folder/testavatar.jpeg |
+      | filesForUpload/lorem.txt       | shared folder/lorem.txt       |
     And "Alice" creates the following resources
       | resource           | type         | content                 |
       | secureDocument.odt | OpenDocument | very important document |
@@ -65,11 +65,11 @@ Feature: Secure view
     Given "Alice" creates the following folder in personal space using API
       | name          |
       | shared folder |
-    And "Alice" uploads the following resource
-      | resource        | to            |
-      | simple.pdf      | shared folder |
-      | testavatar.jpeg | shared folder |
-      | lorem.txt       | shared folder |
+    And "Alice" uploads the following local file into personal space using API
+      | localFile                      | to                             |
+      | filesForUpload/simple.pdf      | shared folder/secure.pdf       |
+      | filesForUpload/testavatar.jpeg | shared folder/securePhoto.jpeg |
+      | filesForUpload/lorem.txt       | shared folder/secureFile.txt   |
     And "Alice" creates the following resources
       | resource           | type         | content                 |
       | secureDocument.odt | OpenDocument | very important document |
@@ -81,6 +81,8 @@ Feature: Secure view
 
     And "Brian" logs in
     And "Brian" navigates to the shared with me page
+
+    # .odt file
     Then "Brian" should see following actions for file "secureDocument.odt"
       | action            |
       | Open in Collabora |
@@ -89,51 +91,100 @@ Feature: Secure view
       | Download           |
       | Copy               |
       | Open in OnlyOffice |
-    And "Brian" should not see following actions for folder "shared folder"
+    And "Brian" should not see preview for file "secureDocument.odt"
+
+    # folder
+    Then "Brian" should not see following actions for folder "shared folder"
       | action   |
       | Download |
       | Copy     |
     When "Brian" opens folder "shared folder"
-    Then "Brian" should see following actions for file "simple.pdf"
+
+    # .pdf file
+    Then "Brian" should see following actions for file "secure.pdf"
       | action            |
       | Open in Collabora |
-    But "Brian" should not see following actions for file "simple.pdf"
+    But "Brian" should not see following actions for file "secure.pdf"
       | action             |
       | Download           |
       | Copy               |
       | Open in PDF Viewer |
-    And "Brian" should see following actions for file "testavatar.jpeg"
+    And "Brian" should not see thumbnail and preview for file "secure.pdf"
+
+    # .jpeg file
+    Then "Brian" should see following actions for file "securePhoto.jpeg"
       | action            |
       | Open in Collabora |
-    But "Brian" should not see following actions for file "testavatar.jpeg"
+    But "Brian" should not see following actions for file "securePhoto.jpeg"
       | action   |
       | Download |
       | Copy     |
       | Preview  |
-    And "Brian" should see following actions for file "lorem.txt"
+    And "Brian" should not see thumbnail and preview for file "securePhoto.jpeg"
+
+    # .txt file
+    Then "Brian" should see following actions for file "secureFile.txt"
       | action            |
       | Open in Collabora |
-    But "Brian" should not see following actions for file "lorem.txt"
+    But "Brian" should not see following actions for file "secureFile.txt"
       | action              |
       | Download            |
       | Copy                |
       | Open in Text Editor |
       | Open in OnlyOffice  |
+    And "Brian" should not see thumbnail and preview for file "secureFile.txt"
 
-    # check available actions in the seach result puge
-    When "Brian" searches "lorem" using the global search and the "all files" filter and presses enter
+    # check available actions and files preview in the seach result page
+    When "Brian" searches "secure" using the global search and the "all files" filter and presses enter
     Then following resources should be displayed in the files list for user "Brian"
-      | resource  |
-      | lorem.txt |
-    And "Brian" should see following actions for file "lorem.txt"
+      | resource           |
+      | secureFile.txt     |
+      | securePhoto.jpeg   |
+      | secure.pdf         |
+      | secureDocument.odt |
+
+    # .txt file
+    Then "Brian" should see following actions for file "secureFile.txt"
       | action            |
       | Open in Collabora |
-    # please enable again after fixing https://github.com/owncloud/ocis/issues/9608
-    # But "Brian" should not see following actions for file "lorem.txt"
-    #   | action              |
-    #   | Download            |
-    #   | Copy                |
-    #   | Open in Text Editor |
-    #   | Open in OnlyOffice  |
+    But "Brian" should not see following actions for file "secureFile.txt"
+      | action              |
+      | Download            |
+      | Copy                |
+      | Open in Text Editor |
+      | Open in OnlyOffice  |
+    And "Brian" should not see thumbnail and preview for file "secureFile.txt"
 
+    # .jpeg file
+    Then "Brian" should see following actions for file "securePhoto.jpeg"
+      | action            |
+      | Open in Collabora |
+    But "Brian" should not see following actions for file "securePhoto.jpeg"
+      | action   |
+      | Download |
+      | Copy     |
+      | Preview  |
+    And "Brian" should not see thumbnail and preview for file "securePhoto.jpeg"
+
+    # .pdf file
+    Then "Brian" should see following actions for file "secure.pdf"
+      | action            |
+      | Open in Collabora |
+    But "Brian" should not see following actions for file "secure.pdf"
+      | action             |
+      | Download           |
+      | Copy               |
+      | Open in PDF Viewer |
+    And "Brian" should not see preview for file "secure.pdf"
+
+    # .odt file
+    Then "Brian" should see following actions for file "secureDocument.odt"
+      | action            |
+      | Open in Collabora |
+    But "Brian" should not see following actions for file "secureDocument.odt"
+      | action             |
+      | Download           |
+      | Copy               |
+      | Open in OnlyOffice |
+    And "Brian" should not see preview for file "secureDocument.odt"
     And "Brian" logs out
