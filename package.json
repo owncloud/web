@@ -45,7 +45,7 @@
     "caf": "15.0.1",
     "portal-vue": "3.0.0",
     "uuid": "9.0.1",
-    "vue-demi": "0.14.6",
+    "vue-demi": "0.14.8",
     "vue-router": "4.2.5",
     "vue3-gettext": "2.4.0"
   },
