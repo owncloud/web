@@ -1,6 +1,6 @@
 import { computed, unref, watch } from 'vue'
 import { UppyService } from '../../services/uppy/uppyService'
-import { useCapabilityStore, useConfigStore } from '../piniaStores'
+import { useCapabilityStore } from '../piniaStores'
 import { TusOptions } from '@uppy/tus'
 import { XHRUploadOptions } from '@uppy/xhr-upload'
 import { UppyFile } from '@uppy/core'
@@ -11,7 +11,6 @@ interface UploadOptions {
 }
 
 export function useUpload(options: UploadOptions) {
-  const configStore = useConfigStore()
   const capabilityStore = useCapabilityStore()
   const { headers } = useRequestHeaders()
 
@@ -47,7 +46,7 @@ export function useUpload(options: UploadOptions) {
 
   const xhrOptions = computed<XHRUploadOptions>(() => {
     return {
-      timeout: configStore.options.upload?.xhr?.timeout || 60000,
+      timeout: 60000,
       endpoint: '',
       headers: (file) => ({
         'x-oc-mtime': file?.data?.lastModified / 1000,
