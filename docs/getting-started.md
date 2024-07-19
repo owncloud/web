@@ -71,7 +71,6 @@ Depending on the backend you are using, there are sample config files provided i
 - `options.tokenStorageLocal` Specifies whether the access token will be stored in the local storage when set to `true` or in the session storage when set to `false`. If stored in the local storage, login state will be persisted across multiple browser tabs, means no additional logins are required. Defaults to `true`.
 - `options.loginUrl` Specifies the target URL to the login page. This is helpful when an external IdP is used. This option is disabled by default. Example URL like: 'https://www.myidp.com/login'.
 - `options.logoutUrl` Adds a link to the user's profile page to point him to an external page, where he can manage his session and devices. This is helpful when an external IdP is used. This option is disabled by default.
-- `options.ocm.openRemotely` Specifies whether opening files in remote shares in their original ocm instance should be enabled. Defaults to `false`.
 - `options.userListRequiresFilter` Defines whether one or more filters must be set in order to list users in the Web admin settings. Set this option to 'true' if running in an environment with a lot of users and listing all users could slow down performance. Defaults to `false`.
 - `options.concurrentRequests` This accepts an object with the following optional fields to customize the maximum number of concurrent requests in code paths where we limit concurrent requests 
     - `resourceBatchActions` Concurrent number of file/folder/space batch actions like e.g. accepting shares. Defaults to 4.
