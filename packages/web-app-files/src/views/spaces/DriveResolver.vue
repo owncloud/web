@@ -101,9 +101,7 @@ export default defineComponent({
             query: {
               ...query,
               scrollTo: unref(resource).fileId,
-              ...(configStore.options.openLinksWithDefaultApp && {
-                openWithDefaultApp: 'true'
-              })
+              openWithDefaultApp: 'true'
             }
           })
         )
@@ -114,9 +112,7 @@ export default defineComponent({
         name: 'resolvePrivateLink',
         params: { fileId: unref(fileId) },
         query: {
-          ...(configStore.options.openLinksWithDefaultApp && {
-            openWithDefaultApp: 'true'
-          })
+          openWithDefaultApp: 'true'
         }
       })
     }
@@ -127,9 +123,7 @@ export default defineComponent({
           name: 'resolvePrivateLink',
           params: { fileId: unref(fileId) },
           query: {
-            ...(configStore.options.openLinksWithDefaultApp && {
-              openWithDefaultApp: 'true'
-            })
+            openWithDefaultApp: 'true'
           }
         })
       }

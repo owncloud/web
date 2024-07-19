@@ -241,9 +241,7 @@ export default defineComponent({
       const targetLocation: RouteLocationNamedRaw = {
         name: 'files-public-link',
         query: {
-          ...(configStore.options.openLinksWithDefaultApp && {
-            openWithDefaultApp: 'true'
-          }),
+          openWithDefaultApp: 'true',
           ...(!!fileId && { fileId }),
           ...(!!scrollTo && { scrollTo }),
           ...(unref(details) && { details: unref(details) })

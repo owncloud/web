@@ -28,7 +28,6 @@ const defaultOptions = {
     target: 'resources'
   },
   openAppsInTab: false,
-  openLinksWithDefaultApp: true,
   routing: {
     idBased: true
   },

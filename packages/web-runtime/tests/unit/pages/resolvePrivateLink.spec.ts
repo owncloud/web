@@ -119,15 +119,6 @@ describe('resolvePrivateLink', () => {
         })
       )
     })
-    it('does not pass the openWithDefaultApp param when disabled via config', async () => {
-      const { wrapper, mocks } = getWrapper({ openLinksWithDefaultApp: false, path: '/' })
-      await wrapper.vm.resolvePrivateLinkTask.last
-      expect(mocks.$router.push).toHaveBeenCalledWith(
-        expect.objectContaining({
-          query: expect.not.objectContaining({ openWithDefaultApp: 'true' })
-        })
-      )
-    })
     it('does not pass the openWithDefaultApp param when not requested via query', async () => {
       const { wrapper, mocks } = getWrapper({ openWithDefaultAppQuery: 'false', path: '/' })
       await wrapper.vm.resolvePrivateLinkTask.last
@@ -147,8 +138,7 @@ function getWrapper({
   fileId = '',
   details = '',
   hiddenShare = false,
-  openWithDefaultAppQuery = 'true',
-  openLinksWithDefaultApp = true
+  openWithDefaultAppQuery = 'true'
 }: {
   space?: SpaceResource
   resource?: Resource
@@ -157,7 +147,6 @@ function getWrapper({
   details?: string
   hiddenShare?: boolean
   openWithDefaultAppQuery?: string
-  openLinksWithDefaultApp?: boolean
 } = {}) {
   vi.mocked(queryItemAsString).mockImplementation((str) => {
     if (str === 'fileId') {
@@ -185,11 +174,7 @@ function getWrapper({
     mocks,
     wrapper: shallowMount(resolvePrivateLink, {
       global: {
-        plugins: [
-          ...defaultPlugins({
-            piniaOptions: { configState: { options: { openLinksWithDefaultApp } } }
-          })
-        ],
+        plugins: [...defaultPlugins()],
         mocks,
         provide: mocks
       }
