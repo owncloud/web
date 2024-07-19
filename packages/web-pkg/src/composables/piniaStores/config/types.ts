@@ -112,7 +112,6 @@ const OptionsConfigSchema = z.object({
     })
     .optional(),
   runningOnEos: z.boolean().optional(),
-  sharingRecipientsPerPage: z.number().optional(),
   sidebar: z
     .object({
       shares: z
