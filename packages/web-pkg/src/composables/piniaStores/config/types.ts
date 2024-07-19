@@ -98,6 +98,11 @@ const OptionsConfigSchema = z.object({
   isRunningOnEos: z.boolean().optional(),
   loginUrl: z.string().optional(),
   logoutUrl: z.string().optional(),
+  ocm: z
+    .object({
+      openRemotely: z.boolean().optional()
+    })
+    .optional(),
   openAppsInTab: z.boolean().optional(),
   routing: z
     .object({
