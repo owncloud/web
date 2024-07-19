@@ -2,6 +2,7 @@ import { parseXML, prepareFileFromProps } from 'webdav'
 import { XMLParser } from 'fast-xml-parser'
 import { WebDavResponseResource, WebDavResponseTusSupport } from '../../helpers'
 import { urlJoin } from '../../utils'
+import { DavErrorCode } from '../constants'
 
 export const parseTusHeaders = (headers: Headers) => {
   const result: WebDavResponseTusSupport = {}
@@ -54,21 +55,30 @@ export const parseMultiStatus = async (xmlBody: string) => {
   }) as unknown as WebDavResponseResource[]
 }
 
-export const parseError = (xmlBody: string) => {
+export const parseError = (xmlBody: string): { message: string; errorCode: DavErrorCode } => {
   const parser = new XMLParser()
+  const errorObj = { message: 'Unknown error', errorCode: undefined }
+
   try {
     const parsed = parser.parse(xmlBody)
-
-    if (parsed['d:error'] && parsed['d:error']['s:message']) {
+    if (!parsed['d:error']) {
+      return errorObj
+    }
+    if (parsed['d:error']['s:message']) {
       const message = parsed['d:error']['s:message']
       if (typeof message === 'string') {
-        return message
+        errorObj.message = message
       }
-      return ''
+    }
+    if (parsed['d:error']['s:errorcode']) {
+      const errorCode = parsed['d:error']['s:errorcode']
+      if (typeof errorCode === 'string') {
+        errorObj.errorCode = errorCode
+      }
     }
   } catch (error) {
-    return 'Unknown error'
+    return errorObj
   }
 
-  return 'Unknown error'
+  return errorObj
 }

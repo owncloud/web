@@ -12,7 +12,7 @@ import { DavMethod, DavPropertyValue } from '../constants'
 import { buildPropFindBody, buildPropPatchBody } from './builders'
 import { parseError, parseMultiStatus, parseTusHeaders } from './parsers'
 import { WebDavResponseResource } from '../../helpers'
-import { HttpError } from '../../errors'
+import { DavHttpError } from '../../errors'
 import { AxiosInstance } from 'axios'
 
 export interface DAVOptions {
@@ -217,7 +217,12 @@ export class DAV {
       const { response } = error
       const body = await response.text()
       const errorMessage = parseError(body)
-      throw new HttpError(errorMessage, response, response.status)
+      throw new DavHttpError(
+        errorMessage.message,
+        errorMessage.errorCode,
+        response,
+        response.status
+      )
     }
   }
 }
