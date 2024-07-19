@@ -42,9 +42,8 @@ describe('NameAndCopy', () => {
 
     vi.advanceTimersByTime(550)
 
-    wrapper.vm.$nextTick(() => {
-      expect(wrapper.html()).toMatchSnapshot()
-    })
+    await wrapper.vm.$nextTick()
+    expect(wrapper.html()).toMatchSnapshot()
   })
 })
 
