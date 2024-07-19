@@ -3,7 +3,7 @@ import { ref } from 'vue'
 
 export const useSortMock = (
   options: Partial<ReturnType<typeof useSort>> = {}
-): ReturnType<typeof useSort> => {
+): ReturnType<typeof useSort<any>> => {
   return {
     items: ref([]),
     sortBy: ref('name'),

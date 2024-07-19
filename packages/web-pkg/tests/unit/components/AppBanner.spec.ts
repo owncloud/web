@@ -55,8 +55,8 @@ function getWrapper({
     history: ('/' && createWebHistory('/')) || createWebHashHistory()
   })
 
-  vi.mocked(useSessionStorage).mockImplementation(() => {
-    return ref<string>(sessionStorageReturnValue)
+  vi.mocked(useSessionStorage<string>).mockImplementation(() => {
+    return ref(sessionStorageReturnValue)
   })
 
   const mocks = { ...defaultComponentMocks(), $router: router }
