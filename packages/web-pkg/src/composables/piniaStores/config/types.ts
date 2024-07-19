@@ -100,12 +100,6 @@ const OptionsConfigSchema = z.object({
   logoutUrl: z.string().optional(),
   openAppsInTab: z.boolean().optional(),
   openLinksWithDefaultApp: z.boolean().optional(),
-  routing: z
-    .object({
-      fullShareOwnerPaths: z.boolean().optional(),
-      idBased: z.boolean().optional()
-    })
-    .optional(),
   runningOnEos: z.boolean().optional(),
   sidebar: z
     .object({

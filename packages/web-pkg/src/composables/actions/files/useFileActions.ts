@@ -170,7 +170,7 @@ export const useFileActions = () => {
       },
       query: {
         ...(remoteItemId && { shareId: remoteItemId }),
-        ...(resource.fileId && configStore.options.routing.idBased && { fileId: resource.fileId }),
+        ...(resource.fileId && configStore.options.cernFeatures && { fileId: resource.fileId }),
         ...routeToContextQuery(unref(router.currentRoute))
       }
     }

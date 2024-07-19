@@ -24,7 +24,7 @@ export const useFileRouteReplace = (options: FileRouteReplaceOptions = {}) => {
     path: string
     fileId?: string | number
   }): boolean => {
-    if (!configStore.options.routing?.idBased) {
+    if (!configStore.options.cernFeatures) {
       return false
     }
     if (path === resource.path && fileId === resource.fileId) {

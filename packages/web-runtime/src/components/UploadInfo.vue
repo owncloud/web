@@ -569,7 +569,7 @@ export default defineComponent({
         },
         query: {
           ...file.targetRoute.query,
-          ...(this.configOptions.routing.idBased &&
+          ...(this.configOptions.cernFeatures &&
             !isUndefined(file.meta.fileId) && { fileId: file.meta.fileId })
         }
       }
@@ -579,7 +579,7 @@ export default defineComponent({
         ...file.targetRoute,
         query: {
           ...file.targetRoute.query,
-          ...(this.configOptions.routing.idBased &&
+          ...(this.configOptions.cernFeatures &&
             !isUndefined(file.meta.currentFolderId) && { fileId: file.meta.currentFolderId })
         }
       }

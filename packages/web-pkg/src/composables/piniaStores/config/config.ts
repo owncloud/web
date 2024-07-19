@@ -29,9 +29,6 @@ const defaultOptions = {
   },
   openAppsInTab: false,
   openLinksWithDefaultApp: true,
-  routing: {
-    idBased: true
-  },
   runningOnEos: false,
   sidebar: {
     shares: {

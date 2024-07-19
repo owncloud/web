@@ -401,7 +401,7 @@ export default defineComponent({
           route: unref(route),
           space,
           resourcePath: props.item,
-          ...(configStore.options.routing.idBased && { ancestorMetaData })
+          ...(configStore.options.cernFeatures && { ancestorMetaData })
         })
       )
     })
