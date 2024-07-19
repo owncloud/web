@@ -144,9 +144,7 @@ export default defineComponent({
       }
 
       const { params, query } = createFileRouteOptions(space, { fileId, path })
-      const openWithDefault =
-        unref(openWithDefaultApp) !== 'false' &&
-        !unref(details)
+      const openWithDefault = unref(openWithDefaultApp) !== 'false' && !unref(details)
 
       targetLocation.params = params
       targetLocation.query = {
