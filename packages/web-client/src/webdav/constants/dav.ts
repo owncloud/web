@@ -14,6 +14,13 @@ export abstract class DavPermission {
   static readonly SecureView: string = 'X'
 }
 
+export type DavErrorCode =
+  | 'ERR_LISTING_MEMBERS_NOT_ALLOWED'
+  | 'ERR_INVALID_CREDENTIALS'
+  | 'ERR_MISSING_BASIC_AUTH'
+  | 'ERR_MISSING_BEARER_AUTH'
+  | 'ERR_FILE_NOT_FOUND_IN_ROOT'
+
 export enum DavMethod {
   copy = 'COPY',
   delete = 'DELETE',

@@ -59,7 +59,7 @@
 </template>
 
 <script lang="ts">
-import { SharePermissionBit } from '@ownclouders/web-client'
+import { DavHttpError, SharePermissionBit } from '@ownclouders/web-client'
 import { authService } from '../services/auth'
 
 import {
@@ -139,22 +139,23 @@ export default defineComponent({
       try {
         loadedSpace.value = yield clientService.webdav.getFileInfo(unref(publicLinkSpace))
       } catch (error) {
-        // FIXME: check for error codes as soon as the server supports them
-        if (error.statusCode === 401) {
-          if (error.message === "No 'Authorization: Basic' header found") {
+        const err = error as DavHttpError
+
+        if (err.statusCode === 401) {
+          if (err.errorCode === 'ERR_MISSING_BASIC_AUTH') {
             isPasswordRequired.value = true
           }
 
-          if (error.message === "No 'Authorization: Bearer' header found") {
+          if (err.errorCode === 'ERR_MISSING_BEARER_AUTH') {
             isInternalLink.value = true
           }
 
           return
         }
-        if (error.statusCode === 404) {
+        if (err.statusCode === 404) {
           throw new Error($gettext('The resource could not be located, it may not exist anymore.'))
         }
-        throw error
+        throw err
       }
     })
 

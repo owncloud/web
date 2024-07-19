@@ -2,7 +2,7 @@ import ResolvePublicLink from '../../../src/pages/resolvePublicLink.vue'
 import { defaultPlugins, defaultComponentMocks, shallowMount } from 'web-test-helpers'
 import { mockDeep } from 'vitest-mock-extended'
 import { CapabilityStore, ClientService, useRouteParam } from '@ownclouders/web-pkg'
-import { HttpError, SpaceResource } from '@ownclouders/web-client'
+import { DavHttpError, SpaceResource } from '@ownclouders/web-client'
 import { authService } from 'web-runtime/src/services/auth'
 import { ref } from 'vue'
 
@@ -89,11 +89,11 @@ function getWrapper({
   // loadPublicSpaceTask response
   if (passwordRequired) {
     $clientService.webdav.getFileInfo.mockRejectedValueOnce(
-      new HttpError("No 'Authorization: Basic' header found", undefined, 401)
+      new DavHttpError('', 'ERR_MISSING_BASIC_AUTH', undefined, 401)
     )
   } else if (isInternalLink) {
     $clientService.webdav.getFileInfo.mockRejectedValueOnce(
-      new HttpError("No 'Authorization: Bearer' header found", undefined, 401)
+      new DavHttpError('', 'ERR_MISSING_BEARER_AUTH', undefined, 401)
     )
   }
 
