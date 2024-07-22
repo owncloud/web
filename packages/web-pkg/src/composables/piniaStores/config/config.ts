@@ -83,7 +83,8 @@ export const useConfigStore = defineStore('config', () => {
 
     if (data.options) {
       options.value = merge({ ...defaultOptions }, data.options)
-      unref(options).ocm.openRemotely = !!unref(options).cernFeatures
+      // ocm.openRemotely will not be loaded from config, but set based on cernFeatures option
+      unref(options).ocm.openRemotely = unref(options).cernFeatures
     }
 
     if (data.external_apps) {
