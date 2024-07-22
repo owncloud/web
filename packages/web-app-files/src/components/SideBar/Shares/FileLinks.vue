@@ -173,9 +173,8 @@ export default defineComponent({
     const space = inject<Ref<SpaceResource>>('space')
     const resource = inject<Ref<Resource>>('resource')
 
-    const initialLinkListCollapsed = !configStore.options.sidebar.shares.showAllOnLoad
-    const linkListCollapsed = ref(initialLinkListCollapsed)
-    const indirectLinkListCollapsed = ref(initialLinkListCollapsed)
+    const linkListCollapsed = ref(true)
+    const indirectLinkListCollapsed = ref(true)
     const directLinks = computed(() =>
       unref(linkShares)
         .filter((l) => !l.indirect && !l.isQuickLink)

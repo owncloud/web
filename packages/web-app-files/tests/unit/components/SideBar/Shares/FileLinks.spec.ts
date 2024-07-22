@@ -52,8 +52,9 @@ vi.mock('@ownclouders/web-pkg', async (importOriginal) => ({
 describe('FileLinks', () => {
   describe('links', () => {
     describe('when links list is not empty', () => {
-      it('should render a list of direct and indirect links', () => {
+      it('should render a list of direct and indirect links', async () => {
         const { wrapper } = getWrapper()
+        await wrapper.find('.indirect-link-list-toggle').trigger('click')
 
         const linkListItems = wrapper.findAllComponents<any>(linkListItemNameAndCopy)
         const linkListItemsDetails = wrapper.findAll(linkListItemDetailsAndEdit)
@@ -78,21 +79,15 @@ describe('FileLinks', () => {
           createdDateTime: '2020-01-01'
         })
 
-        it('shows all links if showAllOnLoad config is set', () => {
+        it('shows only 3 links initially', () => {
           const links = [link, link, link, link]
-          const { wrapper } = getWrapper({ links, showAllOnLoad: true })
-
-          expect(wrapper.findAll(linkListItemNameAndCopy).length).toBe(links.length)
-        })
-        it('shows only 3 links if showAllOnLoad config is not set', () => {
-          const links = [link, link, link, link]
-          const { wrapper } = getWrapper({ links, showAllOnLoad: false })
+          const { wrapper } = getWrapper({ links })
 
           expect(wrapper.findAll(linkListItemNameAndCopy).length).toBe(3)
         })
         it('button toggles to show all links', async () => {
           const links = [link, link, link, link]
-          const { wrapper } = getWrapper({ links, showAllOnLoad: false })
+          const { wrapper } = getWrapper({ links })
           await wrapper.find(selectors.indirectToggle).trigger('click')
 
           expect(wrapper.findAll(linkListItemNameAndCopy).length).toBe(links.length)
@@ -161,15 +156,13 @@ function getWrapper({
   resource = mockDeep<Resource>({ isFolder: false, canShare: () => true }),
   links = defaultLinksList,
   abilities = [{ action: 'create-all', subject: 'PublicLink' }],
-  canShare = true,
-  showAllOnLoad = true
+  canShare = true
 }: {
   resource?: Resource
   links?: typeof defaultLinksList
   abilities?: AbilityRule[]
   defaultLinkPermissions?: number
   canShare?: boolean
-  showAllOnLoad?: boolean
 } = {}) {
   const createLinkMock = vi.fn()
   vi.mocked(useCanShare).mockReturnValue({ canShare: () => canShare })
@@ -199,7 +192,6 @@ function getWrapper({
             abilities,
             piniaOptions: {
               capabilityState: { capabilities },
-              configState: { options: { sidebar: { shares: { showAllOnLoad } } } },
               sharesState: { linkShares: links }
             }
           })

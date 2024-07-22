@@ -36,11 +36,6 @@ const defaultOptions = {
     fullShareOwnerPaths: false
   },
   runningOnEos: false,
-  sidebar: {
-    shares: {
-      showAllOnLoad: false
-    }
-  },
   tokenStorageLocal: true,
   userListRequiresFilter: false
 } satisfies Partial<OptionsConfig>

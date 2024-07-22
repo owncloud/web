@@ -162,11 +162,11 @@ export default defineComponent({
     const resource = inject<Ref<Resource>>('resource')
     const space = inject<Ref<SpaceResource>>('space')
 
-    const sharesListCollapsed = ref(!configStore.options.sidebar.shares.showAllOnLoad)
+    const sharesListCollapsed = ref(true)
     const toggleShareListCollapsed = () => {
       sharesListCollapsed.value = !unref(sharesListCollapsed)
     }
-    const memberListCollapsed = ref(!configStore.options.sidebar.shares.showAllOnLoad)
+    const memberListCollapsed = ref(true)
     const toggleMemberListCollapsed = () => {
       memberListCollapsed.value = !unref(memberListCollapsed)
     }
