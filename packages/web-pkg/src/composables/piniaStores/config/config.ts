@@ -27,6 +27,7 @@ const defaultOptions = {
     enabled: false,
     target: 'resources'
   },
+  ocm: {},
   openAppsInTab: false,
   routing: {
     idBased: true
