@@ -64,12 +64,9 @@
       </li>
     </oc-list>
     <div v-if="directLinks.length > 3" class="oc-flex oc-flex-center">
-      <oc-button
-        class="indirect-link-list-toggle"
-        appearance="raw"
-        @click="toggleLinkListCollapsed"
-        v-text="collapseButtonTitle"
-      />
+      <oc-button class="indirect-link-list-toggle" appearance="raw" @click="toggleLinkListCollapsed"
+        ><span v-text="collapseButtonTitle"
+      /></oc-button>
     </div>
     <div v-if="indirectLinks.length" id="indirect-link-list">
       <hr class="oc-my-m" />
@@ -100,8 +97,9 @@
           class="indirect-link-list-toggle"
           appearance="raw"
           @click="toggleIndirectLinkListCollapsed"
-          v-text="indirectCollapseButtonTitle"
-        />
+        >
+          <span v-text="indirectCollapseButtonTitle" />
+        </oc-button>
       </div>
     </div>
   </div>
