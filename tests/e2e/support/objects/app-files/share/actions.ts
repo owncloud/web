@@ -31,6 +31,7 @@ const createLinkButton = '.oc-modal-body-actions-confirm'
 const showMoreOptionsButton = '#show-more-share-options-btn'
 const calendarDatePickerId = 'recipient-datepicker-btn'
 const informMessage = '//div[contains(@class,"oc-notification-message-title")]'
+const showMoreBtn = '.toggle-shares-list-btn:has-text("Show more")'
 
 export interface ShareArgs {
   page: Page
@@ -60,6 +61,12 @@ export const openSharingPanel = async function (
       await sidebar.open({ page, resource: item })
       await sidebar.openPanel({ page, name: 'sharing' })
       break
+  }
+
+  // always click on the “Show more” button if it exists
+  const showMore = page.locator(showMoreBtn)
+  if ((await showMore.count()) > 0) {
+    await showMore.click()
   }
 }
 

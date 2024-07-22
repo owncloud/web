@@ -64,14 +64,9 @@
       </li>
     </oc-list>
     <div v-if="directLinks.length > 3" class="oc-flex oc-flex-center">
-      <oc-button
-        class="indirect-link-list-toggle"
-        appearance="raw"
-        @click="toggleLinkListCollapsed"
-      >
-        <span v-text="collapseButtonTitle" />
-        <oc-icon :name="collapseButtonIcon" fill-type="line" />
-      </oc-button>
+      <oc-button class="indirect-link-list-toggle" appearance="raw" @click="toggleLinkListCollapsed"
+        ><span v-text="collapseButtonTitle"
+      /></oc-button>
     </div>
     <div v-if="indirectLinks.length" id="indirect-link-list">
       <hr class="oc-my-m" />
@@ -104,7 +99,6 @@
           @click="toggleIndirectLinkListCollapsed"
         >
           <span v-text="indirectCollapseButtonTitle" />
-          <oc-icon :name="indirectCollapseButtonIcon" fill-type="line" />
         </oc-button>
       </div>
     </div>
@@ -173,9 +167,8 @@ export default defineComponent({
     const space = inject<Ref<SpaceResource>>('space')
     const resource = inject<Ref<Resource>>('resource')
 
-    const initialLinkListCollapsed = !configStore.options.sidebar.shares.showAllOnLoad
-    const linkListCollapsed = ref(initialLinkListCollapsed)
-    const indirectLinkListCollapsed = ref(initialLinkListCollapsed)
+    const linkListCollapsed = ref(true)
+    const indirectLinkListCollapsed = ref(true)
     const directLinks = computed(() =>
       unref(linkShares)
         .filter((l) => !l.indirect && !l.isQuickLink)
@@ -280,16 +273,10 @@ export default defineComponent({
   },
   computed: {
     collapseButtonTitle() {
-      return this.linkListCollapsed ? this.$gettext('Show all') : this.$gettext('Show less')
-    },
-    collapseButtonIcon() {
-      return this.linkListCollapsed ? 'arrow-down-s' : 'arrow-up-s'
+      return this.linkListCollapsed ? this.$gettext('Show more') : this.$gettext('Show less')
     },
     indirectCollapseButtonTitle() {
       return this.indirectLinkListCollapsed ? this.$gettext('Show') : this.$gettext('Hide')
-    },
-    indirectCollapseButtonIcon() {
-      return this.indirectLinkListCollapsed ? 'arrow-down-s' : 'arrow-up-s'
     },
 
     quicklink() {

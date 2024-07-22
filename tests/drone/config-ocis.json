@@ -9,11 +9,6 @@
     "scope": "openid profile email"
   },
   "options": {
-    "sidebar": {
-      "shares": {
-        "showAllOnLoad": true
-      }
-    },
     "routing": {
       "idBased": false
     }

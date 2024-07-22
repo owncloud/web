@@ -127,6 +127,7 @@ function createWrapper(
   stubVueSelect = true
 ) {
   const mocks = { ...defaultComponentMocks(), $clientService: clientService }
+  mocks.$clientService.graphAuthenticated.tags.listTags.mockResolvedValue([])
   return {
     wrapper: mount(TagsSelect, {
       global: {

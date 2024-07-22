@@ -111,15 +111,6 @@ const OptionsConfigSchema = z.object({
     })
     .optional(),
   runningOnEos: z.boolean().optional(),
-  sidebar: z
-    .object({
-      shares: z
-        .object({
-          showAllOnLoad: z.boolean().optional()
-        })
-        .optional()
-    })
-    .optional(),
   tokenStorageLocal: z.boolean().optional(),
   upload: z
     .object({

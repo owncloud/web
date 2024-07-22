@@ -58,8 +58,9 @@ describe('FileShares', () => {
       collaborators = [getCollaborator(), getCollaborator(), getCollaborator(), getCollaborator()]
     })
 
-    it('renders sharedWithLabel and sharee list', () => {
+    it('renders sharedWithLabel and sharee list', async () => {
       const { wrapper } = getWrapper({ collaborators })
+      await wrapper.find('.toggle-shares-list-btn').trigger('click')
       expect(wrapper.find('#files-collaborators-list').exists()).toBeTruthy()
       expect(wrapper.findAll('#files-collaborators-list li').length).toBe(collaborators.length)
       expect(wrapper.html()).toMatchSnapshot()
@@ -86,11 +87,10 @@ describe('FileShares', () => {
       expect(listItemStub.props('modifiable')).toBeFalsy()
     })
     it('toggles the share list', async () => {
-      const showAllOnLoad = true
       const { wrapper } = getWrapper({ mountType: mount, collaborators })
-      expect(wrapper.vm.sharesListCollapsed).toBe(!showAllOnLoad)
+      expect(wrapper.vm.sharesListCollapsed).toBe(true)
       await wrapper.find('.toggle-shares-list-btn').trigger('click')
-      expect(wrapper.vm.sharesListCollapsed).toBe(showAllOnLoad)
+      expect(wrapper.vm.sharesListCollapsed).toBe(false)
     })
     it('share should be modifiable if its personal space share', () => {
       const space = mock<SpaceResource>({ driveType: 'personal' })
@@ -165,7 +165,6 @@ function getWrapper({
   collaborators = [],
   spaceMembers = [],
   user = undefined,
-  showAllOnLoad = true,
   ancestorMetaData = {},
   canShare = true
 }: {
@@ -175,7 +174,6 @@ function getWrapper({
   collaborators?: CollaboratorShare[]
   spaceMembers?: CollaboratorShare[]
   user?: User
-  showAllOnLoad?: boolean
   ancestorMetaData?: AncestorMetaData
   canShare?: boolean
 } = {}) {
@@ -196,7 +194,7 @@ function getWrapper({
               spacesState: { spaceMembers },
               capabilityState: { capabilities },
               configState: {
-                options: { contextHelpers: true, sidebar: { shares: { showAllOnLoad } } }
+                options: { contextHelpers: true }
               },
               sharesState: { collaboratorShares: collaborators },
               resourcesStore: { ancestorMetaData }

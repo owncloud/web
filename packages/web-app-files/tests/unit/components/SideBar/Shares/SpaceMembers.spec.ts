@@ -142,7 +142,7 @@ function getWrapper({
             userState: { user },
             spacesState: { spaceMembers },
             configState: {
-              options: { contextHelpers: true, sidebar: { shares: { showAllOnLoad: true } } }
+              options: { contextHelpers: true }
             }
           }
         })
