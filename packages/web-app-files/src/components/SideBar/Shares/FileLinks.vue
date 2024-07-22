@@ -68,10 +68,8 @@
         class="indirect-link-list-toggle"
         appearance="raw"
         @click="toggleLinkListCollapsed"
-      >
-        <span v-text="collapseButtonTitle" />
-        <oc-icon :name="collapseButtonIcon" fill-type="line" />
-      </oc-button>
+        v-text="collapseButtonTitle"
+      />
     </div>
     <div v-if="indirectLinks.length" id="indirect-link-list">
       <hr class="oc-my-m" />
@@ -102,10 +100,8 @@
           class="indirect-link-list-toggle"
           appearance="raw"
           @click="toggleIndirectLinkListCollapsed"
-        >
-          <span v-text="indirectCollapseButtonTitle" />
-          <oc-icon :name="indirectCollapseButtonIcon" fill-type="line" />
-        </oc-button>
+          v-text="indirectCollapseButtonTitle"
+        />
       </div>
     </div>
   </div>
@@ -279,16 +275,10 @@ export default defineComponent({
   },
   computed: {
     collapseButtonTitle() {
-      return this.linkListCollapsed ? this.$gettext('Show all') : this.$gettext('Show less')
-    },
-    collapseButtonIcon() {
-      return this.linkListCollapsed ? 'arrow-down-s' : 'arrow-up-s'
+      return this.linkListCollapsed ? this.$gettext('Show more') : this.$gettext('Show less')
     },
     indirectCollapseButtonTitle() {
       return this.indirectLinkListCollapsed ? this.$gettext('Show') : this.$gettext('Hide')
-    },
-    indirectCollapseButtonIcon() {
-      return this.indirectLinkListCollapsed ? 'arrow-down-s' : 'arrow-up-s'
     },
 
     quicklink() {
