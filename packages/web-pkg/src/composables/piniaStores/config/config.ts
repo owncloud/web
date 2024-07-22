@@ -32,7 +32,8 @@ const defaultOptions = {
   },
   openAppsInTab: false,
   routing: {
-    idBased: true
+    idBased: true,
+    fullShareOwnerPaths: false
   },
   runningOnEos: false,
   sidebar: {
@@ -85,6 +86,9 @@ export const useConfigStore = defineStore('config', () => {
       options.value = merge({ ...defaultOptions }, data.options)
       // ocm.openRemotely will not be loaded from config, but set based on cernFeatures option
       unref(options).ocm.openRemotely = unref(options).cernFeatures
+      // routing will not be loaded from config, but set based on cernFeatures option
+      unref(options).routing.idBased = !unref(options).cernFeatures
+      unref(options).routing.fullShareOwnerPaths = unref(options).cernFeatures
     }
 
     if (data.external_apps) {
@@ -109,7 +113,6 @@ export const useConfigStore = defineStore('config', () => {
     scripts,
     styles,
     serverUrl,
-
     loadConfig
   }
 })
