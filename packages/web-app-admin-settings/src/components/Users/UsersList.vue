@@ -236,7 +236,7 @@ export default defineComponent({
         return
       }
       if (!isUserSelected(user)) {
-        selectUser(user)
+        userSettingsStore.setSelectedUsers([user])
       }
       displayPositionedDropdown(dropdown.tippy, event, unref(contextMenuButtonRef))
     }
@@ -251,7 +251,7 @@ export default defineComponent({
         return
       }
       if (!isUserSelected(user)) {
-        selectUser(user)
+        userSettingsStore.setSelectedUsers([user])
       }
       displayPositionedDropdown(dropdown._tippy, event, unref(contextMenuButtonRef))
     }

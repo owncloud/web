@@ -452,7 +452,7 @@ export default defineComponent({
         return
       }
       if (!isSpaceSelected(space)) {
-        selectSpace(space)
+        spaceSettingsStore.setSelectedSpaces([space])
       }
       displayPositionedDropdown(dropdown.tippy, event, unref(contextMenuButtonRef))
     }
@@ -467,7 +467,7 @@ export default defineComponent({
         return
       }
       if (!isSpaceSelected(space)) {
-        selectSpace(space)
+        spaceSettingsStore.setSelectedSpaces([space])
       }
       displayPositionedDropdown(dropdown._tippy, event, unref(contextMenuButtonRef))
     }

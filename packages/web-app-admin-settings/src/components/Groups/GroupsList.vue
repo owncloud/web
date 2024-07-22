@@ -222,7 +222,7 @@ export default defineComponent({
         return
       }
       if (!isGroupSelected(group)) {
-        selectGroup(group)
+        groupSettingsStore.setSelectedGroups([group])
       }
       displayPositionedDropdown(dropdown.tippy, event, unref(contextMenuButtonRef))
     }
@@ -237,7 +237,7 @@ export default defineComponent({
         return
       }
       if (!isGroupSelected(group)) {
-        selectGroup(group)
+        groupSettingsStore.setSelectedGroups([group])
       }
       displayPositionedDropdown(dropdown._tippy, event, unref(contextMenuButtonRef))
     }
