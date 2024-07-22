@@ -249,6 +249,7 @@ export function buildCollaboratorShare({
   indirect?: boolean
 }): CollaboratorShare {
   const role = graphRoles.find(({ id }) => id === graphPermission.roles?.[0])
+  const invitedBy = graphPermission.invitation?.invitedBy?.user
 
   return {
     id: graphPermission.id,
@@ -256,7 +257,7 @@ export function buildCollaboratorShare({
     indirect,
     shareType: graphPermission.grantedToV2.group ? ShareTypes.group.value : ShareTypes.user.value,
     role,
-    sharedBy: { id: '', displayName: '' }, // FIXME: see https://github.com/owncloud/ocis/issues/9571
+    sharedBy: { id: invitedBy?.id, displayName: invitedBy?.displayName },
     sharedWith: graphPermission.grantedToV2.user || graphPermission.grantedToV2.group,
     permissions: (graphPermission['@libre.graph.permissions.actions']
       ? graphPermission['@libre.graph.permissions.actions']
@@ -275,12 +276,14 @@ export function buildLinkShare({
   resourceId: string
   indirect?: boolean
 }): LinkShare {
+  const invitedBy = graphPermission.invitation?.invitedBy?.user
+
   return {
     id: graphPermission.id,
     resourceId,
     indirect,
     shareType: ShareTypes.link.value,
-    sharedBy: { id: '', displayName: '' }, // FIXME: see https://github.com/owncloud/ocis/issues/9571
+    sharedBy: { id: invitedBy?.id, displayName: invitedBy?.displayName },
     hasPassword: graphPermission.hasPassword,
     createdDateTime: graphPermission.createdDateTime,
     expirationDateTime: graphPermission.expirationDateTime,
