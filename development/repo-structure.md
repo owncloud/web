@@ -118,7 +118,6 @@ Both `web-app-admin-settings` and `web-app-files` are standalone apps which are 
 Apps which fall into the categories `viewer` or `editor` can be opened from the context of a file or folder. This mostly happens from
 within the `files` app. We currently bundle the following apps with the default ownCloud Web release artifact:
 
-- `web-app-draw-io` an editor for `.drawio` files
 - `web-app-external` an iframe integration of all the apps coming from the [app provider](https://owncloud.dev/services/app-provider/)
   (e.g. OnlyOffice, Collabora Online and others)
 - `web-app-pdf-viewer` a viewer for `.pdf` files, which relies on native PDF rendering support from the browser
