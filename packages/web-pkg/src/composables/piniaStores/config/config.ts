@@ -27,7 +27,9 @@ const defaultOptions = {
     enabled: false,
     target: 'resources'
   },
-  ocm: {},
+  ocm: {
+    openRemotely: false
+  },
   openAppsInTab: false,
   routing: {
     idBased: true
@@ -81,6 +83,7 @@ export const useConfigStore = defineStore('config', () => {
 
     if (data.options) {
       options.value = merge({ ...defaultOptions }, data.options)
+      unref(options).ocm.openRemotely = !!unref(options).cernFeatures
     }
 
     if (data.external_apps) {
