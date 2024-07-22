@@ -38,7 +38,6 @@ const addNewResourceButton = `#new-file-menu-btn`
 const createNewFolderButton = '#new-folder-btn'
 const createNewTxtFileButton = '.new-file-btn-txt'
 const createNewMdFileButton = '.new-file-btn-md'
-const createNewDrawioFileButton = '.new-file-btn-drawio'
 const createNewOfficeDocumentFileBUtton = '//ul[@id="create-list"]//span[text()="%s"]'
 const createNewShortcutButton = '#new-shortcut-btn'
 const shortcutResorceInput = '#create-shortcut-modal-url-input'
@@ -82,8 +81,6 @@ const hiddenFilesToggleButton = '//*[@data-testid="files-switch-hidden-files"]//
 const previewImage = '//main[@id="preview"]//div[contains(@class,"stage_media")]//img'
 const previewAudio = '//main[@id="preview"]//div[contains(@class,"stage_media")]//audio//source'
 const previewVideo = '//main[@id="preview"]//div[contains(@class,"stage_media")]//video//source'
-const drawioSaveButton = '.geBigButton >> text=Save'
-const drawioIframe = '#drawio-editor'
 const externalEditorIframe = '[name="app-iframe"]'
 const tagTableCell =
   '//*[@data-test-resource-name="%s"]/ancestor::tr//td[contains(@class, "oc-table-data-cell-tags")]'
@@ -191,7 +188,6 @@ export type createResourceTypes =
   | 'folder'
   | 'txtFile'
   | 'mdFile'
-  | 'drawioFile'
   | 'OpenDocument'
   | 'Microsoft Word'
 
@@ -300,23 +296,6 @@ export const createNewFileOrFolder = async (args: createResourceArgs): Promise<v
         page.locator(util.format(actionConfirmationButton, 'Create')).click()
       ])
       await editTextDocument({ page, content, name })
-      break
-    }
-    case 'drawioFile': {
-      await page.locator(createNewDrawioFileButton).click()
-      await page.locator(resourceNameInput).fill(name)
-
-      await Promise.all([
-        page.waitForResponse((resp) => resp.status() === 201 && resp.request().method() === 'PUT'),
-        page.locator(util.format(actionConfirmationButton, 'Create')).click()
-      ])
-
-      await page.waitForLoadState()
-      await page.frameLocator(drawioIframe).locator(drawioSaveButton).click()
-      await page.waitForURL('**/draw-io/personal/**')
-
-      // TODO: Update to use appTopBar once #8447 is merged
-      await page.goto(page.url())
       break
     }
     case 'OpenDocument': {

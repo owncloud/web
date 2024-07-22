@@ -634,25 +634,6 @@ importers:
         specifier: workspace:*
         version: link:../web-test-helpers
 
-  packages/web-app-draw-io:
-    dependencies:
-      '@ownclouders/web-client':
-        specifier: workspace:*
-        version: link:../web-client
-      '@ownclouders/web-pkg':
-        specifier: workspace:*
-        version: link:../web-pkg
-      luxon:
-        specifier: 3.2.1
-        version: 3.2.1
-    devDependencies:
-      '@types/luxon':
-        specifier: 3.2.1
-        version: 3.2.1
-      web-test-helpers:
-        specifier: workspace:*
-        version: link:../web-test-helpers
-
   packages/web-app-epub-reader:
     dependencies:
       '@ownclouders/web-client':

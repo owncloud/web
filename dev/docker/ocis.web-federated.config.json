@@ -36,14 +36,6 @@
       }
     },
     {
-      "id": "draw-io",
-      "path": "web-app-draw-io",
-      "config": {
-        "url": "https://embed.diagrams.net",
-        "theme": "minimal"
-      }
-    },
-    {
       "id": "importer",
       "path": "web-app-importer",
       "config": {
