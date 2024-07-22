@@ -7,7 +7,6 @@
     "authUrl": ""
   },
   "apps" : [
-    "draw-io",
     "files",
     "pdf-viewer",
     "preview",

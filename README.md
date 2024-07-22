@@ -61,7 +61,6 @@ The backbone of this project is built by the following parts of the `packages`:
 - **runtime:** Central place of (user) authentication, provisioning of the user interface layout, client side storage, routing, theming, dependencies and (sub)application handling
 
 The repository's `packages` also contains the following apps, which can be en-/disabled via the `config.json`:
-- **draw-io:** An extension for creating, opening and editing `.draw` files
 - **external:** An extension for creating, opening and editing files using the WOPI server
 - **files:** The default extension and core part of the project, responsible for file sync-and-share - up- and downloading, sharing with other users/groups or via links, version management and more
 - **pdf-viewer:** An extension for opening PDF files without leaving the UI

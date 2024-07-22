@@ -81,11 +81,10 @@ Feature: share
     Given "Alice" logs in
     And "Alice" opens the "files" app
     And "Alice" creates the following resources
-      | resource            | type       | content   |
-      | shareToBrian.txt    | txtFile    | some text |
-      | shareToBrian.md     | mdFile     | readme    |
-      | shareToBrian.drawio | drawioFile |           |
-      | sharedFile.txt      | txtFile    | some text |
+      | resource         | type    | content   |
+      | shareToBrian.txt | txtFile | some text |
+      | shareToBrian.md  | mdFile  | readme    |
+      | sharedFile.txt   | txtFile | some text |
     And "Alice" edits the following resources
       | resource         | content                   |
       | shareToBrian.txt | new content edited        |

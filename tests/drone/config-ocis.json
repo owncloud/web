@@ -18,13 +18,5 @@
       "idBased": false
     }
   },
-  "apps": [
-    "files",
-    "draw-io",
-    "text-editor",
-    "preview",
-    "pdf-viewer",
-    "search",
-    "admin-settings"
-  ]
+  "apps": ["files", "text-editor", "preview", "pdf-viewer", "search", "admin-settings"]
 }

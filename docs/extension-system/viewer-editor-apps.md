@@ -20,7 +20,7 @@ This section will guide you through the process of implementing such an app with
 
 An app is essentially a distinct package that must be specified as an external application in the Web configuration.
 
-The structure of an app is quite simple and straightforward. Consider, for example, the [draw.io app](https://github.com/owncloud/web/tree/master/packages/web-app-draw-io). It consists of a `package.json` file, a `src` directory containing all the source code, and a `l10n` directory for translations. Optionally, you may also include a `tests` directory if your application requires testing.
+The structure of an app is quite simple and straightforward. Consider, for example, the [pdf-viewer app](https://github.com/owncloud/web/tree/master/packages/web-app-pdf-viewer). It consists of a `package.json` file, a `src` directory containing all the source code, and a `l10n` directory for translations. Optionally, you may also include a `tests` directory if your application requires testing.
 
 To learn more about apps in general, please refer to the [Web app docs]({{< ref "_index.md#apps" >}}).
 
