@@ -1,0 +1,7 @@
+Bugfix: Open dropdown menu does not deselect other items in admin settings app
+
+We've fixed a bug where, other like in the other tables,
+the dropdown menu in the admin settings app did not deselect other items when opening a new dropdown menu.
+
+https://github.com/owncloud/web/pull/11253
+https://github.com/owncloud/web/issues/11245
