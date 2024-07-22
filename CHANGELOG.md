@@ -11,6 +11,7 @@ Summary
 * Bugfix - Downloading files via the app top bar doesn't reflect the current state: [#11174](https://github.com/owncloud/web/pull/11174)
 * Bugfix - Images stretched in preview app in Safari browser: [#11186](https://github.com/owncloud/web/pull/11186)
 * Bugfix - UI breaks when tags are numbers: [#11194](https://github.com/owncloud/web/pull/11194)
+* Change - Remove draw-io as default app: [#11252](https://github.com/owncloud/web/pull/11252)
 
 Details
 -------
@@ -39,6 +40,18 @@ Details
 
    https://github.com/owncloud/web/issues/11193
    https://github.com/owncloud/web/pull/11194
+
+* Change - Remove draw-io as default app: [#11252](https://github.com/owncloud/web/pull/11252)
+
+   BREAKING CHANGE: draw-io has been removed as default web app. The app is now
+   available via the [web-extensions
+   repository](https://github.com/owncloud/web-extensions).
+
+   Please refer to [the web-app docs](https://owncloud.dev/services/web/#web-apps)
+   to see how to load an external web app.
+
+   https://github.com/owncloud/web/issues/11248
+   https://github.com/owncloud/web/pull/11252
 
 Changelog for ownCloud Web [9.2.0] (2024-07-11)
 =======================================
