@@ -65,7 +65,7 @@ export const openSharingPanel = async function (
 
   // always click on the “Show more” button if it exists
   const showMore = page.locator(showMoreBtn)
-  if (await showMore.count() > 0) {
+  if ((await showMore.count()) > 0) {
     await showMore.click()
   }
 }
