@@ -11,6 +11,7 @@ Summary
 * Bugfix - Downloading files via the app top bar doesn't reflect the current state: [#11174](https://github.com/owncloud/web/pull/11174)
 * Bugfix - Images stretched in preview app in Safari browser: [#11186](https://github.com/owncloud/web/pull/11186)
 * Bugfix - UI breaks when tags are numbers: [#11194](https://github.com/owncloud/web/pull/11194)
+* Bugfix - Open dropdown menu does not deselect other items in admin settings app: [#11253](https://github.com/owncloud/web/pull/11253)
 * Change - Remove draw-io as default app: [#11252](https://github.com/owncloud/web/pull/11252)
 
 Details
@@ -40,6 +41,15 @@ Details
 
    https://github.com/owncloud/web/issues/11193
    https://github.com/owncloud/web/pull/11194
+
+* Bugfix - Open dropdown menu does not deselect other items in admin settings app: [#11253](https://github.com/owncloud/web/pull/11253)
+
+   We've fixed a bug where, other like in the other tables, the dropdown menu in
+   the admin settings app did not deselect other items when opening a new dropdown
+   menu.
+
+   https://github.com/owncloud/web/issues/11245
+   https://github.com/owncloud/web/pull/11253
 
 * Change - Remove draw-io as default app: [#11252](https://github.com/owncloud/web/pull/11252)
 
