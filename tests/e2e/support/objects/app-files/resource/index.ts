@@ -342,4 +342,16 @@ export class Resource {
   async getAllAvailableActions({ resource }: { resource: string }): Promise<string[]> {
     return await po.getAllAvailableActions({ page: this.#page, resource })
   }
+
+  getFileThumbnailLocator(resource: string): Locator {
+    return po.getFileThumbnailLocator({ page: this.#page, resource })
+  }
+
+  async shouldSeeFilePreview({ resource }: { resource: string }): Promise<void> {
+    await po.shouldSeeFilePreview({ page: this.#page, resource })
+  }
+
+  async shouldNotSeeFilePreview({ resource }: { resource: string }): Promise<void> {
+    await po.shouldNotSeeFilePreview({ page: this.#page, resource })
+  }
 }
