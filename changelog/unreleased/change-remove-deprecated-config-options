@@ -13,6 +13,7 @@ as they were either not used anymore or only relevant for CI testing:
 - `options.sidebar.exif.showLocation`
 - `options.sidebar.shares.showAllOnLoad`
 - `options.sharingRecipientsPerPage`
+- `options.displayThumbnails`
 - `options.disablePreviews`
 - `options.previewFileMimeType`
 - `options.topCenterNotifications`
