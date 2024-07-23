@@ -6,8 +6,8 @@
   >
     <div class="oc-topbar-left oc-flex oc-flex-middle oc-flex-start">
       <applications-menu
-        v-if="appMenuItems.length && !isEmbedModeEnabled"
-        :applications-list="appMenuItems"
+        v-if="appMenuExtensions.length && !isEmbedModeEnabled"
+        :menu-items="appMenuExtensions"
       />
       <router-link v-if="!hideLogo" ref="navigationSidebarLogo" :to="homeLink" class="oc-width-1-1">
         <oc-img
@@ -31,7 +31,7 @@
       <portal to="app.runtime.header.right" :order="100">
         <notifications v-if="isNotificationBellEnabled" />
         <side-bar-toggle v-if="isSideBarToggleVisible" :disabled="isSideBarToggleDisabled" />
-        <user-menu :applications-list="userMenuItems" />
+        <user-menu />
       </portal>
     </template>
     <portal-target name="app.runtime.header.left" @change="updateLeftPortal" />
@@ -40,9 +40,7 @@
 
 <script lang="ts">
 import { storeToRefs } from 'pinia'
-import { computed, unref, PropType, ref } from 'vue'
-import { useGettext } from 'vue3-gettext'
-
+import { computed, unref, PropType, ref, onMounted } from 'vue'
 import ApplicationsMenu from './ApplicationsMenu.vue'
 import UserMenu from './UserMenu.vue'
 import Notifications from './Notifications.vue'
@@ -50,21 +48,30 @@ import FeedbackLink from './FeedbackLink.vue'
 import SideBarToggle from './SideBarToggle.vue'
 import {
   ApplicationInformation,
+  AppMenuItemExtension,
   CustomComponentTarget,
+  EDITOR_MODE_EDIT,
   queryItemAsString,
+  resolveFileNameDuplicate,
+  useAppsStore,
   useAuthStore,
   useCapabilityStore,
+  useClientService,
   useConfigStore,
   useEmbedMode,
+  useExtensionRegistry,
+  useFileActions,
+  useGetMatchingSpace,
+  useResourcesStore,
   useRouteQuery,
   useRouter,
+  useSpacesStore,
   useThemeStore
 } from '@ownclouders/web-pkg'
 import { isRuntimeRoute } from '../../router'
-import { MenuItem } from '../../helpers/menuItems'
-import { topBarCenterExtensionPoint } from '../../extensionPoints'
-
-type Menus = 'apps' | 'appSwitcher' | 'user'
+import { appMenuExtensionPoint, topBarCenterExtensionPoint } from '../../extensionPoints'
+import { useGettext } from 'vue3-gettext'
+import { urlJoin } from '@ownclouders/web-client'
 
 export default {
   components: {
@@ -88,11 +95,15 @@ export default {
     const { currentTheme } = storeToRefs(themeStore)
     const configStore = useConfigStore()
     const { options: configOptions } = storeToRefs(configStore)
+    const extensionRegistry = useExtensionRegistry()
 
     const authStore = useAuthStore()
-    const language = useGettext()
     const router = useRouter()
     const { isEnabled: isEmbedModeEnabled } = useEmbedMode()
+
+    const appMenuExtensions = computed(() => {
+      return extensionRegistry.requestExtensions(appMenuExtensionPoint)
+    })
 
     const logoWidth = ref('150px')
     const hideLogoQuery = useRouteQuery('hide-logo', 'false')
@@ -124,89 +135,76 @@ export default {
       return isRuntimeRoute(unref(router.currentRoute))
     })
 
-    const isNavItemPermitted = (permittedMenus: Menus[], navItem: ApplicationInformation) => {
-      // FIXME: there is no menu...
-      if ((navItem as any).menu) {
-        return permittedMenus.includes((navItem as any).menu)
-      }
-      return permittedMenus.includes(null)
-    }
-
-    /**
-     * Returns well-formed menuItem objects by a list of extensions.
-     * The following properties must be accessible in the wrapping code:
-     * - applicationsList
-     * - $language
-     */
-    const getMenuItems = (permittedMenus: Menus[], activeRoutePath: string) => {
-      return props.applicationsList
-        .filter((app) => {
-          if (app.type === 'extension') {
-            return app.applicationMenu?.enabled() && !permittedMenus.includes('user')
-          }
-          return isNavItemPermitted(permittedMenus, app)
-        })
-        .map<MenuItem>((item) => {
-          // FIXME: types are a mess here
-          const _item = item as any
-
-          const lang = language.current
-          // TODO: move language resolution to a common function
-          // FIXME: need to handle logic for variants like en_US vs en_GB
-          let title = _item.title ? _item.title.en : _item.name
-          let color = _item.color
-          let icon: string
-          let iconUrl: string
-          if (_item.title && _item.title[lang]) {
-            title = _item.title[lang]
-          }
-
-          if (!item.icon) {
-            icon = 'deprecated' // "broken" icon
-          } else if (item.icon.indexOf('.') < 0) {
-            // not a file name or URL, treat as a material icon name instead
-            icon = item.icon
-          } else {
-            iconUrl = item.icon
-          }
-
-          const app: MenuItem = {
-            id: _item.id,
-            icon: icon,
-            iconUrl: iconUrl,
-            title: title,
-            color: color,
-            defaultExtension: _item.defaultExtension,
-            ..._item.applicationMenu
-          }
-
-          if (_item.url) {
-            app.url = _item.url
-            app.target = ['_blank', '_self', '_parent', '_top'].includes(_item.target)
-              ? _item.target
-              : '_blank'
-          } else if (_item.path) {
-            app.path = _item.path
-            app.active = activeRoutePath?.startsWith(app.path)
-          } else {
-            app.path = `/${_item.id}`
-            app.active = activeRoutePath?.startsWith(app.path)
-          }
-
-          return app
-        })
-    }
-
-    const activeRoutePath = computed(() => router.resolve(unref(router.currentRoute)).path)
-    const userMenuItems = computed(() => getMenuItems(['user'], unref(activeRoutePath)))
-    const appMenuItems = computed(() =>
-      getMenuItems([null, 'apps', 'appSwitcher'], unref(activeRoutePath))
-    )
-
     const contentOnLeftPortal = ref(false)
     const updateLeftPortal = (newContent: { hasContent: boolean; sources: string[] }) => {
       contentOnLeftPortal.value = newContent.hasContent
     }
+
+    /**
+     * FIXME: remove the following once we remove the deprecated applicationMenu prop (see below).
+     * The old implementation was bad since this shouldn't live in the runtime.
+     * Rather register such logic in the app itself via a handler.
+     */
+    const { getMatchingSpace } = useGetMatchingSpace()
+    const spacesStore = useSpacesStore()
+    const appsStore = useAppsStore()
+    const resourcesStore = useResourcesStore()
+    const clientService = useClientService()
+    const { $gettext } = useGettext()
+    const { openEditor } = useFileActions()
+    const { resources, currentFolder } = storeToRefs(resourcesStore)
+    const onEditorApplicationClick = async (appId: string, defaultExtension: string) => {
+      let destinationSpace = unref(currentFolder) ? getMatchingSpace(unref(currentFolder)) : null
+      let destinationFiles = unref(resources)
+      let filePath = unref(currentFolder)?.path
+
+      if (!destinationSpace || !unref(currentFolder).canCreate()) {
+        destinationSpace = spacesStore.personalSpace
+        destinationFiles = (await clientService.webdav.listFiles(destinationSpace)).children
+        filePath = ''
+      }
+
+      let fileName = $gettext('New file') + `.${defaultExtension}`
+
+      if (destinationFiles.some((f) => f.name === fileName)) {
+        fileName = resolveFileNameDuplicate(fileName, defaultExtension, destinationFiles)
+      }
+
+      const emptyResource = await clientService.webdav.putFileContents(destinationSpace, {
+        path: urlJoin(filePath, fileName)
+      })
+
+      const space = getMatchingSpace(emptyResource)
+      const appFileExtension = appsStore.fileExtensions.find(
+        ({ app, extension }) => app === appId && extension === defaultExtension
+      )
+
+      openEditor(appFileExtension, space, emptyResource, EDITOR_MODE_EDIT)
+    }
+
+    onMounted(() => {
+      // FIXME: backwards compatibility for the deprecated applicationMenu prop
+      const navExtensions = props.applicationsList
+        .filter((app) => app.applicationMenu?.enabled())
+        .map((app) => ({
+          id: app.id,
+          type: 'appMenuItem',
+          label: () => app.name,
+          path: `/${app.id}`,
+          icon: app.icon,
+          color: app.color,
+          extensionPointIds: [appMenuExtensionPoint.id],
+          priority: app.applicationMenu?.priority || 50,
+          ...((app as any).url && { url: (app as any).url, target: '_blank' }),
+          ...(app.applicationMenu?.openAsEditor && {
+            handler: () => {
+              onEditorApplicationClick(app.id, app.defaultExtension)
+            }
+          })
+        })) as AppMenuItemExtension[]
+
+      extensionRegistry.registerExtensions(computed(() => navExtensions))
+    })
 
     return {
       configOptions,
@@ -214,15 +212,14 @@ export default {
       currentTheme,
       updateLeftPortal,
       isNotificationBellEnabled,
-      userMenuItems,
-      appMenuItems,
       hideLogo,
       logoWidth,
       isEmbedModeEnabled,
       isSideBarToggleVisible,
       isSideBarToggleDisabled,
       homeLink,
-      topBarCenterExtensionPoint
+      topBarCenterExtensionPoint,
+      appMenuExtensions
     }
   },
   computed: {

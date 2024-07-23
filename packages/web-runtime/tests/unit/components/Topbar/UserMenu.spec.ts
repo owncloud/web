@@ -9,7 +9,6 @@ import {
 import { mock } from 'vitest-mock-extended'
 import { SpaceResource } from '@ownclouders/web-client'
 import { Quota } from '@ownclouders/web-client/graph/generated'
-import { MenuItem } from 'web-runtime/src/helpers/menuItems'
 
 const totalQuota = 1000
 const basicQuota = 300
@@ -137,15 +136,6 @@ const getMountedWrapper = (
   }
 
   return mount(UserMenu, {
-    props: {
-      applicationsList: [
-        {
-          icon: 'application',
-          path: '/settings',
-          title: 'Settings'
-        } as MenuItem
-      ]
-    },
     global: {
       provide: mocks,
       renderStubDefaultSlot: true,

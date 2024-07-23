@@ -7,7 +7,7 @@
       <div v-if="isIE11" class="oc-background-muted oc-text-center oc-py-m">
         <p class="oc-m-rm" v-text="ieDeprecationWarning" />
       </div>
-      <top-bar :applications-list="applicationsList" />
+      <top-bar :applications-list="Object.values(apps)" />
     </div>
     <div id="web-content-main" class="oc-px-s oc-pb-s">
       <div class="app-container oc-flex">
@@ -45,7 +45,6 @@
 import orderBy from 'lodash-es/orderBy'
 import {
   AppLoadingSpinner,
-  ApplicationInformation,
   CustomComponentExtension,
   CustomComponentTarget,
   Extension,
@@ -242,23 +241,6 @@ export default defineComponent({
     ieDeprecationWarning() {
       return this.$gettext(
         'Internet Explorer (your current browser) is not officially supported. For security reasons, please switch to another browser.'
-      )
-    },
-
-    applicationsList() {
-      const list: ApplicationInformation[] = []
-
-      Object.values(this.apps).forEach((app) => {
-        list.push({
-          ...app,
-          type: 'extension'
-        })
-      })
-
-      return list.sort(
-        (a, b) =>
-          (a.applicationMenu?.priority || Number.MAX_SAFE_INTEGER) -
-          (b.applicationMenu?.priority || Number.MAX_SAFE_INTEGER)
       )
     }
   }

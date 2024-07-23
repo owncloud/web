@@ -15,11 +15,6 @@ exports[`User Menu component > when no quota and email is set > the user menu do
           <oc-icon-stub data-v-08f1b1e7="" name="settings-4" fill-type="line" class="oc-p-xs"></oc-icon-stub> <span data-v-08f1b1e7="">Preferences</span>
         </oc-button-stub>
       </li>
-      <li data-v-08f1b1e7="">
-        <oc-button-stub data-v-08f1b1e7="" type="router-link" appearance="raw" to="[object Object]">
-          <oc-icon-stub data-v-08f1b1e7="" name="application" class="oc-p-xs"></oc-icon-stub> <span data-v-08f1b1e7="">Settings</span>
-        </oc-button-stub>
-      </li>
       <!--v-if-->
       <li data-v-08f1b1e7="">
         <oc-button-stub data-v-08f1b1e7="" id="oc-topbar-account-logout" appearance="raw">
@@ -48,11 +43,6 @@ exports[`User Menu component > when no quota and no email is set > the user menu
           <oc-icon-stub data-v-08f1b1e7="" name="settings-4" fill-type="line" class="oc-p-xs"></oc-icon-stub> <span data-v-08f1b1e7="">Preferences</span>
         </oc-button-stub>
       </li>
-      <li data-v-08f1b1e7="">
-        <oc-button-stub data-v-08f1b1e7="" type="router-link" appearance="raw" to="[object Object]">
-          <oc-icon-stub data-v-08f1b1e7="" name="application" class="oc-p-xs"></oc-icon-stub> <span data-v-08f1b1e7="">Settings</span>
-        </oc-button-stub>
-      </li>
       <!--v-if-->
       <li data-v-08f1b1e7="">
         <oc-button-stub data-v-08f1b1e7="" id="oc-topbar-account-logout" appearance="raw">
@@ -79,11 +69,6 @@ exports[`User Menu component > when quota and no email is set > renders a naviga
       <li data-v-08f1b1e7="">
         <oc-button-stub data-v-08f1b1e7="" id="oc-topbar-account-manage" type="router-link" to="[object Object]" appearance="raw">
           <oc-icon-stub data-v-08f1b1e7="" name="settings-4" fill-type="line" class="oc-p-xs"></oc-icon-stub> <span data-v-08f1b1e7="">Preferences</span>
-        </oc-button-stub>
-      </li>
-      <li data-v-08f1b1e7="">
-        <oc-button-stub data-v-08f1b1e7="" type="router-link" appearance="raw" to="[object Object]">
-          <oc-icon-stub data-v-08f1b1e7="" name="application" class="oc-p-xs"></oc-icon-stub> <span data-v-08f1b1e7="">Settings</span>
         </oc-button-stub>
       </li>
       <li data-v-08f1b1e7="" class="storage-wrapper oc-pl-s">
@@ -119,11 +104,6 @@ exports[`User Menu component > when quota is above 80% and below 90% > renders a
           <oc-icon-stub data-v-08f1b1e7="" name="settings-4" fill-type="line" class="oc-p-xs"></oc-icon-stub> <span data-v-08f1b1e7="">Preferences</span>
         </oc-button-stub>
       </li>
-      <li data-v-08f1b1e7="">
-        <oc-button-stub data-v-08f1b1e7="" type="router-link" appearance="raw" to="[object Object]">
-          <oc-icon-stub data-v-08f1b1e7="" name="application" class="oc-p-xs"></oc-icon-stub> <span data-v-08f1b1e7="">Settings</span>
-        </oc-button-stub>
-      </li>
       <li data-v-08f1b1e7="" class="storage-wrapper oc-pl-s">
         <oc-icon-stub data-v-08f1b1e7="" name="cloud" fill-type="line" class="oc-p-xs"></oc-icon-stub>
         <div data-v-08f1b1e7="" class="oc-width-1-1">
@@ -155,11 +135,6 @@ exports[`User Menu component > when quota is above 90% > renders a danger quota 
       <li data-v-08f1b1e7="">
         <oc-button-stub data-v-08f1b1e7="" id="oc-topbar-account-manage" type="router-link" to="[object Object]" appearance="raw">
           <oc-icon-stub data-v-08f1b1e7="" name="settings-4" fill-type="line" class="oc-p-xs"></oc-icon-stub> <span data-v-08f1b1e7="">Preferences</span>
-        </oc-button-stub>
-      </li>
-      <li data-v-08f1b1e7="">
-        <oc-button-stub data-v-08f1b1e7="" type="router-link" appearance="raw" to="[object Object]">
-          <oc-icon-stub data-v-08f1b1e7="" name="application" class="oc-p-xs"></oc-icon-stub> <span data-v-08f1b1e7="">Settings</span>
         </oc-button-stub>
       </li>
       <li data-v-08f1b1e7="" class="storage-wrapper oc-pl-s">
@@ -195,11 +170,6 @@ exports[`User Menu component > when quota is below 80% > renders a primary quota
           <oc-icon-stub data-v-08f1b1e7="" name="settings-4" fill-type="line" class="oc-p-xs"></oc-icon-stub> <span data-v-08f1b1e7="">Preferences</span>
         </oc-button-stub>
       </li>
-      <li data-v-08f1b1e7="">
-        <oc-button-stub data-v-08f1b1e7="" type="router-link" appearance="raw" to="[object Object]">
-          <oc-icon-stub data-v-08f1b1e7="" name="application" class="oc-p-xs"></oc-icon-stub> <span data-v-08f1b1e7="">Settings</span>
-        </oc-button-stub>
-      </li>
       <li data-v-08f1b1e7="" class="storage-wrapper oc-pl-s">
         <oc-icon-stub data-v-08f1b1e7="" name="cloud" fill-type="line" class="oc-p-xs"></oc-icon-stub>
         <div data-v-08f1b1e7="" class="oc-width-1-1">
@@ -233,11 +203,6 @@ exports[`User Menu component > when quota is not defined > renders no percentag 
           <oc-icon-stub data-v-08f1b1e7="" name="settings-4" fill-type="line" class="oc-p-xs"></oc-icon-stub> <span data-v-08f1b1e7="">Preferences</span>
         </oc-button-stub>
       </li>
-      <li data-v-08f1b1e7="">
-        <oc-button-stub data-v-08f1b1e7="" type="router-link" appearance="raw" to="[object Object]">
-          <oc-icon-stub data-v-08f1b1e7="" name="application" class="oc-p-xs"></oc-icon-stub> <span data-v-08f1b1e7="">Settings</span>
-        </oc-button-stub>
-      </li>
       <li data-v-08f1b1e7="" class="storage-wrapper oc-pl-s">
         <oc-icon-stub data-v-08f1b1e7="" name="cloud" fill-type="line" class="oc-p-xs"></oc-icon-stub>
         <div data-v-08f1b1e7="" class="oc-width-1-1">
@@ -269,11 +234,6 @@ exports[`User Menu component > when quota is unlimited > renders no percentag of
       <li data-v-08f1b1e7="">
         <oc-button-stub data-v-08f1b1e7="" id="oc-topbar-account-manage" type="router-link" to="[object Object]" appearance="raw">
           <oc-icon-stub data-v-08f1b1e7="" name="settings-4" fill-type="line" class="oc-p-xs"></oc-icon-stub> <span data-v-08f1b1e7="">Preferences</span>
-        </oc-button-stub>
-      </li>
-      <li data-v-08f1b1e7="">
-        <oc-button-stub data-v-08f1b1e7="" type="router-link" appearance="raw" to="[object Object]">
-          <oc-icon-stub data-v-08f1b1e7="" name="application" class="oc-p-xs"></oc-icon-stub> <span data-v-08f1b1e7="">Settings</span>
         </oc-button-stub>
       </li>
       <li data-v-08f1b1e7="" class="storage-wrapper oc-pl-s">

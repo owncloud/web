@@ -26,22 +26,22 @@
     >
       <div class="oc-display-block oc-position-relative">
         <oc-list class="applications-list">
-          <li v-for="(n, nid) in applicationsList" :key="`apps-menu-${nid}`">
+          <li v-for="(n, nid) in sortedMenuItems" :key="`apps-menu-${nid}`">
             <oc-button
               :key="n.url ? 'apps-menu-external-link' : 'apps-menu-internal-link'"
-              :appearance="n.active ? 'raw-inverse' : 'raw'"
-              :variation="n.active ? 'primary' : 'passive'"
-              :class="{ 'oc-background-primary-gradient router-link-active': n.active }"
+              :appearance="isMenuItemActive(n) ? 'raw-inverse' : 'raw'"
+              :variation="isMenuItemActive(n) ? 'primary' : 'passive'"
+              :class="{ 'oc-background-primary-gradient router-link-active': isMenuItemActive(n) }"
               :data-test-id="n.id"
               v-bind="getAdditionalAttributes(n)"
               v-on="getAdditionalEventBindings(n)"
             >
               <oc-application-icon
                 :key="`apps-menu-icon-${nid}-${appIconKey}`"
-                :icon="n.icon"
+                :icon="n.icon || 'link'"
                 :color-primary="n.color"
               />
-              <span v-text="$gettext(n.title)" />
+              <span v-text="$gettext(n.label())" />
             </oc-button>
           </li>
         </oc-list>
@@ -56,42 +56,30 @@ import { OcDrop } from 'design-system/src/components'
 import OcApplicationIcon from 'design-system/src/components/OcApplicationIcon/OcApplicationIcon.vue'
 import { useGettext } from 'vue3-gettext'
 import * as uuid from 'uuid'
-import {
-  EDITOR_MODE_EDIT,
-  resolveFileNameDuplicate,
-  useAppsStore,
-  useClientService,
-  useFileActions,
-  useGetMatchingSpace,
-  useResourcesStore,
-  useSpacesStore
-} from '@ownclouders/web-pkg'
-import { urlJoin } from '@ownclouders/web-client'
-import { storeToRefs } from 'pinia'
-import { MenuItem } from '../../helpers/menuItems'
+import { AppMenuItemExtension, useRouter } from '@ownclouders/web-pkg'
 
 export default defineComponent({
   components: {
     OcApplicationIcon
   },
   props: {
-    applicationsList: {
-      type: Array as PropType<MenuItem[]>,
+    menuItems: {
+      type: Array as PropType<AppMenuItemExtension[]>,
       required: false,
-      default: (): MenuItem[] => []
+      default: (): AppMenuItemExtension[] => []
     }
   },
-  setup() {
-    const { openEditor } = useFileActions()
-    const clientService = useClientService()
+  setup(props) {
+    const router = useRouter()
     const { $gettext } = useGettext()
     const appIconKey = ref('')
-    const { getMatchingSpace } = useGetMatchingSpace()
-    const spacesStore = useSpacesStore()
-    const appsStore = useAppsStore()
 
-    const resourcesStore = useResourcesStore()
-    const { resources, currentFolder } = storeToRefs(resourcesStore)
+    const activeRoutePath = computed(() => unref(router.currentRoute).path)
+    const sortedMenuItems = computed(() => {
+      return [...props.menuItems].sort(
+        (a, b) => (a.priority || Number.MAX_SAFE_INTEGER) - (b.priority || Number.MAX_SAFE_INTEGER)
+      )
+    })
 
     const applicationSwitcherLabel = computed(() => {
       return $gettext('Application Switcher')
@@ -100,60 +88,37 @@ export default defineComponent({
       appIconKey.value = uuid.v4().replaceAll('-', '')
     }
 
-    const onEditorApplicationClick = async (item: MenuItem) => {
-      let destinationSpace = unref(currentFolder) ? getMatchingSpace(unref(currentFolder)) : null
-      let destinationFiles = unref(resources)
-      let filePath = unref(currentFolder)?.path
-
-      if (!destinationSpace || !unref(currentFolder).canCreate()) {
-        destinationSpace = spacesStore.personalSpace
-        destinationFiles = (await clientService.webdav.listFiles(destinationSpace)).children
-        filePath = ''
-      }
-
-      let fileName = $gettext('New file') + `.${item.defaultExtension}`
-
-      if (destinationFiles.some((f) => f.name === fileName)) {
-        fileName = resolveFileNameDuplicate(fileName, item.defaultExtension, destinationFiles)
-      }
-
-      const emptyResource = await clientService.webdav.putFileContents(destinationSpace, {
-        path: urlJoin(filePath, fileName)
-      })
-
-      const space = getMatchingSpace(emptyResource)
-      const appFileExtension = appsStore.fileExtensions.find(
-        ({ app, extension }) => app === item.id && extension === item.defaultExtension
-      )
-
-      openEditor(appFileExtension, space, emptyResource, EDITOR_MODE_EDIT)
+    const getAdditionalEventBindings = (item: AppMenuItemExtension) => {
+      return item.handler ? { click: item.handler } : {}
     }
-    const getAdditionalEventBindings = (item: MenuItem) => {
-      if (item?.openAsEditor) {
-        return {
-          click: () => onEditorApplicationClick(item)
-        }
+    const getAdditionalAttributes = (item: AppMenuItemExtension) => {
+      let type: string
+      if (item.handler) {
+        type = 'button'
+      } else if (item.path) {
+        type = 'router-link'
+      } else {
+        type = 'a'
       }
-      return {}
-    }
-    const getAdditionalAttributes = (item: MenuItem) => {
-      if (item?.openAsEditor) {
-        return {}
-      }
+
       return {
-        type: item.url ? 'a' : 'router-link',
-        target: item.target,
-        href: item.url,
-        to: item.path
+        type,
+        ...(type === 'router-link' && { to: item.path }),
+        ...(type === 'a' && { href: item.url, target: '_blank' })
       }
+    }
+    const isMenuItemActive = (item: AppMenuItemExtension) => {
+      return unref(activeRoutePath)?.startsWith(item.path)
     }
 
     return {
+      sortedMenuItems,
       appIconKey,
       updateAppIcons,
       applicationSwitcherLabel,
       getAdditionalAttributes,
-      getAdditionalEventBindings
+      getAdditionalEventBindings,
+      isMenuItemActive
     }
   },
   mounted() {
