@@ -7,7 +7,7 @@ import { mimeTypes } from './mimeTypes'
 const { default: App, appId } = app
 
 export default defineWebApplication({
-  setup({ applicationConfig }) {
+  setup() {
     const { $gettext } = useGettext()
 
     const routes = [
