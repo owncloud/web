@@ -8,10 +8,5 @@
     "response_type": "code",
     "scope": "openid profile email"
   },
-  "options": {
-    "routing": {
-      "idBased": false
-    }
-  },
   "apps": ["files", "text-editor", "preview", "pdf-viewer", "search", "admin-settings"]
 }

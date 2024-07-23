@@ -1,0 +1,41 @@
+Change: Removal of Deprecated Config Options
+
+BREAKING CHANGE for developers and administrators:
+The following configuration options have been removed to simplify the configuration process for administrators and improve the overall manageability of the project,
+as they were either not used anymore or only relevant for CI testing:
+
+- `options.ocm.openRemotely`
+- `options.openLinksWithDefaultApp`
+- `options.upload.xhr.timeout`
+- `options.routing.idBased`
+- `options.routing.fullShareOwnerPaths`
+- `options.hoverableQuickActions`
+- `options.sidebar.exif.showLocation`
+- `options.sidebar.shares.showAllOnLoad`
+- `options.sharingRecipientsPerPage`
+- `options.displayThumbnails`
+- `options.disablePreviews`
+- `options.previewFileMimeType`
+- `options.topCenterNotifications`
+- `options.displayResourcesLazy`
+
+https://github.com/owncloud/web/pull/11251
+https://github.com/owncloud/web/issues/11212
+https://github.com/owncloud/web/pull/11249
+https://github.com/owncloud/web/issues/11219
+https://github.com/owncloud/web/pull/11240
+https://github.com/owncloud/web/issues/11216
+https://github.com/owncloud/web/pull/11238
+https://github.com/owncloud/web/issues/11218
+https://github.com/owncloud/web/pull/11229
+https://github.com/owncloud/web/issues/11217
+https://github.com/owncloud/web/pull/11228
+https://github.com/owncloud/web/issues/11211
+https://github.com/owncloud/web/pull/11226
+https://github.com/owncloud/web/issues/11213
+https://github.com/owncloud/web/pull/11224
+https://github.com/owncloud/web/issues/11215
+https://github.com/owncloud/web/pull/11223
+https://github.com/owncloud/web/issues/11214
+https://github.com/owncloud/web/pull/11209
+https://github.com/owncloud/web/issues/11207
