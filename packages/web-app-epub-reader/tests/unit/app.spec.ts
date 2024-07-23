@@ -215,8 +215,8 @@ function getWrapper({
   localStorageGeneral?: Record<string, unknown>
   localStorageResource?: Record<string, unknown>
 } = {}) {
-  vi.mocked(useLocalStorage).mockImplementationOnce(() => ref(localStorageGeneral))
-  vi.mocked(useLocalStorage).mockImplementationOnce(() => ref(localStorageResource))
+  vi.mocked(useLocalStorage<unknown>).mockImplementationOnce(() => ref(localStorageGeneral))
+  vi.mocked(useLocalStorage<unknown>).mockImplementationOnce(() => ref(localStorageResource))
 
   return {
     wrapper: mount(App, {

@@ -6,7 +6,7 @@ import { SpaceResource } from '@ownclouders/web-client'
 
 export const useResourcesViewDefaultsMock = (
   options: Partial<ReturnType<typeof useResourcesViewDefaults>> = {}
-): ReturnType<typeof useResourcesViewDefaults> => {
+): ReturnType<typeof useResourcesViewDefaults<any, any, any>> => {
   return {
     fileListHeaderY: ref(0),
     refreshFileListHeaderPosition: vi.fn(),
