@@ -7,7 +7,7 @@ as they were either not used anymore or only relevant for CI testing:
 - `options.ocm.openRemotely`
 - `options.openLinksWithDefaultApp`
 - `options.upload.xhr.timeout`
-- `option.routing`
+- `options.routing`
 - `options.hoverableQuickActions`
 - `options.sidebar.exif.showLocation`
 - `options.sidebar.shares.showAllOnLoad`
