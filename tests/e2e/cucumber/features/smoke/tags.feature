@@ -8,10 +8,10 @@ Feature: Users can use web to organize tags
 
   Scenario: Tag management
     When "Alice" logs in
+    And "Alice" creates the following files into personal space using API
+      | pathToFile | content     |
+      | lorem.txt  | lorem ipsum |
     And "Alice" opens the "files" app
-    And "Alice" uploads the following resource
-      | resource  |
-      | lorem.txt |
     And "Alice" adds the following tags for the following resources using the sidebar panel
       | resource  | tags         |
       | lorem.txt | tag 1, tag 2 |
@@ -35,11 +35,11 @@ Feature: Users can use web to organize tags
 
   Scenario: Tag search
     When "Alice" logs in
+    And "Alice" creates the following files into personal space using API
+      | pathToFile   | content     |
+      | lorem.txt    | lorem ipsum |
+      | textfile.txt | test file   |
     And "Alice" opens the "files" app
-    And "Alice" uploads the following resource
-      | resource     |
-      | lorem.txt    |
-      | textfile.txt |
     And "Alice" adds the following tags for the following resources using the sidebar panel
       | resource  | tags       |
       | lorem.txt | tag1, tag2 |
@@ -55,13 +55,13 @@ Feature: Users can use web to organize tags
 
   Scenario: Tag sharing
     When "Alice" logs in
+    And "Alice" creates the following folders in personal space using API
+      | name             |
+      | folder_to_shared |
+    And "Alice" creates the following files into personal space using API
+      | pathToFile                 | content     |
+      | folder_to_shared/lorem.txt | lorem ipsum |
     And "Alice" opens the "files" app
-    And "Alice" creates the following resources
-      | resource         | type   |
-      | folder_to_shared | folder |
-    And "Alice" uploads the following resource
-      | resource  | to               |
-      | lorem.txt | folder_to_shared |
     And "Alice" adds the following tags for the following resources using the sidebar panel
       | resource                   | tags         |
       | folder_to_shared/lorem.txt | tag 1, tag 2 |
