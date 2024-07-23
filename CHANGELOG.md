@@ -12,6 +12,7 @@ Summary
 * Bugfix - Images stretched in preview app in Safari browser: [#11186](https://github.com/owncloud/web/pull/11186)
 * Bugfix - UI breaks when tags are numbers: [#11194](https://github.com/owncloud/web/pull/11194)
 * Bugfix - Open dropdown menu does not deselect other items in admin settings app: [#11253](https://github.com/owncloud/web/pull/11253)
+* Change - Removal of Deprecated Config Options: [#11251](https://github.com/owncloud/web/pull/11251)
 * Change - Remove draw-io as default app: [#11252](https://github.com/owncloud/web/pull/11252)
 
 Details
@@ -50,6 +51,42 @@ Details
 
    https://github.com/owncloud/web/issues/11245
    https://github.com/owncloud/web/pull/11253
+
+* Change - Removal of Deprecated Config Options: [#11251](https://github.com/owncloud/web/pull/11251)
+
+   BREAKING CHANGE for developers and administrators: The following configuration
+   options have been removed to simplify the configuration process for
+   administrators and improve the overall manageability of the project, as they
+   were either not used anymore or only relevant for CI testing:
+
+   - `options.ocm.openRemotely` - `options.openLinksWithDefaultApp` -
+   `options.upload.xhr.timeout` - `options.routing.idBased` -
+   `options.routing.fullShareOwnerPaths` - `options.hoverableQuickActions` -
+   `options.sidebar.exif.showLocation` - `options.sidebar.shares.showAllOnLoad` -
+   `options.sharingRecipientsPerPage` - `options.displayThumbnails` -
+   `options.disablePreviews` - `options.previewFileMimeType` -
+   `options.topCenterNotifications` - `options.displayResourcesLazy`
+
+   https://github.com/owncloud/web/issues/11212
+   https://github.com/owncloud/web/issues/11219
+   https://github.com/owncloud/web/issues/11216
+   https://github.com/owncloud/web/issues/11218
+   https://github.com/owncloud/web/issues/11217
+   https://github.com/owncloud/web/issues/11211
+   https://github.com/owncloud/web/issues/11213
+   https://github.com/owncloud/web/issues/11215
+   https://github.com/owncloud/web/issues/11214
+   https://github.com/owncloud/web/issues/11207
+   https://github.com/owncloud/web/pull/11251
+   https://github.com/owncloud/web/pull/11249
+   https://github.com/owncloud/web/pull/11240
+   https://github.com/owncloud/web/pull/11238
+   https://github.com/owncloud/web/pull/11229
+   https://github.com/owncloud/web/pull/11228
+   https://github.com/owncloud/web/pull/11226
+   https://github.com/owncloud/web/pull/11224
+   https://github.com/owncloud/web/pull/11223
+   https://github.com/owncloud/web/pull/11209
 
 * Change - Remove draw-io as default app: [#11252](https://github.com/owncloud/web/pull/11252)
 
