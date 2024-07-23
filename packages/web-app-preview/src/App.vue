@@ -95,7 +95,7 @@ import MediaAudio from './components/Sources/MediaAudio.vue'
 import MediaImage from './components/Sources/MediaImage.vue'
 import MediaVideo from './components/Sources/MediaVideo.vue'
 import { CachedFile } from './helpers/types'
-import { getMimeTypes } from './mimeTypes'
+import { mimeTypes } from './mimeTypes'
 import { PanzoomEventDetail } from '@panzoom/panzoom'
 
 export const appId = 'preview'
@@ -144,10 +144,6 @@ export default defineComponent({
     const preloadImageCount = ref(10)
     const preview = ref<HTMLElement>()
 
-    const mimeTypes = computed(() => {
-      return getMimeTypes(appsStore.externalAppConfig[appId]?.mimeTypes)
-    })
-
     const sortBy = computed(() => {
       if (!unref(contextRouteQuery)) {
         return 'name'
@@ -194,7 +190,7 @@ export default defineComponent({
       }
 
       const files = props.activeFiles.filter((file) => {
-        return unref(mimeTypes).includes(file.mimeType?.toLowerCase())
+        return mimeTypes.includes(file.mimeType?.toLowerCase())
       })
 
       return sortHelper(files, [{ name: unref(sortBy) }], unref(sortBy), unref(sortDir))

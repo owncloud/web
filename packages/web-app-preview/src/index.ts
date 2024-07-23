@@ -2,7 +2,7 @@ import { AppWrapperRoute, defineWebApplication } from '@ownclouders/web-pkg'
 import translations from '../l10n/translations.json'
 import * as app from './App.vue'
 import { useGettext } from 'vue3-gettext'
-import { getMimeTypes } from './mimeTypes'
+import { mimeTypes } from './mimeTypes'
 
 const { default: App, appId } = app
 
@@ -34,7 +34,7 @@ export default defineWebApplication({
       name: $gettext('Preview'),
       id: appId,
       icon: 'eye',
-      extensions: getMimeTypes(applicationConfig?.mimeTypes).map((mimeType) => ({
+      extensions: mimeTypes.map((mimeType) => ({
         mimeType,
         routeName,
         label: $gettext('Preview')
