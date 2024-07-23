@@ -1,5 +1,9 @@
 import { Page } from '@playwright/test'
+import util from 'util'
 import { locatorUtils } from '../../../utils'
+
+const contextMenuSelector =
+  '//span[@data-test-resource-name="%s"]/ancestor::tr[contains(@class, "oc-tbody-tr")]//button[contains(@class, "resource-table-btn-action-dropdown")]'
 
 const openForResource = async ({
   page,
@@ -8,11 +12,7 @@ const openForResource = async ({
   page: Page
   resource: string
 }): Promise<void> => {
-  await page
-    .locator(
-      `//span[@data-test-resource-name="${resource}"]/ancestor::tr[contains(@class, "oc-tbody-tr")]//button[contains(@class, "resource-table-btn-action-dropdown")]`
-    )
-    .click()
+  await page.locator(util.format(contextMenuSelector, resource)).click()
   await page.locator('.oc-files-actions-show-details-trigger').click()
 }
 
@@ -25,11 +25,7 @@ export const openPanelForResource = async ({
   resource: string
   panel: string
 }): Promise<void> => {
-  await page
-    .locator(
-      `//span[@data-test-resource-name="${resource}"]/ancestor::tr[contains(@class, "oc-tbody-tr")]//button[contains(@class, "resource-table-btn-action-dropdown")]`
-    )
-    .click()
+  await page.locator(util.format(contextMenuSelector, resource)).click()
   await page.locator(`.oc-files-actions-show-${panel}-trigger`).click()
 }
 
