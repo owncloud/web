@@ -48,6 +48,7 @@ const textEditorMarkdownInput = '#text-editor #text-editor-container .md-mode .P
 const resourceNameInput = '.oc-modal input'
 const resourceUploadButton = '#upload-menu-btn'
 const fileUploadInput = '#files-file-upload-input'
+const folderUploadInput = '#files-folder-upload-input'
 const uploadInfoCloseButton = '#close-upload-info-btn'
 const uploadErrorCloseButton = '.oc-notification-message-danger button[aria-label="Close"]'
 const filesBatchAction = '.files-app-bar-actions .oc-files-actions-%s-trigger'
@@ -512,10 +513,11 @@ export interface uploadResourceArgs {
   option?: string
   error?: string
   expectToFail?: boolean
+  type?: string
 }
 
 const performUpload = async (args: uploadResourceArgs): Promise<void> => {
-  const { page, resources, to, option, error, expectToFail } = args
+  const { page, resources, to, option, error, expectToFail, type } = args
   if (to) {
     await clickResource({ page, path: to })
   }
@@ -523,7 +525,7 @@ const performUpload = async (args: uploadResourceArgs): Promise<void> => {
   await page.locator(resourceUploadButton).click()
 
   let uploadAction: Promise<void> = page
-    .locator(fileUploadInput)
+    .locator(type === 'folder' ? folderUploadInput : fileUploadInput)
     .setInputFiles(resources.map((file) => file.path))
 
   if (option) {

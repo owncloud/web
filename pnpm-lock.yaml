@@ -121,8 +121,8 @@ importers:
         specifier: workspace:*
         version: link:packages/tsconfig
       '@playwright/test':
-        specifier: 1.44.1
-        version: 1.44.1
+        specifier: 1.45.0
+        version: 1.45.0
       '@rollup/plugin-inject':
         specifier: 5.0.3
         version: 5.0.3(rollup@4.14.0)
@@ -2544,9 +2544,9 @@ packages:
     resolution: {integrity: sha512-POgTXhjrTfbTV63DiFXav4lBHiICLKKwDeaKn9Nphwj7WH6m0hMMCaJkMyRWjgtPFyRKRVoMXXjczsTQRDEhYw==}
     engines: {node: ^12.20.0 || ^14.18.0 || >=16.0.0}
 
-  '@playwright/test@1.44.1':
-    resolution: {integrity: sha512-1hZ4TNvD5z9VuhNJ/walIjvMVvYkZKf71axoF/uiAqpntQJXpG64dlXhoDXE3OczPuTuvjf/M5KWFg5VAVUS3Q==}
-    engines: {node: '>=16'}
+  '@playwright/test@1.45.0':
+    resolution: {integrity: sha512-TVYsfMlGAaxeUllNkywbwek67Ncf8FRGn8ZlRdO291OL3NjG9oMbfVhyP82HQF0CZLMrYsvesqoUekxdWuF9Qw==}
+    engines: {node: '>=18'}
     hasBin: true
 
   '@polka/url@1.0.0-next.24':
@@ -7549,14 +7549,14 @@ packages:
     resolution: {integrity: sha512-nDywThFk1i4BQK4twPQ6TA4RT8bDY96yeuCVBWL3ePARCiEKDRSrNGbFIgUJpLp+XeIR65v8ra7WuJOFUBtkMA==}
     engines: {node: '>=8'}
 
-  playwright-core@1.44.1:
-    resolution: {integrity: sha512-wh0JWtYTrhv1+OSsLPgFzGzt67Y7BE/ZS3jEqgGBlp2ppp1ZDj8c+9IARNW4dwf1poq5MgHreEM2KV/GuR4cFA==}
-    engines: {node: '>=16'}
+  playwright-core@1.45.0:
+    resolution: {integrity: sha512-lZmHlFQ0VYSpAs43dRq1/nJ9G/6SiTI7VPqidld9TDefL9tX87bTKExWZZUF5PeRyqtXqd8fQi2qmfIedkwsNQ==}
+    engines: {node: '>=18'}
     hasBin: true
 
-  playwright@1.44.1:
-    resolution: {integrity: sha512-qr/0UJ5CFAtloI3avF95Y0L1xQo6r3LQArLIg/z/PoGJ6xa+EwzrwO5lpNr/09STxdHuUoP2mvuELJS+hLdtgg==}
-    engines: {node: '>=16'}
+  playwright@1.45.0:
+    resolution: {integrity: sha512-4z3ac3plDfYzGB6r0Q3LF8POPR20Z8D0aXcxbJvmfMgSSq1hkcgvFRXJk9rUq5H/MJ0Ktal869hhOdI/zUTeLA==}
+    engines: {node: '>=18'}
     hasBin: true
 
   pofile@1.0.11:
@@ -11165,10 +11165,10 @@ snapshots:
       '@cucumber/ci-environment': 9.1.0
       '@cucumber/cucumber-expressions': 16.1.1
       '@cucumber/gherkin': 26.0.3
-      '@cucumber/gherkin-streams': 5.0.1(@cucumber/gherkin@26.0.3)(@cucumber/message-streams@4.0.1(@cucumber/messages@21.0.1))(@cucumber/messages@21.0.1)
+      '@cucumber/gherkin-streams': 5.0.1(@cucumber/gherkin@26.0.3)(@cucumber/message-streams@4.0.1(@cucumber/messages@24.0.1))(@cucumber/messages@21.0.1)
       '@cucumber/gherkin-utils': 8.0.2
       '@cucumber/html-formatter': 20.2.1(@cucumber/messages@21.0.1)
-      '@cucumber/message-streams': 4.0.1(@cucumber/messages@24.0.1)
+      '@cucumber/message-streams': 4.0.1(@cucumber/messages@21.0.1)
       '@cucumber/messages': 21.0.1
       '@cucumber/tag-expressions': 5.0.1
       assertion-error-formatter: 3.0.0
@@ -11203,10 +11203,10 @@ snapshots:
       yaml: 2.3.4
       yup: 0.32.11
 
-  '@cucumber/gherkin-streams@5.0.1(@cucumber/gherkin@26.0.3)(@cucumber/message-streams@4.0.1(@cucumber/messages@21.0.1))(@cucumber/messages@21.0.1)':
+  '@cucumber/gherkin-streams@5.0.1(@cucumber/gherkin@26.0.3)(@cucumber/message-streams@4.0.1(@cucumber/messages@24.0.1))(@cucumber/messages@21.0.1)':
     dependencies:
       '@cucumber/gherkin': 26.0.3
-      '@cucumber/message-streams': 4.0.1(@cucumber/messages@24.0.1)
+      '@cucumber/message-streams': 4.0.1(@cucumber/messages@21.0.1)
       '@cucumber/messages': 21.0.1
       commander: 9.1.0
       source-map-support: 0.5.21
@@ -11247,13 +11247,13 @@ snapshots:
     dependencies:
       '@cucumber/messages': 22.0.0
 
+  '@cucumber/message-streams@4.0.1(@cucumber/messages@21.0.1)':
+    dependencies:
+      '@cucumber/messages': 21.0.1
+
   '@cucumber/message-streams@4.0.1(@cucumber/messages@22.0.0)':
     dependencies:
       '@cucumber/messages': 22.0.0
-
-  '@cucumber/message-streams@4.0.1(@cucumber/messages@24.0.1)':
-    dependencies:
-      '@cucumber/messages': 24.0.1
 
   '@cucumber/messages@19.1.4':
     dependencies:
@@ -11644,9 +11644,9 @@ snapshots:
       picocolors: 1.0.0
       tslib: 2.6.2
 
-  '@playwright/test@1.44.1':
+  '@playwright/test@1.45.0':
     dependencies:
-      playwright: 1.44.1
+      playwright: 1.45.0
 
   '@polka/url@1.0.0-next.24': {}
 
@@ -17237,11 +17237,11 @@ snapshots:
     dependencies:
       find-up: 3.0.0
 
-  playwright-core@1.44.1: {}
+  playwright-core@1.45.0: {}
 
-  playwright@1.44.1:
+  playwright@1.45.0:
     dependencies:
-      playwright-core: 1.44.1
+      playwright-core: 1.45.0
     optionalDependencies:
       fsevents: 2.3.2
 

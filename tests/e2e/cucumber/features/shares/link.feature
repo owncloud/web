@@ -73,10 +73,9 @@ Feature: link
     And "Anonymous" creates the following resources
       | resource       | type   |
       | myfolder/child | folder |
-    # currently upload folder feature is not available in playwright
-    # And "Anonymous" uploads the following resources in public link page
-    #   | resource              |
-    #   | filesForUpload/PARENT |
+    And "Anonymous" uploads the following resources in public link page
+      | resource | type   |
+      | PARENT   | folder |
     And "Anonymous" moves the following resource using drag-drop
       | resource      | to        |
       | new-lorem.txt | SubFolder |

@@ -41,7 +41,8 @@ When(
       await resourceObject.upload({
         to: info.to,
         resources: [this.filesEnvironment.getFile({ name: info.resource })],
-        option: info.option
+        option: info.option,
+        type: info.type
       })
     }
   }

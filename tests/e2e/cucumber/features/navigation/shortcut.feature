@@ -34,6 +34,10 @@ Feature: Users can create shortcuts for resources and sites
       | docs                       |                | folder  |
       | https://owncloud.com/news/ | companyNews    | website |
 
+    And "Alice" downloads the following resources using the sidebar panel
+      | resource           | type |
+      | important file.url | file |
+
     When "Alice" opens a shortcut "important file.url"
     Then "Alice" is in a text-editor
     And "Alice" closes the file viewer
