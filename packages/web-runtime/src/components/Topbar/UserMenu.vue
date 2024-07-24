@@ -83,22 +83,6 @@
               <span v-text="$gettext('Preferences')" />
             </oc-button>
           </li>
-          <li v-for="(app, index) in applicationsList" :key="`user-menu-${index}`">
-            <oc-button
-              v-if="app.url"
-              type="a"
-              appearance="raw"
-              :target="app.target"
-              :href="app.url"
-            >
-              <oc-icon :name="app.icon" class="oc-p-xs" />
-              <span v-text="$gettext(app.title)" />
-            </oc-button>
-            <oc-button v-else type="router-link" appearance="raw" :to="{ path: app.path }">
-              <oc-icon :name="app.icon" class="oc-p-xs" />
-              <span v-text="$gettext(app.title)" />
-            </oc-button>
-          </li>
           <li v-if="quotaEnabled" class="storage-wrapper oc-pl-s">
             <oc-icon name="cloud" fill-type="line" class="oc-p-xs" />
             <div class="oc-width-1-1">
@@ -141,7 +125,7 @@
 
 <script lang="ts">
 import { storeToRefs } from 'pinia'
-import { defineComponent, PropType, ComponentPublicInstance, computed, unref } from 'vue'
+import { defineComponent, ComponentPublicInstance, computed, unref } from 'vue'
 import { filesize } from 'filesize'
 import {
   useRoute,
@@ -152,16 +136,8 @@ import {
   useAuthService
 } from '@ownclouders/web-pkg'
 import { OcDrop } from 'design-system/src/components'
-import { MenuItem } from '../../helpers/menuItems'
 
 export default defineComponent({
-  props: {
-    applicationsList: {
-      type: Array as PropType<MenuItem[]>,
-      required: false,
-      default: (): MenuItem[] => []
-    }
-  },
   setup() {
     const route = useRoute()
     const userStore = useUserStore()

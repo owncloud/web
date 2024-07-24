@@ -6,52 +6,67 @@ import {
   shallowMount
 } from 'web-test-helpers'
 import { mock } from 'vitest-mock-extended'
-import { MenuItem } from 'web-runtime/src/helpers/menuItems'
-import { SpaceResource } from '@ownclouders/web-client'
-
-vi.mock('@ownclouders/web-pkg', async (importOriginal) => ({
-  ...(await importOriginal<any>()),
-  useFileActions: vi.fn(() => ({ openEditor: vi.fn() }))
-}))
-
-const menuLinks = [
-  {
-    icon: 'folder',
-    iconUrl: undefined,
-    title: 'Files',
-    path: '/files'
-  },
-  {
-    icon: 'some-icon',
-    iconUrl: undefined,
-    title: 'External',
-    url: 'http://some.org',
-    target: '_blank'
-  }
-] as MenuItem[]
+import { AppMenuItemExtension } from '@ownclouders/web-pkg'
 
 describe('ApplicationsMenu component', () => {
-  it('should render navigation with button and menu items in dropdown', () => {
-    const { wrapper } = getWrapper(menuLinks)
-    expect(wrapper.html()).toMatchSnapshot()
+  describe('type', () => {
+    it('renders internal button menu items', () => {
+      const menuItem = { label: () => '', handler: () => undefined } as AppMenuItemExtension
+      const { wrapper } = getWrapper({ menuItems: [menuItem] })
+      const menuItemType = wrapper.find('oc-list-stub oc-button-stub').attributes('type')
+      expect(menuItemType).toEqual('button')
+    })
+    it('renders internal link menu items', () => {
+      const menuItem = { label: () => '', path: '/files' } as AppMenuItemExtension
+      const { wrapper } = getWrapper({ menuItems: [menuItem] })
+      const menuItemType = wrapper.find('oc-list-stub oc-button-stub').attributes('type')
+      expect(menuItemType).toEqual('router-link')
+    })
+    it('renders external menu items', () => {
+      const menuItem = { label: () => '', url: 'foo.bar' } as AppMenuItemExtension
+      const { wrapper } = getWrapper({ menuItems: [menuItem] })
+      const menuItemType = wrapper.find('oc-list-stub oc-button-stub').attributes('type')
+      expect(menuItemType).toEqual('a')
+    })
+  })
+  it('correctly sorts menu items by priority', () => {
+    const menuItems = [
+      { label: () => '1', priority: 50 },
+      { label: () => '2', priority: 40 }
+    ] as AppMenuItemExtension[]
+
+    const { wrapper } = getWrapper({ menuItems })
+    const firstElTxt = wrapper.findAll('oc-list-stub oc-button-stub')[0].find('span').text()
+    expect(firstElTxt).toEqual(menuItems[1].label())
+  })
+  describe('active state', () => {
+    it('checks the current route path against the menu item path', () => {
+      const menuItems = [
+        { label: () => '1', path: '/1' },
+        { label: () => '2', path: '/2' }
+      ] as AppMenuItemExtension[]
+
+      const { wrapper } = getWrapper({ menuItems, path: '/2' })
+      const activeElTxt = wrapper.find('.router-link-active span').text()
+      expect(activeElTxt).toEqual(menuItems[1].label())
+    })
   })
 })
 
-function getWrapper(applicationsList: MenuItem[] = []) {
+function getWrapper({
+  menuItems = [],
+  path = '/'
+}: { menuItems?: AppMenuItemExtension[]; path?: string } = {}) {
   const mocks = {
     ...defaultComponentMocks({
-      currentRoute: mock<RouteLocation>({ query: { app: 'admin-settings' } })
-    }),
-    space: {
-      driveType: 'personal',
-      spaceRoles: { viewer: [], editor: [], manager: [] }
-    } as unknown as SpaceResource
+      currentRoute: mock<RouteLocation>({ path })
+    })
   }
 
   return {
     wrapper: shallowMount(ApplicationsMenu, {
       props: {
-        applicationsList
+        menuItems
       },
       global: {
         renderStubDefaultSlot: true,

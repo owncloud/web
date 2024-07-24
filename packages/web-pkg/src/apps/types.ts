@@ -40,6 +40,7 @@ export interface ApplicationQuickAction {
 
 export type AppConfigObject = Record<string, any>
 
+/** @deprecated */
 export interface ApplicationMenuItem {
   enabled: () => boolean
   priority?: number
@@ -77,8 +78,9 @@ export interface ApplicationInformation {
   extensions?: ApplicationFileExtension[]
   defaultExtension?: string
   type?: string
-  applicationMenu?: ApplicationMenuItem
   translations?: Translations
+  /** @deprecated */
+  applicationMenu?: ApplicationMenuItem
 }
 
 /**

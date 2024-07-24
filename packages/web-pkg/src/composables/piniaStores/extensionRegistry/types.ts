@@ -7,7 +7,13 @@ import { Component, Slot } from 'vue'
 import { StringUnionOrAnyString } from '../../../utils'
 
 export type ExtensionType = StringUnionOrAnyString<
-  'action' | 'customComponent' | 'folderView' | 'search' | 'sidebarNav' | 'sidebarPanel'
+  | 'action'
+  | 'appMenuItem'
+  | 'customComponent'
+  | 'folderView'
+  | 'search'
+  | 'sidebarNav'
+  | 'sidebarPanel'
 >
 
 export type Extension = {
@@ -48,6 +54,17 @@ export interface FolderViewExtension extends Extension {
 export interface CustomComponentExtension extends Extension {
   type: 'customComponent'
   content: Slot | Component
+}
+
+export interface AppMenuItemExtension extends Extension {
+  type: 'appMenuItem'
+  label: () => string
+  color?: string
+  handler?: () => void
+  icon?: string
+  path?: string
+  priority?: number
+  url?: string
 }
 
 export type ExtensionPoint<T extends Extension> = {

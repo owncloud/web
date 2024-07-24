@@ -1,5 +1,9 @@
 import { Capabilities } from '@ownclouders/web-client/ocs'
-import { ApplicationInformation } from '@ownclouders/web-pkg'
+import {
+  ApplicationInformation,
+  AppMenuItemExtension,
+  useExtensionRegistry
+} from '@ownclouders/web-pkg'
 import { mock } from 'vitest-mock-extended'
 import { computed } from 'vue'
 import TopBar from 'web-runtime/src/components/Topbar/TopBar.vue'
@@ -73,8 +77,22 @@ describe('Top Bar component', () => {
 const getWrapper = ({
   capabilities = {},
   userContextReady = true
-}: { capabilities?: Partial<Capabilities['capabilities']>; userContextReady?: boolean } = {}) => {
+}: {
+  capabilities?: Partial<Capabilities['capabilities']>
+  userContextReady?: boolean
+} = {}) => {
   const mocks = { ...defaultComponentMocks() }
+
+  const plugins = defaultPlugins({
+    piniaOptions: {
+      authState: { userContextReady },
+      capabilityState: { capabilities },
+      configState: { options: { disableFeedbackLink: false } }
+    }
+  })
+
+  const extensionRegistry = useExtensionRegistry()
+  vi.mocked(extensionRegistry.requestExtensions).mockReturnValue([mock<AppMenuItemExtension>()])
 
   return {
     wrapper: shallowMount(TopBar, {
@@ -83,20 +101,12 @@ const getWrapper = ({
           mock<ApplicationInformation>({
             type: 'extension',
             icon: '',
-            applicationMenu: { enabled: () => true }
+            applicationMenu: undefined
           })
         ]
       },
       global: {
-        plugins: [
-          ...defaultPlugins({
-            piniaOptions: {
-              authState: { userContextReady },
-              capabilityState: { capabilities },
-              configState: { options: { disableFeedbackLink: false } }
-            }
-          })
-        ],
+        plugins,
         stubs: { 'router-link': true, 'portal-target': true, notifications: true },
         mocks,
         provide: mocks

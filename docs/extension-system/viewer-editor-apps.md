@@ -29,9 +29,10 @@ To learn more about apps in general, please refer to the [Web app docs]({{< ref 
 Inside the `src` folder you will need an `index.ts` file that sets up the app so it can be registered by the Web runtime. It follows the basic structure as described in [the apps section]({{< ref "_index.md#apps" >}}), so it may look like this:
 
 ```typescript
-import { AppWrapperRoute, defineWebApplication } from '@ownclouders/web-pkg'
+import { AppWrapperRoute, defineWebApplication, AppMenuItemExtension } from '@ownclouders/web-pkg'
 import translations from '../l10n/translations.json'
 import { useGettext } from 'vue3-gettext'
+import { computed } from 'vue'
 
 // This is the base component of your app.
 import App from './App.vue'
@@ -60,6 +61,17 @@ export default defineWebApplication({
       }
     ]
 
+    // if you want your app to be present in the app menu on the top left.
+    const menuItems = computed<AppMenuItemExtension[]>(() => [
+      {
+        label: () => $gettext('Advanced PDF Viewer'),
+        type: 'appMenuItem',
+        handler: () => {
+          // do stuff...
+        }
+      }
+    ])
+
     return {
       appInfo: {
         name: 'Advanced PDF Viewer',
@@ -80,17 +92,11 @@ export default defineWebApplication({
               }
             }
           }
-        ],
-
-        // Add this if you want your app to be present in the app menu on the top left.
-        applicationMenu: {
-          enabled: () => true,
-          openAsEditor: true,
-          priority: 10
-        }
+        ]
       },
       routes,
-      translations
+      translations,
+      extensions: menuItems
     }
   }
 })

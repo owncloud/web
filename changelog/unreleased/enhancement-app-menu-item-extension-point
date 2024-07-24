@@ -1,0 +1,9 @@
+Enhancement: Application menu extension point
+
+We've added an extension point for adding items in the top left application switcher menu.
+
+`AppMenuItemExtension`'s can either link to an internal page (via `path`), an external page (via `url`) or have a button handler (via `handler`). Please refer to the docs for more information.
+
+DEPRECATION NOTICE: This deprecates the `applicationMenu` property of the appinfo object.
+
+https://github.com/owncloud/web/pull/11258
