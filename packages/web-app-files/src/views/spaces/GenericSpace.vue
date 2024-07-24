@@ -491,7 +491,7 @@ export default defineComponent({
     }
 
     onMounted(() => {
-      // Workaround fix for https://github.com/owncloud/web/issues/11262. Don't transfer to mater, because it's properly fixed
+      // Workaround fix for https://github.com/owncloud/web/issues/11262. Don't transfer to master, because it's properly fixed
       if (isProjectSpaceResource(unref(space))) {
         store.commit('Files/PRUNE_SHARES')
       }
