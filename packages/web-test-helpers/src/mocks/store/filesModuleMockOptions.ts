@@ -37,7 +37,8 @@ export const filesModuleMockOptions = {
       RESET_SELECTION: jest.fn(),
       SET_LATEST_SELECTED_FILE_ID: jest.fn(),
       CLEAR_FILES_SEARCHED: jest.fn(),
-      CLEAR_CLIPBOARD: jest.fn()
+      CLEAR_CLIPBOARD: jest.fn(),
+      PRUNE_SHARES: jest.fn()
     },
     actions: {
       deleteFiles: jest.fn(),
