@@ -67,13 +67,17 @@ describe('Preview app', () => {
       const { wrapper } = createShallowMountWrapper()
       await nextTick()
 
-      wrapper.vm.toPreloadImageIds = []
-      wrapper.vm.preloadImageCount = 3
+      wrapper.vm.cachedFiles = {}
       wrapper.vm.setActiveFile('personal/admin/sleeping_dog.gif')
 
       await nextTick()
 
-      expect(wrapper.vm.toPreloadImageIds).toEqual(['8', '9', '1', '6', '4'])
+      expect(
+        Object.values(wrapper.vm.cachedFiles)
+          .filter((cachedFile) => cachedFile.isImage)
+          .map((cachedFile) => cachedFile.id)
+          .sort((a, b) => a.localeCompare(b))
+      ).toEqual(['1', '2', '4', '6', '7', '8', '9'])
     })
   })
 })

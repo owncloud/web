@@ -1,3 +1,5 @@
+import { Ref } from 'vue'
+
 export type CachedFile = {
   id: string
   name: string
@@ -7,4 +9,6 @@ export type CachedFile = {
   isVideo: boolean
   isImage: boolean
   isAudio: boolean
+  isLoading: Ref<boolean>
+  isError: Ref<boolean>
 }

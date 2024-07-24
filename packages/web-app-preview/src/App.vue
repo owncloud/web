@@ -1,29 +1,35 @@
 <template>
-  <div v-if="loading" class="oc-width-1-1">
+  <div v-if="isFolderLoading" class="oc-width-1-1">
     <div class="oc-position-center">
       <oc-spinner :aria-label="$gettext('Loading media file')" size="xlarge" />
     </div>
   </div>
-  <oc-icon
-    v-else-if="isFileContentError"
-    name="file-damage"
-    variation="danger"
-    size="xlarge"
-    class="oc-position-center"
-    :accessible-label="$gettext('Failed to load media file')"
-  />
   <div
     v-else
     ref="preview"
     class="oc-flex oc-width-1-1 oc-height-1-1"
     tabindex="-1"
-    @keydown.left="prev"
-    @keydown.right="next"
+    @keydown.left="goToPrev"
+    @keydown.right="goToNext"
   >
     <div class="stage" :class="{ lightbox: isFullScreenModeActivated }">
-      <div v-show="activeMediaFileCached" class="stage_media">
+      <div class="stage_media">
+        <div v-if="!activeMediaFileCached || activeMediaFileCached.isLoading" class="oc-width-1-1">
+          <div class="oc-position-center">
+            <oc-spinner :aria-label="$gettext('Loading media file')" size="xlarge" />
+          </div>
+        </div>
+        <div
+          v-else-if="activeMediaFileCached.isError"
+          class="oc-width-1-1 oc-flex oc-flex-column oc-flex-middle oc-flex-center"
+        >
+          <oc-icon name="file-damage" variation="danger" size="xlarge" />
+          <p>
+            {{ $gettext('Failed to load "%{filename}"', { filename: activeMediaFileCached.name }) }}
+          </p>
+        </div>
         <media-image
-          v-if="activeMediaFileCached.isImage"
+          v-else-if="activeMediaFileCached.isImage"
           :file="activeMediaFileCached"
           :current-image-rotation="currentImageRotation"
           :current-image-zoom="currentImageZoom"
@@ -49,15 +55,15 @@
         :active-index="activeIndex"
         :is-full-screen-mode-activated="isFullScreenModeActivated"
         :is-folder-loading="isFolderLoading"
-        :is-image="activeMediaFileCached?.isImage"
+        :show-image-controls="activeMediaFileCached?.isImage && !activeMediaFileCached?.isError"
         :current-image-rotation="currentImageRotation"
         :current-image-zoom="currentImageZoom"
         @set-rotation="currentImageRotation = $event"
         @set-zoom="currentImageZoom = $event"
         @reset-image="resetImage"
-        @toggle-full-screen="toggleFullscreenMode"
-        @toggle-previous="prev"
-        @toggle-next="next"
+        @toggle-full-screen="toggleFullScreenMode"
+        @toggle-previous="goToPrev"
+        @toggle-next="goToNext"
       />
     </div>
   </div>
@@ -67,12 +73,12 @@ import {
   computed,
   defineComponent,
   ref,
-  Ref,
   unref,
   PropType,
   nextTick,
   getCurrentInstance,
-  watch
+  watch,
+  Ref
 } from 'vue'
 import { RouteLocationRaw } from 'vue-router'
 import { Resource } from '@ownclouders/web-client'
@@ -82,23 +88,29 @@ import {
   FileContext,
   ProcessorType,
   SortDir,
-  useAppsStore,
+  createFileRouteOptions,
   queryItemAsString,
   sortHelper,
   useRoute,
   useRouteQuery,
-  useRouter
+  useRouter,
+  usePreviewService
 } from '@ownclouders/web-pkg'
-import { createFileRouteOptions } from '@ownclouders/web-pkg'
 import MediaControls from './components/MediaControls.vue'
 import MediaAudio from './components/Sources/MediaAudio.vue'
 import MediaImage from './components/Sources/MediaImage.vue'
 import MediaVideo from './components/Sources/MediaVideo.vue'
 import { CachedFile } from './helpers/types'
+import {
+  useFileTypes,
+  useFullScreenMode,
+  useImageControls,
+  usePreviewDimensions
+} from './composables'
 import { mimeTypes } from './mimeTypes'
-import { PanzoomEventDetail } from '@panzoom/panzoom'
 
 export const appId = 'preview'
+const PRELOAD_COUNT = 5
 
 export default defineComponent({
   name: 'Preview',
@@ -126,22 +138,17 @@ export default defineComponent({
   setup(props, { emit }) {
     const router = useRouter()
     const route = useRoute()
-    const appsStore = useAppsStore()
     const contextRouteQuery = useRouteQuery('contextRouteQuery') as unknown as Ref<
       Record<string, string>
     >
+    const { isFileTypeAudio, isFileTypeImage, isFileTypeVideo } = useFileTypes()
+    const previewService = usePreviewService()
+    const { dimensions } = usePreviewDimensions()
 
     const activeIndex = ref<number>()
-    const cachedFiles = ref<CachedFile[]>([])
+    const cachedFiles = ref<Record<string, CachedFile>>({})
     const folderLoaded = ref(false)
-    const isFileContentError = ref(false)
     const isAutoPlayEnabled = ref(true)
-    const toPreloadImageIds = ref<string[]>([])
-    const currentImageZoom = ref(1)
-    const currentImageRotation = ref(0)
-    const currentImagePositionX = ref(0)
-    const currentImagePositionY = ref(0)
-    const preloadImageCount = ref(10)
     const preview = ref<HTMLElement>()
 
     const sortBy = computed(() => {
@@ -156,33 +163,6 @@ export default defineComponent({
       }
       return (unref(contextRouteQuery)['sort-dir'] as SortDir) ?? SortDir.Asc
     })
-
-    const isFullScreenModeActivated = ref(false)
-    const toggleFullscreenMode = () => {
-      const activateFullscreen = !unref(isFullScreenModeActivated)
-      isFullScreenModeActivated.value = activateFullscreen
-      if (activateFullscreen) {
-        if (document.documentElement.requestFullscreen) {
-          document.documentElement.requestFullscreen()
-        }
-      } else {
-        if (document.exitFullscreen) {
-          document.exitFullscreen()
-        }
-      }
-    }
-
-    const onPanZoomChanged = ({ detail }: { detail: PanzoomEventDetail }) => {
-      currentImagePositionX.value = detail.x
-      currentImagePositionY.value = detail.y
-    }
-
-    const resetImage = () => {
-      currentImageZoom.value = 1
-      currentImageRotation.value = 0
-      currentImagePositionX.value = 0
-      currentImagePositionY.value = 0
-    }
 
     const filteredFiles = computed(() => {
       if (!props.activeFiles) {
@@ -199,8 +179,50 @@ export default defineComponent({
       return unref(filteredFiles)[unref(activeIndex)]
     })
     const activeMediaFileCached = computed(() => {
-      return unref(cachedFiles).find((i) => i.id === unref(activeFilteredFile)?.id)
+      return unref(cachedFiles)[unref(activeFilteredFile)?.id]
     })
+
+    const loadFileIntoCache = async (file: Resource) => {
+      if (Object.hasOwn(unref(cachedFiles), file.id)) {
+        return
+      }
+
+      const cachedFile: CachedFile = {
+        id: file.id,
+        name: file.name,
+        url: undefined,
+        ext: file.extension,
+        mimeType: file.mimeType,
+        isVideo: isFileTypeVideo(file),
+        isImage: isFileTypeImage(file),
+        isAudio: isFileTypeAudio(file),
+        isLoading: ref(true),
+        isError: ref(false)
+      }
+      cachedFiles.value[file.id] = cachedFile
+
+      try {
+        if (cachedFile.isImage) {
+          cachedFile.url = await previewService.loadPreview(
+            {
+              space: unref(props.currentFileContext.space),
+              resource: file,
+              dimensions: unref(dimensions),
+              processor: ProcessorType.enum.fit
+            },
+            false,
+            false
+          )
+          return
+        }
+        cachedFile.url = await props.getUrlForResource(unref(props.currentFileContext.space), file)
+      } catch (e) {
+        console.error(e)
+        cachedFile.isError.value = true
+      } finally {
+        cachedFile.isLoading.value = false
+      }
+    }
 
     const updateLocalHistory = () => {
       // this is a rare edge case when browsing quickly through a lot of files
@@ -219,7 +241,6 @@ export default defineComponent({
         query: { ...unref(route).query, ...query }
       })
     }
-    const isFileContentLoading = ref(true)
 
     const instance = getCurrentInstance()
     watch(
@@ -243,12 +264,20 @@ export default defineComponent({
       emit('update:resource', file)
     })
 
-    const loading = computed(() => props.isFolderLoading || unref(isFileContentLoading))
-
+    const loading = computed(() => {
+      if (props.isFolderLoading) {
+        return true
+      }
+      const file = unref(activeMediaFileCached)
+      if (!file) {
+        return true
+      }
+      return unref(file.isLoading)
+    })
     watch(
       loading,
-      async () => {
-        if (!unref(loading)) {
+      async (loading) => {
+        if (!loading) {
           await nextTick()
           unref(preview).focus()
         }
@@ -257,59 +286,25 @@ export default defineComponent({
     )
 
     return {
+      ...useImageControls(),
+      ...useFullScreenMode(),
       activeFilteredFile,
       activeIndex,
       activeMediaFileCached,
       cachedFiles,
       filteredFiles,
-      isFileContentLoading,
-      isFullScreenModeActivated,
-      toggleFullscreenMode,
       updateLocalHistory,
-      resetImage,
-      isFileContentError,
       isAutoPlayEnabled,
-      toPreloadImageIds,
-      currentImageZoom,
-      currentImageRotation,
-      currentImagePositionX,
-      currentImagePositionY,
-      onPanZoomChanged,
-      preloadImageCount,
       preview,
-      loading
-    }
-  },
-  computed: {
-    thumbDimensions() {
-      switch (true) {
-        case window.innerWidth <= 1024:
-          return 1024
-        case window.innerWidth <= 1280:
-          return 1280
-        case window.innerWidth <= 1920:
-          return 1920
-        case window.innerWidth <= 2160:
-          return 2160
-        default:
-          return 3840
-      }
-    },
-    isActiveFileTypeImage() {
-      return !this.isActiveFileTypeAudio && !this.isActiveFileTypeVideo
-    },
-    isActiveFileTypeAudio() {
-      return this.isFileTypeAudio(this.activeFilteredFile)
-    },
-    isActiveFileTypeVideo() {
-      return this.isFileTypeVideo(this.activeFilteredFile)
+      isFileTypeImage,
+      loadFileIntoCache
     }
   },
 
   watch: {
     activeIndex(newValue, oldValue) {
       if (newValue !== oldValue) {
-        this.loadMedium()
+        this.loadFileIntoCache(this.activeFilteredFile)
         this.preloadImages()
       }
 
@@ -325,15 +320,13 @@ export default defineComponent({
   mounted() {
     // keep a local history for this component
     window.addEventListener('popstate', this.handleLocalHistoryEvent)
-    document.addEventListener('fullscreenchange', this.handleFullScreenChangeEvent)
   },
 
   beforeUnmount() {
     window.removeEventListener('popstate', this.handleLocalHistoryEvent)
-    document.removeEventListener('fullscreenchange', this.handleFullScreenChangeEvent)
 
-    this.cachedFiles.forEach((medium) => {
-      this.revokeUrl(medium.url)
+    Object.values(this.cachedFiles).forEach((cachedFile) => {
+      this.revokeUrl(cachedFile.url)
     })
   },
 
@@ -348,56 +341,13 @@ export default defineComponent({
           return
         }
       }
-
-      this.isFileContentLoading = false
-      this.isFileContentError = true
     },
     // react to PopStateEvent ()
     handleLocalHistoryEvent() {
       const result = this.$router.resolve(document.location as unknown as RouteLocationRaw)
       this.setActiveFile(queryItemAsString(result.params.driveAliasAndItem))
     },
-    handleFullScreenChangeEvent() {
-      if (document.fullscreenElement === null) {
-        this.isFullScreenModeActivated = false
-      }
-    },
-    loadMedium() {
-      if (this.activeMediaFileCached) {
-        return
-      }
-
-      this.loadActiveFileIntoCache()
-    },
-    async loadActiveFileIntoCache() {
-      this.isFileContentLoading = true
-
-      try {
-        const loadRawFile = !this.isActiveFileTypeImage
-        let mediaUrl: string
-        if (loadRawFile) {
-          mediaUrl = await this.getUrlForResource(
-            unref(this.currentFileContext.space),
-            this.activeFilteredFile
-          )
-        } else {
-          mediaUrl = await this.loadPreview(this.activeFilteredFile)
-        }
-
-        this.addPreviewToCache(this.activeFilteredFile, mediaUrl)
-        this.isFileContentLoading = false
-        this.isFileContentError = false
-      } catch (e) {
-        this.isFileContentLoading = false
-        this.isFileContentError = true
-        console.error(e)
-      }
-    },
-    next() {
-      if (this.isFileContentLoading) {
-        return
-      }
-      this.isFileContentError = false
+    goToNext() {
       if (this.activeIndex + 1 >= this.filteredFiles.length) {
         this.activeIndex = 0
         this.updateLocalHistory()
@@ -406,11 +356,7 @@ export default defineComponent({
       this.activeIndex++
       this.updateLocalHistory()
     },
-    prev() {
-      if (this.isFileContentLoading) {
-        return
-      }
-      this.isFileContentError = false
+    goToPrev() {
       if (this.activeIndex === 0) {
         this.activeIndex = this.filteredFiles.length - 1
         this.updateLocalHistory()
@@ -419,50 +365,7 @@ export default defineComponent({
       this.activeIndex--
       this.updateLocalHistory()
     },
-    isFileTypeImage(file: Resource) {
-      return !this.isFileTypeAudio(file) && !this.isFileTypeVideo(file)
-    },
-    isFileTypeAudio(file: Resource) {
-      return file.mimeType.toLowerCase().startsWith('audio')
-    },
-
-    isFileTypeVideo(file: Resource) {
-      return file.mimeType.toLowerCase().startsWith('video')
-    },
-    addPreviewToCache(file: Resource, url: string) {
-      this.cachedFiles.push({
-        id: file.id,
-        name: file.name,
-        url,
-        ext: file.extension,
-        mimeType: file.mimeType,
-        isVideo: this.isFileTypeVideo(file),
-        isImage: this.isFileTypeImage(file),
-        isAudio: this.isFileTypeAudio(file)
-      })
-    },
-    loadPreview(file: Resource) {
-      return this.$previewService.loadPreview({
-        space: unref(this.currentFileContext.space),
-        resource: file,
-        dimensions: [this.thumbDimensions, this.thumbDimensions] as [number, number],
-        processor: ProcessorType.enum.fit
-      })
-    },
     preloadImages() {
-      const loadPreviewAsync = (file: Resource) => {
-        this.toPreloadImageIds.push(file.id)
-        this.loadPreview(file)
-
-          .then((mediaUrl) => {
-            this.addPreviewToCache(file, mediaUrl)
-          })
-          .catch((e) => {
-            console.error(e)
-            this.toPreloadImageIds = this.toPreloadImageIds.filter((fileId) => fileId !== file.id)
-          })
-      }
-
       const preloadFile = (preloadFileIndex: number) => {
         let cycleIndex =
           (((this.activeIndex + preloadFileIndex) % this.filteredFiles.length) +
@@ -470,25 +373,16 @@ export default defineComponent({
           this.filteredFiles.length
 
         const file = this.filteredFiles[cycleIndex]
-
-        if (!this.isFileTypeImage(file) || this.toPreloadImageIds.includes(file.id)) {
-          return
-        }
-
-        loadPreviewAsync(file)
+        this.loadFileIntoCache(file)
       }
 
-      for (
-        let followingFileIndex = 1;
-        followingFileIndex <= this.preloadImageCount;
-        followingFileIndex++
-      ) {
+      for (let followingFileIndex = 1; followingFileIndex <= PRELOAD_COUNT; followingFileIndex++) {
         preloadFile(followingFileIndex)
       }
 
       for (
         let previousFileIndex = -1;
-        previousFileIndex >= this.preloadImageCount * -1;
+        previousFileIndex >= PRELOAD_COUNT * -1;
         previousFileIndex--
       ) {
         preloadFile(previousFileIndex)

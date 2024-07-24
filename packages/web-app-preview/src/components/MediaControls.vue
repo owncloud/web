@@ -47,7 +47,7 @@
           />
         </oc-button>
       </div>
-      <div v-if="isImage" class="oc-flex oc-flex-middle">
+      <div v-if="showImageControls" class="oc-flex oc-flex-middle">
         <div class="oc-flex">
           <oc-button
             v-oc-tooltip="imageShrinkDescription"
@@ -142,7 +142,7 @@ export default defineComponent({
       type: Boolean,
       default: false
     },
-    isImage: {
+    showImageControls: {
       type: Boolean,
       default: false
     },
