@@ -22,7 +22,8 @@ const defaultHttps = () =>
 export const defineConfig = (overrides = {}) => {
   return ({ mode }) => {
     const isProduction = mode === 'production'
-    const isServing = !isProduction
+    const isTesting = mode === 'test'
+    const isServing = !isProduction && !isTesting
 
     // read package name from vite workspace
     const packageJson = JSON.parse(
@@ -96,9 +97,30 @@ export const defineConfig = (overrides = {}) => {
         plugins: [
           vue({
             // set to true when switching to esm
-            customElement: false
+            customElement: false,
+            ...(isTesting && { template: { compilerOptions: { whitespace: 'preserve' } } })
           })
-        ]
+        ],
+        test: {
+          globals: true,
+          environment: 'happy-dom',
+          clearMocks: true,
+          include: ['**/*.spec.ts'],
+          exclude: [
+            '**/node_modules/**',
+            '**/dist/**',
+            '**/cypress/**',
+            '**/.{idea,git,cache,output,temp}/**',
+            '**/{karma,rollup,webpack,vite,vitest,jest,ava,babel,nyc,cypress,tsup,build}.config.*',
+            '.pnpm-store/*',
+            'e2e/**'
+          ],
+          coverage: {
+            provider: 'v8',
+            reportsDirectory: './coverage',
+            reporter: 'lcov'
+          }
+        }
       },
       overrides
     )
