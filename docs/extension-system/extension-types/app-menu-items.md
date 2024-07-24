@@ -37,11 +37,11 @@ For `id`, `type`, and `extensionPointIds`, please see [extension base section]({
 
 A `handler` will result in a `<button>` element. This is necessary when an action should be performed when clicking the menu item (e.g. opening a file editor).
 
-A `path` will result in a `<a>` element that links to an internal page. That means the given path needs to exist within the application.
+A `path` will result in an `<a>` element that links to an internal page via the vue router. That means the given path needs to exist within the application.
 
-A `url` will result in a `<a>` element that links to an external page. External pages always open in a new tab or window.
+A `url` will result in an `<a>` element that links to an external page. External pages always open in a new tab or window.
 
-Since these properties are optional, the priority order is `handler` > `path` > `url`. At least one of them has to be provided when registering an extension.
+At least one of these properties has to be provided when registering an extension. If you define more than one, the priority order is `handler` > `path` > `url`. 
 
 ## Example
 
