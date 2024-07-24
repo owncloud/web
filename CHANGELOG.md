@@ -14,6 +14,7 @@ Summary
 * Bugfix - Open dropdown menu does not deselect other items in admin settings app: [#11253](https://github.com/owncloud/web/pull/11253)
 * Change - Removal of Deprecated Config Options: [#11251](https://github.com/owncloud/web/pull/11251)
 * Change - Remove draw-io as default app: [#11252](https://github.com/owncloud/web/pull/11252)
+* Enhancement - Application menu extension point: [#11258](https://github.com/owncloud/web/pull/11258)
 
 Details
 -------
@@ -99,6 +100,20 @@ Details
 
    https://github.com/owncloud/web/issues/11248
    https://github.com/owncloud/web/pull/11252
+
+* Enhancement - Application menu extension point: [#11258](https://github.com/owncloud/web/pull/11258)
+
+   We've added an extension point for adding items in the top left application
+   switcher menu.
+
+   `AppMenuItemExtension`'s can either link to an internal page (via `path`), an
+   external page (via `url`) or have a button handler (via `handler`). Please refer
+   to the docs for more information.
+
+   DEPRECATION NOTICE: This deprecates the `applicationMenu` property of the
+   appinfo object.
+
+   https://github.com/owncloud/web/pull/11258
 
 Changelog for ownCloud Web [9.2.0] (2024-07-11)
 =======================================
