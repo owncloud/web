@@ -1,0 +1,7 @@
+Bugfix: Show more toggle in space members view not reactive
+
+We've fixed a bug where the toggle to show more members in the space members view was not reactive.
+Clicking the toggle in the sidebar will now correctly display “Show More” or “Show Less” as intended.
+
+https://github.com/owncloud/web/pull/11263
+https://github.com/owncloud/web/issues/11261
