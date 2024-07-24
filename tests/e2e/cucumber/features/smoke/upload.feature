@@ -16,7 +16,7 @@ Feature: Upload
     And "Alice" opens the "files" app
 
 
-  Scenario: Upload resources in personal space
+  Scenario: Upload files in personal space
     Given "Alice" creates the following resources
       | resource          | type    | content             |
       | new-lorem-big.txt | txtFile | new lorem big file  |
@@ -51,13 +51,6 @@ Feature: Upload
       # Coverage for bug: https://github.com/owncloud/web/issues/10810
       | test#file.txt | file   |
       | test#folder   | folder |
-
-    # https://github.com/owncloud/web/issues/6348
-    # Note: uploading folder with empty sub-folder should be done manually
-    # currently upload folder feature is not available in playwright
-    # And "Alice" uploads the following resources
-    #  | resource |
-    #  | FOLDER   |
     And "Alice" logs out
 
 
@@ -65,4 +58,22 @@ Feature: Upload
     When "Alice" uploads 50 small files in personal space
     Then "Alice" should see the text "50 items with 600 B in total (50 files, 0 folders)" at the footer of the page
     And "Alice" should see 50 resources in the personal space files view
+    And "Alice" logs out
+
+
+  Scenario: upload folder
+    When "Alice" uploads the following resources
+      | resource | type   |
+      | PARENT   | folder |
+    # check that folder content exist
+    And "Alice" opens folder "PARENT"
+    And "Alice" opens the following file in pdfviewer
+      | resource   |
+      | simple.pdf |
+    And "Alice" closes the file viewer
+
+    # upload empty folder
+    And "Alice" uploads the following resources
+      | resource | type   |
+      | FOLDER   | folder |
     And "Alice" logs out
