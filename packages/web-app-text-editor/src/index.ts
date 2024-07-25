@@ -104,7 +104,6 @@ export default defineWebApplication({
       id: appId,
       icon: 'file-text',
       color: '#0D856F',
-      isFileEditor: true,
       defaultExtension: 'txt',
       extensions: fileExtensions().map((extensionItem) => {
         return {

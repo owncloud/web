@@ -35,7 +35,6 @@ const appInfo: ApplicationInformation = {
   id: 'files',
   icon: 'resource-type-folder',
   color: 'var(--oc-color-swatch-primary-muted)',
-  isFileEditor: false,
   extensions: []
 }
 

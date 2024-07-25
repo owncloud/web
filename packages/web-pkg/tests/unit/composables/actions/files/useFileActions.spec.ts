@@ -82,7 +82,6 @@ function getWrapper({ setup }: { setup: (instance: ReturnType<typeof useFileActi
                   name: 'Text Editor',
                   id: 'text-editor',
                   color: '#0D856F',
-                  isFileEditor: true,
                   extensions: [
                     {
                       extension: 'txt'

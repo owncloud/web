@@ -58,7 +58,6 @@ export default defineWebApplication({
     const appInfo: ApplicationInformation = {
       name: appName,
       id: appId,
-      isFileEditor: true,
       extensions: mimeTypes.map((mimeType) => {
         const provider = mimeType.app_providers.find((provider) => provider.name === appName)
         return {

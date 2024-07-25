@@ -32,8 +32,7 @@ export default defineWebApplication({
       name: $gettext('ScienceMesh'),
       id: 'ocm',
       color: '#AE291D',
-      icon: 'contacts-book',
-      isFileEditor: false
+      icon: 'contacts-book'
     }
 
     router.addRoute({

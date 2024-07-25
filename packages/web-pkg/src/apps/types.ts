@@ -74,6 +74,7 @@ export interface ApplicationInformation {
   iconFillType?: IconFillType
   iconColor?: string
   img?: string
+  /** @deprecated */
   isFileEditor?: boolean
   extensions?: ApplicationFileExtension[]
   defaultExtension?: string

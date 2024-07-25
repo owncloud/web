@@ -159,8 +159,7 @@ export default defineWebApplication({
       name: $gettext('Admin Settings'),
       id: appId,
       icon: 'settings-4',
-      color: '#2b2b2b',
-      isFileEditor: false
+      color: '#2b2b2b'
     }
 
     const menuItems = computed<AppMenuItemExtension[]>(() => {

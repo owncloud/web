@@ -15,8 +15,7 @@ const $gettext = (msg: string) => {
 const appInfo: ApplicationInformation = {
   name: $gettext('Search'),
   id: 'search',
-  icon: 'folder',
-  isFileEditor: false
+  icon: 'folder'
 }
 
 export default defineWebApplication({
