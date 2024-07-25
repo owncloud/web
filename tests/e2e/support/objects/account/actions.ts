@@ -21,8 +21,7 @@ export const getQuotaValue = async (args: { page: Page }): Promise<string> => {
   await page.locator(quotaValue).click()
 
   // parse "0 B of 10 GB used"
-  const value = quotaText.split('of')
-  return value[1].replace(/[^0-9]/g, '')
+  return quotaText.match(/\d+/g)?.[1]
 }
 
 export const getUserInfo = async (args: { page: Page; key: string }): Promise<string> => {

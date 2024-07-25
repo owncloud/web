@@ -70,6 +70,24 @@
             <span class="profile-info-wrapper" :class="{ 'oc-py-xs': !user.mail }">
               <span class="oc-display-block" v-text="user.displayName" />
               <span v-if="user.mail" class="oc-text-small" v-text="user.mail" />
+              <div v-if="quotaEnabled" class="storage-wrapper oc-flex oc-flex-bottom oc-mt-xs">
+                <oc-icon name="hard-drive-2" size="small" fill-type="line" class="oc-mr-xs" />
+                <div>
+                  <p class="oc-my-rm">
+                    <span
+                      class="storage-wrapper-quota oc-text-small"
+                      v-text="personalStorageDetailsLabel"
+                    />
+                  </p>
+                  <oc-progress
+                    v-if="limitedPersonalStorage"
+                    :value="quotaUsagePercent"
+                    :max="100"
+                    size="small"
+                    :variation="quotaProgressVariant"
+                  />
+                </div>
+              </div>
             </span>
           </li>
           <li>
@@ -82,25 +100,6 @@
               <oc-icon name="settings-4" fill-type="line" class="oc-p-xs" />
               <span v-text="$gettext('Preferences')" />
             </oc-button>
-          </li>
-          <li v-if="quotaEnabled" class="storage-wrapper oc-pl-s">
-            <oc-icon name="cloud" fill-type="line" class="oc-p-xs" />
-            <div class="oc-width-1-1">
-              <p class="oc-my-rm">
-                <span class="oc-display-block" v-text="personalStorageLabel" />
-                <span
-                  class="storage-wrapper-quota oc-text-small"
-                  v-text="personalStorageDetailsLabel"
-                />
-              </p>
-              <oc-progress
-                v-if="limitedPersonalStorage"
-                :value="quotaUsagePercent"
-                :max="100"
-                size="small"
-                :variation="quotaProgressVariant"
-              />
-            </div>
           </li>
           <li>
             <oc-button id="oc-topbar-account-logout" appearance="raw" @click="logout">
@@ -183,21 +182,14 @@ export default defineComponent({
     onPremisesSamAccountName() {
       return this.user?.onPremisesSamAccountName
     },
-    personalStorageLabel() {
-      if (!this.limitedPersonalStorage) {
-        return this.$gettext('Personal storage')
-      }
-      return this.$gettext('Personal storage (%{percentage}% used)', {
-        percentage: (this.quotaUsagePercent || 0).toString()
-      })
-    },
     personalStorageDetailsLabel() {
       const total = this.quota.total || 0
       const used = this.quota.used || 0
       return total
-        ? this.$gettext('%{used} of %{total} used', {
+        ? this.$gettext('%{used} of %{total} used (%{percentage}%)', {
             used: filesize(used),
-            total: filesize(total)
+            total: filesize(total),
+            percentage: (this.quotaUsagePercent || 0).toString()
           })
         : this.$gettext('%{used} used', {
             used: filesize(used),

@@ -1,0 +1,6 @@
+Enhancement: Move quota info to general info in user menu
+
+We've moved the quota information out of its own section in the user menu and into the general information section.
+This change makes it easier to find and understand the quota information.
+
+https://github.com/owncloud/web/pull/11279
