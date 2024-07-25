@@ -60,7 +60,7 @@ export interface AppMenuItemExtension extends Extension {
   type: 'appMenuItem'
   label: () => string
   color?: string
-  handler?: () => void
+  handler?: () => Promise<void> | void
   icon?: string
   path?: string
   priority?: number
