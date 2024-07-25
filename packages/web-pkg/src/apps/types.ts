@@ -77,6 +77,7 @@ export interface ApplicationInformation {
   isFileEditor?: boolean
   extensions?: ApplicationFileExtension[]
   defaultExtension?: string
+  /** @deprecated */
   type?: string
   translations?: Translations
   /** @deprecated */
