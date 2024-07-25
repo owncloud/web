@@ -131,7 +131,7 @@ export const extensions = ({ applicationConfig }: ApplicationSetupOptions) => {
       extensionPointIds: ['app.files.upload-menu'],
       action: {
         name: 'import-files',
-        icon: 'cloud',
+        icon: 'upload-cloud',
         handler,
         label: () => $gettext('Import'),
         isVisible: () => {
