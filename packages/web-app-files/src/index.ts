@@ -127,18 +127,8 @@ export const navItems = (context: ComponentCustomProperties): AppNavigationItem[
 
 export default defineWebApplication({
   setup() {
-    const userStore = useUserStore()
-
     return {
-      appInfo: {
-        ...appInfo,
-        applicationMenu: {
-          enabled: () => {
-            return !!userStore.user
-          },
-          priority: 10
-        }
-      },
+      appInfo,
       routes: buildRoutes({
         App,
         Favorites,
@@ -159,7 +149,7 @@ export default defineWebApplication({
       }),
       navItems,
       translations,
-      extensions: extensions(),
+      extensions: extensions(appInfo),
       extensionPoints: extensionPoints()
     }
   }

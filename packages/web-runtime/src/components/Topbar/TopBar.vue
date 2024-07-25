@@ -50,28 +50,19 @@ import {
   ApplicationInformation,
   AppMenuItemExtension,
   CustomComponentTarget,
-  EDITOR_MODE_EDIT,
   queryItemAsString,
-  resolveFileNameDuplicate,
-  useAppsStore,
   useAuthStore,
   useCapabilityStore,
-  useClientService,
   useConfigStore,
   useEmbedMode,
   useExtensionRegistry,
-  useFileActions,
-  useGetMatchingSpace,
-  useResourcesStore,
+  useOpenEmptyEditor,
   useRouteQuery,
   useRouter,
-  useSpacesStore,
   useThemeStore
 } from '@ownclouders/web-pkg'
 import { isRuntimeRoute } from '../../router'
 import { appMenuExtensionPoint, topBarCenterExtensionPoint } from '../../extensionPoints'
-import { useGettext } from 'vue3-gettext'
-import { urlJoin } from '@ownclouders/web-client'
 
 export default {
   components: {
@@ -96,6 +87,7 @@ export default {
     const configStore = useConfigStore()
     const { options: configOptions } = storeToRefs(configStore)
     const extensionRegistry = useExtensionRegistry()
+    const { openEmptyEditor } = useOpenEmptyEditor()
 
     const authStore = useAuthStore()
     const router = useRouter()
@@ -140,48 +132,6 @@ export default {
       contentOnLeftPortal.value = newContent.hasContent
     }
 
-    /**
-     * FIXME: remove the following once we remove the deprecated applicationMenu prop (see below).
-     * The old implementation was bad since this shouldn't live in the runtime.
-     * Rather register such logic in the app itself via a handler.
-     */
-    const { getMatchingSpace } = useGetMatchingSpace()
-    const spacesStore = useSpacesStore()
-    const appsStore = useAppsStore()
-    const resourcesStore = useResourcesStore()
-    const clientService = useClientService()
-    const { $gettext } = useGettext()
-    const { openEditor } = useFileActions()
-    const { resources, currentFolder } = storeToRefs(resourcesStore)
-    const onEditorApplicationClick = async (appId: string, defaultExtension: string) => {
-      let destinationSpace = unref(currentFolder) ? getMatchingSpace(unref(currentFolder)) : null
-      let destinationFiles = unref(resources)
-      let filePath = unref(currentFolder)?.path
-
-      if (!destinationSpace || !unref(currentFolder).canCreate()) {
-        destinationSpace = spacesStore.personalSpace
-        destinationFiles = (await clientService.webdav.listFiles(destinationSpace)).children
-        filePath = ''
-      }
-
-      let fileName = $gettext('New file') + `.${defaultExtension}`
-
-      if (destinationFiles.some((f) => f.name === fileName)) {
-        fileName = resolveFileNameDuplicate(fileName, defaultExtension, destinationFiles)
-      }
-
-      const emptyResource = await clientService.webdav.putFileContents(destinationSpace, {
-        path: urlJoin(filePath, fileName)
-      })
-
-      const space = getMatchingSpace(emptyResource)
-      const appFileExtension = appsStore.fileExtensions.find(
-        ({ app, extension }) => app === appId && extension === defaultExtension
-      )
-
-      openEditor(appFileExtension, space, emptyResource, EDITOR_MODE_EDIT)
-    }
-
     onMounted(() => {
       // FIXME: backwards compatibility for the deprecated applicationMenu prop
       const navExtensions = props.applicationsList
@@ -197,9 +147,7 @@ export default {
           priority: app.applicationMenu?.priority || 50,
           ...((app as any).url && { url: (app as any).url, target: '_blank' }),
           ...(app.applicationMenu?.openAsEditor && {
-            handler: () => {
-              onEditorApplicationClick(app.id, app.defaultExtension)
-            }
+            handler: () => openEmptyEditor(app.id, app.defaultExtension)
           })
         })) as AppMenuItemExtension[]
 

@@ -1,19 +1,22 @@
 import {
+  ApplicationInformation,
   FileActionOptions,
   useClientService,
   useConfigStore,
   useMessages,
+  useUserStore,
   useWindowOpen
 } from '@ownclouders/web-pkg'
 import { useGettext } from 'vue3-gettext'
 import { computed } from 'vue'
 import { Extension } from '@ownclouders/web-pkg'
-import { OCM_PROVIDER_ID } from '@ownclouders/web-client'
+import { OCM_PROVIDER_ID, urlJoin } from '@ownclouders/web-client'
 
-export const extensions = () => {
+export const extensions = (appInfo: ApplicationInformation) => {
   const { showErrorMessage } = useMessages()
   const clientService = useClientService()
   const configStore = useConfigStore()
+  const userStore = useUserStore()
   const { $gettext } = useGettext()
   const { openUrl } = useWindowOpen()
 
@@ -69,6 +72,17 @@ export const extensions = () => {
         componentType: 'button',
         class: 'oc-files-actions-open-file-remote'
       }
-    }
+    },
+    ...((userStore.user && [
+      {
+        id: `app.${appInfo.id}.menuItem`,
+        type: 'appMenuItem',
+        label: () => appInfo.name,
+        color: appInfo.color,
+        icon: appInfo.icon,
+        path: urlJoin(appInfo.id)
+      }
+    ]) ||
+      [])
   ])
 }

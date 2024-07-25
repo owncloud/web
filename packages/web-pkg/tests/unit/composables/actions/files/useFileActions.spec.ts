@@ -77,11 +77,6 @@ function getWrapper({ setup }: { setup: (instance: ReturnType<typeof useFileActi
             appsState: {
               apps: {
                 'text-editor': {
-                  applicationMenu: {
-                    priority: 20,
-                    openAsEditor: true,
-                    enabled: () => true
-                  },
                   defaultExtension: 'txt',
                   icon: 'file-text',
                   name: 'Text Editor',
@@ -95,9 +90,6 @@ function getWrapper({ setup }: { setup: (instance: ReturnType<typeof useFileActi
                   ]
                 },
                 external: {
-                  applicationMenu: {
-                    enabled: () => true
-                  },
                   defaultExtension: '',
                   icon: 'check_box_outline_blank',
                   name: 'External',

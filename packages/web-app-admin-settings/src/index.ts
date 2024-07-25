@@ -3,14 +3,17 @@ import General from './views/General.vue'
 import Users from './views/Users.vue'
 import Groups from './views/Groups.vue'
 import Spaces from './views/Spaces.vue'
-import { Ability } from '@ownclouders/web-client'
+import { Ability, urlJoin } from '@ownclouders/web-client'
 import {
+  ApplicationInformation,
+  AppMenuItemExtension,
   AppNavigationItem,
   defineWebApplication,
   useAbility,
   useUserStore
 } from '@ownclouders/web-pkg'
 import { RouteRecordRaw } from 'vue-router'
+import { computed } from 'vue'
 
 // just a dummy function to trick gettext tools
 function $gettext(msg: string) {
@@ -152,29 +155,45 @@ export default defineWebApplication({
     const { can } = useAbility()
     const userStore = useUserStore()
 
+    const appInfo: ApplicationInformation = {
+      name: $gettext('Admin Settings'),
+      id: appId,
+      icon: 'settings-4',
+      color: '#2b2b2b',
+      isFileEditor: false
+    }
+
+    const menuItems = computed<AppMenuItemExtension[]>(() => {
+      const items: AppMenuItemExtension[] = []
+
+      const menuItemAvailable =
+        userStore.user &&
+        (can('read-all', 'Setting') ||
+          can('read-all', 'Account') ||
+          can('read-all', 'Group') ||
+          can('read-all', 'Drive'))
+
+      if (menuItemAvailable) {
+        items.push({
+          id: `app.${appInfo.id}.menuItem`,
+          type: 'appMenuItem',
+          label: () => appInfo.name,
+          color: appInfo.color,
+          icon: appInfo.icon,
+          priority: 40,
+          path: urlJoin(appInfo.id)
+        })
+      }
+
+      return items
+    })
+
     return {
-      appInfo: {
-        name: $gettext('Admin Settings'),
-        id: appId,
-        icon: 'settings-4',
-        color: '#2b2b2b',
-        isFileEditor: false,
-        applicationMenu: {
-          enabled: () => {
-            return (
-              userStore.user &&
-              (can('read-all', 'Setting') ||
-                can('read-all', 'Account') ||
-                can('read-all', 'Group') ||
-                can('read-all', 'Drive'))
-            )
-          },
-          priority: 40
-        }
-      },
+      appInfo,
       routes,
       navItems,
-      translations
+      translations,
+      extensions: menuItems
     }
   }
 })

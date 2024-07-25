@@ -2,16 +2,22 @@ import { useGettext } from 'vue3-gettext'
 import translations from '../l10n/translations.json'
 import TextEditor from './App.vue'
 import {
+  AppMenuItemExtension,
   AppWrapperRoute,
   ApplicationFileExtension,
+  ApplicationInformation,
   defineWebApplication,
+  useOpenEmptyEditor,
   useUserStore
 } from '@ownclouders/web-pkg'
+import { computed } from 'vue'
+import { urlJoin } from '@ownclouders/web-client'
 
 export default defineWebApplication({
   setup({ applicationConfig }) {
     const { $gettext } = useGettext()
     const userStore = useUserStore()
+    const { openEmptyEditor } = useOpenEmptyEditor()
 
     const appId = 'text-editor'
 
@@ -93,32 +99,47 @@ export default defineWebApplication({
       }
     ]
 
-    return {
-      appInfo: {
-        name: $gettext('Text Editor'),
-        id: appId,
-        icon: 'file-text',
-        color: '#0D856F',
-        isFileEditor: true,
-        applicationMenu: {
-          enabled: () => {
-            return !!userStore.user
-          },
+    const appInfo: ApplicationInformation = {
+      name: $gettext('Text Editor'),
+      id: appId,
+      icon: 'file-text',
+      color: '#0D856F',
+      isFileEditor: true,
+      defaultExtension: 'txt',
+      extensions: fileExtensions().map((extensionItem) => {
+        return {
+          extension: extensionItem.extension,
+          ...(Object.prototype.hasOwnProperty.call(extensionItem, 'newFileMenu') && {
+            newFileMenu: extensionItem.newFileMenu
+          })
+        }
+      })
+    }
+
+    const menuItems = computed<AppMenuItemExtension[]>(() => {
+      const items: AppMenuItemExtension[] = []
+
+      if (userStore.user) {
+        items.push({
+          id: `app.${appInfo.id}.menuItem`,
+          type: 'appMenuItem',
+          label: () => appInfo.name,
+          color: appInfo.color,
+          icon: appInfo.icon,
           priority: 20,
-          openAsEditor: true
-        },
-        defaultExtension: 'txt',
-        extensions: fileExtensions().map((extensionItem) => {
-          return {
-            extension: extensionItem.extension,
-            ...(Object.prototype.hasOwnProperty.call(extensionItem, 'newFileMenu') && {
-              newFileMenu: extensionItem.newFileMenu
-            })
-          }
+          path: urlJoin(appInfo.id),
+          handler: () => openEmptyEditor(appInfo.id, appInfo.defaultExtension)
         })
-      },
+      }
+
+      return items
+    })
+
+    return {
+      appInfo,
       routes,
-      translations
+      translations,
+      extensions: menuItems
     }
   }
 })
