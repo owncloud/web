@@ -52,10 +52,6 @@ export class Share {
     return await isAcceptedSharePresent({ page: this.#page, resource, owner })
   }
 
-  async hasPermissionToShare(resource: string): Promise<boolean> {
-    return await po.hasPermissionToShare({ page: this.#page, resource })
-  }
-
   async createQuickLink(args: Omit<createLinkArgs, 'page'>): Promise<void> {
     await po.createQuickLink({ ...args, page: this.#page })
   }

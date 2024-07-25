@@ -111,9 +111,6 @@ export class Resource {
   async restoreVersion(args: Omit<po.resourceVersionArgs, 'page'>): Promise<void> {
     const startUrl = this.#page.url()
     await po.restoreResourceVersion({ ...args, page: this.#page })
-    // Files details page does not update after restore button is clicked
-    // This is the issue: https://github.com/owncloud/web/issues/6361
-    await this.#page.reload()
     await this.#page.goto(startUrl)
   }
 

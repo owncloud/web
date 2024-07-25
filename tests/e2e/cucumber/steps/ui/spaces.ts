@@ -129,15 +129,6 @@ Then(
 )
 
 When(
-  '{string} reloads the spaces page',
-  async function (this: World, stepUser: string): Promise<void> {
-    const { page } = this.actorsEnvironment.getActor({ key: stepUser })
-    const spacesObject = new objects.applicationFiles.Spaces({ page })
-    await spacesObject.reloadPage()
-  }
-)
-
-When(
   /^"([^"]*)" navigates to the trashbin(| of the project space "([^"]*)")$/,
   async function (this: World, stepUser: string, key: string): Promise<void> {
     const { page } = this.actorsEnvironment.getActor({ key: stepUser })

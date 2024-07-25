@@ -54,8 +54,6 @@ Feature: spaces participant management
     When "Carol" logs in
     And "Carol" navigates to the project space "team.1"
     Then "Carol" should not be able to edit folder "parent"
-    # page reload is necessary to fetch all the changes made by user Brian
-    When "Alice" reloads the spaces page
     And "Alice" creates a public link of following resource using the sidebar panel
       | resource | role     | password |
       | parent   | Can edit | %public% |

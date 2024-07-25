@@ -185,11 +185,11 @@ Feature: Copy
     And "Alice" copies the following resource using sidebar-panel
       | resource | to  | option    |
       | folder1  | sub | keep both |
-    # issue https://github.com/owncloud/web/issues/10515
-    # | folder1  | sub | replace |
+      # issue https://github.com/owncloud/web/issues/10515
+      | folder1  | sub | replace   |
     And "Alice" moves the following resource using sidebar-panel
-      | resource | to  | option    |
-      | folder1  | sub | keep both |
-    # issue https://github.com/owncloud/web/issues/10515
-    # | sub1/folder1  | sub | replace |
+      | resource     | to  | option    |
+      | folder1      | sub | keep both |
+      # issue https://github.com/owncloud/web/issues/10515
+      | sub1/folder1 | sub | replace   |
     And "Alice" logs out

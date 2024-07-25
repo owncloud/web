@@ -33,7 +33,6 @@ Feature: internal link share in project space
     And "Alice" creates a public link of following resource using the sidebar panel
       | resource | role           | password |
       | myfolder | Invited people | %public% |
-    # When "Alice" edits the public link named "Link" of resource "myfolder" changing role to "Invited people"
     And "Alice" logs out
 
     And "Brian" opens the public link "Link"

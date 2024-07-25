@@ -192,10 +192,6 @@ export const addSpaceMembers = async (args: SpaceMembersArgs): Promise<void> => 
   await sidebar.close({ page: page })
 }
 
-export const reloadSpacePage = async (page: Page): Promise<void> => {
-  await page.reload()
-}
-
 export const changeSpaceImage = async (args: {
   id: string
   page: Page

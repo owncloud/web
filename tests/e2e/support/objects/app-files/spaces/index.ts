@@ -73,10 +73,6 @@ export class Spaces {
     await po.changeSpaceRole({ ...args, page: this.#page })
   }
 
-  async reloadPage(): Promise<void> {
-    await po.reloadSpacePage(this.#page)
-  }
-
   async changeSpaceImage({ key, resource }: { key: string; resource: File }): Promise<void> {
     const { id } = this.#spacesEnvironment.getSpace({ key })
     await po.changeSpaceImage({ id, resource, page: this.#page })
