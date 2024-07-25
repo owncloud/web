@@ -17,11 +17,6 @@ import { Action } from '../../../../src/composables/actions'
 //   return createMockActionComposables(importOriginal())
 // })
 
-// vi.mock('../../../../src/composables/actions/files/useFileActionsSetReadme', (importOriginal) => {
-//   const original = await importOriginal()
-//   return createMockActionComposables(importOriginal())
-// })
-
 describe.skip('ContextActions', () => {
   describe('menu sections', () => {
     it('do not render when no action enabled', () => {
