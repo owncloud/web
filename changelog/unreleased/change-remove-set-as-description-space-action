@@ -1,0 +1,8 @@
+Change: Remove set as description space action
+
+BREAKING CHANGE: In order to eliminate complexity and reduce confusion, we removed the "Set as description" space action.
+This action was not used frequently and was not necessary for the user experience.
+The space description can still be simply updated via the "Edit description" action.
+
+https://github.com/owncloud/web/pull/11277
+https://github.com/owncloud/web/issues/11276
