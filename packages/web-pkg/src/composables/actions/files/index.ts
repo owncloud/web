@@ -1,5 +1,4 @@
 export * from './useFileActions'
-export * from './useFileActionsSetReadme'
 export * from './useFileActionsEnableSync'
 export * from './useFileActionsToggleHideShare'
 export * from './useFileActionsCopy'

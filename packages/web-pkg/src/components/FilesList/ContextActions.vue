@@ -29,7 +29,6 @@ import {
   useFileActionsNavigate,
   useFileActionsFavorite,
   useFileActionsCreateSpaceFromResource,
-  useFileActionsSetReadme,
   useFileActions
 } from '../../composables'
 import { isNil } from 'lodash-es'
@@ -62,7 +61,6 @@ export default defineComponent({
     const { actions: renameActions } = useFileActionsRename()
     const { actions: restoreActions } = useFileActionsRestore()
     const { actions: setSpaceImageActions } = useFileActionsSetImage()
-    const { actions: setSpaceReadmeActions } = useFileActionsSetReadme()
     const { actions: showDetailsActions } = useFileActionsShowDetails()
     const { actions: createSpaceFromResourceActions } = useFileActionsCreateSpaceFromResource()
     const { actions: showSharesActions } = useFileActionsShowShares()
@@ -145,7 +143,6 @@ export default defineComponent({
         ...unref(disableSyncActions),
         ...unref(hideShareActions),
         ...unref(setSpaceImageActions),
-        ...unref(setSpaceReadmeActions),
         ...unref(extensionsContextActions).filter(
           (a) => a.category === 'actions' || isNil(a.category)
         )
