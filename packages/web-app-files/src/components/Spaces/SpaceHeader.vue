@@ -57,6 +57,7 @@
       <div ref="markdownContainerRef" class="markdown-container">
         <text-editor
           v-if="markdownContent"
+          :key="markdownContent"
           :resource="markdownResource"
           :current-content="markdownContent"
           :is-read-only="true"
@@ -183,6 +184,8 @@ export default defineComponent({
     watch(
       computed(() => props.space.spaceReadmeData),
       async (data: any) => {
+        console.log('WATCH')
+        console.log(data)
         if (!data) {
           return
         }
@@ -194,6 +197,8 @@ export default defineComponent({
         const fileInfoResponse = await getFileInfo(props.space, {
           path: `.space/${props.space.spaceReadmeData.name}`
         })
+
+        console.log(fileContentsResponse)
 
         unobserveMarkdownContainerResize()
         markdownContent.value = fileContentsResponse.body
