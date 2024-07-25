@@ -12,8 +12,6 @@ import { locatorUtils } from '../../../utils'
 const invitePanel = '//*[@id="oc-files-sharing-sidebar"]'
 const quickShareButton =
   '//*[@data-test-resource-name="%s"]/ancestor::tr//button[contains(@class, "files-quick-action-show-shares")]'
-const noPermissionToShareLabel =
-  '//*[@data-testid="files-collaborators-no-share-permissions-message"]'
 const actionMenuDropdownButton =
   '//*[@data-test-resource-name="%s"]/ancestor::tr//button[contains(@class, "resource-table-btn-action-dropdown")]'
 const actionsTriggerButton =
@@ -205,17 +203,6 @@ export const checkSharee = async (args: ShareArgs): Promise<void> => {
   for (const collaborator of recipients) {
     await Collaborator.checkCollaborator({ page, collaborator })
   }
-}
-
-export const hasPermissionToShare = async (
-  args: Omit<ShareArgs, 'recipients'>
-): Promise<boolean> => {
-  const { page, resource } = args
-  // reload page to make sure the changes are reflected
-  await page.reload()
-  await openSharingPanel(page, resource)
-  await Collaborator.waitForInvitePanel(page)
-  return !(await page.isVisible(noPermissionToShareLabel))
 }
 
 export const createQuickLink = async (args: createLinkArgs): Promise<string> => {

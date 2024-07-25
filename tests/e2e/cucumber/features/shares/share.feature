@@ -267,12 +267,12 @@ Feature: share
     When "Brian" logs in
     And "Brian" navigates to the shared with me page
     Then following resources should be displayed in the Shares for user "Brian"
-      | resource     |
-      | testfile.txt |
-      | test-folder  |
-    # https://github.com/owncloud/ocis/issues/8471
-    # | testfile (1).txt |
-    # | test-folder (1)  |
+      | resource         |
+      | testfile.txt     |
+      | test-folder      |
+      # https://github.com/owncloud/ocis/issues/8471
+      | testfile (1).txt |
+      | test-folder (1)  |
     And "Brian" logs out
 
 
