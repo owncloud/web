@@ -17,6 +17,7 @@ Summary
 * Change - Remove set as description space action: [#11277](https://github.com/owncloud/web/pull/11277)
 * Enhancement - Application menu extension point: [#11258](https://github.com/owncloud/web/pull/11258)
 * Enhancement - Move quota info to general info in user menu: [#11279](https://github.com/owncloud/web/pull/11279)
+* Enhancement - Add edit description button to space info: [#11280](https://github.com/owncloud/web/pull/11280)
 
 Details
 -------
@@ -134,6 +135,14 @@ Details
    understand the quota information.
 
    https://github.com/owncloud/web/pull/11279
+
+* Enhancement - Add edit description button to space info: [#11280](https://github.com/owncloud/web/pull/11280)
+
+   We've added an edit description button to the space info section. This button
+   allows you to edit the description of a space directly from the space info
+   section.
+
+   https://github.com/owncloud/web/pull/11280
 
 Changelog for ownCloud Web [9.2.0] (2024-07-11)
 =======================================
