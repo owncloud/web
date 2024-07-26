@@ -1552,6 +1552,10 @@ def collaboraService():
                 "DONT_GEN_SSL_CERT": "set",
                 "extra_params": "--o:ssl.enable=true --o:ssl.termination=true --o:welcome.enable=false --o:net.frame_ancestors=https://ocis:9200",
             },
+            "commands": [
+                "coolconfig generate-proof-key",
+                "bash /start-collabora-online.sh",
+            ],
         },
     ]
 
