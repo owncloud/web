@@ -16,6 +16,7 @@ Summary
 * Change - Remove draw-io as default app: [#11252](https://github.com/owncloud/web/pull/11252)
 * Change - Remove set as description space action: [#11277](https://github.com/owncloud/web/pull/11277)
 * Enhancement - Application menu extension point: [#11258](https://github.com/owncloud/web/pull/11258)
+* Enhancement - Move quota info to general info in user menu: [#11279](https://github.com/owncloud/web/pull/11279)
 
 Details
 -------
@@ -125,6 +126,14 @@ Details
    appinfo object.
 
    https://github.com/owncloud/web/pull/11258
+
+* Enhancement - Move quota info to general info in user menu: [#11279](https://github.com/owncloud/web/pull/11279)
+
+   We've moved the quota information out of its own section in the user menu and
+   into the general information section. This change makes it easier to find and
+   understand the quota information.
+
+   https://github.com/owncloud/web/pull/11279
 
 Changelog for ownCloud Web [9.2.0] (2024-07-11)
 =======================================
