@@ -1,0 +1,18 @@
+{
+  "name": "json-viewer",
+  "version": "0.0.0",
+  "private": true,
+  "description": "ownCloud Web json-viewer",
+  "license": "AGPL-3.0",
+  "dependencies": {
+    "vanilla-jsoneditor": "^0.23.8"
+  },
+  "devDependencies": {
+    "web-test-helpers": "workspace:*"
+  },
+  "peerDependencies": {
+    "@ownclouders/web-client": "workspace:*",
+    "@ownclouders/web-pkg": "workspace:*",
+    "vue3-gettext": "2.4.0"
+  }
+}

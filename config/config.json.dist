@@ -12,7 +12,8 @@
     "preview",
     "search",
     "text-editor",
-    "epub-reader"
+    "epub-reader",
+    "json-viewer"
   ],
   "applications" : []
 }

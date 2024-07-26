@@ -20,7 +20,8 @@
     "admin-settings",
     "ocm",
     "webfinger",
-    "epub-reader"
+    "epub-reader",
+    "json-viewer"
   ],
   "external_apps": [
     {

@@ -16,7 +16,8 @@
     "text-editor",
     "external",
     "admin-settings",
-    "epub-reader"
+    "epub-reader",
+    "json-viewer"
   ],
   "options": {
     "contextHelpersReadMore": true
