@@ -54,7 +54,7 @@
         </oc-button>
       </div>
       <p v-if="space.description" class="oc-mt-rm oc-text-bold">{{ space.description }}</p>
-      <div ref="markdownContainerRef" class="markdown-container">
+      <div ref="markdownContainerRef" class="markdown-container oc-flex oc-flex-middle">
         <text-editor
           v-if="markdownContent"
           :resource="markdownResource"
@@ -62,6 +62,16 @@
           :is-read-only="true"
           :application-config="{}"
         />
+        <div class="markdown-container-edit oc-ml-s">
+          <oc-button
+            v-oc-tooltip="editReadmeContentActions[0].label"
+            size="small"
+            appearance="raw"
+            @click="editReadmeContentActions[0].handler({ resources: [space] })"
+          >
+            <oc-icon name="pencil" size="small" fill-type="line" />
+          </oc-button>
+        </div>
       </div>
       <div
         v-if="showMarkdownCollapse && markdownContent"
@@ -95,7 +105,8 @@ import {
   usePreviewService,
   ProcessorType,
   useResourcesStore,
-  TextEditor
+  TextEditor,
+  useSpaceActionsEditReadmeContent
 } from '@ownclouders/web-pkg'
 import { ImageDimension } from '@ownclouders/web-pkg'
 import { VisibilityObserver } from '@ownclouders/web-pkg'
@@ -128,6 +139,7 @@ export default defineComponent({
     const { getFileContents, getFileInfo } = clientService.webdav
     const previewService = usePreviewService()
     const resourcesStore = useResourcesStore()
+    const { actions: editReadmeContentActions } = useSpaceActionsEditReadmeContent()
 
     const markdownContainerRef = ref(null)
     const markdownContent = ref('')
@@ -265,7 +277,8 @@ export default defineComponent({
       memberCount,
       memberCountString,
       openSideBarSharePanel,
-      loadPreviewTask
+      loadPreviewTask,
+      editReadmeContentActions
     }
   }
 })

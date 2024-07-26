@@ -1,0 +1,6 @@
+Enhancement: Add edit description button to space info
+
+We've added an edit description button to the space info section.
+This button allows you to edit the description of a space directly from the space info section.
+
+https://github.com/owncloud/web/pull/11280

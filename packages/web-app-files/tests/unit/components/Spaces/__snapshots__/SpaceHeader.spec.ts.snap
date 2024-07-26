@@ -21,8 +21,12 @@ exports[`SpaceHeader > should add the "squashed"-class when the sidebar is opene
       <!--v-if-->
     </div>
     <!--v-if-->
-    <div class="markdown-container">
+    <div class="markdown-container oc-flex oc-flex-middle">
       <!--v-if-->
+      <div class="markdown-container-edit oc-ml-s"><button type="button" class="oc-button oc-rounded oc-button-s oc-button-justify-content-center oc-button-gap-m oc-button-passive oc-button-passive-raw">
+          <!--v-if-->
+          <!-- @slot Content of the button --> <span class="oc-icon oc-icon-s oc-icon-passive"><!----></span>
+        </button></div>
     </div>
     <!--v-if-->
   </div>
@@ -50,8 +54,12 @@ exports[`SpaceHeader > space image > should show the default image if no other i
       <!--v-if-->
     </div>
     <!--v-if-->
-    <div class="markdown-container">
+    <div class="markdown-container oc-flex oc-flex-middle">
       <!--v-if-->
+      <div class="markdown-container-edit oc-ml-s"><button type="button" class="oc-button oc-rounded oc-button-s oc-button-justify-content-center oc-button-gap-m oc-button-passive oc-button-passive-raw">
+          <!--v-if-->
+          <!-- @slot Content of the button --> <span class="oc-icon oc-icon-s oc-icon-passive"><!----></span>
+        </button></div>
     </div>
     <!--v-if-->
   </div>
@@ -77,8 +85,12 @@ exports[`SpaceHeader > space image > should show the set image 1`] = `
       <!--v-if-->
     </div>
     <!--v-if-->
-    <div class="markdown-container">
+    <div class="markdown-container oc-flex oc-flex-middle">
       <!--v-if-->
+      <div class="markdown-container-edit oc-ml-s"><button type="button" class="oc-button oc-rounded oc-button-s oc-button-justify-content-center oc-button-gap-m oc-button-passive oc-button-passive-raw">
+          <!--v-if-->
+          <!-- @slot Content of the button --> <span class="oc-icon oc-icon-s oc-icon-passive"><!----></span>
+        </button></div>
     </div>
     <!--v-if-->
   </div>
