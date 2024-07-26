@@ -19,7 +19,7 @@
 
 <script lang="ts">
 import { computed, defineComponent, PropType, unref } from 'vue'
-import { Quota } from '@ownclouders/web-client/src/graph/generated'
+import { Quota } from '@ownclouders/web-client/graph/generated'
 import { filesize } from 'filesize'
 import { useGettext } from 'vue3-gettext'
 
