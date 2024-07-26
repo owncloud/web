@@ -9,7 +9,7 @@
     <title><%= data.title %></title>
     <link rel="manifest" href="manifest.json" crossorigin="use-credentials" />
     <% if (data.buildConfig.cdn) { %>
-    <script src="//cdnjs.cloudflare.com/ajax/libs/require.js/2.3.6/require.min.js"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/require.js/2.3.7/require.min.js"></script>
     <script>
       if (typeof requirejs === 'undefined') {
         document.write('<script src="js/require.js?<%= data.compilationTimestamp %>">\x3C/script>')
