@@ -14,6 +14,7 @@ exports[`account page > account information section > displays basic user inform
     <dt data-v-f2ac0579="" class="oc-text-normal oc-text-muted">Email</dt>
     <dd data-v-f2ac0579="">some-email</dd>
   </div>
+  <!--v-if-->
   <div data-v-f2ac0579="" class="account-page-info-groups oc-mb oc-width-1-2@m oc-width-1-1@s">
     <dt data-v-f2ac0579="" class="oc-text-normal oc-text-muted">Group memberships</dt>
     <dd data-v-f2ac0579="" data-testid="group-names"><span data-v-f2ac0579="" data-testid="group-names-empty">You are not part of any group</span></dd>

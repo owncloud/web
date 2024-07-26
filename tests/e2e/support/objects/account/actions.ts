@@ -3,7 +3,7 @@ import util from 'util'
 import config from '../../../config'
 
 const accountMenuButton = '.oc-topbar-avatar'
-const quotaValue = '.storage-wrapper-quota'
+const quotaValue = '.quota-information-text'
 const accountManageButton = '#oc-topbar-account-manage'
 const infoValue = '.account-page-info-%s dd'
 const requestExportButton = '[data-testid="request-export-btn"]'
