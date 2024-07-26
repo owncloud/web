@@ -28,7 +28,8 @@ export default defineComponent({
   props: {
     quota: {
       type: Object as PropType<Quota>,
-      required: true
+      required: true,
+      default: () => undefined as Quota // FIXME: hack because vue doesn't detect type
     }
   },
   setup(props) {
