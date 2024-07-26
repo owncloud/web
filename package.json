@@ -74,7 +74,7 @@
     "@vitest/web-worker": "2.0.3",
     "@vue/test-utils": "2.4.5",
     "autoprefixer": "10.4.16",
-    "browserslist-to-esbuild": "^1.2.0",
+    "browserslist-to-esbuild": "^2.0.0",
     "browserslist-useragent-regexp": "^4.0.0",
     "commander": "11.1.0",
     "core-js": "3.30.2",
