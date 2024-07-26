@@ -220,8 +220,8 @@ importers:
         specifier: 17.0.2
         version: 17.0.2
       requirejs:
-        specifier: 2.3.6
-        version: 2.3.6
+        specifier: 2.3.7
+        version: 2.3.7
       rollup-plugin-visualizer:
         specifier: 5.9.0
         version: 5.9.0(rollup@4.14.0)
@@ -8314,8 +8314,8 @@ packages:
   require-main-filename@2.0.0:
     resolution: {integrity: sha512-NKN5kMDylKuldxYLSUfrbo5Tuzh4hd+2E8NPPX02mZtn1VuREQToYe/ZdlJy+J3uCpfaiGF05e7B8W0iXbQHmg==}
 
-  requirejs@2.3.6:
-    resolution: {integrity: sha512-ipEzlWQe6RK3jkzikgCupiTbTvm4S0/CAU5GlgptkN5SO6F3u0UD0K18wy6ErDqiCyP4J4YYe1HuAShvsxePLg==}
+  requirejs@2.3.7:
+    resolution: {integrity: sha512-DouTG8T1WanGok6Qjg2SXuCMzszOo0eHeH9hDZ5Y4x8Je+9JB38HdTLT4/VA8OaUhBa0JPVHJ0pyBkM1z+pDsw==}
     engines: {node: '>=0.4.0'}
     hasBin: true
 
@@ -11165,10 +11165,10 @@ snapshots:
       '@cucumber/ci-environment': 9.1.0
       '@cucumber/cucumber-expressions': 16.1.1
       '@cucumber/gherkin': 26.0.3
-      '@cucumber/gherkin-streams': 5.0.1(@cucumber/gherkin@26.0.3)(@cucumber/message-streams@4.0.1(@cucumber/messages@24.0.1))(@cucumber/messages@21.0.1)
+      '@cucumber/gherkin-streams': 5.0.1(@cucumber/gherkin@26.0.3)(@cucumber/message-streams@4.0.1(@cucumber/messages@21.0.1))(@cucumber/messages@21.0.1)
       '@cucumber/gherkin-utils': 8.0.2
       '@cucumber/html-formatter': 20.2.1(@cucumber/messages@21.0.1)
-      '@cucumber/message-streams': 4.0.1(@cucumber/messages@21.0.1)
+      '@cucumber/message-streams': 4.0.1(@cucumber/messages@24.0.1)
       '@cucumber/messages': 21.0.1
       '@cucumber/tag-expressions': 5.0.1
       assertion-error-formatter: 3.0.0
@@ -11203,10 +11203,10 @@ snapshots:
       yaml: 2.3.4
       yup: 0.32.11
 
-  '@cucumber/gherkin-streams@5.0.1(@cucumber/gherkin@26.0.3)(@cucumber/message-streams@4.0.1(@cucumber/messages@24.0.1))(@cucumber/messages@21.0.1)':
+  '@cucumber/gherkin-streams@5.0.1(@cucumber/gherkin@26.0.3)(@cucumber/message-streams@4.0.1(@cucumber/messages@21.0.1))(@cucumber/messages@21.0.1)':
     dependencies:
       '@cucumber/gherkin': 26.0.3
-      '@cucumber/message-streams': 4.0.1(@cucumber/messages@21.0.1)
+      '@cucumber/message-streams': 4.0.1(@cucumber/messages@24.0.1)
       '@cucumber/messages': 21.0.1
       commander: 9.1.0
       source-map-support: 0.5.21
@@ -11247,13 +11247,13 @@ snapshots:
     dependencies:
       '@cucumber/messages': 22.0.0
 
-  '@cucumber/message-streams@4.0.1(@cucumber/messages@21.0.1)':
-    dependencies:
-      '@cucumber/messages': 21.0.1
-
   '@cucumber/message-streams@4.0.1(@cucumber/messages@22.0.0)':
     dependencies:
       '@cucumber/messages': 22.0.0
+
+  '@cucumber/message-streams@4.0.1(@cucumber/messages@24.0.1)':
+    dependencies:
+      '@cucumber/messages': 24.0.1
 
   '@cucumber/messages@19.1.4':
     dependencies:
@@ -18168,7 +18168,7 @@ snapshots:
 
   require-main-filename@2.0.0: {}
 
-  requirejs@2.3.6: {}
+  requirejs@2.3.7: {}
 
   requires-port@1.0.0: {}
 
