@@ -154,11 +154,11 @@ importers:
         specifier: 10.4.16
         version: 10.4.16(postcss@8.4.32)
       browserslist-to-esbuild:
-        specifier: ^1.2.0
-        version: 1.2.0
+        specifier: ^2.0.0
+        version: 2.1.1(browserslist@4.22.2)
       browserslist-useragent-regexp:
         specifier: ^4.0.0
-        version: 4.1.0(browserslist@4.21.4)
+        version: 4.1.0(browserslist@4.22.2)
       commander:
         specifier: 11.1.0
         version: 11.1.0
@@ -3652,9 +3652,12 @@ packages:
   browserify-zlib@0.2.0:
     resolution: {integrity: sha512-Z942RysHXmJrhqk88FmKBVq/v5tqmSkDz7p54G/MGyjMnCFFnC79XWNbg+Vta8W6Wb2qtSZTSxIGkJrRpCFEiA==}
 
-  browserslist-to-esbuild@1.2.0:
-    resolution: {integrity: sha512-ftrrbI/VHBgEnmnSyhkqvQVMp6jAKybfs0qMIlm7SLBrQTGMsdCIP4q3BoKeLsZTBQllIQtY9kbxgRYV2WU47g==}
-    engines: {node: '>=12'}
+  browserslist-to-esbuild@2.1.1:
+    resolution: {integrity: sha512-KN+mty6C3e9AN8Z5dI1xeN15ExcRNeISoC3g7V0Kax/MMF9MSoYA2G7lkTTcVUFntiEjkpI0HNgqJC1NjdyNUw==}
+    engines: {node: '>=18'}
+    hasBin: true
+    peerDependencies:
+      browserslist: '*'
 
   browserslist-useragent-regexp@4.1.0:
     resolution: {integrity: sha512-ob2n92QgGEsI1Vfly4U4gfIyfTk7FA7znPXMuNgFE7opaML+TS+cciBMP0IkTSI0NomhyGdxUAt7dd3yNPIEwA==}
@@ -3662,11 +3665,6 @@ packages:
     hasBin: true
     peerDependencies:
       browserslist: '>=4.0.0'
-
-  browserslist@4.21.4:
-    resolution: {integrity: sha512-CBHJJdDmgjl3daYjN5Cp5kbTf1mUhZoS+beLklHIvkOWscs83YAhLlF3Wsh/lciQYAcbBJgTOD44VtG31ZM4Hw==}
-    engines: {node: ^6 || ^7 || ^8 || ^9 || ^10 || ^11 || ^12 || >=13.7}
-    hasBin: true
 
   browserslist@4.22.2:
     resolution: {integrity: sha512-0UgcrvQmBDvZHFGdYUehrCNIazki7/lUP3kkoi/r3YB2amZbFM9J43ZRkJTXBUZK4gmx56+Sqk9+Vs9mwZx9+A==}
@@ -3757,9 +3755,6 @@ packages:
 
   caniuse-api@3.0.0:
     resolution: {integrity: sha512-bsTwuIg/BZZK/vreVTYYbSWoe2F+71P7K5QGEX+pT250DZbfU1MQ5prOKpPR+LL6uWKK3KMwMCAS74QB3Um1uw==}
-
-  caniuse-lite@1.0.30001563:
-    resolution: {integrity: sha512-na2WUmOxnwIZtwnFI2CZ/3er0wdNzU7hN+cPYz/z2ajHThnkWjNBOpEPP4n+4r2WPM847JaMotaJE3bnfzjyKw==}
 
   caniuse-lite@1.0.30001572:
     resolution: {integrity: sha512-1Pbh5FLmn5y4+QhNyJE9j3/7dK44dGB83/ZMjv/qJk86TvDbjk0LosiZo0i0WB0Vx607qMX9jYrn1VLHCkN4rw==}
@@ -4573,9 +4568,6 @@ packages:
     resolution: {integrity: sha512-UeJmFfOrAQS8OJWPZ4qtgHyWExa088/MtK5UEyoJGFH67cDEXkZSviOiKRCZ4Xij0zxI3JECgYs3oKx+AizQBA==}
     engines: {node: '>=0.10.0'}
     hasBin: true
-
-  electron-to-chromium@1.4.390:
-    resolution: {integrity: sha512-9h6KDGTynRfpM16U40uLSCxRO3diIKcXXI0mPChKls7sfkxOlCH1sgSJ14Rb00BFomQNHY/p67gaZSu5Mu8j6w==}
 
   electron-to-chromium@1.4.617:
     resolution: {integrity: sha512-sYNE3QxcDS4ANW1k4S/wWYMXjCVcFSOX3Bg8jpuMFaXt/x8JCmp0R1Xe1ZXDX4WXnSRBf+GJ/3eGWicUuQq5cg==}
@@ -6786,9 +6778,6 @@ packages:
 
   node-notifier@10.0.1:
     resolution: {integrity: sha512-YX7TSyDukOZ0g+gmzjB6abKu+hTGvO8+8+gIFDsRCU2t8fLV/P2unmt+LGFaIa4y64aX98Qksa97rgz4vMNeLQ==}
-
-  node-releases@2.0.10:
-    resolution: {integrity: sha512-5GFldHPXVG/YZmFzJvKK2zDSzPKhEp0+ZR5SVaoSag9fsL5YgHbUHDfnG5494ISANDcK4KwPXAx2xqVEydmd7w==}
 
   node-releases@2.0.14:
     resolution: {integrity: sha512-y10wOWt8yZpqXmOgRo77WaHEmhYQYGNA6y421PKsKYWEK8aW+cqAphborZDhqfyKrbZEN92CN1X2KbafY2s7Yw==}
@@ -9243,12 +9232,6 @@ packages:
   upath@1.2.0:
     resolution: {integrity: sha512-aZwGpamFO61g3OlfT7OQCHqhGnW43ieH9WZeP7QxN/G/jS4jfqUkZxoryvJgVPEcrl5NL/ggHsSmLMHuH64Lhg==}
     engines: {node: '>=4'}
-
-  update-browserslist-db@1.0.10:
-    resolution: {integrity: sha512-OztqDenkfFkbSG+tRxBeAnCVPckDBcvibKd35yDONx6OU8N7sqgwc7rCbkJ/WcYtVRZ4ba68d6byhC21GFh7sQ==}
-    hasBin: true
-    peerDependencies:
-      browserslist: '>= 4.21.0'
 
   update-browserslist-db@1.0.13:
     resolution: {integrity: sha512-xebP81SNcPuNpPP3uzeW1NYXxI3rxyJzF3pD6sH4jE7o/IX+WtSpwnVU+qIsDPyk0d3hmFQ7mjqc6AtV604hbg==}
@@ -12812,25 +12795,19 @@ snapshots:
     dependencies:
       pako: 1.0.11
 
-  browserslist-to-esbuild@1.2.0:
+  browserslist-to-esbuild@2.1.1(browserslist@4.22.2):
     dependencies:
-      browserslist: 4.21.4
+      browserslist: 4.22.2
+      meow: 13.2.0
 
-  browserslist-useragent-regexp@4.1.0(browserslist@4.21.4):
+  browserslist-useragent-regexp@4.1.0(browserslist@4.22.2):
     dependencies:
       argue-cli: 2.1.0
-      browserslist: 4.21.4
+      browserslist: 4.22.2
       easy-table: 1.2.0
       picocolors: 1.0.0
       regexp-tree: 0.1.27
       ua-regexes-lite: 1.1.5
-
-  browserslist@4.21.4:
-    dependencies:
-      caniuse-lite: 1.0.30001563
-      electron-to-chromium: 1.4.390
-      node-releases: 2.0.10
-      update-browserslist-db: 1.0.10(browserslist@4.21.4)
 
   browserslist@4.22.2:
     dependencies:
@@ -12976,8 +12953,6 @@ snapshots:
       caniuse-lite: 1.0.30001572
       lodash.memoize: 4.1.2
       lodash.uniq: 4.5.0
-
-  caniuse-lite@1.0.30001563: {}
 
   caniuse-lite@1.0.30001572: {}
 
@@ -13925,8 +13900,6 @@ snapshots:
   ejs@3.1.10:
     dependencies:
       jake: 10.8.5
-
-  electron-to-chromium@1.4.390: {}
 
   electron-to-chromium@1.4.617: {}
 
@@ -16333,8 +16306,6 @@ snapshots:
       shellwords: 0.1.1
       uuid: 8.3.2
       which: 2.0.2
-
-  node-releases@2.0.10: {}
 
   node-releases@2.0.14: {}
 
@@ -19047,12 +19018,6 @@ snapshots:
   untildify@4.0.0: {}
 
   upath@1.2.0: {}
-
-  update-browserslist-db@1.0.10(browserslist@4.21.4):
-    dependencies:
-      browserslist: 4.21.4
-      escalade: 3.1.1
-      picocolors: 1.0.0
 
   update-browserslist-db@1.0.13(browserslist@4.22.2):
     dependencies:
