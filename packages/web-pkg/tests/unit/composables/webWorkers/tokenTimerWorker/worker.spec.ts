@@ -13,22 +13,37 @@ describe('token timer worker', () => {
     worker.terminate()
   })
 
-  it('should not post a message with "reset" topic', async () => {
-    const messageSpy = vi.fn()
-    unref(worker.worker).onmessage = messageSpy
+  it('resets the timer with "reset" topic', async () => {
+    let workerResolve: (val: boolean) => unknown
+    const promise = new Promise((resolve) => {
+      workerResolve = resolve
+    })
+
+    const clearTimeoutSpy = vi.spyOn(window, 'clearTimeout')
+    clearTimeoutSpy.mockImplementation(() => {
+      workerResolve(true)
+    })
+
     worker.post(JSON.stringify({ topic: 'reset' }))
+    await promise
 
-    await new Promise((resolve) => setTimeout(resolve, 1100))
-
-    expect(messageSpy).not.toHaveBeenCalled()
+    expect(clearTimeoutSpy).toHaveBeenCalled()
   })
 
   it('should post a message with "set" topic', async () => {
-    const messageSpy = vi.fn()
-    unref(worker.worker).onmessage = messageSpy
-    worker.post(JSON.stringify({ topic: 'set', expiry: 1, expiryThreshold: 1 }))
+    let workerResolve: (val: boolean) => unknown
+    const promise = new Promise((resolve) => {
+      workerResolve = resolve
+    })
 
-    await new Promise((resolve) => setTimeout(resolve, 1100))
+    const messageSpy = vi.fn()
+    unref(worker.worker).onmessage = () => {
+      workerResolve(true)
+      messageSpy()
+    }
+
+    worker.post(JSON.stringify({ topic: 'set', expiry: 1, expiryThreshold: 1 }))
+    await promise
 
     expect(messageSpy).toHaveBeenCalled()
   })
