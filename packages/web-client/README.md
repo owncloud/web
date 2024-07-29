@@ -1,6 +1,6 @@
 # web-client
 
-The `web-client` is a standalone package that allows you to interact with the [ownCloud Infinite Scale (oCIS)](https://github.com/owncloud/ocis/) APIs via TypeScript. It provides an abstraction layer between the server and a (web-) application that converts API data into objects with helpful types and utilities. This abstraction ensures that users of the APIs don't need in-depth knowledge about them, such as required methods or returned status codes (note that the Graph layer is currently an exception to this, meaning it doesn't process responses in any way).
+The `web-client` is a standalone package that allows you to interact with the [ownCloud Infinite Scale (oCIS)](https://github.com/owncloud/ocis/) APIs via TypeScript. It provides an abstraction layer between the server and a (web-) application that converts API data into objects with helpful types and utilities. This abstraction ensures that users of the APIs don't need in-depth knowledge about them, such as required methods or returned status codes.
 
 The supported APIs are:
 
