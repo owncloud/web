@@ -60,6 +60,7 @@ export class Session {
           refreshToken: body.refresh_token
         }
       })
+      console.log(tokenEnvironment.getToken({user: { ...user }}))
     }
   }
 
@@ -67,4 +68,96 @@ export class Session {
     await this.#page.locator('#_userMenuButton').click()
     await this.#page.locator('#oc-topbar-account-logout').click()
   }
+
+  // isTokenExpired(token) {
+  //       const arrayToken = token.split('.');
+  //       const tokenPayload = JSON.parse(Buffer.from(arrayToken[1], 'base64').toString('utf8'));
+  //       console.log(tokenPayload)
+  //       return Math.floor(new Date().getTime() / 1000) >= tokenPayload?.exp;
+  // }
+
+  async refreshToken({user}) {
+      const tokenEnvironment = TokenEnvironmentFactory()
+      if (config.refreshToken) {
+
+          // const accessToken = tokenEnvironment.getToken({user: { ...user }}).accessToken
+          // await this.#page.waitForTimeout(500)
+          // const isTokenExp = this.isTokenExpired(accessToken)
+          // console.log(isTokenExp)
+          const [response] = await Promise.all([
+              this.#page.waitForResponse(
+                  (resp) =>
+                      resp.url().endsWith('/token') &&
+                      resp.status() === 200 &&
+                      resp.request().method() === 'POST'
+              ),
+          ])
+          const body = await response.json()
+          tokenEnvironment.updateToken({
+              user: { ...user },
+              token: {
+                  ...tokenEnvironment.getToken({user}),
+                  accessToken: body.access_token,
+              }
+          })
+          console.log(tokenEnvironment.getToken({user}))
+      }else {
+          const [response] = await Promise.all([
+              // this.#page.waitForResponse(
+              //     (resp) =>
+              //         resp.url().includes('/oidc-silent-redirect.html') &&
+              //         resp.status() === 200 &&
+              //         resp.request().method() === 'GET'
+              // ),
+              this.#page.waitForResponse(
+                  (resp) =>
+                      resp.url().endsWith('/token') &&
+                      resp.status() === 200 &&
+                      resp.request().method() === 'POST'
+              ),
+
+          ])
+          // console.log(response[0])
+          const body = await response.json()
+
+          tokenEnvironment.updateToken({
+              user: { ...user },
+              token: {
+                  ...tokenEnvironment.getToken({user}),
+                  accessToken: body.access_token,
+              }
+          })
+
+          // Listen for iframe creation
+          // this.#page.on('frameattached', async (frame) => {
+          //     console.log('Frame attached:', frame.url())
+          //
+          //     // Wait for the frame to load
+          //     await frame.waitForLoadState('load');
+          //     console.log('Frame loaded:', frame.url())
+          //
+          //     // Perform actions with the frame
+          //     // Example: Interact with an element inside the iframe
+          //     // const element = await frame.$('selector');
+          //     // Perform actions with the element if needed
+          // });
+
+          // Listen for frames navigating
+          // this.#page.on('framenavigated', (frame) => {
+          //     // console.log('Frame navigated to:', frame)
+          //     console.log('Frame navigated to:', frame.url())
+          // });
+
+          // console.log(await this.#page.frameLocator('[name="iframe"]'))
+          // const iframeLocator = await this.#page.frameLocator('iframe')
+          // const iframeCount = await iframeLocator.count();
+
+          // if (iframeCount > 0) {
+          //     console.log('Iframe exists');
+          // } else {
+          //     console.log('Iframe does not exist');
+          // }
+      }
+  }
+
 }

@@ -19,8 +19,19 @@ class IdpTokenEnvironment {
   }
 
   setToken({ user, token }: { user: User; token: Token }): Token {
+      if (createdTokenStore.has(user.id)){
+          throw new Error(`Token of '${user}' already exist`)
+      }
     createdTokenStore.set(user.id, token)
     return token
+  }
+
+  updateToken({user,token}: {user:User; token:Token}):Map<string, Token> {
+      if (!createdTokenStore.has(user.id)){
+          throw new Error(`Token of '${user}' not found`)
+      }
+      createdTokenStore.delete(user.id)
+      return createdTokenStore.set(user.id, token)
   }
 
   deleteToken({ user }: { user: User }): void {
@@ -37,6 +48,14 @@ class KeycloakTokenEnvironment {
     keycloakTokenStore.set(user.id, token)
     return token
   }
+
+    updateToken({user,token}: {user:User; token:Token}):Map<string, Token> {
+        if (!keycloakTokenStore.has(user.id)){
+            throw new Error(`Token of '${user}' not found`)
+        }
+        keycloakTokenStore.delete(user.id)
+        return keycloakTokenStore.set(user.id, token)
+    }
 
   deleteToken({ user }: { user: User }): void {
     keycloakTokenStore.delete(user.id)
