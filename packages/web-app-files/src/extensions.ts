@@ -1,21 +1,25 @@
 import {
+  ApplicationInformation,
   Extension,
   useCapabilityStore,
   useConfigStore,
   useFileActionsCopyQuickLink,
   useFileActionsShowShares,
   useRouter,
-  useSearch
+  useSearch,
+  useUserStore
 } from '@ownclouders/web-pkg'
 import { computed, unref } from 'vue'
 import { SDKSearch } from './search'
 import { useSideBarPanels } from './composables/extensions/useFileSideBars'
 import { useFolderViews } from './composables/extensions/useFolderViews'
 import { quickActionsExtensionPoint } from './extensionPoints'
+import { urlJoin } from '@ownclouders/web-client'
 
-export const extensions = () => {
+export const extensions = (appInfo: ApplicationInformation) => {
   const capabilityStore = useCapabilityStore()
   const configStore = useConfigStore()
+  const userStore = useUserStore()
   const router = useRouter()
   const { search: searchFunction } = useSearch()
 
@@ -45,6 +49,18 @@ export const extensions = () => {
       extensionPointIds: [quickActionsExtensionPoint.id],
       type: 'action',
       action: unref(quickLinkActions)[0]
-    }
+    },
+    ...((userStore.user && [
+      {
+        id: `app.${appInfo.id}.menuItem`,
+        type: 'appMenuItem',
+        label: () => appInfo.name,
+        color: appInfo.color,
+        icon: appInfo.icon,
+        priority: 10,
+        path: urlJoin(appInfo.id)
+      }
+    ]) ||
+      [])
   ])
 }

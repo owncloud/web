@@ -9,8 +9,7 @@ function $gettext(msg: string) {
 const appInfo = {
   name: $gettext('Webfinger'),
   id: 'webfinger',
-  icon: 'fingerprint',
-  isFileEditor: false
+  icon: 'fingerprint'
 }
 
 const routes = () => [
