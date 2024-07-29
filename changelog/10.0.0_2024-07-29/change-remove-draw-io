@@ -1,6 +1,6 @@
 Change: Remove draw-io as default app
 
-BREAKING CHANGE: draw-io has been removed as default web app. The app is now available via the [web-extensions repository](https://github.com/owncloud/web-extensions).
+BREAKING CHANGE for administrators: draw-io has been removed as default web app. The app is now available via the [web-extensions repository](https://github.com/owncloud/web-extensions).
 
 Please refer to [the web-app docs](https://owncloud.dev/services/web/#web-apps) to see how to load an external web app.
 
