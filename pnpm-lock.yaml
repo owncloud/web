@@ -75,8 +75,8 @@ importers:
         specifier: 3.4.21
         version: 3.4.21(typescript@5.5.3)
       vue-demi:
-        specifier: 0.14.8
-        version: 0.14.8(vue@3.4.21(typescript@5.5.3))
+        specifier: 0.14.10
+        version: 0.14.10(vue@3.4.21(typescript@5.5.3))
       vue-router:
         specifier: 4.2.5
         version: 4.2.5(vue@3.4.21(typescript@5.5.3))
@@ -9516,6 +9516,17 @@ packages:
     peerDependencies:
       vue: ^3.3
 
+  vue-demi@0.14.10:
+    resolution: {integrity: sha512-nMZBOwuzabUO0nLgIcc6rycZEebF6eeUfaiQx9+WSk8e29IbLvPU9feI6tqW4kTo3hvoYAJkMh8n8D0fuISphg==}
+    engines: {node: '>=12'}
+    hasBin: true
+    peerDependencies:
+      '@vue/composition-api': ^1.0.0-rc.1
+      vue: ^3.0.0-0 || ^2.6.0
+    peerDependenciesMeta:
+      '@vue/composition-api':
+        optional: true
+
   vue-demi@0.14.5:
     resolution: {integrity: sha512-o9NUVpl/YlsGJ7t+xuqJKx8EBGf1quRhCiT6D/J0pfwmk9zUwYkC7yrF4SZCe6fETvSM3UNL2edcbYrSyc4QHA==}
     engines: {node: '>=12'}
@@ -12302,7 +12313,7 @@ snapshots:
 
   '@vueuse/shared@10.3.0(vue@3.4.21(typescript@5.5.3))':
     dependencies:
-      vue-demi: 0.14.6(vue@3.4.21(typescript@5.5.3))
+      vue-demi: 0.14.8(vue@3.4.21(typescript@5.5.3))
     transitivePeerDependencies:
       - '@vue/composition-api'
       - vue
@@ -19414,6 +19425,10 @@ snapshots:
   vue-concurrency@5.0.1(vue@3.4.21(typescript@5.5.3)):
     dependencies:
       caf: 15.0.1(patch_hash=l6oc6ggvh6ycwg3k5urnriyw5a)
+      vue: 3.4.21(typescript@5.5.3)
+
+  vue-demi@0.14.10(vue@3.4.21(typescript@5.5.3)):
+    dependencies:
       vue: 3.4.21(typescript@5.5.3)
 
   vue-demi@0.14.5(vue@3.4.21(typescript@5.5.3)):
