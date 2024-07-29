@@ -4,7 +4,7 @@
   "description": "OCM",
   "license": "AGPL-3.0",
   "devDependencies": {
-    "@types/uuid": "9.0.1"
+    "@types/uuid": "9.0.8"
   },
   "peerDependencies": {
     "@ownclouders/web-client": "workspace:*",

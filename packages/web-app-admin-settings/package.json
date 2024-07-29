@@ -6,7 +6,7 @@
   "license": "AGPL-3.0",
   "devDependencies": {
     "@types/mark.js": "8.11.12",
-    "@types/uuid": "9.0.1",
+    "@types/uuid": "9.0.8",
     "web-test-helpers": "workspace:*"
   },
   "dependencies": {
