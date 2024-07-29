@@ -80,7 +80,8 @@ export class PreviewService {
 
   public async loadPreview(
     options: LoadPreviewOptions,
-    cached = false
+    cached = false,
+    silenceErrors = true
   ): Promise<string | undefined> {
     const { space, resource } = options
     const serverSupportsPreview = this.available && this.isMimetypeSupported(resource.mimeType)
@@ -104,13 +105,16 @@ export class PreviewService {
       return this.publicPreviewUrl(options)
     }
     try {
-      return await this.privatePreviewBlob(options, cached)
-    } catch (_) {
-      return undefined
+      return await this.privatePreviewBlob(options, cached, silenceErrors)
+    } catch (e) {
+      if (silenceErrors) {
+        return undefined
+      }
+      throw e
     }
   }
 
-  private async cacheFactory(options: LoadPreviewOptions): Promise<string> {
+  private async cacheFactory(options: LoadPreviewOptions, silenceErrors: boolean): Promise<string> {
     const { resource, dimensions } = options
     const hit = cacheService.filePreview.get(resource.id.toString())
 
@@ -124,7 +128,12 @@ export class PreviewService {
         { src, etag: resource.etag, dimensions },
         0
       ).src
-    } catch (ignored) {}
+    } catch (e) {
+      if (silenceErrors) {
+        return
+      }
+      throw e
+    }
   }
 
   private buildQueryString(options: BuildQueryStringOptions): string {
@@ -139,10 +148,14 @@ export class PreviewService {
     })
   }
 
-  private async privatePreviewBlob(options: LoadPreviewOptions, cached = false): Promise<string> {
+  private async privatePreviewBlob(
+    options: LoadPreviewOptions,
+    cached = false,
+    silenceErrors = true
+  ): Promise<string> {
     const { resource, dimensions, processor } = options
     if (cached) {
-      return this.cacheFactory(options)
+      return this.cacheFactory(options, silenceErrors)
     }
 
     const url = [

@@ -52,33 +52,33 @@ describe('MediaControls component', () => {
   describe('size', () => {
     describe('shrink button', () => {
       it('exists if file is an image', () => {
-        const { wrapper } = getWrapper({ isImage: true })
+        const { wrapper } = getWrapper({ showImageControls: true })
         expect(wrapper.find(selectors.controlsImageShrink).exists()).toBeTruthy()
       })
       it('emits "setZoom"-event on click', async () => {
-        const { wrapper } = getWrapper({ isImage: true })
+        const { wrapper } = getWrapper({ showImageControls: true })
         await wrapper.find(selectors.controlsImageShrink).trigger('click')
         expect(wrapper.emitted('setZoom').length).toBeDefined()
       })
     })
     describe('zoom button', () => {
       it('exists if file is an image', () => {
-        const { wrapper } = getWrapper({ isImage: true })
+        const { wrapper } = getWrapper({ showImageControls: true })
         expect(wrapper.find(selectors.controlsImageZoom).exists()).toBeTruthy()
       })
       it('emits "setZoom"-event on click', async () => {
-        const { wrapper } = getWrapper({ isImage: true })
+        const { wrapper } = getWrapper({ showImageControls: true })
         await wrapper.find(selectors.controlsImageZoom).trigger('click')
         expect(wrapper.emitted('setZoom').length).toBeDefined()
       })
     })
     describe('original size button', () => {
       it('exists if file is an image', () => {
-        const { wrapper } = getWrapper({ isImage: true })
+        const { wrapper } = getWrapper({ showImageControls: true })
         expect(wrapper.find(selectors.controlsImageOriginalSize).exists()).toBeTruthy()
       })
       it('emits "setZoom"-event on click', async () => {
-        const { wrapper } = getWrapper({ isImage: true })
+        const { wrapper } = getWrapper({ showImageControls: true })
         await wrapper.find(selectors.controlsImageOriginalSize).trigger('click')
         expect(wrapper.emitted('setZoom').length).toBeDefined()
       })
@@ -87,22 +87,22 @@ describe('MediaControls component', () => {
   describe('rotation', () => {
     describe('left button', () => {
       it('exists if file is an image', () => {
-        const { wrapper } = getWrapper({ isImage: true })
+        const { wrapper } = getWrapper({ showImageControls: true })
         expect(wrapper.find(selectors.controlsRotateLeft).exists()).toBeTruthy()
       })
       it('emits "setRotation"-event on click', async () => {
-        const { wrapper } = getWrapper({ isImage: true })
+        const { wrapper } = getWrapper({ showImageControls: true })
         await wrapper.find(selectors.controlsRotateLeft).trigger('click')
         expect(wrapper.emitted('setRotation').length).toBeDefined()
       })
     })
     describe('right button', () => {
       it('exists if file is an image', () => {
-        const { wrapper } = getWrapper({ isImage: true })
+        const { wrapper } = getWrapper({ showImageControls: true })
         expect(wrapper.find(selectors.controlsRotateRight).exists()).toBeTruthy()
       })
       it('emits "setRotation"-event on click', async () => {
-        const { wrapper } = getWrapper({ isImage: true })
+        const { wrapper } = getWrapper({ showImageControls: true })
         await wrapper.find(selectors.controlsRotateRight).trigger('click')
         expect(wrapper.emitted('setRotation').length).toBeDefined()
       })
@@ -111,11 +111,11 @@ describe('MediaControls component', () => {
   describe('reset', () => {
     describe('reset button', () => {
       it('exists if file is an image', () => {
-        const { wrapper } = getWrapper({ isImage: true })
+        const { wrapper } = getWrapper({ showImageControls: true })
         expect(wrapper.find(selectors.controlsImageReset).exists()).toBeTruthy()
       })
       it('emits "resetImage"-event on click', async () => {
-        const { wrapper } = getWrapper({ isImage: true })
+        const { wrapper } = getWrapper({ showImageControls: true })
         await wrapper.find(selectors.controlsImageReset).trigger('click')
         expect(wrapper.emitted('resetImage').length).toBeDefined()
       })
