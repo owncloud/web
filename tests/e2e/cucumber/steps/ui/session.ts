@@ -79,3 +79,10 @@ When(
     await page.locator('#web').waitFor()
   }
 )
+
+When('{string} access token expires, refresh token request for new access token', async function (this: World, stepUser: string): Promise<void> {
+    const sessionObject = await createNewSession(this, stepUser)
+    const user = this.usersEnvironment.getUser({ key: stepUser })
+    await sessionObject.refreshToken({user})
+});
+
