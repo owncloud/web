@@ -77,7 +77,6 @@ export default defineWebApplication({
         name: 'Advanced PDF Viewer',
         id: appId,
         defaultExtension: 'pdf',
-        isFileEditor: true,
         extensions: [
           // This makes sure all files with the "pdf" extension will be routed to your app when being opened.
           // See the `ApplicationFileExtension` interface down below for a list of all possible properties.
