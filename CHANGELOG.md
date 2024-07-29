@@ -1,9 +1,9 @@
-Changelog for ownCloud Web [unreleased] (UNRELEASED)
+Changelog for ownCloud Web [10.0.0] (2024-07-29)
 =======================================
-The following sections list the changes in ownCloud web unreleased relevant to
+The following sections list the changes in ownCloud web 10.0.0 relevant to
 ownCloud admins and users.
 
-[unreleased]: https://github.com/owncloud/web/compare/v9.2.0...master
+[10.0.0]: https://github.com/owncloud/web/compare/v9.1.0...v10.0.0
 
 Summary
 -------
@@ -15,6 +15,7 @@ Summary
 * Change - Removal of Deprecated Config Options: [#11251](https://github.com/owncloud/web/pull/11251)
 * Change - Remove draw-io as default app: [#11252](https://github.com/owncloud/web/pull/11252)
 * Change - Remove set as description space action: [#11277](https://github.com/owncloud/web/pull/11277)
+* Enhancement - Add share role icon to shared with me table: [#11166](https://github.com/owncloud/web/pull/11166)
 * Enhancement - Application menu extension point: [#11258](https://github.com/owncloud/web/pull/11258)
 * Enhancement - Move quota info to general info in user menu: [#11279](https://github.com/owncloud/web/pull/11279)
 * Enhancement - Add edit description button to space info: [#11280](https://github.com/owncloud/web/pull/11280)
@@ -94,8 +95,8 @@ Details
 
 * Change - Remove draw-io as default app: [#11252](https://github.com/owncloud/web/pull/11252)
 
-   BREAKING CHANGE: draw-io has been removed as default web app. The app is now
-   available via the [web-extensions
+   BREAKING CHANGE for administrators: draw-io has been removed as default web app.
+   The app is now available via the [web-extensions
    repository](https://github.com/owncloud/web-extensions).
 
    Please refer to [the web-app docs](https://owncloud.dev/services/web/#web-apps)
@@ -113,6 +114,15 @@ Details
 
    https://github.com/owncloud/web/issues/11276
    https://github.com/owncloud/web/pull/11277
+
+* Enhancement - Add share role icon to shared with me table: [#11166](https://github.com/owncloud/web/pull/11166)
+
+   We've added the respective share role icon with a tooltip that contains the
+   share role name to each share column, so the user knows which permission they
+   have in a share.
+
+   https://github.com/owncloud/web/issues/11101
+   https://github.com/owncloud/web/pull/11166
 
 * Enhancement - Application menu extension point: [#11258](https://github.com/owncloud/web/pull/11258)
 
@@ -143,30 +153,6 @@ Details
    section.
 
    https://github.com/owncloud/web/pull/11280
-
-Changelog for ownCloud Web [9.2.0] (2024-07-11)
-=======================================
-The following sections list the changes in ownCloud web 9.2.0 relevant to
-ownCloud admins and users.
-
-[9.2.0]: https://github.com/owncloud/web/compare/v9.1.0...v9.2.0
-
-Summary
--------
-
-* Enhancement - Add share role icon to shared with me table: [#11166](https://github.com/owncloud/web/pull/11166)
-
-Details
--------
-
-* Enhancement - Add share role icon to shared with me table: [#11166](https://github.com/owncloud/web/pull/11166)
-
-   We've added the respective share role icon with a tooltip that contains the
-   share role name to each share column, so the user knows which permission they
-   have in a share.
-
-   https://github.com/owncloud/web/issues/11101
-   https://github.com/owncloud/web/pull/11166
 
 Changelog for ownCloud Web [9.1.0] (2024-07-05)
 =======================================
