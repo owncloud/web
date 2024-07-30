@@ -1,0 +1,6 @@
+Enhancement: Add quota information to account page
+
+We've added a new section to the account page that displays the users current quota usage.
+
+https://github.com/owncloud/web/pull/11287
+

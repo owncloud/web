@@ -70,24 +70,11 @@
             <span class="profile-info-wrapper" :class="{ 'oc-py-xs': !user.mail }">
               <span class="oc-display-block" v-text="user.displayName" />
               <span v-if="user.mail" class="oc-text-small" v-text="user.mail" />
-              <div v-if="quotaEnabled" class="storage-wrapper oc-flex oc-flex-bottom oc-mt-xs">
-                <oc-icon name="hard-drive-2" size="small" fill-type="line" class="oc-mr-xs" />
-                <div>
-                  <p class="oc-my-rm">
-                    <span
-                      class="storage-wrapper-quota oc-text-small"
-                      v-text="personalStorageDetailsLabel"
-                    />
-                  </p>
-                  <oc-progress
-                    v-if="limitedPersonalStorage"
-                    :value="quotaUsagePercent"
-                    :max="100"
-                    size="small"
-                    :variation="quotaProgressVariant"
-                  />
-                </div>
-              </div>
+              <quota-information
+                v-if="quotaEnabled"
+                :quota="quota"
+                class="oc-text-small oc-mt-xs"
+              />
             </span>
           </li>
           <li>
@@ -125,7 +112,6 @@
 <script lang="ts">
 import { storeToRefs } from 'pinia'
 import { defineComponent, ComponentPublicInstance, computed, unref } from 'vue'
-import { filesize } from 'filesize'
 import {
   useRoute,
   useSpacesStore,
@@ -135,8 +121,10 @@ import {
   useAuthService
 } from '@ownclouders/web-pkg'
 import { OcDrop } from 'design-system/src/components'
+import QuotaInformation from '../Account/QuotaInformation.vue'
 
 export default defineComponent({
+  components: { QuotaInformation },
   setup() {
     const route = useRoute()
     const userStore = useUserStore()
@@ -182,38 +170,8 @@ export default defineComponent({
     onPremisesSamAccountName() {
       return this.user?.onPremisesSamAccountName
     },
-    personalStorageDetailsLabel() {
-      const total = this.quota.total || 0
-      const used = this.quota.used || 0
-      return total
-        ? this.$gettext('%{used} of %{total} used (%{percentage}%)', {
-            used: filesize(used),
-            total: filesize(total),
-            percentage: (this.quotaUsagePercent || 0).toString()
-          })
-        : this.$gettext('%{used} used', {
-            used: filesize(used),
-            total: filesize(total)
-          })
-    },
-    limitedPersonalStorage() {
-      return this.quota.total !== 0
-    },
     quotaEnabled() {
       return !!this.quota
-    },
-    quotaUsagePercent() {
-      return parseFloat(((this.quota.used / this.quota.total) * 100).toFixed(2))
-    },
-
-    quotaProgressVariant() {
-      if ((this.quotaUsagePercent || 0) < 80) {
-        return 'primary'
-      }
-      if ((this.quotaUsagePercent || 0) < 90) {
-        return 'warning'
-      }
-      return 'danger'
     }
   },
   mounted() {
@@ -256,8 +214,7 @@ export default defineComponent({
     }
   }
 
-  &.profile-info-wrapper,
-  &.storage-wrapper {
+  &.profile-info-wrapper {
     gap: var(--oc-space-medium);
     min-height: 3rem;
   }

@@ -37,6 +37,12 @@
             <span v-else v-text="$gettext('No email has been set up')" />
           </dd>
         </div>
+        <div v-if="!!quota" class="account-page-info-quota oc-mb oc-width-1-2@m oc-width-1-1@s">
+          <dt class="oc-text-normal oc-text-muted" v-text="$gettext('Personal storage')" />
+          <dd data-testid="quota">
+            <quota-information :quota="quota" class="oc-mt-xs" />
+          </dd>
+        </div>
         <div class="account-page-info-groups oc-mb oc-width-1-2@m oc-width-1-1@s">
           <dt class="oc-text-normal oc-text-muted" v-text="$gettext('Group memberships')" />
           <dd data-testid="group-names">
@@ -219,10 +225,12 @@ import { supportedLanguages } from '../defaults'
 import { User } from '@ownclouders/web-client/graph/generated'
 import { isEmpty } from 'lodash-es'
 import { call } from '@ownclouders/web-client'
+import QuotaInformation from '../components/Account/QuotaInformation.vue'
 
 export default defineComponent({
   name: 'AccountPage',
   components: {
+    QuotaInformation,
     AppLoadingSpinner,
     GdprExport,
     ExtensionPreference,
@@ -253,6 +261,10 @@ export default defineComponent({
     const isSettingsServiceSupported = computed(() => !configStore.options.runningOnEos)
 
     const { user } = storeToRefs(userStore)
+
+    const quota = computed(() => {
+      return spacesStore.personalSpace?.spaceQuota
+    })
 
     const showGdprExport = computed(() => {
       return (
@@ -539,7 +551,8 @@ export default defineComponent({
       loadAccountBundleTask,
       loadGraphUserTask,
       loadValuesListTask,
-      showEditPasswordModal
+      showEditPasswordModal,
+      quota
     }
   },
   computed: {
