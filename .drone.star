@@ -1,6 +1,6 @@
 ALPINE_GIT = "alpine/git:latest"
 APACHE_TIKA = "apache/tika:2.8.0.0"
-COLLABORA_CODE = "collabora/code:23.05.6.5.1"
+COLLABORA_CODE = "collabora/code:24.04.5.1.1"
 CS3ORG_WOPI_SERVER = "cs3org/wopiserver:v10.3.0"
 KEYCLOAK = "quay.io/keycloak/keycloak:24.0.1"
 MINIO_MC = "minio/mc:RELEASE.2021-10-07T04-19-58Z"
@@ -1550,7 +1550,7 @@ def collaboraService():
             "detach": True,
             "environment": {
                 "DONT_GEN_SSL_CERT": "set",
-                "extra_params": "--o:ssl.enable=true --o:ssl.termination=true --o:welcome.enable=false --o:net.frame_ancestors=https://ocis:9200",
+                "extra_params": "--o:ssl.enable=false --o:ssl.ssl_verification=false --o:ssl.termination=true --o:welcome.enable=false --o:net.frame_ancestors=https://ocis:9200",
             },
             "commands": [
                 "coolconfig generate-proof-key",
