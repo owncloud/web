@@ -1,5 +1,5 @@
 <template>
-  <img :src="src" :alt="alt" :aria-hidden="`${!alt}`" :title="title" :loading="loadingType" />
+  <img :src="src" :alt="alt" :aria-hidden="`${ariaHidden}`" :title="title" :loading="loadingType" />
 </template>
 <script lang="ts">
 import { PropType } from 'vue'

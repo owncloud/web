@@ -21,7 +21,7 @@
 <script lang="ts">
 import ActionMenuItem from './ContextActions/ActionMenuItem.vue'
 import { defineComponent, PropType } from 'vue'
-import { Action, ActionOptions } from '../composables/actions'
+import { Action, ActionOptions } from '../composables'
 
 export default defineComponent({
   name: 'BatchActions',

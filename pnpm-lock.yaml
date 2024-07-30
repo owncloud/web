@@ -631,6 +631,40 @@ importers:
         specifier: workspace:*
         version: link:../web-test-helpers
 
+  packages/web-app-app-store:
+    dependencies:
+      '@ownclouders/web-client':
+        specifier: workspace:*
+        version: link:../web-client
+      '@ownclouders/web-pkg':
+        specifier: workspace:*
+        version: link:../web-pkg
+      axios:
+        specifier: 1.6.8
+        version: 1.6.8
+      design-system:
+        specifier: workspace:@ownclouders/design-system@*
+        version: link:../design-system
+      lodash-es:
+        specifier: 4.17.21
+        version: 4.17.21
+      pinia:
+        specifier: 2.1.7
+        version: 2.1.7(typescript@5.5.3)(vue@3.4.21(typescript@5.5.3))
+      vue-concurrency:
+        specifier: 5.0.1
+        version: 5.0.1(vue@3.4.21(typescript@5.5.3))
+      web-app-app-store:
+        specifier: workspace:*
+        version: 'link:'
+      zod:
+        specifier: ^3.22.4
+        version: 3.22.4
+    devDependencies:
+      web-test-helpers:
+        specifier: workspace:*
+        version: link:../web-test-helpers
+
   packages/web-app-epub-reader:
     dependencies:
       '@ownclouders/web-client':
@@ -16583,7 +16617,7 @@ snapshots:
     dependencies:
       '@vue/devtools-api': 6.5.1
       vue: 3.4.21(typescript@5.5.3)
-      vue-demi: 0.14.6(vue@3.4.21(typescript@5.5.3))
+      vue-demi: 0.14.10(vue@3.4.21(typescript@5.5.3))
     optionalDependencies:
       typescript: 5.5.3
 
