@@ -1,6 +1,7 @@
 directives:
   child-src:
     - '''self'''
+    - 'blob:'
   connect-src:
     - '''self'''
     - 'https://${COMPANION_DOMAIN|companion.owncloud.test}/'
@@ -32,6 +33,7 @@ directives:
   script-src:
     - '''self'''
     - '''unsafe-inline'''
+    - '''wasm-unsafe-eval'''
   style-src:
     - '''self'''
     - '''unsafe-inline'''
