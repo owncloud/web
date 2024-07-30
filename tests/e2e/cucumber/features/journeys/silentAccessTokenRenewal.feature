@@ -1,11 +1,11 @@
-Feature: Refresh Access Token
+Feature: Silent Access Token Renewal
 
   As a user
-  I want the web application to automatically refresh its access token using a refresh token,
+  I want the web application to automatically renew access token just before access token expires using iframe at background,
   So that I can be confident the application will not encounter issues related to expired access tokens.
 
-#  reset access token to  5 min
-  Scenario: validate access token
+
+  Scenario: renew access token
     Given "Admin" creates following users using API
       | id    |
       | Alice |

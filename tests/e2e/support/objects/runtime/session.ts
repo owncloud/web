@@ -84,6 +84,8 @@ export class Session {
           // await this.#page.waitForTimeout(500)
           // const isTokenExp = this.isTokenExpired(accessToken)
           // console.log(isTokenExp)
+
+          // decode jwt token and sleep until exp time reached for safe side (skip this part because access token time is short)
           const [response] = await Promise.all([
               this.#page.waitForResponse(
                   (resp) =>
@@ -93,6 +95,7 @@ export class Session {
               ),
           ])
           const body = await response.json()
+          // once access token is renewed, token storage should be updated
           tokenEnvironment.updateToken({
               user: { ...user },
               token: {
@@ -100,25 +103,23 @@ export class Session {
                   accessToken: body.access_token,
               }
           })
-          console.log(tokenEnvironment.getToken({user}))
       }else {
-          const [response] = await Promise.all([
-              // this.#page.waitForResponse(
-              //     (resp) =>
-              //         resp.url().includes('/oidc-silent-redirect.html') &&
-              //         resp.status() === 200 &&
-              //         resp.request().method() === 'GET'
-              // ),
+          // for normal flow, iframe is triggered at background it happen for short time so difficult to get iframe but we can get request which trigger iframe
+          const [,tokenResponse] = await Promise.all([
+              this.#page.waitForResponse(
+                  (resp) =>
+                      resp.url().includes('/oidc-silent-redirect.html') &&
+                      resp.status() === 200 &&
+                      resp.request().method() === 'GET'
+              ),
               this.#page.waitForResponse(
                   (resp) =>
                       resp.url().endsWith('/token') &&
                       resp.status() === 200 &&
                       resp.request().method() === 'POST'
               ),
-
           ])
-          // console.log(response[0])
-          const body = await response.json()
+          const body = await tokenResponse.json()
 
           tokenEnvironment.updateToken({
               user: { ...user },
