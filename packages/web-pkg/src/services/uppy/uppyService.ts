@@ -5,7 +5,7 @@ import XHRUpload, { XHRUploadOptions } from '@uppy/xhr-upload'
 import { Language } from 'vue3-gettext'
 import { eventBus } from '../eventBus'
 import DropTarget from '@uppy/drop-target'
-import { urlJoin } from '@ownclouders/web-client'
+import { Resource, urlJoin } from '@ownclouders/web-client'
 import { UppyResource } from './types'
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-ignore
@@ -48,6 +48,7 @@ type TusClientError = Error & { originalResponse: any }
 export class UppyService {
   uppy: Uppy
   uploadInputs: HTMLInputElement[] = []
+  uploadFolderMap: Record<string, Resource> = {}
 
   constructor({ language }: UppyServiceOptions) {
     const { $gettext } = language
@@ -306,5 +307,22 @@ export class UppyService {
     this.uploadInputs.forEach((item) => {
       item.value = null
     })
+  }
+
+  /**
+   * Set a specific upload folder for an upload. The HandleUpload plugin
+   * checks, if a specific folder has been specified as upload destination.
+   * If not, it falls back to the current folder.
+   * The uploadId needs to be set within the meta object of the upload files
+   * for the plugin to connect an upload to its destination folder.
+   **/
+  setUploadFolder(uploadId: string, folder: Resource) {
+    this.uploadFolderMap[uploadId] = folder
+  }
+
+  removeUploadFolder(uploadId: string) {
+    if (this.uploadFolderMap[uploadId]) {
+      delete this.uploadFolderMap[uploadId]
+    }
   }
 }
