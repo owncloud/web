@@ -1,3 +1,25 @@
+Changelog for ownCloud Web [unreleased] (UNRELEASED)
+=======================================
+The following sections list the changes in ownCloud web unreleased relevant to
+ownCloud admins and users.
+
+[unreleased]: https://github.com/owncloud/web/compare/v10.0.0...master
+
+Summary
+-------
+
+* Enhancement - Add quota information to account page: [#11287](https://github.com/owncloud/web/pull/11287)
+
+Details
+-------
+
+* Enhancement - Add quota information to account page: [#11287](https://github.com/owncloud/web/pull/11287)
+
+   We've added a new section to the account page that displays the users current
+   quota usage.
+
+   https://github.com/owncloud/web/pull/11287
+
 Changelog for ownCloud Web [10.0.0] (2024-07-29)
 =======================================
 The following sections list the changes in ownCloud web 10.0.0 relevant to
