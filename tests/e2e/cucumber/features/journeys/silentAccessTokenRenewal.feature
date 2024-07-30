@@ -13,15 +13,16 @@ Feature: Silent Access Token Renewal
       | id    | role        |
       | Alice | Space Admin |
     And "Alice" logs in
-    When "Alice" access token expires, refresh token request for new access token
-    And "Alice" creates the following project space using API
+    And "Alice" opens the "files" app
+    And "Alice" navigates to the projects space page
+    And "Alice" creates the following project spaces
       | name | id     |
       | team | team.1 |
+    When "Alice" access token expires, background iframe renews access token
     And "Alice" navigates to the project space "team.1"
-    And "Alice" creates the following folder in space "team" using API
-      | name         |
-      | space-folder |
-    Then "Alice" should get "folder-created" SSE event
-    And following resources should be displayed in the files list for user "Alice"
+    And "Alice" creates the following resources
+      | resource     | type   |
+      | space-folder | folder |
+    Then following resources should be displayed in the files list for user "Alice"
       | resource     |
       | space-folder |

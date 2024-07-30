@@ -1,5 +1,6 @@
 import { Given, When, Then } from '@cucumber/cucumber'
 import { PickleTag } from '@cucumber/messages'
+import { expect } from '@playwright/test'
 import { World } from '../../environment'
 import { config } from '../../../config'
 import { objects } from '../../../support'
@@ -80,9 +81,22 @@ When(
   }
 )
 
-When('{string} access token expires, refresh token request for new access token', async function (this: World, stepUser: string): Promise<void> {
+When(
+  '{string} access token expires, refresh token renews access token',
+  async function (this: World, stepUser: string): Promise<void> {
     const sessionObject = await createNewSession(this, stepUser)
     const user = this.usersEnvironment.getUser({ key: stepUser })
-    await sessionObject.refreshToken({user})
-});
+    const hasRenewed = await sessionObject.isAccessTokenValidatedUsingRefreshToken({ user })
+    expect(hasRenewed).toBeTruthy()
+  }
+)
 
+When(
+  '{string} access token expires, background iframe renews access token',
+  async function (this: World, stepUser: string): Promise<void> {
+    const sessionObject = await createNewSession(this, stepUser)
+    const user = this.usersEnvironment.getUser({ key: stepUser })
+    const hasRenewed = await sessionObject.isAccessTokenValidatedSilentlyUsingIframe({ user })
+    expect(hasRenewed).toBeTruthy()
+  }
+)
