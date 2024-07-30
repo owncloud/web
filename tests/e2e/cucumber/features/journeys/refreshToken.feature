@@ -26,3 +26,15 @@ Feature: Refresh Access Token
     Then following resources should be displayed in the files list for user "Alice"
       | resource     |
       | space-folder |
+    When "Alice" access token expires, refresh token renews access token
+    And "Alice" opens the "admin-settings" app
+    And "Alice" navigates to the groups management page
+    When "Alice" creates the following groups
+      | id       |
+      | sales    |
+      | security |
+    Then "Alice" should see the following group
+      | group    |
+      | sales    |
+      | security |
+    And "Alice" logs out

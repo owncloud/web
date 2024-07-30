@@ -68,59 +68,33 @@ export class Session {
     await this.#page.locator('#oc-topbar-account-logout').click()
   }
 
-  async isAccessTokenValidatedUsingRefreshToken({ user }): Promise<boolean> {
-    const tokenEnvironment = TokenEnvironmentFactory()
-    // decode jwt token and sleep until exp time reached for safe side (skip this part because access token time is short)
-    const response = await this.#page.waitForResponse(
-      (resp) =>
-        resp.url().includes('/token') && resp.status() === 200 && resp.request().method() === 'POST'
-    )
-    const tokenResponse = await response.json()
-    const tokenPayload = await response.request().postDataJSON()
-    if (tokenPayload.grant_type === 'refresh_token') {
-      // once access token is renewed, token storage should be updated
-      await tokenEnvironment.updateToken({
-        user: { ...user },
-        token: {
-          ...tokenEnvironment.getToken({ user }),
-          accessToken: tokenResponse.access_token
-        }
-      })
-      return true
-    }
-    return false
-  }
+  // async isAccessTokenValidatedUsingRefreshToken(): Promise<boolean> {
+  //   // hint for improvement decode jwt token and sleep until exp time reached for safe side (skip this part because access token time is short)
+  //   const response = await this.#page.waitForResponse(
+  //     (resp) =>
+  //       resp.url().includes('/token') && resp.status() === 200 && resp.request().method() === 'POST'
+  //   )
+  //   const tokenPayload = await response.request().postDataJSON()
+  //   return tokenPayload.grant_type === 'refresh_token'
+  // }
 
-  async isAccessTokenValidatedSilentlyUsingIframe({ user }): Promise<boolean> {
-    const tokenEnvironment = TokenEnvironmentFactory()
-    // for normal flow, iframe is triggered at background it happen for short time so difficult to get iframe but we can get request which trigger iframe
-    const [, response] = await Promise.all([
-      this.#page.waitForResponse(
-        (resp) =>
-          resp.url().includes('/oidc-silent-redirect.html') &&
-          resp.status() === 200 &&
-          resp.request().method() === 'GET'
-      ),
-      this.#page.waitForResponse(
-        (resp) =>
-          resp.url().endsWith('/token') &&
-          resp.status() === 200 &&
-          resp.request().method() === 'POST'
-      )
-    ])
-    const tokenResponse = await response.json()
-    const tokenPayload = await response.request().postDataJSON()
-    if (tokenPayload.grant_type === 'authorization_code') {
-      // once access token is renewed, token storage should be updated
-      await tokenEnvironment.updateToken({
-        user: { ...user },
-        token: {
-          ...tokenEnvironment.getToken({ user }),
-          accessToken: tokenResponse.access_token
-        }
-      })
-      return true
-    }
-    return false
-  }
+  // async isAccessTokenValidatedSilentlyUsingIframe(): Promise<boolean> {
+  //   // for normal flow, iframe is triggered at background it happen for short time so difficult to get iframe, but we can get request which trigger iframe
+  //   const [, response] = await Promise.all([
+  //     this.#page.waitForResponse(
+  //       (resp) =>
+  //         resp.url().includes('/oidc-silent-redirect.html') &&
+  //         resp.status() === 200 &&
+  //         resp.request().method() === 'GET'
+  //     ),
+  //     this.#page.waitForResponse(
+  //       (resp) =>
+  //         resp.url().endsWith('/token') &&
+  //         resp.status() === 200 &&
+  //         resp.request().method() === 'POST'
+  //     )
+  //   ])
+  //   const tokenPayload = await response.request().postDataJSON()
+  //   return tokenPayload.grant_type === 'authorization_code'
+  // }
 }

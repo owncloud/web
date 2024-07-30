@@ -82,21 +82,15 @@ When(
 )
 
 When(
-  '{string} access token expires, refresh token renews access token',
-  async function (this: World, stepUser: string): Promise<void> {
-    const sessionObject = await createNewSession(this, stepUser)
-    const user = this.usersEnvironment.getUser({ key: stepUser })
-    const hasRenewed = await sessionObject.isAccessTokenValidatedUsingRefreshToken({ user })
-    expect(hasRenewed).toBeTruthy()
-  }
-)
+  /^"([^"]*)" access token expires, (refresh token|background iframe) renews access token$/,
+  async function (this: World, stepUser: string, renewalType: string): Promise<void> {
+    const { page } = this.actorsEnvironment.getActor({ key: stepUser })
+    const application = new objects.runtime.Application({ page })
+    const hasRenewed =
+      renewalType === 'refresh token'
+        ? await application.isAccessTokenValidatedUsingRefreshToken()
+        : await application.isAccessTokenValidatedSilentlyUsingIframe()
 
-When(
-  '{string} access token expires, background iframe renews access token',
-  async function (this: World, stepUser: string): Promise<void> {
-    const sessionObject = await createNewSession(this, stepUser)
-    const user = this.usersEnvironment.getUser({ key: stepUser })
-    const hasRenewed = await sessionObject.isAccessTokenValidatedSilentlyUsingIframe({ user })
     expect(hasRenewed).toBeTruthy()
   }
 )

@@ -10,8 +10,8 @@ Feature: Silent Access Token Renewal
       | id    |
       | Alice |
     And "Admin" assigns following roles to the users using API
-      | id    | role        |
-      | Alice | Space Admin |
+      | id    | role  |
+      | Alice | Admin |
     And "Alice" logs in
     And "Alice" opens the "files" app
     And "Alice" navigates to the projects space page
@@ -26,3 +26,15 @@ Feature: Silent Access Token Renewal
     Then following resources should be displayed in the files list for user "Alice"
       | resource     |
       | space-folder |
+    When "Alice" access token expires, background iframe renews access token
+    And "Alice" opens the "admin-settings" app
+    And "Alice" navigates to the groups management page
+    When "Alice" creates the following groups
+      | id       |
+      | sales    |
+      | security |
+    Then "Alice" should see the following group
+      | group    |
+      | sales    |
+      | security |
+    And "Alice" logs out
