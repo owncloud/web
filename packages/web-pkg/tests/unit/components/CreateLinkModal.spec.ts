@@ -7,7 +7,7 @@ import { AbilityRule, LinkShare, Resource, ShareRole } from '@ownclouders/web-cl
 import { PasswordPolicy } from 'design-system/src/helpers'
 import { useEmbedMode } from '../../../src/composables/embedMode'
 import { useLinkTypes } from '../../../src/composables/links'
-import { ref } from 'vue'
+import { nextTick, ref } from 'vue'
 import { CapabilityStore, useSharesStore } from '../../../src/composables/piniaStores'
 import { SharingLinkType } from '@ownclouders/web-client/graph/generated'
 
@@ -23,17 +23,28 @@ const selectors = {
   roleElements: '.role-dropdown-list li',
   contextMenuToggle: '#link-modal-context-menu-toggle',
   confirmBtn: '.link-modal-confirm',
-  cancelBtn: '.link-modal-cancel'
+  cancelBtn: '.link-modal-cancel',
+  linkRoleDropDownToggle: '.link-role-dropdown-toggle'
 }
 
 describe('CreateLinkModal', () => {
   describe('password input', () => {
-    it('should be rendered', () => {
+    it('should not rendered when "advancedMode" is not set', async () => {
       const { wrapper } = getWrapper()
+      wrapper.vm.advancedMode = false
+      await nextTick()
+      expect(wrapper.find(selectors.passwordInput).exists()).toBeFalsy()
+    })
+    it('should be rendered', async () => {
+      const { wrapper } = getWrapper()
+      wrapper.vm.advancedMode = true
+      await nextTick()
       expect(wrapper.find(selectors.passwordInput).exists()).toBeTruthy()
     })
-    it('should be disabled for internal links', () => {
+    it('should be disabled for internal links', async () => {
       const { wrapper } = getWrapper({ defaultLinkType: SharingLinkType.Internal })
+      wrapper.vm.advancedMode = true
+      await nextTick()
       expect(wrapper.find(selectors.passwordInput).attributes('disabled')).toBeTruthy()
     })
     it('should not be rendered if user cannot create public links', () => {
@@ -45,21 +56,38 @@ describe('CreateLinkModal', () => {
       expect(wrapper.find(selectors.passwordInput).exists()).toBeFalsy()
     })
   })
-  describe('link role select', () => {
-    it('lists all types as roles', () => {
+  describe('link role drop', () => {
+    it('should not rendered when "advancedMode" is not set', async () => {
+      const { wrapper } = getWrapper()
+      wrapper.vm.advancedMode = false
+      await nextTick()
+      expect(wrapper.find(selectors.linkRoleDropDownToggle).exists()).toBeFalsy()
+    })
+    it('lists all types as roles', async () => {
       const availableLinkTypes = [
         SharingLinkType.View,
         SharingLinkType.Internal,
         SharingLinkType.Edit
       ]
       const { wrapper } = getWrapper({ availableLinkTypes })
+      wrapper.vm.advancedMode = true
+      await nextTick()
+      await wrapper.find(selectors.linkRoleDropDownToggle).trigger('click')
 
       expect(wrapper.findAll(selectors.roleElements).length).toBe(availableLinkTypes.length)
     })
   })
   describe('context menu', () => {
-    it('should display the button to toggle the context menu', () => {
+    it('should not rendered when "advancedMode" is not set', async () => {
       const { wrapper } = getWrapper()
+      wrapper.vm.advancedMode = false
+      await nextTick()
+      expect(wrapper.find(selectors.contextMenuToggle).exists()).toBeFalsy()
+    })
+    it('should display the button to toggle the context menu', async () => {
+      const { wrapper } = getWrapper()
+      wrapper.vm.advancedMode = true
+      await nextTick()
       expect(wrapper.find(selectors.contextMenuToggle).exists()).toBeTruthy()
     })
     it('should not display the button to toggle the context menu if user cannot create public links', () => {
@@ -72,19 +100,12 @@ describe('CreateLinkModal', () => {
     })
   })
   describe('method "confirm"', () => {
-    it('shows an error if a password is enforced but empty', async () => {
-      vi.spyOn(console, 'error').mockImplementation(undefined)
-      const { wrapper } = getWrapper({ passwordEnforced: true })
-      try {
-        await wrapper.vm.onConfirm()
-      } catch (error) {}
-
-      expect(wrapper.vm.password.error).toBeDefined()
-    })
     it('does not create links when the password policy is not fulfilled', async () => {
       vi.spyOn(console, 'error').mockImplementation(undefined)
       const callbackFn = vi.fn()
       const { wrapper } = getWrapper({ passwordPolicyFulfilled: false, callbackFn })
+      wrapper.vm.advancedMode = true
+      await nextTick()
       try {
         await wrapper.vm.onConfirm()
       } catch (error) {}

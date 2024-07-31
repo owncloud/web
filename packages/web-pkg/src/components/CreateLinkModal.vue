@@ -67,8 +67,8 @@
       </oc-button>
       <oc-drop
         v-if="!onlyInternalLinksAllowed"
-        X
         ref="contextMenuDrop"
+        X
         drop-id="link-modal-context-menu-drop"
         toggle="#link-modal-context-menu-toggle"
         padding-size="small"
