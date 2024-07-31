@@ -37,6 +37,16 @@ export class PasswordPolicyService {
     this.buildGeneratePasswordRules()
   }
 
+  private hasRules(): boolean {
+    return (
+      !!this.capability.min_characters ||
+      !!this.capability.min_lowercase_characters ||
+      !!this.capability.min_uppercase_characters ||
+      !!this.capability.min_digits ||
+      !!this.capability.min_special_characters
+    )
+  }
+
   private buildGeneratePasswordRules(): void {
     const DEFAULT_LENGTH = 12
     const DEFAULT_MIN_LOWERCASE_CHARACTERS = 2
@@ -80,7 +90,7 @@ export class PasswordPolicyService {
     }
     const rules = {} as Record<string, unknown>
 
-    if (enforcePassword) {
+    if (enforcePassword && !this.hasRules()) {
       rules.mustNotBeEmpty = {}
     }
 
