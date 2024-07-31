@@ -5,7 +5,6 @@
     type="password"
     :password-policy="inputPasswordPolicy"
     :generate-password-method="inputGeneratePasswordMethod"
-    :fix-message-line="true"
     :placeholder="link.hasPassword ? '●●●●●●●●' : null"
     :error-message="errorMessage"
     class="oc-modal-body-input"
