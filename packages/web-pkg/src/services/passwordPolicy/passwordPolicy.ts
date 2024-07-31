@@ -35,17 +35,6 @@ export class PasswordPolicyService {
   public initialize(capabilityStore: CapabilityStore) {
     this.capability = capabilityStore.passwordPolicy
     this.buildGeneratePasswordRules()
-    this.buildPolicy()
-  }
-
-  private useDefaultRules(): boolean {
-    return (
-      !this.capability.min_characters &&
-      !this.capability.min_lowercase_characters &&
-      !this.capability.min_uppercase_characters &&
-      !this.capability.min_digits &&
-      !this.capability.min_special_characters
-    )
   }
 
   private buildGeneratePasswordRules(): void {
@@ -80,7 +69,7 @@ export class PasswordPolicyService {
     }
   }
 
-  private buildPolicy(): void {
+  private buildPolicy({ enforcePassword = false } = {}): void {
     const ruleset = {
       atLeastCharacters: new AtLeastCharactersRule({ ...this.language }),
       mustNotBeEmpty: new MustNotBeEmptyRule({ ...this.language }),
@@ -91,7 +80,7 @@ export class PasswordPolicyService {
     }
     const rules = {} as Record<string, unknown>
 
-    if (this.useDefaultRules()) {
+    if (enforcePassword) {
       rules.mustNotBeEmpty = {}
     }
 
@@ -125,7 +114,8 @@ export class PasswordPolicyService {
     this.policy = new PasswordPolicy(rules, ruleset)
   }
 
-  public getPolicy(): PasswordPolicy {
+  public getPolicy({ enforcePassword = false } = {}): PasswordPolicy {
+    this.buildPolicy({ enforcePassword })
     return this.policy
   }
 

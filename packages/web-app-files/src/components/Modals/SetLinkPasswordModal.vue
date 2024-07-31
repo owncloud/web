@@ -92,7 +92,7 @@ export default defineComponent({
       onInput,
       errorMessage,
       passwordPolicyService,
-      inputPasswordPolicy: passwordPolicyService.getPolicy(),
+      inputPasswordPolicy: passwordPolicyService.getPolicy({ enforcePassword: true }),
       inputGeneratePasswordMethod: () => passwordPolicyService.generatePassword(),
 
       // unit tests

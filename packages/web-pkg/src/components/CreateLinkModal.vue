@@ -1,11 +1,10 @@
 <template>
-  <div class="oc-flex oc-button-justify-content-space-between">
+  <div class="oc-flex oc-button-justify-content-space-between oc-pb-s">
     <div v-if="advancedMode" class="oc-flex oc-flex-middle">
       <oc-icon class="oc-mr-s" :name="getLinkRoleByType(selectedType).icon" fill-type="line" />
       <link-role-dropdown
         :model-value="selectedType"
         :available-link-type-options="availableLinkTypes"
-        drop-offset="0"
         @update:model-value="updateSelectedLinkType"
       />
     </div>
@@ -24,7 +23,7 @@
       <span v-text="$gettext('Options')" />
     </oc-button>
   </div>
-  <div v-if="!onlyInternalLinksAllowed" class="link-modal-password oc-mt-s">
+  <div v-if="!onlyInternalLinksAllowed" class="link-modal-password">
     <oc-text-input
       v-if="advancedMode"
       :key="passwordInputKey"
@@ -43,7 +42,7 @@
       :disabled="selectedLinkTypeIsInternal"
       @update:model-value="updatePassword"
     />
-    <div v-else class="link-modal-password-text oc-text-small oc-text-muted">
+    <div v-else-if="password.value" class="link-modal-password-text oc-text-small oc-text-muted">
       <span v-text="$gettext('Password: ')" />
       <span v-text="password.value" />
     </div>
@@ -68,6 +67,7 @@
       </oc-button>
       <oc-drop
         v-if="!onlyInternalLinksAllowed"
+        X
         ref="contextMenuDrop"
         drop-id="link-modal-context-menu-drop"
         toggle="#link-modal-context-menu-toggle"
@@ -199,8 +199,6 @@ export default defineComponent({
     const contextMenuDrop = ref<InstanceType<typeof OcDrop>>()
     const advancedMode = ref(false)
 
-    const passwordPolicy = passwordPolicyService.getPolicy()
-
     const isFolder = computed(() => props.resources.every(({ isFolder }) => isFolder))
 
     const confirmButtonText = computed(() => {
@@ -228,6 +226,10 @@ export default defineComponent({
 
     const availableLinkTypes = computed(() => getAvailableLinkTypes({ isFolder: unref(isFolder) }))
     const passwordEnforced = computed(() => isPasswordEnforcedForLinkType(unref(selectedType)))
+
+    const passwordPolicy = passwordPolicyService.getPolicy({
+      enforcePassword: unref(passwordEnforced)
+    })
 
     const selectedLinkTypeIsInternal = computed(
       () => unref(selectedType) === SharingLinkType.Internal
