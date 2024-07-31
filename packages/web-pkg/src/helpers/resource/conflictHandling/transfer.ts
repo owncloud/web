@@ -168,7 +168,7 @@ export class ResourceTransfer extends ConflictDialog {
         sourceSpace: this.sourceSpace,
         targetSpace: this.targetSpace,
         targetFolder: this.targetFolder,
-        path: join(this.targetFolder.path, targetName),
+        targetName,
         overwrite: overwriteTarget,
         transferType
       })

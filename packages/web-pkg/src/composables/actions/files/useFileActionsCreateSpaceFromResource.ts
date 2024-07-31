@@ -58,7 +58,12 @@ export const useFileActionsCreateSpaceFromResource = () => {
 
       for (const resource of resources) {
         copyOps.push(
-          queue.add(() => webdav.copyFiles(space, resource, createdSpace, { path: resource.name }))
+          queue.add(() =>
+            webdav.copyFiles(space, { fileId: resource.id }, createdSpace, {
+              parentFolderId: createdSpace.id,
+              name: resource.name
+            })
+          )
         )
       }
 

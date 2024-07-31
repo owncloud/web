@@ -51,8 +51,9 @@ export const useSpaceActionsDuplicate = () => {
         for (const file of existingSpaceFiles.children) {
           copyOps.push(
             queue.add(() =>
-              clientService.webdav.copyFiles(existingSpace, file, duplicatedSpace, {
-                path: file.name
+              clientService.webdav.copyFiles(existingSpace, { fileId: file.id }, duplicatedSpace, {
+                parentFolderId: duplicatedSpace.id,
+                name: file.name
               })
             )
           )
