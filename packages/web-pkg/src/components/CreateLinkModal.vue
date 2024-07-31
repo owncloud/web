@@ -285,11 +285,6 @@ export default defineComponent({
 
     const onConfirm = async () => {
       if (!unref(selectedLinkTypeIsInternal)) {
-        if (unref(passwordEnforced) && !unref(password).value) {
-          password.error = $gettext('Password must not be empty')
-          return Promise.reject()
-        }
-
         if (!passwordPolicy.check(unref(password).value)) {
           password.error = $gettext('Password must fulfill the password policy')
           return Promise.reject()
