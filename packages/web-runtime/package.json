@@ -12,7 +12,7 @@
     "@ownclouders/web-pkg": "workspace:*",
     "@popperjs/core": "^2.11.5",
     "@sentry/vue": "7.101.0",
-    "@uppy/core": "3.3.0",
+    "@uppy/core": "3.13.1",
     "@uppy/utils": "^5.3.0",
     "@vueuse/head": "2.0.0",
     "axios": "1.6.8",

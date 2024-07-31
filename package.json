@@ -41,7 +41,7 @@
     "vue": "3.4.21"
   },
   "peerDependencies": {
-    "@uppy/core": "3.3.0",
+    "@uppy/core": "3.13.1",
     "caf": "15.0.1",
     "portal-vue": "3.0.0",
     "uuid": "9.0.1",
