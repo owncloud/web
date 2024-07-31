@@ -5,7 +5,7 @@ import * as uuid from 'uuid'
 import { Language } from 'vue3-gettext'
 import { Ref, unref } from 'vue'
 import { RouteLocationNormalizedLoaded } from 'vue-router'
-import { SpaceResource } from '@ownclouders/web-client'
+import { Resource, SpaceResource } from '@ownclouders/web-client'
 import { urlJoin } from '@ownclouders/web-client'
 import { UploadResourceConflict } from './helpers/resource'
 import {
@@ -91,10 +91,20 @@ export class HandleUpload extends BasePlugin {
     return this.uppy.getPlugin('Tus') ? 'tus' : 'xhrUpload'
   }
 
+  getUploadFolder(uploadId: string): Resource {
+    // check if an upload folder has been set for this upload id
+    if (uploadId && this.uppyService.uploadFolderMap[uploadId]) {
+      return this.uppyService.uploadFolderMap[uploadId]
+    }
+
+    // fall back to current folder
+    return this.resourcesStore.currentFolder
+  }
+
   /**
    * Converts the input files type UppyResources and updates the uppy upload queue
    */
-  prepareFiles(files: UppyFile[]): UppyResource[] {
+  prepareFiles(files: UppyFile[], uploadFolder: Resource): UppyResource[] {
     const filesToUpload: Record<string, UppyResource> = {}
 
     if (!this.resourcesStore.currentFolder && unref(this.route)?.params?.token) {
@@ -122,13 +132,13 @@ export class HandleUpload extends BasePlugin {
       this.uppy.setState({ files: { ...this.uppy.getState().files, ...filesToUpload } })
       return Object.values(filesToUpload)
     }
-    const { id: currentFolderId, path: currentFolderPath } = this.resourcesStore.currentFolder
+    const { id: currentFolderId, path: currentFolderPath } = uploadFolder
 
     const { name, params, query } = unref(this.route)
     const topLevelFolderIds: Record<string, string> = {}
 
     for (const file of files) {
-      const relativeFilePath = file.meta.relativePath as string
+      const relativeFilePath = (file.meta.relativePath || file.meta.webkitRelativePath) as string
       // Directory without filename
       const directory =
         !relativeFilePath || dirname(relativeFilePath) === '.' ? '' : dirname(relativeFilePath)
@@ -260,10 +270,13 @@ export class HandleUpload extends BasePlugin {
   /**
    * Creates the directory tree and removes files of failed directories from the upload queue.
    */
-  async createDirectoryTree(filesToUpload: UppyResource[]): Promise<UppyResource[]> {
+  async createDirectoryTree(
+    filesToUpload: UppyResource[],
+    uploadFolder: Resource
+  ): Promise<UppyResource[]> {
     const { webdav } = this.clientService
     const space = unref(this.space)
-    const { id: currentFolderId, path: currentFolderPath } = this.resourcesStore.currentFolder
+    const { id: currentFolderId, path: currentFolderPath } = uploadFolder
 
     const routeName = filesToUpload[0].meta.routeName
     const routeDriveAliasAndItem = filesToUpload[0].meta.routeDriveAliasAndItem
@@ -370,7 +383,9 @@ export class HandleUpload extends BasePlugin {
       return
     }
 
-    let filesToUpload = this.prepareFiles(files)
+    const uploadId = files[0].meta?.uploadId
+    const uploadFolder = this.getUploadFolder(uploadId)
+    let filesToUpload = this.prepareFiles(files, uploadFolder)
 
     // quota check
     if (this.quotaCheckEnabled) {
@@ -408,7 +423,7 @@ export class HandleUpload extends BasePlugin {
 
     this.uppyService.publish('uploadStarted')
     if (this.directoryTreeCreateEnabled) {
-      filesToUpload = await this.createDirectoryTree(filesToUpload)
+      filesToUpload = await this.createDirectoryTree(filesToUpload, uploadFolder)
     }
 
     if (!filesToUpload.length) {
@@ -418,6 +433,7 @@ export class HandleUpload extends BasePlugin {
 
     this.uppyService.publish('addedForUpload', filesToUpload)
     this.uppyService.uploadFiles()
+    this.uppyService.removeUploadFolder(uploadId)
   }
 
   install() {

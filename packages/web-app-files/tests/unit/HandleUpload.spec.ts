@@ -41,10 +41,9 @@ describe('HandleUpload', () => {
     const { instance, mocks } = getWrapper()
     mocks.uppy.getPlugin.mockReturnValue(mock<UIPlugin>())
     const fileToUpload = mock<UppyFile>({ name: 'name' })
-    const processedFiles = instance.prepareFiles([fileToUpload])
+    const uploadFolder = mock<Resource>({ id: '1', path: '/' })
+    const processedFiles = instance.prepareFiles([fileToUpload], uploadFolder)
 
-    const resourcesStore = useResourcesStore()
-    const currentFolder = resourcesStore.currentFolder
     const route = unref(mocks.opts.route)
 
     expect(processedFiles[0].tus.endpoint).toEqual('/')
@@ -53,9 +52,9 @@ describe('HandleUpload', () => {
     expect(processedFiles[0].meta.spaceName).toEqual(unref(mocks.opts.space).name)
     expect(processedFiles[0].meta.driveAlias).toEqual(unref(mocks.opts.space).driveAlias)
     expect(processedFiles[0].meta.driveType).toEqual(unref(mocks.opts.space).driveType)
-    expect(processedFiles[0].meta.currentFolder).toEqual(currentFolder.path)
-    expect(processedFiles[0].meta.currentFolderId).toEqual(currentFolder.id)
-    expect(processedFiles[0].meta.tusEndpoint).toEqual(currentFolder.path)
+    expect(processedFiles[0].meta.currentFolder).toEqual(uploadFolder.path)
+    expect(processedFiles[0].meta.currentFolderId).toEqual(uploadFolder.id)
+    expect(processedFiles[0].meta.tusEndpoint).toEqual(uploadFolder.path)
     expect(processedFiles[0].meta.relativeFolder).toEqual('')
     expect(processedFiles[0].meta.routeName).toEqual(route.name)
     expect(processedFiles[0].meta.routeDriveAliasAndItem).toEqual(route.params.driveAliasAndItem)
@@ -70,9 +69,8 @@ describe('HandleUpload', () => {
       const createdFolder = mock<Resource>()
       mocks.opts.clientService.webdav.createFolder.mockResolvedValue(createdFolder)
 
-      const result = await instance.createDirectoryTree([fileToUpload])
-      const resourcesStore = useResourcesStore()
-      const currentFolder = resourcesStore.currentFolder
+      const uploadFolder = mock<Resource>({ id: '1', path: '/' })
+      const result = await instance.createDirectoryTree([fileToUpload], uploadFolder)
 
       expect(mocks.opts.uppyService.publish).toHaveBeenCalledWith(
         'uploadSuccess',
@@ -85,8 +83,8 @@ describe('HandleUpload', () => {
             spaceName: unref(mocks.opts.space).name,
             driveAlias: unref(mocks.opts.space).driveAlias,
             driveType: unref(mocks.opts.space).driveType,
-            currentFolder: currentFolder.path,
-            currentFolderId: currentFolder.id,
+            currentFolder: uploadFolder.path,
+            currentFolderId: uploadFolder.id,
             relativeFolder: '',
             routeName: fileToUpload.meta.routeName,
             routeDriveAliasAndItem: fileToUpload.meta.routeDriveAliasAndItem,
@@ -114,7 +112,7 @@ describe('HandleUpload', () => {
       const fileToUpload = mock<UppyResource>({ name: 'name', meta: { relativeFolder } })
       mocks.opts.clientService.webdav.createFolder.mockRejectedValue({})
 
-      const result = await instance.createDirectoryTree([fileToUpload])
+      const result = await instance.createDirectoryTree([fileToUpload], mock<Resource>())
 
       expect(mocks.opts.uppyService.publish).toHaveBeenCalledWith('uploadError', expect.anything())
       expect(mocks.uppy.removeFile).toHaveBeenCalled()
