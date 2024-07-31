@@ -38,7 +38,7 @@ export const useFileActionsCreateLink = ({
   const { dispatchModal } = useModals()
   const { copyToClipboard } = useClipboard()
 
-  const proceedResult = async (result: PromiseSettledResult<LinkShare>[]) => {
+  const proceedResult = async (result: PromiseSettledResult<LinkShare>[], password: '') => {
     const succeeded = result.filter(
       (val): val is PromiseFulfilledResult<LinkShare> => val.status === 'fulfilled'
     )
@@ -49,7 +49,12 @@ export const useFileActionsCreateLink = ({
       if (result.length === 1) {
         // Only copy to clipboard if the user tries to create one single link
         try {
-          await copyToClipboard(succeeded[0].value.webUrl)
+          const copyToClipboardText = password
+            ? `Link:${succeeded[0].value.webUrl} Password:${password}`
+            : succeeded[0].value.webUrl
+
+          console.log(copyToClipboardText)
+          await copyToClipboard(copyToClipboardText)
           successMessage = $gettext('The link has been copied to your clipboard.')
         } catch (e) {
           console.warn('Unable to copy link to clipboard', e)
@@ -88,8 +93,8 @@ export const useFileActionsCreateLink = ({
     if (enforceModal || (passwordEnforced && unref(defaultLinkType) !== SharingLinkType.Internal)) {
       dispatchModal({
         title: $ngettext(
-          'Create link for "%{resourceName}"',
-          'Create links for the selected items',
+          'Copy link for "%{resourceName}"',
+          'Copy links for the selected items',
           resources.length,
           { resourceName: resources[0].name }
         ),
@@ -119,7 +124,7 @@ export const useFileActionsCreateLink = ({
     )
     const result = await loadingService.addTask(() => Promise.allSettled<LinkShare>(promises))
 
-    proceedResult(result)
+    proceedResult(result, '')
   }
 
   const isVisible = ({ resources }: FileActionOptions) => {
