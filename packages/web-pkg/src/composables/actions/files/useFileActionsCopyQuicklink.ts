@@ -1,4 +1,4 @@
-import { isLinkShare, LinkShare } from '@ownclouders/web-client'
+import { isLinkShare } from '@ownclouders/web-client'
 import { computed, unref } from 'vue'
 import { useClientService } from '../../clientService'
 import { useGettext } from 'vue3-gettext'
@@ -17,17 +17,7 @@ export const useFileActionsCopyQuickLink = () => {
   const { canShare } = useCanShare()
   const { copyToClipboard } = useClipboard()
 
-  const onLinkCreatedCallback = async (result: PromiseSettledResult<LinkShare>[]) => {
-    const link = result.find(
-      (val): val is PromiseFulfilledResult<LinkShare> => val.status === 'fulfilled'
-    )
-    if (link?.value) {
-      await copyQuickLinkToClipboard(link.value.webUrl)
-    }
-  }
-
   const { actions: createLinkActions } = useFileActionsCreateLink({
-    onLinkCreatedCallback,
     showMessages: false
   })
   const createQuicklinkAction = computed<FileAction>(() =>

@@ -166,6 +166,11 @@ import LinkRoleDropdown from './LinkRoleDropdown.vue'
 
 type RoleRef = ComponentPublicInstance<typeof OcButton>
 
+interface CallbackArgs {
+  result: PromiseSettledResult<LinkShare>[]
+  password: string
+}
+
 export default defineComponent({
   name: 'CreateLinkModal',
   components: { LinkRoleDropdown },
@@ -175,9 +180,7 @@ export default defineComponent({
     space: { type: Object as PropType<SpaceResource>, default: undefined },
     isQuickLink: { type: Boolean, default: false },
     callbackFn: {
-      type: Function as PropType<
-        (result: PromiseSettledResult<LinkShare>[], password: string) => Promise<void> | void
-      >,
+      type: Function as PropType<(args: CallbackArgs) => Promise<void> | void>,
       default: undefined
     }
   },
@@ -323,7 +326,7 @@ export default defineComponent({
       }
 
       if (props.callbackFn) {
-        props.callbackFn(result, password.value)
+        props.callbackFn({ result, password: password.value })
       }
     }
 
