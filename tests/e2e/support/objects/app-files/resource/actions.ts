@@ -83,6 +83,7 @@ const previewImage = '//main[@id="preview"]//div[contains(@class,"stage_media")]
 const previewAudio = '//main[@id="preview"]//div[contains(@class,"stage_media")]//audio//source'
 const previewVideo = '//main[@id="preview"]//div[contains(@class,"stage_media")]//video//source'
 const externalEditorIframe = '[name="app-iframe"]'
+const copyPasteWarningPopup = '#copy_paste_warning-box'
 const tagTableCell =
   '//*[@data-test-resource-name="%s"]/ancestor::tr//td[contains(@class, "oc-table-data-cell-tags")]'
 const tagInFilesTable = '//*[contains(@class, "oc-tag")]//span[text()="%s"]//ancestor::a'
@@ -440,6 +441,20 @@ export const openAndGetContentOfDocument = async ({
   // copying and getting the value with keyboard requires some
   await page.keyboard.press('ControlOrMeta+A', { delay: 200 })
   await page.keyboard.press('ControlOrMeta+C', { delay: 200 })
+  try {
+    await editorMainFrame
+      .locator(copyPasteWarningPopup)
+      .waitFor({ timeout: config.minTimeout * 1000 })
+    // close popup
+    await page.keyboard.press('Escape')
+    // deselect text. otherwise the clipboard will be empty
+    await page.keyboard.press('Escape')
+    // select text again and copy text
+    await page.keyboard.press('ControlOrMeta+A', { delay: 200 })
+    await page.keyboard.press('ControlOrMeta+C', { delay: 200 })
+  } catch (e) {
+    console.log('No copy-paste warning popup found. Continue...')
+  }
   return await page.evaluate(() => navigator.clipboard.readText())
 }
 
