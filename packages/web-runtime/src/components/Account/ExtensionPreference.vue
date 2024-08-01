@@ -92,9 +92,10 @@ export default defineComponent({
     })
 
     const filterOptions = (options: Extension[], search: string) => {
-      return options.filter((option) => {
-        return option.userPreference?.optionLabel.toLowerCase().includes(search.toLowerCase())
-      })
+      return options.filter(
+        (option) =>
+          option.userPreference?.optionLabel.toLowerCase().includes(search.toLowerCase().trim())
+      )
     }
     return {
       extensions,
