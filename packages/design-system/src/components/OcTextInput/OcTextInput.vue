@@ -307,7 +307,7 @@ export default defineComponent({
       return this.descriptionMessage
     },
     showClearButton() {
-      return !this.disabled && this.clearButtonEnabled && this.modelValue !== null
+      return !this.disabled && this.clearButtonEnabled && !!this.modelValue
     },
     clearButtonAccessibleLabelValue() {
       return this.clearButtonAccessibleLabel || this.$gettext('Clear input')
