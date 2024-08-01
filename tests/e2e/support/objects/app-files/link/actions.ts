@@ -61,7 +61,7 @@ export type publicLinkAndItsEditButtonVisibilityArgs = {
   resource?: string
   space?: boolean
 }
-const publicLinkRoleToggle = `link-role-dropdown-toggle`
+const publicLinkRoleToggle = `//button[contains(@class, "link-role-dropdown-toggle")]`
 const publicLinkSetRoleButton = `//span[contains(@class,"role-dropdown-list-option-label") and text()='%s']`
 const linkExpiryDatepicker = '.link-expiry-picker:not(.vc-container)'
 const publicLinkEditRoleButton =
@@ -124,7 +124,7 @@ export const createLink = async (args: createLinkArgs): Promise<string> => {
   await page.locator(advancedModeButton).click()
 
   if (role) {
-    await page.locator(util.format(publicLinkRoleToggle, role)).click()
+    await page.locator(publicLinkRoleToggle).click()
     await page.locator(util.format(publicLinkSetRoleButton, role)).click()
   }
 
