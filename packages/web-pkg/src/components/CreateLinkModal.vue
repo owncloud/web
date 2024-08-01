@@ -1,7 +1,7 @@
 <template>
   <div class="oc-flex oc-button-justify-content-space-between oc-pb-s">
     <div v-if="advancedMode" class="oc-flex oc-flex-middle">
-      <oc-icon class="oc-mr-s" :name="getLinkRoleByType(selectedType).icon" fill-type="line" />
+      <oc-icon class="oc-mr-s" :name="selectedTypeIcon" fill-type="line" />
       <link-role-dropdown
         :model-value="selectedType"
         :available-link-type-options="availableLinkTypes"
@@ -9,8 +9,8 @@
       />
     </div>
     <div v-else class="oc-flex oc-flex-middle">
-      <oc-icon class="oc-mr-s" :name="getLinkRoleByType(selectedType).icon" fill-type="line" />
-      <span v-text="$gettext(getLinkRoleByType(selectedType).description)" />
+      <oc-icon class="oc-mr-s" :name="selectedTypeIcon" fill-type="line" />
+      <span v-text="selectedTypeDescription" />
     </div>
     <oc-button
       v-if="!advancedMode"
@@ -222,9 +222,14 @@ export default defineComponent({
     const passwordInputKey = ref(uuidV4())
     const roleRefs = ref<Record<string, RoleRef>>({})
 
+    const selectedExpiry = ref<Date>()
     const password = reactive({ value: '', error: undefined })
     const selectedType = ref(unref(defaultLinkType))
-    const selectedExpiry = ref<Date>()
+
+    const selectedTypeDescription = computed(() =>
+      $gettext(getLinkRoleByType(unref(selectedType)).description)
+    )
+    const selectedTypeIcon = computed(() => getLinkRoleByType(unref(selectedType)).icon)
 
     const availableLinkTypes = computed(() => getAvailableLinkTypes({ isFolder: unref(isFolder) }))
     const passwordEnforced = computed(() => isPasswordEnforcedForLinkType(unref(selectedType)))
@@ -379,6 +384,8 @@ export default defineComponent({
       expirationRules,
       availableLinkTypes,
       selectedType,
+      selectedTypeIcon,
+      selectedTypeDescription,
       selectedLinkTypeIsInternal,
       onlyInternalLinksAllowed,
       isSelectedLinkType,

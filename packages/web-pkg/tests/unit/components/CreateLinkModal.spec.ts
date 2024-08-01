@@ -199,7 +199,7 @@ function getWrapper({
     mock<ReturnType<typeof useLinkTypes>>({
       defaultLinkType: ref(defaultLinkType),
       getAvailableLinkTypes: () => availableLinkTypes,
-      getLinkRoleByType: () => mock<ShareRole>(),
+      getLinkRoleByType: () => mock<ShareRole>({ description: 'role' }),
       isPasswordEnforcedForLinkType: () => passwordEnforced
     })
   )
