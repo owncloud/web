@@ -108,7 +108,16 @@
 </template>
 
 <script lang="ts">
-import { ComponentPublicInstance, defineComponent, ref, unref, computed, watch } from 'vue'
+import {
+  ComponentPublicInstance,
+  computed,
+  defineComponent,
+  ref,
+  unref,
+  watch,
+  onMounted,
+  nextTick
+} from 'vue'
 import Fuse from 'fuse.js'
 import Mark from 'mark.js'
 import {
@@ -148,7 +157,6 @@ export default defineComponent({
     const filterTerm = ref('')
     const router = useRouter()
     const route = useRoute()
-    const markInstance = ref(null)
 
     const lastSelectedGroupIndex = ref(0)
     const lastSelectedGroupId = ref(null)
@@ -305,12 +313,19 @@ export default defineComponent({
       await unref(router).push({ ...unref(route), query: { ...unref(route).query, page: '1' } })
     })
 
+    const markInstance = ref(null)
+    onMounted(async () => {
+      await nextTick()
+      markInstance.value = new Mark('.mark-element')
+    })
     watch([filterTerm, paginatedItems], () => {
       unref(markInstance)?.unmark()
-      unref(markInstance)?.mark(unref(filterTerm), {
-        element: 'span',
-        className: 'mark-highlight'
-      })
+      if (unref(filterTerm)) {
+        unref(markInstance)?.mark(unref(filterTerm), {
+          element: 'span',
+          className: 'mark-highlight'
+        })
+      }
     })
 
     return {
@@ -332,7 +347,6 @@ export default defineComponent({
       totalPages,
       filter,
       orderBy,
-      markInstance,
       selectedGroups,
       unselectAllGroups,
       selectGroups,
@@ -394,11 +408,6 @@ export default defineComponent({
     highlighted() {
       return this.selectedGroups.map((group) => group.id)
     }
-  },
-  mounted() {
-    this.$nextTick(() => {
-      this.markInstance = new Mark('.mark-element')
-    })
   },
   methods: {
     handleSort(event: { sortBy: keyof Group; sortDir: SortDir }) {

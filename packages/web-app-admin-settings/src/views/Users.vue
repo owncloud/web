@@ -156,20 +156,9 @@ import {
   useConfigStore,
   QueryValue
 } from '@ownclouders/web-pkg'
-import {
-  computed,
-  defineComponent,
-  ref,
-  onBeforeUnmount,
-  onMounted,
-  unref,
-  watch,
-  nextTick,
-  Ref
-} from 'vue'
+import { computed, defineComponent, ref, onBeforeUnmount, onMounted, unref, watch, Ref } from 'vue'
 import { useTask } from 'vue-concurrency'
 import { useGettext } from 'vue3-gettext'
-import Mark from 'mark.js'
 import { format } from 'util'
 import { omit } from 'lodash-es'
 import { storeToRefs } from 'pinia'
@@ -228,7 +217,6 @@ export default defineComponent({
     const template = ref()
     const displayNameQuery = useRouteQuery('q_displayName')
     const filterTermDisplayName = ref(queryItemAsString(unref(displayNameQuery)))
-    const markInstance = ref(null)
 
     let editQuotaActionEventToken: string
 
@@ -418,22 +406,6 @@ export default defineComponent({
       }
 
       await loadResourcesTask.perform()
-
-      watch(
-        [users, displayNameQuery],
-        async () => {
-          await nextTick()
-          markInstance.value = new Mark('.mark-element')
-          unref(markInstance)?.unmark()
-          unref(markInstance)?.mark(queryItemAsString(unref(displayNameQuery)) || '', {
-            element: 'span',
-            className: 'mark-highlight'
-          })
-        },
-        {
-          immediate: true
-        }
-      )
 
       editQuotaActionEventToken = eventBus.subscribe(
         'app.admin-settings.users.user.quota.updated',
