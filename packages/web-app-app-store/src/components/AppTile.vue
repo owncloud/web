@@ -2,7 +2,9 @@
   <li class="app-tile oc-card oc-card-default oc-card-rounded">
     <div class="app-cover-image">
       <oc-img v-if="app.coverImage?.url" :src="app.coverImage?.url" />
-      <oc-icon v-else name="computer" size="xlarge" />
+      <div v-else class="fallback-icon">
+        <oc-icon name="computer" size="xxlarge" />
+      </div>
     </div>
     <div class="app-tile-body oc-card-body oc-p">
       <div class="app-content">
@@ -83,11 +85,22 @@ export default defineComponent({
   outline: 1px solid var(--oc-color-border);
 
   .app-cover-image {
+    width: 100%;
+
     img {
-      object-fit: contain;
       width: 100%;
-      height: 200px;
-      max-height: 200px;
+      max-width: 100%;
+      aspect-ratio: 3/2;
+      object-fit: cover;
+    }
+
+    .fallback-icon {
+      width: 100%;
+      aspect-ratio: 3/2;
+      background-color: white;
+      display: flex;
+      align-items: center;
+      justify-content: center;
     }
   }
 
