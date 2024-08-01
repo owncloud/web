@@ -161,7 +161,6 @@ import { Resource } from '@ownclouders/web-client'
 import { formatRelativeDateFromDateTime } from '../helpers'
 import { OcButton, OcDrop } from 'design-system/src/components'
 import { SharingLinkType } from '@ownclouders/web-client/graph/generated'
-import { $gettext } from '../router/utils'
 import LinkRoleDropdown from './LinkRoleDropdown.vue'
 
 type RoleRef = ComponentPublicInstance<typeof OcButton>
@@ -393,8 +392,7 @@ export default defineComponent({
       // unit tests
       onConfirm
     }
-  },
-  methods: { $gettext }
+  }
 })
 </script>
 

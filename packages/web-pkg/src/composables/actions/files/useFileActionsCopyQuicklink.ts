@@ -17,9 +17,7 @@ export const useFileActionsCopyQuickLink = () => {
   const { canShare } = useCanShare()
   const { copyToClipboard } = useClipboard()
 
-  const { actions: createLinkActions } = useFileActionsCreateLink({
-    showMessages: false
-  })
+  const { actions: createLinkActions } = useFileActionsCreateLink()
   const createQuicklinkAction = computed<FileAction>(() =>
     unref(createLinkActions).find(({ name }) => name === 'create-quick-links')
   )

@@ -8,7 +8,7 @@ import {
 } from '../../../../../src/composables/piniaStores'
 import { defaultComponentMocks, getComposableWrapper } from 'web-test-helpers'
 import { mock } from 'vitest-mock-extended'
-import { LinkShare, Resource, SpaceResource } from '@ownclouders/web-client'
+import { Resource, SpaceResource } from '@ownclouders/web-client'
 import { SharingLinkType } from '@ownclouders/web-client/graph/generated'
 import { useLinkTypes } from '../../../../../src/composables/links/useLinkTypes'
 
@@ -118,32 +118,6 @@ describe('useFileActionsCreateLink', () => {
         }
       })
     })
-    it('calls the onLinkCreatedCallback if given', () => {
-      const onLinkCreatedCallback = vi.fn()
-      getWrapper({
-        onLinkCreatedCallback,
-        setup: async ({ actions }) => {
-          await unref(actions)[0].handler({
-            resources: [mock<Resource>({ canShare: () => true })],
-            space: undefined
-          })
-          expect(onLinkCreatedCallback).toHaveBeenCalledTimes(1)
-        }
-      })
-    })
-    it('does not show messages if disabled', () => {
-      getWrapper({
-        showMessages: false,
-        setup: async ({ actions }) => {
-          await unref(actions)[0].handler({
-            resources: [mock<Resource>({ canShare: () => true })],
-            space: undefined
-          })
-          const { showMessage } = useMessages()
-          expect(showMessage).not.toHaveBeenCalled()
-        }
-      })
-    })
   })
 })
 
@@ -151,9 +125,7 @@ function getWrapper({
   setup,
   enforceModal = false,
   passwordEnforced = false,
-  defaultLinkType = SharingLinkType.View,
-  onLinkCreatedCallback = undefined,
-  showMessages = true
+  defaultLinkType = SharingLinkType.View
 }: {
   setup: (
     instance: ReturnType<typeof useFileActionsCreateLink>,
@@ -162,7 +134,6 @@ function getWrapper({
   enforceModal?: boolean
   passwordEnforced?: boolean
   defaultLinkType?: SharingLinkType
-  onLinkCreatedCallback?: (result: PromiseSettledResult<LinkShare>[]) => Promise<void> | void
   showMessages?: boolean
 }) {
   vi.mocked(useLinkTypes).mockReturnValue(
@@ -178,9 +149,7 @@ function getWrapper({
     wrapper: getComposableWrapper(
       () => {
         const instance = useFileActionsCreateLink({
-          enforceModal,
-          showMessages,
-          onLinkCreatedCallback
+          enforceModal
         })
         setup(instance, { mocks })
       },

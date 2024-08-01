@@ -41,7 +41,6 @@ export const useFileActionsCreateLink = ({
     result: PromiseSettledResult<LinkShare>[]
     password?: string
   }) => {
-    console.log(password)
     const succeeded = result.filter(
       (val): val is PromiseFulfilledResult<LinkShare> => val.status === 'fulfilled'
     )
@@ -53,10 +52,12 @@ export const useFileActionsCreateLink = ({
         // Only copy to clipboard if the user tries to create one single link
         try {
           const copyToClipboardText = password
-            ? `Link:${succeeded[0].value.webUrl} Password:${password}`
+            ? $gettext('Link:%{link} Password:%{password}', {
+                link: succeeded[0].value.webUrl,
+                password
+              })
             : succeeded[0].value.webUrl
 
-          console.log(copyToClipboardText)
           await copyToClipboard(copyToClipboardText)
           successMessage = $gettext('The link has been copied to your clipboard.')
         } catch (e) {
