@@ -15,6 +15,7 @@ export const AppVersionSchema = z.object({
   url: z.string(),
   filename: z.string().optional()
 })
+export type AppVersion = z.infer<typeof AppVersionSchema>
 
 export const AppAuthorSchema = z.object({
   name: z.string(),

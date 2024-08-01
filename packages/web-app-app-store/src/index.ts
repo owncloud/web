@@ -63,6 +63,21 @@ export default defineWebApplication({
           authContext: 'user',
           title: $gettext('App Store')
         }
+      },
+      {
+        path: '/app/:appId',
+        name: 'details',
+        component: () => import('./views/AppDetails.vue'),
+        beforeEnter: (to, from, next) => {
+          if (!unref(hasPermission)) {
+            return next({ path: '/' })
+          }
+          next()
+        },
+        meta: {
+          authContext: 'user',
+          title: $gettext('App Details')
+        }
       }
     ]
 
