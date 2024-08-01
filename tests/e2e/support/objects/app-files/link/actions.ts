@@ -98,6 +98,7 @@ const copyPasswordButton = '.oc-text-input-copy-password-button'
 const generatePasswordButton = '.oc-text-input-generate-password-button'
 const expectedRegexForGeneratedPassword = /^[A-Za-z0-9\s\S]{12}$/
 const passwordInputDescription = '.oc-text-input-description .oc-text-input-description'
+const advancedModeButton = '.link-modal-advanced-mode-button'
 
 const getRecentLinkUrl = async (page: Page): Promise<string> => {
   return await page.locator(publicLinkUrlList).first().textContent()
@@ -119,7 +120,9 @@ export const createLink = async (args: createLinkArgs): Promise<string> => {
     await sidebar.openPanel({ page: page, name: 'sharing' })
   }
   await page.locator(addPublicLinkButton).click()
-  if (role) {
+  await page.locator(advancedModeButton).click()
+
+    if (role) {
     await page.locator(util.format(publicLinkSetRoleButton, role)).click()
   }
 

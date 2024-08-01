@@ -14,6 +14,7 @@
     </div>
     <oc-button
       v-if="!advancedMode"
+      class="link-modal-advanced-mode-button"
       gap-size="xsmall"
       appearance="raw"
       variation="primary"

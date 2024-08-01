@@ -30,6 +30,7 @@ const showMoreOptionsButton = '#show-more-share-options-btn'
 const calendarDatePickerId = 'recipient-datepicker-btn'
 const informMessage = '//div[contains(@class,"oc-notification-message-title")]'
 const showMoreBtn = '.toggle-shares-list-btn:has-text("Show more")'
+const advancedModeButton = '.link-modal-advanced-mode-button'
 
 export interface ShareArgs {
   page: Page
@@ -211,6 +212,7 @@ export const createQuickLink = async (args: createLinkArgs): Promise<string> => 
   const linkName = 'Link'
 
   await clickActionInContextMenu({ page, resource }, 'copy-quicklink')
+  await page.locator(advancedModeButton).click()
   await page.locator(passwordInput).fill(password)
 
   await Promise.all([
