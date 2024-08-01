@@ -44,7 +44,7 @@
           :label="allResourcesCheckboxLabel"
           :hide-label="true"
           :model-value="areAllResourcesSelected"
-          @update:model-value="toggleSelectionAll"
+          @click.stop="toggleSelectionAll"
         />
       </div>
     </template>
@@ -56,8 +56,7 @@
         size="large"
         :model-value="isResourceSelected(item)"
         :outline="isLatestSelectedItem(item)"
-        @update:model-value="setSelection($event, item)"
-        @click.stop="fileClicked([item, $event, true])"
+        @click.stop="toggleSelection(item.id)"
       />
     </template>
     <template #name="{ item }">
@@ -483,9 +482,10 @@ export default defineComponent({
     resourceType: {
       type: String as PropType<'file' | 'space'>,
       default: 'file'
-    } /**
+    },
+    /**
      * Determines if the table content should be loaded lazily.
-     */,
+     */
     lazy: {
       type: Boolean,
       default: true
@@ -530,7 +530,6 @@ export default defineComponent({
     const { userContextReady } = storeToRefs(authStore)
 
     const resourcesStore = useResourcesStore()
-    const { toggleSelection } = resourcesStore
     const { areFileExtensionsShown, latestSelectedId } = storeToRefs(resourcesStore)
 
     const dragItem = ref<Resource>()
@@ -584,6 +583,16 @@ export default defineComponent({
       return !unref(disabledResources).includes(resource.id)
     }
 
+    const emitSelect = (selectedIds: string[]) => {
+      eventBus.publish('app.files.list.clicked')
+      context.emit('update:selectedIds', selectedIds)
+    }
+
+    const toggleSelection = (resourceId: string) => {
+      resourcesStore.toggleSelection(resourceId)
+      emitSelect(resourcesStore.selectedIds)
+    }
+
     return {
       router,
       configOptions,
@@ -616,6 +625,7 @@ export default defineComponent({
       isFilePicker,
       isLocationPicker,
       isEmbedModeEnabled,
+      emitSelect,
       toggleSelection,
       areFileExtensionsShown,
       latestSelectedId,
@@ -1046,17 +1056,6 @@ export default defineComponent({
     },
     formatDateRelative(date: string) {
       return formatRelativeDateFromJSDate(new Date(date), this.$language.current)
-    },
-    setSelection(selected: string[], resource: Resource) {
-      if (selected) {
-        this.emitSelect([...this.selectedIds, resource.id])
-      } else {
-        this.emitSelect(this.selectedIds.filter((id) => id !== resource.id))
-      }
-    },
-    emitSelect(selectedIds: string[]) {
-      eventBus.publish('app.files.list.clicked')
-      this.$emit('update:selectedIds', selectedIds)
     },
     toggleSelectionAll() {
       if (this.areAllResourcesSelected) {

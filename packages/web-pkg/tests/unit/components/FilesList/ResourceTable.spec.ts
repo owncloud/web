@@ -301,15 +301,15 @@ describe('ResourceTable', () => {
   })
 
   describe('resource selection', () => {
-    it('adds resources to selection model via checkboxes', () => {
+    it('adds resources to selection model via checkboxes', async () => {
       const { wrapper } = getMountedWrapper()
-      wrapper.find('.resource-table-select-all .oc-checkbox').setValue(true)
-      wrapper.find('.oc-tbody-tr-documents .oc-checkbox').setValue(true)
+      await wrapper.find('.resource-table-select-all .oc-checkbox').trigger('click')
+      await wrapper.find('.oc-tbody-tr-documents .oc-checkbox').trigger('click')
       expect(wrapper.emitted('update:selectedIds').length).toBe(2)
     })
-    it('does not add resources that are disabled to selection model via checkboxes', () => {
+    it('does not add resources that are disabled to selection model via checkboxes', async () => {
       const { wrapper } = getMountedWrapper({ addProcessingResources: true })
-      wrapper.find('.resource-table-select-all .oc-checkbox').setValue(true)
+      await wrapper.find('.resource-table-select-all .oc-checkbox').trigger('click')
       expect(wrapper.emitted('update:selectedIds')[0][0]).not.toContain(
         processingResourcesWithAllFields[0].id
       )
@@ -326,7 +326,7 @@ describe('ResourceTable', () => {
           }
         })
 
-        await wrapper.find('.resource-table-select-all .oc-checkbox').setValue(false)
+        await wrapper.find('.resource-table-select-all .oc-checkbox').trigger('click')
         expect(wrapper.emitted<string>('update:selectedIds')[0][0].length).toBe(0)
       })
     })
