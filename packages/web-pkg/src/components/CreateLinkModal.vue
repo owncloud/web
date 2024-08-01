@@ -216,7 +216,7 @@ export default defineComponent({
 
     const password = reactive({ value: '', error: undefined })
     const selectedType = ref(unref(defaultLinkType))
-    const selectedExpiry = ref<string>()
+    const selectedExpiry = ref<Date>()
 
     const availableLinkTypes = computed(() => getAvailableLinkTypes({ isFolder: unref(isFolder) }))
     const passwordEnforced = computed(() => isPasswordEnforcedForLinkType(unref(selectedType)))
@@ -230,14 +230,14 @@ export default defineComponent({
 
     const selectedExpiryDateRelative = computed(() =>
       formatRelativeDateFromDateTime(
-        DateTime.fromJSDate(new Date(unref(selectedExpiry))).endOf('day'),
+        DateTime.fromJSDate(unref(selectedExpiry)).endOf('day'),
         language.current
       )
     )
 
     const selectedExpiryDate = computed(() =>
       formatRelativeDateFromDateTime(
-        DateTime.fromJSDate(new Date(unref(selectedExpiry))).endOf('day'),
+        DateTime.fromJSDate(unref(selectedExpiry)).endOf('day'),
         language.current
       )
     )
@@ -261,7 +261,7 @@ export default defineComponent({
               type: unref(selectedType),
               '@libre.graph.quickLink': props.isQuickLink,
               password: unref(password).value,
-              expirationDateTime: unref(selectedExpiry),
+              expirationDateTime: DateTime.fromJSDate(unref(selectedExpiry)).endOf('day').toISO(),
               displayName: $gettext('Link')
             }
           })
