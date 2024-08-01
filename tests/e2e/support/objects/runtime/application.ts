@@ -8,6 +8,7 @@ const notificationsDrop = `#oc-notifications-drop`
 const notificationsLoading = `#oc-notifications-drop .oc-notifications-loading`
 const markNotificationsAsReadButton = `#oc-notifications-drop .oc-notifications-mark-all`
 const notificationItemsMessages = `#oc-notifications-drop .oc-notifications-item .oc-notifications-message`
+const closeSidebarBtn = `#app-sidebar .header__close`
 
 export class Application {
   #page: Page
@@ -65,5 +66,12 @@ export class Application {
 
   async openUrl(url): Promise<void> {
     await this.#page.goto(url)
+  }
+
+  async closeSidebar(): Promise<void> {
+    const sideBarIsOpen = await this.#page.locator(closeSidebarBtn).isVisible()
+    if (sideBarIsOpen) {
+      await this.#page.locator(closeSidebarBtn).click()
+    }
   }
 }

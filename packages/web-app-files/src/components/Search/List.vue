@@ -6,7 +6,10 @@
         :has-bulk-actions="true"
         :is-side-bar-open="isSideBarOpen"
       />
-      <div v-if="displayFilter" class="files-search-result-filter oc-flex oc-mx-m oc-mb-m oc-mt-xs">
+      <div
+        v-if="displayFilter"
+        class="files-search-result-filter oc-flex oc-flex-wrap oc-mx-m oc-mb-m oc-mt-xs"
+      >
         <div class="oc-mr-m oc-flex oc-flex-middle">
           <oc-icon name="filter-2" class="oc-mr-xs" />
           <span v-text="$gettext('Filter:')" />

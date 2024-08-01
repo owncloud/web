@@ -11,7 +11,7 @@
         <div
           class="shared-with-me-filters oc-flex oc-flex-between oc-flex-wrap oc-flex-bottom oc-mx-m oc-mb-m"
         >
-          <div class="oc-flex">
+          <div class="oc-flex oc-flex-wrap">
             <div class="oc-mr-m oc-flex oc-flex-middle">
               <oc-icon name="filter-2" class="oc-mr-xs" />
               <span v-text="$gettext('Filter:')" />

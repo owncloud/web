@@ -291,6 +291,7 @@ export default defineComponent({
 }
 
 .oc-drop {
+  max-width: 100%;
   width: 300px;
 
   li a:focus {

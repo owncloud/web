@@ -431,7 +431,9 @@ export default defineComponent({
   .oc-table-header-cell-role,
   .oc-table-data-cell-role,
   .oc-table-header-cell-accountEnabled,
-  .oc-table-data-cell-accountEnabled {
+  .oc-table-data-cell-accountEnabled,
+  .oc-table-header-cell-mail,
+  .oc-table-data-cell-mail {
     display: none;
 
     @media only screen and (min-width: 1200px) {
@@ -452,7 +454,9 @@ export default defineComponent({
     .oc-table-header-cell-role,
     .oc-table-data-cell-role,
     .oc-table-header-cell-accountEnabled,
-    .oc-table-data-cell-accountEnabled {
+    .oc-table-data-cell-accountEnabled,
+    .oc-table-header-cell-mail,
+    .oc-table-data-cell-mail {
       display: none;
 
       @media only screen and (min-width: 1600px) {

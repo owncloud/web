@@ -13,17 +13,18 @@
       :batch-action-items="selectedGroups"
       :show-view-options="true"
     >
-      <template #topbarActions>
+      <template #topbarActions="{ limitedScreenSpace }">
         <div>
           <oc-button
             id="create-group-btn"
+            v-oc-tooltip="limitedScreenSpace ? createGroupAction.label() : undefined"
             class="oc-mr-s"
             variation="primary"
             appearance="filled"
             @click="createGroupAction.handler()"
           >
             <oc-icon :name="createGroupAction.icon" />
-            <span v-text="createGroupAction.label()" />
+            <span v-if="!limitedScreenSpace" v-text="createGroupAction.label()" />
           </oc-button>
         </div>
       </template>

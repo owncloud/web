@@ -13,18 +13,19 @@
       :batch-action-items="selectedUsers"
       :show-view-options="true"
     >
-      <template #topbarActions>
+      <template #topbarActions="{ limitedScreenSpace }">
         <div>
           <oc-button
             v-if="createUserAction.isVisible()"
             id="create-user-btn"
+            v-oc-tooltip="limitedScreenSpace ? createUserAction.label() : undefined"
             class="oc-mr-s"
             variation="primary"
             appearance="filled"
             @click="createUserAction.handler()"
           >
             <oc-icon :name="createUserAction.icon" />
-            <span v-text="createUserAction.label()" />
+            <span v-if="!limitedScreenSpace" v-text="createUserAction.label()" />
           </oc-button>
         </div>
       </template>

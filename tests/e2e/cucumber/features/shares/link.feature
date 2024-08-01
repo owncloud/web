@@ -345,6 +345,7 @@ Feature: link
       | resource     | role     | password |
       | folderPublic | Can edit | %public% |
     When "Alice" opens the "files" app
+    And "Alice" closes the sidebar
     Then "Alice" should see link-direct indicator on the folder "folderPublic"
     When "Alice" opens folder "folderPublic"
     Then "Alice" should see link-indirect indicator on the file "lorem.txt"
