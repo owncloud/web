@@ -4,6 +4,7 @@
     class="extension-preference"
     :multiple="extensionPoint.multiple"
     :options="extensions"
+    :filter="filterOptions"
     option-label="displayName"
   >
     <template #selected-option="{ userPreference }">
@@ -90,8 +91,14 @@ export default defineComponent({
       }
     })
 
+    const filterOptions = (options: Extension[], search: string) => {
+      return options.filter((option) => {
+        return option.userPreference?.optionLabel.toLowerCase().includes(search.toLowerCase())
+      })
+    }
     return {
       extensions,
+      filterOptions,
       model: props.extensionPoint.multiple ? modelMultiSelect : modelSingleSelect
     }
   }
