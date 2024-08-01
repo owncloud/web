@@ -228,8 +228,8 @@ export const createQuickLink = async (args: createLinkArgs): Promise<string> => 
     // here is flaky https://github.com/owncloud/web/issues/9941
     // sometimes test doesn't have time to pick up the correct buffer
     await page.waitForTimeout(500)
-    url = await page.evaluate(() => navigator.clipboard.readText())
-
+    const clipBoardText = await page.evaluate(() => navigator.clipboard.readText())
+    url = clipBoardText.match(/https?:\/\/[^ ]+/)[0]
     expect(url).toContain(config.baseUrlOcis)
   } else {
     const quickLinkUrlLocator = util.format(publicLinkInputField, linkName)
