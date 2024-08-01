@@ -138,6 +138,8 @@ const onlyOfficeInfoDialogConfirm = `.alert button[result="ok"]`
 const fileThumbnail = `//span[@data-test-resource-name="%s"]/ancestor::tr[contains(@class, "oc-tbody-tr")]//img[contains(@class,"oc-resource-thumbnail")]`
 const fileIconWrapper = '#oc-file-details-sidebar .details-icon-wrapper'
 const fileIconPreview = '#oc-file-details-sidebar .details-preview'
+const activitySidebarPanel = 'sidebar-panel-activities'
+const activitySidebarPanelBodyContent = '#sidebar-panel-activities .sidebar-panel__body-content'
 
 export const clickResource = async ({
   page,
@@ -2054,4 +2056,25 @@ export const shouldNotSeeFilePreview = async ({
   await sidebar.open({ page: page, resource })
   await expect(page.locator(fileIconWrapper)).toBeVisible()
   await sidebar.close({ page: page })
+}
+
+export const shouldSeeActivity = async ({
+  page,
+  resource,
+  activity
+}: {
+  page: Page
+  resource: string
+  activity: string
+}): Promise<void> => {
+  await page.pause()
+  const paths = resource.split('/')
+  const finalResource = paths.pop()
+  for (const path of paths) {
+    await clickResource({ page, path })
+  }
+  await sidebar.open({ page: page, resource: finalResource })
+  await sidebar.openPanel({ page: page, name: 'activities' })
+  await expect(page.getByTestId(activitySidebarPanel)).toBeVisible()
+  await expect(page.locator(activitySidebarPanelBodyContent)).toContainText(activity)
 }
