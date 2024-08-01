@@ -1,3 +1,26 @@
+Changelog for ownCloud Web [unreleased] (UNRELEASED)
+=======================================
+The following sections list the changes in ownCloud web unreleased relevant to
+ownCloud admins and users.
+
+[unreleased]: https://github.com/owncloud/web/compare/v10.1.0...master
+
+Summary
+-------
+
+* Bugfix - Toggling checkboxes via keyboard: [#11312](https://github.com/owncloud/web/pull/11312)
+
+Details
+-------
+
+* Bugfix - Toggling checkboxes via keyboard: [#11312](https://github.com/owncloud/web/pull/11312)
+
+   Toggling checkboxes via the keyboard enter key in the resources table has been
+   fixed and does now work.
+
+   https://github.com/owncloud/web/issues/10730
+   https://github.com/owncloud/web/pull/11312
+
 Changelog for ownCloud Web [10.1.0] (2024-07-31)
 =======================================
 The following sections list the changes in ownCloud web 10.1.0 relevant to
