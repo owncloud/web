@@ -122,7 +122,7 @@ export const createLink = async (args: createLinkArgs): Promise<string> => {
   await page.locator(addPublicLinkButton).click()
   await page.locator(advancedModeButton).click()
 
-    if (role) {
+  if (role) {
     await page.locator(util.format(publicLinkSetRoleButton, role)).click()
   }
 
