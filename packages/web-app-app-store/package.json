@@ -5,13 +5,18 @@
   "description": "ownCloud app store",
   "license": "AGPL-3.0",
   "devDependencies": {
+    "@types/mark.js": "8.11.12",
     "web-test-helpers": "workspace:*"
+  },
+  "dependencies": {
+    "mark.js": "^8.11.1"
   },
   "peerDependencies": {
     "@ownclouders/web-client": "workspace:*",
     "@ownclouders/web-pkg": "workspace:*",
     "axios": "1.6.8",
     "design-system": "workspace:@ownclouders/design-system@*",
+    "fuse.js": "6.6.2",
     "lodash-es": "4.17.21",
     "pinia": "2.1.7",
     "vue-concurrency": "5.0.1",

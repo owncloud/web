@@ -18,7 +18,8 @@ export const useAppsStore = defineStore(`${APPID}-apps`, () => {
         return appsList.apps.map((app) => {
           return {
             ...app,
-            repository: repo
+            repository: repo,
+            mostRecentVersion: app.versions[0]
           }
         })
       } catch (e) {

@@ -6,8 +6,25 @@
     </div>
     <div class="app-tile-body oc-card-body oc-p">
       <div class="app-content">
-        <h3 class="oc-my-s">{{ app.name }}</h3>
-        <p class="oc-my-s">{{ app.subtitle }}</p>
+        <div class="oc-flex oc-flex-middle">
+          <h3 class="oc-my-s oc-text-truncate mark-element">{{ app.name }}</h3>
+          <span class="oc-ml-s oc-text-muted oc-text-small">
+            v{{ app.mostRecentVersion.version }}
+          </span>
+        </div>
+        <p class="oc-my-s mark-element">{{ app.subtitle }}</p>
+      </div>
+      <div class="app-tags">
+        <oc-tag
+          v-for="tag in app.tags"
+          :key="`app-tag-${app.id}-${tag}`"
+          size="small"
+          class="oc-text-nowrap"
+          type="button"
+          @click="emitSearchTerm(tag)"
+        >
+          <span class="mark-element">{{ tag }}</span>
+        </oc-tag>
       </div>
       <oc-list class="app-actions">
         <action-menu-item
@@ -36,14 +53,21 @@ export default defineComponent({
       required: true
     }
   },
-  setup() {
+  emits: ['search'],
+  setup(props, { emit }) {
     const { downloadAppAction } = useAppActionsDownload()
 
     const actions = computed(() => {
       return [downloadAppAction]
     })
+
+    const emitSearchTerm = (term: string) => {
+      emit('search', term)
+    }
+
     return {
-      actions
+      actions,
+      emitSearchTerm
     }
   }
 })
@@ -72,6 +96,11 @@ export default defineComponent({
     flex-flow: column;
     justify-content: space-between;
     height: 100%;
+
+    .app-tags {
+      display: flex;
+      gap: 0.5rem;
+    }
 
     .app-actions {
       display: flex;

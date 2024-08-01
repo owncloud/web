@@ -16,7 +16,7 @@ export const useAppActionsDownload = () => {
       return $gettext('Download')
     },
     handler: (options?) => {
-      const version = options.app.versions[0]
+      const version = options.app.mostRecentVersion
       const filename = version.filename || version.url.split('/').pop()
       triggerDownloadWithFilename(version.url, filename)
     },

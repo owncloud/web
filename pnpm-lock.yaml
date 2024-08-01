@@ -645,9 +645,15 @@ importers:
       design-system:
         specifier: workspace:@ownclouders/design-system@*
         version: link:../design-system
+      fuse.js:
+        specifier: 6.6.2
+        version: 6.6.2
       lodash-es:
         specifier: 4.17.21
         version: 4.17.21
+      mark.js:
+        specifier: ^8.11.1
+        version: 8.11.1
       pinia:
         specifier: 2.1.7
         version: 2.1.7(typescript@5.5.3)(vue@3.4.21(typescript@5.5.3))
@@ -661,6 +667,9 @@ importers:
         specifier: ^3.22.4
         version: 3.22.4
     devDependencies:
+      '@types/mark.js':
+        specifier: 8.11.12
+        version: 8.11.12
       web-test-helpers:
         specifier: workspace:*
         version: link:../web-test-helpers

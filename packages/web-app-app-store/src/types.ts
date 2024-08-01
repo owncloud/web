@@ -48,7 +48,8 @@ export const RawAppSchema = z.object({
 })
 
 export const AppSchema = RawAppSchema.extend({
-  repository: AppStoreRepositorySchema
+  repository: AppStoreRepositorySchema,
+  mostRecentVersion: AppVersionSchema
 })
 export type App = z.infer<typeof AppSchema>
 
