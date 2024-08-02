@@ -15,11 +15,11 @@ Details
 
 * Bugfix - Toggling checkboxes via keyboard: [#11312](https://github.com/owncloud/web/pull/11312)
 
-   Toggling checkboxes via the keyboard enter key in the resources table has been
-   fixed and does now work.
+   Toggling checkboxes via the keyboard enter key has been fixed and does now work.
 
    https://github.com/owncloud/web/issues/10730
    https://github.com/owncloud/web/pull/11312
+   https://github.com/owncloud/web/pull/11315
 
 Changelog for ownCloud Web [10.1.0] (2024-07-31)
 =======================================
