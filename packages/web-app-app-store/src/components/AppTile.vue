@@ -1,6 +1,6 @@
 <template>
   <li class="app-tile oc-card oc-card-default oc-card-rounded">
-    <router-link :to="{ name: 'app-store-details', params: { appId: encodeURIComponent(app.id) } }">
+    <router-link :to="{ name: `${APPID}-details`, params: { appId: encodeURIComponent(app.id) } }">
       <app-cover :app="app" />
     </router-link>
     <div class="app-tile-body oc-card-body oc-p">
@@ -8,7 +8,7 @@
         <div class="oc-flex oc-flex-middle">
           <h3 class="oc-my-s oc-text-truncate mark-element">
             <router-link
-              :to="{ name: 'app-store-details', params: { appId: encodeURIComponent(app.id) } }"
+              :to="{ name: `${APPID}-details`, params: { appId: encodeURIComponent(app.id) } }"
             >
               {{ app.name }}
             </router-link>
@@ -28,6 +28,7 @@
 <script lang="ts">
 import { defineComponent, type PropType } from 'vue'
 import { App } from '../types'
+import { APPID } from '../appid'
 import AppCover from './AppCover.vue'
 import AppTags from './AppTags.vue'
 import AppActions from './AppActions.vue'
@@ -48,7 +49,8 @@ export default defineComponent({
     }
 
     return {
-      emitSearchTerm
+      emitSearchTerm,
+      APPID
     }
   }
 })

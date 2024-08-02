@@ -1,7 +1,7 @@
 <template>
   <div class="app-details oc-p-m">
     <div class="back-to-list">
-      <router-link :to="{ name: 'app-store-list' }" class="oc-flex oc-flex-middle">
+      <router-link :to="{ name: `${APPID}-list` }" class="oc-flex oc-flex-middle">
         <oc-icon name="arrow-left-s" fill-type="line" />
         <span v-text="$gettext('Back to list')" />
       </router-link>
@@ -34,6 +34,7 @@
 <script lang="ts">
 import { computed, defineComponent, unref } from 'vue'
 import { App } from '../types'
+import { APPID } from '../appid'
 import { useRouteParam } from '@ownclouders/web-pkg'
 import { useAppsStore } from '../piniaStores'
 import AppCover from '../components/AppCover.vue'
@@ -54,7 +55,8 @@ export default defineComponent({
     })
 
     return {
-      app
+      app,
+      APPID
     }
   }
 })

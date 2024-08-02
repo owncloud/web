@@ -9,7 +9,7 @@ import {
 } from '@ownclouders/web-pkg'
 import { urlJoin } from '@ownclouders/web-client'
 import { RouteRecordRaw } from 'vue-router'
-import { useAppsStore, useRepositoriesStore } from './piniaStores'
+import { useRepositoriesStore } from './piniaStores'
 import { AppStoreConfigSchema } from './types'
 import { APPID } from './appid'
 export default defineWebApplication({
@@ -47,12 +47,9 @@ export default defineWebApplication({
     const routes: RouteRecordRaw[] = [
       {
         path: '/',
-        redirect: urlJoin(appInfo.id, 'list')
-      },
-      {
-        path: '/list',
-        name: 'list',
-        component: () => import('./views/AppList.vue'),
+        name: 'root',
+        component: () => import('./LayoutContainer.vue'),
+        redirect: urlJoin(appInfo.id, 'list'),
         beforeEnter: (to, from, next) => {
           if (!unref(hasPermission)) {
             return next({ path: '/' })
@@ -60,24 +57,28 @@ export default defineWebApplication({
           next()
         },
         meta: {
-          authContext: 'user',
-          title: $gettext('App Store')
-        }
-      },
-      {
-        path: '/app/:appId',
-        name: 'details',
-        component: () => import('./views/AppDetails.vue'),
-        beforeEnter: (to, from, next) => {
-          if (!unref(hasPermission)) {
-            return next({ path: '/' })
-          }
-          next()
+          authContext: 'user'
         },
-        meta: {
-          authContext: 'user',
-          title: $gettext('App Details')
-        }
+        children: [
+          {
+            path: 'list',
+            name: 'list',
+            component: () => import('./views/AppList.vue'),
+            meta: {
+              authContext: 'user',
+              title: $gettext('App Store')
+            }
+          },
+          {
+            path: 'app/:appId',
+            name: 'details',
+            component: () => import('./views/AppDetails.vue'),
+            meta: {
+              authContext: 'user',
+              title: $gettext('App Details')
+            }
+          }
+        ]
       }
     ]
 
@@ -103,11 +104,7 @@ export default defineWebApplication({
     return {
       appInfo,
       routes,
-      extensions,
-      ready: () => {
-        const appsStore = useAppsStore()
-        return appsStore.loadApps()
-      }
+      extensions
     }
   }
 })
