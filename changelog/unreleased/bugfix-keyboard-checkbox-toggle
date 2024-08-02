@@ -1,6 +1,7 @@
 Bugfix: Toggling checkboxes via keyboard
 
-Toggling checkboxes via the keyboard enter key in the resources table has been fixed and does now work.
+Toggling checkboxes via the keyboard enter key has been fixed and does now work.
 
 https://github.com/owncloud/web/pull/11312
+https://github.com/owncloud/web/pull/11315
 https://github.com/owncloud/web/issues/10730

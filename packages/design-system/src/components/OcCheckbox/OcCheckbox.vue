@@ -8,7 +8,7 @@
       :class="classes"
       :value="option"
       :disabled="disabled"
-      @keydown.enter="$emit('click', $event)"
+      @keydown.enter="keydownEnter"
     />
     <label :for="id" :class="labelClasses" v-text="label" />
   </span>
@@ -132,6 +132,12 @@ export default defineComponent({
         return this.model
       }
       return this.model.some((m) => isEqual(m, this.option))
+    }
+  },
+  methods: {
+    keydownEnter(event: KeyboardEvent) {
+      this.model = !this.model
+      this.$emit('click', event)
     }
   }
 })
