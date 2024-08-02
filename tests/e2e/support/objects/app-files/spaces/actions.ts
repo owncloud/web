@@ -1,4 +1,4 @@
-import { Page } from '@playwright/test'
+import { Page, expect } from '@playwright/test'
 import util from 'util'
 
 import { sidebar, editor } from '../utils'
@@ -22,6 +22,8 @@ const editSpacesDescription = '.oc-files-actions-edit-readme-content-trigger:vis
 const spacesDescriptionInputArea = '.md-mode .ProseMirror'
 const spacesDescriptionSaveTextFileInEditorButton = '#app-save-action:visible'
 const spaceHeaderSelector = '.space-header'
+const activitySidebarPanel = 'sidebar-panel-activities'
+const activitySidebarPanelBodyContent = '#sidebar-panel-activities .sidebar-panel__body-content'
 
 export const openActionsPanel = async (page: Page): Promise<void> => {
   await sidebar.open({ page })
@@ -31,6 +33,11 @@ export const openActionsPanel = async (page: Page): Promise<void> => {
 export const openSharingPanel = async (page: Page): Promise<void> => {
   await sidebar.open({ page })
   await sidebar.openPanel({ page, name: 'space-share' })
+}
+
+export const openActivitiesPanel = async (page: Page): Promise<void> => {
+  await sidebar.open({ page })
+  await sidebar.openPanel({ page, name: 'activities' })
 }
 
 /**/
@@ -298,4 +305,16 @@ export const downloadSpace = async (page: Page): Promise<string> => {
   await sidebar.close({ page })
 
   return download.suggestedFilename()
+}
+
+export const checkSpaceActivity = async ({
+  page,
+  activity
+}: {
+  page: Page
+  activity: string
+}): Promise<void> => {
+  await openActivitiesPanel(page)
+  await expect(page.getByTestId(activitySidebarPanel)).toBeVisible()
+  await expect(page.locator(activitySidebarPanelBodyContent)).toContainText(activity)
 }

@@ -103,4 +103,8 @@ export class Spaces {
   downloadSpace(): Promise<string> {
     return po.downloadSpace(this.#page)
   }
+
+  async checkSpaceActivity({ activity }: { activity: string }): Promise<void> {
+    await po.checkSpaceActivity({ page: this.#page, activity })
+  }
 }

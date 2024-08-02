@@ -206,3 +206,15 @@ When(
     expect(downloadedResource).toContain('download.zip')
   }
 )
+
+Then(
+  '{string} should see activity of the space',
+  async function (this: World, stepUser: string, stepTable: DataTable): Promise<void> {
+    const { page } = this.actorsEnvironment.getActor({ key: stepUser })
+    const spacesObject = new objects.applicationFiles.Spaces({ page })
+
+    for (const info of stepTable.hashes()) {
+      await spacesObject.checkSpaceActivity({ activity: info.activity })
+    }
+  }
+)
