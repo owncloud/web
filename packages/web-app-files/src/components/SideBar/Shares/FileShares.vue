@@ -88,7 +88,7 @@
       </ul>
       <div v-if="showMemberToggle" class="oc-flex oc-flex-center">
         <oc-button appearance="raw" @click="toggleMemberListCollapsed">
-          {{ collapseButtonTitle }}
+          {{ collapseMemberButtonTitle }}
         </oc-button>
       </div>
     </template>
