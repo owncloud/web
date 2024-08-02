@@ -214,7 +214,7 @@ Then(
     const spacesObject = new objects.applicationFiles.Spaces({ page })
 
     for (const info of stepTable.hashes()) {
-      await spacesObject.shouldSeeSpaceActivity({ activity: info.activity })
+      await spacesObject.checkSpaceActivity({ activity: info.activity })
     }
   }
 )

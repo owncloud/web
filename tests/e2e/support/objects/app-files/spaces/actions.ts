@@ -307,7 +307,7 @@ export const downloadSpace = async (page: Page): Promise<string> => {
   return download.suggestedFilename()
 }
 
-export const shouldSeeSpaceActivity = async ({
+export const checkSpaceActivity = async ({
   page,
   activity
 }: {

@@ -352,13 +352,13 @@ export class Resource {
     await po.shouldNotSeeFilePreview({ page: this.#page, resource })
   }
 
-  async shouldSeeActivity({
+  async checkActivity({
     resource,
     activity
   }: {
     resource: string
     activity: string
   }): Promise<void> {
-    await po.shouldSeeActivity({ page: this.#page, resource, activity })
+    await po.checkActivity({ page: this.#page, resource, activity })
   }
 }

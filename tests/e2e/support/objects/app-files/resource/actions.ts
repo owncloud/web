@@ -2058,7 +2058,7 @@ export const shouldNotSeeFilePreview = async ({
   await sidebar.close({ page: page })
 }
 
-export const shouldSeeActivity = async ({
+export const checkActivity = async ({
   page,
   resource,
   activity
@@ -2067,7 +2067,6 @@ export const shouldSeeActivity = async ({
   resource: string
   activity: string
 }): Promise<void> => {
-  await page.pause()
   const paths = resource.split('/')
   const finalResource = paths.pop()
   for (const path of paths) {
