@@ -92,7 +92,6 @@ export default defineComponent({
   border-radius: 4px;
 
   .oc-icon {
-
     height: 18px !important;
     max-height: 18px !important;
     max-width: 18px !important;
