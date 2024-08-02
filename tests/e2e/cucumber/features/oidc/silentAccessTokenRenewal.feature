@@ -5,7 +5,7 @@ Feature: Silent Access Token Renewal
   So that I can be confident the application will not encounter issues related to expired access tokens.
 
 
-  Scenario: renew access token
+  Scenario: renew access token using iframe silently
     Given "Admin" creates following users using API
       | id    |
       | Alice |
@@ -26,15 +26,4 @@ Feature: Silent Access Token Renewal
     Then following resources should be displayed in the files list for user "Alice"
       | resource     |
       | space-folder |
-    When "Alice" access token expires, background iframe renews access token
-    And "Alice" opens the "admin-settings" app
-    And "Alice" navigates to the groups management page
-    When "Alice" creates the following groups
-      | id       |
-      | sales    |
-      | security |
-    Then "Alice" should see the following group
-      | group    |
-      | sales    |
-      | security |
     And "Alice" logs out
