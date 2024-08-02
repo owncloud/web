@@ -44,7 +44,7 @@
       @update:model-value="updatePassword"
     />
     <div v-else-if="password.value" class="link-modal-password-text oc-text-small oc-text-muted">
-      <span v-text="$gettext('Password: ')" />
+      <span v-text="$gettext('Password:')" />
       <span v-text="password.value" />
     </div>
   </div>
