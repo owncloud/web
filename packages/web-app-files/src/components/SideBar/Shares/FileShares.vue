@@ -261,6 +261,10 @@ export default defineComponent({
       return this.sharesListCollapsed ? this.$gettext('Show more') : this.$gettext('Show less')
     },
 
+    collapseMemberButtonTitle() {
+      return this.memberListCollapsed ? this.$gettext('Show more') : this.$gettext('Show less')
+    },
+
     hasSharees() {
       return this.displayCollaborators.length > 0
     },

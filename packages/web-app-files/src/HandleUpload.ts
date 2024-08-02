@@ -289,9 +289,8 @@ export class HandleUpload extends BasePlugin {
     for (const file of filesToUpload.filter(({ meta }) => !!meta.relativeFolder)) {
       const folders = file.meta.relativeFolder.split('/').filter(Boolean)
       let current = directoryTree
-      if (folders.length <= 1) {
-        topLevelIds[file.meta.relativeFolder] = file.meta.topLevelFolderId
-      }
+      // first folder is always top level
+      topLevelIds[urlJoin(folders[0])] = file.meta.topLevelFolderId
       for (const folder of folders) {
         current[folder] = current[folder] || {}
         current = current[folder]
