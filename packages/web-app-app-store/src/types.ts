@@ -40,7 +40,7 @@ export const RawAppSchema = z.object({
   subtitle: z.string(),
   description: z.string().optional(),
   license: z.string(),
-  versions: z.array(AppVersionSchema),
+  versions: z.array(AppVersionSchema), // versions are expected to be sorted from newest to oldest
   authors: z.array(AppAuthorSchema),
   tags: z.array(z.string()),
   coverImage: AppImageSchema.optional(),

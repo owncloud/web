@@ -1,5 +1,5 @@
 <template>
-  <main>
+  <main id="app-store">
     <loading-apps v-if="areAppsLoading" />
     <template v-else>
       <router-view />
@@ -37,3 +37,10 @@ export default defineComponent({
   }
 })
 </script>
+
+<style lang="scss">
+#app-store {
+  overflow: auto;
+  padding: var(--oc-space-medium) !important;
+}
+</style>

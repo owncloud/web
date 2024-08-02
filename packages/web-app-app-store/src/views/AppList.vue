@@ -1,6 +1,6 @@
 <template>
-  <div class="app-list oc-px">
-    <h2 v-text="$gettext('App Store')" />
+  <div class="app-list oc-mb-m">
+    <h2 class="oc-mt-rm" v-text="$gettext('App Store')" />
     <div class="oc-flex oc-flex-middle">
       <oc-text-input
         id="apps-filter"
@@ -86,8 +86,6 @@ export default defineComponent({
 
 <style lang="scss">
 .app-list {
-  overflow: auto;
-
   .app-tiles {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));

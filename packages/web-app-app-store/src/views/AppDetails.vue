@@ -1,5 +1,5 @@
 <template>
-  <div class="app-details oc-p-m">
+  <div class="app-details">
     <div class="back-to-list">
       <router-link :to="{ name: `${APPID}-list` }" class="oc-flex oc-flex-middle">
         <oc-icon name="arrow-left-s" fill-type="line" />
@@ -10,7 +10,7 @@
     <div class="app-content">
       <div class="oc-flex oc-flex-middle">
         <h2 class="oc-my-s oc-text-truncate">{{ app.name }}</h2>
-        <span class="oc-ml-s oc-text-muted oc-text-small">
+        <span class="oc-ml-s oc-text-muted oc-text-small oc-mt-s">
           v{{ app.mostRecentVersion.version }}
         </span>
       </div>
@@ -24,8 +24,16 @@
       <h3>{{ $gettext('Tags') }}</h3>
       <app-tags :app="app" />
     </div>
+    <div v-if="app.authors">
+      <h3>{{ $gettext('Author') }}</h3>
+      <app-authors :app="app" />
+    </div>
+    <div v-if="app.resources">
+      <h3>{{ $gettext('Resources') }}</h3>
+      <app-resources :app="app" />
+    </div>
     <div v-if="app.versions">
-      <h3>{{ $gettext('Version History') }}</h3>
+      <h3>{{ $gettext('Releases') }}</h3>
       <app-versions :app="app" />
     </div>
   </div>
@@ -38,11 +46,13 @@ import { APPID } from '../appid'
 import { useRouteParam } from '@ownclouders/web-pkg'
 import { useAppsStore } from '../piniaStores'
 import AppCover from '../components/AppCover.vue'
+import AppResources from '../components/AppResources.vue'
 import AppTags from '../components/AppTags.vue'
 import AppVersions from '../components/AppVersions.vue'
+import AppAuthors from '../components/AppAuthors.vue'
 
 export default defineComponent({
-  components: { AppVersions, AppTags, AppCover },
+  components: { AppAuthors, AppCover, AppResources, AppTags, AppVersions },
   setup() {
     const appIdRouteParam = useRouteParam('appId')
     const appId = computed(() => {
@@ -64,7 +74,6 @@ export default defineComponent({
 
 <style lang="scss">
 .app-details {
-  overflow: auto;
   max-width: 600px;
   margin: 0 auto;
 

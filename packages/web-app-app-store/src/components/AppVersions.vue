@@ -1,5 +1,11 @@
 <template>
-  <oc-table class="oc-width-1-1" :data="data" :fields="fields" padding-x="remove">
+  <oc-table
+    class="oc-width-1-1"
+    :data="data"
+    :fields="fields"
+    padding-x="remove"
+    :has-header="false"
+  >
     <template #version="{ item }">
       v{{ item.version }}
       <oc-tag v-if="item.version === app.mostRecentVersion.version" size="small" class="oc-ml-s">
@@ -37,14 +43,12 @@ export default defineComponent({
       return [
         {
           name: 'version',
-          title: $gettext('Version'),
           type: 'slot',
           width: 'expand',
           wrap: 'truncate'
         },
         {
           name: 'actions',
-          title: $gettext('Actions'),
           type: 'slot',
           alignH: 'right',
           width: 'shrink',
