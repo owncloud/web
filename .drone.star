@@ -91,6 +91,18 @@ config = {
                 "app-provider",
             ],
         },
+        "accessToken-renewal-1": {
+            "skip": False,
+            "suites": [
+                "cucumber/features/oidc/refreshToken.feature",
+            ],
+        },
+        "accessToken-renewal-2": {
+            "skip": False,
+            "suites": [
+                "cucumber/features/oidc/silentAccessTokenRenewal.feature",
+            ],
+        },
     },
     "build": True,
 }
@@ -575,7 +587,7 @@ def e2eTests(ctx):
                      "environment": environment,
                      "commands": [
                          "cd tests/e2e",
-                         "bash run-e2e.sh --suites %s" % ",".join(params["suites"]),
+                         "bash run-e2e.sh %s" % ("--suites %s" % ",".join(params["suites"]) if suite not in ["accessToken-renewal-1", "accessToken-renewal-2"] else ",".join(params["suites"])),
                      ],
                  }] + \
                  uploadTracingResult(ctx) + \
@@ -890,6 +902,12 @@ def ocisService(type, tika_enabled = False, enforce_password_public_link = False
         environment["GRAPH_ASSIGN_DEFAULT_USER_ROLE"] = "false"
         environment["GRAPH_USERNAME_MATCH"] = "none"
         environment["KEYCLOAK_DOMAIN"] = "keycloak:8443"
+
+    if type == "accessToken-renewal-1":
+        environment["IDP_ACCESS_TOKEN_EXPIRATION"] = 10
+        environment["WEB_OIDC_SCOPE"] = "openid profile email offline_access"
+    elif type == "accessToken-renewal-2":
+        environment["IDP_ACCESS_TOKEN_EXPIRATION"] = 10
 
     if type == "app-provider":
         environment["GATEWAY_GRPC_ADDR"] = "0.0.0.0:9142"
