@@ -313,7 +313,7 @@ export default defineComponent({
       await unref(router).push({ ...unref(route), query: { ...unref(route).query, page: '1' } })
     })
 
-    const markInstance = ref(null)
+    const markInstance = ref<Mark>(null)
     onMounted(async () => {
       await nextTick()
       markInstance.value = new Mark('.mark-element')

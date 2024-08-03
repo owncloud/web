@@ -10,7 +10,7 @@ import {
 import { urlJoin } from '@ownclouders/web-client'
 import { RouteRecordRaw } from 'vue-router'
 import { useRepositoriesStore } from './piniaStores'
-import { AppStoreConfigSchema } from './types'
+import {AppStoreConfigSchema, AppStoreRepository} from './types'
 import { APPID } from './appid'
 export default defineWebApplication({
   setup({ applicationConfig }) {
@@ -19,7 +19,7 @@ export default defineWebApplication({
     const userStore = useUserStore()
     const repositoryStore = useRepositoriesStore()
 
-    const defaultRepositories = [
+    const defaultRepositories: AppStoreRepository[] = [
       {
         name: 'awesome-ocis',
         url: 'https://raw.githubusercontent.com/owncloud/awesome-ocis/main/webApps/apps.json'

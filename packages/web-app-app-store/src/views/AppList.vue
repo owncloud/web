@@ -77,7 +77,7 @@ export default defineComponent({
       )
     })
 
-    const markInstance = ref(null)
+    const markInstance = ref<Mark>(null)
     onMounted(async () => {
       await nextTick()
       markInstance.value = new Mark('.mark-element')
