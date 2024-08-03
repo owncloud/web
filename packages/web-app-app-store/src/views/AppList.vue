@@ -46,7 +46,7 @@ export default defineComponent({
     const { apps } = storeToRefs(appsStore)
     const router = useRouter()
 
-    const filterTermQueryItem = useRouteQuery('filter')
+    const filterTermQueryItem = useRouteQuery('filter', '')
     const filterTerm = computed(() => {
       return queryItemAsString(unref(filterTermQueryItem))
     })
@@ -55,8 +55,7 @@ export default defineComponent({
     const setFilterTerm = (term: string) => {
       return router.replace({
         query: {
-          ...unref(router.currentRoute).query,
-          filter: (term || '').trim()
+          ...(term && { filter: term.trim() })
         }
       })
     }
