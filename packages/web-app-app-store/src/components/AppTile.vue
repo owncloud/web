@@ -6,7 +6,7 @@
     <div class="app-tile-body oc-card-body oc-p">
       <div class="app-content">
         <div class="oc-flex oc-flex-middle">
-          <h3 class="oc-my-s oc-text-truncate mark-element">
+          <h3 class="oc-my-s oc-text-truncate mark-element app-tile-title">
             <router-link
               :to="{ name: `${APPID}-details`, params: { appId: encodeURIComponent(app.id) } }"
             >
@@ -71,6 +71,13 @@ export default defineComponent({
     flex-flow: column;
     justify-content: space-between;
     height: 100%;
+  }
+
+  .app-tile-title {
+    .mark-highlight {
+      font-weight: var(--oc-font-weight-extrabold) !important;
+      color: var(--oc-color-text-default);
+    }
   }
 }
 </style>
