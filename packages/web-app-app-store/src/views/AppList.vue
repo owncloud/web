@@ -81,20 +81,16 @@ export default defineComponent({
       await nextTick()
       markInstance.value = new Mark('.mark-element')
     })
-    watch(
-      filterTerm,
-      () => {
-        filterTermInput.value = unref(filterTerm)
-        unref(markInstance)?.unmark()
-        if (unref(filterTerm)) {
-          unref(markInstance)?.mark(unref(filterTerm), {
-            element: 'span',
-            className: 'mark-highlight'
-          })
-        }
-      },
-      { immediate: true }
-    )
+    watch([filterTerm, markInstance], () => {
+      filterTermInput.value = unref(filterTerm)
+      unref(markInstance)?.unmark()
+      if (unref(filterTerm)) {
+        unref(markInstance)?.mark(unref(filterTerm), {
+          element: 'span',
+          className: 'mark-highlight'
+        })
+      }
+    })
 
     return {
       filteredApps,
