@@ -74,6 +74,9 @@ export default defineComponent({
 
 <style lang="scss">
 .app-details {
+  background-color: var(--oc-color-background-highlight);
+  border-radius: 5px;
+  padding: var(--oc-space-large);
   max-width: 600px;
   margin: 0 auto;
 
@@ -82,7 +85,7 @@ export default defineComponent({
   gap: 1rem;
 
   .back-to-list {
-    border-bottom: 1px solid var(--oc-color-border);
+    border-bottom: 1px solid var(--oc-color-input-border);
     margin-bottom: var(--oc-space-medium);
   }
 }
