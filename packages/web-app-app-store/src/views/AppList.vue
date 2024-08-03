@@ -3,11 +3,12 @@
     <h2 class="oc-mt-rm" v-text="$gettext('App Store')" />
     <div class="oc-flex oc-flex-middle">
       <oc-text-input
+        :model-value="filterTermInput"
         id="apps-filter"
-        v-model.trim="filterTerm"
         :label="$gettext('Search')"
         :clear-button-enabled="true"
         autocomplete="off"
+        @update:model-value="setFilterTerm"
       />
     </div>
     <oc-list class="app-tiles">
@@ -30,7 +31,12 @@ import { useAppsStore } from '../piniaStores'
 import AppTile from '../components/AppTile.vue'
 import { storeToRefs } from 'pinia'
 import { App } from '../types'
-import { defaultFuseOptions } from '@ownclouders/web-pkg'
+import {
+  defaultFuseOptions,
+  queryItemAsString,
+  useRouteQuery,
+  useRouter
+} from '@ownclouders/web-pkg'
 
 export default defineComponent({
   name: 'AppList',
@@ -38,10 +44,21 @@ export default defineComponent({
   setup() {
     const appsStore = useAppsStore()
     const { apps } = storeToRefs(appsStore)
+    const router = useRouter()
 
-    const filterTerm = ref('')
+    const filterTermQueryItem = useRouteQuery('filter')
+    const filterTerm = computed(() => {
+      return queryItemAsString(unref(filterTermQueryItem))
+    })
+    const filterTermInput = ref('')
+
     const setFilterTerm = (term: string) => {
-      filterTerm.value = term.trim()
+      return router.replace({
+        query: {
+          ...unref(router.currentRoute).query,
+          filter: (term || '').trim()
+        }
+      })
     }
     const filter = (apps: App[], filterTerm: string) => {
       if (!(filterTerm || '').trim()) {
@@ -65,20 +82,26 @@ export default defineComponent({
       await nextTick()
       markInstance.value = new Mark('.mark-element')
     })
-    watch(filterTerm, () => {
-      unref(markInstance)?.unmark()
-      if (unref(filterTerm)) {
-        unref(markInstance)?.mark(unref(filterTerm), {
-          element: 'span',
-          className: 'mark-highlight'
-        })
-      }
-    })
+    watch(
+      filterTerm,
+      () => {
+        filterTermInput.value = unref(filterTerm)
+        unref(markInstance)?.unmark()
+        if (unref(filterTerm)) {
+          unref(markInstance)?.mark(unref(filterTerm), {
+            element: 'span',
+            className: 'mark-highlight'
+          })
+        }
+      },
+      { immediate: true }
+    )
 
     return {
       filteredApps,
       filterTerm,
-      setFilterTerm
+      setFilterTerm,
+      filterTermInput
     }
   }
 })

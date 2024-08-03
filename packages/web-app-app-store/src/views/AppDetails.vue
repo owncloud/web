@@ -22,7 +22,7 @@
     </div>
     <div v-if="app.tags">
       <h3>{{ $gettext('Tags') }}</h3>
-      <app-tags :app="app" />
+      <app-tags :app="app" @search="onTagClicked" />
     </div>
     <div v-if="app.authors">
       <h3>{{ $gettext('Author') }}</h3>
@@ -43,7 +43,7 @@
 import { computed, defineComponent, unref } from 'vue'
 import { App } from '../types'
 import { APPID } from '../appid'
-import { useRouteParam } from '@ownclouders/web-pkg'
+import { useRouteParam, useRouter } from '@ownclouders/web-pkg'
 import { useAppsStore } from '../piniaStores'
 import AppCover from '../components/AppCover.vue'
 import AppResources from '../components/AppResources.vue'
@@ -59,14 +59,20 @@ export default defineComponent({
       return decodeURIComponent(unref(appIdRouteParam))
     })
     const appsStore = useAppsStore()
+    const router = useRouter()
 
     const app = computed<App>(() => {
       return appsStore.getById(unref(appId))
     })
 
+    const onTagClicked = (tag: string) => {
+      router.push({ name: `${APPID}-list`, query: { filter: tag } })
+    }
+
     return {
       app,
-      APPID
+      APPID,
+      onTagClicked
     }
   }
 })
