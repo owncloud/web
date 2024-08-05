@@ -11,6 +11,7 @@ Summary
 * Bugfix - Show more toggle in space members view not reactive: [#11263](https://github.com/owncloud/web/pull/11263)
 * Bugfix - Uploading nested folders: [#11299](https://github.com/owncloud/web/issues/11299)
 * Bugfix - Toggling checkboxes via keyboard: [#11312](https://github.com/owncloud/web/pull/11312)
+* Enhancement - Redesign share link modal: [#11310](https://github.com/owncloud/web/pull/11310)
 
 Details
 -------
@@ -39,6 +40,14 @@ Details
    https://github.com/owncloud/web/issues/10730
    https://github.com/owncloud/web/pull/11312
    https://github.com/owncloud/web/pull/11315
+
+* Enhancement - Redesign share link modal: [#11310](https://github.com/owncloud/web/pull/11310)
+
+   We've redesigned the share link modal to make it easier to share. The new modal
+   is more user-friendly and provides a better experience for sharing.
+
+   https://github.com/owncloud/web/issues/11204
+   https://github.com/owncloud/web/pull/11310
 
 Changelog for ownCloud Web [10.1.0] (2024-07-31)
 =======================================
