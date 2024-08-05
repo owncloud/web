@@ -35,7 +35,7 @@
             />
           </template>
         </div>
-        <div class="oc-pl-s oc-text-truncate">
+        <div class="files-collaborators-collaborator-name-wrapper oc-pl-s">
           <div v-oc-tooltip="shareDisplayNameTooltip" class="oc-text-truncate">
             <span
               aria-hidden="true"
@@ -474,6 +474,10 @@ export default defineComponent({
 }
 
 .files-collaborators-collaborator-role {
+  max-width: 100%;
+}
+
+.files-collaborators-collaborator-name-wrapper {
   max-width: 100%;
 }
 </style>

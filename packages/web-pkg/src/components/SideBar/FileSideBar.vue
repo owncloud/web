@@ -395,7 +395,6 @@ export default defineComponent({
 
   .sidebar-panel {
     &__file_info {
-      background-color: var(--oc-color-background-default);
       padding: var(--oc-space-small) var(--oc-space-small) 0 var(--oc-space-small);
     }
   }

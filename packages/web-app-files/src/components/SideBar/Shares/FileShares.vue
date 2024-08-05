@@ -31,7 +31,7 @@
       />
       <ul
         id="files-collaborators-list"
-        class="oc-list oc-list-divider oc-overflow-hidden"
+        class="oc-list oc-list-divider"
         :class="{ 'oc-mb-l': showSpaceMembers, 'oc-m-rm': !showSpaceMembers }"
         :aria-label="$gettext('Share receivers')"
       >

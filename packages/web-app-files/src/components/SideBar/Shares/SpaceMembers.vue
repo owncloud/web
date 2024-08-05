@@ -51,7 +51,7 @@
       <ul
         id="files-collaborators-list"
         ref="collaboratorList"
-        class="oc-list oc-list-divider oc-overflow-hidden oc-m-rm"
+        class="oc-list oc-list-divider oc-m-rm"
         :aria-label="$gettext('Space members')"
       >
         <li v-for="collaborator in filteredSpaceMembers" :key="collaborator.id">
