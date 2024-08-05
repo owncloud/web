@@ -52,10 +52,14 @@ export const useFileActionsCreateLink = ({
         // Only copy to clipboard if the user tries to create one single link
         try {
           const copyToClipboardText = password
-            ? $gettext('%{link} Password:%{password}', {
-                link: succeeded[0].value.webUrl,
-                password
-              })
+            ? $gettext(
+                '%{link} Password:%{password}',
+                {
+                  link: succeeded[0].value.webUrl,
+                  password
+                },
+                true
+              )
             : succeeded[0].value.webUrl
 
           await copyToClipboard(copyToClipboardText)
