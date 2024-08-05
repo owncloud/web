@@ -1,7 +1,7 @@
 <template>
   <li class="app-tile oc-card oc-card-default oc-card-rounded">
     <router-link :to="{ name: `${APPID}-details`, params: { appId: encodeURIComponent(app.id) } }">
-      <app-cover :app="app" />
+      <app-image-gallery :app="app" />
     </router-link>
     <div class="app-tile-body oc-card-body oc-p">
       <div class="app-content">
@@ -29,13 +29,13 @@
 import { defineComponent, type PropType } from 'vue'
 import { App } from '../types'
 import { APPID } from '../appid'
-import AppCover from './AppCover.vue'
 import AppTags from './AppTags.vue'
 import AppActions from './AppActions.vue'
+import AppImageGallery from './AppImageGallery.vue'
 
 export default defineComponent({
   name: 'AppTile',
-  components: { AppActions, AppTags, AppCover },
+  components: { AppImageGallery, AppActions, AppTags },
   props: {
     app: {
       type: Object as PropType<App>,

@@ -27,6 +27,7 @@ export const AppImageSchema = z.object({
   url: z.string(),
   caption: z.string().optional()
 })
+export type AppImage = z.infer<typeof AppImageSchema>
 
 export const AppResourceSchema = z.object({
   url: z.string(),

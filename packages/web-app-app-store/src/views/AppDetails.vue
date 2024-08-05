@@ -6,7 +6,7 @@
         <span v-text="$gettext('Back to list')" />
       </router-link>
     </div>
-    <app-cover :app="app" />
+    <app-image-gallery :app="app" :show-pagination="true" />
     <div class="app-content oc-card-body oc-p">
       <div class="oc-flex oc-flex-middle">
         <h2 class="oc-my-s oc-text-truncate">{{ app.name }}</h2>
@@ -45,14 +45,14 @@ import { App } from '../types'
 import { APPID } from '../appid'
 import { useRouteParam, useRouter } from '@ownclouders/web-pkg'
 import { useAppsStore } from '../piniaStores'
-import AppCover from '../components/AppCover.vue'
 import AppResources from '../components/AppResources.vue'
 import AppTags from '../components/AppTags.vue'
 import AppVersions from '../components/AppVersions.vue'
 import AppAuthors from '../components/AppAuthors.vue'
+import AppImageGallery from '../components/AppImageGallery.vue'
 
 export default defineComponent({
-  components: { AppAuthors, AppCover, AppResources, AppTags, AppVersions },
+  components: { AppImageGallery, AppAuthors, AppResources, AppTags, AppVersions },
   setup() {
     const appIdRouteParam = useRouteParam('appId')
     const appId = computed(() => {
