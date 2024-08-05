@@ -88,7 +88,7 @@
       </ul>
       <div v-if="showMemberToggle" class="oc-flex oc-flex-center">
         <oc-button appearance="raw" @click="toggleMemberListCollapsed">
-          {{ collapseButtonTitle }}
+          {{ collapseMemberButtonTitle }}
         </oc-button>
       </div>
     </template>
@@ -259,6 +259,10 @@ export default defineComponent({
 
     collapseButtonTitle() {
       return this.sharesListCollapsed ? this.$gettext('Show more') : this.$gettext('Show less')
+    },
+
+    collapseMemberButtonTitle() {
+      return this.memberListCollapsed ? this.$gettext('Show more') : this.$gettext('Show less')
     },
 
     hasSharees() {

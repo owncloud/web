@@ -1,0 +1,6 @@
+Bugfix: Uploading nested folders
+
+We've fixed a bug where the upload overlay breaks when uploading a folder that contains exactly one folder (which then contains some files).
+
+https://github.com/owncloud/web/issues/11299
+https://github.com/owncloud/web/pull/11302
