@@ -18,13 +18,9 @@ import { useClientService } from '../../clientService'
 import { SharingLinkType } from '@ownclouders/web-client/graph/generated'
 
 export const useFileActionsCreateLink = ({
-  enforceModal = false,
-  showMessages = true,
-  onLinkCreatedCallback = undefined
+  enforceModal = false
 }: {
   enforceModal?: boolean
-  showMessages?: boolean
-  onLinkCreatedCallback?: (result: PromiseSettledResult<LinkShare>[]) => Promise<void> | void
 } = {}) => {
   const clientService = useClientService()
   const userStore = useUserStore()
@@ -38,7 +34,13 @@ export const useFileActionsCreateLink = ({
   const { dispatchModal } = useModals()
   const { copyToClipboard } = useClipboard()
 
-  const proceedResult = async (result: PromiseSettledResult<LinkShare>[]) => {
+  const proceedResult = async ({
+    result,
+    password
+  }: {
+    result: PromiseSettledResult<LinkShare>[]
+    password?: string
+  }) => {
     const succeeded = result.filter(
       (val): val is PromiseFulfilledResult<LinkShare> => val.status === 'fulfilled'
     )
@@ -49,22 +51,23 @@ export const useFileActionsCreateLink = ({
       if (result.length === 1) {
         // Only copy to clipboard if the user tries to create one single link
         try {
-          await copyToClipboard(succeeded[0].value.webUrl)
+          const copyToClipboardText = password
+            ? $gettext('Link:%{link} Password:%{password}', {
+                link: succeeded[0].value.webUrl,
+                password
+              })
+            : succeeded[0].value.webUrl
+
+          await copyToClipboard(copyToClipboardText)
           successMessage = $gettext('The link has been copied to your clipboard.')
         } catch (e) {
           console.warn('Unable to copy link to clipboard', e)
         }
       }
 
-      if (showMessages) {
-        showMessage({
-          title: $ngettext(
-            successMessage,
-            'Links have been created successfully.',
-            succeeded.length
-          )
-        })
-      }
+      showMessage({
+        title: $ngettext(successMessage, 'Links have been created successfully.', succeeded.length)
+      })
     }
 
     const failed = result.filter(({ status }) => status === 'rejected')
@@ -73,10 +76,6 @@ export const useFileActionsCreateLink = ({
         errors: (failed as PromiseRejectedResult[]).map(({ reason }) => reason),
         title: $ngettext('Failed to create link', 'Failed to create links', failed.length)
       })
-    }
-
-    if (onLinkCreatedCallback) {
-      onLinkCreatedCallback(result)
     }
   }
 
@@ -88,8 +87,8 @@ export const useFileActionsCreateLink = ({
     if (enforceModal || (passwordEnforced && unref(defaultLinkType) !== SharingLinkType.Internal)) {
       dispatchModal({
         title: $ngettext(
-          'Create link for "%{resourceName}"',
-          'Create links for the selected items',
+          'Copy link for "%{resourceName}"',
+          'Copy links for the selected items',
           resources.length,
           { resourceName: resources[0].name }
         ),
@@ -119,7 +118,7 @@ export const useFileActionsCreateLink = ({
     )
     const result = await loadingService.addTask(() => Promise.allSettled<LinkShare>(promises))
 
-    proceedResult(result)
+    proceedResult({ result })
   }
 
   const isVisible = ({ resources }: FileActionOptions) => {

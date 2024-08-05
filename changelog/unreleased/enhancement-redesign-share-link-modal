@@ -1,0 +1,7 @@
+Enhancement: Redesign share link modal
+
+We've redesigned the share link modal to make it easier to share.
+The new modal is more user-friendly and provides a better experience for sharing.
+
+https://github.com/owncloud/web/pull/11310
+https://github.com/owncloud/web/issues/11204

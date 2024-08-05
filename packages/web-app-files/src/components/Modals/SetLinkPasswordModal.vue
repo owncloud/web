@@ -5,7 +5,6 @@
     type="password"
     :password-policy="inputPasswordPolicy"
     :generate-password-method="inputGeneratePasswordMethod"
-    :fix-message-line="true"
     :placeholder="link.hasPassword ? '●●●●●●●●' : null"
     :error-message="errorMessage"
     class="oc-modal-body-input"
@@ -93,7 +92,7 @@ export default defineComponent({
       onInput,
       errorMessage,
       passwordPolicyService,
-      inputPasswordPolicy: passwordPolicyService.getPolicy(),
+      inputPasswordPolicy: passwordPolicyService.getPolicy({ enforcePassword: true }),
       inputGeneratePasswordMethod: () => passwordPolicyService.generatePassword(),
 
       // unit tests

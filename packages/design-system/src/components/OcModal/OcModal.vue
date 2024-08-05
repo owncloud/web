@@ -499,10 +499,6 @@ export default defineComponent({
     line-height: 1.625;
     padding: var(--oc-space-medium) var(--oc-space-medium) 0;
 
-    span {
-      color: var(--oc-color-text-default);
-    }
-
     &-message {
       margin-bottom: var(--oc-space-medium);
       margin-top: var(--oc-space-small);
