@@ -51,7 +51,7 @@ exports[`TrashOverview > view states > should render spaces list 1`] = `
           <tr class="oc-table-footer-row">
             <td colspan="2" class="oc-table-footer-cell">
               <!-- @slot Footer of the table -->
-              <div class="oc-text-nowrap oc-text-center oc-width-1-1 oc-my-s">
+              <div class="oc-text-center oc-width-1-1 oc-my-s">
                 <p class="oc-text-muted">3 trashes in total</p>
                 <!--v-if-->
               </div>

@@ -130,7 +130,7 @@
             <pagination :pages="paginationPages" :current-page="paginationPage" />
             <div
               v-if="searchResultExceedsLimit"
-              class="oc-text-nowrap oc-text-center oc-width-1-1 oc-my-s"
+              class="oc-text-center oc-width-1-1 oc-my-s"
               v-text="searchResultExceedsLimitText"
             />
             <list-info v-else-if="paginatedResources.length > 0" class="oc-width-1-1 oc-my-s" />
