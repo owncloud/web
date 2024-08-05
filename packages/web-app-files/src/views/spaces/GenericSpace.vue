@@ -81,6 +81,7 @@
               :drag-drop="true"
               :sort-by="sortBy"
               :sort-dir="sortDir"
+              :is-side-bar-open="isSideBarOpen"
               :header-position="fileListHeaderY /* table */"
               :sort-fields="sortFields /* tiles */"
               :view-size="viewSize /* tiles */"

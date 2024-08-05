@@ -1,0 +1,6 @@
+Bugfix: Prevent horizontal table scroll
+
+We've prevented resource tables from being horizontally scrollable for a11y reasons. Instead, information that is available elsewhere will get hidden on smaller displays.
+
+https://github.com/owncloud/web/pull/11313
+https://github.com/owncloud/web/issues/10728

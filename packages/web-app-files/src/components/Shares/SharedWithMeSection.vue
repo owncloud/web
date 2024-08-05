@@ -19,7 +19,6 @@
       v-model:selectedIds="selectedResourcesIds"
       :is-side-bar-open="isSideBarOpen"
       :fields-displayed="displayedFields"
-      sidebar-closed
       :resources="resourceItems"
       :are-resources-clickable="resourceClickable"
       :target-route-callback="resourceTargetRouteCallback"

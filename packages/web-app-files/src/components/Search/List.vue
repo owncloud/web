@@ -6,7 +6,10 @@
         :has-bulk-actions="true"
         :is-side-bar-open="isSideBarOpen"
       />
-      <div v-if="displayFilter" class="files-search-result-filter oc-flex oc-mx-m oc-mb-m oc-mt-xs">
+      <div
+        v-if="displayFilter"
+        class="files-search-result-filter oc-flex oc-flex-wrap oc-mx-m oc-mb-m oc-mt-xs"
+      >
         <div class="oc-mr-m oc-flex oc-flex-middle">
           <oc-icon name="filter-2" class="oc-mr-xs" />
           <span v-text="$gettext('Filter:')" />
@@ -127,7 +130,7 @@
             <pagination :pages="paginationPages" :current-page="paginationPage" />
             <div
               v-if="searchResultExceedsLimit"
-              class="oc-text-nowrap oc-text-center oc-width-1-1 oc-my-s"
+              class="oc-text-center oc-width-1-1 oc-my-s"
               v-text="searchResultExceedsLimitText"
             />
             <list-info v-else-if="paginatedResources.length > 0" class="oc-width-1-1 oc-my-s" />

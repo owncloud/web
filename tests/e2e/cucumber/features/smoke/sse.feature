@@ -77,6 +77,7 @@ Feature: server sent events
       | space-folder | Carol     | user | Can view |
     Then "Alice" should get "share-created" SSE event
     And "Brian" should get "share-created" SSE event
+    And "Brian" closes the sidebar
     And "Brian" should see user-direct indicator on the folder "space-folder"
 
     # share-updated

@@ -436,7 +436,7 @@ export default defineComponent({
       return this.clipboardResources && this.clipboardResources.length !== 0
     },
     hideButtonLabels() {
-      return this.limitedScreenSpace && this.showPasteHereButton
+      return this.limitedScreenSpace
     },
 
     showActions() {

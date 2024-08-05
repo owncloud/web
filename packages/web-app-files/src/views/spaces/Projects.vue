@@ -32,7 +32,7 @@
             <span v-text="$gettext('You don\'t have access to any spaces')" />
           </template>
         </no-content-message>
-        <div v-else class="spaces-list oc-mt-l">
+        <div v-else class="spaces-list">
           <div
             class="spaces-list-filters oc-flex oc-flex-between oc-flex-wrap oc-flex-bottom oc-mx-m oc-mb-m"
           >
@@ -64,6 +64,7 @@
             :sort-by="sortBy"
             :sort-dir="sortDir"
             :header-position="fileListHeaderY"
+            :is-side-bar-open="isSideBarOpen"
             :view-size="viewSize"
             v-bind="folderView.componentAttrs?.()"
             @sort="handleSort"
@@ -107,7 +108,7 @@
             </template>
             <template #footer>
               <pagination :pages="totalPages" :current-page="currentPage" />
-              <div class="oc-text-nowrap oc-text-center oc-width-1-1 oc-my-s">
+              <div class="oc-text-center oc-width-1-1 oc-my-s">
                 <p class="oc-text-muted">{{ footerTextTotal }}</p>
                 <p v-if="filterTerm" class="oc-text-muted">{{ footerTextFilter }}</p>
               </div>

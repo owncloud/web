@@ -69,7 +69,7 @@
         </li>
         <li
           v-if="viewModes.find((v) => v.name === FolderViewModeConstants.name.tiles)"
-          class="files-view-options-list-item oc-visible@s oc-flex oc-flex-between oc-flex-middle"
+          class="files-view-options-list-item oc-flex oc-flex-between oc-flex-middle"
         >
           <label for="tiles-size-slider" v-text="$gettext('Tile size')" />
           <input

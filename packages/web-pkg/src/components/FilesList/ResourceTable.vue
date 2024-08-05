@@ -1219,7 +1219,11 @@ export default defineComponent({
   .oc-table-header-cell-manager,
   .oc-table-data-cell-manager,
   .oc-table-header-cell-remainingQuota,
-  .oc-table-data-cell-remainingQuota {
+  .oc-table-data-cell-remainingQuota,
+  .oc-table-header-cell-members,
+  .oc-table-data-cell-members,
+  .oc-table-header-cell-status,
+  .oc-table-data-cell-status {
     display: none;
 
     @media only screen and (min-width: 960px) {
@@ -1251,7 +1255,9 @@ export default defineComponent({
     .oc-table-header-cell-totalQuota,
     .oc-table-data-cell-totalQuota,
     .oc-table-header-cell-usedQuota,
-    .oc-table-data-cell-usedQuota {
+    .oc-table-data-cell-usedQuota,
+    .oc-table-header-cell-members,
+    .oc-table-data-cell-members {
       display: none;
 
       @media only screen and (min-width: 1400px) {
@@ -1368,14 +1374,18 @@ export default defineComponent({
 
 // shared with me: on tablets hide shared with column and display sharedBy column instead
 #files-shared-with-me-view .files-table .oc-table-header-cell-sharedBy,
-#files-shared-with-me-view .files-table .oc-table-data-cell-sharedBy {
+#files-shared-with-me-view .files-table .oc-table-data-cell-sharedBy,
+#files-shared-with-me-view .files-table .oc-table-header-cell-syncEnabled,
+#files-shared-with-me-view .files-table .oc-table-data-cell-syncEnabled {
   @media only screen and (min-width: 640px) {
     display: table-cell;
   }
 }
 
 #files-shared-with-me-view .files-table .oc-table-header-cell-sharedWith,
-#files-shared-with-me-view .files-table .oc-table-data-cell-sharedWith {
+#files-shared-with-me-view .files-table .oc-table-data-cell-sharedWith,
+#files-shared-with-me-view .files-table .oc-table-header-cell-syncEnabled,
+#files-shared-with-me-view .files-table .oc-table-data-cell-syncEnabled {
   @media only screen and (max-width: 1199px) {
     display: none;
   }

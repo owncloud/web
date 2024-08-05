@@ -43,3 +43,9 @@ When(
     await applicationObject.openUrl(url)
   }
 )
+
+When('{string} closes the sidebar', async function (this: World, user: string): Promise<void> {
+  const { page } = this.actorsEnvironment.getActor({ key: user })
+  const applicationObject = new objects.runtime.Application({ page })
+  await applicationObject.closeSidebar()
+})

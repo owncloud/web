@@ -95,7 +95,7 @@
         </template>
         <template #footer>
           <pagination :pages="totalPages" :current-page="currentPage" />
-          <div class="oc-text-nowrap oc-text-center oc-width-1-1 oc-my-s">
+          <div class="oc-text-center oc-width-1-1 oc-my-s">
             <p class="oc-text-muted">{{ footerTextTotal }}</p>
           </div>
         </template>
@@ -431,7 +431,9 @@ export default defineComponent({
   .oc-table-header-cell-role,
   .oc-table-data-cell-role,
   .oc-table-header-cell-accountEnabled,
-  .oc-table-data-cell-accountEnabled {
+  .oc-table-data-cell-accountEnabled,
+  .oc-table-header-cell-mail,
+  .oc-table-data-cell-mail {
     display: none;
 
     @media only screen and (min-width: 1200px) {
@@ -452,7 +454,9 @@ export default defineComponent({
     .oc-table-header-cell-role,
     .oc-table-data-cell-role,
     .oc-table-header-cell-accountEnabled,
-    .oc-table-data-cell-accountEnabled {
+    .oc-table-data-cell-accountEnabled,
+    .oc-table-header-cell-mail,
+    .oc-table-data-cell-mail {
       display: none;
 
       @media only screen and (min-width: 1600px) {

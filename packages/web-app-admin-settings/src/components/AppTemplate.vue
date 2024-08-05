@@ -28,7 +28,11 @@
             v-if="showAppBar"
             class="admin-settings-app-bar-actions oc-flex oc-flex-middle oc-mt-xs"
           >
-            <slot name="topbarActions" class="oc-flex-1 oc-flex oc-flex-start" />
+            <slot
+              name="topbarActions"
+              :limited-screen-space="limitedScreenSpace"
+              class="oc-flex-1 oc-flex oc-flex-start"
+            />
             <batch-actions
               v-if="showBatchActions"
               :actions="batchActions"
