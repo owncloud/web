@@ -19,7 +19,7 @@
         </div>
         <p class="oc-my-s mark-element">{{ app.subtitle }}</p>
       </div>
-      <app-tags :app="app" @search="emitSearchTerm" />
+      <app-tags :app="app" @click="emitSearchTerm" />
       <app-actions :app="app" />
     </div>
   </li>

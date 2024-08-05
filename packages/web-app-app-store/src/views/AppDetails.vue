@@ -21,7 +21,7 @@
       </div>
       <div v-if="app.tags">
         <h3>{{ $gettext('Tags') }}</h3>
-        <app-tags :app="app" @search="onTagClicked" />
+        <app-tags :app="app" @click="onTagClicked" />
       </div>
       <div v-if="app.authors">
         <h3>{{ $gettext('Author') }}</h3>

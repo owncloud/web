@@ -6,7 +6,7 @@
       size="small"
       class="oc-text-nowrap"
       type="button"
-      @click="emitSearchTerm(tag)"
+      @click="emitClick(tag)"
     >
       <span class="mark-element">{{ tag }}</span>
     </oc-tag>
@@ -24,14 +24,14 @@ export default defineComponent({
       required: true
     }
   },
-  emits: ['search'],
+  emits: ['click'],
   setup(props, { emit }) {
-    const emitSearchTerm = (term: string) => {
-      emit('search', term)
+    const emitClick = (tagName: string) => {
+      emit('click', tagName)
     }
 
     return {
-      emitSearchTerm
+      emitClick
     }
   }
 })
