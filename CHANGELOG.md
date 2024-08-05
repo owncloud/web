@@ -11,6 +11,7 @@ Summary
 * Bugfix - Show more toggle in space members view not reactive: [#11263](https://github.com/owncloud/web/pull/11263)
 * Bugfix - Uploading nested folders: [#11299](https://github.com/owncloud/web/issues/11299)
 * Bugfix - Toggling checkboxes via keyboard: [#11312](https://github.com/owncloud/web/pull/11312)
+* Bugfix - Prevent horizontal table scroll: [#11313](https://github.com/owncloud/web/pull/11313)
 * Enhancement - Redesign share link modal: [#11310](https://github.com/owncloud/web/pull/11310)
 
 Details
@@ -40,6 +41,15 @@ Details
    https://github.com/owncloud/web/issues/10730
    https://github.com/owncloud/web/pull/11312
    https://github.com/owncloud/web/pull/11315
+
+* Bugfix - Prevent horizontal table scroll: [#11313](https://github.com/owncloud/web/pull/11313)
+
+   We've prevented resource tables from being horizontally scrollable for a11y
+   reasons. Instead, information that is available elsewhere will get hidden on
+   smaller displays.
+
+   https://github.com/owncloud/web/issues/10728
+   https://github.com/owncloud/web/pull/11313
 
 * Enhancement - Redesign share link modal: [#11310](https://github.com/owncloud/web/pull/11310)
 
