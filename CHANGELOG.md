@@ -8,10 +8,29 @@ ownCloud admins and users.
 Summary
 -------
 
+* Bugfix - Show more toggle in space members view not reactive: [#11263](https://github.com/owncloud/web/pull/11263)
+* Bugfix - Uploading nested folders: [#11299](https://github.com/owncloud/web/issues/11299)
 * Bugfix - Toggling checkboxes via keyboard: [#11312](https://github.com/owncloud/web/pull/11312)
 
 Details
 -------
+
+* Bugfix - Show more toggle in space members view not reactive: [#11263](https://github.com/owncloud/web/pull/11263)
+
+   We've fixed a bug where the toggle to show more members in the space members
+   view was not reactive. Clicking the toggle in the sidebar will now correctly
+   display “Show More” or “Show Less” as intended.
+
+   https://github.com/owncloud/web/issues/11261
+   https://github.com/owncloud/web/pull/11263
+
+* Bugfix - Uploading nested folders: [#11299](https://github.com/owncloud/web/issues/11299)
+
+   We've fixed a bug where the upload overlay breaks when uploading a folder that
+   contains exactly one folder (which then contains some files).
+
+   https://github.com/owncloud/web/issues/11299
+   https://github.com/owncloud/web/pull/11302
 
 * Bugfix - Toggling checkboxes via keyboard: [#11312](https://github.com/owncloud/web/pull/11312)
 
