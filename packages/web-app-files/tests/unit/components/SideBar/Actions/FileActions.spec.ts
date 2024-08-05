@@ -21,6 +21,7 @@ const fileActions: Record<string, ActionWithSelector> = {
   copy: mock<ActionWithSelector>({
     handler: vi.fn(),
     label: () => 'Copy',
+    subtitle: () => 'Copy to another location',
     componentType: 'button',
     class: 'oc-files-actions-copy-trigger',
     selector: '.oc-files-actions-copy-trigger'

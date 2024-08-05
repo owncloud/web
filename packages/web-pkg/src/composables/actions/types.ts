@@ -5,6 +5,7 @@ import { IconFillType } from '../../helpers'
 import { StringUnionOrAnyString } from '../../utils'
 
 export type ActionOptions = Record<string, unknown | unknown[]>
+
 export interface Action<T = ActionOptions> {
   name: string
   category?: StringUnionOrAnyString<'context' | 'share' | 'actions' | 'sidebar'>
@@ -23,8 +24,12 @@ export interface Action<T = ActionOptions> {
   opensInNewWindow?: boolean
   isExternal?: boolean
   ext?: string
+  newTab?: boolean
 
   label(options?: T): string
+
+  subtitle?(options?: T): string
+
   isVisible(options?: T): boolean
 
   // componentType: button
@@ -35,12 +40,14 @@ export interface Action<T = ActionOptions> {
 
   // can be used to display the action in a disabled state in the UI
   isDisabled?(options?: T): boolean
+
   disabledTooltip?(options?: T): string
 }
 
 export type FileActionOptions<T extends Resource = Resource> = {
   space: SpaceResource
   resources?: T[]
+  newTab?: boolean
 }
 export type FileAction<T extends Resource = Resource> = Action<FileActionOptions<T>>
 

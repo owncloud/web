@@ -88,7 +88,7 @@
               :style="folderViewStyle"
               v-bind="folderView.componentAttrs?.()"
               @file-dropped="fileDropped"
-              @file-click="triggerDefaultAction"
+              @file-click="onFileClick"
               @row-mounted="rowMounted"
               @sort="handleSort"
             >
@@ -146,6 +146,7 @@ import {
 
 import {
   isResourceTxtFileAlmostEmpty,
+  MouseEventButton,
   ProcessorType,
   ResourceTransfer,
   TransferType,
@@ -154,6 +155,7 @@ import {
   useExtensionRegistry,
   useFileActions,
   useFileActionsCreateNewFolder,
+  useFolderLink,
   usePasteWorker,
   useResourcesStore,
   useRouter,
@@ -255,6 +257,7 @@ export default defineComponent({
     const { startWorker } = usePasteWorker()
     const { breadcrumbsFromPath, concatBreadcrumbs } = useBreadcrumbsFromPath()
     const { openWithDefaultApp } = useOpenWithDefaultApp()
+    const { getFolderLink } = useFolderLink()
 
     const space = computed(() => props.space)
 
@@ -594,6 +597,29 @@ export default defineComponent({
       })
     }
 
+    const onFileClick = ({
+      space,
+      resources,
+      event
+    }: {
+      space: SpaceResource
+      resources: Resource[]
+      event: MouseEvent
+    }) => {
+      const newTab =
+        event.button === MouseEventButton.MIDDLE ||
+        (event.button === MouseEventButton.LEFT && event.altKey)
+      const resource = resources[0]
+
+      /**if (newTab && resource.isFolder && false) {
+       const folderLink = getFolderLink(resource)
+       const folderHref = router.resolve(folderLink).href
+       return window.open(new URL(folderHref, window.location.origin), 'blank')
+       }**/
+
+      openWithDefaultApp({ space, resource, newTab })
+    }
+
     return {
       ...useFileActions(),
       ...resourcesViewDefaults,
@@ -623,7 +649,8 @@ export default defineComponent({
       updateResourceField,
       areHiddenFilesShown,
       fileDropped,
-      isResourceTxtFileAlmostEmpty
+      isResourceTxtFileAlmostEmpty,
+      onFileClick
     }
   },
 

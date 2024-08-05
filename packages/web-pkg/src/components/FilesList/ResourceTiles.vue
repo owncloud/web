@@ -54,7 +54,7 @@
             $emit('rowMounted', resource, tileRefs.tiles[resource.id], ImageDimension.Tile)
           "
           @contextmenu="showContextMenu($event, resource, tileRefs.tiles[resource.id])"
-          @click="emitTileClick(resource)"
+          @click="emitTileClick(resource, $event)"
           @dragstart="dragStart(resource, $event)"
           @dragenter.prevent="setDropStyling(resource, false, $event)"
           @dragleave.prevent="setDropStyling(resource, true, $event)"
@@ -276,7 +276,7 @@ export default defineComponent({
       return { path: '' }
     }
 
-    const emitTileClick = (resource: Resource) => {
+    const emitTileClick = (resource: Resource, event: MouseEvent) => {
       if (unref(isEmbedModeEnabled) && unref(isFilePicker)) {
         return postMessage<Resource>(
           'owncloud-embed:file-pick',
@@ -291,7 +291,7 @@ export default defineComponent({
         })
       }
       if (resource.type !== 'space' && resource.type !== 'folder') {
-        resourceRouteResolver.createFileAction(resource)
+        resourceRouteResolver.createFileAction({ resource, event })
       }
     }
 

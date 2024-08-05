@@ -46,7 +46,6 @@ Depending on the backend you are using, there are sample config files provided i
 
 #### Options
 
-- `options.openAppsInTab` Configures whether apps and extensions generally should open in a new tab. Defaults to false.
 - `options.accountEditLink` This accepts an object with the following optional fields to have a link on the account page:
     - `options.accountEditLink.href` Set a different target URL for the edit link. Make sure to prepend it with `http(s)://`.
 - `options.disableFeedbackLink` Set this option to `true` to disable the feedback link in the topbar. Keeping it enabled (value `false` or absence of the option)

@@ -34,10 +34,15 @@
       />
       <span
         v-if="!action.hideLabel"
-        class="oc-files-context-action-label"
+        class="oc-files-context-action-label oc-display-block"
         data-testid="action-label"
       >
-        {{ action.label(actionOptions) }}
+        <span v-text="action.label(actionOptions)" />
+        <span
+          v-if="action.subtitle"
+          class="oc-files-context-action-subtitle oc-text-muted oc-text-xsmall"
+          v-text="action.subtitle(actionOptions)"
+        />
       </span>
       <span
         v-if="action.shortcut && shortcutHint"
@@ -122,15 +127,17 @@ export default defineComponent({
         return {}
       }
 
-      const callback = () =>
+      const callback = (event: MouseEvent) => {
         this.action.handler({
-          ...this.actionOptions
+          ...this.actionOptions,
+          newTab: event.altKey
         })
+      }
       if (this.action.keepOpen) {
         return {
-          click: (event: Event) => {
+          click: (event: MouseEvent) => {
             event.stopPropagation()
-            callback()
+            callback(event)
           }
         }
       }
@@ -145,6 +152,7 @@ export default defineComponent({
 .action-menu-item {
   vertical-align: middle;
 }
+
 .oc-files-context-action-shortcut {
   justify-content: right !important;
   font-size: var(--oc-font-size-small);

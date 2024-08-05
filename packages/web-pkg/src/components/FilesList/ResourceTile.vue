@@ -15,7 +15,8 @@
       :folder-link="resourceRoute"
       :is-resource-clickable="isResourceClickable"
       tabindex="-1"
-      @click="$emit('click')"
+      @click="$emit('click', $event)"
+      @click.middle="$emit('click', $event)"
     >
       <div class="oc-tile-card-selection">
         <slot name="selection" :item="resource" />
@@ -61,7 +62,8 @@
             :is-extension-displayed="isExtensionDisplayed"
             :is-resource-clickable="isResourceClickable"
             :folder-link="resourceRoute"
-            @click="$emit('click')"
+            @click="$emit('click', $event)"
+            @click.middle="$emit('click', $event)"
           />
         </div>
         <div class="oc-flex oc-flex-middle">

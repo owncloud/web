@@ -86,7 +86,7 @@ export default {
     }
   },
   methods: {
-    emitClick() {
+    emitClick(event: MouseEvent) {
       if (this.isNavigatable) {
         return
       }
@@ -94,7 +94,7 @@ export default {
       /**
        * Triggered when the resource is a file and the name is clicked
        */
-      this.$emit('click')
+      this.$emit('click', event)
     }
   }
 }

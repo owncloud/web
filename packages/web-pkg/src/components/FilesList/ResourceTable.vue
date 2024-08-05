@@ -81,7 +81,8 @@
             getParentFolderLinkIconAdditionalAttributes(item)
           "
           :class="{ 'resource-table-resource-cut': isResourceCut(item) }"
-          @click="emitFileClick(item)"
+          @click="(event: MouseEvent) => emitFileClick(item, event)"
+          @click.middle="(event: MouseEvent) => emitFileClick(item, event)"
         />
         <oc-button
           v-if="hasRenameAction(item)"
@@ -1067,14 +1068,13 @@ export default defineComponent({
           .map((resource) => resource.id)
       )
     },
-    emitFileClick(resource: Resource) {
+    emitFileClick(resource: Resource, event: MouseEvent) {
       const space = this.getMatchingSpace(resource)
-
       /**
        * Triggered when a default action is triggered on a file
        * @property {object} resource resource for which the event is triggered
        */
-      this.$emit('fileClick', { space, resources: [resource] })
+      this.$emit('fileClick', { space, resources: [resource], event })
     },
     getResourceCheckboxLabel(resource: Resource) {
       if (resource.type === 'folder') {

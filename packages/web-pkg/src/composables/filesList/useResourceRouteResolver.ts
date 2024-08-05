@@ -37,13 +37,13 @@ export const useResourceRouteResolver = (
     )
   }
 
-  const createFileAction = (resource: Resource) => {
+  const createFileAction = ({ resource, event }: { resource: Resource; event: MouseEvent }) => {
     const space = unref(options.space) || getMatchingSpace(resource)
     /**
      * Triggered when a default action is triggered on a file
      * @property {object} resource resource for which the event is triggered
      */
-    context.emit('fileClick', { space, resources: [resource] })
+    context.emit('fileClick', { space, resources: [resource], event })
   }
 
   return {

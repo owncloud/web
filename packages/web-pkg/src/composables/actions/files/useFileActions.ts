@@ -56,6 +56,10 @@ export const useFileActions = () => {
   const resourcesStore = useResourcesStore()
   const { currentFolder } = storeToRefs(resourcesStore)
 
+  const isMacOs = computed(() => {
+    return window.navigator.platform.match('Mac')
+  })
+
   const { actions: enableSyncActions } = useFileActionsEnableSync()
   const { actions: hideShareActions } = useFileActionsToggleHideShare()
   const { actions: copyActions } = useFileActionsCopy()
@@ -103,7 +107,14 @@ export const useFileActions = () => {
             if (fileExtension.label) {
               return $gettext(fileExtension.label)
             }
-            return $gettext('Open in %{app}', { app: appInfo.name }, true)
+            return $gettext('Open in a %{app}', { app: appInfo.name }, true)
+          },
+          subtitle: () => {
+            return $gettext(
+              'Hold %{key} to open in new tab',
+              { key: unref(isMacOs) ? '⌥' : 'Alt' },
+              true
+            )
           },
           icon: fileExtension.icon || appInfo.icon,
           ...(appInfo.iconFillType && {
@@ -111,7 +122,13 @@ export const useFileActions = () => {
           }),
           img: appInfo.img,
           handler: (options) =>
-            openEditor(fileExtension, options.space, options.resources[0], EDITOR_MODE_EDIT),
+            openEditor(
+              fileExtension,
+              options.space,
+              options.resources[0],
+              EDITOR_MODE_EDIT,
+              options.newTab
+            ),
           isVisible: ({ resources }) => {
             if (resources.length !== 1) {
               return false
@@ -180,16 +197,16 @@ export const useFileActions = () => {
     appFileExtension: ApplicationFileExtension,
     space: SpaceResource,
     resource: Resource,
-    mode: string
+    mode: string,
+    newTab = false
   ) => {
     const remoteItemId = isShareSpaceResource(space) ? space.id : undefined
     const routeName = appFileExtension.routeName || appFileExtension.app
     const routeOpts = getEditorRouteOpts(routeName, space, resource, mode, remoteItemId)
 
-    if (configStore.options.openAppsInTab) {
+    if (newTab) {
       const path = router.resolve(routeOpts).href
-      const target = `${appFileExtension.routeName}-${resource.path}`
-
+      const target = '_blank'
       openUrl(path, target, true)
       return
     }

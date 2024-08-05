@@ -6,10 +6,12 @@ export function useOpenWithDefaultApp() {
 
   const openWithDefaultApp = ({
     space,
-    resource
+    resource,
+    newTab
   }: {
     space: SpaceResource
     resource: Resource
+    newTab?: boolean
   }) => {
     if (!resource || resource.isFolder) {
       return
@@ -17,7 +19,8 @@ export function useOpenWithDefaultApp() {
 
     const fileActionsOptions = {
       resources: [resource],
-      space: space
+      space: space,
+      newTab
     }
 
     const defaultEditorAction = getDefaultEditorAction(fileActionsOptions)

@@ -103,7 +103,6 @@ const OptionsConfigSchema = z.object({
       openRemotely: z.boolean().optional()
     })
     .optional(),
-  openAppsInTab: z.boolean().optional(),
   routing: z
     .object({
       fullShareOwnerPaths: z.boolean().optional(),

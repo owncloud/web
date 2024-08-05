@@ -18,3 +18,9 @@ export type FederatedUser = {
 export type FederatedConnection = FederatedUser & {
   id: string
 }
+
+export enum MouseEventButton {
+  LEFT = 0,
+  MIDDLE = 1,
+  RIGHT = 2
+}
