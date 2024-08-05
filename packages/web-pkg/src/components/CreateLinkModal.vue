@@ -24,7 +24,7 @@
       <span v-text="$gettext('Options')" />
     </oc-button>
   </div>
-  <div v-if="!onlyInternalLinksAllowed" class="link-modal-password">
+  <div v-if="!onlyInternalLinksAllowed" class="link-modal-password oc-mb-m">
     <oc-text-input
       v-if="advancedMode"
       :key="passwordInputKey"
