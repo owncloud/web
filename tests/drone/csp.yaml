@@ -3,6 +3,7 @@ directives:
     - '''self'''
   connect-src:
     - '''self'''
+    - 'https://raw.githubusercontent.com/owncloud/awesome-ocis/'
     # In contrast to bash and docker the default is given after the | character
     - 'https://${KEYCLOAK_DOMAIN|keycloak:8443}/'
   default-src:
@@ -22,6 +23,7 @@ directives:
     - '''self'''
     - 'data:'
     - 'blob:'
+    - 'https://raw.githubusercontent.com/owncloud/awesome-ocis/'
     # In contrast to bash and docker the default is given after the | character
     - 'https://${ONLYOFFICE_DOMAIN|onlyoffice:443}/'
     - 'https://${COLLABORA_DOMAIN|collabora:9980}/'

@@ -106,14 +106,26 @@
 
 <script lang="ts">
 import { useGettext } from 'vue3-gettext'
-import { ComponentPublicInstance, defineComponent, PropType, ref, unref, computed } from 'vue'
+import {
+  ComponentPublicInstance,
+  PropType,
+  computed,
+  defineComponent,
+  nextTick,
+  onMounted,
+  ref,
+  unref,
+  watch
+} from 'vue'
 import {
   AppLoadingSpinner,
   ContextMenuBtnClickEventData,
   displayPositionedDropdown,
   eventBus,
+  queryItemAsString,
   SortDir,
-  useKeyboardActions
+  useKeyboardActions,
+  useRouteQuery
 } from '@ownclouders/web-pkg'
 import { SideBarEventTopics } from '@ownclouders/web-pkg'
 import { AppRole, User } from '@ownclouders/web-client/graph/generated'
@@ -128,6 +140,7 @@ import {
   useKeyboardTableNavigation
 } from '../../composables/keyboardActions'
 import { findIndex } from 'lodash-es'
+import Mark from 'mark.js'
 
 export default defineComponent({
   name: 'UsersList',
@@ -314,6 +327,23 @@ export default defineComponent({
       lastSelectedUserId
     )
 
+    const markInstance = ref<Mark>(null)
+    onMounted(async () => {
+      await nextTick()
+      markInstance.value = new Mark('.mark-element')
+    })
+    const displayNameQuery = useRouteQuery('q_displayName')
+    watch([displayNameQuery, paginatedItems], () => {
+      unref(markInstance)?.unmark()
+      const filterTerm = queryItemAsString(unref(displayNameQuery))
+      if (filterTerm) {
+        unref(markInstance)?.mark(filterTerm, {
+          element: 'span',
+          className: 'mark-highlight'
+        })
+      }
+    })
+
     return {
       showDetails,
       showEditPanel,
@@ -337,11 +367,6 @@ export default defineComponent({
       selectUsers,
       unselectAllUsers,
       users
-    }
-  },
-  data() {
-    return {
-      markInstance: null
     }
   },
   computed: {

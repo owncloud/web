@@ -7,7 +7,7 @@
       :class="[action.class, 'action-menu-item', 'oc-py-s', 'oc-px-m', 'oc-width-1-1']"
       :aria-label="componentProps.disabled ? action.disabledTooltip?.(actionOptions) : ''"
       data-testid="action-handler"
-      size="small"
+      :size="size"
       justify-content="left"
       v-on="componentListeners"
     >
@@ -30,7 +30,7 @@
         data-testid="action-icon"
         :name="action.icon"
         :fill-type="action.iconFillType || 'line'"
-        size="medium"
+        :size="size"
       />
       <span
         v-if="!action.hideLabel"
@@ -56,7 +56,7 @@
 
 <script lang="ts">
 import { computed, defineComponent, PropType } from 'vue'
-import { Action, ActionOptions } from '../../composables/actions'
+import { Action, ActionOptions } from '../../composables'
 
 export default defineComponent({
   name: 'ActionMenuItem',
@@ -68,6 +68,11 @@ export default defineComponent({
     actionOptions: {
       type: Object as PropType<ActionOptions>,
       required: true
+    },
+    size: {
+      type: String,
+      required: false,
+      default: 'medium'
     },
     appearance: {
       type: String,

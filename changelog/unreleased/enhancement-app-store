@@ -1,0 +1,9 @@
+Enhancement: App Store app
+
+We've added a new App Store app to the platform. This app allows you to explore available apps and download them from
+our `awesome-ocis` github repository.
+
+In order to use this app, you currently need to adjust your `csp.yaml` file (only if you have it customized).
+Please add the URL `'https://raw.githubusercontent.com/owncloud/awesome-ocis/'` to the sections `connect-src` and `img-src`.
+
+https://github.com/owncloud/web/pull/11302
