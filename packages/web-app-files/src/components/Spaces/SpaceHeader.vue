@@ -54,23 +54,26 @@
         </oc-button>
       </div>
       <p v-if="space.description" class="oc-mt-rm oc-text-bold">{{ space.description }}</p>
-      <div ref="markdownContainerRef" class="markdown-container oc-flex oc-flex-middle">
+      <div
+        v-if="markdownResource && markdownContent"
+        ref="markdownContainerRef"
+        class="markdown-container oc-flex oc-flex-middle"
+      >
         <text-editor
-          v-if="markdownContent"
           :resource="markdownResource"
           :current-content="markdownContent"
           :is-read-only="true"
           :application-config="{}"
         />
         <div class="markdown-container-edit oc-ml-s">
-          <oc-button
-            v-oc-tooltip="editReadmeContentActions[0].label"
+          <router-link
+            v-oc-tooltip="$gettext('Edit description')"
             size="small"
             appearance="raw"
-            @click="editReadmeContentActions[0].handler({ resources: [space] })"
+            :to="editReadMeContentLink"
           >
             <oc-icon name="pencil" size="small" fill-type="line" />
-          </oc-button>
+          </router-link>
         </div>
       </div>
       <div
@@ -106,7 +109,8 @@ import {
   ProcessorType,
   useResourcesStore,
   TextEditor,
-  useSpaceActionsEditReadmeContent
+  useSpaceActionsEditReadmeContent,
+  useFileActions
 } from '@ownclouders/web-pkg'
 import { ImageDimension } from '@ownclouders/web-pkg'
 import { VisibilityObserver } from '@ownclouders/web-pkg'
@@ -139,6 +143,7 @@ export default defineComponent({
     const { getFileContents, getFileInfo } = clientService.webdav
     const previewService = usePreviewService()
     const resourcesStore = useResourcesStore()
+    const { getDefaultAction } = useFileActions()
     const { actions: editReadmeContentActions } = useSpaceActionsEditReadmeContent()
 
     const markdownContainerRef = ref(null)
@@ -220,6 +225,16 @@ export default defineComponent({
 
     const imageContent = ref(null)
     const imageExpanded = ref(false)
+
+    const editReadMeContentLink = computed(() => {
+      const action = getDefaultAction({ resources: [unref(markdownResource)], space: props.space })
+
+      if (!action.route) {
+        return null
+      }
+
+      return action.route({ space: props.space, resources: [unref(markdownResource)] })
+    })
     const toggleImageExpanded = () => {
       imageExpanded.value = !unref(imageExpanded)
     }
@@ -278,7 +293,8 @@ export default defineComponent({
       memberCountString,
       openSideBarSharePanel,
       loadPreviewTask,
-      editReadmeContentActions
+      editReadmeContentActions,
+      editReadMeContentLink
     }
   }
 })

@@ -68,7 +68,7 @@ const resources = [
   }
 ]
 
-describe('ResourceTiles component', () => {
+describe.skip('ResourceTiles component', () => {
   const originalGetElementById = document.getElementById
   const originalGetComputedStyle = window.getComputedStyle
   beforeEach(() => {

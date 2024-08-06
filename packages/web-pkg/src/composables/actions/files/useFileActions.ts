@@ -35,6 +35,7 @@ import { Resource, SpaceResource } from '@ownclouders/web-client'
 import { storeToRefs } from 'pinia'
 import { useEmbedMode } from '../../embedMode'
 import { RouteRecordName } from 'vue-router'
+import { useGetMatchingSpace } from '../../spaces'
 
 export const EDITOR_MODE_EDIT = 'edit'
 export const EDITOR_MODE_CREATE = 'create'
@@ -45,16 +46,19 @@ export interface GetFileActionsOptions extends FileActionOptions {
 
 export const useFileActions = () => {
   const appsStore = useAppsStore()
-  const configStore = useConfigStore()
   const router = useRouter()
   const { $gettext } = useGettext()
   const isSearchActive = useIsSearchActive()
   const { isEnabled: isEmbedModeEnabled } = useEmbedMode()
+  const { getMatchingSpace } = useGetMatchingSpace()
 
   const { openUrl } = useWindowOpen()
 
   const resourcesStore = useResourcesStore()
   const { currentFolder } = storeToRefs(resourcesStore)
+
+  const configStore = useConfigStore()
+  const { options } = storeToRefs(configStore)
 
   const { actions: enableSyncActions } = useFileActionsEnableSync()
   const { actions: hideShareActions } = useFileActionsToggleHideShare()
@@ -105,11 +109,21 @@ export const useFileActions = () => {
             }
             return $gettext('Open in %{app}', { app: appInfo.name }, true)
           },
+          showOpenInNewTabHint: true,
           icon: fileExtension.icon || appInfo.icon,
           ...(appInfo.iconFillType && {
             iconFillType: appInfo.iconFillType
           }),
           img: appInfo.img,
+          componentType: 'router-link',
+          route: ({ space, resources }) => {
+            return getEditorRoute({
+              appFileExtension: fileExtension,
+              space,
+              resource: resources[0],
+              mode: EDITOR_MODE_EDIT
+            })
+          },
           handler: (options) =>
             openEditor(fileExtension, options.space, options.resources[0], EDITOR_MODE_EDIT),
           isVisible: ({ resources }) => {
@@ -140,7 +154,6 @@ export const useFileActions = () => {
             return false
           },
           hasPriority: fileExtension.hasPriority,
-          componentType: 'button',
           class: `oc-files-actions-${kebabCase(appInfo.name).toLowerCase()}-trigger`
         }
       })
@@ -153,6 +166,22 @@ export const useFileActions = () => {
       })
   })
 
+  const getEditorRoute = ({
+    appFileExtension,
+    space,
+    resource,
+    mode
+  }: {
+    appFileExtension: ApplicationFileExtension
+    space: SpaceResource
+    resource: Resource
+    mode: string
+  }) => {
+    const remoteItemId = isShareSpaceResource(space) ? space.id : undefined
+    const routeName = appFileExtension.routeName || appFileExtension.app
+    const routeOpts = getEditorRouteOpts(routeName, space, resource, mode, remoteItemId)
+    return router.resolve(routeOpts)
+  }
   const getEditorRouteOpts = (
     routeName: RouteRecordName,
     space: SpaceResource,
@@ -160,6 +189,10 @@ export const useFileActions = () => {
     mode: string,
     remoteItemId: string
   ) => {
+    if (!space) {
+      space = getMatchingSpace(resource)
+    }
+
     return {
       name: routeName,
       params: {
@@ -170,7 +203,7 @@ export const useFileActions = () => {
       },
       query: {
         ...(remoteItemId && { shareId: remoteItemId }),
-        ...(resource.fileId && configStore.options.routing.idBased && { fileId: resource.fileId }),
+        ...(resource.fileId && unref(options).routing.idBased && { fileId: resource.fileId }),
         ...routeToContextQuery(unref(router.currentRoute))
       }
     }
@@ -186,7 +219,7 @@ export const useFileActions = () => {
     const routeName = appFileExtension.routeName || appFileExtension.app
     const routeOpts = getEditorRouteOpts(routeName, space, resource, mode, remoteItemId)
 
-    if (configStore.options.openAppsInTab) {
+    if (unref(options).cernFeatures) {
       const path = router.resolve(routeOpts).href
       const target = `${appFileExtension.routeName}-${resource.path}`
 

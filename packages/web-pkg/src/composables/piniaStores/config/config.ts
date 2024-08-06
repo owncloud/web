@@ -30,7 +30,6 @@ const defaultOptions = {
   ocm: {
     openRemotely: false
   },
-  openAppsInTab: false,
   routing: {
     idBased: true,
     fullShareOwnerPaths: false

@@ -40,6 +40,7 @@ export const useFileActionsNavigate = () => {
     {
       name: 'navigate',
       icon: 'folder-open',
+      showOpenInNewTabHint: true,
       label: () => $gettext('Open folder'),
       isVisible: ({ resources }) => {
         if (isLocationTrashActive(router, 'files-trash-generic')) {
