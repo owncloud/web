@@ -45,7 +45,6 @@ export interface GetFileActionsOptions extends FileActionOptions {
 
 export const useFileActions = () => {
   const appsStore = useAppsStore()
-  const configStore = useConfigStore()
   const router = useRouter()
   const { $gettext } = useGettext()
   const isSearchActive = useIsSearchActive()
@@ -55,6 +54,9 @@ export const useFileActions = () => {
 
   const resourcesStore = useResourcesStore()
   const { currentFolder } = storeToRefs(resourcesStore)
+
+  const configStore = useConfigStore()
+  const { options } = storeToRefs(configStore)
 
   const isMacOs = computed(() => {
     return window.navigator.platform.match('Mac')
@@ -204,7 +206,7 @@ export const useFileActions = () => {
     const routeName = appFileExtension.routeName || appFileExtension.app
     const routeOpts = getEditorRouteOpts(routeName, space, resource, mode, remoteItemId)
 
-    if (newTab) {
+    if (newTab || unref(options).cernFeatures) {
       const path = router.resolve(routeOpts).href
       const target = '_blank'
       openUrl(path, target, true)

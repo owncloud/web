@@ -49,12 +49,6 @@
         class="oc-files-context-action-shortcut"
         v-text="action.shortcut"
       />
-      <span
-        v-if="action.opensInNewWindow"
-        data-testid="action-sr-hint"
-        class="oc-invisible-sr"
-        v-text="$gettext('(Opens in new window)')"
-      />
     </oc-button>
   </li>
 </template>

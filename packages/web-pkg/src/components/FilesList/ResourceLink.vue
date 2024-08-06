@@ -3,13 +3,11 @@
     :is="componentType"
     v-bind="componentProps"
     v-if="isResourceClickable"
-    :target="linkTargetBlank"
-    :aria-describedby="opensInNewWindowDescriptionId"
     :draggable="false"
     @dragstart.prevent.stop
     @click="emitClick"
   >
-    <slot :opens-in-new-window-description-id="opensInNewWindowDescriptionId" />
+    <slot />
   </component>
   <span v-else>
     <slot />
@@ -17,8 +15,6 @@
 </template>
 
 <script lang="ts">
-import uniqueId from 'design-system/src/utils/uniqueId'
-
 /**
  * Wraps content in a resource link
  */
@@ -69,20 +65,6 @@ export default {
       return {
         to: this.folderLink
       }
-    },
-    opensInNewWindowDescriptionId() {
-      if (this.resource.opensInNewWindow) {
-        return uniqueId('oc-link-description-')
-      }
-
-      return null
-    },
-    linkTargetBlank() {
-      if (this.isNavigatable && this.resource.opensInNewWindow) {
-        return '_blank'
-      }
-
-      return null
     }
   },
   methods: {

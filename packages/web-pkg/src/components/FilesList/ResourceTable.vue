@@ -313,7 +313,6 @@ export default defineComponent({
      * - shareDate: The date when the share was created
      * - deletionDate: The date when the resource has been deleted
      * - syncEnabled: The sync status of the share
-     * - opensInNewWindow: Open the link in a new window
      */
     resources: {
       type: Array as PropType<Resource[]>,
