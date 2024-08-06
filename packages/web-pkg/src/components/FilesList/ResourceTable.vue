@@ -1157,7 +1157,7 @@ export default defineComponent({
 
 .resource-table {
   &-resource-cut {
-    opacity: 0.6;
+    opacity: 0.7;
   }
 
   &-resource-wrapper {
