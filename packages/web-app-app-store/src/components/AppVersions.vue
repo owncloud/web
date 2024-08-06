@@ -30,14 +30,20 @@ export default defineComponent({
   props: {
     app: {
       type: Object as PropType<App>,
-      required: true
+      required: true,
+      default: (): App => undefined
     }
   },
   setup(props) {
     const { $gettext } = useGettext()
 
     const data = computed(() => {
-      return props.app.versions
+      return props.app.versions.map((version) => {
+        return {
+          ...version,
+          id: version.version
+        }
+      })
     })
     const fields = computed(() => {
       return [

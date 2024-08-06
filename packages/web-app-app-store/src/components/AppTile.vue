@@ -39,7 +39,8 @@ export default defineComponent({
   props: {
     app: {
       type: Object as PropType<App>,
-      required: true
+      required: true,
+      default: (): App => undefined
     }
   },
   emits: ['search'],
