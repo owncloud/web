@@ -120,7 +120,7 @@ export default defineComponent({
     justify-content: center;
     padding: var(--oc-space-small) 0;
     margin: 0;
-    background-color: rgba(255, 255, 255, 0.5);
+    background-color: rgba(255, 255, 255, 0.8);
   }
 }
 </style>
