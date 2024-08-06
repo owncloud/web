@@ -1,3 +1,4 @@
+import translations from '../l10n/translations.json'
 import { useGettext } from 'vue3-gettext'
 import { computed, unref } from 'vue'
 import {
@@ -104,6 +105,7 @@ export default defineWebApplication({
     return {
       appInfo,
       routes,
+      translations,
       extensions
     }
   }
