@@ -325,13 +325,13 @@ describe('OcTextInput', () => {
       expect(wrapper.find(selectors.clearInputButton).exists()).toBeFalsy()
     })
 
-    it('has clear button when it is enabled but the input is an empty string but not null', () => {
+    it('has no clear button when it is enabled but the input is an empty string', () => {
       const wrapper = getShallowWrapper({
         clearButtonEnabled: true,
         modelValue: ''
       })
 
-      expect(wrapper.find(selectors.clearInputButton).exists()).toBeTruthy()
+      expect(wrapper.find(selectors.clearInputButton).exists()).toBeFalsy()
     })
 
     it('has no clear button when it is enabled but the input is null', () => {
