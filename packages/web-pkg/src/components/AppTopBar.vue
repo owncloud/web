@@ -44,7 +44,12 @@
             </oc-drop>
           </template>
           <span v-if="hasAutosave" class="oc-flex oc-flex-middle">
-            <oc-icon v-oc-tooltip="autoSaveTooltipText" name="refresh" color="white" />
+            <oc-icon
+              v-oc-tooltip="autoSaveTooltipText"
+              :accessible-label="autoSaveTooltipText"
+              name="refresh"
+              color="white"
+            />
           </span>
           <template v-if="mainActions.length && resource">
             <context-action-menu

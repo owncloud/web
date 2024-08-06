@@ -6,32 +6,40 @@
           v-for="(field, index) in fields"
           :key="`oc-thead-${field.name}`"
           v-bind="extractThProps(field, index)"
-          @click="handleTrClick(field)"
         >
-          <span v-if="field.headerType === 'slot'" class="oc-table-thead-content">
-            <slot :name="field.name + 'Header'" />
-          </span>
-          <span
-            v-else
-            class="oc-table-thead-content header-text"
-            v-text="extractFieldTitle(field)"
-          />
           <oc-button
             v-if="field.sortable"
             :aria-label="getSortLabel(field.name)"
-            :class="{ 'oc-invisible-sr': sortBy !== field.name }"
-            class="oc-button-sort"
-            variation="passive"
             appearance="raw"
-            @click.stop="handleTrClick(field)"
+            class="oc-button-sort oc-width-1-1"
+            @click="handleSort(field)"
           >
+            <span v-if="field.headerType === 'slot'" class="oc-table-thead-content">
+              <slot :name="field.name + 'Header'" />
+            </span>
+            <span
+              v-else
+              class="oc-table-thead-content header-text"
+              v-text="extractFieldTitle(field)"
+            />
             <oc-icon
               :name="sortDir === 'asc' ? 'arrow-down' : 'arrow-up'"
               fill-type="line"
+              :class="{ 'oc-invisible-sr': sortBy !== field.name }"
               size="small"
               variation="passive"
             />
           </oc-button>
+          <div v-else>
+            <span v-if="field.headerType === 'slot'" class="oc-table-thead-content">
+              <slot :name="field.name + 'Header'" />
+            </span>
+            <span
+              v-else
+              class="oc-table-thead-content header-text"
+              v-text="extractFieldTitle(field)"
+            />
+          </div>
         </oc-th>
       </oc-tr>
     </oc-thead>
@@ -477,12 +485,6 @@ export default defineComponent({
       return this.$gettext('Sort by %{ name }', { name })
     },
 
-    handleTrClick(field: FieldType) {
-      if (this.isSortable) {
-        this.handleSort(field)
-      }
-    },
-
     extractSortThProps(props: Record<string, string>, field: FieldType) {
       if (!this.fieldIsSortable(field)) {
         return
@@ -600,11 +602,9 @@ export default defineComponent({
   }
 }
 .oc-button-sort {
-  display: inline-table;
-  vertical-align: middle;
+  display: flex;
+  justify-content: start;
   .oc-icon {
-    display: table-cell !important;
-    vertical-align: middle !important;
     &:hover {
       background-color: var(--oc-color-background-hover);
     }

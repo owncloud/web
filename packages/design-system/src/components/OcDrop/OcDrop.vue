@@ -294,9 +294,6 @@ export default defineComponent({
   max-width: 100%;
   width: 300px;
 
-  li a:focus {
-    outline: auto 1px !important;
-  }
   .oc-card {
     border-radius: var(--oc-space-small) !important;
   }

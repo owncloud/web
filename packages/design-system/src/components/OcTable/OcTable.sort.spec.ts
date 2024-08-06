@@ -135,10 +135,8 @@ describe('OcTable.sort', () => {
         }
       })
 
-      const headers = wrapper.findAll('thead th')
-      const th1 = headers.at(1)
-
-      await th1.trigger('click')
+      const sortBtn = wrapper.findAll('.oc-button-sort').at(0)
+      await sortBtn.trigger('click')
       expect(wrapper.emitted('sort')[0]).toMatchObject([
         {
           sortBy: tableFieldId.name,
@@ -183,10 +181,8 @@ describe('OcTable.sort', () => {
           }
         })
 
-        const headers = wrapper.findAll('thead th')
-        const th2 = headers.at(2)
-
-        await th2.trigger('click')
+        const sortBtn = wrapper.findAll('.oc-button-sort').at(1)
+        await sortBtn.trigger('click')
         expect(wrapper.emitted('sort')[0]).toMatchObject([
           {
             sortBy: sortByNew,

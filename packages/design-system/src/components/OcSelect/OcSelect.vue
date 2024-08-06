@@ -114,7 +114,9 @@ import VueSelect from 'vue-select'
 
 // the keycode property is deprecated in the JS event API, vue-select still works with it though
 enum KeyCode {
-  Enter = 13
+  Enter = 13,
+  ArrowDown = 40,
+  ArrowUp = 38
 }
 
 /**
@@ -348,6 +350,19 @@ export default defineComponent({
       setDropdownEnabled(false)
     }
 
+    /**
+     * Sets the outline for the highlighted option. This needs to be applied when
+     * navigating via keyboard because of a11y.
+     */
+    const setKeyboardOutline = async () => {
+      const optionEls = unref(select).$refs.dropdownMenu.querySelectorAll('li')
+      const highlightedOption = optionEls[unref(select).typeAheadPointer]
+      if (highlightedOption) {
+        await nextTick()
+        highlightedOption.classList.add('keyboard-outline')
+      }
+    }
+
     const selectMapKeydown = (map: Record<number, (e: KeyboardEvent) => void>) => {
       return {
         ...map,
@@ -358,12 +373,33 @@ export default defineComponent({
           }
           map[KeyCode.Enter](e)
           unref(select).searchEl.focus()
+        },
+        [KeyCode.ArrowDown]: async (e: KeyboardEvent) => {
+          e.preventDefault()
+          unref(select).typeAheadDown()
+
+          if (unref(dropdownOpen)) {
+            await setKeyboardOutline()
+          }
+        },
+        [KeyCode.ArrowUp]: async (e: KeyboardEvent) => {
+          e.preventDefault()
+          unref(select).typeAheadUp()
+
+          if (unref(dropdownOpen)) {
+            await setKeyboardOutline()
+          }
         }
       }
     }
 
-    const onSelectKeyDown = (e: KeyboardEvent) => {
+    const onSelectKeyDown = async (e: KeyboardEvent) => {
       if (e.key === 'Enter' || e.key === 'Tab') {
+        if (unref(dropdownOpen)) {
+          // set initial outline for highlighted option
+          await setKeyboardOutline()
+        }
+
         return
       }
 
@@ -601,6 +637,11 @@ export default defineComponent({
     .vs__dropdown-toggle {
       border-color: var(--oc-color-swatch-passive-default);
     }
+  }
+
+  .keyboard-outline {
+    outline: 2px var(--oc-color-swatch-passive-default) solid !important;
+    outline-offset: -2px;
   }
 }
 

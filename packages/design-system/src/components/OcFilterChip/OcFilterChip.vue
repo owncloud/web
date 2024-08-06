@@ -175,4 +175,12 @@ export default defineComponent({
   transform: scale(0) !important;
   width: 0px !important;
 }
+
+// the focussed button needs to stay above the other to correctly display the focus outline
+.oc-filter-chip-button,
+.oc-filter-chip-clear {
+  &:focus {
+    z-index: 9;
+  }
+}
 </style>

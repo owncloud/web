@@ -112,3 +112,17 @@ hr {
     border-radius: 100px;
   }
 }
+
+// outline for visible focus (via tab)
+*:focus-visible:not(input[type=text]):not(input[type=textarea]):not(input[type=search]):not(input[type=password]) {
+  outline: 2px var(--oc-color-swatch-passive-contrast) solid;
+  outline-offset: 0;
+  box-shadow: 0 0 0 4px var(--oc-color-swatch-passive-default);
+}
+
+// inner outline for visible focus on resource names
+// outer outlines don't work because of the hidden overflow (due to text truncation)
+.oc-resource-details a:focus-visible,
+.oc-resource-details button:focus-visible {
+  box-shadow: inset 0px 0px 0px 2px var(--oc-color-swatch-passive-default) !important;
+}

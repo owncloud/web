@@ -37,6 +37,7 @@
         >
           <oc-icon
             v-oc-tooltip="$gettext(resource.shareRoles[0].displayName)"
+            :accessible-label="$gettext(resource.shareRoles[0].description)"
             :name="resource.shareRoles[0].icon"
             fill-type="line"
             size="small"
