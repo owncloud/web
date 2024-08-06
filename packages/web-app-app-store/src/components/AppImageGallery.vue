@@ -6,27 +6,27 @@
         <oc-icon name="computer" size="xxlarge" />
       </div>
     </div>
-    <ol v-if="hasPagination" class="app-image-pagination">
+    <ul v-if="hasPagination" class="app-image-navigation">
       <li>
-        <oc-button class="oc-p-xs" @click="previousImage">
+        <oc-button class="oc-p-xs" appearance="raw-inverse" @click="previousImage">
           <oc-icon name="arrow-left-s" />
         </oc-button>
       </li>
       <li v-for="(image, index) in images" :key="`gallery-page-${index}`">
-        <oc-button
-          class="oc-py-xs"
-          :disabled="index === currentImageIndex"
-          @click="setImageIndex(index)"
-        >
-          {{ index + 1 }}
+        <oc-button class="oc-py-xs" appearance="raw-inverse" @click="setImageIndex(index)">
+          <oc-icon
+            name="circle"
+            size="small"
+            :fill-type="index === currentImageIndex ? 'fill' : 'line'"
+          />
         </oc-button>
       </li>
       <li>
-        <oc-button class="oc-p-xs" @click="nextImage">
+        <oc-button class="oc-p-xs" appearance="raw-inverse" @click="nextImage">
           <oc-icon name="arrow-right-s" />
         </oc-button>
       </li>
-    </ol>
+    </ul>
   </div>
 </template>
 <script lang="ts">
@@ -79,34 +79,41 @@ export default defineComponent({
 </script>
 
 <style lang="scss">
-.app-image {
-  width: 100%;
+.app-image-wrapper {
+  position: relative;
 
-  img {
+  .app-image {
     width: 100%;
-    max-width: 100%;
-    aspect-ratio: 3/2;
-    object-fit: cover;
+
+    img {
+      width: 100%;
+      max-width: 100%;
+      aspect-ratio: 3/2;
+      object-fit: cover;
+    }
+
+    .fallback-icon {
+      width: 100%;
+      aspect-ratio: 3/2;
+      background-color: white;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
   }
 
-  .fallback-icon {
+  .app-image-navigation {
+    list-style: none;
     width: 100%;
-    aspect-ratio: 3/2;
-    background-color: white;
+    position: absolute;
+    bottom: 0;
     display: flex;
+    flex-direction: row;
+    gap: 0.5rem;
     align-items: center;
     justify-content: center;
+    padding: 0;
+    background-color: rgba(0, 0, 0, 0.3);
   }
-}
-.app-image-pagination {
-  width: 100%;
-  padding: 0;
-  margin-top: var(--oc-space-small);
-  list-style: none;
-  display: flex;
-  flex-direction: row;
-  gap: 0.5rem;
-  align-items: center;
-  justify-content: center;
 }
 </style>
