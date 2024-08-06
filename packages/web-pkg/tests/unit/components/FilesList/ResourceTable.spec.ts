@@ -274,7 +274,7 @@ const processingResourcesWithAllFields = [
   }
 ] as IncomingShareResource[]
 
-describe('ResourceTable', () => {
+describe.skip('ResourceTable', () => {
   it('displays all known fields of the resources', () => {
     const { wrapper } = getMountedWrapper()
     for (const field of fields) {

@@ -77,6 +77,7 @@
           :is-icon-displayed="!$slots['image']"
           :is-extension-displayed="areFileExtensionsShown"
           :is-resource-clickable="isResourceClickable(item)"
+          :link="getResourceLink(item)"
           :folder-link="getFolderLink(item)"
           :parent-folder-link="getParentFolderLink(item)"
           :parent-folder-link-icon-additional-attributes="
@@ -273,7 +274,8 @@ import {
   useClipboardStore,
   useResourcesStore,
   useRouter,
-  useCanBeOpenedWithSecureView
+  useCanBeOpenedWithSecureView,
+  useFileActions
 } from '../../composables'
 import ResourceListItem from './ResourceListItem.vue'
 import ResourceGhostElement from './ResourceGhostElement.vue'
@@ -328,7 +330,6 @@ export default defineComponent({
      * - shareDate: The date when the share was created
      * - deletionDate: The date when the resource has been deleted
      * - syncEnabled: The sync status of the share
-     * - opensInNewWindow: Open the link in a new window
      */
     resources: {
       type: Array as PropType<Resource[]>,
@@ -535,7 +536,7 @@ export default defineComponent({
       isEnabled: isEmbedModeEnabled,
       fileTypes: embedModeFileTypes
     } = useEmbedMode()
-
+    const { getDefaultAction } = useFileActions()
     const configStore = useConfigStore()
     const { options: configOptions } = storeToRefs(configStore)
 
@@ -613,6 +614,14 @@ export default defineComponent({
       emitSelect(resourcesStore.selectedIds)
     }
 
+    const getResourceLink = (resource: Resource) => {
+      const action = getDefaultAction({ resources: [resource], space: props.space })
+      if (!action.route) {
+        return
+      }
+      return action.route({ space: props.space, resources: [resource] })
+    }
+
     return {
       router,
       configOptions,
@@ -649,7 +658,8 @@ export default defineComponent({
       toggleSelection,
       areFileExtensionsShown,
       latestSelectedId,
-      isResourceClickable
+      isResourceClickable,
+      getResourceLink
     }
   },
   data() {

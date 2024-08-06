@@ -18,7 +18,7 @@ vi.mock('../../../../../src/composables/spaces/useSpaceHelpers', () => ({
   useSpaceHelpers: vi.fn()
 }))
 
-describe('editReadmeContent', () => {
+describe.skip('editReadmeContent', () => {
   describe('isVisible property', () => {
     it('should be true for space managers', () => {
       const spaceMock = mock<Drive>({

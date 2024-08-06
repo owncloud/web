@@ -52,6 +52,7 @@ export default defineComponent({
     display: inline-flex;
     gap: 10px;
     vertical-align: top;
+    text-decoration: none;
   }
 
   > li:hover {

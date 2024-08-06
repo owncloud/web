@@ -44,6 +44,7 @@
           :ref="(el) => (tileRefs.tiles[resource.id] = el as ResourceTileRef)"
           :resource="resource"
           :resource-route="getRoute(resource)"
+          :resource-folder-route="getFolderRoute(resource)"
           :is-resource-selected="isResourceSelected(resource)"
           :is-resource-clickable="isResourceClickable(resource)"
           :is-resource-disabled="isResourceDisabled(resource)"
@@ -160,7 +161,8 @@ import {
   useResourcesStore,
   useViewSizeMax,
   useEmbedMode,
-  useCanBeOpenedWithSecureView
+  useCanBeOpenedWithSecureView,
+  useFileActions
 } from '../../composables'
 
 type ResourceTileRef = ComponentPublicInstance<typeof ResourceTile>
@@ -225,6 +227,7 @@ export default defineComponent({
     const { showMessage } = useMessages()
     const { $gettext } = useGettext()
     const resourcesStore = useResourcesStore()
+    const { getDefaultAction } = useFileActions()
     const { canBeOpenedWithSecureView } = useCanBeOpenedWithSecureView()
     const { emit } = context
     const {
@@ -258,6 +261,14 @@ export default defineComponent({
     )
 
     const getRoute = (resource: Resource) => {
+      const action = getDefaultAction({ resources: [resource], space: props.space })
+      if (!action.route) {
+        return null
+      }
+
+      return action.route({ space: props.space, resources: [resource] })
+    }
+    const getFolderRoute = (resource: Resource) => {
       if (isSpaceResource(resource)) {
         return resource.disabled
           ? null
@@ -276,7 +287,10 @@ export default defineComponent({
           resource: resource
         })
       }
-      return { path: '' }
+
+      return {
+        path: ''
+      }
     }
 
     const emitTileClick = (resource: Resource) => {
@@ -549,6 +563,7 @@ export default defineComponent({
       areFileExtensionsShown,
       emitTileClick,
       getRoute,
+      getFolderRoute,
       showContextMenuOnBtnClick,
       showContextMenu,
       tileRefs,

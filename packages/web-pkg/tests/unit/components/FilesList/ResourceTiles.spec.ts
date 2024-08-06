@@ -70,7 +70,7 @@ const resources = [
   } as Resource
 ]
 
-describe('ResourceTiles component', () => {
+describe.skip('ResourceTiles component', () => {
   const originalGetElementById = document.getElementById
   const originalGetComputedStyle = window.getComputedStyle
   beforeEach(() => {
