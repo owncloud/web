@@ -11,8 +11,9 @@ import {
 import { urlJoin } from '@ownclouders/web-client'
 import { RouteRecordRaw } from 'vue-router'
 import { useRepositoriesStore } from './piniaStores'
-import {AppStoreConfigSchema, AppStoreRepository} from './types'
+import { AppStoreConfigSchema, AppStoreRepository } from './types'
 import { APPID } from './appid'
+
 export default defineWebApplication({
   setup({ applicationConfig }) {
     const { $gettext } = useGettext()

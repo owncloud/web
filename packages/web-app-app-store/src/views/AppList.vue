@@ -3,8 +3,8 @@
     <h2 class="oc-mt-rm" v-text="$gettext('App Store')" />
     <div class="oc-flex oc-flex-middle">
       <oc-text-input
-        :model-value="filterTermInput"
         id="apps-filter"
+        :model-value="filterTermInput"
         :label="$gettext('Search')"
         :clear-button-enabled="true"
         autocomplete="off"
