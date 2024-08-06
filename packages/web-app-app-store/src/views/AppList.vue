@@ -1,6 +1,9 @@
 <template>
   <div class="app-list oc-mb-m">
-    <h2 class="oc-mt-rm" v-text="$gettext('App Store')" />
+    <h2 class="oc-mt-rm">
+      {{ $gettext('App Store') }}
+      <app-contextual-helper />
+    </h2>
     <div class="oc-flex oc-flex-middle">
       <oc-text-input
         id="apps-filter"
@@ -37,10 +40,11 @@ import {
   useRouteQuery,
   useRouter
 } from '@ownclouders/web-pkg'
+import AppContextualHelper from '../components/AppContextualHelper.vue'
 
 export default defineComponent({
   name: 'AppList',
-  components: { AppTile },
+  components: { AppContextualHelper, AppTile },
   setup() {
     const appsStore = useAppsStore()
     const { apps } = storeToRefs(appsStore)

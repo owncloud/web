@@ -32,7 +32,10 @@
         <app-resources :app="app" />
       </div>
       <div v-if="app.versions">
-        <h3>{{ $gettext('Releases') }}</h3>
+        <h3>
+          {{ $gettext('Releases') }}
+          <app-contextual-helper />
+        </h3>
         <app-versions :app="app" />
       </div>
     </div>
@@ -50,9 +53,17 @@ import AppTags from '../components/AppTags.vue'
 import AppVersions from '../components/AppVersions.vue'
 import AppAuthors from '../components/AppAuthors.vue'
 import AppImageGallery from '../components/AppImageGallery.vue'
+import AppContextualHelper from '../components/AppContextualHelper.vue'
 
 export default defineComponent({
-  components: { AppImageGallery, AppAuthors, AppResources, AppTags, AppVersions },
+  components: {
+    AppContextualHelper,
+    AppImageGallery,
+    AppAuthors,
+    AppResources,
+    AppTags,
+    AppVersions
+  },
   setup() {
     const appIdRouteParam = useRouteParam('appId')
     const appId = computed(() => {
