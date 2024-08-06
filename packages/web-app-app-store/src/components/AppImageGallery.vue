@@ -8,12 +8,17 @@
     </div>
     <ul v-if="hasPagination" class="app-image-navigation">
       <li>
-        <oc-button class="oc-p-xs" appearance="raw-inverse" @click="previousImage">
+        <oc-button class="oc-p-xs" appearance="raw" variation="primary" @click="previousImage">
           <oc-icon name="arrow-left-s" />
         </oc-button>
       </li>
       <li v-for="(image, index) in images" :key="`gallery-page-${index}`">
-        <oc-button class="oc-py-xs" appearance="raw-inverse" @click="setImageIndex(index)">
+        <oc-button
+          class="oc-py-xs"
+          appearance="raw"
+          variation="primary"
+          @click="setImageIndex(index)"
+        >
           <oc-icon
             name="circle"
             size="small"
@@ -22,7 +27,7 @@
         </oc-button>
       </li>
       <li>
-        <oc-button class="oc-p-xs" appearance="raw-inverse" @click="nextImage">
+        <oc-button class="oc-p-xs" appearance="raw" variation="primary" @click="nextImage">
           <oc-icon name="arrow-right-s" />
         </oc-button>
       </li>
@@ -112,8 +117,9 @@ export default defineComponent({
     gap: 0.5rem;
     align-items: center;
     justify-content: center;
-    padding: 0;
-    background-color: rgba(0, 0, 0, 0.3);
+    padding: var(--oc-space-small) 0;
+    margin: 0;
+    background-color: rgba(255, 255, 255, 0.5);
   }
 }
 </style>
