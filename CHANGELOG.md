@@ -12,6 +12,7 @@ Summary
 * Bugfix - Uploading nested folders: [#11299](https://github.com/owncloud/web/issues/11299)
 * Bugfix - Toggling checkboxes via keyboard: [#11312](https://github.com/owncloud/web/pull/11312)
 * Bugfix - Prevent horizontal table scroll: [#11313](https://github.com/owncloud/web/pull/11313)
+* Enhancement - App Store app: [#11302](https://github.com/owncloud/web/pull/11302)
 * Enhancement - Redesign share link modal: [#11310](https://github.com/owncloud/web/pull/11310)
 
 Details
@@ -50,6 +51,18 @@ Details
 
    https://github.com/owncloud/web/issues/10728
    https://github.com/owncloud/web/pull/11313
+
+* Enhancement - App Store app: [#11302](https://github.com/owncloud/web/pull/11302)
+
+   We've added a new App Store app to the platform. This app allows you to explore
+   available apps and download them from our `awesome-ocis` github repository.
+
+   In order to use this app, you currently need to adjust your `csp.yaml` file
+   (only if you have it customized). Please add the URL
+   `'https://raw.githubusercontent.com/owncloud/awesome-ocis/'` to the sections
+   `connect-src` and `img-src`.
+
+   https://github.com/owncloud/web/pull/11302
 
 * Enhancement - Redesign share link modal: [#11310](https://github.com/owncloud/web/pull/11310)
 
