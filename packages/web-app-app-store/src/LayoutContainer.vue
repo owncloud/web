@@ -1,6 +1,6 @@
 <template>
   <main id="app-store">
-    <loading-apps v-if="areAppsLoading" />
+    <app-loading-spinner v-if="areAppsLoading" />
     <template v-else>
       <router-view />
     </template>
@@ -8,22 +8,21 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, ref } from 'vue'
+import { defineComponent, onMounted, ref } from 'vue'
 import { useAppsStore } from './piniaStores'
-import { useLoadingService } from '@ownclouders/web-pkg'
-import LoadingApps from './components/LoadingApps.vue'
+import { AppLoadingSpinner } from '@ownclouders/web-pkg'
 
 export default defineComponent({
   name: 'LayoutContainer',
-  components: { LoadingApps },
+  components: { AppLoadingSpinner },
   setup() {
     const appsStore = useAppsStore()
-    const loadingService = useLoadingService()
 
     const areAppsLoading = ref(true)
-    loadingService.addTask(async () => {
+    const appsLoadingPromise = appsStore.loadApps()
+    onMounted(async () => {
       try {
-        await appsStore.loadApps()
+        await appsLoadingPromise
       } catch (e) {
         console.error(e)
       } finally {
