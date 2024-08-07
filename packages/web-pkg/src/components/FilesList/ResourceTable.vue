@@ -842,7 +842,11 @@ export default defineComponent({
       return fields
     },
     areAllResourcesSelected() {
-      return this.selectedResources.length === this.resources.length - this.disabledResources.length
+      const allResourcesDisabled = this.disabledResources.length === this.resources.length
+      const allSelected =
+        this.selectedResources.length === this.resources.length - this.disabledResources.length
+
+      return !allResourcesDisabled && allSelected
     },
     selectedResources() {
       return this.resources.filter((resource) => this.selectedIds.includes(resource.id))
