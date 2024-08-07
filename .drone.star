@@ -904,10 +904,10 @@ def ocisService(type, tika_enabled = False, enforce_password_public_link = False
         environment["KEYCLOAK_DOMAIN"] = "keycloak:8443"
 
     if type == "accessToken-renewal-1":
-        environment["IDP_ACCESS_TOKEN_EXPIRATION"] = 10
+        environment["IDP_ACCESS_TOKEN_EXPIRATION"] = 30
         environment["WEB_OIDC_SCOPE"] = "openid profile email offline_access"
     elif type == "accessToken-renewal-2":
-        environment["IDP_ACCESS_TOKEN_EXPIRATION"] = 10
+        environment["IDP_ACCESS_TOKEN_EXPIRATION"] = 30
 
     if type == "app-provider":
         environment["GATEWAY_GRPC_ADDR"] = "0.0.0.0:9142"
