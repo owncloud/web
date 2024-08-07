@@ -62,7 +62,7 @@ const actionSkipButton = '.oc-modal-body-actions-cancel'
 const actionSecondaryConfirmationButton = '.oc-modal-body-actions-secondary'
 const versionRevertButton = '//*[@data-testid="file-versions-revert-button"]'
 const sideBarActionButton =
-  '//div[contains(@class, "files-side-bar")]//*[contains(@data-testid, "action-handler")]/span[text()="%s"]'
+  '//div[contains(@class, "files-side-bar")]//*[contains(@data-testid, "action-handler")]//span[text()="%s"]'
 const notificationMessageDialog = '.oc-notification-message-title'
 const notificationMessage = '.oc-notification-message'
 const permanentDeleteButton = '.oc-files-actions-delete-permanent-trigger'
