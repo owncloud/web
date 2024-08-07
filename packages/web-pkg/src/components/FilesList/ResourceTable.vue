@@ -622,7 +622,7 @@ export default defineComponent({
 
       const action = getDefaultAction({ resources: [resource], space })
 
-      if (!action.route) {
+      if (!action?.route) {
         return
       }
 
