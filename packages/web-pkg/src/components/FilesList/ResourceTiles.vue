@@ -130,7 +130,12 @@ import {
   watch
 } from 'vue'
 import { useGettext } from 'vue3-gettext'
-import { isSpaceResource, Resource, SpaceResource } from '@ownclouders/web-client'
+import {
+  isProjectSpaceResource,
+  isSpaceResource,
+  Resource,
+  SpaceResource
+} from '@ownclouders/web-client'
 
 // Constants should match what is being used in OcTable/ResourceTable
 // Alignment regarding naming would be an API-breaking change and can
@@ -257,7 +262,7 @@ export default defineComponent({
     const getRoute = (resource: Resource) => {
       if (isSpaceResource(resource)) {
         return resource.disabled
-          ? { path: '#' }
+          ? null
           : createLocationSpaces(
               'files-spaces-generic',
               createFileRouteOptions(resource as SpaceResource, {
@@ -284,12 +289,6 @@ export default defineComponent({
         )
       }
 
-      if (isSpaceResource(resource) && resource.disabled) {
-        showMessage({
-          title: $gettext('Disabled spaces cannot be entered'),
-          status: 'warning'
-        })
-      }
       if (resource.type !== 'space' && resource.type !== 'folder') {
         resourceRouteResolver.createFileAction(resource)
       }
@@ -313,6 +312,10 @@ export default defineComponent({
     }
 
     const isResourceClickable = (resource: Resource) => {
+      if (isProjectSpaceResource(resource) && resource.disabled) {
+        return false
+      }
+
       if (resource.isFolder) {
         return true
       }
