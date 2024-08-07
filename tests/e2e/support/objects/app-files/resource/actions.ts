@@ -118,7 +118,7 @@ const sharesNavigationButtonSelector = '.oc-sidebar-nav [data-nav-name="files-sh
 const keepBothButton = '.oc-modal-body-actions-confirm'
 const mediaNavigationButton = `//button[contains(@class, "preview-controls-%s")]`
 const sideBarActions =
-  '//ul[@id="oc-files-actions-sidebar"]//span[@class="oc-files-context-action-label"]'
+  '//ul[@id="oc-files-actions-sidebar"]//span[contains(@class,"oc-files-context-action-label")]/span'
 
 // online office locators
 // Collabora
