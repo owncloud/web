@@ -36,7 +36,7 @@
     "@types/dompurify": "3.0.5",
     "@types/luxon": "3.2.1",
     "@types/mark.js": "8.11.12",
-    "@types/uuid": "9.0.1",
+    "@types/uuid": "9.0.8",
     "clean-publish": "4.2.0",
     "web-test-helpers": "workspace:*",
     "zod": "^3.22.4",

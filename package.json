@@ -31,7 +31,7 @@
     "not OperaMobile > 0"
   ],
   "dependencies": {
-    "@types/uuid": "9.0.1",
+    "@types/uuid": "9.0.8",
     "@vue/compiler-dom": "3.4.21",
     "@vue/compiler-sfc": "3.4.21",
     "@vue/runtime-dom": "3.4.21",
