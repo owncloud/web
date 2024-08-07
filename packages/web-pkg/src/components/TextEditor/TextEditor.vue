@@ -83,7 +83,7 @@ export default defineComponent({
         el: unref(toastUiEditorRef),
         usageStatistics: false, // sends hostname to google analytics DISABLE
         initialValue: props.currentContent,
-        useCommandShortcut: false,
+        useCommandShortcut: true,
         hideModeSwitch: true,
         language: language.current,
         height: '100%',
