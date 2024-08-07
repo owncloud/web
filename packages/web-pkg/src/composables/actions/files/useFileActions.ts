@@ -177,6 +177,10 @@ export const useFileActions = () => {
     resource: Resource
     mode: string
   }) => {
+    if (!space) {
+      space = getMatchingSpace(resource)
+    }
+
     const remoteItemId = isShareSpaceResource(space) ? space.id : undefined
     const routeName = appFileExtension.routeName || appFileExtension.app
     const routeOpts = getEditorRouteOpts(routeName, space, resource, mode, remoteItemId)
