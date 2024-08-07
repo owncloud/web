@@ -615,7 +615,12 @@ export default defineComponent({
     }
 
     const getResourceLink = (resource: Resource) => {
-      const action = getDefaultAction({ resources: [resource], space: props.space })
+      let space = props.space
+      if (!space) {
+        space = getMatchingSpace(resource)
+      }
+
+      const action = getDefaultAction({ resources: [resource], space })
       if (!action.route) {
         return
       }

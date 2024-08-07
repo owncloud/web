@@ -162,7 +162,8 @@ import {
   useViewSizeMax,
   useEmbedMode,
   useCanBeOpenedWithSecureView,
-  useFileActions
+  useFileActions,
+  useGetMatchingSpace
 } from '../../composables'
 
 type ResourceTileRef = ComponentPublicInstance<typeof ResourceTile>
@@ -228,6 +229,7 @@ export default defineComponent({
     const { $gettext } = useGettext()
     const resourcesStore = useResourcesStore()
     const { getDefaultAction } = useFileActions()
+    const { getMatchingSpace } = useGetMatchingSpace()
     const { canBeOpenedWithSecureView } = useCanBeOpenedWithSecureView()
     const { emit } = context
     const {
@@ -261,7 +263,12 @@ export default defineComponent({
     )
 
     const getRoute = (resource: Resource) => {
-      const action = getDefaultAction({ resources: [resource], space: props.space })
+      let space = props.space
+      if (!space) {
+        space = getMatchingSpace(resource)
+      }
+
+      const action = getDefaultAction({ resources: [resource], space })
       if (!action.route) {
         return null
       }
