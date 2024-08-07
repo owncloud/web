@@ -85,24 +85,46 @@ export class Application {
     return tokenPayload.grant_type === 'refresh_token'
   }
 
-  async isAccessTokenValidatedSilentlyUsingIframe(): Promise<boolean> {
-    if (this.#page.locator('iframe')) {
-      const [, response] = await Promise.all([
-        this.#page.waitForResponse(
-          (resp) =>
-            resp.url().includes('/oidc-silent-redirect.html') &&
-            resp.status() === 200 &&
-            resp.request().method() === 'GET'
-        ),
-        this.#page.waitForResponse(
-          (resp) =>
-            resp.url().endsWith('/token') &&
-            resp.status() === 200 &&
-            resp.request().method() === 'POST'
-        )
-      ])
-      const tokenPayload = await response.request().postDataJSON()
-      return tokenPayload.grant_type === 'authorization_code'
-    }
+  async waitForTokenRenewalViaIframe(): Promise<void> {
+    const waitForIframe = this.#page.evaluateHandle(() => {
+      let iframe = null
+      const observer = new MutationObserver((mutations) => {
+        mutations.forEach((mutation) => {
+          if (mutation.type === 'childList') {
+            mutation.addedNodes.forEach((node) => {
+              if (node.nodeName === 'IFRAME') {
+                iframe = node
+              }
+            })
+          }
+        })
+      })
+      observer.observe(document.body, { childList: true, subtree: true })
+      return new Promise((resolve) => {
+        const interval = setInterval(() => {
+          if (iframe) {
+            observer.disconnect()
+            clearInterval(interval)
+            resolve(iframe)
+          }
+        }, 1000)
+      })
+    })
+
+    await Promise.all([
+      this.#page.waitForResponse(
+        (resp) =>
+          resp.url().includes('/oidc-silent-redirect.html') &&
+          resp.status() === 200 &&
+          resp.request().method() === 'GET'
+      ),
+      this.#page.waitForResponse(
+        (resp) =>
+          resp.url().endsWith('/token') &&
+          resp.status() === 200 &&
+          resp.request().method() === 'POST'
+      ),
+      waitForIframe
+    ])
   }
 }

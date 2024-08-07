@@ -18,7 +18,7 @@ Feature: Silent Access Token Renewal
     And "Alice" creates the following project spaces
       | name | id     |
       | team | team.1 |
-    When "Alice" access token expires, background iframe renews access token
+    When "Alice" waits for token renewal via iframe
     And "Alice" navigates to the project space "team.1"
     And "Alice" creates the following resources
       | resource     | type   |
