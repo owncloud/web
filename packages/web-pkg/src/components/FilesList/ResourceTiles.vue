@@ -273,7 +273,7 @@ export default defineComponent({
         return null
       }
 
-      return action.route({ space: props.space, resources: [resource] })
+      return action.route({ space, resources: [resource] })
     }
     const getFolderRoute = (resource: Resource) => {
       if (isSpaceResource(resource)) {

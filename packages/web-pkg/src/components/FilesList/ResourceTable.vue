@@ -621,10 +621,12 @@ export default defineComponent({
       }
 
       const action = getDefaultAction({ resources: [resource], space })
+
       if (!action.route) {
         return
       }
-      return action.route({ space: props.space, resources: [resource] })
+
+      return action.route({ space, resources: [resource] })
     }
 
     return {
