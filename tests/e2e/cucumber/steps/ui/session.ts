@@ -82,6 +82,15 @@ When(
 )
 
 When(
+  /^"([^"]*)" waits for token renewal via iframe$/,
+  async function (this: World, stepUser: string): Promise<void> {
+    const { page } = this.actorsEnvironment.getActor({ key: stepUser })
+    const application = new objects.runtime.Application({ page })
+    await application.waitForTokenRenewalViaIframe()
+  }
+)
+
+When(
   /^"([^"]*)" access token expires, (refresh token|background iframe) renews access token$/,
   async function (this: World, stepUser: string, renewalType: string): Promise<void> {
     const { page } = this.actorsEnvironment.getActor({ key: stepUser })
@@ -89,7 +98,7 @@ When(
     const hasRenewed =
       renewalType === 'refresh token'
         ? await application.isAccessTokenValidatedUsingRefreshToken()
-        : await application.isAccessTokenValidatedSilentlyUsingIframe()
+        : await application.waitForTokenRenewalViaIframe()
 
     expect(hasRenewed).toBeTruthy()
   }
