@@ -25,6 +25,13 @@ vi.mock('../../../../src/composables/resources', async (importOriginal) => ({
   useCanBeOpenedWithSecureView: vi.fn()
 }))
 
+vi.mock('../../../../src/composables/actions/files', async (importOriginal) => ({
+  ...(await importOriginal<any>()),
+  useFileActions: vi.fn().mockReturnValue({
+    getDefaultAction: vi.fn().mockReturnValue({ handler: vi.fn() })
+  })
+}))
+
 const spacesResources = [
   {
     id: '1',
@@ -68,7 +75,7 @@ const resources = [
   }
 ]
 
-describe.skip('ResourceTiles component', () => {
+describe('ResourceTiles component', () => {
   const originalGetElementById = document.getElementById
   const originalGetComputedStyle = window.getComputedStyle
   beforeEach(() => {
