@@ -68,6 +68,7 @@
               :hide-label="true"
               size="large"
               class="oc-flex-inline oc-p-s"
+              :disabled="!isSpaceResource(resource) && isResourceDisabled(resource)"
               :model-value="isResourceSelected(resource)"
               @click.stop.prevent="toggleTile([resource, $event])"
             />
@@ -80,6 +81,7 @@
               v-if="getIndicators(resource).length"
               :resource="resource"
               :indicators="getIndicators(resource)"
+              :disable-handler="!isSpaceResource(resource) && isResourceDisabled(resource)"
             />
           </template>
           <template #actions>
@@ -87,6 +89,7 @@
           </template>
           <template #contextMenu>
             <context-menu-quick-action
+              v-if="isSpaceResource(resource) || !isResourceDisabled(resource)"
               :ref="(el) => (tileRefs.dropBtns[resource.id] = el as ContextMenuQuickActionRef)"
               :item="resource"
               class="resource-tiles-btn-action-dropdown"
@@ -130,12 +133,7 @@ import {
   watch
 } from 'vue'
 import { useGettext } from 'vue3-gettext'
-import {
-  isProjectSpaceResource,
-  isSpaceResource,
-  Resource,
-  SpaceResource
-} from '@ownclouders/web-client'
+import { isSpaceResource, Resource, SpaceResource } from '@ownclouders/web-client'
 
 // Constants should match what is being used in OcTable/ResourceTable
 // Alignment regarding naming would be an API-breaking change and can
@@ -312,7 +310,7 @@ export default defineComponent({
     }
 
     const isResourceClickable = (resource: Resource) => {
-      if (isProjectSpaceResource(resource) && resource.disabled) {
+      if (isResourceDisabled(resource)) {
         return false
       }
 
@@ -573,7 +571,8 @@ export default defineComponent({
       getIndicators,
       isFilePicker,
       isLocationPicker,
-      isResourceDisabled
+      isResourceDisabled,
+      isSpaceResource
     }
   },
   data() {

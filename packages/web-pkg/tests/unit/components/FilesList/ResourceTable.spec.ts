@@ -16,9 +16,11 @@ import { displayPositionedDropdown } from '../../../../src/helpers/contextMenuDr
 import { eventBus } from '../../../../src/services/eventBus'
 import { SideBarEventTopics } from '../../../../src/composables/sideBar'
 import { mock } from 'vitest-mock-extended'
-import { computed } from 'vue'
+import { computed, ref } from 'vue'
 import { Identity } from '@ownclouders/web-client/graph/generated'
 import { describe } from 'vitest'
+import { useFileActionsRename } from '../../../../src/composables/actions/files'
+import { FileAction } from '../../../../src/composables/actions/types'
 
 const mockUseEmbedMode = vi.fn().mockReturnValue({
   isLocationPicker: computed(() => false),
@@ -34,6 +36,11 @@ vi.mock('../../../../src/composables/embedMode', () => ({
 vi.mock('../../../../src/composables/resources', async (importOriginal) => ({
   ...(await importOriginal<any>()),
   useCanBeOpenedWithSecureView: vi.fn()
+}))
+
+vi.mock('../../../../src/composables/actions/files', async (importOriginal) => ({
+  ...(await importOriginal<any>()),
+  useFileActionsRename: vi.fn()
 }))
 
 const router = {
@@ -491,16 +498,15 @@ describe('ResourceTable', () => {
       expect(spyDisplayPositionedDropdown).toHaveBeenCalledTimes(1)
     })
 
-    it('does not emit select event on clicking the three-dot icon in table row of a disabled resource', async () => {
-      const spyDisplayPositionedDropdown = vi.mocked(displayPositionedDropdown)
+    it('does not show the three-dot icon in table row of a disabled resource', () => {
       const { wrapper } = getMountedWrapper({ addProcessingResources: true })
-      await wrapper
-        .find(
-          '.oc-tbody-tr-rainforest .oc-table-data-cell-actions .resource-table-btn-action-dropdown'
-        )
-        .trigger('click')
-      expect(wrapper.emitted('update:selectedIds')).toBeUndefined()
-      expect(spyDisplayPositionedDropdown).toHaveBeenCalledTimes(0)
+      expect(
+        wrapper
+          .find(
+            '.oc-tbody-tr-rainforest .oc-table-data-cell-actions .resource-table-btn-action-dropdown'
+          )
+          .exists()
+      ).toBeFalsy()
     })
 
     it('removes invalid chars from item ids for usage in html template', async () => {
@@ -601,6 +607,16 @@ describe('ResourceTable', () => {
       expect(wrapper.findAll('.resource-table-shared-with .oc-avatar').length).toBe(1)
     })
   })
+  describe('rename action', () => {
+    it('shows if available', () => {
+      const { wrapper } = getMountedWrapper()
+      expect(wrapper.find('.resource-table-edit-name').exists()).toBeTruthy()
+    })
+    it('does not show if not available', () => {
+      const { wrapper } = getMountedWrapper({ hasRenameAction: false })
+      expect(wrapper.find('.resource-table-edit-name').exists()).toBeFalsy()
+    })
+  })
 })
 
 function getMountedWrapper({
@@ -608,12 +624,14 @@ function getMountedWrapper({
   userContextReady = true,
   addProcessingResources = false,
   canBeOpenedWithSecureView = true,
+  hasRenameAction = true,
   resources = resourcesWithAllFields
 }: {
   props?: PartialComponentProps<typeof ResourceTable>
   userContextReady?: boolean
   addProcessingResources?: boolean
   canBeOpenedWithSecureView?: boolean
+  hasRenameAction?: boolean
   resources?: Resource[]
 } = {}) {
   const capabilities = {
@@ -623,6 +641,12 @@ function getMountedWrapper({
   vi.mocked(useCanBeOpenedWithSecureView).mockReturnValue({
     canBeOpenedWithSecureView: () => canBeOpenedWithSecureView
   })
+
+  vi.mocked(useFileActionsRename).mockReturnValue(
+    mock<ReturnType<typeof useFileActionsRename>>({
+      actions: ref([mock<FileAction>({ isVisible: () => hasRenameAction })])
+    })
+  )
 
   return {
     wrapper: mount(ResourceTable, {

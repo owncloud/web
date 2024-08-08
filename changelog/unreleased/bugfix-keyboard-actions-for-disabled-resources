@@ -1,0 +1,6 @@
+Bugfix: Keyboard actions for disabled resources
+
+We've fixed an issue where certain actions such as rename or select were still possible for disabled resources when navigating via keyboard.
+
+https://github.com/owncloud/web/pull/11342
+https://github.com/owncloud/web/issues/11335

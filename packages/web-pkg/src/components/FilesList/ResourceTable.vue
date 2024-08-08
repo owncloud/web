@@ -41,6 +41,7 @@
         <oc-checkbox
           id="resource-table-select-all"
           size="large"
+          :disabled="resources.length === disabledResources.length"
           :label="allResourcesCheckboxLabel"
           :hide-label="true"
           :model-value="areAllResourcesSelected"
@@ -54,6 +55,7 @@
         :label="getResourceCheckboxLabel(item)"
         :hide-label="true"
         size="large"
+        :disabled="isResourceDisabled(item)"
         :model-value="isResourceSelected(item)"
         :outline="isLatestSelectedItem(item)"
         @click.stop="toggleSelection(item.id)"
@@ -155,6 +157,7 @@
         v-if="item.indicators.length"
         :resource="item"
         :indicators="item.indicators"
+        :disable-handler="isResourceDisabled(item)"
       />
     </template>
     <template #status="{ item }">
@@ -212,7 +215,7 @@
       </oc-button>
     </template>
     <template #actions="{ item }">
-      <div class="resource-table-actions">
+      <div v-if="!isResourceDisabled(item)" class="resource-table-actions">
         <!-- @slot Add quick actions before the `context-menu / three dot` button in the actions column -->
         <slot name="quickActions" :resource="item" />
         <context-menu-quick-action

@@ -46,4 +46,17 @@ describe('OcStatusIndicators', () => {
     })
     expect(wrapper.find(`#${indicator.id}`).exists()).toBeTruthy()
   })
+  it('does not render a button if disableHandler is set', () => {
+    const wrapper = mount(StatusIndicators, {
+      props: {
+        resource: fileResource,
+        indicators: [indicator],
+        disableHandler: true
+      },
+      global: {
+        plugins: [...defaultPlugins()]
+      }
+    })
+    expect(wrapper.find('button').exists()).toBeFalsy()
+  })
 })

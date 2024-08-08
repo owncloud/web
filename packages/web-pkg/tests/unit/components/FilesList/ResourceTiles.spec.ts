@@ -7,7 +7,9 @@ import { ComponentPublicInstance, computed } from 'vue'
 import { extractDomSelector } from '@ownclouders/web-client'
 import OcDrop from 'design-system/src/components/OcDrop/OcDrop.vue'
 import { useCanBeOpenedWithSecureView } from '../../../../src/composables/resources'
+import { displayPositionedDropdown } from '../../../../src/helpers/contextMenuDropdown'
 
+vi.mock('../../../../src/helpers/contextMenuDropdown')
 vi.mock('../../../../src/composables/viewMode', async (importOriginal) => ({
   ...(await importOriginal<any>()),
   useTileSize: vi.fn().mockReturnValue({
@@ -65,7 +67,7 @@ const resources = [
     canRename: vi.fn(),
     getDomSelector: () => extractDomSelector('forest'),
     canDownload: () => true
-  }
+  } as Resource
 ]
 
 describe('ResourceTiles component', () => {
@@ -196,6 +198,36 @@ describe('ResourceTiles component', () => {
         const { wrapper } = getWrapper()
         wrapper.vm.fileDropped(mock<Resource>(), { dataTransfer: {} } as DragEvent)
         expect(wrapper.emitted('fileDropped')).toBeDefined()
+      })
+    })
+    describe('context menu', () => {
+      it('triggers the positioned dropdown on click', async () => {
+        const spyDisplayPositionedDropdown = vi.mocked(displayPositionedDropdown)
+        const { wrapper } = getWrapper({ props: { resources } })
+        const btn = wrapper.find('.resource-tiles-btn-action-dropdown')
+        await btn.trigger('click')
+        expect(spyDisplayPositionedDropdown).toHaveBeenCalled()
+      })
+      it('does not show for disabled resources', () => {
+        const { wrapper } = getWrapper({
+          props: { resources: [{ ...resources[0], processing: true }] }
+        })
+        expect(wrapper.find('.resource-tiles-btn-action-dropdown').exists()).toBeFalsy()
+      })
+    })
+    describe('checkboxes', () => {
+      it('update the selected ids on click', async () => {
+        const { wrapper } = getWrapper({ props: { resources } })
+        const checkbox = wrapper.find('input[type="checkbox"]')
+        await checkbox.trigger('click')
+        expect(wrapper.emitted('update:selectedIds')).toBeTruthy()
+      })
+      it('are disabled for disabled resources', () => {
+        const { wrapper } = getWrapper({
+          props: { resources: [{ ...resources[0], processing: true }] }
+        })
+        const checkbox = wrapper.find('input[type="checkbox"]')
+        expect(Object.keys(checkbox.attributes())).toContain('disabled')
       })
     })
   })

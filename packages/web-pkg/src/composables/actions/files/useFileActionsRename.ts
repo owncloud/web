@@ -238,7 +238,7 @@ export const useFileActionsRename = () => {
         }
 
         const renameDisabled = resources.some((resource) => {
-          return !resource.canRename()
+          return !resource.canRename() || resource.processing
         })
         return !renameDisabled
       },
