@@ -52,12 +52,9 @@ export default defineComponent({
 
     const keyDownHandler = (event: KeyboardEvent, editor: EditorCore) => {
       const ctrl = event.ctrlKey || event.metaKey
-
       if (!ctrl) {
         return
       }
-
-      console.log('keyDownHandler', event.key)
 
       switch (event.key) {
         case 'y':
