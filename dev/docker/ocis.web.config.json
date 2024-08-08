@@ -5,8 +5,7 @@
     "metadata_url": "https://host.docker.internal:9200/.well-known/openid-configuration",
     "authority": "https://host.docker.internal:9200",
     "client_id": "web",
-    "response_type": "code",
-    "scope": "openid profile email"
+    "response_type": "code"
   },
   "options": {
     "contextHelpersReadMore": true

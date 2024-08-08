@@ -76,14 +76,27 @@ export class Application {
     }
   }
 
-  async isAccessTokenValidatedUsingRefreshToken(): Promise<boolean> {
-    const response = await this.#page.waitForResponse(
-      (resp) =>
-        resp.url().includes('/token') && resp.status() === 200 && resp.request().method() === 'POST'
-    )
-    const tokenPayload = await response.request().postDataJSON()
-    console.log(tokenPayload)
-    return tokenPayload.grant_type === 'refresh_token'
+  async waitForTokenRenewalViaRefreshToken(): Promise<void> {
+    await Promise.all([
+      this.#page.waitForResponse(
+        (resp) => !resp.url().includes('/oidc-silent-redirect.html'),
+        // timeout after 50 seconds
+        { timeout: (config.timeout - 10) * 1000 }
+      ),
+      this.#page.waitForResponse(
+        (resp) =>
+          resp.url().includes('/token') &&
+          resp.status() === 200 &&
+          resp.request().method() === 'POST' &&
+          resp.request().postDataJSON().grant_type === 'refresh_token' &&
+          resp.request().postDataJSON().hasOwnProperty('refresh_token') &&
+          resp.request().postDataJSON().refresh_token &&
+          resp.request().postDataJSON().hasOwnProperty('scope') &&
+          resp.request().postDataJSON().scope.includes('offline_access'),
+        // timeout after 50 seconds
+        { timeout: (config.timeout - 10) * 1000 }
+      )
+    ])
   }
 
   async waitForTokenRenewalViaIframe(): Promise<void> {
@@ -125,7 +138,10 @@ export class Application {
         (resp) =>
           resp.url().endsWith('/token') &&
           resp.status() === 200 &&
-          resp.request().method() === 'POST',
+          resp.request().method() === 'POST' &&
+          resp.request().postDataJSON().grant_type === 'authorization_code' &&
+          resp.request().postDataJSON().hasOwnProperty('code') &&
+          resp.request().postDataJSON().code,
         // timeout after 50 seconds
         { timeout: (config.timeout - 10) * 1000 }
       ),

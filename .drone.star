@@ -611,7 +611,7 @@ def e2eTests(ctx):
         if "suites" in matrix:
             command += "--suites %s" % ",".join(params["suites"])
         elif "features" in matrix:
-            command += "%s" % ",".join(params["features"])
+            command += "%s" % " ".join(params["features"])
         else:
             print("Error: No suites or features defined for e2e test suite '%s'" % suite)
             return []

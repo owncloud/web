@@ -5,8 +5,7 @@
     "metadata_url": "https://ocis:9200/.well-known/openid-configuration",
     "authority": "https://ocis:9200",
     "client_id": "web",
-    "response_type": "code",
-    "scope": "openid profile email"
+    "response_type": "code"
   },
   "apps": ["files", "text-editor", "preview", "pdf-viewer", "search", "admin-settings"]
 }
