@@ -6,7 +6,7 @@ import {
   RouteLocation,
   shallowMount
 } from 'web-test-helpers'
-import { eventBus, SideBar } from '@ownclouders/web-pkg'
+import { eventBus, SideBar, useIsTopBarSticky } from '@ownclouders/web-pkg'
 import { SideBarEventTopics } from '@ownclouders/web-pkg'
 import { mock } from 'vitest-mock-extended'
 import { OcBreadcrumb } from 'design-system/src/components'
@@ -111,6 +111,8 @@ describe('AppTemplate', () => {
 })
 
 function getWrapper({ props = {}, isMobileWidth = false } = {}) {
+  vi.mocked(useIsTopBarSticky).mockReturnValue({ isSticky: ref(true) })
+
   return {
     wrapper: shallowMount(AppTemplate, {
       props: {

@@ -1,0 +1,6 @@
+Enhancement: Unstick top bar
+
+The top bar above tables as well as the table headers now lose their "stickiness" with limited vertical screen space. This way, we prevent those elements from overflowing content below.
+
+https://github.com/owncloud/web/pull/11344
+https://github.com/owncloud/web/issues/10728
