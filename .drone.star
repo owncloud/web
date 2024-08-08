@@ -608,9 +608,9 @@ def e2eTests(ctx):
                      ocisService(extra_env_config = params["extraServerEnvironment"])
 
         command = "bash run-e2e.sh "
-        if suite["suites"]:
+        if "suites" in matrix:
             command += "--suites %s" % ",".join(params["suites"])
-        elif suite["features"]:
+        elif "features" in matrix:
             command += "%s" % ",".join(params["features"])
         else:
             print("Error: No suites or features defined for e2e test suite '%s'" % suite)
