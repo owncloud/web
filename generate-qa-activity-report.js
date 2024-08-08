@@ -43,19 +43,17 @@ async function getRecentChanges() {
       const { startDate, endDate } = getStartAndEndDate(options.month, options.year);
       formattedSinceDate = getGitDateFormat(startDate);
       formattedUntilDate = getGitDateFormat(endDate);
-      period = `Month: ${options.month}, Year: ${options.year}`;
+      period = `${options.month}_${options.year}`;
     } else if (options.days) {
       const today = new Date();
       today.setDate(today.getDate() - options.days);
       formattedSinceDate = getGitDateFormat(today);
       formattedUntilDate = getGitDateFormat(new Date());
-      period = `Last ${options.days} days`;
+      period = `Last_${options.days}_days`;
     } else {
       console.error('Please provide either days or month and year.');
       return;
     }
-
-    const reportDate = getGitDateFormat(new Date());
 
     const logOptions = {
       file: 'tests/e2e/cucumber/features',
@@ -67,17 +65,18 @@ async function getRecentChanges() {
 
     const logs = await git.log(logOptions);
 
-    let addedLines = 0;
-    let deletedLines = 0;
-    const commits = [];
+    const csvRows = [
+      ['Test-Type', 'Date', 'Tests Added', 'Tests Changed', 'Tests Deleted', 'commit-ID']
+    ];
 
     for (const log of logs.all) {
       const diff = await git.diff([`${log.hash}~1`, log.hash, '--', 'tests/e2e/cucumber/features']);
       const diffLines = diff.split('\n');
 
-      let commitAddedLines = 0;
-      let commitDeletedLines = 0;
-      const features = new Map(); // Track changes per feature file
+      let commitAddedTests = 0;
+      let commitChangedTests = 0;
+      let commitDeletedTests = 0;
+
       let currentFile = null;
 
       for (const line of diffLines) {
@@ -85,78 +84,40 @@ async function getRecentChanges() {
           const match = line.match(/ b\/(tests\/e2e\/cucumber\/features\/[^\s]+)/);
           if (match) {
             currentFile = match[1];
-            if (!features.has(currentFile)) {
-              features.set(currentFile, { addedLines: 0, deletedLines: 0 });
-            }
-          }
-        } else if (line.startsWith('+++ b/')) {
-          const match = line.match(/b\/(tests\/e2e\/cucumber\/features\/[^\s]+)/);
-          if (match) {
-            currentFile = match[1];
-            if (!features.has(currentFile)) {
-              features.set(currentFile, { addedLines: 0, deletedLines: 0 });
-            }
           }
         } else if (line.startsWith('+') && !line.startsWith('+++')) {
-          if (currentFile) {
-            features.get(currentFile).addedLines += 1;
-            commitAddedLines += 1;
+          // Consider only the addition of scenarios or features. Example: +  Scenario: activity
+          if (line.includes('Scenario:') || line.includes('Feature:')) {
+            commitAddedTests += 1;
           }
         } else if (line.startsWith('-') && !line.startsWith('---')) {
-          if (currentFile) {
-            features.get(currentFile).deletedLines += 1;
-            commitDeletedLines += 1;
+          // Consider only the deleting of scenarios or features. Example: -  Scenario: activity
+          if (line.includes('Scenario:') || line.includes('Feature:')) {
+            commitDeletedTests += 1;
           }
+        } else if ((line.includes('@@ Feature:')) && currentFile) {
+          // if line contains 'Feature', that is test change. Example @@ -17,8 +17,8 @@ Feature: Download
+          commitChangedTests += 1;
         }
       }
 
-      addedLines += commitAddedLines;
-      deletedLines += commitDeletedLines;
-
-      commits.push({
-        hash: log.hash,
-        date: log.date,
-        message: log.message,
-        author: log.author_name,
-        features: Array.from(features.entries()).map(([file, stats]) => ({
-          file,
-          ...stats
-        })),
-        addedLines: commitAddedLines,
-        deletedLines: commitDeletedLines
-      });
+      csvRows.push([
+        'UI Test',
+        log.date,
+        commitAddedTests,
+        commitChangedTests,
+        commitDeletedTests,
+        log.hash
+      ]);
     }
 
-    const reportContent = `
-# QA Activity Report for ${period}
-Date: ${reportDate}
+    const csvContent = csvRows.map(row => row.join(',')).join('\n');
 
-## Summary
-- **Added steps to the .feature files:** ${addedLines}
-- **Deleted steps in the .feature files:** ${deletedLines}
-- **Modified steps in the .feature files:** ${addedLines + deletedLines}
-
-## Commits:
-${commits.map(commit => `
-### Commit: ${commit.hash}
-- **Date:** ${commit.date}
-- **Author:** ${commit.author}
-- **Message:** ${commit.message}
-${commit.features.map(feature => `
-- **Feature:** ${feature.file}
-  - **Added steps:** ${feature.addedLines}
-  - **Deleted steps:** ${feature.deletedLines}
-`).join('')}
-- **Total Added steps:** ${commit.addedLines}
-- **Total Deleted steps:** ${commit.deletedLines}
-`).join('')}
-    `;
-
-    fs.writeFile('QA_Activity_Report.md', reportContent, (err) => {
+    fs.writeFile(`QA_Activity_Report_${period}.csv`, csvContent, (err) => {
       if (err) {
-        console.error('Error writing report:', err);
+        console.error('Error writing CSV report:', err);
       } else {
-        console.log('Report generated successfully.');
+        console.log('CSV report generated successfully.');
       }
     });
 
