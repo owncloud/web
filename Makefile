@@ -71,6 +71,4 @@ generate-qa-activity-report: node_modules
 		echo "Please set the MONTH and YEAR environment variables. Usage: make generate-qa-activity-report MONTH=<month> YEAR=<year>"; \
 		exit 1; \
 	fi
-	# git checkout master
-	# git pull
 	pnpm exec node generate-qa-activity-report.js --month ${MONTH} --year ${YEAR}
