@@ -55,7 +55,8 @@
               <div v-if="modifiable" class="oc-flex oc-flex-nowrap oc-flex-middle">
                 <role-dropdown
                   :dom-selector="shareDomSelector"
-                  :existing-role="share.role"
+                  :existing-share-role="share.role"
+                  :existing-share-permissions="share.permissions"
                   :is-locked="isLocked"
                   class="files-collaborators-collaborator-role"
                   mode="edit"
