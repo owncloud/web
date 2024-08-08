@@ -14,7 +14,7 @@
       :fields="fields"
       :data="paginatedItems"
       :highlighted="highlighted"
-      :sticky="true"
+      :sticky="isSticky"
       :header-position="fileListHeaderY"
       :hover="true"
       @sort="handleSort"
@@ -125,6 +125,7 @@ import {
   displayPositionedDropdown,
   eventBus,
   SortDir,
+  useIsTopBarSticky,
   useKeyboardActions,
   useRoute,
   useRouter
@@ -157,6 +158,7 @@ export default defineComponent({
     const filterTerm = ref('')
     const router = useRouter()
     const route = useRoute()
+    const { isSticky } = useIsTopBarSticky()
 
     const lastSelectedGroupIndex = ref(0)
     const lastSelectedGroupId = ref(null)
@@ -351,7 +353,8 @@ export default defineComponent({
       unselectAllGroups,
       selectGroups,
       selectGroup,
-      groups
+      groups,
+      isSticky
     }
   },
   computed: {

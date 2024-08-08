@@ -3,7 +3,12 @@
     <app-loading-spinner v-if="loading" />
     <template v-else>
       <div id="admin-settings-wrapper" class="oc-width-expand oc-height-1-1 oc-position-relative">
-        <div id="admin-settings-app-bar" ref="appBarRef" class="oc-app-bar oc-py-s">
+        <div
+          id="admin-settings-app-bar"
+          ref="appBarRef"
+          class="oc-app-bar oc-py-s"
+          :class="{ 'admin-settings-app-bar-sticky': isSticky }"
+        >
           <div class="admin-settings-app-bar-controls oc-flex oc-flex-between oc-flex-middle">
             <oc-breadcrumb
               v-if="!isMobileWidth"
@@ -68,7 +73,8 @@ import {
   SideBar,
   BatchActions,
   SideBarPanelContext,
-  Action
+  Action,
+  useIsTopBarSticky
 } from '@ownclouders/web-pkg'
 import {
   defineComponent,
@@ -159,6 +165,8 @@ export default defineComponent({
   setup(props) {
     const appBarRef = ref<VNodeRef>()
     const limitedScreenSpace = ref(false)
+    const { isSticky } = useIsTopBarSticky()
+
     const onResize = () => {
       limitedScreenSpace.value = props.isSideBarOpen
         ? window.innerWidth <= 1600
@@ -199,7 +207,8 @@ export default defineComponent({
         applicationId: 'admin-settings'
       }),
       perPageDefault,
-      paginationOptions
+      paginationOptions,
+      isSticky
     }
   }
 })
@@ -215,9 +224,13 @@ export default defineComponent({
   border-top-right-radius: 15px;
   box-sizing: border-box;
   z-index: 2;
-  position: sticky;
+  position: inherit;
   padding: 0 var(--oc-space-medium);
   top: 0;
+
+  &.admin-settings-app-bar-sticky {
+    position: sticky;
+  }
 }
 
 .admin-settings-app-bar-controls {

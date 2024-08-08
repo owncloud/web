@@ -1,5 +1,9 @@
 <template>
-  <div id="files-app-bar" ref="filesAppBar" :class="{ 'files-app-bar-squashed': isSideBarOpen }">
+  <div
+    id="files-app-bar"
+    ref="filesAppBar"
+    :class="{ 'files-app-bar-squashed': isSideBarOpen, 'files-app-bar-sticky': isSticky }"
+  >
     <div class="files-topbar oc-py-s">
       <h1 class="oc-invisible-sr" v-text="pageTitle" />
       <oc-hidden-announcer :announcement="selectedResourcesAnnouncement" level="polite" />
@@ -93,7 +97,8 @@ import {
   useRouter,
   FolderViewModeConstants,
   useExtensionRegistry,
-  ActionExtension
+  ActionExtension,
+  useIsTopBarSticky
 } from '../../composables'
 import { BreadcrumbItem } from 'design-system/src/components/OcBreadcrumb/types'
 import { useActiveLocation } from '../../composables'
@@ -154,6 +159,7 @@ export default defineComponent({
     const { can } = useAbility()
     const router = useRouter()
     const { requestExtensions } = useExtensionRegistry()
+    const { isSticky } = useIsTopBarSticky()
 
     const resourcesStore = useResourcesStore()
     const { selectedResources } = storeToRefs(resourcesStore)
@@ -275,7 +281,8 @@ export default defineComponent({
       breadcrumbTruncationOffset,
       fileDroppedBreadcrumb,
       pageTitle,
-      selectedResources
+      selectedResources,
+      isSticky
     }
   },
   data: function () {
@@ -346,9 +353,13 @@ export default defineComponent({
   border-top-right-radius: 15px;
   box-sizing: border-box;
   z-index: 2;
-  position: sticky;
+  position: inherit;
   padding: 0 var(--oc-space-medium);
   top: 0;
+
+  &.files-app-bar-sticky {
+    position: sticky;
+  }
 
   .files-app-bar-controls {
     min-height: 52px;
