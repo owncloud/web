@@ -273,8 +273,8 @@ export default defineComponent({
       box-sizing: border-box;
       padding: var(--oc-space-small);
       color: var(--oc-color-swatch-passive-default);
-      &:focus,
-      &:hover {
+      &:focus:not([disabled]),
+      &:hover:not([disabled]) {
         background-color: var(--oc-color-background-hover);
 
         text-decoration: none !important;

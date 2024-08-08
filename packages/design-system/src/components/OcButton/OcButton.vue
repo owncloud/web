@@ -463,6 +463,13 @@ export default defineComponent({
       var(--oc-color-swatch-danger-muted),
       var(--oc-color-swatch-danger-contrast)
     );
+
+    &-filled:hover {
+      color: var(--oc-color-swatch-danger-default) !important;
+      span > svg {
+        fill: var(--oc-color-swatch-danger-default) !important;
+      }
+    }
   }
 
   &:disabled {
