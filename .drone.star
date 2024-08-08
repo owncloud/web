@@ -75,6 +75,12 @@ config = {
                 "search",
                 "shares",
             ],
+            "extraServerEnvironment": {
+                "FRONTEND_FULL_TEXT_SEARCH_ENABLED": True,
+                "SEARCH_EXTRACTOR_TYPE": "tika",
+                "SEARCH_EXTRACTOR_TIKA_TIKA_URL": "http://tika:9998",
+                "SEARCH_EXTRACTOR_CS3SOURCE_INSECURE": True,
+            },
         },
         "4": {
             "earlyFail": True,
@@ -90,18 +96,36 @@ config = {
             "suites": [
                 "app-provider",
             ],
+            "extraServerEnvironment": {
+                "GATEWAY_GRPC_ADDR": "0.0.0.0:9142",
+                "MICRO_REGISTRY": "nats-js-kv",
+                "MICRO_REGISTRY_ADDRESS": "0.0.0.0:9233",
+                "NATS_NATS_HOST": "0.0.0.0",
+                "NATS_NATS_PORT": 9233,
+                "COLLABORA_DOMAIN": "collabora:9980",
+                "ONLYOFFICE_DOMAIN": "onlyoffice:443",
+                "FRONTEND_APP_HANDLER_SECURE_VIEW_APP_ADDR": "com.owncloud.api.collaboration.Collabora",
+                "WEB_UI_CONFIG_FILE": None,
+            },
         },
-        "accessToken-renewal-1": {
+        "oidc-refresh-token": {
             "skip": False,
-            "suites": [
+            "features": [
                 "cucumber/features/oidc/refreshToken.feature",
             ],
+            "extraServerEnvironment": {
+                "IDP_ACCESS_TOKEN_EXPIRATION": 30,
+                "WEB_OIDC_SCOPE": "openid profile email offline_access",
+            },
         },
-        "accessToken-renewal-2": {
+        "oidc-iframe": {
             "skip": False,
-            "suites": [
-                "cucumber/features/oidc/silentAccessTokenRenewal.feature",
+            "features": [
+                "cucumber/features/oidc/iframeTokenRenewal.feature",
             ],
+            "extraServerEnvironment": {
+                "IDP_ACCESS_TOKEN_EXPIRATION": 30,
+            },
         },
     },
     "build": True,
@@ -517,8 +541,10 @@ def e2eTests(ctx):
         "reportTracing": "false",
         "db": "mysql:5.5",
         "suites": [],
+        "features": [],
         "tikaNeeded": False,
         "failOnUncaughtConsoleError": "false",
+        "extraServerEnvironment": {},
     }
 
     e2e_trigger = {
@@ -572,14 +598,23 @@ def e2eTests(ctx):
             steps += collaboraService() + \
                      onlyofficeService() + \
                      waitForServices("online-offices", ["collabora:9980", "onlyoffice:443"]) + \
-                     ocisService("app-provider") + \
+                     ocisService(extra_env_config = params["extraServerEnvironment"]) + \
                      wopiCollaborationService("collabora") + \
                      wopiCollaborationService("onlyoffice") + \
                      waitForServices("wopi", ["wopi-collabora:9300", "wopi-onlyoffice:9300"])
         else:
             # oCIS specific steps
             steps += (tikaService() if params["tikaNeeded"] else []) + \
-                     ocisService("e2e-tests", tika_enabled = params["tikaNeeded"])
+                     ocisService(extra_env_config = params["extraServerEnvironment"])
+
+        command = "bash run-e2e.sh "
+        if suite["suites"]:
+            command += "--suites %s" % ",".join(params["suites"])
+        elif suite["features"]:
+            command += "%s" % ",".join(params["features"])
+        else:
+            print("Error: No suites or features defined for e2e test suite '%s'" % suite)
+            return []
 
         steps += [{
                      "name": "e2e-tests",
@@ -587,7 +622,7 @@ def e2eTests(ctx):
                      "environment": environment,
                      "commands": [
                          "cd tests/e2e",
-                         "bash run-e2e.sh %s" % ("--suites %s" % ",".join(params["suites"]) if suite not in ["accessToken-renewal-1", "accessToken-renewal-2"] else ",".join(params["suites"])),
+                         command,
                      ],
                  }] + \
                  uploadTracingResult(ctx) + \
@@ -874,7 +909,7 @@ def documentation(ctx):
         },
     ]
 
-def ocisService(type, tika_enabled = False, enforce_password_public_link = False):
+def ocisService(extra_env_config = {}, enforce_password_public_link = False):
     environment = {
         "IDM_ADMIN_PASSWORD": "admin",  # override the random admin password from `ocis init`
         "OCIS_INSECURE": "true",
@@ -888,44 +923,11 @@ def ocisService(type, tika_enabled = False, enforce_password_public_link = False
         "FRONTEND_OCS_ENABLE_DENIALS": True,
         "OCIS_PASSWORD_POLICY_BANNED_PASSWORDS_LIST": "%s/tests/drone/banned-passwords.txt" % dir["web"],
         "PROXY_CSP_CONFIG_FILE_LOCATION": "%s/tests/drone/csp.yaml" % dir["web"],
+        "WEB_UI_CONFIG_FILE": "%s" % dir["ocisConfig"],
     }
-    if type == "keycloak":
-        environment["PROXY_AUTOPROVISION_ACCOUNTS"] = "true"
-        environment["PROXY_ROLE_ASSIGNMENT_DRIVER"] = "oidc"
-        environment["OCIS_OIDC_ISSUER"] = "https://keycloak:8443/realms/oCIS"
-        environment["PROXY_OIDC_REWRITE_WELLKNOWN"] = "true"
-        environment["WEB_OIDC_CLIENT_ID"] = "web"
-        environment["PROXY_USER_OIDC_CLAIM"] = "preferred_username"
-        environment["PROXY_USER_CS3_CLAIM"] = "username"
-        environment["OCIS_ADMIN_USER_ID"] = ""
-        environment["OCIS_EXCLUDE_RUN_SERVICES"] = "idp"
-        environment["GRAPH_ASSIGN_DEFAULT_USER_ROLE"] = "false"
-        environment["GRAPH_USERNAME_MATCH"] = "none"
-        environment["KEYCLOAK_DOMAIN"] = "keycloak:8443"
 
-    if type == "accessToken-renewal-1":
-        environment["IDP_ACCESS_TOKEN_EXPIRATION"] = 30
-        environment["WEB_OIDC_SCOPE"] = "openid profile email offline_access"
-    elif type == "accessToken-renewal-2":
-        environment["IDP_ACCESS_TOKEN_EXPIRATION"] = 30
-
-    if type == "app-provider":
-        environment["GATEWAY_GRPC_ADDR"] = "0.0.0.0:9142"
-        environment["MICRO_REGISTRY"] = "nats-js-kv"
-        environment["MICRO_REGISTRY_ADDRESS"] = "0.0.0.0:9233"
-        environment["NATS_NATS_HOST"] = "0.0.0.0"
-        environment["NATS_NATS_PORT"] = 9233
-        environment["COLLABORA_DOMAIN"] = "collabora:9980"
-        environment["ONLYOFFICE_DOMAIN"] = "onlyoffice:443"
-        environment["FRONTEND_APP_HANDLER_SECURE_VIEW_APP_ADDR"] = "com.owncloud.api.collaboration.Collabora"
-    else:
-        environment["WEB_UI_CONFIG_FILE"] = "%s" % dir["ocisConfig"]
-
-    if tika_enabled:
-        environment["FRONTEND_FULL_TEXT_SEARCH_ENABLED"] = True
-        environment["SEARCH_EXTRACTOR_TYPE"] = "tika"
-        environment["SEARCH_EXTRACTOR_TIKA_TIKA_URL"] = "http://tika:9998"
-        environment["SEARCH_EXTRACTOR_CS3SOURCE_INSECURE"] = True
+    for config in extra_env_config:
+        environment[config] = extra_env_config[config]
 
     if enforce_password_public_link:
         environment["OCIS_SHARING_PUBLIC_SHARE_MUST_HAVE_PASSWORD"] = False
@@ -1800,7 +1802,23 @@ def e2eTestsOnKeycloak(ctx):
     else:
         steps += restoreOcisCache()
 
-    steps += ocisService("keycloak") + \
+    # configs to setup ocis with keycloak
+    environment = {
+        "PROXY_AUTOPROVISION_ACCOUNTS": "true",
+        "PROXY_ROLE_ASSIGNMENT_DRIVER": "oidc",
+        "OCIS_OIDC_ISSUER": "https://keycloak:8443/realms/oCIS",
+        "PROXY_OIDC_REWRITE_WELLKNOWN": "true",
+        "WEB_OIDC_CLIENT_ID": "web",
+        "PROXY_USER_OIDC_CLAIM": "preferred_username",
+        "PROXY_USER_CS3_CLAIM": "username",
+        "OCIS_ADMIN_USER_ID": "",
+        "OCIS_EXCLUDE_RUN_SERVICES": "idp",
+        "GRAPH_ASSIGN_DEFAULT_USER_ROLE": "false",
+        "GRAPH_USERNAME_MATCH": "none",
+        "KEYCLOAK_DOMAIN": "keycloak:8443",
+    }
+
+    steps += ocisService(extra_env_config = environment) + \
              [
                  {
                      "name": "e2e-tests",
