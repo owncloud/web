@@ -1,5 +1,8 @@
 <template>
-  <div class="oc-resource oc-text-overflow">
+  <div
+    class="oc-resource oc-text-overflow"
+    :class="{ 'oc-resource-no-interaction': !isResourceClickable }"
+  >
     <resource-link
       v-if="isIconDisplayed"
       :resource="resource"
@@ -230,6 +233,10 @@ export default defineComponent({
   display: inline-flex;
   justify-content: flex-start;
   overflow: visible !important;
+
+  &-no-interaction {
+    pointer-events: none;
+  }
 
   &-link {
     position: relative;

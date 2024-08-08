@@ -208,8 +208,6 @@ export default defineComponent({
   }
 
   &.state-trashed {
-    cursor: pointer;
-
     .tile-image,
     .tile-default-image > svg {
       filter: grayscale(100%);
