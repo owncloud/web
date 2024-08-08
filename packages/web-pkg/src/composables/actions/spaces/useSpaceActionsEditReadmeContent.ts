@@ -73,6 +73,10 @@ export const useSpaceActionsEditReadmeContent = () => {
           return false
         }
 
+        if (resources[0].disabled) {
+          return false
+        }
+
         return resources[0].canEditReadme({ user: userStore.user })
       },
       componentType: 'button',

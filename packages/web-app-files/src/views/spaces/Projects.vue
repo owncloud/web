@@ -441,7 +441,7 @@ export default defineComponent({
     }
 
     const loadPreview = async (space: SpaceResource) => {
-      if (!space.spaceImageData) {
+      if (!space.spaceImageData || space.disabled) {
         return
       }
 

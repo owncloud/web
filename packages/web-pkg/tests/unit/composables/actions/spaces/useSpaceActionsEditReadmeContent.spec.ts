@@ -65,6 +65,15 @@ describe('editReadmeContent', () => {
         }
       })
     })
+    it('should be false when resource is disabled', () => {
+      getWrapper({
+        setup: ({ actions }) => {
+          expect(
+            unref(actions)[0].isVisible({ resources: [mock<SpaceResource>({ disabled: true })] })
+          ).toBe(false)
+        }
+      })
+    })
   })
   describe('method "handler"', () => {
     it('calls method "openWithDefaultApp"', () => {

@@ -2,7 +2,7 @@
   <div class="oc-status-indicators">
     <template v-for="indicator in indicators">
       <oc-button
-        v-if="hasHandler(indicator)"
+        v-if="hasHandler(indicator) && !disableHandler"
         :id="indicator.id"
         :key="`${indicator.id}-handler`"
         v-oc-tooltip="$gettext(indicator.label)"
@@ -97,6 +97,13 @@ export default defineComponent({
     indicators: {
       type: Array as PropType<Indicator[]>,
       required: true
+    },
+    /**
+     * Disables the handler for all indicators. This is useful e.g. for disabled resources.
+     */
+    disableHandler: {
+      type: Boolean,
+      default: false
     }
   },
 
