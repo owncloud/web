@@ -130,9 +130,13 @@ export default defineComponent({
 
     const availableRoles = inject<Ref<ShareRole[]>>('availableShareRoles')
 
-    const initialSelectedRole = props.existingRole ? props.existingRole : unref(availableRoles)[0]
+    const initialSelectedRole = props.existingRole
+      ? props.existingRole
+      : {
+          description: 'Role disabled',
+          displayName: 'Disabled Role'
+        }
     const selectedRole = ref<ShareRole>(initialSelectedRole)
-
     const isSelectedRole = (role: ShareRole) => {
       return unref(selectedRole).id === role.id
     }
