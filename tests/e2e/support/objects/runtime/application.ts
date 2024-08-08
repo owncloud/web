@@ -1,5 +1,6 @@
 import { Page } from '@playwright/test'
 import util from 'util'
+import { config } from '../../../config'
 
 const appSwitcherButton = '#_appSwitcherButton'
 const appSelector = `//ul[contains(@class, "applications-list")]//*[@data-test-id="%s"]`
@@ -116,13 +117,17 @@ export class Application {
         (resp) =>
           resp.url().includes('/oidc-silent-redirect.html') &&
           resp.status() === 200 &&
-          resp.request().method() === 'GET'
+          resp.request().method() === 'GET',
+        // timeout after 50 seconds
+        { timeout: (config.timeout - 10) * 1000 }
       ),
       this.#page.waitForResponse(
         (resp) =>
           resp.url().endsWith('/token') &&
           resp.status() === 200 &&
-          resp.request().method() === 'POST'
+          resp.request().method() === 'POST',
+        // timeout after 50 seconds
+        { timeout: (config.timeout - 10) * 1000 }
       ),
       waitForIframe
     ])
