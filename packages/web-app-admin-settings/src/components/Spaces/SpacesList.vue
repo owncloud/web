@@ -79,7 +79,6 @@
             :name="item.disabled ? 'stop-circle' : 'play-circle'"
             size="small"
             fill-type="line"
-            class="oc-mr-s"
           />
         </span>
       </template>

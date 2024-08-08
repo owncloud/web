@@ -157,6 +157,14 @@
         :indicators="item.indicators"
       />
     </template>
+    <template #status="{ item }">
+      <oc-icon
+        v-oc-tooltip="item.disabled ? $gettext('Disabled') : $gettext('Enabled')"
+        :name="item.disabled ? 'stop-circle' : 'play-circle'"
+        size="small"
+        fill-type="line"
+      />
+    </template>
     <template #sdate="{ item }">
       <span
         v-oc-tooltip="formatDate(item.sdate)"
@@ -241,7 +249,12 @@ import {
   ComponentPublicInstance
 } from 'vue'
 import { useWindowSize } from '@vueuse/core'
-import { IncomingShareResource, Resource, TrashResource } from '@ownclouders/web-client'
+import {
+  IncomingShareResource,
+  isProjectSpaceResource,
+  Resource,
+  TrashResource
+} from '@ownclouders/web-client'
 import { extractDomSelector, SpaceResource } from '@ownclouders/web-client'
 import { ShareTypes, isShareResource } from '@ownclouders/web-client'
 
@@ -567,6 +580,10 @@ export default defineComponent({
 
     const isResourceClickable = (resource: Resource) => {
       if (!props.areResourcesClickable) {
+        return false
+      }
+
+      if (isProjectSpaceResource(resource) && resource.disabled) {
         return false
       }
 
