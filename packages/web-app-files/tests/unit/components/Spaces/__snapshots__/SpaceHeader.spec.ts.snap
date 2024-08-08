@@ -21,12 +21,36 @@ exports[`SpaceHeader > should add the "squashed"-class when the sidebar is opene
       <!--v-if-->
     </div>
     <!--v-if-->
-    <div class="markdown-container oc-flex oc-flex-middle">
-      <!--v-if-->
-      <div class="markdown-container-edit oc-ml-s"><button type="button" class="oc-button oc-rounded oc-button-s oc-button-justify-content-center oc-button-gap-m oc-button-passive oc-button-passive-raw">
+    <!--v-if-->
+    <!--v-if-->
+  </div>
+</div>"
+`;
+
+exports[`SpaceHeader > space description > should show the description 1`] = `
+"<div class="space-header oc-p-m oc-flex">
+  <div class="space-header-image">
+    <div class="space-header-image-default oc-flex oc-flex-middle oc-flex-center"><span class="oc-icon oc-icon-xxl oc-icon-passive oc-px-m oc-py-m"><!----></span></div>
+  </div>
+  <div class="space-header-infos">
+    <div class="oc-flex oc-mb-s oc-flex-middle oc-flex-between">
+      <div class="oc-flex oc-flex-middle space-header-infos-heading">
+        <h2 class="space-header-name"></h2> <button type="button" aria-label="Show context menu" class="oc-button oc-rounded oc-button-m oc-button-justify-content-center oc-button-gap-m oc-button-passive oc-button-passive-raw oc-ml-s" id="space-context-btn">
           <!--v-if-->
-          <!-- @slot Content of the button --> <span class="oc-icon oc-icon-s oc-icon-passive"><!----></span>
-        </button></div>
+          <!-- @slot Content of the button --> <span class="oc-icon oc-icon-m oc-icon-passive"><!----></span>
+        </button>
+        <div id="space-context-drop" class="oc-drop oc-box-shadow-medium oc-rounded" options="[object Object]">
+          <div class="oc-card oc-card-body oc-background-secondary oc-p-s">
+            <space-context-actions-stub actionoptions="[object Object]"></space-context-actions-stub>
+          </div>
+        </div>
+      </div>
+      <!--v-if-->
+    </div>
+    <!--v-if-->
+    <div class="markdown-container oc-flex oc-flex-middle">
+      <!---->
+      <div class="markdown-container-edit oc-ml-s"><a attrs="[object Object]" size="small" appearance="raw"></a></div>
     </div>
     <!--v-if-->
   </div>
@@ -54,13 +78,7 @@ exports[`SpaceHeader > space image > should show the default image if no other i
       <!--v-if-->
     </div>
     <!--v-if-->
-    <div class="markdown-container oc-flex oc-flex-middle">
-      <!--v-if-->
-      <div class="markdown-container-edit oc-ml-s"><button type="button" class="oc-button oc-rounded oc-button-s oc-button-justify-content-center oc-button-gap-m oc-button-passive oc-button-passive-raw">
-          <!--v-if-->
-          <!-- @slot Content of the button --> <span class="oc-icon oc-icon-s oc-icon-passive"><!----></span>
-        </button></div>
-    </div>
+    <!--v-if-->
     <!--v-if-->
   </div>
 </div>"
@@ -85,13 +103,7 @@ exports[`SpaceHeader > space image > should show the set image 1`] = `
       <!--v-if-->
     </div>
     <!--v-if-->
-    <div class="markdown-container oc-flex oc-flex-middle">
-      <!--v-if-->
-      <div class="markdown-container-edit oc-ml-s"><button type="button" class="oc-button oc-rounded oc-button-s oc-button-justify-content-center oc-button-gap-m oc-button-passive oc-button-passive-raw">
-          <!--v-if-->
-          <!-- @slot Content of the button --> <span class="oc-icon oc-icon-s oc-icon-passive"><!----></span>
-        </button></div>
-    </div>
+    <!--v-if-->
     <!--v-if-->
   </div>
 </div>"

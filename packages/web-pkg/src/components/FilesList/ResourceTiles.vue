@@ -44,6 +44,7 @@
           :ref="(el) => (tileRefs.tiles[resource.id] = el as ResourceTileRef)"
           :resource="resource"
           :resource-route="getRoute(resource)"
+          :resource-folder-route="getFolderRoute(resource)"
           :is-resource-selected="isResourceSelected(resource)"
           :is-resource-clickable="isResourceClickable(resource)"
           :is-resource-disabled="isResourceDisabled(resource)"
@@ -162,7 +163,9 @@ import {
   useResourcesStore,
   useViewSizeMax,
   useEmbedMode,
-  useCanBeOpenedWithSecureView
+  useCanBeOpenedWithSecureView,
+  useFileActions,
+  useGetMatchingSpace
 } from '../../composables'
 
 type ResourceTileRef = ComponentPublicInstance<typeof ResourceTile>
@@ -227,6 +230,8 @@ export default defineComponent({
     const { showMessage } = useMessages()
     const { $gettext } = useGettext()
     const resourcesStore = useResourcesStore()
+    const { getDefaultAction } = useFileActions()
+    const { getMatchingSpace } = useGetMatchingSpace()
     const { canBeOpenedWithSecureView } = useCanBeOpenedWithSecureView()
     const { emit } = context
     const {
@@ -260,6 +265,19 @@ export default defineComponent({
     )
 
     const getRoute = (resource: Resource) => {
+      let space = props.space
+      if (!space) {
+        space = getMatchingSpace(resource)
+      }
+
+      const action = getDefaultAction({ resources: [resource], space })
+      if (!action?.route) {
+        return null
+      }
+
+      return action.route({ space, resources: [resource] })
+    }
+    const getFolderRoute = (resource: Resource) => {
       if (isSpaceResource(resource)) {
         return resource.disabled
           ? null
@@ -278,7 +296,10 @@ export default defineComponent({
           resource: resource
         })
       }
-      return { path: '' }
+
+      return {
+        path: ''
+      }
     }
 
     const emitTileClick = (resource: Resource) => {
@@ -551,6 +572,7 @@ export default defineComponent({
       areFileExtensionsShown,
       emitTileClick,
       getRoute,
+      getFolderRoute,
       showContextMenuOnBtnClick,
       showContextMenu,
       tileRefs,

@@ -1,8 +1,16 @@
-import { ref } from 'vue'
+import { nextTick, ref } from 'vue'
 import SpaceHeader from 'web-app-files/src/components/Spaces/SpaceHeader.vue'
 import { Drive } from '@ownclouders/web-client/graph/generated'
-import { SpaceResource, buildSpace } from '@ownclouders/web-client'
+import { SpaceResource, buildSpace, Resource } from '@ownclouders/web-client'
 import { defaultPlugins, mount, defaultComponentMocks } from 'web-test-helpers'
+import { mock } from 'vitest-mock-extended'
+
+vi.mock('@ownclouders/web-pkg', async (importOriginal) => ({
+  ...(await importOriginal<any>()),
+  useFileActions: vi.fn().mockReturnValue({
+    getDefaultAction: vi.fn().mockReturnValue({ handler: vi.fn() })
+  })
+}))
 
 describe('SpaceHeader', () => {
   it('should add the "squashed"-class when the sidebar is opened', () => {
@@ -37,6 +45,16 @@ describe('SpaceHeader', () => {
       })
       expect(wrapper.find('.space-header').classes()).not.toContain('oc-flex')
       expect(wrapper.find('.space-header-image').classes()).toContain('space-header-image-expanded')
+    })
+  })
+  describe('space description', () => {
+    it('should show the description', async () => {
+      const wrapper = getWrapper({ space: buildSpace({ id: '1' } as unknown as Drive) })
+      wrapper.vm.markdownResource = mock<Resource>()
+      wrapper.vm.markdownContent = 'content'
+      await nextTick()
+      expect(wrapper.find('.markdown-container').exists()).toBeTruthy()
+      expect(wrapper.html()).toMatchSnapshot()
     })
   })
 })

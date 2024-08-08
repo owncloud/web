@@ -6,6 +6,7 @@
     <resource-link
       v-if="isIconDisplayed"
       :resource="resource"
+      :link="link"
       :is-resource-clickable="isResourceClickable"
       :folder-link="folderLink"
       class="oc-resource-link"
@@ -30,19 +31,13 @@
     </resource-link>
     <div class="oc-resource-details oc-text-overflow" :class="{ 'oc-pl-s': isIconDisplayed }">
       <resource-link
-        v-slot="{ opensInNewWindowDescriptionId }"
         :resource="resource"
         :is-resource-clickable="isResourceClickable"
+        :link="link"
         :folder-link="folderLink"
         class="oc-text-overflow"
         @click="emitClick"
       >
-        <span
-          v-if="opensInNewWindowDescriptionId"
-          :id="opensInNewWindowDescriptionId"
-          class="oc-invisible-sr"
-          v-text="$gettext('Opens in a new window')"
-        />
         <resource-name
           :key="resource.name"
           :name="resource.name"
@@ -76,6 +71,7 @@ import { Resource } from '@ownclouders/web-client'
 import ResourceIcon from './ResourceIcon.vue'
 import ResourceLink from './ResourceLink.vue'
 import ResourceName from './ResourceName.vue'
+import { RouteLocationRaw } from 'vue-router'
 
 /**
  * Displays a resource together with the resource type icon or thumbnail
@@ -98,6 +94,14 @@ export default defineComponent({
       type: String,
       required: false,
       default: ''
+    },
+    /**
+     * The resource link
+     */
+    link: {
+      type: Object as PropType<RouteLocationRaw>,
+      required: false,
+      default: null
     },
     /**
      * The resource folder link
