@@ -7,7 +7,7 @@ import { useCanShare } from '../../shares'
 import { useClipboard } from '../../clipboard'
 import { Resource, SpaceResource } from '@ownclouders/web-client'
 import { useFileActionsCreateLink } from './useFileActionsCreateLink'
-import { useMessages } from '../../piniaStores'
+import { useMessages, useSharesStore } from '../../piniaStores'
 
 export const useFileActionsCopyQuickLink = () => {
   const { showMessage, showErrorMessage } = useMessages()
@@ -15,6 +15,7 @@ export const useFileActionsCopyQuickLink = () => {
   const { $gettext } = language
   const clientService = useClientService()
   const { canShare } = useCanShare()
+  const sharesStore = useSharesStore()
   const { copyToClipboard } = useClipboard()
 
   const { actions: createLinkActions } = useFileActionsCreateLink()
@@ -43,7 +44,7 @@ export const useFileActionsCopyQuickLink = () => {
     resource: Resource
   }) => {
     const client = clientService.graphAuthenticated.permissions
-    const { shares } = await client.listPermissions(space.id, resource.id)
+    const { shares } = await client.listPermissions(space.id, resource.id, sharesStore.graphRoles)
     return shares.filter(isLinkShare).find(({ isQuickLink }) => isQuickLink)
   }
 
