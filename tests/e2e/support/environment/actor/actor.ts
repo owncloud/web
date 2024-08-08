@@ -8,6 +8,7 @@ export class ActorEnvironment extends EventEmitter implements Actor {
   private readonly options: ActorOptions
   public context: BrowserContext
   public page: Page
+  public tabs: Page[] = []
 
   constructor(options: ActorOptions) {
     super()
@@ -22,6 +23,7 @@ export class ActorEnvironment extends EventEmitter implements Actor {
     }
 
     this.page = await this.context.newPage()
+    this.tabs.push(this.page)
 
     this.page.on('pageerror', (exception) => {
       console.log(`[UNCAUGHT EXCEPTION] "${exception}"`)
@@ -32,12 +34,27 @@ export class ActorEnvironment extends EventEmitter implements Actor {
     })
   }
 
-  public async newPage(newPage: Page): Promise<Page> {
-    // close the old page
-    await this.page.close()
+  public savePage(newPage: Page) {
+    this.tabs.push(newPage)
     // set the new page
     this.page = newPage
-    return this.page
+  }
+
+  public async newTab(): Promise<Page> {
+    const page: Page = await this.context.newPage()
+    this.tabs.push(page)
+    this.page = page
+    return page
+  }
+
+  public async closeCurrentTab(): Promise<void> {
+    await this.page.close()
+    this.tabs.pop()
+    if (this.tabs.length === 0) {
+      this.page = null
+      return
+    }
+    this.page = this.tabs[this.tabs.length - 1]
   }
 
   async close(): Promise<void> {

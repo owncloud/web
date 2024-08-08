@@ -1,17 +1,17 @@
-Feature: Silent Access Token Renewal
+Feature: Token renewal using iframe
 
   As a user
   I want the web application to automatically renew access token just before access token expires using iframe at background,
   So that I can be confident the application will not encounter issues related to expired access tokens.
 
 
-  Scenario: renew access token using iframe silently
+  Scenario: access token renewal via iframe
     Given "Admin" creates following users using API
       | id    |
       | Alice |
     And "Admin" assigns following roles to the users using API
-      | id    | role  |
-      | Alice | Admin |
+      | id    | role        |
+      | Alice | Space Admin |
     And "Alice" logs in
     And "Alice" opens the "files" app
     And "Alice" navigates to the projects space page
