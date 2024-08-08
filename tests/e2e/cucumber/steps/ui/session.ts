@@ -95,17 +95,6 @@ When(
 )
 
 When(
-  '{string} logs in from the internal link',
-  async function (this: World, stepUser: string): Promise<void> {
-    const sessionObject = await createNewSession(this, stepUser)
-    const { page } = this.actorsEnvironment.getActor({ key: stepUser })
-    const user = this.usersEnvironment.getUser({ key: stepUser })
-    await sessionObject.login({ user })
-    await page.locator('#web').waitFor()
-  }
-)
-
-When(
   '{string} waits for token to expire',
   async function (this: World, stepUser: string): Promise<void> {
     const { page } = this.actorsEnvironment.getActor({ key: stepUser })
