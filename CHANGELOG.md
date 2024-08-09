@@ -13,6 +13,7 @@ Summary
 * Bugfix - Toggling checkboxes via keyboard: [#11312](https://github.com/owncloud/web/pull/11312)
 * Bugfix - Prevent horizontal table scroll: [#11313](https://github.com/owncloud/web/pull/11313)
 * Bugfix - Keyboard actions for disabled resources: [#11342](https://github.com/owncloud/web/pull/11342)
+* Bugfix - OCM page reload: [#11348](https://github.com/owncloud/web/pull/11348)
 * Enhancement - App Store app: [#11302](https://github.com/owncloud/web/pull/11302)
 * Enhancement - Redesign share link modal: [#11310](https://github.com/owncloud/web/pull/11310)
 
@@ -60,6 +61,14 @@ Details
 
    https://github.com/owncloud/web/issues/11335
    https://github.com/owncloud/web/pull/11342
+
+* Bugfix - OCM page reload: [#11348](https://github.com/owncloud/web/pull/11348)
+
+   We've fixed an issue where reloading the Open Cloud Mesh page would show an
+   error.
+
+   https://github.com/owncloud/web/issues/11153
+   https://github.com/owncloud/web/pull/11348
 
 * Enhancement - App Store app: [#11302](https://github.com/owncloud/web/pull/11302)
 
