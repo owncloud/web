@@ -6,7 +6,11 @@
         <h2 class="oc-px-s" v-text="$gettext('Accept invitations')" />
         <oc-contextual-helper class="oc-pl-xs" v-bind="helperContent" />
       </div>
-      <div class="oc-flex oc-flex-column oc-flex-middle oc-flex-center oc-p-m">
+      <div v-if="!providers.length" class="oc-flex oc-flex-center oc-flex-middle">
+        <oc-icon name="error-warning" fill-type="line" class="oc-mr-s" size="large" />
+        <span v-text="$gettext('The list of institutions is empty. Please contact your admin.')" />
+      </div>
+      <div v-else class="oc-flex oc-flex-column oc-flex-middle oc-flex-center oc-p-m">
         <div class="oc-width-1-2">
           <oc-text-input
             ref="tokenInput"
