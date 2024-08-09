@@ -27,7 +27,7 @@ describe('RoleDropdown', () => {
   it('does not render a button if only one role is available', () => {
     const { wrapper } = getWrapper({
       mountType: shallowMount,
-      availableShareRoles: [mock<ShareRole>({ displayName: 'Can view', description: '' })]
+      availableInternalShareRoles: [mock<ShareRole>({ displayName: 'Can view', description: '' })]
     })
     expect(wrapper.find(selectors.recipientRoleBtn).exists()).toBeFalsy()
   })
@@ -41,24 +41,42 @@ describe('RoleDropdown', () => {
     const { wrapper } = getWrapper({ mountType: shallowMount })
     expect(wrapper.findAll(selectors.roleButton).length).toBe(2)
   })
+  it('uses available external share roles if "isExternal" is given', () => {
+    const externalShareRole2 = mock<ShareRole>({ id: 'external1', displayName: '' })
+    const externalShareRole1 = mock<ShareRole>({ id: 'external2', displayName: '' })
+    const { wrapper } = getWrapper({
+      mountType: shallowMount,
+      isExternal: true,
+      availableExternalShareRoles: [externalShareRole1, externalShareRole2]
+    })
+
+    expect(
+      wrapper.find(`oc-button-stub#files-recipient-role-drop-btn-${externalShareRole1.id}`).exists()
+    ).toBeTruthy()
+  })
 })
 
 function getWrapper({
   mountType = mount,
   existingRole = null,
-  availableShareRoles = [
+  isExternal = false,
+  availableInternalShareRoles = [
     mock<ShareRole>({ displayName: 'Can view', description: '' }),
     mock<ShareRole>({ displayName: 'Can edit', description: '' })
-  ]
+  ],
+  availableExternalShareRoles = []
 }: {
   mountType?: typeof mount
   existingRole?: ShareRole
-  availableShareRoles?: ShareRole[]
+  isExternal?: boolean
+  availableInternalShareRoles?: ShareRole[]
+  availableExternalShareRoles?: ShareRole[]
 } = {}) {
   return {
     wrapper: mountType(RoleDropdown, {
       props: {
-        existingRole
+        existingRole,
+        isExternal
       },
       global: {
         plugins: [
@@ -69,7 +87,8 @@ function getWrapper({
         renderStubDefaultSlot: true,
         provide: {
           resource: mock<Resource>(),
-          availableShareRoles
+          availableInternalShareRoles,
+          availableExternalShareRoles
         }
       }
     })

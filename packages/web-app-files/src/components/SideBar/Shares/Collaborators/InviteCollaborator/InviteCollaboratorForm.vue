@@ -49,6 +49,37 @@
           <!-- Empty to hide the caret -->
           <span />
         </template>
+        <template #spinner="{ loading }">
+          <oc-spinner
+            v-if="loading"
+            :aria-label="$gettext('Loading users and groups')"
+            size="small"
+          />
+          <oc-filter-chip
+            v-if="shareRoleTypes.length > 1"
+            :filter-label="currentShareRoleType.label"
+            class="invite-form-share-role-type"
+            raw
+            close-on-click
+          >
+            <template #default>
+              <oc-button
+                v-for="(option, index) in shareRoleTypes"
+                :key="index"
+                appearance="raw"
+                size="medium"
+                justify-content="space-between"
+                class="invite-form-share-role-type-item oc-flex oc-flex-middle oc-width-1-1 oc-py-xs oc-px-s"
+                @click="selectShareRoleType(option)"
+              >
+                <span>{{ option.longLabel }}</span>
+                <div v-if="option.id === currentShareRoleType.id" class="oc-flex">
+                  <oc-icon name="check" />
+                </div>
+              </oc-button>
+            </template>
+          </oc-filter-chip>
+        </template>
       </oc-select>
     </div>
     <div class="oc-flex oc-flex-between oc-flex-wrap oc-mb-l oc-mt-s">
@@ -56,6 +87,7 @@
         mode="create"
         :show-icon="isRunningOnEos"
         class="role-selection-dropdown"
+        :is-external="isExternalShareRoleType"
         @option-change="collaboratorRoleChanged"
       />
       <div class="oc-flex">
@@ -152,7 +184,7 @@ import {
   useUserStore
 } from '@ownclouders/web-pkg'
 
-import { computed, defineComponent, inject, ref, unref, watch, onMounted, nextTick } from 'vue'
+import { computed, defineComponent, inject, ref, unref, watch, onMounted, nextTick, Ref } from 'vue'
 import { Resource, SpaceResource } from '@ownclouders/web-client'
 import { formatDateFromDateTime, formatRelativeDateFromDateTime } from '@ownclouders/web-pkg'
 import { DateTime } from 'luxon'
@@ -160,6 +192,7 @@ import { OcDrop } from 'design-system/src/components'
 import { useTask } from 'vue-concurrency'
 import { useGettext } from 'vue3-gettext'
 import { isProjectSpaceResource } from '@ownclouders/web-client'
+import { Group } from '@ownclouders/web-client/graph/generated'
 
 // just a dummy function to trick gettext tools
 const $gettext = (str: string) => {
@@ -172,6 +205,8 @@ type AccountType = {
 }
 
 type DropDownShouldOpenOptions = { open: boolean; search: string[] }
+
+export type ShareRoleType = { id: string; label: string; longLabel: string }
 
 export default defineComponent({
   name: 'InviteCollaboratorForm',
@@ -223,6 +258,7 @@ export default defineComponent({
 
     const resource = inject<Resource>('resource')
     const space = inject<SpaceResource>('space')
+    const availableExternalRoles = inject<Ref<ShareRole[]>>('availableExternalShareRoles')
 
     const resourceIsSpace = computed(() => unref(resource).type === 'space')
 
@@ -288,14 +324,27 @@ export default defineComponent({
     })
 
     const fetchRecipientsTask = useTask(function* (signal, query: string) {
+      let filter: string
+      if (unref(isExternalShareRoleType)) {
+        // filter for external user types only
+        filter = `(userType eq 'Federated')`
+      }
+
       const client = clientService.graphAuthenticated
       const userData = yield* call(
-        client.users.listUsers({ orderBy: ['displayName'], search: `"${query}"` }, { signal })
+        client.users.listUsers(
+          { orderBy: ['displayName'], search: `"${query}"`, filter },
+          { signal }
+        )
       )
 
-      const groupData = yield* call(
-        client.groups.listGroups({ orderBy: ['displayName'], search: `"${query}"` }, { signal })
-      )
+      let groupData: Group[]
+      if (!unref(isExternalShareRoleType)) {
+        // groups are only available for internal shares
+        groupData = yield* call(
+          client.groups.listGroups({ orderBy: ['displayName'], search: `"${query}"` }, { signal })
+        )
+      }
 
       const users = (userData || []).map((u) => ({
         ...u,
@@ -406,6 +455,48 @@ export default defineComponent({
       saving.value = false
     }
 
+    const externalShareRolesEnabled = computed(() => unref(availableExternalRoles).length)
+
+    const internalShareRoleType = '1'
+    const externalShareRoleType = '2'
+    const shareRoleTypes = computed<ShareRoleType[]>(() => [
+      {
+        id: internalShareRoleType,
+        label: $gettext('Internal'),
+        longLabel: $gettext('Internal users')
+      },
+      ...((unref(externalShareRolesEnabled) && [
+        {
+          id: externalShareRoleType,
+          label: $gettext('External'),
+          longLabel: $gettext('External users')
+        }
+      ]) ||
+        [])
+    ])
+    const currentShareRoleType = ref<ShareRoleType>(unref(shareRoleTypes)[0])
+    const isExternalShareRoleType = computed(
+      () => unref(currentShareRoleType).id === externalShareRoleType
+    )
+    const selectShareRoleType = async (shareRoleType: ShareRoleType) => {
+      if (unref(currentShareRoleType).id !== shareRoleType.id) {
+        currentShareRoleType.value = shareRoleType
+        selectedCollaborators.value = []
+
+        if (unref(searchQuery)) {
+          await fetchRecipients(unref(searchQuery))
+        }
+      }
+      focusShareInput()
+    }
+
+    const focusShareInput = () => {
+      const inviteInput = document.getElementById('files-share-invite-input')
+      if (inviteInput) {
+        inviteInput.focus()
+      }
+    }
+
     return {
       minSearchLength: capabilityRefs.sharingSearchMinLength,
       isRunningOnEos: computed(() => configStore.options.runningOnEos),
@@ -423,6 +514,11 @@ export default defineComponent({
       selectedCollaborators,
       fetchRecipients,
       share,
+      shareRoleTypes,
+      currentShareRoleType,
+      isExternalShareRoleType,
+      selectShareRoleType,
+      focusShareInput,
 
       // CERN
       accountType,
@@ -521,10 +617,9 @@ export default defineComponent({
     resetFocusOnInvite(event: CollaboratorAutoCompleteItem[]) {
       this.selectedCollaborators = event
       this.autocompleteResults = []
+      this.searchQuery = ''
       this.$nextTick(() => {
-        const inviteInput = document.getElementById('files-share-invite-input')
-
-        inviteInput.focus()
+        this.focusShareInput()
       })
     }
   }
@@ -550,5 +645,27 @@ export default defineComponent({
 
 .new-collaborators-form-cern > .cern-account-type-input {
   width: 30%;
+}
+
+#new-collaborators-form {
+  .invite-form-share-role-type {
+    .oc-filter-chip-button.oc-pill {
+      padding: 0 !important;
+    }
+
+    &-item:hover {
+      background-color: var(--oc-color-background-hover) !important;
+    }
+
+    .oc-drop {
+      width: 180px;
+    }
+  }
+
+  .vs__actions {
+    padding: 0 !important;
+    cursor: inherit;
+    flex-wrap: nowrap;
+  }
 }
 </style>
