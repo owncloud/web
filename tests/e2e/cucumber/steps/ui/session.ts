@@ -79,3 +79,43 @@ When(
     await page.locator('#web').waitFor()
   }
 )
+
+When(
+  /^"([^"]*)" waits for token renewal via (iframe|refresh token)$/,
+  async function (this: World, stepUser: string, renewalType: string): Promise<void> {
+    const { page } = this.actorsEnvironment.getActor({ key: stepUser })
+    const application = new objects.runtime.Application({ page })
+
+    if (renewalType === 'iframe') {
+      await application.waitForTokenRenewalViaIframe()
+    } else {
+      await application.waitForTokenRenewalViaRefreshToken()
+    }
+  }
+)
+
+When(
+  '{string} waits for token to expire',
+  async function (this: World, stepUser: string): Promise<void> {
+    const { page } = this.actorsEnvironment.getActor({ key: stepUser })
+    // wait for the token to expire (35 seconds)
+    // token should expire after 30 seconds
+    await page.waitForTimeout((config.timeout - 25) * 1000)
+  }
+)
+
+When(
+  '{string} navigates to new tab',
+  async function (this: World, stepUser: string): Promise<void> {
+    const actor = this.actorsEnvironment.getActor({ key: stepUser })
+    await actor.newTab()
+  }
+)
+
+When(
+  '{string} closes the current tab',
+  async function (this: World, stepUser: string): Promise<void> {
+    const actor = this.actorsEnvironment.getActor({ key: stepUser })
+    await actor.closeCurrentTab()
+  }
+)

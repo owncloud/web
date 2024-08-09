@@ -16,7 +16,9 @@ export interface Actor {
   context: BrowserContext
   page: Page
   close(): Promise<void>
-  newPage(page: Page): Promise<Page>
+  savePage(page: Page): void
+  newTab(): Promise<Page>
+  closeCurrentTab(): Promise<void>
 }
 
 export interface User {
