@@ -148,7 +148,7 @@ export const useSharesStore = defineStore('shares', () => {
     const share = await client.createInvite(space.id, resource.id, options, unref(graphRoles))
 
     addCollaboratorShares([share])
-    updateFileShareTypes(resource.path)
+    updateFileShareTypes(resource.id)
     resourcesStore.loadIndicators(space, resource.id)
     return share
   }
