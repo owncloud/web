@@ -37,7 +37,7 @@
               :label="$gettext('Add a description (optional)')"
               :clear-button-enabled="true"
               :description-message="
-                !descriptionErrorMessage && `${formInput.description.length}/${50}`
+                !descriptionErrorMessage && `${formInput.description?.length || 0}/${50}`
               "
             />
             <oc-text-input
