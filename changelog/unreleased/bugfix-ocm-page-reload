@@ -1,0 +1,6 @@
+Bugfix: OCM page reload
+
+We've fixed an issue where reloading the Open Cloud Mesh page would show an error.
+
+https://github.com/owncloud/web/pull/11348
+https://github.com/owncloud/web/issues/11153
