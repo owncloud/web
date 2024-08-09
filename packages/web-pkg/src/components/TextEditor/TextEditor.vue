@@ -50,6 +50,22 @@ export default defineComponent({
       )
     })
 
+    const keyDownHandler = (event: KeyboardEvent, editor: EditorCore) => {
+      const ctrl = event.ctrlKey || event.metaKey
+      if (!ctrl) {
+        return
+      }
+
+      switch (event.key) {
+        case 'y':
+          editor.exec('redo')
+          break
+        case 'z':
+          editor.exec('undo')
+          break
+      }
+    }
+
     const loadSyntaxHighlighting = async () => {
       const [plugin] = await Promise.all([
         import(
@@ -92,6 +108,9 @@ export default defineComponent({
         events: {
           change: () => {
             emit('update:currentContent', toastUiEditor.getMarkdown())
+          },
+          keydown: (_mode: string, event: KeyboardEvent) => {
+            keyDownHandler(event, toastUiEditor)
           }
         },
         ...(themeStore.currentTheme.isDark && { theme: 'dark' })
