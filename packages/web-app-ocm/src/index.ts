@@ -9,12 +9,12 @@ const routes: RouteRecordRaw[] = [
   {
     path: '/',
     redirect: () => {
-      return { name: 'ocm-app-invitations' }
+      return { name: 'open-cloud-mesh-invitations' }
     }
   },
   {
     path: '/invitations',
-    name: 'ocm-app-invitations',
+    name: 'open-cloud-mesh-invitations',
     component: App,
     meta: {
       patchCleanPath: true,
@@ -30,7 +30,7 @@ export default defineWebApplication({
 
     const appInfo: ApplicationInformation = {
       name: $gettext('ScienceMesh'),
-      id: 'ocm',
+      id: 'open-cloud-mesh',
       color: '#AE291D',
       icon: 'contacts-book'
     }
