@@ -6,18 +6,15 @@
         <h2 class="oc-px-s" v-text="$gettext('Accept invitations')" />
         <oc-contextual-helper class="oc-pl-xs" v-bind="helperContent" />
       </div>
-      <br />
-      <br />
-
-      <div class="oc-flex oc-flex-column oc-flex-middle oc-flex-center">
+      <div class="oc-flex oc-flex-column oc-flex-middle oc-flex-center oc-p-m">
         <div class="oc-width-1-2">
           <oc-text-input
             ref="tokenInput"
             v-model="token"
             :label="$gettext('Enter invite token')"
             :clear-button-enabled="true"
+            class="oc-mb-m"
           />
-          <br />
           <oc-select
             v-model="provider"
             :label="$gettext('Select institution of inviter')"
@@ -47,8 +44,6 @@
             />
           </div>
         </div>
-        <br />
-        <br />
         <oc-button size="small" :disabled="acceptInvitationButtonDisabled" @click="acceptInvite">
           <oc-icon name="add" />
           <span v-text="$gettext('Accept invitation')" />
@@ -68,7 +63,6 @@ import {
   useMessages,
   useConfigStore
 } from '@ownclouders/web-pkg'
-import { $gettext } from '@ownclouders/web-pkg/src/router/utils'
 import { useGettext } from 'vue3-gettext'
 import { onBeforeRouteUpdate, RouteLocationNormalized } from 'vue-router'
 import { ProviderSchema, providerListSchema } from '../schemas'
@@ -200,8 +194,7 @@ export default defineComponent({
       acceptInvitationButtonDisabled,
       acceptInvite
     }
-  },
-  methods: { $gettext }
+  }
 })
 </script>
 

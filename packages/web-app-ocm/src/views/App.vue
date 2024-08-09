@@ -121,22 +121,22 @@ export default defineComponent({
 <style lang="scss" scoped>
 .sciencemesh {
   background-color: var(--oc-color-background-hover);
+  overflow: auto;
 }
 .sciencemesh-wrapper {
   height: 100%;
 }
 .sciencemesh-top {
-  height: 360px;
-  overflow: hidden;
-  @media (max-width: 1000px) {
+  max-height: 360px;
+  @media (max-width: $oc-breakpoint-large-default) {
     flex-direction: column;
     height: auto;
+    max-height: unset;
   }
 }
 #sciencemesh-invite,
 #sciencemesh-accept-invites {
   margin: var(--oc-space-small);
-  overflow-y: auto;
 }
 #sciencemesh-invite,
 #sciencemesh-accept-invites,
@@ -145,7 +145,7 @@ export default defineComponent({
   background-color: var(--oc-color-background-default);
   border-radius: 15px;
   padding: var(--oc-space-small);
-  @media (max-width: 1000px) {
+  @media (max-width: $oc-breakpoint-large-default) {
     width: auto;
   }
 }
@@ -153,7 +153,8 @@ export default defineComponent({
   flex: 1;
 }
 #sciencemesh-invite {
-  @media (max-width: 1000px) {
+  overflow: auto;
+  @media (max-width: $oc-breakpoint-large-default) {
     margin-bottom: var(--oc-space-small);
   }
 }
