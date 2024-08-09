@@ -45,7 +45,7 @@
           <template #actions="{ item }">
             <oc-button
               appearance="raw"
-              class="oc-p-s action-menu-item"
+              class="oc-p-s action-menu-item delete-connection-btn"
               @click="deleteConnection(item)"
             >
               <oc-icon name="delete-bin-5" fill-type="line" size="medium" />
@@ -190,6 +190,10 @@ export default defineComponent({
   }
   #accepted-invitations-empty {
     height: 100%;
+  }
+
+  .delete-connection-btn:hover {
+    background-color: var(--oc-color-background-hover);
   }
 }
 </style>
