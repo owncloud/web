@@ -24,21 +24,26 @@
             :label="$gettext('Select institution of inviter')"
             :options="providers"
             class="oc-mb-m"
+            :position-fixed="true"
             :loading="loading"
           >
             <template #option="{ full_name, domain }">
-              <span class="option">
-                <strong v-text="full_name" />
-              </span>
-              <span class="option" v-text="domain" />
+              <div class="oc-text-break">
+                <span class="option">
+                  <strong v-text="full_name" />
+                </span>
+                <span class="option" v-text="domain" />
+              </div>
             </template>
             <template #no-options> No institutions found with this name </template>
             <template #selected-option="{ full_name, domain }">
-              <strong class="oc-mr-s" v-text="full_name" />
-              <small
-                v-oc-tooltip="domain"
-                v-text="domain.length > 17 ? domain.slice(0, 20) + '...' : domain"
-              />
+              <div class="options-wrapper oc-text-break">
+                <strong class="oc-mr-s oc-text-break" v-text="full_name" />
+                <small
+                  v-oc-tooltip="domain"
+                  v-text="domain.length > 17 ? domain.slice(0, 20) + '...' : domain"
+                />
+              </div>
             </template>
           </oc-select>
           <div v-if="providerError" class="oc-text-input-message">
@@ -81,9 +86,9 @@ export default defineComponent({
     const configStore = useConfigStore()
     const { $gettext } = useGettext()
 
-    const token = ref(undefined)
-    const provider = ref(undefined)
-    const providers = ref([])
+    const token = ref<string>(undefined)
+    const provider = ref<ProviderSchema>(undefined)
+    const providers = ref<ProviderSchema[]>([])
     const loading = ref(true)
     const providerError = ref(false)
     const tokenInput = ref<InstanceType<typeof OcTextInput>>()
@@ -202,8 +207,20 @@ export default defineComponent({
 })
 </script>
 
-<style lang="scss" scoped>
-.option {
-  display: block;
+<style lang="scss">
+.sciencemesh-app {
+  .option {
+    display: block;
+  }
+
+  .vs__selected,
+  .options-wrapper {
+    max-width: 100%;
+  }
+
+  .vs__selected-options {
+    max-width: 100%;
+    overflow: hidden;
+  }
 }
 </style>

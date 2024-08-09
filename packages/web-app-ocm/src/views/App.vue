@@ -137,6 +137,7 @@ export default defineComponent({
 #sciencemesh-invite,
 #sciencemesh-accept-invites {
   margin: var(--oc-space-small);
+  overflow: auto;
 }
 #sciencemesh-invite,
 #sciencemesh-accept-invites,
