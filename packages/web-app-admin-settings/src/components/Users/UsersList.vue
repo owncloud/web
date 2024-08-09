@@ -14,7 +14,7 @@
         :fields="fields"
         :data="paginatedItems"
         :highlighted="highlighted"
-        :sticky="true"
+        :sticky="isSticky"
         :header-position="fileListHeaderY"
         :hover="true"
         @sort="handleSort"
@@ -124,6 +124,7 @@ import {
   eventBus,
   queryItemAsString,
   SortDir,
+  useIsTopBarSticky,
   useKeyboardActions,
   useRouteQuery
 } from '@ownclouders/web-pkg'
@@ -157,6 +158,7 @@ export default defineComponent({
   },
   setup(props) {
     const { $gettext } = useGettext()
+    const { isSticky } = useIsTopBarSticky()
 
     const contextMenuButtonRef = ref(undefined)
     const sortBy = ref('onPremisesSamAccountName')
@@ -366,7 +368,8 @@ export default defineComponent({
       selectUser,
       selectUsers,
       unselectAllUsers,
-      users
+      users,
+      isSticky
     }
   },
   computed: {

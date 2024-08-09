@@ -15,7 +15,7 @@
       :fields="fields"
       :data="paginatedItems"
       :highlighted="highlighted"
-      :sticky="true"
+      :sticky="isSticky"
       :header-position="fileListHeaderY"
       :hover="true"
       @sort="handleSort"
@@ -124,7 +124,8 @@ import {
   formatFileSize,
   defaultFuseOptions,
   useKeyboardActions,
-  ContextMenuBtnClickEventData
+  ContextMenuBtnClickEventData,
+  useIsTopBarSticky
 } from '@ownclouders/web-pkg'
 import {
   ComponentPublicInstance,
@@ -163,6 +164,7 @@ export default defineComponent({
     const route = useRoute()
     const language = useGettext()
     const { $gettext } = language
+    const { isSticky } = useIsTopBarSticky()
 
     const { y: fileListHeaderY } = useFileListHeaderPosition('#admin-settings-app-bar')
     const contextMenuButtonRef = ref(undefined)
@@ -535,7 +537,8 @@ export default defineComponent({
       totalPages,
       selectSpace,
       selectSpaces,
-      unselectAllSpaces
+      unselectAllSpaces,
+      isSticky
     }
   },
   methods: { $gettext }
