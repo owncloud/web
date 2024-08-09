@@ -84,6 +84,7 @@
     "eslint": "8.56.0",
     "flush-promises": "1.0.2",
     "git-repo-info": "2.1.1",
+    "simple-git": "3.25.0",
     "glob": "10.3.12",
     "happy-dom": "13.3.1",
     "join-path": "1.1.1",

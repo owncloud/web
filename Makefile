@@ -64,3 +64,11 @@ l10n-read: node_modules
 .PHONY: l10n-write
 l10n-write: node_modules
 	make -C packages/web-runtime/l10n translations
+
+.PHONY: generate-qa-activity-report
+generate-qa-activity-report: node_modules
+	@if [ -z "${MONTH}" ] || [ -z "${YEAR}" ]; then \
+		echo "Please set the MONTH and YEAR environment variables. Usage: make generate-qa-activity-report MONTH=<month> YEAR=<year>"; \
+		exit 1; \
+	fi
+	pnpm exec node generate-qa-activity-report.js --month ${MONTH} --year ${YEAR}
