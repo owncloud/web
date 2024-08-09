@@ -101,7 +101,7 @@ import {
   FileSideBar,
   InlineFilterOption,
   ItemFilter,
-  useConfigStore,
+  useAppsStore,
   useResourcesStore
 } from '@ownclouders/web-pkg'
 import { AppBar, ItemFilterInline } from '@ownclouders/web-pkg'
@@ -131,7 +131,7 @@ export default defineComponent({
 
   setup() {
     const { openWithDefaultApp } = useOpenWithDefaultApp()
-    const configStore = useConfigStore()
+    const appsStore = useAppsStore()
     const resourcesStore = useResourcesStore()
 
     const {
@@ -246,6 +246,12 @@ export default defineComponent({
 
     const shareTypes = computed(() => {
       const uniqueShareTypes = uniq(unref(paginatedResources).flatMap((i) => i.shareTypes))
+
+      const ocmAvailable = appsStore.appIds.includes('open-cloud-mesh')
+      if (ocmAvailable && !uniqueShareTypes.includes(ShareTypes.remote.value)) {
+        uniqueShareTypes.push(ShareTypes.remote.value)
+      }
+
       return ShareTypes.getByValues(uniqueShareTypes)
     })
 

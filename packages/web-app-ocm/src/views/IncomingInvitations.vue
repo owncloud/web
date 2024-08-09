@@ -6,38 +6,44 @@
         <h2 class="oc-px-s" v-text="$gettext('Accept invitations')" />
         <oc-contextual-helper class="oc-pl-xs" v-bind="helperContent" />
       </div>
-      <br />
-      <br />
-
-      <div class="oc-flex oc-flex-column oc-flex-middle oc-flex-center">
+      <div v-if="!providers.length" class="oc-flex oc-flex-center oc-flex-middle">
+        <oc-icon name="error-warning" fill-type="line" class="oc-mr-s" size="large" />
+        <span v-text="$gettext('The list of institutions is empty. Please contact your admin.')" />
+      </div>
+      <div v-else class="oc-flex oc-flex-column oc-flex-middle oc-flex-center oc-p-m">
         <div class="oc-width-1-2">
           <oc-text-input
             ref="tokenInput"
             v-model="token"
             :label="$gettext('Enter invite token')"
             :clear-button-enabled="true"
+            class="oc-mb-m"
           />
-          <br />
           <oc-select
             v-model="provider"
             :label="$gettext('Select institution of inviter')"
             :options="providers"
             class="oc-mb-m"
+            :position-fixed="true"
             :loading="loading"
           >
             <template #option="{ full_name, domain }">
-              <span class="option">
-                <strong v-text="full_name" />
-              </span>
-              <span class="option" v-text="domain" />
+              <div class="oc-text-break">
+                <span class="option">
+                  <strong v-text="full_name" />
+                </span>
+                <span class="option" v-text="domain" />
+              </div>
             </template>
             <template #no-options> No institutions found with this name </template>
             <template #selected-option="{ full_name, domain }">
-              <strong class="oc-mr-s" v-text="full_name" />
-              <small
-                v-oc-tooltip="domain"
-                v-text="domain.length > 17 ? domain.slice(0, 20) + '...' : domain"
-              />
+              <div class="options-wrapper oc-text-break">
+                <strong class="oc-mr-s oc-text-break" v-text="full_name" />
+                <small
+                  v-oc-tooltip="domain"
+                  v-text="domain.length > 17 ? domain.slice(0, 20) + '...' : domain"
+                />
+              </div>
             </template>
           </oc-select>
           <div v-if="providerError" class="oc-text-input-message">
@@ -47,8 +53,6 @@
             />
           </div>
         </div>
-        <br />
-        <br />
         <oc-button size="small" :disabled="acceptInvitationButtonDisabled" @click="acceptInvite">
           <oc-icon name="add" />
           <span v-text="$gettext('Accept invitation')" />
@@ -68,7 +72,6 @@ import {
   useMessages,
   useConfigStore
 } from '@ownclouders/web-pkg'
-import { $gettext } from '@ownclouders/web-pkg/src/router/utils'
 import { useGettext } from 'vue3-gettext'
 import { onBeforeRouteUpdate, RouteLocationNormalized } from 'vue-router'
 import { ProviderSchema, providerListSchema } from '../schemas'
@@ -83,9 +86,9 @@ export default defineComponent({
     const configStore = useConfigStore()
     const { $gettext } = useGettext()
 
-    const token = ref(undefined)
-    const provider = ref(undefined)
-    const providers = ref([])
+    const token = ref<string>(undefined)
+    const provider = ref<ProviderSchema>(undefined)
+    const providers = ref<ProviderSchema[]>([])
     const loading = ref(true)
     const providerError = ref(false)
     const tokenInput = ref<InstanceType<typeof OcTextInput>>()
@@ -200,13 +203,24 @@ export default defineComponent({
       acceptInvitationButtonDisabled,
       acceptInvite
     }
-  },
-  methods: { $gettext }
+  }
 })
 </script>
 
-<style lang="scss" scoped>
-.option {
-  display: block;
+<style lang="scss">
+.sciencemesh-app {
+  .option {
+    display: block;
+  }
+
+  .vs__selected,
+  .options-wrapper {
+    max-width: 100%;
+  }
+
+  .vs__selected-options {
+    max-width: 100%;
+    overflow: hidden;
+  }
 }
 </style>

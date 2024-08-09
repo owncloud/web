@@ -6,9 +6,8 @@
         <h2 class="oc-px-s" v-text="$gettext('Invite users')"></h2>
         <oc-contextual-helper class="oc-pl-xs" v-bind="helperContent" />
       </div>
-      <div class="oc-flex oc-flex-middle oc-flex-center">
+      <div class="oc-flex oc-flex-middle oc-flex-center oc-p-m">
         <oc-button
-          v-oc-tooltip="$gettext('Generate new invitation')"
           :aria-label="
             $gettext('Generate invitation link that can be shared with one or more invitees')
           "
@@ -18,8 +17,6 @@
           <span v-text="$gettext('Generate invitation')" />
         </oc-button>
       </div>
-
-      <br />
       <oc-modal
         v-if="showInviteModal"
         :title="$gettext('Generate new invitation')"
@@ -40,10 +37,9 @@
               :label="$gettext('Add a description (optional)')"
               :clear-button-enabled="true"
               :description-message="
-                !descriptionErrorMessage && `${formInput.description.length}/${50}`
+                !descriptionErrorMessage && `${formInput.description?.length || 0}/${50}`
               "
             />
-            <br />
             <oc-text-input
               id="invite_token_recipient"
               ref="inputForFocusEmail"
@@ -58,8 +54,6 @@
             <input type="submit" class="oc-hidden" />
           </form> </template
       ></oc-modal>
-      <br />
-
       <app-loading-spinner v-if="loading" />
       <template v-else>
         <no-content-message
@@ -74,16 +68,19 @@
         </no-content-message>
         <oc-table v-else :fields="fields" :data="sortedTokens" :highlighted="lastCreatedToken">
           <template #token="rowData">
-            <span>{{ rowData.item.token.slice(0, 5) + '...' }}</span>
-            <oc-button
-              id="oc-sciencemesh-copy-token"
-              v-oc-tooltip="$gettext('Copy invite token')"
-              :aria-label="$gettext('Copy invite token')"
-              appearance="raw"
-              @click="copyToken(rowData)"
-            >
-              <oc-icon name="file-copy" />
-            </oc-button>
+            <div class="invite-code-wrapper oc-flex">
+              <span class="oc-display-inline-block oc-text-truncate">{{ rowData.item.token }}</span>
+              <oc-button
+                id="oc-sciencemesh-copy-token"
+                v-oc-tooltip="$gettext('Copy invite token')"
+                :aria-label="$gettext('Copy invite token')"
+                appearance="raw"
+                class="oc-ml-s"
+                @click="copyToken(rowData)"
+              >
+                <oc-icon name="file-copy" />
+              </oc-button>
+            </div>
           </template>
           <template #link="rowData">
             <a :href="rowData.item.link" v-text="$gettext('Link')" />
@@ -96,6 +93,13 @@
             >
               <oc-icon name="file-copy" />
             </oc-button>
+          </template>
+          <template #expiration="rowData">
+            <span
+              v-oc-tooltip="formatDate(rowData.item.expiration)"
+              tabindex="0"
+              v-text="formatDateRelative(rowData.item.expiration)"
+            />
           </template>
         </oc-table>
       </template>
@@ -110,7 +114,9 @@ import {
   NoContentMessage,
   AppLoadingSpinner,
   useClientService,
-  useMessages
+  useMessages,
+  formatDateFromJSDate,
+  formatRelativeDateFromJSDate
 } from '@ownclouders/web-pkg'
 import { useGettext } from 'vue3-gettext'
 import { inviteListSchema, inviteSchema } from '../schemas'
@@ -132,7 +138,7 @@ export default defineComponent({
   setup() {
     const { showMessage, showErrorMessage } = useMessages()
     const clientService = useClientService()
-    const { $gettext } = useGettext()
+    const { $gettext, current: currentLanguage } = useGettext()
 
     const lastCreatedToken = ref('')
     const showInviteModal = ref(false)
@@ -169,7 +175,8 @@ export default defineComponent({
         {
           name: 'expiration',
           title: $gettext('Expires'),
-          alignH: 'right'
+          alignH: 'right',
+          type: 'slot'
         }
       ].filter(Boolean)
     })
@@ -328,6 +335,13 @@ export default defineComponent({
       listTokens()
     })
 
+    const formatDate = (date: string) => {
+      return formatDateFromJSDate(new Date(date), currentLanguage)
+    }
+    const formatDateRelative = (date: string) => {
+      return formatRelativeDateFromJSDate(new Date(date), currentLanguage)
+    }
+
     return {
       helperContent,
       openInviteModal,
@@ -343,14 +357,24 @@ export default defineComponent({
       copyLink,
       lastCreatedToken,
       fields,
-      inputForFocusEmail
+      inputForFocusEmail,
+      formatDate,
+      formatDateRelative
     }
   }
 })
 </script>
 
-<style lang="scss" scoped>
-#invite-tokens-empty {
-  height: 10vh;
+<style lang="scss">
+.sciencemesh-app {
+  .invite-code-wrapper {
+    max-width: 100%;
+    @media (max-width: $oc-breakpoint-xlarge) {
+      max-width: 200px;
+    }
+  }
+  #invite-tokens-empty {
+    height: 100%;
+  }
 }
 </style>
