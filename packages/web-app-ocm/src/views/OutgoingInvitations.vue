@@ -94,6 +94,13 @@
               <oc-icon name="file-copy" />
             </oc-button>
           </template>
+          <template #expiration="rowData">
+            <span
+              v-oc-tooltip="formatDate(rowData.item.expiration)"
+              tabindex="0"
+              v-text="formatDateRelative(rowData.item.expiration)"
+            />
+          </template>
         </oc-table>
       </template>
     </div>
@@ -107,7 +114,9 @@ import {
   NoContentMessage,
   AppLoadingSpinner,
   useClientService,
-  useMessages
+  useMessages,
+  formatDateFromJSDate,
+  formatRelativeDateFromJSDate
 } from '@ownclouders/web-pkg'
 import { useGettext } from 'vue3-gettext'
 import { inviteListSchema, inviteSchema } from '../schemas'
@@ -129,7 +138,7 @@ export default defineComponent({
   setup() {
     const { showMessage, showErrorMessage } = useMessages()
     const clientService = useClientService()
-    const { $gettext } = useGettext()
+    const { $gettext, current: currentLanguage } = useGettext()
 
     const lastCreatedToken = ref('')
     const showInviteModal = ref(false)
@@ -166,7 +175,8 @@ export default defineComponent({
         {
           name: 'expiration',
           title: $gettext('Expires'),
-          alignH: 'right'
+          alignH: 'right',
+          type: 'slot'
         }
       ].filter(Boolean)
     })
@@ -325,6 +335,13 @@ export default defineComponent({
       listTokens()
     })
 
+    const formatDate = (date: string) => {
+      return formatDateFromJSDate(new Date(date), currentLanguage)
+    }
+    const formatDateRelative = (date: string) => {
+      return formatRelativeDateFromJSDate(new Date(date), currentLanguage)
+    }
+
     return {
       helperContent,
       openInviteModal,
@@ -340,7 +357,9 @@ export default defineComponent({
       copyLink,
       lastCreatedToken,
       fields,
-      inputForFocusEmail
+      inputForFocusEmail,
+      formatDate,
+      formatDateRelative
     }
   }
 })
