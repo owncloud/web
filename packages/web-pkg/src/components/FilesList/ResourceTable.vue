@@ -16,7 +16,7 @@
     :fields="fields"
     :highlighted="selectedIds"
     :disabled="disabledResources"
-    :sticky="true"
+    :sticky="isSticky"
     :header-position="headerPosition"
     :drag-drop="dragDrop"
     :hover="hover"
@@ -274,7 +274,8 @@ import {
   useResourcesStore,
   useRouter,
   useCanBeOpenedWithSecureView,
-  useFileActions
+  useFileActions,
+  useIsTopBarSticky
 } from '../../composables'
 import ResourceListItem from './ResourceListItem.vue'
 import ResourceGhostElement from './ResourceGhostElement.vue'
@@ -529,6 +530,7 @@ export default defineComponent({
     const { getMatchingSpace } = useGetMatchingSpace()
     const { canBeOpenedWithSecureView } = useCanBeOpenedWithSecureView()
     const { getFolderLink } = useFolderLink()
+    const { isSticky } = useIsTopBarSticky()
     const {
       isLocationPicker,
       isFilePicker,
@@ -670,7 +672,8 @@ export default defineComponent({
       areFileExtensionsShown,
       latestSelectedId,
       isResourceClickable,
-      getResourceLink
+      getResourceLink,
+      isSticky
     }
   },
   data() {
