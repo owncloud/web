@@ -109,7 +109,6 @@ import {
   ProcessorType,
   useResourcesStore,
   TextEditor,
-  useSpaceActionsEditReadmeContent,
   useFileActions
 } from '@ownclouders/web-pkg'
 import { ImageDimension } from '@ownclouders/web-pkg'
