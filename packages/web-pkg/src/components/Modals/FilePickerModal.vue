@@ -95,8 +95,6 @@ export default defineComponent({
       routeOpts.query[contextRouteNameKey] =
         createLocationSpaces('files-spaces-generic').name.toString()
 
-      console.log(routeOpts.query)
-
       const editorRoute = router.resolve(routeOpts)
       const editorRouteUrl = new URL(editorRoute.href, window.location.origin)
 
