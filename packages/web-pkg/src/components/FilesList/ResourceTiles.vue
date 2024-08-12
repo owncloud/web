@@ -160,7 +160,9 @@ import {
   useResourcesStore,
   useViewSizeMax,
   useEmbedMode,
-  useCanBeOpenedWithSecureView
+  useCanBeOpenedWithSecureView,
+  useFileActions,
+  useGetMatchingSpace
 } from '../../composables'
 
 type ResourceTileRef = ComponentPublicInstance<typeof ResourceTile>
@@ -225,6 +227,8 @@ export default defineComponent({
     const { showMessage } = useMessages()
     const { $gettext } = useGettext()
     const resourcesStore = useResourcesStore()
+    const { getDefaultAction } = useFileActions()
+    const { getMatchingSpace } = useGetMatchingSpace()
     const { canBeOpenedWithSecureView } = useCanBeOpenedWithSecureView()
     const { emit } = context
     const {
@@ -269,16 +273,27 @@ export default defineComponent({
               })
             )
       }
-      if (resource.type === 'folder') {
+
+      if (resource.isFolder) {
         return resourceRouteResolver.createFolderLink({
           path: resource.path,
           fileId: resource.fileId,
           resource: resource
         })
       }
-      return { path: '' }
-    }
 
+      let space = props.space
+      if (!space) {
+        space = getMatchingSpace(resource)
+      }
+
+      const action = getDefaultAction({ resources: [resource], space })
+      if (!action?.route) {
+        return null
+      }
+
+      return action.route({ space, resources: [resource] })
+    }
     const emitTileClick = (resource: Resource) => {
       if (unref(isEmbedModeEnabled) && unref(isFilePicker)) {
         return postMessage<Resource>(

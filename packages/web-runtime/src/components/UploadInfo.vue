@@ -120,7 +120,7 @@
               :is-path-displayed="true"
               :is-resource-clickable="isResourceClickable(item)"
               :parent-folder-name="parentFolderName(item)"
-              :folder-link="folderLink(item)"
+              :link="resourceLink(item)"
               :parent-folder-link="parentFolderLink(item)"
             />
             <span v-else class="oc-flex oc-flex-middle oc-text-truncate">
@@ -551,7 +551,7 @@ export default defineComponent({
     isResourceClickable(file: UploadResult) {
       return file.isFolder === true
     },
-    folderLink(file: UploadResult) {
+    resourceLink(file: UploadResult) {
       if (!file.isFolder) {
         return {}
       }

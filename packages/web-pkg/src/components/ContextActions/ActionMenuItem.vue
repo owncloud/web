@@ -34,29 +34,30 @@
       />
       <span
         v-if="!action.hideLabel"
-        class="oc-files-context-action-label"
+        class="oc-files-context-action-label oc-flex"
         data-testid="action-label"
       >
-        {{ action.label(actionOptions) }}
+        <span v-text="action.label(actionOptions)" />
+        <span
+          v-if="action.showOpenInNewTabHint"
+          class="oc-text-muted oc-text-xsmall"
+          v-text="openInNewTabHint"
+        />
       </span>
       <span
         v-if="action.shortcut && shortcutHint"
         class="oc-files-context-action-shortcut"
         v-text="action.shortcut"
       />
-      <span
-        v-if="action.opensInNewWindow"
-        data-testid="action-sr-hint"
-        class="oc-invisible-sr"
-        v-text="$gettext('(Opens in new window)')"
-      />
     </oc-button>
   </li>
 </template>
 
 <script lang="ts">
-import { computed, defineComponent, PropType } from 'vue'
-import { Action, ActionOptions } from '../../composables'
+import { computed, defineComponent, PropType, unref } from 'vue'
+import { Action, ActionOptions, useConfigStore } from '../../composables'
+import { useGettext } from 'vue3-gettext'
+import { storeToRefs } from 'pinia'
 
 export default defineComponent({
   name: 'ActionMenuItem',
@@ -94,6 +95,10 @@ export default defineComponent({
     }
   },
   setup(props) {
+    const { $gettext } = useGettext()
+    const configStore = useConfigStore()
+    const { options } = storeToRefs(configStore)
+
     const componentProps = computed(() => {
       const properties = {
         appearance: props.action.appearance || props.appearance,
@@ -107,15 +112,29 @@ export default defineComponent({
       if (props.action.componentType === 'router-link' && props.action.route) {
         return {
           ...properties,
-          to: props.action.route(props.actionOptions)
+          to: props.action.route(props.actionOptions),
+          target: options.value.cernFeatures ? '_blank' : '_self'
         }
       }
 
       return properties
     })
 
+    const isMacOs = computed(() => {
+      return window.navigator.platform.match('Mac')
+    })
+
+    const openInNewTabHint = computed(() => {
+      return $gettext(
+        'Hold %{key} and click to open in new tab',
+        { key: unref(isMacOs) ? '⌘' : 'ctrl' },
+        true
+      )
+    })
+
     return {
-      componentProps
+      componentProps,
+      openInNewTabHint
     }
   },
   computed: {
@@ -150,6 +169,11 @@ export default defineComponent({
 .action-menu-item {
   vertical-align: middle;
 }
+
+.oc-files-context-action-label {
+  flex-direction: column;
+}
+
 .oc-files-context-action-shortcut {
   justify-content: right !important;
   font-size: var(--oc-font-size-small);

@@ -2,7 +2,7 @@
 
 exports[`OcTile component > renders default space correctly 1`] = `
 "<div class="oc-tile-card oc-card oc-card-default oc-rounded">
-  <resource-link-stub resource="[object Object]" folderlink="[object Object]" isresourceclickable="true" class="oc-card-media-top oc-flex oc-flex-center oc-flex-middle oc-m-rm" tabindex="-1">
+  <resource-link-stub resource="[object Object]" isresourceclickable="true" class="oc-card-media-top oc-flex oc-flex-center oc-flex-middle oc-m-rm" tabindex="-1">
     <div class="oc-tile-card-selection"></div>
     <!--v-if-->
     <div class="oc-tile-card-preview oc-flex oc-flex-middle oc-flex-center">
@@ -13,7 +13,7 @@ exports[`OcTile component > renders default space correctly 1`] = `
   <div class="oc-card-body oc-p-s">
     <div class="oc-flex oc-flex-between oc-flex-middle">
       <div class="oc-flex oc-flex-middle oc-text-truncate resource-name-wrapper">
-        <resource-list-item-stub resource="[object Object]" pathprefix="" folderlink="[object Object]" ispathdisplayed="false" parentfoldername="" parentfolderlinkiconadditionalattributes="[object Object]" isextensiondisplayed="true" isthumbnaildisplayed="true" isicondisplayed="false" isresourceclickable="true"></resource-list-item-stub>
+        <resource-list-item-stub resource="[object Object]" pathprefix="" ispathdisplayed="false" parentfoldername="" parentfolderlinkiconadditionalattributes="[object Object]" isextensiondisplayed="true" isthumbnaildisplayed="true" isicondisplayed="false" isresourceclickable="true"></resource-list-item-stub>
       </div>
       <div class="oc-flex oc-flex-middle">
         <!-- Slot for indicators !-->
@@ -28,7 +28,7 @@ exports[`OcTile component > renders default space correctly 1`] = `
 
 exports[`OcTile component > renders disabled space correctly 1`] = `
 "<div class="oc-tile-card oc-card oc-card-default oc-rounded oc-tile-card-disabled">
-  <resource-link-stub resource="[object Object]" folderlink="[object Object]" isresourceclickable="true" class="oc-card-media-top oc-flex oc-flex-center oc-flex-middle oc-m-rm" tabindex="-1">
+  <resource-link-stub resource="[object Object]" isresourceclickable="true" class="oc-card-media-top oc-flex oc-flex-center oc-flex-middle oc-m-rm" tabindex="-1">
     <div class="oc-tile-card-selection"></div>
     <!--v-if-->
     <div class="oc-tile-card-preview oc-flex oc-flex-middle oc-flex-center">
@@ -39,7 +39,7 @@ exports[`OcTile component > renders disabled space correctly 1`] = `
   <div class="oc-card-body oc-p-s">
     <div class="oc-flex oc-flex-between oc-flex-middle">
       <div class="oc-flex oc-flex-middle oc-text-truncate resource-name-wrapper">
-        <resource-list-item-stub resource="[object Object]" pathprefix="" folderlink="[object Object]" ispathdisplayed="false" parentfoldername="" parentfolderlinkiconadditionalattributes="[object Object]" isextensiondisplayed="true" isthumbnaildisplayed="true" isicondisplayed="false" isresourceclickable="true"></resource-list-item-stub>
+        <resource-list-item-stub resource="[object Object]" pathprefix="" ispathdisplayed="false" parentfoldername="" parentfolderlinkiconadditionalattributes="[object Object]" isextensiondisplayed="true" isthumbnaildisplayed="true" isicondisplayed="false" isresourceclickable="true"></resource-list-item-stub>
       </div>
       <div class="oc-flex oc-flex-middle">
         <!-- Slot for indicators !-->

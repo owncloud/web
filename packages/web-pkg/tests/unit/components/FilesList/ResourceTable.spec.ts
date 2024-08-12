@@ -40,7 +40,10 @@ vi.mock('../../../../src/composables/resources', async (importOriginal) => ({
 
 vi.mock('../../../../src/composables/actions/files', async (importOriginal) => ({
   ...(await importOriginal<any>()),
-  useFileActionsRename: vi.fn()
+  useFileActionsRename: vi.fn(),
+  useFileActions: vi.fn().mockReturnValue({
+    getDefaultAction: vi.fn().mockReturnValue({ handler: vi.fn() })
+  })
 }))
 
 const router = {

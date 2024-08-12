@@ -32,6 +32,7 @@ export const useFolderLink = (options: ResourceRouteResolverOptions = {}) => {
 
     return space.name
   }
+
   const getFolderLink = (resource: Resource) => {
     return createFolderLink({
       path: resource.path,

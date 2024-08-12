@@ -3,13 +3,12 @@
     :is="componentType"
     v-bind="componentProps"
     v-if="isResourceClickable"
-    :target="linkTargetBlank"
-    :aria-describedby="opensInNewWindowDescriptionId"
+    :target="linkTarget"
     :draggable="false"
     @dragstart.prevent.stop
     @click="emitClick"
   >
-    <slot :opens-in-new-window-description-id="opensInNewWindowDescriptionId" />
+    <slot />
   </component>
   <span v-else>
     <slot />
@@ -17,7 +16,10 @@
 </template>
 
 <script lang="ts">
-import uniqueId from 'design-system/src/utils/uniqueId'
+import { useConfigStore } from '../../composables'
+import { storeToRefs } from 'pinia'
+import { computed, PropType, unref } from 'vue'
+import { RouteLocationRaw } from 'vue-router'
 
 /**
  * Wraps content in a resource link
@@ -28,8 +30,8 @@ export default {
     /**
      * The resource folder link
      */
-    folderLink: {
-      type: Object,
+    link: {
+      type: Object as PropType<RouteLocationRaw>,
       required: false,
       default: null
     },
@@ -50,9 +52,23 @@ export default {
     }
   },
   emits: ['click'],
+  setup: (props) => {
+    const configStore = useConfigStore()
+    const { options } = storeToRefs(configStore)
+
+    const linkTarget = computed(() => {
+      return unref(options).cernFeatures && props.link && !props.resource.isFolder
+        ? '_blank'
+        : '_self'
+    })
+
+    return {
+      linkTarget
+    }
+  },
   computed: {
     isNavigatable() {
-      return this.resource.isFolder && !this.resource.disabled
+      return (this.resource.isFolder || this.link) && !this.resource.disabled
     },
     componentType() {
       return this.isNavigatable ? 'router-link' : 'oc-button'
@@ -67,22 +83,8 @@ export default {
       }
 
       return {
-        to: this.folderLink
+        to: this.link
       }
-    },
-    opensInNewWindowDescriptionId() {
-      if (this.resource.opensInNewWindow) {
-        return uniqueId('oc-link-description-')
-      }
-
-      return null
-    },
-    linkTargetBlank() {
-      if (this.isNavigatable && this.resource.opensInNewWindow) {
-        return '_blank'
-      }
-
-      return null
     }
   },
   methods: {

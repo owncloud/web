@@ -6,8 +6,8 @@
     <resource-link
       v-if="isIconDisplayed"
       :resource="resource"
+      :link="link"
       :is-resource-clickable="isResourceClickable"
-      :folder-link="folderLink"
       class="oc-resource-link"
       @click="emitClick"
     >
@@ -30,19 +30,12 @@
     </resource-link>
     <div class="oc-resource-details oc-text-overflow" :class="{ 'oc-pl-s': isIconDisplayed }">
       <resource-link
-        v-slot="{ opensInNewWindowDescriptionId }"
         :resource="resource"
         :is-resource-clickable="isResourceClickable"
-        :folder-link="folderLink"
+        :link="link"
         class="oc-text-overflow"
         @click="emitClick"
       >
-        <span
-          v-if="opensInNewWindowDescriptionId"
-          :id="opensInNewWindowDescriptionId"
-          class="oc-invisible-sr"
-          v-text="$gettext('Opens in a new window')"
-        />
         <resource-name
           :key="resource.name"
           :name="resource.name"
@@ -76,6 +69,7 @@ import { Resource } from '@ownclouders/web-client'
 import ResourceIcon from './ResourceIcon.vue'
 import ResourceLink from './ResourceLink.vue'
 import ResourceName from './ResourceName.vue'
+import { RouteLocationRaw } from 'vue-router'
 
 /**
  * Displays a resource together with the resource type icon or thumbnail
@@ -100,10 +94,10 @@ export default defineComponent({
       default: ''
     },
     /**
-     * The resource folder link
+     * The resource link
      */
-    folderLink: {
-      type: Object,
+    link: {
+      type: Object as PropType<RouteLocationRaw>,
       required: false,
       default: null
     },
@@ -116,20 +110,20 @@ export default defineComponent({
       default: false
     },
     /**
-     * The resource parent folder name to be displayed
-     */
-    parentFolderName: {
-      type: String,
-      required: false,
-      default: ''
-    },
-    /**
      * The resource parent folder link path
      */
     parentFolderLink: {
       type: Object,
       required: false,
       default: null
+    },
+    /**
+     * The resource parent folder name to be displayed
+     */
+    parentFolderName: {
+      type: String,
+      required: false,
+      default: ''
     },
     /**
      * The resource parent folder link path icon additional attributes
@@ -178,13 +172,12 @@ export default defineComponent({
       return this.parentFolderName
     },
     parentFolderComponentType() {
-      return this.parentFolderLink !== null ? 'router-link' : 'span'
+      return this.parentFolderLink ? 'router-link' : 'span'
     },
 
     parentFolderStyle() {
-      const hasLinkTarget = this.parentFolderLink !== null
       return {
-        cursor: hasLinkTarget ? 'pointer' : 'default'
+        cursor: this.parentFolderLink ? 'pointer' : 'default'
       }
     },
 

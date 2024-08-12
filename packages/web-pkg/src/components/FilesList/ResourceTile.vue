@@ -12,7 +12,7 @@
     <resource-link
       class="oc-card-media-top oc-flex oc-flex-center oc-flex-middle oc-m-rm"
       :resource="resource"
-      :folder-link="resourceRoute"
+      :link="resourceRoute"
       :is-resource-clickable="isResourceClickable"
       tabindex="-1"
       @click="$emit('click')"
@@ -60,7 +60,7 @@
             :is-icon-displayed="false"
             :is-extension-displayed="isExtensionDisplayed"
             :is-resource-clickable="isResourceClickable"
-            :folder-link="resourceRoute"
+            :link="resourceRoute"
             @click="$emit('click')"
           />
         </div>
@@ -89,6 +89,7 @@ import { isProjectSpaceResource, Resource } from '@ownclouders/web-client'
 import { useGettext } from 'vue3-gettext'
 import { isSpaceResource } from '@ownclouders/web-client'
 import { isResourceTxtFileAlmostEmpty } from '../../helpers'
+import { RouteLocationRaw } from 'vue-router'
 
 export default defineComponent({
   name: 'ResourceTile',
@@ -102,8 +103,9 @@ export default defineComponent({
       default: () => ({})
     },
     resourceRoute: {
-      type: Object,
-      default: () => ({})
+      type: Object as PropType<RouteLocationRaw>,
+      required: false,
+      default: null
     },
     isResourceSelected: {
       type: Boolean,
