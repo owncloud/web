@@ -173,9 +173,6 @@ export default defineComponent({
   },
   emits: ['click'],
   computed: {
-    parentFolderNameTooltip() {
-      return this.parentFolderName
-    },
     parentFolderComponentType() {
       return this.parentFolderLink !== null ? 'router-link' : 'span'
     },
