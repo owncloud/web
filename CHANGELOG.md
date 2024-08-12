@@ -17,6 +17,7 @@ Summary
 * Enhancement - App Store app: [#11302](https://github.com/owncloud/web/pull/11302)
 * Enhancement - Redesign share link modal: [#11310](https://github.com/owncloud/web/pull/11310)
 * Enhancement - Files as links: [#11329](https://github.com/owncloud/web/pull/11329)
+* Enhancement - Unstick top bar: [#11344](https://github.com/owncloud/web/pull/11344)
 
 Details
 -------
@@ -101,6 +102,15 @@ Details
 
    https://github.com/owncloud/web/issues/11222
    https://github.com/owncloud/web/pull/11329
+
+* Enhancement - Unstick top bar: [#11344](https://github.com/owncloud/web/pull/11344)
+
+   The top bar above tables as well as the table headers now lose their
+   "stickiness" with limited vertical screen space. This way, we prevent those
+   elements from overflowing content below.
+
+   https://github.com/owncloud/web/issues/10728
+   https://github.com/owncloud/web/pull/11344
 
 Changelog for ownCloud Web [10.1.0] (2024-07-31)
 =======================================
