@@ -23,7 +23,6 @@ import {
   useRouter,
   useThemeStore,
   useFileActions,
-  useResourcesStore,
   routeToContextQuery,
   embedModeFilePickMessageData
 } from '../../composables'

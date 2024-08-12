@@ -35,7 +35,6 @@ import { Resource, SpaceResource } from '@ownclouders/web-client'
 import { storeToRefs } from 'pinia'
 import { useEmbedMode } from '../../embedMode'
 import { RouteRecordName } from 'vue-router'
-import { useGetMatchingSpace } from '../../spaces'
 
 export const EDITOR_MODE_EDIT = 'edit'
 export const EDITOR_MODE_CREATE = 'create'

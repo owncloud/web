@@ -306,7 +306,6 @@ import OcTable from 'design-system/src/components/OcTable/OcTable.vue'
 import { storeToRefs } from 'pinia'
 import OcButton from 'design-system/src/components/OcButton/OcButton.vue'
 import { FieldType } from 'design-system/src/components/OcTable/OcTable.vue'
-import { RouteLocation } from 'vue-router'
 
 const TAGS_MINIMUM_SCREEN_WIDTH = 850
 
