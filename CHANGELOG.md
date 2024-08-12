@@ -16,6 +16,7 @@ Summary
 * Bugfix - OCM page reload: [#11348](https://github.com/owncloud/web/pull/11348)
 * Enhancement - App Store app: [#11302](https://github.com/owncloud/web/pull/11302)
 * Enhancement - Redesign share link modal: [#11310](https://github.com/owncloud/web/pull/11310)
+* Enhancement - Files as links: [#11329](https://github.com/owncloud/web/pull/11329)
 
 Details
 -------
@@ -90,6 +91,16 @@ Details
    https://github.com/owncloud/web/issues/11204
    https://github.com/owncloud/web/pull/11310
    https://github.com/owncloud/web/pull/11324
+
+* Enhancement - Files as links: [#11329](https://github.com/owncloud/web/pull/11329)
+
+   We have converted the former buttons in the files list to links, this change
+   makes it easier to open files in a new tab or window. The same applies to the
+   context menu, where we also add a hint to the shortcut for opening the file in a
+   new tab.´
+
+   https://github.com/owncloud/web/issues/11222
+   https://github.com/owncloud/web/pull/11329
 
 Changelog for ownCloud Web [10.1.0] (2024-07-31)
 =======================================
