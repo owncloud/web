@@ -79,11 +79,6 @@ export class Application {
   async waitForTokenRenewalViaRefreshToken(): Promise<void> {
     await Promise.all([
       this.#page.waitForResponse(
-        (resp) => !resp.url().includes('/oidc-silent-redirect.html'),
-        // timeout after 50 seconds
-        { timeout: (config.timeout - 10) * 1000 }
-      ),
-      this.#page.waitForResponse(
         (resp) =>
           resp.url().includes('/token') &&
           resp.status() === 200 &&
@@ -93,8 +88,7 @@ export class Application {
           resp.request().postDataJSON().refresh_token &&
           resp.request().postDataJSON().hasOwnProperty('scope') &&
           resp.request().postDataJSON().scope.includes('offline_access'),
-        // timeout after 50 seconds
-        { timeout: (config.timeout - 10) * 1000 }
+        { timeout: config.tokenTimeout * 1000 }
       )
     ])
   }
@@ -131,8 +125,7 @@ export class Application {
           resp.url().includes('/oidc-silent-redirect.html') &&
           resp.status() === 200 &&
           resp.request().method() === 'GET',
-        // timeout after 50 seconds
-        { timeout: (config.timeout - 10) * 1000 }
+        { timeout: config.tokenTimeout * 1000 }
       ),
       this.#page.waitForResponse(
         (resp) =>
@@ -142,8 +135,7 @@ export class Application {
           resp.request().postDataJSON().grant_type === 'authorization_code' &&
           resp.request().postDataJSON().hasOwnProperty('code') &&
           resp.request().postDataJSON().code,
-        // timeout after 50 seconds
-        { timeout: (config.timeout - 10) * 1000 }
+        { timeout: config.tokenTimeout * 1000 }
       ),
       waitForIframe
     ])

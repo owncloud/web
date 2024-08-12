@@ -98,9 +98,8 @@ When(
   '{string} waits for token to expire',
   async function (this: World, stepUser: string): Promise<void> {
     const { page } = this.actorsEnvironment.getActor({ key: stepUser })
-    // wait for the token to expire (35 seconds)
-    // token should expire after 30 seconds
-    await page.waitForTimeout((config.timeout - 25) * 1000)
+    // wait for the token to expire
+    await page.waitForTimeout(config.tokenTimeout * 1000)
   }
 )
 

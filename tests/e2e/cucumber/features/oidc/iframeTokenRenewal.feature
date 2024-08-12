@@ -1,7 +1,7 @@
 Feature: Token renewal using iframe
 
   As a user
-  I want the web application to automatically renew access token just before access token expires using iframe at background,
+  I want the web application to automatically renew access token just before access token expires using an iframe in the background,
   So that I can be confident the application will not encounter issues related to expired access tokens.
 
 

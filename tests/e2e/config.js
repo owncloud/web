@@ -32,6 +32,7 @@ exports.config = {
   slowMo: parseInt(process.env.SLOW_MO) || 0,
   timeout: parseInt(process.env.TIMEOUT) || 60,
   minTimeout: parseInt(process.env.MIN_TIMEOUT) || 5,
+  tokenTimeout: parseInt(process.env.TOKEN_TIMEOUT) || 40,
   headless: process.env.HEADLESS === 'true',
   acceptDownloads: process.env.DOWNLOADS !== 'false',
   browser: process.env.BROWSER ?? 'chrome',
