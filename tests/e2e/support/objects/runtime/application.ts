@@ -1,5 +1,6 @@
 import { Page } from '@playwright/test'
 import util from 'util'
+import { config } from '../../../config'
 
 const appSwitcherButton = '#_appSwitcherButton'
 const appSelector = `//ul[contains(@class, "applications-list")]//*[@data-test-id="%s"]`
@@ -73,5 +74,70 @@ export class Application {
     if (sideBarIsOpen) {
       await this.#page.locator(closeSidebarBtn).click()
     }
+  }
+
+  async waitForTokenRenewalViaRefreshToken(): Promise<void> {
+    await Promise.all([
+      this.#page.waitForResponse(
+        (resp) =>
+          resp.url().includes('/token') &&
+          resp.status() === 200 &&
+          resp.request().method() === 'POST' &&
+          resp.request().postDataJSON().grant_type === 'refresh_token' &&
+          resp.request().postDataJSON().hasOwnProperty('refresh_token') &&
+          resp.request().postDataJSON().refresh_token &&
+          resp.request().postDataJSON().hasOwnProperty('scope') &&
+          resp.request().postDataJSON().scope.includes('offline_access'),
+        { timeout: config.tokenTimeout * 1000 }
+      )
+    ])
+  }
+
+  async waitForTokenRenewalViaIframe(): Promise<void> {
+    const waitForIframe = this.#page.evaluateHandle(() => {
+      let iframe = null
+      const observer = new MutationObserver((mutations) => {
+        mutations.forEach((mutation) => {
+          if (mutation.type === 'childList') {
+            mutation.addedNodes.forEach((node) => {
+              if (node.nodeName === 'IFRAME') {
+                iframe = node
+              }
+            })
+          }
+        })
+      })
+      observer.observe(document.body, { childList: true, subtree: true })
+      return new Promise((resolve) => {
+        const interval = setInterval(() => {
+          if (iframe) {
+            observer.disconnect()
+            clearInterval(interval)
+            resolve(iframe)
+          }
+        }, 1000)
+      })
+    })
+
+    await Promise.all([
+      this.#page.waitForResponse(
+        (resp) =>
+          resp.url().includes('/oidc-silent-redirect.html') &&
+          resp.status() === 200 &&
+          resp.request().method() === 'GET',
+        { timeout: config.tokenTimeout * 1000 }
+      ),
+      this.#page.waitForResponse(
+        (resp) =>
+          resp.url().endsWith('/token') &&
+          resp.status() === 200 &&
+          resp.request().method() === 'POST' &&
+          resp.request().postDataJSON().grant_type === 'authorization_code' &&
+          resp.request().postDataJSON().hasOwnProperty('code') &&
+          resp.request().postDataJSON().code,
+        { timeout: config.tokenTimeout * 1000 }
+      ),
+      waitForIframe
+    ])
   }
 }
