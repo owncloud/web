@@ -275,7 +275,8 @@ import {
   useRouter,
   useCanBeOpenedWithSecureView,
   useFileActions,
-  useIsTopBarSticky
+  useIsTopBarSticky,
+  embedModeFilePickMessageData
 } from '../../composables'
 import ResourceListItem from './ResourceListItem.vue'
 import ResourceGhostElement from './ResourceGhostElement.vue'
@@ -305,6 +306,7 @@ import OcTable from 'design-system/src/components/OcTable/OcTable.vue'
 import { storeToRefs } from 'pinia'
 import OcButton from 'design-system/src/components/OcButton/OcButton.vue'
 import { FieldType } from 'design-system/src/components/OcTable/OcTable.vue'
+import { RouteLocation } from 'vue-router'
 
 const TAGS_MINIMUM_SCREEN_WIDTH = 850
 
@@ -1068,10 +1070,10 @@ export default defineComponent({
       const resource = data[0]
 
       if (this.isEmbedModeEnabled && this.isFilePicker) {
-        return this.postMessage<Resource>(
-          'owncloud-embed:file-pick',
-          JSON.parse(JSON.stringify(resource))
-        )
+        return this.postMessage<embedModeFilePickMessageData>('owncloud-embed:file-pick', {
+          resource: JSON.parse(JSON.stringify(resource)),
+          originRoute: JSON.parse(JSON.stringify(unref(this.router.currentRoute)))
+        })
       }
 
       if (this.isResourceDisabled(resource)) {

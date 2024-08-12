@@ -19,8 +19,8 @@ export interface AppNavigationResult {
 }
 
 export const contextRouteNameKey = 'contextRouteName'
-export const contextRouteParamsKey = 'contextRouteParams'
-export const contextRouteQueryKey = 'contextRouteQuery'
+const contextRouteParamsKey = 'contextRouteParams'
+const contextRouteQueryKey = 'contextRouteQuery'
 
 /*
   vue-router type bindings do not allow nested objects
