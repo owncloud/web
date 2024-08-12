@@ -57,7 +57,9 @@ export default {
     const { options } = storeToRefs(configStore)
 
     const linkTarget = computed(() => {
-      return unref(options).cernFeatures && props.link ? '_blank' : '_self'
+      return unref(options).cernFeatures && props.link && !props.resource.isFolder
+        ? '_blank'
+        : '_self'
     })
 
     return {
