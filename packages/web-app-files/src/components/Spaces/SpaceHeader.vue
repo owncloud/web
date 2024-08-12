@@ -144,7 +144,6 @@ export default defineComponent({
     const previewService = usePreviewService()
     const resourcesStore = useResourcesStore()
     const { getDefaultAction } = useFileActions()
-    const { actions: editReadmeContentActions } = useSpaceActionsEditReadmeContent()
 
     const markdownContainerRef = ref(null)
     const markdownContent = ref('')
@@ -293,7 +292,6 @@ export default defineComponent({
       memberCountString,
       openSideBarSharePanel,
       loadPreviewTask,
-      editReadmeContentActions,
       editReadMeContentLink
     }
   }
