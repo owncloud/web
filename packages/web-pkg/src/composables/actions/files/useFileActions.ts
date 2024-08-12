@@ -50,7 +50,6 @@ export const useFileActions = () => {
   const { $gettext } = useGettext()
   const isSearchActive = useIsSearchActive()
   const { isEnabled: isEmbedModeEnabled } = useEmbedMode()
-  const { getMatchingSpace } = useGetMatchingSpace()
 
   const { openUrl } = useWindowOpen()
 

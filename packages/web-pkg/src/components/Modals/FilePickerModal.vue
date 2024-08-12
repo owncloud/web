@@ -22,13 +22,20 @@ import {
   useModals,
   useRouter,
   useThemeStore,
-  useFileActions
+  useFileActions,
+  useResourcesStore,
+  queryItemAsString,
+  contextRouteParamsKey,
+  contextRouteQueryKey,
+  contextRouteNameKey
 } from '../../composables'
 import { ApplicationInformation } from '../../apps'
 import { RouteLocationRaw } from 'vue-router'
 import AppLoadingSpinner from '../AppLoadingSpinner.vue'
 import { isShareSpaceResource, Resource } from '@ownclouders/web-client'
 import { unref } from 'vue'
+import path from 'path'
+import { createLocationSpaces } from '../../router'
 
 export default defineComponent({
   name: 'FilePickerModal',
@@ -41,6 +48,7 @@ export default defineComponent({
   setup(props) {
     const iframeRef = ref<HTMLIFrameElement>()
     const isLoading = ref(true)
+    const { currentFolder } = useResourcesStore()
     const router = useRouter()
     const { removeModal } = useModals()
     const { getMatchingSpace } = useGetMatchingSpace()
@@ -80,6 +88,15 @@ export default defineComponent({
         EDITOR_MODE_EDIT,
         remoteItemId
       )
+      routeOpts.query[contextRouteQueryKey].fileId = currentFolder.id
+      routeOpts.query[contextRouteParamsKey].driveAliasAndItem = path.dirname(
+        queryItemAsString(unref(router.currentRoute).params.driveAliasAndItem)
+      )
+      routeOpts.query[contextRouteNameKey] =
+        createLocationSpaces('files-spaces-generic').name.toString()
+
+      console.log(routeOpts.query)
+
       const editorRoute = router.resolve(routeOpts)
       const editorRouteUrl = new URL(editorRoute.href, window.location.origin)
 
