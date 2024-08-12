@@ -36,14 +36,6 @@ export default {
       default: null
     },
     /**
-     * The resource folder link
-     */
-    folderLink: {
-      type: Object as PropType<RouteLocationRaw>,
-      required: false,
-      default: null
-    },
-    /**
      * The resource to be displayed
      */
     resource: {
@@ -89,7 +81,7 @@ export default {
       }
 
       return {
-        to: this.link || this.folderLink
+        to: this.link
       }
     }
   },

@@ -78,7 +78,6 @@
           :is-extension-displayed="areFileExtensionsShown"
           :is-resource-clickable="isResourceClickable(item)"
           :link="getResourceLink(item)"
-          :folder-link="getFolderLink(item)"
           :parent-folder-link="getParentFolderLink(item)"
           :parent-folder-link-icon-additional-attributes="
             getParentFolderLinkIconAdditionalAttributes(item)
@@ -529,6 +528,7 @@ export default defineComponent({
     const capabilityStore = useCapabilityStore()
     const { getMatchingSpace } = useGetMatchingSpace()
     const { canBeOpenedWithSecureView } = useCanBeOpenedWithSecureView()
+    const { getFolderLink } = useFolderLink()
     const {
       isLocationPicker,
       isFilePicker,
@@ -615,6 +615,10 @@ export default defineComponent({
     }
 
     const getResourceLink = (resource: Resource) => {
+      if (resource.isFolder) {
+        return getFolderLink(resource)
+      }
+
       let space = props.space
       if (!space) {
         space = getMatchingSpace(resource)

@@ -13,7 +13,6 @@
       class="oc-card-media-top oc-flex oc-flex-center oc-flex-middle oc-m-rm"
       :resource="resource"
       :link="resourceRoute"
-      :folder-link="resourceFolderRoute"
       :is-resource-clickable="isResourceClickable"
       tabindex="-1"
       @click="$emit('click')"
@@ -62,7 +61,6 @@
             :is-extension-displayed="isExtensionDisplayed"
             :is-resource-clickable="isResourceClickable"
             :link="resourceRoute"
-            :folder-link="resourceFolderRoute"
             @click="$emit('click')"
           />
         </div>
@@ -106,11 +104,8 @@ export default defineComponent({
     },
     resourceRoute: {
       type: Object as PropType<RouteLocationRaw>,
-      default: () => ({})
-    },
-    resourceFolderRoute: {
-      type: Object,
-      default: () => ({})
+      required: false,
+      default: null
     },
     isResourceSelected: {
       type: Boolean,

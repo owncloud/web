@@ -3,7 +3,7 @@
     :resource="resource"
     :path-prefix="pathPrefix"
     :is-path-displayed="true"
-    :folder-link="folderLink"
+    :link="resourceLink"
     :is-extension-displayed="areFileExtensionsShown"
     :parent-folder-link-icon-additional-attributes="parentFolderLinkIconAdditionalAttributes"
     :parent-folder-name="parentFolderName"
@@ -49,6 +49,8 @@ export default defineComponent({
   setup(props) {
     const { triggerDefaultAction } = useFileActions()
     const { getMatchingSpace } = useGetMatchingSpace()
+    const { getDefaultAction } = useFileActions()
+
     const {
       getPathPrefix,
       getParentFolderName,
@@ -101,6 +103,20 @@ export default defineComponent({
       }
     })
 
+    const resourceLink = computed(() => {
+      if (unref(resource).isFolder) {
+        return getFolderLink(unref(resource))
+      }
+
+      const action = getDefaultAction({ resources: [unref(resource)], space: unref(space) })
+
+      if (!action?.route) {
+        return null
+      }
+
+      return action.route({ space: unref(space), resources: [unref(resource)] })
+    })
+
     return {
       configOptions,
       space,
@@ -108,8 +124,8 @@ export default defineComponent({
       resource,
       resourceDisabled,
       resourceClicked,
+      resourceLink,
       parentFolderLink: getParentFolderLink(unref(resource)),
-      folderLink: getFolderLink(unref(resource)),
       pathPrefix: getPathPrefix(unref(resource)),
       parentFolderName: getParentFolderName(unref(resource)),
       parentFolderLinkIconAdditionalAttributes: getParentFolderLinkIconAdditionalAttributes(

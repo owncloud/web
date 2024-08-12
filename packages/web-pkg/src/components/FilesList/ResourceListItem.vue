@@ -8,7 +8,6 @@
       :resource="resource"
       :link="link"
       :is-resource-clickable="isResourceClickable"
-      :folder-link="folderLink"
       class="oc-resource-link"
       @click="emitClick"
     >
@@ -34,7 +33,6 @@
         :resource="resource"
         :is-resource-clickable="isResourceClickable"
         :link="link"
-        :folder-link="folderLink"
         class="oc-text-overflow"
         @click="emitClick"
       >
@@ -104,14 +102,6 @@ export default defineComponent({
       default: null
     },
     /**
-     * The resource folder link
-     */
-    folderLink: {
-      type: Object,
-      required: false,
-      default: null
-    },
-    /**
      * Asserts whether the resource path should be displayed
      */
     isPathDisplayed: {
@@ -120,20 +110,20 @@ export default defineComponent({
       default: false
     },
     /**
-     * The resource parent folder name to be displayed
-     */
-    parentFolderName: {
-      type: String,
-      required: false,
-      default: ''
-    },
-    /**
      * The resource parent folder link path
      */
     parentFolderLink: {
       type: Object,
       required: false,
       default: null
+    },
+    /**
+     * The resource parent folder name to be displayed
+     */
+    parentFolderName: {
+      type: String,
+      required: false,
+      default: ''
     },
     /**
      * The resource parent folder link path icon additional attributes
@@ -182,13 +172,12 @@ export default defineComponent({
       return this.parentFolderName
     },
     parentFolderComponentType() {
-      return this.parentFolderLink !== null ? 'router-link' : 'span'
+      return this.parentFolderLink ? 'router-link' : 'span'
     },
 
     parentFolderStyle() {
-      const hasLinkTarget = this.parentFolderLink !== null
       return {
-        cursor: hasLinkTarget ? 'pointer' : 'default'
+        cursor: this.parentFolderLink ? 'pointer' : 'default'
       }
     },
 

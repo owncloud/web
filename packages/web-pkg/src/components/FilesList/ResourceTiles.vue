@@ -44,7 +44,6 @@
           :ref="(el) => (tileRefs.tiles[resource.id] = el as ResourceTileRef)"
           :resource="resource"
           :resource-route="getRoute(resource)"
-          :resource-folder-route="getFolderRoute(resource)"
           :is-resource-selected="isResourceSelected(resource)"
           :is-resource-clickable="isResourceClickable(resource)"
           :is-resource-disabled="isResourceDisabled(resource)"
@@ -263,6 +262,26 @@ export default defineComponent({
     )
 
     const getRoute = (resource: Resource) => {
+      if (isSpaceResource(resource)) {
+        return resource.disabled
+          ? null
+          : createLocationSpaces(
+              'files-spaces-generic',
+              createFileRouteOptions(resource as SpaceResource, {
+                path: '',
+                fileId: resource.fileId
+              })
+            )
+      }
+
+      if (resource.isFolder) {
+        return resourceRouteResolver.createFolderLink({
+          path: resource.path,
+          fileId: resource.fileId,
+          resource: resource
+        })
+      }
+
       let space = props.space
       if (!space) {
         space = getMatchingSpace(resource)
@@ -275,31 +294,6 @@ export default defineComponent({
 
       return action.route({ space, resources: [resource] })
     }
-    const getFolderRoute = (resource: Resource) => {
-      if (isSpaceResource(resource)) {
-        return resource.disabled
-          ? null
-          : createLocationSpaces(
-              'files-spaces-generic',
-              createFileRouteOptions(resource as SpaceResource, {
-                path: '',
-                fileId: resource.fileId
-              })
-            )
-      }
-      if (resource.type === 'folder') {
-        return resourceRouteResolver.createFolderLink({
-          path: resource.path,
-          fileId: resource.fileId,
-          resource: resource
-        })
-      }
-
-      return {
-        path: ''
-      }
-    }
-
     const emitTileClick = (resource: Resource) => {
       if (unref(isEmbedModeEnabled) && unref(isFilePicker)) {
         return postMessage<Resource>(
@@ -570,7 +564,6 @@ export default defineComponent({
       areFileExtensionsShown,
       emitTileClick,
       getRoute,
-      getFolderRoute,
       showContextMenuOnBtnClick,
       showContextMenu,
       tileRefs,
