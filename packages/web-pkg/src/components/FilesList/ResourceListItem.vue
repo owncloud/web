@@ -58,7 +58,6 @@
         <component
           :is="parentFolderComponentType"
           v-if="isPathDisplayed"
-          v-oc-tooltip="parentFolderNameTooltip"
           :to="parentFolderLink"
           :style="parentFolderStyle"
           class="parent-folder oc-text-truncate"
