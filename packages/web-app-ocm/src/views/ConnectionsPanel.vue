@@ -7,7 +7,7 @@
           <h2 class="oc-px-s" v-text="$gettext('Federated connections')" />
           <oc-contextual-helper class="oc-pl-xs" v-bind="helperContent" />
         </div>
-        <div id="shares-links" class="oc-flex oc-flex-middle oc-mr-m">
+        <div id="shares-links" class="oc-flex oc-flex-middle oc-flex-wrap oc-mr-m">
           <label class="oc-mr-s" v-text="$gettext('Federated shares:')" />
           <oc-button
             :aria-current="$gettext('Federated shares with me')"
@@ -45,7 +45,7 @@
           <template #actions="{ item }">
             <oc-button
               appearance="raw"
-              class="oc-p-s action-menu-item"
+              class="oc-p-s action-menu-item delete-connection-btn"
               @click="deleteConnection(item)"
             >
               <oc-icon name="delete-bin-5" fill-type="line" size="medium" />
@@ -176,19 +176,24 @@ export default defineComponent({
 })
 </script>
 
-<style lang="scss" scoped>
-#accepted-invitations-empty {
-  height: 10vh;
-}
+<style lang="scss">
+.sciencemesh-app {
+  #shares-links {
+    button:hover {
+      background-color: var(--oc-color-background-hover);
+      border-color: var(--oc-color-background-hover);
+    }
 
-#shares-links {
-  button:hover {
-    background-color: var(--oc-color-background-hover);
-    border-color: var(--oc-color-background-hover);
+    @media (max-width: $oc-breakpoint-medium-default) {
+      visibility: none;
+    }
+  }
+  #accepted-invitations-empty {
+    height: 100%;
   }
 
-  @media (max-width: 850px) {
-    visibility: none;
+  .delete-connection-btn:hover {
+    background-color: var(--oc-color-background-hover);
   }
 }
 </style>

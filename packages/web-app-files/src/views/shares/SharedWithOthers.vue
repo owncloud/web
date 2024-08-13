@@ -79,6 +79,7 @@
 <script lang="ts">
 import {
   queryItemAsString,
+  useAppsStore,
   useCapabilityStore,
   useConfigStore,
   useFileActions,
@@ -128,6 +129,7 @@ export default defineComponent({
     const capabilityStore = useCapabilityStore()
     const { getMatchingSpace } = useGetMatchingSpace()
     const configStore = useConfigStore()
+    const appsStore = useAppsStore()
     const { options: configOptions } = storeToRefs(configStore)
 
     const resourcesStore = useResourcesStore()
@@ -139,6 +141,12 @@ export default defineComponent({
 
     const shareTypes = computed(() => {
       const uniqueShareTypes = uniq(unref(paginatedResources).flatMap((i) => i.shareTypes))
+
+      const ocmAvailable = appsStore.appIds.includes('open-cloud-mesh')
+      if (ocmAvailable && !uniqueShareTypes.includes(ShareTypes.remote.value)) {
+        uniqueShareTypes.push(ShareTypes.remote.value)
+      }
+
       return ShareTypes.getByValues(uniqueShareTypes)
     })
     const selectedShareTypesQuery = useRouteQuery('q_shareType')
@@ -193,13 +201,13 @@ export default defineComponent({
 
   computed: {
     isEmpty() {
-      return this.paginatedResources.length < 1
+      return this.filteredItems.length < 1
     }
   },
 
   async created() {
     await this.loadResourcesTask.perform()
-    this.scrollToResourceFromRoute(this.paginatedResources, 'files-app-bar')
+    this.scrollToResourceFromRoute(this.filteredItems, 'files-app-bar')
   },
 
   beforeUnmount() {
