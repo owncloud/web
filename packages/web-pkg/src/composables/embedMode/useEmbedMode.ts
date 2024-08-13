@@ -1,5 +1,12 @@
 import { computed, unref } from 'vue'
 import { useConfigStore } from '../piniaStores'
+import { Resource } from '@ownclouders/web-client'
+import { RouteLocation } from 'vue-router'
+
+export interface embedModeFilePickMessageData {
+  resource: Resource
+  originRoute: RouteLocation
+}
 
 export const useEmbedMode = () => {
   const configStore = useConfigStore()

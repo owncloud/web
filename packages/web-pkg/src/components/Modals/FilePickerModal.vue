@@ -22,12 +22,14 @@ import {
   useModals,
   useRouter,
   useThemeStore,
-  useFileActions
+  useFileActions,
+  routeToContextQuery,
+  embedModeFilePickMessageData
 } from '../../composables'
 import { ApplicationInformation } from '../../apps'
 import { RouteLocationRaw } from 'vue-router'
 import AppLoadingSpinner from '../AppLoadingSpinner.vue'
-import { isShareSpaceResource, Resource } from '@ownclouders/web-client'
+import { isShareSpaceResource } from '@ownclouders/web-client'
 import { unref } from 'vue'
 
 export default defineComponent({
@@ -69,7 +71,8 @@ export default defineComponent({
         return
       }
 
-      const resource: Resource = data.data
+      const { resource, originRoute }: embedModeFilePickMessageData = data.data
+
       const space = getMatchingSpace(resource)
       const remoteItemId = isShareSpaceResource(space) ? space.id : undefined
 
@@ -80,6 +83,8 @@ export default defineComponent({
         EDITOR_MODE_EDIT,
         remoteItemId
       )
+      routeOpts.query = { ...routeOpts.query, ...routeToContextQuery(originRoute) }
+
       const editorRoute = router.resolve(routeOpts)
       const editorRouteUrl = new URL(editorRoute.href, window.location.origin)
 
