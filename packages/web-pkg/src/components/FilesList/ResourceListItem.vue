@@ -51,7 +51,6 @@
         <component
           :is="parentFolderComponentType"
           v-if="isPathDisplayed"
-          v-oc-tooltip="parentFolderNameTooltip"
           :to="parentFolderLink"
           :style="parentFolderStyle"
           class="parent-folder oc-text-truncate"
@@ -168,9 +167,6 @@ export default defineComponent({
   },
   emits: ['click'],
   computed: {
-    parentFolderNameTooltip() {
-      return this.parentFolderName
-    },
     parentFolderComponentType() {
       return this.parentFolderLink ? 'router-link' : 'span'
     },
