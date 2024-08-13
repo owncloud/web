@@ -14,6 +14,7 @@ Summary
 * Bugfix - Prevent horizontal table scroll: [#11313](https://github.com/owncloud/web/pull/11313)
 * Bugfix - Keyboard actions for disabled resources: [#11342](https://github.com/owncloud/web/pull/11342)
 * Bugfix - OCM page reload: [#11348](https://github.com/owncloud/web/pull/11348)
+* Bugfix - Closing an app opened via in-app open feature stays open: [#11353](https://github.com/owncloud/web/pull/11353)
 * Enhancement - App Store app: [#11302](https://github.com/owncloud/web/pull/11302)
 * Enhancement - Redesign share link modal: [#11310](https://github.com/owncloud/web/pull/11310)
 * Enhancement - Files as links: [#11329](https://github.com/owncloud/web/pull/11329)
@@ -71,6 +72,13 @@ Details
 
    https://github.com/owncloud/web/issues/11153
    https://github.com/owncloud/web/pull/11348
+
+* Bugfix - Closing an app opened via in-app open feature stays open: [#11353](https://github.com/owncloud/web/pull/11353)
+
+   We've fixed a bug, where closing an opened file from the app itself via the
+   'Open' item in the three-dot-menu would not close the app.
+
+   https://github.com/owncloud/web/pull/11353
 
 * Enhancement - App Store app: [#11302](https://github.com/owncloud/web/pull/11302)
 
