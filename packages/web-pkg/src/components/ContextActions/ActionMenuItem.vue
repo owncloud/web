@@ -177,7 +177,5 @@ export default defineComponent({
 .oc-files-context-action-shortcut {
   justify-content: right !important;
   font-size: var(--oc-font-size-small);
-  font-weight: bold !important;
-  opacity: 0.7;
 }
 </style>

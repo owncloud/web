@@ -520,7 +520,6 @@ export default defineComponent({
       flex: 1;
       font-weight: normal !important;
       font-size: var(--oc-font-size-small);
-      opacity: 0.7;
     }
   }
 }
