@@ -425,7 +425,8 @@ export default defineComponent({
 
       if (isProjectSpaceResource(unref(resource))) {
         const updatedSpace = await clientService.graphAuthenticated.drives.getDrive(
-          unref(resource).id
+          unref(resource).id,
+          sharesStore.graphRoles
         )
 
         upsertSpace(updatedSpace)

@@ -198,6 +198,7 @@ import {
 } from '@ownclouders/web-pkg'
 import SpaceContextActions from '../../components/Spaces/SpaceContextActions.vue'
 import {
+  getSpaceManagers,
   isProjectSpaceResource,
   ProjectSpaceResource,
   SpaceResource
@@ -367,9 +368,11 @@ export default defineComponent({
     useKeyboardTableActions(keyActions)
 
     const getManagerNames = (space: SpaceResource) => {
-      const allManagers = space.spaceRoles.manager
+      const allManagers = getSpaceManagers(space)
       const managers = allManagers.length > 2 ? allManagers.slice(0, 2) : allManagers
-      let managerStr = managers.map((m) => m.displayName).join(', ')
+      let managerStr = managers
+        .map(({ grantedTo }) => (grantedTo.user || grantedTo.group).displayName)
+        .join(', ')
       if (allManagers.length > 2) {
         managerStr += `... +${allManagers.length - 2}`
       }
@@ -396,7 +399,7 @@ export default defineComponent({
       return formatFileSize(space.spaceQuota.remaining, language.current)
     }
     const getMemberCount = (space: SpaceResource) => {
-      return Object.values(space.spaceRoles).flat().length
+      return Object.keys(space.members).length
     }
 
     onMounted(async () => {

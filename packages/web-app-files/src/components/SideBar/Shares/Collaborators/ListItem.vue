@@ -203,7 +203,9 @@ export default defineComponent({
     const { $gettext } = language
     const { dispatchModal } = useModals()
 
-    const { updateShare } = useSharesStore()
+    const sharesStore = useSharesStore()
+    const { graphRoles } = storeToRefs(sharesStore)
+    const { updateShare } = sharesStore
     const { upsertSpace, upsertSpaceMember } = useSpacesStore()
 
     const { user } = storeToRefs(userStore)
@@ -245,6 +247,7 @@ export default defineComponent({
       clientService,
       sharedParentDir,
       shareDate,
+      graphRoles,
       setDenyShare,
       showNotifyShareModal,
       showMessage,
@@ -425,7 +428,7 @@ export default defineComponent({
 
         if (isProjectSpaceResource(this.resource)) {
           const client = this.clientService.graphAuthenticated
-          const space = await client.drives.getDrive(this.resource.id)
+          const space = await client.drives.getDrive(this.resource.id, this.graphRoles)
 
           this.upsertSpace(space)
           this.upsertSpaceMember({ member: share })

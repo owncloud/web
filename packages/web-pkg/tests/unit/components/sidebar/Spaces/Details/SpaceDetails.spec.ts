@@ -1,5 +1,12 @@
 import SpaceDetails from '../../../../../../src/components/SideBar/Spaces/Details/SpaceDetails.vue'
-import { CollaboratorShare, ShareRole, SpaceResource, Resource } from '@ownclouders/web-client'
+import {
+  CollaboratorShare,
+  ShareRole,
+  SpaceResource,
+  Resource,
+  SpaceMember,
+  GraphSharePermission
+} from '@ownclouders/web-client'
 import { mock } from 'vitest-mock-extended'
 import { defaultComponentMocks, defaultPlugins, shallowMount } from 'web-test-helpers'
 import { RouteLocation } from 'vue-router'
@@ -10,11 +17,12 @@ const spaceMock = {
   name: ' space',
   id: '1',
   mdate: 'Wed, 21 Oct 2015 07:28:00 GMT',
-  spaceRoles: {
-    manager: [{ id: '1', displayName: 'alice' }],
-    editor: [],
-    viewer: []
-  },
+  members: [
+    mock<SpaceMember>({
+      permissions: [GraphSharePermission.deletePermissions],
+      grantedTo: { user: { id: '1', displayName: 'alice' }, group: undefined }
+    })
+  ],
   spaceQuota: {
     used: 100,
     total: 1000

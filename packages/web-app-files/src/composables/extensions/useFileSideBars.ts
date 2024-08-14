@@ -363,9 +363,7 @@ export const useSideBarPanels = (): SidebarPanelExtension<SpaceResource, Resourc
           ) {
             return false
           }
-          return [...items[0].spaceRoles.manager, ...items[0].spaceRoles.editor].some(
-            (role) => role.id === userStore.user.id
-          )
+          return true
         }
       }
     },

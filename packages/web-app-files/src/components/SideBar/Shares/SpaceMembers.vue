@@ -105,7 +105,9 @@ export default defineComponent({
     const clientService = useClientService()
     const { canShare } = useCanShare()
     const { dispatchModal } = useModals()
-    const { deleteShare } = useSharesStore()
+    const sharesStore = useSharesStore()
+    const { deleteShare } = sharesStore
+    const { graphRoles } = storeToRefs(sharesStore)
     const spacesStore = useSpacesStore()
     const { upsertSpace, removeSpaceMember } = spacesStore
     const { spaceMembers } = storeToRefs(spacesStore)
@@ -133,6 +135,7 @@ export default defineComponent({
       canShare,
       markInstance,
       filesPrivateLinks,
+      graphRoles,
       ...useMessages()
     }
   },
@@ -226,7 +229,7 @@ export default defineComponent({
 
             if (!currentUserRemoved) {
               const client = this.clientService.graphAuthenticated
-              const space = await client.drives.getDrive(share.resourceId)
+              const space = await client.drives.getDrive(share.resourceId, this.graphRoles)
               this.upsertSpace(space)
             }
 

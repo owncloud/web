@@ -1,14 +1,14 @@
 <template>
   <ul class="oc-list">
     <li
-      v-for="(member, index) in members"
+      v-for="(m, index) in members"
       :key="index"
       class="oc-flex oc-flex-middle oc-mb-s"
       data-testid="space-members-list"
     >
       <oc-avatar
-        v-if="member.kind === 'user'"
-        :user-name="member.displayName"
+        v-if="m.grantedTo.user"
+        :user-name="m.grantedTo.user.displayName"
         :width="36"
         class="oc-mr-s"
       /><oc-avatar-item
@@ -19,20 +19,19 @@
         name="group"
         class="oc-mr-s"
       />
-      {{ member.displayName }}
+      {{ (m.grantedTo.user || m.grantedTo.group).displayName }}
     </li>
   </ul>
 </template>
 <script lang="ts">
 import { computed, defineComponent, PropType } from 'vue'
-import { ShareTypes } from '@ownclouders/web-client'
-import { SpaceRole } from '@ownclouders/web-client'
+import { ShareTypes, SpaceMember } from '@ownclouders/web-client'
 
 export default defineComponent({
   name: 'MembersRoleSection',
   props: {
     members: {
-      type: Array as PropType<SpaceRole[]>,
+      type: Array as PropType<SpaceMember[]>,
       required: true
     }
   },

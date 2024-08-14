@@ -17,8 +17,10 @@ exports[`SpaceHeader > should add the "squashed"-class when the sidebar is opene
             <space-context-actions-stub actionoptions="[object Object]"></space-context-actions-stub>
           </div>
         </div>
-      </div>
-      <!--v-if-->
+      </div> <button type="button" aria-label="Open context menu and show members" class="oc-button oc-rounded oc-button-m oc-button-justify-content-center oc-button-gap-m oc-button-passive oc-button-passive-raw">
+        <!--v-if-->
+        <!-- @slot Content of the button --> <span class="oc-icon oc-icon-s oc-icon-passive"><!----></span> <span class="space-header-people-count oc-text-small">17 members</span>
+      </button>
     </div>
     <!--v-if-->
     <!--v-if-->
@@ -44,8 +46,10 @@ exports[`SpaceHeader > space description > should show the description 1`] = `
             <space-context-actions-stub actionoptions="[object Object]"></space-context-actions-stub>
           </div>
         </div>
-      </div>
-      <!--v-if-->
+      </div> <button type="button" aria-label="Open context menu and show members" class="oc-button oc-rounded oc-button-m oc-button-justify-content-center oc-button-gap-m oc-button-passive oc-button-passive-raw">
+        <!--v-if-->
+        <!-- @slot Content of the button --> <span class="oc-icon oc-icon-s oc-icon-passive"><!----></span> <span class="space-header-people-count oc-text-small">17 members</span>
+      </button>
     </div>
     <!--v-if-->
     <div class="markdown-container oc-flex oc-flex-middle">
@@ -74,8 +78,10 @@ exports[`SpaceHeader > space image > should show the default image if no other i
             <space-context-actions-stub actionoptions="[object Object]"></space-context-actions-stub>
           </div>
         </div>
-      </div>
-      <!--v-if-->
+      </div> <button type="button" aria-label="Open context menu and show members" class="oc-button oc-rounded oc-button-m oc-button-justify-content-center oc-button-gap-m oc-button-passive oc-button-passive-raw">
+        <!--v-if-->
+        <!-- @slot Content of the button --> <span class="oc-icon oc-icon-s oc-icon-passive"><!----></span> <span class="space-header-people-count oc-text-small">17 members</span>
+      </button>
     </div>
     <!--v-if-->
     <!--v-if-->
@@ -99,8 +105,10 @@ exports[`SpaceHeader > space image > should show the set image 1`] = `
             <space-context-actions-stub actionoptions="[object Object]"></space-context-actions-stub>
           </div>
         </div>
-      </div>
-      <!--v-if-->
+      </div> <button type="button" aria-label="Open context menu and show members" class="oc-button oc-rounded oc-button-m oc-button-justify-content-center oc-button-gap-m oc-button-passive oc-button-passive-raw">
+        <!--v-if-->
+        <!-- @slot Content of the button --> <span class="oc-icon oc-icon-s oc-icon-passive"><!----></span> <span class="space-header-people-count oc-text-small">17 members</span>
+      </button>
     </div>
     <!--v-if-->
     <!--v-if-->

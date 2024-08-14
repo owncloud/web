@@ -2,11 +2,11 @@ import {
   useOpenWithDefaultApp,
   useSpaceActionsEditReadmeContent
 } from '../../../../../src/composables/actions'
-import { Resource, SpaceResource, buildSpace } from '@ownclouders/web-client'
+import { Resource, SpaceResource } from '@ownclouders/web-client'
 import { getComposableWrapper } from 'web-test-helpers'
 import { unref } from 'vue'
 import { mock, mockDeep } from 'vitest-mock-extended'
-import { Drive, User } from '@ownclouders/web-client/graph/generated'
+import { User } from '@ownclouders/web-client/graph/generated'
 import { ClientService } from '../../../../../src/services'
 import { useSpaceHelpers } from '../../../../../src/composables/spaces/useSpaceHelpers'
 
@@ -20,20 +20,14 @@ vi.mock('../../../../../src/composables/spaces/useSpaceHelpers', () => ({
 
 describe('editReadmeContent', () => {
   describe('isVisible property', () => {
-    it('should be true for space managers', () => {
-      const spaceMock = mock<Drive>({
-        id: '1',
-        root: {
-          permissions: [{ roles: ['manager'], grantedToIdentities: [{ user: { id: '1' } }] }]
-        },
-        special: [{ specialFolder: { name: 'readme' } }]
-      })
+    it('should be true if canEditReadme is true', () => {
+      const spaceMock = mock<SpaceResource>({ canEditReadme: () => true })
 
       getWrapper({
         setup: ({ actions }) => {
           expect(
             unref(actions)[0].isVisible({
-              resources: [buildSpace(spaceMock)]
+              resources: [spaceMock]
             })
           ).toBe(true)
         }
@@ -46,30 +40,15 @@ describe('editReadmeContent', () => {
         }
       })
     })
-    it('should be false when the current user is a viewer', () => {
-      const spaceMock = mock<Drive>({
-        id: '1',
-        root: {
-          permissions: [{ roles: ['viewer'], grantedToIdentities: [{ user: { id: '1' } }] }]
-        },
-        special: null
-      })
+    it('should be false if canEditReadme is false', () => {
+      const spaceMock = mock<SpaceResource>({ canEditReadme: () => false })
 
       getWrapper({
         setup: ({ actions }) => {
           expect(
             unref(actions)[0].isVisible({
-              resources: [buildSpace(spaceMock)]
+              resources: [spaceMock]
             })
-          ).toBe(false)
-        }
-      })
-    })
-    it('should be false when resource is disabled', () => {
-      getWrapper({
-        setup: ({ actions }) => {
-          expect(
-            unref(actions)[0].isVisible({ resources: [mock<SpaceResource>({ disabled: true })] })
           ).toBe(false)
         }
       })

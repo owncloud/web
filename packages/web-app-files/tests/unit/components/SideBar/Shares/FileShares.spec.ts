@@ -97,22 +97,22 @@ describe('FileShares', () => {
       const { wrapper } = getWrapper({ space, mountType: shallowMount, collaborators })
       expect(wrapper.vm.isShareModifiable(collaborators[0])).toBe(true)
     })
-    it('share should not be modifiable if its not personal space share', () => {
-      const space = mock<SpaceResource>({ driveType: 'project' })
-      const { wrapper } = getWrapper({ space, mountType: shallowMount, collaborators })
-      expect(wrapper.vm.isShareModifiable(collaborators[0])).toBe(false)
-    })
     it('share should not be modifiable if collaborator is indirect', () => {
       const space = mock<SpaceResource>({ driveType: 'personal' })
       const { wrapper } = getWrapper({ space, mountType: shallowMount, collaborators })
       collaborators[0]['indirect'] = true
       expect(wrapper.vm.isShareModifiable(collaborators[0])).toBe(false)
     })
-    it('share should not be modifiable if user is not manager', () => {
-      const space = mock<SpaceResource>({ driveType: 'project', isManager: () => false })
+    it('share should not be modifiable if its a project space user cannot share', () => {
+      const space = mock<SpaceResource>({ driveType: 'project', canShare: () => false })
       collaborators[0]['indirect'] = true
       const { wrapper } = getWrapper({ space, mountType: shallowMount, collaborators })
       expect(wrapper.vm.isShareModifiable(collaborators[0])).toBe(false)
+    })
+    it('share should be modifiable if its a project space and user can share', () => {
+      const space = mock<SpaceResource>({ driveType: 'project', canShare: () => true })
+      const { wrapper } = getWrapper({ space, mountType: shallowMount, collaborators })
+      expect(wrapper.vm.isShareModifiable(collaborators[0])).toBe(true)
     })
   })
 

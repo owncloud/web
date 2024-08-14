@@ -6,22 +6,21 @@
 // ```
 // because in the else block resource gets the type never. If this is changed in a later TypeScript version
 // or all types get different members, the underscored props can be removed.
-import { DriveItem, Identity, Quota, User } from '@ownclouders/web-client/graph/generated'
+import {
+  DriveItem,
+  Quota,
+  SharePointIdentitySet,
+  User
+} from '@ownclouders/web-client/graph/generated'
 import { Ability, Resource } from '../resource'
 
 export const SHARE_JAIL_ID = 'a0ca6a90-a365-4782-871e-d44447bbc668'
 export const OCM_PROVIDER_ID = '89f37a33-858b-45fa-8890-a1f2b27d90e1'
 
-export interface SpaceRole extends Identity {
-  kind: 'user' | 'group'
-  isMember(u: User): boolean
-}
-
-export interface SpaceRoles {
-  viewer: SpaceRole[]
-  editor: SpaceRole[]
-  manager: SpaceRole[]
-  'secure-viewer': SpaceRole[]
+export type SpaceMember = {
+  grantedTo: SharePointIdentitySet
+  permissions: string[]
+  roleId: string
 }
 
 export interface SpaceResource extends Resource {
@@ -30,7 +29,7 @@ export interface SpaceResource extends Resource {
   driveAlias: string
   driveType: 'mountpoint' | 'personal' | 'project' | 'share' | 'public' | (string & unknown)
   root: DriveItem
-  spaceRoles: SpaceRoles
+  members: Record<string, SpaceMember>
   spaceQuota: Quota
   spaceImageData: DriveItem
   spaceReadmeData: DriveItem
@@ -41,15 +40,13 @@ export interface SpaceResource extends Resource {
   canEditImage(args?: { user?: User }): boolean
   canEditReadme(args?: { user?: User }): boolean
   canRestore(args?: { user?: User; ability?: Ability }): boolean
+  canDeleteFromTrashBin(args?: { user?: User }): boolean
+  canRestoreFromTrashbin(args?: { user?: User }): boolean
 
   getWebDavUrl({ path }: { path: string }): string
   getWebDavTrashUrl({ path }: { path: string }): string
   getDriveAliasAndItem(resource: Resource): string
 
-  isViewer(user: User): boolean
-  isSecureViewer(user: User): boolean
-  isEditor(user: User): boolean
-  isManager(user: User): boolean
   isMember(user: User): boolean
   isOwner(user: User): boolean
 }

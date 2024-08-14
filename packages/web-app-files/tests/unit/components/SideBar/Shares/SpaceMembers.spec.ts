@@ -112,7 +112,7 @@ describe('SpaceMembers', () => {
 
   describe('filter', () => {
     it('toggles the filter on click', async () => {
-      const space = mock<ProjectSpaceResource>({ isManager: () => true })
+      const space = mock<ProjectSpaceResource>()
       const wrapper = getWrapper({ mountType: mount, space })
       expect(wrapper.vm.isFilterOpen).toBeFalsy()
       await wrapper.find('.open-filter-btn').trigger('click')

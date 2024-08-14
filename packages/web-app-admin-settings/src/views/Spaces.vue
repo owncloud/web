@@ -70,7 +70,8 @@ import {
   useSpaceActionsDisable,
   useSpaceActionsRestore,
   useSpaceActionsEditQuota,
-  AppLoadingSpinner
+  AppLoadingSpinner,
+  useSharesStore
 } from '@ownclouders/web-pkg'
 import { call, SpaceResource } from '@ownclouders/web-client'
 import { computed, defineComponent, onBeforeUnmount, onMounted, ref, unref } from 'vue'
@@ -100,6 +101,7 @@ export default defineComponent({
     const clientService = useClientService()
     const { $gettext } = useGettext()
     const { isSideBarOpen, sideBarActivePanel } = useSideBar()
+    const sharesStore = useSharesStore()
 
     const loadResourcesEventToken = ref(null)
     let updateQuotaForSpaceEventToken: string
@@ -119,7 +121,7 @@ export default defineComponent({
 
     const loadResourcesTask = useTask(function* (signal) {
       const drives = yield* call(
-        clientService.graphAuthenticated.drives.listAllDrives({
+        clientService.graphAuthenticated.drives.listAllDrives(sharesStore.graphRoles, {
           orderBy: 'name asc',
           filter: 'driveType eq project'
         })

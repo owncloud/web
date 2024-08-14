@@ -1,10 +1,10 @@
 import { useSpaceActionsDelete } from '../../../../../src/composables/actions'
 import { useMessages, useModals } from '../../../../../src/composables/piniaStores'
-import { buildSpace, SpaceResource } from '@ownclouders/web-client'
+import { SpaceResource } from '@ownclouders/web-client'
 import { defaultComponentMocks, RouteLocation, getComposableWrapper } from 'web-test-helpers'
 import { mock } from 'vitest-mock-extended'
 import { unref } from 'vue'
-import { Drive, User } from '@ownclouders/web-client/graph/generated'
+import { User } from '@ownclouders/web-client/graph/generated'
 
 describe('delete', () => {
   describe('isVisible property', () => {
@@ -15,50 +15,19 @@ describe('delete', () => {
         }
       })
     })
-    it('should be false when the space is not disabled', () => {
-      const spaceMock = mock<Drive>({
-        id: '1',
-        root: {
-          permissions: [{ roles: ['manager'], grantedToIdentities: [{ user: { id: '1' } }] }]
-        },
-        driveType: 'project',
-        special: null
-      })
+    it('should be false when the space can not be deleted', () => {
+      const spaceMock = mock<SpaceResource>({ driveType: 'project', canBeDeleted: () => false })
       getWrapper({
         setup: ({ actions }) => {
-          expect(unref(actions)[0].isVisible({ resources: [buildSpace(spaceMock)] })).toBe(false)
+          expect(unref(actions)[0].isVisible({ resources: [spaceMock] })).toBe(false)
         }
       })
     })
-    it('should be true when the space is disabled', () => {
-      const spaceMock = mock<Drive>({
-        id: '1',
-        root: {
-          permissions: [{ roles: ['manager'], grantedToIdentities: [{ user: { id: '1' } }] }],
-          deleted: { state: 'trashed' }
-        },
-        driveType: 'project',
-        special: null
-      })
+    it('should be true when the space can be deleted', () => {
+      const spaceMock = mock<SpaceResource>({ driveType: 'project', canBeDeleted: () => true })
       getWrapper({
         setup: ({ actions }) => {
-          expect(unref(actions)[0].isVisible({ resources: [buildSpace(spaceMock)] })).toBe(true)
-        }
-      })
-    })
-    it('should be false when the current user is a viewer', () => {
-      const spaceMock = mock<Drive>({
-        id: '1',
-        root: {
-          permissions: [{ roles: ['viewer'], grantedToIdentities: [{ user: { id: '1' } }] }],
-          deleted: { state: 'trashed' }
-        },
-        driveType: 'project',
-        special: null
-      })
-      getWrapper({
-        setup: ({ actions }) => {
-          expect(unref(actions)[0].isVisible({ resources: [buildSpace(spaceMock)] })).toBe(false)
+          expect(unref(actions)[0].isVisible({ resources: [spaceMock] })).toBe(true)
         }
       })
     })

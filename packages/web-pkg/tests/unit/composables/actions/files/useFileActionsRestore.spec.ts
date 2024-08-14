@@ -180,11 +180,7 @@ function getWrapper({
         name: invalidLocation ? 'files-spaces-generic' : 'files-trash-generic'
       })
     }),
-    space: mock<ProjectSpaceResource>({
-      driveType,
-      isEditor: () => false,
-      isManager: () => false
-    })
+    space: mock<ProjectSpaceResource>({ driveType })
   }
   mocks.$clientService.webdav.listFiles.mockImplementation(() => {
     return Promise.resolve({ resource: mock<Resource>(), children: [] })

@@ -17,7 +17,7 @@ export const useCanShare = () => {
       return false
     }
 
-    if (isProjectSpaceResource(space) && !space.isManager(userStore.user)) {
+    if (isProjectSpaceResource(space) && !space.canShare({ user: userStore.user })) {
       return false
     }
 

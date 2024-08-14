@@ -1,10 +1,10 @@
 import { useFileActionsSetImage } from '../../../../../src'
 import { useMessages } from '../../../../../src/composables/piniaStores'
-import { buildSpace, Resource, SpaceResource } from '@ownclouders/web-client'
+import { Resource, SpaceResource } from '@ownclouders/web-client'
 import { mock } from 'vitest-mock-extended'
 import { defaultComponentMocks, RouteLocation, getComposableWrapper } from 'web-test-helpers'
 import { unref } from 'vue'
-import { Drive, User } from '@ownclouders/web-client/graph/generated'
+import { User } from '@ownclouders/web-client/graph/generated'
 import { useSpaceHelpers } from '../../../../../src/composables/spaces/useSpaceHelpers'
 
 vi.mock('../../../../../src/composables/spaces/useSpaceHelpers', () => ({
@@ -14,16 +14,8 @@ vi.mock('../../../../../src/composables/spaces/useSpaceHelpers', () => ({
 describe('setImage', () => {
   describe('isVisible property', () => {
     it('should be false when no resource given', () => {
-      const space = buildSpace(
-        mock<Drive>({
-          id: '1',
-          quota: {},
-          root: {
-            permissions: [{ roles: ['manager'], grantedToIdentities: [{ user: { id: '1' } }] }]
-          },
-          special: [{ specialFolder: { name: 'image' }, file: { mimeType: 'image/png' } }]
-        })
-      )
+      const space = mock<SpaceResource>({ canEditImage: () => true })
+
       getWrapper({
         setup: ({ actions }) => {
           expect(unref(actions)[0].isVisible({ space, resources: [] as Resource[] })).toBe(false)
@@ -31,16 +23,7 @@ describe('setImage', () => {
       })
     })
     it('should be false when mimeType is not image', () => {
-      const space = buildSpace(
-        mock<Drive>({
-          id: '1',
-          quota: {},
-          root: {
-            permissions: [{ roles: ['manager'], grantedToIdentities: [{ user: { id: '1' } }] }]
-          },
-          special: [{ specialFolder: { name: 'image' }, file: { mimeType: 'image/png' } }]
-        })
-      )
+      const space = mock<SpaceResource>({ canEditImage: () => true })
       getWrapper({
         setup: ({ actions }) => {
           expect(
@@ -54,16 +37,7 @@ describe('setImage', () => {
       })
     })
     it('should be true when the mimeType is image', () => {
-      const space = buildSpace(
-        mock<Drive>({
-          id: '1',
-          quota: {},
-          root: {
-            permissions: [{ roles: ['manager'], grantedToIdentities: [{ user: { id: '1' } }] }]
-          },
-          special: [{ specialFolder: { name: 'image' }, file: { mimeType: 'image/png' } }]
-        })
-      )
+      const space = mock<SpaceResource>({ canEditImage: () => true })
       getWrapper({
         setup: ({ actions }) => {
           expect(
@@ -75,17 +49,8 @@ describe('setImage', () => {
         }
       })
     })
-    it('should be false when the current user is a viewer', () => {
-      const space = buildSpace(
-        mock<Drive>({
-          id: '1',
-          quota: {},
-          root: {
-            permissions: [{ roles: ['viewer'], grantedToIdentities: [{ user: { id: '1' } }] }]
-          },
-          special: [{ specialFolder: { name: 'image' }, file: { mimeType: 'image/png' } }]
-        })
-      )
+    it('should be false when canEditImage is false', () => {
+      const space = mock<SpaceResource>({ canEditImage: () => false })
       getWrapper({
         setup: ({ actions }) => {
           expect(

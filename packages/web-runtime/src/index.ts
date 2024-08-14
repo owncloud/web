@@ -220,6 +220,11 @@ export const bootstrapApp = async (configurationPath: string, appsReadyCallback:
         })
       }
 
+      // load sharing roles from graph API
+      const graphRoleDefinitions =
+        await clientService.graphAuthenticated.permissions.listRoleDefinitions()
+      sharesStore.setGraphRoles(graphRoleDefinitions)
+
       // Load spaces to make them available across the application
       await spacesStore.loadSpaces({ graphClient: clientService.graphAuthenticated })
       const personalSpace = spacesStore.spaces.find(isPersonalSpaceResource)
@@ -231,11 +236,6 @@ export const bootstrapApp = async (configurationPath: string, appsReadyCallback:
           value: app.config.globalProperties.$gettext('Personal')
         })
       }
-
-      // load sharing roles from graph API
-      const graphRoleDefinitions =
-        await clientService.graphAuthenticated.permissions.listRoleDefinitions()
-      sharesStore.setGraphRoles(graphRoleDefinitions)
     },
     {
       immediate: true

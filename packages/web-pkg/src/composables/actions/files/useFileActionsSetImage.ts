@@ -6,7 +6,7 @@ import { useRouter } from '../../router'
 import { useGettext } from 'vue3-gettext'
 import { computed } from 'vue'
 import { FileAction, FileActionOptions } from '../types'
-import { useMessages, useSpacesStore, useUserStore } from '../../piniaStores'
+import { useMessages, useSharesStore, useSpacesStore, useUserStore } from '../../piniaStores'
 import { useCreateSpace, useSpaceHelpers } from '../../spaces'
 
 export const useFileActionsSetImage = () => {
@@ -18,6 +18,7 @@ export const useFileActionsSetImage = () => {
   const loadingService = useLoadingService()
   const previewService = usePreviewService()
   const spacesStore = useSpacesStore()
+  const sharesStore = useSharesStore()
   const { createDefaultMetaFolder } = useCreateSpace()
   const { getDefaultMetaFolder } = useSpaceHelpers()
 
@@ -43,10 +44,14 @@ export const useFileActionsSetImage = () => {
       }
 
       const { fileId } = await getFileInfo(space, { fileId: resources[0].id })
-      const updatedSpace = await graphClient.drives.updateDrive(storageId, {
-        name: space.name,
-        special: [{ specialFolder: { name: 'image' }, id: fileId }]
-      })
+      const updatedSpace = await graphClient.drives.updateDrive(
+        storageId,
+        {
+          name: space.name,
+          special: [{ specialFolder: { name: 'image' }, id: fileId }]
+        },
+        sharesStore.graphRoles
+      )
 
       spacesStore.updateSpaceField({
         id: storageId,

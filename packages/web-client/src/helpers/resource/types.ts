@@ -90,7 +90,6 @@ export interface Resource {
   canRename?(args?: { user?: User; ability?: Ability }): boolean
   canBeDeleted?(args?: { user?: User; ability?: Ability }): boolean
   canDeny?(): boolean
-  canRemoveFromTrashbin?({ user }: { user?: User }): boolean
   canEditTags?(): boolean
 
   getDomSelector?(): string

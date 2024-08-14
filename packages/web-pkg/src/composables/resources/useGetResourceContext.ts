@@ -8,13 +8,14 @@ import {
 import { computed, unref } from 'vue'
 import { useClientService } from '../clientService'
 import { urlJoin } from '@ownclouders/web-client'
-import { useSpacesStore, useConfigStore } from '../piniaStores'
+import { useSpacesStore, useConfigStore, useSharesStore } from '../piniaStores'
 import { DavProperty } from '@ownclouders/web-client/webdav'
 
 export const useGetResourceContext = () => {
   const clientService = useClientService()
   const configStore = useConfigStore()
   const spacesStore = useSpacesStore()
+  const shareStore = useSharesStore()
 
   const spaces = computed(() => spacesStore.spaces)
 
@@ -35,7 +36,7 @@ export const useGetResourceContext = () => {
       DavProperty.ResourceType
     ]
 
-    const tmpSpace = buildSpace({ id: fileId, name: '' })
+    const tmpSpace = buildSpace({ id: fileId, name: '' }, shareStore.graphRoles)
     return clientService.webdav.getFileInfo(tmpSpace, { fileId }, { davProperties })
   }
 

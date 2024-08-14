@@ -437,8 +437,8 @@ export default defineComponent({
         return false
       }
 
-      if (isProjectSpaceResource(this.space) && !this.space.isManager(this.user)) {
-        return false
+      if (isProjectSpaceResource(this.space)) {
+        return this.space.canShare({ user: this.user })
       }
 
       return true

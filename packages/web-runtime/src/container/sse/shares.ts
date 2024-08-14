@@ -16,6 +16,7 @@ export const onSSESpaceMemberAddedEvent = async ({
   sseData,
   resourcesStore,
   spacesStore,
+  sharesStore,
   clientService,
   router
 }: SSEEventOptions) => {
@@ -24,7 +25,10 @@ export const onSSESpaceMemberAddedEvent = async ({
     return
   }
 
-  const space = await clientService.graphAuthenticated.drives.getDrive(sseData.itemid)
+  const space = await clientService.graphAuthenticated.drives.getDrive(
+    sseData.itemid,
+    sharesStore.graphRoles
+  )
   spacesStore.upsertSpace(space)
 
   if (!isLocationSpacesActive(router, 'files-spaces-projects')) {
@@ -38,6 +42,7 @@ export const onSSESpaceMemberRemovedEvent = async ({
   sseData,
   resourcesStore,
   spacesStore,
+  sharesStore,
   messageStore,
   clientService,
   language,
@@ -50,7 +55,10 @@ export const onSSESpaceMemberRemovedEvent = async ({
   }
 
   if (!sseData.affecteduserids?.includes(userStore.user.id)) {
-    const space = await clientService.graphAuthenticated.drives.getDrive(sseData.itemid)
+    const space = await clientService.graphAuthenticated.drives.getDrive(
+      sseData.itemid,
+      sharesStore.graphRoles
+    )
     return spacesStore.upsertSpace(space)
   }
 
@@ -84,6 +92,7 @@ export const onSSESpaceShareUpdatedEvent = async ({
   sseData,
   resourcesStore,
   spacesStore,
+  sharesStore,
   clientService,
   userStore,
   router
@@ -93,7 +102,10 @@ export const onSSESpaceShareUpdatedEvent = async ({
     return
   }
 
-  const space = await clientService.graphAuthenticated.drives.getDrive(sseData.itemid)
+  const space = await clientService.graphAuthenticated.drives.getDrive(
+    sseData.itemid,
+    sharesStore.graphRoles
+  )
   spacesStore.upsertSpace(space)
 
   if (

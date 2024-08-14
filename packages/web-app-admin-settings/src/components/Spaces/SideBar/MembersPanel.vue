@@ -9,102 +9,75 @@
       <div v-if="!filteredSpaceMembers.length">
         <h3 class="oc-text-bold oc-text-medium" v-text="$gettext('No members found')" />
       </div>
-      <div
-        v-if="filteredSpaceManagers.length"
-        class="oc-mb-m"
-        data-testid="space-members-role-managers"
-      >
-        <h3 class="oc-text-bold oc-text-medium" v-text="$gettext('Managers')" />
-        <members-role-section :members="filteredSpaceManagers" />
+      <div v-for="(role, i) in availableRoles" :key="i">
+        <div
+          v-if="getMembersForRole(role).length"
+          class="oc-mb-m"
+          :data-testid="`space-members-role-${role.displayName}`"
+        >
+          <h3 class="oc-text-bold oc-text-medium" v-text="role.displayName" />
+          <members-role-section :members="getMembersForRole(role)" />
+        </div>
       </div>
-      <div
-        v-if="filteredSpaceEditors.length"
-        class="oc-mb-m"
-        data-testid="space-members-role-editors"
-      >
-        <h3 class="oc-text-bold oc-text-medium" v-text="$gettext('Editors')" />
-        <members-role-section :members="filteredSpaceEditors" />
-      </div>
-      <div
-        v-if="filteredSpaceViewers.length"
-        class="oc-mb-m"
-        data-testid="space-members-role-viewers"
-      >
-        <h3 class="oc-text-bold oc-text-medium" v-text="$gettext('Viewers')" />
-        <members-role-section :members="filteredSpaceViewers" />
-      </div>
-      <div
-        v-if="filteredSpaceSecureViewers.length"
-        class="oc-mb-m"
-        data-testid="space-members-role-secure-viewers"
-      >
-        <h3 class="oc-text-bold oc-text-medium" v-text="$gettext('Secure viewers')" />
-        <members-role-section :members="filteredSpaceSecureViewers" />
+      <div v-if="membersWithoutRole.length" class="space-members-custom">
+        <h3 class="oc-text-bold oc-text-medium" v-text="$gettext('Custom role')" />
+        <members-role-section :members="membersWithoutRole" />
       </div>
     </div>
   </div>
 </template>
 <script lang="ts">
 import { computed, defineComponent, inject, ref, watch, unref } from 'vue'
-import { SpaceResource, SpaceRole } from '@ownclouders/web-client'
+import { ShareRole, SpaceMember, SpaceResource } from '@ownclouders/web-client'
 import MembersRoleSection from './MembersRoleSection.vue'
 import Fuse from 'fuse.js'
 import Mark from 'mark.js'
-import { defaultFuseOptions } from '@ownclouders/web-pkg'
+import { defaultFuseOptions, useSharesStore } from '@ownclouders/web-pkg'
 
 export default defineComponent({
   name: 'MembersPanel',
   components: { MembersRoleSection },
   setup() {
+    const sharesStore = useSharesStore()
+
     const resource = inject<SpaceResource>('resource')
     const filterTerm = ref('')
     const markInstance = ref(null)
     const membersListRef = ref(null)
-    const filterMembers = (collection: Array<SpaceRole & { roleType: string }>, term: string) => {
+
+    const filterMembers = (collection: SpaceMember[], term: string) => {
       if (!(term || '').trim()) {
         return collection
       }
 
-      const searchEngine = new Fuse(collection, { ...defaultFuseOptions, keys: ['displayName'] })
+      const searchEngine = new Fuse(collection, {
+        ...defaultFuseOptions,
+        keys: ['grantedTo.user.displayName', 'grantedTo.group.displayName']
+      })
       return searchEngine.search(term).map((r) => r.item)
     }
 
-    const spaceMembers = computed(() => {
-      return [
-        ...unref(resource).spaceRoles.manager.map((r) => ({
-          ...r,
-          roleType: 'manager'
-        })),
-        ...unref(resource).spaceRoles.editor.map((r) => ({
-          ...r,
-          roleType: 'editor'
-        })),
-        ...unref(resource).spaceRoles.viewer.map((r) => ({
-          ...r,
-          roleType: 'viewer'
-        })),
-        ...unref(resource).spaceRoles['secure-viewer'].map((r) => ({
-          ...r,
-          roleType: 'secure-viewer'
-        }))
-      ].sort((a, b) => a.displayName.localeCompare(b.displayName))
+    const spaceMembers = computed<SpaceMember[]>(() => {
+      return Object.values(unref(resource).members)
     })
 
-    const filteredSpaceMembers = computed(() => {
+    const filteredSpaceMembers = computed<SpaceMember[]>(() => {
       return filterMembers(unref(spaceMembers), unref(filterTerm))
     })
-    const filteredSpaceManagers = computed(() => {
-      return unref(filteredSpaceMembers).filter((m) => m.roleType === 'manager')
+
+    const availableRoles = computed<ShareRole[]>(() => {
+      const permissionsWithRole = unref(spaceMembers).filter((p) => !!p.roleId)
+      const roleIds = [...new Set(permissionsWithRole.map((p) => p.roleId))]
+      return roleIds.map((r) => sharesStore.graphRoles[r]).filter(Boolean)
     })
-    const filteredSpaceEditors = computed(() => {
-      return unref(filteredSpaceMembers).filter((m) => m.roleType === 'editor')
+
+    const membersWithoutRole = computed<SpaceMember[]>(() => {
+      return unref(filteredSpaceMembers).filter(({ roleId }) => !roleId)
     })
-    const filteredSpaceViewers = computed(() => {
-      return unref(filteredSpaceMembers).filter((m) => m.roleType === 'viewer')
-    })
-    const filteredSpaceSecureViewers = computed(() => {
-      return unref(filteredSpaceMembers).filter((m) => m.roleType === 'secure-viewer')
-    })
+
+    const getMembersForRole = (role: ShareRole): SpaceMember[] => {
+      return unref(filteredSpaceMembers).filter(({ roleId }) => roleId === role.id)
+    }
 
     watch(filterTerm, () => {
       if (unref(membersListRef)) {
@@ -120,11 +93,10 @@ export default defineComponent({
     return {
       filterTerm,
       filteredSpaceMembers,
-      filteredSpaceManagers,
-      filteredSpaceEditors,
-      filteredSpaceViewers,
-      filteredSpaceSecureViewers,
-      membersListRef
+      membersListRef,
+      availableRoles,
+      membersWithoutRole,
+      getMembersForRole
     }
   }
 })

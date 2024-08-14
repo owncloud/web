@@ -7,7 +7,8 @@ import {
   useUserStore,
   useMessages,
   useSpacesStore,
-  useSpaceHelpers
+  useSpaceHelpers,
+  useSharesStore
 } from '@ownclouders/web-pkg'
 import { eventBus } from '@ownclouders/web-pkg'
 import { useGettext } from 'vue3-gettext'
@@ -22,6 +23,7 @@ export const useSpaceActionsUploadImage = ({ spaceImageInput }: { spaceImageInpu
   const loadingService = useLoadingService()
   const previewService = usePreviewService()
   const spacesStore = useSpacesStore()
+  const sharesStore = useSharesStore()
   const { createDefaultMetaFolder } = useCreateSpace()
   const { getDefaultMetaFolder } = useSpaceHelpers()
 
@@ -75,10 +77,14 @@ export const useSpaceActionsUploadImage = ({ spaceImageInput }: { spaceImageInpu
           overwrite: true
         })
 
-        const updatedSpace = await graphClient.drives.updateDrive(selectedSpace.id, {
-          name: selectedSpace.name,
-          special: [{ specialFolder: { name: 'image' }, id: fileId }]
-        })
+        const updatedSpace = await graphClient.drives.updateDrive(
+          selectedSpace.id,
+          {
+            name: selectedSpace.name,
+            special: [{ specialFolder: { name: 'image' }, id: fileId }]
+          },
+          sharesStore.graphRoles
+        )
 
         spacesStore.updateSpaceField({
           id: selectedSpace.id,

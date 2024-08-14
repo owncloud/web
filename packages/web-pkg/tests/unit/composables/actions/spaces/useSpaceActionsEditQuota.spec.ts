@@ -1,10 +1,9 @@
 import { useSpaceActionsEditQuota } from '../../../../../src/composables/actions'
 import { useModals } from '../../../../../src/composables/piniaStores'
-import { buildSpace } from '@ownclouders/web-client'
+import { SpaceResource } from '@ownclouders/web-client'
 import { defaultComponentMocks, getComposableWrapper } from 'web-test-helpers'
 import { unref } from 'vue'
 import { mock } from 'vitest-mock-extended'
-import { Drive } from '@ownclouders/web-client/graph/generated'
 
 describe('editQuota', () => {
   describe('isVisible property', () => {
@@ -16,36 +15,20 @@ describe('editQuota', () => {
       })
     })
     it('should be true when the current user has the "set-space-quota"-permission', () => {
-      const spaceMock = mock<Drive>({
-        id: '1',
-        quota: {},
-        root: {
-          permissions: [{ roles: ['manager'], grantedToIdentities: [{ user: { id: '1' } }] }]
-        },
-        driveType: 'project',
-        special: null
-      })
+      const spaceMock = mock<SpaceResource>({ driveType: 'project' })
       getWrapper({
         canEditSpaceQuota: true,
         setup: ({ actions }) => {
-          expect(unref(actions)[0].isVisible({ resources: [buildSpace(spaceMock)] })).toBe(true)
+          expect(unref(actions)[0].isVisible({ resources: [spaceMock] })).toBe(true)
         }
       })
     })
     it('should be false when the current user does not have the "set-space-quota"-permission', () => {
-      const spaceMock = mock<Drive>({
-        id: '1',
-        quota: {},
-        root: {
-          permissions: [{ roles: ['manager'], grantedToIdentities: [{ user: { id: '1' } }] }]
-        },
-        driveType: 'project',
-        special: null
-      })
+      const spaceMock = mock<SpaceResource>({ driveType: 'project' })
       getWrapper({
         canEditSpaceQuota: false,
         setup: ({ actions }) => {
-          expect(unref(actions)[0].isVisible({ resources: [buildSpace(spaceMock)] })).toBe(false)
+          expect(unref(actions)[0].isVisible({ resources: [spaceMock] })).toBe(false)
         }
       })
     })

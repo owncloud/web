@@ -261,7 +261,7 @@ export default defineComponent({
     )
 
     const memberCount = computed(() => {
-      return Object.values(props.space.spaceRoles).flat().length
+      return Object.keys(props.space.members).length
     })
     const memberCountString = computed(() => {
       return $ngettext('%{count} member', '%{count} members', unref(memberCount), {

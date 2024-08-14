@@ -510,9 +510,9 @@ Then(
     const { page } = this.actorsEnvironment.getActor({ key: stepUser })
     const spacesObject = new objects.applicationAdminSettings.Spaces({ page })
     const actualMemberList = {
-      manager: await spacesObject.listMembers({ filter: 'managers' }),
-      viewer: await spacesObject.listMembers({ filter: 'viewers' }),
-      editor: await spacesObject.listMembers({ filter: 'editors' })
+      manager: await spacesObject.listMembers({ filter: 'Can manage' }),
+      viewer: await spacesObject.listMembers({ filter: 'Can view' }),
+      editor: await spacesObject.listMembers({ filter: 'Can edit' })
     }
     for (const info of stepTable.hashes()) {
       const shareRole = shareRoles[info.role as keyof typeof shareRoles]

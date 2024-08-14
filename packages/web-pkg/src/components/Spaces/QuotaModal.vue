@@ -28,7 +28,8 @@ import {
   useMessages,
   useSpacesStore,
   useCapabilityStore,
-  useResourcesStore
+  useResourcesStore,
+  useSharesStore
 } from '../../composables'
 import { useRouter } from '../../composables/router'
 import { eventBus } from '../../services'
@@ -72,6 +73,7 @@ export default defineComponent({
     const clientService = useClientService()
     const router = useRouter()
     const spacesStore = useSpacesStore()
+    const sharesStore = useSharesStore()
     const { updateResourceField } = useResourcesStore()
 
     const selectedOption = ref(0)
@@ -137,7 +139,7 @@ export default defineComponent({
         const updatedSpace = await client.drives.updateDrive(
           space.id,
           { name: space.name, quota: { total: unref(selectedOption) } },
-          {}
+          sharesStore.graphRoles
         )
         if (unref(router.currentRoute).name === 'admin-settings-spaces') {
           eventBus.publish('app.admin-settings.spaces.space.quota.updated', {

@@ -6,7 +6,9 @@ import { Drive } from '@ownclouders/web-client/graph/generated'
 
 const spaceMock = mock<Drive>({
   id: '1',
-  root: { permissions: [{ roles: ['manager'], grantedToIdentities: [{ user: { id: '1' } }] }] },
+  root: {
+    permissions: [{ '@libre.graph.permissions.actions': [], grantedToV2: { user: { id: '1' } } }]
+  },
   driveType: 'project',
   special: null
 })
@@ -14,7 +16,7 @@ const spaceMock = mock<Drive>({
 describe('SpaceContextActions', () => {
   describe('action handlers', () => {
     it('renders actions that are always available: "Members", "Edit Quota", "Details"', () => {
-      const { wrapper } = getWrapper(buildSpace(spaceMock))
+      const { wrapper } = getWrapper(buildSpace(spaceMock, {}))
 
       expect(
         wrapper.findAll('[data-testid="action-label"]').some((el) => el.text() === 'Members')
