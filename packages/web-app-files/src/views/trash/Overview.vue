@@ -44,7 +44,7 @@
             </template>
             <template #name="{ item }">
               <oc-button
-                class="oc-display-block"
+                class="oc-display-block trash-bin-route"
                 appearance="raw"
                 v-bind="getSpaceAttributes(item)"
               >
@@ -273,5 +273,11 @@ export default defineComponent({
 <style lang="scss">
 #spaces-filter {
   width: 16rem;
+}
+
+.trash-bin {
+  &-route {
+    color: var(--oc-color-text-default);
+  }
 }
 </style>
