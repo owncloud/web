@@ -79,6 +79,7 @@ Details
    'Open' item in the three-dot-menu would not close the app.
 
    https://github.com/owncloud/web/pull/11353
+   https://github.com/owncloud/web/pull/11354
 
 * Enhancement - App Store app: [#11302](https://github.com/owncloud/web/pull/11302)
 
