@@ -87,7 +87,7 @@
   },
   "peerDependencies": {
     "@casl/ability": "^6.3.3",
-    "axios": "1.6.8",
+    "axios": "1.7.4",
     "fast-xml-parser": "4.3.3",
     "lodash-es": "^4.17.21",
     "luxon": "3.2.1",
