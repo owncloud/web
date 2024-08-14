@@ -77,7 +77,7 @@ export default defineComponent({
       const affectedUsers = props.users.filter(({ id }) => userStore.user.id !== id)
       const client = clientService.graphAuthenticated
       const promises = affectedUsers.map(({ id }) =>
-        client.users.editUser(id, { accountEnabled: unref(selectedOption).value })
+        client.users.editUser(id, { accountEnabled: unref(selectedOption).value } as User)
       )
       const results = await Promise.allSettled(promises)
 

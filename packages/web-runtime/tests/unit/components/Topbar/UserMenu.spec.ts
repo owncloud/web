@@ -154,7 +154,7 @@ const getMountedWrapper = (
             },
             userState: {
               user: noUser
-                ? {}
+                ? null
                 : {
                     id: '1',
                     onPremisesSamAccountName: 'einstein',

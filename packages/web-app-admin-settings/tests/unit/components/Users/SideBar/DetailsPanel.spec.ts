@@ -18,7 +18,7 @@ describe('DetailsPanel', () => {
     })
     it('should not be set if multiple users are given', () => {
       const { wrapper } = getWrapper({
-        props: { user: null, users: [defaultUser, { displayName: 'user2' }] }
+        props: { user: null, users: [defaultUser, { displayName: 'user2' } as User] }
       })
       expect(wrapper.vm.user).toEqual(null)
     })
@@ -48,7 +48,7 @@ describe('DetailsPanel', () => {
     })
     it('should be true if multiple users are given', () => {
       const { wrapper } = getWrapper({
-        props: { user: null, users: [defaultUser, { displayName: 'user2' }] }
+        props: { user: null, users: [defaultUser, { displayName: 'user2' } as User] }
       })
       expect(wrapper.vm.multipleUsers).toBeTruthy()
     })

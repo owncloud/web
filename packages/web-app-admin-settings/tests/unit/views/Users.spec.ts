@@ -39,7 +39,7 @@ const getDefaultUser = (): User => {
         resourceId: 'some-graph-app-id'
       }
     ]
-  }
+  } as User
 }
 
 const getDefaultApplications = () => {
@@ -128,7 +128,7 @@ describe('Users view', () => {
       expect(
         wrapper.vm.sideBarAvailablePanels
           .find(({ name }) => name === 'EditPanel')
-          .isVisible({ items: [{ id: '1' }] })
+          .isVisible({ items: [{ id: '1' } as User] })
       ).toBeTruthy()
     })
     it('should contain DetailsPanel no user is selected', () => {
@@ -144,7 +144,7 @@ describe('Users view', () => {
       expect(
         wrapper.vm.sideBarAvailablePanels
           .find(({ name }) => name === 'EditPanel')
-          .isVisible({ items: [{ id: '1' }, { id: '2' }] })
+          .isVisible({ items: [{ id: '1' }, { id: '2' }] as User[] })
       ).toBeFalsy()
     })
   })
@@ -156,7 +156,10 @@ describe('Users view', () => {
       expect(wrapper.find('batch-actions-stub').exists()).toBeFalsy()
     })
     it('display when one user selected', async () => {
-      const { wrapper } = getMountedWrapper({ mountType: mount, selectedUsers: [{ id: '1' }] })
+      const { wrapper } = getMountedWrapper({
+        mountType: mount,
+        selectedUsers: [{ id: '1' } as User]
+      })
       await wrapper.vm.loadResourcesTask.last
       await wrapper.vm.$nextTick()
       expect(wrapper.find('batch-actions-stub').exists()).toBeTruthy()
@@ -164,7 +167,7 @@ describe('Users view', () => {
     it('display when more than one users selected', async () => {
       const { wrapper } = getMountedWrapper({
         mountType: mount,
-        selectedUsers: [{ id: '1' }, { id: '2' }]
+        selectedUsers: [{ id: '1' }, { id: '2' }] as User[]
       })
       await wrapper.vm.loadResourcesTask.last
       await wrapper.vm.$nextTick()
@@ -314,7 +317,7 @@ function getMountedWrapper({
 
   mocks.$clientService = clientService
 
-  const user = { id: '1', uuid: '1' }
+  const user = { id: '1' } as User
 
   return {
     mocks,

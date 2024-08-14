@@ -119,7 +119,7 @@ describe('Details SideBar Panel', () => {
       })
       const { wrapper } = createWrapper({
         resource,
-        user: { onPremisesSamAccountName: 'einstein' }
+        user: { onPremisesSamAccountName: 'einstein' } as User
       })
       expect(wrapper.find(selectors.sharedBy).exists()).toBeTruthy()
     })
@@ -199,7 +199,7 @@ function createWrapper({
   resource = null,
   isPublicLinkContext = false,
   ancestorMetaData = {},
-  user = { onPremisesSamAccountName: 'marie' },
+  user = { onPremisesSamAccountName: 'marie' } as User,
   versions = [],
   tagsEnabled = true
 }: {
