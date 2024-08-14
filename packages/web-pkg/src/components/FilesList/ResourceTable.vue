@@ -1068,15 +1068,15 @@ export default defineComponent({
        */
       const resource = data[0]
 
-      if (this.isEmbedModeEnabled && this.isFilePicker) {
+      if (this.isResourceDisabled(resource)) {
+        return
+      }
+
+      if (this.isEmbedModeEnabled && this.isFilePicker && !resource.isFolder) {
         return this.postMessage<embedModeFilePickMessageData>('owncloud-embed:file-pick', {
           resource: JSON.parse(JSON.stringify(resource)),
           originRoute: JSON.parse(JSON.stringify(unref(this.router.currentRoute)))
         })
-      }
-
-      if (this.isResourceDisabled(resource)) {
-        return
       }
 
       const eventData = data[1]

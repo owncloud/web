@@ -3,3 +3,4 @@ Bugfix: Closing an app opened via in-app open feature stays open
 We've fixed a bug, where closing an opened file from the app itself via the 'Open' item in the three-dot-menu would not close the app.
 
 https://github.com/owncloud/web/pull/11353
+https://github.com/owncloud/web/pull/11354
