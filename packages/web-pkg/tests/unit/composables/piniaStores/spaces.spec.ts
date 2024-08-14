@@ -9,7 +9,7 @@ import { createPinia, setActivePinia } from 'pinia'
 import { mock, mockDeep } from 'vitest-mock-extended'
 import {
   CollaboratorShare,
-  GraphShareRoleIdMap,
+  GraphSharePermission,
   ShareRole,
   SpaceResource
 } from '@ownclouders/web-client'
@@ -23,20 +23,22 @@ describe('spaces', () => {
   })
 
   describe('method "sortSpaceMembers"', () => {
-    it('always puts space managers first', () => {
+    it('sorts space members by amount of permissions', () => {
       const members = [
         mock<CollaboratorShare>({
-          role: { id: GraphShareRoleIdMap.SpaceEditor },
+          permissions: [],
           sharedWith: { displayName: 'user1' }
         }),
         mock<CollaboratorShare>({
-          role: { id: GraphShareRoleIdMap.SpaceManager },
+          permissions: [GraphSharePermission.updatePermissions],
           sharedWith: { displayName: 'user2' }
         })
       ]
 
       const sortedMembers = sortSpaceMembers(members)
-      expect(sortedMembers[0].role.id).toEqual(GraphShareRoleIdMap.SpaceManager)
+      expect(
+        sortedMembers[0].permissions.includes(GraphSharePermission.updatePermissions)
+      ).toBeTruthy()
     })
   })
 
@@ -278,6 +280,7 @@ describe('spaces', () => {
         setup: async (instance) => {
           const share = mock<CollaboratorShare>({
             id: '1',
+            permissions: [],
             role: mock<ShareRole>({ id: 'roleId' })
           })
           const clientService = mockDeep<ClientService>()

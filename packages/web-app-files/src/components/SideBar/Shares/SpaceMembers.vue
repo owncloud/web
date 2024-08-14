@@ -71,7 +71,7 @@
 import { storeToRefs } from 'pinia'
 import CollaboratorListItem from './Collaborators/ListItem.vue'
 import InviteCollaboratorForm from './Collaborators/InviteCollaborator/InviteCollaboratorForm.vue'
-import { GraphShareRoleIdMap } from '@ownclouders/web-client'
+import { GraphSharePermission } from '@ownclouders/web-client'
 import {
   createLocationSpaces,
   isLocationSpacesActive,
@@ -193,13 +193,16 @@ export default defineComponent({
         return false
       }
 
-      if (share.role.id !== GraphShareRoleIdMap.SpaceManager) {
+      const memberCanUpdateMembers = share.permissions.includes(
+        GraphSharePermission.updatePermissions
+      )
+      if (!memberCanUpdateMembers) {
         return true
       }
 
-      // forbid to remove last manager of a space
-      const managers = this.spaceMembers.filter(
-        ({ role }) => role.id === GraphShareRoleIdMap.SpaceManager
+      // make sure at least one member can edit other members
+      const managers = this.spaceMembers.filter(({ permissions }) =>
+        permissions.includes(GraphSharePermission.updatePermissions)
       )
       return managers.length > 1
     },

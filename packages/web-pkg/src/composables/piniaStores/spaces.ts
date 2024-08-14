@@ -3,7 +3,6 @@ import { computed, ref, unref } from 'vue'
 import { isCollaboratorShare, SpaceResource } from '@ownclouders/web-client'
 import { Graph } from '@ownclouders/web-client/graph'
 import {
-  GraphShareRoleIdMap,
   buildSpace,
   extractStorageId,
   isPersonalSpaceResource,
@@ -14,16 +13,9 @@ import { useUserStore } from './user'
 import { ConfigStore, useConfigStore } from './config'
 import { useSharesStore } from './shares'
 
+// sort space members with higher permissions (managers) at the top
 export const sortSpaceMembers = (shares: CollaboratorShare[]) => {
-  const sortedManagers = shares
-    .filter((share) => share.role.id === GraphShareRoleIdMap.SpaceManager)
-    .sort((a, b) => a.sharedWith.displayName.localeCompare(b.sharedWith.displayName))
-
-  const sortedRest = shares
-    .filter((share) => share.role.id !== GraphShareRoleIdMap.SpaceManager)
-    .sort((a, b) => a.sharedWith.displayName.localeCompare(b.sharedWith.displayName))
-
-  return [...sortedManagers, ...sortedRest]
+  return shares.sort((a, b) => b.permissions.length - a.permissions.length)
 }
 
 export const getSpacesByType = async ({

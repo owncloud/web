@@ -131,6 +131,7 @@ export function buildSpace(
     }
   }
 
+  console.log('data', data)
   if (data.root?.permissions) {
     for (const permission of data.root.permissions) {
       spaceRoles[permission.roles[0] as keyof SpaceRoles].push(

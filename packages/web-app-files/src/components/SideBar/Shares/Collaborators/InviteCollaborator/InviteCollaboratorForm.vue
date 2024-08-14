@@ -169,7 +169,6 @@ import ExpirationDatepicker from './ExpirationDatepicker.vue'
 import {
   CollaboratorAutoCompleteItem,
   CollaboratorShare,
-  GraphShareRoleIdMap,
   ShareRole,
   ShareTypes,
   call
@@ -242,7 +241,7 @@ export default defineComponent({
 
     const sharesStore = useSharesStore()
     const { addShare } = sharesStore
-    const { collaboratorShares, graphRoles } = storeToRefs(sharesStore)
+    const { collaboratorShares } = storeToRefs(sharesStore)
 
     const searchQuery = ref('')
     const searchInProgress = ref(false)
@@ -258,9 +257,8 @@ export default defineComponent({
 
     const resource = inject<Resource>('resource')
     const space = inject<SpaceResource>('space')
+    const availableInternalRoles = inject<Ref<ShareRole[]>>('availableInternalShareRoles')
     const availableExternalRoles = inject<Ref<ShareRole[]>>('availableExternalShareRoles')
-
-    const resourceIsSpace = computed(() => unref(resource).type === 'space')
 
     const markInstance = ref(null)
 
@@ -302,9 +300,9 @@ export default defineComponent({
     })
 
     onMounted(async () => {
-      selectedRole.value = unref(resourceIsSpace)
-        ? unref(graphRoles)[GraphShareRoleIdMap.SpaceViewer]
-        : unref(graphRoles)[GraphShareRoleIdMap.Viewer]
+      selectedRole.value = unref(isExternalShareRoleType)
+        ? unref(availableExternalRoles)[0]
+        : unref(availableInternalRoles)[0]
 
       await nextTick()
       markInstance.value = new Mark('.mark-element')
