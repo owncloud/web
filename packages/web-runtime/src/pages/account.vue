@@ -430,7 +430,7 @@ export default defineComponent({
         if (authStore.userContextReady) {
           await clientService.graphAuthenticated.users.editMe({
             preferredLanguage: option.value
-          })
+          } as User)
 
           if (capabilityStore.supportSSE) {
             ;(clientService.sseAuthenticated as SSEAdapter).updateLanguage(language.current)

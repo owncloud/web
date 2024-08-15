@@ -9,6 +9,7 @@ import {
 import { mock } from 'vitest-mock-extended'
 import { defaultComponentMocks, defaultPlugins, shallowMount } from 'web-test-helpers'
 import { RouteLocation } from 'vue-router'
+import { User } from '@ownclouders/web-client/graph/generated'
 
 const spaceMock = {
   type: 'space',
@@ -72,7 +73,7 @@ function createWrapper({ spaceResource = spaceMock, props = {} } = {}) {
         plugins: [
           ...defaultPlugins({
             piniaOptions: {
-              userState: { user: { id: '1', onPremisesSamAccountName: 'marie' } },
+              userState: { user: { id: '1', onPremisesSamAccountName: 'marie' } as User },
               spacesState: { spaceMembers: [spaceShare] },
               sharesState: { collaboratorShares: [spaceShare] },
               resourcesStore: { resources: [mock<Resource>({ name: 'file1', type: 'file' })] }

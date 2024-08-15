@@ -2,6 +2,7 @@ import { CollaboratorShare, LinkShare } from '../../helpers'
 import type {
   DriveItemCreateLink,
   DriveItemInvite,
+  ListPermissionsSpaceRootSelectEnum,
   Permission,
   SharingLinkPassword,
   UnifiedRoleDefinition
@@ -28,6 +29,10 @@ export interface GraphPermissions {
     driveId: string,
     itemId: string,
     graphRoles?: UnifiedRoleDefinition[],
+    options?: {
+      filter?: string
+      select?: Array<ListPermissionsSpaceRootSelectEnum>
+    },
     requestOptions?: GraphRequestOptions
   ): Promise<ListPermissionsResponse>
   updatePermission<T extends Share>(

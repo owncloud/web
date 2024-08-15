@@ -6,7 +6,7 @@ import { Resource, SpaceResource, buildSpace } from '@ownclouders/web-client'
 import { getComposableWrapper } from 'web-test-helpers'
 import { unref } from 'vue'
 import { mock, mockDeep } from 'vitest-mock-extended'
-import { Drive } from '@ownclouders/web-client/graph/generated'
+import { Drive, User } from '@ownclouders/web-client/graph/generated'
 import { ClientService } from '../../../../../src/services'
 import { useSpaceHelpers } from '../../../../../src/composables/spaces/useSpaceHelpers'
 
@@ -119,7 +119,9 @@ function getWrapper({
       {
         provide: { $clientService: mockDeep<ClientService>() },
         pluginOptions: {
-          piniaOptions: { userState: { user: { id: '1', onPremisesSamAccountName: 'alice' } } }
+          piniaOptions: {
+            userState: { user: { id: '1', onPremisesSamAccountName: 'alice' } as User }
+          }
         }
       }
     )

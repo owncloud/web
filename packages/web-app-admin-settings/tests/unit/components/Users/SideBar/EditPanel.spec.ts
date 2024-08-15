@@ -6,7 +6,7 @@ import {
   shallowMount
 } from 'web-test-helpers'
 import { mock } from 'vitest-mock-extended'
-import { Group, User } from '@ownclouders/web-client/graph/generated'
+import { Drive, Group, User } from '@ownclouders/web-client/graph/generated'
 import { CapabilityStore } from '@ownclouders/web-pkg'
 import GroupSelect from '../../../../../src/components/Users/GroupSelect.vue'
 
@@ -193,9 +193,9 @@ function getWrapper({
           displayName: 'jan',
           mail: 'jan@owncloud.com',
           passwordProfile: { password: '' },
-          drive: { quota: {} },
+          drive: { quota: {} } as Drive,
           memberOf: selectedGroups
-        },
+        } as User,
         roles: [{ id: '1', displayName: 'admin' }],
         groups,
         applicationId: '1'

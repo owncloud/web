@@ -3,6 +3,7 @@ import { ShareRole } from '@ownclouders/web-client'
 import { defaultPlugins, mount, shallowMount } from 'web-test-helpers'
 import { mock } from 'vitest-mock-extended'
 import { Resource } from '@ownclouders/web-client'
+import { User } from '@ownclouders/web-client/graph/generated'
 
 const selectors = {
   recipientRoleBtn: '.files-recipient-role-select-btn',
@@ -62,7 +63,7 @@ function getWrapper({
       global: {
         plugins: [
           ...defaultPlugins({
-            piniaOptions: { userState: { user: { onPremisesSamAccountName: 'name' } } }
+            piniaOptions: { userState: { user: { onPremisesSamAccountName: 'name' } as User } }
           })
         ],
         renderStubDefaultSlot: true,

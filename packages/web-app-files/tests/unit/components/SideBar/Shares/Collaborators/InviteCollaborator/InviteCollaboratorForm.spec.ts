@@ -82,19 +82,19 @@ describe('InviteCollaboratorForm', () => {
       expect(mocks.$clientService.graphAuthenticated.groups.listGroups).toHaveBeenCalledTimes(1)
     })
     it('fetches users and groups returned from the server', async () => {
-      const { wrapper } = getWrapper({ users: [{ id: '2' }], groups: [{ id: '3' }] })
+      const { wrapper } = getWrapper({ users: [{ id: '2' } as User], groups: [{ id: '3' }] })
       await wrapper.vm.fetchRecipientsTask.last
 
       expect(wrapper.vm.autocompleteResults.length).toBe(2)
     })
     it('filters out the current user', async () => {
-      const { wrapper } = getWrapper({ users: [{ id: '1' }], groups: [{ id: '3' }] })
+      const { wrapper } = getWrapper({ users: [{ id: '1' } as User], groups: [{ id: '3' }] })
       await wrapper.vm.fetchRecipientsTask.last
 
       expect(wrapper.vm.autocompleteResults.length).toBe(1)
     })
     it('filters out selected users', async () => {
-      const { wrapper } = getWrapper({ users: [{ id: '2' }], groups: [{ id: '3' }] })
+      const { wrapper } = getWrapper({ users: [{ id: '2' } as User], groups: [{ id: '3' }] })
       wrapper.vm.selectedCollaborators = [mock<CollaboratorAutoCompleteItem>({ id: '2' })]
       await wrapper.vm.fetchRecipientsTask.last
 
@@ -102,7 +102,7 @@ describe('InviteCollaboratorForm', () => {
     })
     it('filters out existing direct shares', async () => {
       const { wrapper } = getWrapper({
-        users: [{ id: '2' }],
+        users: [{ id: '2' } as User],
         groups: [{ id: '3' }],
         existingCollaborators: [
           mock<CollaboratorShare>({ sharedWith: { id: '2' }, indirect: false })

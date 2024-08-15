@@ -3,7 +3,7 @@ import { buildSpace, SpaceResource } from '@ownclouders/web-client'
 import { mock } from 'vitest-mock-extended'
 import { defaultComponentMocks, RouteLocation, getComposableWrapper } from 'web-test-helpers'
 import { unref } from 'vue'
-import { Drive } from '@ownclouders/web-client/graph/generated'
+import { Drive, User } from '@ownclouders/web-client/graph/generated'
 import { useMessages, useModals } from '../../../../../src/composables/piniaStores'
 
 describe('restore', () => {
@@ -149,7 +149,9 @@ function getWrapper({
         mocks,
         provide: mocks,
         pluginOptions: {
-          piniaOptions: { userState: { user: { id: '1', onPremisesSamAccountName: 'alice' } } }
+          piniaOptions: {
+            userState: { user: { id: '1', onPremisesSamAccountName: 'alice' } as User }
+          }
         }
       }
     )

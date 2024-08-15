@@ -5,7 +5,7 @@ import { SideBarEventTopics } from '@ownclouders/web-pkg'
 import { useUserSettingsStore } from '../../../../src/composables/stores/userSettings'
 import { User } from '@ownclouders/web-client/graph/generated'
 
-const getUserMocks = () => [{ id: '1', displayName: 'jan' }]
+const getUserMocks = () => [{ id: '1', displayName: 'jan' }] as User[]
 vi.mock('@ownclouders/web-pkg', async (importOriginal) => ({
   ...(await importOriginal<any>()),
   displayPositionedDropdown: vi.fn(),
@@ -36,7 +36,7 @@ describe('UsersList', () => {
 
       expect(
         wrapper.vm.orderBy(
-          [{ displayName: 'user' }, { displayName: 'admin' }],
+          [{ displayName: 'user' }, { displayName: 'admin' }] as User[],
           'displayName',
           false
         )
@@ -46,7 +46,11 @@ describe('UsersList', () => {
       const { wrapper } = getWrapper()
 
       expect(
-        wrapper.vm.orderBy([{ displayName: 'admin' }, { displayName: 'user' }], 'displayName', true)
+        wrapper.vm.orderBy(
+          [{ displayName: 'admin' }, { displayName: 'user' }] as User[],
+          'displayName',
+          true
+        )
       ).toEqual([{ displayName: 'user' }, { displayName: 'admin' }])
     })
 

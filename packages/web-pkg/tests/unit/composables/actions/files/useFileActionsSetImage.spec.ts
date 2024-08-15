@@ -4,7 +4,7 @@ import { buildSpace, Resource, SpaceResource } from '@ownclouders/web-client'
 import { mock } from 'vitest-mock-extended'
 import { defaultComponentMocks, RouteLocation, getComposableWrapper } from 'web-test-helpers'
 import { unref } from 'vue'
-import { Drive } from '@ownclouders/web-client/graph/generated'
+import { Drive, User } from '@ownclouders/web-client/graph/generated'
 import { useSpaceHelpers } from '../../../../../src/composables/spaces/useSpaceHelpers'
 
 vi.mock('../../../../../src/composables/spaces/useSpaceHelpers', () => ({
@@ -178,7 +178,9 @@ function getWrapper({
         mocks,
         provide: mocks,
         pluginOptions: {
-          piniaOptions: { userState: { user: { id: '1', onPremisesSamAccountName: 'alice' } } }
+          piniaOptions: {
+            userState: { user: { id: '1', onPremisesSamAccountName: 'alice' } as User }
+          }
         }
       }
     )

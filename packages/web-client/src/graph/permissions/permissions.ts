@@ -48,12 +48,14 @@ export const PermissionsFactory = ({
       }) as T
     },
 
-    async listPermissions(driveId, itemId, graphRoles, requestOptions) {
+    async listPermissions(driveId, itemId, graphRoles, options, requestOptions) {
       let responseData: CollectionOfPermissionsWithAllowedValues
 
       if (driveId === itemId) {
         const { data } = await drivesRootApiFactory.listPermissionsSpaceRoot(
           driveId,
+          options?.filter,
+          options?.select ? new Set([...options.select]) : null,
           requestOptions
         )
         responseData = data
@@ -61,6 +63,8 @@ export const PermissionsFactory = ({
         const { data } = await drivesPermissionsApiFactory.listPermissions(
           driveId,
           itemId,
+          options?.filter,
+          options?.select ? new Set([...options.select]) : null,
           requestOptions
         )
         responseData = data

@@ -169,7 +169,7 @@ export default defineComponent({
     const { showErrorMessage } = useMessages()
     const { $gettext } = useGettext()
 
-    const editUser: MaybeRef<User> = ref({})
+    const editUser: MaybeRef<User> = ref()
     const formData = ref({
       displayName: {
         errorMessage: '',
@@ -249,7 +249,7 @@ export default defineComponent({
         const graphEditUserPayload = diff(
           graphEditUserPayloadExtractor(user),
           graphEditUserPayloadExtractor(editUser)
-        )
+        ) as User
 
         if (!isEmpty(graphEditUserPayload)) {
           await client.users.editUser(editUser.id, graphEditUserPayload)

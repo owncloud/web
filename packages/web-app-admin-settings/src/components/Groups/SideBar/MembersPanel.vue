@@ -21,7 +21,7 @@ import { computed, defineComponent, inject, ref, watch, unref, Ref } from 'vue'
 import MembersRoleSection from '../../Groups/SideBar/MembersRoleSection.vue'
 import Fuse from 'fuse.js'
 import Mark from 'mark.js'
-import { Group } from '@ownclouders/web-client/graph/generated'
+import { Group, User } from '@ownclouders/web-client/graph/generated'
 import { defaultFuseOptions } from '@ownclouders/web-pkg'
 
 export default defineComponent({
@@ -33,7 +33,7 @@ export default defineComponent({
     const markInstance = ref(null)
     const membersListRef = ref(null)
 
-    const filterMembers = (collection: Group[], term: string) => {
+    const filterMembers = (collection: User[], term: string) => {
       if (!(term || '').trim()) {
         return collection
       }

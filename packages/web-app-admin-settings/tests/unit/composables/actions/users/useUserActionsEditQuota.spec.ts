@@ -2,6 +2,7 @@ import { useUserActionsEditQuota } from '../../../../../src/composables/actions/
 import { defaultComponentMocks, getComposableWrapper, writable } from 'web-test-helpers'
 import { unref } from 'vue'
 import { useCapabilityStore, useModals } from '@ownclouders/web-pkg'
+import { User } from '@ownclouders/web-client/graph/generated'
 
 describe('useUserActionsEditQuota', () => {
   describe('isVisible property', () => {
@@ -19,7 +20,7 @@ describe('useUserActionsEditQuota', () => {
           name: 'some-drive',
           quota: {}
         }
-      }
+      } as User
       getWrapper({
         canEditSpaceQuota: true,
         setup: ({ actions }) => {
@@ -34,7 +35,7 @@ describe('useUserActionsEditQuota', () => {
           name: 'some-drive',
           quota: {}
         }
-      }
+      } as User
       getWrapper({
         canEditSpaceQuota: false,
         setup: ({ actions }) => {
@@ -51,7 +52,7 @@ describe('useUserActionsEditQuota', () => {
               name: 'some-drive',
               quota: {}
             }
-          }
+          } as User
 
           const capabilityStore = useCapabilityStore()
           writable(capabilityStore).graphUsersReadOnlyAttributes = ['drive.quota']
