@@ -50,7 +50,7 @@ export const useScrollTo = (): ScrollToResult => {
     // files-app-bar, admin-settings-app-bar
     const topbarElement = document.getElementById(options.topbarElement)
     // topbar height + th height + height of one row = offset needed when scrolling top
-    const topOffset = topbarElement.offsetHeight + resourceElement.offsetHeight * 2
+    const topOffset = topbarElement?.offsetHeight || 0 + resourceElement.offsetHeight * 2
 
     if (
       resourceElement.getBoundingClientRect().bottom > window.innerHeight ||

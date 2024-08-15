@@ -10,6 +10,7 @@ import {
 import { defineComponent, ref } from 'vue'
 import { useSelectedResources } from '../../../../src/composables/selection'
 import {
+  useAppsStore,
   useExtensionRegistry,
   useResourcesStore,
   useSharesStore,
@@ -170,6 +171,24 @@ describe('FileSideBar', () => {
       await wrapper.vm.loadSharesTask.perform(resource)
 
       expect(loadSpaceMembers).toHaveBeenCalled()
+    })
+    it('loads available external share roles if the ocm app is enabled', async () => {
+      const resource = mock<Resource>()
+      const { wrapper, mocks } = createWrapper()
+
+      mocks.$clientService.graphAuthenticated.permissions.listPermissions.mockResolvedValue({
+        shares: [],
+        allowedActions: [],
+        allowedRoles: []
+      })
+
+      const { isAppEnabled } = useAppsStore()
+      vi.mocked(isAppEnabled).mockReturnValue(true)
+      await wrapper.vm.loadSharesTask.perform(resource)
+
+      expect(
+        mocks.$clientService.graphAuthenticated.permissions.listPermissions
+      ).toHaveBeenCalledTimes(2)
     })
     describe('cache', () => {
       it('is being used in non-flat file lists', async () => {

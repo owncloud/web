@@ -109,6 +109,11 @@ export default defineComponent({
     isLocked: {
       type: Boolean,
       default: false
+    },
+    // only show external share roles
+    isExternal: {
+      type: Boolean,
+      default: false
     }
   },
   emits: ['optionChange'],
@@ -128,7 +133,14 @@ export default defineComponent({
       return ''
     })
 
-    const availableRoles = inject<Ref<ShareRole[]>>('availableShareRoles')
+    const availableInternalRoles = inject<Ref<ShareRole[]>>('availableInternalShareRoles')
+    const availableExternalRoles = inject<Ref<ShareRole[]>>('availableExternalShareRoles')
+    const availableRoles = computed(() => {
+      if (props.isExternal) {
+        return unref(availableExternalRoles)
+      }
+      return unref(availableInternalRoles)
+    })
 
     const initialSelectedRole = props.existingRole ? props.existingRole : unref(availableRoles)[0]
     const selectedRole = ref<ShareRole>(initialSelectedRole)

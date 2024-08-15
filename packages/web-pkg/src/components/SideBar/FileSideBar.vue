@@ -51,7 +51,8 @@ import {
   useSharesStore,
   useResourcesStore,
   useUserStore,
-  useConfigStore
+  useConfigStore,
+  useAppsStore
 } from '../../composables'
 import {
   isProjectSpaceResource,
@@ -95,6 +96,7 @@ export default defineComponent({
     const sharesStore = useSharesStore()
     const userStore = useUserStore()
     const configStore = useConfigStore()
+    const appsStore = useAppsStore()
 
     const resourcesStore = useResourcesStore()
     const { currentFolder } = storeToRefs(resourcesStore)
@@ -102,7 +104,8 @@ export default defineComponent({
     const loadedResource = ref<Resource>()
     const versions = ref<Resource[]>([])
 
-    const availableShareRoles = ref<ShareRole[]>([])
+    const availableInternalShareRoles = ref<ShareRole[]>([])
+    const availableExternalShareRoles = ref<ShareRole[]>([])
 
     const { selectedResources } = useSelectedResources()
 
@@ -205,8 +208,23 @@ export default defineComponent({
       const loadedCollaboratorShares = shares.filter(isCollaboratorShare)
       const loadedLinkShares = shares.filter(isLinkShare)
 
-      availableShareRoles.value =
+      availableInternalShareRoles.value =
         sharesStore.graphRoles.filter((r) => allowedRoles?.map(({ id }) => id).includes(r.id)) || []
+
+      // load external share roles
+      if (appsStore.isAppEnabled('open-cloud-mesh')) {
+        const { allowedRoles } = yield* call(
+          client.listPermissions(props.space?.id, resource.id, sharesStore.graphRoles, {
+            filter: `@libre.graph.permissions.roles.allowedValues/rolePermissions/any(p:contains(p/condition, '@Subject.UserType=="Federated"'))`,
+            // FIXME: use ListPermissionsSpaceRootSelectEnum, but the values seem to be wrong because of "\" at the start
+            select: ['@libre.graph.permissions.roles.allowedValues' as any]
+          })
+        )
+
+        availableExternalShareRoles.value =
+          sharesStore.graphRoles.filter((r) => allowedRoles?.map(({ id }) => id).includes(r.id)) ||
+          []
+      }
 
       // use cache for indirect shares
       const useCache = !unref(isFlatFileList) && !unref(isProjectsLocation)
@@ -370,7 +388,8 @@ export default defineComponent({
       'activePanel',
       computed(() => props.activePanel)
     )
-    provide('availableShareRoles', readonly(availableShareRoles))
+    provide('availableInternalShareRoles', readonly(availableInternalShareRoles))
+    provide('availableExternalShareRoles', readonly(availableExternalShareRoles))
 
     return {
       loadedResource,

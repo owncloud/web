@@ -124,7 +124,7 @@ export default defineComponent({
 
         const { token: currentToken, providerDomain, ...query } = unref(route).query
         router.replace({
-          name: 'ocm-app-invitations',
+          name: 'open-cloud-mesh-invitations',
           query
         })
 

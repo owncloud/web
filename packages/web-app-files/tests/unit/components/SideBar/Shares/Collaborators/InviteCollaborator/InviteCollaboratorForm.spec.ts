@@ -16,6 +16,8 @@ import {
 } from '@ownclouders/web-client'
 import { Group, User } from '@ownclouders/web-client/graph/generated'
 import OcButton from 'design-system/src/components/OcButton/OcButton.vue'
+import RoleDropdown from '../../../../../../../src/components/SideBar/Shares/Collaborators/RoleDropdown.vue'
+import { ShareRoleType } from '../../../../../../../src/components/SideBar/Shares/Collaborators/InviteCollaborator/InviteCollaboratorForm.vue'
 
 vi.mock('lodash-es', () => ({ debounce: (fn: any) => fn() }))
 
@@ -147,6 +149,27 @@ describe('InviteCollaboratorForm', () => {
     })
     it.todo('resets focus upon selecting an invitee')
   })
+  describe('share role type filter', () => {
+    it.each([
+      { externalRoles: [], available: false },
+      { externalRoles: [mock<ShareRole>()], available: true }
+    ])(
+      'is present depending on the available external share roles',
+      ({ externalRoles, available }) => {
+        const { wrapper } = getWrapper({ externalShareRoles: externalRoles })
+        expect(wrapper.find('.invite-form-share-role-type').exists()).toBe(available)
+      }
+    )
+    it('correctly passes the external prop to the role dropdown component', async () => {
+      const externalRoles = [mock<ShareRole>()]
+      const { wrapper } = getWrapper({ externalShareRoles: externalRoles })
+      wrapper.vm.currentShareRoleType = mock<ShareRoleType>({ id: '2' })
+      await wrapper.vm.$nextTick()
+
+      const roleDropdown = wrapper.findComponent<typeof RoleDropdown>('role-dropdown-stub')
+      expect(roleDropdown.props('isExternal')).toBeTruthy()
+    })
+  })
 })
 
 function getWrapper({
@@ -155,6 +178,7 @@ function getWrapper({
   users = [],
   groups = [],
   existingCollaborators = [],
+  externalShareRoles = [],
   user = mock<User>({ id: '1' })
 }: {
   storageId?: string
@@ -162,6 +186,7 @@ function getWrapper({
   users?: User[]
   groups?: Group[]
   existingCollaborators?: CollaboratorShare[]
+  externalShareRoles?: ShareRole[]
   user?: User
 } = {}) {
   const mocks = defaultComponentMocks({
@@ -193,8 +218,9 @@ function getWrapper({
             }
           })
         ],
-        provide: { ...mocks, resource },
-        mocks
+        provide: { ...mocks, resource, availableExternalShareRoles: externalShareRoles },
+        mocks,
+        stubs: { OcSelect: false, VueSelect: false }
       }
     })
   }

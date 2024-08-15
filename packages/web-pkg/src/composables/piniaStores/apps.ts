@@ -60,6 +60,10 @@ export const useAppsStore = defineStore('apps', () => {
     externalAppConfig.value = { ...unref(externalAppConfig), [appId]: config }
   }
 
+  const isAppEnabled = (appId: string) => {
+    return unref(appIds).includes(appId)
+  }
+
   return {
     apps,
     externalAppConfig,
@@ -68,7 +72,8 @@ export const useAppsStore = defineStore('apps', () => {
 
     registerApp,
     registerFileExtension,
-    loadExternalAppConfig
+    loadExternalAppConfig,
+    isAppEnabled
   }
 })
 
