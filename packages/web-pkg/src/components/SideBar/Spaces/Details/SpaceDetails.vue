@@ -13,7 +13,7 @@
       />
     </div>
     <div
-      v-if="showShareIndicators && hasShares"
+      v-if="showShareIndicators && hasShares && !resource.disabled"
       class="oc-flex oc-flex-middle oc-space-details-sidebar-members oc-mb-s oc-text-small"
       style="gap: 15px"
     >

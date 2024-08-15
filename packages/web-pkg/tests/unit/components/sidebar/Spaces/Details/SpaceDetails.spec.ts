@@ -57,6 +57,13 @@ describe('Details SideBar Panel', () => {
     })
     expect(wrapper.find(selectors.spaceMembers).exists()).toBeFalsy()
   })
+  it('does not render share indicators if space is disabled', () => {
+    const { wrapper } = createWrapper({
+      spaceResource: { ...spaceMock, disabled: true },
+      props: { showShareIndicators: true }
+    })
+    expect(wrapper.find(selectors.spaceMembers).exists()).toBeFalsy()
+  })
 })
 
 function createWrapper({ spaceResource = spaceMock, props = {} } = {}) {

@@ -20,7 +20,7 @@ export const useSpaceActionsShowMembers = () => {
       icon: 'group',
       label: () => $gettext('Members'),
       handler,
-      isVisible: ({ resources }) => resources.length === 1,
+      isVisible: ({ resources }) => resources.length === 1 && !resources[0].disabled,
       componentType: 'button',
       class: 'oc-files-actions-show-details-trigger'
     }

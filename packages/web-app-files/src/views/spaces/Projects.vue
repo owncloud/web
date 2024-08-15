@@ -93,7 +93,9 @@
             </template>
             <template #actions="{ resource }">
               <oc-button
+                v-if="!resource.disabled"
                 v-oc-tooltip="showSpaceMemberLabel"
+                class="spaces-list-show-members-button"
                 :aria-label="showSpaceMemberLabel"
                 appearance="raw"
                 @click="openSidebarSharePanel(resource as SpaceResource)"
