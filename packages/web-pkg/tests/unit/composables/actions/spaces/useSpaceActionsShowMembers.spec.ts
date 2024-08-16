@@ -21,6 +21,17 @@ describe('showMembers', () => {
         }
       })
     })
+    it('should be false when resource is disabled', () => {
+      getWrapper({
+        setup: ({ actions }) => {
+          expect(
+            unref(actions)[0].isVisible({
+              resources: [{ id: '1', disabled: true } as SpaceResource]
+            })
+          ).toBe(false)
+        }
+      })
+    })
   })
 })
 

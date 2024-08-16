@@ -385,7 +385,7 @@ export const useSideBarPanels = (): SidebarPanelExtension<SpaceResource, Resourc
           }
         }),
         isVisible: ({ items }) => {
-          return items?.length === 1 && isProjectSpaceResource(items[0])
+          return items?.length === 1 && isProjectSpaceResource(items[0]) && !items[0].disabled
         }
       }
     },
