@@ -1512,6 +1512,12 @@ export interface Identity {
      * @memberof Identity
      */
     'id'?: string;
+    /**
+     * The type of the identity. This can be either \"Member\" for regular user, \"Guest\" for guest users or \"Federated\" for users imported from a federated instance. Can be used by clients to indicate the type of user. For more details, clients should look up and cache the user at the /users enpoint.
+     * @type {string}
+     * @memberof Identity
+     */
+    '@libre.graph.userType'?: string;
 }
 /**
  * Optional. User account.
@@ -2424,7 +2430,7 @@ export interface User {
      * @type {string}
      * @memberof User
      */
-    'mail': string;
+    'mail'?: string;
     /**
      * Groups that this user is a member of. HTTP Methods: GET (supported for all groups). Read-only. Nullable. Supports $expand.
      * @type {Array<Group>}
@@ -2465,6 +2471,103 @@ export interface User {
      * Represents the users language setting, ISO-639-1 Code
      * @type {string}
      * @memberof User
+     */
+    'preferredLanguage'?: string;
+}
+/**
+ * Represents updates to an Active Directory user object.
+ * @export
+ * @interface UserUpdate
+ */
+export interface UserUpdate {
+    /**
+     * Read-only.
+     * @type {string}
+     * @memberof UserUpdate
+     */
+    'id'?: string;
+    /**
+     * Set to \"true\" when the account is enabled.
+     * @type {boolean}
+     * @memberof UserUpdate
+     */
+    'accountEnabled'?: boolean;
+    /**
+     * The apps and app roles which this user has been assigned.
+     * @type {Array<AppRoleAssignment>}
+     * @memberof UserUpdate
+     */
+    'appRoleAssignments'?: Array<AppRoleAssignment>;
+    /**
+     * The name displayed in the address book for the user. This value is usually the combination of the user\'s first name, middle initial, and last name. This property is required when a user is created and it cannot be cleared during updates. Returned by default. Supports $orderby.
+     * @type {string}
+     * @memberof UserUpdate
+     */
+    'displayName'?: string;
+    /**
+     * A collection of drives available for this user. Read-only.
+     * @type {Array<Drive>}
+     * @memberof UserUpdate
+     */
+    'drives'?: Array<Drive>;
+    /**
+     * 
+     * @type {Drive}
+     * @memberof UserUpdate
+     */
+    'drive'?: Drive;
+    /**
+     * Identities associated with this account.
+     * @type {Array<ObjectIdentity>}
+     * @memberof UserUpdate
+     */
+    'identities'?: Array<ObjectIdentity>;
+    /**
+     * The SMTP address for the user, for example, \'jeff@contoso.onowncloud.com\'. Returned by default.
+     * @type {string}
+     * @memberof UserUpdate
+     */
+    'mail'?: string;
+    /**
+     * Groups that this user is a member of. HTTP Methods: GET (supported for all groups). Read-only. Nullable. Supports $expand.
+     * @type {Array<Group>}
+     * @memberof UserUpdate
+     */
+    'memberOf'?: Array<Group>;
+    /**
+     * Contains the on-premises SAM account name synchronized from the on-premises directory.
+     * @type {string}
+     * @memberof UserUpdate
+     */
+    'onPremisesSamAccountName'?: string;
+    /**
+     * 
+     * @type {PasswordProfile}
+     * @memberof UserUpdate
+     */
+    'passwordProfile'?: PasswordProfile;
+    /**
+     * The user\'s surname (family name or last name). Returned by default.
+     * @type {string}
+     * @memberof UserUpdate
+     */
+    'surname'?: string;
+    /**
+     * The user\'s givenName. Returned by default.
+     * @type {string}
+     * @memberof UserUpdate
+     */
+    'givenName'?: string;
+    /**
+     * The user`s type. This can be either \"Member\" for regular user, \"Guest\" for guest users or \"Federated\" for users imported from a federated instance.
+     * @type {string}
+     * @memberof UserUpdate
+     */
+    'userType'?: string;
+    /**
+     * Represents the users language setting, ISO-639-1 Code
+     * @type {string}
+     * @memberof UserUpdate
      */
     'preferredLanguage'?: string;
 }
@@ -4383,8 +4486,8 @@ export class DrivesPermissionsApi extends BaseAPI {
  * @export
  */
 export const ListPermissionsSelectEnum = {
-    LibreGraphPermissionsActionsAllowedValues: '\\@libre.graph.permissions.actions.allowedValues',
-    LibreGraphPermissionsRolesAllowedValues: '\\@libre.graph.permissions.roles.allowedValues',
+    LibreGraphPermissionsActionsAllowedValues: '@libre.graph.permissions.actions.allowedValues',
+    LibreGraphPermissionsRolesAllowedValues: '@libre.graph.permissions.roles.allowedValues',
     Value: 'value'
 } as const;
 export type ListPermissionsSelectEnum = typeof ListPermissionsSelectEnum[keyof typeof ListPermissionsSelectEnum];
@@ -5189,8 +5292,8 @@ export class DrivesRootApi extends BaseAPI {
  * @export
  */
 export const ListPermissionsSpaceRootSelectEnum = {
-    LibreGraphPermissionsActionsAllowedValues: '\\@libre.graph.permissions.actions.allowedValues',
-    LibreGraphPermissionsRolesAllowedValues: '\\@libre.graph.permissions.roles.allowedValues',
+    LibreGraphPermissionsActionsAllowedValues: '@libre.graph.permissions.actions.allowedValues',
+    LibreGraphPermissionsRolesAllowedValues: '@libre.graph.permissions.roles.allowedValues',
     Value: 'value'
 } as const;
 export type ListPermissionsSpaceRootSelectEnum = typeof ListPermissionsSpaceRootSelectEnum[keyof typeof ListPermissionsSpaceRootSelectEnum];
@@ -9084,11 +9187,11 @@ export const MeUserApiAxiosParamCreator = function (configuration?: Configuratio
         /**
          * 
          * @summary Update the current user
-         * @param {User} [user] New user values
+         * @param {UserUpdate} [userUpdate] New user values
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        updateOwnUser: async (user?: User, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+        updateOwnUser: async (userUpdate?: UserUpdate, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
             const localVarPath = `/v1.0/me`;
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
@@ -9114,7 +9217,7 @@ export const MeUserApiAxiosParamCreator = function (configuration?: Configuratio
             setSearchParams(localVarUrlObj, localVarQueryParameter);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
             localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
-            localVarRequestOptions.data = serializeDataIfNeeded(user, localVarRequestOptions, configuration)
+            localVarRequestOptions.data = serializeDataIfNeeded(userUpdate, localVarRequestOptions, configuration)
 
             return {
                 url: toPathString(localVarUrlObj),
@@ -9147,12 +9250,12 @@ export const MeUserApiFp = function(configuration?: Configuration) {
         /**
          * 
          * @summary Update the current user
-         * @param {User} [user] New user values
+         * @param {UserUpdate} [userUpdate] New user values
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async updateOwnUser(user?: User, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<User>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.updateOwnUser(user, options);
+        async updateOwnUser(userUpdate?: UserUpdate, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<User>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.updateOwnUser(userUpdate, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
             const localVarOperationServerBasePath = operationServerMap['MeUserApi.updateOwnUser']?.[localVarOperationServerIndex]?.url;
             return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
@@ -9180,12 +9283,12 @@ export const MeUserApiFactory = function (configuration?: Configuration, basePat
         /**
          * 
          * @summary Update the current user
-         * @param {User} [user] New user values
+         * @param {UserUpdate} [userUpdate] New user values
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        updateOwnUser(user?: User, options?: RawAxiosRequestConfig): AxiosPromise<User> {
-            return localVarFp.updateOwnUser(user, options).then((request) => request(axios, basePath));
+        updateOwnUser(userUpdate?: UserUpdate, options?: RawAxiosRequestConfig): AxiosPromise<User> {
+            return localVarFp.updateOwnUser(userUpdate, options).then((request) => request(axios, basePath));
         },
     };
 };
@@ -9212,13 +9315,13 @@ export class MeUserApi extends BaseAPI {
     /**
      * 
      * @summary Update the current user
-     * @param {User} [user] New user values
+     * @param {UserUpdate} [userUpdate] New user values
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof MeUserApi
      */
-    public updateOwnUser(user?: User, options?: RawAxiosRequestConfig) {
-        return MeUserApiFp(this.configuration).updateOwnUser(user, options).then((request) => request(this.axios, this.basePath));
+    public updateOwnUser(userUpdate?: UserUpdate, options?: RawAxiosRequestConfig) {
+        return MeUserApiFp(this.configuration).updateOwnUser(userUpdate, options).then((request) => request(this.axios, this.basePath));
     }
 }
 
@@ -9819,15 +9922,15 @@ export const UserApiAxiosParamCreator = function (configuration?: Configuration)
          * 
          * @summary Update entity in users
          * @param {string} userId key: id of user
-         * @param {User} user New property values
+         * @param {UserUpdate} userUpdate New property values
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        updateUser: async (userId: string, user: User, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+        updateUser: async (userId: string, userUpdate: UserUpdate, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
             // verify required parameter 'userId' is not null or undefined
             assertParamExists('updateUser', 'userId', userId)
-            // verify required parameter 'user' is not null or undefined
-            assertParamExists('updateUser', 'user', user)
+            // verify required parameter 'userUpdate' is not null or undefined
+            assertParamExists('updateUser', 'userUpdate', userUpdate)
             const localVarPath = `/v1.0/users/{user-id}`
                 .replace(`{${"user-id"}}`, encodeURIComponent(String(userId)));
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
@@ -9854,7 +9957,7 @@ export const UserApiAxiosParamCreator = function (configuration?: Configuration)
             setSearchParams(localVarUrlObj, localVarQueryParameter);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
             localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
-            localVarRequestOptions.data = serializeDataIfNeeded(user, localVarRequestOptions, configuration)
+            localVarRequestOptions.data = serializeDataIfNeeded(userUpdate, localVarRequestOptions, configuration)
 
             return {
                 url: toPathString(localVarUrlObj),
@@ -9918,12 +10021,12 @@ export const UserApiFp = function(configuration?: Configuration) {
          * 
          * @summary Update entity in users
          * @param {string} userId key: id of user
-         * @param {User} user New property values
+         * @param {UserUpdate} userUpdate New property values
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async updateUser(userId: string, user: User, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<User>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.updateUser(userId, user, options);
+        async updateUser(userId: string, userUpdate: UserUpdate, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<User>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.updateUser(userId, userUpdate, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
             const localVarOperationServerBasePath = operationServerMap['UserApi.updateUser']?.[localVarOperationServerIndex]?.url;
             return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
@@ -9976,12 +10079,12 @@ export const UserApiFactory = function (configuration?: Configuration, basePath?
          * 
          * @summary Update entity in users
          * @param {string} userId key: id of user
-         * @param {User} user New property values
+         * @param {UserUpdate} userUpdate New property values
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        updateUser(userId: string, user: User, options?: RawAxiosRequestConfig): AxiosPromise<User> {
-            return localVarFp.updateUser(userId, user, options).then((request) => request(axios, basePath));
+        updateUser(userId: string, userUpdate: UserUpdate, options?: RawAxiosRequestConfig): AxiosPromise<User> {
+            return localVarFp.updateUser(userId, userUpdate, options).then((request) => request(axios, basePath));
         },
     };
 };
@@ -10037,13 +10140,13 @@ export class UserApi extends BaseAPI {
      * 
      * @summary Update entity in users
      * @param {string} userId key: id of user
-     * @param {User} user New property values
+     * @param {UserUpdate} userUpdate New property values
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof UserApi
      */
-    public updateUser(userId: string, user: User, options?: RawAxiosRequestConfig) {
-        return UserApiFp(this.configuration).updateUser(userId, user, options).then((request) => request(this.axios, this.basePath));
+    public updateUser(userId: string, userUpdate: UserUpdate, options?: RawAxiosRequestConfig) {
+        return UserApiFp(this.configuration).updateUser(userId, userUpdate, options).then((request) => request(this.axios, this.basePath));
     }
 }
 
