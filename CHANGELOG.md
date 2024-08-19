@@ -1,9 +1,9 @@
-Changelog for ownCloud Web [unreleased] (UNRELEASED)
+Changelog for ownCloud Web [10.1.0] (2024-08-16)
 =======================================
-The following sections list the changes in ownCloud web unreleased relevant to
+The following sections list the changes in ownCloud web 10.1.0 relevant to
 ownCloud admins and users.
 
-[unreleased]: https://github.com/owncloud/web/compare/v10.1.0...master
+[10.1.0]: https://github.com/owncloud/web/compare/v10.0.0...v10.1.0
 
 Summary
 -------
@@ -15,8 +15,10 @@ Summary
 * Bugfix - Keyboard actions for disabled resources: [#11342](https://github.com/owncloud/web/pull/11342)
 * Bugfix - OCM page reload: [#11348](https://github.com/owncloud/web/pull/11348)
 * Bugfix - Closing an app opened via in-app open feature stays open: [#11353](https://github.com/owncloud/web/pull/11353)
+* Enhancement - Add quota information to account page: [#11287](https://github.com/owncloud/web/pull/11287)
 * Enhancement - App Store app: [#11302](https://github.com/owncloud/web/pull/11302)
 * Enhancement - Redesign share link modal: [#11310](https://github.com/owncloud/web/pull/11310)
+* Enhancement - Accessibility: [#11315](https://github.com/owncloud/web/pull/11315)
 * Enhancement - Files as links: [#11329](https://github.com/owncloud/web/pull/11329)
 * Enhancement - Unstick top bar: [#11344](https://github.com/owncloud/web/pull/11344)
 
@@ -81,6 +83,13 @@ Details
    https://github.com/owncloud/web/pull/11353
    https://github.com/owncloud/web/pull/11354
 
+* Enhancement - Add quota information to account page: [#11287](https://github.com/owncloud/web/pull/11287)
+
+   We've added a new section to the account page that displays the users current
+   quota usage.
+
+   https://github.com/owncloud/web/pull/11287
+
 * Enhancement - App Store app: [#11302](https://github.com/owncloud/web/pull/11302)
 
    We've added a new App Store app to the platform. This app allows you to explore
@@ -102,6 +111,18 @@ Details
    https://github.com/owncloud/web/pull/11310
    https://github.com/owncloud/web/pull/11324
 
+* Enhancement - Accessibility: [#11315](https://github.com/owncloud/web/pull/11315)
+
+   Several accessibility improvements have been made, most notably in regards to
+   color contrasts and outlines when navigating via keyboard.
+
+   https://github.com/owncloud/web/issues/10730
+   https://github.com/owncloud/web/issues/10726
+   https://github.com/owncloud/web/issues/10735
+   https://github.com/owncloud/web/pull/11315
+   https://github.com/owncloud/web/pull/11331
+   https://github.com/owncloud/web/pull/11320
+
 * Enhancement - Files as links: [#11329](https://github.com/owncloud/web/pull/11329)
 
    We have converted the former buttons in the files list to links, this change
@@ -120,28 +141,6 @@ Details
 
    https://github.com/owncloud/web/issues/10728
    https://github.com/owncloud/web/pull/11344
-
-Changelog for ownCloud Web [10.1.0] (2024-07-31)
-=======================================
-The following sections list the changes in ownCloud web 10.1.0 relevant to
-ownCloud admins and users.
-
-[10.1.0]: https://github.com/owncloud/web/compare/v10.0.0...v10.1.0
-
-Summary
--------
-
-* Enhancement - Add quota information to account page: [#11287](https://github.com/owncloud/web/pull/11287)
-
-Details
--------
-
-* Enhancement - Add quota information to account page: [#11287](https://github.com/owncloud/web/pull/11287)
-
-   We've added a new section to the account page that displays the users current
-   quota usage.
-
-   https://github.com/owncloud/web/pull/11287
 
 Changelog for ownCloud Web [10.0.0] (2024-07-29)
 =======================================
