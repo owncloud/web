@@ -11,6 +11,7 @@ import {
 import { SharingLinkType } from '@ownclouders/web-client/graph/generated'
 import { Resource } from '@ownclouders/web-client'
 import OcButton from 'design-system/src/components/OcButton/OcButton.vue'
+import { DateTime } from 'luxon'
 
 vi.mock('@ownclouders/web-pkg', async (importOriginal) => ({
   ...(await importOriginal<any>()),
@@ -119,7 +120,7 @@ function getShallowMountedWrapper({
         expirationRules: {
           enforced: false,
           default: null,
-          min: new Date(),
+          min: DateTime.now(),
           max: null
         },
         linkShare,

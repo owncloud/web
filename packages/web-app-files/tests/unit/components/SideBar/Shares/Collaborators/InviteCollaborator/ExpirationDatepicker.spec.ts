@@ -202,7 +202,7 @@ describe('InviteCollaborator ExpirationDatepicker', () => {
     ).toBe(null)
 
     const manualDate = DateTime.now().plus({ days: 5 })
-    wrapper.vm.dateCurrent = manualDate.toJSDate()
+    wrapper.vm.dateCurrent = manualDate
     await nextTick()
     expect(wrapper.emitted('optionChange').length).toBe(4)
     expect(

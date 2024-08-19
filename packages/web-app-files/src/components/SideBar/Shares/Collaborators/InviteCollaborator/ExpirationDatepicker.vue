@@ -1,39 +1,29 @@
 <template>
   <div class="oc-flex oc-flex-middle oc-flex-nowrap">
-    <oc-datepicker
-      v-model="dateCurrent"
-      :min-date="dateMin"
-      :max-date="dateMax"
-      :locale="language.current"
-      :is-required="enforced"
-      class="files-recipient-expiration-datepicker oc-width-1-1"
-      data-testid="recipient-datepicker"
-    >
-      <template #default="{ togglePopover }">
-        <oc-button
-          class="files-collaborators-expiration-button oc-p-s action-menu-item"
-          data-testid="recipient-datepicker-btn"
-          appearance="raw"
-          gap-size="none"
-          :aria-label="
-            dateCurrent ? $gettext('Edit expiration date') : $gettext('Set expiration date')
-          "
-          @click="togglePopover"
-        >
-          <oc-icon name="calendar-event" fill-type="line" size="medium" variation="passive" />
-          <span
-            v-if="!dateCurrent"
-            key="no-expiration-date-label"
-            v-text="$gettext('Set expiration date')"
-          />
-          <span
-            v-else
-            key="set-expiration-date-label"
-            v-text="$gettext('Expires %{expires}', { expires: dateExpire })"
-          />
-        </oc-button>
-      </template>
-    </oc-datepicker>
+    <div>
+      <oc-button
+        class="files-collaborators-expiration-button oc-p-s action-menu-item"
+        data-testid="recipient-datepicker-btn"
+        appearance="raw"
+        gap-size="none"
+        :aria-label="
+          dateCurrent ? $gettext('Edit expiration date') : $gettext('Set expiration date')
+        "
+        @click="showDatePickerModal"
+      >
+        <oc-icon name="calendar-event" fill-type="line" size="medium" variation="passive" />
+        <span
+          v-if="!dateCurrent"
+          key="no-expiration-date-label"
+          v-text="$gettext('Set expiration date')"
+        />
+        <span
+          v-else
+          key="set-expiration-date-label"
+          v-text="$gettext('Expires %{expires}', { expires: dateExpire })"
+        />
+      </oc-button>
+    </div>
     <oc-button
       v-if="!enforced && dateCurrent"
       class="recipient-edit-expiration-btn-remove"
@@ -48,11 +38,12 @@
 
 <script lang="ts">
 import { DateTime } from 'luxon'
-import { computed, watch, defineComponent, customRef, PropType } from 'vue'
-import { useCapabilityStore } from '@ownclouders/web-pkg'
+import { computed, watch, defineComponent, customRef, PropType, unref } from 'vue'
+import { useCapabilityStore, useModals } from '@ownclouders/web-pkg'
 import { ShareTypes } from '@ownclouders/web-client'
-import { formatRelativeDateFromDateTime, getLocaleFromLanguage } from '@ownclouders/web-pkg'
+import { formatRelativeDateFromDateTime } from '@ownclouders/web-pkg'
 import { useGettext } from 'vue3-gettext'
+import DatePickerModal from '../../../../Modals/DatePickerModal.vue'
 
 export default defineComponent({
   name: 'DateCurrentpicker',
@@ -67,11 +58,13 @@ export default defineComponent({
   setup(props, { emit }) {
     const language = useGettext()
     const capabilityStore = useCapabilityStore()
+    const { dispatchModal } = useModals()
 
     const optionsUser = computed(() => capabilityStore.sharingUserExpireDate)
     const optionsGroup = computed(() => capabilityStore.sharingGroupExpireDate)
     const enforced = computed(() => optionsUser.value?.enforced || optionsGroup.value?.enforced)
-    const dateMin = DateTime.now().setLocale(language.current).toJSDate()
+    const dateMin = DateTime.now()
+
     const dateDefault = computed(() => {
       const hasUserCollaborators = props.shareTypes.includes(ShareTypes.user.value)
       const hasGroupCollaborators = props.shareTypes.includes(ShareTypes.group.value)
@@ -100,39 +93,44 @@ export default defineComponent({
         return null
       }
 
-      return DateTime.now()
-        .setLocale(getLocaleFromLanguage(language.current))
-        .plus({ days })
-        .toJSDate()
+      return DateTime.now().plus({ days })
     })
     const dateMax = computed(() => (enforced.value ? dateDefault.value : null))
-    const dateCurrent = customRef<Date>((track, trigger) => {
-      let date: Date = null
+    const dateCurrent = customRef<DateTime>((track, trigger) => {
+      let date: DateTime = null
       return {
         get() {
           track()
           return date || dateDefault.value
         },
-        set(val) {
+        set(val: DateTime) {
           date = val
           trigger()
         }
       }
     })
     const dateExpire = computed(() =>
-      formatRelativeDateFromDateTime(
-        DateTime.fromJSDate(dateCurrent.value).endOf('day'),
-        language.current
-      )
+      formatRelativeDateFromDateTime(dateCurrent.value.endOf('day'), language.current)
     )
 
-    watch(dateCurrent, (val) => {
-      const dateCurrent = DateTime.fromJSDate(val)
-        .setLocale(getLocaleFromLanguage(language.current))
-        .endOf('day')
+    const showDatePickerModal = () => {
+      dispatchModal({
+        title: language.$gettext('Set expiration date'),
+        customComponent: DatePickerModal,
+        customComponentAttrs: () => ({
+          currentDate: unref(dateCurrent),
+          minDate: unref(dateMin),
+          maxDate: unref(dateMax)
+        }),
+        onConfirm: (expirationDateTime) => {
+          dateCurrent.value = expirationDateTime as any
+        }
+      })
+    }
 
+    watch(dateCurrent, (val) => {
       emit('optionChange', {
-        expirationDate: dateCurrent.isValid ? dateCurrent.toString() : null
+        expirationDate: unref(dateCurrent).isValid ? dateCurrent.value : null
       })
     })
 
@@ -148,9 +146,8 @@ export default defineComponent({
       language,
       enforced,
       dateCurrent,
-      dateMin,
-      dateMax,
-      dateExpire
+      dateExpire,
+      showDatePickerModal
     }
   }
 })

@@ -21,42 +21,32 @@
     >
       <oc-list class="collaborator-edit-dropdown-options-list" :aria-label="shareEditOptions">
         <li v-if="canEditOrDelete && isExpirationSupported" class="oc-rounded oc-menu-item-hover">
-          <oc-datepicker
-            v-model="enteredExpirationDate"
-            :min-date="minExpirationDate"
-            :max-date="maxExpirationDate"
-            :locale="$language.current"
-            :is-required="isExpirationDateEnforced"
-            class="files-recipient-expiration-datepicker oc-flex"
-            data-testid="recipient-datepicker"
-          >
-            <template #default="{ togglePopover }">
-              <oc-button
-                class="files-collaborators-expiration-button oc-p-s action-menu-item"
-                data-testid="recipient-datepicker-btn"
-                appearance="raw"
-                @click="togglePopover"
-              >
-                <oc-icon name="calendar-event" fill-type="line" size="medium" variation="passive" />
-                <span
-                  v-if="isExpirationDateSet"
-                  class="oc-ml-s"
-                  v-text="$gettext('Expires %{expires}', { expires: dateExpire })"
-                />
-                <span v-else v-text="$gettext('Set expiration date')" />
-              </oc-button>
-              <oc-button
-                v-if="isRemoveExpirationPossible"
-                class="remove-expiration-date"
-                data-testid="collaborator-remove-expiration-btn"
-                appearance="raw"
-                :aria-label="$gettext('Remove expiration date')"
-                @click="removeExpirationDate"
-              >
-                <oc-icon name="close" />
-              </oc-button>
-            </template>
-          </oc-datepicker>
+          <div class="oc-flex">
+            <oc-button
+              class="files-collaborators-expiration-button oc-p-s action-menu-item"
+              data-testid="recipient-datepicker-btn"
+              appearance="raw"
+              @click="showDatePickerModal"
+            >
+              <oc-icon name="calendar-event" fill-type="line" size="medium" variation="passive" />
+              <span
+                v-if="isExpirationDateSet"
+                class="oc-ml-s"
+                v-text="$gettext('Expires %{expires}', { expires: dateExpire })"
+              />
+              <span v-else v-text="$gettext('Set expiration date')" />
+            </oc-button>
+            <oc-button
+              v-if="isRemoveExpirationPossible"
+              class="remove-expiration-date"
+              data-testid="collaborator-remove-expiration-btn"
+              appearance="raw"
+              :aria-label="$gettext('Remove expiration date')"
+              @click="removeExpirationDate"
+            >
+              <oc-icon name="close" />
+            </oc-button>
+          </div>
         </li>
         <li v-for="(option, i) in options" :key="i" class="oc-rounded oc-menu-item-hover">
           <template v-if="option.enabled">
@@ -101,10 +91,12 @@ import { isProjectSpaceResource } from '@ownclouders/web-client'
 import {
   formatRelativeDateFromDateTime,
   useCapabilityStore,
-  useConfigStore
+  useConfigStore,
+  useModals
 } from '@ownclouders/web-pkg'
 import { useGettext } from 'vue3-gettext'
 import { storeToRefs } from 'pinia'
+import DatePickerModal from '../../../Modals/DatePickerModal.vue'
 
 export default defineComponent({
   name: 'EditDropdown',
@@ -152,6 +144,7 @@ export default defineComponent({
     const language = useGettext()
     const { $gettext } = language
     const configStore = useConfigStore()
+    const { dispatchModal } = useModals()
 
     const toggleShareDenied = (value: boolean) => {
       emit('setDenyShare', value)
@@ -179,7 +172,8 @@ export default defineComponent({
       dateExpire,
       userExpirationDate: capabilityRefs.sharingUserExpireDate,
       groupExpirationDate: capabilityRefs.sharingGroupExpireDate,
-      dropButtonTooltip
+      dropButtonTooltip,
+      dispatchModal
     }
   },
   data: function () {
@@ -290,9 +284,7 @@ export default defineComponent({
         days = userMaxExpirationDays || groupMaxExpirationDays
       }
 
-      const date = new Date()
-      date.setDate(new Date().getDate() + days)
-      return date
+      return DateTime.now().plus({ days })
     },
 
     isExpirationDateEnforced() {
@@ -315,23 +307,10 @@ export default defineComponent({
     },
 
     minExpirationDate() {
-      const date = new Date()
-      date.setDate(new Date().getDate() + 1)
-      return date
-    }
-  },
-  watch: {
-    enteredExpirationDate: {
-      handler: 'updateExpirationDate'
+      return DateTime.now().endOf('day')
     }
   },
   methods: {
-    updateExpirationDate() {
-      this.$emit('expirationDateChanged', {
-        expirationDateTime: DateTime.fromJSDate(this.enteredExpirationDate).endOf('day').toISO()
-      })
-      ;(this.$refs.expirationDateDrop as InstanceType<typeof OcDrop>).hide()
-    },
     removeExpirationDate() {
       this.$emit('expirationDateChanged', { expirationDateTime: null })
       ;(this.$refs.expirationDateDrop as InstanceType<typeof OcDrop>).hide()
@@ -341,6 +320,24 @@ export default defineComponent({
     },
     showAccessDetails() {
       this.$emit('showAccessDetails')
+    },
+    showDatePickerModal() {
+      const currentDate = DateTime.fromISO(this.expirationDate)
+
+      this.dispatchModal({
+        title: this.$gettext('Set expiration date'),
+        customComponent: DatePickerModal,
+        customComponentAttrs: () => ({
+          currentDate: currentDate.isValid ? currentDate : null,
+          minDate: this.minExpirationDate,
+          maxDate: this.maxExpirationDate
+        }),
+        onConfirm: (expirationDateTime) => {
+          this.$emit('expirationDateChanged', {
+            expirationDateTime
+          })
+        }
+      })
     }
   }
 })
