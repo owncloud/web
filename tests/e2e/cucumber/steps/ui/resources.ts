@@ -838,7 +838,8 @@ Then(
 
     actionType === 'should'
       ? await expect(lockLocator).toBeVisible()
-      : await expect(lockLocator).not.toBeVisible()
+      : // can take more than 5 seconds for lock to be released in case of OnlyOffice
+        await expect(lockLocator).not.toBeVisible({ timeout: config.timeout })
   }
 )
 
@@ -926,10 +927,11 @@ Then(
     const { page } = this.actorsEnvironment.getActor({ key: stepUser })
     const resourceObject = new objects.applicationFiles.Resource({ page })
     for (const info of stepTable.hashes()) {
+      const actions = await resourceObject.getAllAvailableActions({ resource })
       if (actionType === 'should') {
-        expect(await resourceObject.getAllAvailableActions({ resource })).toContain(info.action)
+        expect(actions.some((action) => action.startsWith(info.action))).toBe(true)
       } else {
-        expect(await resourceObject.getAllAvailableActions({ resource })).not.toContain(info.action)
+        expect(actions.some((action) => action.startsWith(info.action))).toBe(false)
       }
     }
   }
