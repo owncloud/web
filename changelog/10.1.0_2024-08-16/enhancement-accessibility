@@ -1,0 +1,10 @@
+Enhancement: Accessibility
+
+Several accessibility improvements have been made, most notably in regards to color contrasts and outlines when navigating via keyboard.
+
+https://github.com/owncloud/web/pull/11315
+https://github.com/owncloud/web/pull/11331
+https://github.com/owncloud/web/pull/11320
+https://github.com/owncloud/web/issues/10730
+https://github.com/owncloud/web/issues/10726
+https://github.com/owncloud/web/issues/10735
