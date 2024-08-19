@@ -6,7 +6,7 @@ Feature: url stability for mobile and desktop client
   # This is a minimal test for the integration of ocis with different online office suites like Collabora and OnlyOffice
   # Check that the file can be opened in collabora or onlyoffice using the url. https://github.com/owncloud/web/issues/9897
 
-  
+
   Scenario: open office suite files with Collabora and onlyOffice
     Given "Admin" creates following users using API
       | id    |
@@ -18,6 +18,7 @@ Feature: url stability for mobile and desktop client
     And "Alice" creates the following resources
       | resource           | type           | content                |
       | MicrosoftWord.docx | Microsoft Word | Microsoft Word Content |
+    And for "Alice" file "MicrosoftWord.docx" should not be locked
     And "Alice" opens the "files" app
 
     # desktop feature
