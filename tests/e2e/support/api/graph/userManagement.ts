@@ -5,7 +5,7 @@ import { config } from '../../../config'
 import { getApplicationEntity } from './utils'
 import { userRoleStore } from '../../store'
 import { UsersEnvironment } from '../../environment'
-import { getTokenFromApi } from '../../utils/tokenHelper'
+import { setAccessToken } from '../../utils/tokenHelper'
 
 export const me = async ({ user }: { user: User }): Promise<Me> => {
   const response = await request({
@@ -37,7 +37,7 @@ export const createUser = async ({ user, admin }: { user: User; admin: User }): 
   const usersEnvironment = new UsersEnvironment()
   const resBody = (await response.json()) as User
   usersEnvironment.storeCreatedUser({ user: { ...user, uuid: resBody.id } })
-  await getTokenFromApi({ username: user.id })
+  await setAccessToken({ username: user.id })
   return user
 }
 

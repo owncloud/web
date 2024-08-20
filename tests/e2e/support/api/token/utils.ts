@@ -1,11 +1,18 @@
 import { TokenEnvironmentFactory } from '../../environment'
 import { config } from '../../../config'
-import fetch from 'node-fetch'
+import fetch, { Response } from 'node-fetch'
+import { User } from '../../types'
 
 const logonUrl = config.backendUrl + '/signin/v1/identifier/_/logon'
 const redirectUrl = config.backendUrl + '/oidc-callback.html'
 const tokenUrl = config.backendUrl + '/konnect/v1/token'
-export const getContinueURI = async (user) => {
+
+interface token {
+  access_token: string
+  refresh_token: string
+}
+
+const getAuthorizedEndPoint = async ({ user }: { user: User }): Promise<Array<string>> => {
   const logonResponse = await fetch(logonUrl, {
     method: 'POST',
     headers: {
@@ -29,10 +36,16 @@ export const getContinueURI = async (user) => {
   const cookies = logonResponse.headers.raw()['set-cookie']
   const data = await logonResponse.json()
   const authorizedUrl = data.hello.continue_uri
-  return getCode(user, authorizedUrl, cookies)
+  return [authorizedUrl, cookies]
 }
 
-const getCode = async (user, continueUrl, cookies) => {
+const getCode = async ({
+  continueUrl,
+  cookies
+}: {
+  continueUrl: string
+  cookies: string
+}): Promise<string> => {
   const params = new URLSearchParams({
     client_id: 'web',
     prompt: 'none',
@@ -53,12 +66,17 @@ const getCode = async (user, continueUrl, cookies) => {
   }
   const locationHeader = authorizeResponse.headers.get('location')
   const urlParams = new URLSearchParams(new URL(locationHeader).search)
-  return getToken(user, urlParams.get('code'), cookies)
+  return urlParams.get('code')
 }
 
-const getToken = async (user, code, cookies) => {
-  const tokenEnvironment = TokenEnvironmentFactory()
-  const accessTokenResponse = await fetch(tokenUrl, {
+const getToken = async ({
+  code,
+  cookies
+}: {
+  code: string
+  cookies: string
+}): Promise<Response> => {
+  const response = await fetch(tokenUrl, {
     method: 'POST',
     headers: {
       Cookie: cookies
@@ -70,7 +88,19 @@ const getToken = async (user, code, cookies) => {
       grant_type: 'authorization_code'
     })
   })
-  const tokenList = await accessTokenResponse.json()
+  if (response.status !== 200) {
+    throw new Error(`logonResponse.status is ${response.status}, expected 200`)
+  }
+  return response
+}
+
+export const setAccessAndRefreshToken = async ({ user }: { user: User }) => {
+  const [authorizedUrl, cookies] = await getAuthorizedEndPoint({ user })
+  const code = await getCode({ continueUrl: authorizedUrl, cookies })
+  const response = await getToken({ code, cookies })
+  const tokenList = (await response.json()) as token
+
+  const tokenEnvironment = TokenEnvironmentFactory()
   tokenEnvironment.setToken({
     user: { ...user },
     token: {

@@ -1,6 +1,7 @@
 import { Page } from '@playwright/test'
 import { User } from '../../types'
 import { config } from '../../../config'
+import { TokenEnvironmentFactory, TokenProviderType } from '../../environment'
 
 export class Session {
   #page: Page
@@ -28,10 +29,16 @@ export class Session {
     await this.#page.locator('#kc-login').click()
   }
 
-  async login({ user }: { user: User }): Promise<void> {
+  async login({
+    user,
+    tokenType = null
+  }: {
+    user: User
+    tokenType?: TokenProviderType
+  }): Promise<void> {
     const { id, password } = user
 
-    await Promise.all([
+    const [response] = await Promise.all([
       this.#page.waitForResponse(
         (resp) =>
           resp.url().endsWith('/token') &&
@@ -40,6 +47,19 @@ export class Session {
       ),
       this.signIn(id, password)
     ])
+    if (!config.basicAuth) {
+      const body = await response.json()
+      const tokenEnvironment = TokenEnvironmentFactory(tokenType)
+
+      tokenEnvironment.setToken({
+        user: { ...user },
+        token: {
+          userId: user.id,
+          accessToken: body.access_token,
+          refreshToken: body.refresh_token
+        }
+      })
+    }
   }
 
   async logout(): Promise<void> {
