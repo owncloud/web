@@ -26,12 +26,6 @@ export interface PasswordEnforcedForCapability {
   read_write_delete?: boolean
 }
 
-export interface PublicExpirationCapability {
-  days?: string
-  enabled?: boolean
-  enforced?: boolean
-}
-
 export interface SearchPropertyCapability {
   enabled?: boolean
 }
@@ -143,7 +137,6 @@ export interface Capabilities {
         can_edit?: boolean
         default_permissions?: number
         enabled?: boolean
-        expire_date?: PublicExpirationCapability
         multiple?: boolean
         password?: {
           enforced?: boolean
@@ -154,19 +147,7 @@ export interface Capabilities {
         upload?: boolean
       }
       search_min_length?: number
-      group?: {
-        expire_date?: {
-          enabled?: boolean
-          enforced?: boolean
-          days?: string
-        }
-      }
       user?: {
-        expire_date?: {
-          enabled?: boolean
-          enforced?: boolean
-          days?: string
-        }
         profile_picture?: boolean
         send_mail?: boolean
         settings?: {

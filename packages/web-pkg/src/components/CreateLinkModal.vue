@@ -80,10 +80,8 @@
             <oc-datepicker
               v-model="selectedExpiry"
               class="link-expiry-picker oc-flex oc-width-1-1"
-              :min-date="expirationRules.min"
-              :max-date="expirationRules.max"
+              :min-date="DateTime.now()"
               :locale="$language.current"
-              :is-required="expirationRules.enforced"
             >
               <template #default="{ togglePopover }">
                 <oc-button
@@ -151,7 +149,6 @@ import {
 import {
   usePasswordPolicyService,
   useEmbedMode,
-  useExpirationRules,
   useLinkTypes,
   Modal,
   useSharesStore,
@@ -191,7 +188,6 @@ export default defineComponent({
     const { $gettext } = language
     const passwordPolicyService = usePasswordPolicyService()
     const { isEnabled: isEmbedEnabled, postMessage } = useEmbedMode()
-    const { expirationRules } = useExpirationRules()
     const {
       defaultLinkType,
       getAvailableLinkTypes,
@@ -382,7 +378,6 @@ export default defineComponent({
       passwordInputKey,
       selectedExpiry,
       expirationDateTooltip,
-      expirationRules,
       availableLinkTypes,
       selectedType,
       selectedTypeIcon,
@@ -399,6 +394,11 @@ export default defineComponent({
 
       // unit tests
       onConfirm
+    }
+  },
+  computed: {
+    DateTime() {
+      return DateTime
     }
   }
 })

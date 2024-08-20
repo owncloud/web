@@ -20,7 +20,10 @@
       padding-size="small"
     >
       <oc-list class="collaborator-edit-dropdown-options-list" :aria-label="shareEditOptions">
-        <li v-if="canEditOrDelete && isExpirationSupported" class="oc-rounded oc-menu-item-hover">
+        <li
+          v-if="canEditOrDelete && isExpirationSupported"
+          class="oc-rounded oc-menu-item-hover files-collaborators-expiration"
+        >
           <div class="oc-flex">
             <oc-button
               class="files-collaborators-expiration-button oc-p-s action-menu-item"
@@ -88,14 +91,8 @@ import uniqueId from 'design-system/src/utils/uniqueId'
 import { OcDrop } from 'design-system/src/components'
 import { Resource } from '@ownclouders/web-client'
 import { isProjectSpaceResource } from '@ownclouders/web-client'
-import {
-  formatRelativeDateFromDateTime,
-  useCapabilityStore,
-  useConfigStore,
-  useModals
-} from '@ownclouders/web-pkg'
+import { formatRelativeDateFromDateTime, useConfigStore, useModals } from '@ownclouders/web-pkg'
 import { useGettext } from 'vue3-gettext'
-import { storeToRefs } from 'pinia'
 import DatePickerModal from '../../../Modals/DatePickerModal.vue'
 
 export default defineComponent({
@@ -139,8 +136,6 @@ export default defineComponent({
     'notifyShare'
   ],
   setup(props, { emit }) {
-    const capabilityStore = useCapabilityStore()
-    const capabilityRefs = storeToRefs(capabilityStore)
     const language = useGettext()
     const { $gettext } = language
     const configStore = useConfigStore()
@@ -170,15 +165,8 @@ export default defineComponent({
       resource: inject<Ref<Resource>>('resource'),
       toggleShareDenied,
       dateExpire,
-      userExpirationDate: capabilityRefs.sharingUserExpireDate,
-      groupExpirationDate: capabilityRefs.sharingGroupExpireDate,
       dropButtonTooltip,
       dispatchModal
-    }
-  },
-  data: function () {
-    return {
-      enteredExpirationDate: null
     }
   },
   computed: {
@@ -245,69 +233,7 @@ export default defineComponent({
     },
 
     isRemoveExpirationPossible() {
-      return (
-        this.canEditOrDelete &&
-        this.isExpirationSupported &&
-        this.isExpirationDateSet &&
-        !this.isExpirationDateEnforced
-      )
-    },
-
-    isDefaultExpirationEnabled() {
-      if (this.editingUser) {
-        return this.userExpirationDate.enabled
-      }
-
-      if (this.editingGroup) {
-        return this.groupExpirationDate.enabled
-      }
-
-      return this.userExpirationDate.enabled || this.groupExpirationDate.enabled
-    },
-
-    defaultExpirationDate() {
-      if (!this.isDefaultExpirationEnabled) {
-        return null
-      }
-
-      const userMaxExpirationDays = parseInt(this.userExpirationDate.days)
-      const groupMaxExpirationDays = parseInt(this.groupExpirationDate.days)
-      let days = 0
-
-      if (this.editingUser) {
-        days = userMaxExpirationDays
-      } else if (this.editingGroup) {
-        days = groupMaxExpirationDays
-      } else if (userMaxExpirationDays && groupMaxExpirationDays) {
-        days = Math.min(userMaxExpirationDays, groupMaxExpirationDays)
-      } else {
-        days = userMaxExpirationDays || groupMaxExpirationDays
-      }
-
-      return DateTime.now().plus({ days })
-    },
-
-    isExpirationDateEnforced() {
-      if (this.editingUser) {
-        return this.userExpirationDate?.enforced
-      }
-
-      if (this.editingGroup) {
-        return this.groupExpirationDate?.enforced
-      }
-
-      return this.userExpirationDate?.enforced || this.groupExpirationDate?.enforced
-    },
-
-    maxExpirationDate() {
-      if (!this.isExpirationDateEnforced) {
-        return null
-      }
-      return this.defaultExpirationDate
-    },
-
-    minExpirationDate() {
-      return DateTime.now().endOf('day')
+      return this.canEditOrDelete && this.isExpirationSupported && this.isExpirationDateSet
     }
   },
   methods: {
@@ -329,8 +255,7 @@ export default defineComponent({
         customComponent: DatePickerModal,
         customComponentAttrs: () => ({
           currentDate: currentDate.isValid ? currentDate : null,
-          minDate: this.minExpirationDate,
-          maxDate: this.maxExpirationDate
+          minDate: DateTime.now()
         }),
         onConfirm: (expirationDateTime) => {
           this.$emit('expirationDateChanged', {

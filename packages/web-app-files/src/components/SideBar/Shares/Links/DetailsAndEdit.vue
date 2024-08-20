@@ -95,7 +95,7 @@
                   <span v-text="option.title" />
                 </oc-button>
                 <oc-button
-                  v-if="option.remove && option.remove.isRemovable"
+                  v-if="option.remove"
                   :data-testid="`files-link-id-${linkShare.id}-edit-${option.id}`"
                   :aria-label="option.remove.title"
                   appearance="raw"
@@ -158,7 +158,7 @@ import { formatDateFromDateTime, formatRelativeDateFromDateTime } from '@ownclou
 import { Resource, SpaceResource } from '@ownclouders/web-client'
 import { createFileRouteOptions } from '@ownclouders/web-pkg'
 import { OcDrop } from 'design-system/src/components'
-import { usePasswordPolicyService, ExpirationRules } from '@ownclouders/web-pkg'
+import { usePasswordPolicyService } from '@ownclouders/web-pkg'
 import { useGettext } from 'vue3-gettext'
 import SetLinkPasswordModal from '../../../Modals/SetLinkPasswordModal.vue'
 import { storeToRefs } from 'pinia'
@@ -182,10 +182,6 @@ export default defineComponent({
     canRename: {
       type: Boolean,
       default: false
-    },
-    expirationRules: {
-      type: Object as PropType<ExpirationRules>,
-      required: true
     },
     isFolderShare: {
       type: Boolean,
@@ -263,8 +259,7 @@ export default defineComponent({
         customComponent: DatePickerModal,
         customComponentAttrs: () => ({
           currentDate: currentDate.isValid ? currentDate : null,
-          minDate: props.expirationRules.min,
-          maxDate: props.expirationRules.max
+          minDate: DateTime.now()
         }),
         onConfirm: (expirationDateTime) => {
           emit('updateLink', {
@@ -386,7 +381,6 @@ export default defineComponent({
             id: 'remove-expiration',
             title: this.$gettext('Remove expiration date'),
             icon: 'close',
-            isRemovable: !this.expirationRules.enforced,
             method: () =>
               this.$emit('updateLink', {
                 linkShare: { ...this.linkShare, expirationDateTime: null }

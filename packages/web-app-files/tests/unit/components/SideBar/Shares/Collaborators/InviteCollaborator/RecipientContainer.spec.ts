@@ -41,8 +41,7 @@ function getMountedWrapper(recipient: CollaboratorAutoCompleteItem, avatarsEnabl
   const capabilities = {
     files_sharing: {
       user: {
-        profile_picture: avatarsEnabled,
-        expire_date: { enabled: true, days: '10' }
+        profile_picture: avatarsEnabled
       }
     }
   } satisfies Partial<CapabilityStore['capabilities']>

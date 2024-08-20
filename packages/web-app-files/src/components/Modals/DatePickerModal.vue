@@ -1,13 +1,9 @@
 <template>
-  {{ minDate }}
-  --
-  {{ maxDate }}
   <oc-text-input
     v-model="date"
     :label="$gettext('Expiration date')"
     type="date"
     :min="minDate?.toISODate()"
-    :max="maxDate?.toISODate()"
     :fix-message-line="true"
     :error-message="errorMessage"
   />
@@ -25,8 +21,7 @@ export default defineComponent({
   props: {
     modal: { type: Object as PropType<Modal>, required: true },
     currentDate: { type: Object as PropType<DateTime>, required: false, default: null },
-    minDate: { type: Object as PropType<DateTime>, required: false, default: null },
-    maxDate: { type: Object as PropType<DateTime>, required: false, default: null }
+    minDate: { type: Object as PropType<DateTime>, required: false, default: null }
   },
   emits: ['confirm', 'update:confirmDisabled'],
   setup(props, { emit, expose }) {
@@ -58,15 +53,6 @@ export default defineComponent({
           return (errorMessage.value = $gettext('The date must be after %{date}', {
             date: props.minDate
               .minus({ day: 1 })
-              .setLocale(current)
-              .toLocaleString(DateTime.DATE_SHORT)
-          }))
-        }
-
-        if (props.maxDate && unref(dateTime) > props.maxDate) {
-          return (errorMessage.value = $gettext('The date must be before %{date}', {
-            date: props.maxDate
-              .plus({ day: 1 })
               .setLocale(current)
               .toLocaleString(DateTime.DATE_SHORT)
           }))

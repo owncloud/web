@@ -118,16 +118,9 @@ export const useCapabilityStore = defineStore('capabilities', () => {
   const sharingPublicPasswordEnforcedFor = computed(
     () => unref(capabilities).files_sharing.public?.password.enforced_for
   )
-  const sharingPublicExpireDate = computed(
-    () => unref(capabilities).files_sharing.public?.expire_date
-  )
   const sharingSearchMinLength = computed(() => unref(capabilities).files_sharing.search_min_length)
-  const sharingUserExpireDate = computed(() => unref(capabilities).files_sharing.user?.expire_date)
   const sharingUserProfilePicture = computed(
     () => unref(capabilities).files_sharing.user?.profile_picture
-  )
-  const sharingGroupExpireDate = computed(
-    () => unref(capabilities).files_sharing.group?.expire_date
   )
 
   const tusMaxChunkSize = computed(() => unref(capabilities).files.tus_support?.max_chunk_size)
@@ -182,11 +175,8 @@ export const useCapabilityStore = defineStore('capabilities', () => {
     sharingPublicAlias,
     sharingPublicDefaultPermissions,
     sharingPublicPasswordEnforcedFor,
-    sharingPublicExpireDate,
     sharingSearchMinLength,
-    sharingUserExpireDate,
     sharingUserProfilePicture,
-    sharingGroupExpireDate,
     tusMaxChunkSize,
     tusExtension,
     tusHttpMethodOverride,

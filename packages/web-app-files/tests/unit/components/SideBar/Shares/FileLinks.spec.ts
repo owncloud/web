@@ -174,7 +174,6 @@ function getWrapper({
   const capabilities = {
     files_sharing: {
       public: {
-        expire_date: {},
         alias: true,
         password: {
           enforced_for: { read_only: false, upload_only: false, read_write: false }
