@@ -258,7 +258,7 @@ export default defineComponent({
           currentDate: currentDate.isValid ? currentDate : null,
           minDate: DateTime.now()
         }),
-        onConfirm: (expirationDateTime) => {
+        onConfirm: (expirationDateTime: DateTime) => {
           this.$emit('expirationDateChanged', {
             expirationDateTime
           })

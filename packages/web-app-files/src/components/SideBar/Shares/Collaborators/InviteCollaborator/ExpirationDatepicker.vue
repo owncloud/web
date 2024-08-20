@@ -80,8 +80,8 @@ export default defineComponent({
           currentDate: unref(dateCurrent),
           minDate: DateTime.now()
         }),
-        onConfirm: (expirationDateTime) => {
-          dateCurrent.value = expirationDateTime as any
+        onConfirm: (expirationDateTime: DateTime) => {
+          dateCurrent.value = expirationDateTime
         }
       })
     }

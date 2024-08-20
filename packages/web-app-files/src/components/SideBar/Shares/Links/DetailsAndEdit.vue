@@ -262,7 +262,7 @@ export default defineComponent({
           currentDate: currentDate.isValid ? currentDate : null,
           minDate: DateTime.now()
         }),
-        onConfirm: (expirationDateTime) => {
+        onConfirm: (expirationDateTime: DateTime) => {
           emit('updateLink', {
             linkShare: { ...props.linkShare, expirationDateTime }
           })
