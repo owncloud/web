@@ -10,6 +10,7 @@ import { useLinkTypes } from '../../../src/composables/links'
 import { nextTick, ref } from 'vue'
 import { CapabilityStore, useSharesStore } from '../../../src/composables/piniaStores'
 import { SharingLinkType } from '@ownclouders/web-client/graph/generated'
+import { describe } from 'vitest'
 
 vi.mock('../../../src/composables/embedMode')
 vi.mock('../../../src/composables/passwordPolicyService')
@@ -27,7 +28,7 @@ const selectors = {
   linkRoleDropDownToggle: '.link-role-dropdown-toggle'
 }
 
-describe.skip('CreateLinkModal', () => {
+describe('CreateLinkModal', () => {
   describe('password input', () => {
     it('should not rendered when "advancedMode" is not set', async () => {
       const { wrapper } = getWrapper()
@@ -56,6 +57,34 @@ describe.skip('CreateLinkModal', () => {
       expect(wrapper.find(selectors.passwordInput).exists()).toBeFalsy()
     })
   })
+  describe('datepicker', () => {
+    it('should not rendered when "advancedMode" is not set', async () => {
+      const { wrapper } = getWrapper()
+      wrapper.vm.advancedMode = false
+      await nextTick()
+      expect(wrapper.findComponent({ name: 'oc-datepicker' }).exists()).toBeFalsy()
+    })
+    it('should be rendered', async () => {
+      const { wrapper } = getWrapper()
+      wrapper.vm.advancedMode = true
+      await nextTick()
+      expect(wrapper.findComponent({ name: 'oc-datepicker' }).exists()).toBeTruthy()
+    })
+    it('should be disabled for internal links', async () => {
+      const { wrapper } = getWrapper({ defaultLinkType: SharingLinkType.Internal })
+      wrapper.vm.advancedMode = true
+      await nextTick()
+      expect(wrapper.findComponent({ name: 'oc-datepicker' }).attributes('disabled')).toBeTruthy()
+    })
+    it('should not be rendered if user cannot create public links', () => {
+      const { wrapper } = getWrapper({
+        userCanCreatePublicLinks: false,
+        availableLinkTypes: [SharingLinkType.Internal],
+        defaultLinkType: SharingLinkType.Internal
+      })
+      expect(wrapper.findComponent({ name: 'oc-datepicker' }).exists()).toBeFalsy()
+    })
+  })
   describe('link role drop', () => {
     it('should not rendered when "advancedMode" is not set', async () => {
       const { wrapper } = getWrapper()
@@ -77,41 +106,7 @@ describe.skip('CreateLinkModal', () => {
       expect(wrapper.findAll(selectors.roleElements).length).toBe(availableLinkTypes.length)
     })
   })
-  describe('context menu', () => {
-    it('should not rendered when "advancedMode" is not set', async () => {
-      const { wrapper } = getWrapper()
-      wrapper.vm.advancedMode = false
-      await nextTick()
-      expect(wrapper.find(selectors.contextMenuToggle).exists()).toBeFalsy()
-    })
-    it('should display the button to toggle the context menu', async () => {
-      const { wrapper } = getWrapper()
-      wrapper.vm.advancedMode = true
-      await nextTick()
-      expect(wrapper.find(selectors.contextMenuToggle).exists()).toBeTruthy()
-    })
-    it('should not display the button to toggle the context menu if user cannot create public links', () => {
-      const { wrapper } = getWrapper({
-        userCanCreatePublicLinks: false,
-        availableLinkTypes: [SharingLinkType.Internal],
-        defaultLinkType: SharingLinkType.Internal
-      })
-      expect(wrapper.find(selectors.contextMenuToggle).exists()).toBeFalsy()
-    })
-  })
   describe('method "confirm"', () => {
-    it('does not create links when the password policy is not fulfilled', async () => {
-      vi.spyOn(console, 'error').mockImplementation(undefined)
-      const callbackFn = vi.fn()
-      const { wrapper } = getWrapper({ passwordPolicyFulfilled: false, callbackFn })
-      wrapper.vm.advancedMode = true
-      await nextTick()
-      try {
-        await wrapper.vm.onConfirm()
-      } catch (error) {}
-
-      expect(callbackFn).not.toHaveBeenCalled()
-    })
     it('creates links for all resources', async () => {
       const callbackFn = vi.fn()
       const resources = [mock<Resource>({ isFolder: false }), mock<Resource>({ isFolder: false })]
@@ -166,6 +161,16 @@ describe.skip('CreateLinkModal', () => {
         )
       }
     )
+  })
+  describe('action buttons', () => {
+    describe('confirm button', () => {
+      it('is disabled when password policy is not fulfilled', async () => {
+        const { wrapper } = getWrapper({ passwordPolicyFulfilled: false })
+        wrapper.vm.advancedMode = true
+        await nextTick()
+        expect(wrapper.find(selectors.confirmBtn).attributes('disabled')).toBeTruthy()
+      })
+    })
   })
 })
 

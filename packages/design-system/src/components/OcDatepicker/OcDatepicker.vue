@@ -9,6 +9,7 @@
     :error-message="errorMessage"
     :clear-button-enabled="true"
     :clear-button-accessible-label="$gettext('Clear date')"
+    class="oc-date-picker"
   />
 </template>
 
