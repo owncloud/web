@@ -1,6 +1,7 @@
 <template>
   <oc-text-input
     v-model="dateInputString"
+    v-bind="$attrs"
     :label="label"
     type="date"
     :min="minDate?.toISODate()"

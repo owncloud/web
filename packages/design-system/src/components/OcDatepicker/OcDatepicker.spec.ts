@@ -20,7 +20,7 @@ describe('OcDatePicker', () => {
     const inputEl = wrapper.find('.oc-text-input')
     expect(inputEl.attributes('min')).toEqual(DateTime.now().toISODate())
   })
-  it('emits on date change', async () => {
+  it('emits event on date change', async () => {
     const wrapper = getWrapper({ label: 'Datepicker label' })
     const inputEl = wrapper.find('.oc-text-input')
     await inputEl.setValue(DateTime.now().toISODate())

@@ -47,72 +47,21 @@
       <span v-text="$gettext('Password:')" />
       <span v-text="password.value" />
     </div>
+    <oc-datepicker
+      v-if="advancedMode"
+      class="oc-mt-s"
+      :min-date="DateTime.now()"
+      :label="$gettext('Expiry date')"
+      :disabled="selectedLinkTypeIsInternal"
+      :description-message="
+        selectedLinkTypeIsInternal
+          ? $gettext('Expiry date cannot be set for internal links')
+          : undefined
+      "
+      @date-changed="onExpiryDateChanged"
+    />
   </div>
   <div class="link-modal-actions oc-flex oc-flex-right oc-flex-middle oc-mt-s">
-    <div v-if="advancedMode" class="link-modal-actions-advanced">
-      <oc-icon
-        v-if="selectedExpiry"
-        v-oc-tooltip="expirationDateTooltip"
-        class="oc-mr-s"
-        :aria-label="expirationDateTooltip"
-        name="calendar-event"
-        fill-type="line"
-      />
-      <oc-button
-        v-if="!onlyInternalLinksAllowed"
-        id="link-modal-context-menu-toggle"
-        :aria-label="$gettext('More options')"
-        appearance="raw"
-      >
-        <oc-icon name="more-2" />
-      </oc-button>
-      <oc-drop
-        v-if="!onlyInternalLinksAllowed"
-        ref="contextMenuDrop"
-        X
-        drop-id="link-modal-context-menu-drop"
-        toggle="#link-modal-context-menu-toggle"
-        padding-size="small"
-        mode="click"
-      >
-        <oc-list class="link-modal-context-menu">
-          <li class="oc-rounded oc-menu-item-hover">
-            <oc-datepicker
-              v-model="selectedExpiry"
-              class="link-expiry-picker oc-flex oc-width-1-1"
-              :min-date="DateTime.now()"
-              :locale="$language.current"
-            >
-              <template #default="{ togglePopover }">
-                <oc-button
-                  appearance="raw"
-                  class="oc-p-s action-menu-item link-expiry-picker-btn"
-                  :disabled="selectedLinkTypeIsInternal"
-                  @click="togglePopover"
-                >
-                  <oc-icon name="calendar-event" fill-type="line" size="medium" />
-                  <span
-                    v-text="
-                      selectedExpiry
-                        ? $gettext('Edit expiration date')
-                        : $gettext('Set expiration date')
-                    "
-                  />
-                </oc-button>
-                <oc-button
-                  v-if="selectedExpiry"
-                  :aria-label="$gettext('Remove expiration date')"
-                  appearance="raw"
-                  @click="selectedExpiry = undefined"
-                >
-                  <oc-icon name="close" />
-                </oc-button>
-              </template>
-            </oc-datepicker>
-          </li>
-        </oc-list>
-      </oc-drop>
-    </div>
     <oc-button
       class="link-modal-cancel oc-modal-body-actions-cancel oc-ml-s"
       appearance="outline"
@@ -124,6 +73,7 @@
       class="link-modal-confirm oc-modal-body-actions-confirm oc-ml-s"
       appearance="filled"
       variation="primary"
+      :disabled="confirmButtonDisabled"
       @click="$emit('confirm')"
       >{{ confirmButtonText }}
     </oc-button>
@@ -143,8 +93,7 @@ import {
   ref,
   reactive,
   unref,
-  onMounted,
-  watch
+  onMounted
 } from 'vue'
 import {
   usePasswordPolicyService,
@@ -156,8 +105,7 @@ import {
 } from '../composables'
 import { LinkShare, SpaceResource } from '@ownclouders/web-client'
 import { Resource } from '@ownclouders/web-client'
-import { formatRelativeDateFromDateTime } from '../helpers'
-import { OcButton, OcDrop } from 'design-system/src/components'
+import { OcButton } from 'design-system/src/components'
 import { SharingLinkType } from '@ownclouders/web-client/graph/generated'
 import LinkRoleDropdown from './LinkRoleDropdown.vue'
 
@@ -195,8 +143,8 @@ export default defineComponent({
       isPasswordEnforcedForLinkType
     } = useLinkTypes()
     const { addLink } = useSharesStore()
-    const contextMenuDrop = ref<InstanceType<typeof OcDrop>>()
     const advancedMode = ref(false)
+    const invalidExpiryDate = ref(false)
 
     const isFolder = computed(() => props.resources.every(({ isFolder }) => isFolder))
 
@@ -219,7 +167,7 @@ export default defineComponent({
     const passwordInputKey = ref(uuidV4())
     const roleRefs = ref<Record<string, RoleRef>>({})
 
-    const selectedExpiry = ref<Date>()
+    const selectedExpiry = ref<DateTime>()
     const password = reactive({ value: '', error: undefined })
     const selectedType = ref(unref(defaultLinkType))
 
@@ -241,31 +189,13 @@ export default defineComponent({
     const onlyInternalLinksAllowed = computed(
       () => unref(availableLinkTypes).length === 1 && unref(selectedLinkTypeIsInternal)
     )
-
-    const selectedExpiryDateRelative = computed(() =>
-      formatRelativeDateFromDateTime(
-        DateTime.fromJSDate(unref(selectedExpiry)).endOf('day'),
-        language.current
-      )
-    )
-
-    const selectedExpiryDate = computed(() =>
-      formatRelativeDateFromDateTime(
-        DateTime.fromJSDate(unref(selectedExpiry)).endOf('day'),
-        language.current
-      )
-    )
-
-    const expirationDateTooltip = computed(() => {
-      return $gettext(
-        'Expires %{timeToExpiry} (%{expiryDate})',
-        { timeToExpiry: unref(selectedExpiryDateRelative), expiryDate: unref(selectedExpiryDate) },
-        true
-      )
-    })
-
     const setAdvancedMode = () => {
       advancedMode.value = true
+    }
+
+    const onExpiryDateChanged = ({ date, error }: { date: DateTime; error: boolean }) => {
+      selectedExpiry.value = date
+      invalidExpiryDate.value = error
     }
 
     const createLinks = () => {
@@ -279,7 +209,7 @@ export default defineComponent({
               type: unref(selectedType),
               '@libre.graph.quickLink': props.isQuickLink,
               password: unref(password).value,
-              expirationDateTime: DateTime.fromJSDate(unref(selectedExpiry)).endOf('day').toISO(),
+              expirationDateTime: unref(selectedExpiry)?.toISO(),
               displayName: $gettext('Link')
             }
           })
@@ -287,14 +217,25 @@ export default defineComponent({
       )
     }
 
-    const onConfirm = async () => {
+    const passwordPolicyFulfilled = computed(() => {
       if (!unref(selectedLinkTypeIsInternal)) {
         if (!passwordPolicy.check(unref(password).value)) {
-          password.error = $gettext('Password must fulfill the password policy')
-          return Promise.reject()
+          return false
         }
       }
 
+      return true
+    })
+
+    const confirmButtonDisabled = computed(() => {
+      if (unref(passwordPolicyFulfilled) && !unref(invalidExpiryDate)) {
+        return false
+      }
+
+      return true
+    })
+
+    const onConfirm = async () => {
       const result = await createLinks()
 
       const succeeded = result.filter(({ status }) => status === 'fulfilled')
@@ -364,20 +305,14 @@ export default defineComponent({
       }
     })
 
-    watch(selectedExpiry, () => {
-      unref(contextMenuDrop).hide()
-    })
-
     return {
       roleRefs,
-      contextMenuDrop,
       password,
       passwordEnforced,
       passwordPolicy,
       generatePasswordMethod: () => passwordPolicyService.generatePassword(),
       passwordInputKey,
       selectedExpiry,
-      expirationDateTooltip,
       availableLinkTypes,
       selectedType,
       selectedTypeIcon,
@@ -391,6 +326,8 @@ export default defineComponent({
       confirmButtonText,
       advancedMode,
       setAdvancedMode,
+      onExpiryDateChanged,
+      confirmButtonDisabled,
 
       // unit tests
       onConfirm
