@@ -256,6 +256,7 @@ export default defineComponent({
 
       dispatchModal({
         title: $gettext('Set expiration date'),
+        hideActions: true,
         customComponent: DatePickerModal,
         customComponentAttrs: () => ({
           currentDate: currentDate.isValid ? currentDate : null,

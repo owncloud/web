@@ -74,6 +74,7 @@ export default defineComponent({
     const showDatePickerModal = () => {
       dispatchModal({
         title: language.$gettext('Set expiration date'),
+        hideActions: true,
         customComponent: DatePickerModal,
         customComponentAttrs: () => ({
           currentDate: unref(dateCurrent),

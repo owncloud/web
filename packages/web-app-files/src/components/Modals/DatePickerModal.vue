@@ -7,7 +7,23 @@
     :fix-message-line="true"
     :error-message="errorMessage"
   />
-  <oc-button @click="$emit('confirm', dateTime)">REAL CONFIRM</oc-button>
+
+  <div class="link-modal-actions oc-flex oc-flex-right oc-flex-middle oc-mt-s">
+    <oc-button
+      class="link-modal-cancel oc-modal-body-actions-cancel oc-ml-s"
+      appearance="outline"
+      variation="passive"
+      @click="$emit('cancel')"
+      >{{ $gettext('Cancel') }}
+    </oc-button>
+    <oc-button
+      class="link-modal-confirm oc-modal-body-actions-confirm oc-ml-s"
+      appearance="filled"
+      variation="primary"
+      @click="$emit('confirm', dateTime)"
+      >{{ $gettext('Confirm') }}
+    </oc-button>
+  </div>
 </template>
 
 <script lang="ts">
@@ -23,8 +39,8 @@ export default defineComponent({
     currentDate: { type: Object as PropType<DateTime>, required: false, default: null },
     minDate: { type: Object as PropType<DateTime>, required: false, default: null }
   },
-  emits: ['confirm', 'update:confirmDisabled'],
-  setup(props, { emit, expose }) {
+  emits: ['confirm', 'update:confirmDisabled', 'cancel'],
+  setup(props, { emit }) {
     const { $gettext, current } = useGettext()
     const date = ref<string>('')
     const errorMessage = ref<string>('')
@@ -64,16 +80,10 @@ export default defineComponent({
       { immediate: true, deep: true }
     )
 
-    const onConfirm = () => {
-      console.log('???')
-      ///emit('confirm', unref(dateTime))
-    }
-
     return {
       date,
       errorMessage,
-      dateTime,
-      onConfirm
+      dateTime
     }
   }
 })
