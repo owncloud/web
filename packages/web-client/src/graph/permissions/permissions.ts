@@ -1,4 +1,10 @@
-import { buildCollaboratorShare, buildLinkShare, CollaboratorShare, LinkShare } from '../../helpers'
+import {
+  buildCollaboratorShare,
+  buildLinkShare,
+  CollaboratorShare,
+  LinkShare,
+  ShareRole
+} from '../../helpers'
 import {
   CollectionOfPermissionsWithAllowedValues,
   DrivesPermissionsApiFactory,
@@ -27,7 +33,7 @@ export const PermissionsFactory = ({
       driveId: string,
       itemId: string,
       permId: string,
-      graphRoles: UnifiedRoleDefinition[],
+      graphRoles: Record<string, ShareRole>,
       requestOptions: GraphRequestOptions
     ): Promise<T> {
       const { data: permission } = await drivesPermissionsApiFactory.getPermission(
@@ -44,7 +50,7 @@ export const PermissionsFactory = ({
       return buildCollaboratorShare({
         graphPermission: permission,
         resourceId: itemId,
-        graphRoles: graphRoles || []
+        graphRoles: graphRoles || {}
       }) as T
     },
 
@@ -82,7 +88,7 @@ export const PermissionsFactory = ({
         return buildCollaboratorShare({
           graphPermission: permission,
           resourceId: itemId,
-          graphRoles: graphRoles || []
+          graphRoles: graphRoles || {}
         })
       })
 
@@ -94,7 +100,7 @@ export const PermissionsFactory = ({
       itemId: string,
       permId: string,
       data: Permission,
-      graphRoles: UnifiedRoleDefinition[],
+      graphRoles: Record<string, ShareRole>,
       requestOptions: GraphRequestOptions
     ): Promise<T> {
       let permission: Permission
@@ -127,7 +133,7 @@ export const PermissionsFactory = ({
       return buildCollaboratorShare({
         graphPermission: permission,
         resourceId: itemId,
-        graphRoles: graphRoles || []
+        graphRoles: graphRoles || {}
       }) as T
     },
 
@@ -169,7 +175,7 @@ export const PermissionsFactory = ({
       return buildCollaboratorShare({
         graphPermission: permission,
         resourceId: itemId,
-        graphRoles: graphRoles || []
+        graphRoles: graphRoles || {}
       })
     },
 

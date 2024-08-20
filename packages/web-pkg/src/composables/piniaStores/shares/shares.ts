@@ -26,13 +26,16 @@ export const useSharesStore = defineStore('shares', () => {
   const loading = ref(false)
   const collaboratorShares = ref<CollaboratorShare[]>([]) as Ref<CollaboratorShare[]>
   const linkShares = ref<LinkShare[]>([]) as Ref<LinkShare[]>
-  const graphRoles = ref<ShareRole[]>([]) as Ref<ShareRole[]>
+  const graphRoles = ref<Record<string, ShareRole>>({}) as Ref<Record<string, ShareRole>>
 
   const setGraphRoles = (values: UnifiedRoleDefinition[]) => {
-    graphRoles.value = values.map((v) => ({
-      ...v,
-      icon: getThemeRoleIcon(v)
-    }))
+    graphRoles.value = values.reduce<Record<string, ShareRole>>((acc, role) => {
+      acc[role.id] = {
+        ...role,
+        icon: getThemeRoleIcon(role)
+      }
+      return acc
+    }, {})
   }
 
   const upsertCollaboratorShare = (share: CollaboratorShare) => {

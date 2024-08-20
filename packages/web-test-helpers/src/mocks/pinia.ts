@@ -61,7 +61,7 @@ export type PiniaMockOptions = {
   sharesState?: {
     collaboratorShares?: CollaboratorShare[]
     linkShares?: LinkShare[]
-    graphRoles?: ShareRole[]
+    graphRoles?: Record<string, ShareRole>
     loading?: boolean
   }
   spacesState?: { spaces?: SpaceResource[]; spaceMembers?: CollaboratorShare[] }
