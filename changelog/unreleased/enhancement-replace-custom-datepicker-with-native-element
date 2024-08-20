@@ -1,0 +1,7 @@
+Enhancement: Replace custom datepicker with native html element
+
+We've replaced the custom datepicker with a native html date input element.
+This change will improve the user experience and accessibility of the datepicker.
+
+https://github.com/owncloud/web/pull/11377
+https://github.com/owncloud/web/issues/11374
