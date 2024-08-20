@@ -103,7 +103,6 @@
     "typescript": "5.5.3",
     "url": "^0.11.3",
     "url-loader": "^4.1.1",
-    "v-calendar": "github:dschmidt/v-calendar#3ce6e3b8afd5491cb53ee811281d5fa8a45b044d",
     "vue": "3.4.21",
     "vue-inline-svg": "3.1.2",
     "vue-loader": "^17.4.2",
@@ -129,11 +128,11 @@
     "focus-trap-vue": "^4.0.1",
     "postcss-import": "^16.0.0",
     "tippy.js": "^6.3.7",
-    "v-calendar": "github:dschmidt/v-calendar#3ce6e3b8afd5491cb53ee811281d5fa8a45b044d",
     "vue": "3.4.21",
     "vue-inline-svg": "3.1.2",
     "vue-select": "^3.12.0",
-    "webfontloader": "^1.6.28"
+    "webfontloader": "^1.6.28",
+    "luxon": "3.2.1"
   },
   "engines": {
     "node": ">= 14.0.0",

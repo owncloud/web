@@ -36,6 +36,7 @@
         v-if="showClearButton"
         :aria-label="clearButtonAccessibleLabelValue"
         class="oc-pr-s oc-position-center-right oc-text-input-btn-clear"
+        :class="{ 'oc-mr-l': type === 'date' }"
         appearance="raw"
         @click="onClear"
       >
