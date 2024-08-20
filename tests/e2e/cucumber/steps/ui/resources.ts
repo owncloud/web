@@ -839,7 +839,7 @@ Then(
     actionType === 'should'
       ? await expect(lockLocator).toBeVisible()
       : // can take more than 5 seconds for lock to be released in case of OnlyOffice
-        await expect(lockLocator).not.toBeVisible({ timeout: config.timeout })
+        await expect(lockLocator).not.toBeVisible({ timeout: config.timeout * 1000 })
   }
 )
 
