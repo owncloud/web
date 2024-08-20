@@ -84,9 +84,9 @@ export default class Collaborator {
   private static readonly showAccessDetailsButton =
     '%s//ul[contains(@class,"collaborator-edit-dropdown-options-list")]//button[contains(@class,"show-access-details")]'
   private static readonly removeCollaboratorConfirmationButton = '.oc-modal-body-actions-confirm'
-  private static readonly collaboratorExpirationDatepicker =
-    '.collaborator-edit-dropdown-options-list .files-recipient-expiration-datepicker:not(.vc-container)'
-  private static readonly expirationDatepickerDaySelect = '.vc-day.id-%s'
+  private static readonly collaboratorExpirationDatepicker = '.oc-modal-body .oc-date-picker input'
+  private static readonly collaboratorExpirationDatepickerConfirmButton =
+    '.oc-modal-body-actions-confirm'
   private static readonly collaboratorDropdownItem =
     'div[data-testid="new-collaborators-form"] div[data-testid="recipient-autocomplete-item-%s"]'
 
@@ -257,22 +257,11 @@ export default class Collaborator {
       expirationDate.toLowerCase().match(/[dayrmonthwek]+/)[0],
       expirationDate
     )
-    await page.locator(Collaborator.collaboratorExpirationDatepicker).evaluate(
-      (datePicker: any, { newExpiryDate }): any => {
-        datePicker.__datePicker.$refs.calendar.move(newExpiryDate)
-      },
-      { newExpiryDate }
-    )
 
     await page
-      .locator(
-        util.format(
-          Collaborator.expirationDatepickerDaySelect,
-          newExpiryDate.toISOString().split('T')[0]
-        )
-      )
-      .first()
-      .click()
+      .locator(Collaborator.collaboratorExpirationDatepicker)
+      .fill(newExpiryDate.toISOString().split('T')[0])
+    await page.locator(Collaborator.collaboratorExpirationDatepickerConfirmButton).click()
   }
 
   static async removeExpirationDateFromCollaborator(
