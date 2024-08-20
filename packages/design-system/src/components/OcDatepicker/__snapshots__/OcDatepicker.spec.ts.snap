@@ -1,7 +1,7 @@
 // Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
 exports[`OcDatePicker > renders 1`] = `
-"<div class=""><label class="oc-label" for="oc-textinput-1">Datepicker label</label>
+"<div class="oc-date-picker"><label class="oc-label" for="oc-textinput-1">Datepicker label</label>
   <div class="oc-position-relative">
     <!--v-if--> <input id="oc-textinput-1" aria-invalid="false" class="oc-text-input oc-input oc-rounded" type="date">
     <!--v-if-->
