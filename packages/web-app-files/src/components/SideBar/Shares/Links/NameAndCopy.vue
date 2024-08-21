@@ -36,7 +36,7 @@
 
 <script lang="ts">
 import { computed, defineComponent, PropType } from 'vue'
-import { useMessages } from '@ownclouders/web-pkg'
+import { formatDateFromISO, useMessages } from '@ownclouders/web-pkg'
 import { useClipboard } from '@vueuse/core'
 import { useGettext } from 'vue3-gettext'
 import { LinkShare } from '@ownclouders/web-client'
@@ -51,7 +51,7 @@ export default defineComponent({
     }
   },
   setup(props) {
-    const { $gettext } = useGettext()
+    const { $gettext, current: currentLanguage } = useGettext()
     const { showMessage } = useMessages()
 
     const {
@@ -61,7 +61,11 @@ export default defineComponent({
     } = useClipboard({ legacy: true, copiedDuring: 550 })
 
     const linkCreationDate = computed(() => {
-      return DateTime.fromISO(props.linkShare.createdDateTime).toLocaleString(DateTime.DATETIME_MED)
+      return formatDateFromISO(
+        props.linkShare.createdDateTime,
+        currentLanguage,
+        DateTime.DATETIME_MED
+      )
     })
 
     const copyLinkToClipboard = () => {
