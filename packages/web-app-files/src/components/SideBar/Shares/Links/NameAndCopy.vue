@@ -2,7 +2,10 @@
   <div class="oc-mb-s oc-width-1-1">
     <h4 class="oc-text-normal oc-files-file-link-name oc-m-rm oc-flex oc-flex-column">
       <span class="oc-text-truncate" v-text="linkName" />
-      <span class="oc-text-small oc-text-muted oc-my-xs oc-invisible-sr" v-text="linkCreationDate" />
+      <span
+        class="oc-text-small oc-text-muted oc-my-xs oc-invisible-sr"
+        v-text="linkCreationDate"
+      />
     </h4>
     <div class="oc-flex oc-flex-middle oc-flex-between oc-width-1-1 oc-p-xs link-name-container">
       <div v-if="copied" class="oc-flex oc-flex-middle oc-text-truncate">
