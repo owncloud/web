@@ -11,6 +11,7 @@
       :class="toggleSidebarButtonClass"
       class="toggle-sidebar-button oc-pb-s oc-pt-m"
       :aria-label="$gettext('Toggle sidebar')"
+      :aria-expanded="!closed"
       @click="$emit('update:nav-bar-closed', !closed)"
     >
       <oc-icon size="large" fill-type="line" :name="toggleSidebarButtonIcon" />
@@ -158,6 +159,7 @@ export default defineComponent({
   border-radius: 5px;
   transition: transform 0.2s cubic-bezier(0.51, 0.06, 0.56, 1.37);
 }
+
 #web-nav-sidebar {
   background-color: var(--oc-color-background-default);
   border-radius: 15px 0 0 15px;
@@ -175,10 +177,12 @@ export default defineComponent({
   .toggle-sidebar-button {
     min-height: 3rem;
     transition: all 0.2s ease-out;
+
     &:hover {
       overflow: hidden;
     }
   }
+
   .toggle-sidebar-button-expanded {
     justify-content: flex-end !important;
   }
@@ -201,10 +205,12 @@ export default defineComponent({
     }
   }
 }
+
 .oc-app-navigation-expanded {
   min-width: 230px !important;
   max-width: 230px !important;
 }
+
 .oc-app-navigation-collapsed {
   min-width: 62px !important;
   max-width: 62px !important;
