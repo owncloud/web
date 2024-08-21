@@ -96,7 +96,7 @@ async function getRecentChanges() {
       if (err) {
         console.error('Error writing CSV report:', err)
       } else {
-        console.log('CSV report generated successfully.')
+        console.log(`CSV report generated successfully. You can find it in , ${reportFilePath}`)
       }
     })
 
