@@ -79,6 +79,13 @@ export default defineComponent({
   }
 })
 </script>
+<style lang="scss">
+.oc-date-picker {
+  input::-webkit-calendar-picker-indicator {
+    cursor: pointer;
+  }
+}
+</style>
 <docs>
 ```js
 <template>
