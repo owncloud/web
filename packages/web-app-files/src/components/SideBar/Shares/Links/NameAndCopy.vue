@@ -1,6 +1,9 @@
 <template>
   <div class="oc-mb-s oc-width-1-1">
-    <h4 class="oc-text-truncate oc-text-normal oc-files-file-link-name oc-m-rm" v-text="linkName" />
+    <h4 class="oc-text-normal oc-files-file-link-name oc-m-rm oc-flex oc-flex-column">
+      <span class="oc-text-truncate" v-text="linkName" />
+      <span class="oc-text-small oc-text-muted oc-my-xs oc-invisible-sr" v-text="linkCreationDate" />
+    </h4>
     <div class="oc-flex oc-flex-middle oc-flex-between oc-width-1-1 oc-p-xs link-name-container">
       <div v-if="copied" class="oc-flex oc-flex-middle oc-text-truncate">
         <oc-icon variation="success" name="checkbox-circle" />
@@ -29,11 +32,12 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, PropType } from 'vue'
+import { computed, defineComponent, PropType } from 'vue'
 import { useMessages } from '@ownclouders/web-pkg'
 import { useClipboard } from '@vueuse/core'
 import { useGettext } from 'vue3-gettext'
 import { LinkShare } from '@ownclouders/web-client'
+import { DateTime } from 'luxon'
 
 export default defineComponent({
   name: 'NameAndCopy',
@@ -53,6 +57,10 @@ export default defineComponent({
       isSupported: isClipboardCopySupported
     } = useClipboard({ legacy: true, copiedDuring: 550 })
 
+    const linkCreationDate = computed(() => {
+      return DateTime.fromISO(props.linkShare.createdDateTime).toLocaleString(DateTime.DATETIME_MED)
+    })
+
     const copyLinkToClipboard = () => {
       copy(props.linkShare.webUrl)
       showMessage({
@@ -67,7 +75,8 @@ export default defineComponent({
     return {
       copied,
       copyLinkToClipboard,
-      isClipboardCopySupported
+      isClipboardCopySupported,
+      linkCreationDate
     }
   },
   computed: {
