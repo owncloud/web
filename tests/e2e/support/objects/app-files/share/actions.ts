@@ -18,7 +18,7 @@ const actionsTriggerButton =
   '//*[@data-test-resource-name="%s"]/ancestor::tr//button[contains(@class, "oc-files-actions-%s-trigger")]'
 
 const publicLinkInputField =
-  '//h4[contains(@class, "oc-files-file-link-name") and text()="%s"]' +
+  '//h4//span[contains(@class, "oc-files-file-link-name") and text()="%s"]' +
   '/following-sibling::div//p[contains(@class,"oc-files-file-link-url")]'
 const selecAllCheckbox = '#resource-table-select-all'
 const acceptButton = '.oc-files-actions-enable-sync-trigger'

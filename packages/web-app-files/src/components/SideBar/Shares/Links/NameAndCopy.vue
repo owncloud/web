@@ -1,7 +1,7 @@
 <template>
   <div class="oc-mb-s oc-width-1-1">
-    <h4 class="oc-text-normal oc-files-file-link-name oc-m-rm oc-flex oc-flex-column">
-      <span class="oc-text-truncate" v-text="linkName" />
+    <h4 class="oc-text-normal oc-m-rm oc-flex oc-flex-column">
+      <span class="oc-text-truncate oc-files-file-link-name" v-text="linkName" />
       <span
         class="oc-text-small oc-text-muted oc-my-xs oc-invisible-sr"
         v-text="linkCreationDate"
