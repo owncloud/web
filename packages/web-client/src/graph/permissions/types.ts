@@ -1,4 +1,4 @@
-import { CollaboratorShare, LinkShare } from '../../helpers'
+import { CollaboratorShare, LinkShare, ShareRole } from '../../helpers'
 import type {
   DriveItemCreateLink,
   DriveItemInvite,
@@ -22,13 +22,13 @@ export interface GraphPermissions {
     driveId: string,
     itemId: string,
     permId: string,
-    graphRoles?: UnifiedRoleDefinition[],
+    graphRoles?: Record<string, ShareRole>,
     requestOptions?: GraphRequestOptions
   ): Promise<T>
   listPermissions(
     driveId: string,
     itemId: string,
-    graphRoles?: UnifiedRoleDefinition[],
+    graphRoles?: Record<string, ShareRole>,
     options?: {
       filter?: string
       select?: Array<ListPermissionsSpaceRootSelectEnum>
@@ -40,7 +40,7 @@ export interface GraphPermissions {
     itemId: string,
     permId: string,
     data: Permission,
-    graphRoles?: UnifiedRoleDefinition[],
+    graphRoles?: Record<string, ShareRole>,
     requestOptions?: GraphRequestOptions
   ): Promise<T>
   deletePermission(
@@ -53,7 +53,7 @@ export interface GraphPermissions {
     driveId: string,
     itemId: string,
     data: DriveItemInvite,
-    graphRoles?: UnifiedRoleDefinition[],
+    graphRoles?: Record<string, ShareRole>,
     requestOptions?: GraphRequestOptions
   ): Promise<CollaboratorShare>
   createLink(

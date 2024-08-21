@@ -209,10 +209,10 @@ function getWrapper({
               capabilityState: { capabilities },
               configState: { options: { concurrentRequests: { shares: { create: 1 } } } },
               sharesState: {
-                graphRoles: [
-                  mock<ShareRole>({ id: GraphShareRoleIdMap.Viewer }),
-                  mock<ShareRole>({ id: GraphShareRoleIdMap.SpaceViewer })
-                ],
+                graphRoles: {
+                  [GraphShareRoleIdMap.Viewer]: mock<ShareRole>(),
+                  [GraphShareRoleIdMap.SpaceViewer]: mock<ShareRole>()
+                },
                 collaboratorShares: existingCollaborators
               }
             }

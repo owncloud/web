@@ -80,7 +80,6 @@ import {
 import { useAbility, useUserStore } from '@ownclouders/web-pkg'
 import { Resource } from '@ownclouders/web-client'
 import { useGettext } from 'vue3-gettext'
-import { useSharesStore } from '@ownclouders/web-pkg'
 import { ShareRole } from '@ownclouders/web-client'
 
 export default defineComponent({
@@ -121,8 +120,6 @@ export default defineComponent({
     const ability = useAbility()
     const userStore = useUserStore()
     const { user } = storeToRefs(userStore)
-    const sharesStore = useSharesStore()
-    const { graphRoles } = storeToRefs(sharesStore)
     const { $gettext } = useGettext()
 
     const dropButtonTooltip = computed(() => {
@@ -159,7 +156,6 @@ export default defineComponent({
       user,
       dropButtonTooltip,
       resource: inject<Resource>('resource'),
-      graphRoles,
       selectedRole,
       availableRoles,
       isSelectedRole,

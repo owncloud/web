@@ -4,6 +4,7 @@ import {
   OutgoingShareResource,
   Resource,
   ShareResource,
+  ShareRole,
   ShareTypes
 } from '../../../../src/helpers'
 import {
@@ -75,7 +76,7 @@ describe('share helper functions', () => {
     it("returns all roles from a drive item's permissions that are also included in the graphRoles", () => {
       const driveItem = mockDeep<DriveItem>()
       driveItem.remoteItem.permissions = [{ roles: ['1', '2'] }, { roles: ['1', '3'] }]
-      const graphRoles = [{ id: '1' }, { id: '4' }] as UnifiedRoleDefinition[]
+      const graphRoles = { '1': mock<ShareRole>({ id: '1' }), '4': mock<ShareRole>({ id: '4' }) }
 
       const result = getShareResourceRoles({ driveItem, graphRoles })
 
@@ -122,10 +123,10 @@ describe('share helper functions', () => {
       }
     ]
 
-    const graphRoles = [
-      { id: '1', rolePermissions: [{ allowedResourceActions: ['view'] }] },
-      { id: '2', rolePermissions: [{ allowedResourceActions: ['edit'] }] }
-    ] as UnifiedRoleDefinition[]
+    const graphRoles = {
+      '1': mock<ShareRole>({ id: '1', rolePermissions: [{ allowedResourceActions: ['view'] }] }),
+      '2': mock<ShareRole>({ id: '1', rolePermissions: [{ allowedResourceActions: ['view'] }] })
+    }
 
     it('sets ids based on the drive item, its first permission and parent reference', () => {
       const result = buildIncomingShareResource({ driveItem, graphRoles })
@@ -199,10 +200,10 @@ describe('share helper functions', () => {
   })
 
   describe('buildCollaboratorShare', () => {
-    const graphRoles = [
-      { id: '1', rolePermissions: [{ allowedResourceActions: ['view'] }] },
-      { id: '2', rolePermissions: [{ allowedResourceActions: ['edit'] }] }
-    ] as UnifiedRoleDefinition[]
+    const graphRoles = {
+      '1': mock<ShareRole>({ id: '1', rolePermissions: [{ allowedResourceActions: ['view'] }] }),
+      '2': mock<ShareRole>({ id: '1', rolePermissions: [{ allowedResourceActions: ['view'] }] })
+    }
 
     const resourceId = '1'
 
@@ -266,7 +267,7 @@ describe('share helper functions', () => {
       it('sets permissions from the graph roles as fallback', () => {
         const graphPermission = mock<Permission>({
           '@libre.graph.permissions.actions': undefined,
-          roles: [graphRoles[0].id]
+          roles: [graphRoles['1'].id]
         })
 
         const result = buildCollaboratorShare({
@@ -276,7 +277,7 @@ describe('share helper functions', () => {
         })
 
         expect(result.permissions).toEqual(
-          graphRoles[0].rolePermissions.flatMap(
+          graphRoles['1'].rolePermissions.flatMap(
             ({ allowedResourceActions }) => allowedResourceActions
           )
         )

@@ -5,7 +5,8 @@ import {
   IncomingShareResource,
   CollaboratorShare,
   GraphSharePermission,
-  LinkShare
+  LinkShare,
+  ShareRole
 } from './types'
 import { extractDomSelector, extractExtensionFromFile, extractStorageId } from '../resource'
 import { ShareTypes } from './type'
@@ -42,11 +43,11 @@ export const getShareResourceRoles = ({
   graphRoles
 }: {
   driveItem: DriveItem
-  graphRoles: UnifiedRoleDefinition[]
+  graphRoles: Record<string, ShareRole>
 }) => {
   return driveItem.remoteItem?.permissions.reduce<UnifiedRoleDefinition[]>((acc, permission) => {
     permission.roles?.forEach((roleId) => {
-      const role = graphRoles.find(({ id }) => id === roleId)
+      const role = graphRoles[roleId]
       if (role && !acc.some(({ id }) => id === role.id)) {
         acc.push(role)
       }
@@ -94,7 +95,7 @@ export function buildIncomingShareResource({
   graphRoles
 }: {
   driveItem: DriveItem
-  graphRoles: UnifiedRoleDefinition[]
+  graphRoles: Record<string, ShareRole>
 }): IncomingShareResource {
   const resourceName = driveItem.name || driveItem.remoteItem.name
   const storageId = extractStorageId(driveItem.remoteItem.id)
@@ -244,11 +245,11 @@ export function buildCollaboratorShare({
   indirect = false
 }: {
   graphPermission: Permission
-  graphRoles: UnifiedRoleDefinition[]
+  graphRoles: Record<string, ShareRole>
   resourceId: string
   indirect?: boolean
 }): CollaboratorShare {
-  const role = graphRoles.find(({ id }) => id === graphPermission.roles?.[0])
+  const role = graphRoles[graphPermission.roles?.[0]]
   const invitedBy = graphPermission.invitation?.invitedBy?.user
 
   return {

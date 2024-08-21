@@ -291,7 +291,7 @@ describe('spaces', () => {
           userStore.user = mock<User>()
 
           const sharesStore = useSharesStore()
-          sharesStore.graphRoles = [mock<ShareRole>({ id: 'roleId' })]
+          sharesStore.graphRoles = { roleId: mock<ShareRole>({ id: 'roleId' }) }
 
           await instance.loadSpaceMembers({
             graphClient: clientService.graphAuthenticated,

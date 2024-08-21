@@ -303,8 +303,8 @@ export default defineComponent({
 
     onMounted(async () => {
       selectedRole.value = unref(resourceIsSpace)
-        ? unref(graphRoles).find(({ id }) => id === GraphShareRoleIdMap.SpaceViewer)
-        : unref(graphRoles).find(({ id }) => id === GraphShareRoleIdMap.Viewer)
+        ? unref(graphRoles)[GraphShareRoleIdMap.SpaceViewer]
+        : unref(graphRoles)[GraphShareRoleIdMap.Viewer]
 
       await nextTick()
       markInstance.value = new Mark('.mark-element')
