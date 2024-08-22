@@ -1,3 +1,26 @@
+Changelog for ownCloud Web [unreleased] (UNRELEASED)
+=======================================
+The following sections list the changes in ownCloud web unreleased relevant to
+ownCloud admins and users.
+
+[unreleased]: https://github.com/owncloud/web/compare/v10.1.0...master
+
+Summary
+-------
+
+* Enhancement - Replace custom datepicker with native html element: [#11377](https://github.com/owncloud/web/pull/11377)
+
+Details
+-------
+
+* Enhancement - Replace custom datepicker with native html element: [#11377](https://github.com/owncloud/web/pull/11377)
+
+   We've replaced the custom datepicker with a native html date input element. This
+   change will improve the user experience and accessibility of the datepicker.
+
+   https://github.com/owncloud/web/issues/11374
+   https://github.com/owncloud/web/pull/11377
+
 Changelog for ownCloud Web [10.1.0] (2024-08-16)
 =======================================
 The following sections list the changes in ownCloud web 10.1.0 relevant to
