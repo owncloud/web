@@ -14,29 +14,25 @@
         key="no-expiration-date-label"
         v-text="$gettext('Set expiration date')"
       />
-      <span
-        v-else
-        key="set-expiration-date-label"
-        v-text="$gettext('Expires %{expires}', { expires: dateExpire })"
-      />
+      <span v-else key="set-expiration-date-label" v-text="$gettext('Edit expiration date')" />
     </oc-button>
   </div>
   <oc-button
     v-if="dateCurrent"
-    class="recipient-edit-expiration-btn-remove"
+    class="recipient-edit-expiration-btn-remove oc-p-s action-menu-item"
     appearance="raw"
     :aria-label="$gettext('Remove expiration date')"
     @click="dateCurrent = null"
   >
-    <oc-icon name="close" />
+    <oc-icon name="calendar-close" fill-type="line" size="medium" variation="passive" />
+    <span key="no-expiration-date-label" v-text="$gettext('Remove expiration date')" />
   </oc-button>
 </template>
 
 <script lang="ts">
 import { DateTime } from 'luxon'
-import { computed, watch, defineComponent, customRef, PropType, unref } from 'vue'
+import { watch, defineComponent, customRef, PropType, unref } from 'vue'
 import { useModals } from '@ownclouders/web-pkg'
-import { formatRelativeDateFromDateTime } from '@ownclouders/web-pkg'
 import { useGettext } from 'vue3-gettext'
 import DatePickerModal from '../../../../Modals/DatePickerModal.vue'
 
@@ -67,9 +63,6 @@ export default defineComponent({
         }
       }
     })
-    const dateExpire = computed(() =>
-      formatRelativeDateFromDateTime(dateCurrent.value.endOf('day'), language.current)
-    )
 
     const showDatePickerModal = () => {
       dispatchModal({
@@ -88,14 +81,13 @@ export default defineComponent({
 
     watch(dateCurrent, () => {
       emit('optionChange', {
-        expirationDate: unref(dateCurrent).isValid ? dateCurrent.value : null
+        expirationDate: unref(dateCurrent)?.isValid ? dateCurrent.value : null
       })
     })
 
     return {
       language,
       dateCurrent,
-      dateExpire,
       showDatePickerModal
     }
   }

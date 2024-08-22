@@ -88,17 +88,12 @@
             <span class="text oc-text-truncate" v-text="sharedParentDir" />
           </router-link>
         </div>
-        <span v-if="hasExpirationDate">
-          <oc-icon
-            v-oc-tooltip="expirationDate"
-            class="files-collaborators-collaborator-expiration"
-            data-testid="recipient-info-expiration-date"
-            :aria-label="expirationDate"
-            name="calendar-event"
-            fill-type="line"
-          />
-          <span class="oc-invisible-sr" v-text="screenreaderShareExpiration" />
-        </span>
+        <expiration-date-indicator
+          v-if="hasExpirationDate"
+          class="files-collaborators-collaborator-expiration"
+          data-testid="recipient-info-expiration-date"
+          :expiration-date="DateTime.fromISO(share.expirationDateTime)"
+        />
         <edit-dropdown
           :id="`edit-drop-down-${editDropDownToggleId}`"
           class="files-collaborators-collaborator-edit"
@@ -145,7 +140,7 @@ import {
 import { Resource, extractDomSelector } from '@ownclouders/web-client'
 import { computed, defineComponent, inject, PropType, Ref } from 'vue'
 import * as uuid from 'uuid'
-import { formatDateFromDateTime, formatRelativeDateFromDateTime } from '@ownclouders/web-pkg'
+import { formatDateFromDateTime } from '@ownclouders/web-pkg'
 import { useClientService } from '@ownclouders/web-pkg'
 import { OcInfoDrop, OcDrop } from 'design-system/src/components'
 import { RouteLocationNamedRaw } from 'vue-router'
@@ -153,10 +148,12 @@ import { useGettext } from 'vue3-gettext'
 import { SpaceResource } from '@ownclouders/web-client'
 import { isProjectSpaceResource } from '@ownclouders/web-client'
 import { ContextualHelperDataListItem } from 'design-system/src/helpers'
+import ExpirationDateIndicator from '../ExpirationDateIndicator.vue'
 
 export default defineComponent({
   name: 'ListItem',
   components: {
+    ExpirationDateIndicator,
     EditDropdown,
     RoleDropdown
   },
@@ -250,7 +247,8 @@ export default defineComponent({
       showMessage,
       showErrorMessage,
       upsertSpace,
-      upsertSpaceMember
+      upsertSpaceMember,
+      DateTime
     }
   },
   computed: {
@@ -313,26 +311,12 @@ export default defineComponent({
       return this.$gettext('Share receiver name: %{ displayName }', context)
     },
 
-    screenreaderShareExpiration() {
-      return this.$gettext('Share expires %{ expiryDateRelative } (%{ expiryDate })', {
-        expiryDateRelative: this.expirationDateRelative,
-        expiryDate: this.expirationDate
-      })
-    },
-
     hasExpirationDate() {
       return !!this.share.expirationDateTime
     },
 
     expirationDate() {
       return formatDateFromDateTime(
-        DateTime.fromISO(this.share.expirationDateTime).endOf('day'),
-        this.$language.current
-      )
-    },
-
-    expirationDateRelative() {
-      return formatRelativeDateFromDateTime(
         DateTime.fromISO(this.share.expirationDateTime).endOf('day'),
         this.$language.current
       )
@@ -463,10 +447,6 @@ export default defineComponent({
     grid-column-start: 2;
     margin-left: var(--oc-space-medium);
   }
-}
-
-.files-collaborators-collaborator-expiration {
-  margin-top: 5px;
 }
 
 .files-collaborators-collaborator-navigation {

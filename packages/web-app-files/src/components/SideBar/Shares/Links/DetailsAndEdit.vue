@@ -41,14 +41,11 @@
         fill-type="line"
         :aria-label="passwortProtectionTooltip"
       />
-      <oc-icon
+      <expiration-date-indicator
         v-if="linkShare.expirationDateTime"
-        v-oc-tooltip="expirationDateTooltip"
-        class="oc-files-public-link-expires oc-ml-xs"
+        :expiration-date="DateTime.fromISO(linkShare.expirationDateTime)"
         :data-testid="`files-link-id-${linkShare.id}-expiration-date`"
-        :aria-label="expirationDateTooltip"
-        name="calendar-event"
-        fill-type="line"
+        class="oc-files-public-link-expires oc-ml-xs"
       />
       <oc-icon
         v-if="isRunningOnEos && currentLinkNotifyUploadsExtraRecipients"
@@ -93,15 +90,6 @@
                 >
                   <oc-icon :name="option.icon" fill-type="line" size="medium" />
                   <span v-text="option.title" />
-                </oc-button>
-                <oc-button
-                  v-if="option.remove"
-                  :data-testid="`files-link-id-${linkShare.id}-edit-${option.id}`"
-                  :aria-label="option.remove.title"
-                  appearance="raw"
-                  @click="option.remove.method"
-                >
-                  <oc-icon :name="option.remove.icon" />
                 </oc-button>
               </div>
               <oc-button
@@ -164,6 +152,7 @@ import SetLinkPasswordModal from '../../../Modals/SetLinkPasswordModal.vue'
 import { storeToRefs } from 'pinia'
 import { SharingLinkType } from '@ownclouders/web-client/graph/generated'
 import DatePickerModal from '../../../Modals/DatePickerModal.vue'
+import ExpirationDateIndicator from '../ExpirationDateIndicator.vue'
 
 type EditOption = {
   id: string
@@ -171,13 +160,12 @@ type EditOption = {
   icon: string
   method?: () => void
   variation?: string
-  remove?: any
   showDatepicker?: boolean
 }
 
 export default defineComponent({
   name: 'DetailsAndEdit',
-  components: { LinkRoleDropdown },
+  components: { LinkRoleDropdown, ExpirationDateIndicator },
   props: {
     canRename: {
       type: Boolean,
@@ -351,7 +339,8 @@ export default defineComponent({
       currentLinkRoleLabel,
       viaRouterParams,
       viaTooltip,
-      showDatePickerModal
+      showDatePickerModal,
+      DateTime
     }
   },
   data() {
@@ -375,17 +364,20 @@ export default defineComponent({
       if (this.linkShare.expirationDateTime) {
         result.push({
           id: 'edit-expiration',
-          title: this.$gettext('Expires %{expires}', { expires: this.expirationDateRelative }),
+          title: this.$gettext('Edit expiration date'),
           icon: 'calendar-event',
-          showDatepicker: true,
-          remove: {
-            id: 'remove-expiration',
-            title: this.$gettext('Remove expiration date'),
-            icon: 'close',
-            method: () =>
-              this.$emit('updateLink', {
-                linkShare: { ...this.linkShare, expirationDateTime: null }
-              })
+          showDatepicker: true
+        })
+
+        result.push({
+          id: 'remove-expiration',
+          title: this.$gettext('Remove expiration date'),
+          icon: 'calendar-close',
+          method: () => {
+            this.$emit('updateLink', {
+              linkShare: { ...this.linkShare, expirationDateTime: null }
+            })
+            ;(this.$refs.editPublicLinkDropdown as InstanceType<typeof OcDrop>).hide()
           }
         })
       } else if (!this.isAliasLink) {
@@ -467,13 +459,6 @@ export default defineComponent({
       return formatRelativeDateFromDateTime(
         DateTime.fromISO(this.linkShare.expirationDateTime).endOf('day'),
         this.$language.current
-      )
-    },
-    expirationDateTooltip() {
-      return this.$gettext(
-        'Expires %{timeToExpiry} (%{expiryDate})',
-        { timeToExpiry: this.expirationDateRelative, expiryDate: this.dateExpire },
-        true
       )
     },
     passwortProtectionTooltip() {

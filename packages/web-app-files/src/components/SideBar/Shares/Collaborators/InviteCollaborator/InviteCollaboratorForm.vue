@@ -28,7 +28,8 @@
         :filter="filterRecipients"
         :label="selectedCollaboratorsLabel"
         :dropdown-should-open="
-          ({ open, search }: DropDownShouldOpenOptions) => open && search.length >= minSearchLength && !searchInProgress
+          ({ open, search }: DropDownShouldOpenOptions) =>
+            open && search.length >= minSearchLength && !searchInProgress
         "
         @search:input="onSearch"
         @update:model-value="resetFocusOnInvite"
@@ -89,18 +90,13 @@
         :is-external="isExternalShareRoleType"
         @option-change="collaboratorRoleChanged"
       />
-      <div class="oc-flex">
-        <div v-if="expirationDate" class="oc-flex oc-flex-middle">
-          <oc-icon
-            v-oc-tooltip="formattedExpirationDate"
-            class="files-collaborators-collaborator-expiration"
-            data-testid="recipient-info-expiration-date"
-            :aria-label="formattedExpirationDate"
-            name="calendar-event"
-            fill-type="line"
-          />
-          <span class="oc-invisible-sr" v-text="screenreaderShareExpiration" />
-        </div>
+      <div class="oc-flex oc-flex-middle">
+        <expiration-date-indicator
+          v-if="expirationDate"
+          :expiration-date="DateTime.fromISO(expirationDate)"
+          class="files-collaborators-collaborator-expiration"
+          data-testid="recipient-info-expiration-date"
+        />
         <oc-button
           id="show-more-share-options-btn"
           class="oc-mx-s"
@@ -185,13 +181,13 @@ import {
 
 import { computed, defineComponent, inject, ref, unref, watch, onMounted, nextTick, Ref } from 'vue'
 import { Resource, SpaceResource } from '@ownclouders/web-client'
-import { formatDateFromDateTime, formatRelativeDateFromDateTime } from '@ownclouders/web-pkg'
 import { DateTime } from 'luxon'
 import { OcDrop } from 'design-system/src/components'
 import { useTask } from 'vue-concurrency'
 import { useGettext } from 'vue3-gettext'
 import { isProjectSpaceResource } from '@ownclouders/web-client'
 import { Group } from '@ownclouders/web-client/graph/generated'
+import ExpirationDateIndicator from '../../ExpirationDateIndicator.vue'
 
 // just a dummy function to trick gettext tools
 const $gettext = (str: string) => {
@@ -210,6 +206,7 @@ export type ShareRoleType = { id: string; label: string; longLabel: string }
 export default defineComponent({
   name: 'InviteCollaboratorForm',
   components: {
+    ExpirationDateIndicator,
     AutocompleteItem,
     RoleDropdown,
     RecipientContainer,
@@ -518,6 +515,7 @@ export default defineComponent({
       isExternalShareRoleType,
       selectShareRoleType,
       focusShareInput,
+      DateTime,
 
       // CERN
       accountType,
@@ -536,29 +534,6 @@ export default defineComponent({
 
     selectedCollaboratorsLabel() {
       return this.inviteLabel || this.$gettext('Search')
-    },
-
-    formattedExpirationDate() {
-      return this.expirationDate === null
-        ? null
-        : formatDateFromDateTime(
-            DateTime.fromISO(this.expirationDate).endOf('day'),
-            this.$language.current
-          )
-    },
-    expirationDateRelative() {
-      return this.expirationDate === null
-        ? null
-        : formatRelativeDateFromDateTime(
-            DateTime.fromISO(this.expirationDate).endOf('day'),
-            this.$language.current
-          )
-    },
-    screenreaderShareExpiration() {
-      return this.$gettext('Share expires %{ expiryDateRelative } (%{ expiryDate })', {
-        expiryDateRelative: this.expirationDateRelative,
-        expiryDate: this.expirationDate
-      })
     }
   },
   mounted() {
