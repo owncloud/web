@@ -1,6 +1,6 @@
 <template>
   <div class="oc-flex oc-button-justify-content-space-between oc-pb-s">
-    <div v-if="advancedMode" class="oc-flex oc-flex-middle">
+    <div v-if="isAdvancedMode" class="oc-flex oc-flex-middle">
       <oc-icon class="oc-mr-s" :name="selectedTypeIcon" fill-type="line" />
       <link-role-dropdown
         :model-value="selectedType"
@@ -13,7 +13,7 @@
       <span v-text="selectedTypeDescription" />
     </div>
     <oc-button
-      v-if="!advancedMode"
+      v-if="!isAdvancedMode"
       class="link-modal-advanced-mode-button"
       gap-size="xsmall"
       appearance="raw"
@@ -26,7 +26,7 @@
   </div>
   <div v-if="!onlyInternalLinksAllowed" class="link-modal-password oc-mb-m">
     <oc-text-input
-      v-if="advancedMode"
+      v-if="isAdvancedMode"
       :key="passwordInputKey"
       :model-value="password.value"
       type="password"
@@ -48,7 +48,7 @@
       <span v-text="password.value" />
     </div>
     <oc-datepicker
-      v-if="advancedMode"
+      v-if="isAdvancedMode"
       class="oc-mt-s"
       :min-date="DateTime.now()"
       :label="$gettext('Expiry date')"
@@ -143,8 +143,8 @@ export default defineComponent({
       isPasswordEnforcedForLinkType
     } = useLinkTypes()
     const { addLink } = useSharesStore()
-    const advancedMode = ref(false)
-    const invalidExpiryDate = ref(false)
+    const isAdvancedMode = ref(false)
+    const isInvalidExpiryDate = ref(false)
 
     const isFolder = computed(() => props.resources.every(({ isFolder }) => isFolder))
 
@@ -190,12 +190,12 @@ export default defineComponent({
       () => unref(availableLinkTypes).length === 1 && unref(selectedLinkTypeIsInternal)
     )
     const setAdvancedMode = () => {
-      advancedMode.value = true
+      isAdvancedMode.value = true
     }
 
     const onExpiryDateChanged = ({ date, error }: { date: DateTime; error: boolean }) => {
       selectedExpiry.value = date
-      invalidExpiryDate.value = error
+      isInvalidExpiryDate.value = error
     }
 
     const createLinks = () => {
@@ -228,7 +228,7 @@ export default defineComponent({
     })
 
     const confirmButtonDisabled = computed(() => {
-      if (unref(passwordPolicyFulfilled) && !unref(invalidExpiryDate)) {
+      if (unref(passwordPolicyFulfilled) && !unref(isInvalidExpiryDate)) {
         return false
       }
 
@@ -324,7 +324,7 @@ export default defineComponent({
       updatePassword,
       getLinkRoleByType,
       confirmButtonText,
-      advancedMode,
+      isAdvancedMode,
       setAdvancedMode,
       onExpiryDateChanged,
       confirmButtonDisabled,

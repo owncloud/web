@@ -86,7 +86,7 @@ export default defineComponent({
       })
     }
 
-    watch(dateCurrent, (val) => {
+    watch(dateCurrent, () => {
       emit('optionChange', {
         expirationDate: unref(dateCurrent).isValid ? dateCurrent.value : null
       })

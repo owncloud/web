@@ -7,7 +7,7 @@
     :min="minDate?.toISODate()"
     :fix-message-line="true"
     :error-message="errorMessage"
-    :clear-button-enabled="true"
+    :clear-button-enabled="isClearable"
     :clear-button-accessible-label="$gettext('Clear date')"
     class="oc-date-picker"
   />
@@ -17,13 +17,13 @@
 import { computed, defineComponent, onMounted, PropType, ref, unref, watch } from 'vue'
 import { useGettext } from 'vue3-gettext'
 import { DateTime } from 'luxon'
-
 export default defineComponent({
   name: 'OcDatepicker',
   status: 'ready',
   release: '1.0.0',
   props: {
     label: { type: String, required: true },
+    isClearable: { type: Boolean, default: true },
     currentDate: { type: Object as PropType<DateTime>, required: false, default: null },
     minDate: { type: Object as PropType<DateTime>, required: false, default: null }
   },
@@ -37,7 +37,7 @@ export default defineComponent({
       return date.isValid ? date : null
     })
 
-    const minDateUndercut = computed(() => {
+    const isMinDateUndercut = computed(() => {
       if (!props.minDate || !unref(date)) {
         return false
       }
@@ -45,7 +45,7 @@ export default defineComponent({
     })
 
     const errorMessage = computed(() => {
-      if (unref(minDateUndercut)) {
+      if (unref(isMinDateUndercut)) {
         return $gettext('The date must be after %{date}', {
           date: props.minDate
             .minus({ day: 1 })
@@ -65,7 +65,7 @@ export default defineComponent({
     watch(
       date,
       () => {
-        emit('dateChanged', { date: unref(date), error: unref(minDateUndercut) })
+        emit('dateChanged', { date: unref(date), error: unref(isMinDateUndercut) })
       },
       {
         deep: true
