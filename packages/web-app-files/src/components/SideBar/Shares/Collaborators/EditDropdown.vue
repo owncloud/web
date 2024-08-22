@@ -24,32 +24,26 @@
           v-if="canEditOrDelete && isExpirationSupported"
           class="oc-rounded oc-menu-item-hover files-collaborators-expiration"
         >
-          <div class="oc-flex">
-            <oc-button
-              class="files-collaborators-expiration-button oc-p-s action-menu-item"
-              data-testid="recipient-datepicker-btn"
-              appearance="raw"
-              @click="showDatePickerModal"
-            >
-              <oc-icon name="calendar-event" fill-type="line" size="medium" variation="passive" />
-              <span
-                v-if="isExpirationDateSet"
-                class="oc-ml-s"
-                v-text="$gettext('Expires %{expires}', { expires: dateExpire })"
-              />
-              <span v-else v-text="$gettext('Set expiration date')" />
-            </oc-button>
-            <oc-button
-              v-if="isRemoveExpirationPossible"
-              class="remove-expiration-date"
-              data-testid="collaborator-remove-expiration-btn"
-              appearance="raw"
-              :aria-label="$gettext('Remove expiration date')"
-              @click="removeExpirationDate"
-            >
-              <oc-icon name="close" />
-            </oc-button>
-          </div>
+          <oc-button
+            class="files-collaborators-expiration-button oc-p-s action-menu-item"
+            data-testid="recipient-datepicker-btn"
+            appearance="raw"
+            @click="showDatePickerModal"
+          >
+            <oc-icon name="calendar-event" fill-type="line" size="medium" variation="passive" />
+            <span v-if="isExpirationDateSet" v-text="$gettext('Edit expiration date')" />
+            <span v-else v-text="$gettext('Set expiration date')" />
+          </oc-button>
+          <oc-button
+            v-if="isRemoveExpirationPossible"
+            class="remove-expiration-date oc-p-s action-menu-item"
+            data-testid="collaborator-remove-expiration-btn oc-p-s action-menu-item"
+            appearance="raw"
+            @click="removeExpirationDate"
+          >
+            <oc-icon name="close" />
+            <span v-text="$gettext('Remove expiration date')" />
+          </oc-button>
         </li>
         <li v-for="(option, i) in options" :key="i" class="oc-rounded oc-menu-item-hover">
           <template v-if="option.enabled">

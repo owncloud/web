@@ -91,15 +91,6 @@
                   <oc-icon :name="option.icon" fill-type="line" size="medium" />
                   <span v-text="option.title" />
                 </oc-button>
-                <oc-button
-                  v-if="option.remove"
-                  :data-testid="`files-link-id-${linkShare.id}-edit-${option.id}`"
-                  :aria-label="option.remove.title"
-                  appearance="raw"
-                  @click="option.remove.method"
-                >
-                  <oc-icon :name="option.remove.icon" />
-                </oc-button>
               </div>
               <oc-button
                 v-else
@@ -169,7 +160,6 @@ type EditOption = {
   icon: string
   method?: () => void
   variation?: string
-  remove?: any
   showDatepicker?: boolean
 }
 
@@ -374,17 +364,20 @@ export default defineComponent({
       if (this.linkShare.expirationDateTime) {
         result.push({
           id: 'edit-expiration',
-          title: this.$gettext('Expires %{expires}', { expires: this.expirationDateRelative }),
+          title: this.$gettext('Edit expiration date'),
           icon: 'calendar-event',
-          showDatepicker: true,
-          remove: {
-            id: 'remove-expiration',
-            title: this.$gettext('Remove expiration date'),
-            icon: 'close',
-            method: () =>
-              this.$emit('updateLink', {
-                linkShare: { ...this.linkShare, expirationDateTime: null }
-              })
+          showDatepicker: true
+        })
+
+        result.push({
+          id: 'remove-expiration',
+          title: this.$gettext('Remove expiration date'),
+          icon: 'calendar-close',
+          method: () => {
+            this.$emit('updateLink', {
+              linkShare: { ...this.linkShare, expirationDateTime: null }
+            })
+            ;(this.$refs.editPublicLinkDropdown as InstanceType<typeof OcDrop>).hide()
           }
         })
       } else if (!this.isAliasLink) {
