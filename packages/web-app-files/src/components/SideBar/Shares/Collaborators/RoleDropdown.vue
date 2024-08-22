@@ -22,7 +22,7 @@
       <oc-contextual-helper
         v-if="isDisabledRole"
         class="oc-ml-xs files-permission-actions-list"
-        :list="existingSharePermissions.map((permission) => ({ text: $gettext(permission) }))"
+        :list="existingSharePermissions.map((permission) => ({ text: permission }))"
       />
     </div>
     <oc-drop
@@ -86,7 +86,6 @@ import { useAbility, useUserStore } from '@ownclouders/web-pkg'
 import { Resource } from '@ownclouders/web-client'
 import { useGettext } from 'vue3-gettext'
 import { ShareRole } from '@ownclouders/web-client'
-import { $gettext } from '@ownclouders/web-pkg/src/router/utils'
 
 export default defineComponent({
   name: 'RoleDropdown',
@@ -216,7 +215,6 @@ export default defineComponent({
   },
 
   methods: {
-    $gettext,
     cycleRoles(event: KeyboardEvent) {
       // events only need to be captured if the roleSelect element is visible
       if (!get(this.$refs.rolesDrop, 'tippy.state.isShown', false)) {

@@ -11,7 +11,7 @@ exports[`Collaborator ListItem component > share inheritance indicators > show w
         <div data-v-ccf14be2="" class="oc-text-truncate"><span data-v-ccf14be2="" aria-hidden="true" class="files-collaborators-collaborator-name">einstein</span> <span data-v-ccf14be2="" class="oc-invisible-sr">Share receiver name: einstein</span></div>
         <div data-v-ccf14be2="">
           <div data-v-ccf14be2="" class="oc-flex oc-flex-nowrap oc-flex-middle">
-            <role-dropdown-stub data-v-ccf14be2="" existingrole="undefined" domselector="1" mode="edit" showicon="false" islocked="false" isexternal="false" class="files-collaborators-collaborator-role"></role-dropdown-stub>
+            <role-dropdown-stub data-v-ccf14be2="" existingsharerole="undefined" existingsharepermissions="" domselector="1" mode="edit" showicon="false" islocked="false" isexternal="false" class="files-collaborators-collaborator-role"></role-dropdown-stub>
           </div>
         </div>
       </div>
