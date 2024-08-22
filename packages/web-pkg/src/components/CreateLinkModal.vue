@@ -328,14 +328,10 @@ export default defineComponent({
       setAdvancedMode,
       onExpiryDateChanged,
       confirmButtonDisabled,
+      DateTime,
 
       // unit tests
       onConfirm
-    }
-  },
-  computed: {
-    DateTime() {
-      return DateTime
     }
   }
 })
