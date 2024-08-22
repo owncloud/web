@@ -7,7 +7,8 @@ import { User } from '@ownclouders/web-client/graph/generated'
 
 const selectors = {
   recipientRoleBtn: '.files-recipient-role-select-btn',
-  roleButton: '.files-recipient-role-drop-btn'
+  roleButton: '.files-recipient-role-drop-btn',
+  filesPermissionActionsList: '.files-permission-actions-list'
 }
 
 describe('RoleDropdown', () => {
@@ -19,10 +20,19 @@ describe('RoleDropdown', () => {
   it('renders a button with existing role if given', () => {
     const { wrapper } = getWrapper({
       mountType: shallowMount,
-      existingRole: mock<ShareRole>({ displayName: 'Can edit' })
+      existingShareRole: mock<ShareRole>({ displayName: 'Can edit' })
     })
     expect(wrapper.find(selectors.recipientRoleBtn).exists()).toBeTruthy()
     expect(wrapper.find(`${selectors.recipientRoleBtn} span`).text()).toEqual('Can edit')
+    expect(wrapper.find(selectors.filesPermissionActionsList).exists()).toBeFalsy()
+  })
+  it('lists permission actions if a role is unknown', () => {
+    const { wrapper } = getWrapper({
+      mountType: shallowMount,
+      existingSharePermissions: ['read', 'update']
+    })
+    expect(wrapper.find(selectors.recipientRoleBtn).exists()).toBeTruthy()
+    expect(wrapper.find(selectors.filesPermissionActionsList).exists()).toBeTruthy()
   })
   it('does not render a button if only one role is available', () => {
     const { wrapper } = getWrapper({
@@ -58,7 +68,8 @@ describe('RoleDropdown', () => {
 
 function getWrapper({
   mountType = mount,
-  existingRole = null,
+  existingShareRole = null,
+  existingSharePermissions = null,
   isExternal = false,
   availableInternalShareRoles = [
     mock<ShareRole>({ displayName: 'Can view', description: '' }),
@@ -67,7 +78,8 @@ function getWrapper({
   availableExternalShareRoles = []
 }: {
   mountType?: typeof mount
-  existingRole?: ShareRole
+  existingShareRole?: ShareRole
+  existingSharePermissions?: string[]
   isExternal?: boolean
   availableInternalShareRoles?: ShareRole[]
   availableExternalShareRoles?: ShareRole[]
@@ -75,7 +87,8 @@ function getWrapper({
   return {
     wrapper: mountType(RoleDropdown, {
       props: {
-        existingRole,
+        existingShareRole,
+        existingSharePermissions: existingSharePermissions ?? [],
         isExternal
       },
       global: {

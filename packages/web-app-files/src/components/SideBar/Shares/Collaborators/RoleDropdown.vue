@@ -21,7 +21,7 @@
       </oc-button>
       <oc-contextual-helper
         v-if="isDisabledRole"
-        class="oc-ml-xs"
+        class="oc-ml-xs files-permission-actions-list"
         :list="existingSharePermissions.map((permission) => ({ text: $gettext(permission) }))"
       />
     </div>
