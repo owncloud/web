@@ -41,7 +41,7 @@
             appearance="raw"
             @click="removeExpirationDate"
           >
-            <oc-icon name="close" />
+            <oc-icon name="calendar-close" />
             <span v-text="$gettext('Remove expiration date')" />
           </oc-button>
         </li>
