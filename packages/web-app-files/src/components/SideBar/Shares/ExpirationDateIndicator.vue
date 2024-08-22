@@ -21,7 +21,6 @@ export default defineComponent({
   props: {
     expirationDate: { type: Object as PropType<DateTime>, required: false, default: null }
   },
-  emits: ['confirm', 'cancel'],
   setup(props) {
     const { $gettext, current: currentLanguage } = useGettext()
 

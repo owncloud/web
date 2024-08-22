@@ -85,7 +85,7 @@ import uniqueId from 'design-system/src/utils/uniqueId'
 import { OcDrop } from 'design-system/src/components'
 import { Resource } from '@ownclouders/web-client'
 import { isProjectSpaceResource } from '@ownclouders/web-client'
-import { formatRelativeDateFromDateTime, useConfigStore, useModals } from '@ownclouders/web-pkg'
+import { useConfigStore, useModals } from '@ownclouders/web-pkg'
 import { useGettext } from 'vue3-gettext'
 import DatePickerModal from '../../../Modals/DatePickerModal.vue'
 
@@ -147,18 +147,10 @@ export default defineComponent({
       return ''
     })
 
-    const dateExpire = computed(() =>
-      formatRelativeDateFromDateTime(
-        DateTime.fromISO(props.expirationDate).endOf('day'),
-        language.current
-      )
-    )
-
     return {
       configStore,
       resource: inject<Ref<Resource>>('resource'),
       toggleShareDenied,
-      dateExpire,
       dropButtonTooltip,
       dispatchModal
     }
