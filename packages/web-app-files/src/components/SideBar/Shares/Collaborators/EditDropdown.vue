@@ -20,43 +20,36 @@
       padding-size="small"
     >
       <oc-list class="collaborator-edit-dropdown-options-list" :aria-label="shareEditOptions">
-        <li v-if="canEditOrDelete && isExpirationSupported" class="oc-rounded oc-menu-item-hover">
-          <oc-datepicker
-            v-model="enteredExpirationDate"
-            :min-date="minExpirationDate"
-            :max-date="maxExpirationDate"
-            :locale="$language.current"
-            :is-required="isExpirationDateEnforced"
-            class="files-recipient-expiration-datepicker oc-flex"
-            data-testid="recipient-datepicker"
-          >
-            <template #default="{ togglePopover }">
-              <oc-button
-                class="files-collaborators-expiration-button oc-p-s action-menu-item"
-                data-testid="recipient-datepicker-btn"
-                appearance="raw"
-                @click="togglePopover"
-              >
-                <oc-icon name="calendar-event" fill-type="line" size="medium" variation="passive" />
-                <span
-                  v-if="isExpirationDateSet"
-                  class="oc-ml-s"
-                  v-text="$gettext('Expires %{expires}', { expires: dateExpire })"
-                />
-                <span v-else v-text="$gettext('Set expiration date')" />
-              </oc-button>
-              <oc-button
-                v-if="isRemoveExpirationPossible"
-                class="remove-expiration-date"
-                data-testid="collaborator-remove-expiration-btn"
-                appearance="raw"
-                :aria-label="$gettext('Remove expiration date')"
-                @click="removeExpirationDate"
-              >
-                <oc-icon name="close" />
-              </oc-button>
-            </template>
-          </oc-datepicker>
+        <li
+          v-if="canEditOrDelete && isExpirationSupported"
+          class="oc-rounded oc-menu-item-hover files-collaborators-expiration"
+        >
+          <div class="oc-flex">
+            <oc-button
+              class="files-collaborators-expiration-button oc-p-s action-menu-item"
+              data-testid="recipient-datepicker-btn"
+              appearance="raw"
+              @click="showDatePickerModal"
+            >
+              <oc-icon name="calendar-event" fill-type="line" size="medium" variation="passive" />
+              <span
+                v-if="isExpirationDateSet"
+                class="oc-ml-s"
+                v-text="$gettext('Expires %{expires}', { expires: dateExpire })"
+              />
+              <span v-else v-text="$gettext('Set expiration date')" />
+            </oc-button>
+            <oc-button
+              v-if="isRemoveExpirationPossible"
+              class="remove-expiration-date"
+              data-testid="collaborator-remove-expiration-btn"
+              appearance="raw"
+              :aria-label="$gettext('Remove expiration date')"
+              @click="removeExpirationDate"
+            >
+              <oc-icon name="close" />
+            </oc-button>
+          </div>
         </li>
         <li v-for="(option, i) in options" :key="i" class="oc-rounded oc-menu-item-hover">
           <template v-if="option.enabled">
@@ -98,13 +91,9 @@ import uniqueId from 'design-system/src/utils/uniqueId'
 import { OcDrop } from 'design-system/src/components'
 import { Resource } from '@ownclouders/web-client'
 import { isProjectSpaceResource } from '@ownclouders/web-client'
-import {
-  formatRelativeDateFromDateTime,
-  useCapabilityStore,
-  useConfigStore
-} from '@ownclouders/web-pkg'
+import { formatRelativeDateFromDateTime, useConfigStore, useModals } from '@ownclouders/web-pkg'
 import { useGettext } from 'vue3-gettext'
-import { storeToRefs } from 'pinia'
+import DatePickerModal from '../../../Modals/DatePickerModal.vue'
 
 export default defineComponent({
   name: 'EditDropdown',
@@ -147,11 +136,10 @@ export default defineComponent({
     'notifyShare'
   ],
   setup(props, { emit }) {
-    const capabilityStore = useCapabilityStore()
-    const capabilityRefs = storeToRefs(capabilityStore)
     const language = useGettext()
     const { $gettext } = language
     const configStore = useConfigStore()
+    const { dispatchModal } = useModals()
 
     const toggleShareDenied = (value: boolean) => {
       emit('setDenyShare', value)
@@ -177,14 +165,8 @@ export default defineComponent({
       resource: inject<Ref<Resource>>('resource'),
       toggleShareDenied,
       dateExpire,
-      userExpirationDate: capabilityRefs.sharingUserExpireDate,
-      groupExpirationDate: capabilityRefs.sharingGroupExpireDate,
-      dropButtonTooltip
-    }
-  },
-  data: function () {
-    return {
-      enteredExpirationDate: null
+      dropButtonTooltip,
+      dispatchModal
     }
   },
   computed: {
@@ -251,87 +233,10 @@ export default defineComponent({
     },
 
     isRemoveExpirationPossible() {
-      return (
-        this.canEditOrDelete &&
-        this.isExpirationSupported &&
-        this.isExpirationDateSet &&
-        !this.isExpirationDateEnforced
-      )
-    },
-
-    isDefaultExpirationEnabled() {
-      if (this.editingUser) {
-        return this.userExpirationDate.enabled
-      }
-
-      if (this.editingGroup) {
-        return this.groupExpirationDate.enabled
-      }
-
-      return this.userExpirationDate.enabled || this.groupExpirationDate.enabled
-    },
-
-    defaultExpirationDate() {
-      if (!this.isDefaultExpirationEnabled) {
-        return null
-      }
-
-      const userMaxExpirationDays = parseInt(this.userExpirationDate.days)
-      const groupMaxExpirationDays = parseInt(this.groupExpirationDate.days)
-      let days = 0
-
-      if (this.editingUser) {
-        days = userMaxExpirationDays
-      } else if (this.editingGroup) {
-        days = groupMaxExpirationDays
-      } else if (userMaxExpirationDays && groupMaxExpirationDays) {
-        days = Math.min(userMaxExpirationDays, groupMaxExpirationDays)
-      } else {
-        days = userMaxExpirationDays || groupMaxExpirationDays
-      }
-
-      const date = new Date()
-      date.setDate(new Date().getDate() + days)
-      return date
-    },
-
-    isExpirationDateEnforced() {
-      if (this.editingUser) {
-        return this.userExpirationDate?.enforced
-      }
-
-      if (this.editingGroup) {
-        return this.groupExpirationDate?.enforced
-      }
-
-      return this.userExpirationDate?.enforced || this.groupExpirationDate?.enforced
-    },
-
-    maxExpirationDate() {
-      if (!this.isExpirationDateEnforced) {
-        return null
-      }
-      return this.defaultExpirationDate
-    },
-
-    minExpirationDate() {
-      const date = new Date()
-      date.setDate(new Date().getDate() + 1)
-      return date
-    }
-  },
-  watch: {
-    enteredExpirationDate: {
-      handler: 'updateExpirationDate'
+      return this.canEditOrDelete && this.isExpirationSupported && this.isExpirationDateSet
     }
   },
   methods: {
-    updateExpirationDate() {
-      this.$emit('expirationDateChanged', {
-        expirationDateTime: DateTime.fromJSDate(this.enteredExpirationDate).endOf('day').toISO()
-      })
-      ;(this.$refs.expirationDateDrop as InstanceType<typeof OcDrop>).hide()
-    },
     removeExpirationDate() {
       this.$emit('expirationDateChanged', { expirationDateTime: null })
       ;(this.$refs.expirationDateDrop as InstanceType<typeof OcDrop>).hide()
@@ -341,6 +246,24 @@ export default defineComponent({
     },
     showAccessDetails() {
       this.$emit('showAccessDetails')
+    },
+    showDatePickerModal() {
+      const currentDate = DateTime.fromISO(this.expirationDate)
+
+      this.dispatchModal({
+        title: this.$gettext('Set expiration date'),
+        hideActions: true,
+        customComponent: DatePickerModal,
+        customComponentAttrs: () => ({
+          currentDate: currentDate.isValid ? currentDate : null,
+          minDate: DateTime.now()
+        }),
+        onConfirm: (expirationDateTime: DateTime) => {
+          this.$emit('expirationDateChanged', {
+            expirationDateTime
+          })
+        }
+      })
     }
   }
 })

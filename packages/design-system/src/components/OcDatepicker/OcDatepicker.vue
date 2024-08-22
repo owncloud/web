@@ -1,145 +1,113 @@
 <template>
-  <date-picker ref="datePicker" class="oc-datepicker" v-bind="$attrs" :popover="popperOpts">
-    <template #default="args">
-      <!-- @slot Default slot to use as the popover anchor for datepicker -->
-      <!-- args is undefined during initial render, hence we check it here -->
-      <slot
-        v-if="args"
-        :input-value="args.inputValue"
-        :toggle-popover="args.togglePopover"
-        :hide-popover="args.hidePopover"
-      />
-    </template>
-  </date-picker>
+  <oc-text-input
+    v-model="dateInputString"
+    v-bind="$attrs"
+    :label="label"
+    type="date"
+    :min="minDate?.toISODate()"
+    :fix-message-line="true"
+    :error-message="errorMessage"
+    :clear-button-enabled="isClearable"
+    :clear-button-accessible-label="$gettext('Clear date')"
+    class="oc-date-picker"
+  />
 </template>
 
 <script lang="ts">
-import {
-  computed,
-  ComponentPublicInstance,
-  defineComponent,
-  defineAsyncComponent,
-  ref,
-  unref,
-  watch
-} from 'vue'
-import { Modifier } from '@popperjs/core'
-import 'v-calendar/dist/style.css'
-import OcSpinner from '../OcSpinner/OcSpinner.vue'
-
-/**
- * Datepicker component based on [v-calendar](https://vcalendar.io/). For detailed documentation, please visit https://vcalendar.io/vue-3.html
- */
+import { computed, defineComponent, onMounted, PropType, ref, unref, watch } from 'vue'
+import { useGettext } from 'vue3-gettext'
+import { DateTime } from 'luxon'
 export default defineComponent({
   name: 'OcDatepicker',
   status: 'ready',
   release: '1.0.0',
-
-  components: {
-    DatePicker: defineAsyncComponent({
-      loader: async () => {
-        const { DatePicker } = await import('v-calendar')
-        return DatePicker
-      },
-      loadingComponent: OcSpinner
-    })
+  props: {
+    label: { type: String, required: true },
+    isClearable: { type: Boolean, default: true },
+    currentDate: { type: Object as PropType<DateTime>, required: false, default: null },
+    minDate: { type: Object as PropType<DateTime>, required: false, default: null }
   },
+  emits: ['dateChanged'],
+  setup(props, { emit }) {
+    const { $gettext, current } = useGettext()
+    const dateInputString = ref<string>('')
 
-  inheritAttrs: true,
-  setup() {
-    const datePicker = ref<ComponentPublicInstance>()
+    const date = computed(() => {
+      const date = DateTime.fromISO(unref(dateInputString)).endOf('day')
+      return date.isValid ? date : null
+    })
 
-    const popperOpts = computed(() => {
-      return {
-        modifiers: [
-          {
-            name: 'fixVerticalPosition',
-            enabled: true,
-            phase: 'beforeWrite',
-            requiresIfExists: ['offset', 'flip'],
-            fn({ state }) {
-              const dropHeight =
-                state.modifiersData.fullHeight || state.elements.popper.offsetHeight
-              const rect = state.elements.popper.getBoundingClientRect()
-              const neededScreenSpace =
-                (state.elements.reference as HTMLElement).offsetHeight + rect.top + dropHeight
+    const isMinDateUndercut = computed(() => {
+      if (!props.minDate || !unref(date)) {
+        return false
+      }
+      return unref(date) < props.minDate
+    })
 
-              if (state.placement !== 'top-start' && neededScreenSpace > window.innerHeight) {
-                state.styles.popper.top = `-${150}px`
-              }
-            }
-          } as Modifier<'fixVerticalPosition', unknown>
-        ]
+    const errorMessage = computed(() => {
+      if (unref(isMinDateUndercut)) {
+        return $gettext('The date must be after %{date}', {
+          date: props.minDate
+            .minus({ day: 1 })
+            .setLocale(current)
+            .toLocaleString(DateTime.DATE_SHORT)
+        })
+      }
+      return ''
+    })
+
+    onMounted(() => {
+      if (props.currentDate) {
+        dateInputString.value = props.currentDate.toISODate()
       }
     })
 
     watch(
-      datePicker,
+      date,
       () => {
-        if (unref(datePicker)) {
-          // for e2e tests
-          unref(datePicker).$el.__datePicker = unref(datePicker)
-        }
+        emit('dateChanged', { date: unref(date), error: unref(isMinDateUndercut) })
       },
-      { immediate: true }
+      {
+        deep: true
+      }
     )
 
-    return { popperOpts, datePicker }
+    return {
+      dateInputString,
+      errorMessage
+    }
   }
 })
 </script>
-
 <style lang="scss">
-.vc-pane-layout {
-  color: var(--oc-color-text-default) !important;
-  background-color: var(--oc-color-background-default) !important;
-}
-.vc-arrow svg path {
-  fill: var(--oc-color-text-default) !important;
-}
-.vc-title {
-  color: var(--oc-color-text-default) !important;
-}
-.vc-weekday {
-  color: var(--oc-color-text-muted) !important;
-}
-.vc-day {
-  color: var(--oc-color-text-default) !important;
-  font-weight: var(--oc-font-weight-bold);
-}
-
-.vc-highlights {
-  .vc-highlight {
-    background-color: var(--oc-color-swatch-primary-default) !important;
+.oc-date-picker {
+  input::-webkit-calendar-picker-indicator {
+    cursor: pointer;
   }
-  + span {
-    color: var(--oc-color-text-inverse) !important;
-  }
-}
-
-.vc-day-content.is-disabled {
-  color: var(--oc-color-text-muted) !important;
-  background: none;
-  cursor: not-allowed;
-  font-weight: var(--oc-font-weight-extralight);
 }
 </style>
 <docs>
 ```js
 <template>
-<div>
-  <oc-datepicker v-model="date">
-    <template #default="{ togglePopover }">
-      <oc-button @click="togglePopover">Open datepicker</oc-button>
-    </template>
-  </oc-datepicker>
-  <p v-if="date" v-text="date" />
-</div>
+  <div>
+    <oc-datepicker :current-date="currentDate" :min-date="minDate" label="Enter or pick a date"
+                   @date-changed="onDateChanged"/>
+    <p v-if="selectedDate" v-text="selectedDate"/>
+  </div>
 </template>
 <script>
-export default {
-  data: () => ({ date: null })
-}
+  import {DateTime} from "luxon";
+
+  export default {
+    data: () => ({
+      minDate: DateTime.now(), currentDate: DateTime.now(), selectedDate: ''
+    }),
+    methods: {
+      onDateChanged({date}) {
+        this.selectedDate = date ? date.toLocaleString(DateTime.DATE_FULL) : ''
+      }
+    }
+  }
 </script>
 ```
 </docs>

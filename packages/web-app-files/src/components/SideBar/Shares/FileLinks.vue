@@ -14,13 +14,11 @@
       <name-and-copy v-if="quicklink" :link-share="quicklink" />
       <create-quick-link
         v-else-if="canCreateLinks({ space, resource })"
-        :expiration-rules="expirationRules"
         @create-public-link="addNewLink(true)"
       />
       <details-and-edit
         v-if="quicklink"
         :can-rename="false"
-        :expiration-rules="expirationRules"
         :is-folder-share="resource.isFolder"
         :is-modifiable="canEditLink(quicklink)"
         :is-password-enforced="isPasswordEnforcedForLinkType(quicklink.type)"
@@ -52,7 +50,6 @@
         <name-and-copy :link-share="link" />
         <details-and-edit
           :can-rename="true"
-          :expiration-rules="expirationRules"
           :is-folder-share="resource.isFolder"
           :is-modifiable="canEditLink(link)"
           :is-password-enforced="isPasswordEnforcedForLinkType(link.type)"
@@ -84,12 +81,7 @@
           :data-testid="`files-link-id-${link.id}`"
         >
           <name-and-copy :link-share="link" />
-          <details-and-edit
-            :expiration-rules="expirationRules"
-            :is-folder-share="true"
-            :is-modifiable="false"
-            :link-share="link"
-          />
+          <details-and-edit :is-folder-share="true" :is-modifiable="false" :link-share="link" />
         </li>
       </oc-list>
       <div class="oc-flex oc-flex-center">
@@ -108,7 +100,6 @@
 import { computed, defineComponent, inject, ref, Ref, unref } from 'vue'
 import {
   useAbility,
-  useExpirationRules,
   useFileActionsCreateLink,
   FileAction,
   useClientService,
@@ -143,7 +134,6 @@ export default defineComponent({
     const ability = useAbility()
     const clientService = useClientService()
     const { can } = ability
-    const { expirationRules } = useExpirationRules()
     const { dispatchModal } = useModals()
     const { removeResources } = useResourcesStore()
     const { isPasswordEnforcedForLinkType } = useLinkTypes()
@@ -261,7 +251,6 @@ export default defineComponent({
       configOptions,
       canCreateLinks,
       canEditLink,
-      expirationRules,
       handleLinkUpdate,
       addNewLink,
       dispatchModal,

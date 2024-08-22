@@ -63,7 +63,8 @@ export type publicLinkAndItsEditButtonVisibilityArgs = {
 }
 const publicLinkRoleToggle = `//button[contains(@class, "link-role-dropdown-toggle")]`
 const publicLinkSetRoleButton = `//span[contains(@class,"role-dropdown-list-option-label") and text()='%s']`
-const linkExpiryDatepicker = '.link-expiry-picker:not(.vc-container)'
+const linkExpiryDatepicker = '.oc-modal-body .oc-date-picker input'
+const linkExpiryDatepickerConfirmButton = '.oc-modal-body-actions-confirm'
 const publicLinkEditRoleButton =
   `//h4//span[contains(@class, "oc-files-file-link-name") and text()="%s"]//ancestor::li//div[contains(@class, "link-details")]/` +
   `div/button[contains(@class, "link-role-dropdown-toggle")]`
@@ -85,7 +86,8 @@ const editPublicLinkSetExpirationButton =
   '//div[contains(@id,"edit-public-link-dropdown")]//button/span[text()="Set expiration date"]'
 const editPublicLinkAddPasswordButton =
   '//div[contains(@id,"edit-public-link-dropdown")]//button/span[text()="Edit password"]'
-const editPublicLinkInput = '.oc-modal-body input.oc-text-input'
+const editPublicLinkNameInput = '.oc-modal-body input.oc-text-input'
+const editPublicLinkPasswordInput = '.oc-modal-body .oc-text-input-password-wrapper input'
 const editPublicLinkRenameConfirm = '.oc-modal-body-actions-confirm'
 const deleteLinkButton =
   `//h4//span[contains(@class, "oc-files-file-link-name") and text()="%s"]` +
@@ -132,7 +134,7 @@ export const createLink = async (args: createLinkArgs): Promise<string> => {
     ? await expect(page.locator(passwordInputDescription).first()).toHaveText(
         'Password cannot be set for internal links'
       )
-    : await page.locator(editPublicLinkInput).fill(password)
+    : await page.locator(editPublicLinkPasswordInput).fill(password)
 
   await Promise.all([
     page.waitForResponse(
@@ -199,7 +201,7 @@ export const changeName = async (args: changeNameArgs): Promise<string> => {
   }
   await page.locator(util.format(editPublicLinkButton, 'Link')).click()
   await page.locator(editPublicLinkRenameButton).click()
-  await page.locator(editPublicLinkInput).fill(newName)
+  await page.locator(editPublicLinkNameInput).fill(newName)
   await page.locator(editPublicLinkRenameConfirm).click()
   const message = await page.locator(linkUpdateDialog).textContent()
   expect(message.trim()).toBe('Link was updated successfully')
@@ -221,7 +223,7 @@ export const fillPassword = async (args: addPasswordArgs): Promise<void> => {
   await sidebar.openPanel({ page: page, name: 'sharing' })
   await page.locator(util.format(editPublicLinkButton, linkName)).click()
   await page.locator(editPublicLinkAddPasswordButton).click()
-  await page.locator(editPublicLinkInput).fill(newPassword)
+  await page.locator(editPublicLinkPasswordInput).fill(newPassword)
   await page.locator(editPublicLinkRenameConfirm).click()
 }
 
@@ -240,12 +242,12 @@ export const showOrHidePassword = async (args: {
   const { page, showOrHide } = args
   await page.locator(showOrHidePasswordButton).click()
   showOrHide === 'reveals'
-    ? await expect(page.locator(editPublicLinkInput)).toHaveAttribute('type', 'text')
-    : await expect(page.locator(editPublicLinkInput)).toHaveAttribute('type', 'password')
+    ? await expect(page.locator(editPublicLinkPasswordInput)).toHaveAttribute('type', 'text')
+    : await expect(page.locator(editPublicLinkPasswordInput)).toHaveAttribute('type', 'password')
 }
 
 export const copyEnteredPassword = async (page: Page): Promise<void> => {
-  const enteredPassword = await page.locator(editPublicLinkInput).inputValue()
+  const enteredPassword = await page.locator(editPublicLinkPasswordInput).inputValue()
   await page.locator(copyPasswordButton).click()
   const copiedPassword = await page.evaluate('navigator.clipboard.readText()')
   expect(enteredPassword).toBe(copiedPassword)
@@ -253,7 +255,7 @@ export const copyEnteredPassword = async (page: Page): Promise<void> => {
 
 export const generatePassword = async (page: Page): Promise<void> => {
   await page.locator(generatePasswordButton).click()
-  const generatedPassword = await page.locator(editPublicLinkInput).inputValue()
+  const generatedPassword = await page.locator(editPublicLinkPasswordInput).inputValue()
   expect(generatedPassword).toMatch(expectedRegexForGeneratedPassword)
 }
 
@@ -286,12 +288,8 @@ export const addExpiration = async (args: addExpirationArgs): Promise<void> => {
     expireDate
   )
 
-  await page.locator(linkExpiryDatepicker).evaluate(
-    (datePicker: any, { newExpiryDate }): any => {
-      datePicker?.__vueParentComponent?.refs?.calendar.move(newExpiryDate)
-    },
-    { newExpiryDate }
-  )
+  await page.locator(linkExpiryDatepicker).fill(newExpiryDate.toISOString().split('T')[0])
+  await page.locator(linkExpiryDatepickerConfirmButton).click()
 }
 
 export const deleteLink = async (args: deleteLinkArgs): Promise<void> => {

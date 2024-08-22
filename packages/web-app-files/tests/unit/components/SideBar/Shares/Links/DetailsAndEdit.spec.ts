@@ -116,12 +116,6 @@ function getShallowMountedWrapper({
     wrapper: shallowMount(DetailsAndEdit, {
       props: {
         canRename: true,
-        expirationRules: {
-          enforced: false,
-          default: null,
-          min: new Date(),
-          max: null
-        },
         linkShare,
         isModifiable,
         isPasswordEnforced: false

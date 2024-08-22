@@ -83,37 +83,27 @@
               :key="`public-link-edit-option-${i}`"
               class="oc-rounded oc-menu-item-hover"
             >
-              <oc-datepicker
-                v-if="option.showDatepicker"
-                v-model="newExpiration"
-                class="link-expiry-picker oc-flex oc-width-1-1"
-                :min-date="expirationRules.min"
-                :max-date="expirationRules.max"
-                :locale="$language.current"
-                :is-required="expirationRules.enforced"
-              >
-                <template #default="{ togglePopover }">
-                  <oc-button
-                    :data-testid="`files-link-id-${linkShare.id}-edit-${option.id}`"
-                    appearance="raw"
-                    class="oc-p-s action-menu-item"
-                    :variation="option.variation"
-                    @click="togglePopover"
-                  >
-                    <oc-icon :name="option.icon" fill-type="line" size="medium" />
-                    <span v-text="option.title" />
-                  </oc-button>
-                  <oc-button
-                    v-if="option.remove && option.remove.isRemovable"
-                    :data-testid="`files-link-id-${linkShare.id}-edit-${option.id}`"
-                    :aria-label="option.remove.title"
-                    appearance="raw"
-                    @click="option.remove.method"
-                  >
-                    <oc-icon :name="option.remove.icon" />
-                  </oc-button>
-                </template>
-              </oc-datepicker>
+              <div v-if="option.showDatepicker" class="oc-flex">
+                <oc-button
+                  :data-testid="`files-link-id-${linkShare.id}-edit-${option.id}`"
+                  appearance="raw"
+                  class="oc-p-s action-menu-item"
+                  :variation="option.variation"
+                  @click="showDatePickerModal"
+                >
+                  <oc-icon :name="option.icon" fill-type="line" size="medium" />
+                  <span v-text="option.title" />
+                </oc-button>
+                <oc-button
+                  v-if="option.remove"
+                  :data-testid="`files-link-id-${linkShare.id}-edit-${option.id}`"
+                  :aria-label="option.remove.title"
+                  appearance="raw"
+                  @click="option.remove.method"
+                >
+                  <oc-icon :name="option.remove.icon" />
+                </oc-button>
+              </div>
               <oc-button
                 v-else
                 appearance="raw"
@@ -168,17 +158,18 @@ import { formatDateFromDateTime, formatRelativeDateFromDateTime } from '@ownclou
 import { Resource, SpaceResource } from '@ownclouders/web-client'
 import { createFileRouteOptions } from '@ownclouders/web-pkg'
 import { OcDrop } from 'design-system/src/components'
-import { usePasswordPolicyService, ExpirationRules } from '@ownclouders/web-pkg'
+import { usePasswordPolicyService } from '@ownclouders/web-pkg'
 import { useGettext } from 'vue3-gettext'
 import SetLinkPasswordModal from '../../../Modals/SetLinkPasswordModal.vue'
 import { storeToRefs } from 'pinia'
 import { SharingLinkType } from '@ownclouders/web-client/graph/generated'
+import DatePickerModal from '../../../Modals/DatePickerModal.vue'
 
 type EditOption = {
   id: string
   title: string
   icon: string
-  method: () => void
+  method?: () => void
   variation?: string
   remove?: any
   showDatepicker?: boolean
@@ -191,10 +182,6 @@ export default defineComponent({
     canRename: {
       type: Boolean,
       default: false
-    },
-    expirationRules: {
-      type: Object as PropType<ExpirationRules>,
-      required: true
     },
     isFolderShare: {
       type: Boolean,
@@ -264,6 +251,24 @@ export default defineComponent({
       emit('updateLink', { linkShare })
     }
 
+    const showDatePickerModal = () => {
+      const currentDate = DateTime.fromISO(props.linkShare.expirationDateTime)
+
+      dispatchModal({
+        title: $gettext('Set expiration date'),
+        hideActions: true,
+        customComponent: DatePickerModal,
+        customComponentAttrs: () => ({
+          currentDate: currentDate.isValid ? currentDate : null,
+          minDate: DateTime.now()
+        }),
+        onConfirm: (expirationDateTime: DateTime) => {
+          emit('updateLink', {
+            linkShare: { ...props.linkShare, expirationDateTime }
+          })
+        }
+      })
+    }
     const showPasswordModal = (callbackFn: () => void = undefined) => {
       dispatchModal({
         title: props.linkShare.hasPassword ? $gettext('Edit password') : $gettext('Add password'),
@@ -345,7 +350,8 @@ export default defineComponent({
       currentLinkRoleDescription,
       currentLinkRoleLabel,
       viaRouterParams,
-      viaTooltip
+      viaTooltip,
+      showDatePickerModal
     }
   },
   data() {
@@ -370,18 +376,12 @@ export default defineComponent({
         result.push({
           id: 'edit-expiration',
           title: this.$gettext('Expires %{expires}', { expires: this.expirationDateRelative }),
-          method: () => {
-            this.$emit('updateLink', {
-              linkShare: { ...this.linkShare, expirationDateTime: this.dateExpire }
-            })
-          },
           icon: 'calendar-event',
           showDatepicker: true,
           remove: {
             id: 'remove-expiration',
             title: this.$gettext('Remove expiration date'),
             icon: 'close',
-            isRemovable: !this.expirationRules.enforced,
             method: () =>
               this.$emit('updateLink', {
                 linkShare: { ...this.linkShare, expirationDateTime: null }
@@ -454,7 +454,6 @@ export default defineComponent({
 
       return result
     },
-
     deleteOption(): EditOption {
       return {
         id: 'delete',
@@ -464,14 +463,12 @@ export default defineComponent({
         variation: 'danger'
       }
     },
-
     expirationDateRelative() {
       return formatRelativeDateFromDateTime(
         DateTime.fromISO(this.linkShare.expirationDateTime).endOf('day'),
         this.$language.current
       )
     },
-
     expirationDateTooltip() {
       return this.$gettext(
         'Expires %{timeToExpiry} (%{expiryDate})',
@@ -479,11 +476,9 @@ export default defineComponent({
         true
       )
     },
-
     passwortProtectionTooltip() {
       return this.$gettext('This link is password-protected')
     },
-
     currentLinkNotifyUploads() {
       // FIXME cern code
       return undefined
@@ -497,14 +492,6 @@ export default defineComponent({
         return this.$gettext('Edit third party notification')
       }
       return this.$gettext('Notify a third party about uploads')
-    }
-  },
-  watch: {
-    newExpiration(expirationDateTime: string) {
-      const date = DateTime.fromJSDate(new Date(expirationDateTime))
-      this.$emit('updateLink', {
-        linkShare: { ...this.linkShare, expirationDateTime: date.toString() }
-      })
     }
   },
   methods: {
@@ -532,7 +519,6 @@ export default defineComponent({
         }
       })
     },
-
     toggleNotifyUploads() {
       if (this.currentLinkNotifyUploads) {
         this.$emit('updateLink', {

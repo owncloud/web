@@ -7,7 +7,7 @@ import OcButton from 'design-system/src/components/OcButton/OcButton.vue'
 const selectors = {
   editBtn: '.collaborator-edit-dropdown-options-btn',
   removeShareAction: '.remove-share',
-  oCDatepickerStub: 'oc-datepicker-stub',
+  expireDateMenuAction: '.files-collaborators-expiration',
   showAccessDetailsAction: '.show-access-details'
 }
 
@@ -39,11 +39,11 @@ describe('EditDropdown', () => {
   describe('expiration date', () => {
     it('is being rendered when canEditOrDelete is true', () => {
       const { wrapper } = getWrapper({ canEditOrDelete: true })
-      expect(wrapper.find(selectors.oCDatepickerStub).exists()).toBeTruthy()
+      expect(wrapper.find(selectors.expireDateMenuAction).exists()).toBeTruthy()
     })
     it('is not being rendered when canEditOrDelete is false', () => {
       const { wrapper } = getWrapper({ canEditOrDelete: false })
-      expect(wrapper.find(selectors.oCDatepickerStub).exists()).toBeFalsy()
+      expect(wrapper.find(selectors.expireDateMenuAction).exists()).toBeFalsy()
     })
   })
   describe('show access details action', () => {
