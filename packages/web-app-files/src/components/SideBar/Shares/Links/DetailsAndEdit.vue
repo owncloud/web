@@ -41,14 +41,11 @@
         fill-type="line"
         :aria-label="passwortProtectionTooltip"
       />
-      <oc-icon
+      <expiration-date-indicator
         v-if="linkShare.expirationDateTime"
-        v-oc-tooltip="expirationDateTooltip"
-        class="oc-files-public-link-expires oc-ml-xs"
+        :expiration-date="DateTime.fromISO(linkShare.expirationDateTime)"
         :data-testid="`files-link-id-${linkShare.id}-expiration-date`"
-        :aria-label="expirationDateTooltip"
-        name="calendar-event"
-        fill-type="line"
+        class="oc-files-public-link-expires oc-ml-xs"
       />
       <oc-icon
         v-if="isRunningOnEos && currentLinkNotifyUploadsExtraRecipients"
@@ -164,6 +161,7 @@ import SetLinkPasswordModal from '../../../Modals/SetLinkPasswordModal.vue'
 import { storeToRefs } from 'pinia'
 import { SharingLinkType } from '@ownclouders/web-client/graph/generated'
 import DatePickerModal from '../../../Modals/DatePickerModal.vue'
+import ExpirationDateIndicator from '../ExpirationDateIndicator.vue'
 
 type EditOption = {
   id: string
@@ -177,7 +175,7 @@ type EditOption = {
 
 export default defineComponent({
   name: 'DetailsAndEdit',
-  components: { LinkRoleDropdown },
+  components: { LinkRoleDropdown, ExpirationDateIndicator },
   props: {
     canRename: {
       type: Boolean,
@@ -351,7 +349,8 @@ export default defineComponent({
       currentLinkRoleLabel,
       viaRouterParams,
       viaTooltip,
-      showDatePickerModal
+      showDatePickerModal,
+      DateTime
     }
   },
   data() {
@@ -467,13 +466,6 @@ export default defineComponent({
       return formatRelativeDateFromDateTime(
         DateTime.fromISO(this.linkShare.expirationDateTime).endOf('day'),
         this.$language.current
-      )
-    },
-    expirationDateTooltip() {
-      return this.$gettext(
-        'Expires %{timeToExpiry} (%{expiryDate})',
-        { timeToExpiry: this.expirationDateRelative, expiryDate: this.dateExpire },
-        true
       )
     },
     passwortProtectionTooltip() {
