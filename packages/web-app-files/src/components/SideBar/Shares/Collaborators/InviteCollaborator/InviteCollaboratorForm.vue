@@ -27,7 +27,6 @@
         :multiple="true"
         :filter="filterRecipients"
         :label="selectedCollaboratorsLabel"
-        aria-describedby="files-share-invite-hint"
         :dropdown-should-open="
           ({ open, search }: DropDownShouldOpenOptions) => open && search.length >= minSearchLength && !searchInProgress
         "

@@ -1,6 +1,12 @@
 <template>
   <div class="oc-mb-s oc-width-1-1">
-    <h4 class="oc-text-truncate oc-text-normal oc-files-file-link-name oc-m-rm" v-text="linkName" />
+    <h4 class="oc-text-normal oc-m-rm oc-flex oc-flex-column">
+      <span class="oc-text-truncate oc-files-file-link-name" v-text="linkName" />
+      <span
+        class="oc-text-small oc-text-muted oc-my-xs oc-invisible-sr"
+        v-text="linkCreationDate"
+      />
+    </h4>
     <div class="oc-flex oc-flex-middle oc-flex-between oc-width-1-1 oc-p-xs link-name-container">
       <div v-if="copied" class="oc-flex oc-flex-middle oc-text-truncate">
         <oc-icon variation="success" name="checkbox-circle" />
@@ -29,11 +35,12 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, PropType } from 'vue'
-import { useMessages } from '@ownclouders/web-pkg'
+import { computed, defineComponent, PropType } from 'vue'
+import { formatDateFromISO, useMessages } from '@ownclouders/web-pkg'
 import { useClipboard } from '@vueuse/core'
 import { useGettext } from 'vue3-gettext'
 import { LinkShare } from '@ownclouders/web-client'
+import { DateTime } from 'luxon'
 
 export default defineComponent({
   name: 'NameAndCopy',
@@ -44,7 +51,7 @@ export default defineComponent({
     }
   },
   setup(props) {
-    const { $gettext } = useGettext()
+    const { $gettext, current: currentLanguage } = useGettext()
     const { showMessage } = useMessages()
 
     const {
@@ -52,6 +59,14 @@ export default defineComponent({
       copied,
       isSupported: isClipboardCopySupported
     } = useClipboard({ legacy: true, copiedDuring: 550 })
+
+    const linkCreationDate = computed(() => {
+      return formatDateFromISO(
+        props.linkShare.createdDateTime,
+        currentLanguage,
+        DateTime.DATETIME_MED
+      )
+    })
 
     const copyLinkToClipboard = () => {
       copy(props.linkShare.webUrl)
@@ -67,7 +82,8 @@ export default defineComponent({
     return {
       copied,
       copyLinkToClipboard,
-      isClipboardCopySupported
+      isClipboardCopySupported,
+      linkCreationDate
     }
   },
   computed: {

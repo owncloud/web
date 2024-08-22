@@ -65,11 +65,11 @@ const publicLinkRoleToggle = `//button[contains(@class, "link-role-dropdown-togg
 const publicLinkSetRoleButton = `//span[contains(@class,"role-dropdown-list-option-label") and text()='%s']`
 const linkExpiryDatepicker = '.link-expiry-picker:not(.vc-container)'
 const publicLinkEditRoleButton =
-  `//h4[contains(@class, "oc-files-file-link-name") and text()="%s"]//ancestor::li//div[contains(@class, "link-details")]/` +
+  `//h4//span[contains(@class, "oc-files-file-link-name") and text()="%s"]//ancestor::li//div[contains(@class, "link-details")]/` +
   `div/button[contains(@class, "link-role-dropdown-toggle")]`
 const addPublicLinkButton = '#files-file-link-add'
 const publicLinkNameList =
-  '//div[@id="oc-files-file-link"]//ul//h4[contains(@class,"oc-files-file-link-name")]'
+  '//div[@id="oc-files-file-link"]//ul//h4//span[contains(@class,"oc-files-file-link-name")]'
 const publicLinkUrlList =
   '//div[@id="oc-files-file-link"]//ul//p[contains(@class,"oc-files-file-link-url")]'
 const publicLink = `//ul//h4[text()='%s']/following-sibling::div//p`
@@ -77,7 +77,7 @@ const publicLinkCurrentRole =
   '//button[contains(@class,"link-role-dropdown-toggle")]//span[contains(@class,"link-current-role")]'
 const linkUpdateDialog = '//div[contains(@class,"oc-notification-message-title")]'
 const editPublicLinkButton =
-  `//h4[contains(@class, "oc-files-file-link-name") and text()="%s"]` +
+  `//h4//span[contains(@class, "oc-files-file-link-name") and text()="%s"]` +
   `//ancestor::li//div[contains(@class, "details-buttons")]//button[contains(@class, "edit-drop-trigger")]`
 const editPublicLinkRenameButton =
   '//div[contains(@id,"edit-public-link-dropdown")]//button/span[text()="Rename"]'
@@ -88,7 +88,7 @@ const editPublicLinkAddPasswordButton =
 const editPublicLinkInput = '.oc-modal-body input.oc-text-input'
 const editPublicLinkRenameConfirm = '.oc-modal-body-actions-confirm'
 const deleteLinkButton =
-  `//h4[contains(@class, "oc-files-file-link-name") and text()="%s"]` +
+  `//h4//span[contains(@class, "oc-files-file-link-name") and text()="%s"]` +
   `//ancestor::li//div[contains(@class, "details-buttons")]//button/span[text()="Delete link"]`
 const confirmDeleteButton = `//button[contains(@class,"oc-modal-body-actions-confirm") and text()="Delete"]`
 const notificationContainer = 'div.oc-notification'

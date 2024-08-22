@@ -2,7 +2,7 @@
 
 exports[`NameAndCopy > should show link info component including a copy-to-clipboard button 1`] = `
 "<div data-v-bc999e16="" class="oc-mb-s oc-width-1-1">
-  <h4 data-v-bc999e16="" class="oc-text-truncate oc-text-normal oc-files-file-link-name oc-m-rm">Example link</h4>
+  <h4 data-v-bc999e16="" class="oc-text-normal oc-m-rm oc-flex oc-flex-column"><span data-v-bc999e16="" class="oc-text-truncate oc-files-file-link-name">Example link</span> <span data-v-bc999e16="" class="oc-text-small oc-text-muted oc-my-xs oc-invisible-sr">Invalid DateTime</span></h4>
   <div data-v-bc999e16="" class="oc-flex oc-flex-middle oc-flex-between oc-width-1-1 oc-p-xs link-name-container">
     <div data-v-bc999e16="" class="oc-flex oc-flex-middle oc-text-truncate"><span data-v-bc999e16="" class="oc-icon oc-icon-m oc-icon-passive"><!----></span>
       <p data-v-bc999e16="" class="oc-files-file-link-url oc-ml-s oc-text-truncate oc-my-rm">https://some-url.com/abc</p>
@@ -16,7 +16,7 @@ exports[`NameAndCopy > should show link info component including a copy-to-clipb
 
 exports[`NameAndCopy > upon clicking it should copy the private link to the clipboard button, render a success message and change icon for half a second 1`] = `
 "<div data-v-bc999e16="" class="oc-mb-s oc-width-1-1">
-  <h4 data-v-bc999e16="" class="oc-text-truncate oc-text-normal oc-files-file-link-name oc-m-rm">Example link</h4>
+  <h4 data-v-bc999e16="" class="oc-text-normal oc-m-rm oc-flex oc-flex-column"><span data-v-bc999e16="" class="oc-text-truncate oc-files-file-link-name">Example link</span> <span data-v-bc999e16="" class="oc-text-small oc-text-muted oc-my-xs oc-invisible-sr">Invalid DateTime</span></h4>
   <div data-v-bc999e16="" class="oc-flex oc-flex-middle oc-flex-between oc-width-1-1 oc-p-xs link-name-container">
     <div data-v-bc999e16="" class="oc-flex oc-flex-middle oc-text-truncate"><span data-v-bc999e16="" class="oc-icon oc-icon-m oc-icon-success"><!----></span>
       <p data-v-bc999e16="" class="oc-files-file-link-url url-copied oc-ml-s oc-my-rm">Copied</p>
@@ -30,7 +30,7 @@ exports[`NameAndCopy > upon clicking it should copy the private link to the clip
 
 exports[`NameAndCopy > upon clicking it should copy the private link to the clipboard button, render a success message and change icon for half a second 2`] = `
 "<div data-v-bc999e16="" class="oc-mb-s oc-width-1-1">
-  <h4 data-v-bc999e16="" class="oc-text-truncate oc-text-normal oc-files-file-link-name oc-m-rm">Example link</h4>
+  <h4 data-v-bc999e16="" class="oc-text-normal oc-m-rm oc-flex oc-flex-column"><span data-v-bc999e16="" class="oc-text-truncate oc-files-file-link-name">Example link</span> <span data-v-bc999e16="" class="oc-text-small oc-text-muted oc-my-xs oc-invisible-sr">Invalid DateTime</span></h4>
   <div data-v-bc999e16="" class="oc-flex oc-flex-middle oc-flex-between oc-width-1-1 oc-p-xs link-name-container">
     <div data-v-bc999e16="" class="oc-flex oc-flex-middle oc-text-truncate"><span data-v-bc999e16="" class="oc-icon oc-icon-m oc-icon-passive"><!----></span>
       <p data-v-bc999e16="" class="oc-files-file-link-url oc-ml-s oc-text-truncate oc-my-rm">https://some-url.com/abc</p>
