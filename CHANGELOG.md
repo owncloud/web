@@ -9,6 +9,7 @@ Summary
 -------
 
 * Enhancement - Replace custom datepicker with native html element: [#11377](https://github.com/owncloud/web/pull/11377)
+* Enhancement - Display disabled role permissions: [#11387](https://github.com/owncloud/web/pull/11387)
 
 Details
 -------
@@ -21,6 +22,13 @@ Details
    https://github.com/owncloud/web/issues/11374
    https://github.com/owncloud/web/pull/11377
    https://github.com/owncloud/web/pull/11388
+
+* Enhancement - Display disabled role permissions: [#11387](https://github.com/owncloud/web/pull/11387)
+
+   We've added a new feature to the sharing sidebar panel which allows you to see
+   the permissions of a role that has been disabled.
+
+   https://github.com/owncloud/web/pull/11387
 
 Changelog for ownCloud Web [10.1.0] (2024-08-16)
 =======================================
