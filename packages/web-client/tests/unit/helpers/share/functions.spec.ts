@@ -223,7 +223,8 @@ describe('share helper functions', () => {
       it('is user type if grantedToV2 includes a user', () => {
         const graphPermission = mock<Permission>({
           '@libre.graph.permissions.actions': [],
-          grantedToV2: { user: {}, group: undefined }
+          grantedToV2: { user: {}, group: undefined },
+          link: undefined
         })
 
         const result = buildCollaboratorShare({
@@ -237,7 +238,8 @@ describe('share helper functions', () => {
       it('is group type if grantedToV2 includes a group', () => {
         const graphPermission = mock<Permission>({
           '@libre.graph.permissions.actions': [],
-          grantedToV2: { user: undefined, group: {} }
+          grantedToV2: { user: undefined, group: {} },
+          link: undefined
         })
 
         const result = buildCollaboratorShare({
@@ -247,6 +249,21 @@ describe('share helper functions', () => {
         })
 
         expect(result.shareType).toEqual(ShareTypes.group.value)
+      })
+      it('is external type if grantedToV2 includes a user that is external', () => {
+        const graphPermission = mock<Permission>({
+          '@libre.graph.permissions.actions': [],
+          grantedToV2: { user: { '@libre.graph.userType': 'Federated' }, group: undefined },
+          link: undefined
+        })
+
+        const result = buildCollaboratorShare({
+          graphPermission,
+          graphRoles,
+          resourceId
+        })
+
+        expect(result.shareType).toEqual(ShareTypes.remote.value)
       })
     })
     describe('permissions', () => {

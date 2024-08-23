@@ -1,0 +1,6 @@
+Enhancement: Mark external shares
+
+External shares are now being marked in the right sidebar so they can be distinguished from regular shares.
+
+https://github.com/owncloud/web/pull/11394
+https://github.com/owncloud/web/issues/11361

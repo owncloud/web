@@ -43,6 +43,14 @@
               v-text="shareDisplayName"
             />
             <span class="oc-invisible-sr" v-text="screenreaderShareDisplayName" />
+            <oc-contextual-helper
+              v-if="isExternalShare"
+              :text="
+                $gettext(
+                  'External user, registered with another organization’s account but granted access to your resources. External users can only have “view” or “edit” permission.'
+                )
+              "
+            />
           </div>
           <div>
             <div
@@ -58,6 +66,7 @@
                   :existing-share-role="share.role"
                   :existing-share-permissions="share.permissions"
                   :is-locked="isLocked"
+                  :is-external="isExternalShare"
                   class="files-collaborators-collaborator-role"
                   mode="edit"
                   @option-change="shareRoleChanged"
@@ -218,6 +227,8 @@ export default defineComponent({
       return formatDateFromDateTime(DateTime.fromISO(props.share.createdDateTime), language.current)
     })
 
+    const isExternalShare = computed(() => props.share.shareType === ShareTypes.remote.value)
+
     const setDenyShare = (value: boolean) => {
       emit('onSetDeny', { share: props.share, value })
     }
@@ -252,6 +263,7 @@ export default defineComponent({
       showErrorMessage,
       upsertSpace,
       upsertSpaceMember,
+      isExternalShare,
       DateTime
     }
   },
