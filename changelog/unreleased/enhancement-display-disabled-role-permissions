@@ -1,0 +1,5 @@
+Enhancement: Display disabled role permissions
+
+We've added a new feature to the sharing sidebar panel which allows you to see the permissions of a role that has been disabled.
+
+https://github.com/owncloud/web/pull/11387

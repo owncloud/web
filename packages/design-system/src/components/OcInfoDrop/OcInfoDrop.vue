@@ -18,7 +18,7 @@
           <oc-icon name="close" fill-type="line" size="medium" variation="inherit" />
         </oc-button>
       </div>
-      <p class="info-text" v-text="$gettext(text)" />
+      <p v-if="text" class="info-text" v-text="$gettext(text)" />
       <dl v-if="list.length" class="info-list">
         <component :is="item.headline ? 'dt' : 'dd'" v-for="(item, index) in list" :key="index">
           {{ $gettext(item.text) }}
@@ -158,6 +158,14 @@ export default defineComponent({
   .info-title {
     font-size: 1.125rem;
     font-weight: normal;
+  }
+  .info-list:first-child,
+  .info-text:first-child {
+    margin-top: 0;
+  }
+  .info-list:last-child,
+  .info-text:last-child {
+    margin-bottom: 0;
   }
   .info-list {
     dt {

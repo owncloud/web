@@ -19,6 +19,11 @@
         <span class="oc-text-truncate" v-text="inviteLabel" />
         <oc-icon name="arrow-down-s" />
       </oc-button>
+      <oc-contextual-helper
+        v-if="isDisabledRole"
+        class="oc-ml-xs files-permission-actions-list"
+        :list="existingSharePermissions.map((permission) => ({ text: permission }))"
+      />
     </div>
     <oc-drop
       v-if="availableRoles.length > 1"
@@ -86,10 +91,15 @@ export default defineComponent({
   name: 'RoleDropdown',
   components: { RoleItem },
   props: {
-    existingRole: {
+    existingShareRole: {
       type: Object as PropType<ShareRole>,
       required: false,
       default: undefined
+    },
+    existingSharePermissions: {
+      type: Array as PropType<string[]>,
+      required: false,
+      default: () => []
     },
     domSelector: {
       type: String,
@@ -139,9 +149,30 @@ export default defineComponent({
       return unref(availableInternalRoles)
     })
 
-    const initialSelectedRole = props.existingRole ? props.existingRole : unref(availableRoles)[0]
-    const selectedRole = ref<ShareRole>(initialSelectedRole)
+    let initialSelectedRole: ShareRole
+    const hasExistingShareRole = computed(() => !!props.existingShareRole)
+    const hasExistingSharePermissions = computed(() => !!props.existingSharePermissions.length)
+    const isDisabledRole = computed(
+      () => !unref(hasExistingShareRole) && unref(hasExistingSharePermissions)
+    )
+    switch (true) {
+      // if no role is set and no permissions are set, we use the first available role as the default
+      case !unref(hasExistingShareRole) && !unref(hasExistingSharePermissions):
+        initialSelectedRole = unref(availableRoles)[0]
+        break
+      // in the rare case that a role is disabled and permissions are set aka a disabled unified role ...
+      case unref(isDisabledRole):
+        // ... we need to create a fake role as an indicator that the permissions are custom
+        initialSelectedRole = {
+          displayName: $gettext('Custom permissions')
+        }
+        break
+      default:
+        initialSelectedRole = props.existingShareRole
+        break
+    }
 
+    const selectedRole = ref<ShareRole>(initialSelectedRole)
     const isSelectedRole = (role: ShareRole) => {
       return unref(selectedRole).id === role.id
     }
@@ -159,7 +190,8 @@ export default defineComponent({
       selectedRole,
       availableRoles,
       isSelectedRole,
-      selectRole
+      selectRole,
+      isDisabledRole
     }
   },
   computed: {
