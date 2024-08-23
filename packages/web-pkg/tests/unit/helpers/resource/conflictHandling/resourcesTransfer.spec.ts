@@ -38,8 +38,8 @@ describe('resourcesTransfer', () => {
     const spaceOptions = {
       id: 'c42c9504-2c19-44fd-87cc-b4fc20ecbb54'
     } as unknown as Drive
-    sourceSpace = buildSpace(spaceOptions)
-    targetSpace = buildSpace(spaceOptions)
+    sourceSpace = buildSpace(spaceOptions, {})
+    targetSpace = buildSpace(spaceOptions, {})
     targetFolder = {
       id: 'target',
       path: 'target',

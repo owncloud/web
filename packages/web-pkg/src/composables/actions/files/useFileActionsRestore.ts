@@ -20,7 +20,13 @@ import { useRouter } from '../../router'
 import { computed, unref } from 'vue'
 import { useGettext } from 'vue3-gettext'
 import type { FileAction, FileActionOptions } from '../types'
-import { useMessages, useSpacesStore, useUserStore, useResourcesStore } from '../../piniaStores'
+import {
+  useMessages,
+  useSpacesStore,
+  useUserStore,
+  useResourcesStore,
+  useSharesStore
+} from '../../piniaStores'
 import { useRestoreWorker } from '../../webWorkers/restoreWorker'
 
 export const useFileActionsRestore = () => {
@@ -30,6 +36,7 @@ export const useFileActionsRestore = () => {
   const { $gettext, $ngettext } = useGettext()
   const clientService = useClientService()
   const spacesStore = useSpacesStore()
+  const sharesStore = useSharesStore()
   const resourcesStore = useResourcesStore()
   const { startWorker } = useRestoreWorker()
 
@@ -143,7 +150,7 @@ export const useFileActionsRestore = () => {
 
         // Reload quota
         const graphClient = clientService.graphAuthenticated
-        const updatedSpace = await graphClient.drives.getDrive(space.id)
+        const updatedSpace = await graphClient.drives.getDrive(space.id, sharesStore.graphRoles)
         spacesStore.updateSpaceField({
           id: updatedSpace.id,
           field: 'spaceQuota',
@@ -220,8 +227,7 @@ export const useFileActionsRestore = () => {
 
         if (
           isProjectSpaceResource(space) &&
-          !space.isEditor(userStore.user) &&
-          !space.isManager(userStore.user)
+          !space.canRestoreFromTrashbin({ user: userStore.user })
         ) {
           return false
         }

@@ -5,7 +5,7 @@ import { useGettext } from 'vue3-gettext'
 import { useOpenWithDefaultApp } from '../useOpenWithDefaultApp'
 import { getRelativeSpecialFolderSpacePath, Resource, SpaceResource } from '@ownclouders/web-client'
 import { useClientService } from '../../clientService'
-import { useSpacesStore, useUserStore } from '../../piniaStores'
+import { useSharesStore, useSpacesStore, useUserStore } from '../../piniaStores'
 import { useCreateSpace, useSpaceHelpers } from '../../spaces'
 
 export const useSpaceActionsEditReadmeContent = () => {
@@ -14,6 +14,7 @@ export const useSpaceActionsEditReadmeContent = () => {
   const { createDefaultMetaFolder } = useCreateSpace()
   const userStore = useUserStore()
   const spacesStore = useSpacesStore()
+  const sharesStore = useSharesStore()
   const { $gettext } = useGettext()
   const { getDefaultMetaFolder } = useSpaceHelpers()
 
@@ -25,10 +26,14 @@ export const useSpaceActionsEditReadmeContent = () => {
       fileName: 'readme.md'
     })
 
-    const updatesSpace = await clientService.graphAuthenticated.drives.updateDrive(space.id, {
-      name: space.name,
-      special: [{ specialFolder: { name: 'readme' }, id: markdownResource.id }]
-    })
+    const updatesSpace = await clientService.graphAuthenticated.drives.updateDrive(
+      space.id,
+      {
+        name: space.name,
+        special: [{ specialFolder: { name: 'readme' }, id: markdownResource.id }]
+      },
+      sharesStore.graphRoles
+    )
 
     spacesStore.updateSpaceField({
       id: space.id,
@@ -70,10 +75,6 @@ export const useSpaceActionsEditReadmeContent = () => {
       handler,
       isVisible: ({ resources }) => {
         if (resources.length !== 1) {
-          return false
-        }
-
-        if (resources[0].disabled) {
           return false
         }
 

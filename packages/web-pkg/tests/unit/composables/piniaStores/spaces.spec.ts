@@ -9,7 +9,7 @@ import { createPinia, setActivePinia } from 'pinia'
 import { mock, mockDeep } from 'vitest-mock-extended'
 import {
   CollaboratorShare,
-  GraphShareRoleIdMap,
+  GraphSharePermission,
   ShareRole,
   SpaceResource
 } from '@ownclouders/web-client'
@@ -23,20 +23,22 @@ describe('spaces', () => {
   })
 
   describe('method "sortSpaceMembers"', () => {
-    it('always puts space managers first', () => {
+    it('sorts space members by amount of permissions', () => {
       const members = [
         mock<CollaboratorShare>({
-          role: { id: GraphShareRoleIdMap.SpaceEditor },
+          permissions: [],
           sharedWith: { displayName: 'user1' }
         }),
         mock<CollaboratorShare>({
-          role: { id: GraphShareRoleIdMap.SpaceManager },
+          permissions: [GraphSharePermission.updatePermissions],
           sharedWith: { displayName: 'user2' }
         })
       ]
 
       const sortedMembers = sortSpaceMembers(members)
-      expect(sortedMembers[0].role.id).toEqual(GraphShareRoleIdMap.SpaceManager)
+      expect(
+        sortedMembers[0].permissions.includes(GraphSharePermission.updatePermissions)
+      ).toBeTruthy()
     })
   })
 
@@ -188,14 +190,22 @@ describe('spaces', () => {
           await instance.loadSpaces({ graphClient })
 
           expect(graphClient.drives.listMyDrives).toHaveBeenCalledTimes(2)
-          expect(graphClient.drives.listMyDrives).toHaveBeenNthCalledWith(1, {
-            orderBy: 'name asc',
-            filter: 'driveType eq personal'
-          })
-          expect(graphClient.drives.listMyDrives).toHaveBeenNthCalledWith(2, {
-            orderBy: 'name asc',
-            filter: 'driveType eq project'
-          })
+          expect(graphClient.drives.listMyDrives).toHaveBeenNthCalledWith(
+            1,
+            {},
+            {
+              orderBy: 'name asc',
+              filter: 'driveType eq personal'
+            }
+          )
+          expect(graphClient.drives.listMyDrives).toHaveBeenNthCalledWith(
+            2,
+            {},
+            {
+              orderBy: 'name asc',
+              filter: 'driveType eq project'
+            }
+          )
           expect(instance.spaces.length).toBe(2)
           expect(instance.spacesLoading).toBeFalsy()
           expect(instance.spacesInitialized).toBeTruthy()
@@ -213,10 +223,13 @@ describe('spaces', () => {
           await instance.loadMountPoints({ graphClient })
 
           expect(graphClient.drives.listMyDrives).toHaveBeenCalledTimes(1)
-          expect(graphClient.drives.listMyDrives).toHaveBeenCalledWith({
-            orderBy: 'name asc',
-            filter: 'driveType eq mountpoint'
-          })
+          expect(graphClient.drives.listMyDrives).toHaveBeenCalledWith(
+            {},
+            {
+              orderBy: 'name asc',
+              filter: 'driveType eq mountpoint'
+            }
+          )
           expect(instance.spaces.length).toBe(1)
           expect(instance.mountPointsInitialized).toBeTruthy()
         }
@@ -233,10 +246,13 @@ describe('spaces', () => {
           await instance.reloadProjectSpaces({ graphClient })
 
           expect(graphClient.drives.listMyDrives).toHaveBeenCalledTimes(1)
-          expect(graphClient.drives.listMyDrives).toHaveBeenCalledWith({
-            orderBy: 'name asc',
-            filter: 'driveType eq project'
-          })
+          expect(graphClient.drives.listMyDrives).toHaveBeenCalledWith(
+            {},
+            {
+              orderBy: 'name asc',
+              filter: 'driveType eq project'
+            }
+          )
           expect(instance.spaces.length).toBe(1)
         }
       })
@@ -278,6 +294,7 @@ describe('spaces', () => {
         setup: async (instance) => {
           const share = mock<CollaboratorShare>({
             id: '1',
+            permissions: [],
             role: mock<ShareRole>({ id: 'roleId' })
           })
           const clientService = mockDeep<ClientService>()

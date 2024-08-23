@@ -1,20 +1,20 @@
 import MembersRoleSection from '../../../../../src/components/Spaces/SideBar/MembersRoleSection.vue'
 import { defaultPlugins, shallowMount } from 'web-test-helpers'
 import { mock } from 'vitest-mock-extended'
-import { SpaceRole } from '@ownclouders/web-client'
+import { SpaceMember } from '@ownclouders/web-client'
 
 describe('MembersRoleSection', () => {
   it('should render all members accordingly', () => {
     const members = [
-      mock<SpaceRole>({ kind: 'user', displayName: 'einstein' }),
-      mock<SpaceRole>({ kind: 'group', displayName: 'physic-lovers' })
+      mock<SpaceMember>({ grantedTo: { user: { displayName: 'einstein' }, group: undefined } }),
+      mock<SpaceMember>({ grantedTo: { group: { displayName: 'physic-lovers' }, user: undefined } })
     ]
     const { wrapper } = getWrapper({ members })
     expect(wrapper.html()).toMatchSnapshot()
   })
 })
 
-function getWrapper({ members = [] }: { members?: SpaceRole[] } = {}) {
+function getWrapper({ members = [] }: { members?: SpaceMember[] } = {}) {
   return {
     wrapper: shallowMount(MembersRoleSection, {
       props: {

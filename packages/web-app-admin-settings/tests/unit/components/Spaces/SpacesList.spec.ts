@@ -7,48 +7,66 @@ import { nextTick } from 'vue'
 import { useSpaceSettingsStore } from '../../../../src/composables'
 import { mock } from 'vitest-mock-extended'
 import { OcTable } from 'design-system/src/components'
-import { SpaceResource } from '@ownclouders/web-client'
+import { GraphSharePermission, SpaceMember, SpaceResource } from '@ownclouders/web-client'
 
 const spaceMocks = [
-  {
+  mock<SpaceResource>({
     id: '1',
     name: '1 Some space',
     disabled: false,
-    spaceRoles: {
-      manager: [
-        { id: 'user1', displayName: 'user1' },
-        { id: 'user2', displayName: 'user2' },
-        { id: 'user3', displayName: 'user3' }
-      ],
-      editor: [],
-      viewer: []
+    members: {
+      '1': mock<SpaceMember>({
+        permissions: [GraphSharePermission.deletePermissions],
+        grantedTo: { user: { displayName: 'user1' } }
+      }),
+      '2': mock<SpaceMember>({
+        permissions: [GraphSharePermission.deletePermissions],
+        grantedTo: { user: { displayName: 'user2' } }
+      }),
+      '3': mock<SpaceMember>({
+        permissions: [GraphSharePermission.deletePermissions],
+        grantedTo: { user: { displayName: 'user3' } }
+      })
     },
     spaceQuota: {
       total: 1000000000,
       used: 0,
       remaining: 1000000000
     }
-  },
-  {
+  }),
+  mock<SpaceResource>({
     id: '2',
     name: '2 Another space',
     disabled: true,
-    spaceRoles: {
-      manager: [
-        { id: 'user1', displayName: 'user1' },
-        { id: 'user2', displayName: 'user2' },
-        { id: 'user3', displayName: 'user3' }
-      ],
-      editor: [{ id: 'user4', displayName: 'user4' }],
-      viewer: [{ id: 'user5', displayName: 'user5' }]
+    members: {
+      '1': mock<SpaceMember>({
+        permissions: [GraphSharePermission.deletePermissions],
+        grantedTo: { user: { displayName: 'user1' } }
+      }),
+      '2': mock<SpaceMember>({
+        permissions: [GraphSharePermission.deletePermissions],
+        grantedTo: { user: { displayName: 'user2' } }
+      }),
+      '3': mock<SpaceMember>({
+        permissions: [GraphSharePermission.deletePermissions],
+        grantedTo: { user: { displayName: 'user3' } }
+      }),
+      '4': mock<SpaceMember>({
+        permissions: [],
+        grantedTo: { user: { displayName: 'user4' } }
+      }),
+      '5': mock<SpaceMember>({
+        permissions: [],
+        grantedTo: { user: { displayName: 'user5' } }
+      })
     },
     spaceQuota: {
       total: 2000000000,
       used: 500000000,
       remaining: 1500000000
     }
-  }
-] as SpaceResource[]
+  })
+]
 
 const selectors = {
   ocTableStub: 'oc-table-stub'

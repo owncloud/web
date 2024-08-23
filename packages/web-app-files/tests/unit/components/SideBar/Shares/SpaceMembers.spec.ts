@@ -3,7 +3,7 @@ import {
   ShareTypes,
   ShareRole,
   CollaboratorShare,
-  GraphShareRoleIdMap
+  GraphSharePermission
 } from '@ownclouders/web-client'
 import { mock } from 'vitest-mock-extended'
 import { ProjectSpaceResource, SpaceResource } from '@ownclouders/web-client'
@@ -31,8 +31,8 @@ const memberMocks = [
       id: 'alice',
       displayName: 'alice'
     },
-    role: mock<ShareRole>({ id: GraphShareRoleIdMap.SpaceManager }),
-    permissions: [],
+    role: mock<ShareRole>(),
+    permissions: [GraphSharePermission.updatePermissions],
     resourceId: '1',
     indirect: false,
     sharedBy: { id: 'admin', displayName: 'admin' }
@@ -44,7 +44,7 @@ const memberMocks = [
       onPremisesSamAccountName: 'Einstein',
       displayName: 'einstein'
     },
-    role: mock<ShareRole>({ id: GraphShareRoleIdMap.SpaceEditor }),
+    role: mock<ShareRole>(),
     permissions: [],
     resourceId: '1',
     indirect: false,
@@ -57,7 +57,7 @@ const memberMocks = [
       onPremisesSamAccountName: 'Marie',
       displayName: 'marie'
     },
-    role: mock<ShareRole>({ id: GraphShareRoleIdMap.SpaceViewer }),
+    role: mock<ShareRole>(),
     permissions: [],
     resourceId: '1',
     indirect: false,
@@ -112,7 +112,7 @@ describe('SpaceMembers', () => {
 
   describe('filter', () => {
     it('toggles the filter on click', async () => {
-      const space = mock<ProjectSpaceResource>({ isManager: () => true })
+      const space = mock<ProjectSpaceResource>()
       const wrapper = getWrapper({ mountType: mount, space })
       expect(wrapper.vm.isFilterOpen).toBeFalsy()
       await wrapper.find('.open-filter-btn').trigger('click')

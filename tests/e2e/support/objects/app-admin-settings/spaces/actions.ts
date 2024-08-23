@@ -255,13 +255,13 @@ export const listSpaceMembers = async (args: {
   let users: string[] = []
   const names = []
   switch (filter) {
-    case 'managers':
+    case 'Can manage':
       users = await page.locator(util.format(spaceMemberList, filter)).allTextContents()
       break
-    case 'viewers':
+    case 'Can view':
       users = await page.locator(util.format(spaceMemberList, filter)).allTextContents()
       break
-    case 'editors':
+    case 'Can edit':
       users = await page.locator(util.format(spaceMemberList, filter)).allTextContents()
       break
   }

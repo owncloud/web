@@ -1,277 +1,398 @@
-import { buildSpace, ProjectSpaceResource } from '../../../../src/helpers/space'
+import { buildSpace } from '../../../../src/helpers/space'
 import { mock } from 'vitest-mock-extended'
-import { Ability } from '@ownclouders/web-client'
+import { Ability, GraphSharePermission, ShareRole } from '@ownclouders/web-client'
 import { Drive, User } from '@ownclouders/web-client/graph/generated'
+
+const noPermissionsRole = mock<ShareRole>({ id: '1', rolePermissions: [] })
+const canUploadRole = mock<ShareRole>({
+  id: '2',
+  rolePermissions: [
+    {
+      condition: 'exists @Resource.Root',
+      allowedResourceActions: [GraphSharePermission.createUpload]
+    }
+  ]
+})
+const canDeletePermissionsRole = mock<ShareRole>({
+  id: '3',
+  rolePermissions: [
+    {
+      condition: 'exists @Resource.Root',
+      allowedResourceActions: [GraphSharePermission.deletePermissions]
+    }
+  ]
+})
+const canCreatePermissionsRole = mock<ShareRole>({
+  id: '4',
+  rolePermissions: [
+    {
+      condition: 'exists @Resource.Root',
+      allowedResourceActions: [GraphSharePermission.createPermissions]
+    }
+  ]
+})
+
+const graphRoles = {
+  [noPermissionsRole.id]: noPermissionsRole,
+  [canUploadRole.id]: canUploadRole,
+  [canDeletePermissionsRole.id]: canDeletePermissionsRole,
+  [canCreatePermissionsRole.id]: canCreatePermissionsRole
+}
 
 describe('buildSpace', () => {
   const id = '1'
 
-  describe('isViewer', () => {
+  const getSpace = ({ role, permissions }: { role: ShareRole; permissions: string[] }) => {
+    return buildSpace(
+      {
+        special: [],
+        root: {
+          permissions: [
+            {
+              roles: role ? [role.id] : [],
+              grantedToV2: { user: { id } },
+              ...(permissions.length && { '@libre.graph.permissions.actions': permissions })
+            }
+          ]
+        }
+      } as Drive,
+      graphRoles
+    )
+  }
+
+  describe('canUpload', () => {
     it.each([
-      { role: 'viewer', expectedResult: true },
-      { role: 'editor', expectedResult: false },
-      { role: 'manager', expectedResult: false }
-    ])('returns true for a viewer of the space', (data) => {
-      const space = buildSpace(
-        mock<Drive>({
-          special: null,
-          root: {
-            permissions: [{ roles: [data.role], grantedToIdentities: [{ user: { id } }] }]
-          }
-        })
-      ) as ProjectSpaceResource
-      expect(space.isViewer(mock<User>({ id }))).toBe(data.expectedResult)
+      { permissions: [GraphSharePermission.createUpload], role: undefined, expectedResult: true },
+      { permissions: [], role: canUploadRole, expectedResult: true },
+      { permissions: [], role: noPermissionsRole, expectedResult: false }
+    ])(
+      'behaves accordingly to the given role and permissions',
+      ({ permissions, role, expectedResult }) => {
+        const space = getSpace({ role, permissions })
+        expect(space.canUpload({ user: mock<User>({ id, memberOf: [] }) })).toBe(expectedResult)
+      }
+    )
+  })
+
+  describe('canDownload', () => {
+    it('is always true', () => {
+      const space = getSpace({ role: noPermissionsRole, permissions: [] })
+      expect(space.canDownload()).toBeTruthy()
     })
   })
 
-  describe('isEditor', () => {
+  describe('canBeDeleted', () => {
     it.each([
-      { role: 'viewer', expectedResult: false },
-      { role: 'editor', expectedResult: true },
-      { role: 'manager', expectedResult: false }
-    ])('returns true for a editor of the space', (data) => {
-      const space = buildSpace(
-        mock<Drive>({
-          special: null,
-          root: {
-            permissions: [{ roles: [data.role], grantedToIdentities: [{ user: { id } }] }]
-          }
-        })
-      ) as ProjectSpaceResource
-      expect(space.isEditor(mock<User>({ id }))).toBe(data.expectedResult)
-    })
+      {
+        userCan: false,
+        permissions: [GraphSharePermission.deletePermissions],
+        role: undefined,
+        disabled: true,
+        expectedResult: true
+      },
+      {
+        userCan: false,
+        permissions: [],
+        role: canDeletePermissionsRole,
+        disabled: true,
+        expectedResult: true
+      },
+      {
+        userCan: false,
+        permissions: [],
+        role: noPermissionsRole,
+        disabled: true,
+        expectedResult: false
+      },
+      {
+        userCan: true,
+        permissions: [],
+        role: noPermissionsRole,
+        disabled: true,
+        expectedResult: true
+      },
+      {
+        userCan: true,
+        permissions: [],
+        role: noPermissionsRole,
+        disabled: false,
+        expectedResult: false
+      }
+    ])(
+      'behaves accordingly to the given role, permissions, abilities and disabled state',
+      ({ permissions, role, expectedResult, userCan, disabled }) => {
+        const ability = mock<Ability>({ can: () => userCan })
+        const space = getSpace({ role, permissions })
+        space.disabled = disabled
+        expect(space.canBeDeleted({ user: mock<User>({ id, memberOf: [] }), ability })).toBe(
+          expectedResult
+        )
+      }
+    )
   })
 
-  describe('isManager', () => {
+  describe('canRename', () => {
     it.each([
-      { role: 'viewer', expectedResult: false },
-      { role: 'editor', expectedResult: false },
-      { role: 'manager', expectedResult: true }
-    ])('returns true for a manager of the space', (data) => {
-      const space = buildSpace(
-        mock<Drive>({
-          special: null,
-          root: {
-            permissions: [{ roles: [data.role], grantedToIdentities: [{ user: { id } }] }]
-          }
-        })
-      ) as ProjectSpaceResource
-      expect(space.isManager(mock<User>({ id }))).toBe(data.expectedResult)
-    })
+      {
+        userCan: false,
+        permissions: [GraphSharePermission.deletePermissions],
+        role: undefined,
+        expectedResult: true
+      },
+      {
+        userCan: false,
+        permissions: [],
+        role: canDeletePermissionsRole,
+        expectedResult: true
+      },
+      {
+        userCan: false,
+        permissions: [],
+        role: noPermissionsRole,
+        expectedResult: false
+      },
+      {
+        userCan: true,
+        permissions: [],
+        role: noPermissionsRole,
+        expectedResult: true
+      }
+    ])(
+      'behaves accordingly to the given role, permissions and abilities',
+      ({ permissions, role, expectedResult, userCan }) => {
+        const ability = mock<Ability>({ can: () => userCan })
+        const space = getSpace({ role, permissions })
+        expect(space.canRename({ user: mock<User>({ id, memberOf: [] }), ability })).toBe(
+          expectedResult
+        )
+      }
+    )
   })
 
-  it.each([
-    { role: 'viewer', expectedResult: false },
-    { role: 'editor', expectedResult: true },
-    { role: 'manager', expectedResult: true }
-  ])('canUpload', (data) => {
-    const space = buildSpace(
-      mock<Drive>({
-        special: null,
-        root: {
-          permissions: [{ roles: [data.role], grantedToIdentities: [{ user: { id } }] }]
-        }
-      })
-    ) as ProjectSpaceResource
-    expect(space.canUpload({ user: mock<User>({ id }) })).toBe(data.expectedResult)
+  describe('canEditDescription', () => {
+    it.each([
+      {
+        userCan: false,
+        permissions: [GraphSharePermission.deletePermissions],
+        role: undefined,
+        expectedResult: true
+      },
+      {
+        userCan: false,
+        permissions: [],
+        role: canDeletePermissionsRole,
+        expectedResult: true
+      },
+      {
+        userCan: false,
+        permissions: [],
+        role: noPermissionsRole,
+        expectedResult: false
+      },
+      {
+        userCan: true,
+        permissions: [],
+        role: noPermissionsRole,
+        expectedResult: true
+      }
+    ])(
+      'behaves accordingly to the given role, permissions and abilities',
+      ({ permissions, role, expectedResult, userCan }) => {
+        const ability = mock<Ability>({ can: () => userCan })
+        const space = getSpace({ role, permissions })
+        expect(space.canEditDescription({ user: mock<User>({ id, memberOf: [] }), ability })).toBe(
+          expectedResult
+        )
+      }
+    )
   })
 
-  it.each([
-    {
-      userCan: false,
-      spaceRole: 'manager',
-      spaceDisabled: true,
-      expectedResult: true
-    },
-    {
-      userCan: false,
-      spaceRole: 'editor',
-      spaceDisabled: true,
-      expectedResult: false
-    },
-    {
-      userCan: false,
-      spaceRole: 'viewer',
-      spaceDisabled: true,
-      expectedResult: false
-    },
-    {
-      userCan: true,
-      spaceRole: 'viewer',
-      spaceDisabled: true,
-      expectedResult: true
-    },
-    {
-      userCan: true,
-      spaceRole: 'viewer',
-      spaceDisabled: false,
-      expectedResult: false
-    }
-  ])('canBeDeleted', (data) => {
-    const ability = mock<Ability>({ can: () => data.userCan })
-    const space = buildSpace(
-      mock<Drive>({
-        special: null,
-        root: {
-          permissions: [{ roles: [data.spaceRole], grantedToIdentities: [{ user: { id } }] }],
-          ...(data.spaceDisabled && { deleted: { state: 'trashed' } })
-        }
-      })
-    ) as ProjectSpaceResource
-    expect(space.canBeDeleted({ user: mock<User>({ id }), ability })).toBe(data.expectedResult)
+  describe('canShare', () => {
+    it.each([
+      {
+        permissions: [GraphSharePermission.createPermissions],
+        role: undefined,
+        expectedResult: true
+      },
+      { permissions: [], role: canCreatePermissionsRole, expectedResult: true },
+      { permissions: [], role: noPermissionsRole, expectedResult: false }
+    ])(
+      'behaves accordingly to the given role and permissions',
+      ({ permissions, role, expectedResult }) => {
+        const space = getSpace({ role, permissions })
+        expect(space.canShare({ user: mock<User>({ id, memberOf: [] }) })).toBe(expectedResult)
+      }
+    )
   })
 
-  it.each([
-    { spaceRole: 'manager', expectedResult: true },
-    { spaceRole: 'editor', expectedResult: false },
-    { spaceRole: 'viewer', expectedResult: false }
-  ])('canRename', (data) => {
-    const space = buildSpace(
-      mock<Drive>({
-        special: null,
-        root: {
-          permissions: [{ roles: [data.spaceRole], grantedToIdentities: [{ user: { id } }] }]
-        }
-      })
-    ) as ProjectSpaceResource
-    expect(space.canRename({ user: mock<User>({ id }) })).toBe(data.expectedResult)
+  describe('canRestore', () => {
+    it.each([
+      {
+        userCan: false,
+        permissions: [GraphSharePermission.deletePermissions],
+        role: undefined,
+        disabled: true,
+        expectedResult: true
+      },
+      {
+        userCan: false,
+        permissions: [],
+        role: canDeletePermissionsRole,
+        disabled: true,
+        expectedResult: true
+      },
+      {
+        userCan: false,
+        permissions: [],
+        role: noPermissionsRole,
+        disabled: true,
+        expectedResult: false
+      },
+      {
+        userCan: true,
+        permissions: [],
+        role: noPermissionsRole,
+        disabled: true,
+        expectedResult: true
+      },
+      {
+        userCan: true,
+        permissions: [],
+        role: noPermissionsRole,
+        disabled: false,
+        expectedResult: false
+      }
+    ])(
+      'behaves accordingly to the given role, permissions, abilities and disabled state',
+      ({ permissions, role, expectedResult, userCan, disabled }) => {
+        const ability = mock<Ability>({ can: () => userCan })
+        const space = getSpace({ role, permissions })
+        space.disabled = disabled
+        expect(space.canRestore({ user: mock<User>({ id, memberOf: [] }), ability })).toBe(
+          expectedResult
+        )
+      }
+    )
   })
 
-  it.each([
-    { spaceRole: 'manager', expectedResult: true },
-    { spaceRole: 'editor', expectedResult: false },
-    { spaceRole: 'viewer', expectedResult: false }
-  ])('canEditDescription', (data) => {
-    const space = buildSpace(
-      mock<Drive>({
-        special: null,
-        root: {
-          permissions: [{ roles: [data.spaceRole], grantedToIdentities: [{ user: { id } }] }]
-        }
-      })
-    ) as ProjectSpaceResource
-    expect(space.canEditDescription({ user: mock<User>({ id }) })).toBe(data.expectedResult)
+  describe('canDisable', () => {
+    it.each([
+      {
+        userCan: false,
+        permissions: [GraphSharePermission.deletePermissions],
+        role: undefined,
+        disabled: false,
+        expectedResult: true
+      },
+      {
+        userCan: false,
+        permissions: [],
+        role: canDeletePermissionsRole,
+        disabled: false,
+        expectedResult: true
+      },
+      {
+        userCan: false,
+        permissions: [],
+        role: noPermissionsRole,
+        disabled: false,
+        expectedResult: false
+      },
+      {
+        userCan: true,
+        permissions: [],
+        role: noPermissionsRole,
+        disabled: false,
+        expectedResult: true
+      },
+      {
+        userCan: true,
+        permissions: [],
+        role: noPermissionsRole,
+        disabled: true,
+        expectedResult: false
+      }
+    ])(
+      'behaves accordingly to the given role, permissions, abilities and disabled state',
+      ({ permissions, role, expectedResult, userCan, disabled }) => {
+        const ability = mock<Ability>({ can: () => userCan })
+        const space = getSpace({ role, permissions })
+        space.disabled = disabled
+        expect(space.canDisable({ user: mock<User>({ id, memberOf: [] }), ability })).toBe(
+          expectedResult
+        )
+      }
+    )
   })
 
-  it.each([
-    {
-      spaceRole: 'manager',
-      spaceDisabled: true,
-      expectedResult: true
-    },
-    {
-      spaceRole: 'editor',
-      spaceDisabled: true,
-      expectedResult: false
-    },
-    {
-      spaceRole: 'viewer',
-      spaceDisabled: true,
-      expectedResult: false
-    }
-  ])('canRestore', (data) => {
-    const space = buildSpace(
-      mock<Drive>({
-        special: null,
-        root: {
-          permissions: [{ roles: [data.spaceRole], grantedToIdentities: [{ user: { id } }] }],
-          ...(data.spaceDisabled && { deleted: { state: 'trashed' } })
-        }
-      })
-    ) as ProjectSpaceResource
-    expect(space.canRestore({ user: mock<User>({ id }) })).toBe(data.expectedResult)
+  describe('canEditImage', () => {
+    it.each([
+      {
+        permissions: [GraphSharePermission.deletePermissions],
+        role: undefined,
+        disabled: false,
+        expectedResult: true
+      },
+      {
+        permissions: [],
+        role: canDeletePermissionsRole,
+        disabled: false,
+        expectedResult: true
+      },
+      {
+        permissions: [],
+        role: noPermissionsRole,
+        disabled: false,
+        expectedResult: false
+      },
+      {
+        permissions: [],
+        role: noPermissionsRole,
+        disabled: true,
+        expectedResult: false
+      }
+    ])(
+      'behaves accordingly to the given role, permissions and disabled state',
+      ({ permissions, role, expectedResult, disabled }) => {
+        const space = getSpace({ role, permissions })
+        space.disabled = disabled
+        expect(space.canEditImage({ user: mock<User>({ id, memberOf: [] }) })).toBe(expectedResult)
+      }
+    )
   })
-
-  it.each([
-    {
-      userCan: false,
-      spaceRole: 'manager',
-      spaceDisabled: false,
-      expectedResult: true
-    },
-    {
-      userCan: false,
-      spaceRole: 'editor',
-      spaceDisabled: false,
-      expectedResult: false
-    },
-    {
-      userCan: false,
-      spaceRole: 'viewer',
-      spaceDisabled: false,
-      expectedResult: false
-    },
-    {
-      userCan: true,
-      spaceRole: 'viewer',
-      spaceDisabled: false,
-      expectedResult: true
-    },
-    {
-      userCan: true,
-      spaceRole: 'viewer',
-      spaceDisabled: true,
-      expectedResult: false
-    }
-  ])('canDisable', (data) => {
-    const ability = mock<Ability>({ can: () => data.userCan })
-    const space = buildSpace(
-      mock<Drive>({
-        special: null,
-        root: {
-          permissions: [{ roles: [data.spaceRole], grantedToIdentities: [{ user: { id } }] }],
-          ...(data.spaceDisabled && { deleted: { state: 'trashed' } })
-        }
-      })
-    ) as ProjectSpaceResource
-    expect(space.canDisable({ user: mock<User>({ id }), ability })).toBe(data.expectedResult)
-  })
-
-  it.each([
-    { role: 'manager', expectedResult: true },
-    { role: 'editor', expectedResult: false },
-    { role: 'viewer', expectedResult: false }
-  ])('canShare', (data) => {
-    const space = buildSpace(
-      mock<Drive>({
-        special: null,
-        root: {
-          permissions: [{ roles: [data.role], grantedToIdentities: [{ user: { id } }] }]
-        }
-      })
-    ) as ProjectSpaceResource
-    expect(space.canShare({ user: mock<User>({ id }) })).toBe(data.expectedResult)
-  })
-
-  it.each([
-    { role: 'manager', expectedResult: true },
-    { role: 'editor', expectedResult: true },
-    { role: 'viewer', expectedResult: false }
-  ])('canEditImage', (data) => {
-    const space = buildSpace(
-      mock<Drive>({
-        special: null,
-        root: {
-          permissions: [{ roles: [data.role], grantedToIdentities: [{ user: { id } }] }]
-        }
-      })
-    ) as ProjectSpaceResource
-    expect(space.canEditImage({ user: mock<User>({ id }) })).toBe(data.expectedResult)
-  })
-
-  it.each([
-    { role: 'manager', expectedResult: true },
-    { role: 'editor', expectedResult: true },
-    { role: 'viewer', expectedResult: false }
-  ])('canEditReadme', (data) => {
-    const space = buildSpace(
-      mock<Drive>({
-        special: null,
-        root: {
-          permissions: [{ roles: [data.role], grantedToIdentities: [{ user: { id } }] }]
-        }
-      })
-    ) as ProjectSpaceResource
-    expect(space.canEditReadme({ user: mock<User>({ id }) })).toBe(data.expectedResult)
+  describe('canEditReadme', () => {
+    it.each([
+      {
+        permissions: [GraphSharePermission.deletePermissions],
+        role: undefined,
+        disabled: false,
+        expectedResult: true
+      },
+      {
+        permissions: [],
+        role: canDeletePermissionsRole,
+        disabled: false,
+        expectedResult: true
+      },
+      {
+        permissions: [],
+        role: noPermissionsRole,
+        disabled: false,
+        expectedResult: false
+      },
+      {
+        permissions: [],
+        role: noPermissionsRole,
+        disabled: true,
+        expectedResult: false
+      }
+    ])(
+      'behaves accordingly to the given role, permissions and disabled state',
+      ({ permissions, role, expectedResult, disabled }) => {
+        const space = getSpace({ role, permissions })
+        space.disabled = disabled
+        expect(space.canEditReadme({ user: mock<User>({ id, memberOf: [] }) })).toBe(expectedResult)
+      }
+    )
   })
 })

@@ -83,7 +83,11 @@
 import { storeToRefs } from 'pinia'
 import { defineComponent, inject, ref, Ref, computed, unref } from 'vue'
 import { useTask } from 'vue-concurrency'
-import { getRelativeSpecialFolderSpacePath, SpaceResource } from '@ownclouders/web-client'
+import {
+  getRelativeSpecialFolderSpacePath,
+  getSpaceManagers,
+  SpaceResource
+} from '@ownclouders/web-client'
 import {
   usePreviewService,
   useClientService,
@@ -230,12 +234,14 @@ export default defineComponent({
       return formatDateFromISO(this.resource.mdate, this.$language.current)
     },
     ownerUsernames() {
-      return this.resource.spaceRoles.manager
+      const managers = getSpaceManagers(this.resource)
+      return managers
         .map((share) => {
-          if (share.id === this.user?.id) {
-            return this.$gettext('%{displayName} (me)', { displayName: share.displayName })
+          const member = share.grantedTo.user || share.grantedTo.group
+          if (member.id === this.user?.id) {
+            return this.$gettext('%{displayName} (me)', { displayName: member.displayName })
           }
-          return share.displayName
+          return member.displayName
         })
         .join(', ')
     },
@@ -246,7 +252,7 @@ export default defineComponent({
       return this.linkShareCount > 0
     },
     memberShareCount() {
-      return this.spaceMembers.length
+      return Object.keys(this.resource.members).length
     },
     memberShareLabel() {
       return this.$ngettext(

@@ -4,7 +4,13 @@ import { SpaceAction, SpaceActionOptions } from '../types'
 import { useClientService } from '../../clientService'
 import { useLoadingService } from '../../loadingService'
 import { useGettext } from 'vue3-gettext'
-import { useMessages, useModals, useSpacesStore, useUserStore } from '../../piniaStores'
+import {
+  useMessages,
+  useModals,
+  useSharesStore,
+  useSpacesStore,
+  useUserStore
+} from '../../piniaStores'
 import { useCreateSpace, useSpaceHelpers } from '../../spaces'
 import { eventBus } from '../../../services'
 import { blobToArrayBuffer, canvasToBlob } from '../../../helpers'
@@ -20,6 +26,7 @@ export const useSpaceActionsSetIcon = () => {
   const { createDefaultMetaFolder } = useCreateSpace()
   const { dispatchModal } = useModals()
   const { getDefaultMetaFolder } = useSpaceHelpers()
+  const sharesStore = useSharesStore()
 
   const handler = ({ resources }: SpaceActionOptions) => {
     if (resources.length !== 1) {
@@ -84,10 +91,14 @@ export const useSpaceActionsSetIcon = () => {
           overwrite: true
         })
 
-        const updatedSpace = await graphClient.drives.updateDrive(space.id, {
-          name: space.name,
-          special: [{ specialFolder: { name: 'image' }, id: fileId }]
-        })
+        const updatedSpace = await graphClient.drives.updateDrive(
+          space.id,
+          {
+            name: space.name,
+            special: [{ specialFolder: { name: 'image' }, id: fileId }]
+          },
+          sharesStore.graphRoles
+        )
 
         spacesStore.updateSpaceField({
           id: space.id,

@@ -71,7 +71,7 @@
 import { storeToRefs } from 'pinia'
 import CollaboratorListItem from './Collaborators/ListItem.vue'
 import InviteCollaboratorForm from './Collaborators/InviteCollaborator/InviteCollaboratorForm.vue'
-import { GraphShareRoleIdMap } from '@ownclouders/web-client'
+import { GraphSharePermission } from '@ownclouders/web-client'
 import {
   createLocationSpaces,
   isLocationSpacesActive,
@@ -105,7 +105,9 @@ export default defineComponent({
     const clientService = useClientService()
     const { canShare } = useCanShare()
     const { dispatchModal } = useModals()
-    const { deleteShare } = useSharesStore()
+    const sharesStore = useSharesStore()
+    const { deleteShare } = sharesStore
+    const { graphRoles } = storeToRefs(sharesStore)
     const spacesStore = useSpacesStore()
     const { upsertSpace, removeSpaceMember } = spacesStore
     const { spaceMembers } = storeToRefs(spacesStore)
@@ -133,6 +135,7 @@ export default defineComponent({
       canShare,
       markInstance,
       filesPrivateLinks,
+      graphRoles,
       ...useMessages()
     }
   },
@@ -193,13 +196,16 @@ export default defineComponent({
         return false
       }
 
-      if (share.role.id !== GraphShareRoleIdMap.SpaceManager) {
+      const memberCanUpdateMembers = share.permissions.includes(
+        GraphSharePermission.updatePermissions
+      )
+      if (!memberCanUpdateMembers) {
         return true
       }
 
-      // forbid to remove last manager of a space
-      const managers = this.spaceMembers.filter(
-        ({ role }) => role.id === GraphShareRoleIdMap.SpaceManager
+      // make sure at least one member can edit other members
+      const managers = this.spaceMembers.filter(({ permissions }) =>
+        permissions.includes(GraphSharePermission.updatePermissions)
       )
       return managers.length > 1
     },
@@ -223,7 +229,7 @@ export default defineComponent({
 
             if (!currentUserRemoved) {
               const client = this.clientService.graphAuthenticated
-              const space = await client.drives.getDrive(share.resourceId)
+              const space = await client.drives.getDrive(share.resourceId, this.graphRoles)
               this.upsertSpace(space)
             }
 

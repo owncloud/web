@@ -137,7 +137,7 @@ import {
   unref,
   watch
 } from 'vue'
-import { SpaceResource } from '@ownclouders/web-client'
+import { getSpaceManagers, SpaceResource } from '@ownclouders/web-client'
 import Mark from 'mark.js'
 import Fuse from 'fuse.js'
 import { useGettext } from 'vue3-gettext'
@@ -352,9 +352,11 @@ export default defineComponent({
     ])
 
     const getManagerNames = (space: SpaceResource) => {
-      const allManagers = space.spaceRoles.manager
+      const allManagers = getSpaceManagers(space)
       const managers = allManagers.length > 2 ? allManagers.slice(0, 2) : allManagers
-      let managerStr = managers.map((m) => m.displayName).join(', ')
+      let managerStr = managers
+        .map(({ grantedTo }) => (grantedTo.user || grantedTo.group).displayName)
+        .join(', ')
       if (allManagers.length > 2) {
         managerStr += `... +${allManagers.length - 2}`
       }
@@ -386,11 +388,7 @@ export default defineComponent({
       return formatFileSize(space.spaceQuota.remaining, language.current)
     }
     const getMemberCount = (space: SpaceResource) => {
-      return (
-        space.spaceRoles.manager.length +
-        space.spaceRoles.editor.length +
-        space.spaceRoles.viewer.length
-      )
+      return Object.keys(space.members).length
     }
 
     const getSelectSpaceLabel = (space: SpaceResource) => {

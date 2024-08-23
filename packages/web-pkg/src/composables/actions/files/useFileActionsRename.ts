@@ -20,8 +20,10 @@ import {
   useModals,
   useCapabilityStore,
   useConfigStore,
-  useResourcesStore
+  useResourcesStore,
+  useUserStore
 } from '../../piniaStores'
+import { useAbility } from '../../ability'
 
 export const useFileActionsRename = () => {
   const { showErrorMessage } = useMessages()
@@ -31,6 +33,8 @@ export const useFileActionsRename = () => {
   const clientService = useClientService()
   const configStore = useConfigStore()
   const { dispatchModal } = useModals()
+  const userStore = useUserStore()
+  const ability = useAbility()
 
   const resourcesStore = useResourcesStore()
   const { setCurrentFolder, upsertResource } = resourcesStore
@@ -238,7 +242,7 @@ export const useFileActionsRename = () => {
         }
 
         const renameDisabled = resources.some((resource) => {
-          return !resource.canRename() || resource.processing
+          return !resource.canRename({ user: userStore.user, ability }) || resource.processing
         })
         return !renameDisabled
       },

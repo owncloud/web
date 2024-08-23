@@ -70,7 +70,7 @@ export const useFileActionsEmptyTrashBin = () => {
 
         if (
           isProjectSpaceResource(space) &&
-          !space.canRemoveFromTrashbin({ user: userStore.user })
+          !space.canDeleteFromTrashBin({ user: userStore.user })
         ) {
           return false
         }

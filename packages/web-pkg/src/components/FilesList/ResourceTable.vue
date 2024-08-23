@@ -716,14 +716,14 @@ export default defineComponent({
 
             {
               name: 'manager',
-              prop: 'spaceRoles',
+              prop: 'members',
               title: this.$gettext('Manager'),
               type: 'slot'
             },
             {
               name: 'members',
               title: this.$gettext('Members'),
-              prop: 'spaceRoles',
+              prop: 'members',
               type: 'slot'
             },
             {

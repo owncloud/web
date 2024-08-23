@@ -174,8 +174,8 @@ export default defineComponent({
     showActions() {
       return (
         !isProjectSpaceResource(this.space) ||
-        this.space.isEditor(this.user) ||
-        this.space.isManager(this.user)
+        this.space.canDeleteFromTrashBin({ user: this.user }) ||
+        this.space.canRestoreFromTrashbin({ user: this.user })
       )
     }
   }

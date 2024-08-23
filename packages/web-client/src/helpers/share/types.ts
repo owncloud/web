@@ -13,7 +13,10 @@ export enum GraphSharePermission {
   readDeleted = 'libre.graph/driveItem/deleted/read',
   updatePath = 'libre.graph/driveItem/path/update',
   updateDeleted = 'libre.graph/driveItem/deleted/update',
-  deleteStandard = 'libre.graph/driveItem/standard/delete'
+  updatePermissions = 'libre.graph/driveItem/permissions/update',
+  deleteStandard = 'libre.graph/driveItem/standard/delete',
+  deleteDeleted = 'libre.graph/driveItem/deleted/delete',
+  deletePermissions = 'libre.graph/driveItem/permissions/delete'
 }
 
 export interface ShareResource extends Resource {

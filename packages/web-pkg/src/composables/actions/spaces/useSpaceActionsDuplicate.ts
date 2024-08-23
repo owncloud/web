@@ -11,11 +11,18 @@ import { resolveFileNameDuplicate } from '../../../helpers/resource/conflictHand
 import PQueue from 'p-queue'
 import { useRouter } from '../../router'
 import { isLocationSpacesActive } from '../../../router'
-import { useConfigStore, useMessages, useResourcesStore, useSpacesStore } from '../../piniaStores'
+import {
+  useConfigStore,
+  useMessages,
+  useResourcesStore,
+  useSharesStore,
+  useSpacesStore
+} from '../../piniaStores'
 
 export const useSpaceActionsDuplicate = () => {
   const configStore = useConfigStore()
   const spacesStore = useSpacesStore()
+  const sharesStore = useSharesStore()
   const { showMessage, showErrorMessage } = useMessages()
   const router = useRouter()
   const { $gettext } = useGettext()
@@ -37,7 +44,7 @@ export const useSpaceActionsDuplicate = () => {
           description: existingSpace.description,
           quota: { total: existingSpace.spaceQuota.total }
         },
-        {}
+        sharesStore.graphRoles
       )
 
       const existingSpaceFiles = await clientService.webdav.listFiles(existingSpace)
@@ -91,7 +98,8 @@ export const useSpaceActionsDuplicate = () => {
 
         duplicatedSpace = await clientService.graphAuthenticated.drives.updateDrive(
           duplicatedSpace.id,
-          specialRequestData
+          specialRequestData,
+          sharesStore.graphRoles
         )
       }
 

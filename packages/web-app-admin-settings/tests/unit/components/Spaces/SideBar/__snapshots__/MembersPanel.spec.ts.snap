@@ -7,9 +7,15 @@ exports[`MembersPanel > should display an empty result if no matching members fo
     <div>
       <h3 class="oc-text-bold oc-text-medium">No members found</h3>
     </div>
-    <!--v-if-->
-    <!--v-if-->
-    <!--v-if-->
+    <div>
+      <!--v-if-->
+    </div>
+    <div>
+      <!--v-if-->
+    </div>
+    <div>
+      <!--v-if-->
+    </div>
     <!--v-if-->
   </div>
 </div>"
@@ -20,22 +26,25 @@ exports[`MembersPanel > should render all members accordingly to their role assi
   <oc-text-input-stub id="oc-textinput-1" type="text" modelvalue="" clearbuttonenabled="false" clearbuttonaccessiblelabel="" disabled="false" label="Filter members" fixmessageline="false" readonly="false" passwordpolicy="[object Object]" class="oc-text-truncate oc-mr-s oc-mt-m"></oc-text-input-stub>
   <div data-testid="space-members">
     <!--v-if-->
-    <div class="oc-mb-m" data-testid="space-members-role-managers">
-      <h3 class="oc-text-bold oc-text-medium">Managers</h3>
-      <members-role-section-stub members="[object Object]"></members-role-section-stub>
+    <div>
+      <div class="oc-mb-m" data-testid="space-members-role-Managers">
+        <h3 class="oc-text-bold oc-text-medium">Managers</h3>
+        <members-role-section-stub members="[object Object]"></members-role-section-stub>
+      </div>
     </div>
-    <div class="oc-mb-m" data-testid="space-members-role-editors">
-      <h3 class="oc-text-bold oc-text-medium">Editors</h3>
-      <members-role-section-stub members="[object Object],[object Object]"></members-role-section-stub>
+    <div>
+      <div class="oc-mb-m" data-testid="space-members-role-Editors">
+        <h3 class="oc-text-bold oc-text-medium">Editors</h3>
+        <members-role-section-stub members="[object Object]"></members-role-section-stub>
+      </div>
     </div>
-    <div class="oc-mb-m" data-testid="space-members-role-viewers">
-      <h3 class="oc-text-bold oc-text-medium">Viewers</h3>
-      <members-role-section-stub members="[object Object]"></members-role-section-stub>
+    <div>
+      <div class="oc-mb-m" data-testid="space-members-role-Viewers">
+        <h3 class="oc-text-bold oc-text-medium">Viewers</h3>
+        <members-role-section-stub members="[object Object]"></members-role-section-stub>
+      </div>
     </div>
-    <div class="oc-mb-m" data-testid="space-members-role-secure-viewers">
-      <h3 class="oc-text-bold oc-text-medium">Secure viewers</h3>
-      <members-role-section-stub members="[object Object]"></members-role-section-stub>
-    </div>
+    <!--v-if-->
   </div>
 </div>"
 `;

@@ -92,7 +92,7 @@ describe('TrashOverview', () => {
     })
     it('should set the sort parameters accordingly when calling "handleSort"', () => {
       const { wrapper } = getWrapper({ spaces: [spaceMocks[0]] })
-      const sortBy = 'spaceRoles'
+      const sortBy = 'members'
       const sortDir = SortDir.Desc
       wrapper.vm.handleSort({ sortBy, sortDir })
       expect(wrapper.vm.sortBy).toEqual(sortBy)

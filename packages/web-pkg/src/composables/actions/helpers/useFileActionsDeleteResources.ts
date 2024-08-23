@@ -17,7 +17,8 @@ import {
   useModals,
   useSpacesStore,
   useConfigStore,
-  useResourcesStore
+  useResourcesStore,
+  useSharesStore
 } from '../../piniaStores'
 import { storeToRefs } from 'pinia'
 import { useDeleteWorker } from '../../webWorkers'
@@ -32,6 +33,7 @@ export const useFileActionsDeleteResources = () => {
   const clientService = useClientService()
   const { dispatchModal } = useModals()
   const spacesStore = useSpacesStore()
+  const sharesStore = useSharesStore()
   const { startWorker } = useDeleteWorker({
     concurrentRequests: configStore.options.concurrentRequests.resourceBatchActions
   })
@@ -224,7 +226,10 @@ export const useFileActionsDeleteResources = () => {
               !['public', 'share'].includes(spaceForDeletion?.driveType)
             ) {
               const graphClient = clientService.graphAuthenticated
-              const updatedSpace = await graphClient.drives.getDrive(unref(resources)[0].storageId)
+              const updatedSpace = await graphClient.drives.getDrive(
+                unref(resources)[0].storageId,
+                sharesStore.graphRoles
+              )
               spacesStore.updateSpaceField({
                 id: updatedSpace.id,
                 field: 'spaceQuota',

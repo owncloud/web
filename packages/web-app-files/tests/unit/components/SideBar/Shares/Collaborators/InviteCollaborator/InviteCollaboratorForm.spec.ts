@@ -8,12 +8,7 @@ import {
 } from 'web-test-helpers'
 import { Resource, SpaceResource } from '@ownclouders/web-client'
 import { useSharesStore } from '@ownclouders/web-pkg'
-import {
-  CollaboratorAutoCompleteItem,
-  CollaboratorShare,
-  GraphShareRoleIdMap,
-  ShareRole
-} from '@ownclouders/web-client'
+import { CollaboratorAutoCompleteItem, CollaboratorShare, ShareRole } from '@ownclouders/web-client'
 import { Group, User } from '@ownclouders/web-client/graph/generated'
 import OcButton from 'design-system/src/components/OcButton/OcButton.vue'
 import RoleDropdown from '../../../../../../../src/components/SideBar/Shares/Collaborators/RoleDropdown.vue'
@@ -209,16 +204,17 @@ function getWrapper({
               capabilityState: { capabilities },
               configState: { options: { concurrentRequests: { shares: { create: 1 } } } },
               sharesState: {
-                graphRoles: {
-                  [GraphShareRoleIdMap.Viewer]: mock<ShareRole>(),
-                  [GraphShareRoleIdMap.SpaceViewer]: mock<ShareRole>()
-                },
                 collaboratorShares: existingCollaborators
               }
             }
           })
         ],
-        provide: { ...mocks, resource, availableExternalShareRoles: externalShareRoles },
+        provide: {
+          ...mocks,
+          resource,
+          availableExternalShareRoles: externalShareRoles,
+          availableInternalShareRoles: [mock<ShareRole>()]
+        },
         mocks,
         stubs: { OcSelect: false, VueSelect: false }
       }
