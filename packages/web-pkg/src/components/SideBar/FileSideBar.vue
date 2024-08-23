@@ -67,6 +67,7 @@ import {
 } from '@ownclouders/web-client'
 import { storeToRefs } from 'pinia'
 import { useTask } from 'vue-concurrency'
+import { ListPermissionsSpaceRootSelectEnum } from '@ownclouders/web-client/graph/generated'
 
 export default defineComponent({
   name: 'FileSideBar',
@@ -217,8 +218,7 @@ export default defineComponent({
         const { allowedRoles } = yield* call(
           client.listPermissions(props.space?.id, resource.id, sharesStore.graphRoles, {
             filter: `@libre.graph.permissions.roles.allowedValues/rolePermissions/any(p:contains(p/condition, '@Subject.UserType=="Federated"'))`,
-            // FIXME: use ListPermissionsSpaceRootSelectEnum, but the values seem to be wrong because of "\" at the start
-            select: ['@libre.graph.permissions.roles.allowedValues' as any]
+            select: [ListPermissionsSpaceRootSelectEnum.LibreGraphPermissionsRolesAllowedValues]
           })
         )
 
