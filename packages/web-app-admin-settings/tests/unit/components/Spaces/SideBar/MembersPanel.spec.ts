@@ -5,9 +5,9 @@ import { ShareRole, SpaceResource } from '@ownclouders/web-client'
 import MembersRoleSection from '../../../../../src/components/Spaces/SideBar/MembersRoleSection.vue'
 
 const graphRoles = {
-  '1': mock<ShareRole>({ id: '1', displayName: 'Managers' }),
-  '2': mock<ShareRole>({ id: '2', displayName: 'Editors' }),
-  '3': mock<ShareRole>({ id: '3', displayName: 'Viewers' })
+  '1': mock<ShareRole>({ id: '1', displayName: 'Managers', rolePermissions: [] }),
+  '2': mock<ShareRole>({ id: '2', displayName: 'Editors', rolePermissions: [] }),
+  '3': mock<ShareRole>({ id: '3', displayName: 'Viewers', rolePermissions: [] })
 }
 
 const spaceMock = {

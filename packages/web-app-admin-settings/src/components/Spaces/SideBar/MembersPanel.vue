@@ -68,7 +68,15 @@ export default defineComponent({
     const availableRoles = computed<ShareRole[]>(() => {
       const permissionsWithRole = unref(spaceMembers).filter((p) => !!p.roleId)
       const roleIds = [...new Set(permissionsWithRole.map((p) => p.roleId))]
-      return roleIds.map((r) => sharesStore.graphRoles[r]).filter(Boolean)
+      return roleIds
+        .map((r) => sharesStore.graphRoles[r])
+        .filter(Boolean)
+        .sort((a, b) => {
+          // sort roles by amount of permissions (most likely translates to manager > editor > viewer)
+          const permissionsA = a.rolePermissions.flatMap((r) => r.allowedResourceActions)
+          const permissionsB = b.rolePermissions.flatMap((r) => r.allowedResourceActions)
+          return permissionsB.length - permissionsA.length
+        })
     })
 
     const membersWithoutRole = computed<SpaceMember[]>(() => {
