@@ -104,12 +104,18 @@ export const useDriveResolver = (options: DriveResolverOptions = {}): DriveResol
           shareIdStr = [SHARE_JAIL_ID, shareIdStr].join('!')
         }
 
-        matchingSpace = buildShareSpaceResource({
-          driveAliasPrefix,
-          id: shareIdStr,
-          shareName: unref(shareName),
-          serverUrl: configStore.serverUrl
-        })
+        const shareSpace = spacesStore.spaces.find(({ id }) => id === shareIdStr)
+        if (shareSpace) {
+          matchingSpace = shareSpace
+        } else {
+          matchingSpace = buildShareSpaceResource({
+            driveAliasPrefix,
+            id: shareIdStr,
+            shareName: unref(shareName),
+            serverUrl: configStore.serverUrl
+          })
+          spacesStore.addSpaces([matchingSpace])
+        }
         path = item.join('/')
       } else {
         if (unref(fileId)) {

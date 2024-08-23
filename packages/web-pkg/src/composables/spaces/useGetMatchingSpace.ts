@@ -63,12 +63,18 @@ export const useGetMatchingSpace = (options?: GetMatchingSpaceOptions) => {
       shareName = resource.name
     }
 
-    return buildShareSpaceResource({
+    let shareSpace = spacesStore.spaces.find(({ id }) => id === resource.remoteItemId)
+    if (shareSpace) {
+      return shareSpace
+    }
+    shareSpace = buildShareSpaceResource({
       driveAliasPrefix,
       id: resource.remoteItemId,
       shareName,
       serverUrl: configStore.serverUrl
     })
+    spacesStore.addSpaces([shareSpace])
+    return shareSpace
   }
 
   const getMatchingMountPoints = (space: SpaceResource): MountPointSpaceResource[] =>
