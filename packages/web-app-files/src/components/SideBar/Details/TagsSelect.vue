@@ -3,6 +3,8 @@
     ref="tagSelect"
     v-model="selectedTags"
     class="tags-select"
+    :label="$gettext('Tags')"
+    :label-hidden="true"
     :multiple="true"
     :disabled="readonly"
     :options="availableTags"

@@ -7,6 +7,8 @@
       <div class="oc-docs-width-medium grouping-oc-select">
         <oc-select
           v-model="selectedGroupingOption"
+          :label="$gettext('Group by')"
+          :label-hidden="true"
           :options="[
             ...Object.keys(groupingSettings.groupingFunctions),
             ...(!Object.keys(groupingSettings.groupingFunctions).includes('None') ? ['None'] : [])

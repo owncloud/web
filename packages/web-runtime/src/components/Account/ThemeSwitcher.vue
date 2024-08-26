@@ -2,6 +2,8 @@
   <div>
     <oc-select
       :model-value="currentThemeOrAuto"
+      :label="$gettext('Theme')"
+      :label-hidden="true"
       :clearable="false"
       :options="availableThemesAndAuto"
       option-label="name"

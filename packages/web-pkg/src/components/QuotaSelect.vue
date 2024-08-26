@@ -10,6 +10,7 @@
       :options="options"
       :create-option="createOption"
       option-label="displayValue"
+      :label="$gettext('Quota')"
       v-bind="$attrs"
       @update:model-value="onUpdate"
     >
