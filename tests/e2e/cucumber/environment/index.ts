@@ -74,7 +74,7 @@ Before(async function (this: World, { pickle }: ITestCaseHookParameter) {
       await setAdminTokenFromLogin(state.browser)
       await setKeycloakAdminToken(state.browser)
     } else {
-      await setAdminToken({ user: this.usersEnvironment.getUser({ key: 'admin' }) })
+      await setAdminToken(this.usersEnvironment.getUser({ key: 'admin' }))
     }
   }
 })
@@ -192,8 +192,8 @@ const cleanUpGroup = async (adminUser: User) => {
   createdGroupStore.clear()
 }
 
-const setAdminToken = async ({ user }: { user: User }) => {
-  return await setAccessToken({ username: user.id })
+const setAdminToken = async (user: User) => {
+  return await setAccessToken(user.id)
 }
 
 const setAdminTokenFromLogin = async (browser: Browser) => {

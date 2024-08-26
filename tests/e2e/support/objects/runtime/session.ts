@@ -47,7 +47,8 @@ export class Session {
       ),
       this.signIn(id, password)
     ])
-    if (!config.basicAuth) {
+
+    if (!config.basicAuth || config.keycloak) {
       const body = await response.json()
       const tokenEnvironment = TokenEnvironmentFactory(tokenType)
 

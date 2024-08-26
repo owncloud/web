@@ -33,8 +33,8 @@ export const getTokenFromLogin = async ({
   await ctx.close()
 }
 
-export const setAccessToken = async ({ username }: { username: string }) => {
+export const setAccessToken = async (username: string) => {
   username = username || 'admin'
   const loginUser = new UsersEnvironment().getUser({ key: username })
-  await setAccessAndRefreshToken({ user: loginUser })
+  await setAccessAndRefreshToken(loginUser)
 }
