@@ -5,7 +5,7 @@
   "peerDependencies": {
     "@casl/ability": "^6.3.3",
     "@casl/vue": "^2.2.2",
-    "axios": "1.7.4",
+    "axios": "1.7.5",
     "pinia": "2.1.7",
     "vue-router": "4.2.5",
     "vue3-gettext": "2.4.0"
