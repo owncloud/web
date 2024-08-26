@@ -609,8 +609,8 @@ importers:
         specifier: ^8.11.1
         version: 8.11.1
       pinia:
-        specifier: 2.1.7
-        version: 2.1.7(typescript@5.5.3)(vue@3.4.21(typescript@5.5.3))
+        specifier: 2.2.2
+        version: 2.2.2(typescript@5.5.3)(vue@3.4.21(typescript@5.5.3))
       uuid:
         specifier: 9.0.1
         version: 9.0.1
@@ -655,8 +655,8 @@ importers:
         specifier: ^8.11.1
         version: 8.11.1
       pinia:
-        specifier: 2.1.7
-        version: 2.1.7(typescript@5.5.3)(vue@3.4.21(typescript@5.5.3))
+        specifier: 2.2.2
+        version: 2.2.2(typescript@5.5.3)(vue@3.4.21(typescript@5.5.3))
       vue-concurrency:
         specifier: 5.0.1
         version: 5.0.1(vue@3.4.21(typescript@5.5.3))
@@ -705,8 +705,8 @@ importers:
         specifier: 4.17.21
         version: 4.17.21
       pinia:
-        specifier: 2.1.7
-        version: 2.1.7(typescript@5.5.3)(vue@3.4.21(typescript@5.5.3))
+        specifier: 2.2.2
+        version: 2.2.2(typescript@5.5.3)(vue@3.4.21(typescript@5.5.3))
       uuid:
         specifier: 9.0.1
         version: 9.0.1
@@ -775,8 +775,8 @@ importers:
         specifier: ^6.6.2
         version: 6.6.2
       pinia:
-        specifier: 2.1.7
-        version: 2.1.7(typescript@5.5.3)(vue@3.4.21(typescript@5.5.3))
+        specifier: 2.2.2
+        version: 2.2.2(typescript@5.5.3)(vue@3.4.21(typescript@5.5.3))
       qs:
         specifier: 6.11.2
         version: 6.11.2
@@ -846,7 +846,7 @@ importers:
         version: https://github.com/owncloud/uppy/releases/download/v3.12.13-owncloud/uppy-webdav.tgz(@uppy/core@https://github.com/owncloud/uppy/releases/download/v3.12.13-owncloud/uppy-core.tgz)
       pinia:
         specifier: ^2.1.7
-        version: 2.1.7(typescript@5.5.3)(vue@3.4.21(typescript@5.5.3))
+        version: 2.2.2(typescript@5.5.3)(vue@3.4.21(typescript@5.5.3))
     devDependencies:
       web-test-helpers:
         specifier: workspace:*
@@ -936,8 +936,8 @@ importers:
         specifier: ^8.11.1
         version: 8.11.1
       pinia:
-        specifier: 2.1.7
-        version: 2.1.7(typescript@5.5.3)(vue@3.4.21(typescript@5.5.3))
+        specifier: 2.2.2
+        version: 2.2.2(typescript@5.5.3)(vue@3.4.21(typescript@5.5.3))
       vue-router:
         specifier: 4.2.5
         version: 4.2.5(vue@3.4.21(typescript@5.5.3))
@@ -1112,8 +1112,8 @@ importers:
         specifier: ^1.1.1
         version: 1.1.1
       pinia:
-        specifier: 2.1.7
-        version: 2.1.7(typescript@5.5.3)(vue@3.4.21(typescript@5.5.3))
+        specifier: 2.2.2
+        version: 2.2.2(typescript@5.5.3)(vue@3.4.21(typescript@5.5.3))
       qs:
         specifier: 6.11.2
         version: 6.11.2
@@ -1237,8 +1237,8 @@ importers:
         specifier: ^6.6.2
         version: 6.6.2
       pinia:
-        specifier: 2.1.7
-        version: 2.1.7(typescript@5.5.3)(vue@3.4.21(typescript@5.5.3))
+        specifier: 2.2.2
+        version: 2.2.2(typescript@5.5.3)(vue@3.4.21(typescript@5.5.3))
       portal-vue:
         specifier: 3.0.0
         version: 3.0.0(patch_hash=bogvb64kjdufpa4744k4xkam7u)(vue@3.4.21(typescript@5.5.3))
@@ -1322,8 +1322,8 @@ importers:
         specifier: 1.7.5
         version: 1.7.5
       pinia:
-        specifier: 2.1.7
-        version: 2.1.7(typescript@5.5.3)(vue@3.4.21(typescript@5.5.3))
+        specifier: 2.2.2
+        version: 2.2.2(typescript@5.5.3)(vue@3.4.21(typescript@5.5.3))
       vue-router:
         specifier: 4.2.5
         version: 4.2.5(vue@3.4.21(typescript@5.5.3))
@@ -1333,7 +1333,7 @@ importers:
     devDependencies:
       '@pinia/testing':
         specifier: ^0.1.3
-        version: 0.1.3(pinia@2.1.7(typescript@5.5.3)(vue@3.4.21(typescript@5.5.3)))(vue@3.4.21(typescript@5.5.3))
+        version: 0.1.3(pinia@2.2.2(typescript@5.5.3)(vue@3.4.21(typescript@5.5.3)))(vue@3.4.21(typescript@5.5.3))
 
   tests/e2e:
     dependencies:
@@ -3118,6 +3118,9 @@ packages:
 
   '@vue/devtools-api@6.5.1':
     resolution: {integrity: sha512-+KpckaAQyfbvshdDW5xQylLni1asvNSGme1JFs8I1+/H5pHEhqUKMEQD/qn3Nx5+/nycBq11qAEi8lk+LXI2dA==}
+
+  '@vue/devtools-api@6.6.3':
+    resolution: {integrity: sha512-0MiMsFma/HqA6g3KLKn+AGpL1kgKhFWszC9U29NfpWK5LE7bjeXxySWJrOJ77hBz+TBrBQ7o4QJqbPbqbs8rJw==}
 
   '@vue/language-core@1.8.27':
     resolution: {integrity: sha512-L8Kc27VdQserNaCUNiSFdDl9LWT24ly8Hpwf1ECy3aFb9m6bDhBGQYOujDm21N7EW3moKIOKEanQwe1q5BK+mA==}
@@ -7246,8 +7249,8 @@ packages:
     resolution: {integrity: sha512-uB80kBFb/tfd68bVleG9T5GGsGPjJrLAUpR5PZIrhBnIaRTQRjqdJSsIKkOP6OAIFbj7GOrcudc5pNjZ+geV2g==}
     engines: {node: '>=6'}
 
-  pinia@2.1.7:
-    resolution: {integrity: sha512-+C2AHFtcFqjPih0zpYuvof37SFxMQ7OEG2zV9jRI12i9BOy3YQVAHwdKtyyc8pDcDyIc33WCIsZaCFWU7WWxGQ==}
+  pinia@2.2.2:
+    resolution: {integrity: sha512-ja2XqFWZC36mupU4z1ZzxeTApV7DOw44cV4dhQ9sGwun+N89v/XP7+j7q6TanS1u1tdbK4r+1BUx7heMaIdagA==}
     peerDependencies:
       '@vue/composition-api': ^1.4.0
       typescript: '>=4.4.4'
@@ -9430,17 +9433,6 @@ packages:
       '@vue/composition-api':
         optional: true
 
-  vue-demi@0.14.8:
-    resolution: {integrity: sha512-Uuqnk9YE9SsWeReYqK2alDI5YzciATE0r2SkA6iMAtuXvNTMNACJLJEXNXaEy94ECuBe4Sk6RzRU80kjdbIo1Q==}
-    engines: {node: '>=12'}
-    hasBin: true
-    peerDependencies:
-      '@vue/composition-api': ^1.0.0-rc.1
-      vue: ^3.0.0-0 || ^2.6.0
-    peerDependenciesMeta:
-      '@vue/composition-api':
-        optional: true
-
   vue-docgen-api@4.75.1:
     resolution: {integrity: sha512-MECZ3uExz+ssmhD/2XrFoQQs93y17IVO1KDYTp8nr6i9GNrk67AAto6QAtilW1H/pTDPMkQxJ7w/25ZIqVtfAA==}
     peerDependencies:
@@ -11256,9 +11248,9 @@ snapshots:
 
   '@panzoom/panzoom@4.5.1': {}
 
-  '@pinia/testing@0.1.3(pinia@2.1.7(typescript@5.5.3)(vue@3.4.21(typescript@5.5.3)))(vue@3.4.21(typescript@5.5.3))':
+  '@pinia/testing@0.1.3(pinia@2.2.2(typescript@5.5.3)(vue@3.4.21(typescript@5.5.3)))(vue@3.4.21(typescript@5.5.3))':
     dependencies:
-      pinia: 2.1.7(typescript@5.5.3)(vue@3.4.21(typescript@5.5.3))
+      pinia: 2.2.2(typescript@5.5.3)(vue@3.4.21(typescript@5.5.3))
       vue-demi: 0.14.6(vue@3.4.21(typescript@5.5.3))
     transitivePeerDependencies:
       - '@vue/composition-api'
@@ -12077,6 +12069,8 @@ snapshots:
 
   '@vue/devtools-api@6.5.1': {}
 
+  '@vue/devtools-api@6.6.3': {}
+
   '@vue/language-core@1.8.27(typescript@5.5.3)':
     dependencies:
       '@volar/language-core': 1.11.1
@@ -12166,7 +12160,7 @@ snapshots:
 
   '@vueuse/shared@10.3.0(vue@3.4.21(typescript@5.5.3))':
     dependencies:
-      vue-demi: 0.14.8(vue@3.4.21(typescript@5.5.3))
+      vue-demi: 0.14.10(vue@3.4.21(typescript@5.5.3))
     transitivePeerDependencies:
       - '@vue/composition-api'
       - vue
@@ -16582,9 +16576,9 @@ snapshots:
 
   pify@4.0.1: {}
 
-  pinia@2.1.7(typescript@5.5.3)(vue@3.4.21(typescript@5.5.3)):
+  pinia@2.2.2(typescript@5.5.3)(vue@3.4.21(typescript@5.5.3)):
     dependencies:
-      '@vue/devtools-api': 6.5.1
+      '@vue/devtools-api': 6.6.3
       vue: 3.4.21(typescript@5.5.3)
       vue-demi: 0.14.10(vue@3.4.21(typescript@5.5.3))
     optionalDependencies:
@@ -19020,10 +19014,6 @@ snapshots:
       vue: 3.4.21(typescript@5.5.3)
 
   vue-demi@0.14.6(vue@3.4.21(typescript@5.5.3)):
-    dependencies:
-      vue: 3.4.21(typescript@5.5.3)
-
-  vue-demi@0.14.8(vue@3.4.21(typescript@5.5.3)):
     dependencies:
       vue: 3.4.21(typescript@5.5.3)
 

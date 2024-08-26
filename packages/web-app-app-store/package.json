@@ -18,7 +18,7 @@
     "design-system": "workspace:@ownclouders/design-system@*",
     "fuse.js": "6.6.2",
     "lodash-es": "4.17.21",
-    "pinia": "2.1.7",
+    "pinia": "2.2.2",
     "vue-concurrency": "5.0.1",
     "web-app-app-store": "workspace:*",
     "zod": "^3.22.4"

@@ -25,7 +25,7 @@
     "luxon": "3.2.1",
     "oidc-client-ts": "^2.4.0",
     "p-queue": "^6.6.2",
-    "pinia": "2.1.7",
+    "pinia": "2.2.2",
     "portal-vue": "3.0.0",
     "postcss-import": "16.0.0",
     "promise": "^8.1.0",
