@@ -100,7 +100,7 @@ export default defineComponent({
         case ShareTypes.remote.value:
           return {
             name: ShareTypes.remote.icon,
-            label: this.$gettext('Remote user')
+            label: this.$gettext('External user')
           }
 
         default:

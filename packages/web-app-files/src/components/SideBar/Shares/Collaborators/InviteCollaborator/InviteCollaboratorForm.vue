@@ -40,7 +40,7 @@
           <autocomplete-item class="mark-element" :item="option" />
         </template>
         <template #no-options>
-          <span v-text="$gettext('No users or groups found.')" />
+          <span v-text="noOptionsLabel" />
         </template>
         <template #selected-option-container="{ option, deselect }">
           <recipient-container :key="option.id" :recipient="option" :deselect="deselect" />
@@ -342,7 +342,7 @@ export default defineComponent({
 
       const users = (userData || []).map((u) => ({
         ...u,
-        shareType: ShareTypes.user.value
+        shareType: unref(isExternalShareRoleType) ? ShareTypes.remote.value : ShareTypes.user.value
       })) as CollaboratorAutoCompleteItem[]
 
       const groups = (groupData || []).map((u) => ({
@@ -492,6 +492,13 @@ export default defineComponent({
       }
     }
 
+    const noOptionsLabel = computed(() => {
+      if (unref(isExternalShareRoleType)) {
+        return $gettext('No external users found.')
+      }
+      return $gettext('No users or groups found.')
+    })
+
     return {
       minSearchLength: capabilityRefs.sharingSearchMinLength,
       isRunningOnEos: computed(() => configStore.options.runningOnEos),
@@ -514,6 +521,7 @@ export default defineComponent({
       isExternalShareRoleType,
       selectShareRoleType,
       focusShareInput,
+      noOptionsLabel,
       DateTime,
 
       // CERN

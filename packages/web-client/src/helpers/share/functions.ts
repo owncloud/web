@@ -99,17 +99,13 @@ export function buildIncomingShareResource({
   const resourceName = driveItem.name || driveItem.remoteItem.name
   const storageId = extractStorageId(driveItem.remoteItem.id)
 
-  const shareTypes = uniq(
-    driveItem.remoteItem.permissions.map((p) =>
-      p.grantedToV2.group ? ShareTypes.group.value : ShareTypes.user.value
-    )
-  )
-
-  const sharedWith = driveItem.remoteItem.permissions.map(({ grantedToV2 }) => {
+  const shareTypes = uniq(driveItem.remoteItem.permissions.map(getShareTypeFromPermission))
+  const sharedWith = driveItem.remoteItem.permissions.map((permission) => {
+    const { grantedToV2 } = permission
     const identity = grantedToV2.group || grantedToV2.user
     return {
       ...identity,
-      shareType: grantedToV2.group ? ShareTypes.group.value : ShareTypes.user.value
+      shareType: getShareTypeFromPermission(permission)
     }
   })
 
@@ -199,20 +195,10 @@ export function buildOutgoingShareResource({
           shareType: ShareTypes.link.value
         }
       }
-      if (p.grantedToV2.group) {
-        return { ...p.grantedToV2.group, shareType: ShareTypes.group.value }
-      }
-      return { ...p.grantedToV2.user, shareType: ShareTypes.user.value }
+      const shareType = getShareTypeFromPermission(p)
+      return { ...(p.grantedToV2.user || p.grantedToV2.group), shareType }
     }),
-    shareTypes: driveItem.permissions.map((p) => {
-      if (p.link) {
-        return ShareTypes.link.value
-      }
-      if (p.grantedToV2.group) {
-        return ShareTypes.group.value
-      }
-      return ShareTypes.user.value
-    }),
+    shareTypes: driveItem.permissions.map(getShareTypeFromPermission),
     isFolder: !!driveItem.folder,
     type: !!driveItem.folder ? 'folder' : 'file',
     mimeType: driveItem.file?.mimeType || 'httpd/unix-directory',
@@ -253,7 +239,7 @@ export function buildCollaboratorShare({
     id: graphPermission.id,
     resourceId,
     indirect,
-    shareType: graphPermission.grantedToV2.group ? ShareTypes.group.value : ShareTypes.user.value,
+    shareType: getShareTypeFromPermission(graphPermission),
     role,
     sharedBy: { id: invitedBy?.id, displayName: invitedBy?.displayName },
     sharedWith: graphPermission.grantedToV2.user || graphPermission.grantedToV2.group,
@@ -291,4 +277,17 @@ export function buildLinkShare({
     webUrl: graphPermission.link.webUrl,
     preventsDownload: graphPermission.link.preventsDownload
   }
+}
+
+function getShareTypeFromPermission({ link, grantedToV2 }: Permission) {
+  if (link) {
+    return ShareTypes.link.value
+  }
+  if (grantedToV2?.group) {
+    return ShareTypes.group.value
+  }
+  if (grantedToV2?.user?.['@libre.graph.userType'] === 'Federated') {
+    return ShareTypes.remote.value
+  }
+  return ShareTypes.user.value
 }

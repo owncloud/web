@@ -39,7 +39,8 @@ const selectors = {
   collaboratorRole: '.files-collaborators-collaborator-role',
   collaboratorEdit: '.files-collaborators-collaborator-edit',
   shareInheritanceIndicators: '.oc-resource-indicators',
-  expirationDateIcon: '[data-testid="recipient-info-expiration-date"]'
+  expirationDateIcon: '[data-testid="recipient-info-expiration-date"]',
+  externalContextHelper: '.files-collaborators-collaborator-name-wrapper .oc-contextual-helper'
 }
 
 const getShareMock = ({
@@ -215,6 +216,16 @@ describe('Collaborator ListItem component', () => {
       expect(sharesStore.updateShare).not.toHaveBeenCalled()
       const messagesStore = useMessages()
       expect(messagesStore.showErrorMessage).toHaveBeenCalled()
+    })
+  })
+  describe('external user shares', () => {
+    it('correctly identifies external shares', () => {
+      const share = getShareMock({ shareType: ShareTypes.remote.value })
+      const { wrapper } = createWrapper({ share })
+      const roleDropDown = wrapper.findComponent<typeof RoleDropdown>('role-dropdown-stub')
+
+      expect(roleDropDown.props('isExternal')).toBeTruthy()
+      expect(wrapper.find(selectors.externalContextHelper).exists()).toBeTruthy()
     })
   })
 })

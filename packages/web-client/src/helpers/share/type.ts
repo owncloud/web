@@ -40,7 +40,7 @@ export abstract class ShareTypes {
   static readonly group = new ShareType('group', 1, $gettext('Group'), 'group')
   static readonly link = new ShareType('link', 3, $gettext('Link'), 'link')
   static readonly guest = new ShareType('guest', 4, $gettext('Guest'), 'global')
-  static readonly remote = new ShareType('remote', 6, $gettext('Federated'), 'earth')
+  static readonly remote = new ShareType('remote', 6, $gettext('External'), 'earth')
 
   static readonly individuals = [this.user, this.guest, this.remote]
   static readonly collectives = [this.group]
