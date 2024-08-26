@@ -131,7 +131,7 @@ describe('FileShares', () => {
   describe('current space', () => {
     it('loads space members if a space is given and the current user is member', () => {
       const user = { id: '1' }
-      const space = mock<SpaceResource>({ driveType: 'project' })
+      const space = mock<SpaceResource>({ driveType: 'project', isMember: () => true })
       const spaceMembers = [{ collaborator: { name: user.id } }, { collaborator: { name: 2 } }]
       const collaborator = getCollaborator()
       collaborator.collaborator = { ...collaborator.collaborator, name: user.id }

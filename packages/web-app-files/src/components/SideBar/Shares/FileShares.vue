@@ -144,15 +144,6 @@ export default defineComponent({
     const toggleMemberListCollapsed = () => {
       memberListCollapsed.value = !unref(memberListCollapsed)
     }
-    const currentUserIsMemberOfSpace = computed(() => {
-      const userId = store.getters.user?.id
-      if (!userId) {
-        return false
-      }
-      return store.getters['runtime/spaces/spaceMembers'].some(
-        (member) => member.collaborator?.name === userId
-      )
-    })
 
     const ancestorMetaData: Ref<AncestorMetaData> = computed(
       () => store.getters['runtime/ancestorMetaData/ancestorMetaData']
@@ -175,7 +166,6 @@ export default defineComponent({
       toggleShareListCollapsed,
       memberListCollapsed,
       toggleMemberListCollapsed,
-      currentUserIsMemberOfSpace,
       hasProjectSpaces: useCapabilityProjectSpacesEnabled(),
       hasShareJail: useCapabilityShareJailEnabled(),
       hasResharing: useCapabilityFilesSharingResharing(),
@@ -291,7 +281,7 @@ export default defineComponent({
       return (
         this.space?.driveType === 'project' &&
         this.resource.type !== 'space' &&
-        this.currentUserIsMemberOfSpace
+        this.space?.isMember(this.user)
       )
     },
 
@@ -524,7 +514,7 @@ export default defineComponent({
     // fixMe: head-breaking logic
     isShareModifiable(collaborator) {
       const isPersonalSpaceShare = !isProjectSpaceResource(this.space)
-      const isPersonalMember = this.currentUserIsMemberOfSpace
+      const isPersonalMember = this.space?.isMember(this.user)
       const isIndirectPersonalCollaborator = collaborator.indirect
       const isProjectSpaceShare = !isPersonalSpaceShare
       const isManager = this.space?.isManager(this.user)

@@ -1,0 +1,6 @@
+Bugfix: Missing space members for group memberships
+
+We've fixed a bug where group members of a space could not see other space members on regular resources within the space.
+
+https://github.com/owncloud/web/issues/11384
+https://github.com/owncloud/web/pull/11395
