@@ -59,7 +59,7 @@
     "@uppy/xhr-upload": "^3.0.1",
     "@vueuse/core": "^10.0.0",
     "@vue/shared": "3.4.23",
-    "axios": "1.7.4",
+    "axios": "1.7.5",
     "deepmerge": "^4.2.2",
     "design-system": "workspace:@ownclouders/design-system@*",
     "dompurify": "^3.0.6",

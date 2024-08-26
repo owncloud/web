@@ -9,7 +9,7 @@
   "peerDependencies": {
     "@ownclouders/web-client": "workspace:*",
     "@ownclouders/web-pkg": "workspace:*",
-    "axios": "1.7.4",
+    "axios": "1.7.5",
     "email-validator": "^2.0.4",
     "fuse.js": "6.6.2",
     "lodash-es": "4.17.21",

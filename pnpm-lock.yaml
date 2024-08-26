@@ -588,8 +588,8 @@ importers:
         specifier: workspace:*
         version: link:../web-pkg
       axios:
-        specifier: 1.7.4
-        version: 1.7.4
+        specifier: 1.7.5
+        version: 1.7.5
       deep-object-diff:
         specifier: ^1.1.9
         version: 1.1.9
@@ -640,8 +640,8 @@ importers:
         specifier: workspace:*
         version: link:../web-pkg
       axios:
-        specifier: 1.7.4
-        version: 1.7.4
+        specifier: 1.7.5
+        version: 1.7.5
       design-system:
         specifier: workspace:@ownclouders/design-system@*
         version: link:../design-system
@@ -745,8 +745,8 @@ importers:
         specifier: https://github.com/owncloud/uppy/releases/download/v3.12.13-owncloud/uppy-onedrive.tgz
         version: https://github.com/owncloud/uppy/releases/download/v3.12.13-owncloud/uppy-onedrive.tgz(@uppy/core@https://github.com/owncloud/uppy/releases/download/v3.12.13-owncloud/uppy-core.tgz)
       axios:
-        specifier: 1.7.4
-        version: 1.7.4
+        specifier: 1.7.5
+        version: 1.7.5
       design-system:
         specifier: workspace:@ownclouders/design-system@*
         version: link:../design-system
@@ -861,8 +861,8 @@ importers:
         specifier: workspace:*
         version: link:../web-pkg
       axios:
-        specifier: 1.7.4
-        version: 1.7.4
+        specifier: 1.7.5
+        version: 1.7.5
       email-validator:
         specifier: ^2.0.4
         version: 2.0.4
@@ -1002,8 +1002,8 @@ importers:
         specifier: ^2.0.1
         version: 2.0.1
       axios:
-        specifier: 1.7.4
-        version: 1.7.4
+        specifier: 1.7.5
+        version: 1.7.5
       fast-xml-parser:
         specifier: 4.3.3
         version: 4.3.3
@@ -1073,8 +1073,8 @@ importers:
         specifier: ^10.0.0
         version: 10.3.0(vue@3.4.21(typescript@5.5.3))
       axios:
-        specifier: 1.7.4
-        version: 1.7.4
+        specifier: 1.7.5
+        version: 1.7.5
       deepmerge:
         specifier: ^4.2.2
         version: 4.2.2
@@ -1207,8 +1207,8 @@ importers:
         specifier: 2.0.0
         version: 2.0.0(vue@3.4.21(typescript@5.5.3))
       axios:
-        specifier: 1.7.4
-        version: 1.7.4
+        specifier: 1.7.5
+        version: 1.7.5
       design-system:
         specifier: workspace:@ownclouders/design-system@*
         version: link:../design-system
@@ -1319,8 +1319,8 @@ importers:
         specifier: ^2.2.2
         version: 2.2.2(@casl/ability@6.3.3)(vue@3.4.21(typescript@5.5.3))
       axios:
-        specifier: 1.7.4
-        version: 1.7.4
+        specifier: 1.7.5
+        version: 1.7.5
       pinia:
         specifier: 2.1.7
         version: 2.1.7(typescript@5.5.3)(vue@3.4.21(typescript@5.5.3))
@@ -3552,8 +3552,8 @@ packages:
     resolution: {integrity: sha512-DMD0KiN46eipeziST1LPP/STfDU0sufISXmjSgvVsoU2tqxctQeASejWcfNtxYKqETM1UxQ8sp2OrSBWpHY6sw==}
     engines: {node: '>= 0.4'}
 
-  axios@1.7.4:
-    resolution: {integrity: sha512-DukmaFRnY6AzAALSH4J2M3k6PkaC+MfaAGdEERRWcC9q3/TWQwLpHR8ZRLKTdQ3aBDL64EdluRDjJqKw+BPZEw==}
+  axios@1.7.5:
+    resolution: {integrity: sha512-fZu86yCo+svH3uqJ/yTdQ0QHpQu5oL+/QE+QPSv6BZSkDAoky9vytxp7u5qk83OJFS3kEBcesWni9WTZAv3tSw==}
 
   babel-core@7.0.0-bridge.0:
     resolution: {integrity: sha512-poPX9mZH/5CSanm50Q+1toVci6pv5KSRv/5TWCwtzQS5XEwn40BcCrgIeMFWP9CKKIniKXNxoIOnOq4VVlGXhg==}
@@ -12482,7 +12482,7 @@ snapshots:
 
   available-typed-arrays@1.0.5: {}
 
-  axios@1.7.4:
+  axios@1.7.5:
     dependencies:
       follow-redirects: 1.15.6(debug@4.3.4(supports-color@6.1.0))
       form-data: 4.0.0
