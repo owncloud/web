@@ -563,7 +563,7 @@ importers:
         version: 4.6.2(vite@5.2.8(@types/node@18.11.9)(sass@1.69.7)(terser@5.26.0))(vue@3.4.21(typescript@5.5.3))
       rollup-plugin-serve:
         specifier: ^2.0.2
-        version: 2.0.2
+        version: 2.0.3
       sass:
         specifier: 1.69.7
         version: 1.69.7
@@ -8174,8 +8174,8 @@ packages:
     peerDependencies:
       rollup: '>=2.0.0'
 
-  rollup-plugin-serve@2.0.2:
-    resolution: {integrity: sha512-ALqyTbPhlf7FZ5RzlbDvMYvbKuCHWginJkTo6dMsbgji/a78IbsXox+pC83HENdkTRz8OXrTj+aShp3+3ratpg==}
+  rollup-plugin-serve@2.0.3:
+    resolution: {integrity: sha512-gQKmfQng17+jOsX5tmDanvJkm0f9XLqWVvXsD7NGd1SlneT+U1j/HjslDUXQz6cqwLnVDRc6xF2lj6rre+eeeQ==}
 
   rollup-plugin-visualizer@5.9.0:
     resolution: {integrity: sha512-bbDOv47+Bw4C/cgs0czZqfm8L82xOZssk4ayZjG40y9zbXclNk7YikrZTDao6p7+HDiGxrN0b65SgZiVm9k1Cg==}
@@ -17703,7 +17703,7 @@ snapshots:
     dependencies:
       rollup: 4.14.0
 
-  rollup-plugin-serve@2.0.2:
+  rollup-plugin-serve@2.0.3:
     dependencies:
       mime: 3.0.0
       opener: 1.5.2
