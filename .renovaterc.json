@@ -1,6 +1,6 @@
 {
   "$schema": "https://docs.renovatebot.com/renovate-schema.json",
   "extends": ["github>owncloud-ops/renovate-presets:docker"],
-  "prConcurrentLimit": 5,
+  "prConcurrentLimit": 15,
   "ignoreDeps": ["@adobe/leonardo-contrast-colors"]
 }
