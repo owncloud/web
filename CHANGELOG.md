@@ -10,6 +10,7 @@ Summary
 
 * Enhancement - Replace custom datepicker with native html element: [#11377](https://github.com/owncloud/web/pull/11377)
 * Enhancement - Display disabled role permissions: [#11387](https://github.com/owncloud/web/pull/11387)
+* Enhancement - Mark external shares: [#11394](https://github.com/owncloud/web/pull/11394)
 
 Details
 -------
@@ -29,6 +30,14 @@ Details
    the permissions of a role that has been disabled.
 
    https://github.com/owncloud/web/pull/11387
+
+* Enhancement - Mark external shares: [#11394](https://github.com/owncloud/web/pull/11394)
+
+   External shares are now being marked in the right sidebar so they can be
+   distinguished from regular shares.
+
+   https://github.com/owncloud/web/issues/11361
+   https://github.com/owncloud/web/pull/11394
 
 Changelog for ownCloud Web [10.1.0] (2024-08-16)
 =======================================
