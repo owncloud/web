@@ -3,7 +3,7 @@
   "private": true,
   "main": "src/index.ts",
   "peerDependencies": {
-    "@casl/ability": "^6.3.3",
+    "@casl/ability": "6.7.1",
     "@casl/vue": "^2.2.2",
     "axios": "1.7.5",
     "pinia": "2.2.2",

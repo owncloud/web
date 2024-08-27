@@ -86,7 +86,7 @@
     "vite-plugin-dts": "3.6.0"
   },
   "peerDependencies": {
-    "@casl/ability": "^6.3.3",
+    "@casl/ability": "6.7.1",
     "axios": "1.7.5",
     "fast-xml-parser": "4.4.1",
     "lodash-es": "^4.17.21",
