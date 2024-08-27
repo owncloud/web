@@ -80,12 +80,12 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, PropType, ComponentPublicInstance, ref, watch, computed } from 'vue'
+import { defineComponent, PropType, ref, watch, computed } from 'vue'
 import OcButton from '../OcButton/OcButton.vue'
 import OcIcon from '../OcIcon/OcIcon.vue'
 import OcTextInput from '../OcTextInput/OcTextInput.vue'
 import { FocusTrap } from 'focus-trap-vue'
-import { FocusTargetOrFalse, FocusTargetValueOrFalse, FocusTrapTabbableOptions } from 'focus-trap'
+import { FocusTargetOrFalse, FocusTrapTabbableOptions } from 'focus-trap'
 
 /**
  * Modals are generally used to force the user to focus on confirming or completing a single action.
@@ -304,6 +304,8 @@ export default defineComponent({
   setup(props) {
     const showSpinner = ref(false)
     const buttonConfirmAppearance = ref('filled')
+    const ocModal = ref<HTMLElement>()
+    const ocModalInput = ref<typeof OcTextInput>()
 
     const tabbableOptions = computed((): FocusTrapTabbableOptions => {
       // Enable shadow DOM support for e.g. emoji-picker
@@ -341,7 +343,9 @@ export default defineComponent({
     return {
       showSpinner,
       buttonConfirmAppearance,
-      tabbableOptions
+      tabbableOptions,
+      ocModal,
+      ocModalInput
     }
   },
   data() {
@@ -354,12 +358,8 @@ export default defineComponent({
       if (this.focusTrapInitial || this.focusTrapInitial === false) {
         return this.focusTrapInitial as FocusTargetOrFalse
       }
-      return () => {
-        // FIXME: according to the types it's incorrect to pass this.$refs.ocModalInput
-        // but passing this.$refs.ocModalInput?.$el does not work …
-        return ((this.$refs.ocModalInput as ComponentPublicInstance as unknown as HTMLElement) ||
-          (this.$refs.ocModal as HTMLElement)) as FocusTargetValueOrFalse
-      }
+
+      return () => this.ocModalInput?.$el || this.ocModal
     },
     classes() {
       return ['oc-modal', `oc-modal-${this.variation}`, this.elementClass]
