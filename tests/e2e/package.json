@@ -1,6 +1,6 @@
 {
   "dependencies": {
-    "luxon": "3.2.1"
+    "luxon": "3.5.0"
   },
   "devDependencies": {
     "@ai-zen/node-fetch-event-source": "^2.1.4",
