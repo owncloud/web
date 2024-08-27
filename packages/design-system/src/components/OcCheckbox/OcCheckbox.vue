@@ -8,9 +8,10 @@
       :class="classes"
       :value="option"
       :disabled="disabled"
+      :aria-label="labelHidden ? label : null"
       @keydown.enter="keydownEnter"
     />
-    <label :for="id" :class="labelClasses" v-text="label" />
+    <label v-if="!labelHidden" :for="id" :class="labelClasses" v-text="label" />
   </span>
 </template>
 
@@ -19,6 +20,7 @@ import { defineComponent, PropType } from 'vue'
 import { isEqual } from 'lodash-es'
 import { getSizeClass } from '../../utils/sizeClasses'
 import uniqueId from '../../utils/uniqueId'
+
 /**
  * A checkbox input element. The checkbox is either checked or unchecked.
  */
@@ -74,6 +76,13 @@ export default defineComponent({
       type: String,
       required: true,
       default: null
+    },
+    /**
+     * Hide the label of the Checkbox
+     */
+    labelHidden: {
+      type: Boolean,
+      default: false
     },
     /**
      * Is the label of the Checkbox visually hidden?
@@ -238,7 +247,7 @@ label > .oc-checkbox + span {
       <oc-checkbox :value="true" label="Medium checkbox (default)"/>
     </div>
     <div>
-      <oc-checkbox size="large" label="Large checkbox" />
+      <oc-checkbox size="large" label="Large checkbox"/>
     </div>
   </section>
 </template>

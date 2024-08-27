@@ -1,0 +1,6 @@
+Enhancement: Redesign account page
+
+We've redesigned the account page to make the overall experience more intuitive and user-friendly.
+
+https://github.com/owncloud/web/pull/11440
+https://github.com/owncloud/web/issues/11372

@@ -74,5 +74,6 @@ export type ExtensionPoint<T extends Extension> = {
   defaultExtensionId?: string
   userPreference?: {
     label: string
+    description?: string
   }
 }

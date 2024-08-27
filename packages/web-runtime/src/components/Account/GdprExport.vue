@@ -1,6 +1,5 @@
 <template>
-  <div class="oc-mb-l">
-    <p v-text="$gettext('Request a personal data export according to §20 GDPR.')" />
+  <div>
     <span v-if="loading">
       <oc-spinner />
     </span>
@@ -9,29 +8,39 @@
       class="oc-flex oc-flex-middle"
       data-testid="export-in-process"
     >
-      <oc-icon name="time" fill-type="line" size="small" class="oc-mr-s" />
-      <span v-text="$gettext('Export is being processed. This can take up to 24 hours.')" />
+      <div class="oc-flex oc-flex-middle">
+        <oc-icon name="time" fill-type="line" size="small" />
+        <span
+          class="oc-ml-xs"
+          v-text="$gettext('Export is being processed. This can take up to 24 hours.')"
+        />
+      </div>
     </span>
     <div v-else class="oc-flex">
       <oc-button
-        appearance="outline"
+        appearance="raw"
         variation="primary"
         data-testid="request-export-btn"
         class="oc-mr-s"
         @click="requestExport"
       >
-        <span v-text="$gettext('Request new export')" />
+        <div class="oc-flex oc-flex-middle">
+          <oc-icon name="question-answer" fill-type="line" size="small" />
+          <span class="oc-ml-xs" v-text="$gettext('Request new export')" />
+        </div>
       </oc-button>
       <oc-button
         v-if="exportFile"
-        appearance="outline"
+        v-oc-tooltip="$gettext('Latest export from: %{date}', { date: exportDate })"
+        appearance="raw"
         variation="primary"
         data-testid="download-export-btn"
         @click="downloadExport"
       >
-        <oc-icon name="download" fill-type="line" size="small" />
-        <span v-text="$gettext('Download latest export')" />
-        <span v-text="`(${exportDate})`" />
+        <div class="oc-flex oc-flex-middle">
+          <oc-icon name="download" fill-type="line" size="small" />
+          <span class="oc-ml-xs" v-text="$gettext('Download')" />
+        </div>
       </oc-button>
     </div>
   </div>
