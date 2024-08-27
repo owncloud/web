@@ -99,7 +99,6 @@ export function buildIncomingShareResource({
   const resourceName = driveItem.name || driveItem.remoteItem.name
   const storageId = extractStorageId(driveItem.remoteItem.id)
 
-  const shareTypes = uniq(driveItem.remoteItem.permissions.map(getShareTypeFromPermission))
   const sharedWith = driveItem.remoteItem.permissions.map((permission) => {
     const { grantedToV2 } = permission
     const identity = grantedToV2.group || grantedToV2.user
@@ -116,6 +115,12 @@ export function buildIncomingShareResource({
     }
     return acc
   }, [])
+
+  let shareTypes = uniq(driveItem.remoteItem.permissions.map(getShareTypeFromPermission))
+  const isExternal = sharedBy.some((s) => s['@libre.graph.userType'] === 'Federated')
+  if (isExternal) {
+    shareTypes = [ShareTypes.remote.value]
+  }
 
   const shareRoles = getShareResourceRoles({ driveItem, graphRoles })
   const sharePermissions = getShareResourcePermissions({ driveItem, shareRoles })
