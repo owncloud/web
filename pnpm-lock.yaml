@@ -1243,8 +1243,8 @@ importers:
         specifier: 3.0.0
         version: 3.0.0(patch_hash=bogvb64kjdufpa4744k4xkam7u)(vue@3.4.21(typescript@5.5.3))
       postcss-import:
-        specifier: 16.0.0
-        version: 16.0.0(postcss@8.4.41)
+        specifier: 16.1.0
+        version: 16.1.0(postcss@8.4.41)
       promise:
         specifier: ^8.1.0
         version: 8.1.0
@@ -7387,6 +7387,12 @@ packages:
 
   postcss-import@16.0.0:
     resolution: {integrity: sha512-e77lhVvrD1I2y7dYmBv0k9ULTdArgEYZt97T4w6sFIU5uxIHvDFQlKgUUyY7v7Barj0Yf/zm5A4OquZN7jKm5Q==}
+    engines: {node: '>=18.0.0'}
+    peerDependencies:
+      postcss: ^8.0.0
+
+  postcss-import@16.1.0:
+    resolution: {integrity: sha512-7hsAZ4xGXl4MW+OKEWCnF6T5jqBw80/EE9aXg1r2yyn1RsVEU8EtKXbijEODa+rg7iih4bKf7vlvTGYR4CnPNg==}
     engines: {node: '>=18.0.0'}
     peerDependencies:
       postcss: ^8.0.0
@@ -16724,6 +16730,13 @@ snapshots:
       postcss: 8.4.32
 
   postcss-import@16.0.0(postcss@8.4.41):
+    dependencies:
+      postcss: 8.4.41
+      postcss-value-parser: 4.2.0
+      read-cache: 1.0.0
+      resolve: 1.22.8
+
+  postcss-import@16.1.0(postcss@8.4.41):
     dependencies:
       postcss: 8.4.41
       postcss-value-parser: 4.2.0
