@@ -58,7 +58,7 @@
     "chalk": "^4.1.2",
     "compression-webpack-plugin": "^10.0.0",
     "copy-webpack-plugin": "^11.0.0",
-    "css-loader": "6.8.1",
+    "css-loader": "7.1.2",
     "deepmerge": "^4.2.2",
     "emoji-mart": "5.6.0",
     "file-loader": "^6.2.0",
