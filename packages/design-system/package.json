@@ -89,7 +89,7 @@
     "sass": "1.77.8",
     "sass-loader": "10.1.0",
     "sass-resources-loader": "^2.2.5",
-    "semver": "7.5.4",
+    "semver": "7.6.3",
     "shelljs": "^0.8.3",
     "style-dictionary": "^3.9.1",
     "style-loader": "^2.0.0",
