@@ -36,9 +36,18 @@
           class="oc-text-nowrap oc-flex oc-flex-middle oc-flex-right"
         >
           <oc-icon
+            v-if="resource.shareRoles?.length"
             v-oc-tooltip="$gettext(resource.shareRoles[0].displayName)"
             :accessible-label="$gettext(resource.shareRoles[0].description)"
             :name="resource.shareRoles[0].icon"
+            fill-type="line"
+            size="small"
+          />
+          <oc-icon
+            v-else-if="isExternalShare(resource)"
+            v-oc-tooltip="ShareTypes.remote.label"
+            :accessible-label="ShareTypes.remote.label"
+            :name="ShareTypes.remote.icon"
             fill-type="line"
             size="small"
           />
@@ -104,7 +113,7 @@ import { VisibilityObserver } from '@ownclouders/web-pkg'
 import { SortDir, useGetMatchingSpace } from '@ownclouders/web-pkg'
 import { createLocationSpaces } from '@ownclouders/web-pkg'
 import ListInfo from '../../components/FilesList/ListInfo.vue'
-import { IncomingShareResource } from '@ownclouders/web-client'
+import { IncomingShareResource, ShareTypes } from '@ownclouders/web-client'
 import { ContextActions } from '@ownclouders/web-pkg'
 import { NoContentMessage } from '@ownclouders/web-pkg'
 import { useSelectedResources } from '@ownclouders/web-pkg'
@@ -195,6 +204,10 @@ export default defineComponent({
 
     const { updateResourceField } = useResourcesStore()
 
+    const isExternalShare = (resource: IncomingShareResource) => {
+      return resource.shareTypes.includes(ShareTypes.remote.value)
+    }
+
     const resourceTargetRouteCallback = ({
       path,
       fileId,
@@ -214,7 +227,9 @@ export default defineComponent({
       resourceTargetRouteCallback,
       ...useSelectedResources(),
       getMatchingSpace,
-      updateResourceField
+      updateResourceField,
+      isExternalShare,
+      ShareTypes
     }
   },
 
