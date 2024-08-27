@@ -424,8 +424,8 @@ importers:
         specifier: ^2.2.5
         version: 2.2.5
       semver:
-        specifier: 7.5.4
-        version: 7.5.4
+        specifier: 7.6.3
+        version: 7.6.3
       shelljs:
         specifier: ^0.8.3
         version: 0.8.5
@@ -10852,7 +10852,7 @@ snapshots:
       '@cucumber/gherkin-streams': 5.0.1(@cucumber/gherkin@26.0.3)(@cucumber/message-streams@4.0.1(@cucumber/messages@26.0.0))(@cucumber/messages@21.0.1)
       '@cucumber/gherkin-utils': 8.0.2
       '@cucumber/html-formatter': 20.2.1(@cucumber/messages@21.0.1)
-      '@cucumber/message-streams': 4.0.1(@cucumber/messages@24.0.1)
+      '@cucumber/message-streams': 4.0.1(@cucumber/messages@21.0.1)
       '@cucumber/messages': 21.0.1
       '@cucumber/tag-expressions': 5.0.1
       assertion-error-formatter: 3.0.0
@@ -10890,7 +10890,7 @@ snapshots:
   '@cucumber/gherkin-streams@5.0.1(@cucumber/gherkin@26.0.3)(@cucumber/message-streams@4.0.1(@cucumber/messages@26.0.0))(@cucumber/messages@21.0.1)':
     dependencies:
       '@cucumber/gherkin': 26.0.3
-      '@cucumber/message-streams': 4.0.1(@cucumber/messages@24.0.1)
+      '@cucumber/message-streams': 4.0.1(@cucumber/messages@21.0.1)
       '@cucumber/messages': 21.0.1
       commander: 9.1.0
       source-map-support: 0.5.21
@@ -10931,13 +10931,13 @@ snapshots:
     dependencies:
       '@cucumber/messages': 22.0.0
 
+  '@cucumber/message-streams@4.0.1(@cucumber/messages@21.0.1)':
+    dependencies:
+      '@cucumber/messages': 21.0.1
+
   '@cucumber/message-streams@4.0.1(@cucumber/messages@22.0.0)':
     dependencies:
       '@cucumber/messages': 22.0.0
-
-  '@cucumber/message-streams@4.0.1(@cucumber/messages@24.0.1)':
-    dependencies:
-      '@cucumber/messages': 24.0.1
 
   '@cucumber/messages@19.1.4':
     dependencies:
@@ -13442,7 +13442,7 @@ snapshots:
       postcss-modules-scope: 3.1.0(postcss@8.4.32)
       postcss-modules-values: 4.0.0(postcss@8.4.32)
       postcss-value-parser: 4.2.0
-      semver: 7.5.4
+      semver: 7.6.3
       webpack: 5.89.0
 
   css-select@4.3.0:
@@ -16121,7 +16121,7 @@ snapshots:
     dependencies:
       growly: 1.3.0
       is-wsl: 2.2.0
-      semver: 7.5.4
+      semver: 7.6.3
       shellwords: 0.1.1
       uuid: 8.3.2
       which: 2.0.2
@@ -16729,7 +16729,7 @@ snapshots:
       cosmiconfig: 8.3.6(typescript@5.5.3)
       jiti: 1.21.0
       postcss: 8.4.41
-      semver: 7.5.4
+      semver: 7.6.3
       webpack: 5.89.0
     transitivePeerDependencies:
       - typescript
@@ -17728,7 +17728,7 @@ snapshots:
       loader-utils: 2.0.4
       neo-async: 2.6.2
       schema-utils: 3.3.0
-      semver: 7.5.4
+      semver: 7.6.3
       webpack: 5.89.0
     optionalDependencies:
       sass: 1.77.8
@@ -18600,7 +18600,7 @@ snapshots:
       chalk: 4.1.2
       enhanced-resolve: 5.15.0
       micromatch: 4.0.8
-      semver: 7.5.4
+      semver: 7.6.3
       source-map: 0.7.4
       typescript: 5.5.3
       webpack: 5.89.0
