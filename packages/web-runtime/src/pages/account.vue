@@ -102,8 +102,9 @@
           <dd data-testid="language" class="oc-width-1-3@l oc-width-1-2@m oc-width-1-1@s">
             <oc-select
               v-if="languageOptions"
-              :placeholder="$gettext('Please choose...')"
               :model-value="selectedLanguageValue"
+              :label="$gettext('Language')"
+              :label-hidden="true"
               :clearable="false"
               :searchable="true"
               :options="languageOptions"

@@ -1,6 +1,6 @@
 <template>
   <div>
-    <label v-if="label" :for="id" class="oc-label" v-text="label" />
+    <label v-if="!labelHidden" :aria-hidden="true" :for="id" class="oc-label" v-text="label" />
     <oc-contextual-helper
       v-if="contextualHelper?.isEnabled"
       v-bind="contextualHelper?.data"
@@ -171,12 +171,20 @@ export default defineComponent({
       default: false
     },
     /**
-     * Label of the select component
+     * Label of the select component, required because of accessibility reasons
      * ATTENTION: this shadows the vue-select prop `label`. If you need access to that use `optionLabel`.
      */
     label: {
       type: String,
-      default: null
+      required: true
+    },
+    /**
+     * Hide the label visually, but keep it for accessibility
+     */
+    labelHidden: {
+      type: Boolean,
+      required: false,
+      default: false
     },
     /**
      * oc-contextual-helper can be injected here
@@ -309,7 +317,10 @@ export default defineComponent({
       const comboBoxElement = (unref(select) as ComponentPublicInstance).$el.querySelector(
         'div:first-child'
       )
-      comboBoxElement?.setAttribute('aria-label', $gettext('Search for option'))
+      comboBoxElement?.setAttribute(
+        'aria-label',
+        `${props.label} - ${$gettext('Search for option')}`
+      )
     }
 
     const userInput = (event: Event) => {
@@ -320,10 +331,6 @@ export default defineComponent({
        */
       emit('search:input', (event.target as HTMLInputElement).value)
     }
-
-    onMounted(() => {
-      setComboBoxAriaLabel()
-    })
 
     const dropdownEnabled = ref(false)
     const setDropdownEnabled = (enabled: boolean) => {
@@ -437,6 +444,8 @@ export default defineComponent({
     })
 
     onMounted(() => {
+      setComboBoxAriaLabel()
+
       if (props.positionFixed) {
         window.addEventListener('resize', setDropdownPosition)
       }
@@ -692,7 +701,7 @@ For detailed documentation (props, slots, events, etc.), please visit https://vu
 ```js
 <template>
   <div class="oc-docs-width-medium">
-    <oc-select label="Custom label" v-model="selected" :options="['Bannana', 'Orange', 'Pear']"/>
+    <oc-select label="Fruit" v-model="selected" :options="['Bannana', 'Orange', 'Pear']"/>
   </div>
 </template>
 <script>
@@ -711,7 +720,7 @@ prevent clearing the selected value by hitting `delete`.
 ```js
 <template>
   <div class="oc-docs-width-medium">
-    <oc-select v-model="selected" :options="['Apple', 'Bannana', 'Orange', 'Pear']" :clearable="false"/>
+    <oc-select label="Fruit" v-model="selected" :options="['Apple', 'Bannana', 'Orange', 'Pear']" :clearable="false"/>
   </div>
 </template>
 <script>
@@ -727,7 +736,7 @@ prevent clearing the selected value by hitting `delete`.
 ```js
 <template>
   <div class="oc-docs-width-medium">
-    <oc-select v-model="selected" :multiple="true" :options="options"/>
+    <oc-select label="Fruits" v-model="selected" :multiple="true" :options="options"/>
   </div>
 </template>
 <script>
@@ -752,7 +761,7 @@ To prevent user from filtering options by typing a serach query into the `oc-sel
 ```js
 <template>
   <div class="oc-docs-width-medium">
-    <oc-select v-model="selected" :options="['Apple', 'Bannana', 'Orange', 'Pear']" :searchable="false"/>
+    <oc-select :label="Fruit" v-model="selected" :options="['Apple', 'Bannana', 'Orange', 'Pear']" :searchable="false"/>
   </div>
 </template>
 <script>
@@ -772,7 +781,7 @@ label.
 <template>
   <div class="oc-docs-width-medium">
     <oc-select
-      label="Custom Label"
+      label="Fruit"
       option-label="title"
       :options="options"
       v-model="selected"
@@ -816,7 +825,7 @@ It is important to specify the `option-label` prop on the `oc-select` to make fi
 <template>
   <div class="oc-docs-width-medium">
     <oc-select
-      label="Custom Label"
+      label="Fruit"
       :options="options"
       v-model="selected"
       class="oc-mb-m"

@@ -52,6 +52,8 @@
         <oc-select
           v-model="currentChapter"
           class="epub-reader-controls-chapters-select oc-width-1-1 oc-px-s oc-hidden@l"
+          :label="$gettext('Chapter')"
+          :label-hidden="true"
           :options="chapters"
           :searchable="false"
           @update:model-value="showChapter"

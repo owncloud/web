@@ -2,6 +2,8 @@
   <oc-select
     v-model="model"
     class="extension-preference"
+    :label="extensionPoint.userPreference.label"
+    :label-hidden="true"
     :multiple="extensionPoint.multiple"
     :options="extensions"
     :filter="filterOptions"

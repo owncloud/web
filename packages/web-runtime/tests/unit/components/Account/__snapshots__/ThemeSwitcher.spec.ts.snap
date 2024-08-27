@@ -2,12 +2,12 @@
 
 exports[`ThemeSwitcher component > restores > dark theme if dark theme is saved in localstorage 1`] = `
 "<div>
-  <oc-select-stub clearable="false" option-label="name" model-value="[object Object]" options="[object Object],[object Object],[object Object]"></oc-select-stub>
+  <oc-select-stub label="Theme" label-hidden="true" clearable="false" option-label="name" model-value="[object Object]" options="[object Object],[object Object],[object Object]"></oc-select-stub>
 </div>"
 `;
 
 exports[`ThemeSwitcher component > restores > light theme if light theme is saved in localstorage 1`] = `
 "<div>
-  <oc-select-stub model-value="[object Object]" clearable="false" option-label="name" options="[object Object],[object Object],[object Object]"></oc-select-stub>
+  <oc-select-stub model-value="[object Object]" label="Theme" label-hidden="true" clearable="false" option-label="name" options="[object Object],[object Object],[object Object]"></oc-select-stub>
 </div>"
 `;

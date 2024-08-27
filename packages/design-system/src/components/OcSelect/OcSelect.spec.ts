@@ -1,4 +1,4 @@
-import { defaultPlugins, mount } from 'web-test-helpers'
+import { defaultPlugins, mount, PartialComponentProps } from 'web-test-helpers'
 import OcSelect from './OcSelect.vue'
 
 const selectors = {
@@ -87,9 +87,16 @@ describe('OcSelect', () => {
   })
 })
 
-function getWrapper(props = {}) {
+function getWrapper(
+  props: Partial<
+    PartialComponentProps<typeof OcSelect> & { options: unknown[]; modelValue: unknown }
+  > = {}
+) {
   return mount(OcSelect, {
-    props,
+    props: {
+      label: 'Select label',
+      ...props
+    },
     global: {
       plugins: [...defaultPlugins()]
     }

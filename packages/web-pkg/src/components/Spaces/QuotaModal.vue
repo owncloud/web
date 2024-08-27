@@ -1,7 +1,6 @@
 <template>
   <quota-select
     id="quota-select-batch-action-form"
-    :label="$gettext('Quota')"
     :total-quota="selectedOption"
     :max-quota="maxQuota"
     :position-fixed="true"

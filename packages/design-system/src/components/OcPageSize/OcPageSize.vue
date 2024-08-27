@@ -11,6 +11,8 @@
       class="oc-page-size-select"
       data-testid="oc-page-size-select"
       :model-value="selected"
+      :label="label"
+      :label-hidden="true"
       :options="options"
       :clearable="false"
       :searchable="false"
