@@ -76,7 +76,7 @@
     "autoprefixer": "10.4.16",
     "browserslist-to-esbuild": "^2.0.0",
     "browserslist-useragent-regexp": "^4.0.0",
-    "commander": "11.1.0",
+    "commander": "12.1.0",
     "core-js": "3.30.2",
     "cross-fetch": "4.0.0",
     "cucumber-html-reporter": "7.1.1",
