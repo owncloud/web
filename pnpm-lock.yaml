@@ -1193,7 +1193,7 @@ importers:
         version: link:../web-pkg
       '@popperjs/core':
         specifier: ^2.11.5
-        version: 2.11.5
+        version: 2.11.8
       '@sentry/vue':
         specifier: 7.119.0
         version: 7.119.0(vue@3.4.21(typescript@5.5.3))
@@ -2469,9 +2469,6 @@ packages:
 
   '@polka/url@1.0.0-next.24':
     resolution: {integrity: sha512-2LuNTFBIO0m7kKIQvvPHN6UE63VjpmL9rnEEaOOaiSPbZK+zUOYIzBAWcED+3XYzhYsd/0mD57VdxAEqqV52CQ==}
-
-  '@popperjs/core@2.11.5':
-    resolution: {integrity: sha512-9X2obfABZuDVLCgPK9aX0a/x4jaOEweTTWE2+9sr0Qqqevj2Uv5XorvusThmc9XGYpS9yI+fhh8RTafBtGposw==}
 
   '@popperjs/core@2.11.8':
     resolution: {integrity: sha512-P1st0aksCrn9sGZhp8GMYwBnQsbvAWsZAX44oXNNvLHGqAOcoVxmjZiohstwQ7SqKnbR47akdNi+uleWD8+g6A==}
@@ -11271,8 +11268,6 @@ snapshots:
       playwright: 1.45.0
 
   '@polka/url@1.0.0-next.24': {}
-
-  '@popperjs/core@2.11.5': {}
 
   '@popperjs/core@2.11.8': {}
 
