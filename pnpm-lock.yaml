@@ -1014,8 +1014,8 @@ importers:
         specifier: 3.5.0
         version: 3.5.0
       webdav:
-        specifier: 5.6.0
-        version: 5.6.0
+        specifier: 5.7.1
+        version: 5.7.1
       xml-js:
         specifier: ^1.6.11
         version: 1.6.11
@@ -1285,8 +1285,8 @@ importers:
         specifier: workspace:*
         version: 'link:'
       webdav:
-        specifier: 5.6.0
-        version: 5.6.0
+        specifier: 5.7.1
+        version: 5.7.1
       webfontloader:
         specifier: ^1.6.28
         version: 1.6.28
@@ -4669,6 +4669,10 @@ packages:
     resolution: {integrity: sha512-V0hjH4dGPh9Ao5p0MoRY6BVqtwCjhz6vI5LT8AJ55H+4g9/4vbHx1I54fS0XuclLhDHArPQCiMjDxjaL8fPxhw==}
     engines: {node: '>=0.12'}
 
+  entities@5.0.0:
+    resolution: {integrity: sha512-BeJFvFRJddxobhvEdm5GqHzRV/X+ACeuw0/BuuxsCh1EUZcAIz8+kYmBp/LrQuloy6K1f3a0M7+IhmZ7QnkISA==}
+    engines: {node: '>=0.12'}
+
   env-paths@2.2.1:
     resolution: {integrity: sha512-+h1lkLKhZMTYjog1VEpJNG7NZJWcuc2DDk/qsqSTRRCOXiLjeQ1d1/udrUGhqMxUgAlwKNZ0cf2uqan5GLuS2A==}
     engines: {node: '>=6'}
@@ -6184,8 +6188,8 @@ packages:
   launch-editor@2.6.1:
     resolution: {integrity: sha512-eB/uXmFVpY4zezmGp5XtU21kwo7GBbKB+EQ+UZeWtGb9yAM5xt/Evk+lYH3eRNAtId+ej4u7TYPFZ07w4s7rRw==}
 
-  layerr@2.0.1:
-    resolution: {integrity: sha512-z0730CwG/JO24evdORnyDkwG1Q7b7mF2Tp1qRQ0YvrMMARbt1DFG694SOv439Gm7hYKolyZyaB49YIrYIfZBdg==}
+  layerr@3.0.0:
+    resolution: {integrity: sha512-tv754Ki2dXpPVApOrjTyRo4/QegVb9eVFq4mjqp4+NM5NaX7syQvN5BBNfV/ZpAHCEHV24XdUVrBAoka4jt3pA==}
 
   leven@2.1.0:
     resolution: {integrity: sha512-nvVPLpIHUxCUoRLrFqTgSxXJ614d8AgQoWl7zPe/2VadE8+1dpU3LBhowRuBAcuwruWtOdD8oYC9jDNJjXDPyA==}
@@ -6561,10 +6565,6 @@ packages:
   minimatch@3.1.2:
     resolution: {integrity: sha512-J7p63hRiAjw1NDEww1W7i37+ByIrOWO5XQQAzZ3VOcL0PNybwpfmV/N05zFAzwQ9USyEcX6t3UO+K5aqBQOIHw==}
 
-  minimatch@7.4.6:
-    resolution: {integrity: sha512-sBz8G/YjVniEz6lKPNpKxXwazJe4c19fEfV2GDMX6AjFz+MX9uDWIZW8XreVhkFW3fkIdTv/gxWr/Kks5FFAVw==}
-    engines: {node: '>=10'}
-
   minimatch@9.0.1:
     resolution: {integrity: sha512-0jWhJpD/MdhPXwPuiRkCbfYfSKp2qnn2eOc279qI7f+osl/l+prKSrvhg157zSYvx/1nmgn2NqdT6k2Z7zSH9w==}
     engines: {node: '>=16 || 14 >=14.17'}
@@ -6575,6 +6575,10 @@ packages:
 
   minimatch@9.0.4:
     resolution: {integrity: sha512-KqWh+VchfxcMNRAJjj2tnsSJdNbHsVgnkBhTNrW7AjVo6OvLtxw8zfT9oLw1JSohlFzJ8jCoTgaoXvJ+kHt6fw==}
+    engines: {node: '>=16 || 14 >=14.17'}
+
+  minimatch@9.0.5:
+    resolution: {integrity: sha512-G6T0ZX48xgozx7587koeX9Ys2NYy6Gmv//P89sEte9V9whIapMNF4idKxnW2QtCcLiTWlb/wfCabAtAFWhhBow==}
     engines: {node: '>=16 || 14 >=14.17'}
 
   minimist@1.2.8:
@@ -9600,8 +9604,8 @@ packages:
     resolution: {integrity: sha512-e0MO3wdXWKrLbL0DgGnUV7WHVuw9OUvL4hjgnPkIeEvESk74gAITi5G606JtZPp39cd8HA9VQzCIvA49LpPN5Q==}
     engines: {node: '>= 8'}
 
-  webdav@5.6.0:
-    resolution: {integrity: sha512-1zpC9T+nZAEz3hHrEdis3gybiwoR5LillHmFiylhYWAsGU0bGlWlRZtK5NJ3bTr2wCoKABrRGGqLk24+UxF4Gg==}
+  webdav@5.7.1:
+    resolution: {integrity: sha512-JVPn3nLxXJfHSRvennHsOrDYjFLkilZ1Qlw8Ff6hpqp6AvkgF7a//aOh5wA4rMp+sLZ1Km0V+iv0LyO1FIwtXg==}
     engines: {node: '>=16'}
 
   webfontloader@1.6.28:
@@ -10855,7 +10859,7 @@ snapshots:
       '@cucumber/ci-environment': 9.1.0
       '@cucumber/cucumber-expressions': 16.1.1
       '@cucumber/gherkin': 26.0.3
-      '@cucumber/gherkin-streams': 5.0.1(@cucumber/gherkin@26.0.3)(@cucumber/message-streams@4.0.1(@cucumber/messages@24.0.1))(@cucumber/messages@21.0.1)
+      '@cucumber/gherkin-streams': 5.0.1(@cucumber/gherkin@26.0.3)(@cucumber/message-streams@4.0.1(@cucumber/messages@21.0.1))(@cucumber/messages@21.0.1)
       '@cucumber/gherkin-utils': 8.0.2
       '@cucumber/html-formatter': 20.2.1(@cucumber/messages@21.0.1)
       '@cucumber/message-streams': 4.0.1(@cucumber/messages@21.0.1)
@@ -10893,7 +10897,7 @@ snapshots:
       yaml: 2.3.4
       yup: 0.32.11
 
-  '@cucumber/gherkin-streams@5.0.1(@cucumber/gherkin@26.0.3)(@cucumber/message-streams@4.0.1(@cucumber/messages@24.0.1))(@cucumber/messages@21.0.1)':
+  '@cucumber/gherkin-streams@5.0.1(@cucumber/gherkin@26.0.3)(@cucumber/message-streams@4.0.1(@cucumber/messages@21.0.1))(@cucumber/messages@21.0.1)':
     dependencies:
       '@cucumber/gherkin': 26.0.3
       '@cucumber/message-streams': 4.0.1(@cucumber/messages@21.0.1)
@@ -13893,6 +13897,8 @@ snapshots:
 
   entities@4.5.0: {}
 
+  entities@5.0.0: {}
+
   env-paths@2.2.1: {}
 
   epubjs@0.3.93:
@@ -15572,7 +15578,7 @@ snapshots:
       picocolors: 1.0.0
       shell-quote: 1.8.1
 
-  layerr@2.0.1: {}
+  layerr@3.0.0: {}
 
   leven@2.1.0: {}
 
@@ -15945,10 +15951,6 @@ snapshots:
     dependencies:
       brace-expansion: 1.1.11
 
-  minimatch@7.4.6:
-    dependencies:
-      brace-expansion: 2.0.1
-
   minimatch@9.0.1:
     dependencies:
       brace-expansion: 2.0.1
@@ -15958,6 +15960,10 @@ snapshots:
       brace-expansion: 2.0.1
 
   minimatch@9.0.4:
+    dependencies:
+      brace-expansion: 2.0.1
+
+  minimatch@9.0.5:
     dependencies:
       brace-expansion: 2.0.1
 
@@ -19296,17 +19302,17 @@ snapshots:
 
   web-streams-polyfill@3.2.1: {}
 
-  webdav@5.6.0:
+  webdav@5.7.1:
     dependencies:
       '@buttercup/fetch': 0.2.1
       base-64: 1.0.0
       byte-length: 1.0.2
-      entities: 4.5.0
+      entities: 5.0.0
       fast-xml-parser: 4.4.1
       hot-patcher: 2.0.1
-      layerr: 2.0.1
+      layerr: 3.0.0
       md5: 2.3.0
-      minimatch: 7.4.6
+      minimatch: 9.0.5
       nested-property: 4.0.0
       node-fetch: 3.3.2
       path-posix: 1.0.0
