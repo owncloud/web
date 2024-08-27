@@ -56,7 +56,7 @@
     "babel-loader": "^9.0.0",
     "babel-plugin-require-context-hook": "^1.0.0",
     "chalk": "^4.1.2",
-    "compression-webpack-plugin": "^10.0.0",
+    "compression-webpack-plugin": "^11.0.0",
     "copy-webpack-plugin": "^11.0.0",
     "css-loader": "6.8.1",
     "deepmerge": "^4.2.2",
