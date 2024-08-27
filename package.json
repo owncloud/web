@@ -102,7 +102,7 @@
     "sass": "1.77.8",
     "ts-node": "10.9.2",
     "tslib": "2.5.0",
-    "typescript": "5.5.3",
+    "typescript": "5.5.4",
     "url-search-params-polyfill": "8.1.1",
     "vite": "5.2.8",
     "vite-plugin-environment": "^1.1.3",
