@@ -834,16 +834,16 @@ importers:
         version: link:../web-pkg
       '@uppy/dashboard':
         specifier: https://github.com/owncloud/uppy/releases/download/v3.12.13-owncloud/uppy-dashboard.tgz
-        version: https://github.com/owncloud/uppy/releases/download/v3.12.13-owncloud/uppy-dashboard.tgz(@uppy/core@https://github.com/owncloud/uppy/releases/download/v3.12.13-owncloud/uppy-core.tgz)
+        version: https://github.com/owncloud/uppy/releases/download/v3.12.13-owncloud/uppy-dashboard.tgz
       '@uppy/google-drive':
         specifier: https://github.com/owncloud/uppy/releases/download/v3.12.13-owncloud/uppy-google-drive.tgz
-        version: https://github.com/owncloud/uppy/releases/download/v3.12.13-owncloud/uppy-google-drive.tgz(@uppy/core@https://github.com/owncloud/uppy/releases/download/v3.12.13-owncloud/uppy-core.tgz)
+        version: https://github.com/owncloud/uppy/releases/download/v3.12.13-owncloud/uppy-google-drive.tgz
       '@uppy/onedrive':
         specifier: https://github.com/owncloud/uppy/releases/download/v3.12.13-owncloud/uppy-onedrive.tgz
-        version: https://github.com/owncloud/uppy/releases/download/v3.12.13-owncloud/uppy-onedrive.tgz(@uppy/core@https://github.com/owncloud/uppy/releases/download/v3.12.13-owncloud/uppy-core.tgz)
+        version: https://github.com/owncloud/uppy/releases/download/v3.12.13-owncloud/uppy-onedrive.tgz
       '@uppy/webdav':
         specifier: https://github.com/owncloud/uppy/releases/download/v3.12.13-owncloud/uppy-webdav.tgz
-        version: https://github.com/owncloud/uppy/releases/download/v3.12.13-owncloud/uppy-webdav.tgz(@uppy/core@https://github.com/owncloud/uppy/releases/download/v3.12.13-owncloud/uppy-core.tgz)
+        version: https://github.com/owncloud/uppy/releases/download/v3.12.13-owncloud/uppy-webdav.tgz
       pinia:
         specifier: ^2.1.7
         version: 2.2.2(typescript@5.5.3)(vue@3.4.21(typescript@5.5.3))
@@ -1220,7 +1220,7 @@ importers:
         version: 7.5.4
       focus-trap-vue:
         specifier: ^4.0.1
-        version: 4.0.1(focus-trap@7.5.4)(vue@3.4.21(typescript@5.5.3))
+        version: 4.0.3(focus-trap@7.5.4)(vue@3.4.21(typescript@5.5.3))
       fuse.js:
         specifier: 6.6.2
         version: 6.6.2
@@ -5123,12 +5123,6 @@ packages:
 
   flush-write-stream@1.1.1:
     resolution: {integrity: sha512-3Z4XhFZ3992uIq0XOqb9AreonueSYphE6oYbpt5+3u06JWklbsPkNv3ZKkP9Bz/r+1MWCaMoSQ28P85+1Yc77w==}
-
-  focus-trap-vue@4.0.1:
-    resolution: {integrity: sha512-2iqOeoSvgq7Um6aL+255a/wXPskj6waLq2oKCa4gOnMORPo15JX7wN6J5bl1SMhMlTlkHXGSrQ9uJPJLPZDl5w==}
-    peerDependencies:
-      focus-trap: ^7.0.0
-      vue: ^3.0.0
 
   focus-trap-vue@4.0.3:
     resolution: {integrity: sha512-cIX5rybkCAlNZ4IHYJ3nCFIsipDDljJHHjtTO2IgYWkVYg7X9ipUVdab3HzYp88kmHgMwjcB71LYnXRRsF6ZqQ==}
@@ -10849,7 +10843,7 @@ snapshots:
       '@cucumber/ci-environment': 9.1.0
       '@cucumber/cucumber-expressions': 16.1.1
       '@cucumber/gherkin': 26.0.3
-      '@cucumber/gherkin-streams': 5.0.1(@cucumber/gherkin@26.0.3)(@cucumber/message-streams@4.0.1(@cucumber/messages@26.0.0))(@cucumber/messages@21.0.1)
+      '@cucumber/gherkin-streams': 5.0.1(@cucumber/gherkin@26.0.3)(@cucumber/message-streams@4.0.1(@cucumber/messages@21.0.1))(@cucumber/messages@21.0.1)
       '@cucumber/gherkin-utils': 8.0.2
       '@cucumber/html-formatter': 20.2.1(@cucumber/messages@21.0.1)
       '@cucumber/message-streams': 4.0.1(@cucumber/messages@21.0.1)
@@ -10887,7 +10881,7 @@ snapshots:
       yaml: 2.3.4
       yup: 0.32.11
 
-  '@cucumber/gherkin-streams@5.0.1(@cucumber/gherkin@26.0.3)(@cucumber/message-streams@4.0.1(@cucumber/messages@26.0.0))(@cucumber/messages@21.0.1)':
+  '@cucumber/gherkin-streams@5.0.1(@cucumber/gherkin@26.0.3)(@cucumber/message-streams@4.0.1(@cucumber/messages@21.0.1))(@cucumber/messages@21.0.1)':
     dependencies:
       '@cucumber/gherkin': 26.0.3
       '@cucumber/message-streams': 4.0.1(@cucumber/messages@21.0.1)
@@ -11824,6 +11818,21 @@ snapshots:
       nanoid: 4.0.0
       preact: 10.7.1
 
+  '@uppy/dashboard@https://github.com/owncloud/uppy/releases/download/v3.12.13-owncloud/uppy-dashboard.tgz':
+    dependencies:
+      '@transloadit/prettier-bytes': 0.0.7
+      '@uppy/informer': https://github.com/owncloud/uppy/releases/download/v3.12.13-owncloud/uppy-informer.tgz
+      '@uppy/provider-views': https://github.com/owncloud/uppy/releases/download/v3.12.13-owncloud/uppy-provider-views.tgz
+      '@uppy/status-bar': https://github.com/owncloud/uppy/releases/download/v3.12.13-owncloud/uppy-status-bar.tgz
+      '@uppy/thumbnail-generator': https://github.com/owncloud/uppy/releases/download/v3.12.13-owncloud/uppy-thumbnail-generator.tgz
+      '@uppy/utils': https://github.com/owncloud/uppy/releases/download/v3.12.13-owncloud/uppy-utils.tgz
+      classnames: 2.3.2
+      is-shallow-equal: 1.0.1
+      lodash: 4.17.21
+      memoize-one: 6.0.0
+      nanoid: 4.0.0
+      preact: 10.7.1
+
   '@uppy/dashboard@https://github.com/owncloud/uppy/releases/download/v3.12.13-owncloud/uppy-dashboard.tgz(@uppy/core@https://github.com/owncloud/uppy/releases/download/v3.12.13-owncloud/uppy-core.tgz)':
     dependencies:
       '@transloadit/prettier-bytes': 0.0.7
@@ -11845,17 +11854,28 @@ snapshots:
       '@uppy/core': https://github.com/owncloud/uppy/releases/download/v3.12.13-owncloud/uppy-core.tgz
       '@uppy/utils': https://github.com/owncloud/uppy/releases/download/v3.12.13-owncloud/uppy-utils.tgz
 
-  '@uppy/google-drive@https://github.com/owncloud/uppy/releases/download/v3.12.13-owncloud/uppy-google-drive.tgz(@uppy/core@https://github.com/owncloud/uppy/releases/download/v3.12.13-owncloud/uppy-core.tgz)':
+  '@uppy/google-drive@https://github.com/owncloud/uppy/releases/download/v3.12.13-owncloud/uppy-google-drive.tgz':
     dependencies:
       '@uppy/companion-client': https://github.com/owncloud/uppy/releases/download/v3.12.13-owncloud/uppy-companion-client.tgz
-      '@uppy/core': https://github.com/owncloud/uppy/releases/download/v3.12.13-owncloud/uppy-core.tgz
-      '@uppy/provider-views': https://github.com/owncloud/uppy/releases/download/v3.12.13-owncloud/uppy-provider-views.tgz(@uppy/core@https://github.com/owncloud/uppy/releases/download/v3.12.13-owncloud/uppy-core.tgz)
+      '@uppy/provider-views': https://github.com/owncloud/uppy/releases/download/v3.12.13-owncloud/uppy-provider-views.tgz
+      '@uppy/utils': https://github.com/owncloud/uppy/releases/download/v3.12.13-owncloud/uppy-utils.tgz
+      preact: 10.7.1
+
+  '@uppy/informer@https://github.com/owncloud/uppy/releases/download/v3.12.13-owncloud/uppy-informer.tgz':
+    dependencies:
       '@uppy/utils': https://github.com/owncloud/uppy/releases/download/v3.12.13-owncloud/uppy-utils.tgz
       preact: 10.7.1
 
   '@uppy/informer@https://github.com/owncloud/uppy/releases/download/v3.12.13-owncloud/uppy-informer.tgz(@uppy/core@https://github.com/owncloud/uppy/releases/download/v3.12.13-owncloud/uppy-core.tgz)':
     dependencies:
       '@uppy/core': https://github.com/owncloud/uppy/releases/download/v3.12.13-owncloud/uppy-core.tgz
+      '@uppy/utils': https://github.com/owncloud/uppy/releases/download/v3.12.13-owncloud/uppy-utils.tgz
+      preact: 10.7.1
+
+  '@uppy/onedrive@https://github.com/owncloud/uppy/releases/download/v3.12.13-owncloud/uppy-onedrive.tgz':
+    dependencies:
+      '@uppy/companion-client': https://github.com/owncloud/uppy/releases/download/v3.12.13-owncloud/uppy-companion-client.tgz
+      '@uppy/provider-views': https://github.com/owncloud/uppy/releases/download/v3.12.13-owncloud/uppy-provider-views.tgz
       '@uppy/utils': https://github.com/owncloud/uppy/releases/download/v3.12.13-owncloud/uppy-utils.tgz
       preact: 10.7.1
 
@@ -11867,6 +11887,14 @@ snapshots:
       '@uppy/utils': https://github.com/owncloud/uppy/releases/download/v3.12.13-owncloud/uppy-utils.tgz
       preact: 10.7.1
 
+  '@uppy/provider-views@https://github.com/owncloud/uppy/releases/download/v3.12.13-owncloud/uppy-provider-views.tgz':
+    dependencies:
+      '@uppy/utils': https://github.com/owncloud/uppy/releases/download/v3.12.13-owncloud/uppy-utils.tgz
+      classnames: 2.3.2
+      nanoid: 4.0.0
+      p-queue: 7.4.1
+      preact: 10.7.1
+
   '@uppy/provider-views@https://github.com/owncloud/uppy/releases/download/v3.12.13-owncloud/uppy-provider-views.tgz(@uppy/core@https://github.com/owncloud/uppy/releases/download/v3.12.13-owncloud/uppy-core.tgz)':
     dependencies:
       '@uppy/core': https://github.com/owncloud/uppy/releases/download/v3.12.13-owncloud/uppy-core.tgz
@@ -11874,6 +11902,13 @@ snapshots:
       classnames: 2.5.1
       nanoid: 4.0.0
       p-queue: 7.4.1
+      preact: 10.7.1
+
+  '@uppy/status-bar@https://github.com/owncloud/uppy/releases/download/v3.12.13-owncloud/uppy-status-bar.tgz':
+    dependencies:
+      '@transloadit/prettier-bytes': 0.0.9
+      '@uppy/utils': https://github.com/owncloud/uppy/releases/download/v3.12.13-owncloud/uppy-utils.tgz
+      classnames: 2.3.2
       preact: 10.7.1
 
   '@uppy/status-bar@https://github.com/owncloud/uppy/releases/download/v3.12.13-owncloud/uppy-status-bar.tgz(@uppy/core@https://github.com/owncloud/uppy/releases/download/v3.12.13-owncloud/uppy-core.tgz)':
@@ -11885,6 +11920,11 @@ snapshots:
       preact: 10.7.1
 
   '@uppy/store-default@https://github.com/owncloud/uppy/releases/download/v3.12.13-owncloud/uppy-store-default.tgz': {}
+
+  '@uppy/thumbnail-generator@https://github.com/owncloud/uppy/releases/download/v3.12.13-owncloud/uppy-thumbnail-generator.tgz':
+    dependencies:
+      '@uppy/utils': https://github.com/owncloud/uppy/releases/download/v3.12.13-owncloud/uppy-utils.tgz
+      exifr: 7.1.3
 
   '@uppy/thumbnail-generator@https://github.com/owncloud/uppy/releases/download/v3.12.13-owncloud/uppy-thumbnail-generator.tgz(@uppy/core@https://github.com/owncloud/uppy/releases/download/v3.12.13-owncloud/uppy-core.tgz)':
     dependencies:
@@ -11903,11 +11943,10 @@ snapshots:
     dependencies:
       lodash: 4.17.21
 
-  '@uppy/webdav@https://github.com/owncloud/uppy/releases/download/v3.12.13-owncloud/uppy-webdav.tgz(@uppy/core@https://github.com/owncloud/uppy/releases/download/v3.12.13-owncloud/uppy-core.tgz)':
+  '@uppy/webdav@https://github.com/owncloud/uppy/releases/download/v3.12.13-owncloud/uppy-webdav.tgz':
     dependencies:
       '@uppy/companion-client': https://github.com/owncloud/uppy/releases/download/v3.12.13-owncloud/uppy-companion-client.tgz
-      '@uppy/core': https://github.com/owncloud/uppy/releases/download/v3.12.13-owncloud/uppy-core.tgz
-      '@uppy/provider-views': https://github.com/owncloud/uppy/releases/download/v3.12.13-owncloud/uppy-provider-views.tgz(@uppy/core@https://github.com/owncloud/uppy/releases/download/v3.12.13-owncloud/uppy-core.tgz)
+      '@uppy/provider-views': https://github.com/owncloud/uppy/releases/download/v3.12.13-owncloud/uppy-provider-views.tgz
       '@uppy/utils': https://github.com/owncloud/uppy/releases/download/v3.12.13-owncloud/uppy-utils.tgz
       preact: 10.7.1
 
@@ -14488,11 +14527,6 @@ snapshots:
     dependencies:
       inherits: 2.0.4
       readable-stream: 2.3.8
-
-  focus-trap-vue@4.0.1(focus-trap@7.5.4)(vue@3.4.21(typescript@5.5.3)):
-    dependencies:
-      focus-trap: 7.5.4
-      vue: 3.4.21(typescript@5.5.3)
 
   focus-trap-vue@4.0.3(focus-trap@7.5.4)(vue@3.4.21(typescript@5.5.3)):
     dependencies:
