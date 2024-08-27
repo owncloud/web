@@ -766,8 +766,8 @@ importers:
         specifier: 4.17.21
         version: 4.17.21
       luxon:
-        specifier: 3.2.1
-        version: 3.2.1
+        specifier: 3.5.0
+        version: 3.5.0
       mark.js:
         specifier: ^8.11.1
         version: 8.11.1
@@ -1011,8 +1011,8 @@ importers:
         specifier: ^4.17.21
         version: 4.17.21
       luxon:
-        specifier: 3.2.1
-        version: 3.2.1
+        specifier: 3.5.0
+        version: 3.5.0
       webdav:
         specifier: 5.6.0
         version: 5.6.0
@@ -1097,8 +1097,8 @@ importers:
         specifier: ^4.17.21
         version: 4.17.21
       luxon:
-        specifier: 3.2.1
-        version: 3.2.1
+        specifier: 3.5.0
+        version: 3.5.0
       mark.js:
         specifier: ^8.11.1
         version: 8.11.1
@@ -1228,8 +1228,8 @@ importers:
         specifier: ^4.17.21
         version: 4.17.21
       luxon:
-        specifier: 3.2.1
-        version: 3.2.1
+        specifier: 3.5.0
+        version: 3.5.0
       oidc-client-ts:
         specifier: ^2.4.0
         version: 2.4.0
@@ -6362,6 +6362,10 @@ packages:
 
   luxon@3.2.1:
     resolution: {integrity: sha512-QrwPArQCNLAKGO/C+ZIilgIuDnEnKx5QYODdDtbFaxzsbZcc/a7WFq7MhsVYgRlwawLtvOUESTlfJ+hc/USqPg==}
+    engines: {node: '>=12'}
+
+  luxon@3.5.0:
+    resolution: {integrity: sha512-rh+Zjr6DNfUYR3bPwJEnuwDdqMbxZW7LOQfUN4B54+Cl+0o5zaU9RJ6bcidfDtC1cWCZXQ+nvX8bf6bAji37QQ==}
     engines: {node: '>=12'}
 
   magic-string@0.25.9:
@@ -15736,6 +15740,8 @@ snapshots:
   lru-cache@8.0.5: {}
 
   luxon@3.2.1: {}
+
+  luxon@3.5.0: {}
 
   magic-string@0.25.9:
     dependencies:
