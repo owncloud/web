@@ -21,13 +21,13 @@ describe('datetime helper', () => {
     it('should give correct output', () => {
       expect(
         formatDateFromDateTime(DateTime.fromISO('2010-10-22T21:38:00'), language, dateFormat)
-      ).toBe('Oct 22, 2010, 9:38 PM')
+      ).toBe('Oct 22, 2010, 9:38\u202fPM')
     })
   })
   describe('formatDateFromJSDate', () => {
     it('should give correct output', () => {
       expect(formatDateFromJSDate(new Date('2010-10-22T21:38:00'), language, dateFormat)).toBe(
-        'Oct 22, 2010, 9:38 PM'
+        'Oct 22, 2010, 9:38\u202fPM'
       )
     })
     it('should fail for null', () => {
@@ -37,7 +37,7 @@ describe('datetime helper', () => {
   describe('formatDateFromHTTP', () => {
     it('should give correct output', () => {
       expect(formatDateFromHTTP('Tue, 15 Nov 1994 12:45:26 GMT', language, dateFormat)).toBe(
-        'Nov 15, 1994, 12:45 PM'
+        'Nov 15, 1994, 12:45\u202fPM'
       )
     })
     it('should fail for invalid http date', () => {
@@ -49,7 +49,7 @@ describe('datetime helper', () => {
   describe('formatDateFromISO', () => {
     it('should give correct output', () => {
       expect(formatDateFromISO('2010-10-22T21:38:00', language, dateFormat)).toBe(
-        'Oct 22, 2010, 9:38 PM'
+        'Oct 22, 2010, 9:38\u202fPM'
       )
     })
     it('should fail for invalid iso date', () => {
@@ -61,7 +61,7 @@ describe('datetime helper', () => {
   describe('formatDateFromRFC', () => {
     it('should give correct output', () => {
       expect(formatDateFromRFC('01 Jun 2016 14:31:46 -0700', language, dateFormat)).toBe(
-        'Jun 1, 2016, 9:31 PM'
+        'Jun 1, 2016, 9:31\u202fPM'
       )
     })
     it('should fail for invalid rfc date', () => {

@@ -67,7 +67,7 @@
     "fuse.js": "6.6.2",
     "js-generate-password": "^0.1.9",
     "lodash-es": "^4.17.21",
-    "luxon": "3.2.1",
+    "luxon": "3.5.0",
     "mark.js": "^8.11.1",
     "oidc-client-ts": "^2.4.0",
     "p-queue": "^6.6.2",

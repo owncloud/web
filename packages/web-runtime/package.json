@@ -22,7 +22,7 @@
     "focus-trap-vue": "^4.0.1",
     "fuse.js": "6.6.2",
     "lodash-es": "^4.17.21",
-    "luxon": "3.2.1",
+    "luxon": "3.5.0",
     "oidc-client-ts": "^2.4.0",
     "p-queue": "^6.6.2",
     "pinia": "2.2.2",
