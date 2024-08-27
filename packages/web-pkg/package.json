@@ -74,7 +74,7 @@
     "password-sheriff": "^1.1.1",
     "pinia": "2.2.2",
     "qs": "6.13.0",
-    "semver": "7.5.4",
+    "semver": "7.6.3",
     "uuid": "9.0.1",
     "vue-concurrency": "5.0.1",
     "vue-router": "4.2.5",
