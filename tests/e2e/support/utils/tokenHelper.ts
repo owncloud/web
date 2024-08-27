@@ -3,6 +3,7 @@ import { Session } from '../objects/runtime/session'
 import { TokenProviderType } from '../environment'
 import { UsersEnvironment } from '../environment'
 import { config } from '../../config'
+import { setAccessAndRefreshToken } from '../api/token'
 
 export const getTokenFromLogin = async ({
   browser,
@@ -30,4 +31,10 @@ export const getTokenFromLogin = async ({
 
   await page.close()
   await ctx.close()
+}
+
+export const setAccessToken = async (username: string) => {
+  username = username || 'admin'
+  const loginUser = new UsersEnvironment().getUser({ key: username })
+  await setAccessAndRefreshToken(loginUser)
 }
