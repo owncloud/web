@@ -124,7 +124,7 @@
   "peerDependencies": {
     "@popperjs/core": "^2.11.5",
     "filesize": "^10.1.0",
-    "focus-trap": "7.2.0",
+    "focus-trap": "7.5.4",
     "focus-trap-vue": "^4.0.1",
     "postcss-import": "^16.1.0",
     "tippy.js": "^6.3.7",
