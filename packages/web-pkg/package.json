@@ -73,7 +73,7 @@
     "p-queue": "^6.6.2",
     "password-sheriff": "^1.1.1",
     "pinia": "2.2.2",
-    "qs": "6.11.2",
+    "qs": "6.13.0",
     "semver": "7.5.4",
     "uuid": "9.0.1",
     "vue-concurrency": "5.0.1",
