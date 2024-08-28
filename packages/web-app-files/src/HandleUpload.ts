@@ -1,5 +1,5 @@
 import Uppy, { BasePlugin, UppyFile } from '@uppy/core'
-import { filesize } from 'filesize'
+import { filesize, FileSizeOptionsString } from 'filesize'
 import { basename, dirname, join } from 'path'
 import * as uuid from 'uuid'
 import { Language } from 'vue3-gettext'
@@ -255,7 +255,9 @@ export class HandleUpload extends BasePlugin {
             'There is not enough quota on %{spaceName}, you need additional %{missingSpace} to upload these files',
             {
               spaceName,
-              missingSpace: filesize((space.spaceQuota.remaining - uploadSize) * -1)
+              missingSpace: filesize<FileSizeOptionsString>(
+                (space.spaceQuota.remaining - uploadSize) * -1
+              )
             }
           )
         })
