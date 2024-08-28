@@ -344,7 +344,7 @@ importers:
         version: 6.2.0(webpack@5.89.0)
       filesize:
         specifier: ^10.1.0
-        version: 10.1.0
+        version: 10.1.4
       focus-trap:
         specifier: 7.5.4
         version: 7.5.4
@@ -755,7 +755,7 @@ importers:
         version: 2.0.4
       filesize:
         specifier: ^10.1.0
-        version: 10.1.0
+        version: 10.1.4
       fuse.js:
         specifier: 6.6.2
         version: 6.6.2
@@ -1083,7 +1083,7 @@ importers:
         version: 3.0.6
       filesize:
         specifier: ^10.1.0
-        version: 10.1.0
+        version: 10.1.4
       fuse.js:
         specifier: 6.6.2
         version: 6.6.2
@@ -1208,7 +1208,7 @@ importers:
         version: link:../design-system
       filesize:
         specifier: ^10.1.0
-        version: 10.1.0
+        version: 10.1.4
       focus-trap:
         specifier: 7.5.4
         version: 7.5.4
@@ -4862,8 +4862,8 @@ packages:
   filelist@1.0.2:
     resolution: {integrity: sha512-z7O0IS8Plc39rTCq6i6iHxk43duYOn8uFJiWSewIq0Bww1RNybVHSCjahmcC87ZqAm4OTvFzlzeGu3XAzG1ctQ==}
 
-  filesize@10.1.0:
-    resolution: {integrity: sha512-GTLKYyBSDz3nPhlLVPjPWZCnhkd9TrrRArNcy8Z+J2cqScB7h2McAzR6NBX6nYOoWafql0roY8hrocxnZBv9CQ==}
+  filesize@10.1.4:
+    resolution: {integrity: sha512-ryBwPIIeErmxgPnm6cbESAzXjuEFubs+yKYLBZvg3CaiNcmkJChoOGcBSrZ6IwkMwPABwPpVXE6IlNdGJJrvEg==}
     engines: {node: '>= 10.4.0'}
 
   filesize@8.0.7:
@@ -13934,7 +13934,7 @@ snapshots:
     dependencies:
       minimatch: 3.1.2
 
-  filesize@10.1.0: {}
+  filesize@10.1.4: {}
 
   filesize@8.0.7: {}
 
