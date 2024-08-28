@@ -20,7 +20,7 @@
     "lodash-es": "4.17.21",
     "pinia": "2.2.2",
     "vue-concurrency": "5.0.1",
-    "web-app-app-store": "workspace:*",
+    "vue-router": "4.2.5",
     "zod": "3.23.8"
   }
 }

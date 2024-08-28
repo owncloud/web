@@ -37,49 +37,6 @@ patchedDependencies:
 importers:
 
   .:
-    dependencies:
-      '@types/uuid':
-        specifier: 9.0.8
-        version: 9.0.8
-      '@uppy/core':
-        specifier: https://github.com/owncloud/uppy/releases/download/v3.12.13-owncloud/uppy-core.tgz
-        version: https://github.com/owncloud/uppy/releases/download/v3.12.13-owncloud/uppy-core.tgz
-      '@vue/compiler-dom':
-        specifier: 3.4.21
-        version: 3.4.21
-      '@vue/compiler-sfc':
-        specifier: 3.4.21
-        version: 3.4.21
-      '@vue/runtime-dom':
-        specifier: 3.4.21
-        version: 3.4.21
-      caf:
-        specifier: 15.0.1
-        version: 15.0.1(patch_hash=l6oc6ggvh6ycwg3k5urnriyw5a)
-      portal-vue:
-        specifier: 3.0.0
-        version: 3.0.0(patch_hash=bogvb64kjdufpa4744k4xkam7u)(vue@3.4.21(typescript@5.5.4))
-      rollup-plugin-gzip:
-        specifier: ^3.1.0
-        version: 3.1.2(rollup@4.14.0)
-      uuid:
-        specifier: 9.0.1
-        version: 9.0.1
-      vite-plugin-static-copy:
-        specifier: ^0.17.0
-        version: 0.17.1(vite@5.2.8(@types/node@18.11.9)(sass@1.77.8)(terser@5.26.0))
-      vite-plugin-treat-umd-as-commonjs:
-        specifier: 0.1.4
-        version: 0.1.4(vite@5.2.8(@types/node@18.11.9)(sass@1.77.8)(terser@5.26.0))
-      vue:
-        specifier: 3.4.21
-        version: 3.4.21(typescript@5.5.4)
-      vue-demi:
-        specifier: 0.14.10
-        version: 0.14.10(vue@3.4.21(typescript@5.5.4))
-      vue-router:
-        specifier: 4.2.5
-        version: 4.2.5(vue@3.4.21(typescript@5.5.4))
     devDependencies:
       '@babel/core':
         specifier: 7.23.7
@@ -108,9 +65,6 @@ importers:
       '@ownclouders/babel-preset':
         specifier: workspace:*
         version: link:packages/babel-preset
-      '@ownclouders/design-system':
-        specifier: workspace:*
-        version: link:packages/design-system
       '@ownclouders/eslint-config':
         specifier: workspace:*
         version: link:packages/eslint-config
@@ -123,21 +77,9 @@ importers:
       '@playwright/test':
         specifier: 1.45.0
         version: 1.45.0
-      '@rollup/plugin-inject':
-        specifier: 5.0.3
-        version: 5.0.3(rollup@4.14.0)
-      '@types/glob':
-        specifier: 8.1.0
-        version: 8.1.0
-      '@types/lodash-es':
-        specifier: 4.17.7
-        version: 4.17.7
-      '@types/node':
-        specifier: 18.11.9
-        version: 18.11.9
-      '@types/node-fetch':
-        specifier: 2.6.10
-        version: 2.6.10
+      '@uppy/core':
+        specifier: https://github.com/owncloud/uppy/releases/download/v3.12.13-owncloud/uppy-core.tgz
+        version: https://github.com/owncloud/uppy/releases/download/v3.12.13-owncloud/uppy-core.tgz
       '@vitejs/plugin-vue':
         specifier: 5.0.3
         version: 5.0.3(vite@5.2.8(@types/node@18.11.9)(sass@1.77.8)(terser@5.26.0))(vue@3.4.21(typescript@5.5.4))
@@ -147,12 +89,15 @@ importers:
       '@vitest/web-worker':
         specifier: 2.0.5
         version: 2.0.5(vitest@2.0.5(@types/node@18.11.9)(happy-dom@13.3.1)(jsdom@25.0.0)(sass@1.77.8)(terser@5.26.0))
+      '@vue/compiler-dom':
+        specifier: 3.4.21
+        version: 3.4.21
+      '@vue/compiler-sfc':
+        specifier: 3.4.21
+        version: 3.4.21
       '@vue/test-utils':
         specifier: 2.4.5
         version: 2.4.5
-      autoprefixer:
-        specifier: 10.4.16
-        version: 10.4.16(postcss@8.4.32)
       browserslist-to-esbuild:
         specifier: ^2.0.0
         version: 2.1.1(browserslist@4.22.2)
@@ -177,9 +122,6 @@ importers:
       eslint:
         specifier: 8.56.0
         version: 8.56.0
-      flush-promises:
-        specifier: 1.0.2
-        version: 1.0.2
       git-repo-info:
         specifier: 2.1.1
         version: 2.1.1
@@ -189,18 +131,12 @@ importers:
       happy-dom:
         specifier: 13.3.1
         version: 13.3.1
-      join-path:
-        specifier: 1.1.1
-        version: 1.1.1
       jsdom:
         specifier: ^25.0.0
         version: 25.0.0
       license-checker-rseidelsohn:
         specifier: 4.3.0
         version: 4.3.0
-      lodash:
-        specifier: 4.17.21
-        version: 4.17.21
       node-fetch:
         specifier: 2.7.0
         version: 2.7.0
@@ -210,18 +146,15 @@ importers:
       pino-pretty:
         specifier: 11.2.2
         version: 11.2.2
-      postcss:
-        specifier: 8.4.32
-        version: 8.4.32
       qs:
         specifier: 6.13.0
         version: 6.13.0
-      react:
-        specifier: 17.0.2
-        version: 17.0.2
       requirejs:
         specifier: 2.3.7
         version: 2.3.7
+      rollup-plugin-gzip:
+        specifier: ^3.1.0
+        version: 3.1.2(rollup@4.14.0)
       rollup-plugin-visualizer:
         specifier: 5.9.0
         version: 5.9.0(rollup@4.14.0)
@@ -240,9 +173,6 @@ importers:
       typescript:
         specifier: 5.5.4
         version: 5.5.4
-      url-search-params-polyfill:
-        specifier: 8.1.1
-        version: 8.1.1
       vite:
         specifier: 5.2.8
         version: 5.2.8(@types/node@18.11.9)(sass@1.77.8)(terser@5.26.0)
@@ -252,21 +182,30 @@ importers:
       vite-plugin-node-polyfills:
         specifier: 0.21.0
         version: 0.21.0(rollup@4.14.0)(vite@5.2.8(@types/node@18.11.9)(sass@1.77.8)(terser@5.26.0))
+      vite-plugin-static-copy:
+        specifier: ^0.17.0
+        version: 0.17.1(vite@5.2.8(@types/node@18.11.9)(sass@1.77.8)(terser@5.26.0))
+      vite-plugin-treat-umd-as-commonjs:
+        specifier: 0.1.4
+        version: 0.1.4(vite@5.2.8(@types/node@18.11.9)(sass@1.77.8)(terser@5.26.0))
       vitest:
         specifier: 2.0.5
         version: 2.0.5(@types/node@18.11.9)(happy-dom@13.3.1)(jsdom@25.0.0)(sass@1.77.8)(terser@5.26.0)
       vitest-mock-extended:
         specifier: 1.3.2
         version: 1.3.2(typescript@5.5.4)(vitest@2.0.5(@types/node@18.11.9)(happy-dom@13.3.1)(jsdom@25.0.0)(sass@1.77.8)(terser@5.26.0))
+      vue:
+        specifier: 3.4.21
+        version: 3.4.21(typescript@5.5.4)
+      vue-demi:
+        specifier: 0.14.10
+        version: 0.14.10(vue@3.4.21(typescript@5.5.4))
       vue-tsc:
         specifier: 2.0.24
         version: 2.0.24(typescript@5.5.4)
       vue3-gettext:
         specifier: 2.4.0
         version: 2.4.0(patch_hash=x32qkm4z6srz5xuveescagpdyu)(@vue/compiler-sfc@3.4.21)(vue@3.4.21(typescript@5.5.4))
-      wait-for-expect:
-        specifier: 3.0.2
-        version: 3.0.2
 
   packages/babel-preset:
     dependencies:
@@ -306,6 +245,9 @@ importers:
       '@lezer/highlight':
         specifier: ^1.2.0
         version: 1.2.0
+      '@playwright/test':
+        specifier: 1.45.0
+        version: 1.45.0
       '@popperjs/core':
         specifier: ^2.11.5
         version: 2.11.8
@@ -404,10 +346,10 @@ importers:
         version: 0.11.10
       react:
         specifier: ^18.2.0
-        version: 18.2.0
+        version: 18.3.1
       react-dom:
         specifier: ^18.2.0
-        version: 18.2.0(react@18.2.0)
+        version: 18.2.0(react@18.3.1)
       sass:
         specifier: 1.77.8
         version: 1.77.8
@@ -611,6 +553,9 @@ importers:
       vue-concurrency:
         specifier: 5.0.1
         version: 5.0.1(vue@3.4.21(typescript@5.5.4))
+      vue-router:
+        specifier: 4.2.5
+        version: 4.2.5(vue@3.4.21(typescript@5.5.4))
       web-app-admin-settings:
         specifier: workspace:*
         version: 'link:'
@@ -654,9 +599,9 @@ importers:
       vue-concurrency:
         specifier: 5.0.1
         version: 5.0.1(vue@3.4.21(typescript@5.5.4))
-      web-app-app-store:
-        specifier: workspace:*
-        version: 'link:'
+      vue-router:
+        specifier: 4.2.5
+        version: 4.2.5(vue@3.4.21(typescript@5.5.4))
       zod:
         specifier: 3.23.8
         version: 3.23.8
@@ -707,6 +652,9 @@ importers:
       vue-concurrency:
         specifier: 5.0.1
         version: 5.0.1(vue@3.4.21(typescript@5.5.4))
+      vue-router:
+        specifier: 4.2.5
+        version: 4.2.5(vue@3.4.21(typescript@5.5.4))
       vue3-gettext:
         specifier: 2.4.0
         version: 2.4.0(patch_hash=x32qkm4z6srz5xuveescagpdyu)(@vue/compiler-sfc@3.4.21)(vue@3.4.21(typescript@5.5.4))
@@ -872,6 +820,9 @@ importers:
       vue-concurrency:
         specifier: 5.0.1
         version: 5.0.1(vue@3.4.21(typescript@5.5.4))
+      vue-router:
+        specifier: 4.2.5
+        version: 4.2.5(vue@3.4.21(typescript@5.5.4))
       zod:
         specifier: 3.23.8
         version: 3.23.8
@@ -904,6 +855,9 @@ importers:
       '@vueuse/core':
         specifier: ^10.3.0
         version: 10.3.0(vue@3.4.21(typescript@5.5.4))
+      vue-router:
+        specifier: 4.2.5
+        version: 4.2.5(vue@3.4.21(typescript@5.5.4))
       vue3-gettext:
         specifier: 2.4.0
         version: 2.4.0(patch_hash=x32qkm4z6srz5xuveescagpdyu)(@vue/compiler-sfc@3.4.21)(vue@3.4.21(typescript@5.5.4))
@@ -945,6 +899,9 @@ importers:
       '@types/mark.js':
         specifier: 8.11.12
         version: 8.11.12
+      flush-promises:
+        specifier: 1.0.2
+        version: 1.0.2
       web-test-helpers:
         specifier: workspace:*
         version: link:../web-test-helpers
@@ -1007,6 +964,9 @@ importers:
       luxon:
         specifier: 3.5.0
         version: 3.5.0
+      uuid:
+        specifier: 9.0.1
+        version: 9.0.1
       webdav:
         specifier: 5.7.1
         version: 5.7.1
@@ -1020,12 +980,21 @@ importers:
       '@types/luxon':
         specifier: 3.2.1
         version: 3.2.1
+      '@vitejs/plugin-vue':
+        specifier: 5.0.3
+        version: 5.0.3(vite@5.2.8(@types/node@18.11.9)(sass@1.77.8)(terser@5.26.0))(vue@3.4.21(typescript@5.5.4))
       clean-publish:
         specifier: 5.0.0
         version: 5.0.0
+      vite:
+        specifier: 5.2.8
+        version: 5.2.8(@types/node@18.11.9)(sass@1.77.8)(terser@5.26.0)
       vite-plugin-dts:
         specifier: 3.6.0
         version: 3.6.0(@types/node@18.11.9)(rollup@4.14.0)(typescript@5.5.4)(vite@5.2.8(@types/node@18.11.9)(sass@1.77.8)(terser@5.26.0))
+      vite-plugin-node-polyfills:
+        specifier: 0.21.0
+        version: 0.21.0(rollup@4.14.0)(vite@5.2.8(@types/node@18.11.9)(sass@1.77.8)(terser@5.26.0))
     publishDirectory: package
 
   packages/web-pkg:
@@ -1139,6 +1108,9 @@ importers:
       '@types/dompurify':
         specifier: 3.0.5
         version: 3.0.5
+      '@types/lodash-es':
+        specifier: 4.17.7
+        version: 4.17.7
       '@types/luxon':
         specifier: 3.2.1
         version: 3.2.1
@@ -1154,12 +1126,18 @@ importers:
       clean-publish:
         specifier: 5.0.0
         version: 5.0.0
+      portal-vue:
+        specifier: 3.0.0
+        version: 3.0.0(patch_hash=bogvb64kjdufpa4744k4xkam7u)(vue@3.4.21(typescript@5.5.4))
       prismjs:
         specifier: ^1.29.0
         version: 1.29.0
       vite-plugin-dts:
         specifier: 3.6.0
         version: 3.6.0(@types/node@18.11.9)(rollup@4.14.0)(typescript@5.5.4)(vite@5.2.8(@types/node@18.11.9)(sass@1.77.8)(terser@5.26.0))
+      vite-plugin-node-polyfills:
+        specifier: 0.21.0
+        version: 0.21.0(rollup@4.14.0)(vite@5.2.8(@types/node@18.11.9)(sass@1.77.8)(terser@5.26.0))
       web-test-helpers:
         specifier: workspace:*
         version: link:../web-test-helpers
@@ -1324,14 +1302,19 @@ importers:
         version: 0.1.3(pinia@2.2.2(typescript@5.5.4)(vue@3.4.21(typescript@5.5.4)))(vue@3.4.21(typescript@5.5.4))
 
   tests/e2e:
-    dependencies:
-      luxon:
-        specifier: 3.5.0
-        version: 3.5.0
     devDependencies:
       '@ai-zen/node-fetch-event-source':
         specifier: ^2.1.4
         version: 2.1.4
+      join-path:
+        specifier: 1.1.1
+        version: 1.1.1
+      lodash:
+        specifier: 4.17.21
+        version: 4.17.21
+      luxon:
+        specifier: 3.5.0
+        version: 3.5.0
       xml-js:
         specifier: ^1.6.11
         version: 1.6.11
@@ -2420,15 +2403,6 @@ packages:
   '@popperjs/core@2.11.8':
     resolution: {integrity: sha512-P1st0aksCrn9sGZhp8GMYwBnQsbvAWsZAX44oXNNvLHGqAOcoVxmjZiohstwQ7SqKnbR47akdNi+uleWD8+g6A==}
 
-  '@rollup/plugin-inject@5.0.3':
-    resolution: {integrity: sha512-411QlbL+z2yXpRWFXSmw/teQRMkXcAAC8aYTemc15gwJRpvEVDQwoe+N/HTFD8RFG8+88Bme9DK2V9CVm7hJdA==}
-    engines: {node: '>=14.0.0'}
-    peerDependencies:
-      rollup: ^1.20.0||^2.0.0||^3.0.0
-    peerDependenciesMeta:
-      rollup:
-        optional: true
-
   '@rollup/plugin-inject@5.0.5':
     resolution: {integrity: sha512-2+DEJbNBoPROPkgTDNe8/1YXWcqxbN5DTjASVIOx8HS+pITXushyNiBV56RB08zuptzz8gT3YfkqriTBVycepg==}
     engines: {node: '>=14.0.0'}
@@ -2668,9 +2642,6 @@ packages:
   '@types/glob@7.2.0':
     resolution: {integrity: sha512-ZUxbzKl0IfJILTS6t7ip5fQQM/J3TJYubDm3nMbgubNNYS62eXeUpoLUC8/7fJNiFYHTrGPQn7hspDUzIHX3UA==}
 
-  '@types/glob@8.1.0':
-    resolution: {integrity: sha512-IO+MJPVhoqz+28h1qLAcBEH2+xHMK6MTyHJc7MTnnYb6wsoLR29POVGJ7LycmVXIqyy/4/2ShP5sUwTXuOwb/w==}
-
   '@types/http-errors@2.0.4':
     resolution: {integrity: sha512-D0CFMMtydbJAegzOyHjtiKPLlvnm3iTZyZRSZoLq2mRhDdmLfIWOCYPfQJ4cu2erKghU++QvjcUjp/5h7hESpA==}
 
@@ -2713,9 +2684,6 @@ packages:
 
   '@types/minimatch@5.1.2':
     resolution: {integrity: sha512-K0VQKziLUWkVKiRVrx4a40iPaxTUefQmjtkQofBkYRcoaaL/8rhwDWww9qWbrgicNOgnpIsMxyNIUM4+n6dUIA==}
-
-  '@types/node-fetch@2.6.10':
-    resolution: {integrity: sha512-PPpPK6F9ALFTn59Ka3BaL+qGuipRfxNE8qVgkp0bVixeiR2c2/L+IVOiBdu9JhhT22sWnQEp6YyHGI2b2+CMcA==}
 
   '@types/node-forge@1.3.11':
     resolution: {integrity: sha512-FQx220y22OKNTqaByeBGqHWYz4cl94tpcxeFdvBo3wjG6XPBuZ0BNgNZRV5J5TFmmcsJ4IzsLkmGRiQbnYsBEQ==}
@@ -6151,10 +6119,6 @@ packages:
   magic-string@0.25.9:
     resolution: {integrity: sha512-RmF0AsMzgt25qzqqLc1+MbHmhdx0ojF2Fvs4XnOqz2ZOBXzzkEwc/dJQZCYHAn7v1jbVOjAZfK8msRn4BxO4VQ==}
 
-  magic-string@0.27.0:
-    resolution: {integrity: sha512-8UnnX2PeRAPZuN12svgR9j7M1uWMovg/CEnIwIG0LFkXSJJe4PdfUGiTGl8V9bsBHFUtfVINcSyYxd7q+kx9fA==}
-    engines: {node: '>=12'}
-
   magic-string@0.30.10:
     resolution: {integrity: sha512-iIRwTIf0QKV3UAnYK4PU8uiEc4SRh5jX0mwpIwETPpHdhVM4f53RSwS/vXvN1JhGX+Cs7B8qIq3d6AH49O5fAQ==}
 
@@ -7651,12 +7615,8 @@ packages:
       react: '>=16.8'
       react-dom: '>=16.8'
 
-  react@17.0.2:
-    resolution: {integrity: sha512-gnhPt75i/dq/z3/6q/0asP78D0u592D5L1pd7M8P+dck6Fu/jJeL6iVVK23fptSUZj8Vjf++7wXA8UNclGQcbA==}
-    engines: {node: '>=0.10.0'}
-
-  react@18.2.0:
-    resolution: {integrity: sha512-/3IjMdb2L9QbBdWiW5e3P2/npwMBaU9mHCSCUzNln0ZCYbcfTsGbTJrU/kGemdH2IWmB2ioZ+zkxtmq6g09fGQ==}
+  react@18.3.1:
+    resolution: {integrity: sha512-wS+hAgJShR0KhEvPJArfuPVN1+Hz1t0Y6n5jLrGQbkb4urgPE/0Rve+1kMB1v/oWgHgm4WIcV+i7F2pTVj+2iQ==}
     engines: {node: '>=0.10.0'}
 
   read-cache@1.0.0:
@@ -8933,9 +8893,6 @@ packages:
   url-parse@1.5.10:
     resolution: {integrity: sha512-WypcfiRhfeUP9vvF0j6rw0J3hrWrw6iZv3+22h6iRMJ/8z1Tj6XfLP4DsUix5MhMPnXpiHDoKyoZ/bdCkwBCiQ==}
 
-  url-search-params-polyfill@8.1.1:
-    resolution: {integrity: sha512-KmkCs6SjE6t4ihrfW9JelAPQIIIFbJweaaSLTh/4AO+c58JlDcb+GbdPt8yr5lRcFg4rPswRFRRhBGpWwh0K/Q==}
-
   url@0.11.3:
     resolution: {integrity: sha512-6hxOLGfZASQK/cijlZnZJTq8OXAkt/3YGfQX45vvMYXpZoo8NdWZcY73K108Jf759lS1Bv/8wXnHDTSz17dSRw==}
 
@@ -9270,9 +9227,6 @@ packages:
   w3c-xmlserializer@5.0.0:
     resolution: {integrity: sha512-o8qghlI8NZHU1lLPrpi2+Uq7abh4GGPpYANlalzWxyWteJOCsr/P+oPBA49TOLu5FTZO4d3F9MnWJfiMo4BkmA==}
     engines: {node: '>=18'}
-
-  wait-for-expect@3.0.2:
-    resolution: {integrity: sha512-cfS1+DZxuav1aBYbaO/kE06EOS8yRw7qOFoD3XtjTkYvCvh3zUvNST8DXK/nPaeqIzIv3P3kL3lRJn8iwOiSag==}
 
   walkes@0.2.1:
     resolution: {integrity: sha512-mbCCLh/TineJ2hxHpV6E0OmXht0P8R695BKHbhjrh56GwTHlPVbOTftetdih9XLQZgkFkrJXhGz1j9cxq03tWQ==}
@@ -10947,14 +10901,6 @@ snapshots:
 
   '@popperjs/core@2.11.8': {}
 
-  '@rollup/plugin-inject@5.0.3(rollup@4.14.0)':
-    dependencies:
-      '@rollup/pluginutils': 5.0.2(rollup@4.14.0)
-      estree-walker: 2.0.2
-      magic-string: 0.27.0
-    optionalDependencies:
-      rollup: 4.14.0
-
   '@rollup/plugin-inject@5.0.5(rollup@4.14.0)':
     dependencies:
       '@rollup/pluginutils': 5.0.2(rollup@4.14.0)
@@ -11120,10 +11066,10 @@ snapshots:
 
   '@teppeis/multimaps@2.0.0': {}
 
-  '@tippyjs/react@4.1.0(react-dom@18.2.0(react@18.2.0))(react@18.2.0)':
+  '@tippyjs/react@4.1.0(react-dom@18.2.0(react@18.3.1))(react@18.3.1)':
     dependencies:
-      react: 18.2.0
-      react-dom: 18.2.0(react@18.2.0)
+      react: 18.3.1
+      react-dom: 18.2.0(react@18.3.1)
       tippy.js: 6.3.7
 
   '@toast-ui/editor-plugin-code-syntax-highlight@3.1.0':
@@ -11211,11 +11157,6 @@ snapshots:
       '@types/minimatch': 5.1.2
       '@types/node': 18.11.9
 
-  '@types/glob@8.1.0':
-    dependencies:
-      '@types/minimatch': 5.1.2
-      '@types/node': 18.11.9
-
   '@types/http-errors@2.0.4': {}
 
   '@types/http-proxy@1.17.14':
@@ -11255,11 +11196,6 @@ snapshots:
   '@types/mime@3.0.4': {}
 
   '@types/minimatch@5.1.2': {}
-
-  '@types/node-fetch@2.6.10':
-    dependencies:
-      '@types/node': 18.11.9
-      form-data: 4.0.0
 
   '@types/node-forge@1.3.11':
     dependencies:
@@ -12104,16 +12040,6 @@ snapshots:
   atob@2.1.2: {}
 
   atomic-sleep@1.0.0: {}
-
-  autoprefixer@10.4.16(postcss@8.4.32):
-    dependencies:
-      browserslist: 4.22.2
-      caniuse-lite: 1.0.30001572
-      fraction.js: 4.3.7
-      normalize-range: 0.1.2
-      picocolors: 1.0.1
-      postcss: 8.4.32
-      postcss-value-parser: 4.2.0
 
   autoprefixer@10.4.16(postcss@8.4.41):
     dependencies:
@@ -15189,10 +15115,6 @@ snapshots:
     dependencies:
       sourcemap-codec: 1.4.8
 
-  magic-string@0.27.0:
-    dependencies:
-      '@jridgewell/sourcemap-codec': 1.4.15
-
   magic-string@0.30.10:
     dependencies:
       '@jridgewell/sourcemap-codec': 1.4.15
@@ -15226,10 +15148,10 @@ snapshots:
 
   mark.js@8.11.1: {}
 
-  markdown-to-jsx@6.11.4(react@18.2.0):
+  markdown-to-jsx@6.11.4(react@18.3.1):
     dependencies:
       prop-types: 15.8.1
-      react: 18.2.0
+      react: 18.3.1
       unquote: 1.1.1
 
   marks-pane@1.0.9: {}
@@ -16610,10 +16532,10 @@ snapshots:
       iconv-lite: 0.4.24
       unpipe: 1.0.0
 
-  react-codemirror2@7.3.0(codemirror@5.65.16)(react@18.2.0):
+  react-codemirror2@7.3.0(codemirror@5.65.16)(react@18.3.1):
     dependencies:
       codemirror: 5.65.16
-      react: 18.2.0
+      react: 18.3.1
 
   react-dev-utils@12.0.1(eslint@8.56.0)(typescript@4.9.5)(vue-template-compiler@2.7.14)(webpack@5.89.0):
     dependencies:
@@ -16671,41 +16593,41 @@ snapshots:
     transitivePeerDependencies:
       - supports-color
 
-  react-dom@18.2.0(react@18.2.0):
+  react-dom@18.2.0(react@18.3.1):
     dependencies:
       loose-envify: 1.4.0
-      react: 18.2.0
+      react: 18.3.1
       scheduler: 0.23.0
 
   react-error-overlay@6.0.11: {}
 
-  react-group@3.0.2(react@18.2.0):
+  react-group@3.0.2(react@18.3.1):
     dependencies:
       prop-types: 15.8.1
-      react: 18.2.0
+      react: 18.3.1
 
-  react-icons@3.11.0(react@18.2.0):
+  react-icons@3.11.0(react@18.3.1):
     dependencies:
       camelcase: 5.3.1
-      react: 18.2.0
+      react: 18.3.1
 
   react-is@16.13.1: {}
 
   react-lifecycles-compat@3.0.4: {}
 
-  react-simple-code-editor@0.10.0(react-dom@18.2.0(react@18.2.0))(react@18.2.0):
+  react-simple-code-editor@0.10.0(react-dom@18.2.0(react@18.3.1))(react@18.3.1):
     dependencies:
-      react: 18.2.0
-      react-dom: 18.2.0(react@18.2.0)
+      react: 18.3.1
+      react-dom: 18.2.0(react@18.3.1)
 
-  react-simple-code-editor@0.13.1(react-dom@18.2.0(react@18.2.0))(react@18.2.0):
+  react-simple-code-editor@0.13.1(react-dom@18.2.0(react@18.3.1))(react@18.3.1):
     dependencies:
-      react: 18.2.0
-      react-dom: 18.2.0(react@18.2.0)
+      react: 18.3.1
+      react-dom: 18.2.0(react@18.3.1)
 
-  react-styleguidist@11.2.0(eslint@8.56.0)(react-dom@18.2.0(react@18.2.0))(react@18.2.0)(typescript@4.9.5)(vue-template-compiler@2.7.14)(webpack@5.89.0):
+  react-styleguidist@11.2.0(eslint@8.56.0)(react-dom@18.2.0(react@18.3.1))(react@18.3.1)(typescript@4.9.5)(vue-template-compiler@2.7.14)(webpack@5.89.0):
     dependencies:
-      '@tippyjs/react': 4.1.0(react-dom@18.2.0(react@18.2.0))(react@18.2.0)
+      '@tippyjs/react': 4.1.0(react-dom@18.2.0(react@18.3.1))(react@18.3.1)
       '@vxna/mini-html-webpack-template': 2.0.0
       acorn: 6.4.2
       acorn-jsx: 5.3.2(acorn@6.4.2)
@@ -16743,7 +16665,7 @@ snapshots:
       loader-utils: 2.0.4
       lodash: 4.17.21
       lowercase-keys: 2.0.0
-      markdown-to-jsx: 6.11.4(react@18.2.0)
+      markdown-to-jsx: 6.11.4(react@18.3.1)
       mini-html-webpack-plugin: 3.1.3(webpack@5.89.0)
       mri: 1.2.0
       ora: 4.1.1
@@ -16751,15 +16673,15 @@ snapshots:
       prop-types: 15.8.1
       q-i: 2.0.1
       qss: 2.0.3
-      react: 18.2.0
+      react: 18.3.1
       react-dev-utils: 12.0.1(eslint@8.56.0)(typescript@4.9.5)(vue-template-compiler@2.7.14)(webpack@5.89.0)
       react-docgen: 5.4.3
       react-docgen-annotation-resolver: 2.0.0
       react-docgen-displayname-handler: 3.0.2(react-docgen@5.4.3)
-      react-dom: 18.2.0(react@18.2.0)
-      react-group: 3.0.2(react@18.2.0)
-      react-icons: 3.11.0(react@18.2.0)
-      react-simple-code-editor: 0.10.0(react-dom@18.2.0(react@18.2.0))(react@18.2.0)
+      react-dom: 18.2.0(react@18.3.1)
+      react-group: 3.0.2(react@18.3.1)
+      react-icons: 3.11.0(react@18.3.1)
+      react-simple-code-editor: 0.10.0(react-dom@18.2.0(react@18.3.1))(react@18.3.1)
       recast: 0.18.10
       remark: 13.0.0
       strip-html-comments: 1.0.0
@@ -16780,12 +16702,7 @@ snapshots:
       - webpack
       - webpack-cli
 
-  react@17.0.2:
-    dependencies:
-      loose-envify: 1.4.0
-      object-assign: 4.1.1
-
-  react@18.2.0:
+  react@18.3.1:
     dependencies:
       loose-envify: 1.4.0
 
@@ -18200,8 +18117,6 @@ snapshots:
       querystringify: 2.2.0
       requires-port: 1.0.0
 
-  url-search-params-polyfill@8.1.1: {}
-
   url@0.11.3:
     dependencies:
       punycode: 1.4.1
@@ -18545,15 +18460,15 @@ snapshots:
       prop-types: 15.8.1
       q-i: 2.0.1
       qss: 2.0.3
-      react: 18.2.0
-      react-codemirror2: 7.3.0(codemirror@5.65.16)(react@18.2.0)
+      react: 18.3.1
+      react-codemirror2: 7.3.0(codemirror@5.65.16)(react@18.3.1)
       react-dev-utils: 12.0.1(eslint@8.56.0)(typescript@4.9.5)(vue-template-compiler@2.7.14)(webpack@5.89.0)
-      react-dom: 18.2.0(react@18.2.0)
-      react-group: 3.0.2(react@18.2.0)
-      react-icons: 3.11.0(react@18.2.0)
+      react-dom: 18.2.0(react@18.3.1)
+      react-group: 3.0.2(react@18.3.1)
+      react-icons: 3.11.0(react@18.3.1)
       react-lifecycles-compat: 3.0.4
-      react-simple-code-editor: 0.13.1(react-dom@18.2.0(react@18.2.0))(react@18.2.0)
-      react-styleguidist: 11.2.0(eslint@8.56.0)(react-dom@18.2.0(react@18.2.0))(react@18.2.0)(typescript@4.9.5)(vue-template-compiler@2.7.14)(webpack@5.89.0)
+      react-simple-code-editor: 0.13.1(react-dom@18.2.0(react@18.3.1))(react@18.3.1)
+      react-styleguidist: 11.2.0(eslint@8.56.0)(react-dom@18.2.0(react@18.3.1))(react@18.3.1)(typescript@4.9.5)(vue-template-compiler@2.7.14)(webpack@5.89.0)
       rewrite-imports: 2.0.3
       source-map: 0.7.4
       style-loader: 1.3.0(webpack@5.89.0)
@@ -18630,8 +18545,6 @@ snapshots:
   w3c-xmlserializer@5.0.0:
     dependencies:
       xml-name-validator: 5.0.0
-
-  wait-for-expect@3.0.2: {}
 
   walkes@0.2.1: {}
 

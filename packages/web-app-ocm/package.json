@@ -15,6 +15,7 @@
     "lodash-es": "4.17.21",
     "vue-concurrency": "5.0.1",
     "uuid": "9.0.1",
+    "vue-router": "4.2.5",
     "zod": "3.23.8"
   }
 }

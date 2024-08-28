@@ -11,7 +11,7 @@
     "@uppy/dashboard": "^3.1.1",
     "@uppy/google-drive": "^3.1.1",
     "@uppy/onedrive": "^3.1.1",
-    "@uppy/webdav": "^3.1.1"
+    "@uppy/webdav": "https://github.com/owncloud/uppy/releases/download/v3.12.13-owncloud/uppy-webdav.tgz"
   },
   "peerDependencies": {
     "@ownclouders/design-system": "workspace:*",
