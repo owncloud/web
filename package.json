@@ -92,7 +92,7 @@
     "license-checker-rseidelsohn": "4.3.0",
     "lodash": "4.17.21",
     "node-fetch": "2.7.0",
-    "pino": "7.11.0",
+    "pino": "9.3.2",
     "pino-pretty": "7.6.1",
     "postcss": "8.4.32",
     "qs": "6.13.0",
