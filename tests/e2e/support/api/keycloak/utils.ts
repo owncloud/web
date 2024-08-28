@@ -30,7 +30,8 @@ export const refreshToken = async ({ user }: { user: User }): Promise<void> => {
   const tokenEnvironment = TokenEnvironmentFactory('keycloak')
 
   const body = new URLSearchParams()
-  body.append('client_id', 'security-admin-console')
+  // client-id `admin-cli` enables us to use password grant type to get access token
+  body.append('client_id', 'admin-cli')
   body.append('grant_type', 'refresh_token')
   body.append('refresh_token', tokenEnvironment.getToken({ user }).refreshToken)
 
@@ -46,6 +47,34 @@ export const refreshToken = async ({ user }: { user: User }): Promise<void> => {
   const resBody = (await response.json()) as KeycloakToken
 
   // update tokens
+  tokenEnvironment.setToken({
+    user: { ...user },
+    token: {
+      userId: user.id,
+      accessToken: resBody.access_token,
+      refreshToken: resBody.refresh_token
+    }
+  })
+}
+
+export const getAccessToken = async (user: User): Promise<void> => {
+  const keyCloakTokenUrl = config.keycloakUrl + '/realms/master/protocol/openid-connect/token'
+
+  const response = await fetch(keyCloakTokenUrl, {
+    method: 'POST',
+    // password grant type is used to get keycloak token.
+    // This approach is not recommended and used only for the test
+    body: new URLSearchParams({
+      client_id: 'admin-cli',
+      username: config.keycloakAdminUser,
+      password: config.keycloakAdminUser,
+      grant_type: 'password'
+    })
+  })
+
+  const resBody = (await response.json()) as KeycloakToken
+  const tokenEnvironment = TokenEnvironmentFactory('keycloak')
+
   tokenEnvironment.setToken({
     user: { ...user },
     token: {
