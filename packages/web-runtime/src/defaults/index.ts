@@ -20,8 +20,5 @@ export const loadTranslations = async () => {
 }
 
 export const loadDesignSystem = async () => {
-  // fontawesome-free attributions console message
-  import('@fortawesome/fontawesome-free/attribution')
-
   return (await import('design-system')).default
 }
