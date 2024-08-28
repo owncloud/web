@@ -37,7 +37,7 @@
     "@types/luxon": "3.2.1",
     "@types/mark.js": "8.11.12",
     "@types/uuid": "9.0.8",
-    "clean-publish": "4.2.0",
+    "clean-publish": "5.0.0",
     "web-test-helpers": "workspace:*",
     "zod": "^3.22.4",
     "@toast-ui/editor": "^3.2.2",

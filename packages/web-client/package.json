@@ -82,7 +82,7 @@
   },
   "devDependencies": {
     "@types/luxon": "3.2.1",
-    "clean-publish": "4.2.0",
+    "clean-publish": "5.0.0",
     "vite-plugin-dts": "3.6.0"
   },
   "peerDependencies": {
