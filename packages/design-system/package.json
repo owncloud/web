@@ -100,7 +100,7 @@
     "tinycolor2": "^1.6.0",
     "tippy.js": "^6.3.7",
     "ts-loader": "^9.5.1",
-    "typescript": "5.5.3",
+    "typescript": "5.5.4",
     "url": "^0.11.3",
     "url-loader": "^4.1.1",
     "vue": "3.4.21",
