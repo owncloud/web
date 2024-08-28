@@ -89,7 +89,7 @@
     "happy-dom": "13.3.1",
     "join-path": "1.1.1",
     "jsdom": "^20.0.2",
-    "license-checker-rseidelsohn": "3.3.0",
+    "license-checker-rseidelsohn": "4.3.0",
     "lodash": "4.17.21",
     "node-fetch": "2.7.0",
     "pino": "7.11.0",
