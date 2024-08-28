@@ -208,8 +208,8 @@ importers:
         specifier: 9.3.2
         version: 9.3.2
       pino-pretty:
-        specifier: 7.6.1
-        version: 7.6.1
+        specifier: 11.2.2
+        version: 11.2.2
       postcss:
         specifier: 8.4.32
         version: 8.4.32
@@ -3315,10 +3315,6 @@ packages:
   argparse@2.0.1:
     resolution: {integrity: sha512-8+9WqebbFzpX9OR+Wa6O29asIogeRMzcGtAINdpMHHyAg10f05aSFVBbcEqGf/PXw1EjAZ+q2/bEBg3DvurK3Q==}
 
-  args@5.0.1:
-    resolution: {integrity: sha512-1kqmFCFsPffavQFGt8OxJdIcETti99kySRUPMpOhaGjL6mRJn8HFU1OxKY5bMqfZKUwTQc1mZkAjmGYaVOHFtQ==}
-    engines: {node: '>= 6.0.0'}
-
   argue-cli@2.1.0:
     resolution: {integrity: sha512-dgojXfc4SiqmNwe38PnbT3zJasrz7g62dLAPD+VFT5RJb8W7LGRqw2IFd2ES+plnhsp4HYNJmFqMU1tCThdCww==}
     engines: {node: '>=14.0.0'}
@@ -3695,10 +3691,6 @@ packages:
 
   camel-case@4.1.2:
     resolution: {integrity: sha512-gxGWBrTT1JuMx6R+o5PTXMmUnhnVzLQ9SNutD4YqKtI6ap897t3tKECYla6gCWEkplXnlNybEkZg9GEGxKFCgw==}
-
-  camelcase@5.0.0:
-    resolution: {integrity: sha512-faqwZqnWxbxn+F1d399ygeamQNy3lPp/H9H6rNrqYh4FSVCtcY+3cub1MxA8o9mDd55mM8Aghuu/kuyYA6VTsA==}
-    engines: {node: '>=6'}
 
   camelcase@5.3.1:
     resolution: {integrity: sha512-L28STB170nwWS63UjtlEOE3dldQApaJXZkOI1uMFfzf3rRuPegHaHesyee+YxQ+W6SvRDQV6UrdOdRiR153wJg==}
@@ -4434,9 +4426,6 @@ packages:
   duplexify@3.7.1:
     resolution: {integrity: sha512-07z8uv2wMyS51kKhD1KsdXJg5WQ6t93RneqRxUHnskXVtlYYkLqM0gqStQZ3pj073g687jPCHrqNfCzawLYh5g==}
 
-  duplexify@4.1.2:
-    resolution: {integrity: sha512-fz3OjcNCHmRP12MJoZMPglx8m4rrFP8rovnk4vT8Fs+aonZoCwGg10dSsQsfP/E62eZcPTMSMP6686fu9Qlqtw==}
-
   eastasianwidth@0.2.0:
     resolution: {integrity: sha512-I88TYZWc9XiYHRQ4/3c5rjjfgkjhLyW2luGIheGERbNQ6OY7yTybanSpDXZa8y7VUP9YmDcYa+eyq4ca7iLqWA==}
 
@@ -4791,6 +4780,9 @@ packages:
   extsprintf@1.4.0:
     resolution: {integrity: sha512-6NW8DZ8pWBc5NbGYUiqqccj9dXnuSzilZYqprdKJBZsQodGH9IyUoFOGxIWVDcBzHMb8ET24aqx9p66tZEWZkA==}
     engines: {'0': node >=0.6.0}
+
+  fast-copy@3.0.2:
+    resolution: {integrity: sha512-dl0O9Vhju8IrcLndv2eU4ldt1ftXMqqfgN4H1cpmGV7P6jeB9FwpN9a2c8DPGE1Ys88rNUJVYDHq73CGAGOPfQ==}
 
   fast-deep-equal@3.1.3:
     resolution: {integrity: sha512-f3qQ9oQy9j2AhBe/H9VC91wLmKBCCU/gDOnKNAYG5hswO7BLKj09Hc5HYNz9cGI++xlpDCIgDaitVs03ATR84Q==}
@@ -5287,6 +5279,9 @@ packages:
 
   header-case@2.0.4:
     resolution: {integrity: sha512-H/vuk5TEEVZwrR0lp2zed9OCo1uAILMlx0JEMgC26rzyJJ3N1v6XkwHHXJQdR2doSjcGPM6OKPYoJgf0plJ11Q==}
+
+  help-me@5.0.0:
+    resolution: {integrity: sha512-7xgomUX6ADmcYzFik0HzAxh/73YlKR9bmFzf51CZwR+b6YtzU2m0u49hQCqV6SvlqIqsaxovfwdvbnsw3b/zpg==}
 
   hey-listen@1.0.8:
     resolution: {integrity: sha512-COpmrF2NOg4TBWUJ5UVyaCU2A88wEMkUPK4hNqyCkqHbxT92BbvfjoSozkAIIm6XhicGlJHhFdullInrdhwU8Q==}
@@ -6414,10 +6409,6 @@ packages:
     resolution: {integrity: sha512-hdrFxZOycD/g6A6SoI2bB5NA/5NEqD0569+S47WZhPvm46sD50ZHdYaFmnua5lndde9rCHGjmfK7Z8BuCt/PcQ==}
     deprecated: This package is no longer supported.
 
-  mri@1.1.4:
-    resolution: {integrity: sha512-6y7IjGPm8AzlvoUrwAaw1tLnUBudaS3752vcd8JtrpGGQn+rXIe63LFVHm/YMwtqAuh+LJPCFdlLYPWM1nYn6w==}
-    engines: {node: '>=4'}
-
   mri@1.2.0:
     resolution: {integrity: sha512-tzzskb3bG8LvYGFF/mDTpq3jpI6Q9wc3LEmBaghu+DdCssd1FakN7Bc0hVNmEyGq1bq3RgfkCb3cmQLpNPOroA==}
     engines: {node: '>=4'}
@@ -6717,9 +6708,6 @@ packages:
   oidc-client-ts@2.4.0:
     resolution: {integrity: sha512-WijhkTrlXK2VvgGoakWJiBdfIsVGz6CFzgjNNqZU1hPKV2kyeEaJgLs7RwuiSp2WhLfWBQuLvr2SxVlZnk3N1w==}
     engines: {node: '>=12.13.0'}
-
-  on-exit-leak-free@0.2.0:
-    resolution: {integrity: sha512-dqaz3u44QbRXQooZLTUKU41ZrzYrcvLISVgbrzbyCMxpmSLJvZ3ZamIJIZ29P6OhZIkNIQKosdeM6t1LYbA9hg==}
 
   on-exit-leak-free@2.1.2:
     resolution: {integrity: sha512-0eJJY6hXLGf1udHwfNftBqH+g73EU4B504nZeKpz1sYRKafAghwxEJunB2O7rDZkL4PGfsMVnTXZ2EjibbqcsA==}
@@ -7047,14 +7035,11 @@ packages:
     resolution: {integrity: sha512-MnUuEycAemtSaeFSjXKW/aroV7akBbY+Sv+RkyqFjgAe73F+MR0TBWKBRDkmfWq/HiFmdavfZ1G7h4SPZXaCSg==}
     engines: {node: '>=0.10.0'}
 
-  pino-abstract-transport@0.5.0:
-    resolution: {integrity: sha512-+KAgmVeqXYbTtU2FScx1XS3kNyfZ5TrXY07V96QnUSFqo2gAqlvmaxH67Lj7SWazqsMabf+58ctdTcBgnOLUOQ==}
-
   pino-abstract-transport@1.2.0:
     resolution: {integrity: sha512-Guhh8EZfPCfH+PMXAb6rKOjGQEoy0xlAIn+irODG5kgfYV+BQ0rGYYWTIel3P5mmyXqkYkPmdIkywsn6QKUR1Q==}
 
-  pino-pretty@7.6.1:
-    resolution: {integrity: sha512-H7N6ZYkiyrfwBGW9CSjx0uyO9Q2Lyt73881+OTYk8v3TiTdgN92QHrWlEq/LeWw5XtDP64jeSk3mnc6T+xX9/w==}
+  pino-pretty@11.2.2:
+    resolution: {integrity: sha512-2FnyGir8nAJAqD3srROdrF1J5BIcMT4nwj7hHSc60El6Uxlym00UbCCd8pYIterstVBFlMyF1yFV8XdGIPbj4A==}
     hasBin: true
 
   pino-std-serializers@7.0.0:
@@ -7902,9 +7887,6 @@ packages:
     resolution: {integrity: sha512-R7ICJEeP3y+d/q4C8YEJj9nRP0JyiSqG07uc0oQh8JvAe706dDFVL95GBZYCjADqmhArZWWjfM/5EcmVu4/B+g==}
     engines: {node: '>=6'}
 
-  rfdc@1.3.0:
-    resolution: {integrity: sha512-V2hovdzFbOi77/WajaSMXk2OLm+xNIeQdMMuB7icj7bk6zi2F8GGAxigcnDFpJHbNyNcgyJDiP+8nOrY5cZGrA==}
-
   rimraf@2.7.1:
     resolution: {integrity: sha512-uWjbaKIK3T1OSVptzX7Nl6PvQ3qAGtKEtVRjRuazjfL3Bx5eI409VZSqgND+4UNnmzLVdPj9FqFJNPqBZFve4w==}
     deprecated: Rimraf versions prior to v4 are no longer supported
@@ -8231,9 +8213,6 @@ packages:
 
   sockjs@0.3.24:
     resolution: {integrity: sha512-GJgLTZ7vYb/JtPSSZ10hsOYIvEYsjbNU+zPdIHcUaWVNUEPivzxku31865sSSud0Da0W4lEeOPlmw93zLQchuQ==}
-
-  sonic-boom@2.4.1:
-    resolution: {integrity: sha512-WgtVLfGl347/zS1oTuLaOAvVD5zijgjphAJHgbbnBJGgexnr+C1ULSj0j7ftoGxpuxR4PaV635NkwFemG8m/5w==}
 
   sonic-boom@4.0.1:
     resolution: {integrity: sha512-hTSD/6JMLyT4r9zeof6UtuBDpjJ9sO08/nmS5djaA9eozT9oOlNdpXSnzcgj4FTqpk3nkLrs61l4gip9r1HCrQ==}
@@ -12030,13 +12009,6 @@ snapshots:
 
   argparse@2.0.1: {}
 
-  args@5.0.1:
-    dependencies:
-      camelcase: 5.0.0
-      chalk: 2.4.2
-      leven: 2.1.0
-      mri: 1.1.4
-
   argue-cli@2.1.0: {}
 
   aria-query@5.3.0:
@@ -12512,8 +12484,6 @@ snapshots:
     dependencies:
       pascal-case: 3.1.2
       tslib: 2.5.0
-
-  camelcase@5.0.0: {}
 
   camelcase@5.3.1: {}
 
@@ -13376,13 +13346,6 @@ snapshots:
       readable-stream: 2.3.8
       stream-shift: 1.0.1
 
-  duplexify@4.1.2:
-    dependencies:
-      end-of-stream: 1.4.4
-      inherits: 2.0.4
-      readable-stream: 3.6.2
-      stream-shift: 1.0.1
-
   eastasianwidth@0.2.0: {}
 
   easy-table@1.2.0:
@@ -13867,6 +13830,8 @@ snapshots:
       - supports-color
 
   extsprintf@1.4.0: {}
+
+  fast-copy@3.0.2: {}
 
   fast-deep-equal@3.1.3: {}
 
@@ -14407,6 +14372,8 @@ snapshots:
     dependencies:
       capital-case: 1.0.4
       tslib: 2.5.0
+
+  help-me@5.0.0: {}
 
   hey-listen@1.0.8: {}
 
@@ -15492,8 +15459,6 @@ snapshots:
       rimraf: 2.7.1
       run-queue: 1.0.3
 
-  mri@1.1.4: {}
-
   mri@1.2.0: {}
 
   mrmime@2.0.0: {}
@@ -15735,8 +15700,6 @@ snapshots:
     dependencies:
       crypto-js: 4.2.0
       jwt-decode: 3.1.2
-
-  on-exit-leak-free@0.2.0: {}
 
   on-exit-leak-free@2.1.2: {}
 
@@ -16062,30 +16025,26 @@ snapshots:
 
   pinkie@2.0.4: {}
 
-  pino-abstract-transport@0.5.0:
-    dependencies:
-      duplexify: 4.1.2
-      split2: 4.1.0
-
   pino-abstract-transport@1.2.0:
     dependencies:
       readable-stream: 4.5.2
       split2: 4.1.0
 
-  pino-pretty@7.6.1:
+  pino-pretty@11.2.2:
     dependencies:
-      args: 5.0.1
       colorette: 2.0.16
       dateformat: 4.6.3
+      fast-copy: 3.0.2
       fast-safe-stringify: 2.1.1
+      help-me: 5.0.0
       joycon: 3.1.1
-      on-exit-leak-free: 0.2.0
-      pino-abstract-transport: 0.5.0
+      minimist: 1.2.8
+      on-exit-leak-free: 2.1.2
+      pino-abstract-transport: 1.2.0
       pump: 3.0.0
-      readable-stream: 3.6.2
-      rfdc: 1.3.0
+      readable-stream: 4.5.2
       secure-json-parse: 2.4.0
-      sonic-boom: 2.4.1
+      sonic-boom: 4.0.1
       strip-json-comments: 3.1.1
 
   pino-std-serializers@7.0.0: {}
@@ -17082,8 +17041,6 @@ snapshots:
 
   rewrite-imports@2.0.3: {}
 
-  rfdc@1.3.0: {}
-
   rimraf@2.7.1:
     dependencies:
       glob: 7.2.3
@@ -17474,10 +17431,6 @@ snapshots:
       faye-websocket: 0.11.4
       uuid: 8.3.2
       websocket-driver: 0.7.4
-
-  sonic-boom@2.4.1:
-    dependencies:
-      atomic-sleep: 1.0.0
 
   sonic-boom@4.0.1:
     dependencies:

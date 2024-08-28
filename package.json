@@ -93,7 +93,7 @@
     "lodash": "4.17.21",
     "node-fetch": "2.7.0",
     "pino": "9.3.2",
-    "pino-pretty": "7.6.1",
+    "pino-pretty": "11.2.2",
     "postcss": "8.4.32",
     "qs": "6.13.0",
     "react": "17.0.2",
