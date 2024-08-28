@@ -16,6 +16,6 @@
     "uuid": "9.0.1",
     "vue-concurrency": "5.0.1",
     "vue3-gettext": "2.4.0",
-    "zod": "3.22.4"
+    "zod": "3.23.8"
   }
 }
