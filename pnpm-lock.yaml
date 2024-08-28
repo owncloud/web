@@ -145,8 +145,8 @@ importers:
         specifier: 2.0.3
         version: 2.0.3(vitest@2.0.5(@types/node@18.11.9)(happy-dom@13.3.1)(jsdom@20.0.3)(sass@1.77.8)(terser@5.26.0))
       '@vitest/web-worker':
-        specifier: 2.0.3
-        version: 2.0.3(vitest@2.0.5(@types/node@18.11.9)(happy-dom@13.3.1)(jsdom@20.0.3)(sass@1.77.8)(terser@5.26.0))
+        specifier: 2.0.5
+        version: 2.0.5(vitest@2.0.5(@types/node@18.11.9)(happy-dom@13.3.1)(jsdom@20.0.3)(sass@1.77.8)(terser@5.26.0))
       '@vue/test-utils':
         specifier: 2.4.5
         version: 2.4.5
@@ -1155,8 +1155,8 @@ importers:
         specifier: 9.0.8
         version: 9.0.8
       '@vitest/web-worker':
-        specifier: 1.6.0
-        version: 1.6.0(vitest@2.0.5(@types/node@18.11.9)(happy-dom@13.3.1)(jsdom@20.0.3)(sass@1.77.8)(terser@5.26.0))
+        specifier: 2.0.5
+        version: 2.0.5(vitest@2.0.5(@types/node@18.11.9)(happy-dom@13.3.1)(jsdom@20.0.3)(sass@1.77.8)(terser@5.26.0))
       clean-publish:
         specifier: 4.2.0
         version: 4.2.0
@@ -3059,15 +3059,10 @@ packages:
   '@vitest/utils@2.0.5':
     resolution: {integrity: sha512-d8HKbqIcya+GR67mkZbrzhS5kKhtp8dQLcmRZLGTscGVg7yImT82cIrhtn2L8+VujWcy6KZweApgNmPsTAO/UQ==}
 
-  '@vitest/web-worker@1.6.0':
-    resolution: {integrity: sha512-VVKzjk6PVKfaXfhRwTxXaQ0NCp2BoUPhiR2OYd3InZb60jbZVmKquvngFXgvgOf1aDT8ztloMi8yu3wj9eRcuQ==}
+  '@vitest/web-worker@2.0.5':
+    resolution: {integrity: sha512-V569KT8CAeh/Cj8JE1oG8FZ7ajmcqSZQ5bhCMwYsYxeceDcV9iDDkRgQFWOJX7yOI95ldiUOaQdFpLrc2eBREA==}
     peerDependencies:
-      vitest: ^1.0.0
-
-  '@vitest/web-worker@2.0.3':
-    resolution: {integrity: sha512-r6upd0uSya0W1PhYPyytuLyxcVxTfwTP4IovhDYL1TM/MHtIfRdhVGVVnjdhQlmZXEF7t8p6LUyBpMETApDgDg==}
-    peerDependencies:
-      vitest: 2.0.3
+      vitest: 2.0.5
 
   '@volar/language-core@1.11.1':
     resolution: {integrity: sha512-dOcNn3i9GgZAcJt43wuaEykSluAuOkQgzni1cuxLxTV0nJKanQztp7FxyswdRILaKH+P2XZMPRp2S4MV/pElCw==}
@@ -11121,7 +11116,7 @@ snapshots:
 
   '@kwsites/file-exists@1.1.1':
     dependencies:
-      debug: 4.3.5
+      debug: 4.3.6(supports-color@8.1.1)
     transitivePeerDependencies:
       - supports-color
 
@@ -11952,16 +11947,9 @@ snapshots:
       loupe: 3.1.1
       tinyrainbow: 1.2.0
 
-  '@vitest/web-worker@1.6.0(vitest@2.0.5(@types/node@18.11.9)(happy-dom@13.3.1)(jsdom@20.0.3)(sass@1.77.8)(terser@5.26.0))':
+  '@vitest/web-worker@2.0.5(vitest@2.0.5(@types/node@18.11.9)(happy-dom@13.3.1)(jsdom@20.0.3)(sass@1.77.8)(terser@5.26.0))':
     dependencies:
-      debug: 4.3.4(supports-color@8.1.1)
-      vitest: 2.0.5(@types/node@18.11.9)(happy-dom@13.3.1)(jsdom@20.0.3)(sass@1.77.8)(terser@5.26.0)
-    transitivePeerDependencies:
-      - supports-color
-
-  '@vitest/web-worker@2.0.3(vitest@2.0.5(@types/node@18.11.9)(happy-dom@13.3.1)(jsdom@20.0.3)(sass@1.77.8)(terser@5.26.0))':
-    dependencies:
-      debug: 4.3.5
+      debug: 4.3.6(supports-color@8.1.1)
       vitest: 2.0.5(@types/node@18.11.9)(happy-dom@13.3.1)(jsdom@20.0.3)(sass@1.77.8)(terser@5.26.0)
     transitivePeerDependencies:
       - supports-color
@@ -13563,6 +13551,12 @@ snapshots:
   debug@4.3.5:
     dependencies:
       ms: 2.1.2
+
+  debug@4.3.6(supports-color@6.1.0):
+    dependencies:
+      ms: 2.1.2
+    optionalDependencies:
+      supports-color: 6.1.0
 
   debug@4.3.6(supports-color@8.1.1):
     dependencies:
@@ -15270,7 +15264,7 @@ snapshots:
   istanbul-lib-source-maps@5.0.6:
     dependencies:
       '@jridgewell/trace-mapping': 0.3.25
-      debug: 4.3.5
+      debug: 4.3.6(supports-color@8.1.1)
       istanbul-lib-coverage: 3.2.2
     transitivePeerDependencies:
       - supports-color
@@ -17341,7 +17335,7 @@ snapshots:
 
   read-installed-packages@1.0.0:
     dependencies:
-      debug: 4.3.4(supports-color@8.1.1)
+      debug: 4.3.6(supports-color@8.1.1)
       read-package-json: 4.1.2
       readdir-scoped-modules: 1.1.0
       semver: 7.6.3
@@ -18051,7 +18045,7 @@ snapshots:
 
   spdy-transport@3.0.0:
     dependencies:
-      debug: 4.3.4(supports-color@8.1.1)
+      debug: 4.3.6(supports-color@8.1.1)
       detect-node: 2.1.0
       hpack.js: 2.1.6
       obuf: 1.1.2
@@ -18062,7 +18056,7 @@ snapshots:
 
   spdy-transport@3.0.0(supports-color@6.1.0):
     dependencies:
-      debug: 4.3.4(supports-color@6.1.0)
+      debug: 4.3.6(supports-color@6.1.0)
       detect-node: 2.1.0
       hpack.js: 2.1.6
       obuf: 1.1.2
@@ -18845,7 +18839,7 @@ snapshots:
   vite-node@2.0.5(@types/node@18.11.9)(sass@1.77.8)(terser@5.26.0):
     dependencies:
       cac: 6.7.14
-      debug: 4.3.5
+      debug: 4.3.6(supports-color@8.1.1)
       pathe: 1.1.2
       tinyrainbow: 1.2.0
       vite: 5.2.8(@types/node@18.11.9)(sass@1.77.8)(terser@5.26.0)
