@@ -145,8 +145,8 @@ importers:
         specifier: 2.0.3
         version: 2.0.3(vitest@2.0.5(@types/node@18.11.9)(happy-dom@13.3.1)(jsdom@20.0.3)(sass@1.77.8)(terser@5.26.0))
       '@vitest/web-worker':
-        specifier: 2.0.3
-        version: 2.0.3(vitest@2.0.5(@types/node@18.11.9)(happy-dom@13.3.1)(jsdom@20.0.3)(sass@1.77.8)(terser@5.26.0))
+        specifier: 2.0.5
+        version: 2.0.5(vitest@2.0.5(@types/node@18.11.9)(happy-dom@13.3.1)(jsdom@20.0.3)(sass@1.77.8)(terser@5.26.0))
       '@vue/test-utils':
         specifier: 2.4.5
         version: 2.4.5
@@ -3058,11 +3058,6 @@ packages:
 
   '@vitest/utils@2.0.5':
     resolution: {integrity: sha512-d8HKbqIcya+GR67mkZbrzhS5kKhtp8dQLcmRZLGTscGVg7yImT82cIrhtn2L8+VujWcy6KZweApgNmPsTAO/UQ==}
-
-  '@vitest/web-worker@2.0.3':
-    resolution: {integrity: sha512-r6upd0uSya0W1PhYPyytuLyxcVxTfwTP4IovhDYL1TM/MHtIfRdhVGVVnjdhQlmZXEF7t8p6LUyBpMETApDgDg==}
-    peerDependencies:
-      vitest: 2.0.3
 
   '@vitest/web-worker@2.0.5':
     resolution: {integrity: sha512-V569KT8CAeh/Cj8JE1oG8FZ7ajmcqSZQ5bhCMwYsYxeceDcV9iDDkRgQFWOJX7yOI95ldiUOaQdFpLrc2eBREA==}
@@ -11959,13 +11954,6 @@ snapshots:
       estree-walker: 3.0.3
       loupe: 3.1.1
       tinyrainbow: 1.2.0
-
-  '@vitest/web-worker@2.0.3(vitest@2.0.5(@types/node@18.11.9)(happy-dom@13.3.1)(jsdom@20.0.3)(sass@1.77.8)(terser@5.26.0))':
-    dependencies:
-      debug: 4.3.5
-      vitest: 2.0.5(@types/node@18.11.9)(happy-dom@13.3.1)(jsdom@20.0.3)(sass@1.77.8)(terser@5.26.0)
-    transitivePeerDependencies:
-      - supports-color
 
   '@vitest/web-worker@2.0.5(vitest@2.0.5(@types/node@18.11.9)(happy-dom@13.3.1)(jsdom@20.0.3)(sass@1.77.8)(terser@5.26.0))':
     dependencies:
