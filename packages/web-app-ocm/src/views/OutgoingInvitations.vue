@@ -125,7 +125,7 @@ type Token = {
   id: string
   token: string
   link?: string
-  expiration?: string
+  expiration?: Date
   expirationSeconds?: number
   description?: string
 }
@@ -318,28 +318,18 @@ export default defineComponent({
     const toDateTime = (secs: number) => {
       const d = new Date(Date.UTC(1970, 0, 1))
       d.setUTCSeconds(secs)
-      return (
-        ('0' + d.getDate()).slice(-2) +
-        '-' +
-        ('0' + (d.getMonth() + 1)).slice(-2) +
-        '-' +
-        d.getFullYear() +
-        ' ' +
-        ('0' + d.getHours()).slice(-2) +
-        ':' +
-        ('0' + d.getMinutes()).slice(-2)
-      )
+      return d
     }
 
     onMounted(() => {
       listTokens()
     })
 
-    const formatDate = (date: string) => {
-      return formatDateFromJSDate(new Date(date), currentLanguage)
+    const formatDate = (date: Date) => {
+      return formatDateFromJSDate(date, currentLanguage)
     }
-    const formatDateRelative = (date: string) => {
-      return formatRelativeDateFromJSDate(new Date(date), currentLanguage)
+    const formatDateRelative = (date: Date) => {
+      return formatRelativeDateFromJSDate(date, currentLanguage)
     }
 
     return {
