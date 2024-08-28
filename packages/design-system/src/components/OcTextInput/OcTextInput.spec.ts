@@ -311,7 +311,7 @@ describe('OcTextInput', () => {
         modelValue: 'non-empty-value',
         clearButtonAccessibleLabel: 'test label'
       })
-      expect(wrapper.find(selectors.clearInputButton).attributes().arialabel).toBe('test label')
+      expect(wrapper.find(selectors.clearInputButton).attributes('aria-label')).toBe('test label')
     })
   })
 

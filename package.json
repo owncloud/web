@@ -88,7 +88,7 @@
     "glob": "11.0.0",
     "happy-dom": "13.3.1",
     "join-path": "1.1.1",
-    "jsdom": "^20.0.2",
+    "jsdom": "^25.0.0",
     "license-checker-rseidelsohn": "4.3.0",
     "lodash": "4.17.21",
     "node-fetch": "2.7.0",
