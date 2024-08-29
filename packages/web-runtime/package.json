@@ -26,7 +26,6 @@
     "p-queue": "^6.6.2",
     "pinia": "2.2.2",
     "portal-vue": "3.0.0",
-    "postcss-import": "16.1.0",
     "promise": "^8.1.0",
     "qs": "6.13.0",
     "semver": "7.6.3",

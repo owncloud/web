@@ -1,12 +1,10 @@
 {
   "ignores": [
     "autoprefixer",
-    "easygettext",
     "webpack-dev-server",
     "stylelint-config-standard",
     "stylelint-config-sass-guidelines",
-    "style-loader",
-    "postcss-import"
+    "style-loader"
   ],
   "ignorePatterns": [
     "src/styles/**/*.scss",
