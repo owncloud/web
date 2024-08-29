@@ -924,6 +924,8 @@ def ocisService(extra_env_config = {}, enforce_password_public_link = False):
         "OCIS_PASSWORD_POLICY_BANNED_PASSWORDS_LIST": "%s/tests/drone/banned-passwords.txt" % dir["web"],
         "PROXY_CSP_CONFIG_FILE_LOCATION": "%s/tests/drone/csp.yaml" % dir["web"],
         "WEB_UI_CONFIG_FILE": "%s" % dir["ocisConfig"],
+        # Needed for enabling all roles
+        "GRAPH_AVAILABLE_ROLES": "b1e2218d-eef8-4d4c-b82d-0f1a1b48f3b5,a8d5fe5e-96e3-418d-825b-534dbdf22b99,fb6c3e19-e378-47e5-b277-9732f9de6e21,58c63c02-1d89-4572-916a-870abc5a1b7d,2d00ce52-1fc2-4dbc-8b95-a73b73395f5a,1c996275-f1c9-4e71-abdf-a42f6495e960,312c0871-5ef7-4b3a-85b6-0e4074c64049,aa97fe03-7980-45ac-9e50-b325749fd7e6",
     }
 
     for config in extra_env_config:
@@ -1816,8 +1818,6 @@ def e2eTestsOnKeycloak(ctx):
         "GRAPH_ASSIGN_DEFAULT_USER_ROLE": "false",
         "GRAPH_USERNAME_MATCH": "none",
         "KEYCLOAK_DOMAIN": "keycloak:8443",
-        # Needed for enabling all roles
-        "GRAPH_AVAILABLE_ROLES": "b1e2218d-eef8-4d4c-b82d-0f1a1b48f3b5,a8d5fe5e-96e3-418d-825b-534dbdf22b99,fb6c3e19-e378-47e5-b277-9732f9de6e21,58c63c02-1d89-4572-916a-870abc5a1b7d,2d00ce52-1fc2-4dbc-8b95-a73b73395f5a,1c996275-f1c9-4e71-abdf-a42f6495e960,312c0871-5ef7-4b3a-85b6-0e4074c64049,aa97fe03-7980-45ac-9e50-b325749fd7e6",
     }
 
     steps += ocisService(extra_env_config = environment) + \
