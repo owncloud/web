@@ -374,13 +374,13 @@ export default defineComponent({
   }
 
   &-list {
-    @media (max-width: $oc-breakpoint-xsmall-max) {
-      display: none !important;
-    }
-
     list-style: none;
     align-items: baseline;
     flex-wrap: nowrap;
+
+    @media (max-width: $oc-breakpoint-xsmall-max) {
+      display: none !important;
+    }
 
     #oc-breadcrumb-contextmenu-trigger > span {
       vertical-align: middle;

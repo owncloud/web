@@ -7,7 +7,9 @@ $directives: ("m": "margin");
     @each $directionKey, $directionValues in $directions {
       &#{$directionKey} {
         @each $direction in $directionValues {
-          #{$directiveValue}-#{$direction}: calc(-1 * $oc-space-medium) !important;
+          & {
+            #{$directiveValue}-#{$direction}: calc(-1 * $oc-space-medium) !important;
+          }
 
           @each $sizeKey, $sizeValue in $sizes {
             &-#{$sizeKey} {

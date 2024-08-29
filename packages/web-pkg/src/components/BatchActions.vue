@@ -46,6 +46,8 @@ export default defineComponent({
 
 <style lang="scss">
 #oc-appbar-batch-actions {
+  display: block;
+
   .action-menu-item {
     padding-left: var(--oc-space-small) !important;
     padding-right: var(--oc-space-small) !important;
@@ -57,17 +59,17 @@ export default defineComponent({
     border-color: var(--oc-color-background-hover);
   }
 
-  display: block;
   li {
     float: left !important;
   }
   @media only screen and (min-width: 1200px) {
+    align-items: center;
+    display: flex;
+
     li {
       margin-top: 0;
       margin-bottom: 0;
     }
-    align-items: center;
-    display: flex;
   }
 }
 .oc-appbar-batch-actions-squashed .oc-files-context-action-label {

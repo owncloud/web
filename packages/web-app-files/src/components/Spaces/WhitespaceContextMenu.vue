@@ -81,12 +81,13 @@ export default defineComponent({
   height: 0;
 }
 .whitespace-context-actions-list {
+  text-align: left;
+  white-space: normal;
+
   .oc-card {
     padding-left: 0px !important;
     padding-right: 0px !important;
   }
-  text-align: left;
-  white-space: normal;
 
   a,
   button,

@@ -168,13 +168,13 @@ export default defineComponent({
     margin-bottom: 0;
   }
   .info-list {
+    font-weight: bold;
+    margin-bottom: var(--oc-space-xsmall);
+    margin-top: var(--oc-space-small);
     dt {
       &:first-child {
         margin-top: 0;
       }
-      font-weight: bold;
-      margin-bottom: var(--oc-space-xsmall);
-      margin-top: var(--oc-space-small);
     }
     dd {
       margin-left: 0;
