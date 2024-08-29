@@ -8,15 +8,16 @@
     "web-test-helpers": "workspace:*"
   },
   "dependencies": {
-    "@uppy/dashboard": "^3.1.1",
-    "@uppy/google-drive": "^3.1.1",
-    "@uppy/onedrive": "^3.1.1",
+    "@uppy/dashboard": "3.3.0",
+    "@uppy/google-drive": "3.3.0",
+    "@uppy/onedrive": "3.3.0",
     "@uppy/webdav": "https://github.com/owncloud/uppy/releases/download/v3.12.13-owncloud/uppy-webdav.tgz"
   },
   "peerDependencies": {
     "@ownclouders/design-system": "workspace:*",
     "@ownclouders/web-client": "workspace:*",
     "@ownclouders/web-pkg": "workspace:*",
+    "@uppy/core": "^3.3.0",
     "pinia": "^2.1.7"
   }
 }

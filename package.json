@@ -48,7 +48,6 @@
     "@ownclouders/prettier-config": "workspace:*",
     "@ownclouders/tsconfig": "workspace:*",
     "@playwright/test": "1.45.0",
-    "@uppy/core": "3.12.13",
     "@vitejs/plugin-vue": "5.0.3",
     "@vitest/coverage-v8": "2.0.3",
     "@vitest/web-worker": "2.0.5",
