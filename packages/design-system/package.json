@@ -86,7 +86,7 @@
     "semver": "7.6.3",
     "shelljs": "^0.8.3",
     "style-dictionary": "^3.9.1",
-    "style-loader": "^2.0.0",
+    "style-loader": "^4.0.0",
     "style-value-types": "^5.0.0",
     "stylelint": "16.2.1",
     "stylelint-config-sass-guidelines": "^11.0.0",
