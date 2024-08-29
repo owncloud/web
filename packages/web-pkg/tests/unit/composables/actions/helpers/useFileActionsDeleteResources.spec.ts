@@ -1,10 +1,16 @@
 import { useFileActionsDeleteResources } from '../../../../../src/composables/actions'
 import { mockDeep } from 'vitest-mock-extended'
 import { FolderResource, Resource, SpaceResource } from '@ownclouders/web-client'
-import { defaultComponentMocks, getComposableWrapper } from 'web-test-helpers'
+import {
+  defaultComponentMocks,
+  getComposableWrapper,
+  useGetMatchingSpaceMock
+} from 'web-test-helpers'
 import { useDeleteWorker } from '../../../../../src/composables/webWorkers/deleteWorker'
+import { useGetMatchingSpace } from '../../../../../src/composables/spaces/useGetMatchingSpace'
 
 vi.mock('../../../../../src/composables/webWorkers/deleteWorker')
+vi.mock('../../../../../src/composables/spaces/useGetMatchingSpace')
 
 const currentFolder = {
   id: '1',
@@ -70,6 +76,12 @@ function getWrapper({
       callback({ successful: result, failed: [] })
     })
   })
+
+  vi.mocked(useGetMatchingSpace).mockImplementation(() =>
+    useGetMatchingSpaceMock({
+      getInternalSpace: () => mocks.space
+    })
+  )
 
   return {
     mocks,

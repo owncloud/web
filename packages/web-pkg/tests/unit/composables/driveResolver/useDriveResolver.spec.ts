@@ -1,8 +1,9 @@
 import { useDriveResolver } from '../../../../src/composables/driveResolver'
 import { ref, unref } from 'vue'
 import { mock, mockDeep } from 'vitest-mock-extended'
-import { isShareSpaceResource, SpaceResource } from '@ownclouders/web-client'
+import { isShareSpaceResource, ShareSpaceResource, SpaceResource } from '@ownclouders/web-client'
 import { getComposableWrapper, defaultComponentMocks, RouteLocation } from 'web-test-helpers'
+import { useSpacesStore } from '../../../../src/composables/piniaStores'
 
 describe('useDriveResolver', () => {
   it('should be valid', () => {
@@ -40,11 +41,13 @@ describe('useDriveResolver', () => {
     )
   })
   it('returns a share space for a share', () => {
-    const spaceMock = mockDeep<SpaceResource>()
+    const shareSpace = mockDeep<ShareSpaceResource>({ driveType: 'share' })
 
     const mocks = defaultComponentMocks()
     getComposableWrapper(
       () => {
+        const spacesStore = useSpacesStore()
+        vi.mocked(spacesStore.createShareSpace).mockReturnValue(shareSpace)
         const { space, item } = useDriveResolver({
           driveAliasAndItem: ref(`share/someSharedFolder`)
         })
@@ -54,7 +57,7 @@ describe('useDriveResolver', () => {
       {
         mocks,
         provide: mocks,
-        pluginOptions: { piniaOptions: { spacesState: { spaces: [spaceMock] } } }
+        pluginOptions: { piniaOptions: { spacesState: { spaces: [shareSpace] } } }
       }
     )
   })

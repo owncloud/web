@@ -3,11 +3,15 @@ import {
   RouteLocation,
   defaultComponentMocks,
   defaultPlugins,
-  shallowMount
+  shallowMount,
+  useGetMatchingSpaceMock
 } from 'web-test-helpers'
-import { Resource } from '@ownclouders/web-client'
+import { Resource, SpaceResource } from '@ownclouders/web-client'
 import AppTopBar from '../../../src/components/AppTopBar.vue'
 import { Action } from '../../../src/composables/actions'
+import { useGetMatchingSpace } from '../../../src/composables/spaces/useGetMatchingSpace'
+
+vi.mock('../../../src/composables/spaces/useGetMatchingSpace')
 
 describe('AppTopBar', () => {
   describe('if no resource is present', () => {
@@ -69,6 +73,14 @@ function getWrapper(
   const mocks = defaultComponentMocks({
     currentRoute: mock<RouteLocation>({ name: 'admin-settings-general' })
   })
+
+  vi.mocked(useGetMatchingSpace).mockImplementation(() =>
+    useGetMatchingSpaceMock({
+      getInternalSpace: () => mock<SpaceResource>(),
+      isResourceAccessible: () => true
+    })
+  )
+
   return {
     wrapper: shallowMount(AppTopBar, {
       props: {

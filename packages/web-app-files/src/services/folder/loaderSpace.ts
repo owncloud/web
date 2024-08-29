@@ -194,10 +194,11 @@ export class FolderLoaderSpace implements FolderLoader {
         return
       }
       const role = sharesStore.graphRoles[permission.roles[0]]
-      if (role) {
-        const permissions = role.rolePermissions.flatMap((p) => p.allowedResourceActions)
-        allPermissions.push(...permissions)
+      if (!role) {
+        return
       }
+      const permissions = role.rolePermissions.flatMap((p) => p.allowedResourceActions)
+      allPermissions.push(...permissions)
     })
 
     const uniquePermissions = [...new Set(allPermissions)]

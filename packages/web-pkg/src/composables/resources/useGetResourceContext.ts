@@ -1,6 +1,5 @@
 import {
   Resource,
-  buildShareSpaceResource,
   isMountPointSpaceResource,
   OCM_PROVIDER_ID,
   buildSpace
@@ -69,16 +68,13 @@ export const useGetResourceContext = () => {
       }
     }
 
-    space = spacesStore.spaces.find(({ id }) => id === mountPoint.root?.remoteItem?.id)
-    if (!space) {
-      space = buildShareSpaceResource({
+    space =
+      spacesStore.getSpace(mountPoint.root?.remoteItem?.id) ||
+      spacesStore.createShareSpace({
         driveAliasPrefix: resource.storageId?.startsWith(OCM_PROVIDER_ID) ? 'ocm-share' : 'share',
         id: mountPoint.root?.remoteItem?.id,
-        shareName: mountPoint.name,
-        serverUrl: configStore.serverUrl
+        shareName: mountPoint.name
       })
-      spacesStore.addSpaces([space])
-    }
 
     path = urlJoin(...sharePathSegments)
     return { space, resource, path }
