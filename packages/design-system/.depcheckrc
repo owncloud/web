@@ -1,12 +1,12 @@
 {
   "ignores": [
     "autoprefixer",
-    "easygettext",
-    "webpack-dev-server",
-    "stylelint-config-standard",
-    "stylelint-config-sass-guidelines",
     "style-loader",
-    "postcss-import"
+    "stylelint-config-sass-guidelines",
+    "stylelint-config-standard",
+    "vue-inline-svg",
+    "webfontloader",
+    "webpack-dev-server"
   ],
   "ignorePatterns": [
     "src/styles/**/*.scss",

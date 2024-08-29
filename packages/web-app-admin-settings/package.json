@@ -5,25 +5,24 @@
   "description": "ownCloud admin settings",
   "license": "AGPL-3.0",
   "devDependencies": {
-    "@types/mark.js": "8.11.12",
-    "@types/uuid": "9.0.8",
     "web-test-helpers": "workspace:*"
   },
   "dependencies": {
-    "deep-object-diff": "^1.1.9",
-    "email-validator": "^2.0.4",
-    "mark.js": "^8.11.1"
+    "deep-object-diff": "^1.1.9"
   },
   "peerDependencies": {
     "@ownclouders/web-client": "workspace:*",
     "@ownclouders/web-pkg": "workspace:*",
     "axios": "1.7.5",
     "design-system": "workspace:@ownclouders/design-system@*",
+    "email-validator": "^2.0.4",
     "fuse.js": "6.6.2",
     "lodash-es": "4.17.21",
+    "mark.js": "^8.11.1",
     "pinia": "2.2.2",
     "uuid": "9.0.1",
     "vue-concurrency": "5.0.1",
+    "vue-router": "4.2.5",
     "web-app-admin-settings": "workspace:*"
   }
 }

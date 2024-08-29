@@ -32,19 +32,20 @@
     "prepublishOnly": "rm -rf ./package && clean-publish && rm -rf package/dist/tests package/dist/*.css && find package && cat package/package.json",
     "postpublish": "rm -rf ./package"
   },
-  "devDependencies": {
-    "@types/dompurify": "3.0.5",
-    "@types/luxon": "3.2.1",
-    "@types/mark.js": "8.11.12",
-    "@types/uuid": "9.0.8",
-    "clean-publish": "5.0.0",
-    "web-test-helpers": "workspace:*",
-    "zod": "3.23.8",
-    "@toast-ui/editor": "^3.2.2",
+  "dependencies": {
     "@toast-ui/editor-plugin-code-syntax-highlight": "^3.1.0",
+    "@toast-ui/editor": "^3.2.2",
+    "js-generate-password": "^0.1.9",
+    "password-sheriff": "^1.1.1",
+    "prismjs": "^1.29.0"
+  },
+  "devDependencies": {
+    "@types/lodash-es": "4.17.7",
     "@vitest/web-worker": "2.0.5",
-    "prismjs": "^1.29.0",
-    "vite-plugin-dts": "3.6.0"
+    "clean-publish": "5.0.0",
+    "vite-plugin-dts": "3.6.0",
+    "vite-plugin-node-polyfills": "0.21.0",
+    "web-test-helpers": "workspace:*"
   },
   "peerDependencies": {
     "@casl/ability": "6.7.1",
@@ -52,33 +53,32 @@
     "@microsoft/fetch-event-source": "^2.0.1",
     "@ownclouders/web-client": "workspace:*",
     "@sentry/vue": "7.119.0",
-    "@uppy/core": "3.3.0",
+    "@uppy/core": "^3.3.0",
     "@uppy/drop-target": "^2.0.0",
     "@uppy/tus": "^3.1.0",
     "@uppy/utils": "^5.3.0",
     "@uppy/xhr-upload": "^3.0.1",
-    "@vueuse/core": "^10.0.0",
     "@vue/shared": "3.4.23",
+    "@vueuse/core": "^10.3.0",
     "axios": "1.7.5",
     "deepmerge": "^4.2.2",
     "design-system": "workspace:@ownclouders/design-system@*",
     "dompurify": "^3.0.6",
     "filesize": "^10.1.0",
     "fuse.js": "6.6.2",
-    "js-generate-password": "^0.1.9",
     "lodash-es": "^4.17.21",
     "luxon": "3.5.0",
     "mark.js": "^8.11.1",
     "oidc-client-ts": "^2.4.0",
     "p-queue": "^6.6.2",
-    "password-sheriff": "^1.1.1",
     "pinia": "2.2.2",
+    "portal-vue": "3.0.0",
     "qs": "6.13.0",
     "semver": "7.6.3",
     "uuid": "9.0.1",
     "vue-concurrency": "5.0.1",
     "vue-router": "4.2.5",
     "vue3-gettext": "2.4.0",
-    "vitest": "2.0.5"
+    "zod": "3.23.8"
   }
 }

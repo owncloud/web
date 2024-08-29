@@ -14,7 +14,9 @@ import {
   ResourcesStore,
   useResourcesStore,
   SharesStore,
-  useSharesStore
+  useSharesStore,
+  useAuthService,
+  AuthServiceInterface
 } from '@ownclouders/web-pkg'
 import { unref } from 'vue'
 import { ClientService } from '@ownclouders/web-pkg'
@@ -41,6 +43,7 @@ export type TaskContext = {
   capabilityStore: CapabilityStore
   resourcesStore: ResourcesStore
   sharesStore: SharesStore
+  authService: AuthServiceInterface
 }
 
 export interface FolderLoader {
@@ -72,6 +75,7 @@ export class FolderService {
     const configStore = useConfigStore()
     const resourcesStore = useResourcesStore()
     const sharesStore = useSharesStore()
+    const authService = useAuthService()
 
     const loader = this.loaders.find((l) => l.isEnabled() && l.isActive(unref(router)))
     if (!loader) {
@@ -88,7 +92,8 @@ export class FolderService {
         capabilityStore,
         resourcesStore,
         sharesStore,
-        router
+        router,
+        authService
       }
       try {
         yield loader.getTask(context).perform(...args)

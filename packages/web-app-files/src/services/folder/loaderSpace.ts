@@ -11,7 +11,6 @@ import {
 } from '@ownclouders/web-client'
 import { unref } from 'vue'
 import { FolderLoaderOptions } from './types'
-import { authService } from 'web-runtime/src/services/auth'
 import { useFileRouteReplace } from '@ownclouders/web-pkg'
 import { IncomingShareResource } from '@ownclouders/web-client'
 import { getIndicators } from '@ownclouders/web-pkg'
@@ -33,7 +32,7 @@ export class FolderLoaderSpace implements FolderLoader {
   }
 
   public getTask(context: TaskContext): FolderLoaderTask {
-    const { router, clientService, resourcesStore, userStore } = context
+    const { router, clientService, resourcesStore, userStore, authService } = context
     const { webdav } = clientService
     const { replaceInvalidFileRoute } = useFileRouteReplace({ router })
 

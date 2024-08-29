@@ -80,20 +80,26 @@
     "prepublishOnly": "rm -rf ./package && clean-publish && rm -rf package/dist/tests && find package && cat package/package.json",
     "postpublish": "rm -rf ./package"
   },
+  "dependencies": {
+    "fast-xml-parser": "4.4.1",
+    "webdav": "5.7.1",
+    "xml-js": "^1.6.11"
+  },
   "devDependencies": {
     "@types/luxon": "3.2.1",
+    "@vitejs/plugin-vue": "5.0.3",
     "clean-publish": "5.0.0",
-    "vite-plugin-dts": "3.6.0"
+    "vite-plugin-dts": "3.6.0",
+    "vite-plugin-node-polyfills": "0.21.0",
+    "vite": "5.2.8"
   },
   "peerDependencies": {
     "@casl/ability": "6.7.1",
+    "@microsoft/fetch-event-source": "^2.0.1",
     "axios": "1.7.5",
-    "fast-xml-parser": "4.4.1",
     "lodash-es": "^4.17.21",
     "luxon": "3.5.0",
-    "@microsoft/fetch-event-source": "^2.0.1",
-    "webdav": "5.7.1",
-    "xml-js": "^1.6.11",
+    "uuid": "9.0.1",
     "zod": "3.23.8"
   }
 }

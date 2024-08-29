@@ -5,19 +5,16 @@
   "description": "ownCloud web search",
   "license": "AGPL-3.0",
   "devDependencies": {
-    "@types/mark.js": "8.11.12",
+    "flush-promises": "1.0.2",
     "web-test-helpers": "workspace:*"
-  },
-  "dependencies": {
-    "mark.js": "^8.11.1"
   },
   "peerDependencies": {
     "@ownclouders/web-client": "workspace:*",
     "@ownclouders/web-pkg": "workspace:*",
     "lodash-es": "^4.17.21",
+    "mark.js": "^8.11.1",
     "pinia": "2.2.2",
     "vue3-gettext": "2.4.0",
-    "vue-router": "4.2.5",
-    "web-app-files": "workspace:*"
+    "vue-router": "4.2.5"
   }
 }
