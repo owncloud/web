@@ -19,7 +19,7 @@
     "@vueuse/core": "10.3.0",
     "@vueuse/head": "2.0.0",
     "axios": "1.7.5",
-    "deepmerge": "4.2.2",
+    "deepmerge": "4.3.1",
     "design-system": "workspace:@ownclouders/design-system@*",
     "dompurify": "3.0.6",
     "email-validator": "2.0.4",
