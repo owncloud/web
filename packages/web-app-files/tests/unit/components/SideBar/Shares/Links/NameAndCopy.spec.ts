@@ -1,6 +1,9 @@
+import { ref } from 'vue'
 import { LinkShare } from '@ownclouders/web-client'
 import { useMessages } from '@ownclouders/web-pkg'
 import NameAndCopy from '../../../../../../src/components/SideBar/Shares/Links/NameAndCopy.vue'
+import { useClipboard } from '@vueuse/core'
+import { mock } from 'vitest-mock-extended'
 import { defaultPlugins, mount } from 'web-test-helpers'
 
 const linkShare = {
@@ -8,16 +11,15 @@ const linkShare = {
   webUrl: 'https://some-url.com/abc'
 } as LinkShare
 
-// @vitest-environment jsdom
+vi.mock('@vueuse/core', () => ({
+  useClipboard: vi.fn(() => ({
+    copy: vi.fn(),
+    copied: false,
+    isSupported: true
+  }))
+}))
+
 describe('NameAndCopy', () => {
-  beforeEach(() => {
-    vi.useFakeTimers()
-  })
-
-  afterEach(() => {
-    vi.useRealTimers()
-  })
-
   // ignore tippy warning
   vi.spyOn(console, 'warn').mockImplementation(undefined)
   it('should show link info component including a copy-to-clipboard button', () => {
@@ -25,22 +27,22 @@ describe('NameAndCopy', () => {
     expect(wrapper.html()).toMatchSnapshot()
   })
   it('upon clicking it should copy the private link to the clipboard button, render a success message and change icon for half a second', async () => {
-    Object.assign(window.navigator, {
-      clipboard: {
-        writeText: vi.fn().mockImplementation(() => Promise.resolve())
-      }
-    })
+    const copyMock = vi.fn()
+    const copiedRef = ref(true)
+    vi.mocked(useClipboard).mockReturnValue(
+      mock<ReturnType<typeof useClipboard>>({ copy: copyMock, copied: copiedRef })
+    )
 
     const { wrapper } = getWrapper()
     const { showMessage } = useMessages()
     expect(showMessage).not.toHaveBeenCalled()
 
     await wrapper.find('.oc-files-public-link-copy-url').trigger('click')
-    expect(window.navigator.clipboard.writeText).toHaveBeenCalledWith(linkShare.webUrl)
+    expect(copyMock).toHaveBeenCalledTimes(1)
     expect(wrapper.html()).toMatchSnapshot()
     expect(showMessage).toHaveBeenCalledTimes(1)
 
-    vi.advanceTimersByTime(550)
+    copiedRef.value = false
 
     await wrapper.vm.$nextTick()
     expect(wrapper.html()).toMatchSnapshot()
