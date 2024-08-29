@@ -1,4 +1,4 @@
-import { useResourcesViewDefaults } from 'web-app-files/src/composables'
+import { useResourcesViewDefaults } from '../../src/composables'
 import { readonly, ref } from 'vue'
 import { mock, mockDeep } from 'vitest-mock-extended'
 import { Task } from 'vue-concurrency'

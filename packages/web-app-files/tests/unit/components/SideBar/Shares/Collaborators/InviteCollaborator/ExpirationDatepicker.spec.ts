@@ -1,4 +1,4 @@
-import ExpirationDatepicker from 'web-app-files/src/components/SideBar/Shares/Collaborators/InviteCollaborator/ExpirationDatepicker.vue'
+import ExpirationDatepicker from '../../../../../../../src/components/SideBar/Shares/Collaborators/InviteCollaborator/ExpirationDatepicker.vue'
 import { defaultPlugins, mount } from 'web-test-helpers'
 
 describe('InviteCollaborator ExpirationDatepicker', () => {

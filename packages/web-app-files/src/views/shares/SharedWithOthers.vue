@@ -104,7 +104,7 @@ import { defineComponent, computed, unref, ComponentPublicInstance } from 'vue'
 import { Resource } from '@ownclouders/web-client'
 import { useGroupingSettings } from '@ownclouders/web-pkg'
 import { useGetMatchingSpace } from '@ownclouders/web-pkg'
-import SharesNavigation from 'web-app-files/src/components/AppBar/SharesNavigation.vue'
+import SharesNavigation from '../../components/AppBar/SharesNavigation.vue'
 import { OutgoingShareResource, ShareTypes } from '@ownclouders/web-client'
 import { storeToRefs } from 'pinia'
 

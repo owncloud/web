@@ -1,4 +1,4 @@
-import { useSpaceActionsUploadImage } from 'web-app-files/src/composables/actions/spaces/useSpaceActionsUploadImage'
+import { useSpaceActionsUploadImage } from '../../../../../src/composables/actions/spaces/useSpaceActionsUploadImage'
 import { mock } from 'vitest-mock-extended'
 import { defaultComponentMocks, RouteLocation, getComposableWrapper } from 'web-test-helpers'
 import { unref, VNodeRef } from 'vue'

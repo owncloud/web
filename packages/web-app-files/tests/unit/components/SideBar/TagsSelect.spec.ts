@@ -1,5 +1,5 @@
 import { defaultComponentMocks, mount, defaultPlugins } from 'web-test-helpers'
-import TagsSelect from 'web-app-files/src/components/SideBar/Details/TagsSelect.vue'
+import TagsSelect from '../../../../src/components/SideBar/Details/TagsSelect.vue'
 import { mock, mockDeep } from 'vitest-mock-extended'
 import { Resource } from '@ownclouders/web-client'
 import { ClientService, eventBus, useMessages } from '@ownclouders/web-pkg'

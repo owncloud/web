@@ -191,7 +191,7 @@ import QuickActions from '../../components/FilesList/QuickActions.vue'
 import ResourceDetails from '../../components/FilesList/ResourceDetails.vue'
 import { ResourceTiles } from '@ownclouders/web-pkg'
 import SpaceHeader from '../../components/Spaces/SpaceHeader.vue'
-import WhitespaceContextMenu from 'web-app-files/src/components/Spaces/WhitespaceContextMenu.vue'
+import WhitespaceContextMenu from '../../components/Spaces/WhitespaceContextMenu.vue'
 import { eventBus } from '@ownclouders/web-pkg'
 import { useResourcesViewDefaults } from '../../composables'
 import { FolderLoaderOptions } from '../../services/folder'
@@ -201,7 +201,7 @@ import {
   useKeyboardTableMouseActions,
   useKeyboardTableNavigation,
   useKeyboardTableSpaceActions
-} from 'web-app-files/src/composables/keyboardActions'
+} from '../../composables/keyboardActions'
 import { storeToRefs } from 'pinia'
 import { folderViewsFolderExtensionPoint } from '../../extensionPoints'
 

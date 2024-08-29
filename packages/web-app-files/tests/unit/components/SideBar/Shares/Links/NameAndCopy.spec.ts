@@ -1,6 +1,6 @@
 import { LinkShare } from '@ownclouders/web-client'
 import { useMessages } from '@ownclouders/web-pkg'
-import NameAndCopy from 'web-app-files/src/components/SideBar/Shares/Links/NameAndCopy.vue'
+import NameAndCopy from '../../../../../../src/components/SideBar/Shares/Links/NameAndCopy.vue'
 import { defaultPlugins, mount } from 'web-test-helpers'
 
 const linkShare = {

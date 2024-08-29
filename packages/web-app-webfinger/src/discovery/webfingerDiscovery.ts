@@ -1,4 +1,4 @@
-import { OwnCloudServer } from 'web-app-webfinger/src/discovery/types'
+import { OwnCloudServer } from './types'
 import { ClientService } from '@ownclouders/web-pkg'
 import { urlJoin } from '@ownclouders/web-client'
 

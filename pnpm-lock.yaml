@@ -551,9 +551,6 @@ importers:
       vue-router:
         specifier: 4.2.5
         version: 4.2.5(vue@3.4.21(typescript@5.5.4))
-      web-app-admin-settings:
-        specifier: workspace:*
-        version: 'link:'
     devDependencies:
       web-test-helpers:
         specifier: workspace:*
@@ -714,9 +711,6 @@ importers:
       vue3-gettext:
         specifier: 2.4.0
         version: 2.4.0(patch_hash=x32qkm4z6srz5xuveescagpdyu)(@vue/compiler-sfc@3.4.21)(vue@3.4.21(typescript@5.5.4))
-      web-app-files:
-        specifier: workspace:*
-        version: 'link:'
       web-app-search:
         specifier: workspace:*
         version: link:../web-app-search
@@ -891,9 +885,6 @@ importers:
       design-system:
         specifier: workspace:@ownclouders/design-system@*
         version: link:../design-system
-      web-app-webfinger:
-        specifier: workspace:*
-        version: 'link:'
     devDependencies:
       web-test-helpers:
         specifier: workspace:*

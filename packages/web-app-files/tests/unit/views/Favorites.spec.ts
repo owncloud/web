@@ -1,6 +1,6 @@
 import Favorites from '../../../src/views/Favorites.vue'
-import { useResourcesViewDefaults } from 'web-app-files/src/composables'
-import { useResourcesViewDefaultsMock } from 'web-app-files/tests/mocks/useResourcesViewDefaultsMock'
+import { useResourcesViewDefaults } from '../../../src/composables'
+import { useResourcesViewDefaultsMock } from '../../../tests/mocks/useResourcesViewDefaultsMock'
 import { h, ref } from 'vue'
 import { mockDeep, mock } from 'vitest-mock-extended'
 import { Resource } from '@ownclouders/web-client'
@@ -13,7 +13,7 @@ import {
   folderViewsProjectSpacesExtensionPoint
 } from '../../../src/extensionPoints'
 
-vi.mock('web-app-files/src/composables')
+vi.mock('../../../src/composables')
 vi.mock('@ownclouders/web-pkg', async (importOriginal) => ({
   ...(await importOriginal<any>()),
   useFileActions: vi.fn()

@@ -1,4 +1,4 @@
-import FileLinks from 'web-app-files/src/components/SideBar/Shares/FileLinks.vue'
+import FileLinks from '../../../../../src/components/SideBar/Shares/FileLinks.vue'
 import { defaultPlugins, shallowMount, defaultComponentMocks } from 'web-test-helpers'
 import { mock, mockDeep } from 'vitest-mock-extended'
 import { Resource } from '@ownclouders/web-client'

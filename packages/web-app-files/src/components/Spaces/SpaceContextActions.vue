@@ -17,7 +17,7 @@
 <script lang="ts">
 import { ContextActionMenu, useSpaceActionsNavigateToTrash } from '@ownclouders/web-pkg'
 import { useFileActionsShowDetails } from '@ownclouders/web-pkg'
-import { useSpaceActionsUploadImage } from 'web-app-files/src/composables'
+import { useSpaceActionsUploadImage } from '../../composables'
 import {
   useSpaceActionsDelete,
   useSpaceActionsDisable,

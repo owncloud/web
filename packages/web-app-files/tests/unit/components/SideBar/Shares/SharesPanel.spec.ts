@@ -1,4 +1,4 @@
-import SharesPanel from 'web-app-files/src/components/SideBar/Shares/SharesPanel.vue'
+import SharesPanel from '../../../../../src/components/SideBar/Shares/SharesPanel.vue'
 import { defaultPlugins, shallowMount } from 'web-test-helpers'
 
 const ocLoaderStubSelector = 'oc-loader-stub'

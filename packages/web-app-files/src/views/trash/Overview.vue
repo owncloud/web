@@ -85,7 +85,7 @@ import {
 import { createLocationTrash } from '@ownclouders/web-pkg'
 import { createFileRouteOptions } from '@ownclouders/web-pkg'
 import { AppBar } from '@ownclouders/web-pkg'
-import FilesViewWrapper from 'web-app-files/src/components/FilesViewWrapper.vue'
+import FilesViewWrapper from '../../components/FilesViewWrapper.vue'
 import {
   isPersonalSpaceResource,
   isProjectSpaceResource,

@@ -133,7 +133,7 @@ import { AppRole, User } from '@ownclouders/web-client/graph/generated'
 import { ContextMenuQuickAction } from '@ownclouders/web-pkg'
 import { useFileListHeaderPosition, usePagination } from '@ownclouders/web-pkg'
 import { Pagination } from '@ownclouders/web-pkg'
-import { perPageDefault, perPageStoragePrefix } from 'web-app-admin-settings/src/defaults'
+import { perPageDefault, perPageStoragePrefix } from '../../defaults'
 import { storeToRefs } from 'pinia'
 import { useUserSettingsStore } from '../../composables/stores/userSettings'
 import {

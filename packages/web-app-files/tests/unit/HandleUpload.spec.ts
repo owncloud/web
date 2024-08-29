@@ -15,10 +15,10 @@ import {
   useResourcesStore
 } from '@ownclouders/web-pkg'
 import { Language } from 'vue3-gettext'
-import { UploadResourceConflict } from 'web-app-files/src/helpers/resource/actions'
+import { UploadResourceConflict } from '../../src/helpers/resource/actions'
 import { createTestingPinia } from 'web-test-helpers'
 
-vi.mock('web-app-files/src/helpers/resource/actions')
+vi.mock('../../src/helpers/resource/actions')
 
 describe('HandleUpload', () => {
   it('installs the handleUpload callback when files are being added', () => {

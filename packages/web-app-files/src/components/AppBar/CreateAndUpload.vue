@@ -208,7 +208,7 @@ import {
   isShareSpaceResource
 } from '@ownclouders/web-client'
 import { useService, useUpload, UppyService, UploadResult } from '@ownclouders/web-pkg'
-import { HandleUpload } from 'web-app-files/src/HandleUpload'
+import { HandleUpload } from '../../HandleUpload'
 import { useRoute } from 'vue-router'
 import { useGettext } from 'vue3-gettext'
 import { useExtensionRegistry } from '@ownclouders/web-pkg'

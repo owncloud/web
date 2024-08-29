@@ -67,7 +67,7 @@
 </template>
 
 <script lang="ts">
-import { perPageDefault, paginationOptions } from 'web-app-admin-settings/src/defaults'
+import { perPageDefault, paginationOptions } from '../defaults'
 import {
   AppLoadingSpinner,
   SideBar,

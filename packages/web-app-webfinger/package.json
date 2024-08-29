@@ -10,7 +10,6 @@
   "peerDependencies": {
     "@ownclouders/web-client": "workspace:*",
     "@ownclouders/web-pkg": "workspace:*",
-    "design-system": "workspace:@ownclouders/design-system@*",
-    "web-app-webfinger": "workspace:*"
+    "design-system": "workspace:@ownclouders/design-system@*"
   }
 }

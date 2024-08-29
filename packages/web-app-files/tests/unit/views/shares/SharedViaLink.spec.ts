@@ -1,6 +1,6 @@
 import SharedViaLink from '../../../../src/views/shares/SharedViaLink.vue'
-import { useResourcesViewDefaults } from 'web-app-files/src/composables'
-import { useResourcesViewDefaultsMock } from 'web-app-files/tests/mocks/useResourcesViewDefaultsMock'
+import { useResourcesViewDefaults } from '../../../../src/composables'
+import { useResourcesViewDefaultsMock } from '../../../../tests/mocks/useResourcesViewDefaultsMock'
 import { ref } from 'vue'
 import { mock, mockDeep } from 'vitest-mock-extended'
 import { OutgoingShareResource } from '@ownclouders/web-client'
@@ -13,7 +13,7 @@ import {
 } from 'web-test-helpers'
 import { ResourceTable } from '@ownclouders/web-pkg'
 
-vi.mock('web-app-files/src/composables')
+vi.mock('../../../../src/composables')
 vi.mock('@ownclouders/web-pkg', async (importOriginal) => ({
   ...(await importOriginal<any>()),
   useFileActions: vi.fn()

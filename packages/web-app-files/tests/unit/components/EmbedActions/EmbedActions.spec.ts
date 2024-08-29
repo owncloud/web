@@ -1,5 +1,5 @@
 import { defaultPlugins, shallowMount } from 'web-test-helpers'
-import EmbedActions from 'web-app-files/src/components/EmbedActions/EmbedActions.vue'
+import EmbedActions from '../../../../src/components/EmbedActions/EmbedActions.vue'
 import { FileAction, useEmbedMode, useFileActionsCreateLink } from '@ownclouders/web-pkg'
 import { mock } from 'vitest-mock-extended'
 import { ref } from 'vue'

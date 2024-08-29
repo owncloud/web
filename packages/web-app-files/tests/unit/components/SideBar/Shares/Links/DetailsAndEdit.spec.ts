@@ -1,4 +1,4 @@
-import DetailsAndEdit from 'web-app-files/src/components/SideBar/Shares/Links/DetailsAndEdit.vue'
+import DetailsAndEdit from '../../../../../../src/components/SideBar/Shares/Links/DetailsAndEdit.vue'
 import { LinkShare, ShareRole, ShareTypes } from '@ownclouders/web-client'
 import { defaultPlugins, shallowMount, defaultComponentMocks } from 'web-test-helpers'
 import { mock } from 'vitest-mock-extended'

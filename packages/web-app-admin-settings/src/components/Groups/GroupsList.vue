@@ -137,7 +137,7 @@ import { useGettext } from 'vue3-gettext'
 import { defaultFuseOptions } from '@ownclouders/web-pkg'
 import { useFileListHeaderPosition, usePagination } from '@ownclouders/web-pkg'
 import { Pagination } from '@ownclouders/web-pkg'
-import { perPageDefault, perPageStoragePrefix } from 'web-app-admin-settings/src/defaults'
+import { perPageDefault, perPageStoragePrefix } from '../../defaults'
 import {
   useKeyboardTableMouseActions,
   useKeyboardTableNavigation

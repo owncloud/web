@@ -1,5 +1,5 @@
 import SharedWithMe from '../../../../src/views/shares/SharedWithMe.vue'
-import { useResourcesViewDefaults } from 'web-app-files/src/composables'
+import { useResourcesViewDefaults } from '../../../../src/composables'
 import {
   queryItemAsString,
   InlineFilterOption,
@@ -7,16 +7,16 @@ import {
   useOpenWithDefaultApp,
   ItemFilter
 } from '@ownclouders/web-pkg'
-import { useResourcesViewDefaultsMock } from 'web-app-files/tests/mocks/useResourcesViewDefaultsMock'
+import { useResourcesViewDefaultsMock } from '../../../../tests/mocks/useResourcesViewDefaultsMock'
 import { ref } from 'vue'
 import { defaultStubs, RouteLocation } from 'web-test-helpers'
-import { useSortMock } from 'web-app-files/tests/mocks/useSortMock'
+import { useSortMock } from '../../../../tests/mocks/useSortMock'
 import { mock } from 'vitest-mock-extended'
 import { defaultPlugins, mount, defaultComponentMocks } from 'web-test-helpers'
 import { ShareTypes, IncomingShareResource } from '@ownclouders/web-client'
 import SharedWithMeSection from '../../../../src/components/Shares/SharedWithMeSection.vue'
 
-vi.mock('web-app-files/src/composables/resourcesViewDefaults')
+vi.mock('../../../../src/composables/resourcesViewDefaults')
 vi.mock('@ownclouders/web-pkg', async (importOriginal) => ({
   ...(await importOriginal<any>()),
   useSort: vi.fn().mockImplementation(() => useSortMock()),

@@ -1,4 +1,4 @@
-import SpaceMembers from 'web-app-files/src/components/SideBar/Shares/SpaceMembers.vue'
+import SpaceMembers from '../../../../../src/components/SideBar/Shares/SpaceMembers.vue'
 import {
   ShareTypes,
   ShareRole,
@@ -16,7 +16,7 @@ import {
 } from 'web-test-helpers'
 import { User } from '@ownclouders/web-client/graph/generated'
 import { useCanShare, useModals } from '@ownclouders/web-pkg'
-import ListItem from 'web-app-files/src/components/SideBar/Shares/Collaborators/ListItem.vue'
+import ListItem from '../../../../../src/components/SideBar/Shares/Collaborators/ListItem.vue'
 
 vi.mock('@ownclouders/web-pkg', async (importOriginal) => ({
   ...(await importOriginal<any>()),

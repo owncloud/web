@@ -22,7 +22,6 @@
     "pinia": "2.2.2",
     "uuid": "9.0.1",
     "vue-concurrency": "5.0.1",
-    "vue-router": "4.2.5",
-    "web-app-admin-settings": "workspace:*"
+    "vue-router": "4.2.5"
   }
 }
