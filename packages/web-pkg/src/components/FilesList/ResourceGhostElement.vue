@@ -45,6 +45,9 @@ export default defineComponent({
 
 <style lang="scss">
 .ghost-element-layer1 {
+  position: relative;
+  background-color: var(--oc-color-background-hover);
+
   .ghost-element-layer2 {
     position: absolute;
     background-color: var(--oc-color-background-hover);
@@ -65,8 +68,6 @@ export default defineComponent({
     bottom: -6px;
     z-index: -2;
   }
-  position: relative;
-  background-color: var(--oc-color-background-hover);
 }
 .ghost-element {
   background-color: transparent;

@@ -602,12 +602,11 @@ export default defineComponent({
     &__actions {
       flex-flow: row wrap;
       gap: var(--oc-space-xsmall);
+      cursor: pointer;
 
       svg {
         overflow: visible;
       }
-
-      cursor: pointer;
     }
 
     &__clear svg {
