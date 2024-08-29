@@ -1,10 +1,12 @@
 {
   "ignores": [
     "autoprefixer",
-    "webpack-dev-server",
-    "stylelint-config-standard",
+    "style-loader",
     "stylelint-config-sass-guidelines",
-    "style-loader"
+    "stylelint-config-standard",
+    "vue-inline-svg",
+    "webfontloader",
+    "webpack-dev-server"
   ],
   "ignorePatterns": [
     "src/styles/**/*.scss",

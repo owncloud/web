@@ -30,10 +30,6 @@
     "not OperaMini all",
     "not OperaMobile > 0"
   ],
-  "workspaces": [
-    "packages/*",
-    "tests/e2e"
-  ],
   "devDependencies": {
     "@babel/core": "7.23.7",
     "@babel/polyfill": "7.12.1",
@@ -48,6 +44,11 @@
     "@ownclouders/prettier-config": "workspace:*",
     "@ownclouders/tsconfig": "workspace:*",
     "@playwright/test": "1.45.0",
+    "@types/dompurify": "3.0.5",
+    "@types/luxon": "3.2.1",
+    "@types/mark.js": "8.11.12",
+    "@types/semver": "7.5.0",
+    "@types/uuid": "9.0.8",
     "@vitejs/plugin-vue": "5.0.3",
     "@vitest/coverage-v8": "2.0.3",
     "@vitest/web-worker": "2.0.5",

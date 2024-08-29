@@ -4,15 +4,7 @@
   "private": true,
   "description": "ownCloud web files",
   "license": "AGPL-3.0",
-  "dependencies": {
-    "mark.js": "^8.11.1"
-  },
   "devDependencies": {
-    "@types/dompurify": "3.0.5",
-    "@types/luxon": "3.2.1",
-    "@types/mark.js": "8.11.12",
-    "@types/uuid": "9.0.8",
-    "@vueuse/core": "^10.3.0",
     "web-test-helpers": "workspace:*"
   },
   "peerDependencies": {
@@ -22,11 +14,13 @@
     "@vueuse/core": "^10.3.0",
     "axios": "1.7.5",
     "design-system": "workspace:@ownclouders/design-system@*",
+    "dompurify": "^3.0.6",
     "email-validator": "^2.0.4",
     "filesize": "^10.1.0",
     "fuse.js": "6.6.2",
     "lodash-es": "4.17.21",
     "luxon": "3.5.0",
+    "mark.js": "^8.11.1",
     "p-queue": "^6.6.2",
     "pinia": "2.2.2",
     "qs": "6.13.0",
@@ -35,7 +29,6 @@
     "vue-router": "4.2.5",
     "vue3-gettext": "2.4.0",
     "web-app-files": "workspace:*",
-    "web-app-search": "workspace:*",
-    "dompurify": "^3.0.6"
+    "web-app-search": "workspace:*"
   }
 }
