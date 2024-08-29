@@ -1,6 +1,6 @@
 import SharedWithOthers from '../../../../src/views/shares/SharedWithOthers.vue'
-import { useResourcesViewDefaults } from 'web-app-files/src/composables'
-import { useResourcesViewDefaultsMock } from 'web-app-files/tests/mocks/useResourcesViewDefaultsMock'
+import { useResourcesViewDefaults } from '../../../../src/composables'
+import { useResourcesViewDefaultsMock } from '../../../../tests/mocks/useResourcesViewDefaultsMock'
 import { ref } from 'vue'
 import { defaultStubs, RouteLocation } from 'web-test-helpers'
 import { mock, mockDeep } from 'vitest-mock-extended'
@@ -10,7 +10,7 @@ import { ShareTypes } from '@ownclouders/web-client'
 import { useSortMock } from '../../../mocks/useSortMock'
 import { ResourceTable } from '@ownclouders/web-pkg'
 
-vi.mock('web-app-files/src/composables')
+vi.mock('../../../../src/composables')
 vi.mock('@ownclouders/web-pkg', async (importOriginal) => ({
   ...(await importOriginal<any>()),
   useSort: vi.fn().mockImplementation(() => useSortMock()),

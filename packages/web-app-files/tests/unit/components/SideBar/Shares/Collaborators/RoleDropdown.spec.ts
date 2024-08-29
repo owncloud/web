@@ -1,4 +1,4 @@
-import RoleDropdown from 'web-app-files/src/components/SideBar/Shares/Collaborators/RoleDropdown.vue'
+import RoleDropdown from '../../../../../../src/components/SideBar/Shares/Collaborators/RoleDropdown.vue'
 import { ShareRole } from '@ownclouders/web-client'
 import { defaultPlugins, mount, shallowMount } from 'web-test-helpers'
 import { mock } from 'vitest-mock-extended'

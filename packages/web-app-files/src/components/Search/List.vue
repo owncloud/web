@@ -201,7 +201,7 @@ import {
   useKeyboardTableNavigation,
   useKeyboardTableMouseActions,
   useKeyboardTableActions
-} from 'web-app-files/src/composables/keyboardActions'
+} from '../../composables/keyboardActions'
 import { extractDomSelector } from '@ownclouders/web-client'
 import { storeToRefs } from 'pinia'
 

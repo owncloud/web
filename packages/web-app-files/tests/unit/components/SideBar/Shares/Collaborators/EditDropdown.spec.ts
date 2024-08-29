@@ -1,4 +1,4 @@
-import EditDropdown from 'web-app-files/src/components/SideBar/Shares/Collaborators/EditDropdown.vue'
+import EditDropdown from '../../../../../../src/components/SideBar/Shares/Collaborators/EditDropdown.vue'
 import { defaultPlugins, shallowMount } from 'web-test-helpers'
 import { mock } from 'vitest-mock-extended'
 import { Resource } from '@ownclouders/web-client'

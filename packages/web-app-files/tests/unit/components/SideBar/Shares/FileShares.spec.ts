@@ -1,4 +1,4 @@
-import FileShares from 'web-app-files/src/components/SideBar/Shares/FileShares.vue'
+import FileShares from '../../../../../src/components/SideBar/Shares/FileShares.vue'
 import { mock } from 'vitest-mock-extended'
 import { Resource } from '@ownclouders/web-client'
 import { SpaceResource } from '@ownclouders/web-client'

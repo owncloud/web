@@ -1,5 +1,5 @@
 import { DateTime } from 'luxon'
-import FileVersions from 'web-app-files/src/components/SideBar/Versions/FileVersions.vue'
+import FileVersions from '../../../../../src/components/SideBar/Versions/FileVersions.vue'
 import { defaultComponentMocks, defaultStubs } from 'web-test-helpers'
 import { mock, mockDeep } from 'vitest-mock-extended'
 import { Resource, SpaceResource } from '@ownclouders/web-client'

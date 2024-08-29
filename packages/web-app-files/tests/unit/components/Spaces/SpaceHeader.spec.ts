@@ -1,5 +1,5 @@
 import { nextTick, ref } from 'vue'
-import SpaceHeader from 'web-app-files/src/components/Spaces/SpaceHeader.vue'
+import SpaceHeader from '../../../../src/components/Spaces/SpaceHeader.vue'
 import { DriveItem } from '@ownclouders/web-client/graph/generated'
 import { SpaceResource, Resource } from '@ownclouders/web-client'
 import { defaultPlugins, mount, defaultComponentMocks } from 'web-test-helpers'

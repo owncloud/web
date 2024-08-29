@@ -1,6 +1,6 @@
 import GenericTrash from '../../../../src/views/spaces/GenericTrash.vue'
-import { useResourcesViewDefaults } from 'web-app-files/src/composables'
-import { useResourcesViewDefaultsMock } from 'web-app-files/tests/mocks/useResourcesViewDefaultsMock'
+import { useResourcesViewDefaults } from '../../../../src/composables'
+import { useResourcesViewDefaultsMock } from '../../../../tests/mocks/useResourcesViewDefaultsMock'
 import { ref } from 'vue'
 import { mock } from 'vitest-mock-extended'
 import { Resource } from '@ownclouders/web-client'
@@ -16,7 +16,7 @@ import {
 } from 'web-test-helpers'
 import { AppBar } from '@ownclouders/web-pkg'
 
-vi.mock('web-app-files/src/composables')
+vi.mock('../../../../src/composables')
 
 describe('GenericTrash view', () => {
   it('appBar always present', () => {

@@ -1,4 +1,4 @@
-import CreateAndUpload from 'web-app-files/src/components/AppBar/CreateAndUpload.vue'
+import CreateAndUpload from '../../../../src/components/AppBar/CreateAndUpload.vue'
 import { mock } from 'vitest-mock-extended'
 import { Resource, SpaceResource } from '@ownclouders/web-client'
 import {

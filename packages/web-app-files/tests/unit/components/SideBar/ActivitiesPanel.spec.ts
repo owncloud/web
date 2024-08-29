@@ -1,4 +1,4 @@
-import ActivitiesPanel from 'web-app-files/src/components/SideBar/ActivitiesPanel.vue'
+import ActivitiesPanel from '../../../../src/components/SideBar/ActivitiesPanel.vue'
 import { defaultComponentMocks, defaultPlugins, mount } from 'web-test-helpers'
 import { Resource } from '@ownclouders/web-client'
 import { mock } from 'vitest-mock-extended'

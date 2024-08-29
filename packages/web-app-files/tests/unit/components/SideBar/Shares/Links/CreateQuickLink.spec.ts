@@ -1,4 +1,4 @@
-import CreateQuickLink from 'web-app-files/src/components/SideBar/Shares/Links/CreateQuickLink.vue'
+import CreateQuickLink from '../../../../../../src/components/SideBar/Shares/Links/CreateQuickLink.vue'
 import { defaultPlugins, mount } from 'web-test-helpers'
 
 describe('CreateQuickLink component', () => {

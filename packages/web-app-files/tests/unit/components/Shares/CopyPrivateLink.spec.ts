@@ -1,7 +1,7 @@
 import { mock } from 'vitest-mock-extended'
 import { Resource } from '@ownclouders/web-client'
 import { defaultPlugins, mount } from 'web-test-helpers'
-import CopyPrivateLink from 'web-app-files/src/components/Shares/CopyPrivateLink.vue'
+import CopyPrivateLink from '../../../../src/components/Shares/CopyPrivateLink.vue'
 import { useMessages } from '@ownclouders/web-pkg'
 
 const resource = mock<Resource>({

@@ -1,9 +1,9 @@
 import { computed, ref } from 'vue'
 import { mock, mockDeep } from 'vitest-mock-extended'
 import { Resource, SpaceResource } from '@ownclouders/web-client'
-import GenericSpace from 'web-app-files/src/views/spaces/GenericSpace.vue'
-import { useResourcesViewDefaults } from 'web-app-files/src/composables/resourcesViewDefaults'
-import { useResourcesViewDefaultsMock } from 'web-app-files/tests/mocks/useResourcesViewDefaultsMock'
+import GenericSpace from '../../../../src/views/spaces/GenericSpace.vue'
+import { useResourcesViewDefaults } from '../../../../src/composables/resourcesViewDefaults'
+import { useResourcesViewDefaultsMock } from '../../../../tests/mocks/useResourcesViewDefaultsMock'
 import {
   defaultPlugins,
   mount,
@@ -31,8 +31,8 @@ import {
 const mockCreateFolder = vi.fn()
 const mockUseEmbedMode = vi.fn().mockReturnValue({ isEnabled: computed(() => false) })
 
-vi.mock('web-app-files/src/composables/resourcesViewDefaults')
-vi.mock('web-app-files/src/composables/keyboardActions')
+vi.mock('../../../../src/composables/resourcesViewDefaults')
+vi.mock('../../../../src/composables/keyboardActions')
 vi.mock('@ownclouders/web-pkg', async (importOriginal) => ({
   ...(await importOriginal<any>()),
   useBreadcrumbsFromPath: vi.fn(),

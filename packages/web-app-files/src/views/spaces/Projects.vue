@@ -216,7 +216,7 @@ import {
   useKeyboardTableNavigation,
   useKeyboardTableMouseActions,
   useKeyboardTableActions
-} from 'web-app-files/src/composables/keyboardActions'
+} from '../../composables/keyboardActions'
 import { orderBy } from 'lodash-es'
 import { useResourcesViewDefaults } from '../../composables'
 import { folderViewsProjectSpacesExtensionPoint } from '../../extensionPoints'

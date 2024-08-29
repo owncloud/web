@@ -41,7 +41,7 @@ import {
   useSpaceActionsRename,
   useSpaceActionsRestore
 } from '@ownclouders/web-pkg'
-import { useSpaceActionsUploadImage } from 'web-app-files/src/composables'
+import { useSpaceActionsUploadImage } from '../../../composables'
 import { useFileActionsDownloadArchive } from '@ownclouders/web-pkg'
 
 export default defineComponent({

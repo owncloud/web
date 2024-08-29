@@ -81,7 +81,7 @@ import {
 import { eventBus } from '@ownclouders/web-pkg'
 import { useService, UppyService } from '@ownclouders/web-pkg'
 import { useAuthService } from '@ownclouders/web-pkg'
-import { HandleUpload } from 'web-app-files/src/HandleUpload'
+import { HandleUpload } from '../HandleUpload'
 import { createFileRouteOptions } from '@ownclouders/web-pkg'
 import { PublicSpaceResource, SharePermissionBit } from '@ownclouders/web-client'
 

@@ -1,8 +1,8 @@
 import { merge } from 'lodash-es'
 import { shallowMount } from '@vue/test-utils'
-import List from 'web-app-files/src/components/Search/List.vue'
-import { useResourcesViewDefaults } from 'web-app-files/src/composables'
-import { useResourcesViewDefaultsMock } from 'web-app-files/tests/mocks/useResourcesViewDefaultsMock'
+import List from '../../../../src/components/Search/List.vue'
+import { useResourcesViewDefaults } from '../../../../src/composables'
+import { useResourcesViewDefaultsMock } from '../../../../tests/mocks/useResourcesViewDefaultsMock'
 import { createRouter, createMemoryHistory } from 'vue-router'
 
 import { defaultComponentMocks, defaultPlugins } from 'web-test-helpers/src'
@@ -12,7 +12,7 @@ import { Resource } from '@ownclouders/web-client'
 import { mock } from 'vitest-mock-extended'
 import { Capabilities } from '@ownclouders/web-client/ocs'
 
-vi.mock('web-app-files/src/composables')
+vi.mock('../../../../src/composables')
 vi.mock('@ownclouders/web-pkg', async (importOriginal) => ({
   ...(await importOriginal<any>()),
   queryItemAsString: vi.fn(),

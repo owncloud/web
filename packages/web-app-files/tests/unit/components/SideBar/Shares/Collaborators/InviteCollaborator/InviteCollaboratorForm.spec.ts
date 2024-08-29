@@ -1,5 +1,5 @@
 import { mock } from 'vitest-mock-extended'
-import InviteCollaboratorForm from 'web-app-files/src/components/SideBar/Shares/Collaborators/InviteCollaborator/InviteCollaboratorForm.vue'
+import InviteCollaboratorForm from '../../../../../../../src/components/SideBar/Shares/Collaborators/InviteCollaborator/InviteCollaboratorForm.vue'
 import {
   defaultComponentMocks,
   defaultPlugins,
