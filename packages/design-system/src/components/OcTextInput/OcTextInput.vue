@@ -76,7 +76,7 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, HTMLAttributes, PropType } from 'vue'
+import { defineComponent, HTMLAttributes, PropType, nextTick } from 'vue'
 
 import uniqueId from '../../utils/uniqueId'
 import OcButton from '../OcButton/OcButton.vue'
@@ -348,7 +348,8 @@ export default defineComponent({
        **/
       this.$emit('update:modelValue', value)
     },
-    onFocus(target: HTMLInputElement) {
+    async onFocus(target: HTMLInputElement) {
+      await nextTick()
       target.select()
       if (this.selectionRange && this.selectionRange.length > 1) {
         target.setSelectionRange(this.selectionRange[0], this.selectionRange[1])
