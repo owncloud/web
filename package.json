@@ -72,7 +72,7 @@
     "pino": "9.3.2",
     "qs": "6.13.0",
     "requirejs": "2.3.7",
-    "rollup-plugin-gzip": "^3.1.0",
+    "rollup-plugin-gzip": "^4.0.0",
     "rollup-plugin-visualizer": "5.9.0",
     "simple-git": "3.25.0",
     "ts-node": "10.9.2",

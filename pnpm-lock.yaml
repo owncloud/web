@@ -162,8 +162,8 @@ importers:
         specifier: 2.3.7
         version: 2.3.7
       rollup-plugin-gzip:
-        specifier: ^3.1.0
-        version: 3.1.2(rollup@4.14.0)
+        specifier: ^4.0.0
+        version: 4.0.1(rollup@4.14.0)
       rollup-plugin-visualizer:
         specifier: 5.9.0
         version: 5.9.0(rollup@4.14.0)
@@ -7642,8 +7642,8 @@ packages:
   ripemd160@2.0.2:
     resolution: {integrity: sha512-ii4iagi25WusVoiC4B4lq7pbXfAp3D9v5CwfkY33vffw2+pkDjY1D8GaN7spsxvCSx8dkPqOZCEZyfxcmJG2IA==}
 
-  rollup-plugin-gzip@3.1.2:
-    resolution: {integrity: sha512-9xemMyvCjkklgNpu6jCYqQAbvCLJzA2nilkiOGzFuXTUX3cXEFMwIhsIBRF7kTKD/SnZ1tNPcxFm4m4zJ3VfNQ==}
+  rollup-plugin-gzip@4.0.1:
+    resolution: {integrity: sha512-HVukJ5vwTxgzKaNeKCNEqFRQ+/T/j/3zqoUaCN3VGTt8/Mn7Wu2nMCE8VBIDubjM5U+QGgiWs6fYysn63JZY1g==}
     engines: {node: '>=10.0.0'}
     peerDependencies:
       rollup: '>=2.0.0'
@@ -16531,7 +16531,7 @@ snapshots:
       hash-base: 3.1.0
       inherits: 2.0.4
 
-  rollup-plugin-gzip@3.1.2(rollup@4.14.0):
+  rollup-plugin-gzip@4.0.1(rollup@4.14.0):
     dependencies:
       rollup: 4.14.0
 
