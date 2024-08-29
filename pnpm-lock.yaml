@@ -189,8 +189,8 @@ importers:
         specifier: 0.21.0
         version: 0.21.0(rollup@4.14.0)(vite@5.2.8(@types/node@18.11.9)(sass@1.77.8)(terser@5.26.0))
       vite-plugin-static-copy:
-        specifier: ^0.17.0
-        version: 0.17.1(vite@5.2.8(@types/node@18.11.9)(sass@1.77.8)(terser@5.26.0))
+        specifier: ^1.0.0
+        version: 1.0.6(vite@5.2.8(@types/node@18.11.9)(sass@1.77.8)(terser@5.26.0))
       vite-plugin-treat-umd-as-commonjs:
         specifier: 0.1.4
         version: 0.1.4(vite@5.2.8(@types/node@18.11.9)(sass@1.77.8)(terser@5.26.0))
@@ -8768,11 +8768,11 @@ packages:
     peerDependencies:
       vite: ^2.0.0 || ^3.0.0 || ^4.0.0 || ^5.0.0
 
-  vite-plugin-static-copy@0.17.1:
-    resolution: {integrity: sha512-9h3iaVs0bqnqZOM5YHJXGHqdC5VAVlTZ2ARYsuNpzhEJUHmFqXY7dAK4ZFpjEQ4WLFKcaN8yWbczr81n01U4sQ==}
-    engines: {node: ^14.18.0 || >=16.0.0}
+  vite-plugin-static-copy@1.0.6:
+    resolution: {integrity: sha512-3uSvsMwDVFZRitqoWHj0t4137Kz7UynnJeq1EZlRW7e25h2068fyIZX4ORCCOAkfp1FklGxJNVJBkBOD+PZIew==}
+    engines: {node: ^18.0.0 || >=20.0.0}
     peerDependencies:
-      vite: ^3.0.0 || ^4.0.0 || ^5.0.0
+      vite: ^5.0.0
 
   vite-plugin-treat-umd-as-commonjs@0.1.4:
     resolution: {integrity: sha512-JkdmLaVvNP6637V2V6zKDKu+iGLQt6k38kHtKBdw9B7xTwfLAnFUF6qn9fyws9hDkBVl2v9QjLIME2GpfVFFnw==}
@@ -17765,7 +17765,7 @@ snapshots:
     transitivePeerDependencies:
       - rollup
 
-  vite-plugin-static-copy@0.17.1(vite@5.2.8(@types/node@18.11.9)(sass@1.77.8)(terser@5.26.0)):
+  vite-plugin-static-copy@1.0.6(vite@5.2.8(@types/node@18.11.9)(sass@1.77.8)(terser@5.26.0)):
     dependencies:
       chokidar: 3.6.0
       fast-glob: 3.3.2
