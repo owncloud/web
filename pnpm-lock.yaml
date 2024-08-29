@@ -885,9 +885,6 @@ importers:
       design-system:
         specifier: workspace:@ownclouders/design-system@*
         version: link:../design-system
-      web-app-webfinger:
-        specifier: workspace:*
-        version: 'link:'
     devDependencies:
       web-test-helpers:
         specifier: workspace:*

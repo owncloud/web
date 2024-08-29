@@ -30,7 +30,7 @@ import {
   useRoute,
   useRouteMeta
 } from '@ownclouders/web-pkg'
-import { OwnCloudServer, WebfingerDiscovery } from 'web-app-webfinger/src/discovery'
+import { OwnCloudServer, WebfingerDiscovery } from '../discovery'
 import { useGettext } from 'vue3-gettext'
 import { useAuthService } from '@ownclouders/web-pkg'
 
