@@ -146,7 +146,7 @@ import { SideBarEventTopics } from '@ownclouders/web-pkg'
 import { ContextMenuQuickAction } from '@ownclouders/web-pkg'
 import { useFileListHeaderPosition, useRoute, useRouter, usePagination } from '@ownclouders/web-pkg'
 import { Pagination } from '@ownclouders/web-pkg'
-import { perPageDefault, perPageStoragePrefix } from 'web-app-admin-settings/src/defaults'
+import { perPageDefault, perPageStoragePrefix } from '../../defaults'
 import { findIndex } from 'lodash-es'
 import {
   useKeyboardTableMouseActions,

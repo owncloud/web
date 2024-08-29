@@ -2,10 +2,7 @@ import { defaultPlugins, mount } from 'web-test-helpers'
 import { mock } from 'vitest-mock-extended'
 import { Resource } from '@ownclouders/web-client'
 import ContextActions from '../../../../src/components/Groups/ContextActions.vue'
-import {
-  useGroupActionsDelete,
-  useGroupActionsEdit
-} from 'web-app-admin-settings/src/composables/actions'
+import { useGroupActionsDelete, useGroupActionsEdit } from '../../../../src/composables/actions'
 import { computed, ref } from 'vue'
 import { Action } from '@ownclouders/web-pkg'
 
