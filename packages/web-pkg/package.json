@@ -35,7 +35,7 @@
   "dependencies": {
     "@toast-ui/editor-plugin-code-syntax-highlight": "^3.1.0",
     "@toast-ui/editor": "^3.2.2",
-    "js-generate-password": "^0.1.9",
+    "js-generate-password": "^1.0.0",
     "password-sheriff": "^1.1.1",
     "prismjs": "^1.29.0"
   },

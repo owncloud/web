@@ -1015,8 +1015,8 @@ importers:
         specifier: 6.6.2
         version: 6.6.2
       js-generate-password:
-        specifier: ^0.1.9
-        version: 0.1.9
+        specifier: ^1.0.0
+        version: 1.0.0
       lodash-es:
         specifier: ^4.17.21
         version: 4.17.21
@@ -5593,8 +5593,8 @@ packages:
     engines: {node: '>=14'}
     hasBin: true
 
-  js-generate-password@0.1.9:
-    resolution: {integrity: sha512-eBHpI+Re+zGZIsKBmBNjJk1bt7jeY8cBJMPhb+AhZaZ/DYjerCKwN6cQDjXUxFCHVHd8u9Fn4zgFBMDFQLoSZg==}
+  js-generate-password@1.0.0:
+    resolution: {integrity: sha512-CHeBLSaph7lwGDvovQXvV66/u3dWTM2hIOWMrnSJ1i/2J1Pm76EyUlV6W7KLwKZSMgQi4U5hcTkbbyLm+XwtXQ==}
     hasBin: true
 
   js-stringify@1.0.2:
@@ -14371,7 +14371,7 @@ snapshots:
       glob: 10.4.5
       nopt: 7.2.0
 
-  js-generate-password@0.1.9: {}
+  js-generate-password@1.0.0: {}
 
   js-stringify@1.0.2: {}
 
