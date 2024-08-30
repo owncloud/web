@@ -94,7 +94,7 @@ importers:
         version: 9.0.8
       '@vitejs/plugin-vue':
         specifier: 5.0.3
-        version: 5.0.3(vite@5.2.8(@types/node@18.11.9)(sass@1.77.8)(terser@5.26.0))(vue@3.4.21(typescript@5.5.4))
+        version: 5.0.3(vite@5.2.8(@types/node@18.11.9)(sass@1.77.8)(terser@5.26.0))(vue@3.4.38(typescript@5.5.4))
       '@vitest/coverage-v8':
         specifier: 2.0.3
         version: 2.0.3(vitest@2.0.5(@types/node@18.11.9)(happy-dom@13.3.1)(jsdom@25.0.0)(sass@1.77.8)(terser@5.26.0))
@@ -102,11 +102,11 @@ importers:
         specifier: 2.0.5
         version: 2.0.5(vitest@2.0.5(@types/node@18.11.9)(happy-dom@13.3.1)(jsdom@25.0.0)(sass@1.77.8)(terser@5.26.0))
       '@vue/compiler-dom':
-        specifier: 3.4.21
-        version: 3.4.21
+        specifier: 3.4.38
+        version: 3.4.38
       '@vue/compiler-sfc':
-        specifier: 3.4.21
-        version: 3.4.21
+        specifier: 3.4.38
+        version: 3.4.38
       '@vue/test-utils':
         specifier: 2.4.5
         version: 2.4.5
@@ -201,17 +201,17 @@ importers:
         specifier: 2.0.2
         version: 2.0.2(typescript@5.5.4)(vitest@2.0.5(@types/node@18.11.9)(happy-dom@13.3.1)(jsdom@25.0.0)(sass@1.77.8)(terser@5.26.0))
       vue:
-        specifier: 3.4.21
-        version: 3.4.21(typescript@5.5.4)
+        specifier: 3.4.38
+        version: 3.4.38(typescript@5.5.4)
       vue-demi:
         specifier: 0.14.10
-        version: 0.14.10(vue@3.4.21(typescript@5.5.4))
+        version: 0.14.10(vue@3.4.38(typescript@5.5.4))
       vue-tsc:
         specifier: 2.0.24
         version: 2.0.24(typescript@5.5.4)
       vue3-gettext:
         specifier: 2.4.0
-        version: 2.4.0(patch_hash=x32qkm4z6srz5xuveescagpdyu)(@vue/compiler-sfc@3.4.21)(vue@3.4.21(typescript@5.5.4))
+        version: 2.4.0(patch_hash=x32qkm4z6srz5xuveescagpdyu)(@vue/compiler-sfc@3.4.38)(vue@3.4.38(typescript@5.5.4))
 
   packages/babel-preset:
     dependencies:
@@ -241,7 +241,7 @@ importers:
         version: 7.5.4
       focus-trap-vue:
         specifier: ^4.0.1
-        version: 4.0.3(focus-trap@7.5.4)(vue@3.4.21(typescript@5.5.4))
+        version: 4.0.3(focus-trap@7.5.4)(vue@3.4.38(typescript@5.5.4))
       fuse.js:
         specifier: 6.6.2
         version: 6.6.2
@@ -255,20 +255,20 @@ importers:
         specifier: ^6.3.7
         version: 6.3.7
       vue:
-        specifier: 3.4.21
-        version: 3.4.21(typescript@5.5.4)
+        specifier: 3.4.38
+        version: 3.4.38(typescript@5.5.4)
       vue-inline-svg:
         specifier: 3.1.3
-        version: 3.1.3(vue@3.4.21(typescript@5.5.4))
+        version: 3.1.3(vue@3.4.38(typescript@5.5.4))
       vue-router:
         specifier: 4.2.5
-        version: 4.2.5(vue@3.4.21(typescript@5.5.4))
+        version: 4.2.5(vue@3.4.38(typescript@5.5.4))
       vue-select:
         specifier: 4.0.0-beta.6
-        version: 4.0.0-beta.6(vue@3.4.21(typescript@5.5.4))
+        version: 4.0.0-beta.6(vue@3.4.38(typescript@5.5.4))
       vue3-gettext:
         specifier: 2.4.0
-        version: 2.4.0(patch_hash=x32qkm4z6srz5xuveescagpdyu)(@vue/compiler-sfc@3.4.21)(vue@3.4.21(typescript@5.5.4))
+        version: 2.4.0(patch_hash=x32qkm4z6srz5xuveescagpdyu)(@vue/compiler-sfc@3.4.38)(vue@3.4.38(typescript@5.5.4))
       webfontloader:
         specifier: ^1.6.28
         version: 1.6.28
@@ -416,13 +416,13 @@ importers:
         version: 4.1.1(file-loader@6.2.0(webpack@5.89.0))(webpack@5.89.0)
       vue-loader:
         specifier: ^17.4.2
-        version: 17.4.2(@vue/compiler-sfc@3.4.21)(vue@3.4.21(typescript@5.5.4))(webpack@5.89.0)
+        version: 17.4.2(@vue/compiler-sfc@3.4.38)(vue@3.4.38(typescript@5.5.4))(webpack@5.89.0)
       vue-style-loader:
         specifier: ^4.1.3
         version: 4.1.3
       vue-styleguidist:
         specifier: ^4.72.4
-        version: 4.72.4(@vue/compiler-sfc@3.4.21)(eslint@8.56.0)(pug@3.0.2)(vue-loader@17.4.2(@vue/compiler-sfc@3.4.21)(vue@3.4.21(typescript@5.5.4))(webpack@5.89.0))(vue-template-compiler@2.7.14)(vue@3.4.21(typescript@5.5.4))(webpack@5.89.0)
+        version: 4.72.4(@vue/compiler-sfc@3.4.38)(eslint@8.56.0)(pug@3.0.2)(vue-loader@17.4.2(@vue/compiler-sfc@3.4.38)(vue@3.4.38(typescript@5.5.4))(webpack@5.89.0))(vue-template-compiler@2.7.14)(vue@3.4.38(typescript@5.5.4))(webpack@5.89.0)
       web-test-helpers:
         specifier: workspace:*
         version: link:../web-test-helpers
@@ -488,7 +488,7 @@ importers:
     dependencies:
       '@vitejs/plugin-vue':
         specifier: ^4.0.0
-        version: 4.6.2(vite@5.2.8(@types/node@18.11.9)(sass@1.77.8)(terser@5.26.0))(vue@3.4.21(typescript@5.5.4))
+        version: 4.6.2(vite@5.2.8(@types/node@18.11.9)(sass@1.77.8)(terser@5.26.0))(vue@3.4.38(typescript@5.5.4))
       rollup-plugin-serve:
         specifier: ^2.0.2
         version: 2.0.3
@@ -538,16 +538,16 @@ importers:
         version: 8.11.1
       pinia:
         specifier: 2.2.2
-        version: 2.2.2(typescript@5.5.4)(vue@3.4.21(typescript@5.5.4))
+        version: 2.2.2(typescript@5.5.4)(vue@3.4.38(typescript@5.5.4))
       uuid:
         specifier: 9.0.1
         version: 9.0.1
       vue-concurrency:
         specifier: 5.0.1
-        version: 5.0.1(vue@3.4.21(typescript@5.5.4))
+        version: 5.0.1(vue@3.4.38(typescript@5.5.4))
       vue-router:
         specifier: 4.2.5
-        version: 4.2.5(vue@3.4.21(typescript@5.5.4))
+        version: 4.2.5(vue@3.4.38(typescript@5.5.4))
     devDependencies:
       web-test-helpers:
         specifier: workspace:*
@@ -578,13 +578,13 @@ importers:
         version: 8.11.1
       pinia:
         specifier: 2.2.2
-        version: 2.2.2(typescript@5.5.4)(vue@3.4.21(typescript@5.5.4))
+        version: 2.2.2(typescript@5.5.4)(vue@3.4.38(typescript@5.5.4))
       vue-concurrency:
         specifier: 5.0.1
-        version: 5.0.1(vue@3.4.21(typescript@5.5.4))
+        version: 5.0.1(vue@3.4.38(typescript@5.5.4))
       vue-router:
         specifier: 4.2.5
-        version: 4.2.5(vue@3.4.21(typescript@5.5.4))
+        version: 4.2.5(vue@3.4.38(typescript@5.5.4))
       zod:
         specifier: 3.23.8
         version: 3.23.8
@@ -606,7 +606,7 @@ importers:
         version: 0.3.93
       vue3-gettext:
         specifier: 2.4.0
-        version: 2.4.0(patch_hash=x32qkm4z6srz5xuveescagpdyu)(@vue/compiler-sfc@3.4.21)(vue@3.4.21(typescript@5.5.4))
+        version: 2.4.0(patch_hash=x32qkm4z6srz5xuveescagpdyu)(@vue/compiler-sfc@3.4.38)(vue@3.4.38(typescript@5.5.4))
     devDependencies:
       web-test-helpers:
         specifier: workspace:*
@@ -625,19 +625,19 @@ importers:
         version: 4.17.21
       pinia:
         specifier: 2.2.2
-        version: 2.2.2(typescript@5.5.4)(vue@3.4.21(typescript@5.5.4))
+        version: 2.2.2(typescript@5.5.4)(vue@3.4.38(typescript@5.5.4))
       uuid:
         specifier: 9.0.1
         version: 9.0.1
       vue-concurrency:
         specifier: 5.0.1
-        version: 5.0.1(vue@3.4.21(typescript@5.5.4))
+        version: 5.0.1(vue@3.4.38(typescript@5.5.4))
       vue-router:
         specifier: 4.2.5
-        version: 4.2.5(vue@3.4.21(typescript@5.5.4))
+        version: 4.2.5(vue@3.4.38(typescript@5.5.4))
       vue3-gettext:
         specifier: 2.4.0
-        version: 2.4.0(patch_hash=x32qkm4z6srz5xuveescagpdyu)(@vue/compiler-sfc@3.4.21)(vue@3.4.21(typescript@5.5.4))
+        version: 2.4.0(patch_hash=x32qkm4z6srz5xuveescagpdyu)(@vue/compiler-sfc@3.4.38)(vue@3.4.38(typescript@5.5.4))
       zod:
         specifier: 3.23.8
         version: 3.23.8
@@ -659,7 +659,7 @@ importers:
         version: https://github.com/owncloud/uppy/releases/download/v3.12.13-owncloud/uppy-core.tgz
       '@vueuse/core':
         specifier: ^11.0.0
-        version: 11.0.3(vue@3.4.21(typescript@5.5.4))
+        version: 11.0.3(vue@3.4.38(typescript@5.5.4))
       axios:
         specifier: 1.7.5
         version: 1.7.5
@@ -692,7 +692,7 @@ importers:
         version: 6.6.2
       pinia:
         specifier: 2.2.2
-        version: 2.2.2(typescript@5.5.4)(vue@3.4.21(typescript@5.5.4))
+        version: 2.2.2(typescript@5.5.4)(vue@3.4.38(typescript@5.5.4))
       qs:
         specifier: 6.13.0
         version: 6.13.0
@@ -701,13 +701,13 @@ importers:
         version: 9.0.1
       vue-concurrency:
         specifier: 5.0.1
-        version: 5.0.1(vue@3.4.21(typescript@5.5.4))
+        version: 5.0.1(vue@3.4.38(typescript@5.5.4))
       vue-router:
         specifier: 4.2.5
-        version: 4.2.5(vue@3.4.21(typescript@5.5.4))
+        version: 4.2.5(vue@3.4.38(typescript@5.5.4))
       vue3-gettext:
         specifier: 2.4.0
-        version: 2.4.0(patch_hash=x32qkm4z6srz5xuveescagpdyu)(@vue/compiler-sfc@3.4.21)(vue@3.4.21(typescript@5.5.4))
+        version: 2.4.0(patch_hash=x32qkm4z6srz5xuveescagpdyu)(@vue/compiler-sfc@3.4.38)(vue@3.4.38(typescript@5.5.4))
       web-app-search:
         specifier: workspace:*
         version: link:../web-app-search
@@ -744,7 +744,7 @@ importers:
         version: https://github.com/owncloud/uppy/releases/download/v3.12.13-owncloud/uppy-webdav.tgz(@uppy/core@https://github.com/owncloud/uppy/releases/download/v3.12.13-owncloud/uppy-core.tgz)
       pinia:
         specifier: ^2.1.7
-        version: 2.2.2(typescript@5.5.4)(vue@3.4.21(typescript@5.5.4))
+        version: 2.2.2(typescript@5.5.4)(vue@3.4.38(typescript@5.5.4))
     devDependencies:
       web-test-helpers:
         specifier: workspace:*
@@ -775,10 +775,10 @@ importers:
         version: 9.0.1
       vue-concurrency:
         specifier: 5.0.1
-        version: 5.0.1(vue@3.4.21(typescript@5.5.4))
+        version: 5.0.1(vue@3.4.38(typescript@5.5.4))
       vue-router:
         specifier: 4.2.5
-        version: 4.2.5(vue@3.4.21(typescript@5.5.4))
+        version: 4.2.5(vue@3.4.38(typescript@5.5.4))
       zod:
         specifier: 3.23.8
         version: 3.23.8
@@ -790,7 +790,7 @@ importers:
         version: link:../web-pkg
       vue3-gettext:
         specifier: 2.4.0
-        version: 2.4.0(patch_hash=x32qkm4z6srz5xuveescagpdyu)(@vue/compiler-sfc@3.4.21)(vue@3.4.21(typescript@5.5.4))
+        version: 2.4.0(patch_hash=x32qkm4z6srz5xuveescagpdyu)(@vue/compiler-sfc@3.4.38)(vue@3.4.38(typescript@5.5.4))
     devDependencies:
       web-test-helpers:
         specifier: workspace:*
@@ -809,13 +809,13 @@ importers:
         version: 4.5.1
       '@vueuse/core':
         specifier: ^11.0.0
-        version: 11.0.3(vue@3.4.21(typescript@5.5.4))
+        version: 11.0.3(vue@3.4.38(typescript@5.5.4))
       vue-router:
         specifier: 4.2.5
-        version: 4.2.5(vue@3.4.21(typescript@5.5.4))
+        version: 4.2.5(vue@3.4.38(typescript@5.5.4))
       vue3-gettext:
         specifier: 2.4.0
-        version: 2.4.0(patch_hash=x32qkm4z6srz5xuveescagpdyu)(@vue/compiler-sfc@3.4.21)(vue@3.4.21(typescript@5.5.4))
+        version: 2.4.0(patch_hash=x32qkm4z6srz5xuveescagpdyu)(@vue/compiler-sfc@3.4.38)(vue@3.4.38(typescript@5.5.4))
     devDependencies:
       web-test-helpers:
         specifier: workspace:*
@@ -837,13 +837,13 @@ importers:
         version: 8.11.1
       pinia:
         specifier: 2.2.2
-        version: 2.2.2(typescript@5.5.4)(vue@3.4.21(typescript@5.5.4))
+        version: 2.2.2(typescript@5.5.4)(vue@3.4.38(typescript@5.5.4))
       vue-router:
         specifier: 4.2.5
-        version: 4.2.5(vue@3.4.21(typescript@5.5.4))
+        version: 4.2.5(vue@3.4.38(typescript@5.5.4))
       vue3-gettext:
         specifier: 2.4.0
-        version: 2.4.0(patch_hash=x32qkm4z6srz5xuveescagpdyu)(@vue/compiler-sfc@3.4.21)(vue@3.4.21(typescript@5.5.4))
+        version: 2.4.0(patch_hash=x32qkm4z6srz5xuveescagpdyu)(@vue/compiler-sfc@3.4.38)(vue@3.4.38(typescript@5.5.4))
     devDependencies:
       flush-promises:
         specifier: 1.0.2
@@ -862,10 +862,10 @@ importers:
         version: link:../web-pkg
       vue-concurrency:
         specifier: 5.0.1
-        version: 5.0.1(vue@3.4.21(typescript@5.5.4))
+        version: 5.0.1(vue@3.4.38(typescript@5.5.4))
       vue3-gettext:
         specifier: 2.4.0
-        version: 2.4.0(patch_hash=x32qkm4z6srz5xuveescagpdyu)(@vue/compiler-sfc@3.4.21)(vue@3.4.21(typescript@5.5.4))
+        version: 2.4.0(patch_hash=x32qkm4z6srz5xuveescagpdyu)(@vue/compiler-sfc@3.4.38)(vue@3.4.38(typescript@5.5.4))
     devDependencies:
       web-test-helpers:
         specifier: workspace:*
@@ -925,7 +925,7 @@ importers:
         version: 3.2.1
       '@vitejs/plugin-vue':
         specifier: 5.0.3
-        version: 5.0.3(vite@5.2.8(@types/node@18.11.9)(sass@1.77.8)(terser@5.26.0))(vue@3.4.21(typescript@5.5.4))
+        version: 5.0.3(vite@5.2.8(@types/node@18.11.9)(sass@1.77.8)(terser@5.26.0))(vue@3.4.38(typescript@5.5.4))
       clean-publish:
         specifier: 5.0.0
         version: 5.0.0
@@ -947,7 +947,7 @@ importers:
         version: 6.7.1
       '@casl/vue':
         specifier: ^2.2.2
-        version: 2.2.2(@casl/ability@6.7.1)(vue@3.4.21(typescript@5.5.4))
+        version: 2.2.2(@casl/ability@6.7.1)(vue@3.4.38(typescript@5.5.4))
       '@microsoft/fetch-event-source':
         specifier: ^2.0.1
         version: 2.0.1
@@ -956,7 +956,7 @@ importers:
         version: link:../web-client
       '@sentry/vue':
         specifier: 8.27.0
-        version: 8.27.0(vue@3.4.21(typescript@5.5.4))
+        version: 8.27.0(vue@3.4.38(typescript@5.5.4))
       '@toast-ui/editor':
         specifier: ^3.2.2
         version: 3.2.2
@@ -979,11 +979,11 @@ importers:
         specifier: https://github.com/owncloud/uppy/releases/download/v3.12.13-owncloud/uppy-xhr-upload.tgz
         version: https://github.com/owncloud/uppy/releases/download/v3.12.13-owncloud/uppy-xhr-upload.tgz(@uppy/core@https://github.com/owncloud/uppy/releases/download/v3.12.13-owncloud/uppy-core.tgz)
       '@vue/shared':
-        specifier: 3.4.23
-        version: 3.4.23
+        specifier: 3.4.38
+        version: 3.4.38
       '@vueuse/core':
         specifier: ^11.0.0
-        version: 11.0.3(vue@3.4.21(typescript@5.5.4))
+        version: 11.0.3(vue@3.4.38(typescript@5.5.4))
       axios:
         specifier: 1.7.5
         version: 1.7.5
@@ -1025,10 +1025,10 @@ importers:
         version: 1.1.1
       pinia:
         specifier: 2.2.2
-        version: 2.2.2(typescript@5.5.4)(vue@3.4.21(typescript@5.5.4))
+        version: 2.2.2(typescript@5.5.4)(vue@3.4.38(typescript@5.5.4))
       portal-vue:
         specifier: 3.0.0
-        version: 3.0.0(patch_hash=bogvb64kjdufpa4744k4xkam7u)(vue@3.4.21(typescript@5.5.4))
+        version: 3.0.0(patch_hash=bogvb64kjdufpa4744k4xkam7u)(vue@3.4.38(typescript@5.5.4))
       prismjs:
         specifier: ^1.29.0
         version: 1.29.0
@@ -1043,13 +1043,13 @@ importers:
         version: 9.0.1
       vue-concurrency:
         specifier: 5.0.1
-        version: 5.0.1(vue@3.4.21(typescript@5.5.4))
+        version: 5.0.1(vue@3.4.38(typescript@5.5.4))
       vue-router:
         specifier: 4.2.5
-        version: 4.2.5(vue@3.4.21(typescript@5.5.4))
+        version: 4.2.5(vue@3.4.38(typescript@5.5.4))
       vue3-gettext:
         specifier: 2.4.0
-        version: 2.4.0(patch_hash=x32qkm4z6srz5xuveescagpdyu)(@vue/compiler-sfc@3.4.21)(vue@3.4.21(typescript@5.5.4))
+        version: 2.4.0(patch_hash=x32qkm4z6srz5xuveescagpdyu)(@vue/compiler-sfc@3.4.38)(vue@3.4.38(typescript@5.5.4))
       zod:
         specifier: 3.23.8
         version: 3.23.8
@@ -1081,7 +1081,7 @@ importers:
         version: 6.7.1
       '@casl/vue':
         specifier: ^2.2.2
-        version: 2.2.2(@casl/ability@6.7.1)(vue@3.4.21(typescript@5.5.4))
+        version: 2.2.2(@casl/ability@6.7.1)(vue@3.4.38(typescript@5.5.4))
       '@microsoft/fetch-event-source':
         specifier: 2.0.1
         version: 2.0.1
@@ -1093,7 +1093,7 @@ importers:
         version: link:../web-pkg
       '@sentry/vue':
         specifier: 8.27.0
-        version: 8.27.0(vue@3.4.21(typescript@5.5.4))
+        version: 8.27.0(vue@3.4.38(typescript@5.5.4))
       '@uppy/core':
         specifier: https://github.com/owncloud/uppy/releases/download/v3.12.13-owncloud/uppy-core.tgz
         version: https://github.com/owncloud/uppy/releases/download/v3.12.13-owncloud/uppy-core.tgz
@@ -1111,10 +1111,10 @@ importers:
         version: https://github.com/owncloud/uppy/releases/download/v3.12.13-owncloud/uppy-xhr-upload.tgz(@uppy/core@https://github.com/owncloud/uppy/releases/download/v3.12.13-owncloud/uppy-core.tgz)
       '@vueuse/core':
         specifier: 11.0.3
-        version: 11.0.3(vue@3.4.21(typescript@5.5.4))
+        version: 11.0.3(vue@3.4.38(typescript@5.5.4))
       '@vueuse/head':
         specifier: 2.0.0
-        version: 2.0.0(vue@3.4.21(typescript@5.5.4))
+        version: 2.0.0(vue@3.4.38(typescript@5.5.4))
       axios:
         specifier: 1.7.5
         version: 1.7.5
@@ -1138,7 +1138,7 @@ importers:
         version: 7.5.4
       focus-trap-vue:
         specifier: ^4.0.1
-        version: 4.0.3(focus-trap@7.5.4)(vue@3.4.21(typescript@5.5.4))
+        version: 4.0.3(focus-trap@7.5.4)(vue@3.4.38(typescript@5.5.4))
       fuse.js:
         specifier: 6.6.2
         version: 6.6.2
@@ -1159,10 +1159,10 @@ importers:
         version: 6.6.2
       pinia:
         specifier: 2.2.2
-        version: 2.2.2(typescript@5.5.4)(vue@3.4.21(typescript@5.5.4))
+        version: 2.2.2(typescript@5.5.4)(vue@3.4.38(typescript@5.5.4))
       portal-vue:
         specifier: 3.0.0
-        version: 3.0.0(patch_hash=bogvb64kjdufpa4744k4xkam7u)(vue@3.4.21(typescript@5.5.4))
+        version: 3.0.0(patch_hash=bogvb64kjdufpa4744k4xkam7u)(vue@3.4.38(typescript@5.5.4))
       promise:
         specifier: ^8.1.0
         version: 8.3.0
@@ -1179,17 +1179,17 @@ importers:
         specifier: 9.0.1
         version: 9.0.1
       vue:
-        specifier: 3.4.21
-        version: 3.4.21(typescript@5.5.4)
+        specifier: 3.4.38
+        version: 3.4.38(typescript@5.5.4)
       vue-concurrency:
         specifier: 5.0.1
-        version: 5.0.1(vue@3.4.21(typescript@5.5.4))
+        version: 5.0.1(vue@3.4.38(typescript@5.5.4))
       vue-router:
         specifier: 4.2.5
-        version: 4.2.5(vue@3.4.21(typescript@5.5.4))
+        version: 4.2.5(vue@3.4.38(typescript@5.5.4))
       vue3-gettext:
         specifier: 2.4.0
-        version: 2.4.0(patch_hash=x32qkm4z6srz5xuveescagpdyu)(@vue/compiler-sfc@3.4.21)(vue@3.4.21(typescript@5.5.4))
+        version: 2.4.0(patch_hash=x32qkm4z6srz5xuveescagpdyu)(@vue/compiler-sfc@3.4.38)(vue@3.4.38(typescript@5.5.4))
       web-runtime:
         specifier: workspace:*
         version: 'link:'
@@ -1214,23 +1214,23 @@ importers:
         version: 6.7.1
       '@casl/vue':
         specifier: ^2.2.2
-        version: 2.2.2(@casl/ability@6.7.1)(vue@3.4.21(typescript@5.5.4))
+        version: 2.2.2(@casl/ability@6.7.1)(vue@3.4.38(typescript@5.5.4))
       axios:
         specifier: 1.7.5
         version: 1.7.5
       pinia:
         specifier: 2.2.2
-        version: 2.2.2(typescript@5.5.4)(vue@3.4.21(typescript@5.5.4))
+        version: 2.2.2(typescript@5.5.4)(vue@3.4.38(typescript@5.5.4))
       vue-router:
         specifier: 4.2.5
-        version: 4.2.5(vue@3.4.21(typescript@5.5.4))
+        version: 4.2.5(vue@3.4.38(typescript@5.5.4))
       vue3-gettext:
         specifier: 2.4.0
-        version: 2.4.0(patch_hash=x32qkm4z6srz5xuveescagpdyu)(@vue/compiler-sfc@3.4.21)(vue@3.4.21(typescript@5.5.4))
+        version: 2.4.0(patch_hash=x32qkm4z6srz5xuveescagpdyu)(@vue/compiler-sfc@3.4.38)(vue@3.4.38(typescript@5.5.4))
     devDependencies:
       '@pinia/testing':
         specifier: ^0.1.3
-        version: 0.1.3(pinia@2.2.2(typescript@5.5.4)(vue@3.4.21(typescript@5.5.4)))(vue@3.4.21(typescript@5.5.4))
+        version: 0.1.3(pinia@2.2.2(typescript@5.5.4)(vue@3.4.38(typescript@5.5.4)))(vue@3.4.38(typescript@5.5.4))
 
   tests/e2e:
     devDependencies:
@@ -2856,17 +2856,17 @@ packages:
   '@volar/typescript@2.4.1':
     resolution: {integrity: sha512-UoRzC0PXcwajFQTu8XxKSYNsWNBtVja6Y9gC8eLv7kYm+UEKJCcZ8g7dialsOYA0HKs3Vpg57MeCsawFLC6m9Q==}
 
-  '@vue/compiler-core@3.4.21':
-    resolution: {integrity: sha512-MjXawxZf2SbZszLPYxaFCjxfibYrzr3eYbKxwpLR9EQN+oaziSu3qKVbwBERj1IFIB8OLUewxB5m/BFzi613og==}
+  '@vue/compiler-core@3.4.38':
+    resolution: {integrity: sha512-8IQOTCWnLFqfHzOGm9+P8OPSEDukgg3Huc92qSG49if/xI2SAwLHQO2qaPQbjCWPBcQoO1WYfXfTACUrWV3c5A==}
 
-  '@vue/compiler-dom@3.4.21':
-    resolution: {integrity: sha512-IZC6FKowtT1sl0CR5DpXSiEB5ayw75oT2bma1BEhV7RRR1+cfwLrxc2Z8Zq/RGFzJ8w5r9QtCOvTjQgdn0IKmA==}
+  '@vue/compiler-dom@3.4.38':
+    resolution: {integrity: sha512-Osc/c7ABsHXTsETLgykcOwIxFktHfGSUDkb05V61rocEfsFDcjDLH/IHJSNJP+/Sv9KeN2Lx1V6McZzlSb9EhQ==}
 
-  '@vue/compiler-sfc@3.4.21':
-    resolution: {integrity: sha512-me7epoTxYlY+2CUM7hy9PCDdpMPfIwrOvAXud2Upk10g4YLv9UBW7kL798TvMeDhPthkZ0CONNrK2GoeI1ODiQ==}
+  '@vue/compiler-sfc@3.4.38':
+    resolution: {integrity: sha512-s5QfZ+9PzPh3T5H4hsQDJtI8x7zdJaew/dCGgqZ2630XdzaZ3AD8xGZfBqpT8oaD/p2eedd+pL8tD5vvt5ZYJQ==}
 
-  '@vue/compiler-ssr@3.4.21':
-    resolution: {integrity: sha512-M5+9nI2lPpAsgXOGQobnIueVqc9sisBFexh5yMIMRAPYLa7+5wEJs8iqOZc1WAa9WQbx9GR2twgznU8LTIiZ4Q==}
+  '@vue/compiler-ssr@3.4.38':
+    resolution: {integrity: sha512-YXznKFQ8dxYpAz9zLuVvfcXhc31FSPFDcqr0kyujbOwNhlmaNvL2QfIy+RZeJgSn5Fk54CWoEUeW+NVBAogGaw==}
 
   '@vue/compiler-vue2@2.7.16':
     resolution: {integrity: sha512-qYC3Psj9S/mfu9uVi5WvNZIzq+xnXMhOwbTFKKDD7b1lhpnn71jXSFdTQ+WsIEk0ONCd7VV2IMm7ONl6tbQ86A==}
@@ -2890,25 +2890,22 @@ packages:
       typescript:
         optional: true
 
-  '@vue/reactivity@3.4.21':
-    resolution: {integrity: sha512-UhenImdc0L0/4ahGCyEzc/pZNwVgcglGy9HVzJ1Bq2Mm9qXOpP8RyNTjookw/gOCUlXSEtuZ2fUg5nrHcoqJcw==}
+  '@vue/reactivity@3.4.38':
+    resolution: {integrity: sha512-4vl4wMMVniLsSYYeldAKzbk72+D3hUnkw9z8lDeJacTxAkXeDAP1uE9xr2+aKIN0ipOL8EG2GPouVTH6yF7Gnw==}
 
-  '@vue/runtime-core@3.4.21':
-    resolution: {integrity: sha512-pQthsuYzE1XcGZznTKn73G0s14eCJcjaLvp3/DKeYWoFacD9glJoqlNBxt3W2c5S40t6CCcpPf+jG01N3ULyrA==}
+  '@vue/runtime-core@3.4.38':
+    resolution: {integrity: sha512-21z3wA99EABtuf+O3IhdxP0iHgkBs1vuoCAsCKLVJPEjpVqvblwBnTj42vzHRlWDCyxu9ptDm7sI2ZMcWrQqlA==}
 
-  '@vue/runtime-dom@3.4.21':
-    resolution: {integrity: sha512-gvf+C9cFpevsQxbkRBS1NpU8CqxKw0ebqMvLwcGQrNpx6gqRDodqKqA+A2VZZpQ9RpK2f9yfg8VbW/EpdFUOJw==}
+  '@vue/runtime-dom@3.4.38':
+    resolution: {integrity: sha512-afZzmUreU7vKwKsV17H1NDThEEmdYI+GCAK/KY1U957Ig2NATPVjCROv61R19fjZNzMmiU03n79OMnXyJVN0UA==}
 
-  '@vue/server-renderer@3.4.21':
-    resolution: {integrity: sha512-aV1gXyKSN6Rz+6kZ6kr5+Ll14YzmIbeuWe7ryJl5muJ4uwSwY/aStXTixx76TwkZFJLm1aAlA/HSWEJ4EyiMkg==}
+  '@vue/server-renderer@3.4.38':
+    resolution: {integrity: sha512-NggOTr82FbPEkkUvBm4fTGcwUY8UuTsnWC/L2YZBmvaQ4C4Jl/Ao4HHTB+l7WnFCt5M/dN3l0XLuyjzswGYVCA==}
     peerDependencies:
-      vue: 3.4.21
+      vue: 3.4.38
 
-  '@vue/shared@3.4.21':
-    resolution: {integrity: sha512-PuJe7vDIi6VYSinuEbUIQgMIRZGgM8e4R+G+/dQTk0X1NEdvgvvgv7m+rfmDH1gZzyA1OjjoWskvHlfRNfQf3g==}
-
-  '@vue/shared@3.4.23':
-    resolution: {integrity: sha512-wBQ0gvf+SMwsCQOyusNw/GoXPV47WGd1xB5A1Pgzy0sQ3Bi5r5xm3n+92y3gCnB3MWqnRDdvfkRGxhKtbBRNgg==}
+  '@vue/shared@3.4.38':
+    resolution: {integrity: sha512-q0xCiLkuWWQLzVrecPb0RMsNWyxICOjPrcrwxTUEHb1fsnvni4dcuyG7RT/Ie7VPTvnjzIaWzRMUBsrqNj/hhw==}
 
   '@vue/test-utils@2.4.5':
     resolution: {integrity: sha512-oo2u7vktOyKUked36R93NB7mg2B+N7Plr8lxp2JBGwr18ch6EggFjixSCdIVVLkT6Qr0z359Xvnafc9dcKyDUg==}
@@ -8980,8 +8977,8 @@ packages:
       '@vue/compiler-sfc': '>=3.0.0'
       vue: '>=3.0.0'
 
-  vue@3.4.21:
-    resolution: {integrity: sha512-5hjyV/jLEIKD/jYl4cavMcnzKwjMKohureP8ejn3hhEjwhWIhWeuzL2kJAjzl/WyVsgPY56Sy4Z40C3lVshxXA==}
+  vue@3.4.38:
+    resolution: {integrity: sha512-f0ZgN+mZ5KFgVv9wz0f4OgVKukoXtS3nwET4c2vLBGQR50aI8G0cqbFtLlX9Yiyg3LFGBitruPHt2PxwTduJEw==}
     peerDependencies:
       typescript: '*'
     peerDependenciesMeta:
@@ -10075,10 +10072,10 @@ snapshots:
     dependencies:
       '@ucast/mongo2js': 1.3.4
 
-  '@casl/vue@2.2.2(@casl/ability@6.7.1)(vue@3.4.21(typescript@5.5.4))':
+  '@casl/vue@2.2.2(@casl/ability@6.7.1)(vue@3.4.38(typescript@5.5.4))':
     dependencies:
       '@casl/ability': 6.7.1
-      vue: 3.4.21(typescript@5.5.4)
+      vue: 3.4.38(typescript@5.5.4)
 
   '@codemirror/autocomplete@6.12.0(@codemirror/language@6.10.0)(@codemirror/state@6.4.0)(@codemirror/view@6.23.0)(@lezer/common@1.2.0)':
     dependencies:
@@ -10225,7 +10222,7 @@ snapshots:
       '@cucumber/ci-environment': 9.1.0
       '@cucumber/cucumber-expressions': 16.1.1
       '@cucumber/gherkin': 26.0.3
-      '@cucumber/gherkin-streams': 5.0.1(@cucumber/gherkin@26.0.3)(@cucumber/message-streams@4.0.1(@cucumber/messages@21.0.1))(@cucumber/messages@21.0.1)
+      '@cucumber/gherkin-streams': 5.0.1(@cucumber/gherkin@26.0.3)(@cucumber/message-streams@4.0.1(@cucumber/messages@26.0.0))(@cucumber/messages@21.0.1)
       '@cucumber/gherkin-utils': 8.0.2
       '@cucumber/html-formatter': 20.2.1(@cucumber/messages@21.0.1)
       '@cucumber/message-streams': 4.0.1(@cucumber/messages@21.0.1)
@@ -10263,7 +10260,7 @@ snapshots:
       yaml: 2.3.4
       yup: 0.32.11
 
-  '@cucumber/gherkin-streams@5.0.1(@cucumber/gherkin@26.0.3)(@cucumber/message-streams@4.0.1(@cucumber/messages@21.0.1))(@cucumber/messages@21.0.1)':
+  '@cucumber/gherkin-streams@5.0.1(@cucumber/gherkin@26.0.3)(@cucumber/message-streams@4.0.1(@cucumber/messages@26.0.0))(@cucumber/messages@21.0.1)':
     dependencies:
       '@cucumber/gherkin': 26.0.3
       '@cucumber/message-streams': 4.0.1(@cucumber/messages@21.0.1)
@@ -10611,10 +10608,10 @@ snapshots:
 
   '@panzoom/panzoom@4.5.1': {}
 
-  '@pinia/testing@0.1.3(pinia@2.2.2(typescript@5.5.4)(vue@3.4.21(typescript@5.5.4)))(vue@3.4.21(typescript@5.5.4))':
+  '@pinia/testing@0.1.3(pinia@2.2.2(typescript@5.5.4)(vue@3.4.38(typescript@5.5.4)))(vue@3.4.38(typescript@5.5.4))':
     dependencies:
-      pinia: 2.2.2(typescript@5.5.4)(vue@3.4.21(typescript@5.5.4))
-      vue-demi: 0.14.10(vue@3.4.21(typescript@5.5.4))
+      pinia: 2.2.2(typescript@5.5.4)(vue@3.4.38(typescript@5.5.4))
+      vue-demi: 0.14.10(vue@3.4.38(typescript@5.5.4))
     transitivePeerDependencies:
       - '@vue/composition-api'
       - vue
@@ -10786,13 +10783,13 @@ snapshots:
     dependencies:
       '@sentry/types': 8.27.0
 
-  '@sentry/vue@8.27.0(vue@3.4.21(typescript@5.5.4))':
+  '@sentry/vue@8.27.0(vue@3.4.38(typescript@5.5.4))':
     dependencies:
       '@sentry/browser': 8.27.0
       '@sentry/core': 8.27.0
       '@sentry/types': 8.27.0
       '@sentry/utils': 8.27.0
-      vue: 3.4.21(typescript@5.5.4)
+      vue: 3.4.38(typescript@5.5.4)
 
   '@sindresorhus/merge-streams@2.3.0': {}
 
@@ -11054,13 +11051,13 @@ snapshots:
       '@unhead/schema': 1.8.4
       '@unhead/shared': 1.8.4
 
-  '@unhead/vue@1.8.4(vue@3.4.21(typescript@5.5.4))':
+  '@unhead/vue@1.8.4(vue@3.4.38(typescript@5.5.4))':
     dependencies:
       '@unhead/schema': 1.8.4
       '@unhead/shared': 1.8.4
       hookable: 5.5.3
       unhead: 1.8.4
-      vue: 3.4.21(typescript@5.5.4)
+      vue: 3.4.38(typescript@5.5.4)
 
   '@uppy/companion-client@https://github.com/owncloud/uppy/releases/download/v3.12.13-owncloud/uppy-companion-client.tgz':
     dependencies:
@@ -11172,15 +11169,15 @@ snapshots:
       '@uppy/utils': https://github.com/owncloud/uppy/releases/download/v3.12.13-owncloud/uppy-utils.tgz
       nanoid: 4.0.0
 
-  '@vitejs/plugin-vue@4.6.2(vite@5.2.8(@types/node@18.11.9)(sass@1.77.8)(terser@5.26.0))(vue@3.4.21(typescript@5.5.4))':
+  '@vitejs/plugin-vue@4.6.2(vite@5.2.8(@types/node@18.11.9)(sass@1.77.8)(terser@5.26.0))(vue@3.4.38(typescript@5.5.4))':
     dependencies:
       vite: 5.2.8(@types/node@18.11.9)(sass@1.77.8)(terser@5.26.0)
-      vue: 3.4.21(typescript@5.5.4)
+      vue: 3.4.38(typescript@5.5.4)
 
-  '@vitejs/plugin-vue@5.0.3(vite@5.2.8(@types/node@18.11.9)(sass@1.77.8)(terser@5.26.0))(vue@3.4.21(typescript@5.5.4))':
+  '@vitejs/plugin-vue@5.0.3(vite@5.2.8(@types/node@18.11.9)(sass@1.77.8)(terser@5.26.0))(vue@3.4.38(typescript@5.5.4))':
     dependencies:
       vite: 5.2.8(@types/node@18.11.9)(sass@1.77.8)(terser@5.26.0)
-      vue: 3.4.21(typescript@5.5.4)
+      vue: 3.4.38(typescript@5.5.4)
 
   '@vitest/coverage-v8@2.0.3(vitest@2.0.5(@types/node@18.11.9)(happy-dom@13.3.1)(jsdom@25.0.0)(sass@1.77.8)(terser@5.26.0))':
     dependencies:
@@ -11253,35 +11250,35 @@ snapshots:
       path-browserify: 1.0.1
       vscode-uri: 3.0.8
 
-  '@vue/compiler-core@3.4.21':
+  '@vue/compiler-core@3.4.38':
     dependencies:
       '@babel/parser': 7.24.8
-      '@vue/shared': 3.4.21
+      '@vue/shared': 3.4.38
       entities: 4.5.0
       estree-walker: 2.0.2
       source-map-js: 1.2.0
 
-  '@vue/compiler-dom@3.4.21':
+  '@vue/compiler-dom@3.4.38':
     dependencies:
-      '@vue/compiler-core': 3.4.21
-      '@vue/shared': 3.4.21
+      '@vue/compiler-core': 3.4.38
+      '@vue/shared': 3.4.38
 
-  '@vue/compiler-sfc@3.4.21':
+  '@vue/compiler-sfc@3.4.38':
     dependencies:
       '@babel/parser': 7.24.8
-      '@vue/compiler-core': 3.4.21
-      '@vue/compiler-dom': 3.4.21
-      '@vue/compiler-ssr': 3.4.21
-      '@vue/shared': 3.4.21
+      '@vue/compiler-core': 3.4.38
+      '@vue/compiler-dom': 3.4.38
+      '@vue/compiler-ssr': 3.4.38
+      '@vue/shared': 3.4.38
       estree-walker: 2.0.2
       magic-string: 0.30.11
       postcss: 8.4.41
       source-map-js: 1.2.0
 
-  '@vue/compiler-ssr@3.4.21':
+  '@vue/compiler-ssr@3.4.38':
     dependencies:
-      '@vue/compiler-dom': 3.4.21
-      '@vue/shared': 3.4.21
+      '@vue/compiler-dom': 3.4.38
+      '@vue/shared': 3.4.38
 
   '@vue/compiler-vue2@2.7.16':
     dependencies:
@@ -11293,8 +11290,8 @@ snapshots:
   '@vue/language-core@2.0.24(typescript@5.5.4)':
     dependencies:
       '@volar/language-core': 2.4.1
-      '@vue/compiler-dom': 3.4.21
-      '@vue/shared': 3.4.23
+      '@vue/compiler-dom': 3.4.38
+      '@vue/shared': 3.4.38
       computeds: 0.0.1
       minimatch: 9.0.5
       muggle-string: 0.4.1
@@ -11306,9 +11303,9 @@ snapshots:
   '@vue/language-core@2.0.29(typescript@5.5.4)':
     dependencies:
       '@volar/language-core': 2.4.1
-      '@vue/compiler-dom': 3.4.21
+      '@vue/compiler-dom': 3.4.38
       '@vue/compiler-vue2': 2.7.16
-      '@vue/shared': 3.4.23
+      '@vue/shared': 3.4.38
       computeds: 0.0.1
       minimatch: 9.0.5
       muggle-string: 0.4.1
@@ -11316,59 +11313,58 @@ snapshots:
     optionalDependencies:
       typescript: 5.5.4
 
-  '@vue/reactivity@3.4.21':
+  '@vue/reactivity@3.4.38':
     dependencies:
-      '@vue/shared': 3.4.21
+      '@vue/shared': 3.4.38
 
-  '@vue/runtime-core@3.4.21':
+  '@vue/runtime-core@3.4.38':
     dependencies:
-      '@vue/reactivity': 3.4.21
-      '@vue/shared': 3.4.21
+      '@vue/reactivity': 3.4.38
+      '@vue/shared': 3.4.38
 
-  '@vue/runtime-dom@3.4.21':
+  '@vue/runtime-dom@3.4.38':
     dependencies:
-      '@vue/runtime-core': 3.4.21
-      '@vue/shared': 3.4.21
+      '@vue/reactivity': 3.4.38
+      '@vue/runtime-core': 3.4.38
+      '@vue/shared': 3.4.38
       csstype: 3.1.3
 
-  '@vue/server-renderer@3.4.21(vue@3.4.21(typescript@5.5.4))':
+  '@vue/server-renderer@3.4.38(vue@3.4.38(typescript@5.5.4))':
     dependencies:
-      '@vue/compiler-ssr': 3.4.21
-      '@vue/shared': 3.4.21
-      vue: 3.4.21(typescript@5.5.4)
+      '@vue/compiler-ssr': 3.4.38
+      '@vue/shared': 3.4.38
+      vue: 3.4.38(typescript@5.5.4)
 
-  '@vue/shared@3.4.21': {}
-
-  '@vue/shared@3.4.23': {}
+  '@vue/shared@3.4.38': {}
 
   '@vue/test-utils@2.4.5':
     dependencies:
       js-beautify: 1.14.11
       vue-component-type-helpers: 2.0.13
 
-  '@vueuse/core@11.0.3(vue@3.4.21(typescript@5.5.4))':
+  '@vueuse/core@11.0.3(vue@3.4.38(typescript@5.5.4))':
     dependencies:
       '@types/web-bluetooth': 0.0.20
       '@vueuse/metadata': 11.0.3
-      '@vueuse/shared': 11.0.3(vue@3.4.21(typescript@5.5.4))
-      vue-demi: 0.14.10(vue@3.4.21(typescript@5.5.4))
+      '@vueuse/shared': 11.0.3(vue@3.4.38(typescript@5.5.4))
+      vue-demi: 0.14.10(vue@3.4.38(typescript@5.5.4))
     transitivePeerDependencies:
       - '@vue/composition-api'
       - vue
 
-  '@vueuse/head@2.0.0(vue@3.4.21(typescript@5.5.4))':
+  '@vueuse/head@2.0.0(vue@3.4.38(typescript@5.5.4))':
     dependencies:
       '@unhead/dom': 1.8.4
       '@unhead/schema': 1.8.4
       '@unhead/ssr': 1.8.4
-      '@unhead/vue': 1.8.4(vue@3.4.21(typescript@5.5.4))
-      vue: 3.4.21(typescript@5.5.4)
+      '@unhead/vue': 1.8.4(vue@3.4.38(typescript@5.5.4))
+      vue: 3.4.38(typescript@5.5.4)
 
   '@vueuse/metadata@11.0.3': {}
 
-  '@vueuse/shared@11.0.3(vue@3.4.21(typescript@5.5.4))':
+  '@vueuse/shared@11.0.3(vue@3.4.38(typescript@5.5.4))':
     dependencies:
-      vue-demi: 0.14.10(vue@3.4.21(typescript@5.5.4))
+      vue-demi: 0.14.10(vue@3.4.38(typescript@5.5.4))
     transitivePeerDependencies:
       - '@vue/composition-api'
       - vue
@@ -13088,7 +13084,7 @@ snapshots:
 
   eslint-plugin-prettier-vue@5.0.0:
     dependencies:
-      '@vue/compiler-sfc': 3.4.21
+      '@vue/compiler-sfc': 3.4.38
       picocolors: 1.0.1
       prettier: 3.3.3
       prettier-linter-helpers: 1.0.0
@@ -13553,10 +13549,10 @@ snapshots:
       inherits: 2.0.4
       readable-stream: 2.3.8
 
-  focus-trap-vue@4.0.3(focus-trap@7.5.4)(vue@3.4.21(typescript@5.5.4)):
+  focus-trap-vue@4.0.3(focus-trap@7.5.4)(vue@3.4.38(typescript@5.5.4)):
     dependencies:
       focus-trap: 7.5.4
-      vue: 3.4.21(typescript@5.5.4)
+      vue: 3.4.38(typescript@5.5.4)
 
   focus-trap@7.5.4:
     dependencies:
@@ -15516,11 +15512,11 @@ snapshots:
 
   pify@4.0.1: {}
 
-  pinia@2.2.2(typescript@5.5.4)(vue@3.4.21(typescript@5.5.4)):
+  pinia@2.2.2(typescript@5.5.4)(vue@3.4.38(typescript@5.5.4)):
     dependencies:
       '@vue/devtools-api': 6.6.3
-      vue: 3.4.21(typescript@5.5.4)
-      vue-demi: 0.14.10(vue@3.4.21(typescript@5.5.4))
+      vue: 3.4.38(typescript@5.5.4)
+      vue-demi: 0.14.10(vue@3.4.38(typescript@5.5.4))
     optionalDependencies:
       typescript: 5.5.4
 
@@ -15608,9 +15604,9 @@ snapshots:
 
   pofile@1.1.4: {}
 
-  portal-vue@3.0.0(patch_hash=bogvb64kjdufpa4744k4xkam7u)(vue@3.4.21(typescript@5.5.4)):
+  portal-vue@3.0.0(patch_hash=bogvb64kjdufpa4744k4xkam7u)(vue@3.4.38(typescript@5.5.4)):
     optionalDependencies:
-      vue: 3.4.21(typescript@5.5.4)
+      vue: 3.4.38(typescript@5.5.4)
 
   portfinder@1.0.32(supports-color@6.1.0):
     dependencies:
@@ -17847,29 +17843,29 @@ snapshots:
 
   vue-component-type-helpers@2.0.13: {}
 
-  vue-concurrency@5.0.1(vue@3.4.21(typescript@5.5.4)):
+  vue-concurrency@5.0.1(vue@3.4.38(typescript@5.5.4)):
     dependencies:
       caf: 15.0.1(patch_hash=l6oc6ggvh6ycwg3k5urnriyw5a)
-      vue: 3.4.21(typescript@5.5.4)
+      vue: 3.4.38(typescript@5.5.4)
 
-  vue-demi@0.14.10(vue@3.4.21(typescript@5.5.4)):
+  vue-demi@0.14.10(vue@3.4.38(typescript@5.5.4)):
     dependencies:
-      vue: 3.4.21(typescript@5.5.4)
+      vue: 3.4.38(typescript@5.5.4)
 
-  vue-docgen-api@4.75.1(vue@3.4.21(typescript@5.5.4)):
+  vue-docgen-api@4.75.1(vue@3.4.38(typescript@5.5.4)):
     dependencies:
       '@babel/parser': 7.24.8
       '@babel/types': 7.24.9
-      '@vue/compiler-dom': 3.4.21
-      '@vue/compiler-sfc': 3.4.21
+      '@vue/compiler-dom': 3.4.38
+      '@vue/compiler-sfc': 3.4.38
       ast-types: 0.16.1
       hash-sum: 2.0.0
       lru-cache: 8.0.5
       pug: 3.0.2
       recast: 0.23.4
       ts-map: 1.0.3
-      vue: 3.4.21(typescript@5.5.4)
-      vue-inbrowser-compiler-independent-utils: 4.71.1(vue@3.4.21(typescript@5.5.4))
+      vue: 3.4.38(typescript@5.5.4)
+      vue-inbrowser-compiler-independent-utils: 4.71.1(vue@3.4.38(typescript@5.5.4))
 
   vue-eslint-parser@9.4.3(eslint@8.56.0):
     dependencies:
@@ -17884,79 +17880,79 @@ snapshots:
     transitivePeerDependencies:
       - supports-color
 
-  vue-inbrowser-compiler-demi@4.71.1(@vue/compiler-sfc@3.4.21)(vue-template-compiler@2.7.14)(vue@3.4.21(typescript@5.5.4)):
+  vue-inbrowser-compiler-demi@4.71.1(@vue/compiler-sfc@3.4.38)(vue-template-compiler@2.7.14)(vue@3.4.38(typescript@5.5.4)):
     dependencies:
-      vue: 3.4.21(typescript@5.5.4)
+      vue: 3.4.38(typescript@5.5.4)
     optionalDependencies:
-      '@vue/compiler-sfc': 3.4.21
+      '@vue/compiler-sfc': 3.4.38
       vue-template-compiler: 2.7.14
 
-  vue-inbrowser-compiler-independent-utils@4.71.1(vue@3.4.21(typescript@5.5.4)):
+  vue-inbrowser-compiler-independent-utils@4.71.1(vue@3.4.38(typescript@5.5.4)):
     dependencies:
-      vue: 3.4.21(typescript@5.5.4)
+      vue: 3.4.38(typescript@5.5.4)
 
-  vue-inbrowser-compiler-utils@4.72.4(@vue/compiler-sfc@3.4.21)(vue-template-compiler@2.7.14)(vue@3.4.21(typescript@5.5.4)):
+  vue-inbrowser-compiler-utils@4.72.4(@vue/compiler-sfc@3.4.38)(vue-template-compiler@2.7.14)(vue@3.4.38(typescript@5.5.4)):
     dependencies:
       camelcase: 5.3.1
-      vue: 3.4.21(typescript@5.5.4)
-      vue-inbrowser-compiler-demi: 4.71.1(@vue/compiler-sfc@3.4.21)(vue-template-compiler@2.7.14)(vue@3.4.21(typescript@5.5.4))
-      vue-inbrowser-compiler-independent-utils: 4.71.1(vue@3.4.21(typescript@5.5.4))
+      vue: 3.4.38(typescript@5.5.4)
+      vue-inbrowser-compiler-demi: 4.71.1(@vue/compiler-sfc@3.4.38)(vue-template-compiler@2.7.14)(vue@3.4.38(typescript@5.5.4))
+      vue-inbrowser-compiler-independent-utils: 4.71.1(vue@3.4.38(typescript@5.5.4))
     transitivePeerDependencies:
       - '@vue/compiler-sfc'
       - vue-template-compiler
 
-  vue-inbrowser-compiler@4.72.4(@vue/compiler-sfc@3.4.21)(vue-template-compiler@2.7.14)(vue@3.4.21(typescript@5.5.4)):
+  vue-inbrowser-compiler@4.72.4(@vue/compiler-sfc@3.4.38)(vue-template-compiler@2.7.14)(vue@3.4.38(typescript@5.5.4)):
     dependencies:
       acorn: 6.4.2
       acorn-jsx: 5.3.2(acorn@6.4.2)
       buble: 0.20.0
       camelcase: 5.3.1
       detect-browser: 5.3.0
-      vue: 3.4.21(typescript@5.5.4)
-      vue-inbrowser-compiler-utils: 4.72.4(@vue/compiler-sfc@3.4.21)(vue-template-compiler@2.7.14)(vue@3.4.21(typescript@5.5.4))
+      vue: 3.4.38(typescript@5.5.4)
+      vue-inbrowser-compiler-utils: 4.72.4(@vue/compiler-sfc@3.4.38)(vue-template-compiler@2.7.14)(vue@3.4.38(typescript@5.5.4))
       walkes: 0.2.1
     transitivePeerDependencies:
       - '@vue/compiler-sfc'
       - vue-template-compiler
 
-  vue-inbrowser-prismjs-highlighter@4.69.1(@vue/compiler-sfc@3.4.21)(vue-template-compiler@2.7.14)(vue@3.4.21(typescript@5.5.4)):
+  vue-inbrowser-prismjs-highlighter@4.69.1(@vue/compiler-sfc@3.4.38)(vue-template-compiler@2.7.14)(vue@3.4.38(typescript@5.5.4)):
     dependencies:
       prismjs: 1.29.0
-      vue-inbrowser-compiler-utils: 4.72.4(@vue/compiler-sfc@3.4.21)(vue-template-compiler@2.7.14)(vue@3.4.21(typescript@5.5.4))
+      vue-inbrowser-compiler-utils: 4.72.4(@vue/compiler-sfc@3.4.38)(vue-template-compiler@2.7.14)(vue@3.4.38(typescript@5.5.4))
     transitivePeerDependencies:
       - '@vue/compiler-sfc'
       - vue
       - vue-template-compiler
 
-  vue-inline-svg@3.1.3(vue@3.4.21(typescript@5.5.4)):
+  vue-inline-svg@3.1.3(vue@3.4.38(typescript@5.5.4)):
     dependencies:
-      vue: 3.4.21(typescript@5.5.4)
+      vue: 3.4.38(typescript@5.5.4)
 
-  vue-loader@17.4.2(@vue/compiler-sfc@3.4.21)(vue@3.4.21(typescript@5.5.4))(webpack@5.89.0):
+  vue-loader@17.4.2(@vue/compiler-sfc@3.4.38)(vue@3.4.38(typescript@5.5.4))(webpack@5.89.0):
     dependencies:
       chalk: 4.1.2
       hash-sum: 2.0.0
       watchpack: 2.4.0
       webpack: 5.89.0
     optionalDependencies:
-      '@vue/compiler-sfc': 3.4.21
-      vue: 3.4.21(typescript@5.5.4)
+      '@vue/compiler-sfc': 3.4.38
+      vue: 3.4.38(typescript@5.5.4)
 
-  vue-router@4.2.5(vue@3.4.21(typescript@5.5.4)):
+  vue-router@4.2.5(vue@3.4.38(typescript@5.5.4)):
     dependencies:
       '@vue/devtools-api': 6.6.3
-      vue: 3.4.21(typescript@5.5.4)
+      vue: 3.4.38(typescript@5.5.4)
 
-  vue-select@4.0.0-beta.6(vue@3.4.21(typescript@5.5.4)):
+  vue-select@4.0.0-beta.6(vue@3.4.38(typescript@5.5.4)):
     dependencies:
-      vue: 3.4.21(typescript@5.5.4)
+      vue: 3.4.38(typescript@5.5.4)
 
   vue-style-loader@4.1.3:
     dependencies:
       hash-sum: 1.0.2
       loader-utils: 1.4.2
 
-  vue-styleguidist@4.72.4(@vue/compiler-sfc@3.4.21)(eslint@8.56.0)(pug@3.0.2)(vue-loader@17.4.2(@vue/compiler-sfc@3.4.21)(vue@3.4.21(typescript@5.5.4))(webpack@5.89.0))(vue-template-compiler@2.7.14)(vue@3.4.21(typescript@5.5.4))(webpack@5.89.0):
+  vue-styleguidist@4.72.4(@vue/compiler-sfc@3.4.38)(eslint@8.56.0)(pug@3.0.2)(vue-loader@17.4.2(@vue/compiler-sfc@3.4.38)(vue@3.4.38(typescript@5.5.4))(webpack@5.89.0))(vue-template-compiler@2.7.14)(vue@3.4.38(typescript@5.5.4))(webpack@5.89.0):
     dependencies:
       '@babel/runtime': 7.20.13
       '@vxna/mini-html-webpack-template': 1.0.0
@@ -18010,18 +18006,18 @@ snapshots:
       terser-webpack-plugin: 4.2.3(webpack@5.89.0)
       to-ast: 1.0.0
       typescript: 4.9.5
-      vue: 3.4.21(typescript@5.5.4)
-      vue-docgen-api: 4.75.1(vue@3.4.21(typescript@5.5.4))
-      vue-inbrowser-compiler: 4.72.4(@vue/compiler-sfc@3.4.21)(vue-template-compiler@2.7.14)(vue@3.4.21(typescript@5.5.4))
-      vue-inbrowser-compiler-utils: 4.72.4(@vue/compiler-sfc@3.4.21)(vue-template-compiler@2.7.14)(vue@3.4.21(typescript@5.5.4))
-      vue-inbrowser-prismjs-highlighter: 4.69.1(@vue/compiler-sfc@3.4.21)(vue-template-compiler@2.7.14)(vue@3.4.21(typescript@5.5.4))
-      vue-loader: 17.4.2(@vue/compiler-sfc@3.4.21)(vue@3.4.21(typescript@5.5.4))(webpack@5.89.0)
+      vue: 3.4.38(typescript@5.5.4)
+      vue-docgen-api: 4.75.1(vue@3.4.38(typescript@5.5.4))
+      vue-inbrowser-compiler: 4.72.4(@vue/compiler-sfc@3.4.38)(vue-template-compiler@2.7.14)(vue@3.4.38(typescript@5.5.4))
+      vue-inbrowser-compiler-utils: 4.72.4(@vue/compiler-sfc@3.4.38)(vue-template-compiler@2.7.14)(vue@3.4.38(typescript@5.5.4))
+      vue-inbrowser-prismjs-highlighter: 4.69.1(@vue/compiler-sfc@3.4.38)(vue-template-compiler@2.7.14)(vue@3.4.38(typescript@5.5.4))
+      vue-loader: 17.4.2(@vue/compiler-sfc@3.4.38)(vue@3.4.38(typescript@5.5.4))(webpack@5.89.0)
       webpack: 5.89.0
       webpack-dev-server: 3.11.3(webpack@5.89.0)
       webpack-filter-warnings-plugin: 1.2.1(webpack@5.89.0)
       webpack-merge: 4.2.2
     optionalDependencies:
-      '@vue/compiler-sfc': 3.4.21
+      '@vue/compiler-sfc': 3.4.38
       pug: 3.0.2
       vue-template-compiler: 2.7.14
     transitivePeerDependencies:
@@ -18051,9 +18047,9 @@ snapshots:
       semver: 7.6.3
       typescript: 5.5.4
 
-  vue3-gettext@2.4.0(patch_hash=x32qkm4z6srz5xuveescagpdyu)(@vue/compiler-sfc@3.4.21)(vue@3.4.21(typescript@5.5.4)):
+  vue3-gettext@2.4.0(patch_hash=x32qkm4z6srz5xuveescagpdyu)(@vue/compiler-sfc@3.4.38)(vue@3.4.38(typescript@5.5.4)):
     dependencies:
-      '@vue/compiler-sfc': 3.4.21
+      '@vue/compiler-sfc': 3.4.38
       chalk: 4.1.2
       command-line-args: 5.2.1
       cosmiconfig: 7.1.0
@@ -18063,15 +18059,15 @@ snapshots:
       parse5-htmlparser2-tree-adapter: 6.0.1
       pofile: 1.1.4
       tslib: 2.5.0
-      vue: 3.4.21(typescript@5.5.4)
+      vue: 3.4.38(typescript@5.5.4)
 
-  vue@3.4.21(typescript@5.5.4):
+  vue@3.4.38(typescript@5.5.4):
     dependencies:
-      '@vue/compiler-dom': 3.4.21
-      '@vue/compiler-sfc': 3.4.21
-      '@vue/runtime-dom': 3.4.21
-      '@vue/server-renderer': 3.4.21(vue@3.4.21(typescript@5.5.4))
-      '@vue/shared': 3.4.21
+      '@vue/compiler-dom': 3.4.38
+      '@vue/compiler-sfc': 3.4.38
+      '@vue/runtime-dom': 3.4.38
+      '@vue/server-renderer': 3.4.38(vue@3.4.38(typescript@5.5.4))
+      '@vue/shared': 3.4.38
     optionalDependencies:
       typescript: 5.5.4
 
