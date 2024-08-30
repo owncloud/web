@@ -8,9 +8,9 @@
     "web-test-helpers": "workspace:*"
   },
   "dependencies": {
-    "@uppy/dashboard": "3.3.0",
-    "@uppy/google-drive": "3.3.0",
-    "@uppy/onedrive": "3.3.0",
+    "@uppy/dashboard": "3.9.1",
+    "@uppy/google-drive": "3.6.0",
+    "@uppy/onedrive": "3.4.0",
     "@uppy/webdav": "https://github.com/owncloud/uppy/releases/download/v3.12.13-owncloud/uppy-webdav.tgz"
   },
   "peerDependencies": {
