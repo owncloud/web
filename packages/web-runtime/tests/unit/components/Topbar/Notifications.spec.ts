@@ -1,11 +1,11 @@
-import Notifications from 'web-runtime/src/components/Topbar/Notifications.vue'
-import { Notification } from 'web-runtime/src/helpers/notifications'
+import Notifications from '../../../../src/components/Topbar/Notifications.vue'
+import { Notification } from '../../../../src/helpers/notifications'
 import { mock } from 'vitest-mock-extended'
 import { defaultComponentMocks, defaultPlugins, shallowMount } from 'web-test-helpers'
 import { SpaceResource } from '@ownclouders/web-client'
 import { RouterLink, RouteLocationNamedRaw, RouteLocationNormalizedLoaded } from 'vue-router'
 import { AxiosResponse } from 'axios'
-import Avatar from 'web-runtime/src/components/Avatar.vue'
+import Avatar from '../../../../src/components/Avatar.vue'
 
 const selectors = {
   notificationBellStub: 'notification-bell-stub',

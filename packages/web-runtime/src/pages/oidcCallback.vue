@@ -18,7 +18,7 @@
 <script lang="ts">
 import { computed, defineComponent, onBeforeUnmount, onMounted, ref, unref } from 'vue'
 import { useEmbedMode, useRoute, useThemeStore } from '@ownclouders/web-pkg'
-import { authService } from 'web-runtime/src/services/auth'
+import { authService } from '../services/auth'
 import { storeToRefs } from 'pinia'
 
 export default defineComponent({

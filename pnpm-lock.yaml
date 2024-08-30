@@ -1190,9 +1190,6 @@ importers:
       vue3-gettext:
         specifier: 2.4.0
         version: 2.4.0(patch_hash=x32qkm4z6srz5xuveescagpdyu)(@vue/compiler-sfc@3.4.38)(vue@3.4.38(typescript@5.5.4))
-      web-runtime:
-        specifier: workspace:*
-        version: 'link:'
       webdav:
         specifier: 5.7.1
         version: 5.7.1

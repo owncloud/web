@@ -1,4 +1,4 @@
-import ApplicationsMenu from 'web-runtime/src/components/Topbar/ApplicationsMenu.vue'
+import ApplicationsMenu from '../../../../src/components/Topbar/ApplicationsMenu.vue'
 import {
   RouteLocation,
   defaultComponentMocks,

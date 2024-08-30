@@ -37,7 +37,7 @@ import {
   isPublicSpaceResource,
   PublicSpaceResource
 } from '@ownclouders/web-client'
-import { loadCustomTranslations } from 'web-runtime/src/helpers/customTranslations'
+import { loadCustomTranslations } from './helpers/customTranslations'
 import { createApp, watch } from 'vue'
 import PortalVue, { createWormhole } from 'portal-vue'
 import { createPinia } from 'pinia'

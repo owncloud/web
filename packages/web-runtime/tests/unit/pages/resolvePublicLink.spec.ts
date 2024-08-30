@@ -3,10 +3,10 @@ import { defaultPlugins, defaultComponentMocks, shallowMount } from 'web-test-he
 import { mockDeep } from 'vitest-mock-extended'
 import { CapabilityStore, ClientService, useRouteParam } from '@ownclouders/web-pkg'
 import { DavHttpError, SpaceResource } from '@ownclouders/web-client'
-import { authService } from 'web-runtime/src/services/auth'
+import { authService } from '../../../src/services/auth'
 import { ref } from 'vue'
 
-vi.mock('web-runtime/src/services/auth')
+vi.mock('../../../src/services/auth')
 
 vi.mock('@ownclouders/web-pkg', async (importOriginal) => ({
   ...(await importOriginal<any>()),

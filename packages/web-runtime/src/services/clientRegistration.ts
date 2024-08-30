@@ -1,6 +1,6 @@
 import { buildUrl, OpenIdConnectConfig } from '@ownclouders/web-pkg'
 import { v4 as uuidV4 } from 'uuid'
-import { router } from 'web-runtime/src/router'
+import { router } from '../router'
 
 async function get(url: string) {
   return await fetch(url, { headers: { 'X-Request-ID': uuidV4() } })

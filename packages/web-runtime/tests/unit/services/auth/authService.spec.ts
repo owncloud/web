@@ -1,14 +1,14 @@
 import { ConfigStore, useAuthStore, useConfigStore } from '@ownclouders/web-pkg'
 import { mock } from 'vitest-mock-extended'
 import { Router } from 'vue-router'
-import { AuthService } from 'web-runtime/src/services/auth/authService'
-import { UserManager } from 'web-runtime/src/services/auth/userManager'
+import { AuthService } from '../../../../src/services/auth/authService'
+import { UserManager } from '../../../../src/services/auth/userManager'
 import { RouteLocation, createRouter, createTestingPinia } from 'web-test-helpers/src'
 
 const mockUpdateContext = vi.fn()
 console.debug = vi.fn()
 
-vi.mock('web-runtime/src/services/auth/userManager')
+vi.mock('../../../../src/services/auth/userManager')
 
 const initAuthService = ({
   authService,

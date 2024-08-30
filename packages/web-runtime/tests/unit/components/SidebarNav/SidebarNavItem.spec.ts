@@ -1,4 +1,4 @@
-import SidebarNavItem from 'web-runtime/src/components/SidebarNav/SidebarNavItem.vue'
+import SidebarNavItem from '../../../../src/components/SidebarNav/SidebarNavItem.vue'
 import sidebarNavItemFixtures from '../../../__fixtures__/sidebarNavItems'
 import { defaultPlugins, mount } from 'web-test-helpers'
 

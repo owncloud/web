@@ -1,5 +1,5 @@
 import { DOMWrapper } from '@vue/test-utils'
-import SkipTo from 'web-runtime/src/components/SkipTo.vue'
+import SkipTo from '../../../src/components/SkipTo.vue'
 import { shallowMount } from 'web-test-helpers'
 ;(document as any).getElementById = vi.fn(() => ({
   setAttribute: vi.fn(),
