@@ -1,5 +1,5 @@
 import { computed, Ref, ref, unref, watch } from 'vue'
-import { buildShareSpaceResource, SHARE_JAIL_ID, SpaceResource } from '@ownclouders/web-client'
+import { SHARE_JAIL_ID, SpaceResource } from '@ownclouders/web-client'
 import { useRouteQuery } from '../router'
 import { useSpacesLoading } from './useSpacesLoading'
 import { queryItemAsString } from '../appDefaults'
@@ -104,12 +104,14 @@ export const useDriveResolver = (options: DriveResolverOptions = {}): DriveResol
           shareIdStr = [SHARE_JAIL_ID, shareIdStr].join('!')
         }
 
-        matchingSpace = buildShareSpaceResource({
-          driveAliasPrefix,
-          id: shareIdStr,
-          shareName: unref(shareName),
-          serverUrl: configStore.serverUrl
-        })
+        matchingSpace =
+          spacesStore.getSpace(shareIdStr) ||
+          spacesStore.createShareSpace({
+            driveAliasPrefix,
+            id: shareIdStr,
+            shareName: unref(shareName)
+          })
+
         path = item.join('/')
       } else {
         if (unref(fileId)) {

@@ -1,6 +1,10 @@
 import { defineStore } from 'pinia'
 import { computed, ref, unref } from 'vue'
-import { isCollaboratorShare, SpaceResource } from '@ownclouders/web-client'
+import {
+  buildShareSpaceResource,
+  isCollaboratorShare,
+  SpaceResource
+} from '@ownclouders/web-client'
 import { Graph } from '@ownclouders/web-client/graph'
 import {
   buildSpace,
@@ -107,6 +111,29 @@ export const useSpacesStore = defineStore('spaces', () => {
 
   const removeSpace = (space: SpaceResource) => {
     spaces.value = unref(spaces).filter(({ id }) => id !== space.id)
+  }
+
+  const getSpace = (id: string) => {
+    return unref(spaces).find((s) => id == s.id)
+  }
+
+  const createShareSpace = ({
+    driveAliasPrefix,
+    id,
+    shareName
+  }: {
+    driveAliasPrefix: 'share' | 'ocm-share'
+    id: string
+    shareName: string
+  }) => {
+    const space = buildShareSpaceResource({
+      driveAliasPrefix,
+      id,
+      shareName,
+      serverUrl: configStore.serverUrl
+    })
+    addSpaces([space])
+    return space
   }
 
   const upsertSpace = (space: SpaceResource) => {
@@ -238,6 +265,8 @@ export const useSpacesStore = defineStore('spaces', () => {
     currentSpace,
     personalSpace,
 
+    getSpace,
+    createShareSpace,
     setSpacesInitialized,
     setMountPointsInitialized,
     setSpacesLoading,

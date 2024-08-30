@@ -1,7 +1,8 @@
 import { useGetMatchingSpace } from '../../../../src/composables/spaces'
 import { defaultComponentMocks, getComposableWrapper, RouteLocation } from 'web-test-helpers'
 import { mock } from 'vitest-mock-extended'
-import { Resource, SpaceResource } from '@ownclouders/web-client'
+import { Resource, ShareSpaceResource, SpaceResource } from '@ownclouders/web-client'
+import { useSpacesStore } from '../../../../src/composables/piniaStores'
 
 describe('useSpaceHelpers', () => {
   it('should be valid', () => {
@@ -29,7 +30,11 @@ describe('useSpaceHelpers', () => {
       getWrapper({
         setup: ({ getMatchingSpace }) => {
           const resource = mock<Resource>({ remoteItemPath: '/' })
-          expect(getMatchingSpace(resource).driveType).toEqual('share')
+          const shareSpace = { id: '1' } as ShareSpaceResource
+          const { createShareSpace } = useSpacesStore()
+          vi.mocked(createShareSpace).mockReturnValue(shareSpace)
+
+          expect(getMatchingSpace(resource)).toEqual(shareSpace)
         }
       })
     })

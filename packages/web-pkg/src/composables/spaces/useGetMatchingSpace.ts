@@ -2,7 +2,6 @@ import { useRouteParam } from '../router'
 import { Resource, SpaceResource } from '@ownclouders/web-client'
 import {
   MountPointSpaceResource,
-  buildShareSpaceResource,
   extractStorageId,
   isMountPointSpaceResource,
   isProjectSpaceResource,
@@ -63,12 +62,14 @@ export const useGetMatchingSpace = (options?: GetMatchingSpaceOptions) => {
       shareName = resource.name
     }
 
-    return buildShareSpaceResource({
-      driveAliasPrefix,
-      id: resource.remoteItemId,
-      shareName,
-      serverUrl: configStore.serverUrl
-    })
+    return (
+      spacesStore.getSpace(resource.remoteItemId) ||
+      spacesStore.createShareSpace({
+        driveAliasPrefix,
+        id: resource.remoteItemId,
+        shareName
+      })
+    )
   }
 
   const getMatchingMountPoints = (space: SpaceResource): MountPointSpaceResource[] =>

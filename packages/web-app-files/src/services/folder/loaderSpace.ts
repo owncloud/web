@@ -1,19 +1,30 @@
 import { FolderLoader, FolderLoaderTask, TaskContext } from '../folder'
 import { Router } from 'vue-router'
 import { useTask } from 'vue-concurrency'
-import { isLocationPublicActive, isLocationSpacesActive } from '@ownclouders/web-pkg'
+import isEmpty from 'lodash-es/isEmpty'
 import {
+  isLocationPublicActive,
+  isLocationSpacesActive,
+  SharesStore,
+  SpacesStore,
+  UserStore
+} from '@ownclouders/web-pkg'
+import {
+  buildIncomingShareResource,
   call,
+  isMountPointSpaceResource,
   isPersonalSpaceResource,
   isPublicSpaceResource,
   isShareSpaceResource,
+  SpaceMember,
   SpaceResource
 } from '@ownclouders/web-client'
 import { unref } from 'vue'
 import { FolderLoaderOptions } from './types'
 import { useFileRouteReplace } from '@ownclouders/web-pkg'
-import { IncomingShareResource } from '@ownclouders/web-client'
 import { getIndicators } from '@ownclouders/web-pkg'
+import { Graph } from '@ownclouders/web-client/graph'
+import { DriveItem } from '@ownclouders/web-client/graph/generated'
 
 export class FolderLoaderSpace implements FolderLoader {
   public isEnabled(): boolean {
@@ -32,9 +43,20 @@ export class FolderLoaderSpace implements FolderLoader {
   }
 
   public getTask(context: TaskContext): FolderLoaderTask {
-    const { router, clientService, resourcesStore, userStore, authService } = context
-    const { webdav } = clientService
+    const {
+      router,
+      clientService,
+      resourcesStore,
+      userStore,
+      authService,
+      spacesStore,
+      sharesStore
+    } = context
+    const { webdav, graphAuthenticated: graphClient } = clientService
     const { replaceInvalidFileRoute } = useFileRouteReplace({ router })
+
+    const getSharedDriveItem = this.getSharedDriveItem
+    const setCurrentUserShareSpacePermissions = this.setCurrentUserShareSpacePermissions
 
     return useTask(function* (
       signal1,
@@ -56,15 +78,17 @@ export class FolderLoaderSpace implements FolderLoader {
           replaceInvalidFileRoute({ space, resource: currentFolder, path, fileId })
         }
 
+        let sharedDriveItem: DriveItem
+
         if (path === '/') {
           if (isShareSpaceResource(space)) {
-            // FIXME: it would be cleaner to fetch the driveItem as soon as graph api is capable of it
-            currentFolder = {
-              ...currentFolder,
-              id: space.id,
-              syncEnabled: true,
-              canShare: () => false
-            } as IncomingShareResource
+            sharedDriveItem = yield* call(getSharedDriveItem({ graphClient, spacesStore, space }))
+            if (sharedDriveItem) {
+              currentFolder = buildIncomingShareResource({
+                graphRoles: sharesStore.graphRoles,
+                driveItem: sharedDriveItem
+              })
+            }
           } else if (!isPersonalSpaceResource(space) && !isPublicSpaceResource(space)) {
             // note: in the future we might want to show the space as root for personal spaces as well (to show quota and the like). Currently not needed.
             currentFolder = space
@@ -85,9 +109,23 @@ export class FolderLoaderSpace implements FolderLoader {
           }
         }
 
-        // TODO: remove when server returns share id for federated shares in propfind response
         if (isShareSpaceResource(space)) {
+          // TODO: remove when server returns share id for federated shares in propfind response
           resources.forEach((r) => (r.remoteItemId = space.id))
+
+          // add current user as space member if not already loaded
+          if (isEmpty(space.members)) {
+            if (!sharedDriveItem) {
+              sharedDriveItem = yield* call(getSharedDriveItem({ graphClient, spacesStore, space }))
+            }
+            setCurrentUserShareSpacePermissions({
+              sharesStore,
+              spacesStore,
+              userStore,
+              space,
+              sharedDriveItem
+            })
+          }
         }
 
         resourcesStore.initResourceList({ currentFolder, resources })
@@ -100,5 +138,79 @@ export class FolderLoaderSpace implements FolderLoader {
         }
       }
     }).restartable()
+  }
+
+  /**
+   * Gets the drive item for a given shared space.
+   */
+  private async getSharedDriveItem({
+    graphClient,
+    spacesStore,
+    space
+  }: {
+    graphClient: Graph
+    spacesStore: SpacesStore
+    space: SpaceResource
+  }) {
+    await spacesStore.loadMountPoints({ graphClient })
+
+    const mountPoints = spacesStore.spaces.filter(isMountPointSpaceResource)
+    // even if the resource has been shared via multiple permissions (e.g. directly via user and a group)
+    // we only care about one matching mount point since the remote item contains all permissions
+    const matchingMountPoint = mountPoints.find((s) => s.root?.remoteItem?.id === space.id)
+    if (!matchingMountPoint) {
+      return null
+    }
+    const { id } = matchingMountPoint
+    return graphClient.driveItems.getDriveItem(id.split('!')[0], id)
+  }
+
+  /**
+   * Since shared spaces are only virtual, they and their permissions can't be fetched from the server.
+   * Hence the permissions for the current user need to be set manually via the corresponding drive item.
+   */
+  private setCurrentUserShareSpacePermissions({
+    sharesStore,
+    spacesStore,
+    userStore,
+    space,
+    sharedDriveItem
+  }: {
+    sharesStore: SharesStore
+    spacesStore: SpacesStore
+    userStore: UserStore
+    space: SpaceResource
+    sharedDriveItem: DriveItem
+  }) {
+    const permissions = sharedDriveItem?.remoteItem?.permissions || []
+    if (!permissions.length) {
+      return
+    }
+
+    const allPermissions: string[] = []
+    permissions.forEach((permission) => {
+      if (permission['@libre.graph.permissions.actions']) {
+        allPermissions.push(...permission['@libre.graph.permissions.actions'])
+        return
+      }
+      const role = sharesStore.graphRoles[permission.roles[0]]
+      if (!role) {
+        return
+      }
+      const permissions = role.rolePermissions.flatMap((p) => p.allowedResourceActions)
+      allPermissions.push(...permissions)
+    })
+
+    const uniquePermissions = [...new Set(allPermissions)]
+    const spaceMember: SpaceMember = {
+      grantedTo: { user: { id: userStore.user.id, displayName: userStore.user.displayName } },
+      permissions: uniquePermissions,
+      roleId: ''
+    }
+    spacesStore.updateSpaceField({
+      id: space.id,
+      field: 'members',
+      value: { [userStore.user.id]: spaceMember }
+    })
   }
 }

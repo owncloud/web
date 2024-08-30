@@ -1,12 +1,18 @@
 import DetailsAndEdit from '../../../../../../src/components/SideBar/Shares/Links/DetailsAndEdit.vue'
-import { LinkShare, ShareRole, ShareTypes } from '@ownclouders/web-client'
-import { defaultPlugins, shallowMount, defaultComponentMocks } from 'web-test-helpers'
+import { LinkShare, ShareRole, ShareTypes, SpaceResource } from '@ownclouders/web-client'
+import {
+  defaultPlugins,
+  shallowMount,
+  defaultComponentMocks,
+  useGetMatchingSpaceMock
+} from 'web-test-helpers'
 import { mock } from 'vitest-mock-extended'
 import {
   useLinkTypes,
   LinkRoleDropdown,
   AncestorMetaDataValue,
-  AncestorMetaData
+  AncestorMetaData,
+  useGetMatchingSpace
 } from '@ownclouders/web-pkg'
 import { SharingLinkType } from '@ownclouders/web-client/graph/generated'
 import { Resource } from '@ownclouders/web-client'
@@ -14,7 +20,8 @@ import OcButton from 'design-system/src/components/OcButton/OcButton.vue'
 
 vi.mock('@ownclouders/web-pkg', async (importOriginal) => ({
   ...(await importOriginal<any>()),
-  useLinkTypes: vi.fn()
+  useLinkTypes: vi.fn(),
+  useGetMatchingSpace: vi.fn()
 }))
 
 const exampleLink = {
@@ -108,6 +115,12 @@ function getShallowMountedWrapper({
     mock<ReturnType<typeof useLinkTypes>>({
       getAvailableLinkTypes: () => availableLinkTypes,
       getLinkRoleByType: () => mock<ShareRole>({ displayName: '', description: '', label: '' })
+    })
+  )
+
+  vi.mocked(useGetMatchingSpace).mockImplementation(() =>
+    useGetMatchingSpaceMock({
+      getInternalSpace: () => mock<SpaceResource>()
     })
   )
 
