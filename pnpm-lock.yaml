@@ -661,7 +661,7 @@ importers:
         specifier: https://github.com/owncloud/uppy/releases/download/v3.12.13-owncloud/uppy-core.tgz
         version: https://github.com/owncloud/uppy/releases/download/v3.12.13-owncloud/uppy-core.tgz
       '@vueuse/core':
-        specifier: ^10.3.0 || ^11.0.0
+        specifier: ^11.0.0
         version: 11.0.3(vue@3.4.21(typescript@5.5.4))
       axios:
         specifier: 1.7.5
@@ -811,7 +811,7 @@ importers:
         specifier: ^4.5.1
         version: 4.5.1
       '@vueuse/core':
-        specifier: ^10.3.0 || ^11.0.0
+        specifier: ^11.0.0
         version: 11.0.3(vue@3.4.21(typescript@5.5.4))
       vue-router:
         specifier: 4.2.5
@@ -985,7 +985,7 @@ importers:
         specifier: 3.4.23
         version: 3.4.23
       '@vueuse/core':
-        specifier: ^10.3.0 || ^11.0.0
+        specifier: ^11.0.0
         version: 11.0.3(vue@3.4.21(typescript@5.5.4))
       axios:
         specifier: 1.7.5
