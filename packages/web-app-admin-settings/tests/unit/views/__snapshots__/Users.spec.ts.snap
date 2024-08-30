@@ -29,7 +29,7 @@ exports[`Users view > list view > renders initially warning if filters are manda
           <div data-v-32efd9c6="" class="oc-flex oc-flex-middle">
             <div data-v-32efd9c6="" class=""><label class="oc-label" for="users-filter">Search</label>
               <div class="oc-position-relative">
-                <!--v-if--> <input id="users-filter" modelmodifiers="[object Object]" autocomplete="off" aria-invalid="false" class="oc-text-input oc-input oc-rounded" type="text">
+                <!--v-if--> <input id="users-filter" modelmodifiers="[object Object]" autocomplete="off" aria-invalid="false" class="oc-text-input oc-input oc-rounded" type="text" value="">
                 <!--v-if-->
               </div>
               <!--v-if-->
@@ -77,7 +77,7 @@ exports[`Users view > list view > renders list initially 1`] = `
           <div data-v-32efd9c6="" class="oc-flex oc-flex-middle">
             <div data-v-32efd9c6="" class=""><label class="oc-label" for="users-filter">Search</label>
               <div class="oc-position-relative">
-                <!--v-if--> <input id="users-filter" modelmodifiers="[object Object]" autocomplete="off" aria-invalid="false" class="oc-text-input oc-input oc-rounded" type="text">
+                <!--v-if--> <input id="users-filter" modelmodifiers="[object Object]" autocomplete="off" aria-invalid="false" class="oc-text-input oc-input oc-rounded" type="text" value="">
                 <!--v-if-->
               </div>
               <!--v-if-->

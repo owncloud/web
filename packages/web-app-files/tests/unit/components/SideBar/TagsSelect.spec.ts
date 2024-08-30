@@ -114,7 +114,7 @@ describe('Tag Select', () => {
   })
 
   it('does not accept tags consisting of blanks only', () => {
-    const { wrapper } = createWrapper(mockDeep<Resource>({ tags: [] }))
+    const { wrapper } = createWrapper(mock<Resource>({ tags: [] }))
     const option = wrapper.vm.createOption(' ')
     expect(option.error).toBeDefined()
     expect(option.selectable).toBeFalsy()
