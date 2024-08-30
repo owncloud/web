@@ -11,7 +11,7 @@
     "@ownclouders/web-client": "workspace:*",
     "@ownclouders/web-pkg": "workspace:*",
     "@uppy/core": "^3.3.0",
-    "@vueuse/core": "^10.3.0",
+    "@vueuse/core": "^11.0.0",
     "axios": "1.7.5",
     "design-system": "workspace:@ownclouders/design-system@*",
     "dompurify": "^3.0.6",

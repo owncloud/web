@@ -13,7 +13,7 @@
   "peerDependencies": {
     "@ownclouders/web-client": "workspace:*",
     "@ownclouders/web-pkg": "workspace:*",
-    "@vueuse/core": "^10.3.0",
+    "@vueuse/core": "^11.0.0",
     "vue3-gettext": "2.4.0",
     "vue-router": "4.2.5"
   }
