@@ -15,7 +15,7 @@ export const useTokenTimerWorker = ({ authService }: { authService: AuthServiceI
     worker.value = createWorker(TokenWorker as unknown as string)
 
     unref(unref(worker).worker).onmessage = () => {
-      authService.signinSilent().catch((error) => {
+      authService.signinSilent().catch(async (error) => {
         if (error instanceof ErrorTimeout) {
           console.warn('token renewal timed out, retrying in 5 seconds...')
           unref(worker).post(JSON.stringify({ topic: 'set', expiry: 5, expiryThreshold: 0 }))
@@ -23,6 +23,12 @@ export const useTokenTimerWorker = ({ authService }: { authService: AuthServiceI
         }
 
         console.error('token renewal error:', error)
+
+        // log out user if they don't have a refresh token
+        const refreshToken = await authService.getRefreshToken()
+        if (!refreshToken) {
+          return authService.logoutUser()
+        }
       })
     }
   }
