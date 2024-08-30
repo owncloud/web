@@ -35,8 +35,7 @@ import FileInfo from './Files/FileInfo.vue'
 import {
   isLocationCommonActive,
   isLocationSharesActive,
-  isLocationSpacesActive,
-  isLocationTrashActive
+  isLocationSpacesActive
 } from '../../router'
 import {
   SidebarPanelExtension,
@@ -50,10 +49,10 @@ import {
   useSpacesStore,
   useSharesStore,
   useResourcesStore,
-  useUserStore,
   useConfigStore,
   useAppsStore,
-  useCanListShares
+  useCanListShares,
+  useCanListVersions
 } from '../../composables'
 import {
   isProjectSpaceResource,
@@ -61,12 +60,11 @@ import {
   Resource,
   ShareRole,
   call,
-  isSpaceResource,
-  isPersonalSpaceResource,
   isCollaboratorShare,
   isLinkShare,
   isShareSpaceResource,
-  isIncomingShareResource
+  isIncomingShareResource,
+  isPersonalSpaceResource
 } from '@ownclouders/web-client'
 import { storeToRefs } from 'pinia'
 import { useTask } from 'vue-concurrency'
@@ -98,10 +96,10 @@ export default defineComponent({
     const eventBus = useEventBus()
     const spacesStore = useSpacesStore()
     const sharesStore = useSharesStore()
-    const userStore = useUserStore()
     const configStore = useConfigStore()
     const appsStore = useAppsStore()
     const { canListShares } = useCanListShares()
+    const { canListVersions } = useCanListVersions()
 
     const resourcesStore = useResourcesStore()
     const { currentFolder } = storeToRefs(resourcesStore)
@@ -147,7 +145,6 @@ export default defineComponent({
     const isProjectsLocation = isLocationSpacesActive(router, 'files-spaces-projects')
     const isFavoritesLocation = useActiveLocation(isLocationCommonActive, 'files-common-favorites')
     const isSearchLocation = useActiveLocation(isLocationCommonActive, 'files-common-search')
-    const isTrashLocation = useActiveLocation(isLocationTrashActive, 'files-trash-generic')
 
     const closeSideBar = () => {
       eventBus.publish(SideBarEventTopics.close)
@@ -178,12 +175,6 @@ export default defineComponent({
     const isFlatFileList = computed(() => {
       return unref(isShareLocation) || unref(isSearchLocation) || unref(isFavoritesLocation)
     })
-
-    const userIsSpaceMember = computed(
-      () =>
-        (isProjectSpaceResource(props.space) && props.space.isMember(userStore.user)) ||
-        (isPersonalSpaceResource(props.space) && props.space.isOwner(userStore.user))
-    )
 
     const availablePanels = computed(() =>
       extensionRegistry
@@ -325,17 +316,14 @@ export default defineComponent({
           loadVersionsTask.cancelAll()
         }
 
-        if (
-          !resource.isFolder &&
-          !isSpaceResource(resource) &&
-          unref(userIsSpaceMember) &&
-          !unref(isTrashLocation)
-        ) {
-          try {
-            await loadVersionsTask.perform(resource)
-          } catch (e) {
-            console.error(e)
-          }
+        if (!canListVersions({ space: props.space, resource })) {
+          return
+        }
+
+        try {
+          await loadVersionsTask.perform(resource)
+        } catch (e) {
+          console.error(e)
         }
       },
       { immediate: true, deep: true }

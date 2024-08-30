@@ -23,6 +23,9 @@ const InnerSideBarComponent = defineComponent({
 })
 
 vi.mock('../../../../src/composables/selection', () => ({ useSelectedResources: vi.fn() }))
+vi.mock('../../../../src/composables/resources/useCanListVersions', () => ({
+  useCanListVersions: () => ({ canListVersions: vi.fn() })
+}))
 
 const selectors = {
   sideBar: '.files-side-bar',

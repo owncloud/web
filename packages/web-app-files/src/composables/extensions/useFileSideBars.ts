@@ -19,16 +19,11 @@ import {
   SidebarPanelExtension,
   useIsFilesAppActive,
   useGetMatchingSpace,
-  useUserStore,
   useCapabilityStore,
-  useCanListShares
+  useCanListShares,
+  useCanListVersions
 } from '@ownclouders/web-pkg'
-import {
-  isPersonalSpaceResource,
-  isProjectSpaceResource,
-  isSpaceResource,
-  SpaceResource
-} from '@ownclouders/web-client'
+import { isProjectSpaceResource, SpaceResource } from '@ownclouders/web-client'
 import { Resource } from '@ownclouders/web-client'
 import { useGettext } from 'vue3-gettext'
 import { unref } from 'vue'
@@ -43,7 +38,7 @@ export const useSideBarPanels = (): SidebarPanelExtension<SpaceResource, Resourc
   const isFilesAppActive = useIsFilesAppActive()
   const { isPersonalSpaceRoot } = useGetMatchingSpace()
   const { canListShares } = useCanListShares()
-  const userStore = useUserStore()
+  const { canListVersions } = useCanListVersions()
 
   return [
     {
@@ -251,23 +246,7 @@ export const useSideBarPanels = (): SidebarPanelExtension<SpaceResource, Resourc
           if (items?.length !== 1) {
             return false
           }
-          if (isProjectSpaceResource(items[0])) {
-            // project space roots don't support versions
-            return false
-          }
-
-          const userIsSpaceMember =
-            (isProjectSpaceResource(root) && root.isMember(userStore.user)) ||
-            (isPersonalSpaceResource(root) && root.isOwner(userStore.user))
-
-          if (
-            isLocationTrashActive(router, 'files-trash-generic') ||
-            !userIsSpaceMember ||
-            isSpaceResource(items[0])
-          ) {
-            return false
-          }
-          return items[0].type !== 'folder'
+          return canListVersions({ space: root, resource: items[0] })
         }
       }
     },

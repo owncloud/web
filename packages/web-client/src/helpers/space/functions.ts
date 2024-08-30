@@ -8,6 +8,7 @@ import {
 } from '../resource'
 import {
   isPersonalSpaceResource,
+  isPublicSpaceResource,
   PublicSpaceResource,
   ShareSpaceResource,
   SpaceMember,
@@ -296,6 +297,12 @@ export function buildSpace(
         GraphSharePermission.deletePermissions
       )
     },
+    canListVersions: function ({ user }: { user?: User } = {}) {
+      if (isPersonalSpaceResource(this) && this.isOwner(user)) {
+        return true
+      }
+      return getPermissionsForSpaceMember(this, user).includes(GraphSharePermission.readVersions)
+    },
     canCreate: function () {
       return true
     },
@@ -325,6 +332,9 @@ export function buildSpace(
       return urlJoin(webDavTrashUrl, path)
     },
     isMember(user: User): boolean {
+      if (isPublicSpaceResource(this)) {
+        return false
+      }
       if (this.isOwner(user) || !!this.members[user.id]) {
         return true
       }
