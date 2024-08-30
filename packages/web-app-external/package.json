@@ -12,7 +12,7 @@
     "@ownclouders/web-pkg": "workspace:*",
     "lodash-es": "4.17.21",
     "pinia": "2.2.2",
-    "uuid": "9.0.1",
+    "uuid": "10.0.0",
     "vue-concurrency": "5.0.1",
     "vue3-gettext": "2.4.0",
     "vue-router": "4.2.5",
