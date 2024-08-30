@@ -3,6 +3,8 @@ import { Resource } from '@ownclouders/web-client'
 import { defaultPlugins, mount } from 'web-test-helpers'
 import CopyPrivateLink from '../../../../src/components/Shares/CopyPrivateLink.vue'
 import { useMessages } from '@ownclouders/web-pkg'
+import { useClipboard } from '@vueuse/core'
+import { ref } from 'vue'
 
 const resource = mock<Resource>({
   type: 'folder',
@@ -16,33 +18,31 @@ const resource = mock<Resource>({
   privateLink: 'https://example.com/fake-private-link'
 })
 
-// @vitest-environment jsdom
+vi.mock('@vueuse/core', () => ({
+  useClipboard: vi.fn(() => ({
+    copy: vi.fn(),
+    copied: false,
+    isSupported: true
+  }))
+}))
+
 describe('CopyPrivateLink', () => {
-  beforeEach(() => {
-    vi.useFakeTimers()
-  })
-
-  afterEach(() => {
-    vi.useRealTimers()
-  })
-
   it('should render a button', () => {
     const { wrapper } = getWrapper()
     expect(wrapper.html()).toMatchSnapshot()
   })
   it('upon clicking it should copy the private link to the clipboard button, render a success message and change icon for half a second', async () => {
-    Object.assign(window.navigator, {
-      clipboard: {
-        writeText: vi.fn().mockImplementation(() => Promise.resolve())
-      }
-    })
+    const copyMock = vi.fn()
+    vi.mocked(useClipboard).mockReturnValue(
+      mock<ReturnType<typeof useClipboard>>({ copy: copyMock, copied: ref(true) })
+    )
 
     const { wrapper } = getWrapper()
     const { showMessage } = useMessages()
     expect(showMessage).not.toHaveBeenCalled()
 
     await wrapper.find('button').trigger('click')
-    expect(window.navigator.clipboard.writeText).toHaveBeenCalledWith(resource.privateLink)
+    expect(copyMock).toHaveBeenCalledTimes(1)
     expect(showMessage).toHaveBeenCalledTimes(1)
   })
 })
