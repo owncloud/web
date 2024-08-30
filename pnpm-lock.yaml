@@ -243,8 +243,8 @@ importers:
         specifier: ^4.0.1
         version: 4.0.3(focus-trap@7.5.4)(vue@3.4.38(typescript@5.5.4))
       fuse.js:
-        specifier: 6.6.2
-        version: 6.6.2
+        specifier: 7.0.0
+        version: 7.0.0
       lodash-es:
         specifier: 4.17.21
         version: 4.17.21
@@ -528,8 +528,8 @@ importers:
         specifier: ^2.0.4
         version: 2.0.4
       fuse.js:
-        specifier: 6.6.2
-        version: 6.6.2
+        specifier: 7.0.0
+        version: 7.0.0
       lodash-es:
         specifier: 4.17.21
         version: 4.17.21
@@ -568,8 +568,8 @@ importers:
         specifier: workspace:@ownclouders/design-system@*
         version: link:../design-system
       fuse.js:
-        specifier: 6.6.2
-        version: 6.6.2
+        specifier: 7.0.0
+        version: 7.0.0
       lodash-es:
         specifier: 4.17.21
         version: 4.17.21
@@ -676,8 +676,8 @@ importers:
         specifier: ^10.1.0
         version: 10.1.4
       fuse.js:
-        specifier: 6.6.2
-        version: 6.6.2
+        specifier: 7.0.0
+        version: 7.0.0
       lodash-es:
         specifier: 4.17.21
         version: 4.17.21
@@ -765,8 +765,8 @@ importers:
         specifier: ^2.0.4
         version: 2.0.4
       fuse.js:
-        specifier: 6.6.2
-        version: 6.6.2
+        specifier: 7.0.0
+        version: 7.0.0
       lodash-es:
         specifier: 4.17.21
         version: 4.17.21
@@ -1000,8 +1000,8 @@ importers:
         specifier: ^10.1.0
         version: 10.1.4
       fuse.js:
-        specifier: 6.6.2
-        version: 6.6.2
+        specifier: 7.0.0
+        version: 7.0.0
       js-generate-password:
         specifier: ^1.0.0
         version: 1.0.0
@@ -1140,8 +1140,8 @@ importers:
         specifier: ^4.0.1
         version: 4.0.3(focus-trap@7.5.4)(vue@3.4.38(typescript@5.5.4))
       fuse.js:
-        specifier: 6.6.2
-        version: 6.6.2
+        specifier: 7.0.0
+        version: 7.0.0
       lodash-es:
         specifier: 4.17.21
         version: 4.17.21
@@ -4879,8 +4879,8 @@ packages:
   functions-have-names@1.2.3:
     resolution: {integrity: sha512-xckBUXyTIqT97tq2x2AMb+g163b5JFysYk0x4qxNFwbfQkmNZoiRHb6sPzI9/QV33WeuvVYBUIiD4NzNIyqaRQ==}
 
-  fuse.js@6.6.2:
-    resolution: {integrity: sha512-cJaJkxCCxC8qIIcPBF9yGxY0W/tVZS3uEISDxhYIdtk8OL93pe+6Zj7LjCqVV4dzbqcriOZ+kQ/NE4RXZHsIGA==}
+  fuse.js@7.0.0:
+    resolution: {integrity: sha512-14F4hBIxqKvD4Zz/XjDc3y94mNZN6pRv3U13Udo0lNLCWRBUsrMv2xwcF/y/Z5sV6+FQW+/ow68cHpm4sunt8Q==}
     engines: {node: '>=10'}
 
   gensync@1.0.0-beta.2:
@@ -13688,7 +13688,7 @@ snapshots:
 
   functions-have-names@1.2.3: {}
 
-  fuse.js@6.6.2: {}
+  fuse.js@7.0.0: {}
 
   gensync@1.0.0-beta.2: {}
 

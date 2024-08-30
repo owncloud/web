@@ -65,7 +65,7 @@
     "design-system": "workspace:@ownclouders/design-system@*",
     "dompurify": "^3.0.6",
     "filesize": "^10.1.0",
-    "fuse.js": "6.6.2",
+    "fuse.js": "7.0.0",
     "lodash-es": "^4.17.21",
     "luxon": "3.5.0",
     "mark.js": "^8.11.1",

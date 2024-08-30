@@ -63,7 +63,7 @@
 
 <script lang="ts">
 import { PropType, defineComponent, nextTick, onMounted, ref, unref, watch } from 'vue'
-import Fuse from 'fuse.js'
+import Fuse, { FuseOptionKey } from 'fuse.js'
 import Mark from 'mark.js'
 import omit from 'lodash-es/omit'
 import { useRoute, useRouteQuery, useRouter } from '../composables'
@@ -113,9 +113,9 @@ export default defineComponent({
       default: 'name'
     },
     filterableAttributes: {
-      type: Array as PropType<Fuse.FuseOptionKey<Item>[]>,
+      type: Array as PropType<FuseOptionKey<Item>[]>,
       required: false,
-      default: (): Fuse.FuseOptionKey<Item>[] => []
+      default: (): FuseOptionKey<Item>[] => []
     },
     closeOnClick: {
       type: Boolean,
