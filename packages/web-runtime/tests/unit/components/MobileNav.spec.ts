@@ -1,7 +1,7 @@
 import MobileNav from '../../../src/components/MobileNav.vue'
 import { defaultPlugins, defaultComponentMocks, mount } from 'web-test-helpers'
 import { mock } from 'vitest-mock-extended'
-import { NavItem } from 'web-runtime/src/helpers/navItems'
+import { NavItem } from '../../../src/helpers/navItems'
 
 const selectors = {
   mobileNavBtn: '#mobile-nav-button',

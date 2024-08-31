@@ -15,7 +15,7 @@ import {
   useMessages,
   useResourcesStore
 } from '@ownclouders/web-pkg'
-import { LanguageOption, SettingsBundle, SettingsValue } from 'web-runtime/src/helpers/settings'
+import { LanguageOption, SettingsBundle, SettingsValue } from '../../../src/helpers/settings'
 import { User } from '@ownclouders/web-client/graph/generated'
 import { VueWrapper } from '@vue/test-utils'
 import { SpaceResource } from '@ownclouders/web-client'

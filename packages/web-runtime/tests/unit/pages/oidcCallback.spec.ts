@@ -5,7 +5,7 @@ import {
   shallowMount
 } from 'web-test-helpers'
 import oidcCallback from '../../../src/pages/oidcCallback.vue'
-import { authService } from 'web-runtime/src/services/auth'
+import { authService } from '../../../src/services/auth'
 import { mock } from 'vitest-mock-extended'
 import { computed } from 'vue'
 

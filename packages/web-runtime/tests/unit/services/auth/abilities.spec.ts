@@ -1,4 +1,4 @@
-import { getAbilities } from 'web-runtime/src/services/auth/abilities'
+import { getAbilities } from '../../../../src/services/auth/abilities'
 
 describe('getAbilities', () => {
   it('gets no abilities if empty permissions given', () => {

@@ -216,7 +216,7 @@ import {
 } from '@ownclouders/web-pkg'
 import { useTask } from 'vue-concurrency'
 import { useGettext } from 'vue3-gettext'
-import { setCurrentLanguage, loadAppTranslations } from 'web-runtime/src/helpers/language'
+import { setCurrentLanguage, loadAppTranslations } from '../helpers/language'
 import GdprExport from '../components/Account/GdprExport.vue'
 import ThemeSwitcher from '../components/Account/ThemeSwitcher.vue'
 import ExtensionPreference from '../components/Account/ExtensionPreference.vue'

@@ -1,4 +1,4 @@
-import UserMenu from 'web-runtime/src/components/Topbar/UserMenu.vue'
+import UserMenu from '../../../../src/components/Topbar/UserMenu.vue'
 import {
   defaultPlugins,
   defaultStubs,

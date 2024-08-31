@@ -1,7 +1,7 @@
 import { WebThemeType, useThemeStore } from '@ownclouders/web-pkg'
 import { mock } from 'vitest-mock-extended'
-import ThemeSwitcher from 'web-runtime/src/components/Account/ThemeSwitcher.vue'
-import defaultTheme from 'web-runtime/themes/owncloud/theme.json'
+import ThemeSwitcher from '../../../../src/components/Account/ThemeSwitcher.vue'
+import defaultTheme from '../../../../themes/owncloud/theme.json'
 import { defaultPlugins, defaultStubs, mount } from 'web-test-helpers'
 
 const defaultOwnCloudTheme = {

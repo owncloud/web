@@ -1,4 +1,4 @@
-import Avatar from 'web-runtime/src/components/Avatar.vue'
+import Avatar from '../../../src/components/Avatar.vue'
 import { defaultComponentMocks, defaultPlugins, shallowMount } from 'web-test-helpers'
 import { mock, mockDeep } from 'vitest-mock-extended'
 import { CapabilityStore, ClientService } from '@ownclouders/web-pkg'

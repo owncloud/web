@@ -1,4 +1,4 @@
-import NotificationBell from 'web-runtime/src/components/Topbar/NotificationBell.vue'
+import NotificationBell from '../../../../src/components/Topbar/NotificationBell.vue'
 import { defaultComponentMocks, defaultPlugins, mount } from 'web-test-helpers/src'
 
 describe('NotificationBell', () => {
