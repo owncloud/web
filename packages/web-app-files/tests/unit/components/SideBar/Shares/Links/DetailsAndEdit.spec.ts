@@ -11,8 +11,8 @@ import {
   useLinkTypes,
   LinkRoleDropdown,
   AncestorMetaDataValue,
-  AncestorMetaData,
-  useGetMatchingSpace
+  useGetMatchingSpace,
+  useResourcesStore
 } from '@ownclouders/web-pkg'
 import { SharingLinkType } from '@ownclouders/web-client/graph/generated'
 import { Resource } from '@ownclouders/web-client'
@@ -71,16 +71,14 @@ describe('DetailsAndEdit component', () => {
   })
 
   it('renders a button for indirect links', () => {
-    const linkShare = mock<LinkShare>({ indirect: true })
-    const ancestorMetaData = {
-      '/parent': mock<AncestorMetaDataValue>({
-        id: 'ancestorId',
-        shareTypes: [ShareTypes.link.value],
-        path: '/parent'
-      })
-    }
+    const linkShare = mock<LinkShare>({ indirect: true, resourceId: 'ancestorId' })
+    const sharedAncestor = mock<AncestorMetaDataValue>({
+      id: 'ancestorId',
+      shareTypes: [ShareTypes.link.value],
+      path: '/parent'
+    })
 
-    const { wrapper } = getShallowMountedWrapper({ linkShare, ancestorMetaData })
+    const { wrapper } = getShallowMountedWrapper({ linkShare, sharedAncestor })
     const viaButton = wrapper.findComponent<typeof OcButton>('.oc-files-file-link-via')
     expect(viaButton.exists()).toBeTruthy()
     expect(viaButton.props('to').query.fileId).toEqual('ancestorId')
@@ -104,12 +102,12 @@ function getShallowMountedWrapper({
   linkShare = exampleLink,
   isModifiable = true,
   availableLinkTypes = [SharingLinkType.View],
-  ancestorMetaData = {}
+  sharedAncestor
 }: {
   linkShare?: LinkShare
   isModifiable?: boolean
   availableLinkTypes?: SharingLinkType[]
-  ancestorMetaData?: AncestorMetaData
+  sharedAncestor?: AncestorMetaDataValue
 } = {}) {
   vi.mocked(useLinkTypes).mockReturnValue(
     mock<ReturnType<typeof useLinkTypes>>({
@@ -124,6 +122,11 @@ function getShallowMountedWrapper({
     })
   )
 
+  const plugins = defaultPlugins()
+
+  const resourcesStore = useResourcesStore()
+  vi.mocked(resourcesStore).getAncestorById.mockReturnValue(sharedAncestor)
+
   const mocks = defaultComponentMocks()
   return {
     wrapper: shallowMount(DetailsAndEdit, {
@@ -137,15 +140,7 @@ function getShallowMountedWrapper({
         mocks,
         renderStubDefaultSlot: true,
         stubs: { OcDatepicker: false, 'date-picker': true, OcButton: false },
-        plugins: [
-          ...defaultPlugins({
-            piniaOptions: {
-              resourcesStore: {
-                ancestorMetaData
-              }
-            }
-          })
-        ],
+        plugins,
         provide: { ...mocks, resource: mock<Resource>({ path: '/', remoteItemPath: undefined }) }
       }
     })

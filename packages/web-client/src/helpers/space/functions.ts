@@ -342,7 +342,7 @@ export function buildSpace(
   return s
 }
 
-function getPermissionsForSpaceMember(space: SpaceResource, user: User) {
+export function getPermissionsForSpaceMember(space: SpaceResource, user: User) {
   const permissions: string[] = []
 
   // FIXME: user should always be given, adjust `can...` functions in SpaceResource

@@ -111,7 +111,7 @@ import {
 } from '@ownclouders/web-pkg'
 import { isLocationSharesActive } from '@ownclouders/web-pkg'
 import { textUtils } from '../../../helpers/textUtils'
-import { ShareTypes } from '@ownclouders/web-client'
+import { isShareSpaceResource, ShareTypes } from '@ownclouders/web-client'
 import InviteCollaboratorForm from './Collaborators/InviteCollaborator/InviteCollaboratorForm.vue'
 import CollaboratorListItem from './Collaborators/ListItem.vue'
 import {
@@ -147,20 +147,28 @@ export default defineComponent({
     const resourcesStore = useResourcesStore()
     const { removeResources, getAncestorById } = resourcesStore
 
-    const spacesStore = useSpacesStore()
-    const { spaceMembers } = storeToRefs(spacesStore)
+    const { getSpaceMembers } = useSpacesStore()
 
     const configStore = useConfigStore()
     const { options: configOptions } = storeToRefs(configStore)
 
     const sharesStore = useSharesStore()
     const { addShare, deleteShare } = sharesStore
-    const { collaboratorShares } = storeToRefs(sharesStore)
 
     const { user } = storeToRefs(userStore)
 
     const resource = inject<Ref<Resource>>('resource')
     const space = inject<Ref<SpaceResource>>('space')
+
+    const collaboratorShares = computed(() => {
+      if (isProjectSpaceResource(unref(space))) {
+        // filter out project space members, they are listed separately (see down below)
+        return sharesStore.collaboratorShares.filter((c) => c.resourceId !== unref(space).id)
+      }
+      return sharesStore.collaboratorShares
+    })
+
+    const spaceMembers = computed(() => getSpaceMembers(unref(space)))
 
     const sharesListCollapsed = ref(true)
     const toggleShareListCollapsed = () => {
@@ -433,7 +441,7 @@ export default defineComponent({
         return false
       }
 
-      if (isProjectSpaceResource(this.space)) {
+      if (isProjectSpaceResource(this.space) || isShareSpaceResource(this.space)) {
         return this.space.canShare({ user: this.user })
       }
 

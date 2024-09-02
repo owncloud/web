@@ -121,8 +121,8 @@ describe('FileShares', () => {
       const user = { id: '1' } as User
       const space = mock<SpaceResource>({ driveType: 'project', isMember: () => true })
       const spaceMembers = [
-        { sharedWith: { id: user.id } },
-        { sharedWith: { id: '2' } }
+        { sharedWith: { id: user.id, displayName: '' }, resourceId: space.id, permissions: [] },
+        { sharedWith: { id: '2', displayName: '' }, resourceId: space.id, permissions: [] }
       ] as CollaboratorShare[]
       const collaborator = getCollaborator()
       collaborator.sharedWith = {
@@ -137,7 +137,9 @@ describe('FileShares', () => {
     it('does not load space members if a space is given but the current user not a member', () => {
       const user = { id: '1' } as User
       const space = mock<SpaceResource>({ driveType: 'project' })
-      const spaceMembers = [{ sharedWith: { id: `${user}-2` } }] as CollaboratorShare[]
+      const spaceMembers = [
+        { sharedWith: { id: `${user}-2`, displayName: '' }, resourceId: space.id, permissions: [] }
+      ] as CollaboratorShare[]
       const collaborator = getCollaborator()
       collaborator.sharedWith = {
         ...collaborator.sharedWith,
@@ -183,6 +185,10 @@ function getWrapper({
     files_sharing: { deny_access: false }
   } satisfies Partial<CapabilityStore['capabilities']>
 
+  if (spaceMembers.length) {
+    collaborators = [...collaborators, ...spaceMembers]
+  }
+
   return {
     wrapper: mountType(FileShares, {
       global: {
@@ -191,7 +197,6 @@ function getWrapper({
             piniaOptions: {
               stubActions: false,
               userState: { user },
-              spacesState: { spaceMembers },
               capabilityState: { capabilities },
               configState: {
                 options: { contextHelpers: true }

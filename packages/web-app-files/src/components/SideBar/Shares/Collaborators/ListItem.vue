@@ -213,7 +213,7 @@ export default defineComponent({
     const sharesStore = useSharesStore()
     const { graphRoles } = storeToRefs(sharesStore)
     const { updateShare } = sharesStore
-    const { upsertSpace, upsertSpaceMember } = useSpacesStore()
+    const { upsertSpace } = useSpacesStore()
 
     const { user } = storeToRefs(userStore)
 
@@ -260,7 +260,6 @@ export default defineComponent({
       showMessage,
       showErrorMessage,
       upsertSpace,
-      upsertSpaceMember,
       isExternalShare,
       DateTime
     }
@@ -413,7 +412,7 @@ export default defineComponent({
       expirationDateTime?: string
     }) {
       try {
-        const share = await this.updateShare({
+        await this.updateShare({
           clientService: this.$clientService,
           space: this.space,
           resource: this.resource,
@@ -426,7 +425,6 @@ export default defineComponent({
           const space = await client.drives.getDrive(this.resource.id, this.graphRoles)
 
           this.upsertSpace(space)
-          this.upsertSpaceMember({ member: share })
         }
 
         this.showMessage({ title: this.$gettext('Share successfully changed') })

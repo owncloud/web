@@ -64,7 +64,7 @@ export type PiniaMockOptions = {
     graphRoles?: Record<string, ShareRole>
     loading?: boolean
   }
-  spacesState?: { spaces?: SpaceResource[]; spaceMembers?: CollaboratorShare[] }
+  spacesState?: { spaces?: SpaceResource[] }
   userState?: { user?: User }
   capabilityState?: {
     capabilities?: Partial<Capabilities['capabilities']>
@@ -132,7 +132,7 @@ export function createMockStore({
       },
       resources: { resources: [], ...resourcesStore },
       shares: { collaboratorShares: [], linkShares: [], ...sharesState },
-      spaces: { spaces: [], spaceMembers: [], ...spacesState },
+      spaces: { spaces: [], ...spacesState },
       userSettings: { users: [], selectedUsers: [], ...userSettingsStore },
       groupSettings: { groups: [], selectedGroups: [], ...groupSettingsStore },
       spaceSettings: { spaces: [], selectedSpaces: [], ...spaceSettingsStore },

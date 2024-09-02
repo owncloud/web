@@ -13,7 +13,6 @@ import {
   SpaceDetailsMultiple,
   SpaceNoSelection,
   isLocationTrashActive,
-  isLocationPublicActive,
   isLocationSpacesActive,
   isLocationSharesActive,
   useRouter,
@@ -21,13 +20,12 @@ import {
   useIsFilesAppActive,
   useGetMatchingSpace,
   useUserStore,
-  useCapabilityStore
+  useCapabilityStore,
+  useCanListShares
 } from '@ownclouders/web-pkg'
 import {
   isPersonalSpaceResource,
   isProjectSpaceResource,
-  isShareResource,
-  isShareSpaceResource,
   isSpaceResource,
   SpaceResource
 } from '@ownclouders/web-client'
@@ -44,6 +42,7 @@ export const useSideBarPanels = (): SidebarPanelExtension<SpaceResource, Resourc
   const { $gettext } = useGettext()
   const isFilesAppActive = useIsFilesAppActive()
   const { isPersonalSpaceRoot } = useGetMatchingSpace()
+  const { canListShares } = useCanListShares()
   const userStore = useUserStore()
 
   return [
@@ -232,23 +231,7 @@ export const useSideBarPanels = (): SidebarPanelExtension<SpaceResource, Resourc
             // project space roots have their own "sharing" panel (= space members)
             return false
           }
-          if (isPersonalSpaceRoot(items[0])) {
-            // sharing panel is not available on the personal space root
-            return false
-          }
-          if (isShareResource(items[0])) {
-            return false
-          }
-          if (isShareSpaceResource(root)) {
-            return false
-          }
-          if (
-            isLocationTrashActive(router, 'files-trash-generic') ||
-            isLocationPublicActive(router, 'files-public-link')
-          ) {
-            return false
-          }
-          return capabilityStore.sharingApiEnabled
+          return canListShares({ space: root, resource: items[0] })
         }
       }
     },

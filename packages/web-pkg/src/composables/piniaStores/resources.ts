@@ -287,6 +287,24 @@ export const useResourcesStore = defineStore('resources', () => {
     }
 
     return Promise.all(promises).then(() => {
+      if (!Object.keys(data).includes('/')) {
+        // add space as root element
+        const cachedRoot = unref(ancestorMetaData)['/']
+        if (cachedRoot?.spaceId === space.id) {
+          data['/'] = cachedRoot
+        } else {
+          const { parentFolderId } = Object.values(data)[0]
+          const space = spacesStore.spaces.find(({ id }) => parentFolderId.startsWith(id))
+          data['/'] = {
+            id: space.id,
+            shareTypes: space.shareTypes,
+            parentFolderId: space.id,
+            spaceId: space.id,
+            path: '/'
+          }
+        }
+      }
+
       setAncestorMetaData(data)
     })
   }

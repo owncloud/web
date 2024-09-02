@@ -92,7 +92,6 @@ import {
   usePreviewService,
   useClientService,
   useUserStore,
-  useSpacesStore,
   useSharesStore,
   useResourcesStore,
   useResourceContents,
@@ -127,14 +126,12 @@ export default defineComponent({
     const userStore = useUserStore()
     const previewService = usePreviewService()
     const clientService = useClientService()
-    const spacesStore = useSpacesStore()
     const resourcesStore = useResourcesStore()
     const { resourceContentsText } = useResourceContents({ showSizeInformation: false })
     const router = useRouter()
     const { current: currentLanguage } = useGettext()
 
     const sharesStore = useSharesStore()
-    const { spaceMembers } = storeToRefs(spacesStore)
 
     const resource = inject<Ref<SpaceResource>>('resource')
     const spaceImage = ref('')
@@ -177,7 +174,6 @@ export default defineComponent({
       linkShareCount,
       showWebDavDetails,
       user,
-      spaceMembers,
       resourceContentsText,
       showSize,
       size

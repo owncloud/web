@@ -229,7 +229,7 @@ export default defineComponent({
     const clientService = useClientService()
     const { showMessage, showErrorMessage } = useMessages()
     const spacesStore = useSpacesStore()
-    const { upsertSpace, upsertSpaceMember } = spacesStore
+    const { upsertSpace } = spacesStore
     const capabilityStore = useCapabilityStore()
     const capabilityRefs = storeToRefs(capabilityStore)
     const configStore = useConfigStore()
@@ -426,10 +426,6 @@ export default defineComponent({
         )
 
         upsertSpace(updatedSpace)
-
-        addedShares.forEach((member) => {
-          upsertSpaceMember({ member })
-        })
       }
 
       if (results.length !== errors.length) {
