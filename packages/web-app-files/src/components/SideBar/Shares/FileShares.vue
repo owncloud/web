@@ -170,9 +170,6 @@ export default defineComponent({
     const toggleMemberListCollapsed = () => {
       memberListCollapsed.value = !unref(memberListCollapsed)
     }
-    const currentUserIsMemberOfSpace = computed(() => {
-      return unref(spaceMembers).some((member) => member.sharedWith?.id === unref(user)?.id)
-    })
 
     const matchingSpace = computed(() => {
       return getMatchingSpace(unref(resource))
@@ -213,7 +210,6 @@ export default defineComponent({
       toggleShareListCollapsed,
       memberListCollapsed,
       toggleMemberListCollapsed,
-      currentUserIsMemberOfSpace,
       hasShareCanDenyAccess: capabilityRefs.sharingDenyAccess,
       filesPrivateLinks: capabilityRefs.filesPrivateLinks,
       getAncestorById,
@@ -302,7 +298,7 @@ export default defineComponent({
       return (
         this.space?.driveType === 'project' &&
         this.resource.type !== 'space' &&
-        this.currentUserIsMemberOfSpace
+        this.space?.isMember(this.user)
       )
     }
   },
