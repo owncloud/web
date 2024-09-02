@@ -3,7 +3,7 @@ Changelog for ownCloud Web [unreleased] (UNRELEASED)
 The following sections list the changes in ownCloud web unreleased relevant to
 ownCloud admins and users.
 
-[unreleased]: https://github.com/owncloud/web/compare/v10.1.0...master
+[unreleased]: https://github.com/owncloud/web/compare/v8.0.5...master
 
 Summary
 -------
@@ -39,6 +39,57 @@ Details
    https://github.com/owncloud/web/issues/11361
    https://github.com/owncloud/web/pull/11394
 
+Changelog for ownCloud Web [8.0.5] (2024-09-02)
+=======================================
+The following sections list the changes in ownCloud web 8.0.5 relevant to
+ownCloud admins and users.
+
+[8.0.5]: https://github.com/owncloud/web/compare/v10.1.0...v8.0.5
+
+Summary
+-------
+
+* Bugfix - Show more toggle in space members view not reactive: [#11263](https://github.com/owncloud/web/pull/11263)
+* Bugfix - Space show links from other spaces: [#11263](https://github.com/owncloud/web/pull/11263)
+* Bugfix - Uploading nested folders: [#11299](https://github.com/owncloud/web/issues/11299)
+* Bugfix - Missing space members for group memberships: [#11384](https://github.com/owncloud/web/issues/11384)
+
+Details
+-------
+
+* Bugfix - Show more toggle in space members view not reactive: [#11263](https://github.com/owncloud/web/pull/11263)
+
+   We've fixed a bug where the toggle to show more members in the space members
+   view was not reactive. Clicking the toggle in the sidebar will now correctly
+   display “Show More” or “Show Less” as intended.
+
+   https://github.com/owncloud/web/issues/11261
+   https://github.com/owncloud/web/pull/11263
+
+* Bugfix - Space show links from other spaces: [#11263](https://github.com/owncloud/web/pull/11263)
+
+   We've fixed a bug where in a special constellation, links from other spaces were
+   shown in the space. This is now fixed.
+
+   https://github.com/owncloud/web/issues/11261
+   https://github.com/owncloud/web/pull/11263
+
+* Bugfix - Uploading nested folders: [#11299](https://github.com/owncloud/web/issues/11299)
+
+   We've fixed a bug where the upload overlay breaks when uploading a folder that
+   contains exactly one folder (which then contains some files).
+
+   https://github.com/owncloud/web/issues/11299
+   https://github.com/owncloud/web/pull/11302
+
+* Bugfix - Missing space members for group memberships: [#11384](https://github.com/owncloud/web/issues/11384)
+
+   We've fixed a bug where group members of a space could not see other space
+   members on regular resources within the space.
+
+   https://github.com/owncloud/web/issues/11384
+   https://github.com/owncloud/web/pull/11395
+
 Changelog for ownCloud Web [10.1.0] (2024-08-16)
 =======================================
 The following sections list the changes in ownCloud web 10.1.0 relevant to
@@ -49,8 +100,6 @@ ownCloud admins and users.
 Summary
 -------
 
-* Bugfix - Show more toggle in space members view not reactive: [#11263](https://github.com/owncloud/web/pull/11263)
-* Bugfix - Uploading nested folders: [#11299](https://github.com/owncloud/web/issues/11299)
 * Bugfix - Toggling checkboxes via keyboard: [#11312](https://github.com/owncloud/web/pull/11312)
 * Bugfix - Prevent horizontal table scroll: [#11313](https://github.com/owncloud/web/pull/11313)
 * Bugfix - Keyboard actions for disabled resources: [#11342](https://github.com/owncloud/web/pull/11342)
@@ -65,23 +114,6 @@ Summary
 
 Details
 -------
-
-* Bugfix - Show more toggle in space members view not reactive: [#11263](https://github.com/owncloud/web/pull/11263)
-
-   We've fixed a bug where the toggle to show more members in the space members
-   view was not reactive. Clicking the toggle in the sidebar will now correctly
-   display “Show More” or “Show Less” as intended.
-
-   https://github.com/owncloud/web/issues/11261
-   https://github.com/owncloud/web/pull/11263
-
-* Bugfix - Uploading nested folders: [#11299](https://github.com/owncloud/web/issues/11299)
-
-   We've fixed a bug where the upload overlay breaks when uploading a folder that
-   contains exactly one folder (which then contains some files).
-
-   https://github.com/owncloud/web/issues/11299
-   https://github.com/owncloud/web/pull/11302
 
 * Bugfix - Toggling checkboxes via keyboard: [#11312](https://github.com/owncloud/web/pull/11312)
 
