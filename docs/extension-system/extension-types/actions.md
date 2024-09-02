@@ -36,9 +36,9 @@ The most important configuration options are:
 - `icon` - The icon to be displayed, can be picked from https://owncloud.design/#/Design%20Tokens/IconList
 - `name` - The name of the action (not displayed in the UI)
 - `label` - The text to be displayed
-- `route` - The string/route to navigate to, if the nav item should be a `<router-link>`
-- `handler` - The action to perform upon click, if the nav item should be a `<button>`
-- `componentType` - Either `'button'` or `'router-link'`, depending on whether the action should be a link or button
+- `route` - The string/route to navigate to. The nav item will be a `<router-link>` tag.
+- `href` - The URL to navigate to. The nav item will be a `<a>`tag.
+- `handler` - The action to perform upon click. The nav item will be a `<button>` tag.
 - `isVisible` - Determines whether the action is displayed to the user
 
 Please check the [`Action` type](https://github.com/owncloud/web/blob/236c185540fc6758dc7bd84985c8834fa4145530/packages/web-pkg/src/composables/actions/types.ts#L6) for a full list of configuration options.
@@ -58,7 +58,6 @@ export const useDownloadFilesExtension = () => {
     action: {
       name: 'download-files',
       icon: 'download',
-      componentType: 'button',
       class: 'oc-files-actions-download-files',
       label: () => $gettext('Download'),
       isVisible: ({ space, resources }) => {
