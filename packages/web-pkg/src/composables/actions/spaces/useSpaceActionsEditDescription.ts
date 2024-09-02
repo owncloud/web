@@ -75,7 +75,6 @@ export const useSpaceActionsEditDescription = () => {
 
         return resources[0].canEditDescription({ user: userStore.user, ability })
       },
-      componentType: 'button',
       class: 'oc-files-actions-edit-description-trigger'
     }
   ])

@@ -114,7 +114,6 @@ export const useGroupActionsDelete = () => {
       isVisible: ({ resources }) => {
         return !!resources.length && !resources.some((r) => r.groupTypes?.includes('ReadOnly'))
       },
-      componentType: 'button',
       class: 'oc-groups-actions-delete-trigger'
     }
   ])

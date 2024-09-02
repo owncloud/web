@@ -121,7 +121,6 @@ export const useSpaceActionsDelete = () => {
       isVisible: ({ resources }) => {
         return !!filterResourcesToDelete(resources).length
       },
-      componentType: 'button',
       class: 'oc-files-actions-delete-trigger'
     }
   ])

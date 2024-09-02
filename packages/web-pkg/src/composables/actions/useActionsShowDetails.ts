@@ -16,7 +16,6 @@ export const useActionsShowDetails = () => {
       isVisible: ({ resources }) => {
         return (resources as unknown[]).length > 0
       },
-      componentType: 'button',
       class: 'oc-admin-settings-show-details-trigger'
     }
   ])

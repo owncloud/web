@@ -40,7 +40,6 @@ export const useSpaceActionsNavigateToTrash = () => {
 
         return true
       },
-      componentType: 'button',
       class: 'oc-files-actions-navigate-to-trash-trigger'
     }
   ])

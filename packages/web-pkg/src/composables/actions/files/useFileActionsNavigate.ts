@@ -60,7 +60,6 @@ export const useFileActionsNavigate = () => {
 
         return true
       },
-      componentType: 'router-link',
       route: ({ space, resources }) => {
         return merge(
           {},

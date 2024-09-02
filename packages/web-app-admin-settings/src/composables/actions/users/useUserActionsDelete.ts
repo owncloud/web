@@ -116,7 +116,6 @@ export const useUserActionsDelete = () => {
       isVisible: ({ resources }) => {
         return !!resources.length && !capabilityStore.graphUsersDeleteDisabled
       },
-      componentType: 'button',
       class: 'oc-users-actions-delete-trigger'
     }
   ])

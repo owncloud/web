@@ -16,7 +16,6 @@ export const useUserActionsEdit = () => {
       isVisible: ({ resources }) => {
         return resources.length === 1
       },
-      componentType: 'button',
       class: 'oc-users-actions-edit-trigger'
     }
   ])

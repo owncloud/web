@@ -119,7 +119,6 @@ export const useSpaceActionsDisable = () => {
       isVisible: ({ resources }) => {
         return !!filterResourcesToDisable(resources).length
       },
-      componentType: 'button',
       class: 'oc-files-actions-disable-trigger'
     }
   ])

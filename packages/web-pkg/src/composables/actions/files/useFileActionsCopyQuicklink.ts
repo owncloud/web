@@ -72,7 +72,6 @@ export const useFileActionsCopyQuickLink = () => {
 
         return canShare({ space, resource: resources[0] })
       },
-      componentType: 'button',
       class: 'oc-files-actions-copy-quicklink-trigger'
     }
   ])

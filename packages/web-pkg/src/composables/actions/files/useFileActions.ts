@@ -113,7 +113,6 @@ export const useFileActions = () => {
             iconFillType: appInfo.iconFillType
           }),
           img: appInfo.img,
-          componentType: 'router-link',
           route: ({ space, resources }) => {
             return getEditorRoute({
               appFileExtension: fileExtension,

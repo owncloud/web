@@ -16,7 +16,6 @@ export const useGroupActionsEdit = () => {
       isVisible: ({ resources }) => {
         return resources.length === 1 && !resources[0].groupTypes?.includes('ReadOnly')
       },
-      componentType: 'button',
       class: 'oc-groups-actions-edit-trigger'
     }
   ])

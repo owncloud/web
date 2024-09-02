@@ -246,7 +246,6 @@ export const useFileActionsRename = () => {
         })
         return !renameDisabled
       },
-      componentType: 'button',
       class: 'oc-files-actions-rename-trigger'
     }
   ])

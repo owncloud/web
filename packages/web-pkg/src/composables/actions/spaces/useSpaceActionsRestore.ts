@@ -128,7 +128,6 @@ export const useSpaceActionsRestore = () => {
       isVisible: ({ resources }) => {
         return !!filterResourcesToRestore(resources).length
       },
-      componentType: 'button',
       class: 'oc-files-actions-restore-trigger'
     }
   ])

@@ -118,7 +118,6 @@ export const useSpaceActionsUploadImage = ({ spaceImageInput }: { spaceImageInpu
 
         return resources[0].canEditImage({ user: userStore.user })
       },
-      componentType: 'button',
       class: 'oc-files-actions-upload-space-image-trigger'
     }
   ])

@@ -52,7 +52,6 @@ export const useFileActionsDownloadFile = () => {
         }
         return resources[0].canDownload()
       },
-      componentType: 'button',
       class: 'oc-files-actions-download-file-trigger'
     }
   ])

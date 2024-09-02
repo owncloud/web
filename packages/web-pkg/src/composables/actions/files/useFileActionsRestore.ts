@@ -234,7 +234,6 @@ export const useFileActionsRestore = () => {
 
         return resources.length > 0
       },
-      componentType: 'button',
       class: 'oc-files-actions-restore-trigger'
     }
   ])

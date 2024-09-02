@@ -63,7 +63,6 @@ export const useFileActionsFavorite = () => {
 
         return capabilityStore.filesFavorites && ability.can('create', 'Favorite')
       },
-      componentType: 'button',
       class: 'oc-files-actions-favorite-trigger'
     }
   ])

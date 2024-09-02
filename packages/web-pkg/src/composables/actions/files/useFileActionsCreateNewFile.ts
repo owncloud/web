@@ -181,7 +181,6 @@ export const useFileActionsCreateNewFile = ({ space }: { space?: Ref<SpaceResour
         isVisible: () => {
           return unref(currentFolder)?.canUpload({ user: userStore.user })
         },
-        componentType: 'button',
         class: 'oc-files-actions-create-new-file',
         ext: appFileExtension.extension,
         isExternal: appFileExtension.app?.startsWith('external-')

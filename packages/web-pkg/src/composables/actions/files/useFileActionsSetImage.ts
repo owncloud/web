@@ -97,7 +97,6 @@ export const useFileActionsSetImage = () => {
 
         return space.canEditImage({ user: userStore.user })
       },
-      componentType: 'button',
       class: 'oc-files-actions-set-space-image-trigger'
     }
   ])

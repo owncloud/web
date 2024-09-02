@@ -31,7 +31,6 @@ export const useFileActionsCreateNewShortcut = ({ space }: { space: Ref<SpaceRes
         isVisible: () => {
           return unref(currentFolder)?.canCreate()
         },
-        componentType: 'button',
         class: 'oc-files-actions-create-new-shortcut'
       }
     ]
