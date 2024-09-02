@@ -490,8 +490,8 @@ importers:
         specifier: ^4.0.0
         version: 4.6.2(vite@5.2.8(@types/node@18.11.9)(sass@1.77.8)(terser@5.26.0))(vue@3.4.38(typescript@5.5.4))
       rollup-plugin-serve:
-        specifier: ^2.0.2
-        version: 2.0.3
+        specifier: ^3.0.0
+        version: 3.0.0
       sass:
         specifier: 1.77.8
         version: 1.77.8
@@ -6064,9 +6064,9 @@ packages:
     engines: {node: '>=4.0.0'}
     hasBin: true
 
-  mime@3.0.0:
-    resolution: {integrity: sha512-jSCU7/VB1loIWBZe14aEYHU/+1UMEHoaO7qxCOVJOw9GgH72VAWppxNcjU+x9a2k3GSIBXNKxXQFqRvvZ7vr3A==}
-    engines: {node: '>=10.0.0'}
+  mime@4.0.4:
+    resolution: {integrity: sha512-v8yqInVjhXyqP6+Kw4fV3ZzeMRqEW6FotRsKXjRS5VMTNIuXsdRoAvklpoRgSqXm6o9VNH4/C0mgedko9DdLsQ==}
+    engines: {node: '>=16'}
     hasBin: true
 
   mimic-fn@2.1.0:
@@ -7640,8 +7640,8 @@ packages:
     peerDependencies:
       rollup: '>=2.0.0'
 
-  rollup-plugin-serve@2.0.3:
-    resolution: {integrity: sha512-gQKmfQng17+jOsX5tmDanvJkm0f9XLqWVvXsD7NGd1SlneT+U1j/HjslDUXQz6cqwLnVDRc6xF2lj6rre+eeeQ==}
+  rollup-plugin-serve@3.0.0:
+    resolution: {integrity: sha512-DjVRhbwC0OgP1Q1sj8Lvx12ee60UTZM767kkjT61sYKHw/wLpANAw3VZN5ZMa5NlvO8bYpfTaqiUrW+icAjXFg==}
 
   rollup-plugin-visualizer@5.9.0:
     resolution: {integrity: sha512-bbDOv47+Bw4C/cgs0czZqfm8L82xOZssk4ayZjG40y9zbXclNk7YikrZTDao6p7+HDiGxrN0b65SgZiVm9k1Cg==}
@@ -14858,7 +14858,7 @@ snapshots:
 
   mime@2.6.0: {}
 
-  mime@3.0.0: {}
+  mime@4.0.4: {}
 
   mimic-fn@2.1.0: {}
 
@@ -16525,9 +16525,9 @@ snapshots:
     dependencies:
       rollup: 4.14.0
 
-  rollup-plugin-serve@2.0.3:
+  rollup-plugin-serve@3.0.0:
     dependencies:
-      mime: 3.0.0
+      mime: 4.0.4
       opener: 1.5.2
 
   rollup-plugin-visualizer@5.9.0(rollup@4.14.0):
