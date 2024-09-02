@@ -15,7 +15,6 @@ export interface Action<T = ActionOptions> {
   appearance?: string
   id?: string
   img?: string
-  componentType: 'button' | 'router-link' // FIXME: Should be determined by handler/route
   class?: string
   hasPriority?: boolean
   hideLabel?: boolean
@@ -34,6 +33,9 @@ export interface Action<T = ActionOptions> {
 
   // componentType: router-link
   route?(options?: T): RouteLocationRaw
+
+  // componentType: a
+  href?(options?: T): string
 
   // can be used to display the action in a disabled state in the UI
   isDisabled?(options?: T): boolean

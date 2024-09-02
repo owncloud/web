@@ -1,0 +1,5 @@
+Enhancement: Support a tags in actions
+
+We've added support for `a` tags in actions. This allows developers to create action extensions for e.g. opening file-specific URLs from the context menu.
+
+https://github.com/owncloud/web/pull/11502
