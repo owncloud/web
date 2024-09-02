@@ -13,7 +13,7 @@
   "peerDependencies": {
     "@ownclouders/web-client": "workspace:*",
     "@ownclouders/web-pkg": "workspace:*",
-    "axios": "1.7.5",
+    "axios": "1.7.7",
     "design-system": "workspace:@ownclouders/design-system@*",
     "email-validator": "^2.0.4",
     "fuse.js": "7.0.0",
