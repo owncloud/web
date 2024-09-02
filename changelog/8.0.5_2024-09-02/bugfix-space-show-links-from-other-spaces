@@ -1,0 +1,6 @@
+Bugfix: Space show links from other spaces
+
+We've fixed a bug where in a special constellation, links from other spaces were shown in the space. This is now fixed.
+
+https://github.com/owncloud/web/pull/11263
+https://github.com/owncloud/web/issues/11261
