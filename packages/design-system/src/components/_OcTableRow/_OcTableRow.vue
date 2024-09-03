@@ -63,8 +63,6 @@ export default defineComponent({
       return props.lazy ? props.lazy.colspan : 1
     })
 
-    console.log(props.lazy)
-
     const { isVisible } = props.lazy
       ? useIsVisible({
           ...props.lazy,
