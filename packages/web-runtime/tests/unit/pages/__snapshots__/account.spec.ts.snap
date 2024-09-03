@@ -1,67 +1,139 @@
 // Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
 exports[`account page > account information section > displays basic user information 1`] = `
-"<dl data-v-f2ac0579="" class="account-page-info oc-flex oc-flex-wrap">
-  <div data-v-f2ac0579="" class="account-page-info-username oc-mb oc-width-1-2@m oc-width-1-1@s">
-    <dt data-v-f2ac0579="" class="oc-text-normal oc-text-muted">Username</dt>
-    <dd data-v-f2ac0579="">some-username</dd>
+"<div class="account-table account-page-info">
+  <div class="oc-flex oc-flex-between oc-flex-bottom oc-width-1-1">
+    <h2>Account Information</h2>
+    <!--v-if-->
   </div>
-  <div data-v-f2ac0579="" class="account-page-info-displayname oc-mb oc-width-1-2@m oc-width-1-1@s">
-    <dt data-v-f2ac0579="" class="oc-text-normal oc-text-muted">First and last name</dt>
-    <dd data-v-f2ac0579="">some-displayname</dd>
-  </div>
-  <div data-v-f2ac0579="" class="account-page-info-email oc-mb oc-width-1-2@m oc-width-1-1@s">
-    <dt data-v-f2ac0579="" class="oc-text-normal oc-text-muted">Email</dt>
-    <dd data-v-f2ac0579="">some-email</dd>
-  </div>
-  <!--v-if-->
-  <div data-v-f2ac0579="" class="account-page-info-groups oc-mb oc-width-1-2@m oc-width-1-1@s">
-    <dt data-v-f2ac0579="" class="oc-text-normal oc-text-muted">Group memberships</dt>
-    <dd data-v-f2ac0579="" data-testid="group-names"><span data-v-f2ac0579="" data-testid="group-names-empty">You are not part of any group</span></dd>
-  </div>
-  <div data-v-f2ac0579="" class="account-page-logout-all-devices oc-mb oc-width-1-2@m oc-width-1-1@s">
-    <dt data-v-f2ac0579="" class="oc-text-normal oc-text-muted">Logout from active devices</dt>
-    <dd data-v-f2ac0579="" data-testid="logout">
-      <oc-button-stub data-v-f2ac0579="" appearance="raw" type="a" href="https://account-manager/logout" target="_blank" data-testid="account-page-logout-url-btn"></oc-button-stub>
-    </dd>
-  </div>
-  <!--v-if-->
-</dl>"
+  <table class="oc-table-simple">
+    <thead class="oc-thead oc-invisible-sr">
+      <tr tabindex="-1">
+        <th class="oc-table-cell oc-table-cell-align-left oc-table-cell-align-middle oc-table-cell-width-auto oc-text-nowrap oc-th">Information name</th>
+        <th class="oc-table-cell oc-table-cell-align-left oc-table-cell-align-middle oc-table-cell-width-auto oc-text-nowrap oc-th">Information value</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr tabindex="-1" class="account-page-info-username">
+        <td class="oc-table-cell oc-table-cell-align-left oc-table-cell-align-middle oc-table-cell-width-auto oc-td">Username</td>
+        <td class="oc-table-cell oc-table-cell-align-left oc-table-cell-align-middle oc-table-cell-width-auto oc-td">some-username</td>
+      </tr>
+      <tr tabindex="-1" class="account-page-info-displayname">
+        <td class="oc-table-cell oc-table-cell-align-left oc-table-cell-align-middle oc-table-cell-width-auto oc-td">First and last name</td>
+        <td class="oc-table-cell oc-table-cell-align-left oc-table-cell-align-middle oc-table-cell-width-auto oc-td">some-displayname</td>
+      </tr>
+      <tr tabindex="-1" class="account-page-info-email">
+        <td class="oc-table-cell oc-table-cell-align-left oc-table-cell-align-middle oc-table-cell-width-auto oc-td">Email</td>
+        <td class="oc-table-cell oc-table-cell-align-left oc-table-cell-align-middle oc-table-cell-width-auto oc-td">some-email</td>
+      </tr>
+      <!--v-if-->
+      <tr tabindex="-1" class="account-page-info-groups">
+        <td class="oc-table-cell oc-table-cell-align-left oc-table-cell-align-middle oc-table-cell-width-auto oc-td">Group memberships</td>
+        <td class="oc-table-cell oc-table-cell-align-left oc-table-cell-align-middle oc-table-cell-width-auto oc-td" data-testid="group-names"><span data-testid="group-names-empty">You are not part of any group</span></td>
+      </tr>
+      <tr tabindex="-1" class="account-page-logout-all-devices">
+        <td class="oc-table-cell oc-table-cell-align-left oc-table-cell-align-middle oc-table-cell-width-auto oc-td">Logout from active devices</td>
+        <td class="oc-table-cell oc-table-cell-align-left oc-table-cell-align-middle oc-table-cell-width-auto oc-td" data-testid="logout"><a href="https://account-manager/logout" target="_blank" class="oc-button oc-rounded oc-button-m oc-button-justify-content-center oc-button-gap-m oc-button-passive oc-button-passive-raw" data-testid="account-page-logout-url-btn">
+            <!--v-if-->
+            <!-- @slot Content of the button --> <span>Show devices</span>
+          </a></td>
+      </tr>
+    </tbody>
+  </table>
+</div>"
 `;
 
-exports[`account page > account information section > group membership > displays group names 1`] = `"<dd data-v-f2ac0579="" data-testid="group-names"><span data-v-f2ac0579="">one, two, three</span></dd>"`;
+exports[`account page > account information section > group membership > displays group names 1`] = `"<td class="oc-table-cell oc-table-cell-align-left oc-table-cell-align-middle oc-table-cell-width-auto oc-td" data-testid="group-names"><span>one, two, three</span></td>"`;
 
-exports[`account page > header section > edit url button > should be displayed if defined via config 1`] = `"<oc-button-stub data-v-f2ac0579="" variation="primary" type="a" href="/" target="_blank" data-testid="account-page-edit-url-btn"></oc-button-stub>"`;
+exports[`account page > header section > edit url button > should be displayed if defined via config 1`] = `
+"<a href="/" target="_blank" class="oc-button oc-rounded oc-button-m oc-button-justify-content-center oc-button-gap-m oc-button-primary oc-button-primary-outline" data-testid="account-page-edit-url-btn">
+  <!--v-if-->
+  <!-- @slot Content of the button --> <span class="oc-icon oc-icon-m oc-icon-passive"><!----></span> <span>Edit</span>
+</a>"
+`;
 
 exports[`account page > public link context > should render a limited view 1`] = `
-"<main data-v-f2ac0579="" id="account" class="oc-height-1-1 oc-m">
-  <h1 data-v-f2ac0579="" id="account-page-title" class="oc-page-title oc-m-rm oc-invisible-sr">Some Title</h1>
-  <!--v-if-->
-  <div data-v-f2ac0579="">
-    <div data-v-f2ac0579="" class="oc-flex oc-width-1-1">
-      <h2 data-v-f2ac0579="" class="oc-text-bold">Preferences</h2>
+"<main id="account" class="oc-mt-m oc-mb-l oc-flex oc-flex-center">
+  <div class="account-page">
+    <h1 id="account-page-title">My Account</h1>
+    <!--v-if-->
+    <div class="account-table account-page-preferences">
+      <h2 class="account-table-title">Preferences</h2>
+      <table class="oc-table-simple">
+        <thead class="oc-thead oc-invisible-sr">
+          <tr tabindex="-1">
+            <th class="oc-table-cell oc-table-cell-align-left oc-table-cell-align-middle oc-table-cell-width-auto oc-text-nowrap oc-th">Preference name</th>
+            <th class="oc-table-cell oc-table-cell-align-left oc-table-cell-align-middle oc-table-cell-width-auto oc-text-nowrap oc-th">Preference description</th>
+            <th class="oc-table-cell oc-table-cell-align-left oc-table-cell-align-middle oc-table-cell-width-auto oc-text-nowrap oc-th">Preference value</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr tabindex="-1" class="account-page-info-language">
+            <td class="oc-table-cell oc-table-cell-align-left oc-table-cell-align-middle oc-table-cell-width-auto oc-td">Language</td>
+            <td class="oc-table-cell oc-table-cell-align-left oc-table-cell-align-middle oc-table-cell-width-auto oc-td">
+              <div class="oc-flex"><span>Select your language.</span> <a href="https://explore.transifex.com/owncloud-org/owncloud-web/" target="_blank">
+                  <div class="oc-flex oc-ml-xs oc-flex-middle"><span>Help to translate</span> <span class="oc-icon oc-icon-s oc-icon-passive oc-ml-xs"><!----></span></div>
+                </a></div>
+            </td>
+            <td class="oc-table-cell oc-table-cell-align-left oc-table-cell-align-middle oc-table-cell-width-auto oc-td" data-testid="language">
+              <div options="[object Object],[object Object],[object Object],[object Object],[object Object],[object Object],[object Object],[object Object],[object Object],[object Object],[object Object],[object Object],[object Object],[object Object],[object Object],[object Object],[object Object],[object Object],[object Object],[object Object],[object Object],[object Object],[object Object],[object Object],[object Object],[object Object],[object Object],[object Object],[object Object],[object Object],[object Object],[object Object],[object Object],[object Object]" model-value="[object Object]">
+                <!--v-if-->
+                <!--v-if-->
+                <div dir="auto" class="v-select vs--single vs--searchable oc-select" style="background: transparent;">
+                  <div id="vs1__combobox" class="vs__dropdown-toggle" role="combobox" aria-expanded="false" aria-owns="vs1__listbox" aria-label="Language - Search for option">
+                    <div class="vs__selected-options"><span class="vs__selected"><!--v-if--> English <!--v-if--></span><input class="vs__search" id="oc-select-1" aria-autocomplete="list" aria-labelledby="vs1__combobox" aria-controls="vs1__listbox" type="search" autocomplete="off" value=""></div>
+                    <div class="vs__actions"><button type="button" class="vs__clear" title="Clear Selected" aria-label="Clear Selected" style="display: none;"><svg xmlns="http://www.w3.org/2000/svg" width="10" height="10">
+                          <path d="M6.895455 5l2.842897-2.842898c.348864-.348863.348864-.914488 0-1.263636L9.106534.261648c-.348864-.348864-.914489-.348864-1.263636 0L5 3.104545 2.157102.261648c-.348863-.348864-.914488-.348864-1.263636 0L.261648.893466c-.348864.348864-.348864.914489 0 1.263636L3.104545 5 .261648 7.842898c-.348864.348863-.348864.914488 0 1.263636l.631818.631818c.348864.348864.914773.348864 1.263636 0L5 6.895455l2.842898 2.842897c.348863.348864.914772.348864 1.263636 0l.631818-.631818c.348864-.348864.348864-.914489 0-1.263636L6.895455 5z"></path>
+                        </svg></button><svg xmlns="http://www.w3.org/2000/svg" width="14" height="10" role="presentation" class="vs__open-indicator">
+                        <path d="M9.211364 7.59931l4.48338-4.867229c.407008-.441854.407008-1.158247 0-1.60046l-.73712-.80023c-.407008-.441854-1.066904-.441854-1.474243 0L7 5.198617 2.51662.33139c-.407008-.441853-1.066904-.441853-1.474243 0l-.737121.80023c-.407008.441854-.407008 1.158248 0 1.600461l4.48338 4.867228L7 10l2.211364-2.40069z"></path>
+                      </svg>
+                      <div class="vs__spinner" style="display: none;">Loading...</div>
+                    </div>
+                  </div>
+                  <transition-stub name="vs__fade" appear="false" persisted="false" css="true">
+                    <ul id="vs1__listbox" role="listbox" style="display: none; visibility: hidden;"></ul>
+                  </transition-stub>
+                </div>
+                <!--v-if-->
+              </div>
+            </td>
+          </tr>
+          <!--v-if-->
+          <tr tabindex="-1" class="account-page-info-theme">
+            <td class="oc-table-cell oc-table-cell-align-left oc-table-cell-align-middle oc-table-cell-width-auto oc-td">Theme</td>
+            <td class="oc-table-cell oc-table-cell-align-left oc-table-cell-align-middle oc-table-cell-width-auto oc-td"><span>Select your favorite theme</span></td>
+            <td class="oc-table-cell oc-table-cell-align-left oc-table-cell-align-middle oc-table-cell-width-auto oc-td" data-testid="theme">
+              <div>
+                <div model-value="[object Object]" options="[object Object],[object Object],[object Object]">
+                  <!--v-if-->
+                  <!--v-if-->
+                  <div dir="auto" class="v-select vs--single vs--searchable oc-select" style="background: transparent;">
+                    <div id="vs2__combobox" class="vs__dropdown-toggle" role="combobox" aria-expanded="false" aria-owns="vs2__listbox" aria-label="Theme - Search for option">
+                      <div class="vs__selected-options"><span class="vs__selected"><!--v-if--> Auto (same as system) <!--v-if--></span><input class="vs__search" id="oc-select-2" aria-autocomplete="list" aria-labelledby="vs2__combobox" aria-controls="vs2__listbox" type="search" autocomplete="off" value=""></div>
+                      <div class="vs__actions"><button type="button" class="vs__clear" title="Clear Selected" aria-label="Clear Selected" style="display: none;"><svg xmlns="http://www.w3.org/2000/svg" width="10" height="10">
+                            <path d="M6.895455 5l2.842897-2.842898c.348864-.348863.348864-.914488 0-1.263636L9.106534.261648c-.348864-.348864-.914489-.348864-1.263636 0L5 3.104545 2.157102.261648c-.348863-.348864-.914488-.348864-1.263636 0L.261648.893466c-.348864.348864-.348864.914489 0 1.263636L3.104545 5 .261648 7.842898c-.348864.348863-.348864.914488 0 1.263636l.631818.631818c.348864.348864.914773.348864 1.263636 0L5 6.895455l2.842898 2.842897c.348863.348864.914772.348864 1.263636 0l.631818-.631818c.348864-.348864.348864-.914489 0-1.263636L6.895455 5z"></path>
+                          </svg></button><svg xmlns="http://www.w3.org/2000/svg" width="14" height="10" role="presentation" class="vs__open-indicator">
+                          <path d="M9.211364 7.59931l4.48338-4.867229c.407008-.441854.407008-1.158247 0-1.60046l-.73712-.80023c-.407008-.441854-1.066904-.441854-1.474243 0L7 5.198617 2.51662.33139c-.407008-.441853-1.066904-.441853-1.474243 0l-.737121.80023c-.407008.441854-.407008 1.158248 0 1.600461l4.48338 4.867228L7 10l2.211364-2.40069z"></path>
+                        </svg>
+                        <div class="vs__spinner" style="display: none;">Loading...</div>
+                      </div>
+                    </div>
+                    <transition-stub name="vs__fade" appear="false" persisted="false" css="true">
+                      <ul id="vs2__listbox" role="listbox" style="display: none; visibility: hidden;"></ul>
+                    </transition-stub>
+                  </div>
+                  <!--v-if-->
+                </div>
+              </div>
+            </td>
+          </tr>
+          <!--v-if-->
+          <!--v-if-->
+        </tbody>
+      </table>
     </div>
-    <dl data-v-f2ac0579="" class="account-page-preferences oc-flex oc-flex-wrap">
-      <div data-v-f2ac0579="" class="account-page-info-language oc-mb oc-width-1-2@m oc-width-1-1@s">
-        <dt data-v-f2ac0579="" class="oc-text-normal oc-text-muted">Language</dt>
-        <dd data-v-f2ac0579="" data-testid="language" class="oc-width-1-3@l oc-width-1-2@m oc-width-1-1@s">
-          <oc-select-stub data-v-f2ac0579="" label="Language" id="oc-select-1" filter="[Function]" disabled="false" labelhidden="true" optionlabel="label" getoptionlabel="[Function]" searchable="true" clearable="false" loading="false" fixmessageline="false" multiple="false" readonly="false" positionfixed="false" options="[object Object],[object Object],[object Object],[object Object],[object Object],[object Object],[object Object],[object Object],[object Object],[object Object],[object Object],[object Object],[object Object],[object Object],[object Object],[object Object],[object Object],[object Object],[object Object],[object Object],[object Object],[object Object],[object Object],[object Object],[object Object],[object Object],[object Object],[object Object],[object Object],[object Object],[object Object],[object Object],[object Object],[object Object]" model-value="[object Object]"></oc-select-stub>
-          <div data-v-f2ac0579="" class="oc-mt-s"><a data-v-f2ac0579="" href="https://explore.transifex.com/owncloud-org/owncloud-web/" target="_blank" class="oc-flex oc-flex-middle">
-              <oc-icon-stub data-v-f2ac0579="" name="service" class="oc-mr-xs"></oc-icon-stub> <span data-v-f2ac0579="">Help translate</span>
-            </a></div>
-        </dd>
-      </div>
-      <div data-v-f2ac0579="" class="account-page-info-theme oc-mb oc-width-1-2@m oc-width-1-1@s">
-        <dt data-v-f2ac0579="" class="oc-text-normal oc-text-muted">Theme</dt>
-        <dd data-v-f2ac0579="" data-testid="theme" class="oc-width-1-3@l oc-width-1-2@m oc-width-1-1@s">
-          <theme-switcher-stub data-v-f2ac0579=""></theme-switcher-stub>
-        </dd>
-      </div>
-      <!--v-if-->
-      <!--v-if-->
-    </dl>
+    <!--v-if-->
+    <!--v-if-->
   </div>
-  <!--v-if-->
-  <!--v-if-->
 </main>"
 `;

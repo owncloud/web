@@ -3,7 +3,7 @@ import {
   defaultComponentMocks,
   defaultPlugins,
   mockAxiosResolve,
-  shallowMount,
+  mount,
   mockAxiosReject
 } from 'web-test-helpers'
 import { mock } from 'vitest-mock-extended'
@@ -37,7 +37,7 @@ const selectors = {
   groupNames: '[data-testid="group-names"]',
   groupNamesEmpty: '[data-testid="group-names-empty"]',
   gdprExport: '[data-testid="gdpr-export"]',
-  extensionsSection: '.account-page-extension-preferences'
+  extensionsSection: '.account-page-extensions'
 }
 
 describe('account page', () => {
@@ -339,14 +339,13 @@ function getWrapper({
 
   return {
     mocks,
-    wrapper: shallowMount(account, {
+    wrapper: mount(account, {
       global: {
         plugins,
         mocks,
         provide: mocks,
         stubs: {
-          'oc-button': true,
-          'oc-icon': true
+          'extension-preference': true
         }
       }
     })

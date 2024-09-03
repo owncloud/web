@@ -204,7 +204,8 @@ export default defineComponent({
       multiple: false,
       defaultExtensionId: defaultProgressBarExtension.id,
       userPreference: {
-        label: $gettext('Global progress bar')
+        label: $gettext('Global progress bar'),
+        description: $gettext('Customize your progress bar')
       }
     }
     const extensionPoints = computed<ExtensionPoint<Extension>[]>(() => [progressBarExtensionPoint])
