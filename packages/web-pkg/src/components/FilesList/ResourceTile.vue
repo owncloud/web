@@ -343,7 +343,6 @@ export default defineComponent({
   }
 
   &-lazy-shimmer {
-    background-color: var(--oc-color-input-text-muted);
     height: 120px;
     opacity: 0.2;
     position: relative;
@@ -354,10 +353,10 @@ export default defineComponent({
     animation: shimmer 2s infinite;
     background-image: linear-gradient(
       90deg,
-      rgba(#fff, 0) 0,
-      rgba(#fff, 0.2) 20%,
-      rgba(#fff, 0.5) 60%,
-      rgba(#fff, 0)
+      rgba(#4c5f79, 0) 0,
+      rgba(#4c5f79, 0.2) 20%,
+      rgba(#4c5f79, 0.5) 60%,
+      rgba(#4c5f79, 0)
     );
     bottom: 0;
     content: '';
