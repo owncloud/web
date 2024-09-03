@@ -153,7 +153,6 @@ export const useFileActionsCreateLink = ({
           return $gettext('Create links')
         },
         isVisible,
-        componentType: 'button',
         class: 'oc-files-actions-create-links'
       },
       {
@@ -164,7 +163,6 @@ export const useFileActionsCreateLink = ({
           return $gettext('Create links')
         },
         isVisible,
-        componentType: 'button',
         class: 'oc-files-actions-create-quick-links'
       }
     ]

@@ -89,7 +89,6 @@ export const useFileActionsOpenShortcut = () => {
         }
         return resources[0].canDownload()
       },
-      componentType: 'button',
       class: 'oc-files-actions-open-short-cut-trigger'
     }
   ])

@@ -147,7 +147,6 @@ export const extensions = ({ applicationConfig }: ApplicationSetupOptions) => {
         },
         isDisabled: () => !!Object.keys(uppyService.getCurrentUploads()).length,
         disabledTooltip: () => $gettext('Please wait until all imports have finished'),
-        componentType: 'button',
         class: 'oc-files-actions-import'
       }
     }

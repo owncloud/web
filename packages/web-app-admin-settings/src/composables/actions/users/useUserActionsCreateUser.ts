@@ -13,7 +13,6 @@ export const useUserActionsCreateUser = () => {
     {
       name: 'create-user',
       icon: 'add',
-      componentType: 'button',
       class: 'oc-users-actions-create-user',
       label: () => $gettext('New user'),
       isVisible: () => !capabilityStore.graphUsersCreateDisabled,

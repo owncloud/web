@@ -11,7 +11,6 @@ export const useGroupActionsCreateGroup = () => {
     {
       name: 'create-group',
       icon: 'add',
-      componentType: 'button',
       class: 'oc-groups-actions-create-group',
       label: () => $gettext('New group'),
       isVisible: () => true,

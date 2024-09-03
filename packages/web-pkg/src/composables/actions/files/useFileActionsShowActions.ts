@@ -37,7 +37,6 @@ export const useFileActionsShowActions = () => {
         // return hardcoded `true` in all cases once we have them.
         return resources.length === 1
       },
-      componentType: 'button',
       class: 'oc-files-actions-show-actions-trigger'
     }
   ])

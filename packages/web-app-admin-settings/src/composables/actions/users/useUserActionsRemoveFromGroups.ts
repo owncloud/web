@@ -32,7 +32,6 @@ export const useUserActionsRemoveFromGroups = ({ groups }: { groups: Ref<Group[]
     {
       name: 'remove-users-from-groups',
       icon: 'subtract',
-      componentType: 'button',
       class: 'oc-users-actions-remove-from-groups-trigger',
       label: () => $gettext('Remove from groups'),
       isVisible: ({ resources }) => {

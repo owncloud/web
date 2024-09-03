@@ -32,7 +32,6 @@ export const useUserActionsAddToGroups = ({ groups }: { groups: Ref<Group[]> }) 
     {
       name: 'add-to-groups',
       icon: 'add',
-      componentType: 'button',
       class: 'oc-users-actions-add-to-groups-trigger',
       label: () => $gettext('Add to groups'),
       isVisible: ({ resources }) => {

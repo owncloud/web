@@ -52,7 +52,6 @@ export const useSpaceActionsEditQuota = () => {
         }
         return ability.can('set-quota-all', 'Drive')
       },
-      componentType: 'button',
       class: 'oc-files-actions-edit-quota-trigger'
     }
   ])

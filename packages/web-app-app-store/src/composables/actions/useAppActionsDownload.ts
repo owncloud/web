@@ -24,7 +24,6 @@ export const useAppActionsDownload = () => {
     isVisible: () => {
       return true
     },
-    componentType: 'button',
     appearance: 'outline'
   }
 

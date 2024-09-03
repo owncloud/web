@@ -80,7 +80,6 @@ export const useSpaceActionsEditReadmeContent = () => {
 
         return resources[0].canEditReadme({ user: userStore.user })
       },
-      componentType: 'button',
       class: 'oc-files-actions-edit-readme-content-trigger'
     }
   ])

@@ -137,7 +137,6 @@ export const useFileActionsDownloadArchive = () => {
           })
           return !downloadDisabled
         },
-        componentType: 'button',
         class: 'oc-files-actions-download-archive-trigger'
       }
     ]

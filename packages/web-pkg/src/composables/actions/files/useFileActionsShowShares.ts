@@ -37,7 +37,6 @@ export const useFileActionsShowShares = () => {
         }
         return canShare({ space, resource: resources[0] })
       },
-      componentType: 'button',
       class: 'oc-files-actions-show-shares-trigger'
     }
   ])

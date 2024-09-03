@@ -67,7 +67,6 @@ export const useFileActionsMove = () => {
         })
         return !moveDisabled
       },
-      componentType: 'button',
       class: 'oc-files-actions-move-trigger'
     }
   ])

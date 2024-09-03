@@ -448,13 +448,10 @@ export default defineComponent({
           disabledTooltip: () => '',
           isVisible: () => unref(isEditor),
           isDisabled: () => isReadOnly.value || !isDirty.value,
-          componentType: 'button',
           icon: 'save',
           id: 'app-save-action',
           label: () => 'Save',
-          handler: () => {
-            save()
-          }
+          handler: save
         }
       ]
     })

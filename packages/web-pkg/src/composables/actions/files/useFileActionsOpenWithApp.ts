@@ -43,7 +43,6 @@ export const useFileActionsOpenWithApp = ({ appId }: { appId: string }) => {
       isVisible: () => {
         return !unref(isFilesAppActive)
       },
-      componentType: 'button',
       class: 'oc-files-actions-open-with-app-trigger'
     }
   ])

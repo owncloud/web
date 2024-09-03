@@ -17,7 +17,6 @@ const fileActions = {
     icon: 'file-download',
     handler: vi.fn(),
     label: () => 'Download',
-    componentType: 'button',
     class: 'oc-files-actions-download-file-trigger'
   } as unknown as FileAction,
   navigate: {
@@ -25,8 +24,14 @@ const fileActions = {
     icon: 'folder-open',
     route: () => ({ name: 'files-personal' }),
     label: () => 'Open Folder',
-    componentType: 'router-link',
     class: 'oc-files-actions-navigate-trigger'
+  } as unknown as FileAction,
+  redirect: {
+    name: 'redirect',
+    icon: 'external',
+    href: () => 'https://owncloud.com',
+    label: () => 'Visit ownCloud',
+    class: 'oc-files-actions-redirect-trigger'
   } as unknown as FileAction
 }
 
@@ -81,6 +86,16 @@ describe('ActionMenuItem component', () => {
       // FIXME: to.name cannot be accessed, because the attributes().to holds a string containing `[object Object]`.
       // That doesn't allow checking the name of the router-link.
       // expect(link.attributes().href).toBe(action.route)
+    })
+  })
+  describe('component is of type a', () => {
+    it('has a href', () => {
+      const action = fileActions.redirect
+      const { wrapper } = getWrapper(action, mount)
+      const link = wrapper.find(selectors.handler)
+      expect(link.exists()).toBeTruthy()
+      expect(link.element.tagName).toBe('A')
+      expect(link.attributes().href).toBe(action.href())
     })
   })
 })

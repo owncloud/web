@@ -77,7 +77,6 @@ export const useSpaceActionsRename = () => {
 
         return resources[0].canRename({ user: userStore.user, ability })
       },
-      componentType: 'button',
       class: 'oc-files-actions-rename-trigger'
     }
   ])

@@ -101,7 +101,6 @@ export const useFileActionsDisableSync = () => {
 
         return resources.some((resource) => resource.syncEnabled)
       },
-      componentType: 'button',
       class: 'oc-files-actions-disable-sync-trigger'
     }
   ])

@@ -84,7 +84,6 @@ export const useFileActionsToggleHideShare = () => {
 
         return isLocationSharesActive(router, 'files-shares-with-me')
       },
-      componentType: 'button',
       class: 'oc-files-actions-hide-share-trigger'
     }
   ])

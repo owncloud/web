@@ -2,7 +2,7 @@
   <li v-oc-tooltip="componentProps.disabled ? action.disabledTooltip?.(actionOptions) : ''">
     <oc-button
       v-oc-tooltip="showTooltip || action.hideLabel ? action.label(actionOptions) : ''"
-      :type="action.componentType"
+      :type="componentType"
       v-bind="componentProps"
       :class="[action.class, 'action-menu-item', 'oc-py-s', 'oc-px-m', 'oc-width-1-1']"
       :aria-label="componentProps.disabled ? action.disabledTooltip?.(actionOptions) : ''"
@@ -99,6 +99,23 @@ export default defineComponent({
     const configStore = useConfigStore()
     const { options } = storeToRefs(configStore)
 
+    const componentType = computed<string>(() => {
+      if (Object.hasOwn(props.action, 'handler')) {
+        return 'button'
+      }
+      if (Object.hasOwn(props.action, 'route')) {
+        return 'router-link'
+      }
+      if (Object.hasOwn(props.action, 'href')) {
+        return 'a'
+      }
+      console.warn(
+        'ActionMenuItem: No handler, route or href callback found in action',
+        props.action
+      )
+      return 'button'
+    })
+
     const componentProps = computed(() => {
       const properties = {
         appearance: props.action.appearance || props.appearance,
@@ -109,15 +126,18 @@ export default defineComponent({
         ...(props.action.id && { id: props.action.id })
       }
 
-      if (props.action.componentType === 'router-link' && props.action.route) {
-        return {
-          ...properties,
-          to: props.action.route(props.actionOptions),
+      return {
+        ...properties,
+        ...(unref(componentType) === 'router-link' && {
+          to: props.action.route(props.actionOptions)
+        }),
+        ...(unref(componentType) === 'a' && {
+          href: props.action.href(props.actionOptions)
+        }),
+        ...(['router-link', 'a'].includes(unref(componentType)) && {
           target: options.value.cernFeatures ? '_blank' : '_self'
-        }
+        })
       }
-
-      return properties
     })
 
     const isMacOs = computed(() => {
@@ -133,6 +153,7 @@ export default defineComponent({
     })
 
     return {
+      componentType,
       componentProps,
       openInNewTabHint
     }
@@ -142,7 +163,7 @@ export default defineComponent({
       return this.action.icon && /^https?:\/\//i.test(this.action.icon)
     },
     componentListeners() {
-      if (typeof this.action.handler !== 'function' || this.action.componentType !== 'button') {
+      if (typeof this.action.handler !== 'function') {
         return {}
       }
 

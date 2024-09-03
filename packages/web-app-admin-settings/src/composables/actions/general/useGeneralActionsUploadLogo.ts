@@ -57,7 +57,6 @@ export const useGeneralActionsUploadLogo = ({ imageInput }: { imageInput: VNodeR
       handler: () => {
         unref(imageInput).click()
       },
-      componentType: 'button',
       class: 'oc-general-actions-upload-logo-trigger'
     }
   ])

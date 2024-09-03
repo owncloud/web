@@ -80,7 +80,6 @@ export const useFileActionsDelete = () => {
         })
         return !deleteDisabled
       },
-      componentType: 'button',
       class: 'oc-files-actions-delete-trigger'
     },
     {
@@ -106,7 +105,6 @@ export const useFileActionsDelete = () => {
 
         return resources.length > 0
       },
-      componentType: 'button',
       class: 'oc-files-actions-delete-permanent-trigger'
     }
   ])

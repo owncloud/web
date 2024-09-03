@@ -69,7 +69,6 @@ export const extensions = (appInfo: ApplicationInformation) => {
             resources[0]?.storageId?.startsWith(OCM_PROVIDER_ID)
           )
         },
-        componentType: 'button',
         class: 'oc-files-actions-open-file-remote'
       }
     },

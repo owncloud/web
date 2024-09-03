@@ -91,7 +91,6 @@ export const useFileActionsCopy = () => {
           // a user always has their home dir with write access
           return true
         },
-        componentType: 'button',
         class: 'oc-files-actions-copy-trigger'
       }
     ]

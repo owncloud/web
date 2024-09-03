@@ -38,7 +38,6 @@ export const useGeneralActionsResetLogo = () => {
         return ability.can('update-all', 'Logo')
       },
       handler,
-      componentType: 'button',
       class: 'oc-general-actions-reset-logo-trigger'
     }
   ])

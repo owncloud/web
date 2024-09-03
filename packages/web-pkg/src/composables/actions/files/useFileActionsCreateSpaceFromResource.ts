@@ -131,7 +131,6 @@ export const useFileActionsCreateSpaceFromResource = () => {
 
           return true
         },
-        componentType: 'button',
         class: 'oc-files-actions-create-space-from-resource-trigger'
       }
     ]

@@ -30,7 +30,6 @@ export const useUserActionsEditLogin = () => {
     {
       name: 'edit-login',
       icon: 'login-circle',
-      componentType: 'button',
       class: 'oc-users-actions-edit-login-trigger',
       label: () => $gettext('Edit login'),
       isVisible: ({ resources }) => {
