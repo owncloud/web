@@ -203,7 +203,6 @@ export default defineComponent({
 
     const { isVisible } = props.lazy
       ? useIsVisible({
-          ...props.lazy,
           target: observerTarget
         })
       : { isVisible: ref(true) }
