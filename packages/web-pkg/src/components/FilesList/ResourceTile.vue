@@ -343,33 +343,32 @@ export default defineComponent({
   }
 
   &-lazy-shimmer {
-    width: 140px;
+    background-color: var(--oc-color-input-text-muted);
     height: 120px;
-    background-color: var(--oc-color-background-hover);
+    opacity: 0.2;
     position: relative;
     overflow: hidden;
   }
 
-  &-lazy-shimmer::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: -100%;
-    width: 200%;
-    height: 100%;
-    background-image: linear-gradient(
-      to right,
-      rgba(255, 255, 255, 0) 0%,
-      rgba(255, 255, 255, 0.5) 50%,
-      rgba(255, 255, 255, 0) 100%
-    );
+  &-lazy-shimmer::after {
     animation: shimmer 2s infinite;
+    background-image: linear-gradient(
+      90deg,
+      rgba(#fff, 0) 0,
+      rgba(#fff, 0.2) 20%,
+      rgba(#fff, 0.5) 60%,
+      rgba(#fff, 0)
+    );
+    bottom: 0;
+    content: '';
+    left: 0;
+    position: absolute;
+    right: 0;
+    top: 0;
+    transform: translateX(-100%);
   }
 
   @keyframes shimmer {
-    0% {
-      transform: translateX(0);
-    }
     100% {
       transform: translateX(100%);
     }
