@@ -50,6 +50,7 @@
           :is-extension-displayed="areFileExtensionsShown"
           :resource-icon-size="resourceIconSize"
           :draggable="dragDrop"
+          :lazy="lazy"
           @vue:mounted="
             $emit('rowMounted', resource, tileRefs.tiles[resource.id], ImageDimension.Tile)
           "
@@ -154,7 +155,6 @@ import {
   FolderViewModeConstants,
   SortDir,
   SortField,
-  useMessages,
   useResourceRouteResolver,
   useTileSize,
   useResourcesStore,
@@ -220,11 +220,14 @@ export default defineComponent({
     dragDrop: {
       type: Boolean,
       default: false
+    },
+    lazy: {
+      type: Boolean,
+      default: true
     }
   },
   emits: ['fileClick', 'fileDropped', 'rowMounted', 'sort', 'update:selectedIds'],
   setup(props, context) {
-    const { showMessage } = useMessages()
     const { $gettext } = useGettext()
     const resourcesStore = useResourcesStore()
     const { getDefaultAction } = useFileActions()

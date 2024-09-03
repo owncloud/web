@@ -266,6 +266,7 @@ describe('ResourceTiles component', () => {
     return {
       wrapper: mount(ResourceTiles, {
         props: {
+          lazy: false,
           viewSize: 1,
           ...props
         },
