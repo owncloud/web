@@ -1,0 +1,6 @@
+Bugfix: OCM invite generation body format
+
+We've fixed the issue where the body of the OCM invite generation was not formatted correctly.
+
+https://github.com/owncloud/web/pull/11512
+https://github.com/owncloud/ocis/issues/9583
