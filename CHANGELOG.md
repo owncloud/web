@@ -11,6 +11,7 @@ Summary
 * Enhancement - Replace custom datepicker with native html element: [#11377](https://github.com/owncloud/web/pull/11377)
 * Enhancement - Display disabled role permissions: [#11387](https://github.com/owncloud/web/pull/11387)
 * Enhancement - Mark external shares: [#11394](https://github.com/owncloud/web/pull/11394)
+* Enhancement - Support a tags in actions: [#11502](https://github.com/owncloud/web/pull/11502)
 
 Details
 -------
@@ -38,6 +39,13 @@ Details
 
    https://github.com/owncloud/web/issues/11361
    https://github.com/owncloud/web/pull/11394
+
+* Enhancement - Support a tags in actions: [#11502](https://github.com/owncloud/web/pull/11502)
+
+   We've added support for `a` tags in actions. This allows developers to create
+   action extensions for e.g. opening file-specific URLs from the context menu.
+
+   https://github.com/owncloud/web/pull/11502
 
 Changelog for ownCloud Web [8.0.5] (2024-09-02)
 =======================================
