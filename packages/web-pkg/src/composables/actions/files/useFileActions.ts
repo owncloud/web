@@ -29,7 +29,12 @@ import {
   useFileActionsRestore,
   useFileActionsCreateSpaceFromResource
 } from './index'
-import { useAppsStore, useConfigStore, useResourcesStore } from '../../piniaStores'
+import {
+  ActionExtension,
+  useAppsStore,
+  useConfigStore,
+  useExtensionRegistry
+} from '../../piniaStores'
 import { ApplicationFileExtension } from '../../../apps'
 import { Resource, SpaceResource } from '@ownclouders/web-client'
 import { storeToRefs } from 'pinia'
@@ -49,11 +54,9 @@ export const useFileActions = () => {
   const { $gettext } = useGettext()
   const isSearchActive = useIsSearchActive()
   const { isEnabled: isEmbedModeEnabled } = useEmbedMode()
+  const { requestExtensions } = useExtensionRegistry()
 
   const { openUrl } = useWindowOpen()
-
-  const resourcesStore = useResourcesStore()
-  const { currentFolder } = storeToRefs(resourcesStore)
 
   const configStore = useConfigStore()
   const { options } = storeToRefs(configStore)
@@ -89,6 +92,14 @@ export const useFileActions = () => {
     ...unref(favoriteActions),
     ...unref(navigateActions)
   ])
+
+  const defaultActions = computed<FileAction[]>(() => {
+    const contextActionExtensions = requestExtensions<ActionExtension>({
+      id: 'global.files.default-actions',
+      extensionType: 'action'
+    })
+    return contextActionExtensions.map((extension) => extension.action)
+  })
 
   const editorActions = computed(() => {
     if (unref(isEmbedModeEnabled)) {
@@ -240,45 +251,39 @@ export const useFileActions = () => {
     action.handler(options)
   }
 
-  const getDefaultEditorAction = (options: FileActionOptions): Action | null => {
-    return getDefaultAction({ ...options, omitSystemActions: true })
-  }
-
   const getDefaultAction = (options: GetFileActionsOptions): Action | null => {
-    const filterCallback = (action: FileAction) =>
-      action.isVisible({
-        ...options,
-        // FIXME: parent does not exit in FileActionOptions, what is this supposed to do?
-        parent: unref(currentFolder)
-      } as any)
+    const filterCallback = (action: FileAction) => action.isVisible(options)
 
-    // first priority: handlers from config
-    const enabledEditorActions = unref(editorActions).filter(filterCallback)
-
-    // prioritize apps that have hasPriority set
-    const appActions = enabledEditorActions.sort(
-      (a, b) => Number(b.hasPriority) - Number(a.hasPriority)
-    )
-
+    const appActions = unref(editorActions)
+      .filter(filterCallback)
+      .sort((a, b) => Number(b.hasPriority) - Number(a.hasPriority))
     if (appActions.length) {
       return appActions[0]
     }
 
-    // fallback: system actions
-    return options.omitSystemActions ? null : unref(systemActions).filter(filterCallback)[0]
+    const extensionActions = unref(defaultActions).filter(filterCallback)
+    if (extensionActions.length) {
+      return extensionActions[0]
+    }
+
+    if (options.omitSystemActions) {
+      return null
+    }
+    return unref(systemActions).filter(filterCallback)[0]
   }
 
   const getAllAvailableActions = (options: FileActionOptions) => {
-    return [...unref(editorActions), ...unref(systemActions)].filter((action) => {
-      return action.isVisible(options)
-    })
+    return [...unref(editorActions), ...unref(defaultActions), ...unref(systemActions)].filter(
+      (action) => {
+        return action.isVisible(options)
+      }
+    )
   }
 
   return {
     editorActions,
     systemActions,
     getDefaultAction,
-    getDefaultEditorAction,
     getAllAvailableActions,
     getEditorRouteOpts,
     openEditor,
