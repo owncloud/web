@@ -61,7 +61,7 @@
     "core-js": "3.30.2",
     "cucumber-html-reporter": "7.1.1",
     "ejs": "3.1.10",
-    "eslint": "8.56.0",
+    "eslint": "9.9.1",
     "git-repo-info": "2.1.1",
     "glob": "11.0.0",
     "happy-dom": "13.3.1",
