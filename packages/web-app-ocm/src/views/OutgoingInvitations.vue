@@ -202,15 +202,12 @@ export default defineComponent({
       if (unref(descriptionErrorMessage)) {
         return
       }
-
       try {
         const { data: tokenInfo } = await clientService.httpAuthenticated.post(
           '/sciencemesh/generate-invite',
           {
-            params: {
-              ...(description && { description }),
-              ...(recipient && { recipient })
-            }
+            ...(description && { description }),
+            ...(recipient && { recipient })
           },
           {
             schema: inviteSchema
