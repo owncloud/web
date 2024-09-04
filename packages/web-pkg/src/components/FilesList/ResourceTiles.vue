@@ -658,7 +658,8 @@ export default defineComponent({
   row-gap: 1rem;
 
   &-controls {
-    border-bottom: 1px solid var(--oc-color-border);  }
+    border-bottom: 1px solid var(--oc-color-border);
+  }
 
   &-item-drop-highlight {
     background-color: var(--oc-color-input-border) !important;
