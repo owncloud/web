@@ -3,10 +3,10 @@
     <div class="oc-flex oc-flex-middle oc-mb-m oc-pb-s oc-tiles-controls">
       <oc-checkbox
         id="tiles-view-select-all"
+        v-oc-tooltip="selectAllCheckboxLabel"
         class="oc-ml-s"
         size="large"
-        v-oc-tooltip="selectAllCheckBoxLabel"
-        :label="selectAllCheckBoxLabel"
+        :label="selectAllCheckboxLabel"
         :label-hidden="true"
         :disabled="resources.length === disabledResourceIds.length"
         :model-value="areAllResourcesSelected"
@@ -177,14 +177,12 @@ import {
   useFileActions,
   useGetMatchingSpace
 } from '../../composables'
-import { $gettext } from '../../router/utils'
 
 type ResourceTileRef = ComponentPublicInstance<typeof ResourceTile>
 type ContextMenuQuickActionRef = ComponentPublicInstance<typeof ContextMenuQuickAction>
 
 export default defineComponent({
   name: 'ResourceTiles',
-  methods: { $gettext },
   components: { ContextMenuQuickAction, ResourceGhostElement, ResourceTile },
   props: {
     /**
@@ -263,7 +261,7 @@ export default defineComponent({
 
     const areFileExtensionsShown = computed(() => resourcesStore.areFileExtensionsShown)
 
-    const selectAllCheckBoxLabel = computed(() => {
+    const selectAllCheckboxLabel = computed(() => {
       return unref(areAllResourcesSelected) ? $gettext('Clear selection') : $gettext('Select all')
     })
 
@@ -647,7 +645,7 @@ export default defineComponent({
       areAllResourcesSelected,
       disabledResourceIds,
       toggleSelectionAll,
-      selectAllCheckBoxLabel
+      selectAllCheckboxLabel
     }
   },
   data() {

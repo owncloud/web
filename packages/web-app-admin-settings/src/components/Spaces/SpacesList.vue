@@ -154,7 +154,6 @@ import {
 } from '../../composables/keyboardActions'
 import { useSpaceSettingsStore } from '../../composables'
 import { storeToRefs } from 'pinia'
-import { $gettext } from '@ownclouders/web-pkg/src/router/utils'
 
 export default defineComponent({
   name: 'SpacesList',
@@ -538,8 +537,7 @@ export default defineComponent({
       unselectAllSpaces,
       isSticky
     }
-  },
-  methods: { $gettext }
+  }
 })
 </script>
 
