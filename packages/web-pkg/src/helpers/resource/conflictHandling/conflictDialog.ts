@@ -12,7 +12,6 @@ export interface FileConflict {
 }
 
 export class ConflictDialog {
-  /* eslint-disable no-useless-constructor */
   constructor(
     protected $gettext: Language['$gettext'],
     protected $ngettext: Language['$ngettext']

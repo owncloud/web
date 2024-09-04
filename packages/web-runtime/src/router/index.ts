@@ -14,7 +14,6 @@ import {
   RouteLocationNormalizedLoaded
 } from 'vue-router'
 
-// eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-ignore
 import qs from 'qs'
 

@@ -7,10 +7,10 @@ import { eventBus } from '../eventBus'
 import DropTarget from '@uppy/drop-target'
 import { Resource, urlJoin } from '@ownclouders/web-client'
 import { UppyResource } from './types'
-// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+
 // @ts-ignore
 import getFileType from '@uppy/utils/lib/getFileType'
-// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+
 // @ts-ignore
 import generateFileID from '@uppy/utils/lib/generateFileID'
 

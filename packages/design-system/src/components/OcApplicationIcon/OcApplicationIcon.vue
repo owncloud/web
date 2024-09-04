@@ -58,7 +58,7 @@ export default defineComponent({
       return !!props.colorSecondary
     })
     const generatedHashedPrimaryColor = computed((): string => {
-      let hashedColor = generateHashedColorForString(props.icon)
+      const hashedColor = generateHashedColorForString(props.icon)
       return rgbToHex(setDesiredContrastRatio(hexToRgb(hashedColor), hexToRgb('#ffffff'), 4))
     })
     const iconStyle = computed(() => {

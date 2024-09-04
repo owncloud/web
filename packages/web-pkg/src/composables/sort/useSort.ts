@@ -15,7 +15,7 @@ export enum SortDir {
 export interface SortField {
   name: string
   prop?: string
-  // eslint-disable-next-line @typescript-eslint/ban-types
+  // eslint-disable-next-line
   sortable?: MaybeRef<boolean | Function | string>
   sortDir?: MaybeRef<SortDir>
   label?: string

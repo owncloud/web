@@ -5,7 +5,7 @@ import { encodePath } from '../../utils'
 import { isPublicSpaceResource } from '@ownclouders/web-client'
 import { BuildQueryStringOptions, LoadPreviewOptions } from '.'
 import { AuthStore, CapabilityStore, ConfigStore, UserStore } from '../../composables'
-// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+
 // @ts-ignore
 import { stringify } from 'qs'
 

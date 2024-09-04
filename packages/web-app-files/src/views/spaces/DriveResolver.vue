@@ -155,7 +155,7 @@ export default defineComponent({
          * find an easy way to do that.
          **/
         if (space.fileId === space.id) {
-          let publicSpace = (await getSpaceResource()) as PublicSpaceResource
+          const publicSpace = (await getSpaceResource()) as PublicSpaceResource
 
           // FIXME: check for type once https://github.com/owncloud/ocis/issues/8740 is resolved
           if (publicSpace.publicLinkPermission === SharePermissionBit.Create) {

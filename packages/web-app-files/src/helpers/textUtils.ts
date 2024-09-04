@@ -39,7 +39,7 @@ function naturalSortCompare(a: string, b: string) {
       aNum = Number(aa[x])
       bNum = Number(bb[x])
       // note: == is correct here
-      // eslint-disable-next-line eqeqeq
+
       if (aNum == aa[x] && bNum == bb[x]) {
         return aNum - bNum
       } else {

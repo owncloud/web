@@ -27,7 +27,7 @@ export default defineComponent({
       required: true
     },
     fields: {
-      type: Array<String>,
+      type: Array<string>,
       required: true
     }
   }

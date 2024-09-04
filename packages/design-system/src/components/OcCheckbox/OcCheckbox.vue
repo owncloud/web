@@ -50,7 +50,7 @@ export default defineComponent({
      *
      * Can be any type, but most common is boolean for singular checkbox use, or array when used in a group of checkboxes.
      **/
-    // eslint-disable-next-line vue/require-prop-types
+
     modelValue: {
       type: [Boolean, Array] as PropType<boolean | unknown[]>,
       required: false,

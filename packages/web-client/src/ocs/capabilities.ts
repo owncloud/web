@@ -1,7 +1,6 @@
 import { AxiosInstance } from 'axios'
 import get from 'lodash-es/get'
 
-/* eslint-disable camelcase */
 export interface AppProviderCapability {
   apps_url?: string
   enabled?: boolean
@@ -45,7 +44,7 @@ export interface ArchiverCapability {
   enabled?: boolean
   version?: string // version is just a major version, e.g. `v2`
   formats?: string[]
-  // eslint-disable-next-line camelcase
+
   archiver_url?: string
   max_num_files?: string
   max_size?: string
@@ -185,7 +184,6 @@ export interface Capabilities {
     string?: string
   }
 }
-/* eslint-enable camelcase */
 
 export const GetCapabilitiesFactory = (baseURI: string, axios: AxiosInstance) => {
   const url = new URL(baseURI)

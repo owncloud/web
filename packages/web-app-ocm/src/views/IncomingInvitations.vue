@@ -167,7 +167,7 @@ export default defineComponent({
       }
       const providerDomainQuery = to.query.providerDomain
       if (providerDomainQuery) {
-        let matchedProvider = unref(providers)?.find(
+        const matchedProvider = unref(providers)?.find(
           (p) => p.domain === queryItemAsString(providerDomainQuery)
         )
         if (matchedProvider) {

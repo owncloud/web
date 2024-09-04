@@ -140,8 +140,8 @@ export default defineComponent({
     const localStorageData = useLocalStorage<{ fontSizePercentage?: number }>(`oc_epubReader`, {})
     const currentFontSizePercentage = ref(unref(localStorageData).fontSizePercentage || 100)
     const themeStore = useThemeStore()
-    let book = ref<Book>()
-    let rendition = ref<Rendition>()
+    const book = ref<Book>()
+    const rendition = ref<Rendition>()
 
     const navigateLeft = () => {
       unref(rendition).prev()

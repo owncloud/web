@@ -246,7 +246,7 @@ export default defineComponent({
         )
       }
 
-      let userFacingErrors: Error[] = []
+      const userFacingErrors: Error[] = []
       const failed = result.filter(({ status }) => status === 'rejected')
       if (failed.length) {
         ;(failed as PromiseRejectedResult[])

@@ -50,7 +50,7 @@ export default defineComponent({
      *
      * Can be any type.
      **/
-    // eslint-disable-next-line vue/require-prop-types
+
     modelValue: {
       type: [String, Number, Boolean, Object],
       required: false,
