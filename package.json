@@ -64,7 +64,7 @@
     "eslint": "8.56.0",
     "git-repo-info": "2.1.1",
     "glob": "11.0.0",
-    "happy-dom": "13.3.1",
+    "happy-dom": "15.7.3",
     "jsdom": "^25.0.0",
     "license-checker-rseidelsohn": "4.3.0",
     "node-fetch": "2.7.0",
