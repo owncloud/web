@@ -2,7 +2,7 @@ import { SDKSearch } from '../../../src/search'
 import { RouteLocation, Router } from 'vue-router'
 import { mock } from 'vitest-mock-extended'
 import { ref } from 'vue'
-import { createTestingPinia } from 'web-test-helpers/src'
+import { createTestingPinia, writable } from 'web-test-helpers/src'
 import { ConfigStore, useCapabilityStore } from '@ownclouders/web-pkg'
 
 const getStore = (reports: string[] = []) => {
@@ -25,11 +25,12 @@ describe('SDKProvider', () => {
         { route: 'search-provider-list' },
         { route: 'bar', available: true }
       ].forEach((v) => {
+        const router = mock<Router>()
+        writable(router).currentRoute = ref(mock<RouteLocation>({ name: v.route }))
+
         const search = new SDKSearch(
           getStore(['search-files']),
-          mock<Router>({
-            currentRoute: ref(mock<RouteLocation>({ name: v.route }))
-          }),
+          router,
           vi.fn(),
           mock<ConfigStore>()
         )

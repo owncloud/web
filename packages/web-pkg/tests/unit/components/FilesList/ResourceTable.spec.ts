@@ -16,7 +16,7 @@ import { displayPositionedDropdown } from '../../../../src/helpers/contextMenuDr
 import { eventBus } from '../../../../src/services/eventBus'
 import { SideBarEventTopics } from '../../../../src/composables/sideBar'
 import { mock } from 'vitest-mock-extended'
-import { computed, ref } from 'vue'
+import { computed } from 'vue'
 import { Identity } from '@ownclouders/web-client/graph/generated'
 import { describe } from 'vitest'
 import { useFileActionsRename } from '../../../../src/composables/actions/files'
@@ -645,11 +645,11 @@ function getMountedWrapper({
     canBeOpenedWithSecureView: () => canBeOpenedWithSecureView
   })
 
-  vi.mocked(useFileActionsRename).mockReturnValue(
-    mock<ReturnType<typeof useFileActionsRename>>({
-      actions: ref([mock<FileAction>({ isVisible: () => hasRenameAction })])
-    })
-  )
+  const useFileActionsRenameMock = mock<ReturnType<typeof useFileActionsRename>>()
+  useFileActionsRenameMock.actions = computed(() => [
+    mock<FileAction>({ isVisible: () => hasRenameAction })
+  ])
+  vi.mocked(useFileActionsRename).mockReturnValue(useFileActionsRenameMock)
 
   return {
     wrapper: mount(ResourceTable, {

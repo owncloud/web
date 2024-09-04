@@ -317,7 +317,7 @@ function getMountedWrapper({
   props?: PartialComponentProps<typeof GenericSpace>
   files?: Resource[]
   loading?: boolean
-  currentRoute?: Partial<RouteLocation>
+  currentRoute?: { name?: string; path?: string }
   currentFolder?: Resource
   runningOnEos?: boolean
   space?: SpaceResource

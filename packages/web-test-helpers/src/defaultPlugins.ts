@@ -58,22 +58,22 @@ export const defaultPlugins = ({
           tag: { type: String, default: 'a' },
           to: { type: [String, Object], default: '' }
         },
-        render() {
-          let path = this.$props.to
+        setup(props) {
+          let path = props.to
 
           if (!!path && typeof path !== 'string') {
-            path = this.$props.to.path || this.$props.to.name
+            path = props.to.path || props.to.name
 
-            if (this.$props.to.params) {
-              path += '/' + Object.values(this.$props.to.params).join('/')
+            if (props.to.params) {
+              path += '/' + Object.values(props.to.params).join('/')
             }
 
-            if (this.$props.to.query) {
-              path += '?' + Object.values(this.$props.to.query).join('&')
+            if (props.to.query) {
+              path += '?' + Object.values(props.to.query).join('&')
             }
           }
 
-          return h(this.tag, { attrs: { href: path } }, this.$slots.default)
+          return () => h(props.tag, { attrs: { href: path } })
         }
       })
     }

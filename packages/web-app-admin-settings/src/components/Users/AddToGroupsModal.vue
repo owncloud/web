@@ -8,7 +8,7 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, PropType, ref, unref, watch } from 'vue'
+import { defineComponent, PropType, Ref, ref, unref, watch } from 'vue'
 import { useGettext } from 'vue3-gettext'
 import { Group, User } from '@ownclouders/web-client/graph/generated'
 import GroupSelect from './GroupSelect.vue'
@@ -36,7 +36,7 @@ export default defineComponent({
     const { $gettext, $ngettext } = useGettext()
     const userSettingsStore = useUserSettingsStore()
 
-    const selectedOptions = ref<Group[]>([])
+    const selectedOptions: Ref<Group[]> = ref([])
     const changeSelectedGroupOption = (options: Group[]) => {
       selectedOptions.value = options
     }

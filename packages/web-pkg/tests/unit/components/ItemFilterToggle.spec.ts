@@ -1,7 +1,6 @@
 import ItemFilterToggle from '../../../src/components/ItemFilterToggle.vue'
 import { defaultComponentMocks, defaultPlugins, mount } from 'web-test-helpers'
 import { queryItemAsString } from '../../../src/composables/appDefaults'
-import { unref } from 'vue'
 
 vi.mock('../../../src/composables/appDefaults', () => ({
   appDefaults: vi.fn(),
@@ -27,11 +26,13 @@ describe('ItemFilterToggle', () => {
   describe('route query', () => {
     it('sets the active state as query param', async () => {
       const { wrapper, mocks } = getWrapper()
-      const currentRouteQuery = unref(mocks.$router.currentRoute).query
       expect(mocks.$router.push).not.toHaveBeenCalled()
       await wrapper.find(selectors.filterBtn).trigger('click')
-      expect(currentRouteQuery[wrapper.vm.queryParam]).toBeDefined()
-      expect(mocks.$router.push).toHaveBeenCalled()
+      expect(mocks.$router.push).toHaveBeenCalledWith(
+        expect.objectContaining({
+          query: expect.objectContaining({ [wrapper.vm.queryParam]: 'true' })
+        })
+      )
     })
     it('sets the active state initially when given via query param', () => {
       const { wrapper } = getWrapper({ initialQuery: 'true' })

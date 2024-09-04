@@ -14,7 +14,7 @@ import {
 import { eventBus, UppyResource } from '@ownclouders/web-pkg'
 import { defaultPlugins, shallowMount, defaultComponentMocks } from 'web-test-helpers'
 import { RouteLocation } from 'vue-router'
-import { ref } from 'vue'
+import { computed, ref } from 'vue'
 import { OcButton } from 'design-system/src/components'
 
 vi.mock('@ownclouders/web-pkg', async (importOriginal) => ({
@@ -197,11 +197,9 @@ function getWrapper({
   const { requestExtensions } = useExtensionRegistry()
   vi.mocked(requestExtensions).mockReturnValue([])
 
-  vi.mocked(useFileActionsCreateNewFile).mockReturnValue(
-    mock<ReturnType<typeof useFileActionsCreateNewFile>>({
-      actions: ref(createActions)
-    })
-  )
+  const useFileActionsCreateNewFileMock = mock<ReturnType<typeof useFileActionsCreateNewFile>>()
+  useFileActionsCreateNewFileMock.actions = computed(() => createActions)
+  vi.mocked(useFileActionsCreateNewFile).mockReturnValue(useFileActionsCreateNewFileMock)
 
   const pasteActionHandler = vi.fn()
   vi.mocked(useFileActionsPaste).mockReturnValue(

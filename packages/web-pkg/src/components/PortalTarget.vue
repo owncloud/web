@@ -15,7 +15,7 @@ export default defineComponent({
     ...PortalTargetVue.props
   },
   setup(props) {
-    const properties = computed(() => props)
+    const properties = computed<typeof PortalTargetVue.props>(() => props)
     onMounted(() => {
       eventBus.publish(PortalTargetEventTopics.mounted, props)
     })

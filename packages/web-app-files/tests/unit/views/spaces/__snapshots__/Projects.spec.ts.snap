@@ -30,7 +30,7 @@ exports[`Projects view > different files view states > lists all available proje
             <!--v-if-->
           </div>
         </div>
-        <div class="resource-table" selected-ids="" resource-type="space" resources="[object Object],[object Object]" fields-displayed="image,name,manager,members,totalQuota,usedQuota,remainingQuota,status,mdate" sort-fields="[object Object],[object Object],[object Object],[object Object],[object Object],[object Object],[object Object],[object Object],[object Object]" sort-by="undefined" sort-dir="desc" header-position="0" is-side-bar-open="false" view-size="NaN"></div>
+        <div class="resource-table" selected-ids="" resource-type="space" resources="[object Object],[object Object]" fields-displayed="image,name,manager,members,totalQuota,usedQuota,remainingQuota,status,mdate" sort-fields="[object Object],[object Object],[object Object],[object Object],[object Object],[object Object],[object Object],[object Object],[object Object]" sort-by="name" sort-dir="asc" header-position="0" is-side-bar-open="false" view-size="1"></div>
       </div>
     </div>
   </div>

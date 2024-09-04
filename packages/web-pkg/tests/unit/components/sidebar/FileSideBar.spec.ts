@@ -228,11 +228,9 @@ function createWrapper({
   const { requestExtensions } = useExtensionRegistry()
   vi.mocked(requestExtensions).mockReturnValue([])
 
-  vi.mocked(useSelectedResources).mockReturnValue(
-    mock<ReturnType<typeof useSelectedResources>>({
-      selectedResources: item ? ref([item]) : ref([])
-    })
-  )
+  const useSelectedResourcesMock = mock<ReturnType<typeof useSelectedResources>>()
+  useSelectedResourcesMock.selectedResources = item ? ref([item]) : ref([])
+  vi.mocked(useSelectedResources).mockReturnValue(useSelectedResourcesMock)
 
   const mocks = defaultComponentMocks({
     currentRoute: mock<RouteLocation>({ name: currentRouteName })
