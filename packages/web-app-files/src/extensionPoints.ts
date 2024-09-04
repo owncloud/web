@@ -26,6 +26,11 @@ export const contextActionsExtensionPoint: ExtensionPoint<ActionExtension> = {
   extensionType: 'action',
   multiple: true
 }
+export const defaultActionsExtensionPoint: ExtensionPoint<ActionExtension> = {
+  id: 'global.files.default-actions',
+  extensionType: 'action',
+  multiple: true
+}
 export const fileSideBarExtensionPoint: ExtensionPoint<SidebarPanelExtension<any, any, any>> = {
   id: 'global.files.sidebar',
   extensionType: 'sidebarPanel',
@@ -51,6 +56,7 @@ export const extensionPoints = () => {
       quickActionsExtensionPoint,
       batchActionsExtensionPoint,
       contextActionsExtensionPoint,
+      defaultActionsExtensionPoint,
       fileSideBarExtensionPoint,
       folderViewsFolderExtensionPoint,
       folderViewsFavoritesExtensionPoint,
