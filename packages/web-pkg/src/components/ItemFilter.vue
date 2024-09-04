@@ -38,7 +38,7 @@
                     class="item-filter-checkbox oc-mr-s"
                     :label="$gettext('Toggle selection')"
                     :model-value="isItemSelected(item)"
-                    hide-label
+                    :label-hidden="true"
                     @update:model-value="toggleItemSelection(item)"
                     @click.stop
                   />

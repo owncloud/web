@@ -2,7 +2,9 @@
 
 exports[`ResourceTiles component > renders a footer slot 1`] = `
 "<div data-v-67d39700="" id="tiles-view" class="oc-px-m oc-pt-l">
-  <!--v-if-->
+  <div data-v-67d39700="" class="oc-flex oc-flex-middle oc-mb-m oc-pb-s oc-border-b"><span data-v-67d39700=""><input id="resource-table-select-all" type="checkbox" name="checkbox" class="oc-checkbox oc-rounded oc-checkbox-l" disabled="" aria-label="Select all"> <!--v-if--></span>
+    <!--v-if-->
+  </div>
   <ul data-v-67d39700="" class="oc-list oc-my-rm oc-mx-rm oc-tiles oc-flex"> </ul>
   <!--v-if-->
   <div data-v-67d39700="" class="oc-tiles-footer">Hello, ResourceTiles footer!</div>
@@ -11,7 +13,9 @@ exports[`ResourceTiles component > renders a footer slot 1`] = `
 
 exports[`ResourceTiles component > renders an array of spaces correctly 1`] = `
 "<div data-v-67d39700="" id="tiles-view" class="oc-px-m oc-pt-l">
-  <!--v-if-->
+  <div data-v-67d39700="" class="oc-flex oc-flex-middle oc-mb-m oc-pb-s oc-border-b"><span data-v-67d39700=""><input id="resource-table-select-all" type="checkbox" name="checkbox" class="oc-checkbox oc-rounded oc-checkbox-l" aria-label="Select all"> <!--v-if--></span>
+    <!--v-if-->
+  </div>
   <ul data-v-67d39700="" class="oc-list oc-my-rm oc-mx-rm oc-tiles oc-flex">
     <li data-v-67d39700="" class="oc-tiles-item has-item-context-menu">
       <div data-v-67d39700="" class="oc-tile-card oc-card oc-card-default oc-rounded" data-item-id="1" draggable="false"><a target="_self" draggable="false" class="oc-card-media-top oc-flex oc-flex-center oc-flex-middle oc-m-rm" tabindex="-1" attrs="[object Object]"></a>

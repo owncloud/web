@@ -43,7 +43,7 @@
           size="large"
           :disabled="resources.length === disabledResources.length"
           :label="allResourcesCheckboxLabel"
-          :hide-label="true"
+          :label-hidden="true"
           :model-value="areAllResourcesSelected"
           @click.stop="toggleSelectionAll"
         />
@@ -53,7 +53,7 @@
       <oc-checkbox
         :id="`resource-table-select-${resourceDomSelector(item)}`"
         :label="getResourceCheckboxLabel(item)"
-        :hide-label="true"
+        :label-hidden="true"
         size="large"
         :disabled="isResourceDisabled(item)"
         :model-value="isResourceSelected(item)"

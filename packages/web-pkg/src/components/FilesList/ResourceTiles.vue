@@ -6,7 +6,7 @@
         size="large"
         :disabled="resources.length === disabledResources.length"
         :label="$gettext('Select all')"
-        :hide-label="true"
+        :label-hidden="true"
         :model-value="areAllResourcesSelected"
         @click.stop="toggleSelectionAll"
       />
@@ -77,7 +77,7 @@
             <oc-checkbox
               v-if="!isLocationPicker && !isFilePicker"
               :label="getResourceCheckboxLabel(resource)"
-              :hide-label="true"
+              :label-hidden="true"
               size="large"
               class="oc-flex-inline oc-p-s"
               :disabled="!isSpaceResource(resource) && isResourceDisabled(resource)"

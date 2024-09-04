@@ -85,14 +85,6 @@ export default defineComponent({
       default: false
     },
     /**
-     * Is the label of the Checkbox visually hidden?
-     **/
-    hideLabel: {
-      type: Boolean,
-      required: false,
-      default: false
-    },
-    /**
      * Size of the Checkbox. Valid values are `small`, `medium` and `large`.
      * If not specified, defaults to `medium`
      */
@@ -132,7 +124,6 @@ export default defineComponent({
     },
     labelClasses() {
       return {
-        'oc-invisible-sr': this.hideLabel,
         'oc-cursor-pointer': !this.disabled
       }
     },

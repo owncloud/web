@@ -10,6 +10,7 @@ describe('OcCheckbox', () => {
       }
     })
   }
+
   const checkboxSelector = "input[type='checkbox']"
 
   describe('input id', () => {
@@ -28,11 +29,12 @@ describe('OcCheckbox', () => {
       expect(checkBoxLabelElement.attributes('for')).toBe('test-id')
       expect(checkBoxLabelElement.text()).toBe('test label')
     })
-    it("should hide label if 'hideLabel' prop is enabled", () => {
-      const wrapper = getWrapperWithProps({ hideLabel: true })
+    it("should hide label if 'labelHidden' prop is enabled", () => {
+      const wrapper = getWrapperWithProps({ labelHidden: true })
       const checkBoxLabelElement = wrapper.find('label')
-      expect(checkBoxLabelElement.exists()).toBeTruthy()
-      expect(checkBoxLabelElement.attributes('class')).toContain('oc-invisible-sr')
+      expect(checkBoxLabelElement.exists()).toBeFalsy()
+      const checkboxElement = wrapper.find<HTMLInputElement>(checkboxSelector)
+      expect(checkboxElement.attributes('aria-label')).toContain('test label')
     })
     it('should have cursor pointer property if not disabled', () => {
       const wrapper = getWrapperWithProps({ disabled: false })
