@@ -13,6 +13,7 @@ Summary
 * Enhancement - Display disabled role permissions: [#11387](https://github.com/owncloud/web/pull/11387)
 * Enhancement - Mark external shares: [#11394](https://github.com/owncloud/web/pull/11394)
 * Enhancement - Support a tags in actions: [#11502](https://github.com/owncloud/web/pull/11502)
+* Enhancement - Improve tiles view performance: [#11508](https://github.com/owncloud/web/pull/11508)
 
 Details
 -------
@@ -55,6 +56,14 @@ Details
    action extensions for e.g. opening file-specific URLs from the context menu.
 
    https://github.com/owncloud/web/pull/11502
+
+* Enhancement - Improve tiles view performance: [#11508](https://github.com/owncloud/web/pull/11508)
+
+   We've made some changes to the tiles view to improve performance. So that users
+   can see their files and folders faster, when working with a lot of files.
+
+   https://github.com/owncloud/web/issues/11480
+   https://github.com/owncloud/web/pull/11508
 
 Changelog for ownCloud Web [8.0.5] (2024-09-02)
 =======================================
