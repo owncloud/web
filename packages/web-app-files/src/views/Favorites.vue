@@ -17,7 +17,7 @@
         <component
           :is="folderView.component"
           v-else
-          v-model:selectedIds="selectedResourcesIds"
+          v-model:selected-ids="selectedResourcesIds"
           :is-side-bar-open="isSideBarOpen"
           :are-paths-displayed="true"
           :resources="paginatedResources"

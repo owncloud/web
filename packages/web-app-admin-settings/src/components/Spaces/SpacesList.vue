@@ -28,7 +28,7 @@
           class="oc-ml-s"
           :label="$gettext('Select all spaces')"
           :model-value="allSpacesSelected"
-          hide-label
+          :label-hidden="true"
           @update:model-value="
             allSpacesSelected ? unselectAllSpaces() : selectSpaces(paginatedItems)
           "
@@ -41,7 +41,7 @@
           :model-value="isSpaceSelected(item)"
           :option="item"
           :label="getSelectSpaceLabel(item)"
-          hide-label
+          :label-hidden="true"
           @update:model-value="selectSpace(item)"
           @click.stop="fileClicked([item, $event])"
         />

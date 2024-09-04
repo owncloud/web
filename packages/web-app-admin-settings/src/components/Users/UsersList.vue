@@ -27,7 +27,7 @@
             class="oc-ml-s"
             :label="$gettext('Select all users')"
             :model-value="allUsersSelected"
-            hide-label
+            :label-hidden="true"
             @update:model-value="
               allUsersSelected ? unselectAllUsers() : selectUsers(paginatedItems)
             "
@@ -40,7 +40,7 @@
             :model-value="isUserSelected(item)"
             :option="item"
             :label="getSelectUserLabel(item)"
-            hide-label
+            :label-hidden="true"
             @update:model-value="selectUser(item)"
             @click.stop="rowClicked([item, $event])"
           />

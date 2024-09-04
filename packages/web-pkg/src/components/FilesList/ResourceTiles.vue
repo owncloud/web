@@ -1,38 +1,49 @@
 <template>
   <div id="tiles-view" class="oc-px-m oc-pt-l">
-    <div v-if="sortFields.length" class="oc-tile-sorting oc-border-b oc-mb-m oc-pb-s">
-      <span class="oc-mr-xs" v-text="$gettext('Sort by: ')" />
-      <oc-button id="oc-tiles-sort-btn" appearance="raw" gap-size="none">
-        <span v-text="$gettext(currentSortField.label)" />
-        <oc-icon name="arrow-down-s" />
-      </oc-button>
-      <oc-drop
-        ref="sortDrop"
-        toggle="#oc-tiles-sort-btn"
-        class="oc-tiles-sort-drop"
-        mode="click"
-        padding-size="small"
-        close-on-click
-      >
-        <oc-list class="oc-tiles-sort-list">
-          <li v-for="(field, index) in sortFields" :key="index" class="oc-my-xs">
-            <oc-button
-              justify-content="space-between"
-              class="oc-tiles-sort-list-item oc-p-s oc-width-1-1"
-              :class="{
-                'oc-background-primary-gradient': isSortFieldSelected(field),
-                selected: isSortFieldSelected(field)
-              }"
-              :appearance="isSortFieldSelected(field) ? 'raw-inverse' : 'raw'"
-              :variation="isSortFieldSelected(field) ? 'primary' : 'passive'"
-              @click="selectSorting(field)"
-            >
-              <span v-text="$gettext(field.label)" />
-              <oc-icon v-if="isSortFieldSelected(field)" name="check" variation="inherit" />
-            </oc-button>
-          </li>
-        </oc-list>
-      </oc-drop>
+    <div class="oc-flex oc-flex-middle oc-mb-m oc-pb-s oc-tiles-controls">
+      <oc-checkbox
+        id="resource-table-select-all"
+        size="large"
+        :disabled="resources.length === disabledResourceIds.length"
+        :label="$gettext('Select all')"
+        :label-hidden="true"
+        :model-value="areAllResourcesSelected"
+        @click.stop="toggleSelectionAll"
+      />
+      <div v-if="sortFields.length" class="oc-tile-sorting oc-ml-s">
+        <span class="oc-mr-xs" v-text="$gettext('Sort by: ')" />
+        <oc-button id="oc-tiles-sort-btn" appearance="raw" gap-size="none">
+          <span v-text="$gettext(currentSortField.label)" />
+          <oc-icon name="arrow-down-s" />
+        </oc-button>
+        <oc-drop
+          ref="sortDrop"
+          toggle="#oc-tiles-sort-btn"
+          class="oc-tiles-sort-drop"
+          mode="click"
+          padding-size="small"
+          close-on-click
+        >
+          <oc-list class="oc-tiles-sort-list">
+            <li v-for="(field, index) in sortFields" :key="index" class="oc-my-xs">
+              <oc-button
+                justify-content="space-between"
+                class="oc-tiles-sort-list-item oc-p-s oc-width-1-1"
+                :class="{
+                  'oc-background-primary-gradient': isSortFieldSelected(field),
+                  selected: isSortFieldSelected(field)
+                }"
+                :appearance="isSortFieldSelected(field) ? 'raw-inverse' : 'raw'"
+                :variation="isSortFieldSelected(field) ? 'primary' : 'passive'"
+                @click="selectSorting(field)"
+              >
+                <span v-text="$gettext(field.label)" />
+                <oc-icon v-if="isSortFieldSelected(field)" name="check" variation="inherit" />
+              </oc-button>
+            </li>
+          </oc-list>
+        </oc-drop>
+      </div>
     </div>
     <oc-list class="oc-tiles oc-flex">
       <li
@@ -66,7 +77,7 @@
             <oc-checkbox
               v-if="!isLocationPicker && !isFilePicker"
               :label="getResourceCheckboxLabel(resource)"
-              :hide-label="true"
+              :label-hidden="true"
               size="large"
               class="oc-flex-inline oc-p-s"
               :disabled="!isSpaceResource(resource) && isResourceDisabled(resource)"
@@ -327,6 +338,10 @@ export default defineComponent({
       return props.selectedIds.includes(resource.id)
     }
 
+    const selectedResources = computed(() => {
+      return props.resources.filter((resource) => props.selectedIds.includes(resource.id))
+    })
+
     const isResourceClickable = (resource: Resource) => {
       if (isResourceDisabled(resource)) {
         return false
@@ -363,8 +378,29 @@ export default defineComponent({
       return resource.processing === true
     }
 
+    const disabledResourceIds = computed(() => {
+      return (
+        props.resources
+          ?.filter((resource) => isResourceDisabled(resource) === true)
+          ?.map((resource) => resource.id) || []
+      )
+    })
+
     const emitSelect = (selectedIds: string[]) => {
       emit('update:selectedIds', selectedIds)
+    }
+
+    const toggleSelectionAll = () => {
+      if (unref(areAllResourcesSelected)) {
+        return emit('update:selectedIds', [])
+      }
+
+      emit(
+        'update:selectedIds',
+        props.resources
+          .filter((resource) => !unref(disabledResourceIds).includes(resource.id))
+          .map((resource) => resource.id)
+      )
     }
 
     const showContextMenu = (
@@ -544,6 +580,15 @@ export default defineComponent({
       return unref(viewWidth) / unref(maxTilesCurrent) - unref(gapSizePixels)
     })
 
+    const areAllResourcesSelected = computed(() => {
+      const allResourcesDisabled = unref(disabledResourceIds).length === props.resources.length
+      const allSelected =
+        unref(selectedResources).length ===
+        props.resources.length - unref(disabledResourceIds).length
+
+      return !allResourcesDisabled && allSelected
+    })
+
     watch(
       tileSizePixels,
       (px: number) => {
@@ -590,7 +635,10 @@ export default defineComponent({
       isFilePicker,
       isLocationPicker,
       isResourceDisabled,
-      isSpaceResource
+      isSpaceResource,
+      areAllResourcesSelected,
+      disabledResourceIds,
+      toggleSelectionAll
     }
   },
   data() {
@@ -608,6 +656,10 @@ export default defineComponent({
   grid-template-columns: repeat(auto-fit, minmax(var(--oc-size-tiles-actual), 1fr));
   justify-content: flex-start;
   row-gap: 1rem;
+
+  &-controls {
+    border-bottom: 1px solid var(--oc-color-border);
+  }
 
   &-item-drop-highlight {
     background-color: var(--oc-color-input-border) !important;

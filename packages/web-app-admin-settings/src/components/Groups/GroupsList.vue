@@ -27,7 +27,7 @@
           class="oc-ml-s"
           :label="$gettext('Select all groups')"
           :model-value="allGroupsSelected"
-          hide-label
+          :label-hidden="true"
           @update:model-value="
             allGroupsSelected ? unselectAllGroups() : selectGroups(paginatedItems)
           "
@@ -40,7 +40,7 @@
           :model-value="isGroupSelected(rowData.item)"
           :option="rowData.item"
           :label="getSelectGroupLabel(rowData.item)"
-          hide-label
+          :label-hidden="true"
           @update:model-value="selectGroup(rowData.item)"
           @click.stop="rowClicked([rowData.item, $event])"
         />
