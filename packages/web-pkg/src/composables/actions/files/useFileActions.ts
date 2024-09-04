@@ -9,7 +9,6 @@ import {
   Action,
   FileAction,
   FileActionOptions,
-  useFileActionsOpenShortcut,
   useIsSearchActive,
   useWindowOpen
 } from '../../actions'
@@ -74,10 +73,8 @@ export const useFileActions = () => {
   const { actions: renameActions } = useFileActionsRename()
   const { actions: restoreActions } = useFileActionsRestore()
   const { actions: createSpaceFromResource } = useFileActionsCreateSpaceFromResource()
-  const { actions: openShortcutActions } = useFileActionsOpenShortcut()
 
   const systemActions = computed((): Action[] => [
-    ...unref(openShortcutActions),
     ...unref(downloadArchiveActions),
     ...unref(downloadFileActions),
     ...unref(deleteActions),

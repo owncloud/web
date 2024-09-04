@@ -9,7 +9,6 @@ import {
   ActionExtension,
   FileActionOptions,
   useExtensionRegistry,
-  useFileActionsOpenShortcut,
   useFileActionsToggleHideShare,
   useFileActionsCopyQuickLink,
   useFileActionsPaste,
@@ -64,7 +63,6 @@ export default defineComponent({
     const { actions: showDetailsActions } = useFileActionsShowDetails()
     const { actions: createSpaceFromResourceActions } = useFileActionsCreateSpaceFromResource()
     const { actions: showSharesActions } = useFileActionsShowShares()
-    const { actions: openShortcutActions } = useFileActionsOpenShortcut()
 
     const extensionRegistry = useExtensionRegistry()
     const extensionsContextActions = computed(() => {
@@ -112,7 +110,6 @@ export default defineComponent({
 
     const menuItemsContext = computed(() => {
       return [
-        ...unref(openShortcutActions),
         ...unref(editorActions),
         ...unref(extensionsContextActions).filter((a) => a.category === 'context')
       ]
