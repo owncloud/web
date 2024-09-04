@@ -50,8 +50,10 @@
         v-for="resource in resources"
         :key="resource.id"
         class="oc-tiles-item has-item-context-menu"
+        v-memo="[resources]"
       >
         <resource-tile
+
           :ref="(el) => (tileRefs.tiles[resource.id] = el as ResourceTileRef)"
           :resource="resource"
           :resource-route="getRoute(resource)"
