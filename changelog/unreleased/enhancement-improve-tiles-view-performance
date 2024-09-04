@@ -1,0 +1,7 @@
+Enhancement: Improve tiles view performance
+
+We've made some changes to the tiles view to improve performance.
+So that users can see their files and folders faster, when working with a lot of files.
+
+https://github.com/owncloud/web/pull/11508
+https://github.com/owncloud/web/issues/11480
