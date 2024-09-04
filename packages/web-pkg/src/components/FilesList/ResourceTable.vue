@@ -300,6 +300,7 @@ import { determineResourceTableSortFields } from '../../helpers/ui/resourceTable
 import { useFileActionsRename } from '../../composables/actions'
 import { createLocationCommon } from '../../router'
 import get from 'lodash-es/get'
+import { parse, stringify } from 'flatted'
 
 // ODS component import is necessary here for CERN to overwrite OcTable
 import OcTable from 'design-system/src/components/OcTable/OcTable.vue'
@@ -1074,8 +1075,8 @@ export default defineComponent({
 
       if (this.isEmbedModeEnabled && this.isFilePicker && !resource.isFolder) {
         return this.postMessage<embedModeFilePickMessageData>('owncloud-embed:file-pick', {
-          resource: JSON.parse(JSON.stringify(resource)),
-          originRoute: JSON.parse(JSON.stringify(unref(this.router.currentRoute)))
+          resource: parse(stringify(resource)),
+          originRoute: parse(stringify(unref(this.router.currentRoute)))
         })
       }
 
