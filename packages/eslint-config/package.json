@@ -4,6 +4,7 @@
   "private": false,
   "version": "0.0.1",
   "license": "AGPL-3.0",
+  "type": "module",
   "author": "ownCloud GmbH <devops@owncloud.com>",
   "homepage": "https://github.com/owncloud/web/tree/master/packages/eslint-config",
   "repository": {
@@ -16,15 +17,16 @@
   },
   "dependencies": {
     "@babel/eslint-parser": "^7.23.3",
-    "@typescript-eslint/eslint-plugin": "^8.0.0",
     "@typescript-eslint/parser": "^8.0.0",
     "eslint-config-prettier": "^9.1.0",
     "eslint-plugin-n": "^17.0.0",
-    "eslint-plugin-prettier-vue": "^5.0.0",
+    "eslint-plugin-prettier": "^5.0.0",
     "eslint-plugin-promise": "^7.0.0",
     "eslint-plugin-unused-imports": "^4.0.0",
-    "eslint-plugin-vue": "^9.19.2",
+    "eslint-plugin-vue": "^9.28.0",
     "eslint-plugin-vuejs-accessibility": "^2.2.0",
+    "globals": "^15.0.0",
+    "typescript-eslint": "^8.4.0",
     "typescript": "5.5.4"
   },
   "peerDependencies": {

@@ -25,7 +25,6 @@ import browserslistToEsbuild from 'browserslist-to-esbuild'
 import fetch from 'node-fetch'
 import { Agent } from 'https'
 
-// eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-ignore
 import ejs from 'ejs'
 
