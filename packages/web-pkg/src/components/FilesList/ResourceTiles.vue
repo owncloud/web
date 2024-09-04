@@ -4,7 +4,7 @@
       <oc-checkbox
         id="resource-table-select-all"
         size="large"
-        :disabled="resources.length === disabledResources.length"
+        :disabled="resources.length === disabledResourceIds.length"
         :label="$gettext('Select all')"
         :label-hidden="true"
         :model-value="areAllResourcesSelected"
@@ -380,7 +380,7 @@ export default defineComponent({
       return resource.processing === true
     }
 
-    const disabledResources: ComputedRef<Array<Resource['id']>> = computed(() => {
+    const disabledResourceIds = computed(() => {
       return (
         props.resources
           ?.filter((resource) => isResourceDisabled(resource) === true)
@@ -400,7 +400,7 @@ export default defineComponent({
       emit(
         'update:selectedIds',
         props.resources
-          .filter((resource) => !unref(disabledResources).includes(resource.id))
+          .filter((resource) => !unref(disabledResourceIds).includes(resource.id))
           .map((resource) => resource.id)
       )
     }
@@ -583,9 +583,10 @@ export default defineComponent({
     })
 
     const areAllResourcesSelected = computed(() => {
-      const allResourcesDisabled = unref(disabledResources).length === props.resources.length
+      const allResourcesDisabled = unref(disabledResourceIds).length === props.resources.length
       const allSelected =
-        unref(selectedResources).length === props.resources.length - unref(disabledResources).length
+        unref(selectedResources).length ===
+        props.resources.length - unref(disabledResourceIds).length
 
       return !allResourcesDisabled && allSelected
     })
@@ -638,7 +639,7 @@ export default defineComponent({
       isResourceDisabled,
       isSpaceResource,
       areAllResourcesSelected,
-      disabledResources,
+      disabledResourceIds,
       toggleSelectionAll
     }
   },
