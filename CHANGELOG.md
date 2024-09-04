@@ -14,6 +14,7 @@ Summary
 * Enhancement - Mark external shares: [#11394](https://github.com/owncloud/web/pull/11394)
 * Enhancement - Support a tags in actions: [#11502](https://github.com/owncloud/web/pull/11502)
 * Enhancement - Improve tiles view performance: [#11508](https://github.com/owncloud/web/pull/11508)
+* Enhancement - Add select all checkbox to tiles view: [#11518](https://github.com/owncloud/web/pull/11518)
 
 Details
 -------
@@ -64,6 +65,13 @@ Details
 
    https://github.com/owncloud/web/issues/11480
    https://github.com/owncloud/web/pull/11508
+
+* Enhancement - Add select all checkbox to tiles view: [#11518](https://github.com/owncloud/web/pull/11518)
+
+   We have added a select all checkbox to the tiles view to allow users to select
+   all resources at once.
+
+   https://github.com/owncloud/web/pull/11518
 
 Changelog for ownCloud Web [8.0.5] (2024-09-02)
 =======================================
