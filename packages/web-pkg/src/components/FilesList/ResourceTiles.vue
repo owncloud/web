@@ -1,6 +1,6 @@
 <template>
   <div id="tiles-view" class="oc-px-m oc-pt-l">
-    <div class="oc-flex oc-flex-middle oc-mb-m oc-pb-s oc-border-b">
+    <div class="oc-flex oc-flex-middle oc-mb-m oc-pb-s oc-tiles-controls">
       <oc-checkbox
         id="resource-table-select-all"
         size="large"
@@ -656,6 +656,9 @@ export default defineComponent({
   grid-template-columns: repeat(auto-fit, minmax(var(--oc-size-tiles-actual), 1fr));
   justify-content: flex-start;
   row-gap: 1rem;
+
+  &-controls {
+    border-bottom: 1px solid var(--oc-color-border);  }
 
   &-item-drop-highlight {
     background-color: var(--oc-color-input-border) !important;
