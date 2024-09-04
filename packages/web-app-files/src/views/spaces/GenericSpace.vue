@@ -73,7 +73,7 @@
             <component
               :is="folderView.component"
               v-else
-              v-model:selectedIds="selectedResourcesIds"
+              v-model:selected-ids="selectedResourcesIds"
               :resources="paginatedResources"
               :view-mode="viewMode"
               :target-route-callback="resourceTargetRouteCallback"

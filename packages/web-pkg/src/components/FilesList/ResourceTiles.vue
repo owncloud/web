@@ -1,38 +1,49 @@
 <template>
   <div id="tiles-view" class="oc-px-m oc-pt-l">
-    <div v-if="sortFields.length" class="oc-tile-sorting oc-border-b oc-mb-m oc-pb-s">
-      <span class="oc-mr-xs" v-text="$gettext('Sort by: ')" />
-      <oc-button id="oc-tiles-sort-btn" appearance="raw" gap-size="none">
-        <span v-text="$gettext(currentSortField.label)" />
-        <oc-icon name="arrow-down-s" />
-      </oc-button>
-      <oc-drop
-        ref="sortDrop"
-        toggle="#oc-tiles-sort-btn"
-        class="oc-tiles-sort-drop"
-        mode="click"
-        padding-size="small"
-        close-on-click
-      >
-        <oc-list class="oc-tiles-sort-list">
-          <li v-for="(field, index) in sortFields" :key="index" class="oc-my-xs">
-            <oc-button
-              justify-content="space-between"
-              class="oc-tiles-sort-list-item oc-p-s oc-width-1-1"
-              :class="{
-                'oc-background-primary-gradient': isSortFieldSelected(field),
-                selected: isSortFieldSelected(field)
-              }"
-              :appearance="isSortFieldSelected(field) ? 'raw-inverse' : 'raw'"
-              :variation="isSortFieldSelected(field) ? 'primary' : 'passive'"
-              @click="selectSorting(field)"
-            >
-              <span v-text="$gettext(field.label)" />
-              <oc-icon v-if="isSortFieldSelected(field)" name="check" variation="inherit" />
-            </oc-button>
-          </li>
-        </oc-list>
-      </oc-drop>
+    <div class="oc-flex oc-flex-middle oc-mb-m oc-pb-s oc-border-b">
+      <oc-checkbox
+        id="resource-table-select-all"
+        size="large"
+        :disabled="resources.length === disabledResources.length"
+        :label="$gettext('Select all')"
+        :hide-label="true"
+        :model-value="areAllResourcesSelected"
+        @click.stop="toggleSelectionAll"
+      />
+      <div v-if="sortFields.length" class="oc-tile-sorting oc-ml-s">
+        <span class="oc-mr-xs" v-text="$gettext('Sort by: ')" />
+        <oc-button id="oc-tiles-sort-btn" appearance="raw" gap-size="none">
+          <span v-text="$gettext(currentSortField.label)" />
+          <oc-icon name="arrow-down-s" />
+        </oc-button>
+        <oc-drop
+          ref="sortDrop"
+          toggle="#oc-tiles-sort-btn"
+          class="oc-tiles-sort-drop"
+          mode="click"
+          padding-size="small"
+          close-on-click
+        >
+          <oc-list class="oc-tiles-sort-list">
+            <li v-for="(field, index) in sortFields" :key="index" class="oc-my-xs">
+              <oc-button
+                justify-content="space-between"
+                class="oc-tiles-sort-list-item oc-p-s oc-width-1-1"
+                :class="{
+                  'oc-background-primary-gradient': isSortFieldSelected(field),
+                  selected: isSortFieldSelected(field)
+                }"
+                :appearance="isSortFieldSelected(field) ? 'raw-inverse' : 'raw'"
+                :variation="isSortFieldSelected(field) ? 'primary' : 'passive'"
+                @click="selectSorting(field)"
+              >
+                <span v-text="$gettext(field.label)" />
+                <oc-icon v-if="isSortFieldSelected(field)" name="check" variation="inherit" />
+              </oc-button>
+            </li>
+          </oc-list>
+        </oc-drop>
+      </div>
     </div>
     <oc-list class="oc-tiles oc-flex">
       <li
@@ -131,7 +142,8 @@ import {
   PropType,
   ref,
   unref,
-  watch
+  watch,
+  ComputedRef
 } from 'vue'
 import { useGettext } from 'vue3-gettext'
 import { isSpaceResource, Resource, SpaceResource } from '@ownclouders/web-client'
@@ -164,6 +176,7 @@ import {
   useFileActions,
   useGetMatchingSpace
 } from '../../composables'
+import { $gettext } from '../../router/utils'
 
 type ResourceTileRef = ComponentPublicInstance<typeof ResourceTile>
 type ContextMenuQuickActionRef = ComponentPublicInstance<typeof ContextMenuQuickAction>
@@ -327,6 +340,10 @@ export default defineComponent({
       return props.selectedIds.includes(resource.id)
     }
 
+    const selectedResources = computed(() => {
+      return props.resources.filter((resource) => props.selectedIds.includes(resource.id))
+    })
+
     const isResourceClickable = (resource: Resource) => {
       if (isResourceDisabled(resource)) {
         return false
@@ -363,8 +380,29 @@ export default defineComponent({
       return resource.processing === true
     }
 
+    const disabledResources: ComputedRef<Array<Resource['id']>> = computed(() => {
+      return (
+        props.resources
+          ?.filter((resource) => isResourceDisabled(resource) === true)
+          ?.map((resource) => resource.id) || []
+      )
+    })
+
     const emitSelect = (selectedIds: string[]) => {
       emit('update:selectedIds', selectedIds)
+    }
+
+    const toggleSelectionAll = () => {
+      if (unref(areAllResourcesSelected)) {
+        return emit('update:selectedIds', [])
+      }
+
+      emit(
+        'update:selectedIds',
+        props.resources
+          .filter((resource) => !unref(disabledResources).includes(resource.id))
+          .map((resource) => resource.id)
+      )
     }
 
     const showContextMenu = (
@@ -544,6 +582,14 @@ export default defineComponent({
       return unref(viewWidth) / unref(maxTilesCurrent) - unref(gapSizePixels)
     })
 
+    const areAllResourcesSelected = computed(() => {
+      const allResourcesDisabled = unref(disabledResources).length === props.resources.length
+      const allSelected =
+        unref(selectedResources).length === props.resources.length - unref(disabledResources).length
+
+      return !allResourcesDisabled && allSelected
+    })
+
     watch(
       tileSizePixels,
       (px: number) => {
@@ -590,14 +636,18 @@ export default defineComponent({
       isFilePicker,
       isLocationPicker,
       isResourceDisabled,
-      isSpaceResource
+      isSpaceResource,
+      areAllResourcesSelected,
+      disabledResources,
+      toggleSelectionAll
     }
   },
   data() {
     return {
       ImageDimension
     }
-  }
+  },
+  methods: { $gettext }
 })
 </script>
 
