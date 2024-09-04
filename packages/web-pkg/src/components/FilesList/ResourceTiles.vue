@@ -176,7 +176,6 @@ import {
   useFileActions,
   useGetMatchingSpace
 } from '../../composables'
-import { $gettext } from '../../router/utils'
 
 type ResourceTileRef = ComponentPublicInstance<typeof ResourceTile>
 type ContextMenuQuickActionRef = ComponentPublicInstance<typeof ContextMenuQuickAction>
@@ -646,8 +645,7 @@ export default defineComponent({
     return {
       ImageDimension
     }
-  },
-  methods: { $gettext }
+  }
 })
 </script>
 
