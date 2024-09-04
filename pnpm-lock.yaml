@@ -367,11 +367,11 @@ importers:
         specifier: ^18.2.0
         version: 18.2.0(react@18.3.1)
       sass:
-        specifier: 1.77.8
-        version: 1.77.8
+        specifier: 1.78.0
+        version: 1.78.0
       sass-loader:
         specifier: 10.1.0
-        version: 10.1.0(sass@1.77.8)(webpack@5.89.0)
+        version: 10.1.0(sass@1.78.0)(webpack@5.89.0)
       sass-resources-loader:
         specifier: ^2.2.5
         version: 2.2.5
@@ -7712,11 +7712,6 @@ packages:
   sass-resources-loader@2.2.5:
     resolution: {integrity: sha512-po8rfETH9cOQACWxubT/1CCu77KjxwRtCDm6QAXZH99aUHBydwSoxdIjC40SGp/dcS/FkSNJl0j1VEojGZqlvQ==}
 
-  sass@1.77.8:
-    resolution: {integrity: sha512-4UHg6prsrycW20fqLGPShtEvo/WyHRVRHwOP4DzkUrObWoWI05QBSfzU71TVB7PFaL104TwNaHpjlWXAZbQiNQ==}
-    engines: {node: '>=14.0.0'}
-    hasBin: true
-
   sass@1.78.0:
     resolution: {integrity: sha512-AaIqGSrjo5lA2Yg7RvFZrlXDBCp3nV4XP73GrLGvdRWWwk+8H3l0SDvq/5bA4eF+0RFPLuWUk3E+P1U/YqnpsQ==}
     engines: {node: '>=14.0.0'}
@@ -10217,7 +10212,7 @@ snapshots:
       '@cucumber/ci-environment': 9.1.0
       '@cucumber/cucumber-expressions': 16.1.1
       '@cucumber/gherkin': 26.0.3
-      '@cucumber/gherkin-streams': 5.0.1(@cucumber/gherkin@26.0.3)(@cucumber/message-streams@4.0.1(@cucumber/messages@21.0.1))(@cucumber/messages@21.0.1)
+      '@cucumber/gherkin-streams': 5.0.1(@cucumber/gherkin@26.0.3)(@cucumber/message-streams@4.0.1(@cucumber/messages@26.0.0))(@cucumber/messages@21.0.1)
       '@cucumber/gherkin-utils': 8.0.2
       '@cucumber/html-formatter': 20.2.1(@cucumber/messages@21.0.1)
       '@cucumber/message-streams': 4.0.1(@cucumber/messages@21.0.1)
@@ -10255,7 +10250,7 @@ snapshots:
       yaml: 2.3.4
       yup: 0.32.11
 
-  '@cucumber/gherkin-streams@5.0.1(@cucumber/gherkin@26.0.3)(@cucumber/message-streams@4.0.1(@cucumber/messages@21.0.1))(@cucumber/messages@21.0.1)':
+  '@cucumber/gherkin-streams@5.0.1(@cucumber/gherkin@26.0.3)(@cucumber/message-streams@4.0.1(@cucumber/messages@26.0.0))(@cucumber/messages@21.0.1)':
     dependencies:
       '@cucumber/gherkin': 26.0.3
       '@cucumber/message-streams': 4.0.1(@cucumber/messages@21.0.1)
@@ -16593,7 +16588,7 @@ snapshots:
 
   safer-buffer@2.1.2: {}
 
-  sass-loader@10.1.0(sass@1.77.8)(webpack@5.89.0):
+  sass-loader@10.1.0(sass@1.78.0)(webpack@5.89.0):
     dependencies:
       klona: 2.0.6
       loader-utils: 2.0.4
@@ -16602,7 +16597,7 @@ snapshots:
       semver: 7.6.3
       webpack: 5.89.0
     optionalDependencies:
-      sass: 1.77.8
+      sass: 1.78.0
 
   sass-resources-loader@2.2.5:
     dependencies:
@@ -16610,12 +16605,6 @@ snapshots:
       chalk: 4.1.2
       glob: 7.2.3
       loader-utils: 2.0.4
-
-  sass@1.77.8:
-    dependencies:
-      chokidar: 3.6.0
-      immutable: 4.1.0
-      source-map-js: 1.2.0
 
   sass@1.78.0:
     dependencies:
