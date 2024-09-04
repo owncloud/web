@@ -1,0 +1,5 @@
+Enhancement: Add default actions extension point
+
+We've added a new extension point `global.files.default-action` for allowing action extensions to register themselves for the left click default action.
+
+https://github.com/owncloud/web/pull/11515
