@@ -151,10 +151,11 @@ your extension will be used automatically.
    2. Folder views for regular folders. ExtensionPointId `app.files.folder-views.folder`. Mounts extensions of type `folderView`.
    3. Folder views for the project spaces overview. ExtensionPointId `app.files.folder-views.project-spaces`. Mounts extensions of type `folderView`.
    4. Folder views for the favorites page. ExtensionPointId `app.files.folder-views.favorites`. Mounts extensions of type `folderView`.
-   5. Right click context menu. ExtensionPointId `app.files.context-actions`. Mounts extensions of type `action`.
-   6. Batch actions in the app bar above file lists. ExtensionPointId `app.files.batch-actions`. Mounts extensions of type `action`.
-   7. Upload menu. ExtensionPointId `app.files.upload-menu`. Mounts extensions of type `action`.
-   8. Quick actions. ExtensionPointId `app.files.quick-actions`. Mounts extensions of type `action`.
+   5. Right click context menu. ExtensionPointId `global.files.context-actions`. Mounts extensions of type `action`.
+   6. Batch actions in the app bar above file lists. ExtensionPointId `global.files.batch-actions`. Mounts extensions of type `action`.
+   7. Default actions (left click) on a file. ExtensionPointId `global.files.default-actions`. Mounts extensions of type `action`.
+   8. Upload menu. ExtensionPointId `app.files.upload-menu`. Mounts extensions of type `action`.
+   9. Quick actions. ExtensionPointId `app.files.quick-actions`. Mounts extensions of type `action`.
 4. Global search providers. ExtensionPointId `app.search.providers`. Utilizes extensions of type `search` as search engines for the search input in the global top bar.
 
 #### User Preferences for Extensions
