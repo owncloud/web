@@ -49,7 +49,6 @@
       <li
         v-for="resource in resources"
         :key="resource.id"
-        v-memo="[resources]"
         class="oc-tiles-item has-item-context-menu"
       >
         <resource-tile
@@ -143,8 +142,7 @@ import {
   PropType,
   ref,
   unref,
-  watch,
-  ComputedRef
+  watch
 } from 'vue'
 import { useGettext } from 'vue3-gettext'
 import { isSpaceResource, Resource, SpaceResource } from '@ownclouders/web-client'
