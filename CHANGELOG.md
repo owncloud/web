@@ -8,6 +8,7 @@ ownCloud admins and users.
 Summary
 -------
 
+* Bugfix - OCM invite generation body format: [#11512](https://github.com/owncloud/web/pull/11512)
 * Enhancement - Replace custom datepicker with native html element: [#11377](https://github.com/owncloud/web/pull/11377)
 * Enhancement - Display disabled role permissions: [#11387](https://github.com/owncloud/web/pull/11387)
 * Enhancement - Mark external shares: [#11394](https://github.com/owncloud/web/pull/11394)
@@ -15,6 +16,14 @@ Summary
 
 Details
 -------
+
+* Bugfix - OCM invite generation body format: [#11512](https://github.com/owncloud/web/pull/11512)
+
+   We've fixed the issue where the body of the OCM invite generation was not
+   formatted correctly.
+
+   https://github.com/owncloud/ocis/issues/9583
+   https://github.com/owncloud/web/pull/11512
 
 * Enhancement - Replace custom datepicker with native html element: [#11377](https://github.com/owncloud/web/pull/11377)
 
