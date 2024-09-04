@@ -14,7 +14,7 @@ import { Resource, SpaceResource } from '@ownclouders/web-client'
 
 import FileActions from '../SideBar/Actions/FileActions.vue'
 import FileDetails from '../SideBar/Details/FileDetails.vue'
-import { useFileActions, FileInfo } from '@ownclouders/web-pkg'
+import { FileInfo, useOpenWithDefaultApp } from '@ownclouders/web-pkg'
 import { useRouteQuery } from '@ownclouders/web-pkg'
 
 export default defineComponent({
@@ -25,6 +25,7 @@ export default defineComponent({
   },
   provide() {
     return {
+      // provide resource and space for sub-components
       resource: computed(() => this.singleResource),
       space: computed(() => this.space)
     }
@@ -42,20 +43,13 @@ export default defineComponent({
     }
   },
   setup(props) {
-    const { getDefaultEditorAction } = useFileActions()
+    const { openWithDefaultApp } = useOpenWithDefaultApp()
     const openWithDefaultAppQuery = useRouteQuery('openWithDefaultApp')
-    const fileActionsOptions = {
-      resources: [props.singleResource],
-      space: props.space
-    }
-    const defaultEditorAction = getDefaultEditorAction(fileActionsOptions)
-
-    if (unref(openWithDefaultAppQuery) === 'true' && defaultEditorAction) {
-      defaultEditorAction.handler({ ...fileActionsOptions })
-    }
-
-    return {
-      defaultEditorAction
+    if (unref(openWithDefaultAppQuery) === 'true') {
+      openWithDefaultApp({
+        space: props.space,
+        resource: props.singleResource
+      })
     }
   }
 })

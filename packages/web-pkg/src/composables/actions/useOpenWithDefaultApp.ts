@@ -2,7 +2,7 @@ import { useFileActions } from './files'
 import { Resource, SpaceResource } from '@ownclouders/web-client'
 
 export function useOpenWithDefaultApp() {
-  const { getDefaultEditorAction } = useFileActions()
+  const { getDefaultAction } = useFileActions()
 
   const openWithDefaultApp = ({
     space,
@@ -19,10 +19,9 @@ export function useOpenWithDefaultApp() {
       resources: [resource],
       space: space
     }
-
-    const defaultEditorAction = getDefaultEditorAction(fileActionsOptions)
+    const defaultEditorAction = getDefaultAction({ ...fileActionsOptions, omitSystemActions: true })
     if (defaultEditorAction) {
-      defaultEditorAction.handler({ ...fileActionsOptions })
+      defaultEditorAction.handler(fileActionsOptions)
     }
   }
 

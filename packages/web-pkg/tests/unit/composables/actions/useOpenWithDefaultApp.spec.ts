@@ -55,7 +55,7 @@ function getWrapper({
 }) {
   vi.mocked(useFileActions).mockReturnValue(
     mock<ReturnType<typeof useFileActions>>({
-      getDefaultEditorAction: () => defaultEditorAction
+      getDefaultAction: () => defaultEditorAction
     })
   )
 

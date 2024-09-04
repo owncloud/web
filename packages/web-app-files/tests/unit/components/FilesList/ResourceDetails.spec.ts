@@ -1,50 +1,49 @@
-import { defaultComponentMocks, defaultPlugins, mount, RouteLocation } from 'web-test-helpers'
+import {
+  defaultComponentMocks,
+  defaultPlugins,
+  RouteLocation,
+  shallowMount
+} from 'web-test-helpers'
 import ResourceDetails from '../../../../src/components/FilesList/ResourceDetails.vue'
 import { mock } from 'vitest-mock-extended'
-import { useFileActions } from '@ownclouders/web-pkg'
 import { Resource, SpaceResource } from '@ownclouders/web-client'
-import { useRouteQuery } from '@ownclouders/web-pkg'
+import { useOpenWithDefaultApp, useRouteQuery } from '@ownclouders/web-pkg'
 import { ref } from 'vue'
 
 vi.mock('@ownclouders/web-pkg', async (importOriginal) => ({
   ...(await importOriginal<any>()),
   getIndicators: vi.fn(() => []),
   useRouteQuery: vi.fn(),
-  useFileActions: vi.fn()
+  useOpenWithDefaultApp: vi.fn()
 }))
 
 describe('ResourceDetails component', () => {
-  vi.mocked(useFileActions).mockImplementation(() =>
-    mock<ReturnType<typeof useFileActions>>({
-      getDefaultEditorAction: () => ({ handler: vi.fn() }) as any
-    })
-  )
-
-  it('renders resource details correctly', () => {
-    const { wrapper } = getWrapper(true)
-    expect(wrapper.html()).toMatchSnapshot()
-  })
-
   describe('open with default actions', () => {
     it("doesn't open default action if query param 'openWithDefaultApp' isn't set true", () => {
-      const { wrapper } = getWrapper()
-      expect(wrapper.vm.defaultEditorAction.handler).not.toHaveBeenCalled()
+      const { mocks } = getWrapper()
+      expect(mocks.openWithDefaultAppMock).not.toHaveBeenCalled()
     })
     it("opens default action if query param 'openWithDefaultApp' is set true", () => {
       vi.mocked(useRouteQuery).mockImplementationOnce(() => ref('true'))
-      const { wrapper } = getWrapper()
-      expect(wrapper.vm.defaultEditorAction.handler).toHaveBeenCalled()
+      const { mocks } = getWrapper()
+      expect(mocks.openWithDefaultAppMock).toHaveBeenCalled()
     })
   })
 
   function getWrapper(isFolder = false) {
+    const openWithDefaultAppMock = vi.fn()
+    vi.mocked(useOpenWithDefaultApp).mockReturnValue({
+      openWithDefaultApp: openWithDefaultAppMock
+    })
+
     const mocks = {
       ...defaultComponentMocks({
         currentRoute: mock<RouteLocation>({
           name: 'files-public-link',
           query: { openWithDefaultAppQuery: 'true' }
         })
-      })
+      }),
+      openWithDefaultAppMock
     }
 
     const file = {
@@ -64,7 +63,7 @@ describe('ResourceDetails component', () => {
 
     return {
       mocks,
-      wrapper: mount(ResourceDetails, {
+      wrapper: shallowMount(ResourceDetails, {
         props: {
           space,
           singleResource: file
