@@ -56,7 +56,7 @@
           </div>
           <component
             :is="folderView.component"
-            v-model:selectedIds="selectedResourcesIds"
+            v-model:selected-ids="selectedResourcesIds"
             resource-type="space"
             :resources="paginatedItems"
             :fields-displayed="tableDisplayFields"

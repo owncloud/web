@@ -1,7 +1,7 @@
 // Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
 exports[`InviteCollaborator RecipientContainer > displays an avatar image if capability is present 1`] = `
-"<span class="oc-recipient files-share-invite-recipient" data-testid="recipient-container-Albert Einstein"><span class="vue-avatar--wrapper oc-avatar oc-recipient-avatar" style="width: 16.8px; height: 16.8px; line-height: 16.8px; font-size: 6px; font-family: Helvetica, Arial, sans-serif; color: white;" width="16.8" aria-hidden="true" focusable="false" data-test-user-name="Albert Einstein" data-testid="recipient-avatar"><img src="avatarUrl" alt="" aria-hidden="true" class="avatarImg"></span>
+"<span class="oc-recipient files-share-invite-recipient" data-testid="recipient-container-Albert Einstein"><span class="vue-avatar--wrapper oc-avatar oc-recipient-avatar" style="width: 16.8px; height: 16.8px; line-height: 16.8px; font-size: 6px; font-family: Helvetica, Arial, sans-serif; color: white;" width="16.8" aria-hidden="true" focusable="false" data-test-user-name="Albert Einstein" data-testid="recipient-avatar"><img src="avatarUrl" alt="" aria-hidden="true" loading="lazy" class="avatarImg"></span>
 <p class="oc-recipient-name" data-testid="recipient-name">Albert Einstein</p> <!-- @slot Append content (actions, additional info, etc.)  --> <button type="button" aria-label="Deselect Albert Einstein" class="oc-button oc-rounded oc-button-m oc-button-justify-content-center oc-button-gap-m oc-button-passive oc-button-passive-raw files-share-invite-recipient-btn-remove">
   <!--v-if-->
   <!-- @slot Content of the button -->

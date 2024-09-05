@@ -28,7 +28,7 @@ describe('filterSearch.js', () => {
     const parent = wrapper.find('.test')
     input.value = 'test'
     input.trigger('keydown')
-    expect(parent.classes()).toContain('vueds-visible')
+    expect(parent.attributes('class')).toContain('vueds-visible')
   })
 
   it('should hide all links when the input is cleared', () => {

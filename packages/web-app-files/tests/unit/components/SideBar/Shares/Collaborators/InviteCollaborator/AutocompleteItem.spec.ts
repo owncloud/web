@@ -5,7 +5,9 @@ import { defaultPlugins, shallowMount } from 'web-test-helpers'
 describe('AutocompleteItem component', () => {
   it.each(ShareTypes.all)('sets a class that reflects the share type', (shareType) => {
     const { wrapper } = createWrapper({ shareType: shareType.value })
-    expect(wrapper.find('div').classes()).toContain(`files-collaborators-search-${shareType.key}`)
+    expect(wrapper.find('div').attributes('class')).toContain(
+      `files-collaborators-search-${shareType.key}`
+    )
   })
   it.each(ShareTypes.all)(
     'displays the correct image/icon according to the shareType',

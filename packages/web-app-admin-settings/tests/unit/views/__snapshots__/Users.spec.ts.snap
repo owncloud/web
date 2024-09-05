@@ -23,8 +23,8 @@ exports[`Users view > list view > renders initially warning if filters are manda
         <div class="user-filters oc-flex oc-flex-between oc-flex-wrap oc-flex-bottom oc-mx-m oc-mb-m">
           <div data-v-32efd9c6="" class="oc-flex oc-flex-middle">
             <div data-v-32efd9c6="" class="oc-mr-m oc-flex oc-flex-middle"><span data-v-32efd9c6="" class="oc-icon oc-icon-m oc-icon-passive oc-mr-xs"><!----></span> <span data-v-32efd9c6="">Filter:</span></div>
-            <item-filter-stub data-v-32efd9c6="" filterlabel="Groups" filtername="groups" optionfilterlabel="Filter groups" showoptionfilter="true" allowmultiple="true" idattribute="id" displaynameattribute="displayName" filterableattributes="displayName" closeonclick="false" class="oc-mr-s" items=""></item-filter-stub>
-            <item-filter-stub data-v-32efd9c6="" filterlabel="Roles" filtername="roles" optionfilterlabel="Filter roles" showoptionfilter="true" allowmultiple="true" idattribute="id" displaynameattribute="displayName" filterableattributes="displayName" closeonclick="false" items="[object Object],[object Object],[object Object],[object Object]"></item-filter-stub>
+            <item-filter-stub data-v-32efd9c6="" filterlabel="Groups" items="" filtername="groups" optionfilterlabel="Filter groups" showoptionfilter="true" allowmultiple="true" idattribute="id" displaynameattribute="displayName" filterableattributes="displayName" closeonclick="false" class="oc-mr-s"></item-filter-stub>
+            <item-filter-stub data-v-32efd9c6="" filterlabel="Roles" items="[object Object],[object Object],[object Object],[object Object]" filtername="roles" optionfilterlabel="Filter roles" showoptionfilter="true" allowmultiple="true" idattribute="id" displaynameattribute="displayName" filterableattributes="displayName" closeonclick="false"></item-filter-stub>
           </div>
           <div data-v-32efd9c6="" class="oc-flex oc-flex-middle">
             <div data-v-32efd9c6="" class=""><label class="oc-label" for="users-filter">Search</label>
@@ -71,8 +71,8 @@ exports[`Users view > list view > renders list initially 1`] = `
         <div class="user-filters oc-flex oc-flex-between oc-flex-wrap oc-flex-bottom oc-mx-m oc-mb-m">
           <div data-v-32efd9c6="" class="oc-flex oc-flex-middle">
             <div data-v-32efd9c6="" class="oc-mr-m oc-flex oc-flex-middle"><span data-v-32efd9c6="" class="oc-icon oc-icon-m oc-icon-passive oc-mr-xs"><!----></span> <span data-v-32efd9c6="">Filter:</span></div>
-            <item-filter-stub data-v-32efd9c6="" filterlabel="Groups" filtername="groups" optionfilterlabel="Filter groups" showoptionfilter="true" allowmultiple="true" idattribute="id" displaynameattribute="displayName" filterableattributes="displayName" closeonclick="false" class="oc-mr-s" items=""></item-filter-stub>
-            <item-filter-stub data-v-32efd9c6="" filterlabel="Roles" filtername="roles" optionfilterlabel="Filter roles" showoptionfilter="true" allowmultiple="true" idattribute="id" displaynameattribute="displayName" filterableattributes="displayName" closeonclick="false" items="[object Object],[object Object],[object Object],[object Object]"></item-filter-stub>
+            <item-filter-stub data-v-32efd9c6="" filterlabel="Groups" items="" filtername="groups" optionfilterlabel="Filter groups" showoptionfilter="true" allowmultiple="true" idattribute="id" displaynameattribute="displayName" filterableattributes="displayName" closeonclick="false" class="oc-mr-s"></item-filter-stub>
+            <item-filter-stub data-v-32efd9c6="" filterlabel="Roles" items="[object Object],[object Object],[object Object],[object Object]" filtername="roles" optionfilterlabel="Filter roles" showoptionfilter="true" allowmultiple="true" idattribute="id" displaynameattribute="displayName" filterableattributes="displayName" closeonclick="false"></item-filter-stub>
           </div>
           <div data-v-32efd9c6="" class="oc-flex oc-flex-middle">
             <div data-v-32efd9c6="" class=""><label class="oc-label" for="users-filter">Search</label>

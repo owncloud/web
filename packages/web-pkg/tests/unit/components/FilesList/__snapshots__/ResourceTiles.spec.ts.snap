@@ -14,13 +14,13 @@ exports[`ResourceTiles component > renders an array of spaces correctly 1`] = `
   <!--v-if-->
   <ul data-v-67d39700="" class="oc-list oc-my-rm oc-mx-rm oc-tiles oc-flex">
     <li data-v-67d39700="" class="oc-tiles-item has-item-context-menu">
-      <div data-v-67d39700="" class="oc-tile-card oc-card oc-card-default oc-rounded" data-item-id="1" draggable="false"><a target="_self" draggable="false" class="oc-card-media-top oc-flex oc-flex-center oc-flex-middle oc-m-rm" tabindex="-1" attrs="[object Object]"></a>
+      <div data-v-67d39700="" class="oc-tile-card oc-card oc-card-default oc-rounded" data-item-id="1" draggable="false"><a attrs="[object Object]" target="_self" draggable="false" class="oc-card-media-top oc-flex oc-flex-center oc-flex-middle oc-m-rm" tabindex="-1"></a>
         <div class="oc-card-body oc-p-s">
           <div class="oc-flex oc-flex-between oc-flex-middle">
             <div class="oc-flex oc-flex-middle oc-text-truncate resource-name-wrapper">
               <div class="oc-resource oc-text-overflow">
                 <!--v-if-->
-                <div class="oc-resource-details oc-text-overflow"><a target="_self" draggable="false" class="oc-text-overflow" attrs="[object Object]"></a>
+                <div class="oc-resource-details oc-text-overflow"><a attrs="[object Object]" target="_self" draggable="false" class="oc-text-overflow"></a>
                   <div class="oc-resource-indicators">
                     <!--v-if-->
                   </div>
@@ -44,13 +44,13 @@ exports[`ResourceTiles component > renders an array of spaces correctly 1`] = `
       </div>
     </li>
     <li data-v-67d39700="" class="oc-tiles-item has-item-context-menu">
-      <div data-v-67d39700="" class="oc-tile-card oc-card oc-card-default oc-rounded" data-item-id="2" draggable="false"><a target="_self" draggable="false" class="oc-card-media-top oc-flex oc-flex-center oc-flex-middle oc-m-rm" tabindex="-1" attrs="[object Object]"></a>
+      <div data-v-67d39700="" class="oc-tile-card oc-card oc-card-default oc-rounded" data-item-id="2" draggable="false"><a attrs="[object Object]" target="_self" draggable="false" class="oc-card-media-top oc-flex oc-flex-center oc-flex-middle oc-m-rm" tabindex="-1"></a>
         <div class="oc-card-body oc-p-s">
           <div class="oc-flex oc-flex-between oc-flex-middle">
             <div class="oc-flex oc-flex-middle oc-text-truncate resource-name-wrapper">
               <div class="oc-resource oc-text-overflow">
                 <!--v-if-->
-                <div class="oc-resource-details oc-text-overflow"><a target="_self" draggable="false" class="oc-text-overflow" attrs="[object Object]"></a>
+                <div class="oc-resource-details oc-text-overflow"><a attrs="[object Object]" target="_self" draggable="false" class="oc-text-overflow"></a>
                   <div class="oc-resource-indicators">
                     <!--v-if-->
                   </div>

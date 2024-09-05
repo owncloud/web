@@ -10,6 +10,6 @@ describe('OcTableSimple', () => {
       }
     })
 
-    expect(wrapper.classes()).toContain('oc-table-simple-hover')
+    expect(wrapper.attributes('class')).toContain('oc-table-simple-hover')
   })
 })

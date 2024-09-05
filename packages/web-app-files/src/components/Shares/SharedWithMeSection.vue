@@ -16,7 +16,7 @@
     </no-content-message>
     <resource-table
       v-else
-      v-model:selectedIds="selectedResourcesIds"
+      v-model:selected-ids="selectedResourcesIds"
       :is-side-bar-open="isSideBarOpen"
       :fields-displayed="displayedFields"
       :resources="resourceItems"
