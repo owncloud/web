@@ -367,7 +367,7 @@ export default defineComponent({
     },
     preloadImages() {
       const preloadFile = (preloadFileIndex: number) => {
-        let cycleIndex =
+        const cycleIndex =
           (((this.activeIndex + preloadFileIndex) % this.filteredFiles.length) +
             this.filteredFiles.length) %
           this.filteredFiles.length

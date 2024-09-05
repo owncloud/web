@@ -669,7 +669,7 @@ export default defineComponent({
 
       //TODO: Remove extraction code as soon as https://github.com/tus/tus-js-client/issues/448 is solved
       const formatErrorMessageToObject = (errorMessage: string) => {
-        let responseCode = errorMessage.match(/response code: (\d+)/)?.[1]
+        const responseCode = errorMessage.match(/response code: (\d+)/)?.[1]
         const errorBody = JSON.parse(
           errorMessage.match(/response text: ([\s\S]+?), request id/)?.[1] || '{}'
         )

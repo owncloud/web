@@ -32,9 +32,8 @@ async function post(url: string, data: unknown) {
 export async function registerClient(openIdConfig: OpenIdConnectConfig) {
   const clientData = JSON.parse(sessionStorage.getItem('dynamicClientData'))
   if (clientData !== null) {
-    // eslint-disable-next-line camelcase
     const client_secret_expires_at = clientData.client_secret_expires_at || 0
-    // eslint-disable-next-line camelcase
+
     if (client_secret_expires_at === 0 || Date.now() < client_secret_expires_at * 1000) {
       return JSON.parse(clientData)
     }

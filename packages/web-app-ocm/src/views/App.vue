@@ -65,7 +65,7 @@ export default defineComponent({
     }
 
     const highlightNewConnections = async () => {
-      let oldConnections = [...unref(connections)]
+      const oldConnections = [...unref(connections)]
       await findAcceptedUsers()
       if (oldConnections.length < unref(connections).length) {
         highlightedConnections.value = unref(connections).filter(

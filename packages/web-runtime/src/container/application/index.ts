@@ -6,10 +6,10 @@ import { applicationStore } from '../store'
 import { isObject } from 'lodash-es'
 
 // import modules to provide them to applications
-import * as vue from 'vue' // eslint-disable-line
-import * as luxon from 'luxon' // eslint-disable-line
-import * as vueGettext from 'vue3-gettext' // eslint-disable-line
-import * as pinia from 'pinia' // eslint-disable-line
+import * as vue from 'vue'
+import * as luxon from 'luxon'
+import * as vueGettext from 'vue3-gettext'
+import * as pinia from 'pinia'
 import * as webPkg from '@ownclouders/web-pkg'
 import * as webClient from '@ownclouders/web-client'
 import * as webClientGraph from '@ownclouders/web-client/graph'

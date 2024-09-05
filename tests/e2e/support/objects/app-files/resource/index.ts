@@ -105,7 +105,6 @@ export class Resource {
     await this.#page.goto(startUrl)
   }
 
-  // eslint-disable-next-line @typescript-eslint/no-empty-function
   async open(): Promise<void> {}
 
   async restoreVersion(args: Omit<po.resourceVersionArgs, 'page'>): Promise<void> {

@@ -35,7 +35,7 @@ export default defineComponent({
   },
   computed: {
     classes() {
-      let c = []
+      const c = []
 
       c.push('oc-grid-' + this.gutter)
 

@@ -50,7 +50,7 @@ describe('Depending on what gets passed into the theming options', () => {
     )
     expect(document.documentElement.style.getPropertyValue('--oc-space-small')).toMatch('20px')
   })
-  // eslint-disable-next-line
+
   // it('Defaults to ODS colors where none are passed in theming options', () => {
   //   expect(document.documentElement.style.getPropertyValue('--oc-color')).toMatch("green")
   //   expect(document.documentElement.style.getPropertyValue('--oc-brand-primary-hover')).toMatch('#223959')

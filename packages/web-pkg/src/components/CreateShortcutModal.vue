@@ -179,7 +179,7 @@ export default defineComponent({
     let markInstance: Mark = null
 
     const getInputUrlWithProtocol = (input: string) => {
-      let url = input.trim()
+      const url = input.trim()
       if (isMaybeUrl(url)) {
         return url
       }

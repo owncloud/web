@@ -1,6 +1,6 @@
 import App from './App.vue'
 import List from './views/List.vue'
-// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+
 // @ts-ignore
 import translations from '../l10n/translations.json'
 import { ApplicationInformation, defineWebApplication } from '@ownclouders/web-pkg'

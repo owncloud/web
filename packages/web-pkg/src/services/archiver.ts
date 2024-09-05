@@ -1,8 +1,8 @@
 // Workaround https://github.com/npm/node-semver/issues/381
-// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+
 // @ts-ignore
 import major from 'semver/functions/major'
-// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+
 // @ts-ignore
 import rcompare from 'semver/functions/rcompare'
 
