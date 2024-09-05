@@ -23,7 +23,6 @@ import {
   useRouter,
   useThemeStore,
   useFileActions,
-  routeToContextQuery,
   embedModeFilePickMessageData
 } from '../../composables'
 import { ApplicationInformation } from '../../apps'
@@ -71,7 +70,7 @@ export default defineComponent({
         return
       }
 
-      const { resource, originRoute }: embedModeFilePickMessageData = data.data
+      const { resource, locationQuery }: embedModeFilePickMessageData = data.data
 
       const space = getMatchingSpace(resource)
       const remoteItemId = isShareSpaceResource(space) ? space.id : undefined
@@ -83,7 +82,7 @@ export default defineComponent({
         EDITOR_MODE_EDIT,
         remoteItemId
       )
-      routeOpts.query = { ...routeOpts.query, ...routeToContextQuery(originRoute) }
+      routeOpts.query = { ...routeOpts.query, ...locationQuery }
 
       const editorRoute = router.resolve(routeOpts)
       const editorRouteUrl = new URL(editorRoute.href, window.location.origin)
