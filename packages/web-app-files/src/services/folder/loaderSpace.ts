@@ -12,7 +12,6 @@ import {
 import {
   buildIncomingShareResource,
   call,
-  isMountPointSpaceResource,
   isPersonalSpaceResource,
   isPublicSpaceResource,
   isShareSpaceResource,
@@ -152,12 +151,7 @@ export class FolderLoaderSpace implements FolderLoader {
     spacesStore: SpacesStore
     space: SpaceResource
   }) {
-    await spacesStore.loadMountPoints({ graphClient })
-
-    const mountPoints = spacesStore.spaces.filter(isMountPointSpaceResource)
-    // even if the resource has been shared via multiple permissions (e.g. directly via user and a group)
-    // we only care about one matching mount point since the remote item contains all permissions
-    const matchingMountPoint = mountPoints.find((s) => s.root?.remoteItem?.id === space.id)
+    const matchingMountPoint = await spacesStore.getMountPointForSpace({ graphClient, space })
     if (!matchingMountPoint) {
       return null
     }

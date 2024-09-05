@@ -2,7 +2,7 @@ import { defineStore } from 'pinia'
 import { computed, ref, unref } from 'vue'
 import {
   buildShareSpaceResource,
-  isCollaboratorShare,
+  isMountPointSpaceResource,
   SpaceResource
 } from '@ownclouders/web-client'
 import { Graph } from '@ownclouders/web-client/graph'
@@ -12,7 +12,7 @@ import {
   isPersonalSpaceResource,
   isProjectSpaceResource
 } from '@ownclouders/web-client'
-import type { CollaboratorShare, ShareRole } from '@ownclouders/web-client'
+import type { CollaboratorShare, MountPointSpaceResource, ShareRole } from '@ownclouders/web-client'
 import { useUserStore } from './user'
 import { ConfigStore, useConfigStore } from './config'
 import { useSharesStore } from './shares'
@@ -75,7 +75,6 @@ export const useSpacesStore = defineStore('spaces', () => {
   const sharesStore = useSharesStore()
 
   const spaces = ref<SpaceResource[]>([])
-  const spaceMembers = ref<CollaboratorShare[]>([])
   const currentSpace = ref<SpaceResource>()
   const spacesInitialized = ref(false)
   const mountPointsInitialized = ref(false)
@@ -101,8 +100,13 @@ export const useSpacesStore = defineStore('spaces', () => {
     currentSpace.value = space
   }
 
-  const setSpaceMembers = (members: CollaboratorShare[]) => {
-    spaceMembers.value = members
+  const getSpaceMembers = (space: SpaceResource) => {
+    // only project spaces have members
+    if (!isProjectSpaceResource(space)) {
+      return []
+    }
+    const members = sharesStore.collaboratorShares.filter((c) => c.resourceId === space.id)
+    return sortSpaceMembers(members)
   }
 
   const addSpaces = (s: SpaceResource[]) => {
@@ -115,6 +119,22 @@ export const useSpacesStore = defineStore('spaces', () => {
 
   const getSpace = (id: string) => {
     return unref(spaces).find((s) => id == s.id)
+  }
+
+  const getMountPointForSpace = async ({
+    graphClient,
+    space
+  }: {
+    graphClient: Graph
+    space: SpaceResource
+  }): Promise<MountPointSpaceResource> => {
+    await loadMountPoints({ graphClient })
+
+    // even if the resource has been shared via multiple permissions (e.g. directly via user and a group)
+    // we only care about one matching mount point since the remote item contains all permissions
+    return unref(spaces).find(
+      (s) => isMountPointSpaceResource(s) && s.root?.remoteItem?.id === space.id
+    )
   }
 
   const createShareSpace = ({
@@ -222,46 +242,11 @@ export const useSpacesStore = defineStore('spaces', () => {
     addSpaces(projectSpaces)
   }
 
-  const loadSpaceMembers = async ({
-    graphClient,
-    space
-  }: {
-    graphClient: Graph
-    space: SpaceResource
-  }) => {
-    spaceMembers.value = []
-
-    const { shares } = await graphClient.permissions.listPermissions(
-      space.id,
-      space.id,
-      sharesStore.graphRoles
-    )
-
-    const spaceShares = shares.filter(isCollaboratorShare)
-    spaceMembers.value = sortSpaceMembers(spaceShares)
-  }
-
-  const upsertSpaceMember = ({ member }: { member: CollaboratorShare }) => {
-    const existingMember = unref(spaceMembers).find(({ id }) => id === member.id)
-    if (existingMember) {
-      Object.assign(existingMember, member)
-      return
-    }
-
-    unref(spaceMembers).push(member)
-  }
-
-  const removeSpaceMember = ({ member }: { member: CollaboratorShare }) => {
-    const existingMember = unref(spaceMembers).find(({ id }) => id === member.id)
-    spaceMembers.value = unref(spaceMembers).filter(({ id }) => existingMember.id !== id)
-  }
-
   return {
     spaces,
     spacesInitialized,
     mountPointsInitialized,
     spacesLoading,
-    spaceMembers,
     currentSpace,
     personalSpace,
 
@@ -271,7 +256,8 @@ export const useSpacesStore = defineStore('spaces', () => {
     setMountPointsInitialized,
     setSpacesLoading,
     setCurrentSpace,
-    setSpaceMembers,
+    getSpaceMembers,
+    getMountPointForSpace,
 
     addSpaces,
     removeSpace,
@@ -279,11 +265,7 @@ export const useSpacesStore = defineStore('spaces', () => {
     updateSpaceField,
     loadSpaces,
     loadMountPoints,
-    reloadProjectSpaces,
-
-    loadSpaceMembers,
-    upsertSpaceMember,
-    removeSpaceMember
+    reloadProjectSpaces
   }
 })
 

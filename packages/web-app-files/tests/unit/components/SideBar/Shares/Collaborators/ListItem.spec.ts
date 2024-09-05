@@ -12,7 +12,7 @@ import {
   defaultComponentMocks,
   nextTicks
 } from 'web-test-helpers'
-import { useMessages, useSharesStore, useSpacesStore } from '@ownclouders/web-pkg'
+import { useMessages, useSharesStore } from '@ownclouders/web-pkg'
 import EditDropdown from '../../../../../../src/components/SideBar/Shares/Collaborators/EditDropdown.vue'
 import RoleDropdown from '../../../../../../src/components/SideBar/Shares/Collaborators/RoleDropdown.vue'
 import { mock } from 'vitest-mock-extended'
@@ -154,21 +154,6 @@ describe('Collaborator ListItem component', () => {
       })
       const sharesStore = useSharesStore()
       expect(sharesStore.updateShare).toHaveBeenCalled()
-    })
-    it('calls "upsertSpaceMember" for space resources', async () => {
-      const resource = mock<SpaceResource>({ driveType: 'project' })
-      const { wrapper } = createWrapper({
-        share: getShareMock({ shareType: ShareTypes.user.value }),
-        resource
-      })
-      wrapper.findComponent<typeof RoleDropdown>('role-dropdown-stub').vm.$emit('optionChange', {
-        permissions: [GraphSharePermission.readBasic]
-      })
-
-      await nextTicks(4)
-
-      const spacesStore = useSpacesStore()
-      expect(spacesStore.upsertSpaceMember).toHaveBeenCalled()
     })
     it('shows a message on error', async () => {
       const resource = mock<SpaceResource>({ driveType: 'project' })

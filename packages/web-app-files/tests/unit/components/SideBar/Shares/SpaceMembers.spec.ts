@@ -15,7 +15,7 @@ import {
   RouteLocation
 } from 'web-test-helpers'
 import { User } from '@ownclouders/web-client/graph/generated'
-import { useCanShare, useModals } from '@ownclouders/web-pkg'
+import { useCanShare, useModals, useSpacesStore } from '@ownclouders/web-pkg'
 import ListItem from '../../../../../src/components/SideBar/Shares/Collaborators/ListItem.vue'
 
 vi.mock('@ownclouders/web-pkg', async (importOriginal) => ({
@@ -134,19 +134,22 @@ function getWrapper({
   const mocks = defaultComponentMocks({
     currentRoute: mock<RouteLocation>({ name: currentRouteName })
   })
+
+  const plugins = defaultPlugins({
+    piniaOptions: {
+      userState: { user },
+      configState: {
+        options: { contextHelpers: true }
+      }
+    }
+  })
+
+  const spacesStore = useSpacesStore()
+  vi.mocked(spacesStore).getSpaceMembers.mockReturnValue(spaceMembers)
+
   return mountType(SpaceMembers, {
     global: {
-      plugins: [
-        ...defaultPlugins({
-          piniaOptions: {
-            userState: { user },
-            spacesState: { spaceMembers },
-            configState: {
-              options: { contextHelpers: true }
-            }
-          }
-        })
-      ],
+      plugins,
       mocks,
       provide: {
         ...mocks,

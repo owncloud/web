@@ -83,7 +83,6 @@ function createWrapper({ spaceResource = spaceMock, props = {} } = {}) {
           ...defaultPlugins({
             piniaOptions: {
               userState: { user: { id: '1', onPremisesSamAccountName: 'marie' } as User },
-              spacesState: { spaceMembers: [spaceShare] },
               sharesState: { collaboratorShares: [spaceShare] },
               resourcesStore: { resources: [mock<Resource>({ name: 'file1', type: 'file' })] }
             }

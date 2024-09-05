@@ -2,20 +2,12 @@ import { getComposableWrapper } from 'web-test-helpers'
 import {
   useSpacesStore,
   sortSpaceMembers,
-  useUserStore,
   useSharesStore
 } from '../../../../src/composables/piniaStores'
 import { createPinia, setActivePinia } from 'pinia'
 import { mock, mockDeep } from 'vitest-mock-extended'
-import {
-  CollaboratorShare,
-  GraphSharePermission,
-  ShareRole,
-  SpaceResource
-} from '@ownclouders/web-client'
+import { CollaboratorShare, GraphSharePermission, SpaceResource } from '@ownclouders/web-client'
 import { Graph } from '@ownclouders/web-client/graph'
-import { User } from '@ownclouders/web-client/graph/generated'
-import { ClientService } from '../../../../src/services'
 
 describe('spaces', () => {
   beforeEach(() => {
@@ -258,66 +250,50 @@ describe('spaces', () => {
       })
     })
   })
-  describe('method "upsertSpaceMember"', () => {
-    it('correctly adds space members', () => {
+  describe('method "getSpaceMembers"', () => {
+    it('correctly returns members for project spaces', () => {
       getWrapper({
         setup: (instance) => {
-          const member = mock<CollaboratorShare>({ id: '1' })
+          const space = mock<SpaceResource>({ id: '1', driveType: 'project' })
+          const sharesStore = useSharesStore()
+          sharesStore.collaboratorShares = [mock<CollaboratorShare>({ resourceId: space.id })]
+          const members = instance.getSpaceMembers(space)
 
-          instance.upsertSpaceMember({ member })
-
-          expect(instance.spaceMembers.length).toBe(1)
-          expect(instance.spaceMembers[0].id).toBe(member.id)
+          expect(members.length).toBe(1)
         }
       })
     })
-    it('correctly updates space members', () => {
+    it('does not return members for personal space', () => {
       getWrapper({
         setup: (instance) => {
-          const member = mock<CollaboratorShare>({ id: '1', indirect: false })
-          instance.upsertSpaceMember({ member })
+          const space = mock<SpaceResource>({ id: '1', driveType: 'personal' })
+          const sharesStore = useSharesStore()
+          sharesStore.collaboratorShares = [mock<CollaboratorShare>({ resourceId: space.id })]
+          const members = instance.getSpaceMembers(space)
 
-          expect(instance.spaceMembers.length).toBe(1)
-          expect(instance.spaceMembers[0].indirect).toBe(member.indirect)
-
-          instance.upsertSpaceMember({ member: { ...member, indirect: true } })
-
-          expect(instance.spaceMembers.length).toBe(1)
-          expect(instance.spaceMembers[0].indirect).toBe(true)
+          expect(members.length).toBe(0)
         }
       })
     })
   })
-  describe('method "loadSpaceMembers"', () => {
-    it('loads space members and sets them', () => {
+  describe('method "getMountPointForSpace"', () => {
+    it('returns a matching mount point', () => {
       getWrapper({
         setup: async (instance) => {
-          const share = mock<CollaboratorShare>({
-            id: '1',
-            permissions: [],
-            role: mock<ShareRole>({ id: 'roleId' })
-          })
-          const clientService = mockDeep<ClientService>()
-          clientService.graphAuthenticated.permissions.listPermissions.mockResolvedValue({
-            shares: [share],
-            allowedActions: [],
-            allowedRoles: []
-          })
+          const graphClient = mockDeep<Graph>()
+          const space = mock<SpaceResource>({ id: '1', driveType: 'project' })
+          const mountpoints = [
+            mock<SpaceResource>({
+              id: '2',
+              driveType: 'mountpoint',
+              root: { remoteItem: { id: space.id } }
+            })
+          ]
+          instance.spaces = mountpoints
+          instance.mountPointsInitialized = true
+          const mountPoint = await instance.getMountPointForSpace({ graphClient, space })
 
-          const userStore = useUserStore()
-          userStore.user = mock<User>()
-
-          const sharesStore = useSharesStore()
-          sharesStore.graphRoles = { roleId: mock<ShareRole>({ id: 'roleId' }) }
-
-          await instance.loadSpaceMembers({
-            graphClient: clientService.graphAuthenticated,
-            space: mock<SpaceResource>()
-          })
-
-          expect(clientService.graphAuthenticated.permissions.listPermissions).toHaveBeenCalled()
-          expect(instance.spaceMembers.length).toBe(1)
-          expect(instance.spaceMembers[0].id).toBe(share.id)
+          expect(mountPoint).toEqual(mountpoints[0])
         }
       })
     })

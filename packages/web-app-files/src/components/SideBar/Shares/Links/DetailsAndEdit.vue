@@ -140,7 +140,7 @@ import {
   useModals,
   useResourcesStore
 } from '@ownclouders/web-pkg'
-import { LinkShare, ShareTypes } from '@ownclouders/web-client'
+import { LinkShare } from '@ownclouders/web-client'
 import { computed, defineComponent, inject, PropType, Ref, ref, unref } from 'vue'
 import { formatDateFromDateTime, formatRelativeDateFromDateTime } from '@ownclouders/web-pkg'
 import { Resource, SpaceResource } from '@ownclouders/web-client'
@@ -291,10 +291,7 @@ export default defineComponent({
     })
 
     const sharedAncestor = computed(() => {
-      const ancestorPath = Object.keys(unref(ancestorMetaData)).find((key) =>
-        unref(ancestorMetaData)[key].shareTypes.includes(ShareTypes.link.value)
-      )
-      return ancestorPath ? unref(ancestorMetaData)[ancestorPath] : undefined
+      return resourcesStore.getAncestorById(props.linkShare.resourceId)
     })
 
     const viaRouterParams = computed(() => {
@@ -317,9 +314,13 @@ export default defineComponent({
         return null
       }
 
-      return $gettext('Navigate to the parent (%{folderName})', {
-        folderName: basename(unref(sharedAncestor).path)
-      })
+      let folderName = basename(unref(sharedAncestor).path)
+      if (!folderName) {
+        // no folder name means path is "/" -> parent is the space
+        folderName = unref(space).name
+      }
+
+      return $gettext('Navigate to the parent (%{folderName})', { folderName })
     })
 
     return {

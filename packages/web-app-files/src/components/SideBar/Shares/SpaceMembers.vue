@@ -84,7 +84,7 @@ import {
   useSpacesStore,
   useUserStore
 } from '@ownclouders/web-pkg'
-import { defineComponent, inject, ref, Ref } from 'vue'
+import { computed, defineComponent, inject, ref, Ref, unref } from 'vue'
 import { shareSpaceAddMemberHelp } from '../../../helpers/contextualHelpers'
 import { ProjectSpaceResource, CollaboratorShare } from '@ownclouders/web-client'
 import { useClientService } from '@ownclouders/web-pkg'
@@ -109,8 +109,7 @@ export default defineComponent({
     const { deleteShare } = sharesStore
     const { graphRoles } = storeToRefs(sharesStore)
     const spacesStore = useSpacesStore()
-    const { upsertSpace, removeSpaceMember } = spacesStore
-    const { spaceMembers } = storeToRefs(spacesStore)
+    const { upsertSpace, getSpaceMembers } = spacesStore
     const capabilityStore = useCapabilityStore()
     const { filesPrivateLinks } = storeToRefs(capabilityStore)
 
@@ -121,17 +120,20 @@ export default defineComponent({
 
     const markInstance = ref<Mark>()
 
+    const resource = inject<Ref<ProjectSpaceResource>>('resource')
+
+    const spaceMembers = computed(() => getSpaceMembers(unref(resource)))
+
     return {
       user,
       clientService,
       configStore,
       configOptions,
-      resource: inject<Ref<ProjectSpaceResource>>('resource'),
+      resource,
       dispatchModal,
       spaceMembers,
       deleteShare,
       upsertSpace,
-      removeSpaceMember,
       canShare,
       markInstance,
       filesPrivateLinks,
@@ -232,8 +234,6 @@ export default defineComponent({
               const space = await client.drives.getDrive(share.resourceId, this.graphRoles)
               this.upsertSpace(space)
             }
-
-            this.removeSpaceMember({ member: share })
 
             this.showMessage({
               title: this.$gettext('Share was removed successfully')

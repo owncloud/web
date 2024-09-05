@@ -52,7 +52,8 @@ import {
   useResourcesStore,
   useUserStore,
   useConfigStore,
-  useAppsStore
+  useAppsStore,
+  useCanListShares
 } from '../../composables'
 import {
   isProjectSpaceResource,
@@ -63,7 +64,9 @@ import {
   isSpaceResource,
   isPersonalSpaceResource,
   isCollaboratorShare,
-  isLinkShare
+  isLinkShare,
+  isShareSpaceResource,
+  isIncomingShareResource
 } from '@ownclouders/web-client'
 import { storeToRefs } from 'pinia'
 import { useTask } from 'vue-concurrency'
@@ -98,6 +101,7 @@ export default defineComponent({
     const userStore = useUserStore()
     const configStore = useConfigStore()
     const appsStore = useAppsStore()
+    const { canListShares } = useCanListShares()
 
     const resourcesStore = useResourcesStore()
     const { currentFolder } = storeToRefs(resourcesStore)
@@ -201,9 +205,20 @@ export default defineComponent({
       const { collaboratorShares: collaboratorCache, linkShares: linkCache } = sharesStore
       const client = clientService.graphAuthenticated.permissions
 
+      let driveId = props.space?.id
+      if (isShareSpaceResource(props?.space)) {
+        const matchingMountPoint = yield spacesStore.getMountPointForSpace({
+          graphClient: clientService.graphAuthenticated,
+          space: props.space
+        })
+        if (matchingMountPoint) {
+          driveId = matchingMountPoint.root.remoteItem.rootId
+        }
+      }
+
       // load direct shares
       const { shares, allowedRoles } = yield* call(
-        client.listPermissions(props.space?.id, resource.id, sharesStore.graphRoles)
+        client.listPermissions(driveId, resource.fileId, sharesStore.graphRoles)
       )
 
       const loadedCollaboratorShares = shares.filter(isCollaboratorShare)
@@ -216,7 +231,7 @@ export default defineComponent({
       // load external share roles
       if (appsStore.isAppEnabled('open-cloud-mesh')) {
         const { allowedRoles } = yield* call(
-          client.listPermissions(props.space?.id, resource.id, sharesStore.graphRoles, {
+          client.listPermissions(driveId, resource.fileId, sharesStore.graphRoles, {
             filter: `@libre.graph.permissions.roles.allowedValues/rolePermissions/any(p:contains(p/condition, '@Subject.UserType=="Federated"'))`,
             select: [ListPermissionsSpaceRootSelectEnum.LibreGraphPermissionsRolesAllowedValues]
           })
@@ -246,27 +261,44 @@ export default defineComponent({
         })
       }
 
-      // load uncached indirect shares
-      const ancestorDataWithoutRoot = resourcesStore.ancestorMetaData
-      if (Object.keys(resourcesStore.ancestorMetaData).includes('/')) {
-        // filter out space roots because they don't have shares
-        // (expect for project spaces, but they are loaded separately)
-        delete ancestorDataWithoutRoot['/']
-      }
-
+      // gather all ancestors we need to load shares for (indirect shares, space members)
       const cachedIds = [...collaboratorCache, ...linkCache].map(({ resourceId }) => resourceId)
-      const ancestorIds = Object.values(ancestorDataWithoutRoot)
+      const ancestorIds = Object.values(resourcesStore.ancestorMetaData)
+        .filter(({ id, path }) => {
+          if (id === resource.id || cachedIds.includes(id)) {
+            // share already cached
+            return false
+          }
+          if (isIncomingShareResource(resource)) {
+            // incoming shares don't have ancestors because they are root elements themselves
+            return false
+          }
+          if (isPersonalSpaceResource(props.space)) {
+            // filter out personal space roots since they don't have shares
+            return path !== '/'
+          }
+          return true
+        })
         .map(({ id }) => id)
-        .filter((id) => id !== resource.id && !cachedIds.includes(id))
+
+      if (
+        unref(isFlatFileList) &&
+        isProjectSpaceResource(props.space) &&
+        !isProjectSpaceResource(resource)
+      ) {
+        // add project space to ancestors in flat file list where we don't have ancestors
+        // to display space members in the sidebar
+        ancestorIds.push(props.space.id)
+      }
 
       const queue = new PQueue({
         concurrency: configStore.options.concurrentRequests.shares.list
       })
 
-      const promises = ancestorIds.map((id) => {
+      const promises = [...new Set(ancestorIds)].map((id) => {
         return queue.add(() =>
           clientService.graphAuthenticated.permissions
-            .listPermissions(props.space?.id, id, sharesStore.graphRoles)
+            .listPermissions(driveId, id, sharesStore.graphRoles)
             .then((result) => {
               const indirectShares = result.shares.map((s) => ({ ...s, indirect: true }))
               loadedCollaboratorShares.push(...indirectShares.filter(isCollaboratorShare))
@@ -278,16 +310,6 @@ export default defineComponent({
       yield Promise.allSettled(promises)
       sharesStore.setCollaboratorShares(loadedCollaboratorShares)
       sharesStore.setLinkShares(loadedLinkShares)
-
-      if (isProjectSpaceResource(resource)) {
-        spacesStore.setSpaceMembers(sharesStore.collaboratorShares)
-      } else if (isProjectSpaceResource(props.space)) {
-        yield spacesStore.loadSpaceMembers({
-          graphClient: clientService.graphAuthenticated,
-          space: props.space
-        })
-      }
-
       sharesStore.setLoading(false)
     }).restartable()
 
@@ -339,7 +361,7 @@ export default defineComponent({
         }
 
         isMetaDataLoading.value = true
-        if (unref(userIsSpaceMember) && !unref(isTrashLocation)) {
+        if (canListShares({ space: props.space, resource })) {
           try {
             if (loadSharesTask.isRunning) {
               loadSharesTask.cancelAll()

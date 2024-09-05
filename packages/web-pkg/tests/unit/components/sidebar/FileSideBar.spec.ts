@@ -13,8 +13,7 @@ import {
   useAppsStore,
   useExtensionRegistry,
   useResourcesStore,
-  useSharesStore,
-  useSpacesStore
+  useSharesStore
 } from '../../../../src/composables/piniaStores'
 import { AncestorMetaDataValue } from '../../../../src'
 
@@ -140,37 +139,6 @@ describe('FileSideBar', () => {
       expect(
         mocks.$clientService.graphAuthenticated.permissions.listPermissions
       ).toHaveBeenCalledTimes(2)
-    })
-    it('calls "setSpaceMembers" for space resources', async () => {
-      const resource = mock<SpaceResource>({ id: '1', driveType: 'project' })
-      const { wrapper, mocks } = createWrapper()
-
-      mocks.$clientService.graphAuthenticated.permissions.listPermissions.mockResolvedValue({
-        shares: [],
-        allowedActions: [],
-        allowedRoles: []
-      })
-
-      const { setSpaceMembers } = useSpacesStore()
-      await wrapper.vm.loadSharesTask.perform(resource)
-
-      expect(setSpaceMembers).toHaveBeenCalled()
-    })
-    it('calls "loadSpaceMembers" if current space is a project space', async () => {
-      const resource = mock<Resource>()
-      const space = mock<SpaceResource>({ id: '1', driveType: 'project' })
-      const { wrapper, mocks } = createWrapper({ space })
-
-      mocks.$clientService.graphAuthenticated.permissions.listPermissions.mockResolvedValue({
-        shares: [],
-        allowedActions: [],
-        allowedRoles: []
-      })
-
-      const { loadSpaceMembers } = useSpacesStore()
-      await wrapper.vm.loadSharesTask.perform(resource)
-
-      expect(loadSpaceMembers).toHaveBeenCalled()
     })
     it('loads available external share roles if the ocm app is enabled', async () => {
       const resource = mock<Resource>()
