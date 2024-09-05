@@ -36,8 +36,8 @@ const getAuthorizedEndPoint = async (user: User): Promise<Array<string>> => {
     )
   }
 
-  const cookies = logonResponse.headers.raw()['set-cookie']
-  const data = await logonResponse.json()
+  const cookies = logonResponse.headers.raw()['set-cookie']?.[0] || ''
+  const data = (await logonResponse.json()) as { hello: { continue_uri: string } }
   const authorizedUrl = data.hello.continue_uri
   return [authorizedUrl, cookies]
 }
