@@ -152,7 +152,7 @@ Feature: spaces.personal
 
     When "Carol" logs in
     And "Carol" navigates to the project space "team.1"
-    And "Carol" should not see the version of the file
+    And "Carol" should not see the version panel for the file
       | resource     | to     |
       | textfile.txt | parent |
     And "Carol" logs out

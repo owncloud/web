@@ -1,0 +1,6 @@
+Enhancement: Hide versions panel with insufficient permissions
+
+Users that have insufficient permissions to view file versions don't see the versions sidebar panel anymore. This currently affects regular share receivers, space viewers and space editors without the permission to view versions.
+
+https://github.com/owncloud/web/pull/11484
+https://github.com/owncloud/web/issues/11359
