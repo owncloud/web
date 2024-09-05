@@ -490,8 +490,8 @@ importers:
   packages/extension-sdk:
     dependencies:
       '@vitejs/plugin-vue':
-        specifier: ^4.0.0
-        version: 4.6.2(vite@5.2.8(@types/node@18.11.9)(sass@1.78.0)(terser@5.26.0))(vue@3.4.38(typescript@5.5.4))
+        specifier: ^5.0.0
+        version: 5.0.3(vite@5.2.8(@types/node@18.11.9)(sass@1.78.0)(terser@5.26.0))(vue@3.4.38(typescript@5.5.4))
       rollup-plugin-serve:
         specifier: ^3.0.0
         version: 3.0.0
@@ -2817,13 +2817,6 @@ packages:
     version: 3.3.1
     peerDependencies:
       '@uppy/core': https://github.com/owncloud/uppy/releases/download/v3.12.13-owncloud/uppy-core.tgz
-
-  '@vitejs/plugin-vue@4.6.2':
-    resolution: {integrity: sha512-kqf7SGFoG+80aZG6Pf+gsZIVvGSCKE98JbiWqcCV9cThtg91Jav0yvYFC9Zb+jKetNGF6ZKeoaxgZfND21fWKw==}
-    engines: {node: ^14.18.0 || >=16.0.0}
-    peerDependencies:
-      vite: ^4.0.0 || ^5.0.0
-      vue: ^3.2.25
 
   '@vitejs/plugin-vue@5.0.3':
     resolution: {integrity: sha512-b8S5dVS40rgHdDrw+DQi/xOM9ed+kSRZzfm1T74bMmBDCd8XO87NKlFYInzCtwvtWwXZvo1QxE2OSspTATWrbA==}
@@ -11166,11 +11159,6 @@ snapshots:
       '@uppy/core': https://github.com/owncloud/uppy/releases/download/v3.12.13-owncloud/uppy-core.tgz
       '@uppy/utils': https://github.com/owncloud/uppy/releases/download/v3.12.13-owncloud/uppy-utils.tgz
       nanoid: 4.0.0
-
-  '@vitejs/plugin-vue@4.6.2(vite@5.2.8(@types/node@18.11.9)(sass@1.78.0)(terser@5.26.0))(vue@3.4.38(typescript@5.5.4))':
-    dependencies:
-      vite: 5.2.8(@types/node@18.11.9)(sass@1.78.0)(terser@5.26.0)
-      vue: 3.4.38(typescript@5.5.4)
 
   '@vitejs/plugin-vue@5.0.3(vite@5.2.8(@types/node@18.11.9)(sass@1.78.0)(terser@5.26.0))(vue@3.4.38(typescript@5.5.4))':
     dependencies:
