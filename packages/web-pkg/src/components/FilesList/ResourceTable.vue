@@ -277,7 +277,8 @@ import {
   useCanBeOpenedWithSecureView,
   useFileActions,
   useIsTopBarSticky,
-  embedModeFilePickMessageData
+  embedModeFilePickMessageData,
+  routeToContextQuery
 } from '../../composables'
 import ResourceListItem from './ResourceListItem.vue'
 import ResourceGhostElement from './ResourceGhostElement.vue'
@@ -1078,7 +1079,9 @@ export default defineComponent({
       if (this.isEmbedModeEnabled && this.isFilePicker && !resource.isFolder) {
         return this.postMessage<embedModeFilePickMessageData>('owncloud-embed:file-pick', {
           resource: JSON.parse(JSON.stringify(resource)),
-          originRoute: JSON.parse(JSON.stringify(unref(this.router.currentRoute)))
+          locationQuery: JSON.parse(
+            JSON.stringify(routeToContextQuery(unref(this.router.currentRoute)))
+          )
         })
       }
 

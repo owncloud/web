@@ -175,7 +175,10 @@ import {
   useEmbedMode,
   useCanBeOpenedWithSecureView,
   useFileActions,
-  useGetMatchingSpace
+  useGetMatchingSpace,
+  embedModeFilePickMessageData,
+  routeToContextQuery,
+  useRouter
 } from '../../composables'
 
 type ResourceTileRef = ComponentPublicInstance<typeof ResourceTile>
@@ -242,6 +245,7 @@ export default defineComponent({
   emits: ['fileClick', 'fileDropped', 'rowMounted', 'sort', 'update:selectedIds'],
   setup(props, context) {
     const { $gettext } = useGettext()
+    const router = useRouter()
     const resourcesStore = useResourcesStore()
     const { getDefaultAction } = useFileActions()
     const { getMatchingSpace } = useGetMatchingSpace()
@@ -316,10 +320,10 @@ export default defineComponent({
     }
     const emitTileClick = (resource: Resource) => {
       if (unref(isEmbedModeEnabled) && unref(isFilePicker)) {
-        return postMessage<Resource>(
-          'owncloud-embed:file-pick',
-          JSON.parse(JSON.stringify(resource))
-        )
+        return postMessage<embedModeFilePickMessageData>('owncloud-embed:file-pick', {
+          resource: JSON.parse(JSON.stringify(resource)),
+          locationQuery: JSON.parse(JSON.stringify(routeToContextQuery(unref(router.currentRoute))))
+        })
       }
 
       if (resource.type !== 'space' && resource.type !== 'folder') {
