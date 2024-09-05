@@ -40,9 +40,10 @@
       <div class="resource-table-select-all">
         <oc-checkbox
           id="resource-table-select-all"
+          v-oc-tooltip="{ content: selectAllCheckboxLabel, placement: 'bottom' }"
           size="large"
+          :label="selectAllCheckboxLabel"
           :disabled="resources.length === disabledResources.length"
-          :label="allResourcesCheckboxLabel"
           :label-hidden="true"
           :model-value="areAllResourcesSelected"
           @click.stop="toggleSelectionAll"
@@ -893,11 +894,13 @@ export default defineComponent({
 
       return !allResourcesDisabled && allSelected
     },
+    selectAllCheckboxLabel() {
+      return this.areAllResourcesSelected
+        ? this.$gettext('Clear selection')
+        : this.$gettext('Select all')
+    },
     selectedResources() {
       return this.resources.filter((resource) => this.selectedIds.includes(resource.id))
-    },
-    allResourcesCheckboxLabel() {
-      return this.$gettext('Select all resources')
     },
     contextMenuLabel() {
       return this.$gettext('Show context menu')

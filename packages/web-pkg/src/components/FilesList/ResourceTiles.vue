@@ -2,16 +2,18 @@
   <div id="tiles-view" class="oc-px-m oc-pt-l">
     <div class="oc-flex oc-flex-middle oc-mb-m oc-pb-s oc-tiles-controls">
       <oc-checkbox
-        id="resource-table-select-all"
+        id="tiles-view-select-all"
+        v-oc-tooltip="selectAllCheckboxLabel"
+        class="oc-ml-s"
         size="large"
-        :disabled="resources.length === disabledResourceIds.length"
-        :label="$gettext('Select all')"
+        :label="selectAllCheckboxLabel"
         :label-hidden="true"
+        :disabled="resources.length === disabledResourceIds.length"
         :model-value="areAllResourcesSelected"
         @click.stop="toggleSelectionAll"
       />
-      <div v-if="sortFields.length" class="oc-tile-sorting oc-ml-s">
-        <span class="oc-mr-xs" v-text="$gettext('Sort by: ')" />
+      <div v-if="sortFields.length" class="oc-tile-sorting oc-ml-m">
+        <span v-text="$gettext('Sort by:')" />
         <oc-button id="oc-tiles-sort-btn" appearance="raw" gap-size="none">
           <span v-text="$gettext(currentSortField.label)" />
           <oc-icon name="arrow-down-s" />
@@ -258,6 +260,10 @@ export default defineComponent({
     })
 
     const areFileExtensionsShown = computed(() => resourcesStore.areFileExtensionsShown)
+
+    const selectAllCheckboxLabel = computed(() => {
+      return unref(areAllResourcesSelected) ? $gettext('Clear selection') : $gettext('Select all')
+    })
 
     const dragItem = ref()
     const ghostElementRef = ref()
@@ -638,7 +644,8 @@ export default defineComponent({
       isSpaceResource,
       areAllResourcesSelected,
       disabledResourceIds,
-      toggleSelectionAll
+      toggleSelectionAll,
+      selectAllCheckboxLabel
     }
   },
   data() {
