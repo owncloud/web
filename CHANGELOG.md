@@ -12,6 +12,7 @@ Summary
 * Enhancement - Replace custom datepicker with native html element: [#11377](https://github.com/owncloud/web/pull/11377)
 * Enhancement - Display disabled role permissions: [#11387](https://github.com/owncloud/web/pull/11387)
 * Enhancement - Mark external shares: [#11394](https://github.com/owncloud/web/pull/11394)
+* Enhancement - Hide versions panel with insufficient permissions: [#11484](https://github.com/owncloud/web/pull/11484)
 * Enhancement - Support a tags in actions: [#11502](https://github.com/owncloud/web/pull/11502)
 * Enhancement - Improve tiles view performance: [#11508](https://github.com/owncloud/web/pull/11508)
 * Enhancement - Add default actions extension point: [#11515](https://github.com/owncloud/web/pull/11515)
@@ -51,6 +52,15 @@ Details
 
    https://github.com/owncloud/web/issues/11361
    https://github.com/owncloud/web/pull/11394
+
+* Enhancement - Hide versions panel with insufficient permissions: [#11484](https://github.com/owncloud/web/pull/11484)
+
+   Users that have insufficient permissions to view file versions don't see the
+   versions sidebar panel anymore. This currently affects regular share receivers,
+   space viewers and space editors without the permission to view versions.
+
+   https://github.com/owncloud/web/issues/11359
+   https://github.com/owncloud/web/pull/11484
 
 * Enhancement - Support a tags in actions: [#11502](https://github.com/owncloud/web/pull/11502)
 
