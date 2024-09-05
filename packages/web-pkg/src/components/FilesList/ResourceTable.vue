@@ -1076,7 +1076,14 @@ export default defineComponent({
       if (this.isEmbedModeEnabled && this.isFilePicker && !resource.isFolder) {
         return this.postMessage<embedModeFilePickMessageData>('owncloud-embed:file-pick', {
           resource: parse(stringify(resource)),
-          originRoute: parse(stringify(unref(this.router.currentRoute)))
+          originRoute: parse(
+            stringify({
+              name: unref(this.router.currentRoute).name,
+              query: unref(this.router.currentRoute).query,
+              params: unref(this.router.currentRoute).params,
+              meta: unref(this.router.currentRoute).meta
+            })
+          )
         })
       }
 

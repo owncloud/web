@@ -67,9 +67,12 @@ export default defineComponent({
     }
 
     const onFilePick = ({ data }: MessageEvent) => {
+      console.log('DO LISTEN')
+      console.log(data)
       if (data.name !== 'owncloud-embed:file-pick') {
         return
       }
+      console.log('OK PICKED')
 
       const { resource, originRoute }: embedModeFilePickMessageData = data.data
 
