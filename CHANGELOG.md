@@ -9,6 +9,7 @@ Summary
 -------
 
 * Bugfix - OCM invite generation body format: [#11512](https://github.com/owncloud/web/pull/11512)
+* Bugfix - Logout on access token renewal failure: [#11526](https://github.com/owncloud/web/pull/11526)
 * Enhancement - Replace custom datepicker with native html element: [#11377](https://github.com/owncloud/web/pull/11377)
 * Enhancement - Display disabled role permissions: [#11387](https://github.com/owncloud/web/pull/11387)
 * Enhancement - Mark external shares: [#11394](https://github.com/owncloud/web/pull/11394)
@@ -28,6 +29,14 @@ Details
 
    https://github.com/owncloud/ocis/issues/9583
    https://github.com/owncloud/web/pull/11512
+
+* Bugfix - Logout on access token renewal failure: [#11526](https://github.com/owncloud/web/pull/11526)
+
+   We've fixed the issue with the user being able to navigate the Web UI after a
+   failed token renewal. Instead, the user is now properly being logged out.
+
+   https://github.com/owncloud/web/issues/11478
+   https://github.com/owncloud/web/pull/11526
 
 * Enhancement - Replace custom datepicker with native html element: [#11377](https://github.com/owncloud/web/pull/11377)
 
