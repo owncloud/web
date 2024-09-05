@@ -30,7 +30,7 @@
     "lodash-es": "4.17.21",
     "luxon": "3.5.0",
     "mark.js": "8.11.1",
-    "oidc-client-ts": "^2.4.0",
+    "oidc-client-ts": "^3.0.0",
     "p-queue": "8.0.1",
     "pinia": "2.2.2",
     "portal-vue": "3.0.0",

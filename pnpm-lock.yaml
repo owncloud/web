@@ -1018,8 +1018,8 @@ importers:
         specifier: ^8.11.1
         version: 8.11.1
       oidc-client-ts:
-        specifier: ^2.4.0
-        version: 2.4.0
+        specifier: ^2.4.0 || ^3.0.0
+        version: 3.0.1
       p-queue:
         specifier: ^8.0.0
         version: 8.0.1
@@ -1155,8 +1155,8 @@ importers:
         specifier: 8.11.1
         version: 8.11.1
       oidc-client-ts:
-        specifier: ^2.4.0
-        version: 2.4.0
+        specifier: ^3.0.0
+        version: 3.0.1
       p-queue:
         specifier: 8.0.1
         version: 8.0.1
@@ -3923,9 +3923,6 @@ packages:
   crypto-browserify@3.12.0:
     resolution: {integrity: sha512-fz4spIh+znjO2VjL+IdhEpRJ3YN6sMzITSBijk6FK2UvTqruSQW+/cCZTSNsMiZNvUeq0CqurF+dAbyiGOY6Wg==}
 
-  crypto-js@4.2.0:
-    resolution: {integrity: sha512-KALDyEYgpY+Rlob/iriUtjV6d5Eq+Y191A5g4UqLAi8CyGP9N1+FdVbkc1SxKc2r4YAYqG8JzO2KGL+AizD70Q==}
-
   css-declaration-sorter@6.4.1:
     resolution: {integrity: sha512-rtdthzxKuyq6IzqX6jEcIzQF/YqccluefyCYheovBOLhFT/drQA9zj/UbRAa9J7C0o6EG6u3E6g+vKkay7/k3g==}
     engines: {node: ^10 || ^12 || >=14}
@@ -5668,8 +5665,9 @@ packages:
   jszip@3.10.1:
     resolution: {integrity: sha512-xXDvecyTpGLrqFrvkrUSoxxfJI5AH7U8zxxtVclpsUtMCq4JQ290LY8AW5c7Ggnr/Y/oK+bQMbqK2qmtk3pN4g==}
 
-  jwt-decode@3.1.2:
-    resolution: {integrity: sha512-UfpWE/VZn0iP50d8cz9NrZLM9lSWhcJ+0Gt/nm4by88UL+J1SiKN8/5dkjMmbEzwL2CAe+67GsegCbIKtbp75A==}
+  jwt-decode@4.0.0:
+    resolution: {integrity: sha512-+KJGIyHgkGuIq3IEBNftfhW/LfWhXUIY6OmyVWjliu5KH1y0fw7VQ8YndE2O4qZdMSd9SqbnC8GOcZEy0Om7sA==}
+    engines: {node: '>=18'}
 
   keyv@4.5.4:
     resolution: {integrity: sha512-oxVHkHR/EJf2CNXnWxRLW6mg7JyCCUcG0DtEGmL2ctUo1PNTin1PUil+r/+4r5MpVgC/fn1kjsx7mjSujKqIpw==}
@@ -6440,9 +6438,9 @@ packages:
   obuf@1.1.2:
     resolution: {integrity: sha512-PX1wu0AmAdPqOL1mWhqmlOd8kOIZQwGZw6rh7uby9fTc5lhaOWFLX3I6R1hrF9k3zUY40e6igsLGkDXK92LJNg==}
 
-  oidc-client-ts@2.4.0:
-    resolution: {integrity: sha512-WijhkTrlXK2VvgGoakWJiBdfIsVGz6CFzgjNNqZU1hPKV2kyeEaJgLs7RwuiSp2WhLfWBQuLvr2SxVlZnk3N1w==}
-    engines: {node: '>=12.13.0'}
+  oidc-client-ts@3.0.1:
+    resolution: {integrity: sha512-xX8unZNtmtw3sOz4FPSqDhkLFnxCDsdo2qhFEH2opgWnF/iXMFoYdBQzkwCxAZVgt3FT3DnuBY3k80EZHT0RYg==}
+    engines: {node: '>=18'}
 
   on-exit-leak-free@2.1.2:
     resolution: {integrity: sha512-0eJJY6hXLGf1udHwfNftBqH+g73EU4B504nZeKpz1sYRKafAghwxEJunB2O7rDZkL4PGfsMVnTXZ2EjibbqcsA==}
@@ -12515,8 +12513,6 @@ snapshots:
       randombytes: 2.1.0
       randomfill: 1.0.4
 
-  crypto-js@4.2.0: {}
-
   css-declaration-sorter@6.4.1(postcss@8.4.41):
     dependencies:
       postcss: 8.4.41
@@ -14426,7 +14422,7 @@ snapshots:
       readable-stream: 2.3.8
       setimmediate: 1.0.5
 
-  jwt-decode@3.1.2: {}
+  jwt-decode@4.0.0: {}
 
   keyv@4.5.4:
     dependencies:
@@ -15137,10 +15133,9 @@ snapshots:
 
   obuf@1.1.2: {}
 
-  oidc-client-ts@2.4.0:
+  oidc-client-ts@3.0.1:
     dependencies:
-      crypto-js: 4.2.0
-      jwt-decode: 3.1.2
+      jwt-decode: 4.0.0
 
   on-exit-leak-free@2.1.2: {}
 
