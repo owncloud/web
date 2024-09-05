@@ -334,8 +334,8 @@ importers:
         specifier: ^10.0.0
         version: 10.0.1
       npm:
-        specifier: ^8.0.0
-        version: 8.19.4
+        specifier: ^10.0.0
+        version: 10.8.2
       npm-run-all2:
         specifier: ^6.0.0
         version: 6.2.2
@@ -6325,27 +6325,27 @@ packages:
     resolution: {integrity: sha512-sJOdmRGrY2sjNTRMbSvluQqg+8X7ZK61yvzBEIDhz4f8z1TZFYABsqjjCBd/0PUNE9M6QDgHJXQkGUEm7Q+l9Q==}
     engines: {node: ^12.20.0 || ^14.13.1 || >=16.0.0}
 
-  npm@8.19.4:
-    resolution: {integrity: sha512-3HANl8i9DKnUA89P4KEgVNN28EjSeDCmvEqbzOAuxCFDzdBZzjUl99zgnGpOUumvW5lvJo2HKcjrsc+tfyv1Hw==}
-    engines: {node: ^12.13.0 || ^14.15.0 || >=16.0.0}
+  npm@10.8.2:
+    resolution: {integrity: sha512-x/AIjFIKRllrhcb48dqUNAAZl0ig9+qMuN91RpZo3Cb2+zuibfh+KISl6+kVVyktDz230JKc208UkQwwMqyB+w==}
+    engines: {node: ^18.17.0 || >=20.5.0}
     hasBin: true
     bundledDependencies:
       - '@isaacs/string-locale-compare'
       - '@npmcli/arborist'
-      - '@npmcli/ci-detect'
       - '@npmcli/config'
       - '@npmcli/fs'
       - '@npmcli/map-workspaces'
       - '@npmcli/package-json'
+      - '@npmcli/promise-spawn'
+      - '@npmcli/redact'
       - '@npmcli/run-script'
+      - '@sigstore/tuf'
       - abbrev
       - archy
       - cacache
       - chalk
-      - chownr
+      - ci-info
       - cli-columns
-      - cli-table3
-      - columnify
       - fastest-levenshtein
       - fs-minipass
       - glob
@@ -6370,11 +6370,10 @@ packages:
       - minimatch
       - minipass
       - minipass-pipeline
-      - mkdirp
-      - mkdirp-infer-owner
       - ms
       - node-gyp
       - nopt
+      - normalize-package-data
       - npm-audit-report
       - npm-install-checks
       - npm-package-arg
@@ -6382,20 +6381,16 @@ packages:
       - npm-profile
       - npm-registry-fetch
       - npm-user-validate
-      - npmlog
-      - opener
       - p-map
       - pacote
       - parse-conflict-json
       - proc-log
       - qrcode-terminal
       - read
-      - read-package-json
-      - read-package-json-fast
-      - readdir-scoped-modules
-      - rimraf
       - semver
+      - spdx-expression-parse
       - ssri
+      - supports-color
       - tar
       - text-table
       - tiny-relative-date
@@ -15100,7 +15095,7 @@ snapshots:
     dependencies:
       path-key: 4.0.0
 
-  npm@8.19.4: {}
+  npm@10.8.2: {}
 
   nth-check@2.1.1:
     dependencies:
