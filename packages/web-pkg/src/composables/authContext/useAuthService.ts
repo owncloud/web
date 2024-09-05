@@ -5,6 +5,7 @@ export interface AuthServiceInterface {
   handleAuthError(route: any): any
   signinSilent(): Promise<unknown>
   logoutUser(): Promise<void | NavigationFailure>
+  getRefreshToken(): Promise<string>
 }
 
 export const useAuthService = (): AuthServiceInterface => {

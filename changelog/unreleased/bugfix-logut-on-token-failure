@@ -1,0 +1,6 @@
+Bugfix: Logout on access token renewal failure
+
+We've fixed the issue with the user being able to navigate the Web UI after a failed token renewal. Instead, the user is now properly being logged out.
+
+https://github.com/owncloud/web/pull/11526
+https://github.com/owncloud/web/issues/11478

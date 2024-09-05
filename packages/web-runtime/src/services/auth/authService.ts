@@ -350,6 +350,11 @@ export class AuthService implements AuthServiceInterface {
     this.authStore.clearUserContext()
   }
 
+  public async getRefreshToken() {
+    const user = await this.userManager.getUser()
+    return user?.refresh_token
+  }
+
   private handleDelegatedTokenUpdate(event: MessageEvent) {
     if (
       this.configStore.options.embed?.delegateAuthenticationOrigin &&
