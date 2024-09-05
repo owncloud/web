@@ -248,25 +248,25 @@ export const useFileActions = () => {
     action.handler(options)
   }
 
-  const getDefaultAction = (options: GetFileActionsOptions): Action | null => {
+  const getDefaultAction = (options: GetFileActionsOptions): Action | undefined => {
     const filterCallback = (action: FileAction) => action.isVisible(options)
 
-    const appActions = unref(editorActions)
-      .filter(filterCallback)
+    const editorAction = unref(editorActions)
       .sort((a, b) => Number(b.hasPriority) - Number(a.hasPriority))
-    if (appActions.length) {
-      return appActions[0]
+      .find(filterCallback)
+    if (editorAction) {
+      return editorAction
     }
 
-    const extensionActions = unref(defaultActions).filter(filterCallback)
-    if (extensionActions.length) {
-      return extensionActions[0]
+    const defaultAction = unref(defaultActions).find(filterCallback)
+    if (defaultAction) {
+      return defaultAction
     }
 
     if (options.omitSystemActions) {
-      return null
+      return undefined
     }
-    return unref(systemActions).filter(filterCallback)[0]
+    return unref(systemActions).find(filterCallback)
   }
 
   const getAllAvailableActions = (options: FileActionOptions) => {
