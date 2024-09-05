@@ -80,6 +80,7 @@ Details
    all resources at once.
 
    https://github.com/owncloud/web/pull/11518
+   https://github.com/owncloud/web/pull/11521
 
 Changelog for ownCloud Web [8.0.5] (2024-09-02)
 =======================================
