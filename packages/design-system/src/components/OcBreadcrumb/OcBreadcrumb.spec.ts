@@ -12,7 +12,7 @@ describe('OcBreadcrumb', () => {
   it('sets correct variation', () => {
     const { wrapper } = getWrapper({ variation: 'lead' })
     expect(wrapper.props().variation).toMatch('lead')
-    expect(wrapper.find('.oc-breadcrumb').classes()).toContain('oc-breadcrumb-lead')
+    expect(wrapper.find('.oc-breadcrumb').attributes('class')).toContain('oc-breadcrumb-lead')
     expect(wrapper.html()).toMatchSnapshot()
   })
   it('displays all items', () => {

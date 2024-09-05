@@ -89,7 +89,7 @@ describe('OcTable', () => {
       }
     })
 
-    expect(wrapper.classes()).toContain('oc-table-hover')
+    expect(wrapper.attributes('class')).toContain('oc-table-hover')
   })
 
   it('extracts field title', () => {
@@ -154,7 +154,7 @@ describe('OcTable', () => {
       }
     })
 
-    expect(wrapper.classes()).toContain('oc-table-sticky')
+    expect(wrapper.attributes('class')).toContain('oc-table-sticky')
   })
 
   it('highlights a row', () => {

@@ -350,7 +350,7 @@ describe('ResourceTable', () => {
 
         const { wrapper } = getMountedWrapper()
         const trFolder = await wrapper.find('.oc-tbody-tr-documents')
-        expect(trFolder.classes().includes('oc-table-disabled')).toBeFalsy()
+        expect(trFolder.attributes('class').includes('oc-table-disabled')).toBeFalsy()
       })
       it('sets files disabled if does not occur in it', async () => {
         mockUseEmbedMode.mockReturnValue({
@@ -361,8 +361,8 @@ describe('ResourceTable', () => {
         const { wrapper } = getMountedWrapper()
         const trTxt = await wrapper.find('.oc-tbody-tr-notes')
         const trJpg = await wrapper.find('.oc-tbody-tr-forest')
-        expect(trTxt.classes().includes('oc-table-disabled')).toBeFalsy()
-        expect(trJpg.classes().includes('oc-table-disabled')).toBeTruthy()
+        expect(trTxt.attributes('class').includes('oc-table-disabled')).toBeFalsy()
+        expect(trJpg.attributes('class').includes('oc-table-disabled')).toBeTruthy()
       })
     })
 
@@ -526,12 +526,12 @@ describe('ResourceTable', () => {
   describe('hover effect', () => {
     it('is disabled by default', () => {
       const { wrapper } = getMountedWrapper({ props: { hover: false } })
-      expect(wrapper.find('table').classes()).not.toContain('oc-table-hover')
+      expect(wrapper.find('table').attributes('class')).not.toContain('oc-table-hover')
     })
 
     it('can be enabled', () => {
       const { wrapper } = getMountedWrapper({ props: { hover: true } })
-      expect(wrapper.find('table').classes()).toContain('oc-table-hover')
+      expect(wrapper.find('table').attributes('class')).toContain('oc-table-hover')
     })
   })
 

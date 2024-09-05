@@ -33,13 +33,13 @@ describe('activeNav.js', () => {
     const child = wrapper.find('.child')
     const parent = wrapper.find('.parent')
     child.trigger('click')
-    expect(parent.classes()).toContain('vueds-active')
+    expect(parent.attributes('class')).toContain('vueds-active')
   })
 
   it('should change the active class on top level when a sub item is clicked', () => {
     const deepChild = wrapper.find('.deep-child')
     const parent = wrapper.find('.parent')
     deepChild.trigger('click')
-    expect(parent.classes()).toContain('vueds-active')
+    expect(parent.attributes('class')).toContain('vueds-active')
   })
 })

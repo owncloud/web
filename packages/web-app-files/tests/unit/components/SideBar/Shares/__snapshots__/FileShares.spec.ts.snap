@@ -11,7 +11,7 @@ exports[`FileShares > collaborators list > renders sharedWithLabel and sharee li
     <h4 data-v-5d17c3fa="" class="oc-text-bold oc-my-rm">Shared with</h4>
     <!--v-if-->
   </div>
-  <portal-target data-v-5d17c3fa="" name="app.files.sidebar.sharing.shared-with.top" multiple="true" slot-props="[object Object]"></portal-target>
+  <portal-target data-v-5d17c3fa="" name="app.files.sidebar.sharing.shared-with.top" slot-props="[object Object]" multiple="true"></portal-target>
   <ul data-v-5d17c3fa="" id="files-collaborators-list" class="oc-list oc-list-divider oc-m-rm" aria-label="Share receivers">
     <li data-v-5d17c3fa="">
       <collaborator-list-item-stub data-v-5d17c3fa="" share="[object Object]" issharedenied="false" modifiable="true" resourcename="[Function]" deniable="false" islocked="[Function]" isspaceshare="false"></collaborator-list-item-stub>
@@ -25,7 +25,7 @@ exports[`FileShares > collaborators list > renders sharedWithLabel and sharee li
     <li data-v-5d17c3fa="">
       <collaborator-list-item-stub data-v-5d17c3fa="" share="[object Object]" issharedenied="false" modifiable="true" resourcename="[Function]" deniable="false" islocked="[Function]" isspaceshare="false"></collaborator-list-item-stub>
     </li>
-    <portal-target data-v-5d17c3fa="" name="app.files.sidebar.sharing.shared-with.bottom" multiple="true" slot-props="[object Object]"></portal-target>
+    <portal-target data-v-5d17c3fa="" name="app.files.sidebar.sharing.shared-with.bottom" slot-props="[object Object]" multiple="true"></portal-target>
   </ul>
   <div data-v-5d17c3fa="" class="oc-flex oc-flex-center"><button data-v-5d17c3fa="" type="button" class="oc-button oc-rounded oc-button-m oc-button-justify-content-center oc-button-gap-m oc-button-passive oc-button-passive-raw toggle-shares-list-btn">
       <!--v-if-->

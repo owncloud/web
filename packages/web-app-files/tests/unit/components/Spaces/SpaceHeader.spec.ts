@@ -45,8 +45,10 @@ describe('SpaceHeader', () => {
         space: getSpaceMock({ webDavUrl: '/' }),
         isMobileWidth: true
       })
-      expect(wrapper.find('.space-header').classes()).not.toContain('oc-flex')
-      expect(wrapper.find('.space-header-image').classes()).toContain('space-header-image-expanded')
+      expect(wrapper.find('.space-header').attributes('class')).not.toContain('oc-flex')
+      expect(wrapper.find('.space-header-image').attributes('class')).toContain(
+        'space-header-image-expanded'
+      )
     })
   })
   describe('space description', () => {

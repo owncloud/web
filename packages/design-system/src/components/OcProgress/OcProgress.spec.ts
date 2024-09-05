@@ -12,8 +12,8 @@ describe('OcProgress', () => {
       }
     })
 
-    expect(wrapper.classes()).toContain('oc-progress-small')
-    expect(wrapper.classes()).toContain('oc-progress-warning')
+    expect(wrapper.attributes('class')).toContain('oc-progress-small')
+    expect(wrapper.attributes('class')).toContain('oc-progress-warning')
     expect(wrapper.html()).toMatchSnapshot()
   })
 })

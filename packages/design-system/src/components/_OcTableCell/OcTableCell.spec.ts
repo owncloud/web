@@ -16,9 +16,9 @@ describe('OcTableCell', () => {
     })
 
     expect(wrapper.element.tagName).toBe('TH')
-    expect(wrapper.classes()).toContain('oc-table-cell-align-right')
-    expect(wrapper.classes()).toContain('oc-table-cell-align-bottom')
-    expect(wrapper.classes()).toContain('oc-table-cell-width-shrink')
+    expect(wrapper.attributes('class')).toContain('oc-table-cell-align-right')
+    expect(wrapper.attributes('class')).toContain('oc-table-cell-align-bottom')
+    expect(wrapper.attributes('class')).toContain('oc-table-cell-width-shrink')
     expect(wrapper.html()).toMatchSnapshot()
   })
 })
