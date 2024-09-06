@@ -57,4 +57,4 @@ TypeScriptSnippetSyntax.prototype.build = function ({
   return definitionChoices.join('') + `${implementation}\n});`
 }
 
-module.exports = TypeScriptSnippetSyntax
+export default TypeScriptSnippetSyntax

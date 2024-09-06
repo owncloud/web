@@ -1,5 +1,5 @@
 import { Page } from '@playwright/test'
-import { startCase } from 'lodash'
+import { startCase } from 'lodash-es'
 import util from 'util'
 import { Group, User } from '../../../types'
 import { getActualExpiryDate } from '../../../utils/datePicker'
