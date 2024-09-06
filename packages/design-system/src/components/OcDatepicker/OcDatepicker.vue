@@ -31,7 +31,7 @@ export default defineComponent({
     errorMessage: { type: String, required: false, default: '' }
   },
   emits: ['dateChanged'],
-  setup(props, { emit, attrs }) {
+  setup(props, { emit }) {
     const { $gettext, current } = useGettext()
     const dateInputString = ref<string>('')
 
