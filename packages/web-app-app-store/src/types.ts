@@ -17,6 +17,12 @@ export const AppVersionSchema = z.object({
 })
 export type AppVersion = z.infer<typeof AppVersionSchema>
 
+export const BADGE_COLORS = ['primary', 'success', 'danger'] as const
+export const AppBadgeSchema = z.object({
+  label: z.string(),
+  color: z.enum(BADGE_COLORS).optional().default('primary')
+})
+
 export const AppAuthorSchema = z.object({
   name: z.string(),
   email: z.string().optional(),
@@ -39,6 +45,7 @@ export const RawAppSchema = z.object({
   id: z.string(),
   name: z.string(),
   subtitle: z.string(),
+  badge: AppBadgeSchema.optional(),
   description: z.string().optional(),
   license: z.string(),
   versions: z.array(AppVersionSchema), // versions are expected to be sorted from newest to oldest

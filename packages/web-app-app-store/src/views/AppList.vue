@@ -75,9 +75,7 @@ export default defineComponent({
     }
     const filteredApps = computed(() => {
       // TODO: debounce the filtering by 100-300ms
-      return filter(unref(apps), unref(filterTerm)).sort((a, b) =>
-        a.name.toLowerCase().localeCompare(b.name.toLowerCase())
-      )
+      return filter(unref(apps), unref(filterTerm))
     })
 
     const markInstance = ref<Mark>(null)
