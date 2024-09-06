@@ -10,6 +10,7 @@
     :clear-button-enabled="isClearable"
     :clear-button-accessible-label="$gettext('Clear date')"
     class="oc-date-picker"
+    :description-message="relativeDate"
   />
 </template>
 
@@ -17,6 +18,7 @@
 import { computed, defineComponent, onMounted, PropType, ref, unref, watch } from 'vue'
 import { useGettext } from 'vue3-gettext'
 import { DateTime } from 'luxon'
+
 export default defineComponent({
   name: 'OcDatepicker',
   status: 'ready',
@@ -35,6 +37,15 @@ export default defineComponent({
     const date = computed(() => {
       const date = DateTime.fromISO(unref(dateInputString)).endOf('day')
       return date.isValid ? date : null
+    })
+
+    const relativeDate = computed(() => {
+      if (!unref(date)) {
+        return ''
+      }
+      return unref(date)
+        .setLocale((current || '').split('_')[0])
+        .toRelative()
     })
 
     const isMinDateUndercut = computed(() => {
@@ -74,6 +85,7 @@ export default defineComponent({
 
     return {
       dateInputString,
+      relativeDate,
       errorMessage
     }
   }
