@@ -32,8 +32,7 @@
       type="password"
       :password-policy="!selectedLinkTypeIsInternal ? passwordPolicy : null"
       :generate-password-method="generatePasswordMethod"
-      :error-message="password.error"
-      :description-message="
+      :error-message="
         selectedLinkTypeIsInternal
           ? $gettext('Password cannot be set for internal links')
           : undefined
@@ -53,7 +52,7 @@
       :min-date="DateTime.now()"
       :label="$gettext('Expiry date')"
       :disabled="selectedLinkTypeIsInternal"
-      :description-message="
+      :error-message="
         selectedLinkTypeIsInternal
           ? $gettext('Expiry date cannot be set for internal links')
           : undefined

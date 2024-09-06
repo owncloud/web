@@ -4,13 +4,13 @@
     v-bind="$attrs"
     :label="label"
     type="date"
+    class="oc-date-picker"
     :min="minDate?.toISODate()"
     :fix-message-line="true"
-    :error-message="errorMessage"
     :clear-button-enabled="isClearable"
     :clear-button-accessible-label="$gettext('Clear date')"
-    class="oc-date-picker"
-    :description-message="relativeDate"
+    :error-message="inputErrorMessage"
+    :description-message="inputDescriptionMessage"
   />
 </template>
 
@@ -27,10 +27,11 @@ export default defineComponent({
     label: { type: String, required: true },
     isClearable: { type: Boolean, default: true },
     currentDate: { type: Object as PropType<DateTime>, required: false, default: null },
-    minDate: { type: Object as PropType<DateTime>, required: false, default: null }
+    minDate: { type: Object as PropType<DateTime>, required: false, default: null },
+    errorMessage: { type: String, required: false, default: '' }
   },
   emits: ['dateChanged'],
-  setup(props, { emit }) {
+  setup(props, { emit, attrs }) {
     const { $gettext, current } = useGettext()
     const dateInputString = ref<string>('')
 
@@ -39,10 +40,11 @@ export default defineComponent({
       return date.isValid ? date : null
     })
 
-    const relativeDate = computed(() => {
-      if (!unref(date)) {
+    const inputDescriptionMessage = computed(() => {
+      if (!unref(date) || unref(inputErrorMessage)) {
         return ''
       }
+
       return unref(date)
         .setLocale((current || '').split('_')[0])
         .toRelative()
@@ -55,7 +57,11 @@ export default defineComponent({
       return unref(date) < props.minDate
     })
 
-    const errorMessage = computed(() => {
+    const inputErrorMessage = computed(() => {
+      if (props.errorMessage) {
+        return props.errorMessage
+      }
+
       if (unref(isMinDateUndercut)) {
         return $gettext('The date must be after %{date}', {
           date: props.minDate
@@ -85,8 +91,8 @@ export default defineComponent({
 
     return {
       dateInputString,
-      relativeDate,
-      errorMessage
+      inputDescriptionMessage,
+      inputErrorMessage
     }
   }
 })
