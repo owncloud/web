@@ -1,5 +1,8 @@
 <template>
   <div class="app-image-wrapper">
+    <div v-if="app.badge" class="app-image-ribbon" :class="[`app-image-ribbon-${app.badge.color}`]">
+      <span>{{ app.badge.label }}</span>
+    </div>
     <div class="app-image">
       <oc-img v-if="currentImage?.url" :src="currentImage?.url" />
       <div v-else class="fallback-icon">
@@ -87,6 +90,50 @@ export default defineComponent({
 <style lang="scss">
 .app-image-wrapper {
   position: relative;
+
+  .app-image-ribbon {
+    position: absolute;
+    top: 0;
+    right: 0;
+    z-index: 1;
+    overflow: hidden;
+    width: 7rem;
+    height: 7rem;
+    text-align: right;
+
+    &-primary {
+      span {
+        color: var(--oc-color-swatch-primary-contrast);
+        background-color: var(--oc-color-swatch-primary-default);
+      }
+    }
+    &-success {
+      span {
+        color: var(--oc-color-swatch-success-contrast);
+        background-color: var(--oc-color-swatch-success-default);
+      }
+    }
+    &-danger {
+      span {
+        color: var(--oc-color-swatch-danger-contrast);
+        background-color: var(--oc-color-swatch-danger-default);
+      }
+    }
+
+    span {
+      position: absolute;
+      top: 1.8rem;
+      right: -2.2rem;
+      font-size: 0.7rem;
+      font-weight: bold;
+      text-align: center;
+      line-height: 2rem;
+      transform: rotate(45deg);
+      -webkit-transform: rotate(45deg);
+      width: 10rem;
+      display: block;
+    }
+  }
 
   .app-image {
     width: 100%;

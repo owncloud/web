@@ -20,13 +20,17 @@ export const useAppsStore = () => {
           const data = await fetch(repo.url)
           const appsListData = await data.json()
           const appsList = RawAppListSchema.parse(appsListData)
-          return appsList.apps.map((app) => {
-            return {
-              ...app,
-              repository: repo,
-              mostRecentVersion: app.versions[0]
-            }
-          })
+          return appsList.apps
+            .map((app) => {
+              return {
+                ...app,
+                repository: repo,
+                mostRecentVersion: app.versions[0]
+              }
+            })
+            .sort((a, b) => {
+              return a.name.toLowerCase().localeCompare(b.name.toLowerCase())
+            })
         } catch (e) {
           console.error(e)
           return []
