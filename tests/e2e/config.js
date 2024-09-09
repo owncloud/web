@@ -1,6 +1,6 @@
 const withHttp = (url) => (/^https?:\/\//i.test(url) ? url : `https://${url}`)
 
-exports.config = {
+export const config = {
   // environment
   assets: './tests/e2e/filesForUpload',
   tempAssetsPath: './tests/e2e/filesForUpload/temp',

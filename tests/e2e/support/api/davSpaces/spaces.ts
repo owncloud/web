@@ -3,7 +3,7 @@ import { User } from '../../types'
 import join from 'join-path'
 import { getSpaceIdBySpaceName } from '../graph'
 import convert from 'xml-js'
-import _ from 'lodash/object'
+import _ from 'lodash-es/object'
 import { createTagsForResource } from '../graph/utils'
 
 export const folderExists = async ({

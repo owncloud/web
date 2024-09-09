@@ -1,6 +1,10 @@
 {
   "extends": "@ownclouders/tsconfig",
-  "compilerOptions": {
-    "module": "CommonJS"
+  "ts-node": {
+    "esm": true,
+    "files": true,
+    "transpileOnly": true,
+    "experimentalResolver": true,
+    "experimentalSpecifierResolution": "node"
   }
 }
