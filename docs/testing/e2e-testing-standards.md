@@ -255,5 +255,47 @@ printTransactions()
 deleteProperty()
 ```
 
-## Gherkin Syntax
+## Gherkin Best Practices: Do's and Don'ts for Effective Features & Scenarios
+### Writing Features
+DO 👍
+- **Be Descriptive:** Use clear and descriptive language that accurately reflects the functionality.
+- **Keep It Concise:** Avoid overly long titles or descriptions. Aim for brevity while maintaining clarity.
+- **Use Active Voice:** Write in an active voice to make it clear who is performing the action.
+- **Contextual Information:** If applicable, provide context about the user role or the scenario to clarify who benefits from the feature.
+
+DO NOT ⚔️
+- **Avoid Vague Titles:** Titles like "Test Feature" or "Feature 1" do not provide meaningful information.
+- **Neglect User Perspective:** Failing to mention the user role can make it unclear who the feature is intended for.
+
+Example of a well-written feature:
+```gherkin
+Feature: Password Management for Registered Users
+  As a registered user
+  I want to set a new password
+  So that I can secure my account
+```
+
+### Writing Scenarios
+- **Use Clear and Descriptive Scenario Titles:** Ensure that each scenario title clearly conveys the action being tested and the expected outcome.
+```gherkin
+Scenario: User successfully registers with valid details
+```
+- **Use Clear Given/When/Then Steps:** Clearly define the context, action, and expected outcome(success or error messages if any).
+```gherkin
+Given the user is on the registration page
+When the user enters valid details
+Then the user should see a confirmation message "Registration successful! Welcome to our platform."
+```
+- **Use "tries to" for Negation:** This syntax is effective for scenarios where an action is expected to fail.
+```gherkin
+Scenario: User tries to log in with incorrect credentials
+Given the user is on the registration page
+When the user tries to log in with username "Alice" and password "wrongPassword"
+Then the user should see an error message
+  """
+  Incorrect username or password.
+  """
+```
+
+## Broad Gherkin Guidelines
 This [ownCloud developer manual](https://doc.owncloud.com/server/next/developer_manual/testing/acceptance-tests.html#how-to-write-acceptance-tests) provides comprehensive guidelines and best practices for writing acceptance tests using the Gherkin syntax, a widely adopted language for defining test scenarios in a human-readable format. The manual outlines the specific syntax and structure required when crafting feature files and scenarios to ensure consistency and maintainability within the ownCloud testing framework.
