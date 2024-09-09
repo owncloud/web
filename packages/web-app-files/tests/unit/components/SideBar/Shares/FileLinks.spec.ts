@@ -108,7 +108,7 @@ describe('FileLinks', () => {
 
     describe('when the add-new-link button is clicked', () => {
       it('should call createLink', async () => {
-        const { wrapper, mocks } = getWrapper({ abilities: [] })
+        const { wrapper, mocks } = getWrapper()
         await wrapper.find(selectors.linkAddButton).trigger('click')
         expect(mocks.createLinkMock).toHaveBeenCalledTimes(1)
       })
@@ -129,7 +129,7 @@ describe('FileLinks', () => {
       canShare: () => true
     })
 
-    it('existing viewer link is not modifiable', () => {
+    it('existing link is not modifiable', () => {
       const viewerLink = defaultLinksList[0]
       viewerLink.type = SharingLinkType.View
       const { wrapper } = getWrapper({ resource, abilities: [], links: [viewerLink] })
@@ -139,15 +139,9 @@ describe('FileLinks', () => {
       const isModifiable = detailsAndEdit.props('isModifiable')
       expect(isModifiable).toBeFalsy()
     })
-    it('existing internal link is modifiable', () => {
-      const internalLink = defaultLinksList[0]
-      internalLink.type = SharingLinkType.Internal
-      const { wrapper } = getWrapper({ resource, abilities: [], links: [internalLink] })
-      const detailsAndEdit = wrapper.findComponent<typeof DetailsAndEdit>(
-        linkListItemDetailsAndEdit
-      )
-      const isModifiable = detailsAndEdit.props('isModifiable')
-      expect(isModifiable).toBeTruthy()
+    it('new links cannot be created', () => {
+      const { wrapper } = getWrapper({ resource, abilities: [] })
+      expect(wrapper.find(selectors.linkAddButton).exists()).toBeFalsy()
     })
   })
 })

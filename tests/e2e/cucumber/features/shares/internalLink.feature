@@ -1,7 +1,7 @@
 Feature: internal link share
 
 
-  Scenario: share a link with internal role
+  Scenario: opening a link with internal role
     Given "Admin" creates following users using API
       | id    |
       | Alice |
@@ -13,11 +13,9 @@ Feature: internal link share
     And "Alice" shares the following resource using API
       | resource | recipient | type | role     |
       | myfolder | Brian     | user | Can edit |
-    And "Alice" opens the "files" app
-    And "Alice" creates a public link of following resource using the sidebar panel
-      | resource | password |
-      | myfolder | %public% |
-    When "Alice" edits the public link named "Link" of resource "myfolder" changing role to "Invited people"
+    And "Alice" creates a public link of following resource using API
+      | resource | role           |
+      | myfolder | Invited people |
     And "Brian" opens the public link "Link"
     And "Brian" logs in from the internal link
     And "Brian" navigates to the shared with me page

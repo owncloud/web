@@ -7,7 +7,7 @@ import { defaultComponentMocks, getComposableWrapper } from 'web-test-helpers'
 import { mock } from 'vitest-mock-extended'
 import { FileAction } from '../../../../../src/composables/actions'
 import { useCanShare } from '../../../../../src/composables/shares'
-import { Resource, SpaceResource } from '@ownclouders/web-client'
+import { AbilityRule, Resource, SpaceResource } from '@ownclouders/web-client'
 import { LinkShare } from '@ownclouders/web-client'
 import { useClipboard } from '../../../../../src/composables/clipboard'
 import { useMessages } from '../../../../../src/composables/piniaStores'
@@ -33,6 +33,20 @@ describe('useFileActionsCopyQuickLink', () => {
         }
       })
     })
+    it('should return false if user cannot create public links and no links exist', () => {
+      getWrapper({
+        setup: ({ actions }) => {
+          expect(
+            unref(actions)[0].isVisible({
+              resources: [mock<Resource>({ shareTypes: [] })],
+              space: undefined
+            })
+          ).toBeFalsy()
+        },
+        canCreatePublicLinks: false
+      })
+    })
+
     it('should return false if canShare is false', () => {
       getWrapper({
         canShare: false,
@@ -102,6 +116,7 @@ describe('useFileActionsCopyQuickLink', () => {
 function getWrapper({
   setup,
   canShare = true,
+  canCreatePublicLinks = true,
   quickLinkExists = false
 }: {
   setup: (
@@ -109,6 +124,7 @@ function getWrapper({
     mocks: Record<string, any>
   ) => void
   canShare?: boolean
+  canCreatePublicLinks?: boolean
   quickLinkExists?: boolean
 }) {
   const createLinkMock = vi.fn()
@@ -129,6 +145,11 @@ function getWrapper({
     allowedRoles: []
   })
 
+  const abilities = [] as AbilityRule[]
+  if (canCreatePublicLinks) {
+    abilities.push({ action: 'create-all', subject: 'PublicLink' })
+  }
+
   return {
     wrapper: getComposableWrapper(
       () => {
@@ -137,7 +158,8 @@ function getWrapper({
       },
       {
         mocks,
-        provide: mocks
+        provide: mocks,
+        pluginOptions: { abilities }
       }
     )
   }

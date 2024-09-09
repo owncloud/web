@@ -1,4 +1,4 @@
-import { isLinkShare } from '@ownclouders/web-client'
+import { isLinkShare, ShareTypes } from '@ownclouders/web-client'
 import { computed, unref } from 'vue'
 import { useClientService } from '../../clientService'
 import { useGettext } from 'vue3-gettext'
@@ -8,6 +8,9 @@ import { useClipboard } from '../../clipboard'
 import { Resource, SpaceResource } from '@ownclouders/web-client'
 import { useFileActionsCreateLink } from './useFileActionsCreateLink'
 import { useMessages, useSharesStore } from '../../piniaStores'
+import { useAbility } from '../../ability'
+import { SideBarEventTopics } from '../../sideBar'
+import { useEventBus } from '../../eventBus'
 
 export const useFileActionsCopyQuickLink = () => {
   const { showMessage, showErrorMessage } = useMessages()
@@ -17,6 +20,8 @@ export const useFileActionsCopyQuickLink = () => {
   const { canShare } = useCanShare()
   const sharesStore = useSharesStore()
   const { copyToClipboard } = useClipboard()
+  const { can } = useAbility()
+  const eventBus = useEventBus()
 
   const { actions: createLinkActions } = useFileActionsCreateLink()
   const createQuicklinkAction = computed<FileAction>(() =>
@@ -56,6 +61,13 @@ export const useFileActionsCopyQuickLink = () => {
       return copyQuickLinkToClipboard(existingQuickLink.webUrl)
     }
 
+    if (!can('create-all', 'PublicLink')) {
+      // this is for handling an edge case where the user cannot create public links
+      // and no quick links exists, but a normal one does
+      eventBus.publish(SideBarEventTopics.openWithPanel, 'sharing')
+      return
+    }
+
     return unref(createQuicklinkAction).handler({ space, resources })
   }
 
@@ -67,6 +79,13 @@ export const useFileActionsCopyQuickLink = () => {
       handler,
       isVisible: ({ space, resources }) => {
         if (resources.length !== 1) {
+          return false
+        }
+
+        if (
+          !can('create-all', 'PublicLink') &&
+          !resources[0].shareTypes.includes(ShareTypes.link.value)
+        ) {
           return false
         }
 

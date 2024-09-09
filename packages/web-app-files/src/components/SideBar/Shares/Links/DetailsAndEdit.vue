@@ -149,7 +149,6 @@ import { OcDrop } from 'design-system/src/components'
 import { usePasswordPolicyService } from '@ownclouders/web-pkg'
 import { useGettext } from 'vue3-gettext'
 import SetLinkPasswordModal from '../../../Modals/SetLinkPasswordModal.vue'
-import { storeToRefs } from 'pinia'
 import { SharingLinkType } from '@ownclouders/web-client/graph/generated'
 import DatePickerModal from '../../../Modals/DatePickerModal.vue'
 import ExpirationDateIndicator from '../ExpirationDateIndicator.vue'
@@ -204,7 +203,6 @@ export default defineComponent({
       useLinkTypes()
 
     const resourcesStore = useResourcesStore()
-    const { ancestorMetaData } = storeToRefs(resourcesStore)
 
     const space = inject<Ref<SpaceResource>>('space')
     const resource = inject<Ref<Resource>>('resource')

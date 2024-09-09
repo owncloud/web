@@ -24,23 +24,17 @@
       <span v-text="$gettext('Options')" />
     </oc-button>
   </div>
-  <div v-if="!onlyInternalLinksAllowed" class="link-modal-password oc-mb-m">
+  <div class="link-modal-password oc-mb-m">
     <oc-text-input
       v-if="isAdvancedMode"
       :key="passwordInputKey"
       :model-value="password.value"
       type="password"
-      :password-policy="!selectedLinkTypeIsInternal ? passwordPolicy : null"
+      :password-policy="passwordPolicy"
       :generate-password-method="generatePasswordMethod"
       :error-message="password.error"
-      :description-message="
-        selectedLinkTypeIsInternal
-          ? $gettext('Password cannot be set for internal links')
-          : undefined
-      "
       :label="passwordEnforced ? `${$gettext('Password')}*` : $gettext('Password')"
       class="link-modal-password-input"
-      :disabled="selectedLinkTypeIsInternal"
       @update:model-value="updatePassword"
     />
     <div v-else-if="password.value" class="link-modal-password-text oc-text-small oc-text-muted">
@@ -52,12 +46,6 @@
       class="oc-mt-s"
       :min-date="DateTime.now()"
       :label="$gettext('Expiry date')"
-      :disabled="selectedLinkTypeIsInternal"
-      :description-message="
-        selectedLinkTypeIsInternal
-          ? $gettext('Expiry date cannot be set for internal links')
-          : undefined
-      "
       @date-changed="onExpiryDateChanged"
     />
   </div>
@@ -187,10 +175,6 @@ export default defineComponent({
         return $gettext('Share link(s)')
       }
 
-      if (unref(selectedLinkTypeIsInternal)) {
-        return $gettext('Copy link')
-      }
-
       return $gettext('Copy link')
     })
 
@@ -213,12 +197,6 @@ export default defineComponent({
       enforcePassword: unref(passwordEnforced)
     })
 
-    const selectedLinkTypeIsInternal = computed(
-      () => unref(selectedType) === SharingLinkType.Internal
-    )
-    const onlyInternalLinksAllowed = computed(
-      () => unref(availableLinkTypes).length === 1 && unref(selectedLinkTypeIsInternal)
-    )
     const setAdvancedMode = () => {
       isAdvancedMode.value = true
     }
@@ -248,10 +226,8 @@ export default defineComponent({
     }
 
     const passwordPolicyFulfilled = computed(() => {
-      if (!unref(selectedLinkTypeIsInternal)) {
-        if (!passwordPolicy.check(unref(password).value)) {
-          return false
-        }
+      if (!passwordPolicy.check(unref(password).value)) {
+        return false
       }
 
       return true
@@ -314,14 +290,6 @@ export default defineComponent({
 
     const updateSelectedLinkType = (type: SharingLinkType) => {
       selectedType.value = type
-      if (unref(selectedLinkTypeIsInternal)) {
-        password.value = ''
-        password.error = ''
-        selectedExpiry.value = undefined
-
-        // re-render password because it's the only way to remove policy messages
-        passwordInputKey.value = uuidV4()
-      }
     }
 
     onMounted(() => {
@@ -347,8 +315,6 @@ export default defineComponent({
       selectedType,
       selectedTypeIcon,
       selectedTypeDescription,
-      selectedLinkTypeIsInternal,
-      onlyInternalLinksAllowed,
       isSelectedLinkType,
       updateSelectedLinkType,
       updatePassword,

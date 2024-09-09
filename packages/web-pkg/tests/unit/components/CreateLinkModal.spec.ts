@@ -42,17 +42,11 @@ describe('CreateLinkModal', () => {
       await nextTick()
       expect(wrapper.find(selectors.passwordInput).exists()).toBeTruthy()
     })
-    it('should be disabled for internal links', async () => {
-      const { wrapper } = getWrapper({ defaultLinkType: SharingLinkType.Internal })
-      wrapper.vm.isAdvancedMode = true
-      await nextTick()
-      expect(wrapper.find(selectors.passwordInput).attributes('disabled')).toBeTruthy()
-    })
     it('should not be rendered if user cannot create public links', () => {
       const { wrapper } = getWrapper({
         userCanCreatePublicLinks: false,
-        availableLinkTypes: [SharingLinkType.Internal],
-        defaultLinkType: SharingLinkType.Internal
+        availableLinkTypes: [],
+        defaultLinkType: SharingLinkType.View
       })
       expect(wrapper.find(selectors.passwordInput).exists()).toBeFalsy()
     })
@@ -70,17 +64,11 @@ describe('CreateLinkModal', () => {
       await nextTick()
       expect(wrapper.findComponent({ name: 'oc-datepicker' }).exists()).toBeTruthy()
     })
-    it('should be disabled for internal links', async () => {
-      const { wrapper } = getWrapper({ defaultLinkType: SharingLinkType.Internal })
-      wrapper.vm.isAdvancedMode = true
-      await nextTick()
-      expect(wrapper.findComponent({ name: 'oc-datepicker' }).attributes('disabled')).toBeTruthy()
-    })
     it('should not be rendered if user cannot create public links', () => {
       const { wrapper } = getWrapper({
         userCanCreatePublicLinks: false,
-        availableLinkTypes: [SharingLinkType.Internal],
-        defaultLinkType: SharingLinkType.Internal
+        availableLinkTypes: [],
+        defaultLinkType: SharingLinkType.View
       })
       expect(wrapper.findComponent({ name: 'oc-datepicker' }).exists()).toBeFalsy()
     })
@@ -93,11 +81,7 @@ describe('CreateLinkModal', () => {
       expect(wrapper.find(selectors.linkRoleDropDownToggle).exists()).toBeFalsy()
     })
     it('lists all types as roles', async () => {
-      const availableLinkTypes = [
-        SharingLinkType.View,
-        SharingLinkType.Internal,
-        SharingLinkType.Edit
-      ]
+      const availableLinkTypes = [SharingLinkType.View, SharingLinkType.Edit]
       const { wrapper } = getWrapper({ availableLinkTypes })
       wrapper.vm.isAdvancedMode = true
       await nextTick()
@@ -183,7 +167,7 @@ function getWrapper({
   embedModeEnabled = false,
   callbackFn = undefined,
   isQuickLink = false,
-  availableLinkTypes = [SharingLinkType.Internal, SharingLinkType.View]
+  availableLinkTypes = [SharingLinkType.View]
 }: {
   resources?: Resource[]
   defaultLinkType?: SharingLinkType
@@ -204,7 +188,7 @@ function getWrapper({
     mock<ReturnType<typeof useLinkTypes>>({
       defaultLinkType: ref(defaultLinkType),
       getAvailableLinkTypes: () => availableLinkTypes,
-      getLinkRoleByType: () => mock<ShareRole>({ description: 'role' }),
+      getLinkRoleByType: () => mock<ShareRole>({ description: 'role', label: '' }),
       isPasswordEnforcedForLinkType: () => passwordEnforced
     })
   )

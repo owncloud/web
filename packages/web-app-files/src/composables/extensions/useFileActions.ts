@@ -1,6 +1,6 @@
 import {
   ActionExtension,
-  useFileActionsCopyQuickLink,
+  useFileActionsCopyPermanentLink,
   useFileActionsOpenShortcut,
   useFileActionsShowShares
 } from '@ownclouders/web-pkg'
@@ -14,7 +14,7 @@ import { unref } from 'vue'
 export const useFileActions = (): ActionExtension[] => {
   const { actions: openShortcutActions } = useFileActionsOpenShortcut()
   const { actions: showSharesActions } = useFileActionsShowShares()
-  const { actions: quickLinkActions } = useFileActionsCopyQuickLink()
+  const { actions: permanentLinkActions } = useFileActionsCopyPermanentLink()
 
   return [
     {
@@ -33,7 +33,7 @@ export const useFileActions = (): ActionExtension[] => {
       id: 'com.github.owncloud.web.files.quick-action.quicklink',
       extensionPointIds: [quickActionsExtensionPoint.id],
       type: 'action',
-      action: unref(quickLinkActions)[0]
+      action: unref(permanentLinkActions)[0]
     }
   ]
 }
