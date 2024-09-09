@@ -147,8 +147,8 @@ importers:
         specifier: 4.3.0
         version: 4.3.0
       node-fetch:
-        specifier: 2.7.0
-        version: 2.7.0
+        specifier: 3.3.2
+        version: 3.3.2
       pino:
         specifier: 9.3.2
         version: 9.3.2

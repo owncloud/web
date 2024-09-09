@@ -17,6 +17,6 @@ export const getOpenWithWebUrl = async ({
     user: user
   })
   checkResponseStatus(response, 'Failed while getting url')
-  const respBody = await response.json()
+  const respBody = (await response.json()) as { uri: string }
   return respBody.uri
 }

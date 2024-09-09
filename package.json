@@ -67,7 +67,7 @@
     "happy-dom": "15.7.3",
     "jsdom": "^25.0.0",
     "license-checker-rseidelsohn": "4.3.0",
-    "node-fetch": "2.7.0",
+    "node-fetch": "3.3.2",
     "pino-pretty": "11.2.2",
     "pino": "9.3.2",
     "qs": "6.13.0",

@@ -242,7 +242,7 @@ export const createLinkShare = async ({
     user
   })
 
-  const responseData = await response.json()
+  const responseData = (await response.json()) as { link: { webUrl: string } }
   const webUrl = responseData.link.webUrl
   const linksEnvironment: LinksEnvironment = new LinksEnvironment()
   linksEnvironment.createLink({
