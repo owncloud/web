@@ -44,12 +44,18 @@
       </oc-list>
     </nav>
     <!-- @slot bottom content of the sidebar -->
-    <slot name="bottom" />
+    <slot name="bottom">
+      <div class="versions oc-pb-s oc-pl-s oc-text-small oc-text-muted">
+        <span v-text="backendVersion" />
+        <span v-text="webVersion" />
+      </div>
+    </slot>
   </div>
 </template>
 
 <script lang="ts">
 import {
+  computed,
   defineComponent,
   nextTick,
   onBeforeUnmount,
@@ -62,6 +68,8 @@ import {
 import * as uuid from 'uuid'
 import SidebarNavItem from './SidebarNavItem.vue'
 import { NavItem } from '../../helpers/navItems'
+import { getBackendVersion, getWebVersion } from '../../container/versions'
+import { useCapabilityStore } from '@ownclouders/web-pkg'
 
 type NavItemRef = InstanceType<typeof SidebarNavItem>
 
@@ -81,6 +89,10 @@ export default defineComponent({
     let resizeObserver: ResizeObserver
     const navItemRefs = ref<Record<string, NavItemRef>>({})
     const highlighterAttrs = ref<Record<string, unknown>>({})
+    const capabilityStore = useCapabilityStore()
+
+    const webVersion = computed(() => getWebVersion())
+    const backendVersion = computed(() => getBackendVersion({ capabilityStore }))
 
     onMounted(() => {
       const navBar = document.getElementById('web-nav-sidebar')
@@ -128,7 +140,7 @@ export default defineComponent({
       { deep: true, immediate: true }
     )
 
-    return { highlighterAttrs, navItemRefs }
+    return { highlighterAttrs, navItemRefs, backendVersion, webVersion }
   },
   computed: {
     toggleSidebarButtonClass() {
@@ -185,6 +197,14 @@ export default defineComponent({
 
   .toggle-sidebar-button-expanded {
     justify-content: flex-end !important;
+  }
+
+  .versions {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: flex-end;
+    flex-grow: 1;
   }
 
   .oc-sidebar-nav li a:not(.active),
