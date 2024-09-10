@@ -11,6 +11,7 @@ Summary
 * Bugfix - OCM token clipboard copy: [#11557](https://github.com/owncloud/web/pull/11557)
 * Bugfix - OCM local instance check: [#11560](https://github.com/owncloud/web/pull/11560)
 * Enhancement - Add split confirm button to create link modal: [#11558](https://github.com/owncloud/web/pull/11558)
+* Enhancement - Add versions to the left sidebar bottom: [#11561](https://github.com/owncloud/web/pull/11561)
 
 Details
 -------
@@ -37,6 +38,14 @@ Details
 
    https://github.com/owncloud/web/issues/11551
    https://github.com/owncloud/web/pull/11558
+
+* Enhancement - Add versions to the left sidebar bottom: [#11561](https://github.com/owncloud/web/pull/11561)
+
+   We have added the versions to the left sidebar bottom to make it easier for
+   users to find the versions of the server and web UI.
+
+   https://github.com/owncloud/enterprise/issues/6814
+   https://github.com/owncloud/web/pull/11561
 
 Changelog for ownCloud Web [10.2.0] (2024-09-05)
 =======================================
