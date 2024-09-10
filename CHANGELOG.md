@@ -10,6 +10,7 @@ Summary
 
 * Bugfix - OCM token clipboard copy: [#11557](https://github.com/owncloud/web/pull/11557)
 * Bugfix - OCM local instance check: [#11560](https://github.com/owncloud/web/pull/11560)
+* Enhancement - Add split confirm button to create link modal: [#11558](https://github.com/owncloud/web/pull/11558)
 
 Details
 -------
@@ -28,6 +29,14 @@ Details
    instance in inviter select.
 
    https://github.com/owncloud/web/pull/11560
+
+* Enhancement - Add split confirm button to create link modal: [#11558](https://github.com/owncloud/web/pull/11558)
+
+   We've added a split button to the create link modal, which allows you to copy
+   the link to the clipboard with or without the password.
+
+   https://github.com/owncloud/web/issues/11551
+   https://github.com/owncloud/web/pull/11558
 
 Changelog for ownCloud Web [10.2.0] (2024-09-05)
 =======================================
