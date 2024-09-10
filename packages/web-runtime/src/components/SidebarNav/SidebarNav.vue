@@ -45,7 +45,7 @@
     </nav>
     <!-- @slot bottom content of the sidebar -->
     <slot name="bottom">
-      <div class="versions oc-pb-s oc-pl-s oc-text-small oc-text-muted">
+      <div v-if="!closed" class="versions oc-pb-s oc-pl-s oc-text-small oc-text-muted">
         <span v-text="backendVersion" />
         <span v-text="webVersion" />
       </div>
@@ -70,6 +70,7 @@ import SidebarNavItem from './SidebarNavItem.vue'
 import { NavItem } from '../../helpers/navItems'
 import { getBackendVersion, getWebVersion } from '../../container/versions'
 import { useCapabilityStore } from '@ownclouders/web-pkg'
+import sideBarToggle from "../Topbar/SideBarToggle.vue";
 
 type NavItemRef = InstanceType<typeof SidebarNavItem>
 
@@ -143,6 +144,9 @@ export default defineComponent({
     return { highlighterAttrs, navItemRefs, backendVersion, webVersion }
   },
   computed: {
+    sideBarToggle() {
+      return sideBarToggle
+    },
     toggleSidebarButtonClass() {
       return this.closed
         ? 'toggle-sidebar-button-collapsed'
