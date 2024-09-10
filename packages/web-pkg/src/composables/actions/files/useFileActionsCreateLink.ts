@@ -36,10 +36,12 @@ export const useFileActionsCreateLink = ({
 
   const proceedResult = async ({
     result,
-    password
+    password,
+    options = {}
   }: {
     result: PromiseSettledResult<LinkShare>[]
     password?: string
+    options?: { copyPassword?: boolean }
   }) => {
     const succeeded = result.filter(
       (val): val is PromiseFulfilledResult<LinkShare> => val.status === 'fulfilled'
@@ -51,7 +53,7 @@ export const useFileActionsCreateLink = ({
       if (result.length === 1) {
         // Only copy to clipboard if the user tries to create one single link
         try {
-          const copyToClipboardText = password
+          const copyToClipboardText = options.copyPassword
             ? $gettext(
                 '%{link} Password:%{password}',
                 {

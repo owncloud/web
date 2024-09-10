@@ -8,7 +8,7 @@ import { PasswordPolicy } from 'design-system/src/helpers'
 import { useEmbedMode } from '../../../src/composables/embedMode'
 import { useLinkTypes } from '../../../src/composables/links'
 import { nextTick, ref } from 'vue'
-import { CapabilityStore, useSharesStore } from '../../../src/composables/piniaStores'
+import { CapabilityStore, Modal, useSharesStore } from '../../../src/composables/piniaStores'
 import { SharingLinkType } from '@ownclouders/web-client/graph/generated'
 import { describe } from 'vitest'
 
@@ -242,7 +242,7 @@ function getWrapper({
         resources,
         isQuickLink,
         callbackFn,
-        modal: undefined
+        modal: mock<Modal>()
       },
       global: {
         plugins: [

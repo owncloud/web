@@ -45,7 +45,7 @@
     />
     <div v-else-if="password.value" class="link-modal-password-text oc-text-small oc-text-muted">
       <span v-text="$gettext('Password:')" />
-      <span v-text="'********'" />
+      <span v-text="password.value" />
     </div>
     <oc-datepicker
       v-if="isAdvancedMode"
@@ -69,14 +69,43 @@
       @click="$emit('cancel')"
       >{{ $gettext('Cancel') }}
     </oc-button>
-    <oc-button
-      class="link-modal-confirm oc-modal-body-actions-confirm oc-ml-s"
-      appearance="filled"
-      variation="primary"
-      :disabled="confirmButtonDisabled"
-      @click="$emit('confirm')"
-      >{{ confirmButtonText }}
-    </oc-button>
+    <div
+      class="link-modal-confirm-button-group oc-ml-s"
+      :class="{ 'oc-button-group': password.value }"
+    >
+      <oc-button
+        class="link-modal-confirm oc-modal-body-actions-confirm"
+        appearance="filled"
+        variation="primary"
+        :disabled="confirmButtonDisabled"
+        @click="onConfirm"
+        >{{ confirmButtonText }}
+      </oc-button>
+      <oc-button
+        v-if="password.value"
+        class="link-modal-confirm oc-modal-body-actions-confirm-secondary-trigger"
+        appearance="filled"
+        variation="primary"
+        gap-size="xsmall"
+        :disabled="confirmButtonDisabled"
+      >
+        <oc-icon size="small" name="arrow-down-s" />
+      </oc-button>
+      <oc-drop
+        v-if="password.value"
+        drop-id="oc-modal-body-actions-confirm-secondary-drop"
+        toggle=".oc-modal-body-actions-confirm-secondary-trigger"
+        mode="click"
+        close-on-click
+      >
+        <oc-button
+          class="oc-modal-body-actions-confirm-password"
+          appearance="raw"
+          @click="onConfirm({ copyPassword: true })"
+          >{{ $gettext('Copy link and password') }}
+        </oc-button>
+      </oc-drop>
+    </div>
   </div>
 </template>
 
@@ -101,7 +130,8 @@ import {
   useLinkTypes,
   Modal,
   useSharesStore,
-  useClientService
+  useClientService,
+  useModals
 } from '../composables'
 import { LinkShare, SpaceResource } from '@ownclouders/web-client'
 import { Resource } from '@ownclouders/web-client'
@@ -114,6 +144,7 @@ type RoleRef = ComponentPublicInstance<typeof OcButton>
 interface CallbackArgs {
   result: PromiseSettledResult<LinkShare>[]
   password: string
+  options?: { copyPassword?: boolean }
 }
 
 export default defineComponent({
@@ -129,9 +160,10 @@ export default defineComponent({
       default: undefined
     }
   },
-  emits: ['cancel', 'confirm'],
-  setup(props, { expose }) {
+  emits: ['cancel'],
+  setup(props) {
     const clientService = useClientService()
+    const { removeModal } = useModals()
     const language = useGettext()
     const { $gettext } = language
     const passwordPolicyService = usePasswordPolicyService()
@@ -155,10 +187,6 @@ export default defineComponent({
 
       if (unref(selectedLinkTypeIsInternal)) {
         return $gettext('Copy link')
-      }
-
-      if (unref(passwordEnforced) || unref(password)) {
-        return $gettext('Copy link and password')
       }
 
       return $gettext('Copy link')
@@ -235,7 +263,8 @@ export default defineComponent({
       return true
     })
 
-    const onConfirm = async () => {
+    const onConfirm = async (options: { copyPassword?: boolean } = {}) => {
+      removeModal(props.modal.id)
       const result = await createLinks()
 
       const succeeded = result.filter(({ status }) => status === 'fulfilled')
@@ -268,12 +297,9 @@ export default defineComponent({
       }
 
       if (props.callbackFn) {
-        props.callbackFn({ result, password: password.value })
+        props.callbackFn({ result, password: password.value, options })
       }
     }
-
-    expose({ onConfirm })
-
     const isSelectedLinkType = (type: SharingLinkType) => {
       return unref(selectedType) === type
     }
@@ -345,6 +371,14 @@ export default defineComponent({
 
 .link-modal-password {
   margin-left: calc(var(--oc-space-small) + 22px);
+}
+
+.link-modal-confirm-button-group {
+  outline: 0;
+
+  :nth-child(2) {
+    background: var(--oc-color-swatch-primary-gradient);
+  }
 }
 
 .role-dropdown-list span {
