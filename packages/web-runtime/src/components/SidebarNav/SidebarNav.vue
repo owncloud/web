@@ -144,9 +144,6 @@ export default defineComponent({
     return { highlighterAttrs, navItemRefs, backendVersion, webVersion }
   },
   computed: {
-    sideBarToggle() {
-      return sideBarToggle
-    },
     toggleSidebarButtonClass() {
       return this.closed
         ? 'toggle-sidebar-button-collapsed'
