@@ -1,5 +1,5 @@
 import { mock } from 'vitest-mock-extended'
-import _ from 'lodash-es'
+import merge from 'lodash-es/merge'
 import {
   defaultPlugins,
   mount,
@@ -61,7 +61,7 @@ function getWrapper(propsData = {}, mountType = shallowMount) {
   const mocks = defaultComponentMocks({ currentRoute: mock<RouteLocation>(filesPersonalRoute) })
   return {
     wrapper: mountType(Pagination, {
-      props: _.merge({ currentPage: 1, pages: 10 }, propsData),
+      props: merge({ currentPage: 1, pages: 10 }, propsData),
       global: {
         stubs: {
           RouterLink: RouterLinkStub

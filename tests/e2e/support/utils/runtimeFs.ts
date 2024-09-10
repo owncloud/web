@@ -63,7 +63,7 @@ export const createFileWithSize = (
         const remainingBytes = sizeInBytes - bytesWritten
         const buffer = Buffer.alloc(remainingBytes < bufferSize ? remainingBytes : bufferSize)
 
-        fs.writeSync(fd, buffer, 0, buffer.length, null)
+        fs.writeSync(fd, buffer as any, 0, buffer.length, null)
 
         bytesWritten += buffer.length
       }

@@ -52,7 +52,7 @@ function getWrapper({
         component: {}
       }
     ],
-    history: ('/' && createWebHistory('/')) || createWebHashHistory()
+    history: createWebHistory('/') || createWebHashHistory()
   })
 
   vi.mocked(useSessionStorage<string>).mockImplementation(() => {
