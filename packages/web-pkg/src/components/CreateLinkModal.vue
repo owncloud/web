@@ -95,6 +95,7 @@
         drop-id="oc-modal-body-actions-confirm-secondary-drop"
         toggle=".oc-modal-body-actions-confirm-secondary-trigger"
         mode="click"
+        padding-size="small"
         close-on-click
       >
         <oc-list class="oc-modal-body-actions-confirm-secondary-menu">
