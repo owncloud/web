@@ -1,3 +1,26 @@
+Changelog for ownCloud Web [unreleased] (UNRELEASED)
+=======================================
+The following sections list the changes in ownCloud web unreleased relevant to
+ownCloud admins and users.
+
+[unreleased]: https://github.com/owncloud/web/compare/v10.2.0...master
+
+Summary
+-------
+
+* Bugfix - OCM token clipboard copy: [#11557](https://github.com/owncloud/web/pull/11557)
+
+Details
+-------
+
+* Bugfix - OCM token clipboard copy: [#11557](https://github.com/owncloud/web/pull/11557)
+
+   We've fixed an issue where the token was not being copied to the clipboard after
+   creating an OCM invitation.
+
+   https://github.com/owncloud/web/issues/11552
+   https://github.com/owncloud/web/pull/11557
+
 Changelog for ownCloud Web [10.2.0] (2024-09-05)
 =======================================
 The following sections list the changes in ownCloud web 10.2.0 relevant to
