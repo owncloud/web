@@ -1,0 +1,6 @@
+Enhancement: Add versions to the left sidebar bottom
+
+We have added the versions to the left sidebar bottom to make it easier for users to find the versions of the backed and frontend.
+
+https://github.com/owncloud/web/pull/11561
+https://github.com/owncloud/enterprise/issues/6814
