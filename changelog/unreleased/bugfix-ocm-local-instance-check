@@ -1,0 +1,5 @@
+Bugfix: OCM local instance check
+
+We've fixed the issue where the current instance was not recognized as a local instance in inviter select.
+
+https://github.com/owncloud/web/pull/11560

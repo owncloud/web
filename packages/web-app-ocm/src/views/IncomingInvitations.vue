@@ -35,7 +35,7 @@
                 <span class="option" v-text="domain" />
               </div>
             </template>
-            <template #no-options> No institutions found with this name </template>
+            <template #no-options> No institutions found with this name</template>
             <template #selected-option="{ full_name, domain }">
               <div class="options-wrapper oc-text-break">
                 <strong class="oc-mr-s oc-text-break" v-text="full_name" />
@@ -155,7 +155,22 @@ export default defineComponent({
       }
     }
     const isMyProviderSelectedProvider = (p: ProviderSchema) => {
-      return p.domain === new URL(configStore.serverUrl).hostname
+      // the protocol is not important, we just need the host and port, it's there to make it compatible with URL
+      const toURL = (purl: string) =>
+        new URL(purl.split('://').length === 1 ? `https://${purl}` : purl)
+      const { host: configStoreHost, port: configStorePort } = toURL(configStore.serverUrl)
+      const { host: providerSchemaHost, port: providerSchemaPort } = toURL(p.domain)
+
+      return [
+        // ensure that the config store host is not empty, minimal check
+        !!configStoreHost,
+        // ensure that the provider schema host is not empty, minimal check
+        !!providerSchemaHost,
+        // check if the host is the same
+        configStoreHost === providerSchemaHost,
+        // also check the port, multiple instances can run on the same host but not on the same port...
+        configStorePort === providerSchemaPort
+      ].every((c) => c)
     }
 
     const handleParams = (to: RouteLocationNormalized) => {
