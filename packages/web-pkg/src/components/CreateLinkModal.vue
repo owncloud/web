@@ -86,7 +86,6 @@
         class="link-modal-confirm oc-modal-body-actions-confirm-secondary-trigger"
         appearance="filled"
         variation="primary"
-        gap-size="xsmall"
         :disabled="confirmButtonDisabled"
       >
         <oc-icon size="small" name="arrow-down-s" />
@@ -98,12 +97,16 @@
         mode="click"
         close-on-click
       >
-        <oc-button
-          class="oc-modal-body-actions-confirm-password"
-          appearance="raw"
-          @click="onConfirm({ copyPassword: true })"
-          >{{ $gettext('Copy link and password') }}
-        </oc-button>
+        <oc-list class="oc-modal-body-actions-confirm-secondary-menu">
+          <li class="oc-rounded oc-menu-item-hover">
+            <oc-button
+              class="oc-modal-body-actions-confirm-password action-menu-item"
+              appearance="raw"
+              @click="onConfirm({ copyPassword: true })"
+              >{{ $gettext('Copy link and password') }}
+            </oc-button>
+          </li>
+        </oc-list>
       </oc-drop>
     </div>
   </div>
@@ -375,10 +378,18 @@ export default defineComponent({
 
 .link-modal-confirm-button-group {
   outline: 0;
+}
 
-  :nth-child(2) {
-    background: var(--oc-color-swatch-primary-gradient);
+.oc-modal-body-actions-confirm-secondary-menu {
+  .action-menu-item {
+    width: 100%;
+    justify-content: flex-start;
   }
+}
+
+.oc-modal-body-actions-confirm-secondary-trigger {
+  background: var(--oc-color-swatch-primary-gradient);
+  padding: var(--oc-space-xsmall);
 }
 
 .role-dropdown-list span {
