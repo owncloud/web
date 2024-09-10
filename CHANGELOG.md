@@ -9,6 +9,7 @@ Summary
 -------
 
 * Bugfix - OCM token clipboard copy: [#11557](https://github.com/owncloud/web/pull/11557)
+* Bugfix - OCM local instance check: [#11560](https://github.com/owncloud/web/pull/11560)
 
 Details
 -------
@@ -20,6 +21,13 @@ Details
 
    https://github.com/owncloud/web/issues/11552
    https://github.com/owncloud/web/pull/11557
+
+* Bugfix - OCM local instance check: [#11560](https://github.com/owncloud/web/pull/11560)
+
+   We've fixed the issue where the current instance was not recognized as a local
+   instance in inviter select.
+
+   https://github.com/owncloud/web/pull/11560
 
 Changelog for ownCloud Web [10.2.0] (2024-09-05)
 =======================================
