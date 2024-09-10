@@ -56,7 +56,7 @@ export default defineComponent({
 
     const customComponentRef = ref<CustomModalComponentInstance>()
 
-    const onModalConfirm = async (value?: string) => {
+    const onModalConfirm = async (value?: unknown) => {
       try {
         updateModal(unref(modal)?.id, 'isLoading', true)
 
@@ -65,7 +65,7 @@ export default defineComponent({
             await unref(modal).onConfirm(value)
           })
         } else if (unref(customComponentRef)?.onConfirm) {
-          await loadingService.addTask(() => unref(customComponentRef).onConfirm())
+          await loadingService.addTask(() => unref(customComponentRef).onConfirm(value))
         }
       } catch (error) {
         updateModal(unref(modal)?.id, 'isLoading', false)

@@ -1,0 +1,7 @@
+Enhancement: Add split confirm button to create link modal
+
+We've added a split button to the create link modal,
+which allows you to copy the link to the clipboard with or without the password.
+
+https://github.com/owncloud/web/pull/11558
+https://github.com/owncloud/web/issues/11551

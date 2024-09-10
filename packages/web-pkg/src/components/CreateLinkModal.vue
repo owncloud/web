@@ -45,7 +45,7 @@
     />
     <div v-else-if="password.value" class="link-modal-password-text oc-text-small oc-text-muted">
       <span v-text="$gettext('Password:')" />
-      <span v-text="'********'" />
+      <span v-text="password.value" />
     </div>
     <oc-datepicker
       v-if="isAdvancedMode"
@@ -69,14 +69,47 @@
       @click="$emit('cancel')"
       >{{ $gettext('Cancel') }}
     </oc-button>
-    <oc-button
-      class="link-modal-confirm oc-modal-body-actions-confirm oc-ml-s"
-      appearance="filled"
-      variation="primary"
-      :disabled="confirmButtonDisabled"
-      @click="$emit('confirm')"
-      >{{ confirmButtonText }}
-    </oc-button>
+    <div
+      class="link-modal-confirm-button-group oc-ml-s"
+      :class="{ 'oc-button-group': password.value }"
+    >
+      <oc-button
+        class="link-modal-confirm oc-modal-body-actions-confirm"
+        appearance="filled"
+        variation="primary"
+        :disabled="confirmButtonDisabled"
+        @click="$emit('confirm')"
+        >{{ confirmButtonText }}
+      </oc-button>
+      <oc-button
+        v-if="password.value"
+        class="link-modal-confirm oc-modal-body-actions-confirm-secondary-trigger"
+        appearance="filled"
+        variation="primary"
+        :disabled="confirmButtonDisabled"
+      >
+        <oc-icon size="small" name="arrow-down-s" />
+      </oc-button>
+      <oc-drop
+        v-if="password.value"
+        drop-id="oc-modal-body-actions-confirm-secondary-drop"
+        toggle=".oc-modal-body-actions-confirm-secondary-trigger"
+        mode="click"
+        padding-size="small"
+        close-on-click
+      >
+        <oc-list class="oc-modal-body-actions-confirm-secondary-menu">
+          <li class="oc-rounded oc-menu-item-hover">
+            <oc-button
+              class="oc-modal-body-actions-confirm-password action-menu-item"
+              appearance="raw"
+              @click="$emit('confirm', { copyPassword: true })"
+              >{{ $gettext('Copy link and password') }}
+            </oc-button>
+          </li>
+        </oc-list>
+      </oc-drop>
+    </div>
   </div>
 </template>
 
@@ -114,6 +147,7 @@ type RoleRef = ComponentPublicInstance<typeof OcButton>
 interface CallbackArgs {
   result: PromiseSettledResult<LinkShare>[]
   password: string
+  options?: { copyPassword?: boolean }
 }
 
 export default defineComponent({
@@ -155,10 +189,6 @@ export default defineComponent({
 
       if (unref(selectedLinkTypeIsInternal)) {
         return $gettext('Copy link')
-      }
-
-      if (unref(passwordEnforced) || unref(password)) {
-        return $gettext('Copy link and password')
       }
 
       return $gettext('Copy link')
@@ -235,7 +265,7 @@ export default defineComponent({
       return true
     })
 
-    const onConfirm = async () => {
+    const onConfirm = async (options: { copyPassword?: boolean } = {}) => {
       const result = await createLinks()
 
       const succeeded = result.filter(({ status }) => status === 'fulfilled')
@@ -268,7 +298,7 @@ export default defineComponent({
       }
 
       if (props.callbackFn) {
-        props.callbackFn({ result, password: password.value })
+        props.callbackFn({ result, password: password.value, options })
       }
     }
 
@@ -345,6 +375,22 @@ export default defineComponent({
 
 .link-modal-password {
   margin-left: calc(var(--oc-space-small) + 22px);
+}
+
+.link-modal-confirm-button-group {
+  outline: 0;
+}
+
+.oc-modal-body-actions-confirm-secondary-menu {
+  .action-menu-item {
+    width: 100%;
+    justify-content: flex-start;
+  }
+}
+
+.oc-modal-body-actions-confirm-secondary-trigger {
+  background: var(--oc-color-swatch-primary-gradient);
+  padding: var(--oc-space-xsmall);
 }
 
 .role-dropdown-list span {
