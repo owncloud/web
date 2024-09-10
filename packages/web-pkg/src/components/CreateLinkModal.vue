@@ -78,7 +78,7 @@
         appearance="filled"
         variation="primary"
         :disabled="confirmButtonDisabled"
-        @click="onConfirm"
+        @click="$emit('confirm')"
         >{{ confirmButtonText }}
       </oc-button>
       <oc-button
@@ -103,7 +103,7 @@
             <oc-button
               class="oc-modal-body-actions-confirm-password action-menu-item"
               appearance="raw"
-              @click="onConfirm({ copyPassword: true })"
+              @click="$emit('confirm', { copyPassword: true })"
               >{{ $gettext('Copy link and password') }}
             </oc-button>
           </li>
@@ -134,8 +134,7 @@ import {
   useLinkTypes,
   Modal,
   useSharesStore,
-  useClientService,
-  useModals
+  useClientService
 } from '../composables'
 import { LinkShare, SpaceResource } from '@ownclouders/web-client'
 import { Resource } from '@ownclouders/web-client'
@@ -164,10 +163,9 @@ export default defineComponent({
       default: undefined
     }
   },
-  emits: ['cancel'],
-  setup(props) {
+  emits: ['cancel', 'confirm'],
+  setup(props, { expose }) {
     const clientService = useClientService()
-    const { removeModal } = useModals()
     const language = useGettext()
     const { $gettext } = language
     const passwordPolicyService = usePasswordPolicyService()
@@ -268,7 +266,6 @@ export default defineComponent({
     })
 
     const onConfirm = async (options: { copyPassword?: boolean } = {}) => {
-      removeModal(props.modal.id)
       const result = await createLinks()
 
       const succeeded = result.filter(({ status }) => status === 'fulfilled')
@@ -304,6 +301,9 @@ export default defineComponent({
         props.callbackFn({ result, password: password.value, options })
       }
     }
+
+    expose({ onConfirm })
+
     const isSelectedLinkType = (type: SharingLinkType) => {
       return unref(selectedType) === type
     }
