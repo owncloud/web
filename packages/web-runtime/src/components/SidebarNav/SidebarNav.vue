@@ -70,7 +70,7 @@ import SidebarNavItem from './SidebarNavItem.vue'
 import { NavItem } from '../../helpers/navItems'
 import { getBackendVersion, getWebVersion } from '../../container/versions'
 import { useCapabilityStore } from '@ownclouders/web-pkg'
-import sideBarToggle from "../Topbar/SideBarToggle.vue";
+import sideBarToggle from '../Topbar/SideBarToggle.vue'
 
 type NavItemRef = InstanceType<typeof SidebarNavItem>
 
