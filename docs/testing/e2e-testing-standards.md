@@ -1,3 +1,16 @@
+---
+title: 'End-to-End (E2E) Test Standards'
+date: 2024-09-11T00:00:00+00:00
+weight: 60
+geekdocRepo: https://github.com/owncloud/web
+geekdocEditPath: edit/master/docs/testing
+geekdocFilePath: e2e-testing-standards.md
+---
+
+{{< toc >}}
+
+## Introduction
+
 In ownCloud, we use Playwright for webUI test automation. We benefit from lower barriers to entry, readability, and usability when test standards are consistent across repositories. For example:
 
 - **Reusability:** Enhances reusability by making it easier to reuse functions, locators, shared steps, and other test code. Finding the necessary components and functionalities will be simple for someone working on a test resulting in reduced duplication and the requirement for rework after the initiation of a code review.
@@ -12,6 +25,8 @@ Here are the test standards and guidelines we adhere to when creating Playwright
 - `tests/:`
 
     - `e2e/`: Main folder containing all (end-to-end) E2E test-related files.
+    
+      - `cucumber/`: Main folder containing all Cucumber(BDD) test-related files.
 
         - `features/`: Contains Gherkin feature files.
 
@@ -19,37 +34,42 @@ Here are the test standards and guidelines we adhere to when creating Playwright
 
                 - `<aFeatureFile>.feature`: A feature file.
 
-        - `page-objects/`: Contains the Page Object classes.
-
-            - `<specific-page-object-folder>/`: Collection house for related page objects for each webpage or component
-
-                - `<individualPageObject>.ts`: Page Object for each webpage or component.
-
         - `steps/`: Holds the step definition files for mapping Gherkin steps to code.
 
             - `<stepDefinition>.ts`: Step definitions for each feature.
+
+        - `hooks/`: Cucumber hooks for setting up and tearing down test environments.
+            - `hooks.ts`: Contains `Before`, `After`, and other lifecycle hooks.
+
+      - `support/`: Playwright (Test implementation)
+
+        - `api/`: Contains API-related test files and configurations.
+          
+          - `<api-folder>/ `: Specific API tests for a particular service.
+
+        - `objects/`: Contains the Page Object classes.
+
+            - `<specific-page-object-folder>/`: Collection house for related page objects for each webpage or component.
+
+                - `<individualPageObject>.ts`: Page Object for each webpage or component.
 
         - `utils/`: Utility functions and common helpers.
 
             - `helpers.ts`: Common utility functions (e.g., date formatting, data generation).
 
-        - `config/`: Configuration files for Playwright and other tools.
-
-            - `playwright.config.ts`: Playwright configuration.
-
-        - `hooks/`: Cucumber hooks for setting up and tearing down test environments.
-
-            - `hooks.ts`: Contains `Before`, `After`, and other lifecycle hooks.
-
-        - `reports/`: Generated test reports (e.g., HTML, JSON).
-
-            - `screenshots/`: Captured screenshots during test execution.
-
-            - `videos/`: Recorded videos of test runs.
-
         - `test-data/`: Static test data files or folders for upload.
 
-            - `data.json`: Example JSON files or CSVs with test data.
+            - `filesForUpload/`: Static test data files for upload.
+
+      - `config/`: Configuration files for Playwright and other tools.
+
+          - `playwright.config.ts`: Playwright configuration.
+
+      - `reports/`: Generated test reports (e.g., HTML, JSON).
+
+          - `screenshots/`: Captured screenshots during test execution.
+
+          - `videos/`: Recorded videos of test runs.
 
 ## Test Structure - Arrange, Act, Assert:
 
@@ -127,7 +147,7 @@ Then(
 
 ## Waiting:
 
-We can avoid using any arbitrary waits until it is really, really necessary.
+Playwright uses auto-waiting, so we avoid artificial waiting, the exception being if it is really necessary.
 
 DO NOT ⚔️
 
