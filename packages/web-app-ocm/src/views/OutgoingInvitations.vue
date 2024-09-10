@@ -231,16 +231,16 @@ export default defineComponent({
             title: $gettext('Success'),
             status: 'success',
             desc: recipient
-              ? $gettext('New invitation link has been created and sent to %{recipient}.', {
+              ? $gettext('New token has been created and sent to %{recipient}.', {
                   recipient
                 })
               : $gettext(
-                  'New invitation link has been created and copied to your clipboard. Send it to the invitee(s).'
+                  'New token has been created and copied to your clipboard. Send it to the invitee(s).'
                 )
           })
           lastCreatedToken.value = tokenInfo.token
           if (!recipient) {
-            navigator.clipboard.writeText(tokenInfo.invite_link)
+            navigator.clipboard.writeText(tokenInfo.token)
           }
         }
       } catch (error) {
