@@ -1,0 +1,6 @@
+Bugfix: OCM token clipboard copy
+
+We've fixed an issue where the token was not being copied to the clipboard after creating an OCM invitation.
+
+https://github.com/owncloud/web/pull/11557
+https://github.com/owncloud/web/issues/11552
