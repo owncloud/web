@@ -1,11 +1,8 @@
-import { Page, expect, Locator } from '@playwright/test'
+import { Page, Locator } from '@playwright/test'
 import util from 'util'
 import Collaborator, { ICollaborator, IAccessDetails } from './collaborator'
 import { sidebar } from '../utils'
 import { clickResource } from '../resource/actions'
-import { clearCurrentPopup, createLinkArgs } from '../link/actions'
-import { config } from '../../../../config.js'
-import { createdLinkStore } from '../../../store'
 import { User } from '../../../types'
 import { locatorUtils } from '../../../utils'
 
@@ -146,9 +143,6 @@ export const clickActionInContextMenu = async (
         page.locator(util.format(actionsTriggerButton, resource, action)).click()
       ])
       break
-    case 'copy-quicklink':
-      await page.locator(util.format(actionsTriggerButton, resource, action)).click()
-      break
     case 'disable-sync':
       await Promise.all([
         page.waitForResponse(
@@ -204,47 +198,6 @@ export const checkSharee = async (args: ShareArgs): Promise<void> => {
   for (const collaborator of recipients) {
     await Collaborator.checkCollaborator({ page, collaborator })
   }
-}
-
-export const createQuickLink = async (args: createLinkArgs): Promise<string> => {
-  const { page, resource, password } = args
-  let url = ''
-  const linkName = 'Link'
-
-  await clickActionInContextMenu({ page, resource }, 'copy-quicklink')
-  await page.locator(advancedModeButton).click()
-  await page.locator(passwordInput).fill(password)
-
-  await Promise.all([
-    page.waitForResponse(
-      (res) =>
-        res.url().includes('createLink') &&
-        res.request().method() === 'POST' &&
-        res.status() === 200
-    ),
-    page.locator(createLinkButton).click()
-  ])
-  if (config.backendUrl.startsWith('https')) {
-    // here is flaky https://github.com/owncloud/web/issues/9941
-    // sometimes test doesn't have time to pick up the correct buffer
-    await page.waitForTimeout(500)
-    const clipBoardText = await page.evaluate(() => navigator.clipboard.readText())
-    url = clipBoardText.match(/https?:\/\/[^ ]+/)[0]
-    expect(url).toContain(config.baseUrlOcis)
-  } else {
-    const quickLinkUrlLocator = util.format(publicLinkInputField, linkName)
-    if (!(await page.locator(quickLinkUrlLocator).isVisible())) {
-      await openSharingPanel(page, resource)
-    }
-    url = await page.locator(quickLinkUrlLocator).textContent()
-  }
-
-  await clearCurrentPopup(page)
-
-  if (url && !createdLinkStore.has(linkName)) {
-    createdLinkStore.set(linkName, { name: linkName, url })
-  }
-  return url
 }
 
 export interface setDenyShareArgs {

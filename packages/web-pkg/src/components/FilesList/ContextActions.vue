@@ -10,7 +10,7 @@ import {
   FileActionOptions,
   useExtensionRegistry,
   useFileActionsToggleHideShare,
-  useFileActionsCopyQuickLink,
+  useFileActionsCopyPermanentLink,
   useFileActionsPaste,
   useFileActionsShowDetails,
   useFileActionsShowShares,
@@ -47,7 +47,7 @@ export default defineComponent({
     const { actions: enableSyncActions } = useFileActionsEnableSync()
     const { actions: hideShareActions } = useFileActionsToggleHideShare()
     const { actions: copyActions } = useFileActionsCopy()
-    const { actions: createQuickLinkActions } = useFileActionsCopyQuickLink()
+    const { actions: copyPermanentLinkActions } = useFileActionsCopyPermanentLink()
     const { actions: disableSyncActions } = useFileActionsDisableSync()
     const { actions: deleteActions } = useFileActionsDelete()
     const { actions: downloadArchiveActions } = useFileActionsDownloadArchive()
@@ -120,7 +120,7 @@ export default defineComponent({
     const menuItemsShare = computed(() => {
       return [
         ...unref(showSharesActions),
-        ...unref(createQuickLinkActions),
+        ...unref(copyPermanentLinkActions),
         ...unref(extensionsContextActions).filter((a) => a.category === 'share')
       ].filter((item) => item.isVisible(unref(actionOptions)))
     })

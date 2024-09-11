@@ -61,7 +61,7 @@ import {
   useConfigStore,
   useResourcesStore,
   FileContentOptions,
-  useFileActionsCopyQuickLink,
+  useFileActionsCopyPermanentLink,
   useFileActionsDownloadFile,
   useFileActionsShowDetails,
   useFileActionsShowShares,
@@ -141,7 +141,7 @@ export default defineComponent({
     const { actions: openWithAppActions } = useFileActionsOpenWithApp({
       appId: props.applicationId
     })
-    const { actions: createQuickLinkActions } = useFileActionsCopyQuickLink()
+    const { actions: copyPermanentLinkActions } = useFileActionsCopyPermanentLink()
     const { actions: downloadFileActions } = useFileActionsDownloadFile()
     const { actions: showDetailsActions } = useFileActionsShowDetails()
     const { actions: showSharesActions } = useFileActionsShowShares()
@@ -484,7 +484,7 @@ export default defineComponent({
       )
     })
     const menuItemsShare = computed(() => {
-      return [...unref(showSharesActions), ...unref(createQuickLinkActions)].filter((item) =>
+      return [...unref(showSharesActions), ...unref(copyPermanentLinkActions)].filter((item) =>
         item.isVisible(unref(actionOptions))
       )
     })

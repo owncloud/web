@@ -93,29 +93,6 @@ Feature: spaces public link
     And "David" logs out
 
 
-  Scenario: Quick link
-    Given "Admin" creates following users using API
-      | id    |
-      | Alice |
-    And "Admin" assigns following roles to the users using API
-      | id    | role        |
-      | Alice | Space Admin |
-    When "Alice" logs in
-    And "Alice" creates the following project space using API
-      | name | id     |
-      | team | team.1 |
-    And "Alice" creates the following file in space "team" using API
-      | name     | content   |
-      | file.txt | some text |
-    And "Alice" navigates to the project space "team.1"
-    When "Alice" creates quick link of the resource "file.txt" with password "%public%" from the context menu
-    And "Anonymous" opens the public link "Link"
-    And "Anonymous" unlocks the public link with password "%public%"
-    Then "Anonymous" is in a text-editor
-    And "Anonymous" closes the file viewer
-    And "Alice" logs out
-
-
   Scenario: crud operation to public link for space
     Given "Admin" creates following users using API
       | id    |

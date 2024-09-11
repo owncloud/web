@@ -193,25 +193,6 @@ When(
 )
 
 When(
-  '{string} creates quick link of the resource {string} with password {string} from the context menu',
-  async function (
-    this: World,
-    stepUser: string,
-    resource: string,
-    password: string
-  ): Promise<void> {
-    const { page } = this.actorsEnvironment.getActor({ key: stepUser })
-    const shareObject = new objects.applicationFiles.Share({ page })
-    const linkObject = new objects.applicationFiles.Link({ page })
-    password = password === '%public%' ? linkObject.securePassword : password
-    await shareObject.createQuickLink({
-      resource,
-      password
-    })
-  }
-)
-
-When(
   '{string} should not be able to open the folder/file {string}',
   async function (this: World, stepUser: string, resource: string): Promise<void> {
     const { page } = this.actorsEnvironment.getActor({ key: stepUser })
