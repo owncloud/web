@@ -52,7 +52,7 @@
     "@casl/vue": "^2.2.2",
     "@microsoft/fetch-event-source": "^2.0.1",
     "@ownclouders/web-client": "workspace:*",
-    "@sentry/vue": "8.29.0",
+    "@sentry/vue": "8.30.0",
     "@uppy/core": "^3.3.0",
     "@uppy/drop-target": "^2.0.0",
     "@uppy/tus": "^3.1.0",
