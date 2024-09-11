@@ -14,7 +14,7 @@
 </template>
 
 <script lang="ts">
-import { computed, defineComponent, onMounted, PropType, ref, unref, watch } from 'vue'
+import { computed, defineComponent, PropType, ref, unref, watch } from 'vue'
 import { useGettext } from 'vue3-gettext'
 import { DateTime } from 'luxon'
 export default defineComponent({
@@ -56,11 +56,18 @@ export default defineComponent({
       return ''
     })
 
-    onMounted(() => {
-      if (props.currentDate) {
-        dateInputString.value = props.currentDate.toISODate()
-      }
-    })
+    watch(
+      () => props.currentDate,
+      () => {
+        if (props.currentDate) {
+          dateInputString.value = props.currentDate.toISODate()
+          return
+        }
+
+        dateInputString.value = undefined
+      },
+      { immediate: true }
+    )
 
     watch(
       date,

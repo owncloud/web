@@ -25,6 +25,7 @@
     </oc-button>
     <oc-drop
       v-if="!isToggle"
+      ref="dropRef"
       :toggle="'#' + id"
       class="oc-filter-chip-drop"
       mode="click"
@@ -49,8 +50,9 @@
 </template>
 
 <script lang="ts">
-import { computed, defineComponent, PropType } from 'vue'
+import { computed, defineComponent, PropType, ref, unref } from 'vue'
 import uniqueId from '../../utils/uniqueId'
+import OcDrop from '../OcDrop/OcDrop.vue'
 
 export default defineComponent({
   name: 'OcFilterChip',
@@ -107,14 +109,23 @@ export default defineComponent({
     }
   },
   emits: ['clearFilter', 'hideDrop', 'showDrop', 'toggleFilter'],
-  setup(props) {
+  setup(props, { expose }) {
+    const dropRef = ref<typeof OcDrop>()
+
     const filterActive = computed(() => {
       if (props.isToggle) {
         return props.isToggleActive
       }
       return !!props.selectedItemNames.length
     })
-    return { filterActive }
+
+    const hideDrop = () => {
+      unref(dropRef)?.hide()
+    }
+
+    expose({ hideDrop })
+
+    return { filterActive, dropRef }
   }
 })
 </script>
