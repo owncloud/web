@@ -3,7 +3,7 @@
     "name": "host.docker.internal:9200",
     "full_name": "host.docker.internal 9200",
     "organization": "ownCloud",
-    "domain": "host.docker.internal",
+    "domain": "host.docker.internal:9200",
     "homepage": "https://owncloud.com",
     "services": [
       {
@@ -25,7 +25,7 @@
     "name": "ocis.owncloud.test:10200",
     "full_name": "ocis.owncloud.test 10200",
     "organization": "ownCloud",
-    "domain": "ocis.owncloud.test",
+    "domain": "ocis.owncloud.test:10200",
     "homepage": "https://owncloud.com",
     "services": [
       {
