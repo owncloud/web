@@ -35,6 +35,7 @@ directives:
   script-src:
     - '''self'''
     - '''unsafe-inline'''
+    - 'https://www.gstatic.com/'
   style-src:
     - '''self'''
     - '''unsafe-inline'''
