@@ -12,7 +12,12 @@ exports[`CopyPrivateLink > should render a button 1`] = `
     <div id="oc-contextual-helper-1" class="oc-drop oc-box-shadow-medium oc-rounded oc-width-1-1 oc-info-drop">
       <div class="oc-card oc-card-body oc-background-secondary oc-p-m">
         <div class="info-drop-content">
-          <!--v-if-->
+          <div class="oc-flex oc-flex-between info-header oc-border-b oc-pb-s">
+            <h4 class="oc-m-rm info-title">Permanent link</h4> <button type="button" aria-label="Close" class="oc-button oc-rounded oc-button-m oc-button-justify-content-center oc-button-gap-m oc-button-passive oc-button-passive-raw">
+              <!--v-if-->
+              <!-- @slot Content of the button --> <span class="oc-icon oc-icon-m oc-icon-inherit"><!----></span>
+            </button>
+          </div>
           <p class="info-text">Copy the link to point your team to this item. Works only for people with existing access.</p>
           <!--v-if-->
           <!--v-if-->

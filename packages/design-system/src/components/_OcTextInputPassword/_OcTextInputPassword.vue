@@ -67,7 +67,11 @@
           ]"
           v-text="getPasswordPolicyRuleMessage(testedRule)"
         ></span>
-        <oc-contextual-helper v-if="testedRule.helperMessage" :text="testedRule.helperMessage" />
+        <oc-contextual-helper
+          v-if="testedRule.helperMessage"
+          :text="testedRule.helperMessage"
+          :title="$gettext('Password policy')"
+        />
       </div>
     </div>
   </portal>

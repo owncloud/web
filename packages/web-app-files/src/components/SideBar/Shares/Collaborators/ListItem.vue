@@ -50,6 +50,7 @@
                   'External user, registered with another organization’s account but granted access to your resources. External users can only have “view” or “edit” permission.'
                 )
               "
+              :title="$gettext('External user')"
             />
           </div>
           <div>

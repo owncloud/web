@@ -13,7 +13,7 @@ import uniqueId from '../../utils/uniqueId'
 import OcButton from '../OcButton/OcButton.vue'
 import OcIcon from '../OcIcon/OcIcon.vue'
 import OcInfoDrop from '../OcInfoDrop/OcInfoDrop.vue'
-import { ContextualHelperData } from '../../helpers'
+import { ContextualHelperDataListItem } from '../../helpers'
 
 export default defineComponent({
   name: 'OcContextualHelper',
@@ -25,8 +25,7 @@ export default defineComponent({
      */
     title: {
       type: String,
-      required: false,
-      default: ''
+      required: true
     },
     /**
      * Text at the beginning
@@ -40,9 +39,9 @@ export default defineComponent({
      * List element
      */
     list: {
-      type: Array as PropType<ContextualHelperData[]>,
+      type: Array as PropType<ContextualHelperDataListItem[]>,
       required: false,
-      default: (): ContextualHelperData[] => []
+      default: (): ContextualHelperDataListItem[] => []
     },
     /**
      * Text at the end

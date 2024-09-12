@@ -1,10 +1,15 @@
+import { FocusTrap } from 'focus-trap-vue'
+import OcDrop from '../OcDrop/OcDrop.vue'
 import OcInfoDrop from './OcInfoDrop.vue'
 import { PartialComponentProps, defaultPlugins, shallowMount } from 'web-test-helpers'
 
 describe('OcInfoDrop', () => {
   function getWrapperWithProps(props: PartialComponentProps<typeof OcInfoDrop>) {
     return shallowMount(OcInfoDrop, {
-      props,
+      props: {
+        ...props,
+        title: props.title || 'test-title'
+      },
       global: {
         plugins: [...defaultPlugins()],
         renderStubDefaultSlot: true,
@@ -44,6 +49,20 @@ describe('OcInfoDrop', () => {
     it('should set end-text prop', () => {
       const wrapper = getWrapperWithProps({ endText: 'test-my-text' })
       expect(wrapper.find('.info-text-end').text()).toBe('test-my-text')
+    })
+    describe('focus trap', () => {
+      it('is active if the drop is open', async () => {
+        const wrapper = getWrapperWithProps({ title: 'title' })
+        wrapper.findComponent<typeof OcDrop>('oc-drop-stub').vm.$emit('show-drop')
+        await wrapper.vm.$nextTick()
+        const focusTrap = wrapper.findComponent<typeof FocusTrap>('focus-trap-stub')
+        expect(focusTrap.props('active')).toBeTruthy()
+      })
+      it('is not active if the drop is closed', () => {
+        const wrapper = getWrapperWithProps({ title: 'title' })
+        const focusTrap = wrapper.findComponent<typeof FocusTrap>('focus-trap-stub')
+        expect(focusTrap.props('active')).toBeFalsy()
+      })
     })
   })
 })

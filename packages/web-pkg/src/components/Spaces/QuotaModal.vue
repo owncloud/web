@@ -52,7 +52,7 @@ export default defineComponent({
     },
     warningMessageContextualHelperData: {
       type: Object as PropType<ContextualHelperData>,
-      default: (): ContextualHelperData => ({})
+      default: (): ContextualHelperData => undefined
     },
     resourceType: {
       type: String,

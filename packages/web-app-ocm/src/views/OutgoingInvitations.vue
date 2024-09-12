@@ -187,7 +187,8 @@ export default defineComponent({
       return {
         text: $gettext(
           'Create an invitation link and send it to the person you want to share with.'
-        )
+        ),
+        title: $gettext('Invitation link')
       }
     })
 

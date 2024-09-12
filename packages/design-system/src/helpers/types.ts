@@ -4,7 +4,7 @@ export interface ContextualHelperDataListItem {
 }
 
 export interface ContextualHelperData {
-  title?: string
+  title: string
   text?: string
   list?: ContextualHelperDataListItem[]
   readMoreLink?: string

@@ -20,6 +20,7 @@
               'Enter the target URL of a webpage or the name of a file. Users will be directed to this webpage or file.'
             )
           "
+          :title="$gettext('Webpage or file')"
           class="oc-ml-xs"
         />
       </div>
@@ -96,6 +97,7 @@
           ></label>
           <oc-contextual-helper
             :text="$gettext('Shortcut name as it will appear in the file list.')"
+            :title="$gettext('Shortcut name')"
             class="oc-ml-xs"
           />
         </div>

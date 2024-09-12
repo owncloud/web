@@ -97,7 +97,8 @@ export default defineComponent({
       return {
         text: $gettext(
           'Once you accept the invitation, the inviter will be added to your connections.'
-        )
+        ),
+        title: $gettext('Accepting invitations')
       }
     })
 
