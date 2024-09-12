@@ -237,11 +237,11 @@ importers:
         specifier: ^10.1.0
         version: 10.1.6
       focus-trap:
-        specifier: 7.5.4
-        version: 7.5.4
+        specifier: 7.6.0
+        version: 7.6.0
       focus-trap-vue:
         specifier: ^4.0.1
-        version: 4.0.3(focus-trap@7.5.4)(vue@3.4.38(typescript@5.6.2))
+        version: 4.0.3(focus-trap@7.6.0)(vue@3.4.38(typescript@5.6.2))
       fuse.js:
         specifier: 7.0.0
         version: 7.0.0
@@ -1137,11 +1137,11 @@ importers:
         specifier: ^10.1.0
         version: 10.1.6
       focus-trap:
-        specifier: 7.5.4
-        version: 7.5.4
+        specifier: 7.6.0
+        version: 7.6.0
       focus-trap-vue:
         specifier: ^4.0.1
-        version: 4.0.3(focus-trap@7.5.4)(vue@3.4.38(typescript@5.6.2))
+        version: 4.0.3(focus-trap@7.6.0)(vue@3.4.38(typescript@5.6.2))
       fuse.js:
         specifier: 7.0.0
         version: 7.0.0
@@ -4734,8 +4734,8 @@ packages:
       focus-trap: ^7.0.0
       vue: ^3.0.0
 
-  focus-trap@7.5.4:
-    resolution: {integrity: sha512-N7kHdlgsO/v+iD/dMoJKtsSqs5Dz/dXZVebRgJw23LDk+jMi/974zyiOYDziY2JPp8xivq9BmUGwIJMiuSBi7w==}
+  focus-trap@7.6.0:
+    resolution: {integrity: sha512-1td0l3pMkWJLFipobUcGaf+5DTY4PLDDrcqoSaKP8ediO/CoWCCYk/fT/Y2A4e6TNB+Sh6clRJCjOPPnKoNHnQ==}
 
   follow-redirects@1.15.6:
     resolution: {integrity: sha512-wWN62YITEaOpSK584EZXJafH1AGpO8RVgElfkuXbTOrPX4fIfOyEpW/CsiNd8JdYrAoOvafRTOEnvsO++qCqFA==}
@@ -13473,12 +13473,12 @@ snapshots:
       inherits: 2.0.4
       readable-stream: 2.3.8
 
-  focus-trap-vue@4.0.3(focus-trap@7.5.4)(vue@3.4.38(typescript@5.6.2)):
+  focus-trap-vue@4.0.3(focus-trap@7.6.0)(vue@3.4.38(typescript@5.6.2)):
     dependencies:
-      focus-trap: 7.5.4
+      focus-trap: 7.6.0
       vue: 3.4.38(typescript@5.6.2)
 
-  focus-trap@7.5.4:
+  focus-trap@7.6.0:
     dependencies:
       tabbable: 6.2.0
 
