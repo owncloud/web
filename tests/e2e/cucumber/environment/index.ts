@@ -5,10 +5,13 @@ import {
   setWorldConstructor,
   ITestCaseHookParameter,
   AfterAll,
-  After
+  After,
+  Status
 } from '@cucumber/cucumber'
 import pino from 'pino'
 import { Browser, chromium, firefox, webkit } from '@playwright/test'
+import path from 'path'
+import fs from 'fs'
 
 import { config } from '../../config'
 import { api, environment } from '../../support'
@@ -39,7 +42,9 @@ const logger = pino({
     }
   }
 })
+
 setDefaultTimeout(config.debug ? -1 : config.timeout * 1000)
+setWorldConstructor(World)
 
 Before(async function (this: World, { pickle }: ITestCaseHookParameter) {
   this.feature = pickle
@@ -137,6 +142,10 @@ After(async function (this: World, { result, willBeRetried }: ITestCaseHookParam
   keycloakTokenStore.clear()
   removeTempUploadDirectory()
   closeSSEConnections()
+
+  if (config.reportTracing) {
+    filterTracingReports(result.status)
+  }
 })
 
 AfterAll(async () => {
@@ -145,9 +154,35 @@ AfterAll(async () => {
   if (state.browser) {
     await state.browser.close()
   }
+
+  if (config.reportTracing) {
+    // move failed tracing reports
+    const failedDir = path.dirname(config.tracingReportDir) + '/failed'
+
+    if (fs.existsSync(failedDir)) {
+      fs.renameSync(failedDir, config.tracingReportDir)
+    }
+  }
 })
 
-setWorldConstructor(World)
+function filterTracingReports(status: string) {
+  const traceDir = config.tracingReportDir
+  const failedDir = path.dirname(config.tracingReportDir) + '/failed'
+
+  if (status !== Status.PASSED) {
+    if (!fs.existsSync(failedDir)) {
+      fs.mkdirSync(failedDir, { recursive: true })
+    }
+    const reports = fs.readdirSync(traceDir)
+    // collect tracings for failed tests
+    reports.forEach((report) => {
+      fs.renameSync(`${traceDir}/${report}`, `${failedDir}/${report}`)
+    })
+  } else {
+    // clean up the tracing directory
+    fs.rmSync(traceDir, { recursive: true })
+  }
+}
 
 const cleanUpUser = async (adminUser: User) => {
   const requests: Promise<User>[] = []

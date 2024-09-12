@@ -37,6 +37,9 @@ export const config = {
   acceptDownloads: process.env.DOWNLOADS !== 'false',
   browser: process.env.BROWSER ?? 'chrome',
   reportDir: process.env.REPORT_DIR || 'reports/e2e',
+  get tracingReportDir() {
+    return this.reportDir + '/playwright/tracing'
+  },
   reportVideo: process.env.REPORT_VIDEO === 'true',
   reportHar: process.env.REPORT_HAR === 'true',
   reportTracing: process.env.REPORT_TRACING === 'true',
