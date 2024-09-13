@@ -116,7 +116,7 @@
     "lodash-es": "4.17.21",
     "luxon": "3.5.0",
     "vue-router": "4.2.5",
-    "vue": "3.5.0",
+    "vue": "3.5.4",
     "vue3-gettext": "2.4.0"
   },
   "engines": {
