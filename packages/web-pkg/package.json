@@ -58,7 +58,7 @@
     "@uppy/tus": "^3.1.0",
     "@uppy/utils": "^5.3.0",
     "@uppy/xhr-upload": "^3.0.1",
-    "@vue/shared": "3.4.38",
+    "@vue/shared": "3.5.4",
     "@vueuse/core": "^11.0.0",
     "axios": "1.7.7",
     "deepmerge": "^4.2.2",

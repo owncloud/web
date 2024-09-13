@@ -1,7 +1,7 @@
 import ResolvePublicLink from '../../../src/pages/resolvePublicLink.vue'
 import { defaultPlugins, defaultComponentMocks, shallowMount } from 'web-test-helpers'
 import { mockDeep } from 'vitest-mock-extended'
-import { CapabilityStore, ClientService, useRouteParam } from '@ownclouders/web-pkg'
+import { CapabilityStore, ClientService, useRouteParam, useRouteQuery } from '@ownclouders/web-pkg'
 import { DavHttpError, SpaceResource } from '@ownclouders/web-client'
 import { authService } from '../../../src/services/auth'
 import { ref } from 'vue'
@@ -10,7 +10,8 @@ vi.mock('../../../src/services/auth')
 
 vi.mock('@ownclouders/web-pkg', async (importOriginal) => ({
   ...(await importOriginal<any>()),
-  useRouteParam: vi.fn()
+  useRouteParam: vi.fn(),
+  useRouteQuery: vi.fn()
 }))
 
 const selectors = {
@@ -105,6 +106,7 @@ function getWrapper({
   } satisfies Partial<CapabilityStore['capabilities']>
 
   vi.mocked(useRouteParam).mockReturnValue(ref('token'))
+  vi.mocked(useRouteQuery).mockReturnValue(ref('redirectUrl'))
 
   return {
     mocks,

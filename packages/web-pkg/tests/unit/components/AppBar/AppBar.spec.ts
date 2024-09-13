@@ -70,7 +70,7 @@ describe('AppBar component', () => {
           [],
           {},
           { breadcrumbs: [breadcrumbItems[0]] },
-          mock<RouteLocation>(),
+          mock<RouteLocation>({ name: '' }),
           true
         )
         expect(wrapper.find(selectors.ocBreadcrumbStub).exists()).toBeFalsy()

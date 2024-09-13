@@ -32,7 +32,9 @@ describe('SpaceContextActions', () => {
 })
 
 function getWrapper(space: SpaceResource) {
-  const mocks = defaultComponentMocks({ currentRoute: mock<RouteLocation>({ path: '/files' }) })
+  const mocks = defaultComponentMocks({
+    currentRoute: mock<RouteLocation>({ path: '/files', name: '' })
+  })
   mocks.$previewService.getSupportedMimeTypes.mockReturnValue([])
   return {
     wrapper: mount(SpaceContextActions, {
