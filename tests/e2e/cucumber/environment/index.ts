@@ -159,7 +159,7 @@ function filterTracingReports(status: string) {
   const traceDir = config.tracingReportDir
   const failedDir = path.dirname(config.tracingReportDir) + '/failed'
 
-  if (status !== Status.PASSED) {
+  if (status !== 'PASSED') {
     if (!fs.existsSync(failedDir)) {
       fs.mkdirSync(failedDir, { recursive: true })
     }
