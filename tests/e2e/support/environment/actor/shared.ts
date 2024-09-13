@@ -6,6 +6,7 @@ export interface ActorsOptions {
   context: {
     acceptDownloads: boolean
     reportDir: string
+    tracingReportDir: string
     reportVideo: boolean
     reportHar: boolean
     reportTracing: boolean

@@ -26,6 +26,7 @@ export class World extends CucumberWorld {
       context: {
         acceptDownloads: config.acceptDownloads,
         reportDir: config.reportDir,
+        tracingReportDir: config.tracingReportDir,
         reportHar: config.reportHar,
         reportTracing: config.reportTracing,
         reportVideo: config.reportVideo,

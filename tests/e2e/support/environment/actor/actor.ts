@@ -60,12 +60,7 @@ export class ActorEnvironment extends EventEmitter implements Actor {
   async close(): Promise<void> {
     if (this.options.context.reportTracing) {
       await this.context?.tracing.stop({
-        path: path.join(
-          this.options.context.reportDir,
-          'playwright',
-          'tracing',
-          `${this.options.namespace}.zip`
-        )
+        path: path.join(this.options.context.tracingReportDir, `${this.options.namespace}.zip`)
       })
     }
 
