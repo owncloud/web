@@ -1862,7 +1862,7 @@ def e2eTestsOnKeycloak(ctx):
                          "BASE_URL_OCIS": "ocis:9200",
                          "HEADLESS": "true",
                          "RETRY": "1",
-                         "REPORT_TRACING": "true",
+                         "REPORT_TRACING": "with-tracing" in ctx.build.title.lower(),
                          "KEYCLOAK": "true",
                          "KEYCLOAK_HOST": "keycloak:8443",
                      },
