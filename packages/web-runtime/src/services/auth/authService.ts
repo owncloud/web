@@ -140,8 +140,13 @@ export class AuthService implements AuthServiceInterface {
 
       if (!this.userManager.areEventHandlersRegistered) {
         this.userManager.events.addAccessTokenExpired((...args): void => {
-          console.error('AccessToken Expired：', ...args)
-          this.handleAuthError(unref(this.router.currentRoute))
+          const handleExpirationError = () => {
+            console.error('AccessToken Expired：', ...args)
+            this.handleAuthError(unref(this.router.currentRoute), { forceLogout: true })
+          }
+
+          // retry silent signin once, force logoout if it fails
+          this.userManager.signinSilent().catch(handleExpirationError)
         })
 
         this.userManager.events.addAccessTokenExpiring((...args) => {
@@ -165,7 +170,7 @@ export class AuthService implements AuthServiceInterface {
           }
         })
 
-        this.userManager.events.addUserUnloaded(async () => {
+        this.userManager.events.addUserUnloaded(() => {
           console.log('user unloaded…')
           this.tokenTimerWorker?.resetTokenTimer()
           this.resetStateAfterUserLogout()
@@ -288,7 +293,10 @@ export class AuthService implements AuthServiceInterface {
     return '/?' + new URLSearchParams(currentQuery as Record<string, string>).toString()
   }
 
-  public async handleAuthError(route: RouteLocation) {
+  public async handleAuthError(
+    route: RouteLocation,
+    { forceLogout = false }: { forceLogout?: boolean } = {}
+  ) {
     if (isPublicLinkContextRequired(this.router, route)) {
       const token = extractPublicLinkToken(route)
       this.publicLinkManager.clear(token)
@@ -299,6 +307,12 @@ export class AuthService implements AuthServiceInterface {
       })
     }
     if (isUserContextRequired(this.router, route) || isIdpContextRequired(this.router, route)) {
+      if (forceLogout) {
+        this.tokenTimerWorker?.resetTokenTimer()
+        await this.logoutUser()
+        return
+      }
+
       const user = await this.userManager.getUser()
       if (user?.expires_in !== undefined && user.expires_in < 0) {
         // token expired, simply return and let the regular auth flow do its thing
