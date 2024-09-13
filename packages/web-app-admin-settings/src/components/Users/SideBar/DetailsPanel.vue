@@ -40,6 +40,7 @@
                     'User roles become available once the user has logged in for the first time.'
                   )
                 "
+                :title="$gettext('User role')"
               />
             </span>
           </td>
@@ -62,6 +63,7 @@
                     'User quota becomes available once the user has logged in for the first time.'
                   )
                 "
+                :title="$gettext('Quota')"
               />
             </span>
           </td>
@@ -72,7 +74,10 @@
             <span v-if="_user.memberOf.length" v-text="groupsDisplayValue" />
             <span v-else>
               <span class="oc-mr-xs">-</span>
-              <oc-contextual-helper :text="$gettext('No groups assigned.')" />
+              <oc-contextual-helper
+                :text="$gettext('No groups assigned.')"
+                :title="$gettext('Groups')"
+              />
             </span>
           </td>
         </tr>

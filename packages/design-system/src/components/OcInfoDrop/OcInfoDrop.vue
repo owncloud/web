@@ -6,57 +6,57 @@
     :toggle="toggle"
     :mode="mode"
     close-on-click
+    @hide-drop="() => (dropOpen = false)"
+    @show-drop="() => (dropOpen = true)"
   >
-    <div class="info-drop-content">
-      <div v-if="title" class="oc-flex oc-flex-between info-header oc-border-b oc-pb-s">
-        <h4 class="oc-m-rm info-title" v-text="$gettext(title)" />
+    <focus-trap :active="dropOpen">
+      <div class="info-drop-content">
+        <div class="oc-flex oc-flex-between info-header oc-border-b oc-pb-s">
+          <h4 class="oc-m-rm info-title" v-text="$gettext(title)" />
+          <oc-button
+            v-oc-tooltip="$gettext('Close')"
+            appearance="raw"
+            :aria-label="$gettext('Close')"
+          >
+            <oc-icon name="close" fill-type="line" size="medium" variation="inherit" />
+          </oc-button>
+        </div>
+        <p v-if="text" class="info-text" v-text="$gettext(text)" />
+        <dl v-if="list.length" class="info-list">
+          <component :is="item.headline ? 'dt' : 'dd'" v-for="(item, index) in list" :key="index">
+            {{ $gettext(item.text) }}
+          </component>
+        </dl>
+        <p v-if="endText" class="info-text-end" v-text="$gettext(endText)" />
         <oc-button
-          v-oc-tooltip="$gettext('Close')"
+          v-if="readMoreLink"
+          type="a"
           appearance="raw"
-          :aria-label="$gettext('Close')"
+          size="small"
+          class="info-more-link"
+          :href="readMoreLink"
+          target="_blank"
         >
-          <oc-icon name="close" fill-type="line" size="medium" variation="inherit" />
+          {{ $gettext('Read more') }}
         </oc-button>
       </div>
-      <p v-if="text" class="info-text" v-text="$gettext(text)" />
-      <dl v-if="list.length" class="info-list">
-        <component :is="item.headline ? 'dt' : 'dd'" v-for="(item, index) in list" :key="index">
-          {{ $gettext(item.text) }}
-        </component>
-      </dl>
-      <p v-if="endText" class="info-text-end" v-text="$gettext(endText)" />
-      <oc-button
-        v-if="readMoreLink"
-        type="a"
-        appearance="raw"
-        size="small"
-        class="info-more-link"
-        :href="readMoreLink"
-        target="_blank"
-      >
-        {{ $gettext('Read more') }}
-      </oc-button>
-    </div>
+    </focus-trap>
   </oc-drop>
 </template>
 
 <script lang="ts">
-import { defineComponent, PropType } from 'vue'
-
+import { defineComponent, PropType, ref } from 'vue'
 import OcButton from '../OcButton/OcButton.vue'
 import OcIcon from '../OcIcon/OcIcon.vue'
 import OcDrop from '../OcDrop/OcDrop.vue'
 import uniqueId from '../../utils/uniqueId'
-
-export type ListElement = {
-  text: string
-  headline?: boolean
-}
+import { FocusTrap } from 'focus-trap-vue'
+import { ContextualHelperDataListItem } from '../../helpers'
 
 export default defineComponent({
   name: 'OcInfoDrop',
   status: 'unreleased',
-  components: { OcButton, OcIcon, OcDrop },
+  components: { OcButton, OcIcon, OcDrop, FocusTrap },
   props: {
     /**
      * Id of the element
@@ -100,8 +100,7 @@ export default defineComponent({
      */
     title: {
       type: String,
-      required: false,
-      default: ''
+      required: true
     },
     /**
      * Text at the beginning
@@ -115,9 +114,9 @@ export default defineComponent({
      * List element
      */
     list: {
-      type: Array as PropType<ListElement[]>,
+      type: Array as PropType<ContextualHelperDataListItem[]>,
       required: false,
-      default: (): ListElement[] => []
+      default: (): ContextualHelperDataListItem[] => []
     },
     /**
      * Text at the end
@@ -134,6 +133,13 @@ export default defineComponent({
       type: String,
       required: false,
       default: ''
+    }
+  },
+  setup() {
+    const dropOpen = ref(false)
+
+    return {
+      dropOpen
     }
   }
 })

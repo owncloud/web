@@ -4,7 +4,7 @@
       <oc-icon size="small" :name="copied ? 'checkbox-circle' : 'file-copy'" />
       <span class="oc-ml-xs" v-text="$gettext('Permanent link')"
     /></oc-button>
-    <oc-contextual-helper class="oc-ml-xs" :text="helperText" />
+    <oc-contextual-helper class="oc-ml-xs" :text="helperText" :title="$gettext('Permanent link')" />
   </div>
 </template>
 

@@ -23,6 +23,7 @@
         v-if="isDisabledRole"
         class="oc-ml-xs files-permission-actions-list"
         :list="existingSharePermissions.map((permission) => ({ text: permission }))"
+        :title="$gettext('Custom permissions')"
       />
     </div>
     <oc-drop

@@ -16,7 +16,11 @@
           <create-space v-if="hasCreatePermission" class="oc-mr-s" />
           <div v-if="!selectedResourcesIds?.length" class="oc-flex oc-flex-middle oc-pl-s">
             <span v-text="$gettext('Learn about spaces')" />
-            <oc-contextual-helper :text="spacesHelpText" class="oc-ml-xs" />
+            <oc-contextual-helper
+              :text="spacesHelpText"
+              :title="$gettext('Spaces')"
+              class="oc-ml-xs"
+            />
           </div>
         </template>
       </app-bar>

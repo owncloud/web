@@ -86,6 +86,7 @@ import OcIcon from '../OcIcon/OcIcon.vue'
 import OcTextInput from '../OcTextInput/OcTextInput.vue'
 import { FocusTrap } from 'focus-trap-vue'
 import { FocusTargetOrFalse, FocusTrapTabbableOptions } from 'focus-trap'
+import { ContextualHelperData } from '../../helpers'
 
 /**
  * Modals are generally used to force the user to focus on confirming or completing a single action.
@@ -179,7 +180,7 @@ export default defineComponent({
      * Contextual helper data
      */
     contextualHelperData: {
-      type: Object,
+      type: Object as PropType<ContextualHelperData>,
       required: false,
       default: null
     },
