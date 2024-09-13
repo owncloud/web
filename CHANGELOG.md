@@ -12,6 +12,7 @@ Summary
 * Bugfix - OCM local instance check: [#11560](https://github.com/owncloud/web/pull/11560)
 * Enhancement - Add split confirm button to create link modal: [#11558](https://github.com/owncloud/web/pull/11558)
 * Enhancement - Add versions to the left sidebar bottom: [#11561](https://github.com/owncloud/web/pull/11561)
+* Enhancement - Accessibility improvements: [#11574](https://github.com/owncloud/web/pull/11574)
 
 Details
 -------
@@ -46,6 +47,16 @@ Details
 
    https://github.com/owncloud/enterprise/issues/6814
    https://github.com/owncloud/web/pull/11561
+
+* Enhancement - Accessibility improvements: [#11574](https://github.com/owncloud/web/pull/11574)
+
+   The following accessibility improvements have been made:
+
+   - Contextual helpers now have a focus trap, meaning the user can't focus
+   elements in the background while the contextual helper is showing.
+
+   https://github.com/owncloud/web/issues/10725
+   https://github.com/owncloud/web/pull/11574
 
 Changelog for ownCloud Web [10.2.0] (2024-09-05)
 =======================================
