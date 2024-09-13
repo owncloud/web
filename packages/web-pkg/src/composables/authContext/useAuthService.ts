@@ -1,7 +1,7 @@
 import { useService } from '../service'
 
 export interface AuthServiceInterface {
-  handleAuthError(route: any): any
+  handleAuthError(route: any, options?: { forceLogout?: boolean }): any
 }
 
 export const useAuthService = (): AuthServiceInterface => {
