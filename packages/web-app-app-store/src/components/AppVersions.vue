@@ -1,11 +1,5 @@
 <template>
-  <oc-table
-    class="oc-width-1-1"
-    :data="data"
-    :fields="fields"
-    padding-x="remove"
-    :has-header="false"
-  >
+  <oc-table class="oc-width-1-1" :data="data" :fields="fields" padding-x="remove">
     <template #version="{ item }">
       v{{ item.version }}
       <oc-tag v-if="item.version === app.mostRecentVersion.version" size="small" class="oc-ml-s">
@@ -41,6 +35,7 @@ export default defineComponent({
       return props.app.versions.map((version) => {
         return {
           ...version,
+          minOCIS: version.minOCIS ? `v${version.minOCIS}` : '-',
           id: version.version
         }
       })
@@ -48,17 +43,26 @@ export default defineComponent({
     const fields = computed(() => {
       return [
         {
+          name: 'minOCIS',
+          type: 'raw',
+          width: 'shrink',
+          wrap: 'nowrap',
+          title: $gettext('oCIS Version')
+        },
+        {
           name: 'version',
           type: 'slot',
           width: 'expand',
-          wrap: 'truncate'
+          wrap: 'truncate',
+          title: $gettext('App Version')
         },
         {
           name: 'actions',
           type: 'slot',
           alignH: 'right',
           width: 'shrink',
-          wrap: 'nowrap'
+          wrap: 'nowrap',
+          title: ''
         }
       ]
     })

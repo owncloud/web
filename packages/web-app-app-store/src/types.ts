@@ -12,6 +12,7 @@ export const AppStoreConfigSchema = z.object({
 
 export const AppVersionSchema = z.object({
   version: z.string(),
+  minOCIS: z.string().optional(),
   url: z.string(),
   filename: z.string().optional()
 })
