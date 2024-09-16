@@ -291,7 +291,7 @@ services:
       - traefik
 
   traefik:
-    image: traefik:v3.1.2
+    image: traefik:v3.1.3
     restart: unless-stopped
     entrypoint:
       [
