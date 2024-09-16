@@ -340,8 +340,8 @@ export function buildSpace(
       }
       return user.memberOf?.some((group) => !!this.members[group.id])
     },
-    isOwner({ id }: User): boolean {
-      return id === this.owner?.id
+    isOwner(user: User): boolean {
+      return user?.id === this.owner?.id
     }
   } satisfies SpaceResource
   Object.defineProperty(s, 'nodeId', {
