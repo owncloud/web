@@ -145,7 +145,7 @@ export class AuthService implements AuthServiceInterface {
             this.handleAuthError(unref(this.router.currentRoute), { forceLogout: true })
           }
 
-          // retry silent signin once, force logoout if it fails
+          // retry silent signin once, force logout if it fails
           this.userManager.signinSilent().catch(handleExpirationError)
         })
 
