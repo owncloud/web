@@ -43,7 +43,7 @@
     "@ownclouders/eslint-config": "workspace:*",
     "@ownclouders/prettier-config": "workspace:*",
     "@ownclouders/tsconfig": "workspace:*",
-    "@playwright/test": "1.45.0",
+    "@playwright/test": "1.47.1",
     "@types/dompurify": "3.0.5",
     "@types/luxon": "3.2.1",
     "@types/mark.js": "8.11.12",
