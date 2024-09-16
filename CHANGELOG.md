@@ -10,6 +10,7 @@ Summary
 
 * Bugfix - OCM token clipboard copy: [#11557](https://github.com/owncloud/web/pull/11557)
 * Bugfix - OCM local instance check: [#11560](https://github.com/owncloud/web/pull/11560)
+* Bugfix - Thumbnails for GeoGebra slides not showing up: [#11583](https://github.com/owncloud/web/pull/11583)
 * Enhancement - Add split confirm button to create link modal: [#11558](https://github.com/owncloud/web/pull/11558)
 * Enhancement - Add versions to the left sidebar bottom: [#11561](https://github.com/owncloud/web/pull/11561)
 * Enhancement - Accessibility improvements: [#11574](https://github.com/owncloud/web/pull/11574)
@@ -32,6 +33,14 @@ Details
    instance in inviter select.
 
    https://github.com/owncloud/web/pull/11560
+
+* Bugfix - Thumbnails for GeoGebra slides not showing up: [#11583](https://github.com/owncloud/web/pull/11583)
+
+   We've fixed a bug, where the thumbnails for GeoGebra slide files were not
+   showing up in the files list anymore.
+
+   https://github.com/owncloud/web/issues/11576
+   https://github.com/owncloud/web/pull/11583
 
 * Enhancement - Add split confirm button to create link modal: [#11558](https://github.com/owncloud/web/pull/11558)
 
