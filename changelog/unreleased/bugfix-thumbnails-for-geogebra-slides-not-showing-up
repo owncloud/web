@@ -1,0 +1,6 @@
+Bugfix: Thumbnails for GeoGebra slides not showing up
+
+We've fixed a bug, where the thumbnails for GeoGebra slide files were not showing up in the files list anymore.
+
+https://github.com/owncloud/web/pull/11583
+https://github.com/owncloud/web/issues/11576
