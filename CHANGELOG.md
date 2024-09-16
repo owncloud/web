@@ -13,6 +13,7 @@ Summary
 * Enhancement - Add split confirm button to create link modal: [#11558](https://github.com/owncloud/web/pull/11558)
 * Enhancement - Add versions to the left sidebar bottom: [#11561](https://github.com/owncloud/web/pull/11561)
 * Enhancement - Accessibility improvements: [#11574](https://github.com/owncloud/web/pull/11574)
+* Enhancement - Show min oCIS version in app details (app store): [#11580](https://github.com/owncloud/web/pull/11580)
 
 Details
 -------
@@ -57,6 +58,13 @@ Details
 
    https://github.com/owncloud/web/issues/10725
    https://github.com/owncloud/web/pull/11574
+
+* Enhancement - Show min oCIS version in app details (app store): [#11580](https://github.com/owncloud/web/pull/11580)
+
+   We're now showing the minimum required oCIS version of apps in the app releases
+   of the app store.
+
+   https://github.com/owncloud/web/pull/11580
 
 Changelog for ownCloud Web [10.2.0] (2024-09-05)
 =======================================
