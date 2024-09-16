@@ -11,6 +11,7 @@ Summary
 * Bugfix - OCM token clipboard copy: [#11557](https://github.com/owncloud/web/pull/11557)
 * Bugfix - OCM local instance check: [#11560](https://github.com/owncloud/web/pull/11560)
 * Bugfix - Thumbnails for GeoGebra slides not showing up: [#11583](https://github.com/owncloud/web/pull/11583)
+* Bugfix - Logout issues on token renewal failure: [#11584](https://github.com/owncloud/web/pull/11584)
 * Enhancement - Add split confirm button to create link modal: [#11558](https://github.com/owncloud/web/pull/11558)
 * Enhancement - Add versions to the left sidebar bottom: [#11561](https://github.com/owncloud/web/pull/11561)
 * Enhancement - Accessibility improvements: [#11574](https://github.com/owncloud/web/pull/11574)
@@ -41,6 +42,18 @@ Details
 
    https://github.com/owncloud/web/issues/11576
    https://github.com/owncloud/web/pull/11583
+
+* Bugfix - Logout issues on token renewal failure: [#11584](https://github.com/owncloud/web/pull/11584)
+
+   When token renewal fails for any reason, we now retry the user login one more
+   time. If this fails, the user gets logged out and redirected to the login page.
+
+   This solves an issue where a logged out user was still able to access and
+   navigate the UI in a broken state.
+
+   https://github.com/owncloud/web/issues/11478
+   https://github.com/owncloud/ocis/issues/10038
+   https://github.com/owncloud/web/pull/11584
 
 * Enhancement - Add split confirm button to create link modal: [#11558](https://github.com/owncloud/web/pull/11558)
 
