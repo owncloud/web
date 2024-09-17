@@ -16,7 +16,7 @@ const dom = ({ position = 'auto', mode = 'click', paddingSize = 'medium' } = {})
     }
   )
   const drop = wrapper.findComponent({ name: 'oc-drop' })
-  const tippy = drop.vm.$data.tippy
+  const tippy = drop.vm.tippy
 
   return { wrapper, drop, tippy }
 }
