@@ -98,10 +98,7 @@ export default {
     })
 
     const logoWidth = ref('150px')
-    const hideLogoQuery = useRouteQuery('hide-logo', 'false')
-    const hideLogo = computed(() => {
-      return queryItemAsString(unref(hideLogoQuery)) === 'true'
-    })
+    const hideLogo = computed(() => unref(configOptions).hideLogo)
 
     const isNotificationBellEnabled = computed(() => {
       return (

@@ -116,7 +116,8 @@ const OptionsConfigSchema = z.object({
       companionUrl: z.string().optional()
     })
     .optional(),
-  userListRequiresFilter: z.boolean().optional()
+  userListRequiresFilter: z.boolean().optional(),
+  hideLogo: z.boolean().optional()
 })
 
 export type OptionsConfig = z.infer<typeof OptionsConfigSchema>

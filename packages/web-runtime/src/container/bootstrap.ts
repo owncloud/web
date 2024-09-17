@@ -149,7 +149,8 @@ export const announceConfiguration = async ({
 
   rawConfig.options = {
     ...rawConfig.options,
-    embed: { ...rawConfig.options?.embed, ...embedConfigFromQuery }
+    embed: { ...rawConfig.options?.embed, ...embedConfigFromQuery },
+    hideLogo: getQueryParam('hide-logo') === 'true'
   }
 
   configStore.loadConfig(rawConfig)

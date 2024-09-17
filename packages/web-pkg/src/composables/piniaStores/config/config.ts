@@ -36,7 +36,8 @@ const defaultOptions = {
   },
   runningOnEos: false,
   tokenStorageLocal: true,
-  userListRequiresFilter: false
+  userListRequiresFilter: false,
+  hideLogo: false
 } satisfies Partial<OptionsConfig>
 
 export const useConfigStore = defineStore('config', () => {
