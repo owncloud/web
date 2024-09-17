@@ -3,13 +3,7 @@ import { useWebWorker } from '@vueuse/core'
 import PasteWorker from '../../../../../src/composables/webWorkers/pasteWorker/worker?worker'
 import { TransferType } from '../../../../../src/helpers/resource/conflictHandling'
 import { mock } from 'vitest-mock-extended'
-import { client } from '@ownclouders/web-client'
 import type { WebDAV } from '@ownclouders/web-client/webdav'
-
-vi.mock('@ownclouders/web-client', async (importOriginal) => ({
-  ...(await importOriginal<any>()),
-  client: vi.fn()
-}))
 
 const resourceMock = {
   id: 'resourceId',
@@ -35,7 +29,8 @@ const transferDataMock = {
   sourceSpace: sourceSpaceMock,
   targetSpace: targetSpaceMock,
   targetFolder: targetFolderMock,
-  path: ''
+  path: '',
+  baseUrl: 'https://example.com'
 }
 
 describe('paste worker', () => {
@@ -53,7 +48,10 @@ describe('paste worker', () => {
       resolveTest = resolve
     })
 
-    vi.mocked(client).mockReturnValue({ webdav: webDavMock, ocs: undefined, graph: undefined })
+    vi.doMock('@ownclouders/web-client', async (importOriginal) => ({
+      ...(await importOriginal<any>()),
+      client: () => ({ webdav: webDavMock, ocs: undefined, graph: undefined })
+    }))
   })
 
   afterEach(() => {
