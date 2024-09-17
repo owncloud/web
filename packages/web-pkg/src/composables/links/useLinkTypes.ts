@@ -12,19 +12,7 @@ export const useLinkTypes = () => {
 
   const canCreatePublicLinks = computed(() => ability.can('create-all', 'PublicLink'))
 
-  const defaultLinkType = computed<SharingLinkType>(() => {
-    const canCreatePublicLink = ability.can('create-all', 'PublicLink')
-    if (!canCreatePublicLink) {
-      return SharingLinkType.Internal
-    }
-
-    const defaultPermissions = capabilityStore.sharingPublicDefaultPermissions
-    if (defaultPermissions === undefined || defaultPermissions === 1) {
-      return SharingLinkType.View
-    }
-
-    return SharingLinkType.Internal
-  })
+  const defaultLinkType = computed<SharingLinkType>(() => SharingLinkType.View)
 
   const isPasswordEnforcedForLinkType = (type: SharingLinkType) => {
     if (type === SharingLinkType.View) {
@@ -44,12 +32,11 @@ export const useLinkTypes = () => {
 
   const getAvailableLinkTypes = ({ isFolder }: { isFolder: boolean }): SharingLinkType[] => {
     if (!unref(canCreatePublicLinks)) {
-      return [SharingLinkType.Internal]
+      return []
     }
 
     if (isFolder) {
       return [
-        SharingLinkType.Internal,
         SharingLinkType.View,
         SharingLinkType.Upload,
         SharingLinkType.Edit,
@@ -57,7 +44,7 @@ export const useLinkTypes = () => {
       ]
     }
 
-    return [SharingLinkType.Internal, SharingLinkType.View, SharingLinkType.Edit]
+    return [SharingLinkType.View, SharingLinkType.Edit]
   }
 
   // links don't have roles in graph API, hence we need to define them here

@@ -95,25 +95,6 @@ Feature: link
     And "Alice" logs out
 
 
-  Scenario: Quick link
-    Given "Alice" logs in
-    And "Alice" creates the following folders in personal space using API
-      | name         |
-      | folderPublic |
-    And "Alice" creates the following files into personal space using API
-      | pathToFile             | content     |
-      | folderPublic/lorem.txt | lorem ipsum |
-
-    And "Alice" opens the "files" app
-    When "Alice" creates quick link of the resource "folderPublic" with password "%public%" from the context menu
-    And "Anonymous" opens the public link "Link"
-    And "Anonymous" unlocks the public link with password "%public%"
-    And "Anonymous" downloads the following public link resources using the sidebar panel
-      | resource  | type |
-      | lorem.txt | file |
-    And "Alice" logs out
-
-
   Scenario: public link for folder and file (by authenticated user)
     Given "Admin" creates following user using API
       | id    |

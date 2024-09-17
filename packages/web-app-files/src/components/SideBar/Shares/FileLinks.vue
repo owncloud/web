@@ -5,17 +5,14 @@
       <oc-contextual-helper v-if="helpersEnabled" class="oc-pl-xs" v-bind="viaLinkHelp" />
     </div>
     <p
-      v-if="!canCreateLinks({ space, resource })"
+      v-if="!canCreateLinks"
       data-testid="files-links-no-share-permissions-message"
       class="oc-mt-m"
       v-text="$gettext('You do not have permission to create links')"
     />
-    <div v-if="quicklink || canCreateLinks({ space, resource })" class="oc-mt-m">
+    <div v-if="quicklink || canCreateLinks" class="oc-mt-m">
       <name-and-copy v-if="quicklink" :link-share="quicklink" />
-      <create-quick-link
-        v-else-if="canCreateLinks({ space, resource })"
-        @create-public-link="addNewLink(true)"
-      />
+      <create-quick-link v-else-if="canCreateLinks" @create-public-link="addNewLink(true)" />
       <details-and-edit
         v-if="quicklink"
         :can-rename="false"
@@ -29,7 +26,7 @@
       />
       <hr class="oc-my-m" />
       <oc-button
-        v-if="canCreateLinks({ space, resource })"
+        v-if="canCreateLinks"
         id="files-file-link-add"
         variation="primary"
         appearance="raw"
@@ -137,7 +134,14 @@ export default defineComponent({
     const { dispatchModal } = useModals()
     const { removeResources } = useResourcesStore()
     const { isPasswordEnforcedForLinkType } = useLinkTypes()
-    const { canShare: canCreateLinks } = useCanShare()
+    const { canShare } = useCanShare()
+
+    const canCreateLinks = computed(() => {
+      if (!ability.can('create-all', 'PublicLink')) {
+        return false
+      }
+      return canShare({ space: unref(space), resource: unref(resource) })
+    })
 
     const sharesStore = useSharesStore()
     const { updateLink, deleteLink } = sharesStore
@@ -182,7 +186,7 @@ export default defineComponent({
 
     const canEditLink = (linkShare: LinkShare) => {
       return (
-        canCreateLinks({ space: unref(space), resource: unref(resource) }) &&
+        unref(canCreateLinks) &&
         (can('create-all', 'PublicLink') || linkShare.type === SharingLinkType.Internal)
       )
     }

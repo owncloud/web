@@ -21,13 +21,13 @@ const collaboratorAction = {
   label: () => 'Add people'
 }
 
-const quickLinkAction = {
+const permanentLinkAction = {
   isVisible: vi.fn(() => false),
   handler: vi.fn(),
   icon: 'link-add',
-  id: 'quicklink',
-  name: 'copy-quicklink',
-  label: () => 'Create and copy quicklink'
+  id: 'permanent-link',
+  name: 'copy-permanent-link',
+  label: () => 'Copy permanent link'
 }
 
 const testItem = {
@@ -58,7 +58,7 @@ describe('QuickActions', () => {
     })
 
     it('should not display action buttons where "displayed" is set to false', () => {
-      const linkActionButton = wrapper.find('.files-quick-action-copy-quicklink')
+      const linkActionButton = wrapper.find('.files-quick-action-copy-permanent-link')
 
       expect(linkActionButton.exists()).toBeFalsy()
     })
@@ -96,7 +96,7 @@ function getWrapper({ embedModeEnabled = false } = {}) {
     }),
     mock<ActionExtension>({
       extensionPointIds: [quickActionsExtensionPoint.id],
-      action: quickLinkAction
+      action: permanentLinkAction
     })
   ])
 

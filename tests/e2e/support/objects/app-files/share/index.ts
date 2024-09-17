@@ -1,7 +1,6 @@
 import { Page, Locator } from '@playwright/test'
 import * as po from './actions'
 import { resourceIsNotOpenable, isAcceptedSharePresent, resourceIsSynced } from './utils'
-import { createLinkArgs } from '../link/actions'
 import { ICollaborator, IAccessDetails } from './collaborator'
 import { User } from '../../../types'
 export class Share {
@@ -50,10 +49,6 @@ export class Share {
   async isAcceptedSharePresent(resource: string, owner: string): Promise<boolean> {
     await this.#page.reload()
     return await isAcceptedSharePresent({ page: this.#page, resource, owner })
-  }
-
-  async createQuickLink(args: Omit<createLinkArgs, 'page'>): Promise<void> {
-    await po.createQuickLink({ ...args, page: this.#page })
   }
 
   async resourceIsNotOpenable(resource: string): Promise<boolean> {

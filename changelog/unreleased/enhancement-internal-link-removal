@@ -1,0 +1,6 @@
+Enhancement: Internal link removal
+
+The internal link type has been removed because the permanent link makes it obsolete. Existing internal links still resolve correctly to ensure backwards compatibility.
+
+https://github.com/owncloud/web/pull/11553
+https://github.com/owncloud/web/issues/11544

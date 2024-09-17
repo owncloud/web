@@ -1,0 +1,6 @@
+Enhancement: Copy quick link action removal
+
+The action for creating/copying quick links for a resource has been removed. Instead, a new action has been added to copy the permanent link of a resource.
+
+https://github.com/owncloud/web/pull/11553
+https://github.com/owncloud/web/issues/11544

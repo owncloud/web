@@ -11,47 +11,20 @@ describe('useLinkTypes', () => {
     expect(useLinkTypes).toBeDefined()
   })
   describe('computed "defaultLinkType"', () => {
-    it('is internal if user can not create public links', () => {
+    it('is viewer', () => {
       getWrapper({
-        abilities: [],
-        setup: ({ defaultLinkType }) => {
-          expect(unref(defaultLinkType)).toBe(SharingLinkType.Internal)
-        }
-      })
-    })
-    it('is viewer if user can create public links and no default permissions are given', () => {
-      getWrapper({
-        abilities: [{ action: 'create-all', subject: 'PublicLink' }],
         setup: ({ defaultLinkType }) => {
           expect(unref(defaultLinkType)).toBe(SharingLinkType.View)
-        }
-      })
-    })
-    it('is viewer if default permissions are 1', () => {
-      getWrapper({
-        abilities: [{ action: 'create-all', subject: 'PublicLink' }],
-        defaultPermissions: 1,
-        setup: ({ defaultLinkType }) => {
-          expect(unref(defaultLinkType)).toBe(SharingLinkType.View)
-        }
-      })
-    })
-    it('is internasl if default permissions are 0', () => {
-      getWrapper({
-        abilities: [{ action: 'create-all', subject: 'PublicLink' }],
-        defaultPermissions: 0,
-        setup: ({ defaultLinkType }) => {
-          expect(unref(defaultLinkType)).toBe(SharingLinkType.Internal)
         }
       })
     })
   })
   describe('method "getAvailableLinkTypes"', () => {
-    it('only returns the internal type if user can not create public links', () => {
+    it('is empty if the user cannot create public links', () => {
       getWrapper({
         abilities: [],
         setup: ({ getAvailableLinkTypes }) => {
-          expect(getAvailableLinkTypes({ isFolder: true })).toEqual([SharingLinkType.Internal])
+          expect(getAvailableLinkTypes({ isFolder: true })).toEqual([])
         }
       })
     })
@@ -60,7 +33,6 @@ describe('useLinkTypes', () => {
         abilities: [{ action: 'create-all', subject: 'PublicLink' }],
         setup: ({ getAvailableLinkTypes }) => {
           expect(getAvailableLinkTypes({ isFolder: true })).toEqual([
-            SharingLinkType.Internal,
             SharingLinkType.View,
             SharingLinkType.Upload,
             SharingLinkType.Edit,
@@ -74,7 +46,6 @@ describe('useLinkTypes', () => {
         abilities: [{ action: 'create-all', subject: 'PublicLink' }],
         setup: ({ getAvailableLinkTypes }) => {
           expect(getAvailableLinkTypes({ isFolder: false })).toEqual([
-            SharingLinkType.Internal,
             SharingLinkType.View,
             SharingLinkType.Edit
           ])

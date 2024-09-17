@@ -15,7 +15,6 @@ import {
 } from '../../piniaStores'
 import { useClipboard } from '../../clipboard'
 import { useClientService } from '../../clientService'
-import { SharingLinkType } from '@ownclouders/web-client/graph/generated'
 
 export const useFileActionsCreateLink = ({
   enforceModal = false
@@ -90,7 +89,7 @@ export const useFileActionsCreateLink = ({
     { isQuickLink = false }: { isQuickLink?: boolean } = {}
   ) => {
     const passwordEnforced = capabilityStore.sharingPublicPasswordEnforcedFor.read_only === true
-    if (enforceModal || (passwordEnforced && unref(defaultLinkType) !== SharingLinkType.Internal)) {
+    if (enforceModal || passwordEnforced) {
       dispatchModal({
         title: $ngettext(
           'Copy link for "%{resourceName}"',
