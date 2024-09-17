@@ -2,13 +2,7 @@ import { unref } from 'vue'
 import { useWebWorker } from '@vueuse/core'
 import RestoreWorker from '../../../../../src/composables/webWorkers/restoreWorker/worker?worker'
 import { mock } from 'vitest-mock-extended'
-import { client } from '@ownclouders/web-client'
 import type { WebDAV } from '@ownclouders/web-client/webdav'
-
-vi.mock('@ownclouders/web-client', async (importOriginal) => ({
-  ...(await importOriginal<any>()),
-  client: vi.fn()
-}))
 
 const resourceMock = {
   id: 'resourceId',
@@ -23,7 +17,8 @@ const spaceMock = {
 const dataMock = {
   resources: [resourceMock],
   space: spaceMock,
-  missingFolderPaths: []
+  missingFolderPaths: [],
+  baseUrl: 'https://example.com'
 }
 
 describe('delete worker', () => {
@@ -41,7 +36,10 @@ describe('delete worker', () => {
       resolveTest = resolve
     })
 
-    vi.mocked(client).mockReturnValue({ webdav: webDavMock, ocs: undefined, graph: undefined })
+    vi.doMock('@ownclouders/web-client', async (importOriginal) => ({
+      ...(await importOriginal<any>()),
+      client: () => ({ webdav: webDavMock, ocs: undefined, graph: undefined })
+    }))
   })
 
   afterEach(() => {
