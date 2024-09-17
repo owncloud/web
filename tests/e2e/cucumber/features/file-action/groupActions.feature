@@ -26,7 +26,6 @@ Feature: Group actions
     # disabling auto accepting to check accepting share
     And "Brian" disables auto-accepting using API
 
-    And "Alice" logs in
     And "Alice" creates the following folders in personal space using API
       | name                   |
       | sharedFolder           |
@@ -44,7 +43,7 @@ Feature: Group actions
       | folder4      | Brian     | user | Can edit |
       | folder5      | Brian     | user | Can edit |
       | parentFolder | Brian     | user | Can edit |
-    And "Alice" opens the "files" app
+    And "Alice" logs in
 
     # multiple share
     And "Alice" shares the following resources using the sidebar panel

@@ -10,8 +10,7 @@ Feature: Users can see all activities of the resources and spaces
       | Alice | Space Admin |
 
   Scenario: activity
-    When "Alice" logs in
-    And "Alice" creates the following project space using API
+    When "Alice" creates the following project space using API
       | name | id     |
       | team | team.1 |
     And "Alice" creates the following folder in personal space using API
@@ -20,7 +19,7 @@ Feature: Users can see all activities of the resources and spaces
     And "Alice" shares the following resource using API
       | resource     | recipient | type | role     |
       | sharedFolder | Brian     | user | Can edit |
-    And "Alice" opens the "files" app
+    And "Alice" logs in
     Then "Alice" should see activity of the following resource
       | resource     | activity                             |
       | sharedFolder | alice shared sharedFolder with brian |

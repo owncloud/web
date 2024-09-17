@@ -9,7 +9,6 @@ Feature: web can be navigated through urls
     And "Admin" assigns following roles to the users using API
       | id    | role        |
       | Alice | Space Admin |
-    And "Alice" logs in
     And "Alice" creates the following folders in personal space using API
       | name   |
       | FOLDER |
@@ -29,6 +28,7 @@ Feature: web can be navigated through urls
     And "Alice" creates the following file in space "Development" using API
       | name              | content                   |
       | spaceTextfile.txt | This is test file. Cheers |
+    And "Alice" logs in
     When "Alice" navigates to "versions" details panel of file "lorem.txt" of space "personal" through the URL
     Then "Alice" restores following resources version
       | resource  | to | version | openDetailsPanel |

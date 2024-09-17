@@ -8,7 +8,6 @@ Feature: Tiles
       | id    |
       | Alice |
     And "Alice" logs in
-    And "Alice" opens the "files" app
     And "Alice" creates the following resources
       | resource    | type   |
       | tile_folder | folder |

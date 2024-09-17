@@ -169,7 +169,6 @@ Feature: server sent events
     Given "Admin" assigns following roles to the users using API
       | id    | role        |
       | Alice | Space Admin |
-    And "Alice" logs in
     And "Alice" creates the following project space using API
       | name      | id        |
       | Marketing | marketing |
@@ -179,6 +178,7 @@ Feature: server sent events
     And "Alice" creates the following folder in space "Marketing" using API
       | name         |
       | space-folder |
+    And "Alice" logs in
     When "Alice" navigates to the project space "marketing"
     And "Brian" logs in
     And "Brian" navigates to the project space "marketing"

@@ -7,8 +7,7 @@ Feature: Users can create shortcuts for resources and sites
       | Brian |
 
   Scenario: shortcut
-    When "Alice" logs in
-    And "Alice" creates the following folders in personal space using API
+    When "Alice" creates the following folders in personal space using API
       | name |
       | docs |
     And "Alice" creates the following files into personal space using API
@@ -23,7 +22,7 @@ Feature: Users can create shortcuts for resources and sites
     And "Alice" creates a public link of following resource using API
       | resource        | password |
       | docs/notice.txt | %public% |
-    And "Alice" opens the "files" app
+    And "Alice" logs in
     And "Alice" renames the most recently created public link of resource "docs/notice.txt" to "myPublicLink"
     And "Alice" opens the "files" app
 

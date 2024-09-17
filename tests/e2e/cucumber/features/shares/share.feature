@@ -7,16 +7,15 @@ Feature: share
       | Brian |
 
   Scenario: folder
-    And "Brian" logs in
+
     # disabling auto accepting to check accepting share
     And "Brian" disables auto-accepting using API
-    And "Alice" logs in
     And "Alice" creates the following folder in personal space using API
       | name               |
       | folder_to_shared   |
       | folder_to_shared_2 |
       | shared_folder      |
-    And "Alice" opens the "files" app
+    And "Alice" logs in
     And "Alice" uploads the following resource
       | resource      | to                 |
       | lorem.txt     | folder_to_shared   |
@@ -27,6 +26,7 @@ Feature: share
       | shared_folder      | Brian     | user | Can edit | folder       |
       | folder_to_shared_2 | Brian     | user | Can edit | folder       |
 
+    And "Brian" logs in
     And "Brian" navigates to the shared with me page
     And "Brian" opens folder "folder_to_shared"
     # user should have access to unsynced shares
@@ -79,7 +79,6 @@ Feature: share
 
   Scenario: file
     Given "Alice" logs in
-    And "Alice" opens the "files" app
     And "Alice" creates the following resources
       | resource         | type    | content   |
       | shareToBrian.txt | txtFile | some text |
@@ -156,7 +155,6 @@ Feature: share
     When "Alice" closes the file viewer
 
     When "Brian" logs in
-    And "Brian" opens the "files" app
     And "Brian" navigates to the shared with me page
     And "Brian" disables the sync for the following share
       | name           |
@@ -199,7 +197,6 @@ Feature: share
     And "Admin" adds user to the group using API
       | user  | group |
       | Brian | sales |
-    And  "Alice" logs in
     And "Alice" creates the following folder in personal space using API
       | name       |
       | myfolder   |
@@ -208,7 +205,7 @@ Feature: share
       | pathToFile           | content      |
       | new.txt              | some content |
       | mainFolder/lorem.txt | lorem epsum  |
-    And "Alice" opens the "files" app
+    And  "Alice" logs in
     When "Alice" shares the following resource using the sidebar panel
       | resource   | recipient | type  | role     | resourceType | expirationDate |
       | new.txt    | Brian     | user  | Can edit | file         | +5 days        |
@@ -238,27 +235,25 @@ Feature: share
     Given "Admin" creates following users using API
       | id    |
       | Carol |
-    And "Alice" logs in
     And "Alice" creates the following folder in personal space using API
       | name        |
       | test-folder |
     And "Alice" creates the following files into personal space using API
       | pathToFile   | content      |
       | testfile.txt | example text |
-    And "Alice" opens the "files" app
+    And "Alice" logs in
     And "Alice" shares the following resource using the sidebar panel
       | resource     | recipient | type | role     |
       | testfile.txt | Brian     | user | Can view |
       | test-folder  | Brian     | user | Can view |
     And "Alice" logs out
-    And "Carol" logs in
     And "Carol" creates the following folder in personal space using API
       | name        |
       | test-folder |
     And "Carol" creates the following files into personal space using API
       | pathToFile   | content      |
       | testfile.txt | example text |
-    And "Carol" opens the "files" app
+    And "Carol" logs in
     And "Carol" shares the following resource using the sidebar panel
       | resource     | recipient | type | role     |
       | testfile.txt | Brian     | user | Can view |
@@ -280,7 +275,6 @@ Feature: share
     Given "Admin" creates following users using API
       | id    |
       | Carol |
-    And "Alice" logs in
     And "Alice" creates the following folder in personal space using API
       | name        |
       | test-folder |
@@ -288,11 +282,11 @@ Feature: share
       | pathToFile               | content      |
       | testfile.txt             | example text |
       | test-folder/testfile.txt | some text    |
-    And "Alice" opens the "files" app
     And "Alice" shares the following resource using API
       | resource                 | recipient | type | role     |
       | testfile.txt             | Brian     | user | Can edit |
       | test-folder/testfile.txt | Brian     | user | Can edit |
+    And "Alice" logs in
     And "Alice" navigates to the shared with others page
     Then following resources should be displayed in the files list for user "Alice"
       | resource                 |
@@ -302,14 +296,13 @@ Feature: share
 
 
   Scenario: share indication
-    When "Alice" logs in
-    And "Alice" creates the following folders in personal space using API
+    When "Alice" creates the following folders in personal space using API
       | name                  |
       | shareFolder/subFolder |
     And "Alice" shares the following resource using API
       | resource    | recipient | type | role     |
       | shareFolder | Brian     | user | Can edit |
-    And "Alice" opens the "files" app
+    And "Alice" logs in
     Then "Alice" should see user-direct indicator on the folder "shareFolder"
     When "Alice" opens folder "shareFolder"
     Then "Alice" should see user-indirect indicator on the folder "subFolder"
