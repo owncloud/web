@@ -290,7 +290,7 @@ $internal-form-checkbox-indeterminate-image: "data:image/svg+xml;charset=UTF-8,%
 .oc-select:focus,
 .oc-textarea:focus {
   outline: none;
-  border-color: var(--oc-color-swatch-passive-default);
+  border-color: var(--oc-color-input-text-default);
   color: $form-focus-color;
 }
 
