@@ -1,7 +1,6 @@
 <template>
   <tr
     ref="observerTarget"
-    tabindex="-1"
     @click="$emit('click', $event)"
     @contextmenu="$emit('contextmenu', $event)"
     @dragstart="$emit('dragstart', $event)"

@@ -1,7 +1,7 @@
 import { QueryValue, useResourcesStore, FolderViewModeConstants } from '@ownclouders/web-pkg'
 import { useScrollTo } from '@ownclouders/web-pkg'
 import { Ref, ref, unref, nextTick, watchEffect } from 'vue'
-import { Key, KeyboardActions, Modifier } from '@ownclouders/web-pkg'
+import { Key, KeyboardActions, Modifier, focusCheckbox } from '@ownclouders/web-pkg'
 import { Resource } from '@ownclouders/web-client'
 import { findIndex } from 'lodash-es'
 import { storeToRefs } from 'pinia'
@@ -19,9 +19,9 @@ export const useKeyboardTableNavigation = (
   const resourcesStore = useResourcesStore()
   const { latestSelectedId } = storeToRefs(resourcesStore)
 
-  const bindKeyActionsIds = ref([])
-  const tileViewStart = ref(null)
-  const tileViewDirection = ref(null)
+  const bindKeyActionsIds: Ref<string[]> = ref([])
+  const tileViewStart = ref<string>(null)
+  const tileViewDirection = ref<Direction>(null)
 
   keyActions.bindKeyAction({ modifier: Modifier.Ctrl, primary: Key.A }, () =>
     handleSelectAllAction()
@@ -123,6 +123,7 @@ export const useKeyboardTableNavigation = (
     await nextTick()
     resourcesStore.addSelection(nextId)
     await nextTick()
+    focusCheckbox(nextId)
     scrollToResource(nextId, { topbarElement: 'files-app-bar' })
   }
 
@@ -237,6 +238,7 @@ export const useKeyboardTableNavigation = (
         ? resourcesStore.addSelection(id)
         : resourcesStore.removeSelection(id)
     }
+    focusCheckbox(vp.lastSelectedFileId)
     resourcesStore.setLastSelectedId(vp.lastSelectedFileId)
   }
   const handleTilesShiftDownAction = () => {
@@ -254,6 +256,7 @@ export const useKeyboardTableNavigation = (
         ? resourcesStore.addSelection(id)
         : resourcesStore.removeSelection(id)
     }
+    focusCheckbox(vp.lastSelectedFileId)
     resourcesStore.setLastSelectedId(vp.lastSelectedFileId)
   }
 
@@ -281,6 +284,7 @@ export const useKeyboardTableNavigation = (
     if (tileViewDirection.value === direction) {
       resourcesStore.addSelection(nextResourceId)
     }
+    focusCheckbox(nextResourceId)
   }
 
   const handleShiftUpAction = (movedBy = 1) => {
@@ -294,6 +298,7 @@ export const useKeyboardTableNavigation = (
     } else {
       resourcesStore.addSelection(nextResourceId)
     }
+    focusCheckbox(nextResourceId)
     scrollToResource(nextResourceId, { topbarElement: 'files-app-bar' })
     keyActions.selectionCursor.value = unref(keyActions.selectionCursor) - 1
   }
@@ -308,6 +313,7 @@ export const useKeyboardTableNavigation = (
     } else {
       resourcesStore.addSelection(nextResourceId)
     }
+    focusCheckbox(nextResourceId)
     scrollToResource(nextResourceId, { topbarElement: 'files-app-bar' })
     keyActions.selectionCursor.value = unref(keyActions.selectionCursor) + 1
   }

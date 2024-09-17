@@ -3,6 +3,9 @@ Enhancement: Accessibility improvements
 The following accessibility improvements have been made:
 
 - Contextual helpers now have a focus trap, meaning the user can't focus elements in the background while the contextual helper is showing.
+- An issue where the current focus would not change when navigating the resource table/tiles with the keyboard has been fixed.
 
 https://github.com/owncloud/web/pull/11574
+https://github.com/owncloud/web/pull/11591
 https://github.com/owncloud/web/issues/10725
+https://github.com/owncloud/web/issues/10729
