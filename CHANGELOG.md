@@ -12,6 +12,8 @@ Summary
 * Bugfix - OCM local instance check: [#11560](https://github.com/owncloud/web/pull/11560)
 * Bugfix - Thumbnails for GeoGebra slides not showing up: [#11583](https://github.com/owncloud/web/pull/11583)
 * Bugfix - Logout issues on token renewal failure: [#11584](https://github.com/owncloud/web/pull/11584)
+* Enhancement - Copy quick link action removal: [#11553](https://github.com/owncloud/web/pull/11553)
+* Enhancement - Internal link removal: [#11553](https://github.com/owncloud/web/pull/11553)
 * Enhancement - Add split confirm button to create link modal: [#11558](https://github.com/owncloud/web/pull/11558)
 * Enhancement - Add versions to the left sidebar bottom: [#11561](https://github.com/owncloud/web/pull/11561)
 * Enhancement - Accessibility improvements: [#11574](https://github.com/owncloud/web/pull/11574)
@@ -54,6 +56,23 @@ Details
    https://github.com/owncloud/web/issues/11478
    https://github.com/owncloud/ocis/issues/10038
    https://github.com/owncloud/web/pull/11584
+
+* Enhancement - Copy quick link action removal: [#11553](https://github.com/owncloud/web/pull/11553)
+
+   The action for creating/copying quick links for a resource has been removed.
+   Instead, a new action has been added to copy the permanent link of a resource.
+
+   https://github.com/owncloud/web/issues/11544
+   https://github.com/owncloud/web/pull/11553
+
+* Enhancement - Internal link removal: [#11553](https://github.com/owncloud/web/pull/11553)
+
+   The internal link type has been removed because the permanent link makes it
+   obsolete. Existing internal links still resolve correctly to ensure backwards
+   compatibility.
+
+   https://github.com/owncloud/web/issues/11544
+   https://github.com/owncloud/web/pull/11553
 
 * Enhancement - Add split confirm button to create link modal: [#11558](https://github.com/owncloud/web/pull/11558)
 
