@@ -95,10 +95,18 @@ Details
    The following accessibility improvements have been made:
 
    - Contextual helpers now have a focus trap, meaning the user can't focus
-   elements in the background while the contextual helper is showing.
+   elements in the background while the contextual helper is showing. - An issue
+   where the current focus would not change when navigating the resource
+   table/tiles with the keyboard has been fixed. - The contrasts of input borders
+   have been aligned with the official WCAG requirements. - The space member search
+   in the right sidebar now has a label. Also, the search has been moved from the
+   top of the sharing panel to the members section where all members are listed.
 
    https://github.com/owncloud/web/issues/10725
+   https://github.com/owncloud/web/issues/10729
+   https://github.com/owncloud/web/issues/10724
    https://github.com/owncloud/web/pull/11574
+   https://github.com/owncloud/web/pull/11591
 
 * Enhancement - Show min oCIS version in app details (app store): [#11580](https://github.com/owncloud/web/pull/11580)
 
