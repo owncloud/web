@@ -1,39 +1,52 @@
 <template>
-  <section class="files-embed-actions">
-    <oc-button
-      data-testid="button-cancel"
-      appearance="raw-inverse"
-      variation="brand"
-      @click="emitCancel"
-      >{{ $gettext('Cancel') }}
-    </oc-button>
-    <oc-button
-      v-if="!isLocationPicker && !isFilePicker"
-      key="btn-share"
-      data-testid="button-share"
-      variation="inverse"
-      appearance="filled"
-      :disabled="
-        areSelectActionsDisabled || !createLinkAction.isVisible({ resources: selectedFiles, space })
-      "
-      @click="createLinkAction.handler({ resources: selectedFiles, space })"
-      >{{ $gettext('Share link(s)') }}
-    </oc-button>
-    <oc-button
-      v-if="!isFilePicker"
-      data-testid="button-select"
-      variation="inverse"
-      appearance="filled"
-      :disabled="areSelectActionsDisabled"
-      @click="emitSelect"
-      >{{ selectLabel }}
-    </oc-button>
+  <section class="files-embed-actions oc-width-1-1 oc-flex oc-flex-middle oc-flex-between oc-my-s">
+    <oc-text-input
+      v-if="chooseFileName"
+      v-model="fileName"
+      class="files-embed-actions-file-name oc-flex oc-flex-row oc-flex-middle"
+      :selection-range="fileNameInputSelectionRange"
+      :label="$gettext('File name')"
+    />
+
+    <div class="files-embed-actions-buttons oc-flex oc-flex-middle">
+      <oc-button
+        class="oc-mr-s"
+        data-testid="button-cancel"
+        appearance="raw-inverse"
+        variation="brand"
+        @click="emitCancel"
+        >{{ $gettext('Cancel') }}
+      </oc-button>
+      <oc-button
+        v-if="!isLocationPicker && !isFilePicker"
+        key="btn-share"
+        data-testid="button-share"
+        variation="inverse"
+        appearance="filled"
+        :disabled="
+          areSelectActionsDisabled ||
+          !createLinkAction.isVisible({ resources: selectedFiles, space })
+        "
+        @click="createLinkAction.handler({ resources: selectedFiles, space })"
+        >{{ $gettext('Share link(s)') }}
+      </oc-button>
+      <oc-button
+        v-if="!isFilePicker"
+        data-testid="button-select"
+        variation="inverse"
+        appearance="filled"
+        :disabled="areSelectActionsDisabled"
+        @click="emitSelect"
+        >{{ selectLabel }}
+      </oc-button>
+    </div>
   </section>
 </template>
 
 <script lang="ts">
-import { computed, defineComponent, unref } from 'vue'
+import { computed, defineComponent, ref, unref } from 'vue'
 import {
+  embedModeLocationPickMessageData,
   FileAction,
   useAbility,
   useEmbedMode,
@@ -49,12 +62,18 @@ export default defineComponent({
   setup() {
     const ability = useAbility()
     const { $gettext } = useGettext()
-    const { isLocationPicker, isFilePicker, postMessage } = useEmbedMode()
+    const {
+      isLocationPicker,
+      isFilePicker,
+      postMessage,
+      chooseFileName,
+      chooseFileNameSuggestion
+    } = useEmbedMode()
     const spacesStore = useSpacesStore()
     const { currentSpace: space } = storeToRefs(spacesStore)
-
     const resourcesStore = useResourcesStore()
     const { currentFolder, selectedResources } = storeToRefs(resourcesStore)
+    const fileName = ref(unref(chooseFileNameSuggestion))
 
     const selectedFiles = computed<Resource[]>(() => {
       if (isLocationPicker.value) {
@@ -75,7 +94,19 @@ export default defineComponent({
       isLocationPicker.value ? $gettext('Choose') : $gettext('Attach as copy')
     )
 
+    const fileNameInputSelectionRange = computed(() => {
+      return [0, unref(fileName).split('.')[0].length] as [number, number]
+    })
+
     const emitSelect = (): void => {
+      if (unref(chooseFileName)) {
+        postMessage<embedModeLocationPickMessageData>('owncloud-embed:select', {
+          resources: JSON.parse(JSON.stringify(selectedFiles.value)),
+          fileName: unref(fileName)
+        })
+      }
+
+      // TODO: adjust type to embedModeLocationPickMessageData later (breaking)
       postMessage<Resource[]>(
         'owncloud-embed:select',
         JSON.parse(JSON.stringify(selectedFiles.value))
@@ -87,6 +118,8 @@ export default defineComponent({
     }
 
     return {
+      chooseFileName,
+      chooseFileNameSuggestion,
       selectedFiles,
       areSelectActionsDisabled,
       canCreatePublicLinks,
@@ -96,22 +129,40 @@ export default defineComponent({
       emitCancel,
       emitSelect,
       space,
-      createLinkAction
+      createLinkAction,
+      fileName,
+      fileNameInputSelectionRange
     }
   }
 })
 </script>
 
-<style scoped>
+<style lang="scss">
 .files-embed-actions {
-  align-items: center;
-  box-sizing: border-box;
-  display: flex;
   flex-wrap: wrap;
-  gap: var(--oc-space-medium);
-  justify-content: flex-end;
-  padding: var(--oc-space-medium) 0;
-  padding-right: var(--oc-space-small);
-  width: 100%;
+  gap: var(--oc-space-small);
+
+  color: var(--oc-color-text-inverse);
+
+  &-file-name {
+    margin-left: 230px;
+    gap: var(--oc-space-small);
+
+    input {
+      width: 400px;
+    }
+
+    @media (max-width: $oc-breakpoint-medium-default) {
+      margin-left: 0;
+
+      input {
+        width: auto;
+      }
+    }
+  }
+
+  &-buttons {
+    margin-left: auto;
+  }
 }
 </style>

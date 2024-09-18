@@ -94,6 +94,18 @@ const getEmbedConfigFromQuery = (
     config.target = embedTarget
   }
 
+  // Can enable file name input for location picker
+  const embedChooseFileName = getQueryParam('embed-choose-file-name')
+
+  config.chooseFileName = embedChooseFileName === 'true'
+
+  // Initial value for file name input in location picker
+  const embedChooseFileNameSuggestion = getQueryParam('embed-choose-file-name-suggestion')
+
+  if (embedChooseFileNameSuggestion) {
+    config.chooseFileNameSuggestion = embedChooseFileNameSuggestion
+  }
+
   const embedFileTypes = getQueryParam('embed-file-types')
 
   if (embedFileTypes) {

@@ -16,6 +16,7 @@
 <script lang="ts">
 import { defineComponent, onBeforeUnmount, onMounted, PropType, ref } from 'vue'
 import {
+  embedModeLocationPickMessageData,
   Modal,
   useClientService,
   useGetMatchingSpace,
@@ -57,6 +58,8 @@ export default defineComponent({
     iframeUrl.searchParams.append('hide-logo', 'true')
     iframeUrl.searchParams.append('embed', 'true')
     iframeUrl.searchParams.append('embed-target', 'location')
+    iframeUrl.searchParams.append('embed-choose-file-name', 'true')
+    iframeUrl.searchParams.append('embed-choose-file-name-suggestion', props.originalResource.name)
 
     const onLoad = () => {
       isLoading.value = false
@@ -68,16 +71,20 @@ export default defineComponent({
         return
       }
 
-      const destinationFolder: Resource = data.data[0]
+      let { resources, fileName }: embedModeLocationPickMessageData = data.data
+
+      const destinationFolder: Resource = resources[0]
       const space = getMatchingSpace(destinationFolder)
 
-      let fileName = props.originalResource.name
       const { children: existingResources } = await webdav.listFiles(space, {
         fileId: destinationFolder.fileId
       })
-      if (existingResources.find((resource) => resource.name === props.originalResource.name)) {
+      const resourceAlreadyExists = existingResources.find(
+        (existingResource) => existingResource.name === fileName
+      )
+      if (resourceAlreadyExists) {
         fileName = resolveFileNameDuplicate(
-          props.originalResource.name,
+          fileName,
           props.originalResource.extension,
           existingResources
         )

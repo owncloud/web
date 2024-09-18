@@ -8,6 +8,11 @@ export interface embedModeFilePickMessageData {
   locationQuery: LocationQuery
 }
 
+export interface embedModeLocationPickMessageData {
+  resources: Resource[]
+  fileName?: string
+}
+
 export const useEmbedMode = () => {
   const configStore = useConfigStore()
 
@@ -15,6 +20,14 @@ export const useEmbedMode = () => {
 
   const isLocationPicker = computed(() => {
     return configStore.options.embed?.target === 'location'
+  })
+
+  const chooseFileName = computed(() => {
+    return configStore.options.embed?.chooseFileName
+  })
+
+  const chooseFileNameSuggestion = computed(() => {
+    return configStore.options.embed?.chooseFileNameSuggestion
   })
 
   const isFilePicker = computed(() => {
@@ -56,6 +69,8 @@ export const useEmbedMode = () => {
   return {
     isEnabled,
     isLocationPicker,
+    chooseFileName,
+    chooseFileNameSuggestion,
     isFilePicker,
     messagesTargetOrigin,
     isDelegatingAuthentication,

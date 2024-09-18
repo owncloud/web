@@ -50,14 +50,12 @@ import {
   ApplicationInformation,
   AppMenuItemExtension,
   CustomComponentTarget,
-  queryItemAsString,
   useAuthStore,
   useCapabilityStore,
   useConfigStore,
   useEmbedMode,
   useExtensionRegistry,
   useOpenEmptyEditor,
-  useRouteQuery,
   useRouter,
   useThemeStore
 } from '@ownclouders/web-pkg'

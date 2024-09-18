@@ -134,6 +134,7 @@ function getWrapper(
     mock<ReturnType<typeof useEmbedMode>>({
       isLocationPicker: ref(isLocationPicker),
       isFilePicker: ref(isFilePicker),
+      chooseFileName: ref(false),
       postMessage: postMessageMock
     })
   )
