@@ -258,8 +258,8 @@ importers:
         specifier: 3.5.6
         version: 3.5.6(typescript@5.6.2)
       vue-inline-svg:
-        specifier: 3.1.3
-        version: 3.1.3(vue@3.5.6(typescript@5.6.2))
+        specifier: 3.1.4
+        version: 3.1.4(vue@3.5.6(typescript@5.6.2))
       vue-router:
         specifier: 4.2.5
         version: 4.2.5(vue@3.5.6(typescript@5.6.2))
@@ -8852,8 +8852,8 @@ packages:
   vue-inbrowser-prismjs-highlighter@4.69.1:
     resolution: {integrity: sha512-3bms6QpaP7hNCuxtoypRS9Soy+rM8hxjfY7xahS5rUfjq+ddfvUKGEFiapCp6/jRj4Fy3m6RuezR4xi3cZAZXw==}
 
-  vue-inline-svg@3.1.3:
-    resolution: {integrity: sha512-R5AV2h8D6Z3ZKSCbxHGWqKGcFUPSTD35Paavgp8u0HJIkv0iPN9h77vXzJWbt+erdhntmQd1mSLUs9BvPdjVtw==}
+  vue-inline-svg@3.1.4:
+    resolution: {integrity: sha512-2WrOViZroRvB0UqwkwxDlCz516pkmT9ojsWri9Vxp8wBcQ1/wzfF0ubw5J/ZxNgjkBBAp0qkTiXDdzBPonT21A==}
     peerDependencies:
       vue: ^3
 
@@ -17798,7 +17798,7 @@ snapshots:
       - vue
       - vue-template-compiler
 
-  vue-inline-svg@3.1.3(vue@3.5.6(typescript@5.6.2)):
+  vue-inline-svg@3.1.4(vue@3.5.6(typescript@5.6.2)):
     dependencies:
       vue: 3.5.6(typescript@5.6.2)
 
