@@ -491,7 +491,7 @@ importers:
     dependencies:
       '@vitejs/plugin-vue':
         specifier: ^5.0.0
-        version: 5.1.3(vite@5.2.8(@types/node@18.11.9)(sass@1.78.0)(terser@5.26.0))(vue@3.5.6(typescript@5.6.2))
+        version: 5.1.3(vite@5.2.14(@types/node@18.11.9)(sass@1.78.0)(terser@5.26.0))(vue@3.5.6(typescript@5.6.2))
       rollup-plugin-serve:
         specifier: ^3.0.0
         version: 3.0.0
@@ -500,7 +500,7 @@ importers:
         version: 1.78.0
       vite:
         specifier: ^5
-        version: 5.2.8(@types/node@18.11.9)(sass@1.78.0)(terser@5.26.0)
+        version: 5.2.14(@types/node@18.11.9)(sass@1.78.0)(terser@5.26.0)
 
   packages/prettier-config:
     dependencies:
@@ -928,19 +928,19 @@ importers:
         version: 3.2.1
       '@vitejs/plugin-vue':
         specifier: 5.1.3
-        version: 5.1.3(vite@5.2.8(@types/node@18.11.9)(sass@1.78.0)(terser@5.26.0))(vue@3.5.6(typescript@5.6.2))
+        version: 5.1.3(vite@5.2.14(@types/node@18.11.9)(sass@1.78.0)(terser@5.26.0))(vue@3.5.6(typescript@5.6.2))
       clean-publish:
         specifier: 5.0.0
         version: 5.0.0
       vite:
-        specifier: 5.2.8
-        version: 5.2.8(@types/node@18.11.9)(sass@1.78.0)(terser@5.26.0)
+        specifier: 5.2.14
+        version: 5.2.14(@types/node@18.11.9)(sass@1.78.0)(terser@5.26.0)
       vite-plugin-dts:
         specifier: 4.0.3
-        version: 4.0.3(@types/node@18.11.9)(rollup@4.14.0)(typescript@5.6.2)(vite@5.2.8(@types/node@18.11.9)(sass@1.78.0)(terser@5.26.0))
+        version: 4.0.3(@types/node@18.11.9)(rollup@4.14.0)(typescript@5.6.2)(vite@5.2.14(@types/node@18.11.9)(sass@1.78.0)(terser@5.26.0))
       vite-plugin-node-polyfills:
         specifier: 0.21.0
-        version: 0.21.0(rollup@4.14.0)(vite@5.2.8(@types/node@18.11.9)(sass@1.78.0)(terser@5.26.0))
+        version: 0.21.0(rollup@4.14.0)(vite@5.2.14(@types/node@18.11.9)(sass@1.78.0)(terser@5.26.0))
     publishDirectory: package
 
   packages/web-pkg:
@@ -1068,10 +1068,10 @@ importers:
         version: 5.0.0
       vite-plugin-dts:
         specifier: 4.0.3
-        version: 4.0.3(@types/node@18.11.9)(rollup@4.14.0)(typescript@5.6.2)(vite@5.2.8(@types/node@18.11.9)(sass@1.78.0)(terser@5.26.0))
+        version: 4.0.3(@types/node@18.11.9)(rollup@4.14.0)(typescript@5.6.2)(vite@5.2.14(@types/node@18.11.9)(sass@1.78.0)(terser@5.26.0))
       vite-plugin-node-polyfills:
         specifier: 0.21.0
-        version: 0.21.0(rollup@4.14.0)(vite@5.2.8(@types/node@18.11.9)(sass@1.78.0)(terser@5.26.0))
+        version: 0.21.0(rollup@4.14.0)(vite@5.2.14(@types/node@18.11.9)(sass@1.78.0)(terser@5.26.0))
       web-test-helpers:
         specifier: workspace:*
         version: link:../web-test-helpers
@@ -8723,6 +8723,34 @@ packages:
     peerDependencies:
       vite: '*'
 
+  vite@5.2.14:
+    resolution: {integrity: sha512-TFQLuwWLPms+NBNlh0D9LZQ+HXW471COABxw/9TEUBrjuHMo9BrYBPrN/SYAwIuVL+rLerycxiLT41t4f5MZpA==}
+    engines: {node: ^18.0.0 || >=20.0.0}
+    hasBin: true
+    peerDependencies:
+      '@types/node': ^18.0.0 || >=20.0.0
+      less: '*'
+      lightningcss: ^1.21.0
+      sass: '*'
+      stylus: '*'
+      sugarss: '*'
+      terser: ^5.4.0
+    peerDependenciesMeta:
+      '@types/node':
+        optional: true
+      less:
+        optional: true
+      lightningcss:
+        optional: true
+      sass:
+        optional: true
+      stylus:
+        optional: true
+      sugarss:
+        optional: true
+      terser:
+        optional: true
+
   vite@5.2.8:
     resolution: {integrity: sha512-OyZR+c1CE8yeHw5V5t59aXsUPPVTHMDjEZz8MgguLL/Q7NblxhZUlTu9xSPqlsUO/y+X7dlU05jdhvyycD55DA==}
     engines: {node: ^18.0.0 || >=20.0.0}
@@ -11131,6 +11159,11 @@ snapshots:
       '@uppy/utils': https://github.com/owncloud/uppy/releases/download/v3.12.13-owncloud/uppy-utils.tgz
       nanoid: 4.0.0
 
+  '@vitejs/plugin-vue@5.1.3(vite@5.2.14(@types/node@18.11.9)(sass@1.78.0)(terser@5.26.0))(vue@3.5.6(typescript@5.6.2))':
+    dependencies:
+      vite: 5.2.14(@types/node@18.11.9)(sass@1.78.0)(terser@5.26.0)
+      vue: 3.5.6(typescript@5.6.2)
+
   '@vitejs/plugin-vue@5.1.3(vite@5.2.8(@types/node@18.11.9)(sass@1.78.0)(terser@5.26.0))(vue@3.5.6(typescript@5.6.2))':
     dependencies:
       vite: 5.2.8(@types/node@18.11.9)(sass@1.78.0)(terser@5.26.0)
@@ -11161,13 +11194,13 @@ snapshots:
       chai: 5.1.1
       tinyrainbow: 1.2.0
 
-  '@vitest/mocker@2.1.1(@vitest/spy@2.1.1)(vite@5.2.8(@types/node@18.11.9)(sass@1.78.0)(terser@5.26.0))':
+  '@vitest/mocker@2.1.1(@vitest/spy@2.1.1)(vite@5.2.14(@types/node@18.11.9)(sass@1.78.0)(terser@5.26.0))':
     dependencies:
       '@vitest/spy': 2.1.1
       estree-walker: 3.0.3
       magic-string: 0.30.11
     optionalDependencies:
-      vite: 5.2.8(@types/node@18.11.9)(sass@1.78.0)(terser@5.26.0)
+      vite: 5.2.14(@types/node@18.11.9)(sass@1.78.0)(terser@5.26.0)
 
   '@vitest/pretty-format@2.1.1':
     dependencies:
@@ -17601,7 +17634,7 @@ snapshots:
       cac: 6.7.14
       debug: 4.3.7(supports-color@8.1.1)
       pathe: 1.1.2
-      vite: 5.2.8(@types/node@18.11.9)(sass@1.78.0)(terser@5.26.0)
+      vite: 5.2.14(@types/node@18.11.9)(sass@1.78.0)(terser@5.26.0)
     transitivePeerDependencies:
       - '@types/node'
       - less
@@ -17612,7 +17645,7 @@ snapshots:
       - supports-color
       - terser
 
-  vite-plugin-dts@4.0.3(@types/node@18.11.9)(rollup@4.14.0)(typescript@5.6.2)(vite@5.2.8(@types/node@18.11.9)(sass@1.78.0)(terser@5.26.0)):
+  vite-plugin-dts@4.0.3(@types/node@18.11.9)(rollup@4.14.0)(typescript@5.6.2)(vite@5.2.14(@types/node@18.11.9)(sass@1.78.0)(terser@5.26.0)):
     dependencies:
       '@microsoft/api-extractor': 7.47.4(@types/node@18.11.9)
       '@rollup/pluginutils': 5.1.0(rollup@4.14.0)
@@ -17626,7 +17659,7 @@ snapshots:
       typescript: 5.6.2
       vue-tsc: 2.0.29(typescript@5.6.2)
     optionalDependencies:
-      vite: 5.2.8(@types/node@18.11.9)(sass@1.78.0)(terser@5.26.0)
+      vite: 5.2.14(@types/node@18.11.9)(sass@1.78.0)(terser@5.26.0)
     transitivePeerDependencies:
       - '@types/node'
       - rollup
@@ -17635,6 +17668,14 @@ snapshots:
   vite-plugin-environment@1.1.3(vite@5.2.8(@types/node@18.11.9)(sass@1.78.0)(terser@5.26.0)):
     dependencies:
       vite: 5.2.8(@types/node@18.11.9)(sass@1.78.0)(terser@5.26.0)
+
+  vite-plugin-node-polyfills@0.21.0(rollup@4.14.0)(vite@5.2.14(@types/node@18.11.9)(sass@1.78.0)(terser@5.26.0)):
+    dependencies:
+      '@rollup/plugin-inject': 5.0.5(rollup@4.14.0)
+      node-stdlib-browser: 1.2.0
+      vite: 5.2.14(@types/node@18.11.9)(sass@1.78.0)(terser@5.26.0)
+    transitivePeerDependencies:
+      - rollup
 
   vite-plugin-node-polyfills@0.21.0(rollup@4.14.0)(vite@5.2.8(@types/node@18.11.9)(sass@1.78.0)(terser@5.26.0)):
     dependencies:
@@ -17657,6 +17698,17 @@ snapshots:
       '@rollup/pluginutils': 4.2.1
       vite: 5.2.8(@types/node@18.11.9)(sass@1.78.0)(terser@5.26.0)
 
+  vite@5.2.14(@types/node@18.11.9)(sass@1.78.0)(terser@5.26.0):
+    dependencies:
+      esbuild: 0.20.2
+      postcss: 8.4.47
+      rollup: 4.14.0
+    optionalDependencies:
+      '@types/node': 18.11.9
+      fsevents: 2.3.3
+      sass: 1.78.0
+      terser: 5.26.0
+
   vite@5.2.8(@types/node@18.11.9)(sass@1.78.0)(terser@5.26.0):
     dependencies:
       esbuild: 0.20.2
@@ -17677,7 +17729,7 @@ snapshots:
   vitest@2.1.1(@types/node@18.11.9)(happy-dom@15.7.3)(jsdom@25.0.0)(sass@1.78.0)(terser@5.26.0):
     dependencies:
       '@vitest/expect': 2.1.1
-      '@vitest/mocker': 2.1.1(@vitest/spy@2.1.1)(vite@5.2.8(@types/node@18.11.9)(sass@1.78.0)(terser@5.26.0))
+      '@vitest/mocker': 2.1.1(@vitest/spy@2.1.1)(vite@5.2.14(@types/node@18.11.9)(sass@1.78.0)(terser@5.26.0))
       '@vitest/pretty-format': 2.1.1
       '@vitest/runner': 2.1.1
       '@vitest/snapshot': 2.1.1
@@ -17692,7 +17744,7 @@ snapshots:
       tinyexec: 0.3.0
       tinypool: 1.0.0
       tinyrainbow: 1.2.0
-      vite: 5.2.8(@types/node@18.11.9)(sass@1.78.0)(terser@5.26.0)
+      vite: 5.2.14(@types/node@18.11.9)(sass@1.78.0)(terser@5.26.0)
       vite-node: 2.1.1(@types/node@18.11.9)(sass@1.78.0)(terser@5.26.0)
       why-is-node-running: 2.3.0
     optionalDependencies:
