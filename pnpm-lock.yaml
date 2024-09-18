@@ -461,7 +461,7 @@ importers:
         version: 9.1.0(eslint@9.9.1(jiti@1.21.0))
       eslint-plugin-n:
         specifier: ^17.0.0
-        version: 17.10.2(eslint@9.9.1(jiti@1.21.0))
+        version: 17.10.3(eslint@9.9.1(jiti@1.21.0))
       eslint-plugin-prettier:
         specifier: ^5.0.0
         version: 5.2.1(@types/eslint@8.56.1)(eslint-config-prettier@9.1.0(eslint@9.9.1(jiti@1.21.0)))(eslint@9.9.1(jiti@1.21.0))(prettier@3.3.3)
@@ -4401,8 +4401,8 @@ packages:
     peerDependencies:
       eslint: '>=8'
 
-  eslint-plugin-n@17.10.2:
-    resolution: {integrity: sha512-e+s4eAf5NtJaxPhTNu3qMO0Iz40WANS93w9LQgYcvuljgvDmWi/a3rh+OrNyMHeng6aOWGJO0rCg5lH4zi8yTw==}
+  eslint-plugin-n@17.10.3:
+    resolution: {integrity: sha512-ySZBfKe49nQZWR1yFaA0v/GsH6Fgp8ah6XV0WDz6CN8WO0ek4McMzb7A2xnf4DCYV43frjCygvb9f/wx7UUxRw==}
     engines: {node: ^18.18.0 || ^20.9.0 || >=21.1.0}
     peerDependencies:
       eslint: '>=8.23.0'
@@ -4902,8 +4902,8 @@ packages:
     resolution: {integrity: sha512-GMat4EJ5161kIy2HevLlr4luNjBgvmj413KaQA7jt4V8B4RDsfpHk7WQ9GVqfYyyx8OS/L66Kox+rJRNklLK7w==}
     engines: {node: '>=6'}
 
-  get-tsconfig@4.8.0:
-    resolution: {integrity: sha512-Pgba6TExTZ0FJAn1qkJAjIeKoDJ3CsI2ChuLohJnZl/tTU8MVrq3b+2t5UOPfRa4RMsorClBjJALkJUMjG1PAw==}
+  get-tsconfig@4.8.1:
+    resolution: {integrity: sha512-k9PN+cFBmaLWtVz29SkUoqU5O0slLuHJXt/2P+tMVFT+phsSGXGkp9t3rQIqdz0e+06EHNGs3oM6ZX1s2zHxRg==}
 
   get-value@2.0.6:
     resolution: {integrity: sha512-Ln0UQDlxH1BapMu3GPtf7CuYNwRZf2gwCuPqbyG6pB8WfmFpzqcy4xtAaAMUhnNqjMKTiCPZG2oMT3YSx8U2NA==}
@@ -13023,13 +13023,13 @@ snapshots:
       eslint: 9.9.1(jiti@1.21.0)
       eslint-compat-utils: 0.5.1(eslint@9.9.1(jiti@1.21.0))
 
-  eslint-plugin-n@17.10.2(eslint@9.9.1(jiti@1.21.0)):
+  eslint-plugin-n@17.10.3(eslint@9.9.1(jiti@1.21.0)):
     dependencies:
       '@eslint-community/eslint-utils': 4.4.0(eslint@9.9.1(jiti@1.21.0))
       enhanced-resolve: 5.17.1
       eslint: 9.9.1(jiti@1.21.0)
       eslint-plugin-es-x: 7.8.0(eslint@9.9.1(jiti@1.21.0))
-      get-tsconfig: 4.8.0
+      get-tsconfig: 4.8.1
       globals: 15.9.0
       ignore: 5.3.2
       minimatch: 9.0.5
@@ -13616,7 +13616,7 @@ snapshots:
     dependencies:
       pump: 3.0.0
 
-  get-tsconfig@4.8.0:
+  get-tsconfig@4.8.1:
     dependencies:
       resolve-pkg-maps: 1.0.0
 
