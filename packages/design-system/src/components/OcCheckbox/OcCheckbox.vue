@@ -118,7 +118,6 @@ export default defineComponent({
         'oc-checkbox',
         'oc-rounded',
         'oc-checkbox-' + getSizeClass(this.size),
-        { 'oc-checkbox-outline': this.outline },
         { 'oc-checkbox-checked': this.isChecked }
       ]
     },
@@ -162,10 +161,6 @@ export default defineComponent({
   vertical-align: middle;
   background-color: transparent;
   outline: none;
-
-  &-outline {
-    outline: solid 2px var(--oc-color-swatch-passive-default);
-  }
 
   &-s {
     @include oc-form-check-size(0.7);

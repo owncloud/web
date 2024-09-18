@@ -1,6 +1,6 @@
 import { useScrollTo } from '@ownclouders/web-pkg'
 import { Ref, unref } from 'vue'
-import { Key, KeyboardActions, Modifier } from '@ownclouders/web-pkg'
+import { Key, KeyboardActions, Modifier, focusCheckbox } from '@ownclouders/web-pkg'
 import { find, findIndex } from 'lodash-es'
 import { Item } from '@ownclouders/web-client'
 
@@ -55,6 +55,7 @@ export const useKeyboardTableNavigation = (
       (resource) => resource.id === nextResource.id
     )
 
+    focusCheckbox(nextResource.id)
     keyActions.resetSelectionCursor()
     selectedRows.value = [nextResource]
     lastSelectedRowIndex.value = nextResourceIndex
@@ -86,6 +87,7 @@ export const useKeyboardTableNavigation = (
       selectedRows.value.push(nextResource)
     }
 
+    focusCheckbox(nextResource.id)
     lastSelectedRowIndex.value = nextResourceIndex
     lastSelectedRowId.value = String(nextResource.id)
     keyActions.selectionCursor.value = unref(keyActions.selectionCursor) - 1
@@ -121,6 +123,7 @@ export const useKeyboardTableNavigation = (
       selectedRows.value.push(nextResource)
     }
 
+    focusCheckbox(nextResource.id)
     lastSelectedRowIndex.value = nextResourceIndex
     lastSelectedRowId.value = String(nextResource.id)
     keyActions.selectionCursor.value = unref(keyActions.selectionCursor) + 1

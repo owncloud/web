@@ -5,35 +5,6 @@
         <h3 v-translate class="oc-text-bold oc-text-medium oc-m-rm">Add members</h3>
         <oc-contextual-helper v-if="helpersEnabled" class="oc-pl-xs" v-bind="spaceAddMemberHelp" />
       </div>
-      <div class="oc-flex">
-        <div v-if="isFilterOpen" class="oc-flex">
-          <oc-text-input
-            v-model="filterTerm"
-            class="oc-text-truncate space-members-filter oc-mr-s"
-            label=""
-            :placeholder="$gettext('Filter members')"
-          />
-          <oc-button
-            v-oc-tooltip="$gettext('Close filter')"
-            class="close-filter-btn"
-            :aria-label="$gettext('Close filter')"
-            appearance="raw"
-            @click="toggleFilter"
-          >
-            <oc-icon name="close" fill-type="line" size="small" />
-          </oc-button>
-        </div>
-        <oc-button
-          v-else
-          v-oc-tooltip="$gettext('Filter members')"
-          class="open-filter-btn"
-          :aria-label="$gettext('Filter members')"
-          appearance="raw"
-          @click="toggleFilter"
-        >
-          <oc-icon name="search" fill-type="line" size="small" />
-        </oc-button>
-      </div>
     </div>
     <invite-collaborator-form
       v-if="canShare({ space: resource, resource })"
@@ -43,9 +14,45 @@
       class="oc-my-s"
     />
     <template v-if="hasCollaborators">
-      <div id="files-collaborators-headline" class="oc-flex oc-flex-middle oc-flex-between">
-        <h4 class="oc-text-bold oc-my-rm" v-text="$gettext('Members')" />
+      <div
+        id="files-collaborators-headline"
+        class="oc-flex oc-flex-middle oc-flex-between oc-position-relative"
+      >
+        <div class="oc-flex">
+          <h4 class="oc-text-bold oc-my-rm" v-text="$gettext('Members')" />
+          <oc-button
+            v-oc-tooltip="$gettext('Filter members')"
+            class="open-filter-btn oc-ml-s"
+            :aria-label="$gettext('Filter members')"
+            appearance="raw"
+            :aria-expanded="isFilterOpen"
+            @click="toggleFilter"
+          >
+            <oc-icon name="search" fill-type="line" size="small" />
+          </oc-button>
+        </div>
         <copy-private-link v-if="filesPrivateLinks" :resource="resource" />
+      </div>
+      <div
+        class="oc-flex oc-flex-between space-members-filter-container"
+        :class="{ 'space-members-filter-container-expanded': isFilterOpen }"
+      >
+        <oc-text-input
+          ref="filterInput"
+          v-model="filterTerm"
+          class="oc-text-truncate space-members-filter oc-mr-s oc-width-1-1"
+          :label="$gettext('Filter members')"
+          :clear-button-enabled="true"
+        />
+        <oc-button
+          v-oc-tooltip="$gettext('Close filter')"
+          class="close-filter-btn oc-mt-m"
+          :aria-label="$gettext('Close filter')"
+          appearance="raw"
+          @click="toggleFilter"
+        >
+          <oc-icon name="arrow-up-s" fill-type="line" />
+        </oc-button>
       </div>
 
       <ul
@@ -84,7 +91,7 @@ import {
   useSpacesStore,
   useUserStore
 } from '@ownclouders/web-pkg'
-import { computed, defineComponent, inject, ref, Ref, unref } from 'vue'
+import { computed, defineComponent, inject, nextTick, ref, Ref, unref, useTemplateRef } from 'vue'
 import { shareSpaceAddMemberHelp } from '../../../helpers/contextualHelpers'
 import { ProjectSpaceResource, CollaboratorShare } from '@ownclouders/web-client'
 import { useClientService } from '@ownclouders/web-pkg'
@@ -92,6 +99,7 @@ import Fuse from 'fuse.js'
 import Mark from 'mark.js'
 import { defaultFuseOptions } from '@ownclouders/web-pkg'
 import CopyPrivateLink from '../../Shares/CopyPrivateLink.vue'
+import { OcTextInput } from 'design-system/src/components'
 
 export default defineComponent({
   name: 'SpaceMembers',
@@ -101,6 +109,8 @@ export default defineComponent({
     InviteCollaboratorForm
   },
   setup() {
+    const filterInput = useTemplateRef<typeof OcTextInput>('filterInput')
+
     const userStore = useUserStore()
     const clientService = useClientService()
     const { canShare } = useCanShare()
@@ -119,6 +129,8 @@ export default defineComponent({
     const { user } = storeToRefs(userStore)
 
     const markInstance = ref<Mark>()
+    const filterTerm = ref('')
+    const isFilterOpen = ref(false)
 
     const resource = inject<Ref<ProjectSpaceResource>>('resource')
 
@@ -138,13 +150,10 @@ export default defineComponent({
       markInstance,
       filesPrivateLinks,
       graphRoles,
+      filterTerm,
+      isFilterOpen,
+      filterInput,
       ...useMessages()
-    }
-  },
-  data: () => {
-    return {
-      filterTerm: '',
-      isFilterOpen: false
     }
   },
   computed: {
@@ -190,8 +199,12 @@ export default defineComponent({
 
       return searchEngine.search(term).map((r) => r.item)
     },
-    toggleFilter() {
+    async toggleFilter() {
       this.isFilterOpen = !this.isFilterOpen
+      if (this.isFilterOpen) {
+        await nextTick()
+        this.filterInput.focus()
+      }
     },
     isModifiable(share: CollaboratorShare) {
       if (!this.canShare({ space: this.resource, resource: this.resource })) {
@@ -260,9 +273,30 @@ export default defineComponent({
 })
 </script>
 
-<style>
+<style lang="scss">
 .space-members-filter {
-  max-width: 160px;
+  label {
+    font-size: var(--oc-font-size-small);
+  }
+
+  &-container {
+    max-height: 0px;
+    visibility: hidden;
+    transition:
+      max-height 0.25s ease-in-out,
+      margin-bottom 0.25s ease-in-out,
+      visibility 0.25s ease-in-out;
+
+    &-expanded {
+      max-height: 60px;
+      visibility: visible;
+      transition:
+        max-height 0.25s ease-in-out,
+        margin-bottom 0.25s ease-in-out,
+        visibility 0s;
+      margin-bottom: var(--oc-space-medium);
+    }
+  }
 }
 
 #files-collaborators-headline {

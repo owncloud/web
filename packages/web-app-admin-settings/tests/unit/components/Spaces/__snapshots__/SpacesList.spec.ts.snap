@@ -14,7 +14,7 @@ exports[`SpacesList > should render all spaces in a table 1`] = `
   </div>
   <table class="oc-table oc-table-hover oc-table-sticky has-item-context-menu spaces-table">
     <thead class="oc-thead">
-      <tr tabindex="-1" class="oc-table-header-row">
+      <tr class="oc-table-header-row">
         <th class="oc-table-cell oc-table-cell-align-left oc-table-cell-align-middle oc-table-cell-width-shrink oc-text-nowrap oc-th oc-table-header-cell oc-table-header-cell-select oc-pl-s" style="top: 0px;">
           <div><span class="oc-table-thead-content"><oc-checkbox-stub id="oc-checkbox-1" disabled="false" modelvalue="false" label="Select all spaces" labelhidden="true" size="large" outline="false" class="oc-ml-s"></oc-checkbox-stub></span></div>
         </th>
@@ -58,7 +58,7 @@ exports[`SpacesList > should render all spaces in a table 1`] = `
       </tr>
     </thead>
     <tbody class="has-item-context-menu">
-      <tr tabindex="-1" class="oc-tbody-tr oc-tbody-tr-1" data-item-id="1" draggable="false">
+      <tr class="oc-tbody-tr oc-tbody-tr-1" data-item-id="1" draggable="false">
         <td class="oc-table-cell oc-table-cell-align-left oc-table-cell-align-middle oc-table-cell-width-shrink oc-td oc-table-data-cell oc-table-data-cell-select oc-pl-s">
           <oc-checkbox-stub id="oc-checkbox-2" disabled="false" modelvalue="false" option="undefined" label="Select 1 Some space" labelhidden="true" size="large" outline="false" class="oc-ml-s"></oc-checkbox-stub>
         </td>
@@ -84,7 +84,7 @@ exports[`SpacesList > should render all spaces in a table 1`] = `
             </button></div>
         </td>
       </tr>
-      <tr tabindex="-1" class="oc-tbody-tr oc-tbody-tr-2" data-item-id="2" draggable="false">
+      <tr class="oc-tbody-tr oc-tbody-tr-2" data-item-id="2" draggable="false">
         <td class="oc-table-cell oc-table-cell-align-left oc-table-cell-align-middle oc-table-cell-width-shrink oc-td oc-table-data-cell oc-table-data-cell-select oc-pl-s">
           <oc-checkbox-stub id="oc-checkbox-3" disabled="false" modelvalue="false" option="undefined" label="Select 2 Another space" labelhidden="true" size="large" outline="false" class="oc-ml-s"></oc-checkbox-stub>
         </td>

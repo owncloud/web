@@ -17,7 +17,7 @@ exports[`TrashOverview > view states > should render spaces list 1`] = `
       </div>
       <table class="oc-table oc-table-hover oc-table-sticky has-item-context-menu spaces-table">
         <thead class="oc-thead">
-          <tr tabindex="-1" class="oc-table-header-row">
+          <tr class="oc-table-header-row">
             <th class="oc-table-cell oc-table-cell-align-left oc-table-cell-align-middle oc-table-cell-width-shrink oc-text-nowrap oc-th oc-table-header-cell oc-table-header-cell-icon oc-pl-s" style="top: 0px;">
               <div><span class="oc-table-thead-content header-text"></span></div>
             </th>
@@ -28,19 +28,19 @@ exports[`TrashOverview > view states > should render spaces list 1`] = `
           </tr>
         </thead>
         <tbody class="has-item-context-menu">
-          <tr tabindex="-1" class="oc-tbody-tr oc-tbody-tr-1" data-item-id="1" draggable="false">
+          <tr class="oc-tbody-tr oc-tbody-tr-1" data-item-id="1" draggable="false">
             <td class="oc-table-cell oc-table-cell-align-left oc-table-cell-align-middle oc-table-cell-width-shrink oc-td oc-table-data-cell oc-table-data-cell-icon oc-pl-s"><span class="oc-icon oc-icon-m oc-icon-passive oc-pl-m"><!----></span></td>
             <td class="oc-table-cell oc-table-cell-align-left oc-table-cell-align-middle oc-table-cell-width-auto oc-td oc-table-data-cell oc-table-data-cell-name oc-pr-s">
               <router-link-stub to="[object Object]" class="oc-button oc-rounded oc-button-m oc-button-justify-content-center oc-button-gap-m oc-button-passive oc-button-passive-raw oc-display-block trash-bin-route"></router-link-stub>
             </td>
           </tr>
-          <tr tabindex="-1" class="oc-tbody-tr oc-tbody-tr-2" data-item-id="2" draggable="false">
+          <tr class="oc-tbody-tr oc-tbody-tr-2" data-item-id="2" draggable="false">
             <td class="oc-table-cell oc-table-cell-align-left oc-table-cell-align-middle oc-table-cell-width-shrink oc-td oc-table-data-cell oc-table-data-cell-icon oc-pl-s"><span class="oc-icon oc-icon-m oc-icon-passive oc-pl-m"><!----></span></td>
             <td class="oc-table-cell oc-table-cell-align-left oc-table-cell-align-middle oc-table-cell-width-auto oc-td oc-table-data-cell oc-table-data-cell-name oc-pr-s">
               <router-link-stub to="[object Object]" class="oc-button oc-rounded oc-button-m oc-button-justify-content-center oc-button-gap-m oc-button-passive oc-button-passive-raw oc-display-block trash-bin-route"></router-link-stub>
             </td>
           </tr>
-          <tr tabindex="-1" class="oc-tbody-tr oc-tbody-tr-3" data-item-id="3" draggable="false">
+          <tr class="oc-tbody-tr oc-tbody-tr-3" data-item-id="3" draggable="false">
             <td class="oc-table-cell oc-table-cell-align-left oc-table-cell-align-middle oc-table-cell-width-shrink oc-td oc-table-data-cell oc-table-data-cell-icon oc-pl-s"><span class="oc-icon oc-icon-m oc-icon-passive oc-pl-m"><!----></span></td>
             <td class="oc-table-cell oc-table-cell-align-left oc-table-cell-align-middle oc-table-cell-width-auto oc-td oc-table-data-cell oc-table-data-cell-name oc-pr-s">
               <router-link-stub to="[object Object]" class="oc-button oc-rounded oc-button-m oc-button-justify-content-center oc-button-gap-m oc-button-passive oc-button-passive-raw oc-display-block trash-bin-route"></router-link-stub>
