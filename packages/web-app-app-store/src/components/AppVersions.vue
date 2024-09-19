@@ -43,18 +43,18 @@ export default defineComponent({
     const fields = computed(() => {
       return [
         {
-          name: 'minOCIS',
-          type: 'raw',
-          width: 'shrink',
-          wrap: 'nowrap',
-          title: $gettext('oCIS Version')
-        },
-        {
           name: 'version',
           type: 'slot',
           width: 'expand',
           wrap: 'truncate',
           title: $gettext('App Version')
+        },
+        {
+          name: 'minOCIS',
+          type: 'raw',
+          width: 'shrink',
+          wrap: 'nowrap',
+          title: $gettext('Infinite Scale Version')
         },
         {
           name: 'actions',
