@@ -14,7 +14,8 @@ vi.mock('@ownclouders/web-pkg', async (importOriginal) => ({
 const selectors = Object.freeze({
   btnSelect: '[data-testid="button-select"]',
   btnCancel: '[data-testid="button-cancel"]',
-  btnShare: '[data-testid="button-share"]'
+  btnShare: '[data-testid="button-share"]',
+  fileNameInput: '.files-embed-actions-file-name'
 })
 
 describe('EmbedActions', () => {
@@ -59,6 +60,37 @@ describe('EmbedActions', () => {
       await wrapper.find(selectors.btnSelect).trigger('click')
 
       expect(mocks.postMessageMock).toHaveBeenCalledWith('owncloud-embed:select', [{ id: '1' }])
+    })
+    it('should display the file name input when chooseFileName is configured', () => {
+      const { wrapper, mocks } = getWrapper({
+        currentFolder: { id: '1' } as Resource,
+        isLocationPicker: true,
+        chooseFileName: true
+      })
+
+      expect(wrapper.find(selectors.fileNameInput).exists()).toBe(true)
+    })
+    it('should hide the file name input when chooseFileName is not configured', () => {
+      const { wrapper, mocks } = getWrapper({
+        currentFolder: { id: '1' } as Resource,
+        isLocationPicker: true
+      })
+
+      expect(wrapper.find(selectors.fileNameInput).exists()).toBe(false)
+    })
+    it('should emit select event with currentFolder as selected resource and fileName when select action is triggered and chooseFileName is configured', async () => {
+      const { wrapper, mocks } = getWrapper({
+        currentFolder: { id: '1' } as Resource,
+        isLocationPicker: true,
+        chooseFileName: true
+      })
+
+      await wrapper.find(selectors.btnSelect).trigger('click')
+
+      expect(mocks.postMessageMock).toHaveBeenCalledWith('owncloud-embed:select', {
+        fileName: 'file.txt',
+        resources: [{ id: '1' }]
+      })
     })
   })
 
@@ -118,13 +150,15 @@ function getWrapper(
     currentFolder = undefined,
     createLinksActionEnabled = true,
     isLocationPicker = false,
-    isFilePicker = false
+    isFilePicker = false,
+    chooseFileName = false
   }: {
     selectedIds?: string[]
     currentFolder?: Resource
     createLinksActionEnabled?: boolean
     isLocationPicker?: boolean
     isFilePicker?: boolean
+    chooseFileName?: boolean
   } = {
     selectedIds: []
   }
@@ -134,7 +168,8 @@ function getWrapper(
     mock<ReturnType<typeof useEmbedMode>>({
       isLocationPicker: ref(isLocationPicker),
       isFilePicker: ref(isFilePicker),
-      chooseFileName: ref(false),
+      chooseFileName: ref(chooseFileName),
+      chooseFileNameSuggestion: ref('file.txt'),
       postMessage: postMessageMock
     })
   )
