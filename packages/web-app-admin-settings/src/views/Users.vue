@@ -345,14 +345,20 @@ export default defineComponent({
     const filterGroups = (groups: Group[]) => {
       filters.groups.ids.value = groups.map((g) => g.id)
       loadUsersTask.perform()
-      userSettingsStore.setSelectedUsers([])
+      if (userSettingsStore.selectedUsers.length) {
+        // only reset selection if there are selected users because is messes with the focus otherwise
+        userSettingsStore.setSelectedUsers([])
+      }
       additionalUserDataLoadedForUserIds.value = []
       return resetPagination()
     }
     const filterRoles = (roles: AppRole[]) => {
       filters.roles.ids.value = roles.map((r) => r.id)
       loadUsersTask.perform()
-      userSettingsStore.setSelectedUsers([])
+      if (userSettingsStore.selectedUsers.length) {
+        // only reset selection if there are selected users because is messes with the focus otherwise
+        userSettingsStore.setSelectedUsers([])
+      }
       additionalUserDataLoadedForUserIds.value = []
       return resetPagination()
     }

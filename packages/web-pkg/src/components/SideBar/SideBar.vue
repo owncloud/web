@@ -1,10 +1,12 @@
 <template>
   <div
     id="app-sidebar"
+    ref="appSideBar"
     data-testid="app-sidebar"
     :class="{
       'has-active-sub-panel': hasActiveSubPanel,
-      'oc-flex oc-flex-center oc-flex-middle': loading
+      'oc-flex oc-flex-center oc-flex-middle': loading,
+      'app-sidebar-full-width': fullWidthSideBar
     }"
   >
     <oc-spinner v-if="loading" />
@@ -95,7 +97,17 @@
 
 <script lang="ts">
 import { VisibilityObserver } from '../../observer'
-import { computed, defineComponent, nextTick, PropType, ref, unref, watch } from 'vue'
+import {
+  computed,
+  defineComponent,
+  nextTick,
+  onBeforeUnmount,
+  PropType,
+  ref,
+  unref,
+  useTemplateRef,
+  watch
+} from 'vue'
 import { SideBarPanel, SideBarPanelContext } from './types'
 import { useGettext } from 'vue3-gettext'
 
@@ -129,6 +141,8 @@ export default defineComponent({
   emits: ['close', 'selectPanel'],
   setup(props) {
     const { $gettext } = useGettext()
+    const appSideBar = useTemplateRef<HTMLElement>('appSideBar')
+    const panelContainer = useTemplateRef<HTMLElement[]>('panelContainer')
 
     const rootPanels = computed(() => {
       return props.availablePanels.filter(
@@ -201,7 +215,77 @@ export default defineComponent({
       return $gettext('Back to main panels')
     })
 
+    const initVisibilityObserver = () => {
+      visibilityObserver = new VisibilityObserver({
+        root: document.querySelector('#app-sidebar'),
+        threshold: 0.9
+      })
+      hiddenObserver = new VisibilityObserver({
+        root: document.querySelector('#app-sidebar'),
+        threshold: 0.05
+      })
+      const doFocus = () => {
+        if (!unref(focussedElementId)) {
+          return
+        }
+        const element = document.getElementById(unref(focussedElementId))
+        if (!element) {
+          return
+        }
+        element.focus()
+      }
+
+      if (!unref(panelContainer)) {
+        return
+      }
+
+      visibilityObserver.disconnect()
+      hiddenObserver.disconnect()
+      unref(panelContainer).forEach((panel) => {
+        visibilityObserver.observe(panel, {
+          onEnter: doFocus,
+          onExit: doFocus
+        })
+        hiddenObserver.observe(panel, {
+          onExit: clearOldPanelName
+        })
+      })
+    }
+
+    const fullWidthSideBar = computed(() => window.innerWidth <= 960)
+    const backgroundContentEl = computed(() => {
+      return unref(appSideBar).parentElement.querySelector('div') as HTMLElement
+    })
+
+    watch(
+      () => props.isOpen,
+      async (isOpen) => {
+        if (!isOpen) {
+          return
+        }
+
+        await nextTick()
+        initVisibilityObserver()
+
+        if (unref(fullWidthSideBar) && unref(backgroundContentEl)) {
+          // hide content behind sidebar when it has full width to avoid focusable elements
+          unref(backgroundContentEl).style.visibility = 'hidden'
+        }
+      },
+      { immediate: true }
+    )
+
+    onBeforeUnmount(() => {
+      visibilityObserver.disconnect()
+      hiddenObserver.disconnect()
+
+      if (unref(backgroundContentEl)) {
+        unref(backgroundContentEl).style.visibility = 'visible'
+      }
+    })
+
     return {
+      appSideBar,
       displayPanels,
       rootPanels,
       subPanels,
@@ -213,32 +297,9 @@ export default defineComponent({
       hasActiveSubPanel,
       hasActiveRootPanel,
       accessibleLabelBack,
-      focussedElementId
+      focussedElementId,
+      fullWidthSideBar
     }
-  },
-
-  data() {
-    return {
-      selectedFile: {}
-    }
-  },
-
-  watch: {
-    isOpen: {
-      handler: function (isOpen) {
-        if (!isOpen) {
-          return
-        }
-        this.$nextTick(() => {
-          this.initVisibilityObserver()
-        })
-      },
-      immediate: true
-    }
-  },
-  beforeUnmount() {
-    visibilityObserver.disconnect()
-    hiddenObserver.disconnect()
   },
   methods: {
     setSidebarPanel(panel: string) {
@@ -251,43 +312,6 @@ export default defineComponent({
 
     closeSidebar() {
       this.$emit('close')
-    },
-
-    initVisibilityObserver() {
-      visibilityObserver = new VisibilityObserver({
-        root: document.querySelector('#app-sidebar'),
-        threshold: 0.9
-      })
-      hiddenObserver = new VisibilityObserver({
-        root: document.querySelector('#app-sidebar'),
-        threshold: 0.05
-      })
-      const doFocus = () => {
-        if (!this.focussedElementId) {
-          return
-        }
-        const element = document.getElementById(this.focussedElementId)
-        if (!element) {
-          return
-        }
-        element.focus()
-      }
-
-      if (!this.$refs.panelContainer) {
-        return
-      }
-
-      visibilityObserver.disconnect()
-      hiddenObserver.disconnect()
-      ;(this.$refs.panelContainer as HTMLElement[]).forEach((panel) => {
-        visibilityObserver.observe(panel, {
-          onEnter: doFocus,
-          onExit: doFocus
-        })
-        hiddenObserver.observe(panel, {
-          onExit: this.clearOldPanelName
-        })
-      })
     },
 
     openPanel(panel: string) {
@@ -311,13 +335,12 @@ export default defineComponent({
   min-width: 440px;
   width: 440px;
 }
+.app-sidebar-full-width {
+  min-width: 100% !important;
+  width: 100% !important;
+}
 
 @media only screen and (max-width: 960px) {
-  #app-sidebar {
-    min-width: 100%;
-    width: 100%;
-  }
-
   .files-wrapper {
     flex-wrap: nowrap !important;
   }

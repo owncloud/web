@@ -6,7 +6,7 @@
   >
     <oc-button
       id="_appSwitcherButton"
-      ref="menubutton"
+      ref="menuButton"
       v-oc-tooltip="applicationSwitcherLabel"
       appearance="raw-inverse"
       variation="brand"
@@ -51,8 +51,8 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, PropType, ComponentPublicInstance, ref, computed, unref } from 'vue'
-import { OcDrop } from 'design-system/src/components'
+import { defineComponent, PropType, ref, computed, unref, useTemplateRef } from 'vue'
+import { OcButton, OcDrop } from 'design-system/src/components'
 import OcApplicationIcon from 'design-system/src/components/OcApplicationIcon/OcApplicationIcon.vue'
 import { useGettext } from 'vue3-gettext'
 import * as uuid from 'uuid'
@@ -73,6 +73,9 @@ export default defineComponent({
     const router = useRouter()
     const { $gettext } = useGettext()
     const appIconKey = ref('')
+
+    const menuButton = useTemplateRef<typeof OcButton>('menuButton')
+    const menu = useTemplateRef<typeof OcDrop>('menu')
 
     const activeRoutePath = computed(() => unref(router.currentRoute).path)
     const sortedMenuItems = computed(() => {
@@ -112,6 +115,8 @@ export default defineComponent({
     }
 
     return {
+      menu,
+      menuButton,
       sortedMenuItems,
       appIconKey,
       updateAppIcons,
@@ -122,10 +127,16 @@ export default defineComponent({
     }
   },
   mounted() {
-    ;(this.$refs.menu as InstanceType<typeof OcDrop>)?.tippy?.setProps({
-      onHidden: () => (this.$refs.menubutton as ComponentPublicInstance).$el.focus(),
-      onShown: () =>
-        (this.$refs.menu as ComponentPublicInstance).$el.querySelector('a:first-of-type').focus()
+    this.menu?.tippy?.setProps({
+      onHidden: () => {
+        if (document.activeElement?.classList.contains('oc-logo-href')) {
+          // logo is the next element, which means the user is navigating away and the
+          // drop closed. we don't want to re-focus the app switcher in this case.
+          return
+        }
+        this.menuButton.$el.focus()
+      },
+      onShown: () => this.menu.$el.querySelector('a:first-of-type').focus()
     })
   }
 })

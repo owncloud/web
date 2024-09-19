@@ -198,7 +198,7 @@ export default defineComponent({
     const showDrop = async () => {
       setDisplayedItems(props.items)
       await nextTick()
-      unref(filterInputRef).focus()
+      unref(filterInputRef)?.focus()
     }
 
     watch(filterTerm, () => {

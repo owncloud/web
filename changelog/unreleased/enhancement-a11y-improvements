@@ -6,9 +6,13 @@ The following accessibility improvements have been made:
 - An issue where the current focus would not change when navigating the resource table/tiles with the keyboard has been fixed.
 - The contrasts of input borders have been aligned with the official WCAG requirements.
 - The space member search in the right sidebar now has a label. Also, the search has been moved from the top of the sharing panel to the members section where all members are listed.
+- Leaving dropdown menus via the keyboard navigation now closes them.
+- When the sidebar is open and uses 100% of the screen width (mobile view), it is no longer possible to focus elements in the background.
 
 https://github.com/owncloud/web/pull/11574
 https://github.com/owncloud/web/pull/11591
+https://github.com/owncloud/web/pull/11600
 https://github.com/owncloud/web/issues/10725
 https://github.com/owncloud/web/issues/10729
 https://github.com/owncloud/web/issues/10724
+https://github.com/owncloud/web/issues/10733
