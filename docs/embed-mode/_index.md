@@ -61,6 +61,8 @@ To maintain uniformity and ease of handling, each event encapsulates the same st
 ## Location picker
 
 By default, the Embed mode allows users to select resources. In certain cases (e.g. uploading a file), this needs to be changed to allow selecting a location. This can be achieved by running the embed mode with additional parameter `embed-target=location`. With this parameter, resource selection is disabled and the selected resources array always includes the current folder as the only item.
+In special scenarios you also want the user to set a file name, this can be archived by adding the `embed-choose-file-name=true` parameter, or if you also want to set a default file name, you can use `default-file-name-suggestion=my file.text`.
+
 
 ### Example
 
