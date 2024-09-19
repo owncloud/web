@@ -139,10 +139,11 @@ export default defineComponent({
 
 <style lang="scss">
 .files-embed-actions {
+  // Prevent .snackbar from overlapping the actions
+  z-index: calc(var(--oc-z-index-modal) + 2);
+  color: var(--oc-color-text-inverse);
   flex-wrap: wrap;
   gap: var(--oc-space-small);
-
-  color: var(--oc-color-text-inverse);
 
   &-file-name {
     margin-left: 230px;
