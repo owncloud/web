@@ -246,10 +246,6 @@ export const filterUsers = async (args: {
   values: string[]
 }): Promise<void> => {
   const { page, filter, values } = args
-  if (await page.locator(closeEditPanel).count()) {
-    // close potentially open sidebar panel to avoid focus jumping
-    await page.locator(closeEditPanel).click()
-  }
   await page.locator(util.format(userFilter, filter)).click()
   for (const value of values) {
     await Promise.all([

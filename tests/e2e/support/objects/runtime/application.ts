@@ -9,7 +9,8 @@ const notificationsDrop = `#oc-notifications-drop`
 const notificationsLoading = `#oc-notifications-drop .oc-notifications-loading`
 const markNotificationsAsReadButton = `#oc-notifications-drop .oc-notifications-mark-all`
 const notificationItemsMessages = `#oc-notifications-drop .oc-notifications-item .oc-notifications-message`
-const closeSidebarBtn = `#app-sidebar .header__close`
+const closeSidebarRootPanelBtn = `#app-sidebar .is-active-root-panel .header__close`
+const closeSidebarSubPanelBtn = `#app-sidebar .is-active-sub-panel .header__close`
 
 export class Application {
   #page: Page
@@ -70,9 +71,11 @@ export class Application {
   }
 
   async closeSidebar(): Promise<void> {
-    const sideBarIsOpen = await this.#page.locator(closeSidebarBtn).isVisible()
-    if (sideBarIsOpen) {
-      await this.#page.locator(closeSidebarBtn).click()
+    const isSubPanelActive = await this.#page.locator(closeSidebarSubPanelBtn).isVisible()
+    if (isSubPanelActive) {
+      await this.#page.locator(closeSidebarSubPanelBtn).click()
+    } else {
+      await this.#page.locator(closeSidebarRootPanelBtn).click()
     }
   }
 

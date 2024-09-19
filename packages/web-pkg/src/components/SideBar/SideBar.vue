@@ -3,6 +3,7 @@
     id="app-sidebar"
     ref="appSideBar"
     data-testid="app-sidebar"
+    tabindex="-1"
     :class="{
       'has-active-sub-panel': hasActiveSubPanel,
       'oc-flex oc-flex-center oc-flex-middle': loading,
@@ -15,7 +16,6 @@
         v-for="panel in displayPanels"
         :id="`sidebar-panel-${panel.name}`"
         :key="`panel-${panel.name}`"
-        ref="panelContainer"
         :data-testid="`sidebar-panel-${panel.name}`"
         :tabindex="activePanelName === panel.name ? -1 : null"
         class="sidebar-panel"
@@ -96,7 +96,6 @@
 </template>
 
 <script lang="ts">
-import { VisibilityObserver } from '../../observer'
 import {
   computed,
   defineComponent,
@@ -110,9 +109,6 @@ import {
 } from 'vue'
 import { SideBarPanel, SideBarPanelContext } from './types'
 import { useGettext } from 'vue3-gettext'
-
-let visibilityObserver: VisibilityObserver
-let hiddenObserver: VisibilityObserver
 
 export default defineComponent({
   props: {
@@ -142,7 +138,6 @@ export default defineComponent({
   setup(props) {
     const { $gettext } = useGettext()
     const appSideBar = useTemplateRef<HTMLElement>('appSideBar')
-    const panelContainer = useTemplateRef<HTMLElement[]>('panelContainer')
 
     const rootPanels = computed(() => {
       return props.availablePanels.filter(
@@ -195,16 +190,6 @@ export default defineComponent({
       }
       return unref(rootPanels)[0].name
     })
-    const focussedElementId = ref<string>('')
-    watch(
-      activePanelName,
-      (panelName) => {
-        nextTick(() => {
-          focussedElementId.value = panelName ? `sidebar-panel-${panelName}` : null
-        })
-      },
-      { immediate: true }
-    )
 
     const accessibleLabelBack = computed(() => {
       if (unref(rootPanels).length === 1) {
@@ -214,43 +199,6 @@ export default defineComponent({
       }
       return $gettext('Back to main panels')
     })
-
-    const initVisibilityObserver = () => {
-      visibilityObserver = new VisibilityObserver({
-        root: document.querySelector('#app-sidebar'),
-        threshold: 0.9
-      })
-      hiddenObserver = new VisibilityObserver({
-        root: document.querySelector('#app-sidebar'),
-        threshold: 0.05
-      })
-      const doFocus = () => {
-        if (!unref(focussedElementId)) {
-          return
-        }
-        const element = document.getElementById(unref(focussedElementId))
-        if (!element) {
-          return
-        }
-        element.focus()
-      }
-
-      if (!unref(panelContainer)) {
-        return
-      }
-
-      visibilityObserver.disconnect()
-      hiddenObserver.disconnect()
-      unref(panelContainer).forEach((panel) => {
-        visibilityObserver.observe(panel, {
-          onEnter: doFocus,
-          onExit: doFocus
-        })
-        hiddenObserver.observe(panel, {
-          onExit: clearOldPanelName
-        })
-      })
-    }
 
     const fullWidthSideBar = computed(() => window.innerWidth <= 960)
     const backgroundContentEl = computed(() => {
@@ -264,11 +212,9 @@ export default defineComponent({
           return
         }
 
-        await nextTick()
-        initVisibilityObserver()
-
         if (unref(fullWidthSideBar) && unref(backgroundContentEl)) {
           // hide content behind sidebar when it has full width to avoid focusable elements
+          await nextTick()
           unref(backgroundContentEl).style.visibility = 'hidden'
         }
       },
@@ -276,9 +222,6 @@ export default defineComponent({
     )
 
     onBeforeUnmount(() => {
-      visibilityObserver.disconnect()
-      hiddenObserver.disconnect()
-
       if (unref(backgroundContentEl)) {
         unref(backgroundContentEl).style.visibility = 'visible'
       }
@@ -297,7 +240,6 @@ export default defineComponent({
       hasActiveSubPanel,
       hasActiveRootPanel,
       accessibleLabelBack,
-      focussedElementId,
       fullWidthSideBar
     }
   },
@@ -322,6 +264,7 @@ export default defineComponent({
     closePanel() {
       this.setOldPanelName(this.activePanelName)
       this.resetSidebarPanel()
+      this.appSideBar.focus()
     }
   }
 })
@@ -334,6 +277,12 @@ export default defineComponent({
   overflow: hidden;
   min-width: 440px;
   width: 440px;
+
+  &:focus,
+  &:focus-visible {
+    box-shadow: none;
+    outline: none;
+  }
 }
 .app-sidebar-full-width {
   min-width: 100% !important;
