@@ -36,7 +36,9 @@ import {
   computed,
   onMounted
 } from 'vue'
+import toNumber from 'lodash-es/toNumber'
 import { DateTime } from 'luxon'
+import { dirname } from 'path'
 import { useTask } from 'vue-concurrency'
 import { useGettext } from 'vue3-gettext'
 import { onBeforeRouteLeave, useRouter } from 'vue-router'
@@ -46,54 +48,50 @@ import ErrorScreen from './PartialViews/ErrorScreen.vue'
 import LoadingScreen from './PartialViews/LoadingScreen.vue'
 import FileSideBar from '../SideBar/FileSideBar.vue'
 import {
-  UrlForResourceOptions,
+  Action,
+  FileAction,
+  FileActionOptions,
+  FileContentOptions,
+  Key,
+  Modifier,
   queryItemAsString,
+  UrlForResourceOptions,
   useAppDefaults,
+  useAppMeta,
+  useAppsStore,
   useClientService,
+  useConfigStore,
+  useFileActionsCopyPermanentLink,
+  useFileActionsDownloadFile,
+  useFileActionsSaveAs,
+  useFileActionsShowDetails,
+  useFileActionsShowShares,
+  useGetResourceContext,
+  useKeyboardActions,
+  useLoadingService,
+  useMessages,
+  useModals,
+  useResourcesStore,
   useRoute,
   useRouteParam,
   useRouteQuery,
   useSelectedResources,
   useSideBar,
-  useModals,
-  useMessages,
-  useSpacesStore,
-  useAppsStore,
-  useConfigStore,
-  useResourcesStore,
-  FileContentOptions,
-  useFileActionsCopyPermanentLink,
-  useFileActionsDownloadFile,
-  useFileActionsShowDetails,
-  useFileActionsShowShares,
-  FileActionOptions,
-  FileAction,
-  useLoadingService,
-  useFileActionsSaveAs
+  useSpacesStore
 } from '../../composables'
+import { useFileActionsOpenWithApp } from '../../composables/actions/files/useFileActionsOpenWithApp'
 import {
-  Action,
-  Modifier,
-  Key,
-  useAppMeta,
-  useGetResourceContext,
-  useKeyboardActions
-} from '../../composables'
-import {
-  Resource,
-  SpaceResource,
   call,
+  HttpError,
   isPersonalSpaceResource,
   isProjectSpaceResource,
-  isShareSpaceResource
+  isShareSpaceResource,
+  Resource,
+  SpaceResource
 } from '@ownclouders/web-client'
 import { DavPermission } from '@ownclouders/web-client/webdav'
-import { HttpError } from '@ownclouders/web-client'
-import { dirname } from 'path'
-import { useFileActionsOpenWithApp } from '../../composables/actions/files/useFileActionsOpenWithApp'
 import { UnsavedChangesModal } from '../Modals'
 import { formatFileSize } from '../../helpers'
-import toNumber from 'lodash-es/toNumber'
 
 export default defineComponent({
   name: 'AppWrapper',
@@ -130,6 +128,10 @@ export default defineComponent({
     disableAutoSave: {
       type: Boolean,
       default: false
+    },
+    contentType: {
+      type: String,
+      default: 'text/plain'
     }
   },
   setup(props) {
@@ -392,11 +394,24 @@ export default defineComponent({
     }
 
     const saveFileTask = useTask(function* () {
-      const newContent = unref(currentContent)
+      let newContent = unref(currentContent)
+
+      const headers =
+        props.contentType === 'image'
+          ? {
+              'Content-Type': 'application/offset+octet-stream'
+            }
+          : {}
+
+      if (props.contentType === 'image') {
+        newContent = Buffer.from(newContent, 'base64')
+      }
+
       try {
         const putFileContentsResponse = yield putFileContents(currentFileContext, {
           content: newContent,
-          previousEntityTag: unref(currentETag)
+          previousEntityTag: unref(currentETag),
+          headers
         })
         serverContent.value = newContent
         currentETag.value = putFileContentsResponse.etag
@@ -468,15 +483,12 @@ export default defineComponent({
       }
       const editorOptions = configStore.options.editor
       if (editorOptions.autosaveEnabled && !props.disableAutoSave) {
-        autosaveIntervalId = setInterval(
-          async () => {
-            if (isDirty.value) {
-              await save()
-              autosavePopup()
-            }
-          },
-          (editorOptions.autosaveInterval || 120) * 1000
-        )
+        autosaveIntervalId = setInterval(async () => {
+          if (isDirty.value) {
+            await save()
+            autosavePopup()
+          }
+        }, (editorOptions.autosaveInterval || 120) * 1000)
       }
     })
     onBeforeUnmount(() => {

@@ -12,6 +12,7 @@ export function AppWrapperRoute(
     fileContentOptions?: FileContentOptions
     importResourceWithExtension?: (resource: Resource) => string
     disableAutoSave?: boolean
+    contentType?: string
   }
 ) {
   return defineComponent({
