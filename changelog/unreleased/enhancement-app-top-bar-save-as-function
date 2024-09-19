@@ -1,0 +1,7 @@
+Enhancement: Add a "Save As" function to the app top bar
+
+We've added a "Save As" function to the app top bar.
+This allows the user to save a file with a new name or in a different location out of our regular editors.
+
+https://github.com/owncloud/web/pull/11586
+https://github.com/owncloud/web/issues/11525
