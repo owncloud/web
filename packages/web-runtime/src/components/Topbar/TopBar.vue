@@ -9,7 +9,7 @@
         v-if="appMenuExtensions.length && !isEmbedModeEnabled"
         :menu-items="appMenuExtensions"
       />
-      <router-link v-if="!hideLogo" ref="navigationSidebarLogo" :to="homeLink" class="oc-width-1-1">
+      <router-link v-if="!hideLogo" :to="homeLink" class="oc-width-1-1 oc-logo-href">
         <oc-img
           v-oc-tooltip="$gettext('Back to home')"
           :src="currentTheme.logo.topbar"
