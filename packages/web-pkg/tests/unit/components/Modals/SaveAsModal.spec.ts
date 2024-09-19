@@ -2,7 +2,7 @@ import SaveAsModal from '../../../../src/components/Modals/SaveAsModal.vue'
 import { defaultComponentMocks, defaultPlugins, nextTicks, shallowMount } from 'web-test-helpers'
 import { mock, mockDeep } from 'vitest-mock-extended'
 import { Resource, SpaceResource } from '@ownclouders/web-client'
-import { ListFilesResult } from '@ownclouders/web-client/src'
+import { ListFilesResult } from '@ownclouders/web-client/webdav'
 import { Modal, useMessages, useModals } from '../../../../src/composables/piniaStores'
 import { ClientService } from '../../../../src'
 
