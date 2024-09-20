@@ -3,7 +3,6 @@
     v-if="isOpen"
     ref="sidebar"
     class="files-side-bar"
-    tabindex="-1"
     :is-open="isOpen"
     :active-panel="activePanel"
     :available-panels="availablePanels"

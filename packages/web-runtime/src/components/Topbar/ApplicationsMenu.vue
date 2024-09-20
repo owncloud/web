@@ -6,7 +6,6 @@
   >
     <oc-button
       id="_appSwitcherButton"
-      ref="menuButton"
       v-oc-tooltip="applicationSwitcherLabel"
       appearance="raw-inverse"
       variation="brand"
@@ -52,7 +51,7 @@
 
 <script lang="ts">
 import { defineComponent, PropType, ref, computed, unref, useTemplateRef } from 'vue'
-import { OcButton, OcDrop } from 'design-system/src/components'
+import { OcDrop } from 'design-system/src/components'
 import OcApplicationIcon from 'design-system/src/components/OcApplicationIcon/OcApplicationIcon.vue'
 import { useGettext } from 'vue3-gettext'
 import * as uuid from 'uuid'
@@ -74,7 +73,6 @@ export default defineComponent({
     const { $gettext } = useGettext()
     const appIconKey = ref('')
 
-    const menuButton = useTemplateRef<typeof OcButton>('menuButton')
     const menu = useTemplateRef<typeof OcDrop>('menu')
 
     const activeRoutePath = computed(() => unref(router.currentRoute).path)
@@ -116,7 +114,6 @@ export default defineComponent({
 
     return {
       menu,
-      menuButton,
       sortedMenuItems,
       appIconKey,
       updateAppIcons,
@@ -128,14 +125,6 @@ export default defineComponent({
   },
   mounted() {
     this.menu?.tippy?.setProps({
-      onHidden: () => {
-        if (document.activeElement?.classList.contains('oc-logo-href')) {
-          // logo is the next element, which means the user is navigating away and the
-          // drop closed. we don't want to re-focus the app switcher in this case.
-          return
-        }
-        this.menuButton.$el.focus()
-      },
       onShown: () => this.menu.$el.querySelector('a:first-of-type').focus()
     })
   }

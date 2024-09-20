@@ -1,4 +1,4 @@
-import { onBeforeUnmount, readonly, ref, Ref, unref } from 'vue'
+import { nextTick, onBeforeUnmount, readonly, ref, Ref, unref } from 'vue'
 import { EventBus, eventBus as defaultEventBus } from '../../services/eventBus'
 import { SideBarEventTopics } from './eventTopics'
 import { useLocalStorage } from '../localStorage'
@@ -17,9 +17,21 @@ export const useSideBar = (options?: SideBarOptions): SideBarResult => {
   const eventBus = options?.bus || defaultEventBus
   const isSideBarOpen = useLocalStorage(`oc_sideBarOpen`, false)
 
+  const focusSidebar = async () => {
+    await nextTick()
+    const appSideBar = document.getElementById('app-sidebar')
+    if (!appSideBar) {
+      return
+    }
+    appSideBar.focus()
+  }
+
   const sideBarActivePanel = ref(null)
   const toggleSideBarToken = eventBus.subscribe(SideBarEventTopics.toggle, () => {
     isSideBarOpen.value = !unref(isSideBarOpen)
+    if (unref(isSideBarOpen)) {
+      focusSidebar()
+    }
   })
   const closeSideBarToken = eventBus.subscribe(SideBarEventTopics.close, () => {
     isSideBarOpen.value = false
@@ -28,12 +40,14 @@ export const useSideBar = (options?: SideBarOptions): SideBarResult => {
   const openSideBarToken = eventBus.subscribe(SideBarEventTopics.open, () => {
     isSideBarOpen.value = true
     sideBarActivePanel.value = null
+    focusSidebar()
   })
   const openSideBarWithPanelToken = eventBus.subscribe(
     SideBarEventTopics.openWithPanel,
     (panelName: string) => {
       isSideBarOpen.value = true
       sideBarActivePanel.value = panelName
+      focusSidebar()
     }
   )
   const setActiveSideBarPanelToken = eventBus.subscribe(
