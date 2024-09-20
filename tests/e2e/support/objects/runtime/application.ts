@@ -71,6 +71,8 @@ export class Application {
   }
 
   async closeSidebar(): Promise<void> {
+    // await sidebar transitions
+    await new Promise((resolve) => setTimeout(resolve, 250))
     const isSubPanelActive = await this.#page.locator(closeSidebarSubPanelBtn).isVisible()
     if (isSubPanelActive) {
       await this.#page.locator(closeSidebarSubPanelBtn).click()

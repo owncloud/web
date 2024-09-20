@@ -19,7 +19,7 @@ import { AncestorMetaDataValue } from '../../../../src'
 
 const InnerSideBarComponent = defineComponent({
   props: { availablePanels: { type: Array, required: true } },
-  template: '<div id="foo"><slot name="header"></slot></div>'
+  template: '<div id="foo"><slot name="rootHeader"></slot></div>'
 })
 
 vi.mock('../../../../src/composables/selection', () => ({ useSelectedResources: vi.fn() }))
