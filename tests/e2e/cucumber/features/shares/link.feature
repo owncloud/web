@@ -267,13 +267,13 @@ Feature: link
     And "Alice" creates a public link of following resource using the sidebar panel
       | resource  | password |
       | lorem.txt | %public% |
-    When "Alice" tries to sets a new password "ownCloud-1" of the public link named "Link" of resource "lorem.txt"
+    When "Alice" tries to sets a new password "ownCloud-1" of the public link named "Unnamed link" of resource "lorem.txt"
     Then "Alice" should see an error message
       """
       Unfortunately, your password is commonly used. please pick a harder-to-guess password for your safety
       """
     And "Alice" closes the public link password dialog box
-    When "Alice" tries to sets a new password "ownCloud-1" of the public link named "Link" of resource "lorem.txt"
+    When "Alice" tries to sets a new password "ownCloud-1" of the public link named "Unnamed link" of resource "lorem.txt"
     Then "Alice" should see an error message
       """
       Unfortunately, your password is commonly used. please pick a harder-to-guess password for your safety
@@ -283,7 +283,7 @@ Feature: link
     And "Alice" generates the password for the public link
     And "Alice" copies the password of the public link
     And "Alice" sets the password of the public link
-    And "Anonymous" opens the public link "Link"
+    And "Anonymous" opens the public link "Unnamed link"
     And "Anonymous" unlocks the public link with password "%copied_password%"
     And "Alice" logs out
 
@@ -337,7 +337,7 @@ Feature: link
 
     # check copy link to clipboard button
     When "Alice" opens the "files" app
-    And "Alice" copies the link "Link" of resource "folderPublic"
+    And "Alice" copies the link "Unnamed link" of resource "folderPublic"
     And "Alice" opens the "%clipboard%" url
     And "Alice" unlocks the public link with password "%public%"
     Then following resources should be displayed in the files list for user "Alice"

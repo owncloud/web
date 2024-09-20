@@ -38,7 +38,7 @@ Feature: language settings
     And "Alice" creates a public link of following resource using API
       | resource     | password |
       | folderPublic | %public% |
-    When "Anonymous" opens the public link "Link"
+    When "Anonymous" opens the public link "Unnamed link"
     And "Anonymous" unlocks the public link with password "%public%"
     And "Anonymous" opens the user menu
     And "Anonymous" changes the language to "Deutsch - German"

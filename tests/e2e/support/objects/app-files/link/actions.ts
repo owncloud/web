@@ -65,21 +65,16 @@ const publicLinkRoleToggle = `//button[contains(@class, "link-role-dropdown-togg
 const publicLinkSetRoleButton = `//span[contains(@class,"role-dropdown-list-option-label") and text()='%s']`
 const linkExpiryDatepicker = '.oc-modal-body .oc-date-picker input'
 const linkExpiryDatepickerConfirmButton = '.oc-modal-body-actions-confirm'
-const publicLinkEditRoleButton =
-  `//h4//span[contains(@class, "oc-files-file-link-name") and text()="%s"]//ancestor::li//div[contains(@class, "link-details")]/` +
-  `div/button[contains(@class, "link-role-dropdown-toggle")]`
+const publicLinkEditRoleButton = `//span[contains(@class, "files-links-name") and text()="%s"]//ancestor::li//button[contains(@class, "link-role-dropdown-toggle")]`
 const addPublicLinkButton = '#files-file-link-add'
 const publicLinkNameList =
-  '//div[@id="oc-files-file-link"]//ul//h4//span[contains(@class,"oc-files-file-link-name")]'
-const publicLinkUrlList =
-  '//div[@id="oc-files-file-link"]//ul//p[contains(@class,"oc-files-file-link-url")]'
+  '//div[@id="oc-files-file-link"]//ul//span[contains(@class, "files-links-name")]'
 const publicLink = `//ul//h4[text()='%s']/following-sibling::div//p`
 const publicLinkCurrentRole =
   '//button[contains(@class,"link-role-dropdown-toggle")]//span[contains(@class,"link-current-role")]'
 const linkUpdateDialog = '//div[contains(@class,"oc-notification-message-title")]'
 const editPublicLinkButton =
-  `//h4//span[contains(@class, "oc-files-file-link-name") and text()="%s"]` +
-  `//ancestor::li//div[contains(@class, "details-buttons")]//button[contains(@class, "edit-drop-trigger")]`
+  '//span[contains(@class, "files-links-name") and text()="%s"]//ancestor::li//button[contains(@class, "edit-drop-trigger")]'
 const editPublicLinkRenameButton =
   '//div[contains(@id,"edit-public-link-dropdown")]//button/span[text()="Rename"]'
 const editPublicLinkSetExpirationButton =
@@ -90,8 +85,8 @@ const editPublicLinkNameInput = '.oc-modal-body input.oc-text-input'
 const editPublicLinkPasswordInput = '.oc-modal-body .oc-text-input-password-wrapper input'
 const editPublicLinkRenameConfirm = '.oc-modal-body-actions-confirm'
 const deleteLinkButton =
-  `//h4//span[contains(@class, "oc-files-file-link-name") and text()="%s"]` +
-  `//ancestor::li//div[contains(@class, "details-buttons")]//button/span[text()="Delete link"]`
+  `//span[contains(@class, "files-links-name") and text()="%s"]` +
+  `//ancestor::li//button/span[text()="Delete link"]`
 const confirmDeleteButton = `//button[contains(@class,"oc-modal-body-actions-confirm") and text()="Delete"]`
 const notificationContainer = 'div.oc-notification'
 const publicLinkPasswordErrorMessage = `//div[contains(@class, "oc-text-input-message oc-text-input-danger")]/span`
@@ -102,9 +97,13 @@ const generatePasswordButton = '.oc-text-input-generate-password-button'
 const expectedRegexForGeneratedPassword = /^[A-Za-z0-9\s\S]{12}$/
 const passwordInputDescription = '.oc-text-input-description .oc-text-input-description'
 const advancedModeButton = '.link-modal-advanced-mode-button'
+const copyLinkButton =
+  '//span[contains(@class, "files-links-name") and text()="%s"]//ancestor::li//button[contains(@class, "oc-files-public-link-copy-url")]'
 
-const getRecentLinkUrl = async (page: Page): Promise<string> => {
-  return await page.locator(publicLinkUrlList).first().textContent()
+const getRecentLinkUrl = async (page: Page, name: string): Promise<string> => {
+  await page.locator(util.format(copyLinkButton, name)).click()
+  const handle = await page.evaluateHandle(() => navigator.clipboard.readText())
+  return handle.jsonValue()
 }
 
 const getRecentLinkName = async (page: Page): Promise<string> => {
@@ -146,7 +145,7 @@ export const createLink = async (args: createLinkArgs): Promise<string> => {
     page.locator(editPublicLinkRenameConfirm).click()
   ])
   await clearCurrentPopup(page)
-  return await getRecentLinkUrl(page)
+  return await getRecentLinkUrl(page, 'Unnamed link')
 }
 
 export const changeRole = async (args: changeRoleArgs): Promise<string> => {
@@ -199,7 +198,7 @@ export const changeName = async (args: changeNameArgs): Promise<string> => {
     await sidebar.open({ page: page, resource: resourceName })
     await sidebar.openPanel({ page: page, name: 'sharing' })
   }
-  await page.locator(util.format(editPublicLinkButton, 'Link')).click()
+  await page.locator(util.format(editPublicLinkButton, 'Unnamed link')).click()
   await page.locator(editPublicLinkRenameButton).click()
   await page.locator(editPublicLinkNameInput).fill(newName)
   await page.locator(editPublicLinkRenameConfirm).click()

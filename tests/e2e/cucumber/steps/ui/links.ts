@@ -15,7 +15,7 @@ When(
         resource: info.resource,
         role: info.role,
         password: info.password === '%public%' ? securePassword : info.password,
-        name: 'Link'
+        name: 'Unnamed link'
       })
     }
   }
@@ -153,7 +153,7 @@ When(
     const { page } = this.actorsEnvironment.getActor({ key: stepUser })
     const linkObject = new objects.applicationFiles.Link({ page })
     const roleText = await linkObject.changeRole({ linkName, resource, role })
-    expect(roleText.toLowerCase()).toBe(roleDisplayText[role].toLowerCase())
+    expect(roleText.toLowerCase()).toBe(role.toLowerCase())
   }
 )
 
@@ -219,7 +219,7 @@ When(
     const { page } = this.actorsEnvironment.getActor({ key: stepUser })
     const linkObject = new objects.applicationFiles.Link({ page })
     const newPermission = await linkObject.changeRole({ linkName, role, space: true })
-    expect(newPermission.toLowerCase()).toBe(roleDisplayText[role].toLowerCase())
+    expect(newPermission.toLowerCase()).toBe(role.toLowerCase())
   }
 )
 

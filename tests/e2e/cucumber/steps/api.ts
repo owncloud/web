@@ -297,7 +297,7 @@ Given(
         user,
         path: info.resource,
         password: info.password,
-        name: 'Link',
+        name: 'Unnamed link',
         role: info.role,
         spaceName: info.space
       })

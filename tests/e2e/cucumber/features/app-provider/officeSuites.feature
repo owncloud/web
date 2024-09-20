@@ -24,7 +24,7 @@ Feature: Integrate with online office suites like Collabora and OnlyOffice
     And "Alice" opens the following file in Collabora
       | resource         |
       | OpenDocument.odt |
-    And "Anonymous" opens the public link "Link"
+    And "Anonymous" opens the public link "Unnamed link"
     And "Anonymous" unlocks the public link with password "%public%"
     Then "Anonymous" should see the content "OpenDocument Content" in editor "Collabora"
     When "Alice" edits the following resource
@@ -36,8 +36,8 @@ Feature: Integrate with online office suites like Collabora and OnlyOffice
       | OpenDocument.odt | OpenDocument | Edited OpenDocument Content |
     Then "Alice" should see the content "Edited OpenDocument Content" in editor "Collabora"
     And "Alice" closes the file viewer
-    When "Alice" edits the public link named "Link" of resource "OpenDocument.odt" changing role to "Can view"
-    And "Anonymous" opens the public link "Link"
+    When "Alice" edits the public link named "Unnamed link" of resource "OpenDocument.odt" changing role to "Can view"
+    And "Anonymous" opens the public link "Unnamed link"
     And "Anonymous" unlocks the public link with password "%public%"
     Then "Anonymous" should not be able to edit content of following resource
       | resource         | type         | content                     |
@@ -86,7 +86,7 @@ Feature: Integrate with online office suites like Collabora and OnlyOffice
     And "Alice" opens the following file in OnlyOffice
       | resource           |
       | MicrosoftWord.docx |
-    And "Anonymous" opens the public link "Link"
+    And "Anonymous" opens the public link "Unnamed link"
     And "Anonymous" unlocks the public link with password "%public%"
     Then "Anonymous" should see the content "Microsoft Word Content" in editor "OnlyOffice"
     When "Alice" edits the following resource
@@ -98,8 +98,8 @@ Feature: Integrate with online office suites like Collabora and OnlyOffice
       | MicrosoftWord.docx | Microsoft Word | Edited Microsoft Word Content |
     Then "Alice" should see the content "Edited Microsoft Word Content" in editor "OnlyOffice"
     And "Alice" closes the file viewer
-    When "Alice" edits the public link named "Link" of resource "MicrosoftWord.docx" changing role to "Can view"
-    And "Anonymous" opens the public link "Link"
+    When "Alice" edits the public link named "Unnamed link" of resource "MicrosoftWord.docx" changing role to "Can view"
+    And "Anonymous" opens the public link "Unnamed link"
     And "Anonymous" unlocks the public link with password "%public%"
     Then "Anonymous" should not be able to edit content of following resource
       | resource           | type           | content                       |
@@ -165,7 +165,7 @@ Feature: Integrate with online office suites like Collabora and OnlyOffice
       | usingSpaceLink.docx | Microsoft Word | public can create files in the project space using spaceLink |
 
     # public create .docx file using folderLink
-    When "Anonymous" opens the public link "Link"
+    When "Anonymous" opens the public link "Unnamed link"
     And "Anonymous" unlocks the public link with password "%public%"
     And "Anonymous" creates the following resources
       | resource             | type           | content                |
@@ -212,7 +212,7 @@ Feature: Integrate with online office suites like Collabora and OnlyOffice
       | usingSpaceLink.odt | OpenDocument | public can create files in the project space using spaceLink |
 
     # public create .docx file using folderLink
-    When "Anonymous" opens the public link "Link"
+    When "Anonymous" opens the public link "Unnamed link"
     And "Anonymous" unlocks the public link with password "%public%"
     And "Anonymous" creates the following resources
       | resource            | type         | content              |

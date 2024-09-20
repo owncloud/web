@@ -52,35 +52,30 @@ export const useLinkTypes = () => {
     {
       id: SharingLinkType.Internal,
       displayName: $gettext('Invited people'),
-      label: $gettext('Only for invited people'),
       description: $gettext('Link works only for invited people. Login is required.'),
       icon: 'user'
     },
     {
       id: SharingLinkType.View,
       displayName: $gettext('Can view'),
-      label: $gettext('Anyone with the link can view'),
       description: $gettext('Anyone with the link can view and download.'),
       icon: 'eye'
     },
     {
       id: SharingLinkType.Upload,
       displayName: $gettext('Can upload'),
-      label: $gettext('Anyone with the link can upload'),
       description: $gettext('Anyone with the link can view, download and upload.'),
       icon: 'upload'
     },
     {
       id: SharingLinkType.Edit,
       displayName: $gettext('Can edit'),
-      label: $gettext('Anyone with the link can edit'),
       description: $gettext('Anyone with the link can view, download and edit.'),
       icon: 'pencil'
     },
     {
       id: SharingLinkType.CreateOnly,
       displayName: $gettext('Secret File Drop'),
-      label: $gettext('Secret File Drop'),
       description: $gettext(
         'Anyone with the link can only upload, existing content is not revealed.'
       ),

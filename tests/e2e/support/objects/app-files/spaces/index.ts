@@ -81,8 +81,8 @@ export class Spaces {
   async createPublicLink({ password }: { password: string }): Promise<void> {
     const url = await po.createPublicLinkForSpace({ page: this.#page, password })
     this.#linksEnvironment.createLink({
-      key: 'Link',
-      link: { name: 'Link', url }
+      key: 'Unnamed link',
+      link: { name: 'Unnamed link', url }
     })
   }
 

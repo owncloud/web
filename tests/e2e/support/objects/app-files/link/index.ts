@@ -26,7 +26,7 @@ export class Link {
   async changeName(args: Omit<po.changeNameArgs, 'page'>): Promise<string> {
     const startUrl = this.#page.url()
     const name = await po.changeName({ page: this.#page, ...args })
-    const currentLink = this.#linksEnvironment.getLink({ name: 'Link' })
+    const currentLink = this.#linksEnvironment.getLink({ name: 'Unnamed link' })
 
     this.#linksEnvironment.updateLinkName({
       key: currentLink.name,

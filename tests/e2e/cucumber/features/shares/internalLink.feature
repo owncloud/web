@@ -15,7 +15,7 @@ Feature: internal link share
     And "Alice" creates a public link of following resource using API
       | resource | role           |
       | myfolder | Invited people |
-    And "Brian" opens the public link "Link"
+    And "Brian" opens the public link "Unnamed link"
     And "Brian" logs in from the internal link
     And "Brian" navigates to the shared with me page
     And "Brian" uploads the following resource

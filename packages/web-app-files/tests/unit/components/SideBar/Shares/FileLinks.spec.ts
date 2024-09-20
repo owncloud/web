@@ -1,17 +1,10 @@
 import FileLinks from '../../../../../src/components/SideBar/Shares/FileLinks.vue'
+import ListItem from '../../../../../src/components/SideBar/Shares/Links/ListItem.vue'
 import { defaultPlugins, shallowMount, defaultComponentMocks } from 'web-test-helpers'
-import { mock, mockDeep } from 'vitest-mock-extended'
-import { Resource } from '@ownclouders/web-client'
-import { LinkShare, ShareTypes } from '@ownclouders/web-client'
-import { AbilityRule } from '@ownclouders/web-client'
-import {
-  CapabilityStore,
-  FileAction,
-  useCanShare,
-  useFileActionsCreateLink
-} from '@ownclouders/web-pkg'
+import { mock } from 'vitest-mock-extended'
+import { LinkShare, ShareTypes, Resource, AbilityRule } from '@ownclouders/web-client'
+import { FileAction, useCanShare, useFileActionsCreateLink } from '@ownclouders/web-pkg'
 import { computed } from 'vue'
-import DetailsAndEdit from '../../../../../src/components/SideBar/Shares/Links/DetailsAndEdit.vue'
 import { SharingLinkType } from '@ownclouders/web-client/graph/generated'
 
 const defaultLinksList = [
@@ -36,12 +29,10 @@ const defaultLinksList = [
 const selectors = {
   linkAddButton: '#files-file-link-add',
   noSharePermissions: '[data-testid="files-links-no-share-permissions-message"]',
-  linkNoResults: '#oc-file-links-no-results',
-  indirectToggle: '.indirect-link-list-toggle'
+  linkNoResults: '.files-links-empty',
+  indirectToggle: '.indirect-link-list-toggle',
+  listItemStub: 'list-item-stub'
 }
-
-const linkListItemNameAndCopy = 'name-and-copy-stub'
-const linkListItemDetailsAndEdit = 'details-and-edit-stub'
 
 vi.mock('@ownclouders/web-pkg', async (importOriginal) => ({
   ...(await importOriginal<any>()),
@@ -56,12 +47,9 @@ describe('FileLinks', () => {
         const { wrapper } = getWrapper()
         await wrapper.find('.indirect-link-list-toggle').trigger('click')
 
-        const linkListItems = wrapper.findAllComponents<any>(linkListItemNameAndCopy)
-        const linkListItemsDetails = wrapper.findAll(linkListItemDetailsAndEdit)
+        const linkListItems = wrapper.findAllComponents<typeof ListItem>(selectors.listItemStub)
 
         expect(linkListItems.length).toBe(2)
-        expect(linkListItemsDetails.length).toBe(2)
-
         expect(linkListItems.at(0).props('linkShare')).toMatchObject(defaultLinksList[0])
         expect(linkListItems.at(1).props('linkShare')).toMatchObject(defaultLinksList[1])
       })
@@ -83,14 +71,14 @@ describe('FileLinks', () => {
           const links = [link, link, link, link]
           const { wrapper } = getWrapper({ links })
 
-          expect(wrapper.findAll(linkListItemNameAndCopy).length).toBe(3)
+          expect(wrapper.findAll(selectors.listItemStub).length).toBe(3)
         })
         it('button toggles to show all links', async () => {
           const links = [link, link, link, link]
           const { wrapper } = getWrapper({ links })
           await wrapper.find(selectors.indirectToggle).trigger('click')
 
-          expect(wrapper.findAll(linkListItemNameAndCopy).length).toBe(links.length)
+          expect(wrapper.findAll(selectors.listItemStub).length).toBe(links.length)
         })
       })
     })
@@ -121,7 +109,7 @@ describe('FileLinks', () => {
     })
   })
   describe('user does not have the permission to create public links', () => {
-    const resource = mockDeep<Resource>({
+    const resource = mock<Resource>({
       path: '/lorem.txt',
       type: 'file',
       isFolder: false,
@@ -133,9 +121,7 @@ describe('FileLinks', () => {
       const viewerLink = defaultLinksList[0]
       viewerLink.type = SharingLinkType.View
       const { wrapper } = getWrapper({ resource, abilities: [], links: [viewerLink] })
-      const detailsAndEdit = wrapper.findComponent<typeof DetailsAndEdit>(
-        linkListItemDetailsAndEdit
-      )
+      const detailsAndEdit = wrapper.findComponent<typeof ListItem>(selectors.listItemStub)
       const isModifiable = detailsAndEdit.props('isModifiable')
       expect(isModifiable).toBeFalsy()
     })
@@ -147,7 +133,7 @@ describe('FileLinks', () => {
 })
 
 function getWrapper({
-  resource = mockDeep<Resource>({ isFolder: false, canShare: () => true }),
+  resource = mock<Resource>({ isFolder: false, canShare: () => true }),
   links = defaultLinksList,
   abilities = [{ action: 'create-all', subject: 'PublicLink' }],
   canShare = true
@@ -165,16 +151,6 @@ function getWrapper({
   })
 
   const mocks = defaultComponentMocks()
-  const capabilities = {
-    files_sharing: {
-      public: {
-        alias: true,
-        password: {
-          enforced_for: { read_only: false, upload_only: false, read_write: false }
-        }
-      }
-    }
-  } satisfies Partial<CapabilityStore['capabilities']>
 
   return {
     mocks: { ...mocks, createLinkMock },
@@ -184,7 +160,6 @@ function getWrapper({
           ...defaultPlugins({
             abilities,
             piniaOptions: {
-              capabilityState: { capabilities },
               sharesState: { linkShares: links }
             }
           })

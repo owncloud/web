@@ -40,7 +40,6 @@ export interface IncomingShareResource extends ShareResource {
 
 export interface ShareRole extends UnifiedRoleDefinition {
   icon?: string
-  label?: string
 }
 
 export interface Share {

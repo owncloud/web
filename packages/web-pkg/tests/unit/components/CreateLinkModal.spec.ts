@@ -130,21 +130,6 @@ describe('CreateLinkModal', () => {
       await wrapper.vm.onConfirm()
       expect(callbackFn).toHaveBeenCalledTimes(1)
     })
-    it.each([true, false])(
-      'correctly passes the quicklink property to createLink',
-      async (isQuickLink) => {
-        const resources = [mock<Resource>({ isFolder: false })]
-        const { wrapper } = getWrapper({ resources, isQuickLink })
-        await wrapper.vm.onConfirm()
-
-        const { addLink } = useSharesStore()
-        expect(addLink).toHaveBeenCalledWith(
-          expect.objectContaining({
-            options: expect.objectContaining({ '@libre.graph.quickLink': isQuickLink })
-          })
-        )
-      }
-    )
   })
   describe('action buttons', () => {
     describe('confirm button', () => {
@@ -166,7 +151,6 @@ function getWrapper({
   passwordPolicyFulfilled = true,
   embedModeEnabled = false,
   callbackFn = undefined,
-  isQuickLink = false,
   availableLinkTypes = [SharingLinkType.View]
 }: {
   resources?: Resource[]
@@ -176,7 +160,6 @@ function getWrapper({
   passwordPolicyFulfilled?: boolean
   embedModeEnabled?: boolean
   callbackFn?: ComponentProps<typeof CreateLinkModal>['callbackFn']
-  isQuickLink?: boolean
   availableLinkTypes?: SharingLinkType[]
 } = {}) {
   vi.mocked(usePasswordPolicyService).mockReturnValue(
@@ -188,7 +171,7 @@ function getWrapper({
     mock<ReturnType<typeof useLinkTypes>>({
       defaultLinkType: ref(defaultLinkType),
       getAvailableLinkTypes: () => availableLinkTypes,
-      getLinkRoleByType: () => mock<ShareRole>({ description: 'role', label: '' }),
+      getLinkRoleByType: () => mock<ShareRole>({ description: 'role', displayName: 'role' }),
       isPasswordEnforcedForLinkType: () => passwordEnforced
     })
   )
@@ -224,7 +207,6 @@ function getWrapper({
     wrapper: mount(CreateLinkModal, {
       props: {
         resources,
-        isQuickLink,
         callbackFn,
         modal: mock<Modal>()
       },

@@ -84,10 +84,7 @@ export const useFileActionsCreateLink = ({
     }
   }
 
-  const handler = async (
-    { space, resources }: FileActionOptions,
-    { isQuickLink = false }: { isQuickLink?: boolean } = {}
-  ) => {
+  const handler = async ({ space, resources }: FileActionOptions) => {
     const passwordEnforced = capabilityStore.sharingPublicPasswordEnforcedFor.read_only === true
     if (enforceModal || passwordEnforced) {
       dispatchModal({
@@ -101,7 +98,6 @@ export const useFileActionsCreateLink = ({
         customComponentAttrs: () => ({
           space,
           resources,
-          isQuickLink,
           callbackFn: proceedResult
         }),
         hideActions: true
@@ -115,8 +111,8 @@ export const useFileActionsCreateLink = ({
         space,
         resource,
         options: {
-          '@libre.graph.quickLink': isQuickLink,
-          displayName: $gettext('Link'),
+          '@libre.graph.quickLink': false,
+          displayName: $gettext('Unnamed link'),
           type: unref(defaultLinkType)
         }
       })
@@ -149,22 +145,12 @@ export const useFileActionsCreateLink = ({
       {
         name: 'create-links',
         icon: 'link',
-        handler: (...args) => handler(...args, { isQuickLink: false }),
+        handler,
         label: () => {
           return $gettext('Create links')
         },
         isVisible,
         class: 'oc-files-actions-create-links'
-      },
-      {
-        name: 'create-quick-links',
-        icon: 'link',
-        handler: (...args) => handler(...args, { isQuickLink: true }),
-        label: () => {
-          return $gettext('Create links')
-        },
-        isVisible,
-        class: 'oc-files-actions-create-quick-links'
       }
     ]
   })

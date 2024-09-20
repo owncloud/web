@@ -1,51 +1,18 @@
 <template>
   <div id="oc-files-file-link" class="oc-position-relative">
     <div class="oc-flex oc-flex-middle">
-      <h3 class="oc-text-bold oc-text-medium oc-m-rm" v-text="linksHeading" />
+      <h3 class="oc-text-bold oc-text-medium oc-m-rm" v-text="$gettext('Public links')" />
       <oc-contextual-helper v-if="helpersEnabled" class="oc-pl-xs" v-bind="viaLinkHelp" />
     </div>
-    <p
-      v-if="!canCreateLinks"
-      data-testid="files-links-no-share-permissions-message"
-      class="oc-mt-m"
-      v-text="$gettext('You do not have permission to create links')"
-    />
-    <div v-if="quicklink || canCreateLinks" class="oc-mt-m">
-      <name-and-copy v-if="quicklink" :link-share="quicklink" />
-      <create-quick-link v-else-if="canCreateLinks" @create-public-link="addNewLink(true)" />
-      <details-and-edit
-        v-if="quicklink"
-        :can-rename="false"
-        :is-folder-share="resource.isFolder"
-        :is-modifiable="canEditLink(quicklink)"
-        :is-password-enforced="isPasswordEnforcedForLinkType(quicklink.type)"
-        :is-password-removable="canDeletePublicLinkPassword(quicklink)"
-        :link-share="quicklink"
-        @update-link="handleLinkUpdate"
-        @remove-public-link="deleteLinkConfirmation"
-      />
-      <hr class="oc-my-m" />
-      <oc-button
-        v-if="canCreateLinks"
-        id="files-file-link-add"
-        variation="primary"
-        appearance="raw"
-        data-testid="files-link-add-btn"
-        @click="addNewLink(false)"
-      >
-        <span v-text="$gettext('Add link')"
-      /></oc-button>
-    </div>
-
-    <oc-list v-if="directLinks.length" class="oc-overflow-hidden oc-my-m">
-      <li
-        v-for="link in displayLinks"
-        :key="link.key"
-        class="oc-py-s"
-        :data-testid="`files-link-id-${link.id}`"
-      >
-        <name-and-copy :link-share="link" />
-        <details-and-edit
+    <p v-if="!directLinks.length" class="files-links-empty oc-mt-m" v-text="noLinksLabel" />
+    <ul
+      v-else
+      id="files-links-list"
+      class="oc-list oc-list-divider oc-mt-m"
+      :aria-label="$gettext('Public links')"
+    >
+      <li v-for="link in displayLinks" :key="link.id">
+        <list-item
           :can-rename="true"
           :is-folder-share="resource.isFolder"
           :is-modifiable="canEditLink(link)"
@@ -56,31 +23,50 @@
           @remove-public-link="deleteLinkConfirmation"
         />
       </li>
-    </oc-list>
+    </ul>
     <div v-if="directLinks.length > 3" class="oc-flex oc-flex-center">
       <oc-button class="indirect-link-list-toggle" appearance="raw" @click="toggleLinkListCollapsed"
         ><span v-text="collapseButtonTitle"
       /></oc-button>
     </div>
-    <div v-if="indirectLinks.length" id="indirect-link-list">
+    <div class="oc-mt-m">
+      <oc-button
+        v-if="canCreateLinks"
+        id="files-file-link-add"
+        variation="primary"
+        appearance="raw"
+        data-testid="files-link-add-btn"
+        @click="addNewLink"
+      >
+        <span v-text="$gettext('Add link')"
+      /></oc-button>
+      <p
+        v-else
+        data-testid="files-links-no-share-permissions-message"
+        class="oc-mt-m"
+        v-text="$gettext('You do not have permission to create public links.')"
+      />
+    </div>
+    <div v-if="indirectLinks.length" class="files-links-indirect oc-mt-m">
       <hr class="oc-my-m" />
-      <div class="oc-flex">
-        <h3 class="oc-text-bold oc-m-rm oc-text-medium">
-          <span v-text="indirectLinksHeading" />
-        </h3>
+      <h4 class="oc-text-bold oc-text-medium oc-m-rm">
+        {{ indirectLinksHeading }}
         <oc-contextual-helper v-if="helpersEnabled" class="oc-pl-xs" v-bind="indirectLinkHelp" />
+      </h4>
+      <div
+        class="files-links-indirect-list"
+        :class="{ 'files-links-indirect-list-open': !indirectLinkListCollapsed }"
+      >
+        <ul class="oc-list oc-list-divider" :aria-label="$gettext('Public links')">
+          <li v-for="link in indirectLinks" :key="link.id">
+            <list-item
+              :is-folder-share="resource.isFolder"
+              :is-modifiable="false"
+              :link-share="link"
+            />
+          </li>
+        </ul>
       </div>
-      <oc-list v-if="!indirectLinkListCollapsed" class="oc-overflow-hidden oc-my-m">
-        <li
-          v-for="link in displayIndirectLinks"
-          :key="link.key"
-          class="oc-py-s"
-          :data-testid="`files-link-id-${link.id}`"
-        >
-          <name-and-copy :link-share="link" />
-          <details-and-edit :is-folder-share="true" :is-modifiable="false" :link-share="link" />
-        </li>
-      </oc-list>
       <div class="oc-flex oc-flex-center">
         <oc-button
           class="indirect-link-list-toggle"
@@ -108,10 +94,8 @@ import {
   useCanShare
 } from '@ownclouders/web-pkg'
 import { shareViaLinkHelp, shareViaIndirectLinkHelp } from '../../../helpers/contextualHelpers'
-import { LinkShare } from '@ownclouders/web-client'
-import DetailsAndEdit from './Links/DetailsAndEdit.vue'
-import NameAndCopy from './Links/NameAndCopy.vue'
-import CreateQuickLink from './Links/CreateQuickLink.vue'
+import { isSpaceResource, LinkShare } from '@ownclouders/web-client'
+import ListItem from './Links/ListItem.vue'
 import { Resource, SpaceResource } from '@ownclouders/web-client'
 import { isLocationSharesActive, useSharesStore } from '@ownclouders/web-pkg'
 import { useGettext } from 'vue3-gettext'
@@ -120,11 +104,7 @@ import { SharingLinkType } from '@ownclouders/web-client/graph/generated'
 
 export default defineComponent({
   name: 'FileLinks',
-  components: {
-    CreateQuickLink,
-    DetailsAndEdit,
-    NameAndCopy
-  },
+  components: { ListItem },
   setup() {
     const { showMessage, showErrorMessage } = useMessages()
     const { $gettext } = useGettext()
@@ -154,9 +134,6 @@ export default defineComponent({
     const createLinkAction = computed<FileAction>(() =>
       unref(createLinkActions).find(({ name }) => name === 'create-links')
     )
-    const createQuicklinkAction = computed<FileAction>(() =>
-      unref(createLinkActions).find(({ name }) => name === 'create-quick-links')
-    )
 
     const space = inject<Ref<SpaceResource>>('space')
     const resource = inject<Ref<Resource>>('resource')
@@ -165,7 +142,7 @@ export default defineComponent({
     const indirectLinkListCollapsed = ref(true)
     const directLinks = computed(() =>
       unref(linkShares)
-        .filter((l) => !l.indirect && !l.isQuickLink)
+        .filter((l) => !l.indirect)
         .sort((a, b) => b.createdDateTime.localeCompare(a.createdDateTime))
         .map((share) => {
           return { ...share, key: 'direct-link-' + share.id }
@@ -191,12 +168,8 @@ export default defineComponent({
       )
     }
 
-    const addNewLink = (isQuickLink: boolean) => {
+    const addNewLink = () => {
       const handlerArgs = { space: unref(space), resources: [unref(resource)] }
-      if (isQuickLink) {
-        return unref(createQuicklinkAction)?.handler(handlerArgs)
-      }
-
       return unref(createLinkAction)?.handler(handlerArgs)
     }
 
@@ -240,6 +213,24 @@ export default defineComponent({
       }
     }
 
+    const toggleLinkListCollapsed = () => {
+      linkListCollapsed.value = !unref(linkListCollapsed)
+    }
+
+    const toggleIndirectLinkListCollapsed = () => {
+      indirectLinkListCollapsed.value = !unref(indirectLinkListCollapsed)
+    }
+
+    const noLinksLabel = computed(() => {
+      if (isSpaceResource(unref(resource))) {
+        return $gettext('This space has no public links.')
+      }
+      if (unref(resource).isFolder) {
+        return $gettext('This folder has no public link.')
+      }
+      return $gettext('This file has no public link.')
+    })
+
     return {
       clientService,
       space,
@@ -254,6 +245,7 @@ export default defineComponent({
       configStore,
       configOptions,
       canCreateLinks,
+      noLinksLabel,
       canEditLink,
       handleLinkUpdate,
       addNewLink,
@@ -261,7 +253,9 @@ export default defineComponent({
       showMessage,
       showErrorMessage,
       removeResources,
-      canDeletePublicLinkPassword
+      canDeletePublicLinkPassword,
+      toggleIndirectLinkListCollapsed,
+      toggleLinkListCollapsed
     }
   },
   computed: {
@@ -270,10 +264,6 @@ export default defineComponent({
     },
     indirectCollapseButtonTitle() {
       return this.indirectLinkListCollapsed ? this.$gettext('Show') : this.$gettext('Hide')
-    },
-
-    quicklink() {
-      return this.linkShares.find(({ isQuickLink, indirect }) => isQuickLink === true && !indirect)
     },
 
     helpersEnabled() {
@@ -286,13 +276,8 @@ export default defineComponent({
     indirectLinkHelp() {
       return shareViaIndirectLinkHelp({ configStore: this.configStore })
     },
-
-    linksHeading() {
-      return this.$gettext('Share via link')
-    },
-
     indirectLinksHeading() {
-      return this.$gettext('Indirect links (%{ count })', {
+      return this.$gettext('Indirect (%{ count })', {
         count: this.indirectLinks.length.toString()
       })
     },
@@ -302,28 +287,9 @@ export default defineComponent({
         return this.directLinks.slice(0, 3)
       }
       return this.directLinks
-    },
-
-    displayIndirectLinks() {
-      if (this.indirectLinkListCollapsed) {
-        return []
-      }
-      return this.indirectLinks
-    },
-
-    resourceIsSpace() {
-      return this.resource.type === 'space'
     }
   },
   methods: {
-    toggleLinkListCollapsed() {
-      this.linkListCollapsed = !this.linkListCollapsed
-    },
-
-    toggleIndirectLinkListCollapsed() {
-      this.indirectLinkListCollapsed = !this.indirectLinkListCollapsed
-    },
-
     deleteLinkConfirmation({ link }: { link: LinkShare }) {
       this.dispatchModal({
         variation: 'danger',
@@ -348,7 +314,7 @@ export default defineComponent({
             this.showMessage({ title: this.$gettext('Link was deleted successfully') })
 
             if (lastLinkId && isLocationSharesActive(this.$router, 'files-shares-via-link')) {
-              if (this.resourceIsSpace) {
+              if (isSpaceResource(this.resource)) {
                 // spaces need their actual id instead of their share id to be removed from the file list
                 lastLinkId = this.resource.id.toString()
               }
@@ -373,9 +339,18 @@ export default defineComponent({
   border-radius: 5px;
 }
 
-.link-name-container {
-  background-color: var(--oc-color-input-bg);
-  border: 1px solid var(--oc-color-input-border);
-  border-radius: 5px;
+.files-links-indirect-list {
+  display: grid;
+  grid-template-rows: 0fr;
+  transition: all 0.25s ease-out;
+
+  ul {
+    overflow: hidden;
+  }
+
+  &-open {
+    grid-template-rows: 1fr;
+    margin-top: var(--oc-space-medium);
+  }
 }
 </style>
