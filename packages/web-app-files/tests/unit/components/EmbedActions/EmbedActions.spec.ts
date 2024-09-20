@@ -1,4 +1,9 @@
-import { defaultPlugins, shallowMount } from 'web-test-helpers'
+import {
+  defaultComponentMocks,
+  defaultPlugins,
+  RouteLocation,
+  shallowMount
+} from 'web-test-helpers'
 import EmbedActions from '../../../../src/components/EmbedActions/EmbedActions.vue'
 import { FileAction, useEmbedMode, useFileActionsCreateLink } from '@ownclouders/web-pkg'
 import { mock } from 'vitest-mock-extended'
@@ -89,7 +94,11 @@ describe('EmbedActions', () => {
 
       expect(mocks.postMessageMock).toHaveBeenCalledWith('owncloud-embed:select', {
         fileName: 'file.txt',
-        resources: [{ id: '1' }]
+        resources: [{ id: '1' }],
+        locationQuery: {
+          contextRouteName: 'files-spaces-generic',
+          contextRouteQuery: {}
+        }
       })
     })
   })
@@ -187,11 +196,23 @@ function getWrapper(
   )
 
   const resources = selectedIds.map((id) => ({ id })) as Resource[]
+  const mocks = {
+    ...defaultComponentMocks({
+      currentRoute: mock<RouteLocation>({
+        name: 'files-spaces-generic',
+        path: '/files/spaces/personal/admin'
+      })
+    }),
+    createLinkHandlerMock,
+    postMessageMock
+  }
 
   return {
-    mocks: { createLinkHandlerMock, postMessageMock },
+    mocks,
     wrapper: shallowMount(EmbedActions, {
       global: {
+        mocks,
+        provide: mocks,
         stubs: { OcButton: false },
         plugins: [
           ...defaultPlugins({

@@ -16,21 +16,24 @@
 <script lang="ts">
 import { defineComponent, onBeforeUnmount, onMounted, PropType, ref } from 'vue'
 import {
+  EDITOR_MODE_EDIT,
   embedModeLocationPickMessageData,
   Modal,
   useClientService,
+  useFileActions,
   useGetMatchingSpace,
   useMessages,
   useModals,
   useRouter,
   useThemeStore
 } from '../../composables'
-import { RouteLocationRaw } from 'vue-router'
+import { LocationQuery, RouteLocationRaw } from 'vue-router'
 import AppLoadingSpinner from '../AppLoadingSpinner.vue'
-import { Resource } from '@ownclouders/web-client'
+import { isShareSpaceResource, Resource, SpaceResource, urlJoin } from '@ownclouders/web-client'
 import { unref } from 'vue'
 import { resolveFileNameDuplicate } from '../../helpers'
 import { useGettext } from 'vue3-gettext'
+import { DavProperty } from '@ownclouders/web-client/webdav'
 
 export default defineComponent({
   name: 'SaveAsModal',
@@ -47,12 +50,13 @@ export default defineComponent({
     const themeStore = useThemeStore()
     const { $gettext } = useGettext()
     const router = useRouter()
-    const { webdav } = useClientService()
+    const clientService = useClientService()
     const { removeModal } = useModals()
     const { showMessage, showErrorMessage } = useMessages()
     const { getMatchingSpace } = useGetMatchingSpace()
-    const parentFolderRoute = router.resolve(props.parentFolderLink)
+    const { getEditorRouteOpts } = useFileActions()
 
+    const parentFolderRoute = router.resolve(props.parentFolderLink)
     const iframeTitle = themeStore.currentTheme.common?.name
     const iframeUrl = new URL(parentFolderRoute.href, window.location.origin)
     iframeUrl.searchParams.append('hide-logo', 'true')
@@ -71,14 +75,45 @@ export default defineComponent({
         return
       }
 
-      let { resources, fileName }: embedModeLocationPickMessageData = data.data
+      const { resources, fileName, locationQuery }: embedModeLocationPickMessageData = data.data
 
       const destinationFolder: Resource = resources[0]
       const space = getMatchingSpace(destinationFolder)
 
-      const { children: existingResources } = await webdav.listFiles(space, {
-        fileId: destinationFolder.fileId
-      })
+      try {
+        const resource = await saveFile({ destinationFolder, fileName, space })
+        showMessage({
+          title: $gettext('"%{fileName}" was saved successfully', { fileName: resource.name })
+        })
+        openFile({ resource, space, locationQuery })
+      } catch (e) {
+        console.error(e)
+        showErrorMessage({
+          title: $gettext('Unable to save "%{fileName}"', { fileName }),
+          errors: [e]
+        })
+        console.error(e)
+      }
+
+      removeModal(props.modal.id)
+    }
+
+    const saveFile = async ({
+      destinationFolder,
+      fileName,
+      space
+    }: {
+      destinationFolder: Resource
+      fileName: string
+      space: SpaceResource
+    }) => {
+      const { children: existingResources } = await clientService.webdav.listFiles(
+        space,
+        {
+          fileId: destinationFolder.fileId
+        },
+        { davProperties: [DavProperty.Name] }
+      )
       const resourceAlreadyExists = existingResources.find(
         (existingResource) => existingResource.name === fileName
       )
@@ -90,23 +125,36 @@ export default defineComponent({
         )
       }
 
-      try {
-        await webdav.putFileContents(space, {
-          fileName,
-          parentFolderId: destinationFolder.id,
-          content: props.content
-        })
-        showMessage({ title: $gettext('"%{fileName}" was saved successfully', { fileName }) })
-      } catch (e) {
-        console.error(e)
-        showErrorMessage({
-          title: $gettext('Unable to save "%{fileName}"', { fileName }),
-          errors: [e]
-        })
-        console.error(e)
-      }
+      return clientService.webdav.putFileContents(space, {
+        fileName,
+        parentFolderId: destinationFolder.id,
+        content: props.content,
+        path: urlJoin(destinationFolder.path, fileName)
+      })
+    }
 
-      removeModal(props.modal.id)
+    const openFile = ({
+      locationQuery,
+      resource,
+      space
+    }: {
+      locationQuery: LocationQuery
+      resource: Resource
+      space: SpaceResource
+    }) => {
+      const remoteItemId = isShareSpaceResource(space) ? space.id : undefined
+      const routeOpts = getEditorRouteOpts(
+        unref(router.currentRoute).name,
+        space,
+        resource,
+        EDITOR_MODE_EDIT,
+        remoteItemId
+      )
+      routeOpts.query = { ...routeOpts.query, ...locationQuery }
+
+      const editorRoute = router.resolve(routeOpts)
+      const editorRouteUrl = new URL(editorRoute.href, window.location.origin)
+      window.open(editorRouteUrl.href, '_blank')
     }
 
     const onCancel = ({ data }: MessageEvent) => {

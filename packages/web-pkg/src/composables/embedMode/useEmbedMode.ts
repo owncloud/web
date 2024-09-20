@@ -11,6 +11,7 @@ export interface embedModeFilePickMessageData {
 export interface embedModeLocationPickMessageData {
   resources: Resource[]
   fileName?: string
+  locationQuery?: LocationQuery
 }
 
 export const useEmbedMode = () => {

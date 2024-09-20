@@ -20,6 +20,7 @@
       <oc-button
         v-if="!isLocationPicker && !isFilePicker"
         key="btn-share"
+        class="oc-mr-s"
         data-testid="button-share"
         variation="inverse"
         appearance="filled"
@@ -48,10 +49,12 @@ import { computed, defineComponent, ref, unref } from 'vue'
 import {
   embedModeLocationPickMessageData,
   FileAction,
+  routeToContextQuery,
   useAbility,
   useEmbedMode,
   useFileActionsCreateLink,
   useResourcesStore,
+  useRouter,
   useSpacesStore
 } from '@ownclouders/web-pkg'
 import { Resource } from '@ownclouders/web-client'
@@ -70,6 +73,7 @@ export default defineComponent({
       chooseFileNameSuggestion
     } = useEmbedMode()
     const spacesStore = useSpacesStore()
+    const router = useRouter()
     const { currentSpace: space } = storeToRefs(spacesStore)
     const resourcesStore = useResourcesStore()
     const { currentFolder, selectedResources } = storeToRefs(resourcesStore)
@@ -102,7 +106,8 @@ export default defineComponent({
       if (unref(chooseFileName)) {
         postMessage<embedModeLocationPickMessageData>('owncloud-embed:select', {
           resources: JSON.parse(JSON.stringify(selectedFiles.value)),
-          fileName: unref(fileName)
+          fileName: unref(fileName),
+          locationQuery: JSON.parse(JSON.stringify(routeToContextQuery(unref(router.currentRoute))))
         })
       }
 

@@ -6,6 +6,8 @@ import { ListFilesResult } from '@ownclouders/web-client/webdav'
 import { Modal, useMessages, useModals } from '../../../../src/composables/piniaStores'
 import { ClientService } from '../../../../src'
 
+window.open = vi.fn()
+
 describe('SaveAsModal', () => {
   describe('iframe', () => {
     it('sets the iframe src correctly', () => {
@@ -25,6 +27,7 @@ describe('SaveAsModal', () => {
 
       expect(mocks.$clientService.webdav.listFiles).not.toHaveBeenCalled()
       expect(mocks.$clientService.webdav.putFileContents).not.toHaveBeenCalled()
+      expect(window.open).not.toHaveBeenCalled()
     })
     it('saves the file when message does equal "owncloud-embed:select"', async () => {
       const { wrapper, mocks } = getWrapper()
@@ -45,9 +48,10 @@ describe('SaveAsModal', () => {
         })
       )
 
-      await nextTicks(2)
+      await nextTicks(4)
       expect(messageStore.showMessage).toHaveBeenCalled()
       expect(modalStore.removeModal).toHaveBeenCalled()
+      expect(window.open).toHaveBeenCalled()
     })
     it('shows an error message when the file when message does equal "owncloud-embed:select and request fails"', async () => {
       console.error = vi.fn()
@@ -69,9 +73,10 @@ describe('SaveAsModal', () => {
         })
       )
 
-      await nextTicks(2)
+      await nextTicks(4)
       expect(messageStore.showErrorMessage).toHaveBeenCalled()
       expect(modalStore.removeModal).toHaveBeenCalled()
+      expect(window.open).not.toHaveBeenCalled()
     })
   })
 })
