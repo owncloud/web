@@ -36,7 +36,7 @@
           </template>
         </div>
         <div class="files-collaborators-collaborator-name-wrapper oc-pl-s">
-          <div v-oc-tooltip="shareDisplayNameTooltip" class="oc-text-truncate">
+          <div class="oc-text-truncate">
             <span
               aria-hidden="true"
               class="files-collaborators-collaborator-name"
@@ -311,10 +311,6 @@ export default defineComponent({
         })
       }
       return this.share.sharedWith.displayName
-    },
-
-    shareDisplayNameTooltip() {
-      return this.shareDisplayName
     },
 
     screenreaderShareDisplayName() {

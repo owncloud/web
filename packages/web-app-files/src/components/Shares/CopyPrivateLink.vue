@@ -1,10 +1,9 @@
 <template>
   <div class="oc-flex oc-flex-middle">
-    <oc-button gap-size="none" appearance="raw" @click="copyLinkToClipboard">
-      <oc-icon size="small" :name="copied ? 'checkbox-circle' : 'file-copy'" />
+    <oc-button v-oc-tooltip="tooltip" gap-size="none" appearance="raw" @click="copyLinkToClipboard">
+      <oc-icon size="small" :name="copied ? 'checkbox-circle' : 'file-copy'" fill-type="line" />
       <span class="oc-ml-xs" v-text="$gettext('Permanent link')"
     /></oc-button>
-    <oc-contextual-helper class="oc-ml-xs" :text="helperText" :title="$gettext('Permanent link')" />
   </div>
 </template>
 
@@ -35,13 +34,13 @@ export default defineComponent({
       })
     }
 
-    const helperText = computed(() => {
+    const tooltip = computed(() => {
       return $gettext(
         'Copy the link to point your team to this item. Works only for people with existing access.'
       )
     })
 
-    return { copied, helperText, copyLinkToClipboard }
+    return { copied, tooltip, copyLinkToClipboard }
   }
 })
 </script>
