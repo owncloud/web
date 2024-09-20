@@ -18,6 +18,7 @@ Summary
 * Enhancement - Add versions to the left sidebar bottom: [#11561](https://github.com/owncloud/web/pull/11561)
 * Enhancement - Accessibility improvements: [#11574](https://github.com/owncloud/web/pull/11574)
 * Enhancement - Show min oCIS version in app details (app store): [#11580](https://github.com/owncloud/web/pull/11580)
+* Enhancement - Soothe right sidebar panel transitions: [#11614](https://github.com/owncloud/web/pull/11614)
 
 Details
 -------
@@ -122,6 +123,12 @@ Details
    of the app store.
 
    https://github.com/owncloud/web/pull/11580
+
+* Enhancement - Soothe right sidebar panel transitions: [#11614](https://github.com/owncloud/web/pull/11614)
+
+   The panel transitions of the right sidebar are a bit smoother now.
+
+   https://github.com/owncloud/web/pull/11614
 
 Changelog for ownCloud Web [10.2.0] (2024-09-05)
 =======================================
