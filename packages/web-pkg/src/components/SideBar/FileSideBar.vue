@@ -13,11 +13,19 @@
     @select-panel="setActiveSideBarPanel"
     @close="closeSideBar"
   >
-    <template #header>
+    <template #rootHeader>
       <file-info
         v-if="isFileHeaderVisible"
         class="sidebar-panel__file_info"
-        :is-sub-panel-active="!!activePanel"
+        :is-sub-panel-active="false"
+      />
+      <space-info v-else-if="isSpaceHeaderVisible" class="sidebar-panel__space_info" />
+    </template>
+    <template #subHeader>
+      <file-info
+        v-if="isFileHeaderVisible"
+        class="sidebar-panel__file_info"
+        :is-sub-panel-active="true"
       />
       <space-info v-else-if="isSpaceHeaderVisible" class="sidebar-panel__space_info" />
     </template>

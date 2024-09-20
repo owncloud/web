@@ -1,0 +1,5 @@
+Enhancement: Soothe right sidebar panel transitions
+
+The panel transitions of the right sidebar are a bit smoother now.
+
+https://github.com/owncloud/web/pull/11614

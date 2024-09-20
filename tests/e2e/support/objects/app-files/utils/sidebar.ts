@@ -4,6 +4,8 @@ import { locatorUtils } from '../../../utils'
 
 const contextMenuSelector =
   '//span[@data-test-resource-name="%s"]/ancestor::tr[contains(@class, "oc-tbody-tr")]//button[contains(@class, "resource-table-btn-action-dropdown")]'
+const closeSidebarRootPanelBtn = `#app-sidebar .is-active-root-panel .header__close`
+const closeSidebarSubPanelBtn = `#app-sidebar .is-active-sub-panel .header__close`
 
 const openForResource = async ({
   page,
@@ -48,8 +50,14 @@ export const open = async ({
 }
 
 export const close = async ({ page }: { page: Page }): Promise<void> => {
-  const closeButtonSelector = `//div[contains(@class,"sidebar-panel is-active")]//button[contains(@class,"header__close")]`
-  await page.locator(closeButtonSelector).click()
+  // await sidebar transitions
+  await new Promise((resolve) => setTimeout(resolve, 250))
+  const isSubPanelActive = await page.locator(closeSidebarSubPanelBtn).isVisible()
+  if (isSubPanelActive) {
+    await page.locator(closeSidebarSubPanelBtn).click()
+  } else {
+    await page.locator(closeSidebarRootPanelBtn).click()
+  }
 }
 
 export const openPanel = async ({ page, name }: { page: Page; name: string }): Promise<void> => {

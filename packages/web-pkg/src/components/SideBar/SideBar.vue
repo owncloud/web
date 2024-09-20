@@ -19,7 +19,9 @@
         :data-testid="`sidebar-panel-${panel.name}`"
         :tabindex="activePanelName === panel.name ? -1 : null"
         class="sidebar-panel"
+        :inert="activePanelName !== panel.name"
         :class="{
+          'is-root-panel': panel.isRoot?.(panelContext),
           'is-active-sub-panel': hasActiveSubPanel && activeSubPanelName === panel.name, // only one specific sub panel can be active
           'is-active-root-panel': hasActiveRootPanel && panel.isRoot?.(panelContext) // all root panels are active if no sub panel is active
         }"
@@ -54,7 +56,8 @@
         </div>
 
         <div>
-          <slot name="header" />
+          <slot v-if="panel.isRoot?.(panelContext)" name="rootHeader" />
+          <slot v-else name="subHeader" />
         </div>
         <div class="sidebar-panel__body" :class="[`sidebar-panel__body-${panel.name}`]">
           <div
@@ -327,6 +330,18 @@ export default defineComponent({
   &.is-active-sub-panel {
     visibility: unset;
     transform: translateX(0);
+  }
+
+  &.is-active-root-panel {
+    right: 0 !important;
+    transition: right 0.4s 0s;
+  }
+
+  &.is-root-panel {
+    transform: translateX(0);
+    visibility: visible;
+    transition: right 0.4s 0s;
+    right: 100px;
   }
 
   .multi-root-panel-separator {
