@@ -165,7 +165,8 @@ export default defineConfig(({ mode, command }) => {
       css: {
         preprocessorOptions: {
           scss: {
-            additionalData: `@import "${projectRootDir}/packages/design-system/src/styles/styles";${stripScssMarker}`
+            additionalData: `@import "${projectRootDir}/packages/design-system/src/styles/styles";${stripScssMarker}`,
+            silenceDeprecations: ['legacy-js-api']
           }
         }
       },
