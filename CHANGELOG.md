@@ -103,15 +103,18 @@ Details
    top of the sharing panel to the members section where all members are listed. -
    Leaving dropdown menus via the keyboard navigation now closes them. - When the
    sidebar is open and uses 100% of the screen width (mobile view), it is no longer
-   possible to focus elements in the background.
+   possible to focus elements in the background. - Focus issues with the right
+   sidebar have been fixed.
 
    https://github.com/owncloud/web/issues/10725
    https://github.com/owncloud/web/issues/10729
    https://github.com/owncloud/web/issues/10724
    https://github.com/owncloud/web/issues/10733
+   https://github.com/owncloud/web/issues/10618
    https://github.com/owncloud/web/pull/11574
    https://github.com/owncloud/web/pull/11591
    https://github.com/owncloud/web/pull/11600
+   https://github.com/owncloud/web/pull/11609
 
 * Enhancement - Show min oCIS version in app details (app store): [#11580](https://github.com/owncloud/web/pull/11580)
 
