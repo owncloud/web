@@ -31,7 +31,7 @@
           v-if="linkShare.hasPassword"
           v-oc-tooltip="$gettext('This link is password-protected')"
           name="lock-password"
-          class="oc-files-file-link-has-password"
+          class="oc-files-file-link-has-password oc-mr-xs"
           fill-type="line"
           :aria-label="$gettext('This link is password-protected')"
         />
@@ -39,14 +39,15 @@
       <expiration-date-indicator
         v-if="linkShare.expirationDateTime"
         :expiration-date="DateTime.fromISO(linkShare.expirationDateTime)"
-        class="oc-ml-xs"
+        class="oc-mx-xs"
       />
-      <copy-link :link-share="linkShare" class="oc-ml-xs" />
+      <copy-link :link-share="linkShare" class="oc-mx-xs" />
       <edit-dropdown
         :can-rename="canRename"
         :is-modifiable="isModifiable"
         :is-password-removable="isPasswordRemovable"
         :link-share="linkShare"
+        class="oc-ml-xs"
         @remove-public-link="$emit('removePublicLink', $event)"
         @update-link="$emit('updateLink', $event)"
         @show-password-modal="showPasswordModal"
