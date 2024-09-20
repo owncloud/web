@@ -78,7 +78,7 @@ export default class Collaborator {
   private static readonly denyShareCollaboratorButton =
     '%s//ul[contains(@class,"collaborator-edit-dropdown-options-list")]//span[contains(@class,"deny-share")]//button[contains(@aria-checked,"%s")]'
   private static readonly setExpirationDateCollaboratorButton =
-    '%s//ul[contains(@class,"collaborator-edit-dropdown-options-list")]//button[@data-testid="recipient-datepicker-btn"]'
+    '%s//ul[contains(@class,"collaborator-edit-dropdown-options-list")]//button[contains(@class,"recipient-datepicker-btn")]'
   private static readonly removeExpirationDateCollaboratorButton =
     '%s//ul[contains(@class,"collaborator-edit-dropdown-options-list")]//button[contains(@class,"remove-expiration-date")]'
   private static readonly showAccessDetailsButton =

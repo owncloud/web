@@ -20,6 +20,13 @@ export default defineConfig({
       }
     }
   ],
+  css: {
+    preprocessorOptions: {
+      scss: {
+        silenceDeprecations: ['legacy-js-api']
+      }
+    }
+  },
   test: {
     root,
     globals: true,

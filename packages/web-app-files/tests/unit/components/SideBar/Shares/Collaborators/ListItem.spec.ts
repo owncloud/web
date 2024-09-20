@@ -38,7 +38,7 @@ const selectors = {
   accessDetailsButton: '.files-collaborators-collaborator-access-details-button',
   collaboratorRole: '.files-collaborators-collaborator-role',
   collaboratorEdit: '.files-collaborators-collaborator-edit',
-  shareInheritanceIndicators: '.oc-resource-indicators',
+  shareInheritanceIndicators: '.files-collaborators-collaborator-shared-via',
   expirationDateIcon: '[data-testid="recipient-info-expiration-date"]',
   externalContextHelper: '.files-collaborators-collaborator-name-wrapper .oc-contextual-helper'
 }

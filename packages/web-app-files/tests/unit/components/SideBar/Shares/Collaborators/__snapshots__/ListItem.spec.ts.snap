@@ -19,13 +19,9 @@ exports[`Collaborator ListItem component > share inheritance indicators > show w
       </div>
     </div>
     <div data-v-ccf14be2="" class="oc-flex oc-flex-middle oc-width-1-3 files-collaborators-collaborator-navigation">
-      <div data-v-ccf14be2="" class="oc-resource-indicators oc-text-truncate">
-        <router-link-stub data-v-ccf14be2="" class="parent-folder oc-text-truncate" to="[object Object]"><span data-v-ccf14be2="" class="text">via</span>
-          <oc-icon-stub data-v-ccf14be2="" name="folder-2" size="small" fill-type="line" class="oc-px-xs"></oc-icon-stub> <span data-v-ccf14be2="" class="text oc-text-truncate">folder</span>
-        </router-link-stub>
-      </div>
       <!--v-if-->
-      <edit-dropdown-stub data-v-ccf14be2="" sharecategory="user" caneditordelete="true" issharedenied="false" deniable="false" islocked="false" id="edit-drop-down-00000000-0000-0000-0000-000000000000" class="files-collaborators-collaborator-edit" data-testid="collaborator-edit"></edit-dropdown-stub>
+      <oc-icon-stub data-v-ccf14be2="" name="folder-shared" fill-type="line" class="files-collaborators-collaborator-shared-via oc-mx-xs"></oc-icon-stub>
+      <edit-dropdown-stub data-v-ccf14be2="" sharecategory="user" caneditordelete="true" issharedenied="false" deniable="false" islocked="false" sharedparentroute="[object Object]" id="edit-drop-down-00000000-0000-0000-0000-000000000000" class="files-collaborators-collaborator-edit oc-ml-xs" data-testid="collaborator-edit"></edit-dropdown-stub>
       <oc-info-drop-stub data-v-ccf14be2="" class="share-access-details-drop" title="Access details" list="[object Object],[object Object],[object Object],[object Object],[object Object],[object Object],[object Object],[object Object],[object Object],[object Object]" mode="manual" target="#edit-drop-down-00000000-0000-0000-0000-000000000000"></oc-info-drop-stub>
     </div>
   </div>

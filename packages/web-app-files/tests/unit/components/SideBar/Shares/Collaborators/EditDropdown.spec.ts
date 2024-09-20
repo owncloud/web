@@ -1,14 +1,15 @@
 import EditDropdown from '../../../../../../src/components/SideBar/Shares/Collaborators/EditDropdown.vue'
-import { defaultPlugins, shallowMount } from 'web-test-helpers'
+import { defaultPlugins, PartialComponentProps, shallowMount } from 'web-test-helpers'
 import { mock } from 'vitest-mock-extended'
 import { Resource } from '@ownclouders/web-client'
 import OcButton from 'design-system/src/components/OcButton/OcButton.vue'
 
 const selectors = {
   editBtn: '.collaborator-edit-dropdown-options-btn',
-  removeShareAction: '.remove-share',
-  expireDateMenuAction: '.files-collaborators-expiration',
-  showAccessDetailsAction: '.show-access-details'
+  removeShareSection: '.collaborator-edit-dropdown-options-list-remove',
+  expireDateMenuAction: '.set-expiration-date',
+  showAccessDetailsAction: '.show-access-details',
+  navigateToParentAction: '.navigate-to-parent'
 }
 
 describe('EditDropdown', () => {
@@ -29,11 +30,11 @@ describe('EditDropdown', () => {
   describe('remove share action', () => {
     it('is being rendered when canEditOrDelete is true', () => {
       const { wrapper } = getWrapper({ canEditOrDelete: true })
-      expect(wrapper.find(selectors.removeShareAction).exists()).toBeTruthy()
+      expect(wrapper.find(selectors.removeShareSection).exists()).toBeTruthy()
     })
     it('is not being rendered when canEditOrDelete is false', () => {
       const { wrapper } = getWrapper({ canEditOrDelete: false })
-      expect(wrapper.find(selectors.removeShareAction).exists()).toBeFalsy()
+      expect(wrapper.find(selectors.removeShareSection).exists()).toBeFalsy()
     })
   })
   describe('expiration date', () => {
@@ -46,6 +47,18 @@ describe('EditDropdown', () => {
       expect(wrapper.find(selectors.expireDateMenuAction).exists()).toBeFalsy()
     })
   })
+  describe('navigate to parent action', () => {
+    it('is being rendered when sharedParentRoute is given', () => {
+      const { wrapper } = getWrapper({
+        sharedParentRoute: { params: { driveAliasAndItem: '/folder' } }
+      })
+      expect(wrapper.find(selectors.navigateToParentAction).exists()).toBeTruthy()
+    })
+    it('is not being rendered when sharedParentRoute is not given', () => {
+      const { wrapper } = getWrapper()
+      expect(wrapper.find(selectors.navigateToParentAction).exists()).toBeFalsy()
+    })
+  })
   describe('show access details action', () => {
     it('is being rendered', () => {
       const { wrapper } = getWrapper()
@@ -54,7 +67,7 @@ describe('EditDropdown', () => {
   })
 })
 
-function getWrapper(props = {}) {
+function getWrapper(props: PartialComponentProps<typeof EditDropdown> = {}) {
   return {
     wrapper: shallowMount(EditDropdown, {
       props: {
@@ -65,7 +78,7 @@ function getWrapper(props = {}) {
       global: {
         plugins: [...defaultPlugins()],
         provide: { resource: mock<Resource>() },
-        stubs: { OcDrop: false, OcList: false }
+        stubs: { OcDrop: false, OcList: false, ContextMenuItem: false }
       }
     })
   }
