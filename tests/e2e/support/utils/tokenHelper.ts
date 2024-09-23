@@ -38,3 +38,4 @@ export const setAccessToken = async (username: string) => {
   const loginUser = new UsersEnvironment().getUser({ key: username })
   await setAccessAndRefreshToken(loginUser)
 }
+

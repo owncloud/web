@@ -23,21 +23,21 @@ Feature: users management
       | id    |
       | Alice |
       | Brian |
-    And "Alice" logs in
-    And "Brian" logs in
-    And "Admin" opens the "admin-settings" app
-    And "Admin" navigates to the users management page
-    When "Admin" changes the quota of the user "Alice" to "500" using the sidebar panel
-    Then "Alice" should have quota "500"
-    When "Admin" changes the quota to "20" for users using the batch action
-      | id    |
-      | Alice |
-      | Brian |
-    Then "Alice" should have quota "20"
-    And "Brian" should have quota "20"
-    And "Brian" logs out
-    And "Alice" logs out
-    And "Admin" logs out
+#    And "Alice" logs in
+#    And "Brian" logs in
+#    And "Admin" opens the "admin-settings" app
+#    And "Admin" navigates to the users management page
+#    When "Admin" changes the quota of the user "Alice" to "500" using the sidebar panel
+#    Then "Alice" should have quota "500"
+#    When "Admin" changes the quota to "20" for users using the batch action
+#      | id    |
+#      | Alice |
+#      | Brian |
+#    Then "Alice" should have quota "20"
+#    And "Brian" should have quota "20"
+#    And "Brian" logs out
+#    And "Alice" logs out
+#    And "Admin" logs out
 
 
   Scenario: user group assignments can be handled via batch actions

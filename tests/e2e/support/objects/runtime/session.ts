@@ -49,8 +49,10 @@ export class Session {
     ])
 
     if (!config.basicAuth || config.keycloak) {
+
       const body = await response.json()
       const tokenEnvironment = TokenEnvironmentFactory(tokenType)
+
 
       tokenEnvironment.setToken({
         user: { ...user },
@@ -60,6 +62,7 @@ export class Session {
           refreshToken: body.refresh_token
         }
       })
+      // console.log('token from login::::::::::::::::::::::::::', user.id, body.access_token)
     }
   }
 
