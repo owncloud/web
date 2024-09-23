@@ -26,7 +26,7 @@ const selectors = {
 describe('Preview component', () => {
   const driveAliasAndItem = '1'
   vi.mocked(useGetMatchingSpace).mockImplementation(() => useGetMatchingSpaceMock())
-  it('should render preview component', () => {
+  it('should render preview component', async () => {
     const { wrapper } = getWrapper({
       space: mock<SpaceResource>({
         id: '1',
@@ -35,6 +35,8 @@ describe('Preview component', () => {
         getDriveAliasAndItem: () => driveAliasAndItem
       })
     })
+    wrapper.vm.previewData = 'blob:image'
+    await wrapper.vm.$nextTick()
     expect(wrapper.html()).toMatchSnapshot()
   })
   it('should render resource component without file extension when areFileExtensionsShown is set to false', () => {

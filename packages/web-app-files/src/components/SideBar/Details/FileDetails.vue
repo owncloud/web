@@ -138,7 +138,8 @@ import {
   useConfigStore,
   useResourcesStore,
   formatDateFromJSDate,
-  useResourceContents
+  useResourceContents,
+  useLoadPreview
 } from '@ownclouders/web-pkg'
 import upperFirst from 'lodash-es/upperFirst'
 import {
@@ -147,7 +148,7 @@ import {
   isTrashResource,
   ShareTypes
 } from '@ownclouders/web-client'
-import { usePreviewService, useGetMatchingSpace } from '@ownclouders/web-pkg'
+import { useGetMatchingSpace } from '@ownclouders/web-pkg'
 import { getIndicators } from '@ownclouders/web-pkg'
 import {
   formatDateFromHTTP,
@@ -157,7 +158,6 @@ import {
 import { eventBus } from '@ownclouders/web-pkg'
 import { SideBarEventTopics } from '@ownclouders/web-pkg'
 import { Resource, SpaceResource } from '@ownclouders/web-client'
-import { useTask } from 'vue-concurrency'
 import { useGettext } from 'vue3-gettext'
 import { getSharedAncestorRoute } from '@ownclouders/web-pkg'
 import { ResourceIcon } from '@ownclouders/web-pkg'
@@ -187,6 +187,7 @@ export default defineComponent({
     const capabilityStore = useCapabilityStore()
     const { getMatchingSpace } = useGetMatchingSpace()
     const { resourceContentsText } = useResourceContents({ showSizeInformation: false })
+    const { loadPreview, previewsLoading } = useLoadPreview()
 
     const language = useGettext()
     const { $gettext, current: currentLanguage } = language
@@ -200,35 +201,12 @@ export default defineComponent({
     const versions = inject<Ref<Resource[]>>('versions')
     const space = inject<Ref<SpaceResource>>('space')
 
-    const previewService = usePreviewService()
-    const preview = ref(undefined)
+    const preview = ref<string>(undefined)
 
     const authStore = useAuthStore()
     const { publicLinkContextReady } = storeToRefs(authStore)
 
-    const isPreviewEnabled = computed(() => {
-      if (unref(resource).isFolder) {
-        return false
-      }
-      return props.previewEnabled
-    })
-    const loadPreviewTask = useTask(function* (signal, resource) {
-      if (!unref(isPreviewEnabled)) {
-        preview.value = undefined
-        return
-      }
-      preview.value = yield previewService.loadPreview({
-        space: unref(space),
-        resource,
-        dimensions: ImageDimension.Preview
-      })
-    }).restartable()
-    const isPreviewLoading = computed(() => {
-      if (!unref(isPreviewEnabled)) {
-        return false
-      }
-      return loadPreviewTask.isRunning || !loadPreviewTask.last
-    })
+    const isPreviewLoading = computed(() => props.previewEnabled && unref(previewsLoading))
 
     const sharedAncestor = computed(() => {
       return Object.values(unref(ancestorMetaData)).find(
@@ -370,10 +348,16 @@ export default defineComponent({
     }
 
     watch(
-      resource,
-      () => {
+      () => unref(resource).id,
+      async () => {
         if (unref(resource)) {
-          loadPreviewTask.perform(unref(resource))
+          preview.value = await loadPreview({
+            space: unref(space),
+            resource: unref(resource),
+            dimensions: ImageDimension.Preview,
+            cancelRunning: true,
+            updateStore: false
+          })
         }
       },
       { immediate: true }

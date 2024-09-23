@@ -1,13 +1,15 @@
-import { Ref, onBeforeUnmount, ref, watch } from 'vue'
+import { Ref, onBeforeUnmount, ref, unref, watch } from 'vue'
 
 export const useIsVisible = ({
   target,
   mode = 'show',
-  rootMargin = '100px'
+  rootMargin = '100px',
+  onVisibleCallback
 }: {
   target: Ref<Element>
   mode?: string
   rootMargin?: string
+  onVisibleCallback?: () => void
 }) => {
   const isSupported = window && 'IntersectionObserver' in window
   if (!isSupported) {
@@ -27,6 +29,10 @@ export const useIsVisible = ({
       const isIntersecting = intersectionObserverEntries.at(-1).isIntersecting
 
       isVisible.value = isIntersecting
+      if (unref(isVisible) && onVisibleCallback) {
+        onVisibleCallback()
+      }
+
       /**
        * if given mode is `showHide` we need to keep the observation alive.
        */

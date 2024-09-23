@@ -74,6 +74,7 @@
           @dragleave.prevent="setDropStyling(resource, true, $event)"
           @drop="fileDropped(resource, $event)"
           @dragover="$event.preventDefault()"
+          @item-visible="$emit('itemVisible', resource)"
         >
           <template #selection>
             <oc-checkbox
@@ -242,7 +243,7 @@ export default defineComponent({
       default: true
     }
   },
-  emits: ['fileClick', 'fileDropped', 'rowMounted', 'sort', 'update:selectedIds'],
+  emits: ['fileClick', 'fileDropped', 'rowMounted', 'sort', 'itemVisible', 'update:selectedIds'],
   setup(props, context) {
     const { $gettext } = useGettext()
     const router = useRouter()

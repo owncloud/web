@@ -1,0 +1,6 @@
+Enhancement: Preview loading performance
+
+We've improved the performance of loading previews, especially for spaces.
+
+https://github.com/owncloud/web/pull/11631
+https://github.com/owncloud/ocis/issues/10054

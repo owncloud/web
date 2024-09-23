@@ -102,24 +102,22 @@ import {
   unref,
   watch
 } from 'vue'
-import { SpaceResource } from '@ownclouders/web-client'
+import { buildSpaceImageResource, SpaceResource } from '@ownclouders/web-client'
 import {
   useClientService,
-  usePreviewService,
   ProcessorType,
   useResourcesStore,
   TextEditor,
-  useFileActions
+  useFileActions,
+  useLoadPreview
 } from '@ownclouders/web-pkg'
 import { ImageDimension } from '@ownclouders/web-pkg'
-import { VisibilityObserver } from '@ownclouders/web-pkg'
 import SpaceContextActions from './SpaceContextActions.vue'
 import { eventBus } from '@ownclouders/web-pkg'
 import { SideBarEventTopics } from '@ownclouders/web-pkg'
 import { useGettext } from 'vue3-gettext'
-import { useTask } from 'vue-concurrency'
+import { DriveItem } from '@ownclouders/web-client/graph/generated'
 
-const visibilityObserver = new VisibilityObserver()
 const markdownContainerCollapsedClass = 'collapsed'
 
 export default defineComponent({
@@ -140,9 +138,9 @@ export default defineComponent({
     const { $gettext, $ngettext } = language
     const clientService = useClientService()
     const { getFileContents, getFileInfo } = clientService.webdav
-    const previewService = usePreviewService()
     const resourcesStore = useResourcesStore()
     const { getDefaultAction } = useFileActions()
+    const { loadPreview } = useLoadPreview()
 
     const markdownContainerRef = ref(null)
     const markdownContent = ref('')
@@ -192,12 +190,11 @@ export default defineComponent({
     }
     onMounted(observeMarkdownContainerResize)
     onBeforeUnmount(() => {
-      visibilityObserver.disconnect()
       unobserveMarkdownContainerResize()
     })
     watch(
       computed(() => props.space.spaceReadmeData),
-      async (data: any) => {
+      async (data: DriveItem) => {
         if (!data) {
           return
         }
@@ -221,7 +218,7 @@ export default defineComponent({
       { deep: true, immediate: true }
     )
 
-    const imageContent = ref(null)
+    const imageContent = ref<string>(null)
     const imageExpanded = ref(false)
 
     const editReadMeContentLink = computed(() => {
@@ -237,27 +234,23 @@ export default defineComponent({
       imageExpanded.value = !unref(imageExpanded)
     }
 
-    const loadPreviewTask = useTask(function* (signal) {
-      const resource = yield getFileInfo(props.space, {
-        path: `.space/${props.space.spaceImageData.name}`
-      })
-      imageContent.value = yield previewService.loadPreview({
-        space: props.space,
-        resource,
-        dimensions: ImageDimension.Tile,
-        processor: ProcessorType.enum.fit
-      })
-    })
-
     watch(
       computed(() => props.space.spaceImageData),
       async (data) => {
         if (!data) {
           return
         }
-        await loadPreviewTask.perform()
+        const resource = buildSpaceImageResource(props.space)
+        imageContent.value = await loadPreview({
+          space: props.space,
+          resource,
+          dimensions: ImageDimension.Tile,
+          processor: ProcessorType.enum.fit,
+          cancelRunning: true,
+          updateStore: false
+        })
       },
-      { deep: true, immediate: true }
+      { immediate: true }
     )
 
     const memberCount = computed(() => {
@@ -290,7 +283,6 @@ export default defineComponent({
       memberCount,
       memberCountString,
       openSideBarSharePanel,
-      loadPreviewTask,
       editReadMeContentLink
     }
   }

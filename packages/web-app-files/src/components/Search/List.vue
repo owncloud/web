@@ -108,7 +108,13 @@
           :fields-displayed="['name', 'size', 'tags', 'mdate']"
           :resource-dom-selector="resourceDomSelector"
           @file-click="triggerDefaultAction"
-          @row-mounted="rowMounted"
+          @item-visible="
+            loadPreview({
+              space: getMatchingSpace($event),
+              resource: $event,
+              ignoreAlmostEmptyTxtFiles: true
+            })
+          "
           @sort="handleSort"
         >
           <template #additionalResourceContent="{ resource }">
@@ -155,16 +161,12 @@ import {
   useConfigStore,
   useResourcesStore
 } from '@ownclouders/web-pkg'
-import { VisibilityObserver } from '@ownclouders/web-pkg'
-import { ImageDimension } from '@ownclouders/web-pkg'
 import { NoContentMessage } from '@ownclouders/web-pkg'
 import { ResourceTable } from '@ownclouders/web-pkg'
 import { ContextActions, FileSideBar } from '@ownclouders/web-pkg'
-import { debounce } from 'lodash-es'
 import { useGettext } from 'vue3-gettext'
 import { AppBar } from '@ownclouders/web-pkg'
 import {
-  ComponentPublicInstance,
   computed,
   defineComponent,
   nextTick,
@@ -188,7 +190,8 @@ import {
   useGetMatchingSpace,
   useRoute,
   useRouteQuery,
-  useRouter
+  useRouter,
+  useLoadPreview
 } from '@ownclouders/web-pkg'
 import { onBeforeRouteLeave } from 'vue-router'
 import { useTask } from 'vue-concurrency'
@@ -204,8 +207,6 @@ import {
 } from '../../composables/keyboardActions'
 import { extractDomSelector } from '@ownclouders/web-client'
 import { storeToRefs } from 'pinia'
-
-const visibilityObserver = new VisibilityObserver()
 
 type Tag = {
   id: string
@@ -254,7 +255,7 @@ export default defineComponent({
     const { getMatchingSpace } = useGetMatchingSpace()
 
     const resourcesStore = useResourcesStore()
-    const { initResourceList, clearResourceList, updateResourceField } = resourcesStore
+    const { initResourceList, clearResourceList } = resourcesStore
     const { totalResourcesCount } = storeToRefs(resourcesStore)
 
     const configStore = useConfigStore()
@@ -265,6 +266,7 @@ export default defineComponent({
     const doUseScope = useRouteQuery('useScope')
 
     const resourcesView = useResourcesViewDefaults<Resource, any, any[]>()
+    const { loadPreview } = useLoadPreview(resourcesView.viewMode)
     const keyActions = useKeyboardActions()
     useKeyboardTableNavigation(keyActions, resourcesView.paginatedResources, resourcesView.viewMode)
     useKeyboardTableMouseActions(keyActions, resourcesView.viewMode)
@@ -486,8 +488,8 @@ export default defineComponent({
       resourceDomSelector,
       initResourceList,
       clearResourceList,
-      updateResourceField,
-      totalResourcesCount
+      totalResourcesCount,
+      loadPreview
     }
   },
   computed: {
@@ -536,33 +538,6 @@ export default defineComponent({
         await nextTick()
         this.scrollToResourceFromRoute(this.paginatedResources, 'files-app-bar')
       }
-    }
-  },
-  beforeUnmount() {
-    visibilityObserver.disconnect()
-  },
-  methods: {
-    rowMounted(resource: Resource, component: ComponentPublicInstance<unknown>) {
-      const loadPreview = async () => {
-        const preview = await this.$previewService.loadPreview(
-          {
-            space: this.getMatchingSpace(resource),
-            resource,
-            dimensions: ImageDimension.Thumbnail
-          },
-          true
-        )
-        if (preview) {
-          this.updateResourceField({ id: resource.id, field: 'thumbnail', value: preview })
-        }
-      }
-
-      const debounced = debounce(({ unobserve }) => {
-        unobserve()
-        loadPreview()
-      }, 250)
-
-      visibilityObserver.observe(component.$el, { onEnter: debounced, onExit: debounced.cancel })
     }
   }
 })

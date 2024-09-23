@@ -69,6 +69,7 @@
         @dragleave.prevent="dropRowStyling(itemDomSelector(item), true, $event)"
         @mouseleave="dropRowStyling(itemDomSelector(item), true, $event)"
         @dragover="dragOver($event)"
+        @item-visible="$emit('itemVisible', item)"
       >
         <oc-td
           v-for="(field, tdIndex) in fields"
@@ -318,7 +319,8 @@ export default defineComponent({
     EVENT_TROW_MOUNTED,
     EVENT_TROW_CONTEXTMENU,
     EVENT_SORT,
-    'dropRowStyling'
+    'dropRowStyling',
+    'itemVisible'
   ],
   setup() {
     const constants = {

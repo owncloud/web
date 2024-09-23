@@ -27,7 +27,13 @@
           :style="folderViewStyle"
           v-bind="folderView.componentAttrs?.()"
           @file-click="triggerDefaultAction"
-          @row-mounted="rowMounted"
+          @item-visible="
+            loadPreview({
+              space: getMatchingSpace($event),
+              resource: $event,
+              ignoreAlmostEmptyTxtFiles: true
+            })
+          "
           @sort="handleSort"
         >
           <template #quickActions="props">
@@ -64,17 +70,13 @@ import {
   ref,
   unref
 } from 'vue'
-import { debounce } from 'lodash-es'
-
 import { Resource } from '@ownclouders/web-client'
 import {
-  VisibilityObserver,
   useExtensionRegistry,
   useConfigStore,
-  useResourcesStore
+  useResourcesStore,
+  useLoadPreview
 } from '@ownclouders/web-pkg'
-import { ImageDimension } from '@ownclouders/web-pkg'
-
 import { AppLoadingSpinner } from '@ownclouders/web-pkg'
 import { FileSideBar, NoContentMessage } from '@ownclouders/web-pkg'
 import { Pagination } from '@ownclouders/web-pkg'
@@ -91,8 +93,6 @@ import { useResourcesViewDefaults } from '../composables'
 import { useFileActions } from '@ownclouders/web-pkg'
 import { storeToRefs } from 'pinia'
 import { folderViewsFavoritesExtensionPoint } from '../extensionPoints'
-
-const visibilityObserver = new VisibilityObserver()
 
 export default defineComponent({
   components: {
@@ -114,9 +114,9 @@ export default defineComponent({
     const { options: configOptions } = storeToRefs(configStore)
 
     const resourcesStore = useResourcesStore()
-    const { updateResourceField } = resourcesStore
 
     const resourcesViewDefaults = useResourcesViewDefaults<Resource, any, any[]>()
+    const { loadPreview } = useLoadPreview(resourcesViewDefaults.viewMode)
 
     const extensionRegistry = useExtensionRegistry()
     const viewModes = computed(() => {
@@ -150,7 +150,6 @@ export default defineComponent({
     })
 
     onBeforeUnmount(() => {
-      visibilityObserver.disconnect()
       eventBus.unsubscribe('app.files.list.removeFromFavorites', unref(loadResourcesEventToken))
     })
 
@@ -160,10 +159,10 @@ export default defineComponent({
       configOptions,
       getMatchingSpace,
       viewModes,
-      updateResourceField,
       appBarRef,
       folderView,
-      folderViewStyle
+      folderViewStyle,
+      loadPreview
     }
   },
 
@@ -176,31 +175,6 @@ export default defineComponent({
   async created() {
     await this.loadResourcesTask.perform()
     this.scrollToResourceFromRoute(this.paginatedResources, 'files-app-bar')
-  },
-
-  methods: {
-    rowMounted(resource: Resource, component: ComponentPublicInstance<unknown>) {
-      const loadPreview = async () => {
-        const preview = await this.$previewService.loadPreview(
-          {
-            space: this.getMatchingSpace(resource),
-            resource,
-            dimensions: ImageDimension.Thumbnail
-          },
-          true
-        )
-        if (preview) {
-          this.updateResourceField({ id: resource.id, field: 'thumbnail', value: preview })
-        }
-      }
-
-      const debounced = debounce(({ unobserve }) => {
-        unobserve()
-        loadPreview()
-      }, 250)
-
-      visibilityObserver.observe(component.$el, { onEnter: debounced, onExit: debounced.cancel })
-    }
   }
 })
 </script>
