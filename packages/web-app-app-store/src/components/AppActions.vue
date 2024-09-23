@@ -5,7 +5,7 @@
       :key="`app-action-${action.name}`"
       size="small"
       :action="action"
-      :action-options="{ app, ...(version && version) }"
+      :action-options="{ app, version }"
     />
   </oc-list>
 </template>
