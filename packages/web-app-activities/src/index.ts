@@ -14,7 +14,7 @@ export default defineWebApplication({
       name: $gettext('Activities'),
       id: APPID,
       icon: 'pulse',
-      color: '#ff6961'
+      color: '#887ef1'
     }
 
     const routes: RouteRecordRaw[] = [

@@ -7,12 +7,16 @@
     <div>activity unknown</div>
     <div class="oc-text-truncate">
       <resource-list-item v-if="resource" :resource="resource" :is-resource-clickable="false" />
-      <div v-if="resourceDeleted" class="oc-text-muted oc-flex oc-flex-middle oc-p-xs">
-        <oc-icon name="delete-bin" />
+      <div
+        v-if="resourceNotAccessible"
+        class="oc-text-muted oc-flex oc-flex-middle oc-p-xs"
+        v-oc-tooltip="$gettext('The resource is unavailable, it may have been deleted.')"
+      >
+        <oc-icon name="eye-off" />
         <span class="oc-ml-s" v-text="activity.template.variables.resource.name" />
       </div>
     </div>
-    <div><span v-text="modifiedDateTime"></span></div>
+    <div><span v-text="recordedDateTime" /></div>
   </div>
 </template>
 
@@ -20,7 +24,12 @@
 import { computed, defineComponent, onMounted, PropType, ref, unref } from 'vue'
 import { Activity } from '@ownclouders/web-client/src/graph/generated'
 import { DateTime } from 'luxon'
-import { formatDateFromDateTime, ResourceListItem, useClientService } from '@ownclouders/web-pkg'
+import {
+  formatDateFromDateTime,
+  formatRelativeDateFromDateTime,
+  ResourceListItem,
+  useClientService
+} from '@ownclouders/web-pkg'
 import { useGettext } from 'vue3-gettext'
 import { Resource } from '@ownclouders/web-client'
 
@@ -37,10 +46,16 @@ export default defineComponent({
     const clientService = useClientService()
     const { current: currentLanguage } = useGettext()
     const resource = ref<Resource>()
-    const resourceDeleted = ref(false)
+    const resourceNotAccessible = ref(false)
 
-    const modifiedDateTime = computed(() => {
+    const recordedDateTime = computed(() => {
       const dateTime = DateTime.fromISO(props.activity.times.recordedTime)
+
+      const isWithinLastHour = dateTime > DateTime.now().minus({ hour: 1 })
+      if (isWithinLastHour) {
+        return formatRelativeDateFromDateTime(dateTime, currentLanguage)
+      }
+
       return formatDateFromDateTime(dateTime, currentLanguage)
     })
 
@@ -51,14 +66,14 @@ export default defineComponent({
           { fileId: props.activity.template.variables.resource.id }
         )
       } catch (e) {
-        resourceDeleted.value = true
+        resourceNotAccessible.value = true
       }
     })
 
     return {
-      modifiedDateTime,
+      recordedDateTime,
       resource,
-      resourceDeleted
+      resourceNotAccessible
     }
   }
 })

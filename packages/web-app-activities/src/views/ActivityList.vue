@@ -40,19 +40,6 @@ export default defineComponent({
         }
         acc[date].push(activity)
 
-        // TODO: Remove mock data
-        const date2 = DateTime.fromISO(activity.times.recordedTime).minus({ day: 1 }).toISODate()
-        if (!acc[date2]) {
-          acc[date2] = []
-        }
-        acc[date2].push(activity)
-
-        const date3 = DateTime.fromISO(activity.times.recordedTime).minus({ day: 2 }).toISODate()
-        if (!acc[date3]) {
-          acc[date3] = []
-        }
-        acc[date3].push(activity)
-
         return acc
       }, {})
     })
