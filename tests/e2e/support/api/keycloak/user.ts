@@ -2,7 +2,7 @@ import join from 'join-path'
 import { getUserIdFromResponse, request, realmBasePath } from './utils'
 import { deleteUser as graphDeleteUser, getUserId } from '../graph'
 import { checkResponseStatus } from '../http'
-import { User, KeycloakRealmRole } from '../../types'
+import {User, KeycloakRealmRole, Group} from '../../types'
 import { UsersEnvironment } from '../../environment'
 import { keycloakRealmRoles } from '../../store'
 import { state } from '../../../cucumber/environment/shared'
@@ -74,7 +74,7 @@ export const assignRole = async ({
   admin: User
   uuid: string
   role: string
-}) => {
+}):Promise<Response>   => {
   // can assign multiple realm role at once
   return request({
     method: 'POST',
@@ -163,4 +163,36 @@ export const getRealmRole = async (role: string, admin: User): Promise<KeycloakR
   }
 
   throw new Error(`Role '${role}' not found in the keycloak realm`)
+}
+
+export const createGroup = async ({ group, admin }: { group: Group; admin: User }): Promise<void> => {
+
+  const body = JSON.stringify({
+    name: group.displayName
+  })
+  // create a user
+  const response = await request({
+    method: 'POST',
+    path: join(realmBasePath, 'groups'),
+    body,
+    user: admin,
+    header: { 'Content-Type': 'application/json' }
+  })
+  console.log(response)
+  checkResponseStatus(response, 'Failed while creating group')
+  // created user id
+  const keycloakGroupUUID = getUserIdFromResponse(response)
+  console.log(group)
+  const usersEnvironment = new UsersEnvironment()
+  // // stored keycloak user information on storage
+  usersEnvironment.storeCreatedGroup({ group: { ...group, uuid: keycloakGroupUUID } })
+
+  // // login to initialize the user in oCIS Web
+  // await initializeUser(user.id)
+  //
+  // // store oCIS user information
+  // usersEnvironment.storeCreatedUser({
+  //   user: { ...user, uuid: await getUserId({ user, admin }), role: defaultNewUserRole }
+  // })
+  // return user
 }

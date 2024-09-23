@@ -1,15 +1,17 @@
-import { User } from '../../types'
+import {Group, User} from '../../types'
 import {
   createUser as graphCreateUser,
   deleteUser as graphDeleteUser,
   assignRole as graphAssignRole,
+  createGroup as graphCreateGroup,
   getUserId
 } from '../graph'
 import {
   createUser as keycloakCreateUser,
   deleteUser as keycloakDeleteUser,
   assignRole as keycloakAssignRole,
-  unAssignRole as keycloakUnAssignRole
+  unAssignRole as keycloakUnAssignRole,
+  createGroup as keycloakCreateGroup
 } from '../keycloak'
 import { config } from '../../../config'
 import { UsersEnvironment } from '../../environment'
@@ -41,10 +43,9 @@ export const assignRole = async ({
     const usersEnvironment = new UsersEnvironment()
     const createdUser = usersEnvironment.getCreatedKeycloakUser({ key: user.id })
     await keycloakAssignRole({ admin, uuid: createdUser.uuid, role })
-  } else {
+  }
     const id = await getUserId({ user, admin })
     await graphAssignRole(admin, id, role)
-  }
 }
 
 export const unAssignRole = async ({ admin, user }: { admin: User; user: User }): Promise<void> => {
@@ -53,4 +54,11 @@ export const unAssignRole = async ({ admin, user }: { admin: User; user: User })
     const createdUser = usersEnvironment.getCreatedKeycloakUser({ key: user.id })
     await keycloakUnAssignRole({ admin, uuid: createdUser.uuid, role: createdUser.role })
   }
+}
+
+export const createGroup = async ({ group, admin }: { group: Group; admin: User }): Promise<User> => {
+  if (config.keycloak) {
+    return await keycloakCreateGroup({ group, admin })
+  }
+  return await graphCreateGroup({ group, admin })
 }

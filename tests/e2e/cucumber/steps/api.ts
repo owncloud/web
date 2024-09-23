@@ -43,7 +43,8 @@ Given(
 
     for (const info of stepTable.hashes()) {
       const group = this.usersEnvironment.getGroup({ key: info.id })
-      await api.graph.createGroup({ group, admin })
+      console.log(group)
+      await api.provision.createGroup({ group, admin })
     }
   }
 )
