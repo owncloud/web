@@ -17,6 +17,7 @@ import {
 import { SharingLinkType } from '@ownclouders/web-client/graph/generated'
 import { Resource } from '@ownclouders/web-client'
 import OcButton from 'design-system/src/components/OcButton/OcButton.vue'
+import { RouteLocationNamedRaw } from 'vue-router'
 
 vi.mock('@ownclouders/web-pkg', async (importOriginal) => ({
   ...(await importOriginal<any>()),
@@ -81,7 +82,8 @@ describe('DetailsAndEdit component', () => {
     const { wrapper } = getShallowMountedWrapper({ linkShare, sharedAncestor })
     const viaButton = wrapper.findComponent<typeof OcButton>('.oc-files-file-link-via')
     expect(viaButton.exists()).toBeTruthy()
-    expect(viaButton.props('to').query.fileId).toEqual('ancestorId')
+    const routeLocation = viaButton.props('to') as RouteLocationNamedRaw
+    expect(routeLocation.query.fileId).toEqual('ancestorId')
   })
 
   describe('additional information icons', () => {

@@ -4,7 +4,7 @@ import { MockProxy, mock } from 'vitest-mock-extended'
 import { join } from 'path'
 import { defaultComponentMocks, defaultPlugins, shallowMount } from 'web-test-helpers'
 import { OcButton } from 'design-system/src/components'
-import { RouteLocationNormalizedLoaded } from 'vue-router'
+import { RouteLocationNamedRaw, RouteLocationNormalizedLoaded } from 'vue-router'
 
 const selectors = {
   homeButton: '#files-list-not-found-button-go-home',
@@ -43,8 +43,9 @@ describe('NotFoundMessage', () => {
       const { wrapper } = getWrapper(space, spacesLocation)
       const homeButton = wrapper.findComponent<typeof OcButton>(selectors.homeButton)
 
-      expect(homeButton.props().to.name).toBe(spacesLocation.name)
-      expect(homeButton.props().to.params.driveAliasAndItem).toBe('personal')
+      const routeLocation = homeButton.props('to') as RouteLocationNamedRaw
+      expect(routeLocation.name).toBe(spacesLocation.name)
+      expect(routeLocation.params.driveAliasAndItem).toBe('personal')
     })
   })
 
@@ -79,8 +80,9 @@ describe('NotFoundMessage', () => {
       const { wrapper } = getWrapper(space, publicLocation)
       const reloadLinkButton = wrapper.findComponent<typeof OcButton>(selectors.reloadLinkButton)
 
-      expect(reloadLinkButton.props().to.name).toBe(publicLocation.name)
-      expect(reloadLinkButton.props().to.params.driveAliasAndItem).toBe(
+      const routeLocation = reloadLinkButton.props('to') as RouteLocationNamedRaw
+      expect(routeLocation.name).toBe(publicLocation.name)
+      expect(routeLocation.params.driveAliasAndItem).toBe(
         space.getDriveAliasAndItem({ path: '' } as Resource)
       )
     })
