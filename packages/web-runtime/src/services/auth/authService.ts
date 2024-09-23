@@ -103,7 +103,7 @@ export class AuthService {
         this.userManager.events.addAccessTokenExpired((...args): void => {
           const handleExpirationError = () => {
             console.error('AccessToken Expired：', ...args)
-            this.handleAuthError(unref(this.router.currentRoute))
+            this.handleAuthError(unref(this.router.currentRoute), { forceLogout: true })
           }
 
           /**
@@ -253,7 +253,10 @@ export class AuthService {
     return '/?' + new URLSearchParams(currentQuery as Record<string, string>).toString()
   }
 
-  public async handleAuthError(route: RouteLocation) {
+  public async handleAuthError(
+    route: RouteLocation,
+    { forceLogout = false }: { forceLogout?: boolean } = {}
+  ) {
     if (isPublicLinkContextRequired(this.router, route)) {
       const token = extractPublicLinkToken(route)
       this.publicLinkManager.clear(token)
@@ -264,6 +267,11 @@ export class AuthService {
       })
     }
     if (isUserContextRequired(this.router, route) || isIdpContextRequired(this.router, route)) {
+      if (forceLogout) {
+        await this.logoutUser()
+        return
+      }
+
       const user = await this.userManager.getUser()
       if (user?.expires_in !== undefined && user.expires_in < 0) {
         // token expired, simply return and let the regular auth flow do its thing
