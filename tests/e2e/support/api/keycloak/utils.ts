@@ -26,7 +26,11 @@ export const getUserIdFromResponse = (response: Response): string => {
   return response.headers.get('location').split('/').pop()
 }
 
-export const refreshToken = async ({ user }: { user: User }): Promise<void> => {
+export const refreshAccessTokenForKeycloakUser = async ({
+  user
+}: {
+  user: User
+}): Promise<void> => {
   const tokenEnvironment = TokenEnvironmentFactory('keycloak')
 
   const body = new URLSearchParams()
@@ -57,7 +61,7 @@ export const refreshToken = async ({ user }: { user: User }): Promise<void> => {
   })
 }
 
-export const getAccessToken = async (user: User): Promise<void> => {
+export const setAccessTokenForKeycloakUser = async (user: User): Promise<void> => {
   const keyCloakTokenUrl = config.keycloakUrl + '/realms/master/protocol/openid-connect/token'
 
   const response = await fetch(keyCloakTokenUrl, {

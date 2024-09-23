@@ -9,11 +9,11 @@ Feature: spaces management
       | id    | role        |
       | Alice | Space Admin |
       | Brian | Space Admin |
-    When "Alice" logs in
-    And "Alice" creates the following project spaces using API
+    When "Alice" creates the following project spaces using API
       | name   | id     |
       | team A | team.a |
       | team B | team.b |
+    And "Alice" logs in
     When "Alice" opens the "admin-settings" app
     And "Alice" navigates to the project spaces management page
     When "Alice" updates the space "team.a" name to "developer team" using the context-menu
@@ -42,13 +42,13 @@ Feature: spaces management
     And "Admin" assigns following roles to the users using API
       | id    | role        |
       | Alice | Space Admin |
-    And "Alice" logs in
     And "Alice" creates the following project spaces using API
       | name   | id     |
       | team A | team.a |
       | team B | team.b |
       | team C | team.c |
       | team D | team.d |
+    And "Alice" logs in
     When "Alice" opens the "admin-settings" app
     And "Alice" navigates to the project spaces management page
     And "Alice" disables the following spaces using the batch-actions
@@ -135,16 +135,12 @@ Feature: spaces management
       | Alice | Admin       |
       | Brian | Space Admin |
       | Carol | Space Admin |
-    When "Brian" logs in
     And "Brian" creates the following project spaces using API
       | name   | id     |
       | team A | team.a |
-    And "Brian" logs out
-    When "Carol" logs in
     And "Carol" creates the following project spaces using API
       | name   | id     |
       | team B | team.b |
-    And "Carol" logs out
     When "Alice" logs in
     And "Alice" opens the "admin-settings" app
     And "Alice" navigates to the project spaces management page

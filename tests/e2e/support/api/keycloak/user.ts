@@ -6,7 +6,8 @@ import { User, KeycloakRealmRole } from '../../types'
 import { UsersEnvironment } from '../../environment'
 import { keycloakRealmRoles } from '../../store'
 import { state } from '../../../cucumber/environment/shared'
-import { getTokenFromLogin } from '../../utils/tokenHelper'
+import { initializeUser } from '../../utils/tokenHelper'
+import { setAccessTokenForKeycloakOcisUser } from './ocisUserToken'
 
 const ocisKeycloakUserRoles: Record<string, string> = {
   Admin: 'ocisAdmin',
@@ -57,12 +58,17 @@ export const createUser = async ({ user, admin }: { user: User; admin: User }): 
   })
 
   // login to initialize the user in oCIS Web
-  await initializeUser(user.id)
+  await initializeUser({
+    browser: state.browser,
+    username: user.id,
+    waitForSelector: '#web-content'
+  })
 
   // store oCIS user information
   usersEnvironment.storeCreatedUser({
     user: { ...user, uuid: await getUserId({ user, admin }), role: defaultNewUserRole }
   })
+  await setAccessTokenForKeycloakOcisUser(user)
   return user
 }
 
@@ -107,14 +113,6 @@ export const unAssignRole = async ({
   })
   checkResponseStatus(response, 'Can not delete existing role ')
   return response
-}
-
-const initializeUser = async (username: string): Promise<void> => {
-  return await getTokenFromLogin({
-    browser: state.browser,
-    username,
-    waitForSelector: '#web-content'
-  })
 }
 
 export const deleteUser = async ({ user, admin }: { user: User; admin: User }): Promise<User> => {
