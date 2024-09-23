@@ -29,7 +29,7 @@ Feature: Users can see all activities of the resources and spaces
     And "Alice" navigates to the project space "team.1"
     Then "Alice" should see activity of the space
       | activity                      |
-      | alice added readme.md to team |
+      | alice added readme.md to .space |
     And "Alice" logs out
 
     # see activity in the shared resources
@@ -37,5 +37,5 @@ Feature: Users can see all activities of the resources and spaces
     And "Brian" navigates to the shared with me page
     Then "Brian" should see activity of the following resource
       | resource               | activity                              |
-      | sharedFolder/subFolder | alice added subFolder to Alice Hansen |
+      | sharedFolder/subFolder | alice added subFolder to sharedFolder |
     And "Brian" logs out
