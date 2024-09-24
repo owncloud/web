@@ -521,27 +521,9 @@ importers:
       design-system:
         specifier: workspace:@ownclouders/design-system@*
         version: link:../design-system
-      fuse.js:
-        specifier: 7.0.0
-        version: 7.0.0
-      lodash-es:
-        specifier: 4.17.21
-        version: 4.17.21
-      mark.js:
-        specifier: ^8.11.1
-        version: 8.11.1
-      pinia:
-        specifier: 2.2.2
-        version: 2.2.2(typescript@5.6.2)(vue@3.5.8(typescript@5.6.2))
-      vue-concurrency:
-        specifier: 5.0.1
-        version: 5.0.1(vue@3.5.8(typescript@5.6.2))
       vue-router:
-        specifier: 4.2.5
+        specifier: ^4.2.5
         version: 4.2.5(vue@3.5.8(typescript@5.6.2))
-      zod:
-        specifier: 3.23.8
-        version: 3.23.8
     devDependencies:
       web-test-helpers:
         specifier: workspace:*
