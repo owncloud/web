@@ -11,6 +11,7 @@
     "@ownclouders/web-client": "workspace:*",
     "@ownclouders/web-pkg": "workspace:*",
     "design-system": "workspace:@ownclouders/design-system@*",
-    "vue-router": "^4.2.5"
+    "vue-router": "^4.2.5",
+    "pinia": "^2.2.2"
   }
 }
