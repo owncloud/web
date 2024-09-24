@@ -154,7 +154,6 @@ Feature: Search
     Given "Admin" creates following users using API
       | id    |
       | Alice |
-
     And "Alice" creates the following folders in personal space using API
       | name      |
       | mediaTest |

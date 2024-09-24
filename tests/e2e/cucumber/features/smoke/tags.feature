@@ -37,7 +37,7 @@ Feature: Users can use web to organize tags
       | pathToFile   | content     |
       | lorem.txt    | lorem ipsum |
       | textfile.txt | test file   |
-    When "Alice" logs in
+    And "Alice" logs in
     And "Alice" adds the following tags for the following resources using the sidebar panel
       | resource  | tags       |
       | lorem.txt | tag1, tag2 |

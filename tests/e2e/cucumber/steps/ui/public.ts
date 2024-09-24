@@ -35,7 +35,7 @@ When(
     if (password === '%copied_password%') {
       password = await page.evaluate('navigator.clipboard.readText()')
     } else {
-      password = '%public%' === password ? securePassword : password
+      password = password === '%public%' ? securePassword : password
     }
     await pageObject.authenticate({ password })
   }

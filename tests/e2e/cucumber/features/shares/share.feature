@@ -7,9 +7,8 @@ Feature: share
       | Brian |
 
   Scenario: folder
-
     # disabling auto accepting to check accepting share
-    And "Brian" disables auto-accepting using API
+    Given "Brian" disables auto-accepting using API
     And "Alice" creates the following folder in personal space using API
       | name               |
       | folder_to_shared   |
@@ -205,7 +204,7 @@ Feature: share
       | pathToFile           | content      |
       | new.txt              | some content |
       | mainFolder/lorem.txt | lorem epsum  |
-    And  "Alice" logs in
+    And "Alice" logs in
     When "Alice" shares the following resource using the sidebar panel
       | resource   | recipient | type  | role     | resourceType | expirationDate |
       | new.txt    | Brian     | user  | Can edit | file         | +5 days        |

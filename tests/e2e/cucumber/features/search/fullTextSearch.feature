@@ -20,7 +20,6 @@ Feature: Search
     And "Alice" shares the following resource using API
       | resource        | recipient | type | role     |
       | fileToShare.txt | Brian     | user | Can edit |
-
     And "Brian" creates the following folder in personal space using API
       | name       |
       | testFolder |
