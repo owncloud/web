@@ -1,5 +1,5 @@
 <template>
-  <ul class="oc-list activity-list">
+  <oc-list class="activity-list">
     <li v-for="(activities, date) in activitiesDateCategorized" :key="date" class="oc-mb-l">
       <span class="oc-text-bold oc-text-muted activity-list-date" v-text="getListDate(date)" />
       <ul class="oc-ml-s oc-mt-s timeline">
@@ -8,7 +8,7 @@
         </li>
       </ul>
     </li>
-  </ul>
+  </oc-list>
 </template>
 
 <script lang="ts">
