@@ -278,7 +278,8 @@ import {
   useFileActions,
   useIsTopBarSticky,
   embedModeFilePickMessageData,
-  routeToContextQuery
+  routeToContextQuery,
+  useSpaceActionsRename
 } from '../../composables'
 import ResourceListItem from './ResourceListItem.vue'
 import ResourceGhostElement from './ResourceGhostElement.vue'
@@ -564,7 +565,9 @@ export default defineComponent({
     )
 
     const { actions: renameActions } = useFileActionsRename()
+    const { actions: renameActionsSpace } = useSpaceActionsRename()
     const renameHandler = computed(() => unref(renameActions)[0].handler)
+    const renameHandlerSpace = computed(() => unref(renameActionsSpace)[0].handler)
 
     const getTagToolTip = (text: string) => (text.length > 7 ? text : '')
 
@@ -646,7 +649,9 @@ export default defineComponent({
       contextMenuButton,
       getTagToolTip,
       renameActions,
+      renameActionsSpace,
       renameHandler,
+      renameHandlerSpace,
       FolderViewModeConstants,
       hasTags,
       disabledResources,
@@ -947,11 +952,22 @@ export default defineComponent({
       return item.id === this.latestSelectedId
     },
     hasRenameAction(item: Resource) {
+      if (isProjectSpaceResource(item)) {
+        return this.renameActionsSpace.filter((menuItem) =>
+          menuItem.isVisible({ resources: [item] })
+        ).length
+      }
+
       return this.renameActions.filter((menuItem) =>
         menuItem.isVisible({ space: this.space, resources: [item] })
       ).length
     },
     openRenameDialog(item: Resource) {
+      if (isProjectSpaceResource(item)) {
+        return this.renameHandlerSpace({
+          resources: [item]
+        })
+      }
       this.renameHandler({
         space: this.getMatchingSpace(item),
         resources: [item]
