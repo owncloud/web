@@ -1,8 +1,8 @@
 <template>
   <div class="oc-flex oc-flex-middle activity-item">
     <div class="oc-flex oc-flex-middle">
-      <oc-avatar :width="36" :user-name="activity.template.variables.user.displayName" />
-      <span class="oc-ml-s" v-text="activity.template.variables.user.displayName" />
+      <oc-avatar :width="36" :user-name="activity.template.variables?.user?.displayName" />
+      <span class="oc-ml-s" v-text="activity.template.variables?.user?.displayName" />
     </div>
     <div>activity unknown</div>
     <div class="oc-text-truncate">
@@ -13,7 +13,7 @@
         class="oc-text-muted oc-flex oc-flex-middle oc-p-xs"
       >
         <oc-icon name="eye-off" />
-        <span class="oc-ml-s" v-text="activity.template.variables.resource.name" />
+        <span class="oc-ml-s" v-text="activity.template.variables?.resource?.name" />
       </div>
     </div>
     <div><span v-text="recordedDateTime" /></div>
@@ -22,7 +22,7 @@
 
 <script lang="ts">
 import { computed, defineComponent, onMounted, PropType, ref, unref } from 'vue'
-import { Activity } from '@ownclouders/web-client/graph/generated'
+import { Activity as GraphActivity, User } from '@ownclouders/web-client/graph/generated'
 import { DateTime } from 'luxon'
 import {
   formatDateFromDateTime,
@@ -31,9 +31,18 @@ import {
   useClientService
 } from '@ownclouders/web-pkg'
 import { useGettext } from 'vue3-gettext'
-import { Resource } from '@ownclouders/web-client'
-import { DavProperty } from '@ownclouders/web-client/webdav'
+import { Resource, SpaceResource } from '@ownclouders/web-client'
 
+//TODO: Use original type Activity from web-client when it's corrected
+type Activity = GraphActivity & {
+  template: {
+    variables?: {
+      space?: SpaceResource
+      resource?: Resource
+      user?: User
+    }
+  }
+}
 export default defineComponent({
   name: 'ActivityList',
   components: { ResourceListItem },
@@ -63,9 +72,8 @@ export default defineComponent({
     onMounted(async () => {
       try {
         resource.value = await clientService.webdav.getFileInfo(
-          unref(props.activity.template.variables.space.id),
-          { fileId: props.activity.template.variables.resource.id },
-          { davProperties: DavProperty.name }
+          unref(props.activity.template.variables?.space),
+          { fileId: props.activity.template.variables?.resource?.id }
         )
       } catch (e) {
         resourceNotAccessible.value = true

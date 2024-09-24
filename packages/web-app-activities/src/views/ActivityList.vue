@@ -6,7 +6,7 @@
         v-text="getDateHeadline(date)"
       />
       <oc-list class="oc-ml-s oc-mt-s timeline">
-        <li v-for="activityItem in activities" :key="activityItem">
+        <li v-for="activityItem in activities" :key="activityItem.id">
           <ActivityItem :activity="activityItem" />
         </li>
       </oc-list>
@@ -22,6 +22,7 @@ import ActivityItem from '../components/ActivityItem.vue'
 import { formatDateFromDateTime } from '@ownclouders/web-pkg'
 import { useGettext } from 'vue3-gettext'
 
+type DateActivityCollection = Record<string, Activity[]>
 export default defineComponent({
   name: 'ActivityList',
   components: { ActivityItem },
@@ -34,8 +35,8 @@ export default defineComponent({
   setup(props) {
     const { current: currentLanguage } = useGettext()
 
-    const activitiesDateCategorized = computed(() => {
-      return props.activities.reduce((acc, activity) => {
+    const activitiesDateCategorized = computed<DateActivityCollection>(() => {
+      return props.activities.reduce((acc: DateActivityCollection, activity) => {
         const date = DateTime.fromISO(activity.times.recordedTime).toISODate()
 
         if (!acc[date]) {
@@ -44,9 +45,8 @@ export default defineComponent({
         acc[date].push(activity)
 
         return acc
-      }, {})
+      }, {} as DateActivityCollection)
     })
-
     const getDateHeadline = (dateISO: string) => {
       const dateTime = DateTime.fromISO(dateISO)
 
