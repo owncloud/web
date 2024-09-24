@@ -80,14 +80,14 @@ export default defineComponent({
     })
 
     const loadActivitiesTask = useTask(function* (signal) {
-      const filters = ['sort:desc']
+      const filters = ['sort:desc', 'limit:100']
 
       if (unref(locationQuery)) {
         filters.push(`itemid:${unref(locationQuery)}`)
       }
 
       activities.value = yield* call(
-        clientService.graphAuthenticated.activities.listActivities(`${filters.join(' AND ')}`, {
+        clientService.graphAuthenticated.activities.listActivities(filters.join(' AND '), {
           signal
         })
       )
