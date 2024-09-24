@@ -524,9 +524,15 @@ importers:
       pinia:
         specifier: ^2.2.2
         version: 2.2.2(typescript@5.6.2)(vue@3.5.8(typescript@5.6.2))
+      vue-concurrency:
+        specifier: ^5.0.1
+        version: 5.0.1(vue@3.5.8(typescript@5.6.2))
       vue-router:
         specifier: ^4.2.5
         version: 4.2.5(vue@3.5.8(typescript@5.6.2))
+      vue3-gettext:
+        specifier: ^2.4.0
+        version: 2.4.0(patch_hash=x32qkm4z6srz5xuveescagpdyu)(@vue/compiler-sfc@3.5.8)(vue@3.5.8(typescript@5.6.2))
     devDependencies:
       web-test-helpers:
         specifier: workspace:*
@@ -610,6 +616,9 @@ importers:
       vue-router:
         specifier: 4.2.5
         version: 4.2.5(vue@3.5.8(typescript@5.6.2))
+      vue3-gettext:
+        specifier: 2.4.0
+        version: 2.4.0(patch_hash=x32qkm4z6srz5xuveescagpdyu)(@vue/compiler-sfc@3.5.8)(vue@3.5.8(typescript@5.6.2))
       zod:
         specifier: 3.23.8
         version: 3.23.8

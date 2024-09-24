@@ -11,7 +11,9 @@
     "@ownclouders/web-client": "workspace:*",
     "@ownclouders/web-pkg": "workspace:*",
     "design-system": "workspace:@ownclouders/design-system@*",
+    "pinia": "^2.2.2",
+    "vue-concurrency": "^5.0.1",
     "vue-router": "^4.2.5",
-    "pinia": "^2.2.2"
+    "vue3-gettext": "^2.4.0"
   }
 }
