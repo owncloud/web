@@ -25,12 +25,14 @@ import {
   keycloakCreatedUser
 } from '../../support/store'
 import { Group, User } from '../../support/types'
-import { getTokenFromLogin, setAccessToken } from '../../support/utils/tokenHelper'
+import {
+  setAccessToken,
+  setKeyCloakAccessToken
+} from '../../support/utils/tokenHelper'
 import { createdTokenStore, keycloakTokenStore } from '../../support/store/token'
 import { removeTempUploadDirectory } from '../../support/utils/runtimeFs'
 import { getAccessToken, refreshToken, setupKeycloakAdminUser } from '../../support/api/keycloak'
 import { closeSSEConnections } from '../../support/environment/sse'
-import { setAccessTokenForKeycloakUser } from '../../support/api/keycloak/ocisUserToken'
 
 export { World }
 
@@ -76,8 +78,7 @@ Before(async function (this: World, { pickle }: ITestCaseHookParameter) {
   if (!config.basicAuth) {
     if (config.keycloak) {
       // In keycloak setup with oCIS, access token is received via login to the browser directly.
-      // await setAdminTokenFromLogin(state.browser)
-      await setAccessTokenForKeycloakUser()
+      await setKeycloakAdminTokenForoCIS(this.usersEnvironment.getUser({ key: 'admin' }))
       await setKeycloakAdminTokenfromApi(this.usersEnvironment.getUser({ key: 'admin' }))
     } else {
       await setAdminToken(this.usersEnvironment.getUser({ key: 'admin' }))
@@ -128,7 +129,7 @@ After(async function (this: World, { result, willBeRetried }: ITestCaseHookParam
   // refresh keycloak admin access token
   if (config.keycloak) {
     await refreshToken({ user: this.usersEnvironment.getUser({ key: 'admin' }) })
-    await setAdminTokenFromLogin(state.browser)
+    await setKeycloakAdminTokenForoCIS(this.usersEnvironment.getUser({ key: 'admin' }))
   }
 
   await cleanUpUser(this.usersEnvironment.getUser({ key: 'admin' }))
@@ -230,10 +231,10 @@ const setAdminToken = async (user: User) => {
   return await setAccessToken(user.id)
 }
 
-const setAdminTokenFromLogin = async (browser: Browser) => {
-  return await getTokenFromLogin({ browser })
-}
-
 const setKeycloakAdminTokenfromApi = async (user: User) => {
   return await getAccessToken(user)
+}
+
+const setKeycloakAdminTokenForoCIS = async (user: User) => {
+  return await setKeyCloakAccessToken(user.id)
 }

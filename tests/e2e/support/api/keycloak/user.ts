@@ -6,7 +6,7 @@ import { User, KeycloakRealmRole } from '../../types'
 import { UsersEnvironment } from '../../environment'
 import { keycloakRealmRoles } from '../../store'
 import { state } from '../../../cucumber/environment/shared'
-import { getTokenFromLogin } from '../../utils/tokenHelper'
+import { loginUser, setKeyCloakAccessToken } from '../../utils/tokenHelper'
 
 const ocisKeycloakUserRoles: Record<string, string> = {
   Admin: 'ocisAdmin',
@@ -63,6 +63,7 @@ export const createUser = async ({ user, admin }: { user: User; admin: User }): 
   usersEnvironment.storeCreatedUser({
     user: { ...user, uuid: await getUserId({ user, admin }), role: defaultNewUserRole }
   })
+  await setKeyCloakAccessToken(user.id)
   return user
 }
 
@@ -110,7 +111,7 @@ export const unAssignRole = async ({
 }
 
 const initializeUser = async (username: string): Promise<void> => {
-  return await getTokenFromLogin({
+  return await loginUser({
     browser: state.browser,
     username,
     waitForSelector: '#web-content'

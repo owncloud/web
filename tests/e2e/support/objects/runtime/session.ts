@@ -29,16 +29,10 @@ export class Session {
     await this.#page.locator('#kc-login').click()
   }
 
-  async login({
-    user,
-    tokenType = null
-  }: {
-    user: User
-    tokenType?: TokenProviderType
-  }): Promise<void> {
+  async login({ user }: { user: User; tokenType?: TokenProviderType }): Promise<void> {
     const { id, password } = user
 
-    const [response] = await Promise.all([
+    await Promise.all([
       this.#page.waitForResponse(
         (resp) =>
           resp.url().endsWith('/token') &&
@@ -47,23 +41,6 @@ export class Session {
       ),
       this.signIn(id, password)
     ])
-
-    if (!config.basicAuth || config.keycloak) {
-
-      const body = await response.json()
-      const tokenEnvironment = TokenEnvironmentFactory(tokenType)
-
-
-      tokenEnvironment.setToken({
-        user: { ...user },
-        token: {
-          userId: user.id,
-          accessToken: body.access_token,
-          refreshToken: body.refresh_token
-        }
-      })
-      // console.log('token from login::::::::::::::::::::::::::', user.id, body.access_token)
-    }
   }
 
   async logout(): Promise<void> {
