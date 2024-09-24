@@ -37,7 +37,10 @@
             </oc-button>
           </li>
         </oc-list>
-        <oc-list v-for="(group, groupIndex) in createFileActionsGroups" :key="`file-creation-group-${groupIndex}`">
+        <oc-list
+          v-for="(group, groupIndex) in createFileActionsGroups"
+          :key="`file-creation-group-${groupIndex}`"
+        >
           <li
             v-for="(fileAction, fileActionIndex) in group"
             :key="`file-creation-item-${groupIndex}-${fileActionIndex}`"
