@@ -2077,3 +2077,21 @@ export const checkActivity = async ({
   await expect(page.getByTestId(activitySidebarPanel)).toBeVisible()
   await expect(page.locator(activitySidebarPanelBodyContent)).toContainText(activity)
 }
+
+export const checkEmptyActivity = async ({
+  page,
+  resource
+}: {
+  page: Page
+  resource: string
+}): Promise<void> => {
+  const paths = resource.split('/')
+  const finalResource = paths.pop()
+  for (const path of paths) {
+    await clickResource({ page, path })
+  }
+  await sidebar.open({ page: page, resource: finalResource })
+  await sidebar.openPanel({ page: page, name: 'activities' })
+  await expect(page.getByTestId(activitySidebarPanel)).toBeVisible()
+  await expect(page.locator(activitySidebarPanelBodyContent)).toContainText('No activities')
+}

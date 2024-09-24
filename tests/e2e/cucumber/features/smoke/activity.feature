@@ -34,7 +34,7 @@ Feature: Users can see all activities of the resources and spaces
     # see activity in the shared resources
     When "Brian" logs in
     And "Brian" navigates to the shared with me page
-    Then "Brian" should see activity of the following resource
+    Then "Brian" should not see any activity of the following resource
       | resource               | activity                              |
       | sharedFolder/subFolder | alice added subFolder to sharedFolder |
     And "Brian" logs out

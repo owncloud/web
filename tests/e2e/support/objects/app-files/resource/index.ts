@@ -360,4 +360,8 @@ export class Resource {
   }): Promise<void> {
     await po.checkActivity({ page: this.#page, resource, activity })
   }
+
+  async checkEmptyActivity({ resource }: { resource: string }): Promise<void> {
+    await po.checkEmptyActivity({ page: this.#page, resource })
+  }
 }
