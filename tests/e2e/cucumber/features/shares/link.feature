@@ -10,7 +10,6 @@ Feature: link
     Given "Admin" creates following user using API
       | id    |
       | Brian |
-    When "Alice" logs in
     And "Alice" creates the following folders in personal space using API
       | name                   |
       | folderPublic           |
@@ -19,7 +18,7 @@ Feature: link
       | pathToFile             | content     |
       | folderPublic/lorem.txt | lorem ipsum |
 
-    And "Alice" opens the "files" app
+    When "Alice" logs in
     And "Alice" creates a public link of following resource using the sidebar panel
       | resource     | role             | password |
       | folderPublic | Secret File Drop | %public% |

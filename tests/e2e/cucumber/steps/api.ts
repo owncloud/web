@@ -1,6 +1,6 @@
 import { Given, DataTable } from '@cucumber/cucumber'
 import { World } from '../environment'
-import { api, objects } from '../../support'
+import { api } from '../../support'
 import fs from 'fs'
 import { Space } from '../../support/types'
 
@@ -290,15 +290,13 @@ Given(
 Given(
   '{string} creates a public link of following resource using API',
   async function (this: World, stepUser: string, stepTable: DataTable) {
-    const { page } = this.actorsEnvironment.getActor({ key: stepUser })
     const user = this.usersEnvironment.getUser({ key: stepUser })
-    const linkObject = new objects.applicationFiles.Link({ page })
 
     for (const info of stepTable.hashes()) {
       await api.share.createLinkShare({
         user,
         path: info.resource,
-        password: info.password === '%public%' ? linkObject.securePassword : info.password,
+        password: info.password,
         name: 'Link',
         role: info.role,
         spaceName: info.space

@@ -9,7 +9,6 @@ Feature: Upload large resources
       | Alice |
     And the user creates a file "largefile.txt" of "1GB" size in the temp upload directory
     And "Alice" logs in
-    And "Alice" opens the "files" app
     When "Alice" starts uploading the following large resources from the temp upload directory
       | resource      |
       | largefile.txt |

@@ -4,6 +4,7 @@ import { World } from '../../environment'
 import { objects } from '../../../support'
 import { processDelete, processDownload } from './resources'
 import { editor } from '../../../support/objects/app-files/utils'
+import { securePassword } from '../../../support/store'
 
 When(
   '{string} opens the public link {string}',
@@ -31,11 +32,10 @@ When(
   async function (this: World, stepUser: string, password: string): Promise<void> {
     const { page } = this.actorsEnvironment.getActor({ key: stepUser })
     const pageObject = new objects.applicationFiles.page.Public({ page })
-    const linkObject = new objects.applicationFiles.Link({ page })
     if (password === '%copied_password%') {
       password = await page.evaluate('navigator.clipboard.readText()')
     } else {
-      password = password === '%public%' ? linkObject.securePassword : password
+      password = password === '%public%' ? securePassword : password
     }
     await pageObject.authenticate({ password })
   }

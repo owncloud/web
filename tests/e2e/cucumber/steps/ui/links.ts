@@ -2,6 +2,7 @@ import { DataTable, Then, When } from '@cucumber/cucumber'
 import { expect } from '@playwright/test'
 import { World } from '../../environment'
 import { objects } from '../../../support'
+import { securePassword, roleDisplayText } from '../../../support/store'
 
 When(
   '{string} creates a public link of following resource using the sidebar panel',
@@ -13,7 +14,7 @@ When(
       await linkObject.create({
         resource: info.resource,
         role: info.role,
-        password: info.password === '%public%' ? linkObject.securePassword : info.password,
+        password: info.password === '%public%' ? securePassword : info.password,
         name: 'Link'
       })
     }
@@ -25,8 +26,7 @@ When(
   async function (this: World, stepUser: string, password: string): Promise<void> {
     const { page } = this.actorsEnvironment.getActor({ key: stepUser })
     const spaceObject = new objects.applicationFiles.Spaces({ page })
-    const linkObject = new objects.applicationFiles.Link({ page })
-    password = password === '%public%' ? linkObject.securePassword : password
+    password = password === '%public%' ? securePassword : password
     await spaceObject.createPublicLink({ password })
   }
 )
@@ -153,7 +153,7 @@ When(
     const { page } = this.actorsEnvironment.getActor({ key: stepUser })
     const linkObject = new objects.applicationFiles.Link({ page })
     const roleText = await linkObject.changeRole({ linkName, resource, role })
-    expect(roleText.toLowerCase()).toBe(linkObject.roleDisplayText[role].toLowerCase())
+    expect(roleText.toLowerCase()).toBe(roleDisplayText[role].toLowerCase())
   }
 )
 
@@ -219,7 +219,7 @@ When(
     const { page } = this.actorsEnvironment.getActor({ key: stepUser })
     const linkObject = new objects.applicationFiles.Link({ page })
     const newPermission = await linkObject.changeRole({ linkName, role, space: true })
-    expect(newPermission.toLowerCase()).toBe(linkObject.roleDisplayText[role].toLowerCase())
+    expect(newPermission.toLowerCase()).toBe(roleDisplayText[role].toLowerCase())
   }
 )
 

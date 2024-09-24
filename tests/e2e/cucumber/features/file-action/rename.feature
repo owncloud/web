@@ -8,7 +8,6 @@ Feature: rename
       | id    |
       | Alice |
       | Brian |
-    And "Alice" logs in
     And "Alice" creates the following folders in personal space using API
       | name   |
       | folder |
@@ -21,7 +20,6 @@ Feature: rename
     And "Alice" creates a public link of following resource using API
       | resource | role     | password |
       | folder   | Can edit | %public% |
-    And "Alice" opens the "files" app
     And "Brian" logs in
     And "Brian" navigates to the shared with me page
     And "Brian" opens folder "folder"
@@ -40,6 +38,7 @@ Feature: rename
       | renamedByBrian.txt | renamedByAnonymous.txt |
 
     # rename in the shares with other page
+    And "Alice" logs in
     And "Alice" navigates to the shared with others page
     And "Alice" opens folder "folder"
     When "Alice" renames the following resource

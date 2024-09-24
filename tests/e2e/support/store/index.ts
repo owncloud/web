@@ -1,5 +1,5 @@
 export { actorStore } from './actor'
-export { createdLinkStore } from './link'
+export { createdLinkStore, roleDisplayText, securePassword } from './link'
 export { createdSpaceStore } from './space'
 export { dummyUserStore, createdUserStore } from './user'
 export { dummyGroupStore, createdGroupStore } from './group'

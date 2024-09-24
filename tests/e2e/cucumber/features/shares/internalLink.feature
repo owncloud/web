@@ -6,7 +6,6 @@ Feature: internal link share
       | id    |
       | Alice |
       | Brian |
-    And "Alice" logs in
     And "Alice" creates the following folder in personal space using API
       | name     |
       | myfolder |
@@ -22,6 +21,7 @@ Feature: internal link share
     And "Brian" uploads the following resource
       | resource   | to       |
       | simple.pdf | myfolder |
+    And "Alice" logs in
     And "Alice" updates following sharee role
       | resource | recipient | type | role     |
       | myfolder | Brian     | user | Can view |

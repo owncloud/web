@@ -7,11 +7,10 @@ Feature: Users can use web to organize tags
       | Brian |
 
   Scenario: Tag management
-    When "Alice" logs in
-    And "Alice" creates the following files into personal space using API
+    When "Alice" creates the following files into personal space using API
       | pathToFile | content     |
       | lorem.txt  | lorem ipsum |
-    And "Alice" opens the "files" app
+    And "Alice" logs in
     And "Alice" adds the following tags for the following resources using the sidebar panel
       | resource  | tags         |
       | lorem.txt | tag 1, tag 2 |
@@ -34,12 +33,11 @@ Feature: Users can use web to organize tags
 
 
   Scenario: Tag search
-    When "Alice" logs in
-    And "Alice" creates the following files into personal space using API
+    When "Alice" creates the following files into personal space using API
       | pathToFile   | content     |
       | lorem.txt    | lorem ipsum |
       | textfile.txt | test file   |
-    And "Alice" opens the "files" app
+    And "Alice" logs in
     And "Alice" adds the following tags for the following resources using the sidebar panel
       | resource  | tags       |
       | lorem.txt | tag1, tag2 |
@@ -54,14 +52,13 @@ Feature: Users can use web to organize tags
 
 
   Scenario: Tag sharing
-    When "Alice" logs in
-    And "Alice" creates the following folders in personal space using API
+    Given "Alice" creates the following folders in personal space using API
       | name             |
       | folder_to_shared |
     And "Alice" creates the following files into personal space using API
       | pathToFile                 | content     |
       | folder_to_shared/lorem.txt | lorem ipsum |
-    And "Alice" opens the "files" app
+    And "Alice" logs in
     And "Alice" adds the following tags for the following resources using the sidebar panel
       | resource                   | tags         |
       | folder_to_shared/lorem.txt | tag 1, tag 2 |

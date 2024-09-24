@@ -4,6 +4,7 @@ import { Group, User } from '../../types'
 import { getSpaceIdBySpaceName } from '../graph'
 import { getIdOfFileInsideSpace } from '../davSpaces'
 import { LinksEnvironment, UsersEnvironment } from '../../environment'
+import { securePassword } from '../../store'
 
 export const shareTypes: Readonly<{
   user: string
@@ -230,7 +231,7 @@ export const createLinkShare = async ({
   })
 
   const roleType: string = linkShareRoles[role as keyof typeof linkShareRoles]
-
+  password = password === '%public%' ? securePassword : password
   const response = await request({
     method: 'POST',
     path: join('graph', 'v1beta1', 'drives', driveId, 'items', itemId, 'createLink'),

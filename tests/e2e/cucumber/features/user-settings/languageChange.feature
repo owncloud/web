@@ -9,14 +9,12 @@ Feature: language settings
       | Brian |
 
   Scenario: system language change
-    And "Brian" logs in
     And "Brian" creates the following folder in personal space using API
       | name          |
       | check_message |
     And "Brian" shares the following resource using API
       | resource      | recipient | type | role     |
       | check_message | Alice     | user | Can edit |
-    And "Brian" logs out
     And "Alice" logs in
     And "Alice" opens the user menu
     And "Alice" changes the language to "Deutsch - German"
@@ -30,8 +28,7 @@ Feature: language settings
 
 
   Scenario: anonymous user language change
-    When "Alice" logs in
-    And "Alice" creates the following folder in personal space using API
+    When "Alice" creates the following folder in personal space using API
       | name         |
       | folderPublic |
     And "Alice" uploads the following local file into personal space using API
@@ -41,8 +38,6 @@ Feature: language settings
     And "Alice" creates a public link of following resource using API
       | resource     | password |
       | folderPublic | %public% |
-    And "Alice" opens the "files" app
-    And "Alice" logs out
     When "Anonymous" opens the public link "Link"
     And "Anonymous" unlocks the public link with password "%public%"
     And "Anonymous" opens the user menu

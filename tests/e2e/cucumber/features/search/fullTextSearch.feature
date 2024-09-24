@@ -11,7 +11,6 @@ Feature: Search
     And "Admin" assigns following roles to the users using API
       | id    | role        |
       | Brian | Space Admin |
-    And "Alice" logs in
     And "Alice" uploads the following local file into personal space using API
       | localFile                   | to              |
       | filesForUpload/textfile.txt | fileToShare.txt |
@@ -21,8 +20,6 @@ Feature: Search
     And "Alice" shares the following resource using API
       | resource        | recipient | type | role     |
       | fileToShare.txt | Brian     | user | Can edit |
-    And "Alice" logs out
-    And "Brian" logs in
     And "Brian" creates the following folder in personal space using API
       | name       |
       | testFolder |
@@ -45,7 +42,7 @@ Feature: Search
       | resource        | tags  |
       | fileWithTag.txt | tag 1 |
       | withTag.txt     | tag 1 |
-
+    And "Brian" logs in
     When "Brian" searches "" using the global search and the "all files" filter and presses enter
     Then "Brian" should see the message "Search for files" on the search result
 

@@ -11,7 +11,6 @@ Feature: Download
 
 
   Scenario: download resources
-    When "Alice" logs in
     And "Alice" creates the following folders in personal space using API
       | name         |
       | folderPublic |
@@ -28,7 +27,7 @@ Feature: Download
       | emptyFolder    | Brian     | user | Can edit |
       | testavatar.jpg | Brian     | user | Can edit |
 
-    When "Alice" opens the "files" app
+    When "Alice" logs in
     And "Alice" downloads the following resources using the batch action
       | resource       | type   |
       | folderPublic   | folder |

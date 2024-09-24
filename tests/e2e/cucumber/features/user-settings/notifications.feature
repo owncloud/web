@@ -19,7 +19,6 @@ Feature: Notifications
       | user  | group |
       | Alice | sales |
       | Brian | sales |
-    And "Alice" logs in
     And "Alice" creates the following folder in personal space using API
       | name             |
       | folder_to_shared |
@@ -27,7 +26,7 @@ Feature: Notifications
     And "Alice" creates the following project space using API
       | name | id     |
       | team | team.1 |
-    And "Alice" opens the "files" app
+    And "Alice" logs in
     When "Alice" shares the following resource using the sidebar panel
       | resource         | recipient | type  | role     | resourceType |
       | folder_to_shared | Brian     | user  | Can edit | folder       |
