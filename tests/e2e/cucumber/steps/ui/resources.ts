@@ -971,3 +971,15 @@ Then(
     }
   }
 )
+
+Then(
+  '{string} should not see any activity of the following resource(s)',
+  async function (this: World, stepUser: string, stepTable: DataTable): Promise<void> {
+    const { page } = this.actorsEnvironment.getActor({ key: stepUser })
+    const resourceObject = new objects.applicationFiles.Resource({ page })
+
+    for (const info of stepTable.hashes()) {
+      await resourceObject.checkEmptyActivity({ resource: info.resource })
+    }
+  }
+)
