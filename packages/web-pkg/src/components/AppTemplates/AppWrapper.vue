@@ -90,6 +90,7 @@ import { DavPermission } from '@ownclouders/web-client/webdav'
 import { HttpError } from '@ownclouders/web-client'
 import { dirname } from 'path'
 import { useFileActionsOpenWithApp } from '../../composables/actions/files/useFileActionsOpenWithApp'
+import { UnsavedChangesModal } from '../Modals'
 
 export default defineComponent({
   name: 'AppWrapper',
@@ -544,15 +545,17 @@ export default defineComponent({
     onBeforeRouteLeave((_to, _from, next) => {
       if (unref(isDirty)) {
         dispatchModal({
-          variation: 'danger',
-          icon: 'warning',
+          icon: 'error-warning',
           title: $gettext('Unsaved changes'),
-          message: $gettext('Your changes were not saved. Do you want to save them?'),
-          cancelText: $gettext("Don't Save"),
-          confirmText: $gettext('Save'),
+          customComponent: UnsavedChangesModal,
           focusTrapInitial: '.oc-modal-body-actions-confirm',
-          onCancel() {
-            next()
+          hideActions: true,
+          customComponentAttrs: () => {
+            return {
+              closeCallback: async () => {
+                next()
+              }
+            }
           },
           async onConfirm() {
             await save()
