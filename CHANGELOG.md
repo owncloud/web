@@ -13,6 +13,7 @@ Summary
 * Bugfix - Thumbnails for GeoGebra slides not showing up: [#11583](https://github.com/owncloud/web/pull/11583)
 * Bugfix - Logout issues on token renewal failure: [#11584](https://github.com/owncloud/web/pull/11584)
 * Bugfix - App version downloads: [#11633](https://github.com/owncloud/web/pull/11633)
+* Bugfix - Wrong webdav URL in sidebar: [#11642](https://github.com/owncloud/web/pull/11642)
 * Enhancement - Copy quick link action removal: [#11553](https://github.com/owncloud/web/pull/11553)
 * Enhancement - Internal link removal: [#11553](https://github.com/owncloud/web/pull/11553)
 * Enhancement - Add split confirm button to create link modal: [#11558](https://github.com/owncloud/web/pull/11558)
@@ -68,6 +69,13 @@ Details
    app would fail.
 
    https://github.com/owncloud/web/pull/11633
+
+* Bugfix - Wrong webdav URL in sidebar: [#11642](https://github.com/owncloud/web/pull/11642)
+
+   We've fixed a bug where the webdav URL in the sidebar was wrong.
+
+   https://github.com/owncloud/web/issues/11590
+   https://github.com/owncloud/web/pull/11642
 
 * Enhancement - Copy quick link action removal: [#11553](https://github.com/owncloud/web/pull/11553)
 
