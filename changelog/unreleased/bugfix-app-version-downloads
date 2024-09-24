@@ -1,0 +1,5 @@
+Bugfix: App version downloads
+
+We've fixed an issue in the app store where downloading specific versions of an app would fail.
+
+https://github.com/owncloud/web/pull/11633
