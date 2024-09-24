@@ -58,7 +58,8 @@ export default defineComponent({
       return encodePath(unref(resource).webDavPath)
     })
     const webDavUrl = computed(() => {
-      return urlJoin(props.space?.root?.webDavUrl, 'dav', unref(webDavPath))
+      console.log(unref(resource))
+      return urlJoin(props.space?.root?.webDavUrl, unref(resource).path)
     })
 
     const copyWebDAVPathToClipboard = () => {
