@@ -208,6 +208,10 @@ const fileIcon = {
   epub: {
     icon: { name: 'resource-type-book', color: 'var(--oc-color-icon-epub)' },
     extensions: ['epub']
+  },
+  board: {
+    icon: { name: 'resource-type-board' },
+    extensions: ['ggs']
   }
 }
 
