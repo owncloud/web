@@ -18,43 +18,61 @@
       <oc-drop
         drop-id="new-file-menu-drop"
         toggle="#new-file-menu-btn"
+        class="oc-width-auto"
         mode="click"
         close-on-click
-        class="oc-width-auto"
         padding-size="small"
       >
         <oc-list id="create-list" :class="areFileExtensionsShown ? 'expanded-list' : null">
           <li class="create-list-folder oc-menu-item-hover">
-            <oc-button id="new-folder-btn" appearance="raw" @click="createNewFolderAction">
+            <oc-button
+              id="new-folder-btn"
+              class="oc-width-1-1"
+              justify-content="left"
+              appearance="raw"
+              @click="createNewFolderAction"
+            >
               <resource-icon :resource="folderIconResource" size="medium" />
               <span v-text="$gettext('Folder')" />
             </oc-button>
           </li>
-          <template v-for="(group, groupIndex) in createFileActionsGroups">
-            <li
-              v-for="(fileAction, fileActionIndex) in group"
-              :key="`file-creation-item-${groupIndex}-${fileActionIndex}`"
-              class="create-list-file oc-menu-item-hover"
-              :class="{ 'top-separator': fileActionIndex === 0 }"
+        </oc-list>
+        <oc-list
+          v-for="(group, groupIndex) in createFileActionsGroups"
+          :key="`file-creation-group-${groupIndex}`"
+        >
+          <li
+            v-for="(fileAction, fileActionIndex) in group"
+            :key="`file-creation-item-${groupIndex}-${fileActionIndex}`"
+            class="create-list-file oc-menu-item-hover"
+          >
+            <oc-button
+              appearance="raw"
+              class="oc-width-1-1"
+              justify-content="left"
+              :class="['new-file-btn-' + fileAction.ext]"
+              @click="fileAction.handler"
             >
-              <oc-button
-                appearance="raw"
-                :class="['new-file-btn-' + fileAction.ext]"
-                @click="fileAction.handler"
+              <resource-icon :resource="getIconResource(fileAction)" size="medium" />
+              <span class="create-list-file-item-text">{{ fileAction.label() }}</span>
+              <span
+                v-if="areFileExtensionsShown && fileAction.ext"
+                class="create-list-file-item-extension"
               >
-                <resource-icon :resource="getIconResource(fileAction)" size="medium" />
-                <span class="create-list-file-item-text">{{ fileAction.label() }}</span>
-                <span
-                  v-if="areFileExtensionsShown && fileAction.ext"
-                  class="create-list-file-item-extension"
-                >
-                  {{ fileAction.ext }}
-                </span>
-              </oc-button>
-            </li>
-          </template>
+                {{ fileAction.ext }}
+              </span>
+            </oc-button>
+          </li>
+        </oc-list>
+        <oc-list>
           <li class="create-list-shortcut oc-menu-item-hover">
-            <oc-button id="new-shortcut-btn" appearance="raw" @click="createNewShortcutAction">
+            <oc-button
+              id="new-shortcut-btn"
+              class="oc-width-1-1"
+              justify-content="left"
+              appearance="raw"
+              @click="createNewShortcutAction"
+            >
               <oc-icon name="external-link" size="medium" />
               <span v-text="$gettext('Shortcut')" />
               <span
@@ -106,7 +124,7 @@
       padding-size="small"
       @show-drop="showDrop"
     >
-      <oc-list id="upload-list" :class="{ 'oc-pb-s': extensionActions.length }">
+      <oc-list id="upload-list">
         <li class="oc-menu-item-hover">
           <resource-upload ref="folder-upload" btn-class="oc-width-1-1" />
         </li>
@@ -114,7 +132,7 @@
           <resource-upload ref="file-upload" btn-class="oc-width-1-1" :is-folder="true" />
         </li>
       </oc-list>
-      <oc-list v-if="extensionActions.length" id="extension-list" class="oc-pt-s">
+      <oc-list v-if="extensionActions.length" id="extension-list">
         <li
           v-for="(action, key) in extensionActions"
           :key="`${key}-${actionKeySuffix}`"
@@ -491,59 +509,36 @@ export default defineComponent({
 })
 </script>
 <style lang="scss">
-#create-list {
-  li {
-    border: 1px solid transparent;
-    &.top-separator {
-      padding-top: 1px;
-      border-top: 1px solid var(--oc-color-border) !important;
-    }
-
-    button {
-      display: inline-flex;
-      gap: 10px;
-      justify-content: left;
-      width: 100%;
-    }
-  }
-}
-
-.create-list {
-  &-file-item {
-    &-text {
-      display: inline-flex;
-      text-align: left;
-      justify-content: flex-start;
-    }
-    &-extension {
-      display: inline-flex;
-      text-align: left;
-      justify-content: right;
-      flex: 1;
-      font-weight: normal !important;
-      font-size: var(--oc-font-size-small);
-    }
-  }
-}
-
-#upload-list,
+#upload-menu-drop,
 #new-file-menu-drop {
   min-width: 230px;
+
+  ul:not(:first-child) {
+    border-top: 1px solid var(--oc-color-border);
+    padding-top: var(--oc-space-small);
+  }
+
+  ul:not(:last-child) {
+    padding-bottom: var(--oc-space-small);
+  }
+}
+
+.create-list-file-item-extension {
+  font-weight: 400 !important;
+  font-size: var(--oc-font-size-small);
+  margin-left: auto;
 }
 
 .expanded-list {
   min-width: 280px !important;
 }
+
 #create-list,
 #upload-list,
 #new-file-menu-drop {
   .oc-icon-m svg {
     height: 100% !important;
   }
-}
-
-#extension-list {
-  border-top: 1px solid var(--oc-color-border);
 }
 
 #clipboard-btns {
