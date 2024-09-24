@@ -58,7 +58,6 @@ export default defineComponent({
       return encodePath(unref(resource).webDavPath)
     })
     const webDavUrl = computed(() => {
-      console.log(unref(resource))
       return urlJoin(props.space?.root?.webDavUrl, unref(resource).path)
     })
 
