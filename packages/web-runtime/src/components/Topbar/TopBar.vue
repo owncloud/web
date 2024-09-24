@@ -50,14 +50,12 @@ import {
   ApplicationInformation,
   AppMenuItemExtension,
   CustomComponentTarget,
-  queryItemAsString,
   useAuthStore,
   useCapabilityStore,
   useConfigStore,
   useEmbedMode,
   useExtensionRegistry,
   useOpenEmptyEditor,
-  useRouteQuery,
   useRouter,
   useThemeStore
 } from '@ownclouders/web-pkg'
@@ -98,10 +96,7 @@ export default {
     })
 
     const logoWidth = ref('150px')
-    const hideLogoQuery = useRouteQuery('hide-logo', 'false')
-    const hideLogo = computed(() => {
-      return queryItemAsString(unref(hideLogoQuery)) === 'true'
-    })
+    const hideLogo = computed(() => unref(configOptions).hideLogo)
 
     const isNotificationBellEnabled = computed(() => {
       return (

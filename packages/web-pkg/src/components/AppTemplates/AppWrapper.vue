@@ -67,7 +67,8 @@ import {
   useFileActionsShowShares,
   FileActionOptions,
   FileAction,
-  useLoadingService
+  useLoadingService,
+  useFileActionsSaveAs
 } from '../../composables'
 import {
   Action,
@@ -160,6 +161,8 @@ export default defineComponent({
     const isReadOnly = ref(false)
     const serverContent = ref()
     const currentContent = ref()
+
+    const { actions: saveAsActions } = useFileActionsSaveAs({ content: currentContent })
 
     const isEditor = computed(() => {
       return Boolean(props.wrappedComponent.emits?.includes('update:currentContent'))
@@ -479,9 +482,16 @@ export default defineComponent({
     }
 
     const menuItemsContext = computed(() => {
-      return [...unref(openWithAppActions), ...unref(fileActionsSave)].filter((item) =>
-        item.isVisible(unref(actionOptions))
-      )
+      return [
+        ...unref(openWithAppActions),
+        ...unref(fileActionsSave),
+        ...unref(saveAsActions).map((action) => {
+          return {
+            ...action,
+            isVisible: (args: FileActionOptions) => isEditor.value && action.isVisible(args)
+          }
+        })
+      ].filter((item) => item.isVisible(unref(actionOptions)))
     })
     const menuItemsShare = computed(() => {
       return [...unref(showSharesActions), ...unref(copyPermanentLinkActions)].filter((item) =>

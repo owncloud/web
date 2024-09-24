@@ -12,6 +12,7 @@ import {
   ApplicationInformation,
   defineWebApplication,
   useCapabilityStore,
+  useEmbedMode,
   useSpacesStore,
   useUserStore
 } from '@ownclouders/web-pkg'
@@ -22,7 +23,7 @@ import { AppNavigationItem } from '@ownclouders/web-pkg'
 // dirty: importing view from other extension within project
 import SearchResults from '../../web-app-search/src/views/List.vue'
 import { isPersonalSpaceResource, isShareSpaceResource } from '@ownclouders/web-client'
-import { ComponentCustomProperties } from 'vue'
+import { ComponentCustomProperties, unref } from 'vue'
 import { extensionPoints } from './extensionPoints'
 
 // just a dummy function to trick gettext tools
@@ -42,6 +43,7 @@ export const navItems = (context: ComponentCustomProperties): AppNavigationItem[
   const spacesStores = useSpacesStore()
   const userStore = useUserStore()
   const capabilityStore = useCapabilityStore()
+  const { isEnabled: isEmbedModeEnabled } = useEmbedMode()
 
   return [
     {
@@ -117,7 +119,11 @@ export const navItems = (context: ComponentCustomProperties): AppNavigationItem[
       },
       activeFor: [{ path: `/${appInfo.id}/trash` }],
       isVisible() {
-        return capabilityStore.davTrashbin === '1.0' && capabilityStore.filesUndelete
+        return (
+          capabilityStore.davTrashbin === '1.0' &&
+          capabilityStore.filesUndelete &&
+          !unref(isEmbedModeEnabled)
+        )
       },
       priority: 50
     }
