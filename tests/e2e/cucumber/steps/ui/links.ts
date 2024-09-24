@@ -2,7 +2,7 @@ import { DataTable, Then, When } from '@cucumber/cucumber'
 import { expect } from '@playwright/test'
 import { World } from '../../environment'
 import { objects } from '../../../support'
-import { securePassword, roleDisplayText } from '../../../support/store'
+import { securePassword } from '../../../support/store'
 
 When(
   '{string} creates a public link of following resource using the sidebar panel',
