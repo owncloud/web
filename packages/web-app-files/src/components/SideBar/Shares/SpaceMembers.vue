@@ -5,6 +5,7 @@
         <h3 v-translate class="oc-text-bold oc-text-medium oc-m-rm">Add members</h3>
         <oc-contextual-helper v-if="helpersEnabled" class="oc-pl-xs" v-bind="spaceAddMemberHelp" />
       </div>
+      <copy-private-link :resource="resource" />
     </div>
     <invite-collaborator-form
       v-if="canShare({ space: resource, resource })"
@@ -31,7 +32,6 @@
             <oc-icon name="search" fill-type="line" size="small" />
           </oc-button>
         </div>
-        <copy-private-link v-if="filesPrivateLinks" :resource="resource" />
       </div>
       <div
         class="oc-flex oc-flex-between space-members-filter-container"
@@ -83,7 +83,6 @@ import {
   createLocationSpaces,
   isLocationSpacesActive,
   useCanShare,
-  useCapabilityStore,
   useConfigStore,
   useMessages,
   useModals,
@@ -120,8 +119,6 @@ export default defineComponent({
     const { graphRoles } = storeToRefs(sharesStore)
     const spacesStore = useSpacesStore()
     const { upsertSpace, getSpaceMembers } = spacesStore
-    const capabilityStore = useCapabilityStore()
-    const { filesPrivateLinks } = storeToRefs(capabilityStore)
 
     const configStore = useConfigStore()
     const { options: configOptions } = storeToRefs(configStore)
@@ -148,7 +145,6 @@ export default defineComponent({
       upsertSpace,
       canShare,
       markInstance,
-      filesPrivateLinks,
       graphRoles,
       filterTerm,
       isFilterOpen,

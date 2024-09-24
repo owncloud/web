@@ -60,30 +60,13 @@ describe('useFileActionsCreateLink', () => {
       getWrapper({
         setup: async ({ actions }) => {
           const { addLink } = useSharesStore()
-          // link action
           await unref(actions)[0].handler({
             resources: [mock<Resource>({ canShare: () => true })],
             space: undefined
           })
-          expect(addLink).toHaveBeenCalledWith(
-            expect.objectContaining({
-              options: expect.objectContaining({ '@libre.graph.quickLink': false })
-            })
-          )
+          expect(addLink).toHaveBeenCalledTimes(1)
           const { showMessage } = useMessages()
           expect(showMessage).toHaveBeenCalledTimes(1)
-
-          // quick link action
-          await unref(actions)[1].handler({
-            resources: [mock<Resource>({ canShare: () => true })],
-            space: undefined
-          })
-          expect(addLink).toHaveBeenNthCalledWith(
-            2,
-            expect.objectContaining({
-              options: expect.objectContaining({ '@libre.graph.quickLink': true })
-            })
-          )
         }
       })
     })

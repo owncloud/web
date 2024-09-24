@@ -57,7 +57,7 @@ Feature: spaces participant management
     And "Alice" creates a public link of following resource using the sidebar panel
       | resource | role     | password |
       | parent   | Can edit | %public% |
-    And "Anonymous" opens the public link "Link"
+    And "Anonymous" opens the public link "Unnamed link"
     And "Anonymous" unlocks the public link with password "%public%"
     And "Anonymous" uploads the following resources in public link page
       | resource     |

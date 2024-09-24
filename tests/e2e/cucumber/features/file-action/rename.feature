@@ -31,7 +31,7 @@ Feature: rename
     And "Brian" logs out
 
     # rename in the public link
-    When "Anonymous" opens the public link "Link"
+    When "Anonymous" opens the public link "Unnamed link"
     And "Anonymous" unlocks the public link with password "%public%"
     When "Anonymous" renames the following resource
       | resource           | as                     |

@@ -145,7 +145,6 @@ export default defineComponent({
     modal: { type: Object as PropType<Modal>, required: true },
     resources: { type: Array as PropType<Resource[]>, required: true },
     space: { type: Object as PropType<SpaceResource>, default: undefined },
-    isQuickLink: { type: Boolean, default: false },
     callbackFn: {
       type: Function as PropType<(args: CallbackArgs) => Promise<void> | void>,
       default: undefined
@@ -215,10 +214,10 @@ export default defineComponent({
             resource,
             options: {
               type: unref(selectedType),
-              '@libre.graph.quickLink': props.isQuickLink,
+              '@libre.graph.quickLink': false,
               password: unref(password).value,
               expirationDateTime: unref(selectedExpiry)?.toISO(),
-              displayName: $gettext('Link')
+              displayName: $gettext('Unnamed link')
             }
           })
         )

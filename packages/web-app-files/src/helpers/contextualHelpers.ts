@@ -92,19 +92,6 @@ export const shareViaLinkHelp = (options: ContextualHelperOptions) =>
       title: $gettext('Choose how access is granted'),
       list: [
         {
-          text: $gettext('Only invited people can access'),
-          headline: true
-        },
-        {
-          text: $gettext(
-            'Account and login is required. Only people from the list "Invited people" can access.'
-          )
-        },
-        {
-          text: $gettext('Everyone with the link'),
-          headline: true
-        },
-        {
           text: $gettext(
             'No login required. Everyone with the link can access. If you share this link with people from the list "Invited people", they need to login so that their individual assigned permissions can take effect. If they are not logged-in, the permissions of the link take effect.'
           )

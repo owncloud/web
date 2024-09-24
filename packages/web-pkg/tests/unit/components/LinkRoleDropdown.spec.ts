@@ -48,8 +48,7 @@ function getWrapper({
 }: { modelValue?: SharingLinkType; availableLinkTypeOptions?: SharingLinkType[] } = {}) {
   vi.mocked(useLinkTypes).mockReturnValue(
     mock<ReturnType<typeof useLinkTypes>>({
-      getLinkRoleByType: (value) =>
-        mock<ShareRole>({ displayName: value, description: value, label: value })
+      getLinkRoleByType: (value) => mock<ShareRole>({ displayName: value, description: value })
     })
   )
 

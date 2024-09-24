@@ -91,7 +91,7 @@ export default defineComponent({
     }
 
     const currentLinkRoleLabel = computed(() => {
-      return $gettext(getLinkRoleByType(props.modelValue)?.label)
+      return $gettext(getLinkRoleByType(props.modelValue)?.displayName)
     })
 
     const dropUuid = uuid.v4()
