@@ -25,6 +25,7 @@ Summary
 * Enhancement - Move permanent link indicator: [#11606](https://github.com/owncloud/web/pull/11606)
 * Enhancement - Redesign sidebar link section in sharing panel: [#11606](https://github.com/owncloud/web/pull/11606)
 * Enhancement - Soothe right sidebar panel transitions: [#11614](https://github.com/owncloud/web/pull/11614)
+* Enhancement - Add cancel button to unsaved changes dialog: [#11644](https://github.com/owncloud/web/pull/11644)
 
 Details
 -------
@@ -182,6 +183,14 @@ Details
    The panel transitions of the right sidebar are a bit smoother now.
 
    https://github.com/owncloud/web/pull/11614
+
+* Enhancement - Add cancel button to unsaved changes dialog: [#11644](https://github.com/owncloud/web/pull/11644)
+
+   We've added a cancel button to the unsaved changes dialog to allow users to
+   cancel the action.
+
+   https://github.com/owncloud/web/issues/11636
+   https://github.com/owncloud/web/pull/11644
 
 Changelog for ownCloud Web [10.2.0] (2024-09-05)
 =======================================
