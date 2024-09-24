@@ -1,7 +1,7 @@
 <template>
   <oc-list class="activity-list">
     <li v-for="(activities, date) in activitiesDateCategorized" :key="date" class="oc-mb-l">
-      <span class="oc-text-bold oc-text-muted activity-list-date" v-text="getListDate(date)" />
+      <h2 class="oc-text-bold oc-text-muted activity-list-date oc-text-medium" v-text="getDateHeadline(date)" />
       <ul class="oc-ml-s oc-mt-s timeline">
         <li v-for="activityItem in activities" :key="activityItem">
           <ActivityItem :activity="activityItem" />
@@ -44,7 +44,7 @@ export default defineComponent({
       }, {})
     })
 
-    const getListDate = (dateISO: string) => {
+    const getDateHeadline = (dateISO: string) => {
       const dateTime = DateTime.fromISO(dateISO)
 
       if (
@@ -57,7 +57,7 @@ export default defineComponent({
       return formatDateFromDateTime(dateTime, currentLanguage, DateTime.DATE_MED_WITH_WEEKDAY)
     }
 
-    return { activitiesDateCategorized, getListDate }
+    return { activitiesDateCategorized, getDateHeadline }
   }
 })
 </script>
