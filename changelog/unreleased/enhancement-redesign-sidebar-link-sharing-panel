@@ -1,0 +1,6 @@
+Enhancement: Redesign sidebar link section in sharing panel
+
+The design of the sidebar link section in the sharing panel has been aligned with the people sharing section.
+
+https://github.com/owncloud/web/pull/11606
+https://github.com/owncloud/web/issues/11602

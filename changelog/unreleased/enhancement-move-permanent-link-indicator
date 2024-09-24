@@ -1,0 +1,6 @@
+Enhancement: Move permanent link indicator
+
+The permanent link indicator has been moved to the top right of the sharing sidebar panel. This is ensures that it's always visible, no matter if there are shares present or not.
+
+https://github.com/owncloud/web/pull/11606
+https://github.com/owncloud/web/issues/11602

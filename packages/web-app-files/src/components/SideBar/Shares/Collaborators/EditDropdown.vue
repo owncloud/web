@@ -1,18 +1,17 @@
 <template>
-  <span class="oc-flex oc-flex-middle">
-    <div v-oc-tooltip="dropButtonTooltip">
-      <oc-button
-        :id="editShareBtnId"
-        class="collaborator-edit-dropdown-options-btn"
-        :aria-label="
-          isLocked ? dropButtonTooltip : $gettext('Open context menu with share editing options')
-        "
-        appearance="raw"
-        :disabled="isLocked"
-      >
-        <oc-icon name="more-2" />
-      </oc-button>
-    </div>
+  <div class="oc-flex oc-flex-middle">
+    <oc-button
+      :id="editShareBtnId"
+      v-oc-tooltip="dropButtonTooltip"
+      class="collaborator-edit-dropdown-options-btn"
+      :aria-label="
+        isLocked ? dropButtonTooltip : $gettext('Open context menu with share editing options')
+      "
+      appearance="raw"
+      :disabled="isLocked"
+    >
+      <oc-icon name="more-2" />
+    </oc-button>
     <oc-drop
       ref="expirationDateDrop"
       :toggle="'#' + editShareBtnId"
@@ -20,66 +19,30 @@
       padding-size="small"
     >
       <oc-list class="collaborator-edit-dropdown-options-list" :aria-label="shareEditOptions">
-        <li
-          v-if="canEditOrDelete && isExpirationSupported"
-          class="oc-rounded oc-menu-item-hover files-collaborators-expiration"
-        >
-          <oc-button
-            class="files-collaborators-expiration-button oc-p-s action-menu-item"
-            data-testid="recipient-datepicker-btn"
-            appearance="raw"
-            @click="showDatePickerModal"
-          >
-            <oc-icon name="calendar-event" fill-type="line" size="medium" variation="passive" />
-            <span v-if="isExpirationDateSet" v-text="$gettext('Edit expiration date')" />
-            <span v-else v-text="$gettext('Set expiration date')" />
-          </oc-button>
-          <oc-button
-            v-if="isRemoveExpirationPossible"
-            class="remove-expiration-date oc-p-s action-menu-item"
-            data-testid="collaborator-remove-expiration-btn oc-p-s action-menu-item"
-            appearance="raw"
-            @click="removeExpirationDate"
-          >
-            <oc-icon name="calendar-close" />
-            <span v-text="$gettext('Remove expiration date')" />
-          </oc-button>
-        </li>
         <li v-for="(option, i) in options" :key="i" class="oc-rounded oc-menu-item-hover">
-          <template v-if="option.enabled">
-            <div
-              v-if="option.hasSwitch"
-              class="action-menu-item item-has-switch oc-p-s oc-flex oc-flex-center"
-            >
-              <oc-icon :name="option.icon" fill-type="line" size="medium" variation="passive" />
-              <oc-switch
-                class="oc-ml-s oc-flex oc-width-1-1 oc-button-justify-content-space-between"
-                :checked="isShareDenied"
-                :class="option.class"
-                :label="option.title"
-                @update:checked="option.method"
-              />
-            </div>
-            <oc-button
-              v-else
-              appearance="raw"
-              class="oc-p-s action-menu-item"
-              :class="option.class"
-              v-bind="option.additionalAttributes || {}"
-              @click="option.method"
-            >
-              <oc-icon :name="option.icon" fill-type="line" size="medium" variation="passive" />
-              <span v-text="option.title" />
-            </oc-button>
-          </template>
+          <context-menu-item :option="option" />
+        </li>
+        <li v-if="sharedParentRoute" class="oc-rounded oc-menu-item-hover">
+          <context-menu-item :option="navigateToParentOption" />
+        </li>
+      </oc-list>
+      <oc-list
+        v-if="canEditOrDelete"
+        class="collaborator-edit-dropdown-options-list collaborator-edit-dropdown-options-list-remove"
+      >
+        <li
+          class="oc-rounded oc-menu-item-hover"
+          :class="{ 'oc-pt-s': options.length > 0 || sharedParentRoute }"
+        >
+          <context-menu-item :option="removeShareOption" />
         </li>
       </oc-list>
     </oc-drop>
-  </span>
+  </div>
 </template>
 
 <script lang="ts">
-import { computed, defineComponent, inject, Ref } from 'vue'
+import { computed, defineComponent, inject, PropType, Ref, unref, useTemplateRef } from 'vue'
 import { DateTime } from 'luxon'
 import uniqueId from 'design-system/src/utils/uniqueId'
 import { OcDrop } from 'design-system/src/components'
@@ -88,9 +51,23 @@ import { isProjectSpaceResource } from '@ownclouders/web-client'
 import { useConfigStore, useModals } from '@ownclouders/web-pkg'
 import { useGettext } from 'vue3-gettext'
 import DatePickerModal from '../../../Modals/DatePickerModal.vue'
+import { RouteLocationNamedRaw } from 'vue-router'
+import ContextMenuItem from './ContextMenuItem.vue'
+
+export type EditOption = {
+  icon: string
+  title: string
+  additionalAttributes?: Record<string, string>
+  class?: string
+  hasSwitch?: boolean
+  isChecked?: Ref<boolean>
+  method?: (args?: unknown) => void
+  to?: RouteLocationNamedRaw
+}
 
 export default defineComponent({
   name: 'EditDropdown',
+  components: { ContextMenuItem },
   props: {
     expirationDate: {
       type: String,
@@ -120,6 +97,10 @@ export default defineComponent({
     isLocked: {
       type: Boolean,
       default: false
+    },
+    sharedParentRoute: {
+      type: Object as PropType<RouteLocationNamedRaw>,
+      default: undefined
     }
   },
   emits: [
@@ -134,6 +115,9 @@ export default defineComponent({
     const { $gettext } = language
     const configStore = useConfigStore()
     const { dispatchModal } = useModals()
+    const expirationDateDrop = useTemplateRef<typeof OcDrop>('expirationDateDrop')
+
+    const resource = inject<Ref<Resource>>('resource')
 
     const toggleShareDenied = (value: boolean) => {
       emit('setDenyShare', value)
@@ -147,52 +131,94 @@ export default defineComponent({
       return ''
     })
 
+    const navigateToParentOption = computed<EditOption>(() => {
+      return {
+        title: $gettext('Navigate to parent'),
+        icon: 'folder-shared',
+        class: 'navigate-to-parent',
+        to: props.sharedParentRoute
+      }
+    })
+
+    const removeShareOption = computed<EditOption>(() => {
+      return {
+        title: isProjectSpaceResource(unref(resource))
+          ? $gettext('Remove member')
+          : $gettext('Remove share'),
+        method: () => {
+          emit('removeShare')
+        },
+        class: 'remove-share',
+        icon: 'delete-bin-5',
+        additionalAttributes: {
+          'data-testid': 'collaborator-remove-share-btn'
+        }
+      }
+    })
+
     return {
       configStore,
-      resource: inject<Ref<Resource>>('resource'),
+      resource,
+      expirationDateDrop,
       toggleShareDenied,
       dropButtonTooltip,
-      dispatchModal
+      dispatchModal,
+      navigateToParentOption,
+      removeShareOption
     }
   },
   computed: {
-    options() {
-      return [
-        {
-          title: isProjectSpaceResource(this.resource)
-            ? this.$gettext('Remove member')
-            : this.$gettext('Remove share'),
-          method: this.removeShare,
-          class: 'remove-share',
-          enabled: this.canEditOrDelete,
-          icon: 'delete-bin-5',
-          additionalAttributes: {
-            'data-testid': 'collaborator-remove-share-btn'
-          }
-        },
+    options(): EditOption[] {
+      const result: EditOption[] = [
         {
           title: this.$gettext('Access details'),
           method: this.showAccessDetails,
-          enabled: true,
           icon: 'information',
           class: 'show-access-details'
-        },
-        {
-          title: this.$gettext('Deny access'),
-          method: this.toggleShareDenied,
-          enabled: this.deniable,
-          icon: 'stop-circle',
-          class: 'deny-share',
-          hasSwitch: true
-        },
-        {
-          title: this.$gettext('Notify via mail'),
-          method: () => this.$emit('notifyShare'),
-          enabled: this.configStore.options.isRunningOnEos,
-          icon: 'mail',
-          class: 'notify-via-mail'
         }
       ]
+
+      if (this.deniable) {
+        result.push({
+          title: this.$gettext('Deny access'),
+          method: this.toggleShareDenied,
+          icon: 'stop-circle',
+          class: 'deny-share',
+          hasSwitch: true,
+          isChecked: computed(() => this.isShareDenied)
+        })
+      }
+
+      if (this.canEditOrDelete && this.isExpirationSupported) {
+        result.push({
+          title: this.isExpirationDateSet
+            ? this.$gettext('Edit expiration date')
+            : this.$gettext('Set expiration date'),
+          class: 'set-expiration-date recipient-datepicker-btn',
+          icon: 'calendar-event',
+          method: this.showDatePickerModal
+        })
+      }
+
+      if (this.isRemoveExpirationPossible) {
+        result.push({
+          title: this.$gettext('Remove expiration date'),
+          class: 'remove-expiration-date',
+          icon: 'calendar-close',
+          method: this.removeExpirationDate
+        })
+      }
+
+      if (this.configStore.options.isRunningOnEos) {
+        result.push({
+          title: this.$gettext('Notify via mail'),
+          method: () => this.$emit('notifyShare'),
+          icon: 'mail',
+          class: 'notify-via-mail'
+        })
+      }
+
+      return result
     },
 
     editShareBtnId() {
@@ -225,10 +251,7 @@ export default defineComponent({
   methods: {
     removeExpirationDate() {
       this.$emit('expirationDateChanged', { expirationDateTime: null })
-      ;(this.$refs.expirationDateDrop as InstanceType<typeof OcDrop>).hide()
-    },
-    removeShare() {
-      this.$emit('removeShare')
+      this.expirationDateDrop.hide()
     },
     showAccessDetails() {
       this.$emit('showAccessDetails')
@@ -255,10 +278,17 @@ export default defineComponent({
 })
 </script>
 <style lang="scss">
-.collaborator-edit-dropdown-options-list .action-menu-item {
-  width: 100%;
-  justify-content: flex-start;
-  color: var(--oc-color-swatch-passive-default);
-  gap: var(--oc-space-small);
+.collaborator-edit-dropdown-options-list {
+  &-remove {
+    margin-top: var(--oc-space-small) !important;
+    border-top: 1px solid var(--oc-color-border) !important;
+  }
+
+  .action-menu-item {
+    width: 100%;
+    justify-content: flex-start;
+    color: var(--oc-color-swatch-passive-default);
+    gap: var(--oc-space-small);
+  }
 }
 </style>

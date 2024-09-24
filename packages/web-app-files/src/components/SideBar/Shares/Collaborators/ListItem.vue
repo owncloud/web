@@ -85,29 +85,22 @@
         </div>
       </div>
       <div class="oc-flex oc-flex-middle oc-width-1-3 files-collaborators-collaborator-navigation">
-        <div
-          v-if="sharedParentRoute && !isShareDenied"
-          class="oc-resource-indicators oc-text-truncate"
-        >
-          <router-link
-            v-oc-tooltip="$gettext('Navigate to parent folder')"
-            class="parent-folder oc-text-truncate"
-            :to="sharedParentRoute"
-          >
-            <span class="text" v-text="$gettext('via')" />
-            <oc-icon name="folder-2" size="small" fill-type="line" class="oc-px-xs" />
-            <span class="text oc-text-truncate" v-text="sharedParentDir" />
-          </router-link>
-        </div>
         <expiration-date-indicator
           v-if="hasExpirationDate"
-          class="files-collaborators-collaborator-expiration"
+          class="files-collaborators-collaborator-expiration oc-mr-xs"
           data-testid="recipient-info-expiration-date"
           :expiration-date="DateTime.fromISO(share.expirationDateTime)"
         />
+        <oc-icon
+          v-if="!isShareDenied && sharedParentRoute"
+          v-oc-tooltip="sharedViaTooltip"
+          name="folder-shared"
+          fill-type="line"
+          class="files-collaborators-collaborator-shared-via oc-mx-xs"
+        />
         <edit-dropdown
           :id="`edit-drop-down-${editDropDownToggleId}`"
-          class="files-collaborators-collaborator-edit"
+          class="files-collaborators-collaborator-edit oc-ml-xs"
           data-testid="collaborator-edit"
           :expiration-date="share.expirationDateTime ? share.expirationDateTime : null"
           :share-category="shareCategory"
@@ -115,6 +108,7 @@
           :is-share-denied="isShareDenied"
           :is-locked="isLocked"
           :deniable="deniable"
+          :shared-parent-route="!isShareDenied ? sharedParentRoute : undefined"
           @expiration-date-changed="shareExpirationChanged"
           @remove-share="removeShare"
           @set-deny-share="setDenyShare"
@@ -149,7 +143,7 @@ import {
   useSharesStore
 } from '@ownclouders/web-pkg'
 import { Resource, extractDomSelector } from '@ownclouders/web-client'
-import { computed, defineComponent, inject, PropType, Ref } from 'vue'
+import { computed, defineComponent, inject, PropType, Ref, unref } from 'vue'
 import * as uuid from 'uuid'
 import { formatDateFromDateTime } from '@ownclouders/web-pkg'
 import { useClientService } from '@ownclouders/web-pkg'
@@ -247,6 +241,11 @@ export default defineComponent({
       // const response = await clientService.owncloudSdk.shares.notifyShare(props.share.id)
     }
 
+    const sharedViaTooltip = computed(() =>
+      $gettext('Shared via the parent folder "%{sharedParentDir}"', {
+        sharedParentDir: unref(sharedParentDir)
+      })
+    )
     return {
       resource: inject<Ref<Resource>>('resource'),
       space: inject<Ref<SpaceResource>>('space'),
@@ -262,6 +261,7 @@ export default defineComponent({
       showErrorMessage,
       upsertSpace,
       isExternalShare,
+      sharedViaTooltip,
       DateTime
     }
   },
@@ -463,6 +463,7 @@ export default defineComponent({
 }
 
 .files-collaborators-collaborator-navigation {
+  align-items: center;
   justify-content: end;
 }
 
