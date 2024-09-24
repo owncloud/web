@@ -1,8 +1,8 @@
 <template>
   <div id="oc-files-sharing-sidebar" class="oc-position-relative">
-    <div class="oc-flex oc-flex-between oc-flex-center oc-flex-middle">
-      <div class="oc-flex oc-py-s">
-        <h3 v-translate class="oc-text-bold oc-text-medium oc-m-rm">Add members</h3>
+    <div class="oc-flex oc-flex-center oc-flex-middle">
+      <div v-if="canShare({ space: resource, resource })" class="oc-flex oc-py-s">
+        <h3 class="oc-text-bold oc-text-medium oc-m-rm" v-text="$gettext('Add members')" />
         <oc-contextual-helper v-if="helpersEnabled" class="oc-pl-xs" v-bind="spaceAddMemberHelp" />
       </div>
       <copy-private-link :resource="resource" />
@@ -270,6 +270,12 @@ export default defineComponent({
 </script>
 
 <style lang="scss">
+#oc-files-sharing-sidebar {
+  .copy-private-link {
+    margin-left: auto;
+  }
+}
+
 .space-members-filter {
   label {
     font-size: var(--oc-font-size-small);
