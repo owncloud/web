@@ -1,0 +1,6 @@
+Bugfix: Wrong webdav URL in sidebar
+
+We've fixed a bug where the webdav URL in the sidebar was wrong.
+
+https://github.com/owncloud/web/pull/11642
+https://github.com/owncloud/web/issues/11590
