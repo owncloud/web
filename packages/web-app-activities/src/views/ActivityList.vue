@@ -1,12 +1,15 @@
 <template>
   <oc-list class="activity-list">
     <li v-for="(activities, date) in activitiesDateCategorized" :key="date" class="oc-mb-l">
-      <h2 class="oc-text-bold oc-text-muted activity-list-date oc-text-medium" v-text="getDateHeadline(date)" />
-      <ul class="oc-ml-s oc-mt-s timeline">
+      <h2
+        class="oc-text-bold oc-text-muted activity-list-date oc-text-medium"
+        v-text="getDateHeadline(date)"
+      />
+      <oc-list class="oc-ml-s oc-mt-s timeline">
         <li v-for="activityItem in activities" :key="activityItem">
           <ActivityItem :activity="activityItem" />
         </li>
-      </ul>
+      </oc-list>
     </li>
   </oc-list>
 </template>

@@ -9,8 +9,8 @@
       <resource-list-item v-if="resource" :resource="resource" :is-resource-clickable="false" />
       <div
         v-if="resourceNotAccessible"
-        class="oc-text-muted oc-flex oc-flex-middle oc-p-xs"
         v-oc-tooltip="$gettext('The resource is unavailable, it may have been deleted.')"
+        class="oc-text-muted oc-flex oc-flex-middle oc-p-xs"
       >
         <oc-icon name="eye-off" />
         <span class="oc-ml-s" v-text="activity.template.variables.resource.name" />
