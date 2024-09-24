@@ -979,7 +979,7 @@ Then(
     const resourceObject = new objects.applicationFiles.Resource({ page })
 
     for (const info of stepTable.hashes()) {
-      await resourceObject.checkEmptyActivity({ resource: info.resource, activity: info.activity })
+      await resourceObject.checkEmptyActivity({ resource: info.resource })
     }
   }
 )
