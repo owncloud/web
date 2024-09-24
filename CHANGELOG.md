@@ -12,6 +12,7 @@ Summary
 * Bugfix - OCM local instance check: [#11560](https://github.com/owncloud/web/pull/11560)
 * Bugfix - Thumbnails for GeoGebra slides not showing up: [#11583](https://github.com/owncloud/web/pull/11583)
 * Bugfix - Logout issues on token renewal failure: [#11584](https://github.com/owncloud/web/pull/11584)
+* Bugfix - App version downloads: [#11633](https://github.com/owncloud/web/pull/11633)
 * Enhancement - Copy quick link action removal: [#11553](https://github.com/owncloud/web/pull/11553)
 * Enhancement - Internal link removal: [#11553](https://github.com/owncloud/web/pull/11553)
 * Enhancement - Add split confirm button to create link modal: [#11558](https://github.com/owncloud/web/pull/11558)
@@ -57,6 +58,13 @@ Details
    https://github.com/owncloud/web/issues/11478
    https://github.com/owncloud/ocis/issues/10038
    https://github.com/owncloud/web/pull/11584
+
+* Bugfix - App version downloads: [#11633](https://github.com/owncloud/web/pull/11633)
+
+   We've fixed an issue in the app store where downloading specific versions of an
+   app would fail.
+
+   https://github.com/owncloud/web/pull/11633
 
 * Enhancement - Copy quick link action removal: [#11553](https://github.com/owncloud/web/pull/11553)
 
