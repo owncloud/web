@@ -1,0 +1,6 @@
+Enhancement: Add cancel button to unsaved changes dialog
+
+We've added a cancel button to the unsaved changes dialog to allow users to cancel the action.
+
+https://github.com/owncloud/web/pull/11644
+https://github.com/owncloud/web/issues/11636
