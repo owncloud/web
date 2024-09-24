@@ -20,6 +20,8 @@ Summary
 * Enhancement - Accessibility improvements: [#11574](https://github.com/owncloud/web/pull/11574)
 * Enhancement - Show min oCIS version in app details (app store): [#11580](https://github.com/owncloud/web/pull/11580)
 * Enhancement - Add a "Save As" function to the app top bar: [#11586](https://github.com/owncloud/web/pull/11586)
+* Enhancement - Move permanent link indicator: [#11606](https://github.com/owncloud/web/pull/11606)
+* Enhancement - Redesign sidebar link section in sharing panel: [#11606](https://github.com/owncloud/web/pull/11606)
 * Enhancement - Soothe right sidebar panel transitions: [#11614](https://github.com/owncloud/web/pull/11614)
 
 Details
@@ -140,6 +142,23 @@ Details
 
    https://github.com/owncloud/web/issues/11525
    https://github.com/owncloud/web/pull/11586
+
+* Enhancement - Move permanent link indicator: [#11606](https://github.com/owncloud/web/pull/11606)
+
+   The permanent link indicator has been moved to the top right of the sharing
+   sidebar panel. This is ensures that it's always visible, no matter if there are
+   shares present or not.
+
+   https://github.com/owncloud/web/issues/11602
+   https://github.com/owncloud/web/pull/11606
+
+* Enhancement - Redesign sidebar link section in sharing panel: [#11606](https://github.com/owncloud/web/pull/11606)
+
+   The design of the sidebar link section in the sharing panel has been aligned
+   with the people sharing section.
+
+   https://github.com/owncloud/web/issues/11602
+   https://github.com/owncloud/web/pull/11606
 
 * Enhancement - Soothe right sidebar panel transitions: [#11614](https://github.com/owncloud/web/pull/11614)
 
