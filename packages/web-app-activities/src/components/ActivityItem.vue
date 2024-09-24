@@ -22,7 +22,7 @@
 
 <script lang="ts">
 import { computed, defineComponent, onMounted, PropType, ref, unref } from 'vue'
-import { Activity } from '@ownclouders/web-client/src/graph/generated'
+import { Activity } from '@ownclouders/web-client/graph/generated'
 import { DateTime } from 'luxon'
 import {
   formatDateFromDateTime,
@@ -32,6 +32,7 @@ import {
 } from '@ownclouders/web-pkg'
 import { useGettext } from 'vue3-gettext'
 import { Resource } from '@ownclouders/web-client'
+import { DavProperty } from '@ownclouders/web-client/webdav'
 
 export default defineComponent({
   name: 'ActivityList',
@@ -63,7 +64,8 @@ export default defineComponent({
       try {
         resource.value = await clientService.webdav.getFileInfo(
           unref(props.activity.template.variables.space.id),
-          { fileId: props.activity.template.variables.resource.id }
+          { fileId: props.activity.template.variables.resource.id },
+          { davProperties: DavProperty.name }
         )
       } catch (e) {
         resourceNotAccessible.value = true
