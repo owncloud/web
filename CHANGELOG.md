@@ -19,6 +19,7 @@ Summary
 * Enhancement - Add versions to the left sidebar bottom: [#11561](https://github.com/owncloud/web/pull/11561)
 * Enhancement - Accessibility improvements: [#11574](https://github.com/owncloud/web/pull/11574)
 * Enhancement - Show min oCIS version in app details (app store): [#11580](https://github.com/owncloud/web/pull/11580)
+* Enhancement - Add a "Save As" function to the app top bar: [#11586](https://github.com/owncloud/web/pull/11586)
 * Enhancement - Soothe right sidebar panel transitions: [#11614](https://github.com/owncloud/web/pull/11614)
 
 Details
@@ -131,6 +132,14 @@ Details
    of the app store.
 
    https://github.com/owncloud/web/pull/11580
+
+* Enhancement - Add a "Save As" function to the app top bar: [#11586](https://github.com/owncloud/web/pull/11586)
+
+   We've added a "Save As" function to the app top bar. This allows the user to
+   save a file with a new name or in a different location with our regular editors.
+
+   https://github.com/owncloud/web/issues/11525
+   https://github.com/owncloud/web/pull/11586
 
 * Enhancement - Soothe right sidebar panel transitions: [#11614](https://github.com/owncloud/web/pull/11614)
 
