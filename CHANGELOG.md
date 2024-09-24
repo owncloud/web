@@ -14,6 +14,7 @@ Summary
 * Bugfix - Logout issues on token renewal failure: [#11584](https://github.com/owncloud/web/pull/11584)
 * Bugfix - App version downloads: [#11633](https://github.com/owncloud/web/pull/11633)
 * Bugfix - Wrong webdav URL in sidebar: [#11642](https://github.com/owncloud/web/pull/11642)
+* Bugfix - Renaming space in projects view files table does not work: [#11643](https://github.com/owncloud/web/pull/11643/)
 * Enhancement - Copy quick link action removal: [#11553](https://github.com/owncloud/web/pull/11553)
 * Enhancement - Internal link removal: [#11553](https://github.com/owncloud/web/pull/11553)
 * Enhancement - Add split confirm button to create link modal: [#11558](https://github.com/owncloud/web/pull/11558)
@@ -76,6 +77,14 @@ Details
 
    https://github.com/owncloud/web/issues/11590
    https://github.com/owncloud/web/pull/11642
+
+* Bugfix - Renaming space in projects view files table does not work: [#11643](https://github.com/owncloud/web/pull/11643/)
+
+   We've fixed a bug where renaming a space in the projects view files table did
+   not work.
+
+   https://github.com/owncloud/web/issues/11638
+   https://github.com/owncloud/web/pull/11643/
 
 * Enhancement - Copy quick link action removal: [#11553](https://github.com/owncloud/web/pull/11553)
 
