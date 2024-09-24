@@ -1,6 +1,6 @@
 <template>
   <div id="oc-files-sharing-sidebar" class="oc-position-relative">
-    <div class="oc-flex ">
+    <div class="oc-flex">
       <div v-if="canShare({ space: resource, resource })" class="oc-flex oc-py-s">
         <h3 class="oc-text-bold oc-text-medium oc-m-rm" v-text="$gettext('Add members')" />
         <oc-contextual-helper v-if="helpersEnabled" class="oc-pl-xs" v-bind="spaceAddMemberHelp" />
