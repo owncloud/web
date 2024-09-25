@@ -56,7 +56,7 @@
             size="small"
           />
           <oc-filter-chip
-            v-if="shareRoleTypes.length > 1"
+            v-if="showShareTypeFilter"
             :filter-label="currentShareRoleType.label"
             class="invite-form-share-role-type"
             raw
@@ -495,6 +495,10 @@ export default defineComponent({
       return $gettext('No users or groups found.')
     })
 
+    const showShareTypeFilter = computed(
+      () => unref(shareRoleTypes).length > 1 && !isProjectSpaceResource(unref(resource))
+    )
+
     return {
       minSearchLength: capabilityRefs.sharingSearchMinLength,
       isRunningOnEos: computed(() => configStore.options.runningOnEos),
@@ -519,6 +523,7 @@ export default defineComponent({
       focusShareInput,
       noOptionsLabel,
       DateTime,
+      showShareTypeFilter,
 
       // CERN
       accountType,

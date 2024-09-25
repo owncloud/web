@@ -164,6 +164,13 @@ describe('InviteCollaboratorForm', () => {
       const roleDropdown = wrapper.findComponent<typeof RoleDropdown>('role-dropdown-stub')
       expect(roleDropdown.props('isExternal')).toBeTruthy()
     })
+    it('is not present for project space resources', () => {
+      const space = mock<SpaceResource>({ driveType: 'project' })
+      const externalRoles = [mock<ShareRole>()]
+      const { wrapper } = getWrapper({ externalShareRoles: externalRoles, resource: space })
+
+      expect(wrapper.find('.invite-form-share-role-type').exists()).toBeFalsy()
+    })
   })
 })
 
