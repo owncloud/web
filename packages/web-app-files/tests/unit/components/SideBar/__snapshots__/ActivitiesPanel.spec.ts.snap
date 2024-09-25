@@ -3,7 +3,7 @@
 exports[`ActivitiesPanel > should render a list of activities when data is present 1`] = `
 "<div>
   <div class="oc-ml-s">
-    <ul class="timeline">
+    <ul class="oc-list oc-my-rm oc-mx-rm timeline">
       <li><span><strong>Marie Curie</strong> created <strong>new folder</strong>.</span> <span class="oc-text-muted oc-text-small oc-mt-s">Jul 29, 2024, 6:34 PM</span></li>
       <li><span><strong>Albert Einstein</strong> moved <strong>textfile.txt</strong>.</span> <span class="oc-text-muted oc-text-small oc-mt-s">Jul 29, 2023, 6:34 PM</span></li>
       <li><span><strong>Robert Oppenheimer</strong> deleted <strong>atom plans.pdf</strong>.</span> <span class="oc-text-muted oc-text-small oc-mt-s">Jul 29, 2022, 6:34 PM</span></li>

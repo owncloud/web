@@ -4,7 +4,7 @@
     <template v-else>
       <p v-if="!activities.length" v-text="$gettext('No activities')" />
       <div v-else class="oc-ml-s">
-        <ul class="timeline">
+        <oc-list class="timeline">
           <li v-for="activity in activities" :key="activity.id">
             <span v-html="getHtmlFromActivity(activity)" />
             <span
@@ -12,7 +12,7 @@
               v-text="getTimeFromActivity(activity)"
             />
           </li>
-        </ul>
+        </oc-list>
         <p class="oc-text-muted oc-text-small" v-text="activitiesFooterText" />
       </div>
     </template>

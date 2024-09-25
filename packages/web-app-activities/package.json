@@ -1,8 +1,8 @@
 {
-  "name": "web-app-app-store",
+  "name": "web-app-activities",
   "version": "0.0.0",
   "private": true,
-  "description": "ownCloud app store",
+  "description": "ownCloud activities app",
   "license": "AGPL-3.0",
   "devDependencies": {
     "web-test-helpers": "workspace:*"
@@ -10,15 +10,11 @@
   "peerDependencies": {
     "@ownclouders/web-client": "workspace:*",
     "@ownclouders/web-pkg": "workspace:*",
-    "axios": "1.7.7",
     "design-system": "workspace:@ownclouders/design-system@*",
-    "fuse.js": "7.0.0",
-    "lodash-es": "4.17.21",
-    "mark.js": "^8.11.1",
-    "pinia": "2.2.2",
-    "vue-concurrency": "5.0.1",
-    "vue-router": "4.2.5",
-    "zod": "3.23.8",
-    "vue3-gettext": "2.4.0"
+    "pinia": "^2.2.2",
+    "luxon": "^3.5.0",
+    "vue-concurrency": "^5.0.1",
+    "vue-router": "^4.2.5",
+    "vue3-gettext": "^2.4.0"
   }
 }
