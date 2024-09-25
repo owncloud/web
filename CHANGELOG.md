@@ -26,6 +26,7 @@ Summary
 * Enhancement - Redesign sidebar link section in sharing panel: [#11606](https://github.com/owncloud/web/pull/11606)
 * Enhancement - Soothe right sidebar panel transitions: [#11614](https://github.com/owncloud/web/pull/11614)
 * Enhancement - Add cancel button to unsaved changes dialog: [#11644](https://github.com/owncloud/web/pull/11644)
+* Enhancement - File type icon for .ggs files: [#11646](https://github.com/owncloud/web/pull/11646)
 
 Details
 -------
@@ -191,6 +192,12 @@ Details
 
    https://github.com/owncloud/web/issues/11636
    https://github.com/owncloud/web/pull/11644
+
+* Enhancement - File type icon for .ggs files: [#11646](https://github.com/owncloud/web/pull/11646)
+
+   We've added a new file type icon for .ggs files.
+
+   https://github.com/owncloud/web/pull/11646
 
 Changelog for ownCloud Web [10.2.0] (2024-09-05)
 =======================================
