@@ -14,7 +14,12 @@
         @update:model-value="setFilterTerm"
       />
     </div>
-    <oc-list class="app-tiles">
+    <no-content-message v-if="!filteredApps.length" icon="store">
+      <template #message>
+        <span v-text="$gettext('No apps found matching your search')" />
+      </template>
+    </no-content-message>
+    <oc-list v-else class="app-tiles">
       <app-tile
         v-for="app in filteredApps"
         :key="`app-${app.repository.name}-${app.id}`"
@@ -36,6 +41,7 @@ import { storeToRefs } from 'pinia'
 import { App } from '../types'
 import {
   defaultFuseOptions,
+  NoContentMessage,
   queryItemAsString,
   useRouteQuery,
   useRouter
@@ -44,7 +50,7 @@ import AppContextualHelper from '../components/AppContextualHelper.vue'
 
 export default defineComponent({
   name: 'AppList',
-  components: { AppContextualHelper, AppTile },
+  components: { AppContextualHelper, AppTile, NoContentMessage },
   setup() {
     const appsStore = useAppsStore()
     const { apps } = storeToRefs(appsStore)
