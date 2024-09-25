@@ -1,32 +1,15 @@
-import { HttpClient as _HttpClient } from '../../http'
-import { client } from '@ownclouders/web-client'
+import { HttpClient } from '../../http'
+import { graph, ocs, webdav } from '@ownclouders/web-client'
 import { Graph } from '@ownclouders/web-client/graph'
 import { OCS } from '@ownclouders/web-client/ocs'
-import { Auth, AuthParameters } from './auth'
-import axios, { AxiosInstance } from 'axios'
+import { AuthParameters } from './auth'
+import axios from 'axios'
 import { v4 as uuidV4 } from 'uuid'
 import { WebDAV } from '@ownclouders/web-client/webdav'
 import { Language } from 'vue3-gettext'
 import { FetchEventSourceInit } from '@microsoft/fetch-event-source'
 import { sse } from '@ownclouders/web-client/sse'
 import { AuthStore, ConfigStore } from '../../composables'
-
-interface ClientContext {
-  language: string
-  token: string
-  publicLinkToken?: string
-  publicLinkPassword?: string
-}
-
-interface HttpClient extends ClientContext {
-  client: _HttpClient
-}
-
-interface OcClient extends ClientContext {
-  graph: Graph
-  ocs: OCS
-  webdav: WebDAV
-}
 
 const createFetchOptions = (authParams: AuthParameters, language: string): FetchEventSourceInit => {
   return {
@@ -37,24 +20,6 @@ const createFetchOptions = (authParams: AuthParameters, language: string): Fetch
       'X-Requested-With': 'XMLHttpRequest'
     }
   }
-}
-
-const createAxiosInstance = (
-  authParams: AuthParameters,
-  language: string,
-  initiatorId: string
-): AxiosInstance => {
-  const auth = new Auth(authParams)
-  const axiosClient = axios.create({
-    headers: { ...auth.getHeaders(), 'Accept-Language': language, 'Initiator-ID': initiatorId }
-  })
-  axiosClient.interceptors.request.use((config) => {
-    config.headers['X-Request-ID'] = uuidV4()
-    config.headers['X-Requested-With'] = 'XMLHttpRequest'
-    config.headers['Content-Type'] = 'application/x-www-form-urlencoded'
-    return config
-  })
-  return axiosClient
 }
 
 export interface ClientServiceOptions {
@@ -68,46 +33,55 @@ export class ClientService {
   private language: Language
   private authStore: AuthStore
 
-  private initiatorUuid: string
-
   private httpAuthenticatedClient: HttpClient
   private httpUnAuthenticatedClient: HttpClient
 
-  private ocUserContextClient: OcClient
-  private ocPublicLinkContextClient: OcClient
-  private ocWebdavContextClient: OcClient
+  private graphClient: Graph
+  private ocsClient: OCS
+  private webDavClient: WebDAV
+
+  public initiatorId = uuidV4()
+
+  private staticHeaders: Record<string, string> = {
+    'Initiator-ID': this.initiatorId,
+    'X-Requested-With': 'XMLHttpRequest'
+  }
 
   constructor(options: ClientServiceOptions) {
     this.configStore = options.configStore
     this.language = options.language
     this.authStore = options.authStore
 
-    this.initiatorUuid = uuidV4()
+    this.initGraphClient()
+    this.initOcsClient()
+    this.initWebDavClient()
+
+    this.httpAuthenticatedClient = new HttpClient(
+      { baseURL: this.configStore.serverUrl, headers: this.staticHeaders },
+      (config) => {
+        Object.assign(config.headers, this.getDynamicHeaders())
+        return config
+      }
+    )
+    this.httpUnAuthenticatedClient = new HttpClient(
+      { baseURL: this.configStore.serverUrl, headers: this.staticHeaders },
+      (config) => {
+        Object.assign(config.headers, this.getDynamicHeaders({ useAuth: false }))
+        return config
+      }
+    )
   }
 
-  public get initiatorId(): string {
-    return this.initiatorUuid
+  public get httpAuthenticated() {
+    return this.httpAuthenticatedClient
   }
 
-  public get httpAuthenticated(): _HttpClient {
-    if (this.clientNeedsInit(this.httpAuthenticatedClient)) {
-      this.httpAuthenticatedClient = this.getHttpClient(true)
-    }
-    return this.httpAuthenticatedClient.client
+  public get httpUnAuthenticated() {
+    return this.httpUnAuthenticatedClient
   }
 
-  public get httpUnAuthenticated(): _HttpClient {
-    if (this.clientNeedsInit(this.httpUnAuthenticatedClient, false)) {
-      this.httpUnAuthenticatedClient = this.getHttpClient()
-    }
-    return this.httpUnAuthenticatedClient.client
-  }
-
-  public get graphAuthenticated(): Graph {
-    if (this.clientNeedsInit(this.ocUserContextClient)) {
-      this.ocUserContextClient = this.getOcClient({ accessToken: this.authStore.accessToken })
-    }
-    return this.ocUserContextClient.graph
+  public get graphAuthenticated() {
+    return this.graphClient
   }
 
   public get sseAuthenticated(): EventSource {
@@ -117,78 +91,76 @@ export class ClientService {
     )
   }
 
-  public get ocsUserContext(): OCS {
-    if (this.clientNeedsInit(this.ocUserContextClient)) {
-      this.ocUserContextClient = this.getOcClient({ accessToken: this.authStore.accessToken })
-    }
-    return this.ocUserContextClient.ocs
+  public get ocs() {
+    return this.ocsClient
   }
 
-  public ocsPublicLinkContext(password?: string): OCS {
-    if (this.clientNeedsInit(this.ocPublicLinkContextClient)) {
-      this.ocPublicLinkContextClient = this.getOcClient({
-        publicLinkToken: this.authStore.accessToken,
-        publicLinkPassword: password
-      })
-    }
-    return this.ocPublicLinkContextClient.ocs
+  /** @deprecated use `ocs()` instead */
+  public get ocsUserContext() {
+    return this.ocs
   }
 
-  private getHttpClient(authenticated = false): HttpClient {
-    return {
-      ...(!!authenticated && { token: this.authStore.accessToken }),
-      language: this.currentLanguage,
-      client: new _HttpClient({
-        baseURL: this.configStore.serverUrl,
-        headers: {
-          'Accept-Language': this.currentLanguage,
-          ...(!!authenticated && { Authorization: 'Bearer ' + this.authStore.accessToken }),
-          'X-Requested-With': 'XMLHttpRequest',
-          'X-Request-ID': uuidV4(),
-          'Initiator-ID': this.initiatorId
-        }
-      })
-    }
+  /** @deprecated use `ocs()` instead */
+  public ocsPublicLinkContext(password?: string) {
+    return this.ocs
   }
 
-  private getOcClient(authParams: AuthParameters): OcClient {
-    const { graph, ocs, webdav } = client({
-      axiosClient: createAxiosInstance(authParams, this.currentLanguage, this.initiatorId),
-      baseURI: this.configStore.serverUrl
-    })
-
-    return {
-      token: this.authStore.accessToken,
-      language: this.currentLanguage,
-      graph,
-      ocs,
-      webdav
-    }
+  public get webdav() {
+    return this.webDavClient
   }
 
-  private clientNeedsInit(client: ClientContext, hasToken = true) {
-    return (
-      !client ||
-      (hasToken && client.token !== this.authStore.accessToken) ||
-      client.publicLinkPassword !== this.authStore.publicLinkPassword ||
-      client.publicLinkToken !== this.authStore.publicLinkToken ||
-      client.language !== this.currentLanguage
-    )
-  }
-
-  public get webdav(): WebDAV {
-    const hasToken = !!this.authStore.accessToken
-    if (this.clientNeedsInit(this.ocWebdavContextClient, hasToken)) {
-      this.ocWebdavContextClient = this.getOcClient({
-        accessToken: this.authStore.accessToken,
-        publicLinkPassword: this.authStore.publicLinkPassword,
-        publicLinkToken: this.authStore.publicLinkToken
-      })
-    }
-    return this.ocWebdavContextClient.webdav
-  }
-
-  get currentLanguage(): string {
+  get currentLanguage() {
     return this.language.current
+  }
+
+  private initGraphClient() {
+    const axiosClient = axios.create({ headers: this.staticHeaders })
+    axiosClient.interceptors.request.use((config) => {
+      Object.assign(config.headers, this.getDynamicHeaders())
+      return config
+    })
+    this.graphClient = graph(this.configStore.serverUrl, axiosClient)
+  }
+
+  private initOcsClient() {
+    const axiosClient = axios.create({ headers: this.staticHeaders })
+    axiosClient.interceptors.request.use((config) => {
+      Object.assign(config.headers, this.getDynamicHeaders())
+      return config
+    })
+    this.ocsClient = ocs(this.configStore.serverUrl, axiosClient)
+  }
+
+  private initWebDavClient() {
+    this.webDavClient = webdav(this.configStore.serverUrl, () => {
+      const headers = { ...this.staticHeaders, ...this.getDynamicHeaders() }
+
+      if (this.authStore.publicLinkToken) {
+        headers['public-token'] = this.authStore.publicLinkToken
+      }
+
+      if (this.authStore.publicLinkPassword) {
+        headers['Authorization'] =
+          'Basic ' +
+          Buffer.from(['public', this.authStore.publicLinkPassword].join(':')).toString('base64')
+      }
+
+      return headers
+    })
+  }
+
+  /**
+   * Dynamic headers that should be provided via callback or interceptor because they may
+   * change during the lifetime of the application (e.g. token renewal).
+   */
+  private getDynamicHeaders({ useAuth = true }: { useAuth?: boolean } = {}): Record<
+    string,
+    string
+  > {
+    return {
+      'Accept-Language': this.currentLanguage,
+      'X-Request-ID': uuidV4(),
+      ...(useAuth && { Authorization: 'Bearer ' + this.authStore.accessToken })
+    }
   }
 }

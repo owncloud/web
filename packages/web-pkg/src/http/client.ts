@@ -1,4 +1,10 @@
-import axios, { AxiosInstance, AxiosRequestConfig, AxiosResponse, CancelTokenSource } from 'axios'
+import axios, {
+  AxiosInstance,
+  AxiosRequestConfig,
+  AxiosResponse,
+  CancelTokenSource,
+  InternalAxiosRequestConfig
+} from 'axios'
 import merge from 'lodash-es/merge'
 import { z } from 'zod'
 
@@ -9,9 +15,17 @@ export class HttpClient {
   private readonly instance: AxiosInstance
   private readonly cancelToken: CancelTokenSource
 
-  constructor(config?: AxiosRequestConfig) {
+  constructor(
+    config?: AxiosRequestConfig,
+    interceptor?: (
+      value: InternalAxiosRequestConfig<any>
+    ) => InternalAxiosRequestConfig<any> | Promise<InternalAxiosRequestConfig<any>>
+  ) {
     this.cancelToken = axios.CancelToken.source()
     this.instance = axios.create(config)
+    if (interceptor) {
+      this.instance.interceptors.request.use(interceptor)
+    }
   }
 
   public cancel(msg?: string): void {
