@@ -35,6 +35,7 @@ export const config = {
   tokenTimeout: parseInt(process.env.TOKEN_TIMEOUT) || 40,
   headless: process.env.HEADLESS === 'true',
   acceptDownloads: process.env.DOWNLOADS !== 'false',
+  trace: 'on-first-retry',
   browser: process.env.BROWSER ?? 'chrome',
   reportDir: process.env.REPORT_DIR || 'reports/e2e',
   get tracingReportDir() {

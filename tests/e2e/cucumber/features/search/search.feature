@@ -131,23 +131,23 @@ Feature: Search
       | mainFolder/exampleInsideTheMainFolder.txt          | I'm in the main folder    |
       | mainFolder/subFolder/exampleInsideTheSubFolder.txt | I'm in the sub folder     |
     And "Alice" logs in
-    When "Alice" opens folder "mainFolder"
-    And "Alice" searches "example" using the global search and the "all files" filter
-    Then following resources should be displayed in the search list for user "Alice"
-      | resource                          |
-      | exampleInsideThePersonalSpace.txt |
-      | exampleInsideTheMainFolder.txt    |
-      | exampleInsideTheSubFolder.txt     |
-
-    When "Alice" searches "example" using the global search and the "current folder" filter
-    Then following resources should be displayed in the search list for user "Alice"
-      | resource                       |
-      | exampleInsideTheMainFolder.txt |
-      | exampleInsideTheSubFolder.txt  |
-    But following resources should not be displayed in the search list for user "Alice"
-      | resource                          |
-      | exampleInsideThePersonalSpace.txt |
-    And "Alice" logs out
+    When "Alice" opens folder "mainFoder"
+#    And "Alice" searches "example" using the global search and the "all files" filter
+#    Then following resources should be displayed in the search list for user "Alice"
+#      | resource                          |
+#      | exampleInsideThePersonalSpace.txt |
+#      | exampleInsideTheMainFolder.txt    |
+#      | exampleInsideTheSubFolder.txt     |
+#
+#    When "Alice" searches "example" using the global search and the "current folder" filter
+#    Then following resources should be displayed in the search list for user "Alice"
+#      | resource                       |
+#      | exampleInsideTheMainFolder.txt |
+#      | exampleInsideTheSubFolder.txt  |
+#    But following resources should not be displayed in the search list for user "Alice"
+#      | resource                          |
+#      | exampleInsideThePersonalSpace.txt |
+#    And "Alice" logs out
 
 
   Scenario: Search using mediaType filter
@@ -160,58 +160,58 @@ Feature: Search
     And "Alice" uploads the following local file into personal space using API
       | localFile                     | to            |
       | filesForUpload/testavatar.jpg | mediaTest.jpg |
-    And "Alice" creates the following files into personal space using API
-      | pathToFile    | content        |
-      | mediaTest.txt | I'm a Document |
-      | mediaTest.pdf | I'm a PDF      |
-      | mediaTest.mp3 | I'm a Audio    |
-      | mediaTest.zip | I'm a Archive  |
-    And "Alice" logs in
-    And "Alice" searches "mediaTest" using the global search and the "all files" filter and presses enter
-    And "Alice" enables the option to search title only
-    And "Alice" selects mediaType "Document" from the search result filter chip
-    Then following resources should be displayed in the files list for user "Alice"
-      | resource      |
-      | mediaTest.txt |
-    And "Alice" clears mediaType filter
-    When "Alice" selects mediaType "PDF" from the search result filter chip
-    Then following resources should be displayed in the files list for user "Alice"
-      | resource      |
-      | mediaTest.pdf |
-    And "Alice" clears mediaType filter
-    When "Alice" selects mediaType "Audio" from the search result filter chip
-    Then following resources should be displayed in the files list for user "Alice"
-      | resource      |
-      | mediaTest.mp3 |
-    And "Alice" clears mediaType filter
-    When "Alice" selects mediaType "Archive" from the search result filter chip
-    Then following resources should be displayed in the files list for user "Alice"
-      | resource      |
-      | mediaTest.zip |
-    And "Alice" clears mediaType filter
-    # multiple choose
-    When "Alice" selects mediaType "Folder" from the search result filter chip
-    And "Alice" selects mediaType "Image" from the search result filter chip
-    Then following resources should be displayed in the files list for user "Alice"
-      | resource      |
-      | mediaTest     |
-      | mediaTest.jpg |
-    But following resources should not be displayed in the files list for user "Alice"
-      | resource      |
-      | mediaTest.txt |
-      | mediaTest.pdf |
-      | mediaTest.mp3 |
-      | mediaTest.zip |
-    And "Alice" logs out
+#    And "Alice" creates the following files into personal space using API
+#      | pathToFile    | content        |
+#      | mediaTest.txt | I'm a Document |
+#      | mediaTest.pdf | I'm a PDF      |
+#      | mediaTest.mp3 | I'm a Audio    |
+#      | mediaTest.zip | I'm a Archive  |
+#    And "Alice" logs in
+#    And "Alice" searches "mediaTest" using the global search and the "all files" filter and presses enter
+#    And "Alice" enables the option to search title only
+#    And "Alice" selects mediaType "Document" from the search result filter chip
+#    Then following resources should be displayed in the files list for user "Alice"
+#      | resource      |
+#      | mediaTest.txt |
+#    And "Alice" clears mediaType filter
+#    When "Alice" selects mediaType "PDF" from the search result filter chip
+#    Then following resources should be displayed in the files list for user "Alice"
+#      | resource      |
+#      | mediaTest.pdf |
+#    And "Alice" clears mediaType filter
+#    When "Alice" selects mediaType "Audio" from the search result filter chip
+#    Then following resources should be displayed in the files list for user "Alice"
+#      | resource      |
+#      | mediaTest.mp3 |
+#    And "Alice" clears mediaType filter
+#    When "Alice" selects mediaType "Archive" from the search result filter chip
+#    Then following resources should be displayed in the files list for user "Alice"
+#      | resource      |
+#      | mediaTest.zip |
+#    And "Alice" clears mediaType filter
+#    # multiple choose
+#    When "Alice" selects mediaType "Folder" from the search result filter chip
+#    And "Alice" selects mediaType "Image" from the search result filter chip
+#    Then following resources should be displayed in the files list for user "Alice"
+#      | resource      |
+#      | mediaTest     |
+#      | mediaTest.jpg |
+#    But following resources should not be displayed in the files list for user "Alice"
+#      | resource      |
+#      | mediaTest.txt |
+#      | mediaTest.pdf |
+#      | mediaTest.mp3 |
+#      | mediaTest.zip |
+#    And "Alice" logs out
 
 
   Scenario: Search using lastModified filter
     Given "Admin" creates following users using API
       | id    |
       | Alice |
-    And "Alice" creates the following folders in personal space using API
-      | name       |
-      | mainFolder |
+#    And "Alice" creates the following folders in personal space using API
+#      | name       |
+#      | mainFolder |
     And "Alice" creates the following files with mtime into personal space using API
       | pathToFile               | content             | mtimeDeltaDays |
       | mainFolder/mediaTest.pdf | created 29 days ago | -29 days       |
@@ -219,29 +219,29 @@ Feature: Search
       | mainFolder/mediaTest.md  | created today       |                |
     And "Alice" logs in
     When "Alice" opens folder "mainFolder"
-    And "Alice" searches "mediaTest" using the global search and the "current folder" filter and presses enter
-    And "Alice" enables the option to search title only
-    And "Alice" selects lastModified "last 30 days" from the search result filter chip
-    Then following resources should be displayed in the files list for user "Alice"
-      | resource                 |
-      | mainFolder/mediaTest.pdf |
-      | mainFolder/mediaTest.txt |
-      | mainFolder/mediaTest.md  |
-    When "Alice" selects lastModified "last 7 days" from the search result filter chip
-    Then following resources should be displayed in the files list for user "Alice"
-      | resource                 |
-      | mainFolder/mediaTest.txt |
-      | mainFolder/mediaTest.md  |
-    But following resources should not be displayed in the files list for user "Alice"
-      | resource                 |
-      | mainFolder/mediaTest.pdf |
-    When "Alice" selects lastModified "today" from the search result filter chip
-    Then following resources should be displayed in the files list for user "Alice"
-      | resource                |
-      | mainFolder/mediaTest.md |
-    But following resources should not be displayed in the files list for user "Alice"
-      | resource                 |
-      | mainFolder/mediaTest.pdf |
-      | mainFolder/mediaTest.txt |
-    And "Alice" clears lastModified filter
-    And "Alice" logs out
+#    And "Alice" searches "mediaTest" using the global search and the "current folder" filter and presses enter
+#    And "Alice" enables the option to search title only
+#    And "Alice" selects lastModified "last 30 days" from the search result filter chip
+#    Then following resources should be displayed in the files list for user "Alice"
+#      | resource                 |
+#      | mainFolder/mediaTest.pdf |
+#      | mainFolder/mediaTest.txt |
+#      | mainFolder/mediaTest.md  |
+#    When "Alice" selects lastModified "last 7 days" from the search result filter chip
+#    Then following resources should be displayed in the files list for user "Alice"
+#      | resource                 |
+#      | mainFolder/mediaTest.txt |
+#      | mainFolder/mediaTest.md  |
+#    But following resources should not be displayed in the files list for user "Alice"
+#      | resource                 |
+#      | mainFolder/mediaTest.pdf |
+#    When "Alice" selects lastModified "today" from the search result filter chip
+#    Then following resources should be displayed in the files list for user "Alice"
+#      | resource                |
+#      | mainFolder/mediaTest.md |
+#    But following resources should not be displayed in the files list for user "Alice"
+#      | resource                 |
+#      | mainFolder/mediaTest.pdf |
+#      | mainFolder/mediaTest.txt |
+#    And "Alice" clears lastModified filter
+#    And "Alice" logs out

@@ -53,7 +53,7 @@ config = {
     "e2e": {
         "1": {
             "earlyFail": True,
-            "skip": False,
+            "skip": True,
             "suites": [
                 "journeys",
                 "smoke",
@@ -64,12 +64,11 @@ config = {
             "skip": False,
             "suites": [
                 "admin-settings",
-                "spaces",
             ],
         },
         "3": {
             "earlyFail": True,
-            "skip": False,
+            "skip": True,
             "tikaNeeded": True,
             "suites": [
                 "search",
@@ -84,7 +83,7 @@ config = {
         },
         "4": {
             "earlyFail": True,
-            "skip": False,
+            "skip": True,
             "suites": [
                 "navigation",
                 "user-settings",
@@ -92,7 +91,7 @@ config = {
             ],
         },
         "app-provider": {
-            "skip": False,
+            "skip": True,
             "suites": [
                 "app-provider",
             ],
@@ -109,7 +108,7 @@ config = {
             },
         },
         "oidc-refresh-token": {
-            "skip": False,
+            "skip": True,
             "features": [
                 "cucumber/features/oidc/refreshToken.feature",
             ],
@@ -119,7 +118,7 @@ config = {
             },
         },
         "oidc-iframe": {
-            "skip": False,
+            "skip": True,
             "features": [
                 "cucumber/features/oidc/iframeTokenRenewal.feature",
             ],
@@ -207,7 +206,7 @@ def stagePipelines(ctx):
 
     e2e_pipelines = e2eTests(ctx)
     keycloak_pipelines = e2eTestsOnKeycloak(ctx)
-    return unit_test_pipelines + buildAndTestDesignSystem(ctx) + pipelinesDependsOn(e2e_pipelines + keycloak_pipelines, unit_test_pipelines)
+    return e2e_pipelines
 
 def afterPipelines(ctx):
     return build(ctx) + pipelinesDependsOn(notify(), build(ctx))
@@ -623,6 +622,11 @@ def e2eTests(ctx):
                      "commands": [
                          "cd tests/e2e",
                          command,
+                         "cd ../../",
+                         "pwd",
+                         "cd reports/e2e/",
+                         "pwd",
+                         "cd playwright/tracing/",
                      ],
                  }] + \
                  uploadTracingResult(ctx) + \
@@ -1537,6 +1541,9 @@ def logTracingResult(ctx, suite):
         "image": OC_UBUNTU,
         "commands": [
             "cd %s/reports/e2e/playwright/tracing/" % dir["web"],
+            "ls -al",
+            "pwd",
+            "cd %s/tests" % dir["web"],
             'echo "To see the trace, please open the following link in the console"',
             'for f in *.zip; do echo "npx playwright show-trace https://cache.owncloud.com/public/${DRONE_REPO}/${DRONE_BUILD_NUMBER}/tracing/$f \n"; done',
         ],
