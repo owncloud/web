@@ -33,7 +33,7 @@ import {
 import { useGettext } from 'vue3-gettext'
 import { Resource, SpaceResource } from '@ownclouders/web-client'
 
-//TODO: Use original type Activity from web-client when it's corrected
+//FIXME: Use original type Activity from web-client when it's corrected https://github.com/owncloud/ocis/issues/10151
 type Activity = GraphActivity & {
   template: {
     variables?: {
