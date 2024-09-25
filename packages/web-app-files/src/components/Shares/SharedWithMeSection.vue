@@ -27,13 +27,7 @@
       :sort-dir="sortDir"
       :grouping-settings="groupingSettings"
       @file-click="triggerDefaultAction"
-      @item-visible="
-        loadPreview({
-          space: getMatchingSpace($event),
-          resource: $event,
-          ignoreAlmostEmptyTxtFiles: true
-        })
-      "
+      @item-visible="loadPreview({ space: getMatchingSpace($event), resource: $event })"
       @sort="sortHandler"
     >
       <template #syncEnabled="{ resource }">

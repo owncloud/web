@@ -12,7 +12,6 @@ import { usePreviewService } from '../previewService'
 import { ProcessorType } from '../../services'
 import { useResourcesStore } from '../piniaStores'
 import { ImageDimension } from '../../constants'
-import { isResourceTxtFileAlmostEmpty } from '../../helpers/resource'
 
 type LoadPreviewOptions = {
   space: SpaceResource
@@ -26,12 +25,6 @@ type LoadPreviewOptions = {
    * @default false
    */
   cancelRunning?: boolean
-
-  /**
-   * Ignore loading previews for text files that are almost empty.
-   * @default false
-   */
-  ignoreAlmostEmptyTxtFiles?: boolean
 
   /**
    * Update resource store after loading.
@@ -81,13 +74,9 @@ export const useLoadPreview = (viewMode?: Ref<string>) => {
   })
 
   const loadPreview = async (options: LoadPreviewOptions) => {
-    const { resource, cancelRunning, ignoreAlmostEmptyTxtFiles } = options
+    const { resource, cancelRunning } = options
     if (cancelRunning) {
       cancelTasks()
-    }
-
-    if (ignoreAlmostEmptyTxtFiles && isResourceTxtFileAlmostEmpty(resource)) {
-      return null
     }
 
     if (isProjectSpaceResource(resource) && (!resource.spaceImageData || resource.disabled)) {

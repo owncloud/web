@@ -89,9 +89,7 @@
               v-bind="folderView.componentAttrs?.()"
               @file-dropped="fileDropped"
               @file-click="triggerDefaultAction"
-              @item-visible="
-                loadPreview({ space, resource: $event, ignoreAlmostEmptyTxtFiles: true })
-              "
+              @item-visible="loadPreview({ space, resource: $event })"
               @sort="handleSort"
             >
               <template #contextMenu="{ resource }">

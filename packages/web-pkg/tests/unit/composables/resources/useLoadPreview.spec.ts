@@ -8,9 +8,6 @@ import { PreviewService, ProcessorType } from '../../../../src/services'
 import { FolderViewModeConstants, ImageDimension } from '../../../../src'
 
 vi.mock('../../../../src/composables/previewService/usePreviewService')
-vi.mock('../../../../src/helpers/resource/isResourceTxtFileAlmostEmpty', () => ({
-  isResourceTxtFileAlmostEmpty: () => true
-}))
 vi.mock('@ownclouders/web-client', async (importOriginal) => ({
   ...(await importOriginal<any>()),
   buildSpaceImageResource: vi.fn()
@@ -28,16 +25,6 @@ describe('useLoadPreview', () => {
           expect(preview).toEqual(loadedPreview)
         },
         loadedPreview
-      })
-    })
-    it('does not load previews for almost empty text files if ignored', () => {
-      getWrapper({
-        setup: async ({ loadPreview }) => {
-          const space = mock<SpaceResource>()
-          const resource = mock<Resource>()
-          const preview = await loadPreview({ space, resource, ignoreAlmostEmptyTxtFiles: true })
-          expect(preview).toBe(null)
-        }
       })
     })
     describe('project space resources', () => {

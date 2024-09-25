@@ -108,13 +108,7 @@
           :fields-displayed="['name', 'size', 'tags', 'mdate']"
           :resource-dom-selector="resourceDomSelector"
           @file-click="triggerDefaultAction"
-          @item-visible="
-            loadPreview({
-              space: getMatchingSpace($event),
-              resource: $event,
-              ignoreAlmostEmptyTxtFiles: true
-            })
-          "
+          @item-visible="loadPreview({ space: getMatchingSpace($event), resource: $event })"
           @sort="handleSort"
         >
           <template #additionalResourceContent="{ resource }">

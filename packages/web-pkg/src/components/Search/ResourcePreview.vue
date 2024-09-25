@@ -147,8 +147,7 @@ export default defineComponent({
         space: this.space,
         resource: this.resource,
         dimensions: ImageDimension.Thumbnail,
-        cancelRunning: true,
-        ignoreAlmostEmptyTxtFiles: true
+        cancelRunning: true
       })
 
       preview && (this.previewData = preview)

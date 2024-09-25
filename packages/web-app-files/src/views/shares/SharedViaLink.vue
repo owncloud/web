@@ -29,13 +29,7 @@
           :sort-by="sortBy"
           :sort-dir="sortDir"
           @file-click="triggerDefaultAction"
-          @item-visible="
-            loadPreview({
-              space: getMatchingSpace($event),
-              resource: $event,
-              ignoreAlmostEmptyTxtFiles: true
-            })
-          "
+          @item-visible="loadPreview({ space: getMatchingSpace($event), resource: $event })"
           @sort="handleSort"
         >
           <template #contextMenu="{ resource }">

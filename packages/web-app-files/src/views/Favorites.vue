@@ -27,13 +27,7 @@
           :style="folderViewStyle"
           v-bind="folderView.componentAttrs?.()"
           @file-click="triggerDefaultAction"
-          @item-visible="
-            loadPreview({
-              space: getMatchingSpace($event),
-              resource: $event,
-              ignoreAlmostEmptyTxtFiles: true
-            })
-          "
+          @item-visible="loadPreview({ space: getMatchingSpace($event), resource: $event })"
           @sort="handleSort"
         >
           <template #quickActions="props">

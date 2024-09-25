@@ -74,7 +74,6 @@
           :path-prefix="getPathPrefix(item)"
           :is-path-displayed="arePathsDisplayed"
           :parent-folder-name="getParentFolderName(item)"
-          :is-thumbnail-displayed="shouldDisplayThumbnails(item)"
           :is-icon-displayed="!$slots['image']"
           :is-extension-displayed="areFileExtensionsShown"
           :is-resource-clickable="isResourceClickable(item)"
@@ -292,7 +291,6 @@ import {
   formatDateFromJSDate,
   formatRelativeDateFromJSDate
 } from '../../helpers'
-import { isResourceTxtFileAlmostEmpty } from '../../helpers/resource'
 import { SideBarEventTopics } from '../../composables/sideBar'
 import ContextMenuQuickAction from '../ContextActions/ContextMenuQuickAction.vue'
 
@@ -924,9 +922,6 @@ export default defineComponent({
         return false
       }
       return this.clipboardResources.some((r) => r.id === resource.id)
-    },
-    shouldDisplayThumbnails(item: Resource) {
-      return !isResourceTxtFileAlmostEmpty(item)
     },
     getTagLink(tag: string) {
       const currentTerm = unref(this.router.currentRoute).query?.term
