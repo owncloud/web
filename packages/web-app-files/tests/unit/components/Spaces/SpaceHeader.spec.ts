@@ -1,7 +1,7 @@
 import { nextTick, ref } from 'vue'
 import SpaceHeader from '../../../../src/components/Spaces/SpaceHeader.vue'
 import { DriveItem } from '@ownclouders/web-client/graph/generated'
-import { SpaceResource, Resource } from '@ownclouders/web-client'
+import { SpaceResource, Resource, buildSpaceImageResource } from '@ownclouders/web-client'
 import { defaultPlugins, mount, defaultComponentMocks } from 'web-test-helpers'
 import { mock } from 'vitest-mock-extended'
 
@@ -9,7 +9,15 @@ vi.mock('@ownclouders/web-pkg', async (importOriginal) => ({
   ...(await importOriginal<any>()),
   useFileActions: vi.fn().mockReturnValue({
     getDefaultAction: vi.fn().mockReturnValue({ handler: vi.fn() })
+  }),
+  useLoadPreview: vi.fn().mockReturnValue({
+    loadPreview: vi.fn(() => 'blob:image')
   })
+}))
+
+vi.mock('@ownclouders/web-client', async (importOriginal) => ({
+  ...(await importOriginal<any>()),
+  buildSpaceImageResource: vi.fn()
 }))
 
 const getSpaceMock = (spaceImageData: DriveItem = undefined) =>
@@ -35,7 +43,7 @@ describe('SpaceHeader', () => {
     })
     it('should show the set image', async () => {
       const wrapper = getWrapper({ space: getSpaceMock({ webDavUrl: '/' }) })
-      await wrapper.vm.loadPreviewTask.last
+      await wrapper.vm.$nextTick()
       expect(wrapper.find('.space-header-image-default').exists()).toBeFalsy()
       expect(wrapper.find('.space-header-image img').exists()).toBeTruthy()
       expect(wrapper.html()).toMatchSnapshot()
@@ -66,6 +74,8 @@ describe('SpaceHeader', () => {
 function getWrapper({ space = {} as SpaceResource, isSideBarOpen = false, isMobileWidth = false }) {
   const mocks = defaultComponentMocks()
   mocks.$previewService.loadPreview.mockResolvedValue('blob:image')
+  vi.mocked(buildSpaceImageResource).mockReturnValue(mock<Resource>())
+
   return mount(SpaceHeader, {
     props: {
       space,

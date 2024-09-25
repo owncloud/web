@@ -72,22 +72,22 @@
             :view-size="viewSize"
             v-bind="folderView.componentAttrs?.()"
             @sort="handleSort"
-            @row-mounted="rowMounted"
+            @item-visible="loadPreview({ space: $event, resource: $event })"
           >
             <template #image="{ resource }">
               <template v-if="viewMode === FolderViewModeConstants.name.tiles">
                 <img
-                  v-if="imageContentObject[resource.id]"
+                  v-if="resource.thumbnail"
                   class="tile-preview"
-                  :src="imageContentObject[resource.id]['data']"
+                  :src="resource.thumbnail"
                   alt=""
                 />
               </template>
               <template v-else>
                 <img
-                  v-if="imageContentObject[resource.id]"
+                  v-if="resource.thumbnail"
                   class="table-preview oc-mr-s"
-                  :src="imageContentObject[resource.id]['data']"
+                  :src="resource.thumbnail"
                   alt=""
                   width="33"
                   height="33"
@@ -172,13 +172,13 @@ import Fuse from 'fuse.js'
 
 import {
   AppLoadingSpinner,
-  useConfigStore,
   useResourcesStore,
   useSpacesStore,
   useExtensionRegistry,
   ItemFilterToggle,
   useRouteQuery,
-  queryItemAsString
+  queryItemAsString,
+  useLoadPreview
 } from '@ownclouders/web-pkg'
 
 import { AppBar } from '@ownclouders/web-pkg'
@@ -195,10 +195,7 @@ import {
   useRoute,
   Pagination,
   FileSideBar,
-  ImageDimension,
-  NoContentMessage,
-  ProcessorType,
-  usePreviewService
+  NoContentMessage
 } from '@ownclouders/web-pkg'
 import SpaceContextActions from '../../components/Spaces/SpaceContextActions.vue'
 import {
@@ -211,7 +208,6 @@ import FilesViewWrapper from '../../components/FilesViewWrapper.vue'
 import { ResourceTable, ResourceTiles } from '@ownclouders/web-pkg'
 import { eventBus } from '@ownclouders/web-pkg'
 import { SideBarEventTopics, useSideBar } from '@ownclouders/web-pkg'
-import { WebDAV } from '@ownclouders/web-client/webdav'
 import { sortFields as availableSortFields } from '@ownclouders/web-pkg'
 import { defaultFuseOptions, formatFileSize, ResourceIcon } from '@ownclouders/web-pkg'
 import { useGettext } from 'vue3-gettext'
@@ -250,9 +246,6 @@ export default defineComponent({
     const { $gettext } = language
     const filterTerm = ref('')
     const markInstance = ref(undefined)
-    const imageContentObject = ref<Record<string, { fileId: string; data: string }>>({})
-    const previewService = usePreviewService()
-    const configStore = useConfigStore()
     const includeDisabledParam = useRouteQuery('q_includeDisabled')
 
     const { setSelection, initResourceList, clearResourceList } = useResourcesStore()
@@ -365,6 +358,9 @@ export default defineComponent({
       name: `${unref(routeName)}-${FolderViewModeConstants.queryName}`,
       defaultValue: FolderViewModeConstants.name.tiles
     })
+    const viewModeStr = computed(() => queryItemAsString(unref(viewMode)))
+
+    const { loadPreview } = useLoadPreview(viewModeStr)
 
     const keyActions = useKeyboardActions()
     useKeyboardTableNavigation(keyActions, runtimeSpaces, viewMode)
@@ -412,7 +408,7 @@ export default defineComponent({
       loadPreviewToken = eventBus.subscribe(
         'app.files.spaces.uploaded-image',
         (space: SpaceResource) => {
-          loadPreview(space)
+          loadPreview({ space, resource: space })
         }
       )
       scrollToResourceFromRoute(unref(spaces), 'files-app-bar')
@@ -444,42 +440,6 @@ export default defineComponent({
         spaceCount: unref(items).length.toString()
       })
     })
-
-    const rowMounted = (space: SpaceResource) => {
-      loadPreview(space)
-    }
-
-    const loadPreview = async (space: SpaceResource) => {
-      if (!space.spaceImageData || space.disabled) {
-        return
-      }
-
-      const resource = await (clientService.webdav as WebDAV).getFileInfo(space, {
-        path: `.space/${space.spaceImageData.name}`
-      })
-
-      const processor =
-        unref(viewMode) === FolderViewModeConstants.name.tiles
-          ? ProcessorType.enum.fit
-          : ProcessorType.enum.thumbnail
-
-      const dimensions =
-        unref(viewMode) === FolderViewModeConstants.name.tiles
-          ? ImageDimension.Tile
-          : ImageDimension.Thumbnail
-
-      const thumbnail = await previewService.loadPreview({
-        space,
-        resource,
-        dimensions,
-        processor
-      })
-
-      imageContentObject.value[space.id] = {
-        fileId: space.spaceImageData.id,
-        data: thumbnail
-      }
-    }
 
     const folderView = computed(() => {
       const viewModeName = unref(viewMode) || FolderViewModeConstants.name.tiles
@@ -525,8 +485,7 @@ export default defineComponent({
       footerTextTotal,
       footerTextFilter,
       items,
-      imageContentObject,
-      rowMounted,
+      loadPreview,
       setSelection,
       viewSize,
       fileListHeaderY,

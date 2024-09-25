@@ -7,7 +7,7 @@
     :is-extension-displayed="areFileExtensionsShown"
     :parent-folder-link-icon-additional-attributes="parentFolderLinkIconAdditionalAttributes"
     :parent-folder-name="parentFolderName"
-    :is-thumbnail-displayed="displayThumbnails"
+    :is-thumbnail-displayed="!!previewData"
     v-bind="additionalAttrs"
   />
 </template>
@@ -22,10 +22,10 @@ import {
   useFileActions,
   useFolderLink,
   useConfigStore,
-  useResourcesStore
+  useResourcesStore,
+  useLoadPreview
 } from '../../composables'
 import { isSpaceResource, Resource } from '@ownclouders/web-client'
-import { isResourceTxtFileAlmostEmpty } from '../../helpers'
 import ResourceListItem from '../FilesList/ResourceListItem.vue'
 import { SearchResultValue } from './types'
 import { storeToRefs } from 'pinia'
@@ -50,6 +50,7 @@ export default defineComponent({
     const { triggerDefaultAction } = useFileActions()
     const { getMatchingSpace } = useGetMatchingSpace()
     const { getDefaultAction } = useFileActions()
+    const { loadPreview } = useLoadPreview()
 
     const {
       getPathPrefix,
@@ -62,7 +63,7 @@ export default defineComponent({
     const { options: configOptions } = storeToRefs(configStore)
     const resourcesStore = useResourcesStore()
 
-    const previewData = ref()
+    const previewData = ref<string>()
 
     const areFileExtensionsShown = computed(() => resourcesStore.areFileExtensionsShown)
 
@@ -121,6 +122,7 @@ export default defineComponent({
       configOptions,
       space,
       previewData,
+      loadPreview,
       resource,
       resourceDisabled,
       resourceClicked,
@@ -135,29 +137,18 @@ export default defineComponent({
       areFileExtensionsShown
     }
   },
-  computed: {
-    displayThumbnails() {
-      return !isResourceTxtFileAlmostEmpty(this.resource)
-    }
-  },
   mounted() {
     if (this.resourceDisabled) {
       this.$el.parentElement.classList.add('disabled')
     }
 
-    if (!this.displayThumbnails) {
-      return
-    }
-
     const loadPreview = async () => {
-      const preview = await this.$previewService.loadPreview(
-        {
-          space: this.space,
-          resource: this.resource,
-          dimensions: ImageDimension.Thumbnail
-        },
-        true
-      )
+      const preview = await this.loadPreview({
+        space: this.space,
+        resource: this.resource,
+        dimensions: ImageDimension.Thumbnail,
+        cancelRunning: true
+      })
 
       preview && (this.previewData = preview)
     }

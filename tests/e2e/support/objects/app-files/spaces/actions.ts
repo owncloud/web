@@ -221,12 +221,6 @@ export const changeSpaceImage = async (args: {
     ),
     page.waitForResponse(
       (resp) =>
-        resp.url().endsWith(resource.name) &&
-        resp.status() === 207 &&
-        resp.request().method() === 'PROPFIND'
-    ),
-    page.waitForResponse(
-      (resp) =>
         resp.url().includes(resource.name) &&
         resp.status() === 200 &&
         resp.request().method() === 'GET'

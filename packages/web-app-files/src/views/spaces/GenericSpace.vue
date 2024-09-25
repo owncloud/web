@@ -89,7 +89,7 @@
               v-bind="folderView.componentAttrs?.()"
               @file-dropped="fileDropped"
               @file-click="triggerDefaultAction"
-              @row-mounted="rowMounted"
+              @item-visible="loadPreview({ space, resource: $event })"
               @sort="handleSort"
             >
               <template #contextMenu="{ resource }">
@@ -121,7 +121,7 @@
 </template>
 
 <script lang="ts">
-import { debounce, omit, last } from 'lodash-es'
+import { omit, last } from 'lodash-es'
 import { basename } from 'path'
 import {
   computed,
@@ -145,8 +145,6 @@ import {
 } from '@ownclouders/web-client'
 
 import {
-  isResourceTxtFileAlmostEmpty,
-  ProcessorType,
   ResourceTransfer,
   TransferType,
   useConfigStore,
@@ -154,6 +152,7 @@ import {
   useExtensionRegistry,
   useFileActions,
   useFileActionsCreateNewFolder,
+  useLoadPreview,
   usePasteWorker,
   useResourcesStore,
   useRouter,
@@ -169,8 +168,6 @@ import {
   Pagination,
   ResourceTable,
   CreateTargetRouteOptions,
-  FolderViewModeConstants,
-  VisibilityObserver,
   createFileRouteOptions,
   createLocationPublic,
   createLocationSpaces,
@@ -204,8 +201,6 @@ import {
 } from '../../composables/keyboardActions'
 import { storeToRefs } from 'pinia'
 import { folderViewsFolderExtensionPoint } from '../../extensionPoints'
-
-const visibilityObserver = new VisibilityObserver()
 
 export default defineComponent({
   name: 'GenericSpace',
@@ -266,7 +261,7 @@ export default defineComponent({
     const { options: configOptions } = storeToRefs(configStore)
 
     const resourcesStore = useResourcesStore()
-    const { removeResources, resetSelection, updateResourceField } = resourcesStore
+    const { removeResources, resetSelection } = resourcesStore
     const {
       currentFolder,
       totalResourcesCount,
@@ -443,6 +438,7 @@ export default defineComponent({
     }
 
     const resourcesViewDefaults = useResourcesViewDefaults<Resource, any, any[]>()
+    const { loadPreview } = useLoadPreview(resourcesViewDefaults.viewMode)
 
     const folderView = computed(() => {
       const viewMode = unref(resourcesViewDefaults.viewMode)
@@ -524,7 +520,6 @@ export default defineComponent({
     })
 
     onBeforeUnmount(() => {
-      visibilityObserver.disconnect()
       eventBus.unsubscribe('app.files.list.load', loadResourcesEventToken)
     })
 
@@ -605,7 +600,6 @@ export default defineComponent({
       isCurrentFolderEmpty,
       resourceTargetRouteCallback,
       performLoaderTask,
-      FolderViewModeConstants,
       viewModes,
       appBarRef,
       folderView,
@@ -620,10 +614,9 @@ export default defineComponent({
       currentFolder,
       totalResourcesCount,
       totalResourcesSize,
-      updateResourceField,
       areHiddenFilesShown,
       fileDropped,
-      isResourceTxtFileAlmostEmpty
+      loadPreview
     }
   },
 
@@ -672,45 +665,6 @@ export default defineComponent({
       handler: function () {
         this.performLoaderTask(true)
       }
-    }
-  },
-
-  methods: {
-    rowMounted(
-      resource: Resource,
-      component: ComponentPublicInstance<unknown>,
-      dimensions: [number, number]
-    ) {
-      const loadPreview = async () => {
-        if (this.isResourceTxtFileAlmostEmpty(resource)) {
-          return
-        }
-
-        const processor =
-          this.viewMode === FolderViewModeConstants.name.tiles
-            ? ProcessorType.enum.fit
-            : ProcessorType.enum.thumbnail
-
-        const preview = await this.$previewService.loadPreview(
-          {
-            space: this.space,
-            resource,
-            processor,
-            dimensions
-          },
-          true
-        )
-        if (preview) {
-          this.updateResourceField({ id: resource.id, field: 'thumbnail', value: preview })
-        }
-      }
-
-      const debounced = debounce(({ unobserve }) => {
-        unobserve()
-        loadPreview()
-      }, 250)
-
-      visibilityObserver.observe(component.$el, { onEnter: debounced, onExit: debounced.cancel })
     }
   }
 })

@@ -82,7 +82,8 @@ export class PreviewService {
   public async loadPreview(
     options: LoadPreviewOptions,
     cached = false,
-    silenceErrors = true
+    silenceErrors = true,
+    signal?: AbortSignal
   ): Promise<string | undefined> {
     const { space, resource } = options
     const serverSupportsPreview = this.available && this.isMimetypeSupported(resource.mimeType)
@@ -106,7 +107,7 @@ export class PreviewService {
       return this.publicPreviewUrl(options)
     }
     try {
-      return await this.privatePreviewBlob(options, cached, silenceErrors)
+      return await this.privatePreviewBlob(options, cached, silenceErrors, signal)
     } catch (e) {
       if (silenceErrors) {
         return undefined
@@ -152,7 +153,8 @@ export class PreviewService {
   private async privatePreviewBlob(
     options: LoadPreviewOptions,
     cached = false,
-    silenceErrors = true
+    silenceErrors = true,
+    signal?: AbortSignal
   ): Promise<string> {
     const { resource, dimensions, processor } = options
     if (cached) {
@@ -167,12 +169,16 @@ export class PreviewService {
       this.buildQueryString({ etag: resource.etag, dimensions, processor })
     ].join('')
     const { data } = await this.clientService.httpAuthenticated.get<Blob>(url, {
-      responseType: 'blob'
+      responseType: 'blob',
+      signal
     })
     return window.URL.createObjectURL(data)
   }
 
-  private async publicPreviewUrl(options: LoadPreviewOptions): Promise<string> {
+  private async publicPreviewUrl(
+    options: LoadPreviewOptions,
+    signal?: AbortSignal
+  ): Promise<string> {
     const { resource, dimensions, processor } = options
     // In a public context, i.e. public shares, the downloadURL contains a pre-signed url to
     // download the file.
@@ -188,7 +194,7 @@ export class PreviewService {
       .join('&')
 
     const previewUrl = [url, combinedQuery].filter(Boolean).join('?')
-    const { status } = await this.clientService.httpUnAuthenticated.head(previewUrl)
+    const { status } = await this.clientService.httpUnAuthenticated.head(previewUrl, { signal })
 
     if (status !== 404) {
       return previewUrl

@@ -2,6 +2,7 @@ import { Permission, User } from '../../graph/generated'
 import {
   Ability,
   extractDomSelector,
+  extractExtensionFromFile,
   extractNodeId,
   Resource,
   ResourceIndicator
@@ -350,6 +351,20 @@ export function buildSpace(
     }
   })
   return s
+}
+
+// build a space image resource based on a given space by its spaceImageData
+export function buildSpaceImageResource(space: SpaceResource): Resource {
+  return {
+    id: space.spaceImageData.id,
+    name: space.spaceImageData.name,
+    etag: space.spaceImageData.eTag,
+    extension: extractExtensionFromFile({ name: space.spaceImageData.name } as Resource),
+    mimeType: space.spaceImageData.file.mimeType,
+    type: 'file',
+    webDavPath: urlJoin(space.webDavPath, '.space', space.spaceImageData.name),
+    canDownload: () => true
+  } as Resource
 }
 
 export function getPermissionsForSpaceMember(space: SpaceResource, user: User) {

@@ -1,7 +1,7 @@
 <template>
   <div id="oc-space-details-sidebar">
     <div class="oc-space-details-sidebar-image oc-text-center">
-      <oc-spinner v-if="loadImageTask.isRunning" />
+      <oc-spinner v-if="previewsLoading" />
       <div v-else-if="spaceImage" class="oc-position-relative">
         <img :src="spaceImage" alt="" class="oc-mb-s" />
       </div>
@@ -81,21 +81,15 @@
 </template>
 <script lang="ts">
 import { storeToRefs } from 'pinia'
-import { defineComponent, inject, ref, Ref, computed, unref } from 'vue'
-import { useTask } from 'vue-concurrency'
+import { defineComponent, inject, ref, Ref, computed, unref, watch } from 'vue'
+import { buildSpaceImageResource, getSpaceManagers, SpaceResource } from '@ownclouders/web-client'
 import {
-  getRelativeSpecialFolderSpacePath,
-  getSpaceManagers,
-  SpaceResource
-} from '@ownclouders/web-client'
-import {
-  usePreviewService,
-  useClientService,
   useUserStore,
   useSharesStore,
   useResourcesStore,
   useResourceContents,
-  useRouter
+  useRouter,
+  useLoadPreview
 } from '../../../../composables'
 import SpaceQuota from '../../../SpaceQuota.vue'
 import WebDavDetails from '../../WebDavDetails.vue'
@@ -122,14 +116,13 @@ export default defineComponent({
       default: true
     }
   },
-  setup(props) {
+  setup() {
     const userStore = useUserStore()
-    const previewService = usePreviewService()
-    const clientService = useClientService()
     const resourcesStore = useResourcesStore()
     const { resourceContentsText } = useResourceContents({ showSizeInformation: false })
     const router = useRouter()
     const { current: currentLanguage } = useGettext()
+    const { loadPreview, previewsLoading } = useLoadPreview()
 
     const sharesStore = useSharesStore()
 
@@ -137,24 +130,6 @@ export default defineComponent({
     const spaceImage = ref('')
 
     const { user } = storeToRefs(userStore)
-
-    const loadImageTask = useTask(function* (signal, ref) {
-      if (!ref.resource?.spaceImageData || !props.showSpaceImage) {
-        spaceImage.value = undefined
-        return
-      }
-
-      const imageResource = yield clientService.webdav.getFileInfo(unref(resource), {
-        path: getRelativeSpecialFolderSpacePath(unref(resource), 'image')
-      })
-
-      spaceImage.value = yield previewService.loadPreview({
-        space: unref(resource),
-        resource: imageResource,
-        dimensions: ImageDimension.Tile,
-        processor: ProcessorType.enum.fit
-      })
-    })
 
     const linkShareCount = computed(() => sharesStore.linkShares.length)
     const showWebDavDetails = computed(() => resourcesStore.areWebDavDetailsShown)
@@ -167,8 +142,27 @@ export default defineComponent({
       )}`
     })
 
+    watch(
+      () => unref(resource).spaceImageData,
+      async () => {
+        if (!unref(resource).spaceImageData) {
+          return
+        }
+
+        const imageResource = buildSpaceImageResource(unref(resource))
+        spaceImage.value = await loadPreview({
+          space: unref(resource),
+          resource: imageResource,
+          dimensions: ImageDimension.Tile,
+          processor: ProcessorType.enum.fit,
+          cancelRunning: true,
+          updateStore: false
+        })
+      },
+      { immediate: true }
+    )
+
     return {
-      loadImageTask,
       spaceImage,
       resource,
       linkShareCount,
@@ -176,7 +170,8 @@ export default defineComponent({
       user,
       resourceContentsText,
       showSize,
-      size
+      size,
+      previewsLoading
     }
   },
   computed: {
@@ -266,17 +261,6 @@ export default defineComponent({
         { linkShareCount: this.linkShareCount.toString() }
       )
     }
-  },
-  watch: {
-    'resource.spaceImageData': {
-      handler() {
-        this.loadImageTask.perform(this)
-      },
-      deep: true
-    }
-  },
-  mounted() {
-    this.loadImageTask.perform(this)
   },
   methods: {
     expandSharesPanel() {

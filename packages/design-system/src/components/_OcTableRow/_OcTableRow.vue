@@ -41,9 +41,10 @@ export default defineComponent({
     'dragenter',
     'dragleave',
     'dragover',
-    'mouseleave'
+    'mouseleave',
+    'itemVisible'
   ],
-  setup(props, ctx) {
+  setup(props, { emit }) {
     const observerTarget = customRef((track, trigger) => {
       let $el: HTMLElement
       return {
@@ -65,11 +66,16 @@ export default defineComponent({
     const { isVisible } = props.lazy
       ? useIsVisible({
           ...props.lazy,
-          target: observerTarget
+          target: observerTarget,
+          onVisibleCallback: () => emit('itemVisible')
         })
       : { isVisible: ref(true) }
 
     const isHidden = computed(() => !unref(isVisible))
+
+    if (!props.lazy) {
+      emit('itemVisible')
+    }
 
     return {
       observerTarget,

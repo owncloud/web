@@ -27,7 +27,7 @@
       :sort-dir="sortDir"
       :grouping-settings="groupingSettings"
       @file-click="triggerDefaultAction"
-      @row-mounted="rowMounted"
+      @item-visible="loadPreview({ space: getMatchingSpace($event), resource: $event })"
       @sort="sortHandler"
     >
       <template #syncEnabled="{ resource }">
@@ -104,12 +104,10 @@ import {
   useConfigStore,
   useFileActions,
   useFileActionsToggleHideShare,
+  useLoadPreview,
   useResourcesStore
 } from '@ownclouders/web-pkg'
-import { ComponentPublicInstance, computed, defineComponent, PropType, unref } from 'vue'
-import { debounce } from 'lodash-es'
-import { ImageDimension } from '@ownclouders/web-pkg'
-import { VisibilityObserver } from '@ownclouders/web-pkg'
+import { computed, defineComponent, PropType, unref } from 'vue'
 import { SortDir, useGetMatchingSpace } from '@ownclouders/web-pkg'
 import { createLocationSpaces } from '@ownclouders/web-pkg'
 import ListInfo from '../../components/FilesList/ListInfo.vue'
@@ -120,8 +118,6 @@ import { useSelectedResources } from '@ownclouders/web-pkg'
 import { RouteLocationNamedRaw } from 'vue-router'
 import { CreateTargetRouteOptions } from '@ownclouders/web-pkg'
 import { createFileRouteOptions } from '@ownclouders/web-pkg'
-
-const visibilityObserver = new VisibilityObserver()
 
 export default defineComponent({
   components: {
@@ -197,6 +193,7 @@ export default defineComponent({
     const capabilityStore = useCapabilityStore()
     const configStore = useConfigStore()
     const { getMatchingSpace } = useGetMatchingSpace()
+    const { loadPreview } = useLoadPreview()
 
     const { triggerDefaultAction } = useFileActions()
     const { actions: hideShareActions } = useFileActionsToggleHideShare()
@@ -229,7 +226,8 @@ export default defineComponent({
       getMatchingSpace,
       updateResourceField,
       isExternalShare,
-      ShareTypes
+      ShareTypes,
+      loadPreview
     }
   },
 
@@ -254,35 +252,7 @@ export default defineComponent({
       return this.items.slice(0, this.showMoreToggleCount)
     }
   },
-  beforeUnmount() {
-    visibilityObserver.disconnect()
-  },
   methods: {
-    rowMounted(resource: IncomingShareResource, component: ComponentPublicInstance<unknown>) {
-      const loadPreview = async () => {
-        const preview = await this.$previewService.loadPreview(
-          {
-            space: this.getMatchingSpace(resource),
-            resource,
-            dimensions: ImageDimension.Thumbnail
-          },
-          true
-        )
-        if (preview) {
-          this.updateResourceField({ id: resource.id, field: 'thumbnail', value: preview })
-        }
-      }
-
-      const debounced = debounce(({ unobserve }) => {
-        unobserve()
-        loadPreview()
-      }, 250)
-
-      visibilityObserver.observe(component.$el, {
-        onEnter: debounced,
-        onExit: debounced.cancel
-      })
-    },
     toggleShowMore() {
       this.showMore = !this.showMore
     }

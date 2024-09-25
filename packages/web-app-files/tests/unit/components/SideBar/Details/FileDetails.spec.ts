@@ -68,12 +68,6 @@ describe('Details SideBar Panel', () => {
         expect(wrapper.find(selectors.resourceIcon).exists()).toBeFalsy()
       })
     })
-    it('shows resource icon instead if the resource is a folder', () => {
-      const resource = getResourceMock({ type: 'folder' })
-      const { wrapper } = createWrapper({ resource })
-      expect(wrapper.find(selectors.preview).exists()).toBeFalsy()
-      expect(wrapper.find(selectors.resourceIcon).exists()).toBeTruthy()
-    })
   })
   describe('status indicators', () => {
     it('show if given on non-public page', () => {

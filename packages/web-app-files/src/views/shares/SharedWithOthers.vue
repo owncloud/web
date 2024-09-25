@@ -52,7 +52,7 @@
           :sort-dir="sortDir"
           :grouping-settings="groupingSettings"
           @file-click="triggerDefaultAction"
-          @row-mounted="rowMounted"
+          @item-visible="loadPreview({ space: getMatchingSpace($event), resource: $event })"
           @sort="handleSort"
         >
           <template #contextMenu="{ resource }">
@@ -83,12 +83,12 @@ import {
   useCapabilityStore,
   useConfigStore,
   useFileActions,
+  useLoadPreview,
   useResourcesStore,
   useRouteQuery
 } from '@ownclouders/web-pkg'
-import { VisibilityObserver, ItemFilter } from '@ownclouders/web-pkg'
-import { ImageDimension } from '@ownclouders/web-pkg'
-import { debounce, uniq } from 'lodash-es'
+import { ItemFilter } from '@ownclouders/web-pkg'
+import { uniq } from 'lodash-es'
 
 import { FileSideBar, ResourceTable } from '@ownclouders/web-pkg'
 import { AppLoadingSpinner } from '@ownclouders/web-pkg'
@@ -100,15 +100,12 @@ import { ContextActions } from '@ownclouders/web-pkg'
 import FilesViewWrapper from '../../components/FilesViewWrapper.vue'
 
 import { useResourcesViewDefaults } from '../../composables'
-import { defineComponent, computed, unref, ComponentPublicInstance } from 'vue'
-import { Resource } from '@ownclouders/web-client'
+import { defineComponent, computed, unref } from 'vue'
 import { useGroupingSettings } from '@ownclouders/web-pkg'
 import { useGetMatchingSpace } from '@ownclouders/web-pkg'
 import SharesNavigation from '../../components/AppBar/SharesNavigation.vue'
 import { OutgoingShareResource, ShareTypes } from '@ownclouders/web-client'
 import { storeToRefs } from 'pinia'
-
-const visibilityObserver = new VisibilityObserver()
 
 export default defineComponent({
   components: {
@@ -133,11 +130,17 @@ export default defineComponent({
     const { options: configOptions } = storeToRefs(configStore)
 
     const resourcesStore = useResourcesStore()
-    const { updateResourceField } = resourcesStore
 
     const resourcesViewDefaults = useResourcesViewDefaults<OutgoingShareResource, any, any[]>()
-    const { sortBy, sortDir, loadResourcesTask, selectedResourcesIds, paginatedResources } =
-      resourcesViewDefaults
+    const {
+      sortBy,
+      sortDir,
+      loadResourcesTask,
+      selectedResourcesIds,
+      paginatedResources,
+      viewMode
+    } = resourcesViewDefaults
+    const { loadPreview } = useLoadPreview(viewMode)
 
     const shareTypes = computed(() => {
       const uniqueShareTypes = uniq(unref(paginatedResources).flatMap((i) => i.shareTypes))
@@ -192,7 +195,7 @@ export default defineComponent({
       filteredItems,
       shareTypes,
       getMatchingSpace,
-      updateResourceField,
+      loadPreview,
 
       // CERN
       ...useGroupingSettings({ sortBy, sortDir })
@@ -208,35 +211,6 @@ export default defineComponent({
   async created() {
     await this.loadResourcesTask.perform()
     this.scrollToResourceFromRoute(this.filteredItems, 'files-app-bar')
-  },
-
-  beforeUnmount() {
-    visibilityObserver.disconnect()
-  },
-
-  methods: {
-    rowMounted(resource: Resource, component: ComponentPublicInstance<unknown>) {
-      const loadPreview = async () => {
-        const preview = await this.$previewService.loadPreview(
-          {
-            space: this.getMatchingSpace(resource),
-            resource,
-            dimensions: ImageDimension.Thumbnail
-          },
-          true
-        )
-        if (preview) {
-          this.updateResourceField({ id: resource.id, field: 'thumbnail', value: preview })
-        }
-      }
-
-      const debounced = debounce(({ unobserve }) => {
-        unobserve()
-        loadPreview()
-      }, 250)
-
-      visibilityObserver.observe(component.$el, { onEnter: debounced, onExit: debounced.cancel })
-    }
   }
 })
 </script>

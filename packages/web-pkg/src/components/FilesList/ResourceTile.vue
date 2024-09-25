@@ -92,7 +92,6 @@ import ResourceLink from './ResourceLink.vue'
 import { isProjectSpaceResource, Resource } from '@ownclouders/web-client'
 import { useGettext } from 'vue3-gettext'
 import { isSpaceResource } from '@ownclouders/web-client'
-import { isResourceTxtFileAlmostEmpty } from '../../helpers'
 import { RouteLocationRaw } from 'vue-router'
 import { useIsVisible } from '@ownclouders/design-system/src/composables'
 import { customRef, ref, unref } from 'vue'
@@ -144,8 +143,8 @@ export default defineComponent({
       default: false
     }
   },
-  emits: ['click', 'contextmenu'],
-  setup(props) {
+  emits: ['click', 'contextmenu', 'itemVisible'],
+  setup(props, { emit }) {
     const { $gettext } = useGettext()
 
     const observerTarget = customRef((track, trigger) => {
@@ -198,16 +197,21 @@ export default defineComponent({
     })
 
     const shouldDisplayThumbnails = (resource: Resource) => {
-      return resource.thumbnail && !isResourceTxtFileAlmostEmpty(resource)
+      return resource.thumbnail
     }
 
     const { isVisible } = props.lazy
       ? useIsVisible({
-          target: observerTarget
+          target: observerTarget,
+          onVisibleCallback: () => emit('itemVisible')
         })
       : { isVisible: ref(true) }
 
     const isHidden = computed(() => !unref(isVisible))
+
+    if (!props.lazy) {
+      emit('itemVisible')
+    }
 
     return {
       statusIconAttrs,
