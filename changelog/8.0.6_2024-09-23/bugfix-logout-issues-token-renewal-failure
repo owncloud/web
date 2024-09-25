@@ -1,0 +1,5 @@
+Bugfix: Force logout after token expiry retry
+
+When the access token has expired and the retry to re-login the user didn't work for some reason, we now force a logout.
+
+https://github.com/owncloud/ocis/issues/11620
