@@ -25,10 +25,7 @@ import {
   keycloakCreatedUser
 } from '../../support/store'
 import { Group, User } from '../../support/types'
-import {
-  setAccessToken,
-  setKeyCloakAccessToken
-} from '../../support/utils/tokenHelper'
+import { setAccessToken, setKeyCloakAccessToken } from '../../support/utils/tokenHelper'
 import { createdTokenStore, keycloakTokenStore } from '../../support/store/token'
 import { removeTempUploadDirectory } from '../../support/utils/runtimeFs'
 import { getAccessToken, refreshToken, setupKeycloakAdminUser } from '../../support/api/keycloak'
@@ -77,7 +74,6 @@ Before(async function (this: World, { pickle }: ITestCaseHookParameter) {
   })
   if (!config.basicAuth) {
     if (config.keycloak) {
-      // In keycloak setup with oCIS, access token is received via login to the browser directly.
       await setKeycloakAdminTokenForoCIS(this.usersEnvironment.getUser({ key: 'admin' }))
       await setKeycloakAdminTokenfromApi(this.usersEnvironment.getUser({ key: 'admin' }))
     } else {

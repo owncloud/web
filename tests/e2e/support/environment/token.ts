@@ -30,7 +30,6 @@ class IdpTokenEnvironment {
 
 class KeycloakTokenEnvironment {
   getToken({ user }: { user: User }): Token {
-
     return keycloakTokenStore.get(user.id)
   }
 

@@ -83,7 +83,6 @@ export const getAccessToken = async (user: User): Promise<void> => {
       refreshToken: resBody.refresh_token
     }
   })
-  // console.log('token from api:::::::::::::', user.id,resBody.access_token)
 }
 
 export const setupKeycloakAdminUser = (user: User) => {

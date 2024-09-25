@@ -45,4 +45,3 @@ export const setKeyCloakAccessToken = async (username: string) => {
   const loginUser = new UsersEnvironment().getUser({ key: username })
   await setAccessTokenForKeycloakUser(loginUser)
 }
-
