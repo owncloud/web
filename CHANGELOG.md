@@ -3,7 +3,7 @@ Changelog for ownCloud Web [unreleased] (UNRELEASED)
 The following sections list the changes in ownCloud web unreleased relevant to
 ownCloud admins and users.
 
-[unreleased]: https://github.com/owncloud/web/compare/v10.2.0...master
+[unreleased]: https://github.com/owncloud/web/compare/v8.0.6...master
 
 Summary
 -------
@@ -198,6 +198,28 @@ Details
    We've added a new file type icon for .ggs files.
 
    https://github.com/owncloud/web/pull/11646
+
+Changelog for ownCloud Web [8.0.6] (2024-09-23)
+=======================================
+The following sections list the changes in ownCloud web 8.0.6 relevant to
+ownCloud admins and users.
+
+[8.0.6]: https://github.com/owncloud/web/compare/v10.2.0...v8.0.6
+
+Summary
+-------
+
+* Bugfix - Force logout after token expiry retry: [#11620](https://github.com/owncloud/ocis/issues/11620)
+
+Details
+-------
+
+* Bugfix - Force logout after token expiry retry: [#11620](https://github.com/owncloud/ocis/issues/11620)
+
+   When the access token has expired and the retry to re-login the user didn't work
+   for some reason, we now force a logout.
+
+   https://github.com/owncloud/ocis/issues/11620
 
 Changelog for ownCloud Web [10.2.0] (2024-09-05)
 =======================================
