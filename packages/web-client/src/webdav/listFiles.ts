@@ -120,7 +120,8 @@ export const ListFilesFactory = (
           } as ListFilesResult
         }
         const resources = webDavResources.map(buildResource)
-        if (fileId && fileId !== resources[0].fileId) {
+        const resourceIsSpace = fileId === space.id
+        if (fileId && !resourceIsSpace && fileId !== resources[0].fileId) {
           return listFilesCorrectedPath()
         }
         return { resource: resources[0], children: resources.slice(1) } as ListFilesResult
