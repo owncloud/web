@@ -1,7 +1,6 @@
-import axios, { type AxiosInstance } from 'axios'
 import PQueue from 'p-queue'
 import { dirname } from 'path'
-import { client, urlJoin } from '@ownclouders/web-client'
+import { webdav as _webdav, urlJoin } from '@ownclouders/web-client'
 import type { Resource, SpaceResource } from '@ownclouders/web-client'
 import type { WorkerTopic } from '../../piniaStores/webWorkers'
 import type { WebDAV } from '@ownclouders/web-client/webdav'
@@ -21,7 +20,7 @@ type Message = {
   data: MessageData
 }
 
-let axiosClient: AxiosInstance
+let storedHeaders: Record<string, string>
 
 const createFolderStructure = async ({
   client,
@@ -60,12 +59,12 @@ const createFolderStructure = async ({
 self.onmessage = async (e: MessageEvent) => {
   const { topic, data } = JSON.parse(e.data) as Message
 
-  if (topic === 'tokenUpdate' && axiosClient) {
-    const existingToken = axiosClient?.defaults.headers.Authorization
+  if (topic === 'tokenUpdate' && storedHeaders) {
+    const existingToken = storedHeaders.Authorization
 
     // token must only be updated for bearer tokens, not on public links
     if (existingToken?.toString().startsWith('Bearer')) {
-      Object.assign(axiosClient.defaults, { headers: { Authorization: data.accessToken } })
+      storedHeaders.Authorization = data.accessToken
     }
 
     return
@@ -73,8 +72,8 @@ self.onmessage = async (e: MessageEvent) => {
 
   const { baseUrl, headers, space, resources, missingFolderPaths } = data
 
-  axiosClient = axios.create({ headers })
-  const { webdav } = client({ axiosClient, baseURI: baseUrl })
+  storedHeaders = headers
+  const webdav = _webdav(baseUrl, () => storedHeaders)
 
   const successful: RestoreWorkerReturnData['successful'] = []
   const failed: RestoreWorkerReturnData['failed'] = []

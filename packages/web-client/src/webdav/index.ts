@@ -1,4 +1,6 @@
-import { WebDAV, WebDavOptions } from './types'
+import axios from 'axios'
+import { Headers } from 'webdav'
+import { WebDAV } from './types'
 import { CopyFilesFactory } from './copyFiles'
 import { CreateFolderFactory } from './createFolder'
 import { GetFileContentsFactory } from './getFileContents'
@@ -25,8 +27,17 @@ export * from './types'
 export type { ListFilesOptions, ListFilesResult } from './listFiles'
 export type { GetFileContentsResponse } from './getFileContents'
 
-export const webdav = (options: WebDavOptions): WebDAV => {
-  const dav = new DAV({ axiosClient: options.axiosClient, baseUrl: options.baseUrl })
+export const webdav = (baseURI: string, headers?: () => Headers): WebDAV => {
+  const axiosClient = axios.create()
+  if (headers) {
+    axiosClient.interceptors.request.use((config) => {
+      Object.assign(config.headers, headers())
+      return config
+    })
+  }
+
+  const options = { axiosClient, baseUrl: baseURI, headers }
+  const dav = new DAV({ baseUrl: baseURI, headers })
 
   const pathForFileIdFactory = GetPathForFileIdFactory(dav, options)
   const { getPathForFileId } = pathForFileIdFactory

@@ -1,6 +1,5 @@
-import axios, { type AxiosInstance } from 'axios'
 import PQueue from 'p-queue'
-import { type Resource, client, type SpaceResource } from '@ownclouders/web-client'
+import { type Resource, webdav as _webdav, type SpaceResource } from '@ownclouders/web-client'
 import type { DeleteWorkerTopic } from './useDeleteWorker'
 
 type MessageData = {
@@ -17,17 +16,17 @@ type Message = {
   data: MessageData
 }
 
-let axiosClient: AxiosInstance
+let storedHeaders: Record<string, string>
 
 self.onmessage = async (e: MessageEvent) => {
   const { topic, data } = JSON.parse(e.data) as Message
 
-  if (topic === 'tokenUpdate' && axiosClient) {
-    const existingToken = axiosClient?.defaults.headers.Authorization
+  if (topic === 'tokenUpdate' && storedHeaders) {
+    const existingToken = storedHeaders.Authorization
 
     // token must only be updated for bearer tokens, not on public links
     if (existingToken?.toString().startsWith('Bearer')) {
-      Object.assign(axiosClient.defaults, { headers: { Authorization: data.accessToken } })
+      storedHeaders.Authorization = data.accessToken
     }
 
     return
@@ -35,8 +34,8 @@ self.onmessage = async (e: MessageEvent) => {
 
   const { baseUrl, headers, space, resources, concurrentRequests } = data
 
-  axiosClient = axios.create({ headers })
-  const { webdav } = client({ axiosClient, baseURI: baseUrl })
+  storedHeaders = headers
+  const webdav = _webdav(baseUrl, () => storedHeaders)
 
   const successful: Resource[] = []
   const failed: { resource: Resource; status: number }[] = []

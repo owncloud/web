@@ -1,7 +1,6 @@
-import axios, { type AxiosInstance } from 'axios'
 import PQueue from 'p-queue'
 import { join } from 'path'
-import { type Resource, client } from '@ownclouders/web-client'
+import { type Resource, webdav as _webdav } from '@ownclouders/web-client'
 import type { WorkerTopic } from '../../piniaStores/webWorkers'
 import { TransferType } from '../../../helpers/resource/conflictHandling/types'
 import type { TransferData } from '../../../helpers/resource/conflictHandling'
@@ -18,17 +17,17 @@ type Message = {
   data: MessageData
 }
 
-let axiosClient: AxiosInstance
+let storedHeaders: Record<string, string>
 
 self.onmessage = async (e: MessageEvent) => {
   const { topic, data } = JSON.parse(e.data) as Message
 
-  if (topic === 'tokenUpdate' && axiosClient) {
-    const existingToken = axiosClient?.defaults.headers.Authorization
+  if (topic === 'tokenUpdate' && storedHeaders) {
+    const existingToken = storedHeaders.Authorization
 
     // token must only be updated for bearer tokens, not on public links
     if (existingToken?.toString().startsWith('Bearer')) {
-      Object.assign(axiosClient.defaults, { headers: { Authorization: data.accessToken } })
+      storedHeaders.Authorization = data.accessToken
     }
 
     return
@@ -36,8 +35,8 @@ self.onmessage = async (e: MessageEvent) => {
 
   const { baseUrl, headers, transferData } = data
 
-  axiosClient = axios.create({ headers })
-  const { webdav } = client({ axiosClient, baseURI: baseUrl })
+  storedHeaders = headers
+  const webdav = _webdav(baseUrl, () => storedHeaders)
 
   const successful: Resource[] = []
   const failed: { resourceName: string; error: Error }[] = []

@@ -22,44 +22,74 @@ $ yarn add @ownclouders/web-client
 
 ## Usage
 
-To utilize the `web-client`, you must instantiate it with a base URI corresponding to your oCIS deployment and an axios instance. The axios instance, or at least its headers, is being used for all requests, requiring the inclusion of all relevant headers such as authorization.
+### Graph
+
+The graph client needs to be instantiated with a base URI corresponding to your oCIS deployment and an axios instance. The axios instance is being used for all requests, which means it needs to include all relevant headers either statically or via interceptor.
 
 ```
 import axios from axios
-import { client } from '@ownclouders/web-client'
+import { graph } from '@ownclouders/web-client'
 
 const accessToken = 'some_access_token'
-const baseUri = 'some_base_uri'
+const baseURI = 'some_base_uri'
 
 const axiosClient = axios.create({
 	headers: { Authorization: accessToken }
 })
 
-const { graph, ocs, webdav } = client({ axiosClient, baseURI })
+const graphClient = graph(baseURI, axiosClient)
 ```
 
-### Graph
-
-The following example demonstrates how to retrieve all spaces accessible to the user. A `SpaceResource` can then be used to e.g. fetch files and folders (see example down below).
+The following example demonstrates how to retrieve all spaces accessible to the user. A `SpaceResource` can then be used to e.g. fetch files and folders (see webdav example down below).
 
 ```
-const mySpaces = await graph.drives.listMyDrives()
+const mySpaces = await graphClient.drives.listMyDrives()
 ```
 
 ### OCS
 
+The ocs client needs to be instantiated with a base URI corresponding to your oCIS deployment and an axios instance. The axios instance is being used for all requests, which means it needs to include all relevant headers either statically or via interceptor.
+
+```
+import axios from axios
+import { ocs } from '@ownclouders/web-client'
+
+const accessToken = 'some_access_token'
+const baseURI = 'some_base_uri'
+
+const axiosClient = axios.create({
+	headers: { Authorization: accessToken }
+})
+
+const ocsClient = ocs(baseURI, axiosClient)
+```
+
 The following examples demonstrate how to fetch capabilities and sign URLs.
 
 ```
-const capablities = await ocs.getCapabilities()
+const capabilities = await ocsClient.getCapabilities()
 
-const signedUrl = await ocs.signUrl('some_url_to_sign', 'your_username')
+const signedUrl = await ocsClient.signUrl('some_url_to_sign', 'your_username')
 ```
 
-### WebDAV
+### WebDav
+
+The webdav client needs to be instantiated with a base URI corresponding to your oCIS deployment. You can also pass a header callback which will be called with every dav request.
+
+```
+import { webdav } from '@ownclouders/web-client'
+
+const accessToken = 'some_access_token'
+const baseURI = 'some_base_uri'
+
+const webDavClient = webdav(
+	baseURI,
+	() => ({ Authorization: accessToken })
+)
+```
 
 The following example demonstrates how to list all resources of a given `SpaceResource` (see above how to fetch space resources).
 
 ```
-const { resource, children } = await webdav.listFiles(spaceResource)
+const { resource, children } = await webDavClient.listFiles(spaceResource)
 ```
