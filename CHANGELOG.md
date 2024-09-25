@@ -25,6 +25,7 @@ Summary
 * Enhancement - Move permanent link indicator: [#11606](https://github.com/owncloud/web/pull/11606)
 * Enhancement - Redesign sidebar link section in sharing panel: [#11606](https://github.com/owncloud/web/pull/11606)
 * Enhancement - Soothe right sidebar panel transitions: [#11614](https://github.com/owncloud/web/pull/11614)
+* Enhancement - Preview loading performance: [#11631](https://github.com/owncloud/web/pull/11631)
 * Enhancement - Add cancel button to unsaved changes dialog: [#11644](https://github.com/owncloud/web/pull/11644)
 * Enhancement - File type icon for .ggs files: [#11646](https://github.com/owncloud/web/pull/11646)
 
@@ -184,6 +185,13 @@ Details
    The panel transitions of the right sidebar are a bit smoother now.
 
    https://github.com/owncloud/web/pull/11614
+
+* Enhancement - Preview loading performance: [#11631](https://github.com/owncloud/web/pull/11631)
+
+   We've improved the performance of loading previews, especially for spaces.
+
+   https://github.com/owncloud/ocis/issues/10054
+   https://github.com/owncloud/web/pull/11631
 
 * Enhancement - Add cancel button to unsaved changes dialog: [#11644](https://github.com/owncloud/web/pull/11644)
 
