@@ -249,7 +249,7 @@ export default defineComponent({
     const { getMatchingSpace } = useGetMatchingSpace()
 
     const resourcesStore = useResourcesStore()
-    const { initResourceList, clearResourceList } = resourcesStore
+    const { initResourceList, clearResourceList, setAncestorMetaData } = resourcesStore
     const { totalResourcesCount } = storeToRefs(resourcesStore)
 
     const configStore = useConfigStore()
@@ -424,6 +424,7 @@ export default defineComponent({
       // the store state needs a reset to prevent the old list of resources
       // from being rendered while the request retrieves the new resources from the server.
       clearResourceList()
+      setAncestorMetaData({})
 
       if (capabilityStore.filesTags) {
         await loadAvailableTagsTask.perform()

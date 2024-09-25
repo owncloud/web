@@ -248,10 +248,12 @@ export default defineComponent({
     const markInstance = ref(undefined)
     const includeDisabledParam = useRouteQuery('q_includeDisabled')
 
-    const { setSelection, initResourceList, clearResourceList } = useResourcesStore()
+    const { setSelection, initResourceList, clearResourceList, setAncestorMetaData } =
+      useResourcesStore()
 
     const loadResourcesTask = useTask(function* () {
       clearResourceList()
+      setAncestorMetaData({})
       yield spacesStore.reloadProjectSpaces({ graphClient: clientService.graphAuthenticated })
       initResourceList({ currentFolder: null, resources: unref(spaces) })
     })
