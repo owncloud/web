@@ -35,11 +35,13 @@
   "dependencies": {
     "@toast-ui/editor-plugin-code-syntax-highlight": "^3.1.0",
     "@toast-ui/editor": "^3.2.2",
+    "dompurify": "3.1.7",
     "js-generate-password": "^1.0.0",
     "password-sheriff": "^1.1.1",
     "prismjs": "^1.29.0"
   },
   "devDependencies": {
+    "@types/dompurify": "3.0.5",
     "@types/lodash-es": "4.17.12",
     "@vitest/web-worker": "2.1.1",
     "clean-publish": "5.0.0",
@@ -63,7 +65,6 @@
     "axios": "1.7.7",
     "deepmerge": "^4.2.2",
     "design-system": "workspace:@ownclouders/design-system@*",
-    "dompurify": "^3.0.6",
     "filesize": "^10.1.0",
     "fuse.js": "7.0.0",
     "lodash-es": "^4.17.21",
