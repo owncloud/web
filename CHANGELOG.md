@@ -30,6 +30,7 @@ Summary
 * Enhancement - Preview loading performance: [#11631](https://github.com/owncloud/web/pull/11631)
 * Enhancement - Add cancel button to unsaved changes dialog: [#11644](https://github.com/owncloud/web/pull/11644)
 * Enhancement - File type icon for .ggs files: [#11646](https://github.com/owncloud/web/pull/11646)
+* Enhancement - Remove link type "Uploader": [#11661](https://github.com/owncloud/web/pull/11661)
 
 Details
 -------
@@ -224,6 +225,14 @@ Details
    We've added a new file type icon for .ggs files.
 
    https://github.com/owncloud/web/pull/11646
+
+* Enhancement - Remove link type "Uploader": [#11661](https://github.com/owncloud/web/pull/11661)
+
+   The link type "Uploader" has been removed because it's almost the same as
+   "Editor". Existing links of this type still work though.
+
+   https://github.com/owncloud/web/issues/11381
+   https://github.com/owncloud/web/pull/11661
 
 Changelog for ownCloud Web [8.0.6] (2024-09-23)
 =======================================
