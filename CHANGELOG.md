@@ -156,6 +156,7 @@ Details
    https://github.com/owncloud/web/pull/11591
    https://github.com/owncloud/web/pull/11600
    https://github.com/owncloud/web/pull/11609
+   https://github.com/owncloud/web/pull/11659
 
 * Enhancement - Show min oCIS version in app details (app store): [#11580](https://github.com/owncloud/web/pull/11580)
 
