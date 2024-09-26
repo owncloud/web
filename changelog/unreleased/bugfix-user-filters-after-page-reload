@@ -1,0 +1,6 @@
+Bugfix: User filters after page reload
+
+We've fixed an issue where applied user filters would not be visible after page reload.
+
+https://github.com/owncloud/web/issues/11604
+https://github.com/owncloud/web/pull/11666
