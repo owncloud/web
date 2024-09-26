@@ -8,7 +8,7 @@
       :resource="resource"
       :link="link"
       :is-resource-clickable="isResourceClickable"
-      class="oc-resource-link"
+      class="oc-resource-icon-link"
       @click="emitClick"
     >
       <oc-img
@@ -227,7 +227,7 @@ export default defineComponent({
     pointer-events: none;
   }
 
-  &-link {
+  &-icon-link {
     position: relative;
   }
 

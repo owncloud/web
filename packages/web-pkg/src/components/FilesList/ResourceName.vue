@@ -154,7 +154,7 @@ export default defineComponent({
 <style lang="scss">
 .oc-resource {
   &-name {
-    display: inline-flex;
+    display: flex;
     min-width: 0;
 
     &:hover {

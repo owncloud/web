@@ -1,11 +1,11 @@
 // Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
 exports[`OcResource > displays parent folder name default if calculated name is empty 1`] = `
-"<div class="oc-resource oc-text-overflow"><button target="_self" type="button" class="oc-button oc-rounded oc-button-m oc-button-justify-content-left oc-button-gap-undefined oc-button-passive oc-button-passive-raw oc-resource-link" draggable="false">
+"<div class="oc-resource oc-text-overflow"><button target="_self" type="button" class="oc-button oc-rounded oc-button-m oc-button-justify-content-left oc-button-gap-undefined oc-button-passive oc-button-passive-raw oc-resource-link oc-resource-icon-link" draggable="false">
     <!--v-if-->
     <!-- @slot Content of the button --> <span class="oc-icon oc-icon-l oc-icon-passive oc-resource-icon oc-resource-icon-file"><!----></span>
   </button>
-  <div class="oc-resource-details oc-text-overflow oc-pl-s"><button target="_self" type="button" class="oc-button oc-rounded oc-button-m oc-button-justify-content-left oc-button-gap-undefined oc-button-passive oc-button-passive-raw oc-text-overflow" draggable="false">
+  <div class="oc-resource-details oc-text-overflow oc-pl-s"><button target="_self" type="button" class="oc-button oc-rounded oc-button-m oc-button-justify-content-left oc-button-gap-undefined oc-button-passive oc-button-passive-raw oc-resource-link oc-text-overflow" draggable="false">
       <!--v-if-->
       <!-- @slot Content of the button --> <span class="oc-resource-name" data-test-resource-path="example.pdf" data-test-resource-name="example.pdf" data-test-resource-type="file"><span class="oc-text-truncate"><span class="oc-resource-basename">example</span></span><span class="oc-resource-extension">.pdf</span></span>
     </button>

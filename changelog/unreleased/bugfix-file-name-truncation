@@ -1,0 +1,6 @@
+Bugfix: File name truncation
+
+We've fixed the broken file name truncation in file lists.
+
+https://github.com/owncloud/web/pull/11658
+https://github.com/owncloud/web/issues/11617

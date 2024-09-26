@@ -5,6 +5,7 @@
     v-if="isResourceClickable"
     :target="linkTarget"
     :draggable="false"
+    class="oc-resource-link"
     @dragstart.prevent.stop
     @click="emitClick"
   >
@@ -101,3 +102,9 @@ export default {
   }
 }
 </script>
+<style lang="scss">
+.oc-resource-link {
+  // necessary for the focus outline to show up
+  display: inline-flex;
+}
+</style>
