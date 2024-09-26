@@ -1,6 +1,6 @@
 <template>
   <div class="app-list oc-mb-m">
-    <h2 class="oc-mt-rm">
+    <h2 class="oc-mt-rm app-list-headline">
       {{ $gettext('App Store') }}
       <app-contextual-helper />
     </h2>
