@@ -21,14 +21,14 @@ Feature: Users can see all activities of the resources and spaces
       | sharedFolder | Brian     | user | Can edit |
     And "Alice" logs in
     Then "Alice" should see activity of the following resource
-      | resource     | activity                             |
-      | sharedFolder | alice shared sharedFolder with brian |
+      | resource     | activity                                    |
+      | sharedFolder | Alice Hansen shared sharedFolder with brian |
 
     # see activity in the project space
     And "Alice" navigates to the project space "team.1"
     Then "Alice" should see activity of the space
-      | activity                      |
-      | alice added readme.md to .space |
+      | activity                               |
+      | Alice Hansen added readme.md to .space |
     And "Alice" logs out
 
     # see activity in the shared resources

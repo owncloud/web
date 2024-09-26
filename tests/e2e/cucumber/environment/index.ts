@@ -139,7 +139,7 @@ After(async function (this: World, { result, willBeRetried }: ITestCaseHookParam
   removeTempUploadDirectory()
   closeSSEConnections()
 
-  if (config.reportTracing) {
+  if (fs.existsSync(config.tracingReportDir)) {
     filterTracingReports(result.status)
   }
 
@@ -155,13 +155,10 @@ AfterAll(async () => {
     await state.browser.close()
   }
 
-  if (config.reportTracing) {
-    // move failed tracing reports
-    const failedDir = path.dirname(config.tracingReportDir) + '/failed'
-
-    if (fs.existsSync(failedDir)) {
-      fs.renameSync(failedDir, config.tracingReportDir)
-    }
+  // move failed tracing reports
+  const failedDir = path.dirname(config.tracingReportDir) + '/failed'
+  if (fs.existsSync(failedDir)) {
+    fs.renameSync(failedDir, config.tracingReportDir)
   }
 })
 
