@@ -213,7 +213,7 @@ export const getIdOfFileInsideSpace = async ({
     }
   } else {
     // extract file id form the response
-    return _.get(fileDataResponse, '[d:propstat][d:prop][oc:fileid]')._text
+    return _.get(fileDataResponse, '[d:propstat][0][d:prop][oc:fileid]')._text
   }
 }
 
