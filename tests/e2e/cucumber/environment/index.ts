@@ -121,6 +121,9 @@ After(async function (this: World, { result, willBeRetried }: ITestCaseHookParam
     return
   }
 
+  config.reportHar = willBeRetried || defaults.reportHar
+  config.reportTracing = willBeRetried || defaults.reportTracing
+
   await this.actorsEnvironment.close()
 
   // refresh keycloak admin access token
@@ -142,10 +145,6 @@ After(async function (this: World, { result, willBeRetried }: ITestCaseHookParam
   if (config.reportTracing) {
     filterTracingReports(result.status)
   }
-
-  // NOTE: config should be changed at the very end of the test
-  config.reportHar = willBeRetried || defaults.reportHar
-  config.reportTracing = willBeRetried || defaults.reportTracing
 })
 
 AfterAll(async () => {
@@ -168,6 +167,10 @@ AfterAll(async () => {
 function filterTracingReports(status: string) {
   const traceDir = config.tracingReportDir
   const failedDir = path.dirname(config.tracingReportDir) + '/failed'
+
+  if (!fs.existsSync(traceDir)) {
+    return
+  }
 
   if (status !== Status.PASSED) {
     if (!fs.existsSync(failedDir)) {
