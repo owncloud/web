@@ -205,7 +205,7 @@ export default defineComponent({
 
     const fullWidthSideBar = computed(() => window.innerWidth <= 960)
     const backgroundContentEl = computed(() => {
-      return unref(appSideBar).parentElement.querySelector('div') as HTMLElement
+      return unref(appSideBar)?.parentElement?.querySelector('div') as HTMLElement
     })
 
     watch(
@@ -214,10 +214,9 @@ export default defineComponent({
         if (!isOpen) {
           return
         }
-
+        await nextTick()
         if (unref(fullWidthSideBar) && unref(backgroundContentEl)) {
           // hide content behind sidebar when it has full width to avoid focusable elements
-          await nextTick()
           unref(backgroundContentEl).style.visibility = 'hidden'
         }
       },
