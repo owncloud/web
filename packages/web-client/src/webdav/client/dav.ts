@@ -13,11 +13,10 @@ import { buildPropFindBody, buildPropPatchBody } from './builders'
 import { parseError, parseMultiStatus, parseTusHeaders } from './parsers'
 import { WebDavResponseResource } from '../../helpers'
 import { DavHttpError } from '../../errors'
-import { AxiosInstance } from 'axios'
 
 export interface DAVOptions {
-  axiosClient: AxiosInstance
   baseUrl: string
+  headers?: () => Headers
 }
 
 export interface DavResult {
@@ -33,13 +32,13 @@ export type DAVRequestOptions = {
 
 export class DAV {
   private client: WebDAVClient
-  private axiosClient: AxiosInstance
   private davPath: string
+  private headers: () => Headers
 
-  constructor({ axiosClient, baseUrl }: DAVOptions) {
+  constructor({ baseUrl, headers }: DAVOptions) {
     this.davPath = urlJoin(baseUrl, 'remote.php/dav')
     this.client = createClient(this.davPath, {})
-    this.axiosClient = axiosClient
+    this.headers = headers
   }
 
   public mkcol(path: string, opts: DAVRequestOptions = {}) {
@@ -175,17 +174,11 @@ export class DAV {
   }
 
   private buildHeaders(headers: Headers = {}): Headers {
-    const authHeader = this.axiosClient.defaults.headers.Authorization
-    const languageHeader = this.axiosClient.defaults.headers['Accept-Language']
-    const initiatorIdHeader = this.axiosClient.defaults.headers['Initiator-ID']
-
     return {
-      ...(authHeader && { Authorization: authHeader.toString() }),
-      ...(languageHeader && { 'Accept-Language': languageHeader.toString() }),
-      ...(initiatorIdHeader && { 'Initiator-ID': initiatorIdHeader.toString() }),
       'Content-Type': 'application/xml; charset=utf-8',
       'X-Requested-With': 'XMLHttpRequest',
       'X-Request-ID': uuidV4(),
+      ...(this.headers && { ...this.headers() }),
       ...headers
     }
   }

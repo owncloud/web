@@ -17,10 +17,12 @@ import { GetPathForFileIdFactory } from './getPathForFileId'
 import { SetFavoriteFactory } from './setFavorite'
 import { ListFavoriteFilesFactory } from './listFavoriteFiles'
 import { AxiosInstance } from 'axios'
+import { Headers } from 'webdav'
 
 export interface WebDavOptions {
   axiosClient: AxiosInstance
   baseUrl: string
+  headers?: () => Headers
 }
 
 export interface WebDAV {

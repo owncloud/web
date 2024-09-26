@@ -50,7 +50,7 @@ describe('paste worker', () => {
 
     vi.doMock('@ownclouders/web-client', async (importOriginal) => ({
       ...(await importOriginal<any>()),
-      client: () => ({ webdav: webDavMock, ocs: undefined, graph: undefined })
+      webdav: () => webDavMock
     }))
   })
 
