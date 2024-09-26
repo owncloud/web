@@ -1,0 +1,7 @@
+Enhancement: Allow setting view mode for apps via query
+
+We've added a new query param 'view_mode' to the app URL to allow setting the view mode for apps.
+If the specific app and permission allows it, the view mode can be set to 'view' or 'write' via the query param.
+
+https://github.com/owncloud/web/pull/11668
+https://github.com/owncloud/web/issues/11667

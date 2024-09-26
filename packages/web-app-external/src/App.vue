@@ -47,7 +47,9 @@ import {
   useMessages,
   useRequest,
   useAppProviderService,
-  useRoute
+  useRoute,
+  queryItemAsString,
+  useRouteQuery
 } from '@ownclouders/web-pkg'
 import {
   isProjectSpaceResource,
@@ -71,6 +73,11 @@ export default defineComponent({
     const route = useRoute()
     const appProviderService = useAppProviderService()
     const { makeRequest } = useRequest()
+
+    const viewModeQuery = useRouteQuery('view_mode')
+    const viewModeQueryValue = computed(() => {
+      return queryItemAsString(unref(viewModeQuery))
+    })
 
     const appName = computed(() => {
       const lowerCaseAppName = unref(route)
@@ -194,7 +201,12 @@ export default defineComponent({
           return
         }
 
-        let viewMode = props.isReadOnly ? 'view' : 'write'
+        let viewMode = 'view'
+
+        if (!props.isReadOnly) {
+          viewMode = unref(viewModeQueryValue) || 'write'
+        }
+
         if (
           determineOpenAsPreview(unref(appName)) &&
           (isShareSpaceResource(props.space) ||
