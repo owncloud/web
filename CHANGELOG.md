@@ -16,6 +16,7 @@ Summary
 * Bugfix - Wrong webdav URL in sidebar: [#11642](https://github.com/owncloud/web/pull/11642)
 * Bugfix - Renaming space in projects view files table does not work: [#11643](https://github.com/owncloud/web/pull/11643/)
 * Bugfix - Hide share type switch for project spaces: [#11653](https://github.com/owncloud/web/pull/11653)
+* Bugfix - File name truncation: [#11658](https://github.com/owncloud/web/pull/11658)
 * Enhancement - Copy quick link action removal: [#11553](https://github.com/owncloud/web/pull/11553)
 * Enhancement - Internal link removal: [#11553](https://github.com/owncloud/web/pull/11553)
 * Enhancement - Add split confirm button to create link modal: [#11558](https://github.com/owncloud/web/pull/11558)
@@ -97,6 +98,13 @@ Details
 
    https://github.com/owncloud/web/issues/11579
    https://github.com/owncloud/web/pull/11653
+
+* Bugfix - File name truncation: [#11658](https://github.com/owncloud/web/pull/11658)
+
+   We've fixed the broken file name truncation in file lists.
+
+   https://github.com/owncloud/web/issues/11617
+   https://github.com/owncloud/web/pull/11658
 
 * Enhancement - Copy quick link action removal: [#11553](https://github.com/owncloud/web/pull/11553)
 
