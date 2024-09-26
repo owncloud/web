@@ -38,7 +38,7 @@ const addNewResourceButton = `#new-file-menu-btn`
 const createNewFolderButton = '#new-folder-btn'
 const createNewTxtFileButton = '.new-file-btn-txt'
 const createNewMdFileButton = '.new-file-btn-md'
-const createNewOfficeDocumentFileBUtton = '//ul[@id="create-list"]//span[text()="%s"]'
+const createNewOfficeDocumentFileBUtton = '//div[@id="new-file-menu-drop"]//span[text()="%s"]'
 const createNewShortcutButton = '#new-shortcut-btn'
 const shortcutResorceInput = '#create-shortcut-modal-url-input'
 const saveTextFileInEditorButton = '#app-save-action:visible'
