@@ -58,27 +58,25 @@ export const useLinkTypes = () => {
     {
       id: SharingLinkType.View,
       displayName: $gettext('Can view'),
-      description: $gettext('Anyone with the link can view and download.'),
+      description: $gettext('View, download'),
       icon: 'eye'
     },
     {
       id: SharingLinkType.Upload,
       displayName: $gettext('Can upload'),
-      description: $gettext('Anyone with the link can view, download and upload.'),
+      description: $gettext('View, upload, download'),
       icon: 'upload'
     },
     {
       id: SharingLinkType.Edit,
       displayName: $gettext('Can edit'),
-      description: $gettext('Anyone with the link can view, download and edit.'),
+      description: $gettext('View, upload, edit, download, delete'),
       icon: 'pencil'
     },
     {
       id: SharingLinkType.CreateOnly,
       displayName: $gettext('Secret File Drop'),
-      description: $gettext(
-        'Anyone with the link can only upload, existing content is not revealed.'
-      ),
+      description: $gettext('Upload only, existing content is not revealed'),
       icon: 'inbox-unarchive'
     }
   ] satisfies ShareRole[]
