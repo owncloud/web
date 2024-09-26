@@ -36,12 +36,7 @@ export const useLinkTypes = () => {
     }
 
     if (isFolder) {
-      return [
-        SharingLinkType.View,
-        SharingLinkType.Upload,
-        SharingLinkType.Edit,
-        SharingLinkType.CreateOnly
-      ]
+      return [SharingLinkType.View, SharingLinkType.Edit, SharingLinkType.CreateOnly]
     }
 
     return [SharingLinkType.View, SharingLinkType.Edit]

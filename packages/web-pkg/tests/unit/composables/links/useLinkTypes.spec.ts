@@ -34,7 +34,6 @@ describe('useLinkTypes', () => {
         setup: ({ getAvailableLinkTypes }) => {
           expect(getAvailableLinkTypes({ isFolder: true })).toEqual([
             SharingLinkType.View,
-            SharingLinkType.Upload,
             SharingLinkType.Edit,
             SharingLinkType.CreateOnly
           ])
