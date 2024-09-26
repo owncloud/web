@@ -224,11 +224,13 @@ export const useResourcesStore = defineStore('resources', () => {
   const loadAncestorMetaData = ({
     folder,
     space,
-    client
+    client,
+    signal
   }: {
     folder: Resource
     space: SpaceResource
     client: WebDAV
+    signal?: AbortSignal
   }) => {
     const data: AncestorMetaData = {
       [folder.path]: {
@@ -274,15 +276,17 @@ export const useResourcesStore = defineStore('resources', () => {
       }
 
       promises.push(
-        client.listFiles(space, { path }, { depth: 0, davProperties }).then(({ resource }) => {
-          data[path] = {
-            id: resource.fileId,
-            shareTypes: resource.shareTypes,
-            parentFolderId: resource.parentFolderId,
-            spaceId: space.id,
-            path
-          }
-        })
+        client
+          .listFiles(space, { path }, { depth: 0, davProperties, signal })
+          .then(({ resource }) => {
+            data[path] = {
+              id: resource.fileId,
+              shareTypes: resource.shareTypes,
+              parentFolderId: resource.parentFolderId,
+              spaceId: space.id,
+              path
+            }
+          })
       )
     }
 

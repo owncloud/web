@@ -22,10 +22,15 @@ export class FolderLoaderSharedViaLink implements FolderLoader {
       resourcesStore.setAncestorMetaData({})
 
       if (configStore.options.routing.fullShareOwnerPaths) {
-        yield spacesStore.loadMountPoints({ graphClient: clientService.graphAuthenticated })
+        yield spacesStore.loadMountPoints({
+          graphClient: clientService.graphAuthenticated,
+          signal: signal1
+        })
       }
 
-      const value = yield* call(clientService.graphAuthenticated.driveItems.listSharedByMe())
+      const value = yield* call(
+        clientService.graphAuthenticated.driveItems.listSharedByMe({ signal: signal1 })
+      )
 
       const resources = value
         .filter((s) => s.permissions.some(({ link }) => !!link))

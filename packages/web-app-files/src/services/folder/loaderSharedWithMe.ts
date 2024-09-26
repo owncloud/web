@@ -22,10 +22,15 @@ export class FolderLoaderSharedWithMe implements FolderLoader {
       resourcesStore.setAncestorMetaData({})
 
       if (configStore.options.routing.fullShareOwnerPaths) {
-        yield spacesStore.loadMountPoints({ graphClient: clientService.graphAuthenticated })
+        yield spacesStore.loadMountPoints({
+          graphClient: clientService.graphAuthenticated,
+          signal: signal1
+        })
       }
 
-      const value = yield* call(clientService.graphAuthenticated.driveItems.listSharedWithMe())
+      const value = yield* call(
+        clientService.graphAuthenticated.driveItems.listSharedWithMe({ signal: signal1 })
+      )
 
       const resources = value.map((driveItem) =>
         buildIncomingShareResource({ driveItem, graphRoles: sharesStore.graphRoles })

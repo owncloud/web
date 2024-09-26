@@ -188,7 +188,8 @@ describe('spaces', () => {
             {
               orderBy: 'name asc',
               filter: 'driveType eq personal'
-            }
+            },
+            expect.anything()
           )
           expect(graphClient.drives.listMyDrives).toHaveBeenNthCalledWith(
             2,
@@ -196,7 +197,8 @@ describe('spaces', () => {
             {
               orderBy: 'name asc',
               filter: 'driveType eq project'
-            }
+            },
+            expect.anything()
           )
           expect(instance.spaces.length).toBe(2)
           expect(instance.spacesLoading).toBeFalsy()
@@ -220,7 +222,8 @@ describe('spaces', () => {
             {
               orderBy: 'name asc',
               filter: 'driveType eq mountpoint'
-            }
+            },
+            expect.anything()
           )
           expect(instance.spaces.length).toBe(1)
           expect(instance.mountPointsInitialized).toBeTruthy()
@@ -243,7 +246,8 @@ describe('spaces', () => {
             {
               orderBy: 'name asc',
               filter: 'driveType eq project'
-            }
+            },
+            expect.anything()
           )
           expect(instance.spaces.length).toBe(1)
         }

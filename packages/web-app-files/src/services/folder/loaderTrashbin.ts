@@ -26,7 +26,7 @@ export class FolderLoaderTrashbin implements FolderLoader {
       const { resource, children } = yield webdav.listFiles(
         space,
         {},
-        { depth: 1, davProperties: DavProperties.Trashbin, isTrash: true }
+        { depth: 1, davProperties: DavProperties.Trashbin, isTrash: true, signal: signal1 }
       )
 
       resourcesStore.initResourceList({ currentFolder: resource, resources: children })

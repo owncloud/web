@@ -264,7 +264,7 @@ export default defineComponent({
       })
     }
 
-    const loadFileTask = useTask(function* () {
+    const loadFileTask = useTask(function* (signal) {
       try {
         if (!unref(driveAliasAndItem)) {
           yield addMissingDriveAliasAndItem()
@@ -280,9 +280,15 @@ export default defineComponent({
           const timestamp = DateTime.local().toFormat('yyyyMMddHHmmss')
           const targetPath = `${unref(resource).name}_${timestamp}.${newExtension}`
           if (
-            !(yield clientService.webdav.copyFiles(unref(space), unref(resource), unref(space), {
-              path: targetPath
-            }))
+            !(yield clientService.webdav.copyFiles(
+              unref(space),
+              unref(resource),
+              unref(space),
+              {
+                path: targetPath
+              },
+              { signal }
+            ))
           ) {
             throw new Error($gettext('Importing failed'))
           }
@@ -300,18 +306,17 @@ export default defineComponent({
 
         if (unref(hasProp('currentContent'))) {
           const fileContentsResponse = yield* call(
-            getFileContents(currentFileContext, props.fileContentOptions)
+            getFileContents(currentFileContext, { ...props.fileContentOptions, signal })
           )
           serverContent.value = currentContent.value = fileContentsResponse.body
           currentETag.value = fileContentsResponse.headers['OC-ETag']
         }
 
         if (unref(hasProp('url'))) {
-          url.value = yield getUrlForResource(
-            unref(space),
-            unref(resource),
-            props.urlForResourceOptions
-          )
+          url.value = yield getUrlForResource(unref(space), unref(resource), {
+            ...props.urlForResourceOptions,
+            signal
+          })
         }
         loading.value = false
       } catch (e) {
