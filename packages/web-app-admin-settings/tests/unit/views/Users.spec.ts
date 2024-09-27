@@ -3,7 +3,7 @@ import { ItemFilter, OptionsConfig, UserAction, useAppDefaults } from '@owncloud
 import { mock, mockDeep } from 'vitest-mock-extended'
 import { defaultComponentMocks, defaultPlugins, mount, shallowMount } from 'web-test-helpers'
 import { ClientService, queryItemAsString } from '@ownclouders/web-pkg'
-import { User } from '@ownclouders/web-client/graph/generated'
+import { Group, User } from '@ownclouders/web-client/graph/generated'
 import { useAppDefaultsMock } from 'web-test-helpers/src/mocks/useAppDefaultsMock'
 import { useUserActionsCreateUser } from '../../../src/composables/actions/users/useUserActionsCreateUser'
 import { ref } from 'vue'
@@ -74,7 +74,7 @@ const getClientService = () => {
   clientService.graphAuthenticated.users.listUsers.mockResolvedValue([mock<User>(getDefaultUser())])
   clientService.graphAuthenticated.users.getUser.mockResolvedValue(mock<User>(getDefaultUser()))
   clientService.graphAuthenticated.users.editUser.mockResolvedValue(mock<User>(getDefaultUser()))
-  clientService.graphAuthenticated.groups.listGroups.mockResolvedValue([])
+  clientService.graphAuthenticated.groups.listGroups.mockResolvedValue([mock<Group>()])
   clientService.graphAuthenticated.applications.listApplications.mockResolvedValue(
     getDefaultApplications()
   )

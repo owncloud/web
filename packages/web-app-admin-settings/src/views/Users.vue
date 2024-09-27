@@ -45,6 +45,7 @@
                 <span v-text="$gettext('Filter:')" />
               </div>
               <item-filter
+                v-if="groups.length"
                 :allow-multiple="true"
                 :filter-label="$gettext('Groups')"
                 :filterable-attributes="['displayName']"
@@ -64,6 +65,7 @@
                 </template>
               </item-filter>
               <item-filter
+                v-if="roles.length"
                 :allow-multiple="true"
                 :filter-label="$gettext('Roles')"
                 :filterable-attributes="['displayName']"
