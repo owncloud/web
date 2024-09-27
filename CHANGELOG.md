@@ -9,6 +9,7 @@ Summary
 -------
 
 * Bugfix - User filters after page reload: [#11604](https://github.com/owncloud/web/issues/11604)
+* Bugfix - Hide copy permanent link action on public pages: [#11645](https://github.com/owncloud/web/issues/11645)
 * Enhancement - Allow setting view mode for apps via query: [#11668](https://github.com/owncloud/web/pull/11668)
 
 Details
@@ -21,6 +22,14 @@ Details
 
    https://github.com/owncloud/web/issues/11604
    https://github.com/owncloud/web/pull/11666
+
+* Bugfix - Hide copy permanent link action on public pages: [#11645](https://github.com/owncloud/web/issues/11645)
+
+   We've hidden the action for copying permanent links on public pages since it
+   doesn't make any sense in this context.
+
+   https://github.com/owncloud/web/issues/11645
+   https://github.com/owncloud/web/pull/11670
 
 * Enhancement - Allow setting view mode for apps via query: [#11668](https://github.com/owncloud/web/pull/11668)
 
