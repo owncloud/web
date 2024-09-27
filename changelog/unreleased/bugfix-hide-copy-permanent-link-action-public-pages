@@ -1,0 +1,6 @@
+Bugfix: Hide copy permanent link action on public pages
+
+We've hidden the action for copying permanent links on public pages since it doesn't make any sense in this context.
+
+https://github.com/owncloud/web/issues/11645
+https://github.com/owncloud/web/pull/11670
