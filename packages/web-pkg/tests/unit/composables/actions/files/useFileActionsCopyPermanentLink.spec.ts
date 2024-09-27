@@ -18,6 +18,16 @@ describe('useFileActionsCopyPermanentLink', () => {
         }
       })
     })
+    it('should return false in public spaces', () => {
+      getWrapper({
+        setup: ({ actions }) => {
+          const publicSpace = mock<SpaceResource>({ driveType: 'public' })
+          expect(
+            unref(actions)[0].isVisible({ space: publicSpace, resources: [mock<Resource>()] })
+          ).toBeFalsy()
+        }
+      })
+    })
     it('should return true if one resource selected', () => {
       getWrapper({
         setup: ({ actions }) => {
