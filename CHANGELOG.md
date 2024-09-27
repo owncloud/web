@@ -9,6 +9,7 @@ Summary
 -------
 
 * Bugfix - User filters after page reload: [#11604](https://github.com/owncloud/web/issues/11604)
+* Enhancement - Allow setting view mode for apps via query: [#11668](https://github.com/owncloud/web/pull/11668)
 
 Details
 -------
@@ -20,6 +21,15 @@ Details
 
    https://github.com/owncloud/web/issues/11604
    https://github.com/owncloud/web/pull/11666
+
+* Enhancement - Allow setting view mode for apps via query: [#11668](https://github.com/owncloud/web/pull/11668)
+
+   We've added a new query param 'view_mode' to the app URL to allow setting the
+   view mode for apps. If the specific app and permission allows it, the view mode
+   can be set to 'view' or 'write' via the query param.
+
+   https://github.com/owncloud/web/issues/11667
+   https://github.com/owncloud/web/pull/11668
 
 Changelog for ownCloud Web [10.3.0] (2024-09-26)
 =======================================
