@@ -1,3 +1,26 @@
+Changelog for ownCloud Web [unreleased] (UNRELEASED)
+=======================================
+The following sections list the changes in ownCloud web unreleased relevant to
+ownCloud admins and users.
+
+[unreleased]: https://github.com/owncloud/web/compare/v10.3.0...master
+
+Summary
+-------
+
+* Bugfix - User filters after page reload: [#11604](https://github.com/owncloud/web/issues/11604)
+
+Details
+-------
+
+* Bugfix - User filters after page reload: [#11604](https://github.com/owncloud/web/issues/11604)
+
+   We've fixed an issue where applied user filters would not be visible after page
+   reload.
+
+   https://github.com/owncloud/web/issues/11604
+   https://github.com/owncloud/web/pull/11666
+
 Changelog for ownCloud Web [10.3.0] (2024-09-26)
 =======================================
 The following sections list the changes in ownCloud web 10.3.0 relevant to
