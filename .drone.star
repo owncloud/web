@@ -776,6 +776,7 @@ def buildRelease(ctx):
                 "image": TOOLHIPPIE_CALENS,
                 "commands": [
                     "calens --version %s -o dist/CHANGELOG.md -t changelog/CHANGELOG-Release.tmpl" % version.split("-")[0],
+                    "calens --version %s -o dist/CHANGELOG-csv.md -t changelog/CHANGELOG-csv.tmpl" % version.split("-")[0],
                 ],
                 "when": {
                     "ref": [
