@@ -21,7 +21,7 @@ export type TransferData = {
   sourceSpace: SpaceResource
   targetSpace: SpaceResource
   targetFolder: Resource
-  path: string
+  targetName: string
   overwrite: boolean
   transferType: TransferType
 }

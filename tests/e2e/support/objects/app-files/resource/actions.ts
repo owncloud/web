@@ -831,12 +831,7 @@ export const pasteResource = async (args: moveOrCopyResourceArgs): Promise<void>
   }
   if (option) {
     await Promise.all([
-      page.waitForResponse(
-        (resp) =>
-          resp.url().endsWith(resource) &&
-          resp.ok &&
-          resp.request().method() === action.toUpperCase()
-      ),
+      page.waitForResponse((resp) => resp.ok && resp.request().method() === action.toUpperCase()),
       option === 'replace'
         ? page.locator(actionSecondaryConfirmationButton).click()
         : page.locator(keepBothButton).click()
@@ -860,16 +855,11 @@ export const moveOrCopyMultipleResources = async (
 
   const waitForMoveResponses = []
   if (['drag-drop-breadcrumb', 'drag-drop'].includes(method)) {
-    for (const resource of resources) {
+    resources.forEach(() => {
       waitForMoveResponses.push(
-        page.waitForResponse(
-          (resp) =>
-            resp.url().endsWith(resource) &&
-            resp.status() === 201 &&
-            resp.request().method() === 'MOVE'
-        )
+        page.waitForResponse((resp) => resp.status() === 201 && resp.request().method() === 'MOVE')
       )
-    }
+    })
   }
 
   switch (method) {
@@ -986,10 +976,7 @@ export const moveOrCopyResource = async (args: moveOrCopyResourceArgs): Promise<
       }
       await Promise.all([
         page.waitForResponse(
-          (resp) =>
-            resp.url().endsWith(resource) &&
-            resp.status() === 201 &&
-            resp.request().method() === action.toUpperCase()
+          (resp) => resp.status() === 201 && resp.request().method() === action.toUpperCase()
         ),
         page.keyboard.press('ControlOrMeta+v')
       ])
@@ -1000,12 +987,7 @@ export const moveOrCopyResource = async (args: moveOrCopyResourceArgs): Promise<
       const target = page.locator(util.format(resourceNameSelector, newLocation))
 
       await Promise.all([
-        page.waitForResponse(
-          (resp) =>
-            resp.url().endsWith(resource) &&
-            resp.status() === 201 &&
-            resp.request().method() === 'MOVE'
-        ),
+        page.waitForResponse((resp) => resp.status() === 201 && resp.request().method() === 'MOVE'),
         source.dragTo(target)
       ])
 
@@ -1023,12 +1005,7 @@ export const moveOrCopyResource = async (args: moveOrCopyResourceArgs): Promise<
       )
 
       await Promise.all([
-        page.waitForResponse(
-          (resp) =>
-            resp.url().endsWith(resource) &&
-            resp.status() === 201 &&
-            resp.request().method() === 'MOVE'
-        ),
+        page.waitForResponse((resp) => resp.status() === 201 && resp.request().method() === 'MOVE'),
         source.dragTo(target)
       ])
 
@@ -1074,12 +1051,7 @@ export const renameResource = async (args: renameResourceArgs): Promise<void> =>
   await page.locator(util.format(filesContextMenuAction, 'rename')).click()
   await page.locator(fileRenameInput).fill(newName)
   await Promise.all([
-    page.waitForResponse(
-      (resp) =>
-        resp.url().endsWith(resourceBase) &&
-        resp.status() === 201 &&
-        resp.request().method() === 'MOVE'
-    ),
+    page.waitForResponse((resp) => resp.status() === 201 && resp.request().method() === 'MOVE'),
     page.locator(util.format(actionConfirmationButton, 'Rename')).click()
   ])
 }
