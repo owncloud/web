@@ -171,7 +171,7 @@ export const changeQuota = async (args: {
   const searchLocator = page.locator(spacesQuotaSearchField)
   await searchLocator.pressSequentially(value)
   await page.locator(selectedQuotaValueField).waitFor()
-  await page.locator(util.format(quotaValueDropDown, `${value} GB`)).click()
+  await page.locator(util.format(quotaValueDropDown, `${value} GiB`)).click()
 
   await Promise.all([
     page.waitForResponse(
