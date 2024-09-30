@@ -45,7 +45,7 @@
     "@types/lodash-es": "4.17.12",
     "@vitest/web-worker": "2.1.1",
     "clean-publish": "5.0.0",
-    "vite-plugin-dts": "4.2.1",
+    "vite-plugin-dts": "4.2.3",
     "vite-plugin-node-polyfills": "0.22.0",
     "web-test-helpers": "workspace:*"
   },
