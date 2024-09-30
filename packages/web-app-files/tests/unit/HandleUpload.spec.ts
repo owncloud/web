@@ -283,7 +283,7 @@ const getWrapper = ({
 
   const opts = {
     clientService: mockDeep<ClientService>(),
-    language: mock<Language>(),
+    language: mock<Language>({ current: 'en' }),
     route: ref(route),
     userStore: useUserStore(),
     messageStore: useMessages(),

@@ -1,4 +1,4 @@
-import { filesize } from 'filesize'
+import { filesize, FileSizeOptionsString } from 'filesize'
 import { getLocaleFromLanguage } from './locale'
 
 const mb = 1048576
@@ -13,15 +13,17 @@ const mb = 1048576
 export const formatFileSize = (size: number | string, currentLanguage: string) => {
   const parsedSize = typeof size === 'string' ? parseInt(size) : size
   if (parsedSize < 0) {
-    return ''
+    return '--'
   }
 
   if (isNaN(parsedSize)) {
     return '?'
   }
 
-  return filesize(parsedSize, {
+  return filesize<FileSizeOptionsString>(parsedSize, {
     round: parsedSize < mb ? 0 : 1,
-    locale: getLocaleFromLanguage(currentLanguage)
+    locale: getLocaleFromLanguage(currentLanguage),
+    base: 10,
+    output: 'string'
   })
 }

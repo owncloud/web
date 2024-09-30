@@ -20,8 +20,8 @@
 <script lang="ts">
 import { computed, defineComponent, PropType, unref } from 'vue'
 import { Quota } from '@ownclouders/web-client/graph/generated'
-import { filesize, FileSizeOptionsString } from 'filesize'
 import { useGettext } from 'vue3-gettext'
+import { formatFileSize } from '@ownclouders/web-pkg'
 
 export default defineComponent({
   name: 'QuotaInformation',
@@ -33,7 +33,7 @@ export default defineComponent({
     }
   },
   setup(props) {
-    const { $gettext } = useGettext()
+    const { $gettext, current: currentLanguage } = useGettext()
 
     const limitedPersonalStorage = computed(() => {
       return props.quota.total !== 0
@@ -48,13 +48,13 @@ export default defineComponent({
       const used = props.quota.used || 0
       return total
         ? $gettext('%{used} of %{total} used (%{percentage}%)', {
-            used: filesize<FileSizeOptionsString>(used),
-            total: filesize<FileSizeOptionsString>(total),
+            used: formatFileSize(used, currentLanguage),
+            total: formatFileSize(total, currentLanguage),
             percentage: (unref(quotaUsagePercent) || 0).toString()
           })
         : $gettext('%{used} used', {
-            used: filesize<FileSizeOptionsString>(used),
-            total: filesize<FileSizeOptionsString>(total)
+            used: formatFileSize(used, currentLanguage),
+            total: formatFileSize(total, currentLanguage)
           })
     })
 

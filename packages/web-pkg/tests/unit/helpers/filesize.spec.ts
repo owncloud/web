@@ -30,7 +30,7 @@ describe('formatFileSize', () => {
   })
   describe('handles invalid input', () => {
     it.each([
-      [-1, ''],
+      [-1, '--'],
       ['nonNumericInput', '?'],
       [NaN, '?']
     ])('input "%s"', (input: any, expected: string) => {

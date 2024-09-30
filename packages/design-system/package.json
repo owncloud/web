@@ -109,7 +109,6 @@
   },
   "peerDependencies": {
     "deepmerge": "^4.2.2",
-    "filesize": "^10.1.0",
     "focus-trap-vue": "^4.0.1",
     "focus-trap": "7.6.0",
     "fuse.js": "7.0.0",
