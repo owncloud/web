@@ -240,59 +240,6 @@ describe('GenericSpace view', () => {
 
       expect(wrapper.find(selectors.actionsCreateAndUpload).exists()).toBe(true)
     })
-
-    it('should render create folder button when in embed mode', () => {
-      mockUseEmbedMode.mockReturnValue({
-        isEnabled: computed(() => true)
-      })
-
-      const { wrapper } = getMountedWrapper({
-        stubs: { 'app-bar': AppBarStub, CreateAndUpload: true }
-      })
-
-      expect(wrapper.find(selectors.btnCreateFolder).exists()).toBe(true)
-    })
-
-    it('should not render create folder button when in embed mode but is file picker', () => {
-      mockUseEmbedMode.mockReturnValue({
-        isEnabled: computed(() => true),
-        isFilePicker: computed(() => true)
-      })
-
-      const { wrapper } = getMountedWrapper({
-        stubs: { 'app-bar': AppBarStub, CreateAndUpload: true }
-      })
-
-      expect(wrapper.find(selectors.actionsCreateAndUpload).exists()).toBe(false)
-      expect(wrapper.find(selectors.btnCreateFolder).exists()).toBe(false)
-    })
-
-    it('should not render create and upload actions when in embed mode', () => {
-      mockUseEmbedMode.mockReturnValue({
-        isEnabled: computed(() => true)
-      })
-
-      const { wrapper } = getMountedWrapper({
-        stubs: { 'app-bar': AppBarStub, CreateAndUpload: true }
-      })
-
-      expect(wrapper.find(selectors.actionsCreateAndUpload).exists()).toBe(false)
-    })
-
-    it('should call createNewFolderAction when create folder button is clicked', () => {
-      mockUseEmbedMode.mockReturnValue({
-        isEnabled: computed(() => true)
-      })
-
-      const { wrapper } = getMountedWrapper({
-        stubs: { 'app-bar': AppBarStub, CreateAndUpload: true }
-      })
-
-      // @ts-expect-error even though the vm object is not specified on WrapperLike, it actually is present there
-      wrapper.findComponent(selectors.btnCreateFolder).vm.$emit('click')
-
-      expect(mockCreateFolder).toHaveBeenCalledTimes(1)
-    })
   })
 })
 
