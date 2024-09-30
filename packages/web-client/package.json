@@ -89,9 +89,9 @@
     "@types/luxon": "3.4.2",
     "@vitejs/plugin-vue": "5.1.4",
     "clean-publish": "5.0.0",
-    "vite-plugin-dts": "4.2.1",
+    "vite-plugin-dts": "4.2.3",
     "vite-plugin-node-polyfills": "0.22.0",
-    "vite": "5.4.7"
+    "vite": "5.4.8"
   },
   "peerDependencies": {
     "@casl/ability": "6.7.1",
