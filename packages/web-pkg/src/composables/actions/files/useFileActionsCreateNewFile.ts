@@ -19,6 +19,7 @@ import {
 } from '../../piniaStores'
 import { ApplicationFileExtension } from '../../../apps'
 import { storeToRefs } from 'pinia'
+import { useEmbedMode } from '../../embedMode'
 
 export const useFileActionsCreateNewFile = ({ space }: { space?: Ref<SpaceResource> } = {}) => {
   const { showMessage, showErrorMessage } = useMessages()
@@ -27,6 +28,7 @@ export const useFileActionsCreateNewFile = ({ space }: { space?: Ref<SpaceResour
   const { $gettext } = useGettext()
   const { dispatchModal } = useModals()
   const appsStore = useAppsStore()
+  const { isEnabled: isEmbedModeEnabled } = useEmbedMode()
 
   const { openEditor } = useFileActions()
   const clientService = useClientService()
@@ -136,9 +138,15 @@ export const useFileActionsCreateNewFile = ({ space }: { space?: Ref<SpaceResour
             })
           }
 
+          resourcesStore.upsertResource(resource)
+
           showMessage({
             title: $gettext('"%{fileName}" was created successfully', { fileName: resource.name })
           })
+
+          if (unref(isEmbedModeEnabled)) {
+            return
+          }
 
           return openFile(resource, appFileExtension)
         } catch (error) {
