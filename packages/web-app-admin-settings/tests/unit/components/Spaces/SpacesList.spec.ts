@@ -29,9 +29,9 @@ const spaceMocks = [
       })
     },
     spaceQuota: {
-      total: 1000000000,
+      total: 1073741824,
       used: 0,
-      remaining: 1000000000
+      remaining: 1073741824
     }
   }),
   mock<SpaceResource>({
@@ -61,9 +61,9 @@ const spaceMocks = [
       })
     },
     spaceQuota: {
-      total: 2000000000,
-      used: 500000000,
-      remaining: 1500000000
+      total: 2147483648,
+      used: 524288000,
+      remaining: 1610612736
     }
   })
 ]

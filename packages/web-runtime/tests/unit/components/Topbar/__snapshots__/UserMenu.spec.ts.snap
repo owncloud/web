@@ -68,8 +68,8 @@ exports[`User Menu component > when quota and no email is set > renders a naviga
         <div data-v-08f1b1e7="" class="quota-information oc-flex oc-flex-bottom oc-text-small oc-mt-xs">
           <oc-icon-stub name="hard-drive-2" size="small" fill-type="line" class="oc-mr-xs"></oc-icon-stub>
           <div>
-            <p class="oc-my-rm"><span class="quota-information-text">300 B of 1 kB used (30%)</span></p>
-            <oc-progress-stub class="quota-information-progress-bar" max="100" size="small" variation="primary" value="30"></oc-progress-stub>
+            <p class="oc-my-rm"><span class="quota-information-text">300 B of 1 KiB used (29.3%)</span></p>
+            <oc-progress-stub class="quota-information-progress-bar" max="100" size="small" variation="primary" value="29.3"></oc-progress-stub>
           </div>
         </div></span>
       </li>
@@ -101,8 +101,8 @@ exports[`User Menu component > when quota is above 80% and below 90% > renders a
         <div data-v-08f1b1e7="" class="quota-information oc-flex oc-flex-bottom oc-text-small oc-mt-xs">
           <oc-icon-stub name="hard-drive-2" size="small" fill-type="line" class="oc-mr-xs"></oc-icon-stub>
           <div>
-            <p class="oc-my-rm"><span class="quota-information-text">810 B of 1 kB used (81%)</span></p>
-            <oc-progress-stub class="quota-information-progress-bar" max="100" size="small" variation="warning" value="81"></oc-progress-stub>
+            <p class="oc-my-rm"><span class="quota-information-text">810 B of 1 KiB used (79.1%)</span></p>
+            <oc-progress-stub class="quota-information-progress-bar" max="100" size="small" variation="primary" value="79.1"></oc-progress-stub>
           </div>
         </div></span>
       </li>
@@ -134,8 +134,8 @@ exports[`User Menu component > when quota is above 90% > renders a danger quota 
         <div data-v-08f1b1e7="" class="quota-information oc-flex oc-flex-bottom oc-text-small oc-mt-xs">
           <oc-icon-stub name="hard-drive-2" size="small" fill-type="line" class="oc-mr-xs"></oc-icon-stub>
           <div>
-            <p class="oc-my-rm"><span class="quota-information-text">910 B of 1 kB used (91%)</span></p>
-            <oc-progress-stub class="quota-information-progress-bar" max="100" size="small" variation="danger" value="91"></oc-progress-stub>
+            <p class="oc-my-rm"><span class="quota-information-text">990 B of 1 KiB used (96.68%)</span></p>
+            <oc-progress-stub class="quota-information-progress-bar" max="100" size="small" variation="danger" value="96.68"></oc-progress-stub>
           </div>
         </div></span>
       </li>
@@ -167,8 +167,8 @@ exports[`User Menu component > when quota is below 80% > renders a primary quota
         <div data-v-08f1b1e7="" class="quota-information oc-flex oc-flex-bottom oc-text-small oc-mt-xs">
           <oc-icon-stub name="hard-drive-2" size="small" fill-type="line" class="oc-mr-xs"></oc-icon-stub>
           <div>
-            <p class="oc-my-rm"><span class="quota-information-text">300 B of 1 kB used (30%)</span></p>
-            <oc-progress-stub class="quota-information-progress-bar" max="100" size="small" variation="primary" value="30"></oc-progress-stub>
+            <p class="oc-my-rm"><span class="quota-information-text">300 B of 1 KiB used (29.3%)</span></p>
+            <oc-progress-stub class="quota-information-progress-bar" max="100" size="small" variation="primary" value="29.3"></oc-progress-stub>
           </div>
         </div></span>
       </li>
@@ -200,7 +200,7 @@ exports[`User Menu component > when quota is not defined > renders no percentag 
         <div data-v-08f1b1e7="" class="quota-information oc-flex oc-flex-bottom oc-text-small oc-mt-xs">
           <oc-icon-stub name="hard-drive-2" size="small" fill-type="line" class="oc-mr-xs"></oc-icon-stub>
           <div>
-            <p class="oc-my-rm"><span class="quota-information-text">910 B used</span></p>
+            <p class="oc-my-rm"><span class="quota-information-text">990 B used</span></p>
             <!--v-if-->
           </div>
         </div></span>

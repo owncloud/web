@@ -10,10 +10,10 @@ import { mock } from 'vitest-mock-extended'
 import { SpaceResource } from '@ownclouders/web-client'
 import { Quota } from '@ownclouders/web-client/graph/generated'
 
-const totalQuota = 1000
+const totalQuota = 1024
 const basicQuota = 300
 const warningQuota = 810
-const dangerQuota = 910
+const dangerQuota = 990
 
 const noEmail = ''
 const email = 'test@test.de'

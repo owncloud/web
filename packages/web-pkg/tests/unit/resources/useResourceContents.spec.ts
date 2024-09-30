@@ -105,11 +105,14 @@ describe('resourceContents', () => {
   it.each`
     size              | expectedSize
     ${1}              | ${'1 B'}
-    ${100}            | ${'100 B'}
-    ${10000}          | ${'10 kB'}
-    ${10000000}       | ${'10 MB'}
-    ${10000000000}    | ${'10 GB'}
-    ${10000000000000} | ${'10 TB'}
+    ${1024}           | ${'1 KiB'}
+    ${1048576}        | ${'1 MiB'}
+    ${1073741824}     | ${'1 GiB'}
+    ${1099511627776}  | ${'1 TiB'}
+    ${10240}          | ${'10 KiB'}
+    ${10485760}       | ${'10 MiB'}
+    ${10737418240}    | ${'10 GiB'}
+    ${10995116277760} | ${'10 TiB'}
   `('should display correctly size according to items', ({ size, expectedSize }) => {
     const resources = [
       mock<Resource>({

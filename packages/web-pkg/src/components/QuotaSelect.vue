@@ -68,28 +68,28 @@ export default {
     DEFAULT_OPTIONS(): Option[] {
       return [
         {
-          value: Math.pow(10, 9),
-          displayValue: this.getFormattedFileSize(Math.pow(10, 9))
+          value: Math.pow(2, 30),
+          displayValue: this.getFormattedFileSize(Math.pow(2, 30))
         },
         {
-          value: 2 * Math.pow(10, 9),
-          displayValue: this.getFormattedFileSize(2 * Math.pow(10, 9))
+          value: 2 * Math.pow(2, 30),
+          displayValue: this.getFormattedFileSize(2 * Math.pow(2, 30))
         },
         {
-          value: 5 * Math.pow(10, 9),
-          displayValue: this.getFormattedFileSize(5 * Math.pow(10, 9))
+          value: 5 * Math.pow(2, 30),
+          displayValue: this.getFormattedFileSize(5 * Math.pow(2, 30))
         },
         {
-          value: 10 * Math.pow(10, 9),
-          displayValue: this.getFormattedFileSize(10 * Math.pow(10, 9))
+          value: 10 * Math.pow(2, 30),
+          displayValue: this.getFormattedFileSize(10 * Math.pow(2, 30))
         },
         {
-          value: 50 * Math.pow(10, 9),
-          displayValue: this.getFormattedFileSize(50 * Math.pow(10, 9))
+          value: 50 * Math.pow(2, 30),
+          displayValue: this.getFormattedFileSize(50 * Math.pow(2, 30))
         },
         {
-          value: 100 * Math.pow(10, 9),
-          displayValue: this.getFormattedFileSize(100 * Math.pow(10, 9))
+          value: 100 * Math.pow(2, 30),
+          displayValue: this.getFormattedFileSize(100 * Math.pow(2, 30))
         },
         {
           displayValue: this.$gettext('No restriction'),
@@ -137,7 +137,7 @@ export default {
           selectable: false
         }
       }
-      const value = parseFloat(option) * Math.pow(10, 9)
+      const value = parseFloat(option) * Math.pow(2, 30)
 
       if (value > this.quotaLimit) {
         return {

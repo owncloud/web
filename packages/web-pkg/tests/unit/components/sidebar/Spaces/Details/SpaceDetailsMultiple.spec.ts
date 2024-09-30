@@ -9,8 +9,8 @@ const spaceMock = {
   mdate: 'Wed, 21 Oct 2015 07:28:00 GMT',
   spaceQuota: {
     used: 100,
-    total: 1000,
-    remaining: 900
+    total: 1024,
+    remaining: 924
   }
 } as unknown as SpaceResource
 

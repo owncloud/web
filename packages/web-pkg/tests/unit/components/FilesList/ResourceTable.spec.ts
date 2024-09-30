@@ -123,7 +123,7 @@ const resourcesWithAllFields = [
     isFolder: false,
     type: 'file',
     tags: ['space', 'tag', 'moon'],
-    size: '111000234',
+    size: 104857600,
     mdate: getCurrentDate(),
     sdate: getCurrentDate(),
     ddate: getCurrentDate(),
@@ -305,7 +305,7 @@ describe('ResourceTable', () => {
 
   it('formats the resource size to a human readable format', () => {
     const { wrapper } = getMountedWrapper()
-    expect(wrapper.find('.oc-tbody-tr-forest .oc-table-data-cell-size').text()).toEqual('111 MB')
+    expect(wrapper.find('.oc-tbody-tr-forest .oc-table-data-cell-size').text()).toEqual('100 MiB')
     expect(wrapper.find('.oc-tbody-tr-documents .oc-table-data-cell-size').text()).toEqual('--')
     expect(wrapper.find('.oc-tbody-tr-notes .oc-table-data-cell-size').text()).toEqual('?')
   })

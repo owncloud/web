@@ -36,6 +36,7 @@
     "@toast-ui/editor-plugin-code-syntax-highlight": "^3.1.0",
     "@toast-ui/editor": "^3.2.2",
     "dompurify": "3.1.7",
+    "filesize": "^10.1.0",
     "js-generate-password": "^1.0.0",
     "password-sheriff": "^1.1.1",
     "prismjs": "^1.29.0"
@@ -65,7 +66,6 @@
     "axios": "1.7.7",
     "deepmerge": "^4.2.2",
     "design-system": "workspace:@ownclouders/design-system@*",
-    "filesize": "^10.1.0",
     "fuse.js": "7.0.0",
     "lodash-es": "^4.17.21",
     "luxon": "3.5.0",

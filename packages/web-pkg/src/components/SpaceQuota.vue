@@ -12,8 +12,9 @@
 
 <script lang="ts">
 import { defineComponent, PropType } from 'vue'
-import { filesize, FileSizeOptionsString } from 'filesize'
 import { Quota } from '@ownclouders/web-client/graph/generated'
+import { formatFileSize } from '../helpers'
+import { useGettext } from 'vue3-gettext'
 
 export default defineComponent({
   name: 'SpaceQuota',
@@ -22,6 +23,13 @@ export default defineComponent({
       type: Object as PropType<Quota>,
       required: true,
       default: () => undefined as Quota // FIXME: hack because vue doesn't detect type
+    }
+  },
+  setup: () => {
+    const { current: currentLanguage } = useGettext()
+
+    return {
+      currentLanguage
     }
   },
   computed: {
@@ -39,10 +47,10 @@ export default defineComponent({
       })
     },
     quotaTotal() {
-      return filesize<FileSizeOptionsString>(this.spaceQuota.total)
+      return formatFileSize(this.spaceQuota.total, this.currentLanguage)
     },
     quotaUsed() {
-      return filesize<FileSizeOptionsString>(this.spaceQuota.used)
+      return formatFileSize(this.spaceQuota.used, this.currentLanguage)
     },
     quotaUsagePercent() {
       return parseFloat(((this.spaceQuota.used / this.spaceQuota.total) * 100).toFixed(2))

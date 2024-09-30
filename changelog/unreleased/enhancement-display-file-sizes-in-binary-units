@@ -1,0 +1,8 @@
+Enhancement: Display file and folder sizes in binary units
+
+We've updated the display of file and folder sizes, along with quota information,
+to use binary units (such as GiB, MiB) instead of decimal units (like GB, MB).
+This change enhances consistency and improves readability by aligning with the binary unit standard.
+
+https://github.com/owncloud/web/pull/11685
+https://github.com/owncloud/enterprise/issues/5808

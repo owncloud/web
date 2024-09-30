@@ -86,7 +86,7 @@ export const changeSpaceQuota = async (args: {
   const searchLocator = page.locator(spacesQuotaSearchField)
   await searchLocator.pressSequentially(value)
   await page.locator(selectedQuotaValueField).waitFor()
-  await page.locator(util.format(quotaValueDropDown, `${value} GB`)).click()
+  await page.locator(util.format(quotaValueDropDown, `${value} GiB`)).click()
   await confirmAction({
     page,
     method: 'PATCH',
