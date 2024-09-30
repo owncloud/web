@@ -113,6 +113,9 @@ describe('delete worker', () => {
   })
 
   it('returns failed files', async () => {
+    vi.spyOn(console, 'error').mockImplementation(() => undefined)
+    webDavMock.deleteFile.mockRejectedValue({ response: {} })
+
     unref(worker.worker).onmessage = (e: MessageEvent) => {
       const { failed } = JSON.parse(e.data)
       expect(failed.length).toBe(1)

@@ -1,9 +1,10 @@
 import PQueue from 'p-queue'
 import { join } from 'path'
-import { type Resource, webdav as _webdav } from '@ownclouders/web-client'
+import { webdav as _webdav } from '@ownclouders/web-client'
 import type { WorkerTopic } from '../../piniaStores/webWorkers'
 import { TransferType } from '../../../helpers/resource/conflictHandling/types'
 import type { TransferData } from '../../../helpers/resource/conflictHandling'
+import { PasteWorkerReturnData } from './usePasteWorker'
 
 type MessageData = {
   baseUrl?: string
@@ -38,8 +39,8 @@ self.onmessage = async (e: MessageEvent) => {
   storedHeaders = headers
   const webdav = _webdav(baseUrl, () => storedHeaders)
 
-  const successful: Resource[] = []
-  const failed: { resourceName: string; error: Error }[] = []
+  const successful: PasteWorkerReturnData['successful'] = []
+  const failed: PasteWorkerReturnData['failed'] = []
   const queue = new PQueue({ concurrency: 4 })
 
   const doCopy = (transferData: TransferData) =>
@@ -77,8 +78,14 @@ self.onmessage = async (e: MessageEvent) => {
         resource.webDavPath = join(data.targetFolder.webDavPath, resource.name)
 
         successful.push(resource)
-      } catch (error) {
-        failed.push({ resourceName: resource.name, error })
+      } catch (e) {
+        console.error(e)
+        failed.push({
+          resourceName: resource.name,
+          message: e.message,
+          statusCode: e.statusCode,
+          xReqId: e.response.headers?.get('x-request-id')
+        })
       }
     })
   })

@@ -1,0 +1,6 @@
+Bugfix: Undefined request IDs
+
+Request IDs from failing copy, move and delete requests are no longer undefined.
+
+https://github.com/owncloud/web/issues/11678
+https://github.com/owncloud/web/pull/11684

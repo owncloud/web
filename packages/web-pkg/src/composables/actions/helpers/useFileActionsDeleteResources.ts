@@ -193,9 +193,9 @@ export const useFileActionsDeleteResources = () => {
               messageStore.showMessage({ title })
             }
 
-            failed.forEach(({ status, resource }) => {
+            failed.forEach(({ error, resource }) => {
               let title = $gettext('Failed to delete "%{resource}"', { resource: resource.name })
-              if (status === 423) {
+              if (error.statusCode === 423) {
                 title = $gettext('Failed to delete "%{resource}" - the file is locked', {
                   resource: resource.name
                 })
