@@ -251,10 +251,13 @@ export default defineComponent({
     const { setSelection, initResourceList, clearResourceList, setAncestorMetaData } =
       useResourcesStore()
 
-    const loadResourcesTask = useTask(function* () {
+    const loadResourcesTask = useTask(function* (signal) {
       clearResourceList()
       setAncestorMetaData({})
-      yield spacesStore.reloadProjectSpaces({ graphClient: clientService.graphAuthenticated })
+      yield spacesStore.reloadProjectSpaces({
+        graphClient: clientService.graphAuthenticated,
+        signal
+      })
       initResourceList({ currentFolder: null, resources: unref(spaces) })
     })
 

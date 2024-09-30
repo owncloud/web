@@ -135,9 +135,13 @@ export default defineComponent({
     const isPasswordRequired = ref(false)
     const isInternalLink = ref(false)
 
-    const loadPublicSpaceTask = useTask(function* () {
+    const loadPublicSpaceTask = useTask(function* (signal) {
       try {
-        loadedSpace.value = yield clientService.webdav.getFileInfo(unref(publicLinkSpace))
+        loadedSpace.value = yield clientService.webdav.getFileInfo(
+          unref(publicLinkSpace),
+          {},
+          { signal }
+        )
       } catch (error) {
         const err = error as DavHttpError
 
@@ -159,9 +163,13 @@ export default defineComponent({
       }
     })
 
-    const verifyPasswordTask = useTask(function* () {
+    const verifyPasswordTask = useTask(function* (signal) {
       try {
-        loadedSpace.value = yield clientService.webdav.getFileInfo(unref(publicLinkSpace))
+        loadedSpace.value = yield clientService.webdav.getFileInfo(
+          unref(publicLinkSpace),
+          {},
+          { signal }
+        )
         if (!isPublicSpaceResource(unref(loadedSpace))) {
           const e: any = new Error($gettext('The resource is not a public link.'))
           e.resource = unref(loadedSpace)

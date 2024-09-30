@@ -121,10 +121,14 @@ export default defineComponent({
 
     const loadResourcesTask = useTask(function* (signal) {
       const drives = yield* call(
-        clientService.graphAuthenticated.drives.listAllDrives(sharesStore.graphRoles, {
-          orderBy: 'name asc',
-          filter: 'driveType eq project'
-        })
+        clientService.graphAuthenticated.drives.listAllDrives(
+          sharesStore.graphRoles,
+          {
+            orderBy: 'name asc',
+            filter: 'driveType eq project'
+          },
+          { signal }
+        )
       )
       spaceSettingsStore.setSpaces(drives)
     })

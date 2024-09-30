@@ -70,7 +70,7 @@ export class FolderLoaderSpace implements FolderLoader {
 
         // eslint-disable-next-line prefer-const
         let { resource: currentFolder, children: resources } = yield* call(
-          webdav.listFiles(space, { path, fileId })
+          webdav.listFiles(space, { path, fileId }, { signal: signal1 })
         )
         // if current folder has no id (= singe file public link) we must not correct the route
         if (currentFolder.id) {
@@ -81,7 +81,9 @@ export class FolderLoaderSpace implements FolderLoader {
 
         if (path === '/') {
           if (isShareSpaceResource(space)) {
-            sharedDriveItem = yield* call(getSharedDriveItem({ graphClient, spacesStore, space }))
+            sharedDriveItem = yield* call(
+              getSharedDriveItem({ graphClient, spacesStore, space, signal: signal1 })
+            )
             if (sharedDriveItem) {
               currentFolder = buildIncomingShareResource({
                 graphRoles: sharesStore.graphRoles,
@@ -94,7 +96,12 @@ export class FolderLoaderSpace implements FolderLoader {
           }
         }
 
-        yield resourcesStore.loadAncestorMetaData({ folder: currentFolder, space, client: webdav })
+        yield resourcesStore.loadAncestorMetaData({
+          folder: currentFolder,
+          space,
+          client: webdav,
+          signal: signal1
+        })
 
         if (options.loadShares) {
           const ancestorMetaData = resourcesStore.ancestorMetaData
@@ -115,7 +122,9 @@ export class FolderLoaderSpace implements FolderLoader {
           // add current user as space member if not already loaded
           if (isEmpty(space.members)) {
             if (!sharedDriveItem) {
-              sharedDriveItem = yield* call(getSharedDriveItem({ graphClient, spacesStore, space }))
+              sharedDriveItem = yield* call(
+                getSharedDriveItem({ graphClient, spacesStore, space, signal: signal1 })
+              )
             }
             setCurrentUserShareSpacePermissions({
               sharesStore,
@@ -145,13 +154,19 @@ export class FolderLoaderSpace implements FolderLoader {
   private async getSharedDriveItem({
     graphClient,
     spacesStore,
-    space
+    space,
+    signal
   }: {
     graphClient: Graph
     spacesStore: SpacesStore
     space: SpaceResource
+    signal?: AbortSignal
   }) {
-    const matchingMountPoint = await spacesStore.getMountPointForSpace({ graphClient, space })
+    const matchingMountPoint = await spacesStore.getMountPointForSpace({
+      graphClient,
+      space,
+      signal
+    })
     if (!matchingMountPoint) {
       return null
     }

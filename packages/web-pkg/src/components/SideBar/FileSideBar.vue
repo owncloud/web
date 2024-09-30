@@ -193,7 +193,7 @@ export default defineComponent({
     )
 
     const loadVersionsTask = useTask(function* (signal, resource: Resource) {
-      versions.value = yield clientService.webdav.listFileVersions(resource.id)
+      versions.value = yield clientService.webdav.listFileVersions(resource.id, { signal })
     })
 
     const loadSharesTask = useTask(function* (signal, resource: Resource) {
@@ -207,7 +207,8 @@ export default defineComponent({
       if (isShareSpaceResource(props?.space)) {
         const matchingMountPoint = yield spacesStore.getMountPointForSpace({
           graphClient: clientService.graphAuthenticated,
-          space: props.space
+          space: props.space,
+          signal
         })
         if (matchingMountPoint) {
           driveId = matchingMountPoint.root.remoteItem.rootId
@@ -216,7 +217,7 @@ export default defineComponent({
 
       // load direct shares
       const { shares, allowedRoles } = yield* call(
-        client.listPermissions(driveId, resource.fileId, sharesStore.graphRoles)
+        client.listPermissions(driveId, resource.fileId, sharesStore.graphRoles, {}, { signal })
       )
 
       const loadedCollaboratorShares = shares.filter(isCollaboratorShare)
@@ -229,10 +230,16 @@ export default defineComponent({
       // load external share roles
       if (appsStore.isAppEnabled('open-cloud-mesh')) {
         const { allowedRoles } = yield* call(
-          client.listPermissions(driveId, resource.fileId, sharesStore.graphRoles, {
-            filter: `@libre.graph.permissions.roles.allowedValues/rolePermissions/any(p:contains(p/condition, '@Subject.UserType=="Federated"'))`,
-            select: [ListPermissionsSpaceRootSelectEnum.LibreGraphPermissionsRolesAllowedValues]
-          })
+          client.listPermissions(
+            driveId,
+            resource.fileId,
+            sharesStore.graphRoles,
+            {
+              filter: `@libre.graph.permissions.roles.allowedValues/rolePermissions/any(p:contains(p/condition, '@Subject.UserType=="Federated"'))`,
+              select: [ListPermissionsSpaceRootSelectEnum.LibreGraphPermissionsRolesAllowedValues]
+            },
+            { signal }
+          )
         )
 
         availableExternalShareRoles.value =
@@ -296,7 +303,7 @@ export default defineComponent({
       const promises = [...new Set(ancestorIds)].map((id) => {
         return queue.add(() =>
           clientService.graphAuthenticated.permissions
-            .listPermissions(driveId, id, sharesStore.graphRoles)
+            .listPermissions(driveId, id, sharesStore.graphRoles, {}, { signal })
             .then((result) => {
               const indirectShares = result.shares.map((s) => ({ ...s, indirect: true }))
               loadedCollaboratorShares.push(...indirectShares.filter(isCollaboratorShare))

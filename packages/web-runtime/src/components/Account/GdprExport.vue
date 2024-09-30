@@ -74,11 +74,13 @@ export default defineComponent({
     const exportFile = ref<Resource>()
     const exportInProgress = ref(false)
 
-    const loadExportTask = useTask(function* () {
+    const loadExportTask = useTask(function* (signal) {
       try {
-        const resource = yield clientService.webdav.getFileInfo(spacesStore.personalSpace, {
-          path: `/${GDPR_EXPORT_FILE_NAME}`
-        })
+        const resource = yield clientService.webdav.getFileInfo(
+          spacesStore.personalSpace,
+          { path: `/${GDPR_EXPORT_FILE_NAME}` },
+          { signal }
+        )
 
         if (resource.processing) {
           exportInProgress.value = true

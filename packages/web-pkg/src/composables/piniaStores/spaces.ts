@@ -26,17 +26,23 @@ export const getSpacesByType = async ({
   graphClient,
   driveType,
   configStore,
-  graphRoles
+  graphRoles,
+  signal
 }: {
   graphClient: Graph
   driveType: string
   configStore: ConfigStore
   graphRoles: Record<string, ShareRole>
+  signal?: AbortSignal
 }) => {
-  const mountpoints = await graphClient.drives.listMyDrives(graphRoles, {
-    orderBy: 'name asc',
-    filter: `driveType eq ${driveType}`
-  })
+  const mountpoints = await graphClient.drives.listMyDrives(
+    graphRoles,
+    {
+      orderBy: 'name asc',
+      filter: `driveType eq ${driveType}`
+    },
+    { signal }
+  )
   if (!mountpoints.length) {
     return []
   }
@@ -123,12 +129,14 @@ export const useSpacesStore = defineStore('spaces', () => {
 
   const getMountPointForSpace = async ({
     graphClient,
-    space
+    space,
+    signal
   }: {
     graphClient: Graph
     space: SpaceResource
+    signal?: AbortSignal
   }): Promise<MountPointSpaceResource> => {
-    await loadMountPoints({ graphClient })
+    await loadMountPoints({ graphClient, signal })
 
     // even if the resource has been shared via multiple permissions (e.g. directly via user and a group)
     // we only care about one matching mount point since the remote item contains all permissions
@@ -213,7 +221,13 @@ export const useSpacesStore = defineStore('spaces', () => {
     }
   }
 
-  const loadMountPoints = async ({ graphClient }: { graphClient: Graph }) => {
+  const loadMountPoints = async ({
+    graphClient,
+    signal
+  }: {
+    graphClient: Graph
+    signal?: AbortSignal
+  }) => {
     // fetching mount points is particularly expensive, so we do that only on first access.
     if (unref(mountPointsInitialized)) {
       return
@@ -223,7 +237,8 @@ export const useSpacesStore = defineStore('spaces', () => {
         graphClient,
         driveType: 'mountpoint',
         configStore,
-        graphRoles: sharesStore.graphRoles
+        graphRoles: sharesStore.graphRoles,
+        signal
       })
       addSpaces(mountPointSpaces)
     } finally {
@@ -231,12 +246,19 @@ export const useSpacesStore = defineStore('spaces', () => {
     }
   }
 
-  const reloadProjectSpaces = async ({ graphClient }: { graphClient: Graph }) => {
+  const reloadProjectSpaces = async ({
+    graphClient,
+    signal
+  }: {
+    graphClient: Graph
+    signal?: AbortSignal
+  }) => {
     const projectSpaces = await getSpacesByType({
       graphClient,
       driveType: 'project',
       configStore,
-      graphRoles: sharesStore.graphRoles
+      graphRoles: sharesStore.graphRoles,
+      signal
     })
     spaces.value = unref(spaces).filter((s) => !isProjectSpaceResource(s))
     addSpaces(projectSpaces)

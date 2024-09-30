@@ -305,7 +305,7 @@ export default defineComponent({
     )
     const showLogout = computed(() => authStore.userContextReady && configStore.options.logoutUrl)
 
-    const loadValuesListTask = useTask(function* () {
+    const loadValuesListTask = useTask(function* (signal) {
       if (!authStore.userContextReady || !unref(isSettingsServiceSupported)) {
         return
       }
@@ -316,7 +316,8 @@ export default defineComponent({
         } = yield* call(
           clientService.httpAuthenticated.post<{ values: SettingsValue[] }>(
             '/api/v0/settings/values-list',
-            { account_uuid: 'me' }
+            { account_uuid: 'me' },
+            { signal }
           )
         )
         valuesList.value = values || []
@@ -330,7 +331,7 @@ export default defineComponent({
       }
     }).restartable()
 
-    const loadAccountBundleTask = useTask(function* () {
+    const loadAccountBundleTask = useTask(function* (signal) {
       if (!authStore.userContextReady || !unref(isSettingsServiceSupported)) {
         return
       }
@@ -341,7 +342,8 @@ export default defineComponent({
         } = yield* call(
           clientService.httpAuthenticated.post<{ bundles: SettingsBundle[] }>(
             '/api/v0/settings/bundles-list',
-            {}
+            {},
+            { signal }
           )
         )
         accountBundle.value = bundles?.find((b) => b.extension === 'ocis-accounts')
@@ -355,13 +357,13 @@ export default defineComponent({
       }
     }).restartable()
 
-    const loadGraphUserTask = useTask(function* () {
+    const loadGraphUserTask = useTask(function* (signal) {
       if (!authStore.userContextReady) {
         return
       }
 
       try {
-        graphUser.value = yield* call(clientService.graphAuthenticated.users.getMe())
+        graphUser.value = yield* call(clientService.graphAuthenticated.users.getMe({}, { signal }))
       } catch (e) {
         console.error(e)
         showErrorMessage({

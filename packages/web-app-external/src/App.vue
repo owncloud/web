@@ -130,7 +130,8 @@ export default defineComponent({
 
         const url = `${baseUrl}?${query}`
         const response = yield makeRequest('POST', url, {
-          validateStatus: () => true
+          validateStatus: () => true,
+          signal
         })
 
         if (response.status !== 200) {

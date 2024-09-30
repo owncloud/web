@@ -176,7 +176,8 @@ export default {
       try {
         const response = yield* call(
           clientService.httpAuthenticated.get<{ ocs: { data: Notification[] } }>(
-            'ocs/v2.php/apps/notifications/api/v1/notifications'
+            'ocs/v2.php/apps/notifications/api/v1/notifications',
+            { signal }
           )
         )
 
@@ -198,7 +199,8 @@ export default {
       try {
         yield clientService.httpAuthenticated.delete(
           'ocs/v2.php/apps/notifications/api/v1/notifications',
-          { data: { ids } }
+          { data: { ids } },
+          { signal }
         )
       } catch (e) {
         console.error(e)

@@ -306,7 +306,7 @@ export default defineComponent({
         return
       }
 
-      const data = yield clientService.graphAuthenticated.users.getUser(user.id)
+      const data = yield clientService.graphAuthenticated.users.getUser(user.id, {}, { signal })
       unref(additionalUserDataLoadedForUserIds).push(user.id)
 
       Object.assign(user, data)

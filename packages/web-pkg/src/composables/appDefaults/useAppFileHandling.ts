@@ -14,10 +14,10 @@ interface AppFileHandlingOptions {
   clientService: ClientService
 }
 
-export type FileContentOptions = { responseType?: 'arraybuffer' | 'blob' | 'text' } & Record<
-  string,
-  any
->
+export type FileContentOptions = {
+  responseType?: 'arraybuffer' | 'blob' | 'text'
+  signal?: AbortSignal
+} & Record<string, any>
 export type UrlForResourceOptions = Omit<Parameters<WebDAV['getFileUrl']>[2], 'isUrlSigningEnabled'>
 
 export interface AppFileHandlingResult {
@@ -61,7 +61,10 @@ export function useAppFileHandling({
   // TODO: support query parameters
   const getFileContents = (
     fileContext: MaybeRef<FileContext>,
-    options: { responseType?: 'arraybuffer' | 'blob' | 'text' } & Record<string, any>
+    options: { responseType?: 'arraybuffer' | 'blob' | 'text'; signal?: AbortSignal } & Record<
+      string,
+      any
+    >
   ) => {
     return clientService.webdav.getFileContents(
       unref(unref(fileContext).space),
@@ -90,7 +93,7 @@ export function useAppFileHandling({
 
   const putFileContents = (
     fileContext: MaybeRef<FileContext>,
-    options: { content?: string } & Record<string, any>
+    options: { content?: string; signal?: AbortSignal } & Record<string, any>
   ) => {
     return clientService.webdav.putFileContents(unref(unref(fileContext).space), {
       path: unref(unref(fileContext).item),

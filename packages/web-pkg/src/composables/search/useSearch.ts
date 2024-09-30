@@ -1,11 +1,12 @@
 import { computed, unref } from 'vue'
 import { SearchResult } from '../../components'
 import { DavProperties } from '@ownclouders/web-client/webdav'
-import { urlJoin } from '@ownclouders/web-client'
+import { call, urlJoin } from '@ownclouders/web-client'
 import { useClientService } from '../clientService'
 import { isProjectSpaceResource } from '@ownclouders/web-client'
 import { useConfigStore, useResourcesStore, useSpacesStore } from '../piniaStores'
 import { SearchResource } from '@ownclouders/web-client'
+import { useTask } from 'vue-concurrency'
 
 export const useSearch = () => {
   const configStore = useConfigStore()
@@ -18,9 +19,10 @@ export const useSearch = () => {
   const getProjectSpace = (id: string) => {
     return unref(projectSpaces).find((s) => s.id === id)
   }
-  const search = async (term: string, searchLimit: number = null): Promise<SearchResult> => {
+
+  const searchTask = useTask(function* (signal, term: string, searchLimit: number = null) {
     if (configStore.options.routing.fullShareOwnerPaths) {
-      await spacesStore.loadMountPoints({ graphClient: clientService.graphAuthenticated })
+      yield spacesStore.loadMountPoints({ graphClient: clientService.graphAuthenticated, signal })
     }
 
     if (!term) {
@@ -30,10 +32,13 @@ export const useSearch = () => {
       }
     }
 
-    const { resources, totalResults } = await clientService.webdav.search(term, {
-      searchLimit,
-      davProperties: DavProperties.Default
-    })
+    const { resources, totalResults } = yield* call(
+      clientService.webdav.search(term, {
+        searchLimit,
+        davProperties: DavProperties.Default,
+        signal
+      })
+    )
 
     return {
       totalResults,
@@ -53,6 +58,10 @@ export const useSearch = () => {
           return !data.name.startsWith('.') || unref(areHiddenFilesShown)
         })
     }
+  }).restartable()
+
+  const search = async (term: string, searchLimit: number = null): Promise<SearchResult> => {
+    return await searchTask.perform(term, searchLimit)
   }
 
   return {

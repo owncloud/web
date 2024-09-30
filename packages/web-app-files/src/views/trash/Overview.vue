@@ -121,9 +121,12 @@ export default defineComponent({
       )
     )
 
-    const loadResourcesTask = useTask(function* () {
+    const loadResourcesTask = useTask(function* (signal) {
       resourcesStore.clearResourceList()
-      yield spacesStore.reloadProjectSpaces({ graphClient: clientService.graphAuthenticated })
+      yield spacesStore.reloadProjectSpaces({
+        graphClient: clientService.graphAuthenticated,
+        signal
+      })
       resourcesStore.initResourceList({ currentFolder: null, resources: unref(spaces) })
     })
 
