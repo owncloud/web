@@ -21,7 +21,7 @@ Feature: check files pagination in project space
       | .hidden-testFile.txt | This is a hidden file. |
     And "Alice" navigates to the project space "dev.1"
     When "Alice" navigates to page "2" of the project space files view
-    Then "Alice" should see the text "112 items with 1 kB in total (56 files including 1 hidden, 56 folders including 1 hidden)" at the footer of the page
+    Then "Alice" should see the text "112 items with 1 KiB in total (56 files including 1 hidden, 56 folders including 1 hidden)" at the footer of the page
     And "Alice" should see 10 resources in the project space files view
     When "Alice" enables the option to display the hidden file
     Then "Alice" should see 12 resources in the project space files view
