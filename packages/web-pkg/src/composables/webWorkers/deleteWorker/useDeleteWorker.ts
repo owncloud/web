@@ -1,14 +1,24 @@
 import { unref } from 'vue'
 import { useWebWorkersStore } from '../../piniaStores/webWorkers'
-import type { Resource, SpaceResource } from '@ownclouders/web-client'
+import {
+  createHttpError,
+  HttpError,
+  type Resource,
+  type SpaceResource
+} from '@ownclouders/web-client'
 import { useConfigStore } from '../../piniaStores'
 import { useLoadingService } from '../../loadingService'
 import { useRequestHeaders } from '../../requestHeaders'
 import DeleteWorker from './worker?worker'
 
-type WorkerReturnData = {
+export type DeleteWorkerReturnData = {
   successful: Resource[]
-  failed: { resource: Resource; status: number }[]
+  failed: { resource: Resource; message: string; statusCode: number; xReqId: string }[]
+}
+
+type CallbackOptions = {
+  successful: Resource[]
+  failed: { resource: Resource; error: HttpError }[]
 }
 
 export type DeleteWorkerTopic = 'fileListDelete' | 'trashBinDelete' | 'tokenUpdate'
@@ -27,9 +37,9 @@ export const useDeleteWorker = ({
       space,
       resources
     }: { topic: DeleteWorkerTopic; space: SpaceResource; resources: Resource[] },
-    callback: (result: WorkerReturnData) => void
+    callback: (result: CallbackOptions) => void
   ) => {
-    const worker = createWorker<WorkerReturnData>(DeleteWorker as unknown as string, {
+    const worker = createWorker<DeleteWorkerReturnData>(DeleteWorker as unknown as string, {
       needsTokenRenewal: true
     })
 
@@ -38,7 +48,15 @@ export const useDeleteWorker = ({
     unref(worker.worker).onmessage = (e: MessageEvent) => {
       terminateWorker(worker.id)
       resolveLoading?.(true)
-      callback(JSON.parse(e.data))
+
+      const { successful, failed } = JSON.parse(e.data) as DeleteWorkerReturnData
+
+      // construct http error based on the parsed error data
+      const failedWithErrors = failed.map(({ resource, ...errorData }) => {
+        return { resource, error: createHttpError(errorData) }
+      })
+
+      callback({ successful, failed: failedWithErrors })
     }
 
     loadingService.addTask(

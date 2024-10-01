@@ -109,7 +109,8 @@ describe('paste worker', () => {
   })
 
   it('returns failed files', async () => {
-    webDavMock.copyFiles.mockRejectedValue(undefined)
+    vi.spyOn(console, 'error').mockImplementation(() => undefined)
+    webDavMock.copyFiles.mockRejectedValue({ response: {} })
 
     unref(worker.worker).onmessage = (e: MessageEvent) => {
       const { failed } = JSON.parse(e.data)

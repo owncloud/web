@@ -1,6 +1,6 @@
 import PQueue from 'p-queue'
 import { type Resource, webdav as _webdav, type SpaceResource } from '@ownclouders/web-client'
-import type { DeleteWorkerTopic } from './useDeleteWorker'
+import type { DeleteWorkerTopic, DeleteWorkerReturnData } from './useDeleteWorker'
 
 type MessageData = {
   baseUrl?: string
@@ -37,8 +37,8 @@ self.onmessage = async (e: MessageEvent) => {
   storedHeaders = headers
   const webdav = _webdav(baseUrl, () => storedHeaders)
 
-  const successful: Resource[] = []
-  const failed: { resource: Resource; status: number }[] = []
+  const successful: DeleteWorkerReturnData['successful'] = []
+  const failed: DeleteWorkerReturnData['failed'] = []
   const queue = new PQueue({ concurrency: concurrentRequests })
 
   const doDelete = (r: Resource) => {
@@ -67,10 +67,14 @@ self.onmessage = async (e: MessageEvent) => {
             return
           }
         }
-
-        failed.push({ status, resource: r })
-      } catch (error) {
-        failed.push({ status: error.statusCode, resource: r })
+      } catch (e) {
+        console.error(e)
+        failed.push({
+          resource: r,
+          message: e.message,
+          statusCode: e.statusCode,
+          xReqId: e.response.headers?.get('x-request-id')
+        })
       }
     })
   })
