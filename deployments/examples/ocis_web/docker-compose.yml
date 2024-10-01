@@ -141,6 +141,7 @@ services:
       COLLABORATION_CS3API_DATAGATEWAY_INSECURE: "${INSECURE:-true}"
       COLLABORATION_LOG_LEVEL: ${LOG_LEVEL:-info}
       MICRO_REGISTRY_ADDRESS: "ocis:9233"
+      OCIS_URL: https://${OCIS_DOMAIN:-ocis.owncloud.test}
     volumes:
       - ocis-config:/etc/ocis
     labels:
