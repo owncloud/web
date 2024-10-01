@@ -189,6 +189,7 @@ services:
       COLLABORATION_APP_INSECURE: ${INSECURE:-true}
       COLLABORATION_CS3API_DATAGATEWAY_INSECURE: ${INSECURE:-true}
       COLLABORATION_LOG_LEVEL: ${LOG_LEVEL:-info}
+      OCIS_URL: ${OCIS_URL:-https://host.docker.internal:9200}
     extra_hosts:
       - host.docker.internal:${DOCKER_HOST:-host-gateway}
     volumes:
@@ -249,6 +250,7 @@ services:
       COLLABORATION_APP_INSECURE: ${INSECURE:-true}
       COLLABORATION_CS3API_DATAGATEWAY_INSECURE: ${INSECURE:-true}
       COLLABORATION_LOG_LEVEL: ${LOG_LEVEL:-info}
+      OCIS_URL: ${OCIS_URL:-https://host.docker.internal:9200}
     extra_hosts:
       - host.docker.internal:${DOCKER_HOST:-host-gateway}
     volumes:
