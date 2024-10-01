@@ -10,6 +10,7 @@ Summary
 
 * Bugfix - User filters after page reload: [#11604](https://github.com/owncloud/web/issues/11604)
 * Bugfix - Hide copy permanent link action on public pages: [#11645](https://github.com/owncloud/web/issues/11645)
+* Bugfix - Undefined request IDs: [#11678](https://github.com/owncloud/web/issues/11678)
 * Enhancement - Allow setting view mode for apps via query: [#11668](https://github.com/owncloud/web/pull/11668)
 
 Details
@@ -30,6 +31,13 @@ Details
 
    https://github.com/owncloud/web/issues/11645
    https://github.com/owncloud/web/pull/11670
+
+* Bugfix - Undefined request IDs: [#11678](https://github.com/owncloud/web/issues/11678)
+
+   Request IDs from failing copy, move and delete requests are no longer undefined.
+
+   https://github.com/owncloud/web/issues/11678
+   https://github.com/owncloud/web/pull/11684
 
 * Enhancement - Allow setting view mode for apps via query: [#11668](https://github.com/owncloud/web/pull/11668)
 
