@@ -385,7 +385,7 @@ export default defineComponent({
             if (space) {
               errorPopup(
                 new HttpError(
-                  $gettext('There is not enough quota on "%{spaceName}" to save this file', {
+                  $gettext('Insufficient quota on "%{spaceName}" to save this file', {
                     spaceName: space.name
                   }),
                   e.response
@@ -394,7 +394,7 @@ export default defineComponent({
               break
             }
             errorPopup(
-              new HttpError($gettext('There is not enough quota to save this file'), e.response)
+              new HttpError($gettext('Insufficient quota for saving this file'), e.response)
             )
             break
           default:

@@ -250,9 +250,9 @@ export class HandleUpload extends BasePlugin {
         }
 
         this.messageStore.showErrorMessage({
-          title: $gettext('Not enough quota'),
+          title: $gettext('Insufficient quota'),
           desc: $gettext(
-            'There is not enough quota on %{spaceName}, you need additional %{missingSpace} to upload these files',
+            'Insufficient quota on %{spaceName}. You need additional %{missingSpace} to upload these files',
             {
               spaceName,
               missingSpace: filesize<FileSizeOptionsString>(
