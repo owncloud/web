@@ -28,6 +28,12 @@ TOOLHIPPIE_CALENS = "toolhippie/calens:latest"
 WEB_PUBLISH_NPM_PACKAGES = ["babel-preset", "design-system", "eslint-config", "extension-sdk", "prettier-config", "tsconfig", "web-client", "web-pkg", "web-test-helpers"]
 WEB_PUBLISH_NPM_ORGANIZATION = "@ownclouders"
 
+# configs
+OCIS_URL = "https://ocis:9200"
+OCIS_DOMAIN = "ocis:9200"
+OCIS_FED_URL = "https://federation-ocis:10200"
+OCIS_FED_DOMAIN = "federation-ocis:10200"
+
 dir = {
     "base": "/var/www/owncloud",
     "web": "/var/www/owncloud/web",
@@ -37,6 +43,7 @@ dir = {
     "ocisConfig": "/var/www/owncloud/web/tests/drone/config-ocis.json",
     "ocisIdentifierRegistrationConfig": "/var/www/owncloud/web/tests/drone/identifier-registration.yml",
     "ocisRevaDataRoot": "/srv/app/tmp/ocis/owncloud/data/",
+    "ocmProviders": "/var/www/owncloud/web/tests/drone/providers.json",
 }
 
 config = {
@@ -90,6 +97,23 @@ config = {
                 "user-settings",
                 "file-action",
             ],
+        },
+        "ocm": {
+            "earlyFail": True,
+            "skip": False,
+            "federationServer": True,
+            "suites": [
+                "ocm",
+            ],
+            "extraServerEnvironment": {
+                "OCIS_ADD_RUN_SERVICES": "ocm",
+                "OCIS_ENABLE_OCM": True,
+                "GRAPH_INCLUDE_OCM_SHAREES": True,
+                "OCM_OCM_INVITE_MANAGER_INSECURE": True,
+                "OCM_OCM_SHARE_PROVIDER_INSECURE": True,
+                "OCM_OCM_STORAGE_PROVIDER_INSECURE": True,
+                "OCM_OCM_PROVIDER_AUTHORIZER_PROVIDERS_FILE": "%s" % dir["ocmProviders"],
+            },
         },
         "app-provider": {
             "skip": False,
@@ -543,6 +567,7 @@ def e2eTests(ctx):
         "suites": [],
         "features": [],
         "tikaNeeded": False,
+        "federationServer": False,
         "failOnUncaughtConsoleError": "false",
         "extraServerEnvironment": {},
     }
@@ -598,14 +623,17 @@ def e2eTests(ctx):
             steps += collaboraService() + \
                      onlyofficeService() + \
                      waitForServices("online-offices", ["collabora:9980", "onlyoffice:443"]) + \
-                     ocisService(extra_env_config = params["extraServerEnvironment"]) + \
+                     ocisService(params["extraServerEnvironment"]) + \
                      wopiCollaborationService("collabora") + \
                      wopiCollaborationService("onlyoffice") + \
                      waitForServices("wopi", ["wopi-collabora:9300", "wopi-onlyoffice:9300"])
+        elif "ocm" in suite:
+            steps += ocisService(params["extraServerEnvironment"]) + \
+                     (ocisService(params["extraServerEnvironment"], "federation") if params["federationServer"] else [])
         else:
             # oCIS specific steps
             steps += (tikaService() if params["tikaNeeded"] else []) + \
-                     ocisService(extra_env_config = params["extraServerEnvironment"])
+                     ocisService(params["extraServerEnvironment"])
 
         command = "bash run-e2e.sh "
         if "suites" in matrix:
@@ -911,12 +939,11 @@ def documentation(ctx):
         },
     ]
 
-def ocisService(extra_env_config = {}, enforce_password_public_link = False):
+def ocisService(extra_env_config = {}, deploy_type = "ocis"):
     environment = {
         "IDM_ADMIN_PASSWORD": "admin",  # override the random admin password from `ocis init`
         "OCIS_INSECURE": "true",
         "OCIS_LOG_LEVEL": "error",
-        "OCIS_URL": "https://ocis:9200",
         "LDAP_GROUP_SUBSTRING_FILTER_TYPE": "any",
         "LDAP_USER_SUBSTRING_FILTER_TYPE": "any",
         "PROXY_ENABLE_BASIC_AUTH": True,
@@ -930,20 +957,22 @@ def ocisService(extra_env_config = {}, enforce_password_public_link = False):
         "GRAPH_AVAILABLE_ROLES": "b1e2218d-eef8-4d4c-b82d-0f1a1b48f3b5,a8d5fe5e-96e3-418d-825b-534dbdf22b99,fb6c3e19-e378-47e5-b277-9732f9de6e21,58c63c02-1d89-4572-916a-870abc5a1b7d,2d00ce52-1fc2-4dbc-8b95-a73b73395f5a,1c996275-f1c9-4e71-abdf-a42f6495e960,312c0871-5ef7-4b3a-85b6-0e4074c64049,aa97fe03-7980-45ac-9e50-b325749fd7e6",
     }
 
+    if deploy_type == "federation":
+        environment["OCIS_URL"] = "https://federation-ocis:10200"
+        environment["PROXY_HTTP_ADDR"] = "https://federation-ocis:10200"
+        container_name = "federation-ocis"
+        ocis_domain = "federation-ocis:10200"
+    else:
+        container_name = "ocis"
+        ocis_domain = "ocis:9200"
+        environment["OCIS_URL"] = "https://ocis:9200"
+
     for config in extra_env_config:
         environment[config] = extra_env_config[config]
 
-    if enforce_password_public_link:
-        environment["OCIS_SHARING_PUBLIC_SHARE_MUST_HAVE_PASSWORD"] = False
-        environment["FRONTEND_PASSWORD_POLICY_MIN_CHARACTERS"] = 0
-        environment["FRONTEND_PASSWORD_POLICY_MIN_LOWERCASE_CHARACTERS"] = 0
-        environment["FRONTEND_PASSWORD_POLICY_MIN_UPPERCASE_CHARACTERS"] = 0
-        environment["FRONTEND_PASSWORD_POLICY_MIN_DIGITS"] = 0
-        environment["FRONTEND_PASSWORD_POLICY_MIN_SPECIAL_CHARACTERS"] = 0
-
     return [
         {
-            "name": "ocis",
+            "name": container_name,
             "image": OC_CI_GOLANG,
             "detach": True,
             "environment": environment,
@@ -962,7 +991,7 @@ def ocisService(extra_env_config = {}, enforce_password_public_link = False):
                 "path": "/root/.ocis/config",
             }],
         },
-    ] + waitForServices("ocis", ["ocis:9200"])
+    ] + waitForServices(deploy_type, [ocis_domain])
 
 def checkForExistingOcisCache(ctx):
     web_repo_path = "https://raw.githubusercontent.com/owncloud/web/%s" % ctx.build.commit
@@ -1822,7 +1851,7 @@ def e2eTestsOnKeycloak(ctx):
         "KEYCLOAK_DOMAIN": "keycloak:8443",
     }
 
-    steps += ocisService(extra_env_config = environment) + \
+    steps += ocisService(environment) + \
              [
                  {
                      "name": "e2e-tests",
