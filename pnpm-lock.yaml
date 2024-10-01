@@ -476,7 +476,7 @@ importers:
         version: 2.4.1(eslint@9.11.1(jiti@1.21.0))
       globals:
         specifier: ^15.0.0
-        version: 15.9.0
+        version: 15.10.0
       typescript:
         specifier: 5.6.2
         version: 5.6.2
@@ -5023,8 +5023,8 @@ packages:
     resolution: {integrity: sha512-oahGvuMGQlPw/ivIYBjVSrWAfWLBeku5tpPE2fOPLi+WHffIWbuh2tCjhyQhTBPMf5E9jDEH4FOmTYgYwbKwtQ==}
     engines: {node: '>=18'}
 
-  globals@15.9.0:
-    resolution: {integrity: sha512-SmSKyLLKFbSr6rptvP8izbyxJL4ILwqO9Jg23UA0sDlGlu58V59D1//I3vlc0KJphVdUR7vMjHIplYnzBxorQA==}
+  globals@15.10.0:
+    resolution: {integrity: sha512-tqFIbz83w4Y5TCbtgjZjApohbuh7K9BxGYFm7ifwDR240tvdb7P9x+/9VvUKlmkPoiknoJtanI8UOrqxS3a7lQ==}
     engines: {node: '>=18'}
 
   globby@11.1.0:
@@ -13144,7 +13144,7 @@ snapshots:
       eslint: 9.11.1(jiti@1.21.0)
       eslint-plugin-es-x: 7.8.0(eslint@9.11.1(jiti@1.21.0))
       get-tsconfig: 4.8.1
-      globals: 15.9.0
+      globals: 15.10.0
       ignore: 5.3.2
       minimatch: 9.0.5
       semver: 7.6.3
@@ -13828,7 +13828,7 @@ snapshots:
 
   globals@14.0.0: {}
 
-  globals@15.9.0: {}
+  globals@15.10.0: {}
 
   globby@11.1.0:
     dependencies:
