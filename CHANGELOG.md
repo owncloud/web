@@ -12,6 +12,8 @@ Summary
 * Bugfix - Hide copy permanent link action on public pages: [#11645](https://github.com/owncloud/web/issues/11645)
 * Bugfix - Missing tags on "Shared with me" page: [#11677](https://github.com/owncloud/web/issues/11677)
 * Bugfix - Undefined request IDs: [#11678](https://github.com/owncloud/web/issues/11678)
+* Bugfix - Escape HTML characters in activities and notification view: [#11706](https://github.com/owncloud/web/pull/11706)
+* Bugfix - Prevent not allowed characters in shortcut name: [#11707](https://github.com/owncloud/web/pull/11707)
 * Enhancement - Allow setting view mode for apps via query: [#11668](https://github.com/owncloud/web/pull/11668)
 
 Details
@@ -46,6 +48,23 @@ Details
 
    https://github.com/owncloud/web/issues/11678
    https://github.com/owncloud/web/pull/11684
+
+* Bugfix - Escape HTML characters in activities and notification view: [#11706](https://github.com/owncloud/web/pull/11706)
+
+   We've fixed a bug where HTML characters were not escaped in the activities and
+   notification view. This could lead to potential XSS attacks.
+
+   https://github.com/owncloud/web/issues/11705
+   https://github.com/owncloud/web/pull/11706
+
+* Bugfix - Prevent not allowed characters in shortcut name: [#11707](https://github.com/owncloud/web/pull/11707)
+
+   We've fixed an issue where not allowed characters were allowed in the shortcut
+   name. Now, the shortcut name will be validated and only allowed characters will
+   be accepted.
+
+   https://github.com/owncloud/web/issues/11702
+   https://github.com/owncloud/web/pull/11707
 
 * Enhancement - Allow setting view mode for apps via query: [#11668](https://github.com/owncloud/web/pull/11668)
 
