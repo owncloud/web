@@ -213,6 +213,10 @@ export default defineComponent({
         return $gettext('%{name} already exists', { name: `${unref(inputFilename)}.url` })
       }
 
+      if (/[/]/.test(unref(inputFilename))) {
+        return $gettext('Shortcut name cannot contain "/"')
+      }
+
       return ''
     })
 
