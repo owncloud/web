@@ -1,0 +1,8 @@
+Change: Remove importer as default app
+
+BREAKING CHANGE for administrators: importer has been removed as default web app. The app is now available via the [web-extensions repository](https://github.com/owncloud/web-extensions).
+
+Please refer to [the web-app docs](https://owncloud.dev/services/web/#web-apps) to see how to load an external web app.
+
+https://github.com/owncloud/web/pull/11709
+https://github.com/owncloud/web/issues/11698
