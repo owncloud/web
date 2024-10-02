@@ -3,8 +3,9 @@
 </template>
 
 <script lang="ts">
-import { defineComponent } from 'vue'
-import { filesize } from 'filesize'
+import { computed, defineComponent } from 'vue'
+import { formatFileSize } from '../../helpers'
+import { useGettext } from 'vue3-gettext'
 
 /**
  * Displays a formatted resource size
@@ -21,24 +22,12 @@ export default defineComponent({
       required: true
     }
   },
+  setup: (props) => {
+    const { current: currentLanguage } = useGettext()
+    const formattedSize = computed(() => formatFileSize(props.size, currentLanguage))
 
-  computed: {
-    formattedSize() {
-      const size = parseInt(this.size.toString())
-      if (isNaN(size)) {
-        return '?'
-      }
-
-      if (size < 0) {
-        return '--'
-      }
-
-      const mb = 1048576
-
-      return filesize(size, {
-        round: size < mb ? 0 : 1,
-        locale: (this.$language?.current || '').split('_')[0]
-      })
+    return {
+      formattedSize
     }
   }
 })
