@@ -41,8 +41,8 @@ Feature: Upload
       | simple.pdf     |
       | testavatar.jpg |
     And "Alice" tries to upload the following resource
-      | resource      | error            |
-      | lorem-big.txt | Not enough quota |
+      | resource      | error              |
+      | lorem-big.txt | Insufficient quota |
     And "Alice" downloads the following resources using the sidebar panel
       | resource      | type   |
       | PARENT        | folder |

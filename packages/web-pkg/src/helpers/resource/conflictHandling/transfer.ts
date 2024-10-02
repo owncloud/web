@@ -7,6 +7,7 @@ import type { ClientService } from '../../../services'
 import { useMessages } from '../../../composables'
 import { Ref, unref } from 'vue'
 import type { Language } from 'vue3-gettext'
+import { HttpError } from '@ownclouders/web-client'
 
 export class ResourceTransfer extends ConflictDialog {
   constructor(
@@ -90,8 +91,16 @@ export class ResourceTransfer extends ConflictDialog {
           ? this.$gettext('Failed to copy "%{name}"', { name: errors[0]?.resourceName }, true)
           : this.$gettext('Failed to move "%{name}"', { name: errors[0]?.resourceName }, true)
     }
+    let description = ''
+    if (errors.some(({ error }) => error instanceof HttpError && error.statusCode === 507)) {
+      description = this.$gettext('Insufficient quota')
+    }
     const messageStore = useMessages()
-    messageStore.showErrorMessage({ title, errors: errors.map(({ error }) => error) })
+    messageStore.showErrorMessage({
+      title,
+      ...(description && { desc: description }),
+      errors: errors.map(({ error }) => error)
+    })
   }
 
   /**
