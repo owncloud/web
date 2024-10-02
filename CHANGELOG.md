@@ -10,6 +10,7 @@ Summary
 
 * Bugfix - User filters after page reload: [#11604](https://github.com/owncloud/web/issues/11604)
 * Bugfix - Hide copy permanent link action on public pages: [#11645](https://github.com/owncloud/web/issues/11645)
+* Bugfix - Missing tags on "Shared with me" page: [#11677](https://github.com/owncloud/web/issues/11677)
 * Bugfix - Undefined request IDs: [#11678](https://github.com/owncloud/web/issues/11678)
 * Enhancement - Allow setting view mode for apps via query: [#11668](https://github.com/owncloud/web/pull/11668)
 
@@ -31,6 +32,13 @@ Details
 
    https://github.com/owncloud/web/issues/11645
    https://github.com/owncloud/web/pull/11670
+
+* Bugfix - Missing tags on "Shared with me" page: [#11677](https://github.com/owncloud/web/issues/11677)
+
+   Missing resource tags on the "Shared with me" page have been added.
+
+   https://github.com/owncloud/web/issues/11677
+   https://github.com/owncloud/web/pull/11703
 
 * Bugfix - Undefined request IDs: [#11678](https://github.com/owncloud/web/issues/11678)
 
