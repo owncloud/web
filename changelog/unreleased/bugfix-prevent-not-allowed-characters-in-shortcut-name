@@ -1,0 +1,7 @@
+Bugfix: Prevent not allowed characters in shortcut name
+
+We've fixed an issue where not allowed characters were allowed in the shortcut name.
+Now, the shortcut name will be validated and only allowed characters will be accepted.
+
+https://github.com/owncloud/web/pull/11707
+https://github.com/owncloud/web/issues/11702
