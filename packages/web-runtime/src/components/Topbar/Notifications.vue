@@ -75,6 +75,7 @@
 <script lang="ts">
 import { computed, onMounted, onUnmounted, ref, unref } from 'vue'
 import isEmpty from 'lodash-es/isEmpty'
+import escape from 'lodash-es/escape'
 import {
   useCapabilityStore,
   useSpacesStore,
@@ -138,7 +139,7 @@ export default {
             }
             interpolatedMessage = interpolatedMessage.replace(
               `{${param.name}}`,
-              `<strong>${label}</strong>`
+              `<strong>${escape(label)}</strong>`
             )
           }
         }

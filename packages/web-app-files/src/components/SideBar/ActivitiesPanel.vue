@@ -42,6 +42,7 @@ import { useTask } from 'vue-concurrency'
 import { call, Resource } from '@ownclouders/web-client'
 import { DateTime } from 'luxon'
 import { Activity } from '@ownclouders/web-client/graph/generated'
+import escape from 'lodash-es/escape'
 
 const visibilityObserver = new VisibilityObserver()
 export default defineComponent({
@@ -82,7 +83,9 @@ export default defineComponent({
     const getHtmlFromActivity = (activity: Activity) => {
       let message = activity.template.message
       for (const [key, value] of Object.entries(activity.template.variables)) {
-        message = message.replace(`{${key}}`, `<strong>${value.displayName || value.name}</strong>`)
+        const escapedValue = escape(value.displayName || value.name)
+
+        message = message.replace(`{${key}}`, `<strong>${escapedValue}</strong>`)
       }
       return message
     }

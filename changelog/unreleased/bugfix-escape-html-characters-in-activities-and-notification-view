@@ -1,0 +1,7 @@
+Bugfix: Escape HTML characters in activities and notification view
+
+We've fixed a bug where HTML characters were not escaped in the activities and notification view.
+This could lead to potential XSS attacks.
+
+https://github.com/owncloud/web/pull/11706
+https://github.com/owncloud/web/issues/11705
