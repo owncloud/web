@@ -383,13 +383,17 @@ export default defineComponent({
 
         // shared resources look different, hence we need to fetch the actual resource here
         try {
-          let fullResource = await clientService.webdav.getFileInfo(props.space, {
+          const webDavResource = await clientService.webdav.getFileInfo(props.space, {
             path: resource.path
           })
 
-          // make sure props from the share (=resource) are available on the full resource as well
-          fullResource = { ...fullResource, ...resource }
-          loadedResource.value = fullResource
+          // make sure props from the share (=resource) are available on the merged resource
+          const mergedResource = {
+            ...webDavResource,
+            ...resource,
+            tags: webDavResource.tags // tags are always [] in Graph API, hence take them from webdav
+          }
+          loadedResource.value = mergedResource
         } catch (error) {
           loadedResource.value = resource
           console.error(error)

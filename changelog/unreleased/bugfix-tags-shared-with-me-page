@@ -1,0 +1,6 @@
+Bugfix: Missing tags on "Shared with me" page
+
+Missing resource tags on the "Shared with me" page have been added.
+
+https://github.com/owncloud/web/issues/11677
+https://github.com/owncloud/web/pull/11703
