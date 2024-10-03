@@ -4,7 +4,10 @@ import { TokenProviderType } from '../environment'
 import { UsersEnvironment } from '../environment'
 import { config } from '../../config'
 import { setAccessAndRefreshToken } from '../api/token'
-import { setAccessTokenForKeycloakUser } from '../api/keycloak/ocisUserToken'
+import {
+  refreshOcisAccessTokenForKeycloakUser,
+  setOcisAccessTokenForKeycloakUser
+} from '../api/keycloak/ocisUserToken'
 
 export const initializeUser = async ({
   browser,
@@ -39,8 +42,14 @@ export const setAccessToken = async (username: string) => {
   await setAccessAndRefreshToken(loginUser)
 }
 
-export const setKeyCloakAccessToken = async (username: string) => {
+export const setOcisAccessTokenForKeycloak = async (username: string) => {
   username = username || 'admin'
   const loginUser = new UsersEnvironment().getUser({ key: username })
-  await setAccessTokenForKeycloakUser(loginUser)
+  await setOcisAccessTokenForKeycloakUser(loginUser)
+}
+
+export const refreshOcisAccessTokenForKeycloak = async (username: string) => {
+  username = username || 'admin'
+  const loginUser = new UsersEnvironment().getUser({ key: username })
+  await refreshOcisAccessTokenForKeycloakUser(loginUser)
 }

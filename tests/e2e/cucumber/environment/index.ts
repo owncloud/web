@@ -25,7 +25,11 @@ import {
   keycloakCreatedUser
 } from '../../support/store'
 import { Group, User } from '../../support/types'
-import { setAccessToken, setKeyCloakAccessToken } from '../../support/utils/tokenHelper'
+import {
+  refreshOcisAccessTokenForKeycloak,
+  setAccessToken,
+  setOcisAccessTokenForKeycloak
+} from '../../support/utils/tokenHelper'
 import { createdTokenStore, keycloakTokenStore } from '../../support/store/token'
 import { removeTempUploadDirectory } from '../../support/utils/runtimeFs'
 import { getAccessToken, refreshToken, setupKeycloakAdminUser } from '../../support/api/keycloak'
@@ -75,7 +79,7 @@ Before(async function (this: World, { pickle }: ITestCaseHookParameter) {
   if (!config.basicAuth) {
     if (config.keycloak) {
       const user = this.usersEnvironment.getUser({ key: 'admin' })
-      await setKeyCloakAccessToken(user.id)
+      await setOcisAccessTokenForKeycloak(user.id)
       await setKeycloakAdminTokenfromApi(this.usersEnvironment.getUser({ key: 'admin' }))
     } else {
       await setAdminToken(this.usersEnvironment.getUser({ key: 'admin' }))
@@ -125,8 +129,9 @@ After(async function (this: World, { result, willBeRetried }: ITestCaseHookParam
 
   // refresh keycloak admin access token
   if (config.keycloak) {
-    await refreshToken({ user: this.usersEnvironment.getUser({ key: 'admin' }) })
-    await setKeycloakAdminTokenForoCIS(this.usersEnvironment.getUser({ key: 'admin' }))
+    const user = this.usersEnvironment.getUser({ key: 'admin' })
+    await refreshToken({ user: user })
+    await refreshOcisAccessTokenForKeycloak(user.id)
   }
 
   await cleanUpUser(this.usersEnvironment.getUser({ key: 'admin' }))

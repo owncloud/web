@@ -3,7 +3,7 @@ import { TokenEnvironmentFactory } from '../../environment'
 import { config } from '../../../config'
 import { User } from '../../types'
 
-interface KeycloakToken {
+interface ocisTokenForKeycloak {
   access_token: string
   refresh_token: string
 }
@@ -88,20 +88,48 @@ const getToken = async (authorizationCode: string) => {
 
   if (tokenResponse.status !== 200) {
     throw new Error(
-      `Login failed: Expected status code to be 200 but received ${tokenResponse.status}. \nMessage: ${tokenResponse.statusText}`
+      `Failed to retrieve token: Expected status code to be 200 but received ${tokenResponse.status}. \nMessage: ${tokenResponse.statusText}`
     )
   }
 
   return tokenResponse
 }
 
-export const setAccessTokenForKeycloakUser = async (user: User) => {
+export const setOcisAccessTokenForKeycloakUser = async (user: User) => {
   const [auhorizationUrl, cookies] = await getAuthorizationEndPoint()
   const authorizationCode = await getCode(user, auhorizationUrl, cookies)
   const tokenResponse = await getToken(authorizationCode)
-  const token = (await tokenResponse.json()) as KeycloakToken
+  const token = (await tokenResponse.json()) as ocisTokenForKeycloak
 
   const tokenEnvironment = TokenEnvironmentFactory()
+  tokenEnvironment.setToken({
+    user: { ...user },
+    token: {
+      userId: user.id,
+      accessToken: token.access_token,
+      refreshToken: token.refresh_token
+    }
+  })
+}
+
+export const refreshOcisAccessTokenForKeycloakUser = async (user: User) => {
+  const tokenEnvironment = TokenEnvironmentFactory()
+  const refreshToken = tokenEnvironment.getToken({ user }).refreshToken
+  const tokenResponse = await fetch(tokenEndpoint, {
+    method: 'POST',
+    body: new URLSearchParams({
+      client_id: 'web',
+      refresh_token: refreshToken,
+      grant_type: 'refresh_token'
+    })
+  })
+  if (tokenResponse.status !== 200) {
+    throw new Error(
+      `Failed to retrieve token: Expected status code to be 200 but received ${tokenResponse.status}. \nMessage: ${tokenResponse.statusText}`
+    )
+  }
+
+  const token = (await tokenResponse.json()) as ocisTokenForKeycloak
   tokenEnvironment.setToken({
     user: { ...user },
     token: {
