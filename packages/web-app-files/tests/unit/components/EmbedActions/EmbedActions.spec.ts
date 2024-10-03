@@ -67,7 +67,7 @@ describe('EmbedActions', () => {
       expect(mocks.postMessageMock).toHaveBeenCalledWith('owncloud-embed:select', [{ id: '1' }])
     })
     it('should display the file name input when chooseFileName is configured', () => {
-      const { wrapper, mocks } = getWrapper({
+      const { wrapper } = getWrapper({
         currentFolder: { id: '1' } as Resource,
         isLocationPicker: true,
         chooseFileName: true
@@ -76,7 +76,7 @@ describe('EmbedActions', () => {
       expect(wrapper.find(selectors.fileNameInput).exists()).toBe(true)
     })
     it('should hide the file name input when chooseFileName is not configured', () => {
-      const { wrapper, mocks } = getWrapper({
+      const { wrapper } = getWrapper({
         currentFolder: { id: '1' } as Resource,
         isLocationPicker: true
       })

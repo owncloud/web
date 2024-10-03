@@ -45,7 +45,7 @@ export const loadTheme = async (location = '') => {
       )
       return defaultOwnCloudTheme
     }
-  } catch (e) {
+  } catch {
     console.error(`Failed to load theme '${location}', using default theme.`)
     return defaultOwnCloudTheme
   }

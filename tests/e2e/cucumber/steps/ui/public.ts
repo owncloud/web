@@ -12,7 +12,7 @@ When(
     let page: Page
     try {
       page = this.actorsEnvironment.getActor({ key: stepUser }).page
-    } catch (e) {
+    } catch {
       await this.actorsEnvironment
         .createActor({
           key: stepUser,

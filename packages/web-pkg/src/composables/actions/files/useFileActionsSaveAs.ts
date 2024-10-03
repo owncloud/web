@@ -1,8 +1,7 @@
 import { FileAction, FileActionOptions } from '../types'
 import { computed, unref, Ref } from 'vue'
 import { useGettext } from 'vue3-gettext'
-import { useAppsStore, useModals } from '../../piniaStores'
-import { storeToRefs } from 'pinia'
+import { useModals } from '../../piniaStores'
 import SaveAsModal from '../../../components/Modals/SaveAsModal.vue'
 import { useFolderLink } from '../../folderLink'
 import { useIsFilesAppActive } from '../helpers'
@@ -11,8 +10,6 @@ export const useFileActionsSaveAs = ({ content }: { content: Ref<unknown> }) => 
   const { $gettext } = useGettext()
   const isFilesAppActive = useIsFilesAppActive()
   const { dispatchModal } = useModals()
-  const appsStore = useAppsStore()
-  const { apps } = storeToRefs(appsStore)
   const { getParentFolderLink } = useFolderLink()
 
   const handler = ({ resources }: FileActionOptions) => {

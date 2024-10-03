@@ -7,12 +7,11 @@ import {
 import { computed, unref } from 'vue'
 import { useClientService } from '../clientService'
 import { urlJoin } from '@ownclouders/web-client'
-import { useSpacesStore, useConfigStore, useSharesStore } from '../piniaStores'
+import { useSpacesStore, useSharesStore } from '../piniaStores'
 import { DavProperty } from '@ownclouders/web-client/webdav'
 
 export const useGetResourceContext = () => {
   const clientService = useClientService()
-  const configStore = useConfigStore()
   const spacesStore = useSpacesStore()
   const shareStore = useSharesStore()
 

@@ -149,7 +149,7 @@ import { findIndex } from 'lodash-es'
 export default defineComponent({
   name: 'GroupsList',
   components: { ContextMenuQuickAction, Pagination },
-  setup(props) {
+  setup() {
     const { $gettext } = useGettext()
     const { y: fileListHeaderY } = useFileListHeaderPosition('#admin-settings-app-bar')
     const contextMenuButtonRef = ref(undefined)

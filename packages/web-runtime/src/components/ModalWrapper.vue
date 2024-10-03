@@ -67,7 +67,7 @@ export default defineComponent({
         } else if (unref(customComponentRef)?.onConfirm) {
           await loadingService.addTask(() => unref(customComponentRef).onConfirm(value))
         }
-      } catch (error) {
+      } catch {
         updateModal(unref(modal)?.id, 'isLoading', false)
         return
       }

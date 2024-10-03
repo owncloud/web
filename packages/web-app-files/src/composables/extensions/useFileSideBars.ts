@@ -358,7 +358,7 @@ export const useSideBarPanels = (): SidebarPanelExtension<SpaceResource, Resourc
         icon: 'pulse',
         title: () => $gettext('Activities'),
         component: ActivitiesPanel,
-        isVisible: ({ items, root }) => {
+        isVisible: ({ items }) => {
           if (items?.length !== 1) {
             return false
           }

@@ -204,7 +204,7 @@ export default defineComponent({
       await listProviders()
       handleParams(unref(route))
     })
-    onBeforeRouteUpdate((to, from) => {
+    onBeforeRouteUpdate((to) => {
       handleParams(to)
     })
 

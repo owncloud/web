@@ -4,7 +4,6 @@ import { eventBus } from '../../../services'
 import { SideBarEventTopics } from '../../sideBar'
 import { computed } from 'vue'
 import { useGettext } from 'vue3-gettext'
-import { useIsFilesAppActive } from '../helpers'
 import { useRouter } from '../../router'
 import { FileAction, FileActionOptions } from '../types'
 import { useCanShare } from '../../shares'
@@ -13,7 +12,6 @@ import { useResourcesStore } from '../../piniaStores'
 export const useFileActionsShowShares = () => {
   const router = useRouter()
   const { $gettext } = useGettext()
-  const isFilesAppActive = useIsFilesAppActive()
   const { canShare } = useCanShare()
   const resourcesStore = useResourcesStore()
 

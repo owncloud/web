@@ -67,7 +67,7 @@ export class PublicLinkManager {
     if (password) {
       try {
         return Buffer.from(password, 'base64').toString()
-      } catch (e) {
+      } catch {
         this.clear(token)
       }
     }

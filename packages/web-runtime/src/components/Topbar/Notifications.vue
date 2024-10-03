@@ -223,7 +223,7 @@ export default {
         }
         setAdditionalNotificationData(notification)
         notifications.value = [notification, ...unref(notifications)]
-      } catch (_) {
+      } catch {
         console.error('Unable to parse sse notification data')
       }
     }

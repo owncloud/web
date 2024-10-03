@@ -139,7 +139,7 @@ export default defineComponent({
             await resolveToInternalLocation(path)
             loading.value = false
             return
-          } catch (e) {
+          } catch {
             // getPathForFileId failed means the user doesn't have internal access to the resource
           }
         }

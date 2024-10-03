@@ -312,26 +312,6 @@ export const announceApplicationsReady = async ({
 }
 
 /**
- * Rewrites old names of renamed apps to their new name and prints a warning to adjust configuration to the respective new app name.
- *
- * @param {ConfigStore} configStore
- */
-const rewriteDeprecatedAppNames = (configStore: ConfigStore) => {
-  const appAliases = [
-    { name: 'preview', oldName: 'media-viewer' },
-    { name: 'text-editor', oldName: 'markdown-editor' }
-  ]
-  return configStore.apps.map((appName) => {
-    const appAlias = appAliases.find((appAlias) => appAlias.oldName === appName)
-    if (appAlias) {
-      console.warn(`app "${appAlias.oldName}" has been renamed, use "${appAlias.name}" instead.`)
-      return appAlias.name
-    }
-    return appName
-  })
-}
-
-/**
  * announce runtime theme to the runtime, this also takes care that the store
  * and designSystem has all needed information to render the customized ui
  *

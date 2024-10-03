@@ -75,7 +75,7 @@ export default defineComponent({
           unref(props.activity.template.variables?.space),
           { fileId: props.activity.template.variables?.resource?.id }
         )
-      } catch (e) {
+      } catch {
         resourceNotAccessible.value = true
       }
     })

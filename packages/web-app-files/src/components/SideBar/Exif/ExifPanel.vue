@@ -42,7 +42,7 @@
 <script lang="ts">
 import { computed, defineComponent, inject, Ref, unref } from 'vue'
 import { Resource } from '@ownclouders/web-client'
-import { formatDateFromISO, useConfigStore, useMessages } from '@ownclouders/web-pkg'
+import { formatDateFromISO, useMessages } from '@ownclouders/web-pkg'
 import { useGettext } from 'vue3-gettext'
 import { useClipboard } from '@vueuse/core'
 
@@ -50,7 +50,6 @@ export default defineComponent({
   name: 'ExifPanel',
   setup() {
     const resource = inject<Ref<Resource>>('resource')
-    const config = useConfigStore()
     const language = useGettext()
     const { $gettext } = language
     const { showMessage } = useMessages()

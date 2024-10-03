@@ -128,7 +128,7 @@ export default defineComponent({
             }
           )
           return false
-        } catch (e) {}
+        } catch {}
       }
 
       this.formData.displayName.errorMessage = ''

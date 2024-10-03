@@ -48,7 +48,7 @@
 import { useGettext } from 'vue3-gettext'
 import { computed, defineComponent, ref, unref, PropType, watch } from 'vue'
 import * as EmailValidator from 'email-validator'
-import { Modal, useClientService, useEventBus, useMessages } from '@ownclouders/web-pkg'
+import { Modal, useClientService, useMessages } from '@ownclouders/web-pkg'
 import { useUserSettingsStore } from '../../composables/stores/userSettings'
 
 export default defineComponent({
@@ -57,7 +57,6 @@ export default defineComponent({
   emits: ['confirm', 'update:confirmDisabled'],
   setup(props, { emit, expose }) {
     const { showMessage, showErrorMessage } = useMessages()
-    const eventBus = useEventBus()
     const clientService = useClientService()
     const { $gettext } = useGettext()
     const userSettingsStore = useUserSettingsStore()
@@ -198,7 +197,7 @@ export default defineComponent({
         })
         this.formData.userName.valid = false
         return false
-      } catch (e) {}
+      } catch {}
 
       this.formData.userName.errorMessage = ''
       this.formData.userName.valid = true

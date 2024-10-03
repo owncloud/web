@@ -96,7 +96,7 @@ describe('resolvePrivateLink', () => {
     const { wrapper } = getWrapper()
     try {
       await wrapper.vm.resolvePrivateLinkTask.last
-    } catch (e) {}
+    } catch {}
 
     expect(wrapper.find('.oc-link-resolve-error-message p').text()).toEqual(
       'The file or folder does not exist'

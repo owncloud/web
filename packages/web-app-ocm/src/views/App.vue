@@ -58,7 +58,7 @@ export default defineComponent({
         >('/sciencemesh/find-accepted-users')
         loadingConnections.value = false
         connections.value = acceptedUsers.map(buildConnection)
-      } catch (error) {
+      } catch {
         connections.value = []
         loadingConnections.value = false
       }

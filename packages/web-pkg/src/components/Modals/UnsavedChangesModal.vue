@@ -42,6 +42,7 @@ export default defineComponent({
     modal: { type: Object as PropType<Modal>, required: true },
     closeCallback: { type: Function as PropType<() => void>, required: true }
   },
+  emits: ['cancel', 'confirm'],
   setup(props) {
     const { removeModal } = useModals()
     const onClose = () => {

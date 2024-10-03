@@ -35,5 +35,5 @@ const cacheFactory = async (options: AvatarUrlOptions): Promise<string> => {
   try {
     const src = await avatarUrl(options)
     return cacheService.avatarUrl.set(options.username, { src, size: options.size }, 0).src
-  } catch (ignored) {}
+  } catch {}
 }

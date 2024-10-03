@@ -120,7 +120,7 @@ describe('CreateUserModal', () => {
       const eventSpy = vi.spyOn(eventBus, 'publish')
       try {
         await wrapper.vm.onConfirm()
-      } catch (error) {}
+      } catch {}
 
       const { showMessage } = useMessages()
       expect(showMessage).not.toHaveBeenCalled()

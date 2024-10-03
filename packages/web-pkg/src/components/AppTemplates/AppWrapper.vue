@@ -557,7 +557,7 @@ export default defineComponent({
           hideActions: true,
           customComponentAttrs: () => {
             return {
-              closeCallback: async () => {
+              closeCallback: () => {
                 next()
               }
             }

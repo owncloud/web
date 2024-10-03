@@ -112,7 +112,7 @@ export default defineComponent({
         )
         this.formData.displayName.valid = false
         return false
-      } catch (e) {}
+      } catch {}
 
       this.formData.displayName.errorMessage = ''
       this.formData.displayName.valid = true
