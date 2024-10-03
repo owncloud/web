@@ -5,6 +5,7 @@ export const config = {
   assets: './tests/e2e/filesForUpload',
   tempAssetsPath: './tests/e2e/filesForUpload/temp',
   baseUrlOcis: process.env.BASE_URL_OCIS ?? 'host.docker.internal:9200',
+  federatedUrlOcis: process.env.BASE_URL_OCIS ?? 'host.docker.internal:9200',
   basicAuth: process.env.BASIC_AUTH === 'true',
   // keycloak config
   keycloak: process.env.KEYCLOAK === 'true',
@@ -17,6 +18,12 @@ export const config = {
   },
   get frontendUrl() {
     return withHttp(process.env.SERVER_HOST || this.baseUrlOcis)
+  },
+  get federatedBackendUrl() {
+    return withHttp(process.env.FEDERATED_BACKEND_HOST || this.federatedUrlOcis)
+  },
+  get federatedFrontendUrl() {
+    return withHttp(process.env.FEDERATED_SERVER_HOST || this.federatedUrlOcis)
   },
   get keycloakUrl() {
     return withHttp(this.keycloakHost)
