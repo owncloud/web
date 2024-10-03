@@ -293,7 +293,7 @@ services:
       - traefik
 
   traefik:
-    image: traefik:v3.1.4
+    image: traefik:v3.1.5
     restart: unless-stopped
     entrypoint:
       [
