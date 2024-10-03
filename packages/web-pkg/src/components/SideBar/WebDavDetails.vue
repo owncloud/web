@@ -35,7 +35,6 @@
 
 <script lang="ts">
 import { defineComponent, inject, ref, Ref, computed, unref, PropType } from 'vue'
-import { isShareSpaceResource, urlJoin } from '@ownclouders/web-client'
 import { Resource, SpaceResource } from '@ownclouders/web-client'
 import { encodePath } from '../../utils'
 
