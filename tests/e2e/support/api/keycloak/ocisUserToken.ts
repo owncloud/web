@@ -35,21 +35,19 @@ async function getAuthorizationEndPoint() {
     throw new Error(`Unexpected redirection. ${errorDescription}`)
   } else if (authorizationResponse.status !== 200) {
     throw new Error(
-      `Authorization failed: Expected status code be 200 but received ${authorizationResponse.status}. Message: ${authorizationResponse.statusText}`
+      `Authorization failed: Expected status code to be 200 but received ${authorizationResponse.status}. \nMessage: ${authorizationResponse.statusText}`
     )
   }
 
   const cookies = authorizationResponse.headers.raw()['set-cookie']?.[0]
   const htmlData = await authorizationResponse.text()
 
-  //regex to match the url received in the response html body
+  // authorization url for login is send back from server in the HTML body.
   const match = htmlData.match(/action="([^"]+)"/)
-  let auhorizationUrl
   if (!match) {
-    throw new Error('No URL found.')
-  } else {
-    auhorizationUrl = match[1]
+    throw new Error('No authorization url found in the HTML response body.')
   }
+  const auhorizationUrl = match[1]
   return [auhorizationUrl, cookies]
 }
 
@@ -68,7 +66,7 @@ const getCode = async (user, auhorizationUrl: string, cookies: string) => {
 
   if (authCodeResponse.status !== 302) {
     throw new Error(
-      `Login failed: Expected status code be 302 but received ${authCodeResponse.status}. Message: ${authCodeResponse.statusText}`
+      `Login failed: Expected status code to be 302 but received ${authCodeResponse.status}. \nMessage: ${authCodeResponse.statusText}`
     )
   }
 
@@ -90,7 +88,7 @@ const getToken = async (authorizationCode: string) => {
 
   if (tokenResponse.status !== 200) {
     throw new Error(
-      `Login failed: Expected status code be 200 but received ${tokenResponse.status}. Message: ${tokenResponse.statusText}`
+      `Login failed: Expected status code to be 200 but received ${tokenResponse.status}. \nMessage: ${tokenResponse.statusText}`
     )
   }
 
@@ -101,15 +99,15 @@ export const setAccessTokenForKeycloakUser = async (user: User) => {
   const [auhorizationUrl, cookies] = await getAuthorizationEndPoint()
   const authorizationCode = await getCode(user, auhorizationUrl, cookies)
   const tokenResponse = await getToken(authorizationCode)
-  const tokenList = (await tokenResponse.json()) as KeycloakToken
+  const token = (await tokenResponse.json()) as KeycloakToken
 
   const tokenEnvironment = TokenEnvironmentFactory()
   tokenEnvironment.setToken({
     user: { ...user },
     token: {
       userId: user.id,
-      accessToken: tokenList.access_token,
-      refreshToken: tokenList.refresh_token
+      accessToken: token.access_token,
+      refreshToken: token.refresh_token
     }
   })
 }

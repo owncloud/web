@@ -74,7 +74,8 @@ Before(async function (this: World, { pickle }: ITestCaseHookParameter) {
   })
   if (!config.basicAuth) {
     if (config.keycloak) {
-      await setKeycloakAdminTokenForoCIS(this.usersEnvironment.getUser({ key: 'admin' }))
+      const user = this.usersEnvironment.getUser({ key: 'admin' })
+      await setKeyCloakAccessToken(user.id)
       await setKeycloakAdminTokenfromApi(this.usersEnvironment.getUser({ key: 'admin' }))
     } else {
       await setAdminToken(this.usersEnvironment.getUser({ key: 'admin' }))
@@ -229,8 +230,4 @@ const setAdminToken = async (user: User) => {
 
 const setKeycloakAdminTokenfromApi = async (user: User) => {
   return await getAccessToken(user)
-}
-
-const setKeycloakAdminTokenForoCIS = async (user: User) => {
-  return await setKeyCloakAccessToken(user.id)
 }

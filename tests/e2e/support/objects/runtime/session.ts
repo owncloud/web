@@ -1,7 +1,6 @@
 import { Page } from '@playwright/test'
 import { User } from '../../types'
 import { config } from '../../../config'
-import { TokenProviderType } from '../../environment'
 
 export class Session {
   #page: Page
@@ -29,7 +28,7 @@ export class Session {
     await this.#page.locator('#kc-login').click()
   }
 
-  async login({ user }: { user: User; tokenType?: TokenProviderType }): Promise<void> {
+  async login(user: User): Promise<void> {
     const { id, password } = user
 
     await Promise.all([
