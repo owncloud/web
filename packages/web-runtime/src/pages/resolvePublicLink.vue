@@ -212,7 +212,7 @@ export default defineComponent({
         } catch (e) {
           authStore.clearPublicLinkContext()
           console.error(e, e.resource)
-          return
+          throw e
         }
       }
 
