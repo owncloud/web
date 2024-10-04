@@ -41,6 +41,7 @@ export const AppResourceSchema = z.object({
   label: z.string(),
   icon: z.string().optional()
 })
+export type AppResource = z.infer<typeof AppResourceSchema>
 
 export const RawAppSchema = z.object({
   id: z.string(),
