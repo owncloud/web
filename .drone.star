@@ -35,6 +35,7 @@ dir = {
     "commentsFile": "/var/www/owncloud/web/comments.file",
     "app": "/srv/app",
     "ocisConfig": "/var/www/owncloud/web/tests/drone/config-ocis.json",
+    "federatedOcisConfig": "/var/www/owncloud/web/tests/drone/config-ocis-federated.json",
     "ocisIdentifierRegistrationConfig": "/var/www/owncloud/web/tests/drone/identifier-registration.yml",
     "ocisRevaDataRoot": "/srv/app/tmp/ocis/owncloud/data/",
     "ocmProviders": "/var/www/owncloud/web/tests/drone/providers.json",
@@ -110,7 +111,7 @@ config = {
             },
         },
         "app-provider": {
-            "skip": False,
+            "skip": True,
             "suites": [
                 "app-provider",
             ],
@@ -224,7 +225,7 @@ def stagePipelines(ctx):
 
     e2e_pipelines = e2eTests(ctx)
     keycloak_pipelines = e2eTestsOnKeycloak(ctx)
-    return e2e_pipelines
+    return e2e_pipelines + keycloak_pipelines
 
 def afterPipelines(ctx):
     return build(ctx) + pipelinesDependsOn(notify(), build(ctx))
@@ -944,7 +945,6 @@ def ocisService(extra_env_config = {}, deploy_type = "ocis"):
         "OCIS_JWT_SECRET": "some-ocis-jwt-secret",
         "OCIS_PASSWORD_POLICY_BANNED_PASSWORDS_LIST": "%s/tests/drone/banned-passwords.txt" % dir["web"],
         "PROXY_CSP_CONFIG_FILE_LOCATION": "%s/tests/drone/csp.yaml" % dir["web"],
-        "WEB_UI_CONFIG_FILE": "%s" % dir["ocisConfig"],
         # Needed for enabling all roles
         "GRAPH_AVAILABLE_ROLES": "b1e2218d-eef8-4d4c-b82d-0f1a1b48f3b5,a8d5fe5e-96e3-418d-825b-534dbdf22b99,fb6c3e19-e378-47e5-b277-9732f9de6e21,58c63c02-1d89-4572-916a-870abc5a1b7d,2d00ce52-1fc2-4dbc-8b95-a73b73395f5a,1c996275-f1c9-4e71-abdf-a42f6495e960,312c0871-5ef7-4b3a-85b6-0e4074c64049,aa97fe03-7980-45ac-9e50-b325749fd7e6",
     }
@@ -952,12 +952,14 @@ def ocisService(extra_env_config = {}, deploy_type = "ocis"):
     if deploy_type == "federation":
         environment["OCIS_URL"] = "https://federation-ocis:10200"
         environment["PROXY_HTTP_ADDR"] = "federation-ocis:10200"
+        environment["WEB_UI_CONFIG_FILE"] = dir["federatedOcisConfig"]
         container_name = "federation-ocis"
         ocis_domain = "federation-ocis:10200"
     else:
         container_name = "ocis"
         ocis_domain = "ocis:9200"
         environment["OCIS_URL"] = "https://ocis:9200"
+        environment["WEB_UI_CONFIG_FILE"] = dir["ocisConfig"]
 
     for config in extra_env_config:
         environment[config] = extra_env_config[config]

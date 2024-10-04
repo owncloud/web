@@ -15,3 +15,13 @@ export const generateInvitation = async (args: { page: Page }): Promise<void> =>
   await page.locator(generateInvitationActionConfirmButton).click()
   await expect(page.locator(emptyInvitationToken)).not.toBeVisible()
 }
+
+export const acceptInvitation = async (args: { page: Page }): Promise<void> => {
+  const { page } = args
+  // todo: store federation invitation token  and use that token
+  // await page.locator(generateInvitationButton).click()
+  // await page.locator(descriptionInput).fill('hello')
+  // await page.locator(emailInput).fill('a@e.com')
+  // await page.locator(generateInvitationActionConfirmButton).click()
+  // await expect(page.locator(emptyInvitationToken)).not.toBeVisible()
+}

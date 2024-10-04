@@ -7,7 +7,7 @@ import { setAccessAndRefreshToken } from '../api/token'
 
 export const getTokenFromLogin = async ({
   browser,
-  url = config.frontendUrl,
+  url = config.baseUrl,
   username = null,
   tokenType = null,
   waitForSelector = null
