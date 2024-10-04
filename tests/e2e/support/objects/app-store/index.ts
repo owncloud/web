@@ -12,39 +12,39 @@ export class AppStore {
     await po.openAppStore({ page: this.#page })
   }
 
-  async waitForAppStoreIsVisible(): Promise<void> {
+  waitForAppStoreIsVisible(): Promise<void> {
     return po.waitForAppStoreIsVisible({ page: this.#page })
   }
 
-  async getAppsList(): Promise<string[]> {
+  getAppsList(): Promise<string[]> {
     return po.getAppsList({ page: this.#page })
   }
 
-  async setSearchTerm(searchTerm: string): Promise<void> {
+  setSearchTerm(searchTerm: string): Promise<void> {
     return po.setSearchTerm({ page: this.#page, searchTerm })
   }
 
-  async selectAppTag({ app, tag }: { app: string; tag: string }): Promise<void> {
+  selectAppTag({ app, tag }: { app: string; tag: string }): Promise<void> {
     return po.selectAppTag({ page: this.#page, app, tag })
   }
 
-  async selectTag(tag): Promise<void> {
+  selectTag(tag): Promise<void> {
     return po.selectTag({ page: this.#page, tag })
   }
 
-  async selectApp(app: string): Promise<void> {
+  selectApp(app: string): Promise<void> {
     return po.selectApp({ page: this.#page, app })
   }
 
-  async waitForAppDetailsIsVisible(app: string): Promise<void> {
+  waitForAppDetailsIsVisible(app: string): Promise<void> {
     return po.waitForAppDetailsIsVisible({ page: this.#page, app })
   }
 
-  async downloadApp(app: string): Promise<Download> {
+  downloadApp(app: string): Promise<Download> {
     return po.downloadApp({ page: this.#page, app })
   }
 
-  async downloadAppVersion(version: string): Promise<string> {
+  downloadAppVersion(version: string): Promise<string> {
     return po.downloadAppVersion({ page: this.#page, version })
   }
 

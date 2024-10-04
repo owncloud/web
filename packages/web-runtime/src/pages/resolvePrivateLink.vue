@@ -50,7 +50,6 @@ import {
   useRouteQuery,
   createLocationSpaces,
   createLocationShares,
-  useConfigStore,
   useClientService
 } from '@ownclouders/web-pkg'
 import { unref, defineComponent, computed, onMounted, ref, Ref } from 'vue'
@@ -66,7 +65,6 @@ export default defineComponent({
   setup() {
     const router = useRouter()
     const id = useRouteParam('fileId')
-    const configStore = useConfigStore()
     const { $gettext } = useGettext()
     const clientService = useClientService()
 

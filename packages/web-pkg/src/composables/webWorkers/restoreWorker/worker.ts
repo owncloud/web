@@ -45,7 +45,7 @@ const createFolderStructure = async ({
 
     try {
       await client.createFolder(space, { path: folderPath })
-    } catch (ignored) {}
+    } catch {}
 
     existingPaths.push(folderPath)
     parentPath = folderPath

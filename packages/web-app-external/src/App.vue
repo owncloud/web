@@ -185,7 +185,7 @@ export default defineComponent({
         if (JSON.parse(event.data)?.MessageId === 'UI_Edit') {
           loadAppUrl.perform('write')
         }
-      } catch (e) {}
+      } catch {}
     }
     onMounted(() => {
       if (determineOpenAsPreview(unref(appName))) {

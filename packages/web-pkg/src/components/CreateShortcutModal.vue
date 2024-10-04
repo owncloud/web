@@ -226,7 +226,7 @@ export default defineComponent({
 
       try {
         searchResult.value = yield search(searchTerm, SEARCH_LIMIT)
-      } catch (e) {
+      } catch {
         // Don't show user facing error, as the core functionality does work without an intact search
       }
     })
@@ -252,7 +252,7 @@ export default defineComponent({
           )
         }
         inputFilename.value = filename
-      } catch (_) {}
+      } catch {}
     }
 
     const dropItemResourceClicked = (item: SearchResultValue) => {

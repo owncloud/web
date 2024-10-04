@@ -417,7 +417,7 @@ export default defineComponent({
             userName: this.editUser.onPremisesSamAccountName
           })
           return false
-        } catch (e) {}
+        } catch {}
       }
 
       this.formData.userName.errorMessage = ''

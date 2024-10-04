@@ -287,7 +287,7 @@ export default defineComponent({
       )
     })
 
-    const loadResourcesTask = useTask(function* (signal) {
+    const loadResourcesTask = useTask(function* () {
       yield loadUsersTask.perform()
       yield loadGroupsTask.perform()
       yield loadAppRolesTask.perform()

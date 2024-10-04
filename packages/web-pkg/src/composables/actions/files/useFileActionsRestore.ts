@@ -59,7 +59,7 @@ export const useFileActionsRestore = () => {
               path: parentPath
             })
           ).children
-        } catch (error) {
+        } catch {
           missingFolderPaths.push(parentPath)
         }
         existingResourcesCache[parentPath] = existingResources

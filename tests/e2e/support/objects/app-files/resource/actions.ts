@@ -353,7 +353,7 @@ const createDocumentFile = async (
           .locator(collaboraWelcomeModalIframe)
           .waitFor({ timeout: config.minTimeout * 1000 })
         await page.keyboard.press('Escape')
-      } catch (e) {
+      } catch {
         console.log('No welcome modal found. Continue...')
       }
       await editorMainFrame.locator(collaboraDocTextAreaSelector).fill(content)
@@ -425,7 +425,7 @@ export const openAndGetContentOfDocument = async ({
           .locator(collaboraWelcomeModalIframe)
           .waitFor({ timeout: config.minTimeout * 1000 })
         await page.keyboard.press('Escape')
-      } catch (e) {
+      } catch {
         console.log('No welcome modal found. Continue...')
       }
       await editorMainFrame.locator(collaboraCanvasEditorSelector).click()
@@ -454,7 +454,7 @@ export const openAndGetContentOfDocument = async ({
     // select text again and copy text
     await page.keyboard.press('ControlOrMeta+A', { delay: 200 })
     await page.keyboard.press('ControlOrMeta+C', { delay: 200 })
-  } catch (e) {
+  } catch {
     console.log('No copy-paste warning popup found. Continue...')
   }
   return await page.evaluate(() => navigator.clipboard.readText())
@@ -1541,7 +1541,7 @@ export const getDisplayedResourcesFromTrashbin = async (page: Page): Promise<str
   const result = page.locator('[data-test-resource-path]')
   try {
     await result.first().waitFor({ timeout: config.minTimeout * 1000 })
-  } catch (err) {
+  } catch {
     console.log('Trashbin is empty')
   }
 
@@ -1698,7 +1698,7 @@ export const openFileInViewer = async (args: openFileInViewerArgs): Promise<void
         await onlyOfficeIframe.locator(onlyOfficeInfoDialogConfirm).click()
         // NOTE: page reload is required if the info dialog appears
         await page.reload()
-      } catch (err) {
+      } catch {
         console.log('No info dialog. Continue...')
       }
 
@@ -1995,7 +1995,7 @@ export const canEditContent = async ({
           .locator(collaboraWelcomeModalIframe)
           .waitFor({ timeout: config.minTimeout * 1000 })
         await page.keyboard.press('Escape')
-      } catch (e) {
+      } catch {
         console.log('No welcome modal found. Continue...')
       }
       const collaboraDocPermissionModeLocator = editorMainFrame.locator(
@@ -2011,7 +2011,7 @@ export const canEditContent = async ({
       try {
         await expect(innerFrame.locator(onlyOfficeSaveButtonSelector)).toBeVisible()
         return true
-      } catch (e) {
+      } catch {
         return false
       }
   }

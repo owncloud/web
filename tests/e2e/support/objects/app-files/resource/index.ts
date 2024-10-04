@@ -309,7 +309,7 @@ export class Resource {
     return po.getLockLocator({ ...args, page: this.#page })
   }
 
-  async navigateMediaFile(navigationType: string): Promise<void> {
+  navigateMediaFile(navigationType: string): Promise<void> {
     return po.navigateMediaFile({ page: this.#page, navigationType })
   }
 

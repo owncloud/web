@@ -16,7 +16,7 @@ export const listenSSE = (baseUrl: string, user: User): Promise<void> => {
       ...getAuthHeader(user)
     },
     signal: ctrl.signal,
-    async onopen(response) {
+    onopen(response) {
       if (response.ok && response.headers.get('content-type') === EventStreamContentType) {
         console.log('Listening to SSE events...')
         return Promise.resolve()

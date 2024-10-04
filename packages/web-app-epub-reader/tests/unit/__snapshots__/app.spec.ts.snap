@@ -17,7 +17,10 @@ exports[`Epub reader app > renders correctly 1`] = `
       <div class="epub-reader-controls-font-size oc-flex oc-button-group"><button type="button" aria-label="Decrease font size" class="oc-button oc-rounded oc-button-m oc-button-justify-content-center oc-button-gap-undefined oc-button-passive oc-button-passive-outline epub-reader-controls-font-size-decrease">
           <!--v-if-->
           <!-- @slot Content of the button --> <span class="oc-icon oc-icon-s oc-icon-passive"><!----></span> <span class="oc-icon oc-icon-xs oc-icon-passive"><!----></span>
-        </button> <button type="button" class="oc-button oc-rounded oc-button-m oc-button-justify-content-center oc-button-gap-undefined oc-button-passive oc-button-passive-outline epub-reader-controls-font-size-reset">100%</button> <button type="button" aria-label="Increase font size" class="oc-button oc-rounded oc-button-m oc-button-justify-content-center oc-button-gap-undefined oc-button-passive oc-button-passive-outline epub-reader-controls-font-size-increase">
+        </button> <button type="button" class="oc-button oc-rounded oc-button-m oc-button-justify-content-center oc-button-gap-undefined oc-button-passive oc-button-passive-outline epub-reader-controls-font-size-reset">
+          <!--v-if-->
+          <!-- @slot Content of the button --> 100%
+        </button> <button type="button" aria-label="Increase font size" class="oc-button oc-rounded oc-button-m oc-button-justify-content-center oc-button-gap-undefined oc-button-passive oc-button-passive-outline epub-reader-controls-font-size-increase">
           <!--v-if-->
           <!-- @slot Content of the button --> <span class="oc-icon oc-icon-s oc-icon-passive"><!----></span> <span class="oc-icon oc-icon-xs oc-icon-passive"><!----></span>
         </button></div>

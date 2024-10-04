@@ -21,7 +21,7 @@ export const resourceIsNotOpenable = async ({
       resourceLocator.click()
     ])
     return false
-  } catch (e) {
+  } catch {
     return true
   }
 }

@@ -13,21 +13,14 @@ const actionMenuDropdownButton =
   '//*[@data-test-resource-name="%s"]/ancestor::tr//button[contains(@class, "resource-table-btn-action-dropdown")]'
 const actionsTriggerButton =
   '//*[@data-test-resource-name="%s"]/ancestor::tr//button[contains(@class, "oc-files-actions-%s-trigger")]'
-
-const publicLinkInputField =
-  '//h4//span[contains(@class, "oc-files-file-link-name") and text()="%s"]' +
-  '/following-sibling::div//p[contains(@class,"oc-files-file-link-url")]'
 const selecAllCheckbox = '#resource-table-select-all'
 const acceptButton = '.oc-files-actions-enable-sync-trigger'
 const pendingShareItem =
   '//div[@id="files-shared-with-me-pending-section"]//tr[contains(@class,"oc-tbody-tr")]'
-const passwordInput = '.oc-modal-body .link-modal-password-input input.oc-text-input'
-const createLinkButton = '.oc-modal-body-actions-confirm'
 const showMoreOptionsButton = '#show-more-share-options-btn'
 const calendarDatePickerId = 'recipient-datepicker-btn'
 const informMessage = '//div[contains(@class,"oc-notification-message-title")]'
 const showMoreBtn = '.toggle-shares-list-btn:has-text("Show more")'
-const advancedModeButton = '.link-modal-advanced-mode-button'
 
 export interface ShareArgs {
   page: Page

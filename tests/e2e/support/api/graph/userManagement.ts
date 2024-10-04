@@ -50,7 +50,7 @@ export const deleteUser = async ({ user, admin }: { user: User; admin: User }): 
   try {
     const usersEnvironment = new UsersEnvironment()
     usersEnvironment.removeCreatedUser({ key: user.id })
-  } catch (e) {}
+  } catch {}
   return user
 }
 

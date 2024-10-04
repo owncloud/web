@@ -26,7 +26,7 @@ export const useRouteQuery = (name: string, defaultValue?: QueryValue): Ref<Quer
               [name]: v
             }
           })
-        } catch (e) {}
+        } catch {}
       })
       lastNavigation = navigation
     }

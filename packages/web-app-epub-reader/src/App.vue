@@ -35,8 +35,9 @@
             class="epub-reader-controls-font-size-reset"
             gap-size="none"
             @click="resetFontSize"
-            v-text="`${currentFontSizePercentage}%`"
-          />
+          >
+            {{ `${currentFontSizePercentage}%` }}
+          </oc-button>
           <oc-button
             v-oc-tooltip="`${currentFontSizePercentage + FONT_SIZE_PERCENTAGE_STEP}%`"
             :aria-label="$gettext('Increase font size')"

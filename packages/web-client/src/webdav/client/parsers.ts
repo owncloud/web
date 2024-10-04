@@ -76,7 +76,7 @@ export const parseError = (xmlBody: string): { message: string; errorCode: DavEr
         errorObj.errorCode = errorCode
       }
     }
-  } catch (error) {
+  } catch {
     return errorObj
   }
 
