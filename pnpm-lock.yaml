@@ -1041,7 +1041,7 @@ importers:
         version: 8.11.1
       oidc-client-ts:
         specifier: ^2.4.0 || ^3.0.0
-        version: 3.0.1
+        version: 3.1.0
       p-queue:
         specifier: ^8.0.0
         version: 8.0.1
@@ -1175,7 +1175,7 @@ importers:
         version: 8.11.1
       oidc-client-ts:
         specifier: ^3.0.0
-        version: 3.0.1
+        version: 3.1.0
       p-queue:
         specifier: 8.0.1
         version: 8.0.1
@@ -6471,8 +6471,8 @@ packages:
   obuf@1.1.2:
     resolution: {integrity: sha512-PX1wu0AmAdPqOL1mWhqmlOd8kOIZQwGZw6rh7uby9fTc5lhaOWFLX3I6R1hrF9k3zUY40e6igsLGkDXK92LJNg==}
 
-  oidc-client-ts@3.0.1:
-    resolution: {integrity: sha512-xX8unZNtmtw3sOz4FPSqDhkLFnxCDsdo2qhFEH2opgWnF/iXMFoYdBQzkwCxAZVgt3FT3DnuBY3k80EZHT0RYg==}
+  oidc-client-ts@3.1.0:
+    resolution: {integrity: sha512-IDopEXjiwjkmJLYZo6BTlvwOtnlSniWZkKZoXforC/oLZHC9wkIxd25Kwtmo5yKFMMVcsp3JY6bhcNJqdYk8+g==}
     engines: {node: '>=18'}
 
   on-exit-leak-free@2.1.2:
@@ -15215,7 +15215,7 @@ snapshots:
 
   obuf@1.1.2: {}
 
-  oidc-client-ts@3.0.1:
+  oidc-client-ts@3.1.0:
     dependencies:
       jwt-decode: 4.0.0
 
