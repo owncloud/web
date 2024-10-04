@@ -6,6 +6,7 @@
       :main-actions="fileActions"
       :drop-down-menu-sections="dropDownMenuSections"
       :drop-down-action-options="dropDownActionOptions"
+      :is-auto-save-enabled="isAutoSaveEnabled"
       :is-editor="isEditor"
       :resource="resource"
       @close="closeApp"
@@ -123,6 +124,10 @@ export default defineComponent({
     importResourceWithExtension: {
       type: Function as PropType<(resource: Resource) => string>,
       default: (): Resource => null
+    },
+    disableAutoSave: {
+      type: Boolean,
+      default: false
     }
   },
   setup(props) {
@@ -407,13 +412,17 @@ export default defineComponent({
       await saveFileTask.perform()
     }
 
+    const isAutoSaveEnabled = computed(() => {
+      return !props.disableAutoSave
+    })
+
     let autosaveIntervalId: ReturnType<typeof setInterval> = null
     onMounted(() => {
       if (!unref(isEditor)) {
         return
       }
       const editorOptions = configStore.options.editor
-      if (editorOptions.autosaveEnabled) {
+      if (editorOptions.autosaveEnabled && !props.disableAutoSave) {
         autosaveIntervalId = setInterval(
           async () => {
             if (isDirty.value) {
@@ -604,6 +613,7 @@ export default defineComponent({
       ...useSideBar(),
       dropDownMenuSections,
       dropDownActionOptions: actionOptions,
+      isAutoSaveEnabled,
       isEditor,
       closeApp,
       fileActions,
