@@ -10,4 +10,8 @@ export class Federation {
   async generateInvitation(): Promise<void> {
     await po.generateInvitation({ page: this.#page })
   }
+
+  async acceptInvitation(): Promise<void> {
+    await po.acceptInvitation({ page: this.#page })
+  }
 }

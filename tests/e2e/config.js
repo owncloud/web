@@ -5,7 +5,6 @@ export const config = {
   assets: './tests/e2e/filesForUpload',
   tempAssetsPath: './tests/e2e/filesForUpload/temp',
   baseUrlOcis: process.env.BASE_URL_OCIS ?? 'host.docker.internal:9200',
-  federatedUrlOcis: process.env.BASE_URL_OCIS ?? 'host.docker.internal:9200',
   basicAuth: process.env.BASIC_AUTH === 'true',
   // keycloak config
   keycloak: process.env.KEYCLOAK === 'true',
@@ -13,23 +12,17 @@ export const config = {
   keycloakRealm: process.env.KEYCLOAK_REALM ?? 'oCIS',
   keycloakAdminUser: process.env.KEYCLOAK_ADMIN_USER ?? 'admin',
   keycloakAdminPassword: process.env.KEYCLOAK_ADMIN_PASSWORD ?? 'admin',
-  get backendUrl() {
-    return withHttp(process.env.BACKEND_HOST || this.baseUrlOcis)
-  },
-  get frontendUrl() {
-    return withHttp(process.env.SERVER_HOST || this.baseUrlOcis)
-  },
-  get federatedBackendUrl() {
-    return withHttp(process.env.FEDERATED_BACKEND_HOST || this.federatedUrlOcis)
-  },
-  get federatedFrontendUrl() {
-    return withHttp(process.env.FEDERATED_SERVER_HOST || this.federatedUrlOcis)
-  },
   get keycloakUrl() {
     return withHttp(this.keycloakHost)
   },
   get keycloakLoginUrl() {
     return withHttp(this.keycloakHost + '/admin/master/console')
+  },
+  // ocm config
+  federatedBaseUrlOcis: process.env.FEDERATED_BASE_URL_OCIS ?? 'federation-ocis:10200',
+  federatedServer: false,
+  get baseUrl() {
+    return withHttp(this.federatedServer ? this.federatedBaseUrlOcis : this.baseUrlOcis)
   },
   debug: process.env.DEBUG === 'true',
   logLevel: process.env.LOG_LEVEL || 'silent',

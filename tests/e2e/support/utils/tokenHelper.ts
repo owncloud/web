@@ -7,7 +7,7 @@ import { setAccessAndRefreshToken } from '../api/token'
 
 export const initializeUser = async ({
   browser,
-  url = config.frontendUrl,
+  url = config.baseUrl,
   username = null,
   waitForSelector = null
 }: {
