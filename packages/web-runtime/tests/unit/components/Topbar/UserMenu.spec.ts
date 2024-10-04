@@ -12,8 +12,11 @@ import { Quota } from '@ownclouders/web-client/graph/generated'
 
 const totalQuota = 1000
 const basicQuota = 300
+const basicRemainingQuota = 700
 const warningQuota = 810
+const warningRemainingQuota = 190
 const dangerQuota = 910
+const dangerRemainingQuota = 90
 
 const noEmail = ''
 const email = 'test@test.de'
@@ -27,7 +30,10 @@ describe('User Menu component', () => {
   })
   describe('when quota and no email is set', () => {
     it('renders a navigation without email', () => {
-      const wrapper = getMountedWrapper({ used: basicQuota, total: totalQuota }, noEmail)
+      const wrapper = getMountedWrapper(
+        { used: basicQuota, remaining: basicRemainingQuota, total: totalQuota },
+        noEmail
+      )
       expect(wrapper.html()).toMatchSnapshot()
     })
   })
@@ -48,6 +54,7 @@ describe('User Menu component', () => {
       const wrapper = getMountedWrapper(
         {
           used: basicQuota,
+          remaining: basicRemainingQuota,
           total: totalQuota
         },
         email
@@ -60,6 +67,7 @@ describe('User Menu component', () => {
       const wrapper = getMountedWrapper(
         {
           used: warningQuota,
+          remaining: warningRemainingQuota,
           total: totalQuota
         },
         email
@@ -72,6 +80,7 @@ describe('User Menu component', () => {
       const wrapper = getMountedWrapper(
         {
           used: dangerQuota,
+          remaining: dangerRemainingQuota,
           total: totalQuota
         },
         email
@@ -84,6 +93,7 @@ describe('User Menu component', () => {
       const wrapper = getMountedWrapper(
         {
           used: basicQuota,
+          remaining: basicRemainingQuota,
           total: 0
         },
         email
@@ -96,6 +106,7 @@ describe('User Menu component', () => {
       const wrapper = getMountedWrapper(
         {
           used: dangerQuota,
+          remaining: dangerRemainingQuota,
           total: 0
         },
         email
@@ -108,6 +119,7 @@ describe('User Menu component', () => {
       const wrapper = getMountedWrapper(
         {
           used: dangerQuota,
+          remaining: dangerRemainingQuota,
           total: totalQuota
         },
         email,

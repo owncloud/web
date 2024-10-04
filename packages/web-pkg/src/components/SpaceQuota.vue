@@ -1,6 +1,11 @@
 <template>
   <div class="space-quota">
-    <p class="oc-mb-s oc-mt-rm" v-text="spaceStorageDetailsLabel" />
+    <p class="oc-m-rm" v-text="spaceStorageDetailsLabel" />
+    <p
+      v-if="spaceQuota.total"
+      class="oc-m-rm oc-text-muted oc-text-xsmall"
+      v-text="spaceStorageSubDetailsLabel"
+    />
     <oc-progress
       :value="quotaUsagePercent"
       :max="100"
@@ -35,7 +40,7 @@ export default defineComponent({
   computed: {
     spaceStorageDetailsLabel() {
       if (this.spaceQuota.total) {
-        return this.$gettext('%{used} of %{total} used (%{percentage}% used)', {
+        return this.$gettext('%{used} of %{total} used', {
           used: this.quotaUsed,
           total: this.quotaTotal,
           percentage: this.quotaUsagePercent.toString()
@@ -46,6 +51,12 @@ export default defineComponent({
         used: this.quotaUsed
       })
     },
+    spaceStorageSubDetailsLabel() {
+      return this.$gettext('%{percentage}% used, %{remaining} remaining', {
+        percentage: this.quotaUsagePercent.toString(),
+        remaining: this.quotaRemaining.toString()
+      })
+    },
     quotaTotal() {
       return formatFileSize(this.spaceQuota.total, this.currentLanguage)
     },
@@ -54,6 +65,9 @@ export default defineComponent({
     },
     quotaUsagePercent() {
       return parseFloat(((this.spaceQuota.used / this.spaceQuota.total) * 100).toFixed(2))
+    },
+    quotaRemaining() {
+      return formatFileSize(this.spaceQuota.remaining, this.currentLanguage)
     },
     quotaProgressVariant() {
       switch (this.spaceQuota.state) {
