@@ -1,0 +1,6 @@
+Bugfix: Details panel wrong WebDAV URL of received shares
+
+We've fixed a bug where the WebDAV URL in the details panel of received shares was wrong.
+
+https://github.com/owncloud/web/pull/11712
+https://github.com/owncloud/web/issues/11704
