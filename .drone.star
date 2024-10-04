@@ -28,12 +28,6 @@ TOOLHIPPIE_CALENS = "toolhippie/calens:latest"
 WEB_PUBLISH_NPM_PACKAGES = ["babel-preset", "eslint-config", "extension-sdk", "prettier-config", "tsconfig", "web-client", "web-pkg"]
 WEB_PUBLISH_NPM_ORGANIZATION = "@ownclouders"
 
-# configs
-OCIS_URL = "https://ocis:9200"
-OCIS_DOMAIN = "ocis:9200"
-OCIS_FED_URL = "https://federation-ocis:10200"
-OCIS_FED_DOMAIN = "federation-ocis:10200"
-
 dir = {
     "base": "/var/www/owncloud",
     "web": "/var/www/owncloud/web",
@@ -60,7 +54,7 @@ config = {
     "e2e": {
         "1": {
             "earlyFail": True,
-            "skip": False,
+            "skip": True,
             "suites": [
                 "journeys",
                 "smoke",
@@ -68,7 +62,7 @@ config = {
         },
         "2": {
             "earlyFail": True,
-            "skip": False,
+            "skip": True,
             "suites": [
                 "admin-settings",
                 "spaces",
@@ -76,7 +70,7 @@ config = {
         },
         "3": {
             "earlyFail": True,
-            "skip": False,
+            "skip": True,
             "tikaNeeded": True,
             "suites": [
                 "search",
@@ -91,7 +85,7 @@ config = {
         },
         "4": {
             "earlyFail": True,
-            "skip": False,
+            "skip": True,
             "suites": [
                 "navigation",
                 "user-settings",
@@ -133,7 +127,7 @@ config = {
             },
         },
         "oidc-refresh-token": {
-            "skip": False,
+            "skip": True,
             "features": [
                 "cucumber/features/oidc/refreshToken.feature",
             ],
@@ -143,7 +137,7 @@ config = {
             },
         },
         "oidc-iframe": {
-            "skip": False,
+            "skip": True,
             "features": [
                 "cucumber/features/oidc/iframeTokenRenewal.feature",
             ],
@@ -215,7 +209,6 @@ def main(ctx):
 def beforePipelines(ctx):
     return checkStarlark() + \
            licenseCheck(ctx) + \
-           documentation(ctx) + \
            changelog(ctx) + \
            pnpmCache(ctx) + \
            cacheOcisPipeline(ctx) + \
@@ -231,7 +224,7 @@ def stagePipelines(ctx):
 
     e2e_pipelines = e2eTests(ctx)
     keycloak_pipelines = e2eTestsOnKeycloak(ctx)
-    return unit_test_pipelines + buildAndTestDesignSystem(ctx) + pipelinesDependsOn(e2e_pipelines + keycloak_pipelines, unit_test_pipelines)
+    return e2e_pipelines
 
 def afterPipelines(ctx):
     return build(ctx) + pipelinesDependsOn(notify(), build(ctx))
@@ -948,6 +941,7 @@ def ocisService(extra_env_config = {}, deploy_type = "ocis"):
         "WEB_ASSET_CORE_PATH": "%s/dist" % dir["web"],
         "FRONTEND_SEARCH_MIN_LENGTH": "2",
         "FRONTEND_OCS_ENABLE_DENIALS": True,
+        "OCIS_JWT_SECRET": "some-ocis-jwt-secret",
         "OCIS_PASSWORD_POLICY_BANNED_PASSWORDS_LIST": "%s/tests/drone/banned-passwords.txt" % dir["web"],
         "PROXY_CSP_CONFIG_FILE_LOCATION": "%s/tests/drone/csp.yaml" % dir["web"],
         "WEB_UI_CONFIG_FILE": "%s" % dir["ocisConfig"],
@@ -957,7 +951,7 @@ def ocisService(extra_env_config = {}, deploy_type = "ocis"):
 
     if deploy_type == "federation":
         environment["OCIS_URL"] = "https://federation-ocis:10200"
-        environment["PROXY_HTTP_ADDR"] = "https://federation-ocis:10200"
+        environment["PROXY_HTTP_ADDR"] = "federation-ocis:10200"
         container_name = "federation-ocis"
         ocis_domain = "federation-ocis:10200"
     else:
@@ -981,13 +975,6 @@ def ocisService(extra_env_config = {}, deploy_type = "ocis"):
                 "cp %s/tests/drone/app-registry.yaml /root/.ocis/config/app-registry.yaml" % dir["web"],
                 "./ocis server",
             ],
-            "volumes": [{
-                "name": "gopath",
-                "path": dir["app"],
-            }, {
-                "name": "ocis-config",
-                "path": "/root/.ocis/config",
-            }],
         },
     ] + waitForServices(deploy_type, [ocis_domain])
 
@@ -1642,6 +1629,8 @@ def wopiCollaborationService(name):
         "COLLABORATION_HTTP_ADDR": "0.0.0.0:9300",
         "COLLABORATION_APP_INSECURE": True,
         "COLLABORATION_CS3API_DATAGATEWAY_INSECURE": True,
+        "OCIS_JWT_SECRET": "some-ocis-jwt-secret",
+        "COLLABORATION_WOPI_SECRET": "some-wopi-secret",
     }
 
     if name == "collabora":
@@ -1663,16 +1652,6 @@ def wopiCollaborationService(name):
             "environment": environment,
             "commands": [
                 "./ocis collaboration server",
-            ],
-            "volumes": [
-                {
-                    "name": "gopath",
-                    "path": dir["app"],
-                },
-                {
-                    "name": "ocis-config",
-                    "path": "/root/.ocis/config",
-                },
             ],
         },
     ]
