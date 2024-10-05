@@ -5,7 +5,7 @@ import { CapabilityStore, ClientService, useRouteParam, useRouteQuery } from '@o
 import { DavHttpError, SpaceResource } from '@ownclouders/web-client'
 import { authService } from '../../../src/services/auth'
 import { ref } from 'vue'
-import { DavErrorCode } from '@ownclouders/web-client/src/webdav'
+import { DavErrorCode } from '@ownclouders/web-client/webdav'
 
 vi.mock('../../../src/services/auth')
 
