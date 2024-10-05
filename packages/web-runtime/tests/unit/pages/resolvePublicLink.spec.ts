@@ -5,6 +5,7 @@ import { CapabilityStore, ClientService, useRouteParam, useRouteQuery } from '@o
 import { DavHttpError, SpaceResource } from '@ownclouders/web-client'
 import { authService } from '../../../src/services/auth'
 import { ref } from 'vue'
+import { DavErrorCode } from '@ownclouders/web-client/src/webdav'
 
 vi.mock('../../../src/services/auth')
 
@@ -67,6 +68,31 @@ describe('resolvePublicLink', () => {
       })
     })
   })
+  describe('error message', () => {
+    it('should display an error message if the space cannot be resolved', async () => {
+      const { wrapper, mocks } = getWrapper({ getFileInfoErrorStatusCode: 404 })
+
+      try {
+        await wrapper.vm.loadPublicSpaceTask.last
+      } catch {}
+
+      expect(wrapper.find('.oc-link-resolve-error-message').text()).toContain(
+        'The resource could not be located, it may not exist anymore.'
+      )
+    })
+    it('should display an error message if the space cannot be resolved after entering password', async () => {
+      const { wrapper, mocks } = getWrapper({
+        passwordRequired: true,
+        getFileInfoErrorStatusCode: 404
+      })
+      await wrapper.vm.loadPublicSpaceTask.last
+      await expect(wrapper.vm.resolvePublicLinkTask.perform(true)).rejects.toThrow()
+
+      expect(wrapper.find('.oc-link-resolve-error-message').text()).toContain(
+        'The resource could not be located, it may not exist anymore.'
+      )
+    })
+  })
   describe('internal link', () => {
     it('redirects the user to the login page', async () => {
       const { wrapper, mocks } = getWrapper({ isInternalLink: true })
@@ -82,8 +108,13 @@ describe('resolvePublicLink', () => {
 
 function getWrapper({
   passwordRequired = false,
-  isInternalLink = false
-}: { passwordRequired?: boolean; isInternalLink?: boolean } = {}) {
+  isInternalLink = false,
+  getFileInfoErrorStatusCode = null
+}: {
+  passwordRequired?: boolean
+  isInternalLink?: boolean
+  getFileInfoErrorStatusCode?: number
+} = {}) {
   const $clientService = mockDeep<ClientService>()
   const spaceResource = mockDeep<SpaceResource>({ driveType: 'public' })
 
@@ -98,7 +129,14 @@ function getWrapper({
     )
   }
 
-  $clientService.webdav.getFileInfo.mockResolvedValueOnce(spaceResource)
+  if (getFileInfoErrorStatusCode) {
+    $clientService.webdav.getFileInfo.mockRejectedValueOnce(
+      new DavHttpError('', 'ERR_UNKNOWN' as DavErrorCode, undefined, getFileInfoErrorStatusCode)
+    )
+  } else {
+    $clientService.webdav.getFileInfo.mockResolvedValueOnce(spaceResource)
+  }
+
   const mocks = { ...defaultComponentMocks(), $clientService }
 
   const capabilities = {

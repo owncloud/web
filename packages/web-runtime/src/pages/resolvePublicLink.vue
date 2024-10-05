@@ -275,14 +275,19 @@ export default defineComponent({
     })
 
     onMounted(async () => {
-      if (unref(isOcmLink)) {
-        await resolvePublicLinkTask.perform(false)
-        return
-      }
+      try {
+        if (unref(isOcmLink)) {
+          await resolvePublicLinkTask.perform(false)
+          return
+        }
 
-      await loadPublicSpaceTask.perform()
-      if (!unref(isPasswordRequired)) {
-        await resolvePublicLinkTask.perform(false)
+        await loadPublicSpaceTask.perform()
+
+        if (!unref(isPasswordRequired)) {
+          await resolvePublicLinkTask.perform(false)
+        }
+      } catch (e) {
+        console.error(e)
       }
     })
 
