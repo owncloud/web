@@ -1,0 +1,6 @@
+Bugfix: Application menu not operable in Safari browser
+
+We've fixed a bug where the application menu was not operable in the Safari browser.
+
+https://github.com/owncloud/web/pull/11726
+https://github.com/owncloud/web/issues/11718
