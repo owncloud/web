@@ -138,10 +138,8 @@ export default defineComponent({
     }
 
     const onFocusOut = (event: FocusEvent) => {
-      const focusLeft =
-        event.relatedTarget &&
-        !unref(drop).contains(event.relatedTarget as Node) &&
-        !(event.relatedTarget as HTMLElement)?.classList?.contains('tippy-box')
+      const tippyBox = unref(drop).closest('.tippy-box')
+      const focusLeft = event.relatedTarget && !tippyBox.contains(event.relatedTarget as Node)
       if (focusLeft) {
         // close drop when the focus leaves it
         hide()
