@@ -5,7 +5,7 @@ import {
   mockAxiosResolve,
   mount,
   mockAxiosReject
-} from 'web-test-helpers'
+} from '@ownclouders/web-test-helpers'
 import { mock } from 'vitest-mock-extended'
 import {
   Extension,

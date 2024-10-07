@@ -7,7 +7,7 @@ import {
   defaultPlugins,
   shallowMount,
   useGetMatchingSpaceMock
-} from 'web-test-helpers'
+} from '@ownclouders/web-test-helpers'
 import { useFileActions } from '../../../../src/composables/actions'
 import { CapabilityStore } from '../../../../src/composables/piniaStores'
 

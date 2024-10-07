@@ -6,7 +6,7 @@
   "license": "AGPL-3.0",
   "devDependencies": {
     "flush-promises": "1.0.2",
-    "web-test-helpers": "workspace:*"
+    "@ownclouders/web-test-helpers": "workspace:*"
   },
   "peerDependencies": {
     "@ownclouders/web-client": "workspace:*",

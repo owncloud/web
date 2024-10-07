@@ -1,5 +1,10 @@
 import EditPanel from '../../../../../src/components/Groups/SideBar/EditPanel.vue'
-import { defaultComponentMocks, defaultPlugins, mockAxiosReject, mount } from 'web-test-helpers'
+import {
+  defaultComponentMocks,
+  defaultPlugins,
+  mockAxiosReject,
+  mount
+} from '@ownclouders/web-test-helpers'
 import { mock } from 'vitest-mock-extended'
 import { eventBus, useMessages } from '@ownclouders/web-pkg'
 import { Group } from '@ownclouders/web-client/graph/generated'

@@ -1,5 +1,5 @@
 import ResourceConflictModal from '../../../../src/components/Modals/ResourceConflictModal.vue'
-import { defaultComponentMocks, defaultPlugins, shallowMount } from 'web-test-helpers'
+import { defaultComponentMocks, defaultPlugins, shallowMount } from '@ownclouders/web-test-helpers'
 import { mock } from 'vitest-mock-extended'
 import { Resource } from '@ownclouders/web-client'
 import { ResolveStrategy } from '../../../../src/helpers/resource'

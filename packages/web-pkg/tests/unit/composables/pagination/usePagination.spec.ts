@@ -1,6 +1,6 @@
 import { ref, unref } from 'vue'
 import { usePagination } from '../../../../src/composables'
-import { getComposableWrapper } from 'web-test-helpers'
+import { getComposableWrapper } from '@ownclouders/web-test-helpers'
 
 describe('usePagination', () => {
   describe('computed items', () => {

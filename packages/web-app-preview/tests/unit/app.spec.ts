@@ -1,6 +1,6 @@
 import App from '../../src/App.vue'
 import { nextTick } from 'vue'
-import { defaultComponentMocks, defaultPlugins, shallowMount } from 'web-test-helpers'
+import { defaultComponentMocks, defaultPlugins, shallowMount } from '@ownclouders/web-test-helpers'
 import { FileContext } from '@ownclouders/web-pkg'
 import { mock } from 'vitest-mock-extended'
 

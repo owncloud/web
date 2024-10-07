@@ -1,6 +1,6 @@
 import FileLinks from '../../../../../src/components/SideBar/Shares/FileLinks.vue'
 import ListItem from '../../../../../src/components/SideBar/Shares/Links/ListItem.vue'
-import { defaultPlugins, shallowMount, defaultComponentMocks } from 'web-test-helpers'
+import { defaultPlugins, shallowMount, defaultComponentMocks } from '@ownclouders/web-test-helpers'
 import { mock } from 'vitest-mock-extended'
 import { LinkShare, ShareTypes, Resource, AbilityRule } from '@ownclouders/web-client'
 import { FileAction, useCanShare, useFileActionsCreateLink } from '@ownclouders/web-pkg'

@@ -1,5 +1,10 @@
 import ExtensionPreference from '../../../../src/components/Account/ExtensionPreference.vue'
-import { defaultComponentMocks, defaultPlugins, getOcSelectOptions, mount } from 'web-test-helpers'
+import {
+  defaultComponentMocks,
+  defaultPlugins,
+  getOcSelectOptions,
+  mount
+} from '@ownclouders/web-test-helpers'
 import {
   Extension,
   ExtensionPoint,

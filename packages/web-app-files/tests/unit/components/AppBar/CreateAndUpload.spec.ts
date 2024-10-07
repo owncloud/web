@@ -12,7 +12,7 @@ import {
   useExtensionRegistry
 } from '@ownclouders/web-pkg'
 import { eventBus, UppyResource } from '@ownclouders/web-pkg'
-import { defaultPlugins, shallowMount, defaultComponentMocks } from 'web-test-helpers'
+import { defaultPlugins, shallowMount, defaultComponentMocks } from '@ownclouders/web-test-helpers'
 import { RouteLocation } from 'vue-router'
 import { computed, ref } from 'vue'
 import { OcButton } from 'design-system/src/components'

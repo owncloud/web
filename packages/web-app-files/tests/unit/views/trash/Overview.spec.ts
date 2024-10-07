@@ -5,7 +5,7 @@ import {
   defaultStubs,
   mount,
   RouteLocation
-} from 'web-test-helpers'
+} from '@ownclouders/web-test-helpers'
 import { mock } from 'vitest-mock-extended'
 import { nextTick } from 'vue'
 import { SpaceResource } from '@ownclouders/web-client'

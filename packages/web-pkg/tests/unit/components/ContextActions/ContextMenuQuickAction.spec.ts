@@ -1,5 +1,5 @@
 import ContextMenuQuickAction from '../../../../src/components/ContextActions/ContextMenuQuickAction.vue'
-import { defaultPlugins, mount } from 'web-test-helpers'
+import { defaultPlugins, mount } from '@ownclouders/web-test-helpers'
 
 describe('ContextMenuQuickAction component', () => {
   it('renders component', () => {

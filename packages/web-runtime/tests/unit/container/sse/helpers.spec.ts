@@ -1,5 +1,5 @@
 import { Resource, SpaceResource } from '@ownclouders/web-client'
-import { createTestingPinia } from 'web-test-helpers'
+import { createTestingPinia } from '@ownclouders/web-test-helpers'
 import {
   ClientService,
   PreviewService,

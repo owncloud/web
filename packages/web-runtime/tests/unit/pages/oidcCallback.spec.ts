@@ -3,7 +3,7 @@ import {
   defaultComponentMocks,
   defaultPlugins,
   shallowMount
-} from 'web-test-helpers'
+} from '@ownclouders/web-test-helpers'
 import oidcCallback from '../../../src/pages/oidcCallback.vue'
 import { authService } from '../../../src/services/auth'
 import { mock } from 'vitest-mock-extended'

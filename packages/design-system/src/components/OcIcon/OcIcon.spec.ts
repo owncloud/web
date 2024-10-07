@@ -1,4 +1,4 @@
-import { mount } from 'web-test-helpers'
+import { mount } from '@ownclouders/web-test-helpers'
 import OcIcon from './OcIcon.vue'
 import { glob } from 'glob'
 import path from 'path'

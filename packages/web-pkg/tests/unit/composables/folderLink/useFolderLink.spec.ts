@@ -1,4 +1,4 @@
-import { defaultComponentMocks, getComposableWrapper } from 'web-test-helpers'
+import { defaultComponentMocks, getComposableWrapper } from '@ownclouders/web-test-helpers'
 import { CapabilityStore, useFolderLink } from '../../../../src/composables'
 import { Resource, SpaceResource } from '@ownclouders/web-client'
 

@@ -1,5 +1,5 @@
 import { Resource } from '@ownclouders/web-client'
-import { defaultPlugins, shallowMount } from 'web-test-helpers'
+import { defaultPlugins, shallowMount } from '@ownclouders/web-test-helpers'
 import AudioMetaPanel from '../../../../../src/components/SideBar/Audio/AudioMetaPanel.vue'
 import { mock } from 'vitest-mock-extended'
 import { Audio } from '@ownclouders/web-client/graph/generated'

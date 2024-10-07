@@ -5,7 +5,7 @@ import {
   defaultComponentMocks,
   getComposableWrapper,
   useGetMatchingSpaceMock
-} from 'web-test-helpers'
+} from '@ownclouders/web-test-helpers'
 import { useDeleteWorker } from '../../../../../src/composables/webWorkers/deleteWorker'
 import { useGetMatchingSpace } from '../../../../../src/composables/spaces/useGetMatchingSpace'
 

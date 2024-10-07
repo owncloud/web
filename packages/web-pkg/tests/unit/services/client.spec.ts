@@ -5,7 +5,7 @@ import { graph, ocs, webdav } from '@ownclouders/web-client'
 import { Graph } from '@ownclouders/web-client/graph'
 import { OCS } from '@ownclouders/web-client/ocs'
 import { WebDAV } from '@ownclouders/web-client/webdav'
-import { createTestingPinia, writable } from 'web-test-helpers'
+import { createTestingPinia, writable } from '@ownclouders/web-test-helpers'
 import axios from 'axios'
 import { mock } from 'vitest-mock-extended'
 

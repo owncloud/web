@@ -1,4 +1,4 @@
-import { shallowMount, mount, defaultPlugins } from 'web-test-helpers'
+import { shallowMount, mount, defaultPlugins } from '@ownclouders/web-test-helpers'
 import OcTextInput from './OcTextInput.vue'
 import { PasswordPolicy } from '../../helpers'
 import { mock } from 'vitest-mock-extended'

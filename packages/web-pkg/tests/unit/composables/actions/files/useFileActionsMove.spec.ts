@@ -2,7 +2,11 @@ import { mock, mockDeep } from 'vitest-mock-extended'
 import { unref } from 'vue'
 import { useFileActionsMove } from '../../../../../src/composables/actions'
 import { Resource, SpaceResource } from '@ownclouders/web-client'
-import { RouteLocation, defaultComponentMocks, getComposableWrapper } from 'web-test-helpers/src'
+import {
+  RouteLocation,
+  defaultComponentMocks,
+  getComposableWrapper
+} from '@ownclouders/web-test-helpers'
 
 describe('move', () => {
   describe('computed property "actions"', () => {

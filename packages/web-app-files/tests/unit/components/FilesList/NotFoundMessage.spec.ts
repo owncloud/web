@@ -2,7 +2,7 @@ import NotFoundMessage from '../../../../src/components/FilesList/NotFoundMessag
 import { PublicSpaceResource, SpaceResource, Resource } from '@ownclouders/web-client'
 import { MockProxy, mock } from 'vitest-mock-extended'
 import { join } from 'path'
-import { defaultComponentMocks, defaultPlugins, shallowMount } from 'web-test-helpers'
+import { defaultComponentMocks, defaultPlugins, shallowMount } from '@ownclouders/web-test-helpers'
 import { OcButton } from 'design-system/src/components'
 import { RouteLocationNamedRaw, RouteLocationNormalizedLoaded } from 'vue-router'
 

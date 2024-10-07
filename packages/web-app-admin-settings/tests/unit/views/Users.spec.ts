@@ -1,10 +1,15 @@
 import Users from '../../../src/views/Users.vue'
 import { ItemFilter, OptionsConfig, UserAction, useAppDefaults } from '@ownclouders/web-pkg'
 import { mock, mockDeep } from 'vitest-mock-extended'
-import { defaultComponentMocks, defaultPlugins, mount, shallowMount } from 'web-test-helpers'
+import {
+  defaultComponentMocks,
+  defaultPlugins,
+  mount,
+  shallowMount,
+  useAppDefaultsMock
+} from '@ownclouders/web-test-helpers'
 import { ClientService, queryItemAsString } from '@ownclouders/web-pkg'
 import { Group, User } from '@ownclouders/web-client/graph/generated'
-import { useAppDefaultsMock } from 'web-test-helpers/src/mocks/useAppDefaultsMock'
 import { useUserActionsCreateUser } from '../../../src/composables/actions/users/useUserActionsCreateUser'
 import { ref } from 'vue'
 
@@ -312,10 +317,9 @@ function getMountedWrapper({
   )
 
   const mocks = {
-    ...defaultComponentMocks()
+    ...defaultComponentMocks(),
+    $clientService: clientService
   }
-
-  mocks.$clientService = clientService
 
   const user = { id: '1' } as User
 

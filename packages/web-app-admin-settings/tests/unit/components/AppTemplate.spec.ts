@@ -5,7 +5,7 @@ import {
   defaultPlugins,
   RouteLocation,
   shallowMount
-} from 'web-test-helpers'
+} from '@ownclouders/web-test-helpers'
 import { eventBus, SideBar, useIsTopBarSticky } from '@ownclouders/web-pkg'
 import { SideBarEventTopics } from '@ownclouders/web-pkg'
 import { mock } from 'vitest-mock-extended'

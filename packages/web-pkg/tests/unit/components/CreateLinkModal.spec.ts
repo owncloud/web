@@ -1,5 +1,10 @@
 import CreateLinkModal from '../../../src/components/CreateLinkModal.vue'
-import { ComponentProps, defaultComponentMocks, defaultPlugins, mount } from 'web-test-helpers'
+import {
+  ComponentProps,
+  defaultComponentMocks,
+  defaultPlugins,
+  mount
+} from '@ownclouders/web-test-helpers'
 import { mock } from 'vitest-mock-extended'
 import { PasswordPolicyService } from '../../../src/services'
 import { usePasswordPolicyService } from '../../../src/composables/passwordPolicyService'

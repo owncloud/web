@@ -1,5 +1,5 @@
 import EditDropdown from '../../../../../../src/components/SideBar/Shares/Collaborators/EditDropdown.vue'
-import { defaultPlugins, PartialComponentProps, shallowMount } from 'web-test-helpers'
+import { defaultPlugins, PartialComponentProps, shallowMount } from '@ownclouders/web-test-helpers'
 import { mock } from 'vitest-mock-extended'
 import { Resource } from '@ownclouders/web-client'
 import OcButton from 'design-system/src/components/OcButton/OcButton.vue'

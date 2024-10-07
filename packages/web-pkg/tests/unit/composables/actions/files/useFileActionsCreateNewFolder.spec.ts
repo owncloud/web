@@ -8,7 +8,11 @@ import {
 } from '../../../../../src/composables/piniaStores'
 import { ShareSpaceResource, SpaceResource } from '@ownclouders/web-client'
 import { FolderResource, Resource } from '@ownclouders/web-client'
-import { RouteLocation, defaultComponentMocks, getComposableWrapper } from 'web-test-helpers/src'
+import {
+  RouteLocation,
+  defaultComponentMocks,
+  getComposableWrapper
+} from '@ownclouders/web-test-helpers'
 import { useScrollToMock } from '../../../../mocks/useScrollToMock'
 import { useScrollTo } from '../../../../../src/composables/scrollTo'
 

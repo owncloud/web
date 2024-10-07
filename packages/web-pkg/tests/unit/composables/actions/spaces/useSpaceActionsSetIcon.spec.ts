@@ -1,6 +1,10 @@
 import { useSpaceActionsSetIcon } from '../../../../../src/composables/actions/spaces/useSpaceActionsSetIcon'
 import { useMessages, useModals } from '../../../../../src/composables/piniaStores'
-import { defaultComponentMocks, RouteLocation, getComposableWrapper } from 'web-test-helpers'
+import {
+  defaultComponentMocks,
+  RouteLocation,
+  getComposableWrapper
+} from '@ownclouders/web-test-helpers'
 import { unref } from 'vue'
 import { SpaceResource } from '@ownclouders/web-client'
 import { mock } from 'vitest-mock-extended'

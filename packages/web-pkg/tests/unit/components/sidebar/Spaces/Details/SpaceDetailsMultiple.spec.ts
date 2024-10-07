@@ -1,6 +1,6 @@
 import { SpaceResource } from '@ownclouders/web-client'
 import SpaceDetailsMultiple from '../../../../../../src/components/SideBar/Spaces/Details/SpaceDetailsMultiple.vue'
-import { defaultPlugins, shallowMount } from 'web-test-helpers'
+import { defaultPlugins, shallowMount } from '@ownclouders/web-test-helpers'
 
 const spaceMock = {
   type: 'space',

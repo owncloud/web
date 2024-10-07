@@ -1,7 +1,7 @@
 import { Message, useMessages } from '@ownclouders/web-pkg'
 import { OcNotificationMessage } from 'design-system/src/components'
 import MessageBar from '../../../src/components/MessageBar.vue'
-import { defaultPlugins, shallowMount } from 'web-test-helpers'
+import { defaultPlugins, shallowMount } from '@ownclouders/web-test-helpers'
 
 const messages = [
   {

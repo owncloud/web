@@ -1,6 +1,6 @@
 import { ActionExtension, useEmbedMode } from '@ownclouders/web-pkg'
 import QuickActions from '../../../../src/components/FilesList/QuickActions.vue'
-import { defaultComponentMocks, defaultPlugins, shallowMount } from 'web-test-helpers'
+import { defaultComponentMocks, defaultPlugins, shallowMount } from '@ownclouders/web-test-helpers'
 import { useExtensionRegistry } from '@ownclouders/web-pkg'
 import { mock } from 'vitest-mock-extended'
 import { ref } from 'vue'

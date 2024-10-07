@@ -1,4 +1,9 @@
-import { defaultComponentMocks, defaultPlugins, defaultStubs, mount } from 'web-test-helpers'
+import {
+  defaultComponentMocks,
+  defaultPlugins,
+  defaultStubs,
+  mount
+} from '@ownclouders/web-test-helpers'
 import { mock } from 'vitest-mock-extended'
 import { Resource, SpaceResource } from '@ownclouders/web-client'
 import ContextActions from '../../../../src/components/FilesList/ContextActions.vue'

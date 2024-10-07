@@ -1,4 +1,4 @@
-import { defaultPlugins, mount, shallowMount } from 'web-test-helpers'
+import { defaultPlugins, mount, shallowMount } from '@ownclouders/web-test-helpers'
 import Modal from './OcModal.vue'
 import OcButton from './../OcButton/OcButton.vue'
 

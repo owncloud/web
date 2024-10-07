@@ -1,5 +1,5 @@
 import UploadInfo from '../../../src/components/UploadInfo.vue'
-import { defaultPlugins, shallowMount, defaultComponentMocks } from 'web-test-helpers'
+import { defaultPlugins, shallowMount, defaultComponentMocks } from '@ownclouders/web-test-helpers'
 import { ResourceListItem, UppyResource } from '@ownclouders/web-pkg'
 import { nextTick } from 'vue'
 import { HttpError } from '@ownclouders/web-client'

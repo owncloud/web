@@ -7,7 +7,7 @@ import {
 import { mock } from 'vitest-mock-extended'
 import { computed } from 'vue'
 import TopBar from '../../../../src/components/Topbar/TopBar.vue'
-import { defaultComponentMocks, defaultPlugins, shallowMount } from 'web-test-helpers'
+import { defaultComponentMocks, defaultPlugins, shallowMount } from '@ownclouders/web-test-helpers'
 
 const mockUseEmbedMode = vi.fn().mockReturnValue({ isEnabled: computed(() => false) })
 

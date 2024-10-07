@@ -1,5 +1,5 @@
 import GdprExport from '../../../../src/components/Account/GdprExport.vue'
-import { defaultComponentMocks, defaultPlugins, shallowMount } from 'web-test-helpers'
+import { defaultComponentMocks, defaultPlugins, shallowMount } from '@ownclouders/web-test-helpers'
 import { mock, mockDeep } from 'vitest-mock-extended'
 import { ClientService } from '@ownclouders/web-pkg'
 import { Resource } from '@ownclouders/web-client'
@@ -72,8 +72,7 @@ function getWrapper(resource: Resource = undefined) {
   } else {
     clientService.webdav.getFileInfo.mockRejectedValue({ statusCode: 404 })
   }
-  const mocks = defaultComponentMocks()
-  mocks.$clientService = clientService
+  const mocks = { ...defaultComponentMocks(), $clientService: clientService }
 
   return {
     mocks,

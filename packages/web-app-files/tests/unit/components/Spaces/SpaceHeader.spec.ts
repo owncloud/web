@@ -2,7 +2,7 @@ import { nextTick, ref } from 'vue'
 import SpaceHeader from '../../../../src/components/Spaces/SpaceHeader.vue'
 import { DriveItem } from '@ownclouders/web-client/graph/generated'
 import { SpaceResource, Resource, buildSpaceImageResource } from '@ownclouders/web-client'
-import { defaultPlugins, mount, defaultComponentMocks } from 'web-test-helpers'
+import { defaultPlugins, mount, defaultComponentMocks } from '@ownclouders/web-test-helpers'
 import { mock } from 'vitest-mock-extended'
 
 vi.mock('@ownclouders/web-pkg', async (importOriginal) => ({

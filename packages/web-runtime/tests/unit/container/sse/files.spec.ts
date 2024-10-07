@@ -20,7 +20,7 @@ import {
 import { Router } from 'vue-router'
 import { mock, mockDeep } from 'vitest-mock-extended'
 import { Resource, SpaceResource } from '@ownclouders/web-client'
-import { createTestingPinia } from 'web-test-helpers'
+import { createTestingPinia } from '@ownclouders/web-test-helpers'
 import { Language } from 'vue3-gettext'
 import PQueue from 'p-queue'
 

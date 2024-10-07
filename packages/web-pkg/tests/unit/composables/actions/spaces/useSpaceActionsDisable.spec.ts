@@ -1,7 +1,11 @@
 import { useSpaceActionsDisable } from '../../../../../src/composables/actions/spaces'
 import { useMessages, useModals } from '../../../../../src/composables/piniaStores'
 import { SpaceResource } from '@ownclouders/web-client'
-import { defaultComponentMocks, RouteLocation, getComposableWrapper } from 'web-test-helpers'
+import {
+  defaultComponentMocks,
+  RouteLocation,
+  getComposableWrapper
+} from '@ownclouders/web-test-helpers'
 import { mock } from 'vitest-mock-extended'
 import { unref } from 'vue'
 import { User } from '@ownclouders/web-client/graph/generated'

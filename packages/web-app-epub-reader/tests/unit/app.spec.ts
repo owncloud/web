@@ -4,7 +4,7 @@ import {
   getOcSelectOptions,
   mount,
   nextTicks
-} from 'web-test-helpers'
+} from '@ownclouders/web-test-helpers'
 import App from '../../src/App.vue'
 import { useLocalStorage } from '@ownclouders/web-pkg'
 import { Resource } from '@ownclouders/web-client'

@@ -10,7 +10,7 @@ import {
   defaultComponentMocks,
   defaultStubs,
   RouteLocation
-} from 'web-test-helpers'
+} from '@ownclouders/web-test-helpers'
 import { ResourceTable } from '@ownclouders/web-pkg'
 
 vi.mock('../../../../src/composables')

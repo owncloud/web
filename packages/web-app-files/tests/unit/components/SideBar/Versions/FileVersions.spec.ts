@@ -1,11 +1,11 @@
 import { DateTime } from 'luxon'
 import FileVersions from '../../../../../src/components/SideBar/Versions/FileVersions.vue'
-import { defaultComponentMocks, defaultStubs } from 'web-test-helpers'
+import { defaultComponentMocks, defaultStubs } from '@ownclouders/web-test-helpers'
 import { mock, mockDeep } from 'vitest-mock-extended'
 import { Resource, SpaceResource } from '@ownclouders/web-client'
 import { ShareResource, ShareSpaceResource } from '@ownclouders/web-client'
 import { DavPermission } from '@ownclouders/web-client/webdav'
-import { defaultPlugins, mount, shallowMount } from 'web-test-helpers'
+import { defaultPlugins, mount, shallowMount } from '@ownclouders/web-test-helpers'
 import { useDownloadFile, useResourcesStore } from '@ownclouders/web-pkg'
 import { computed } from 'vue'
 

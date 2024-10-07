@@ -14,7 +14,7 @@ import {
   defaultComponentMocks,
   defaultStubs,
   RouteLocation
-} from 'web-test-helpers'
+} from '@ownclouders/web-test-helpers'
 import { AbilityRule, SpaceResource } from '@ownclouders/web-client'
 import {
   folderViewsFavoritesExtensionPoint,

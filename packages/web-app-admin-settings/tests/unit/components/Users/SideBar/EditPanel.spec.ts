@@ -4,7 +4,7 @@ import {
   defaultPlugins,
   mockAxiosReject,
   shallowMount
-} from 'web-test-helpers'
+} from '@ownclouders/web-test-helpers'
 import { mock } from 'vitest-mock-extended'
 import { Drive, Group, User } from '@ownclouders/web-client/graph/generated'
 import { CapabilityStore } from '@ownclouders/web-pkg'

@@ -1,4 +1,4 @@
-import { PartialComponentProps, mount } from 'web-test-helpers'
+import { PartialComponentProps, mount } from '@ownclouders/web-test-helpers'
 import App from '../../src/App.vue'
 
 vi.mock('@ownclouders/web-pkg')

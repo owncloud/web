@@ -5,7 +5,7 @@ import {
   mount,
   defaultComponentMocks,
   RouteLocation
-} from 'web-test-helpers'
+} from '@ownclouders/web-test-helpers'
 import { mock } from 'vitest-mock-extended'
 import { SpaceResource } from '@ownclouders/web-client'
 import { Quota } from '@ownclouders/web-client/graph/generated'

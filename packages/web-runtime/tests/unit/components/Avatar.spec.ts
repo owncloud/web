@@ -1,5 +1,5 @@
 import Avatar from '../../../src/components/Avatar.vue'
-import { defaultComponentMocks, defaultPlugins, shallowMount } from 'web-test-helpers'
+import { defaultComponentMocks, defaultPlugins, shallowMount } from '@ownclouders/web-test-helpers'
 import { mock, mockDeep } from 'vitest-mock-extended'
 import { CapabilityStore, ClientService } from '@ownclouders/web-pkg'
 import { AxiosResponse } from 'axios'
@@ -92,12 +92,12 @@ function getShallowWrapper(
   loading = false,
   clientService: ReturnType<typeof mockDeep<ClientService>> = undefined
 ) {
-  const mocks = { ...defaultComponentMocks() }
   if (!clientService) {
     clientService = mockDeep<ClientService>()
     clientService.httpAuthenticated.get.mockResolvedValue(mock<AxiosResponse>({ status: 200 }))
   }
-  mocks.$clientService = clientService
+  const mocks = { ...defaultComponentMocks(), $clientService: clientService }
+
   const capabilities = {
     files_sharing: { user: { profile_picture: true } }
   } satisfies Partial<CapabilityStore['capabilities']>

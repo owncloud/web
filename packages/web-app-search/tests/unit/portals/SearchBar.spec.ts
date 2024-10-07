@@ -9,7 +9,7 @@ import {
   defaultComponentMocks,
   RouteLocation,
   nextTicks
-} from 'web-test-helpers'
+} from '@ownclouders/web-test-helpers'
 import { useAvailableProviders } from '../../../src/composables'
 
 const component = defineComponent({

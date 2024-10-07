@@ -1,5 +1,5 @@
 import CustomComponentTarget from '../../../src/components/CustomComponentTarget.vue'
-import { defaultComponentMocks, defaultPlugins, mount } from 'web-test-helpers'
+import { defaultComponentMocks, defaultPlugins, mount } from '@ownclouders/web-test-helpers'
 import {
   CustomComponentExtension,
   Extension,

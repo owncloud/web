@@ -2,7 +2,7 @@ import { useGroupActionsEdit } from '../../../../../src/composables/actions/grou
 import { mock } from 'vitest-mock-extended'
 import { unref } from 'vue'
 import { Group } from '@ownclouders/web-client/graph/generated'
-import { getComposableWrapper } from 'web-test-helpers'
+import { getComposableWrapper } from '@ownclouders/web-test-helpers'
 
 describe('useGroupActionsEdit', () => {
   describe('method "isVisible"', () => {

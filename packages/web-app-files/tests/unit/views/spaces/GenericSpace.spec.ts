@@ -12,7 +12,7 @@ import {
   RouteLocation,
   ComponentProps,
   PartialComponentProps
-} from 'web-test-helpers'
+} from '@ownclouders/web-test-helpers'
 import {
   AppBar,
   FolderViewExtension,

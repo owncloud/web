@@ -4,7 +4,7 @@ import {
   defaultPlugins,
   shallowMount,
   RouteLocation
-} from 'web-test-helpers'
+} from '@ownclouders/web-test-helpers'
 import { mock } from 'vitest-mock-extended'
 import { Resource } from '@ownclouders/web-client'
 

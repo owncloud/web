@@ -1,4 +1,4 @@
-import { getComposableWrapper } from 'web-test-helpers'
+import { getComposableWrapper } from '@ownclouders/web-test-helpers'
 import {
   useSpacesStore,
   sortSpaceMembers,

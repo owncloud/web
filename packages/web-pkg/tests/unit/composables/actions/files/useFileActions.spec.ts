@@ -1,6 +1,10 @@
 import { mock } from 'vitest-mock-extended'
 import { useFileActions } from '../../../../../src/composables/actions'
-import { defaultComponentMocks, RouteLocation, getComposableWrapper } from 'web-test-helpers'
+import {
+  defaultComponentMocks,
+  RouteLocation,
+  getComposableWrapper
+} from '@ownclouders/web-test-helpers'
 import { computed, unref } from 'vue'
 import { describe } from 'vitest'
 import { Resource } from '@ownclouders/web-client'

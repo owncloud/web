@@ -5,7 +5,7 @@ import { useResourcesViewDefaults } from '../../../../src/composables'
 import { useResourcesViewDefaultsMock } from '../../../../tests/mocks/useResourcesViewDefaultsMock'
 import { createRouter, createMemoryHistory } from 'vue-router'
 
-import { defaultComponentMocks, defaultPlugins } from 'web-test-helpers/src'
+import { defaultComponentMocks, defaultPlugins } from '@ownclouders/web-test-helpers'
 import { AppBar, ItemFilter, queryItemAsString, useResourcesStore } from '@ownclouders/web-pkg'
 import { ref } from 'vue'
 import { Resource } from '@ownclouders/web-client'

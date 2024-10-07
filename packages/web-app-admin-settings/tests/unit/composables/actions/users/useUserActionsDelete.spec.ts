@@ -3,7 +3,11 @@ import { mock } from 'vitest-mock-extended'
 import { unref } from 'vue'
 import { User } from '@ownclouders/web-client/graph/generated'
 import { useCapabilityStore } from '@ownclouders/web-pkg'
-import { defaultComponentMocks, getComposableWrapper, writable } from 'web-test-helpers'
+import {
+  defaultComponentMocks,
+  getComposableWrapper,
+  writable
+} from '@ownclouders/web-test-helpers'
 import { useUserSettingsStore } from '../../../../../src/composables/stores/userSettings'
 
 describe('useUserActionsDelete', () => {

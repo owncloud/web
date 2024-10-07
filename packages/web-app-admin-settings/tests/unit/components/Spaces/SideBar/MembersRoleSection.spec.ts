@@ -1,5 +1,5 @@
 import MembersRoleSection from '../../../../../src/components/Spaces/SideBar/MembersRoleSection.vue'
-import { defaultPlugins, shallowMount } from 'web-test-helpers'
+import { defaultPlugins, shallowMount } from '@ownclouders/web-test-helpers'
 import { mock } from 'vitest-mock-extended'
 import { SpaceMember } from '@ownclouders/web-client'
 

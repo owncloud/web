@@ -1,5 +1,5 @@
 import ResolvePublicLink from '../../../src/pages/resolvePublicLink.vue'
-import { defaultPlugins, defaultComponentMocks, shallowMount } from 'web-test-helpers'
+import { defaultPlugins, defaultComponentMocks, shallowMount } from '@ownclouders/web-test-helpers'
 import { mockDeep } from 'vitest-mock-extended'
 import { CapabilityStore, ClientService, useRouteParam, useRouteQuery } from '@ownclouders/web-pkg'
 import { DavHttpError, SpaceResource } from '@ownclouders/web-client'

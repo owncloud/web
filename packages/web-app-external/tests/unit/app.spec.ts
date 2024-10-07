@@ -1,5 +1,5 @@
 import { mock } from 'vitest-mock-extended'
-import { defaultComponentMocks, defaultPlugins, shallowMount } from 'web-test-helpers'
+import { defaultComponentMocks, defaultPlugins, shallowMount } from '@ownclouders/web-test-helpers'
 import { AppProviderService, useRequest, useRoute } from '@ownclouders/web-pkg'
 import { ref } from 'vue'
 

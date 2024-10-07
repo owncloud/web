@@ -1,5 +1,5 @@
 import ExifPanel from '../../../../../src/components/SideBar/Exif/ExifPanel.vue'
-import { defaultPlugins, shallowMount } from 'web-test-helpers'
+import { defaultPlugins, shallowMount } from '@ownclouders/web-test-helpers'
 import { mock } from 'vitest-mock-extended'
 import { Photo, Image, GeoCoordinates } from '@ownclouders/web-client/graph/generated'
 import { Resource } from '@ownclouders/web-client'

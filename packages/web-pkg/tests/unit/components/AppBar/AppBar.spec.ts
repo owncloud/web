@@ -8,7 +8,7 @@ import {
   shallowMount,
   RouteLocation,
   PartialComponentProps
-} from 'web-test-helpers'
+} from '@ownclouders/web-test-helpers'
 import { ArchiverService } from '../../../../src/services'
 import { FolderView } from '../../../../src/ui/types'
 import { useExtensionRegistry, ViewOptions } from '../../../../src'

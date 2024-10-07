@@ -1,5 +1,5 @@
 import AddToGroupsModal from '../../../../src/components/Users/AddToGroupsModal.vue'
-import { defaultComponentMocks, defaultPlugins, shallowMount } from 'web-test-helpers'
+import { defaultComponentMocks, defaultPlugins, shallowMount } from '@ownclouders/web-test-helpers'
 import { mock } from 'vitest-mock-extended'
 import { Group, User } from '@ownclouders/web-client/graph/generated'
 import { Modal, useMessages } from '@ownclouders/web-pkg'
