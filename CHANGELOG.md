@@ -17,6 +17,7 @@ Summary
 * Bugfix - Details panel wrong WebDAV URL of received shares: [#11712](https://github.com/owncloud/web/pull/11712)
 * Bugfix - Accessing disabled password-protected space does not show error: [#11725](https://github.com/owncloud/web/pull/11725)
 * Bugfix - Application menu not operable in Safari browser: [#11726](https://github.com/owncloud/web/pull/11726)
+* Change - Remove importer as default app: [#11709](https://github.com/owncloud/web/pull/11709)
 * Enhancement - Allow setting view mode for apps via query: [#11668](https://github.com/owncloud/web/pull/11668)
 
 Details
@@ -93,6 +94,18 @@ Details
 
    https://github.com/owncloud/web/issues/11718
    https://github.com/owncloud/web/pull/11726
+
+* Change - Remove importer as default app: [#11709](https://github.com/owncloud/web/pull/11709)
+
+   BREAKING CHANGE for administrators: importer has been removed as default web
+   app. The app is now available via the [web-extensions
+   repository](https://github.com/owncloud/web-extensions).
+
+   Please refer to [the web-app docs](https://owncloud.dev/services/web/#web-apps)
+   to see how to load an external web app.
+
+   https://github.com/owncloud/web/issues/11698
+   https://github.com/owncloud/web/pull/11709
 
 * Enhancement - Allow setting view mode for apps via query: [#11668](https://github.com/owncloud/web/pull/11668)
 
