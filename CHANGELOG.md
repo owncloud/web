@@ -16,6 +16,7 @@ Summary
 * Bugfix - Prevent not allowed characters in shortcut name: [#11707](https://github.com/owncloud/web/pull/11707)
 * Bugfix - Details panel wrong WebDAV URL of received shares: [#11712](https://github.com/owncloud/web/pull/11712)
 * Bugfix - Accessing disabled password-protected space does not show error: [#11725](https://github.com/owncloud/web/pull/11725)
+* Bugfix - Application menu not operable in Safari browser: [#11726](https://github.com/owncloud/web/pull/11726)
 * Enhancement - Allow setting view mode for apps via query: [#11668](https://github.com/owncloud/web/pull/11668)
 
 Details
@@ -84,6 +85,14 @@ Details
 
    https://github.com/owncloud/web/issues/11721
    https://github.com/owncloud/web/pull/11725
+
+* Bugfix - Application menu not operable in Safari browser: [#11726](https://github.com/owncloud/web/pull/11726)
+
+   We've fixed a bug where the application menu was not operable in the Safari
+   browser.
+
+   https://github.com/owncloud/web/issues/11718
+   https://github.com/owncloud/web/pull/11726
 
 * Enhancement - Allow setting view mode for apps via query: [#11668](https://github.com/owncloud/web/pull/11668)
 
