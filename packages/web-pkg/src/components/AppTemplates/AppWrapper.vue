@@ -91,6 +91,8 @@ import { HttpError } from '@ownclouders/web-client'
 import { dirname } from 'path'
 import { useFileActionsOpenWithApp } from '../../composables/actions/files/useFileActionsOpenWithApp'
 import { UnsavedChangesModal } from '../Modals'
+import { formatFileSize } from '../../helpers'
+import toNumber from 'lodash-es/toNumber'
 
 export default defineComponent({
   name: 'AppWrapper',
@@ -126,7 +128,7 @@ export default defineComponent({
     }
   },
   setup(props) {
-    const { $gettext } = useGettext()
+    const { $gettext, current: currentLanguage } = useGettext()
     const appsStore = useAppsStore()
     const { showMessage, showErrorMessage } = useMessages()
     const router = useRouter()
@@ -209,6 +211,10 @@ export default defineComponent({
 
     const { applicationMeta } = useAppMeta({ applicationId: props.applicationId, appsStore })
 
+    const fileSizeLimit = computed(() => {
+      return unref(applicationMeta).meta?.fileSizeLimit
+    })
+
     const pageTitle = computed(() => {
       const { name: appName } = unref(applicationMeta)
 
@@ -264,17 +270,24 @@ export default defineComponent({
       })
     }
 
-    const loadFileTask = useTask(function* (signal) {
+    const loadResourceTask = useTask(function* (signal) {
       try {
         if (!unref(driveAliasAndItem)) {
           yield addMissingDriveAliasAndItem()
         }
-
         space.value = unref(unref(currentFileContext).space)
-        resource.value = yield getFileInfo(currentFileContext)
+        resource.value = yield getFileInfo(currentFileContext, { signal })
         resourcesStore.initResourceList({ currentFolder: null, resources: [unref(resource)] })
         selectedResources.value = [unref(resource)]
+      } catch (e) {
+        console.error(e)
+        loadingError.value = e
+        loading.value = false
+      }
+    }).restartable()
 
+    const loadFileTask = useTask(function* (signal) {
+      try {
         const newExtension = props.importResourceWithExtension(unref(resource))
         if (newExtension) {
           const timestamp = DateTime.local().toFormat('yyyyMMddHHmmss')
@@ -318,19 +331,43 @@ export default defineComponent({
             signal
           })
         }
-        loading.value = false
       } catch (e) {
         console.error(e)
         loadingError.value = e
+      } finally {
         loading.value = false
       }
     }).restartable()
 
     watch(
       currentFileContext,
-      () => {
+      async () => {
         if (!unref(noResourceLoading)) {
-          loadFileTask.perform()
+          await loadResourceTask.perform()
+
+          if (unref(fileSizeLimit) && toNumber(unref(resource).size) > unref(fileSizeLimit)) {
+            dispatchModal({
+              title: $gettext('File %{resource} exceeds %{threshold}', {
+                resource: unref(resource).name,
+                threshold: formatFileSize(unref(fileSizeLimit), currentLanguage)
+              }),
+              message: $gettext(
+                'This file exceeds the recommended size of %{threshold} for editing, and may cause performance issues.',
+                {
+                  threshold: formatFileSize(unref(fileSizeLimit), currentLanguage)
+                }
+              ),
+              confirmText: $gettext('Continue'),
+              onCancel: () => {
+                closeApp()
+              },
+              onConfirm: () => {
+                loadFileTask.perform()
+              }
+            })
+          } else {
+            loadFileTask.perform()
+          }
         }
       },
       { immediate: true }
