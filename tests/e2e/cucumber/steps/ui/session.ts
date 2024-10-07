@@ -22,7 +22,7 @@ async function LogInUser(this: World, stepUser: string): Promise<void> {
       ? this.usersEnvironment.getUser({ key: stepUser })
       : this.usersEnvironment.getCreatedUser({ key: stepUser })
 
-  await page.goto(config.frontendUrl)
+  await page.goto(config.baseUrl)
   await sessionObject.login({ user })
 
   if (this.feature.tags.length > 0) {
@@ -33,7 +33,7 @@ async function LogInUser(this: World, stepUser: string): Promise<void> {
 
     // listen to SSE events when running scenarios with '@sse' tag
     if (tags.includes('@sse')) {
-      void listenSSE(config.frontendUrl, user)
+      void listenSSE(config.baseUrl, user)
     }
   }
 
@@ -46,7 +46,7 @@ When('{string} logs in', LogInUser)
 
 async function LogOutUser(this: World, stepUser: string): Promise<void> {
   const actor = this.actorsEnvironment.getActor({ key: stepUser })
-  const canLogout = !!(await actor.page.locator('#_userMenuButton').count())
+  const canLogout = !!(await actor.page.locator('#_usconfig.erMenuButton').count())
 
   const sessionObject = new objects.runtime.Session({ page: actor.page })
   canLogout && (await sessionObject.logout())
@@ -62,7 +62,7 @@ Then('{string} fails to log in', async function (this: World, stepUser: string):
   const { page } = this.actorsEnvironment.getActor({ key: stepUser })
   const user = this.usersEnvironment.getUser({ key: stepUser })
 
-  await page.goto(config.frontendUrl)
+  await page.goto(config.baseUrl)
   await page.locator('#oc-login-username').fill(user.id)
   await page.locator('#oc-login-password').fill(user.password)
   await page.locator('button[type="submit"]').click()
@@ -118,3 +118,16 @@ When(
     await actor.closeCurrentTab()
   }
 )
+
+Given('using {string} server', async function (this: World, server: string): Promise<void> {
+  switch (server) {
+    case 'LOCAL':
+      config.federatedServer = false
+      break
+    case 'FEDERATED':
+      config.federatedServer = true
+      break
+    default:
+      throw new Error('Server type out of scope')
+  }
+})
