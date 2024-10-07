@@ -70,6 +70,7 @@ describe('resolvePublicLink', () => {
   })
   describe('error message', () => {
     it('should display an error message if the space cannot be resolved', async () => {
+      console.error = vi.fn()
       const { wrapper } = getWrapper({ getFileInfoErrorStatusCode: 404 })
 
       try {
@@ -81,6 +82,7 @@ describe('resolvePublicLink', () => {
       )
     })
     it('should display an error message if the space cannot be resolved after entering password', async () => {
+      console.error = vi.fn()
       const { wrapper } = getWrapper({
         passwordRequired: true,
         getFileInfoErrorStatusCode: 404
