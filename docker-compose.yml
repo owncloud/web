@@ -145,28 +145,6 @@ services:
       - ocis-federated-config:/etc/ocis
       - ${OCIS_WEB_CONFIG:-./dev/docker/ocis.web-federated.config.json}:/web/config.json:ro
 
-  companion:
-    image: owncloud/uppy-companion:3.12.13-owncloud
-    extra_hosts:
-      - host.docker.internal:${DOCKER_HOST:-host-gateway}
-    environment:
-      NODE_TLS_REJECT_UNAUTHORIZED: 0
-      COMPANION_ALLOW_LOCAL_URLS: 'true'
-      COMPANION_DATADIR: /tmp/companion/
-      COMPANION_DOMAIN: host.docker.internal:9200
-      COMPANION_PROTOCOL: https
-      COMPANION_PATH: /companion
-      COMPANION_ONEDRIVE_KEY: '${COMPANION_ONEDRIVE_KEY}'
-      COMPANION_ONEDRIVE_SECRET: '${COMPANION_ONEDRIVE_SECRET}'
-    volumes:
-      - uppy_companion_datadir:/tmp/companion/
-    labels:
-      traefik.enable: true
-      traefik.http.routers.companion.tls: true
-      traefik.http.routers.companion.rule: Host(`host.docker.internal`) && PathPrefix(`/companion`)
-      traefik.http.routers.companion.entrypoints: ocis
-      traefik.http.services.companion.loadbalancer.server.port: 3020
-
   collaboration:
     image: ${OCIS_IMAGE:-owncloud/ocis-rolling:master}
     depends_on:
@@ -365,7 +343,6 @@ services:
 
 volumes:
   uploads:
-  uppy_companion_datadir:
   ocis-config:
   ocis-federated-config:
 
