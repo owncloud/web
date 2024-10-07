@@ -1,3 +1,4 @@
+/** @deprecated */
 export const defaultStubs = {
   'app-bar': true,
   'app-top-bar': true,

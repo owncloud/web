@@ -1,9 +1,8 @@
 import { mock } from 'vitest-mock-extended'
 import { ref } from 'vue'
-import { Resource } from '../../../web-client/src'
-import { FileResource } from '../../../web-client/src/helpers'
-import { GetFileContentsResponse } from '../../../web-client/src/webdav/getFileContents'
-import { FileContext, useAppDefaults, AppConfigObject } from '../../../web-pkg'
+import { FileContext, useAppDefaults, AppConfigObject } from '@ownclouders/web-pkg'
+import { FileResource, Resource } from '@ownclouders/web-client'
+import { GetFileContentsResponse } from '@ownclouders/web-client/webdav'
 
 export const useAppDefaultsMock = (
   options: Partial<ReturnType<typeof useAppDefaults>> = {}
