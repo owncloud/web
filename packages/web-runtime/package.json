@@ -39,7 +39,7 @@
     "uuid": "10.0.0",
     "vue-concurrency": "5.0.1",
     "vue-router": "4.2.5",
-    "vue": "3.5.10",
+    "vue": "3.5.11",
     "vue3-gettext": "2.4.0",
     "webdav": "5.7.1",
     "xml-js": "^1.6.11",
