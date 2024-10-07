@@ -70,7 +70,8 @@ describe('resolvePublicLink', () => {
   })
   describe('error message', () => {
     it('should display an error message if the space cannot be resolved', async () => {
-      const { wrapper, mocks } = getWrapper({ getFileInfoErrorStatusCode: 404 })
+      console.error = vi.fn()
+      const { wrapper } = getWrapper({ getFileInfoErrorStatusCode: 404 })
 
       try {
         await wrapper.vm.loadPublicSpaceTask.last
@@ -81,7 +82,8 @@ describe('resolvePublicLink', () => {
       )
     })
     it('should display an error message if the space cannot be resolved after entering password', async () => {
-      const { wrapper, mocks } = getWrapper({
+      console.error = vi.fn()
+      const { wrapper } = getWrapper({
         passwordRequired: true,
         getFileInfoErrorStatusCode: 404
       })

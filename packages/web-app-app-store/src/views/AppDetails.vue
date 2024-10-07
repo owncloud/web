@@ -17,7 +17,12 @@
       <p class="oc-my-rm">{{ app.subtitle }}</p>
       <div v-if="app.description">
         <h3>{{ $gettext('Details') }}</h3>
-        <p class="oc-my-s">{{ app.description }}</p>
+        <text-editor
+          class="oc-my-s"
+          :is-read-only="true"
+          :markdown-mode="true"
+          :current-content="app.description"
+        />
       </div>
       <div v-if="app.tags">
         <h3>{{ $gettext('Tags') }}</h3>
@@ -46,7 +51,7 @@
 import { computed, defineComponent, unref } from 'vue'
 import { App } from '../types'
 import { APPID } from '../appid'
-import { useRouteParam, useRouter } from '@ownclouders/web-pkg'
+import { TextEditor, useRouteParam, useRouter } from '@ownclouders/web-pkg'
 import { useAppsStore } from '../piniaStores'
 import AppResources from '../components/AppResources.vue'
 import AppTags from '../components/AppTags.vue'
@@ -62,7 +67,8 @@ export default defineComponent({
     AppAuthors,
     AppResources,
     AppTags,
-    AppVersions
+    AppVersions,
+    TextEditor
   },
   setup() {
     const appIdRouteParam = useRouteParam('appId')

@@ -21,13 +21,14 @@ export default defineComponent({
   name: 'TextEditor',
   components: { AppLoadingSpinner },
   props: {
-    applicationConfig: { type: Object as PropType<AppConfigObject>, required: true },
+    applicationConfig: { type: Object as PropType<AppConfigObject>, required: false },
     currentContent: {
       type: String,
       required: true
     },
+    markdownMode: { type: Boolean, required: false, default: false },
     isReadOnly: { type: Boolean, required: false, default: false },
-    resource: { type: Object as PropType<Resource>, required: true }
+    resource: { type: Object as PropType<Resource>, required: false }
   },
   emits: ['update:currentContent'],
   setup(props, { emit }) {
@@ -46,7 +47,9 @@ export default defineComponent({
 
     const isMarkdown = computed(() => {
       return (
-        ['md', 'markdown'].includes(props.resource?.extension) || !unref(config).showPreviewOnlyMd
+        props.markdownMode ||
+        ['md', 'markdown'].includes(props.resource?.extension) ||
+        !unref(config).showPreviewOnlyMd
       )
     })
 
