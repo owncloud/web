@@ -138,7 +138,8 @@ export default defineComponent({
     }
 
     const onFocusOut = (event: FocusEvent) => {
-      const focusLeft = event.relatedTarget && !unref(drop).contains(event.relatedTarget as Node)
+      const tippyBox = unref(drop).closest('.tippy-box')
+      const focusLeft = event.relatedTarget && !tippyBox.contains(event.relatedTarget as Node)
       if (focusLeft) {
         // close drop when the focus leaves it
         hide()
@@ -171,7 +172,6 @@ export default defineComponent({
     position() {
       this.tippy.setProps({ placement: this.position })
     },
-
     mode() {
       this.tippy.setProps({ trigger: this.triggerMapping })
     }
@@ -268,6 +268,7 @@ export default defineComponent({
     // note: needed so that the box shadow from `oc-box-shadow-medium` doesn't get suppressed
     padding: 8px;
   }
+
   li.oc-menu-item-hover {
     a,
     .item-has-switch,
@@ -275,6 +276,7 @@ export default defineComponent({
       box-sizing: border-box;
       padding: var(--oc-space-small);
       color: var(--oc-color-swatch-passive-default);
+
       &:focus:not([disabled]),
       &:hover:not([disabled]) {
         background-color: var(--oc-color-background-hover);
@@ -282,9 +284,11 @@ export default defineComponent({
         text-decoration: none !important;
         border-radius: 5px;
       }
+
       &:hover span {
         color: var(--oc-color-swatch-brand-hover) !important;
       }
+
       span {
         text-decoration: none !important;
       }
@@ -322,15 +326,15 @@ export default defineComponent({
       </p>
       <ul class="oc-list">
         <li>
-          <oc-checkbox label="" />
+          <oc-checkbox label=""/>
           <span class="oc-text-muted">Show Files</span>
         </li>
         <li>
-          <oc-checkbox label="" />
+          <oc-checkbox label=""/>
           <span class="oc-text-muted">Show Folders</span>
         </li>
         <li>
-          <oc-search-bar small placeholder="Filter by name" :button="false" label="" />
+          <oc-search-bar small placeholder="Filter by name" :button="false" label=""/>
         </li>
       </ul>
     </oc-drop>
@@ -366,7 +370,8 @@ export default defineComponent({
         </li>
         <li>
           <oc-button id="menu_with_submenu" appearance="raw">
-            Menu item 2<oc-icon
+            Menu item 2
+            <oc-icon
               name="arrow-drop-right"
               fill-type="line"
               class="oc-p-xs"
@@ -383,10 +388,10 @@ export default defineComponent({
           >
             <oc-list class="user-menu-list">
               <li>
-                <oc-button appearance="raw"> Submenu item 1 </oc-button>
+                <oc-button appearance="raw"> Submenu item 1</oc-button>
               </li>
               <li>
-                <oc-button appearance="raw"> Submenu item 2 </oc-button>
+                <oc-button appearance="raw"> Submenu item 2</oc-button>
               </li>
             </oc-list>
           </oc-drop>
@@ -416,21 +421,21 @@ export default defineComponent({
 ### Open drop programatically
 ```js
 <template>
-<div>
-  <oc-button id="manual-target" @click="open">Open</oc-button>
-  <oc-drop ref="drop" mode="manual" target="#manual-target">
-    I am triggered manually
-  </oc-drop>
-</div>
+  <div>
+    <oc-button id="manual-target" @click="open">Open</oc-button>
+    <oc-drop ref="drop" mode="manual" target="#manual-target">
+      I am triggered manually
+    </oc-drop>
+  </div>
 </template>
 <script>
-export default {
-  methods: {
-    open() {
-      this.$refs.drop.show()
+  export default {
+    methods: {
+      open() {
+        this.$refs.drop.show()
+      }
     }
   }
-}
 </script>
 ```
 </docs>
