@@ -29,6 +29,7 @@ export const AppAuthorSchema = z.object({
   email: z.string().optional(),
   url: z.string().optional()
 })
+export type AppAuthor = z.infer<typeof AppAuthorSchema>
 
 export const AppImageSchema = z.object({
   url: z.string(),
