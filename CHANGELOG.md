@@ -15,6 +15,7 @@ Summary
 * Bugfix - Escape HTML characters in activities and notification view: [#11706](https://github.com/owncloud/web/pull/11706)
 * Bugfix - Prevent not allowed characters in shortcut name: [#11707](https://github.com/owncloud/web/pull/11707)
 * Bugfix - Details panel wrong WebDAV URL of received shares: [#11712](https://github.com/owncloud/web/pull/11712)
+* Bugfix - Accessing disabled password-protected space does not show error: [#11725](https://github.com/owncloud/web/pull/11725)
 * Enhancement - Allow setting view mode for apps via query: [#11668](https://github.com/owncloud/web/pull/11668)
 
 Details
@@ -74,6 +75,15 @@ Details
 
    https://github.com/owncloud/web/issues/11704
    https://github.com/owncloud/web/pull/11712
+
+* Bugfix - Accessing disabled password-protected space does not show error: [#11725](https://github.com/owncloud/web/pull/11725)
+
+   We've fixed a bug where accessing a disabled password-protected space did not
+   show an error message. Now, users will see an error message when trying to
+   access a disabled password-protected space.
+
+   https://github.com/owncloud/web/issues/11721
+   https://github.com/owncloud/web/pull/11725
 
 * Enhancement - Allow setting view mode for apps via query: [#11668](https://github.com/owncloud/web/pull/11668)
 
