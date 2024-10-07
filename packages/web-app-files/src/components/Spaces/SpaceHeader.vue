@@ -63,7 +63,6 @@
           :resource="markdownResource"
           :current-content="markdownContent"
           :is-read-only="true"
-          :application-config="{}"
         />
         <div class="markdown-container-edit oc-ml-s">
           <router-link
