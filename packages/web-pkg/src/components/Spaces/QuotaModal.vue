@@ -1,6 +1,5 @@
 <template>
   <quota-select
-    id="quota-select-batch-action-form"
     :total-quota="selectedOption"
     :max-quota="maxQuota"
     :position-fixed="true"
