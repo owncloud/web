@@ -347,13 +347,13 @@ export default defineComponent({
 
           if (unref(fileSizeLimit) && toNumber(unref(resource).size) > unref(fileSizeLimit)) {
             dispatchModal({
-              title: $gettext('File %{resource} exceeds %{threshold}', {
-                resource: unref(resource).name,
+              title: $gettext('File exceeds %{threshold}', {
                 threshold: formatFileSize(unref(fileSizeLimit), currentLanguage)
               }),
               message: $gettext(
-                'This file exceeds the recommended size of %{threshold} for editing, and may cause performance issues.',
+                '%{resource} exceeds the recommended size of %{threshold} for editing, and may cause performance issues.',
                 {
+                  resource: unref(resource).name,
                   threshold: formatFileSize(unref(fileSizeLimit), currentLanguage)
                 }
               ),
