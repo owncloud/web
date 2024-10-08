@@ -23,6 +23,7 @@ export const AppBadgeSchema = z.object({
   label: z.string(),
   color: z.enum(BADGE_COLORS).optional().default('primary')
 })
+export type AppBadge = z.infer<typeof AppBadgeSchema>
 
 export const AppAuthorSchema = z.object({
   name: z.string(),
