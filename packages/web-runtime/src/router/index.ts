@@ -2,6 +2,7 @@ import AccessDeniedPage from '../pages/accessDenied.vue'
 import Account from '../pages/account.vue'
 import LoginPage from '../pages/login.vue'
 import LogoutPage from '../pages/logout.vue'
+import NotFoundPage from '../pages/notFound.vue'
 import OidcCallbackPage from '../pages/oidcCallback.vue'
 import ResolvePublicLinkPage from '../pages/resolvePublicLink.vue'
 import ResolvePrivateLinkPage from '../pages/resolvePrivateLink.vue'
@@ -86,6 +87,12 @@ const routes = [
     name: 'account',
     component: Account,
     meta: { title: $gettext('Account'), authContext: 'hybrid' }
+  },
+  {
+    path: '/:pathMatch(.*)*',
+    name: 'notFound',
+    component: NotFoundPage,
+    meta: { title: $gettext('Not found'), authContext: 'hybrid' }
   }
 ]
 export const router = patchRouter(
