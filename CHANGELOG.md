@@ -20,6 +20,7 @@ Summary
 * Bugfix - Application menu not operable in Safari browser: [#11726](https://github.com/owncloud/web/pull/11726)
 * Change - Remove importer as default app: [#11709](https://github.com/owncloud/web/pull/11709)
 * Enhancement - Allow setting view mode for apps via query: [#11668](https://github.com/owncloud/web/pull/11668)
+* Enhancement - File size warning in editors: [#11731](https://github.com/owncloud/web/pull/11731)
 
 Details
 -------
@@ -123,6 +124,15 @@ Details
 
    https://github.com/owncloud/web/issues/11667
    https://github.com/owncloud/web/pull/11668
+
+* Enhancement - File size warning in editors: [#11731](https://github.com/owncloud/web/pull/11731)
+
+   We've added a warning to the editors, when the respective file size exceeds 2MB.
+   This will help the user to avoid performance issues when working with large
+   files.
+
+   https://github.com/owncloud/web/issues/8038
+   https://github.com/owncloud/web/pull/11731
 
 Changelog for ownCloud Web [10.3.0] (2024-09-26)
 =======================================
