@@ -74,6 +74,9 @@ export interface ApplicationInformation {
   iconFillType?: IconFillType
   iconColor?: string
   img?: string
+  meta?: {
+    fileSizeLimit?: number
+  }
   /** @deprecated */
   isFileEditor?: boolean
   extensions?: ApplicationFileExtension[]

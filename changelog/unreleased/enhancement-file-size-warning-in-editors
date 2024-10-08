@@ -1,0 +1,7 @@
+Enhancement: File size warning in editors
+
+We've added a warning to the editors, when the respective file size exceeds 2MB.
+This will help the user to avoid performance issues when working with large files.
+
+https://github.com/owncloud/web/pull/11731
+https://github.com/owncloud/web/issues/8038
