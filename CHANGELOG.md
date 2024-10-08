@@ -12,6 +12,7 @@ Summary
 * Bugfix - Hide copy permanent link action on public pages: [#11645](https://github.com/owncloud/web/issues/11645)
 * Bugfix - Missing tags on "Shared with me" page: [#11677](https://github.com/owncloud/web/issues/11677)
 * Bugfix - Undefined request IDs: [#11678](https://github.com/owncloud/web/issues/11678)
+* Bugfix - Deleting federated connections: [#11688](https://github.com/owncloud/web/issues/11688)
 * Bugfix - Escape HTML characters in activities and notification view: [#11706](https://github.com/owncloud/web/pull/11706)
 * Bugfix - Prevent not allowed characters in shortcut name: [#11707](https://github.com/owncloud/web/pull/11707)
 * Bugfix - Details panel wrong WebDAV URL of received shares: [#11712](https://github.com/owncloud/web/pull/11712)
@@ -52,6 +53,13 @@ Details
 
    https://github.com/owncloud/web/issues/11678
    https://github.com/owncloud/web/pull/11684
+
+* Bugfix - Deleting federated connections: [#11688](https://github.com/owncloud/web/issues/11688)
+
+   We've fixed an issue where federated connections could not be deleted.
+
+   https://github.com/owncloud/web/issues/11688
+   https://github.com/owncloud/web/pull/11734
 
 * Bugfix - Escape HTML characters in activities and notification view: [#11706](https://github.com/owncloud/web/pull/11706)
 
