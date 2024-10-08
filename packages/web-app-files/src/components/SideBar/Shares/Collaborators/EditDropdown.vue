@@ -38,6 +38,15 @@
         </li>
       </oc-list>
     </oc-drop>
+    <oc-info-drop
+      ref="accessDetailsDrop"
+      class="share-access-details-drop"
+      v-bind="{
+        title: $gettext('Access details'),
+        list: accessDetails
+      }"
+      mode="manual"
+    />
   </div>
 </template>
 
@@ -53,6 +62,8 @@ import { useGettext } from 'vue3-gettext'
 import DatePickerModal from '../../../Modals/DatePickerModal.vue'
 import { RouteLocationNamedRaw } from 'vue-router'
 import ContextMenuItem from './ContextMenuItem.vue'
+import { ContextualHelperDataListItem } from 'design-system/src/helpers'
+import OcInfoDrop from 'design-system/src/components/OcInfoDrop/OcInfoDrop.vue'
 
 export type EditOption = {
   icon: string
@@ -86,6 +97,10 @@ export default defineComponent({
       type: Boolean,
       required: true
     },
+    accessDetails: {
+      type: Array as PropType<ContextualHelperDataListItem[]>,
+      required: true
+    },
     isShareDenied: {
       type: Boolean,
       default: false
@@ -103,19 +118,14 @@ export default defineComponent({
       default: undefined
     }
   },
-  emits: [
-    'expirationDateChanged',
-    'removeShare',
-    'showAccessDetails',
-    'setDenyShare',
-    'notifyShare'
-  ],
+  emits: ['expirationDateChanged', 'removeShare', 'setDenyShare', 'notifyShare'],
   setup(props, { emit }) {
     const language = useGettext()
     const { $gettext } = language
     const configStore = useConfigStore()
     const { dispatchModal } = useModals()
     const expirationDateDrop = useTemplateRef<typeof OcDrop>('expirationDateDrop')
+    const accessDetailsDrop = useTemplateRef<typeof OcInfoDrop>('accessDetailsDrop')
 
     const resource = inject<Ref<Resource>>('resource')
 
@@ -160,6 +170,7 @@ export default defineComponent({
       configStore,
       resource,
       expirationDateDrop,
+      accessDetailsDrop,
       toggleShareDenied,
       dropButtonTooltip,
       dispatchModal,
@@ -172,7 +183,7 @@ export default defineComponent({
       const result: EditOption[] = [
         {
           title: this.$gettext('Access details'),
-          method: this.showAccessDetails,
+          method: () => this.accessDetailsDrop.$refs.drop.show(),
           icon: 'information',
           class: 'show-access-details'
         }
@@ -253,9 +264,6 @@ export default defineComponent({
       this.$emit('expirationDateChanged', { expirationDateTime: null })
       this.expirationDateDrop.hide()
     },
-    showAccessDetails() {
-      this.$emit('showAccessDetails')
-    },
     showDatePickerModal() {
       const currentDate = DateTime.fromISO(this.expirationDate)
 
@@ -289,6 +297,21 @@ export default defineComponent({
     justify-content: flex-start;
     color: var(--oc-color-swatch-passive-default);
     gap: var(--oc-space-small);
+  }
+}
+.share-access-details-drop {
+  dl {
+    display: grid;
+    grid-template-columns: max-content auto;
+    column-gap: var(--oc-space-medium);
+    row-gap: var(--oc-space-xsmall);
+  }
+  dt {
+    grid-column-start: 1;
+  }
+  dd {
+    grid-column-start: 2;
+    margin-left: var(--oc-space-medium);
   }
 }
 </style>

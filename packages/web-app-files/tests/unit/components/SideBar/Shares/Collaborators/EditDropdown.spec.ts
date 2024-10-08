@@ -73,6 +73,7 @@ function getWrapper(props: PartialComponentProps<typeof EditDropdown> = {}) {
       props: {
         canEditOrDelete: true,
         shareCategory: 'user',
+        accessDetails: [],
         ...props
       },
       global: {
