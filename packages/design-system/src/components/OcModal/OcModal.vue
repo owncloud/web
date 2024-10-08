@@ -1,5 +1,5 @@
 <template>
-  <div class="oc-modal-background" aria-labelledby="oc-modal-title">
+  <div class="oc-modal-background">
     <focus-trap :active="true" :initial-focus="initialFocusRef" :tabbable-options="tabbableOptions">
       <div
         :id="elementId"
@@ -8,6 +8,7 @@
         tabindex="0"
         role="dialog"
         aria-modal="true"
+        aria-labelledby="oc-modal-title"
         @keydown.esc="cancelModalAction"
       >
         <div class="oc-modal-title">
