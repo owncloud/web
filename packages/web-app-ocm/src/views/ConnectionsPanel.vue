@@ -155,11 +155,8 @@ export default defineComponent({
 
     const deleteConnection = async (user: FederatedConnection) => {
       try {
-        await clientService.httpAuthenticated.delete('/sciencemesh/delete-accepted-user', null, {
-          params: {
-            user_id: user.user_id,
-            idp: user.idp
-          }
+        await clientService.httpAuthenticated.delete('/sciencemesh/delete-accepted-user', {
+          data: { user_id: user.user_id, idp: user.idp }
         })
 
         const updatedConnections = props.connections.filter(
