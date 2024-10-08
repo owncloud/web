@@ -1,0 +1,6 @@
+Enhancement: Add not found page
+
+We've added a not found page to communicate to users when they've navigated to a page that doesn't exist.
+
+https://github.com/owncloud/web/pull/11737
+https://github.com/owncloud/web/issues/5804
