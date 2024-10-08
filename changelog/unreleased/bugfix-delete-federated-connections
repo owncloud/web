@@ -1,0 +1,6 @@
+Bugfix: Deleting federated connections
+
+We've fixed an issue where federated connections could not be deleted.
+
+https://github.com/owncloud/web/issues/11688
+https://github.com/owncloud/web/pull/11734
