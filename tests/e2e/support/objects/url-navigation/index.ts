@@ -21,4 +21,11 @@ export class URLNavigation {
   async openSpaceViaUrl(args: Omit<po.openResourceViaUrlArgs, 'page'>): Promise<void> {
     await po.openSpaceViaUrl({ ...args, page: this.#page })
   }
+
+  async navigateToNonExistingPage(): Promise<void> {
+    await po.navigateToNonExistingPage({ page: this.#page })
+  }
+  async waitForNotFoundPageToBeVisible(): Promise<void> {
+    await po.waitForNotFoundPageToBeVisible({ page: this.#page })
+  }
 }
