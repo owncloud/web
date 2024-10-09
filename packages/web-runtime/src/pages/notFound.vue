@@ -4,7 +4,7 @@
     <h1 class="oc-text-muted">404</h1>
     <p
       class="oc-text-xlarge oc-m-rm oc-text-muted"
-      v-text="$gettext('The requested page you are looking for does not exist.')"
+      v-text="$gettext('The page you are looking for does not exist.')"
     />
   </div>
 </template>
