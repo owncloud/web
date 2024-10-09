@@ -5,9 +5,9 @@ import { Resource, ResourceIndicator, SpaceResource } from '@ownclouders/web-cli
 import { mock } from 'vitest-mock-extended'
 import { ComponentPublicInstance, computed } from 'vue'
 import { extractDomSelector } from '@ownclouders/web-client'
-import OcDrop from 'design-system/src/components/OcDrop/OcDrop.vue'
 import { useCanBeOpenedWithSecureView } from '../../../../src/composables/resources'
 import { displayPositionedDropdown } from '../../../../src/helpers/contextMenuDropdown'
+import { OcSelect } from 'design-system/src/components'
 
 vi.mock('../../../../src/helpers/contextMenuDropdown')
 vi.mock('../../../../src/composables/viewMode', async (importOriginal) => ({
@@ -164,7 +164,7 @@ describe('ResourceTiles component', () => {
   describe('sorting', () => {
     it('renders the label of the first sort field as default', () => {
       const { wrapper } = getWrapper({ props: { sortFields } })
-      expect(wrapper.find('#oc-tiles-sort-btn').text()).toEqual(sortFields[0].label)
+      expect(wrapper.find('.vs__selected').text()).toEqual(sortFields[0].label)
     })
     it('renders the label of the current sort field as default', () => {
       const sortField = sortFields[2]
@@ -175,67 +175,59 @@ describe('ResourceTiles component', () => {
           sortDir: sortField.sortDir
         }
       })
-      expect(wrapper.find('#oc-tiles-sort-btn').text()).toEqual(sortField.label)
+      expect(wrapper.find('.vs__selected').text()).toEqual(sortField.label)
     })
-    it('emits the "sort"-event', async () => {
-      const index = 2
-      const { wrapper } = getWrapper({ props: { sortFields } })
-      ;(wrapper.vm.$refs.sortDrop as ComponentPublicInstance<typeof OcDrop>).tippy = {
-        hide: vi.fn()
-      }
-      await wrapper.findAll('.oc-tiles-sort-list-item').at(index).trigger('click')
+    it('emits the "sort"-event', () => {
+      const { wrapper } = getWrapper({ props: { sortFields }, stubs: { OcSelect: true } })
+      wrapper.findComponent<typeof OcSelect>('oc-select-stub').vm.$emit('update:modelValue', 1)
       expect(wrapper.emitted('sort')).toBeTruthy()
-      expect(wrapper.emitted('sort')[0][0]).toEqual({
-        sortBy: sortFields[index].name,
-        sortDir: sortFields[index].sortDir
-      })
     })
-    describe('drag and drop', () => {
-      it('emits the "update:selectedIds"-event on drag start', async () => {
-        const { wrapper } = getWrapper()
-        wrapper.vm.dragItem = mock<Resource>()
-        await wrapper.vm.$nextTick()
-        ;(wrapper.vm.$refs.ghostElementRef as ComponentPublicInstance<unknown>).$el = { style: {} }
-        wrapper.vm.dragStart(mock<Resource>(), {
-          dataTransfer: { setDragImage: vi.fn() }
-        } as unknown as DragEvent)
-        expect(wrapper.emitted('update:selectedIds')).toBeDefined()
-      })
-      it('emits the "fileDropped"-event on resource drop', () => {
-        const { wrapper } = getWrapper()
-        wrapper.vm.fileDropped(mock<Resource>(), { dataTransfer: {} } as DragEvent)
-        expect(wrapper.emitted('fileDropped')).toBeDefined()
-      })
+  })
+  describe('drag and drop', () => {
+    it('emits the "update:selectedIds"-event on drag start', async () => {
+      const { wrapper } = getWrapper()
+      wrapper.vm.dragItem = mock<Resource>()
+      await wrapper.vm.$nextTick()
+      ;(wrapper.vm.$refs.ghostElementRef as ComponentPublicInstance<unknown>).$el = { style: {} }
+      wrapper.vm.dragStart(mock<Resource>(), {
+        dataTransfer: { setDragImage: vi.fn() }
+      } as unknown as DragEvent)
+      expect(wrapper.emitted('update:selectedIds')).toBeDefined()
     })
-    describe('context menu', () => {
-      it('triggers the positioned dropdown on click', async () => {
-        const spyDisplayPositionedDropdown = vi.mocked(displayPositionedDropdown)
-        const { wrapper } = getWrapper({ props: { resources } })
-        const btn = wrapper.find('.resource-tiles-btn-action-dropdown')
-        await btn.trigger('click')
-        expect(spyDisplayPositionedDropdown).toHaveBeenCalled()
-      })
-      it('does not show for disabled resources', () => {
-        const { wrapper } = getWrapper({
-          props: { resources: [{ ...resources[0], processing: true }] }
-        })
-        expect(wrapper.find('.resource-tiles-btn-action-dropdown').exists()).toBeFalsy()
-      })
+    it('emits the "fileDropped"-event on resource drop', () => {
+      const { wrapper } = getWrapper()
+      wrapper.vm.fileDropped(mock<Resource>(), { dataTransfer: {} } as DragEvent)
+      expect(wrapper.emitted('fileDropped')).toBeDefined()
     })
-    describe('checkboxes', () => {
-      it('update the selected ids on click', async () => {
-        const { wrapper } = getWrapper({ props: { resources } })
-        const checkbox = wrapper.find('input[type="checkbox"]')
-        await checkbox.trigger('click')
-        expect(wrapper.emitted('update:selectedIds')).toBeTruthy()
+  })
+  describe('context menu', () => {
+    it('triggers the positioned dropdown on click', async () => {
+      const spyDisplayPositionedDropdown = vi.mocked(displayPositionedDropdown)
+      const { wrapper } = getWrapper({ props: { resources } })
+      const btn = wrapper.find('.resource-tiles-btn-action-dropdown')
+      await btn.trigger('click')
+      expect(spyDisplayPositionedDropdown).toHaveBeenCalled()
+    })
+    it('does not show for disabled resources', () => {
+      const { wrapper } = getWrapper({
+        props: { resources: [{ ...resources[0], processing: true }] }
       })
-      it('are disabled for disabled resources', () => {
-        const { wrapper } = getWrapper({
-          props: { resources: [{ ...resources[0], processing: true }] }
-        })
-        const checkbox = wrapper.find('input[type="checkbox"]')
-        expect(Object.keys(checkbox.attributes())).toContain('disabled')
+      expect(wrapper.find('.resource-tiles-btn-action-dropdown').exists()).toBeFalsy()
+    })
+  })
+  describe('checkboxes', () => {
+    it('update the selected ids on click', async () => {
+      const { wrapper } = getWrapper({ props: { resources } })
+      const checkbox = wrapper.find('input[type="checkbox"]')
+      await checkbox.trigger('click')
+      expect(wrapper.emitted('update:selectedIds')).toBeTruthy()
+    })
+    it('are disabled for disabled resources', () => {
+      const { wrapper } = getWrapper({
+        props: { resources: [{ ...resources[0], processing: true }] }
       })
+      const checkbox = wrapper.find('input[type="checkbox"]')
+      expect(Object.keys(checkbox.attributes())).toContain('disabled')
     })
   })
 
@@ -256,7 +248,12 @@ describe('ResourceTiles component', () => {
     )
   })
 
-  function getWrapper({ props = {}, slots = {}, canBeOpenedWithSecureView = true } = {}) {
+  function getWrapper({
+    props = {},
+    slots = {},
+    stubs = {},
+    canBeOpenedWithSecureView = true
+  } = {}) {
     const mocks = defaultComponentMocks()
 
     vi.mocked(useCanBeOpenedWithSecureView).mockReturnValue({
@@ -276,7 +273,8 @@ describe('ResourceTiles component', () => {
         global: {
           plugins: [...defaultPlugins()],
           mocks: mocks,
-          provide: mocks
+          provide: mocks,
+          stubs
         }
       })
     }

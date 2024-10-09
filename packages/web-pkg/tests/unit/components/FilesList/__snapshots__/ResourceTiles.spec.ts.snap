@@ -1,24 +1,24 @@
 // Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
 exports[`ResourceTiles component > renders a footer slot 1`] = `
-"<div data-v-67d39700="" id="tiles-view" class="oc-px-m oc-pt-l">
-  <div data-v-67d39700="" class="oc-flex oc-flex-middle oc-mb-m oc-pb-s oc-tiles-controls"><span data-v-67d39700="" class="oc-ml-s"><input id="tiles-view-select-all" type="checkbox" name="checkbox" class="oc-checkbox oc-rounded oc-checkbox-l" disabled="" aria-label="Select all"> <!--v-if--></span>
+"<div id="tiles-view" class="oc-px-m oc-pt-l">
+  <div class="oc-flex oc-flex-middle oc-mb-m oc-pb-s oc-tiles-controls"><span class="oc-ml-s"><input id="tiles-view-select-all" type="checkbox" name="checkbox" class="oc-checkbox oc-rounded oc-checkbox-l" disabled="" aria-label="Select all"> <!--v-if--></span>
     <!--v-if-->
   </div>
-  <ul data-v-67d39700="" class="oc-list oc-my-rm oc-mx-rm oc-tiles oc-flex"> </ul>
+  <ul class="oc-list oc-my-rm oc-mx-rm oc-tiles oc-flex"> </ul>
   <!--v-if-->
-  <div data-v-67d39700="" class="oc-tiles-footer">Hello, ResourceTiles footer!</div>
+  <div class="oc-tiles-footer">Hello, ResourceTiles footer!</div>
 </div>"
 `;
 
 exports[`ResourceTiles component > renders an array of spaces correctly 1`] = `
-"<div data-v-67d39700="" id="tiles-view" class="oc-px-m oc-pt-l">
-  <div data-v-67d39700="" class="oc-flex oc-flex-middle oc-mb-m oc-pb-s oc-tiles-controls"><span data-v-67d39700="" class="oc-ml-s"><input id="tiles-view-select-all" type="checkbox" name="checkbox" class="oc-checkbox oc-rounded oc-checkbox-l" aria-label="Select all"> <!--v-if--></span>
+"<div id="tiles-view" class="oc-px-m oc-pt-l">
+  <div class="oc-flex oc-flex-middle oc-mb-m oc-pb-s oc-tiles-controls"><span class="oc-ml-s"><input id="tiles-view-select-all" type="checkbox" name="checkbox" class="oc-checkbox oc-rounded oc-checkbox-l" aria-label="Select all"> <!--v-if--></span>
     <!--v-if-->
   </div>
-  <ul data-v-67d39700="" class="oc-list oc-my-rm oc-mx-rm oc-tiles oc-flex">
-    <li data-v-67d39700="" class="oc-tiles-item has-item-context-menu">
-      <div data-v-67d39700="" class="oc-tile-card oc-card oc-card-default oc-rounded" data-item-id="1" draggable="false"><a attrs="[object Object]" target="_self" draggable="false" class="oc-resource-link oc-card-media-top oc-flex oc-flex-center oc-flex-middle oc-m-rm" tabindex="-1"></a>
+  <ul class="oc-list oc-my-rm oc-mx-rm oc-tiles oc-flex">
+    <li class="oc-tiles-item has-item-context-menu">
+      <div class="oc-tile-card oc-card oc-card-default oc-rounded" data-item-id="1" draggable="false"><a attrs="[object Object]" target="_self" draggable="false" class="oc-resource-link oc-card-media-top oc-flex oc-flex-center oc-flex-middle oc-m-rm" tabindex="-1"></a>
         <div class="oc-card-body oc-p-s">
           <div class="oc-flex oc-flex-between oc-flex-middle">
             <div class="oc-flex oc-flex-middle oc-text-truncate resource-name-wrapper">
@@ -34,7 +34,7 @@ exports[`ResourceTiles component > renders an array of spaces correctly 1`] = `
             <div class="oc-flex oc-flex-middle">
               <!-- Slot for indicators !-->
               <!-- Slot for individual actions -->
-              <!-- Slot for contextmenu --> <button data-v-67d39700="" type="button" aria-label="Show context menu" class="oc-button oc-rounded oc-button-m oc-button-justify-content-center oc-button-gap-m oc-button-passive oc-button-passive-raw resource-tiles-btn-action-dropdown" id="context-menu-trigger-1">
+              <!-- Slot for contextmenu --> <button type="button" aria-label="Show context menu" class="oc-button oc-rounded oc-button-m oc-button-justify-content-center oc-button-gap-m oc-button-passive oc-button-passive-raw resource-tiles-btn-action-dropdown" id="context-menu-trigger-1">
                 <!--v-if-->
                 <!-- @slot Content of the button --> <span class="oc-icon oc-icon-m oc-icon-passive"><!----></span>
                 <div id="context-menu-drop-1" class="oc-drop oc-box-shadow-medium oc-rounded oc-overflow-hidden">
@@ -47,8 +47,8 @@ exports[`ResourceTiles component > renders an array of spaces correctly 1`] = `
         </div>
       </div>
     </li>
-    <li data-v-67d39700="" class="oc-tiles-item has-item-context-menu">
-      <div data-v-67d39700="" class="oc-tile-card oc-card oc-card-default oc-rounded" data-item-id="2" draggable="false"><a attrs="[object Object]" target="_self" draggable="false" class="oc-resource-link oc-card-media-top oc-flex oc-flex-center oc-flex-middle oc-m-rm" tabindex="-1"></a>
+    <li class="oc-tiles-item has-item-context-menu">
+      <div class="oc-tile-card oc-card oc-card-default oc-rounded" data-item-id="2" draggable="false"><a attrs="[object Object]" target="_self" draggable="false" class="oc-resource-link oc-card-media-top oc-flex oc-flex-center oc-flex-middle oc-m-rm" tabindex="-1"></a>
         <div class="oc-card-body oc-p-s">
           <div class="oc-flex oc-flex-between oc-flex-middle">
             <div class="oc-flex oc-flex-middle oc-text-truncate resource-name-wrapper">
@@ -64,7 +64,7 @@ exports[`ResourceTiles component > renders an array of spaces correctly 1`] = `
             <div class="oc-flex oc-flex-middle">
               <!-- Slot for indicators !-->
               <!-- Slot for individual actions -->
-              <!-- Slot for contextmenu --> <button data-v-67d39700="" type="button" aria-label="Show context menu" class="oc-button oc-rounded oc-button-m oc-button-justify-content-center oc-button-gap-m oc-button-passive oc-button-passive-raw resource-tiles-btn-action-dropdown" id="context-menu-trigger-2">
+              <!-- Slot for contextmenu --> <button type="button" aria-label="Show context menu" class="oc-button oc-rounded oc-button-m oc-button-justify-content-center oc-button-gap-m oc-button-passive oc-button-passive-raw resource-tiles-btn-action-dropdown" id="context-menu-trigger-2">
                 <!--v-if-->
                 <!-- @slot Content of the button --> <span class="oc-icon oc-icon-m oc-icon-passive"><!----></span>
                 <div id="context-menu-drop-2" class="oc-drop oc-box-shadow-medium oc-rounded oc-overflow-hidden">
@@ -77,13 +77,13 @@ exports[`ResourceTiles component > renders an array of spaces correctly 1`] = `
         </div>
       </div>
     </li>
-    <li data-v-67d39700="" class="ghost-tile" aria-hidden="true"></li>
-    <li data-v-67d39700="" class="ghost-tile" aria-hidden="true"></li>
-    <li data-v-67d39700="" class="ghost-tile" aria-hidden="true"></li>
-    <li data-v-67d39700="" class="ghost-tile" aria-hidden="true"></li>
-    <li data-v-67d39700="" class="ghost-tile" aria-hidden="true"></li>
+    <li class="ghost-tile" aria-hidden="true"></li>
+    <li class="ghost-tile" aria-hidden="true"></li>
+    <li class="ghost-tile" aria-hidden="true"></li>
+    <li class="ghost-tile" aria-hidden="true"></li>
+    <li class="ghost-tile" aria-hidden="true"></li>
   </ul>
   <!--v-if-->
-  <div data-v-67d39700="" class="oc-tiles-footer"></div>
+  <div class="oc-tiles-footer"></div>
 </div>"
 `;
