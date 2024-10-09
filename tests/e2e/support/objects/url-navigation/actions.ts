@@ -86,3 +86,10 @@ const getTheFileIdOfSpaceFile = async (
     spaceName
   })
 }
+
+export const navigateToNonExistingPage = async ({ page }: { page: Page }) => {
+  await page.goto(`${config.backendUrl}/'a-non-existing-page'`)
+}
+export const waitForNotFoundPageToBeVisible = async ({ page }: { page: Page }) => {
+  await page.locator('.page-not-found').waitFor()
+}

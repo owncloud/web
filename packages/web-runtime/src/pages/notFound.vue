@@ -8,7 +8,4 @@
     />
   </div>
 </template>
-
-<script setup lang="ts">
-import { $gettext } from '@ownclouders/web-pkg/src/router/utils'
-</script>
+<script setup lang="ts"></script>
