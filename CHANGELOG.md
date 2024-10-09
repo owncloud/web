@@ -21,6 +21,7 @@ Summary
 * Change - Remove importer as default app: [#11709](https://github.com/owncloud/web/pull/11709)
 * Enhancement - Allow setting view mode for apps via query: [#11668](https://github.com/owncloud/web/pull/11668)
 * Enhancement - File size warning in editors: [#11731](https://github.com/owncloud/web/pull/11731)
+* Enhancement - Add not found page: [#11737](https://github.com/owncloud/web/pull/11737)
 
 Details
 -------
@@ -133,6 +134,14 @@ Details
 
    https://github.com/owncloud/web/issues/8038
    https://github.com/owncloud/web/pull/11731
+
+* Enhancement - Add not found page: [#11737](https://github.com/owncloud/web/pull/11737)
+
+   We've added a not found page to communicate to users when they've navigated to a
+   page that doesn't exist.
+
+   https://github.com/owncloud/web/issues/5804
+   https://github.com/owncloud/web/pull/11737
 
 Changelog for ownCloud Web [10.3.0] (2024-09-26)
 =======================================
