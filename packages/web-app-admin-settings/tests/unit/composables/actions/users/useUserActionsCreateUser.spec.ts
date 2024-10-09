@@ -1,7 +1,7 @@
 import { useCapabilityStore, useModals } from '@ownclouders/web-pkg'
 import { useUserActionsCreateUser } from '../../../../../src/composables/actions/users/useUserActionsCreateUser'
 import { unref } from 'vue'
-import { getComposableWrapper, writable } from 'web-test-helpers'
+import { getComposableWrapper, writable } from '@ownclouders/web-test-helpers'
 
 describe('useUserActionsCreateUser', () => {
   describe('method "isVisible"', () => {

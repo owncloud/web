@@ -1,6 +1,6 @@
 import ListItem from '../../../../../../src/components/SideBar/Shares/Links/ListItem.vue'
 import { LinkShare, ShareRole, Resource } from '@ownclouders/web-client'
-import { defaultPlugins, shallowMount, defaultComponentMocks } from 'web-test-helpers'
+import { defaultPlugins, shallowMount, defaultComponentMocks } from '@ownclouders/web-test-helpers'
 import { mock } from 'vitest-mock-extended'
 import { useLinkTypes, LinkRoleDropdown } from '@ownclouders/web-pkg'
 import { SharingLinkType } from '@ownclouders/web-client/graph/generated'

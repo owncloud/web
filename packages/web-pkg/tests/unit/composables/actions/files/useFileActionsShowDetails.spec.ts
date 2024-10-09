@@ -1,5 +1,5 @@
 import { SideBarEventTopics, eventBus, useFileActionsShowDetails } from '../../../../../src'
-import { defaultComponentMocks, getComposableWrapper } from 'web-test-helpers'
+import { defaultComponentMocks, getComposableWrapper } from '@ownclouders/web-test-helpers'
 import { unref } from 'vue'
 import { Resource } from '@ownclouders/web-client'
 

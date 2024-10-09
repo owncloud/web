@@ -3,7 +3,7 @@ import {
   defaultPlugins,
   RouteLocation,
   shallowMount
-} from 'web-test-helpers'
+} from '@ownclouders/web-test-helpers'
 import ResourceDetails from '../../../../src/components/FilesList/ResourceDetails.vue'
 import { mock } from 'vitest-mock-extended'
 import { Resource, SpaceResource } from '@ownclouders/web-client'

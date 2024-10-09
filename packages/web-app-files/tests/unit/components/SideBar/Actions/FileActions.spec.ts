@@ -7,7 +7,7 @@ import {
   mount,
   defaultComponentMocks,
   RouteLocation
-} from 'web-test-helpers'
+} from '@ownclouders/web-test-helpers'
 import { useFileActions } from '@ownclouders/web-pkg'
 import { Action } from '@ownclouders/web-pkg'
 

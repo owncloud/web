@@ -5,7 +5,7 @@ import {
   shallowMount,
   defaultComponentMocks,
   useGetMatchingSpaceMock
-} from 'web-test-helpers'
+} from '@ownclouders/web-test-helpers'
 import { mock } from 'vitest-mock-extended'
 import { AncestorMetaDataValue, useGetMatchingSpace, useResourcesStore } from '@ownclouders/web-pkg'
 import { SharingLinkType } from '@ownclouders/web-client/graph/generated'

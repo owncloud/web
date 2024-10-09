@@ -1,4 +1,4 @@
-import { shallowMount } from 'web-test-helpers'
+import { shallowMount } from '@ownclouders/web-test-helpers'
 import Cell from './_OcTableCell.vue'
 
 describe('OcTableCell', () => {

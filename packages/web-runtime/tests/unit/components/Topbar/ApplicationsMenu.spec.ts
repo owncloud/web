@@ -4,7 +4,7 @@ import {
   defaultComponentMocks,
   defaultPlugins,
   shallowMount
-} from 'web-test-helpers'
+} from '@ownclouders/web-test-helpers'
 import { mock } from 'vitest-mock-extended'
 import { AppMenuItemExtension } from '@ownclouders/web-pkg'
 

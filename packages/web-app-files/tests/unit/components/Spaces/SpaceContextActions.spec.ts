@@ -1,6 +1,11 @@
 import SpaceContextActions from '../../../../src/components/Spaces/SpaceContextActions.vue'
 import { buildSpace, SpaceResource } from '@ownclouders/web-client'
-import { defaultComponentMocks, defaultPlugins, mount, RouteLocation } from 'web-test-helpers'
+import {
+  defaultComponentMocks,
+  defaultPlugins,
+  mount,
+  RouteLocation
+} from '@ownclouders/web-test-helpers'
 import { mock } from 'vitest-mock-extended'
 import { Drive } from '@ownclouders/web-client/graph/generated'
 

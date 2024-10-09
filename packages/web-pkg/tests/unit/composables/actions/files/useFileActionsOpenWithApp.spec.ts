@@ -1,6 +1,10 @@
 import { mock } from 'vitest-mock-extended'
 import { computed, unref } from 'vue'
-import { defaultComponentMocks, RouteLocation, getComposableWrapper } from 'web-test-helpers'
+import {
+  defaultComponentMocks,
+  RouteLocation,
+  getComposableWrapper
+} from '@ownclouders/web-test-helpers'
 import {
   useFileActionsOpenWithApp,
   useIsFilesAppActive,

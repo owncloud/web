@@ -1,5 +1,5 @@
 import resolvePrivateLink from '../../../src/pages/resolvePrivateLink.vue'
-import { defaultPlugins, defaultComponentMocks, shallowMount } from 'web-test-helpers'
+import { defaultPlugins, defaultComponentMocks, shallowMount } from '@ownclouders/web-test-helpers'
 import { mock } from 'vitest-mock-extended'
 import { queryItemAsString, useGetResourceContext } from '@ownclouders/web-pkg'
 import { Resource, SHARE_JAIL_ID, SpaceResource } from '@ownclouders/web-client'

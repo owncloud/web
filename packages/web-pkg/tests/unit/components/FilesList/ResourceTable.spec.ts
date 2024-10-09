@@ -9,7 +9,7 @@ import {
   ShareTypes,
   SpaceResource
 } from '@ownclouders/web-client'
-import { defaultPlugins, mount, PartialComponentProps } from 'web-test-helpers'
+import { defaultPlugins, mount, PartialComponentProps } from '@ownclouders/web-test-helpers'
 import { CapabilityStore } from '../../../../src/composables/piniaStores'
 import { useCanBeOpenedWithSecureView } from '../../../../src/composables/resources'
 import { displayPositionedDropdown } from '../../../../src/helpers/contextMenuDropdown'

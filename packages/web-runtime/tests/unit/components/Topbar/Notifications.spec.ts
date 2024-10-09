@@ -1,7 +1,7 @@
 import Notifications from '../../../../src/components/Topbar/Notifications.vue'
 import { Notification } from '../../../../src/helpers/notifications'
 import { mock } from 'vitest-mock-extended'
-import { defaultComponentMocks, defaultPlugins, shallowMount } from 'web-test-helpers'
+import { defaultComponentMocks, defaultPlugins, shallowMount } from '@ownclouders/web-test-helpers'
 import { SpaceResource } from '@ownclouders/web-client'
 import { RouterLink, RouteLocationNamedRaw, RouteLocationNormalizedLoaded } from 'vue-router'
 import { AxiosResponse } from 'axios'

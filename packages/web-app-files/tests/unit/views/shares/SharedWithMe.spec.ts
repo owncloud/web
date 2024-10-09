@@ -9,10 +9,10 @@ import {
 } from '@ownclouders/web-pkg'
 import { useResourcesViewDefaultsMock } from '../../../../tests/mocks/useResourcesViewDefaultsMock'
 import { ref } from 'vue'
-import { defaultStubs, RouteLocation } from 'web-test-helpers'
+import { defaultStubs, RouteLocation } from '@ownclouders/web-test-helpers'
 import { useSortMock } from '../../../../tests/mocks/useSortMock'
 import { mock } from 'vitest-mock-extended'
-import { defaultPlugins, mount, defaultComponentMocks } from 'web-test-helpers'
+import { defaultPlugins, mount, defaultComponentMocks } from '@ownclouders/web-test-helpers'
 import { ShareTypes, IncomingShareResource } from '@ownclouders/web-client'
 import SharedWithMeSection from '../../../../src/components/Shares/SharedWithMeSection.vue'
 

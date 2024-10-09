@@ -5,7 +5,7 @@ import {
   defaultPlugins,
   RouteLocation,
   shallowMount
-} from 'web-test-helpers'
+} from '@ownclouders/web-test-helpers'
 import { Resource, SpaceResource } from '@ownclouders/web-client'
 import { useSharesStore } from '@ownclouders/web-pkg'
 import { CollaboratorAutoCompleteItem, CollaboratorShare, ShareRole } from '@ownclouders/web-client'

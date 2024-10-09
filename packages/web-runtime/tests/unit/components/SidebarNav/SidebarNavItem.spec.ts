@@ -1,6 +1,6 @@
 import SidebarNavItem from '../../../../src/components/SidebarNav/SidebarNavItem.vue'
 import sidebarNavItemFixtures from '../../../__fixtures__/sidebarNavItems'
-import { defaultPlugins, mount } from 'web-test-helpers'
+import { defaultPlugins, mount } from '@ownclouders/web-test-helpers'
 
 const exampleNavItem = sidebarNavItemFixtures[0]
 

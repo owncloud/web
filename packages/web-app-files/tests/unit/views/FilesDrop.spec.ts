@@ -5,7 +5,7 @@ import {
   defaultComponentMocks,
   defaultStubs,
   RouteLocation
-} from 'web-test-helpers'
+} from '@ownclouders/web-test-helpers'
 import { mock, mockDeep } from 'vitest-mock-extended'
 import { ClientService } from '@ownclouders/web-pkg'
 import { ListFilesResult } from '@ownclouders/web-client/webdav'

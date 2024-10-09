@@ -1,7 +1,11 @@
 import { useSpaceActionsRename } from '../../../../../src/composables/actions/spaces'
 import { useMessages, useModals } from '../../../../../src/composables/piniaStores'
 import { mock } from 'vitest-mock-extended'
-import { defaultComponentMocks, RouteLocation, getComposableWrapper } from 'web-test-helpers'
+import {
+  defaultComponentMocks,
+  RouteLocation,
+  getComposableWrapper
+} from '@ownclouders/web-test-helpers'
 import { unref } from 'vue'
 import { SpaceResource } from '@ownclouders/web-client'
 

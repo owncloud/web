@@ -1,6 +1,6 @@
 import ActionMenuItem from '../../../../src/components/ContextActions/ActionMenuItem.vue'
 import { FileAction } from '../../../../src/composables/actions'
-import { defaultPlugins, mount, shallowMount } from 'web-test-helpers'
+import { defaultPlugins, mount, shallowMount } from '@ownclouders/web-test-helpers'
 
 const selectors = {
   handler: '[data-testid="action-handler"]',

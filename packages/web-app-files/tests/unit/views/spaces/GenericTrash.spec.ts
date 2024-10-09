@@ -13,7 +13,7 @@ import {
   RouteLocation,
   PartialComponentProps,
   ComponentProps
-} from 'web-test-helpers'
+} from '@ownclouders/web-test-helpers'
 import { AppBar } from '@ownclouders/web-pkg'
 
 vi.mock('../../../../src/composables')

@@ -2,7 +2,11 @@ import { useDriveResolver } from '../../../../src/composables/driveResolver'
 import { ref, unref } from 'vue'
 import { mock, mockDeep } from 'vitest-mock-extended'
 import { isShareSpaceResource, ShareSpaceResource, SpaceResource } from '@ownclouders/web-client'
-import { getComposableWrapper, defaultComponentMocks, RouteLocation } from 'web-test-helpers'
+import {
+  getComposableWrapper,
+  defaultComponentMocks,
+  RouteLocation
+} from '@ownclouders/web-test-helpers'
 import { useSpacesStore } from '../../../../src/composables/piniaStores'
 
 describe('useDriveResolver', () => {

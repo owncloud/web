@@ -1,5 +1,5 @@
 import MobileNav from '../../../src/components/MobileNav.vue'
-import { defaultPlugins, defaultComponentMocks, mount } from 'web-test-helpers'
+import { defaultPlugins, defaultComponentMocks, mount } from '@ownclouders/web-test-helpers'
 import { mock } from 'vitest-mock-extended'
 import { NavItem } from '../../../src/helpers/navItems'
 

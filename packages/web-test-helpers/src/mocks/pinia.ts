@@ -1,19 +1,26 @@
 import { createTestingPinia } from '@pinia/testing'
-import defaultTheme from '../../../web-runtime/themes/owncloud/theme.json'
-import { User, Group } from '../../../web-client/src/graph/generated'
-import { Message, Modal, WebThemeType } from '../../../web-pkg/src/composables/piniaStores'
-import { Capabilities } from '../../../web-client/src/ocs'
 import { mock } from 'vitest-mock-extended'
-import { SpaceResource } from '../../../web-client/src'
-import { OptionsConfig } from '../../../web-pkg/src/composables/piniaStores/config/types'
-import { Resource, CollaboratorShare, LinkShare, ShareRole } from '../../../web-client/src/helpers'
 import {
   AncestorMetaData,
   AppConfigObject,
   ApplicationFileExtension,
   ApplicationInformation,
-  ClipboardActions
-} from '../../../web-pkg/types'
+  ClipboardActions,
+  Message,
+  Modal,
+  OptionsConfig,
+  WebThemeType
+} from '@ownclouders/web-pkg'
+import {
+  CollaboratorShare,
+  LinkShare,
+  Resource,
+  ShareRole,
+  SpaceResource
+} from '@ownclouders/web-client'
+import { Group, User } from '@ownclouders/web-client/graph/generated'
+import { Capabilities } from '@ownclouders/web-client/ocs'
+import defaultTheme from './theme.json'
 
 export { createTestingPinia }
 

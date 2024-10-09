@@ -1,6 +1,6 @@
 import { Resource } from '@ownclouders/web-client'
 import FileDetailsMultiple from '../../../../../src/components/SideBar/Details/FileDetailsMultiple.vue'
-import { defaultPlugins, shallowMount } from 'web-test-helpers'
+import { defaultPlugins, shallowMount } from '@ownclouders/web-test-helpers'
 
 const selectors = {
   selectedFilesText: '[data-testid="selectedFilesText"]',

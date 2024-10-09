@@ -1,5 +1,5 @@
 import ActivitiesPanel from '../../../../src/components/SideBar/ActivitiesPanel.vue'
-import { defaultComponentMocks, defaultPlugins, mount } from 'web-test-helpers'
+import { defaultComponentMocks, defaultPlugins, mount } from '@ownclouders/web-test-helpers'
 import { Resource } from '@ownclouders/web-client'
 import { mock } from 'vitest-mock-extended'
 import { nextTick } from 'vue'

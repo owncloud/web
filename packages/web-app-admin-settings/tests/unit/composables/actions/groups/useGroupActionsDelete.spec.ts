@@ -2,7 +2,7 @@ import { useGroupActionsDelete } from '../../../../../src/composables/actions/gr
 import { mock } from 'vitest-mock-extended'
 import { unref } from 'vue'
 import { Group } from '@ownclouders/web-client/graph/generated'
-import { defaultComponentMocks, getComposableWrapper } from 'web-test-helpers'
+import { defaultComponentMocks, getComposableWrapper } from '@ownclouders/web-test-helpers'
 import { useGroupSettingsStore } from '../../../../../src/composables'
 
 describe('useGroupActionsDelete', () => {

@@ -1,6 +1,11 @@
 import { mockDeep } from 'vitest-mock-extended'
 import ResourceUpload from '../../../../../src/components/AppBar/Upload/ResourceUpload.vue'
-import { defaultComponentMocks, defaultPlugins, defaultStubs, mount } from 'web-test-helpers'
+import {
+  defaultComponentMocks,
+  defaultPlugins,
+  defaultStubs,
+  mount
+} from '@ownclouders/web-test-helpers'
 import { UppyService } from '@ownclouders/web-pkg'
 import { OcButton } from 'design-system/src/components'
 

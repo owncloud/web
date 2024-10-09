@@ -1,4 +1,4 @@
-import { defaultPlugins, shallowMount } from 'web-test-helpers'
+import { defaultPlugins, shallowMount } from '@ownclouders/web-test-helpers'
 import Recipient from './OcRecipient.vue'
 import { Recipient as RecipientType } from './types'
 

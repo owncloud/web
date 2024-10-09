@@ -9,7 +9,7 @@ import {
   announceConfiguration
 } from '../../../src/container/bootstrap'
 import { buildApplication } from '../../../src/container/application'
-import { createTestingPinia } from 'web-test-helpers/src'
+import { createTestingPinia } from '@ownclouders/web-test-helpers'
 
 vi.mock('../../../src/container/application')
 

@@ -8,7 +8,7 @@ import {
   shallowMount,
   defaultComponentMocks,
   RouteLocation
-} from 'web-test-helpers'
+} from '@ownclouders/web-test-helpers'
 
 const routes = [
   mock<RouteRecordNormalized>({

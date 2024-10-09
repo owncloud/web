@@ -46,6 +46,6 @@
     "zod": "3.23.8"
   },
   "devDependencies": {
-    "web-test-helpers": "workspace:*"
+    "@ownclouders/web-test-helpers": "workspace:*"
   }
 }

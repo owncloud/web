@@ -1,7 +1,7 @@
 import Groups from '../../../src/views/Groups.vue'
 import { mock, mockDeep } from 'vitest-mock-extended'
 import { ClientService } from '@ownclouders/web-pkg'
-import { defaultComponentMocks, defaultPlugins, mount } from 'web-test-helpers'
+import { defaultComponentMocks, defaultPlugins, mount } from '@ownclouders/web-test-helpers'
 import { Group } from '@ownclouders/web-client/graph/generated'
 
 const selectors = { batchActionsStub: 'batch-actions-stub' }

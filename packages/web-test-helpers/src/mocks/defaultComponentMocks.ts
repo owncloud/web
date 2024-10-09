@@ -1,4 +1,4 @@
-import { mock, mockDeep } from 'vitest-mock-extended'
+import { mock, mockDeep, MockProxy } from 'vitest-mock-extended'
 import {
   ClientService,
   LoadingService,
@@ -6,7 +6,7 @@ import {
   PasswordPolicyService,
   PreviewService,
   UppyService
-} from '../../../web-pkg/src/'
+} from '@ownclouders/web-pkg'
 import { Router, RouteLocationNormalizedLoaded, RouteLocationRaw } from 'vue-router'
 import { ref } from 'vue'
 import { writable } from '../helpers'
@@ -34,7 +34,7 @@ export const defaultComponentMocks = ({ currentRoute = undefined }: ComponentMoc
   $route.meta.title = $route.meta.title || ''
 
   return {
-    $router,
+    $router: $router as MockProxy<Router>,
     $route,
     $clientService: mockDeep<ClientService>(),
     $previewService: mockDeep<PreviewService>(),

@@ -1,4 +1,4 @@
-import { PartialComponentProps, defaultPlugins, mount } from 'web-test-helpers'
+import { PartialComponentProps, defaultPlugins, mount } from '@ownclouders/web-test-helpers'
 import { mock } from 'vitest-mock-extended'
 import { Resource } from '@ownclouders/web-client'
 import BatchActions from '../../../src/components/BatchActions.vue'

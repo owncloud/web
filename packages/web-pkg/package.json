@@ -48,7 +48,7 @@
     "clean-publish": "5.0.0",
     "vite-plugin-dts": "4.2.3",
     "vite-plugin-node-polyfills": "0.22.0",
-    "web-test-helpers": "workspace:*"
+    "@ownclouders/web-test-helpers": "workspace:*"
   },
   "peerDependencies": {
     "@casl/ability": "6.7.1",

@@ -5,7 +5,7 @@ import { ClientService } from '../../../src/services'
 import { unref, ref, Ref } from 'vue'
 import { AxiosResponse } from 'axios'
 import { ArchiverCapability } from '@ownclouders/web-client/ocs'
-import { createTestingPinia } from 'web-test-helpers'
+import { createTestingPinia } from '@ownclouders/web-test-helpers'
 import { useUserStore } from '../../../src/composables/piniaStores'
 
 const serverUrl = 'https://demo.owncloud.com'

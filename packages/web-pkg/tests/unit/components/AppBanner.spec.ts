@@ -1,12 +1,11 @@
-import { defaultComponentMocks, defaultPlugins, shallowMount } from 'web-test-helpers'
+import { defaultComponentMocks, defaultPlugins, shallowMount } from '@ownclouders/web-test-helpers'
 import AppBanner from '../../../src/components/AppBanner.vue'
-import { createRouter, createWebHashHistory, createWebHistory } from 'vue-router'
+import { createMemoryHistory, createRouter } from 'vue-router'
 import { useSessionStorage } from '@vueuse/core'
 import { ref } from 'vue'
 
 vi.mock('@vueuse/core')
 
-// @vitest-environment jsdom
 describe('AppBanner', () => {
   it('generates app url with correct app scheme', () => {
     const baseElement = document.createElement('base')
@@ -52,7 +51,7 @@ function getWrapper({
         component: {}
       }
     ],
-    history: createWebHistory('/') || createWebHashHistory()
+    history: createMemoryHistory('/')
   })
 
   vi.mocked(useSessionStorage<string>).mockImplementation(() => {

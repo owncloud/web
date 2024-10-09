@@ -10,7 +10,7 @@ import {
   shallowMount,
   defaultComponentMocks,
   defaultStubs
-} from 'web-test-helpers'
+} from '@ownclouders/web-test-helpers'
 import CollaboratorListItem from '../../../../../src/components/SideBar/Shares/Collaborators/ListItem.vue'
 import { AncestorMetaData, CapabilityStore, useCanShare, useModals } from '@ownclouders/web-pkg'
 import { User } from '@ownclouders/web-client/graph/generated'

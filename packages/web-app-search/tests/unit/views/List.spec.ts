@@ -1,5 +1,5 @@
 import List from '../../../src/views/List.vue'
-import { defaultComponentMocks, mount } from 'web-test-helpers'
+import { defaultComponentMocks, mount } from '@ownclouders/web-test-helpers'
 import { useAvailableProviders } from '../../../src/composables'
 import { ref } from 'vue'
 import { SearchProvider, queryItemAsString } from '@ownclouders/web-pkg'

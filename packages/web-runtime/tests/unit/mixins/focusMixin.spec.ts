@@ -1,6 +1,6 @@
 import focusMixin from '../../../src/mixins/focusMixin'
 import { defineComponent } from 'vue'
-import { mount } from 'web-test-helpers'
+import { mount } from '@ownclouders/web-test-helpers'
 
 const Component = defineComponent({
   name: 'DummyComponent',

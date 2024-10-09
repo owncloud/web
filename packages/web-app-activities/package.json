@@ -5,7 +5,7 @@
   "description": "ownCloud activities app",
   "license": "AGPL-3.0",
   "devDependencies": {
-    "web-test-helpers": "workspace:*"
+    "@ownclouders/web-test-helpers": "workspace:*"
   },
   "peerDependencies": {
     "@ownclouders/web-client": "workspace:*",

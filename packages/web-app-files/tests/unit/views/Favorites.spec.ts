@@ -4,7 +4,12 @@ import { useResourcesViewDefaultsMock } from '../../../tests/mocks/useResourcesV
 import { h, ref } from 'vue'
 import { mockDeep, mock } from 'vitest-mock-extended'
 import { Resource } from '@ownclouders/web-client'
-import { defaultPlugins, defaultStubs, mount, defaultComponentMocks } from 'web-test-helpers'
+import {
+  defaultPlugins,
+  defaultStubs,
+  mount,
+  defaultComponentMocks
+} from '@ownclouders/web-test-helpers'
 import { RouteLocation } from 'vue-router'
 import { FolderViewExtension, useExtensionRegistry } from '@ownclouders/web-pkg'
 import {

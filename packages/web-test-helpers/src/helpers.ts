@@ -1,8 +1,7 @@
 import { mount, VueWrapper } from '@vue/test-utils'
 import { defineComponent, nextTick } from 'vue'
+import { createRouter as _createRouter, createMemoryHistory, RouterOptions } from 'vue-router'
 import { defaultPlugins, DefaultPluginsOptions } from './defaultPlugins'
-import { createRouter as _createRouter } from '../../web-runtime/src/router'
-import { createMemoryHistory, RouterOptions } from 'vue-router'
 
 export { mount, shallowMount } from '@vue/test-utils'
 
@@ -42,7 +41,7 @@ export const getOcSelectOptions = async (
   selector: string,
   options = { close: true }
 ) => {
-  const selectElement = await wrapper.find(selector)
+  const selectElement = wrapper.find(selector)
   await selectElement.find('input').trigger('click')
   await selectElement.find('.vs__dropdown-toggle').trigger('mousedown')
 

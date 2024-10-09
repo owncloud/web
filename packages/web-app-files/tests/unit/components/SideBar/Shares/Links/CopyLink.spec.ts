@@ -4,7 +4,7 @@ import { useMessages } from '@ownclouders/web-pkg'
 import CopyLink from '../../../../../../src/components/SideBar/Shares/Links/CopyLink.vue'
 import { useClipboard } from '@vueuse/core'
 import { mock } from 'vitest-mock-extended'
-import { defaultPlugins, mount } from 'web-test-helpers'
+import { defaultPlugins, mount } from '@ownclouders/web-test-helpers'
 
 const linkShare = {
   displayName: 'Example link',

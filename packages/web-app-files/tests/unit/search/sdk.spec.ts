@@ -2,7 +2,7 @@ import { SDKSearch } from '../../../src/search'
 import { RouteLocation, Router } from 'vue-router'
 import { mock } from 'vitest-mock-extended'
 import { ref } from 'vue'
-import { createTestingPinia, writable } from 'web-test-helpers/src'
+import { createTestingPinia, writable } from '@ownclouders/web-test-helpers'
 import { ConfigStore, useCapabilityStore } from '@ownclouders/web-pkg'
 
 const getStore = (reports: string[] = []) => {

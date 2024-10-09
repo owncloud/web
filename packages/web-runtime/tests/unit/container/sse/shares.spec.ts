@@ -22,7 +22,7 @@ import {
 import { mock, mockDeep } from 'vitest-mock-extended'
 import { DriveItem, User } from '@ownclouders/web-client/graph/generated'
 import { ShareTypes, Resource, SpaceResource } from '@ownclouders/web-client'
-import { createTestingPinia, defaultComponentMocks } from 'web-test-helpers'
+import { createTestingPinia, defaultComponentMocks } from '@ownclouders/web-test-helpers'
 import { Language } from 'vue3-gettext'
 import PQueue from 'p-queue'
 import { RouteLocation } from 'vue-router'

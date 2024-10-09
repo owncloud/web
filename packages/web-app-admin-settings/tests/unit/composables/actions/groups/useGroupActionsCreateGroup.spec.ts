@@ -1,7 +1,7 @@
 import { useModals } from '@ownclouders/web-pkg'
 import { useGroupActionsCreateGroup } from '../../../../../src/composables/actions/groups/useGroupActionsCreateGroup'
 import { unref } from 'vue'
-import { getComposableWrapper } from 'web-test-helpers'
+import { getComposableWrapper } from '@ownclouders/web-test-helpers'
 
 describe('useGroupActionsCreateGroup', () => {
   describe('method "handler"', () => {

@@ -1,4 +1,9 @@
-import { defaultComponentMocks, defaultPlugins, defaultStubs, mount } from 'web-test-helpers'
+import {
+  defaultComponentMocks,
+  defaultPlugins,
+  defaultStubs,
+  mount
+} from '@ownclouders/web-test-helpers'
 import { mock } from 'vitest-mock-extended'
 import { Resource } from '@ownclouders/web-client'
 import ActionsPanel from '../../../../../src/components/Spaces/SideBar/ActionsPanel.vue'

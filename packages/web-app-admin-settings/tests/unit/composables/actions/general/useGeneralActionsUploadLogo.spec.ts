@@ -8,7 +8,7 @@ import {
   mockAxiosResolve,
   mockAxiosReject,
   getComposableWrapper
-} from 'web-test-helpers'
+} from '@ownclouders/web-test-helpers'
 
 describe('uploadImage', () => {
   beforeEach(() => {

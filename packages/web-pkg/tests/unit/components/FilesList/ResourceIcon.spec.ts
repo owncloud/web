@@ -1,4 +1,4 @@
-import { shallowMount } from 'web-test-helpers'
+import { shallowMount } from '@ownclouders/web-test-helpers'
 import { AVAILABLE_SIZES } from 'design-system/src/helpers/constants'
 import ResourceIcon from '../../../../src/components/FilesList/ResourceIcon.vue'
 import {

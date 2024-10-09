@@ -1,5 +1,10 @@
 import UsersList from '../../../../src/components/Users/UsersList.vue'
-import { defaultComponentMocks, defaultPlugins, mount, shallowMount } from 'web-test-helpers'
+import {
+  defaultComponentMocks,
+  defaultPlugins,
+  mount,
+  shallowMount
+} from '@ownclouders/web-test-helpers'
 import { displayPositionedDropdown, eventBus, queryItemAsString } from '@ownclouders/web-pkg'
 import { SideBarEventTopics } from '@ownclouders/web-pkg'
 import { useUserSettingsStore } from '../../../../src/composables/stores/userSettings'

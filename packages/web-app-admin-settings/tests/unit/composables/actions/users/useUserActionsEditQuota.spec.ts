@@ -1,5 +1,9 @@
 import { useUserActionsEditQuota } from '../../../../../src/composables/actions/users/useUserActionsEditQuota'
-import { defaultComponentMocks, getComposableWrapper, writable } from 'web-test-helpers'
+import {
+  defaultComponentMocks,
+  getComposableWrapper,
+  writable
+} from '@ownclouders/web-test-helpers'
 import { unref } from 'vue'
 import { useCapabilityStore, useModals } from '@ownclouders/web-pkg'
 import { User } from '@ownclouders/web-client/graph/generated'

@@ -14,7 +14,7 @@ import {
   defaultStubs,
   RouteLocation,
   useGetMatchingSpaceMock
-} from 'web-test-helpers'
+} from '@ownclouders/web-test-helpers'
 
 vi.mock('@ownclouders/web-pkg', async (importOriginal) => ({
   ...(await importOriginal<any>()),

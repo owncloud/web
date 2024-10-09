@@ -5,7 +5,7 @@ import {
   mockAxiosReject,
   RouteLocation,
   shallowMount
-} from 'web-test-helpers'
+} from '@ownclouders/web-test-helpers'
 import { SpaceResource } from '@ownclouders/web-client'
 import { mock } from 'vitest-mock-extended'
 import { FileResource } from '@ownclouders/web-client'

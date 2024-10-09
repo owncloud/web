@@ -4,7 +4,7 @@ import {
   defaultPlugins,
   mockAxiosReject,
   shallowMount
-} from 'web-test-helpers'
+} from '@ownclouders/web-test-helpers'
 import { mock } from 'vitest-mock-extended'
 import { Modal, eventBus, useMessages } from '@ownclouders/web-pkg'
 import { useUserSettingsStore } from '../../../../src/composables/stores/userSettings'

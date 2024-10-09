@@ -16,7 +16,7 @@ import {
 } from '@ownclouders/web-pkg'
 import { Language } from 'vue3-gettext'
 import { UploadResourceConflict } from '../../src/helpers/resource/actions'
-import { createTestingPinia } from 'web-test-helpers'
+import { createTestingPinia } from '@ownclouders/web-test-helpers'
 
 vi.mock('../../src/helpers/resource/actions')
 

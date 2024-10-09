@@ -1,5 +1,5 @@
 import LoadingIndicator from '../../../src/components/LoadingIndicator.vue'
-import { defaultPlugins, shallowMount } from 'web-test-helpers'
+import { defaultPlugins, shallowMount } from '@ownclouders/web-test-helpers'
 import { mock } from 'vitest-mock-extended'
 import { LoadingService } from '../../../src/services'
 import { OcProgress } from 'design-system/src/components'

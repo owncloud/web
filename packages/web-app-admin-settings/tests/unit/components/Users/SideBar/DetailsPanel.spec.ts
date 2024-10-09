@@ -1,6 +1,6 @@
 import { User } from '@ownclouders/web-client/graph/generated'
 import DetailsPanel from '../../../../../src/components/Users/SideBar/DetailsPanel.vue'
-import { PartialComponentProps, defaultPlugins, shallowMount } from 'web-test-helpers'
+import { PartialComponentProps, defaultPlugins, shallowMount } from '@ownclouders/web-test-helpers'
 
 const defaultUser = { displayName: 'user', memberOf: [] } as User
 

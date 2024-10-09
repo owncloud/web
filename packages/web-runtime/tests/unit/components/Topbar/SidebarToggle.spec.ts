@@ -1,6 +1,6 @@
 import SidebarToggle from '../../../../src/components/Topbar/SideBarToggle.vue'
 import { eventBus } from '@ownclouders/web-pkg/src/services'
-import { defaultPlugins, mount, defaultComponentMocks } from 'web-test-helpers'
+import { defaultPlugins, mount, defaultComponentMocks } from '@ownclouders/web-test-helpers'
 
 const selectors = {
   toggleSidebarBtn: '#files-toggle-sidebar'

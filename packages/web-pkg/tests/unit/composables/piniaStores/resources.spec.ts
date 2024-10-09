@@ -1,4 +1,4 @@
-import { createTestingPinia, getComposableWrapper } from 'web-test-helpers'
+import { createTestingPinia, getComposableWrapper } from '@ownclouders/web-test-helpers'
 import { useResourcesStore } from '../../../../src/composables/piniaStores'
 import { mock } from 'vitest-mock-extended'
 import { Resource, ShareTypes, SpaceResource } from '@ownclouders/web-client'

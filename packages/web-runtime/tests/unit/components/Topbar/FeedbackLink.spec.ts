@@ -1,5 +1,5 @@
 import FeedbackLink from '../../../../src/components/Topbar/FeedbackLink.vue'
-import { defaultPlugins, mount } from 'web-test-helpers'
+import { defaultPlugins, mount } from '@ownclouders/web-test-helpers'
 
 describe('FeedbackLink component', () => {
   describe('properties', () => {

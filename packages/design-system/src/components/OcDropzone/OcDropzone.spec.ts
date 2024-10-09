@@ -1,5 +1,5 @@
 import OcDropzone from './OcDropzone.vue'
-import { mount } from 'web-test-helpers'
+import { mount } from '@ownclouders/web-test-helpers'
 
 describe('OcDropzone', () => {
   const selectors = {

@@ -13,7 +13,7 @@ import {
   shallowMount,
   defaultComponentMocks,
   RouteLocation
-} from 'web-test-helpers'
+} from '@ownclouders/web-test-helpers'
 import { User } from '@ownclouders/web-client/graph/generated'
 import { useCanShare, useModals, useSpacesStore } from '@ownclouders/web-pkg'
 import ListItem from '../../../../../src/components/SideBar/Shares/Collaborators/ListItem.vue'

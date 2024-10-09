@@ -3,7 +3,7 @@ import {
   defaultPlugins,
   RouteLocation,
   shallowMount
-} from 'web-test-helpers'
+} from '@ownclouders/web-test-helpers'
 import EmbedActions from '../../../../src/components/EmbedActions/EmbedActions.vue'
 import { FileAction, useEmbedMode, useFileActionsCreateLink } from '@ownclouders/web-pkg'
 import { mock } from 'vitest-mock-extended'

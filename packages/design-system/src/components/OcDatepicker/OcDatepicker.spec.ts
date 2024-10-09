@@ -1,5 +1,5 @@
 import Datepicker from './OcDatepicker.vue'
-import { ComponentProps, defaultPlugins, shallowMount } from 'web-test-helpers'
+import { ComponentProps, defaultPlugins, shallowMount } from '@ownclouders/web-test-helpers'
 import { DateTime } from 'luxon'
 import { nextTick } from 'vue'
 

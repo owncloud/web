@@ -5,7 +5,11 @@ import {
   useFileActionsDelete
 } from '../../../../../src/composables/actions'
 import { Resource, SpaceResource } from '@ownclouders/web-client'
-import { defaultComponentMocks, RouteLocation, getComposableWrapper } from 'web-test-helpers'
+import {
+  defaultComponentMocks,
+  RouteLocation,
+  getComposableWrapper
+} from '@ownclouders/web-test-helpers'
 import { CapabilityStore } from '../../../../../src/composables/piniaStores'
 
 vi.mock('../../../../../src/composables/actions/helpers/useFileActionsDeleteResources')

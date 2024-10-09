@@ -5,7 +5,7 @@ import {
   defaultPlugins,
   shallowMount,
   useGetMatchingSpaceMock
-} from 'web-test-helpers'
+} from '@ownclouders/web-test-helpers'
 import { Resource, SpaceResource } from '@ownclouders/web-client'
 import AppTopBar from '../../../src/components/AppTopBar.vue'
 import { Action } from '../../../src/composables/actions'

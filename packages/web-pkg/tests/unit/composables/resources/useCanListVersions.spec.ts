@@ -1,4 +1,4 @@
-import { getComposableWrapper } from 'web-test-helpers'
+import { getComposableWrapper } from '@ownclouders/web-test-helpers'
 import { mock } from 'vitest-mock-extended'
 import { Resource, SpaceResource, TrashResource } from '@ownclouders/web-client'
 import { useCanListVersions } from '../../../../src/composables/resources'

@@ -4,7 +4,7 @@ import {
   defaultComponentMocks,
   defaultPlugins,
   mount
-} from 'web-test-helpers'
+} from '@ownclouders/web-test-helpers'
 import { queryItemAsString } from '../../../../src/composables/appDefaults'
 import { DateTime } from 'luxon'
 

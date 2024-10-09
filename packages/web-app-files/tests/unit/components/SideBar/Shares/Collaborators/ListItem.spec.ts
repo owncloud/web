@@ -11,7 +11,7 @@ import {
   defaultStubs,
   defaultComponentMocks,
   nextTicks
-} from 'web-test-helpers'
+} from '@ownclouders/web-test-helpers'
 import { useMessages, useSharesStore } from '@ownclouders/web-pkg'
 import EditDropdown from '../../../../../../src/components/SideBar/Shares/Collaborators/EditDropdown.vue'
 import RoleDropdown from '../../../../../../src/components/SideBar/Shares/Collaborators/RoleDropdown.vue'

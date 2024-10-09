@@ -1,6 +1,10 @@
 import { useSpaceActionsUploadImage } from '../../../../../src/composables/actions/spaces/useSpaceActionsUploadImage'
 import { mock } from 'vitest-mock-extended'
-import { defaultComponentMocks, RouteLocation, getComposableWrapper } from 'web-test-helpers'
+import {
+  defaultComponentMocks,
+  RouteLocation,
+  getComposableWrapper
+} from '@ownclouders/web-test-helpers'
 import { unref, VNodeRef } from 'vue'
 import { eventBus, useMessages, useSpaceHelpers } from '@ownclouders/web-pkg'
 import { Resource, SpaceResource } from '@ownclouders/web-client'

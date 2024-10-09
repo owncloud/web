@@ -1,5 +1,5 @@
 import { Extension, ExtensionPoint, useExtensionPreferencesStore } from '../../../../../src'
-import { getComposableWrapper } from 'web-test-helpers'
+import { getComposableWrapper } from '@ownclouders/web-test-helpers'
 import { createPinia, setActivePinia } from 'pinia'
 import { mock } from 'vitest-mock-extended'
 

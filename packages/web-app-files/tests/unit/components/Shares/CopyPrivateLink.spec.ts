@@ -1,6 +1,6 @@
 import { mock } from 'vitest-mock-extended'
 import { Resource } from '@ownclouders/web-client'
-import { defaultPlugins, mount } from 'web-test-helpers'
+import { defaultPlugins, mount } from '@ownclouders/web-test-helpers'
 import CopyPrivateLink from '../../../../src/components/Shares/CopyPrivateLink.vue'
 import { useMessages } from '@ownclouders/web-pkg'
 import { useClipboard } from '@vueuse/core'

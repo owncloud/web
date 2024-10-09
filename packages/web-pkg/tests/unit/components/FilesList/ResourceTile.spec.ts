@@ -1,4 +1,4 @@
-import { defaultPlugins, shallowMount } from 'web-test-helpers'
+import { defaultPlugins, shallowMount } from '@ownclouders/web-test-helpers'
 import ResourceTile from '../../../../src/components/FilesList/ResourceTile.vue'
 
 const getSpaceMock = (disabled = false) => ({

@@ -2,9 +2,13 @@ import { SpaceResource } from '@ownclouders/web-client'
 import { Graph } from '@ownclouders/web-client/graph'
 import { mockDeep } from 'vitest-mock-extended'
 import { ClientService, useAppDefaults } from '@ownclouders/web-pkg'
-import { defaultComponentMocks, defaultPlugins, mount } from 'web-test-helpers'
+import {
+  defaultComponentMocks,
+  defaultPlugins,
+  mount,
+  useAppDefaultsMock
+} from '@ownclouders/web-test-helpers'
 import Spaces from '../../../src/views/Spaces.vue'
-import { useAppDefaultsMock } from 'web-test-helpers/src/mocks/useAppDefaultsMock'
 
 vi.mock('@ownclouders/web-pkg', async (importOriginal) => ({
   ...(await importOriginal<any>()),

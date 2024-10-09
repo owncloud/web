@@ -7,7 +7,7 @@ import {
   RouteLocation,
   mockAxiosResolve,
   getComposableWrapper
-} from 'web-test-helpers'
+} from '@ownclouders/web-test-helpers'
 
 describe('resetLogo', () => {
   beforeEach(() => {

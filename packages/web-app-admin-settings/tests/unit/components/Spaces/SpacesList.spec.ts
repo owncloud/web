@@ -1,5 +1,10 @@
 import SpacesList from '../../../../src/components/Spaces/SpacesList.vue'
-import { defaultComponentMocks, defaultPlugins, mount, shallowMount } from 'web-test-helpers'
+import {
+  defaultComponentMocks,
+  defaultPlugins,
+  mount,
+  shallowMount
+} from '@ownclouders/web-test-helpers'
 import { SortDir, eventBus, queryItemAsString } from '@ownclouders/web-pkg'
 import { displayPositionedDropdown } from '@ownclouders/web-pkg'
 import { SideBarEventTopics } from '@ownclouders/web-pkg'
