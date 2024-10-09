@@ -4,12 +4,15 @@ import { TokenProviderType } from '../environment'
 import { UsersEnvironment } from '../environment'
 import { config } from '../../config'
 import { setAccessAndRefreshToken } from '../api/token'
+import {
+  refreshOcisAccessTokenForKeycloakUser,
+  setOcisAccessTokenForKeycloakUser
+} from '../api/keycloak/ocisUserToken'
 
-export const getTokenFromLogin = async ({
+export const initializeUser = async ({
   browser,
   url = config.frontendUrl,
   username = null,
-  tokenType = null,
   waitForSelector = null
 }: {
   browser: Browser
@@ -25,7 +28,7 @@ export const getTokenFromLogin = async ({
   const loginUser = new UsersEnvironment().getUser({ key: username })
 
   await page.goto(url)
-  await new Session({ page }).login({ user: loginUser, tokenType })
+  await new Session({ page }).login(loginUser)
 
   waitForSelector && (await page.locator(waitForSelector).waitFor())
 
@@ -37,4 +40,16 @@ export const setAccessToken = async (username: string) => {
   username = username || 'admin'
   const loginUser = new UsersEnvironment().getUser({ key: username })
   await setAccessAndRefreshToken(loginUser)
+}
+
+export const setOcisAccessTokenForKeycloak = async (username: string) => {
+  username = username || 'admin'
+  const loginUser = new UsersEnvironment().getUser({ key: username })
+  await setOcisAccessTokenForKeycloakUser(loginUser)
+}
+
+export const refreshOcisAccessTokenForKeycloak = async (username: string) => {
+  username = username || 'admin'
+  const loginUser = new UsersEnvironment().getUser({ key: username })
+  await refreshOcisAccessTokenForKeycloakUser(loginUser)
 }
