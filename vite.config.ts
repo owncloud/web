@@ -131,6 +131,13 @@ export default defineConfig(({ mode, command }) => {
           https: {
             key: readFileSync('./dev/docker/traefik/certificates/server.key'),
             cert: readFileSync('./dev/docker/traefik/certificates/server.crt')
+          },
+          proxy: {
+            '/themes': {
+              target: 'https://host.docker.internal:9200',
+              changeOrigin: true,
+              secure: false // allow self-signed certs
+            }
           }
         })
       }
@@ -223,10 +230,6 @@ export default defineConfig(({ mode, command }) => {
                 src: `packages/design-system/src/assets/${name}/*`,
                 dest: `${name}`
               })),
-              {
-                src: `./packages/web-runtime/themes/*`,
-                dest: `themes`
-              },
               {
                 src: 'node_modules/requirejs/require.js',
                 dest: 'js'
