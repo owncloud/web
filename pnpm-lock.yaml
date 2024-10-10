@@ -440,7 +440,7 @@ importers:
     dependencies:
       '@babel/eslint-parser':
         specifier: ^7.23.3
-        version: 7.25.7(@babel/core@7.25.7)(eslint@9.12.0(jiti@1.21.0))
+        version: 7.25.8(@babel/core@7.25.7)(eslint@9.12.0(jiti@1.21.0))
       '@typescript-eslint/parser':
         specifier: ^8.0.0
         version: 8.8.1(eslint@9.12.0(jiti@1.21.0))(typescript@5.6.3)
@@ -1291,8 +1291,8 @@ packages:
     resolution: {integrity: sha512-yJ474Zv3cwiSOO9nXJuqzvwEeM+chDuQ8GJirw+pZ91sCGCyOZ3dJkVE09fTV0VEVzXyLWhh3G/AolYTPX7Mow==}
     engines: {node: '>=6.9.0'}
 
-  '@babel/eslint-parser@7.25.7':
-    resolution: {integrity: sha512-B+BO9x86VYsQHimucBAL1fxTJKF4wyKY6ZVzee9QgzdZOUfs3BaR6AQrgoGrRI+7IFS1wUz/VyQ+SoBcSpdPbw==}
+  '@babel/eslint-parser@7.25.8':
+    resolution: {integrity: sha512-Po3VLMN7fJtv0nsOjBDSbO1J71UhzShE9MuOSkWEV9IZQXzhZklYtzKZ8ZD/Ij3a0JBv1AG3Ny2L3jvAHQVOGg==}
     engines: {node: ^10.13.0 || ^12.13.0 || >=14.0.0}
     peerDependencies:
       '@babel/core': ^7.11.0
@@ -9301,7 +9301,7 @@ snapshots:
     transitivePeerDependencies:
       - supports-color
 
-  '@babel/eslint-parser@7.25.7(@babel/core@7.25.7)(eslint@9.12.0(jiti@1.21.0))':
+  '@babel/eslint-parser@7.25.8(@babel/core@7.25.7)(eslint@9.12.0(jiti@1.21.0))':
     dependencies:
       '@babel/core': 7.25.7
       '@nicolo-ribaudo/eslint-scope-5-internals': 5.1.1-v1
@@ -10232,7 +10232,7 @@ snapshots:
       '@cucumber/ci-environment': 9.1.0
       '@cucumber/cucumber-expressions': 16.1.1
       '@cucumber/gherkin': 26.0.3
-      '@cucumber/gherkin-streams': 5.0.1(@cucumber/gherkin@26.0.3)(@cucumber/message-streams@4.0.1(@cucumber/messages@26.0.1))(@cucumber/messages@21.0.1)
+      '@cucumber/gherkin-streams': 5.0.1(@cucumber/gherkin@26.0.3)(@cucumber/message-streams@4.0.1(@cucumber/messages@21.0.1))(@cucumber/messages@21.0.1)
       '@cucumber/gherkin-utils': 8.0.2
       '@cucumber/html-formatter': 20.2.1(@cucumber/messages@21.0.1)
       '@cucumber/message-streams': 4.0.1(@cucumber/messages@21.0.1)
@@ -10270,7 +10270,7 @@ snapshots:
       yaml: 2.5.1
       yup: 0.32.11
 
-  '@cucumber/gherkin-streams@5.0.1(@cucumber/gherkin@26.0.3)(@cucumber/message-streams@4.0.1(@cucumber/messages@26.0.1))(@cucumber/messages@21.0.1)':
+  '@cucumber/gherkin-streams@5.0.1(@cucumber/gherkin@26.0.3)(@cucumber/message-streams@4.0.1(@cucumber/messages@21.0.1))(@cucumber/messages@21.0.1)':
     dependencies:
       '@cucumber/gherkin': 26.0.3
       '@cucumber/message-streams': 4.0.1(@cucumber/messages@21.0.1)
