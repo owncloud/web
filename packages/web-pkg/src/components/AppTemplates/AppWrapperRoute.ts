@@ -11,6 +11,7 @@ export function AppWrapperRoute(
     urlForResourceOptions?: UrlForResourceOptions
     fileContentOptions?: FileContentOptions
     importResourceWithExtension?: (resource: Resource) => string
+    disableAutoSave?: boolean
   }
 ) {
   return defineComponent({
