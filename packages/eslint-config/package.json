@@ -2,7 +2,7 @@
   "name": "@ownclouders/eslint-config",
   "main": "index.js",
   "private": false,
-  "version": "0.0.1",
+  "version": "10.3.0",
   "license": "AGPL-3.0",
   "type": "module",
   "author": "ownCloud GmbH <devops@owncloud.com>",
@@ -27,7 +27,7 @@
     "eslint-plugin-vuejs-accessibility": "^2.2.0",
     "globals": "^15.0.0",
     "typescript-eslint": "^8.4.0",
-    "typescript": "5.6.3"
+    "typescript": "^5.6.3"
   },
   "peerDependencies": {
     "eslint": "^9.0.0"
