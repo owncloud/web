@@ -1,0 +1,6 @@
+Enhancement: Quota Information Redesign
+
+We've slightly redesigned the quota information for the space and logged-in user,
+we also show now the remaining space in the quota information.
+
+https://github.com/owncloud/web/pull/11722

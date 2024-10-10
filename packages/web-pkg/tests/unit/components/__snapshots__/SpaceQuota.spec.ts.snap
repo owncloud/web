@@ -2,7 +2,8 @@
 
 exports[`SpaceQuota component > renders the space storage quota label 1`] = `
 "<div class="space-quota">
-  <p class="oc-mb-s oc-mt-rm">1 B of 10 B used (10% used)</p>
+  <p class="oc-m-rm">1 B of 10 B used</p>
+  <p class="oc-m-rm oc-text-muted oc-text-xsmall">10% used, 9 B remaining</p>
   <oc-progress-stub max="100" size="small" variation="primary" indeterminate="false" value="10"></oc-progress-stub>
 </div>"
 `;
