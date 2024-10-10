@@ -1,6 +1,6 @@
 <template>
   <nav id="mobile-nav">
-    <oc-button id="mobile-nav-button" appearance="raw">
+    <oc-button id="mobile-nav-button" appearance="raw" aria-current="page">
       {{ activeNavItem.name }}
       <oc-icon name="arrow-drop-down" />
     </oc-button>
@@ -12,7 +12,12 @@
       close-on-click
     >
       <oc-list>
-        <li v-for="(item, index) in navItems" :key="index" class="mobile-nav-item oc-width-1-1">
+        <li
+          v-for="(item, index) in navItems"
+          :key="index"
+          class="mobile-nav-item oc-width-1-1"
+          :aria-current="item.active ? 'page' : null"
+        >
           <oc-button
             type="router-link"
             :appearance="item.active ? 'raw-inverse' : 'raw'"

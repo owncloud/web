@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="quota-select-batch-action-form">
     <oc-select
       ref="select"
       :model-value="selectedOption"

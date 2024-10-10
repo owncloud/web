@@ -4,6 +4,7 @@
       class="oc-page-size-label"
       :for="selectId"
       data-testid="oc-page-size-label"
+      :aria-hidden="true"
       v-text="label"
     />
     <oc-select

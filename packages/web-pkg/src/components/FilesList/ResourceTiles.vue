@@ -13,38 +13,16 @@
         @click.stop="toggleSelectionAll"
       />
       <div v-if="sortFields.length" class="oc-tile-sorting oc-ml-m">
-        <span v-text="$gettext('Sort by:')" />
-        <oc-button id="oc-tiles-sort-btn" appearance="raw" gap-size="none">
-          <span v-text="$gettext(currentSortField.label)" />
-          <oc-icon name="arrow-down-s" />
-        </oc-button>
-        <oc-drop
-          ref="sortDrop"
-          toggle="#oc-tiles-sort-btn"
-          class="oc-tiles-sort-drop"
-          mode="click"
-          padding-size="small"
-          close-on-click
-        >
-          <oc-list class="oc-tiles-sort-list">
-            <li v-for="(field, index) in sortFields" :key="index" class="oc-my-xs">
-              <oc-button
-                justify-content="space-between"
-                class="oc-tiles-sort-list-item oc-p-s oc-width-1-1"
-                :class="{
-                  'oc-background-primary-gradient': isSortFieldSelected(field),
-                  selected: isSortFieldSelected(field)
-                }"
-                :appearance="isSortFieldSelected(field) ? 'raw-inverse' : 'raw'"
-                :variation="isSortFieldSelected(field) ? 'primary' : 'passive'"
-                @click="selectSorting(field)"
-              >
-                <span v-text="$gettext(field.label)" />
-                <oc-icon v-if="isSortFieldSelected(field)" name="check" variation="inherit" />
-              </oc-button>
-            </li>
-          </oc-list>
-        </oc-drop>
+        <oc-select
+          class="oc-tiles-sort-select oc-flex oc-flex-middle"
+          :model-value="currentSortField"
+          :label="$gettext('Sort by')"
+          :options="sortFields"
+          :clearable="false"
+          :searchable="false"
+          :position-fixed="true"
+          @update:model-value="selectSorting"
+        />
       </div>
     </div>
     <oc-list class="oc-tiles oc-flex">
@@ -661,7 +639,7 @@ export default defineComponent({
 })
 </script>
 
-<style lang="scss" scoped>
+<style lang="scss">
 .oc-tiles {
   column-gap: 1rem;
   display: grid;
@@ -684,17 +662,15 @@ export default defineComponent({
     padding: var(--oc-space-xsmall);
   }
 
-  &-sort-drop {
-    width: 200px;
-  }
+  &-sort-select {
+    min-width: var(--oc-size-width-xsmall);
 
-  &-sort-list {
-    &-item {
-      &:hover,
-      &:focus {
-        background-color: var(--oc-color-background-hover);
-        text-decoration: none;
-      }
+    .v-select {
+      flex: 1;
+      margin-left: var(--oc-space-small);
+    }
+    .vs__dropdown-menu {
+      min-width: var(--oc-size-width-small);
     }
   }
 }

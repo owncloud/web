@@ -19,25 +19,11 @@ import { mock } from 'vitest-mock-extended'
 import { Resource, SpaceResource } from '@ownclouders/web-client'
 import { RouteLocationNamedRaw } from 'vue-router'
 
-vi.mock('@ownclouders/web-client', async (importOriginal) => ({
-  ...(await importOriginal<any>()),
-  buildSpace: vi.fn((space) => space)
-}))
-
-vi.mock('uuid', () => ({
-  v4: () => {
-    return '00000000-0000-0000-0000-000000000000'
-  }
-}))
-
 const selectors = {
   userAvatarImage: 'avatar-image-stub.files-collaborators-collaborator-indicator',
   notUserAvatar: 'oc-avatar-item-stub.files-collaborators-collaborator-indicator',
-  collaboratorAdditionalInfo: '.files-collaborators-collaborator-additional-info',
   collaboratorName: '.files-collaborators-collaborator-name',
-  accessDetailsButton: '.files-collaborators-collaborator-access-details-button',
   collaboratorRole: '.files-collaborators-collaborator-role',
-  collaboratorEdit: '.files-collaborators-collaborator-edit',
   shareInheritanceIndicators: '.files-collaborators-collaborator-shared-via',
   expirationDateIcon: '[data-testid="recipient-info-expiration-date"]',
   externalContextHelper: '.files-collaborators-collaborator-name-wrapper .oc-contextual-helper'

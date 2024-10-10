@@ -99,7 +99,6 @@
           class="files-collaborators-collaborator-shared-via oc-mx-xs"
         />
         <edit-dropdown
-          :id="`edit-drop-down-${editDropDownToggleId}`"
           class="files-collaborators-collaborator-edit oc-ml-xs"
           data-testid="collaborator-edit"
           :expiration-date="share.expirationDateTime ? share.expirationDateTime : null"
@@ -109,18 +108,11 @@
           :is-locked="isLocked"
           :deniable="deniable"
           :shared-parent-route="!isShareDenied ? sharedParentRoute : undefined"
+          :access-details="accessDetails"
           @expiration-date-changed="shareExpirationChanged"
           @remove-share="removeShare"
           @set-deny-share="setDenyShare"
-          @show-access-details="showAccessDetails"
           @notify-share="showNotifyShareModal"
-        />
-        <oc-info-drop
-          ref="accessDetailsDrop"
-          class="share-access-details-drop"
-          v-bind="accessDetailsProps"
-          mode="manual"
-          :target="`#edit-drop-down-${editDropDownToggleId}`"
         />
       </div>
     </div>
@@ -144,10 +136,8 @@ import {
 } from '@ownclouders/web-pkg'
 import { Resource, extractDomSelector } from '@ownclouders/web-client'
 import { computed, defineComponent, inject, PropType, Ref, unref } from 'vue'
-import * as uuid from 'uuid'
 import { formatDateFromDateTime } from '@ownclouders/web-pkg'
 import { useClientService } from '@ownclouders/web-pkg'
-import { OcInfoDrop, OcDrop } from 'design-system/src/components'
 import { RouteLocationNamedRaw } from 'vue-router'
 import { useGettext } from 'vue3-gettext'
 import { SpaceResource } from '@ownclouders/web-client'
@@ -331,14 +321,10 @@ export default defineComponent({
         this.$language.current
       )
     },
-
-    editDropDownToggleId() {
-      return uuid.v4()
-    },
     shareOwnerDisplayName() {
       return this.share.sharedBy.displayName
     },
-    accessDetailsProps() {
+    accessDetails() {
       const list: ContextualHelperDataListItem[] = []
 
       list.push({ text: this.$gettext('Name'), headline: true }, { text: this.shareDisplayName })
@@ -357,22 +343,12 @@ export default defineComponent({
         )
       }
 
-      return {
-        title: this.$gettext('Access details'),
-        list
-      }
+      return list
     }
   },
   methods: {
     removeShare() {
       this.$emit('onDelete', this.share)
-    },
-
-    showAccessDetails() {
-      ;(
-        (this.$refs.accessDetailsDrop as InstanceType<typeof OcInfoDrop>).$refs
-          .drop as InstanceType<typeof OcDrop>
-      ).show()
     },
 
     async shareRoleChanged(role: ShareRole) {
@@ -440,22 +416,6 @@ export default defineComponent({
 <style lang="scss" scoped>
 .sharee-avatar {
   min-width: 36px;
-}
-
-.share-access-details-drop {
-  dl {
-    display: grid;
-    grid-template-columns: max-content auto;
-  }
-
-  dt {
-    grid-column-start: 1;
-  }
-
-  dd {
-    grid-column-start: 2;
-    margin-left: var(--oc-space-medium);
-  }
 }
 
 .files-collaborators-collaborator-navigation {
