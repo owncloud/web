@@ -931,7 +931,7 @@ importers:
   packages/web-pkg:
     dependencies:
       '@casl/ability':
-        specifier: 6.7.1
+        specifier: ^6.7.1
         version: 6.7.1
       '@casl/vue':
         specifier: ^2.2.2
@@ -940,10 +940,10 @@ importers:
         specifier: ^2.0.1
         version: 2.0.1
       '@ownclouders/web-client':
-        specifier: workspace:*
+        specifier: workspace:^
         version: link:../web-client
       '@sentry/vue':
-        specifier: 8.33.1
+        specifier: ^8.33.1
         version: 8.33.1(vue@3.5.11(typescript@5.6.3))
       '@toast-ui/editor':
         specifier: ^3.2.2
@@ -967,28 +967,28 @@ importers:
         specifier: https://github.com/owncloud/uppy/releases/download/v3.12.13-owncloud/uppy-xhr-upload.tgz
         version: https://github.com/owncloud/uppy/releases/download/v3.12.13-owncloud/uppy-xhr-upload.tgz(@uppy/core@https://github.com/owncloud/uppy/releases/download/v3.12.13-owncloud/uppy-core.tgz)
       '@vue/shared':
-        specifier: 3.5.11
+        specifier: ^3.5.11
         version: 3.5.11
       '@vueuse/core':
         specifier: ^11.0.0
         version: 11.1.0(vue@3.5.11(typescript@5.6.3))
       axios:
-        specifier: 1.7.7
+        specifier: ^1.7.7
         version: 1.7.7
       deepmerge:
         specifier: ^4.2.2
         version: 4.3.1
       design-system:
-        specifier: workspace:@ownclouders/design-system@*
+        specifier: workspace:@ownclouders/design-system@^
         version: link:../design-system
       dompurify:
-        specifier: 3.1.7
+        specifier: ^3.1.7
         version: 3.1.7
       filesize:
         specifier: ^10.1.0
         version: 10.1.6
       fuse.js:
-        specifier: 7.0.0
+        specifier: ^7.0.0
         version: 7.0.0
       js-generate-password:
         specifier: ^1.0.0
@@ -997,7 +997,7 @@ importers:
         specifier: ^4.17.21
         version: 4.17.21
       luxon:
-        specifier: 3.5.0
+        specifier: ^3.5.0
         version: 3.5.0
       mark.js:
         specifier: ^8.11.1
@@ -1012,38 +1012,38 @@ importers:
         specifier: ^1.1.1
         version: 1.1.1
       pinia:
-        specifier: 2.2.4
+        specifier: ^2.2.4
         version: 2.2.4(typescript@5.6.3)(vue@3.5.11(typescript@5.6.3))
       portal-vue:
-        specifier: 3.0.0
+        specifier: ^3.0.0
         version: 3.0.0(patch_hash=bogvb64kjdufpa4744k4xkam7u)(vue@3.5.11(typescript@5.6.3))
       prismjs:
         specifier: ^1.29.0
         version: 1.29.0
       qs:
-        specifier: 6.13.0
+        specifier: ^6.13.0
         version: 6.13.0
       semver:
-        specifier: 7.6.3
+        specifier: ^7.6.3
         version: 7.6.3
       uuid:
-        specifier: 10.0.0
+        specifier: ^10.0.0
         version: 10.0.0
       vue-concurrency:
-        specifier: 5.0.1
+        specifier: ^5.0.1
         version: 5.0.1(vue@3.5.11(typescript@5.6.3))
       vue-router:
-        specifier: 4.2.5
+        specifier: ^4.2.5
         version: 4.2.5(vue@3.5.11(typescript@5.6.3))
       vue3-gettext:
-        specifier: 2.4.0
+        specifier: ^2.4.0
         version: 2.4.0(patch_hash=x32qkm4z6srz5xuveescagpdyu)(@vue/compiler-sfc@3.5.11)(vue@3.5.11(typescript@5.6.3))
       zod:
-        specifier: 3.23.8
+        specifier: ^3.23.8
         version: 3.23.8
     devDependencies:
       '@ownclouders/web-test-helpers':
-        specifier: workspace:*
+        specifier: workspace:^
         version: link:../web-test-helpers
       '@types/dompurify':
         specifier: 3.0.5
