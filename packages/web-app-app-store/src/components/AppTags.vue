@@ -3,6 +3,7 @@
     <oc-tag
       v-for="tag in app.tags"
       :key="`app-tag-${app.id}-${tag}`"
+      data-testid="tag-button"
       size="small"
       class="oc-text-nowrap"
       type="button"

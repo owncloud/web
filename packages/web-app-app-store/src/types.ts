@@ -23,12 +23,14 @@ export const AppBadgeSchema = z.object({
   label: z.string(),
   color: z.enum(BADGE_COLORS).optional().default('primary')
 })
+export type AppBadge = z.infer<typeof AppBadgeSchema>
 
 export const AppAuthorSchema = z.object({
   name: z.string(),
   email: z.string().optional(),
   url: z.string().optional()
 })
+export type AppAuthor = z.infer<typeof AppAuthorSchema>
 
 export const AppImageSchema = z.object({
   url: z.string(),
@@ -41,6 +43,7 @@ export const AppResourceSchema = z.object({
   label: z.string(),
   icon: z.string().optional()
 })
+export type AppResource = z.infer<typeof AppResourceSchema>
 
 export const RawAppSchema = z.object({
   id: z.string(),

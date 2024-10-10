@@ -17,6 +17,7 @@ import { computed, defineComponent, PropType } from 'vue'
 import { App } from '../types'
 import { useGettext } from 'vue3-gettext'
 import AppActions from './AppActions.vue'
+import { isEmpty } from 'lodash-es'
 
 export default defineComponent({
   name: 'AppVersions',
@@ -32,13 +33,25 @@ export default defineComponent({
     const { $gettext } = useGettext()
 
     const data = computed(() => {
-      return props.app.versions.map((version) => {
-        return {
-          ...version,
-          minOCIS: version.minOCIS ? `v${version.minOCIS}` : '-',
-          id: version.version
-        }
-      })
+      return (props.app.versions || [])
+        .filter((version) => {
+          if (isEmpty(version.version) || isEmpty(version.url)) {
+            return false
+          }
+          try {
+            new URL(version.url)
+          } catch {
+            return false
+          }
+          return true
+        })
+        .map((version) => {
+          return {
+            ...version,
+            minOCIS: version.minOCIS ? `v${version.minOCIS}` : '-',
+            id: version.version
+          }
+        })
     })
     const fields = computed(() => {
       return [

@@ -11,12 +11,19 @@
     </div>
     <ul v-if="hasPagination" class="app-image-navigation">
       <li>
-        <oc-button class="oc-p-xs" appearance="raw" variation="primary" @click="previousImage">
+        <oc-button
+          data-testid="prev-image"
+          class="oc-p-xs"
+          appearance="raw"
+          variation="primary"
+          @click="previousImage"
+        >
           <oc-icon name="arrow-left-s" />
         </oc-button>
       </li>
       <li v-for="(image, index) in images" :key="`gallery-page-${index}`">
         <oc-button
+          data-testid="set-image"
           class="oc-py-xs"
           appearance="raw"
           variation="primary"
@@ -30,7 +37,13 @@
         </oc-button>
       </li>
       <li>
-        <oc-button class="oc-p-xs" appearance="raw" variation="primary" @click="nextImage">
+        <oc-button
+          data-testid="next-image"
+          class="oc-p-xs"
+          appearance="raw"
+          variation="primary"
+          @click="nextImage"
+        >
           <oc-icon name="arrow-right-s" />
         </oc-button>
       </li>
