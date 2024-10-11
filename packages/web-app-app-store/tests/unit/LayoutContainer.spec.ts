@@ -1,5 +1,10 @@
 import LayoutContainer from '../../src/LayoutContainer.vue'
-import { defaultComponentMocks, defaultPlugins, mount, nextTicks } from 'web-test-helpers'
+import {
+  defaultComponentMocks,
+  defaultPlugins,
+  mount,
+  nextTicks
+} from '@ownclouders/web-test-helpers'
 import { useAppsStore } from '../../src/piniaStores'
 
 const selectors = {

@@ -1,4 +1,4 @@
-import { defaultPlugins, mount } from 'web-test-helpers'
+import { defaultPlugins, mount } from '@ownclouders/web-test-helpers'
 import AppActions from '../../../src/components/AppActions.vue'
 import { App, AppVersion } from '../../../src/types'
 import { mock } from 'vitest-mock-extended'

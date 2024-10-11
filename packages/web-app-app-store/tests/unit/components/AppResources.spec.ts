@@ -1,4 +1,4 @@
-import { mount } from 'web-test-helpers'
+import { mount } from '@ownclouders/web-test-helpers'
 import AppResources from '../../../src/components/AppResources.vue'
 import { App, AppResource } from '../../../src/types'
 import { mock } from 'vitest-mock-extended'

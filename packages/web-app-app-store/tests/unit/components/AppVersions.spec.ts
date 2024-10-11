@@ -1,6 +1,6 @@
 import { App, AppVersion } from '../../../src/types'
 import AppVersions from '../../../src/components/AppVersions.vue'
-import { defaultPlugins, mount } from 'web-test-helpers'
+import { defaultPlugins, mount } from '@ownclouders/web-test-helpers'
 import { mock } from 'vitest-mock-extended'
 
 const version1: AppVersion = {

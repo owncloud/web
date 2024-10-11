@@ -1,7 +1,7 @@
 import AppAuthors from '../../../src/components/AppAuthors.vue'
 import { mock } from 'vitest-mock-extended'
 import { App, AppAuthor } from '../../../src/types'
-import { mount } from 'web-test-helpers'
+import { mount } from '@ownclouders/web-test-helpers'
 
 const author1: AppAuthor = {
   name: 'John Doe',

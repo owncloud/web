@@ -1,5 +1,5 @@
 import AppTags from '../../../src/components/AppTags.vue'
-import { mount } from 'web-test-helpers'
+import { mount } from '@ownclouders/web-test-helpers'
 import { mock } from 'vitest-mock-extended'
 import { App } from '../../../src/types'
 

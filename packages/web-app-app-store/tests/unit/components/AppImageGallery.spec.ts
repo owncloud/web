@@ -1,4 +1,4 @@
-import { defaultPlugins, mount } from 'web-test-helpers'
+import { defaultPlugins, mount } from '@ownclouders/web-test-helpers'
 import { mock } from 'vitest-mock-extended'
 import AppImageGallery from '../../../src/components/AppImageGallery.vue'
 import { App, AppBadge, AppImage, BADGE_COLORS } from '../../../src/types'
