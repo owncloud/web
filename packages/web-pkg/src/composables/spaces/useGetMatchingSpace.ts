@@ -40,7 +40,7 @@ export const useGetMatchingSpace = (options?: GetMatchingSpaceOptions) => {
 
     const space = getInternalSpace(storageId)
 
-    if (space) {
+    if (space && !isMountPointSpaceResource(space)) {
       return space
     }
 
