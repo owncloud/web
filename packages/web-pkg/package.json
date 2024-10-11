@@ -20,9 +20,10 @@
   "publishConfig": {
     "directory": "package",
     "linkDirectory": false,
-    "types": "./dist/src/index.d.ts",
     "exports": {
       ".": {
+        "import": "./dist/web-pkg.js",
+        "require": "./dist/web-pkg.umd.cjs",
         "types": "./dist/src/index.d.ts"
       }
     }
@@ -33,53 +34,53 @@
     "postpublish": "rm -rf ./package"
   },
   "dependencies": {
-    "@toast-ui/editor-plugin-code-syntax-highlight": "^3.1.0",
-    "@toast-ui/editor": "^3.2.2",
-    "dompurify": "3.1.7",
-    "filesize": "^10.1.0",
-    "js-generate-password": "^1.0.0",
-    "password-sheriff": "^1.1.1",
-    "prismjs": "^1.29.0"
-  },
-  "devDependencies": {
-    "@types/dompurify": "3.0.5",
-    "@types/lodash-es": "4.17.12",
-    "@vitest/web-worker": "2.1.2",
-    "clean-publish": "5.0.0",
-    "vite-plugin-dts": "4.2.3",
-    "vite-plugin-node-polyfills": "0.22.0",
-    "@ownclouders/web-test-helpers": "workspace:*"
-  },
-  "peerDependencies": {
-    "@casl/ability": "6.7.1",
+    "@casl/ability": "^6.7.1",
     "@casl/vue": "^2.2.2",
     "@microsoft/fetch-event-source": "^2.0.1",
-    "@ownclouders/web-client": "workspace:*",
-    "@sentry/vue": "8.33.1",
+    "@ownclouders/web-client": "workspace:^",
+    "@sentry/vue": "^8.33.1",
+    "@toast-ui/editor-plugin-code-syntax-highlight": "^3.1.0",
+    "@toast-ui/editor": "^3.2.2",
     "@uppy/core": "^3.3.0",
     "@uppy/drop-target": "^2.0.0",
     "@uppy/tus": "^3.1.0",
     "@uppy/utils": "^5.3.0",
     "@uppy/xhr-upload": "^3.0.1",
-    "@vue/shared": "3.5.11",
+    "@vue/shared": "^3.5.11",
     "@vueuse/core": "^11.0.0",
-    "axios": "1.7.7",
+    "axios": "^1.7.7",
     "deepmerge": "^4.2.2",
-    "design-system": "workspace:@ownclouders/design-system@*",
-    "fuse.js": "7.0.0",
+    "dompurify": "^3.1.7",
+    "filesize": "^10.1.0",
+    "fuse.js": "^7.0.0",
+    "js-generate-password": "^1.0.0",
     "lodash-es": "^4.17.21",
-    "luxon": "3.5.0",
+    "luxon": "^3.5.0",
     "mark.js": "^8.11.1",
     "oidc-client-ts": "^2.4.0 || ^3.0.0",
     "p-queue": "^8.0.0",
-    "pinia": "2.2.4",
-    "portal-vue": "3.0.0",
-    "qs": "6.13.0",
-    "semver": "7.6.3",
-    "uuid": "10.0.0",
-    "vue-concurrency": "5.0.1",
-    "vue-router": "4.2.5",
-    "vue3-gettext": "2.4.0",
-    "zod": "3.23.8"
+    "password-sheriff": "^1.1.1",
+    "pinia": "^2.2.4",
+    "portal-vue": "^3.0.0",
+    "prismjs": "^1.29.0",
+    "qs": "^6.13.0",
+    "semver": "^7.6.3",
+    "uuid": "^10.0.0",
+    "vue-concurrency": "^5.0.1",
+    "vue-router": "^4.2.5",
+    "vue3-gettext": "^2.4.0",
+    "zod": "^3.23.8"
+  },
+  "devDependencies": {
+    "@ownclouders/web-test-helpers": "workspace:^",
+    "@types/dompurify": "3.0.5",
+    "@types/lodash-es": "4.17.12",
+    "@vitest/web-worker": "2.1.2",
+    "clean-publish": "5.0.0",
+    "vite-plugin-dts": "4.2.3",
+    "vite-plugin-node-polyfills": "0.22.0"
+  },
+  "peerDependencies": {
+    "design-system": "workspace:@ownclouders/design-system@^"
   }
 }

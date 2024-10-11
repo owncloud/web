@@ -6,6 +6,7 @@ import {
   PreviewService,
   PasswordPolicyService
 } from './src/services'
+import { Route, Router } from 'vue-router'
 
 export * from './src'
 
@@ -17,5 +18,7 @@ declare module 'vue' {
     $loadingService: LoadingService
     $previewService: PreviewService
     $passwordPolicyService: PasswordPolicyService
+    $router: Router
+    $route: Route
   }
 }
