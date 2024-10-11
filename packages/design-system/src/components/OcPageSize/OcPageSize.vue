@@ -24,7 +24,7 @@
 
 <script lang="ts">
 import { defineComponent } from 'vue'
-import uniqueId from '../../utils/uniqueId'
+import { uniqueId } from '../../helpers'
 import OcSelect from '../OcSelect/OcSelect.vue'
 
 /**

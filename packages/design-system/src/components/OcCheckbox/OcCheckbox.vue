@@ -18,8 +18,7 @@
 <script lang="ts">
 import { defineComponent, PropType } from 'vue'
 import { isEqual } from 'lodash-es'
-import { getSizeClass } from '../../utils/sizeClasses'
-import uniqueId from '../../utils/uniqueId'
+import { getSizeClass, uniqueId } from '../../helpers'
 
 /**
  * A checkbox input element. The checkbox is either checked or unchecked.

@@ -15,7 +15,7 @@ import {
   useRouteQueryPersisted
 } from '../../../src/composables'
 import { FolderView } from '../../../src'
-import { OcPageSize, OcSwitch } from 'design-system/src/components'
+import { OcPageSize, OcSwitch } from '@ownclouders/design-system/components'
 
 vi.mock('../../../src/composables/router', async (importOriginal) => ({
   ...(await importOriginal<any>()),

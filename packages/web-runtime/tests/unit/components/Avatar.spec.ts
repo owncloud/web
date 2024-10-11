@@ -4,7 +4,7 @@ import { mock, mockDeep } from 'vitest-mock-extended'
 import { CapabilityStore, ClientService } from '@ownclouders/web-pkg'
 import { AxiosResponse } from 'axios'
 import { nextTick } from 'vue'
-import { OcAvatar } from 'design-system/src/components'
+import { OcAvatar } from '@ownclouders/design-system/components'
 
 const propsData = {
   userName: 'admin',

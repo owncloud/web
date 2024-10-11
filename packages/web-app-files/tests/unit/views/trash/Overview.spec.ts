@@ -10,7 +10,7 @@ import { mock } from 'vitest-mock-extended'
 import { nextTick } from 'vue'
 import { SpaceResource } from '@ownclouders/web-client'
 import { SortDir } from '@ownclouders/web-pkg'
-import OcTable from 'design-system/src/components/OcTable/OcTable.vue'
+import { OcTable } from '@ownclouders/design-system/components'
 
 const spaceMocks = [
   {

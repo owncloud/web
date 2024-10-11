@@ -142,7 +142,7 @@ import { RouteLocationNamedRaw } from 'vue-router'
 import { useGettext } from 'vue3-gettext'
 import { SpaceResource } from '@ownclouders/web-client'
 import { isProjectSpaceResource } from '@ownclouders/web-client'
-import { ContextualHelperDataListItem } from 'design-system/src/helpers'
+import { ContextualHelperDataListItem } from '@ownclouders/design-system/helpers'
 import ExpirationDateIndicator from '../ExpirationDateIndicator.vue'
 
 export default defineComponent({

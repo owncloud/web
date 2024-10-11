@@ -17,8 +17,8 @@
 <script lang="ts">
 import { defineComponent } from 'vue'
 
-import { getSizeClass } from '../../utils/sizeClasses'
-import uniqueId from '../../utils/uniqueId'
+import { getSizeClass, uniqueId } from '../../helpers'
+
 /**
  * The radio element. Can be grouped to give the user to choose between different options.
  */

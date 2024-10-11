@@ -15,7 +15,7 @@ import { eventBus, UppyResource } from '@ownclouders/web-pkg'
 import { defaultPlugins, shallowMount, defaultComponentMocks } from '@ownclouders/web-test-helpers'
 import { RouteLocation } from 'vue-router'
 import { computed, ref } from 'vue'
-import { OcButton } from 'design-system/src/components'
+import { OcButton } from '@ownclouders/design-system/components'
 
 vi.mock('@ownclouders/web-pkg', async (importOriginal) => ({
   ...(await importOriginal<any>()),

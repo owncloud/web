@@ -92,7 +92,7 @@
 
 <script lang="ts">
 import Fuse from 'fuse.js'
-import uniqueId from '../../utils/uniqueId'
+import { uniqueId } from '../../helpers'
 import {
   defineComponent,
   ComponentPublicInstance,

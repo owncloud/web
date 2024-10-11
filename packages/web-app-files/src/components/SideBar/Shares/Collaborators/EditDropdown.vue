@@ -53,8 +53,8 @@
 <script lang="ts">
 import { computed, defineComponent, inject, PropType, Ref, unref, useTemplateRef } from 'vue'
 import { DateTime } from 'luxon'
-import uniqueId from 'design-system/src/utils/uniqueId'
-import { OcDrop } from 'design-system/src/components'
+import { ContextualHelperDataListItem, uniqueId } from '@ownclouders/design-system/helpers'
+import { OcDrop, OcInfoDrop } from '@ownclouders/design-system/components'
 import { Resource } from '@ownclouders/web-client'
 import { isProjectSpaceResource } from '@ownclouders/web-client'
 import { useConfigStore, useModals } from '@ownclouders/web-pkg'
@@ -62,8 +62,6 @@ import { useGettext } from 'vue3-gettext'
 import DatePickerModal from '../../../Modals/DatePickerModal.vue'
 import { RouteLocationNamedRaw } from 'vue-router'
 import ContextMenuItem from './ContextMenuItem.vue'
-import { ContextualHelperDataListItem } from 'design-system/src/helpers'
-import OcInfoDrop from 'design-system/src/components/OcInfoDrop/OcInfoDrop.vue'
 
 export type EditOption = {
   icon: string

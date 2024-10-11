@@ -9,7 +9,7 @@ import {
 import { eventBus, SideBar, useIsTopBarSticky } from '@ownclouders/web-pkg'
 import { SideBarEventTopics } from '@ownclouders/web-pkg'
 import { mock } from 'vitest-mock-extended'
-import { OcBreadcrumb } from 'design-system/src/components'
+import { OcBreadcrumb } from '@ownclouders/design-system/components'
 
 const stubSelectors = {
   ocBreadcrumb: 'oc-breadcrumb-stub',

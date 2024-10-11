@@ -49,7 +49,7 @@ import { defineComponent, PropType, ref } from 'vue'
 import OcButton from '../OcButton/OcButton.vue'
 import OcIcon from '../OcIcon/OcIcon.vue'
 import OcDrop from '../OcDrop/OcDrop.vue'
-import uniqueId from '../../utils/uniqueId'
+import { uniqueId } from '../../helpers'
 import { FocusTrap } from 'focus-trap-vue'
 import { ContextualHelperDataListItem } from '../../helpers'
 

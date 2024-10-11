@@ -303,10 +303,10 @@ import { createLocationCommon } from '../../router'
 import get from 'lodash-es/get'
 
 // ODS component import is necessary here for CERN to overwrite OcTable
-import OcTable from 'design-system/src/components/OcTable/OcTable.vue'
+import { OcTable } from '@ownclouders/design-system/components'
 import { storeToRefs } from 'pinia'
-import OcButton from 'design-system/src/components/OcButton/OcButton.vue'
-import { FieldType } from 'design-system/src/components/OcTable/OcTable.vue'
+import { OcButton } from '@ownclouders/design-system/components'
+import { FieldType } from '@ownclouders/design-system/helpers'
 
 const TAGS_MINIMUM_SCREEN_WIDTH = 850
 

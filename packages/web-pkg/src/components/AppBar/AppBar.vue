@@ -100,9 +100,8 @@ import {
   ActionExtension,
   useIsTopBarSticky
 } from '../../composables'
-import { BreadcrumbItem } from 'design-system/src/components/OcBreadcrumb/types'
+import { BreadcrumbItem, EVENT_ITEM_DROPPED } from '@ownclouders/design-system/helpers'
 import { useActiveLocation } from '../../composables'
-import { helpers } from 'design-system'
 import { useGettext } from 'vue3-gettext'
 import {
   FileAction,
@@ -113,8 +112,6 @@ import {
 } from '../../composables'
 import { storeToRefs } from 'pinia'
 import { RouteLocationRaw } from 'vue-router'
-
-const { EVENT_ITEM_DROPPED } = helpers
 
 export default defineComponent({
   components: {

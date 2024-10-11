@@ -21,7 +21,7 @@
 import { avatarUrl } from '../../../../../helpers/user'
 import { CollaboratorAutoCompleteItem, ShareTypes } from '@ownclouders/web-client'
 import { defineComponent, PropType } from 'vue'
-import { Recipient } from 'design-system/src/components/OcRecipient/types'
+import { Recipient } from '@ownclouders/design-system/helpers'
 import { useCapabilityStore, useConfigStore } from '@ownclouders/web-pkg'
 import { storeToRefs } from 'pinia'
 

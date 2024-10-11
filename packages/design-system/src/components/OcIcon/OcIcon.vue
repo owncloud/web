@@ -24,8 +24,7 @@
 import { defineComponent } from 'vue'
 import InlineSvg from 'vue-inline-svg'
 import { AVAILABLE_SIZES } from '../../helpers/constants'
-import { getSizeClass } from '../../utils/sizeClasses'
-import uniqueId from '../../utils/uniqueId'
+import { getSizeClass, uniqueId } from '../../helpers'
 
 /**
  * Icons are used to visually communicate core parts of the product and

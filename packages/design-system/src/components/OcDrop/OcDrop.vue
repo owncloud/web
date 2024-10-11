@@ -16,8 +16,7 @@ import { Modifier } from '@popperjs/core'
 import { detectOverflow } from '@popperjs/core'
 import { destroy, hideOnEsc } from '../../directives/OcTooltip'
 import { AVAILABLE_SIZES } from '../../helpers/constants'
-import uniqueId from '../../utils/uniqueId'
-import { getSizeClass } from '../../utils/sizeClasses'
+import { getSizeClass, uniqueId } from '../../helpers'
 import { defineComponent, onBeforeUnmount, onMounted, ref, unref, useTemplateRef } from 'vue'
 
 /**

@@ -2,7 +2,7 @@ import EditDropdown from '../../../../../../src/components/SideBar/Shares/Collab
 import { defaultPlugins, PartialComponentProps, shallowMount } from '@ownclouders/web-test-helpers'
 import { mock } from 'vitest-mock-extended'
 import { Resource } from '@ownclouders/web-client'
-import OcButton from 'design-system/src/components/OcButton/OcButton.vue'
+import { OcButton } from '@ownclouders/design-system/components'
 
 const selectors = {
   editBtn: '.collaborator-edit-dropdown-options-btn',

@@ -1,5 +1,5 @@
 import { omit } from 'lodash-es'
-import { ContextualHelperData } from 'design-system/src/helpers'
+import { ContextualHelperData } from '@ownclouders/design-system/helpers'
 import { ConfigStore } from '@ownclouders/web-pkg'
 
 // just a dummy function to trick gettext tools

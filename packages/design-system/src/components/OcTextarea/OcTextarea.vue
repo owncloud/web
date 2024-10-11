@@ -31,7 +31,7 @@
 
 <script lang="ts">
 import { defineComponent, HTMLAttributes } from 'vue'
-import uniqueId from '../../utils/uniqueId'
+import { uniqueId } from '../../helpers'
 
 /**
  * Textareas are used to allow users to provide text input when the expected

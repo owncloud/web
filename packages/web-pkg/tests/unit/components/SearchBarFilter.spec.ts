@@ -1,7 +1,7 @@
 import { useRouteQuery } from '../../../src/composables/router/useRouteQuery'
 import SearchBarFilter from '../../../src/components/SearchBarFilter.vue'
 import { defaultComponentMocks, defaultPlugins, shallowMount } from '@ownclouders/web-test-helpers'
-import { OcFilterChip } from 'design-system/src/components'
+import { OcFilterChip } from '@ownclouders/design-system/components'
 import { ref } from 'vue'
 
 vi.mock('../../../src/composables/router/useRouteQuery')

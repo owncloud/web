@@ -7,7 +7,7 @@ import { ComponentPublicInstance, computed } from 'vue'
 import { extractDomSelector } from '@ownclouders/web-client'
 import { useCanBeOpenedWithSecureView } from '../../../../src/composables/resources'
 import { displayPositionedDropdown } from '../../../../src/helpers/contextMenuDropdown'
-import { OcSelect } from 'design-system/src/components'
+import { OcSelect } from '@ownclouders/design-system/components'
 
 vi.mock('../../../../src/helpers/contextMenuDropdown')
 vi.mock('../../../../src/composables/viewMode', async (importOriginal) => ({

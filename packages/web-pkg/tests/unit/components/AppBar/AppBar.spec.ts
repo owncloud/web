@@ -12,7 +12,7 @@ import {
 import { ArchiverService } from '../../../../src/services'
 import { FolderView } from '../../../../src/ui/types'
 import { useExtensionRegistry, ViewOptions } from '../../../../src'
-import { OcBreadcrumb } from 'design-system/src/components'
+import { OcBreadcrumb } from '@ownclouders/design-system/components'
 
 const selectors = {
   ocBreadcrumbStub: 'oc-breadcrumb-stub',

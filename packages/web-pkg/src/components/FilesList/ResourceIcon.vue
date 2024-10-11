@@ -11,7 +11,7 @@
 <script lang="ts">
 import { computed, defineComponent, inject, PropType, unref } from 'vue'
 import { Resource } from '@ownclouders/web-client'
-import { AVAILABLE_SIZES } from 'design-system/src/helpers/constants'
+import { AVAILABLE_SIZES } from '@ownclouders/design-system/helpers'
 import {
   IconType,
   createDefaultFileIconMapping,

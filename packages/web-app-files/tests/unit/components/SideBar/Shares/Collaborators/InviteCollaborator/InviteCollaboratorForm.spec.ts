@@ -10,7 +10,7 @@ import { Resource, SpaceResource } from '@ownclouders/web-client'
 import { useSharesStore } from '@ownclouders/web-pkg'
 import { CollaboratorAutoCompleteItem, CollaboratorShare, ShareRole } from '@ownclouders/web-client'
 import { Group, User } from '@ownclouders/web-client/graph/generated'
-import OcButton from 'design-system/src/components/OcButton/OcButton.vue'
+import { OcButton } from '@ownclouders/design-system/components'
 import RoleDropdown from '../../../../../../../src/components/SideBar/Shares/Collaborators/RoleDropdown.vue'
 import { ShareRoleType } from '../../../../../../../src/components/SideBar/Shares/Collaborators/InviteCollaborator/InviteCollaboratorForm.vue'
 

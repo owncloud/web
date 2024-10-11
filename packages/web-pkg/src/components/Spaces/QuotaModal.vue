@@ -32,7 +32,7 @@ import {
 import { useRouter } from '../../composables/router'
 import { eventBus } from '../../services'
 import { storeToRefs } from 'pinia'
-import { ContextualHelperData } from 'design-system/src/helpers'
+import { ContextualHelperData } from '@ownclouders/design-system/helpers'
 
 export default defineComponent({
   name: 'SpaceQuotaModal',

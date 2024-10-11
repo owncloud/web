@@ -81,6 +81,6 @@
     "vite-plugin-node-polyfills": "0.22.0"
   },
   "peerDependencies": {
-    "design-system": "workspace:@ownclouders/design-system@^"
+    "@ownclouders/design-system": "workspace:^"
   }
 }

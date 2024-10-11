@@ -126,7 +126,7 @@ import {
 } from '../composables'
 import { LinkShare, SpaceResource } from '@ownclouders/web-client'
 import { Resource } from '@ownclouders/web-client'
-import { OcButton } from 'design-system/src/components'
+import { OcButton } from '@ownclouders/design-system/components'
 import { SharingLinkType } from '@ownclouders/web-client/graph/generated'
 import LinkRoleDropdown from './LinkRoleDropdown.vue'
 

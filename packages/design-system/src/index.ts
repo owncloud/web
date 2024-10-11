@@ -1,5 +1,5 @@
-import { getSizeClass } from './utils/sizeClasses'
 import { App } from 'vue'
+import { applyCustomProp } from './helpers'
 
 import * as components from './components'
 import * as directives from './directives'
@@ -8,13 +8,6 @@ const initializeCustomProps = (tokens: string[] = [], prefix: string) => {
   for (const param in tokens) {
     applyCustomProp(prefix + param, tokens[param])
   }
-}
-
-export const applyCustomProp = (key: string, value: string | undefined) => {
-  if (value === undefined) {
-    return
-  }
-  ;(document.querySelector(':root') as HTMLElement).style.setProperty('--oc-' + key, value)
 }
 
 export default {
@@ -33,9 +26,3 @@ export default {
     Object.values(directives).forEach((d) => app.directive(d.name, d))
   }
 }
-
-export const utils = { getSizeClass }
-export * as components from './components'
-export * as composables from './composables'
-export * as directives from './directives'
-export * as helpers from './helpers'

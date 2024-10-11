@@ -181,7 +181,7 @@ import {
 import { computed, defineComponent, inject, ref, unref, watch, onMounted, nextTick, Ref } from 'vue'
 import { Resource, SpaceResource } from '@ownclouders/web-client'
 import { DateTime } from 'luxon'
-import { OcDrop } from 'design-system/src/components'
+import { OcDrop } from '@ownclouders/design-system/components'
 import { useTask } from 'vue-concurrency'
 import { useGettext } from 'vue3-gettext'
 import { isProjectSpaceResource } from '@ownclouders/web-client'

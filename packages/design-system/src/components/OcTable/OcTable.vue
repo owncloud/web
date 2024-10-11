@@ -103,7 +103,7 @@ import OcTr from '../_OcTableRow/_OcTableRow.vue'
 import OcTh from '../_OcTableCellHead/_OcTableCellHead.vue'
 import OcTd from '../_OcTableCellData/_OcTableCellData.vue'
 import OcButton from '../OcButton/OcButton.vue'
-import { getSizeClass } from '../../utils/sizeClasses'
+import { getSizeClass, Item, FieldType } from '../../helpers'
 import { defineComponent, PropType } from 'vue'
 
 import {
@@ -118,29 +118,6 @@ import {
 
 const SORT_DIRECTION_ASC = 'asc' as const
 const SORT_DIRECTION_DESC = 'desc' as const
-
-export type FieldType = {
-  name: string
-  title?: string
-  headerType?: string
-  type?: string
-  callback?: any
-  alignH?: string
-  alignV?: string
-  width?: string
-  wrap?: string
-  thClass?: string
-  tdClass?: string
-  sortable?: boolean
-  sortDir?: string
-  prop?: string
-  accessibleLabelCallback?: (item: Item) => string
-}
-
-// FIXME: ideally the id should not be optional, but some generated types (e.g. User and Group) need this
-type Item = {
-  id?: string
-}
 
 /**
  * A table component with dynamic layout and data.

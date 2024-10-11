@@ -25,10 +25,9 @@ export default defineConfig(async (args) => {
   }
 
   // collapsible table
-  ;(config.resolve.alias as any)['design-system/src/components/OcTable/OcTable.vue'] = join(
-    projectRootDir,
-    'packages/web-pkg/src/cern/components/CollapsibleOcTable.vue'
-  )
+  // FIXME: how to handle?
+  ;(config.resolve.alias as any)['@ownclouders/design-system/src/components/OcTable/OcTable.vue'] =
+    join(projectRootDir, 'packages/web-pkg/src/cern/components/CollapsibleOcTable.vue')
   // create space component
   ;(config.resolve.alias as any)['../../components/AppBar/CreateSpace.vue'] = join(
     projectRootDir,
