@@ -878,34 +878,34 @@ importers:
   packages/web-client:
     dependencies:
       '@casl/ability':
-        specifier: 6.7.1
+        specifier: ^6.7.1
         version: 6.7.1
       '@microsoft/fetch-event-source':
         specifier: ^2.0.1
         version: 2.0.1
       axios:
-        specifier: 1.7.7
+        specifier: ^1.7.7
         version: 1.7.7
       fast-xml-parser:
-        specifier: 4.5.0
+        specifier: ^4.5.0
         version: 4.5.0
       lodash-es:
         specifier: ^4.17.21
         version: 4.17.21
       luxon:
-        specifier: 3.5.0
+        specifier: ^3.5.0
         version: 3.5.0
       uuid:
-        specifier: 10.0.0
+        specifier: ^10.0.0
         version: 10.0.0
       webdav:
-        specifier: 5.7.1
+        specifier: ^5.7.1
         version: 5.7.1
       xml-js:
         specifier: ^1.6.11
         version: 1.6.11
       zod:
-        specifier: 3.23.8
+        specifier: ^3.23.8
         version: 3.23.8
     devDependencies:
       '@types/luxon':
