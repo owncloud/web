@@ -2,7 +2,7 @@
   <main id="app-store">
     <app-loading-spinner v-if="areAppsLoading" />
     <template v-else>
-      <router-view />
+      <router-view data-testid="app-store-router-view" />
     </template>
   </main>
 </template>
