@@ -1,28 +1,24 @@
 import {
   AppWrapperRoute,
   defineWebApplication,
-  useCapabilityStore,
-  useClientService,
-  useRequest,
-  ApplicationInformation
+  ApplicationInformation,
+  Extension
 } from '@ownclouders/web-pkg'
 import translations from '../l10n/translations.json'
 import App from './App.vue'
-import { stringify } from 'qs'
-import { Resource, SpaceResource } from '@ownclouders/web-client'
-import { join } from 'path'
 import { useGettext } from 'vue3-gettext'
 import { useAppProviderService } from '@ownclouders/web-pkg/src/composables/appProviderService'
 import Redirect from './Redirect.vue'
 import { useApplicationReadyStore } from './piniaStores'
+import { computed } from 'vue'
+import { useActionExtensionCreateFromTemplate } from './extensions'
+import { useCreateFileHandler } from './composables'
 
 export default defineWebApplication({
   setup(options: any) {
-    const capabilityStore = useCapabilityStore()
-    const { makeRequest } = useRequest()
-    const clientService = useClientService()
     const { $gettext } = useGettext()
     const appProviderService = useAppProviderService()
+    const { createFileHandler } = useCreateFileHandler()
 
     if (!Object.hasOwn(options, 'appName')) {
       const appInfo: ApplicationInformation = {
@@ -70,32 +66,7 @@ export default defineWebApplication({
           routeName: `${appId}-apps`,
           hasPriority: mimeType.default_application === provider.name,
           ...(mimeType.allow_creation && { newFileMenu: { menuTitle: () => mimeType.name } }),
-          createFileHandler: async ({
-            fileName,
-            space,
-            currentFolder
-          }: {
-            fileName: string
-            space: SpaceResource
-            currentFolder: Resource
-          }) => {
-            if (fileName === '') {
-              return
-            }
-
-            const query = stringify({
-              parent_container_id: currentFolder.fileId,
-              filename: fileName
-            })
-            const url = `${capabilityStore.filesAppProviders[0].new_url}?${query}`
-            const response = await makeRequest('POST', url)
-            if (response.status !== 200) {
-              throw new Error(`An error has occurred: ${response.status}`)
-            }
-
-            const path = join(currentFolder.path, fileName) || ''
-            return clientService.webdav.getFileInfo(space, { path })
-          }
+          createFileHandler
         }
       })
     }
@@ -115,10 +86,16 @@ export default defineWebApplication({
       }
     ]
 
+    const actionCreateFromTemplate = useActionExtensionCreateFromTemplate()
+    const extensions = computed<Extension[]>(() => {
+      return [actionCreateFromTemplate]
+    })
+
     return {
       appInfo,
       routes,
-      translations
+      translations,
+      extensions
     }
   }
 })

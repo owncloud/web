@@ -192,7 +192,8 @@ export const useFileActions = () => {
     space: SpaceResource,
     resource: Resource,
     mode: string,
-    remoteItemId: string
+    remoteItemId: string,
+    templateId?: string
   ) => {
     return {
       name: routeName,
@@ -205,6 +206,7 @@ export const useFileActions = () => {
       query: {
         ...(remoteItemId && { shareId: remoteItemId }),
         ...(resource.fileId && unref(options).routing.idBased && { fileId: resource.fileId }),
+        ...(templateId && { templateId }),
         ...routeToContextQuery(unref(router.currentRoute))
       }
     }

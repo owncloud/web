@@ -79,6 +79,11 @@ export default defineComponent({
       return queryItemAsString(unref(viewModeQuery))
     })
 
+    const templateIdQuery = useRouteQuery('templateId')
+    const templateIdQueryValue = computed(() => {
+      return queryItemAsString(unref(templateIdQuery))
+    })
+
     const appName = computed(() => {
       const lowerCaseAppName = unref(route)
         .name.toString()
@@ -125,7 +130,8 @@ export default defineComponent({
           file_id: fileId,
           lang: language.current,
           ...(unref(appName) && { app_name: encodeURIComponent(unref(appName)) }),
-          ...(viewMode && { view_mode: viewMode })
+          ...(viewMode && { view_mode: viewMode }),
+          ...(unref(templateIdQueryValue) && { template_id: unref(templateIdQueryValue) })
         })
 
         const url = `${baseUrl}?${query}`
