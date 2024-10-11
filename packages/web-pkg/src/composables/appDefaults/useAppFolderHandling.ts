@@ -56,7 +56,7 @@ export function useAppFolderHandling({
       })
 
       const isSpaceRoot = spacesStore.spaces.some(
-        (s) => isMountPointSpaceResource(s) && s.root.remoteItem.id === pathResource.id
+        (s) => isMountPointSpaceResource(s) && s.root.remoteItem?.id === pathResource.id
       )
 
       if (isSpaceRoot) {

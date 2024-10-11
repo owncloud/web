@@ -92,6 +92,7 @@ export const navItems = (context: ComponentCustomProperties): AppNavigationItem[
       },
       activeFor: [
         { path: `/${appInfo.id}/spaces/share` },
+        { path: `/${appInfo.id}/spaces/ocm-share` },
         { path: `/${appInfo.id}/spaces/personal` }
       ],
       isVisible() {

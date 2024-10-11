@@ -531,7 +531,10 @@ export default defineComponent({
     const capabilityStore = useCapabilityStore()
     const { getMatchingSpace } = useGetMatchingSpace()
     const { canBeOpenedWithSecureView } = useCanBeOpenedWithSecureView()
-    const { getFolderLink } = useFolderLink()
+    const folderLinkUtils = useFolderLink({
+      space: ref(props.space),
+      targetRouteCallback: computed(() => props.targetRouteCallback)
+    })
     const { isSticky } = useIsTopBarSticky()
     const {
       isLocationPicker,
@@ -622,7 +625,7 @@ export default defineComponent({
 
     const getResourceLink = (resource: Resource) => {
       if (resource.isFolder) {
-        return getFolderLink(resource)
+        return folderLinkUtils.getFolderLink(resource)
       }
 
       let space = props.space
@@ -665,10 +668,7 @@ export default defineComponent({
         },
         context
       ),
-      ...useFolderLink({
-        space: ref(props.space),
-        targetRouteCallback: computed(() => props.targetRouteCallback)
-      }),
+      ...folderLinkUtils,
       postMessage,
       isFilePicker,
       isLocationPicker,

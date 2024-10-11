@@ -1,0 +1,6 @@
+Bugfix: Navigating into folders that have been shared externally
+
+We've fixed an issue where navigating into folders that have been shared externally would not work.
+
+https://github.com/owncloud/web/pull/11758
+https://github.com/owncloud/web/issues/11753
