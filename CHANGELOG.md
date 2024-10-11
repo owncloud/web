@@ -18,6 +18,7 @@ Summary
 * Bugfix - Details panel wrong WebDAV URL of received shares: [#11712](https://github.com/owncloud/web/pull/11712)
 * Bugfix - Accessing disabled password-protected space does not show error: [#11725](https://github.com/owncloud/web/pull/11725)
 * Bugfix - Application menu not operable in Safari browser: [#11726](https://github.com/owncloud/web/pull/11726)
+* Bugfix - Navigating into folders that have been shared externally: [#11758](https://github.com/owncloud/web/pull/11758)
 * Change - Remove importer as default app: [#11709](https://github.com/owncloud/web/pull/11709)
 * Enhancement - Allow setting view mode for apps via query: [#11668](https://github.com/owncloud/web/pull/11668)
 * Enhancement - File size warning in editors: [#11731](https://github.com/owncloud/web/pull/11731)
@@ -104,6 +105,14 @@ Details
 
    https://github.com/owncloud/web/issues/11718
    https://github.com/owncloud/web/pull/11726
+
+* Bugfix - Navigating into folders that have been shared externally: [#11758](https://github.com/owncloud/web/pull/11758)
+
+   We've fixed an issue where navigating into folders that have been shared
+   externally would not work.
+
+   https://github.com/owncloud/web/issues/11753
+   https://github.com/owncloud/web/pull/11758
 
 * Change - Remove importer as default app: [#11709](https://github.com/owncloud/web/pull/11709)
 
