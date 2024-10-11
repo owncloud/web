@@ -25,7 +25,7 @@
         />
       </div>
     </div>
-    <oc-list class="oc-tiles oc-flex">
+    <oc-list class="oc-tiles">
       <li
         v-for="resource in resources"
         :key="resource.id"
