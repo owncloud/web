@@ -6,7 +6,7 @@
       :main-actions="fileActions"
       :drop-down-menu-sections="dropDownMenuSections"
       :drop-down-action-options="dropDownActionOptions"
-      :is-auto-save-enabled="isAutoSaveEnabled"
+      :has-auto-save="hasAutoSave"
       :is-editor="isEditor"
       :resource="resource"
       @close="closeApp"
@@ -412,7 +412,7 @@ export default defineComponent({
       await saveFileTask.perform()
     }
 
-    const isAutoSaveEnabled = computed(() => {
+    const hasAutoSave = computed(() => {
       return !props.disableAutoSave
     })
 
@@ -613,7 +613,7 @@ export default defineComponent({
       ...useSideBar(),
       dropDownMenuSections,
       dropDownActionOptions: actionOptions,
-      isAutoSaveEnabled,
+      hasAutoSave,
       isEditor,
       closeApp,
       fileActions,

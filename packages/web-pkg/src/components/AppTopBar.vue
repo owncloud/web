@@ -124,7 +124,7 @@ export default defineComponent({
       type: Array as PropType<Action[]>,
       default: (): Action[] => []
     },
-    isAutoSaveEnabled: {
+    hasAutoSave: {
       type: Boolean,
       default: true
     },
@@ -148,7 +148,7 @@ export default defineComponent({
     const contextMenuLabel = computed(() => $gettext('Show context menu'))
     const closeButtonLabel = computed(() => $gettext('Close'))
     const hasAutosave = computed(
-      () => props.isEditor && props.isAutoSaveEnabled && configStore.options.editor.autosaveEnabled
+      () => props.isEditor && props.hasAutoSave && configStore.options.editor.autosaveEnabled
     )
     const autoSaveTooltipText = computed(() => {
       const duration = Duration.fromObject(
