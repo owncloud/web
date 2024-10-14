@@ -7,11 +7,11 @@ This packages provides utilities for unit testing within the ownCloud app ecosys
 Depending on your package manager, run one of the following commands:
 
 ```
-$ npm install @ownclouders/web-test-helpers
+$ npm install @ownclouders/web-test-helpers --save-dev
 
-$ pnpm add @ownclouders/web-test-helpers
+$ pnpm add -D @ownclouders/web-test-helpers
 
-$ yarn add @ownclouders/web-test-helpers
+$ yarn add @ownclouders/web-test-helpers --dev
 ```
 
-Make sure that you have `vue`, `@vue/test-utils`, `@ownclouders/web-client` and `@ownclouders/web-pkg` as dependency of your app since those are peer dependencies of this package.
+Make sure that you have `vue`, `@vue/test-utils`, and `@ownclouders/web-pkg` as dev dependencies of your app since those are peer dependencies of this package.
