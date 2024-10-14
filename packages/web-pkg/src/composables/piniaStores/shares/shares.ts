@@ -255,7 +255,9 @@ export const useSharesStore = defineStore('shares', () => {
             '@libre.graph.displayName': options.displayName
           })
         },
-        expirationDateTime: options.expirationDateTime
+        ...(Object.hasOwn(options, 'expirationDateTime') && {
+          expirationDateTime: options.expirationDateTime
+        })
       } satisfies Permission
 
       link = await client.updatePermission<LinkShare>(space.id, resource.id, linkShare.id, payload)

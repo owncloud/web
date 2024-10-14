@@ -91,7 +91,8 @@ import {
   useConfigStore,
   useResourcesStore,
   useLinkTypes,
-  useCanShare
+  useCanShare,
+  UpdateLinkOptions
 } from '@ownclouders/web-pkg'
 import { shareViaLinkHelp, shareViaIndirectLinkHelp } from '../../../helpers/contextualHelpers'
 import { isSpaceResource, LinkShare } from '@ownclouders/web-client'
@@ -185,10 +186,10 @@ export default defineComponent({
 
     const handleLinkUpdate = async ({
       linkShare,
-      password = undefined
+      options
     }: {
       linkShare: LinkShare
-      password?: string
+      options: UpdateLinkOptions['options']
     }) => {
       try {
         await updateLink({
@@ -196,12 +197,7 @@ export default defineComponent({
           space: unref(space),
           resource: unref(resource),
           linkShare,
-          options: {
-            displayName: linkShare.displayName,
-            type: linkShare.type,
-            expirationDateTime: linkShare.expirationDateTime,
-            ...(password !== undefined && { password })
-          }
+          options
         })
         showMessage({ title: $gettext('Link was updated successfully') })
       } catch (e) {
