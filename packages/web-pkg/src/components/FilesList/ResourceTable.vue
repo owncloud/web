@@ -1,5 +1,6 @@
 <template>
-  <oc-table
+  <component
+    :is="configOptions.cernFeatures ? 'collapsible-oc-table' : 'oc-table'"
     v-bind="$attrs"
     id="files-space-table"
     :class="[
@@ -235,7 +236,7 @@
       <!-- @slot Footer of the files table -->
       <slot name="footer" />
     </template>
-  </oc-table>
+  </component>
   <Teleport v-if="dragItem" to="body">
     <resource-ghost-element ref="ghostElement" :preview-items="[dragItem, ...dragSelection]" />
   </Teleport>
@@ -301,11 +302,9 @@ import { determineResourceTableSortFields } from '../../helpers/ui/resourceTable
 import { useFileActionsRename } from '../../composables/actions'
 import { createLocationCommon } from '../../router'
 import get from 'lodash-es/get'
-
-// ODS component import is necessary here for CERN to overwrite OcTable
-import { OcTable } from '@ownclouders/design-system/components'
+import CollapsibleOcTable from './../../cern/components/CollapsibleOcTable.vue'
 import { storeToRefs } from 'pinia'
-import { OcButton } from '@ownclouders/design-system/components'
+import { OcButton, OcTable } from '@ownclouders/design-system/components'
 import { FieldType } from '@ownclouders/design-system/helpers'
 
 const TAGS_MINIMUM_SCREEN_WIDTH = 850
@@ -313,10 +312,11 @@ const TAGS_MINIMUM_SCREEN_WIDTH = 850
 export default defineComponent({
   components: {
     ContextMenuQuickAction,
+    CollapsibleOcTable,
     ResourceGhostElement,
-    OcTable,
     ResourceListItem,
-    ResourceSize
+    ResourceSize,
+    OcTable
   },
   props: {
     /**
