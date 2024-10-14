@@ -31,9 +31,9 @@
     "not OperaMobile > 0"
   ],
   "devDependencies": {
-    "@babel/core": "7.25.7",
+    "@babel/core": "7.25.8",
     "@babel/polyfill": "7.12.1",
-    "@babel/preset-env": "7.25.7",
+    "@babel/preset-env": "7.25.8",
     "@babel/register": "7.25.7",
     "@cucumber/cucumber": "11.0.1",
     "@cucumber/messages": "26.0.1",
@@ -43,7 +43,7 @@
     "@ownclouders/eslint-config": "workspace:*",
     "@ownclouders/prettier-config": "workspace:*",
     "@ownclouders/tsconfig": "workspace:*",
-    "@playwright/test": "1.47.2",
+    "@playwright/test": "1.48.0",
     "@types/luxon": "3.4.2",
     "@types/mark.js": "8.11.12",
     "@types/semver": "7.5.8",
