@@ -117,18 +117,19 @@ export default defineComponent({
     const updateSelectedType = (type: SharingLinkType) => {
       currentLinkType.value = type
       const linkShare = props.linkShare
-      linkShare.type = type
 
       const needsNoPw =
         type === SharingLinkType.Internal ||
         (unref(canDeleteReadOnlyPublicLinkPassword) && type === SharingLinkType.View)
 
       if (!linkShare.hasPassword && !needsNoPw && props.isPasswordEnforced) {
-        showPasswordModal(() => emit('updateLink', { linkShare: { ...linkShare, type } }))
+        showPasswordModal(() =>
+          emit('updateLink', { linkShare: { ...linkShare }, options: { type } })
+        )
         return
       }
 
-      emit('updateLink', { linkShare })
+      emit('updateLink', { linkShare, options: { type } })
     }
 
     const showPasswordModal = (callbackFn: () => void = undefined) => {

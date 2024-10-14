@@ -114,7 +114,8 @@ export default defineComponent({
         }),
         onConfirm: (expirationDateTime: DateTime) => {
           emit('updateLink', {
-            linkShare: { ...props.linkShare, expirationDateTime }
+            linkShare: { ...props.linkShare },
+            options: { expirationDateTime }
           })
         }
       })
@@ -184,8 +185,7 @@ export default defineComponent({
         },
         onConfirm: (displayName: string) => {
           const linkShare = props.linkShare
-          linkShare.displayName = displayName
-          emit('updateLink', { linkShare })
+          emit('updateLink', { linkShare, options: { displayName } })
         }
       })
     }
@@ -220,7 +220,8 @@ export default defineComponent({
           icon: 'calendar-close',
           method: () => {
             emit('updateLink', {
-              linkShare: { ...props.linkShare, expirationDateTime: null }
+              linkShare: { ...props.linkShare },
+              options: { expirationDateTime: null }
             })
             unref(editPublicLinkDropdown).hide()
           }
@@ -247,7 +248,8 @@ export default defineComponent({
             id: 'remove-password',
             title: $gettext('Remove password'),
             icon: 'lock-unlock',
-            method: () => emit('updateLink', { linkShare: props.linkShare, password: '' })
+            method: () =>
+              emit('updateLink', { linkShare: props.linkShare, options: { password: '' } })
           })
         }
       }
@@ -280,6 +282,7 @@ export default defineComponent({
     width: 100%;
     justify-content: flex-start;
   }
+
   &-delete {
     margin-top: var(--oc-space-small) !important;
     border-top: 1px solid var(--oc-color-border) !important;
