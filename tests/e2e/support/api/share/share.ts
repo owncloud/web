@@ -253,3 +253,47 @@ export const createLinkShare = async ({
 
   checkResponseStatus(response, 'Failed while creating public link share')
 }
+
+export const createLinkSpace = async ({
+  user,
+  spaceName,
+  password,
+  name,
+  role = 'Can view'
+}: {
+  user: User
+  spaceName: string
+  password: string
+  name: string
+  role?: string
+}): Promise<void> => {
+  const driveId: string = await getSpaceIdBySpaceName({
+    user,
+    spaceType: 'project',
+    spaceName
+  })
+
+  const roleType: string = linkShareRoles[role as keyof typeof linkShareRoles]
+  password = password === '%public%' ? securePassword : password
+  
+  const response = await request({
+    method: 'POST',
+    path: join('graph', 'v1beta1', 'drives', driveId, 'root', 'createLink'),
+    body: JSON.stringify({
+      type: roleType,
+      password,
+      displayName: name
+    }),
+    user
+  })
+
+  const responseData = (await response.json()) as { link: { webUrl: string } }
+  const webUrl = responseData.link.webUrl
+  const linksEnvironment: LinksEnvironment = new LinksEnvironment()
+  linksEnvironment.createLink({
+    key: name,
+    link: { name: name, url: webUrl }
+  })
+
+  checkResponseStatus(response, 'Failed while creating public link space')
+}

@@ -297,9 +297,25 @@ Given(
         user,
         path: info.resource,
         password: info.password,
-        name: 'Unnamed link',
+        name: info.name ? info.name : 'Unnamed link',
         role: info.role,
         spaceName: info.space
+      })
+    }
+  }
+)
+
+Given(
+  '{string} creates a public link of the space using API',
+  async function (this: World, stepUser: string, stepTable: DataTable) {
+    const user = this.usersEnvironment.getUser({ key: stepUser })
+    for (const info of stepTable.hashes()) {
+      await api.share.createLinkSpace({
+        user,
+        spaceName: info.space,
+        password: info.password,
+        name: info.name ? info.name : 'Unnamed link',
+        role: info.role,
       })
     }
   }
