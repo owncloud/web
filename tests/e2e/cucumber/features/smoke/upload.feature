@@ -71,7 +71,10 @@ Feature: Upload
       | resource   |
       | simple.pdf |
     And "Alice" closes the file viewer
-
+    #upload folder via drag-n-drop
+    And "Alice" uploads the following resources via drag-n-drop
+      | resource          |
+      | Folder,With,Comma |
     # upload empty folder
     And "Alice" uploads the following resources
       | resource | type   |
