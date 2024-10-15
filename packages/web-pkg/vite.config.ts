@@ -6,7 +6,7 @@ import vue from '@vitejs/plugin-vue'
 import pkg from './package.json' assert { type: 'json' }
 
 const projectRootDir = searchForWorkspaceRoot(process.cwd())
-const external = [...Object.keys(pkg.dependencies), ...Object.keys(pkg.peerDependencies)]
+const external = [...Object.keys(pkg.dependencies)]
 
 export default defineConfig({
   resolve: {
@@ -17,7 +17,7 @@ export default defineConfig({
   css: {
     preprocessorOptions: {
       scss: {
-        additionalData: `@import "design-system/src/styles/styles";`,
+        additionalData: `@import "${projectRootDir}/packages/design-system/src/styles/styles";`,
         silenceDeprecations: ['legacy-js-api']
       }
     }
@@ -31,8 +31,6 @@ export default defineConfig({
     rollupOptions: {
       external: external.filter(
         (e) =>
-          // we need to include the ODS in the bundle because we don't publish it on npm
-          e !== 'design-system' &&
           // something is off with this lib, see https://github.com/ahmadjoya/generate-password-lite/issues/8
           e !== 'js-generate-password'
       )
