@@ -759,6 +759,9 @@ importers:
 
   packages/web-app-ocm:
     dependencies:
+      '@ownclouders/design-system':
+        specifier: workspace:*
+        version: link:../design-system
       '@ownclouders/web-client':
         specifier: workspace:*
         version: link:../web-client
@@ -830,6 +833,9 @@ importers:
 
   packages/web-app-search:
     dependencies:
+      '@ownclouders/design-system':
+        specifier: workspace:*
+        version: link:../design-system
       '@ownclouders/web-client':
         specifier: workspace:*
         version: link:../web-client
@@ -10132,7 +10138,7 @@ snapshots:
       '@cucumber/ci-environment': 10.0.1
       '@cucumber/cucumber-expressions': 17.1.0
       '@cucumber/gherkin': 28.0.0
-      '@cucumber/gherkin-streams': 5.0.1(@cucumber/gherkin@28.0.0)(@cucumber/message-streams@4.0.1(@cucumber/messages@26.0.1))(@cucumber/messages@24.1.0)
+      '@cucumber/gherkin-streams': 5.0.1(@cucumber/gherkin@28.0.0)(@cucumber/message-streams@4.0.1(@cucumber/messages@24.1.0))(@cucumber/messages@24.1.0)
       '@cucumber/gherkin-utils': 9.0.0
       '@cucumber/html-formatter': 21.6.0(@cucumber/messages@24.1.0)
       '@cucumber/message-streams': 4.0.1(@cucumber/messages@24.1.0)
@@ -10223,10 +10229,10 @@ snapshots:
       commander: 9.1.0
       source-map-support: 0.5.21
 
-  '@cucumber/gherkin-streams@5.0.1(@cucumber/gherkin@28.0.0)(@cucumber/message-streams@4.0.1(@cucumber/messages@26.0.1))(@cucumber/messages@24.1.0)':
+  '@cucumber/gherkin-streams@5.0.1(@cucumber/gherkin@28.0.0)(@cucumber/message-streams@4.0.1(@cucumber/messages@24.1.0))(@cucumber/messages@24.1.0)':
     dependencies:
       '@cucumber/gherkin': 28.0.0
-      '@cucumber/message-streams': 4.0.1(@cucumber/messages@21.0.1)
+      '@cucumber/message-streams': 4.0.1(@cucumber/messages@24.1.0)
       '@cucumber/messages': 24.1.0
       commander: 9.1.0
       source-map-support: 0.5.21
