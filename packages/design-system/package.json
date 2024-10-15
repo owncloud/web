@@ -51,23 +51,23 @@
     "linkDirectory": false,
     "exports": {
       ".": {
-        "default": "./dist/design-system.js",
-        "require": "./dist/design-system.cjs",
+        "default": "./dist/design-system.mjs",
+        "require": "./dist/design-system.js",
         "types": "./dist/src/index.d.ts"
       },
       "./components": {
-        "default": "./dist/design-system/components.js",
-        "require": "./dist/design-system/components.cjs",
+        "default": "./dist/design-system/components.mjs",
+        "require": "./dist/design-system/components.js",
         "types": "./dist/src/components/index.d.ts"
       },
       "./composables": {
-        "default": "./dist/design-system/composables.js",
-        "require": "./dist/design-system/composables.cjs",
+        "default": "./dist/design-system/composables.mjs",
+        "require": "./dist/design-system/composables.js",
         "types": "./dist/src/composables/index.d.ts"
       },
       "./helpers": {
-        "default": "./dist/design-system/helpers.js",
-        "require": "./dist/design-system/helpers.cjs",
+        "default": "./dist/design-system/helpers.mjs",
+        "require": "./dist/design-system/helpers.js",
         "types": "./dist/src/helpers/index.d.ts"
       }
     }

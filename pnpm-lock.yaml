@@ -1262,9 +1262,6 @@ importers:
       vite-plugin-dts:
         specifier: ^4.2.3
         version: 4.2.4(@types/node@22.7.4)(rollup@4.24.0)(typescript@5.6.3)(vite@5.4.8(@types/node@22.7.4)(sass@1.79.5)(terser@5.34.1))
-      vite-plugin-node-polyfills:
-        specifier: ^0.22.0
-        version: 0.22.0(rollup@4.24.0)(vite@5.4.8(@types/node@22.7.4)(sass@1.79.5)(terser@5.34.1))
     publishDirectory: package
 
   tests/e2e:
@@ -4909,7 +4906,7 @@ packages:
     resolution: {integrity: sha512-oWb1Z6mkHIskLzEJ/XWX0srkpkTQ7vaopMQkyaEIoq0fmtFVxOthb8cCxeT+p3ynTdkk/RZwbgG4brR5BeWECw==}
     engines: {node: '>= 4.0'}
     os: [darwin]
-    deprecated: The v1 package contains DANGEROUS / INSECURE binaries. Upgrade to safe fsevents v2
+    deprecated: Upgrade to fsevents v2 to mitigate potential security issues
 
   fsevents@2.3.2:
     resolution: {integrity: sha512-xiqMQR4xAeHTuB9uWm+fFRcIOgKBMiOBP+eXiyT7jsgVCq1bkVygt00oASowB7EdtpOHaaPgKt812P9ab+DDKA==}
