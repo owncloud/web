@@ -9,6 +9,7 @@
     "@ownclouders/web-test-helpers": "workspace:*"
   },
   "peerDependencies": {
+    "@ownclouders/design-system": "workspace:*",
     "@ownclouders/web-client": "workspace:*",
     "@ownclouders/web-pkg": "workspace:*",
     "lodash-es": "^4.17.21",
