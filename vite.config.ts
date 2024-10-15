@@ -236,6 +236,14 @@ export default defineConfig(({ mode, command }) => {
               }
             ]
 
+            // in development this is handled by the proxy
+            if (production) {
+              targets.push({
+                src: `./packages/web-runtime/themes/*`,
+                dest: `themes`
+              })
+            }
+
             return targets
           })()
         }),
