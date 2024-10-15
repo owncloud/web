@@ -1,7 +1,7 @@
 import { eventBus } from '../services'
 import { RouteLocation } from 'vue-router'
 import omit from 'lodash-es/omit'
-import { BreadcrumbItem } from 'design-system/src/components/OcBreadcrumb/types'
+import { BreadcrumbItem } from '@ownclouders/design-system/helpers'
 import { v4 as uuidv4 } from 'uuid'
 
 export const breadcrumbsFromPath = (

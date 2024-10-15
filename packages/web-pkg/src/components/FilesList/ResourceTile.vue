@@ -93,7 +93,7 @@ import { isProjectSpaceResource, Resource } from '@ownclouders/web-client'
 import { useGettext } from 'vue3-gettext'
 import { isSpaceResource } from '@ownclouders/web-client'
 import { RouteLocationRaw } from 'vue-router'
-import { useIsVisible } from '@ownclouders/design-system/src/composables'
+import { useIsVisible } from '@ownclouders/design-system/composables'
 import { customRef, ref, unref } from 'vue'
 
 export default defineComponent({

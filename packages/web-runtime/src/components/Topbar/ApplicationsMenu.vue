@@ -51,8 +51,7 @@
 
 <script lang="ts">
 import { defineComponent, PropType, ref, computed, unref, useTemplateRef } from 'vue'
-import { OcDrop } from 'design-system/src/components'
-import OcApplicationIcon from 'design-system/src/components/OcApplicationIcon/OcApplicationIcon.vue'
+import { OcDrop, OcApplicationIcon } from '@ownclouders/design-system/components'
 import { useGettext } from 'vue3-gettext'
 import * as uuid from 'uuid'
 import { AppMenuItemExtension, useRouter } from '@ownclouders/web-pkg'

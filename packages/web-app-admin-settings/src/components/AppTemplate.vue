@@ -90,7 +90,7 @@ import {
 import { eventBus, useAppDefaults } from '@ownclouders/web-pkg'
 import { SideBarEventTopics } from '@ownclouders/web-pkg'
 import { SideBarPanel } from '@ownclouders/web-pkg'
-import { BreadcrumbItem } from 'design-system/src/components/OcBreadcrumb/types'
+import { BreadcrumbItem } from '@ownclouders/design-system/helpers'
 import { ViewOptions } from '@ownclouders/web-pkg'
 import { Item } from '@ownclouders/web-client'
 

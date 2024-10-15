@@ -1,4 +1,4 @@
-import uniqueId from './uniqueId'
+import { uniqueId } from './uniqueId'
 
 describe('uniqueId', () => {
   it('increases numeric part of the id independent of the chosen prefix', () => {

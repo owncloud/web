@@ -4,7 +4,7 @@
 
 <script lang="ts">
 import { defineComponent } from 'vue'
-import { getSizeClass } from '../../utils/sizeClasses'
+import { getSizeClass } from '../../helpers'
 
 /**
  * Remote actions can take an undefined portion of time. The spinner gives feedback to the users about an actions being processed.

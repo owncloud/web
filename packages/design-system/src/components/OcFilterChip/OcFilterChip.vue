@@ -51,7 +51,7 @@
 
 <script lang="ts">
 import { computed, defineComponent, PropType, ref, unref } from 'vue'
-import uniqueId from '../../utils/uniqueId'
+import { uniqueId } from '../../helpers'
 import OcDrop from '../OcDrop/OcDrop.vue'
 
 export default defineComponent({

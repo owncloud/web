@@ -1,5 +1,5 @@
 import { shallowMount } from '@ownclouders/web-test-helpers'
-import { AVAILABLE_SIZES } from 'design-system/src/helpers/constants'
+import { AVAILABLE_SIZES } from '@ownclouders/design-system/helpers'
 import ResourceIcon from '../../../../src/components/FilesList/ResourceIcon.vue'
 import {
   ResourceIconMapping,

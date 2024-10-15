@@ -98,7 +98,7 @@ import Fuse from 'fuse.js'
 import Mark from 'mark.js'
 import { defaultFuseOptions } from '@ownclouders/web-pkg'
 import CopyPrivateLink from '../../Shares/CopyPrivateLink.vue'
-import { OcTextInput } from 'design-system/src/components'
+import { OcTextInput } from '@ownclouders/design-system/components'
 
 export default defineComponent({
   name: 'SpaceMembers',

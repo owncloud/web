@@ -1,6 +1,6 @@
 import { defaultPlugins, shallowMount } from '@ownclouders/web-test-helpers'
 import Recipient from './OcRecipient.vue'
-import { Recipient as RecipientType } from './types'
+import { Recipient as RecipientType } from '../../helpers'
 
 describe('OcRecipient', () => {
   function getWrapper(props: Partial<RecipientType> = undefined, slot: string = undefined) {

@@ -8,7 +8,7 @@
 <script lang="ts">
 import { defineComponent } from 'vue'
 
-import { getSizeClass } from '../../utils/sizeClasses'
+import { getSizeClass } from '../../helpers'
 
 export default defineComponent({
   name: 'OcTag',

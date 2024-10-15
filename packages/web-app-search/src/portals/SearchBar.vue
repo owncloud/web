@@ -117,11 +117,12 @@ import { storeToRefs } from 'pinia'
 import { debounce } from 'lodash-es'
 import { useRouteQuery, useRouter } from '@ownclouders/web-pkg'
 import { eventBus } from '@ownclouders/web-pkg'
-import { computed, defineComponent, GlobalComponents, inject, Ref, ref, unref, watch } from 'vue'
+import { computed, defineComponent, inject, Ref, ref, unref, watch } from 'vue'
 import { SearchLocationFilterConstants } from '@ownclouders/web-pkg'
 import { SearchBarFilter } from '@ownclouders/web-pkg'
 import { useAvailableProviders } from '../composables'
 import { RouteLocationNormalizedLoaded } from 'vue-router'
+import { OcDrop } from '@ownclouders/design-system/components'
 
 export default defineComponent({
   name: 'SearchBar',
@@ -141,7 +142,7 @@ export default defineComponent({
     const { currentFolder } = storeToRefs(resourcesStore)
 
     const locationFilterId = ref(SearchLocationFilterConstants.allFiles)
-    const optionsDropRef = ref(null)
+    const optionsDropRef = ref<typeof OcDrop>(null)
     const activePreviewIndex = ref(null)
     const term = ref('')
     const restoreSearchFromRoute = ref(false)
@@ -184,7 +185,7 @@ export default defineComponent({
     })
 
     const optionsDrop = computed(() => {
-      return unref(optionsDropRef) as InstanceType<GlobalComponents['OcDrop']>
+      return unref(optionsDropRef)
     })
 
     const scope = computed(() => {

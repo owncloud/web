@@ -120,7 +120,7 @@ import {
   routeToContextQuery,
   useAuthService
 } from '@ownclouders/web-pkg'
-import { OcDrop } from 'design-system/src/components'
+import { OcDrop } from '@ownclouders/design-system/components'
 import QuotaInformation from '../Account/QuotaInformation.vue'
 
 export default defineComponent({

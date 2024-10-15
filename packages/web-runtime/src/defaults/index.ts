@@ -20,5 +20,5 @@ export const loadTranslations = async () => {
 }
 
 export const loadDesignSystem = async () => {
-  return (await import('design-system')).default
+  return (await import('@ownclouders/design-system')).default
 }

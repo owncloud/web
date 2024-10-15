@@ -3,7 +3,7 @@ import { PublicSpaceResource, SpaceResource, Resource } from '@ownclouders/web-c
 import { MockProxy, mock } from 'vitest-mock-extended'
 import { join } from 'path'
 import { defaultComponentMocks, defaultPlugins, shallowMount } from '@ownclouders/web-test-helpers'
-import { OcButton } from 'design-system/src/components'
+import { OcButton } from '@ownclouders/design-system/components'
 import { RouteLocationNamedRaw, RouteLocationNormalizedLoaded } from 'vue-router'
 
 const selectors = {

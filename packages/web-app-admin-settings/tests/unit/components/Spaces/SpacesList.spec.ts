@@ -11,7 +11,7 @@ import { SideBarEventTopics } from '@ownclouders/web-pkg'
 import { nextTick } from 'vue'
 import { useSpaceSettingsStore } from '../../../../src/composables'
 import { mock } from 'vitest-mock-extended'
-import { OcTable } from 'design-system/src/components'
+import { OcTable } from '@ownclouders/design-system/components'
 import { GraphSharePermission, SpaceMember, SpaceResource } from '@ownclouders/web-client'
 
 const spaceMocks = [

@@ -3,7 +3,7 @@ import { defaultComponentMocks, defaultPlugins, shallowMount } from '@ownclouder
 import { mock } from 'vitest-mock-extended'
 import { User } from '@ownclouders/web-client/graph/generated'
 import { Modal, useMessages } from '@ownclouders/web-pkg'
-import { OcSelect } from 'design-system/src/components'
+import { OcSelect } from '@ownclouders/design-system/components'
 import { useUserSettingsStore } from '../../../../src/composables/stores/userSettings'
 
 describe('LoginModal', () => {

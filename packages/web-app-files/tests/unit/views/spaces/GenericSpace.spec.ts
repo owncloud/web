@@ -21,7 +21,7 @@ import {
 } from '@ownclouders/web-pkg'
 import { useBreadcrumbsFromPathMock } from '../../../mocks/useBreadcrumbsFromPathMock'
 import { h } from 'vue'
-import { BreadcrumbItem } from 'design-system/src/components/OcBreadcrumb/types'
+import { BreadcrumbItem } from '@ownclouders/design-system/helpers'
 import {
   folderViewsFavoritesExtensionPoint,
   folderViewsFolderExtensionPoint,

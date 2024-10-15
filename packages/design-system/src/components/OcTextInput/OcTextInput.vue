@@ -78,7 +78,7 @@
 <script lang="ts">
 import { defineComponent, HTMLAttributes, PropType, nextTick } from 'vue'
 
-import uniqueId from '../../utils/uniqueId'
+import { uniqueId } from '../../helpers'
 import OcButton from '../OcButton/OcButton.vue'
 import OcIcon from '../OcIcon/OcIcon.vue'
 import OcTextInputPassword from '../_OcTextInputPassword/_OcTextInputPassword.vue'

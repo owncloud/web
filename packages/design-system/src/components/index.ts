@@ -1,3 +1,4 @@
+export { default as OcApplicationIcon } from './OcApplicationIcon/OcApplicationIcon.vue'
 export { default as OcAvatar } from './OcAvatar/OcAvatar.vue'
 export { default as OcAvatarCount } from './OcAvatarCount/OcAvatarCount.vue'
 export { default as OcAvatarFederated } from './OcAvatarFederated/OcAvatarFederated.vue'

@@ -3,7 +3,7 @@ import { defineStore } from 'pinia'
 import { computed, ref, unref } from 'vue'
 import { useLocalStorage, usePreferredDark } from '@vueuse/core'
 import { z } from 'zod'
-import { applyCustomProp } from 'design-system/src/'
+import { applyCustomProp } from '@ownclouders/design-system/helpers'
 import { ShareRole } from '@ownclouders/web-client'
 
 const AppBanner = z.object({

@@ -8,9 +8,9 @@
     "@ownclouders/web-test-helpers": "workspace:*"
   },
   "peerDependencies": {
+    "@ownclouders/design-system": "workspace:^",
     "@ownclouders/web-client": "workspace:*",
     "@ownclouders/web-pkg": "workspace:*",
-    "design-system": "workspace:@ownclouders/design-system@*",
     "pinia": "^2.2.2",
     "luxon": "^3.5.0",
     "vue-concurrency": "^5.0.1",

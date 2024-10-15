@@ -51,7 +51,7 @@
 import { defineComponent, PropType, ref, unref } from 'vue'
 import OcIcon from '../OcIcon/OcIcon.vue'
 import OcButton from '../OcButton/OcButton.vue'
-import uniqueId from '../../utils/uniqueId'
+import { uniqueId } from '../../helpers'
 
 type Indicator = {
   id: string

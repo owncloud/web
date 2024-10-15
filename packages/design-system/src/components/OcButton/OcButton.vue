@@ -15,7 +15,7 @@
 <script lang="ts">
 import { defineComponent, PropType } from 'vue'
 import { RouteLocationRaw } from 'vue-router'
-import { getSizeClass } from '../../utils/sizeClasses'
+import { getSizeClass } from '../../helpers'
 
 export default defineComponent({
   name: 'OcButton',

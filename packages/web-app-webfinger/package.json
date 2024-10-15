@@ -8,8 +8,8 @@
     "@ownclouders/web-test-helpers": "workspace:*"
   },
   "peerDependencies": {
+    "@ownclouders/design-system": "workspace:^",
     "@ownclouders/web-client": "workspace:*",
-    "@ownclouders/web-pkg": "workspace:*",
-    "design-system": "workspace:@ownclouders/design-system@*"
+    "@ownclouders/web-pkg": "workspace:*"
   }
 }

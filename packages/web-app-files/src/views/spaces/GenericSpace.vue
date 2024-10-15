@@ -175,7 +175,7 @@ import WhitespaceContextMenu from '../../components/Spaces/WhitespaceContextMenu
 import { eventBus } from '@ownclouders/web-pkg'
 import { useResourcesViewDefaults } from '../../composables'
 import { FolderLoaderOptions } from '../../services/folder'
-import { BreadcrumbItem } from 'design-system/src/components/OcBreadcrumb/types'
+import { BreadcrumbItem } from '@ownclouders/design-system/helpers'
 import { v4 as uuidv4 } from 'uuid'
 import {
   useKeyboardTableMouseActions,

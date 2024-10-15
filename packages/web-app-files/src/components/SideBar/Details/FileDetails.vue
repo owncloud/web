@@ -162,7 +162,7 @@ import { useGettext } from 'vue3-gettext'
 import { getSharedAncestorRoute } from '@ownclouders/web-pkg'
 import { ResourceIcon } from '@ownclouders/web-pkg'
 import { tagsHelper } from '../../../helpers/contextualHelpers'
-import { ContextualHelper } from '@ownclouders/design-system/src/helpers'
+import { ContextualHelper } from '@ownclouders/design-system/helpers'
 import TagsSelect from './TagsSelect.vue'
 import { WebDavDetails } from '@ownclouders/web-pkg'
 

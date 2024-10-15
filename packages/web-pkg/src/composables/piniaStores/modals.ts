@@ -1,4 +1,4 @@
-import { ContextualHelperData } from 'design-system/src/helpers'
+import { ContextualHelperData } from '@ownclouders/design-system/helpers'
 import { defineStore } from 'pinia'
 import { v4 as uuidV4 } from 'uuid'
 import { Component, ComponentPublicInstance, computed, ref, unref } from 'vue'

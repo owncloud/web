@@ -7,7 +7,7 @@ import {
   mount
 } from '@ownclouders/web-test-helpers'
 import { UppyService } from '@ownclouders/web-pkg'
-import { OcButton } from 'design-system/src/components'
+import { OcButton } from '@ownclouders/design-system/components'
 
 describe('Resource Upload Component', () => {
   describe('file upload', () => {

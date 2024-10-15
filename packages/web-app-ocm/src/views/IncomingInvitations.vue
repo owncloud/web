@@ -75,7 +75,7 @@ import {
 import { useGettext } from 'vue3-gettext'
 import { onBeforeRouteUpdate, RouteLocationNormalized } from 'vue-router'
 import { ProviderSchema, providerListSchema } from '../schemas'
-import { OcTextInput } from '@ownclouders/design-system/src/components'
+import { OcTextInput } from '@ownclouders/design-system/components'
 
 export default defineComponent({
   emits: ['highlightNewConnections'],

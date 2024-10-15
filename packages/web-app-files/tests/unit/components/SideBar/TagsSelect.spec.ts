@@ -3,7 +3,7 @@ import TagsSelect from '../../../../src/components/SideBar/Details/TagsSelect.vu
 import { mock, mockDeep } from 'vitest-mock-extended'
 import { Resource } from '@ownclouders/web-client'
 import { ClientService, eventBus, useMessages } from '@ownclouders/web-pkg'
-import { OcSelect } from 'design-system/src/components'
+import { OcSelect } from '@ownclouders/design-system/components'
 
 describe('Tag Select', () => {
   it('show tags input form if loaded successfully', () => {

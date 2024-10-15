@@ -6,7 +6,7 @@ import {
   mount
 } from '@ownclouders/web-test-helpers'
 import { queryItemAsString } from '../../../src/composables/appDefaults'
-import { OcCheckbox } from 'design-system/src/components'
+import { OcCheckbox } from '@ownclouders/design-system/components'
 
 vi.mock('../../../src/composables/appDefaults')
 

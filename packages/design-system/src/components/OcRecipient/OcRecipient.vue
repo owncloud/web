@@ -38,7 +38,7 @@ import { defineComponent, PropType } from 'vue'
 import OcAvatar from '../OcAvatar/OcAvatar.vue'
 import OcIcon from '../OcIcon/OcIcon.vue'
 import OcSpinner from '../OcSpinner/OcSpinner.vue'
-import { Recipient } from './types'
+import { Recipient } from '../../helpers'
 
 export default defineComponent({
   name: 'OcRecipient',

@@ -1,7 +1,7 @@
 import { eventBus } from '../../services/eventBus'
 import { RouteLocation } from 'vue-router'
 import omit from 'lodash-es/omit'
-import { BreadcrumbItem } from 'design-system/src/components/OcBreadcrumb/types'
+import { BreadcrumbItem } from '@ownclouders/design-system/helpers'
 import { v4 as uuidv4 } from 'uuid'
 import { SpaceResource } from '@ownclouders/web-client'
 import { urlJoin } from '@ownclouders/web-client'

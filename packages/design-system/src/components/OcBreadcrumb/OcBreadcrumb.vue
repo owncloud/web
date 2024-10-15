@@ -107,15 +107,15 @@
 <script lang="ts">
 import { computed, defineComponent, nextTick, PropType, ref, unref, watch } from 'vue'
 import { useGettext } from 'vue3-gettext'
-
-import { AVAILABLE_SIZES, EVENT_ITEM_DROPPED_BREADCRUMB } from '../../helpers/constants'
-
+import {
+  AVAILABLE_SIZES,
+  EVENT_ITEM_DROPPED_BREADCRUMB,
+  uniqueId,
+  BreadcrumbItem
+} from '../../helpers'
 import OcButton from '../OcButton/OcButton.vue'
 import OcDrop from '../OcDrop/OcDrop.vue'
 import OcIcon from '../OcIcon/OcIcon.vue'
-import uniqueId from '../../utils/uniqueId'
-
-import { BreadcrumbItem } from './types'
 import { RouteLocationPathRaw } from 'vue-router'
 
 /**

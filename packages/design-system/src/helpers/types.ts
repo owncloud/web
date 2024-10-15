@@ -1,3 +1,5 @@
+import { RouteLocationRaw } from 'vue-router'
+
 export interface ContextualHelperDataListItem {
   text: string
   headline?: boolean
@@ -31,4 +33,48 @@ export interface PasswordPolicy {
   missing(password: string): {
     rules: PasswordPolicyRule[]
   }
+}
+
+// FIXME: ideally the id should not be optional, but some generated types (e.g. User and Group) need this
+export type Item = {
+  id?: string
+}
+
+export type FieldType = {
+  name: string
+  title?: string
+  headerType?: string
+  type?: string
+  callback?: any
+  alignH?: string
+  alignV?: string
+  width?: string
+  wrap?: string
+  thClass?: string
+  tdClass?: string
+  sortable?: boolean
+  sortDir?: string
+  prop?: string
+  accessibleLabelCallback?: (item: Item) => string
+}
+
+export type Recipient = {
+  name: string
+  icon?: {
+    name?: string
+    label?: string
+  }
+  isLoadingAvatar?: boolean
+  hasAvatar?: boolean
+  avatar?: string
+}
+
+export interface BreadcrumbItem {
+  id?: string
+  text: string
+  to?: RouteLocationRaw
+  allowContextActions?: boolean
+  onClick?: () => void
+  isTruncationPlaceholder?: boolean
+  isStaticNav?: boolean
 }
