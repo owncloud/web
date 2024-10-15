@@ -310,12 +310,12 @@ Given(
   async function (this: World, stepUser: string, stepTable: DataTable) {
     const user = this.usersEnvironment.getUser({ key: stepUser })
     for (const info of stepTable.hashes()) {
-      await api.share.createLinkSpace({
+      await api.share.createSpaceLinkShare({
         user,
         spaceName: info.space,
         password: info.password,
         name: info.name ? info.name : 'Unnamed link',
-        role: info.role,
+        role: info.role
       })
     }
   }

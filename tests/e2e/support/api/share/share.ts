@@ -254,7 +254,7 @@ export const createLinkShare = async ({
   checkResponseStatus(response, 'Failed while creating public link share')
 }
 
-export const createLinkSpace = async ({
+export const createSpaceLinkShare = async ({
   user,
   spaceName,
   password,
@@ -275,7 +275,7 @@ export const createLinkSpace = async ({
 
   const roleType: string = linkShareRoles[role as keyof typeof linkShareRoles]
   password = password === '%public%' ? securePassword : password
-  
+
   const response = await request({
     method: 'POST',
     path: join('graph', 'v1beta1', 'drives', driveId, 'root', 'createLink'),
