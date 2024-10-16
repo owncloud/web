@@ -15,6 +15,12 @@ export default defineConfig({
       }
     }
   },
+  resolve: {
+    alias: {
+      // this is a hack to mock it for the tests... won't be a problem if you don't plan to use the ODS standalone
+      webfontloader: resolve(__dirname, './../../tests/unit/stubs/webfontloader.ts')
+    }
+  },
   build: {
     lib: {
       entry: {
@@ -26,7 +32,13 @@ export default defineConfig({
     },
     rollupOptions: {
       external: [
-        ...Object.keys(pkg.dependencies),
+        ...Object.keys(pkg.dependencies).filter(
+          (dep) =>
+            // include vue-select because there is something off with its module type
+            dep !== 'vue-select' &&
+            // include webfontloader to mock it for the tests... won't be a problem if you don't plan to use the ODS standalone
+            dep !== 'webfontloader'
+        ),
         ...Object.keys(pkg.peerDependencies),
         '**/tests',
         '**/*.spec.ts'
