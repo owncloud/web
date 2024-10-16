@@ -115,7 +115,7 @@ export default defineComponent({
 </script>
 
 <style lang="scss">
-.oc-resource-icon {
+span.oc-resource-icon {
   display: inline-flex;
   align-items: center;
   vertical-align: middle;
