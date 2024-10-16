@@ -1,9 +1,16 @@
 <template>
-  <div class="quota-information oc-flex oc-flex-bottom">
+  <div class="quota-information oc-flex oc-flex-middle">
     <oc-icon name="hard-drive-2" size="small" fill-type="line" class="oc-mr-xs" />
     <div>
       <p class="oc-my-rm">
         <span class="quota-information-text" v-text="personalStorageDetailsLabel" />
+      </p>
+      <p class="oc-my-rm">
+        <span
+          v-if="quota.total"
+          class="quota-information-details-text oc-text-xsmall oc-text-muted"
+          v-text="personalStorageSubDetailsLabel"
+        />
       </p>
       <oc-progress
         v-if="limitedPersonalStorage"
@@ -47,15 +54,21 @@ export default defineComponent({
       const total = props.quota.total || 0
       const used = props.quota.used || 0
       return total
-        ? $gettext('%{used} of %{total} used (%{percentage}%)', {
+        ? $gettext('%{used} of %{total} used', {
             used: formatFileSize(used, currentLanguage),
-            total: formatFileSize(total, currentLanguage),
-            percentage: (unref(quotaUsagePercent) || 0).toString()
+            total: formatFileSize(total, currentLanguage)
           })
         : $gettext('%{used} used', {
             used: formatFileSize(used, currentLanguage),
             total: formatFileSize(total, currentLanguage)
           })
+    })
+
+    const personalStorageSubDetailsLabel = computed(() => {
+      return $gettext('%{percentage}% used, %{remaining} remaining', {
+        percentage: (unref(quotaUsagePercent) || 0).toString(),
+        remaining: formatFileSize(props.quota.remaining, currentLanguage).toString()
+      })
     })
 
     const quotaProgressVariant = computed(() => {
@@ -71,6 +84,7 @@ export default defineComponent({
     return {
       quotaUsagePercent,
       personalStorageDetailsLabel,
+      personalStorageSubDetailsLabel,
       limitedPersonalStorage,
       quotaProgressVariant
     }
