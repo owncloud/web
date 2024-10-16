@@ -2,7 +2,7 @@
 
 # This script creates and pushes tags for the main app and all published packages.
 
-APPS=("design-system" "eslint-config" "web-pkg" "web-client" "web-test-helpers")
+APPS=("design-system" "eslint-config" "extension-sdk" "web-pkg" "web-client" "web-test-helpers")
 
 cd "$(dirname "$0")/../.."
 VERSION=$(node -p "require('./package.json').version")

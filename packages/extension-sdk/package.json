@@ -1,6 +1,6 @@
 {
   "name": "@ownclouders/extension-sdk",
-  "version": "0.0.7",
+  "version": "11.0.0-alpha.1",
   "description": "ownCloud Web Extension SDK",
   "license": "AGPL-3.0",
   "main": "index.mjs",
@@ -19,6 +19,6 @@
   },
   "peerDependencies": {
     "vite": "^5",
-    "sass": "1.79.5"
+    "sass": "^1.79.5"
   }
 }

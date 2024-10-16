@@ -5,7 +5,7 @@
 #
 # NOTE: only run this if all packages are supposed to get the same version!
 
-apps=("design-system" "eslint-config" "web-pkg" "web-client" "web-test-helpers")
+apps=("design-system" "eslint-config" "extension-sdk" "web-pkg" "web-client" "web-test-helpers")
 
 NEW_VERSION="$1"
 
