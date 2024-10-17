@@ -1,7 +1,11 @@
 import {
   ActionExtension,
+  contextRouteNameKey,
+  contextRouteParamsKey,
+  contextRouteQueryKey,
   EDITOR_MODE_EDIT,
   FileAction,
+  locationSpacesGeneric,
   resolveFileNameDuplicate,
   useAppProviderService,
   useClientService,
@@ -96,6 +100,15 @@ export const useActionExtensionCreateFromTemplate = (): ActionExtension => {
           undefined,
           template.fileId
         )
+        const contextRouteOptions = {
+          [contextRouteNameKey]: locationSpacesGeneric.name,
+          [contextRouteParamsKey]: { driveAliasAndItem: spacesStore.personalSpace.driveAlias },
+          [contextRouteQueryKey]: { fileId: spacesStore.personalSpace.fileId }
+        }
+        routeOptions.query = {
+          ...routeOptions.query,
+          ...contextRouteOptions
+        }
         await router.push(routeOptions)
       } catch (e) {
         // TODO: can we get more specific with error titles?
