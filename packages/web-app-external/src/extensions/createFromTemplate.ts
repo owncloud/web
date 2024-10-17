@@ -6,6 +6,7 @@ import {
   useAppProviderService,
   useClientService,
   useFileActions,
+  useMessages,
   useRouter,
   useSpacesStore
 } from '@ownclouders/web-pkg'
@@ -22,6 +23,7 @@ export const useActionExtensionCreateFromTemplate = (): ActionExtension => {
   const { createFileHandler } = useCreateFileHandler()
   const { getEditorRouteOpts } = useFileActions()
   const { $gettext } = useGettext()
+  const { showErrorMessage } = useMessages()
 
   const action: FileAction = {
     name: 'create-from-template',
@@ -40,6 +42,10 @@ export const useActionExtensionCreateFromTemplate = (): ActionExtension => {
       }
 
       const template = resources[0]
+      if (!template.canDownload()) {
+        return false
+      }
+
       const templateMimeType = appProviderService.templateMimeTypes.find(
         (mimeType) => mimeType.mime_type === template.mimeType
       )
@@ -62,28 +68,42 @@ export const useActionExtensionCreateFromTemplate = (): ActionExtension => {
           name: template.name,
           extension: template.extension
         } as Resource) + `.${firstApp.target_ext}`
-      const { resource: personalSpaceRoot, children: existingResources } =
-        await existingResourcesPromise
-      if (existingResources.some((f) => f.name === fileName)) {
-        fileName = resolveFileNameDuplicate(fileName, firstApp.target_ext, unref(existingResources))
+
+      try {
+        const { resource: personalSpaceRoot, children: existingResources } =
+          await existingResourcesPromise
+        if (existingResources.some((f) => f.name === fileName)) {
+          fileName = resolveFileNameDuplicate(
+            fileName,
+            firstApp.target_ext,
+            unref(existingResources)
+          )
+        }
+
+        const createdFile = await createFileHandler({
+          fileName,
+          space: spacesStore.personalSpace,
+          currentFolder: personalSpaceRoot
+        })
+
+        const routeName = `external-${firstApp.name.toLowerCase()}-apps`
+        const routeOptions = getEditorRouteOpts(
+          routeName,
+          spacesStore.personalSpace,
+          createdFile,
+          EDITOR_MODE_EDIT,
+          undefined,
+          template.fileId
+        )
+        await router.push(routeOptions)
+      } catch (e) {
+        // TODO: can we get more specific with error titles?
+        console.error(e)
+        showErrorMessage({
+          title: $gettext('Failed to create document from template'),
+          errors: [e]
+        })
       }
-
-      const createdFile = await createFileHandler({
-        fileName,
-        space: spacesStore.personalSpace,
-        currentFolder: personalSpaceRoot
-      })
-
-      const routeName = `external-${firstApp.name.toLowerCase()}-apps`
-      const routeOptions = getEditorRouteOpts(
-        routeName,
-        spacesStore.personalSpace,
-        createdFile,
-        EDITOR_MODE_EDIT,
-        undefined,
-        template.fileId
-      )
-      await router.push(routeOptions)
     }
   }
   return {
