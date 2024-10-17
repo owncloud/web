@@ -23,7 +23,7 @@ async function LogInUser(this: World, stepUser: string): Promise<void> {
       : this.usersEnvironment.getCreatedUser({ key: stepUser })
 
   await page.goto(config.frontendUrl)
-  await sessionObject.login({ user })
+  await sessionObject.login(user)
 
   if (this.feature.tags.length > 0) {
     const tags: string[] = []
@@ -75,7 +75,7 @@ When(
     const sessionObject = await createNewSession(this, stepUser)
     const { page } = this.actorsEnvironment.getActor({ key: stepUser })
     const user = this.usersEnvironment.getUser({ key: stepUser })
-    await sessionObject.login({ user })
+    await sessionObject.login(user)
     await page.locator('#web').waitFor()
   }
 )
