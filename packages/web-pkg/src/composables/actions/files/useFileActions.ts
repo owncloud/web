@@ -241,42 +241,26 @@ export const useFileActions = () => {
     action.handler({ ...options })
   }
 
-  const triggerAction = (name: string, options: FileActionOptions) => {
-    const action = getAllAvailableActions(options).filter((action) => action.name === name)[0]
-    if (!action) {
-      throw new Error(`Action not found: '${name}'`)
+  const getDefaultAction = (options: GetFileActionsOptions): Action | undefined => {
+    const allActions = getAllAvailableActions(options)
+    if (allActions.length) {
+      return allActions[0]
     }
-
-    action.handler(options)
+    return undefined
   }
 
-  const getDefaultAction = (options: GetFileActionsOptions): Action | undefined => {
+  const getAllAvailableActions = (options: GetFileActionsOptions) => {
     const filterCallback = (action: FileAction) => action.isVisible(options)
 
-    const editorAction = unref(editorActions)
+    const primaryActions = [...unref(defaultActions), ...unref(editorActions)]
+      .filter(filterCallback)
       .sort((a, b) => Number(b.hasPriority) - Number(a.hasPriority))
-      .find(filterCallback)
-    if (editorAction) {
-      return editorAction
-    }
 
-    const defaultAction = unref(defaultActions).find(filterCallback)
-    if (defaultAction) {
-      return defaultAction
-    }
+    const secondaryActions = options.omitSystemActions
+      ? []
+      : unref(systemActions).filter(filterCallback)
 
-    if (options.omitSystemActions) {
-      return undefined
-    }
-    return unref(systemActions).find(filterCallback)
-  }
-
-  const getAllAvailableActions = (options: FileActionOptions) => {
-    return [...unref(editorActions), ...unref(defaultActions), ...unref(systemActions)].filter(
-      (action) => {
-        return action.isVisible(options)
-      }
-    )
+    return [...primaryActions, ...secondaryActions]
   }
 
   return {
@@ -286,7 +270,6 @@ export const useFileActions = () => {
     getAllAvailableActions,
     getEditorRouteOpts,
     openEditor,
-    triggerAction,
     triggerDefaultAction
   }
 }

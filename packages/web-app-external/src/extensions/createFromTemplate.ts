@@ -30,6 +30,7 @@ export const useActionExtensionCreateFromTemplate = (): ActionExtension => {
     category: 'context',
     label: () => $gettext('Create from template'),
     icon: 'swap-box',
+    hasPriority: true,
     isVisible: ({ resources }) => {
       if (resources.length !== 1) {
         return false
