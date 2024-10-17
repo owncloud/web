@@ -7,11 +7,12 @@ export class Federation {
   constructor({ page }: { page: Page }) {
     this.#page = page
   }
-  async generateInvitation(): Promise<void> {
-    await po.generateInvitation({ page: this.#page })
+  async generateInvitation(user): Promise<void> {
+    await po.generateInvitation({ page: this.#page, user })
   }
 
-  async acceptInvitation(): Promise<void> {
-    await po.acceptInvitation({ page: this.#page })
+  async acceptInvitation(user): Promise<void> {
+    await po.acceptInvitation({ page: this.#page, user })
+    // await po.isConnectionVisible({ page: this.#page, connectionInfo })
   }
 }

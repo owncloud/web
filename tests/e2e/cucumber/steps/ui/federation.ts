@@ -4,19 +4,21 @@ import { objects } from '../../../support'
 
 Given(
   '{string} generates the federation share invitation token',
-  async function (this: World, stepUser: any): Promise<void> {
+  async function (this: World, stepUser: string): Promise<void> {
     const { page } = this.actorsEnvironment.getActor({ key: stepUser })
     const pageObject = new objects.scienceMesh.Federation({ page })
-    await pageObject.generateInvitation()
+    const user = await this.usersEnvironment.getUser({ key: stepUser })
+    await pageObject.generateInvitation(user.id)
   }
 )
 
 When(
-  '{string} accept federation share invitation',
-  async function (this: World, stepUser: any): Promise<void> {
+  '{string} accepts federated share invitation by {string}',
+  async function (this: World, stepUser: string, sharee: string): Promise<void> {
     const { page } = this.actorsEnvironment.getActor({ key: stepUser })
     const pageObject = new objects.scienceMesh.Federation({ page })
-    await pageObject.generateInvitation()
+    const user = this.usersEnvironment.getUser({ key: sharee })
+    await pageObject.acceptInvitation(user.id)
   }
 )
 

@@ -2,7 +2,7 @@ Feature: federation management
 
   Scenario: user create federated share
     Given using "LOCAL" server
-    Given "Admin" creates following user using API
+    And "Admin" creates following user using API
       | id    |
       | Alice |
     And "Alice" creates the following files into personal space using API
@@ -19,11 +19,12 @@ Feature: federation management
       | Brian |
     And "Brian" logs in
     And "Brian" opens the "open-cloud-mesh" app
-    When "Brian" accept federation share invitation
+    When "Brian" accepts federated share invitation by "Alice"
 #    Then "Brian" should see the following federated connections:
-#      | connections |
+#      | user  | email             | institution |
+#      | Alice | alice@example.org | ocis:9200   |
 #    And "Alice" shares the following resource using the sidebar panel
-#      | resource | recipient | type | role     | resourceType | share-type |
-#      | test.odt | Carol     | user | Can view | file         | external   |
+#      | resource | recipient | type | role     | resourceType | userType |
+#      | test.odt | Brian     | user | Can view | file         | external |
     And "Brian" logs out
 
