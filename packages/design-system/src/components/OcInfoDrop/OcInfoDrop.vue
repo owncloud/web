@@ -22,8 +22,12 @@
           </oc-button>
         </div>
         <p v-if="text" class="info-text" v-text="$gettext(text)" />
-        <dl v-if="list.length" class="info-list">
-          <component :is="item.headline ? 'dt' : 'dd'" v-for="(item, index) in list" :key="index">
+        <dl v-if="listItems.length" class="info-list">
+          <component
+            :is="item.headline ? 'dt' : 'dd'"
+            v-for="(item, index) in listItems"
+            :key="index"
+          >
             {{ $gettext(item.text) }}
           </component>
         </dl>
@@ -45,7 +49,7 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, PropType, ref } from 'vue'
+import { computed, defineComponent, PropType, ref } from 'vue'
 import OcButton from '../OcButton/OcButton.vue'
 import OcIcon from '../OcIcon/OcIcon.vue'
 import OcDrop from '../OcDrop/OcDrop.vue'
@@ -135,11 +139,16 @@ export default defineComponent({
       default: ''
     }
   },
-  setup() {
+  setup(props) {
     const dropOpen = ref(false)
 
+    const listItems = computed(() => {
+      return (props.list || []).filter((item) => !!item.text)
+    })
+
     return {
-      dropOpen
+      dropOpen,
+      listItems
     }
   }
 })

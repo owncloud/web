@@ -31,6 +31,12 @@ export class AppProviderService {
     return unref(this._mimeTypes)
   }
 
+  get templateMimeTypes() {
+    return unref(this._mimeTypes).filter(
+      (mimeType) => !!mimeType.app_providers.some((appProvider) => !!appProvider.target_ext)
+    )
+  }
+
   get appNames(): string[] {
     return [
       ...new Set(

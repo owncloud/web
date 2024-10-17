@@ -1,0 +1,7 @@
+Enhancement: Create documents from templates
+
+We've added a new file action to the `external` app which utilizes the document conversion capabilities of certain WOPI apps to create a document from the contents of a template file.
+This action is the default action for left clicks on template files and is also available in the file context menu.
+
+https://github.com/owncloud/web/issues/11750
+https://github.com/owncloud/web/pull/11775
