@@ -51,10 +51,9 @@ export const useActionExtensionCreateFromTemplate = (): ActionExtension => {
         return false
       }
 
-      const templateMimeType = appProviderService.templateMimeTypes.find(
+      return appProviderService.templateMimeTypes.some(
         (mimeType) => mimeType.mime_type === template.mimeType
       )
-      return !!templateMimeType
     },
     handler: async ({ resources }) => {
       const existingResourcesPromise = clientService.webdav.listFiles(spacesStore.personalSpace, {
@@ -111,7 +110,6 @@ export const useActionExtensionCreateFromTemplate = (): ActionExtension => {
         }
         await router.push(routeOptions)
       } catch (e) {
-        // TODO: can we get more specific with error titles?
         console.error(e)
         showErrorMessage({
           title: $gettext('Failed to create document from template'),
