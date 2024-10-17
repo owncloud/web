@@ -1,3 +1,28 @@
+Changelog for ownCloud Web [unreleased] (UNRELEASED)
+=======================================
+The following sections list the changes in ownCloud web unreleased relevant to
+ownCloud admins and users.
+
+[unreleased]: https://github.com/owncloud/web/compare/v11.0.0...master
+
+Summary
+-------
+
+* Enhancement - Create documents from templates: [#11750](https://github.com/owncloud/web/issues/11750)
+
+Details
+-------
+
+* Enhancement - Create documents from templates: [#11750](https://github.com/owncloud/web/issues/11750)
+
+   We've added a new file action to the `external` app which utilizes the document
+   conversion capabilities of certain WOPI apps to create a document from the
+   contents of a template file. This action is the default action for left clicks
+   on template files and is also available in the file context menu.
+
+   https://github.com/owncloud/web/issues/11750
+   https://github.com/owncloud/web/pull/11775
+
 Changelog for ownCloud Web [11.0.0] (2024-10-16)
 =======================================
 The following sections list the changes in ownCloud web 11.0.0 relevant to
