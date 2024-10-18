@@ -941,6 +941,20 @@ def ocisService(extra_env_config = {}, enforce_password_public_link = False):
         environment["FRONTEND_PASSWORD_POLICY_MIN_DIGITS"] = 0
         environment["FRONTEND_PASSWORD_POLICY_MIN_SPECIAL_CHARACTERS"] = 0
 
+    wait_for_service = waitForServices("ocis", ["ocis:9200"])
+    if "OCIS_EXCLUDE_RUN_SERVICES" not in environment or "idp" not in environment["OCIS_EXCLUDE_RUN_SERVICES"]:
+        wait_for_service = [
+            {
+                "name": "wait-for-ocis",
+                "image": OC_CI_ALPINE,
+                "commands": [
+                    "timeout 300 bash -c 'while [ $(curl -sk -uadmin:admin " +
+                    "%s/graph/v1.0/users/admin " % environment["OCIS_URL"] +
+                    "-w %{http_code} -o /dev/null) != 200 ]; do sleep 1; done'",
+                ],
+            },
+        ]
+
     return [
         {
             "name": "ocis",
@@ -962,7 +976,7 @@ def ocisService(extra_env_config = {}, enforce_password_public_link = False):
                 "path": "/root/.ocis/config",
             }],
         },
-    ] + waitForServices("ocis", ["ocis:9200"])
+    ] + wait_for_service
 
 def checkForExistingOcisCache(ctx):
     web_repo_path = "https://raw.githubusercontent.com/owncloud/web/%s" % ctx.build.commit
