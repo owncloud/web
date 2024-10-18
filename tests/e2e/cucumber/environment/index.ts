@@ -22,10 +22,15 @@ import {
   createdLinkStore,
   createdGroupStore,
   createdUserStore,
-  keycloakCreatedUser
+  keycloakCreatedUser,
+  federatedUserStore
 } from '../../support/store'
 import { Group, User } from '../../support/types'
-import { createdTokenStore, keycloakTokenStore } from '../../support/store/token'
+import {
+  createdTokenStore,
+  federatedTokenStore,
+  keycloakTokenStore
+} from '../../support/store/token'
 import { removeTempUploadDirectory } from '../../support/utils/runtimeFs'
 import {
   setAccessTokenForKeycloakUser,
@@ -78,6 +83,7 @@ Before(async function (this: World, { pickle }: ITestCaseHookParameter) {
         break
     }
   })
+  const tags = pickle.tags.map((tag) => tag.name)
   if (!config.basicAuth) {
     const user = this.usersEnvironment.getUser({ key: 'admin' })
     if (config.keycloak) {
@@ -85,6 +91,10 @@ Before(async function (this: World, { pickle }: ITestCaseHookParameter) {
       await setAccessTokenForKeycloakUser(user)
     } else {
       await setAccessAndRefreshToken(user)
+      if (tags.includes('@ocm')) {
+        config.federatedServer = true
+        await setAccessAndRefreshToken(user)
+      }
     }
   }
 })
@@ -122,26 +132,29 @@ const defaults = {
   reportTracing: config.reportTracing
 }
 
-After(async function (this: World, { result, willBeRetried }: ITestCaseHookParameter) {
+After(async function (this: World, { result, willBeRetried, pickle }: ITestCaseHookParameter) {
   if (!result) {
     return
   }
 
   await this.actorsEnvironment.close()
-
+  const tags = pickle.tags.map((tag) => tag.name)
   // refresh keycloak admin access token
   if (config.keycloak) {
     const user = this.usersEnvironment.getUser({ key: 'admin' })
     await refreshAccessTokenForKeycloakUser(user)
     await refreshAccessTokenForKeycloakOcisUser(user)
   }
-
-  await cleanUpUser(this.usersEnvironment.getUser({ key: 'admin' }))
+  if (tags.includes('@ocm')) {
+    await cleanUpUser(federatedUserStore, this.usersEnvironment.getUser({ key: 'admin' }))
+  }
+  await cleanUpUser(createdUserStore, this.usersEnvironment.getUser({ key: 'admin' }))
   await cleanUpSpaces(this.usersEnvironment.getUser({ key: 'admin' }))
   await cleanUpGroup(this.usersEnvironment.getUser({ key: 'admin' }))
 
   createdLinkStore.clear()
   createdTokenStore.clear()
+  federatedTokenStore.clear()
   keycloakTokenStore.clear()
   removeTempUploadDirectory()
   closeSSEConnections()
@@ -188,13 +201,13 @@ function filterTracingReports(status: string) {
   }
 }
 
-const cleanUpUser = async (adminUser: User) => {
+const cleanUpUser = async (store, adminUser: User) => {
   const requests: Promise<User>[] = []
-  createdUserStore.forEach((user) => {
+  store.forEach((user) => {
     requests.push(api.provision.deleteUser({ user, admin: adminUser }))
   })
   await Promise.all(requests)
-  createdUserStore.clear()
+  store.clear()
   keycloakCreatedUser.clear()
 }
 
