@@ -17,7 +17,7 @@
           <div v-if="!selectedResourcesIds?.length" class="oc-flex oc-flex-middle oc-pl-s">
             <span v-text="$gettext('Learn about spaces')" />
             <oc-contextual-helper
-              :text="spacesHelpText"
+              :list="spacesHelpList"
               :title="$gettext('Spaces')"
               class="oc-ml-xs"
             />
@@ -451,13 +451,25 @@ export default defineComponent({
       return unref(viewModes).find((v) => v.name === viewModeName)
     })
 
-    const spacesHelpText = computed(() => {
-      return $gettext(
-        `Spaces are special folders for making files accessible to a team.
-        Spaces belong to a team and not to a single person. Even if members are removed, the files remain in the Space so that the team can continue to work on the files.
-        Members with the Manager role can add or remove other members from the Space.
-        A Space can have multiple Managers. Each Space has at least one Manager.`
-      )
+    const spacesHelpList = computed(() => {
+      return [
+        {
+          text: $gettext('Spaces are special folders for making files accessible to a team.')
+        },
+        {
+          text: $gettext(
+            'Spaces belong to a team and not to a single person. Even if members are removed, the files remain in the Space so that the team can continue to work on the files.'
+          )
+        },
+        {
+          text: $gettext(
+            'Members with the Manager role can add or remove other members from the Space.'
+          )
+        },
+        {
+          text: $gettext('A Space can have multiple Managers. Each Space has at least one Manager.')
+        }
+      ]
     })
 
     return {
@@ -494,7 +506,7 @@ export default defineComponent({
       setSelection,
       viewSize,
       fileListHeaderY,
-      spacesHelpText
+      spacesHelpList
     }
   },
   computed: {
