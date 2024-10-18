@@ -8,10 +8,18 @@ ownCloud admins and users.
 Summary
 -------
 
+* Bugfix - Sharing label for locked files: [#11795](https://github.com/owncloud/web/pull/11795)
 * Enhancement - Create documents from templates: [#11750](https://github.com/owncloud/web/issues/11750)
 
 Details
 -------
+
+* Bugfix - Sharing label for locked files: [#11795](https://github.com/owncloud/web/pull/11795)
+
+   We've fixed a bug where a locked file would be falsely labelled as shared in the
+   right sidebar.
+
+   https://github.com/owncloud/web/pull/11795
 
 * Enhancement - Create documents from templates: [#11750](https://github.com/owncloud/web/issues/11750)
 
