@@ -260,7 +260,7 @@ export default defineComponent({
         resource: unref(resource),
         ancestorMetaData: unref(ancestorMetaData),
         user: unref(user)
-      })
+      }).filter(({ category }) => category === 'sharing')
     })
 
     const hasAnyShares = computed(() => {

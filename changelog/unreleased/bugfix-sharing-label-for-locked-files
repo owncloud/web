@@ -1,0 +1,5 @@
+Bugfix: Sharing label for locked files
+
+We've fixed a bug where a locked file would be falsely labelled as shared in the right sidebar.
+
+https://github.com/owncloud/web/pull/11795

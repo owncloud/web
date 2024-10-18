@@ -222,7 +222,7 @@ function createWrapper({
           ...mocks,
           versions,
           resource,
-          space: mockDeep<SpaceResource>()
+          space: mockDeep<SpaceResource>({ driveType: 'personal', isOwner: () => true })
         },
         plugins: [
           ...defaultPlugins({
