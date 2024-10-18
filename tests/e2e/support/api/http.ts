@@ -39,7 +39,7 @@ export const request = async ({
     ...header
   }
 
-  const baseUrl = isKeycloakRequest ? config.keycloakUrl : config.backendUrl
+  const baseUrl = isKeycloakRequest ? config.keycloakUrl : config.baseUrl
 
   return await fetch(join(baseUrl, path), {
     method,

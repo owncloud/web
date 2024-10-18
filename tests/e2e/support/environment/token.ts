@@ -1,5 +1,6 @@
-import { createdTokenStore, keycloakTokenStore } from '../store/token'
+import { createdTokenStore, federatedTokenStore, keycloakTokenStore } from '../store/token'
 import { Token, User } from '../types'
+import { config } from '../../config'
 
 export type TokenProviderType = 'keycloak' | null | undefined
 export type TokenEnvironmentType = KeycloakTokenEnvironment | IdpTokenEnvironment
@@ -15,11 +16,13 @@ export function TokenEnvironmentFactory(type?: TokenProviderType) {
 
 class IdpTokenEnvironment {
   getToken({ user }: { user: User }): Token {
-    return createdTokenStore.get(user.id)
+    const store = config.federatedServer ? federatedTokenStore : createdTokenStore
+    return store.get(user.id)
   }
 
   setToken({ user, token }: { user: User; token: Token }): Token {
-    createdTokenStore.set(user.id, token)
+    const store = config.federatedServer ? federatedTokenStore : createdTokenStore
+    store.set(user.id, token)
     return token
   }
 

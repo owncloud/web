@@ -22,10 +22,15 @@ import {
   createdLinkStore,
   createdGroupStore,
   createdUserStore,
-  keycloakCreatedUser
+  keycloakCreatedUser,
+  federatedUserStore
 } from '../../support/store'
 import { Group, User } from '../../support/types'
-import { createdTokenStore, keycloakTokenStore } from '../../support/store/token'
+import {
+  createdTokenStore,
+  federatedTokenStore,
+  keycloakTokenStore
+} from '../../support/store/token'
 import { removeTempUploadDirectory } from '../../support/utils/runtimeFs'
 import {
   setAccessTokenForKeycloakUser,
@@ -78,6 +83,7 @@ Before(async function (this: World, { pickle }: ITestCaseHookParameter) {
         break
     }
   })
+
   if (!config.basicAuth) {
     const user = this.usersEnvironment.getUser({ key: 'admin' })
     if (config.keycloak) {
@@ -85,6 +91,12 @@ Before(async function (this: World, { pickle }: ITestCaseHookParameter) {
       await setAccessTokenForKeycloakUser(user)
     } else {
       await setAccessAndRefreshToken(user)
+      if (isOcm(pickle)) {
+        config.federatedServer = true
+        // need to set tokens for federated oCIS admin
+        await setAccessAndRefreshToken(user)
+        config.federatedServer = false
+      }
     }
   }
 })
@@ -122,7 +134,8 @@ const defaults = {
   reportTracing: config.reportTracing
 }
 
-After(async function (this: World, { result, willBeRetried }: ITestCaseHookParameter) {
+After(async function (this: World, { result, willBeRetried, pickle }: ITestCaseHookParameter) {
+  config.federatedServer = false
   if (!result) {
     return
   }
@@ -136,12 +149,19 @@ After(async function (this: World, { result, willBeRetried }: ITestCaseHookParam
     await refreshAccessTokenForKeycloakOcisUser(user)
   }
 
-  await cleanUpUser(this.usersEnvironment.getUser({ key: 'admin' }))
+  if (isOcm(pickle)) {
+    // need to set federatedServer config to true to delete federated oCIS users
+    config.federatedServer = true
+    await cleanUpUser(federatedUserStore, this.usersEnvironment.getUser({ key: 'admin' }))
+    config.federatedServer = false
+  }
+  await cleanUpUser(createdUserStore, this.usersEnvironment.getUser({ key: 'admin' }))
   await cleanUpSpaces(this.usersEnvironment.getUser({ key: 'admin' }))
   await cleanUpGroup(this.usersEnvironment.getUser({ key: 'admin' }))
 
   createdLinkStore.clear()
   createdTokenStore.clear()
+  federatedTokenStore.clear()
   keycloakTokenStore.clear()
   removeTempUploadDirectory()
   closeSSEConnections()
@@ -188,13 +208,13 @@ function filterTracingReports(status: string) {
   }
 }
 
-const cleanUpUser = async (adminUser: User) => {
+const cleanUpUser = async (store, adminUser: User) => {
   const requests: Promise<User>[] = []
-  createdUserStore.forEach((user) => {
+  store.forEach((user) => {
     requests.push(api.provision.deleteUser({ user, admin: adminUser }))
   })
   await Promise.all(requests)
-  createdUserStore.clear()
+  store.clear()
   keycloakCreatedUser.clear()
 }
 
@@ -229,4 +249,12 @@ const cleanUpGroup = async (adminUser: User) => {
 
   await Promise.all(requests)
   createdGroupStore.clear()
+}
+
+const isOcm = (pickle): boolean => {
+  const tags = pickle.tags.map((tag) => tag.name)
+  if (tags.includes('@ocm')) {
+    return true
+  }
+  return false
 }

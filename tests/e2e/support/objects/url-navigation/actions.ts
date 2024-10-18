@@ -27,7 +27,7 @@ export const navigateToDetailsPanelOfResource = async (
 ): Promise<void> => {
   const { page, resource, detailsPanel, user, space } = args
   const fileId = await getTheFileIdOfSpaceFile(user, space, resource)
-  const fullUrl = `${config.backendUrl}/f/${fileId}?details=${detailsPanel}`
+  const fullUrl = `${config.baseUrl}/f/${fileId}?details=${detailsPanel}`
   await page.goto(fullUrl)
 }
 
@@ -38,13 +38,13 @@ export const openResourceViaUrl = async (args: openResourceViaUrlArgs) => {
 
   switch (client) {
     case 'desktop':
-      fullUrl = `${config.backendUrl}/external/open-with-web/?appName=${editorName}&fileId=${fileId}`
+      fullUrl = `${config.baseUrl}/external/open-with-web/?appName=${editorName}&fileId=${fileId}`
       break
     case 'mobile':
       fullUrl = await getOpenWithWebUrl({ user, fileId, editorName })
       break
     default:
-      fullUrl = `${config.backendUrl}/f/${fileId}`
+      fullUrl = `${config.baseUrl}/f/${fileId}`
   }
   await page.goto(fullUrl)
 }
@@ -61,7 +61,7 @@ export const openSpaceViaUrl = async (args: openResourceViaUrlArgs) => {
     spaceType = 'project'
   }
   const fileId = await getSpaceIdBySpaceName({ user, spaceType, spaceName })
-  const fullUrl = `${config.backendUrl}/f/${fileId}`
+  const fullUrl = `${config.baseUrl}/f/${fileId}`
   await page.goto(fullUrl)
 }
 
@@ -88,7 +88,7 @@ const getTheFileIdOfSpaceFile = async (
 }
 
 export const navigateToNonExistingPage = async ({ page }: { page: Page }) => {
-  await page.goto(`${config.backendUrl}/'a-non-existing-page'`)
+  await page.goto(`${config.baseUrl}/'a-non-existing-page'`)
 }
 export const waitForNotFoundPageToBeVisible = async ({ page }: { page: Page }) => {
   await page.locator('.page-not-found').waitFor()
