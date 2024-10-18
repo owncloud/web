@@ -51,7 +51,15 @@ async function getAuthorizationEndPoint() {
   return [auhorizationUrl, cookies]
 }
 
-const getCode = async (user, auhorizationUrl: string, cookies: string) => {
+const getCode = async ({
+  user,
+  auhorizationUrl,
+  cookies
+}: {
+  user: User
+  auhorizationUrl: string
+  cookies: string
+}) => {
   const authCodeResponse = await fetch(auhorizationUrl, {
     method: 'POST',
     body: new URLSearchParams({
@@ -97,7 +105,7 @@ const getToken = async (authorizationCode: string) => {
 
 export const setAccessTokenForKeycloakOcisUser = async (user: User) => {
   const [auhorizationUrl, cookies] = await getAuthorizationEndPoint()
-  const authorizationCode = await getCode(user, auhorizationUrl, cookies)
+  const authorizationCode = await getCode({ user, auhorizationUrl, cookies })
   const tokenResponse = await getToken(authorizationCode)
   const token = (await tokenResponse.json()) as ocisTokenForKeycloak
 

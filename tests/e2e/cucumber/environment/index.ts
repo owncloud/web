@@ -25,7 +25,6 @@ import {
   keycloakCreatedUser
 } from '../../support/store'
 import { Group, User } from '../../support/types'
-import { setAccessToken } from '../../support/utils/tokenHelper'
 import { createdTokenStore, keycloakTokenStore } from '../../support/store/token'
 import { removeTempUploadDirectory } from '../../support/utils/runtimeFs'
 import {
@@ -36,6 +35,7 @@ import {
   setAccessTokenForKeycloakOcisUser
 } from '../../support/api/keycloak'
 import { closeSSEConnections } from '../../support/environment/sse'
+import { setAccessAndRefreshToken } from '../../support/api/token'
 
 export { World }
 
@@ -84,7 +84,7 @@ Before(async function (this: World, { pickle }: ITestCaseHookParameter) {
       await setAccessTokenForKeycloakOcisUser(user)
       await setAccessTokenForKeycloakUser(user)
     } else {
-      await setAdminToken(user)
+      await setAccessAndRefreshToken(user)
     }
   }
 })
@@ -132,7 +132,7 @@ After(async function (this: World, { result, willBeRetried }: ITestCaseHookParam
   // refresh keycloak admin access token
   if (config.keycloak) {
     const user = this.usersEnvironment.getUser({ key: 'admin' })
-    await refreshAccessTokenForKeycloakUser({ user: user })
+    await refreshAccessTokenForKeycloakUser(user)
     await refreshAccessTokenForKeycloakOcisUser(user)
   }
 
@@ -229,8 +229,4 @@ const cleanUpGroup = async (adminUser: User) => {
 
   await Promise.all(requests)
   createdGroupStore.clear()
-}
-
-const setAdminToken = async (user: User) => {
-  return await setAccessToken(user.id)
 }

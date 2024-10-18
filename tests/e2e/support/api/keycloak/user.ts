@@ -60,7 +60,7 @@ export const createUser = async ({ user, admin }: { user: User; admin: User }): 
   // login to initialize the user in oCIS Web
   await initializeUser({
     browser: state.browser,
-    username: user.id,
+    user,
     waitForSelector: '#web-content'
   })
 
