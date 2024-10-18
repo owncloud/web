@@ -6,7 +6,7 @@ import { User } from '../types'
 
 export const initializeUser = async ({
   browser,
-  url = config.frontendUrl,
+  url = config.baseUrl,
   user,
   waitForSelector = null
 }: {

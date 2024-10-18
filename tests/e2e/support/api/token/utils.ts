@@ -3,9 +3,9 @@ import { config } from '../../../config'
 import fetch, { Response } from 'node-fetch'
 import { User } from '../../types'
 
-const logonUrl = config.backendUrl + '/signin/v1/identifier/_/logon'
-const redirectUrl = config.backendUrl + '/oidc-callback.html'
-const tokenUrl = config.backendUrl + '/konnect/v1/token'
+const logonUrl = '/signin/v1/identifier/_/logon'
+const redirectUrl = '/oidc-callback.html'
+const tokenUrl = '/konnect/v1/token'
 
 interface Token {
   access_token: string
@@ -13,11 +13,11 @@ interface Token {
 }
 
 const getAuthorizedEndPoint = async (user: User): Promise<Array<string>> => {
-  const logonResponse = await fetch(logonUrl, {
+  const logonResponse = await fetch(config.baseUrl + logonUrl, {
     method: 'POST',
     headers: {
       'Kopano-Konnect-XSRF': '1',
-      Referer: config.backendUrl,
+      Referer: config.baseUrl,
       'Content-Type': 'application/json'
     },
     body: JSON.stringify({
@@ -25,7 +25,7 @@ const getAuthorizedEndPoint = async (user: User): Promise<Array<string>> => {
       hello: {
         scope: 'openid profile email',
         client_id: 'web',
-        redirect_uri: redirectUrl,
+        redirect_uri: config.baseUrl + redirectUrl,
         flow: 'oidc'
       }
     })
@@ -52,7 +52,7 @@ const getCode = async ({
   const params = new URLSearchParams({
     client_id: 'web',
     prompt: 'none',
-    redirect_uri: redirectUrl,
+    redirect_uri: config.baseUrl + redirectUrl,
     response_mode: 'query',
     response_type: 'code',
     scope: 'openid profile offline_access email'
@@ -81,12 +81,12 @@ const getCode = async ({
 }
 
 const getToken = async (code: string): Promise<Response> => {
-  const response = await fetch(tokenUrl, {
+  const response = await fetch(config.baseUrl + tokenUrl, {
     method: 'POST',
     body: new URLSearchParams({
       client_id: 'web',
       code: code,
-      redirect_uri: redirectUrl,
+      redirect_uri: config.baseUrl + redirectUrl,
       grant_type: 'authorization_code'
     })
   })
