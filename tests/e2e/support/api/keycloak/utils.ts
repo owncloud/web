@@ -26,11 +26,7 @@ export const getUserIdFromResponse = (response: Response): string => {
   return response.headers.get('location').split('/').pop()
 }
 
-export const refreshAccessTokenForKeycloakUser = async ({
-  user
-}: {
-  user: User
-}): Promise<void> => {
+export const refreshAccessTokenForKeycloakUser = async (user: User): Promise<void> => {
   const tokenEnvironment = TokenEnvironmentFactory('keycloak')
 
   const body = new URLSearchParams()
