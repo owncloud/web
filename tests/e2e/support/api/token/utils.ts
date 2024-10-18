@@ -9,6 +9,7 @@ interface Token {
 }
 
 const getAuthorizedEndPoint = async (user: User): Promise<Array<string>> => {
+  console.log(config.baseUrl)
   const logonResponse = await fetch(config.baseUrl + '/signin/v1/identifier/_/logon', {
     method: 'POST',
     headers: {
@@ -101,6 +102,7 @@ export const setAccessAndRefreshToken = async (user: User) => {
   const tokenList = (await response.json()) as Token
 
   const tokenEnvironment = TokenEnvironmentFactory()
+  console.log(tokenEnvironment)
   tokenEnvironment.setToken({
     user: { ...user },
     token: {

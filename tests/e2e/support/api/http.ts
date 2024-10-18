@@ -9,7 +9,7 @@ export const getAuthHeader = (user: User, isKeycloakRequest: boolean = false) =>
   const authHeader = {
     Authorization: 'Basic ' + Buffer.from(user.id + ':' + user.password).toString('base64')
   }
-
+  console.log(authHeader)
   if (!config.basicAuth) {
     authHeader.Authorization = 'Bearer ' + tokenEnvironment.getToken({ user }).accessToken
   }
@@ -32,7 +32,7 @@ export const request = async ({
   isKeycloakRequest?: boolean
 }): Promise<Response> => {
   const authHeader = getAuthHeader(user, isKeycloakRequest)
-
+console.log(authHeader)
   const basicHeader = {
     'OCS-APIREQUEST': true as any,
     ...(user.id && authHeader),

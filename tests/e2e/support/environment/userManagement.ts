@@ -4,7 +4,7 @@ import {
   dummyGroupStore,
   createdUserStore,
   createdGroupStore,
-  keycloakCreatedUser
+  keycloakCreatedUser, newUserStore
 } from '../store'
 
 export class UsersEnvironment {
@@ -124,4 +124,35 @@ export class UsersEnvironment {
 
     return keycloakCreatedUser.delete(userKey)
   }
+ storeNewCreatedUser({ user }: { user: User }, instanceName: string): User {
+  // Check if the outer Map has an entry for the instance
+  if (!newUserStore.has(instanceName)) {
+    // If not, create a new inner Map for this instance
+    newUserStore.set(instanceName, new Map<string, User>())
+  }
+
+  const instanceUsers = newUserStore.get(instanceName)
+  // Check if the user already exists in the inner Map
+  if (instanceUsers && instanceUsers.has(user.id)) {
+    throw new Error(`User '${user.id}' already exists in '${instanceName}'`)
+  }
+
+  // Store the new user in the inner Map for the current instance
+  instanceUsers?.set(user.id, user) // Use user.id as the key
+
+  return user // Return the user object
+}
+ getNewCreatedUser({ instanceName, userId }: { instanceName: string; userId: string }): User {
+  const userKey = userId.toLowerCase() // Normalize user ID (if needed)
+  if (!newUserStore.has(instanceName)) {
+    throw new Error(`Instance '${instanceName}' not found`)
+  }
+
+  const instanceUsers = newUserStore.get(instanceName)
+  if (!instanceUsers || !instanceUsers.has(userKey)) {
+    throw new Error(`User '${userKey}' not found in '${instanceName}'`)
+  }
+
+  return instanceUsers.get(userKey)! // Return the user, using non-null assertion
+}
 }

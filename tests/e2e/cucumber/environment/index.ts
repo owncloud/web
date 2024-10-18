@@ -78,6 +78,8 @@ Before(async function (this: World, { pickle }: ITestCaseHookParameter) {
         break
     }
   })
+  const tags = pickle.tags.map(tag => tag.name);
+
   if (!config.basicAuth) {
     const user = this.usersEnvironment.getUser({ key: 'admin' })
     if (config.keycloak) {
@@ -85,6 +87,10 @@ Before(async function (this: World, { pickle }: ITestCaseHookParameter) {
       await setAccessTokenForKeycloakUser(user)
     } else {
       await setAdminToken(user)
+      if (tags.includes('@ocm')){
+        config.federatedServer = true
+        await setAdminToken(user)
+      }
     }
   }
 })

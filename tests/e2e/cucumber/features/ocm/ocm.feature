@@ -1,3 +1,4 @@
+@ocm
 Feature: federation management
 
   Scenario: user create federated share

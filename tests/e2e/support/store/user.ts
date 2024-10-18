@@ -1,5 +1,7 @@
 import { User } from '../types'
 
+export const newUserStore = new Map<string, Map<string, User>>();
+
 export const dummyUserStore = new Map<string, User>([
   [
     'admin',
