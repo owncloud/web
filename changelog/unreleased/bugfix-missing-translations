@@ -1,0 +1,5 @@
+Bugfix: Add missing translations
+
+Missing translations for the tile sort options and the editor "Save"-button have been added.
+
+https://github.com/owncloud/web/pull/11804

@@ -13,7 +13,8 @@ import { useSideBar } from '@ownclouders/web-pkg'
 import { queryItemAsString, useRouteQuery } from '@ownclouders/web-pkg'
 import {
   determineResourceTableSortFields,
-  determineResourceTilesSortFields
+  determineResourceTilesSortFields,
+  translateSortFields
 } from '@ownclouders/web-pkg'
 import { Task } from 'vue-concurrency'
 import { Resource } from '@ownclouders/web-client'
@@ -27,6 +28,7 @@ import {
 } from '@ownclouders/web-pkg'
 
 import { ScrollToResult, useScrollTo } from '@ownclouders/web-pkg'
+import { useGettext } from 'vue3-gettext'
 
 interface ResourcesViewDefaultsOptions<T, U extends any[]> {
   loadResourcesTask?: Task<T, U>
@@ -64,6 +66,7 @@ export const useResourcesViewDefaults = <T extends Resource, TT, TU extends any[
     return loadResourcesTask.isRunning || !loadResourcesTask.last
   })
 
+  const language = useGettext()
   const resourcesStore = useResourcesStore()
   const storeItems = computed(() => resourcesStore.activeResources) as unknown as Ref<T[]>
 
@@ -83,7 +86,7 @@ export const useResourcesViewDefaults = <T extends Resource, TT, TU extends any[
 
   const sortFields = computed((): SortField[] => {
     if (unref(viewMode) === FolderViewModeConstants.name.tiles) {
-      return determineResourceTilesSortFields(unref(storeItems)[0])
+      return translateSortFields(determineResourceTilesSortFields(unref(storeItems)[0]), language)
     }
     return determineResourceTableSortFields(unref(storeItems)[0])
   })

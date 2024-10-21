@@ -208,7 +208,7 @@ import FilesViewWrapper from '../../components/FilesViewWrapper.vue'
 import { ResourceTable, ResourceTiles } from '@ownclouders/web-pkg'
 import { eventBus } from '@ownclouders/web-pkg'
 import { SideBarEventTopics, useSideBar } from '@ownclouders/web-pkg'
-import { sortFields as availableSortFields } from '@ownclouders/web-pkg'
+import { sortFields as availableSortFields, translateSortFields } from '@ownclouders/web-pkg'
 import { defaultFuseOptions, formatFileSize, ResourceIcon } from '@ownclouders/web-pkg'
 import { useGettext } from 'vue3-gettext'
 import { useKeyboardActions } from '@ownclouders/web-pkg'
@@ -294,7 +294,7 @@ export default defineComponent({
       'mdate'
     ]
 
-    const sortFields = availableSortFields
+    const sortFields = translateSortFields(availableSortFields, language)
     const {
       sortBy,
       sortDir,

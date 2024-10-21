@@ -505,7 +505,7 @@ export default defineComponent({
           isDisabled: () => isReadOnly.value || !isDirty.value,
           icon: 'save',
           id: 'app-save-action',
-          label: () => 'Save',
+          label: () => $gettext('Save'),
           handler: save
         }
       ]
