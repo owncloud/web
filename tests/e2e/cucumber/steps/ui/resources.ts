@@ -948,6 +948,7 @@ Then(
   ): Promise<void> {
     const { page } = this.actorsEnvironment.getActor({ key: stepUser })
     const resourceObject = new objects.applicationFiles.Resource({ page })
+    await page.pause()
     if (actionType === 'should') {
       action === 'thumbnail and preview' &&
         (await expect(resourceObject.getFileThumbnailLocator(resource)).toBeVisible())
