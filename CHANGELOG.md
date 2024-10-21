@@ -1,37 +1,4 @@
-Changelog for ownCloud Web [unreleased] (UNRELEASED)
-=======================================
-The following sections list the changes in ownCloud web unreleased relevant to
-ownCloud admins and users.
-
-[unreleased]: https://github.com/owncloud/web/compare/v11.0.0...master
-
-Summary
--------
-
-* Bugfix - Sharing label for locked files: [#11795](https://github.com/owncloud/web/pull/11795)
-* Enhancement - Create documents from templates: [#11750](https://github.com/owncloud/web/issues/11750)
-
-Details
--------
-
-* Bugfix - Sharing label for locked files: [#11795](https://github.com/owncloud/web/pull/11795)
-
-   We've fixed a bug where a locked file would be falsely labelled as shared in the
-   right sidebar.
-
-   https://github.com/owncloud/web/pull/11795
-
-* Enhancement - Create documents from templates: [#11750](https://github.com/owncloud/web/issues/11750)
-
-   We've added a new file action to the `external` app which utilizes the document
-   conversion capabilities of certain WOPI apps to create a document from the
-   contents of a template file. This action is the default action for left clicks
-   on template files and is also available in the file context menu.
-
-   https://github.com/owncloud/web/issues/11750
-   https://github.com/owncloud/web/pull/11775
-
-Changelog for ownCloud Web [11.0.0] (2024-10-16)
+Changelog for ownCloud Web [11.0.0] (2024-10-18)
 =======================================
 The following sections list the changes in ownCloud web 11.0.0 relevant to
 ownCloud admins and users.
@@ -52,10 +19,12 @@ Summary
 * Bugfix - Accessing disabled password-protected space does not show error: [#11725](https://github.com/owncloud/web/pull/11725)
 * Bugfix - Application menu not operable in Safari browser: [#11726](https://github.com/owncloud/web/pull/11726)
 * Bugfix - Navigating into folders that have been shared externally: [#11758](https://github.com/owncloud/web/pull/11758)
+* Bugfix - Sharing label for locked files: [#11795](https://github.com/owncloud/web/pull/11795)
 * Change - Remove importer as default app: [#11709](https://github.com/owncloud/web/pull/11709)
 * Enhancement - Allow setting view mode for apps via query: [#11668](https://github.com/owncloud/web/pull/11668)
 * Enhancement - File size warning in editors: [#11731](https://github.com/owncloud/web/pull/11731)
 * Enhancement - Add not found page: [#11737](https://github.com/owncloud/web/pull/11737)
+* Enhancement - Create documents from templates: [#11750](https://github.com/owncloud/web/issues/11750)
 
 Details
 -------
@@ -147,6 +116,13 @@ Details
    https://github.com/owncloud/web/issues/11753
    https://github.com/owncloud/web/pull/11758
 
+* Bugfix - Sharing label for locked files: [#11795](https://github.com/owncloud/web/pull/11795)
+
+   We've fixed a bug where a locked file would be falsely labelled as shared in the
+   right sidebar.
+
+   https://github.com/owncloud/web/pull/11795
+
 * Change - Remove importer as default app: [#11709](https://github.com/owncloud/web/pull/11709)
 
    BREAKING CHANGE for administrators: importer has been removed as default web
@@ -184,6 +160,16 @@ Details
 
    https://github.com/owncloud/web/issues/5804
    https://github.com/owncloud/web/pull/11737
+
+* Enhancement - Create documents from templates: [#11750](https://github.com/owncloud/web/issues/11750)
+
+   We've added a new file action to the `external` app which utilizes the document
+   conversion capabilities of certain WOPI apps to create a document from the
+   contents of a template file. This action is the default action for left clicks
+   on template files and is also available in the file context menu.
+
+   https://github.com/owncloud/web/issues/11750
+   https://github.com/owncloud/web/pull/11775
 
 Changelog for ownCloud Web [10.3.0] (2024-09-26)
 =======================================
