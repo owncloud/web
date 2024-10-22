@@ -10,7 +10,7 @@ interface ocisTokenForKeycloak {
 
 const authorizationEndpoint = config.keycloakUrl + '/realms/oCIS/protocol/openid-connect/auth'
 const tokenEndpoint = config.keycloakUrl + '/realms/oCIS/protocol/openid-connect/token'
-const redirectUrl = config.backendUrl + '/oidc-callback.html'
+const redirectUrl = config.baseUrl + '/oidc-callback.html'
 
 async function getAuthorizationEndPoint() {
   const loginParams = {

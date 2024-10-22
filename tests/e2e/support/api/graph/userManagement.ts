@@ -125,7 +125,7 @@ export const addUserToGroup = async ({
   const userId = usersEnvironment.getCreatedUser({ key: user.id }).uuid
   const groupId = usersEnvironment.getCreatedGroup({ key: group.id }).uuid
   const body = JSON.stringify({
-    '@odata.id': join(config.backendUrl, 'graph', 'v1.0', 'users', userId)
+    '@odata.id': join(config.baseUrl, 'graph', 'v1.0', 'users', userId)
   })
 
   const response = await request({

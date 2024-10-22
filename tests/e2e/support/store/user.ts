@@ -67,3 +67,5 @@ export const dummyUserStore = new Map<string, User>([
 ])
 
 export const createdUserStore = new Map<string, User>()
+
+export const federatedUserStore = new Map<string, User>()

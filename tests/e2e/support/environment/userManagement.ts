@@ -4,8 +4,10 @@ import {
   dummyGroupStore,
   createdUserStore,
   createdGroupStore,
-  keycloakCreatedUser
+  keycloakCreatedUser,
+  federatedUserStore
 } from '../store'
+import { config } from '../../config'
 
 export class UsersEnvironment {
   getUser({ key }: { key: string }): User {
@@ -31,21 +33,22 @@ export class UsersEnvironment {
   }
 
   storeCreatedUser({ user }: { user: User }): User {
-    if (createdUserStore.has(user.id)) {
+    const store = config.federatedServer ? federatedUserStore : createdUserStore
+    if (store.has(user.id)) {
       throw new Error(`user '${user.id}' already exists`)
     }
-    createdUserStore.set(user.id, user)
-
+    store.set(user.id, user)
     return user
   }
 
   getCreatedUser({ key }: { key: string }): User {
+    const store = config.federatedServer ? federatedUserStore : createdUserStore
     const userKey = key.toLowerCase()
-    if (!createdUserStore.has(userKey)) {
+    if (!store.has(userKey)) {
       throw new Error(`user with key '${userKey}' not found`)
     }
 
-    return createdUserStore.get(userKey)
+    return store.get(userKey)
   }
 
   updateCreatedUser({ key, user }: { key: string; user: User }): User {
@@ -60,13 +63,14 @@ export class UsersEnvironment {
   }
 
   removeCreatedUser({ key }: { key: string }): boolean {
+    const store = config.federatedServer ? federatedUserStore : createdUserStore
     const userKey = key.toLowerCase()
 
-    if (!createdUserStore.has(userKey)) {
+    if (!store.has(userKey)) {
       throw new Error(`user '${userKey}' not found`)
     }
 
-    return createdUserStore.delete(userKey)
+    return store.delete(userKey)
   }
 
   getGroup({ key }: { key: string }): Group {
