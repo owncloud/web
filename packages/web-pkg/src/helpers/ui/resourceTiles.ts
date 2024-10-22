@@ -1,5 +1,6 @@
 import { Resource } from '@ownclouders/web-client'
 import { SortDir, SortField } from '../../composables/sort'
+import { Language } from 'vue3-gettext'
 
 // just a dummy function to trick gettext tools
 function $gettext(msg: string) {
@@ -74,4 +75,8 @@ export const determineResourceTilesSortFields = (firstResource: Resource): SortF
   return sortFields.filter((field) =>
     Object.prototype.hasOwnProperty.call(firstResource, field.name)
   )
+}
+
+export const translateSortFields = (fields: SortField[], { $gettext }: Language): SortField[] => {
+  return fields.map((field) => ({ ...field, label: $gettext(field.label) }))
 }
