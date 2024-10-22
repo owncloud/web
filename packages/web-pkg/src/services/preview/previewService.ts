@@ -104,7 +104,7 @@ export class PreviewService {
     }
 
     if (isPublic) {
-      return this.publicPreviewUrl(options)
+      return this.publicPreviewUrl(options, signal)
     }
     try {
       return await this.privatePreviewBlob(options, cached, silenceErrors, signal)
@@ -116,7 +116,11 @@ export class PreviewService {
     }
   }
 
-  private async cacheFactory(options: LoadPreviewOptions, silenceErrors: boolean): Promise<string> {
+  private async cacheFactory(
+    options: LoadPreviewOptions,
+    silenceErrors: boolean,
+    signal?: AbortSignal
+  ): Promise<string> {
     const { resource, dimensions } = options
     const hit = cacheService.filePreview.get(resource.id.toString())
 
@@ -124,7 +128,7 @@ export class PreviewService {
       return hit.src
     }
     try {
-      const src = await this.privatePreviewBlob(options)
+      const src = await this.privatePreviewBlob(options, false, true, signal)
       return cacheService.filePreview.set(
         resource.id.toString(),
         { src, etag: resource.etag, dimensions },
@@ -158,7 +162,7 @@ export class PreviewService {
   ): Promise<string> {
     const { resource, dimensions, processor } = options
     if (cached) {
-      return this.cacheFactory(options, silenceErrors)
+      return this.cacheFactory(options, silenceErrors, signal)
     }
 
     const url = [
@@ -168,11 +172,22 @@ export class PreviewService {
       '?',
       this.buildQueryString({ etag: resource.etag, dimensions, processor })
     ].join('')
-    const { data } = await this.clientService.httpAuthenticated.get<Blob>(url, {
-      responseType: 'blob',
-      signal
-    })
-    return window.URL.createObjectURL(data)
+
+    try {
+      const { data } = await this.clientService.httpAuthenticated.get<Blob>(url, {
+        responseType: 'blob',
+        signal
+      })
+      return window.URL.createObjectURL(data)
+    } catch (e) {
+      if (e.status === 429) {
+        const retryAfter = e.response?.headers?.['retry-after'] || 5
+        await new Promise((resolve) => setTimeout(resolve, retryAfter * 1000))
+        return this.privatePreviewBlob(options, cached, silenceErrors, signal)
+      }
+
+      throw e
+    }
   }
 
   private async publicPreviewUrl(
@@ -194,10 +209,21 @@ export class PreviewService {
       .join('&')
 
     const previewUrl = [url, combinedQuery].filter(Boolean).join('?')
-    const { status } = await this.clientService.httpUnAuthenticated.head(previewUrl, { signal })
 
-    if (status !== 404) {
-      return previewUrl
+    try {
+      const { status } = await this.clientService.httpUnAuthenticated.head(previewUrl, { signal })
+
+      if (status !== 404) {
+        return previewUrl
+      }
+    } catch (e) {
+      if (e.status === 429) {
+        const retryAfter = e.response?.headers?.['retry-after'] || 5
+        await new Promise((resolve) => setTimeout(resolve, retryAfter * 1000))
+        return this.publicPreviewUrl(options, signal)
+      }
+
+      throw e
     }
   }
 }
