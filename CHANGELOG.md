@@ -1,3 +1,25 @@
+Changelog for ownCloud Web [unreleased] (UNRELEASED)
+=======================================
+The following sections list the changes in ownCloud web unreleased relevant to
+ownCloud admins and users.
+
+[unreleased]: https://github.com/owncloud/web/compare/v11.0.0...master
+
+Summary
+-------
+
+* Bugfix - Add missing translations: [#11804](https://github.com/owncloud/web/pull/11804)
+
+Details
+-------
+
+* Bugfix - Add missing translations: [#11804](https://github.com/owncloud/web/pull/11804)
+
+   Missing translations for the tile sort options and the editor "Save"-button have
+   been added.
+
+   https://github.com/owncloud/web/pull/11804
+
 Changelog for ownCloud Web [11.0.0] (2024-10-18)
 =======================================
 The following sections list the changes in ownCloud web 11.0.0 relevant to
