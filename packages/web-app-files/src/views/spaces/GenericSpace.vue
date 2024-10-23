@@ -243,13 +243,8 @@ export default defineComponent({
 
     const resourcesStore = useResourcesStore()
     const { removeResources, resetSelection } = resourcesStore
-    const {
-      currentFolder,
-      totalResourcesCount,
-      totalResourcesSize,
-      areHiddenFilesShown,
-      ancestorMetaData
-    } = storeToRefs(resourcesStore)
+    const { currentFolder, totalResourcesCount, areHiddenFilesShown, ancestorMetaData } =
+      storeToRefs(resourcesStore)
 
     let loadResourcesEventToken: string
 
@@ -592,7 +587,6 @@ export default defineComponent({
       createNewFolderAction,
       currentFolder,
       totalResourcesCount,
-      totalResourcesSize,
       areHiddenFilesShown,
       fileDropped,
       loadPreview

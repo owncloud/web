@@ -15,8 +15,19 @@ export const useResourceContents = ({
   const { current: currentLanguage, $gettext, $ngettext } = useGettext()
   const router = useRouter()
 
-  const { totalResourcesCount, totalResourcesSize, areHiddenFilesShown } =
+  const { resources, totalResourcesCount, areHiddenFilesShown, currentFolder } =
     storeToRefs(resourcesStore)
+
+  const itemSize = computed(() => {
+    if (!unref(currentFolder)?.size || unref(currentFolder)?.size === '0') {
+      // manually accumulate size of all resources
+      const accumulatedSize = unref(resources)
+        .map((r) => (r.size ? parseInt(r.size.toString()) : 0))
+        .reduce((x, y) => x + y, 0)
+      return formatFileSize(accumulatedSize, currentLanguage)
+    }
+    return formatFileSize(unref(currentFolder).size, currentLanguage)
+  })
 
   const resourceContentsText = computed(() => {
     let filesStr = $ngettext(
@@ -74,9 +85,7 @@ export const useResourceContents = ({
       unref(totalResourcesCount).files +
       unref(totalResourcesCount).folders +
       unref(totalResourcesCount).spaces
-    const itemSize = formatFileSize(unref(totalResourcesSize), currentLanguage)
-    const size = parseFloat(unref(totalResourcesSize)?.toString())
-    const showSize = showSizeInformation && size > 0
+    const showSize = showSizeInformation && parseFloat(unref(itemSize)) > 0
     const showSpaces = isLocationSharesActive(router, 'files-shares-via-link')
 
     const itemTemplate = showSize
@@ -96,7 +105,7 @@ export const useResourceContents = ({
 
     return $ngettext(singleTemplate, pluralizedTemplate, totalItemsCount, {
       itemsCount: totalItemsCount.toString(),
-      itemSize,
+      itemSize: unref(itemSize),
       filesStr,
       foldersStr,
       spacesStr
