@@ -87,6 +87,30 @@ describe('PreviewService', () => {
       })
       expect(preview).toEqual(undefined)
     })
+    it('retries when the server returns a 429 status code', async () => {
+      const supportedMimeTypes = ['image/png']
+      const { previewService, clientService } = getWrapper({
+        supportedMimeTypes,
+        version: '1'
+      })
+
+      clientService.httpAuthenticated.get.mockRejectedValueOnce({
+        response: { headers: { 'retry-after': 0.1 } },
+        status: 429
+      })
+      clientService.httpAuthenticated.get.mockResolvedValueOnce(undefined)
+
+      await previewService.loadPreview({
+        space: mock<SpaceResource>(),
+        resource: mock<Resource>({
+          mimeType: supportedMimeTypes[0],
+          webDavPath: '/',
+          etag: '',
+          canDownload: () => true
+        })
+      })
+      expect(clientService.httpAuthenticated.get).toHaveBeenCalledTimes(2)
+    })
     describe('private files', () => {
       it('loads preview', async () => {
         const objectUrl = 'objectUrl'

@@ -1,0 +1,6 @@
+Bugfix: Preview image retries
+
+We've added a retry mechanism to preview loading in case the server is being overrun with too many requests.
+
+https://github.com/owncloud/web/pull/11813
+https://github.com/owncloud/web/issues/11798
