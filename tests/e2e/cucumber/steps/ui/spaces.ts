@@ -90,8 +90,8 @@ When(
     for (const { user, role, kind } of stepTable.hashes()) {
       const collaborator =
         kind === 'user'
-          ? this.usersEnvironment.getUser({ key: user })
-          : this.usersEnvironment.getGroup({ key: user })
+          ? this.usersEnvironment.getCreatedUser({ key: user })
+          : this.usersEnvironment.getCreatedGroup({ key: user })
       const collaboratorWithRole = {
         collaborator,
         role

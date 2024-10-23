@@ -41,5 +41,6 @@ exports.config = {
   },
   reportVideo: process.env.REPORT_VIDEO === 'true',
   reportHar: process.env.REPORT_HAR === 'true',
-  reportTracing: process.env.REPORT_TRACING === 'true'
+  reportTracing: process.env.REPORT_TRACING === 'true',
+  cleanup: process.env.CLEANUP === 'true' || true
 }

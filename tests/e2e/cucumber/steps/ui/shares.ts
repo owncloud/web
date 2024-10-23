@@ -15,8 +15,8 @@ const parseShareTable = function (stepTable: DataTable, usersEnvironment) {
     acc[resource].push({
       collaborator:
         type === 'group'
-          ? usersEnvironment.getGroup({ key: recipient })
-          : usersEnvironment.getUser({ key: recipient }),
+          ? usersEnvironment.getCreatedGroup({ key: recipient })
+          : usersEnvironment.getCreatedUser({ key: recipient }),
       role,
       type,
       resourceType,

@@ -127,9 +127,11 @@ After(async function (this: World, { result, willBeRetried }: ITestCaseHookParam
     await refreshToken({ user: this.usersEnvironment.getUser({ key: 'admin' }) })
   }
 
-  await cleanUpUser(this.usersEnvironment.getUser({ key: 'admin' }))
-  await cleanUpSpaces(this.usersEnvironment.getUser({ key: 'admin' }))
-  await cleanUpGroup(this.usersEnvironment.getUser({ key: 'admin' }))
+  if (config.cleanup) {
+    await cleanUpUser(this.usersEnvironment.getUser({ key: 'admin' }))
+    await cleanUpSpaces(this.usersEnvironment.getUser({ key: 'admin' }))
+    await cleanUpGroup(this.usersEnvironment.getUser({ key: 'admin' }))
+  }
 
   createdLinkStore.clear()
   createdTokenStore.clear()
