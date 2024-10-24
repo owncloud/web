@@ -1,0 +1,6 @@
+Bugfix: Respect post logout url
+
+We've fixed a bug where setting the `post_logout_redirect_url` in the oidc config had no effect.
+
+https://github.com/owncloud/web/pull/11817
+https://github.com/owncloud/web/issues/11816

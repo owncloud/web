@@ -24,6 +24,7 @@ const OpenIdConnectConfigSchema = z.object({
   client_secret: z.string().optional(),
   dynamic: z.string().optional(),
   metadata_url: z.string().optional(),
+  post_logout_redirect_uri: z.string().optional(),
   response_type: z.string().optional(),
   scope: z.string().optional()
 })
