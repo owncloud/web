@@ -18,16 +18,18 @@ const OAuth2ConfigSchema = z.object({
 
 export type OAuth2Config = z.infer<typeof OAuth2ConfigSchema>
 
-const OpenIdConnectConfigSchema = z.object({
-  authority: z.string().optional(),
-  client_id: z.string().optional(),
-  client_secret: z.string().optional(),
-  dynamic: z.string().optional(),
-  metadata_url: z.string().optional(),
-  post_logout_redirect_uri: z.string().optional(),
-  response_type: z.string().optional(),
-  scope: z.string().optional()
-})
+const OpenIdConnectConfigSchema = z
+  .object({
+    authority: z.string().optional(),
+    client_id: z.string().optional(),
+    client_secret: z.string().optional(),
+    dynamic: z.string().optional(),
+    metadata_url: z.string().optional(),
+    post_logout_redirect_uri: z.string().optional(),
+    response_type: z.string().optional(),
+    scope: z.string().optional()
+  })
+  .passthrough()
 
 export type OpenIdConnectConfig = z.infer<typeof OpenIdConnectConfigSchema>
 
