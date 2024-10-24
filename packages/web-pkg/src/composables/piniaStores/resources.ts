@@ -33,12 +33,6 @@ export const useResourcesStore = defineStore('resources', () => {
     return res
   })
 
-  const totalResourcesSize = computed(() => {
-    return unref(resources)
-      .map((r) => (r.size ? parseInt(r.size.toString()) : 0))
-      .reduce((x, y) => x + y, 0)
-  })
-
   const totalResourcesCount = computed(() => {
     const fileCount = unref(resources).filter(({ type }) => type === 'file').length
     const hiddenFileCount = unref(resources).filter(
@@ -322,7 +316,6 @@ export const useResourcesStore = defineStore('resources', () => {
     currentFolder,
     activeResources,
     totalResourcesCount,
-    totalResourcesSize,
 
     setResources,
     removeResources,

@@ -1845,10 +1845,15 @@ export interface expectNumberOfResourcesInThePageToBeArgs {
   numberOfResources: number
 }
 
-export const countNumberOfResourcesInThePage = ({ page }: { page: Page }): Promise<number> => {
+export const countNumberOfResourcesInThePage = async ({
+  page
+}: {
+  page: Page
+}): Promise<number> => {
   // playwright's default count function is not used here because count only counts
   // elements that are visible in the page but in this case we want to get
   // all the elements present
+  await page.locator(footerTextSelector).waitFor()
   return page.evaluate(
     ([filesTableRowSelector]) => {
       return Promise.resolve(document.querySelectorAll(filesTableRowSelector).length)
