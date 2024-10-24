@@ -20,7 +20,8 @@ export const useResourceContents = ({
 
   const itemSize = computed(() => {
     if (!unref(currentFolder)?.size || unref(currentFolder)?.size === '0') {
-      // manually accumulate size of all resources
+      // manually accumulate size of all resources. ideally it's the same as the size
+      // calculated by the server, but in some cases it's not: https://github.com/owncloud/ocis/issues/10396
       const accumulatedSize = unref(resources)
         .map((r) => (r.size ? parseInt(r.size.toString()) : 0))
         .reduce((x, y) => x + y, 0)
