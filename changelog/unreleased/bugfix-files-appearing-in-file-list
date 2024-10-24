@@ -1,0 +1,6 @@
+Bugfix: Files appearing in file list
+
+We've fixed a bug where files would wrongly appear in the current file list during an ongoing upload.
+
+https://github.com/owncloud/web/issues/11803
+https://github.com/owncloud/web/pull/11824

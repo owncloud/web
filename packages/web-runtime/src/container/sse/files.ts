@@ -113,7 +113,11 @@ export const onSSEProcessingFinishedEvent = async ({
         path: '',
         fileId: sseData.itemid
       })
-      resourcesStore.upsertResource(resource)
+
+      // check again for the current folder in case the user has navigated away in the meantime
+      if (isItemInCurrentFolder({ resourcesStore, parentFolderId: sseData.parentitemid })) {
+        resourcesStore.upsertResource(resource)
+      }
     })
   }
 
