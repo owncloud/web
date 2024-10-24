@@ -11,6 +11,7 @@ Summary
 * Bugfix - Add missing translations: [#11804](https://github.com/owncloud/web/pull/11804)
 * Bugfix - Folder size mismatch: [#11806](https://github.com/owncloud/web/issues/11806)
 * Bugfix - Preview image retries: [#11813](https://github.com/owncloud/web/pull/11813)
+* Bugfix - Respect post logout url: [#11817](https://github.com/owncloud/web/pull/11817)
 
 Details
 -------
@@ -37,6 +38,14 @@ Details
 
    https://github.com/owncloud/web/issues/11798
    https://github.com/owncloud/web/pull/11813
+
+* Bugfix - Respect post logout url: [#11817](https://github.com/owncloud/web/pull/11817)
+
+   We've fixed a bug where setting the `post_logout_redirect_url` in the oidc
+   config had no effect.
+
+   https://github.com/owncloud/web/issues/11816
+   https://github.com/owncloud/web/pull/11817
 
 Changelog for ownCloud Web [11.0.0] (2024-10-18)
 =======================================
