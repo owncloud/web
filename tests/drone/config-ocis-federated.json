@@ -1,0 +1,11 @@
+{
+  "server": "https://federation-ocis:10200",
+  "theme": "https://federation-ocis:10200/themes/owncloud/theme.json",
+  "openIdConnect": {
+    "metadata_url": "https://federation-ocis:10200/.well-known/openid-configuration",
+    "authority": "https://federation-ocis:10200",
+    "client_id": "web",
+    "response_type": "code"
+  },
+  "apps": ["files", "text-editor", "preview", "pdf-viewer", "search", "admin-settings", "ocm"]
+}
