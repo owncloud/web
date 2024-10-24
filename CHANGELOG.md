@@ -9,6 +9,7 @@ Summary
 -------
 
 * Bugfix - Add missing translations: [#11804](https://github.com/owncloud/web/pull/11804)
+* Bugfix - Folder size mismatch: [#11806](https://github.com/owncloud/web/issues/11806)
 * Bugfix - Preview image retries: [#11813](https://github.com/owncloud/web/pull/11813)
 
 Details
@@ -20,6 +21,14 @@ Details
    been added.
 
    https://github.com/owncloud/web/pull/11804
+
+* Bugfix - Folder size mismatch: [#11806](https://github.com/owncloud/web/issues/11806)
+
+   We've fixed the size mismatch between a folder in the file list and the
+   accumulated size inside the folder beneath the file list.
+
+   https://github.com/owncloud/web/issues/11806
+   https://github.com/owncloud/web/pull/11814
 
 * Bugfix - Preview image retries: [#11813](https://github.com/owncloud/web/pull/11813)
 
