@@ -70,3 +70,9 @@ export interface AppRole {
   displayName: string
   id: string
 }
+
+export interface FederatedShareInvitation {
+  code: string
+  description?: string
+  email?: string
+}
