@@ -11,6 +11,7 @@ export interface ICollaborator {
   type?: CollaboratorType
   resourceType?: string
   expirationDate?: string
+  shareType?: string
 }
 
 export interface InviteCollaboratorsArgs {
@@ -98,7 +99,7 @@ export default class Collaborator {
     const collaboratorInputLocator = page.locator(Collaborator.inviteInput)
     await collaboratorInputLocator.click()
     await Promise.all([
-      page.waitForResponse((resp) => resp.url().includes('groups') && resp.status() === 200),
+      page.waitForResponse((resp) => resp.url().includes('users') && resp.status() === 200),
       collaboratorInputLocator.fill(collaborator.id)
     ])
     await collaboratorInputLocator.focus()

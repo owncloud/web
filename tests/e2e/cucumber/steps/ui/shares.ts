@@ -13,7 +13,7 @@ const parseShareTable = function (
   usersEnvironment: environment.UsersEnvironment
 ) {
   return stepTable.hashes().reduce<Record<string, ICollaborator[]>>((acc, stepRow) => {
-    const { resource, recipient, type, role, resourceType, expirationDate } = stepRow
+    const { resource, recipient, type, role, resourceType, expirationDate, shareType } = stepRow
 
     if (!acc[resource]) {
       acc[resource] = []
@@ -27,7 +27,8 @@ const parseShareTable = function (
       role,
       type: type as CollaboratorType,
       resourceType,
-      expirationDate
+      expirationDate,
+      shareType
     })
 
     return acc

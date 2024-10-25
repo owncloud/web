@@ -21,6 +21,8 @@ const showMoreOptionsButton = '#show-more-share-options-btn'
 const calendarDatePickerId = 'recipient-datepicker-btn'
 const informMessage = '//div[contains(@class,"oc-notification-message-title")]'
 const showMoreBtn = '.toggle-shares-list-btn:has-text("Show more")'
+const userTypeFilter = '.invite-form-share-role-type'
+const userTypeSelector = '.invite-form-share-role-type-item'
 
 export interface ShareArgs {
   page: Page
@@ -79,6 +81,14 @@ export const createShare = async (args: createShareArgs): Promise<void> => {
       page.getByTestId(calendarDatePickerId).click()
     ])
     await Collaborator.setExpirationDate(page, expirationDate)
+  }
+  const federatedShare = recipients[0].shareType
+  if (federatedShare) {
+    await Promise.all([
+      locatorUtils.waitForEvent(page.locator(invitePanel), 'transitionend'),
+      page.locator(userTypeFilter).click()
+    ])
+    await page.locator(userTypeSelector).filter({ hasText: federatedShare }).click()
   }
   await Collaborator.inviteCollaborators({ page, collaborators: recipients })
   await sidebar.close({ page })
