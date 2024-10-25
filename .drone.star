@@ -586,7 +586,7 @@ def e2eTests(ctx):
 
         if "app-provider" in suite and not "full-ci" in ctx.build.title.lower() and ctx.build.event != "cron":
             continue
-        
+
         if "ocm" in suite and not "full-ci" in ctx.build.title.lower() and ctx.build.event != "cron":
             continue
 
