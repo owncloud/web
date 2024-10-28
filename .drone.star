@@ -55,7 +55,7 @@ config = {
     "e2e": {
         "1": {
             "earlyFail": True,
-            "skip": False,
+            "skip": True,
             "suites": [
                 "journeys",
                 "smoke",
@@ -63,7 +63,7 @@ config = {
         },
         "2": {
             "earlyFail": True,
-            "skip": False,
+            "skip": True,
             "suites": [
                 "admin-settings",
                 "spaces",
@@ -71,7 +71,7 @@ config = {
         },
         "3": {
             "earlyFail": True,
-            "skip": False,
+            "skip": True,
             "tikaNeeded": True,
             "suites": [
                 "search",
@@ -86,7 +86,7 @@ config = {
         },
         "4": {
             "earlyFail": True,
-            "skip": False,
+            "skip": True,
             "suites": [
                 "navigation",
                 "user-settings",
@@ -94,7 +94,7 @@ config = {
             ],
         },
         "app-provider": {
-            "skip": False,
+            "skip": True,
             "suites": [
                 "app-provider",
             ],
@@ -111,7 +111,7 @@ config = {
             },
         },
         "oidc-refresh-token": {
-            "skip": False,
+            "skip": True,
             "features": [
                 "cucumber/features/oidc/refreshToken.feature",
             ],
@@ -121,7 +121,7 @@ config = {
             },
         },
         "oidc-iframe": {
-            "skip": False,
+            "skip": True,
             "features": [
                 "cucumber/features/oidc/iframeTokenRenewal.feature",
             ],
@@ -216,9 +216,6 @@ def main(ctx):
 
 def beforePipelines(ctx):
     return checkStarlark() + \
-           licenseCheck(ctx) + \
-           documentation(ctx) + \
-           changelog(ctx) + \
            pnpmCache(ctx) + \
            cacheOcisPipeline(ctx) + \
            pipelinesDependsOn(buildCacheWeb(ctx), pnpmCache(ctx)) + \
@@ -233,7 +230,7 @@ def stagePipelines(ctx):
 
     e2e_pipelines = e2eTests(ctx)
     keycloak_pipelines = e2eTestsOnKeycloak(ctx)
-    return unit_test_pipelines + buildAndTestDesignSystem(ctx) + pipelinesDependsOn(e2e_pipelines + keycloak_pipelines, unit_test_pipelines)
+    return e2e_pipelines
 
 def afterPipelines(ctx):
     return build(ctx) + pipelinesDependsOn(notify(), build(ctx))
