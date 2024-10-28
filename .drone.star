@@ -137,6 +137,13 @@ config = {
                 "ocm",
             ],
             "extraServerEnvironment": {
+                "GATEWAY_GRPC_ADDR": "0.0.0.0:9142",
+                "MICRO_REGISTRY": "nats-js-kv",
+                "MICRO_REGISTRY_ADDRESS": "0.0.0.0:9233",
+                "NATS_NATS_HOST": "0.0.0.0",
+                "NATS_NATS_PORT": 9233,
+                "COLLABORA_DOMAIN": "collabora:9980",
+                "FRONTEND_APP_HANDLER_SECURE_VIEW_APP_ADDR": "com.owncloud.api.collaboration.Collabora",
                 "OCIS_ADD_RUN_SERVICES": "ocm",
                 "OCIS_ENABLE_OCM": True,
                 "GRAPH_INCLUDE_OCM_SHAREES": True,
@@ -626,8 +633,13 @@ def e2eTests(ctx):
                      wopiCollaborationService("onlyoffice") + \
                      waitForServices("wopi", ["wopi-collabora:9300", "wopi-onlyoffice:9300"])
         elif "ocm" in suite:
-            steps += ocisService(params["extraServerEnvironment"]) + \
-                     (ocisService(params["extraServerEnvironment"], "federation") if params["federationServer"] else [])
+            steps += collaboraService() + \
+                     waitForServices("online-offices", ["collabora:9980"]) + \
+                     ocisService(params["extraServerEnvironment"]) + \
+                     (ocisService(params["extraServerEnvironment"], "federation") if params["federationServer"] else []) + \
+                     wopiCollaborationService("collabora") + \
+                     wopiCollaborationService("collabora", "federation") + \
+                     waitForServices("wopi", ["wopi-collabora:9300"])
         else:
             # oCIS specific steps
             steps += (tikaService() if params["tikaNeeded"] else []) + \
@@ -1646,8 +1658,7 @@ def onlyofficeService():
         },
     ]
 
-def wopiCollaborationService(name):
-    service_name = "wopi-%s" % name
+def wopiCollaborationService(name, deploy_type = "ocis"):
     environment = {
         "MICRO_REGISTRY": "nats-js-kv",
         "MICRO_REGISTRY_ADDRESS": "ocis:9233",
@@ -1658,6 +1669,15 @@ def wopiCollaborationService(name):
         "OCIS_JWT_SECRET": "some-ocis-jwt-secret",
         "COLLABORATION_WOPI_SECRET": "some-wopi-secret",
     }
+
+    if deploy_type == "federation":
+        environment["OCIS_URL"] = "https://federation-ocis:10200"
+        container_name = "federation-%s" % name
+    else:
+        container_name = name
+        environment["OCIS_URL"] = "https://ocis:9200"
+
+    service_name = "wopi-%s" % container_name
 
     if name == "collabora":
         environment["COLLABORATION_APP_NAME"] = "Collabora"
