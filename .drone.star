@@ -630,8 +630,10 @@ def e2eTests(ctx):
                      wopiCollaborationService("onlyoffice") + \
                      waitForServices("wopi", ["wopi-collabora:9300", "wopi-onlyoffice:9300"])
         elif "ocm" in suite:
+            environment["FAIL_ON_UNCAUGHT_CONSOLE_ERR"] = False
             steps += collaboraService() + \
-                     waitForServices("online-offices", ["collabora:9980"]) + \
+                     collaboraService("federation") + \
+                     waitForServices("online-offices", ["collabora:9980", "collabora-federation:9980"]) + \
                      ocisService(params["extraServerEnvironment"]) + \
                      (ocisService(params["extraServerEnvironment"], "federation") if params["federationServer"] else []) + \
                      wopiCollaborationService("collabora") + \
@@ -947,8 +949,12 @@ def documentation(ctx):
     ]
 
 def ocisService(extra_env_config = {}, deploy_type = "ocis"):
+    container_name = "ocis"
+
     environment = {
         "IDM_ADMIN_PASSWORD": "admin",  # override the random admin password from `ocis init`
+        "OCIS_URL": "https://ocis:9200",
+        "WEB_UI_CONFIG_FILE": dir["ocisConfig"],
         "OCIS_INSECURE": "true",
         "OCIS_LOG_LEVEL": "error",
         "OCIS_JWT_SECRET": "some-ocis-jwt-secret",
@@ -967,14 +973,9 @@ def ocisService(extra_env_config = {}, deploy_type = "ocis"):
     if deploy_type == "federation":
         environment["OCIS_URL"] = "https://federation-ocis:10200"
         environment["PROXY_HTTP_ADDR"] = "federation-ocis:10200"
+        environment["COLLABORA_DOMAIN"] = "collabora-federation:9980"
         environment["WEB_UI_CONFIG_FILE"] = dir["federatedOcisConfig"]
         container_name = "federation-ocis"
-        ocis_domain = "federation-ocis:10200"
-    else:
-        container_name = "ocis"
-        ocis_domain = "ocis:9200"
-        environment["OCIS_URL"] = "https://ocis:9200"
-        environment["WEB_UI_CONFIG_FILE"] = dir["ocisConfig"]
 
     for config in extra_env_config:
         environment[config] = extra_env_config[config]
@@ -1614,16 +1615,22 @@ def tikaService():
         "detach": True,
     }] + waitForServices("tika", ["tika:9998"])
 
-def collaboraService():
+def collaboraService(deploy_type = "ocis"):
+    service_name = "collabora"
+    ancestor_url = "https://ocis:9200"
+    if deploy_type == "federation":
+        service_name = "collabora-federation"
+        ancestor_url = "https://federation-ocis:10200"
+
     return [
         {
-            "name": "collabora",
+            "name": service_name,
             "type": "docker",
             "image": COLLABORA_CODE,
             "detach": True,
             "environment": {
                 "DONT_GEN_SSL_CERT": "set",
-                "extra_params": "--o:ssl.enable=true --o:ssl.termination=true --o:welcome.enable=false --o:net.frame_ancestors=https://ocis:9200",
+                "extra_params": "--o:ssl.enable=true --o:ssl.termination=true --o:welcome.enable=false --o:net.frame_ancestors=%s" % ancestor_url,
             },
             "commands": [
                 "coolconfig generate-proof-key",
@@ -1656,6 +1663,7 @@ def onlyofficeService():
     ]
 
 def wopiCollaborationService(name, deploy_type = "ocis"):
+    service_name = "wopi-%s" % name
     environment = {
         "MICRO_REGISTRY": "nats-js-kv",
         "MICRO_REGISTRY_ADDRESS": "ocis:9233",
@@ -1665,16 +1673,13 @@ def wopiCollaborationService(name, deploy_type = "ocis"):
         "COLLABORATION_CS3API_DATAGATEWAY_INSECURE": True,
         "OCIS_JWT_SECRET": "some-ocis-jwt-secret",
         "COLLABORATION_WOPI_SECRET": "some-wopi-secret",
+        "OCIS_URL": "https://ocis:9200",
     }
 
     if deploy_type == "federation":
         environment["OCIS_URL"] = "https://federation-ocis:10200"
-        container_name = "federation-%s" % name
-    else:
-        container_name = name
-        environment["OCIS_URL"] = "https://ocis:9200"
-
-    service_name = "wopi-%s" % container_name
+        environment["MICRO_REGISTRY_ADDRESS"] = "federation-ocis:9233"
+        service_name = "wopi-federation-%s" % name
 
     if name == "collabora":
         environment["COLLABORATION_APP_NAME"] = "Collabora"
