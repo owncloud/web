@@ -8,6 +8,7 @@ ownCloud admins and users.
 Summary
 -------
 
+* Bugfix - Files appearing in file list: [#11803](https://github.com/owncloud/web/issues/11803)
 * Bugfix - Add missing translations: [#11804](https://github.com/owncloud/web/pull/11804)
 * Bugfix - Folder size mismatch: [#11806](https://github.com/owncloud/web/issues/11806)
 * Bugfix - Preview image retries: [#11813](https://github.com/owncloud/web/pull/11813)
@@ -15,6 +16,14 @@ Summary
 
 Details
 -------
+
+* Bugfix - Files appearing in file list: [#11803](https://github.com/owncloud/web/issues/11803)
+
+   We've fixed a bug where files would wrongly appear in the current file list
+   during an ongoing upload.
+
+   https://github.com/owncloud/web/issues/11803
+   https://github.com/owncloud/web/pull/11824
 
 * Bugfix - Add missing translations: [#11804](https://github.com/owncloud/web/pull/11804)
 
