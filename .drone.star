@@ -636,7 +636,7 @@ def e2eTests(ctx):
                      (ocisService(params["extraServerEnvironment"], "federation") if params["federationServer"] else []) + \
                      wopiCollaborationService("collabora") + \
                      wopiCollaborationService("collabora", "federation") + \
-                     waitForServices("wopi", ["wopi-collabora:9300"])
+                     waitForServices("wopi", ["wopi-collabora:9300", "wopi-federation-collabora:9300"])
         else:
             # oCIS specific steps
             steps += (tikaService() if params["tikaNeeded"] else []) + \

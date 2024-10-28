@@ -18,6 +18,9 @@ Feature: federation management
       | filesForUpload/testavatar.jpg | testavatar.jpg          |
       | filesForUpload/sampleGif.gif  | sampleGif.gif           |
     And "Alice" logs in
+    When "Alice" creates the following resources
+      | resource         | type         | content              |
+      | OpenDocument.odt | OpenDocument | OpenDocument Content |
     And "Alice" opens the "open-cloud-mesh" app
     And "Alice" generates invitation token for the federation share
 
