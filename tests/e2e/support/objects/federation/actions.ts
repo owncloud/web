@@ -6,10 +6,11 @@ const generateInvitationButton =
   '//button[contains(@aria-label,"Generate invitation link that can be shared with one or more invitees")]'
 const generateInvitationActionConfirmButton = '.oc-modal-body-actions-confirm'
 const invitationToken = 'span:has-text("%s")'
-const InvitationInput = '//input[starts-with(@id, "oc-textinput-")]'
+const invitationInput = '//input[starts-with(@id, "oc-textinput-")]'
 const invitationConnectionRow =
   '//div[@id="sciencemesh-connections"]//td[text()="%s"]/parent::tr/td[text()="%s"]'
 const institutionOptionDropdown = '.vs__open-indicator'
+const inviterInstitutionOption = 'ul.vs__dropdown-menu > li'
 const acceptInvitationButton = 'button:has(span:has-text("Accept invitation"))'
 
 export const generateInvitation = async (args: { page: Page; user: string }): Promise<void> => {
@@ -38,9 +39,9 @@ export const generateInvitation = async (args: { page: Page; user: string }): Pr
 export const acceptInvitation = async (args: { page: Page; sharer: string }): Promise<void> => {
   const { page, sharer } = args
   const invitation = federatedInvitationCode.get(sharer.toLowerCase())
-  await page.locator(InvitationInput).fill(invitation.code)
+  await page.locator(invitationInput).fill(invitation.code)
   await page.locator(institutionOptionDropdown).click()
-  await page.getByRole('option', { name: 'first-ocis-instance ocis-server:' }).click()
+  await page.locator(inviterInstitutionOption).click()
   await Promise.all([
     page.waitForResponse(
       (resp) =>
