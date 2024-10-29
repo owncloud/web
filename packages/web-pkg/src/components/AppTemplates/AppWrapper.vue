@@ -455,6 +455,14 @@ export default defineComponent({
 
     let autosaveIntervalId: ReturnType<typeof setInterval> = null
     onMounted(() => {
+      if (resourcesStore.ancestorMetaData?.['/'] && unref(space)) {
+        const clearAncestorData = resourcesStore.ancestorMetaData['/'].spaceId !== unref(space).id
+        if (clearAncestorData) {
+          // clear ancestor data in case the user switched spaces (e.g. by opening a file via search results)
+          resourcesStore.setAncestorMetaData({})
+        }
+      }
+
       if (!unref(isEditor)) {
         return
       }
