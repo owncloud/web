@@ -126,6 +126,12 @@ services:
       OCIS_URL: https://ocis.owncloud.test:10200
       OCIS_CORS_ALLOW_ORIGINS: https://ocis.owncloud.test:10201
       OCM_WEBAPP_TEMPLATE: https://ocis.owncloud.test:10201/o/{{.Token}}/{relative-path-to-shared-resource}
+      MICRO_REGISTRY: 'nats-js-kv'
+      MICRO_REGISTRY_ADDRESS: 0.0.0.0:9233
+      PROXY_CSP_CONFIG_FILE_LOCATION: /etc/ocis/csp.yaml
+      ONLYOFFICE_DOMAIN: host.docker.internal:9981
+      COLLABORA_DOMAIN: host.docker.internal:9982
+      FRONTEND_APP_HANDLER_SECURE_VIEW_APP_ADDR: com.owncloud.api.collaboration.Collabora
     labels:
       traefik.enable: true
       traefik.http.routers.ocis-federated.tls: true
@@ -135,10 +141,12 @@ services:
       # workaround: https://github.com/owncloud/ocis/issues/5108
       traefik.http.routers.ocis-federated.middlewares: cors
     volumes:
+      - ./dev/docker/ocis/csp.yaml:/etc/ocis/csp.yaml
       - ./dev/docker/ocis/password-policy-banned-passwords.txt:/etc/ocis/password-policy-banned-passwords.txt
       - ./dev/docker/ocis.idp.config.yaml:/etc/ocis/idp.yaml
       - ./dev/docker/ocis-ca:/var/lib/ocis/proxy
       - ./dev/docker/ocis.storage.ocmproviders.json:/etc/ocis/ocmproviders.json
+      - ./dev/docker/apps:/web/apps
       - ./dist:/web/dist
       - ./dev/docker/ocis/app-registry.yaml:/etc/ocis/app-registry.yaml
       - ocis-federated-config:/etc/ocis
@@ -201,6 +209,67 @@ services:
       traefik.http.routers.collabora.rule: PathPrefix(`/`)
       traefik.http.routers.collabora.entrypoints: collabora
       traefik.http.services.collabora.loadbalancer.server.port: 9980
+    restart: always
+    depends_on:
+      - traefik
+
+  collaboration-ocm:
+    image: ${OCIS_IMAGE:-owncloud/ocis-rolling:master}
+    depends_on:
+      ocis-federated:
+        condition: service_started
+      collabora-ocm:
+        condition: service_healthy
+    entrypoint:
+      - /bin/sh
+    command: ['-c', 'ocis collaboration server']
+    environment:
+      COLLABORATION_GRPC_ADDR: 0.0.0.0:9305
+      COLLABORATION_HTTP_ADDR: 0.0.0.0:9304
+      MICRO_REGISTRY: nats-js-kv
+      MICRO_REGISTRY_ADDRESS: ocis-federated:9233
+      COLLABORATION_WOPI_SRC: https://${WOPISERVER_DOMAIN:-host.docker.internal:9304}
+      COLLABORATION_APP_NAME: Collabora
+      COLLABORATION_APP_ADDR: https://${COLLABORA_DOMAIN:-host.docker.internal:9982}
+      COLLABORATION_APP_ICON: https://${COLLABORA_DOMAIN:-host.docker.internal:9982}/favicon.ico
+      COLLABORATION_APP_INSECURE: ${INSECURE:-true}
+      COLLABORATION_CS3API_DATAGATEWAY_INSECURE: ${INSECURE:-true}
+      COLLABORATION_LOG_LEVEL: ${LOG_LEVEL:-info}
+      OCIS_URL: https://ocis.owncloud.test:10200
+    extra_hosts:
+      - host.docker.internal:${DOCKER_HOST:-host-gateway}
+    volumes:
+      - ocis-config:/etc/ocis
+    labels:
+      traefik.enable: true
+      traefik.http.routers.collaboration-ocm.tls: true
+      traefik.http.routers.collaboration-ocm.rule: PathPrefix(`/`)
+      traefik.http.routers.collaboration-ocm.entrypoints: collaboration-ocm
+      traefik.http.services.collaboration-ocm.loadbalancer.server.port: 9304
+    logging:
+      driver: ${LOG_DRIVER:-local}
+    restart: always
+
+  collabora-ocm:
+    image: collabora/code:24.04.9.1.1
+    command: ['bash', '-c', 'coolconfig generate-proof-key ; /start-collabora-online.sh']
+    environment:
+      DONT_GEN_SSL_CERT: YES
+      extra_params: --o:ssl.enable=false --o:ssl.ssl_verification=false --o:ssl.termination=true --o:welcome.enable=false --o:net.frame_ancestors=https://ocis.owncloud.test:10200
+      username: ${COLLABORA_ADMIN_USER:-admin}
+      password: ${COLLABORA_ADMIN_PASSWORD:-admin}
+    cap_add:
+      - MKNOD
+    extra_hosts:
+      - host.docker.internal:${DOCKER_HOST:-host-gateway}
+    healthcheck:
+      test: ['CMD', 'curl', '-f', 'http://localhost:9980/hosting/discovery']
+    labels:
+      traefik.enable: true
+      traefik.http.routers.collabora-ocm.tls: true
+      traefik.http.routers.collabora-ocm.rule: PathPrefix(`/`)
+      traefik.http.routers.collabora-ocm.entrypoints: collabora-ocm
+      traefik.http.services.collabora-ocm.loadbalancer.server.port: 9980
     restart: always
     depends_on:
       - traefik
@@ -290,8 +359,10 @@ services:
       - '--entrypoints.ocis.address=:9200'
       - '--entrypoints.ocis-federated.address=:10200'
       - '--entrypoints.collabora.address=:9980'
+      - '--entrypoints.collabora-ocm.address=:9982'
       - '--entrypoints.wopi.address=:8880'
       - '--entrypoints.collaboration.address=:9300'
+      - '--entrypoints.collaboration-ocm.address=:9304'
       - '--entrypoints.collaboration-oo.address=:9302'
       - '--entrypoints.websecure.address=:443'
       - '--entrypoints.websecure.http.middlewares=https_config@docker'
@@ -316,8 +387,10 @@ services:
       - '9200:9200'
       - '9300:9300'
       - '9302:9302'
+      - '9304:9304'
       - '10200:10200'
       - '9980:9980'
+      - '9982:9982'
       - '8880:8880'
       - '9981:443'
     volumes:
