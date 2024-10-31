@@ -1,10 +1,10 @@
 [main]
 host = https://www.transifex.com
 
-[o:owncloud-org:p:owncloud-web:r:web-core]
+[o:owncloud-org:p:owncloud-web:r:web-runtime]
 file_filter = locale/<lang>/app.po
 minimum_perc = 0
-resource_name = web-core
+resource_name = web-runtime
 source_file = template.pot
 source_lang = en
 type = PO
