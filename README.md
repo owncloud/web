@@ -68,7 +68,6 @@ The repository's `packages` also contains the following apps, which can be en-/d
 - **epub-reader:** An extension for opening ebook files
 - **external:** An extension for creating, opening and editing files using the WOPI server
 - **files:** The default extension and core part of the project, responsible for file sync-and-share - up- and downloading, sharing with other users/groups or via links, version management and more
-- **importer:** Service to import your files from other cloud storage solutions
 - **ocm:** Open cloud mesh integration to allow for collaboration across ownCloud instances
 - **pdf-viewer:** An extension for opening PDF files without leaving the UI
 - **preview:** An extension for opening audio, video and image files
