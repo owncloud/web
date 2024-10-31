@@ -12,9 +12,10 @@
 import { PropType, defineComponent } from 'vue'
 
 /**
- * Icons are used to visually communicate core parts of the product and
- * available actions. They can act as wayfinding tools to help users more
- * easily understand where they are in the product.
+ * Definition lists are used to visually communicate key-value pairs.
+ * They are useful for displaying metadata, definitions, and other data that is best represented in a key-value format.
+ * @items - An array of objects with `term` and `definition` properties.
+ *
  */
 
 interface DefinitionItem {
@@ -25,10 +26,10 @@ interface DefinitionItem {
 export default defineComponent({
   name: 'OcDefinitionList',
   status: 'ready',
-  release: '15.0.0-alpha.1',
+  release: '16.0.0',
   props: {
     /**
-     * The name of the icon to display.
+     * The items to display in the list.
      */
     items: {
       type: Array as PropType<DefinitionItem[]>,

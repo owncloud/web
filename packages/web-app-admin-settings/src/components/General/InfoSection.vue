@@ -47,22 +47,3 @@ export default defineComponent({
   }
 })
 </script>
-
-<style lang="scss">
-.details-list {
-  display: grid;
-  grid-template-columns: auto minmax(0, 1fr);
-
-  dt,
-  dd {
-    margin-bottom: var(--oc-space-small);
-  }
-  dt {
-    font-weight: bold;
-    white-space: nowrap;
-  }
-  dd {
-    margin-inline-start: var(--oc-space-medium);
-  }
-}
-</style>
