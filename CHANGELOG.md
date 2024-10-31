@@ -13,6 +13,7 @@ Summary
 * Bugfix - Folder size mismatch: [#11806](https://github.com/owncloud/web/issues/11806)
 * Bugfix - Preview image retries: [#11813](https://github.com/owncloud/web/pull/11813)
 * Bugfix - Respect post logout url: [#11817](https://github.com/owncloud/web/pull/11817)
+* Bugfix - Sidebar showing wrong shares: [#11831](https://github.com/owncloud/web/pull/11831)
 
 Details
 -------
@@ -55,6 +56,15 @@ Details
 
    https://github.com/owncloud/web/issues/11816
    https://github.com/owncloud/web/pull/11817
+
+* Bugfix - Sidebar showing wrong shares: [#11831](https://github.com/owncloud/web/pull/11831)
+
+   We've fixed a bug where the right sidebar would display wrong shares when being
+   inside a space and opening a file from another space (e.g. via the search
+   results).
+
+   https://github.com/owncloud/web/issues/11787
+   https://github.com/owncloud/web/pull/11831
 
 Changelog for ownCloud Web [11.0.0] (2024-10-18)
 =======================================
