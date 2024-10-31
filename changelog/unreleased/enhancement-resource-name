@@ -1,0 +1,7 @@
+Enhancement: Add resource_name to translation definition
+
+Add a reasource_name property to each Transifex definition.
+This eases identifying where the resource belongs to.
+
+https://github.com/owncloud/web/pull/11841
+https://github.com/owncloud/web/issues/11839
