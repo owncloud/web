@@ -129,4 +129,4 @@ If you're interested in writing your own viewer or editor app for certain file t
 
 ### Testing
 
-Additional testing code lives in `test-helpers`.
+Additional unit testing code lives in `test-helpers`.
