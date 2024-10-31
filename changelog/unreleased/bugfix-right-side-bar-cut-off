@@ -1,0 +1,6 @@
+Bugfix: Right side bar cut off
+
+We've fixed a bug where the right sidebar would cut off at a browser width >960px and <1024px.
+
+https://github.com/owncloud/web/issues/11830
+https://github.com/owncloud/web/pull/11842
