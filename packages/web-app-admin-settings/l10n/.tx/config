@@ -1,7 +1,7 @@
 [main]
 host = https://www.transifex.com
 
-[o:owncloud-org:p:owncloud-web:r:web-admin-settings]
+[o:owncloud-org:p:owncloud-web:r:admin-settings]
 file_filter = locale/<lang>/app.po
 minimum_perc = 0
 resource_name = web-admin-settings

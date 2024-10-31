@@ -1,7 +1,7 @@
 [main]
 host = https://www.transifex.com
 
-[o:owncloud-org:p:owncloud-web:r:web-text-editor]
+[o:owncloud-org:p:owncloud-web:r:text-editor]
 file_filter = locale/<lang>/app.po
 minimum_perc = 0
 resource_name = web-text-editor

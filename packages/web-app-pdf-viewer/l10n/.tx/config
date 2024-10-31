@@ -1,7 +1,7 @@
 [main]
 host = https://www.transifex.com
 
-[o:owncloud-org:p:owncloud-web:r:web-pdf-viewer]
+[o:owncloud-org:p:owncloud-web:r:pdf-viewer]
 file_filter = locale/<lang>/app.po
 minimum_perc = 0
 resource_name = web-pdf-viewer
