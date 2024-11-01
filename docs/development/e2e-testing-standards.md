@@ -3,7 +3,7 @@ title: 'End-to-End (E2E) Test Standards'
 date: 2024-09-11T00:00:00+00:00
 weight: 60
 geekdocRepo: https://github.com/owncloud/web
-geekdocEditPath: edit/master/docs/testing
+geekdocEditPath: edit/master/docs/development
 geekdocFilePath: e2e-testing-standards.md
 ---
 

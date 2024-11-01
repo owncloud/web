@@ -3,7 +3,7 @@ title: 'Running tests'
 date: 2021-07-27T00:00:00+00:00
 weight: 60
 geekdocRepo: https://github.com/owncloud/web
-geekdocEditPath: edit/master/docs/testing
+geekdocEditPath: edit/master/docs/development
 geekdocFilePath: testing.md
 ---
 
@@ -132,11 +132,11 @@ To see all available options run
 node tests/e2e/cucumber/report --help
 ```
 
-### E2E Tests on oCIS With Keycloak
-We can run some of the e2e tests on oCIS setup with Keycloak as an external idp. To run tests against locally, please follow the steps below:
+### E2E Tests with Keycloak
+We can run some of the e2e tests with Keycloak as an external idp. To run tests against locally, please follow the steps below:
 
-#### Run oCIS With Keycloak
-There's a documentation to serve [oCIS with Keycloak](https://owncloud.dev/ocis/deployment/ocis_keycloak/). Please follow each step to run **oCIS with Keycloak**.
+#### Run oCIS with Keycloak
+Please follow each step of the documentation on how to serve [oCIS with Keycloak](https://owncloud.dev/ocis/deployment/ocis_keycloak/).
 
 #### Run E2E Tests
 ```bash
