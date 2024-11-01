@@ -43,10 +43,3 @@ Now you can access Web via https://host.docker.internal:9200.
 ### Using Instant Hot-Reload via Vite
 
 To work with instant hot-reloading, you can also build Web by running `pnpm vite`. The port to access Web is slightly different then: https://host.docker.internal:9201. Also note that the initial page load may take a bit longer than usual. This is normal and to be expected.
-
-### Running Web with oC10
-
-Older versions of Web (< 7.1.0) also support running oC10 as server. The development setup is nearly the same as mentioned above, the only differences are:
-
-* The server can be started via `docker-compose up oc10`
-* The server port is `8080` (`8081` when running Web via `pnpm vite:oc10`)
