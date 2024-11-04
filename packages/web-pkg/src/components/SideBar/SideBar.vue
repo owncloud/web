@@ -203,7 +203,7 @@ export default defineComponent({
       return $gettext('Back to main panels')
     })
 
-    const fullWidthSideBar = computed(() => window.innerWidth <= 960)
+    const fullWidthSideBar = computed(() => window.innerWidth <= 1024)
     const backgroundContentEl = computed(() => {
       return unref(appSideBar)?.parentElement?.querySelector('div') as HTMLElement
     })
@@ -291,7 +291,7 @@ export default defineComponent({
   width: 100% !important;
 }
 
-@media only screen and (max-width: 960px) {
+@media only screen and (max-width: 1024px) {
   .files-wrapper {
     flex-wrap: nowrap !important;
   }
