@@ -63,7 +63,7 @@
 </template>
 
 <script lang="ts">
-import * as uuid from 'uuid'
+import { v4 as uuidV4 } from 'uuid'
 import { defineComponent, PropType } from 'vue'
 import { computed } from 'vue'
 import { useGettext } from 'vue3-gettext'
@@ -94,7 +94,7 @@ export default defineComponent({
       return $gettext(getLinkRoleByType(props.modelValue)?.displayName)
     })
 
-    const dropUuid = uuid.v4()
+    const dropUuid = uuidV4()
 
     return {
       isSelectedType,

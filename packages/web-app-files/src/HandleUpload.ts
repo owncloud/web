@@ -1,6 +1,6 @@
 import Uppy, { BasePlugin, UppyFile } from '@uppy/core'
 import { basename, dirname, join } from 'path'
-import * as uuid from 'uuid'
+import { v4 as uuidV4 } from 'uuid'
 import { Language } from 'vue3-gettext'
 import { Ref, unref } from 'vue'
 import { RouteLocationNormalizedLoaded } from 'vue-router'
@@ -124,7 +124,7 @@ export class HandleUpload extends BasePlugin {
         file.meta = {
           ...file.meta,
           tusEndpoint: endpoint,
-          uploadId: uuid.v4()
+          uploadId: uuidV4()
         }
 
         filesToUpload[file.id] = file as unknown as UppyResource
@@ -147,7 +147,7 @@ export class HandleUpload extends BasePlugin {
       if (relativeFilePath) {
         const topLevelDirectory = relativeFilePath.split('/').filter(Boolean)[0]
         if (!topLevelFolderIds[topLevelDirectory]) {
-          topLevelFolderIds[topLevelDirectory] = uuid.v4()
+          topLevelFolderIds[topLevelDirectory] = uuidV4()
         }
         topLevelFolderId = topLevelFolderIds[topLevelDirectory]
       }
@@ -178,7 +178,7 @@ export class HandleUpload extends BasePlugin {
         uppyId: this.uppyService.generateUploadId(file),
         relativeFolder: directory,
         tusEndpoint: endpoint,
-        uploadId: uuid.v4(),
+        uploadId: uuidV4(),
         topLevelFolderId,
         // route data
         routeName: name as string,
@@ -304,11 +304,11 @@ export class HandleUpload extends BasePlugin {
       if (path) {
         const isRoot = path.split('/').length <= 1
         path = urlJoin(path, { leadingSlash: true })
-        const uploadId = !isRoot ? uuid.v4() : topLevelIds[path]
+        const uploadId = !isRoot ? uuidV4() : topLevelIds[path]
         const relativeFolder = dirname(path) === '/' ? '' : dirname(path)
 
         const uppyResource = {
-          id: uuid.v4(),
+          id: uuidV4(),
           name: basename(path),
           isFolder: true,
           type: 'folder',

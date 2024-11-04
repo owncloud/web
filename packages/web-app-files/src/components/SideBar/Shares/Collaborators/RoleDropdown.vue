@@ -72,7 +72,7 @@
 import get from 'lodash-es/get'
 import { storeToRefs } from 'pinia'
 import RoleItem from '../Shared/RoleItem.vue'
-import * as uuid from 'uuid'
+import { v4 as uuidV4 } from 'uuid'
 import {
   defineComponent,
   inject,
@@ -198,7 +198,7 @@ export default defineComponent({
   computed: {
     roleButtonId() {
       if (this.domSelector) {
-        return `files-collaborators-role-button-${this.domSelector}-${uuid.v4()}`
+        return `files-collaborators-role-button-${this.domSelector}-${uuidV4()}`
       }
       return 'files-collaborators-role-button-new'
     },

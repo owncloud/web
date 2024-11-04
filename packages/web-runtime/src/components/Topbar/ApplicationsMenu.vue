@@ -53,7 +53,7 @@
 import { defineComponent, PropType, ref, computed, unref, useTemplateRef } from 'vue'
 import { OcDrop, OcApplicationIcon } from '@ownclouders/design-system/components'
 import { useGettext } from 'vue3-gettext'
-import * as uuid from 'uuid'
+import { v4 as uuidV4 } from 'uuid'
 import { AppMenuItemExtension, useRouter } from '@ownclouders/web-pkg'
 
 export default defineComponent({
@@ -85,7 +85,7 @@ export default defineComponent({
       return $gettext('Application Switcher')
     })
     const updateAppIcons = () => {
-      appIconKey.value = uuid.v4().replaceAll('-', '')
+      appIconKey.value = uuidV4().replaceAll('-', '')
     }
 
     const getAdditionalEventBindings = (item: AppMenuItemExtension) => {
