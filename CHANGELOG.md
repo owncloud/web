@@ -13,6 +13,7 @@ Summary
 * Bugfix - Folder size mismatch: [#11806](https://github.com/owncloud/web/issues/11806)
 * Bugfix - Preview image retries: [#11813](https://github.com/owncloud/web/pull/11813)
 * Bugfix - Respect post logout url: [#11817](https://github.com/owncloud/web/pull/11817)
+* Bugfix - Right side bar cut off: [#11830](https://github.com/owncloud/web/issues/11830)
 * Bugfix - Sidebar showing wrong shares: [#11831](https://github.com/owncloud/web/pull/11831)
 
 Details
@@ -56,6 +57,14 @@ Details
 
    https://github.com/owncloud/web/issues/11816
    https://github.com/owncloud/web/pull/11817
+
+* Bugfix - Right side bar cut off: [#11830](https://github.com/owncloud/web/issues/11830)
+
+   We've fixed a bug where the right sidebar would cut off at a browser width
+   >960px and <1024px.
+
+   https://github.com/owncloud/web/issues/11830
+   https://github.com/owncloud/web/pull/11842
 
 * Bugfix - Sidebar showing wrong shares: [#11831](https://github.com/owncloud/web/pull/11831)
 
