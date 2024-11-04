@@ -65,7 +65,7 @@ import {
   unref,
   watch
 } from 'vue'
-import * as uuid from 'uuid'
+import { v4 as uuidV4 } from 'uuid'
 import SidebarNavItem from './SidebarNavItem.vue'
 import { NavItem } from '../../helpers/navItems'
 import { getBackendVersion, getWebVersion } from '../../container/versions'
@@ -159,7 +159,7 @@ export default defineComponent({
   },
   methods: {
     getUuid() {
-      return uuid.v4().replaceAll('-', '')
+      return uuidV4().replaceAll('-', '')
     }
   }
 })

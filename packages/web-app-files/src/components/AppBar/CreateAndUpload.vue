@@ -231,7 +231,7 @@ import { useRoute } from 'vue-router'
 import { useGettext } from 'vue3-gettext'
 import { useExtensionRegistry } from '@ownclouders/web-pkg'
 import { Action, ResourceIcon } from '@ownclouders/web-pkg'
-import { v4 as uuidv4 } from 'uuid'
+import { v4 as uuidV4 } from 'uuid'
 import { storeToRefs } from 'pinia'
 import { uploadMenuExtensionPoint } from '../../extensionPoints'
 
@@ -340,10 +340,10 @@ export default defineComponent({
       return unref(currentFolder)?.canUpload({ user: userStore.user })
     })
 
-    const actionKeySuffix = ref(uuidv4())
+    const actionKeySuffix = ref(uuidV4())
     const showDrop = () => {
       // force actions to be re-rendered when the drop is being opened
-      actionKeySuffix.value = uuidv4()
+      actionKeySuffix.value = uuidV4()
     }
     const isActionDisabled = (action: Action) => {
       return action.isDisabled ? action.isDisabled() : false

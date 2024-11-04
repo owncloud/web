@@ -176,7 +176,7 @@ import { eventBus } from '@ownclouders/web-pkg'
 import { useResourcesViewDefaults } from '../../composables'
 import { FolderLoaderOptions } from '../../services/folder'
 import { BreadcrumbItem } from '@ownclouders/design-system/helpers'
-import { v4 as uuidv4 } from 'uuid'
+import { v4 as uuidV4 } from 'uuid'
 import {
   useKeyboardTableMouseActions,
   useKeyboardTableNavigation,
@@ -298,7 +298,7 @@ export default defineComponent({
       const rootBreadcrumbItems: BreadcrumbItem[] = []
       if (isProjectSpaceResource(unref(space))) {
         rootBreadcrumbItems.push({
-          id: uuidv4(),
+          id: uuidV4(),
           text: $gettext('Spaces'),
           to: createLocationSpaces('files-spaces-projects'),
           isStaticNav: true
@@ -306,13 +306,13 @@ export default defineComponent({
       } else if (isShareSpaceResource(unref(space))) {
         rootBreadcrumbItems.push(
           {
-            id: uuidv4(),
+            id: uuidV4(),
             text: $gettext('Shares'),
             to: { path: '/files/shares' },
             isStaticNav: true
           },
           {
-            id: uuidv4(),
+            id: uuidV4(),
             text: $gettext('Shared with me'),
             to: { path: '/files/shares/with-me' },
             isStaticNav: true
@@ -325,7 +325,7 @@ export default defineComponent({
       query = omit({ ...unref(route).query, ...query }, 'page')
       if (isPersonalSpaceResource(unref(space))) {
         spaceBreadcrumbItem = {
-          id: uuidv4(),
+          id: uuidV4(),
           text: unref(space).name,
           ...(unref(space).isOwner(userStore.user) && {
             to: createLocationSpaces('files-spaces-generic', {
@@ -336,7 +336,7 @@ export default defineComponent({
         }
       } else if (isShareSpaceResource(unref(space))) {
         spaceBreadcrumbItem = {
-          id: uuidv4(),
+          id: uuidV4(),
           allowContextActions: true,
           text: unref(space).name,
           to: createLocationSpaces('files-spaces-generic', {
@@ -346,7 +346,7 @@ export default defineComponent({
         }
       } else if (isPublicSpaceResource(unref(space))) {
         spaceBreadcrumbItem = {
-          id: uuidv4(),
+          id: uuidV4(),
           text: $gettext('Public link'),
           to: createLocationPublic('files-public-link', {
             params,
@@ -356,7 +356,7 @@ export default defineComponent({
         }
       } else {
         spaceBreadcrumbItem = {
-          id: uuidv4(),
+          id: uuidV4(),
           allowContextActions: !unref(hasSpaceHeader),
           text: unref(space).name,
           to: createLocationSpaces('files-spaces-generic', {

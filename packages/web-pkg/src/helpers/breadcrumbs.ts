@@ -2,7 +2,7 @@ import { eventBus } from '../services'
 import { RouteLocation } from 'vue-router'
 import omit from 'lodash-es/omit'
 import { BreadcrumbItem } from '@ownclouders/design-system/helpers'
-import { v4 as uuidv4 } from 'uuid'
+import { v4 as uuidV4 } from 'uuid'
 
 export const breadcrumbsFromPath = (
   currentRoute: RouteLocation,
@@ -15,7 +15,7 @@ export const breadcrumbsFromPath = (
   return resource.map(
     (text, i) =>
       ({
-        id: uuidv4(),
+        id: uuidV4(),
         allowContextActions: true,
         text,
         to: {
@@ -33,7 +33,7 @@ export const concatBreadcrumbs = (...items: BreadcrumbItem[]): BreadcrumbItem[] 
   return [
     ...items,
     {
-      id: uuidv4(),
+      id: uuidV4(),
       allowContextActions: last.allowContextActions,
       text: last.text,
       onClick: () => eventBus.publish('app.files.list.load'),

@@ -2,7 +2,7 @@ import { eventBus } from '../../services/eventBus'
 import { RouteLocation } from 'vue-router'
 import omit from 'lodash-es/omit'
 import { BreadcrumbItem } from '@ownclouders/design-system/helpers'
-import { v4 as uuidv4 } from 'uuid'
+import { v4 as uuidV4 } from 'uuid'
 import { SpaceResource } from '@ownclouders/web-client'
 import { urlJoin } from '@ownclouders/web-client'
 import { useGetMatchingSpace } from '../spaces'
@@ -38,7 +38,7 @@ export const useBreadcrumbsFromPath = () => {
       }
 
       return {
-        id: uuidv4(),
+        id: uuidV4(),
         allowContextActions: true,
         text,
         ...(isAccessible && {
@@ -61,7 +61,7 @@ export const useBreadcrumbsFromPath = () => {
     return [
       ...items,
       {
-        id: uuidv4(),
+        id: uuidV4(),
         allowContextActions: last.allowContextActions,
         text: last.text,
         onClick: () => eventBus.publish('app.files.list.load'),

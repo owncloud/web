@@ -1,6 +1,6 @@
 import { useEventListener } from '@vueuse/core'
 import { Ref, ref, unref } from 'vue'
-import * as uuid from 'uuid'
+import { v4 as uuidV4 } from 'uuid'
 
 interface KeyboardActionsOptions {
   skipDisabledKeyBindingsCheck?: boolean
@@ -112,7 +112,7 @@ export const useKeyboardActions = (options?: KeyboardActionsOptions): KeyboardAc
     keys: { primary: Key; modifier?: Modifier },
     callback: () => void
   ): string => {
-    const id = uuid.v4()
+    const id = uuidV4()
     actions.value.push({
       id,
       ...keys,
