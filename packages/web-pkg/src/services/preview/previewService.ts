@@ -47,7 +47,8 @@ export class PreviewService {
         'image/tiff',
         'image/bmp',
         'image/x-ms-bmp',
-        'application/vnd.geogebra.slides'
+        'application/vnd.geogebra.slides',
+        'application/vnd.geogebra.pinboard'
       ]
     }
   }
