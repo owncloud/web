@@ -11,24 +11,28 @@ const selectors = {
 
 const folderA = {
   id: '1',
+  name: '1',
   type: 'folder',
   mdate: 'Wed, 21 Oct 2015 07:28:00 GMT',
   size: '740'
 } as Resource
 const folderB = {
   id: '2',
+  name: '2',
   type: 'folder',
   mdate: 'Wed, 21 Oct 2015 07:28:00 GMT',
   size: '740'
 } as Resource
 const fileA = {
   id: '3',
+  name: '3',
   type: 'file',
   mdate: 'Wed, 21 Oct 2015 07:28:00 GMT',
   size: '740'
 } as Resource
 const fileB = {
   id: '4',
+  name: '4',
   type: 'file',
   mdate: 'Wed, 21 Oct 2015 07:28:00 GMT',
   size: '740'
