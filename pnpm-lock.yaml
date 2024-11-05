@@ -1232,7 +1232,7 @@ importers:
         specifier: workspace:^
         version: link:../web-client
       '@ownclouders/web-pkg':
-        specifier: ^10.3.0
+        specifier: ^10.3.0 || ^11.0.0
         version: 10.3.0(@casl/ability@6.7.2)(@casl/vue@2.2.2(@casl/ability@6.7.2)(vue@3.5.12(typescript@5.6.3)))(@microsoft/fetch-event-source@2.0.1)(@ownclouders/web-client@packages+web-client)(@sentry/vue@8.35.0(pinia@2.2.6(typescript@5.6.3)(vue@3.5.12(typescript@5.6.3)))(vue@3.5.12(typescript@5.6.3)))(@vue/shared@3.5.12)(@vueuse/core@11.1.0(vue@3.5.12(typescript@5.6.3)))(axios@1.7.7)(deepmerge@4.3.1)(dompurify@3.1.7)(filesize@10.1.6)(fuse.js@7.0.0)(lodash-es@4.17.21)(luxon@3.5.0)(mark.js@8.11.1)(oidc-client-ts@3.1.0)(p-queue@8.0.1)(pinia@2.2.6(typescript@5.6.3)(vue@3.5.12(typescript@5.6.3)))(portal-vue@3.0.0(patch_hash=bogvb64kjdufpa4744k4xkam7u)(vue@3.5.12(typescript@5.6.3)))(qs@6.13.0)(semver@7.6.3)(uuid@11.0.2)(vue-concurrency@5.0.1(vue@3.5.12(typescript@5.6.3)))(vue-router@4.2.5(vue@3.5.12(typescript@5.6.3)))(vue3-gettext@2.4.0(patch_hash=x32qkm4z6srz5xuveescagpdyu)(@vue/compiler-sfc@3.5.12)(vue@3.5.12(typescript@5.6.3)))(zod@3.23.8)
       '@pinia/testing':
         specifier: ^0.1.3
