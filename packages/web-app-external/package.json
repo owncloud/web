@@ -11,7 +11,7 @@
     "@ownclouders/web-client": "workspace:*",
     "@ownclouders/web-pkg": "workspace:*",
     "lodash-es": "4.17.21",
-    "pinia": "2.2.4",
+    "pinia": "2.2.6",
     "qs": "^6.13.0",
     "uuid": "11.0.2",
     "vue-concurrency": "5.0.1",
