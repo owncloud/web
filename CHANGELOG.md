@@ -1,9 +1,9 @@
-Changelog for ownCloud Web [unreleased] (UNRELEASED)
+Changelog for ownCloud Web [11.0.1] (2024-11-05)
 =======================================
-The following sections list the changes in ownCloud web unreleased relevant to
+The following sections list the changes in ownCloud web 11.0.1 relevant to
 ownCloud admins and users.
 
-[unreleased]: https://github.com/owncloud/web/compare/v11.0.0...master
+[11.0.1]: https://github.com/owncloud/web/compare/v11.0.0...v11.0.1
 
 Summary
 -------
