@@ -18,7 +18,7 @@ for app in "${APPS[@]}"; do
 	VERSION=$(node -p "require('./package.json').version")
 	TAG="${app}-v${VERSION}"
 
-	git tag "$TAG"
+	git tag -s -a "$TAG" -m "$TAG"
 	git push origin "$TAG"
 
 	echo "$app-v$VERSION has been created and pushed"
