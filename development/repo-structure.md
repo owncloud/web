@@ -118,6 +118,7 @@ Both `web-app-admin-settings` and `web-app-files` are standalone apps which are 
 Apps which fall into the categories `viewer` or `editor` can be opened from the context of a file or folder. This mostly happens from
 within the `files` app. We currently bundle the following apps with the default ownCloud Web release artifact:
 
+- `web-app-epub-reader` a simple reader for `.epub` files
 - `web-app-external` an iframe integration of all the apps coming from the [app provider](https://owncloud.dev/services/app-provider/)
   (e.g. OnlyOffice, Collabora Online and others)
 - `web-app-pdf-viewer` a viewer for `.pdf` files, which relies on native PDF rendering support from the browser
@@ -125,3 +126,7 @@ within the `files` app. We currently bundle the following apps with the default 
 - `web-app-text-editor` a simple editor for `.txt`, `.md` and other plain text files
 
 If you're interested in writing your own viewer or editor app for certain file types, please get in touch with us for more info.
+
+### Testing
+
+Additional unit testing code lives in `test-helpers`.
