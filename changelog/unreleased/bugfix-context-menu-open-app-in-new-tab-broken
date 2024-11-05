@@ -1,0 +1,6 @@
+Bugfix: Context menu "Open app in new tab" broken
+
+We've fixed a bug where the context menu option "Open app in new tab" was broken.
+
+https://github.com/owncloud/web/pull/11854
+https://github.com/owncloud/web/issues/11853
