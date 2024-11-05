@@ -100,14 +100,14 @@ export default defineComponent({
     const { options } = storeToRefs(configStore)
 
     const componentType = computed<string>(() => {
-      if (Object.hasOwn(props.action, 'handler')) {
-        return 'button'
-      }
       if (Object.hasOwn(props.action, 'route')) {
         return 'router-link'
       }
       if (Object.hasOwn(props.action, 'href')) {
         return 'a'
+      }
+      if (Object.hasOwn(props.action, 'handler')) {
+        return 'button'
       }
       console.warn(
         'ActionMenuItem: No handler, route or href callback found in action',
