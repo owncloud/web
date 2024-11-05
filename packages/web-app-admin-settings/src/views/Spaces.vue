@@ -13,6 +13,13 @@
       :batch-action-items="selectedSpaces"
       :show-view-options="true"
     >
+      <template #topbarActions="{ limitedScreenSpace }">
+        <create-space
+          v-if="hasCreatePermission"
+          :show-label="!limitedScreenSpace"
+          @space-created="(space) => spaceSettingsStore.upsertSpace(space)"
+        />
+      </template>
       <template #sideBarHeader>
         <space-info
           v-if="selectedSpaces.length === 1"
@@ -71,7 +78,9 @@ import {
   useSpaceActionsRestore,
   useSpaceActionsEditQuota,
   AppLoadingSpinner,
-  useSharesStore
+  useSharesStore,
+  useAbility,
+  CreateSpace
 } from '@ownclouders/web-pkg'
 import { call, SpaceResource } from '@ownclouders/web-client'
 import { computed, defineComponent, onBeforeUnmount, onMounted, ref, unref } from 'vue'
@@ -85,6 +94,7 @@ import { Quota } from '@ownclouders/web-client/graph/generated'
 export default defineComponent({
   name: 'SpacesView',
   components: {
+    CreateSpace,
     AppLoadingSpinner,
     SpacesList,
     AppTemplate,
@@ -102,6 +112,7 @@ export default defineComponent({
     const { $gettext } = useGettext()
     const { isSideBarOpen, sideBarActivePanel } = useSideBar()
     const sharesStore = useSharesStore()
+    const { can } = useAbility()
 
     const loadResourcesEventToken = ref(null)
     let updateQuotaForSpaceEventToken: string
@@ -118,6 +129,8 @@ export default defineComponent({
     const itemsPerPage = computed(() => {
       return parseInt(queryItemAsString(unref(itemsPerPageQuery)))
     })
+
+    const hasCreatePermission = computed(() => can('create-all', 'Drive'))
 
     const loadResourcesTask = useTask(function* (signal) {
       const drives = yield* call(
@@ -267,7 +280,9 @@ export default defineComponent({
       sideBarAvailablePanels,
       sideBarPanelContext,
       isLoading,
-      template
+      template,
+      hasCreatePermission,
+      spaceSettingsStore
     }
   }
 })
