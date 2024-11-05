@@ -1,7 +1,7 @@
 import { defaultComponentMocks, defaultPlugins, shallowMount } from '@ownclouders/web-test-helpers'
 import AppBanner from '../../../src/components/AppBanner.vue'
 import { createMemoryHistory, createRouter } from 'vue-router'
-import { useSessionStorage } from '@vueuse/core'
+import { useLocalStorage, useSessionStorage } from '@vueuse/core'
 import { ref } from 'vue'
 
 vi.mock('@vueuse/core')
@@ -56,6 +56,9 @@ function getWrapper({
 
   vi.mocked(useSessionStorage<string>).mockImplementation(() => {
     return ref(sessionStorageReturnValue)
+  })
+  vi.mocked(useLocalStorage<string>).mockImplementation(() => {
+    return ref('')
   })
 
   const mocks = { ...defaultComponentMocks(), $router: router }
