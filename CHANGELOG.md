@@ -1,3 +1,26 @@
+Changelog for ownCloud Web [unreleased] (UNRELEASED)
+=======================================
+The following sections list the changes in ownCloud web unreleased relevant to
+ownCloud admins and users.
+
+[unreleased]: https://github.com/owncloud/web/compare/v11.0.1...master
+
+Summary
+-------
+
+* Bugfix - Context menu "Open app in new tab" broken: [#11854](https://github.com/owncloud/web/pull/11854)
+
+Details
+-------
+
+* Bugfix - Context menu "Open app in new tab" broken: [#11854](https://github.com/owncloud/web/pull/11854)
+
+   We've fixed a bug where the context menu option "Open app in new tab" was
+   broken.
+
+   https://github.com/owncloud/web/issues/11853
+   https://github.com/owncloud/web/pull/11854
+
 Changelog for ownCloud Web [11.0.1] (2024-11-05)
 =======================================
 The following sections list the changes in ownCloud web 11.0.1 relevant to
