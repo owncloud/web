@@ -81,7 +81,7 @@ const DavPropertyMapping = {
   MimeType: defString('getcontenttype' as const),
   ResourceType: defStringArray('resourcetype' as const),
   LockDiscovery: { value: 'lockdiscovery', type: null as Record<string, unknown> },
-  LockOwnerName: defString('ownername' as const),
+  LockOwner: defString('owner' as const),
   LockTime: defString('locktime' as const),
   ActiveLock: {
     value: 'activelock',

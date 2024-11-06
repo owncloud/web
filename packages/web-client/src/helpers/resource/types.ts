@@ -64,7 +64,7 @@ export interface Resource {
   thumbnail?: string
   processing?: boolean
   locked?: boolean
-  lockOwnerName?: string
+  lockOwner?: string
   lockTime?: string
   mimeType?: string
   isFolder?: boolean

@@ -1,0 +1,6 @@
+Bugfix: Show lock information in file details
+
+We fixed showing the lock owner in the file details whenever a file is locked.
+
+https://github.com/owncloud/web/issues/11008
+https://github.com/owncloud/web/pull/11859

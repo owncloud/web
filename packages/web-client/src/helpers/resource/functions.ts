@@ -102,11 +102,11 @@ export function buildResource(resource: WebDavResponseResource): Resource {
   const extension = extractExtensionFromFile({ ...resource, id, name, path: resourcePath })
 
   const lock = resource.props[DavProperty.LockDiscovery]
-  let activeLock: { [DavProperty.LockOwnerName]?: string; [DavProperty.LockTime]?: string }
-  let lockOwnerName: string, lockTime: string
+  let activeLock: { [DavProperty.LockOwner]?: string; [DavProperty.LockTime]?: string }
+  let lockOwner: string, lockTime: string
   if (lock) {
     activeLock = lock[DavProperty.ActiveLock]
-    lockOwnerName = activeLock[DavProperty.LockOwnerName]
+    lockOwner = activeLock[DavProperty.LockOwner]
     lockTime = activeLock[DavProperty.LockTime]
   }
 
@@ -131,7 +131,7 @@ export function buildResource(resource: WebDavResponseResource): Resource {
     type: isFolder ? 'folder' : resource.type,
     isFolder,
     locked: !!activeLock,
-    lockOwnerName,
+    lockOwner,
     lockTime,
     processing: resource.processing || false,
     mdate: resource.props[DavProperty.LastModifiedDate],

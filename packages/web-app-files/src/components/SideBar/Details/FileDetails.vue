@@ -55,9 +55,10 @@
           </td>
         </tr>
         <tr v-if="resource.locked" data-testid="locked-by">
-          <th scope="col" class="oc-pr-s oc-font-semibold" v-text="$gettext('Locked by')" />
+          <th scope="col" class="oc-pr-s oc-font-semibold" v-text="$gettext('Locked via')" />
           <td>
-            <span>{{ resource.lockOwnerName }} ({{ formatDateRelative(resource.lockTime) }})</span>
+            <span>{{ resource.lockOwner }}</span>
+            <span v-if="resource.lockTime">({{ formatDateRelative(resource.lockTime) }})</span>
           </td>
         </tr>
         <tr v-if="showSharedVia" data-testid="shared-via">
