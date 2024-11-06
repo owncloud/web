@@ -18,28 +18,54 @@
         },
         "api_version": "0.0.1",
         "host": "host.docker.internal:9200"
+      },
+      {
+        "endpoint": {
+          "type": {
+            "name": "Webdav",
+            "description": "ownCloud Open Cloud Mesh API"
+          },
+          "name": "ownCloud - OCM API",
+          "path": "https://host.docker.internal:9200/dav/",
+          "is_monitored": true
+        },
+        "api_version": "0.0.1",
+        "host": "host.docker.internal:9200"
       }
     ]
   },
   {
-    "name": "ocis.owncloud.test:10200",
-    "full_name": "ocis.owncloud.test 10200",
+    "name": "host.docker.internal:10200",
+    "full_name": "host.docker.internal 10200",
     "organization": "ownCloud",
-    "domain": "ocis.owncloud.test:10200",
+    "domain": "host.docker.internal:10200",
     "homepage": "https://owncloud.com",
     "services": [
       {
         "endpoint": {
           "type": {
             "name": "OCM",
-            "description": "ownCloud Open Cloud Mesh API"
+            "description": "ownCloud Webdav API"
           },
           "name": "ownCloud - OCM API",
-          "path": "https://ocis.owncloud.test:10200/ocm/",
+          "path": "https://host.docker.internal:10200/ocm/",
           "is_monitored": true
         },
         "api_version": "0.0.1",
-        "host": "ocis.owncloud.test:10200"
+        "host": "host.docker.internal:10200"
+      },
+      {
+        "endpoint": {
+          "type": {
+            "name": "Webdav",
+            "description": "ownCloud WebdavAPI"
+          },
+          "name": "ownCloud - OCM API",
+          "path": "https://host.docker.internal:10200/dav/",
+          "is_monitored": true
+        },
+        "api_version": "0.0.1",
+        "host": "host.docker.internal:10200"
       }
     ]
   }
