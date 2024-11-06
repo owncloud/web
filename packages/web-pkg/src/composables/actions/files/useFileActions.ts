@@ -106,6 +106,7 @@ export const useFileActions = () => {
     return appsStore.fileExtensions
       .map((fileExtension): FileAction => {
         const appInfo = appsStore.apps[fileExtension.app]
+        const hasRoute = router.hasRoute(fileExtension.routeName || fileExtension.app)
 
         return {
           name: `editor-${fileExtension.app}`,
@@ -121,16 +122,24 @@ export const useFileActions = () => {
             iconFillType: appInfo.iconFillType
           }),
           img: appInfo.img,
-          route: ({ space, resources }) => {
-            return getEditorRoute({
-              appFileExtension: fileExtension,
-              space,
-              resource: resources[0],
-              mode: EDITOR_MODE_EDIT
-            })
-          },
-          handler: (options) =>
-            openEditor(fileExtension, options.space, options.resources[0], EDITOR_MODE_EDIT),
+          ...(hasRoute && {
+            route: ({ space, resources }) => {
+              const remoteItemId = isShareSpaceResource(space) ? space.id : undefined
+              const routeName = fileExtension.routeName || fileExtension.app
+              const routeOpts = getEditorRouteOpts(
+                routeName,
+                space,
+                resources[0],
+                EDITOR_MODE_EDIT,
+                remoteItemId
+              )
+              return router.resolve(routeOpts)
+            }
+          }),
+          ...(!hasRoute && {
+            handler: (options) =>
+              openEditor(fileExtension, options.space, options.resources[0], EDITOR_MODE_EDIT)
+          }),
           isVisible: ({ resources }) => {
             if (resources.length !== 1) {
               return false
@@ -171,22 +180,6 @@ export const useFileActions = () => {
       })
   })
 
-  const getEditorRoute = ({
-    appFileExtension,
-    space,
-    resource,
-    mode
-  }: {
-    appFileExtension: ApplicationFileExtension
-    space: SpaceResource
-    resource: Resource
-    mode: string
-  }) => {
-    const remoteItemId = isShareSpaceResource(space) ? space.id : undefined
-    const routeName = appFileExtension.routeName || appFileExtension.app
-    const routeOpts = getEditorRouteOpts(routeName, space, resource, mode, remoteItemId)
-    return router.resolve(routeOpts)
-  }
   const getEditorRouteOpts = (
     routeName: RouteRecordName,
     space: SpaceResource,
