@@ -318,8 +318,14 @@ export default defineComponent({
       const searchEngine = new Fuse(spaces, { ...defaultFuseOptions, keys: ['name'] })
       return searchEngine.search(filterTerm).map((r) => r.item)
     }
-    const items = computed(() =>
-      orderBy(filter(unref(spaces), unref(filterTerm)), unref(sortBy), unref(sortDir))
+    const items = computed(
+      () =>
+        orderBy(
+          filter(unref(spaces), unref(filterTerm)),
+          [(item) => item[unref(sortBy)].toLowerCase()],
+          unref(sortDir)
+        )
+      //orderBy(filter(unref(spaces), unref(filterTerm)), unref(sortBy), unref(sortDir))
     )
 
     const {
