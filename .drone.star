@@ -1101,7 +1101,7 @@ def buildOcis():
             "commands": [
                 "source .drone.env",
                 "cd repo_ocis/ocis",
-                "retry -t 3 'make build'",
+                "retry -t 3 'make build ENABLE_VIPS=1'",
                 "cp bin/ocis %s" % dir["web"],
             ],
             "volumes": go_step_volumes,
