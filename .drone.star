@@ -1665,6 +1665,7 @@ def wopiCollaborationService(name):
         environment["COLLABORATION_APP_ICON"] = "https://collabora:9980/favicon.ico"
     elif name == "onlyoffice":
         environment["COLLABORATION_APP_NAME"] = "OnlyOffice"
+        environment["COLLABORATION_APP_PRODUCT"] = "OnlyOffice"
         environment["COLLABORATION_APP_ADDR"] = "https://onlyoffice"
         environment["COLLABORATION_APP_ICON"] = "https://onlyoffice/web-apps/apps/documenteditor/main/resources/img/favicon.ico"
 
