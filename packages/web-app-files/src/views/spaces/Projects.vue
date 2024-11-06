@@ -321,7 +321,7 @@ export default defineComponent({
     const items = computed(() =>
       orderBy(
         filter(unref(spaces), unref(filterTerm)),
-        [(item) => item[unref(sortBy)].toLowerCase()],
+        [(item: SpaceResource) => item[unref(sortBy)].toLowerCase()],
         unref(sortDir)
       )
     )
