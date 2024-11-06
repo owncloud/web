@@ -8,10 +8,18 @@ ownCloud admins and users.
 Summary
 -------
 
+* Bugfix - Show lock information in file details: [#11008](https://github.com/owncloud/web/issues/11008)
 * Bugfix - Context menu "Open app in new tab" broken: [#11854](https://github.com/owncloud/web/pull/11854)
 
 Details
 -------
+
+* Bugfix - Show lock information in file details: [#11008](https://github.com/owncloud/web/issues/11008)
+
+   We fixed showing the lock owner in the file details whenever a file is locked.
+
+   https://github.com/owncloud/web/issues/11008
+   https://github.com/owncloud/web/pull/11859
 
 * Bugfix - Context menu "Open app in new tab" broken: [#11854](https://github.com/owncloud/web/pull/11854)
 
