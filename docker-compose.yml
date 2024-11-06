@@ -123,7 +123,7 @@ services:
     environment:
       <<: *ocis-environment
       OCIS_URL: ${OCIS_OCM_URL:-https://host.docker.internal:10200}
-      OCIS_CORS_ALLOW_ORIGINS: https://host.docker.internal:10201
+      OCIS_CORS_ALLOW_ORIGINS: https://host.docker.internal:10200,https://host.docker.internal:10201
       OCM_WEBAPP_TEMPLATE: https://host.docker.internal:10201/o/{{.Token}}/{relative-path-to-shared-resource}
       MICRO_REGISTRY: 'nats-js-kv'
       MICRO_REGISTRY_ADDRESS: 0.0.0.0:9233
@@ -180,7 +180,7 @@ services:
     labels:
       traefik.enable: true
       traefik.http.routers.collaboration.tls: true
-      traefik.http.routers.collaboration.rule: PathPrefix(`/`)
+      traefik.http.routers.collaboration.rule: Host(`host.docker.internal`) && PathPrefix(`/`)
       traefik.http.routers.collaboration.entrypoints: collaboration
       traefik.http.services.collaboration.loadbalancer.server.port: 9300
     logging:
@@ -192,7 +192,7 @@ services:
     command: ['bash', '-c', 'coolconfig generate-proof-key ; /start-collabora-online.sh']
     environment:
       DONT_GEN_SSL_CERT: YES
-      extra_params: --o:ssl.enable=false --o:ssl.ssl_verification=false --o:ssl.termination=true --o:welcome.enable=false --o:net.frame_ancestors=${OCIS_URL:-https://host.docker.internal:9200} ${OCIS_OCM_URL:-https://host.docker.internal:10200}
+      extra_params: --o:ssl.enable=false --o:ssl.ssl_verification=false --o:ssl.termination=true --o:welcome.enable=false --o:net.frame_ancestors=${OCIS_URL:-https://host.docker.internal:10200} ${OCIS_OCM_URL:-https://host.docker.internal:9200} --o:alias_group=host.docker.internal:9300|host.docker.internal:10300
       username: ${COLLABORA_ADMIN_USER:-admin}
       password: ${COLLABORA_ADMIN_PASSWORD:-admin}
     cap_add:
@@ -204,7 +204,7 @@ services:
     labels:
       traefik.enable: true
       traefik.http.routers.collabora.tls: true
-      traefik.http.routers.collabora.rule: PathPrefix(`/`)
+      traefik.http.routers.collabora.rule: Host(`host.docker.internal`) && PathPrefix(`/`)
       traefik.http.routers.collabora.entrypoints: collabora
       traefik.http.services.collabora.loadbalancer.server.port: 9980
     restart: always
@@ -241,7 +241,7 @@ services:
     labels:
       traefik.enable: true
       traefik.http.routers.collaboration-ocm.tls: true
-      traefik.http.routers.collaboration-ocm.rule: PathPrefix(`/`)
+      traefik.http.routers.collaboration-ocm.rule: Host(`host.docker.internal`) && PathPrefix(`/`)
       traefik.http.routers.collaboration-ocm.entrypoints: collaboration-ocm
       traefik.http.services.collaboration-ocm.loadbalancer.server.port: 10300
     logging:
@@ -333,7 +333,6 @@ services:
       - '--entrypoints.ocis.address=:9200'
       - '--entrypoints.ocis-federated.address=:10200'
       - '--entrypoints.collabora.address=:9980'
-      - '--entrypoints.wopi.address=:8880'
       - '--entrypoints.collaboration.address=:9300'
       - '--entrypoints.collaboration-ocm.address=:10300'
       - '--entrypoints.collaboration-oo.address=:9302'
@@ -363,7 +362,6 @@ services:
       - '10300:10300'
       - '10200:10200'
       - '9980:9980'
-      - '8880:8880'
       - '9981:443'
     volumes:
       - './dev/docker/traefik/certificates:/certificates'
