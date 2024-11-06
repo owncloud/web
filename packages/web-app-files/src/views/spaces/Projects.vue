@@ -319,7 +319,11 @@ export default defineComponent({
       return searchEngine.search(filterTerm).map((r) => r.item)
     }
     const items = computed(() =>
-      orderBy(filter(unref(spaces), unref(filterTerm)), unref(sortBy), unref(sortDir))
+      orderBy(
+        filter(unref(spaces), unref(filterTerm)),
+        [(item: SpaceResource) => item[unref(sortBy)].toLowerCase()],
+        unref(sortDir)
+      )
     )
 
     const {
