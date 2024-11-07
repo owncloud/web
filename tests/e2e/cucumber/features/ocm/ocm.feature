@@ -49,20 +49,17 @@ Feature: federation management
     And "Brian" opens the "files" app
     When "Brian" navigates to the shared with me page
 
-    # should be work after fixing https://github.com/owncloud/ocis/issues/10272
-    # Then "Brian" should see thumbnail and preview for file "testavatar.jpg"
-    # And "Brian" should see thumbnail and preview for file "sampleGif.gif"
-    # When "Brian" opens the following file in mediaviewer
-    #   | resource       |
-    #   | testavatar.jpg |
-    # Then "Brian" is in a media-viewer
-    # And "Brian" navigates to the next media resource
-    # When "Brian" closes the file viewer
+    Then "Brian" should see thumbnail and preview for file "testavatar.jpg"
+    And "Brian" should see thumbnail and preview for file "sampleGif.gif"
+    When "Brian" opens the following file in mediaviewer
+      | resource       |
+      | testavatar.jpg |
+    Then "Brian" is in a media-viewer
+    When "Brian" closes the file viewer
 
     And "Brian" downloads the following resources using the sidebar panel
       | resource       | type   |
       | folderPublic   | folder |
-      # should be work after fixing https://github.com/owncloud/ocis/issues/11821
-      # | sampleGif.gif  | file   |
-      # | testavatar.jpg | file   |
+      | sampleGif.gif  | file   |
+      | testavatar.jpg | file   |
     And "Brian" logs out
