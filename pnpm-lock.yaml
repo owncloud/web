@@ -94,10 +94,10 @@ importers:
         version: 5.1.4(vite@5.4.8(@types/node@22.7.4)(sass@1.79.5)(terser@5.34.1))(vue@3.5.12(typescript@5.6.3))
       '@vitest/coverage-v8':
         specifier: 2.1.2
-        version: 2.1.2(vitest@2.1.2(@types/node@22.7.4)(happy-dom@15.7.4)(jsdom@25.0.1)(sass@1.79.5)(terser@5.34.1))
+        version: 2.1.2(vitest@2.1.2(@types/node@22.7.4)(happy-dom@15.10.2)(jsdom@25.0.1)(sass@1.79.5)(terser@5.34.1))
       '@vitest/web-worker':
         specifier: 2.1.2
-        version: 2.1.2(vitest@2.1.2(@types/node@22.7.4)(happy-dom@15.7.4)(jsdom@25.0.1)(sass@1.79.5)(terser@5.34.1))
+        version: 2.1.2(vitest@2.1.2(@types/node@22.7.4)(happy-dom@15.10.2)(jsdom@25.0.1)(sass@1.79.5)(terser@5.34.1))
       '@vue/compiler-dom':
         specifier: 3.5.12
         version: 3.5.12
@@ -135,8 +135,8 @@ importers:
         specifier: 11.0.0
         version: 11.0.0
       happy-dom:
-        specifier: 15.7.4
-        version: 15.7.4
+        specifier: 15.10.2
+        version: 15.10.2
       jsdom:
         specifier: ^25.0.0
         version: 25.0.1
@@ -193,10 +193,10 @@ importers:
         version: 0.1.4(vite@5.4.8(@types/node@22.7.4)(sass@1.79.5)(terser@5.34.1))
       vitest:
         specifier: 2.1.2
-        version: 2.1.2(@types/node@22.7.4)(happy-dom@15.7.4)(jsdom@25.0.1)(sass@1.79.5)(terser@5.34.1)
+        version: 2.1.2(@types/node@22.7.4)(happy-dom@15.10.2)(jsdom@25.0.1)(sass@1.79.5)(terser@5.34.1)
       vitest-mock-extended:
         specifier: 2.0.2
-        version: 2.0.2(typescript@5.6.3)(vitest@2.1.2(@types/node@22.7.4)(happy-dom@15.7.4)(jsdom@25.0.1)(sass@1.79.5)(terser@5.34.1))
+        version: 2.0.2(typescript@5.6.3)(vitest@2.1.2(@types/node@22.7.4)(happy-dom@15.10.2)(jsdom@25.0.1)(sass@1.79.5)(terser@5.34.1))
       vue:
         specifier: 3.5.12
         version: 3.5.12(typescript@5.6.3)
@@ -1081,7 +1081,7 @@ importers:
         version: 4.17.12
       '@vitest/web-worker':
         specifier: 2.1.2
-        version: 2.1.2(vitest@2.1.2(@types/node@22.7.4)(happy-dom@15.7.4)(jsdom@25.0.1)(sass@1.79.5)(terser@5.34.1))
+        version: 2.1.2(vitest@2.1.2(@types/node@22.7.4)(happy-dom@15.10.2)(jsdom@25.0.1)(sass@1.79.5)(terser@5.34.1))
       clean-publish:
         specifier: 5.0.0
         version: 5.0.0
@@ -1248,7 +1248,7 @@ importers:
         version: 2.2.6(typescript@5.6.3)(vue@3.5.12(typescript@5.6.3))
       vitest-mock-extended:
         specifier: 2.0.2
-        version: 2.0.2(typescript@5.6.3)(vitest@2.1.2(@types/node@22.7.4)(happy-dom@15.7.4)(jsdom@25.0.1)(sass@1.79.5)(terser@5.34.1))
+        version: 2.0.2(typescript@5.6.3)(vitest@2.1.2(@types/node@22.7.4)(happy-dom@15.10.2)(jsdom@25.0.1)(sass@1.79.5)(terser@5.34.1))
       vue:
         specifier: ^3.5.10
         version: 3.5.12(typescript@5.6.3)
@@ -4884,7 +4884,7 @@ packages:
     resolution: {integrity: sha512-oWb1Z6mkHIskLzEJ/XWX0srkpkTQ7vaopMQkyaEIoq0fmtFVxOthb8cCxeT+p3ynTdkk/RZwbgG4brR5BeWECw==}
     engines: {node: '>= 4.0'}
     os: [darwin]
-    deprecated: The v1 package contains DANGEROUS / INSECURE binaries. Upgrade to safe fsevents v2
+    deprecated: Upgrade to fsevents v2 to mitigate potential security issues
 
   fsevents@2.3.2:
     resolution: {integrity: sha512-xiqMQR4xAeHTuB9uWm+fFRcIOgKBMiOBP+eXiyT7jsgVCq1bkVygt00oASowB7EdtpOHaaPgKt812P9ab+DDKA==}
@@ -5046,8 +5046,8 @@ packages:
   handle-thing@2.0.1:
     resolution: {integrity: sha512-9Qn4yBxelxoh2Ow62nP+Ka/kMnOXRi8BXnRaUwezLNhqelnN49xKz4F/dPP8OYLxLxq6JDtZb2i9XznUQbNPTg==}
 
-  happy-dom@15.7.4:
-    resolution: {integrity: sha512-r1vadDYGMtsHAAsqhDuk4IpPvr6N8MGKy5ntBo7tSdim+pWDxus2PNqOcOt8LuDZ4t3KJHE+gCuzupcx/GKnyQ==}
+  happy-dom@15.10.2:
+    resolution: {integrity: sha512-NbA5XrSovenJIIcfixCREX3ZnV7yHP4phhbfuxxf4CPn+LZpz/jIM9EqJ2DrPwgVDSMoAKH3pZwQvkbsSiCrUw==}
     engines: {node: '>=18.0.0'}
 
   has-ansi@4.0.1:
@@ -10173,7 +10173,7 @@ snapshots:
       '@cucumber/ci-environment': 9.1.0
       '@cucumber/cucumber-expressions': 16.1.1
       '@cucumber/gherkin': 26.0.3
-      '@cucumber/gherkin-streams': 5.0.1(@cucumber/gherkin@26.0.3)(@cucumber/message-streams@4.0.1(@cucumber/messages@27.0.0))(@cucumber/messages@21.0.1)
+      '@cucumber/gherkin-streams': 5.0.1(@cucumber/gherkin@26.0.3)(@cucumber/message-streams@4.0.1(@cucumber/messages@21.0.1))(@cucumber/messages@21.0.1)
       '@cucumber/gherkin-utils': 8.0.2
       '@cucumber/html-formatter': 20.2.1(@cucumber/messages@21.0.1)
       '@cucumber/message-streams': 4.0.1(@cucumber/messages@21.0.1)
@@ -10211,7 +10211,7 @@ snapshots:
       yaml: 2.6.0
       yup: 0.32.11
 
-  '@cucumber/gherkin-streams@5.0.1(@cucumber/gherkin@26.0.3)(@cucumber/message-streams@4.0.1(@cucumber/messages@27.0.0))(@cucumber/messages@21.0.1)':
+  '@cucumber/gherkin-streams@5.0.1(@cucumber/gherkin@26.0.3)(@cucumber/message-streams@4.0.1(@cucumber/messages@21.0.1))(@cucumber/messages@21.0.1)':
     dependencies:
       '@cucumber/gherkin': 26.0.3
       '@cucumber/message-streams': 4.0.1(@cucumber/messages@21.0.1)
@@ -11142,7 +11142,7 @@ snapshots:
       vite: 5.4.8(@types/node@22.7.4)(sass@1.79.5)(terser@5.34.1)
       vue: 3.5.12(typescript@5.6.3)
 
-  '@vitest/coverage-v8@2.1.2(vitest@2.1.2(@types/node@22.7.4)(happy-dom@15.7.4)(jsdom@25.0.1)(sass@1.79.5)(terser@5.34.1))':
+  '@vitest/coverage-v8@2.1.2(vitest@2.1.2(@types/node@22.7.4)(happy-dom@15.10.2)(jsdom@25.0.1)(sass@1.79.5)(terser@5.34.1))':
     dependencies:
       '@ampproject/remapping': 2.3.0
       '@bcoe/v8-coverage': 0.2.3
@@ -11156,7 +11156,7 @@ snapshots:
       std-env: 3.7.0
       test-exclude: 7.0.1
       tinyrainbow: 1.2.0
-      vitest: 2.1.2(@types/node@22.7.4)(happy-dom@15.7.4)(jsdom@25.0.1)(sass@1.79.5)(terser@5.34.1)
+      vitest: 2.1.2(@types/node@22.7.4)(happy-dom@15.10.2)(jsdom@25.0.1)(sass@1.79.5)(terser@5.34.1)
     transitivePeerDependencies:
       - supports-color
 
@@ -11200,10 +11200,10 @@ snapshots:
       loupe: 3.1.1
       tinyrainbow: 1.2.0
 
-  '@vitest/web-worker@2.1.2(vitest@2.1.2(@types/node@22.7.4)(happy-dom@15.7.4)(jsdom@25.0.1)(sass@1.79.5)(terser@5.34.1))':
+  '@vitest/web-worker@2.1.2(vitest@2.1.2(@types/node@22.7.4)(happy-dom@15.10.2)(jsdom@25.0.1)(sass@1.79.5)(terser@5.34.1))':
     dependencies:
       debug: 4.3.7(supports-color@8.1.1)
-      vitest: 2.1.2(@types/node@22.7.4)(happy-dom@15.7.4)(jsdom@25.0.1)(sass@1.79.5)(terser@5.34.1)
+      vitest: 2.1.2(@types/node@22.7.4)(happy-dom@15.10.2)(jsdom@25.0.1)(sass@1.79.5)(terser@5.34.1)
     transitivePeerDependencies:
       - supports-color
 
@@ -13777,7 +13777,7 @@ snapshots:
 
   handle-thing@2.0.1: {}
 
-  happy-dom@15.7.4:
+  happy-dom@15.10.2:
     dependencies:
       entities: 4.5.0
       webidl-conversions: 7.0.0
@@ -17691,13 +17691,13 @@ snapshots:
       sass: 1.79.5
       terser: 5.34.1
 
-  vitest-mock-extended@2.0.2(typescript@5.6.3)(vitest@2.1.2(@types/node@22.7.4)(happy-dom@15.7.4)(jsdom@25.0.1)(sass@1.79.5)(terser@5.34.1)):
+  vitest-mock-extended@2.0.2(typescript@5.6.3)(vitest@2.1.2(@types/node@22.7.4)(happy-dom@15.10.2)(jsdom@25.0.1)(sass@1.79.5)(terser@5.34.1)):
     dependencies:
       ts-essentials: 10.0.1(typescript@5.6.3)
       typescript: 5.6.3
-      vitest: 2.1.2(@types/node@22.7.4)(happy-dom@15.7.4)(jsdom@25.0.1)(sass@1.79.5)(terser@5.34.1)
+      vitest: 2.1.2(@types/node@22.7.4)(happy-dom@15.10.2)(jsdom@25.0.1)(sass@1.79.5)(terser@5.34.1)
 
-  vitest@2.1.2(@types/node@22.7.4)(happy-dom@15.7.4)(jsdom@25.0.1)(sass@1.79.5)(terser@5.34.1):
+  vitest@2.1.2(@types/node@22.7.4)(happy-dom@15.10.2)(jsdom@25.0.1)(sass@1.79.5)(terser@5.34.1):
     dependencies:
       '@vitest/expect': 2.1.2
       '@vitest/mocker': 2.1.2(@vitest/spy@2.1.2)(vite@5.4.8(@types/node@22.7.4)(sass@1.79.5)(terser@5.34.1))
@@ -17720,7 +17720,7 @@ snapshots:
       why-is-node-running: 2.3.0
     optionalDependencies:
       '@types/node': 22.7.4
-      happy-dom: 15.7.4
+      happy-dom: 15.10.2
       jsdom: 25.0.1
     transitivePeerDependencies:
       - less
