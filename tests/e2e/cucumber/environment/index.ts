@@ -244,7 +244,7 @@ const cleanUpSpaces = async (adminUser: User) => {
 const cleanUpGroup = async (adminUser: User) => {
   const requests: Promise<Group>[] = []
   createdGroupStore.forEach((group) => {
-    requests.push(api.graph.deleteGroup({ group, admin: adminUser }))
+    requests.push(api.provision.deleteGroup({ group, admin: adminUser }))
   })
 
   await Promise.all(requests)

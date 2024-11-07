@@ -1,6 +1,6 @@
 import join from 'join-path'
 import { getIdFromResponse, request, realmBasePath } from './utils'
-import { deleteUser as graphDeleteUser, getUserId } from '../graph'
+import { deleteUser as graphDeleteUser, getUserId, deleteGroup as graphDeleteGroup } from '../graph'
 import { checkResponseStatus } from '../http'
 import {User, KeycloakRealmRole, Group} from '../../types'
 import { UsersEnvironment } from '../../environment'
@@ -197,4 +197,28 @@ export const addUserToGroup = ({ admin, uuid, groupId}: { admin: User; uuid: str
     path: join(realmBasePath, 'users', uuid, 'groups', groupId),
     user: admin
   })
+}
+
+export const deleteGroup = async ({group, admin }: { group: Group; admin: User }): Promise<Group> => {
+  // first delete ocis group
+  // deletes the user data
+  await graphDeleteGroup({ group, admin })
+
+  const usersEnvironment = new UsersEnvironment()
+  const KeycloakGroup = usersEnvironment.getCreatedKeycloakGroup({ key: group.id })
+  const response = await request({
+    method: 'DELETE',
+    path: join(realmBasePath, 'groups', KeycloakGroup.uuid),
+    user: admin
+  })
+  checkResponseStatus(response, 'Failed to delete keycloak user: ' + user.id)
+  if (response.ok) {
+    try {
+      const usersEnvironment = new UsersEnvironment()
+      usersEnvironment.removeCreatedGroup({ key: group.id })
+    } catch (e) {
+      console.error('Error removing Keycloak group:', e)
+    }
+  }
+  return group
 }

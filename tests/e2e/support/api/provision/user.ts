@@ -4,6 +4,7 @@ import {
   deleteUser as graphDeleteUser,
   assignRole as graphAssignRole,
   createGroup as graphCreateGroup,
+  deleteGroup as graphDeleteGroup,
   getUserId
 } from '../graph'
 import {
@@ -12,6 +13,7 @@ import {
   assignRole as keycloakAssignRole,
   unAssignRole as keycloakUnAssignRole,
   createGroup as keycloakCreateGroup,
+  deleteGroup as keycloakDeleteGroup,
 } from '../keycloak'
 import { config } from '../../../config'
 import { UsersEnvironment } from '../../environment'
@@ -64,4 +66,11 @@ export const createGroup = async ({ group, admin }: { group: Group; admin: User 
     return await keycloakCreateGroup({ group, admin })
   }
   return await graphCreateGroup({ group, admin })
+}
+
+export const deleteGroup = async ({ group, admin }: { group: Group; admin: User }): Promise<Group> => {
+  if (config.keycloak) {
+    return await keycloakDeleteGroup({ group, admin })
+  }
+  return await graphDeleteGroup({ group, admin })
 }

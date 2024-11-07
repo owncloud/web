@@ -103,6 +103,16 @@ export class UsersEnvironment {
     return group
   }
 
+  removeCreatedGroup({ key }: { key: string }): Group {
+    const groupKey = key.toLowerCase()
+
+    if (!createdGroupStore.has(groupKey)) {
+      throw new Error(`group with key '${groupKey}' not found`)
+    }
+
+    return createdGroupStore.delete(groupKey)
+  }
+
   storeCreatedKeycloakUser({ user }: { user: User }): User {
     if (keycloakCreatedUser.has(user.id)) {
       throw new Error(`Keycloak user '${user.id}' already exists`)
@@ -111,6 +121,15 @@ export class UsersEnvironment {
     return user
   }
   storeCreatedKeycloakGroup({ key }: { key: string }): Group {
+    const groupKey = key.toLowerCase()
+
+    if (!keycloakCreatedGroup.has(groupKey)) {
+      throw new Error(`group with key '${groupKey}' not found`)
+    }
+
+    return keycloakCreatedGroup.get(groupKey)
+  }
+  getCreatedKeycloakGroup({ key }: { key: string }): Group {
     const groupKey = key.toLowerCase()
 
     if (!keycloakCreatedGroup.has(groupKey)) {
