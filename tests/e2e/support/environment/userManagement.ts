@@ -5,6 +5,7 @@ import {
   createdUserStore,
   createdGroupStore,
   keycloakCreatedUser,
+  keycloakCreatedGroup,
   federatedUserStore
 } from '../store'
 import { config } from '../../config'
@@ -108,6 +109,15 @@ export class UsersEnvironment {
     }
     keycloakCreatedUser.set(user.id, user)
     return user
+  }
+  storeCreatedKeycloakGroup({ key }: { key: string }): Group {
+    const groupKey = key.toLowerCase()
+
+    if (!keycloakCreatedGroup.has(groupKey)) {
+      throw new Error(`group with key '${groupKey}' not found`)
+    }
+
+    return keycloakCreatedGroup.get(groupKey)
   }
 
   getCreatedKeycloakUser({ key }: { key: string }): User {

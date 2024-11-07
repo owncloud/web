@@ -22,7 +22,7 @@ export const request = async (args: {
   return await httpRequest({ ...args, isKeycloakRequest: true })
 }
 
-export const getUserIdFromResponse = (response: Response): string => {
+export const getIdFromResponse = (response: Response): string => {
   return response.headers.get('location').split('/').pop()
 }
 

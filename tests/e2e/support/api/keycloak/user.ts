@@ -1,8 +1,8 @@
 import join from 'join-path'
-import { getUserIdFromResponse, request, realmBasePath } from './utils'
+import { getIdFromResponse, request, realmBasePath } from './utils'
 import { deleteUser as graphDeleteUser, getUserId } from '../graph'
 import { checkResponseStatus } from '../http'
-import { User, KeycloakRealmRole } from '../../types'
+import {User, KeycloakRealmRole, Group} from '../../types'
 import { UsersEnvironment } from '../../environment'
 import { keycloakRealmRoles } from '../../store'
 import { state } from '../../../cucumber/environment/shared'
@@ -44,7 +44,7 @@ export const createUser = async ({ user, admin }: { user: User; admin: User }): 
   checkResponseStatus(creationRes, 'Failed while creating user')
 
   // created user id
-  const keycloakUUID = getUserIdFromResponse(creationRes)
+  const keycloakUUID = getIdFromResponse(creationRes)
 
   // assign realmRoles to user
   const defaultNewUserRole = 'User'
@@ -161,4 +161,40 @@ export const getRealmRole = async (role: string, admin: User): Promise<KeycloakR
   }
 
   throw new Error(`Role '${role}' not found in the keycloak realm`)
+}
+
+export const createGroup = async ({ group, admin }: { group: Group; admin: User }): Promise<Group> => {
+  const body = JSON.stringify({
+    name: group.displayName
+  })
+  // create a user
+  const creationResponse = await request({
+    method: 'POST',
+    path: join(realmBasePath, 'groups'),
+    body,
+    user: admin
+  })
+  checkResponseStatus(creationResponse, 'Failed while creating user')
+
+  // created group id
+  const keycloakGroupID = getIdFromResponse(creationResponse)
+
+  // assign created group to admin
+  const defaultUser = 'Admin'
+  const addUserToGroupRes = addUserToGroup({ admin, uuid: keycloakUUID, groupId: keycloakGroupID })
+  checkResponseStatus(addUserToGroupRes, 'Failed while adding user to group')
+
+  const usersEnvironment = new UsersEnvironment()
+  // stored keycloak user information on storage
+  usersEnvironment.storeCreatedKeycloakGroup({ group: { ...group, uuid: keycloakGroupID } })
+
+  return group
+}
+
+export const addUserToGroup = ({ admin, uuid, groupId}: { admin: User; uuid: string; groupId: string }) => {
+  return request({
+    method: 'POST',
+    path: join(realmBasePath, 'users', uuid, 'groups', groupId),
+    user: admin
+  })
 }
