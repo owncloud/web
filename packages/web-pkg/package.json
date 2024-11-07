@@ -76,9 +76,9 @@
     "@ownclouders/web-test-helpers": "workspace:^",
     "@types/dompurify": "3.0.5",
     "@types/lodash-es": "4.17.12",
-    "@vitest/web-worker": "2.1.2",
-    "clean-publish": "5.0.0",
-    "vite-plugin-dts": "4.2.4",
+    "@vitest/web-worker": "2.1.4",
+    "clean-publish": "5.1.0",
+    "vite-plugin-dts": "4.3.0",
     "vite-plugin-node-polyfills": "0.22.0"
   }
 }
