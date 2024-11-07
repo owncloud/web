@@ -1,6 +1,5 @@
 {
   "ignores": [
-    "core-js",
     "requirejs",
     "@babel/register"
   ]

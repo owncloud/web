@@ -116,9 +116,6 @@ importers:
       commander:
         specifier: 12.1.0
         version: 12.1.0
-      core-js:
-        specifier: 3.38.1
-        version: 3.38.1
       cucumber-html-reporter:
         specifier: 7.2.0
         version: 7.2.0
