@@ -9,13 +9,16 @@
 //
 // ========================================================================
 
+@use "sass:string";
+@use "sass:meta";
+
 /* stylelint-disable */
 
 @function str-replace($string, $search, $replace: "") {
-  $index: str-index($string, $search);
+  $index: string.index($string, $search);
 
   @if $index {
-    @return str-slice($string, 1, $index - 1) + $replace + str-replace(str-slice($string, $index + str-length($search)), $search, $replace);
+    @return string.slice($string, 1, $index - 1) + $replace + str-replace(string.slice($string, $index + string.length($search)), $search, $replace);
   }
 
   @return $string;
@@ -25,8 +28,9 @@
 
   $replace-src: str-replace($src, $color-default, $color-new) !default;
   $replace-src: str-replace($replace-src, "#", "%23");
+  $replace-src: string.quote($replace-src);
 
-  background-image: url(quote($replace-src));
+  background-image: url($replace-src);
 }
 
 // Variables
@@ -232,7 +236,7 @@ $internal-form-checkbox-indeterminate-image: "data:image/svg+xml;charset=UTF-8,%
   /* 2 */
   width: 100%;
 
-  @if (mixin-exists(hook-form)) { @include hook-form(); }
+  @if (meta.mixin-exists(hook-form)) { @include hook-form(); }
 }
 
 /*
