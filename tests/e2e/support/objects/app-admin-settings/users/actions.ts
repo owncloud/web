@@ -306,7 +306,7 @@ export const addUserToGroups = async (args: {
     await page.locator(groupsInput).pressSequentially(group)
     await page.keyboard.press('Enter')
   }
-
+  console.log("hh")
   const checkResponses = []
   for (const groupId of groupIds) {
     checkResponses.push(

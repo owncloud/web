@@ -1,13 +1,14 @@
 import join from 'join-path'
 import { getIdFromResponse, request, realmBasePath } from './utils'
-import { deleteUser as graphDeleteUser, getUserId, deleteGroup as graphDeleteGroup } from '../graph'
+import { deleteUser as graphDeleteUser, getUserId, getGroup as graphGetGroup } from '../graph'
 import { checkResponseStatus } from '../http'
-import {User, KeycloakRealmRole, Group} from '../../types'
+import { User, KeycloakRealmRole, Group} from '../../types'
 import { UsersEnvironment } from '../../environment'
 import { keycloakRealmRoles } from '../../store'
 import { state } from '../../../cucumber/environment/shared'
 import { initializeUser } from '../../utils/tokenHelper'
 import { setAccessTokenForKeycloakOcisUser } from './ocisUserToken'
+import {getGroup} from "../graph/userManagement";
 
 const ocisKeycloakUserRoles: Record<string, string> = {
   Admin: 'ocisAdmin',
@@ -167,12 +168,14 @@ export const createGroup = async ({ group, admin }: { group: Group; admin: User 
   const body = JSON.stringify({
     name: group.displayName
   })
+
   // create a user
   const creationResponse = await request({
     method: 'POST',
     path: join(realmBasePath, 'groups'),
     body,
-    user: admin
+    user: admin,
+    header: { 'Content-Type': 'application/json' }
   })
   checkResponseStatus(creationResponse, 'Failed while creating user')
 
@@ -180,20 +183,31 @@ export const createGroup = async ({ group, admin }: { group: Group; admin: User 
   const keycloakGroupID = getIdFromResponse(creationResponse)
 
   // assign created group to admin
-  const defaultUser = 'Admin'
-  const addUserToGroupRes = addUserToGroup({ admin, uuid: keycloakUUID, groupId: keycloakGroupID })
+  const keycloakUUID = await (await (await getUser({ user: 'admin', admin })).json())[0].id
+  const addUserToGroupRes = await addUserToGroup({ admin, uuid: keycloakUUID, groupId: keycloakGroupID })
   checkResponseStatus(addUserToGroupRes, 'Failed while adding user to group')
-
-  const usersEnvironment = new UsersEnvironment()
   // stored keycloak user information on storage
+  const usersEnvironment = new UsersEnvironment()
   usersEnvironment.storeCreatedKeycloakGroup({ group: { ...group, uuid: keycloakGroupID } })
+  await new Promise(resolve => setTimeout(resolve, 30000));
+  // login to initialize the user in oCIS Web
+  await initializeUser({
+    browser: state.browser,
+    user: admin,
+    waitForSelector: '#web-content'
+  })
 
+  // await new Promise(resolve => setTimeout(resolve, 20000));
+  const oCISGroupId =await (await (await graphGetGroup(admin, group.id)).json())
+    .value.find((item: { displayName: string }) => item.displayName === group.displayName)?.id;
+  console.log(oCISGroupId)
+  usersEnvironment.storeCreatedGroup({ group: { ...group, uuid: oCISGroupId } })
   return group
 }
 
-export const addUserToGroup = ({ admin, uuid, groupId}: { admin: User; uuid: string; groupId: string }) => {
-  return request({
-    method: 'POST',
+export const addUserToGroup = async ({ admin, uuid, groupId}: { admin: User; uuid: string; groupId: string }) => {
+  return await request({
+    method: 'PUT',
     path: join(realmBasePath, 'users', uuid, 'groups', groupId),
     user: admin
   })
@@ -202,23 +216,34 @@ export const addUserToGroup = ({ admin, uuid, groupId}: { admin: User; uuid: str
 export const deleteGroup = async ({group, admin }: { group: Group; admin: User }): Promise<Group> => {
   // first delete ocis group
   // deletes the user data
-  await graphDeleteGroup({ group, admin })
+  // await graphDeleteGroup({ group, admin })
 
   const usersEnvironment = new UsersEnvironment()
   const KeycloakGroup = usersEnvironment.getCreatedKeycloakGroup({ key: group.id })
+
   const response = await request({
     method: 'DELETE',
     path: join(realmBasePath, 'groups', KeycloakGroup.uuid),
     user: admin
   })
-  checkResponseStatus(response, 'Failed to delete keycloak user: ' + user.id)
+
+  checkResponseStatus(response, 'Failed to delete keycloak group: ' + group.id)
+
   if (response.ok) {
     try {
       const usersEnvironment = new UsersEnvironment()
-      usersEnvironment.removeCreatedGroup({ key: group.id })
+      usersEnvironment.removeCreatedKeycloakGroup({ key: group.id })
     } catch (e) {
       console.error('Error removing Keycloak group:', e)
     }
   }
   return group
+}
+
+export const getUser = async ({ user, admin }: { user: string; admin: User }) => {
+  return await request({
+    method: 'GET',
+    path: join(realmBasePath, `users?username=${user}&exact=true`),
+    user: admin
+  })
 }

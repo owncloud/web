@@ -68,9 +68,9 @@ export const createGroup = async ({ group, admin }: { group: Group; admin: User 
   return await graphCreateGroup({ group, admin })
 }
 
-export const deleteGroup = async ({ group, admin }: { group: Group; admin: User }): Promise<Group> => {
-  if (config.keycloak) {
-    return await keycloakDeleteGroup({ group, admin })
-  }
-  return await graphDeleteGroup({ group, admin })
-}
+// export const deleteGroup = async ({ group, admin }: { group: Group; admin: User }): Promise<Group> => {
+//   if (config.keycloak) {
+//     return await keycloakDeleteGroup({ group, admin })
+//   }
+//   return await graphDeleteGroup({ group, admin })
+// }

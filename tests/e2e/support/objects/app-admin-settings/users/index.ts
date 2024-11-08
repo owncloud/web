@@ -120,6 +120,7 @@ export class Users {
     action: string
   }): Promise<void> {
     const uuid = this.getUUID({ key })
+    console.log("hello")
     await po.openEditPanel({ page: this.#page, uuid, action })
     await po.addUserToGroups({ page: this.#page, userId: uuid, groups })
   }

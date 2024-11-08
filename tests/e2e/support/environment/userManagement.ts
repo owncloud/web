@@ -87,10 +87,6 @@ export class UsersEnvironment {
   getCreatedGroup({ key }: { key: string }): Group {
     const groupKey = key.toLowerCase()
 
-    if (!createdGroupStore.has(groupKey)) {
-      throw new Error(`group with key '${groupKey}' not found`)
-    }
-
     return createdGroupStore.get(groupKey)
   }
 
@@ -120,21 +116,15 @@ export class UsersEnvironment {
     keycloakCreatedUser.set(user.id, user)
     return user
   }
-  storeCreatedKeycloakGroup({ key }: { key: string }): Group {
-    const groupKey = key.toLowerCase()
-
-    if (!keycloakCreatedGroup.has(groupKey)) {
-      throw new Error(`group with key '${groupKey}' not found`)
+  storeCreatedKeycloakGroup({ group }: { group: Group }): Group {
+    if (keycloakCreatedGroup.has(group)) {
+      throw new Error(`group with key '${group.id}' already exists`)
     }
 
-    return keycloakCreatedGroup.get(groupKey)
+    return keycloakCreatedGroup.set(group.id, group)
   }
   getCreatedKeycloakGroup({ key }: { key: string }): Group {
     const groupKey = key.toLowerCase()
-
-    if (!keycloakCreatedGroup.has(groupKey)) {
-      throw new Error(`group with key '${groupKey}' not found`)
-    }
 
     return keycloakCreatedGroup.get(groupKey)
   }
@@ -156,5 +146,15 @@ export class UsersEnvironment {
     }
 
     return keycloakCreatedUser.delete(userKey)
+  }
+
+  removeCreatedKeycloakGroup({ key }: { key: string }): boolean {
+    const groupKey = key.toLowerCase()
+
+    if (!keycloakCreatedGroup.has(groupKey)) {
+      throw new Error(`group with key '${groupKey}' not found`)
+    }
+
+    return keycloakCreatedGroup.delete(groupKey)
   }
 }

@@ -23,6 +23,7 @@ import {
   createdGroupStore,
   createdUserStore,
   keycloakCreatedUser,
+  keycloakCreatedGroup,
   federatedUserStore
 } from '../../support/store'
 import { Group, User } from '../../support/types'
@@ -243,9 +244,14 @@ const cleanUpSpaces = async (adminUser: User) => {
 
 const cleanUpGroup = async (adminUser: User) => {
   const requests: Promise<Group>[] = []
-  createdGroupStore.forEach((group) => {
-    requests.push(api.provision.deleteGroup({ group, admin: adminUser }))
+  keycloakCreatedGroup.forEach((group) => {
+    requests.push(api.keycloak.deleteGroup({ group, admin: adminUser }))
   })
+
+  createdGroupStore.forEach((group) => {
+    requests.push(api.graph.deleteGroup({ group, admin: adminUser }))
+  })
+
 
   await Promise.all(requests)
   createdGroupStore.clear()
