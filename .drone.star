@@ -1031,7 +1031,7 @@ def cacheOcisPipeline(ctx):
                 rebuildBuildArtifactCache(ctx, "ocis", "ocis")
     else:
         steps = checkForExistingOcisCache(ctx) + \
-                buildOcis() + \
+                buildOcis(enableVips = True) + \
                 cacheOcis()
     return [{
         "kind": "pipeline",
@@ -1068,8 +1068,12 @@ def restoreOcisCache():
         ],
     }]
 
-def buildOcis():
+def buildOcis(enableVips = False):
     ocis_repo_url = "https://github.com/owncloud/ocis.git"
+    if enableVips:
+        build_command = "retry -t 3 'make build ENABLE_VIPS=1'"
+    else:
+        build_command = "retry -t 3 'make build'"
     return [
         {
             "name": "clone-ocis",
@@ -1101,7 +1105,7 @@ def buildOcis():
             "commands": [
                 "source .drone.env",
                 "cd repo_ocis/ocis",
-                "retry -t 3 'make build'",
+                build_command,
                 "cp bin/ocis %s" % dir["web"],
             ],
             "volumes": go_step_volumes,
