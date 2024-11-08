@@ -87,7 +87,7 @@ describe('PreviewService', () => {
       })
       expect(preview).toEqual(undefined)
     })
-    it('retries when the server returns a 429 status code', async () => {
+    it.each([425, 429])('retries when the server returns a %s status code', async (status) => {
       const supportedMimeTypes = ['image/png']
       const { previewService, clientService } = getWrapper({
         supportedMimeTypes,
@@ -96,7 +96,7 @@ describe('PreviewService', () => {
 
       clientService.httpAuthenticated.get.mockRejectedValueOnce({
         response: { headers: { 'retry-after': 0.1 } },
-        status: 429
+        status: status
       })
       clientService.httpAuthenticated.get.mockResolvedValueOnce(undefined)
 
