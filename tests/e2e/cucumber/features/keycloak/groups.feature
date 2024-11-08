@@ -17,6 +17,7 @@ Feature: groups management
     When "Admin" logs out
     When "Admin" logs in
     When "Admin" logs out
+    When "Admin" logs in
 #    And "Admin" opens the "admin-settings" app
 #    And "Admin" navigates to the groups management page
 #    When "Admin" creates the following groups
