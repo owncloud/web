@@ -1,3 +1,26 @@
+Changelog for ownCloud Web [unreleased] (UNRELEASED)
+=======================================
+The following sections list the changes in ownCloud web unreleased relevant to
+ownCloud admins and users.
+
+[unreleased]: https://github.com/owncloud/web/compare/v11.0.2...master
+
+Summary
+-------
+
+* Enhancement - Create spaces via admin settings: [#11849](https://github.com/owncloud/web/pull/11849)
+
+Details
+-------
+
+* Enhancement - Create spaces via admin settings: [#11849](https://github.com/owncloud/web/pull/11849)
+
+   We've added a new feature that allows you to create spaces via the admin
+   settings.
+
+   https://github.com/owncloud/web/issues/11771
+   https://github.com/owncloud/web/pull/11849
+
 Changelog for ownCloud Web [11.0.2] (2024-11-07)
 =======================================
 The following sections list the changes in ownCloud web 11.0.2 relevant to
