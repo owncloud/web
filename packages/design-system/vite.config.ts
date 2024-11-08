@@ -11,7 +11,7 @@ export default defineConfig({
     preprocessorOptions: {
       scss: {
         additionalData: `@import "${projectRootDir}/packages/design-system/src/styles/styles";`,
-        silenceDeprecations: ['legacy-js-api']
+        silenceDeprecations: ['legacy-js-api', 'import']
       }
     }
   },
