@@ -181,8 +181,7 @@ import {
   useLoadPreview
 } from '@ownclouders/web-pkg'
 
-import { AppBar } from '@ownclouders/web-pkg'
-import CreateSpace from '../../components/AppBar/CreateSpace.vue'
+import { AppBar, CreateSpace } from '@ownclouders/web-pkg'
 import {
   useAbility,
   useClientService,

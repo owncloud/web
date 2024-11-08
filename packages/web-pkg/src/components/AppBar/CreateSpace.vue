@@ -2,14 +2,14 @@
   <oc-button
     id="new-space-menu-btn"
     key="new-space-menu-btn-enabled"
-    v-oc-tooltip="$gettext('Create a new space')"
-    :aria-label="$gettext('Create a new space')"
+    v-oc-tooltip="showLabel ? undefined : $gettext('New space')"
+    :aria-label="showLabel ? undefined : $gettext('New space')"
     appearance="filled"
     variation="primary"
     @click="showCreateSpaceModal"
   >
     <oc-icon name="add" />
-    <span v-translate>New Space</span>
+    <span v-if="showLabel" v-text="$gettext('New Space')" />
   </oc-button>
 </template>
 
@@ -23,10 +23,17 @@ import {
   useMessages,
   useSpacesStore,
   useResourcesStore
-} from '@ownclouders/web-pkg'
+} from '../../composables'
 
 export default defineComponent({
-  setup() {
+  props: {
+    showLabel: {
+      type: Boolean,
+      default: true
+    }
+  },
+  emits: ['spaceCreated'],
+  setup(props, { emit }) {
     const { showMessage, showErrorMessage } = useMessages()
     const { $gettext } = useGettext()
     const { createSpace } = useCreateSpace()
@@ -40,6 +47,7 @@ export default defineComponent({
         const createdSpace = await createSpace(name)
         upsertResource(createdSpace)
         spacesStore.upsertSpace(createdSpace)
+        emit('spaceCreated', createdSpace)
         showMessage({ title: $gettext('Space was created successfully') })
       } catch (error) {
         console.error(error)

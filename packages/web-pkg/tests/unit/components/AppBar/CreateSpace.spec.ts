@@ -2,7 +2,7 @@ import CreateSpace from '../../../../src/components/AppBar/CreateSpace.vue'
 import { mockDeep } from 'vitest-mock-extended'
 import { Resource, SpaceResource } from '@ownclouders/web-client'
 import { defaultPlugins, mount, defaultComponentMocks } from '@ownclouders/web-test-helpers'
-import { useMessages, useModals, useSpacesStore } from '@ownclouders/web-pkg'
+import { useMessages, useModals, useSpacesStore } from '../../../../src/composables'
 import { unref } from 'vue'
 
 const selectors = {
@@ -36,6 +36,7 @@ describe('CreateSpace component', () => {
 
       const spacesStore = useSpacesStore()
       expect(spacesStore.upsertSpace).toHaveBeenCalled()
+      expect(wrapper.emitted('spaceCreated')).toBeTruthy()
     })
     it('shows a message when an error occurred', async () => {
       vi.spyOn(console, 'error').mockImplementation(() => undefined)

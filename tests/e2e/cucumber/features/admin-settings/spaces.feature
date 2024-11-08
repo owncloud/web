@@ -1,5 +1,27 @@
 Feature: spaces management
 
+  Scenario: spaces can be created
+    Given "Admin" creates following users using API
+      | id    |
+      | Alice |
+    And "Admin" assigns following roles to the users using API
+      | id    | role        |
+      | Alice | Space Admin |
+    And "Admin" creates the following project spaces using API
+      | name   | id     |
+      | team A | team.a |
+    When "Alice" logs in
+    And "Alice" opens the "admin-settings" app
+    And "Alice" navigates to the project spaces management page
+    And "Alice" creates the following project spaces
+      | name | id     |
+      | team | team.b |
+    Then "Alice" should see the following spaces
+      | id     |
+      | team.a |
+      | team.b |
+    And "Alice" logs out
+
   Scenario: spaces can be managed in the admin settings via the context menu
     Given "Admin" creates following users using API
       | id    |
