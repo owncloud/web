@@ -181,7 +181,7 @@ export class PreviewService {
       })
       return window.URL.createObjectURL(data)
     } catch (e) {
-      if (e.status === 429) {
+      if ([425, 429].includes(e.status)) {
         const retryAfter = e.response?.headers?.['retry-after'] || 5
         await new Promise((resolve) => setTimeout(resolve, retryAfter * 1000))
         return this.privatePreviewBlob(options, cached, silenceErrors, signal)
@@ -218,7 +218,7 @@ export class PreviewService {
         return previewUrl
       }
     } catch (e) {
-      if (e.status === 429) {
+      if ([425, 429].includes(e.status)) {
         const retryAfter = e.response?.headers?.['retry-after'] || 5
         await new Promise((resolve) => setTimeout(resolve, retryAfter * 1000))
         return this.publicPreviewUrl(options, signal)
