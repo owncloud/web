@@ -8,10 +8,19 @@ ownCloud admins and users.
 Summary
 -------
 
+* Bugfix - Preview image retries postprocessing: [#11870](https://github.com/owncloud/web/issues/11870)
 * Enhancement - Create spaces via admin settings: [#11849](https://github.com/owncloud/web/pull/11849)
 
 Details
 -------
+
+* Bugfix - Preview image retries postprocessing: [#11870](https://github.com/owncloud/web/issues/11870)
+
+   Requests for preview images are now being retried when the images could not be
+   loaded due to postprocessing.
+
+   https://github.com/owncloud/web/issues/11870
+   https://github.com/owncloud/web/pull/11874
 
 * Enhancement - Create spaces via admin settings: [#11849](https://github.com/owncloud/web/pull/11849)
 
