@@ -68,9 +68,6 @@ x-ocis-server: &ocis-service
     OCM_OCM_INVITE_MANAGER_INSECURE: 'true'
     OCM_OCM_SHARE_PROVIDER_INSECURE: 'true'
     OCM_OCM_STORAGE_PROVIDER_INSECURE: 'true'
-    OCM_DEBUG_ADDR: '127.0.0.1:10281'
-    OCM_HTTP_ADDR: '127.0.0.1:10280'
-    OCM_GRPC_ADDR: '127.0.0.1:10282'
 
   extra_hosts:
     - host.docker.internal:${DOCKER_HOST:-host-gateway}
