@@ -1,0 +1,6 @@
+Bugfix: Preview image retries postprocessing
+
+Requests for preview images are now being retried when the images could not be loaded due to postprocessing.
+
+https://github.com/owncloud/web/issues/11870
+https://github.com/owncloud/web/pull/11874
