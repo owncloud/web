@@ -2,7 +2,7 @@ ALPINE_GIT = "alpine/git:latest"
 APACHE_TIKA = "apache/tika:2.8.0.0"
 COLLABORA_CODE = "collabora/code:24.04.5.1.1"
 CS3ORG_WOPI_SERVER = "cs3org/wopiserver:v10.3.0"
-KEYCLOAK = "quay.io/keycloak/keycloak:24.0.1"
+KEYCLOAK = "quay.io/keycloak/keycloak:25.0.0"
 MINIO_MC = "minio/mc:RELEASE.2021-10-07T04-19-58Z"
 OC_CI_ALPINE = "owncloudci/alpine:latest"
 OC_CI_BAZEL_BUILDIFIER = "owncloudci/bazel-buildifier"
@@ -1798,6 +1798,7 @@ def keycloakService():
 
 def e2eTestsOnKeycloak(ctx):
     e2e_Keycloak_tests = [
+        "keycloak",
         "journeys",
         "admin-settings/users.feature:20",
         "admin-settings/users.feature:43",
