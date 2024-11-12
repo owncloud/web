@@ -12,7 +12,7 @@
     "fuse.js": "7.0.0",
     "lodash-es": "4.17.21",
     "vue-concurrency": "5.0.1",
-    "uuid": "11.0.2",
+    "uuid": "11.0.3",
     "vue-router": "4.2.5",
     "zod": "3.23.8"
   }
