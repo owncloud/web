@@ -241,7 +241,7 @@ services:
     restart: always
 
   onlyoffice:
-    image: onlyoffice/documentserver:8.2.0
+    image: onlyoffice/documentserver:8.2.1
     entrypoint:
       - /bin/sh
       - /entrypoint-override.sh
