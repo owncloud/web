@@ -63,6 +63,7 @@ export default defineComponent({
     iframeUrl.searchParams.append('embed', 'true')
     iframeUrl.searchParams.append('embed-target', 'location')
     iframeUrl.searchParams.append('embed-choose-file-name', 'true')
+    iframeUrl.searchParams.append('embed-delegate-authentication', 'false')
     iframeUrl.searchParams.append('embed-choose-file-name-suggestion', props.originalResource.name)
 
     const onLoad = () => {
