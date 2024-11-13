@@ -69,7 +69,8 @@ export const useFolderLink = (options: ResourceRouteResolverOptions = {}) => {
     })
 
     //FIXME: As soon the backend exposes oc-share-root via webdav, only use isShareRoot fn
-    const shareRoot = isShareRoot(resource) || resource.id === space.id
+    const shareRoot =
+      isShareRoot(resource) || (resource.id === space.id && isShareSpaceResource(space))
     if (shareRoot || !parentFolderAccessible) {
       return $gettext('Shared with me')
     }
