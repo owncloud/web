@@ -1,0 +1,6 @@
+Bugfix: Open from app and Save As feature broken when opened via shared file
+
+We've fixed an issue where the Open from app and Save As feature was broken when opened via a shared file.
+
+https://github.com/owncloud/web/pull/11900
+https://github.com/owncloud/web/issues/11895

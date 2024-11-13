@@ -8,11 +8,11 @@
             id="app-top-bar-resource"
             :is-thumbnail-displayed="false"
             :is-extension-displayed="areFileExtensionsShown"
-            :path-prefix="pathPrefix"
+            :path-prefix="getPathPrefix(resource)"
             :resource="resource"
-            :parent-folder-name="parentFolderName"
+            :parent-folder-name="getParentFolderName(resource)"
             :parent-folder-link-icon-additional-attributes="
-              parentFolderLinkIconAdditionalAttributes
+              getParentFolderLinkIconAdditionalAttributes(resource)
             "
             :is-path-displayed="isPathDisplayed"
           />
@@ -99,7 +99,7 @@ import {
   useResourcesStore
 } from '../composables'
 import ResourceListItem from './FilesList/ResourceListItem.vue'
-import { Resource, isPublicSpaceResource, isShareSpaceResource } from '@ownclouders/web-client'
+import { isPublicSpaceResource, Resource } from '@ownclouders/web-client'
 import { Duration } from 'luxon'
 
 export default defineComponent({
@@ -140,9 +140,9 @@ export default defineComponent({
   emits: ['close'],
   setup(props) {
     const { $gettext, current: currentLanguage } = useGettext()
-    const { getMatchingSpace } = useGetMatchingSpace()
     const resourcesStore = useResourcesStore()
     const configStore = useConfigStore()
+    const { getMatchingSpace } = useGetMatchingSpace()
 
     const areFileExtensionsShown = computed(() => resourcesStore.areFileExtensionsShown)
     const contextMenuLabel = computed(() => $gettext('Show context menu'))
@@ -158,38 +158,20 @@ export default defineComponent({
       return $gettext(`Autosave (every %{ duration })`, { duration: duration.toHuman() })
     })
 
-    const { getParentFolderName, getParentFolderLinkIconAdditionalAttributes, getPathPrefix } =
-      useFolderLink()
-
     const space = computed(() => getMatchingSpace(props.resource))
 
-    //FIXME: We currently have problems to display the parent folder name of a shared file, so we disabled it for now
     const isPathDisplayed = computed(() => {
-      return !isShareSpaceResource(unref(space)) && !isPublicSpaceResource(unref(space))
-    })
-
-    const pathPrefix = computed(() => {
-      return props.resource ? getPathPrefix(props.resource) : null
-    })
-
-    const parentFolderName = computed(() => {
-      return props.resource ? getParentFolderName(props.resource) : null
-    })
-
-    const parentFolderLinkIconAdditionalAttributes = computed(() => {
-      return props.resource ? getParentFolderLinkIconAdditionalAttributes(props.resource) : null
+      return !isPublicSpaceResource(unref(space))
     })
 
     return {
-      pathPrefix,
-      isPathDisplayed,
       contextMenuLabel,
       closeButtonLabel,
-      parentFolderName,
-      parentFolderLinkIconAdditionalAttributes,
       areFileExtensionsShown,
       hasAutosave,
-      autoSaveTooltipText
+      autoSaveTooltipText,
+      isPathDisplayed,
+      ...useFolderLink()
     }
   }
 })

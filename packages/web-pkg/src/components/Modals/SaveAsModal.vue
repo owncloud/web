@@ -189,7 +189,7 @@ export default defineComponent({
 </script>
 
 <style lang="scss">
-.save-as-modal {
+.oc-modal.save-as-modal {
   max-width: 80vw;
   border: none;
   overflow: hidden;
