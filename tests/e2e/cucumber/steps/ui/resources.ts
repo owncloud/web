@@ -983,3 +983,15 @@ Then(
     }
   }
 )
+
+When(
+  /^"([^"]*)" extracts a file "([^"]*)" using the (sidebar panel|right-click context menu)$/,
+  async function (this: World, stepUser: string, file: any, actionType: string): Promise<void> {
+    const { page } = this.actorsEnvironment.getActor({ key: stepUser })
+    const resourceObject = new objects.applicationFiles.Resource({ page })
+    await resourceObject.extractZip({
+      resource: file,
+      via: actionType === 'sidebar panel' ? 'SIDEBAR_PANEL' : 'RIGHT_CLICK'
+    })
+  }
+)

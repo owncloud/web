@@ -364,4 +364,8 @@ export class Resource {
   async checkEmptyActivity({ resource }: { resource: string }): Promise<void> {
     await po.checkEmptyActivity({ page: this.#page, resource })
   }
+
+  async extractZip(args: Omit<po.extractZipResourceArgs, 'page'>): Promise<void> {
+    await po.extractZip({ ...args, page: this.#page })
+  }
 }

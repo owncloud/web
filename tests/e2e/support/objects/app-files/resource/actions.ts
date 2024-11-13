@@ -691,6 +691,7 @@ export type ActionViaType =
   | 'BATCH_ACTION'
   | 'SINGLE_SHARE_VIEW'
   | 'PREVIEW_TOPBAR'
+  | 'RIGHT_CLICK'
 
 export interface downloadResourcesArgs {
   page: Page
@@ -2101,4 +2102,38 @@ export const checkEmptyActivity = async ({
   await sidebar.openPanel({ page: page, name: 'activities' })
   await expect(page.getByTestId(activitySidebarPanel)).toBeVisible()
   await expect(page.locator(activitySidebarPanelBodyContent)).toContainText('No activities')
+}
+
+/**/
+
+export interface extractZipResourceArgs {
+  page: Page
+  resource: string
+  via: ActionViaType
+}
+
+export const extractZip = async (args: extractZipResourceArgs): Promise<void> => {
+  const { page, resource, via } = args
+  switch (via) {
+    case 'SIDEBAR_PANEL': {
+      await sidebar.open({ page, resource })
+      await sidebar.openPanel({ page, name: 'actions' })
+      await Promise.all([
+        page.waitForResponse((resp) => resp.status() === 201 && resp.request().method() === 'MKCOL')
+        // click on extract button
+      ])
+      break
+    }
+
+    case 'RIGHT_CLICK': {
+      await page.locator(util.format(resourceNameSelector, resource)).click({ button: 'right' })
+      await Promise.all([
+        page.waitForResponse(
+          (resp) => resp.status() === 201 && resp.request().method() === 'MKCOL'
+        ),
+        page.locator('.oc-files-actions-unzip-archive').click()
+      ])
+      break
+    }
+  }
 }
