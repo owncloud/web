@@ -75,7 +75,8 @@ describe('useFolderLink', () => {
       const resource = {
         path: '/My share/test.txt',
         remoteItemPath: '/My share',
-        remoteItemId: '1'
+        remoteItemId: '1',
+        storageId: '1'
       } as Resource
 
       const wrapper = createWrapper()

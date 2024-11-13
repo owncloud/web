@@ -1,0 +1,6 @@
+Bugfix: App top bar does not show location when shared file is opened
+
+We've fixed an issue where the app top bar did not show the location when a shared file was opened.
+
+https://github.com/owncloud/web/pull/11900
+https://github.com/owncloud/web/issues/11896
