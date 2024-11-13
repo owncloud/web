@@ -123,7 +123,7 @@ export default defineComponent({
 </script>
 
 <style lang="scss">
-.open-with-app-modal {
+.oc-modal.open-with-app-modal {
   max-width: 80vw;
   border: none;
   overflow: hidden;
