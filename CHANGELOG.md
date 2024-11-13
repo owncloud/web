@@ -9,6 +9,7 @@ Summary
 -------
 
 * Bugfix - Preview image retries postprocessing: [#11870](https://github.com/owncloud/web/issues/11870)
+* Bugfix - "Save as" / "Open" when embed delegate authentication is enabled: [#11897](https://github.com/owncloud/web/issues/11897)
 * Enhancement - Create spaces via admin settings: [#11849](https://github.com/owncloud/web/pull/11849)
 
 Details
@@ -21,6 +22,14 @@ Details
 
    https://github.com/owncloud/web/issues/11870
    https://github.com/owncloud/web/pull/11874
+
+* Bugfix - "Save as" / "Open" when embed delegate authentication is enabled: [#11897](https://github.com/owncloud/web/issues/11897)
+
+   We've fixed the "Save as" / "Open" actions when embed delegate authentication is
+   enabled on the server side.
+
+   https://github.com/owncloud/web/issues/11897
+   https://github.com/owncloud/web/pull/11899
 
 * Enhancement - Create spaces via admin settings: [#11849](https://github.com/owncloud/web/pull/11849)
 
