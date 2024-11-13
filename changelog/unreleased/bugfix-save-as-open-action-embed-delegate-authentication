@@ -1,0 +1,6 @@
+Bugfix: "Save as" / "Open" when embed delegate authentication is enabled
+
+We've fixed the "Save as" / "Open" actions when embed delegate authentication is enabled on the server side.
+
+https://github.com/owncloud/web/issues/11897
+https://github.com/owncloud/web/pull/11899
