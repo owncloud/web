@@ -10,6 +10,8 @@ Summary
 
 * Bugfix - Preview image retries postprocessing: [#11870](https://github.com/owncloud/web/issues/11870)
 * Bugfix - "Save as" / "Open" when embed delegate authentication is enabled: [#11897](https://github.com/owncloud/web/issues/11897)
+* Bugfix - App top bar does not show location when shared file is opened: [#11900](https://github.com/owncloud/web/pull/11900)
+* Bugfix - Open from app and Save As feature broken when opened via shared file: [#11900](https://github.com/owncloud/web/pull/11900)
 * Enhancement - Create spaces via admin settings: [#11849](https://github.com/owncloud/web/pull/11849)
 
 Details
@@ -30,6 +32,22 @@ Details
 
    https://github.com/owncloud/web/issues/11897
    https://github.com/owncloud/web/pull/11899
+
+* Bugfix - App top bar does not show location when shared file is opened: [#11900](https://github.com/owncloud/web/pull/11900)
+
+   We've fixed an issue where the app top bar did not show the location when a
+   shared file was opened.
+
+   https://github.com/owncloud/web/issues/11896
+   https://github.com/owncloud/web/pull/11900
+
+* Bugfix - Open from app and Save As feature broken when opened via shared file: [#11900](https://github.com/owncloud/web/pull/11900)
+
+   We've fixed an issue where the Open from app and Save As feature was broken when
+   opened via a shared file.
+
+   https://github.com/owncloud/web/issues/11895
+   https://github.com/owncloud/web/pull/11900
 
 * Enhancement - Create spaces via admin settings: [#11849](https://github.com/owncloud/web/pull/11849)
 
