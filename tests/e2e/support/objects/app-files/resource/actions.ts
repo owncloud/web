@@ -1129,13 +1129,15 @@ export const deleteResource = async (args: deleteResourceArgs): Promise<void> =>
       for (const resource of resourcesWithInfo) {
         await sidebar.open({ page, resource: resource.name })
         await sidebar.openPanel({ page, name: 'actions' })
-        await page.locator(deleteButtonSidebar).first().click()
-        await page.waitForResponse(
-          (resp) =>
-            resp.url().includes(encodeURIComponent(resource.name)) &&
-            resp.status() === 204 &&
-            resp.request().method() === 'DELETE'
-        )
+        await Promise.all([
+          page.waitForResponse(
+            (resp) =>
+              resp.url().includes(encodeURIComponent(resource.name)) &&
+              resp.status() === 204 &&
+              resp.request().method() === 'DELETE'
+          ),
+          page.locator(deleteButtonSidebar).first().click()
+        ])
         await sidebar.close({ page })
       }
       break
