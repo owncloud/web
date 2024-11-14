@@ -9,6 +9,7 @@ Summary
 -------
 
 * Bugfix - Preview image retries postprocessing: [#11870](https://github.com/owncloud/web/issues/11870)
+* Bugfix - Preview app Shared with me page: [#11883](https://github.com/owncloud/web/issues/11883)
 * Bugfix - "Save as" / "Open" when embed delegate authentication is enabled: [#11897](https://github.com/owncloud/web/issues/11897)
 * Bugfix - App top bar does not show location when shared file is opened: [#11900](https://github.com/owncloud/web/pull/11900)
 * Bugfix - Open from app and Save As feature broken when opened via shared file: [#11900](https://github.com/owncloud/web/pull/11900)
@@ -25,6 +26,13 @@ Details
 
    https://github.com/owncloud/web/issues/11870
    https://github.com/owncloud/web/pull/11874
+
+* Bugfix - Preview app Shared with me page: [#11883](https://github.com/owncloud/web/issues/11883)
+
+   We fixed a navigation issue with the preview app on the Shared with me page.
+
+   https://github.com/owncloud/web/issues/11883
+   https://github.com/owncloud/web/pull/11893
 
 * Bugfix - "Save as" / "Open" when embed delegate authentication is enabled: [#11897](https://github.com/owncloud/web/issues/11897)
 
