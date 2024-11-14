@@ -77,9 +77,3 @@ export interface FederatedShareInvitation {
   description?: string
   email?: string
 }
-
-export interface FederatedShareInvitation {
-  code: string
-  description?: string
-  email?: string
-}

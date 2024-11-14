@@ -191,7 +191,7 @@ def main(ctx):
 
     after = pipelinesDependsOn(afterPipelines(ctx), stages)
 
-    pipelines = before + stages
+    pipelines = before + stages + after
 
     deploys = example_deploys(ctx)
     if ctx.build.event != "cron":
@@ -210,6 +210,8 @@ def main(ctx):
 
 def beforePipelines(ctx):
     return checkStarlark() + \
+           licenseCheck(ctx) + \
+           documentation(ctx) + \
            changelog(ctx) + \
            pnpmCache(ctx) + \
            cacheOcisPipeline(ctx) + \
@@ -225,7 +227,7 @@ def stagePipelines(ctx):
 
     e2e_pipelines = e2eTests(ctx)
     keycloak_pipelines = e2eTestsOnKeycloak(ctx)
-    return keycloak_pipelines
+    return unit_test_pipelines + buildAndTestDesignSystem(ctx) + pipelinesDependsOn(e2e_pipelines + keycloak_pipelines, unit_test_pipelines)
 
 def afterPipelines(ctx):
     return build(ctx) + pipelinesDependsOn(notify(), build(ctx))
@@ -1797,6 +1799,15 @@ def keycloakService():
 
 def e2eTestsOnKeycloak(ctx):
     e2e_Keycloak_tests = [
+        "journeys",
+        "admin-settings/users.feature:20",
+        "admin-settings/users.feature:43",
+        "admin-settings/users.feature:106",
+        "admin-settings/users.feature:131",
+        "admin-settings/users.feature:185",
+        "admin-settings/spaces.feature",
+        "admin-settings/groups.feature",
+        "admin-settings/general.feature",
         "keycloak",
     ]
 
