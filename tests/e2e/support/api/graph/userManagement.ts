@@ -160,3 +160,13 @@ export const assignRole = async (admin: User, id: string, role: string): Promise
   })
   checkResponseStatus(response, 'Failed while assigning role to the user')
 }
+
+export const getGroup = async ({ admin }: { admin: User }) => {
+  return (
+    await request({
+      method: 'GET',
+      path: join('graph', 'v1.0', 'groups'),
+      user: admin
+    })
+  ).json()
+}

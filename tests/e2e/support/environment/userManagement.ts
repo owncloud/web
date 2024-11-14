@@ -8,6 +8,7 @@ import {
   federatedUserStore
 } from '../store'
 import { config } from '../../config'
+import { dummyKeycloakGroupStore } from '../store/keycloak'
 
 export class UsersEnvironment {
   getUser({ key }: { key: string }): User {
@@ -75,21 +76,17 @@ export class UsersEnvironment {
 
   getGroup({ key }: { key: string }): Group {
     const groupKey = key.toLowerCase()
+    const store = groupKey.startsWith('keycloak') ? dummyKeycloakGroupStore : dummyGroupStore
 
-    if (!dummyGroupStore.has(groupKey)) {
+    if (!store.has(groupKey)) {
       throw new Error(`group with key '${groupKey}' not found`)
     }
 
-    return dummyGroupStore.get(groupKey)
+    return store.get(groupKey)
   }
 
   getCreatedGroup({ key }: { key: string }): Group {
     const groupKey = key.toLowerCase()
-
-    if (!createdGroupStore.has(groupKey)) {
-      throw new Error(`group with key '${groupKey}' not found`)
-    }
-
     return createdGroupStore.get(groupKey)
   }
 

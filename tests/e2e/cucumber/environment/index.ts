@@ -41,6 +41,8 @@ import {
 } from '../../support/api/keycloak'
 import { closeSSEConnections } from '../../support/environment/sse'
 import { setAccessAndRefreshToken } from '../../support/api/token'
+import { dummyKeycloakGroupStore } from '../../support/store/keycloak'
+import { getGroup } from '../../support/api/graph/userManagement'
 
 export { World }
 
@@ -89,6 +91,7 @@ Before(async function (this: World, { pickle }: ITestCaseHookParameter) {
     if (config.keycloak) {
       await setAccessTokenForKeycloakOcisUser(user)
       await setAccessTokenForKeycloakUser(user)
+      await storeGroup(user, this.usersEnvironment)
     } else {
       await setAccessAndRefreshToken(user)
       if (isOcm(pickle)) {
@@ -244,7 +247,9 @@ const cleanUpSpaces = async (adminUser: User) => {
 const cleanUpGroup = async (adminUser: User) => {
   const requests: Promise<Group>[] = []
   createdGroupStore.forEach((group) => {
-    requests.push(api.graph.deleteGroup({ group, admin: adminUser }))
+    if (!group.id.startsWith('keycloak')) {
+      requests.push(api.graph.deleteGroup({ group, admin: adminUser }))
+    }
   })
 
   await Promise.all(requests)
@@ -257,4 +262,22 @@ const isOcm = (pickle): boolean => {
     return true
   }
   return false
+}
+
+interface GroupResponse {
+  value: Group[]
+}
+
+/*
+  store group created from keycloak on store
+ */
+const storeGroup = async (user: User, usersEnvironment) => {
+  const groups = (await getGroup({ admin: user })) as GroupResponse
+
+  dummyKeycloakGroupStore.forEach((value) => {
+    const matchingGroup = groups.value.find((group) => group.displayName === value.displayName)
+    if (matchingGroup) {
+      usersEnvironment.storeCreatedGroup({ group: { ...value, uuid: matchingGroup.id } })
+    }
+  })
 }

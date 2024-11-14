@@ -46,6 +46,7 @@ export interface Group {
   uuid?: string
   id: string
   displayName: string
+  groupTypes?: string[]
 }
 
 export interface Token {
@@ -69,6 +70,12 @@ export interface ApplicationEntity {
 export interface AppRole {
   displayName: string
   id: string
+}
+
+export interface FederatedShareInvitation {
+  code: string
+  description?: string
+  email?: string
 }
 
 export interface FederatedShareInvitation {
