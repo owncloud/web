@@ -14,7 +14,7 @@ export const useCanListVersions = () => {
     if (isTrashResource(resource)) {
       return false
     }
-    return space.canListVersions({ user: userStore.user })
+    return space?.canListVersions({ user: userStore.user })
   }
 
   return {

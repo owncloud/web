@@ -1,0 +1,6 @@
+Bugfix: Preview app Shared with me page
+
+We fixed a navigation issue with the preview app on the Shared with me page.
+
+https://github.com/owncloud/web/issues/11883
+https://github.com/owncloud/web/pull/11893
