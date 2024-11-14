@@ -1,0 +1,6 @@
+Bugfix: Public folder reload
+
+Reloading a folder on a public link page is no longer broken.
+
+https://github.com/owncloud/web/pull/11904
+https://github.com/owncloud/web/issues/11902

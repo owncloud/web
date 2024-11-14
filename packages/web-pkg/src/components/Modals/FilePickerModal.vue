@@ -58,6 +58,7 @@ export default defineComponent({
     iframeUrl.searchParams.append('hide-logo', 'true')
     iframeUrl.searchParams.append('embed', 'true')
     iframeUrl.searchParams.append('embed-target', 'file')
+    iframeUrl.searchParams.append('embed-delegate-authentication', 'false')
     iframeUrl.searchParams.append('embed-file-types', availableFileTypes.join(','))
 
     const onLoad = () => {
@@ -122,7 +123,7 @@ export default defineComponent({
 </script>
 
 <style lang="scss">
-.open-with-app-modal {
+.oc-modal.open-with-app-modal {
   max-width: 80vw;
   border: none;
   overflow: hidden;

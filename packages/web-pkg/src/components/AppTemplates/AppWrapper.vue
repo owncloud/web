@@ -281,7 +281,12 @@ export default defineComponent({
           yield addMissingDriveAliasAndItem()
         }
         space.value = unref(unref(currentFileContext).space)
-        resource.value = yield getFileInfo(currentFileContext, { signal })
+        resource.value = yield getFileInfo(unref(currentFileContext), { signal })
+
+        //FIXME: As soon the backend exposes oc-remote-id via webdav, remove the assignment below
+        if (isShareSpaceResource(unref(space))) {
+          unref(resource).remoteItemId = unref(space).id
+        }
         resourcesStore.initResourceList({ currentFolder: null, resources: [unref(resource)] })
         selectedResources.value = [unref(resource)]
       } catch (e) {

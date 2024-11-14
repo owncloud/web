@@ -293,12 +293,14 @@ export const useResourcesStore = defineStore('resources', () => {
         } else {
           const { parentFolderId } = Object.values(data)[0]
           const space = spacesStore.spaces.find(({ id }) => parentFolderId.startsWith(id))
-          data['/'] = {
-            id: space.id,
-            shareTypes: space.shareTypes,
-            parentFolderId: space.id,
-            spaceId: space.id,
-            path: '/'
+          if (space) {
+            data['/'] = {
+              id: space.id,
+              shareTypes: space.shareTypes,
+              parentFolderId: space.id,
+              spaceId: space.id,
+              path: '/'
+            }
           }
         }
       }
