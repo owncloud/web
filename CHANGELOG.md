@@ -3,7 +3,30 @@ Changelog for ownCloud Web [unreleased] (UNRELEASED)
 The following sections list the changes in ownCloud web unreleased relevant to
 ownCloud admins and users.
 
-[unreleased]: https://github.com/owncloud/web/compare/v11.0.2...master
+[unreleased]: https://github.com/owncloud/web/compare/v11.0.3...master
+
+Summary
+-------
+
+* Enhancement - Create spaces via admin settings: [#11849](https://github.com/owncloud/web/pull/11849)
+
+Details
+-------
+
+* Enhancement - Create spaces via admin settings: [#11849](https://github.com/owncloud/web/pull/11849)
+
+   We've added a new feature that allows you to create spaces via the admin
+   settings.
+
+   https://github.com/owncloud/web/issues/11771
+   https://github.com/owncloud/web/pull/11849
+
+Changelog for ownCloud Web [11.0.3] (2024-11-14)
+=======================================
+The following sections list the changes in ownCloud web 11.0.3 relevant to
+ownCloud admins and users.
+
+[11.0.3]: https://github.com/owncloud/web/compare/v11.0.2...v11.0.3
 
 Summary
 -------
@@ -14,7 +37,6 @@ Summary
 * Bugfix - App top bar does not show location when shared file is opened: [#11900](https://github.com/owncloud/web/pull/11900)
 * Bugfix - Open from app and Save As feature broken when opened via shared file: [#11900](https://github.com/owncloud/web/pull/11900)
 * Bugfix - Public folder reload: [#11904](https://github.com/owncloud/web/pull/11904)
-* Enhancement - Create spaces via admin settings: [#11849](https://github.com/owncloud/web/pull/11849)
 
 Details
 -------
@@ -64,14 +86,6 @@ Details
 
    https://github.com/owncloud/web/issues/11902
    https://github.com/owncloud/web/pull/11904
-
-* Enhancement - Create spaces via admin settings: [#11849](https://github.com/owncloud/web/pull/11849)
-
-   We've added a new feature that allows you to create spaces via the admin
-   settings.
-
-   https://github.com/owncloud/web/issues/11771
-   https://github.com/owncloud/web/pull/11849
 
 Changelog for ownCloud Web [11.0.2] (2024-11-07)
 =======================================
