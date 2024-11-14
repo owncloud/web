@@ -1,10 +1,10 @@
 Feature: Group actions
   As a user
   I want to check group operations like:
-  - sharing a resource by several users
+  - sharing a resource to several users
   - accepting multiple shares by using a batch action
 
-  Scenario: copy and move resources in personal space
+  Scenario: batch share a resource to multiple users and groups
     Given "Admin" creates following user using API
       | id    |
       | Alice |

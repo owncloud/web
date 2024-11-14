@@ -89,11 +89,9 @@ When(
     const resourceObject = new objects.applicationFiles.Resource({ page })
     switch (action) {
       case 'pauses':
-        await page.waitForTimeout(500)
         await resourceObject.pauseUpload()
         break
       case 'resumes':
-        await page.waitForTimeout(500)
         await resourceObject.resumeUpload()
         break
       case 'cancels':

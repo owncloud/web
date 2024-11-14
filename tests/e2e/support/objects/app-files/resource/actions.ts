@@ -1506,11 +1506,16 @@ export const getDisplayedResourcesFromSearch = async (page: Page): Promise<strin
 }
 
 export const getDisplayedResourcesFromFilesList = async (page: Page): Promise<string[]> => {
-  const files = []
-  await page.locator('[data-test-resource-path]').first().waitFor()
   // wait for tika indexing
   await new Promise((resolve) => setTimeout(resolve, 1000))
+  const files = []
   const result = page.locator('[data-test-resource-path]')
+
+  try {
+    await result.first().waitFor({ timeout: config.minTimeout * 1000 })
+  } catch {
+    console.log('Files list is empty')
+  }
 
   const count = await result.count()
   for (let i = 0; i < count; i++) {
