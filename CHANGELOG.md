@@ -12,6 +12,7 @@ Summary
 * Bugfix - "Save as" / "Open" when embed delegate authentication is enabled: [#11897](https://github.com/owncloud/web/issues/11897)
 * Bugfix - App top bar does not show location when shared file is opened: [#11900](https://github.com/owncloud/web/pull/11900)
 * Bugfix - Open from app and Save As feature broken when opened via shared file: [#11900](https://github.com/owncloud/web/pull/11900)
+* Bugfix - Public folder reload: [#11904](https://github.com/owncloud/web/pull/11904)
 * Enhancement - Create spaces via admin settings: [#11849](https://github.com/owncloud/web/pull/11849)
 
 Details
@@ -48,6 +49,13 @@ Details
 
    https://github.com/owncloud/web/issues/11895
    https://github.com/owncloud/web/pull/11900
+
+* Bugfix - Public folder reload: [#11904](https://github.com/owncloud/web/pull/11904)
+
+   Reloading a folder on a public link page is no longer broken.
+
+   https://github.com/owncloud/web/issues/11902
+   https://github.com/owncloud/web/pull/11904
 
 * Enhancement - Create spaces via admin settings: [#11849](https://github.com/owncloud/web/pull/11849)
 
