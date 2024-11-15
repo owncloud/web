@@ -8,29 +8,6 @@ exports[`Multiple Details SideBar Panel > displays the details side panel 1`] = 
       <p class="preview-text">1 space selected</p>
     </div>
   </div>
-  <div>
-    <table class="details-table" aria-label="Overview of the information about the selected spaces">
-      <tr>
-        <th scope="col" class="oc-pr-s oc-font-semibold">Total quota:</th>
-        <td>1 kB</td>
-      </tr>
-      <tr>
-        <th scope="col" class="oc-pr-s oc-font-semibold">Remaining quota:</th>
-        <td>900 B</td>
-      </tr>
-      <tr>
-        <th scope="col" class="oc-pr-s oc-font-semibold">Used quota:</th>
-        <td>100 B</td>
-      </tr>
-      <tr>
-        <th scope="col" class="oc-pr-s oc-font-semibold">Enabled:</th>
-        <td>1</td>
-      </tr>
-      <tr>
-        <th scope="col" class="oc-pr-s oc-font-semibold">Disabled:</th>
-        <td>0</td>
-      </tr>
-    </table>
-  </div>
+  <oc-definition-list-stub items="[object Object],[object Object],[object Object],[object Object],[object Object]" aria-label="Overview of the information about the selected spaces"></oc-definition-list-stub>
 </div>"
 `;
