@@ -147,13 +147,13 @@
         <oc-tr v-if="showWebDavDetails" class="account-page-view-options">
           <oc-td>{{ $gettext('View options') }}</oc-td>
           <oc-td v-if="!isMobileWidth">
-            <span v-text="$gettext('Show WebDAV information in file details')" />
+            <span v-text="$gettext('Show WebDAV information in details view')" />
           </oc-td>
           <oc-td data-testid="view-options">
             <oc-checkbox
               :model-value="viewOptionWebDavDetailsValue"
               size="large"
-              :label="$gettext('Show WebDAV information in file details')"
+              :label="$gettext('Show WebDAV information in details view')"
               :label-hidden="!isMobileWidth"
               data-testid="account-page-webdav-details-checkbox"
               @update:model-value="updateViewOptionsWebDavDetails"
