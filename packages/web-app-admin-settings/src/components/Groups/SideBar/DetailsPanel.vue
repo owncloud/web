@@ -10,15 +10,13 @@
     </div>
     <div v-if="group">
       <GroupInfoBox :group="group" />
-      <table
-        class="details-table"
+      <p
+        class="selected-group-details"
         :aria-label="$gettext('Overview of the information about the selected group')"
       >
-        <tr>
-          <th scope="col" class="oc-pr-s" v-text="$gettext('Group name')" />
-          <td v-text="group.displayName" />
-        </tr>
-      </table>
+        <span class="oc-pr-s oc-font-semibold" v-text="$gettext('Group name')" />
+        <span v-text="group.displayName" />
+      </p>
     </div>
   </div>
 </template>
@@ -64,15 +62,12 @@ export default defineComponent({
   font-size: 1.5rem;
 }
 
-.details-table {
+.selected-group-details {
+  display: table;
   text-align: left;
 
-  tr {
-    height: 1.5rem;
-  }
-
-  th {
-    font-weight: 600;
+  span {
+    padding: 0.2rem;
   }
 }
 </style>

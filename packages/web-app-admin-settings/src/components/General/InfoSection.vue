@@ -1,36 +1,20 @@
 <template>
   <div>
     <h2 class="oc-py-s" v-text="$gettext('Info')" />
-
-    <table class="details-table">
-      <tr>
-        <th scope="col" class="oc-pr-s" v-text="$gettext('ownCloud')" />
-        <td v-text="backendProductName" />
-      </tr>
-      <tr>
-        <th scope="col" class="oc-pr-s" v-text="$gettext('Edition')" />
-        <td v-text="backendEdition" />
-      </tr>
-      <tr>
-        <th scope="col" class="oc-pr-s" v-text="$gettext('Version')" />
-        <td v-text="backendVersion" />
-      </tr>
-      <tr>
-        <th scope="col" class="oc-pr-s" v-text="$gettext('Web client version')" />
-        <td v-text="webClientVersion" />
-      </tr>
-    </table>
+    <oc-definition-list :items="infoItems" />
   </div>
 </template>
 
 <script lang="ts">
 import { defineComponent } from 'vue'
 import { useCapabilityStore } from '@ownclouders/web-pkg'
+import { useGettext } from 'vue3-gettext'
 
 export default defineComponent({
   name: 'InfoSection',
   setup() {
     const capabilityStore = useCapabilityStore()
+    const { $gettext } = useGettext()
 
     let backendProductName = ''
     let backendVersion = ''
@@ -46,11 +30,19 @@ export default defineComponent({
       webClientVersion = process.env.PACKAGE_VERSION
     }
 
+    const infoItems = [
+      { term: $gettext('ownCloud'), definition: backendProductName },
+      { term: $gettext('Edition'), definition: backendEdition },
+      { term: $gettext('Version'), definition: backendVersion },
+      { term: $gettext('Web client version'), definition: webClientVersion }
+    ]
+
     return {
-      webClientVersion,
       backendProductName,
       backendVersion,
-      backendEdition
+      backendEdition,
+      infoItems,
+      webClientVersion
     }
   }
 })

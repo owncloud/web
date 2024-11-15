@@ -6,35 +6,12 @@
         <p class="preview-text" v-text="selectedSpacesString" />
       </div>
     </div>
-    <div>
-      <table class="details-table" :aria-label="detailsTableLabel">
-        <tr>
-          <th scope="col" class="oc-pr-s oc-font-semibold" v-text="$gettext('Total quota:')" />
-          <td v-text="totalSelectedSpaceQuotaTotal" />
-        </tr>
-        <tr>
-          <th scope="col" class="oc-pr-s oc-font-semibold" v-text="$gettext('Remaining quota:')" />
-          <td v-text="totalSelectedSpaceQuotaRemaining" />
-        </tr>
-        <tr>
-          <th scope="col" class="oc-pr-s oc-font-semibold" v-text="$gettext('Used quota:')" />
-          <td v-text="totalSelectedSpaceQuotaUsed" />
-        </tr>
-        <tr>
-          <th scope="col" class="oc-pr-s oc-font-semibold" v-text="$gettext('Enabled:')" />
-          <td v-text="totalEnabledSpaces" />
-        </tr>
-        <tr>
-          <th scope="col" class="oc-pr-s oc-font-semibold" v-text="$gettext('Disabled:')" />
-          <td v-text="totalDisabledSpaces" />
-        </tr>
-      </table>
-    </div>
+    <oc-definition-list :aria-label="detailsTableLabel" :items="items" />
   </div>
 </template>
 <script lang="ts">
 import { formatFileSize } from '../../../../helpers'
-import { computed, defineComponent, PropType } from 'vue'
+import { computed, defineComponent, PropType, unref } from 'vue'
 import { SpaceResource } from '@ownclouders/web-client'
 import { useGettext } from 'vue3-gettext'
 
@@ -95,14 +72,19 @@ export default defineComponent({
         }
       )
     })
+
+    const items = [
+      { term: $gettext('Total quota:'), definition: unref(totalSelectedSpaceQuotaTotal) },
+      { term: $gettext('Remaining quota:'), definition: unref(totalSelectedSpaceQuotaRemaining) },
+      { term: $gettext('Used quota:'), definition: unref(totalSelectedSpaceQuotaUsed) },
+      { term: $gettext('Enabled:'), definition: unref(totalEnabledSpaces) },
+      { term: $gettext('Disabled:'), definition: unref(totalDisabledSpaces) }
+    ]
+
     return {
       detailsTableLabel,
-      selectedSpacesString,
-      totalSelectedSpaceQuotaTotal,
-      totalSelectedSpaceQuotaRemaining,
-      totalSelectedSpaceQuotaUsed,
-      totalEnabledSpaces,
-      totalDisabledSpaces
+      items,
+      selectedSpacesString
     }
   }
 })
@@ -130,13 +112,6 @@ export default defineComponent({
     .preview-text {
       display: block;
     }
-  }
-}
-.details-table {
-  text-align: left;
-
-  tr {
-    height: 1.5rem;
   }
 }
 </style>
