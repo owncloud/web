@@ -8,10 +8,19 @@ ownCloud admins and users.
 Summary
 -------
 
+* Enhancement - Accessibility improvements: [#5379](https://github.com/owncloud/web/issues/5379)
 * Enhancement - Create spaces via admin settings: [#11849](https://github.com/owncloud/web/pull/11849)
 
 Details
 -------
+
+* Enhancement - Accessibility improvements: [#5379](https://github.com/owncloud/web/issues/5379)
+
+   We have further improved accessibility aspects of the web UI.
+
+   https://github.com/owncloud/web/issues/5379
+   https://github.com/owncloud/web/issues/5381
+   https://github.com/owncloud/web/pull/10830
 
 * Enhancement - Create spaces via admin settings: [#11849](https://github.com/owncloud/web/pull/11849)
 
