@@ -86,7 +86,7 @@ export default defineWebApplication({
       }
     ]
 
-    const actionCreateFromTemplate = useActionExtensionCreateFromTemplate()
+    const actionCreateFromTemplate = useActionExtensionCreateFromTemplate(appInfo)
     const extensions = computed<Extension[]>(() => {
       return [actionCreateFromTemplate]
     })
