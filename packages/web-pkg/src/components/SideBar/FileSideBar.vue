@@ -224,12 +224,13 @@ export default defineComponent({
       const loadedLinkShares = shares.filter(isLinkShare)
 
       const rolesArray = Object.values(sharesStore.graphRoles)
-      availableInternalShareRoles.value = allowedRoles.map((r) => {
-        return {
-          ...r,
-          icon: rolesArray.find((role) => role.id === r.id)?.icon
-        }
-      })
+      availableInternalShareRoles.value =
+        allowedRoles?.map((r) => {
+          return {
+            ...r,
+            icon: rolesArray.find((role) => role.id === r.id)?.icon
+          }
+        }) || []
 
       // load external share roles
       if (appsStore.isAppEnabled('open-cloud-mesh')) {
@@ -247,7 +248,12 @@ export default defineComponent({
         )
 
         availableExternalShareRoles.value =
-          rolesArray.filter((r) => allowedRoles?.map(({ id }) => id).includes(r.id)) || []
+          allowedRoles?.map((r) => {
+            return {
+              ...r,
+              icon: rolesArray.find((role) => role.id === r.id)?.icon
+            }
+          }) || []
       }
 
       // use cache for indirect shares

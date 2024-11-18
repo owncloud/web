@@ -81,7 +81,8 @@ import {
   computed,
   ref,
   unref,
-  Ref
+  Ref,
+  watch
 } from 'vue'
 import { useAbility, useUserStore } from '@ownclouders/web-pkg'
 import { Resource } from '@ownclouders/web-client'
@@ -184,6 +185,16 @@ export default defineComponent({
       selectedRole.value = role
       emit('optionChange', unref(selectedRole))
     }
+
+    watch(
+      () => props.isExternal,
+      () => {
+        if (!unref(hasExistingShareRole)) {
+          // when no role exists and the external flag changes, we need to reset the selected role
+          selectedRole.value = unref(availableRoles)[0]
+        }
+      }
+    )
 
     return {
       ability,
