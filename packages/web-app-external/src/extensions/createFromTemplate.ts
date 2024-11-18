@@ -1,5 +1,6 @@
 import {
   ActionExtension,
+  ApplicationInformation,
   contextRouteNameKey,
   contextRouteParamsKey,
   contextRouteQueryKey,
@@ -19,7 +20,9 @@ import { extractNameWithoutExtension, Resource } from '@ownclouders/web-client'
 import { useCreateFileHandler } from '../composables'
 import { useGettext } from 'vue3-gettext'
 
-export const useActionExtensionCreateFromTemplate = (): ActionExtension => {
+export const useActionExtensionCreateFromTemplate = (
+  appInfo: ApplicationInformation
+): ActionExtension => {
   const appProviderService = useAppProviderService()
   const spacesStore = useSpacesStore()
   const clientService = useClientService()
@@ -32,7 +35,7 @@ export const useActionExtensionCreateFromTemplate = (): ActionExtension => {
   const action: FileAction = {
     name: 'create-from-template',
     category: 'context',
-    label: () => $gettext('Create from template'),
+    label: () => $gettext('Create from template via %{ name }', { name: appInfo.name }),
     icon: 'swap-box',
     hasPriority: true,
     isVisible: ({ resources }) => {
@@ -52,7 +55,11 @@ export const useActionExtensionCreateFromTemplate = (): ActionExtension => {
       }
 
       return appProviderService.templateMimeTypes.some(
-        (mimeType) => mimeType.mime_type === template.mimeType
+        (mimeType) =>
+          mimeType.mime_type === template.mimeType &&
+          mimeType.app_providers.some(
+            (appProvider) => appProvider.name == appInfo.name && !!appProvider.target_ext
+          )
       )
     },
     handler: async ({ resources }) => {
@@ -63,25 +70,21 @@ export const useActionExtensionCreateFromTemplate = (): ActionExtension => {
       const templateMimeType = appProviderService.templateMimeTypes.find(
         (mimeType) => mimeType.mime_type === template.mimeType
       )
-      const firstApp = templateMimeType.app_providers.find(
-        (appProvider) => !!appProvider.target_ext
+      const app = templateMimeType.app_providers.find(
+        (appProvider) => !!appProvider.target_ext && appProvider.name === appInfo.name
       )
 
       let fileName =
         extractNameWithoutExtension({
           name: template.name,
           extension: template.extension
-        } as Resource) + `.${firstApp.target_ext}`
+        } as Resource) + `.${app.target_ext}`
 
       try {
         const { resource: personalSpaceRoot, children: existingResources } =
           await existingResourcesPromise
         if (existingResources.some((f) => f.name === fileName)) {
-          fileName = resolveFileNameDuplicate(
-            fileName,
-            firstApp.target_ext,
-            unref(existingResources)
-          )
+          fileName = resolveFileNameDuplicate(fileName, app.target_ext, unref(existingResources))
         }
 
         const createdFile = await createFileHandler({
@@ -90,7 +93,7 @@ export const useActionExtensionCreateFromTemplate = (): ActionExtension => {
           currentFolder: personalSpaceRoot
         })
 
-        const routeName = `external-${firstApp.name.toLowerCase()}-apps`
+        const routeName = `external-${app.name.toLowerCase()}-apps`
         const routeOptions = getEditorRouteOpts(
           routeName,
           spacesStore.personalSpace,
