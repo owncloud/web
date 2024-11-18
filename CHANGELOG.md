@@ -9,6 +9,7 @@ Summary
 -------
 
 * Bugfix - Fix order in roles drop down: [#11916](https://github.com/owncloud/web/pull/11916)
+* Bugfix - Allow create template with different editors: [#11923](https://github.com/owncloud/web/pull/11923)
 * Enhancement - Accessibility improvements: [#5379](https://github.com/owncloud/web/issues/5379)
 * Enhancement - Create spaces via admin settings: [#11849](https://github.com/owncloud/web/pull/11849)
 
@@ -23,6 +24,14 @@ Details
    https://github.com/owncloud/web/issues/11915
    https://github.com/owncloud/web/pull/11916
    https://github.com/owncloud/web/pull/11922
+
+* Bugfix - Allow create template with different editors: [#11923](https://github.com/owncloud/web/pull/11923)
+
+   We've fixed a bug where it was not possible to create a template with different
+   editors.
+
+   https://github.com/owncloud/web/issues/11873
+   https://github.com/owncloud/web/pull/11923
 
 * Enhancement - Accessibility improvements: [#5379](https://github.com/owncloud/web/issues/5379)
 
