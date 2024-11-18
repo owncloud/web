@@ -10,6 +10,7 @@ Summary
 
 * Bugfix - Fix order in roles drop down: [#11916](https://github.com/owncloud/web/pull/11916)
 * Bugfix - Allow create template with different editors: [#11923](https://github.com/owncloud/web/pull/11923)
+* Bugfix - Extension actions in right sidebar: [#11924](https://github.com/owncloud/web/pull/11924)
 * Enhancement - Accessibility improvements: [#5379](https://github.com/owncloud/web/issues/5379)
 * Enhancement - Create spaces via admin settings: [#11849](https://github.com/owncloud/web/pull/11849)
 
@@ -32,6 +33,14 @@ Details
 
    https://github.com/owncloud/web/issues/11873
    https://github.com/owncloud/web/pull/11923
+
+* Bugfix - Extension actions in right sidebar: [#11924](https://github.com/owncloud/web/pull/11924)
+
+   Extension actions (e.g. "Extract here") are now correctly showing in the actions
+   panel of the right sidebar.
+
+   https://github.com/owncloud/web/issues/11898
+   https://github.com/owncloud/web/pull/11924
 
 * Enhancement - Accessibility improvements: [#5379](https://github.com/owncloud/web/issues/5379)
 
