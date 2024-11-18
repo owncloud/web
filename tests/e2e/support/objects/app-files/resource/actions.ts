@@ -110,9 +110,9 @@ const uploadInfoSuccessLabelSelector = '.upload-info-label.upload-info-success'
 const uploadInfoTitle = '.upload-info-title'
 const uploadInfoLabelSelector = '.upload-info-label'
 const pauseResumeUploadButton = '#pause-upload-info-btn'
+const pauseUploadButton = '#pause-upload-info-btn[aria-label="Pause upload"]'
+const resumeUploadButton = '#pause-upload-info-btn[aria-label="Resume upload"]'
 const cancelUploadButton = '#cancel-upload-info-btn'
-const uploadPauseTooltip = '//div[text()="Pause upload"]'
-const uploadResumeTooltip = '//div[text()="Resume upload"]'
 const filesContextMenuAction = 'div[id^="context-menu-drop"] button.oc-files-actions-%s-trigger'
 const highlightedFileRowSelector = '#files-space-table tr.oc-table-highlighted'
 const emptyTrashbinButtonSelector = '.oc-files-actions-empty-trash-bin-trigger'
@@ -688,18 +688,13 @@ export const navigateMediaFile = async ({
 
 export const pauseResourceUpload = async (page: Page): Promise<void> => {
   await pauseResumeUpload(page)
-  await Promise.all([
-    page.locator(uploadResumeTooltip).waitFor(),
-    page.locator(pauseResumeUploadButton).hover()
-  ])
+  await page.locator(resumeUploadButton).waitFor()
 }
 
 export const resumeResourceUpload = async (page: Page): Promise<void> => {
   await pauseResumeUpload(page)
-  await Promise.all([
-    page.locator(uploadPauseTooltip).waitFor(),
-    page.locator(pauseResumeUploadButton).hover()
-  ])
+  await page.locator(pauseUploadButton).waitFor()
+
   await page.locator(uploadInfoSuccessLabelSelector).waitFor()
   await page.locator(uploadInfoCloseButton).click()
 }
@@ -1545,11 +1540,16 @@ export const getDisplayedResourcesFromSearch = async (page: Page): Promise<strin
 }
 
 export const getDisplayedResourcesFromFilesList = async (page: Page): Promise<string[]> => {
-  const files = []
-  await page.locator('[data-test-resource-path]').first().waitFor()
   // wait for tika indexing
   await new Promise((resolve) => setTimeout(resolve, 1000))
+  const files = []
   const result = page.locator('[data-test-resource-path]')
+
+  try {
+    await result.first().waitFor({ timeout: config.minTimeout * 1000 })
+  } catch {
+    console.log('Files list is empty')
+  }
 
   const count = await result.count()
   for (let i = 0; i < count; i++) {
