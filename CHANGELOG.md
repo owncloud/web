@@ -8,11 +8,20 @@ ownCloud admins and users.
 Summary
 -------
 
+* Bugfix - Fix order in roles drop down: [#11916](https://github.com/owncloud/web/pull/11916)
 * Enhancement - Accessibility improvements: [#5379](https://github.com/owncloud/web/issues/5379)
 * Enhancement - Create spaces via admin settings: [#11849](https://github.com/owncloud/web/pull/11849)
 
 Details
 -------
+
+* Bugfix - Fix order in roles drop down: [#11916](https://github.com/owncloud/web/pull/11916)
+
+   We've fixed an issue where the order of roles in the roles drop down was not
+   correct. Now the roles are sorted as delegated by the backend.
+
+   https://github.com/owncloud/web/issues/11915
+   https://github.com/owncloud/web/pull/11916
 
 * Enhancement - Accessibility improvements: [#5379](https://github.com/owncloud/web/issues/5379)
 
