@@ -149,9 +149,7 @@ export default defineComponent({
         roles = availableExternalRoles
       }
 
-      return [...unref(roles)].sort(
-        (role1, role2) => role1['@libre.graph.weight'] - role2['@libre.graph.weight']
-      )
+      return unref(roles)
     })
 
     let initialSelectedRole: ShareRole
