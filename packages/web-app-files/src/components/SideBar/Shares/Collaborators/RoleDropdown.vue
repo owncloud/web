@@ -144,10 +144,14 @@ export default defineComponent({
     const availableInternalRoles = inject<Ref<ShareRole[]>>('availableInternalShareRoles')
     const availableExternalRoles = inject<Ref<ShareRole[]>>('availableExternalShareRoles')
     const availableRoles = computed(() => {
+      let roles = availableInternalRoles
       if (props.isExternal) {
-        return unref(availableExternalRoles)
+        roles = availableExternalRoles
       }
-      return unref(availableInternalRoles)
+
+      return [...unref(roles)].sort(
+        (role1, role2) => role1['@libre.graph.weight'] - role2['@libre.graph.weight']
+      )
     })
 
     let initialSelectedRole: ShareRole
@@ -295,6 +299,7 @@ export default defineComponent({
         &:first-child {
           margin-top: 0;
         }
+
         &:last-child {
           margin-bottom: 0;
         }
@@ -312,6 +317,7 @@ export default defineComponent({
       }
     }
   }
+
   &-role-select-btn {
     max-width: 100%;
   }
