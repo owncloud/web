@@ -735,8 +735,8 @@ importers:
         specifier: 2.2.6
         version: 2.2.6(typescript@5.6.3)(vue@3.5.13(typescript@5.6.3))
       qs:
-        specifier: 6.13.0
-        version: 6.13.0
+        specifier: 6.13.1
+        version: 6.13.1
       uuid:
         specifier: 11.0.3
         version: 11.0.3
@@ -1177,8 +1177,8 @@ importers:
         specifier: ^8.1.0
         version: 8.3.0
       qs:
-        specifier: 6.13.0
-        version: 6.13.0
+        specifier: 6.13.1
+        version: 6.13.1
       semver:
         specifier: 7.6.3
         version: 7.6.3
