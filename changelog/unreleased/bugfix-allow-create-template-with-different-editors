@@ -1,0 +1,6 @@
+Bugfix: Allow create template with different editors
+
+We've fixed a bug where it was not possible to create a template with different editors.
+
+https://github.com/owncloud/web/pull/11923
+https://github.com/owncloud/web/issues/11873
