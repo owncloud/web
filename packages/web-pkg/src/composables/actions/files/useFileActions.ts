@@ -1,4 +1,5 @@
 import kebabCase from 'lodash-es/kebabCase'
+import isNil from 'lodash-es/isNil'
 import { isShareSpaceResource } from '@ownclouders/web-client'
 import { routeToContextQuery } from '../../appDefaults'
 import { isLocationTrashActive } from '../../../router'
@@ -96,6 +97,13 @@ export const useFileActions = () => {
       extensionType: 'action'
     })
     return contextActionExtensions.map((extension) => extension.action)
+  })
+
+  const extensionActions = computed(() => {
+    return requestExtensions<ActionExtension>({
+      id: 'global.files.context-actions',
+      extensionType: 'action'
+    }).map((e) => e.action)
   })
 
   const editorActions = computed(() => {
@@ -260,7 +268,15 @@ export const useFileActions = () => {
       ? []
       : unref(systemActions).filter(filterCallback)
 
-    return [...primaryActions, ...secondaryActions]
+    return [
+      ...primaryActions,
+      ...secondaryActions,
+      ...unref(extensionActions).filter(
+        (a) =>
+          a.isVisible(options as FileActionOptions) &&
+          (a.category === 'actions' || isNil(a.category))
+      )
+    ]
   }
 
   return {
