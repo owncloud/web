@@ -22,6 +22,7 @@ Details
 
    https://github.com/owncloud/web/issues/11915
    https://github.com/owncloud/web/pull/11916
+   https://github.com/owncloud/web/pull/11922
 
 * Enhancement - Accessibility improvements: [#5379](https://github.com/owncloud/web/issues/5379)
 
