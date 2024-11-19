@@ -81,7 +81,8 @@ import {
   computed,
   ref,
   unref,
-  Ref
+  Ref,
+  watch
 } from 'vue'
 import { useAbility, useUserStore } from '@ownclouders/web-pkg'
 import { Resource } from '@ownclouders/web-client'
@@ -144,10 +145,12 @@ export default defineComponent({
     const availableInternalRoles = inject<Ref<ShareRole[]>>('availableInternalShareRoles')
     const availableExternalRoles = inject<Ref<ShareRole[]>>('availableExternalShareRoles')
     const availableRoles = computed(() => {
+      let roles = availableInternalRoles
       if (props.isExternal) {
-        return unref(availableExternalRoles)
+        roles = availableExternalRoles
       }
-      return unref(availableInternalRoles)
+
+      return unref(roles)
     })
 
     let initialSelectedRole: ShareRole
@@ -182,6 +185,16 @@ export default defineComponent({
       selectedRole.value = role
       emit('optionChange', unref(selectedRole))
     }
+
+    watch(
+      () => props.isExternal,
+      () => {
+        if (!unref(hasExistingShareRole)) {
+          // when no role exists and the external flag changes, we need to reset the selected role
+          selectedRole.value = unref(availableRoles)[0]
+        }
+      }
+    )
 
     return {
       ability,
@@ -295,6 +308,7 @@ export default defineComponent({
         &:first-child {
           margin-top: 0;
         }
+
         &:last-child {
           margin-bottom: 0;
         }
@@ -312,6 +326,7 @@ export default defineComponent({
       }
     }
   }
+
   &-role-select-btn {
     max-width: 100%;
   }

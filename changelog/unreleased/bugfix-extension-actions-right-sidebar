@@ -1,0 +1,6 @@
+Bugfix: Extension actions in right sidebar
+
+Extension actions (e.g. "Extract here") are now correctly showing in the actions panel of the right sidebar.
+
+https://github.com/owncloud/web/pull/11924
+https://github.com/owncloud/web/issues/11898
