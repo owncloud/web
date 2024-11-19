@@ -23,7 +23,8 @@ import {
   createdGroupStore,
   createdUserStore,
   keycloakCreatedUser,
-  federatedUserStore
+  federatedUserStore,
+  dummyKeycloakGroupStore
 } from '../../support/store'
 import { Group, User } from '../../support/types'
 import {
@@ -40,9 +41,6 @@ import {
   setAccessTokenForKeycloakOcisUser
 } from '../../support/api/keycloak'
 import { closeSSEConnections } from '../../support/environment/sse'
-import { setAccessAndRefreshToken } from '../../support/api/token'
-import { dummyKeycloakGroupStore } from '../../support/store/keycloak'
-import { getGroup } from '../../support/api/graph/userManagement'
 
 export { World }
 
@@ -91,13 +89,13 @@ Before(async function (this: World, { pickle }: ITestCaseHookParameter) {
     if (config.keycloak) {
       await setAccessTokenForKeycloakOcisUser(user)
       await setAccessTokenForKeycloakUser(user)
-      await storeGroup(user, this.usersEnvironment)
+      await storeKeycloakGroups(user, this.usersEnvironment)
     } else {
-      await setAccessAndRefreshToken(user)
+      await api.token.setAccessAndRefreshToken(user)
       if (isOcm(pickle)) {
         config.federatedServer = true
         // need to set tokens for federated oCIS admin
-        await setAccessAndRefreshToken(user)
+        await api.token.setAccessAndRefreshToken(user)
         config.federatedServer = false
       }
     }
@@ -264,20 +262,16 @@ const isOcm = (pickle): boolean => {
   return false
 }
 
-interface GroupResponse {
-  value: Group[]
-}
-
 /*
   store group created from keycloak on store
  */
-const storeGroup = async (user: User, usersEnvironment) => {
-  const groups = (await getGroup({ admin: user })) as GroupResponse
+const storeKeycloakGroups = async (adminUser: User, usersEnvironment) => {
+  const groups = await api.graph.getGroups(adminUser)
 
-  dummyKeycloakGroupStore.forEach((value) => {
-    const matchingGroup = groups.value.find((group) => group.displayName === value.displayName)
+  dummyKeycloakGroupStore.forEach((dummyGroup) => {
+    const matchingGroup = groups.find((group) => group.displayName === dummyGroup.displayName)
     if (matchingGroup) {
-      usersEnvironment.storeCreatedGroup({ group: { ...value, uuid: matchingGroup.id } })
+      usersEnvironment.storeCreatedGroup({ group: { ...dummyGroup, uuid: matchingGroup.id } })
     }
   })
 }

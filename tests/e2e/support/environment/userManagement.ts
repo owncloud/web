@@ -5,10 +5,10 @@ import {
   createdUserStore,
   createdGroupStore,
   keycloakCreatedUser,
-  federatedUserStore
+  federatedUserStore,
+  dummyKeycloakGroupStore
 } from '../store'
 import { config } from '../../config'
-import { dummyKeycloakGroupStore } from '../store/keycloak'
 
 export class UsersEnvironment {
   getUser({ key }: { key: string }): User {

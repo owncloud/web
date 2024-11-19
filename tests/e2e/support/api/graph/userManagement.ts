@@ -7,6 +7,10 @@ import { userRoleStore } from '../../store'
 import { UsersEnvironment } from '../../environment'
 import { setAccessAndRefreshToken } from '../token'
 
+interface GroupResponse {
+  value: Group[]
+}
+
 export const me = async ({ user }: { user: User }): Promise<Me> => {
   const response = await request({
     method: 'GET',
@@ -161,12 +165,12 @@ export const assignRole = async (admin: User, id: string, role: string): Promise
   checkResponseStatus(response, 'Failed while assigning role to the user')
 }
 
-export const getGroup = async ({ admin }: { admin: User }) => {
-  return (
-    await request({
-      method: 'GET',
-      path: join('graph', 'v1.0', 'groups'),
-      user: admin
-    })
-  ).json()
+export const getGroups = async (adminUser: User): Promise<Group[]> => {
+  const response = await request({
+    method: 'GET',
+    path: join('graph', 'v1.0', 'groups'),
+    user: adminUser
+  })
+  const data = (await response.json()) as GroupResponse
+  return data.value
 }

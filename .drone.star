@@ -1773,7 +1773,7 @@ def keycloakService():
                "environment": {
                    "OCIS_DOMAIN": "ocis:9200",
                    "KC_HOSTNAME": "keycloak",
-                   "KC_HOSTNAME_PORT": 8443,
+                   "KC_PORT": 8443,
                    "KC_DB": "postgres",
                    "KC_DB_URL": "jdbc:postgresql://postgres:5432/keycloak",
                    "KC_DB_USERNAME": "keycloak",

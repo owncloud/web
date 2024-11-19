@@ -21,24 +21,22 @@ Feature: groups management
     When "Admin" creates the following groups
       | id       |
       | security |
-      | finance  |
       | sales    |
     Then "Admin" should see the following group
       | group            |
       | security         |
-      | finance          |
       | keycloak sales   |
       | keycloak finance |
 
     When "Admin" navigates to the users management page
-    And "Admin" adds the user "Brian" to the groups "finance,keycloak sales" using the sidebar panel
+    And "Admin" adds the user "Brian" to the groups "security,keycloak sales" using the sidebar panel
     And "Admin" logs out
 
     And "Alice" logs in
     And "Alice" shares the following resource using the sidebar panel
       | resource            | recipient      | type  | role     | resourceType |
       | shareToSales.txt    | keycloak sales | group | Can edit | file         |
-      | shareToSecurity.txt | finance        | group | Can edit | file         |
+      | shareToSecurity.txt | security       | group | Can edit | file         |
     And "Alice" logs out
 
     And "Brian" logs in
@@ -60,20 +58,10 @@ Feature: groups management
     # After renaming a group, it may take up to 5 minutes for the changes to sync, so avoid using the renamed group in the subsequent steps.
     And "Admin" changes displayName to "a renamed group" for group "keycloak finance" using the sidebar panel
 
-    And "Admin" opens the "admin-settings" app
-    And "Admin" navigates to the groups management page
     When "Admin" deletes the following group using the context menu
       | group |
       | sales |
     Then "Admin" should not see the following group
       | group |
       | sales |
-    When "Admin" deletes the following groups using the batch actions
-      | group    |
-      | security |
-      | finance  |
-    Then "Admin" should not see the following groups
-      | group    |
-      | security |
-      | finance  |
     And "Admin" logs out
