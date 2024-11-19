@@ -46,6 +46,7 @@ export interface Group {
   uuid?: string
   id: string
   displayName: string
+  groupTypes?: string[]
 }
 
 export interface Token {

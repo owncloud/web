@@ -2,7 +2,7 @@ ALPINE_GIT = "alpine/git:latest"
 APACHE_TIKA = "apache/tika:2.8.0.0"
 COLLABORA_CODE = "collabora/code:24.04.5.1.1"
 CS3ORG_WOPI_SERVER = "cs3org/wopiserver:v10.3.0"
-KEYCLOAK = "quay.io/keycloak/keycloak:24.0.1"
+KEYCLOAK = "quay.io/keycloak/keycloak:25.0.0"
 MINIO_MC = "minio/mc:RELEASE.2021-10-07T04-19-58Z"
 OC_CI_ALPINE = "owncloudci/alpine:latest"
 OC_CI_BAZEL_BUILDIFIER = "owncloudci/bazel-buildifier"
@@ -1772,7 +1772,8 @@ def keycloakService():
                "detach": True,
                "environment": {
                    "OCIS_DOMAIN": "ocis:9200",
-                   "KC_HOSTNAME": "keycloak:8443",
+                   "KC_HOSTNAME": "keycloak",
+                   "KC_PORT": 8443,
                    "KC_DB": "postgres",
                    "KC_DB_URL": "jdbc:postgresql://postgres:5432/keycloak",
                    "KC_DB_USERNAME": "keycloak",
@@ -1786,7 +1787,7 @@ def keycloakService():
                "commands": [
                    "mkdir -p /opt/keycloak/data/import",
                    "cp tests/drone/ocis_keycloak/ocis-ci-realm.dist.json /opt/keycloak/data/import/ocis-realm.json",
-                   "/opt/keycloak/bin/kc.sh start-dev --proxy=edge --spi-connections-http-client-default-disable-trust-manager=true --import-realm --health-enabled=true",
+                   "/opt/keycloak/bin/kc.sh start-dev --proxy-headers xforwarded --spi-connections-http-client-default-disable-trust-manager=true --import-realm --health-enabled=true",
                ],
                "volumes": [
                    {
@@ -1807,6 +1808,7 @@ def e2eTestsOnKeycloak(ctx):
         "admin-settings/spaces.feature",
         "admin-settings/groups.feature",
         "admin-settings/general.feature",
+        "keycloak",
     ]
 
     e2e_volumes = [

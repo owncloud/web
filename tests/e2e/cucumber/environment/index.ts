@@ -23,7 +23,8 @@ import {
   createdGroupStore,
   createdUserStore,
   keycloakCreatedUser,
-  federatedUserStore
+  federatedUserStore,
+  dummyKeycloakGroupStore
 } from '../../support/store'
 import { Group, User } from '../../support/types'
 import {
@@ -40,7 +41,6 @@ import {
   setAccessTokenForKeycloakOcisUser
 } from '../../support/api/keycloak'
 import { closeSSEConnections } from '../../support/environment/sse'
-import { setAccessAndRefreshToken } from '../../support/api/token'
 
 export { World }
 
@@ -89,12 +89,13 @@ Before(async function (this: World, { pickle }: ITestCaseHookParameter) {
     if (config.keycloak) {
       await setAccessTokenForKeycloakOcisUser(user)
       await setAccessTokenForKeycloakUser(user)
+      await storeKeycloakGroups(user, this.usersEnvironment)
     } else {
-      await setAccessAndRefreshToken(user)
+      await api.token.setAccessAndRefreshToken(user)
       if (isOcm(pickle)) {
         config.federatedServer = true
         // need to set tokens for federated oCIS admin
-        await setAccessAndRefreshToken(user)
+        await api.token.setAccessAndRefreshToken(user)
         config.federatedServer = false
       }
     }
@@ -244,7 +245,9 @@ const cleanUpSpaces = async (adminUser: User) => {
 const cleanUpGroup = async (adminUser: User) => {
   const requests: Promise<Group>[] = []
   createdGroupStore.forEach((group) => {
-    requests.push(api.graph.deleteGroup({ group, admin: adminUser }))
+    if (!group.id.startsWith('keycloak')) {
+      requests.push(api.graph.deleteGroup({ group, admin: adminUser }))
+    }
   })
 
   await Promise.all(requests)
@@ -257,4 +260,18 @@ const isOcm = (pickle): boolean => {
     return true
   }
   return false
+}
+
+/*
+  store group created from keycloak on store
+ */
+const storeKeycloakGroups = async (adminUser: User, usersEnvironment) => {
+  const groups = await api.graph.getGroups(adminUser)
+
+  dummyKeycloakGroupStore.forEach((dummyGroup) => {
+    const matchingGroup = groups.find((group) => group.displayName === dummyGroup.displayName)
+    if (matchingGroup) {
+      usersEnvironment.storeCreatedGroup({ group: { ...dummyGroup, uuid: matchingGroup.id } })
+    }
+  })
 }
