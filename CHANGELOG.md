@@ -11,6 +11,7 @@ Summary
 * Bugfix - Fix order in roles drop down: [#11916](https://github.com/owncloud/web/pull/11916)
 * Bugfix - Allow create template with different editors: [#11923](https://github.com/owncloud/web/pull/11923)
 * Bugfix - Extension actions in right sidebar: [#11924](https://github.com/owncloud/web/pull/11924)
+* Bugfix - Unique request ids: [#11929](https://github.com/owncloud/web/pull/11929)
 * Enhancement - Accessibility improvements: [#5379](https://github.com/owncloud/web/issues/5379)
 * Enhancement - Create spaces via admin settings: [#11849](https://github.com/owncloud/web/pull/11849)
 
@@ -41,6 +42,14 @@ Details
 
    https://github.com/owncloud/web/issues/11898
    https://github.com/owncloud/web/pull/11924
+
+* Bugfix - Unique request ids: [#11929](https://github.com/owncloud/web/pull/11929)
+
+   We've fixed an issue where the request ids for upload- and worker-requests were
+   not unique.
+
+   https://github.com/owncloud/web/issues/11925
+   https://github.com/owncloud/web/pull/11929
 
 * Enhancement - Accessibility improvements: [#5379](https://github.com/owncloud/web/issues/5379)
 
