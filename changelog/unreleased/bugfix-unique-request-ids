@@ -1,0 +1,6 @@
+Bugfix: Unique request ids
+
+We've fixed an issue where the request ids for upload- and worker-requests were not unique.
+
+https://github.com/owncloud/web/pull/11929
+https://github.com/owncloud/web/issues/11925

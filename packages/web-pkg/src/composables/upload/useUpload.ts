@@ -1,10 +1,12 @@
 import { computed, unref, watch } from 'vue'
+import { v4 as uuidV4 } from 'uuid'
 import { UppyService } from '../../services/uppy/uppyService'
-import { useCapabilityStore } from '../piniaStores'
+import { useAuthStore, useCapabilityStore } from '../piniaStores'
 import { TusOptions } from '@uppy/tus'
 import { XHRUploadOptions } from '@uppy/xhr-upload'
 import { UppyFile } from '@uppy/core'
-import { useRequestHeaders } from '../requestHeaders'
+import { useClientService } from '../clientService'
+import { useGettext } from 'vue3-gettext'
 
 interface UploadOptions {
   uppyService: UppyService
@@ -12,18 +14,38 @@ interface UploadOptions {
 
 export function useUpload(options: UploadOptions) {
   const capabilityStore = useCapabilityStore()
-  const { headers } = useRequestHeaders()
+  const authStore = useAuthStore()
+  const clientService = useClientService()
+  const language = useGettext()
 
   const isTusSupported = computed(() => capabilityStore.tusMaxChunkSize > 0)
+
+  const getHeaders = () => {
+    const headers: Record<string, string> = {}
+
+    if (authStore.publicLinkPassword) {
+      headers['Authorization'] =
+        'Basic ' +
+        Buffer.from(['public', authStore.publicLinkPassword].join(':')).toString('base64')
+    } else if (authStore.accessToken && !authStore.publicLinkPassword) {
+      headers['Authorization'] = 'Bearer ' + authStore.accessToken
+    }
+
+    headers['X-Request-ID'] = uuidV4()
+    headers['Accept-Language'] = language.current
+    headers['Initiator-ID'] = clientService.initiatorId
+    return headers
+  }
 
   const tusOptions = computed<TusOptions>(() => {
     const options: TusOptions = {
       onBeforeRequest: (req, file) =>
         new Promise((resolve) => {
-          req.setHeader('Authorization', unref(headers).Authorization)
-          req.setHeader('X-Request-ID', unref(headers)['X-Request-ID'])
-          req.setHeader('Accept-Language', unref(headers)['Accept-Language'])
-          req.setHeader('Initiator-ID', unref(headers)['Initiator-ID'])
+          const headers = getHeaders()
+          req.setHeader('Authorization', headers.Authorization)
+          req.setHeader('X-Request-ID', headers['X-Request-ID'])
+          req.setHeader('Accept-Language', headers['Accept-Language'])
+          req.setHeader('Initiator-ID', headers['Initiator-ID'])
           if (file?.isRemote) {
             req.setHeader('x-oc-mtime', (file?.data?.lastModified / 1000).toString())
           }
@@ -37,7 +59,7 @@ export function useUpload(options: UploadOptions) {
     // FIXME: remove if cloud upload still works without this
     ;(options as any)['headers'] = (file: UppyFile) => {
       if (!!file.xhrUpload || file?.isRemote) {
-        return { 'x-oc-mtime': file?.data?.lastModified / 1000, ...unref(headers) }
+        return { 'x-oc-mtime': file?.data?.lastModified / 1000, ...getHeaders() }
       }
     }
 
@@ -50,7 +72,7 @@ export function useUpload(options: UploadOptions) {
       endpoint: '',
       headers: (file) => ({
         'x-oc-mtime': file?.data?.lastModified / 1000,
-        ...unref(headers)
+        ...getHeaders()
       })
     }
   })
