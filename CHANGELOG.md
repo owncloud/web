@@ -3,7 +3,39 @@ Changelog for ownCloud Web [unreleased] (UNRELEASED)
 The following sections list the changes in ownCloud web unreleased relevant to
 ownCloud admins and users.
 
-[unreleased]: https://github.com/owncloud/web/compare/v11.0.3...master
+[unreleased]: https://github.com/owncloud/web/compare/v11.0.4...master
+
+Summary
+-------
+
+* Enhancement - Accessibility improvements: [#5379](https://github.com/owncloud/web/issues/5379)
+* Enhancement - Create spaces via admin settings: [#11849](https://github.com/owncloud/web/pull/11849)
+
+Details
+-------
+
+* Enhancement - Accessibility improvements: [#5379](https://github.com/owncloud/web/issues/5379)
+
+   We have further improved accessibility aspects of the web UI.
+
+   https://github.com/owncloud/web/issues/5379
+   https://github.com/owncloud/web/issues/5381
+   https://github.com/owncloud/web/pull/10830
+
+* Enhancement - Create spaces via admin settings: [#11849](https://github.com/owncloud/web/pull/11849)
+
+   We've added a new feature that allows you to create spaces via the admin
+   settings.
+
+   https://github.com/owncloud/web/issues/11771
+   https://github.com/owncloud/web/pull/11849
+
+Changelog for ownCloud Web [11.0.4] (2024-11-19)
+=======================================
+The following sections list the changes in ownCloud web 11.0.4 relevant to
+ownCloud admins and users.
+
+[11.0.4]: https://github.com/owncloud/web/compare/v11.0.3...v11.0.4
 
 Summary
 -------
@@ -12,8 +44,6 @@ Summary
 * Bugfix - Allow create template with different editors: [#11923](https://github.com/owncloud/web/pull/11923)
 * Bugfix - Extension actions in right sidebar: [#11924](https://github.com/owncloud/web/pull/11924)
 * Bugfix - Unique request ids: [#11929](https://github.com/owncloud/web/pull/11929)
-* Enhancement - Accessibility improvements: [#5379](https://github.com/owncloud/web/issues/5379)
-* Enhancement - Create spaces via admin settings: [#11849](https://github.com/owncloud/web/pull/11849)
 
 Details
 -------
@@ -50,22 +80,6 @@ Details
 
    https://github.com/owncloud/web/issues/11925
    https://github.com/owncloud/web/pull/11929
-
-* Enhancement - Accessibility improvements: [#5379](https://github.com/owncloud/web/issues/5379)
-
-   We have further improved accessibility aspects of the web UI.
-
-   https://github.com/owncloud/web/issues/5379
-   https://github.com/owncloud/web/issues/5381
-   https://github.com/owncloud/web/pull/10830
-
-* Enhancement - Create spaces via admin settings: [#11849](https://github.com/owncloud/web/pull/11849)
-
-   We've added a new feature that allows you to create spaces via the admin
-   settings.
-
-   https://github.com/owncloud/web/issues/11771
-   https://github.com/owncloud/web/pull/11849
 
 Changelog for ownCloud Web [11.0.3] (2024-11-14)
 =======================================
