@@ -16,8 +16,6 @@ export class PreviewService {
   authStore: AuthStore
   capabilityStore: CapabilityStore
 
-  capability?: CapabilityStore['capabilities']['files']['thumbnail']
-
   constructor({
     clientService,
     userStore,
@@ -34,12 +32,17 @@ export class PreviewService {
     this.clientService = clientService
     this.userStore = userStore
     this.authStore = authStore
+    this.capabilityStore = capabilityStore
     this.configStore = configStore
+  }
 
-    this.capability = capabilityStore.filesThumbnail || {
-      enabled: true,
-      version: 'v0.1',
-      supportedMimeTypes: [
+  private get available(): boolean {
+    return !!this.capabilityStore.filesThumbnail?.version
+  }
+
+  private get supportedMimeTypes() {
+    return (
+      this.capabilityStore.filesThumbnail?.supportedMimeTypes || [
         'image/gif',
         'image/png',
         'image/jpeg',
@@ -50,15 +53,7 @@ export class PreviewService {
         'application/vnd.geogebra.slides',
         'application/vnd.geogebra.pinboard'
       ]
-    }
-  }
-
-  private get available(): boolean {
-    return !!this.capability?.version
-  }
-
-  private get supportedMimeTypes() {
-    return this.capability?.supportedMimeTypes || []
+    )
   }
 
   private get user() {
