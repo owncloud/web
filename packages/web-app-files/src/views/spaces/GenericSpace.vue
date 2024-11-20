@@ -161,7 +161,8 @@ import {
   useOpenWithDefaultApp,
   useKeyboardActions,
   useRoute,
-  useRouteQuery
+  useRouteQuery,
+  FolderLoaderOptions
 } from '@ownclouders/web-pkg'
 import CreateAndUpload from '../../components/AppBar/CreateAndUpload.vue'
 import FilesViewWrapper from '../../components/FilesViewWrapper.vue'
@@ -174,7 +175,6 @@ import SpaceHeader from '../../components/Spaces/SpaceHeader.vue'
 import WhitespaceContextMenu from '../../components/Spaces/WhitespaceContextMenu.vue'
 import { eventBus } from '@ownclouders/web-pkg'
 import { useResourcesViewDefaults } from '../../composables'
-import { FolderLoaderOptions } from '../../services/folder'
 import { BreadcrumbItem } from '@ownclouders/design-system/helpers'
 import { v4 as uuidV4 } from 'uuid'
 import {

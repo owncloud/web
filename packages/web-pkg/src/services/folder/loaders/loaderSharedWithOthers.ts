@@ -1,7 +1,7 @@
-import { FolderLoader, FolderLoaderTask, TaskContext } from '../folder'
+import { FolderLoader, FolderLoaderTask, TaskContext } from '../folderService'
 import { Router } from 'vue-router'
 import { useTask } from 'vue-concurrency'
-import { isLocationSharesActive } from '@ownclouders/web-pkg'
+import { isLocationSharesActive } from '../../../router'
 import { buildOutgoingShareResource, call } from '@ownclouders/web-client'
 
 export class FolderLoaderSharedWithOthers implements FolderLoader {

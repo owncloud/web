@@ -1,8 +1,8 @@
-import { FolderLoader, FolderLoaderTask, TaskContext } from '../folder'
+import { FolderLoader, FolderLoaderTask, TaskContext } from '../folderService'
 import { Router } from 'vue-router'
 import { useTask } from 'vue-concurrency'
 import { buildResource } from '@ownclouders/web-client'
-import { isLocationCommonActive } from '@ownclouders/web-pkg'
+import { isLocationCommonActive } from '../../../router'
 
 export class FolderLoaderFavorites implements FolderLoader {
   public isEnabled(): boolean {
