@@ -13,34 +13,11 @@ import { Browser, chromium, firefox, webkit } from '@playwright/test'
 import path from 'path'
 import fs from 'fs'
 
-import { config } from '../../config'
-import { api, environment } from '../../support'
 import { World } from './world'
 import { state } from './shared'
-import {
-  createdSpaceStore,
-  createdLinkStore,
-  createdGroupStore,
-  createdUserStore,
-  keycloakCreatedUser,
-  federatedUserStore,
-  dummyKeycloakGroupStore
-} from '../../support/store'
+import { config } from '../../config'
 import { Group, User } from '../../support/types'
-import {
-  createdTokenStore,
-  federatedTokenStore,
-  keycloakTokenStore
-} from '../../support/store/token'
-import { removeTempUploadDirectory } from '../../support/utils/runtimeFs'
-import {
-  setAccessTokenForKeycloakUser,
-  setupKeycloakAdminUser,
-  refreshAccessTokenForKeycloakUser,
-  refreshAccessTokenForKeycloakOcisUser,
-  setAccessTokenForKeycloakOcisUser
-} from '../../support/api/keycloak'
-import { closeSSEConnections } from '../../support/environment/sse'
+import { api, environment, utils, store } from '../../support'
 
 export { World }
 
@@ -87,8 +64,8 @@ Before(async function (this: World, { pickle }: ITestCaseHookParameter) {
   if (!config.basicAuth) {
     const user = this.usersEnvironment.getUser({ key: 'admin' })
     if (config.keycloak) {
-      await setAccessTokenForKeycloakOcisUser(user)
-      await setAccessTokenForKeycloakUser(user)
+      await api.keycloak.setAccessTokenForKeycloakOcisUser(user)
+      await api.keycloak.setAccessTokenForKeycloakUser(user)
       await storeKeycloakGroups(user, this.usersEnvironment)
     } else {
       await api.token.setAccessAndRefreshToken(user)
@@ -126,7 +103,7 @@ BeforeAll(async (): Promise<void> => {
   // setup keycloak admin user
   if (config.keycloak) {
     const usersEnvironment = new environment.UsersEnvironment()
-    setupKeycloakAdminUser(usersEnvironment.getUser({ key: 'admin' }))
+    api.keycloak.setupKeycloakAdminUser(usersEnvironment.getUser({ key: 'admin' }))
   }
 })
 
@@ -146,26 +123,26 @@ After(async function (this: World, { result, willBeRetried, pickle }: ITestCaseH
   // refresh keycloak admin access token
   if (config.keycloak) {
     const user = this.usersEnvironment.getUser({ key: 'admin' })
-    await refreshAccessTokenForKeycloakUser(user)
-    await refreshAccessTokenForKeycloakOcisUser(user)
+    await api.keycloak.refreshAccessTokenForKeycloakUser(user)
+    await api.keycloak.refreshAccessTokenForKeycloakOcisUser(user)
   }
 
   if (isOcm(pickle)) {
     // need to set federatedServer config to true to delete federated oCIS users
     config.federatedServer = true
-    await cleanUpUser(federatedUserStore, this.usersEnvironment.getUser({ key: 'admin' }))
+    await cleanUpUser(store.federatedUserStore, this.usersEnvironment.getUser({ key: 'admin' }))
     config.federatedServer = false
   }
-  await cleanUpUser(createdUserStore, this.usersEnvironment.getUser({ key: 'admin' }))
+  await cleanUpUser(store.createdUserStore, this.usersEnvironment.getUser({ key: 'admin' }))
   await cleanUpSpaces(this.usersEnvironment.getUser({ key: 'admin' }))
   await cleanUpGroup(this.usersEnvironment.getUser({ key: 'admin' }))
 
-  createdLinkStore.clear()
-  createdTokenStore.clear()
-  federatedTokenStore.clear()
-  keycloakTokenStore.clear()
-  removeTempUploadDirectory()
-  closeSSEConnections()
+  store.createdLinkStore.clear()
+  store.createdTokenStore.clear()
+  store.federatedTokenStore.clear()
+  store.keycloakTokenStore.clear()
+  utils.removeTempUploadDirectory()
+  environment.closeSSEConnections()
 
   if (fs.existsSync(config.tracingReportDir)) {
     filterTracingReports(result.status)
@@ -177,7 +154,7 @@ After(async function (this: World, { result, willBeRetried, pickle }: ITestCaseH
 })
 
 AfterAll(async () => {
-  closeSSEConnections()
+  environment.closeSSEConnections()
 
   if (state.browser) {
     await state.browser.close()
@@ -209,19 +186,19 @@ function filterTracingReports(status: string) {
   }
 }
 
-const cleanUpUser = async (store, adminUser: User) => {
+const cleanUpUser = async (createdUserStore, adminUser: User) => {
   const requests: Promise<User>[] = []
-  store.forEach((user) => {
+  createdUserStore.forEach((user) => {
     requests.push(api.provision.deleteUser({ user, admin: adminUser }))
   })
   await Promise.all(requests)
-  store.clear()
-  keycloakCreatedUser.clear()
+  createdUserStore.clear()
+  store.keycloakCreatedUser.clear()
 }
 
 const cleanUpSpaces = async (adminUser: User) => {
   const requests: Promise<void>[] = []
-  createdSpaceStore.forEach((space) => {
+  store.createdSpaceStore.forEach((space) => {
     requests.push(
       api.graph
         .disableSpace({
@@ -239,19 +216,19 @@ const cleanUpSpaces = async (adminUser: User) => {
     )
   })
   await Promise.all(requests)
-  createdSpaceStore.clear()
+  store.createdSpaceStore.clear()
 }
 
 const cleanUpGroup = async (adminUser: User) => {
   const requests: Promise<Group>[] = []
-  createdGroupStore.forEach((group) => {
+  store.createdGroupStore.forEach((group) => {
     if (!group.id.startsWith('keycloak')) {
       requests.push(api.graph.deleteGroup({ group, admin: adminUser }))
     }
   })
 
   await Promise.all(requests)
-  createdGroupStore.clear()
+  store.createdGroupStore.clear()
 }
 
 const isOcm = (pickle): boolean => {
@@ -268,7 +245,7 @@ const isOcm = (pickle): boolean => {
 const storeKeycloakGroups = async (adminUser: User, usersEnvironment) => {
   const groups = await api.graph.getGroups(adminUser)
 
-  dummyKeycloakGroupStore.forEach((dummyGroup) => {
+  store.dummyKeycloakGroupStore.forEach((dummyGroup) => {
     const matchingGroup = groups.find((group) => group.displayName === dummyGroup.displayName)
     if (matchingGroup) {
       usersEnvironment.storeCreatedGroup({ group: { ...dummyGroup, uuid: matchingGroup.id } })

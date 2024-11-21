@@ -3,11 +3,9 @@ import util from 'util'
 import path from 'path'
 import { resourceExists, waitForResources } from './utils'
 import { editor, sidebar } from '../utils'
-import { File, Space } from '../../../types'
-import { dragDropFiles } from '../../../utils/dragDrop'
-import { LinksEnvironment } from '../../../environment'
+import { environment, utils } from '../../../../support'
 import { config } from '../../../../config'
-import { buildXpathLiteral } from '../../../utils/locator'
+import { File, Space } from '../../../types'
 
 const topbarFilenameSelector = '#app-top-bar-resource .oc-resource-name'
 const downloadFileButtonSingleShareView = '.oc-files-actions-download-file-trigger'
@@ -168,7 +166,7 @@ export const clickResourceFromBreadcrumb = async ({
   page: Page
   resource: string
 }): Promise<void> => {
-  const folder = buildXpathLiteral(resource)
+  const folder = utils.locatorUtils.buildXpathLiteral(resource)
   const itemId = await page
     .locator(util.format(breadcrumbResourceSelector, folder))
     .getAttribute('data-item-id')
@@ -615,7 +613,7 @@ export const dropUploadFiles = async (args: uploadResourceArgs): Promise<void> =
 
   // waiting to files view
   await page.locator(addNewResourceButton).waitFor()
-  await dragDropFiles(page, resources, filesView)
+  await utils.dragDropFiles(page, resources, filesView)
 
   await page.locator(uploadInfoCloseButton).click()
   await Promise.all(
@@ -922,7 +920,10 @@ export const moveOrCopyMultipleResources = async (
     case 'drag-drop-breadcrumb': {
       const source = page.locator(highlightedFileRowSelector).first()
       const target = page.locator(
-        util.format(breadcrumbResourceNameSelector, buildXpathLiteral(newLocation))
+        util.format(
+          breadcrumbResourceNameSelector,
+          utils.locatorUtils.buildXpathLiteral(newLocation)
+        )
       )
 
       await Promise.all([...waitForMoveResponses, source.dragTo(target)])
@@ -1014,7 +1015,10 @@ export const moveOrCopyResource = async (args: moveOrCopyResourceArgs): Promise<
     case 'drag-drop-breadcrumb': {
       const source = page.locator(util.format(resourceNameSelector, resourceBase))
       const target = page.locator(
-        util.format(breadcrumbResourceNameSelector, buildXpathLiteral(newLocation))
+        util.format(
+          breadcrumbResourceNameSelector,
+          utils.locatorUtils.buildXpathLiteral(newLocation)
+        )
       )
 
       await Promise.all([
@@ -1030,7 +1034,12 @@ export const moveOrCopyResource = async (args: moveOrCopyResourceArgs): Promise<
       await Promise.all([
         page.locator(util.format(resourceNameSelector, resourceBase)),
         page
-          .locator(util.format(breadcrumbResourceNameSelector, buildXpathLiteral(newLocation)))
+          .locator(
+            util.format(
+              breadcrumbResourceNameSelector,
+              utils.locatorUtils.buildXpathLiteral(newLocation)
+            )
+          )
           .click()
       ])
 
@@ -1899,7 +1908,7 @@ export const createShotcut = async (args: shortcutArgs): Promise<void> => {
       break
     }
     case 'public link':
-      const link = new LinksEnvironment()
+      const link = new environment.LinksEnvironment()
       await page.locator(shortcutResorceInput).fill(link.getLink({ name: resource }).url)
       break
     case 'website': {
