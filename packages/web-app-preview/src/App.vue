@@ -174,7 +174,7 @@ export default defineComponent({
       }
 
       const files = props.activeFiles.filter((file) => {
-        return mimeTypes.includes(file.mimeType?.toLowerCase())
+        return mimeTypes.includes(file.mimeType?.toLowerCase()) && file.canDownload()
       })
 
       return sortHelper(files, [{ name: unref(sortBy) }], unref(sortBy), unref(sortDir))
