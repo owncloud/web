@@ -1,0 +1,6 @@
+Bugfix: Upload without TUS support
+
+We've fixed a bug where it was not possible upload/create files when the server does not support TUS.
+Web crashed trying to see if the user had permissions to upload. Even if they did, it was being denied due to that crash.
+
+https://github.com/owncloud/web/pull/11946

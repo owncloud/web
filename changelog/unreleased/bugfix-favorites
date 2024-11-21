@@ -1,0 +1,5 @@
+Bugfix: Listing of favorites
+
+We've fixed a bug where it was not possible to list favorites.
+
+https://github.com/owncloud/web/pull/11946

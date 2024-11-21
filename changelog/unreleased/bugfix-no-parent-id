@@ -1,0 +1,6 @@
+Bugfix: No parent id set
+
+The parameter Resource.parentFolderId is optional, so we treated it as so when getting the ancestor metadata.
+This prevented the loading of a resource/listing of files, if the backend did not report the parent of the current folder.
+
+https://github.com/owncloud/web/pull/11946
