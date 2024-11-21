@@ -37,7 +37,8 @@ export class PreviewService {
   }
 
   private get available(): boolean {
-    return !!this.capabilityStore.filesThumbnail?.version
+    // By default use v0.1 (to enable thumbnails by default)
+    return !!(this.capabilityStore.filesThumbnail || { version: 'v0.1' }).version
   }
 
   private get supportedMimeTypes() {
