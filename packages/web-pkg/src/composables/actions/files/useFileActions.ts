@@ -206,7 +206,7 @@ export const useFileActions = () => {
     return {
       name: routeName,
       params: {
-        driveAliasAndItem: space.getDriveAliasAndItem(resource),
+        driveAliasAndItem: space?.getDriveAliasAndItem(resource),
         filePath: resource.path,
         fileId: resource.fileId,
         mode

@@ -81,7 +81,7 @@ import {
   Ref
 } from 'vue'
 import { RouteLocationRaw } from 'vue-router'
-import { Resource } from '@ownclouders/web-client'
+import { isShareSpaceResource, Resource } from '@ownclouders/web-client'
 import {
   AppFileHandlingResult,
   AppFolderHandlingResult,
@@ -141,6 +141,7 @@ export default defineComponent({
     const contextRouteQuery = useRouteQuery('contextRouteQuery') as unknown as Ref<
       Record<string, string>
     >
+
     const { isFileTypeAudio, isFileTypeImage, isFileTypeVideo } = useFileTypes()
     const previewService = usePreviewService()
     const { dimensions } = usePreviewDimensions()
@@ -164,13 +165,16 @@ export default defineComponent({
       return (unref(contextRouteQuery)['sort-dir'] as SortDir) ?? SortDir.Asc
     })
 
+    const fileIdQuery = useRouteQuery('fileId')
+    const fileId = computed(() => queryItemAsString(unref(fileIdQuery)))
+
     const filteredFiles = computed(() => {
       if (!props.activeFiles) {
         return []
       }
 
       const files = props.activeFiles.filter((file) => {
-        return mimeTypes.includes(file.mimeType?.toLowerCase())
+        return mimeTypes.includes(file.mimeType?.toLowerCase()) && file.canDownload()
       })
 
       return sortHelper(files, [{ name: unref(sortBy) }], unref(sortBy), unref(sortDir))
@@ -288,6 +292,7 @@ export default defineComponent({
     return {
       ...useImageControls(),
       ...useFullScreenMode(),
+      fileId,
       activeFilteredFile,
       activeIndex,
       activeMediaFileCached,
@@ -333,6 +338,17 @@ export default defineComponent({
   methods: {
     setActiveFile(driveAliasAndItem: string) {
       for (let i = 0; i < this.filteredFiles.length; i++) {
+        if (isShareSpaceResource(unref(this.currentFileContext.space))) {
+          // with share space resources, we don't have an underlying space, so match the file id
+          if (this.filteredFiles[i].remoteItemId === this.fileId) {
+            this.activeIndex = i
+            return
+          }
+
+          this.activeIndex = 0
+          continue
+        }
+
         if (
           unref(this.currentFileContext.space)?.getDriveAliasAndItem(this.filteredFiles[i]) ===
           driveAliasAndItem
