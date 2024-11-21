@@ -8,11 +8,19 @@ ownCloud admins and users.
 Summary
 -------
 
+* Bugfix - Preview app Shared with me page: [#11883](https://github.com/owncloud/web/issues/11883)
 * Enhancement - Accessibility improvements: [#5379](https://github.com/owncloud/web/issues/5379)
 * Enhancement - Create spaces via admin settings: [#11849](https://github.com/owncloud/web/pull/11849)
 
 Details
 -------
+
+* Bugfix - Preview app Shared with me page: [#11883](https://github.com/owncloud/web/issues/11883)
+
+   We fixed navigation issues with the preview app on the Shared with me page.
+
+   https://github.com/owncloud/web/issues/11883
+   https://github.com/owncloud/web/pull/11947
 
 * Enhancement - Accessibility improvements: [#5379](https://github.com/owncloud/web/issues/5379)
 
