@@ -9,55 +9,64 @@ const activeFiles = [
     id: '1',
     name: 'bear.png',
     mimeType: 'image/png',
-    path: 'personal/admin/bear.png'
+    path: 'personal/admin/bear.png',
+    canDownload: () => true
   },
   {
     id: '2',
     name: 'elephant.png',
     mimeType: 'image/png',
-    path: 'personal/admin/elephant.png'
+    path: 'personal/admin/elephant.png',
+    canDownload: () => true
   },
   {
     id: '3',
     name: 'wale_sounds.flac',
     mimeType: 'audio/flac',
-    path: 'personal/admin/wale_sounds.flac'
+    path: 'personal/admin/wale_sounds.flac',
+    canDownload: () => true
   },
   {
     id: '4',
     name: 'lonely_sloth_very_sad.gif',
     mimeType: 'image/gif',
-    path: 'personal/admin/lonely_sloth_very_sad.gif'
+    path: 'personal/admin/lonely_sloth_very_sad.gif',
+    canDownload: () => true
   },
   {
     id: '5',
     name: 'tiger_eats_plants.mp4',
     mimeType: 'video/mp4',
-    path: 'personal/admin/tiger_eats_plants.mp4'
+    path: 'personal/admin/tiger_eats_plants.mp4',
+    canDownload: () => true
   },
   {
     id: '6',
     name: 'happy_hippo.gif',
     mimeType: 'image/gif',
-    path: 'personal/admin/happy_hippo.gif'
+    path: 'personal/admin/happy_hippo.gif',
+    canDownload: () => true
   },
   {
     id: '7',
     name: 'sleeping_dog.gif',
     mimeType: 'image/gif',
-    path: 'personal/admin/sleeping_dog.gif'
+    path: 'personal/admin/sleeping_dog.gif',
+    canDownload: () => true
   },
   {
     id: '8',
     name: 'cat_murr_murr.gif',
     mimeType: 'image/gif',
-    path: 'personal/admin/cat_murr_murr.gif'
+    path: 'personal/admin/cat_murr_murr.gif',
+    canDownload: () => true
   },
   {
     id: '9',
     name: 'labrador.gif',
     mimeType: 'image/gif',
-    path: 'personal/admin/labrador.gif'
+    path: 'personal/admin/labrador.gif',
+    canDownload: () => true
   }
 ]
 
