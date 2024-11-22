@@ -9,6 +9,7 @@ Summary
 -------
 
 * Bugfix - Preview app Shared with me page: [#11883](https://github.com/owncloud/web/issues/11883)
+* Bugfix - Export request ID when delete fails: [#11951](https://github.com/owncloud/web/pull/11951)
 * Enhancement - Accessibility improvements: [#5379](https://github.com/owncloud/web/issues/5379)
 * Enhancement - Create spaces via admin settings: [#11849](https://github.com/owncloud/web/pull/11849)
 
@@ -21,6 +22,14 @@ Details
 
    https://github.com/owncloud/web/issues/11883
    https://github.com/owncloud/web/pull/11947
+
+* Bugfix - Export request ID when delete fails: [#11951](https://github.com/owncloud/web/pull/11951)
+
+   We've fixed a bug where the request ID was not exposed to the error message when
+   a delete operation failed.
+
+   https://github.com/owncloud/web/issues/11925
+   https://github.com/owncloud/web/pull/11951
 
 * Enhancement - Accessibility improvements: [#5379](https://github.com/owncloud/web/issues/5379)
 
