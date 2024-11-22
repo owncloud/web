@@ -1,0 +1,6 @@
+Bugfix: Preview service configuration
+
+When the capabilities specified a different list of mime types that the server supported, this was not being taken into consideration.
+With this fix, it now works.
+
+https://github.com/owncloud/web/pull/11946

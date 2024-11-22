@@ -1,0 +1,5 @@
+Change: Remove the collapsible table
+
+Removed the CERN-only feature of collapsible table. Replaced with the filtering functionality in the shares page.
+
+https://github.com/owncloud/web/pull/11946

@@ -26,7 +26,7 @@ export class FolderLoaderFavorites implements FolderLoader {
         signal: signal1
       })
 
-      resources = resources.map(buildResource)
+      resources = resources.results.map(buildResource)
       resourcesStore.initResourceList({ currentFolder: null, resources })
     })
   }

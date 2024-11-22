@@ -1,0 +1,6 @@
+Enhancement: Sidebar menu selected for different kinds of personal volumes
+
+The current implementation hardcodes the naming of the volumes and assumes that the personal volume always starts with `personal/`, which might not be the case.
+With this enhancement, the selection of the menu happens if the corresponding type of space is selected as well.
+
+https://github.com/owncloud/web/pull/11946

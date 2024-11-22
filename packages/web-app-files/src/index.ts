@@ -22,7 +22,12 @@ import { AppNavigationItem } from '@ownclouders/web-pkg'
 
 // dirty: importing view from other extension within project
 import SearchResults from '../../web-app-search/src/views/List.vue'
-import { isPersonalSpaceResource, isShareSpaceResource } from '@ownclouders/web-client'
+import {
+  isPersonalSpaceResource,
+  isShareSpaceResource,
+  isProjectSpaceResource,
+  isMountPointSpaceResource
+} from '@ownclouders/web-client'
 import { ComponentCustomProperties, unref } from 'vue'
 import { extensionPoints } from './extensionPoints'
 
@@ -57,6 +62,19 @@ export const navItems = (context: ComponentCustomProperties): AppNavigationItem[
       isActive: () => {
         return !spacesStores.currentSpace || spacesStores.currentSpace?.isOwner(userStore.user)
       },
+      activeFor: () => {
+        const personalSpace = spacesStores.spaces.find(
+          (drive) => isPersonalSpaceResource(drive) && drive.isOwner(userStore.user)
+        )
+
+        return personalSpace
+          ? [
+              {
+                path: `/${appInfo.id}/spaces/${personalSpace.driveAlias}`
+              }
+            ]
+          : []
+      },
       isVisible() {
         if (!spacesStores.spacesInitialized) {
           return true
@@ -90,11 +108,21 @@ export const navItems = (context: ComponentCustomProperties): AppNavigationItem[
         // last check is when fullShareOwnerPaths is enabled
         return !space || isShareSpaceResource(space) || !space?.isOwner(userStore.user)
       },
-      activeFor: [
-        { path: `/${appInfo.id}/spaces/share` },
-        { path: `/${appInfo.id}/spaces/ocm-share` },
-        { path: `/${appInfo.id}/spaces/personal` }
-      ],
+      activeFor: () => {
+        const shares = [
+          { path: `/${appInfo.id}/spaces/share` },
+          { path: `/${appInfo.id}/spaces/ocm-share` },
+          { path: `/${appInfo.id}/spaces/personal` }
+        ]
+        spacesStores.spaces.forEach((drive) => {
+          if (isMountPointSpaceResource(drive)) {
+            shares.push({
+              path: `/${appInfo.id}/spaces/${drive.root?.remoteItem?.driveAlias}`
+            })
+          }
+        })
+        return shares
+      },
       isVisible() {
         return capabilityStore.sharingApiEnabled !== false
       },
@@ -106,7 +134,17 @@ export const navItems = (context: ComponentCustomProperties): AppNavigationItem[
       route: {
         path: `/${appInfo.id}/spaces/projects`
       },
-      activeFor: [{ path: `/${appInfo.id}/spaces/project` }],
+      activeFor: () => {
+        const projects = [{ path: `/${appInfo.id}/spaces/project` }]
+        spacesStores.spaces.forEach((drive) => {
+          if (isProjectSpaceResource(drive)) {
+            projects.push({
+              path: `/${appInfo.id}/spaces/${drive.driveAlias}`
+            })
+          }
+        })
+        return projects
+      },
       isVisible() {
         return capabilityStore.spacesProjects
       },
@@ -118,7 +156,7 @@ export const navItems = (context: ComponentCustomProperties): AppNavigationItem[
       route: {
         path: `/${appInfo.id}/trash/overview`
       },
-      activeFor: [{ path: `/${appInfo.id}/trash` }],
+      activeFor: () => [{ path: `/${appInfo.id}/trash` }],
       isVisible() {
         return (
           capabilityStore.davTrashbin === '1.0' &&
