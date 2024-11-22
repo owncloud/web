@@ -201,7 +201,7 @@ export const useFileActionsDeleteResources = () => {
                 })
               }
 
-              messageStore.showErrorMessage({ title, errors: [new Error()] })
+              messageStore.showErrorMessage({ title, errors: [error] })
             })
 
             // user hasn't navigated to another location meanwhile
