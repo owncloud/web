@@ -1,5 +1,5 @@
 import { Browser } from '@playwright/test'
-import { Session } from '../objects/runtime/session'
+import { Session } from '../objects/runtime'
 import { TokenProviderType } from '../environment'
 import { config } from '../../config'
 import { User } from '../types'

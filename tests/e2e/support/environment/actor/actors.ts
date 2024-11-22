@@ -1,10 +1,10 @@
 import { kebabCase } from 'lodash-es'
 import { DateTime } from 'luxon'
+import EventEmitter from 'events'
 import { Actor } from '../../types'
 import { ActorsOptions } from './shared'
 import { ActorEnvironment } from './actor'
 import { actorStore } from '../../store'
-import EventEmitter from 'events'
 
 export class ActorsEnvironment extends EventEmitter {
   private readonly options: ActorsOptions

@@ -1,8 +1,8 @@
-import { Actor } from '../../types'
-import { ActorOptions, buildBrowserContextOptions } from './shared'
 import { BrowserContext, Page, expect } from '@playwright/test'
 import path from 'path'
 import EventEmitter from 'events'
+import { Actor } from '../../types'
+import { ActorOptions, buildBrowserContextOptions } from './shared'
 
 export class ActorEnvironment extends EventEmitter implements Actor {
   private readonly options: ActorOptions

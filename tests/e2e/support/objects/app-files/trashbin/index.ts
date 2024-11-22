@@ -1,6 +1,7 @@
 import { Page } from '@playwright/test'
 import * as po from './actions'
 import { SpacesEnvironment } from '../../../environment'
+
 export class Trashbin {
   #page: Page
   #spacesEnvironment: SpacesEnvironment

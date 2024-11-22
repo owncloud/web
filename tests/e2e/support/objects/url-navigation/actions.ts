@@ -1,9 +1,7 @@
 import { Page } from '@playwright/test'
+import { dav, graph, external } from '../../api'
 import { config } from '../../../config'
-import { getIdOfFileInsideSpace } from '../../api/davSpaces'
 import { User } from '../../types'
-import { getSpaceIdBySpaceName } from '../../api/graph'
-import { getOpenWithWebUrl } from '../../api/external'
 
 export interface navigateToDetailsPanelOfResourceArgs {
   page: Page
@@ -41,7 +39,7 @@ export const openResourceViaUrl = async (args: openResourceViaUrlArgs) => {
       fullUrl = `${config.baseUrl}/external/open-with-web/?appName=${editorName}&fileId=${fileId}`
       break
     case 'mobile':
-      fullUrl = await getOpenWithWebUrl({ user, fileId, editorName })
+      fullUrl = await external.getOpenWithWebUrl({ user, fileId, editorName })
       break
     default:
       fullUrl = `${config.baseUrl}/f/${fileId}`
@@ -60,7 +58,7 @@ export const openSpaceViaUrl = async (args: openResourceViaUrlArgs) => {
     spaceName = space
     spaceType = 'project'
   }
-  const fileId = await getSpaceIdBySpaceName({ user, spaceType, spaceName })
+  const fileId = await graph.getSpaceIdBySpaceName({ user, spaceType, spaceName })
   const fullUrl = `${config.baseUrl}/f/${fileId}`
   await page.goto(fullUrl)
 }
@@ -79,7 +77,7 @@ const getTheFileIdOfSpaceFile = async (
     spaceName = space
     spaceType = 'project'
   }
-  return await getIdOfFileInsideSpace({
+  return await dav.getIdOfFileInsideSpace({
     user,
     pathToFileName,
     spaceType,
