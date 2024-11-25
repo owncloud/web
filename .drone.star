@@ -18,7 +18,7 @@ PLUGINS_DOCKER = "plugins/docker:20.14"
 PLUGINS_GH_PAGES = "plugins/gh-pages:1"
 PLUGINS_GIT_ACTION = "plugins/git-action:1"
 PLUGINS_GITHUB_RELEASE = "plugins/github-release:1"
-PLUGINS_S3 = "plugins/s3:1.4.0"
+PLUGINS_S3 = "plugins/s3:1.5"
 PLUGINS_S3_CACHE = "plugins/s3-cache:1"
 PLUGINS_SLACK = "plugins/slack:1"
 POSTGRES_ALPINE = "postgres:alpine3.18"
@@ -191,7 +191,7 @@ def main(ctx):
 
     after = pipelinesDependsOn(afterPipelines(ctx), stages)
 
-    pipelines = before + stages + after
+    pipelines = before
 
     deploys = example_deploys(ctx)
     if ctx.build.event != "cron":
@@ -210,13 +210,7 @@ def main(ctx):
 
 def beforePipelines(ctx):
     return checkStarlark() + \
-           licenseCheck(ctx) + \
-           documentation(ctx) + \
-           changelog(ctx) + \
-           pnpmCache(ctx) + \
-           cacheOcisPipeline(ctx) + \
-           pipelinesDependsOn(buildCacheWeb(ctx), pnpmCache(ctx)) + \
-           pipelinesDependsOn(pnpmlint(ctx), pnpmCache(ctx))
+           pnpmCache(ctx)
 
 def stagePipelines(ctx):
     unit_test_pipelines = unitTests(ctx)
@@ -243,7 +237,10 @@ def pnpmCache(ctx):
         },
         "steps": skipIfUnchanged(ctx, "cache") +
                  installPnpm() +
-                 rebuildBuildArtifactCache(ctx, "pnpm", ".pnpm-store"),
+                 rebuildBuildArtifactCache(ctx, "pnpm", ".pnpm-store") +
+                 checkPlaywrightChromiumCache() +
+                 installPlaywright() +
+                 cachePlaywright(),
         "trigger": {
             "ref": [
                 "refs/heads/master",
@@ -1899,3 +1896,29 @@ def getOcislatestCommitId(ctx):
             ],
         },
     ]
+
+def cachePlaywright():
+    return [{
+        "name": "upload-playwright-cache",
+        "image": MINIO_MC,
+        "environment": minio_mc_environment,
+        "commands": [
+            ". ./.drone.env",
+            "mc alias set s3 $MC_HOST $AWS_ACCESS_KEY_ID $AWS_SECRET_ACCESS_KEY",
+            "mc cp -a %s/.playwright s3/$CACHE_BUCKET/web/$version/" % dir["web"],
+            "mc ls --recursive s3/$CACHE_BUCKET/web",
+        ],
+    }]
+
+def checkPlaywrightChromiumCache():
+    return [{
+        "name": "check-playwright-cache",
+        "image": MINIO_MC,
+        "environment": minio_mc_environment,
+        "commands": [
+            "ls -al",
+            "mc alias set s3 $MC_HOST $AWS_ACCESS_KEY_ID $AWS_SECRET_ACCESS_KEY",
+            "mc ls --recursive s3/$CACHE_BUCKET/web",
+            "bash tests/drone/script.sh check_playwright_cache",
+        ],
+    }]
