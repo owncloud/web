@@ -1,0 +1,6 @@
+Bugfix: Export request ID when delete fails
+
+We've fixed a bug where the request ID was not exposed to the error message when a delete operation failed.
+
+https://github.com/owncloud/web/pull/11951
+https://github.com/owncloud/web/issues/11925
