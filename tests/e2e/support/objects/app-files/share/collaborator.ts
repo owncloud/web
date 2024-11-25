@@ -187,6 +187,7 @@ export default class Collaborator {
 
     await page
       .locator(util.format(Collaborator.collaboratorEditDropdownButton, collaboratorRow))
+      .first()
       .click()
     await page.locator(util.format(Collaborator.removeCollaboratorButton, collaboratorRow)).click()
 
@@ -302,38 +303,6 @@ export default class Collaborator {
           collaborator.displayName
         )
       : util.format(Collaborator.collaboratorUserSelector, collaborator.displayName)
-  }
-
-  static async setDenyShareForCollaborator(args: SetDenyShareForCollaboratorArgs): Promise<void> {
-    const {
-      page,
-      collaborator: { collaborator, type },
-      deny
-    } = args
-    const collaboratorRow = Collaborator.getCollaboratorUserOrGroupSelector(collaborator, type)
-    await page.locator(collaboratorRow).waitFor()
-
-    await page
-      .locator(util.format(Collaborator.collaboratorEditDropdownButton, collaboratorRow))
-      .click()
-
-    await Promise.all([
-      page.waitForResponse(
-        (resp) =>
-          resp.url().includes('shares') &&
-          resp.status() === 200 &&
-          resp.request().method() === (deny ? 'POST' : 'DELETE')
-      ),
-      page
-        .locator(
-          util.format(
-            Collaborator.denyShareCollaboratorButton,
-            collaboratorRow,
-            deny ? 'false' : 'true'
-          )
-        )
-        .click()
-    ])
   }
 
   static async getAccessDetails(

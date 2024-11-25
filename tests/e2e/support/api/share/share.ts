@@ -27,13 +27,15 @@ export const shareRoles: Readonly<{
   'Can edit': string
   'Can view': string
   'Secret File Drop': string
+  'Cannot access': string
 }> = {
   'Invited people': 'internal',
   'Can upload': 'contributor',
   'Can manage': 'manager',
   'Can edit': 'editor',
   'Can view': 'viewer',
-  'Secret File Drop': 'uploader'
+  'Secret File Drop': 'uploader',
+  'Cannot access': 'denied'
 } as const
 
 export const linkShareRoles: Readonly<{
