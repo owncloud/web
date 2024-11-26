@@ -1903,9 +1903,9 @@ def cachePlaywright():
         "image": MINIO_MC,
         "environment": minio_mc_environment,
         "commands": [
-            ". ./.drone.env",
+            "playwright_version=$(grep '\"@playwright/test\":' \"package.json\" | cut -d':' -f2 | tr -d '\", ')",
             "mc alias set s3 $MC_HOST $AWS_ACCESS_KEY_ID $AWS_SECRET_ACCESS_KEY",
-            "mc cp -a %s/.playwright s3/$CACHE_BUCKET/web/$version/" % dir["web"],
+            "mc cp -r -a %s/.playwright s3/$CACHE_BUCKET/web/$playwright_version/" % dir["web"],
             "mc ls --recursive s3/$CACHE_BUCKET/web",
         ],
     }]
