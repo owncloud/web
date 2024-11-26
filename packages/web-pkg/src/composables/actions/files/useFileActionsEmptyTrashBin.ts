@@ -13,6 +13,7 @@ import {
   useCapabilityStore,
   useResourcesStore
 } from '../../piniaStores'
+import { useLoadingService } from '../../loadingService'
 
 export const useFileActionsEmptyTrashBin = () => {
   const { showMessage, showErrorMessage } = useMessages()
@@ -23,6 +24,7 @@ export const useFileActionsEmptyTrashBin = () => {
   const clientService = useClientService()
   const { dispatchModal } = useModals()
   const resourcesStore = useResourcesStore()
+  const loadingService = useLoadingService()
 
   const emptyTrashBin = ({ space }: { space: SpaceResource }) => {
     return clientService.webdav
@@ -50,7 +52,7 @@ export const useFileActionsEmptyTrashBin = () => {
         'Are you sure you want to permanently delete the listed items? You can’t undo this action.'
       ),
       hasInput: false,
-      onConfirm: () => emptyTrashBin({ space })
+      onConfirm: () => loadingService.addTask(() => emptyTrashBin({ space }))
     })
   }
 
