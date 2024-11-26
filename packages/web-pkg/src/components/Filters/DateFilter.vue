@@ -40,7 +40,7 @@
               justify-content="space-between"
               appearance="raw"
               data-testid="custom-date-range"
-              @click="dateRangeClicked = true"
+              @click="(dateRangeClicked = true)"
             >
               <div class="oc-flex oc-flex-middle oc-text-truncate">
                 <div class="oc-text-truncate oc-ml-s">
@@ -62,7 +62,7 @@
               appearance="raw"
               class="date-filter-range-panel-back"
               :aria-label="$gettext('Go back to filter options')"
-              @click="dateRangeClicked = false"
+              @click="(dateRangeClicked = false)"
             >
               <oc-icon name="arrow-left-s" fill-type="line" />
             </oc-button>
