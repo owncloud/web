@@ -20,7 +20,7 @@
       class="oc-text-input-show-password-toggle oc-px-s oc-background-default"
       appearance="raw"
       size="small"
-      @click="showPassword = !showPassword"
+      @click="(showPassword = !showPassword)"
     >
       <oc-icon size="small" :name="showPassword ? 'eye-off' : 'eye'" />
     </oc-button>

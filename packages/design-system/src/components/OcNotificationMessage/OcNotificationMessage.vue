@@ -26,7 +26,7 @@
           class="oc-notification-message-error-log-toggle-button"
           gap-size="none"
           appearance="raw"
-          @click="showErrorLog = !showErrorLog"
+          @click="(showErrorLog = !showErrorLog)"
         >
           <span v-text="$gettext('Details')"></span>
           <oc-icon :name="showErrorLog ? 'arrow-up-s' : 'arrow-down-s'" />
