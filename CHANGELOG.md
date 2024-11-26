@@ -3,34 +3,17 @@ Changelog for ownCloud Web [unreleased] (UNRELEASED)
 The following sections list the changes in ownCloud web unreleased relevant to
 ownCloud admins and users.
 
-[unreleased]: https://github.com/owncloud/web/compare/v11.0.4...master
+[unreleased]: https://github.com/owncloud/web/compare/v11.0.5...master
 
 Summary
 -------
 
-* Bugfix - Preview app Shared with me page: [#11883](https://github.com/owncloud/web/issues/11883)
-* Bugfix - Export request ID when delete fails: [#11951](https://github.com/owncloud/web/pull/11951)
 * Bugfix - Show progress bar when emptying trash bin: [#11967](https://github.com/owncloud/web/pull/11967)
 * Enhancement - Accessibility improvements: [#5379](https://github.com/owncloud/web/issues/5379)
 * Enhancement - Create spaces via admin settings: [#11849](https://github.com/owncloud/web/pull/11849)
 
 Details
 -------
-
-* Bugfix - Preview app Shared with me page: [#11883](https://github.com/owncloud/web/issues/11883)
-
-   We fixed navigation issues with the preview app on the Shared with me page.
-
-   https://github.com/owncloud/web/issues/11883
-   https://github.com/owncloud/web/pull/11947
-
-* Bugfix - Export request ID when delete fails: [#11951](https://github.com/owncloud/web/pull/11951)
-
-   We've fixed a bug where the request ID was not exposed to the error message when
-   a delete operation failed.
-
-   https://github.com/owncloud/web/issues/11925
-   https://github.com/owncloud/web/pull/11951
 
 * Bugfix - Show progress bar when emptying trash bin: [#11967](https://github.com/owncloud/web/pull/11967)
 
@@ -55,6 +38,37 @@ Details
 
    https://github.com/owncloud/web/issues/11771
    https://github.com/owncloud/web/pull/11849
+
+Changelog for ownCloud Web [11.0.5] (2024-11-25)
+=======================================
+The following sections list the changes in ownCloud web 11.0.5 relevant to
+ownCloud admins and users.
+
+[11.0.5]: https://github.com/owncloud/web/compare/v11.0.4...v11.0.5
+
+Summary
+-------
+
+* Bugfix - Preview app Shared with me page: [#11883](https://github.com/owncloud/web/issues/11883)
+* Bugfix - Export request ID when delete fails: [#11951](https://github.com/owncloud/web/pull/11951)
+
+Details
+-------
+
+* Bugfix - Preview app Shared with me page: [#11883](https://github.com/owncloud/web/issues/11883)
+
+   We fixed navigation issues with the preview app on the Shared with me page.
+
+   https://github.com/owncloud/web/issues/11883
+   https://github.com/owncloud/web/pull/11947
+
+* Bugfix - Export request ID when delete fails: [#11951](https://github.com/owncloud/web/pull/11951)
+
+   We've fixed a bug where the request ID was not exposed to the error message when
+   a delete operation failed.
+
+   https://github.com/owncloud/web/issues/11925
+   https://github.com/owncloud/web/pull/11951
 
 Changelog for ownCloud Web [11.0.4] (2024-11-19)
 =======================================
