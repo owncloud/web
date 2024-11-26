@@ -10,6 +10,7 @@ Summary
 
 * Bugfix - Preview app Shared with me page: [#11883](https://github.com/owncloud/web/issues/11883)
 * Bugfix - Export request ID when delete fails: [#11951](https://github.com/owncloud/web/pull/11951)
+* Bugfix - Show progress bar when emptying trash bin: [#11967](https://github.com/owncloud/web/pull/11967)
 * Enhancement - Accessibility improvements: [#5379](https://github.com/owncloud/web/issues/5379)
 * Enhancement - Create spaces via admin settings: [#11849](https://github.com/owncloud/web/pull/11849)
 
@@ -30,6 +31,14 @@ Details
 
    https://github.com/owncloud/web/issues/11925
    https://github.com/owncloud/web/pull/11951
+
+* Bugfix - Show progress bar when emptying trash bin: [#11967](https://github.com/owncloud/web/pull/11967)
+
+   We've fixed a bug where the progress bar wasn't shown when emptying the trash
+   bin.
+
+   https://github.com/owncloud/web/issues/11966
+   https://github.com/owncloud/web/pull/11967
 
 * Enhancement - Accessibility improvements: [#5379](https://github.com/owncloud/web/issues/5379)
 
