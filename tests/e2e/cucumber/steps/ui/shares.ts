@@ -238,35 +238,6 @@ Then(
 )
 
 When(
-  /^"([^"]*)" (grants|denies) access to the following resources(?:s)? for (group|user) "([^"]*)" using the sidebar panel?$/,
-  async function (
-    this: World,
-    stepUser: string,
-    actionType: string,
-    collaboratorType: 'user' | 'group',
-    collaborator: string,
-    stepTable: DataTable
-  ): Promise<void> {
-    const { page } = this.actorsEnvironment.getActor({ key: stepUser })
-    const shareObject = new objects.applicationFiles.Share({ page })
-
-    for (const { resource } of stepTable.hashes()) {
-      await shareObject.setDenyShare({
-        resource,
-        deny: actionType === 'denies',
-        collaborator: {
-          collaborator:
-            collaboratorType === 'group'
-              ? this.usersEnvironment.getGroup({ key: collaborator })
-              : this.usersEnvironment.getUser({ key: collaborator }),
-          type: collaboratorType
-        } as ICollaborator
-      })
-    }
-  }
-)
-
-When(
   /^"([^"]*)" sets the expiration date of share "([^"]*)" of (group|user) "([^"]*)" to "([^"]*)"?$/,
   async function (
     this: World,

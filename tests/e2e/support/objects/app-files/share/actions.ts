@@ -203,19 +203,6 @@ export const checkSharee = async (args: ShareArgs): Promise<void> => {
   }
 }
 
-export interface setDenyShareArgs {
-  page: Page
-  resource: string
-  deny: boolean
-  collaborator: ICollaborator
-}
-
-export const setDenyShare = async (args: setDenyShareArgs): Promise<void> => {
-  const { page, resource, deny, collaborator } = args
-  await openSharingPanel(page, resource)
-  await Collaborator.setDenyShareForCollaborator({ page, deny, collaborator })
-}
-
 export const addExpirationDate = async (args: {
   page: Page
   resource: string

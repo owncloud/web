@@ -59,12 +59,6 @@ export class Share {
     return await resourceIsSynced({ page: this.#page, resource })
   }
 
-  async setDenyShare(args: Omit<po.setDenyShareArgs, 'page'>): Promise<void> {
-    const startUrl = this.#page.url()
-    await po.setDenyShare({ ...args, page: this.#page })
-    await this.#page.goto(startUrl)
-  }
-
   async addExpirationDate({
     resource,
     collaborator,
