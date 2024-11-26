@@ -31,25 +31,23 @@ check_ocis_cache() {
 
 # get playwright version from package.json
 get_playwright_version() {
-    # Ensure package.json exists
     if [[ ! -f "package.json" ]]; then
         echo "Error: package.json file not found."
     fi
 
-    # Extract Playwright version from package.json
     playwright_version=$(grep '"@playwright/test":' "package.json" | cut -d':' -f2 | tr -d '", ')
     if [[ -z "$playwright_version" ]]; then
-        echo "Error: Playwright package not found in package.json."
+        echo "Error: Playwright package not found in package.json." >&2
+        exit 78
     fi
 
-    echo "Checking Playwright cache for version: $playwright_version"
+    echo "$playwright_version"
 }
 
 # Function to check if the cache exists for the given commit ID
 check_playwright_cache() {
     get_playwright_version
 
-    # Check cache using MinIO
     playwright_cache=$(mc find s3/$CACHE_BUCKET/web/$playwright_version/.playwright 2>&1 | grep 'Object does not exist')
 
     if [[ "$playwright_cache" != "" ]]

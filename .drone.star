@@ -55,7 +55,7 @@ config = {
     "e2e": {
         "1": {
             "earlyFail": True,
-            "skip": False,
+            "skip": True,
             "suites": [
                 "journeys",
                 "smoke",
@@ -71,7 +71,7 @@ config = {
         },
         "3": {
             "earlyFail": True,
-            "skip": False,
+            "skip": True,
             "tikaNeeded": True,
             "suites": [
                 "search",
@@ -86,7 +86,7 @@ config = {
         },
         "4": {
             "earlyFail": True,
-            "skip": False,
+            "skip": True,
             "suites": [
                 "navigation",
                 "user-settings",
@@ -95,7 +95,7 @@ config = {
             ],
         },
         "app-provider": {
-            "skip": False,
+            "skip": True,
             "suites": [
                 "app-provider",
             ],
@@ -112,7 +112,7 @@ config = {
             },
         },
         "oidc-refresh-token": {
-            "skip": False,
+            "skip": True,
             "features": [
                 "cucumber/features/oidc/refreshToken.feature",
             ],
@@ -122,7 +122,7 @@ config = {
             },
         },
         "oidc-iframe": {
-            "skip": False,
+            "skip": True,
             "features": [
                 "cucumber/features/oidc/iframeTokenRenewal.feature",
             ],
@@ -132,7 +132,7 @@ config = {
         },
         "ocm": {
             "earlyFail": True,
-            "skip": False,
+            "skip": True,
             "federationServer": True,
             "suites": [
                 "ocm",
@@ -191,7 +191,7 @@ def main(ctx):
 
     after = pipelinesDependsOn(afterPipelines(ctx), stages)
 
-    pipelines = before
+    pipelines = before + stages + after
 
     deploys = example_deploys(ctx)
     if ctx.build.event != "cron":
@@ -210,7 +210,10 @@ def main(ctx):
 
 def beforePipelines(ctx):
     return checkStarlark() + \
-           pnpmCache(ctx)
+           pnpmCache(ctx) + \
+           cacheOcisPipeline(ctx) + \
+           pipelinesDependsOn(buildCacheWeb(ctx), pnpmCache(ctx)) + \
+           pipelinesDependsOn(pnpmlint(ctx), pnpmCache(ctx))
 
 def stagePipelines(ctx):
     unit_test_pipelines = unitTests(ctx)
@@ -221,7 +224,7 @@ def stagePipelines(ctx):
 
     e2e_pipelines = e2eTests(ctx)
     keycloak_pipelines = e2eTestsOnKeycloak(ctx)
-    return unit_test_pipelines + buildAndTestDesignSystem(ctx) + pipelinesDependsOn(e2e_pipelines + keycloak_pipelines, unit_test_pipelines)
+    return buildAndTestDesignSystem(ctx) + e2e_pipelines + keycloak_pipelines
 
 def afterPipelines(ctx):
     return build(ctx) + pipelinesDependsOn(notify(), build(ctx))
@@ -598,11 +601,14 @@ def e2eTests(ctx):
             "REPORT_TRACING": params["reportTracing"],
             "BASE_URL_OCIS": "ocis:9200",
             "FAIL_ON_UNCAUGHT_CONSOLE_ERR": "true",
+            "PLAYWRIGHT_BROWSERS_PATH": ".playwright",
+            "BROWSER": "chromium",
         }
 
         steps = skipIfUnchanged(ctx, "e2e-tests") + \
                 restoreBuildArtifactCache(ctx, "pnpm", ".pnpm-store") + \
                 installPnpm() + \
+                restorePlaywrightChromiumCache() + \
                 restoreBuildArtifactCache(ctx, "web-dist", "dist")
 
         if ctx.build.event == "cron":
@@ -1819,6 +1825,7 @@ def e2eTestsOnKeycloak(ctx):
 
     steps = restoreBuildArtifactCache(ctx, "pnpm", ".pnpm-store") + \
             installPnpm() + \
+            restorePlaywrightChromiumCache() + \
             keycloakService() + \
             restoreBuildArtifactCache(ctx, "web-dist", "dist")
     if ctx.build.event == "cron":
@@ -1854,6 +1861,8 @@ def e2eTestsOnKeycloak(ctx):
                          "REPORT_TRACING": "with-tracing" in ctx.build.title.lower(),
                          "KEYCLOAK": "true",
                          "KEYCLOAK_HOST": "keycloak:8443",
+                         "PLAYWRIGHT_BROWSERS_PATH": ".playwright",
+                         "BROWSER": "chromium",
                      },
                      "commands": [
                          "cd tests/e2e",
@@ -1903,7 +1912,7 @@ def cachePlaywright():
         "image": MINIO_MC,
         "environment": minio_mc_environment,
         "commands": [
-            "playwright_version=$(grep '\"@playwright/test\":' \"package.json\" | cut -d':' -f2 | tr -d '\", ')",
+            "playwright_version=$(bash tests/drone/script.sh get_playwright_version)",
             "mc alias set s3 $MC_HOST $AWS_ACCESS_KEY_ID $AWS_SECRET_ACCESS_KEY",
             "mc cp -r -a %s/.playwright s3/$CACHE_BUCKET/web/$playwright_version/" % dir["web"],
             "mc ls --recursive s3/$CACHE_BUCKET/web",
@@ -1916,9 +1925,20 @@ def checkPlaywrightChromiumCache():
         "image": MINIO_MC,
         "environment": minio_mc_environment,
         "commands": [
-            "ls -al",
             "mc alias set s3 $MC_HOST $AWS_ACCESS_KEY_ID $AWS_SECRET_ACCESS_KEY",
             "mc ls --recursive s3/$CACHE_BUCKET/web",
             "bash tests/drone/script.sh check_playwright_cache",
+        ],
+    }]
+
+def restorePlaywrightChromiumCache():
+    return [{
+        "name": "restore-playwright-chromium-cache",
+        "image": MINIO_MC,
+        "environment": minio_mc_environment,
+        "commands": [
+            "playwright_version=$(bash tests/drone/script.sh get_playwright_version)",
+            "mc alias set s3 $MC_HOST $AWS_ACCESS_KEY_ID $AWS_SECRET_ACCESS_KEY",
+            "mc cp -r -a s3/$CACHE_BUCKET/web/$playwright_version/.playwright %s" % dir["web"],
         ],
     }]

@@ -100,6 +100,7 @@ BeforeAll(async (): Promise<void> => {
 
   state.browser = await browsers[config.browser]()
 
+  console.log(state.browser.version())
   // setup keycloak admin user
   if (config.keycloak) {
     const usersEnvironment = new environment.UsersEnvironment()
