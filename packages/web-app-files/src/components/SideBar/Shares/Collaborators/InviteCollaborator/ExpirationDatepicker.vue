@@ -22,7 +22,7 @@
     class="recipient-edit-expiration-btn-remove oc-p-s action-menu-item"
     appearance="raw"
     :aria-label="$gettext('Remove expiration date')"
-    @click="(dateCurrent = null)"
+    @click="dateCurrent = null"
   >
     <oc-icon name="calendar-close" fill-type="line" size="medium" variation="passive" />
     <span key="no-expiration-date-label" v-text="$gettext('Remove expiration date')" />
