@@ -243,9 +243,7 @@ def pnpmCache(ctx):
         },
         "steps": skipIfUnchanged(ctx, "cache") +
                  installPnpm() +
-                 installPlaywright() +
-                 rebuildBuildArtifactCache(ctx, "pnpm", ".pnpm-store") +
-                 rebuildBuildArtifactCache(ctx, "playwright", ".playwright"),
+                 rebuildBuildArtifactCache(ctx, "pnpm", ".pnpm-store"),
         "trigger": {
             "ref": [
                 "refs/heads/master",
@@ -1696,18 +1694,6 @@ def buildDesignSystemDocs():
         ],
     }]
 
-def runDesignSystemDocsE2eTests():
-    return [{
-        "name": "run-design-system-docs-e2e-tests",
-        "image": OC_CI_NODEJS,
-        "environment": {
-            "PLAYWRIGHT_BROWSERS_PATH": ".playwright",
-        },
-        "commands": [
-            "pnpm --filter @ownclouders/design-system test:e2e",
-        ],
-    }]
-
 def buildAndTestDesignSystem(ctx):
     design_system_trigger = {
         "ref": [
@@ -1719,15 +1705,13 @@ def buildAndTestDesignSystem(ctx):
     }
 
     steps = restoreBuildArtifactCache(ctx, "pnpm", ".pnpm-store") + \
-            restoreBuildArtifactCache(ctx, "playwright", ".playwright") + \
             installPnpm() + \
-            buildDesignSystemDocs() + \
-            runDesignSystemDocsE2eTests()
+            buildDesignSystemDocs()
 
     return [{
         "kind": "pipeline",
         "type": "docker",
-        "name": "design-system-build-and-test",
+        "name": "build-design-system-docs",
         "workspace": {
             "base": dir["base"],
             "path": config["app"],
