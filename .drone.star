@@ -39,6 +39,7 @@ dir = {
     "ocisRevaDataRoot": "/srv/app/tmp/ocis/owncloud/data/",
     "federatedOcisConfig": "/var/www/owncloud/web/tests/drone/config-ocis-federated.json",
     "ocmProviders": "/var/www/owncloud/web/tests/drone/providers.json",
+    "chromiumZip": "/var/www/owncloud/web/playwright-chromium.tar.gz",
 }
 
 config = {
@@ -604,7 +605,7 @@ def e2eTests(ctx):
             "REPORT_TRACING": params["reportTracing"],
             "BASE_URL_OCIS": "ocis:9200",
             "FAIL_ON_UNCAUGHT_CONSOLE_ERR": "true",
-            "PLAYWRIGHT_BROWSERS_PATH": ".playwright",
+            "PLAYWRIGHT_BROWSERS_PATH": ".chromium",
             "BROWSER": "chromium",
         }
 
@@ -724,13 +725,14 @@ def installPnpm():
 
 def installChromium():
     return [{
-        "name": "playwright-install",
+        "name": "chromium-install",
         "image": OC_CI_NODEJS,
         "environment": {
-            "PLAYWRIGHT_BROWSERS_PATH": ".playwright",
+            "PLAYWRIGHT_BROWSERS_PATH": ".chromium",
         },
         "commands": [
             "pnpm exec playwright install chromium --with-deps",
+            "tar -czvf %s .chromium" % dir["chromiumZip"],
         ],
     }]
 
@@ -1864,7 +1866,7 @@ def e2eTestsOnKeycloak(ctx):
                          "REPORT_TRACING": "with-tracing" in ctx.build.title.lower(),
                          "KEYCLOAK": "true",
                          "KEYCLOAK_HOST": "keycloak:8443",
-                         "PLAYWRIGHT_BROWSERS_PATH": ".playwright",
+                         "PLAYWRIGHT_BROWSERS_PATH": ".chromium",
                          "BROWSER": "chromium",
                      },
                      "commands": [
@@ -1910,17 +1912,19 @@ def getOcislatestCommitId(ctx):
     ]
 
 def cacheChromium():
-    return [{
-        "name": "upload-chromium-cache",
-        "image": MINIO_MC,
-        "environment": minio_mc_environment,
-        "commands": [
-            "playwright_version=$(bash tests/drone/script.sh get_playwright_version)",
-            "mc alias set s3 $MC_HOST $AWS_ACCESS_KEY_ID $AWS_SECRET_ACCESS_KEY",
-            "mc cp -r -a %s/.playwright s3/$CACHE_BUCKET/web/$playwright_version/" % dir["web"],
-            "mc ls --recursive s3/$CACHE_BUCKET/web",
-        ],
-    }]
+    return [
+        {
+            "name": "upload-chromium-cache",
+            "image": MINIO_MC,
+            "environment": minio_mc_environment,
+            "commands": [
+                "playwright_version=$(bash tests/drone/script.sh get_playwright_version)",
+                "mc alias set s3 $MC_HOST $AWS_ACCESS_KEY_ID $AWS_SECRET_ACCESS_KEY",
+                "mc cp -r -a %s s3/$CACHE_BUCKET/web/$playwright_version/" % dir["chromiumZip"],
+                "mc ls --recursive s3/$CACHE_BUCKET/web",
+            ],
+        },
+    ]
 
 def checkChromiumCache():
     return [{
@@ -1935,13 +1939,22 @@ def checkChromiumCache():
     }]
 
 def restoreChromiumCache():
-    return [{
-        "name": "restore-chromium-cache",
-        "image": MINIO_MC,
-        "environment": minio_mc_environment,
-        "commands": [
-            "playwright_version=$(bash tests/drone/script.sh get_playwright_version)",
-            "mc alias set s3 $MC_HOST $AWS_ACCESS_KEY_ID $AWS_SECRET_ACCESS_KEY",
-            "mc cp -r -a s3/$CACHE_BUCKET/web/$playwright_version/.playwright %s" % dir["web"],
-        ],
-    }]
+    return [
+        {
+            "name": "restore-chromium-cache",
+            "image": MINIO_MC,
+            "environment": minio_mc_environment,
+            "commands": [
+                "playwright_version=$(bash tests/drone/script.sh get_playwright_version)",
+                "mc alias set s3 $MC_HOST $AWS_ACCESS_KEY_ID $AWS_SECRET_ACCESS_KEY",
+                "mc cp -r -a s3/$CACHE_BUCKET/web/$playwright_version/playwright-chromium.tar.gz %s" % dir["web"],
+            ],
+        },
+        {
+            "name": "unzip-chromium-cache",
+            "image": OC_UBUNTU,
+            "commands": [
+                "tar -xvf %s -C ." % dir["chromiumZip"],
+            ],
+        },
+    ]

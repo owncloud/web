@@ -48,7 +48,7 @@ get_playwright_version() {
 check_chromium_cache() {
     get_playwright_version
 
-    playwright_cache=$(mc find s3/$CACHE_BUCKET/web/$playwright_version/.playwright 2>&1 | grep 'Object does not exist')
+    playwright_cache=$(mc find s3/$CACHE_BUCKET/web/$playwright_version/playwright-chromium.tar.gz 2>&1 | grep 'Object does not exist')
 
     if [[ "$playwright_cache" != "" ]]
     then
