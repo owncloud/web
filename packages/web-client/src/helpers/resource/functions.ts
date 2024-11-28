@@ -1,7 +1,13 @@
 import path, { basename, dirname } from 'path'
 import { urlJoin } from '../../utils'
 import { DavPermission, DavProperty } from '../../webdav/constants'
-import { Resource, ResourceIndicator, TrashResource, WebDavResponseResource } from './types'
+import {
+  Resource,
+  ResourceIndicator,
+  SearchResource,
+  TrashResource,
+  WebDavResponseResource
+} from './types'
 import { camelCase } from 'lodash-es'
 
 const fileExtensions = {
@@ -10,6 +16,10 @@ const fileExtensions = {
 
 export const isTrashResource = (resource: Resource): resource is TrashResource => {
   return Object.hasOwn(resource, 'ddate')
+}
+
+export const isSearchResource = (resource: Resource): resource is SearchResource => {
+  return Object.hasOwn(resource, 'highlights')
 }
 
 export const extractDomSelector = (str: string): string => {

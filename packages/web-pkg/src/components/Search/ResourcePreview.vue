@@ -29,6 +29,7 @@ import { isSpaceResource, Resource } from '@ownclouders/web-client'
 import ResourceListItem from '../FilesList/ResourceListItem.vue'
 import { SearchResultValue } from './types'
 import { storeToRefs } from 'pinia'
+import { RouteLocationPathRaw } from 'vue-router'
 
 const visibilityObserver = new VisibilityObserver()
 
@@ -44,6 +45,10 @@ export default defineComponent({
     isClickable: {
       type: Boolean,
       default: true
+    },
+    term: {
+      type: String,
+      default: ''
     }
   },
   setup(props) {
@@ -115,7 +120,21 @@ export default defineComponent({
         return null
       }
 
-      return action.route({ space: unref(space), resources: [unref(resource)] })
+      const route = action.route({
+        space: unref(space),
+        resources: [unref(resource)]
+      }) as RouteLocationPathRaw
+
+      // add search term to query param
+      route.query = {
+        ...route.query,
+        contextRouteQuery: {
+          ...((route.query?.contextRouteQuery as any) || {}),
+          term: props.term
+        }
+      }
+
+      return route
     })
 
     return {

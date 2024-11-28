@@ -1,4 +1,5 @@
 import { FolderLoader, FolderLoaderTask, TaskContext } from '../folderService'
+import { unref } from 'vue'
 import { Router } from 'vue-router'
 import { useTask } from 'vue-concurrency'
 import { isLocationSharesActive } from '../../../router'
@@ -10,7 +11,11 @@ export class FolderLoaderSharedWithOthers implements FolderLoader {
   }
 
   public isActive(router: Router): boolean {
-    return isLocationSharesActive(router, 'files-shares-with-others')
+    const currentRoute = unref(router.currentRoute)
+    return (
+      isLocationSharesActive(router, 'files-shares-with-others') ||
+      currentRoute?.query?.contextRouteName === 'files-shares-with-others'
+    )
   }
 
   public getTask(context: TaskContext): FolderLoaderTask {

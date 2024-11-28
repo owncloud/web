@@ -1,12 +1,19 @@
 import App from '../../src/App.vue'
 import { nextTick } from 'vue'
 import { defaultComponentMocks, defaultPlugins, shallowMount } from '@ownclouders/web-test-helpers'
-import { FileContext } from '@ownclouders/web-pkg'
+import { FileContext, queryItemAsString } from '@ownclouders/web-pkg'
 import { mock } from 'vitest-mock-extended'
+
+vi.mock('@ownclouders/web-pkg', async (importOriginal) => ({
+  ...(await importOriginal<any>()),
+  queryItemAsString: vi.fn(),
+  createFileRouteOptions: vi.fn(() => ({ params: {}, query: {} }))
+}))
 
 const activeFiles = [
   {
     id: '1',
+    fileId: '1',
     name: 'bear.png',
     mimeType: 'image/png',
     path: 'personal/admin/bear.png',
@@ -14,6 +21,7 @@ const activeFiles = [
   },
   {
     id: '2',
+    fileId: '2',
     name: 'elephant.png',
     mimeType: 'image/png',
     path: 'personal/admin/elephant.png',
@@ -21,6 +29,7 @@ const activeFiles = [
   },
   {
     id: '3',
+    fileId: '3',
     name: 'wale_sounds.flac',
     mimeType: 'audio/flac',
     path: 'personal/admin/wale_sounds.flac',
@@ -28,6 +37,7 @@ const activeFiles = [
   },
   {
     id: '4',
+    fileId: '4',
     name: 'lonely_sloth_very_sad.gif',
     mimeType: 'image/gif',
     path: 'personal/admin/lonely_sloth_very_sad.gif',
@@ -35,6 +45,7 @@ const activeFiles = [
   },
   {
     id: '5',
+    fileId: '5',
     name: 'tiger_eats_plants.mp4',
     mimeType: 'video/mp4',
     path: 'personal/admin/tiger_eats_plants.mp4',
@@ -42,6 +53,7 @@ const activeFiles = [
   },
   {
     id: '6',
+    fileId: '6',
     name: 'happy_hippo.gif',
     mimeType: 'image/gif',
     path: 'personal/admin/happy_hippo.gif',
@@ -49,6 +61,7 @@ const activeFiles = [
   },
   {
     id: '7',
+    fileId: '7',
     name: 'sleeping_dog.gif',
     mimeType: 'image/gif',
     path: 'personal/admin/sleeping_dog.gif',
@@ -56,6 +69,7 @@ const activeFiles = [
   },
   {
     id: '8',
+    fileId: '8',
     name: 'cat_murr_murr.gif',
     mimeType: 'image/gif',
     path: 'personal/admin/cat_murr_murr.gif',
@@ -63,6 +77,7 @@ const activeFiles = [
   },
   {
     id: '9',
+    fileId: '9',
     name: 'labrador.gif',
     mimeType: 'image/gif',
     path: 'personal/admin/labrador.gif',
@@ -77,7 +92,7 @@ describe('Preview app', () => {
       await nextTick()
 
       wrapper.vm.cachedFiles = {}
-      wrapper.vm.setActiveFile('personal/admin/sleeping_dog.gif')
+      wrapper.vm.goToNext()
 
       await nextTick()
 
@@ -94,16 +109,13 @@ describe('Preview app', () => {
 function createShallowMountWrapper() {
   const mocks = defaultComponentMocks()
   mocks.$previewService.loadPreview.mockResolvedValue('')
+  vi.mocked(queryItemAsString).mockImplementationOnce(() => '1')
+
   return {
     wrapper: shallowMount(App, {
       props: {
         currentFileContext: mock<FileContext>({
-          path: 'personal/admin/bear.png',
-          space: {
-            getDriveAliasAndItem: vi.fn().mockImplementation((file) => {
-              return activeFiles.find((filteredFile) => filteredFile.id == file.id)?.path
-            })
-          }
+          path: 'personal/admin/bear.png'
         }),
         activeFiles,
         isFolderLoading: true,

@@ -3,6 +3,7 @@ import { Router } from 'vue-router'
 import { useTask } from 'vue-concurrency'
 import { buildIncomingShareResource, call } from '@ownclouders/web-client'
 import { isLocationSharesActive } from '../../../router'
+import { unref } from 'vue'
 
 export class FolderLoaderSharedWithMe implements FolderLoader {
   public isEnabled(): boolean {
@@ -10,7 +11,11 @@ export class FolderLoaderSharedWithMe implements FolderLoader {
   }
 
   public isActive(router: Router): boolean {
-    return isLocationSharesActive(router, 'files-shares-with-me')
+    const currentRoute = unref(router.currentRoute)
+    return (
+      isLocationSharesActive(router, 'files-shares-with-me') ||
+      currentRoute?.query?.contextRouteName === 'files-shares-with-me'
+    )
   }
 
   public getTask(context: TaskContext): FolderLoaderTask {
