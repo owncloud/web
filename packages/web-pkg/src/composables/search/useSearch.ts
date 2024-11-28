@@ -4,7 +4,12 @@ import { DavProperties } from '@ownclouders/web-client/webdav'
 import { call, urlJoin } from '@ownclouders/web-client'
 import { useClientService } from '../clientService'
 import { isProjectSpaceResource } from '@ownclouders/web-client'
-import { useConfigStore, useResourcesStore, useSpacesStore } from '../piniaStores'
+import {
+  useCapabilityStore,
+  useConfigStore,
+  useResourcesStore,
+  useSpacesStore
+} from '../piniaStores'
 import { SearchResource } from '@ownclouders/web-client'
 import { useTask } from 'vue-concurrency'
 
@@ -13,7 +18,9 @@ export const useSearch = () => {
   const clientService = useClientService()
   const spacesStore = useSpacesStore()
   const resourcesStore = useResourcesStore()
+  const capabilityStore = useCapabilityStore()
 
+  const fullTextSearchEnabled = computed(() => capabilityStore.searchContent?.enabled)
   const areHiddenFilesShown = computed(() => resourcesStore.areHiddenFilesShown)
   const projectSpaces = computed(() => spacesStore.spaces.filter(isProjectSpaceResource))
   const getProjectSpace = (id: string) => {
@@ -64,8 +71,63 @@ export const useSearch = () => {
     return await searchTask.perform(term, searchLimit)
   }
 
+  const buildSearchTerm = ({
+    term,
+    isTitleOnlySearch,
+    tags,
+    lastModified,
+    mediaType,
+    scope,
+    useScope
+  }: {
+    term: string
+    isTitleOnlySearch?: boolean
+    tags?: string
+    lastModified?: string
+    mediaType?: string
+    scope?: string
+    useScope?: boolean
+  }) => {
+    const query: string[] = []
+
+    const humanSearchTerm = term
+    const useFullTextSearch = unref(fullTextSearchEnabled) && !isTitleOnlySearch
+
+    if (!!humanSearchTerm) {
+      let nameQuery = `name:"*${humanSearchTerm}*"`
+
+      if (useFullTextSearch) {
+        nameQuery = `(name:"*${humanSearchTerm}*" OR content:"${humanSearchTerm}")`
+      }
+
+      query.push(nameQuery)
+    }
+
+    if (useScope && scope) {
+      query.push(`scope:${scope}`)
+    }
+
+    if (tags) {
+      const tagArr = tags.split('+').map((t) => `"${t}"`)
+      query.push(`tag:(${tagArr.join(' OR ')})`)
+    }
+
+    if (lastModified) {
+      query.push(`mtime:${lastModified}`)
+    }
+
+    if (mediaType) {
+      const mediatypes = mediaType.split('+').map((t) => `"${t}"`)
+      query.push(`mediatype:(${mediatypes.join(' OR ')})`)
+    }
+    return query
+      .sort((a, b) => Number(a.startsWith('scope:')) - Number(b.startsWith('scope:')))
+      .join(' AND ')
+  }
+
   return {
-    search
+    search,
+    buildSearchTerm
   }
 }
 

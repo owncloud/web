@@ -153,7 +153,8 @@ import {
   SearchResult,
   useCapabilityStore,
   useConfigStore,
-  useResourcesStore
+  useResourcesStore,
+  useSearch
 } from '@ownclouders/web-pkg'
 import { NoContentMessage } from '@ownclouders/web-pkg'
 import { ResourceTable } from '@ownclouders/web-pkg'
@@ -247,6 +248,7 @@ export default defineComponent({
     const { y: fileListHeaderY } = useFileListHeaderPosition()
     const clientService = useClientService()
     const { getMatchingSpace } = useGetMatchingSpace()
+    const { buildSearchTerm } = useSearch()
 
     const resourcesStore = useResourcesStore()
     const { initResourceList, clearResourceList, setAncestorMetaData } = resourcesStore
@@ -342,28 +344,21 @@ export default defineComponent({
       return { type: 'file', extension: item.icon, isFolder: item.icon == 'folder' } as Resource
     }
 
-    const buildSearchTerm = (manuallyUpdateFilterChip = false) => {
-      const query: string[] = []
-
-      const humanSearchTerm = unref(searchTerm)
+    const doSearch = (manuallyUpdateFilterChip = false) => {
       const isTitleOnlySearch = queryItemAsString(unref(titleOnlyParam)) == 'true'
-      const useFullTextSearch = unref(fullTextSearchEnabled) && !isTitleOnlySearch
+      const tags = queryItemAsString(unref(tagParam))
+      const lastModified = queryItemAsString(unref(lastModifiedParam))
+      const mediaType = queryItemAsString(unref(mediaTypeParam))
 
-      if (!!humanSearchTerm) {
-        let nameQuery = `name:"*${humanSearchTerm}*"`
-
-        if (useFullTextSearch) {
-          nameQuery = `(name:"*${humanSearchTerm}*" OR content:"${humanSearchTerm}")`
-        }
-
-        query.push(nameQuery)
-      }
-
-      const humanScopeQuery = unref(scopeQuery)
-      const isScopedSearch = unref(doUseScope) === 'true'
-      if (isScopedSearch && humanScopeQuery) {
-        query.push(`scope:${humanScopeQuery}`)
-      }
+      const query = buildSearchTerm({
+        term: unref(searchTerm),
+        isTitleOnlySearch,
+        tags,
+        lastModified,
+        mediaType,
+        scope: queryItemAsString(unref(scopeQuery)),
+        useScope: unref(doUseScope) === 'true'
+      })
 
       const updateFilter = (v: Ref<InstanceType<typeof ItemFilter>>) => {
         if (manuallyUpdateFilterChip && unref(v)) {
@@ -377,28 +372,19 @@ export default defineComponent({
         }
       }
 
-      const humanTagsParams = queryItemAsString(unref(tagParam))
-      if (humanTagsParams) {
-        const tags = humanTagsParams.split('+').map((t) => `"${t}"`)
-        query.push(`tag:(${tags.join(' OR ')})`)
+      if (tags) {
         updateFilter(tagFilter)
       }
 
-      const lastModifiedParams = queryItemAsString(unref(lastModifiedParam))
-      if (lastModifiedParams) {
-        query.push(`mtime:${lastModifiedParams}`)
+      if (lastModified) {
         updateFilter(lastModifiedFilter)
       }
 
-      const mediaTypeParams = queryItemAsString(unref(mediaTypeParam))
-      if (mediaTypeParams) {
-        const mediatypes = mediaTypeParams.split('+').map((t) => `"${t}"`)
-        query.push(`mediatype:(${mediatypes.join(' OR ')})`)
+      if (mediaType) {
         updateFilter(mediaTypeFilter)
       }
+
       return query
-        .sort((a, b) => Number(a.startsWith('scope:')) - Number(b.startsWith('scope:')))
-        .join(' AND ')
     }
 
     const breadcrumbs = computed(() => {
@@ -429,7 +415,7 @@ export default defineComponent({
       if (capabilityStore.filesTags) {
         await loadAvailableTagsTask.perform()
       }
-      emit('search', buildSearchTerm())
+      emit('search', doSearch())
     })
 
     watch(
@@ -458,7 +444,7 @@ export default defineComponent({
           }
         }
 
-        emit('search', buildSearchTerm(true))
+        emit('search', doSearch(true))
       },
       { deep: true }
     )
