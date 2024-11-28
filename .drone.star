@@ -55,7 +55,7 @@ config = {
     "e2e": {
         "1": {
             "earlyFail": True,
-            "skip": True,
+            "skip": False,
             "suites": [
                 "journeys",
                 "smoke",
@@ -71,7 +71,7 @@ config = {
         },
         "3": {
             "earlyFail": True,
-            "skip": True,
+            "skip": False,
             "tikaNeeded": True,
             "suites": [
                 "search",
@@ -86,7 +86,7 @@ config = {
         },
         "4": {
             "earlyFail": True,
-            "skip": True,
+            "skip": False,
             "suites": [
                 "navigation",
                 "user-settings",
@@ -95,7 +95,7 @@ config = {
             ],
         },
         "app-provider": {
-            "skip": True,
+            "skip": False,
             "suites": [
                 "app-provider",
             ],
@@ -112,7 +112,7 @@ config = {
             },
         },
         "oidc-refresh-token": {
-            "skip": True,
+            "skip": False,
             "features": [
                 "cucumber/features/oidc/refreshToken.feature",
             ],
@@ -122,7 +122,7 @@ config = {
             },
         },
         "oidc-iframe": {
-            "skip": True,
+            "skip": False,
             "features": [
                 "cucumber/features/oidc/iframeTokenRenewal.feature",
             ],
@@ -132,7 +132,7 @@ config = {
         },
         "ocm": {
             "earlyFail": True,
-            "skip": True,
+            "skip": False,
             "federationServer": True,
             "suites": [
                 "ocm",
@@ -210,6 +210,9 @@ def main(ctx):
 
 def beforePipelines(ctx):
     return checkStarlark() + \
+           licenseCheck(ctx) + \
+           documentation(ctx) + \
+           changelog(ctx) + \
            pnpmCache(ctx) + \
            cacheOcisPipeline(ctx) + \
            pipelinesDependsOn(buildCacheWeb(ctx), pnpmCache(ctx)) + \
@@ -224,7 +227,7 @@ def stagePipelines(ctx):
 
     e2e_pipelines = e2eTests(ctx)
     keycloak_pipelines = e2eTestsOnKeycloak(ctx)
-    return buildAndTestDesignSystem(ctx) + e2e_pipelines + keycloak_pipelines
+    return unit_test_pipelines + buildAndTestDesignSystem(ctx) + pipelinesDependsOn(e2e_pipelines + keycloak_pipelines, unit_test_pipelines)
 
 def afterPipelines(ctx):
     return build(ctx) + pipelinesDependsOn(notify(), build(ctx))
@@ -241,9 +244,9 @@ def pnpmCache(ctx):
         "steps": skipIfUnchanged(ctx, "cache") +
                  installPnpm() +
                  rebuildBuildArtifactCache(ctx, "pnpm", ".pnpm-store") +
-                 checkPlaywrightChromiumCache() +
-                 installPlaywright() +
-                 cachePlaywright(),
+                 checkChromiumCache() +
+                 installChromium() +
+                 cacheChromium(),
         "trigger": {
             "ref": [
                 "refs/heads/master",
@@ -608,7 +611,7 @@ def e2eTests(ctx):
         steps = skipIfUnchanged(ctx, "e2e-tests") + \
                 restoreBuildArtifactCache(ctx, "pnpm", ".pnpm-store") + \
                 installPnpm() + \
-                restorePlaywrightChromiumCache() + \
+                restoreChromiumCache() + \
                 restoreBuildArtifactCache(ctx, "web-dist", "dist")
 
         if ctx.build.event == "cron":
@@ -719,7 +722,7 @@ def installPnpm():
         ],
     }]
 
-def installPlaywright():
+def installChromium():
     return [{
         "name": "playwright-install",
         "image": OC_CI_NODEJS,
@@ -1825,7 +1828,7 @@ def e2eTestsOnKeycloak(ctx):
 
     steps = restoreBuildArtifactCache(ctx, "pnpm", ".pnpm-store") + \
             installPnpm() + \
-            restorePlaywrightChromiumCache() + \
+            restoreChromiumCache() + \
             keycloakService() + \
             restoreBuildArtifactCache(ctx, "web-dist", "dist")
     if ctx.build.event == "cron":
@@ -1906,9 +1909,9 @@ def getOcislatestCommitId(ctx):
         },
     ]
 
-def cachePlaywright():
+def cacheChromium():
     return [{
-        "name": "upload-playwright-cache",
+        "name": "upload-chromium-cache",
         "image": MINIO_MC,
         "environment": minio_mc_environment,
         "commands": [
@@ -1919,21 +1922,21 @@ def cachePlaywright():
         ],
     }]
 
-def checkPlaywrightChromiumCache():
+def checkChromiumCache():
     return [{
-        "name": "check-playwright-cache",
+        "name": "check-chromium-cache",
         "image": MINIO_MC,
         "environment": minio_mc_environment,
         "commands": [
             "mc alias set s3 $MC_HOST $AWS_ACCESS_KEY_ID $AWS_SECRET_ACCESS_KEY",
             "mc ls --recursive s3/$CACHE_BUCKET/web",
-            "bash tests/drone/script.sh check_playwright_cache",
+            "bash tests/drone/script.sh check_chromium_cache",
         ],
     }]
 
-def restorePlaywrightChromiumCache():
+def restoreChromiumCache():
     return [{
-        "name": "restore-playwright-chromium-cache",
+        "name": "restore-chromium-cache",
         "image": MINIO_MC,
         "environment": minio_mc_environment,
         "commands": [

@@ -45,14 +45,14 @@ get_playwright_version() {
 }
 
 # Function to check if the cache exists for the given commit ID
-check_playwright_cache() {
+check_chromium_cache() {
     get_playwright_version
 
     playwright_cache=$(mc find s3/$CACHE_BUCKET/web/$playwright_version/.playwright 2>&1 | grep 'Object does not exist')
 
     if [[ "$playwright_cache" != "" ]]
     then
-        echo "Playwright $playwright_version Chromium exists in cache."
+        echo "Playwright v$playwright_version supported chromium doesn't exist in cache."
         exit 0
     fi
     exit 78
@@ -64,7 +64,8 @@ if [[ "$1" == "" ]]; then
     echo "Commands:"
     echo -e "  get_latest_ocis_commit_id \t get the latest oCIS commit ID"
     echo -e "  check_ocis_cache \t\t check if the cache exists for the given commit ID"
-    echo -e "  check_playwright_cache \t check if the cache exists for the given commit ID"
+    echo -e "  get_playwright_version \t get the playwright version from package.json"
+    echo -e "  check_chromium_cache \t check if the chromium cache exists for the given playwright version"
     exit 1
 fi
 
