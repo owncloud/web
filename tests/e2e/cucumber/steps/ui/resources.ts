@@ -376,7 +376,7 @@ Then(
 )
 
 When(
-  '{string} opens folder {string}',
+  '{string} opens file/folder {string}',
   async function (this: World, stepUser: string, resource: string): Promise<void> {
     const { page } = this.actorsEnvironment.getActor({ key: stepUser })
     const resourceObject = new objects.applicationFiles.Resource({ page })
@@ -632,6 +632,30 @@ When(
         tags: tags.split(',').map((tag) => tag.trim().toLowerCase())
       })
     }
+  }
+)
+
+When(
+  /^"([^"].*)" creates a file from template file "([^"].*)" via "([^"].*)" using the (sidebar panel|context menu)$/,
+  async function (
+    this: World,
+    stepUser: string,
+    file: string,
+    webOffice: string,
+    via: string
+  ): Promise<void> {
+    const { page } = this.actorsEnvironment.getActor({ key: stepUser })
+    const resourceObject = new objects.applicationFiles.Resource({ page })
+    await resourceObject.createFileFromTemplate(file, webOffice, via)
+  }
+)
+
+When(
+  '{string} opens template file {string} via {string} using the context menu',
+  async function (this: World, stepUser: any, file: any, webOffice: any): Promise<void> {
+    const { page } = this.actorsEnvironment.getActor({ key: stepUser })
+    const resourceObject = new objects.applicationFiles.Resource({ page })
+    await resourceObject.openTemplateFile(file, webOffice)
   }
 )
 

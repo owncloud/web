@@ -120,7 +120,7 @@ const sideBarActions =
 
 // online office locators
 // Collabora
-const collaboraDocPermissionModeSelector = '#PermissionMode'
+const collaboraDocPermissionModeSelector = '#permissionmode-container'
 const collaboraEditorSaveSelector = '.notebookbar-shortcuts-bar #save'
 const collaboraDocTextAreaSelector = '#clipboard-area'
 const collaboraWelcomeModalIframe = '.iframe-welcome-modal'
@@ -138,6 +138,7 @@ const fileIconWrapper = '#oc-file-details-sidebar .details-icon-wrapper'
 const fileIconPreview = '#oc-file-details-sidebar .details-preview'
 const activitySidebarPanel = 'sidebar-panel-activities'
 const activitySidebarPanelBodyContent = '#sidebar-panel-activities .sidebar-panel__body-content'
+const contextMenuAction = '//*[@id="oc-files-context-actions-context"]//span[text()="%s"]'
 
 export const clickResource = async ({
   page,
@@ -224,6 +225,44 @@ export const createSpaceFromFolder = async ({
 
   await page.locator(notificationMessage).waitFor()
   return (await response.json()) as Space
+}
+
+export const openTemplateFile = async ({
+  page,
+  resource,
+  webOffice
+}: {
+  page: Page
+  resource: string
+  webOffice: string
+}): Promise<void> => {
+  await page.locator(util.format(resourceNameSelector, resource)).click({ button: 'right' })
+  await page.locator(util.format(contextMenuAction, `Open in ${webOffice}`)).click()
+}
+
+export const createFileFromTemplate = async ({
+  page,
+  resource,
+  webOffice,
+  via
+}: {
+  page: Page
+  resource: string
+  webOffice: string
+  via: string
+}): Promise<void> => {
+  const menuItem = `Create from template via ${webOffice}`
+  if (via.startsWith('sidebar')) {
+    await sidebar.open({ page, resource })
+    await sidebar.openPanel({ page, name: 'actions' })
+    await page.locator(util.format(sideBarActionButton, menuItem)).click()
+    return
+  } else if (via.startsWith('context')) {
+    await page.locator(util.format(resourceNameSelector, resource)).click({ button: 'right' })
+    await page.locator(util.format(contextMenuAction, menuItem)).click()
+    return
+  }
+  throw new Error(`Invalid action '${via}' was provided`)
 }
 
 export const createSpaceFromSelection = async ({

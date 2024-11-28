@@ -364,4 +364,12 @@ export class Resource {
   async checkEmptyActivity({ resource }: { resource: string }): Promise<void> {
     await po.checkEmptyActivity({ page: this.#page, resource })
   }
+
+  async openTemplateFile(resource: string, actionName: string): Promise<void> {
+    await po.openTemplateFile({ page: this.#page, resource, webOffice: actionName })
+  }
+
+  async createFileFromTemplate(resource: string, webOffice: string, via: string): Promise<void> {
+    await po.createFileFromTemplate({ page: this.#page, resource, webOffice, via })
+  }
 }

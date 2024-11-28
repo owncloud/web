@@ -231,3 +231,41 @@ Feature: Integrate with online office suites like Collabora and OnlyOffice
       | usingFolderLink.odt |
     Then "Alice" should see the content "OpenDocument Content" in editor "Collabora"
     And "Alice" logs out
+
+
+  Scenario: create files from office templates
+    Given "Alice" uploads the following local file into personal space using API
+      | localFile     | to            |
+      | Template.dotx | Template.dotx |
+      | Template.ott  | Template.ott  |
+
+    When "Alice" creates a file from template file "Template.dotx" via "OnlyOffice" using the sidebar panel
+    Then "Alice" should see the content "As a user I want to create a document by clicking on a template file" in editor "OnlyOffice"
+    And "Alice" closes the file viewer
+
+    When "Alice" creates a file from template file "Template.ott" via "Collabora" using the context menu
+    Then "Alice" should see the content "As a user I want to create a document by clicking on a template file" in editor "Collabora"
+
+    When "Alice" closes the file viewer
+    And following resources should be displayed in the files list for user "Alice"
+      | resource      |
+      | Template.odt  |
+      | Template.docx |
+
+    When "Alice" opens file "Template.dotx"
+    Then "Alice" should see the content "As a user I want to create a document by clicking on a template file" in editor "OnlyOffice"
+
+    When "Alice" closes the file viewer
+    And following resources should be displayed in the files list for user "Alice"
+      | resource          |
+      | Template (1).docx |
+
+    When "Alice" opens template file "Template.ott" via "Collabora" using the context menu
+    Then "Alice" should see the content "As a user I want to create a document by clicking on a template file" in editor "Collabora"
+
+    When "Alice" closes the file viewer
+    Then following resources should not be displayed in the files list for user "Alice"
+      | resource          |
+      | Template (2).docx |
+    
+    And "Alice" logs out
