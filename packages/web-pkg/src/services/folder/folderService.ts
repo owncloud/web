@@ -17,9 +17,9 @@ import {
   useSharesStore,
   useAuthService,
   AuthServiceInterface
-} from '@ownclouders/web-pkg'
+} from '../../composables'
 import { unref } from 'vue'
-import { ClientService } from '@ownclouders/web-pkg'
+import { ClientService } from '../../services'
 
 import {
   FolderLoaderSpace,
@@ -28,9 +28,7 @@ import {
   FolderLoaderSharedWithMe,
   FolderLoaderSharedWithOthers,
   FolderLoaderTrashbin
-} from './folder/index'
-
-export * from './folder/types'
+} from './loaders'
 
 export type FolderLoaderTask = any
 

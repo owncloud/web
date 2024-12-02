@@ -1,14 +1,7 @@
-import { FolderLoader, FolderLoaderTask, TaskContext } from '../folder'
+import { FolderLoader, FolderLoaderTask, TaskContext } from '../folderService'
 import { Router } from 'vue-router'
 import { useTask } from 'vue-concurrency'
 import isEmpty from 'lodash-es/isEmpty'
-import {
-  isLocationPublicActive,
-  isLocationSpacesActive,
-  SharesStore,
-  SpacesStore,
-  UserStore
-} from '@ownclouders/web-pkg'
 import {
   buildIncomingShareResource,
   call,
@@ -20,10 +13,11 @@ import {
 } from '@ownclouders/web-client'
 import { unref } from 'vue'
 import { FolderLoaderOptions } from './types'
-import { useFileRouteReplace } from '@ownclouders/web-pkg'
-import { getIndicators } from '@ownclouders/web-pkg'
 import { Graph } from '@ownclouders/web-client/graph'
 import { DriveItem } from '@ownclouders/web-client/graph/generated'
+import { isLocationSpacesActive, isLocationPublicActive } from '../../../router'
+import { SharesStore, SpacesStore, useFileRouteReplace, UserStore } from '../../../composables'
+import { getIndicators } from '../../../helpers'
 
 export class FolderLoaderSpace implements FolderLoader {
   public isEnabled(): boolean {

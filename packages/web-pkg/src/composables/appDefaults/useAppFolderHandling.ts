@@ -1,16 +1,18 @@
 import { Ref, ref, unref, MaybeRef } from 'vue'
 import { dirname } from 'path'
-import { ClientService } from '../../services'
+import { ClientService, folderService } from '../../services'
 import { useAppFileHandling } from './useAppFileHandling'
-import { buildIncomingShareResource, Resource } from '@ownclouders/web-client'
+import { isSearchResource, Resource } from '@ownclouders/web-client'
 import { FileContext } from './types'
 import { RouteLocationNormalizedLoaded } from 'vue-router'
 import { useFileRouteReplace } from '../router/useFileRouteReplace'
 import { DavProperty } from '@ownclouders/web-client/webdav'
 import { useAuthService } from '../authContext/useAuthService'
 import { isMountPointSpaceResource } from '@ownclouders/web-client'
-import { useResourcesStore, useSharesStore, useSpacesStore } from '../piniaStores'
+import { useResourcesStore, useSpacesStore } from '../piniaStores'
 import { storeToRefs } from 'pinia'
+import { useRouteQuery } from '../router'
+import { useSearch } from '../search'
 
 interface AppFolderHandlingOptions {
   currentRoute: Ref<RouteLocationNormalizedLoaded>
@@ -29,12 +31,13 @@ export function useAppFolderHandling({
   clientService
 }: AppFolderHandlingOptions): AppFolderHandlingResult {
   const isFolderLoading = ref(false)
-  const { webdav, graphAuthenticated } = clientService
+  const { webdav } = clientService
   const { replaceInvalidFileRoute } = useFileRouteReplace()
   const { getFileInfo } = useAppFileHandling({ clientService })
   const authService = useAuthService()
   const spacesStore = useSpacesStore()
-  const sharesStore = useSharesStore()
+  const { buildSearchTerm, search } = useSearch()
+  const currentRouteQuery = useRouteQuery('contextRouteQuery')
 
   const resourcesStore = useResourcesStore()
   const { activeResources } = storeToRefs(resourcesStore)
@@ -45,17 +48,31 @@ export function useAppFolderHandling({
     try {
       context = unref(context)
 
-      if (context.routeName === 'files-shares-with-me') {
-        // FIXME: this is a somewhat hacky solution to load the shared with me files.
-        // ideally we should check if there is a current folder and if not, use the
-        // folder loader to load files. unfortunately, it currently lives in the files app.
-        const driveItems = await graphAuthenticated.driveItems.listSharedWithMe()
-
-        const resources = driveItems.map((driveItem) =>
-          buildIncomingShareResource({ driveItem, graphRoles: sharesStore.graphRoles })
-        )
+      if ((unref(currentRouteQuery) as any)?.term) {
+        // run search query to load all results
+        // TODO: add filters from query params
+        const searchTerm = buildSearchTerm({ term: (unref(currentRouteQuery) as any)?.term })
+        const { values } = await search(searchTerm, 200)
+        const resources = values
+          .filter(({ data }) => isSearchResource(data as Resource))
+          .map<Resource>((v) => v.data as Resource)
 
         resourcesStore.initResourceList({ currentFolder: null, resources })
+        isFolderLoading.value = false
+        return
+      }
+
+      const flatFileLists = [
+        'files-shares-with-me',
+        'files-shares-with-others',
+        'files-shares-via-link',
+        'files-common-favorites'
+      ]
+
+      if (flatFileLists.includes(unref(context.routeName))) {
+        // use the folder loader to load the resources for flat file lists
+        const loaderTask = folderService.getTask()
+        await loaderTask.perform()
         isFolderLoading.value = false
         return
       }

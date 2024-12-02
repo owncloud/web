@@ -1,5 +1,4 @@
 import { nextTick, computed, unref, Ref } from 'vue'
-import { folderService } from '../../services/folder'
 import { fileList } from '../../helpers/ui'
 import {
   usePagination,
@@ -7,7 +6,8 @@ import {
   SortDir,
   SortField,
   useRouteName,
-  useResourcesStore
+  useResourcesStore,
+  folderService
 } from '@ownclouders/web-pkg'
 import { useSideBar } from '@ownclouders/web-pkg'
 import { queryItemAsString, useRouteQuery } from '@ownclouders/web-pkg'

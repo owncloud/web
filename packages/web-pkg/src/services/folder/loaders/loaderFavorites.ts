@@ -1,8 +1,9 @@
-import { FolderLoader, FolderLoaderTask, TaskContext } from '../folder'
+import { FolderLoader, FolderLoaderTask, TaskContext } from '../folderService'
 import { Router } from 'vue-router'
 import { useTask } from 'vue-concurrency'
 import { buildResource } from '@ownclouders/web-client'
-import { isLocationCommonActive } from '@ownclouders/web-pkg'
+import { isLocationCommonActive } from '../../../router'
+import { unref } from 'vue'
 
 export class FolderLoaderFavorites implements FolderLoader {
   public isEnabled(): boolean {
@@ -10,7 +11,11 @@ export class FolderLoaderFavorites implements FolderLoader {
   }
 
   public isActive(router: Router): boolean {
-    return isLocationCommonActive(router, 'files-common-favorites')
+    const currentRoute = unref(router.currentRoute)
+    return (
+      isLocationCommonActive(router, 'files-common-favorites') ||
+      currentRoute?.query?.contextRouteName === 'files-common-favorites'
+    )
   }
 
   public getTask(context: TaskContext): FolderLoaderTask {

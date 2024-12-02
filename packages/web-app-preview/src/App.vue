@@ -80,8 +80,7 @@ import {
   watch,
   Ref
 } from 'vue'
-import { RouteLocationRaw } from 'vue-router'
-import { isShareSpaceResource, Resource } from '@ownclouders/web-client'
+import { Resource } from '@ownclouders/web-client'
 import {
   AppFileHandlingResult,
   AppFolderHandlingResult,
@@ -94,7 +93,9 @@ import {
   useRoute,
   useRouteQuery,
   useRouter,
-  usePreviewService
+  usePreviewService,
+  useGetMatchingSpace,
+  isLocationSharesActive
 } from '@ownclouders/web-pkg'
 import MediaControls from './components/MediaControls.vue'
 import MediaAudio from './components/Sources/MediaAudio.vue'
@@ -145,12 +146,17 @@ export default defineComponent({
     const { isFileTypeAudio, isFileTypeImage, isFileTypeVideo } = useFileTypes()
     const previewService = usePreviewService()
     const { dimensions } = usePreviewDimensions()
+    const { getMatchingSpace } = useGetMatchingSpace()
 
     const activeIndex = ref<number>()
     const cachedFiles = ref<Record<string, CachedFile>>({})
     const folderLoaded = ref(false)
     const isAutoPlayEnabled = ref(true)
     const preview = ref<HTMLElement>()
+
+    const space = computed(() => {
+      return getMatchingSpace(unref(activeFilteredFile))
+    })
 
     const sortBy = computed(() => {
       if (!unref(contextRouteQuery)) {
@@ -209,7 +215,7 @@ export default defineComponent({
         if (cachedFile.isImage) {
           cachedFile.url = await previewService.loadPreview(
             {
-              space: unref(props.currentFileContext.space),
+              space: unref(space),
               resource: file,
               dimensions: unref(dimensions),
               processor: ProcessorType.enum.fit
@@ -219,7 +225,7 @@ export default defineComponent({
           )
           return
         }
-        cachedFile.url = await props.getUrlForResource(unref(props.currentFileContext.space), file)
+        cachedFile.url = await props.getUrlForResource(unref(space), file)
       } catch (e) {
         console.error(e)
         cachedFile.isError.value = true
@@ -235,10 +241,7 @@ export default defineComponent({
         return
       }
 
-      const { params, query } = createFileRouteOptions(
-        unref(props.currentFileContext.space),
-        unref(activeFilteredFile)
-      )
+      const { params, query } = createFileRouteOptions(unref(space), unref(activeFilteredFile))
       router.replace({
         ...unref(route),
         params: { ...unref(route).params, ...params },
@@ -259,7 +262,7 @@ export default defineComponent({
           folderLoaded.value = true
         }
 
-        ;(instance.proxy as any).setActiveFile(unref(props.currentFileContext.driveAliasAndItem))
+        ;(instance.proxy as any).setActiveFile()
       },
       { immediate: true }
     )
@@ -302,7 +305,8 @@ export default defineComponent({
       isAutoPlayEnabled,
       preview,
       isFileTypeImage,
-      loadFileIntoCache
+      loadFileIntoCache,
+      space
     }
   },
 
@@ -336,32 +340,24 @@ export default defineComponent({
   },
 
   methods: {
-    setActiveFile(driveAliasAndItem: string) {
+    setActiveFile() {
       for (let i = 0; i < this.filteredFiles.length; i++) {
-        if (isShareSpaceResource(unref(this.currentFileContext.space))) {
-          // with share space resources, we don't have an underlying space, so match the file id
-          if (this.filteredFiles[i].remoteItemId === this.fileId) {
-            this.activeIndex = i
-            return
-          }
+        const filterAttr = isLocationSharesActive(this.$router, 'files-shares-with-me')
+          ? 'remoteItemId'
+          : 'fileId'
 
-          this.activeIndex = 0
-          continue
-        }
-
-        if (
-          unref(this.currentFileContext.space)?.getDriveAliasAndItem(this.filteredFiles[i]) ===
-          driveAliasAndItem
-        ) {
+        // match the given file id with the filtered files to get the current index
+        if (this.filteredFiles[i][filterAttr] === this.fileId) {
           this.activeIndex = i
           return
         }
+
+        this.activeIndex = 0
       }
     },
     // react to PopStateEvent ()
     handleLocalHistoryEvent() {
-      const result = this.$router.resolve(document.location as unknown as RouteLocationRaw)
-      this.setActiveFile(queryItemAsString(result.params.driveAliasAndItem))
+      this.setActiveFile()
     },
     goToNext() {
       if (this.activeIndex + 1 >= this.filteredFiles.length) {

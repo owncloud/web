@@ -90,6 +90,7 @@
                   class="preview-component"
                   :provider="provider"
                   :search-result="providerSearchResultValue"
+                  :term="term"
                 />
               </li>
             </oc-list>
