@@ -8,12 +8,22 @@ ownCloud admins and users.
 Summary
 -------
 
+* Bugfix - Preview app flat file lists: [#11960](https://github.com/owncloud/web/pull/11960)
 * Bugfix - Show progress bar when emptying trash bin: [#11967](https://github.com/owncloud/web/pull/11967)
 * Enhancement - Accessibility improvements: [#5379](https://github.com/owncloud/web/issues/5379)
 * Enhancement - Create spaces via admin settings: [#11849](https://github.com/owncloud/web/pull/11849)
 
 Details
 -------
+
+* Bugfix - Preview app flat file lists: [#11960](https://github.com/owncloud/web/pull/11960)
+
+   We've fixed the image loading of the preview app in flat file lists ("Shared
+   with me", "Shared with others", "Shared via link", favorites, search result
+   page) so all images of the current file list are being loaded.
+
+   https://github.com/owncloud/web/issues/8932
+   https://github.com/owncloud/web/pull/11960
 
 * Bugfix - Show progress bar when emptying trash bin: [#11967](https://github.com/owncloud/web/pull/11967)
 
