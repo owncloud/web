@@ -1,7 +1,7 @@
 <template>
   <div class="sciencemesh-app">
     <div>
-      <div class="oc-flex oc-flex-middle oc-px-m oc-py-s">
+      <div class="oc-flex oc-flex-middle oc-px-m oc-pt-s">
         <oc-icon name="user-shared" />
         <h2 class="oc-px-s" v-text="$gettext('Invite users')"></h2>
         <oc-contextual-helper class="oc-pl-xs" v-bind="helperContent" />
@@ -40,17 +40,6 @@
                 !descriptionErrorMessage && `${formInput.description?.length || 0}/${50}`
               "
             />
-            <oc-text-input
-              id="invite_token_recipient"
-              ref="inputForFocusEmail"
-              v-model="formInput.recipient"
-              class="oc-mb-s"
-              type="email"
-              :clear-button-enabled="true"
-              :error-message="emailErrorMessage"
-              :label="$gettext('Email to send the invitation (optional)')"
-            />
-            <!-- <oc-text-input label="Add an recipient to sent the token (optional)"/> -->
             <input type="submit" class="oc-hidden" />
           </form> </template
       ></oc-modal>
@@ -69,7 +58,9 @@
         <oc-table v-else :fields="fields" :data="sortedTokens" :highlighted="lastCreatedToken">
           <template #token="rowData">
             <div class="invite-code-wrapper oc-flex">
-              <span class="oc-display-inline-block oc-text-truncate">{{ rowData.item.token }}</span>
+              <div class="oc-text-truncate">
+                <span class="oc-text-truncate">{{ encodeInviteToken(rowData.item.token) }}</span>
+              </div>
               <oc-button
                 id="oc-sciencemesh-copy-token"
                 v-oc-tooltip="$gettext('Copy invite token')"
@@ -109,14 +100,14 @@
 
 <script lang="ts">
 import { computed, defineComponent, onMounted, ref, unref } from 'vue'
-import * as EmailValidator from 'email-validator'
 import {
   NoContentMessage,
   AppLoadingSpinner,
   useClientService,
   useMessages,
   formatDateFromJSDate,
-  formatRelativeDateFromJSDate
+  formatRelativeDateFromJSDate,
+  useConfigStore
 } from '@ownclouders/web-pkg'
 import { useGettext } from 'vue3-gettext'
 import { inviteListSchema, inviteSchema } from '../schemas'
@@ -138,19 +129,17 @@ export default defineComponent({
   setup() {
     const { showMessage, showErrorMessage } = useMessages()
     const clientService = useClientService()
+    const configStore = useConfigStore()
     const { $gettext, current: currentLanguage } = useGettext()
 
     const lastCreatedToken = ref('')
     const showInviteModal = ref(false)
     const formInput = ref({
-      description: '',
-      recipient: ''
+      description: ''
     })
     const tokens = ref<Token[]>([])
     const loading = ref(true)
-    const emailErrorMessage = ref(null)
     const descriptionErrorMessage = ref<string>()
-    const inputForFocusEmail = ref<HTMLInputElement>()
     const fields = computed(() => {
       const haveLinks = unref(sortedTokens)[0]?.link
 
@@ -163,7 +152,7 @@ export default defineComponent({
         },
         {
           name: 'token',
-          title: $gettext('Invite code'),
+          title: $gettext('Invite token'),
           alignH: haveLinks ? 'right' : 'left',
           type: 'slot'
         },
@@ -192,13 +181,13 @@ export default defineComponent({
       }
     })
 
+    const encodeInviteToken = (token: string) => {
+      const url = new URL(configStore.serverUrl)
+      return btoa(`${token}@${url.host}`)
+    }
+
     const generateToken = async () => {
-      const { description, recipient } = unref(formInput)
-      if (recipient.length > 0 && !EmailValidator.validate(recipient)) {
-        emailErrorMessage.value = $gettext('Please enter a valid email address!')
-        unref(inputForFocusEmail).focus()
-        return
-      }
+      const { description } = unref(formInput)
 
       if (unref(descriptionErrorMessage)) {
         return
@@ -207,8 +196,7 @@ export default defineComponent({
         const { data: tokenInfo } = await clientService.httpAuthenticated.post(
           '/sciencemesh/generate-invite',
           {
-            ...(description && { description }),
-            ...(recipient && { recipient })
+            ...(description && { description })
           },
           {
             schema: inviteSchema
@@ -231,18 +219,14 @@ export default defineComponent({
           showMessage({
             title: $gettext('Success'),
             status: 'success',
-            desc: recipient
-              ? $gettext('New token has been created and sent to %{recipient}.', {
-                  recipient
-                })
-              : $gettext(
-                  'New token has been created and copied to your clipboard. Send it to the invitee(s).'
-                )
+            desc: $gettext(
+              'New token has been created and copied to your clipboard. Send it to the invitee(s).'
+            )
           })
-          lastCreatedToken.value = tokenInfo.token
-          if (!recipient) {
-            navigator.clipboard.writeText(tokenInfo.token)
-          }
+
+          const quickToken = encodeInviteToken(tokenInfo.token)
+          lastCreatedToken.value = quickToken
+          navigator.clipboard.writeText(quickToken)
         }
       } catch (error) {
         lastCreatedToken.value = ''
@@ -286,7 +270,7 @@ export default defineComponent({
       })
     }
     const copyToken = (rowData: { item: { link: string; token: string } }) => {
-      navigator.clipboard.writeText(rowData.item.token)
+      navigator.clipboard.writeText(encodeInviteToken(rowData.item.token))
       showMessage({
         title: $gettext('Invite token copied'),
         desc: $gettext('Invite token has been copied to your clipboard.')
@@ -308,8 +292,7 @@ export default defineComponent({
     const resetGenerateInviteToken = () => {
       showInviteModal.value = false
       formInput.value = {
-        description: '',
-        recipient: ''
+        description: ''
       }
     }
 
@@ -338,16 +321,15 @@ export default defineComponent({
       resetGenerateInviteToken,
       generateToken,
       formInput,
-      emailErrorMessage,
       loading,
       sortedTokens,
       copyToken,
       copyLink,
       lastCreatedToken,
       fields,
-      inputForFocusEmail,
       formatDate,
-      formatDateRelative
+      formatDateRelative,
+      encodeInviteToken
     }
   }
 })
@@ -356,10 +338,7 @@ export default defineComponent({
 <style lang="scss">
 .sciencemesh-app {
   .invite-code-wrapper {
-    max-width: 100%;
-    @media (max-width: $oc-breakpoint-xlarge) {
-      max-width: 200px;
-    }
+    width: 200px;
   }
   #invite-tokens-empty {
     height: 100%;
