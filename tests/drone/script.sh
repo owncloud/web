@@ -45,14 +45,18 @@ get_playwright_version() {
 }
 
 # Function to check if the cache exists for the given commit ID
-check_chromium_cache() {
+check_browsers_cache() {
     get_playwright_version
 
-    playwright_cache=$(mc find s3/$CACHE_BUCKET/web/$playwright_version/playwright-chromium.tar.gz 2>&1 | grep 'Object does not exist')
+    playwright_cache=$(mc find s3/$CACHE_BUCKET/web/browsers-cache/$playwright_version/playwright-browsers.tar.gz 2>&1 | grep 'Object does not exist')
 
     if [[ "$playwright_cache" != "" ]]
     then
-        echo "Playwright v$playwright_version supported chromium doesn't exist in cache."
+        echo "Playwright v$playwright_version supported browsers doesn't exist in cache."
+
+        # Remove everything inside the 'browsers-cache' directory to avoid multiple browsers version
+        echo "Clearing all contents inside the 'browsers-cache' directory..."
+        mc rm --recursive --force s3/$CACHE_BUCKET/web/browsers-cache/
         exit 0
     fi
     exit 78
@@ -65,7 +69,7 @@ if [[ "$1" == "" ]]; then
     echo -e "  get_latest_ocis_commit_id \t get the latest oCIS commit ID"
     echo -e "  check_ocis_cache \t\t check if the cache exists for the given commit ID"
     echo -e "  get_playwright_version \t get the playwright version from package.json"
-    echo -e "  check_chromium_cache \t check if the chromium cache exists for the given playwright version"
+    echo -e "  check_browsers_cache \t check if the browsers cache exists for the given playwright version"
     exit 1
 fi
 
