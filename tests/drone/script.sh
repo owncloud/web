@@ -29,11 +29,43 @@ check_ocis_cache() {
     exit 78
 }
 
+# get playwright version from package.json
+get_playwright_version() {
+    if [[ ! -f "package.json" ]]; then
+        echo "Error: package.json file not found."
+    fi
+
+    playwright_version=$(grep '"@playwright/test":' "package.json" | cut -d':' -f2 | tr -d '", ')
+    if [[ -z "$playwright_version" ]]; then
+        echo "Error: Playwright package not found in package.json." >&2
+        exit 78
+    fi
+
+    echo "$playwright_version"
+}
+
+# Function to check if the cache exists for the given commit ID
+check_browsers_cache() {
+    get_playwright_version
+
+    playwright_cache=$(mc find s3/$CACHE_BUCKET/web/browsers-cache/$playwright_version/playwright-browsers.tar.gz 2>&1 | grep 'Object does not exist')
+
+    if [[ "$playwright_cache" != "" ]]
+    then
+        echo "Playwright v$playwright_version supported browsers doesn't exist in cache."
+        exit 0
+    fi
+    exit 78
+}
+
+
 if [[ "$1" == "" ]]; then
     echo "Usage: $0 [COMMAND]"
     echo "Commands:"
     echo -e "  get_latest_ocis_commit_id \t get the latest oCIS commit ID"
     echo -e "  check_ocis_cache \t\t check if the cache exists for the given commit ID"
+    echo -e "  get_playwright_version \t get the playwright version from package.json"
+    echo -e "  check_browsers_cache \t check if the browsers cache exists for the given playwright version"
     exit 1
 fi
 

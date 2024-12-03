@@ -18,7 +18,7 @@ PLUGINS_DOCKER = "plugins/docker:20.14"
 PLUGINS_GH_PAGES = "plugins/gh-pages:1"
 PLUGINS_GIT_ACTION = "plugins/git-action:1"
 PLUGINS_GITHUB_RELEASE = "plugins/github-release:1"
-PLUGINS_S3 = "plugins/s3:1.4.0"
+PLUGINS_S3 = "plugins/s3:1.5"
 PLUGINS_S3_CACHE = "plugins/s3-cache:1"
 PLUGINS_SLACK = "plugins/slack:1"
 POSTGRES_ALPINE = "postgres:alpine3.18"
@@ -39,6 +39,7 @@ dir = {
     "ocisRevaDataRoot": "/srv/app/tmp/ocis/owncloud/data/",
     "federatedOcisConfig": "/var/www/owncloud/web/tests/drone/config-ocis-federated.json",
     "ocmProviders": "/var/www/owncloud/web/tests/drone/providers.json",
+    "playwrightBrowsersArchive": "/var/www/owncloud/web/playwright-browsers.tar.gz",
 }
 
 config = {
@@ -243,7 +244,10 @@ def pnpmCache(ctx):
         },
         "steps": skipIfUnchanged(ctx, "cache") +
                  installPnpm() +
-                 rebuildBuildArtifactCache(ctx, "pnpm", ".pnpm-store"),
+                 rebuildBuildArtifactCache(ctx, "pnpm", ".pnpm-store") +
+                 checkBrowsersCache() +
+                 installBrowsers() +
+                 cacheBrowsers(),
         "trigger": {
             "ref": [
                 "refs/heads/master",
@@ -601,11 +605,14 @@ def e2eTests(ctx):
             "REPORT_TRACING": params["reportTracing"],
             "BASE_URL_OCIS": "ocis:9200",
             "FAIL_ON_UNCAUGHT_CONSOLE_ERR": "true",
+            "PLAYWRIGHT_BROWSERS_PATH": ".playwright",
+            "BROWSER": "chromium",
         }
 
         steps = skipIfUnchanged(ctx, "e2e-tests") + \
                 restoreBuildArtifactCache(ctx, "pnpm", ".pnpm-store") + \
                 installPnpm() + \
+                restoreBrowsersCache() + \
                 restoreBuildArtifactCache(ctx, "web-dist", "dist")
 
         if ctx.build.event == "cron":
@@ -716,15 +723,16 @@ def installPnpm():
         ],
     }]
 
-def installPlaywright():
+def installBrowsers():
     return [{
-        "name": "playwright-install",
+        "name": "install-browsers",
         "image": OC_CI_NODEJS,
         "environment": {
             "PLAYWRIGHT_BROWSERS_PATH": ".playwright",
         },
         "commands": [
             "pnpm exec playwright install chromium --with-deps",
+            "tar -czvf %s .playwright" % dir["playwrightBrowsersArchive"],
         ],
     }]
 
@@ -1822,6 +1830,7 @@ def e2eTestsOnKeycloak(ctx):
 
     steps = restoreBuildArtifactCache(ctx, "pnpm", ".pnpm-store") + \
             installPnpm() + \
+            restoreBrowsersCache() + \
             keycloakService() + \
             restoreBuildArtifactCache(ctx, "web-dist", "dist")
     if ctx.build.event == "cron":
@@ -1857,6 +1866,8 @@ def e2eTestsOnKeycloak(ctx):
                          "REPORT_TRACING": "with-tracing" in ctx.build.title.lower(),
                          "KEYCLOAK": "true",
                          "KEYCLOAK_HOST": "keycloak:8443",
+                         "PLAYWRIGHT_BROWSERS_PATH": ".playwright",
+                         "BROWSER": "chromium",
                      },
                      "commands": [
                          "cd tests/e2e",
@@ -1896,6 +1907,54 @@ def getOcislatestCommitId(ctx):
                 "curl -o script.sh %s/tests/drone/script.sh" % web_repo_path,
                 ". ./.drone.env",
                 "bash script.sh get_latest_ocis_commit_id",
+            ],
+        },
+    ]
+
+def cacheBrowsers():
+    return [
+        {
+            "name": "upload-browsers-cache",
+            "image": MINIO_MC,
+            "environment": minio_mc_environment,
+            "commands": [
+                "playwright_version=$(bash tests/drone/script.sh get_playwright_version)",
+                "mc alias set s3 $MC_HOST $AWS_ACCESS_KEY_ID $AWS_SECRET_ACCESS_KEY",
+                "mc cp -r -a %s s3/$CACHE_BUCKET/web/browsers-cache/$playwright_version/" % dir["playwrightBrowsersArchive"],
+                "mc ls --recursive s3/$CACHE_BUCKET/web",
+            ],
+        },
+    ]
+
+def checkBrowsersCache():
+    return [{
+        "name": "check-browsers-cache",
+        "image": MINIO_MC,
+        "environment": minio_mc_environment,
+        "commands": [
+            "mc alias set s3 $MC_HOST $AWS_ACCESS_KEY_ID $AWS_SECRET_ACCESS_KEY",
+            "mc ls --recursive s3/$CACHE_BUCKET/web",
+            "bash tests/drone/script.sh check_browsers_cache",
+        ],
+    }]
+
+def restoreBrowsersCache():
+    return [
+        {
+            "name": "restore-browsers-cache",
+            "image": MINIO_MC,
+            "environment": minio_mc_environment,
+            "commands": [
+                "playwright_version=$(bash tests/drone/script.sh get_playwright_version)",
+                "mc alias set s3 $MC_HOST $AWS_ACCESS_KEY_ID $AWS_SECRET_ACCESS_KEY",
+                "mc cp -r -a s3/$CACHE_BUCKET/web/browsers-cache/$playwright_version/playwright-browsers.tar.gz %s" % dir["web"],
+            ],
+        },
+        {
+            "name": "unzip-browsers-cache",
+            "image": OC_UBUNTU,
+            "commands": [
+                "tar -xvf %s -C ." % dir["playwrightBrowsersArchive"],
             ],
         },
     ]
