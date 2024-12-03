@@ -53,10 +53,6 @@ check_browsers_cache() {
     if [[ "$playwright_cache" != "" ]]
     then
         echo "Playwright v$playwright_version supported browsers doesn't exist in cache."
-
-        # Remove everything inside the 'browsers-cache' directory to avoid multiple browsers version
-        echo "Clearing all contents inside the 'browsers-cache' directory..."
-        mc rm --recursive --force s3/$CACHE_BUCKET/web/browsers-cache/
         exit 0
     fi
     exit 78
