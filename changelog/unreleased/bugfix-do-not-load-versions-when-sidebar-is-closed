@@ -1,0 +1,6 @@
+Bugfix: Do not load version when sidebar is closed
+
+We've fixed the the loading of file versions which was triggered even when sidebar was closed. File version will now be loaded only when the sidebar is opened.
+
+https://github.com/owncloud/web/pull/11998
+https://github.com/owncloud/web/issues/11979
