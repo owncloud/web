@@ -38,11 +38,30 @@
           @change="uploadImage"
         />
       </div>
+      <div>
+        <h3 v-text="$gettext('Theme')" />
+        <oc-button
+          variation="primary"
+          appearance="filled"
+          style="background-color: gold; color: black"
+          @click="triggerFileInput"
+        >
+          Try MaterialUI (Upload JSON File)
+        </oc-button>
+        <input
+          ref="fileInput"
+          type="file"
+          accept="application/json"
+          style="display: none"
+          @change="handleFileUpload"
+        />
+      </div>
     </div>
   </div>
 </template>
 
 <script lang="ts">
+import { z } from 'zod'
 import { defineComponent, computed, unref, VNodeRef, ref } from 'vue'
 import { ContextActionMenu, useThemeStore } from '@ownclouders/web-pkg'
 import {
@@ -85,7 +104,111 @@ export default defineComponent({
 
     const supportedLogoMimeTypesAcceptValue = supportedLogoMimeTypes.join(',')
 
+    const colorSchemeSchema = z.object({
+      primary: z.string(),
+      surfaceTint: z.string(),
+      onPrimary: z.string(),
+      primaryContainer: z.string(),
+      onPrimaryContainer: z.string(),
+      secondary: z.string(),
+      onSecondary: z.string(),
+      secondaryContainer: z.string(),
+      onSecondaryContainer: z.string(),
+      tertiary: z.string(),
+      onTertiary: z.string(),
+      tertiaryContainer: z.string(),
+      onTertiaryContainer: z.string(),
+      error: z.string(),
+      onError: z.string(),
+      errorContainer: z.string(),
+      onErrorContainer: z.string(),
+      background: z.string(),
+      onBackground: z.string(),
+      surface: z.string(),
+      onSurface: z.string(),
+      surfaceVariant: z.string(),
+      onSurfaceVariant: z.string(),
+      outline: z.string(),
+      outlineVariant: z.string(),
+      shadow: z.string(),
+      scrim: z.string(),
+      inverseSurface: z.string(),
+      inverseOnSurface: z.string(),
+      inversePrimary: z.string(),
+      primaryFixed: z.string(),
+      onPrimaryFixed: z.string(),
+      primaryFixedDim: z.string(),
+      onPrimaryFixedVariant: z.string(),
+      secondaryFixed: z.string(),
+      onSecondaryFixed: z.string(),
+      secondaryFixedDim: z.string(),
+      onSecondaryFixedVariant: z.string(),
+      tertiaryFixed: z.string(),
+      onTertiaryFixed: z.string(),
+      tertiaryFixedDim: z.string(),
+      onTertiaryFixedVariant: z.string(),
+      surfaceDim: z.string(),
+      surfaceBright: z.string(),
+      surfaceContainerLowest: z.string(),
+      surfaceContainerLow: z.string(),
+      surfaceContainer: z.string(),
+      surfaceContainerHigh: z.string(),
+      surfaceContainerHighest: z.string()
+    })
+
+    const schemeCollectionSchema = z.record(colorSchemeSchema)
+
+    const rootSchema = z.object({
+      schemes: schemeCollectionSchema
+    })
+
+    const fileInput = ref<HTMLInputElement | null>(null)
+
+    const triggerFileInput = () => {
+      fileInput.value?.click()
+    }
+
+    const handleFileUpload = (event: Event) => {
+      const input = event.target as HTMLInputElement
+      const file = input.files?.[0]
+      if (!file) return
+
+      const reader = new FileReader()
+      reader.onload = async () => {
+        try {
+          const parsedData = JSON.parse(reader.result as string)
+          const tryThemes = rootSchema.parse(parsedData)
+
+          const oldCurrentTheme = unref(currentTheme)
+
+          const newThemes = []
+
+          Object.keys(tryThemes['schemes']).forEach((themeName) => {
+            const tryTheme = tryThemes['schemes'][themeName]
+            newThemes.push({
+              ...oldCurrentTheme,
+              designTokens: {
+                ...oldCurrentTheme.designTokens,
+                colorPalette: tryTheme
+              },
+              isDark: themeName.includes('dark'),
+              name: themeName
+            })
+          })
+
+          themeStore.resetAllThemes()
+          themeStore.initializeMdThemes(newThemes)
+        } catch (error) {
+          console.error('Error reading or parsing file:', error)
+        }
+      }
+      reader.readAsText(file)
+    }
+
     return {
+      fileInput,
+      triggerFileInput,
+      handleFileUpload,
       actionOptions,
       currentTheme,
       menuItems,
