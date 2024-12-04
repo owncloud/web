@@ -13,7 +13,8 @@ import {
   mount,
   defaultComponentMocks,
   defaultStubs,
-  RouteLocation
+  RouteLocation,
+  PiniaMockOptions
 } from '@ownclouders/web-test-helpers'
 import { AbilityRule, SpaceResource } from '@ownclouders/web-client'
 import {
@@ -120,6 +121,22 @@ describe('Projects view', () => {
     })
     expect(wrapper.find('create-space-stub').exists()).toBeTruthy()
   })
+  it('should not pass selected resource as space to sidebar when driveType is not "project"', () => {
+    const resource = mock<SpaceResource>({ id: 'selected-resource', driveType: 'personal' })
+    const { wrapper } = getMountedWrapper({
+      store: { resourcesStore: { resources: [resource], selectedIds: ['selected-resource'] } }
+    })
+
+    expect(wrapper.vm.selectedSpace).toStrictEqual(null)
+  })
+  it('should pass selected resource as space to sidebar when driveType is "project"', () => {
+    const resource = mock<SpaceResource>({ id: 'selected-resource', driveType: 'project' })
+    const { wrapper } = getMountedWrapper({
+      store: { resourcesStore: { resources: [resource], selectedIds: ['selected-resource'] } }
+    })
+
+    expect(wrapper.vm.selectedSpace.id).toStrictEqual('selected-resource')
+  })
 })
 
 function getMountedWrapper({
@@ -127,15 +144,17 @@ function getMountedWrapper({
   spaces = [],
   abilities = [],
   stubAppBar = true,
-  includeDisabled = false
+  includeDisabled = false,
+  store = {}
 }: {
   mocks?: Record<string, unknown>
   spaces?: SpaceResource[]
   abilities?: AbilityRule[]
   stubAppBar?: boolean
   includeDisabled?: boolean
+  store?: PiniaMockOptions
 } = {}) {
-  const plugins = defaultPlugins({ abilities, piniaOptions: { spacesState: { spaces } } })
+  const plugins = defaultPlugins({ abilities, piniaOptions: { spacesState: { spaces }, ...store } })
 
   vi.mocked(queryItemAsString).mockImplementation(() => includeDisabled.toString())
 
