@@ -214,6 +214,34 @@ describe('FileSideBar', () => {
         expect(sharesStore.setCollaboratorShares).toHaveBeenCalledWith([])
       })
     })
+    describe('loadVersionsTask', () => {
+      beforeEach(() => {
+        vi.mock('../../../../src/composables/resources/useCanListVersions', () => ({
+          useCanListVersions: () => ({ canListVersions: vi.fn().mockReturnValue(true) })
+        }))
+      })
+
+      it('is called when resource is selected and sidebar is opened', () => {
+        const resource = mock<Resource>({ id: 'some-image', path: '/someImage.jpg' })
+        const { mocks } = createWrapper({
+          item: resource
+        })
+
+        expect(mocks.$clientService.webdav.listFileVersions).toHaveBeenCalledWith('some-image', {
+          signal: expect.any(AbortSignal)
+        })
+      })
+
+      it('is not called if resource is selected and sidebar is not opened', () => {
+        const resource = mock<Resource>({ id: 'some-image', path: '/someImage.jpg' })
+        const { mocks } = createWrapper({
+          item: resource,
+          isOpen: false
+        })
+
+        expect(mocks.$clientService.webdav.listFileVersions).not.toHaveBeenCalled()
+      })
+    })
   })
 })
 

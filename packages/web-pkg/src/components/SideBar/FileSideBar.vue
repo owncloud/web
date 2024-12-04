@@ -334,6 +334,12 @@ export default defineComponent({
         if (unref(panelContext).items?.length !== 1) {
           return
         }
+
+        if (!props.isOpen) {
+          versions.value = []
+          return
+        }
+
         const resource = unref(panelContext).items[0]
 
         if (loadVersionsTask.isRunning) {
