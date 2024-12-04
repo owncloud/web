@@ -275,7 +275,10 @@ export default defineComponent({
       return spacesStore.spaces.filter(isProjectSpaceResource) || []
     })
     const selectedSpace = computed(() => {
-      if (unref(selectedResources).length === 1) {
+      if (
+        unref(selectedResources).length === 1 &&
+        isProjectSpaceResource(unref(selectedResources)[0])
+      ) {
         return unref(selectedResources)[0] as ProjectSpaceResource
       }
       return null
