@@ -27,7 +27,7 @@
         </li>
       </oc-list>
       <oc-list
-        v-if="canEditOrDelete"
+        v-if="canRemove"
         class="collaborator-edit-dropdown-options-list collaborator-edit-dropdown-options-list-remove"
       >
         <li
@@ -91,7 +91,11 @@ export default defineComponent({
         return ['user', 'group'].includes(value) || !value
       }
     },
-    canEditOrDelete: {
+    canEdit: {
+      type: Boolean,
+      required: true
+    },
+    canRemove: {
       type: Boolean,
       required: true
     },
@@ -198,7 +202,7 @@ export default defineComponent({
         })
       }
 
-      if (this.canEditOrDelete && this.isExpirationSupported) {
+      if (this.canEdit && this.isExpirationSupported) {
         result.push({
           title: this.isExpirationDateSet
             ? this.$gettext('Edit expiration date')
@@ -254,7 +258,7 @@ export default defineComponent({
     },
 
     isRemoveExpirationPossible() {
-      return this.canEditOrDelete && this.isExpirationSupported && this.isExpirationDateSet
+      return this.canEdit && this.isExpirationSupported && this.isExpirationDateSet
     }
   },
   methods: {

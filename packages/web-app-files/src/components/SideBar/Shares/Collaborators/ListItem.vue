@@ -103,7 +103,8 @@
           data-testid="collaborator-edit"
           :expiration-date="share.expirationDateTime ? share.expirationDateTime : null"
           :share-category="shareCategory"
-          :can-edit-or-delete="modifiable"
+          :can-edit="modifiable"
+          :can-remove="removable"
           :is-share-denied="isShareDenied"
           :is-locked="isLocked"
           :deniable="deniable"
@@ -162,6 +163,10 @@ export default defineComponent({
       default: false
     },
     modifiable: {
+      type: Boolean,
+      default: false
+    },
+    removable: {
       type: Boolean,
       default: false
     },
