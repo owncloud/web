@@ -28,22 +28,22 @@ describe('EditDropdown', () => {
     })
   })
   describe('remove share action', () => {
-    it('is being rendered when canEditOrDelete is true', () => {
-      const { wrapper } = getWrapper({ canEditOrDelete: true })
+    it('is being rendered when canRemove is true', () => {
+      const { wrapper } = getWrapper({ canRemove: true })
       expect(wrapper.find(selectors.removeShareSection).exists()).toBeTruthy()
     })
-    it('is not being rendered when canEditOrDelete is false', () => {
-      const { wrapper } = getWrapper({ canEditOrDelete: false })
+    it('is not being rendered when canRemove is false', () => {
+      const { wrapper } = getWrapper({ canRemove: false })
       expect(wrapper.find(selectors.removeShareSection).exists()).toBeFalsy()
     })
   })
   describe('expiration date', () => {
-    it('is being rendered when canEditOrDelete is true', () => {
-      const { wrapper } = getWrapper({ canEditOrDelete: true })
+    it('is being rendered when canEdit is true', () => {
+      const { wrapper } = getWrapper({ canEdit: true })
       expect(wrapper.find(selectors.expireDateMenuAction).exists()).toBeTruthy()
     })
-    it('is not being rendered when canEditOrDelete is false', () => {
-      const { wrapper } = getWrapper({ canEditOrDelete: false })
+    it('is not being rendered when canEdit is false', () => {
+      const { wrapper } = getWrapper({ canEdit: false })
       expect(wrapper.find(selectors.expireDateMenuAction).exists()).toBeFalsy()
     })
   })
@@ -71,7 +71,8 @@ function getWrapper(props: PartialComponentProps<typeof EditDropdown> = {}) {
   return {
     wrapper: shallowMount(EditDropdown, {
       props: {
-        canEditOrDelete: true,
+        canEdit: true,
+        canRemove: true,
         shareCategory: 'user',
         accessDetails: [],
         ...props

@@ -1,0 +1,6 @@
+Bugfix: OCM share editing
+
+We've fixed a bug where OCM shares could be edited although the server does not support it.
+
+https://github.com/owncloud/web/pull/12002
+https://github.com/owncloud/web/issues/11991
