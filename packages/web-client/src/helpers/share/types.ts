@@ -1,4 +1,9 @@
-import { Identity, SharingLinkType, UnifiedRoleDefinition } from '../../graph/generated'
+import {
+  Identity,
+  ObjectIdentity,
+  SharingLinkType,
+  UnifiedRoleDefinition
+} from '../../graph/generated'
 import { Resource } from '../resource'
 
 export enum GraphSharePermission {
@@ -73,4 +78,5 @@ export interface CollaboratorAutoCompleteItem {
   shareType: number
   mail?: string
   onPremisesSamAccountName?: string
+  identities?: ObjectIdentity[]
 }

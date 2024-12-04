@@ -20,7 +20,7 @@
 <script lang="ts">
 import { avatarUrl } from '../../../../../helpers/user'
 import { CollaboratorAutoCompleteItem, ShareTypes } from '@ownclouders/web-client'
-import { defineComponent, PropType } from 'vue'
+import { computed, defineComponent, PropType } from 'vue'
 import { Recipient } from '@ownclouders/design-system/helpers'
 import { useCapabilityStore, useConfigStore } from '@ownclouders/web-pkg'
 import { storeToRefs } from 'pinia'
@@ -37,22 +37,35 @@ export default defineComponent({
       default: null
     }
   },
-  setup() {
+  setup(props) {
     const capabilityStore = useCapabilityStore()
     const capabilityRefs = storeToRefs(capabilityStore)
 
     const configStore = useConfigStore()
     const { serverUrl } = storeToRefs(configStore)
 
+    const externalIssuer = computed(() => {
+      if (props.recipient.shareType === ShareTypes.remote.value) {
+        return props.recipient.identities?.[0]?.issuer
+      }
+      return ''
+    })
+
     return {
       serverUrl,
-      userProfilePicture: capabilityRefs.sharingUserProfilePicture
+      userProfilePicture: capabilityRefs.sharingUserProfilePicture,
+      externalIssuer
     }
   },
   data(): { formattedRecipient: Recipient } {
+    let name = this.recipient.displayName
+    if (this.externalIssuer) {
+      name += ` (${this.externalIssuer})`
+    }
+
     return {
       formattedRecipient: {
-        name: this.recipient.displayName,
+        name,
         icon: this.getRecipientIcon(),
         hasAvatar: this.recipient.shareType === ShareTypes.user.value,
         isLoadingAvatar: true
