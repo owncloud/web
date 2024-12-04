@@ -31,6 +31,7 @@
       <template #locationFilter>
         <search-bar-filter
           v-if="locationFilterAvailable"
+          id="files-global-search-filter"
           :current-folder-available="currentFolderAvailable"
           @update:model-value="onLocationFilterChange"
         />
@@ -270,12 +271,12 @@ export default defineComponent({
 
     const onLocationFilterChange = (event: { value: { id: string } }) => {
       locationFilterId.value = event.value.id
-      if (!unref(term)) {
+      if (isLocationCommonActive(router, 'files-common-search')) {
+        onKeyUpEnter()
         return
       }
 
-      if (isLocationCommonActive(router, 'files-common-search')) {
-        onKeyUpEnter()
+      if (!unref(term)) {
         return
       }
       search()

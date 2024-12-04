@@ -11,6 +11,7 @@ import {
   nextTicks
 } from '@ownclouders/web-test-helpers'
 import { useAvailableProviders } from '../../../src/composables'
+import { SearchBarFilter, SearchLocationFilterConstants } from '@ownclouders/web-pkg'
 
 const component = defineComponent({
   emits: ['click', 'keyup'],
@@ -55,7 +56,8 @@ const selectors = {
   providerDisplayName: '.provider .display-name',
   providerMoreResultsLink: '.provider .more-results',
   optionsHidden: '.tippy-box[data-state="hidden"]',
-  optionsVisible: '.tippy-box[data-state="visible"]'
+  optionsVisible: '.tippy-box[data-state="visible"]',
+  searchFilters: '#files-global-search-filter'
 }
 
 vi.mock('lodash-es', () => ({ debounce: (fn: unknown) => fn }))
@@ -222,17 +224,52 @@ describe('Search Bar portal component', () => {
     wrapper.find(selectors.searchInput).trigger('keyup.enter')
     expect(spyRouterPushStub).not.toHaveBeenCalled()
   })
+  test('executes search if term is empty but route is common search', async () => {
+    wrapper = getMountedWrapper({
+      route: 'files-common-search',
+      store: { resourcesStore: { currentFolder: { fileId: 'root-dir' } } }
+    }).wrapper
+    wrapper
+      .findComponent<typeof SearchBarFilter>(selectors.searchFilters)
+      .vm.$emit('update:model-value', {
+        value: { id: SearchLocationFilterConstants.currentFolder }
+      })
+
+    const spyRouterPushStub = wrapper.vm.$router.push
+    expect(spyRouterPushStub).toHaveBeenCalledWith({
+      name: 'files-common-search',
+      query: expect.objectContaining({
+        term: '',
+        provider: 'files.sdk',
+        useScope: 'true',
+        scope: 'root-dir'
+      })
+    })
+  })
+  test('does not execute search if term is empty and route is not common search', async () => {
+    const { wrapper } = getMountedWrapper()
+    wrapper
+      .findComponent<typeof SearchBarFilter>(selectors.searchFilters)
+      .vm.$emit('update:model-value', {
+        value: { id: SearchLocationFilterConstants.currentFolder }
+      })
+
+    const spyRouterPushStub = wrapper.vm.$router.push
+    expect(spyRouterPushStub).not.toHaveBeenCalled()
+  })
 })
 
 function getMountedWrapper({
   mocks = {},
   userContextReady = true,
-  providers = [providerFiles, providerContacts]
+  providers = [providerFiles, providerContacts],
+  route = 'files-spaces-generic',
+  store = {}
 } = {}) {
   vi.mocked(useAvailableProviders).mockReturnValue(ref(providers))
 
   const currentRoute = mock<RouteLocation>({
-    name: 'files-spaces-generic',
+    name: route,
     query: {
       term: '',
       provider: ''
@@ -249,7 +286,7 @@ function getMountedWrapper({
       global: {
         plugins: [
           ...defaultPlugins({
-            piniaOptions: { authState: { userContextReady: userContextReady } }
+            piniaOptions: { authState: { userContextReady: userContextReady }, ...store }
           })
         ],
         mocks: localMocks,
