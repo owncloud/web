@@ -10,6 +10,10 @@ Summary
 
 * Bugfix - Preview app flat file lists: [#11960](https://github.com/owncloud/web/pull/11960)
 * Bugfix - Show progress bar when emptying trash bin: [#11967](https://github.com/owncloud/web/pull/11967)
+* Bugfix - OCM invite flow: [#11992](https://github.com/owncloud/web/pull/11992)
+* Bugfix - Change search scope without search term: [#11997](https://github.com/owncloud/web/pull/11997)
+* Bugfix - Do not load version when sidebar is closed: [#11998](https://github.com/owncloud/web/pull/11998)
+* Bugfix - Use only space resource with `driveType` "project" as space in sidebar: [#12000](https://github.com/owncloud/web/pull/12000)
 * Enhancement - Accessibility improvements: [#5379](https://github.com/owncloud/web/issues/5379)
 * Enhancement - Create spaces via admin settings: [#11849](https://github.com/owncloud/web/pull/11849)
 
@@ -32,6 +36,39 @@ Details
 
    https://github.com/owncloud/web/issues/11966
    https://github.com/owncloud/web/pull/11967
+
+* Bugfix - OCM invite flow: [#11992](https://github.com/owncloud/web/pull/11992)
+
+   We've fixed the OCM invite flow and made it more user-friendly.
+
+   https://github.com/owncloud/web/issues/11983
+   https://github.com/owncloud/web/pull/11992
+
+* Bugfix - Change search scope without search term: [#11997](https://github.com/owncloud/web/pull/11997)
+
+   We've fixed the change of search scope on search page when there is no search
+   term entered.
+
+   https://github.com/owncloud/web/issues/11982
+   https://github.com/owncloud/web/pull/11997
+
+* Bugfix - Do not load version when sidebar is closed: [#11998](https://github.com/owncloud/web/pull/11998)
+
+   We've fixed the the loading of file versions which was triggered even when
+   sidebar was closed. File version will now be loaded only when the sidebar is
+   opened.
+
+   https://github.com/owncloud/web/issues/11979
+   https://github.com/owncloud/web/pull/11998
+
+* Bugfix - Use only space resource with `driveType` "project" as space in sidebar: [#12000](https://github.com/owncloud/web/pull/12000)
+
+   We've fixed the issue where any selected resource got passed to the sidebar as a
+   space in Spaces page. Now only space resource with `driveType` "project" will be
+   passed as a space.
+
+   https://github.com/owncloud/web/issues/11978
+   https://github.com/owncloud/web/pull/12000
 
 * Enhancement - Accessibility improvements: [#5379](https://github.com/owncloud/web/issues/5379)
 
