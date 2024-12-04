@@ -1,0 +1,6 @@
+Bugfix: OCM invite flow
+
+We've fixed the OCM invite flow and made it more user-friendly.
+
+https://github.com/owncloud/web/pull/11992
+https://github.com/owncloud/web/issues/11983
