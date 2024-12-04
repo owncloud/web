@@ -1,0 +1,6 @@
+Bugfix: Change search scope without search term
+
+We've fixed the change of search scope on search page when there is no search term entered.
+
+https://github.com/owncloud/web/pull/11997
+https://github.com/owncloud/web/issues/11982
