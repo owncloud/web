@@ -181,7 +181,7 @@ export default defineComponent({
     .oc-avatar-count,
     .oc-avatar + .oc-avatar-item,
     .oc-avatar-item + .oc-avatar-item {
-      border: 1px solid var(--oc-color-text-inverse);
+      border: 1px solid var(--oc-color-inverseOnSurface);
       margin-left: -25px;
     }
   }

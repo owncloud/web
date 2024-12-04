@@ -104,7 +104,7 @@ export default defineComponent({
   }
 
   &-option-selected {
-    background-color: var(--oc-color-swatch-primary-default) !important;
+    background-color: var(--oc-color-primary) !important;
     color: var(--oc-color-text-inverse) !important;
   }
 }

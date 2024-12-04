@@ -6,7 +6,7 @@ h4,
 h5,
 h6,
 p {
-  color: var(--oc-color-text-default);
+  color: var(--oc-color-onSurface);
 }
 
 html * {
@@ -19,7 +19,7 @@ html, button {
 }
 
 a {
-  color: var(--oc-color-swatch-primary-default);
+  color: var(--oc-color-primary);
   text-decoration: none;
 
   &:hover {
@@ -182,7 +182,7 @@ td.oc-text-break {
  * Give text a muted color and small size.
  */
 .oc-text-meta {
-  color: var(--oc-color-text-muted);
+  color: var(--oc-color-onSurfaceVariant);
   font-size: var(--oc-font-size-small);
 }
 
@@ -190,7 +190,7 @@ td.oc-text-break {
  * Give text a muted color.
  */
 .oc-text-muted {
-  color: var(--oc-color-text-muted);
+  color: var(--oc-color-onSurfaceVariant);
 }
 
 /*

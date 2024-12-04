@@ -2,8 +2,8 @@
   background:
     linear-gradient(
       90deg,
-      var(--oc-color-swatch-primary-muted) 0%,
-      var(--oc-color-swatch-primary-gradient) 100%
+      var(--oc-color-primary) 0%,
+      var(--oc-color-onPrimaryFixed) 100%
     );
 
   &:focus:not([disabled]),
@@ -11,22 +11,22 @@
   {
     background: linear-gradient(
       90deg,
-      var(--oc-color-swatch-primary-muted-hover) 0%,
-      var(--oc-color-swatch-primary-gradient-hover) 100%
+      var(--oc-color-onPrimaryContainer) 0%,
+      var(--oc-color-onPrimaryFixedVariant) 100%
     );
   }
 }
 
 .oc-background-selected {
-  background-color: var(--oc-color-background-highlight) !important;
+  background-color: var(--oc-color-surfaceBright) !important;
 }
 
 .oc-background-brand {
-  background-color: var(--oc-color-swatch-brand-default) !important;
+  background-color: var(--oc-color-primary) !important;
 }
 
 .oc-background-default {
-  background-color: var(--oc-color-background-default) !important;
+  background-color: var(--oc-color-background) !important;
 }
 
 /* stylelint-disable */
@@ -37,7 +37,7 @@
 /* stylelint-enable */
 
 .oc-background-secondary {
-  background-color: var(--oc-color-background-secondary) !important;
+  background-color: var(--oc-color-background) !important;
 }
 
 .oc-background-muted {
@@ -45,7 +45,7 @@
 }
 
 .oc-background-highlight {
-  background-color: var(--oc-color-background-highlight) !important;
+  background-color: var(--oc-color-surfaceBright) !important;
 }
 
 .oc-background-contain {

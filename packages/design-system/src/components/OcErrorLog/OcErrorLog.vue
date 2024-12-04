@@ -76,7 +76,7 @@ export default defineComponent({
     resize: none;
 
     label {
-      color: var(--oc-color-text-muted);
+      color: var(--oc-color-onSurfaceVariant);
     }
   }
 

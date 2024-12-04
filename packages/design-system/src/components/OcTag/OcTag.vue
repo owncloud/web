@@ -90,11 +90,11 @@ export default defineComponent({
 <style lang="scss">
 .oc-tag {
   align-items: center;
-  background-color: var(--oc-color-background-default);
-  border: 1px solid var(--oc-color-text-muted);
+  background-color: var(--oc-color-background);
+  border: 1px solid var(--oc-color-onSurfaceVariant);
   border-radius: 7px;
   box-sizing: border-box;
-  color: var(--oc-color-text-muted);
+  color: var(--oc-color-onSurfaceVariant);
   display: inline-flex;
   gap: var(--oc-space-xsmall);
   text-decoration: none;
@@ -123,7 +123,7 @@ export default defineComponent({
   }
 
   .oc-icon > svg {
-    fill: var(--oc-color-text-muted);
+    fill: var(--oc-color-onSurfaceVariant);
   }
 
   &-link,

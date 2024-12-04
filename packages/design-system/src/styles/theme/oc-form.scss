@@ -42,15 +42,15 @@ $form-padding-horizontal: var(--oc-space-small) !default;
 $form-padding-vertical: var(--oc-space-xsmall) !default;
 
 $form-background: var(--oc-color-background-muted) !default;
-$form-color: var(--oc-color-text-default) !default;
+$form-color: var(--oc-color-onSurface) !default;
 
-$form-focus-background: var(--oc-color-background-highlight) !default;
-$form-focus-color: var(--oc-color-text-default) !default;
+$form-focus-background: var(--oc-color-surfaceBright) !default;
+$form-focus-color: var(--oc-color-onSurface) !default;
 
 $form-disabled-background: var(--oc-color-background-muted) !default;
-$form-disabled-color: var(--oc-color-text-muted) !default;
+$form-disabled-color: var(--oc-color-onSurfaceVariant) !default;
 
-$form-placeholder-color: var(--oc-color-text-muted) !default;
+$form-placeholder-color: var(--oc-color-onSurfaceVariant) !default;
 
 $form-small-height: var(--oc-font-size-small) !default;
 $form-small-padding-horizontal: var(--oc-space-small) !default;
@@ -62,7 +62,7 @@ $form-large-padding-horizontal: var(--oc-space-medium) !default;
 $form-large-line-height: $form-large-height !default;
 $form-large-font-size: var(--oc-font-size-large) !default;
 
-$form-danger-color: var(--oc-color-swatch-danger-default) !default;
+$form-danger-color: var(--oc-color-error) !default;
 $form-success-color: var(--oc-color-swatch-success-default) !default;
 
 $form-width-xsmall: 50px !default;
@@ -71,12 +71,12 @@ $form-width-medium: 200px !default;
 $form-width-large: 500px !default;
 
 $form-select-padding-right: 20px !default;
-$form-select-icon-color: var(--oc-color-text-default) !default;
+$form-select-icon-color: var(--oc-color-onSurface) !default;
 $form-select-option-color: #444 !default;
-$form-select-disabled-icon-color: var(--oc-color-text-muted) !default;
+$form-select-disabled-icon-color: var(--oc-color-onSurfaceVariant) !default;
 
 $form-datalist-padding-right: 20px !default;
-$form-datalist-icon-color: var(--oc-color-text-default) !default;
+$form-datalist-icon-color: var(--oc-color-onSurface) !default;
 
 $form-radio-background: var(--oc-color-background-muted) !default;
 
@@ -86,7 +86,7 @@ $form-radio-checked-icon-color: var(--oc-color-input-text-default) !default;
 $form-radio-checked-focus-background: $oc-color-swatch-primary-default !default;
 
 $form-radio-disabled-background: $oc-color-background-muted !default;
-$form-radio-disabled-icon-color: var(--oc-color-text-muted) !default;
+$form-radio-disabled-icon-color: var(--oc-color-onSurfaceVariant) !default;
 
 $form-legend-font-size: var(--oc-font-size-large) !default;
 $form-legend-line-height: 1.4 !default;
@@ -99,8 +99,8 @@ $form-horizontal-controls-margin-left: 215px !default;
 $form-horizontal-controls-text-padding-top: 7px !default;
 
 $form-icon-width: var(--oc-size-icon-default) !default;
-$form-icon-color: var(--oc-color-text-muted) !default;
-$form-icon-hover-color: var(--oc-color-text-default) !default;
+$form-icon-color: var(--oc-color-onSurfaceVariant) !default;
+$form-icon-hover-color: var(--oc-color-onSurface) !default;
 
 $internal-form-select-image: "data:image/svg+xml;charset=UTF-8,%3Csvg%20width%3D%2224%22%20height%3D%2216%22%20viewBox%3D%220%200%2024%2016%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%0A%20%20%20%20%3Cpolygon%20fill%3D%22#000%22%20points%3D%2212%201%209%206%2015%206%22%20%2F%3E%0A%20%20%20%20%3Cpolygon%20fill%3D%22#000%22%20points%3D%2212%2013%209%208%2015%208%22%20%2F%3E%0A%3C%2Fsvg%3E%0A" !default;
 $internal-form-datalist-image: "data:image/svg+xml;charset=UTF-8,%3Csvg%20width%3D%2224%22%20height%3D%2216%22%20viewBox%3D%220%200%2024%2016%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%0A%20%20%20%20%3Cpolygon%20fill%3D%22#000%22%20points%3D%2212%2012%208%206%2016%206%22%20%2F%3E%0A%3C%2Fsvg%3E%0A" !default;
@@ -302,7 +302,7 @@ $internal-form-checkbox-indeterminate-image: "data:image/svg+xml;charset=UTF-8,%
   .oc-input:focus,
   .oc-select:focus,
   .oc-textarea:focus {
-    background-color: var(--oc-color-background-default);
+    background-color: var(--oc-color-background);
   }
 }
 

@@ -162,7 +162,7 @@ export default defineComponent({
   }
   .info-drop-content {
     font-size: var(--oc-font-size-medium);
-    color: var(--oc-color-text-default);
+    color: var(--oc-color-onSurface);
   }
   .info-more-link {
     font-size: var(--oc-font-size-medium) !important;

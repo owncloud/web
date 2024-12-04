@@ -212,20 +212,20 @@ export default defineComponent({
     &-item {
       &-page {
         border-radius: 4px;
-        color: var(--oc-color-text-default);
+        color: var(--oc-color-onSurface);
         padding: var(--oc-space-xsmall) var(--oc-space-small);
         transition: background-color $transition-duration-short ease-in-out;
 
         &:not(span):hover {
           background-color: var(--oc-color-swatch-passive-default);
-          color: var(--oc-color-text-inverse);
+          color: var(--oc-color-inverseOnSurface);
           text-decoration: none;
         }
       }
 
       &-current {
         background-color: var(--oc-color-swatch-passive-default);
-        color: var(--oc-color-text-inverse);
+        color: var(--oc-color-inverseOnSurface);
         font-weight: bold;
       }
 
@@ -234,7 +234,7 @@ export default defineComponent({
         display: flex;
 
         > .oc-icon > svg {
-          fill: var(--oc-color-text-default);
+          fill: var(--oc-color-onSurface);
         }
       }
 

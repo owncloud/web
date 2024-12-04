@@ -108,7 +108,7 @@ export default defineComponent({
     }
 
     &[aria-checked='true'] {
-      background-color: var(--oc-color-swatch-primary-default);
+      background-color: var(--oc-color-primary);
 
       &::before {
         transform: translateX(calc(100% + 2px));

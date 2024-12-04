@@ -30,7 +30,7 @@ const defaultSpaceIcon: IconType = {
 }
 const defaultFallbackIcon: IconType = {
   name: 'resource-type-file',
-  color: 'var(--oc-color-text-default)'
+  color: 'var(--oc-color-onSurface)'
 }
 
 const defaultFileIconMapping = createDefaultFileIconMapping()

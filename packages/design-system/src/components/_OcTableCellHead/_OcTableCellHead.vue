@@ -47,7 +47,7 @@ export default defineComponent({
 </script>
 <style lang="scss">
 .oc-th {
-  color: var(--oc-color-text-muted);
+  color: var(--oc-color-onSurfaceVariant);
   font-weight: inherit;
 
   &[aria-sort] {

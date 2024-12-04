@@ -153,7 +153,7 @@ $progress-height-small: 5px !default;
 
   &-primary &-current,
   &-primary &-indeterminate div {
-    background-color: var(--oc-color-swatch-primary-default);
+    background-color: var(--oc-color-primary);
   }
   &-success &-current,
   &-success &-indeterminate div {
@@ -161,11 +161,11 @@ $progress-height-small: 5px !default;
   }
   &-warning &-current,
   &-warning &-indeterminate div {
-    background-color: var(--oc-color-swatch-warning-default);
+    background-color: var(--oc-color-error);
   }
   &-danger &-current,
   &-danger &-indeterminate div {
-    background-color: var(--oc-color-swatch-danger-default);
+    background-color: var(--oc-color-error);
   }
 }
 </style>

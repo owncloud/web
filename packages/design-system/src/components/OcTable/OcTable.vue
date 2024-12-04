@@ -511,7 +511,7 @@ export default defineComponent({
 .oc-table {
   border-collapse: collapse;
   border-spacing: 0;
-  color: var(--oc-color-text-default);
+  color: var(--oc-color-onSurface);
   width: 100%;
 
   &-hover tr {
@@ -532,7 +532,7 @@ export default defineComponent({
   }
 
   &-highlighted {
-    background-color: var(--oc-color-background-highlight) !important;
+    background-color: var(--oc-color-surfaceBright) !important;
   }
 
   &-accentuated {
@@ -550,7 +550,7 @@ export default defineComponent({
     position: relative;
 
     .oc-table-header-cell {
-      background-color: var(--oc-color-background-default);
+      background-color: var(--oc-color-background);
       position: sticky;
       z-index: 1;
     }
@@ -573,7 +573,7 @@ export default defineComponent({
     border-top: 1px solid var(--oc-color-border);
 
     &-cell {
-      color: var(--oc-color-text-muted);
+      color: var(--oc-color-onSurfaceVariant);
       font-size: 0.875rem;
       line-height: 1.4;
       padding: var(--oc-space-xsmall);

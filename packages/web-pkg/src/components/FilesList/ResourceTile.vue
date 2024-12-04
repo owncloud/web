@@ -229,7 +229,7 @@ export default defineComponent({
 
 <style lang="scss">
 .oc-tile-card {
-  background-color: var(--oc-color-background-highlight) !important;
+  background-color: var(--oc-color-surfaceBright) !important;
   box-shadow: none;
   height: 100%;
   display: flex;
@@ -267,7 +267,7 @@ export default defineComponent({
     width: 100%;
 
     .oc-tag {
-      color: var(--oc-color-text-default);
+      color: var(--oc-color-onSurface);
 
       &.resource-disabled-indicator {
         z-index: 1;
@@ -341,7 +341,7 @@ export default defineComponent({
   }
 
   .resource-name-wrapper {
-    color: var(--oc-color-text-default);
+    color: var(--oc-color-onSurface);
     max-width: 70%;
     overflow: hidden;
   }

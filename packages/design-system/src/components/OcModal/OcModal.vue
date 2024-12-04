@@ -432,7 +432,7 @@ export default defineComponent({
 }
 
 .oc-modal {
-  background-color: var(--oc-color-background-default);
+  background-color: var(--oc-color-background);
   border: 1px solid var(--oc-color-input-border);
   border-radius: 15px;
   box-shadow: 5px 0 25px rgba(0, 0, 0, 0.3);
@@ -460,7 +460,7 @@ export default defineComponent({
   }
 
   &-primary {
-    @include oc-modal-variation(var(--oc-color-swatch-primary-default));
+    @include oc-modal-variation(var(--oc-color-primary));
   }
 
   &-success {
@@ -468,11 +468,11 @@ export default defineComponent({
   }
 
   &-warning {
-    @include oc-modal-variation(var(--oc-color-swatch-warning-default));
+    @include oc-modal-variation(var(--oc-color-error));
   }
 
   &-danger {
-    @include oc-modal-variation(var(--oc-color-swatch-danger-default));
+    @include oc-modal-variation(var(--oc-color-error));
   }
 
   &-title {
@@ -497,7 +497,7 @@ export default defineComponent({
   }
 
   &-body {
-    color: var(--oc-color-text-default);
+    color: var(--oc-color-onSurface);
     line-height: 1.625;
     padding: var(--oc-space-medium) var(--oc-space-medium) 0;
 
@@ -526,7 +526,7 @@ export default defineComponent({
 
     &-actions {
       text-align: right;
-      background: var(--oc-color-background-default);
+      background: var(--oc-color-background);
       border-bottom-right-radius: 15px;
       border-bottom-left-radius: 15px;
       padding: var(--oc-space-medium);
@@ -545,7 +545,7 @@ export default defineComponent({
 
   .oc-text-input-password-wrapper {
     button {
-      background-color: var(--oc-color-background-highlight) !important;
+      background-color: var(--oc-color-surfaceBright) !important;
     }
   }
 }

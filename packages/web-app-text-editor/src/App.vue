@@ -60,6 +60,6 @@ export default defineComponent({
 
 .toastui-editor-defaultUI-toolbar,
 .toastui-editor-md-tab-container {
-  background-color: var(--oc-color-background-default) !important;
+  background-color: var(--oc-color-background) !important;
 }
 </style>

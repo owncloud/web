@@ -47,7 +47,7 @@ export default defineComponent({
   align-items: center;
   background-color: var(--oc-color-swatch-passive-default);
   border-radius: 50%;
-  color: var(--oc-color-text-inverse);
+  color: var(--oc-color-inverseOnSurface);
   display: flex;
   justify-content: center;
 }

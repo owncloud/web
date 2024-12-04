@@ -546,7 +546,7 @@ $grid-divider-border: #e5e5e5 !default;
   <oc-grid>
     <div style="width: 80px; height: 80px; background-color: var(--oc-color-swatch-passive-default)" class="oc-height-small"></div>
     <div style="width: 80px; height: 80px; background-color: var(--oc-color-swatch-success-default)" class="oc-height-small"></div>
-    <div style="width: 80px; height: 80px; background-color: var(--oc-color-swatch-warning-default)" class="oc-height-small"></div>
+    <div style="width: 80px; height: 80px; background-color: var(--oc-color-error)" class="oc-height-small"></div>
   </oc-grid>
 
   <h3 class="oc-heading-divider">

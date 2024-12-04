@@ -207,7 +207,7 @@ export default defineComponent({
 
   .oc-resource-indicators {
     .text {
-      color: var(--oc-color-swatch-brand-contrast);
+      color: var(--oc-color-background);
     }
   }
 }

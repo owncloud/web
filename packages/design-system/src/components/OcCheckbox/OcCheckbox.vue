@@ -178,7 +178,7 @@ export default defineComponent({
   }
 
   &:focus-visible {
-    outline: var(--oc-color-swatch-primary-default) auto 1px;
+    outline: var(--oc-color-primary) auto 1px;
   }
 
   &-checked,

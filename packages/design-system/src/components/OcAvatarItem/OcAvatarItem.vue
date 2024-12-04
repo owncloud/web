@@ -52,7 +52,7 @@ export default defineComponent({
     iconColor: {
       type: String,
       required: false,
-      default: 'var(--oc-color-text-inverse)'
+      default: 'var(--oc-color-inverseOnSurface)'
     },
     /**
      * Fill-type that should be used for the icon

@@ -61,7 +61,7 @@
         />
         <oc-icon
           v-if="index !== displayItems.length - 1"
-          color="var(--oc-color-text-default)"
+          color="var(--oc-color-onSurface)"
           name="arrow-right-s"
           class="oc-mx-xs"
           fill-type="line"
@@ -73,7 +73,7 @@
             :aria-label="contextMenuLabel"
             appearance="raw"
           >
-            <oc-icon name="more-2" color="var(--oc-color-text-default)" />
+            <oc-icon name="more-2" color="var(--oc-color-onSurface)" />
           </oc-button>
           <oc-drop
             drop-id="oc-breadcrumb-contextmenu"
@@ -342,13 +342,9 @@ export default defineComponent({
 .oc-breadcrumb {
   overflow: visible;
   &-item-dragover {
-    transition:
-      background 0.06s,
-      border 0s 0.08s,
-      border-color 0s,
-      border-width 0.06s;
-    background-color: var(--oc-color-background-highlight);
-    box-shadow: 0 0 0 5px var(--oc-color-background-highlight);
+    transition: background 0.06s, border 0s 0.08s, border-color 0s, border-width 0.06s;
+    background-color: var(--oc-color-surfaceBright);
+    box-shadow: 0 0 0 5px var(--oc-color-surfaceBright);
     border-radius: 5px;
   }
   &-item-text {
@@ -396,12 +392,12 @@ export default defineComponent({
     }
 
     > :nth-child(n + 2)::before {
-      color: var(--oc-color-text-default);
+      color: var(--oc-color-onSurface);
       display: inline-block;
     }
 
     > :last-child > span {
-      color: var(--oc-color-text-default);
+      color: var(--oc-color-onSurface);
     }
   }
 
@@ -411,7 +407,7 @@ export default defineComponent({
     button:first-of-type,
     span:first-of-type {
       font-size: var(--oc-font-size-medium);
-      color: var(--oc-color-text-default);
+      color: var(--oc-color-onSurface);
       display: inline-block;
       vertical-align: sub;
       line-height: normal;

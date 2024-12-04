@@ -236,7 +236,7 @@ export default defineComponent({
     width: 100%;
     max-height: 100%;
     object-fit: cover;
-    background: var(--oc-color-swatch-brand-default);
+    background: var(--oc-color-primary);
   }
 }
 </style>

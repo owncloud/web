@@ -306,13 +306,11 @@ export default defineComponent({
   max-height: 100%;
   display: grid;
   grid-template-rows: auto auto 1fr;
-  background-color: var(--oc-color-background-default);
+  background-color: var(--oc-color-background);
   top: 0;
   position: absolute;
   transform: translateX(100%);
-  transition:
-    transform 0.4s ease,
-    visibility 0.4s 0s;
+  transition: transform 0.4s ease, visibility 0.4s 0s;
   // visibility is here to prevent focusing panel child elements,
   // the transition delay keeps care that it will only apply if the element is visible or not.
   // hidden: if element is off screen
@@ -363,7 +361,7 @@ export default defineComponent({
 
       &__title {
         text-align: center;
-        color: var(--oc-color-text-default);
+        color: var(--oc-color-onSurface);
         font-size: var(--oc-font-size-large);
         grid-column-start: 2;
       }
@@ -393,7 +391,7 @@ export default defineComponent({
       border-bottom: 1px solid var(--oc-color-border);
       width: 100%;
       border-radius: 0;
-      color: var(--oc-color-text-default) !important;
+      color: var(--oc-color-onSurface) !important;
       display: grid;
       grid-template-columns: auto 1fr auto;
       text-align: left;

@@ -22,8 +22,8 @@
         :width="32"
         icon="user"
         icon-fill-type="line"
-        icon-color="var(--oc-color-swatch-brand-default)"
-        background="var(--oc-color-swatch-brand-contrast)"
+        icon-color="var(--oc-color-primary)"
+        background="var(--oc-color-background)"
       />
     </oc-button>
     <oc-drop
@@ -228,7 +228,7 @@ export default defineComponent({
 
   a {
     font-size: var(--oc-font-size-medium) !important;
-    color: var(--oc-color-text-default);
+    color: var(--oc-color-onSurface);
   }
 }
 </style>

@@ -291,7 +291,7 @@ export default defineComponent({
 
     &-item.active {
       .oc-button {
-        color: var(--oc-color-swatch-primary-default);
+        color: var(--oc-color-primary);
       }
     }
   }

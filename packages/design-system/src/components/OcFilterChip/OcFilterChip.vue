@@ -14,7 +14,7 @@
         :class="filterActive ? 'oc-filter-check-icon-active' : 'oc-filter-check-icon-inactive'"
         name="check"
         size="small"
-        color="var(--oc-color-text-inverse)"
+        color="var(--oc-color-inverseOnSurface)"
       />
       <span
         class="oc-text-truncate oc-filter-chip-label"
@@ -44,7 +44,7 @@
       :aria-label="$gettext('Clear filter')"
       @click="$emit('clearFilter')"
     >
-      <oc-icon name="close" size="small" color="var(--oc-color-text-inverse)" />
+      <oc-icon name="close" size="small" color="var(--oc-color-inverseOnSurface)" />
     </oc-button>
   </div>
 </template>
@@ -134,9 +134,9 @@ export default defineComponent({
 .oc-filter-chip {
   &-button.oc-pill {
     align-items: center;
-    background-color: var(--oc-color-background-default) !important;
-    color: var(--oc-color-text-muted) !important;
-    border: 1px solid var(--oc-color-text-muted);
+    background-color: var(--oc-color-background) !important;
+    color: var(--oc-color-onSurfaceVariant) !important;
+    border: 1px solid var(--oc-color-onSurfaceVariant);
     box-sizing: border-box;
     display: inline-flex;
     gap: var(--oc-space-xsmall);
@@ -149,8 +149,8 @@ export default defineComponent({
   }
   &-button-selected.oc-pill,
   &-button-selected.oc-pill:hover {
-    background-color: var(--oc-color-swatch-primary-default) !important;
-    color: var(--oc-color-text-inverse) !important;
+    background-color: var(--oc-color-primary) !important;
+    color: var(--oc-color-inverseOnSurface) !important;
     border-top-left-radius: 99px !important;
     border-bottom-left-radius: 99px !important;
     border-top-right-radius: 0px !important;
@@ -159,8 +159,8 @@ export default defineComponent({
   }
   &-clear,
   &-clear:hover {
-    background-color: var(--oc-color-swatch-primary-default) !important;
-    color: var(--oc-color-text-inverse) !important;
+    background-color: var(--oc-color-primary) !important;
+    color: var(--oc-color-inverseOnSurface) !important;
     border-top-left-radius: 0px !important;
     border-bottom-left-radius: 0px !important;
     border-top-right-radius: 99px !important;

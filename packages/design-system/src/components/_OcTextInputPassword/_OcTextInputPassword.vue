@@ -201,7 +201,7 @@ export default defineComponent({
     padding: 0;
     border-radius: 5px;
     border: 1px solid var(--oc-color-input-border);
-    background-color: var(--oc-color-background-highlight);
+    background-color: var(--oc-color-surfaceBright);
 
     input {
       flex-grow: 2;
@@ -214,14 +214,14 @@ export default defineComponent({
 
     &-warning,
     &-warning:focus {
-      border-color: var(--oc-color-swatch-warning-default) !important;
-      color: var(--oc-color-swatch-warning-default) !important;
+      border-color: var(--oc-color-error) !important;
+      color: var(--oc-color-error) !important;
     }
 
     &-danger,
     &-danger:focus {
-      border-color: var(--oc-color-swatch-danger-default) !important;
-      color: var(--oc-color-swatch-danger-default) !important;
+      border-color: var(--oc-color-error) !important;
+      color: var(--oc-color-error) !important;
     }
 
     &:focus-within {
