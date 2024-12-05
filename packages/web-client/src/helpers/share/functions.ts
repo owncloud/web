@@ -146,6 +146,9 @@ export function buildIncomingShareResource({
     isFolder: !!driveItem.folder,
     type: !!driveItem.folder ? 'folder' : 'file',
     mimeType: driveItem.file?.mimeType || 'httpd/unix-directory',
+    mdate: driveItem.lastModifiedDateTime
+      ? new Date(driveItem.lastModifiedDateTime).toUTCString()
+      : undefined,
     syncEnabled: driveItem['@client.synchronize'],
     hidden: driveItem['@UI.Hidden'],
     shareRoles,

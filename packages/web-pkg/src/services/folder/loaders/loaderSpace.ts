@@ -13,11 +13,10 @@ import {
 } from '@ownclouders/web-client'
 import { unref } from 'vue'
 import { FolderLoaderOptions } from './types'
-import { Graph } from '@ownclouders/web-client/graph'
 import { DriveItem } from '@ownclouders/web-client/graph/generated'
 import { isLocationSpacesActive, isLocationPublicActive } from '../../../router'
 import { SharesStore, SpacesStore, useFileRouteReplace, UserStore } from '../../../composables'
-import { getIndicators } from '../../../helpers'
+import { getIndicators, getSharedDriveItem } from '../../../helpers'
 
 export class FolderLoaderSpace implements FolderLoader {
   public isEnabled(): boolean {
@@ -48,7 +47,6 @@ export class FolderLoaderSpace implements FolderLoader {
     const { webdav, graphAuthenticated: graphClient } = clientService
     const { replaceInvalidFileRoute } = useFileRouteReplace({ router })
 
-    const getSharedDriveItem = this.getSharedDriveItem
     const setCurrentUserShareSpacePermissions = this.setCurrentUserShareSpacePermissions
 
     return useTask(function* (
@@ -140,32 +138,6 @@ export class FolderLoaderSpace implements FolderLoader {
         }
       }
     }).restartable()
-  }
-
-  /**
-   * Gets the drive item for a given shared space.
-   */
-  private async getSharedDriveItem({
-    graphClient,
-    spacesStore,
-    space,
-    signal
-  }: {
-    graphClient: Graph
-    spacesStore: SpacesStore
-    space: SpaceResource
-    signal?: AbortSignal
-  }) {
-    const matchingMountPoint = await spacesStore.getMountPointForSpace({
-      graphClient,
-      space,
-      signal
-    })
-    if (!matchingMountPoint) {
-      return null
-    }
-    const { id } = matchingMountPoint
-    return graphClient.driveItems.getDriveItem(id.split('!')[0], id)
   }
 
   /**
