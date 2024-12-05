@@ -22,7 +22,7 @@
       <oc-contextual-helper
         v-if="isDisabledRole"
         class="oc-ml-xs files-permission-actions-list"
-        :list="existingSharePermissions.map((permission) => ({ text: permission }))"
+        :text="customPermissionsText"
         :title="$gettext('Custom permissions')"
       />
     </div>
@@ -141,6 +141,11 @@ export default defineComponent({
 
       return ''
     })
+    const customPermissionsText = computed(() =>
+      $gettext(
+        'Dear user, please replace this legacy role with one of the currently available role'
+      )
+    )
 
     const availableInternalRoles = inject<Ref<ShareRole[]>>('availableInternalShareRoles')
     const availableExternalRoles = inject<Ref<ShareRole[]>>('availableExternalShareRoles')
@@ -200,6 +205,7 @@ export default defineComponent({
       ability,
       user,
       dropButtonTooltip,
+      customPermissionsText,
       resource: inject<Resource>('resource'),
       selectedRole,
       availableRoles,
