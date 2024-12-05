@@ -39,7 +39,10 @@ describe('SharedWithOthers view', () => {
       expect(wrapper.find('.no-content-message').exists()).toBeTruthy()
     })
     it('shows the files table when files are available', () => {
-      const mockedFiles = [mockDeep<IncomingShareResource>(), mockDeep<IncomingShareResource>()]
+      const mockedFiles = [
+        mockDeep<IncomingShareResource>({ shareTypes: [ShareTypes.user.value] }),
+        mockDeep<IncomingShareResource>({ shareTypes: [ShareTypes.user.value] })
+      ]
       const { wrapper } = getMountedWrapper({ files: mockedFiles })
       expect(wrapper.find('.no-content-message').exists()).toBeFalsy()
       expect(wrapper.find('resource-table-stub').exists()).toBeTruthy()
@@ -73,7 +76,11 @@ function getMountedWrapper({
   mocks = {},
   files = [],
   loading = false
-}: { mocks?: Record<string, unknown>; files?: IncomingShareResource[]; loading?: boolean } = {}) {
+}: {
+  mocks?: Record<string, unknown>
+  files?: IncomingShareResource[]
+  loading?: boolean
+} = {}) {
   vi.mocked(useResourcesViewDefaults).mockImplementation(() =>
     useResourcesViewDefaultsMock({
       paginatedResources: ref(files),

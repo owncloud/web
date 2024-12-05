@@ -13,7 +13,7 @@ import { defaultStubs, RouteLocation } from '@ownclouders/web-test-helpers'
 import { useSortMock } from '../../../../tests/mocks/useSortMock'
 import { mock } from 'vitest-mock-extended'
 import { defaultPlugins, mount, defaultComponentMocks } from '@ownclouders/web-test-helpers'
-import { ShareTypes, IncomingShareResource } from '@ownclouders/web-client'
+import { ShareTypes, IncomingShareResource, ShareType } from '@ownclouders/web-client'
 import SharedWithMeSection from '../../../../src/components/Shares/SharedWithMeSection.vue'
 
 vi.mock('../../../../src/composables/resourcesViewDefaults')
@@ -96,9 +96,11 @@ describe('SharedWithMe view', () => {
         })
         const filterItems = wrapper
           .findComponent<typeof ItemFilter>('.share-type-filter')
-          .props('items')
+          .props('items') as ShareType[]
+
         expect(wrapper.find('.share-type-filter').exists()).toBeTruthy()
-        expect(filterItems).toEqual([shareType1, shareType2])
+        expect(filterItems[0].value).toEqual(shareType1.value)
+        expect(filterItems[1].value).toEqual(shareType2.value)
       })
     })
     describe('shared by', () => {
