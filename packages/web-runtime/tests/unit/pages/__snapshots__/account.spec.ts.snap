@@ -134,6 +134,7 @@ exports[`account page > public link context > should render a limited view 1`] =
     </div>
     <!--v-if-->
     <!--v-if-->
+    <!--v-if-->
   </div>
 </main>"
 `;
