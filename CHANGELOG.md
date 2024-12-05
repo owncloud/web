@@ -14,6 +14,8 @@ Summary
 * Bugfix - Change search scope without search term: [#11997](https://github.com/owncloud/web/pull/11997)
 * Bugfix - Do not load version when sidebar is closed: [#11998](https://github.com/owncloud/web/pull/11998)
 * Bugfix - Use only space resource with `driveType` "project" as space in sidebar: [#12000](https://github.com/owncloud/web/pull/12000)
+* Bugfix - OCM share editing: [#12002](https://github.com/owncloud/web/pull/12002)
+* Bugfix - OCM share recipient issuer: [#12002](https://github.com/owncloud/web/pull/12002)
 * Enhancement - Accessibility improvements: [#5379](https://github.com/owncloud/web/issues/5379)
 * Enhancement - Create spaces via admin settings: [#11849](https://github.com/owncloud/web/pull/11849)
 
@@ -69,6 +71,22 @@ Details
 
    https://github.com/owncloud/web/issues/11978
    https://github.com/owncloud/web/pull/12000
+
+* Bugfix - OCM share editing: [#12002](https://github.com/owncloud/web/pull/12002)
+
+   We've fixed a bug where OCM shares could be edited although the server does not
+   support it.
+
+   https://github.com/owncloud/web/issues/11991
+   https://github.com/owncloud/web/pull/12002
+
+* Bugfix - OCM share recipient issuer: [#12002](https://github.com/owncloud/web/pull/12002)
+
+   We've fixed a bug where the issuer for OCM shares was missing in the invite
+   input field.
+
+   https://github.com/owncloud/web/issues/11972
+   https://github.com/owncloud/web/pull/12002
 
 * Enhancement - Accessibility improvements: [#5379](https://github.com/owncloud/web/issues/5379)
 
