@@ -1,0 +1,6 @@
+Bugfix: OCM share recipient issuer
+
+We've fixed a bug where the issuer for OCM shares was missing in the invite input field.
+
+https://github.com/owncloud/web/pull/12002
+https://github.com/owncloud/web/issues/11972
