@@ -1,0 +1,5 @@
+Bugfix: Missing translations for share type filters
+
+We've fixed a bug, where the translations for the share type filters were missing.
+This was the case for the "Shared with me" and "Shared with others" page.
+
