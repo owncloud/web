@@ -70,7 +70,7 @@ export default defineComponent({
     const loadActivitiesTask = useTask(function* (signal) {
       activities.value = yield* call(
         clientService.graphAuthenticated.activities.listActivities(
-          `itemid:${unref(resource).id} AND limit:${activitiesLimit} AND sort:desc`,
+          `itemid:${unref(resource).fileId} AND limit:${activitiesLimit} AND sort:desc`,
           { signal }
         )
       )
