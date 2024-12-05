@@ -10,7 +10,10 @@
     </div>
     <div v-else class="oc-flex oc-flex-middle">
       <oc-icon class="oc-mr-s" :name="selectedTypeIcon" fill-type="line" />
-      <span v-text="selectedTypeDescription" />
+      <div class="oc-flex oc-flex-column">
+        <span class="oc-text-bold" v-text="selectedTypeDisplayName" />
+        <span class="oc-text-small" v-text="selectedTypeDescription" />
+      </div>
     </div>
     <oc-button
       v-if="!isAdvancedMode"
@@ -187,6 +190,10 @@ export default defineComponent({
     const selectedTypeDescription = computed(() =>
       $gettext(getLinkRoleByType(unref(selectedType)).description)
     )
+
+    const selectedTypeDisplayName = computed(() =>
+      $gettext(getLinkRoleByType(unref(selectedType)).displayName)
+    )
     const selectedTypeIcon = computed(() => getLinkRoleByType(unref(selectedType)).icon)
 
     const availableLinkTypes = computed(() => getAvailableLinkTypes({ isFolder: unref(isFolder) }))
@@ -313,6 +320,7 @@ export default defineComponent({
       availableLinkTypes,
       selectedType,
       selectedTypeIcon,
+      selectedTypeDisplayName,
       selectedTypeDescription,
       isSelectedLinkType,
       updateSelectedLinkType,

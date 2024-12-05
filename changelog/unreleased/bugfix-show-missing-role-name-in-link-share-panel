@@ -1,0 +1,4 @@
+Bugfix: Show missing role name in link share panel
+
+We've fixed a bug where the role name was missing in the link share panel.
+
