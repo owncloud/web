@@ -16,6 +16,7 @@ Summary
 * Bugfix - Use only space resource with `driveType` "project" as space in sidebar: [#12000](https://github.com/owncloud/web/pull/12000)
 * Bugfix - OCM share editing: [#12002](https://github.com/owncloud/web/pull/12002)
 * Bugfix - OCM share recipient issuer: [#12002](https://github.com/owncloud/web/pull/12002)
+* Bugfix - Missing activities on Shared with me page: [#12008](https://github.com/owncloud/web/pull/12008)
 * Enhancement - Accessibility improvements: [#5379](https://github.com/owncloud/web/issues/5379)
 * Enhancement - Create spaces via admin settings: [#11849](https://github.com/owncloud/web/pull/11849)
 
@@ -87,6 +88,12 @@ Details
 
    https://github.com/owncloud/web/issues/11972
    https://github.com/owncloud/web/pull/12002
+
+* Bugfix - Missing activities on Shared with me page: [#12008](https://github.com/owncloud/web/pull/12008)
+
+   We've added the missing activities on the Shared with me page.
+
+   https://github.com/owncloud/web/pull/12008
 
 * Enhancement - Accessibility improvements: [#5379](https://github.com/owncloud/web/issues/5379)
 
