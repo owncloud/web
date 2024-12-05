@@ -1,0 +1,5 @@
+Bugfix: Sidebar file info for shares
+
+We've fixed a bug some file info regarding size an shares was missing in the right sidebar when opening an incoming share via an editor.
+
+https://github.com/owncloud/web/pull/12010
