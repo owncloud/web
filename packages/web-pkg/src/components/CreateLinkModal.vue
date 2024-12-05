@@ -194,6 +194,7 @@ export default defineComponent({
     const selectedTypeDisplayName = computed(() =>
       $gettext(getLinkRoleByType(unref(selectedType)).displayName)
     )
+
     const selectedTypeIcon = computed(() => getLinkRoleByType(unref(selectedType)).icon)
 
     const availableLinkTypes = computed(() => getAvailableLinkTypes({ isFolder: unref(isFolder) }))
