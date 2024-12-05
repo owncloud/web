@@ -77,7 +77,7 @@ export default defineComponent({
     background: {
       type: String,
       required: false,
-      default: 'var(--oc-color-swatch-passive-default)'
+      default: 'var(--oc-color-secondary)'
     },
     /**
      * Accessibility label used as alt. Use only in case the avatar is used alone.

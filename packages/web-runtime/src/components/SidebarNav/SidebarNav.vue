@@ -212,8 +212,8 @@ export default defineComponent({
     &:hover,
     &:focus {
       text-decoration: none !important;
-      background-color: var(--oc-color-background-hover);
-      color: var(--oc-color-swatch-passive-default);
+      background-color: var(--oc-color-surfaceContainerHigh);
+      color: var(--oc-color-secondary);
     }
   }
 
@@ -221,7 +221,7 @@ export default defineComponent({
   .oc-sidebar-nav li button.active {
     &:focus,
     &:hover {
-      color: var(--oc-color-swatch-primary-contrast);
+      color: var(--oc-color-onPrimary);
     }
   }
 }

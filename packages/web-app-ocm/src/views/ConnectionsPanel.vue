@@ -178,8 +178,8 @@ export default defineComponent({
 .sciencemesh-app {
   #shares-links {
     button:hover {
-      background-color: var(--oc-color-background-hover);
-      border-color: var(--oc-color-background-hover);
+      background-color: var(--oc-color-surfaceContainerHigh);
+      border-color: var(--oc-color-surfaceContainerHigh);
     }
 
     @media (max-width: $oc-breakpoint-medium-default) {
@@ -191,7 +191,7 @@ export default defineComponent({
   }
 
   .delete-connection-btn:hover {
-    background-color: var(--oc-color-background-hover);
+    background-color: var(--oc-color-surfaceContainerHigh);
   }
 }
 </style>

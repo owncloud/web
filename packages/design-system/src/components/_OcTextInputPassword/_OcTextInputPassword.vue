@@ -225,7 +225,7 @@ export default defineComponent({
     }
 
     &:focus-within {
-      border-color: var(--oc-color-swatch-passive-default);
+      border-color: var(--oc-color-secondary);
     }
   }
 

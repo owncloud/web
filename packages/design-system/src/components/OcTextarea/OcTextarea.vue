@@ -195,7 +195,7 @@ export default defineComponent({
   padding-bottom: var(--oc-space-xsmall);
   padding-top: var(--oc-space-xsmall);
   box-sizing: border-box;
-  background: var(--oc-color-background-muted);
+  background: var(--oc-color-surfaceDim);
   border: 0 none;
   margin: 0;
   color: var(--oc-color-onSurface);
@@ -209,7 +209,7 @@ export default defineComponent({
 
   &:focus {
     border-color: var(--oc-color-input-text-default);
-    background-color: var(--oc-color-background-muted);
+    background-color: var(--oc-color-surfaceDim);
     color: var(--oc-color-onSurface);
   }
 

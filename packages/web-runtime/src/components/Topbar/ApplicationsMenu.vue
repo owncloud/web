@@ -157,14 +157,14 @@ export default defineComponent({
     &.oc-button-primary-raw-inverse {
       &:focus,
       &:hover {
-        color: var(--oc-color-swatch-primary-contrast) !important;
+        color: var(--oc-color-onPrimary) !important;
       }
     }
 
     &.oc-button-passive-raw {
       &:focus,
       &:hover {
-        color: var(--oc-color-swatch-passive-default) !important;
+        color: var(--oc-color-secondary) !important;
       }
     }
 
@@ -173,7 +173,7 @@ export default defineComponent({
     }
 
     &:hover {
-      background-color: var(--oc-color-background-hover);
+      background-color: var(--oc-color-surfaceContainerHigh);
       text-decoration: none;
     }
 

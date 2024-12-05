@@ -619,7 +619,7 @@ export default defineComponent({
           }
 
           &.disabled {
-            background-color: var(--oc-color-background-muted);
+            background-color: var(--oc-color-surfaceDim);
             pointer-events: none;
             opacity: 0.7;
             filter: grayscale(0.6);

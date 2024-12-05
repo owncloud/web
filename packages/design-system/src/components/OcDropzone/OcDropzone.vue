@@ -19,7 +19,7 @@ export default defineComponent({
 .oc-dropzone {
   align-items: center;
   background-color: var(--oc-color-background);
-  border: 1px dashed var(--oc-color-swatch-primary-muted);
+  border: 1px dashed var(--oc-color-primaryContainer);
   color: var(--oc-color-onSurface);
   display: flex;
   font-size: 1.5rem;

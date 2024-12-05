@@ -41,13 +41,13 @@ $form-line-height: $form-height !default;
 $form-padding-horizontal: var(--oc-space-small) !default;
 $form-padding-vertical: var(--oc-space-xsmall) !default;
 
-$form-background: var(--oc-color-background-muted) !default;
+$form-background: var(--oc-color-surfaceDim) !default;
 $form-color: var(--oc-color-onSurface) !default;
 
 $form-focus-background: var(--oc-color-surfaceBright) !default;
 $form-focus-color: var(--oc-color-onSurface) !default;
 
-$form-disabled-background: var(--oc-color-background-muted) !default;
+$form-disabled-background: var(--oc-color-surfaceDim) !default;
 $form-disabled-color: var(--oc-color-onSurfaceVariant) !default;
 
 $form-placeholder-color: var(--oc-color-onSurfaceVariant) !default;
@@ -78,7 +78,7 @@ $form-select-disabled-icon-color: var(--oc-color-onSurfaceVariant) !default;
 $form-datalist-padding-right: 20px !default;
 $form-datalist-icon-color: var(--oc-color-onSurface) !default;
 
-$form-radio-background: var(--oc-color-background-muted) !default;
+$form-radio-background: var(--oc-color-surfaceDim) !default;
 
 $form-radio-checked-background: $oc-color-swatch-primary-default !default;
 $form-radio-checked-icon-color: var(--oc-color-input-text-default) !default;

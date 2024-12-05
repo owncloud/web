@@ -45,7 +45,7 @@ export default defineComponent({
 <style lang="scss">
 .oc-avatar-count {
   align-items: center;
-  background-color: var(--oc-color-swatch-passive-default);
+  background-color: var(--oc-color-secondary);
   border-radius: 50%;
   color: var(--oc-color-inverseOnSurface);
   display: flex;

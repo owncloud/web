@@ -217,14 +217,14 @@ export default defineComponent({
         transition: background-color $transition-duration-short ease-in-out;
 
         &:not(span):hover {
-          background-color: var(--oc-color-swatch-passive-default);
+          background-color: var(--oc-color-secondary);
           color: var(--oc-color-inverseOnSurface);
           text-decoration: none;
         }
       }
 
       &-current {
-        background-color: var(--oc-color-swatch-passive-default);
+        background-color: var(--oc-color-secondary);
         color: var(--oc-color-inverseOnSurface);
         font-weight: bold;
       }

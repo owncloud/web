@@ -293,7 +293,7 @@ export default defineComponent({
   .action-menu-item {
     width: 100%;
     justify-content: flex-start;
-    color: var(--oc-color-swatch-passive-default);
+    color: var(--oc-color-secondary);
     gap: var(--oc-space-small);
   }
 }

@@ -117,12 +117,12 @@ hr {
 *:focus-visible:not(input[type=text]):not(input[type=textarea]):not(input[type=search]):not(input[type=password]):not(input[type=email]):not(input[type=date]) {
   outline: 2px var(--oc-color-swatch-passive-contrast) solid;
   outline-offset: 0;
-  box-shadow: 0 0 0 4px var(--oc-color-swatch-passive-default);
+  box-shadow: 0 0 0 4px var(--oc-color-secondary);
 }
 
 // inner outline for visible focus on resource names
 // outer outlines don't work because of the hidden overflow (due to text truncation)
 .oc-resource-details a:focus-visible,
 .oc-resource-details button:focus-visible {
-  box-shadow: inset 0px 0px 0px 2px var(--oc-color-swatch-passive-default) !important;
+  box-shadow: inset 0px 0px 0px 2px var(--oc-color-secondary) !important;
 }

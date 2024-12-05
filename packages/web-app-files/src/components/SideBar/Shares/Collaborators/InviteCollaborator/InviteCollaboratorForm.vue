@@ -636,7 +636,7 @@ export default defineComponent({
     }
 
     &-item:hover {
-      background-color: var(--oc-color-background-hover) !important;
+      background-color: var(--oc-color-surfaceContainerHigh) !important;
     }
 
     .oc-drop {

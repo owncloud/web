@@ -46,11 +46,11 @@ export default defineComponent({
 <style lang="scss">
 .ghost-element-layer1 {
   position: relative;
-  background-color: var(--oc-color-background-hover);
+  background-color: var(--oc-color-surfaceContainerHigh);
 
   .ghost-element-layer2 {
     position: absolute;
-    background-color: var(--oc-color-background-hover);
+    background-color: var(--oc-color-surfaceContainerHigh);
     filter: brightness(0.82);
     top: 3px;
     left: 3px;
@@ -60,7 +60,7 @@ export default defineComponent({
   }
   .ghost-element-layer3 {
     position: absolute;
-    background-color: var(--oc-color-background-hover);
+    background-color: var(--oc-color-surfaceContainerHigh);
     filter: brightness(0.72);
     top: 6px;
     left: 6px;

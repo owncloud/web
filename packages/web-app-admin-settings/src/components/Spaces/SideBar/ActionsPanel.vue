@@ -68,7 +68,7 @@ export default defineComponent({
 #oc-spaces-actions-sidebar {
   > li a,
   > li a:hover {
-    color: var(--oc-color-swatch-passive-default);
+    color: var(--oc-color-secondary);
     display: inline-flex;
     gap: 10px;
     vertical-align: top;

@@ -271,7 +271,7 @@ export default defineComponent({
   }
 
   &-passive > svg {
-    fill: var(--oc-color-swatch-passive-default);
+    fill: var(--oc-color-secondary);
   }
 
   &-warning > svg {

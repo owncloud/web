@@ -380,13 +380,13 @@ export default defineComponent({
 
     &:hover,
     &:focus {
-      background-color: var(--oc-color-background-hover);
+      background-color: var(--oc-color-surfaceContainerHigh);
       text-decoration: none;
     }
   }
 
   .selected span {
-    color: var(--oc-color-swatch-primary-contrast);
+    color: var(--oc-color-onPrimary);
   }
 }
 </style>

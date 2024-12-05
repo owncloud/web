@@ -544,7 +544,7 @@ $grid-divider-border: #e5e5e5 !default;
     Simple boxes
   </h3>
   <oc-grid>
-    <div style="width: 80px; height: 80px; background-color: var(--oc-color-swatch-passive-default)" class="oc-height-small"></div>
+    <div style="width: 80px; height: 80px; background-color: var(--oc-color-secondary)" class="oc-height-small"></div>
     <div style="width: 80px; height: 80px; background-color: var(--oc-color-swatch-success-default)" class="oc-height-small"></div>
     <div style="width: 80px; height: 80px; background-color: var(--oc-color-error)" class="oc-height-small"></div>
   </oc-grid>
@@ -554,12 +554,12 @@ $grid-divider-border: #e5e5e5 !default;
   </h3>
   <oc-grid gutter="large">
     <div class="oc-width-1-1 oc-width-large@l">
-      <div style="background-color: var(--oc-color-swatch-passive-default)" class="oc-p-m">
+      <div style="background-color: var(--oc-color-secondary)" class="oc-p-m">
         <p>Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.</p>
       </div>
     </div>
     <div class="oc-width-expand">
-      <div style="background-color: var(--oc-color-swatch-passive-default)" class="oc-p-m">
+      <div style="background-color: var(--oc-color-secondary)" class="oc-p-m">
         <p>I'm matching my neightbors height in @l viewports</p>
       </div>
     </div>
@@ -569,7 +569,7 @@ $grid-divider-border: #e5e5e5 !default;
     An application bar
   </h3>
 
-<div style="background-color: var(--oc-color-background-muted)" class="oc-p-s">
+<div style="background-color: var(--oc-color-surfaceDim)" class="oc-p-s">
   <oc-grid flex gutter="small">
     <div class="oc-width-expand">
       <oc-breadcrumb :items="[{text:'First',to:{path:'first'}},{text:'Second'},{text:'Third'}]" />

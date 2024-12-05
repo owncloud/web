@@ -342,7 +342,7 @@ export default defineComponent({
 
       &:hover,
       &-active {
-        background-color: var(--oc-color-background-hover) !important;
+        background-color: var(--oc-color-surfaceContainerHigh) !important;
       }
     }
 
@@ -359,15 +359,13 @@ export default defineComponent({
 
   &-range-panel {
     transform: translateX(100%);
-    transition:
-      transform 0.4s ease,
-      visibility 0.4s 0s;
+    transition: transform 0.4s ease, visibility 0.4s 0s;
     visibility: hidden;
     position: absolute;
     width: calc(100% - var(--oc-space-medium));
     background: #fff;
     top: 0;
-    color: var(--oc-color-swatch-passive-default);
+    color: var(--oc-color-secondary);
 
     &-active {
       visibility: unset;

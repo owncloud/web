@@ -116,7 +116,7 @@ export default defineComponent({
 
     &-primary {
       span {
-        color: var(--oc-color-swatch-primary-contrast);
+        color: var(--oc-color-onPrimary);
         background-color: var(--oc-color-primary);
       }
     }

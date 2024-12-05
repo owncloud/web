@@ -528,7 +528,7 @@ export default defineComponent({
   }
 
   &-hover tr:not(&-footer-row):hover {
-    background-color: var(--oc-color-background-hover);
+    background-color: var(--oc-color-surfaceContainerHigh);
   }
 
   &-highlighted {
@@ -536,11 +536,11 @@ export default defineComponent({
   }
 
   &-accentuated {
-    background-color: var(--oc-color-background-accentuate);
+    background-color: var(--oc-color-surfaceContainerHighaccentuate);
   }
 
   &-disabled {
-    background-color: var(--oc-color-background-muted);
+    background-color: var(--oc-color-surfaceDim);
     opacity: 0.7;
     filter: grayscale(0.6);
     pointer-events: none;
@@ -563,7 +563,7 @@ export default defineComponent({
   &-thead-content {
     vertical-align: middle;
     display: inline-table;
-    color: var(--oc-color-swatch-passive-default);
+    color: var(--oc-color-secondary);
     &:hover {
       text-decoration: underline;
     }
@@ -585,7 +585,7 @@ export default defineComponent({
   justify-content: start;
   .oc-icon {
     &:hover {
-      background-color: var(--oc-color-background-hover);
+      background-color: var(--oc-color-surfaceContainerHigh);
     }
   }
 }

@@ -511,7 +511,7 @@ export default defineComponent({
   .vs__open-indicator,
   .vs__search,
   .vs__selected {
-    background-color: var(--oc-color-background-muted) !important;
+    background-color: var(--oc-color-surfaceDim) !important;
     color: var(--oc-color-input-text-muted) !important;
     pointer-events: none;
   }
@@ -560,7 +560,7 @@ export default defineComponent({
     }
 
     &__selected-readonly {
-      background-color: var(--oc-color-background-muted) !important;
+      background-color: var(--oc-color-surfaceDim) !important;
     }
 
     &__search,
@@ -594,7 +594,7 @@ export default defineComponent({
 
       &--highlight,
       &--selected {
-        background-color: var(--oc-color-background-hover);
+        background-color: var(--oc-color-surfaceContainerHigh);
         color: var(--oc-color-primaryContainer);
       }
     }
@@ -643,12 +643,12 @@ export default defineComponent({
   &:focus-within {
     .vs__dropdown-menu,
     .vs__dropdown-toggle {
-      border-color: var(--oc-color-swatch-passive-default);
+      border-color: var(--oc-color-secondary);
     }
   }
 
   .keyboard-outline {
-    outline: 2px var(--oc-color-swatch-passive-default) solid !important;
+    outline: 2px var(--oc-color-secondary) solid !important;
     outline-offset: -2px;
   }
 }

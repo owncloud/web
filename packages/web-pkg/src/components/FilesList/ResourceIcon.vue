@@ -26,7 +26,7 @@ const defaultFolderIcon: IconType = {
 
 const defaultSpaceIcon: IconType = {
   name: 'layout-grid',
-  color: 'var(--oc-color-swatch-passive-default)'
+  color: 'var(--oc-color-secondary)'
 }
 const defaultFallbackIcon: IconType = {
   name: 'resource-type-file',

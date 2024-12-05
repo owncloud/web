@@ -238,7 +238,7 @@ export default defineComponent({
 
   &-disabled {
     pointer-events: none;
-    background-color: var(--oc-color-background-muted) !important;
+    background-color: var(--oc-color-surfaceDim) !important;
     opacity: 0.7;
     filter: grayscale(0.6);
 
@@ -291,7 +291,7 @@ export default defineComponent({
   }
 
   &-selected {
-    outline: 2px solid var(--oc-color-swatch-primary-hover);
+    outline: 2px solid var(--oc-color-onPrimaryContainer);
 
     .oc-tile-card-preview {
       width: calc(100% - var(--oc-space-medium));
@@ -315,7 +315,7 @@ export default defineComponent({
     left: 0;
 
     input {
-      background-color: var(--oc-color-background-muted);
+      background-color: var(--oc-color-surfaceDim);
     }
 
     input.oc-checkbox-checked {

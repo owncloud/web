@@ -98,7 +98,7 @@ export default defineComponent({
     width: 18px !important;
 
     svg {
-      fill: var(--oc-color-swatch-primary-contrast) !important;
+      fill: var(--oc-color-onPrimary) !important;
       height: 18px !important;
       max-height: 18px !important;
       max-width: 18px !important;

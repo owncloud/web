@@ -252,7 +252,7 @@ export default defineComponent({
   vertical-align: middle;
   border: 3px solid transparent;
   &:hover {
-    background-color: var(--oc-color-background-hover);
+    background-color: var(--oc-color-surfaceContainerHigh);
     border-radius: 3px;
   }
 }

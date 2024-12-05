@@ -136,12 +136,12 @@ export default defineComponent({
 
     &:hover,
     &:focus {
-      color: var(--oc-color-swatch-primary-hover);
+      color: var(--oc-color-onPrimaryContainer);
       cursor: pointer;
       text-decoration: none;
 
       .oc-icon > svg {
-        fill: var(--oc-color-swatch-primary-hover);
+        fill: var(--oc-color-onPrimaryContainer);
       }
     }
   }
