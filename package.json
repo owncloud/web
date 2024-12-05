@@ -19,7 +19,8 @@
     "vite": "vue-demi-fix && vite",
     "check:types": "pnpm build:tokens && vue-tsc --noEmit",
     "check:all": "pnpm check:types && pnpm lint --fix && pnpm test:unit",
-    "test:a11y": "playwright test -c tests/a11y/playwright.config.ts"
+    "test:a11y:e2e": "playwright test -c tests/a11y/playwright.config.ts",
+    "test:a11y:unit": "vitest packages/web-app-admin-settings/tests/unit/views/Users.a11y.spec.ts"
   },
   "browserslist": [
     "last 1 year",
