@@ -17,6 +17,7 @@ Summary
 * Bugfix - OCM share editing: [#12002](https://github.com/owncloud/web/pull/12002)
 * Bugfix - OCM share recipient issuer: [#12002](https://github.com/owncloud/web/pull/12002)
 * Bugfix - Missing activities on Shared with me page: [#12008](https://github.com/owncloud/web/pull/12008)
+* Bugfix - Show missing role name in link share panel: [#12012](https://github.com/owncloud/web/pull/12012)
 * Enhancement - Accessibility improvements: [#5379](https://github.com/owncloud/web/issues/5379)
 * Enhancement - Create spaces via admin settings: [#11849](https://github.com/owncloud/web/pull/11849)
 
@@ -94,6 +95,12 @@ Details
    We've added the missing activities on the Shared with me page.
 
    https://github.com/owncloud/web/pull/12008
+
+* Bugfix - Show missing role name in link share panel: [#12012](https://github.com/owncloud/web/pull/12012)
+
+   We've fixed a bug where the role name was missing in the link share panel.
+
+   https://github.com/owncloud/web/pull/12012
 
 * Enhancement - Accessibility improvements: [#5379](https://github.com/owncloud/web/issues/5379)
 
