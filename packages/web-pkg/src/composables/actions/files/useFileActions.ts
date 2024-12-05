@@ -121,7 +121,7 @@ export const useFileActions = () => {
             if (fileExtension.label) {
               return $gettext(fileExtension.label)
             }
-            return $gettext('Lol in %{app}', { app: appInfo.name }, true)
+            return $gettext('Open in %{app}', { app: appInfo.name }, true)
           },
           showOpenInNewTabHint: true,
           icon: fileExtension.icon || appInfo.icon,
