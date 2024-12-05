@@ -143,7 +143,7 @@ export default defineComponent({
     })
     const customPermissionsText = computed(() =>
       $gettext(
-        'Dear user, please replace this legacy role with one of the currently available role'
+        'Dear user, please replace this legacy role with one of the currently available roles'
       )
     )
 
