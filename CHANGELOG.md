@@ -20,6 +20,7 @@ Summary
 * Bugfix - Sidebar file info for shares: [#12010](https://github.com/owncloud/web/pull/12010)
 * Bugfix - Show missing role name in link share panel: [#12012](https://github.com/owncloud/web/pull/12012)
 * Bugfix - Missing translations for share type filters: [#12013](https://github.com/owncloud/web/pull/12013)
+* Bugfix - Permanent link for shares: [#12022](https://github.com/owncloud/web/pull/12022)
 * Enhancement - Accessibility improvements: [#5379](https://github.com/owncloud/web/issues/5379)
 * Enhancement - Create spaces via admin settings: [#11849](https://github.com/owncloud/web/pull/11849)
 
@@ -118,6 +119,13 @@ Details
    page.
 
    https://github.com/owncloud/web/pull/12013
+
+* Bugfix - Permanent link for shares: [#12022](https://github.com/owncloud/web/pull/12022)
+
+   We've fixed an issue where the permanent for shares could not be copied.
+
+   https://github.com/owncloud/web/issues/12001
+   https://github.com/owncloud/web/pull/12022
 
 * Enhancement - Accessibility improvements: [#5379](https://github.com/owncloud/web/issues/5379)
 
