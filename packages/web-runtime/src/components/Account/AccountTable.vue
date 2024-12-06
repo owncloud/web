@@ -4,7 +4,7 @@
       <h2 class="account-table-title" v-text="title" />
     </slot>
     <oc-table-simple>
-      <oc-thead class="oc-invisible-sr">
+      <oc-thead :class="{ 'oc-invisible-sr': !showHead }">
         <oc-tr>
           <oc-th v-for="field in fields" :key="field">{{ field }}</oc-th>
         </oc-tr>
@@ -29,7 +29,8 @@ export default defineComponent({
     fields: {
       type: Array<string>,
       required: true
-    }
+    },
+    showHead: { type: Boolean, required: false, default: false }
   }
 })
 </script>
