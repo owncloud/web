@@ -58,7 +58,7 @@ export default defineWebApplication({
         const provider = mimeType.app_providers.find((provider) => provider.name === appName)
         return {
           extension: mimeType.ext,
-          label: $gettext('Open in %{app}', { app: provider.name }),
+          label: () => $gettext('Open in %{app}', { app: provider.name }),
           icon: provider.icon,
           name: provider.name,
           mimeType: mimeType.mime_type,

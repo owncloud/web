@@ -1,4 +1,4 @@
-import { AppWrapperRoute, defineWebApplication } from '@ownclouders/web-pkg'
+import { ApplicationInformation, AppWrapperRoute, defineWebApplication } from '@ownclouders/web-pkg'
 import translations from '../l10n/translations.json'
 import * as app from './App.vue'
 import { useGettext } from 'vue3-gettext'
@@ -30,14 +30,14 @@ export default defineWebApplication({
 
     const routeName = 'preview-media'
 
-    const appInfo = {
+    const appInfo: ApplicationInformation = {
       name: $gettext('Preview'),
       id: appId,
       icon: 'eye',
       extensions: mimeTypes.map((mimeType) => ({
         mimeType,
         routeName,
-        label: $gettext('Preview')
+        label: () => $gettext('Preview')
       }))
     }
 
