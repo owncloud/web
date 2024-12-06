@@ -146,7 +146,7 @@
     "sass": "1.81.0",
     "semver": "7.6.3",
     "shelljs": "^0.8.3",
-    "style-dictionary": "^3.9.1",
+    "style-dictionary": "^4.0.0",
     "style-loader": "^4.0.0",
     "style-value-types": "^5.0.0",
     "stylelint-config-sass-guidelines": "^12.0.0",
