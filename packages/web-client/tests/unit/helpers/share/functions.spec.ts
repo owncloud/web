@@ -25,6 +25,7 @@ import {
   UnifiedRoleDefinition,
   User
 } from '../../../../src/graph/generated'
+import { urlJoin } from '../../../../src'
 
 describe('share helper functions', () => {
   describe('isShareResource', () => {
@@ -129,7 +130,7 @@ describe('share helper functions', () => {
     }
 
     it('sets ids based on the drive item, its first permission and parent reference', () => {
-      const result = buildIncomingShareResource({ driveItem, graphRoles })
+      const result = buildIncomingShareResource({ driveItem, graphRoles, serverUrl: '' })
 
       expect(result.id).toEqual(driveItem.id)
       expect(result.fileId).toEqual(driveItem.remoteItem.id)
@@ -140,22 +141,27 @@ describe('share helper functions', () => {
     it.each([true, false])('correctly detects if the resource is a folder', (isFolder) => {
       const item = { ...driveItem }
       item.folder = isFolder ? mock<DriveItem['folder']>() : undefined
-      const result = buildIncomingShareResource({ driveItem: item, graphRoles })
+      const result = buildIncomingShareResource({ driveItem: item, graphRoles, serverUrl: '' })
 
       expect(result.isFolder).toEqual(isFolder)
       expect(result.type).toEqual(isFolder ? 'folder' : 'file')
     })
     it('sets outgoing to false', () => {
-      const result = buildIncomingShareResource({ driveItem, graphRoles })
+      const result = buildIncomingShareResource({ driveItem, graphRoles, serverUrl: '' })
       expect(result.outgoing).toBeFalsy()
     })
     it('sets sharedBy based on the permission invitation', () => {
-      const result = buildIncomingShareResource({ driveItem, graphRoles })
+      const result = buildIncomingShareResource({ driveItem, graphRoles, serverUrl: '' })
       expect(result.sharedBy).toEqual([sharedBy])
     })
     it('sets sharedBy based on the permission invitation', () => {
-      const result = buildIncomingShareResource({ driveItem, graphRoles })
+      const result = buildIncomingShareResource({ driveItem, graphRoles, serverUrl: '' })
       expect(result.sharedWith).toEqual([{ ...sharedWith, shareType: ShareTypes.user.value }])
+    })
+    it('constructs a private link', () => {
+      const serverUrl = 'https://example.com'
+      const result = buildIncomingShareResource({ driveItem, graphRoles, serverUrl })
+      expect(result.privateLink).toEqual(urlJoin(serverUrl, 'f', driveItem.remoteItem.id))
     })
   })
 
@@ -174,7 +180,7 @@ describe('share helper functions', () => {
     const user = { id: '1', displayName: 'user1' } as User
 
     it('sets ids based on the drive item, its first permission and parent reference', () => {
-      const result = buildOutgoingShareResource({ driveItem, user })
+      const result = buildOutgoingShareResource({ driveItem, user, serverUrl: '' })
 
       expect(result.id).toEqual(driveItem.id)
       expect(result.fileId).toEqual(driveItem.id)
@@ -182,20 +188,25 @@ describe('share helper functions', () => {
       expect(result.parentFolderId).toEqual(driveItem.parentReference.id)
     })
     it('sets outgoing to true', () => {
-      const result = buildOutgoingShareResource({ driveItem, user })
+      const result = buildOutgoingShareResource({ driveItem, user, serverUrl: '' })
       expect(result.outgoing).toBeTruthy()
     })
     it('sets the path based on the parent reference path and the drive item name', () => {
-      const result = buildOutgoingShareResource({ driveItem, user })
+      const result = buildOutgoingShareResource({ driveItem, user, serverUrl: '' })
       expect(result.path).toEqual(`${driveItem.parentReference.path}/${driveItem.name}`)
     })
     it.each([true, false])('correctly detects if the resource is a folder', (isFolder) => {
       const item = { ...driveItem }
       item.folder = isFolder ? mock<DriveItem['folder']>() : undefined
-      const result = buildOutgoingShareResource({ driveItem: item, user })
+      const result = buildOutgoingShareResource({ driveItem: item, user, serverUrl: '' })
 
       expect(result.isFolder).toEqual(isFolder)
       expect(result.type).toEqual(isFolder ? 'folder' : 'file')
+    })
+    it('constructs a private link', () => {
+      const serverUrl = 'https://example.com'
+      const result = buildOutgoingShareResource({ driveItem, user, serverUrl })
+      expect(result.privateLink).toEqual(urlJoin(serverUrl, 'f', driveItem.id))
     })
   })
 

@@ -306,7 +306,8 @@ export default defineComponent({
                 ...fileInfo,
                 ...buildIncomingShareResource({
                   graphRoles: sharesStore.graphRoles,
-                  driveItem: sharedDriveItem
+                  driveItem: sharedDriveItem,
+                  serverUrl: configStore.serverUrl
                 }),
                 tags: fileInfo.tags // tags are always [] in Graph API, hence take them from webdav
               }

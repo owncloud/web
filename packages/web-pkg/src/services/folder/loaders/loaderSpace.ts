@@ -42,7 +42,8 @@ export class FolderLoaderSpace implements FolderLoader {
       userStore,
       authService,
       spacesStore,
-      sharesStore
+      sharesStore,
+      configStore
     } = context
     const { webdav, graphAuthenticated: graphClient } = clientService
     const { replaceInvalidFileRoute } = useFileRouteReplace({ router })
@@ -79,7 +80,8 @@ export class FolderLoaderSpace implements FolderLoader {
             if (sharedDriveItem) {
               currentFolder = buildIncomingShareResource({
                 graphRoles: sharesStore.graphRoles,
-                driveItem: sharedDriveItem
+                driveItem: sharedDriveItem,
+                serverUrl: configStore.serverUrl
               })
             }
           } else if (!isPersonalSpaceResource(space) && !isPublicSpaceResource(space)) {
