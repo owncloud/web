@@ -34,7 +34,13 @@ export class FolderLoaderSharedWithOthers implements FolderLoader {
 
       const resources = value
         .filter((s) => s.permissions.some(({ link }) => !link))
-        .map((driveItem) => buildOutgoingShareResource({ driveItem, user: userStore.user }))
+        .map((driveItem) =>
+          buildOutgoingShareResource({
+            driveItem,
+            user: userStore.user,
+            serverUrl: configStore.serverUrl
+          })
+        )
 
       resourcesStore.initResourceList({ currentFolder: null, resources })
     })

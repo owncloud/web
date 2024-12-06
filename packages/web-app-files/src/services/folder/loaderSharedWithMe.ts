@@ -33,7 +33,11 @@ export class FolderLoaderSharedWithMe implements FolderLoader {
       )
 
       const resources = value.map((driveItem) =>
-        buildIncomingShareResource({ driveItem, graphRoles: sharesStore.graphRoles })
+        buildIncomingShareResource({
+          driveItem,
+          graphRoles: sharesStore.graphRoles,
+          serverUrl: configStore.serverUrl
+        })
       )
 
       resourcesStore.initResourceList({ currentFolder: null, resources })
