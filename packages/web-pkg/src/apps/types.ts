@@ -56,7 +56,7 @@ export interface ApplicationFileExtension {
     currentFolder: Resource
   }) => Promise<Resource>
   hasPriority?: boolean
-  label?: string
+  label?: string | (() => string)
   name?: string
   icon?: string
   mimeType?: string

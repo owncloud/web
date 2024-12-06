@@ -119,7 +119,10 @@ export const useFileActions = () => {
           name: `editor-${fileExtension.app}`,
           label: () => {
             if (fileExtension.label) {
-              return $gettext(fileExtension.label)
+              if (typeof fileExtension.label === 'function') {
+                return fileExtension.label()
+              }
+              return fileExtension.label
             }
             return $gettext('Open in %{app}', { app: appInfo.name }, true)
           },
