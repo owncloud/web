@@ -2,6 +2,7 @@ import {
   ClientService,
   eventBus,
   PreviewService,
+  useConfigStore,
   useMessages,
   useResourcesStore,
   useSharesStore,
@@ -697,6 +698,7 @@ const getMocks = ({
   spacesStore.spaces = spaces
   const messageStore = useMessages()
   const userStore = useUserStore()
+  const configStore = useConfigStore()
   userStore.user = mockDeep<User>({ id: '1' })
   const sharesStore = useSharesStore()
   const clientService = mockDeep<ClientService>({ initiatorId: 'local1' })
@@ -734,6 +736,7 @@ const getMocks = ({
     messageStore,
     userStore,
     sharesStore,
+    configStore,
     clientService,
     previewService,
     resourceQueue,
