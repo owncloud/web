@@ -106,6 +106,7 @@ import { useGetMatchingSpace } from '@ownclouders/web-pkg'
 import SharesNavigation from '../../components/AppBar/SharesNavigation.vue'
 import { OutgoingShareResource, ShareTypes } from '@ownclouders/web-client'
 import { storeToRefs } from 'pinia'
+import { useGettext } from 'vue3-gettext'
 
 export default defineComponent({
   components: {
@@ -128,6 +129,7 @@ export default defineComponent({
     const configStore = useConfigStore()
     const appsStore = useAppsStore()
     const { options: configOptions } = storeToRefs(configStore)
+    const { $gettext } = useGettext()
 
     const resourcesStore = useResourcesStore()
 
@@ -150,7 +152,13 @@ export default defineComponent({
         uniqueShareTypes.push(ShareTypes.remote.value)
       }
 
-      return ShareTypes.getByValues(uniqueShareTypes)
+      return ShareTypes.getByValues(uniqueShareTypes).map((shareType) => {
+        return {
+          key: shareType.key,
+          value: shareType.value,
+          label: $gettext(shareType.label)
+        }
+      })
     })
     const selectedShareTypesQuery = useRouteQuery('q_shareType')
     const filteredItems = computed(() => {
