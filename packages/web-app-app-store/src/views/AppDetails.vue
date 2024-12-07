@@ -97,7 +97,7 @@ export default defineComponent({
 
 <style lang="scss">
 .app-details {
-  background-color: var(--oc-color-background-highlight);
+  background-color: var(--oc-color-surfaceBright);
   box-shadow: none;
   max-width: 600px;
   margin: 0 auto;

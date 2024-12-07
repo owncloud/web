@@ -106,8 +106,8 @@ export default defineComponent({
   user-select: none;
 
   .oc-tag {
-    color: var(--oc-color-text-default);
-    background-color: var(--oc-color-background-highlight);
+    color: var(--oc-color-onSurface);
+    background-color: var(--oc-color-surfaceBright);
   }
   .text {
     opacity: 1;
@@ -119,7 +119,7 @@ export default defineComponent({
   }
 
   &:hover:not(.active) {
-    color: var(--oc-color-swatch-brand-hover) !important;
+    color: var(--oc-color-primaryContainer) !important;
   }
 
   &:hover,

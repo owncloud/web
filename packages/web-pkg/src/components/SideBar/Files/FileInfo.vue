@@ -82,7 +82,7 @@ export default defineComponent({
         fill: #ffba0a !important;
 
         path:not([fill='none']) {
-          stroke: var(--oc-color-swatch-passive-default);
+          stroke: var(--oc-color-secondary);
         }
       }
     }

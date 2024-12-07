@@ -141,7 +141,7 @@ body {
 }
 
 #web {
-  background-color: var(--oc-color-swatch-brand-default);
+  background-color: var(--oc-color-primary);
   height: 100vh;
   max-height: 100vh;
   overflow-y: hidden;

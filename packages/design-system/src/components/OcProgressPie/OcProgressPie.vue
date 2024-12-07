@@ -92,8 +92,8 @@ $default-size: 64px;
 
     &::before,
     &::after {
-      border: calc($default-size / 10) solid var(--oc-color-swatch-brand-default);
-      border-color: var(--oc-color-swatch-brand-default);
+      border: calc($default-size / 10) solid var(--oc-color-primary);
+      border-color: var(--oc-color-primary);
       border-radius: 50%;
       clip: rect(0, calc($default-size / 2), $default-size, 0);
       content: '';
@@ -107,7 +107,7 @@ $default-size: 64px;
   }
 
   &-label {
-    color: var(--oc-color-text-muted) !important;
+    color: var(--oc-color-onSurfaceVariant) !important;
     left: 50%;
     position: absolute;
     top: 50%;

@@ -230,7 +230,7 @@ export default defineComponent({
 }
 
 .preview-controls-action-count {
-  color: var(--oc-color-swatch-brand-contrast);
+  color: var(--oc-color-background);
 }
 
 .preview-controls-image-original-size {

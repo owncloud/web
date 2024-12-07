@@ -252,7 +252,7 @@ export default defineComponent({
   vertical-align: middle;
   border: 3px solid transparent;
   &:hover {
-    background-color: var(--oc-color-background-hover);
+    background-color: var(--oc-color-surfaceContainerHigh);
     border-radius: 3px;
   }
 }
@@ -291,7 +291,7 @@ export default defineComponent({
   &::-webkit-slider-thumb {
     -webkit-appearance: none;
     appearance: none;
-    background: var(--oc-color-swatch-primary-default);
+    background: var(--oc-color-primary);
     border-radius: 50%;
     cursor: pointer;
     height: 1rem;
@@ -299,7 +299,7 @@ export default defineComponent({
   }
 
   &::-moz-range-thumb {
-    background: var(--oc-color-swatch-primary-default);
+    background: var(--oc-color-primary);
     border-radius: 50%;
     cursor: pointer;
     height: 1rem;

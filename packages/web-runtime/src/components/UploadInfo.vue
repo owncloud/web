@@ -706,7 +706,7 @@ export default defineComponent({
 
 <style lang="scss">
 #upload-info {
-  background-color: var(--oc-color-background-secondary);
+  background-color: var(--oc-color-background);
   width: 400px;
 
   @media (max-width: 640px) {
@@ -720,15 +720,15 @@ export default defineComponent({
   }
 
   .upload-info-title {
-    background-color: var(--oc-color-swatch-brand-default);
+    background-color: var(--oc-color-primary);
   }
 
   .upload-info-title p {
-    color: var(--oc-color-swatch-brand-contrast);
+    color: var(--oc-color-background);
   }
 
   .oc-resource-indicators .parent-folder .text {
-    color: var(--oc-color-text-default);
+    color: var(--oc-color-onSurface);
   }
 
   .upload-info-items {
@@ -741,7 +741,7 @@ export default defineComponent({
   }
 
   .upload-info-danger {
-    color: var(--oc-color-swatch-danger-default);
+    color: var(--oc-color-error);
   }
 
   .upload-info-success {

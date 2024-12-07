@@ -96,6 +96,19 @@ export const useThemeStore = defineStore('theme', () => {
 
   const availableThemes = ref<WebThemeType[]>([])
 
+  const resetAllThemes = () => {
+    availableThemes.value = []
+    currentTheme.value = undefined
+  }
+
+  const initializeMdThemes = (themeConfig: unknown) => {
+    availableThemes.value = Object.keys(themeConfig).map((key) => {
+      return themeConfig[key]
+    })
+
+    setThemeFromStorageOrSystem()
+  }
+
   const initializeThemes = (themeConfig: WebThemeConfigType) => {
     availableThemes.value = themeConfig.themes.map((theme) => merge(themeConfig.defaults, theme))
     setThemeFromStorageOrSystem()
@@ -155,6 +168,8 @@ export const useThemeStore = defineStore('theme', () => {
     availableThemes,
     currentTheme,
     initializeThemes,
+    initializeMdThemes,
+    resetAllThemes,
     setAndApplyTheme,
     setAutoSystemTheme,
     isCurrentThemeAutoSystem,
