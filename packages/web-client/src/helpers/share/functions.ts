@@ -91,10 +91,12 @@ export const getShareResourcePermissions = ({
 
 export function buildIncomingShareResource({
   driveItem,
-  graphRoles
+  graphRoles,
+  serverUrl
 }: {
   driveItem: DriveItem
   graphRoles: Record<string, ShareRole>
+  serverUrl: string
 }): IncomingShareResource {
   const resourceName = driveItem.name || driveItem.remoteItem.name
   const storageId = extractStorageId(driveItem.remoteItem.id)
@@ -146,11 +148,15 @@ export function buildIncomingShareResource({
     isFolder: !!driveItem.folder,
     type: !!driveItem.folder ? 'folder' : 'file',
     mimeType: driveItem.file?.mimeType || 'httpd/unix-directory',
+    mdate: driveItem.lastModifiedDateTime
+      ? new Date(driveItem.lastModifiedDateTime).toUTCString()
+      : undefined,
     syncEnabled: driveItem['@client.synchronize'],
     hidden: driveItem['@UI.Hidden'],
     shareRoles,
     sharePermissions,
     outgoing: false,
+    privateLink: urlJoin(serverUrl, 'f', driveItem.remoteItem.id),
     canRename: () => driveItem['@client.synchronize'],
     canDownload: () => sharePermissions.includes(GraphSharePermission.readContent),
     canUpload: () => sharePermissions.includes(GraphSharePermission.createUpload),
@@ -171,10 +177,12 @@ export function buildIncomingShareResource({
 
 export function buildOutgoingShareResource({
   driveItem,
-  user
+  user,
+  serverUrl
 }: {
   driveItem: DriveItem
   user: User
+  serverUrl: string
 }): OutgoingShareResource {
   const storageId = extractStorageId(driveItem.id)
   const path = urlJoin(driveItem.parentReference.path, driveItem.name)
@@ -210,6 +218,7 @@ export function buildOutgoingShareResource({
     type: !!driveItem.folder ? 'folder' : 'file',
     mimeType: driveItem.file?.mimeType || 'httpd/unix-directory',
     outgoing: true,
+    privateLink: urlJoin(serverUrl, 'f', driveItem.id),
     canRename: () => true,
     canDownload: () => true,
     canUpload: () => true,

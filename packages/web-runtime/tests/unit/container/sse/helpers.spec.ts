@@ -3,6 +3,7 @@ import { createTestingPinia } from '@ownclouders/web-test-helpers'
 import {
   ClientService,
   PreviewService,
+  useConfigStore,
   useMessages,
   useResourcesStore,
   useSharesStore,
@@ -109,6 +110,7 @@ const getMocks = ({
   const spacesStore = useSpacesStore()
   const messageStore = useMessages()
   const userStore = useUserStore()
+  const configStore = useConfigStore()
   const sharesStore = useSharesStore()
   const clientService = mockDeep<ClientService>()
   const previewService = mockDeep<PreviewService>()
@@ -123,6 +125,7 @@ const getMocks = ({
     messageStore,
     userStore,
     sharesStore,
+    configStore,
     clientService,
     previewService,
     resourceQueue,

@@ -123,6 +123,7 @@ export const onSSEShareCreatedEvent = async ({
   spacesStore,
   sharesStore,
   userStore,
+  configStore,
   clientService,
   router
 }: SSEEventOptions) => {
@@ -168,7 +169,11 @@ export const onSSEShareCreatedEvent = async ({
     if (!driveItem) {
       return
     }
-    const resource = buildIncomingShareResource({ driveItem, graphRoles: sharesStore.graphRoles })
+    const resource = buildIncomingShareResource({
+      driveItem,
+      graphRoles: sharesStore.graphRoles,
+      serverUrl: configStore.serverUrl
+    })
     return resourcesStore.upsertResource(resource)
   }
 
@@ -179,7 +184,11 @@ export const onSSEShareCreatedEvent = async ({
     if (!driveItem) {
       return
     }
-    const resource = buildOutgoingShareResource({ driveItem, user: userStore.user })
+    const resource = buildOutgoingShareResource({
+      driveItem,
+      user: userStore.user,
+      serverUrl: configStore.serverUrl
+    })
     return resourcesStore.upsertResource(resource)
   }
 }
@@ -189,6 +198,7 @@ export const onSSEShareUpdatedEvent = async ({
   sharesStore,
   clientService,
   userStore,
+  configStore,
   router
 }: SSEEventOptions) => {
   if (sseData.initiatorid === clientService.initiatorId) {
@@ -211,7 +221,11 @@ export const onSSEShareUpdatedEvent = async ({
     if (!driveItem) {
       return
     }
-    const resource = buildIncomingShareResource({ driveItem, graphRoles: sharesStore.graphRoles })
+    const resource = buildIncomingShareResource({
+      driveItem,
+      graphRoles: sharesStore.graphRoles,
+      serverUrl: configStore.serverUrl
+    })
     return resourcesStore.upsertResource(resource)
   }
 }
@@ -308,6 +322,7 @@ export const onSSELinkCreatedEvent = async ({
   resourcesStore,
   spacesStore,
   userStore,
+  configStore,
   clientService,
   router
 }: SSEEventOptions) => {
@@ -353,7 +368,11 @@ export const onSSELinkCreatedEvent = async ({
     if (!driveItem) {
       return
     }
-    const resource = buildOutgoingShareResource({ driveItem, user: userStore.user })
+    const resource = buildOutgoingShareResource({
+      driveItem,
+      user: userStore.user,
+      serverUrl: configStore.serverUrl
+    })
     return resourcesStore.upsertResource(resource)
   }
 }

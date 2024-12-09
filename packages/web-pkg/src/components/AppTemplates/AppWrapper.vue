@@ -69,7 +69,8 @@ import {
   FileActionOptions,
   FileAction,
   useLoadingService,
-  useFileActionsSaveAs
+  useFileActionsSaveAs,
+  useSharesStore
 } from '../../composables'
 import {
   Action,
@@ -82,6 +83,7 @@ import {
 import {
   Resource,
   SpaceResource,
+  buildIncomingShareResource,
   call,
   isPersonalSpaceResource,
   isProjectSpaceResource,
@@ -92,7 +94,7 @@ import { HttpError } from '@ownclouders/web-client'
 import { dirname } from 'path'
 import { useFileActionsOpenWithApp } from '../../composables/actions/files/useFileActionsOpenWithApp'
 import { UnsavedChangesModal } from '../Modals'
-import { formatFileSize } from '../../helpers'
+import { formatFileSize, getSharedDriveItem } from '../../helpers'
 import toNumber from 'lodash-es/toNumber'
 
 export default defineComponent({
@@ -146,6 +148,7 @@ export default defineComponent({
     const spacesStore = useSpacesStore()
     const configStore = useConfigStore()
     const resourcesStore = useResourcesStore()
+    const sharesStore = useSharesStore()
 
     const { actions: openWithAppActions } = useFileActionsOpenWithApp({
       appId: props.applicationId
@@ -281,11 +284,35 @@ export default defineComponent({
           yield addMissingDriveAliasAndItem()
         }
         space.value = unref(unref(currentFileContext).space)
-        resource.value = yield getFileInfo(unref(currentFileContext), { signal })
+        const fileInfo = yield getFileInfo(unref(currentFileContext), { signal })
+        resource.value = fileInfo
 
-        //FIXME: As soon the backend exposes oc-remote-id via webdav, remove the assignment below
         if (isShareSpaceResource(unref(space))) {
+          // FIXME: As soon the backend exposes oc-remote-id via webdav, remove the assignment below
           unref(resource).remoteItemId = unref(space).id
+
+          if (unref(resource).id === unref(resource).remoteItemId) {
+            // use graph api to build incoming share resource
+            const sharedDriveItem = yield* call(
+              getSharedDriveItem({
+                graphClient: clientService.graphAuthenticated,
+                spacesStore,
+                space: unref(space)
+              })
+            )
+
+            if (sharedDriveItem) {
+              resource.value = {
+                ...fileInfo,
+                ...buildIncomingShareResource({
+                  graphRoles: sharesStore.graphRoles,
+                  driveItem: sharedDriveItem,
+                  serverUrl: configStore.serverUrl
+                }),
+                tags: fileInfo.tags // tags are always [] in Graph API, hence take them from webdav
+              }
+            }
+          }
         }
         resourcesStore.initResourceList({ currentFolder: null, resources: [unref(resource)] })
         selectedResources.value = [unref(resource)]

@@ -34,6 +34,11 @@
         class="files-collaborators-autocomplete-additionalInfo"
         v-text="`${additionalInfo}`"
       />
+      <div
+        v-if="externalIssuer"
+        class="files-collaborators-autocomplete-externalIssuer"
+        v-text="`${externalIssuer}`"
+      />
     </div>
   </div>
 </template>
@@ -56,7 +61,14 @@ export default {
       return props.item.mail || props.item.onPremisesSamAccountName
     })
 
-    return { additionalInfo }
+    const externalIssuer = computed(() => {
+      if (props.item.shareType === ShareTypes.remote.value) {
+        return props.item.identities?.[0]?.issuer
+      }
+      return ''
+    })
+
+    return { additionalInfo, externalIssuer }
   },
   computed: {
     shareType() {
@@ -87,7 +99,8 @@ export default {
 </script>
 
 <style lang="scss">
-.files-collaborators-autocomplete-additionalInfo {
+.files-collaborators-autocomplete-additionalInfo,
+.files-collaborators-autocomplete-externalIssuer {
   font-size: var(--oc-font-size-small);
 }
 </style>

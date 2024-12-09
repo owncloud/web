@@ -1,0 +1,5 @@
+Bugfix: Missing activities on Shared with me page
+
+We've added the missing activities on the Shared with me page.
+
+https://github.com/owncloud/web/pull/12008

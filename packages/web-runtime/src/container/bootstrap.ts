@@ -754,6 +754,7 @@ export const registerSSEEventListeners = ({
     messageStore,
     userStore,
     sharesStore,
+    configStore,
     clientService,
     previewService,
     language,

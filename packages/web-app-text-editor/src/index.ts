@@ -25,39 +25,39 @@ export default defineWebApplication({
       const extensions: ApplicationFileExtension[] = [
         {
           extension: 'txt',
-          label: $gettext('Plain text file')
+          label: () => $gettext('Plain text file')
         },
         {
           extension: 'md',
-          label: $gettext('Markdown file')
+          label: () => $gettext('Markdown file')
         },
         {
           extension: 'markdown',
-          label: $gettext('Markdown file')
+          label: () => $gettext('Markdown file')
         },
         {
           extension: 'js',
-          label: $gettext('JavaScript file')
+          label: () => $gettext('JavaScript file')
         },
         {
           extension: 'json',
-          label: $gettext('JSON file')
+          label: () => $gettext('JSON file')
         },
         {
           extension: 'xml',
-          label: $gettext('XML file')
+          label: () => $gettext('XML file')
         },
         {
           extension: 'py',
-          label: $gettext('Python file')
+          label: () => $gettext('Python file')
         },
         {
           extension: 'php',
-          label: $gettext('PHP file')
+          label: () => $gettext('PHP file')
         },
         {
           extension: 'yaml',
-          label: $gettext('YAML file')
+          label: () => $gettext('YAML file')
         }
       ]
 
@@ -75,7 +75,10 @@ export default defineWebApplication({
         if (isPrimary) {
           extensionItem.newFileMenu = {
             menuTitle() {
-              return $gettext(extensionItem.label)
+              if (typeof extensionItem.label === 'function') {
+                return extensionItem.label()
+              }
+              return extensionItem.label
             }
           }
         }

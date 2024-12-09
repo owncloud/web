@@ -252,7 +252,13 @@ export default defineComponent({
         uniqueShareTypes.push(ShareTypes.remote.value)
       }
 
-      return ShareTypes.getByValues(uniqueShareTypes)
+      return ShareTypes.getByValues(uniqueShareTypes).map((shareType) => {
+        return {
+          key: shareType.key,
+          value: shareType.value,
+          label: $gettext(shareType.label)
+        }
+      })
     })
 
     const fileOwners = computed(() => {

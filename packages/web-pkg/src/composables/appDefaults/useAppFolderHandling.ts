@@ -9,7 +9,7 @@ import { useFileRouteReplace } from '../router/useFileRouteReplace'
 import { DavProperty } from '@ownclouders/web-client/webdav'
 import { useAuthService } from '../authContext/useAuthService'
 import { isMountPointSpaceResource } from '@ownclouders/web-client'
-import { useResourcesStore, useSharesStore, useSpacesStore } from '../piniaStores'
+import { useConfigStore, useResourcesStore, useSharesStore, useSpacesStore } from '../piniaStores'
 import { storeToRefs } from 'pinia'
 
 interface AppFolderHandlingOptions {
@@ -35,6 +35,7 @@ export function useAppFolderHandling({
   const authService = useAuthService()
   const spacesStore = useSpacesStore()
   const sharesStore = useSharesStore()
+  const configStore = useConfigStore()
 
   const resourcesStore = useResourcesStore()
   const { activeResources } = storeToRefs(resourcesStore)
@@ -52,7 +53,11 @@ export function useAppFolderHandling({
         const driveItems = await graphAuthenticated.driveItems.listSharedWithMe()
 
         const resources = driveItems.map((driveItem) =>
-          buildIncomingShareResource({ driveItem, graphRoles: sharesStore.graphRoles })
+          buildIncomingShareResource({
+            driveItem,
+            graphRoles: sharesStore.graphRoles,
+            serverUrl: configStore.serverUrl
+          })
         )
 
         resourcesStore.initResourceList({ currentFolder: null, resources })

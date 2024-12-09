@@ -1,0 +1,6 @@
+Bugfix: Permanent link for shares
+
+We've fixed an issue where the permanent for shares could not be copied.
+
+https://github.com/owncloud/web/pull/12022
+https://github.com/owncloud/web/issues/12001

@@ -1,0 +1,6 @@
+Bugfix: Use only space resource with `driveType` "project" as space in sidebar
+
+We've fixed the issue where any selected resource got passed to the sidebar as a space in Spaces page. Now only space resource with `driveType` "project" will be passed as a space.
+
+https://github.com/owncloud/web/pull/12000
+https://github.com/owncloud/web/issues/11978

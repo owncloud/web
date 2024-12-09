@@ -295,11 +295,14 @@ export default defineComponent({
       })
     })
 
-    onMounted(async () => {
+    const setInitialSelectedRole = () => {
       selectedRole.value = unref(isExternalShareRoleType)
         ? unref(availableExternalRoles)[0]
         : unref(availableInternalRoles)[0]
+    }
 
+    onMounted(async () => {
+      setInitialSelectedRole()
       await nextTick()
       markInstance.value = new Mark('.mark-element')
     })
@@ -479,6 +482,7 @@ export default defineComponent({
         }
       }
       focusShareInput()
+      setInitialSelectedRole()
     }
 
     const focusShareInput = () => {
