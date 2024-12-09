@@ -52,7 +52,7 @@ export default defineComponent({
     iconColor: {
       type: String,
       required: false,
-      default: 'var(--oc-color-text-inverse)'
+      default: 'var(--oc-color-inverseOnSurface)'
     },
     /**
      * Fill-type that should be used for the icon
@@ -77,7 +77,7 @@ export default defineComponent({
     background: {
       type: String,
       required: false,
-      default: 'var(--oc-color-swatch-passive-default)'
+      default: 'var(--oc-color-secondary)'
     },
     /**
      * Accessibility label used as alt. Use only in case the avatar is used alone.

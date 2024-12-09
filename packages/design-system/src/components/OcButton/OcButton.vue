@@ -391,7 +391,7 @@ export default defineComponent({
 
   &-passive {
     @include oc-button-variation(
-      var(--oc-color-swatch-passive-default),
+      var(--oc-color-secondary),
       var(--oc-color-swatch-passive-hover),
       var(--oc-color-swatch-passive-muted),
       var(--oc-color-swatch-passive-contrast)
@@ -400,12 +400,12 @@ export default defineComponent({
     &-outline {
       &:focus:not([disabled]),
       &:hover:not([disabled]) {
-        color: var(--oc-color-swatch-passive-default);
+        color: var(--oc-color-secondary);
         background-color: var(--oc-color-swatch-passive-hover-outline);
         border-color: var(--oc-color-swatch-passive-hover-outline);
 
         .oc-icon > svg {
-          fill: var(--oc-color-swatch-passive-default);
+          fill: var(--oc-color-secondary);
         }
       }
     }
@@ -413,27 +413,27 @@ export default defineComponent({
 
   &-brand {
     @include oc-button-variation(
-      var(--oc-color-swatch-brand-default),
-      var(--oc-color-swatch-brand-hover),
-      var(--oc-color-swatch-brand-muted),
-      var(--oc-color-swatch-brand-contrast)
+      var(--oc-color-primary),
+      var(--oc-color-primaryContainer),
+      var(--oc-color-primaryFixedDim),
+      var(--oc-color-background)
     );
   }
 
   &-primary {
     @include oc-button-variation(
-      var(--oc-color-swatch-primary-default),
-      var(--oc-color-swatch-primary-hover),
-      var(--oc-color-swatch-primary-muted),
-      var(--oc-color-swatch-primary-contrast)
+      var(--oc-color-primary),
+      var(--oc-color-onPrimaryContainer),
+      var(--oc-color-primaryContainer),
+      var(--oc-color-onPrimary)
     );
 
     &-filled {
-      color: var(--oc-color-swatch-primary-contrast) !important;
+      color: var(--oc-color-onPrimary) !important;
       @include oc-background-primary-gradient;
 
       span > svg {
-        fill: var(--oc-color-swatch-primary-contrast) !important;
+        fill: var(--oc-color-onPrimary) !important;
       }
     }
   }
@@ -449,25 +449,25 @@ export default defineComponent({
 
   &-warning {
     @include oc-button-variation(
-      var(--oc-color-swatch-warning-default),
-      var(--oc-color-swatch-warning-hover),
-      var(--oc-color-swatch-warning-muted),
-      var(--oc-color-swatch-warning-contrast)
+      var(--oc-color-error),
+      var(--oc-color-errorContainer),
+      var(--oc-color-onErrorContainer),
+      var(--oc-color-onError)
     );
   }
 
   &-danger {
     @include oc-button-variation(
-      var(--oc-color-swatch-danger-default),
+      var(--oc-color-error),
       var(--oc-color-swatch-danger-hover),
       var(--oc-color-swatch-danger-muted),
-      var(--oc-color-swatch-danger-contrast)
+      var(--oc-color-onError)
     );
 
     &-filled:hover {
-      color: var(--oc-color-swatch-danger-default) !important;
+      color: var(--oc-color-error) !important;
       span > svg {
-        fill: var(--oc-color-swatch-danger-default) !important;
+        fill: var(--oc-color-error) !important;
       }
     }
   }
@@ -480,7 +480,7 @@ export default defineComponent({
   &-group {
     display: inline-flex;
     flex-flow: row wrap;
-    outline: 1px solid var(--oc-color-swatch-passive-default);
+    outline: 1px solid var(--oc-color-secondary);
     outline-offset: -1px;
     border-radius: 5px;
 
@@ -502,12 +502,12 @@ export default defineComponent({
 
         &:first-of-type {
           // TODO: Implement color variations if button group should be used again
-          border-left: 1px solid var(--oc-color-swatch-primary-default);
+          border-left: 1px solid var(--oc-color-primary);
         }
 
         &:last-of-type {
           // TODO: Implement color variations if button group should be used again
-          border-right: 1px solid var(--oc-color-swatch-primary-default);
+          border-right: 1px solid var(--oc-color-primary);
         }
       }
     }

@@ -317,7 +317,7 @@ export default defineComponent({
   &-icon {
     align-items: center;
     bottom: 0;
-    color: var(--oc-color-text-muted);
+    color: var(--oc-color-onSurfaceVariant);
     display: inline-flex;
     justify-content: center;
     left: 0;

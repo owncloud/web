@@ -183,8 +183,8 @@ export default defineComponent({
     const to = this.target
       ? document.querySelector(this.target)
       : this.toggle
-        ? document.querySelector(this.toggle)
-        : this.$el.previousElementSibling
+      ? document.querySelector(this.toggle)
+      : this.$el.previousElementSibling
     const content = this.$refs.drop
 
     if (!to || !content) {
@@ -274,18 +274,18 @@ export default defineComponent({
     button:not([role='switch']) {
       box-sizing: border-box;
       padding: var(--oc-space-small);
-      color: var(--oc-color-swatch-passive-default);
+      color: var(--oc-color-secondary);
 
       &:focus:not([disabled]),
       &:hover:not([disabled]) {
-        background-color: var(--oc-color-background-hover);
+        background-color: var(--oc-color-surfaceContainerHigh);
 
         text-decoration: none !important;
         border-radius: 5px;
       }
 
       &:hover span {
-        color: var(--oc-color-swatch-brand-hover) !important;
+        color: var(--oc-color-primaryContainer) !important;
       }
 
       span {

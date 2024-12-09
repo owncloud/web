@@ -381,7 +381,7 @@ export default defineComponent({
 
 .oc-text-input {
   &-description {
-    color: var(--oc-color-text-muted);
+    color: var(--oc-color-onSurfaceVariant);
   }
 
   &-success,
@@ -392,14 +392,14 @@ export default defineComponent({
 
   &-warning,
   &-warning:focus {
-    border-color: var(--oc-color-swatch-warning-default) !important;
-    color: var(--oc-color-swatch-warning-default) !important;
+    border-color: var(--oc-color-error) !important;
+    color: var(--oc-color-error) !important;
   }
 
   &-danger,
   &-danger:focus {
-    border-color: var(--oc-color-swatch-danger-default) !important;
-    color: var(--oc-color-swatch-danger-default) !important;
+    border-color: var(--oc-color-error) !important;
+    color: var(--oc-color-error) !important;
   }
 
   &-message {

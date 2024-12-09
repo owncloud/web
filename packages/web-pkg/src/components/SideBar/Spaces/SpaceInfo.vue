@@ -36,11 +36,11 @@ export default defineComponent({
   grid-template-columns: auto 1fr auto;
   align-items: center;
   grid-gap: 5px;
-  background-color: var(--oc-color-background-default);
+  background-color: var(--oc-color-background);
   padding: var(--oc-space-small) var(--oc-space-small) 0 var(--oc-space-small);
 
   &.sidebar-panel__space_info {
-    border-bottom: 1px solid var(--oc-color-border);
+    border-bottom: 1px solid var(--oc-color-outlineVariant);
   }
 
   &__body {

@@ -593,7 +593,7 @@ export default defineComponent({
   overflow-y: auto;
 
   #account-page-title {
-    border-bottom: 1px solid var(--oc-color-border);
+    border-bottom: 1px solid var(--oc-color-outlineVariant);
   }
 
   .account-page {

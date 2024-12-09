@@ -3,8 +3,7 @@
     id="files-toggle-sidebar"
     v-oc-tooltip="buttonLabel"
     :aria-label="buttonLabel"
-    appearance="raw-inverse"
-    variation="brand"
+    appearance="raw"
     class="oc-my-s"
     @click.stop="toggleSideBar"
   >

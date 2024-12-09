@@ -6,9 +6,9 @@
 .oc-card {
   @extend .oc-rounded;
 
-  background-color: var(--oc-color-background-highlight);
+  background-color: var(--oc-color-surfaceBright);
   box-sizing: border-box;
-  color: var(--oc-color-text-default);
+  color: var(--oc-color-onSurface);
   position: relative;
   transition: box-shadow 0.1s ease-in-out;
 }

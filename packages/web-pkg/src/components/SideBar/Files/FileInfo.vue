@@ -57,7 +57,6 @@ export default defineComponent({
 <style lang="scss">
 .file_info {
   &.sidebar-panel__file_info {
-    border-bottom: 1px solid var(--oc-color-border);
   }
 
   button {
@@ -82,7 +81,7 @@ export default defineComponent({
         fill: #ffba0a !important;
 
         path:not([fill='none']) {
-          stroke: var(--oc-color-swatch-passive-default);
+          stroke: var(--oc-color-secondary);
         }
       }
     }

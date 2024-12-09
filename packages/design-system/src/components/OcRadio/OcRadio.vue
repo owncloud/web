@@ -128,7 +128,7 @@ export default defineComponent({
   -webkit-appearance: none;
   -moz-appearance: none;
 
-  border: 1px solid var(--oc-color-swatch-brand-default);
+  border: 1px solid var(--oc-color-primary);
   border-radius: 50%;
   box-sizing: border-box;
   background-color: var(--oc-color-input-bg);
@@ -149,7 +149,7 @@ export default defineComponent({
   }
 
   &:checked {
-    background-color: var(--oc-color-background-highlight) !important;
+    background-color: var(--oc-color-surfaceBright) !important;
   }
 
   &.oc-radio-s {

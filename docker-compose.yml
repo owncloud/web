@@ -69,6 +69,8 @@ x-ocis-server: &ocis-service
     OCM_OCM_SHARE_PROVIDER_INSECURE: 'true'
     OCM_OCM_STORAGE_PROVIDER_INSECURE: 'true'
 
+    WEB_UI_THEME_PATH: './packages/web-runtime/themes/theme.json'
+
   extra_hosts:
     - host.docker.internal:${DOCKER_HOST:-host-gateway}
     - ocis.owncloud.test:${DOCKER_HOST:-host-gateway}
