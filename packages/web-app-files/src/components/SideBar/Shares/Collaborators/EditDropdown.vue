@@ -287,7 +287,7 @@ export default defineComponent({
 .collaborator-edit-dropdown-options-list {
   &-remove {
     margin-top: var(--oc-space-small) !important;
-    border-top: 1px solid var(--oc-color-border) !important;
+    border-top: 1px solid var(--oc-color-outlineVariant) !important;
   }
 
   .action-menu-item {

@@ -412,8 +412,6 @@ export default defineComponent({
 
 .details-preview,
 .details-icon-wrapper {
-  background-color: var(--oc-color-surfaceDim);
-  border: 10px solid var(--oc-color-surfaceDim);
   height: 230px;
 
   background-size: contain;

@@ -69,7 +69,7 @@ export default defineComponent({
 
   tr {
     border-top: 0;
-    border-bottom: 1px solid var(--oc-color-border);
+    border-bottom: 1px solid var(--oc-color-outlineVariant);
     height: var(--oc-size-height-table-row);
   }
 

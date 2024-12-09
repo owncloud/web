@@ -719,7 +719,6 @@ export default defineComponent({
   &-sticky {
     position: relative;
     .oc-table-header-cell {
-      background-color: var(--oc-color-background);
       position: sticky;
       z-index: 1;
     }

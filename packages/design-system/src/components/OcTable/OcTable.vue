@@ -524,7 +524,7 @@ export default defineComponent({
   }
 
   tr + tr {
-    border-top: 1px solid var(--oc-color-border);
+    border-top: 1px solid var(--oc-color-outlineVariant);
   }
 
   &-hover tr:not(&-footer-row):hover {
@@ -550,7 +550,6 @@ export default defineComponent({
     position: relative;
 
     .oc-table-header-cell {
-      background-color: var(--oc-color-background);
       position: sticky;
       z-index: 1;
     }
@@ -570,7 +569,7 @@ export default defineComponent({
   }
 
   &-footer {
-    border-top: 1px solid var(--oc-color-border);
+    border-top: 1px solid var(--oc-color-outlineVariant);
 
     &-cell {
       color: var(--oc-color-onSurfaceVariant);

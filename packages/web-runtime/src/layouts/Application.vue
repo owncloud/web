@@ -281,7 +281,7 @@ export default defineComponent({
 
     .app-container {
       height: 100%;
-      background-color: var(--oc-color-background);
+      background-color: var(--oc-color-surface);
       border-radius: 15px;
       overflow: hidden;
       width: 100%;

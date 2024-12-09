@@ -274,7 +274,7 @@ export default defineComponent({
 
 <style lang="scss">
 #app-sidebar {
-  border-left: 1px solid var(--oc-color-border);
+  border-left: 1px solid var(--oc-color-outlineVariant);
   position: relative;
   overflow: hidden;
   min-width: 440px;
@@ -342,7 +342,7 @@ export default defineComponent({
   }
 
   .multi-root-panel-separator {
-    border-top: 1px solid var(--oc-color-border);
+    border-top: 1px solid var(--oc-color-outlineVariant);
   }
 
   &__header {
@@ -388,7 +388,7 @@ export default defineComponent({
     margin: var(--oc-space-small) - var(--oc-space-small) - var(--oc-space-small);
 
     > button {
-      border-bottom: 1px solid var(--oc-color-border);
+      border-bottom: 1px solid var(--oc-color-outlineVariant);
       width: 100%;
       border-radius: 0;
       color: var(--oc-color-onSurface) !important;
@@ -399,7 +399,7 @@ export default defineComponent({
       padding: 0 var(--oc-space-small);
 
       &:first-of-type {
-        border-top: 1px solid var(--oc-color-border);
+        border-top: 1px solid var(--oc-color-outlineVariant);
       }
 
       &:last-of-type {
@@ -408,7 +408,7 @@ export default defineComponent({
 
       &:hover,
       &:focus {
-        border-color: var(--oc-color-border) !important;
+        border-color: var(--oc-color-outlineVariant) !important;
       }
 
       &:hover {
