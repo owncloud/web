@@ -630,8 +630,8 @@ importers:
         specifier: 2.4.0
         version: 2.4.0(patch_hash=x32qkm4z6srz5xuveescagpdyu)(@vue/compiler-sfc@3.5.13)(vue@3.5.13(typescript@5.6.3))
       zod:
-        specifier: 3.23.8
-        version: 3.23.8
+        specifier: 3.24.0
+        version: 3.24.0
     devDependencies:
       '@ownclouders/web-test-helpers':
         specifier: workspace:*
@@ -686,8 +686,8 @@ importers:
         specifier: 2.4.0
         version: 2.4.0(patch_hash=x32qkm4z6srz5xuveescagpdyu)(@vue/compiler-sfc@3.5.13)(vue@3.5.13(typescript@5.6.3))
       zod:
-        specifier: 3.23.8
-        version: 3.23.8
+        specifier: 3.24.0
+        version: 3.24.0
     devDependencies:
       '@ownclouders/web-test-helpers':
         specifier: workspace:*
@@ -790,8 +790,8 @@ importers:
         specifier: 4.2.5
         version: 4.2.5(vue@3.5.13(typescript@5.6.3))
       zod:
-        specifier: 3.23.8
-        version: 3.23.8
+        specifier: 3.24.0
+        version: 3.24.0
 
   packages/web-app-pdf-viewer:
     dependencies:
@@ -931,7 +931,7 @@ importers:
         version: 1.6.11
       zod:
         specifier: ^3.23.8
-        version: 3.23.8
+        version: 3.24.0
     devDependencies:
       '@types/luxon':
         specifier: 3.4.2
@@ -1065,7 +1065,7 @@ importers:
         version: 2.4.0(patch_hash=x32qkm4z6srz5xuveescagpdyu)(@vue/compiler-sfc@3.5.13)(vue@3.5.13(typescript@5.6.3))
       zod:
         specifier: ^3.23.8
-        version: 3.23.8
+        version: 3.24.0
     devDependencies:
       '@ownclouders/web-test-helpers':
         specifier: workspace:^
@@ -1207,8 +1207,8 @@ importers:
         specifier: ^1.6.11
         version: 1.6.11
       zod:
-        specifier: 3.23.8
-        version: 3.23.8
+        specifier: 3.24.0
+        version: 3.24.0
     devDependencies:
       '@ownclouders/web-test-helpers':
         specifier: workspace:*
@@ -9321,8 +9321,8 @@ packages:
   zhead@2.2.4:
     resolution: {integrity: sha512-8F0OI5dpWIA5IGG5NHUg9staDwz/ZPxZtvGVf01j7vHqSyZ0raHY+78atOVxRqb73AotX22uV1pXt3gYSstGag==}
 
-  zod@3.23.8:
-    resolution: {integrity: sha512-XBx9AXhXktjUqnepgTiE5flcKIYWi/rme0Eaj+5Y0lftuGBq+jyRu/md4WnuxqgP1ubdpNCsYEYPxrzVHD8d6g==}
+  zod@3.24.0:
+    resolution: {integrity: sha512-Hz+wiY8yD0VLA2k/+nsg2Abez674dDGTai33SwNvMPuf9uIrBC9eFgIMQxBBbHFxVXi8W+5nX9DcAh9YNSQm/w==}
 
   zwitch@1.0.5:
     resolution: {integrity: sha512-V50KMwwzqJV0NpZIZFwfOD5/lyny3WlSzRiXgA0G7VUnRlqttta1L6UQIHzd6EuBY/cHGfwTIck7w1yH6Q5zUw==}
@@ -18393,6 +18393,6 @@ snapshots:
 
   zhead@2.2.4: {}
 
-  zod@3.23.8: {}
+  zod@3.24.0: {}
 
   zwitch@1.0.5: {}
