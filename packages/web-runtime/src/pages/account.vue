@@ -128,22 +128,6 @@
             <theme-switcher />
           </oc-td>
         </oc-tr>
-        <oc-tr v-if="showNotifications" class="account-page-notification">
-          <oc-td>{{ $gettext('Notifications') }}</oc-td>
-          <oc-td v-if="!isMobileWidth">
-            <span v-text="$gettext('Receive notification mails')" />
-          </oc-td>
-          <oc-td data-testid="notification-mails">
-            <oc-checkbox
-              :model-value="disableEmailNotificationsValue"
-              size="large"
-              :label="$gettext('Receive notification mails')"
-              :label-hidden="!isMobileWidth"
-              data-testid="account-page-notification-mails-checkbox"
-              @update:model-value="updateDisableEmailNotifications"
-            />
-          </oc-td>
-        </oc-tr>
         <oc-tr v-if="showWebDavDetails" class="account-page-view-options">
           <oc-td>{{ $gettext('View options') }}</oc-td>
           <oc-td v-if="!isMobileWidth">
@@ -161,6 +145,74 @@
           </oc-td>
         </oc-tr>
       </account-table>
+
+      <template v-if="showNotifications">
+        <!-- TODO: add models and handle events -->
+        <account-table
+          :title="$gettext('Notifications')"
+          :fields="notificationsSettingsFields"
+          :show-head="!isMobileWidth"
+        >
+          <template #header="{ title }">
+            <h2>{{ title }}</h2>
+            <p>
+              {{
+                $gettext(
+                  'Personalise your notification preferences about any file, folder, or Space.'
+                )
+              }}
+            </p>
+          </template>
+
+          <oc-tr v-for="option in notificationsOptions" :key="option.id">
+            <oc-td>{{ option.displayName }}</oc-td>
+            <oc-td>{{ option.description }}</oc-td>
+
+            <template v-if="option.multiChoiceCollectionValue">
+              <oc-td v-for="choice in option.multiChoiceCollectionValue.options" :key="choice.key">
+                <span class="checkbox-cell-wrapper">
+                  <oc-checkbox
+                    :model-value="notificationsValues[option.id][choice.key]"
+                    size="large"
+                    :label="choice.displayValue"
+                    :label-hidden="!isMobileWidth"
+                    :disabled="choice.attribute === 'disabled'"
+                    @update:model-value="
+                      (value) => updateMultiChoiceSettingsValue(option.name, choice.key, value)
+                    "
+                  />
+                </span>
+              </oc-td>
+            </template>
+          </oc-tr>
+        </account-table>
+        <account-table
+          :title="$gettext('Mail notification options')"
+          :fields="emailNotificationsOptionsFields"
+          :show-head="!isMobileWidth"
+          class="oc-mt-m"
+        >
+          <template #header="{ title }">
+            <h2 class="oc-invisible-sr">{{ title }}</h2>
+          </template>
+
+          <oc-tr v-for="option in emailNotificationsOptions" :key="option.id">
+            <oc-td>{{ option.displayName }}</oc-td>
+            <oc-td>{{ option.description }}</oc-td>
+
+            <oc-td v-if="option.singleChoiceValue">
+              <oc-select
+                :model-value="emailNotificationsValues[option.id]"
+                :options="option.singleChoiceValue.options"
+                :clearable="false"
+                option-label="displayValue"
+                @update:model-value="(value) => updateSingleChoiceValue(option.name, value)"
+              />
+            </oc-td>
+          </oc-tr>
+        </account-table>
+      </template>
+
       <account-table
         v-if="extensionPointsWithUserPreferences.length"
         :title="$gettext('Extensions')"
@@ -241,6 +293,7 @@ import { isEmpty } from 'lodash-es'
 import { call } from '@ownclouders/web-client'
 import QuotaInformation from '../components/Account/QuotaInformation.vue'
 import AccountTable from '../components/Account/AccountTable.vue'
+import { useNotificationsSettings } from '../composables/notificationsSettings'
 
 const MOBILE_BREAKPOINT = 800
 export default defineComponent({
@@ -273,6 +326,12 @@ export default defineComponent({
     const spacesStore = useSpacesStore()
     const capabilityStore = useCapabilityStore()
     const configStore = useConfigStore()
+    const {
+      options: notificationsOptions,
+      emailOptions: emailNotificationsOptions,
+      values: notificationsValues,
+      emailValues: emailNotificationsValues
+    } = useNotificationsSettings(valuesList, accountBundle)
 
     const isMobileWidth = ref<boolean>(window.innerWidth < MOBILE_BREAKPOINT)
     const onResize = () => {
@@ -525,6 +584,82 @@ export default defineComponent({
       })
     })
 
+    const notificationsSettingsFields = computed(() => [
+      { label: $gettext('Event') },
+      { label: $gettext('Event description'), hidden: true },
+      { label: $gettext('In-App'), alignH: 'right' },
+      { label: $gettext('Mail'), alignH: 'right' }
+    ])
+
+    const emailNotificationsOptionsFields = computed(() => [
+      { label: $gettext('Options') },
+      { label: $gettext('Option description'), hidden: true },
+      { label: $gettext('Option value'), hidden: true }
+    ])
+
+    const updateValueInValueList = (value: SettingsValue) => {
+      const index = unref(valuesList).findIndex(
+        (v) => v.identifier.setting === value.identifier.setting
+      )
+
+      if (index < 0) {
+        valuesList.value.push(value)
+        return
+      }
+
+      valuesList.value.splice(index, 1, value)
+    }
+
+    const updateMultiChoiceSettingsValue = async (
+      identifier: string,
+      key: string,
+      value: boolean | string
+    ) => {
+      try {
+        if (typeof value === 'boolean') {
+          const currentValue = unref(valuesList).find((v) => v.identifier.setting === identifier)
+
+          await saveValue({
+            identifier,
+            valueOptions: {
+              collectionValue: {
+                values: [
+                  ...currentValue?.value.collectionValue.values.filter((val) => val.key !== key),
+                  { key, boolValue: value }
+                ]
+              }
+            }
+          })
+
+          updateValueInValueList({
+            identifier: { setting: identifier },
+            ...currentValue,
+            value: {
+              ...currentValue?.value,
+              collectionValue: {
+                values: (
+                  currentValue?.value.collectionValue.values.filter((v) => v.key !== key) || []
+                ).concat([{ key, boolValue: value }])
+              }
+            }
+          })
+          showMessage({ title: $gettext('Preference saved.') })
+
+          return
+        }
+      } catch (error) {
+        console.error(error)
+        showErrorMessage({
+          title: $gettext('Unable to save preference…'),
+          errors: [error]
+        })
+      }
+    }
+
+    const updateSingleChoiceValue = async (identifier: string, value: string): Promise<void> => {
+      console.log(value)
+    }
+
     onMounted(async () => {
       window.addEventListener('resize', onResize)
 
@@ -583,7 +718,15 @@ export default defineComponent({
       loadValuesListTask,
       showEditPasswordModal,
       quota,
-      isMobileWidth
+      isMobileWidth,
+      notificationsOptions,
+      notificationsSettingsFields,
+      emailNotificationsOptionsFields,
+      emailNotificationsOptions,
+      notificationsValues,
+      updateMultiChoiceSettingsValue,
+      emailNotificationsValues,
+      updateSingleChoiceValue
     }
   }
 })
