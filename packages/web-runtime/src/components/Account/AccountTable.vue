@@ -6,7 +6,15 @@
     <oc-table-simple>
       <oc-thead :class="{ 'oc-invisible-sr': !showHead }">
         <oc-tr>
-          <oc-th v-for="field in fields" :key="field">{{ field }}</oc-th>
+          <template v-for="field in fields" :key="typeof field === 'string' ? field : field.label">
+            <oc-th v-if="typeof field === 'string'">{{ field }}</oc-th>
+            <oc-th
+              v-else
+              :align-h="field.alignH || 'left'"
+              :class="{ 'oc-invisible-sr': field.hidden }"
+              >{{ field.label }}</oc-th
+            >
+          </template>
         </oc-tr>
       </oc-thead>
       <oc-tbody>
@@ -19,6 +27,12 @@
 <script lang="ts">
 import { defineComponent } from 'vue'
 
+type AccountTableCell = {
+  label: string
+  alignH?: string
+  hidden?: boolean
+}
+
 export default defineComponent({
   name: 'AccountTable',
   props: {
@@ -27,7 +41,7 @@ export default defineComponent({
       required: true
     },
     fields: {
-      type: Array<string>,
+      type: Array<string | AccountTableCell>,
       required: true
     },
     showHead: { type: Boolean, required: false, default: false }
@@ -86,11 +100,13 @@ export default defineComponent({
     }
   }
 
-  td:nth-child(3) {
-    display: flex;
-    justify-content: end;
-    align-items: center;
-    min-height: var(--oc-size-height-table-row);
+  @media (min-width: 801px) {
+    td > .checkbox-cell-wrapper {
+      display: flex;
+      justify-content: end;
+      align-items: center;
+      min-height: var(--oc-size-height-table-row);
+    }
   }
 }
 </style>

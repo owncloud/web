@@ -128,22 +128,6 @@
             <theme-switcher />
           </oc-td>
         </oc-tr>
-        <oc-tr v-if="showNotifications" class="account-page-notification">
-          <oc-td>{{ $gettext('Notifications') }}</oc-td>
-          <oc-td v-if="!isMobileWidth">
-            <span v-text="$gettext('Receive notification mails')" />
-          </oc-td>
-          <oc-td data-testid="notification-mails">
-            <oc-checkbox
-              :model-value="disableEmailNotificationsValue"
-              size="large"
-              :label="$gettext('Receive notification mails')"
-              :label-hidden="!isMobileWidth"
-              data-testid="account-page-notification-mails-checkbox"
-              @update:model-value="updateDisableEmailNotifications"
-            />
-          </oc-td>
-        </oc-tr>
         <oc-tr v-if="showWebDavDetails" class="account-page-view-options">
           <oc-td>{{ $gettext('View options') }}</oc-td>
           <oc-td v-if="!isMobileWidth">
@@ -166,12 +150,7 @@
         <!-- TODO: add models and handle events -->
         <account-table
           :title="$gettext('Notifications')"
-          :fields="[
-            $gettext('Event'),
-            $gettext('Event description'),
-            $gettext('In-App'),
-            $gettext('Mail')
-          ]"
+          :fields="notificationsSettingsFields"
           :show-head="!isMobileWidth"
         >
           <template #header="{ title }">
@@ -184,13 +163,12 @@
               }}
             </p>
           </template>
-          <oc-tr>
-            <oc-td>{{ $gettext('Shared') }}</oc-td>
-            <oc-td>{{
-              $gettext('An item has been shared with you or you have been added to a Space')
-            }}</oc-td>
+
+          <oc-tr v-for="option in notificationsOptions" :key="option.id">
+            <oc-td>{{ option.displayName }}</oc-td>
+            <oc-td>{{ option.description }}</oc-td>
             <oc-td>
-              <span class="table-checkbox-wrapper">
+              <span class="checkbox-cell-wrapper">
                 <oc-checkbox
                   size="large"
                   :label="$gettext('In-App')"
@@ -199,84 +177,19 @@
               </span>
             </oc-td>
             <oc-td>
-              <oc-checkbox size="large" :label="$gettext('Mail')" :label-hidden="!isMobileWidth" />
-            </oc-td>
-          </oc-tr>
-          <oc-tr>
-            <oc-td>{{ $gettext('New') }}</oc-td>
-            <oc-td>{{ $gettext('An item has been created or uploaded') }}</oc-td>
-            <!-- TODO: handle layout of multiple checkboxes -->
-            <oc-td>
-              <oc-checkbox
-                size="large"
-                :label="$gettext('In-App')"
-                :label-hidden="!isMobileWidth"
-              />
-            </oc-td>
-            <oc-td>
-              <oc-checkbox size="large" :label="$gettext('Mail')" :label-hidden="!isMobileWidth" />
-            </oc-td>
-          </oc-tr>
-          <oc-tr>
-            <oc-td>{{ $gettext('Changed') }}</oc-td>
-            <oc-td>{{ $gettext('An item has been changed') }}</oc-td>
-            <oc-td>
-              <oc-checkbox
-                size="large"
-                :label="$gettext('In-App')"
-                :label-hidden="!isMobileWidth"
-              />
-            </oc-td>
-            <oc-td>
-              <oc-checkbox size="large" :label="$gettext('Mail')" :label-hidden="!isMobileWidth" />
-            </oc-td>
-          </oc-tr>
-          <oc-tr>
-            <oc-td>{{ $gettext('Deleted') }}</oc-td>
-            <oc-td>{{ $gettext('An item has been deleted') }}</oc-td>
-            <oc-td>
-              <oc-checkbox
-                size="large"
-                :label="$gettext('In-App')"
-                :label-hidden="!isMobileWidth"
-              />
-            </oc-td>
-            <oc-td>
-              <oc-checkbox size="large" :label="$gettext('Mail')" :label-hidden="!isMobileWidth" />
-            </oc-td>
-          </oc-tr>
-          <oc-tr>
-            <oc-td>{{ $gettext('Downloaded') }}</oc-td>
-            <oc-td>{{ $gettext('An item has been downloaded via a link for everyone') }}</oc-td>
-            <oc-td>
-              <oc-checkbox
-                size="large"
-                :label="$gettext('In-App')"
-                :label-hidden="!isMobileWidth"
-              />
-            </oc-td>
-            <oc-td>
-              <oc-checkbox size="large" :label="$gettext('Mail')" :label-hidden="!isMobileWidth" />
-            </oc-td>
-          </oc-tr>
-          <oc-tr>
-            <oc-td>{{ $gettext('Uploaded') }}</oc-td>
-            <oc-td>{{ $gettext('An item has been uploaded via a link for everyone') }}</oc-td>
-            <oc-td>
-              <oc-checkbox
-                size="large"
-                :label="$gettext('In-App')"
-                :label-hidden="!isMobileWidth"
-              />
-            </oc-td>
-            <oc-td>
-              <oc-checkbox size="large" :label="$gettext('Mail')" :label-hidden="!isMobileWidth" />
+              <span class="checkbox-cell-wrapper">
+                <oc-checkbox
+                  size="large"
+                  :label="$gettext('Mail')"
+                  :label-hidden="!isMobileWidth"
+                />
+              </span>
             </oc-td>
           </oc-tr>
         </account-table>
         <account-table
-          :title="$gettext('Mail notifications frequency')"
-          :fields="[$gettext('Options'), $gettext('Option description'), $gettext('Option value')]"
+          :title="$gettext('Mail notification options')"
+          :fields="emailNotificationsOptionsFields"
           :show-head="!isMobileWidth"
           class="oc-mt-m"
         >
@@ -284,9 +197,9 @@
             <h2 class="oc-invisible-sr">{{ title }}</h2>
           </template>
 
-          <oc-tr>
-            <oc-td>Send E-Mails</oc-td>
-            <oc-td>Receive mails instantly, as a summary or disable</oc-td>
+          <oc-tr v-for="option in emailNotificationsOptions" :key="option.id">
+            <oc-td>{{ option.displayName }}</oc-td>
+            <oc-td>{{ option.description }}</oc-td>
             <oc-td>
               <oc-select :options="emailNotificationsFrequencies" :clearable="false" />
             </oc-td>
@@ -407,7 +320,11 @@ export default defineComponent({
     const spacesStore = useSpacesStore()
     const capabilityStore = useCapabilityStore()
     const configStore = useConfigStore()
-    const { getNotificationsSettings } = useNotificationsSettings()
+    const {
+      options: notificationsOptions,
+      emailOptions: emailNotificationsOptions,
+      updateDefaultValues: updateDefaultNotificationSettingsValues
+    } = useNotificationsSettings(accountBundle)
 
     const isMobileWidth = ref<boolean>(window.innerWidth < MOBILE_BREAKPOINT)
     const onResize = () => {
@@ -667,6 +584,19 @@ export default defineComponent({
       { label: $gettext('Instant') }
     ])
 
+    const notificationsSettingsFields = computed(() => [
+      { label: $gettext('Event') },
+      { label: $gettext('Event description'), hidden: true },
+      { label: $gettext('In-App'), alignH: 'right' },
+      { label: $gettext('Mail'), alignH: 'right' }
+    ])
+
+    const emailNotificationsOptionsFields = computed(() => [
+      { label: $gettext('Options') },
+      { label: $gettext('Option description'), hidden: true },
+      { label: $gettext('Option value'), hidden: true }
+    ])
+
     onMounted(async () => {
       window.addEventListener('resize', onResize)
 
@@ -688,10 +618,7 @@ export default defineComponent({
         : true
 
       // TODO: assign values
-      const notificationsSettings = getNotificationsSettings(
-        unref(valuesList),
-        unref(accountBundle)
-      )
+      updateDefaultNotificationSettingsValues(unref(valuesList), unref(accountBundle))
     })
 
     onBeforeUnmount(() => {
@@ -732,7 +659,11 @@ export default defineComponent({
       showEditPasswordModal,
       quota,
       isMobileWidth,
-      emailNotificationsFrequencies
+      emailNotificationsFrequencies,
+      notificationsOptions,
+      notificationsSettingsFields,
+      emailNotificationsOptionsFields,
+      emailNotificationsOptions
     }
   }
 })
