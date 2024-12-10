@@ -1,64 +1,66 @@
-import { computed, ref, Ref } from 'vue'
+import { computed, Ref, unref } from 'vue'
 import {
   getSettingsDefaultValue,
+  getSettingsValue,
   SETTINGS_EMAIL_NOTIFICATION_BUNDLE_IDS,
   SETTINGS_NOTIFICATION_BUNDLE_IDS,
   SettingsBundle,
-  SettingsNotificationBundle,
   SettingsValue
 } from '../../helpers/settings'
 
-export const useNotificationsSettings = (bundle: Ref<SettingsBundle>) => {
-  const values = ref({
-    [SettingsNotificationBundle.ShareCreated]: { mail: false, inapp: false },
-    [SettingsNotificationBundle.ShareRemoved]: { mail: false, inapp: false },
-    [SettingsNotificationBundle.ShareExpired]: { mail: false, inapp: false },
-    [SettingsNotificationBundle.SpaceShared]: { mail: false, inapp: false },
-    [SettingsNotificationBundle.SpaceUnshared]: { mail: false, inapp: false },
-    [SettingsNotificationBundle.SpaceMembershipExpired]: { mail: false, inapp: false },
-    [SettingsNotificationBundle.SpaceDisabled]: { mail: false, inapp: false },
-    [SettingsNotificationBundle.SpaceDeleted]: { mail: false, inapp: false },
-    [SettingsNotificationBundle.PostprocessingStepFinished]: { mail: false, inapp: false },
-    [SettingsNotificationBundle.ScienceMeshInviteTokenGenerated]: { mail: false, inapp: false }
-  })
-
-  const defaultValues = computed(() => {
-    if (!bundle.value) {
+export const useNotificationsSettings = (
+  valueList: Ref<SettingsValue[]>,
+  bundle: Ref<SettingsBundle>
+) => {
+  const values = computed(() => {
+    if (!unref(bundle)) {
       return {}
     }
 
-    return bundle.value.settings.reduce((acc, curr) => {
+    return unref(bundle).settings.reduce((acc, curr) => {
       if (!SETTINGS_NOTIFICATION_BUNDLE_IDS.includes(curr.id)) {
         return acc
       }
 
-      acc[curr.id] = getSettingsDefaultValue(curr)
+      acc[curr.id] = getSettingsValue(curr, unref(valueList)) || getSettingsDefaultValue(curr)
 
       return acc
     }, {})
   })
 
   const options = computed<SettingsBundle['settings']>(() => {
-    if (!bundle.value) {
+    if (!unref(bundle)) {
       return []
     }
 
-    return bundle.value.settings.filter(({ id }) => SETTINGS_NOTIFICATION_BUNDLE_IDS.includes(id))
+    return unref(bundle).settings.filter(({ id }) => SETTINGS_NOTIFICATION_BUNDLE_IDS.includes(id))
   })
 
   const emailOptions = computed<SettingsBundle['settings']>(() => {
-    if (!bundle.value) {
+    if (!unref(bundle)) {
       return []
     }
 
-    return bundle.value.settings.filter(({ id }) =>
+    return unref(bundle).settings.filter(({ id }) =>
       SETTINGS_EMAIL_NOTIFICATION_BUNDLE_IDS.includes(id)
     )
   })
 
-  const updateDefaultValues = (values: SettingsValue[], bundle: SettingsBundle) => {
-    // TODO: process and return values
-  }
+  const emailValues = computed(() => {
+    if (!unref(bundle)) {
+      return {}
+    }
 
-  return { values, options, emailOptions, updateDefaultValues }
+    return unref(bundle).settings.reduce((acc, curr) => {
+      if (!SETTINGS_EMAIL_NOTIFICATION_BUNDLE_IDS.includes(curr.id)) {
+        return acc
+      }
+
+      acc[curr.id] = getSettingsValue(curr, unref(valueList)) || getSettingsDefaultValue(curr)
+
+      return acc
+    }, {})
+  })
+
+  return { values, options, emailOptions, emailValues }
 }

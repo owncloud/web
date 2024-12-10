@@ -1,3 +1,5 @@
+import { captureException } from '@sentry/vue'
+
 export interface SettingsValue {
   identifier: {
     bundle: string
@@ -18,7 +20,39 @@ export interface SettingsValue {
         stringValue: string
       }[]
     }
+    collectionValue?: {
+      values: {
+        key: string
+        boolValue: boolean
+      }[]
+    }
   }
+}
+
+interface SettingsBundleSetting {
+  description: string
+  displayName: string
+  id: string
+  name: string
+  resource: {
+    type: string
+  }
+  singleChoiceValue?: {
+    options: Record<string, any>[]
+  }
+  multiChoiceCollectionValue?: {
+    options: {
+      value: {
+        boolValue: {
+          default?: boolean
+        }
+      }
+      key: string
+      displayValue: string
+      attribute?: 'disabled'
+    }[]
+  }
+  boolValue?: Record<string, any>
 }
 
 export interface SettingsBundle {
@@ -29,31 +63,7 @@ export interface SettingsBundle {
   resource: {
     type: string
   }
-  settings: {
-    description: string
-    displayName: string
-    id: string
-    name: string
-    resource: {
-      type: string
-    }
-    singleChoiceValue?: {
-      options: Record<string, any>[]
-    }
-    multiChoiceCollectionValue?: {
-      options: {
-        value: {
-          boolValue: {
-            default?: boolean
-          }
-        }
-        key: string
-        displayValue: string
-        attribute?: 'disabled'
-      }[]
-    }
-    boolValue?: Record<string, any>
-  }[]
+  settings: SettingsBundleSetting[]
   type: string
   roleId?: string
 }
@@ -100,10 +110,53 @@ export const SETTINGS_EMAIL_NOTIFICATION_BUNDLE_IDS: string[] = [
   SettingsEmailNotificationBundle.EmailSendingInterval
 ]
 
-export function getSettingsDefaultValue(setting: SettingsBundle['settings']) {
+export function getSettingsDefaultValue(setting: SettingsBundleSetting) {
   if (setting.singleChoiceValue) {
+    const [option] = setting.singleChoiceValue.options
+
+    return {
+      value: option.value.stringValue,
+      displayValue: option.displayValue
+    }
   }
 
   if (setting.multiChoiceCollectionValue) {
+    return setting.multiChoiceCollectionValue.options.reduce((acc, curr) => {
+      acc[curr.key] = curr.value.boolValue.default
+
+      return acc
+    }, {})
+  }
+
+  const error = new Error('Unsupported setting value')
+
+  console.error(error)
+  captureException(error)
+
+  return null
+}
+
+export function getSettingsValue(
+  setting: SettingsBundleSetting,
+  valueList: SettingsValue[]
+): boolean | string | null | { [key: string]: boolean } {
+  const { value } = valueList.find((v) => v.identifier.setting === setting.name) || {}
+
+  if (!value) {
+    return null
+  }
+
+  if (value.collectionValue) {
+    return setting.multiChoiceCollectionValue.options.reduce((acc, curr) => {
+      const val = value.collectionValue.values.find((v) => v.key === curr.key)
+
+      if (val) {
+        acc[curr.key] = val.boolValue
+        return acc
+      }
+
+      acc[curr.key] = curr.value.boolValue.default
+      return acc
+    }, {})
   }
 }

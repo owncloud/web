@@ -167,24 +167,23 @@
           <oc-tr v-for="option in notificationsOptions" :key="option.id">
             <oc-td>{{ option.displayName }}</oc-td>
             <oc-td>{{ option.description }}</oc-td>
-            <oc-td>
-              <span class="checkbox-cell-wrapper">
-                <oc-checkbox
-                  size="large"
-                  :label="$gettext('In-App')"
-                  :label-hidden="!isMobileWidth"
-                />
-              </span>
-            </oc-td>
-            <oc-td>
-              <span class="checkbox-cell-wrapper">
-                <oc-checkbox
-                  size="large"
-                  :label="$gettext('Mail')"
-                  :label-hidden="!isMobileWidth"
-                />
-              </span>
-            </oc-td>
+
+            <template v-if="option.multiChoiceCollectionValue">
+              <oc-td v-for="choice in option.multiChoiceCollectionValue.options" :key="choice.key">
+                <span class="checkbox-cell-wrapper">
+                  <oc-checkbox
+                    :model-value="notificationsValues[option.id][choice.key]"
+                    size="large"
+                    :label="choice.displayValue"
+                    :label-hidden="!isMobileWidth"
+                    :disabled="choice.attribute === 'disabled'"
+                    @update:model-value="
+                      (value) => updateMultiChoiceSettingsValue(option.name, choice.key, value)
+                    "
+                  />
+                </span>
+              </oc-td>
+            </template>
           </oc-tr>
         </account-table>
         <account-table
@@ -200,8 +199,15 @@
           <oc-tr v-for="option in emailNotificationsOptions" :key="option.id">
             <oc-td>{{ option.displayName }}</oc-td>
             <oc-td>{{ option.description }}</oc-td>
-            <oc-td>
-              <oc-select :options="emailNotificationsFrequencies" :clearable="false" />
+
+            <oc-td v-if="option.singleChoiceValue">
+              <oc-select
+                :model-value="emailNotificationsValues[option.id]"
+                :options="option.singleChoiceValue.options"
+                :clearable="false"
+                option-label="displayValue"
+                @update:model-value="(value) => updateSingleChoiceValue(option.name, value)"
+              />
             </oc-td>
           </oc-tr>
         </account-table>
@@ -323,8 +329,9 @@ export default defineComponent({
     const {
       options: notificationsOptions,
       emailOptions: emailNotificationsOptions,
-      updateDefaultValues: updateDefaultNotificationSettingsValues
-    } = useNotificationsSettings(accountBundle)
+      values: notificationsValues,
+      emailValues: emailNotificationsValues
+    } = useNotificationsSettings(valuesList, accountBundle)
 
     const isMobileWidth = ref<boolean>(window.innerWidth < MOBILE_BREAKPOINT)
     const onResize = () => {
@@ -577,13 +584,6 @@ export default defineComponent({
       })
     })
 
-    const emailNotificationsFrequencies = computed(() => [
-      { label: $gettext('Daily') },
-      { label: $gettext('Weekly') },
-      { label: $gettext('Never') },
-      { label: $gettext('Instant') }
-    ])
-
     const notificationsSettingsFields = computed(() => [
       { label: $gettext('Event') },
       { label: $gettext('Event description'), hidden: true },
@@ -596,6 +596,69 @@ export default defineComponent({
       { label: $gettext('Option description'), hidden: true },
       { label: $gettext('Option value'), hidden: true }
     ])
+
+    const updateValueInValueList = (value: SettingsValue) => {
+      const index = unref(valuesList).findIndex(
+        (v) => v.identifier.setting === value.identifier.setting
+      )
+
+      if (index < 0) {
+        valuesList.value.push(value)
+        return
+      }
+
+      valuesList.value.splice(index, 1, value)
+    }
+
+    const updateMultiChoiceSettingsValue = async (
+      identifier: string,
+      key: string,
+      value: boolean | string
+    ) => {
+      try {
+        if (typeof value === 'boolean') {
+          const currentValue = unref(valuesList).find((v) => v.identifier.setting === identifier)
+
+          await saveValue({
+            identifier,
+            valueOptions: {
+              collectionValue: {
+                values: [
+                  ...currentValue?.value.collectionValue.values.filter((val) => val.key !== key),
+                  { key, boolValue: value }
+                ]
+              }
+            }
+          })
+
+          updateValueInValueList({
+            identifier: { setting: identifier },
+            ...currentValue,
+            value: {
+              ...currentValue?.value,
+              collectionValue: {
+                values: (
+                  currentValue?.value.collectionValue.values.filter((v) => v.key !== key) || []
+                ).concat([{ key, boolValue: value }])
+              }
+            }
+          })
+          showMessage({ title: $gettext('Preference saved.') })
+
+          return
+        }
+      } catch (error) {
+        console.error(error)
+        showErrorMessage({
+          title: $gettext('Unable to save preference…'),
+          errors: [error]
+        })
+      }
+    }
+
+    const updateSingleChoiceValue = async (identifier: string, value: string): Promise<void> => {
+      console.log(value)
+    }
 
     onMounted(async () => {
       window.addEventListener('resize', onResize)
@@ -616,9 +679,6 @@ export default defineComponent({
       disableEmailNotificationsValue.value = disableEmailNotificationsConfiguration
         ? !disableEmailNotificationsConfiguration.value?.boolValue
         : true
-
-      // TODO: assign values
-      updateDefaultNotificationSettingsValues(unref(valuesList), unref(accountBundle))
     })
 
     onBeforeUnmount(() => {
@@ -659,11 +719,14 @@ export default defineComponent({
       showEditPasswordModal,
       quota,
       isMobileWidth,
-      emailNotificationsFrequencies,
       notificationsOptions,
       notificationsSettingsFields,
       emailNotificationsOptionsFields,
-      emailNotificationsOptions
+      emailNotificationsOptions,
+      notificationsValues,
+      updateMultiChoiceSettingsValue,
+      emailNotificationsValues,
+      updateSingleChoiceValue
     }
   }
 })
