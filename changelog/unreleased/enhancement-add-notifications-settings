@@ -1,0 +1,6 @@
+Enhancement: Add notifications settings
+
+We've added a new notifications settings section into the account screen. This section allows users to configure what notifications they wish to receive either in-app or via email, when to receive email notifications, and drops the previous notifications toggle.
+
+https://github.com/owncloud/web/pull/12010
+https://github.com/owncloud/web/issues/9248

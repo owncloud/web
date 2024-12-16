@@ -2,9 +2,9 @@ import account from '../../../src/pages/account.vue'
 import {
   defaultComponentMocks,
   defaultPlugins,
+  mockAxiosReject,
   mockAxiosResolve,
-  mount,
-  mockAxiosReject
+  mount
 } from '@ownclouders/web-test-helpers'
 import { mock } from 'vitest-mock-extended'
 import {
@@ -160,7 +160,9 @@ describe('account page', () => {
       const { wrapper, mocks } = getWrapper()
       await blockLoadingState(wrapper)
 
-      mocks.$clientService.httpAuthenticated.post.mockResolvedValueOnce(mockAxiosResolve({}))
+      mocks.$clientService.httpAuthenticated.post.mockResolvedValueOnce(
+        mockAxiosResolve({ value: { id: 'settings-language' } })
+      )
       await wrapper.vm.updateDisableEmailNotifications(true)
       const { showMessage } = useMessages()
       expect(showMessage).toHaveBeenCalled()
@@ -267,6 +269,68 @@ describe('account page', () => {
       await blockLoadingState(wrapper)
 
       expect(wrapper.find(selectors.extensionsSection).exists()).toBeTruthy()
+    })
+  })
+
+  describe('Method "updateMultiChoiceSettingsValue"', () => {
+    it('should show a message on success', async () => {
+      const { wrapper, mocks } = getWrapper({})
+      await blockLoadingState(wrapper)
+
+      mocks.$clientService.httpAuthenticated.post.mockResolvedValueOnce(
+        mockAxiosResolve({
+          value: { identifier: { setting: 'setting-id' }, value: { id: 'value-id' } }
+        })
+      )
+      await wrapper.vm.updateMultiChoiceSettingsValue('setting-id', 'setting-key', true)
+      const { showMessage } = useMessages()
+      expect(showMessage).toHaveBeenCalled()
+    })
+
+    it('should show a message on error', async () => {
+      vi.spyOn(console, 'error').mockImplementation(() => undefined)
+
+      const { wrapper, mocks } = getWrapper({})
+      await blockLoadingState(wrapper)
+
+      mocks.$clientService.httpAuthenticated.post.mockImplementation(() => mockAxiosReject('err'))
+      await wrapper.vm.updateMultiChoiceSettingsValue('setting-id', 'setting-key', true)
+      const { showErrorMessage } = useMessages()
+      expect(showErrorMessage).toHaveBeenCalled()
+    })
+  })
+
+  describe('Method "updateSingleChoiceValue"', () => {
+    it('should show a message on success', async () => {
+      const { wrapper, mocks } = getWrapper({})
+      await blockLoadingState(wrapper)
+
+      mocks.$clientService.httpAuthenticated.post.mockResolvedValueOnce(
+        mockAxiosResolve({
+          value: { identifier: { setting: 'setting-id' }, value: { id: 'value-id' } }
+        })
+      )
+      await wrapper.vm.updateSingleChoiceValue('setting-id', {
+        displayValue: 'Daily',
+        value: { stringValue: 'daily' }
+      })
+      const { showMessage } = useMessages()
+      expect(showMessage).toHaveBeenCalled()
+    })
+
+    it('should show a message on error', async () => {
+      vi.spyOn(console, 'error').mockImplementation(() => undefined)
+
+      const { wrapper, mocks } = getWrapper({})
+      await blockLoadingState(wrapper)
+
+      mocks.$clientService.httpAuthenticated.post.mockImplementation(() => mockAxiosReject('err'))
+      await wrapper.vm.updateSingleChoiceValue('setting-id', {
+        displayValue: 'Daily',
+        value: { stringValue: 'daily' }
+      })
+      const { showErrorMessage } = useMessages()
+      expect(showErrorMessage).toHaveBeenCalled()
     })
   })
 })
