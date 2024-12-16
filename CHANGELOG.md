@@ -21,6 +21,7 @@ Summary
 * Bugfix - Show missing role name in link share panel: [#12012](https://github.com/owncloud/web/pull/12012)
 * Bugfix - Missing translations for share type filters: [#12013](https://github.com/owncloud/web/pull/12013)
 * Bugfix - Permanent link for shares: [#12022](https://github.com/owncloud/web/pull/12022)
+* Bugfix - Preview app files visibility: [#12040](https://github.com/owncloud/web/pull/12040)
 * Enhancement - Accessibility improvements: [#5379](https://github.com/owncloud/web/issues/5379)
 * Enhancement - Create spaces via admin settings: [#11849](https://github.com/owncloud/web/pull/11849)
 * Enhancement - Add notifications settings: [#12010](https://github.com/owncloud/web/pull/12010)
@@ -127,6 +128,19 @@ Details
 
    https://github.com/owncloud/web/issues/12001
    https://github.com/owncloud/web/pull/12022
+
+* Bugfix - Preview app files visibility: [#12040](https://github.com/owncloud/web/pull/12040)
+
+   We've fixed the issue with displaying hidden files when user open a file in
+   preview app in "Shared with me" list. The `q_share-visibility` query param is
+   now passed to the app so that if a user opens a file while listing "visible
+   shares", the preview app will allow moving only to another visible files. When
+   the `q_share-visibility` query param is set to `hidden` (i.e. user is listing
+   "hidden shares"), the preview app will allow moving only to another hidden
+   files.
+
+   https://github.com/owncloud/web/issues/11883
+   https://github.com/owncloud/web/pull/12040
 
 * Enhancement - Accessibility improvements: [#5379](https://github.com/owncloud/web/issues/5379)
 
