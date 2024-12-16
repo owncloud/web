@@ -131,7 +131,7 @@
     "mini-css-extract-plugin": "^2.0.0",
     "node-notifier": "^10.0.0",
     "npm-run-all2": "^7.0.0",
-    "npm": "^10.0.0",
+    "npm": "^11.0.0",
     "onchange": "^7.1.0",
     "optimize-css-assets-webpack-plugin": "^6.0.1",
     "postcss-loader": "8.1.1",
