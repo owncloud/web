@@ -23,6 +23,7 @@ Summary
 * Bugfix - Permanent link for shares: [#12022](https://github.com/owncloud/web/pull/12022)
 * Enhancement - Accessibility improvements: [#5379](https://github.com/owncloud/web/issues/5379)
 * Enhancement - Create spaces via admin settings: [#11849](https://github.com/owncloud/web/pull/11849)
+* Enhancement - Add notifications settings: [#12010](https://github.com/owncloud/web/pull/12010)
 
 Details
 -------
@@ -142,6 +143,16 @@ Details
 
    https://github.com/owncloud/web/issues/11771
    https://github.com/owncloud/web/pull/11849
+
+* Enhancement - Add notifications settings: [#12010](https://github.com/owncloud/web/pull/12010)
+
+   We've added a new notifications settings section into the account screen. This
+   section allows users to configure what notifications they wish to receive either
+   in-app or via email, when to receive email notifications, and drops the previous
+   notifications toggle.
+
+   https://github.com/owncloud/web/issues/9248
+   https://github.com/owncloud/web/pull/12010
 
 Changelog for ownCloud Web [11.0.5] (2024-11-25)
 =======================================
