@@ -1,0 +1,8 @@
+Bugfix: Preview app files visibility
+
+We've fixed the issue with displaying hidden files when user open a file in preview app in "Shared with me" list.
+The `q_share-visibility` query param is now passed to the app so that if a user opens a file while listing "visible shares", the preview app will allow moving only to another visible files.
+When the `q_share-visibility` query param is set to `hidden` (i.e. user is listing "hidden shares"), the preview app will allow moving only to another hidden files.
+
+https://github.com/owncloud/web/pull/12040
+https://github.com/owncloud/web/issues/11883

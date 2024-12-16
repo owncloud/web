@@ -1,5 +1,5 @@
 import App from '../../src/App.vue'
-import { nextTick } from 'vue'
+import { nextTick, ref } from 'vue'
 import { defaultComponentMocks, defaultPlugins, shallowMount } from '@ownclouders/web-test-helpers'
 import { FileContext } from '@ownclouders/web-pkg'
 import { mock } from 'vitest-mock-extended'
@@ -10,6 +10,7 @@ const activeFiles = [
     name: 'bear.png',
     mimeType: 'image/png',
     path: 'personal/admin/bear.png',
+    hidden: false,
     canDownload: () => true
   },
   {
@@ -17,6 +18,7 @@ const activeFiles = [
     name: 'elephant.png',
     mimeType: 'image/png',
     path: 'personal/admin/elephant.png',
+    hidden: false,
     canDownload: () => true
   },
   {
@@ -24,6 +26,7 @@ const activeFiles = [
     name: 'wale_sounds.flac',
     mimeType: 'audio/flac',
     path: 'personal/admin/wale_sounds.flac',
+    hidden: true,
     canDownload: () => true
   },
   {
@@ -31,6 +34,7 @@ const activeFiles = [
     name: 'lonely_sloth_very_sad.gif',
     mimeType: 'image/gif',
     path: 'personal/admin/lonely_sloth_very_sad.gif',
+    hidden: false,
     canDownload: () => true
   },
   {
@@ -38,6 +42,7 @@ const activeFiles = [
     name: 'tiger_eats_plants.mp4',
     mimeType: 'video/mp4',
     path: 'personal/admin/tiger_eats_plants.mp4',
+    hidden: true,
     canDownload: () => true
   },
   {
@@ -45,6 +50,7 @@ const activeFiles = [
     name: 'happy_hippo.gif',
     mimeType: 'image/gif',
     path: 'personal/admin/happy_hippo.gif',
+    hidden: false,
     canDownload: () => true
   },
   {
@@ -52,6 +58,7 @@ const activeFiles = [
     name: 'sleeping_dog.gif',
     mimeType: 'image/gif',
     path: 'personal/admin/sleeping_dog.gif',
+    hidden: false,
     canDownload: () => true
   },
   {
@@ -59,6 +66,7 @@ const activeFiles = [
     name: 'cat_murr_murr.gif',
     mimeType: 'image/gif',
     path: 'personal/admin/cat_murr_murr.gif',
+    hidden: false,
     canDownload: () => true
   },
   {
@@ -66,6 +74,7 @@ const activeFiles = [
     name: 'labrador.gif',
     mimeType: 'image/gif',
     path: 'personal/admin/labrador.gif',
+    hidden: false,
     canDownload: () => true
   }
 ]
@@ -89,9 +98,27 @@ describe('Preview app', () => {
       ).toEqual(['1', '2', '4', '6', '7', '8', '9'])
     })
   })
+
+  describe('Computed "filteredFiles"', () => {
+    it('should hide hidden shares if the share visibility query is not set to "hidden"', () => {
+      const { wrapper } = createShallowMountWrapper()
+      expect(wrapper.vm.filteredFiles.length).toStrictEqual(7)
+    })
+
+    it('should hide visible shares if the share visibility query is set to "hidden"', () => {
+      const { wrapper } = createShallowMountWrapper({
+        currentFileContext: { routeQuery: ref({ ['q_share-visibility']: 'hidden' }) }
+      })
+      expect(wrapper.vm.filteredFiles.length).toStrictEqual(2)
+    })
+  })
 })
 
-function createShallowMountWrapper() {
+function createShallowMountWrapper({
+  currentFileContext
+}: {
+  currentFileContext?: Partial<FileContext>
+} = {}) {
   const mocks = defaultComponentMocks()
   mocks.$previewService.loadPreview.mockResolvedValue('')
   return {
@@ -103,7 +130,8 @@ function createShallowMountWrapper() {
             getDriveAliasAndItem: vi.fn().mockImplementation((file) => {
               return activeFiles.find((filteredFile) => filteredFile.id == file.id)?.path
             })
-          }
+          },
+          ...currentFileContext
         }),
         activeFiles,
         isFolderLoading: true,
