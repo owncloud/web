@@ -52,7 +52,14 @@
       </div>
     </template>
     <template v-if="!isLocationPicker && !isFilePicker" #select="{ item }">
+      <oc-spinner
+        v-if="isResourceInDeleteQueue(item.id)"
+        class="resource-table-activity-indicator"
+        size="medium"
+      />
+
       <oc-checkbox
+        v-else
         :id="`resource-table-select-${resourceDomSelector(item)}`"
         :label="getResourceCheckboxLabel(item)"
         :label-hidden="true"
@@ -306,6 +313,7 @@ import CollapsibleOcTable from './../../cern/components/CollapsibleOcTable.vue'
 import { storeToRefs } from 'pinia'
 import { OcButton, OcTable } from '@ownclouders/design-system/components'
 import { FieldType } from '@ownclouders/design-system/helpers'
+import { OcSpinner } from '@ownclouders/design-system/components'
 
 const TAGS_MINIMUM_SCREEN_WIDTH = 850
 
@@ -316,7 +324,8 @@ export default defineComponent({
     ResourceGhostElement,
     ResourceListItem,
     ResourceSize,
-    OcTable
+    OcTable,
+    OcSpinner
   },
   props: {
     /**
@@ -554,7 +563,7 @@ export default defineComponent({
     const { userContextReady } = storeToRefs(authStore)
 
     const resourcesStore = useResourcesStore()
-    const { areFileExtensionsShown, latestSelectedId } = storeToRefs(resourcesStore)
+    const { areFileExtensionsShown, latestSelectedId, deleteQueue } = storeToRefs(resourcesStore)
 
     const dragItem = ref<Resource>()
     const ghostElement = ref()
@@ -580,7 +589,7 @@ export default defineComponent({
           !resource.isFolder
         )
       }
-      return resource.processing === true
+      return resource.processing === true || isResourceInDeleteQueue(resource.id)
     }
 
     const disabledResources: ComputedRef<Array<Resource['id']>> = computed(() => {
@@ -642,6 +651,10 @@ export default defineComponent({
       return action.route({ space, resources: [resource] })
     }
 
+    const isResourceInDeleteQueue = (id: string): boolean => {
+      return unref(deleteQueue).includes(id)
+    }
+
     return {
       router,
       configOptions,
@@ -679,7 +692,8 @@ export default defineComponent({
       latestSelectedId,
       isResourceClickable,
       getResourceLink,
-      isSticky
+      isSticky,
+      isResourceInDeleteQueue
     }
   },
   data() {
@@ -1251,7 +1265,8 @@ export default defineComponent({
     vertical-align: text-bottom;
   }
 
-  &-edit-name {
+  &-edit-name,
+  &-activity-indicator {
     display: inline-flex;
     margin-left: var(--oc-space-xsmall);
 
