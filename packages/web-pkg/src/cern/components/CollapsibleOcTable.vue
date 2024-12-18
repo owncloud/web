@@ -687,39 +687,38 @@ export default defineComponent({
 .oc-table {
   border-collapse: collapse;
   border-spacing: 0;
-  color: var(--oc-color-text-default);
+  color: var(--oc-color-onSurface);
   width: 100%;
   &-hover tr {
     transition: background-color $transition-duration-short ease-in-out;
   }
   &-hover tr:hover td:not(:last-child) span:not(.avatarInitials):not(button span) {
-    color: var(--oc-color-swatch-brand-hover) !important;
+    color: var(--oc-color-primaryContainer) !important;
   }
   tr {
     outline: none;
     height: var(--oc-size-height-table-row);
   }
   tr + tr {
-    border-top: 1px solid var(--oc-color-border);
+    border-top: 1px solid var(--oc-color-outline);
   }
   &-hover tr:not(&-footer-row):hover {
-    background-color: var(--oc-color-background-hover);
+    background-color: var(--oc-color-surfaceContainerHigh);
   }
   &-highlighted {
-    background-color: var(--oc-color-background-highlight) !important;
+    background-color: var(--oc-color-surfaceBright) !important;
   }
   &-accentuated {
-    background-color: var(--oc-color-background-accentuate);
+    background-color: var(--oc-color-surfaceContainerHighaccentuate);
   }
   &-disabled {
-    background-color: var(--oc-color-background-muted);
+    background-color: var(--oc-color-surfaceDim);
     opacity: 0.8;
     pointer-events: none;
   }
   &-sticky {
     position: relative;
     .oc-table-header-cell {
-      background-color: var(--oc-color-background-default);
       position: sticky;
       z-index: 1;
     }
@@ -730,13 +729,13 @@ export default defineComponent({
   &-thead-content {
     vertical-align: middle;
     display: inline-table;
-    color: var(--oc-color-swatch-passive-default);
+    color: var(--oc-color-secondary);
     &:hover {
       text-decoration: underline;
     }
   }
   &-footer {
-    border-top: 1px solid var(--oc-color-border);
+    border-top: 1px solid var(--oc-color-outline);
     &-cell {
       color: var(--oc-color-text-muted);
       font-size: 0.875rem;
@@ -752,7 +751,7 @@ export default defineComponent({
     display: table-cell !important;
     vertical-align: middle !important;
     &:hover {
-      background-color: var(--oc-color-background-hover);
+      background-color: var(--oc-color-surfaceContainerHigh);
     }
   }
 }

@@ -116,8 +116,8 @@ export default defineComponent({
 
     &-primary {
       span {
-        color: var(--oc-color-swatch-primary-contrast);
-        background-color: var(--oc-color-swatch-primary-default);
+        color: var(--oc-color-onPrimary);
+        background-color: var(--oc-color-primary);
       }
     }
     &-success {
@@ -128,8 +128,8 @@ export default defineComponent({
     }
     &-danger {
       span {
-        color: var(--oc-color-swatch-danger-contrast);
-        background-color: var(--oc-color-swatch-danger-default);
+        color: var(--oc-color-onError);
+        background-color: var(--oc-color-error);
       }
     }
 

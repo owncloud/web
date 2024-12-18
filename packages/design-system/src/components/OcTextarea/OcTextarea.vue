@@ -195,10 +195,10 @@ export default defineComponent({
   padding-bottom: var(--oc-space-xsmall);
   padding-top: var(--oc-space-xsmall);
   box-sizing: border-box;
-  background: var(--oc-color-background-muted);
+  background: var(--oc-color-surfaceDim);
   border: 0 none;
   margin: 0;
-  color: var(--oc-color-text-default);
+  color: var(--oc-color-onSurface);
   max-width: 100%;
   width: 100%;
   overflow: auto;
@@ -209,24 +209,24 @@ export default defineComponent({
 
   &:focus {
     border-color: var(--oc-color-input-text-default);
-    background-color: var(--oc-color-background-muted);
-    color: var(--oc-color-text-default);
+    background-color: var(--oc-color-surfaceDim);
+    color: var(--oc-color-onSurface);
   }
 
   &-warning,
   &-warning:focus {
-    border-color: var(--oc-color-swatch-warning-default);
-    color: var(--oc-color-swatch-warning-default);
+    border-color: var(--oc-color-error);
+    color: var(--oc-color-error);
   }
 
   &-danger,
   &-danger:focus {
-    border-color: var(--oc-color-swatch-danger-default);
-    color: var(--oc-color-swatch-danger-default);
+    border-color: var(--oc-color-error);
+    color: var(--oc-color-error);
   }
 
   &-description {
-    color: var(--oc-color-text-muted);
+    color: var(--oc-color-onSurfaceVariant);
   }
 
   &-message {

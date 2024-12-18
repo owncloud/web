@@ -55,8 +55,8 @@ export default defineComponent({
   }
   .action-menu-item:hover:not([disabled]),
   .action-menu-item:focus:not([disabled]) {
-    background-color: var(--oc-color-background-hover);
-    border-color: var(--oc-color-background-hover);
+    background-color: var(--oc-color-surfaceContainerHigh);
+    border-color: var(--oc-color-surfaceContainerHigh);
   }
 
   li {

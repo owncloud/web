@@ -63,7 +63,7 @@ export default defineComponent({
 .oc-spinner {
   @include oc-spinner-size(1);
 
-  color: var(--oc-color-text-default);
+  color: var(--oc-color-onSurface);
   display: inline-block;
 
   &::after {

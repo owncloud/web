@@ -22,8 +22,8 @@
         :width="32"
         icon="user"
         icon-fill-type="line"
-        icon-color="var(--oc-color-swatch-brand-default)"
-        background="var(--oc-color-swatch-brand-contrast)"
+        icon-color="var(--oc-color-primary)"
+        background="var(--oc-color-background)"
       />
     </oc-button>
     <oc-drop
@@ -208,8 +208,8 @@ export default defineComponent({
 
     &:focus,
     &:hover {
-      background-color: var(--oc-color-background-hover);
-      color: var(--oc-color-swatch-passive-default);
+      background-color: var(--oc-color-surfaceContainerHigh);
+      color: var(--oc-color-secondary);
       text-decoration: none;
     }
   }
@@ -221,14 +221,14 @@ export default defineComponent({
 }
 
 .imprint-footer {
-  background-color: var(--oc-color-background-hover);
+  background-color: var(--oc-color-surfaceContainerHigh);
   margin-left: calc(var(--oc-space-small) * -1);
   width: calc(100% + var(--oc-space-small) * 2);
   margin-bottom: calc(var(--oc-space-small) * -1) !important;
 
   a {
     font-size: var(--oc-font-size-medium) !important;
-    color: var(--oc-color-text-default);
+    color: var(--oc-color-onSurface);
   }
 }
 </style>

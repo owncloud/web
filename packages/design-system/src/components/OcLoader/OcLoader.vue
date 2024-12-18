@@ -53,7 +53,7 @@ export default defineComponent({
   }
 
   &::after {
-    background: var(--oc-color-text-muted);
+    background: var(--oc-color-onSurfaceVariant);
     content: '';
     height: 100%;
     width: 0;
