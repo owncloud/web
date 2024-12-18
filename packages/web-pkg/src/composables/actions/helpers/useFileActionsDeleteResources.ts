@@ -152,6 +152,8 @@ export const useFileActionsDeleteResources = () => {
 
   const filesList_delete = (resources: Resource[]) => {
     resourcesToDelete.value = [...resources]
+    resourcesStore.addResourcesIntoDeleteQueue(unref(resourcesToDelete).map(({ id }) => id))
+    unref(resourcesToDelete).forEach(({ id }) => resourcesStore.removeSelection(id))
 
     const resourceSpaceMapping = unref(resources).reduce<
       Record<string, { space: SpaceResource; resources: Resource[] }>
@@ -193,6 +195,9 @@ export const useFileActionsDeleteResources = () => {
               messageStore.showMessage({ title })
             }
 
+            resourcesStore.removeResourcesFromDeleteQueue(failed.map(({ resource }) => resource.id))
+            resourcesStore.removeResourcesFromDeleteQueue(successful.map(({ id }) => id))
+
             failed.forEach(({ error, resource }) => {
               let title = $gettext('Failed to delete "%{resource}"', { resource: resource.name })
               if (error.statusCode === 423) {
@@ -207,10 +212,6 @@ export const useFileActionsDeleteResources = () => {
             // user hasn't navigated to another location meanwhile
             if (originalCurrentFolderId === unref(currentFolder)?.id) {
               resourcesStore.removeResources(successful)
-
-              successful.forEach(({ id }) => {
-                resourcesStore.removeSelection(id)
-              })
 
               const activeFilesCount = resourcesStore.activeResources.length
               const pageCount = Math.ceil(unref(activeFilesCount) / unref(itemsPerPage))
