@@ -104,6 +104,34 @@ describe('CreateAndUpload component', () => {
       const clipboardStore = useClipboardStore()
       expect(clipboardStore.clearClipboard).toHaveBeenCalled()
     })
+    it('should disable the "paste files"-action when clipboardResources are from same folder', () => {
+      const { wrapper } = getWrapper({
+        clipboardResources: [mock<Resource>({ parentFolderId: 'current-folder' })],
+        currentFolder: mock<Resource>({
+          id: 'current-folder',
+          canUpload: vi.fn().mockReturnValue(true)
+        })
+      })
+      expect(
+        wrapper.findComponent<typeof OcButton>(elSelector.pasteFilesBtn).vm.disabled
+      ).toStrictEqual(true)
+    })
+
+    it('should not disable the "paste files"-action when at least one clipboardResources is not from same folder', () => {
+      const { wrapper } = getWrapper({
+        clipboardResources: [
+          mock<Resource>({ parentFolderId: 'current-folder' }),
+          mock<Resource>({ parentFolderId: 'another-folder' })
+        ],
+        currentFolder: mock<Resource>({
+          id: 'current-folder',
+          canUpload: vi.fn().mockReturnValue(true)
+        })
+      })
+      expect(
+        wrapper.findComponent<typeof OcButton>(elSelector.pasteFilesBtn).vm.disabled
+      ).toStrictEqual(false)
+    })
   })
   describe('method "onUploadComplete"', () => {
     it.each([
