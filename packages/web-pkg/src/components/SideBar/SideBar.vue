@@ -104,6 +104,7 @@ import {
   defineComponent,
   nextTick,
   onBeforeUnmount,
+  onMounted,
   PropType,
   ref,
   unref,
@@ -203,10 +204,20 @@ export default defineComponent({
       return $gettext('Back to main panels')
     })
 
-    const fullWidthSideBar = computed(() => window.innerWidth <= 1024)
+    const windowWidth = ref(window.innerWidth)
+
+    const fullWidthSideBar = computed(() => unref(windowWidth) <= 960)
     const backgroundContentEl = computed(() => {
       return unref(appSideBar)?.parentElement?.querySelector('div') as HTMLElement
     })
+
+    const onResize = () => {
+      if (!props.isOpen) {
+        return
+      }
+
+      windowWidth.value = window.innerWidth
+    }
 
     watch(
       () => props.isOpen,
@@ -223,7 +234,13 @@ export default defineComponent({
       { immediate: true }
     )
 
+    onMounted(() => {
+      window.addEventListener('resize', onResize)
+    })
+
     onBeforeUnmount(() => {
+      window.removeEventListener('resize', onResize)
+
       if (unref(backgroundContentEl)) {
         unref(backgroundContentEl).style.visibility = 'visible'
       }
@@ -291,7 +308,7 @@ export default defineComponent({
   width: 100% !important;
 }
 
-@media only screen and (max-width: 1024px) {
+@media only screen and (max-width: $oc-breakpoint-medium-default) {
   .files-wrapper {
     flex-wrap: nowrap !important;
   }
