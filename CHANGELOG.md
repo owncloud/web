@@ -25,6 +25,7 @@ Summary
 * Enhancement - Accessibility improvements: [#5379](https://github.com/owncloud/web/issues/5379)
 * Enhancement - Create spaces via admin settings: [#11849](https://github.com/owncloud/web/pull/11849)
 * Enhancement - Add notifications settings: [#12010](https://github.com/owncloud/web/pull/12010)
+* Enhancement - Disable resources in delete queue: [#12046](https://github.com/owncloud/web/pull/12046)
 
 Details
 -------
@@ -167,6 +168,15 @@ Details
 
    https://github.com/owncloud/web/issues/9248
    https://github.com/owncloud/web/pull/12010
+
+* Enhancement - Disable resources in delete queue: [#12046](https://github.com/owncloud/web/pull/12046)
+
+   We've added a new delete queue which is used to disable resources that are being
+   currently deleted. When the resource is in delete queue, it also replaces select
+   checkbox with a spinner to better hint that there is an action in progress.
+
+   https://github.com/owncloud/web/issues/11956
+   https://github.com/owncloud/web/pull/12046
 
 Changelog for ownCloud Web [11.0.5] (2024-11-25)
 =======================================
