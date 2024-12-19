@@ -420,7 +420,7 @@ export default defineComponent({
 
     const pasteHereButtonTooltip = computed(() => {
       if (unref(uploadOrFileCreationBlocked)) {
-        return $gettext('You have no permission to paste files here!')
+        return $gettext('You have no permission to paste files here.')
       }
 
       if (unref(isPastingIntoSameFolder)) {
