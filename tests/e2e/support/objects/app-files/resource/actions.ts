@@ -51,7 +51,7 @@ const uploadInfoCloseButton = '#close-upload-info-btn'
 const uploadErrorCloseButton = '.oc-notification-message-danger button[aria-label="Close"]'
 const filesBatchAction = '.files-app-bar-actions .oc-files-actions-%s-trigger'
 const pasteButton = '.paste-files-btn'
-const breadcrumbRoot = '//nav[contains(@class, "oc-breadcrumb")]/ol/li[1]'
+const breadcrumbRoot = '//nav[@id="files-breadcrumb"]//li[1]'
 const fileRenameInput = '.oc-text-input'
 const deleteButtonSidebar = '#oc-files-actions-sidebar .oc-files-actions-delete-trigger'
 const actionConfirmationButton =
@@ -881,6 +881,11 @@ export const pasteResource = async (args: moveOrCopyResourceArgs): Promise<void>
   }
 }
 
+const selectBatchAction = async (page: Page, action: string): Promise<void> => {
+  await page.locator(util.format(filesBatchAction, action)).click()
+  await page.mouse.move(0, 0)
+}
+
 export const moveOrCopyMultipleResources = async (
   args: moveOrCopyMultipleResourceArgs
 ): Promise<void> => {
@@ -922,7 +927,7 @@ export const moveOrCopyMultipleResources = async (
       break
     }
     case 'batch-action': {
-      await page.locator(util.format(filesBatchAction, action)).click()
+      await selectBatchAction(page, action)
 
       await page.locator(breadcrumbRoot).click()
       const newLocationPath = newLocation.split('/')
@@ -994,7 +999,7 @@ export const moveOrCopyResource = async (args: moveOrCopyResourceArgs): Promise<
     }
     case 'batch-action': {
       await page.locator(util.format(checkBox, resourceBase)).click()
-      await page.locator(util.format(filesBatchAction, action)).click()
+      await selectBatchAction(page, action)
       await pasteResource({ page, resource: resourceBase, newLocation, action, method, option })
       break
     }
