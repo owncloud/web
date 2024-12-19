@@ -276,6 +276,15 @@ export default defineComponent({
         })
       }
 
+      if (isLocationCommonActive(router, 'files-common-search')) {
+        yield resourcesStore.loadAncestorMetaData({
+          folder: unref(resource),
+          space: unref(props.space),
+          client: clientService.webdav,
+          signal
+        })
+      }
+
       // gather all ancestors we need to load shares for (indirect shares, space members)
       const cachedIds = [...collaboratorCache, ...linkCache].map(({ resourceId }) => resourceId)
       const ancestorIds = Object.values(resourcesStore.ancestorMetaData)
