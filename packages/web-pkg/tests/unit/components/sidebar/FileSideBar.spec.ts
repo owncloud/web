@@ -161,6 +161,22 @@ describe('FileSideBar', () => {
         mocks.$clientService.graphAuthenticated.permissions.listPermissions
       ).toHaveBeenCalledTimes(2)
     })
+
+    it('should load ancestor meta data to get indirect shares when on search page', async () => {
+      const resource = mock<Resource>()
+      const { wrapper, mocks } = createWrapper({ currentRouteName: 'files-common-search' })
+      const { loadAncestorMetaData } = useResourcesStore()
+
+      mocks.$clientService.graphAuthenticated.permissions.listPermissions.mockResolvedValue({
+        shares: [],
+        allowedActions: [],
+        allowedRoles: []
+      })
+
+      await wrapper.vm.loadSharesTask.perform(resource)
+      expect(loadAncestorMetaData).toHaveBeenCalled()
+    })
+
     describe('cache', () => {
       it('is being used in non-flat file lists', async () => {
         const resource = mock<Resource>()
