@@ -424,7 +424,7 @@ export default defineComponent({
       }
 
       if (unref(isPastingIntoSameFolder)) {
-        return $gettext('You cannot paste resources into the same folder where you copied them.')
+        return $gettext('You cannot paste resources into the same folder.')
       }
 
       return ''
