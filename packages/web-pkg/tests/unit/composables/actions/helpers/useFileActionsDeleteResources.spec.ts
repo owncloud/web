@@ -8,6 +8,7 @@ import {
 } from '@ownclouders/web-test-helpers'
 import { useDeleteWorker } from '../../../../../src/composables/webWorkers/deleteWorker'
 import { useGetMatchingSpace } from '../../../../../src/composables/spaces/useGetMatchingSpace'
+import { useResourcesStore } from '../../../../../src/composables/piniaStores'
 
 vi.mock('../../../../../src/composables/webWorkers/deleteWorker')
 vi.mock('../../../../../src/composables/spaces/useGetMatchingSpace')
@@ -43,6 +44,20 @@ describe('deleteResources', () => {
           expect(router.push).toHaveBeenCalledTimes(1)
         }
       })
+    })
+
+    it('should push resources into delete queue', () => {
+      const filesToDelete = [{ id: '2', path: '/folder/fileToDelete.txt' }]
+      getWrapper({
+        currentFolder,
+        result: filesToDelete,
+        setup: ({ filesList_delete }) => {
+          filesList_delete(filesToDelete)
+        }
+      })
+
+      const { addResourcesIntoDeleteQueue } = useResourcesStore()
+      expect(addResourcesIntoDeleteQueue).toHaveBeenCalledWith(['2'])
     })
   })
 })
