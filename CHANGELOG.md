@@ -22,6 +22,7 @@ Summary
 * Bugfix - Missing translations for share type filters: [#12013](https://github.com/owncloud/web/pull/12013)
 * Bugfix - Permanent link for shares: [#12022](https://github.com/owncloud/web/pull/12022)
 * Bugfix - Preview app files visibility: [#12040](https://github.com/owncloud/web/pull/12040)
+* Bugfix - Disable paste action in same folder: [#12044](https://github.com/owncloud/web/pull/12044)
 * Enhancement - Accessibility improvements: [#5379](https://github.com/owncloud/web/issues/5379)
 * Enhancement - Create spaces via admin settings: [#11849](https://github.com/owncloud/web/pull/11849)
 * Enhancement - Add notifications settings: [#12010](https://github.com/owncloud/web/pull/12010)
@@ -142,6 +143,15 @@ Details
 
    https://github.com/owncloud/web/issues/11883
    https://github.com/owncloud/web/pull/12040
+
+* Bugfix - Disable paste action in same folder: [#12044](https://github.com/owncloud/web/pull/12044)
+
+   We've fixed the state of the "paste files" action when copied resources are from
+   the same folder. The button will be disabled in such case and a tooltip with
+   explanation message displayed.
+
+   https://github.com/owncloud/web/issues/12021
+   https://github.com/owncloud/web/pull/12044
 
 * Enhancement - Accessibility improvements: [#5379](https://github.com/owncloud/web/issues/5379)
 
