@@ -162,20 +162,13 @@ import { isUndefined } from 'lodash-es'
 import getSpeed from '@uppy/utils/lib/getSpeed'
 
 import { HttpError, Resource, urlJoin } from '@ownclouders/web-client'
-import { queryItemAsString, useConfigStore } from '@ownclouders/web-pkg'
-import {
-  formatFileSize,
-  UppyResource,
-  ResourceListItem,
-  ResourceIcon,
-  ResourceName
-} from '@ownclouders/web-pkg'
+import { OcUppyFile, queryItemAsString, useConfigStore } from '@ownclouders/web-pkg'
+import { formatFileSize, ResourceListItem, ResourceIcon, ResourceName } from '@ownclouders/web-pkg'
 import { extractParentFolderName } from '@ownclouders/web-client'
 import { storeToRefs } from 'pinia'
 import { RouteLocationNamedRaw } from 'vue-router'
 
-interface UploadResult extends UppyResource {
-  extension?: string
+interface UploadResult extends OcUppyFile {
   path?: string
   targetRoute?: RouteLocationNamedRaw
   status?: string
@@ -338,8 +331,8 @@ export default defineComponent({
       this.runningUploads += 1
       this.inFinalization = false
     })
-    this.$uppyService.subscribe('addedForUpload', (files: UppyResource[]) => {
-      this.filesInProgressCount += files.filter((f) => !f.isFolder).length
+    this.$uppyService.subscribe('addedForUpload', (files: OcUppyFile[]) => {
+      this.filesInProgressCount += files.filter((f) => !f.meta.isFolder).length
 
       for (const file of files) {
         if (!this.disableActions && file.isRemote) {
@@ -356,7 +349,7 @@ export default defineComponent({
         if (isTopLevelItem) {
           this.uploads[uploadId] = file
           // top level folders get initialized with file counts about their files inside
-          if (file.isFolder && this.uploads[uploadId].filesCount === undefined) {
+          if (file.meta.isFolder && this.uploads[uploadId].filesCount === undefined) {
             this.uploads[uploadId].filesCount = 0
             this.uploads[uploadId].errorCount = 0
             this.uploads[uploadId].successCount = 0
@@ -364,7 +357,7 @@ export default defineComponent({
         }
 
         // count all files inside top level folders to mark them as successful or failed later
-        if (!file.isFolder && !isTopLevelItem && this.uploads[topLevelFolderId]) {
+        if (!file.meta.isFolder && !isTopLevelItem && this.uploads[topLevelFolderId]) {
           this.uploads[topLevelFolderId].filesCount += 1
         }
       }
@@ -381,7 +374,7 @@ export default defineComponent({
     })
     this.$uppyService.subscribe(
       'upload-progress',
-      ({ file, progress }: { file: UppyResource; progress: { bytesUploaded: number } }) => {
+      ({ file, progress }: { file: OcUppyFile; progress: { bytesUploaded: number } }) => {
         if (!this.timeStarted) {
           this.timeStarted = new Date()
           this.inPreparation = false
@@ -399,7 +392,8 @@ export default defineComponent({
 
         this.uploadSpeed = getSpeed({
           bytesUploaded: this.bytesUploaded,
-          uploadStarted: this.timeStarted
+          uploadStarted: this.timeStarted.getTime(),
+          bytesTotal: this.bytesTotal
         })
 
         const progressPercent = (100 * this.bytesUploaded) / this.bytesTotal
@@ -417,7 +411,7 @@ export default defineComponent({
     )
     this.$uppyService.subscribe(
       'uploadError',
-      ({ file, error }: { file: UppyResource; error: Error }) => {
+      ({ file, error }: { file: OcUppyFile; error: Error }) => {
         if (this.errors[file.meta.uploadId]) {
           return
         }
@@ -443,10 +437,10 @@ export default defineComponent({
         }
       }
     )
-    this.$uppyService.subscribe('uploadSuccess', (file: UppyResource) => {
+    this.$uppyService.subscribe('uploadSuccess', (file: OcUppyFile) => {
       // item inside folder
       if (!this.uploads[file.meta.uploadId]) {
-        if (!file.isFolder) {
+        if (!file.meta.isFolder) {
           this.successful.push(file.meta.uploadId)
           this.filesInProgressCount -= 1
 
@@ -460,7 +454,7 @@ export default defineComponent({
 
       // file inside folder that succeeded via retry can now be removed again from this.uploads
       if (file.meta.relativeFolder) {
-        if (!file.isFolder) {
+        if (!file.meta.isFolder) {
           this.successful.push(file.meta.uploadId)
           this.filesInProgressCount -= 1
           if (file.meta.topLevelFolderId) {
@@ -476,7 +470,7 @@ export default defineComponent({
       this.uploads[file.meta.uploadId].path = urlJoin(file.meta.currentFolder, file.name)
       this.uploads[file.meta.uploadId].targetRoute = this.buildRouteFromUppyResource(file)
 
-      if (!file.isFolder) {
+      if (!file.meta.isFolder) {
         this.uploads[file.meta.uploadId].status = 'success'
         this.successful.push(file.meta.uploadId)
         this.filesInProgressCount -= 1
@@ -507,7 +501,7 @@ export default defineComponent({
 
       return this.$gettext('Few seconds left')
     },
-    handleTopLevelFolderUpdate(file: UppyResource, status: string) {
+    handleTopLevelFolderUpdate(file: OcUppyFile, status: string) {
       const topLevelFolder = this.uploads[file.meta.topLevelFolderId]
       if (status === 'success') {
         topLevelFolder.successCount += 1
@@ -549,10 +543,10 @@ export default defineComponent({
       return !!file.targetRoute
     },
     isResourceClickable(file: UploadResult) {
-      return file.isFolder === true
+      return file.meta.isFolder === true
     },
     resourceLink(file: UploadResult) {
-      if (!file.isFolder) {
+      if (!file.meta.isFolder) {
         return {}
       }
       return {
@@ -584,7 +578,7 @@ export default defineComponent({
         }
       }
     },
-    buildRouteFromUppyResource(resource: UppyResource): RouteLocationNamedRaw {
+    buildRouteFromUppyResource(resource: OcUppyFile): RouteLocationNamedRaw {
       if (!resource.meta.routeName) {
         return null
       }
@@ -656,7 +650,7 @@ export default defineComponent({
         (u) => u.status !== 'success' && u.status !== 'error'
       )
 
-      for (const item of runningUploads as UppyResource[]) {
+      for (const item of runningUploads) {
         this.uploads[item.meta.uploadId].status = 'cancelled'
       }
     },

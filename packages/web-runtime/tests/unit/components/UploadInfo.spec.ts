@@ -1,6 +1,6 @@
 import UploadInfo from '../../../src/components/UploadInfo.vue'
 import { defaultPlugins, shallowMount, defaultComponentMocks } from '@ownclouders/web-test-helpers'
-import { ResourceListItem, UppyResource } from '@ownclouders/web-pkg'
+import { ResourceListItem, OcUppyFile } from '@ownclouders/web-pkg'
 import { nextTick } from 'vue'
 import { HttpError } from '@ownclouders/web-client'
 
@@ -142,13 +142,13 @@ describe('UploadInfo component', () => {
           path: '/',
           type: 'file',
           meta: { uploadId: '1' }
-        } as unknown as UppyResource,
+        } as unknown as OcUppyFile,
         '2': {
           name: 'file2',
           path: '/',
           type: 'file',
           meta: { uploadId: '2' }
-        } as unknown as UppyResource
+        } as unknown as OcUppyFile
       }
 
       await nextTick()
@@ -169,19 +169,19 @@ describe('UploadInfo component', () => {
           path: '/',
           type: 'file',
           meta: { uploadId: '1' }
-        } as unknown as UppyResource,
+        } as unknown as OcUppyFile,
         '2': {
           name: 'file2',
           path: '/',
           type: 'file',
           meta: { uploadId: '2' }
-        } as unknown as UppyResource,
+        } as unknown as OcUppyFile,
         '3': {
           name: 'file3',
           path: '/',
           type: 'file',
           meta: { uploadId: '3' }
-        } as unknown as UppyResource
+        } as unknown as OcUppyFile
       }),
         (wrapper.vm.errors = {
           1: new HttpError('', undefined),
@@ -205,11 +205,10 @@ describe('UploadInfo component', () => {
         '1': {
           name: 'file',
           type: 'folder',
-          isFolder: true,
           targetRoute: { params: { driveAliasAndItem: 'some/drive/alias' } },
           path: '',
-          meta: { uploadId: '1' }
-        } as unknown as UppyResource
+          meta: { uploadId: '1', isFolder: true }
+        } as unknown as OcUppyFile
       }
       await nextTick()
 
