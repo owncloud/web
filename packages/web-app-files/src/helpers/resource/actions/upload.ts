@@ -3,12 +3,12 @@ import { Resource } from '@ownclouders/web-client'
 import { extractExtensionFromFile } from '@ownclouders/web-client'
 import {
   ConflictDialog,
+  OcUppyFile,
   ResolveConflict,
   resolveFileNameDuplicate,
   ResolveStrategy,
   ResourceConflictModal,
   ResourcesStore,
-  UppyResource,
   useModals
 } from '@ownclouders/web-pkg'
 
@@ -59,7 +59,7 @@ export class UploadResourceConflict extends ConflictDialog {
     })
   }
 
-  getConflicts(files: UppyResource[]): ConflictedResource[] {
+  getConflicts(files: OcUppyFile[]): ConflictedResource[] {
     const conflicts: ConflictedResource[] = []
     for (const file of files) {
       const relativeFilePath = file.meta.relativePath
@@ -87,9 +87,9 @@ export class UploadResourceConflict extends ConflictDialog {
   }
 
   async displayOverwriteDialog(
-    files: UppyResource[],
+    files: OcUppyFile[],
     conflicts: ConflictedResource[]
-  ): Promise<UppyResource[]> {
+  ): Promise<OcUppyFile[]> {
     let fileCount = 0
     let folderCount = 0
     const resolvedFileConflicts: { name: string; strategy: ResolveStrategy }[] = []

@@ -1,7 +1,7 @@
 import { mock, mockDeep } from 'vitest-mock-extended'
 import { Language } from 'vue3-gettext'
 import { UploadResourceConflict } from '../../../../../src/helpers/resource'
-import { ResolveStrategy, UppyResource, useResourcesStore } from '@ownclouders/web-pkg'
+import { ResolveStrategy, OcUppyFile, useResourcesStore } from '@ownclouders/web-pkg'
 import { Resource } from '@ownclouders/web-client'
 import { createTestingPinia } from '@ownclouders/web-test-helpers'
 
@@ -25,8 +25,8 @@ describe('upload helper', () => {
         mockDeep<Resource>({ name: folderName })
       ]
       const filesToUpload = [
-        mockDeep<UppyResource>({ name: fileName, meta: { relativePath: '', relativeFolder: '' } }),
-        mockDeep<UppyResource>({
+        mockDeep<OcUppyFile>({ name: fileName, meta: { relativePath: '', relativeFolder: '' } }),
+        mockDeep<OcUppyFile>({
           name: 'anotherFile',
           meta: { relativePath: `/${folderName}/anotherFile` }
         })
@@ -43,14 +43,14 @@ describe('upload helper', () => {
     it.each([ResolveStrategy.REPLACE, ResolveStrategy.KEEP_BOTH])(
       'should return all files if user chooses replace or keep both for all',
       async (strategy) => {
-        const uppyResource = mockDeep<UppyResource>({
+        const OcUppyFile = mockDeep<OcUppyFile>({
           name: 'test',
           meta: {
             relativeFolder: ''
           }
         })
         const conflict = {
-          name: uppyResource.name,
+          name: OcUppyFile.name,
           type: 'file'
         }
 
@@ -60,14 +60,14 @@ describe('upload helper', () => {
         )
         instance.resolveFileExists = resolveFileConflictMethod
 
-        const result = await instance.displayOverwriteDialog([uppyResource], [conflict])
+        const result = await instance.displayOverwriteDialog([OcUppyFile], [conflict])
         expect(result.length).toBe(1)
-        expect(result).toEqual([uppyResource])
+        expect(result).toEqual([OcUppyFile])
       }
     )
     it('should return no files if user chooses skip for all', async () => {
-      const uppyResource = mockDeep<UppyResource>({ name: 'test' })
-      const conflict = { name: uppyResource.name, type: 'file' }
+      const OcUppyFile = mockDeep<OcUppyFile>({ name: 'test' })
+      const conflict = { name: OcUppyFile.name, type: 'file' }
 
       const instance = getResourceConflictInstance()
 
@@ -76,14 +76,14 @@ describe('upload helper', () => {
       )
       instance.resolveFileExists = resolveFileConflictMethod
 
-      const result = await instance.displayOverwriteDialog([uppyResource], [conflict])
+      const result = await instance.displayOverwriteDialog([OcUppyFile], [conflict])
       expect(result.length).toBe(0)
     })
     it('should show dialog once if do for all conflicts is ticked', async () => {
-      const uppyResourceOne = mockDeep<UppyResource>({ name: 'test' })
-      const uppyResourceTwo = mockDeep<UppyResource>({ name: 'test2' })
-      const conflictOne = { name: uppyResourceOne.name, type: 'file' }
-      const conflictTwo = { name: uppyResourceTwo.name, type: 'file' }
+      const OcUppyFileOne = mockDeep<OcUppyFile>({ name: 'test' })
+      const OcUppyFileTwo = mockDeep<OcUppyFile>({ name: 'test2' })
+      const conflictOne = { name: OcUppyFileOne.name, type: 'file' }
+      const conflictTwo = { name: OcUppyFileTwo.name, type: 'file' }
 
       const instance = getResourceConflictInstance()
       const resolveFileConflictMethod = vi.fn(() =>
@@ -92,21 +92,21 @@ describe('upload helper', () => {
       instance.resolveFileExists = resolveFileConflictMethod
 
       await instance.displayOverwriteDialog(
-        [uppyResourceOne, uppyResourceTwo],
+        [OcUppyFileOne, OcUppyFileTwo],
         [conflictOne, conflictTwo]
       )
 
       expect(resolveFileConflictMethod).toHaveBeenCalledTimes(1)
     })
     it('should show dialog twice if do for all conflicts is ticked and folders and files are uploaded', async () => {
-      const uppyResourceOne = mockDeep<UppyResource>({ name: 'test' })
-      const uppyResourceTwo = mockDeep<UppyResource>({ name: 'folder' })
+      const OcUppyFileOne = mockDeep<OcUppyFile>({ name: 'test' })
+      const OcUppyFileTwo = mockDeep<OcUppyFile>({ name: 'folder' })
       const conflictOne = {
-        name: uppyResourceOne.name,
+        name: OcUppyFileOne.name,
         type: 'file',
         meta: { relativeFolder: '/' }
       }
-      const conflictTwo = { name: uppyResourceTwo.name, type: 'folder' }
+      const conflictTwo = { name: OcUppyFileTwo.name, type: 'folder' }
 
       const instance = getResourceConflictInstance()
       instance.resolveFileExists = vi.fn(() =>
@@ -114,7 +114,7 @@ describe('upload helper', () => {
       )
 
       await instance.displayOverwriteDialog(
-        [uppyResourceOne, uppyResourceTwo],
+        [OcUppyFileOne, OcUppyFileTwo],
         [conflictOne, conflictTwo]
       )
 
