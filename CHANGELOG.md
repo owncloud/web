@@ -23,6 +23,9 @@ Summary
 * Bugfix - Permanent link for shares: [#12022](https://github.com/owncloud/web/pull/12022)
 * Bugfix - Preview app files visibility: [#12040](https://github.com/owncloud/web/pull/12040)
 * Bugfix - Disable paste action in same folder: [#12044](https://github.com/owncloud/web/pull/12044)
+* Bugfix - Do not push sidebar close action away: [#12045](https://github.com/owncloud/web/pull/12045)
+* Bugfix - Update sidebar width on resize: [#12045](https://github.com/owncloud/web/pull/12045)
+* Bugfix - Use correct breakpoints in sidebar: [#12045](https://github.com/owncloud/web/pull/12045)
 * Enhancement - Accessibility improvements: [#5379](https://github.com/owncloud/web/issues/5379)
 * Enhancement - Create spaces via admin settings: [#11849](https://github.com/owncloud/web/pull/11849)
 * Enhancement - Add notifications settings: [#12010](https://github.com/owncloud/web/pull/12010)
@@ -152,6 +155,31 @@ Details
 
    https://github.com/owncloud/web/issues/12021
    https://github.com/owncloud/web/pull/12044
+
+* Bugfix - Do not push sidebar close action away: [#12045](https://github.com/owncloud/web/pull/12045)
+
+   We've fixed an issue with the sidebar close action which was pushed away when
+   zooming. The layout of the screen was not adjusting the size and shifted the
+   whole sidebar off the screen. We set a fixed width of 100% - sidebar width to
+   prevent this.
+
+   https://github.com/owncloud/web/issues/11536
+   https://github.com/owncloud/web/pull/12045
+
+* Bugfix - Update sidebar width on resize: [#12045](https://github.com/owncloud/web/pull/12045)
+
+   We've fixed an issue where the width of the sidebar was updated only when
+   opening it. We added a resize event handler to the window object so that we can
+   react to it and update the width accordingly.
+
+   https://github.com/owncloud/web/pull/12045
+
+* Bugfix - Use correct breakpoints in sidebar: [#12045](https://github.com/owncloud/web/pull/12045)
+
+   We've set the correct breakpoint used for setting width of the sidebar so that
+   it matches the breakpoint in app wrapper.
+
+   https://github.com/owncloud/web/pull/12045
 
 * Enhancement - Accessibility improvements: [#5379](https://github.com/owncloud/web/issues/5379)
 
