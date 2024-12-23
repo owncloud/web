@@ -26,6 +26,7 @@ Summary
 * Bugfix - Do not push sidebar close action away: [#12045](https://github.com/owncloud/web/pull/12045)
 * Bugfix - Update sidebar width on resize: [#12045](https://github.com/owncloud/web/pull/12045)
 * Bugfix - Use correct breakpoints in sidebar: [#12045](https://github.com/owncloud/web/pull/12045)
+* Bugfix - Show indirect shares on search page: [#12050](https://github.com/owncloud/web/pull/12050)
 * Enhancement - Accessibility improvements: [#5379](https://github.com/owncloud/web/issues/5379)
 * Enhancement - Create spaces via admin settings: [#11849](https://github.com/owncloud/web/pull/11849)
 * Enhancement - Add notifications settings: [#12010](https://github.com/owncloud/web/pull/12010)
@@ -180,6 +181,14 @@ Details
    it matches the breakpoint in app wrapper.
 
    https://github.com/owncloud/web/pull/12045
+
+* Bugfix - Show indirect shares on search page: [#12050](https://github.com/owncloud/web/pull/12050)
+
+   We've fixed an issue where the indirect shares of resources were not displayed
+   in the sidebar when user is on search page.
+
+   https://github.com/owncloud/web/issues/10939
+   https://github.com/owncloud/web/pull/12050
 
 * Enhancement - Accessibility improvements: [#5379](https://github.com/owncloud/web/issues/5379)
 
