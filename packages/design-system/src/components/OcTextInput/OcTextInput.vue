@@ -20,7 +20,8 @@
         :class="{
           'oc-text-input-warning': !!warningMessage,
           'oc-text-input-danger': !!errorMessage,
-          'oc-pl-l': !!readOnly
+          'oc-pl-l': !!readOnly,
+          'clear-action-visible': showClearButton
         }"
         :type="type"
         :value="displayValue"
@@ -407,6 +408,10 @@ export default defineComponent({
     align-items: center;
     margin-top: var(--oc-space-xsmall);
     min-height: $oc-font-size-default * 1.5;
+  }
+
+  &.clear-action-visible {
+    padding-right: ($oc-size-icon-default * 0.7) + 7px;
   }
 }
 </style>
