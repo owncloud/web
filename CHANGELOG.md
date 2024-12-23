@@ -31,6 +31,7 @@ Summary
 * Enhancement - Create spaces via admin settings: [#11849](https://github.com/owncloud/web/pull/11849)
 * Enhancement - Add notifications settings: [#12010](https://github.com/owncloud/web/pull/12010)
 * Enhancement - Disable resources in delete queue: [#12046](https://github.com/owncloud/web/pull/12046)
+* Enhancement - Use generic private link error: [#12054](https://github.com/owncloud/web/pull/12054)
 
 Details
 -------
@@ -224,6 +225,14 @@ Details
 
    https://github.com/owncloud/web/issues/11956
    https://github.com/owncloud/web/pull/12046
+
+* Enhancement - Use generic private link error: [#12054](https://github.com/owncloud/web/pull/12054)
+
+   We've added a more generic error message to the unavailable private links as the
+   previous message was confusing.
+
+   https://github.com/owncloud/web/issues/12009
+   https://github.com/owncloud/web/pull/12054
 
 Changelog for ownCloud Web [11.0.5] (2024-11-25)
 =======================================
