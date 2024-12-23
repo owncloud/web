@@ -27,6 +27,7 @@ Summary
 * Bugfix - Update sidebar width on resize: [#12045](https://github.com/owncloud/web/pull/12045)
 * Bugfix - Use correct breakpoints in sidebar: [#12045](https://github.com/owncloud/web/pull/12045)
 * Bugfix - Show indirect shares on search page: [#12050](https://github.com/owncloud/web/pull/12050)
+* Bugfix - Add more padding to input when clear action is visible: [#12055](https://github.com/owncloud/web/pull/12055)
 * Enhancement - Accessibility improvements: [#5379](https://github.com/owncloud/web/issues/5379)
 * Enhancement - Create spaces via admin settings: [#11849](https://github.com/owncloud/web/pull/11849)
 * Enhancement - Add notifications settings: [#12010](https://github.com/owncloud/web/pull/12010)
@@ -190,6 +191,15 @@ Details
 
    https://github.com/owncloud/web/issues/10939
    https://github.com/owncloud/web/pull/12050
+
+* Bugfix - Add more padding to input when clear action is visible: [#12055](https://github.com/owncloud/web/pull/12055)
+
+   We've fixed the issue where the clear action of the text input would overlap the
+   text entered into the input. When the clear action becomes visible, the right
+   padding of the input will be increased by the size of the clear action.
+
+   https://github.com/owncloud/web/issues/11543
+   https://github.com/owncloud/web/pull/12055
 
 * Enhancement - Accessibility improvements: [#5379](https://github.com/owncloud/web/issues/5379)
 
