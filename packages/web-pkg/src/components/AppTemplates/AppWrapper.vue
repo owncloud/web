@@ -1,5 +1,5 @@
 <template>
-  <main :id="applicationId" class="oc-height-1-1" @keydown.esc="closeApp">
+  <main :id="applicationId" class="app-wrapper oc-height-1-1" @keydown.esc="closeApp">
     <h1 class="oc-invisible-sr" v-text="pageTitle" />
     <app-top-bar
       v-if="!loading && !loadingError && resource"
@@ -18,7 +18,7 @@
       class="oc-flex oc-width-1-1 oc-height-1-1"
       :class="{ 'app-sidebar-open': isSideBarOpen }"
     >
-      <slot class="oc-height-1-1 oc-width-1-1" v-bind="slotAttrs" />
+      <slot class="app-wrapper-content oc-height-1-1" v-bind="slotAttrs" />
       <file-side-bar :is-open="isSideBarOpen" :active-panel="sideBarActivePanel" :space="space" />
     </div>
   </main>
@@ -708,6 +708,17 @@ export default defineComponent({
 @media (max-width: $oc-breakpoint-medium-default) {
   .app-sidebar-open > *:not(:last-child) {
     display: none;
+  }
+}
+
+.app-wrapper {
+  .app-wrapper-content {
+    width: 100%;
+  }
+
+  .app-sidebar-open .app-wrapper-content {
+    // 440px is the width of the app sidebar
+    width: calc(100% - 440px);
   }
 }
 </style>
