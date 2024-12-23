@@ -1,10 +1,14 @@
 import { computed, unref, watch } from 'vue'
 import { v4 as uuidV4 } from 'uuid'
-import { UppyService } from '../../services/uppy/uppyService'
+import {
+  OcTusOptions,
+  OcUppyBody,
+  OcUppyFile,
+  OcUppyMeta,
+  UppyService
+} from '../../services/uppy/uppyService'
 import { useAuthStore, useCapabilityStore } from '../piniaStores'
-import { TusOptions } from '@uppy/tus'
 import { XHRUploadOptions } from '@uppy/xhr-upload'
-import { UppyFile } from '@uppy/core'
 import { useClientService } from '../clientService'
 import { useGettext } from 'vue3-gettext'
 
@@ -37,17 +41,17 @@ export function useUpload(options: UploadOptions) {
     return headers
   }
 
-  const tusOptions = computed<TusOptions>(() => {
-    const options: TusOptions = {
+  const tusOptions = computed<OcTusOptions>(() => {
+    const options: OcTusOptions = {
       onBeforeRequest: (req, file) =>
-        new Promise((resolve) => {
+        new Promise<void>((resolve) => {
           const headers = getHeaders()
           req.setHeader('Authorization', headers.Authorization)
           req.setHeader('X-Request-ID', headers['X-Request-ID'])
           req.setHeader('Accept-Language', headers['Accept-Language'])
           req.setHeader('Initiator-ID', headers['Initiator-ID'])
           if (file?.isRemote) {
-            req.setHeader('x-oc-mtime', (file?.data?.lastModified / 1000).toString())
+            req.setHeader('x-oc-mtime', ((file?.data as File)?.lastModified / 1000).toFixed(0))
           }
           resolve()
         }),
@@ -57,21 +61,24 @@ export function useUpload(options: UploadOptions) {
     }
 
     // FIXME: remove if cloud upload still works without this
-    ;(options as any)['headers'] = (file: UppyFile) => {
+    ;(options as any)['headers'] = (file: OcUppyFile) => {
       if (!!file.xhrUpload || file?.isRemote) {
-        return { 'x-oc-mtime': file?.data?.lastModified / 1000, ...getHeaders() }
+        return {
+          'x-oc-mtime': ((file?.data as File)?.lastModified / 1000).toFixed(0),
+          ...getHeaders()
+        }
       }
     }
 
     return options
   })
 
-  const xhrOptions = computed<XHRUploadOptions>(() => {
+  const xhrOptions = computed<XHRUploadOptions<OcUppyMeta, OcUppyBody>>(() => {
     return {
       timeout: 60000,
       endpoint: '',
       headers: (file) => ({
-        'x-oc-mtime': file?.data?.lastModified / 1000,
+        'x-oc-mtime': ((file?.data as File)?.lastModified / 1000).toFixed(0),
         ...getHeaders()
       })
     }

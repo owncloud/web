@@ -1,4 +1,4 @@
-import Uppy, { BasePlugin, UppyFile } from '@uppy/core'
+import Uppy, { BasePlugin } from '@uppy/core'
 import { basename, dirname, join } from 'path'
 import { v4 as uuidV4 } from 'uuid'
 import { Language } from 'vue3-gettext'
@@ -13,11 +13,15 @@ import {
   SpacesStore,
   UserStore,
   locationPublicLink,
-  formatFileSize
+  formatFileSize,
+  OcUppyFile,
+  OcUppyMeta,
+  OcUppyBody
 } from '@ownclouders/web-pkg'
-import { locationSpacesGeneric, UppyService, UppyResource } from '@ownclouders/web-pkg'
+import { locationSpacesGeneric, UppyService } from '@ownclouders/web-pkg'
 import { isPersonalSpaceResource, isShareSpaceResource } from '@ownclouders/web-client'
 import { ClientService, queryItemAsString } from '@ownclouders/web-pkg'
+import { PluginOpts } from '@uppy/core/lib/BasePlugin'
 
 export interface HandleUploadOptions {
   clientService: ClientService
@@ -44,7 +48,7 @@ export interface HandleUploadOptions {
  * 4. create directory tree if needed
  * 5. start upload
  */
-export class HandleUpload extends BasePlugin {
+export class HandleUpload extends BasePlugin<PluginOpts, OcUppyMeta, OcUppyBody> {
   clientService: ClientService
   language: Language
   route: Ref<RouteLocationNormalizedLoaded>
@@ -58,7 +62,7 @@ export class HandleUpload extends BasePlugin {
   directoryTreeCreateEnabled: boolean
   conflictHandlingEnabled: boolean
 
-  constructor(uppy: Uppy, opts: HandleUploadOptions) {
+  constructor(uppy: Uppy<OcUppyMeta, OcUppyBody>, opts: HandleUploadOptions) {
     super(uppy, opts)
     this.id = opts.id || 'HandleUpload'
     this.type = 'modifier'
@@ -81,7 +85,7 @@ export class HandleUpload extends BasePlugin {
     this.handleUpload = this.handleUpload.bind(this)
   }
 
-  removeFilesFromUpload(filesToUpload: UppyResource[]) {
+  removeFilesFromUpload(filesToUpload: OcUppyFile[]) {
     for (const file of filesToUpload) {
       this.uppy.removeFile(file.id)
     }
@@ -104,8 +108,8 @@ export class HandleUpload extends BasePlugin {
   /**
    * Converts the input files type UppyResources and updates the uppy upload queue
    */
-  prepareFiles(files: UppyFile[], uploadFolder: Resource): UppyResource[] {
-    const filesToUpload: Record<string, UppyResource> = {}
+  prepareFiles(files: OcUppyFile[], uploadFolder: Resource): OcUppyFile[] {
+    const filesToUpload: Record<string, OcUppyFile> = {}
 
     if (!this.resourcesStore.currentFolder && unref(this.route)?.params?.token) {
       // public file drop
@@ -127,7 +131,7 @@ export class HandleUpload extends BasePlugin {
           uploadId: uuidV4()
         }
 
-        filesToUpload[file.id] = file as unknown as UppyResource
+        filesToUpload[file.id] = file
       }
       this.uppy.setState({ files: { ...this.uppy.getState().files, ...filesToUpload } })
       return Object.values(filesToUpload)
@@ -138,7 +142,7 @@ export class HandleUpload extends BasePlugin {
     const topLevelFolderIds: Record<string, string> = {}
 
     for (const file of files) {
-      const relativeFilePath = (file.meta.relativePath || file.meta.webkitRelativePath) as string
+      const relativeFilePath = file.meta.relativePath
       // Directory without filename
       const directory =
         !relativeFilePath || dirname(relativeFilePath) === '.' ? '' : dirname(relativeFilePath)
@@ -166,7 +170,7 @@ export class HandleUpload extends BasePlugin {
         ...file.meta,
         // file data
         name: file.name,
-        mtime: file.data.lastModified / 1000,
+        mtime: (file.data as File).lastModified / 1000,
         // current path & space
         spaceId: unref(this.space).id,
         spaceName: unref(this.space).name,
@@ -186,27 +190,25 @@ export class HandleUpload extends BasePlugin {
         routeShareId: queryItemAsString(query?.shareId) || ''
       }
 
-      filesToUpload[file.id] = file as unknown as UppyResource
+      filesToUpload[file.id] = file
     }
 
     this.uppy.setState({ files: { ...this.uppy.getState().files, ...filesToUpload } })
     return Object.values(filesToUpload)
   }
 
-  checkQuotaExceeded(filesToUpload: UppyResource[]): boolean {
+  checkQuotaExceeded(filesToUpload: OcUppyFile[]): boolean {
     let quotaExceeded = false
 
-    const uploadSizeSpaceMapping = filesToUpload.reduce((acc, uppyResource) => {
+    const uploadSizeSpaceMapping = filesToUpload.reduce((acc, uppyFile) => {
       let targetUploadSpace: SpaceResource
 
-      if (uppyResource.meta.routeName === locationPublicLink.name) {
+      if (uppyFile.meta.routeName === locationPublicLink.name) {
         return acc
       }
 
-      if (uppyResource.meta.routeName === locationSpacesGeneric.name) {
-        targetUploadSpace = this.spacesStore.spaces.find(
-          ({ id }) => id === uppyResource.meta.spaceId
-        )
+      if (uppyFile.meta.routeName === locationSpacesGeneric.name) {
+        targetUploadSpace = this.spacesStore.spaces.find(({ id }) => id === uppyFile.meta.spaceId)
       }
 
       if (
@@ -219,7 +221,7 @@ export class HandleUpload extends BasePlugin {
       }
 
       const existingFile = this.resourcesStore.resources.find(
-        (c) => !uppyResource.meta.relativeFolder && c.name === uppyResource.name
+        (c) => !uppyFile.meta.relativeFolder && c.name === uppyFile.name
       )
       const existingFileSize = existingFile ? Number(existingFile.size) : 0
 
@@ -230,12 +232,12 @@ export class HandleUpload extends BasePlugin {
       if (!matchingMappingRecord) {
         acc.push({
           space: targetUploadSpace,
-          uploadSize: uppyResource.data.size - existingFileSize
+          uploadSize: uppyFile.data.size - existingFileSize
         })
         return acc
       }
 
-      matchingMappingRecord.uploadSize = uppyResource.data.size - existingFileSize
+      matchingMappingRecord.uploadSize = uppyFile.data.size - existingFileSize
 
       return acc
     }, [])
@@ -274,9 +276,9 @@ export class HandleUpload extends BasePlugin {
    * Creates the directory tree and removes files of failed directories from the upload queue.
    */
   async createDirectoryTree(
-    filesToUpload: UppyResource[],
+    filesToUpload: OcUppyFile[],
     uploadFolder: Resource
-  ): Promise<UppyResource[]> {
+  ): Promise<OcUppyFile[]> {
     const { webdav } = this.clientService
     const space = unref(this.space)
     const { id: currentFolderId, path: currentFolderPath } = uploadFolder
@@ -307,7 +309,7 @@ export class HandleUpload extends BasePlugin {
         const uploadId = !isRoot ? uuidV4() : topLevelIds[path]
         const relativeFolder = dirname(path) === '/' ? '' : dirname(path)
 
-        const uppyResource = {
+        const uppyFile = {
           id: uuidV4(),
           name: basename(path),
           isFolder: true,
@@ -332,7 +334,7 @@ export class HandleUpload extends BasePlugin {
           return
         }
 
-        this.uppyService.publish('addedForUpload', [uppyResource])
+        this.uppyService.publish('addedForUpload', [uppyFile])
 
         try {
           const folder = await webdav.createFolder(space, {
@@ -340,14 +342,14 @@ export class HandleUpload extends BasePlugin {
             fetchFolder: isRoot
           })
           this.uppyService.publish('uploadSuccess', {
-            ...uppyResource,
-            meta: { ...uppyResource.meta, fileId: folder?.fileId }
+            ...uppyFile,
+            meta: { ...uppyFile.meta, fileId: folder?.fileId }
           })
         } catch (error) {
           if (error.statusCode !== 405) {
             console.error(error)
             failedFolders.push(path)
-            this.uppyService.publish('uploadError', { file: uppyResource, error })
+            this.uppyService.publish('uploadError', { file: uppyFile, error })
           }
         }
       }
@@ -380,7 +382,7 @@ export class HandleUpload extends BasePlugin {
    * The handler that prepares all files to be uploaded and goes through all necessary steps.
    * Eventually triggers to upload in Uppy.
    */
-  async handleUpload(files: UppyFile[]) {
+  async handleUpload(files: OcUppyFile[]) {
     if (!files.length) {
       return
     }
@@ -415,7 +417,7 @@ export class HandleUpload extends BasePlugin {
         }
 
         filesToUpload = result
-        const conflictMap = result.reduce<Record<string, UppyResource>>((acc, file) => {
+        const conflictMap = result.reduce<Record<string, OcUppyFile>>((acc, file) => {
           acc[file.id] = file
           return acc
         }, {})

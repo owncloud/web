@@ -9,9 +9,10 @@ import {
   CapabilityStore,
   useClipboardStore,
   useFileActionsPaste,
-  useExtensionRegistry
+  useExtensionRegistry,
+  OcUppyFile
 } from '@ownclouders/web-pkg'
-import { eventBus, UppyResource } from '@ownclouders/web-pkg'
+import { eventBus } from '@ownclouders/web-pkg'
 import { defaultPlugins, shallowMount, defaultComponentMocks } from '@ownclouders/web-test-helpers'
 import { RouteLocation } from 'vue-router'
 import { computed, ref } from 'vue'
@@ -140,7 +141,7 @@ describe('CreateAndUpload component', () => {
       { driveType: 'share', updated: 0 },
       { driveType: 'public', updated: 0 }
     ])('updates the space quota for supported drive types: %s', async ({ driveType, updated }) => {
-      const file = mock<UppyResource>({ meta: { driveType, spaceId: '1' } })
+      const file = mock<OcUppyFile>({ meta: { driveType, spaceId: '1' } })
       const spaces = [
         mock<SpaceResource>({ id: file.meta.spaceId, isOwner: () => driveType === 'personal' })
       ]
@@ -156,7 +157,7 @@ describe('CreateAndUpload component', () => {
       const itemId = 'itemId'
       const space = mock<SpaceResource>({ id: '1' })
       const { wrapper, mocks } = getWrapper({ itemId, space })
-      const file = mock<UppyResource>({
+      const file = mock<OcUppyFile>({
         meta: { driveType: 'project', spaceId: space.id, currentFolderId: itemId }
       })
       const graphMock = mocks.$clientService.graphAuthenticated
