@@ -103,7 +103,7 @@ export default defineComponent({
 <style lang="scss">
 .oc-recipient {
   align-items: center;
-  background-color: var(--oc-color-background-default);
+  background-color: var(--oc-color-background);
   border: 1px solid var(--oc-color-input-border);
   border-radius: 6px;
   display: flex;
@@ -113,11 +113,11 @@ export default defineComponent({
   width: auto;
 
   &-icon > svg {
-    fill: var(--oc-color-text-default);
+    fill: var(--oc-color-onSurface);
   }
 
   &-name {
-    color: var(--oc-color-text-default);
+    color: var(--oc-color-onSurface);
     margin: 0;
     padding: 0;
   }

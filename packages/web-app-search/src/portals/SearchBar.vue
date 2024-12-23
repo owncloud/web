@@ -551,7 +551,7 @@ export default defineComponent({
 
     @media (max-width: 639px) {
       visibility: hidden;
-      background-color: var(--oc-color-swatch-brand-default);
+      background-color: var(--oc-color-primary);
       position: absolute;
       height: 48px;
       left: 0;
@@ -615,11 +615,11 @@ export default defineComponent({
 
           &:hover,
           &.active {
-            background-color: var(--oc-color-background-highlight);
+            background-color: var(--oc-color-surfaceBright);
           }
 
           &.disabled {
-            background-color: var(--oc-color-background-muted);
+            background-color: var(--oc-color-surfaceDim);
             pointer-events: none;
             opacity: 0.7;
             filter: grayscale(0.6);

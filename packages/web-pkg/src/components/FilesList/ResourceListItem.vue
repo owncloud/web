@@ -264,7 +264,7 @@ export default defineComponent({
 
       .text {
         &:hover {
-          color: var(--oc-color-text-default);
+          color: var(--oc-color-onSurface);
           text-decoration: underline;
         }
       }

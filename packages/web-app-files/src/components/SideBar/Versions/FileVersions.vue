@@ -174,7 +174,7 @@ export default defineComponent({
       button.version-action-item {
         &:hover {
           color: var(--oc-color-primary-contrast);
-          background-color: var(--oc-color-background-hover);
+          background-color: var(--oc-color-surfaceContainerHigh);
         }
 
         .oc-icon {

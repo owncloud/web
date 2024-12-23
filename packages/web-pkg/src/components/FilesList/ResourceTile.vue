@@ -229,7 +229,7 @@ export default defineComponent({
 
 <style lang="scss">
 .oc-tile-card {
-  background-color: var(--oc-color-background-highlight) !important;
+  background-color: var(--oc-color-surfaceBright) !important;
   box-shadow: none;
   height: 100%;
   display: flex;
@@ -238,7 +238,7 @@ export default defineComponent({
 
   &-disabled {
     pointer-events: none;
-    background-color: var(--oc-color-background-muted) !important;
+    background-color: var(--oc-color-surfaceDim) !important;
     opacity: 0.7;
     filter: grayscale(0.6);
 
@@ -267,7 +267,7 @@ export default defineComponent({
     width: 100%;
 
     .oc-tag {
-      color: var(--oc-color-text-default);
+      color: var(--oc-color-onSurface);
 
       &.resource-disabled-indicator {
         z-index: 1;
@@ -291,7 +291,7 @@ export default defineComponent({
   }
 
   &-selected {
-    outline: 2px solid var(--oc-color-swatch-primary-hover);
+    outline: 2px solid var(--oc-color-onPrimaryContainer);
 
     .oc-tile-card-preview {
       width: calc(100% - var(--oc-space-medium));
@@ -315,7 +315,7 @@ export default defineComponent({
     left: 0;
 
     input {
-      background-color: var(--oc-color-background-muted);
+      background-color: var(--oc-color-surfaceDim);
     }
 
     input.oc-checkbox-checked {
@@ -341,7 +341,7 @@ export default defineComponent({
   }
 
   .resource-name-wrapper {
-    color: var(--oc-color-text-default);
+    color: var(--oc-color-onSurface);
     max-width: 70%;
     overflow: hidden;
   }

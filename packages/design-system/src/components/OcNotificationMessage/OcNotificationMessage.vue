@@ -152,7 +152,7 @@ export default defineComponent({
 
 <style lang="scss">
 .oc-notification-message {
-  background-color: var(--oc-color-background-default) !important;
+  background-color: var(--oc-color-background) !important;
   margin-top: var(--oc-space-small);
   position: relative;
   word-break: break-word;

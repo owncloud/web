@@ -310,7 +310,7 @@ export default defineComponent({
     height: 1.5rem;
 
     &-link {
-      color: var(--oc-color-swatch-passive-default);
+      color: var(--oc-color-secondary);
       pointer-events: visible;
     }
   }

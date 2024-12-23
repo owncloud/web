@@ -511,7 +511,7 @@ export default defineComponent({
   .vs__open-indicator,
   .vs__search,
   .vs__selected {
-    background-color: var(--oc-color-background-muted) !important;
+    background-color: var(--oc-color-surfaceDim) !important;
     color: var(--oc-color-input-text-muted) !important;
     pointer-events: none;
   }
@@ -542,7 +542,7 @@ export default defineComponent({
     &__dropdown-toggle,
     &__dropdown-menu {
       -webkit-appearance: none;
-      background-color: var(--oc-color-background-highlight);
+      background-color: var(--oc-color-surfaceBright);
       border-radius: 0;
       border-radius: 5px;
       border: 1px solid var(--oc-color-input-border);
@@ -560,7 +560,7 @@ export default defineComponent({
     }
 
     &__selected-readonly {
-      background-color: var(--oc-color-background-muted) !important;
+      background-color: var(--oc-color-surfaceDim) !important;
     }
 
     &__search,
@@ -570,7 +570,7 @@ export default defineComponent({
 
     &__dropdown-menu {
       padding: 0;
-      background-color: var(--oc-color-background-default);
+      background-color: var(--oc-color-background);
       margin-top: -1px;
     }
 
@@ -594,8 +594,8 @@ export default defineComponent({
 
       &--highlight,
       &--selected {
-        background-color: var(--oc-color-background-hover);
-        color: var(--oc-color-swatch-brand-hover);
+        background-color: var(--oc-color-surfaceContainerHigh);
+        color: var(--oc-color-primaryContainer);
       }
     }
 
@@ -625,8 +625,8 @@ export default defineComponent({
 
       > *:not(input) {
         padding-left: 3px;
-        background-color: var(--oc-color-background-default);
-        fill: var(--oc-color-text-default);
+        background-color: var(--oc-color-background);
+        fill: var(--oc-color-onSurface);
       }
     }
   }
@@ -635,7 +635,7 @@ export default defineComponent({
     .vs {
       &__selected-options > *:not(input) {
         color: var(--oc-color-input-text-default);
-        background-color: var(--oc-color-background-default);
+        background-color: var(--oc-color-background);
       }
     }
   }
@@ -643,12 +643,12 @@ export default defineComponent({
   &:focus-within {
     .vs__dropdown-menu,
     .vs__dropdown-toggle {
-      border-color: var(--oc-color-swatch-passive-default);
+      border-color: var(--oc-color-secondary);
     }
   }
 
   .keyboard-outline {
-    outline: 2px var(--oc-color-swatch-passive-default) solid !important;
+    outline: 2px var(--oc-color-secondary) solid !important;
     outline-offset: -2px;
   }
 }
@@ -670,14 +670,14 @@ export default defineComponent({
     &.vs--multiple {
       .vs__selected-options > *:not(input) {
         color: var(--oc-color-input-text-default);
-        background-color: var(--oc-color-background-highlight);
+        background-color: var(--oc-color-surfaceBright);
       }
     }
 
     &:focus-within {
       .vs__dropdown-menu,
       .vs__dropdown-toggle {
-        background-color: var(--oc-color-background-default);
+        background-color: var(--oc-color-background);
       }
     }
   }

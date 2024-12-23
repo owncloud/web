@@ -60,7 +60,7 @@ export default defineComponent({
 <style lang="scss">
 .app-tile {
   overflow: hidden;
-  background-color: var(--oc-color-background-highlight) !important;
+  background-color: var(--oc-color-surfaceBright) !important;
   box-shadow: none;
   height: 100%;
   display: flex;
@@ -77,7 +77,7 @@ export default defineComponent({
   .app-tile-title {
     .mark-highlight {
       font-weight: unset !important;
-      color: var(--oc-color-text-default);
+      color: var(--oc-color-onSurface);
     }
   }
 }

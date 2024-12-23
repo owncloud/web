@@ -267,15 +267,15 @@ export default defineComponent({
   }
 
   &-primary > svg {
-    fill: var(--oc-color-swatch-primary-default);
+    fill: var(--oc-color-primary);
   }
 
   &-passive > svg {
-    fill: var(--oc-color-swatch-passive-default);
+    fill: var(--oc-color-secondary);
   }
 
   &-warning > svg {
-    fill: var(--oc-color-swatch-warning-default);
+    fill: var(--oc-color-error);
   }
 
   &-success > svg {
@@ -283,11 +283,11 @@ export default defineComponent({
   }
 
   &-danger > svg {
-    fill: var(--oc-color-swatch-danger-default);
+    fill: var(--oc-color-error);
   }
 
   &-brand > svg {
-    fill: var(--oc-color-swatch-brand-default);
+    fill: var(--oc-color-primary);
   }
 }
 </style>
