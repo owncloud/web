@@ -2,10 +2,11 @@ import { EventBus } from '../../../../src/services/eventBus'
 import { SideBarEventTopics, useSideBar } from '../../../../src/composables/sideBar'
 import { unref, ref } from 'vue'
 import { getComposableWrapper } from '@ownclouders/web-test-helpers'
+import * as localStorage from '../../../../src/composables/localStorage'
 
-vi.mock('../../../../src/composables/localStorage', () => ({
-  useLocalStorage: () => ref(false)
-}))
+const localStorageSpy = vi
+  .spyOn(localStorage, 'useLocalStorage')
+  .mockImplementation(() => ref(false))
 
 describe('useSideBar', () => {
   let eventBus: EventBus
@@ -110,6 +111,52 @@ describe('useSideBar', () => {
         eventBus.publish(SideBarEventTopics.setActivePanel, 'SomePanel')
         expect(unref(sideBarActivePanel)).toBe('SomePanel')
       })
+    })
+  })
+
+  describe('embedMode', () => {
+    beforeEach(() => {
+      localStorageSpy.mockImplementationOnce(() => ref(true))
+    })
+
+    it('should use local ref when embed mode is enabled', () => {
+      getComposableWrapper(
+        () => {
+          const { isSideBarOpen } = useSideBar({ bus: eventBus })
+          expect(unref(isSideBarOpen)).toBe(false)
+        },
+        {
+          pluginOptions: {
+            piniaOptions: {
+              configState: {
+                options: {
+                  embed: { enabled: true }
+                }
+              }
+            }
+          }
+        }
+      )
+    })
+
+    it('should use local storage when embed mode is disabled', () => {
+      getComposableWrapper(
+        () => {
+          const { isSideBarOpen } = useSideBar({ bus: eventBus })
+          expect(unref(isSideBarOpen)).toBe(true)
+        },
+        {
+          pluginOptions: {
+            piniaOptions: {
+              configState: {
+                options: {
+                  embed: { enabled: false }
+                }
+              }
+            }
+          }
+        }
+      )
     })
   })
 })

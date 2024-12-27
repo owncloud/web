@@ -1,7 +1,8 @@
-import { nextTick, onBeforeUnmount, readonly, ref, Ref, unref } from 'vue'
+import { computed, nextTick, onBeforeUnmount, readonly, ref, Ref, unref } from 'vue'
 import { EventBus, eventBus as defaultEventBus } from '../../services/eventBus'
 import { SideBarEventTopics } from './eventTopics'
 import { useLocalStorage } from '../localStorage'
+import { useEmbedMode } from '../embedMode'
 
 interface SideBarResult {
   isSideBarOpen: Ref<boolean>
@@ -14,8 +15,29 @@ interface SideBarOptions {
 }
 
 export const useSideBar = (options?: SideBarOptions): SideBarResult => {
+  const { isEnabled: isEmbedModeEnabled } = useEmbedMode()
   const eventBus = options?.bus || defaultEventBus
-  const isSideBarOpen = useLocalStorage(`oc_sideBarOpen`, false)
+  const isSideBarOpenLocalStorage = useLocalStorage(`oc_sideBarOpen`, false)
+  const isSideBarOpenIsolated = ref(false)
+
+  const isSideBarOpen = computed({
+    get() {
+      if (unref(isEmbedModeEnabled)) {
+        return unref(isSideBarOpenIsolated)
+      }
+
+      return unref(isSideBarOpenLocalStorage)
+    },
+
+    set(value) {
+      if (unref(isEmbedModeEnabled)) {
+        isSideBarOpenIsolated.value = value
+        return
+      }
+
+      isSideBarOpenLocalStorage.value = value
+    }
+  })
 
   const focusSidebar = async () => {
     await nextTick()
