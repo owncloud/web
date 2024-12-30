@@ -1130,6 +1130,11 @@ export default defineComponent({
       if (isCheckboxClicked) {
         return
       }
+
+      if (this.isResourceSelected(resource)) {
+        return
+      }
+
       return this.emitSelect([resource.id])
     },
     formatDate(date: string) {
