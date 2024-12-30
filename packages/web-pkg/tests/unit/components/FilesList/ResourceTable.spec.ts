@@ -508,6 +508,14 @@ describe('ResourceTable', () => {
       const { wrapper } = getMountedWrapper()
       expect(wrapper.find('.oc-tbody-tr-in-delete-queue.oc-table-disabled').exists()).toBe(true)
     })
+
+    it('should not emit select event when clicking on the row of an already selected resource', async () => {
+      const { wrapper } = getMountedWrapper({ props: { selectedIds: ['forest'] } })
+      const tableRow = wrapper.find('.oc-tbody-tr-forest .oc-table-data-cell-size')
+      await tableRow.trigger('click')
+
+      expect(wrapper.emitted('update:selectedIds')).toBeUndefined()
+    })
   })
 
   describe('context menu', () => {

@@ -381,12 +381,6 @@ export default defineComponent({
           return
         }
         const resource = unref(panelContext).items[0]
-
-        if (unref(loadedResource)?.id === resource.id) {
-          // current resource is already loaded
-          return
-        }
-
         isMetaDataLoading.value = true
         if (canListShares({ space: props.space, resource })) {
           try {
