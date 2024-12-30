@@ -198,6 +198,8 @@ export default defineComponent({
 
   &:disabled {
     background-color: $form-radio-disabled-background;
+    cursor: default;
+    opacity: 0.4;
   }
 
   &:disabled:checked {
