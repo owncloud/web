@@ -28,6 +28,7 @@ Summary
 * Bugfix - Use correct breakpoints in sidebar: [#12045](https://github.com/owncloud/web/pull/12045)
 * Bugfix - Show indirect shares on search page: [#12050](https://github.com/owncloud/web/pull/12050)
 * Bugfix - Add more padding to input when clear action is visible: [#12055](https://github.com/owncloud/web/pull/12055)
+* Bugfix - Reload preloaded resource in sidebar: [#12059](https://github.com/owncloud/web/pull/12059)
 * Enhancement - Accessibility improvements: [#5379](https://github.com/owncloud/web/issues/5379)
 * Enhancement - Create spaces via admin settings: [#11849](https://github.com/owncloud/web/pull/11849)
 * Enhancement - Add notifications settings: [#12010](https://github.com/owncloud/web/pull/12010)
@@ -200,6 +201,15 @@ Details
 
    https://github.com/owncloud/web/issues/11543
    https://github.com/owncloud/web/pull/12055
+
+* Bugfix - Reload preloaded resource in sidebar: [#12059](https://github.com/owncloud/web/pull/12059)
+
+   We've fixed an issue where actions were not being updated on a resource. We are
+   now reloading metadata of the resource even in the case when it is already
+   preloaded so that we get up to date information.
+
+   https://github.com/owncloud/web/issues/10748
+   https://github.com/owncloud/web/pull/12059
 
 * Enhancement - Accessibility improvements: [#5379](https://github.com/owncloud/web/issues/5379)
 
