@@ -1,4 +1,4 @@
-import Uppy, { BasePlugin, UppyFile, UIPlugin } from '@uppy/core'
+import Uppy, { BasePlugin, UnknownPlugin, UppyFile } from '@uppy/core'
 import Tus from '@uppy/tus'
 import { TusOptions } from '@uppy/tus'
 import XHRUpload, { XHRUploadOptions } from '@uppy/xhr-upload'
@@ -6,13 +6,10 @@ import { Language } from 'vue3-gettext'
 import { eventBus } from '../eventBus'
 import DropTarget from '@uppy/drop-target'
 import { Resource, urlJoin } from '@ownclouders/web-client'
-import { UppyResource } from './types'
-
-// @ts-ignore
-import getFileType from '@uppy/utils/lib/getFileType'
 
 // @ts-ignore
 import generateFileID from '@uppy/utils/lib/generateFileID'
+import { Body, MinimalRequiredUppyFile } from '@uppy/utils/lib/UppyFile'
 
 type UppyServiceTopics =
   | 'uploadStarted'
@@ -33,8 +30,8 @@ export type uppyHeaders = {
 }
 
 export type UploadResult = {
-  successful: UppyResource[]
-  failed: UppyResource[]
+  successful: OcUppyFile[]
+  failed: OcUppyFile[]
   uploadID?: string
 }
 
@@ -42,17 +39,59 @@ interface UppyServiceOptions {
   language: Language
 }
 
+type FileWithPath = File & {
+  readonly path?: string
+  readonly relativePath?: string
+}
+
 // FIXME: tus error types seem to be wrong in Uppy, we need the type of the tus client lib
 type TusClientError = Error & { originalResponse: any }
 
+// IMPORTANT: must only contain primitive types, complex types won't be serialized properly!
+export type OcUppyMeta = {
+  retry?: boolean
+  name?: string
+  mtime?: number
+  // current space & folder
+  spaceId: string
+  spaceName: string
+  driveAlias: string
+  driveType: string
+  currentFolder: string // current folder path during upload initiation
+  currentFolderId?: string
+  fileId?: string
+  // upload data
+  uppyId?: string
+  relativeFolder: string
+  relativePath: string
+  tusEndpoint: string
+  uploadId: string
+  topLevelFolderId?: string
+  // route data
+  routeName?: string
+  routeDriveAliasAndItem?: string
+  routeShareId?: string
+
+  isFolder: boolean
+}
+export type OcUppyBody = Body
+export type OcUppyFile = UppyFile<OcUppyMeta, OcUppyBody>
+type OcUppyPlugin = typeof BasePlugin<any, OcUppyMeta, OcUppyBody>
+export type OcMinimalUppyFile = MinimalRequiredUppyFile<OcUppyMeta, OcUppyBody>
+
+export type OcTusOptions = TusOptions<OcUppyMeta, OcUppyBody>
+
+/** `OmitFirstArg<typeof someArray>` is the type of the returned value of `someArray.slice(1)`. */
+type OmitFirstArg<T> = T extends [any, ...infer U] ? U : never
+
 export class UppyService {
-  uppy: Uppy
+  uppy: Uppy<OcUppyMeta, OcUppyBody>
   uploadInputs: HTMLInputElement[] = []
   uploadFolderMap: Record<string, Resource> = {}
 
   constructor({ language }: UppyServiceOptions) {
     const { $gettext } = language
-    this.uppy = new Uppy({
+    this.uppy = new Uppy<OcUppyMeta, OcUppyBody>({
       autoProceed: false,
       onBeforeFileAdded: (file, files) => {
         if (file.id in files) {
@@ -60,12 +99,17 @@ export class UppyService {
         }
         file.meta.relativePath = this.getRelativeFilePath(file)
         // id needs to be generated after the relative path has been set.
-        file.id = generateFileID(file)
+        file.id = generateFileID(file, this.uppy.getID())
         return file
-      },
+      }
+    })
+
+    // FIXME: move to importer plugin, as strings are only visible in the dashboard anyhow
+    this.uppy.setOptions({
       locale: {
         strings: {
           addedNumFiles: $gettext('Added %{numFiles} file(s)'), // for some reason this string is required and missing in uppy
+          authenticate: $gettext('Connect'),
           authenticateWith: $gettext('Connect to %{pluginName}'),
           authenticateWithTitle: $gettext('Please authenticate with %{pluginName} to select files'),
           cancel: $gettext('Cancel'),
@@ -73,10 +117,7 @@ export class UppyService {
           loadedXFiles: $gettext('Loaded %{numFiles} files'),
           loading: $gettext('Loading...'),
           logOut: $gettext('Log out'),
-          publicLinkURLLabel: $gettext('Public Link URL'),
-          publicLinkURLDescription: $gettext(
-            'Please provide a URL to a public link without password protection.'
-          ),
+          pluginWebdavInputLabel: $gettext('Public link without password protection'),
           selectX: {
             0: $gettext('Select %{smart_count}'),
             1: $gettext('Select %{smart_count}')
@@ -89,24 +130,28 @@ export class UppyService {
     this.setUpEvents()
   }
 
-  getRelativeFilePath = (file: UppyFile): string | undefined => {
+  getRelativeFilePath = (file: OcUppyFile): string | undefined => {
     const relativePath =
-      file.webkitRelativePath ||
-      file.relativePath ||
-      file.data.relativePath ||
-      file.data.webkitRelativePath
+      (file.data as FileWithPath).relativePath || (file.data as File).webkitRelativePath
     return relativePath ? urlJoin(relativePath) : undefined
   }
 
-  addPlugin(plugin: any, opts: any) {
-    this.uppy.use(plugin, opts)
+  addPlugin<T extends OcUppyPlugin>(
+    Plugin: T,
+    // We want to let the plugin decide whether `opts` is optional or not
+    // so we spread the argument rather than defining `opts:` ourselves.
+    ...args: OmitFirstArg<ConstructorParameters<T>>
+  ) {
+    this.uppy.use(Plugin, ...args)
   }
 
-  removePlugin(plugin: UIPlugin | BasePlugin) {
+  removePlugin(plugin: UnknownPlugin<OcUppyMeta, OcUppyBody>) {
     this.uppy.removePlugin(plugin)
   }
 
-  getPlugin(name: string): UIPlugin | BasePlugin {
+  getPlugin<
+    T extends UnknownPlugin<OcUppyMeta, OcUppyBody> = UnknownPlugin<OcUppyMeta, OcUppyBody>
+  >(name: string): T | undefined {
     return this.uppy.getPlugin(name)
   }
 
@@ -116,8 +161,8 @@ export class UppyService {
     uploadDataDuringCreation,
     onBeforeRequest,
     headers
-  }: TusOptions) {
-    const tusPluginOptions: TusOptions = {
+  }: TusOptions<OcUppyMeta, OcUppyBody>) {
+    const tusPluginOptions: TusOptions<OcUppyMeta, OcUppyBody> = {
       chunkSize,
       removeFingerprintOnSuccess: true,
       overridePatchMethod,
@@ -152,8 +197,8 @@ export class UppyService {
     this.uppy.use(Tus, tusPluginOptions)
   }
 
-  useXhr({ headers, timeout, endpoint }: XHRUploadOptions) {
-    const xhrPluginOptions: XHRUploadOptions = {
+  useXhr({ headers, timeout, endpoint }: XHRUploadOptions<OcUppyMeta, OcUppyBody>) {
+    const xhrPluginOptions: XHRUploadOptions<OcUppyMeta, OcUppyBody> = {
       endpoint,
       method: 'put',
       headers,
@@ -251,7 +296,7 @@ export class UppyService {
       el.setAttribute('listener', 'true')
       el.addEventListener('change', (event) => {
         const target = event.target as HTMLInputElement
-        const files = Array.from(target.files) as unknown as UppyFile[]
+        const files = Array.from(target.files)
         this.addFiles(files)
       })
       this.uploadInputs.push(el)
@@ -262,17 +307,13 @@ export class UppyService {
     this.uploadInputs = this.uploadInputs.filter((input) => input !== el)
   }
 
-  generateUploadId(file: File): string {
-    return generateFileID({
-      name: file.name,
-      size: file.size,
-      type: getFileType(file as unknown as UppyFile),
-      data: file
-    } as unknown as UppyFile)
+  generateUploadId(uppyFile: OcUppyFile): string {
+    return generateFileID(uppyFile, this.uppy.getID())
   }
 
-  addFiles(files: UppyFile[]) {
-    this.uppy.addFiles(files)
+  addFiles(files: OcMinimalUppyFile[] | File[]) {
+    // uppy types say they do not accept File[] but they are wrong
+    this.uppy.addFiles(files as OcMinimalUppyFile[])
   }
 
   uploadFiles() {
