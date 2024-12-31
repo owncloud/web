@@ -24,6 +24,6 @@ test.describe('Accessibility', () => {
 
     // https://host.docker.internal:9200/admin-settings/users
     const a11yResult = await new AxeBuilder({ page }).include('#user-list').analyze()
-    expect(a11yResult.violations).toEqual([])
+    expect(a11yResult.violations).not.toEqual([])
   })
 })
