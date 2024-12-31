@@ -31,6 +31,7 @@
     "not OperaMobile > 0"
   ],
   "devDependencies": {
+    "@axe-core/playwright": "^4.10.1",
     "@babel/core": "7.26.0",
     "@babel/polyfill": "7.12.1",
     "@babel/preset-env": "7.26.0",
@@ -54,6 +55,7 @@
     "@vue/compiler-dom": "3.5.13",
     "@vue/compiler-sfc": "3.5.13",
     "@vue/test-utils": "2.4.6",
+    "axe-core": "^4.10.2",
     "browserslist-to-esbuild": "^2.0.0",
     "browserslist-useragent-regexp": "^4.0.0",
     "commander": "12.1.0",
