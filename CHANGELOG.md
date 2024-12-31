@@ -29,6 +29,7 @@ Summary
 * Bugfix - Show indirect shares on search page: [#12050](https://github.com/owncloud/web/pull/12050)
 * Bugfix - Add more padding to input when clear action is visible: [#12055](https://github.com/owncloud/web/pull/12055)
 * Bugfix - Reload preloaded resource in sidebar: [#12059](https://github.com/owncloud/web/pull/12059)
+* Bugfix - Change opacity of disabled checkboxes: [#12063](https://github.com/owncloud/web/pull/12063)
 * Enhancement - Accessibility improvements: [#5379](https://github.com/owncloud/web/issues/5379)
 * Enhancement - Create spaces via admin settings: [#11849](https://github.com/owncloud/web/pull/11849)
 * Enhancement - Add notifications settings: [#12010](https://github.com/owncloud/web/pull/12010)
@@ -210,6 +211,14 @@ Details
 
    https://github.com/owncloud/web/issues/10748
    https://github.com/owncloud/web/pull/12059
+
+* Bugfix - Change opacity of disabled checkboxes: [#12063](https://github.com/owncloud/web/pull/12063)
+
+   We've fixed an issue where disabled checkbox was not clearly distinguishable
+   from enabled ones by lowering it's opacity.
+
+   https://github.com/owncloud/web/issues/12060
+   https://github.com/owncloud/web/pull/12063
 
 * Enhancement - Accessibility improvements: [#5379](https://github.com/owncloud/web/issues/5379)
 
