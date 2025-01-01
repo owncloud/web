@@ -28,6 +28,7 @@ Summary
 * Bugfix - Use correct breakpoints in sidebar: [#12045](https://github.com/owncloud/web/pull/12045)
 * Bugfix - Show indirect shares on search page: [#12050](https://github.com/owncloud/web/pull/12050)
 * Bugfix - Add more padding to input when clear action is visible: [#12055](https://github.com/owncloud/web/pull/12055)
+* Bugfix - Use local state in sidebar in embed mode: [#12058](https://github.com/owncloud/web/pull/12058)
 * Bugfix - Reload preloaded resource in sidebar: [#12059](https://github.com/owncloud/web/pull/12059)
 * Bugfix - Change opacity of disabled checkboxes: [#12063](https://github.com/owncloud/web/pull/12063)
 * Enhancement - Accessibility improvements: [#5379](https://github.com/owncloud/web/issues/5379)
@@ -202,6 +203,15 @@ Details
 
    https://github.com/owncloud/web/issues/11543
    https://github.com/owncloud/web/pull/12055
+
+* Bugfix - Use local state in sidebar in embed mode: [#12058](https://github.com/owncloud/web/pull/12058)
+
+   We've fixed an issue where the sidebar would be overlapping the content of embed
+   mode iframe when opened due to shared local storage. We now use own local state
+   for the sidebar in embed mode instead of relying on the local storage.
+
+   https://github.com/owncloud/web/issues/11875
+   https://github.com/owncloud/web/pull/12058
 
 * Bugfix - Reload preloaded resource in sidebar: [#12059](https://github.com/owncloud/web/pull/12059)
 
