@@ -1,4 +1,4 @@
-import { test, expect, TestInfo } from '@playwright/test'
+import { test, expect, testInfo } from '@playwright/test'
 import AxeBuilder from '@axe-core/playwright'
 
 test.describe('Accessibility', () => {
@@ -9,7 +9,6 @@ test.describe('Accessibility', () => {
     await page.click("button[type='submit']")
     await page.locator('#files').waitFor()
     console.log('url: ' + baseURL)
-    //console.log('url: ' + baseURL + shares)
 
     // users settings
     await page.goto(`${baseURL}/admin-settings/users`)
@@ -44,7 +43,9 @@ test.describe('Accessibility', () => {
     await page.locator('#files').waitFor()
 
     const a11yResult = await new AxeBuilder({ page })
-      .withTags(['wcag2a', 'wcag2aa', 'wcag21a', 'wcag21aa']) // specify which level should get checked
+      .withTags(['wcag2a', 'wcag2aa', 'wcag21a', 'wcag21aa']) // specify which level should get checked, also include aaa?
+                                                              // maybe also check for 'best-practice', 'ACT'
+                                                              // create fixture?
       .analyze()
 
     await testInfo.attach('accessibility-scan-results', {
@@ -58,21 +59,6 @@ test.describe('Accessibility', () => {
 
 
 /*
-
-available tags  (check if there are more)
-
-'cat.name-role-value',
-'wcag2a',
-'wcag412',
-'section508',
-'section508.22.a',
-'TTv5',
-'TT6.a',
-'EN-301-549',
-'EN-9.4.1.2',
-'ACT'
-
-
 current violations
 {
   id: 'button-name',
