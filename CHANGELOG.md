@@ -3,24 +3,13 @@ Changelog for ownCloud Web [unreleased] (UNRELEASED)
 The following sections list the changes in ownCloud web unreleased relevant to
 ownCloud admins and users.
 
-[unreleased]: https://github.com/owncloud/web/compare/v11.0.5...master
+[unreleased]: https://github.com/owncloud/web/compare/v11.0.6...master
 
 Summary
 -------
 
 * Bugfix - Preview app flat file lists: [#11960](https://github.com/owncloud/web/pull/11960)
 * Bugfix - Show progress bar when emptying trash bin: [#11967](https://github.com/owncloud/web/pull/11967)
-* Bugfix - OCM invite flow: [#11992](https://github.com/owncloud/web/pull/11992)
-* Bugfix - Change search scope without search term: [#11997](https://github.com/owncloud/web/pull/11997)
-* Bugfix - Do not load version when sidebar is closed: [#11998](https://github.com/owncloud/web/pull/11998)
-* Bugfix - Use only space resource with `driveType` "project" as space in sidebar: [#12000](https://github.com/owncloud/web/pull/12000)
-* Bugfix - OCM share editing: [#12002](https://github.com/owncloud/web/pull/12002)
-* Bugfix - OCM share recipient issuer: [#12002](https://github.com/owncloud/web/pull/12002)
-* Bugfix - Missing activities on Shared with me page: [#12008](https://github.com/owncloud/web/pull/12008)
-* Bugfix - Sidebar file info for shares: [#12010](https://github.com/owncloud/web/pull/12010)
-* Bugfix - Show missing role name in link share panel: [#12012](https://github.com/owncloud/web/pull/12012)
-* Bugfix - Missing translations for share type filters: [#12013](https://github.com/owncloud/web/pull/12013)
-* Bugfix - Permanent link for shares: [#12022](https://github.com/owncloud/web/pull/12022)
 * Bugfix - Preview app files visibility: [#12040](https://github.com/owncloud/web/pull/12040)
 * Bugfix - Disable paste action in same folder: [#12044](https://github.com/owncloud/web/pull/12044)
 * Bugfix - Do not push sidebar close action away: [#12045](https://github.com/owncloud/web/pull/12045)
@@ -56,89 +45,6 @@ Details
 
    https://github.com/owncloud/web/issues/11966
    https://github.com/owncloud/web/pull/11967
-
-* Bugfix - OCM invite flow: [#11992](https://github.com/owncloud/web/pull/11992)
-
-   We've fixed the OCM invite flow and made it more user-friendly.
-
-   https://github.com/owncloud/web/issues/11983
-   https://github.com/owncloud/web/pull/11992
-
-* Bugfix - Change search scope without search term: [#11997](https://github.com/owncloud/web/pull/11997)
-
-   We've fixed the change of search scope on search page when there is no search
-   term entered.
-
-   https://github.com/owncloud/web/issues/11982
-   https://github.com/owncloud/web/pull/11997
-
-* Bugfix - Do not load version when sidebar is closed: [#11998](https://github.com/owncloud/web/pull/11998)
-
-   We've fixed the the loading of file versions which was triggered even when
-   sidebar was closed. File version will now be loaded only when the sidebar is
-   opened.
-
-   https://github.com/owncloud/web/issues/11979
-   https://github.com/owncloud/web/pull/11998
-
-* Bugfix - Use only space resource with `driveType` "project" as space in sidebar: [#12000](https://github.com/owncloud/web/pull/12000)
-
-   We've fixed the issue where any selected resource got passed to the sidebar as a
-   space in Spaces page. Now only space resource with `driveType` "project" will be
-   passed as a space.
-
-   https://github.com/owncloud/web/issues/11978
-   https://github.com/owncloud/web/pull/12000
-
-* Bugfix - OCM share editing: [#12002](https://github.com/owncloud/web/pull/12002)
-
-   We've fixed a bug where OCM shares could be edited although the server does not
-   support it.
-
-   https://github.com/owncloud/web/issues/11991
-   https://github.com/owncloud/web/pull/12002
-
-* Bugfix - OCM share recipient issuer: [#12002](https://github.com/owncloud/web/pull/12002)
-
-   We've fixed a bug where the issuer for OCM shares was missing in the invite
-   input field.
-
-   https://github.com/owncloud/web/issues/11972
-   https://github.com/owncloud/web/pull/12002
-
-* Bugfix - Missing activities on Shared with me page: [#12008](https://github.com/owncloud/web/pull/12008)
-
-   We've added the missing activities on the Shared with me page.
-
-   https://github.com/owncloud/web/pull/12008
-
-* Bugfix - Sidebar file info for shares: [#12010](https://github.com/owncloud/web/pull/12010)
-
-   We've fixed a bug some file info regarding size an shares was missing in the
-   right sidebar when opening an incoming share via an editor.
-
-   https://github.com/owncloud/web/pull/12010
-
-* Bugfix - Show missing role name in link share panel: [#12012](https://github.com/owncloud/web/pull/12012)
-
-   We've fixed a bug where the role name was missing in the link share panel.
-
-   https://github.com/owncloud/web/pull/12012
-
-* Bugfix - Missing translations for share type filters: [#12013](https://github.com/owncloud/web/pull/12013)
-
-   We've fixed a bug, where the translations for the share type filters were
-   missing. This was the case for the "Shared with me" and "Shared with others"
-   page.
-
-   https://github.com/owncloud/web/pull/12013
-
-* Bugfix - Permanent link for shares: [#12022](https://github.com/owncloud/web/pull/12022)
-
-   We've fixed an issue where the permanent for shares could not be copied.
-
-   https://github.com/owncloud/web/issues/12001
-   https://github.com/owncloud/web/pull/12022
 
 * Bugfix - Preview app files visibility: [#12040](https://github.com/owncloud/web/pull/12040)
 
@@ -272,6 +178,114 @@ Details
 
    https://github.com/owncloud/web/issues/12009
    https://github.com/owncloud/web/pull/12054
+
+Changelog for ownCloud Web [11.0.6] (2024-12-10)
+=======================================
+The following sections list the changes in ownCloud web 11.0.6 relevant to
+ownCloud admins and users.
+
+[11.0.6]: https://github.com/owncloud/web/compare/v11.0.5...v11.0.6
+
+Summary
+-------
+
+* Bugfix - OCM invite flow: [#11992](https://github.com/owncloud/web/pull/11992)
+* Bugfix - Change search scope without search term: [#11997](https://github.com/owncloud/web/pull/11997)
+* Bugfix - Do not load version when sidebar is closed: [#11998](https://github.com/owncloud/web/pull/11998)
+* Bugfix - Use only space resource with `driveType` "project" as space in sidebar: [#12000](https://github.com/owncloud/web/pull/12000)
+* Bugfix - OCM share editing: [#12002](https://github.com/owncloud/web/pull/12002)
+* Bugfix - OCM share recipient issuer: [#12002](https://github.com/owncloud/web/pull/12002)
+* Bugfix - Missing activities on Shared with me page: [#12008](https://github.com/owncloud/web/pull/12008)
+* Bugfix - Sidebar file info for shares: [#12010](https://github.com/owncloud/web/pull/12010)
+* Bugfix - Show missing role name in link share panel: [#12012](https://github.com/owncloud/web/pull/12012)
+* Bugfix - Missing translations for share type filters: [#12013](https://github.com/owncloud/web/pull/12013)
+* Bugfix - Permanent link for shares: [#12022](https://github.com/owncloud/web/pull/12022)
+
+Details
+-------
+
+* Bugfix - OCM invite flow: [#11992](https://github.com/owncloud/web/pull/11992)
+
+   We've fixed the OCM invite flow and made it more user-friendly.
+
+   https://github.com/owncloud/web/issues/11983
+   https://github.com/owncloud/web/pull/11992
+
+* Bugfix - Change search scope without search term: [#11997](https://github.com/owncloud/web/pull/11997)
+
+   We've fixed the change of search scope on search page when there is no search
+   term entered.
+
+   https://github.com/owncloud/web/issues/11982
+   https://github.com/owncloud/web/pull/11997
+
+* Bugfix - Do not load version when sidebar is closed: [#11998](https://github.com/owncloud/web/pull/11998)
+
+   We've fixed the the loading of file versions which was triggered even when
+   sidebar was closed. File version will now be loaded only when the sidebar is
+   opened.
+
+   https://github.com/owncloud/web/issues/11979
+   https://github.com/owncloud/web/pull/11998
+
+* Bugfix - Use only space resource with `driveType` "project" as space in sidebar: [#12000](https://github.com/owncloud/web/pull/12000)
+
+   We've fixed the issue where any selected resource got passed to the sidebar as a
+   space in Spaces page. Now only space resource with `driveType` "project" will be
+   passed as a space.
+
+   https://github.com/owncloud/web/issues/11978
+   https://github.com/owncloud/web/pull/12000
+
+* Bugfix - OCM share editing: [#12002](https://github.com/owncloud/web/pull/12002)
+
+   We've fixed a bug where OCM shares could be edited although the server does not
+   support it.
+
+   https://github.com/owncloud/web/issues/11991
+   https://github.com/owncloud/web/pull/12002
+
+* Bugfix - OCM share recipient issuer: [#12002](https://github.com/owncloud/web/pull/12002)
+
+   We've fixed a bug where the issuer for OCM shares was missing in the invite
+   input field.
+
+   https://github.com/owncloud/web/issues/11972
+   https://github.com/owncloud/web/pull/12002
+
+* Bugfix - Missing activities on Shared with me page: [#12008](https://github.com/owncloud/web/pull/12008)
+
+   We've added the missing activities on the Shared with me page.
+
+   https://github.com/owncloud/web/pull/12008
+
+* Bugfix - Sidebar file info for shares: [#12010](https://github.com/owncloud/web/pull/12010)
+
+   We've fixed a bug some file info regarding size an shares was missing in the
+   right sidebar when opening an incoming share via an editor.
+
+   https://github.com/owncloud/web/pull/12010
+
+* Bugfix - Show missing role name in link share panel: [#12012](https://github.com/owncloud/web/pull/12012)
+
+   We've fixed a bug where the role name was missing in the link share panel.
+
+   https://github.com/owncloud/web/pull/12012
+
+* Bugfix - Missing translations for share type filters: [#12013](https://github.com/owncloud/web/pull/12013)
+
+   We've fixed a bug, where the translations for the share type filters were
+   missing. This was the case for the "Shared with me" and "Shared with others"
+   page.
+
+   https://github.com/owncloud/web/pull/12013
+
+* Bugfix - Permanent link for shares: [#12022](https://github.com/owncloud/web/pull/12022)
+
+   We've fixed an issue where the permanent for shares could not be copied.
+
+   https://github.com/owncloud/web/issues/12001
+   https://github.com/owncloud/web/pull/12022
 
 Changelog for ownCloud Web [11.0.5] (2024-11-25)
 =======================================
