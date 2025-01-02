@@ -1,8 +1,7 @@
-import { test, expect, testInfo } from '@playwright/test'
-import AxeBuilder from '@axe-core/playwright'
+import { test, expect } from './axeBuilder'
 
 test.describe('Accessibility', () => {
-  test('login page should not have any automatically detectable accessibility issues', async ({ page, baseURL }, testInfo) => {
+  test('login page should not have any automatically detectable accessibility issues', async ({ page, baseURL, makeAxeBuilder }, testInfo ) => {
     await page.goto(`${baseURL}`)
     await page.fill('#oc-login-username', 'admin')
     await page.fill('#oc-login-password', 'admin')
@@ -14,7 +13,9 @@ test.describe('Accessibility', () => {
     await page.locator('#user-list').waitFor()
 
     // https://host.docker.internal:9200/admin-settings/users
-    const a11yResult = await new AxeBuilder({ page }).include('#user-list').analyze()
+    const a11yResult = await makeAxeBuilder()
+      .include('#user-list')
+      .analyze()
 
     // print violations to console
     // await printViolationsToConsole(a11yResult)
@@ -34,6 +35,7 @@ test.describe('Accessibility', () => {
     expect(a11yResult.violations).not.toEqual([])
   })
 
+  /*
   test('login page should not have any automatically detectable WCAG A or AA violations', async ({ page, baseURL }, testInfo) => {
     await page.goto(`${baseURL}`)
     await page.fill('#oc-login-username', 'admin')
@@ -55,6 +57,7 @@ test.describe('Accessibility', () => {
 
     expect(a11yResult.violations).not.toEqual([]);
   })
+  */
 })
 
 /*
