@@ -158,14 +158,12 @@
     <div
       v-if="showPasteHereButton"
       id="clipboard-btns"
-      v-oc-tooltip="
-        uploadOrFileCreationBlocked ? $gettext('You have no permission to paste files here!') : ''
-      "
+      v-oc-tooltip="pasteHereButtonTooltip"
       class="oc-button-group"
-      :class="{ disabled: uploadOrFileCreationBlocked }"
+      :class="{ disabled: isPasteHereButtonDisabled }"
     >
       <oc-button
-        :disabled="uploadOrFileCreationBlocked"
+        :disabled="isPasteHereButtonDisabled"
         class="paste-files-btn"
         @click="pasteFileAction"
       >
@@ -270,6 +268,7 @@ export default defineComponent({
     const sharesStore = useSharesStore()
     const route = useRoute()
     const language = useGettext()
+    const { $gettext } = language
 
     const clipboardStore = useClipboardStore()
     const { clearClipboard } = clipboardStore
@@ -401,6 +400,36 @@ export default defineComponent({
       }
     }
 
+    const uploadOrFileCreationBlocked = computed(() => {
+      return !unref(canUpload)
+    })
+
+    const isPastingIntoSameFolder = computed(() => {
+      if (!unref(clipboardResources) || unref(clipboardResources).length < 1) {
+        return false
+      }
+
+      return !unref(clipboardResources).some(
+        (resource) => resource.parentFolderId !== unref(currentFolder).id
+      )
+    })
+
+    const isPasteHereButtonDisabled = computed(() => {
+      return unref(uploadOrFileCreationBlocked) || unref(isPastingIntoSameFolder)
+    })
+
+    const pasteHereButtonTooltip = computed(() => {
+      if (unref(uploadOrFileCreationBlocked)) {
+        return $gettext('You have no permission to paste files here!')
+      }
+
+      if (unref(isPastingIntoSameFolder)) {
+        return $gettext('You cannot paste resources into the same folder where you copied them.')
+      }
+
+      return ''
+    })
+
     onMounted(() => {
       uploadCompletedSub = uppyService.subscribe('uploadCompleted', onUploadComplete)
       document.addEventListener('paste', handlePasteFileEvent)
@@ -446,6 +475,9 @@ export default defineComponent({
       areFileExtensionsShown,
       clearClipboard,
       clipboardResources,
+      uploadOrFileCreationBlocked,
+      isPasteHereButtonDisabled,
+      pasteHereButtonTooltip,
 
       // HACK: exported for unit tests:
       onUploadComplete
@@ -491,10 +523,6 @@ export default defineComponent({
         return tooltip
       }
       return this.$gettext('Upload files or folders')
-    },
-
-    uploadOrFileCreationBlocked() {
-      return !this.canUpload
     },
 
     folderIconResource() {

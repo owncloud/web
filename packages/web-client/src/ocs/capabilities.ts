@@ -72,6 +72,7 @@ export interface Capabilities {
     }
     notifications?: {
       'ocs-endpoints'?: string[]
+      configurable?: boolean
     }
     core: {
       pollinterval?: number

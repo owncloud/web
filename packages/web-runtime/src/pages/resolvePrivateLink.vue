@@ -21,10 +21,6 @@
         </div>
         <div class="oc-card-body oc-link-resolve-error-message">
           <p class="oc-text-xlarge">{{ errorMessage }}</p>
-          <p
-            v-if="isUnacceptedShareError"
-            v-text="$gettext('You can reload this page after you have enabled syncing the share.')"
-          />
         </div>
       </template>
     </div>
@@ -170,18 +166,9 @@ export default defineComponent({
 
     const errorMessage = computed(() => {
       if (unref(isUnacceptedShareError)) {
-        if (!unref(sharedParentResource)) {
-          return $gettext(
-            'This file or folder has been shared with you. Enable the sync in "Shares" > "Shared with me" to view it.'
-          )
-        } else {
-          return $gettext(
-            'This file or folder has been shared with you via "%{parentShareName}". Enable the sync for the share "%{parentShareName}" in "Shares" > "Shared with me" to view it.',
-            {
-              parentShareName: unref(sharedParentResource).name
-            }
-          )
-        }
+        return $gettext(
+          'The link you are trying to access is invalid or you do not have permission to view the content. Please check the link for any errors or contact the person who shared it for assistance.'
+        )
       }
 
       if (resolvePrivateLinkTask.isError) {

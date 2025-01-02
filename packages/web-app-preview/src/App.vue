@@ -81,7 +81,7 @@ import {
   Ref
 } from 'vue'
 import { RouteLocationRaw } from 'vue-router'
-import { isShareSpaceResource, Resource } from '@ownclouders/web-client'
+import { IncomingShareResource, isShareSpaceResource, Resource } from '@ownclouders/web-client'
 import {
   AppFileHandlingResult,
   AppFolderHandlingResult,
@@ -174,6 +174,20 @@ export default defineComponent({
       }
 
       const files = props.activeFiles.filter((file) => {
+        if (
+          unref(props.currentFileContext.routeQuery)['q_share-visibility'] === 'hidden' &&
+          !(file as IncomingShareResource).hidden
+        ) {
+          return false
+        }
+
+        if (
+          unref(props.currentFileContext.routeQuery)['q_share-visibility'] !== 'hidden' &&
+          (file as IncomingShareResource).hidden
+        ) {
+          return false
+        }
+
         return mimeTypes.includes(file.mimeType?.toLowerCase()) && file.canDownload()
       })
 

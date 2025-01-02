@@ -128,7 +128,10 @@
             <theme-switcher />
           </oc-td>
         </oc-tr>
-        <oc-tr v-if="showNotifications" class="account-page-notification">
+        <oc-tr
+          v-if="showNotifications && !canConfigureSpecificNotifications"
+          class="account-page-notification"
+        >
           <oc-td>{{ $gettext('Notifications') }}</oc-td>
           <oc-td v-if="!isMobileWidth">
             <span v-text="$gettext('Receive notification mails')" />
@@ -161,6 +164,73 @@
           </oc-td>
         </oc-tr>
       </account-table>
+
+      <template v-if="showNotifications && canConfigureSpecificNotifications">
+        <account-table
+          :title="$gettext('Notifications')"
+          :fields="notificationsSettingsFields"
+          :show-head="!isMobileWidth"
+        >
+          <template #header="{ title }">
+            <h2>{{ title }}</h2>
+            <p>
+              {{
+                $gettext(
+                  'Personalise your notification preferences about any file, folder, or Space.'
+                )
+              }}
+            </p>
+          </template>
+
+          <oc-tr v-for="option in notificationsOptions" :key="option.id">
+            <oc-td>{{ option.displayName }}</oc-td>
+            <oc-td>{{ option.description }}</oc-td>
+
+            <template v-if="option.multiChoiceCollectionValue">
+              <oc-td v-for="choice in option.multiChoiceCollectionValue.options" :key="choice.key">
+                <span class="checkbox-cell-wrapper">
+                  <oc-checkbox
+                    :model-value="notificationsValues[option.id][choice.key]"
+                    size="large"
+                    :label="choice.displayValue"
+                    :label-hidden="!isMobileWidth"
+                    :disabled="choice.attribute === 'disabled'"
+                    @update:model-value="
+                      (value) => updateMultiChoiceSettingsValue(option.name, choice.key, value)
+                    "
+                  />
+                </span>
+              </oc-td>
+            </template>
+          </oc-tr>
+        </account-table>
+        <account-table
+          :title="$gettext('Mail notification options')"
+          :fields="emailNotificationsOptionsFields"
+          :show-head="!isMobileWidth"
+          class="oc-mt-m"
+        >
+          <template #header="{ title }">
+            <h2 class="oc-invisible-sr">{{ title }}</h2>
+          </template>
+
+          <oc-tr v-for="option in emailNotificationsOptions" :key="option.id">
+            <oc-td>{{ option.displayName }}</oc-td>
+            <oc-td>{{ option.description }}</oc-td>
+
+            <oc-td v-if="option.singleChoiceValue">
+              <oc-select
+                :model-value="emailNotificationsValues[option.id]"
+                :options="option.singleChoiceValue.options"
+                :clearable="false"
+                option-label="displayValue"
+                @update:model-value="(value) => updateSingleChoiceValue(option.name, value)"
+              />
+            </oc-td>
+          </oc-tr>
+        </account-table>
+      </template>
+
       <account-table
         v-if="extensionPointsWithUserPreferences.length"
         :title="$gettext('Extensions')"
@@ -241,6 +311,8 @@ import { isEmpty } from 'lodash-es'
 import { call } from '@ownclouders/web-client'
 import QuotaInformation from '../components/Account/QuotaInformation.vue'
 import AccountTable from '../components/Account/AccountTable.vue'
+import { useNotificationsSettings } from '../composables/notificationsSettings'
+import { captureException } from '@sentry/vue'
 
 const MOBILE_BREAKPOINT = 800
 export default defineComponent({
@@ -273,6 +345,12 @@ export default defineComponent({
     const spacesStore = useSpacesStore()
     const capabilityStore = useCapabilityStore()
     const configStore = useConfigStore()
+    const {
+      options: notificationsOptions,
+      emailOptions: emailNotificationsOptions,
+      values: notificationsValues,
+      emailValues: emailNotificationsValues
+    } = useNotificationsSettings(valuesList, accountBundle)
 
     const isMobileWidth = ref<boolean>(window.innerWidth < MOBILE_BREAKPOINT)
     const onResize = () => {
@@ -402,9 +480,8 @@ export default defineComponent({
     }: {
       identifier: string
       valueOptions: Record<string, any>
-    }) => {
-      const valueId = unref(valuesList)?.find((cV) => cV.identifier.setting === identifier)?.value
-        ?.id
+    }): Promise<SettingsValue> => {
+      let valueId = unref(valuesList)?.find((cV) => cV.identifier.setting === identifier)?.value?.id
 
       const value = {
         bundleId: unref(accountBundle)?.id,
@@ -416,12 +493,22 @@ export default defineComponent({
       }
 
       try {
-        await clientService.httpAuthenticated.post('/api/v0/settings/values-save', {
-          value: {
-            accountUuid: 'me',
-            ...value
+        const {
+          data: { value: data }
+        } = await clientService.httpAuthenticated.post<{ value: SettingsValue }>(
+          '/api/v0/settings/values-save',
+          {
+            value: {
+              accountUuid: 'me',
+              ...value
+            }
           }
-        })
+        )
+
+        // Not sure if we can remove the condition below so just assign this here to be 100% safe
+        if (data.value.id) {
+          valueId = data.value.id
+        }
 
         /**
          * Edge case: we need to reload the values list to retrieve the valueId if not set,
@@ -431,7 +518,7 @@ export default defineComponent({
           loadValuesListTask.perform()
         }
 
-        return value
+        return data
       } catch (e) {
         throw e
       }
@@ -525,6 +612,100 @@ export default defineComponent({
       })
     })
 
+    const notificationsSettingsFields = computed(() => [
+      { label: $gettext('Event') },
+      { label: $gettext('Event description'), hidden: true },
+      { label: $gettext('In-App'), alignH: 'right' },
+      { label: $gettext('Mail'), alignH: 'right' }
+    ])
+
+    const emailNotificationsOptionsFields = computed(() => [
+      { label: $gettext('Options') },
+      { label: $gettext('Option description'), hidden: true },
+      { label: $gettext('Option value'), hidden: true }
+    ])
+
+    const updateValueInValueList = (value: SettingsValue) => {
+      const index = unref(valuesList).findIndex(
+        (v) => v.identifier.setting === value.identifier.setting
+      )
+
+      if (index < 0) {
+        valuesList.value.push(value)
+        return
+      }
+
+      valuesList.value.splice(index, 1, value)
+    }
+
+    const updateMultiChoiceSettingsValue = async (
+      identifier: string,
+      key: string,
+      value: boolean | string
+    ) => {
+      try {
+        if (typeof value !== 'boolean') {
+          const error = new TypeError(`Unsupported value type ${typeof value}`)
+
+          console.error(error)
+          captureException(error)
+
+          return
+        }
+
+        const currentValue = unref(valuesList).find((v) => v.identifier.setting === identifier)
+
+        const savedValue = await saveValue({
+          identifier,
+          valueOptions: {
+            collectionValue: {
+              values: [
+                ...(currentValue?.value.collectionValue.values.filter((val) => val.key !== key) ||
+                  []),
+                { key, boolValue: value }
+              ]
+            }
+          }
+        })
+
+        updateValueInValueList(savedValue)
+        showMessage({ title: $gettext('Preference saved.') })
+      } catch (error) {
+        captureException(error)
+        console.error(error)
+        showErrorMessage({
+          title: $gettext('Unable to save preference…'),
+          errors: [error]
+        })
+      }
+    }
+
+    const updateSingleChoiceValue = async (
+      identifier: string,
+      value: { displayValue: string; value: { stringValue: string } }
+    ): Promise<void> => {
+      try {
+        const savedValue = await saveValue({
+          identifier,
+          valueOptions: { stringValue: value.value.stringValue }
+        })
+
+        updateValueInValueList(savedValue)
+        showMessage({ title: $gettext('Preference saved.') })
+      } catch (error) {
+        captureException(error)
+        console.error(error)
+        showErrorMessage({
+          title: $gettext('Unable to save preference…'),
+          errors: [error]
+        })
+      }
+    }
+
+    const canConfigureSpecificNotifications = computed(
+      () => capabilityStore.capabilities.notifications.configurable
+    )
+
     onMounted(async () => {
       window.addEventListener('resize', onResize)
 
@@ -583,7 +764,16 @@ export default defineComponent({
       loadValuesListTask,
       showEditPasswordModal,
       quota,
-      isMobileWidth
+      isMobileWidth,
+      notificationsOptions,
+      notificationsSettingsFields,
+      emailNotificationsOptionsFields,
+      emailNotificationsOptions,
+      notificationsValues,
+      updateMultiChoiceSettingsValue,
+      emailNotificationsValues,
+      updateSingleChoiceValue,
+      canConfigureSpecificNotifications
     }
   }
 })
