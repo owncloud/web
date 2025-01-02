@@ -519,7 +519,7 @@ importers:
         version: 2.3.0(typescript@5.6.3)(vue@3.5.13(typescript@5.6.3))
       vue-concurrency:
         specifier: ^5.0.1
-        version: 5.0.1(vue@3.5.13(typescript@5.6.3))
+        version: 5.0.3(vue@3.5.13(typescript@5.6.3))
       vue-router:
         specifier: ^4.2.5
         version: 4.2.5(vue@3.5.13(typescript@5.6.3))
@@ -567,8 +567,8 @@ importers:
         specifier: 11.0.3
         version: 11.0.3
       vue-concurrency:
-        specifier: 5.0.1
-        version: 5.0.1(vue@3.5.13(typescript@5.6.3))
+        specifier: 5.0.3
+        version: 5.0.3(vue@3.5.13(typescript@5.6.3))
       vue-router:
         specifier: 4.2.5
         version: 4.2.5(vue@3.5.13(typescript@5.6.3))
@@ -604,8 +604,8 @@ importers:
         specifier: 2.3.0
         version: 2.3.0(typescript@5.6.3)(vue@3.5.13(typescript@5.6.3))
       vue-concurrency:
-        specifier: 5.0.1
-        version: 5.0.1(vue@3.5.13(typescript@5.6.3))
+        specifier: 5.0.3
+        version: 5.0.3(vue@3.5.13(typescript@5.6.3))
       vue-router:
         specifier: 4.2.5
         version: 4.2.5(vue@3.5.13(typescript@5.6.3))
@@ -660,8 +660,8 @@ importers:
         specifier: 11.0.3
         version: 11.0.3
       vue-concurrency:
-        specifier: 5.0.1
-        version: 5.0.1(vue@3.5.13(typescript@5.6.3))
+        specifier: 5.0.3
+        version: 5.0.3(vue@3.5.13(typescript@5.6.3))
       vue-router:
         specifier: 4.2.5
         version: 4.2.5(vue@3.5.13(typescript@5.6.3))
@@ -724,8 +724,8 @@ importers:
         specifier: 11.0.3
         version: 11.0.3
       vue-concurrency:
-        specifier: 5.0.1
-        version: 5.0.1(vue@3.5.13(typescript@5.6.3))
+        specifier: 5.0.3
+        version: 5.0.3(vue@3.5.13(typescript@5.6.3))
       vue-router:
         specifier: 4.2.5
         version: 4.2.5(vue@3.5.13(typescript@5.6.3))
@@ -767,8 +767,8 @@ importers:
         specifier: 11.0.3
         version: 11.0.3
       vue-concurrency:
-        specifier: 5.0.1
-        version: 5.0.1(vue@3.5.13(typescript@5.6.3))
+        specifier: 5.0.3
+        version: 5.0.3(vue@3.5.13(typescript@5.6.3))
       vue-router:
         specifier: 4.2.5
         version: 4.2.5(vue@3.5.13(typescript@5.6.3))
@@ -857,8 +857,8 @@ importers:
         specifier: workspace:*
         version: link:../web-pkg
       vue-concurrency:
-        specifier: 5.0.1
-        version: 5.0.1(vue@3.5.13(typescript@5.6.3))
+        specifier: 5.0.3
+        version: 5.0.3(vue@3.5.13(typescript@5.6.3))
       vue3-gettext:
         specifier: 2.4.0
         version: 2.4.0(patch_hash=x32qkm4z6srz5xuveescagpdyu)(@vue/compiler-sfc@3.5.13)(vue@3.5.13(typescript@5.6.3))
@@ -1039,7 +1039,7 @@ importers:
         version: 11.0.3
       vue-concurrency:
         specifier: ^5.0.1
-        version: 5.0.1(vue@3.5.13(typescript@5.6.3))
+        version: 5.0.3(vue@3.5.13(typescript@5.6.3))
       vue-router:
         specifier: ^4.2.5
         version: 4.2.5(vue@3.5.13(typescript@5.6.3))
@@ -1175,8 +1175,8 @@ importers:
         specifier: 3.5.13
         version: 3.5.13(typescript@5.6.3)
       vue-concurrency:
-        specifier: 5.0.1
-        version: 5.0.1(vue@3.5.13(typescript@5.6.3))
+        specifier: 5.0.3
+        version: 5.0.3(vue@3.5.13(typescript@5.6.3))
       vue-router:
         specifier: 4.2.5
         version: 4.2.5(vue@3.5.13(typescript@5.6.3))
@@ -8867,8 +8867,8 @@ packages:
   vue-component-type-helpers@2.0.13:
     resolution: {integrity: sha512-xNO5B7DstNWETnoYflLkVgh8dK8h2ZDgxY1M2O0zrqGeBNq5yAZ8a10yCS9+HnixouNGYNX+ggU9MQQq86HTpg==}
 
-  vue-concurrency@5.0.1:
-    resolution: {integrity: sha512-mZLcmySELske15+tmfVNscG9l0FKNVOkdXZMSdrFyLg2xseB7S/ci2Xmsmqihe6hkuAHpGIsjwLwI0vANV0CJw==}
+  vue-concurrency@5.0.3:
+    resolution: {integrity: sha512-z8K4acfOUOLufGysY21xqI+KI8a81XcGUNLXhPOxYevqcfX052VP9KLUNvrdJrbI7rKbDGjIrlRhXwJsFb1Ukw==}
     peerDependencies:
       vue: ^3.3
 
@@ -17804,7 +17804,7 @@ snapshots:
 
   vue-component-type-helpers@2.0.13: {}
 
-  vue-concurrency@5.0.1(vue@3.5.13(typescript@5.6.3)):
+  vue-concurrency@5.0.3(vue@3.5.13(typescript@5.6.3)):
     dependencies:
       caf: 15.0.1(patch_hash=l6oc6ggvh6ycwg3k5urnriyw5a)
       vue: 3.5.13(typescript@5.6.3)
