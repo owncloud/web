@@ -20,6 +20,7 @@ Summary
 * Bugfix - Use local state in sidebar in embed mode: [#12058](https://github.com/owncloud/web/pull/12058)
 * Bugfix - Reload preloaded resource in sidebar: [#12059](https://github.com/owncloud/web/pull/12059)
 * Bugfix - Change opacity of disabled checkboxes: [#12063](https://github.com/owncloud/web/pull/12063)
+* Bugfix - Refetch notifications settings on locale change: [#12074](https://github.com/owncloud/web/pull/12074)
 * Enhancement - Accessibility improvements: [#5379](https://github.com/owncloud/web/issues/5379)
 * Enhancement - Create spaces via admin settings: [#11849](https://github.com/owncloud/web/pull/11849)
 * Enhancement - Add notifications settings: [#12010](https://github.com/owncloud/web/pull/12010)
@@ -135,6 +136,16 @@ Details
 
    https://github.com/owncloud/web/issues/12060
    https://github.com/owncloud/web/pull/12063
+
+* Bugfix - Refetch notifications settings on locale change: [#12074](https://github.com/owncloud/web/pull/12074)
+
+   We've fixed an issue where the notification settings section did not update any
+   strings when users changed their locale. The settings bundle is now fetched
+   again when locale changes to make sure that the oCIS server can return strings
+   in the correct locale.
+
+   https://github.com/owncloud/web/issues/12064
+   https://github.com/owncloud/web/pull/12074
 
 * Enhancement - Accessibility improvements: [#5379](https://github.com/owncloud/web/issues/5379)
 
