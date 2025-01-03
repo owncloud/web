@@ -557,6 +557,11 @@ export default defineComponent({
           }
         }
 
+        if (loadAccountBundleTask.isRunning) {
+          loadAccountBundleTask.cancelAll()
+        }
+
+        loadAccountBundleTask.perform()
         showMessage({ title: $gettext('Preference saved.') })
       } catch (e) {
         console.error(e)
