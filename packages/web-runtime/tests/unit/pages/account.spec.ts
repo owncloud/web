@@ -201,6 +201,19 @@ describe('account page', () => {
       const { showErrorMessage } = useMessages()
       expect(showErrorMessage).toHaveBeenCalled()
     })
+
+    it('should refetch settings bundles', async () => {
+      const { wrapper, mocks } = getWrapper({})
+      await blockLoadingState(wrapper)
+
+      mocks.$clientService.graphAuthenticated.users.editMe.mockResolvedValueOnce(undefined)
+      await wrapper.vm.updateSelectedLanguage({ value: 'en' } as LanguageOption)
+      expect(mocks.$clientService.httpAuthenticated.post).toHaveBeenCalledWith(
+        '/api/v0/settings/bundles-list',
+        {},
+        { signal: expect.any(AbortSignal) }
+      )
+    })
   })
 
   describe('Method "updateViewOptionsWebDavDetails', () => {
