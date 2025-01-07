@@ -88,7 +88,7 @@ test.describe('Accessibility', () => {
       await page.fill('#oc-login-username', 'admin')
       await page.fill('#oc-login-password', 'admin')
       await page.click("button[type='submit']")
-      await page.locator('#web-content-main').waitFor()
+      await page.locator('#files').waitFor()
       // switch view
       await page.locator('.resource-table-condensed').click()
       await page.locator('#files-space-table.condensed').waitFor()
@@ -106,7 +106,7 @@ test.describe('Accessibility', () => {
       await page.fill('#oc-login-username', 'admin')
       await page.fill('#oc-login-password', 'admin')
       await page.click("button[type='submit']")
-      await page.locator('#web-content-main').waitFor()
+      await page.locator('#files').waitFor()
       // switch view
       await page.locator('.resource-tiles').click() 
       await page.locator('.oc-tiles-controls').waitFor()
@@ -118,7 +118,56 @@ test.describe('Accessibility', () => {
 
       expect(a11yResult.violations).toEqual([])
     }),
-    //test file context menu
+    // todo: group all tests relating to side panel things
+    test('file actions share panel should not have any automatically detectable accessibility issues', async ({ page, baseURL, makeAxeBuilder } ) => {
+      await page.goto(`${baseURL}`)
+      await page.fill('#oc-login-username', 'admin')
+      await page.fill('#oc-login-password', 'admin')
+      await page.click("button[type='submit']")
+      await page.locator('#files').waitFor()
+      // select quick file actions share
+      await page.locator('.files-quick-action-show-shares').first().click() 
+      await page.locator('#sidebar-panel-sharing').waitFor()
+
+      const a11yResult = await makeAxeBuilder()
+        .include('#sidebar-panel-sharing')
+        .exclude('#files-file-link-add') // insufficient color contrast for "add link"
+        .analyze()
+
+      expect(a11yResult.violations).toEqual([])
+    }),
+    test('file actions context menu for specific file should not have any automatically detectable accessibility issues', async ({ page, baseURL, makeAxeBuilder } ) => {
+      await page.goto(`${baseURL}`)
+      await page.fill('#oc-login-username', 'admin')
+      await page.fill('#oc-login-password', 'admin')
+      await page.click("button[type='submit']")
+      await page.locator('#files').waitFor()    
+      // click on the context menu of the first file in the list
+      await page.locator('.resource-table-btn-action-dropdown').first().click() 
+      await page.locator('.tippy-content').last().waitFor() // first element contains the invisible state, second (last) the visible state
+
+      const a11yResult = await makeAxeBuilder()
+        .include('.tippy-content')
+        .analyze()
+
+      expect(a11yResult.violations).toEqual([])
+    }),
+    test('files context menu should not have any automatically detectable accessibility issues', async ({ page, baseURL, makeAxeBuilder } ) => {
+      await page.goto(`${baseURL}`)
+      await page.fill('#oc-login-username', 'admin')
+      await page.fill('#oc-login-password', 'admin')
+      await page.click("button[type='submit']")
+      await page.locator('#files').waitFor()    
+      // right click to get "new folder" and "details" context menu
+      await page.locator('#web-content-main').click({ button: 'right' })
+      await page.locator('.tippy-content').waitFor() 
+
+      const a11yResult = await makeAxeBuilder()
+        .include('.tippy-content')
+        .analyze()
+
+      expect(a11yResult.violations).toEqual([])
+    }),
     test.skip('sidebar with details for the file list should not have any automatically detectable accessibility issues', async ({ page, baseURL, makeAxeBuilder } ) => {
       /*
       await page.goto(`${baseURL}`)
