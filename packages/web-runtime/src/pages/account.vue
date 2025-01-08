@@ -616,7 +616,7 @@ export default defineComponent({
       { label: $gettext('Event') },
       { label: $gettext('Event description'), hidden: true },
       { label: $gettext('In-App'), alignH: 'right' },
-      { label: $gettext('Mail'), alignH: 'right' }
+      { label: $gettext('Email'), alignH: 'right' }
     ])
 
     const emailNotificationsOptionsFields = computed(() => [
