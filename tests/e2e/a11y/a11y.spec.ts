@@ -66,7 +66,9 @@ test.describe('Accessibility', () => {
     })
   }),
   test.describe('personal space page', () => {
-    // precondition for the following tests: there should be some files uploaded
+    // precondition for the following tests: 
+    // there should be some files uploaded, and some tags have been added to some of these files
+    // at least one file should have been shared with another user
 
     test('files section in default table view should not have any automatically detectable accessibility issues', async ({ page, baseURL, makeAxeBuilder } ) => {  
       await page.goto(`${baseURL}`)
@@ -185,6 +187,23 @@ test.describe('Accessibility', () => {
 
       expect(a11yResult.violations).toEqual([])
     }),
+    //Select file
+    test('file actions buttons for specific file should not have any automatically detectable accessibility issues', async ({ page, baseURL, makeAxeBuilder } ) => {
+      await page.goto(`${baseURL}`)
+      await page.fill('#oc-login-username', 'admin')
+      await page.fill('#oc-login-password', 'admin')
+      await page.click("button[type='submit']")
+      await page.locator('#files').waitFor()    
+      // check checkbox of the first file in the list
+      await page.locator('#files-space-table .oc-checkbox').first().check() 
+      await page.locator('#oc-appbar-batch-actions').waitFor()
+
+      const a11yResult = await makeAxeBuilder()
+        .include('#oc-appbar-batch-actions')
+        .analyze()
+
+      expect(a11yResult.violations).toEqual([])
+    }),
     test('file actions context menu for specific file should not have any automatically detectable accessibility issues', async ({ page, baseURL, makeAxeBuilder } ) => {
       await page.goto(`${baseURL}`)
       await page.fill('#oc-login-username', 'admin')
@@ -197,6 +216,25 @@ test.describe('Accessibility', () => {
 
       const a11yResult = await makeAxeBuilder()
         .include('.tippy-content')
+        .analyze()
+
+      expect(a11yResult.violations).toEqual([])
+    }),
+    test('file actions details panel should not have any automatically detectable accessibility issues', async ({ page, baseURL, makeAxeBuilder } ) => {
+      await page.goto(`${baseURL}`)
+      await page.fill('#oc-login-username', 'admin')
+      await page.fill('#oc-login-password', 'admin')
+      await page.click("button[type='submit']")
+      await page.locator('#files').waitFor()    
+      // click on the context menu of the first file in the list
+      await page.locator('.resource-table-btn-action-dropdown').first().click() 
+      await page.locator('.tippy-content').last().waitFor() // first element contains the invisible state, second (last) the visible state
+      // select "details"
+      await page.locator('#oc-files-context-actions-sidebar').click() 
+      await page.locator('#sidebar-panel-details').waitFor()
+
+      const a11yResult = await makeAxeBuilder()
+        .include('#sidebar-panel-details')
         .analyze()
 
       expect(a11yResult.violations).toEqual([])
@@ -218,6 +256,53 @@ test.describe('Accessibility', () => {
 
       expect(a11yResult.violations).toEqual([])
     }),
+    // selecting user from combobox (search dropdown) should also be tested, however test code below is not working
+    test.skip('user drop down in file actions share panel should not have any automatically detectable accessibility issues', async ({ page, baseURL, makeAxeBuilder } ) => {
+      await page.goto(`${baseURL}`)
+      await page.fill('#oc-login-username', 'admin')
+      await page.fill('#oc-login-password', 'admin')
+      await page.click("button[type='submit']")
+      await page.locator('#files').waitFor()
+      // select quick file actions share
+      await page.locator('.files-quick-action-show-shares').first().click() 
+      await page.locator('#sidebar-panel-sharing').waitFor()
+      // select user with whom the file shouldbe shared 
+      await page.fill('#files-share-invite-input', 'einstein')
+      await page.locator('.vs__dropdown-toggle').last().waitFor() // first instance contains tags, second (last) instance contains search 
+      await page.locator('.vs__dropdown-toggle').last().click() 
+      //await page.locator('#new-collaborators-form').waitFor()
+      //await page.locator('.files-share-invite-recipient').waitFor()
+
+      //console.log(await page.locator('#new-collaborators-form ul').innerHTML())
+      console.log(await page.locator('#new-collaborators-form').innerHTML())
+
+      const a11yResult = await makeAxeBuilder()
+        .include('#new-collaborators-form')
+        //.exclude('#files-file-link-add') // insufficient color contrast for "add link"
+        .analyze()
+
+      expect(a11yResult.violations).toEqual([])
+    }),
+    test('view type drop down in file actions share panel should not have any automatically detectable accessibility issues', async ({ page, baseURL, makeAxeBuilder } ) => {
+      await page.goto(`${baseURL}`)
+      await page.fill('#oc-login-username', 'admin')
+      await page.fill('#oc-login-password', 'admin')
+      await page.click("button[type='submit']")
+      await page.locator('#files').waitFor()
+      // select quick file actions share
+      await page.locator('.files-quick-action-show-shares').first().click() 
+      await page.locator('#sidebar-panel-sharing').waitFor()
+      // select view type
+      await page.locator('#files-collaborators-role-button-new').click() 
+      await page.locator('.tippy-content').last().waitFor()
+
+      const a11yResult = await makeAxeBuilder()
+        .include('.tippy-content')
+        .analyze()
+
+      expect(a11yResult.violations).toEqual([])
+    }),
+    // 
     test.skip('new context menu with details for the file list should not have any automatically detectable accessibility issues', async ({ page, baseURL, makeAxeBuilder } ) => {
       /*
       await page.goto(`${baseURL}`)
