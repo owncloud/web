@@ -37,7 +37,7 @@
     "semver": "7.6.3",
     "utf8": "^3.0.0",
     "uuid": "11.0.3",
-    "vue-concurrency": "5.0.1",
+    "vue-concurrency": "5.0.3",
     "vue-router": "4.2.5",
     "vue": "3.5.13",
     "vue3-gettext": "2.4.0",

@@ -21,7 +21,7 @@
     "mark.js": "^8.11.1",
     "pinia": "2.3.0",
     "uuid": "11.0.3",
-    "vue-concurrency": "5.0.1",
+    "vue-concurrency": "5.0.3",
     "vue-router": "4.2.5"
   }
 }
