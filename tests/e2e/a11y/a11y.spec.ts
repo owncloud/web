@@ -168,7 +168,58 @@ test.describe('Accessibility', () => {
 
       expect(a11yResult.violations).toEqual([])
     }),
-    test.skip('sidebar with details for the file list should not have any automatically detectable accessibility issues', async ({ page, baseURL, makeAxeBuilder } ) => {
+    test('"new" context menu should not have any automatically detectable accessibility issues', async ({ page, baseURL, makeAxeBuilder } ) => {
+      await page.goto(`${baseURL}`)
+      await page.fill('#oc-login-username', 'admin')
+      await page.fill('#oc-login-password', 'admin')
+      await page.click("button[type='submit']")
+      await page.locator('#files').waitFor()    
+      // click on "+ new" button
+      await page.locator('#new-file-menu-btn').click()
+      await page.locator('.files-app-bar-actions .tippy-content').waitFor() 
+
+      const a11yResult = await makeAxeBuilder()
+        .include('.files-app-bar-actions .tippy-content')
+        .analyze()
+
+      expect(a11yResult.violations).toEqual([])
+    }),
+    test('"upload" context menu should not have any automatically detectable accessibility issues', async ({ page, baseURL, makeAxeBuilder } ) => {
+      await page.goto(`${baseURL}`)
+      await page.fill('#oc-login-username', 'admin')
+      await page.fill('#oc-login-password', 'admin')
+      await page.click("button[type='submit']")
+      await page.locator('#files').waitFor()    
+      // click on "+ new" button
+      await page.locator('#upload-menu-btn').click()
+      await page.locator('.files-app-bar-actions .tippy-content').waitFor() 
+
+      const a11yResult = await makeAxeBuilder()
+        .include('.files-app-bar-actions .tippy-content')
+        .analyze()
+
+      expect(a11yResult.violations).toEqual([])
+    }),
+    test('create new folder popup should not have any automatically detectable accessibility issues', async ({ page, baseURL, makeAxeBuilder } ) => {
+      await page.goto(`${baseURL}`)
+      await page.fill('#oc-login-username', 'admin')
+      await page.fill('#oc-login-password', 'admin')
+      await page.click("button[type='submit']")
+      await page.locator('#files').waitFor()    
+      // click on "+ new" button
+      await page.locator('#new-file-menu-btn').click()
+      await page.locator('.files-app-bar-actions .tippy-content').waitFor() 
+      // click on "folder"
+      await page.locator('#new-folder-btn').click()
+      await page.locator('.oc-modal').waitFor()
+
+      const a11yResult = await makeAxeBuilder()
+        .include('.oc-modal')
+        .analyze()
+
+      expect(a11yResult.violations).toEqual([])
+    }),
+    test.skip('new context menu with details for the file list should not have any automatically detectable accessibility issues', async ({ page, baseURL, makeAxeBuilder } ) => {
       /*
       await page.goto(`${baseURL}`)
       await page.fill('#oc-login-username', 'admin')
