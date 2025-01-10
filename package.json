@@ -63,7 +63,7 @@
     "git-repo-info": "2.1.1",
     "glob": "11.0.0",
     "happy-dom": "15.11.6",
-    "jsdom": "^25.0.0",
+    "jsdom": "^26.0.0",
     "license-checker-rseidelsohn": "4.4.2",
     "node-fetch": "3.3.2",
     "pino-pretty": "13.0.0",
