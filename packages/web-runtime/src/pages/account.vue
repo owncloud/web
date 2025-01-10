@@ -205,7 +205,7 @@
           </oc-tr>
         </account-table>
         <account-table
-          :title="$gettext('Mail notification options')"
+          :title="$gettext('Email notification options')"
           :fields="emailNotificationsOptionsFields"
           :show-head="!isMobileWidth"
           class="oc-mt-m"
@@ -557,6 +557,11 @@ export default defineComponent({
           }
         }
 
+        if (loadAccountBundleTask.isRunning) {
+          loadAccountBundleTask.cancelAll()
+        }
+
+        loadAccountBundleTask.perform()
         showMessage({ title: $gettext('Preference saved.') })
       } catch (e) {
         console.error(e)
@@ -616,7 +621,7 @@ export default defineComponent({
       { label: $gettext('Event') },
       { label: $gettext('Event description'), hidden: true },
       { label: $gettext('In-App'), alignH: 'right' },
-      { label: $gettext('Mail'), alignH: 'right' }
+      { label: $gettext('Email'), alignH: 'right' }
     ])
 
     const emailNotificationsOptionsFields = computed(() => [
