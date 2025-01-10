@@ -3,29 +3,17 @@ Changelog for ownCloud Web [unreleased] (UNRELEASED)
 The following sections list the changes in ownCloud web unreleased relevant to
 ownCloud admins and users.
 
-[unreleased]: https://github.com/owncloud/web/compare/v11.0.6...master
+[unreleased]: https://github.com/owncloud/web/compare/v11.1.0...master
 
 Summary
 -------
 
 * Bugfix - Preview app flat file lists: [#11960](https://github.com/owncloud/web/pull/11960)
 * Bugfix - Show progress bar when emptying trash bin: [#11967](https://github.com/owncloud/web/pull/11967)
-* Bugfix - Preview app files visibility: [#12040](https://github.com/owncloud/web/pull/12040)
-* Bugfix - Disable paste action in same folder: [#12044](https://github.com/owncloud/web/pull/12044)
-* Bugfix - Do not push sidebar close action away: [#12045](https://github.com/owncloud/web/pull/12045)
-* Bugfix - Update sidebar width on resize: [#12045](https://github.com/owncloud/web/pull/12045)
-* Bugfix - Use correct breakpoints in sidebar: [#12045](https://github.com/owncloud/web/pull/12045)
-* Bugfix - Show indirect shares on search page: [#12050](https://github.com/owncloud/web/pull/12050)
-* Bugfix - Add more padding to input when clear action is visible: [#12055](https://github.com/owncloud/web/pull/12055)
-* Bugfix - Use local state in sidebar in embed mode: [#12058](https://github.com/owncloud/web/pull/12058)
 * Bugfix - Reload preloaded resource in sidebar: [#12059](https://github.com/owncloud/web/pull/12059)
-* Bugfix - Change opacity of disabled checkboxes: [#12063](https://github.com/owncloud/web/pull/12063)
-* Bugfix - Refetch notifications settings on locale change: [#12074](https://github.com/owncloud/web/pull/12074)
 * Enhancement - Accessibility improvements: [#5379](https://github.com/owncloud/web/issues/5379)
 * Enhancement - Create spaces via admin settings: [#11849](https://github.com/owncloud/web/pull/11849)
-* Enhancement - Add notifications settings: [#12010](https://github.com/owncloud/web/pull/12010)
 * Enhancement - Disable resources in delete queue: [#12046](https://github.com/owncloud/web/pull/12046)
-* Enhancement - Use generic private link error: [#12054](https://github.com/owncloud/web/pull/12054)
 
 Details
 -------
@@ -46,6 +34,66 @@ Details
 
    https://github.com/owncloud/web/issues/11966
    https://github.com/owncloud/web/pull/11967
+
+* Bugfix - Reload preloaded resource in sidebar: [#12059](https://github.com/owncloud/web/pull/12059)
+
+   We've fixed an issue where actions were not being updated on a resource. We are
+   now reloading metadata of the resource even in the case when it is already
+   preloaded so that we get up to date information.
+
+   https://github.com/owncloud/web/issues/10748
+   https://github.com/owncloud/web/pull/12059
+
+* Enhancement - Accessibility improvements: [#5379](https://github.com/owncloud/web/issues/5379)
+
+   We have further improved accessibility aspects of the web UI.
+
+   https://github.com/owncloud/web/issues/5379
+   https://github.com/owncloud/web/issues/5381
+   https://github.com/owncloud/web/pull/10830
+
+* Enhancement - Create spaces via admin settings: [#11849](https://github.com/owncloud/web/pull/11849)
+
+   We've added a new feature that allows you to create spaces via the admin
+   settings.
+
+   https://github.com/owncloud/web/issues/11771
+   https://github.com/owncloud/web/pull/11849
+
+* Enhancement - Disable resources in delete queue: [#12046](https://github.com/owncloud/web/pull/12046)
+
+   We've added a new delete queue which is used to disable resources that are being
+   currently deleted. When the resource is in delete queue, it also replaces select
+   checkbox with a spinner to better hint that there is an action in progress.
+
+   https://github.com/owncloud/web/issues/11956
+   https://github.com/owncloud/web/pull/12046
+
+Changelog for ownCloud Web [11.1.0] (2025-01-10)
+=======================================
+The following sections list the changes in ownCloud web 11.1.0 relevant to
+ownCloud admins and users.
+
+[11.1.0]: https://github.com/owncloud/web/compare/v11.0.6...v11.1.0
+
+Summary
+-------
+
+* Bugfix - Preview app files visibility: [#12040](https://github.com/owncloud/web/pull/12040)
+* Bugfix - Disable paste action in same folder: [#12044](https://github.com/owncloud/web/pull/12044)
+* Bugfix - Do not push sidebar close action away: [#12045](https://github.com/owncloud/web/pull/12045)
+* Bugfix - Update sidebar width on resize: [#12045](https://github.com/owncloud/web/pull/12045)
+* Bugfix - Use correct breakpoints in sidebar: [#12045](https://github.com/owncloud/web/pull/12045)
+* Bugfix - Show indirect shares on search page: [#12050](https://github.com/owncloud/web/pull/12050)
+* Bugfix - Add more padding to input when clear action is visible: [#12055](https://github.com/owncloud/web/pull/12055)
+* Bugfix - Use local state in sidebar in embed mode: [#12058](https://github.com/owncloud/web/pull/12058)
+* Bugfix - Change opacity of disabled checkboxes: [#12063](https://github.com/owncloud/web/pull/12063)
+* Bugfix - Refetch notifications settings on locale change: [#12074](https://github.com/owncloud/web/pull/12074)
+* Enhancement - Add notifications settings: [#12010](https://github.com/owncloud/web/pull/12010)
+* Enhancement - Use generic private link error: [#12054](https://github.com/owncloud/web/pull/12054)
+
+Details
+-------
 
 * Bugfix - Preview app files visibility: [#12040](https://github.com/owncloud/web/pull/12040)
 
@@ -120,15 +168,6 @@ Details
    https://github.com/owncloud/web/issues/11875
    https://github.com/owncloud/web/pull/12058
 
-* Bugfix - Reload preloaded resource in sidebar: [#12059](https://github.com/owncloud/web/pull/12059)
-
-   We've fixed an issue where actions were not being updated on a resource. We are
-   now reloading metadata of the resource even in the case when it is already
-   preloaded so that we get up to date information.
-
-   https://github.com/owncloud/web/issues/10748
-   https://github.com/owncloud/web/pull/12059
-
 * Bugfix - Change opacity of disabled checkboxes: [#12063](https://github.com/owncloud/web/pull/12063)
 
    We've fixed an issue where disabled checkbox was not clearly distinguishable
@@ -147,22 +186,6 @@ Details
    https://github.com/owncloud/web/issues/12064
    https://github.com/owncloud/web/pull/12074
 
-* Enhancement - Accessibility improvements: [#5379](https://github.com/owncloud/web/issues/5379)
-
-   We have further improved accessibility aspects of the web UI.
-
-   https://github.com/owncloud/web/issues/5379
-   https://github.com/owncloud/web/issues/5381
-   https://github.com/owncloud/web/pull/10830
-
-* Enhancement - Create spaces via admin settings: [#11849](https://github.com/owncloud/web/pull/11849)
-
-   We've added a new feature that allows you to create spaces via the admin
-   settings.
-
-   https://github.com/owncloud/web/issues/11771
-   https://github.com/owncloud/web/pull/11849
-
 * Enhancement - Add notifications settings: [#12010](https://github.com/owncloud/web/pull/12010)
 
    We've added a new notifications settings section into the account screen. This
@@ -172,15 +195,6 @@ Details
 
    https://github.com/owncloud/web/issues/9248
    https://github.com/owncloud/web/pull/12010
-
-* Enhancement - Disable resources in delete queue: [#12046](https://github.com/owncloud/web/pull/12046)
-
-   We've added a new delete queue which is used to disable resources that are being
-   currently deleted. When the resource is in delete queue, it also replaces select
-   checkbox with a spinner to better hint that there is an action in progress.
-
-   https://github.com/owncloud/web/issues/11956
-   https://github.com/owncloud/web/pull/12046
 
 * Enhancement - Use generic private link error: [#12054](https://github.com/owncloud/web/pull/12054)
 
