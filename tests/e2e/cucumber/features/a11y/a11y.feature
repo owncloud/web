@@ -28,7 +28,7 @@ Feature: Accessibility
     # do we need to specify which user?
     Then the search bar should not have any automatically detectable accessibility issues
 
-    When the user enters a search term (e.g. "lorem") into the searchbar
+    When the user enters a searchterm into the searchbar
     And the user clicks on search
     Then the search view should not have any automatically detectable accessibility issues
     # maybe also check filters in search?
@@ -53,7 +53,7 @@ Feature: Accessibility
     When the user logs into oCIS
     Then the application sidebar should not have any automatically detectable accessibility issues
 
-    When user colapses the application sidebar
+    When the user collapses the application sidebar
     Then the collapsed sidebar should not have any automatically detectable accessibility issues
     
 
@@ -72,9 +72,11 @@ Feature: Accessibility
     Then the display options menu should not have any automatically detectable accessibility issues
     And the user closes the display options menu
 
-    When the user opens the files context menu (right mouse click)
-    Then files context menu should not have any automatically detectable accessibility issues
-    And the user clicks again (left mouse click) to close the context menu
+    When the user opens the files context menu 
+    # right mouse click
+    Then the files context menu should not have any automatically detectable accessibility issues
+    And the user clicks again to close the context menu 
+    # left mouse click
 
     When the user selects "new"
     Then the "new" context menu should not have any automatically detectable accessibility issues
@@ -88,8 +90,10 @@ Feature: Accessibility
     Then the upload context menu should not have any automatically detectable accessibility issues
     And the user exits the upload menu
     
-    When the user selects a file (selecting the corresponding checkbox)
-    Then the file actions buttons (download, cut, copy, delete) for that file should not have any automatically detectable accessibility issues
+    When the user selects a file 
+    # by selecting the corresponding checkbox
+    Then the file actions buttons for that file should not have any automatically detectable accessibility issues 
+    # download, cut, copy, delete buttons
     And the user deselects the file
 
     When the user selects the "share" action of a file 
@@ -146,8 +150,10 @@ Feature: Accessibility
     And the user navigates to deleted files
     Then the deleted files view should not have any automatically detectable accessibility issues
 
-    And the user selects a deleted file 
-    Then the file actions buttons (delete, restore) for that file should not have any automatically detectable accessibility issues
+    When the user selects a deleted file 
+    Then the file actions buttons for that file should not have any automatically detectable accessibility issues 
+    # delete & restore buttons
 
-    And the user clicks on "delete" (or "empty trashbin")
-    Then the delete / empty trashbin popup should not have any automatically detectable accessibility issues
+    When the user clicks on delete 
+    Then the delete popup should not have any automatically detectable accessibility issues
+    #same for "empty trashbin"
