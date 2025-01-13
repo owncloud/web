@@ -4,11 +4,7 @@ export default defineConfig({
   testDir: '.',
   testMatch: 'a11y/**/*.spec.ts',
   use: {
-    baseURL: 'https://host.docker.internal:9200',
-    personal: '/files/spaces/personal',
-    shares: '/files/shares/with-me',
-    spaces: '/files/spaces/projects',
-    deleted: '/files/trash/personal'
+    baseURL: 'https://host.docker.internal:9200'
   },
   projects: [
     {
