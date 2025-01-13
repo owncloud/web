@@ -14,24 +14,24 @@ Feature: Accessibility
       | file           | tag  |
       | lorem.txt      |      |
       | testavatar.png | test |
-    // maybe also define which files have been shared with which user?
+    # maybe also define which files have been shared with which user?
 
     
   Scenario: check accessibility of login page
     When the user goes to the login page
     Then the login page should not have any automatically detectable accessibility issues
-    // maybe also check the infopage that follows after entering login credential, although that page is only visible for a few seconds...
+    # maybe also check the infopage that follows after entering login credential, although that page is only visible for a few seconds...
 
 
   Scenario: check accessibility of app header functionalities
     When the user logs into oCIS
-    // do we need to specify which user?
+    # do we need to specify which user?
     Then the search bar should not have any automatically detectable accessibility issues
 
     When the user enters a search term (e.g. "lorem") into the searchbar
     And the user clicks on search
     Then the search view should not have any automatically detectable accessibility issues
-    // maybe also check filters in search?
+    # maybe also check filters in search?
     
     When the user clicks on notifications
     Then the notifications popup should not have any automatically detectable accessibility issues
@@ -44,8 +44,8 @@ Feature: Accessibility
 
     When the user selects the application switcher
     Then the application switcher menu should not have any automatically detectable accessibility issues 
-    // if more tests for app switcher functionalities (text editor (creating new file), app store, admin settings for users, groups, spaces management) are added
-    // there should be a separate scenario for this 
+    # if more tests for app switcher functionalities (text editor (creating new file), app store, admin settings for users, groups, spaces management) are added
+    # there should be a separate scenario for this 
     And the user closes the application switcher menu
 
     
@@ -81,7 +81,7 @@ Feature: Accessibility
 
     When the user selects "folder" within the options of "new" context menu
     Then the create new folder popup should not have any automatically detectable accessibility issues
-    // only checking one option of this menu because all modal use the same template
+    # only checking one option of this menu because all modal use the same template
     And the user cancels creating a new folder
 
     When the user selects "upload"
@@ -97,7 +97,7 @@ Feature: Accessibility
 
     When the user searches for another user to share the file with within the shares panel
     Then the user search drop down in file actions shares panel should not have any automatically detectable accessibility issues
-    // figure out how to test this...
+    # figure out how to test this...
     And the user exits the user search drop down
     
     When the user selects the view type option within the shares panel
@@ -110,9 +110,9 @@ Feature: Accessibility
 
     When the user selects the option "Details" in the file actions context menu
     Then the file actions details panel should not have any automatically detectable accessibility issues
-    // make sure to test this with a file that has a tag
-    // there would be more nested submenus within the details panel, but they are quite simple and it seems like all of them use the same template, 
-    // maybe just check one? for example activity or actions (actions would have the rename model, which seems to use the same template as new folder though)
+    # make sure to test this with a file that has a tag
+    # there would be more nested submenus within the details panel, but they are quite simple and it seems like all of them use the same template, 
+    # maybe just check one? for example activity or actions (actions would have the rename model, which seems to use the same template as new folder though)
     And the user closes the details panel
 
     
@@ -124,20 +124,20 @@ Feature: Accessibility
 
 
   Scenario: check accessibility of shares
-    // either define here which file is shared with whom, or do this in background?
-    // only test "shared with me" as "shared with others" and "shared via link" seems to have the same set of functionalities or subset thereof
+    # either define here which file is shared with whom, or do this in background?
+    # only test "shared with me" as "shared with others" and "shared via link" seems to have the same set of functionalities or subset thereof
     When the user logs into oCIS
     And the user navigates to shares
     Then the shares view should not have any automatically detectable accessibility issues
 
     And the user selects share type 
     Then the share type popup menu should not have any automatically detectable accessibility issues
-    // share type & shared by seem to have the same functionalities, therefore testing one of them is enough coverage
-    // share details uses the same templates as file details, therefore no additional test coverage
+    # share type & shared by seem to have the same functionalities, therefore testing one of them is enough coverage
+    # share details uses the same templates as file details, therefore no additional test coverage
 
 
   Scenario: check accessibility of spaces
-  // it seems like there is no need to test spaces as it has the same features as personal space
+  # it seems like there is no need to test spaces as it has the same features as personal space
 
 
   Scenario: check accessibility of deleted files
