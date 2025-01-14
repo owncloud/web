@@ -11,6 +11,7 @@ Summary
 * Bugfix - Preview app flat file lists: [#11960](https://github.com/owncloud/web/pull/11960)
 * Bugfix - Show progress bar when emptying trash bin: [#11967](https://github.com/owncloud/web/pull/11967)
 * Bugfix - Reload preloaded resource in sidebar: [#12059](https://github.com/owncloud/web/pull/12059)
+* Bugfix - Missing User Light translations: [#12101](https://github.com/owncloud/web/pull/12101)
 * Enhancement - Accessibility improvements: [#5379](https://github.com/owncloud/web/issues/5379)
 * Enhancement - Create spaces via admin settings: [#11849](https://github.com/owncloud/web/pull/11849)
 * Enhancement - Disable resources in delete queue: [#12046](https://github.com/owncloud/web/pull/12046)
@@ -43,6 +44,14 @@ Details
 
    https://github.com/owncloud/web/issues/10748
    https://github.com/owncloud/web/pull/12059
+
+* Bugfix - Missing User Light translations: [#12101](https://github.com/owncloud/web/pull/12101)
+
+   We've added a missing "User Light" string definition into our translations in
+   order to get this role translated.
+
+   https://github.com/owncloud/web/issues/12100
+   https://github.com/owncloud/web/pull/12101
 
 * Enhancement - Accessibility improvements: [#5379](https://github.com/owncloud/web/issues/5379)
 
