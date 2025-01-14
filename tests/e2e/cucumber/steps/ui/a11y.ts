@@ -1,22 +1,39 @@
 import { Given, When, Then, DataTable } from '@cucumber/cucumber'
 import { World } from '../../environment'
 import { objects } from '../../../support'
-import { expect } from '@playwright/test'
+// import { Space } from '../../../support/types'
+
+import { api } from '../../../support'
+// import { expect } from '@playwright/test'
+
+
+
+
+import { test, expect } from '../../../support/utils/a11yAxeBuilder'
+
+
 
 // Scenario: check accessibility of login page 
-Given('the following users exist', async function (this: World, dataTable: any): Promise<void> {
+Given('the following users have been created using the API', async function (this: World, dataTable: any): Promise<void> {
     const { feature, actorsEnvironment, usersEnvironment, filesEnvironment } = this
   
     await new Promise(resolve => setTimeout(resolve, 10))
 })
        
-Given('the following files have been uploaded and tagged accordingly', async function (this: World, dataTable: any): Promise<void> {
-    const { feature, actorsEnvironment, usersEnvironment, filesEnvironment } = this
-       
-    await new Promise(resolve => setTimeout(resolve, 10))
+Given('the following files have been uploaded and tagged accordingly', async function (this: World, dataTable: DataTable): Promise<void> {
+    const user = this.usersEnvironment.getUser({ key: 'Alice' }) // 'Admin' 
+    for (const info of dataTable.hashes()) {
+        await api.dav.uploadFileInPersonalSpace({
+            user,
+            pathToFile: info.file, 
+            content: '../../../filesForUpload/' + info.file // check if this works
+        })
+    }
+    // add tags?
+    // check if all files have been uploaded successfully?       
 })
 
-When('the user goes to the login page', async function (this: World): Promise<void> {
+When('the user navigates to the login page', async function (this: World): Promise<void> {
     const { feature, actorsEnvironment, usersEnvironment, filesEnvironment } = this
     
     await new Promise(resolve => setTimeout(resolve, 10))
@@ -212,14 +229,14 @@ Then('the user clicks again to close the context menu', async function (this: Wo
 })
        
 // When the user selects "new"
-When('the user selects {string}', async function (this: World, string: any): Promise<void> {
+When('the user selects new', async function (this: World): Promise<void> {
     const { feature, actorsEnvironment, usersEnvironment, filesEnvironment } = this
        
     await new Promise(resolve => setTimeout(resolve, 10))
 })
        
-// Then the "new" context menu should not have any automatically detectable accessibility issues
-Then('the {string} context menu should not have any automatically detectable accessibility issues', async function (this: World, string: any): Promise<void> {
+// Then the new context menu should not have any automatically detectable accessibility issues
+Then('the new context menu should not have any automatically detectable accessibility issues', async function (this: World): Promise<void> {
     const { feature, actorsEnvironment, usersEnvironment, filesEnvironment } = this
        
     await new Promise(resolve => setTimeout(resolve, 10))
@@ -245,7 +262,7 @@ Then('the user cancels creating a new folder', async function (this: World): Pro
 })
        
 // When the user selects "upload"
-When('the user selects {string}', async function (this: World, string: any): Promise<void> {
+When('the user selects upload', async function (this: World): Promise<void> {
     const { feature, actorsEnvironment, usersEnvironment, filesEnvironment } = this
        
     await new Promise(resolve => setTimeout(resolve, 10))
@@ -394,6 +411,18 @@ When('the user navigates to shares', async function (this: World): Promise<void>
        
     await new Promise(resolve => setTimeout(resolve, 10))
 })
+
+// from shares.ts
+/*
+When(
+    '{string} navigates to the shared with me page',
+    async function (this: World, stepUser: string): Promise<void> {
+      const { page } = this.actorsEnvironment.getActor({ key: stepUser })
+      const pageObject = new objects.applicationFiles.page.shares.WithMe({ page })
+      await pageObject.navigate()
+    }
+  )
+    */
        
 Then('the shares view should not have any automatically detectable accessibility issues', async function (this: World): Promise<void> {
     const { feature, actorsEnvironment, usersEnvironment, filesEnvironment } = this
@@ -438,7 +467,7 @@ When('the user selects a deleted file', async function (this: World): Promise<vo
     await new Promise(resolve => setTimeout(resolve, 10))
 })
        
-Then('the file actions buttons for that file should not have any automatically detectable accessibility issues', async function (this: World): Promise<void> {
+Then('the delete file actions buttons for that file should not have any automatically detectable accessibility issues', async function (this: World): Promise<void> {
     // delete & restore buttons
     const { feature, actorsEnvironment, usersEnvironment, filesEnvironment } = this
        

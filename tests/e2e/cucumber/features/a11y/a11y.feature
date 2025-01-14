@@ -6,19 +6,23 @@ Feature: Accessibility
 
 
   Background:
-    Given the following users exist
-      | id    |
-      | Admin |
-      | Alice |
-    And the following files have been uploaded and tagged accordingly
-      | file           | tag  |
-      | lorem.txt      |      |
-      | testavatar.png | test |
+    # Given "Admin" creates following users using API
+    #  | id    |
+    #  | Alice |
+    #  | Brian |
+    # Given the following users have been created using the API
+    #  | id    |
+    #  | Admin |
+    #  | Alice |
+    # And the following files have been uploaded and tagged accordingly
+    #  | file           | tag  |
+    #  | lorem.txt      |      |
+    #  | testavatar.png | test |
     # maybe also define which files have been shared with which user?
 
     
   Scenario: check accessibility of login page
-    When the user goes to the login page
+    When the user navigates to the login page
     Then the login page should not have any automatically detectable accessibility issues
     # maybe also check the infopage that follows after entering login credential, although that page is only visible for a few seconds...
 
@@ -78,15 +82,15 @@ Feature: Accessibility
     And the user clicks again to close the context menu 
     # left mouse click
 
-    When the user selects "new"
-    Then the "new" context menu should not have any automatically detectable accessibility issues
+    When the user selects new
+    Then the new context menu should not have any automatically detectable accessibility issues
 
     When the user selects "folder" within the options of "new" context menu
     Then the create new folder popup should not have any automatically detectable accessibility issues
     # only checking one option of this menu because all modal use the same template
     And the user cancels creating a new folder
 
-    When the user selects "upload"
+    When the user selects upload
     Then the upload context menu should not have any automatically detectable accessibility issues
     And the user exits the upload menu
     
@@ -151,7 +155,7 @@ Feature: Accessibility
     Then the deleted files view should not have any automatically detectable accessibility issues
 
     When the user selects a deleted file 
-    Then the file actions buttons for that file should not have any automatically detectable accessibility issues 
+    Then the delete file actions buttons for that file should not have any automatically detectable accessibility issues 
     # delete & restore buttons
 
     When the user clicks on delete 
