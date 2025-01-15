@@ -6,30 +6,28 @@ Feature: Accessibility
 
 
   Background:
-    # Given "Admin" creates following users using API
-    #  | id    |
-    #  | Alice |
-    #  | Brian |
-    # Given the following users have been created using the API
-    #  | id    |
-    #  | Admin |
-    #  | Alice |
-    # And the following files have been uploaded and tagged accordingly
-    #  | file           | tag  |
-    #  | lorem.txt      |      |
-    #  | testavatar.png | test |
-    # maybe also define which files have been shared with which user?
+    Given "Admin" creates following users using API
+      | id    |
+      | Alice |
+      | Brian |
+    And "Alice" uploads the following local file into personal space using API
+      | localFile                     | to             |
+      | filesForUpload/lorem.txt      | lorem.txt      |
+      | filesForUpload/testavatar.jpg | testavatar.jpg |
+    And "Alice" adds the following tags for the following resources using API
+      | resource       | tags     |
+      | lorem.txt      | test-tag |
+      | testavatar.jpg | test-tag |
 
-    
+
   Scenario: check accessibility of login page
-    When the user navigates to the login page
-    Then the login page should not have any automatically detectable accessibility issues
+    When "Alice" navigates to the login page
+    Then "Alice" should not encounter any automatically detectable accessibility issues on the login page 
     # maybe also check the infopage that follows after entering login credential, although that page is only visible for a few seconds...
 
 
   Scenario: check accessibility of app header functionalities
-    When the user logs into oCIS
-    # do we need to specify which user?
+    When "Alice" logs in
     Then the search bar should not have any automatically detectable accessibility issues
 
     When the user enters a searchterm into the searchbar
@@ -54,7 +52,7 @@ Feature: Accessibility
 
     
   Scenario: check accessibility of app sidebar
-    When the user logs into oCIS
+    When "Admin" logs in
     Then the application sidebar should not have any automatically detectable accessibility issues
 
     When the user collapses the application sidebar
@@ -62,7 +60,7 @@ Feature: Accessibility
     
 
   Scenario: check accessibility of files view
-    When the user logs into oCIS
+    When "Admin" logs in
     Then the files section in default table view should not have any automatically detectable accessibility issues
 
     When the user selects condensed table view
@@ -125,7 +123,7 @@ Feature: Accessibility
 
     
   Scenario: check accessibility of file preview
-    When the user logs into oCIS
+    When "Admin" logs in
     And the user selects a media file that allows preview
     Then the file preview should not have any automatically detectable accessibility issues
     And the user closes the file preview
@@ -134,7 +132,7 @@ Feature: Accessibility
   Scenario: check accessibility of shares
     # either define here which file is shared with whom, or do this in background?
     # only test "shared with me" as "shared with others" and "shared via link" seems to have the same set of functionalities or subset thereof
-    When the user logs into oCIS
+    When "Admin" logs in
     And the user navigates to shares
     Then the shares view should not have any automatically detectable accessibility issues
 
@@ -149,7 +147,7 @@ Feature: Accessibility
 
 
   Scenario: check accessibility of deleted files
-    When the user logs into oCIS
+    When "Admin" logs in
     And the user deletes a file
     And the user navigates to deleted files
     Then the deleted files view should not have any automatically detectable accessibility issues
