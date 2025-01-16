@@ -112,6 +112,7 @@ export const useFileActions = () => {
     }
 
     return appsStore.fileExtensions
+      .filter((fileExtension) => appsStore.apps[fileExtension.app]?.hasEditor)
       .map((fileExtension): FileAction => {
         const appInfo = appsStore.apps[fileExtension.app]
 
