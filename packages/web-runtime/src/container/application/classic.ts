@@ -110,7 +110,10 @@ export const convertClassicApplication = ({
   })
 
   const appsStore = useAppsStore()
-  appsStore.registerApp(applicationScript.appInfo, applicationScript.translations)
+  appsStore.registerApp(
+    { ...applicationScript.appInfo, hasEditor: applicationScript.routes?.length > 0 },
+    applicationScript.translations
+  )
 
   if (applicationScript.extensions) {
     extensionRegistry.registerExtensions(applicationScript.extensions)
