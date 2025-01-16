@@ -22,122 +22,123 @@ Feature: Accessibility
 
   Scenario: check accessibility of login page
     When "Alice" navigates to the login page
-    Then "Alice" should not encounter any automatically detectable accessibility issues on the login page 
+    Then "Alice" should not encounter any automatically detectable accessibility issues concerning the login page 
     # maybe also check the infopage that follows after entering login credential, although that page is only visible for a few seconds...
 
 
   Scenario: check accessibility of app header functionalities
     When "Alice" logs in
-    Then the search bar should not have any automatically detectable accessibility issues
+    Then "Alice" should not encounter any automatically detectable accessibility issues concerning the search bar 
 
-    When the user enters a searchterm into the searchbar
-    And the user clicks on search
-    Then the search view should not have any automatically detectable accessibility issues
+    When "Alice" enters a searchterm into the searchbar
+    And "Alice" clicks on search
+    Then "Alice" should not encounter any automatically detectable accessibility issues concerning the search view 
     # maybe also check filters in search?
     
-    When the user clicks on notifications
-    Then the notifications popup should not have any automatically detectable accessibility issues
+    When "Alice" clicks on notifications
+    Then "Alice" should not encounter any automatically detectable accessibility issues concerning the notifications popup 
 
-    When the user clicks on my account
-    Then the my account menu should not have any automatically detectable accessibility issues
+    When "Alice" clicks on my account
+    Then "Alice" should not encounter any automatically detectable accessibility issues concerning the my account menu
 
-    When the user selects the option "Preferences" in the my account menu
-    Then the account preference page should not have any automatically detectable accessibility issues
+    When "Alice" selects the option "Preferences" in the my account menu
+    Then "Alice" should not encounter any automatically detectable accessibility issues concerning the account page 
 
-    When the user selects the application switcher
-    Then the application switcher menu should not have any automatically detectable accessibility issues 
+    When "Alice" selects the application switcher
+    Then "Alice" should not encounter any automatically detectable accessibility issues concerning the application switcher menu 
     # if more tests for app switcher functionalities (text editor (creating new file), app store, admin settings for users, groups, spaces management) are added
     # there should be a separate scenario for this 
-    And the user closes the application switcher menu
+    And "Alice" closes the application switcher menu
 
     
   Scenario: check accessibility of app sidebar
-    When "Admin" logs in
-    Then the application sidebar should not have any automatically detectable accessibility issues
+    When "Alice" logs in
+    Then "Alice" should not encounter any automatically detectable accessibility issues concerning the application sidebar 
 
-    When the user collapses the application sidebar
-    Then the collapsed sidebar should not have any automatically detectable accessibility issues
+    When "Alice" collapses the application sidebar
+    Then "Alice" should not encounter any automatically detectable accessibility issues concerning the collapsed application sidebar 
     
 
   Scenario: check accessibility of files view
-    When "Admin" logs in
-    Then the files section in default table view should not have any automatically detectable accessibility issues
+    When "Alice" logs in
+    Then "Alice" should not encounter any automatically detectable accessibility issues concerning the files section in default table view 
 
-    When the user selects condensed table view
-    Then the files section in condensed table view should not have any automatically detectable accessibility issues
+    When "Alice" selects condensed table view
+    Then "Alice" should not encounter any automatically detectable accessibility issues concerning the files section in condensed table view 
 
-    When the user selects tiles view
-    Then the files section in tiles view should not have any automatically detectable accessibility issues
-    And the user switches back to the default view
+    When "Alice" selects tiles view
+    Then "Alice" should not encounter any automatically detectable accessibility issues concerning the files section in tiles view 
+    And "Alice" switches back to the default view
 
-    When the user selects the display options
-    Then the display options menu should not have any automatically detectable accessibility issues
-    And the user closes the display options menu
+    When "Alice" selects the display options
+    Then "Alice" should not encounter any automatically detectable accessibility issues concerning the display options menu 
+    And "Alice" closes the display options menu
 
-    When the user opens the files context menu 
+    When "Alice" opens the files context menu 
     # right mouse click
-    Then the files context menu should not have any automatically detectable accessibility issues
-    And the user clicks again to close the context menu 
+    Then "Alice" should not encounter any automatically detectable accessibility issues concerning the files context menu 
+    And "Alice" clicks again to close the context menu 
     # left mouse click
 
-    When the user selects new
+    When "Alice" selects new
     Then the new context menu should not have any automatically detectable accessibility issues
+    Then "Alice" should not encounter any automatically detectable accessibility issues concerning the new context menu 
 
-    When the user selects "folder" within the options of "new" context menu
-    Then the create new folder popup should not have any automatically detectable accessibility issues
+    When "Alice" selects "folder" within the options of "new" context menu
+    Then "Alice" should not encounter any automatically detectable accessibility issues concerning the create new folder popup 
     # only checking one option of this menu because all modal use the same template
-    And the user cancels creating a new folder
+    And "Alice" cancels creating a new folder
 
-    When the user selects upload
-    Then the upload context menu should not have any automatically detectable accessibility issues
-    And the user exits the upload menu
+    When "Alice" selects upload
+    Then "Alice" should not encounter any automatically detectable accessibility issues concerning the upload context menu 
+    And "Alice" exits the upload menu
     
-    When the user selects a file 
+    When "Alice" selects a file 
     # by selecting the corresponding checkbox
-    Then the file actions buttons for that file should not have any automatically detectable accessibility issues 
+    Then "Alice" should not encounter any automatically detectable accessibility issues concerning the file actions buttons for that file 
     # download, cut, copy, delete buttons
-    And the user deselects the file
+    And "Alice" deselects the file
 
-    When the user selects the "share" action of a file 
-    Then the file actions shares panel should not have any automatically detectable accessibility issues
+    When "Alice" selects the "share" action of a file 
+    Then "Alice" should not encounter any automatically detectable accessibility issues concerning the file actions shares panel 
 
-    When the user searches for another user to share the file with within the shares panel
-    Then the user search drop down in file actions shares panel should not have any automatically detectable accessibility issues
+    When "Alice" searches for another user to share the file with within the shares panel
+    Then "Alice" should not encounter any automatically detectable accessibility issues concerning the user search drop down in file actions shares panel 
     # figure out how to test this...
-    And the user exits the user search drop down
+    And "Alice" exits the user search drop down
     
-    When the user selects the view type option within the shares panel
-    Then the view type drop down in file actions shares panel should not have any automatically detectable accessibility issues
-    And the user exits the view type option
-    And the user closes the shares panel
+    When "Alice" selects the view type option within the shares panel
+    Then "Alice" should not encounter any automatically detectable accessibility issues concerning the view type drop down in file actions shares panel
+    And "Alice" exits the view type option
+    And "Alice" closes the shares panel
 
-    When the user opens the file context menu of a file
-    Then the file actions context menu for this file should not have any automatically detectable accessibility issues
+    When "Alice" opens the file context menu of a file
+    Then "Alice" should not encounter any automatically detectable accessibility issues concerning the file actions context menu for this file
 
-    When the user selects the option "Details" in the file actions context menu
-    Then the file actions details panel should not have any automatically detectable accessibility issues
+    When "Alice" selects the option "Details" in the file actions context menu
+    Then "Alice" should not encounter any automatically detectable accessibility issues concerning the file actions details panel
     # make sure to test this with a file that has a tag
     # there would be more nested submenus within the details panel, but they are quite simple and it seems like all of them use the same template, 
     # maybe just check one? for example activity or actions (actions would have the rename model, which seems to use the same template as new folder though)
-    And the user closes the details panel
+    And "Alice" closes the details panel
 
     
   Scenario: check accessibility of file preview
-    When "Admin" logs in
-    And the user selects a media file that allows preview
-    Then the file preview should not have any automatically detectable accessibility issues
-    And the user closes the file preview
+    When "Alice" logs in
+    And "Alice" selects a media file that allows preview
+    Then "Alice" should not encounter any automatically detectable accessibility issues concerning the file preview
+    And "Alice" closes the file preview
 
 
   Scenario: check accessibility of shares
     # either define here which file is shared with whom, or do this in background?
     # only test "shared with me" as "shared with others" and "shared via link" seems to have the same set of functionalities or subset thereof
-    When "Admin" logs in
-    And the user navigates to shares
-    Then the shares view should not have any automatically detectable accessibility issues
+    When "Alice" logs in
+    And "Alice" navigates to shares
+    Then "Alice" should not encounter any automatically detectable accessibility issues concerning the shares view
 
-    And the user selects share type 
-    Then the share type popup menu should not have any automatically detectable accessibility issues
+    And "Alice" selects share type 
+    Then "Alice" should not encounter any automatically detectable accessibility issues concerning the share type popup menu
     # share type & shared by seem to have the same functionalities, therefore testing one of them is enough coverage
     # share details uses the same templates as file details, therefore no additional test coverage
 
@@ -147,15 +148,15 @@ Feature: Accessibility
 
 
   Scenario: check accessibility of deleted files
-    When "Admin" logs in
-    And the user deletes a file
-    And the user navigates to deleted files
-    Then the deleted files view should not have any automatically detectable accessibility issues
+    When "Alice" logs in
+    And "Alice" deletes a file
+    And "Alice" navigates to deleted files
+    Then "Alice" should not encounter any automatically detectable accessibility issues concerning the deleted files view
 
-    When the user selects a deleted file 
-    Then the delete file actions buttons for that file should not have any automatically detectable accessibility issues 
+    When "Alice" selects a deleted file 
+    Then "Alice" should not encounter any automatically detectable accessibility issues concerning the delete file action buttons for that file
     # delete & restore buttons
 
-    When the user clicks on delete 
-    Then the delete popup should not have any automatically detectable accessibility issues
+    When "Alice" clicks on delete 
+    Then "Alice" should not encounter any automatically detectable accessibility issues concerning the delete popup
     #same for "empty trashbin"
