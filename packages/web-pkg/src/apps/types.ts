@@ -4,6 +4,7 @@ import { Extension, ExtensionPoint } from '../composables/piniaStores'
 import { IconFillType } from '../helpers'
 import { Resource, SpaceResource } from '@ownclouders/web-client'
 import { Translations } from 'vue3-gettext'
+import { FileActionOptions } from '../composables/actions/types'
 
 export interface AppReadyHookArgs {
   globalProperties: ComponentCustomProperties & Record<string, any>
@@ -63,6 +64,11 @@ export interface ApplicationFileExtension {
   newFileMenu?: { menuTitle: () => string }
   routeName?: string
   secureView?: boolean
+  customHandler?: (
+    fileActionOptions: FileActionOptions,
+    extension: string,
+    appFileExtension: ApplicationFileExtension
+  ) => Promise<void> | void
 }
 
 /** ApplicationInformation describes required information of an application */

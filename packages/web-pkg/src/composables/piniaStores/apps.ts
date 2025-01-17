@@ -52,7 +52,8 @@ export const useAppsStore = defineStore('apps', () => {
         data.hasPriority ||
         unref(externalAppConfig)?.[appId]?.priorityExtensions?.includes(data.extension) ||
         false,
-      secureView: data.secureView || false
+      secureView: data.secureView || false,
+      customHandler: data.customHandler || null
     })
   }
 
