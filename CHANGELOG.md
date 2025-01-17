@@ -15,6 +15,7 @@ Summary
 * Enhancement - Accessibility improvements: [#5379](https://github.com/owncloud/web/issues/5379)
 * Enhancement - Create spaces via admin settings: [#11849](https://github.com/owncloud/web/pull/11849)
 * Enhancement - Disable resources in delete queue: [#12046](https://github.com/owncloud/web/pull/12046)
+* Enhancement - Add psec file icon: [#12104](https://github.com/owncloud/web/pull/12104)
 
 Details
 -------
@@ -77,6 +78,13 @@ Details
 
    https://github.com/owncloud/web/issues/11956
    https://github.com/owncloud/web/pull/12046
+
+* Enhancement - Add psec file icon: [#12104](https://github.com/owncloud/web/pull/12104)
+
+   We've added a new icon which will be used for psec files. These files are
+   representing our password protected folders.
+
+   https://github.com/owncloud/web/pull/12104
 
 Changelog for ownCloud Web [11.1.0] (2025-01-10)
 =======================================
