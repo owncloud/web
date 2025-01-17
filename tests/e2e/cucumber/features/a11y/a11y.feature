@@ -41,8 +41,8 @@ Feature: Accessibility
     When "Alice" clicks on my account
     Then "Alice" should not encounter any automatically detectable accessibility issues concerning the my account menu
 
-    When "Alice" selects the option "Preferences" in the my account menu
-    Then "Alice" should not encounter any automatically detectable accessibility issues concerning the account page 
+    When "Alice" selects the Preferences option in the my account menu
+    Then "Alice" should not encounter any automatically detectable accessibility issues concerning the account preference page 
 
     When "Alice" selects the application switcher
     Then "Alice" should not encounter any automatically detectable accessibility issues concerning the application switcher menu 
@@ -81,10 +81,9 @@ Feature: Accessibility
     # left mouse click
 
     When "Alice" selects new
-    Then the new context menu should not have any automatically detectable accessibility issues
     Then "Alice" should not encounter any automatically detectable accessibility issues concerning the new context menu 
 
-    When "Alice" selects "folder" within the options of "new" context menu
+    When "Alice" selects the Folder option within the new context menu
     Then "Alice" should not encounter any automatically detectable accessibility issues concerning the create new folder popup 
     # only checking one option of this menu because all modal use the same template
     And "Alice" cancels creating a new folder
@@ -99,7 +98,7 @@ Feature: Accessibility
     # download, cut, copy, delete buttons
     And "Alice" deselects the file
 
-    When "Alice" selects the "share" action of a file 
+    When "Alice" selects the share action of a file 
     Then "Alice" should not encounter any automatically detectable accessibility issues concerning the file actions shares panel 
 
     When "Alice" searches for another user to share the file with within the shares panel
@@ -115,7 +114,7 @@ Feature: Accessibility
     When "Alice" opens the file context menu of a file
     Then "Alice" should not encounter any automatically detectable accessibility issues concerning the file actions context menu for this file
 
-    When "Alice" selects the option "Details" in the file actions context menu
+    When "Alice" selects the Details option in the file actions context menu
     Then "Alice" should not encounter any automatically detectable accessibility issues concerning the file actions details panel
     # make sure to test this with a file that has a tag
     # there would be more nested submenus within the details panel, but they are quite simple and it seems like all of them use the same template, 
