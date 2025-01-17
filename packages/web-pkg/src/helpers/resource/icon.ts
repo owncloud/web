@@ -212,6 +212,10 @@ const fileIcon = {
   board: {
     icon: { name: 'resource-type-board' },
     extensions: ['ggs']
+  },
+  psec: {
+    icon: { name: 'file-psec', color: 'var(--oc-color-icon-folder)' },
+    extensions: ['psec']
   }
 }
 
