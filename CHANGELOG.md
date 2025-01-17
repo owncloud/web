@@ -12,6 +12,7 @@ Summary
 * Bugfix - Show progress bar when emptying trash bin: [#11967](https://github.com/owncloud/web/pull/11967)
 * Bugfix - Reload preloaded resource in sidebar: [#12059](https://github.com/owncloud/web/pull/12059)
 * Bugfix - Missing User Light translations: [#12101](https://github.com/owncloud/web/pull/12101)
+* Bugfix - Optionally access preview app route query: [#12112](https://github.com/owncloud/web/pull/12112)
 * Enhancement - Accessibility improvements: [#5379](https://github.com/owncloud/web/issues/5379)
 * Enhancement - Create spaces via admin settings: [#11849](https://github.com/owncloud/web/pull/11849)
 * Enhancement - Disable resources in delete queue: [#12046](https://github.com/owncloud/web/pull/12046)
@@ -53,6 +54,16 @@ Details
 
    https://github.com/owncloud/web/issues/12100
    https://github.com/owncloud/web/pull/12101
+
+* Bugfix - Optionally access preview app route query: [#12112](https://github.com/owncloud/web/pull/12112)
+
+   We've fixed an issue where loading of preview app would fail due to missing
+   route query. The route query is now accessed optionally meaning even when it
+   undefined, the app still loads as expected.
+
+   https://github.com/owncloud/web/issues/12108
+   https://github.com/owncloud/web/issues/12106
+   https://github.com/owncloud/web/pull/12112
 
 * Enhancement - Accessibility improvements: [#5379](https://github.com/owncloud/web/issues/5379)
 
