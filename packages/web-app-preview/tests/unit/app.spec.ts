@@ -126,6 +126,13 @@ describe('Preview app', () => {
       })
       expect(wrapper.vm.filteredFiles.length).toStrictEqual(2)
     })
+
+    it('should filter files even when routeQuery is undefined', () => {
+      const { wrapper } = createShallowMountWrapper({
+        currentFileContext: { routeQuery: undefined }
+      })
+      expect(wrapper.vm.filteredFiles.length).toStrictEqual(7)
+    })
   })
 })
 
