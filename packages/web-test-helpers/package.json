@@ -1,6 +1,6 @@
 {
   "name": "@ownclouders/web-test-helpers",
-  "version": "11.1.0",
+  "version": "11.1.1",
   "description": "ownCloud web test helpers",
   "license": "AGPL-3.0",
   "private": false,
