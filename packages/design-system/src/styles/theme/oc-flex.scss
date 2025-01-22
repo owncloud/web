@@ -178,3 +178,30 @@
   */
 
 .oc-flex-1 { flex: 1; }
+
+/* Spacing
+  ========================================================================== */
+
+.oc-gap-xs {
+  gap: $oc-space-xsmall;
+}
+
+.oc-gap-s {
+  gap: $oc-space-small;
+}
+
+.oc-gap-m {
+  gap: $oc-space-medium;
+}
+
+.oc-gap-l {
+  gap: $oc-space-large;
+}
+
+.oc-gap-xl {
+  gap: $oc-space-xlarge;
+}
+
+.oc-gap-xxl {
+  gap: $oc-space-xxlarge;
+}
