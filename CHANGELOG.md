@@ -13,6 +13,8 @@ Summary
 * Bugfix - Reload preloaded resource in sidebar: [#12059](https://github.com/owncloud/web/pull/12059)
 * Bugfix - Missing User Light translations: [#12101](https://github.com/owncloud/web/pull/12101)
 * Bugfix - Optionally access preview app route query: [#12112](https://github.com/owncloud/web/pull/12112)
+* Bugfix - Change federated share icon: [#12118](https://github.com/owncloud/web/pull/12118)
+* Bugfix - Improve federated share icon contrast: [#12118](https://github.com/owncloud/web/pull/12118)
 * Enhancement - Accessibility improvements: [#5379](https://github.com/owncloud/web/issues/5379)
 * Enhancement - Create spaces via admin settings: [#11849](https://github.com/owncloud/web/pull/11849)
 * Enhancement - Disable resources in delete queue: [#12046](https://github.com/owncloud/web/pull/12046)
@@ -64,6 +66,22 @@ Details
    https://github.com/owncloud/web/issues/12108
    https://github.com/owncloud/web/issues/12106
    https://github.com/owncloud/web/pull/12112
+
+* Bugfix - Change federated share icon: [#12118](https://github.com/owncloud/web/pull/12118)
+
+   We've changed the icon we are using for federated shares in the Shared with
+   others list from "cloud" into "earth".
+
+   https://github.com/owncloud/web/issues/12117
+   https://github.com/owncloud/web/pull/12118
+
+* Bugfix - Improve federated share icon contrast: [#12118](https://github.com/owncloud/web/pull/12118)
+
+   We've made the color of the federated share icon slightly lighter in order to
+   have a sufficient contrast compared to the icon background.
+
+   https://github.com/owncloud/web/issues/12117
+   https://github.com/owncloud/web/pull/12118
 
 * Enhancement - Accessibility improvements: [#5379](https://github.com/owncloud/web/issues/5379)
 
