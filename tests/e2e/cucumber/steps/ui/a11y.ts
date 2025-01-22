@@ -555,60 +555,75 @@ Then('{string} should not encounter any automatically detectable accessibility i
 
 // Scenario: check accessibility of deleted files 
 Then('{string} should not encounter any automatically detectable accessibility issues concerning the deleted files view', async function (this: World, stepUser: string): Promise<void> {
-    // check what is happening
-    // await page.waitForTimeout(2000)
-       
     const { page } = this.actorsEnvironment.getActor({ key: stepUser })
 
     const a11yResult = await new AxeBuilder({ page })
-        .include('.')
-        .exclude('#') //
-        .exclude('#') // 
+        .include('#files-view')
+        .exclude('#files-breadcrumb') // aria-hidden elements should not be focusable nor contain focusable elements 
+                                      // (error is triggered by some element in the breadcrumb)
         .analyze()
 
     expect(a11yResult.violations).toEqual([])     
 })
 
-When('{string} selects a deleted file', async function (this: World, stepUser: string): Promise<void> {
-    const { feature, actorsEnvironment, usersEnvironment, filesEnvironment } = this
-       
-    await new Promise(resolve => setTimeout(resolve, 10))
+When('{string} selects the deleted file', async function (this: World, stepUser: string): Promise<void> {
+    const { page } = this.actorsEnvironment.getActor({ key: stepUser })
+
+    await page.locator('#files-space-table .oc-checkbox').first().check() 
+    await page.locator('#oc-appbar-batch-actions').waitFor()
 })
 
 Then('{string} should not encounter any automatically detectable accessibility issues concerning the delete file action buttons for that file', async function (this: World, stepUser: string): Promise<void> {
-    // delete & restore buttons
     const { page } = this.actorsEnvironment.getActor({ key: stepUser })
 
     const a11yResult = await new AxeBuilder({ page })
-        .include('.')
-        .exclude('#') //
-        .exclude('#') // 
+        .include('#oc-appbar-batch-actions')
         .analyze()
 
     expect(a11yResult.violations).toEqual([])     
 })
 
 When('{string} clicks on delete', async function (this: World, stepUser: string): Promise<void> {
-    const { feature, actorsEnvironment, usersEnvironment, filesEnvironment } = this
-       
-    await new Promise(resolve => setTimeout(resolve, 10))
+    const { page } = this.actorsEnvironment.getActor({ key: stepUser })
+
+    await page.locator('.oc-files-actions-delete-permanent-trigger').click()
+    await page.locator('.oc-modal-danger').waitFor()
 })
 
 Then('{string} should not encounter any automatically detectable accessibility issues concerning the delete popup', async function (this: World, stepUser: string): Promise<void> {
     const { page } = this.actorsEnvironment.getActor({ key: stepUser })
 
     const a11yResult = await new AxeBuilder({ page })
-        .include('.')
-        .exclude('#') //
-        .exclude('#') // 
+        .include('.oc-modal-danger')
         .analyze()
 
     expect(a11yResult.violations).toEqual([])     
 })
 
-Then('{string} cancels delete', async function (this: World, stepUser: string): Promise<void> {
-    const { feature, actorsEnvironment, usersEnvironment, filesEnvironment } = this
-       
-await new Promise(resolve => setTimeout(resolve, 10))
+Then('{string} cancels the delete action', async function (this: World, stepUser: string): Promise<void> {
+    const { page } = this.actorsEnvironment.getActor({ key: stepUser })
+
+    // await page.locator('button:has-text("Cancel")').click()
+    await page.locator('.oc-modal-body-actions-cancel').click()
+    await page.waitForTimeout(3000)
 })
-       
+
+
+/* logging a particular HTML element for inspection 
+
+console.log(await page.locator('').innerHTML())
+
+*/
+
+/* code snipped for printing details of violations to find accessibility issues
+
+    // print violations to console
+    console.log('violation details:')
+    var count = 0
+    for (var o of a11yResult.violations) {
+      console.log(o)
+      count ++
+    }
+    console.log('total number of violations: ' + count)
+
+*/

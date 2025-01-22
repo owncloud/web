@@ -156,11 +156,13 @@ Feature: Accessibility
     # deleted files page seems to be called trashbin in trashbinDelete.feature
     Then "Alice" should not encounter any automatically detectable accessibility issues concerning the deleted files view
 
-    When "Alice" selects a deleted file 
+    When "Alice" selects the deleted file 
     Then "Alice" should not encounter any automatically detectable accessibility issues concerning the delete file action buttons for that file
     # delete & restore buttons
 
     When "Alice" clicks on delete 
     Then "Alice" should not encounter any automatically detectable accessibility issues concerning the delete popup
-    #same for "empty trashbin"
-    And "Alice" cancels delete 
+    # same for "empty trashbin"
+    And "Alice" cancels the delete action
+    # need of restoring the file to bring it back to orignial scenario?
+
