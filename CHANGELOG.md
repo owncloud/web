@@ -15,6 +15,7 @@ Summary
 * Bugfix - Optionally access preview app route query: [#12112](https://github.com/owncloud/web/pull/12112)
 * Bugfix - Change federated share icon: [#12118](https://github.com/owncloud/web/pull/12118)
 * Bugfix - Improve federated share icon contrast: [#12118](https://github.com/owncloud/web/pull/12118)
+* Bugfix - Show external share indicator: [#12119](https://github.com/owncloud/web/pull/12119)
 * Enhancement - Accessibility improvements: [#5379](https://github.com/owncloud/web/issues/5379)
 * Enhancement - Create spaces via admin settings: [#11849](https://github.com/owncloud/web/pull/11849)
 * Enhancement - Disable resources in delete queue: [#12046](https://github.com/owncloud/web/pull/12046)
@@ -82,6 +83,14 @@ Details
 
    https://github.com/owncloud/web/issues/12117
    https://github.com/owncloud/web/pull/12118
+
+* Bugfix - Show external share indicator: [#12119](https://github.com/owncloud/web/pull/12119)
+
+   We've fixed the condition that was preventing the external share indicator from
+   showing up when a permissions indicator was visible.
+
+   https://github.com/owncloud/web/issues/12117
+   https://github.com/owncloud/web/pull/12119
 
 * Enhancement - Accessibility improvements: [#5379](https://github.com/owncloud/web/issues/5379)
 
