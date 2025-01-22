@@ -217,9 +217,13 @@ Then('{string} should not encounter any automatically detectable accessibility i
 })
 
 When('{string} selects condensed table view', async function (this: World, stepUser: string): Promise<void> {
-    const { feature, actorsEnvironment, usersEnvironment, filesEnvironment } = this
-       
-    await new Promise(resolve => setTimeout(resolve, 10))
+    const { page } = this.actorsEnvironment.getActor({ key: stepUser })
+
+    // ensure files is visible?
+    await page.locator('#files').waitFor()
+    // switch to condensed view
+    await page.locator('.resource-table-condensed').click()
+    await page.locator('#files-space-table.condensed').waitFor()
 })
 
 Then('{string} should not encounter any automatically detectable accessibility issues concerning the files section in condensed table view', async function (this: World, stepUser: string): Promise<void> {
@@ -235,9 +239,13 @@ Then('{string} should not encounter any automatically detectable accessibility i
 })
 
 When('{string} selects tiles view', async function (this: World, stepUser: string): Promise<void> {
-    const { feature, actorsEnvironment, usersEnvironment, filesEnvironment } = this
-       
-    await new Promise(resolve => setTimeout(resolve, 10))
+    const { page } = this.actorsEnvironment.getActor({ key: stepUser })
+
+    // ensure files section is visible?
+    await page.locator('#files').waitFor()
+    // switch to tiles view
+    await page.locator('.resource-tiles').click() 
+    await page.locator('.oc-tiles-controls').waitFor()
 })
 
 Then('{string} should not encounter any automatically detectable accessibility issues concerning the files section in tiles view', async function (this: World, stepUser: string): Promise<void> {
@@ -252,67 +260,81 @@ Then('{string} should not encounter any automatically detectable accessibility i
 })
 
 Then('{string} switches back to the default view', async function (this: World, stepUser: string): Promise<void> {
-    const { feature, actorsEnvironment, usersEnvironment, filesEnvironment } = this
-       
-    await new Promise(resolve => setTimeout(resolve, 10))
+    const { page } = this.actorsEnvironment.getActor({ key: stepUser })
+
+    // ensure files section is visible?
+    await page.locator('#files').waitFor()
+    // switch to condensed view
+    await page.locator('.resource-table').click()
+    await page.locator('#files-space-table').waitFor()
 })
 
 When('{string} selects the display options', async function (this: World, stepUser: string): Promise<void> {
-    const { feature, actorsEnvironment, usersEnvironment, filesEnvironment } = this
-       
-    await new Promise(resolve => setTimeout(resolve, 10))
+    const { page } = this.actorsEnvironment.getActor({ key: stepUser })
+
+    // ensure files section is visible?
+    await page.locator('#files').waitFor()
+    // select display options
+    await page.locator('#files-view-options-btn').click() 
+    await page.locator('#files-app-bar-controls-right .tippy-content').last().waitFor() // first element contains the invisible state, last the visible state
 })
 
 Then('{string} should not encounter any automatically detectable accessibility issues concerning the display options menu', async function (this: World, stepUser: string): Promise<void> {
     const { page } = this.actorsEnvironment.getActor({ key: stepUser })
 
     const a11yResult = await new AxeBuilder({ page })
-        .include('.')
-        .exclude('#') //
-        .exclude('#') // 
+        .include('#files-app-bar-controls-right .tippy-content')
         .analyze()
 
     expect(a11yResult.violations).toEqual([])     
 })
 
 Then('{string} closes the display options menu', async function (this: World, stepUser: string): Promise<void> {
-    const { feature, actorsEnvironment, usersEnvironment, filesEnvironment } = this
-       
-    await new Promise(resolve => setTimeout(resolve, 10))
+    const { page } = this.actorsEnvironment.getActor({ key: stepUser })
+
+    // click on display options (again)
+    await page.locator('#files-view-options-btn').click() 
 })
 
 When('{string} opens the files context menu', async function (this: World, stepUser: string): Promise<void> {
-    // right mouse click
-    const { feature, actorsEnvironment, usersEnvironment, filesEnvironment } = this
-       
-    await new Promise(resolve => setTimeout(resolve, 10))
+    const { page } = this.actorsEnvironment.getActor({ key: stepUser })
+
+    // ensure files section is visible?
+    await page.locator('#files').waitFor()
+    // right click to get context menu with "new folder" and "details" context menu
+    await page.locator('#web-content-main').click({ button: 'right' })
+    await page.locator('#context-menu-drop-whitespace').waitFor() 
 })
 
 Then('{string} should not encounter any automatically detectable accessibility issues concerning the files context menu', async function (this: World, stepUser: string): Promise<void> {
     const { page } = this.actorsEnvironment.getActor({ key: stepUser })
 
     const a11yResult = await new AxeBuilder({ page })
-        .include('.tippy-content')
+        .include('#context-menu-drop-whitespace')
         .analyze()
 
     expect(a11yResult.violations).toEqual([])     
 })
 
-Then('{string} clicks again to close the context menu', async function (this: World, stepUser: string): Promise<void> {
+Then('{string} exits the files context menu', async function (this: World, stepUser: string): Promise<void> {
+    const { page } = this.actorsEnvironment.getActor({ key: stepUser })
+
+    // ensure files section is visible?
+    await page.locator('#files').waitFor()
     // left (regular) mouse click
-    const { feature, actorsEnvironment, usersEnvironment, filesEnvironment } = this
-       
-    await new Promise(resolve => setTimeout(resolve, 10))
+    await page.locator('#web-content-main').click()  
 })
        
-// When the user selects "new"
 When('{string} selects new', async function (this: World, stepUser: string): Promise<void> {
-    const { feature, actorsEnvironment, usersEnvironment, filesEnvironment } = this
-       
-    await new Promise(resolve => setTimeout(resolve, 10))
+    const { page } = this.actorsEnvironment.getActor({ key: stepUser })
+    
+    // ensure files section is visible?
+    await page.locator('#files').waitFor()    
+    // click on "+ new" button
+    await page.locator('#new-file-menu-btn').click()
+    await page.locator('.files-app-bar-actions .tippy-content').waitFor() 
 })
        
-// Then the new context menu should not have any automatically detectable accessibility issues
 Then('{string} should not encounter any automatically detectable accessibility issues concerning the new context menu', async function (this: World, stepUser: string): Promise<void> {
     const { page } = this.actorsEnvironment.getActor({ key: stepUser })
 
@@ -324,9 +346,13 @@ Then('{string} should not encounter any automatically detectable accessibility i
 })
 
 When('{string} selects the Folder option within the new context menu', async function (this: World, stepUser: string): Promise<void> {
-    const { feature, actorsEnvironment, usersEnvironment, filesEnvironment } = this
-       
-    await new Promise(resolve => setTimeout(resolve, 10))
+    const { page } = this.actorsEnvironment.getActor({ key: stepUser })
+
+    // ensure that the context menu is visible?
+    await page.locator('.files-app-bar-actions .tippy-content').waitFor() 
+    // click on "folder"
+    await page.locator('#new-folder-btn').click()
+    await page.locator('.oc-modal').waitFor()
 })
 
 Then('{string} should not encounter any automatically detectable accessibility issues concerning the create new folder popup', async function (this: World, stepUser: string): Promise<void> {
@@ -340,16 +366,19 @@ Then('{string} should not encounter any automatically detectable accessibility i
 })
 
 Then('{string} cancels creating a new folder', async function (this: World, stepUser: string): Promise<void> {
-    const { feature, actorsEnvironment, usersEnvironment, filesEnvironment } = this
-       
-    await new Promise(resolve => setTimeout(resolve, 10))
+    const { page } = this.actorsEnvironment.getActor({ key: stepUser })
+
+    await page.locator('.oc-modal-body-actions-cancel').click()
 })
        
-// When the user selects "upload"
 When('{string} selects upload', async function (this: World, stepUser: string): Promise<void> {
-    const { feature, actorsEnvironment, usersEnvironment, filesEnvironment } = this
-       
-    await new Promise(resolve => setTimeout(resolve, 10))
+    const { page } = this.actorsEnvironment.getActor({ key: stepUser })
+
+    // ensure files section is visible?
+    await page.locator('#files').waitFor()    
+    // click on "upload" button
+    await page.locator('#upload-menu-btn').click()
+    await page.locator('.files-app-bar-actions .tippy-content').waitFor() 
 })
 
 Then('{string} should not encounter any automatically detectable accessibility issues concerning the upload context menu', async function (this: World, stepUser: string): Promise<void> {
@@ -362,23 +391,30 @@ Then('{string} should not encounter any automatically detectable accessibility i
     expect(a11yResult.violations).toEqual([])     
 })
 
+// same as "exits the files context menu"
 Then('{string} exits the upload menu', async function (this: World, stepUser: string): Promise<void> {
-    const { feature, actorsEnvironment, usersEnvironment, filesEnvironment } = this
-       
-    await new Promise(resolve => setTimeout(resolve, 10))
+    const { page } = this.actorsEnvironment.getActor({ key: stepUser })
+
+    // ensure files section is visible?
+    await page.locator('#files').waitFor()
+    // left (regular) mouse click
+    await page.locator('#web-content-main').click()  
 })
 
 When('{string} selects a file', async function (this: World, stepUser: string): Promise<void> {
     // by selecting the corresponding checkbox
-    const { feature, actorsEnvironment, usersEnvironment, filesEnvironment } = this
-       
-    await new Promise(resolve => setTimeout(resolve, 10))
+    const { page } = this.actorsEnvironment.getActor({ key: stepUser })
+
+    await page.locator('#files').waitFor()    
+    // check checkbox of the first file in the list
+    await page.locator('#files-space-table .oc-checkbox').first().check() 
+    await page.locator('#oc-appbar-batch-actions').waitFor()
 })
 
 Then('{string} should not encounter any automatically detectable accessibility issues concerning the file actions buttons for that file', async function (this: World, stepUser: string): Promise<void> {
-    // download, cut, copy & delete buttons
     const { page } = this.actorsEnvironment.getActor({ key: stepUser })
 
+    // check a11y of download, cut, copy & delete buttons
     const a11yResult = await new AxeBuilder({ page })
         .include('#oc-appbar-batch-actions')
         .analyze()
@@ -387,16 +423,16 @@ Then('{string} should not encounter any automatically detectable accessibility i
 })
 
 Then('{string} deselects the file', async function (this: World, stepUser: string): Promise<void> {
-    const { feature, actorsEnvironment, usersEnvironment, filesEnvironment } = this
-       
-    await new Promise(resolve => setTimeout(resolve, 10))
+    const { page } = this.actorsEnvironment.getActor({ key: stepUser })
+
+    await page.locator('#files').waitFor()    
+    // check checkbox of the first file in the list
+    await page.locator('#files-space-table .oc-checkbox').first().uncheck() 
 })
        
-// When the user selects the "share" action of a file
 When('{string} selects the share action of a file', async function (this: World, stepUser: string): Promise<void> {
-    const { feature, actorsEnvironment, usersEnvironment, filesEnvironment } = this
-       
-    await new Promise(resolve => setTimeout(resolve, 10))
+    const { page } = this.actorsEnvironment.getActor({ key: stepUser })
+
 })
 
 Then('{string} should not encounter any automatically detectable accessibility issues concerning the file actions shares panel', async function (this: World, stepUser: string): Promise<void> {
@@ -411,9 +447,8 @@ Then('{string} should not encounter any automatically detectable accessibility i
 })
 
 When('{string} searches for another user to share the file with within the shares panel', async function (this: World, stepUser: string): Promise<void> {
-    const { feature, actorsEnvironment, usersEnvironment, filesEnvironment } = this
-       
-    await new Promise(resolve => setTimeout(resolve, 10))
+    const { page } = this.actorsEnvironment.getActor({ key: stepUser })
+
 })
 
 Then('{string} should not encounter any automatically detectable accessibility issues concerning the user search drop down in file actions shares panel', async function (this: World, stepUser: string): Promise<void> {
@@ -427,15 +462,13 @@ Then('{string} should not encounter any automatically detectable accessibility i
 })
 
 Then('{string} exits the user search drop down', async function (this: World, stepUser: string): Promise<void> {
-    const { feature, actorsEnvironment, usersEnvironment, filesEnvironment } = this
-       
-    await new Promise(resolve => setTimeout(resolve, 10))
+    const { page } = this.actorsEnvironment.getActor({ key: stepUser })
+
 })
       
 When('{string} selects the view type option within the shares panel', async function (this: World, stepUser: string): Promise<void> {
-    const { feature, actorsEnvironment, usersEnvironment, filesEnvironment } = this
-       
-    await new Promise(resolve => setTimeout(resolve, 10))
+    const { page } = this.actorsEnvironment.getActor({ key: stepUser })
+
 })
 
 Then('{string} should not encounter any automatically detectable accessibility issues concerning the view type drop down in file actions shares panel', async function (this: World, stepUser: string): Promise<void> {
@@ -449,21 +482,18 @@ Then('{string} should not encounter any automatically detectable accessibility i
 })
 
 Then('{string} exits the view type option', async function (this: World, stepUser: string): Promise<void> {
-    const { feature, actorsEnvironment, usersEnvironment, filesEnvironment } = this
-       
-    await new Promise(resolve => setTimeout(resolve, 10))
+    const { page } = this.actorsEnvironment.getActor({ key: stepUser })
+
 })
 
 Then('{string} closes the shares panel', async function (this: World, stepUser: string): Promise<void> {
-    const { feature, actorsEnvironment, usersEnvironment, filesEnvironment } = this
-       
-    await new Promise(resolve => setTimeout(resolve, 10))
+    const { page } = this.actorsEnvironment.getActor({ key: stepUser })
+
 })
 
 When('{string} opens the file context menu of a file', async function (this: World, stepUser: string): Promise<void> {
-    const { feature, actorsEnvironment, usersEnvironment, filesEnvironment } = this
-       
-    await new Promise(resolve => setTimeout(resolve, 10))
+    const { page } = this.actorsEnvironment.getActor({ key: stepUser })
+
 })
 
 Then('{string} should not encounter any automatically detectable accessibility issues concerning the file actions context menu for this file', async function (this: World, stepUser: string): Promise<void> {
@@ -478,9 +508,8 @@ Then('{string} should not encounter any automatically detectable accessibility i
        
 // When the user selects the option "Details" in the file actions context menu
 When('{string} selects the Details option in the file actions context menu', async function (this: World, stepUser: string): Promise<void> {
-    const { feature, actorsEnvironment, usersEnvironment, filesEnvironment } = this
-       
-    await new Promise(resolve => setTimeout(resolve, 10))
+    const { page } = this.actorsEnvironment.getActor({ key: stepUser })
+
 })
 
 Then('{string} should not encounter any automatically detectable accessibility issues concerning the file actions details panel', async function (this: World, stepUser: string): Promise<void> {
@@ -494,9 +523,8 @@ Then('{string} should not encounter any automatically detectable accessibility i
 })
 
 Then('{string} closes the details panel', async function (this: World, stepUser: string): Promise<void> {
-    const { feature, actorsEnvironment, usersEnvironment, filesEnvironment } = this
-       
-    await new Promise(resolve => setTimeout(resolve, 10))
+    const { page } = this.actorsEnvironment.getActor({ key: stepUser })
+
 })
 
 // Scenario: check accessibility of file preview 
@@ -613,6 +641,9 @@ Then('{string} confirms the delete action', async function (this: World, stepUse
 
 console.log(await page.locator('').innerHTML())
 await page.waitForTimeout(3000)
+
+// first element contains the invisible state, second (last) the visible state
+
 */
 
 /* code snipped for printing details of violations to find accessibility issues

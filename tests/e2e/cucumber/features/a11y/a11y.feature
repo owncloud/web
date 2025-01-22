@@ -68,7 +68,9 @@ Feature: Accessibility
     When "Alice" selects condensed table view
     Then "Alice" should not encounter any automatically detectable accessibility issues concerning the files section in condensed table view 
 
-    When "Alice" selects tiles view
+    # When "Alice" selects tiles view
+    When "Alice" switches to the tiles-view
+    # the second is an existing function 
     Then "Alice" should not encounter any automatically detectable accessibility issues concerning the files section in tiles view 
     And "Alice" switches back to the default view
 
@@ -79,8 +81,7 @@ Feature: Accessibility
     When "Alice" opens the files context menu 
     # right mouse click
     Then "Alice" should not encounter any automatically detectable accessibility issues concerning the files context menu 
-    And "Alice" clicks again to close the context menu 
-    # left mouse click
+    And "Alice" exits the files context menu
 
     When "Alice" selects new
     Then "Alice" should not encounter any automatically detectable accessibility issues concerning the new context menu 
@@ -100,7 +101,9 @@ Feature: Accessibility
     # download, cut, copy, delete buttons
     And "Alice" deselects the file
 
-    When "Alice" selects the share action of a file 
+    # When "Alice" selects the share action of a file 
+    # the following line should do the same:
+    When "Alice" navigates to "sharing" details panel of file "lorem.txt" of space "personal" through the URL
     Then "Alice" should not encounter any automatically detectable accessibility issues concerning the file actions shares panel 
 
     When "Alice" searches for another user to share the file with within the shares panel
