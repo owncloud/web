@@ -57,9 +57,15 @@ Then('{string} should not encounter any automatically detectable accessibility i
        
 // Scenario: check accessibility of app header functionalities
 Then('{string} should not encounter any automatically detectable accessibility issues concerning the search bar', async function (this: World, stepUser: string): Promise<void> {
-    const { feature, actorsEnvironment, usersEnvironment, filesEnvironment } = this
-       
-    await new Promise(resolve => setTimeout(resolve, 10))
+    const { page } = this.actorsEnvironment.getActor({ key: stepUser })
+
+    const a11yResult = await new AxeBuilder({ page })
+        .include('.')
+        .exclude('#') //
+        .exclude('#') // 
+        .analyze()
+
+    expect(a11yResult.violations).toEqual([])       
 })
        
 // When the user enters a search term (e.g. "lorem") into the searchbar
@@ -76,9 +82,15 @@ When('{string} clicks on search', async function (this: World, stepUser: string)
 })
        
 Then('{string} should not encounter any automatically detectable accessibility issues concerning the search view', async function (this: World, stepUser: string): Promise<void> {
-    const { feature, actorsEnvironment, usersEnvironment, filesEnvironment } = this
-       
-    await new Promise(resolve => setTimeout(resolve, 10))
+    const { page } = this.actorsEnvironment.getActor({ key: stepUser })
+
+    const a11yResult = await new AxeBuilder({ page })
+        .include('.')
+        .exclude('#') //
+        .exclude('#') // 
+        .analyze()
+
+    expect(a11yResult.violations).toEqual([])     
 })
        
 When('{string} clicks on notifications', async function (this: World, stepUser: string): Promise<void> {
@@ -88,9 +100,15 @@ When('{string} clicks on notifications', async function (this: World, stepUser: 
 })
 
 Then('{string} should not encounter any automatically detectable accessibility issues concerning the notifications popup', async function (this: World, stepUser: string): Promise<void> {
-    const { feature, actorsEnvironment, usersEnvironment, filesEnvironment } = this
-       
-    await new Promise(resolve => setTimeout(resolve, 10))
+    const { page } = this.actorsEnvironment.getActor({ key: stepUser })
+
+    const a11yResult = await new AxeBuilder({ page })
+        .include('.')
+        .exclude('#') //
+        .exclude('#') // 
+        .analyze()
+
+    expect(a11yResult.violations).toEqual([])     
 })
   
 When('{string} clicks on my account', async function (this: World, stepUser: string): Promise<void> {
@@ -100,9 +118,15 @@ When('{string} clicks on my account', async function (this: World, stepUser: str
 })       
 
 Then('{string} should not encounter any automatically detectable accessibility issues concerning the my account menu', async function (this: World, stepUser: string): Promise<void> {
-    const { feature, actorsEnvironment, usersEnvironment, filesEnvironment } = this
-       
-    await new Promise(resolve => setTimeout(resolve, 10))
+    const { page } = this.actorsEnvironment.getActor({ key: stepUser })
+
+    const a11yResult = await new AxeBuilder({ page })
+        .include('.')
+        .exclude('#') //
+        .exclude('#') // 
+        .analyze()
+
+    expect(a11yResult.violations).toEqual([])     
 })
        
 // When the user selects the option "Preferences" in the my account menu
@@ -113,9 +137,15 @@ When('{string} selects the Preferences option in the my account menu', async fun
 })
 
 Then('{string} should not encounter any automatically detectable accessibility issues concerning the account preference page', async function (this: World, stepUser: string): Promise<void> {
-    const { feature, actorsEnvironment, usersEnvironment, filesEnvironment } = this
-       
-    await new Promise(resolve => setTimeout(resolve, 10))
+    const { page } = this.actorsEnvironment.getActor({ key: stepUser })
+
+    const a11yResult = await new AxeBuilder({ page })
+        .include('.')
+        .exclude('#') //
+        .exclude('#') // 
+        .analyze()
+
+    expect(a11yResult.violations).toEqual([])     
 })
 
 When('{string} selects the application switcher', async function (this: World, stepUser: string): Promise<void> {
@@ -125,9 +155,15 @@ When('{string} selects the application switcher', async function (this: World, s
 })
 
 Then('{string} should not encounter any automatically detectable accessibility issues concerning the application switcher menu', async function (this: World, stepUser: string): Promise<void> {
-    const { feature, actorsEnvironment, usersEnvironment, filesEnvironment } = this
-       
-    await new Promise(resolve => setTimeout(resolve, 10))
+    const { page } = this.actorsEnvironment.getActor({ key: stepUser })
+
+    const a11yResult = await new AxeBuilder({ page })
+        .include('.')
+        .exclude('#') //
+        .exclude('#') // 
+        .analyze()
+
+    expect(a11yResult.violations).toEqual([])     
 })       
 
 Then('{string} closes the application switcher menu', async function (this: World, stepUser: string): Promise<void> {
@@ -138,22 +174,13 @@ Then('{string} closes the application switcher menu', async function (this: Worl
        
 // Scenario: check accessibility of app sidebar      
 Then('{string} should not encounter any automatically detectable accessibility issues concerning the application sidebar', async function (this: World, stepUser: string): Promise<void> {
-    const { feature, actorsEnvironment, usersEnvironment, filesEnvironment } = this
-    // await page.locator('#web-nav-sidebar').waitFor()
+    const { page } = this.actorsEnvironment.getActor({ key: stepUser })
 
-    // EXAMPLE FOR LOCATOR
-    // await page.locator(requestExportButton).waitFor()
-
-    /*
     const a11yResult = await new AxeBuilder({ page })
-        .withTags(['wcag2a', 'wcag2aa', 'wcag21a', 'wcag21aa'])
         .include('#web-nav-sidebar')
         .analyze()
 
-    expect(a11yResult.violations).toEqual([])
-    */
-       
-    await new Promise(resolve => setTimeout(resolve, 10))
+    expect(a11yResult.violations).toEqual([])     
 })
 
 When('{string} collapses the application sidebar', async function (this: World, stepUser: string): Promise<void> {
@@ -165,16 +192,26 @@ When('{string} collapses the application sidebar', async function (this: World, 
 })
        
 Then('{string} should not encounter any automatically detectable accessibility issues concerning the collapsed application sidebar', async function (this: World, stepUser: string): Promise<void> {
-    const { feature, actorsEnvironment, usersEnvironment, filesEnvironment } = this
-       
-    await new Promise(resolve => setTimeout(resolve, 10))
+    const { page } = this.actorsEnvironment.getActor({ key: stepUser })
+
+    const a11yResult = await new AxeBuilder({ page })
+        .include('#web-nav-sidebar.oc-app-navigation-collapsed')
+        .analyze()
+
+    expect(a11yResult.violations).toEqual([])     
 })
 
 // Scenario: check accessibility of files view
 Then('{string} should not encounter any automatically detectable accessibility issues concerning the files section in default table view', async function (this: World, stepUser: string): Promise<void> {
-    const { feature, actorsEnvironment, usersEnvironment, filesEnvironment } = this
-       
-    await new Promise(resolve => setTimeout(resolve, 10))
+    const { page } = this.actorsEnvironment.getActor({ key: stepUser })
+
+    const a11yResult = await new AxeBuilder({ page })
+        .include('#files') 
+        .exclude('.resource-table-edit-name') // buttons must have discernible text
+        .exclude('.oc-resource-icon-link') // buttons/links must have discernible text 
+        .analyze()
+
+    expect(a11yResult.violations).toEqual([])     
 })
 
 When('{string} selects condensed table view', async function (this: World, stepUser: string): Promise<void> {
@@ -184,9 +221,15 @@ When('{string} selects condensed table view', async function (this: World, stepU
 })
 
 Then('{string} should not encounter any automatically detectable accessibility issues concerning the files section in condensed table view', async function (this: World, stepUser: string): Promise<void> {
-    const { feature, actorsEnvironment, usersEnvironment, filesEnvironment } = this
-       
-    await new Promise(resolve => setTimeout(resolve, 10))
+    const { page } = this.actorsEnvironment.getActor({ key: stepUser })
+
+    const a11yResult = await new AxeBuilder({ page })
+        .include('#files-space-table.condensed')
+        .exclude('.resource-table-edit-name') // buttons must have discernible text
+        .exclude('.oc-resource-icon-link') // buttons/links must have discernible text 
+        .analyze()
+
+    expect(a11yResult.violations).toEqual([])     
 })
 
 When('{string} selects tiles view', async function (this: World, stepUser: string): Promise<void> {
@@ -196,9 +239,14 @@ When('{string} selects tiles view', async function (this: World, stepUser: strin
 })
 
 Then('{string} should not encounter any automatically detectable accessibility issues concerning the files section in tiles view', async function (this: World, stepUser: string): Promise<void> {
-    const { feature, actorsEnvironment, usersEnvironment, filesEnvironment } = this
-       
-    await new Promise(resolve => setTimeout(resolve, 10))
+    const { page } = this.actorsEnvironment.getActor({ key: stepUser })
+
+    const a11yResult = await new AxeBuilder({ page })
+        .include('#tiles-view') 
+        .exclude('.oc-card-media-top') // issue with tiles with picture preview, element has focusable descendants
+        .analyze()
+
+    expect(a11yResult.violations).toEqual([])     
 })
 
 Then('{string} switches back to the default view', async function (this: World, stepUser: string): Promise<void> {
@@ -214,9 +262,15 @@ When('{string} selects the display options', async function (this: World, stepUs
 })
 
 Then('{string} should not encounter any automatically detectable accessibility issues concerning the display options menu', async function (this: World, stepUser: string): Promise<void> {
-    const { feature, actorsEnvironment, usersEnvironment, filesEnvironment } = this
-       
-    await new Promise(resolve => setTimeout(resolve, 10))
+    const { page } = this.actorsEnvironment.getActor({ key: stepUser })
+
+    const a11yResult = await new AxeBuilder({ page })
+        .include('.')
+        .exclude('#') //
+        .exclude('#') // 
+        .analyze()
+
+    expect(a11yResult.violations).toEqual([])     
 })
 
 Then('{string} closes the display options menu', async function (this: World, stepUser: string): Promise<void> {
@@ -233,9 +287,13 @@ When('{string} opens the files context menu', async function (this: World, stepU
 })
 
 Then('{string} should not encounter any automatically detectable accessibility issues concerning the files context menu', async function (this: World, stepUser: string): Promise<void> {
-    const { feature, actorsEnvironment, usersEnvironment, filesEnvironment } = this
-       
-    await new Promise(resolve => setTimeout(resolve, 10))
+    const { page } = this.actorsEnvironment.getActor({ key: stepUser })
+
+    const a11yResult = await new AxeBuilder({ page })
+        .include('.tippy-content')
+        .analyze()
+
+    expect(a11yResult.violations).toEqual([])     
 })
 
 Then('{string} clicks again to close the context menu', async function (this: World, stepUser: string): Promise<void> {
@@ -254,9 +312,13 @@ When('{string} selects new', async function (this: World, stepUser: string): Pro
        
 // Then the new context menu should not have any automatically detectable accessibility issues
 Then('{string} should not encounter any automatically detectable accessibility issues concerning the new context menu', async function (this: World, stepUser: string): Promise<void> {
-    const { feature, actorsEnvironment, usersEnvironment, filesEnvironment } = this
-       
-    await new Promise(resolve => setTimeout(resolve, 10))
+    const { page } = this.actorsEnvironment.getActor({ key: stepUser })
+
+    const a11yResult = await new AxeBuilder({ page })
+        .include('.files-app-bar-actions .tippy-content')
+        .analyze()
+
+    expect(a11yResult.violations).toEqual([])     
 })
 
 When('{string} selects the Folder option within the new context menu', async function (this: World, stepUser: string): Promise<void> {
@@ -266,9 +328,13 @@ When('{string} selects the Folder option within the new context menu', async fun
 })
 
 Then('{string} should not encounter any automatically detectable accessibility issues concerning the create new folder popup', async function (this: World, stepUser: string): Promise<void> {
-    const { feature, actorsEnvironment, usersEnvironment, filesEnvironment } = this
-       
-    await new Promise(resolve => setTimeout(resolve, 10))
+    const { page } = this.actorsEnvironment.getActor({ key: stepUser })
+
+    const a11yResult = await new AxeBuilder({ page })
+        .include('.oc-modal')
+        .analyze()
+
+    expect(a11yResult.violations).toEqual([])     
 })
 
 Then('{string} cancels creating a new folder', async function (this: World, stepUser: string): Promise<void> {
@@ -285,9 +351,13 @@ When('{string} selects upload', async function (this: World, stepUser: string): 
 })
 
 Then('{string} should not encounter any automatically detectable accessibility issues concerning the upload context menu', async function (this: World, stepUser: string): Promise<void> {
-    const { feature, actorsEnvironment, usersEnvironment, filesEnvironment } = this
-       
-    await new Promise(resolve => setTimeout(resolve, 10))
+    const { page } = this.actorsEnvironment.getActor({ key: stepUser })
+
+    const a11yResult = await new AxeBuilder({ page })
+        .include('.files-app-bar-actions .tippy-content')
+        .analyze()
+
+    expect(a11yResult.violations).toEqual([])     
 })
 
 Then('{string} exits the upload menu', async function (this: World, stepUser: string): Promise<void> {
@@ -305,9 +375,13 @@ When('{string} selects a file', async function (this: World, stepUser: string): 
 
 Then('{string} should not encounter any automatically detectable accessibility issues concerning the file actions buttons for that file', async function (this: World, stepUser: string): Promise<void> {
     // download, cut, copy & delete buttons
-    const { feature, actorsEnvironment, usersEnvironment, filesEnvironment } = this
-       
-    await new Promise(resolve => setTimeout(resolve, 10))
+    const { page } = this.actorsEnvironment.getActor({ key: stepUser })
+
+    const a11yResult = await new AxeBuilder({ page })
+        .include('#oc-appbar-batch-actions')
+        .analyze()
+
+    expect(a11yResult.violations).toEqual([])     
 })
 
 Then('{string} deselects the file', async function (this: World, stepUser: string): Promise<void> {
@@ -324,9 +398,14 @@ When('{string} selects the share action of a file', async function (this: World,
 })
 
 Then('{string} should not encounter any automatically detectable accessibility issues concerning the file actions shares panel', async function (this: World, stepUser: string): Promise<void> {
-    const { feature, actorsEnvironment, usersEnvironment, filesEnvironment } = this
-       
-    await new Promise(resolve => setTimeout(resolve, 10))
+    const { page } = this.actorsEnvironment.getActor({ key: stepUser })
+
+    const a11yResult = await new AxeBuilder({ page })
+        .include('#sidebar-panel-sharing')
+        .exclude('#files-file-link-add') // insufficient color contrast for "add link"
+        .analyze()
+
+    expect(a11yResult.violations).toEqual([])     
 })
 
 When('{string} searches for another user to share the file with within the shares panel', async function (this: World, stepUser: string): Promise<void> {
@@ -336,9 +415,13 @@ When('{string} searches for another user to share the file with within the share
 })
 
 Then('{string} should not encounter any automatically detectable accessibility issues concerning the user search drop down in file actions shares panel', async function (this: World, stepUser: string): Promise<void> {
-    const { feature, actorsEnvironment, usersEnvironment, filesEnvironment } = this
-       
-    await new Promise(resolve => setTimeout(resolve, 10))
+    const { page } = this.actorsEnvironment.getActor({ key: stepUser })
+
+    const a11yResult = await new AxeBuilder({ page })
+        .include('#new-collaborators-form')
+        .analyze()
+
+    expect(a11yResult.violations).toEqual([])     
 })
 
 Then('{string} exits the user search drop down', async function (this: World, stepUser: string): Promise<void> {
@@ -354,9 +437,13 @@ When('{string} selects the view type option within the shares panel', async func
 })
 
 Then('{string} should not encounter any automatically detectable accessibility issues concerning the view type drop down in file actions shares panel', async function (this: World, stepUser: string): Promise<void> {
-    const { feature, actorsEnvironment, usersEnvironment, filesEnvironment } = this
-       
-    await new Promise(resolve => setTimeout(resolve, 10))
+    const { page } = this.actorsEnvironment.getActor({ key: stepUser })
+
+    const a11yResult = await new AxeBuilder({ page })
+        .include('.tippy-content') 
+        .analyze()
+
+    expect(a11yResult.violations).toEqual([])     
 })
 
 Then('{string} exits the view type option', async function (this: World, stepUser: string): Promise<void> {
@@ -378,9 +465,13 @@ When('{string} opens the file context menu of a file', async function (this: Wor
 })
 
 Then('{string} should not encounter any automatically detectable accessibility issues concerning the file actions context menu for this file', async function (this: World, stepUser: string): Promise<void> {
-    const { feature, actorsEnvironment, usersEnvironment, filesEnvironment } = this
-       
-    await new Promise(resolve => setTimeout(resolve, 10))
+    const { page } = this.actorsEnvironment.getActor({ key: stepUser })
+
+    const a11yResult = await new AxeBuilder({ page })
+        .include('.tippy-content')
+        .analyze()
+
+    expect(a11yResult.violations).toEqual([])     
 })
        
 // When the user selects the option "Details" in the file actions context menu
@@ -391,9 +482,13 @@ When('{string} selects the Details option in the file actions context menu', asy
 })
 
 Then('{string} should not encounter any automatically detectable accessibility issues concerning the file actions details panel', async function (this: World, stepUser: string): Promise<void> {
-    const { feature, actorsEnvironment, usersEnvironment, filesEnvironment } = this
-       
-    await new Promise(resolve => setTimeout(resolve, 10))
+    const { page } = this.actorsEnvironment.getActor({ key: stepUser })
+
+    const a11yResult = await new AxeBuilder({ page })
+        .include('#sidebar-panel-details')
+        .analyze()
+
+    expect(a11yResult.violations).toEqual([])     
 })
 
 Then('{string} closes the details panel', async function (this: World, stepUser: string): Promise<void> {
@@ -403,102 +498,117 @@ Then('{string} closes the details panel', async function (this: World, stepUser:
 })
 
 // Scenario: check accessibility of file preview 
-When('the user selects a media file that allows preview', async function (this: World): Promise<void> {
+When('{string} selects a media file that allows preview', async function (this: World, stepUser: string): Promise<void> {
     const { feature, actorsEnvironment, usersEnvironment, filesEnvironment } = this
        
     await new Promise(resolve => setTimeout(resolve, 10))
 })
-       
-Then('the file preview should not have any automatically detectable accessibility issues', async function (this: World): Promise<void> {
-    const { feature, actorsEnvironment, usersEnvironment, filesEnvironment } = this
-       
-    await new Promise(resolve => setTimeout(resolve, 10))
+     
+Then('{string} should not encounter any automatically detectable accessibility issues concerning the file preview', async function (this: World, stepUser: string): Promise<void> {
+    const { page } = this.actorsEnvironment.getActor({ key: stepUser })
+
+    const a11yResult = await new AxeBuilder({ page })
+        .include('.')
+        .exclude('#') //
+        .exclude('#') // 
+        .analyze()
+
+    expect(a11yResult.violations).toEqual([])     
 })
-       
-Then('the user closes the file preview', async function (this: World): Promise<void> {
+
+Then('{string} closes the file preview', async function (this: World, stepUser: string): Promise<void> {
     const { feature, actorsEnvironment, usersEnvironment, filesEnvironment } = this
        
     await new Promise(resolve => setTimeout(resolve, 10))
 })
 
-// Scenario: check accessibility of shares
-When('the user navigates to shares', async function (this: World): Promise<void> {
+// Scenario: check accessibility of shares     
+Then('{string} should not encounter any automatically detectable accessibility issues concerning the shares view', async function (this: World, stepUser: string): Promise<void> {
+    const { page } = this.actorsEnvironment.getActor({ key: stepUser })
+
+    const a11yResult = await new AxeBuilder({ page })
+        .include('.')
+        .exclude('#') //
+        .exclude('#') // 
+        .analyze()
+
+    expect(a11yResult.violations).toEqual([])     
+})
+
+Then('{string} selects share type', async function (this: World, stepUser: string): Promise<void> {
     const { feature, actorsEnvironment, usersEnvironment, filesEnvironment } = this
        
     await new Promise(resolve => setTimeout(resolve, 10))
 })
 
-// from shares.ts
-/*
-When(
-    '{string} navigates to the shared with me page',
-    async function (this: World, stepUser: string): Promise<void> {
-      const { page } = this.actorsEnvironment.getActor({ key: stepUser })
-      const pageObject = new objects.applicationFiles.page.shares.WithMe({ page })
-      await pageObject.navigate()
-    }
-  )
-    */
-       
-Then('the shares view should not have any automatically detectable accessibility issues', async function (this: World): Promise<void> {
-    const { feature, actorsEnvironment, usersEnvironment, filesEnvironment } = this
-       
-    await new Promise(resolve => setTimeout(resolve, 10))
+Then('{string} should not encounter any automatically detectable accessibility issues concerning the share type popup menu', async function (this: World, stepUser: string): Promise<void> {
+    const { page } = this.actorsEnvironment.getActor({ key: stepUser })
+
+    const a11yResult = await new AxeBuilder({ page })
+        .include('.')
+        .exclude('#') //
+        .exclude('#') // 
+        .analyze()
+
+    expect(a11yResult.violations).toEqual([])     
 })
+
+// Scenario: check accessibility of deleted files 
+Then('{string} should not encounter any automatically detectable accessibility issues concerning the deleted files view', async function (this: World, stepUser: string): Promise<void> {
+    // check what is happening
+    // await page.waitForTimeout(2000)
        
-Then('the user selects share type', async function (this: World): Promise<void> {
-    const { feature, actorsEnvironment, usersEnvironment, filesEnvironment } = this
-       
-    await new Promise(resolve => setTimeout(resolve, 10))
+    const { page } = this.actorsEnvironment.getActor({ key: stepUser })
+
+    const a11yResult = await new AxeBuilder({ page })
+        .include('.')
+        .exclude('#') //
+        .exclude('#') // 
+        .analyze()
+
+    expect(a11yResult.violations).toEqual([])     
 })
-       
-Then('the share type popup menu should not have any automatically detectable accessibility issues', async function (this: World): Promise<void> {
+
+When('{string} selects a deleted file', async function (this: World, stepUser: string): Promise<void> {
     const { feature, actorsEnvironment, usersEnvironment, filesEnvironment } = this
        
     await new Promise(resolve => setTimeout(resolve, 10))
 })
 
-// Scenario: check accessibility of deleted files
-When('the user deletes a file', async function (this: World): Promise<void> {
-    const { feature, actorsEnvironment, usersEnvironment, filesEnvironment } = this
-       
-    await new Promise(resolve => setTimeout(resolve, 10))
-})
-       
-When('the user navigates to deleted files', async function (this: World): Promise<void> {
-    const { feature, actorsEnvironment, usersEnvironment, filesEnvironment } = this
-       
-    await new Promise(resolve => setTimeout(resolve, 10))
-})
-       
-Then('the deleted files view should not have any automatically detectable accessibility issues', async function (this: World): Promise<void> {
-    const { feature, actorsEnvironment, usersEnvironment, filesEnvironment } = this
-       
-    await new Promise(resolve => setTimeout(resolve, 10))
-})
-       
-When('the user selects a deleted file', async function (this: World): Promise<void> {
-    const { feature, actorsEnvironment, usersEnvironment, filesEnvironment } = this
-       
-    await new Promise(resolve => setTimeout(resolve, 10))
-})
-       
-Then('the delete file actions buttons for that file should not have any automatically detectable accessibility issues', async function (this: World): Promise<void> {
+Then('{string} should not encounter any automatically detectable accessibility issues concerning the delete file action buttons for that file', async function (this: World, stepUser: string): Promise<void> {
     // delete & restore buttons
+    const { page } = this.actorsEnvironment.getActor({ key: stepUser })
+
+    const a11yResult = await new AxeBuilder({ page })
+        .include('.')
+        .exclude('#') //
+        .exclude('#') // 
+        .analyze()
+
+    expect(a11yResult.violations).toEqual([])     
+})
+
+When('{string} clicks on delete', async function (this: World, stepUser: string): Promise<void> {
     const { feature, actorsEnvironment, usersEnvironment, filesEnvironment } = this
        
     await new Promise(resolve => setTimeout(resolve, 10))
 })
-       
-When('the user clicks on delete', async function (this: World): Promise<void> {
-    const { feature, actorsEnvironment, usersEnvironment, filesEnvironment } = this
-       
-    await new Promise(resolve => setTimeout(resolve, 10))
+
+Then('{string} should not encounter any automatically detectable accessibility issues concerning the delete popup', async function (this: World, stepUser: string): Promise<void> {
+    const { page } = this.actorsEnvironment.getActor({ key: stepUser })
+
+    const a11yResult = await new AxeBuilder({ page })
+        .include('.')
+        .exclude('#') //
+        .exclude('#') // 
+        .analyze()
+
+    expect(a11yResult.violations).toEqual([])     
 })
-       
-Then('the delete popup should not have any automatically detectable accessibility issues', async function (this: World): Promise<void> {
+
+Then('{string} cancels delete', async function (this: World, stepUser: string): Promise<void> {
     const { feature, actorsEnvironment, usersEnvironment, filesEnvironment } = this
        
-    await new Promise(resolve => setTimeout(resolve, 10))
+await new Promise(resolve => setTimeout(resolve, 10))
 })
        

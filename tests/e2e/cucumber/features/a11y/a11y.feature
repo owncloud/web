@@ -133,7 +133,8 @@ Feature: Accessibility
     # either define here which file is shared with whom, or do this in background?
     # only test "shared with me" as "shared with others" and "shared via link" seems to have the same set of functionalities or subset thereof
     When "Alice" logs in
-    And "Alice" navigates to shares
+    # And "Alice" navigates to shares
+    And "Alice" navigates to the shared with me page
     Then "Alice" should not encounter any automatically detectable accessibility issues concerning the shares view
 
     And "Alice" selects share type 
@@ -148,8 +149,11 @@ Feature: Accessibility
 
   Scenario: check accessibility of deleted files
     When "Alice" logs in
-    And "Alice" deletes a file
-    And "Alice" navigates to deleted files
+    And "Alice" deletes the following resource using the sidebar panel
+      | resource  |
+      | lorem.txt | 
+    And "Alice" navigates to the trashbin
+    # deleted files page seems to be called trashbin in trashbinDelete.feature
     Then "Alice" should not encounter any automatically detectable accessibility issues concerning the deleted files view
 
     When "Alice" selects a deleted file 
@@ -159,3 +163,4 @@ Feature: Accessibility
     When "Alice" clicks on delete 
     Then "Alice" should not encounter any automatically detectable accessibility issues concerning the delete popup
     #same for "empty trashbin"
+    And "Alice" cancels delete 
