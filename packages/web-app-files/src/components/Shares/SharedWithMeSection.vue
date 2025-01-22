@@ -33,7 +33,7 @@
       <template #syncEnabled="{ resource }">
         <div
           :key="resource.getDomSelector()"
-          class="oc-text-nowrap oc-flex oc-flex-middle oc-flex-right"
+          class="oc-text-nowrap oc-flex oc-flex-middle oc-flex-right oc-gap-s"
         >
           <oc-icon
             v-if="resource.shareRoles?.length"
@@ -44,7 +44,7 @@
             size="small"
           />
           <oc-icon
-            v-else-if="isExternalShare(resource)"
+            v-if="isExternalShare(resource)"
             v-oc-tooltip="ShareTypes.remote.label"
             :accessible-label="ShareTypes.remote.label"
             :name="ShareTypes.remote.icon"
@@ -56,7 +56,7 @@
             v-oc-tooltip="$gettext('Synced with your devices')"
             :accessible-label="$gettext('Synced with your devices')"
             name="loop-right"
-            class="sync-enabled oc-ml-s"
+            class="sync-enabled"
             size="small"
           />
         </div>
