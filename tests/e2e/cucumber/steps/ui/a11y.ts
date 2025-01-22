@@ -575,7 +575,7 @@ When('{string} selects the deleted file', async function (this: World, stepUser:
     await page.locator('#oc-appbar-batch-actions').waitFor()
 })
 
-Then('{string} should not encounter any automatically detectable accessibility issues concerning the delete file action buttons for that file', async function (this: World, stepUser: string): Promise<void> {
+Then('{string} should not encounter any automatically detectable accessibility issues concerning the delete file action buttons', async function (this: World, stepUser: string): Promise<void> {
     const { page } = this.actorsEnvironment.getActor({ key: stepUser })
 
     const a11yResult = await new AxeBuilder({ page })
@@ -602,10 +602,10 @@ Then('{string} should not encounter any automatically detectable accessibility i
     expect(a11yResult.violations).toEqual([])     
 })
 
-Then('{string} cancels the delete action', async function (this: World, stepUser: string): Promise<void> {
+Then('{string} confirms the delete action', async function (this: World, stepUser: string): Promise<void> {
     const { page } = this.actorsEnvironment.getActor({ key: stepUser })
 
-    await page.locator('.oc-modal-body-actions-cancel').click()
+    await page.locator('.oc-modal-body-actions-confirm').click()
 })
 
 
