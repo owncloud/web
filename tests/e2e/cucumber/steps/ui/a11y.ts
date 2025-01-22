@@ -184,18 +184,20 @@ Then('{string} should not encounter any automatically detectable accessibility i
 })
 
 When('{string} collapses the application sidebar', async function (this: World, stepUser: string): Promise<void> {
-    const { feature, actorsEnvironment, usersEnvironment, filesEnvironment } = this
+    const { page } = this.actorsEnvironment.getActor({ key: stepUser })
 
-    // await applicationObject.closeSidebar()
-       
-    await new Promise(resolve => setTimeout(resolve, 10))
+    // ensure sidebar is visible
+    await page.locator('#web-nav-sidebar').waitFor()
+    // collapse sidebar
+    await page.locator('.toggle-sidebar-button').click()
+    await page.locator('.oc-app-navigation-collapsed').waitFor()
 })
        
 Then('{string} should not encounter any automatically detectable accessibility issues concerning the collapsed application sidebar', async function (this: World, stepUser: string): Promise<void> {
     const { page } = this.actorsEnvironment.getActor({ key: stepUser })
 
     const a11yResult = await new AxeBuilder({ page })
-        .include('#web-nav-sidebar.oc-app-navigation-collapsed')
+        .include('.oc-app-navigation-collapsed')
         .analyze()
 
     expect(a11yResult.violations).toEqual([])     
@@ -603,16 +605,14 @@ Then('{string} should not encounter any automatically detectable accessibility i
 Then('{string} cancels the delete action', async function (this: World, stepUser: string): Promise<void> {
     const { page } = this.actorsEnvironment.getActor({ key: stepUser })
 
-    // await page.locator('button:has-text("Cancel")').click()
     await page.locator('.oc-modal-body-actions-cancel').click()
-    await page.waitForTimeout(3000)
 })
 
 
 /* logging a particular HTML element for inspection 
 
 console.log(await page.locator('').innerHTML())
-
+await page.waitForTimeout(3000)
 */
 
 /* code snipped for printing details of violations to find accessibility issues
