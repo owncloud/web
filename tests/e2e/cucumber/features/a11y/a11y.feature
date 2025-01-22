@@ -49,6 +49,7 @@ Feature: Accessibility
     # if more tests for app switcher functionalities (text editor (creating new file), app store, admin settings for users, groups, spaces management) are added
     # there should be a separate scenario for this 
     And "Alice" closes the application switcher menu
+    And "Alice" logs out
 
     
   Scenario: check accessibility of app sidebar
@@ -57,6 +58,7 @@ Feature: Accessibility
 
     When "Alice" collapses the application sidebar
     Then "Alice" should not encounter any automatically detectable accessibility issues concerning the collapsed application sidebar 
+    And "Alice" logs out
     
 
   Scenario: check accessibility of files view
@@ -120,6 +122,7 @@ Feature: Accessibility
     # there would be more nested submenus within the details panel, but they are quite simple and it seems like all of them use the same template, 
     # maybe just check one? for example activity or actions (actions would have the rename model, which seems to use the same template as new folder though)
     And "Alice" closes the details panel
+    And "Alice" logs out
 
     
   Scenario: check accessibility of file preview
@@ -127,6 +130,7 @@ Feature: Accessibility
     And "Alice" selects a media file that allows preview
     Then "Alice" should not encounter any automatically detectable accessibility issues concerning the file preview
     And "Alice" closes the file preview
+    And "Alice" logs out
 
 
   Scenario: check accessibility of shares
@@ -141,6 +145,7 @@ Feature: Accessibility
     Then "Alice" should not encounter any automatically detectable accessibility issues concerning the share type popup menu
     # share type & shared by seem to have the same functionalities, therefore testing one of them is enough coverage
     # share details uses the same templates as file details, therefore no additional test coverage
+    And "Alice" logs out
 
 
   Scenario: check accessibility of spaces
@@ -157,12 +162,12 @@ Feature: Accessibility
     Then "Alice" should not encounter any automatically detectable accessibility issues concerning the deleted files view
 
     When "Alice" selects the deleted file 
-    Then "Alice" should not encounter any automatically detectable accessibility issues concerning the delete file action buttons for that file
+    Then "Alice" should not encounter any automatically detectable accessibility issues concerning the delete file action buttons
     # delete & restore buttons
 
     When "Alice" clicks on delete 
     Then "Alice" should not encounter any automatically detectable accessibility issues concerning the delete popup
     # same for "empty trashbin"
-    And "Alice" cancels the delete action
-    # need of restoring the file to bring it back to orignial scenario?
+    And "Alice" confirms the delete action
+    And "Alice" logs out
 
