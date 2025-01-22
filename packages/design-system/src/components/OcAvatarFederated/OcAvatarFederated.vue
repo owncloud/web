@@ -2,9 +2,9 @@
   <oc-avatar-item
     :width="width"
     :icon-size="iconSize"
-    icon="cloud"
+    icon="earth"
     icon-fill-type="line"
-    icon-color="#5AAB9F"
+    icon-color="#85C1BA"
     :name="name"
     :accessible-label="accessibleLabel"
   />
