@@ -77,10 +77,10 @@ importers:
         version: 5.2.0(vite@6.0.9(@types/node@22.9.0)(jiti@1.21.0)(sass@1.81.0)(terser@5.36.0)(yaml@2.6.0))(vue@3.5.13(typescript@5.6.3))
       '@vitest/coverage-v8':
         specifier: 2.1.5
-        version: 2.1.5(vitest@2.1.6(@types/node@22.9.0)(happy-dom@15.11.6)(jiti@1.21.0)(jsdom@26.0.0)(sass@1.81.0)(terser@5.36.0)(yaml@2.6.0))
+        version: 2.1.5(vitest@2.1.6(@types/node@22.9.0)(happy-dom@16.7.2)(jiti@1.21.0)(jsdom@26.0.0)(sass@1.81.0)(terser@5.36.0)(yaml@2.6.0))
       '@vitest/web-worker':
         specifier: 2.1.5
-        version: 2.1.5(vitest@2.1.6(@types/node@22.9.0)(happy-dom@15.11.6)(jiti@1.21.0)(jsdom@26.0.0)(sass@1.81.0)(terser@5.36.0)(yaml@2.6.0))
+        version: 2.1.5(vitest@2.1.6(@types/node@22.9.0)(happy-dom@16.7.2)(jiti@1.21.0)(jsdom@26.0.0)(sass@1.81.0)(terser@5.36.0)(yaml@2.6.0))
       '@vue/compiler-dom':
         specifier: 3.5.13
         version: 3.5.13
@@ -115,8 +115,8 @@ importers:
         specifier: 11.0.0
         version: 11.0.0
       happy-dom:
-        specifier: 15.11.6
-        version: 15.11.6
+        specifier: 16.7.2
+        version: 16.7.2
       jsdom:
         specifier: ^26.0.0
         version: 26.0.0
@@ -173,10 +173,10 @@ importers:
         version: 0.1.4(vite@6.0.9(@types/node@22.9.0)(jiti@1.21.0)(sass@1.81.0)(terser@5.36.0)(yaml@2.6.0))
       vitest:
         specifier: ^2.1.6
-        version: 2.1.6(@types/node@22.9.0)(happy-dom@15.11.6)(jiti@1.21.0)(jsdom@26.0.0)(sass@1.81.0)(terser@5.36.0)(yaml@2.6.0)
+        version: 2.1.6(@types/node@22.9.0)(happy-dom@16.7.2)(jiti@1.21.0)(jsdom@26.0.0)(sass@1.81.0)(terser@5.36.0)(yaml@2.6.0)
       vitest-mock-extended:
         specifier: 2.0.2
-        version: 2.0.2(typescript@5.6.3)(vitest@2.1.6(@types/node@22.9.0)(happy-dom@15.11.6)(jiti@1.21.0)(jsdom@26.0.0)(sass@1.81.0)(terser@5.36.0)(yaml@2.6.0))
+        version: 2.0.2(typescript@5.6.3)(vitest@2.1.6(@types/node@22.9.0)(happy-dom@16.7.2)(jiti@1.21.0)(jsdom@26.0.0)(sass@1.81.0)(terser@5.36.0)(yaml@2.6.0))
       vue:
         specifier: 3.5.13
         version: 3.5.13(typescript@5.6.3)
@@ -1058,7 +1058,7 @@ importers:
         version: 4.17.12
       '@vitest/web-worker':
         specifier: 2.1.5
-        version: 2.1.5(vitest@2.1.6(@types/node@22.9.0)(happy-dom@15.11.6)(jiti@1.21.0)(jsdom@26.0.0)(sass@1.81.0)(terser@5.36.0)(yaml@2.6.0))
+        version: 2.1.5(vitest@2.1.6(@types/node@22.9.0)(happy-dom@16.7.2)(jiti@1.21.0)(jsdom@26.0.0)(sass@1.81.0)(terser@5.36.0)(yaml@2.6.0))
       clean-publish:
         specifier: 5.1.0
         version: 5.1.0
@@ -1225,7 +1225,7 @@ importers:
         version: 2.3.0(typescript@5.6.3)(vue@3.5.13(typescript@5.6.3))
       vitest-mock-extended:
         specifier: 2.0.2
-        version: 2.0.2(typescript@5.6.3)(vitest@2.1.6(@types/node@22.9.0)(happy-dom@15.11.6)(jiti@1.21.0)(jsdom@26.0.0)(sass@1.81.0)(terser@5.36.0)(yaml@2.6.0))
+        version: 2.0.2(typescript@5.6.3)(vitest@2.1.6(@types/node@22.9.0)(happy-dom@16.7.2)(jiti@1.21.0)(jsdom@26.0.0)(sass@1.81.0)(terser@5.36.0)(yaml@2.6.0))
       vue:
         specifier: ^3.5.10
         version: 3.5.13(typescript@5.6.3)
@@ -5065,8 +5065,8 @@ packages:
   handle-thing@2.0.1:
     resolution: {integrity: sha512-9Qn4yBxelxoh2Ow62nP+Ka/kMnOXRi8BXnRaUwezLNhqelnN49xKz4F/dPP8OYLxLxq6JDtZb2i9XznUQbNPTg==}
 
-  happy-dom@15.11.6:
-    resolution: {integrity: sha512-elX7iUTu+5+3b2+NGQc0L3eWyq9jKhuJJ4GpOMxxT/c2pg9O3L5H3ty2VECX0XXZgRmmRqXyOK8brA2hDI6LsQ==}
+  happy-dom@16.7.2:
+    resolution: {integrity: sha512-zOzw0xyYlDaF/ylwbAsduYZZVRTd5u7IwlFkGbEathIeJMLp3vrN3cHm3RS7PZpD9gr/IO16bHEswcgNyWTsqw==}
     engines: {node: '>=18.0.0'}
 
   has-ansi@4.0.1:
@@ -11155,7 +11155,7 @@ snapshots:
       vite: 6.0.9(@types/node@22.9.0)(jiti@1.21.0)(sass@1.81.0)(terser@5.36.0)(yaml@2.6.0)
       vue: 3.5.13(typescript@5.6.3)
 
-  '@vitest/coverage-v8@2.1.5(vitest@2.1.6(@types/node@22.9.0)(happy-dom@15.11.6)(jiti@1.21.0)(jsdom@26.0.0)(sass@1.81.0)(terser@5.36.0)(yaml@2.6.0))':
+  '@vitest/coverage-v8@2.1.5(vitest@2.1.6(@types/node@22.9.0)(happy-dom@16.7.2)(jiti@1.21.0)(jsdom@26.0.0)(sass@1.81.0)(terser@5.36.0)(yaml@2.6.0))':
     dependencies:
       '@ampproject/remapping': 2.3.0
       '@bcoe/v8-coverage': 0.2.3
@@ -11169,7 +11169,7 @@ snapshots:
       std-env: 3.8.0
       test-exclude: 7.0.1
       tinyrainbow: 1.2.0
-      vitest: 2.1.6(@types/node@22.9.0)(happy-dom@15.11.6)(jiti@1.21.0)(jsdom@26.0.0)(sass@1.81.0)(terser@5.36.0)(yaml@2.6.0)
+      vitest: 2.1.6(@types/node@22.9.0)(happy-dom@16.7.2)(jiti@1.21.0)(jsdom@26.0.0)(sass@1.81.0)(terser@5.36.0)(yaml@2.6.0)
     transitivePeerDependencies:
       - supports-color
 
@@ -11213,10 +11213,10 @@ snapshots:
       loupe: 3.1.2
       tinyrainbow: 1.2.0
 
-  '@vitest/web-worker@2.1.5(vitest@2.1.6(@types/node@22.9.0)(happy-dom@15.11.6)(jiti@1.21.0)(jsdom@26.0.0)(sass@1.81.0)(terser@5.36.0)(yaml@2.6.0))':
+  '@vitest/web-worker@2.1.5(vitest@2.1.6(@types/node@22.9.0)(happy-dom@16.7.2)(jiti@1.21.0)(jsdom@26.0.0)(sass@1.81.0)(terser@5.36.0)(yaml@2.6.0))':
     dependencies:
       debug: 4.4.0(supports-color@8.1.1)
-      vitest: 2.1.6(@types/node@22.9.0)(happy-dom@15.11.6)(jiti@1.21.0)(jsdom@26.0.0)(sass@1.81.0)(terser@5.36.0)(yaml@2.6.0)
+      vitest: 2.1.6(@types/node@22.9.0)(happy-dom@16.7.2)(jiti@1.21.0)(jsdom@26.0.0)(sass@1.81.0)(terser@5.36.0)(yaml@2.6.0)
     transitivePeerDependencies:
       - supports-color
 
@@ -13790,9 +13790,8 @@ snapshots:
 
   handle-thing@2.0.1: {}
 
-  happy-dom@15.11.6:
+  happy-dom@16.7.2:
     dependencies:
-      entities: 4.5.0
       webidl-conversions: 7.0.0
       whatwg-mimetype: 3.0.0
 
@@ -17730,13 +17729,13 @@ snapshots:
       terser: 5.36.0
       yaml: 2.6.0
 
-  vitest-mock-extended@2.0.2(typescript@5.6.3)(vitest@2.1.6(@types/node@22.9.0)(happy-dom@15.11.6)(jiti@1.21.0)(jsdom@26.0.0)(sass@1.81.0)(terser@5.36.0)(yaml@2.6.0)):
+  vitest-mock-extended@2.0.2(typescript@5.6.3)(vitest@2.1.6(@types/node@22.9.0)(happy-dom@16.7.2)(jiti@1.21.0)(jsdom@26.0.0)(sass@1.81.0)(terser@5.36.0)(yaml@2.6.0)):
     dependencies:
       ts-essentials: 10.0.1(typescript@5.6.3)
       typescript: 5.6.3
-      vitest: 2.1.6(@types/node@22.9.0)(happy-dom@15.11.6)(jiti@1.21.0)(jsdom@26.0.0)(sass@1.81.0)(terser@5.36.0)(yaml@2.6.0)
+      vitest: 2.1.6(@types/node@22.9.0)(happy-dom@16.7.2)(jiti@1.21.0)(jsdom@26.0.0)(sass@1.81.0)(terser@5.36.0)(yaml@2.6.0)
 
-  vitest@2.1.6(@types/node@22.9.0)(happy-dom@15.11.6)(jiti@1.21.0)(jsdom@26.0.0)(sass@1.81.0)(terser@5.36.0)(yaml@2.6.0):
+  vitest@2.1.6(@types/node@22.9.0)(happy-dom@16.7.2)(jiti@1.21.0)(jsdom@26.0.0)(sass@1.81.0)(terser@5.36.0)(yaml@2.6.0):
     dependencies:
       '@vitest/expect': 2.1.6
       '@vitest/mocker': 2.1.6(vite@6.0.9(@types/node@22.9.0)(jiti@1.21.0)(sass@1.81.0)(terser@5.36.0)(yaml@2.6.0))
@@ -17760,7 +17759,7 @@ snapshots:
       why-is-node-running: 2.3.0
     optionalDependencies:
       '@types/node': 22.9.0
-      happy-dom: 15.11.6
+      happy-dom: 16.7.2
       jsdom: 26.0.0
     transitivePeerDependencies:
       - jiti
