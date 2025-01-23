@@ -3,7 +3,7 @@ Changelog for ownCloud Web [unreleased] (UNRELEASED)
 The following sections list the changes in ownCloud web unreleased relevant to
 ownCloud admins and users.
 
-[unreleased]: https://github.com/owncloud/web/compare/v11.1.0...master
+[unreleased]: https://github.com/owncloud/web/compare/v11.1.1...master
 
 Summary
 -------
@@ -12,10 +12,6 @@ Summary
 * Bugfix - Show progress bar when emptying trash bin: [#11967](https://github.com/owncloud/web/pull/11967)
 * Bugfix - Reload preloaded resource in sidebar: [#12059](https://github.com/owncloud/web/pull/12059)
 * Bugfix - Missing User Light translations: [#12101](https://github.com/owncloud/web/pull/12101)
-* Bugfix - Optionally access preview app route query: [#12112](https://github.com/owncloud/web/pull/12112)
-* Bugfix - Change federated share icon: [#12118](https://github.com/owncloud/web/pull/12118)
-* Bugfix - Improve federated share icon contrast: [#12118](https://github.com/owncloud/web/pull/12118)
-* Bugfix - Show external share indicator: [#12119](https://github.com/owncloud/web/pull/12119)
 * Enhancement - Accessibility improvements: [#5379](https://github.com/owncloud/web/issues/5379)
 * Enhancement - Create spaces via admin settings: [#11849](https://github.com/owncloud/web/pull/11849)
 * Enhancement - Disable resources in delete queue: [#12046](https://github.com/owncloud/web/pull/12046)
@@ -58,6 +54,56 @@ Details
    https://github.com/owncloud/web/issues/12100
    https://github.com/owncloud/web/pull/12101
 
+* Enhancement - Accessibility improvements: [#5379](https://github.com/owncloud/web/issues/5379)
+
+   We have further improved accessibility aspects of the web UI.
+
+   https://github.com/owncloud/web/issues/5379
+   https://github.com/owncloud/web/issues/5381
+   https://github.com/owncloud/web/pull/10830
+
+* Enhancement - Create spaces via admin settings: [#11849](https://github.com/owncloud/web/pull/11849)
+
+   We've added a new feature that allows you to create spaces via the admin
+   settings.
+
+   https://github.com/owncloud/web/issues/11771
+   https://github.com/owncloud/web/pull/11849
+
+* Enhancement - Disable resources in delete queue: [#12046](https://github.com/owncloud/web/pull/12046)
+
+   We've added a new delete queue which is used to disable resources that are being
+   currently deleted. When the resource is in delete queue, it also replaces select
+   checkbox with a spinner to better hint that there is an action in progress.
+
+   https://github.com/owncloud/web/issues/11956
+   https://github.com/owncloud/web/pull/12046
+
+* Enhancement - Add psec file icon: [#12104](https://github.com/owncloud/web/pull/12104)
+
+   We've added a new icon which will be used for psec files. These files are
+   representing our password protected folders.
+
+   https://github.com/owncloud/web/pull/12104
+
+Changelog for ownCloud Web [11.1.1] (2025-01-22)
+=======================================
+The following sections list the changes in ownCloud web 11.1.1 relevant to
+ownCloud admins and users.
+
+[11.1.1]: https://github.com/owncloud/web/compare/v11.1.0...v11.1.1
+
+Summary
+-------
+
+* Bugfix - Optionally access preview app route query: [#12112](https://github.com/owncloud/web/pull/12112)
+* Bugfix - Change federated share icon: [#12118](https://github.com/owncloud/web/pull/12118)
+* Bugfix - Improve federated share icon contrast: [#12118](https://github.com/owncloud/web/pull/12118)
+* Bugfix - Show external share indicator: [#12119](https://github.com/owncloud/web/pull/12119)
+
+Details
+-------
+
 * Bugfix - Optionally access preview app route query: [#12112](https://github.com/owncloud/web/pull/12112)
 
    We've fixed an issue where loading of preview app would fail due to missing
@@ -91,38 +137,6 @@ Details
 
    https://github.com/owncloud/web/issues/12117
    https://github.com/owncloud/web/pull/12119
-
-* Enhancement - Accessibility improvements: [#5379](https://github.com/owncloud/web/issues/5379)
-
-   We have further improved accessibility aspects of the web UI.
-
-   https://github.com/owncloud/web/issues/5379
-   https://github.com/owncloud/web/issues/5381
-   https://github.com/owncloud/web/pull/10830
-
-* Enhancement - Create spaces via admin settings: [#11849](https://github.com/owncloud/web/pull/11849)
-
-   We've added a new feature that allows you to create spaces via the admin
-   settings.
-
-   https://github.com/owncloud/web/issues/11771
-   https://github.com/owncloud/web/pull/11849
-
-* Enhancement - Disable resources in delete queue: [#12046](https://github.com/owncloud/web/pull/12046)
-
-   We've added a new delete queue which is used to disable resources that are being
-   currently deleted. When the resource is in delete queue, it also replaces select
-   checkbox with a spinner to better hint that there is an action in progress.
-
-   https://github.com/owncloud/web/issues/11956
-   https://github.com/owncloud/web/pull/12046
-
-* Enhancement - Add psec file icon: [#12104](https://github.com/owncloud/web/pull/12104)
-
-   We've added a new icon which will be used for psec files. These files are
-   representing our password protected folders.
-
-   https://github.com/owncloud/web/pull/12104
 
 Changelog for ownCloud Web [11.1.0] (2025-01-10)
 =======================================
