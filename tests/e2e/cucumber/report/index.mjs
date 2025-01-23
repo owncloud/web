@@ -1,8 +1,10 @@
-const { program } = require('commander')
-const getRepoInfo = require('git-repo-info')
-const pkg = require('../../../../package.json')
-const reporter = require('cucumber-html-reporter')
-const os = require('os')
+import { Command } from 'commander'
+import getRepoInfo from 'git-repo-info'
+import reporter from 'cucumber-html-reporter'
+import os from 'os'
+import pkg from '../../../../package.json' with { type: 'json' }
+
+const program = new Command()
 
 program
   .option('--backend-version <semver>', 'version of used backend')
@@ -36,7 +38,7 @@ reporter.generate({
     'web-version': pkg.version,
     platform: os.platform(),
     repository: `${repoInfo.branch}`,
-    ...(backendVersion && { [`${backendName}-version`]: backendVersion }),
+    ...(backendVersion && { ['ocis-version']: backendVersion }),
     ...(environment && { environment: environment })
   }
 })
