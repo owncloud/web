@@ -334,6 +334,7 @@ services:
   tika:
     image: apache/tika:3.0.0.0
     container_name: web_tika
+    platform: linux/amd64
     ports:
       - 9998:9998
     restart: unless-stopped
