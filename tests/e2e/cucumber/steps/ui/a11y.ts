@@ -18,6 +18,22 @@ import { test, expect } from '../../../support/utils/a11yAxeBuilder'
 
 const a11yUser = 'admin'
 
+const selectors = {
+    loginBackground: '.oc-login-bg',
+    loginForm: '.oc-login-form',
+    loginUsername: '#oc-login-username',
+    loginPassword: '#oc-login-password',
+    webNavSidebar: '#web-nav-sidebar',
+    toggleSidebarBtn: '.toggle-sidebar-button',
+    appNavigationCollapsed: '.oc-app-navigation-collapsed',
+    files: '#files',
+    resourceTableEditName: '.resource-table-edit-name',
+    resourceIconLink: '.oc-resource-icon-link',
+    resourceTableCondensed: '.resource-table-condensed',
+    filesSpaceTableCondensed: '#files-space-table.condensed',
+
+}
+
 // check if this function is needed (copied from session.ts)
 async function createNewSession(world: World, stepUser: string) {
     const { page } = await world.actorsEnvironment.createActor({
@@ -26,6 +42,26 @@ async function createNewSession(world: World, stepUser: string) {
     })
     return new objects.runtime.Session({ page })
   }
+
+
+async function checkAccessibilityConformity(this: World, stepUser: string, include: string, exclude: string | string[]) {
+
+    const { page } = this.actorsEnvironment.getActor({ key: stepUser })
+
+    /*
+    if (typeof exclude == "string") {
+        exclude = <string[]>[exclude];
+    }
+    */
+    
+    const a11yResult = await new AxeBuilder({ page })
+        .include(include)
+        .exclude(exclude) // check if this supports both string and string[] 
+        .analyze()
+
+    return a11yResult.violations
+  }
+
 
 
 // Scenario: check accessibility of login page 
@@ -39,7 +75,7 @@ When('{string} navigates to the login page', async function (this: World, stepUs
     const { page } = this.actorsEnvironment.getActor({ key: stepUser })
 
     await page.goto('https://host.docker.internal:9200')
-    await page.locator('.oc-login-bg').waitFor()
+    await page.locator(selectors.loginBackground).waitFor()
     // console.log(await page.locator('.oc-login-bg').innerHTML())
 })
 
@@ -47,9 +83,9 @@ Then('{string} should not encounter any automatically detectable accessibility i
     const { page } = this.actorsEnvironment.getActor({ key: stepUser })
 
     const a11yResult = await new AxeBuilder({ page })
-        .include('.oc-login-form')
-        .exclude('#oc-login-username') // autocomplete attribute is incorrectly formatted
-        .exclude('#oc-login-password') // autocomplete attribute is incorrectly formatted
+        .include(selectors.loginForm)
+        .exclude(selectors.loginUsername) // autocomplete attribute is incorrectly formatted
+        .exclude(selectors.loginPassword) // autocomplete attribute is incorrectly formatted
         .analyze()
 
     expect(a11yResult.violations).toEqual([])
@@ -61,7 +97,6 @@ Then('{string} should not encounter any automatically detectable accessibility i
 
     const a11yResult = await new AxeBuilder({ page })
         .include('.')
-        .exclude('#') //
         .exclude('#') // 
         .analyze()
 
@@ -87,7 +122,6 @@ Then('{string} should not encounter any automatically detectable accessibility i
     const a11yResult = await new AxeBuilder({ page })
         .include('.')
         .exclude('#') //
-        .exclude('#') // 
         .analyze()
 
     expect(a11yResult.violations).toEqual([])     
@@ -105,7 +139,6 @@ Then('{string} should not encounter any automatically detectable accessibility i
     const a11yResult = await new AxeBuilder({ page })
         .include('.')
         .exclude('#') //
-        .exclude('#') // 
         .analyze()
 
     expect(a11yResult.violations).toEqual([])     
@@ -123,7 +156,6 @@ Then('{string} should not encounter any automatically detectable accessibility i
     const a11yResult = await new AxeBuilder({ page })
         .include('.')
         .exclude('#') //
-        .exclude('#') // 
         .analyze()
 
     expect(a11yResult.violations).toEqual([])     
@@ -142,7 +174,6 @@ Then('{string} should not encounter any automatically detectable accessibility i
     const a11yResult = await new AxeBuilder({ page })
         .include('.')
         .exclude('#') //
-        .exclude('#') // 
         .analyze()
 
     expect(a11yResult.violations).toEqual([])     
@@ -160,7 +191,6 @@ Then('{string} should not encounter any automatically detectable accessibility i
     const a11yResult = await new AxeBuilder({ page })
         .include('.')
         .exclude('#') //
-        .exclude('#') // 
         .analyze()
 
     expect(a11yResult.violations).toEqual([])     
@@ -177,7 +207,7 @@ Then('{string} should not encounter any automatically detectable accessibility i
     const { page } = this.actorsEnvironment.getActor({ key: stepUser })
 
     const a11yResult = await new AxeBuilder({ page })
-        .include('#web-nav-sidebar')
+        .include(selectors.webNavSidebar)
         .analyze()
 
     expect(a11yResult.violations).toEqual([])     
@@ -187,17 +217,17 @@ When('{string} collapses the application sidebar', async function (this: World, 
     const { page } = this.actorsEnvironment.getActor({ key: stepUser })
 
     // ensure sidebar is visible
-    await page.locator('#web-nav-sidebar').waitFor()
+    await page.locator(selectors.webNavSidebar).waitFor()
     // collapse sidebar
-    await page.locator('.toggle-sidebar-button').click()
-    await page.locator('.oc-app-navigation-collapsed').waitFor()
+    await page.locator(selectors.toggleSidebarBtn).click()
+    await page.locator(selectors.appNavigationCollapsed).waitFor()
 })
        
 Then('{string} should not encounter any automatically detectable accessibility issues concerning the collapsed application sidebar', async function (this: World, stepUser: string): Promise<void> {
     const { page } = this.actorsEnvironment.getActor({ key: stepUser })
 
     const a11yResult = await new AxeBuilder({ page })
-        .include('.oc-app-navigation-collapsed')
+        .include(selectors.appNavigationCollapsed)
         .analyze()
 
     expect(a11yResult.violations).toEqual([])     
@@ -208,9 +238,9 @@ Then('{string} should not encounter any automatically detectable accessibility i
     const { page } = this.actorsEnvironment.getActor({ key: stepUser })
 
     const a11yResult = await new AxeBuilder({ page })
-        .include('#files') 
-        .exclude('.resource-table-edit-name') // buttons must have discernible text
-        .exclude('.oc-resource-icon-link') // buttons/links must have discernible text 
+        .include(selectors.files) 
+        .exclude(selectors.resourceTableEditName) // buttons must have discernible text
+        .exclude(selectors.resourceIconLink) // buttons/links must have discernible text 
         .analyze()
 
     expect(a11yResult.violations).toEqual([])     
@@ -220,29 +250,30 @@ When('{string} switches to the condensed table view', async function (this: Worl
     const { page } = this.actorsEnvironment.getActor({ key: stepUser })
 
     // ensure files is visible
-    await page.locator('#files').waitFor()
+    await page.locator(selectors.files).waitFor()
     // switch to condensed table view
-    await page.locator('.resource-table-condensed').click()
-    await page.locator('#files-space-table.condensed').waitFor()
+    await page.locator(selectors.resourceTableCondensed).click()
+    await page.locator(selectors.filesSpaceTableCondensed).waitFor()
 })
 
 Then('{string} should not encounter any automatically detectable accessibility issues concerning the files section in condensed table view', async function (this: World, stepUser: string): Promise<void> {
     const { page } = this.actorsEnvironment.getActor({ key: stepUser })
 
     const a11yResult = await new AxeBuilder({ page })
-        .include('#files-space-table.condensed')
-        .exclude('.resource-table-edit-name') // buttons must have discernible text
-        .exclude('.oc-resource-icon-link') // buttons/links must have discernible text 
+        .include(selectors.filesSpaceTableCondensed)
+        .exclude(selectors.resourceTableEditName) // buttons must have discernible text
+        .exclude(selectors.resourceIconLink) // buttons/links must have discernible text 
         .analyze()
 
     expect(a11yResult.violations).toEqual([])     
 })
 
+// function is currently not used
 When('{string} switches to the tiles view', async function (this: World, stepUser: string): Promise<void> {
     const { page } = this.actorsEnvironment.getActor({ key: stepUser })
 
     // ensure files section is visible
-    await page.locator('#files').waitFor()
+    await page.locator(selectors.files).waitFor()
     // switch to tiles table view
     await page.locator('.resource-tiles').click() 
     await page.locator('.oc-tiles-controls').waitFor()
