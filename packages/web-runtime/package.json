@@ -29,7 +29,7 @@
     "luxon": "3.5.0",
     "mark.js": "8.11.1",
     "oidc-client-ts": "^3.0.0",
-    "p-queue": "8.0.1",
+    "p-queue": "8.1.0",
     "pinia": "2.3.1",
     "portal-vue": "3.0.0",
     "promise": "^8.1.0",
