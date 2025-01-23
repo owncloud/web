@@ -16,6 +16,7 @@ Summary
 * Enhancement - Create spaces via admin settings: [#11849](https://github.com/owncloud/web/pull/11849)
 * Enhancement - Disable resources in delete queue: [#12046](https://github.com/owncloud/web/pull/12046)
 * Enhancement - Add psec file icon: [#12104](https://github.com/owncloud/web/pull/12104)
+* Enhancement - Add custom handler to file extensions: [#12109](https://github.com/owncloud/web/pull/12109)
 
 Details
 -------
@@ -85,6 +86,14 @@ Details
    representing our password protected folders.
 
    https://github.com/owncloud/web/pull/12104
+
+* Enhancement - Add custom handler to file extensions: [#12109](https://github.com/owncloud/web/pull/12109)
+
+   We've added a new property into application file extensions called
+   `customHandler`. This property allows app developers to use completely custom
+   flows when creating new files.
+
+   https://github.com/owncloud/web/pull/12109
 
 Changelog for ownCloud Web [11.1.1] (2025-01-22)
 =======================================
