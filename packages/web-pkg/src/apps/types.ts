@@ -92,6 +92,8 @@ export interface ApplicationInformation {
   translations?: Translations
   /** @deprecated */
   applicationMenu?: ApplicationMenuItem
+  /** Asserts whether the app has any route which works as an editor */
+  hasEditor?: boolean
 }
 
 /**
@@ -105,7 +107,7 @@ export interface ApplicationTranslations {
 
 /** ClassicApplicationScript reflects classic application script structure */
 export interface ClassicApplicationScript {
-  appInfo?: ApplicationInformation
+  appInfo?: Omit<ApplicationInformation, 'hasEditor'>
   routes?: ((args: ComponentCustomProperties) => RouteRecordRaw[]) | RouteRecordRaw[]
   navItems?: ((args: ComponentCustomProperties) => AppNavigationItem[]) | AppNavigationItem[]
   translations?: ApplicationTranslations
