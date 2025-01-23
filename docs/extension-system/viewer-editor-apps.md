@@ -119,5 +119,10 @@ interface ApplicationFileExtension {
   mimeType?: string
   newFileMenu?: { menuTitle: () => string }
   routeName?: string
+  customHandler? (
+    fileActionOptions: FileActionOptions,
+    extension: string,
+    appFileExtension: ApplicationFileExtension
+  ) => Promise<void> | void
 }
 ```
