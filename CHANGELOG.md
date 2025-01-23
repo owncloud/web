@@ -16,6 +16,7 @@ Summary
 * Enhancement - Create spaces via admin settings: [#11849](https://github.com/owncloud/web/pull/11849)
 * Enhancement - Disable resources in delete queue: [#12046](https://github.com/owncloud/web/pull/12046)
 * Enhancement - Add psec file icon: [#12104](https://github.com/owncloud/web/pull/12104)
+* Enhancement - Handle extensions without editor: [#12105](https://github.com/owncloud/web/pull/12105)
 * Enhancement - Add custom handler to file extensions: [#12109](https://github.com/owncloud/web/pull/12109)
 
 Details
@@ -86,6 +87,14 @@ Details
    representing our password protected folders.
 
    https://github.com/owncloud/web/pull/12104
+
+* Enhancement - Handle extensions without editor: [#12105](https://github.com/owncloud/web/pull/12105)
+
+   We've added a new property to extensions that asserts whether is has an editor
+   or not. This property is computed by checking whether the extension exposes any
+   routes.
+
+   https://github.com/owncloud/web/pull/12105
 
 * Enhancement - Add custom handler to file extensions: [#12109](https://github.com/owncloud/web/pull/12109)
 
