@@ -791,6 +791,33 @@ importers:
         specifier: 3.23.8
         version: 3.23.8
 
+  packages/web-app-password-protected-folders:
+    devDependencies:
+      '@ownclouders/web-client':
+        specifier: workspace:*
+        version: link:../web-client
+      '@ownclouders/web-pkg':
+        specifier: workspace:*
+        version: link:../web-pkg
+      '@ownclouders/web-test-helpers':
+        specifier: workspace:*
+        version: link:../web-test-helpers
+      '@vue/test-utils':
+        specifier: ^2.4.6
+        version: 2.4.6
+      uuid:
+        specifier: ^11.0.0
+        version: 11.0.5
+      vitest-mock-extended:
+        specifier: 2.0.2
+        version: 2.0.2(typescript@5.6.3)(vitest@2.1.6(@types/node@22.9.0)(happy-dom@16.7.2)(jiti@1.21.0)(jsdom@26.0.0)(sass@1.81.0)(terser@5.36.0)(yaml@2.6.0))
+      vue:
+        specifier: ^3.4.21
+        version: 3.5.13(typescript@5.6.3)
+      vue3-gettext:
+        specifier: ^2.4.0
+        version: 2.4.0(patch_hash=x32qkm4z6srz5xuveescagpdyu)(@vue/compiler-sfc@3.5.13)(vue@3.5.13(typescript@5.6.3))
+
   packages/web-app-pdf-viewer:
     dependencies:
       '@ownclouders/web-pkg':
@@ -10557,7 +10584,7 @@ snapshots:
       '@cucumber/ci-environment': 9.1.0
       '@cucumber/cucumber-expressions': 16.1.1
       '@cucumber/gherkin': 26.0.3
-      '@cucumber/gherkin-streams': 5.0.1(@cucumber/gherkin@26.0.3)(@cucumber/message-streams@4.0.1(@cucumber/messages@21.0.1))(@cucumber/messages@21.0.1)
+      '@cucumber/gherkin-streams': 5.0.1(@cucumber/gherkin@26.0.3)(@cucumber/message-streams@4.0.1(@cucumber/messages@27.0.2))(@cucumber/messages@21.0.1)
       '@cucumber/gherkin-utils': 8.0.2
       '@cucumber/html-formatter': 20.2.1(@cucumber/messages@21.0.1)
       '@cucumber/message-streams': 4.0.1(@cucumber/messages@21.0.1)
@@ -10595,7 +10622,7 @@ snapshots:
       yaml: 2.7.0
       yup: 0.32.11
 
-  '@cucumber/gherkin-streams@5.0.1(@cucumber/gherkin@26.0.3)(@cucumber/message-streams@4.0.1(@cucumber/messages@21.0.1))(@cucumber/messages@21.0.1)':
+  '@cucumber/gherkin-streams@5.0.1(@cucumber/gherkin@26.0.3)(@cucumber/message-streams@4.0.1(@cucumber/messages@27.0.2))(@cucumber/messages@21.0.1)':
     dependencies:
       '@cucumber/gherkin': 26.0.3
       '@cucumber/message-streams': 4.0.1(@cucumber/messages@21.0.1)
