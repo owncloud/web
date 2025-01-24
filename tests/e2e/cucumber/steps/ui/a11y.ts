@@ -31,6 +31,20 @@ const selectors = {
     resourceIconLink: '.oc-resource-icon-link',
     resourceTableCondensed: '.resource-table-condensed',
     filesSpaceTableCondensed: '#files-space-table.condensed',
+    resourceTiles: '.resource-tiles',
+    tilesControls: '.oc-tiles-controls',
+    tilesView: '#tiles-view', 
+    cardMediaTop: '.oc-card-media-top',
+    resourceTable: '.resource-table',
+    filesSpaceTable: '#files-space-table',
+    filesViewOptionsBtn: '#files-view-options-btn',
+    displayOptionsMenu: '#files-app-bar-controls-right .tippy-content',
+    webContentMain: '#web-content-main',
+    contextMenuDropWhitespace: '#context-menu-drop-whitespace',
+    newFileMenuBtn: '#new-file-menu-btn',
+    newResourceContextMenu: '.files-app-bar-actions .tippy-content',
+    newFolderBtn: '#new-folder-btn',
+    ocModal: '.oc-modal',
 
 }
 
@@ -249,23 +263,21 @@ Then('{string} should not encounter any automatically detectable accessibility i
 When('{string} switches to the condensed table view', async function (this: World, stepUser: string): Promise<void> {
     const { page } = this.actorsEnvironment.getActor({ key: stepUser })
 
-    // ensure files is visible
-    await page.locator(selectors.files).waitFor()
-    // switch to condensed table view
-    await page.locator(selectors.resourceTableCondensed).click()
-    await page.locator(selectors.filesSpaceTableCondensed).waitFor()
+    const a11yObject = new objects.a11y.Accessibility({ page })
+    a11yObject.switchToCondensedTableView()
 })
 
 Then('{string} should not encounter any automatically detectable accessibility issues concerning the files section in condensed table view', async function (this: World, stepUser: string): Promise<void> {
     const { page } = this.actorsEnvironment.getActor({ key: stepUser })
 
-    const a11yResult = await new AxeBuilder({ page })
-        .include(selectors.filesSpaceTableCondensed)
-        .exclude(selectors.resourceTableEditName) // buttons must have discernible text
-        .exclude(selectors.resourceIconLink) // buttons/links must have discernible text 
-        .analyze()
+    const a11yObject = new objects.a11y.Accessibility({ page })
+    const isAccessibilityConform = await a11yObject.checkAccessibilityConformity(selectors.filesSpaceTableCondensed, [selectors.resourceTableEditName, selectors.resourceIconLink])
 
-    expect(a11yResult.violations).toEqual([])     
+    // excluded for known accessibiliy issues
+    // .exclude(selectors.resourceTableEditName) // buttons must have discernible text
+    // .exclude(selectors.resourceIconLink) // buttons/links must have discernible text 
+
+    expect(isAccessibilityConform).toBe(true)
 })
 
 // function is currently not used
@@ -275,47 +287,49 @@ When('{string} switches to the tiles view', async function (this: World, stepUse
     // ensure files section is visible
     await page.locator(selectors.files).waitFor()
     // switch to tiles table view
-    await page.locator('.resource-tiles').click() 
-    await page.locator('.oc-tiles-controls').waitFor()
+    await page.locator(selectors.resourceTiles).click() 
+    await page.locator(selectors.tilesControls).waitFor()
 })
 
 Then('{string} should not encounter any automatically detectable accessibility issues concerning the files section in tiles view', async function (this: World, stepUser: string): Promise<void> {
     const { page } = this.actorsEnvironment.getActor({ key: stepUser })
 
-    const a11yResult = await new AxeBuilder({ page })
-        .include('#tiles-view') 
-        .exclude('.oc-card-media-top') // issue with tiles with picture preview, element has focusable descendants
-        .analyze()
+    const a11yObject = new objects.a11y.Accessibility({ page })
+    const isAccessibilityConform = await a11yObject.checkAccessibilityConformity(selectors.tilesView, selectors.cardMediaTop)
 
-    expect(a11yResult.violations).toEqual([])     
+    // excluded for known accessibiliy issues
+    // .exclude(selectors.cardMediaTop) // issue with tiles with picture preview, element has focusable descendants
+
+    expect(isAccessibilityConform).toBe(true)  
 })
 
-// currently this function is not used (replaced with an existing function)
 Then('{string} switches to the default table view', async function (this: World, stepUser: string): Promise<void> {
     const { page } = this.actorsEnvironment.getActor({ key: stepUser })
 
-    // ensure files section is visible
-    await page.locator('#files').waitFor()
-    // switch to default table view
-    await page.locator('.resource-table').click()
-    await page.locator('#files-space-table').waitFor()
+    const a11yObject = new objects.a11y.Accessibility({ page })
+    a11yObject.switchToDefaultTableView()
+
+
+    
+
+
 })
 
 When('{string} selects the display options', async function (this: World, stepUser: string): Promise<void> {
     const { page } = this.actorsEnvironment.getActor({ key: stepUser })
 
     // ensure files section is visible
-    await page.locator('#files').waitFor()
+    await page.locator(selectors.files).waitFor()
     // select display options
-    await page.locator('#files-view-options-btn').click() 
-    await page.locator('#files-app-bar-controls-right .tippy-content').last().waitFor() // first element contains the invisible state, last the visible state
+    await page.locator(selectors.filesViewOptionsBtn).click() 
+    await page.locator(selectors.displayOptionsMenu).last().waitFor() // first element contains the invisible state, last the visible state
 })
 
 Then('{string} should not encounter any automatically detectable accessibility issues concerning the display options menu', async function (this: World, stepUser: string): Promise<void> {
     const { page } = this.actorsEnvironment.getActor({ key: stepUser })
 
     const a11yResult = await new AxeBuilder({ page })
-        .include('#files-app-bar-controls-right .tippy-content')
+        .include(selectors.displayOptionsMenu)
         .analyze()
 
     expect(a11yResult.violations).toEqual([])     
@@ -325,24 +339,24 @@ Then('{string} closes the display options menu', async function (this: World, st
     const { page } = this.actorsEnvironment.getActor({ key: stepUser })
 
     // click on display options (again)
-    await page.locator('#files-view-options-btn').click() 
+    await page.locator(selectors.filesViewOptionsBtn).click() 
 })
 
 When('{string} opens the files context menu', async function (this: World, stepUser: string): Promise<void> {
     const { page } = this.actorsEnvironment.getActor({ key: stepUser })
 
     // ensure files section is visible
-    await page.locator('#files').waitFor()
+    await page.locator(selectors.files).waitFor()
     // right click to get context menu with "new folder" and "details" context menu
-    await page.locator('#web-content-main').click({ button: 'right' })
-    await page.locator('#context-menu-drop-whitespace').waitFor() 
+    await page.locator(selectors.webContentMain).click({ button: 'right' })
+    await page.locator(selectors.contextMenuDropWhitespace).waitFor() 
 })
 
 Then('{string} should not encounter any automatically detectable accessibility issues concerning the files context menu', async function (this: World, stepUser: string): Promise<void> {
     const { page } = this.actorsEnvironment.getActor({ key: stepUser })
 
     const a11yResult = await new AxeBuilder({ page })
-        .include('#context-menu-drop-whitespace')
+        .include(selectors.contextMenuDropWhitespace)
         .analyze()
 
     expect(a11yResult.violations).toEqual([])     
@@ -352,26 +366,26 @@ Then('{string} exits the files context menu', async function (this: World, stepU
     const { page } = this.actorsEnvironment.getActor({ key: stepUser })
 
     // ensure files section is visible
-    await page.locator('#files').waitFor()
+    await page.locator(selectors.files).waitFor()
     // left (regular) mouse click
-    await page.locator('#web-content-main').click()  
+    await page.locator(selectors.webContentMain).click()  
 })
        
 When('{string} selects new', async function (this: World, stepUser: string): Promise<void> {
     const { page } = this.actorsEnvironment.getActor({ key: stepUser })
     
     // ensure files section is visible
-    await page.locator('#files').waitFor()    
+    await page.locator(selectors.files).waitFor()    
     // click on "+ new" button
-    await page.locator('#new-file-menu-btn').click()
-    await page.locator('.files-app-bar-actions .tippy-content').waitFor() 
+    await page.locator(selectors.newFileMenuBtn).click()
+    await page.locator(selectors.newResourceContextMenu).waitFor() 
 })
        
 Then('{string} should not encounter any automatically detectable accessibility issues concerning the new context menu', async function (this: World, stepUser: string): Promise<void> {
     const { page } = this.actorsEnvironment.getActor({ key: stepUser })
 
     const a11yResult = await new AxeBuilder({ page })
-        .include('.files-app-bar-actions .tippy-content')
+        .include(selectors.newResourceContextMenu)
         .analyze()
 
     expect(a11yResult.violations).toEqual([])     
@@ -381,17 +395,17 @@ When('{string} selects the folder option within the new context menu', async fun
     const { page } = this.actorsEnvironment.getActor({ key: stepUser })
 
     // ensure that the context menu is visible
-    await page.locator('.files-app-bar-actions .tippy-content').waitFor() 
+    await page.locator(selectors.newResourceContextMenu).waitFor() 
     // click on "folder"
-    await page.locator('#new-folder-btn').click()
-    await page.locator('.oc-modal').waitFor()
+    await page.locator(selectors.newFolderBtn).click()
+    await page.locator(selectors.ocModal).waitFor()
 })
 
 Then('{string} should not encounter any automatically detectable accessibility issues concerning the create new folder popup', async function (this: World, stepUser: string): Promise<void> {
     const { page } = this.actorsEnvironment.getActor({ key: stepUser })
 
     const a11yResult = await new AxeBuilder({ page })
-        .include('.oc-modal')
+        .include(selectors.ocModal)
         .analyze()
 
     expect(a11yResult.violations).toEqual([])     
@@ -407,7 +421,7 @@ When('{string} selects upload', async function (this: World, stepUser: string): 
     const { page } = this.actorsEnvironment.getActor({ key: stepUser })
 
     // ensure files section is visible
-    await page.locator('#files').waitFor()    
+    await page.locator(selectors.files).waitFor()    
     // click on "upload" button
     await page.locator('#upload-menu-btn').click()
     await page.locator('.files-app-bar-actions .tippy-content').waitFor() 
@@ -428,16 +442,16 @@ Then('{string} exits the upload menu', async function (this: World, stepUser: st
     const { page } = this.actorsEnvironment.getActor({ key: stepUser })
 
     // ensure files section is visible
-    await page.locator('#files').waitFor()
+    await page.locator(selectors.files).waitFor()
     // left (regular) mouse click
-    await page.locator('#web-content-main').click()  
+    await page.locator(selectors.webContentMain).click()  
 })
 
 When('{string} selects a file by selecting the corresponding checkbox', async function (this: World, stepUser: string): Promise<void> {
     const { page } = this.actorsEnvironment.getActor({ key: stepUser })
 
     // ensure files section is visible
-    await page.locator('#files').waitFor()    
+    await page.locator(selectors.files).waitFor()    
     // check checkbox of the first file in the list
     await page.locator('#files-space-table .oc-checkbox').first().check() 
     await page.locator('#oc-appbar-batch-actions').waitFor()
@@ -457,7 +471,7 @@ Then('{string} should not encounter any automatically detectable accessibility i
 Then('{string} deselects the file', async function (this: World, stepUser: string): Promise<void> {
     const { page } = this.actorsEnvironment.getActor({ key: stepUser })
 
-    await page.locator('#files').waitFor()    
+    await page.locator(selectors.files).waitFor()    
     // check checkbox of the first file in the list
     await page.locator('#files-space-table .oc-checkbox').first().uncheck() 
 })
@@ -501,16 +515,16 @@ Then('{string} exits the view type drop down', async function (this: World, step
     const { page } = this.actorsEnvironment.getActor({ key: stepUser })
 
     // ensure files section is visible
-    await page.locator('#files').waitFor()
+    await page.locator(selectors.files).waitFor()
     // left (regular) mouse click
-    await page.locator('#web-content-main').click() 
+    await page.locator(selectors.webContentMain).click() 
 })
 
 When('{string} opens the file context menu of a file', async function (this: World, stepUser: string): Promise<void> {
     const { page } = this.actorsEnvironment.getActor({ key: stepUser })
 
     // ensure files section is visible
-    await page.locator('#files').waitFor()    
+    await page.locator(selectors.files).waitFor()    
     // click on the context menu of the first file in the list
     await page.locator('.resource-table-btn-action-dropdown').first().click() 
     await page.locator('.resource-table-actions .tippy-content').last().waitFor() // first element contains the invisible state, second (last) the visible state
