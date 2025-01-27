@@ -8,7 +8,7 @@ cd "$(dirname "$0")/../.."
 VERSION=$(node -p "require('./package.json').version")
 TAG="v${VERSION}"
 
-git tag "$TAG"
+git tag -s -a "$TAG" -m "$TAG"
 git push origin "$TAG"
 echo "v$VERSION has been created and pushed"
 
