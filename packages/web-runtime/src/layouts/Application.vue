@@ -21,7 +21,10 @@
             @update:nav-bar-closed="setNavBarClosed"
           />
           <portal to="app.runtime.mobile.nav">
-            <mobile-nav v-if="isMobileWidth && navItems.length" :nav-items="navItems" />
+            <mobile-nav
+              v-if="isMobileWidth && navItems.length && !hideNavigation"
+              :nav-items="navItems"
+            />
           </portal>
           <router-view
             v-for="name in ['default', 'app', 'fullscreen']"
@@ -51,6 +54,7 @@ import {
   ExtensionPoint,
   useAppsStore,
   useAuthStore,
+  useConfigStore,
   useExtensionRegistry,
   useLocalStorage
 } from '@ownclouders/web-pkg'
@@ -103,6 +107,9 @@ export default defineComponent({
 
     const appsStore = useAppsStore()
     const { apps } = storeToRefs(appsStore)
+
+    const configStore = useConfigStore()
+    const { options: configOptions } = storeToRefs(configStore)
 
     const extensionNavItems = computed(() =>
       getExtensionNavItems({ extensionRegistry, appId: unref(activeApp) })
@@ -177,8 +184,9 @@ export default defineComponent({
       )
     })
 
+    const hideNavigation = computed(() => unref(configOptions).hideNavigation)
     const isSidebarVisible = computed(() => {
-      return unref(navItems).length && !unref(isMobileWidth)
+      return unref(navItems).length && !unref(isMobileWidth) && !unref(hideNavigation)
     })
 
     const navBarClosed = useLocalStorage(`oc_navBarClosed`, false)
@@ -232,6 +240,7 @@ export default defineComponent({
       navItems,
       isMobileWidth,
       navBarClosed,
+      hideNavigation,
       setNavBarClosed
     }
   },

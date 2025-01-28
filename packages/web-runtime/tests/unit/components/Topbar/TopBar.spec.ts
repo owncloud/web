@@ -7,7 +7,12 @@ import {
 import { mock } from 'vitest-mock-extended'
 import { computed } from 'vue'
 import TopBar from '../../../../src/components/Topbar/TopBar.vue'
-import { defaultComponentMocks, defaultPlugins, shallowMount } from '@ownclouders/web-test-helpers'
+import {
+  defaultComponentMocks,
+  defaultPlugins,
+  PiniaMockOptions,
+  shallowMount
+} from '@ownclouders/web-test-helpers'
 
 const mockUseEmbedMode = vi.fn().mockReturnValue({ isEnabled: computed(() => false) })
 
@@ -17,9 +22,15 @@ vi.mock('@ownclouders/web-pkg', async (importOriginal) => ({
 }))
 
 describe('Top Bar component', () => {
-  it('Displays applications menu', () => {
-    const { wrapper } = getWrapper()
-    expect(wrapper.find('applications-menu-stub').exists()).toBeTruthy()
+  describe('applications menu', () => {
+    it('Displays applications menu', () => {
+      const { wrapper } = getWrapper()
+      expect(wrapper.find('applications-menu-stub').exists()).toBeTruthy()
+    })
+    it('should not display when hideAppSwitcher is "true"', () => {
+      const { wrapper } = getWrapper({ options: { hideAppSwitcher: true } })
+      expect(wrapper.find('applications-menu-stub').exists()).toBeFalsy()
+    })
   })
   describe('notifications bell', () => {
     it('should display in authenticated context if announced via capabilities', () => {
@@ -72,14 +83,23 @@ describe('Top Bar component', () => {
       expect(wrapper.find(`${componentName}-stub`).exists()).toBeTruthy()
     }
   )
+  it.each(['feedback-link', 'notifications', 'user-menu'])(
+    'should hide %s when hideAccountMenu is "true"',
+    (componentName) => {
+      const { wrapper } = getWrapper({ options: { hideAccountMenu: true } })
+      expect(wrapper.find(`${componentName}-stub`).exists()).toBeFalsy()
+    }
+  )
 })
 
 const getWrapper = ({
   capabilities = {},
-  userContextReady = true
+  userContextReady = true,
+  options
 }: {
   capabilities?: Partial<Capabilities['capabilities']>
   userContextReady?: boolean
+  options?: PiniaMockOptions['configState']['options']
 } = {}) => {
   const mocks = { ...defaultComponentMocks() }
 
@@ -87,7 +107,7 @@ const getWrapper = ({
     piniaOptions: {
       authState: { userContextReady },
       capabilityState: { capabilities },
-      configState: { options: { disableFeedbackLink: false } }
+      configState: { options: { disableFeedbackLink: false, ...options } }
     }
   })
 

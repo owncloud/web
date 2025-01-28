@@ -6,7 +6,7 @@
   >
     <div class="oc-topbar-left oc-flex oc-flex-middle oc-flex-start">
       <applications-menu
-        v-if="appMenuExtensions.length && !isEmbedModeEnabled"
+        v-if="appMenuExtensions.length && !isEmbedModeEnabled && !hideAppSwitcher"
         :menu-items="appMenuExtensions"
       />
       <router-link v-if="!hideLogo" :to="homeLink" class="oc-width-1-1 oc-logo-href">
@@ -21,12 +21,15 @@
     </div>
     <template v-if="!isEmbedModeEnabled">
       <portal to="app.runtime.header.right" :order="50">
-        <feedback-link v-if="isFeedbackLinkEnabled" v-bind="feedbackLinkOptions" />
+        <feedback-link
+          v-if="isFeedbackLinkEnabled && !hideAccountMenu"
+          v-bind="feedbackLinkOptions"
+        />
       </portal>
       <portal to="app.runtime.header.right" :order="100">
-        <notifications v-if="isNotificationBellEnabled" />
+        <notifications v-if="isNotificationBellEnabled && !hideAccountMenu" />
         <side-bar-toggle v-if="isSideBarToggleVisible" :disabled="isSideBarToggleDisabled" />
-        <user-menu />
+        <user-menu v-if="!hideAccountMenu" />
       </portal>
     </template>
     <portal-target name="app.runtime.header.left" @change="updateLeftPortal" />
@@ -92,6 +95,8 @@ export default {
 
     const logoWidth = ref('150px')
     const hideLogo = computed(() => unref(configOptions).hideLogo)
+    const hideAppSwitcher = computed(() => unref(configOptions).hideAppSwitcher)
+    const hideAccountMenu = computed(() => unref(configOptions).hideAccountMenu)
 
     const isNotificationBellEnabled = computed(() => {
       return (
@@ -157,7 +162,9 @@ export default {
       isSideBarToggleDisabled,
       homeLink,
       topBarCenterExtensionPoint,
-      appMenuExtensions
+      appMenuExtensions,
+      hideAppSwitcher,
+      hideAccountMenu
     }
   },
   computed: {

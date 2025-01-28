@@ -28,7 +28,7 @@ export const useCreateFileHandler = () => {
     const folder = await clientService.webdav.createFolder(unref(space), { path: folderPath })
     upsertResource(folder)
 
-    await addLink({
+    const share = await addLink({
       clientService,
       space,
       resource: folder,
@@ -37,7 +37,10 @@ export const useCreateFileHandler = () => {
 
     const path = urlJoin(currentFolder.path, fileName + '.psec')
 
-    const file = await clientService.webdav.putFileContents(unref(space), { path })
+    const file = await clientService.webdav.putFileContents(unref(space), {
+      path,
+      content: btoa(share.webUrl)
+    })
     upsertResource(file)
   }
 

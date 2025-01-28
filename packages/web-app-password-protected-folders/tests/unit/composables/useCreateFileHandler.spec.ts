@@ -1,9 +1,10 @@
 import { defaultComponentMocks, getComposableWrapper } from '@ownclouders/web-test-helpers'
 import { useCreateFileHandler } from '../../../src/composables/useCreateFileHandler'
 import { mock } from 'vitest-mock-extended'
-import { Resource, SpaceResource } from '@ownclouders/web-client'
+import { LinkShare, Resource, SpaceResource } from '@ownclouders/web-client'
 import { useSharesStore } from '@ownclouders/web-pkg'
 import { SharingLinkType } from '@ownclouders/web-client/graph/generated'
+import { MockedFunction } from 'vitest'
 
 const space = mock<SpaceResource>()
 const currentFolder = mock<Resource>({ path: '/current/folder' })
@@ -14,6 +15,12 @@ describe('createFileHandler', () => {
     getWrapper({
       async setup(instance, mocks) {
         const { addLink } = useSharesStore()
+
+        ;(addLink as MockedFunction<typeof addLink>).mockResolvedValue(
+          mock<LinkShare>({
+            webUrl: 'https://example.org/public-link'
+          })
+        )
 
         await instance.createFileHandler({
           fileName: 'protected',
@@ -32,7 +39,8 @@ describe('createFileHandler', () => {
           options: { password: 'Pass$123', type: SharingLinkType.Edit }
         })
         expect(mocks.$clientService.webdav.putFileContents).toHaveBeenCalledWith(space, {
-          path: '/current/folder/protected.psec'
+          path: '/current/folder/protected.psec',
+          content: btoa('https://example.org/public-link')
         })
       }
     })
@@ -48,6 +56,7 @@ function getWrapper({
   ) => void
 }) {
   const mocks = defaultComponentMocks()
+
   mocks.$clientService.webdav.createFolder.mockResolvedValue(createdFolder)
 
   return {
