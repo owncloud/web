@@ -12,12 +12,14 @@ export const useCreateFileHandler = () => {
     fileName,
     space,
     currentFolder,
-    password
+    password,
+    type
   }: {
     fileName: string
     space: SpaceResource
     currentFolder: Resource
     password: string
+    type: SharingLinkType
   }) => {
     if (fileName === '') {
       return
@@ -32,7 +34,7 @@ export const useCreateFileHandler = () => {
       clientService,
       space,
       resource: folder,
-      options: { password, type: SharingLinkType.Edit }
+      options: { password, type }
     })
 
     const path = urlJoin(currentFolder.path, fileName + '.psec')

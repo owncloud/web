@@ -4,6 +4,7 @@ import { useCreateFileHandler } from '../../../src/composables/useCreateFileHand
 import { mock } from 'vitest-mock-extended'
 import { Resource, SpaceResource } from '@ownclouders/web-client'
 import { VueWrapper } from '@vue/test-utils'
+import { SharingLinkType } from '@ownclouders/web-client/graph/generated'
 
 vi.mock('../../../src/composables/useCreateFileHandler', () => ({
   useCreateFileHandler: vi.fn().mockReturnValue({ createFileHandler: vi.fn() })
@@ -14,7 +15,8 @@ const currentSpace = mock<SpaceResource>()
 
 const SELECTORS = Object.freeze({
   inputFolderName: '#input-folder-name',
-  inputFolderPassword: '#input-folder-password'
+  inputFolderPassword: '#input-folder-password',
+  inputFolderPermissions: '#input-folder-permissions'
 })
 
 describe('CreateFolderModal', () => {
@@ -23,9 +25,11 @@ describe('CreateFolderModal', () => {
 
     const folderNameInput = wrapper.findComponent(SELECTORS.inputFolderName) as VueWrapper
     const passwordInput = wrapper.findComponent(SELECTORS.inputFolderPassword) as VueWrapper
+    const permissionsInput = wrapper.findComponent(SELECTORS.inputFolderPermissions) as VueWrapper
 
     folderNameInput.vm.$emit('update:modelValue', 'name')
     passwordInput.vm.$emit('update:modelValue', 'password')
+    permissionsInput.vm.$emit('update:modelValue', SharingLinkType.Edit)
 
     wrapper.vm.onConfirm()
 
@@ -33,7 +37,8 @@ describe('CreateFolderModal', () => {
       fileName: 'name',
       password: 'password',
       space: currentSpace,
-      currentFolder
+      currentFolder,
+      type: SharingLinkType.Edit
     })
   })
 
