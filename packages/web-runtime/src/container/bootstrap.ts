@@ -162,7 +162,10 @@ export const announceConfiguration = async ({
   rawConfig.options = {
     ...rawConfig.options,
     embed: { ...rawConfig.options?.embed, ...embedConfigFromQuery },
-    hideLogo: getQueryParam('hide-logo') === 'true'
+    hideLogo: getQueryParam('hide-logo') === 'true',
+    hideAppSwitcher: getQueryParam('hide-app-switcher') === 'true',
+    hideAccountMenu: getQueryParam('hide-account-menu') === 'true',
+    hideNavigation: getQueryParam('hide-navigation') === 'true'
   }
 
   configStore.loadConfig(rawConfig)
