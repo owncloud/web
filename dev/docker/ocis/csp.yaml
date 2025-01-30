@@ -11,6 +11,8 @@ directives:
     - '''self'''
   frame-ancestors:
     - '''self'''
+    - 'https://host.docker.internal:9200'
+    - 'https://host.docker.internal:9201'
   frame-src:
     - '''self'''
     - 'blob:'
