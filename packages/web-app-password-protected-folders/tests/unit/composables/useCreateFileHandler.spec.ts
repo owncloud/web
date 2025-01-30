@@ -19,7 +19,8 @@ describe('createFileHandler', () => {
           fileName: 'protected',
           space,
           currentFolder,
-          password: 'Pass$123'
+          password: 'Pass$123',
+          type: SharingLinkType.Edit
         })
 
         expect(mocks.$clientService.webdav.createFolder).toHaveBeenCalledWith(space, {
