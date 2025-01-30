@@ -18,6 +18,7 @@ Summary
 * Enhancement - Add psec file icon: [#12104](https://github.com/owncloud/web/pull/12104)
 * Enhancement - Handle extensions without editor: [#12105](https://github.com/owncloud/web/pull/12105)
 * Enhancement - Add custom handler to file extensions: [#12109](https://github.com/owncloud/web/pull/12109)
+* Enhancement - Add password protected folders app: [#12137](https://github.com/owncloud/web/pull/12137)
 
 Details
 -------
@@ -103,6 +104,15 @@ Details
    flows when creating new files.
 
    https://github.com/owncloud/web/pull/12109
+
+* Enhancement - Add password protected folders app: [#12137](https://github.com/owncloud/web/pull/12137)
+
+   We've added a new application called "Password protected folders". This
+   application allows users to create new folders that are accessible only by
+   entering a password.
+
+   https://github.com/owncloud/web/issues/12039
+   https://github.com/owncloud/web/pull/12137
 
 Changelog for ownCloud Web [11.1.1] (2025-01-22)
 =======================================
