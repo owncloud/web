@@ -25,11 +25,12 @@
 </template>
 
 <script lang="ts">
-import { computed, defineComponent, inject } from 'vue'
+import { computed, defineComponent, inject, unref } from 'vue'
 import { Resource } from '@ownclouders/web-client'
 import { useResourcesStore } from '../../../composables'
 import ResourceIcon from '../../FilesList/ResourceIcon.vue'
 import ResourceName from '../../FilesList/ResourceName.vue'
+import { HIDDEN_FILE_EXTENSIONS } from '../../../constants'
 
 export default defineComponent({
   name: 'FileInfo',
@@ -44,7 +45,11 @@ export default defineComponent({
     const resourcesStore = useResourcesStore()
 
     const resource = inject<Resource>('resource')
-    const areFileExtensionsShown = computed(() => resourcesStore.areFileExtensionsShown)
+    const areFileExtensionsShown = computed(
+      () =>
+        resourcesStore.areFileExtensionsShown &&
+        !HIDDEN_FILE_EXTENSIONS.includes(unref(resource).extension)
+    )
 
     return {
       resource,
