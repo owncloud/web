@@ -17,6 +17,7 @@ import {
   useResourcesStore,
   useSpacesStore
 } from '../../piniaStores'
+import { HIDDEN_FILE_EXTENSIONS } from '../../../constants'
 
 export const useFileActionsCreateSpaceFromResource = () => {
   const { showMessage, showErrorMessage } = useMessages()
@@ -126,6 +127,10 @@ export const useFileActionsCreateSpaceFromResource = () => {
             !isLocationSpacesActive(router, 'files-spaces-generic') ||
             !isPersonalSpaceResource(space)
           ) {
+            return false
+          }
+
+          if (HIDDEN_FILE_EXTENSIONS.includes(resources[0].extension)) {
             return false
           }
 

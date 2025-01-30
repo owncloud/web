@@ -42,7 +42,7 @@ export default defineComponent({
     }
   },
   setup(props) {
-    const { editorActions } = useFileActions()
+    const { editorActions, defaultActions } = useFileActions()
 
     const { actions: enableSyncActions } = useFileActionsEnableSync()
     const { actions: hideShareActions } = useFileActionsToggleHideShare()
@@ -110,6 +110,7 @@ export default defineComponent({
 
     const menuItemsContext = computed(() => {
       return [
+        ...unref(defaultActions),
         ...unref(editorActions),
         ...unref(extensionsContextActions).filter((a) => a.category === 'context')
       ]

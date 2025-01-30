@@ -3,6 +3,7 @@ import { urlJoin } from '../../utils'
 import { DavPermission, DavProperty } from '../../webdav/constants'
 import { Resource, ResourceIndicator, TrashResource, WebDavResponseResource } from './types'
 import { camelCase } from 'lodash-es'
+import { HIDDEN_FILE_EXTENSIONS } from '@ownclouders/web-pkg/src/constants'
 
 const fileExtensions = {
   complex: ['tar.bz2', 'tar.gz', 'tar.xz']
@@ -160,17 +161,26 @@ export function buildResource(resource: WebDavResponseResource): Resource {
       return this.permissions.indexOf(DavPermission.FolderCreateable) >= 0
     },
     canDownload: function () {
-      return this.permissions.indexOf(DavPermission.SecureView) === -1
+      return (
+        // TODO: we should later on separate this from the hidden extensions and use some better logic
+        !HIDDEN_FILE_EXTENSIONS.includes(this.extension) &&
+        this.permissions.indexOf(DavPermission.SecureView) === -1
+      )
     },
     canBeDeleted: function () {
       return this.permissions.indexOf(DavPermission.Deletable) >= 0
     },
     canRename: function () {
-      return this.permissions.indexOf(DavPermission.Renameable) >= 0
+      return (
+        !HIDDEN_FILE_EXTENSIONS.includes(this.extension) &&
+        this.permissions.indexOf(DavPermission.Renameable) >= 0
+      )
     },
     canShare: function ({ ability }) {
       return (
-        ability.can('create-all', 'Share') && this.permissions.indexOf(DavPermission.Shareable) >= 0
+        !HIDDEN_FILE_EXTENSIONS.includes(this.extension) &&
+        ability.can('create-all', 'Share') &&
+        this.permissions.indexOf(DavPermission.Shareable) >= 0
       )
     },
     canCreate: function () {
@@ -178,8 +188,9 @@ export function buildResource(resource: WebDavResponseResource): Resource {
     },
     canEditTags: function () {
       return (
-        this.permissions.indexOf(DavPermission.Updateable) >= 0 ||
-        this.permissions.indexOf(DavPermission.FileUpdateable) >= 0
+        !HIDDEN_FILE_EXTENSIONS.includes(this.extension) &&
+        (this.permissions.indexOf(DavPermission.Updateable) >= 0 ||
+          this.permissions.indexOf(DavPermission.FileUpdateable) >= 0)
       )
     },
     isMounted: function () {

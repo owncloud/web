@@ -933,6 +933,9 @@ importers:
       '@microsoft/fetch-event-source':
         specifier: ^2.0.1
         version: 2.0.1
+      '@ownclouders/web-pkg':
+        specifier: workspace:*
+        version: link:../web-pkg
       axios:
         specifier: ^1.7.7
         version: 1.7.7

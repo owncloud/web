@@ -1,6 +1,12 @@
-import { defaultPlugins, mount } from '@ownclouders/web-test-helpers'
+import { defaultComponentMocks, defaultPlugins, mount } from '@ownclouders/web-test-helpers'
 import ResourceListItem from '../../../../src/components/FilesList/ResourceListItem.vue'
 import { Resource } from '@ownclouders/web-client'
+import { HIDDEN_FILE_EXTENSIONS } from '../../../../src/constants'
+import { mock } from 'vitest-mock-extended'
+
+const SELECTORS = Object.freeze({
+  resourceName: '.oc-resource-basename'
+})
 
 const fileResource = {
   name: 'forest.jpg',
@@ -146,4 +152,34 @@ describe('OcResource', () => {
     expect(wrapper.find('oc-resource-thumbnail').exists()).toBeFalsy()
     expect(wrapper.find('oc-resource-icon').exists()).toBeFalsy()
   })
+
+  it.each(HIDDEN_FILE_EXTENSIONS)(
+    'should not show the file extension when it equals "%s"',
+    (extension) => {
+      const { wrapper } = getWrapper({
+        props: {
+          resource: mock<Resource>({ extension, name: 'forest.' + extension }),
+          isExtensionDisplayed: true
+        }
+      })
+
+      expect(wrapper.find(SELECTORS.resourceName).text()).toStrictEqual('forest')
+    }
+  )
 })
+
+function getWrapper({ props }: { props: { resource: Resource; isExtensionDisplayed?: boolean } }) {
+  const mocks = defaultComponentMocks()
+
+  return {
+    mocks,
+    wrapper: mount(ResourceListItem, {
+      props,
+      global: {
+        mocks,
+        provide: mocks,
+        plugins: [...defaultPlugins()]
+      }
+    })
+  }
+}
