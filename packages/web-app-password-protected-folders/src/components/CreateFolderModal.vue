@@ -47,7 +47,7 @@ const { $gettext } = useGettext()
 const { showErrorMessage } = useMessages()
 const { createFileHandler } = useCreateFileHandler()
 const { currentFolder } = useResourcesStore()
-const { currentSpace } = useSpacesStore()
+const { spaces, currentSpace } = useSpacesStore()
 const { defaultLinkType, getAvailableLinkTypes, getLinkRoleByType } = useLinkTypes()
 
 const formData = reactive({
@@ -66,16 +66,24 @@ const onConfirm = async () => {
   }
 
   try {
+    const personalSpace = unref(spaces).find((space) => space.driveType === 'personal')
+
+    if (!personalSpace) {
+      throw new Error('Could not find personal space')
+    }
+
     await createFileHandler({
       fileName: formData.folderName,
       currentFolder: unref(currentFolder),
-      space: unref(currentSpace),
+      personalSpace: personalSpace,
+      currentSpace: unref(currentSpace),
       password: formData.password,
       type: formData.selectedType
     })
   } catch (error) {
     console.error(error)
     showErrorMessage({ title: $gettext('Failed to create folder'), errors: [error] })
+    return Promise.reject()
   }
 }
 
