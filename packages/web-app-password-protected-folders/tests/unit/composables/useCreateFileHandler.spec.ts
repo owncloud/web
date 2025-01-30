@@ -7,6 +7,7 @@ import { SharingLinkType } from '@ownclouders/web-client/graph/generated'
 import { MockedFunction } from 'vitest'
 
 const space = mock<SpaceResource>()
+const personalSpace = mock<SpaceResource>({ driveType: 'personal' })
 const currentFolder = mock<Resource>({ path: '/current/folder' })
 const createdFolder = mock<Resource>()
 
@@ -24,18 +25,19 @@ describe('createFileHandler', () => {
 
         await instance.createFileHandler({
           fileName: 'protected',
-          space,
+          personalSpace: personalSpace,
           currentFolder,
+          currentSpace: space,
           password: 'Pass$123',
           type: SharingLinkType.Edit
         })
 
-        expect(mocks.$clientService.webdav.createFolder).toHaveBeenCalledWith(space, {
+        expect(mocks.$clientService.webdav.createFolder).toHaveBeenCalledWith(personalSpace, {
           path: '/.protected'
         })
         expect(addLink).toHaveBeenCalledWith({
           clientService: mocks.$clientService,
-          space,
+          space: personalSpace,
           resource: createdFolder,
           options: { password: 'Pass$123', type: SharingLinkType.Edit }
         })

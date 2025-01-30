@@ -1,7 +1,6 @@
 import { Resource, SpaceResource, urlJoin } from '@ownclouders/web-client'
 import { SharingLinkType } from '@ownclouders/web-client/graph/generated'
 import { useClientService, useResourcesStore, useSharesStore } from '@ownclouders/web-pkg'
-import { unref } from 'vue'
 
 export const useCreateFileHandler = () => {
   const clientService = useClientService()
@@ -10,13 +9,15 @@ export const useCreateFileHandler = () => {
 
   const createFileHandler = async ({
     fileName,
-    space,
+    personalSpace,
+    currentSpace,
     currentFolder,
     password,
     type
   }: {
     fileName: string
-    space: SpaceResource
+    personalSpace: SpaceResource
+    currentSpace: SpaceResource
     currentFolder: Resource
     password: string
     type: SharingLinkType
@@ -26,20 +27,22 @@ export const useCreateFileHandler = () => {
     }
 
     const folderPath = '/.' + fileName
+    const folder = await clientService.webdav.createFolder(personalSpace, { path: folderPath })
 
-    const folder = await clientService.webdav.createFolder(unref(space), { path: folderPath })
-    upsertResource(folder)
+    if (currentSpace.id === personalSpace.id) {
+      upsertResource(folder)
+    }
 
     const share = await addLink({
       clientService,
-      space,
+      space: personalSpace,
       resource: folder,
       options: { password, type }
     })
 
     const path = urlJoin(currentFolder.path, fileName + '.psec')
 
-    const file = await clientService.webdav.putFileContents(unref(space), {
+    const file = await clientService.webdav.putFileContents(currentSpace, {
       path,
       content: btoa(share.webUrl)
     })
