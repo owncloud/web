@@ -19,6 +19,7 @@ Summary
 * Enhancement - Handle extensions without editor: [#12105](https://github.com/owncloud/web/pull/12105)
 * Enhancement - Add custom handler to file extensions: [#12109](https://github.com/owncloud/web/pull/12109)
 * Enhancement - Add password protected folders app: [#12137](https://github.com/owncloud/web/pull/12137)
+* Enhancement - Password protected folder permissions: [#12141](https://github.com/owncloud/web/pull/12141)
 
 Details
 -------
@@ -113,6 +114,15 @@ Details
 
    https://github.com/owncloud/web/issues/12039
    https://github.com/owncloud/web/pull/12137
+
+* Enhancement - Password protected folder permissions: [#12141](https://github.com/owncloud/web/pull/12141)
+
+   We've added the permissions dropdown into the create password protected folder
+   dialog. Users can now decide what permissions they would like to add to the
+   folder. Permissions are matching folder public link permissions.
+
+   https://github.com/owncloud/web/issues/12039
+   https://github.com/owncloud/web/pull/12141
 
 Changelog for ownCloud Web [11.1.1] (2025-01-22)
 =======================================
