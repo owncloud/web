@@ -1,6 +1,6 @@
 import { cloneStateObject } from '../../../helpers/store'
 import { isSameResource } from '../../../helpers/resource'
-import { DavHttpError, Resource, SpaceResource } from '@ownclouders/web-client'
+import { DavHttpError, Resource, SpaceResource, urlJoin } from '@ownclouders/web-client'
 import { isLocationSpacesActive } from '../../../router'
 import { dirname } from 'path'
 import { createFileRouteOptions } from '../../../helpers'
@@ -163,7 +163,14 @@ export const useFileActionsDeleteResources = () => {
       }
 
       try {
-        const folderPath = '/.' + resource.name.replace('.psec', '')
+        const matchingSpace = getMatchingSpace(resource)
+
+        const folderPath = urlJoin(
+          '/.PasswordProtectedFolders/projects/',
+          matchingSpace.name,
+          resource.path.replace(resource.name, ''),
+          resource.name.replace('.psec', '')
+        )
         const passwordProtectedFolder = await clientService.webdav.getFileInfo(
           unref(personalSpace),
           {
