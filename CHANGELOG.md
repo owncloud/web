@@ -20,6 +20,8 @@ Summary
 * Enhancement - Add custom handler to file extensions: [#12109](https://github.com/owncloud/web/pull/12109)
 * Enhancement - Add password protected folders app: [#12137](https://github.com/owncloud/web/pull/12137)
 * Enhancement - Password protected folder permissions: [#12141](https://github.com/owncloud/web/pull/12141)
+* Enhancement - Add password protected folders handler: [#12142](https://github.com/owncloud/web/pull/12142)
+* Enhancement - Control more elements visibility via URL query: [#12142](https://github.com/owncloud/web/pull/12142)
 
 Details
 -------
@@ -123,6 +125,27 @@ Details
 
    https://github.com/owncloud/web/issues/12039
    https://github.com/owncloud/web/pull/12141
+
+* Enhancement - Add password protected folders handler: [#12142](https://github.com/owncloud/web/pull/12142)
+
+   We've added a new file action used to handle password protected folders. When a
+   password protected folder is opened, a popup is opened prompting the user to
+   enter the password. After successfully entering the password, content of the
+   folder is displayed inside of the popup.
+
+   https://github.com/owncloud/web/issues/12039
+   https://github.com/owncloud/web/pull/12142
+
+* Enhancement - Control more elements visibility via URL query: [#12142](https://github.com/owncloud/web/pull/12142)
+
+   We've added new params into the URL query that allows configuring elements
+   visibility. The following params can be used:
+
+   - `hide-app-switcher`: hides the application switcher in the top bar -
+   `hide-account-menu`: hides the feedback action, notifications bell, and user
+   menu - `hide-navigation`: hides the navigation sidebar and mobile navigation
+
+   https://github.com/owncloud/web/pull/12142
 
 Changelog for ownCloud Web [11.1.1] (2025-01-22)
 =======================================
