@@ -70,10 +70,10 @@
             <slot name="image" :resource="resource" />
           </template>
           <template #indicators>
-            <oc-status-indicators
-              v-if="getIndicators(resource).length"
+            <resource-status-indicators
+              :space="space"
               :resource="resource"
-              :indicators="getIndicators(resource)"
+              :filter="(indicator) => indicator.category === 'system'"
               :disable-handler="!isSpaceResource(resource) && isResourceDisabled(resource)"
             />
           </template>
@@ -159,13 +159,19 @@ import {
   routeToContextQuery,
   useRouter
 } from '../../composables'
+import ResourceStatusIndicators from './ResourceStatusIndicators.vue'
 
 type ResourceTileRef = ComponentPublicInstance<typeof ResourceTile>
 type ContextMenuQuickActionRef = ComponentPublicInstance<typeof ContextMenuQuickAction>
 
 export default defineComponent({
   name: 'ResourceTiles',
-  components: { ContextMenuQuickAction, ResourceGhostElement, ResourceTile },
+  components: {
+    ContextMenuQuickAction,
+    ResourceGhostElement,
+    ResourceStatusIndicators,
+    ResourceTile
+  },
   props: {
     /**
      * Array of resources (spaces, folders, files) to be displayed as tiles
@@ -524,10 +530,6 @@ export default defineComponent({
       context.emit('fileDropped', resource.id)
     }
 
-    const getIndicators = (resource: Resource) => {
-      return resource.indicators.filter((indicator) => indicator.category === 'system')
-    }
-
     const viewWidth = ref(0)
     const updateViewWidth = () => {
       const element = document.getElementById('tiles-view')
@@ -620,7 +622,6 @@ export default defineComponent({
       fileDropped,
       setDropStyling,
       ghostTilesCount,
-      getIndicators,
       isFilePicker,
       isLocationPicker,
       isResourceDisabled,

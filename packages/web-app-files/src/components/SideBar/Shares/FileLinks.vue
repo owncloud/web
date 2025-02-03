@@ -296,15 +296,13 @@ export default defineComponent({
         confirmText: this.$gettext('Delete'),
         onConfirm: async () => {
           let lastLinkId = this.linkShares.length === 1 ? this.linkShares[0].id : undefined
-          const loadIndicators = this.linkShares.filter((l) => !l.indirect).length === 1
 
           try {
             await this.deleteLink({
               clientService: this.clientService,
               space: this.space,
               resource: this.resource,
-              linkShare: link,
-              loadIndicators
+              linkShare: link
             })
 
             this.showMessage({ title: this.$gettext('Link was deleted successfully') })

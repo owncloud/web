@@ -4,8 +4,7 @@ import {
   extractDomSelector,
   extractExtensionFromFile,
   extractNodeId,
-  Resource,
-  ResourceIndicator
+  Resource
 } from '../resource'
 import {
   isPersonalSpaceResource,
@@ -188,7 +187,6 @@ export function buildSpace(
     isFolder: true,
     mdate: data.lastModifiedDateTime,
     size: data.quota?.used,
-    indicators: [] as ResourceIndicator[],
     tags: [] as string[],
     permissions: '',
     starred: false,

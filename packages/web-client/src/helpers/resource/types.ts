@@ -69,7 +69,6 @@ export interface Resource {
   mimeType?: string
   isFolder?: boolean
   mdate?: string
-  indicators?: ResourceIndicator[]
   size?: number | string // FIXME
   permissions?: string
   starred?: boolean

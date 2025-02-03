@@ -7,8 +7,6 @@ import { useGettext } from 'vue3-gettext'
 import { resolveFileNameDuplicate } from '../../../helpers/resource'
 import { join } from 'path'
 import { WebDAV } from '@ownclouders/web-client/webdav'
-import { isLocationSpacesActive } from '../../../router'
-import { getIndicators } from '../../../helpers'
 import { EDITOR_MODE_CREATE, useFileActions } from './useFileActions'
 import {
   useMessages,
@@ -71,22 +69,7 @@ export const useFileActionsCreateNewFile = ({ space }: { space?: Ref<SpaceResour
     return null
   }
 
-  const loadIndicatorsForNewFile = computed(() => {
-    return (
-      isLocationSpacesActive(router, 'files-spaces-generic') && unref(space).driveType !== 'share'
-    )
-  })
-
   const openFile = (resource: Resource, appFileExtension: ApplicationFileExtension) => {
-    if (loadIndicatorsForNewFile.value) {
-      resource.indicators = getIndicators({
-        space: unref(space),
-        resource,
-        ancestorMetaData: unref(ancestorMetaData),
-        user: userStore.user
-      })
-    }
-
     resourcesStore.upsertResource(resource)
 
     return openEditor(appFileExtension, unref(space), resource, EDITOR_MODE_CREATE)

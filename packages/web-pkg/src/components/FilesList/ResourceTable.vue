@@ -161,10 +161,9 @@
       />
     </template>
     <template #indicators="{ item }">
-      <oc-status-indicators
-        v-if="item.indicators.length"
+      <resource-status-indicators
+        :space="space"
         :resource="item"
-        :indicators="item.indicators"
         :disable-handler="isResourceDisabled(item)"
       />
     </template>
@@ -315,6 +314,7 @@ import { storeToRefs } from 'pinia'
 import { OcButton, OcTable } from '@ownclouders/design-system/components'
 import { FieldType } from '@ownclouders/design-system/helpers'
 import { OcSpinner } from '@ownclouders/design-system/components'
+import ResourceStatusIndicators from './ResourceStatusIndicators.vue'
 
 const TAGS_MINIMUM_SCREEN_WIDTH = 850
 
@@ -325,8 +325,9 @@ export default defineComponent({
     ResourceGhostElement,
     ResourceListItem,
     ResourceSize,
-    OcTable,
-    OcSpinner
+    ResourceStatusIndicators,
+    OcSpinner,
+    OcTable
   },
   props: {
     /**
@@ -868,6 +869,10 @@ export default defineComponent({
           .filter((field) => {
             if (field.name === 'tags' && !this.hasTags) {
               return false
+            }
+
+            if (field.name === 'indicators') {
+              return true
             }
 
             let hasField: boolean

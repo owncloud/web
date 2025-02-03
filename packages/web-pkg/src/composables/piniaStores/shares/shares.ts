@@ -152,7 +152,6 @@ export const useSharesStore = defineStore('shares', () => {
 
     addCollaboratorShares([share])
     updateFileShareTypes(resource.id)
-    resourcesStore.loadIndicators(space, resource.id)
     return share
   }
 
@@ -186,8 +185,7 @@ export const useSharesStore = defineStore('shares', () => {
     clientService,
     space,
     resource,
-    collaboratorShare,
-    loadIndicators = false
+    collaboratorShare
   }: DeleteShareOptions) => {
     const client = clientService.graphAuthenticated.permissions
 
@@ -195,9 +193,6 @@ export const useSharesStore = defineStore('shares', () => {
 
     removeCollaboratorShare(collaboratorShare)
     updateFileShareTypes(resource.id)
-    if (loadIndicators) {
-      resourcesStore.loadIndicators(space, resource.id)
-    }
   }
 
   const addLink = async ({ clientService, space, resource, options }: AddLinkOptions) => {
@@ -227,7 +222,6 @@ export const useSharesStore = defineStore('shares', () => {
       }
     }
 
-    resourcesStore.loadIndicators(space, resource.id)
     return link
   }
 
@@ -267,21 +261,12 @@ export const useSharesStore = defineStore('shares', () => {
     return link
   }
 
-  const deleteLink = async ({
-    clientService,
-    space,
-    resource,
-    linkShare,
-    loadIndicators = false
-  }: DeleteLinkOptions) => {
+  const deleteLink = async ({ clientService, space, resource, linkShare }: DeleteLinkOptions) => {
     const client = clientService.graphAuthenticated.permissions
     await client.deletePermission(space.id, resource.id, linkShare.id)
 
     removeLinkShare(linkShare)
     updateFileShareTypes(resource.id)
-    if (loadIndicators) {
-      resourcesStore.loadIndicators(space, resource.id)
-    }
   }
 
   return {

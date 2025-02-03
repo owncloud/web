@@ -107,7 +107,6 @@ export const useFileActionsPaste = () => {
       }
 
       resourcesStore.upsertResources(fetchedResources)
-      resourcesStore.loadIndicators(targetSpace, unref(currentFolder).id)
     })
   }
 

@@ -3,12 +3,7 @@ import {
   buildOutgoingShareResource,
   ShareTypes
 } from '@ownclouders/web-client'
-import {
-  eventBus,
-  getIndicators,
-  isLocationSharesActive,
-  isLocationSpacesActive
-} from '@ownclouders/web-pkg'
+import { eventBus, isLocationSharesActive, isLocationSpacesActive } from '@ownclouders/web-pkg'
 import { SSEEventOptions } from './types'
 import { isItemInCurrentFolder } from './helpers'
 
@@ -150,16 +145,6 @@ export const onSSEShareCreatedEvent = async ({
     })
 
     resourcesStore.upsertResource(resource)
-    return resourcesStore.updateResourceField({
-      id: resource.id,
-      field: 'indicators',
-      value: getIndicators({
-        space,
-        resource,
-        ancestorMetaData: resourcesStore.ancestorMetaData,
-        user: userStore.user
-      })
-    })
   }
 
   if (isLocationSharesActive(router, 'files-shares-with-me')) {
@@ -277,16 +262,6 @@ export const onSSEShareRemovedEvent = async ({
     })
 
     resourcesStore.upsertResource(resource)
-    return resourcesStore.updateResourceField({
-      id: resource.id,
-      field: 'indicators',
-      value: getIndicators({
-        space,
-        resource,
-        ancestorMetaData: resourcesStore.ancestorMetaData,
-        user: userStore.user
-      })
-    })
   }
 
   if (isLocationSharesActive(router, 'files-shares-with-others')) {
@@ -349,16 +324,6 @@ export const onSSELinkCreatedEvent = async ({
     })
 
     resourcesStore.upsertResource(resource)
-    return resourcesStore.updateResourceField({
-      id: resource.id,
-      field: 'indicators',
-      value: getIndicators({
-        space,
-        resource,
-        ancestorMetaData: resourcesStore.ancestorMetaData,
-        user: userStore.user
-      })
-    })
   }
 
   if (isLocationSharesActive(router, 'files-shares-via-link')) {
@@ -415,16 +380,6 @@ export const onSSELinkRemovedEvent = async ({
     })
   ) {
     resourcesStore.upsertResource(resource)
-    resourcesStore.updateResourceField({
-      id: resource.id,
-      field: 'indicators',
-      value: getIndicators({
-        space,
-        resource,
-        ancestorMetaData: resourcesStore.ancestorMetaData,
-        user: userStore.user
-      })
-    })
   }
 
   if (isLocationSharesActive(router, 'files-shares-via-link')) {
