@@ -22,6 +22,9 @@ Summary
 * Enhancement - Password protected folder permissions: [#12141](https://github.com/owncloud/web/pull/12141)
 * Enhancement - Add password protected folders handler: [#12142](https://github.com/owncloud/web/pull/12142)
 * Enhancement - Control more elements visibility via URL query: [#12142](https://github.com/owncloud/web/pull/12142)
+* Enhancement - Display default actions in context menu: [#12145](https://github.com/owncloud/web/pull/12145)
+* Enhancement - Hide password protected folders action: [#12145](https://github.com/owncloud/web/pull/12145)
+* Enhancement - Hide password protected folders extension: [#12145](https://github.com/owncloud/web/pull/12145)
 
 Details
 -------
@@ -146,6 +149,28 @@ Details
    menu - `hide-navigation`: hides the navigation sidebar and mobile navigation
 
    https://github.com/owncloud/web/pull/12142
+
+* Enhancement - Display default actions in context menu: [#12145](https://github.com/owncloud/web/pull/12145)
+
+   We've added default actions into the context menu so that the user can use that
+   action when accessing the resource through it.
+
+   https://github.com/owncloud/web/issues/12039
+   https://github.com/owncloud/web/pull/12145
+
+* Enhancement - Hide password protected folders action: [#12145](https://github.com/owncloud/web/pull/12145)
+
+   We've hidden all actions on password protected folders except delete.
+
+   https://github.com/owncloud/web/issues/12039
+   https://github.com/owncloud/web/pull/12145
+
+* Enhancement - Hide password protected folders extension: [#12145](https://github.com/owncloud/web/pull/12145)
+
+   We've hidden the password protected folder ".psec" extension.
+
+   https://github.com/owncloud/web/issues/12039
+   https://github.com/owncloud/web/pull/12145
 
 Changelog for ownCloud Web [11.1.1] (2025-01-22)
 =======================================
