@@ -286,6 +286,7 @@ export const useFileActions = () => {
   return {
     editorActions,
     systemActions,
+    defaultActions,
     getDefaultAction,
     getAllAvailableActions,
     getEditorRouteOpts,

@@ -44,7 +44,9 @@
           :type="resource.type"
           :full-path="resource.path"
           :is-path-displayed="isPathDisplayed"
-          :is-extension-displayed="isExtensionDisplayed"
+          :is-extension-displayed="
+            isExtensionDisplayed && !HIDDEN_EXTENSIONS.includes(resource.extension)
+          "
         />
       </resource-link>
       <div class="oc-resource-indicators">
@@ -69,7 +71,7 @@ import ResourceIcon from './ResourceIcon.vue'
 import ResourceLink from './ResourceLink.vue'
 import ResourceName from './ResourceName.vue'
 import { RouteLocationRaw } from 'vue-router'
-
+import { HIDDEN_FILE_EXTENSIONS } from '../../constants'
 /**
  * Displays a resource together with the resource type icon or thumbnail
  */
@@ -166,6 +168,11 @@ export default defineComponent({
     }
   },
   emits: ['click'],
+
+  setup() {
+    return { HIDDEN_EXTENSIONS: HIDDEN_FILE_EXTENSIONS }
+  },
+
   computed: {
     parentFolderComponentType() {
       return this.parentFolderLink ? 'router-link' : 'span'
