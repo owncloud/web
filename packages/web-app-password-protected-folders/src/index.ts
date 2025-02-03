@@ -1,6 +1,9 @@
 import { useGettext } from 'vue3-gettext'
 import translations from '../l10n/translations.json'
-import { defineWebApplication } from '@ownclouders/web-pkg'
+import {
+  defineWebApplication,
+  PASSWORD_PROTECTED_FOLDER_FILE_EXTENSION
+} from '@ownclouders/web-pkg'
 import { useExtensions } from './composables/useExtensions'
 import { useCustomHandler } from './composables/useCustomHandler'
 
@@ -17,7 +20,7 @@ export default defineWebApplication({
         extensions: [
           {
             newFileMenu: { menuTitle: () => $gettext('Password Protected Folder') },
-            extension: 'psec',
+            extension: PASSWORD_PROTECTED_FOLDER_FILE_EXTENSION,
             customHandler
           }
         ]
