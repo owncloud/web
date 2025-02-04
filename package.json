@@ -115,13 +115,6 @@
       "@uppy/webdav": "https://github.com/owncloud/uppy/releases/download/v3.12.13-owncloud/uppy-webdav.tgz",
       "@uppy/xhr-upload": "https://github.com/owncloud/uppy/releases/download/v3.12.13-owncloud/uppy-xhr-upload.tgz"
     },
-    "packageExtensions": {
-      "@toast-ui/editor": {
-        "dependencies": {
-          "prosemirror-transform": "1.8.0"
-        }
-      }
-    },
     "patchedDependencies": {
       "caf@15.0.1": "patches/caf@15.0.1.patch",
       "vue3-gettext@2.4.0": "patches/vue3-gettext@2.4.0.patch",
