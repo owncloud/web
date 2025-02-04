@@ -41,7 +41,6 @@ Feature: Accessibility
 
     When "Alice" selects the folder option within the new context menu
     Then "Alice" should not encounter any automatically detectable accessibility issues concerning the create new folder popup
-    # checking only one option of this menu because all modal use the same template
     And "Alice" cancels creating a new folder
 
     When "Alice" selects upload

@@ -1,7 +1,5 @@
-import { Page, expect } from '@playwright/test'
+import { Page } from '@playwright/test'
 import AxeBuilder from '@axe-core/playwright'
-import util from 'util'
-import { config } from '../../../config'
 
 const selectors = {
   loginBackground: '.oc-login-bg',
@@ -15,7 +13,7 @@ const selectors = {
   resourceTableEditName: '.resource-table-edit-name',
   resourceIconLink: '.oc-resource-icon-link',
   resourceTableCondensed: '.resource-table-condensed',
-  filesSpaceTableCondensed: '#files-space-table.condensed',
+  filesSpaceTableCondensed: '.condensed.files-table', //'#files-space-table .condensed',
   resourceTiles: '.resource-tiles',
   tilesControls: '.oc-tiles-controls',
   tilesView: '#tiles-view',
@@ -30,21 +28,81 @@ const selectors = {
   newResourceContextMenu: '.files-app-bar-actions .tippy-content',
   newFolderBtn: '#new-folder-btn',
   ocModal: '.oc-modal',
+  ocModalCancel: '.oc-modal-body-actions-cancel',
+  uploadMenuBtn: '#upload-menu-btn',
   uploadContextMenu: '.files-app-bar-actions .tippy-content',
   appbarBatchActions: '#oc-appbar-batch-actions',
+  filesSpaceTableCheckbox: '#files-space-table .oc-checkbox'
 }
 
-export const checkAccessibilityConformity = async (args: { page: Page; include: string; exclude?: string | string[] }): Promise<boolean> => {
+export const checkAccessibilityConformity = async (args: {
+  page: Page
+  include: string
+}): Promise<boolean> => {
+  const { page, include } = args
+
+  //console.log('scope: ' + include)
+
+  await page.waitForTimeout(2000)
+  const a11yResult = await new AxeBuilder({ page })
+    .withTags(['wcag2a', 'wcag2aa', 'wcag21a', 'wcag21aa', 'best-practice'])
+    // decide which tags should be included in the default configuration
+    .include(include)
+    .analyze()
+
+  if (JSON.stringify(a11yResult.violations) == JSON.stringify([])) {
+    return true
+  }
+
+  return false
+}
+
+export const checkAccessibilityConformityWithException = async (args: {
+  page: Page
+  include: string
+  exclude: string
+}): Promise<boolean> => {
   const { page, include, exclude } = args
 
-  const a11yResult = await new AxeBuilder({ page })
-      .withTags(['wcag2a', 'wcag2aa', 'wcag21a', 'wcag21aa', 'best-practice'])
-      // decide which tags should be included in the default configuration
-      .include(include)
-      .exclude(exclude)
-      .analyze()
+  //console.log('scope: ' + include)
+  //console.log('exceptions: ' + exclude)
 
-  if (JSON.stringify(a11yResult.violations) == JSON.stringify([])){
+  await page.waitForTimeout(2000)
+  const a11yResult = await new AxeBuilder({ page })
+    .withTags(['wcag2a', 'wcag2aa', 'wcag21a', 'wcag21aa', 'best-practice'])
+    // decide which tags should be included in the default configuration
+    .include(include)
+    .exclude(exclude)
+    .analyze()
+
+  if (JSON.stringify(a11yResult.violations) == JSON.stringify([])) {
+    return true
+  }
+
+  return false
+}
+
+export const checkAccessibilityConformityWith2Exceptions = async (args: {
+  page: Page
+  include: string
+  exclude: string
+  exclude2: string
+}): Promise<boolean> => {
+  const { page, include, exclude, exclude2 } = args
+
+  //console.log('scope: ' + include)
+  //console.log('exceptions: ' + exclude + ', ' + exclude2)
+
+  await page.waitForTimeout(2000)
+  const a11yResult = await new AxeBuilder({ page })
+    .withTags(['wcag2a', 'wcag2aa', 'wcag21a', 'wcag21aa', 'best-practice'])
+    // decide which tags should be included in the default configuration
+    .include(include)
+    .exclude(exclude)
+    .exclude(exclude2)
+    .analyze()
+
+  if (JSON.stringify(a11yResult.violations) == JSON.stringify([])) {
     return true
   }
 
@@ -121,22 +179,16 @@ export const selectFolderOptionWithinNew = async (args: { page: Page }): Promise
 
 export const cancelCreatingNewFolder = async (args: { page: Page }): Promise<void> => {
   const { page } = args
-  await page.locator('.oc-modal-body-actions-cancel').click()
+  await page.locator(selectors.ocModalCancel).click()
 }
-
-
-
-
-
-
 
 export const selectUpload = async (args: { page: Page }): Promise<void> => {
   const { page } = args
   // ensure files section is visible
   await page.locator(selectors.files).waitFor()
   // click on "upload" button
-  await page.locator('#upload-menu-btn').click()
-  await page.locator('.files-app-bar-actions .tippy-content').waitFor()
+  await page.locator(selectors.uploadMenuBtn).click()
+  await page.locator(selectors.uploadContextMenu).waitFor()
 }
 
 export const checkFileCheckbox = async (args: { page: Page }): Promise<void> => {
@@ -144,8 +196,8 @@ export const checkFileCheckbox = async (args: { page: Page }): Promise<void> => 
   // ensure files section is visible
   await page.locator(selectors.files).waitFor()
   // check checkbox of the first file in the list
-  await page.locator('#files-space-table .oc-checkbox').first().check()
-  await page.locator('#oc-appbar-batch-actions').waitFor()
+  await page.locator(selectors.filesSpaceTableCheckbox).first().check()
+  await page.locator(selectors.appbarBatchActions).waitFor()
 }
 
 export const uncheckFileCheckbox = async (args: { page: Page }): Promise<void> => {
@@ -153,10 +205,5 @@ export const uncheckFileCheckbox = async (args: { page: Page }): Promise<void> =
   // ensure files section is visible
   await page.locator(selectors.files).waitFor()
   // check checkbox of the first file in the list
-  await page.locator('#files-space-table .oc-checkbox').first().uncheck()
+  await page.locator(selectors.filesSpaceTableCheckbox).first().uncheck()
 }
-
-
-
-
-

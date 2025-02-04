@@ -8,8 +8,32 @@ export class Accessibility {
     this.#page = page
   }
 
-  async checkAccessibilityConformity(include: string, exclude: string | string[]): Promise<boolean> {
-    return await po.checkAccessibilityConformity({ page: this.#page , include, exclude })
+  async checkAccessibilityConformity(include: string): Promise<boolean> {
+    return await po.checkAccessibilityConformity({ page: this.#page, include })
+  }
+
+  async checkAccessibilityConformityWithException(
+    include: string,
+    exclude: string
+  ): Promise<boolean> {
+    return await po.checkAccessibilityConformityWithException({
+      page: this.#page,
+      include,
+      exclude
+    })
+  }
+
+  async checkAccessibilityConformityWith2Exceptions(
+    include: string,
+    exclude: string,
+    exclude2: string
+  ): Promise<boolean> {
+    return await po.checkAccessibilityConformityWith2Exceptions({
+      page: this.#page,
+      include,
+      exclude,
+      exclude2
+    })
   }
 
   switchToCondensedTableView(): Promise<void> {
@@ -47,7 +71,6 @@ export class Accessibility {
   cancelCreatingNewFolder(): Promise<void> {
     return po.cancelCreatingNewFolder({ page: this.#page })
   }
-
 
   selectUpload(): Promise<void> {
     return po.selectUpload({ page: this.#page })
