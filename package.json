@@ -96,13 +96,6 @@
     "node": "22.13.1"
   },
   "pnpm": {
-    "packageExtensions": {
-      "@toast-ui/editor": {
-        "dependencies": {
-          "prosemirror-transform": "1.8.0"
-        }
-      }
-    },
     "patchedDependencies": {
       "caf@15.0.1": "patches/caf@15.0.1.patch",
       "vue3-gettext@2.4.0": "patches/vue3-gettext@2.4.0.patch",
