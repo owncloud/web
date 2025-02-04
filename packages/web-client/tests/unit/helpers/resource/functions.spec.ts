@@ -151,4 +151,27 @@ describe('buildResource', () => {
       expect(resource.canEditTags()).toBeFalsy()
     }
   )
+
+  it('handles extraProps', () => {
+    const webDavResponse = mockDeep<WebDavResponseResource>({
+      props: {
+        'first-custom-prop': '1',
+
+        // WebDAV library removes the namespace in responses
+        'second-custom-prop': '2',
+
+        // make this explicit because of mockDeep
+        'non-existing-prop': undefined
+      }
+    })
+    const resource = buildResource(webDavResponse, [
+      'first-custom-prop',
+      'x:second-custom-prop',
+      'non-existing-prop'
+    ])
+
+    expect(resource.extraProps['first-custom-prop']).toBe('1')
+    expect(resource.extraProps['x:second-custom-prop']).toBe('2')
+    expect(resource.extraProps['non-existing-prop']).toBeUndefined()
+  })
 })

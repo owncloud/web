@@ -78,6 +78,7 @@ export interface Resource {
   privateLink?: string
   owner?: Identity
   extension?: string
+  extraProps?: Record<string, unknown>
 
   // necessary for incoming share resources and resources inside shares
   remoteItemId?: string

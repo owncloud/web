@@ -3,6 +3,10 @@ import { DavProperties, DavPropertyValue } from '../constants'
 
 const getNamespacedDavProps = (obj: Partial<Record<DavPropertyValue, unknown>>) => {
   return Object.keys(obj).reduce<Record<string, unknown>>((acc, val) => {
+    if (val.includes(':')) {
+      acc[val] = obj[val as DavPropertyValue] || ''
+      return acc
+    }
     const davNamespace = DavProperties.DavNamespace.includes(val as DavPropertyValue)
     acc[davNamespace ? `d:${val}` : `oc:${val}`] = obj[val as DavPropertyValue] || ''
     return acc

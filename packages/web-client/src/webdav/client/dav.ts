@@ -34,11 +34,13 @@ export class DAV {
   private client: WebDAVClient
   private davPath: string
   private headers: () => Headers
+  public extraProps: string[]
 
   constructor({ baseUrl, headers }: DAVOptions) {
     this.davPath = urlJoin(baseUrl, 'remote.php/dav')
     this.client = createClient(this.davPath, {})
     this.headers = headers
+    this.extraProps = []
   }
 
   public mkcol(path: string, opts: DAVRequestOptions = {}) {

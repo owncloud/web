@@ -37,7 +37,11 @@ export const webdav = (baseURI: string, headers?: () => Headers): WebDAV => {
   }
 
   const options = { axiosClient, baseUrl: baseURI, headers }
+
   const dav = new DAV({ baseUrl: baseURI, headers })
+  const registerExtraProp = (name: string) => {
+    dav.extraProps.push(name)
+  }
 
   const pathForFileIdFactory = GetPathForFileIdFactory(dav, options)
   const { getPathForFileId } = pathForFileIdFactory
@@ -91,6 +95,8 @@ export const webdav = (baseURI: string, headers?: () => Headers): WebDAV => {
     clearTrashBin,
     search,
     listFavoriteFiles,
-    setFavorite
+    setFavorite,
+
+    registerExtraProp
   }
 }

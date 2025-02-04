@@ -88,10 +88,10 @@ export const ListFilesFactory = (
               driveAlias: space.driveAlias,
               webDavPath: space.webDavPath
             }),
-            children: children.map(buildResource)
+            children: children.map((c) => buildResource(c, dav.extraProps))
           } as ListFilesResult
         }
-        const resources = webDavResources.map(buildResource)
+        const resources = webDavResources.map((r) => buildResource(r, dav.extraProps))
         return { resource: resources[0], children: resources.slice(1) } as ListFilesResult
       }
 
@@ -115,11 +115,13 @@ export const ListFilesFactory = (
         })
         if (isTrash) {
           return {
-            resource: buildResource(webDavResources[0]),
+            resource: buildResource(webDavResources[0], dav.extraProps),
             children: webDavResources.slice(1).map(buildDeletedResource)
           } as ListFilesResult
         }
-        const resources = webDavResources.map(buildResource)
+
+        const resources = webDavResources.map((r) => buildResource(r, dav.extraProps))
+
         const resourceIsSpace = fileId === space.id
         if (fileId && !resourceIsSpace && fileId !== resources[0].fileId) {
           return listFilesCorrectedPath()

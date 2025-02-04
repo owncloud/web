@@ -45,4 +45,10 @@ export interface WebDAV {
   search: ReturnType<typeof SearchFactory>['search']
   listFavoriteFiles: ReturnType<typeof ListFavoriteFilesFactory>['listFavoriteFiles']
   setFavorite: ReturnType<typeof SetFavoriteFactory>['setFavorite']
+
+  // register prop that will be added to resource.extraProps if available in a response
+  // because of a limitation in our WebDAV library, we cannot differentiate between
+  // the same tag in two different namespaces. Make sure to use unique tag names despite
+  // differing namespaces.
+  registerExtraProp(name: string)
 }
