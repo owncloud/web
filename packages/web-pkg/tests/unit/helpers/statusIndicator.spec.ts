@@ -3,9 +3,51 @@ import { Resource, SpaceResource } from '@ownclouders/web-client'
 import { getIndicators } from '../../../src/helpers/statusIndicators'
 import { User } from '@ownclouders/web-client/graph/generated'
 import { AncestorMetaDataValue } from '../../../src/types'
+import { ResourceIndicator } from '../../../src/helpers'
+import { createTestingPinia } from '@ownclouders/web-test-helpers'
+import {
+  ResourceIndicatorExtension,
+  useExtensionRegistry
+} from '../../../src/composables/piniaStores/extensionRegistry'
 
 describe('status indicators', () => {
   const user = mock<User>()
+
+  createTestingPinia()
+
+  describe('indicator extensions', () => {
+    it('should be requested from the extension registry', () => {
+      const space = mock<SpaceResource>({ driveType: 'project' })
+      const resource = mock<Resource>({ id: 'resource' })
+
+      const { requestExtensions } = useExtensionRegistry()
+      vi.mocked(requestExtensions<ResourceIndicatorExtension>).mockReturnValue([
+        {
+          id: 'test.files.resource-indicator.stub',
+          type: 'resourceIndicator',
+          extensionPointIds: ['global.files.resource-indicator'],
+          getResourceIndicators: (resource: Resource): ResourceIndicator[] => {
+            return [
+              {
+                id: 'some-id',
+                accessibleDescription: 'some accessible description',
+                label: 'some label',
+                icon: 'check_box_outline_blank',
+                fillType: 'line',
+                type: 'some-type',
+                category: 'system'
+              }
+            ]
+          }
+        } satisfies ResourceIndicatorExtension
+      ])
+
+      const indicators = getIndicators({ space, resource, ancestorMetaData: {}, user })
+
+      expect(requestExtensions).toHaveBeenCalled()
+      expect(indicators.some(({ id }) => id === 'some-id')).toBeTruthy()
+    })
+  })
 
   describe('locked indicator', () => {
     it.each([true, false])('should only be present if the file is locked', (locked) => {
