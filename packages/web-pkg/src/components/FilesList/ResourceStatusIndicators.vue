@@ -3,8 +3,8 @@
 </template>
 
 <script setup lang="ts">
-import { Resource, ResourceIndicator, SpaceResource } from '@ownclouders/web-client'
-import { getIndicators } from '../../helpers'
+import { Resource, SpaceResource } from '@ownclouders/web-client'
+import { ResourceIndicator, getIndicators } from '../../helpers'
 import { computed, useAttrs } from 'vue'
 import { useResourcesStore, useUserStore } from '../../composables/piniaStores'
 

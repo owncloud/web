@@ -5,7 +5,6 @@ import {
   IncomingShareResource,
   OutgoingShareResource,
   Resource,
-  ResourceIndicator,
   ShareTypes,
   SpaceResource
 } from '@ownclouders/web-client'
@@ -21,6 +20,7 @@ import { Identity } from '@ownclouders/web-client/graph/generated'
 import { describe } from 'vitest'
 import { useFileActionsRename } from '../../../../src/composables/actions/files'
 import { FileAction } from '../../../../src/composables/actions/types'
+import { ResourceIndicator } from '../../../../src/helpers/statusIndicators'
 
 const mockUseEmbedMode = vi.fn().mockReturnValue({
   isLocationPicker: computed(() => false),

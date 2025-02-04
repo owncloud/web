@@ -31,19 +31,6 @@ export type AbilitySubjects =
 export type Ability = MongoAbility<[AbilityActions, AbilitySubjects]>
 export type AbilityRule = SubjectRawRule<AbilityActions, AbilitySubjects, any>
 
-export type ResourceIndicatorCategory = 'system' | 'sharing'
-
-export interface ResourceIndicator {
-  id: string
-  accessibleDescription: string
-  label: string
-  icon: string
-  fillType: 'fill' | 'line' | 'none'
-  type: string
-  category: ResourceIndicatorCategory
-  handler?: (resource: Resource) => void
-}
-
 // FIXME: almost all of the properties are non-optional, the interface should reflect that
 export interface Resource {
   id: string

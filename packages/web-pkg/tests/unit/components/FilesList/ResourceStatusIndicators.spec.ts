@@ -1,8 +1,8 @@
 import { defaultPlugins, shallowMount } from '@ownclouders/web-test-helpers'
 import ResourceStatusIndicators from '../../../../src/components/FilesList/ResourceStatusIndicators.vue'
-import { Resource, ResourceIndicator, SpaceResource } from '@ownclouders/web-client'
+import { Resource, SpaceResource } from '@ownclouders/web-client'
 import { mock } from 'vitest-mock-extended'
-import { getIndicators } from '../../../../src/helpers/statusIndicators'
+import { getIndicators, ResourceIndicator } from '../../../../src/helpers/statusIndicators'
 import { OcStatusIndicators } from '@ownclouders/design-system/components'
 
 vi.mock('../../../../src/helpers/statusIndicators', async (importOriginal) => ({
