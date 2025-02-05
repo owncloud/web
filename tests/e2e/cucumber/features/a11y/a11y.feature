@@ -50,5 +50,3 @@ Feature: Accessibility
     When "Alice" selects a file by selecting the corresponding checkbox
     Then "Alice" should not encounter any automatically detectable accessibility issues concerning the file actions buttons for that file
     And "Alice" deselects the file
-
-    And "Alice" logs out
