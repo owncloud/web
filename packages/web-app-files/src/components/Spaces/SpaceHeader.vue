@@ -107,9 +107,9 @@ import {
   useClientService,
   ProcessorType,
   useResourcesStore,
-  TextEditor,
   useFileActions,
-  useLoadPreview
+  useLoadPreview,
+  TextEditor
 } from '@ownclouders/web-pkg'
 import { ImageDimension } from '@ownclouders/web-pkg'
 import SpaceContextActions from './SpaceContextActions.vue'
