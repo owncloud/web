@@ -107,7 +107,7 @@ Then(
   }
 )
 
-Then(
+Given(
   '{string} switches to the default table view',
   async function (this: World, stepUser: string): Promise<void> {
     const { page } = this.actorsEnvironment.getActor({ key: stepUser })

@@ -26,7 +26,7 @@ Feature: Accessibility
 
     When "Alice" switches to the tiles-view
     Then "Alice" should not encounter any automatically detectable accessibility issues concerning the files section in tiles view
-    And "Alice" switches to the default table view
+    Given "Alice" switches to the default table view
 
     When "Alice" selects the display options
     Then "Alice" should not encounter any automatically detectable accessibility issues concerning the display options menu
