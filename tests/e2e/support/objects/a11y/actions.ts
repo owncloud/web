@@ -35,6 +35,9 @@ const selectors = {
   filesSpaceTableCheckbox: '#files-space-table .oc-checkbox'
 }
 
+const a11yRuleTags = ['wcag2a', 'wcag2aa', 'wcag21a', 'wcag21aa', 'best-practice']
+// decide which tags should be included in the default configuration of axebuilder
+
 export const analyzeAccessibilityConformityViolations = async (args: {
   page: Page
   include: string
@@ -44,8 +47,7 @@ export const analyzeAccessibilityConformityViolations = async (args: {
   // await page.waitForTimeout(2000) // for testing only
 
   const a11yResult = await new AxeBuilder({ page })
-    .withTags(['wcag2a', 'wcag2aa', 'wcag21a', 'wcag21aa', 'best-practice'])
-    // decide which tags should be included in the default configuration of axebuilder
+    .withTags(a11yRuleTags)
     .include(include)
     .analyze()
 
@@ -62,8 +64,7 @@ export const analyzeAccessibilityConformityViolationsWithException = async (args
   // await page.waitForTimeout(2000) // for testing only
 
   const a11yResult = await new AxeBuilder({ page })
-    .withTags(['wcag2a', 'wcag2aa', 'wcag21a', 'wcag21aa', 'best-practice'])
-    // decide which tags should be included in the default configuration of axebuilder
+    .withTags(a11yRuleTags)
     .include(include)
     .exclude(exclude)
     .analyze()
@@ -82,8 +83,7 @@ export const analyzeAccessibilityConformityViolationsWith2Exceptions = async (ar
   // await page.waitForTimeout(2000) // for testing only
 
   const a11yResult = await new AxeBuilder({ page })
-    .withTags(['wcag2a', 'wcag2aa', 'wcag21a', 'wcag21aa', 'best-practice'])
-    // decide which tags should be included in the default configuration  of axebuilder
+    .withTags(a11yRuleTags)
     .include(include)
     .exclude(exclude)
     .exclude(exclude2)
