@@ -5,7 +5,6 @@ import {
   IncomingShareResource,
   OutgoingShareResource,
   Resource,
-  ResourceIndicator,
   ShareTypes,
   SpaceResource
 } from '@ownclouders/web-client'
@@ -21,6 +20,7 @@ import { Identity } from '@ownclouders/web-client/graph/generated'
 import { describe } from 'vitest'
 import { useFileActionsRename } from '../../../../src/composables/actions/files'
 import { FileAction } from '../../../../src/composables/actions/types'
+import { ResourceIndicator } from '../../../../src/helpers/statusIndicators'
 
 const mockUseEmbedMode = vi.fn().mockReturnValue({
   isLocationPicker: computed(() => false),
@@ -171,7 +171,6 @@ const resourcesWithAllFields = [
     driveId: 'documents',
     name: 'Documents',
     path: '/Documents',
-    indicators,
     isFolder: true,
     type: 'folder',
     size: '-1',
@@ -279,7 +278,6 @@ const processingResourcesWithAllFields = [
     name: 'personalnotes.txt',
     path: '/Documents/personalnotes.txt',
     extension: 'txt',
-    indicators,
     isFolder: false,
     type: 'file',
     size: 'big',

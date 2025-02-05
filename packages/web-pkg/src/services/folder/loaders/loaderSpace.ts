@@ -16,7 +16,7 @@ import { FolderLoaderOptions } from './types'
 import { DriveItem } from '@ownclouders/web-client/graph/generated'
 import { isLocationSpacesActive, isLocationPublicActive } from '../../../router'
 import { SharesStore, SpacesStore, useFileRouteReplace, UserStore } from '../../../composables'
-import { getIndicators, getSharedDriveItem } from '../../../helpers'
+import { getSharedDriveItem } from '../../../helpers'
 
 export class FolderLoaderSpace implements FolderLoader {
   public isEnabled(): boolean {
@@ -96,18 +96,6 @@ export class FolderLoaderSpace implements FolderLoader {
           client: webdav,
           signal: signal1
         })
-
-        if (options.loadShares) {
-          const ancestorMetaData = resourcesStore.ancestorMetaData
-          for (const file of resources) {
-            file.indicators = getIndicators({
-              space,
-              resource: file,
-              ancestorMetaData,
-              user: userStore.user
-            })
-          }
-        }
 
         if (isShareSpaceResource(space)) {
           // TODO: remove when server returns share id for federated shares in propfind response

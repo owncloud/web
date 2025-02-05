@@ -1,13 +1,7 @@
 import path, { basename, dirname } from 'path'
 import { urlJoin } from '../../utils'
 import { DavPermission, DavProperty } from '../../webdav/constants'
-import {
-  Resource,
-  ResourceIndicator,
-  SearchResource,
-  TrashResource,
-  WebDavResponseResource
-} from './types'
+import { Resource, SearchResource, TrashResource, WebDavResponseResource } from './types'
 import { camelCase } from 'lodash-es'
 import { HIDDEN_FILE_EXTENSIONS } from '@ownclouders/web-pkg/src/constants'
 
@@ -162,7 +156,6 @@ export function buildResource(
     size: isFolder
       ? resource.props[DavProperty.ContentSize]?.toString() || '0'
       : resource.props[DavProperty.ContentLength]?.toString() || '0',
-    indicators: [] as ResourceIndicator[],
     permissions: resource.props[DavProperty.Permissions] || '',
     starred: resource.props[DavProperty.IsFavorite] !== 0,
     etag: resource.props[DavProperty.ETag],
@@ -255,7 +248,6 @@ export function buildDeletedResource(resource: WebDavResponseResource): TrashRes
     path: urlJoin(resource.props[DavProperty.TrashbinOriginalLocation], { leadingSlash: true }),
     id,
     parentFolderId: resource.props[DavProperty.FileParent],
-    indicators: [],
     webDavPath: '',
     canUpload: () => false,
     canDownload: () => false,

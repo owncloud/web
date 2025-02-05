@@ -61,8 +61,12 @@ describe('status indicators', () => {
       const resource = mock<Resource>({ id: 'resource', shareTypes: [0, 3] })
       const indicators = getIndicators({ space, resource, ancestorMetaData: {}, user })
 
-      expect(indicators.some(({ type }) => type === 'link-direct')).toBeTruthy()
-      expect(indicators.some(({ type }) => type === 'user-direct')).toBeTruthy()
+      expect(
+        indicators.some(({ type, category }) => category === 'sharing' && 'link-direct')
+      ).toBeTruthy()
+      expect(
+        indicators.some(({ type, category }) => category === 'sharing' && 'user-direct')
+      ).toBeTruthy()
     })
     it('should be present for indirect collaborator and link shares', () => {
       const ancestorMetaData = {
@@ -73,8 +77,12 @@ describe('status indicators', () => {
       const resource = mock<Resource>({ id: 'resource', shareTypes: [] })
       const indicators = getIndicators({ space, resource, ancestorMetaData, user })
 
-      expect(indicators.some(({ type }) => type === 'link-indirect')).toBeTruthy()
-      expect(indicators.some(({ type }) => type === 'user-indirect')).toBeTruthy()
+      expect(
+        indicators.some(({ type, category }) => category === 'sharing' && type === 'link-indirect')
+      ).toBeTruthy()
+      expect(
+        indicators.some(({ type, category }) => category === 'sharing' && type === 'user-indirect')
+      ).toBeTruthy()
     })
   })
 })

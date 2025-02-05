@@ -1,4 +1,4 @@
-import { createFileRouteOptions, getIndicators, ImageDimension } from '@ownclouders/web-pkg'
+import { createFileRouteOptions, ImageDimension } from '@ownclouders/web-pkg'
 import { SSEEventOptions } from './types'
 import { isItemInCurrentFolder } from './helpers'
 
@@ -51,7 +51,6 @@ export const onSSEFileLockingEvent = async ({
   sseData,
   resourcesStore,
   spacesStore,
-  userStore,
   clientService
 }: SSEEventOptions) => {
   const resource = resourcesStore.resources.find((f) => f.id === sseData.itemid)
@@ -67,16 +66,6 @@ export const onSSEFileLockingEvent = async ({
   })
 
   resourcesStore.upsertResource(updatedResource)
-  resourcesStore.updateResourceField({
-    id: updatedResource.id,
-    field: 'indicators',
-    value: getIndicators({
-      space,
-      resource: updatedResource,
-      ancestorMetaData: resourcesStore.ancestorMetaData,
-      user: userStore.user
-    })
-  })
 }
 
 export const onSSEProcessingFinishedEvent = async ({
@@ -217,16 +206,6 @@ export const onSSEItemRestoredEvent = async ({
   }
 
   resourcesStore.upsertResource(resource)
-  resourcesStore.updateResourceField({
-    id: resource.id,
-    field: 'indicators',
-    value: getIndicators({
-      space,
-      resource,
-      ancestorMetaData: resourcesStore.ancestorMetaData,
-      user: userStore.user
-    })
-  })
 }
 
 export const onSSEItemMovedEvent = async ({
@@ -260,16 +239,6 @@ export const onSSEItemMovedEvent = async ({
   }
 
   resourcesStore.upsertResource(resource)
-  resourcesStore.updateResourceField({
-    id: resource.id,
-    field: 'indicators',
-    value: getIndicators({
-      resource,
-      space,
-      user: userStore.user,
-      ancestorMetaData: resourcesStore.ancestorMetaData
-    })
-  })
 }
 
 /**

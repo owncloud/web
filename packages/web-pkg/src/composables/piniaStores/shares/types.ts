@@ -23,7 +23,6 @@ export interface DeleteShareOptions {
   space: SpaceResource
   resource: Resource
   collaboratorShare: CollaboratorShare
-  loadIndicators?: boolean
 }
 
 export interface AddLinkOptions {
@@ -46,5 +45,4 @@ export interface DeleteLinkOptions {
   space: SpaceResource
   resource: Resource
   linkShare: LinkShare
-  loadIndicators?: boolean
 }

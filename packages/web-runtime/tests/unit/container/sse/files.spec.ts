@@ -201,7 +201,6 @@ describe('file events', () => {
       await onSSEItemRestoredEvent({ sseData, ...mocks })
       expect(mocks.clientService.webdav.getFileInfo).toHaveBeenCalled()
       expect(mocks.resourcesStore.upsertResource).toHaveBeenCalled()
-      expect(mocks.resourcesStore.updateResourceField).toHaveBeenCalled()
     })
     it('does not trigger any action when resource is not in current folder', async () => {
       const resourceToRestore = mock<Resource>({
@@ -256,7 +255,6 @@ describe('file events', () => {
       await onSSEItemMovedEvent({ sseData, ...mocks })
       expect(mocks.clientService.webdav.getFileInfo).toHaveBeenCalled()
       expect(mocks.resourcesStore.upsertResource).toHaveBeenCalled()
-      expect(mocks.resourcesStore.updateResourceField).toHaveBeenCalled()
       expect(mocks.resourcesStore.removeResources).not.toHaveBeenCalled()
     })
     it('calls "removeResource" when resource has been moved out of current folder', async () => {

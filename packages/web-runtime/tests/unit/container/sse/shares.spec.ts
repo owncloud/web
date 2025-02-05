@@ -202,7 +202,6 @@ describe('shares events', () => {
       await onSSEShareCreatedEvent({ sseData, ...mocks })
       expect(mocks.clientService.webdav.getFileInfo).toHaveBeenCalled()
       expect(mocks.resourcesStore.upsertResource).toHaveBeenCalled()
-      expect(mocks.resourcesStore.updateResourceField).toHaveBeenCalled()
       expect(
         mocks.clientService.graphAuthenticated.driveItems.listSharedWithMe
       ).not.toHaveBeenCalled()
@@ -394,7 +393,6 @@ describe('shares events', () => {
       await onSSEShareRemovedEvent({ sseData, ...mocks })
       expect(mocks.clientService.webdav.getFileInfo).toHaveBeenCalled()
       expect(mocks.resourcesStore.upsertResource).toHaveBeenCalled()
-      expect(mocks.resourcesStore.updateResourceField).toHaveBeenCalled()
       expect(mocks.messageStore.showMessage).not.toHaveBeenCalled()
       expect(mocks.resourcesStore.removeResources).not.toHaveBeenCalled()
     })
@@ -512,7 +510,6 @@ describe('shares events', () => {
       await onSSELinkCreatedEvent({ sseData, ...mocks })
       expect(mocks.clientService.webdav.getFileInfo).toHaveBeenCalled()
       expect(mocks.resourcesStore.upsertResource).toHaveBeenCalled()
-      expect(mocks.resourcesStore.updateResourceField).toHaveBeenCalled()
       expect(
         mocks.clientService.graphAuthenticated.driveItems.listSharedByMe
       ).not.toHaveBeenCalled()
@@ -584,7 +581,6 @@ describe('shares events', () => {
       await onSSELinkRemovedEvent({ sseData, ...mocks })
       expect(mocks.clientService.webdav.getFileInfo).toHaveBeenCalled()
       expect(mocks.resourcesStore.upsertResource).toHaveBeenCalled()
-      expect(mocks.resourcesStore.updateResourceField).toHaveBeenCalled()
       expect(mocks.resourcesStore.removeResources).not.toHaveBeenCalled()
     })
     it('calls "removeResources" when link share has been removed and current route equals "files-shares-via-link"', async () => {

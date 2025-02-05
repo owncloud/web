@@ -7,7 +7,7 @@ import {
   SpaceResource,
   type Resource
 } from '@ownclouders/web-client'
-import { getIndicators, getParentPaths } from '../../helpers'
+import { getParentPaths } from '../../helpers'
 import { AncestorMetaData, AncestorMetaDataValue } from '../../types'
 import { DavProperty, WebDAV } from '@ownclouders/web-client/webdav'
 import { useSpacesStore } from './spaces'
@@ -177,23 +177,6 @@ export const useResourcesStore = defineStore('resources', () => {
     window.localStorage.setItem('oc_webDavDetailsShown', value.toString())
   }
 
-  const loadIndicators = (space: SpaceResource, id: string) => {
-    const files = unref(resources).filter((f) => [f.id, f.parentFolderId].includes(id))
-    for (const resource of files) {
-      const indicators = getIndicators({
-        space,
-        resource,
-        ancestorMetaData: unref(ancestorMetaData),
-        user: userStore.user
-      })
-      if (!indicators.length && !resource.indicators.length) {
-        continue
-      }
-
-      updateResourceField({ id: resource.id, field: 'indicators', value: indicators })
-    }
-  }
-
   const setAncestorMetaData = (value: AncestorMetaData) => {
     ancestorMetaData.value = value
   }
@@ -359,8 +342,6 @@ export const useResourcesStore = defineStore('resources', () => {
     setAreHiddenFilesShown,
     setAreFileExtensionsShown,
     setAreWebDavDetailsShown,
-
-    loadIndicators,
 
     ancestorMetaData,
     setAncestorMetaData,

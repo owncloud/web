@@ -33,6 +33,7 @@ exports[`ResourceTiles component > renders an array of spaces correctly 1`] = `
             </div>
             <div class="oc-flex oc-flex-middle">
               <!-- Slot for indicators !-->
+              <!--v-if-->
               <!-- Slot for individual actions -->
               <!-- Slot for contextmenu --> <button type="button" aria-label="Show context menu" class="oc-button oc-rounded oc-button-m oc-button-justify-content-center oc-button-gap-m oc-button-passive oc-button-passive-raw resource-tiles-btn-action-dropdown" id="context-menu-trigger-1">
                 <!--v-if-->
@@ -63,6 +64,7 @@ exports[`ResourceTiles component > renders an array of spaces correctly 1`] = `
             </div>
             <div class="oc-flex oc-flex-middle">
               <!-- Slot for indicators !-->
+              <!--v-if-->
               <!-- Slot for individual actions -->
               <!-- Slot for contextmenu --> <button type="button" aria-label="Show context menu" class="oc-button oc-rounded oc-button-m oc-button-justify-content-center oc-button-gap-m oc-button-passive oc-button-passive-raw resource-tiles-btn-action-dropdown" id="context-menu-trigger-2">
                 <!--v-if-->

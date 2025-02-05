@@ -370,8 +370,7 @@ export default defineComponent({
             resource: this.resource,
             collaboratorShare: isSpaceResource(this.resource)
               ? this.getDeniedSpaceMember(share)
-              : this.getDeniedShare(share),
-            loadIndicators: false
+              : this.getDeniedShare(share)
           })
           this.showMessage({
             title: this.$gettext('Access was granted successfully')
@@ -395,15 +394,13 @@ export default defineComponent({
         hasInput: false,
         onConfirm: async () => {
           const lastShareId = this.collaborators.length === 1 ? this.collaborators[0].id : undefined
-          const loadIndicators = this.collaborators.filter((c) => !c.indirect).length === 1
 
           try {
             await this.deleteShare({
               clientService: this.$clientService,
               space: this.space,
               resource: this.resource,
-              collaboratorShare,
-              loadIndicators
+              collaboratorShare
             })
 
             this.showMessage({

@@ -1,32 +1,22 @@
 import { SpaceResource, isShareSpaceResource } from '@ownclouders/web-client'
 import { computed, nextTick, Ref, unref } from 'vue'
 import { useClientService } from '../../clientService'
-import { useRouter } from '../../router'
 import { FileAction } from '../types'
 import { useGettext } from 'vue3-gettext'
 import { resolveFileNameDuplicate } from '../../../helpers/resource'
 import { join } from 'path'
-import { isLocationSpacesActive } from '../../../router'
-import { getIndicators } from '../../../helpers/statusIndicators'
 import { useScrollTo } from '../../scrollTo'
-import {
-  useMessages,
-  useModals,
-  useResourcesStore,
-  useUserStore
-} from '../../../composables/piniaStores'
+import { useMessages, useModals, useResourcesStore } from '../../../composables/piniaStores'
 import { storeToRefs } from 'pinia'
 
 export const useFileActionsCreateNewFolder = ({ space }: { space?: Ref<SpaceResource> } = {}) => {
   const { showMessage, showErrorMessage } = useMessages()
-  const router = useRouter()
   const { dispatchModal } = useModals()
   const { $gettext } = useGettext()
   const { scrollToResource } = useScrollTo()
-  const userRoleStore = useUserStore()
 
   const resourcesStore = useResourcesStore()
-  const { resources, currentFolder, ancestorMetaData } = storeToRefs(resourcesStore)
+  const { resources, currentFolder } = storeToRefs(resourcesStore)
 
   const clientService = useClientService()
 
@@ -56,27 +46,12 @@ export const useFileActionsCreateNewFolder = ({ space }: { space?: Ref<SpaceReso
     return setError(null)
   }
 
-  const loadIndicatorsForNewFile = computed(() => {
-    return (
-      isLocationSpacesActive(router, 'files-spaces-generic') && unref(space).driveType !== 'share'
-    )
-  })
-
   const addNewFolder = async (folderName: string) => {
     folderName = folderName.trimEnd()
 
     try {
       const path = join(unref(currentFolder).path, folderName)
       const resource = await clientService.webdav.createFolder(unref(space), { path })
-
-      if (unref(loadIndicatorsForNewFile)) {
-        resource.indicators = getIndicators({
-          space: unref(space),
-          resource,
-          ancestorMetaData: unref(ancestorMetaData),
-          user: userRoleStore.user
-        })
-      }
 
       // FIXME: move to buildResource as soon as it has space context
       if (isShareSpaceResource(unref(space))) {
