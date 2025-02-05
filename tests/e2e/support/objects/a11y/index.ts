@@ -16,27 +16,14 @@ export class Accessibility {
     return await po.analyzeAccessibilityConformityViolations({ page: this.#page, include })
   }
 
-  async getAccessibilityConformityViolationsWithException(
+  async getAccessibilityConformityViolationsWithExclusions(
     include: string,
-    exclude: string
+    exclude: string | string[]
   ): Promise<any> {
-    return await po.analyzeAccessibilityConformityViolationsWithException({
+    return await po.analyzeAccessibilityConformityViolationsWithExclusions({
       page: this.#page,
       include,
       exclude
-    })
-  }
-
-  async getAccessibilityConformityViolationsWith2Exceptions(
-    include: string,
-    exclude: string,
-    exclude2: string
-  ): Promise<any> {
-    return await po.analyzeAccessibilityConformityViolationsWith2Exceptions({
-      page: this.#page,
-      include,
-      exclude,
-      exclude2
     })
   }
 

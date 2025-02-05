@@ -11,10 +11,9 @@ Then(
     const { page } = this.actorsEnvironment.getActor({ key: stepUser })
 
     const a11yObject = new objects.a11y.Accessibility({ page })
-    const a11yViolations = await a11yObject.getAccessibilityConformityViolationsWith2Exceptions(
+    const a11yViolations = await a11yObject.getAccessibilityConformityViolationsWithExclusions(
       a11yObject.getSelectors().files,
-      a11yObject.getSelectors().resourceTableEditName,
-      a11yObject.getSelectors().resourceIconLink
+      [a11yObject.getSelectors().resourceTableEditName, a11yObject.getSelectors().resourceIconLink]
     )
 
     // excluded for known accessibility issues
@@ -41,10 +40,9 @@ Then(
     const { page } = this.actorsEnvironment.getActor({ key: stepUser })
 
     const a11yObject = new objects.a11y.Accessibility({ page })
-    const a11yViolations = await a11yObject.getAccessibilityConformityViolationsWith2Exceptions(
+    const a11yViolations = await a11yObject.getAccessibilityConformityViolationsWithExclusions(
       a11yObject.getSelectors().filesSpaceTable,
-      a11yObject.getSelectors().resourceTableEditName,
-      a11yObject.getSelectors().resourceIconLink
+      [a11yObject.getSelectors().resourceTableEditName, a11yObject.getSelectors().resourceIconLink]
     )
 
     // excluded for known accessibility issues
@@ -61,7 +59,7 @@ Then(
     const { page } = this.actorsEnvironment.getActor({ key: stepUser })
 
     const a11yObject = new objects.a11y.Accessibility({ page })
-    const a11yViolations = await a11yObject.getAccessibilityConformityViolationsWithException(
+    const a11yViolations = await a11yObject.getAccessibilityConformityViolationsWithExclusions(
       a11yObject.getSelectors().tilesView,
       a11yObject.getSelectors().cardMediaTop
     )

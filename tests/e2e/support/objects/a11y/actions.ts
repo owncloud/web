@@ -44,8 +44,6 @@ export const analyzeAccessibilityConformityViolations = async (args: {
 }): Promise<any> => {
   const { page, include } = args
 
-  // await page.waitForTimeout(2000) // for testing only
-
   const a11yResult = await new AxeBuilder({ page })
     .withTags(a11yRuleTags)
     .include(include)
@@ -54,40 +52,29 @@ export const analyzeAccessibilityConformityViolations = async (args: {
   return a11yResult.violations
 }
 
-export const analyzeAccessibilityConformityViolationsWithException = async (args: {
+export const analyzeAccessibilityConformityViolationsWithExclusions = async (args: {
   page: Page
   include: string
-  exclude: string
+  exclude: string | string[]
 }): Promise<any> => {
-  const { page, include, exclude } = args
+  const { page, include, exclude } =
+   args
 
-  // await page.waitForTimeout(2000) // for testing only
-
-  const a11yResult = await new AxeBuilder({ page })
+  const axeBuilder = new AxeBuilder({ page })
     .withTags(a11yRuleTags)
     .include(include)
-    .exclude(exclude)
-    .analyze()
 
-  return a11yResult.violations
-}
+  if(typeof exclude == "string") {
+    // excluding single selector
+    axeBuilder.exclude(exclude)
+  } else {
+    // excluding multiple selectors
+    for(let e in exclude){
+      axeBuilder.exclude(exclude[e])      
+    }
+  }
 
-export const analyzeAccessibilityConformityViolationsWith2Exceptions = async (args: {
-  page: Page
-  include: string
-  exclude: string
-  exclude2: string
-}): Promise<any> => {
-  const { page, include, exclude, exclude2 } = args
-
-  // await page.waitForTimeout(2000) // for testing only
-
-  const a11yResult = await new AxeBuilder({ page })
-    .withTags(a11yRuleTags)
-    .include(include)
-    .exclude(exclude)
-    .exclude(exclude2)
-    .analyze()
+  const a11yResult = await axeBuilder.analyze()
 
   return a11yResult.violations
 }
