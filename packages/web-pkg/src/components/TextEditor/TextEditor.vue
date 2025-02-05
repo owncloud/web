@@ -62,7 +62,8 @@ export default defineComponent({
 
     const isMarkdown = computed(() => {
       return (
-        ['md', 'markdown'].includes(props.resource?.extension) || !unref(editorConfig).showPreviewOnlyMd
+        ['md', 'markdown'].includes(props.resource?.extension) ||
+        !unref(editorConfig).showPreviewOnlyMd
       )
     })
 
