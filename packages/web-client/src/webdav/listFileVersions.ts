@@ -11,7 +11,7 @@ export const ListFileVersionsFactory = (dav: DAV, options: WebDavOptions) => {
         urlJoin('meta', id, 'v', { leadingSlash: true }),
         opts
       )
-      return versions.map(buildResource)
+      return versions.map((v) => buildResource(v, dav.extraProps))
     }
   }
 }

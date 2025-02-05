@@ -34,11 +34,13 @@ export class DAV {
   private client: WebDAVClient
   private davPath: string
   private headers: () => Headers
+  public extraProps: string[]
 
   constructor({ baseUrl, headers }: DAVOptions) {
     this.davPath = urlJoin(baseUrl, 'remote.php/dav')
     this.client = createClient(this.davPath, {})
     this.headers = headers
+    this.extraProps = []
   }
 
   public mkcol(path: string, opts: DAVRequestOptions = {}) {
@@ -57,7 +59,7 @@ export class DAV {
     const requestHeaders = { ...headers, Depth: depth.toString() }
     const { body, result } = await this.request(path, {
       method: DavMethod.propfind,
-      data: buildPropFindBody(properties),
+      data: buildPropFindBody(properties, { extraProps: this.extraProps }),
       headers: requestHeaders,
       ...opts
     })
@@ -87,7 +89,12 @@ export class DAV {
   ) {
     const { body, result } = await this.request(path, {
       method: DavMethod.report,
-      data: buildPropFindBody(properties, { pattern, filterRules, limit }),
+      data: buildPropFindBody(properties, {
+        pattern,
+        filterRules,
+        limit,
+        extraProps: this.extraProps
+      }),
       ...opts
     })
 

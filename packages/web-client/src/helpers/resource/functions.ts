@@ -93,7 +93,10 @@ const convertObjectToCamelCaseKeys = (data: Record<string, any>) => {
   return converted
 }
 
-export function buildResource(resource: WebDavResponseResource): Resource {
+export function buildResource(
+  resource: WebDavResponseResource,
+  extraPropNames: string[] = []
+): Resource {
   const name = resource.props[DavProperty.Name]?.toString() || basename(resource.filename)
   const id = resource.props[DavProperty.FileId]
 
@@ -126,6 +129,16 @@ export function buildResource(resource: WebDavResponseResource): Resource {
     shareTypes = resource.props[DavProperty.ShareTypes]['share-type']
     if (!Array.isArray(shareTypes)) {
       shareTypes = [shareTypes]
+    }
+  }
+
+  const extraProps: Record<string, unknown> = {}
+  for (const name of extraPropNames || []) {
+    // only use the tag name, the namespace is ignored by our WebDav library
+    // https://github.com/perry-mitchell/webdav-client/issues/210
+    const extraPropName = name.split(':').pop()
+    if (resource.props[extraPropName]) {
+      extraProps[name] = resource.props[extraPropName]
     }
   }
 
@@ -167,6 +180,7 @@ export function buildResource(resource: WebDavResponseResource): Resource {
     location: convertObjectToCamelCaseKeys(resource.props[DavProperty.Location]),
     image: convertObjectToCamelCaseKeys(resource.props[DavProperty.Image]),
     photo: convertObjectToCamelCaseKeys(resource.props[DavProperty.Photo]),
+    extraProps,
     canUpload: function () {
       return this.permissions.indexOf(DavPermission.FolderCreateable) >= 0
     },
