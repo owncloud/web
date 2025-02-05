@@ -3,7 +3,7 @@ import { defineComponent, nextTick } from 'vue'
 import { createRouter as _createRouter, createMemoryHistory, RouterOptions } from 'vue-router'
 import { defaultPlugins, DefaultPluginsOptions } from './defaultPlugins'
 
-export { mount, shallowMount } from '@vue/test-utils'
+export { mount, shallowMount, flushPromises } from '@vue/test-utils'
 
 vi.spyOn(console, 'warn').mockImplementation(() => undefined)
 

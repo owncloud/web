@@ -8,22 +8,24 @@
     </div>
     <div>
       <table class="details-table" :aria-label="detailsTableLabel" role="presentation">
-        <tr data-testid="filesCount">
-          <th scope="col" class="oc-pr-s oc-font-semibold" v-text="filesText" />
-          <td v-text="filesCount" />
-        </tr>
-        <tr data-testid="foldersCount">
-          <th scope="col" class="oc-pr-s oc-font-semibold" v-text="foldersText" />
-          <td v-text="foldersCount" />
-        </tr>
-        <tr v-if="showSpaceCount" data-testid="spacesCount">
-          <th scope="col" class="oc-pr-s oc-font-semibold" v-text="spacesText" />
-          <td v-text="spacesCount" />
-        </tr>
-        <tr v-if="hasSize" data-testid="size">
-          <th scope="col" class="oc-pr-s oc-font-semibold" v-text="sizeText" />
-          <td v-text="sizeValue" />
-        </tr>
+        <tbody>
+          <tr data-testid="filesCount">
+            <th scope="col" class="oc-pr-s oc-font-semibold" v-text="filesText" />
+            <td v-text="filesCount" />
+          </tr>
+          <tr data-testid="foldersCount">
+            <th scope="col" class="oc-pr-s oc-font-semibold" v-text="foldersText" />
+            <td v-text="foldersCount" />
+          </tr>
+          <tr v-if="showSpaceCount" data-testid="spacesCount">
+            <th scope="col" class="oc-pr-s oc-font-semibold" v-text="spacesText" />
+            <td v-text="spacesCount" />
+          </tr>
+          <tr v-if="hasSize" data-testid="size">
+            <th scope="col" class="oc-pr-s oc-font-semibold" v-text="sizeText" />
+            <td v-text="sizeValue" />
+          </tr>
+        </tbody>
       </table>
     </div>
   </div>

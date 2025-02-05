@@ -25,8 +25,8 @@
   </div>
 </template>
 
-<script lang="ts">
-import { computed, defineComponent, unref, PropType } from 'vue'
+<script lang="ts" setup>
+import { computed, unref } from 'vue'
 import { Resource } from '@ownclouders/web-client'
 import dompurify from 'dompurify'
 
@@ -39,56 +39,49 @@ import { useGettext } from 'vue3-gettext'
 import { useThemeStore } from '../../composables'
 import { AppConfigObject } from '../../apps'
 
-export default defineComponent({
-  name: 'TextEditor',
-  components: { MdEditor, MdPreview },
-  props: {
-    applicationConfig: { type: Object as PropType<AppConfigObject>, required: false },
-    currentContent: {
-      type: String,
-      required: true
-    },
-    markdownMode: { type: Boolean, required: false, default: false },
-    isReadOnly: { type: Boolean, required: false, default: false },
-    resource: { type: Object as PropType<Resource>, required: false }
-  },
-  emits: ['update:currentContent'],
-  setup(props) {
-    const language = useGettext()
-    const { currentTheme } = useThemeStore()
+interface TextEditorProps {
+  applicationConfig?: AppConfigObject
+  currentContent: string
+  markdownMode?: boolean
+  isReadOnly?: boolean
+  resource?: Resource
+}
+interface TextEditorEmits {
+  (e: 'update:currentContent', value: string): void
+}
+const {
+  markdownMode = false,
+  isReadOnly = false,
+  applicationConfig,
+  currentContent,
+  resource
+} = defineProps<TextEditorProps>()
 
-    // Should not be a ref, otherwise functions like setMarkdown won't work
-    const editorConfig = computed(() => {
-      // TODO: Remove typecasting once vue-tsc has figured it out
-      const { showPreviewOnlyMd = true } = props.applicationConfig as AppConfigObject
-      return { showPreviewOnlyMd }
-    })
+defineEmits<TextEditorEmits>()
+const language = useGettext()
+const { currentTheme } = useThemeStore()
 
-    const isMarkdown = computed(() => {
-      return (
-        props.markdownMode ||
-        ['md', 'markdown'].includes(props.resource?.extension) ||
-        !unref(editorConfig).showPreviewOnlyMd
-      )
-    })
+// Should not be a ref, otherwise functions like setMarkdown won't work
+const editorConfig = computed(() => {
+  const { showPreviewOnlyMd = true }: AppConfigObject = applicationConfig
+  return { showPreviewOnlyMd }
+})
 
-    const theme = computed(() => (unref(currentTheme).isDark ? 'dark' : 'light'))
+const isMarkdown = computed(() => {
+  return (
+    markdownMode ||
+    ['md', 'markdown'].includes(resource?.extension) ||
+    !unref(editorConfig).showPreviewOnlyMd
+  )
+})
 
-    config({
-      editorConfig: {
-        languageUserDefined
-      }
-    })
+const theme = computed(() => (unref(currentTheme).isDark ? 'dark' : 'light'))
 
-    const sanitize = (html) => dompurify.sanitize(html)
+const sanitize = (html) => dompurify.sanitize(html)
 
-    return {
-      isMarkdown,
-      theme,
-      language,
-      languages,
-      sanitize
-    }
+config({
+  editorConfig: {
+    languageUserDefined
   }
 })
 </script>
