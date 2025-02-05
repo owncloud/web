@@ -1,4 +1,4 @@
-import { When, Then } from '@cucumber/cucumber'
+import { Given, When, Then } from '@cucumber/cucumber'
 import { World } from '../../environment'
 import { objects } from '../../../support'
 
@@ -140,7 +140,7 @@ Then(
   }
 )
 
-Then(
+Given(
   '{string} closes the display options menu',
   async function (this: World, stepUser: string): Promise<void> {
     const { page } = this.actorsEnvironment.getActor({ key: stepUser })
@@ -173,7 +173,7 @@ Then(
   }
 )
 
-Then(
+Given(
   '{string} exits the files context menu',
   async function (this: World, stepUser: string): Promise<void> {
     const { page } = this.actorsEnvironment.getActor({ key: stepUser })
@@ -224,7 +224,7 @@ Then(
   }
 )
 
-Then(
+Given(
   '{string} cancels creating a new folder',
   async function (this: World, stepUser: string): Promise<void> {
     const { page } = this.actorsEnvironment.getActor({ key: stepUser })
@@ -254,8 +254,7 @@ Then(
   }
 )
 
-// same as "exits the files context menu"
-Then(
+Given(
   '{string} exits the upload menu',
   async function (this: World, stepUser: string): Promise<void> {
     const { page } = this.actorsEnvironment.getActor({ key: stepUser })
@@ -288,7 +287,7 @@ Then(
   }
 )
 
-Then('{string} deselects the file', async function (this: World, stepUser: string): Promise<void> {
+Given('{string} deselects the file', async function (this: World, stepUser: string): Promise<void> {
   const { page } = this.actorsEnvironment.getActor({ key: stepUser })
 
   const a11yObject = new objects.a11y.Accessibility({ page })

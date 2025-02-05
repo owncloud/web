@@ -30,23 +30,23 @@ Feature: Accessibility
 
     When "Alice" selects the display options
     Then "Alice" should not encounter any automatically detectable accessibility issues concerning the display options menu
-    And "Alice" closes the display options menu
+    Given "Alice" closes the display options menu
 
     When "Alice" opens the files context menu
     Then "Alice" should not encounter any automatically detectable accessibility issues concerning the files context menu
-    And "Alice" exits the files context menu
+    Given "Alice" exits the files context menu
 
     When "Alice" selects new
     Then "Alice" should not encounter any automatically detectable accessibility issues concerning the new context menu
 
     When "Alice" selects the folder option within the new context menu
     Then "Alice" should not encounter any automatically detectable accessibility issues concerning the create new folder popup
-    And "Alice" cancels creating a new folder
+    Given "Alice" cancels creating a new folder
 
     When "Alice" selects upload
     Then "Alice" should not encounter any automatically detectable accessibility issues concerning the upload context menu
-    And "Alice" exits the upload menu
+    Given "Alice" exits the upload menu
 
     When "Alice" selects a file by selecting the corresponding checkbox
     Then "Alice" should not encounter any automatically detectable accessibility issues concerning the file actions buttons for that file
-    And "Alice" deselects the file
+    Given "Alice" deselects the file
