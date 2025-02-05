@@ -4,40 +4,6 @@ import { objects } from '../../../support'
 
 import { expect } from '@playwright/test'
 
-const selectors = {
-  loginBackground: '.oc-login-bg',
-  loginForm: '.oc-login-form',
-  loginUsername: '#oc-login-username',
-  loginPassword: '#oc-login-password',
-  webNavSidebar: '#web-nav-sidebar',
-  toggleSidebarBtn: '.toggle-sidebar-button',
-  appNavigationCollapsed: '.oc-app-navigation-collapsed',
-  files: '#files',
-  resourceTableEditName: '.resource-table-edit-name',
-  resourceIconLink: '.oc-resource-icon-link',
-  resourceTableCondensed: '.resource-table-condensed',
-  filesSpaceTableCondensed: '#files-space-table.condensed', // '.condensed.files-table',
-  resourceTiles: '.resource-tiles',
-  tilesControls: '.oc-tiles-controls',
-  tilesView: '#tiles-view',
-  cardMediaTop: '.oc-card-media-top',
-  resourceTable: '.resource-table',
-  filesSpaceTable: '#files-space-table',
-  filesViewOptionsBtn: '#files-view-options-btn',
-  displayOptionsMenu: '#files-app-bar-controls-right .tippy-content',
-  webContentMain: '#web-content-main',
-  contextMenuDropWhitespace: '#context-menu-drop-whitespace',
-  newFileMenuBtn: '#new-file-menu-btn',
-  newResourceContextMenu: '.files-app-bar-actions .tippy-content',
-  newFolderBtn: '#new-folder-btn',
-  ocModal: '.oc-modal',
-  ocModalCancel: '.oc-modal-body-actions-cancel',
-  uploadMenuBtn: '#upload-menu-btn',
-  uploadContextMenu: '.files-app-bar-actions .tippy-content',
-  appbarBatchActions: '#oc-appbar-batch-actions',
-  filesSpaceTableCheckbox: '#files-space-table .oc-checkbox'
-}
-
 // Scenario: check accessibility of files view
 Then(
   '{string} should not encounter any automatically detectable accessibility issues concerning the files section in default table view',
@@ -46,9 +12,9 @@ Then(
 
     const a11yObject = new objects.a11y.Accessibility({ page })
     const a11yViolations = await a11yObject.getAccessibilityConformityViolationsWith2Exceptions(
-      selectors.files,
-      selectors.resourceTableEditName,
-      selectors.resourceIconLink
+      a11yObject.getSelectors().files,
+      a11yObject.getSelectors().resourceTableEditName,
+      a11yObject.getSelectors().resourceIconLink
     )
 
     // excluded for known accessibility issues
@@ -76,9 +42,9 @@ Then(
 
     const a11yObject = new objects.a11y.Accessibility({ page })
     const a11yViolations = await a11yObject.getAccessibilityConformityViolationsWith2Exceptions(
-      selectors.filesSpaceTable,
-      selectors.resourceTableEditName,
-      selectors.resourceIconLink
+      a11yObject.getSelectors().filesSpaceTable,
+      a11yObject.getSelectors().resourceTableEditName,
+      a11yObject.getSelectors().resourceIconLink
     )
 
     // excluded for known accessibility issues
@@ -96,8 +62,8 @@ Then(
 
     const a11yObject = new objects.a11y.Accessibility({ page })
     const a11yViolations = await a11yObject.getAccessibilityConformityViolationsWithException(
-      selectors.tilesView,
-      selectors.cardMediaTop
+      a11yObject.getSelectors().tilesView,
+      a11yObject.getSelectors().cardMediaTop
     )
 
     // excluded for known accessibility issues
@@ -134,7 +100,7 @@ Then(
 
     const a11yObject = new objects.a11y.Accessibility({ page })
     const a11yViolations = await a11yObject.getAccessibilityConformityViolations(
-      selectors.displayOptionsMenu
+      a11yObject.getSelectors().displayOptionsMenu
     )
     expect(a11yViolations).toMatchObject([])
   }
@@ -167,7 +133,7 @@ Then(
 
     const a11yObject = new objects.a11y.Accessibility({ page })
     const a11yViolations = await a11yObject.getAccessibilityConformityViolations(
-      selectors.contextMenuDropWhitespace
+      a11yObject.getSelectors().contextMenuDropWhitespace
     )
     expect(a11yViolations).toMatchObject([])
   }
@@ -197,7 +163,7 @@ Then(
 
     const a11yObject = new objects.a11y.Accessibility({ page })
     const a11yViolations = await a11yObject.getAccessibilityConformityViolations(
-      selectors.newResourceContextMenu
+      a11yObject.getSelectors().newResourceContextMenu
     )
     expect(a11yViolations).toMatchObject([])
   }
@@ -219,7 +185,9 @@ Then(
     const { page } = this.actorsEnvironment.getActor({ key: stepUser })
 
     const a11yObject = new objects.a11y.Accessibility({ page })
-    const a11yViolations = await a11yObject.getAccessibilityConformityViolations(selectors.ocModal)
+    const a11yViolations = await a11yObject.getAccessibilityConformityViolations(
+      a11yObject.getSelectors().ocModal
+    )
     expect(a11yViolations).toMatchObject([])
   }
 )
@@ -248,7 +216,7 @@ Then(
 
     const a11yObject = new objects.a11y.Accessibility({ page })
     const a11yViolations = await a11yObject.getAccessibilityConformityViolations(
-      selectors.uploadContextMenu
+      a11yObject.getSelectors().uploadContextMenu
     )
     expect(a11yViolations).toMatchObject([])
   }
@@ -281,7 +249,7 @@ Then(
 
     const a11yObject = new objects.a11y.Accessibility({ page })
     const a11yViolations = await a11yObject.getAccessibilityConformityViolations(
-      selectors.appbarBatchActions
+      a11yObject.getSelectors().appbarBatchActions
     )
     expect(a11yViolations).toMatchObject([])
   }
