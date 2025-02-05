@@ -287,27 +287,27 @@ export const announceApplicationsReady = async ({
     extension: {}
   }
 
-  appsStore.fileExtensions.forEach((editor) => {
-    const meta = appsStore.apps[editor.app]
+  appsStore.fileExtensions.forEach((fileExtensions) => {
+    const app = appsStore.apps[fileExtensions.app]
 
     const getIconDefinition = () => {
       return {
-        name: meta.icon,
-        ...(meta.iconFillType && {
-          fillType: meta.iconFillType
+        name: fileExtensions.icon || app.icon,
+        ...(app.iconFillType && {
+          fillType: app.iconFillType
         }),
-        ...(meta.iconColor && {
-          color: meta.iconColor
+        ...(app.iconColor && {
+          color: app.iconColor
         })
       }
     }
 
-    if (editor.mimeType) {
-      mapping.mimeType[editor.mimeType] = getIconDefinition()
+    if (fileExtensions.mimeType) {
+      mapping.mimeType[fileExtensions.mimeType] = getIconDefinition()
     }
 
-    if (editor.extension) {
-      mapping.extension[editor.extension] = getIconDefinition()
+    if (fileExtensions.extension) {
+      mapping.extension[fileExtensions.extension] = getIconDefinition()
     }
   })
 
