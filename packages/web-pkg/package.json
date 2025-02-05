@@ -1,6 +1,6 @@
 {
   "name": "@ownclouders/web-pkg",
-  "version": "10.3.0",
+  "version": "10.3.1",
   "description": "ownCloud web pkg",
   "license": "AGPL-3.0",
   "main": "src/index.ts",
