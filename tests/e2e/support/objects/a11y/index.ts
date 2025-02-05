@@ -8,27 +8,27 @@ export class Accessibility {
     this.#page = page
   }
 
-  async checkAccessibilityConformity(include: string): Promise<boolean> {
-    return await po.checkAccessibilityConformity({ page: this.#page, include })
+  async getAccessibilityConformityViolations(include: string): Promise<any> {
+    return await po.analyzeAccessibilityConformityViolations({ page: this.#page, include })
   }
 
-  async checkAccessibilityConformityWithException(
+  async getAccessibilityConformityViolationsWithException(
     include: string,
     exclude: string
-  ): Promise<boolean> {
-    return await po.checkAccessibilityConformityWithException({
+  ): Promise<any> {
+    return await po.analyzeAccessibilityConformityViolationsWithException({
       page: this.#page,
       include,
       exclude
     })
   }
 
-  async checkAccessibilityConformityWith2Exceptions(
+  async getAccessibilityConformityViolationsWith2Exceptions(
     include: string,
     exclude: string,
     exclude2: string
-  ): Promise<boolean> {
-    return await po.checkAccessibilityConformityWith2Exceptions({
+  ): Promise<any> {
+    return await po.analyzeAccessibilityConformityViolationsWith2Exceptions({
       page: this.#page,
       include,
       exclude,

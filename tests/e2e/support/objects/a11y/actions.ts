@@ -35,10 +35,10 @@ const selectors = {
   filesSpaceTableCheckbox: '#files-space-table .oc-checkbox'
 }
 
-export const checkAccessibilityConformity = async (args: {
+export const analyzeAccessibilityConformityViolations = async (args: {
   page: Page
   include: string
-}): Promise<boolean> => {
+}): Promise<any> => {
   const { page, include } = args
 
   // await page.waitForTimeout(2000) // for testing only
@@ -49,18 +49,14 @@ export const checkAccessibilityConformity = async (args: {
     .include(include)
     .analyze()
 
-  if (JSON.stringify(a11yResult.violations) == JSON.stringify([])) {
-    return true
-  }
-
-  return false
+  return a11yResult.violations
 }
 
-export const checkAccessibilityConformityWithException = async (args: {
+export const analyzeAccessibilityConformityViolationsWithException = async (args: {
   page: Page
   include: string
   exclude: string
-}): Promise<boolean> => {
+}): Promise<any> => {
   const { page, include, exclude } = args
 
   // await page.waitForTimeout(2000) // for testing only
@@ -72,19 +68,15 @@ export const checkAccessibilityConformityWithException = async (args: {
     .exclude(exclude)
     .analyze()
 
-  if (JSON.stringify(a11yResult.violations) == JSON.stringify([])) {
-    return true
-  }
-
-  return false
+  return a11yResult.violations
 }
 
-export const checkAccessibilityConformityWith2Exceptions = async (args: {
+export const analyzeAccessibilityConformityViolationsWith2Exceptions = async (args: {
   page: Page
   include: string
   exclude: string
   exclude2: string
-}): Promise<boolean> => {
+}): Promise<any> => {
   const { page, include, exclude, exclude2 } = args
 
   // await page.waitForTimeout(2000) // for testing only
@@ -97,11 +89,7 @@ export const checkAccessibilityConformityWith2Exceptions = async (args: {
     .exclude(exclude2)
     .analyze()
 
-  if (JSON.stringify(a11yResult.violations) == JSON.stringify([])) {
-    return true
-  }
-
-  return false
+  return a11yResult.violations
 }
 
 export const switchToCondensedTableView = async (args: { page: Page }): Promise<void> => {
