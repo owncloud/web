@@ -28,6 +28,8 @@ import { Agent } from 'https'
 // @ts-ignore
 import ejs from 'ejs'
 
+const dist = process.env.DIST_DIR || 'dist'
+
 const buildConfig = {
   requirejs: {},
   cdn: process.env.CDN === 'true',
@@ -158,7 +160,7 @@ export default defineConfig(({ mode, command }) => {
           preserveEntrySignatures: 'strict',
           input,
           output: {
-            dir: 'dist',
+            dir: dist,
             chunkFileNames: join('js', 'chunks', `[name]-[hash].mjs`),
             entryFileNames: join('js', '[name]-[hash].mjs')
           }
