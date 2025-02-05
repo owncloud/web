@@ -8,6 +8,10 @@ export class Accessibility {
     this.#page = page
   }
 
+  getSelectors(): { [key: string]: string } {
+    return po.selectors
+  }
+
   async getAccessibilityConformityViolations(include: string): Promise<any> {
     return await po.analyzeAccessibilityConformityViolations({ page: this.#page, include })
   }

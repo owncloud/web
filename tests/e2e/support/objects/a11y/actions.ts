@@ -1,7 +1,7 @@
 import { Page } from '@playwright/test'
 import AxeBuilder from '@axe-core/playwright'
 
-const selectors = {
+export const selectors = {
   loginBackground: '.oc-login-bg',
   loginForm: '.oc-login-form',
   loginUsername: '#oc-login-username',
