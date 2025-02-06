@@ -1,23 +1,32 @@
-import('@toast-ui/editor/dist/i18n/ar')
-import('@toast-ui/editor/dist/i18n/cs-cz')
-import('@toast-ui/editor/dist/i18n/de-de')
-import('@toast-ui/editor/dist/i18n/en-us')
-import('@toast-ui/editor/dist/i18n/es-es')
-import('@toast-ui/editor/dist/i18n/fi-fi')
-import('@toast-ui/editor/dist/i18n/fr-fr')
-import('@toast-ui/editor/dist/i18n/gl-es')
-import('@toast-ui/editor/dist/i18n/hr-hr')
-import('@toast-ui/editor/dist/i18n/it-it')
-import('@toast-ui/editor/dist/i18n/ja-jp')
-import('@toast-ui/editor/dist/i18n/ko-kr')
-import('@toast-ui/editor/dist/i18n/nb-no')
-import('@toast-ui/editor/dist/i18n/nl-nl')
-import('@toast-ui/editor/dist/i18n/pl-pl')
-import('@toast-ui/editor/dist/i18n/ru-ru')
-import('@toast-ui/editor/dist/i18n/sv-se')
-import('@toast-ui/editor/dist/i18n/tr-tr')
-import('@toast-ui/editor/dist/i18n/uk-ua')
-import('@toast-ui/editor/dist/i18n/zh-cn')
-import('@toast-ui/editor/dist/i18n/zh-tw')
+import FR from '@vavt/cm-extension/dist/locale/fr-FR'
+import DE from '@vavt/cm-extension/dist/locale/de-DE'
+import IT from '@vavt/cm-extension/dist/locale/it-IT'
+import ES from '@vavt/cm-extension/dist/locale/es-ES'
+import PL from '@vavt/cm-extension/dist/locale/pl-PL'
+import RU from '@vavt/cm-extension/dist/locale/ru'
+import JP from '@vavt/cm-extension/dist/locale/jp-JP'
+import ID from '@vavt/cm-extension/dist/locale/id-ID'
 
 export default {}
+export const languages = {
+  zh: 'zh-CN',
+  fr: 'fr-FR',
+  ja: 'jp-JP',
+  id: 'id-ID',
+  ru: 'ru',
+  de: 'de-DE',
+  it: 'it-IT',
+  es: 'es-ES',
+  pl: 'pl-PL',
+  en: 'en-US'
+}
+export const languageUserDefined = {
+  'fr-FR': FR,
+  'de-DE': DE,
+  'it-IT': IT,
+  'es-ES': ES,
+  'pl-PL': PL,
+  ru: RU,
+  'jp-JP': JP,
+  'id-ID': ID
+}
