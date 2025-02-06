@@ -77,21 +77,10 @@ Then(
     const { page } = this.actorsEnvironment.getActor({ key: stepUser })
 
     const a11yObject = new objects.a11y.Accessibility({ page })
-
     const a11yViolations = await a11yObject.getAccessibilityConformityViolations(
       a11yObject.getSelectors().tilesView
     )
     expect(a11yViolations).toMatchObject([])
-
-    // expected to fail due to known accessibility issues, therefore exclude:
-    // selectors.cardMediaTop --> issue with tiles with picture preview, element has focusable descendants
-
-    const a11yViolationsWithExclusions =
-      await a11yObject.getAccessibilityConformityViolationsWithExclusions(
-        a11yObject.getSelectors().tilesView,
-        a11yObject.getSelectors().cardMediaTop
-      )
-    expect(a11yViolationsWithExclusions).toMatchObject([])
   }
 )
 

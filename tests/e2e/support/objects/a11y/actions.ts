@@ -15,7 +15,6 @@ export const selectors = {
   resourceTableCondensed: '.resource-table-condensed',
   filesSpaceTableCondensed: '#files-space-table.condensed', // '.condensed.files-table',
   resourceTiles: '.resource-tiles',
-  tilesControls: '.oc-tiles-controls',
   tilesView: '#tiles-view',
   cardMediaTop: '.oc-card-media-top',
   resourceTable: '.resource-table',
