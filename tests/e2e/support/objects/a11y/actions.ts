@@ -57,20 +57,17 @@ export const analyzeAccessibilityConformityViolationsWithExclusions = async (arg
   include: string
   exclude: string | string[]
 }): Promise<any> => {
-  const { page, include, exclude } =
-   args
+  const { page, include, exclude } = args
 
-  const axeBuilder = new AxeBuilder({ page })
-    .withTags(a11yRuleTags)
-    .include(include)
+  const axeBuilder = new AxeBuilder({ page }).withTags(a11yRuleTags).include(include)
 
-  if(typeof exclude == "string") {
+  if (typeof exclude == 'string') {
     // excluding single selector
     axeBuilder.exclude(exclude)
   } else {
     // excluding multiple selectors
-    for(let e in exclude){
-      axeBuilder.exclude(exclude[e])      
+    for (const e in exclude) {
+      axeBuilder.exclude(exclude[e])
     }
   }
 
