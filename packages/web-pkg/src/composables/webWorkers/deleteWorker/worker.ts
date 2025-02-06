@@ -1,7 +1,6 @@
 import PQueue from 'p-queue'
 import { type Resource, webdav as _webdav, type SpaceResource } from '@ownclouders/web-client'
 import type { DeleteWorkerTopic, DeleteWorkerReturnData } from './useDeleteWorker'
-
 type MessageData = {
   baseUrl?: string
   accessToken?: string
@@ -41,7 +40,7 @@ self.onmessage = async (e: MessageEvent) => {
   const failed: DeleteWorkerReturnData['failed'] = []
   const queue = new PQueue({ concurrency: concurrentRequests })
 
-  const doDelete = (r: Resource) => {
+  const doDelete = (r: Pick<Resource, 'extension' | 'path' | 'id'>) => {
     if (topic === 'fileListDelete') {
       return webdav.deleteFile(space, { path: r.path })
     }
