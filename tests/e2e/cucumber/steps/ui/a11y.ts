@@ -11,16 +11,19 @@ Then(
     const { page } = this.actorsEnvironment.getActor({ key: stepUser })
 
     const a11yObject = new objects.a11y.Accessibility({ page })
-    const a11yViolations = await a11yObject.getAccessibilityConformityViolationsWithExclusions(
-      a11yObject.getSelectors().files,
-      [a11yObject.getSelectors().resourceTableEditName, a11yObject.getSelectors().resourceIconLink]
-    )
 
-    // excluded for known accessibility issues
+    const a11yViolations = await a11yObject.getAccessibilityConformityViolations(a11yObject.getSelectors().files)
+    expect(a11yViolations).not.toMatchObject([])
+
+    // expected to fail due to known accessibility issues, therefore exclude:
     // selectors.resourceTableEditName --> buttons must have discernible text
     // selectors.resourceIconLink --> buttons/links must have discernible text
 
-    expect(a11yViolations).toMatchObject([])
+    const a11yViolationsWithExclusions = await a11yObject.getAccessibilityConformityViolationsWithExclusions(
+      a11yObject.getSelectors().files,
+      [a11yObject.getSelectors().resourceTableEditName, a11yObject.getSelectors().resourceIconLink]
+    )
+    expect(a11yViolationsWithExclusions).toMatchObject([])
   }
 )
 
@@ -40,16 +43,19 @@ Then(
     const { page } = this.actorsEnvironment.getActor({ key: stepUser })
 
     const a11yObject = new objects.a11y.Accessibility({ page })
-    const a11yViolations = await a11yObject.getAccessibilityConformityViolationsWithExclusions(
-      a11yObject.getSelectors().filesSpaceTable,
-      [a11yObject.getSelectors().resourceTableEditName, a11yObject.getSelectors().resourceIconLink]
-    )
 
-    // excluded for known accessibility issues
+    const a11yViolations = await a11yObject.getAccessibilityConformityViolations(a11yObject.getSelectors().filesSpaceTable)
+    expect(a11yViolations).not.toMatchObject([])
+
+    // expected to fail due to known accessibility issues, therefore exclude:
     // selectors.resourceTableEditName --> buttons must have discernible text
     // selectors.resourceIconLink --> buttons/links must have discernible text
 
-    expect(a11yViolations).toMatchObject([])
+    const a11yViolationsWithExclusions = await a11yObject.getAccessibilityConformityViolationsWithExclusions(
+      a11yObject.getSelectors().filesSpaceTable,
+      [a11yObject.getSelectors().resourceTableEditName, a11yObject.getSelectors().resourceIconLink]
+    )
+    expect(a11yViolationsWithExclusions).toMatchObject([])
   }
 )
 
@@ -59,15 +65,18 @@ Then(
     const { page } = this.actorsEnvironment.getActor({ key: stepUser })
 
     const a11yObject = new objects.a11y.Accessibility({ page })
-    const a11yViolations = await a11yObject.getAccessibilityConformityViolationsWithExclusions(
+
+    const a11yViolations = await a11yObject.getAccessibilityConformityViolations(a11yObject.getSelectors().tilesView)
+    expect(a11yViolations).toMatchObject([])
+
+    // expected to fail due to known accessibility issues, therefore exclude:
+    // selectors.cardMediaTop --> issue with tiles with picture preview, element has focusable descendants
+
+    const a11yViolationsWithExclusions = await a11yObject.getAccessibilityConformityViolationsWithExclusions(
       a11yObject.getSelectors().tilesView,
       a11yObject.getSelectors().cardMediaTop
     )
-
-    // excluded for known accessibility issues
-    // selectors.cardMediaTop --> issue with tiles with picture preview, element has focusable descendants
-
-    expect(a11yViolations).toMatchObject([])
+    expect(a11yViolationsWithExclusions).toMatchObject([])
   }
 )
 
