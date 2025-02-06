@@ -11,7 +11,7 @@ vi.mock('../../../src/composables/useCreateFileHandler', () => ({
 }))
 
 const currentFolder = mock<Resource>()
-const currentSpace = mock<SpaceResource>()
+const currentSpace = mock<SpaceResource>({ driveType: 'personal' })
 
 const SELECTORS = Object.freeze({
   inputFolderName: '#input-folder-name',
@@ -36,7 +36,8 @@ describe('CreateFolderModal', () => {
     expect(useCreateFileHandler().createFileHandler).toHaveBeenCalledWith({
       fileName: 'name',
       password: 'password',
-      space: currentSpace,
+      personalSpace: currentSpace,
+      currentSpace: currentSpace,
       currentFolder,
       type: SharingLinkType.Edit
     })
@@ -62,7 +63,7 @@ function getWrapper() {
         plugins: defaultPlugins({
           piniaOptions: {
             resourcesStore: { currentFolder },
-            spacesState: { currentSpace }
+            spacesState: { currentSpace, spaces: [currentSpace] }
           }
         }),
         mocks,
