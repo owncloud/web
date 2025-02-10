@@ -1,6 +1,6 @@
 import { cloneStateObject } from '../../../helpers/store'
 import { isSameResource } from '../../../helpers/resource'
-import { Resource, SpaceResource } from '@ownclouders/web-client'
+import { DavHttpError, Resource, SpaceResource } from '@ownclouders/web-client'
 import { isLocationSpacesActive } from '../../../router'
 import { dirname } from 'path'
 import { createFileRouteOptions } from '../../../helpers'
@@ -22,6 +22,8 @@ import {
 } from '../../piniaStores'
 import { storeToRefs } from 'pinia'
 import { useDeleteWorker } from '../../webWorkers'
+import { PASSWORD_PROTECTED_FOLDER_FILE_EXTENSION } from '../../../constants'
+import { captureException } from '@sentry/vue'
 
 export const useFileActionsDeleteResources = () => {
   const configStore = useConfigStore()
@@ -32,7 +34,7 @@ export const useFileActionsDeleteResources = () => {
   const { $gettext, $ngettext } = language
   const clientService = useClientService()
   const { dispatchModal } = useModals()
-  const spacesStore = useSpacesStore()
+  const { personalSpace, updateSpaceField } = useSpacesStore()
   const sharesStore = useSharesStore()
   const { startWorker } = useDeleteWorker({
     concurrentRequests: configStore.options.concurrentRequests.resourceBatchActions
@@ -150,28 +152,72 @@ export const useFileActionsDeleteResources = () => {
     )
   }
 
-  const filesList_delete = (resources: Resource[]) => {
+  const filesList_delete = async (resources: Resource[]) => {
     resourcesToDelete.value = [...resources]
-    resourcesStore.addResourcesIntoDeleteQueue(unref(resourcesToDelete).map(({ id }) => id))
-    unref(resourcesToDelete).forEach(({ id }) => resourcesStore.removeSelection(id))
 
-    const resourceSpaceMapping = unref(resources).reduce<
-      Record<string, { space: SpaceResource; resources: Resource[] }>
-    >((acc, resource) => {
-      if (resource.storageId in acc) {
-        acc[resource.storageId].resources.push(resource)
-        return acc
+    const resourceSpaceMapping: Record<string, { space: SpaceResource; resources: Resource[] }> = {}
+
+    for (const resource of unref(resourcesToDelete)) {
+      if (resource.extension !== PASSWORD_PROTECTED_FOLDER_FILE_EXTENSION) {
+        continue
+      }
+
+      try {
+        const folderPath = '/.' + resource.name.replace('.psec', '')
+        const passwordProtectedFolder = await clientService.webdav.getFileInfo(
+          unref(personalSpace),
+          {
+            path: folderPath
+          }
+        )
+
+        if (!passwordProtectedFolder) {
+          const error = new Error(
+            'Could not find password protected folder with path ' + folderPath
+          )
+
+          captureException(error)
+          console.error(error)
+
+          continue
+        }
+
+        if (!passwordProtectedFolder.canBeDeleted()) {
+          console.warn(
+            '[filesList_delete]: User does not have sufficient permissions to delete password protected folder'
+          )
+          return
+        }
+
+        resourcesToDelete.value.push(passwordProtectedFolder)
+      } catch (error) {
+        if (error instanceof DavHttpError && error.statusCode === 404) {
+          console.warn('[filesList_delete]: User is not owner of the password protected folder')
+          continue
+        }
+
+        console.error(error)
+        captureException(error)
+      }
+    }
+
+    for (const resource of unref(resourcesToDelete)) {
+      resourcesStore.addResourcesIntoDeleteQueue([resource.id])
+      resourcesStore.removeSelection(resource.id)
+
+      if (resource.storageId in resourceSpaceMapping) {
+        resourceSpaceMapping[resource.storageId].resources.push(resource)
+        continue
       }
 
       const matchingSpace = getMatchingSpace(resource)
 
-      if (!(matchingSpace.id in acc)) {
-        acc[matchingSpace.id] = { space: matchingSpace, resources: [] }
+      if (!(matchingSpace.id in resourceSpaceMapping)) {
+        resourceSpaceMapping[matchingSpace.id] = { space: matchingSpace, resources: [] }
       }
 
-      acc[matchingSpace.id].resources.push(resource)
-      return acc
-    }, {})
+      resourceSpaceMapping[matchingSpace.id].resources.push(resource)
+    }
 
     const originalCurrentFolderId = unref(currentFolder)?.id
 
@@ -231,7 +277,7 @@ export const useFileActionsDeleteResources = () => {
                 unref(resources)[0].storageId,
                 sharesStore.graphRoles
               )
-              spacesStore.updateSpaceField({
+              updateSpaceField({
                 id: updatedSpace.id,
                 field: 'spaceQuota',
                 value: updatedSpace.spaceQuota
