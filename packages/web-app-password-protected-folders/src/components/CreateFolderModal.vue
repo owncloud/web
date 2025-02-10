@@ -4,6 +4,7 @@
       id="input-folder-name"
       v-model="formData.folderName"
       :label="$gettext('Folder name')"
+      :error-message="folderNameError"
     />
     <oc-text-input
       id="input-folder-password"
@@ -34,8 +35,9 @@ import {
   useResourcesStore,
   useSpacesStore
 } from '@ownclouders/web-pkg'
-import { computed, reactive, unref, watch } from 'vue'
+import { computed, reactive, ref, unref, watch } from 'vue'
 import { useGettext } from 'vue3-gettext'
+import { DavHttpError } from '../../../web-client/src'
 import { useCreateFileHandler } from '../composables/useCreateFileHandler'
 
 const emit = defineEmits<{
@@ -47,7 +49,7 @@ const { $gettext } = useGettext()
 const { showErrorMessage } = useMessages()
 const { createFileHandler } = useCreateFileHandler()
 const { currentFolder } = useResourcesStore()
-const { currentSpace } = useSpacesStore()
+const { spaces, currentSpace } = useSpacesStore()
 const { defaultLinkType, getAvailableLinkTypes, getLinkRoleByType } = useLinkTypes()
 
 const formData = reactive({
@@ -55,6 +57,8 @@ const formData = reactive({
   password: '',
   selectedType: unref(defaultLinkType)
 })
+
+const folderNameError = ref('')
 
 const isFormValid = computed(() => formData.folderName !== '' && formData.password !== '')
 const availableLinkTypes = computed(() => getAvailableLinkTypes({ isFolder: true }))
@@ -66,16 +70,31 @@ const onConfirm = async () => {
   }
 
   try {
+    folderNameError.value = ''
+
+    const personalSpace = unref(spaces).find((space) => space.driveType === 'personal')
+
+    if (!personalSpace) {
+      throw new Error('Could not find personal space')
+    }
+
     await createFileHandler({
       fileName: formData.folderName,
       currentFolder: unref(currentFolder),
-      space: unref(currentSpace),
+      personalSpace: personalSpace,
+      currentSpace: unref(currentSpace),
       password: formData.password,
       type: formData.selectedType
     })
   } catch (error) {
+    if (error instanceof DavHttpError && error.statusCode === 405) {
+      folderNameError.value = $gettext('Folder already exists')
+      return Promise.reject()
+    }
+
     console.error(error)
     showErrorMessage({ title: $gettext('Failed to create folder'), errors: [error] })
+    return Promise.reject()
   }
 }
 
