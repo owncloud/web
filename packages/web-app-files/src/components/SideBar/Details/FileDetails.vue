@@ -31,98 +31,102 @@
         class="details-table oc-width-1-1"
         :aria-label="$gettext('Overview of the information about the selected file')"
       >
-        <col class="oc-width-1-3" />
-        <col class="oc-width-2-3" />
-        <tr v-if="hasDeletionDate" data-testid="delete-timestamp">
-          <th scope="col" class="oc-pr-s oc-font-semibold" v-text="$gettext('Deleted at')" />
-          <td>
-            <span v-text="capitalizedDeletionDate"></span>
-          </td>
-        </tr>
-        <tr v-if="hasTimestamp" data-testid="timestamp">
-          <th scope="col" class="oc-pr-s oc-font-semibold" v-text="$gettext('Last modified')" />
-          <td>
-            <oc-button
-              v-if="showVersions"
-              v-oc-tooltip="seeVersionsLabel"
-              appearance="raw"
-              :aria-label="seeVersionsLabel"
-              @click="expandVersionsPanel"
-            >
-              {{ capitalizedTimestamp }}
-            </oc-button>
-            <span v-else v-text="capitalizedTimestamp" />
-          </td>
-        </tr>
-        <tr v-if="resource.locked" data-testid="locked-by">
-          <th scope="col" class="oc-pr-s oc-font-semibold" v-text="$gettext('Locked via')" />
-          <td>
-            <span>{{ resource.lockOwner }}</span>
-            <span v-if="resource.lockTime">({{ formatDateRelative(resource.lockTime) }})</span>
-          </td>
-        </tr>
-        <tr v-if="showSharedVia" data-testid="shared-via">
-          <th scope="col" class="oc-pr-s oc-font-semibold" v-text="$gettext('Shared via')" />
-          <td>
-            <router-link :to="sharedAncestorRoute">
-              <span v-oc-tooltip="sharedViaTooltip" v-text="sharedAncestor.path" />
-            </router-link>
-          </td>
-        </tr>
-        <tr v-if="showSharedBy" data-testid="shared-by">
-          <th scope="col" class="oc-pr-s oc-font-semibold" v-text="$gettext('Shared by')" />
-          <td>
-            <span v-text="sharedByDisplayNames" />
-          </td>
-        </tr>
-        <tr
-          v-if="ownerDisplayName && ownerDisplayName !== sharedByDisplayNames"
-          data-testid="ownerDisplayName"
-        >
-          <th scope="col" class="oc-pr-s oc-font-semibold" v-text="$gettext('Owner')" />
-          <td>
-            <p class="oc-m-rm">
-              {{ ownerDisplayName }}
-              <span v-if="ownedByCurrentUser" v-translate>(me)</span>
-            </p>
-          </td>
-        </tr>
-        <tr v-if="showSize" data-testid="sizeInfo">
-          <th scope="col" class="oc-pr-s oc-font-semibold" v-text="$gettext('Size')" />
-          <td v-text="resourceSize" />
-        </tr>
-        <web-dav-details v-if="showWebDavDetails" :space="space" />
-        <tr v-if="showVersions" data-testid="versionsInfo">
-          <th scope="col" class="oc-pr-s oc-font-semibold" v-text="$gettext('Versions')" />
-          <td>
-            <oc-button
-              v-oc-tooltip="seeVersionsLabel"
-              appearance="raw"
-              :aria-label="seeVersionsLabel"
-              @click="expandVersionsPanel"
-            >
-              {{ versions.length }}
-            </oc-button>
-          </td>
-        </tr>
-        <portal-target
-          name="app.files.sidebar.file.details.table"
-          :slot-props="{ space, resource }"
-          :multiple="true"
-        />
-        <tr v-if="hasTags" data-testid="tags">
-          <th scope="col" class="oc-pr-s oc-font-semibold">
-            {{ $gettext('Tags') }}
-            <oc-contextual-helper
-              v-if="contextualHelper?.isEnabled"
-              v-bind="contextualHelper?.data"
-              class="oc-pl-xs"
-            ></oc-contextual-helper>
-          </th>
-          <td>
-            <tags-select :resource="resource"></tags-select>
-          </td>
-        </tr>
+        <colgroup>
+          <col class="oc-width-1-3" />
+          <col class="oc-width-2-3" />
+        </colgroup>
+        <tbody>
+          <tr v-if="hasDeletionDate" data-testid="delete-timestamp">
+            <th scope="col" class="oc-pr-s oc-font-semibold" v-text="$gettext('Deleted at')" />
+            <td>
+              <span v-text="capitalizedDeletionDate"></span>
+            </td>
+          </tr>
+          <tr v-if="hasTimestamp" data-testid="timestamp">
+            <th scope="col" class="oc-pr-s oc-font-semibold" v-text="$gettext('Last modified')" />
+            <td>
+              <oc-button
+                v-if="showVersions"
+                v-oc-tooltip="seeVersionsLabel"
+                appearance="raw"
+                :aria-label="seeVersionsLabel"
+                @click="expandVersionsPanel"
+              >
+                {{ capitalizedTimestamp }}
+              </oc-button>
+              <span v-else v-text="capitalizedTimestamp" />
+            </td>
+          </tr>
+          <tr v-if="resource.locked" data-testid="locked-by">
+            <th scope="col" class="oc-pr-s oc-font-semibold" v-text="$gettext('Locked via')" />
+            <td>
+              <span>{{ resource.lockOwner }}</span>
+              <span v-if="resource.lockTime">({{ formatDateRelative(resource.lockTime) }})</span>
+            </td>
+          </tr>
+          <tr v-if="showSharedVia" data-testid="shared-via">
+            <th scope="col" class="oc-pr-s oc-font-semibold" v-text="$gettext('Shared via')" />
+            <td>
+              <router-link :to="sharedAncestorRoute">
+                <span v-oc-tooltip="sharedViaTooltip" v-text="sharedAncestor.path" />
+              </router-link>
+            </td>
+          </tr>
+          <tr v-if="showSharedBy" data-testid="shared-by">
+            <th scope="col" class="oc-pr-s oc-font-semibold" v-text="$gettext('Shared by')" />
+            <td>
+              <span v-text="sharedByDisplayNames" />
+            </td>
+          </tr>
+          <tr
+            v-if="ownerDisplayName && ownerDisplayName !== sharedByDisplayNames"
+            data-testid="ownerDisplayName"
+          >
+            <th scope="col" class="oc-pr-s oc-font-semibold" v-text="$gettext('Owner')" />
+            <td>
+              <p class="oc-m-rm">
+                {{ ownerDisplayName }}
+                <span v-if="ownedByCurrentUser" v-translate>(me)</span>
+              </p>
+            </td>
+          </tr>
+          <tr v-if="showSize" data-testid="sizeInfo">
+            <th scope="col" class="oc-pr-s oc-font-semibold" v-text="$gettext('Size')" />
+            <td v-text="resourceSize" />
+          </tr>
+          <web-dav-details v-if="showWebDavDetails" :space="space" />
+          <tr v-if="showVersions" data-testid="versionsInfo">
+            <th scope="col" class="oc-pr-s oc-font-semibold" v-text="$gettext('Versions')" />
+            <td>
+              <oc-button
+                v-oc-tooltip="seeVersionsLabel"
+                appearance="raw"
+                :aria-label="seeVersionsLabel"
+                @click="expandVersionsPanel"
+              >
+                {{ versions.length }}
+              </oc-button>
+            </td>
+          </tr>
+          <portal-target
+            name="app.files.sidebar.file.details.table"
+            :slot-props="{ space, resource }"
+            :multiple="true"
+          />
+          <tr v-if="hasTags" data-testid="tags">
+            <th scope="col" class="oc-pr-s oc-font-semibold">
+              {{ $gettext('Tags') }}
+              <oc-contextual-helper
+                v-if="contextualHelper?.isEnabled"
+                v-bind="contextualHelper?.data"
+                class="oc-pl-xs"
+              ></oc-contextual-helper>
+            </th>
+            <td>
+              <tags-select :resource="resource"></tags-select>
+            </td>
+          </tr>
+        </tbody>
       </table>
     </div>
     <p v-else data-testid="noContentText" v-text="$gettext('No information to display')" />
