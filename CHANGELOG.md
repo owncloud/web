@@ -26,6 +26,7 @@ Summary
 * Enhancement - Display default actions in context menu: [#12145](https://github.com/owncloud/web/pull/12145)
 * Enhancement - Hide password protected folders action: [#12145](https://github.com/owncloud/web/pull/12145)
 * Enhancement - Hide password protected folders extension: [#12145](https://github.com/owncloud/web/pull/12145)
+* Enhancement - Delete password protected folders: [#12152](https://github.com/owncloud/web/pull/12152)
 
 Details
 -------
@@ -180,6 +181,14 @@ Details
 
    https://github.com/owncloud/web/issues/12039
    https://github.com/owncloud/web/pull/12145
+
+* Enhancement - Delete password protected folders: [#12152](https://github.com/owncloud/web/pull/12152)
+
+   We've extended the delete resources handler to also delete the hidden folder
+   acting as the password protected folder when deleting a `.psec` files.
+
+   https://github.com/owncloud/web/issues/12039
+   https://github.com/owncloud/web/pull/12152
 
 Changelog for ownCloud Web [11.1.1] (2025-01-22)
 =======================================
