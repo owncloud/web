@@ -234,7 +234,7 @@ importers:
         version: 3.1.4(vue@3.5.13(typescript@5.6.3))
       vue-router:
         specifier: ^4.2.5
-        version: 4.2.5(vue@3.5.13(typescript@5.6.3))
+        version: 4.5.0(vue@3.5.13(typescript@5.6.3))
       vue-select:
         specifier: 4.0.0-beta.6
         version: 4.0.0-beta.6(vue@3.5.13(typescript@5.6.3))
@@ -517,7 +517,7 @@ importers:
         version: 5.0.3(vue@3.5.13(typescript@5.6.3))
       vue-router:
         specifier: ^4.2.5
-        version: 4.2.5(vue@3.5.13(typescript@5.6.3))
+        version: 4.5.0(vue@3.5.13(typescript@5.6.3))
       vue3-gettext:
         specifier: ^2.4.0
         version: 2.4.0(patch_hash=x32qkm4z6srz5xuveescagpdyu)(@vue/compiler-sfc@3.5.13)(vue@3.5.13(typescript@5.6.3))
@@ -565,8 +565,8 @@ importers:
         specifier: 5.0.3
         version: 5.0.3(vue@3.5.13(typescript@5.6.3))
       vue-router:
-        specifier: 4.2.5
-        version: 4.2.5(vue@3.5.13(typescript@5.6.3))
+        specifier: 4.5.0
+        version: 4.5.0(vue@3.5.13(typescript@5.6.3))
     devDependencies:
       '@ownclouders/web-test-helpers':
         specifier: workspace:*
@@ -602,8 +602,8 @@ importers:
         specifier: 5.0.3
         version: 5.0.3(vue@3.5.13(typescript@5.6.3))
       vue-router:
-        specifier: 4.2.5
-        version: 4.2.5(vue@3.5.13(typescript@5.6.3))
+        specifier: 4.5.0
+        version: 4.5.0(vue@3.5.13(typescript@5.6.3))
       vue3-gettext:
         specifier: 2.4.0
         version: 2.4.0(patch_hash=x32qkm4z6srz5xuveescagpdyu)(@vue/compiler-sfc@3.5.13)(vue@3.5.13(typescript@5.6.3))
@@ -658,8 +658,8 @@ importers:
         specifier: 5.0.3
         version: 5.0.3(vue@3.5.13(typescript@5.6.3))
       vue-router:
-        specifier: 4.2.5
-        version: 4.2.5(vue@3.5.13(typescript@5.6.3))
+        specifier: 4.5.0
+        version: 4.5.0(vue@3.5.13(typescript@5.6.3))
       vue3-gettext:
         specifier: 2.4.0
         version: 2.4.0(patch_hash=x32qkm4z6srz5xuveescagpdyu)(@vue/compiler-sfc@3.5.13)(vue@3.5.13(typescript@5.6.3))
@@ -722,8 +722,8 @@ importers:
         specifier: 5.0.3
         version: 5.0.3(vue@3.5.13(typescript@5.6.3))
       vue-router:
-        specifier: 4.2.5
-        version: 4.2.5(vue@3.5.13(typescript@5.6.3))
+        specifier: 4.5.0
+        version: 4.5.0(vue@3.5.13(typescript@5.6.3))
       vue3-gettext:
         specifier: 2.4.0
         version: 2.4.0(patch_hash=x32qkm4z6srz5xuveescagpdyu)(@vue/compiler-sfc@3.5.13)(vue@3.5.13(typescript@5.6.3))
@@ -765,8 +765,8 @@ importers:
         specifier: 5.0.3
         version: 5.0.3(vue@3.5.13(typescript@5.6.3))
       vue-router:
-        specifier: 4.2.5
-        version: 4.2.5(vue@3.5.13(typescript@5.6.3))
+        specifier: 4.5.0
+        version: 4.5.0(vue@3.5.13(typescript@5.6.3))
       zod:
         specifier: 3.24.1
         version: 3.24.1
@@ -826,8 +826,8 @@ importers:
         specifier: ^11.0.0 || ^12.0.0
         version: 12.0.0(typescript@5.6.3)
       vue-router:
-        specifier: 4.2.5
-        version: 4.2.5(vue@3.5.13(typescript@5.6.3))
+        specifier: 4.5.0
+        version: 4.5.0(vue@3.5.13(typescript@5.6.3))
       vue3-gettext:
         specifier: 2.4.0
         version: 2.4.0(patch_hash=x32qkm4z6srz5xuveescagpdyu)(@vue/compiler-sfc@3.5.13)(vue@3.5.13(typescript@5.6.3))
@@ -857,8 +857,8 @@ importers:
         specifier: 2.3.1
         version: 2.3.1(typescript@5.6.3)(vue@3.5.13(typescript@5.6.3))
       vue-router:
-        specifier: 4.2.5
-        version: 4.2.5(vue@3.5.13(typescript@5.6.3))
+        specifier: 4.5.0
+        version: 4.5.0(vue@3.5.13(typescript@5.6.3))
       vue3-gettext:
         specifier: 2.4.0
         version: 2.4.0(patch_hash=x32qkm4z6srz5xuveescagpdyu)(@vue/compiler-sfc@3.5.13)(vue@3.5.13(typescript@5.6.3))
@@ -1067,7 +1067,7 @@ importers:
         version: 5.0.3(vue@3.5.13(typescript@5.6.3))
       vue-router:
         specifier: ^4.2.5
-        version: 4.2.5(vue@3.5.13(typescript@5.6.3))
+        version: 4.5.0(vue@3.5.13(typescript@5.6.3))
       vue3-gettext:
         specifier: ^2.4.0
         version: 2.4.0(patch_hash=x32qkm4z6srz5xuveescagpdyu)(@vue/compiler-sfc@3.5.13)(vue@3.5.13(typescript@5.6.3))
@@ -1203,8 +1203,8 @@ importers:
         specifier: 5.0.3
         version: 5.0.3(vue@3.5.13(typescript@5.6.3))
       vue-router:
-        specifier: 4.2.5
-        version: 4.2.5(vue@3.5.13(typescript@5.6.3))
+        specifier: 4.5.0
+        version: 4.5.0(vue@3.5.13(typescript@5.6.3))
       vue3-gettext:
         specifier: 2.4.0
         version: 2.4.0(patch_hash=x32qkm4z6srz5xuveescagpdyu)(@vue/compiler-sfc@3.5.13)(vue@3.5.13(typescript@5.6.3))
@@ -1258,8 +1258,8 @@ importers:
         specifier: ^3.5.10
         version: 3.5.13(typescript@5.6.3)
       vue-router:
-        specifier: 4.2.5
-        version: 4.2.5(vue@3.5.13(typescript@5.6.3))
+        specifier: 4.5.0
+        version: 4.5.0(vue@3.5.13(typescript@5.6.3))
       vue3-gettext:
         specifier: 2.4.0
         version: 2.4.0(patch_hash=x32qkm4z6srz5xuveescagpdyu)(@vue/compiler-sfc@3.5.13)(vue@3.5.13(typescript@5.6.3))
@@ -9050,8 +9050,8 @@ packages:
       vue:
         optional: true
 
-  vue-router@4.2.5:
-    resolution: {integrity: sha512-DIUpKcyg4+PTQKfFPX88UWhlagBEBEfJ5A8XDXRJLUnZOvcpMF8o/dnL90vpVkGaPbjvXazV/rC1qBKrZlFugw==}
+  vue-router@4.5.0:
+    resolution: {integrity: sha512-HDuk+PuH5monfNuY+ct49mNmkCRK4xJAV9Ts4z9UFc4rzdDnxQLyCMGGc8pKhZhHTVzfanpNwB/lwqevcBwI4w==}
     peerDependencies:
       vue: ^3.2.0
 
@@ -18314,7 +18314,7 @@ snapshots:
       '@vue/compiler-sfc': 3.5.13
       vue: 3.5.13(typescript@5.6.3)
 
-  vue-router@4.2.5(vue@3.5.13(typescript@5.6.3)):
+  vue-router@4.5.0(vue@3.5.13(typescript@5.6.3)):
     dependencies:
       '@vue/devtools-api': 6.6.4
       vue: 3.5.13(typescript@5.6.3)
