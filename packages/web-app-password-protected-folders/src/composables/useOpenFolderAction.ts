@@ -10,6 +10,7 @@ export const useOpenFolderAction = () => {
 
   const action = computed<FileAction>(() => ({
     name: 'open-password-protected-folder',
+    category: 'context',
     icon: 'external-link',
     async handler({ resources, space }) {
       const [file] = resources
