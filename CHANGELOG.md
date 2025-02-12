@@ -12,6 +12,7 @@ Summary
 * Bugfix - Show progress bar when emptying trash bin: [#11967](https://github.com/owncloud/web/pull/11967)
 * Bugfix - Reload preloaded resource in sidebar: [#12059](https://github.com/owncloud/web/pull/12059)
 * Bugfix - Missing User Light translations: [#12101](https://github.com/owncloud/web/pull/12101)
+* Bugfix - Create password protected folder in personal space: [#12146](https://github.com/owncloud/web/pull/12146)
 * Bugfix - Replace text editor: [#12156](https://github.com/owncloud/web/pull/12156)
 * Bugfix - Do not render default actions in context menu: [#12175](https://github.com/owncloud/web/pull/12175)
 * Enhancement - Accessibility improvements: [#5379](https://github.com/owncloud/web/issues/5379)
@@ -27,6 +28,7 @@ Summary
 * Enhancement - Display default actions in context menu: [#12145](https://github.com/owncloud/web/pull/12145)
 * Enhancement - Hide password protected folders action: [#12145](https://github.com/owncloud/web/pull/12145)
 * Enhancement - Hide password protected folders extension: [#12145](https://github.com/owncloud/web/pull/12145)
+* Enhancement - Recursive folder creation: [#12146](https://github.com/owncloud/web/pull/12146)
 * Enhancement - Delete password protected folders: [#12152](https://github.com/owncloud/web/pull/12152)
 
 Details
@@ -65,6 +67,14 @@ Details
 
    https://github.com/owncloud/web/issues/12100
    https://github.com/owncloud/web/pull/12101
+
+* Bugfix - Create password protected folder in personal space: [#12146](https://github.com/owncloud/web/pull/12146)
+
+   We've fixed an issue where the password protected folder was created in current
+   space instead of users personal space.
+
+   https://github.com/owncloud/web/issues/12039
+   https://github.com/owncloud/web/pull/12146
 
 * Bugfix - Replace text editor: [#12156](https://github.com/owncloud/web/pull/12156)
 
@@ -193,6 +203,14 @@ Details
 
    https://github.com/owncloud/web/issues/12039
    https://github.com/owncloud/web/pull/12145
+
+* Enhancement - Recursive folder creation: [#12146](https://github.com/owncloud/web/pull/12146)
+
+   We've extended the `CreateFolderFactory` in web-client to allow creating folders
+   recursively. Simply pass `recursive: true` into options and all parent folders
+   will be created.
+
+   https://github.com/owncloud/web/pull/12146
 
 * Enhancement - Delete password protected folders: [#12152](https://github.com/owncloud/web/pull/12152)
 
