@@ -8,7 +8,7 @@ export const useExtensions = () => {
   const actionExtension = computed<ActionExtension>(() => ({
     id: 'com.github.owncloud.web-extensions.password-protected-folders',
     type: 'action',
-    extensionPointIds: ['global.files.default-actions'],
+    extensionPointIds: ['global.files.context-actions', 'global.files.default-actions'],
     action: unref(action)
   }))
 
