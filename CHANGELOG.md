@@ -13,6 +13,7 @@ Summary
 * Bugfix - Reload preloaded resource in sidebar: [#12059](https://github.com/owncloud/web/pull/12059)
 * Bugfix - Missing User Light translations: [#12101](https://github.com/owncloud/web/pull/12101)
 * Bugfix - Replace text editor: [#12156](https://github.com/owncloud/web/pull/12156)
+* Bugfix - Do not render default actions in context menu: [#12175](https://github.com/owncloud/web/pull/12175)
 * Enhancement - Accessibility improvements: [#5379](https://github.com/owncloud/web/issues/5379)
 * Enhancement - Create spaces via admin settings: [#11849](https://github.com/owncloud/web/pull/11849)
 * Enhancement - Disable resources in delete queue: [#12046](https://github.com/owncloud/web/pull/12046)
@@ -72,6 +73,17 @@ Details
 
    https://github.com/owncloud/enterprise/issues/7077
    https://github.com/owncloud/web/pull/12156
+
+* Bugfix - Do not render default actions in context menu: [#12175](https://github.com/owncloud/web/pull/12175)
+
+   We've fixed an issue where the default action was rendered in the context menu
+   leading into duplicate actions being shown. The default action was originally
+   introduced into the context menu to show "Open folder" action of password
+   protected folders extension but we fixed this to use the correct category in the
+   extension which renders the action as expected.
+
+   https://github.com/owncloud/web/issues/12154
+   https://github.com/owncloud/web/pull/12175
 
 * Enhancement - Accessibility improvements: [#5379](https://github.com/owncloud/web/issues/5379)
 
