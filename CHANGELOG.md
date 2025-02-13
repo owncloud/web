@@ -15,6 +15,7 @@ Summary
 * Bugfix - Create password protected folder in personal space: [#12146](https://github.com/owncloud/web/pull/12146)
 * Bugfix - Replace text editor: [#12156](https://github.com/owncloud/web/pull/12156)
 * Bugfix - Do not render default actions in context menu: [#12175](https://github.com/owncloud/web/pull/12175)
+* Bugfix - Open password protected folder when clicking on its name: [#12177](https://github.com/owncloud/web/pull/12177)
 * Enhancement - Accessibility improvements: [#5379](https://github.com/owncloud/web/issues/5379)
 * Enhancement - Create spaces via admin settings: [#11849](https://github.com/owncloud/web/pull/11849)
 * Enhancement - Disable resources in delete queue: [#12046](https://github.com/owncloud/web/pull/12046)
@@ -94,6 +95,14 @@ Details
 
    https://github.com/owncloud/web/issues/12154
    https://github.com/owncloud/web/pull/12175
+
+* Bugfix - Open password protected folder when clicking on its name: [#12177](https://github.com/owncloud/web/pull/12177)
+
+   We've fixed an issue where clicking on the password protected folder name in the
+   list did not do anything. Clicking on the name name will open the folder.
+
+   https://github.com/owncloud/web/issues/12176
+   https://github.com/owncloud/web/pull/12177
 
 * Enhancement - Accessibility improvements: [#5379](https://github.com/owncloud/web/issues/5379)
 
