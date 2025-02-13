@@ -14,73 +14,75 @@
         class="details-table"
         :aria-label="$gettext('Overview of the information about the selected user')"
       >
-        <tr>
-          <th scope="col" class="oc-pr-s" v-text="$gettext('User name')" />
-          <td v-text="_user.onPremisesSamAccountName" />
-        </tr>
-        <tr>
-          <th scope="col" class="oc-pr-s" v-text="$gettext('First and last name')" />
-          <td v-text="_user.displayName" />
-        </tr>
-        <tr>
-          <th scope="col" class="oc-pr-s" v-text="$gettext('Email')" />
-          <td>
-            <span v-text="_user.mail" />
-          </td>
-        </tr>
-        <tr>
-          <th scope="col" class="oc-pr-s" v-text="$gettext('Role')" />
-          <td>
-            <span v-if="_user.appRoleAssignments" v-text="roleDisplayName" />
-            <span v-else>
-              <span class="oc-mr-xs">-</span>
-              <oc-contextual-helper
-                :text="
-                  $gettext(
-                    'User roles become available once the user has logged in for the first time.'
-                  )
-                "
-                :title="$gettext('User role')"
-              />
-            </span>
-          </td>
-        </tr>
-        <tr>
-          <th scope="col" class="oc-pr-s" v-text="$gettext('Login')" />
-          <td>
-            <span v-text="loginDisplayValue" />
-          </td>
-        </tr>
-        <tr>
-          <th scope="col" class="oc-pr-s" v-text="$gettext('Quota')" />
-          <td>
-            <span v-if="showUserQuota" v-text="quotaDisplayValue" />
-            <span v-else>
-              <span class="oc-mr-xs">-</span>
-              <oc-contextual-helper
-                :text="
-                  $gettext(
-                    'User quota becomes available once the user has logged in for the first time.'
-                  )
-                "
-                :title="$gettext('Quota')"
-              />
-            </span>
-          </td>
-        </tr>
-        <tr>
-          <th scope="col" class="oc-pr-s" v-text="$gettext('Groups')" />
-          <td>
-            <span v-if="_user.memberOf.length" v-text="groupsDisplayValue" />
-            <span v-else>
-              <span class="oc-mr-xs">-</span>
-              <oc-contextual-helper
-                :text="$gettext('No groups assigned.')"
-                :title="$gettext('Groups')"
-              />
-            </span>
-          </td>
-        </tr>
+        <tbody>
+          <tr>
+            <th scope="col" class="oc-pr-s" v-text="$gettext('User name')" />
+            <td v-text="_user.onPremisesSamAccountName" />
+          </tr>
+          <tr>
+            <th scope="col" class="oc-pr-s" v-text="$gettext('First and last name')" />
+            <td v-text="_user.displayName" />
+          </tr>
+          <tr>
+            <th scope="col" class="oc-pr-s" v-text="$gettext('Email')" />
+            <td>
+              <span v-text="_user.mail" />
+            </td>
+          </tr>
+          <tr>
+            <th scope="col" class="oc-pr-s" v-text="$gettext('Role')" />
+            <td>
+              <span v-if="_user.appRoleAssignments" v-text="roleDisplayName" />
+              <span v-else>
+                <span class="oc-mr-xs">-</span>
+                <oc-contextual-helper
+                  :text="
+                    $gettext(
+                      'User roles become available once the user has logged in for the first time.'
+                    )
+                  "
+                  :title="$gettext('User role')"
+                />
+              </span>
+            </td>
+          </tr>
+          <tr>
+            <th scope="col" class="oc-pr-s" v-text="$gettext('Login')" />
+            <td>
+              <span v-text="loginDisplayValue" />
+            </td>
+          </tr>
+          <tr>
+            <th scope="col" class="oc-pr-s" v-text="$gettext('Quota')" />
+            <td>
+              <span v-if="showUserQuota" v-text="quotaDisplayValue" />
+              <span v-else>
+                <span class="oc-mr-xs">-</span>
+                <oc-contextual-helper
+                  :text="
+                    $gettext(
+                      'User quota becomes available once the user has logged in for the first time.'
+                    )
+                  "
+                  :title="$gettext('Quota')"
+                />
+              </span>
+            </td>
+          </tr>
+          <tr>
+            <th scope="col" class="oc-pr-s" v-text="$gettext('Groups')" />
+            <td>
+              <span v-if="_user.memberOf.length" v-text="groupsDisplayValue" />
+              <span v-else>
+                <span class="oc-mr-xs">-</span>
+                <oc-contextual-helper
+                  :text="$gettext('No groups assigned.')"
+                  :title="$gettext('Groups')"
+                />
+              </span>
+            </td>
+          </tr>
+        </tbody>
       </table>
     </div>
   </div>

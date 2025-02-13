@@ -38,54 +38,39 @@
   </portal>
 </template>
 
-<script lang="ts">
-import { computed, defineComponent, ref, unref } from 'vue'
+<script lang="ts" setup>
+import { computed, ref, unref } from 'vue'
 import { useRouter, useThemeStore } from '../composables'
 import { buildUrl } from '../helpers/router'
 import { useSessionStorage } from '@vueuse/core'
 import { storeToRefs } from 'pinia'
 
-export default defineComponent({
-  components: {},
-  props: {
-    fileId: {
-      type: String,
-      required: true
-    }
-  },
-  setup(props) {
-    const appBannerWasClosed = useSessionStorage('app_banner_closed', null)
-    const isVisible = ref<boolean>(unref(appBannerWasClosed) === null)
+interface Props {
+  fileId: string
+}
+const props = defineProps<Props>()
+const appBannerWasClosed = useSessionStorage('app_banner_closed', null)
+const isVisible = ref<boolean>(unref(appBannerWasClosed) === null)
 
-    const router = useRouter()
-    const themeStore = useThemeStore()
-    const { currentTheme } = storeToRefs(themeStore)
+const router = useRouter()
+const themeStore = useThemeStore()
+const { currentTheme } = storeToRefs(themeStore)
 
-    const appBannerSettings = currentTheme.value.appBanner
-    const isAppBannerAvailable = computed(
-      () => appBannerSettings && Object.keys(appBannerSettings).length != 0
-    )
+const appBannerSettings = currentTheme.value.appBanner
+const isAppBannerAvailable = computed(
+  () => appBannerSettings && Object.keys(appBannerSettings).length != 0
+)
 
-    const appUrl = computed(() => {
-      return buildUrl(router, `/f/${props.fileId}`)
-        .toString()
-        .replace('https', currentTheme.value.appBanner?.appScheme)
-    })
-
-    const close = () => {
-      isVisible.value = false
-      useSessionStorage('app_banner_closed', 1)
-    }
-
-    return {
-      appUrl,
-      close,
-      currentTheme,
-      isAppBannerAvailable,
-      isVisible
-    }
-  }
+const appUrl = computed(() => {
+  return buildUrl(router, `/f/${props.fileId}`)
+    .toString()
+    .replace('https', currentTheme.value.appBanner?.appScheme)
 })
+
+const close = () => {
+  isVisible.value = false
+  useSessionStorage('app_banner_closed', 1)
+}
 </script>
 
 <style scoped lang="scss">
