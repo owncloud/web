@@ -484,6 +484,28 @@ describe('ResourceTable', () => {
       await tr.trigger('click')
       expect(wrapper.emitted().fileClick).toBeUndefined()
     })
+
+    it('should emit "fileClick" when psec file is clicked', async () => {
+      const resource = mock<Resource>({
+        id: 'psec-file',
+        name: 'psec-file.psec',
+        path: '/psec-file.psec',
+        remoteItemPath: '/psec-file.psec',
+        canDownload: () => false,
+        isFolder: false,
+        getDomSelector: () => extractDomSelector('psec-file')
+      })
+
+      const { wrapper } = getMountedWrapper({
+        canBeOpenedWithSecureView: false,
+        resources: [resource]
+      })
+      await wrapper.find('.oc-tbody-tr-psec-file .oc-resource-name').trigger('click')
+
+      expect(
+        wrapper.emitted<{ resources: Resource[] }[]>('fileClick')[0][0].resources[0].name
+      ).toMatch('psec-file.psec')
+    })
   })
 
   describe('resource details', () => {
