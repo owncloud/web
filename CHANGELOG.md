@@ -16,6 +16,7 @@ Summary
 * Bugfix - Replace text editor: [#12156](https://github.com/owncloud/web/pull/12156)
 * Bugfix - Do not render default actions in context menu: [#12175](https://github.com/owncloud/web/pull/12175)
 * Bugfix - Open password protected folder when clicking on its name: [#12177](https://github.com/owncloud/web/pull/12177)
+* Bugfix - Skip upload dropzone init when files view is missing: [#12178](https://github.com/owncloud/web/pull/12178)
 * Enhancement - Accessibility improvements: [#5379](https://github.com/owncloud/web/issues/5379)
 * Enhancement - Create spaces via admin settings: [#11849](https://github.com/owncloud/web/pull/11849)
 * Enhancement - Disable resources in delete queue: [#12046](https://github.com/owncloud/web/pull/12046)
@@ -103,6 +104,15 @@ Details
 
    https://github.com/owncloud/web/issues/12176
    https://github.com/owncloud/web/pull/12177
+
+* Bugfix - Skip upload dropzone init when files view is missing: [#12178](https://github.com/owncloud/web/pull/12178)
+
+   We've fixed an issue where the drag & drop upload zone was being initialized
+   even though the target files view element was missing. The initialization will
+   be skipped now in such case.
+
+   https://github.com/owncloud/web/issues/12150
+   https://github.com/owncloud/web/pull/12178
 
 * Enhancement - Accessibility improvements: [#5379](https://github.com/owncloud/web/issues/5379)
 
