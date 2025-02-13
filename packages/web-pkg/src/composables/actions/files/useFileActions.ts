@@ -40,6 +40,7 @@ import { Resource, SpaceResource } from '@ownclouders/web-client'
 import { storeToRefs } from 'pinia'
 import { useEmbedMode } from '../../embedMode'
 import { RouteRecordName } from 'vue-router'
+import { isLocationActive } from '../../../router/utils'
 
 export const EDITOR_MODE_EDIT = 'edit'
 export const EDITOR_MODE_CREATE = 'create'
@@ -153,6 +154,10 @@ export const useFileActions = () => {
             }
 
             if (!unref(isSearchActive) && isLocationTrashActive(router, 'files-trash-generic')) {
+              return false
+            }
+
+            if (isLocationActive(router, { name: fileExtension.routeName })) {
               return false
             }
 
