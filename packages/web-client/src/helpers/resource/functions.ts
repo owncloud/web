@@ -3,7 +3,10 @@ import { urlJoin } from '../../utils'
 import { DavPermission, DavProperty } from '../../webdav/constants'
 import { Resource, ResourceIndicator, TrashResource, WebDavResponseResource } from './types'
 import { camelCase } from 'lodash-es'
-import { HIDDEN_FILE_EXTENSIONS } from '@ownclouders/web-pkg/src/constants'
+import {
+  HIDDEN_FILE_EXTENSIONS,
+  PASSWORD_PROTECTED_FOLDER_FILE_EXTENSION
+} from '@ownclouders/web-pkg/src/constants'
 
 const fileExtensions = {
   complex: ['tar.bz2', 'tar.gz', 'tar.xz']
@@ -258,4 +261,8 @@ export function buildDeletedResource(resource: WebDavResponseResource): TrashRes
     isReceivedShare: () => false,
     getDomSelector: () => extractDomSelector(id)
   }
+}
+
+export function isPasswordProtectedFolderFileResource(resourceName: string): boolean {
+  return resourceName.endsWith(PASSWORD_PROTECTED_FOLDER_FILE_EXTENSION)
 }

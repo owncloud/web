@@ -262,6 +262,7 @@ import {
 import { useWindowSize } from '@vueuse/core'
 import {
   IncomingShareResource,
+  isPasswordProtectedFolderFileResource,
   isProjectSpaceResource,
   Resource,
   TrashResource
@@ -609,7 +610,7 @@ export default defineComponent({
         return false
       }
 
-      if (!resource.isFolder) {
+      if (!resource.isFolder && !isPasswordProtectedFolderFileResource(resource.name)) {
         if (!resource.canDownload() && !canBeOpenedWithSecureView(resource)) {
           return false
         }
