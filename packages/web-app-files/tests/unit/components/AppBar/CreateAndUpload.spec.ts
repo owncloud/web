@@ -168,12 +168,21 @@ describe('CreateAndUpload component', () => {
   })
   describe('drop target', () => {
     it('is being initialized when user can upload', () => {
+      document.getElementById = vi.fn().mockReturnValue(document.createElement('div'))
+
       const { mocks } = getWrapper()
       expect(mocks.$uppyService.useDropTarget).toHaveBeenCalled()
     })
     it('is not being initialized when user can not upload', () => {
       const currentFolder = mock<Resource>({ canUpload: () => false })
       const { mocks } = getWrapper({ currentFolder })
+      expect(mocks.$uppyService.useDropTarget).not.toHaveBeenCalled()
+    })
+    it('should not be initialized when the files view element is not found', () => {
+      document.getElementById = vi.fn().mockReturnValue(null)
+
+      const { mocks } = getWrapper()
+      expect(document.getElementById).toHaveBeenCalledWith('files-view')
       expect(mocks.$uppyService.useDropTarget).not.toHaveBeenCalled()
     })
   })
