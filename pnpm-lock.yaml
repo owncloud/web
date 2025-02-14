@@ -93,9 +93,6 @@ importers:
       '@vue/test-utils':
         specifier: 2.4.6
         version: 2.4.6
-      axe-core:
-        specifier: ^4.10.2
-        version: 4.10.2
       browserslist-to-esbuild:
         specifier: ^2.0.0
         version: 2.1.1(browserslist@4.24.2)

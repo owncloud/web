@@ -55,7 +55,6 @@
     "@vue/compiler-dom": "3.5.13",
     "@vue/compiler-sfc": "3.5.13",
     "@vue/test-utils": "2.4.6",
-    "axe-core": "^4.10.2",
     "browserslist-to-esbuild": "^2.0.0",
     "browserslist-useragent-regexp": "^4.0.0",
     "commander": "13.1.0",
