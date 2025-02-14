@@ -144,7 +144,7 @@ Then(
 
     const a11yObject = new objects.a11y.Accessibility({ page })
     const a11yViolations = await a11yObject.getAccessibilityConformityViolations(
-      a11yObject.getSelectors().contextMenuDropWhitespace
+      a11yObject.getSelectors().filesContextMenu
     )
     expect(a11yViolations).toMatchObject([])
   }

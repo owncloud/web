@@ -2,27 +2,20 @@ import { Page } from '@playwright/test'
 import AxeBuilder from '@axe-core/playwright'
 
 export const selectors = {
-  loginBackground: '.oc-login-bg',
-  loginForm: '.oc-login-form',
-  loginUsername: '#oc-login-username',
-  loginPassword: '#oc-login-password',
-  webNavSidebar: '#web-nav-sidebar',
-  toggleSidebarBtn: '.toggle-sidebar-button',
-  appNavigationCollapsed: '.oc-app-navigation-collapsed',
   files: '#files',
   resourceTableEditName: '.resource-table-edit-name',
   resourceIconLink: '.oc-resource-icon-link',
-  resourceTableCondensed: '.resource-table-condensed',
+  resourceTableCondensedIcon: '.resource-table-condensed',
   filesSpaceTableCondensed: '#files-space-table.condensed', // '.condensed.files-table',
   resourceTiles: '.resource-tiles',
   tilesView: '#tiles-view',
   cardMediaTop: '.oc-card-media-top',
-  resourceTable: '.resource-table',
+  resourceTableIcon: '.resource-table',
   filesSpaceTable: '#files-space-table',
   filesViewOptionsBtn: '#files-view-options-btn',
   displayOptionsMenu: '#files-app-bar-controls-right .tippy-content',
   webContentMain: '#web-content-main',
-  contextMenuDropWhitespace: '#context-menu-drop-whitespace',
+  filesContextMenu: '#context-menu-drop-whitespace',
   newFileMenuBtn: '#new-file-menu-btn',
   newResourceContextMenu: '.files-app-bar-actions .tippy-content',
   newFolderBtn: '#new-folder-btn',
@@ -79,7 +72,7 @@ export const switchToCondensedTableView = async (args: { page: Page }): Promise<
   const { page } = args
 
   await page.locator(selectors.files).waitFor()
-  await page.locator(selectors.resourceTableCondensed).click()
+  await page.locator(selectors.resourceTableCondensedIcon).click()
   await page.locator(selectors.filesSpaceTableCondensed).waitFor()
 }
 
@@ -87,7 +80,7 @@ export const switchToDefaultTableView = async (args: { page: Page }): Promise<vo
   const { page } = args
 
   await page.locator(selectors.files).waitFor()
-  await page.locator(selectors.resourceTable).click()
+  await page.locator(selectors.resourceTableIcon).click()
   await page.locator(selectors.filesSpaceTable).waitFor()
 }
 
@@ -111,7 +104,7 @@ export const openFilesContextMenu = async (args: { page: Page }): Promise<void> 
   await page.locator(selectors.files).waitFor()
   // right click to get context menu with "new folder" and "details" context menu
   await page.locator(selectors.webContentMain).click({ button: 'right' })
-  await page.locator(selectors.contextMenuDropWhitespace).waitFor()
+  await page.locator(selectors.filesContextMenu).waitFor()
 }
 
 export const exitContextMenu = async (args: { page: Page }): Promise<void> => {
