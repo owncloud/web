@@ -8,7 +8,7 @@ import {
 import { mock } from 'vitest-mock-extended'
 import { PasswordPolicyService } from '../../../src/services'
 import { usePasswordPolicyService } from '../../../src/composables/passwordPolicyService'
-import { AbilityRule, LinkShare, Resource, ShareRole } from '@ownclouders/web-client'
+import { AbilityRule, LinkShare, Resource, ShareRole, SpaceResource } from '@ownclouders/web-client'
 import { PasswordPolicy } from '@ownclouders/design-system/helpers'
 import { useEmbedMode } from '../../../src/composables/embedMode'
 import { useLinkTypes } from '../../../src/composables/links'
@@ -30,20 +30,20 @@ const selectors = {
   contextMenuToggle: '#link-modal-context-menu-toggle',
   confirmBtn: '.link-modal-confirm',
   cancelBtn: '.link-modal-cancel',
-  linkRoleDropDownToggle: '.link-role-dropdown-toggle'
+  linkRoleDropDownToggle: '.link-role-dropdown-toggle',
+  modalAdvancedModeButton: '[data-testid="modal-advanced-mode-button"]'
 }
 
 describe('CreateLinkModal', () => {
   describe('password input', () => {
     it('should not rendered when "isAdvancedMode" is not set', async () => {
       const { wrapper } = getWrapper()
-      wrapper.vm.isAdvancedMode = false
       await nextTick()
       expect(wrapper.find(selectors.passwordInput).exists()).toBeFalsy()
     })
     it('should be rendered', async () => {
       const { wrapper } = getWrapper()
-      wrapper.vm.isAdvancedMode = true
+      wrapper.find(selectors.modalAdvancedModeButton).trigger('click')
       await nextTick()
       expect(wrapper.find(selectors.passwordInput).exists()).toBeTruthy()
     })
@@ -59,13 +59,12 @@ describe('CreateLinkModal', () => {
   describe('datepicker', () => {
     it('should not rendered when "isAdvancedMode" is not set', async () => {
       const { wrapper } = getWrapper()
-      wrapper.vm.isAdvancedMode = false
       await nextTick()
       expect(wrapper.findComponent({ name: 'oc-datepicker' }).exists()).toBeFalsy()
     })
     it('should be rendered', async () => {
       const { wrapper } = getWrapper()
-      wrapper.vm.isAdvancedMode = true
+      wrapper.find(selectors.modalAdvancedModeButton).trigger('click')
       await nextTick()
       expect(wrapper.findComponent({ name: 'oc-datepicker' }).exists()).toBeTruthy()
     })
@@ -81,14 +80,13 @@ describe('CreateLinkModal', () => {
   describe('link role drop', () => {
     it('should not rendered when "isAdvancedMode" is not set', async () => {
       const { wrapper } = getWrapper()
-      wrapper.vm.isAdvancedMode = false
       await nextTick()
       expect(wrapper.find(selectors.linkRoleDropDownToggle).exists()).toBeFalsy()
     })
     it('lists all types as roles', async () => {
       const availableLinkTypes = [SharingLinkType.View, SharingLinkType.Edit]
       const { wrapper } = getWrapper({ availableLinkTypes })
-      wrapper.vm.isAdvancedMode = true
+      wrapper.find(selectors.modalAdvancedModeButton).trigger('click')
       await nextTick()
       await wrapper.find(selectors.linkRoleDropDownToggle).trigger('click')
 
@@ -140,7 +138,7 @@ describe('CreateLinkModal', () => {
     describe('confirm button', () => {
       it('is disabled when password policy is not fulfilled', async () => {
         const { wrapper } = getWrapper({ passwordPolicyFulfilled: false })
-        wrapper.vm.isAdvancedMode = true
+        wrapper.find(selectors.modalAdvancedModeButton).trigger('click')
         await nextTick()
         expect(wrapper.find(selectors.confirmBtn).attributes('disabled')).toBeTruthy()
       })
@@ -150,6 +148,7 @@ describe('CreateLinkModal', () => {
 
 function getWrapper({
   resources = [],
+  space = undefined,
   defaultLinkType = SharingLinkType.View,
   userCanCreatePublicLinks = true,
   passwordEnforced = false,
@@ -159,6 +158,7 @@ function getWrapper({
   availableLinkTypes = [SharingLinkType.View]
 }: {
   resources?: Resource[]
+  space?: SpaceResource
   defaultLinkType?: SharingLinkType
   userCanCreatePublicLinks?: boolean
   passwordEnforced?: boolean
@@ -211,6 +211,7 @@ function getWrapper({
     mocks,
     wrapper: mount(CreateLinkModal, {
       props: {
+        space,
         resources,
         callbackFn,
         modal: mock<Modal>()
