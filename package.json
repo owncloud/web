@@ -96,6 +96,9 @@
     "node": "22.13.1"
   },
   "pnpm": {
+    "overrides": {
+      "elliptic": "6.6.1"
+    },
     "patchedDependencies": {
       "caf@15.0.1": "patches/caf@15.0.1.patch",
       "vue3-gettext@2.4.0": "patches/vue3-gettext@2.4.0.patch",
