@@ -44,38 +44,42 @@
       </oc-button>
     </div>
     <table class="details-table oc-width-1-1" :aria-label="detailsTableLabel">
-      <col class="oc-width-1-3" />
-      <col class="oc-width-2-3" />
-      <tr>
-        <th scope="col" class="oc-pr-s oc-font-semibold" v-text="$gettext('Last activity')" />
-        <td v-text="lastModifiedDate" />
-      </tr>
-      <tr v-if="resource.description">
-        <th scope="col" class="oc-pr-s oc-font-semibold" v-text="$gettext('Subtitle')" />
-        <td v-text="resource.description" />
-      </tr>
-      <tr>
-        <th scope="col" class="oc-pr-s oc-font-semibold" v-text="$gettext('Manager')" />
-        <td>
-          <span v-text="ownerUsernames" />
-        </td>
-      </tr>
-      <tr v-if="!resource.disabled">
-        <th scope="col" class="oc-pr-s oc-font-semibold" v-text="$gettext('Quota')" />
-        <td>
-          <space-quota :space-quota="resource.spaceQuota" />
-        </td>
-      </tr>
-      <tr v-if="showSize" data-testid="sizeInfo">
-        <th scope="col" class="oc-pr-s oc-font-semibold" v-text="$gettext('Size')" />
-        <td v-text="size" />
-      </tr>
-      <web-dav-details v-if="showWebDavDetails" :space="resource" />
-      <portal-target
-        name="app.files.sidebar.space.details.table"
-        :slot-props="{ space: resource, resource }"
-        :multiple="true"
-      />
+      <colgroup>
+        <col class="oc-width-1-3" />
+        <col class="oc-width-2-3" />
+      </colgroup>
+      <tbody>
+        <tr>
+          <th scope="col" class="oc-pr-s oc-font-semibold" v-text="$gettext('Last activity')" />
+          <td v-text="lastModifiedDate" />
+        </tr>
+        <tr v-if="resource.description">
+          <th scope="col" class="oc-pr-s oc-font-semibold" v-text="$gettext('Subtitle')" />
+          <td v-text="resource.description" />
+        </tr>
+        <tr>
+          <th scope="col" class="oc-pr-s oc-font-semibold" v-text="$gettext('Manager')" />
+          <td>
+            <span v-text="ownerUsernames" />
+          </td>
+        </tr>
+        <tr v-if="!resource.disabled">
+          <th scope="col" class="oc-pr-s oc-font-semibold" v-text="$gettext('Quota')" />
+          <td>
+            <space-quota :space-quota="resource.spaceQuota" />
+          </td>
+        </tr>
+        <tr v-if="showSize" data-testid="sizeInfo">
+          <th scope="col" class="oc-pr-s oc-font-semibold" v-text="$gettext('Size')" />
+          <td v-text="size" />
+        </tr>
+        <web-dav-details v-if="showWebDavDetails" :space="resource" />
+        <portal-target
+          name="app.files.sidebar.space.details.table"
+          :slot-props="{ space: resource, resource }"
+          :multiple="true"
+        />
+      </tbody>
     </table>
   </div>
 </template>
