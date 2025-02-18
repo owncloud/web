@@ -80,5 +80,10 @@
     "clean-publish": "5.1.0",
     "vite-plugin-dts": "4.3.0",
     "vite-plugin-node-polyfills": "0.22.0"
+  },
+  "pnpm": {
+    "overrides": {
+      "elliptic": "6.6.1"
+    }
   }
 }
