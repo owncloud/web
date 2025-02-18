@@ -53,15 +53,25 @@ which makes it easy to write tests, debug them and have them run cross-browser w
 
 Please make sure you have installed all dependencies and started the server(s) as described in [tooling]({{< ref "tooling.md#development-setup" >}}).
 
-#### Prepare & Start Web
+#### Prepare Web
 
 Bundle the web frontend with the following command:
 
 ```shell
-$ pnpm build:w
+$ pnpm build
 ```
 
 Our compose setup automatically mounts it into an oCIS backend, respectively. Web also gets recompiled on changes.
+
+#### Start Web
+
+Start the web with the following command:
+
+```shell
+docker compose up
+```
+
+This will start all the services. The ENV variables specific to each services are defined in the `docker-compose.yml` file.
 
 #### Run E2E Tests
 
