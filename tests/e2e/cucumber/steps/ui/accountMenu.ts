@@ -68,3 +68,13 @@ Then(
     expect(pageTitle).toEqual(title)
   }
 )
+
+When(
+    'user {string} disables notification for the following event',
+    async function (this: World, stepUser: string, stepTable: DataTable): Promise<void> {
+        const { page } = this.actorsEnvironment.getActor({ key: stepUser })
+        const accountObject = new objects.account.Account({ page })
+        for (const notification of stepTable.hashes()) {
+            await accountObject.disableNotificationEvent(notification.event)
+        }
+    });
