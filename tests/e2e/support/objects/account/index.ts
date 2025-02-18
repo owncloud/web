@@ -35,4 +35,8 @@ export class Account {
   getTitle(): Promise<string> {
     return po.getTitle({ page: this.#page })
   }
+
+  async disableNotificationEvent(event: string): Promise<void> {
+    await po.disableNotificationEvent({ page: this.#page, event })
+  }
 }
