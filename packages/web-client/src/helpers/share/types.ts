@@ -41,6 +41,7 @@ export interface IncomingShareResource extends ShareResource {
   syncEnabled: boolean
   shareRoles: UnifiedRoleDefinition[]
   sharePermissions: GraphSharePermission[]
+  canListVersions?(): boolean
 }
 
 export interface ShareRole extends UnifiedRoleDefinition {
