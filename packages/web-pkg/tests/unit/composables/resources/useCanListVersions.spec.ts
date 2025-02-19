@@ -1,6 +1,11 @@
 import { getComposableWrapper } from '@ownclouders/web-test-helpers'
 import { mock } from 'vitest-mock-extended'
-import { Resource, SpaceResource, TrashResource } from '@ownclouders/web-client'
+import {
+  IncomingShareResource,
+  Resource,
+  SpaceResource,
+  TrashResource
+} from '@ownclouders/web-client'
 import { useCanListVersions } from '../../../../src/composables/resources'
 
 describe('useCanListVersions', () => {
@@ -52,6 +57,21 @@ describe('useCanListVersions', () => {
           const resource = mock<Resource>({ type: 'file' })
           const canList = canListVersions({ space, resource })
           expect(canList).toBeFalsy()
+        }
+      })
+    })
+
+    it('should use resource permissions instead of space permissions for received shares', () => {
+      getWrapper({
+        setup: ({ canListVersions }) => {
+          const space = mock<SpaceResource>({ canListVersions: () => false })
+          const resource = mock<IncomingShareResource>({
+            type: 'file',
+            isReceivedShare: () => true,
+            canListVersions: () => true
+          })
+          const canList = canListVersions({ space, resource })
+          expect(canList).toBeTruthy()
         }
       })
     })
