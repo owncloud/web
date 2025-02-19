@@ -32,6 +32,7 @@ Summary
 * Enhancement - Hide password protected folders extension: [#12145](https://github.com/owncloud/web/pull/12145)
 * Enhancement - Recursive folder creation: [#12146](https://github.com/owncloud/web/pull/12146)
 * Enhancement - Delete password protected folders: [#12152](https://github.com/owncloud/web/pull/12152)
+* Enhancement - Allow camera in external app iframe: [#12188](https://github.com/owncloud/web/pull/12188)
 
 Details
 -------
@@ -238,6 +239,16 @@ Details
 
    https://github.com/owncloud/web/issues/12039
    https://github.com/owncloud/web/pull/12152
+
+* Enhancement - Allow camera in external app iframe: [#12188](https://github.com/owncloud/web/pull/12188)
+
+   We've added the `allow` attribute with value `camera` to iframe in external app
+   so that we allow using camera in external apps. We are not specifying any
+   allowed origins and allow it everywhere as we are already allowing only certain
+   origins to be loaded inside of the iframe.
+
+   https://github.com/owncloud/web/issues/12121
+   https://github.com/owncloud/web/pull/12188
 
 Changelog for ownCloud Web [11.1.1] (2025-01-22)
 =======================================
