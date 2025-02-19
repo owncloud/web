@@ -26,7 +26,8 @@ When(
       await resourceObject.create({
         name: info.resource,
         type: info.type as createResourceTypes,
-        content: info.content
+        content: info.content,
+        password: info.password
       })
     }
   }
