@@ -17,6 +17,7 @@ Summary
 * Bugfix - Do not render default actions in context menu: [#12175](https://github.com/owncloud/web/pull/12175)
 * Bugfix - Open password protected folder when clicking on its name: [#12177](https://github.com/owncloud/web/pull/12177)
 * Bugfix - Skip upload dropzone init when files view is missing: [#12178](https://github.com/owncloud/web/pull/12178)
+* Bugfix - Sanitize content from md-editor-v3: [#12195](https://github.com/owncloud/web/pull/12195)
 * Enhancement - Accessibility improvements: [#5379](https://github.com/owncloud/web/issues/5379)
 * Enhancement - Create spaces via admin settings: [#11849](https://github.com/owncloud/web/pull/11849)
 * Enhancement - Disable resources in delete queue: [#12046](https://github.com/owncloud/web/pull/12046)
@@ -114,6 +115,14 @@ Details
 
    https://github.com/owncloud/web/issues/12150
    https://github.com/owncloud/web/pull/12178
+
+* Bugfix - Sanitize content from md-editor-v3: [#12195](https://github.com/owncloud/web/pull/12195)
+
+   We've fixed an issue where the user can inject XSS attack by sanitizing the
+   user's content
+
+   https://github.com/owncloud/enterprise/issues/7092
+   https://github.com/owncloud/web/pull/12195
 
 * Enhancement - Accessibility improvements: [#5379](https://github.com/owncloud/web/issues/5379)
 
