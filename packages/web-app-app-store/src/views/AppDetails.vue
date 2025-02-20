@@ -96,6 +96,9 @@ export default defineComponent({
 </script>
 
 <style lang="scss">
+// .oc-my-s > .md-editor.md-editor-dark.md-editor-previewOnly {
+//   max-width: 100%;
+// }
 .app-details {
   background-color: var(--oc-color-background-highlight);
   box-shadow: none;
