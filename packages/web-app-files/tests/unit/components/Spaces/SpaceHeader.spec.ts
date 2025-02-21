@@ -1,8 +1,14 @@
-import { nextTick, ref } from 'vue'
+import { ref } from 'vue'
 import SpaceHeader from '../../../../src/components/Spaces/SpaceHeader.vue'
 import { DriveItem } from '@ownclouders/web-client/graph/generated'
 import { SpaceResource, Resource, buildSpaceImageResource } from '@ownclouders/web-client'
-import { defaultPlugins, mount, defaultComponentMocks } from '@ownclouders/web-test-helpers'
+
+import {
+  defaultPlugins,
+  mount,
+  defaultComponentMocks,
+  flushPromises
+} from '@ownclouders/web-test-helpers'
 import { mock } from 'vitest-mock-extended'
 
 vi.mock('@ownclouders/web-pkg', async (importOriginal) => ({
@@ -20,13 +26,14 @@ vi.mock('@ownclouders/web-client', async (importOriginal) => ({
   buildSpaceImageResource: vi.fn()
 }))
 
-const getSpaceMock = (spaceImageData: DriveItem = undefined) =>
+const getSpaceMock = (spaceImageData: DriveItem = undefined, options?: Partial<SpaceResource>) =>
   mock<SpaceResource>({
     id: '1',
     name: '',
     description: '',
     spaceReadmeData: undefined,
-    spaceImageData
+    spaceImageData,
+    ...options
   })
 
 describe('SpaceHeader', () => {
@@ -61,10 +68,14 @@ describe('SpaceHeader', () => {
   })
   describe('space description', () => {
     it('should show the description', async () => {
-      const wrapper = getWrapper({ space: getSpaceMock() })
-      wrapper.vm.markdownResource = mock<Resource>()
-      wrapper.vm.markdownContent = 'content'
-      await nextTick()
+      const wrapper = getWrapper({
+        space: getSpaceMock(undefined, {
+          spaceReadmeData: {
+            name: 'lorem'
+          }
+        })
+      })
+      await flushPromises()
       expect(wrapper.find('.markdown-container').exists()).toBeTruthy()
       expect(wrapper.html()).toMatchSnapshot()
     })
@@ -74,6 +85,8 @@ describe('SpaceHeader', () => {
 function getWrapper({ space = {} as SpaceResource, isSideBarOpen = false, isMobileWidth = false }) {
   const mocks = defaultComponentMocks()
   mocks.$previewService.loadPreview.mockResolvedValue('blob:image')
+  mocks.$clientService.webdav.getFileContents.mockResolvedValue({ body: 'lorem body' })
+  mocks.$clientService.webdav.getFileInfo.mockResolvedValue({ id: '1', path: 'lorem/path' })
   vi.mocked(buildSpaceImageResource).mockReturnValue(mock<Resource>())
 
   return mount(SpaceHeader, {

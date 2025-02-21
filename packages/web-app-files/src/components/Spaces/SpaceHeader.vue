@@ -84,19 +84,8 @@
   </div>
 </template>
 
-<script lang="ts">
-import {
-  computed,
-  defineComponent,
-  inject,
-  onBeforeUnmount,
-  onMounted,
-  PropType,
-  Ref,
-  ref,
-  unref,
-  watch
-} from 'vue'
+<script lang="ts" setup>
+import { computed, inject, onBeforeUnmount, onMounted, Ref, ref, unref, watch } from 'vue'
 import { buildSpaceImageResource, SpaceResource } from '@ownclouders/web-client'
 import {
   useClientService,
@@ -112,176 +101,147 @@ import { eventBus } from '@ownclouders/web-pkg'
 import { SideBarEventTopics } from '@ownclouders/web-pkg'
 import { useGettext } from 'vue3-gettext'
 import { DriveItem } from '@ownclouders/web-client/graph/generated'
-
+interface Props {
+  space: SpaceResource
+  isSideBarOpen: boolean
+}
 const markdownContainerCollapsedClass = 'collapsed'
+const { space, isSideBarOpen = false } = defineProps<Props>()
 
-export default defineComponent({
-  name: 'SpaceHeader',
-  components: {
-    SpaceContextActions,
-    TextEditor
-  },
-  props: {
-    space: {
-      type: Object as PropType<SpaceResource>,
-      required: true
-    },
-    isSideBarOpen: { type: Boolean, default: false }
-  },
-  setup(props) {
-    const language = useGettext()
-    const { $gettext, $ngettext } = language
-    const clientService = useClientService()
-    const { getFileContents, getFileInfo } = clientService.webdav
-    const resourcesStore = useResourcesStore()
-    const { getDefaultAction } = useFileActions()
-    const { loadPreview } = useLoadPreview()
+const language = useGettext()
+const { $gettext, $ngettext } = language
+const clientService = useClientService()
+const { getFileContents, getFileInfo } = clientService.webdav
+const resourcesStore = useResourcesStore()
+const { getDefaultAction } = useFileActions()
+const { loadPreview } = useLoadPreview()
 
-    const markdownContainerRef = ref(null)
-    const markdownContent = ref('')
-    const markdownResource = ref(null)
-    const markdownCollapsed = ref(true)
-    const showMarkdownCollapse = ref(false)
-    const toggleMarkdownCollapsedIcon = computed(() => {
-      return unref(markdownCollapsed) ? 'add' : 'subtract'
-    })
-    const toggleMarkdownCollapsedText = computed(() => {
-      return unref(markdownCollapsed) ? $gettext('Show more') : $gettext('Show less')
-    })
-    const toggleMarkdownCollapsed = () => {
-      markdownCollapsed.value = !unref(markdownCollapsed)
-      unref(markdownContainerRef).classList.toggle(markdownContainerCollapsedClass)
-    }
-    const onMarkdownResize = () => {
-      if (!unref(markdownContainerRef)) {
-        return
-      }
-
-      unref(markdownContainerRef).classList.remove(markdownContainerCollapsedClass)
-      const markdownContainerHeight = unref(markdownContainerRef).offsetHeight
-      if (markdownContainerHeight < 150) {
-        showMarkdownCollapse.value = false
-        return
-      }
-      showMarkdownCollapse.value = true
-
-      if (unref(markdownCollapsed)) {
-        unref(markdownContainerRef).classList.add(markdownContainerCollapsedClass)
-      }
-    }
-    const markdownResizeObserver = new ResizeObserver(onMarkdownResize)
-    const observeMarkdownContainerResize = () => {
-      if (!markdownResizeObserver || !unref(markdownContainerRef)) {
-        return
-      }
-      markdownResizeObserver.unobserve(unref(markdownContainerRef))
-      markdownResizeObserver.observe(unref(markdownContainerRef))
-    }
-    const unobserveMarkdownContainerResize = () => {
-      if (!markdownResizeObserver || !unref(markdownContainerRef)) {
-        return
-      }
-      markdownResizeObserver.unobserve(unref(markdownContainerRef))
-    }
-    onMounted(observeMarkdownContainerResize)
-    onBeforeUnmount(() => {
-      unobserveMarkdownContainerResize()
-    })
-    watch(
-      computed(() => props.space.spaceReadmeData),
-      async (data: DriveItem) => {
-        if (!data) {
-          return
-        }
-
-        const fileContentsResponse = await getFileContents(props.space, {
-          path: `.space/${props.space.spaceReadmeData.name}`
-        })
-
-        const fileInfoResponse = await getFileInfo(props.space, {
-          path: `.space/${props.space.spaceReadmeData.name}`
-        })
-
-        unobserveMarkdownContainerResize()
-        markdownContent.value = fileContentsResponse.body
-        markdownResource.value = fileInfoResponse
-
-        if (unref(markdownContent)) {
-          observeMarkdownContainerResize()
-        }
-      },
-      { deep: true, immediate: true }
-    )
-
-    const imageContent = ref<string>(null)
-    const imageExpanded = ref(false)
-
-    const editReadMeContentLink = computed(() => {
-      const action = getDefaultAction({ resources: [unref(markdownResource)], space: props.space })
-
-      if (!action.route) {
-        return null
-      }
-
-      return action.route({ space: props.space, resources: [unref(markdownResource)] })
-    })
-    const toggleImageExpanded = () => {
-      imageExpanded.value = !unref(imageExpanded)
-    }
-
-    watch(
-      computed(() => props.space.spaceImageData),
-      async (data) => {
-        if (!data) {
-          return
-        }
-        const resource = buildSpaceImageResource(props.space)
-        imageContent.value = await loadPreview({
-          space: props.space,
-          resource,
-          dimensions: ImageDimension.Tile,
-          processor: ProcessorType.enum.fit,
-          cancelRunning: true,
-          updateStore: false
-        })
-      },
-      { immediate: true }
-    )
-
-    const memberCount = computed(() => {
-      return Object.keys(props.space.members).length
-    })
-    const memberCountString = computed(() => {
-      return $ngettext('%{count} member', '%{count} members', unref(memberCount), {
-        count: unref(memberCount).toString()
-      })
-    })
-
-    const openSideBarSharePanel = () => {
-      resourcesStore.setSelection([])
-      eventBus.publish(SideBarEventTopics.openWithPanel, 'space-share')
-    }
-
-    return {
-      isMobileWidth: inject<Ref<boolean>>('isMobileWidth'),
-      markdownContainerRef,
-      markdownContent,
-      markdownResource,
-      markdownCollapsed,
-      showMarkdownCollapse,
-      toggleMarkdownCollapsedIcon,
-      toggleMarkdownCollapsedText,
-      toggleMarkdownCollapsed,
-      imageContent,
-      imageExpanded,
-      toggleImageExpanded,
-      memberCount,
-      memberCountString,
-      openSideBarSharePanel,
-      editReadMeContentLink
-    }
-  }
+const markdownContainerRef = ref(null)
+const markdownContent = ref('')
+const markdownResource = ref(null)
+const markdownCollapsed = ref(true)
+const showMarkdownCollapse = ref(false)
+const toggleMarkdownCollapsedIcon = computed(() => {
+  return unref(markdownCollapsed) ? 'add' : 'subtract'
 })
+const toggleMarkdownCollapsedText = computed(() => {
+  return unref(markdownCollapsed) ? $gettext('Show more') : $gettext('Show less')
+})
+const toggleMarkdownCollapsed = () => {
+  markdownCollapsed.value = !unref(markdownCollapsed)
+  unref(markdownContainerRef).classList.toggle(markdownContainerCollapsedClass)
+}
+const onMarkdownResize = () => {
+  if (!unref(markdownContainerRef)) {
+    return
+  }
+
+  unref(markdownContainerRef).classList.remove(markdownContainerCollapsedClass)
+  const markdownContainerHeight = unref(markdownContainerRef).offsetHeight
+  if (markdownContainerHeight < 150) {
+    showMarkdownCollapse.value = false
+    return
+  }
+  showMarkdownCollapse.value = true
+
+  if (unref(markdownCollapsed)) {
+    unref(markdownContainerRef).classList.add(markdownContainerCollapsedClass)
+  }
+}
+const markdownResizeObserver = new ResizeObserver(onMarkdownResize)
+const observeMarkdownContainerResize = () => {
+  if (!markdownResizeObserver || !unref(markdownContainerRef)) {
+    return
+  }
+  markdownResizeObserver.unobserve(unref(markdownContainerRef))
+  markdownResizeObserver.observe(unref(markdownContainerRef))
+}
+const unobserveMarkdownContainerResize = () => {
+  if (!markdownResizeObserver || !unref(markdownContainerRef)) {
+    return
+  }
+  markdownResizeObserver.unobserve(unref(markdownContainerRef))
+}
+onMounted(observeMarkdownContainerResize)
+onBeforeUnmount(() => {
+  unobserveMarkdownContainerResize()
+})
+watch(
+  computed(() => space.spaceReadmeData),
+  async (data: DriveItem) => {
+    if (!data) {
+      return
+    }
+
+    const fileContentsResponse = await getFileContents(space, {
+      path: `.space/${space.spaceReadmeData.name}`
+    })
+
+    const fileInfoResponse = await getFileInfo(space, {
+      path: `.space/${space.spaceReadmeData.name}`
+    })
+
+    unobserveMarkdownContainerResize()
+    markdownContent.value = fileContentsResponse.body
+    markdownResource.value = fileInfoResponse
+
+    if (unref(markdownContent)) {
+      observeMarkdownContainerResize()
+    }
+  },
+  { deep: true, immediate: true }
+)
+
+const imageContent = ref<string>(null)
+const imageExpanded = ref(false)
+
+const editReadMeContentLink = computed(() => {
+  const action = getDefaultAction({ resources: [unref(markdownResource)], space })
+
+  if (!action.route) {
+    return null
+  }
+
+  return action.route({ space: space, resources: [unref(markdownResource)] })
+})
+const toggleImageExpanded = () => {
+  imageExpanded.value = !unref(imageExpanded)
+}
+
+watch(
+  computed(() => space.spaceImageData),
+  async (data) => {
+    if (!data) {
+      return
+    }
+    const resource = buildSpaceImageResource(space)
+    imageContent.value = await loadPreview({
+      space,
+      resource,
+      dimensions: ImageDimension.Tile,
+      processor: ProcessorType.enum.fit,
+      cancelRunning: true,
+      updateStore: false
+    })
+  },
+  { immediate: true }
+)
+
+const memberCount = computed(() => {
+  return Object.keys(space.members).length
+})
+const memberCountString = computed(() => {
+  return $ngettext('%{count} member', '%{count} members', unref(memberCount), {
+    count: unref(memberCount).toString()
+  })
+})
+
+const openSideBarSharePanel = () => {
+  resourcesStore.setSelection([])
+  eventBus.publish(SideBarEventTopics.openWithPanel, 'space-share')
+}
+
+const isMobileWidth = inject<Ref<boolean>>('isMobileWidth')
 </script>
 
 <style lang="scss">
