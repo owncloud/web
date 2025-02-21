@@ -108,7 +108,6 @@ export default defineComponent({
 
 #space-description-preview {
   background-color: transparent;
-  width: max-content;
 
   .md-editor-preview-wrapper {
     padding: 0;
