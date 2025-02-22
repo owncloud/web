@@ -141,7 +141,7 @@
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
     "sass": "1.81.0",
-    "sass-loader": "10.5.2",
+    "sass-loader": "16.0.5",
     "sass-resources-loader": "^2.2.5",
     "semver": "7.6.3",
     "shelljs": "^0.8.3",
