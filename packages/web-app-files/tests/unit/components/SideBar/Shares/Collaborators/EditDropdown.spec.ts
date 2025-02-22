@@ -28,12 +28,12 @@ describe('EditDropdown', () => {
     })
   })
   describe('remove share action', () => {
-    it('is being rendered when canRemove is true', () => {
-      const { wrapper } = getWrapper({ canRemove: true })
+    it('is being rendered when canEdit is true', () => {
+      const { wrapper } = getWrapper({ canEdit: true })
       expect(wrapper.find(selectors.removeShareSection).exists()).toBeTruthy()
     })
-    it('is not being rendered when canRemove is false', () => {
-      const { wrapper } = getWrapper({ canRemove: false })
+    it('is not being rendered when canEdit is false', () => {
+      const { wrapper } = getWrapper({ canEdit: false })
       expect(wrapper.find(selectors.removeShareSection).exists()).toBeFalsy()
     })
   })
@@ -72,7 +72,6 @@ function getWrapper(props: PartialComponentProps<typeof EditDropdown> = {}) {
     wrapper: shallowMount(EditDropdown, {
       props: {
         canEdit: true,
-        canRemove: true,
         shareCategory: 'user',
         accessDetails: [],
         ...props
