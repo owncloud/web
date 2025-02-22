@@ -201,4 +201,45 @@ describe('announceConfiguration', () => {
     await announceConfiguration({ path: '/config.json', configStore })
     expect(configStore.options.embed.enabled).toStrictEqual(false)
   })
+
+  it('should set default language to value set in URL query when it matches supported languages', async () => {
+    Object.defineProperty(window, 'location', {
+      value: {
+        search: '?lang=de'
+      },
+      writable: true
+    })
+    vi.spyOn(global, 'fetch').mockResolvedValue(
+      mock<Response>({
+        status: 200,
+        json: () => Promise.resolve({ theme: '', server: '', options: {} })
+      })
+    )
+    const configStore = useConfigStore()
+    await announceConfiguration({ path: '/config.json', configStore })
+    expect(configStore.options.defaultLanguage).toStrictEqual('de')
+  })
+
+  it('should fallback to navigator language as default language when lang in URL query does not match supported languages', async () => {
+    Object.defineProperty(window, 'location', {
+      value: {
+        search: '?lang=la'
+      },
+      writable: true
+    })
+    Object.defineProperty(navigator, 'language', {
+      value: 'de',
+      writable: true
+    })
+
+    vi.spyOn(global, 'fetch').mockResolvedValue(
+      mock<Response>({
+        status: 200,
+        json: () => Promise.resolve({ theme: '', server: '', options: {} })
+      })
+    )
+    const configStore = useConfigStore()
+    await announceConfiguration({ path: '/config.json', configStore })
+    expect(configStore.options.defaultLanguage).toStrictEqual('de')
+  })
 })

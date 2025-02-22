@@ -19,6 +19,7 @@ import { ref } from 'vue'
 import { Modal, useThemeStore } from '@ownclouders/web-pkg/src/composables'
 import AppLoadingSpinner from '@ownclouders/web-pkg/src/components/AppLoadingSpinner.vue'
 import { unref } from 'vue'
+import { useGettext } from 'vue3-gettext'
 
 const props = defineProps<{
   modal: Modal
@@ -28,6 +29,7 @@ const props = defineProps<{
 const iframeRef = ref<HTMLIFrameElement>()
 const isLoading = ref(true)
 const themeStore = useThemeStore()
+const { current } = useGettext()
 
 const iframeTitle = themeStore.currentTheme.common?.name
 const iframeUrl = new URL(props.publicLink)
@@ -35,6 +37,7 @@ iframeUrl.searchParams.append('hide-logo', 'true')
 iframeUrl.searchParams.append('hide-app-switcher', 'true')
 iframeUrl.searchParams.append('hide-account-menu', 'true')
 iframeUrl.searchParams.append('hide-navigation', 'true')
+iframeUrl.searchParams.append('lang', current)
 
 const onLoad = () => {
   isLoading.value = false
