@@ -12,6 +12,8 @@ const languageInput = '[data-testid="language"] .vs__search'
 const languageValueDropDown = `.vs__dropdown-menu :text-is("%s")`
 const languageValue = '[data-testid="language"] .vs__selected'
 const accountPageTitle = '#account-page-title'
+const notificationEventCheckBox =
+  '//div[@class="account-table"]//td[text()="%s"]//following-sibling::td//span//input[@aria-label="In-App"]'
 
 export const getQuotaValue = async (args: { page: Page }): Promise<string> => {
   const { page } = args
@@ -108,4 +110,12 @@ export const changeLanguage = async (args: {
 export const getTitle = (args: { page: Page }): Promise<string> => {
   const { page } = args
   return page.locator(accountPageTitle).textContent()
+}
+
+export const disableNotificationEvent = async (args: {
+  page: Page
+  event: string
+}): Promise<void> => {
+  const { page, event } = args
+  await page.locator(util.format(notificationEventCheckBox, event)).click()
 }
