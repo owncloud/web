@@ -690,7 +690,7 @@ importers:
         version: 4.4.1
       '@vueuse/core':
         specifier: ^11.0.0 || ^12.0.0
-        version: 12.0.0(typescript@5.6.3)
+        version: 12.7.0(typescript@5.6.3)
       axios:
         specifier: 1.7.9
         version: 1.7.9
@@ -827,7 +827,7 @@ importers:
         version: 4.5.1
       '@vueuse/core':
         specifier: ^11.0.0 || ^12.0.0
-        version: 12.0.0(typescript@5.6.3)
+        version: 12.7.0(typescript@5.6.3)
       vue-router:
         specifier: 4.2.5
         version: 4.2.5(vue@3.5.13(typescript@5.6.3))
@@ -1007,7 +1007,7 @@ importers:
         version: 3.5.13
       '@vueuse/core':
         specifier: ^12.0.0
-        version: 12.0.0(typescript@5.6.3)
+        version: 12.7.0(typescript@5.6.3)
       axios:
         specifier: ^1.7.7
         version: 1.7.9
@@ -1140,8 +1140,8 @@ importers:
         specifier: 4.3.2
         version: 4.3.2(@uppy/core@4.4.1)
       '@vueuse/core':
-        specifier: 12.0.0
-        version: 12.0.0(typescript@5.6.3)
+        specifier: 12.7.0
+        version: 12.7.0(typescript@5.6.3)
       '@vueuse/head':
         specifier: 2.0.0
         version: 2.0.0(vue@3.5.13(typescript@5.6.3))
@@ -3104,19 +3104,19 @@ packages:
   '@vue/test-utils@2.4.6':
     resolution: {integrity: sha512-FMxEjOpYNYiFe0GkaHsnJPXFHxQ6m4t8vI/ElPGpMWxZKpmRvQ33OIrvRXemy6yha03RxhOlQuy+gZMC3CQSow==}
 
-  '@vueuse/core@12.0.0':
-    resolution: {integrity: sha512-C12RukhXiJCbx4MGhjmd/gH52TjJsc3G0E0kQj/kb19H3Nt6n1CA4DRWuTdWWcaFRdlTe0npWDS942mvacvNBw==}
+  '@vueuse/core@12.7.0':
+    resolution: {integrity: sha512-jtK5B7YjZXmkGNHjviyGO4s3ZtEhbzSgrbX+s5o+Lr8i2nYqNyHuPVOeTdM1/hZ5Tkxg/KktAuAVDDiHMraMVA==}
 
   '@vueuse/head@2.0.0':
     resolution: {integrity: sha512-ykdOxTGs95xjD4WXE4na/umxZea2Itl0GWBILas+O4oqS7eXIods38INvk3XkJKjqMdWPcpCyLX/DioLQxU1KA==}
     peerDependencies:
       vue: '>=2.7 || >=3'
 
-  '@vueuse/metadata@12.0.0':
-    resolution: {integrity: sha512-Yzimd1D3sjxTDOlF05HekU5aSGdKjxhuhRFHA7gDWLn57PRbBIh+SF5NmjhJ0WRgF3my7T8LBucyxdFJjIfRJQ==}
+  '@vueuse/metadata@12.7.0':
+    resolution: {integrity: sha512-4VvTH9mrjXqFN5LYa5YfqHVRI6j7R00Vy4995Rw7PQxyCL3z0Lli86iN4UemWqixxEvYfRjG+hF9wL8oLOn+3g==}
 
-  '@vueuse/shared@12.0.0':
-    resolution: {integrity: sha512-3i6qtcq2PIio5i/vVYidkkcgvmTjCqrf26u+Fd4LhnbBmIT6FN8y6q/GJERp8lfcB9zVEfjdV0Br0443qZuJpw==}
+  '@vueuse/shared@12.7.0':
+    resolution: {integrity: sha512-coLlUw2HHKsm7rPN6WqHJQr18WymN4wkA/3ThFaJ4v4gWGWAQQGK+MJxLuJTBs4mojQiazlVWAKNJNpUWGRkNw==}
 
   '@vxna/mini-html-webpack-template@1.0.0':
     resolution: {integrity: sha512-cwlmP9CoWyZYtI33DUKOjS6Hyn3yNrXZQtP+QxPjaRpYNYcbrg+u7EZQZmvB/Mi7qwiDbeTU7UtMT0C5ouRTNA==}
@@ -10524,7 +10524,7 @@ snapshots:
       '@cucumber/ci-environment': 9.1.0
       '@cucumber/cucumber-expressions': 16.1.1
       '@cucumber/gherkin': 26.0.3
-      '@cucumber/gherkin-streams': 5.0.1(@cucumber/gherkin@26.0.3)(@cucumber/message-streams@4.0.1(@cucumber/messages@27.0.2))(@cucumber/messages@21.0.1)
+      '@cucumber/gherkin-streams': 5.0.1(@cucumber/gherkin@26.0.3)(@cucumber/message-streams@4.0.1(@cucumber/messages@21.0.1))(@cucumber/messages@21.0.1)
       '@cucumber/gherkin-utils': 8.0.2
       '@cucumber/html-formatter': 20.2.1(@cucumber/messages@21.0.1)
       '@cucumber/message-streams': 4.0.1(@cucumber/messages@21.0.1)
@@ -10562,7 +10562,7 @@ snapshots:
       yaml: 2.6.0
       yup: 0.32.11
 
-  '@cucumber/gherkin-streams@5.0.1(@cucumber/gherkin@26.0.3)(@cucumber/message-streams@4.0.1(@cucumber/messages@27.0.2))(@cucumber/messages@21.0.1)':
+  '@cucumber/gherkin-streams@5.0.1(@cucumber/gherkin@26.0.3)(@cucumber/message-streams@4.0.1(@cucumber/messages@21.0.1))(@cucumber/messages@21.0.1)':
     dependencies:
       '@cucumber/gherkin': 26.0.3
       '@cucumber/message-streams': 4.0.1(@cucumber/messages@21.0.1)
@@ -11738,11 +11738,11 @@ snapshots:
       js-beautify: 1.14.11
       vue-component-type-helpers: 2.0.13
 
-  '@vueuse/core@12.0.0(typescript@5.6.3)':
+  '@vueuse/core@12.7.0(typescript@5.6.3)':
     dependencies:
       '@types/web-bluetooth': 0.0.20
-      '@vueuse/metadata': 12.0.0
-      '@vueuse/shared': 12.0.0(typescript@5.6.3)
+      '@vueuse/metadata': 12.7.0
+      '@vueuse/shared': 12.7.0(typescript@5.6.3)
       vue: 3.5.13(typescript@5.6.3)
     transitivePeerDependencies:
       - typescript
@@ -11755,9 +11755,9 @@ snapshots:
       '@unhead/vue': 1.8.4(vue@3.5.13(typescript@5.6.3))
       vue: 3.5.13(typescript@5.6.3)
 
-  '@vueuse/metadata@12.0.0': {}
+  '@vueuse/metadata@12.7.0': {}
 
-  '@vueuse/shared@12.0.0(typescript@5.6.3)':
+  '@vueuse/shared@12.7.0(typescript@5.6.3)':
     dependencies:
       vue: 3.5.13(typescript@5.6.3)
     transitivePeerDependencies:
