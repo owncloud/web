@@ -23,7 +23,7 @@ Generally, your theming configuration lives inside a `.json` file, e.g. `theme.j
 To reference your theme, you have two options:
 
 - Using a URL, e.g. `"theme": "https://externalurl.example.com/theme-name/theme.json",`. To avoid CORS issues, please make sure that you host the URL on the same URL as your ownCloud web hosting.
-- For development and testing purposes, you can store your `theme.json` inside `packages/web-runtime/themes/{theme-name}/` and reference it in the `config.json`. However, this isn't recommended for production use since your changes may get lost when updating oCIS or the `web` app in OC10.
+- For development and testing purposes, you can store your `theme.json` inside `packages/web-runtime/themes/{theme-name}/` and reference it in the `config.json`. However, this isn't recommended for production use since your changes may get lost when updating oCIS.
 
 **Hint:** If no theme is provided, the loading of your custom theme fails or the theme can't be parsed correctly, the standard ownCloud theme will be loaded as a fallback and an error with further information will be logged on the browser console.
 
