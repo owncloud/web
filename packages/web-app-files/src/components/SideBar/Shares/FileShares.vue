@@ -43,7 +43,6 @@
             :resource-name="resource.name"
             :deniable="isShareDeniable(collaborator)"
             :modifiable="isShareModifiable(collaborator)"
-            :removable="isShareRemovable(collaborator)"
             :is-share-denied="isShareDenied(collaborator)"
             :shared-parent-route="getSharedParentRoute(collaborator)"
             :is-locked="resource.locked"
@@ -436,17 +435,6 @@ export default defineComponent({
     },
 
     isShareModifiable(collaborator: CollaboratorShare) {
-      if (collaborator.indirect || collaborator.shareType === ShareTypes.remote.value) {
-        return false
-      }
-
-      if (isProjectSpaceResource(this.space) || isShareSpaceResource(this.space)) {
-        return this.space.canShare({ user: this.user })
-      }
-
-      return true
-    },
-    isShareRemovable(collaborator: CollaboratorShare) {
       if (collaborator.indirect) {
         return false
       }
