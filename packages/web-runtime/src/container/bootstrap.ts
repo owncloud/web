@@ -77,6 +77,7 @@ import {
 } from './sse'
 import { loadAppTranslations } from '../helpers/language'
 import { urlJoin } from '@ownclouders/web-client'
+import { supportedLanguages } from '../defaults'
 
 const getEmbedConfigFromQuery = (
   doesEmbedEnabledOptionExists: boolean
@@ -159,16 +160,22 @@ export const announceConfiguration = async ({
       Object.prototype.hasOwnProperty.call(rawConfig.options.embed, 'enabled')
   )
 
+  const langQuery = getQueryParam('lang')
+  const defaultLanguage =
+    langQuery && supportedLanguages[langQuery] ? langQuery : navigator.language.substring(0, 2)
+
   rawConfig.options = {
     ...rawConfig.options,
     embed: { ...rawConfig.options?.embed, ...embedConfigFromQuery },
     hideLogo: getQueryParam('hide-logo') === 'true',
     hideAppSwitcher: getQueryParam('hide-app-switcher') === 'true',
     hideAccountMenu: getQueryParam('hide-account-menu') === 'true',
-    hideNavigation: getQueryParam('hide-navigation') === 'true'
+    hideNavigation: getQueryParam('hide-navigation') === 'true',
+    defaultLanguage
   }
 
   configStore.loadConfig(rawConfig)
+  return rawConfig
 }
 
 /**
@@ -379,9 +386,8 @@ export const announceGettext = ({
   ...options
 }: {
   app: App
-} & Partial<GetTextOptions>) => {
+} & Partial<GetTextOptions> & { defaultLanguage: string }) => {
   const gettext = createGettext({
-    defaultLanguage: navigator.language.substring(0, 2),
     silent: true,
     ...options
   })
