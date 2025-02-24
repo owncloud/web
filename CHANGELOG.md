@@ -22,6 +22,7 @@ Summary
 * Bugfix - Enable external shares editing: [#12204](https://github.com/owncloud/web/pull/12204)
 * Bugfix - Prevent password protected folder move: [#12205](https://github.com/owncloud/web/pull/12205)
 * Bugfix - Preserve current language in password protected folder view: [#12206](https://github.com/owncloud/web/pull/12206)
+* Bugfix - Preserve current page when opening a file: [#12207](https://github.com/owncloud/web/pull/12207)
 * Enhancement - Accessibility improvements: [#5379](https://github.com/owncloud/web/issues/5379)
 * Enhancement - Create spaces via admin settings: [#11849](https://github.com/owncloud/web/pull/11849)
 * Enhancement - Disable resources in delete queue: [#12046](https://github.com/owncloud/web/pull/12046)
@@ -164,6 +165,13 @@ Details
 
    https://github.com/owncloud/web/issues/12186
    https://github.com/owncloud/web/pull/12206
+
+* Bugfix - Preserve current page when opening a file: [#12207](https://github.com/owncloud/web/pull/12207)
+
+   Add page query into meta contextQueryItems in the route definition
+
+   https://github.com/owncloud/web/issues/12162
+   https://github.com/owncloud/web/pull/12207
 
 * Enhancement - Accessibility improvements: [#5379](https://github.com/owncloud/web/issues/5379)
 
