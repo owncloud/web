@@ -120,16 +120,19 @@ After(async function (this: World, { result, willBeRetried, pickle }: ITestCaseH
 
   await this.actorsEnvironment.close()
 
+  const adminUser = this.usersEnvironment.getUser({ key: 'admin' })
+  await api.token.refreshAccessToken(adminUser)
+
   // refresh keycloak admin access token
   if (config.keycloak) {
-    const user = this.usersEnvironment.getUser({ key: 'admin' })
-    await api.keycloak.refreshAccessTokenForKeycloakUser(user)
-    await api.keycloak.refreshAccessTokenForKeycloakOcisUser(user)
+    await api.keycloak.refreshAccessTokenForKeycloakUser(adminUser)
+    await api.keycloak.refreshAccessTokenForKeycloakOcisUser(adminUser)
   }
 
   if (isOcm(pickle)) {
     // need to set federatedServer config to true to delete federated oCIS users
     config.federatedServer = true
+    await api.token.refreshAccessToken(adminUser)
     await cleanUpUser(store.federatedUserStore, this.usersEnvironment.getUser({ key: 'admin' }))
     config.federatedServer = false
   }

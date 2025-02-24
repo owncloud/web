@@ -1,3 +1,4 @@
+import { checkResponseStatus, request } from '../http'
 import { TokenEnvironmentFactory } from '../../environment'
 import { config } from '../../../config'
 import fetch, { Response } from 'node-fetch'
@@ -105,6 +106,36 @@ export const setAccessAndRefreshToken = async (user: User) => {
   const tokenList = (await response.json()) as Token
 
   const tokenEnvironment = TokenEnvironmentFactory()
+  tokenEnvironment.setToken({
+    user: { ...user },
+    token: {
+      userId: user.id,
+      accessToken: tokenList.access_token,
+      refreshToken: tokenList.refresh_token
+    }
+  })
+}
+
+export const refreshAccessToken = async (user: User): Promise<void> => {
+  const tokenEnvironment = TokenEnvironmentFactory()
+
+  const body = new URLSearchParams()
+  body.append('client_id', 'web')
+  body.append('grant_type', 'refresh_token')
+  body.append('refresh_token', tokenEnvironment.getToken({ user }).refreshToken)
+
+  const response = await request({
+    method: 'POST',
+    path: tokenUrl,
+    body,
+    header: { 'Content-Type': 'application/x-www-form-urlencoded' },
+    user
+  })
+  checkResponseStatus(response, 'Failed refresh access token')
+
+  const tokenList = (await response.json()) as Token
+
+  // update tokens
   tokenEnvironment.setToken({
     user: { ...user },
     token: {
