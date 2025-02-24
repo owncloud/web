@@ -19,6 +19,7 @@ Summary
 * Bugfix - Skip upload dropzone init when files view is missing: [#12178](https://github.com/owncloud/web/pull/12178)
 * Bugfix - Sanitize content from md-editor-v3: [#12195](https://github.com/owncloud/web/pull/12195)
 * Bugfix - Prevent password protected folder move: [#12205](https://github.com/owncloud/web/pull/12205)
+* Bugfix - Preserve current language in password protected folder view: [#12206](https://github.com/owncloud/web/pull/12206)
 * Enhancement - Accessibility improvements: [#5379](https://github.com/owncloud/web/issues/5379)
 * Enhancement - Create spaces via admin settings: [#11849](https://github.com/owncloud/web/pull/11849)
 * Enhancement - Disable resources in delete queue: [#12046](https://github.com/owncloud/web/pull/12046)
@@ -35,6 +36,7 @@ Summary
 * Enhancement - Recursive folder creation: [#12146](https://github.com/owncloud/web/pull/12146)
 * Enhancement - Delete password protected folders: [#12152](https://github.com/owncloud/web/pull/12152)
 * Enhancement - Allow camera in external app iframe: [#12188](https://github.com/owncloud/web/pull/12188)
+* Enhancement - Add `lang` URL query parameter: [#12206](https://github.com/owncloud/web/pull/12206)
 
 Details
 -------
@@ -132,6 +134,15 @@ Details
 
    https://github.com/owncloud/web/issues/12198
    https://github.com/owncloud/web/pull/12205
+
+* Bugfix - Preserve current language in password protected folder view: [#12206](https://github.com/owncloud/web/pull/12206)
+
+   We've added the new `lang` URL query param to the URL of password protected
+   folder iframe to preserve the language settings. The value is set to the
+   currently used language.
+
+   https://github.com/owncloud/web/issues/12186
+   https://github.com/owncloud/web/pull/12206
 
 * Enhancement - Accessibility improvements: [#5379](https://github.com/owncloud/web/issues/5379)
 
@@ -267,6 +278,15 @@ Details
 
    https://github.com/owncloud/web/issues/12121
    https://github.com/owncloud/web/pull/12188
+
+* Enhancement - Add `lang` URL query parameter: [#12206](https://github.com/owncloud/web/pull/12206)
+
+   We've added a new `lang` URL query parameter that allows specifying the default
+   language in which the UI should get displayed when opened. This value is ignored
+   when it does not match supported language codes or when a user is logged in.
+
+   https://github.com/owncloud/web/issues/12186
+   https://github.com/owncloud/web/pull/12206
 
 Changelog for ownCloud Web [11.1.1] (2025-01-22)
 =======================================
