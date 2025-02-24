@@ -1,7 +1,7 @@
+import fetch, { Response } from 'node-fetch'
 import { checkResponseStatus, request } from '../http'
 import { TokenEnvironmentFactory } from '../../environment'
 import { config } from '../../../config'
-import fetch, { Response } from 'node-fetch'
 import { User } from '../../types'
 
 const logonUrl = '/signin/v1/identifier/_/logon'
@@ -13,8 +13,8 @@ interface Token {
   refresh_token: string
 }
 
-const getAuthorizedEndPoint = async (user: User): Promise<Array<string>> => {
-  const logonResponse = await fetch(config.baseUrl + logonUrl, {
+const logonRequest = (username: string, password: string): Promise<Response> => {
+  return fetch(config.baseUrl + logonUrl, {
     method: 'POST',
     headers: {
       'Kopano-Konnect-XSRF': '1',
@@ -22,7 +22,7 @@ const getAuthorizedEndPoint = async (user: User): Promise<Array<string>> => {
       'Content-Type': 'application/json'
     },
     body: JSON.stringify({
-      params: [user.id, user.password, '1'],
+      params: [username, password, '1'],
       hello: {
         scope: 'openid profile email',
         client_id: 'web',
@@ -31,10 +31,31 @@ const getAuthorizedEndPoint = async (user: User): Promise<Array<string>> => {
       }
     })
   })
-  if (logonResponse.status !== 200) {
-    throw new Error(
-      `Logon failed: Expected status code be 200 but received ${logonResponse.status} Message: ${logonResponse.statusText}`
-    )
+}
+
+const getAuthorizedEndPoint = async (user: User): Promise<Array<string>> => {
+  const timeout = 5000 // 5 seconds timeout
+  const startTime = Date.now()
+  let retry = true
+  let logonResponse: Response
+
+  // server may return 502 Bad Gateway if the request is too early
+  // retry until timeout
+  while (retry) {
+    logonResponse = await logonRequest(user.id, user.password)
+    const elapsedTime = Date.now() - startTime
+    retry = elapsedTime < timeout
+
+    if (logonResponse.status === 502 && retry) {
+      console.info('[INFO] Failed with 502 Bad Gateway. Retrying logon request...')
+      // wait for 1 second before retrying
+      await new Promise((resolve) => setTimeout(resolve, 1000))
+      continue
+    } else if (logonResponse.status !== 200) {
+      throw new Error(
+        `Logon failed: Expected status code be 200 but received ${logonResponse.status} Message: ${logonResponse.statusText}`
+      )
+    }
   }
 
   const cookies = logonResponse.headers.raw()['set-cookie']?.[0] || ''
