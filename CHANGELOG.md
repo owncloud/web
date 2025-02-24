@@ -18,6 +18,7 @@ Summary
 * Bugfix - Open password protected folder when clicking on its name: [#12177](https://github.com/owncloud/web/pull/12177)
 * Bugfix - Skip upload dropzone init when files view is missing: [#12178](https://github.com/owncloud/web/pull/12178)
 * Bugfix - Sanitize content from md-editor-v3: [#12195](https://github.com/owncloud/web/pull/12195)
+* Bugfix - Enable external shares editing: [#12204](https://github.com/owncloud/web/pull/12204)
 * Bugfix - Prevent password protected folder move: [#12205](https://github.com/owncloud/web/pull/12205)
 * Bugfix - Preserve current language in password protected folder view: [#12206](https://github.com/owncloud/web/pull/12206)
 * Enhancement - Accessibility improvements: [#5379](https://github.com/owncloud/web/issues/5379)
@@ -126,6 +127,15 @@ Details
 
    https://github.com/owncloud/enterprise/issues/7092
    https://github.com/owncloud/web/pull/12195
+
+* Bugfix - Enable external shares editing: [#12204](https://github.com/owncloud/web/pull/12204)
+
+   We've reenabled external shares editing. It was previously disabled due to
+   missing implementation of OCM shares editing in the backend. That has been
+   implemented in the meantime.
+
+   https://github.com/owncloud/web/issues/12201
+   https://github.com/owncloud/web/pull/12204
 
 * Bugfix - Prevent password protected folder move: [#12205](https://github.com/owncloud/web/pull/12205)
 
