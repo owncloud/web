@@ -163,6 +163,7 @@ export function buildIncomingShareResource({
     canCreate: () => sharePermissions.includes(GraphSharePermission.createChildren),
     canBeDeleted: () => sharePermissions.includes(GraphSharePermission.deleteStandard),
     canEditTags: () => sharePermissions.includes(GraphSharePermission.createChildren),
+    canListVersions: () => sharePermissions.includes(GraphSharePermission.readVersions),
     isMounted: () => false,
     isReceivedShare: () => true,
     canShare: () => false,

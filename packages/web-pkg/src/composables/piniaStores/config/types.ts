@@ -122,7 +122,11 @@ const OptionsConfigSchema = z.object({
     })
     .optional(),
   userListRequiresFilter: z.boolean().optional(),
-  hideLogo: z.boolean().optional()
+  hideLogo: z.boolean().optional(),
+  hideAppSwitcher: z.boolean().optional(),
+  hideAccountMenu: z.boolean().optional(),
+  hideNavigation: z.boolean().optional(),
+  defaultLanguage: z.string().optional()
 })
 
 export type OptionsConfig = z.infer<typeof OptionsConfigSchema>

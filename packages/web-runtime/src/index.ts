@@ -71,11 +71,15 @@ export const bootstrapApp = async (configurationPath: string, appsReadyCallback:
 
   app.provide('$router', router)
 
-  await announceConfiguration({ path: configurationPath, configStore })
+  const config = await announceConfiguration({ path: configurationPath, configStore })
 
   app.use(abilitiesPlugin, createMongoAbility([]), { useGlobalProperties: true })
 
-  const gettext = announceGettext({ app, availableLanguages: supportedLanguages })
+  const gettext = announceGettext({
+    app,
+    availableLanguages: supportedLanguages,
+    defaultLanguage: config.options.defaultLanguage
+  })
 
   const clientService = announceClientService({ app, configStore, authStore })
   announceAuthService({
@@ -292,7 +296,11 @@ export const bootstrapErrorApp = async (err: Error): Promise<void> => {
   await announceTheme({ app, designSystem, configStore })
   console.error(err)
   const translations = await loadTranslations()
-  const gettext = announceGettext({ app, availableLanguages: supportedLanguages })
+  const gettext = announceGettext({
+    app,
+    availableLanguages: supportedLanguages,
+    defaultLanguage: window.navigator.language.slice(0, 3)
+  })
   announceTranslations({ gettext, coreTranslations: translations })
   app.mount('#owncloud')
 }

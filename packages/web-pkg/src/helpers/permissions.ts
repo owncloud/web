@@ -1,4 +1,4 @@
-import { Resource } from '@ownclouders/web-client'
+import { isPasswordProtectedFolderFileResource, Resource } from '@ownclouders/web-client'
 
 /**
  * Asserts whether given resource can be moved
@@ -11,6 +11,10 @@ export function canBeMoved(resource: Resource, parentPath: string) {
   // TODO: Find a way to disable move action when shares are mounted in different folder then root
   const isExternal = resource.isReceivedShare() || resource.isMounted()
   const isMountedInRoot = parentPath === '' && isExternal
+
+  if (isPasswordProtectedFolderFileResource(resource.name)) {
+    return false
+  }
 
   return resource.canBeDeleted() && !isMountedInRoot
 }

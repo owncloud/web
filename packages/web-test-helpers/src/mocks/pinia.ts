@@ -64,6 +64,7 @@ export type PiniaMockOptions = {
     selectedIds?: string[]
     areFileExtensionsShown?: boolean
     areHiddenFilesShown?: boolean
+    deleteQueue?: string[]
   }
   sharesState?: {
     collaboratorShares?: CollaboratorShare[]
@@ -71,7 +72,7 @@ export type PiniaMockOptions = {
     graphRoles?: Record<string, ShareRole>
     loading?: boolean
   }
-  spacesState?: { spaces?: SpaceResource[] }
+  spacesState?: { spaces?: SpaceResource[]; currentSpace?: SpaceResource }
   userState?: { user?: User }
   capabilityState?: {
     capabilities?: Partial<Capabilities['capabilities']>

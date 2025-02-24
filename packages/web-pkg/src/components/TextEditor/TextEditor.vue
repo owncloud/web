@@ -8,6 +8,7 @@
       :theme="theme"
       read-only
       :toolbars="[]"
+      :sanitize="sanitize"
     />
     <md-editor
       v-else
@@ -18,6 +19,7 @@
       :preview="isMarkdown"
       :toolbars="isMarkdown ? undefined : []"
       :read-only="isReadOnly"
+      :sanitize="sanitize"
       @on-change="(value) => $emit('update:currentContent', value)"
     />
   </div>
@@ -26,6 +28,7 @@
 <script lang="ts">
 import { computed, defineComponent, unref, PropType } from 'vue'
 import { Resource } from '@ownclouders/web-client'
+import dompurify from 'dompurify'
 
 import { config, MdEditor, MdPreview } from 'md-editor-v3'
 import 'md-editor-v3/lib/style.css'
@@ -77,11 +80,14 @@ export default defineComponent({
       }
     })
 
+    const sanitize = (html) => dompurify.sanitize(html)
+
     return {
       isMarkdown,
       theme,
       language,
-      languages
+      languages,
+      sanitize
     }
   }
 })
@@ -102,7 +108,6 @@ export default defineComponent({
 
 #space-description-preview {
   background-color: transparent;
-  width: max-content;
 
   .md-editor-preview-wrapper {
     padding: 0;

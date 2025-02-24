@@ -189,7 +189,8 @@ const resourcesWithAllFields = [
     shareTypes: [],
     canRename: vi.fn(),
     getDomSelector: () => extractDomSelector('documents'),
-    canDownload: () => true
+    canDownload: () => true,
+    canListVersions: () => true
   },
   {
     id: 'another-one==',
@@ -214,7 +215,34 @@ const resourcesWithAllFields = [
     tags: [],
     canRename: vi.fn(),
     getDomSelector: () => extractDomSelector('another-one=='),
-    canDownload: () => true
+    canDownload: () => true,
+    canListVersions: () => true
+  },
+  {
+    id: 'in-delete-queue==',
+    driveId: 'another-one==',
+    name: 'In delete queue',
+    path: '/In delete queue',
+    indicators,
+    isFolder: true,
+    type: 'folder',
+    size: '237895',
+    mdate: getCurrentDate(),
+    sdate: getCurrentDate(),
+    owner,
+    sharedBy,
+    sharedWith,
+    hidden: false,
+    syncEnabled: true,
+    outgoing: false,
+    shareRoles: [],
+    sharePermissions: [],
+    shareTypes: [],
+    tags: [],
+    canRename: vi.fn(),
+    getDomSelector: () => extractDomSelector('in-delete-queue=='),
+    canDownload: () => true,
+    canListVersions: () => true
   }
 ] as IncomingShareResource[]
 
@@ -246,6 +274,7 @@ const processingResourcesWithAllFields = [
     canRename: vi.fn(),
     getDomSelector: () => extractDomSelector('forest'),
     canDownload: () => true,
+    canListVersions: () => true,
     processing: true
   },
   {
@@ -273,6 +302,7 @@ const processingResourcesWithAllFields = [
     canRename: vi.fn(),
     getDomSelector: () => extractDomSelector('notes'),
     canDownload: () => true,
+    canListVersions: () => true,
     processing: true
   }
 ] as IncomingShareResource[]
@@ -294,7 +324,7 @@ describe('ResourceTable', () => {
         resourceDomSelector: (resource: Resource) => ['custom', resource.getDomSelector()].join('-')
       }
     })
-    resourcesWithAllFields.forEach((resource) => {
+    resourcesWithAllFields.slice(0, -1).forEach((resource) => {
       ;['.oc-tbody-tr', '#resource-table-select', '#context-menu-drop'].forEach((baseSelector) => {
         expect(
           wrapper.find([baseSelector, 'custom', resource.getDomSelector()].join('-')).exists()
@@ -327,12 +357,18 @@ describe('ResourceTable', () => {
         processingResourcesWithAllFields[1].id
       )
     })
+    it('should replace checkbox with spinner when resource is in delete queue', () => {
+      const { wrapper } = getMountedWrapper()
+      expect(wrapper.find('.oc-tbody-tr-in-delete-queue .oc-checkbox').exists()).toBe(false)
+      expect(wrapper.find('.oc-tbody-tr-in-delete-queue .oc-spinner').exists()).toBe(true)
+    })
 
     describe('all rows already selected', () => {
       it('de-selects all resources via the select-all checkbox', async () => {
         const { wrapper } = getMountedWrapper({
           props: {
-            selectedIds: resourcesWithAllFields.map((resource) => resource.id)
+            selectedIds: resourcesWithAllFields.map((resource) => resource.id),
+            resources: resourcesWithAllFields.slice(0, -1)
           }
         })
 
@@ -455,6 +491,28 @@ describe('ResourceTable', () => {
       await tr.trigger('click')
       expect(wrapper.emitted().fileClick).toBeUndefined()
     })
+
+    it('should emit "fileClick" when psec file is clicked', async () => {
+      const resource = mock<Resource>({
+        id: 'psec-file',
+        name: 'psec-file.psec',
+        path: '/psec-file.psec',
+        remoteItemPath: '/psec-file.psec',
+        canDownload: () => false,
+        isFolder: false,
+        getDomSelector: () => extractDomSelector('psec-file')
+      })
+
+      const { wrapper } = getMountedWrapper({
+        canBeOpenedWithSecureView: false,
+        resources: [resource]
+      })
+      await wrapper.find('.oc-tbody-tr-psec-file .oc-resource-name').trigger('click')
+
+      expect(
+        wrapper.emitted<{ resources: Resource[] }[]>('fileClick')[0][0].resources[0].name
+      ).toMatch('psec-file.psec')
+    })
   })
 
   describe('resource details', () => {
@@ -471,6 +529,11 @@ describe('ResourceTable', () => {
       await tableRow.trigger('click')
 
       expect(wrapper.emitted('update:selectedIds')).toBeUndefined()
+    })
+
+    it('should disable resource when it is in delete queue', () => {
+      const { wrapper } = getMountedWrapper()
+      expect(wrapper.find('.oc-tbody-tr-in-delete-queue.oc-table-disabled').exists()).toBe(true)
     })
   })
 
@@ -672,7 +735,8 @@ function getMountedWrapper({
           ...defaultPlugins({
             piniaOptions: {
               authState: { userContextReady },
-              capabilityState: { capabilities }
+              capabilityState: { capabilities },
+              resourcesStore: { deleteQueue: ['in-delete-queue=='] }
             }
           })
         ],

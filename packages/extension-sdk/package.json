@@ -1,6 +1,6 @@
 {
   "name": "@ownclouders/extension-sdk",
-  "version": "11.1.3",
+  "version": "11.2.0",
   "description": "ownCloud Web Extension SDK",
   "license": "AGPL-3.0",
   "main": "index.mjs",

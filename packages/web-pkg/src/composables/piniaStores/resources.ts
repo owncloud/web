@@ -22,6 +22,7 @@ export const useResourcesStore = defineStore('resources', () => {
   const resources = ref<Resource[]>([]) as Ref<Resource[]>
   const currentFolder = ref<Resource>()
   const ancestorMetaData = ref<AncestorMetaData>({})
+  const deleteQueue = ref<string[]>([])
 
   const activeResources = computed(() => {
     let res = unref(resources)
@@ -313,6 +314,16 @@ export const useResourcesStore = defineStore('resources', () => {
     return Object.values(unref(ancestorMetaData)).find((a) => id === a.id)
   }
 
+  const addResourcesIntoDeleteQueue = (ids: string[]): void => {
+    deleteQueue.value = deleteQueue.value.concat(
+      ids.filter((id) => !unref(deleteQueue).includes(id))
+    )
+  }
+
+  const removeResourcesFromDeleteQueue = (ids: string[]): void => {
+    deleteQueue.value = deleteQueue.value.filter((id) => !ids.includes(id))
+  }
+
   return {
     resources,
     currentFolder,
@@ -355,7 +366,11 @@ export const useResourcesStore = defineStore('resources', () => {
     setAncestorMetaData,
     updateAncestorField,
     loadAncestorMetaData,
-    getAncestorById
+    getAncestorById,
+
+    deleteQueue,
+    addResourcesIntoDeleteQueue,
+    removeResourcesFromDeleteQueue
   }
 })
 

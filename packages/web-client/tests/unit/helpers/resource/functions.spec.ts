@@ -9,6 +9,7 @@ import {
   extractNameWithoutExtension
 } from '../../../../src/helpers'
 import { DavPermission, DavProperty } from '../../../../src/webdav/constants'
+import { HIDDEN_FILE_EXTENSIONS } from '@ownclouders/web-pkg'
 
 describe('extractDomSelector', () => {
   it.each([
@@ -123,4 +124,31 @@ describe('buildResource', () => {
       expect(ability.can).toHaveBeenCalledWith('create-all', 'Share')
     })
   })
+
+  it.each(HIDDEN_FILE_EXTENSIONS)(
+    'should disable all permission excluding canBeDeleted when extension is %s',
+    (extension) => {
+      const webDavResponse = mockDeep<WebDavResponseResource>({
+        props: {
+          name: `forest.${extension}`,
+          [DavProperty.Permissions]:
+            DavPermission.Shareable +
+            DavPermission.Renameable +
+            DavPermission.Updateable +
+            DavPermission.FileUpdateable +
+            DavPermission.Deletable,
+          [DavProperty.Tags]: undefined
+        }
+      })
+      const resource = buildResource(webDavResponse)
+      const ability = mock<Ability>()
+      ability.can.mockReturnValue(true)
+
+      expect(resource.canShare({ ability })).toBeFalsy()
+      expect(resource.canDownload()).toBeFalsy()
+      expect(resource.canBeDeleted()).toBeTruthy()
+      expect(resource.canRename()).toBeFalsy()
+      expect(resource.canEditTags()).toBeFalsy()
+    }
+  )
 })
