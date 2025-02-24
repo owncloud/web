@@ -3,7 +3,7 @@ Changelog for ownCloud Web [unreleased] (UNRELEASED)
 The following sections list the changes in ownCloud web unreleased relevant to
 ownCloud admins and users.
 
-[unreleased]: https://github.com/owncloud/web/compare/v11.1.1...master
+[unreleased]: https://github.com/owncloud/web/compare/v11.2.0...master
 
 Summary
 -------
@@ -12,34 +12,12 @@ Summary
 * Bugfix - Show progress bar when emptying trash bin: [#11967](https://github.com/owncloud/web/pull/11967)
 * Bugfix - Reload preloaded resource in sidebar: [#12059](https://github.com/owncloud/web/pull/12059)
 * Bugfix - Missing User Light translations: [#12101](https://github.com/owncloud/web/pull/12101)
-* Bugfix - Create password protected folder in personal space: [#12146](https://github.com/owncloud/web/pull/12146)
-* Bugfix - Replace text editor: [#12156](https://github.com/owncloud/web/pull/12156)
-* Bugfix - Do not render default actions in context menu: [#12175](https://github.com/owncloud/web/pull/12175)
-* Bugfix - Open password protected folder when clicking on its name: [#12177](https://github.com/owncloud/web/pull/12177)
-* Bugfix - Skip upload dropzone init when files view is missing: [#12178](https://github.com/owncloud/web/pull/12178)
-* Bugfix - Display shared file versions: [#12194](https://github.com/owncloud/web/pull/12194)
-* Bugfix - Sanitize content from md-editor-v3: [#12195](https://github.com/owncloud/web/pull/12195)
-* Bugfix - Enable external shares editing: [#12204](https://github.com/owncloud/web/pull/12204)
-* Bugfix - Prevent password protected folder move: [#12205](https://github.com/owncloud/web/pull/12205)
-* Bugfix - Preserve current language in password protected folder view: [#12206](https://github.com/owncloud/web/pull/12206)
 * Bugfix - Preserve current page when opening a file: [#12207](https://github.com/owncloud/web/pull/12207)
 * Enhancement - Accessibility improvements: [#5379](https://github.com/owncloud/web/issues/5379)
 * Enhancement - Create spaces via admin settings: [#11849](https://github.com/owncloud/web/pull/11849)
-* Enhancement - Disable resources in delete queue: [#12046](https://github.com/owncloud/web/pull/12046)
 * Enhancement - Add psec file icon: [#12104](https://github.com/owncloud/web/pull/12104)
 * Enhancement - Handle extensions without editor: [#12105](https://github.com/owncloud/web/pull/12105)
 * Enhancement - Add custom handler to file extensions: [#12109](https://github.com/owncloud/web/pull/12109)
-* Enhancement - Add password protected folders app: [#12137](https://github.com/owncloud/web/pull/12137)
-* Enhancement - Password protected folder permissions: [#12141](https://github.com/owncloud/web/pull/12141)
-* Enhancement - Add password protected folders handler: [#12142](https://github.com/owncloud/web/pull/12142)
-* Enhancement - Control more elements visibility via URL query: [#12142](https://github.com/owncloud/web/pull/12142)
-* Enhancement - Display default actions in context menu: [#12145](https://github.com/owncloud/web/pull/12145)
-* Enhancement - Hide password protected folders action: [#12145](https://github.com/owncloud/web/pull/12145)
-* Enhancement - Hide password protected folders extension: [#12145](https://github.com/owncloud/web/pull/12145)
-* Enhancement - Recursive folder creation: [#12146](https://github.com/owncloud/web/pull/12146)
-* Enhancement - Delete password protected folders: [#12152](https://github.com/owncloud/web/pull/12152)
-* Enhancement - Allow camera in external app iframe: [#12188](https://github.com/owncloud/web/pull/12188)
-* Enhancement - Add `lang` URL query parameter: [#12206](https://github.com/owncloud/web/pull/12206)
 
 Details
 -------
@@ -78,6 +56,87 @@ Details
    https://github.com/owncloud/web/issues/12100
    https://github.com/owncloud/web/pull/12101
 
+* Bugfix - Preserve current page when opening a file: [#12207](https://github.com/owncloud/web/pull/12207)
+
+   Add page query into meta contextQueryItems in the route definition
+
+   https://github.com/owncloud/web/issues/12162
+   https://github.com/owncloud/web/pull/12207
+
+* Enhancement - Accessibility improvements: [#5379](https://github.com/owncloud/web/issues/5379)
+
+   We have further improved accessibility aspects of the web UI.
+
+   https://github.com/owncloud/web/issues/5379
+   https://github.com/owncloud/web/issues/5381
+   https://github.com/owncloud/web/pull/10830
+
+* Enhancement - Create spaces via admin settings: [#11849](https://github.com/owncloud/web/pull/11849)
+
+   We've added a new feature that allows you to create spaces via the admin
+   settings.
+
+   https://github.com/owncloud/web/issues/11771
+   https://github.com/owncloud/web/pull/11849
+
+* Enhancement - Add psec file icon: [#12104](https://github.com/owncloud/web/pull/12104)
+
+   We've added a new icon which will be used for psec files. These files are
+   representing our password protected folders.
+
+   https://github.com/owncloud/web/pull/12104
+
+* Enhancement - Handle extensions without editor: [#12105](https://github.com/owncloud/web/pull/12105)
+
+   We've added a new property to extensions that asserts whether is has an editor
+   or not. This property is computed by checking whether the extension exposes any
+   routes.
+
+   https://github.com/owncloud/web/pull/12105
+
+* Enhancement - Add custom handler to file extensions: [#12109](https://github.com/owncloud/web/pull/12109)
+
+   We've added a new property into application file extensions called
+   `customHandler`. This property allows app developers to use completely custom
+   flows when creating new files.
+
+   https://github.com/owncloud/web/pull/12109
+
+Changelog for ownCloud Web [11.2.0] (2025-02-24)
+=======================================
+The following sections list the changes in ownCloud web 11.2.0 relevant to
+ownCloud admins and users.
+
+[11.2.0]: https://github.com/owncloud/web/compare/v11.1.3...v11.2.0
+
+Summary
+-------
+
+* Bugfix - Create password protected folder in personal space: [#12146](https://github.com/owncloud/web/pull/12146)
+* Bugfix - Do not render default actions in context menu: [#12175](https://github.com/owncloud/web/pull/12175)
+* Bugfix - Open password protected folder when clicking on its name: [#12177](https://github.com/owncloud/web/pull/12177)
+* Bugfix - Skip upload dropzone init when files view is missing: [#12178](https://github.com/owncloud/web/pull/12178)
+* Bugfix - Display shared file versions: [#12194](https://github.com/owncloud/web/pull/12194)
+* Bugfix - Sanitize content from md-editor-v3: [#12195](https://github.com/owncloud/web/pull/12195)
+* Bugfix - Enable external shares editing: [#12204](https://github.com/owncloud/web/pull/12204)
+* Bugfix - Prevent password protected folder move: [#12205](https://github.com/owncloud/web/pull/12205)
+* Bugfix - Preserve current language in password protected folder view: [#12206](https://github.com/owncloud/web/pull/12206)
+* Enhancement - Disable resources in delete queue: [#12046](https://github.com/owncloud/web/pull/12046)
+* Enhancement - Add password protected folders app: [#12137](https://github.com/owncloud/web/pull/12137)
+* Enhancement - Password protected folder permissions: [#12141](https://github.com/owncloud/web/pull/12141)
+* Enhancement - Add password protected folders handler: [#12142](https://github.com/owncloud/web/pull/12142)
+* Enhancement - Control more elements visibility via URL query: [#12142](https://github.com/owncloud/web/pull/12142)
+* Enhancement - Display default actions in context menu: [#12145](https://github.com/owncloud/web/pull/12145)
+* Enhancement - Hide password protected folders action: [#12145](https://github.com/owncloud/web/pull/12145)
+* Enhancement - Hide password protected folders extension: [#12145](https://github.com/owncloud/web/pull/12145)
+* Enhancement - Recursive folder creation: [#12146](https://github.com/owncloud/web/pull/12146)
+* Enhancement - Delete password protected folders: [#12152](https://github.com/owncloud/web/pull/12152)
+* Enhancement - Allow camera in external app iframe: [#12188](https://github.com/owncloud/web/pull/12188)
+* Enhancement - Add `lang` URL query parameter: [#12206](https://github.com/owncloud/web/pull/12206)
+
+Details
+-------
+
 * Bugfix - Create password protected folder in personal space: [#12146](https://github.com/owncloud/web/pull/12146)
 
    We've fixed an issue where the password protected folder was created in current
@@ -85,14 +144,6 @@ Details
 
    https://github.com/owncloud/web/issues/12039
    https://github.com/owncloud/web/pull/12146
-
-* Bugfix - Replace text editor: [#12156](https://github.com/owncloud/web/pull/12156)
-
-   We've added a new text editor because of security issues with the previous
-   editor and lack of support.
-
-   https://github.com/owncloud/enterprise/issues/7077
-   https://github.com/owncloud/web/pull/12156
 
 * Bugfix - Do not render default actions in context menu: [#12175](https://github.com/owncloud/web/pull/12175)
 
@@ -166,29 +217,6 @@ Details
    https://github.com/owncloud/web/issues/12186
    https://github.com/owncloud/web/pull/12206
 
-* Bugfix - Preserve current page when opening a file: [#12207](https://github.com/owncloud/web/pull/12207)
-
-   Add page query into meta contextQueryItems in the route definition
-
-   https://github.com/owncloud/web/issues/12162
-   https://github.com/owncloud/web/pull/12207
-
-* Enhancement - Accessibility improvements: [#5379](https://github.com/owncloud/web/issues/5379)
-
-   We have further improved accessibility aspects of the web UI.
-
-   https://github.com/owncloud/web/issues/5379
-   https://github.com/owncloud/web/issues/5381
-   https://github.com/owncloud/web/pull/10830
-
-* Enhancement - Create spaces via admin settings: [#11849](https://github.com/owncloud/web/pull/11849)
-
-   We've added a new feature that allows you to create spaces via the admin
-   settings.
-
-   https://github.com/owncloud/web/issues/11771
-   https://github.com/owncloud/web/pull/11849
-
 * Enhancement - Disable resources in delete queue: [#12046](https://github.com/owncloud/web/pull/12046)
 
    We've added a new delete queue which is used to disable resources that are being
@@ -197,29 +225,6 @@ Details
 
    https://github.com/owncloud/web/issues/11956
    https://github.com/owncloud/web/pull/12046
-
-* Enhancement - Add psec file icon: [#12104](https://github.com/owncloud/web/pull/12104)
-
-   We've added a new icon which will be used for psec files. These files are
-   representing our password protected folders.
-
-   https://github.com/owncloud/web/pull/12104
-
-* Enhancement - Handle extensions without editor: [#12105](https://github.com/owncloud/web/pull/12105)
-
-   We've added a new property to extensions that asserts whether is has an editor
-   or not. This property is computed by checking whether the extension exposes any
-   routes.
-
-   https://github.com/owncloud/web/pull/12105
-
-* Enhancement - Add custom handler to file extensions: [#12109](https://github.com/owncloud/web/pull/12109)
-
-   We've added a new property into application file extensions called
-   `customHandler`. This property allows app developers to use completely custom
-   flows when creating new files.
-
-   https://github.com/owncloud/web/pull/12109
 
 * Enhancement - Add password protected folders app: [#12137](https://github.com/owncloud/web/pull/12137)
 
@@ -316,6 +321,51 @@ Details
 
    https://github.com/owncloud/web/issues/12186
    https://github.com/owncloud/web/pull/12206
+
+Changelog for ownCloud Web [11.1.3] (2025-02-06)
+=======================================
+The following sections list the changes in ownCloud web 11.1.3 relevant to
+ownCloud admins and users.
+
+[11.1.3]: https://github.com/owncloud/web/compare/v11.1.2...v11.1.3
+
+Summary
+-------
+
+* Bugfix - Replace text editor: [#12156](https://github.com/owncloud/web/pull/12156)
+
+Details
+-------
+
+* Bugfix - Replace text editor: [#12156](https://github.com/owncloud/web/pull/12156)
+
+   We've added a new text editor because of security issues with the previous
+   editor and lack of support.
+
+   https://github.com/owncloud/enterprise/issues/7077
+   https://github.com/owncloud/web/pull/12156
+
+Changelog for ownCloud Web [11.1.2] (2025-01-27)
+=======================================
+The following sections list the changes in ownCloud web 11.1.2 relevant to
+ownCloud admins and users.
+
+[11.1.2]: https://github.com/owncloud/web/compare/v11.1.1...v11.1.2
+
+Summary
+-------
+
+* Bugfix - Rename ScienceMesh: [#10891](https://github.com/owncloud/ocis/issues/10891)
+
+Details
+-------
+
+* Bugfix - Rename ScienceMesh: [#10891](https://github.com/owncloud/ocis/issues/10891)
+
+   We've renamed ScienceMesh in German locale to prevent confusion among
+   non-science community.
+
+   https://github.com/owncloud/ocis/issues/10891
 
 Changelog for ownCloud Web [11.1.1] (2025-01-22)
 =======================================
