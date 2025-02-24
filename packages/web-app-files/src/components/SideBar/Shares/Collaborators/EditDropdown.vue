@@ -27,7 +27,7 @@
         </li>
       </oc-list>
       <oc-list
-        v-if="canRemove"
+        v-if="canEdit"
         class="collaborator-edit-dropdown-options-list collaborator-edit-dropdown-options-list-remove"
       >
         <li
@@ -92,10 +92,6 @@ export default defineComponent({
       }
     },
     canEdit: {
-      type: Boolean,
-      required: true
-    },
-    canRemove: {
       type: Boolean,
       required: true
     },
