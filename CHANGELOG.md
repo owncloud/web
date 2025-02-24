@@ -18,6 +18,7 @@ Summary
 * Bugfix - Open password protected folder when clicking on its name: [#12177](https://github.com/owncloud/web/pull/12177)
 * Bugfix - Skip upload dropzone init when files view is missing: [#12178](https://github.com/owncloud/web/pull/12178)
 * Bugfix - Sanitize content from md-editor-v3: [#12195](https://github.com/owncloud/web/pull/12195)
+* Bugfix - Prevent password protected folder move: [#12205](https://github.com/owncloud/web/pull/12205)
 * Enhancement - Accessibility improvements: [#5379](https://github.com/owncloud/web/issues/5379)
 * Enhancement - Create spaces via admin settings: [#11849](https://github.com/owncloud/web/pull/11849)
 * Enhancement - Disable resources in delete queue: [#12046](https://github.com/owncloud/web/pull/12046)
@@ -123,6 +124,14 @@ Details
 
    https://github.com/owncloud/enterprise/issues/7092
    https://github.com/owncloud/web/pull/12195
+
+* Bugfix - Prevent password protected folder move: [#12205](https://github.com/owncloud/web/pull/12205)
+
+   We've fixed permissions on password protected folders so that the name of the
+   resource is checked and if it ends with `.psec`, it cannot be moved.
+
+   https://github.com/owncloud/web/issues/12198
+   https://github.com/owncloud/web/pull/12205
 
 * Enhancement - Accessibility improvements: [#5379](https://github.com/owncloud/web/issues/5379)
 
