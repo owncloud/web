@@ -13,12 +13,19 @@ describe('move', () => {
     describe('move isVisible property of returned element', () => {
       it.each([
         {
-          resources: [{ isReceivedShare: () => true, canBeDeleted: () => true }] as Resource[],
+          resources: [
+            { name: 'forest.jpg', isReceivedShare: () => true, canBeDeleted: () => true }
+          ] as Resource[],
           expectedStatus: true
         },
         {
           resources: [
-            { isReceivedShare: () => true, canBeDeleted: () => true, locked: true }
+            {
+              name: 'forest.jpg',
+              isReceivedShare: () => true,
+              canBeDeleted: () => true,
+              locked: true
+            }
           ] as Resource[],
           expectedStatus: false
         }
