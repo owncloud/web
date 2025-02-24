@@ -17,6 +17,7 @@ Summary
 * Bugfix - Do not render default actions in context menu: [#12175](https://github.com/owncloud/web/pull/12175)
 * Bugfix - Open password protected folder when clicking on its name: [#12177](https://github.com/owncloud/web/pull/12177)
 * Bugfix - Skip upload dropzone init when files view is missing: [#12178](https://github.com/owncloud/web/pull/12178)
+* Bugfix - Display shared file versions: [#12194](https://github.com/owncloud/web/pull/12194)
 * Bugfix - Sanitize content from md-editor-v3: [#12195](https://github.com/owncloud/web/pull/12195)
 * Bugfix - Enable external shares editing: [#12204](https://github.com/owncloud/web/pull/12204)
 * Bugfix - Prevent password protected folder move: [#12205](https://github.com/owncloud/web/pull/12205)
@@ -119,6 +120,16 @@ Details
 
    https://github.com/owncloud/web/issues/12150
    https://github.com/owncloud/web/pull/12178
+
+* Bugfix - Display shared file versions: [#12194](https://github.com/owncloud/web/pull/12194)
+
+   We've fixed an issue where versions were not displayed in the sidebar for a
+   shared file even when shared with necessary permissions. If a resource is an
+   incoming share, we are now checking permission directly on the resource object
+   instead of space.
+
+   https://github.com/owncloud/web/issues/12168
+   https://github.com/owncloud/web/pull/12194
 
 * Bugfix - Sanitize content from md-editor-v3: [#12195](https://github.com/owncloud/web/pull/12195)
 
