@@ -38,7 +38,7 @@ export const buildRoutes = (components: RouteComponents): RouteRecordRaw[] => [
         meta: {
           authContext: 'user',
           patchCleanPath: true,
-          contextQueryItems: ['sort-by', 'sort-dir']
+          contextQueryItems: ['sort-by', 'sort-dir', 'page']
         }
       }
     ]
