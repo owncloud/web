@@ -188,14 +188,14 @@ const resourcesWithAllFields = [
     shareTypes: [],
     canRename: vi.fn(),
     getDomSelector: () => extractDomSelector('documents'),
-    canDownload: () => true
+    canDownload: () => true,
+    canListVersions: () => true
   },
   {
     id: 'another-one==',
     driveId: 'another-one==',
     name: 'Another one',
     path: '/Another one',
-    indicators,
     isFolder: true,
     type: 'folder',
     size: '237895',
@@ -213,14 +213,14 @@ const resourcesWithAllFields = [
     tags: [],
     canRename: vi.fn(),
     getDomSelector: () => extractDomSelector('another-one=='),
-    canDownload: () => true
+    canDownload: () => true,
+    canListVersions: () => true
   },
   {
     id: 'in-delete-queue==',
     driveId: 'another-one==',
     name: 'In delete queue',
     path: '/In delete queue',
-    indicators,
     isFolder: true,
     type: 'folder',
     size: '237895',
@@ -238,7 +238,8 @@ const resourcesWithAllFields = [
     tags: [],
     canRename: vi.fn(),
     getDomSelector: () => extractDomSelector('in-delete-queue=='),
-    canDownload: () => true
+    canDownload: () => true,
+    canListVersions: () => true
   }
 ] as IncomingShareResource[]
 
@@ -270,6 +271,7 @@ const processingResourcesWithAllFields = [
     canRename: vi.fn(),
     getDomSelector: () => extractDomSelector('forest'),
     canDownload: () => true,
+    canListVersions: () => true,
     processing: true
   },
   {
@@ -296,6 +298,7 @@ const processingResourcesWithAllFields = [
     canRename: vi.fn(),
     getDomSelector: () => extractDomSelector('notes'),
     canDownload: () => true,
+    canListVersions: () => true,
     processing: true
   }
 ] as IncomingShareResource[]

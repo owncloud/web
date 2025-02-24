@@ -1,5 +1,11 @@
 import { useUserStore } from '../piniaStores'
-import { isSpaceResource, isTrashResource, Resource, SpaceResource } from '@ownclouders/web-client'
+import {
+  IncomingShareResource,
+  isSpaceResource,
+  isTrashResource,
+  Resource,
+  SpaceResource
+} from '@ownclouders/web-client'
 
 export const useCanListVersions = () => {
   const userStore = useUserStore()
@@ -14,6 +20,14 @@ export const useCanListVersions = () => {
     if (isTrashResource(resource)) {
       return false
     }
+
+    if (
+      resource.isReceivedShare() &&
+      typeof (resource as IncomingShareResource).canListVersions === 'function'
+    ) {
+      return (resource as IncomingShareResource).canListVersions()
+    }
+
     return space?.canListVersions({ user: userStore.user })
   }
 
