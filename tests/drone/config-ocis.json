@@ -7,5 +7,14 @@
     "client_id": "web",
     "response_type": "code"
   },
-  "apps": ["files", "text-editor", "preview", "pdf-viewer", "search", "admin-settings", "ocm"]
+  "apps": [
+    "files",
+    "text-editor",
+    "preview",
+    "pdf-viewer",
+    "search",
+    "admin-settings",
+    "ocm",
+    "password-protected-folders"
+  ]
 }

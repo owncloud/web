@@ -8,6 +8,7 @@ import { dragDropFiles } from '../../../utils/dragDrop'
 import { LinksEnvironment } from '../../../environment'
 import { config } from '../../../../config'
 import { buildXpathLiteral } from '../../../utils/locator'
+import { securePassword } from '../../../store'
 
 const topbarFilenameSelector = '#app-top-bar-resource .oc-resource-name'
 const downloadFileButtonSingleShareView = '.oc-files-actions-download-file-trigger'
@@ -36,6 +37,7 @@ const breadcrumbLastResourceNameSelector = '.oc-breadcrumb-item-text-last'
 const breadcrumbResourceSelector = '//*[@id="files-breadcrumb"]//span[text()=%s]//ancestor::li'
 const addNewResourceButton = `#new-file-menu-btn`
 const createNewFolderButton = '#new-folder-btn'
+const passwordProtectedFolderButton = '.new-file-btn-psec'
 const createNewTxtFileButton = '.new-file-btn-txt'
 const createNewMdFileButton = '.new-file-btn-md'
 const createNewOfficeDocumentFileBUtton = '//div[@id="new-file-menu-drop"]//span[text()="%s"]'
@@ -46,6 +48,8 @@ const textEditor = '#text-editor #text-editor-container'
 const textEditorPlainTextInput = '#text-editor #text-editor-container .cm-content'
 const textEditorMarkdownInput = '#text-editor #text-editor-container .cm-content'
 const resourceNameInput = '.oc-modal input'
+const passwordProtectedFolderNameInput = '#input-folder-name'
+const passwordProtectedFolderPasswordInput = '#input-folder-password'
 const resourceUploadButton = '#upload-menu-btn'
 const fileUploadInput = '#files-file-upload-input'
 const folderUploadInput = '#files-folder-upload-input'
@@ -194,12 +198,14 @@ export type createResourceTypes =
   | 'mdFile'
   | 'OpenDocument'
   | 'Microsoft Word'
+  | 'Password Protected Folder'
 
 export interface createResourceArgs {
   page: Page
   name: string
   type: createResourceTypes
   content?: string
+  password?: string
 }
 
 export const createSpaceFromFolder = async ({
@@ -274,12 +280,37 @@ export const createNewFolder = async ({
   ])
 }
 
+export const createPasswordProtectedFolder = async ({
+  page,
+  resource,
+  password
+}: {
+  page: Page
+  resource: string
+  password: string
+}): Promise<void> => {
+  password = password === '%public%' ? securePassword : password
+  await page.locator(passwordProtectedFolderButton).click()
+  await page.locator(passwordProtectedFolderNameInput).fill(resource)
+  await page.locator(passwordProtectedFolderPasswordInput).fill(password)
+  await Promise.all([
+    page.waitForResponse((resp) => resp.status() === 201 && resp.request().method() === 'MKCOL'),
+    page.waitForResponse((resp) => resp.status() === 200 && resp.request().method() === 'POST'),
+    page.waitForResponse((resp) => resp.status() === 207 && resp.request().method() === 'PROPFIND'),
+    page.locator(util.format(actionConfirmationButton, 'Create')).click()
+  ])
+}
+
 export const createNewFileOrFolder = async (args: createResourceArgs): Promise<void> => {
-  const { page, name, type, content } = args
+  const { page, name, type, content, password } = args
   await page.locator(addNewResourceButton).click()
   switch (type) {
     case 'folder': {
       await createNewFolder({ page, resource: name })
+      break
+    }
+    case 'Password Protected Folder': {
+      await createPasswordProtectedFolder({ page, resource: name, password: password })
       break
     }
     case 'txtFile': {
@@ -479,7 +510,7 @@ const isAppProviderServiceForOfficeSuitesReadyInWebUI = async (page: Page, type:
 }
 
 export const createResources = async (args: createResourceArgs): Promise<void> => {
-  const { page, name, type, content } = args
+  const { page, name, type, content, password } = args
   const paths = name.split('/')
   const resource = paths.pop()
 
@@ -495,7 +526,7 @@ export const createResources = async (args: createResourceArgs): Promise<void> =
     }
     await clickResource({ page, path })
   }
-  await createNewFileOrFolder({ page, name: resource, type, content })
+  await createNewFileOrFolder({ page, name: resource, type, content, password })
 }
 
 export const editTextDocument = async ({
