@@ -68,16 +68,37 @@ describe('useFileActionsCreateNewFile', () => {
       })
     })
   })
+
+  describe('customHandler', () => {
+    it('should use customHandler when it is provided', () => {
+      const action = mock<ApplicationFileExtension>({ app: 'link-opener', customHandler: vi.fn() })
+
+      getWrapper({
+        action,
+        setup: ({ actions }) => {
+          unref(actions).at(0).handler()
+          expect(action.customHandler).toHaveBeenCalled()
+        }
+      })
+    })
+  })
 })
 
 function getWrapper({
   resolveCreateFile = true,
   space = undefined,
-  setup
+  setup,
+  action = mock<ApplicationFileExtension>({
+    app: 'text-editor',
+    extension: '.txt',
+    newFileMenu: { menuTitle: vi.fn() },
+    customHandler: null
+  })
 }: {
   resolveCreateFile?: boolean
   space?: SpaceResource
   setup: (instance: ReturnType<typeof useFileActionsCreateNewFile>) => void
+  action?: ApplicationFileExtension
 }) {
   const mocks = {
     ...defaultComponentMocks({
@@ -111,13 +132,7 @@ function getWrapper({
         pluginOptions: {
           piniaOptions: {
             appsState: {
-              fileExtensions: [
-                mock<ApplicationFileExtension>({
-                  app: 'text-editor',
-                  extension: '.txt',
-                  newFileMenu: { menuTitle: vi.fn() }
-                })
-              ]
+              fileExtensions: [action]
             },
             resourcesStore: { currentFolder }
           }

@@ -184,7 +184,10 @@ export const useFileActionsCreateNewFile = ({ space }: { space?: Ref<SpaceResour
       actions.push({
         name: 'create-new-file',
         icon: 'add',
-        handler: (args) => handler(args, appFileExtension.extension, appFileExtension),
+        handler: (args) =>
+          appFileExtension.customHandler
+            ? appFileExtension.customHandler(args, appFileExtension.extension, appFileExtension)
+            : handler(args, appFileExtension.extension, appFileExtension),
         label: () => $gettext(appFileExtension.newFileMenu.menuTitle()),
         isVisible: () => {
           return unref(currentFolder)?.canUpload({ user: userStore.user })

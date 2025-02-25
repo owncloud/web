@@ -4,6 +4,7 @@ import { Extension, ExtensionPoint } from '../composables/piniaStores'
 import { IconFillType } from '../helpers'
 import { Resource, SpaceResource } from '@ownclouders/web-client'
 import { Translations } from 'vue3-gettext'
+import { FileActionOptions } from '../composables/actions/types'
 
 export interface AppReadyHookArgs {
   globalProperties: ComponentCustomProperties & Record<string, any>
@@ -63,6 +64,11 @@ export interface ApplicationFileExtension {
   newFileMenu?: { menuTitle: () => string }
   routeName?: string
   secureView?: boolean
+  customHandler?: (
+    fileActionOptions: FileActionOptions,
+    extension: string,
+    appFileExtension: ApplicationFileExtension
+  ) => Promise<void> | void
 }
 
 /** ApplicationInformation describes required information of an application */
@@ -86,6 +92,8 @@ export interface ApplicationInformation {
   translations?: Translations
   /** @deprecated */
   applicationMenu?: ApplicationMenuItem
+  /** Asserts whether the app has any route which works as an editor */
+  hasEditor?: boolean
 }
 
 /**
@@ -99,7 +107,7 @@ export interface ApplicationTranslations {
 
 /** ClassicApplicationScript reflects classic application script structure */
 export interface ClassicApplicationScript {
-  appInfo?: ApplicationInformation
+  appInfo?: Omit<ApplicationInformation, 'hasEditor'>
   routes?: ((args: ComponentCustomProperties) => RouteRecordRaw[]) | RouteRecordRaw[]
   navItems?: ((args: ComponentCustomProperties) => AppNavigationItem[]) | AppNavigationItem[]
   translations?: ApplicationTranslations

@@ -90,13 +90,22 @@ function getWrapper({ setup }: { setup: (instance: ReturnType<typeof useFileActi
                     {
                       extension: 'txt'
                     }
-                  ]
+                  ],
+                  hasEditor: true
                 },
                 external: {
                   defaultExtension: '',
                   icon: 'check_box_outline_blank',
                   name: 'External',
-                  id: 'external'
+                  id: 'external',
+                  hasEditor: true
+                },
+                'editor-less': {
+                  defaultExtension: '',
+                  icon: 'check_box_outline_blank',
+                  name: 'Editor Less',
+                  id: 'editor-less',
+                  hasEditor: false
                 }
               },
               fileExtensions: [
