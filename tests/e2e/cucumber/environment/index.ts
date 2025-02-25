@@ -121,12 +121,13 @@ After(async function (this: World, { result, willBeRetried, pickle }: ITestCaseH
   await this.actorsEnvironment.close()
 
   const adminUser = this.usersEnvironment.getUser({ key: 'admin' })
-  await api.token.refreshAccessToken(adminUser)
 
   // refresh keycloak admin access token
   if (config.keycloak) {
     await api.keycloak.refreshAccessTokenForKeycloakUser(adminUser)
     await api.keycloak.refreshAccessTokenForKeycloakOcisUser(adminUser)
+  } else {
+    await api.token.refreshAccessToken(adminUser)
   }
 
   if (isOcm(pickle)) {

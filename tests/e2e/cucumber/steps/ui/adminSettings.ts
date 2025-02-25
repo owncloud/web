@@ -346,7 +346,7 @@ When(
     const userIds = []
     switch (actionType) {
       case 'batch actions':
-        for (const { id: user } of stepTable.hashes()) {
+        for (const { user } of stepTable.hashes()) {
           userIds.push(usersObject.getUUID({ key: user }))
           await usersObject.selectUser({ key: user })
         }
