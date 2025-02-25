@@ -7,5 +7,5 @@
     "client_id": "web",
     "response_type": "code"
   },
-  "apps": ["files", "text-editor", "preview", "pdf-viewer", "search", "admin-settings", "ocm", "app-store"]
+  "apps": ["files", "text-editor", "preview", "pdf-viewer", "search", "admin-settings", "ocm", "app-store", "password-protected-folders"]
 }
