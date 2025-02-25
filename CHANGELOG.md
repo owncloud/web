@@ -3,7 +3,7 @@ Changelog for ownCloud Web [unreleased] (UNRELEASED)
 The following sections list the changes in ownCloud web unreleased relevant to
 ownCloud admins and users.
 
-[unreleased]: https://github.com/owncloud/web/compare/v11.2.0...master
+[unreleased]: https://github.com/owncloud/web/compare/v11.3.0...master
 
 Summary
 -------
@@ -15,9 +15,6 @@ Summary
 * Bugfix - Preserve current page when opening a file: [#12207](https://github.com/owncloud/web/pull/12207)
 * Enhancement - Accessibility improvements: [#5379](https://github.com/owncloud/web/issues/5379)
 * Enhancement - Create spaces via admin settings: [#11849](https://github.com/owncloud/web/pull/11849)
-* Enhancement - Add psec file icon: [#12104](https://github.com/owncloud/web/pull/12104)
-* Enhancement - Handle extensions without editor: [#12105](https://github.com/owncloud/web/pull/12105)
-* Enhancement - Add custom handler to file extensions: [#12109](https://github.com/owncloud/web/pull/12109)
 
 Details
 -------
@@ -78,6 +75,23 @@ Details
 
    https://github.com/owncloud/web/issues/11771
    https://github.com/owncloud/web/pull/11849
+
+Changelog for ownCloud Web [11.3.0] (2025-02-25)
+=======================================
+The following sections list the changes in ownCloud web 11.3.0 relevant to
+ownCloud admins and users.
+
+[11.3.0]: https://github.com/owncloud/web/compare/v11.2.0...v11.3.0
+
+Summary
+-------
+
+* Enhancement - Add psec file icon: [#12104](https://github.com/owncloud/web/pull/12104)
+* Enhancement - Handle extensions without editor: [#12105](https://github.com/owncloud/web/pull/12105)
+* Enhancement - Add custom handler to file extensions: [#12109](https://github.com/owncloud/web/pull/12109)
+
+Details
+-------
 
 * Enhancement - Add psec file icon: [#12104](https://github.com/owncloud/web/pull/12104)
 
