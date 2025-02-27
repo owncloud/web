@@ -249,6 +249,68 @@ describe('ResourceTiles component', () => {
     )
   })
 
+  it('should make resource clickable when it is a password protected folder', async () => {
+    const { wrapper } = getWrapper({
+      props: {
+        resources: [
+          {
+            id: 'protected-folder',
+            driveId: 'protected-folder',
+            name: 'protected-folder.psec',
+            path: '/protected-folder.psec',
+            extension: 'psec',
+            isFolder: false,
+            indicators: [] as ResourceIndicator[],
+            type: 'file',
+            tags: ['space', 'tag', 'moon'],
+            size: '111000234',
+            hidden: false,
+            syncEnabled: true,
+            outgoing: false,
+            canRename: () => false,
+            getDomSelector: () => extractDomSelector('protected-folder'),
+            canDownload: () => false
+          }
+        ]
+      }
+    })
+
+    const resourceLink = wrapper.find('.oc-resource-link')
+    await resourceLink.trigger('click')
+
+    expect(wrapper.emitted('fileClick')).toBeTruthy()
+  })
+
+  it('should not make resource clickable when it is not a password protected folder and does not have enough permissions', () => {
+    const { wrapper } = getWrapper({
+      props: {
+        resources: [
+          {
+            id: 'forest',
+            driveId: 'forest',
+            name: 'forest.jpg',
+            path: 'images/nature/forest.jpg',
+            extension: 'jpg',
+            thumbnail: 'https://cdn.pixabay.com/photo/2015/09/09/16/05/forest-931706_960_720.jpg',
+            isFolder: false,
+            indicators: [] as ResourceIndicator[],
+            type: 'file',
+            tags: ['space', 'tag', 'moon'],
+            size: '111000234',
+            hidden: false,
+            syncEnabled: true,
+            outgoing: false,
+            canRename: false,
+            getDomSelector: () => extractDomSelector('forest'),
+            canDownload: () => false
+          }
+        ]
+      }
+    })
+
+    expect(wrapper.find('.oc-resource-link').exists()).toBeFalsy()
+  })
+
   function getWrapper({
     props = {},
     slots = {},

@@ -126,7 +126,12 @@ import {
   watch
 } from 'vue'
 import { useGettext } from 'vue3-gettext'
-import { isSpaceResource, Resource, SpaceResource } from '@ownclouders/web-client'
+import {
+  isPasswordProtectedFolderFileResource,
+  isSpaceResource,
+  Resource,
+  SpaceResource
+} from '@ownclouders/web-client'
 
 // Constants should match what is being used in OcTable/ResourceTable
 // Alignment regarding naming would be an API-breaking change and can
@@ -342,7 +347,7 @@ export default defineComponent({
         return false
       }
 
-      if (resource.isFolder) {
+      if (resource.isFolder || isPasswordProtectedFolderFileResource(resource.name)) {
         return true
       }
 
