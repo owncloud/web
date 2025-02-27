@@ -1,44 +1,7 @@
 // Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
 exports[`CreateAndUpload component > action buttons > should show and be enabled if file creation is possible 1`] = `
-"<div class="create-and-upload-actions oc-flex-inline oc-mr-s"><span><button type="button" aria-label="Create new files or folders" class="oc-button oc-rounded oc-button-m oc-button-justify-content-center oc-button-gap-m oc-button-primary oc-button-primary-filled" id="new-file-menu-btn"><!--v-if--> <!-- @slot Content of the button --> <oc-icon-stub name="add" filltype="fill" accessiblelabel="" type="span" size="medium" variation="passive" color=""></oc-icon-stub> <span>New</span></button></span>
-  <oc-drop-stub dropid="new-file-menu-drop" popperoptions="[object Object]" toggle="#new-file-menu-btn" position="bottom-start" mode="click" closeonclick="true" isnested="false" paddingsize="small" class="oc-width-auto">
-    <oc-list-stub raw="false" id="create-list" class="">
-      <li class="create-list-folder oc-menu-item-hover"><button type="button" class="oc-button oc-rounded oc-button-m oc-button-justify-content-left oc-button-gap-m oc-button-passive oc-button-passive-raw oc-width-1-1" id="new-folder-btn">
-          <!--v-if-->
-          <!-- @slot Content of the button -->
-          <resource-icon-stub resource="[object Object]" size="medium"></resource-icon-stub> <span>Folder</span>
-        </button></li>
-    </oc-list-stub>
-    <oc-list-stub raw="false">
-      <li class="create-list-file oc-menu-item-hover"><button type="button" class="oc-button oc-rounded oc-button-m oc-button-justify-content-left oc-button-gap-m oc-button-passive oc-button-passive-raw oc-width-1-1 new-file-btn-txt">
-          <!--v-if-->
-          <!-- @slot Content of the button -->
-          <resource-icon-stub resource="[object Object]" size="medium"></resource-icon-stub> <span class="create-list-file-item-text">Plain text file</span>
-          <!--v-if-->
-        </button></li>
-      <li class="create-list-file oc-menu-item-hover"><button type="button" class="oc-button oc-rounded oc-button-m oc-button-justify-content-left oc-button-gap-m oc-button-passive oc-button-passive-raw oc-width-1-1 new-file-btn-md">
-          <!--v-if-->
-          <!-- @slot Content of the button -->
-          <resource-icon-stub resource="[object Object]" size="medium"></resource-icon-stub> <span class="create-list-file-item-text">Mark-down file</span>
-          <!--v-if-->
-        </button></li>
-      <li class="create-list-file oc-menu-item-hover"><button type="button" class="oc-button oc-rounded oc-button-m oc-button-justify-content-left oc-button-gap-m oc-button-passive oc-button-passive-raw oc-width-1-1 new-file-btn-drawio">
-          <!--v-if-->
-          <!-- @slot Content of the button -->
-          <resource-icon-stub resource="[object Object]" size="medium"></resource-icon-stub> <span class="create-list-file-item-text">Draw.io document</span>
-          <!--v-if-->
-        </button></li>
-    </oc-list-stub>
-    <oc-list-stub raw="false">
-      <li class="create-list-shortcut oc-menu-item-hover"><button type="button" class="oc-button oc-rounded oc-button-m oc-button-justify-content-left oc-button-gap-m oc-button-passive oc-button-passive-raw oc-width-1-1" id="new-shortcut-btn">
-          <!--v-if-->
-          <!-- @slot Content of the button -->
-          <oc-icon-stub name="external-link" filltype="fill" accessiblelabel="" type="span" size="medium" variation="passive" color=""></oc-icon-stub> <span>Shortcut</span>
-          <!--v-if-->
-        </button></li>
-    </oc-list-stub>
-  </oc-drop-stub> <span><button type="button" aria-label="Upload files or folders" class="oc-button oc-rounded oc-button-m oc-button-justify-content-center oc-button-gap-m oc-button-passive oc-button-passive-outline" id="upload-menu-btn"><!--v-if--> <!-- @slot Content of the button --> <oc-icon-stub name="upload" filltype="line" accessiblelabel="" type="span" size="medium" variation="passive" color=""></oc-icon-stub> <span>Upload</span></button></span>
+"<div class="create-and-upload-actions oc-flex-inline oc-mr-s"><span><button type="button" aria-label="New folder" class="oc-button oc-rounded oc-button-m oc-button-justify-content-center oc-button-gap-m oc-button-primary oc-button-primary-filled" id="new-folder-btn"><!--v-if--> <!-- @slot Content of the button --> <oc-icon-stub name="resource-type-folder" filltype="fill" accessiblelabel="" type="span" size="medium" variation="passive" color=""></oc-icon-stub> <span>New Folder</span></button></span> <span><button type="button" aria-label="Upload files or folders" class="oc-button oc-rounded oc-button-m oc-button-justify-content-center oc-button-gap-m oc-button-passive oc-button-passive-outline" id="upload-menu-btn"><!--v-if--> <!-- @slot Content of the button --> <oc-icon-stub name="upload" filltype="line" accessiblelabel="" type="span" size="medium" variation="passive" color=""></oc-icon-stub> <span>Upload</span></button></span>
   <oc-drop-stub dropid="upload-menu-drop" popperoptions="[object Object]" toggle="#upload-menu-btn" position="bottom-start" mode="click" closeonclick="true" isnested="false" paddingsize="small" class="oc-width-auto">
     <oc-list-stub raw="false" id="upload-list">
       <li class="oc-menu-item-hover">
@@ -55,44 +18,7 @@ exports[`CreateAndUpload component > action buttons > should show and be enabled
 `;
 
 exports[`CreateAndUpload component > file handlers > should show entries for all new file handlers 1`] = `
-"<div class="create-and-upload-actions oc-flex-inline oc-mr-s"><span><button type="button" aria-label="Create new files or folders" class="oc-button oc-rounded oc-button-m oc-button-justify-content-center oc-button-gap-m oc-button-primary oc-button-primary-filled" id="new-file-menu-btn"><!--v-if--> <!-- @slot Content of the button --> <oc-icon-stub name="add" filltype="fill" accessiblelabel="" type="span" size="medium" variation="passive" color=""></oc-icon-stub> <span>New</span></button></span>
-  <oc-drop-stub dropid="new-file-menu-drop" popperoptions="[object Object]" toggle="#new-file-menu-btn" position="bottom-start" mode="click" closeonclick="true" isnested="false" paddingsize="small" class="oc-width-auto">
-    <oc-list-stub raw="false" id="create-list" class="">
-      <li class="create-list-folder oc-menu-item-hover"><button type="button" class="oc-button oc-rounded oc-button-m oc-button-justify-content-left oc-button-gap-m oc-button-passive oc-button-passive-raw oc-width-1-1" id="new-folder-btn">
-          <!--v-if-->
-          <!-- @slot Content of the button -->
-          <resource-icon-stub resource="[object Object]" size="medium"></resource-icon-stub> <span>Folder</span>
-        </button></li>
-    </oc-list-stub>
-    <oc-list-stub raw="false">
-      <li class="create-list-file oc-menu-item-hover"><button type="button" class="oc-button oc-rounded oc-button-m oc-button-justify-content-left oc-button-gap-m oc-button-passive oc-button-passive-raw oc-width-1-1 new-file-btn-txt">
-          <!--v-if-->
-          <!-- @slot Content of the button -->
-          <resource-icon-stub resource="[object Object]" size="medium"></resource-icon-stub> <span class="create-list-file-item-text">Plain text file</span>
-          <!--v-if-->
-        </button></li>
-      <li class="create-list-file oc-menu-item-hover"><button type="button" class="oc-button oc-rounded oc-button-m oc-button-justify-content-left oc-button-gap-m oc-button-passive oc-button-passive-raw oc-width-1-1 new-file-btn-md">
-          <!--v-if-->
-          <!-- @slot Content of the button -->
-          <resource-icon-stub resource="[object Object]" size="medium"></resource-icon-stub> <span class="create-list-file-item-text">Mark-down file</span>
-          <!--v-if-->
-        </button></li>
-      <li class="create-list-file oc-menu-item-hover"><button type="button" class="oc-button oc-rounded oc-button-m oc-button-justify-content-left oc-button-gap-m oc-button-passive oc-button-passive-raw oc-width-1-1 new-file-btn-drawio">
-          <!--v-if-->
-          <!-- @slot Content of the button -->
-          <resource-icon-stub resource="[object Object]" size="medium"></resource-icon-stub> <span class="create-list-file-item-text">Draw.io document</span>
-          <!--v-if-->
-        </button></li>
-    </oc-list-stub>
-    <oc-list-stub raw="false">
-      <li class="create-list-shortcut oc-menu-item-hover"><button type="button" class="oc-button oc-rounded oc-button-m oc-button-justify-content-left oc-button-gap-m oc-button-passive oc-button-passive-raw oc-width-1-1" id="new-shortcut-btn">
-          <!--v-if-->
-          <!-- @slot Content of the button -->
-          <oc-icon-stub name="external-link" filltype="fill" accessiblelabel="" type="span" size="medium" variation="passive" color=""></oc-icon-stub> <span>Shortcut</span>
-          <!--v-if-->
-        </button></li>
-    </oc-list-stub>
-  </oc-drop-stub> <span><button type="button" aria-label="Upload files or folders" class="oc-button oc-rounded oc-button-m oc-button-justify-content-center oc-button-gap-m oc-button-passive oc-button-passive-outline" id="upload-menu-btn"><!--v-if--> <!-- @slot Content of the button --> <oc-icon-stub name="upload" filltype="line" accessiblelabel="" type="span" size="medium" variation="passive" color=""></oc-icon-stub> <span>Upload</span></button></span>
+"<div class="create-and-upload-actions oc-flex-inline oc-mr-s"><span><button type="button" aria-label="New folder" class="oc-button oc-rounded oc-button-m oc-button-justify-content-center oc-button-gap-m oc-button-primary oc-button-primary-filled" id="new-folder-btn"><!--v-if--> <!-- @slot Content of the button --> <oc-icon-stub name="resource-type-folder" filltype="fill" accessiblelabel="" type="span" size="medium" variation="passive" color=""></oc-icon-stub> <span>New Folder</span></button></span> <span><button type="button" aria-label="Upload files or folders" class="oc-button oc-rounded oc-button-m oc-button-justify-content-center oc-button-gap-m oc-button-passive oc-button-passive-outline" id="upload-menu-btn"><!--v-if--> <!-- @slot Content of the button --> <oc-icon-stub name="upload" filltype="line" accessiblelabel="" type="span" size="medium" variation="passive" color=""></oc-icon-stub> <span>Upload</span></button></span>
   <oc-drop-stub dropid="upload-menu-drop" popperoptions="[object Object]" toggle="#upload-menu-btn" position="bottom-start" mode="click" closeonclick="true" isnested="false" paddingsize="small" class="oc-width-auto">
     <oc-list-stub raw="false" id="upload-list">
       <li class="oc-menu-item-hover">

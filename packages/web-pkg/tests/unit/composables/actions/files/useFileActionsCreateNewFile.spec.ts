@@ -82,6 +82,43 @@ describe('useFileActionsCreateNewFile', () => {
       })
     })
   })
+
+  describe('actions', () => {
+    it('should check if the new file menu is visible when the isVisible is a function', () => {
+      const isVisible = vi.fn().mockReturnValue(false)
+      const action = mock<ApplicationFileExtension>({
+        app: 'text-editor',
+        extension: '.txt',
+        newFileMenu: { menuTitle: vi.fn(), isVisible },
+        customHandler: null
+      })
+
+      getWrapper({
+        action,
+        setup(instance) {
+          expect(unref(instance.actions).at(0).isVisible()).toBe(false)
+          expect(isVisible).toHaveBeenCalled()
+        }
+      })
+    })
+
+    it('should not check if the new file menu is visible when the isVisible is not a function', () => {
+      const action = mock<ApplicationFileExtension>({
+        app: 'text-editor',
+        extension: '.txt',
+        newFileMenu: { menuTitle: vi.fn(), isVisible: undefined },
+        customHandler: null
+      })
+
+      getWrapper({
+        action,
+        currentFolder: mock<Resource>({ canUpload: () => true }),
+        setup(instance) {
+          expect(unref(instance.actions).at(0).isVisible()).toBe(true)
+        }
+      })
+    })
+  })
 })
 
 function getWrapper({
@@ -93,12 +130,14 @@ function getWrapper({
     extension: '.txt',
     newFileMenu: { menuTitle: vi.fn() },
     customHandler: null
-  })
+  }),
+  currentFolder = mock<Resource>({ id: '1', path: '/' })
 }: {
   resolveCreateFile?: boolean
   space?: SpaceResource
   setup: (instance: ReturnType<typeof useFileActionsCreateNewFile>) => void
   action?: ApplicationFileExtension
+  currentFolder?: Resource
 }) {
   const mocks = {
     ...defaultComponentMocks({
@@ -117,8 +156,6 @@ function getWrapper({
     }
     return Promise.reject('error')
   })
-
-  const currentFolder = mock<Resource>({ id: '1', path: '/' })
 
   return {
     wrapper: getComposableWrapper(

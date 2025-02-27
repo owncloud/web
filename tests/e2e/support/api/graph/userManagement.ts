@@ -46,15 +46,17 @@ export const createUser = async ({ user, admin }: { user: User; admin: User }): 
 }
 
 export const deleteUser = async ({ user, admin }: { user: User; admin: User }): Promise<User> => {
-  await request({
+  const response = await request({
     method: 'DELETE',
     path: join('graph', 'v1.0', 'users', user.id),
     user: admin
   })
-  try {
-    const usersEnvironment = new UsersEnvironment()
-    usersEnvironment.removeCreatedUser({ key: user.id })
-  } catch {}
+  // do not throw error if user is not found
+  if (response.status !== 204 && response.status !== 404) {
+    throw Error(`Failed to delete user: ${user.id}, Status: ${response.status}`)
+  }
+  const usersEnvironment = new UsersEnvironment()
+  usersEnvironment.removeCreatedUser({ key: user.id })
   return user
 }
 

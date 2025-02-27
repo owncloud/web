@@ -13,6 +13,8 @@ Summary
 * Bugfix - Reload preloaded resource in sidebar: [#12059](https://github.com/owncloud/web/pull/12059)
 * Bugfix - Missing User Light translations: [#12101](https://github.com/owncloud/web/pull/12101)
 * Bugfix - Preserve current page when opening a file: [#12207](https://github.com/owncloud/web/pull/12207)
+* Bugfix - Broken title for public files link: [#12225](https://github.com/owncloud/web/pull/12225)
+* Bugfix - Disable password protected folders creation inside public links: [#12226](https://github.com/owncloud/web/pull/12226)
 * Enhancement - Accessibility improvements: [#5379](https://github.com/owncloud/web/issues/5379)
 * Enhancement - Create spaces via admin settings: [#11849](https://github.com/owncloud/web/pull/11849)
 
@@ -59,6 +61,22 @@ Details
 
    https://github.com/owncloud/web/issues/12162
    https://github.com/owncloud/web/pull/12207
+
+* Bugfix - Broken title for public files link: [#12225](https://github.com/owncloud/web/pull/12225)
+
+   We've fixed the issue of showing an incorrect/broken window title when user
+   opens a public files link
+
+   https://github.com/owncloud/web/issues/12220
+   https://github.com/owncloud/web/pull/12225
+
+* Bugfix - Disable password protected folders creation inside public links: [#12226](https://github.com/owncloud/web/pull/12226)
+
+   We've disabled the option to create password protected folders creation inside
+   of folders that are shared via a public link.
+
+   https://github.com/owncloud/web/issues/12190
+   https://github.com/owncloud/web/pull/12226
 
 * Enhancement - Accessibility improvements: [#5379](https://github.com/owncloud/web/issues/5379)
 
