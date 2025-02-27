@@ -314,11 +314,15 @@ export default defineComponent({
 
     const createFileActionsGroups = computed(() => {
       const result = []
-      const externalFileActions = unref(createNewFileActions).filter(({ isExternal }) => isExternal)
+      const externalFileActions = unref(createNewFileActions).filter(
+        ({ isExternal, isVisible }) => isExternal && isVisible()
+      )
       if (externalFileActions.length) {
         result.push(externalFileActions)
       }
-      const appFileActions = unref(createNewFileActions).filter(({ isExternal }) => !isExternal)
+      const appFileActions = unref(createNewFileActions).filter(
+        ({ isExternal, isVisible }) => !isExternal && isVisible()
+      )
       if (appFileActions.length) {
         result.push(appFileActions)
       }
