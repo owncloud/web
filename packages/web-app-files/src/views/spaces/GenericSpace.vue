@@ -282,9 +282,16 @@ export default defineComponent({
     const isCurrentFolderEmpty = computed(
       () => unref(resourcesViewDefaults.paginatedResources).length < 1
     )
+    const isPublicFile = (spaceData: SpaceResource) => unref(spaceData).driveType === 'public'
+    const hasNoSpaceName = (spaceData: SpaceResource) => !unref(spaceData).name
 
     const titleSegments = computed(() => {
-      const segments = [unref(space).name]
+      const title =
+        isPublicFile(unref(space)) && hasNoSpaceName(unref(space))
+          ? $gettext('Public files')
+          : unref(space).name
+
+      const segments = [title]
       if (props.item !== '/') {
         segments.unshift(basename(props.item))
       }
