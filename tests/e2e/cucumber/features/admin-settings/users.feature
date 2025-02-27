@@ -151,7 +151,7 @@ Feature: users management
       | user  |
       | David |
     When "Admin" deletes the following users using the batch actions
-      | id    |
+      | user  |
       | Alice |
       | Brian |
     And "Admin" deletes the following user using the context menu
