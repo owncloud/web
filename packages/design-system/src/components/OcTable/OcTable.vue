@@ -581,7 +581,7 @@ export default defineComponent({
   }
 }
 .oc-button-sort {
-  display: flex;
+  display: flex !important;
   justify-content: start;
   .oc-icon {
     &:hover {
