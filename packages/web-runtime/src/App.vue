@@ -1,6 +1,10 @@
 <template>
+  <maintenance-banner v-show="maintenanceMode" ref="maintenance-banner" />
   <portal-target name="app.app-banner" multiple />
-  <div id="web">
+  <div
+    id="web"
+    :style="{ '--web-runtime-maintenance-banner-height': maintenanceBannerHeight + 'px' }"
+  >
     <oc-hidden-announcer :announcement="announcement" level="polite" />
     <skip-to target="web-content-main">
       <span v-text="$gettext('Skip to main')" />
@@ -15,21 +19,34 @@ import ModalWrapper from './components/ModalWrapper.vue'
 import { useLayout } from './composables/layout'
 import { computed, defineComponent, unref, watch } from 'vue'
 import { additionalTranslations } from './helpers/additionalTranslations' // eslint-disable-line
-import { eventBus, useResourcesStore, useRouter, useThemeStore } from '@ownclouders/web-pkg'
+import {
+  eventBus,
+  useConfigStore,
+  useResourcesStore,
+  useRouter,
+  useThemeStore
+} from '@ownclouders/web-pkg'
 import { useHead } from './composables/head'
 import { RouteLocation } from 'vue-router'
 import { storeToRefs } from 'pinia'
 import { isEqual } from 'lodash-es'
+import { MaintenanceBanner } from './components/MaintenanceBanner'
+import { useTemplateRef } from 'vue'
+import { MaybeElement, useElementSize } from '@vueuse/core'
 
 export default defineComponent({
   components: {
     SkipTo,
-    ModalWrapper
+    ModalWrapper,
+    MaintenanceBanner
   },
   setup() {
     const resourcesStore = useResourcesStore()
     const themeStore = useThemeStore()
     const { currentTheme } = storeToRefs(themeStore)
+
+    const configStore = useConfigStore()
+    const { maintenanceMode } = storeToRefs(configStore)
 
     const router = useRouter()
     useHead()
@@ -37,6 +54,11 @@ export default defineComponent({
     const activeRoute = computed(() => router.resolve(unref(router.currentRoute)))
 
     const { layout, layoutType } = useLayout({ router })
+
+    const maintenanceBannerElement = useTemplateRef('maintenance-banner')
+    const { height: maintenanceBannerHeight } = useElementSize(
+      maintenanceBannerElement as unknown as MaybeElement
+    )
 
     watch(
       () => unref(activeRoute),
@@ -76,7 +98,10 @@ export default defineComponent({
 
     return {
       layout,
-      currentTheme
+      currentTheme,
+      maintenanceMode,
+      maintenanceBannerElement,
+      maintenanceBannerHeight
     }
   },
   data() {
@@ -142,7 +167,7 @@ body {
 
 #web {
   background-color: var(--oc-color-swatch-brand-default);
-  height: 100vh;
+  height: calc(100vh - var(--web-runtime-maintenance-banner-height));
   max-height: 100vh;
   overflow-y: hidden;
 

@@ -56,6 +56,8 @@ export const useConfigStore = defineStore('config', () => {
   const scripts = ref<RawConfig['scripts']>([])
   const styles = ref<RawConfig['styles']>([])
 
+  const maintenanceMode = ref(false)
+
   const serverUrl = computed(() =>
     urlJoin(unref(server) || window.location.origin, { trailingSlash: true })
   )
@@ -94,6 +96,10 @@ export const useConfigStore = defineStore('config', () => {
     }
   }
 
+  const setMaintenanceMode = (value: boolean) => {
+    maintenanceMode.value = value
+  }
+
   return {
     options,
     oAuth2,
@@ -108,7 +114,9 @@ export const useConfigStore = defineStore('config', () => {
     scripts,
     styles,
     serverUrl,
-    loadConfig
+    maintenanceMode,
+    loadConfig,
+    setMaintenanceMode
   }
 })
 
