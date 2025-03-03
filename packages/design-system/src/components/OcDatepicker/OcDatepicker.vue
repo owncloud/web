@@ -13,78 +13,75 @@
   />
 </template>
 
-<script lang="ts">
-import { computed, defineComponent, PropType, ref, unref, watch } from 'vue'
+<script lang="ts" setup>
+import { computed, ref, unref, watch } from 'vue'
 import { useGettext } from 'vue3-gettext'
 import { DateTime } from 'luxon'
-export default defineComponent({
+
+interface Props {
+  label: string
+  isClearable?: boolean
+  currentDate?: DateTime
+  minDate?: DateTime
+}
+
+interface Emits {
+  (e: 'dateChanged', value: { date: DateTime | null; error: boolean }): void
+}
+defineOptions({
   name: 'OcDatepicker',
   status: 'ready',
-  release: '1.0.0',
-  props: {
-    label: { type: String, required: true },
-    isClearable: { type: Boolean, default: true },
-    currentDate: { type: Object as PropType<DateTime>, required: false, default: null },
-    minDate: { type: Object as PropType<DateTime>, required: false, default: null }
-  },
-  emits: ['dateChanged'],
-  setup(props, { emit }) {
-    const { $gettext, current } = useGettext()
-    const dateInputString = ref<string>('')
-
-    const date = computed(() => {
-      const date = DateTime.fromISO(unref(dateInputString)).endOf('day')
-      return date.isValid ? date : null
-    })
-
-    const isMinDateUndercut = computed(() => {
-      if (!props.minDate || !unref(date)) {
-        return false
-      }
-      return unref(date) < props.minDate
-    })
-
-    const errorMessage = computed(() => {
-      if (unref(isMinDateUndercut)) {
-        return $gettext('The date must be after %{date}', {
-          date: props.minDate
-            .minus({ day: 1 })
-            .setLocale(current)
-            .toLocaleString(DateTime.DATE_SHORT)
-        })
-      }
-      return ''
-    })
-
-    watch(
-      () => props.currentDate,
-      () => {
-        if (props.currentDate) {
-          dateInputString.value = props.currentDate.toISODate()
-          return
-        }
-
-        dateInputString.value = undefined
-      },
-      { immediate: true }
-    )
-
-    watch(
-      date,
-      () => {
-        emit('dateChanged', { date: unref(date), error: unref(isMinDateUndercut) })
-      },
-      {
-        deep: true
-      }
-    )
-
-    return {
-      dateInputString,
-      errorMessage
-    }
-  }
+  release: '1.0.0'
 })
+
+const { label, isClearable = true, currentDate = null, minDate = null } = defineProps<Props>()
+const emit = defineEmits<Emits>()
+const { $gettext, current } = useGettext()
+const dateInputString = ref<string>('')
+
+const date = computed(() => {
+  const date = DateTime.fromISO(unref(dateInputString)).endOf('day')
+  return date.isValid ? date : null
+})
+
+const isMinDateUndercut = computed(() => {
+  if (!minDate || !unref(date)) {
+    return false
+  }
+  return unref(date) < minDate
+})
+
+const errorMessage = computed(() => {
+  if (unref(isMinDateUndercut)) {
+    return $gettext('The date must be after %{date}', {
+      date: minDate.minus({ day: 1 }).setLocale(current).toLocaleString(DateTime.DATE_SHORT)
+    })
+  }
+  return ''
+})
+
+watch(
+  () => currentDate,
+  () => {
+    if (currentDate) {
+      dateInputString.value = currentDate.toISODate()
+      return
+    }
+
+    dateInputString.value = undefined
+  },
+  { immediate: true }
+)
+
+watch(
+  date,
+  () => {
+    emit('dateChanged', { date: unref(date), error: unref(isMinDateUndercut) })
+  },
+  {
+    deep: true
+  }
+)
 </script>
 <style lang="scss">
 .oc-date-picker {

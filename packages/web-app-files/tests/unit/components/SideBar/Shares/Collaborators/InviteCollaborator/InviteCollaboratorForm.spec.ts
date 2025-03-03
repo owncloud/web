@@ -4,7 +4,8 @@ import {
   defaultComponentMocks,
   defaultPlugins,
   RouteLocation,
-  shallowMount
+  shallowMount,
+  VueWrapper
 } from '@ownclouders/web-test-helpers'
 import { Resource, SpaceResource } from '@ownclouders/web-client'
 import { useSharesStore } from '@ownclouders/web-pkg'
@@ -225,6 +226,6 @@ function getWrapper({
         mocks,
         stubs: { OcSelect: false, VueSelect: false }
       }
-    })
+    }) as VueWrapper<any, any>
   }
 }

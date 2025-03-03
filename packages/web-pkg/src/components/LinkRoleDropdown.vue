@@ -62,49 +62,41 @@
   </oc-drop>
 </template>
 
-<script lang="ts">
+<script lang="ts" setup>
 import { v4 as uuidV4 } from 'uuid'
-import { defineComponent, PropType } from 'vue'
 import { computed } from 'vue'
 import { useGettext } from 'vue3-gettext'
 import { SharingLinkType } from '@ownclouders/web-client/graph/generated'
 import { useLinkTypes } from '../composables'
 
-export default defineComponent({
-  name: 'LinkRoleDropdown',
-  props: {
-    modelValue: { type: Object as PropType<SharingLinkType>, required: true },
-    availableLinkTypeOptions: { type: Array as PropType<SharingLinkType[]>, required: true },
-    dropOffset: { type: String, default: undefined }
-  },
-  emits: ['update:modelValue'],
-  setup(props, { emit }) {
-    const { $gettext } = useGettext()
-    const { getLinkRoleByType } = useLinkTypes()
+interface Emits {
+  (event: 'update:modelValue', value: SharingLinkType): void
+}
 
-    const isSelectedType = (type: SharingLinkType) => {
-      return props.modelValue === type
-    }
+interface Props {
+  modelValue: SharingLinkType
+  availableLinkTypeOptions: SharingLinkType[]
+  dropOffset?: string
+}
 
-    const updateSelectedType = (type: SharingLinkType) => {
-      emit('update:modelValue', type)
-    }
+const props = defineProps<Props>()
+const emit = defineEmits<Emits>()
+const { $gettext } = useGettext()
+const { getLinkRoleByType } = useLinkTypes()
 
-    const currentLinkRoleLabel = computed(() => {
-      return $gettext(getLinkRoleByType(props.modelValue)?.displayName)
-    })
+const isSelectedType = (type: SharingLinkType) => {
+  return props.modelValue === type
+}
 
-    const dropUuid = uuidV4()
+const updateSelectedType = (type: SharingLinkType) => {
+  emit('update:modelValue', type)
+}
 
-    return {
-      isSelectedType,
-      updateSelectedType,
-      currentLinkRoleLabel,
-      dropUuid,
-      getLinkRoleByType
-    }
-  }
+const currentLinkRoleLabel = computed(() => {
+  return $gettext(getLinkRoleByType(props.modelValue)?.displayName)
 })
+
+const dropUuid = uuidV4()
 </script>
 
 <style lang="scss" scoped>

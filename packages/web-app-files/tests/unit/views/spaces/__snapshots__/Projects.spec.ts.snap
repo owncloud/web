@@ -21,7 +21,7 @@ exports[`Projects view > different files view states > lists all available proje
               </div>
             </div>
           </div>
-          <div class=""><label class="oc-label" for="spaces-filter">Search</label>
+          <div class="" autocomplete="off"><label class="oc-label" for="spaces-filter">Search</label>
             <div class="oc-position-relative">
               <!--v-if--> <input id="spaces-filter" autocomplete="off" aria-invalid="false" class="oc-text-input oc-input oc-rounded" type="text" value="">
               <!--v-if-->

@@ -171,10 +171,5 @@
   },
   "peerDependencies": {
     "vue": "^3.5.11"
-  },
-  "pnpm": {
-    "overrides": {
-      "elliptic": "6.6.1"
-    }
   }
 }

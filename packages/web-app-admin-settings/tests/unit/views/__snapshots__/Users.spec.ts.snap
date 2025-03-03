@@ -27,7 +27,7 @@ exports[`Users view > list view > renders initially warning if filters are manda
             <item-filter-stub data-v-32efd9c6="" filterlabel="Roles" items="[object Object],[object Object],[object Object],[object Object]" filtername="roles" optionfilterlabel="Filter roles" showoptionfilter="true" allowmultiple="true" idattribute="id" displaynameattribute="displayName" filterableattributes="displayName" closeonclick="false"></item-filter-stub>
           </div>
           <div data-v-32efd9c6="" class="oc-flex oc-flex-middle">
-            <div data-v-32efd9c6="" class=""><label class="oc-label" for="users-filter">Search</label>
+            <div data-v-32efd9c6="" class="" modelmodifiers="[object Object]" autocomplete="off"><label class="oc-label" for="users-filter">Search</label>
               <div class="oc-position-relative">
                 <!--v-if--> <input id="users-filter" modelmodifiers="[object Object]" autocomplete="off" aria-invalid="false" class="oc-text-input oc-input oc-rounded" type="text" value="">
                 <!--v-if-->
@@ -75,7 +75,7 @@ exports[`Users view > list view > renders list initially 1`] = `
             <item-filter-stub data-v-32efd9c6="" filterlabel="Roles" items="[object Object],[object Object],[object Object],[object Object]" filtername="roles" optionfilterlabel="Filter roles" showoptionfilter="true" allowmultiple="true" idattribute="id" displaynameattribute="displayName" filterableattributes="displayName" closeonclick="false"></item-filter-stub>
           </div>
           <div data-v-32efd9c6="" class="oc-flex oc-flex-middle">
-            <div data-v-32efd9c6="" class=""><label class="oc-label" for="users-filter">Search</label>
+            <div data-v-32efd9c6="" class="" modelmodifiers="[object Object]" autocomplete="off"><label class="oc-label" for="users-filter">Search</label>
               <div class="oc-position-relative">
                 <!--v-if--> <input id="users-filter" modelmodifiers="[object Object]" autocomplete="off" aria-invalid="false" class="oc-text-input oc-input oc-rounded" type="text" value="">
                 <!--v-if-->

@@ -47,11 +47,43 @@
   </div>
 </template>
 
-<script lang="ts">
-import { defineComponent, PropType, ref, unref } from 'vue'
+<script lang="ts" setup>
+import { ref, unref } from 'vue'
 import OcIcon from '../OcIcon/OcIcon.vue'
 import OcButton from '../OcButton/OcButton.vue'
 import { uniqueId } from '../../helpers'
+
+/**
+ * OcStatusIndicators - Status indicators which can be attached to a resource.
+ *
+ * @component
+ * @example
+ * ```vue
+ * <oc-status-indicators :resource="resource" :indicators="indicators" />
+ * ```
+ *
+ * @prop {Object} resource - A resource to which the indicators are attached.
+ * @prop {Array.<Indicator>} indicators - An array of indicators to be displayed.
+ * @prop {boolean} [disableHandler=false] - Disables the handler for all indicators. Useful for disabled resources.
+ *
+ * @typedef {Object} Indicator
+ * @property {string} id - Id of the indicator.
+ * @property {string} icon - Icon of the indicator.
+ * @property {string} label - String to be used as an accessible label and tooltip for the indicator.
+ * @property {Function} [handler] - An action to be triggered when the indicator is clicked. Receives the resource.
+ * @property {string} [accessibleDescription] - A string to be used as an accessible description for the indicator. It renders an element only visible for screen readers to provide additional context.
+ * @property {boolean} [visible] - Visibility of the indicator.
+ * @property {string} [type] - Type of the indicator.
+ * @property {string} [fillType] - Fill type of the indicator.
+ *
+ * @method hasHandler
+ * @param {Indicator} indicator - The indicator to check for a handler.
+ * @returns {boolean} - Returns true if the indicator has a handler.
+ *
+ * @method getIndicatorDescriptionId
+ * @param {Indicator} indicator - The indicator to get the description ID for.
+ * @returns {string|null} - Returns the description ID if available, otherwise null.
+ */
 
 type Indicator = {
   id: string
@@ -64,75 +96,36 @@ type Indicator = {
   fillType?: string
 }
 
-/**
- * Status indicators which can be attatched to a resource
- */
-export default defineComponent({
+interface Props {
+  resource: Record<string, any>
+  indicators: Indicator[]
+  disableHandler?: boolean
+}
+
+defineOptions({
   name: 'OcStatusIndicators',
   status: 'ready',
-  release: '2.0.1',
-
-  components: { OcIcon, OcButton },
-
-  props: {
-    /**
-     * A resource to which the indicators are attatched to
-     */
-    resource: {
-      type: Object,
-      required: true
-    },
-    /**
-     * An array of indicators to be displayed. Indicator object has following properties:
-     *
-     * Required:
-     * id: Id of the indicator
-     * icon: Icon of the indicator
-     * label: String to be used as a accessible label and tooltip for the indicator
-     *
-     * Optional:
-     * handler: An action to be triggered when the indicator is clicked. Receives the resource.
-     * accessibleDescription: A string to be used as a accessible description for the indicator. It renders an element only visible for screenreaders to provide additional context
-     */
-    indicators: {
-      type: Array as PropType<Indicator[]>,
-      required: true
-    },
-    /**
-     * Disables the handler for all indicators. This is useful e.g. for disabled resources.
-     */
-    disableHandler: {
-      type: Boolean,
-      default: false
-    }
-  },
-
-  setup() {
-    const accessibleDescriptionIds = ref({} as Record<string, string>)
-
-    const hasHandler = (indicator: Indicator): boolean => {
-      return Object.prototype.hasOwnProperty.call(indicator, 'handler')
-    }
-
-    const getIndicatorDescriptionId = (indicator: Indicator): string | null => {
-      if (!indicator.accessibleDescription) {
-        return null
-      }
-
-      if (!unref(accessibleDescriptionIds)[indicator.id]) {
-        unref(accessibleDescriptionIds)[indicator.id] = uniqueId('oc-indicator-description-')
-      }
-
-      return unref(accessibleDescriptionIds)[indicator.id]
-    }
-
-    return {
-      accessibleDescriptionIds,
-      hasHandler,
-      getIndicatorDescriptionId
-    }
-  }
+  release: '2.0.1'
 })
+
+const { resource, indicators, disableHandler = false } = defineProps<Props>()
+const accessibleDescriptionIds = ref({} as Record<string, string>)
+
+const hasHandler = (indicator: Indicator): boolean => {
+  return Object.prototype.hasOwnProperty.call(indicator, 'handler')
+}
+
+const getIndicatorDescriptionId = (indicator: Indicator): string | null => {
+  if (!indicator.accessibleDescription) {
+    return null
+  }
+
+  if (!unref(accessibleDescriptionIds)[indicator.id]) {
+    unref(accessibleDescriptionIds)[indicator.id] = uniqueId('oc-indicator-description-')
+  }
+
+  return unref(accessibleDescriptionIds)[indicator.id]
+}
 </script>
 
 <style lang="scss">

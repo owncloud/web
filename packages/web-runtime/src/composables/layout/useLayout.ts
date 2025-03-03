@@ -8,9 +8,7 @@ export interface LayoutOptions {
   authStore?: AuthStore
   router?: Router
 }
-
-const layoutTypes = ['plain', 'application'] as const
-type LayoutType = (typeof layoutTypes)[number]
+type LayoutType = 'plain' | 'application'
 
 export const useLayout = (options?: LayoutOptions) => {
   const router = options?.router || useRouter()
