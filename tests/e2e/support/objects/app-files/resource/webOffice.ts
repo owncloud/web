@@ -13,7 +13,7 @@ const onlyOfficeSaveButtonSelector = '#slot-btn-dt-save > button'
 const onlyofficeDocTextAreaSelector = '#area_id'
 const onlyOfficeCanvasEditorSelector = '#id_viewer_overlay'
 
-export const removeCollaboraWelcomeModal = async (page: Page) => {
+export const removeCollaboraWelcomeModal = async (page: Page): Promise<void> => {
   const editorMainFrame = page.frameLocator(externalEditorIframe)
   await editorMainFrame.locator('#document-header').waitFor()
   const versionSet = await editorMainFrame.locator('body').evaluate(() => {
@@ -25,30 +25,30 @@ export const removeCollaboraWelcomeModal = async (page: Page) => {
   }
 }
 
-export const waitForCollaboraEditor = async (page: Page) => {
+export const waitForCollaboraEditor = async (page: Page): Promise<void> => {
   const editorMainFrame = page.frameLocator(externalEditorIframe)
   await editorMainFrame.locator(collaboraDocTextAreaSelector).waitFor()
 }
 
-export const waitForOnlyOfficeEditor = async (page: Page) => {
+export const waitForOnlyOfficeEditor = async (page: Page): Promise<void> => {
   const editorMainFrame = page
     .frameLocator(externalEditorIframe)
     .frameLocator(onlyOfficeInnerFrameSelector)
   await editorMainFrame.locator(onlyofficeDocTextAreaSelector).waitFor()
 }
 
-export const focusCollaboraEditor = async (page: Page) => {
+export const focusCollaboraEditor = async (page: Page): Promise<void> => {
   const editorMainFrame = page.frameLocator(externalEditorIframe)
   await editorMainFrame.locator(collaboraCanvasEditorSelector).click()
 }
 
-export const focusOnlyOfficeEditor = async (page: Page) => {
+export const focusOnlyOfficeEditor = async (page: Page): Promise<void> => {
   const editorMainFrame = page.frameLocator(externalEditorIframe)
   const innerFrame = editorMainFrame.frameLocator(onlyOfficeInnerFrameSelector)
   await innerFrame.locator(onlyOfficeCanvasEditorSelector).click()
 }
 
-export const getOfficeDocumentContent = async (page: Page) => {
+export const getOfficeDocumentContent = async (page: Page): Promise<string> => {
   // clear the clipboard
   await page.evaluate("navigator.clipboard.writeText('')")
   // copying and getting the value with keyboard requires some time
@@ -57,7 +57,7 @@ export const getOfficeDocumentContent = async (page: Page) => {
   return page.evaluate(() => navigator.clipboard.readText())
 }
 
-export const fillCollaboraDocumentContent = async (page: Page, content: string) => {
+export const fillCollaboraDocumentContent = async (page: Page, content: string): Promise<void> => {
   await removeCollaboraWelcomeModal(page)
 
   const editorMainFrame = page.frameLocator(externalEditorIframe)
@@ -72,7 +72,7 @@ export const fillCollaboraDocumentContent = async (page: Page, content: string) 
   await page.waitForTimeout(500)
 }
 
-export const fillOnlyOfficeDocumentContent = async (page: Page, content: string) => {
+export const fillOnlyOfficeDocumentContent = async (page: Page, content: string): Promise<void> => {
   const editorMainFrame = page.frameLocator(externalEditorIframe)
   const innerIframe = editorMainFrame.frameLocator(onlyOfficeInnerFrameSelector)
   await innerIframe.locator(onlyofficeDocTextAreaSelector).focus()
@@ -82,7 +82,7 @@ export const fillOnlyOfficeDocumentContent = async (page: Page, content: string)
   await expect(saveButtonDisabledLocator).toHaveAttribute('disabled', 'disabled')
 }
 
-export const canEditCollaboraDocument = async (page: Page) => {
+export const canEditCollaboraDocument = async (page: Page): Promise<boolean> => {
   const editorMainFrame = page.frameLocator(externalEditorIframe)
   const collaboraDocPermissionModeLocator = editorMainFrame.locator(
     collaboraDocPermissionModeSelector
@@ -91,7 +91,7 @@ export const canEditCollaboraDocument = async (page: Page) => {
   return permissionMode === 'Edit'
 }
 
-export const canEditOnlyOfficeDocument = async (page: Page) => {
+export const canEditOnlyOfficeDocument = async (page: Page): Promise<boolean> => {
   const editorMainFrame = page.frameLocator(externalEditorIframe)
   const innerFrame = editorMainFrame.frameLocator(onlyOfficeInnerFrameSelector)
   try {
