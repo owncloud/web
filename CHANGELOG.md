@@ -15,6 +15,7 @@ Summary
 * Bugfix - Preserve current page when opening a file: [#12207](https://github.com/owncloud/web/pull/12207)
 * Bugfix - Broken title for public files link: [#12225](https://github.com/owncloud/web/pull/12225)
 * Bugfix - Disable password protected folders creation inside public links: [#12226](https://github.com/owncloud/web/pull/12226)
+* Bugfix - Allow email address as user name in the user creation form: [#12228](https://github.com/owncloud/web/issues/12228)
 * Bugfix - Sorting arrow misplaced: [#12236](https://github.com/owncloud/web/pull/12236)
 * Enhancement - Accessibility improvements: [#5379](https://github.com/owncloud/web/issues/5379)
 * Enhancement - Create spaces via admin settings: [#11849](https://github.com/owncloud/web/pull/11849)
@@ -78,6 +79,14 @@ Details
 
    https://github.com/owncloud/web/issues/12190
    https://github.com/owncloud/web/pull/12226
+
+* Bugfix - Allow email address as user name in the user creation form: [#12228](https://github.com/owncloud/web/issues/12228)
+
+   We've fixed user name filtering in the user creation form to allow entering
+   email address as user name, thus aligning UI filtering with backend filtering.
+
+   https://github.com/owncloud/web/issues/12228
+   https://github.com/owncloud/web/pull/12229
 
 * Bugfix - Sorting arrow misplaced: [#12236](https://github.com/owncloud/web/pull/12236)
 
