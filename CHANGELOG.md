@@ -22,6 +22,7 @@ Summary
 * Bugfix - Revert password protected folder creation on error: [#12241](https://github.com/owncloud/web/pull/12241)
 * Enhancement - Accessibility improvements: [#5379](https://github.com/owncloud/web/issues/5379)
 * Enhancement - Create spaces via admin settings: [#11849](https://github.com/owncloud/web/pull/11849)
+* Enhancement - Add new supported language to md-editor: [#12243](https://github.com/owncloud/web/pull/12243)
 
 Details
 -------
@@ -143,6 +144,13 @@ Details
 
    https://github.com/owncloud/web/issues/11771
    https://github.com/owncloud/web/pull/11849
+
+* Enhancement - Add new supported language to md-editor: [#12243](https://github.com/owncloud/web/pull/12243)
+
+   We've updated the md-editor extension to the latest version which supports
+   Arabic language. We have also added auto focus on the editor.
+
+   https://github.com/owncloud/web/pull/12243
 
 Changelog for ownCloud Web [11.3.0] (2025-02-25)
 =======================================
