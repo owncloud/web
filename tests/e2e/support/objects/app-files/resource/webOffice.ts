@@ -26,6 +26,18 @@ export const removeCollaboraWelcomeModal = async (page: Page) => {
   }
 }
 
+export const waitForCollaboraEditor = async (page: Page) => {
+  const editorMainFrame = page.frameLocator(externalEditorIframe)
+  await editorMainFrame.locator(collaboraDocTextAreaSelector).waitFor()
+}
+
+export const waitForOnlyOfficeEditor = async (page: Page) => {
+  const editorMainFrame = page
+    .frameLocator(externalEditorIframe)
+    .frameLocator(onlyOfficeInnerFrameSelector)
+  await editorMainFrame.locator(onlyofficeDocTextAreaSelector).waitFor()
+}
+
 export const focusCollaboraEditor = async (page: Page) => {
   const editorMainFrame = page.frameLocator(externalEditorIframe)
   await editorMainFrame.locator(collaboraCanvasEditorSelector).click()
