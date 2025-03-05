@@ -934,7 +934,7 @@ Then(
     const resourceObject = new objects.applicationFiles.Resource({ page })
 
     for (const info of stepTable.hashes()) {
-      const canEdit = await resourceObject.canEditContent({ type: info.type })
+      const canEdit = await resourceObject.canEditDocumentContent({ type: info.type })
       expect(canEdit).toBe(actionType === 'should')
     }
   }
