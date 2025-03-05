@@ -19,6 +19,7 @@ Summary
 * Bugfix - Allow email address as user name in the user creation form: [#12228](https://github.com/owncloud/web/issues/12228)
 * Bugfix - Sorting arrow misplaced: [#12236](https://github.com/owncloud/web/pull/12236)
 * Bugfix - Add password policies to password protected folders: [#12240](https://github.com/owncloud/web/pull/12240)
+* Bugfix - Revert password protected folder creation on error: [#12241](https://github.com/owncloud/web/pull/12241)
 * Enhancement - Accessibility improvements: [#5379](https://github.com/owncloud/web/issues/5379)
 * Enhancement - Create spaces via admin settings: [#11849](https://github.com/owncloud/web/pull/11849)
 
@@ -118,6 +119,14 @@ Details
 
    https://github.com/owncloud/web/issues/12223
    https://github.com/owncloud/web/pull/12240
+
+* Bugfix - Revert password protected folder creation on error: [#12241](https://github.com/owncloud/web/pull/12241)
+
+   We've fixed an issue where the hidden folder with password protected files was
+   not being deleted in case of an error with link or file creation.
+
+   https://github.com/owncloud/web/issues/12223
+   https://github.com/owncloud/web/pull/12241
 
 * Enhancement - Accessibility improvements: [#5379](https://github.com/owncloud/web/issues/5379)
 
