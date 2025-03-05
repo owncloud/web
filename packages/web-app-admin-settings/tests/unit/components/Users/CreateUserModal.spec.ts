@@ -65,6 +65,14 @@ describe('CreateUserModal', () => {
       expect(await wrapper.vm.validateUserName()).toBeTruthy()
       expect(getUserStub).toHaveBeenCalled()
     })
+    it('should be true when userName is an email address', async () => {
+      const { wrapper, mocks } = getWrapper()
+      const graphMock = mocks.$clientService.graphAuthenticated
+      const getUserStub = graphMock.users.getUser.mockRejectedValue(() => mockAxiosReject())
+      wrapper.vm.user.onPremisesSamAccountName = 'sk@domain.tld'
+      expect(await wrapper.vm.validateUserName()).toBeTruthy()
+      expect(getUserStub).toHaveBeenCalled()
+    })
   })
 
   describe('method "validateDisplayName"', () => {
