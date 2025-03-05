@@ -15,6 +15,7 @@ Summary
 * Bugfix - Preserve current page when opening a file: [#12207](https://github.com/owncloud/web/pull/12207)
 * Bugfix - Broken title for public files link: [#12225](https://github.com/owncloud/web/pull/12225)
 * Bugfix - Disable password protected folders creation inside public links: [#12226](https://github.com/owncloud/web/pull/12226)
+* Bugfix - Make password protected folder tile clickable: [#12227](https://github.com/owncloud/web/pull/12227)
 * Bugfix - Allow email address as user name in the user creation form: [#12228](https://github.com/owncloud/web/issues/12228)
 * Bugfix - Sorting arrow misplaced: [#12236](https://github.com/owncloud/web/pull/12236)
 * Bugfix - Add password policies to password protected folders: [#12240](https://github.com/owncloud/web/pull/12240)
@@ -80,6 +81,17 @@ Details
 
    https://github.com/owncloud/web/issues/12190
    https://github.com/owncloud/web/pull/12226
+
+* Bugfix - Make password protected folder tile clickable: [#12227](https://github.com/owncloud/web/pull/12227)
+
+   We've fixed an issue where the password protected folder resource was not
+   clickable when the files list is in "Tiles" view mode. Due to missing
+   permissions on the resource, the click was disabled. We have added a new check
+   that asserts whether the resource is a password protected folder and if yes, we
+   allow the click.
+
+   https://github.com/owncloud/web/issues/12193
+   https://github.com/owncloud/web/pull/12227
 
 * Bugfix - Allow email address as user name in the user creation form: [#12228](https://github.com/owncloud/web/issues/12228)
 
