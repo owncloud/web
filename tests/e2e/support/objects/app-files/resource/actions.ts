@@ -10,7 +10,9 @@ import {
   canEditOnlyOfficeDocument,
   getOfficeDocumentContent,
   focusCollaboraEditor,
-  focusOnlyOfficeEditor
+  focusOnlyOfficeEditor,
+  waitForOnlyOfficeEditor,
+  waitForCollaboraEditor
 } from './webOffice'
 import { editor, sidebar } from '../utils'
 import { environment, utils } from '../../../../support'
@@ -94,7 +96,6 @@ const hiddenFilesToggleButton = '//*[@data-testid="files-switch-hidden-files"]//
 const previewImage = '//main[@id="preview"]//div[contains(@class,"stage_media")]//img'
 const previewAudio = '//main[@id="preview"]//div[contains(@class,"stage_media")]//audio//source'
 const previewVideo = '//main[@id="preview"]//div[contains(@class,"stage_media")]//video//source'
-const externalEditorIframe = '[name="app-iframe"]'
 const tagTableCell =
   '//*[@data-test-resource-name="%s"]/ancestor::tr//td[contains(@class, "oc-table-data-cell-tags")]'
 const tagInFilesTable = '//*[contains(@class, "oc-tag")]//span[text()="%s"]//ancestor::a'
@@ -130,13 +131,6 @@ const keepBothButton = '.oc-modal-body-actions-confirm'
 const mediaNavigationButton = `//button[contains(@class, "preview-controls-%s")]`
 const sideBarActions =
   '//ul[@id="oc-files-actions-sidebar"]//span[contains(@class,"oc-files-context-action-label")]/span'
-
-// online office locators
-// OnlyOffice
-const onlyOfficeInnerFrameSelector = '[name="frameEditor"]'
-const onlyofficeDocTextAreaSelector = '#area_id'
-const onlyOfficeInfoDialog = '.alert .info-box'
-const onlyOfficeInfoDialogConfirm = `.alert button[result="ok"]`
 
 const fileThumbnail = `//span[@data-test-resource-name="%s"]/ancestor::tr[contains(@class, "oc-tbody-tr")]//img[contains(@class,"oc-resource-thumbnail")]`
 const fileIconWrapper = '#oc-file-details-sidebar .details-icon-wrapper'
@@ -1718,27 +1712,7 @@ export const openFileInViewer = async (args: openFileInViewerArgs): Promise<void
         ),
         page.locator(util.format(resourceNameSelector, name)).click()
       ])
-
-      const onlyOfficeIframe = page
-        .frameLocator(externalEditorIframe)
-        .frameLocator(onlyOfficeInnerFrameSelector)
-
-      // wait for the iframe to load
-      await onlyOfficeIframe.locator('div#viewport').waitFor()
-
-      // close the info dialog if visible
-      try {
-        await onlyOfficeIframe
-          .locator(onlyOfficeInfoDialog)
-          .waitFor({ timeout: config.minTimeout * 1000 })
-        await onlyOfficeIframe.locator(onlyOfficeInfoDialogConfirm).click()
-        // NOTE: page reload is required if the info dialog appears
-        await page.reload()
-      } catch {
-        console.log('No info dialog. Continue...')
-      }
-
-      await onlyOfficeIframe.locator(onlyofficeDocTextAreaSelector).waitFor()
+      await waitForOnlyOfficeEditor(page)
       break
     case 'Collabora':
       await Promise.all([
@@ -1750,6 +1724,7 @@ export const openFileInViewer = async (args: openFileInViewerArgs): Promise<void
         ),
         page.locator(util.format(resourceNameSelector, name)).click()
       ])
+      await waitForCollaboraEditor(page)
       break
     case 'mediaviewer': {
       await Promise.all([
