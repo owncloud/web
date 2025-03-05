@@ -12,7 +12,6 @@ const onlyOfficeInnerFrameSelector = '[name="frameEditor"]'
 const onlyOfficeSaveButtonSelector = '#slot-btn-dt-save > button'
 const onlyofficeDocTextAreaSelector = '#area_id'
 const onlyOfficeCanvasEditorSelector = '#id_viewer_overlay'
-const copyPasteWarningPopup = '#copy_paste_warning-box'
 
 export const removeCollaboraWelcomeModal = async (page: Page) => {
   const editorMainFrame = page.frameLocator(externalEditorIframe)
@@ -50,6 +49,8 @@ export const focusOnlyOfficeEditor = async (page: Page) => {
 }
 
 export const getOfficeDocumentContent = async (page: Page) => {
+  // clear the clipboard
+  await page.evaluate("navigator.clipboard.writeText('')")
   // copying and getting the value with keyboard requires some time
   await page.keyboard.press('ControlOrMeta+A', { delay: 200 })
   await page.keyboard.press('ControlOrMeta+C', { delay: 200 })
