@@ -38,7 +38,7 @@ Users can create password-protected folders by following these steps:
 
    1. Though possible, do not create a PPF in your private Space for security reasons. You would need to share the Space or link file first. Exposing all the personal Space publicly is a security issue for your personal data.
    1. If you create a PPF in a project Space where users also have delete permissions, **Any** accessing user with delete permission would be able to delete the link file. Accidentally or intentionally done, no one would be able to access the PPF anymore, even though the data of the target folder still exists.
-   1. As a suggestion for a secure environment accessing PPF's, it is recommended to create a separate project Space only for PPF's where added users only have view permissions. Space managers or defined users can or will have extended permissions though. This guarantees that users that are allowed to access the Space wont be able to delete or manipulate link files "accidentally".  
+   1. As a suggestion for a secure environment accessing PPF's, it is recommended to create a separate project Space only for PPF's where added users only have view permissions. Space managers or defined users can or will have extended permissions though. This guarantees that users that are allowed to access the Space wont be able to delete or manipulate link files "accidentially".  
 
 1. **Restoring a Deleted a PPF**
 
