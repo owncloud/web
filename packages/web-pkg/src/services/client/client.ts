@@ -136,6 +136,12 @@ export class ClientService {
       Object.assign(config.headers, this.getDynamicHeaders())
       return config
     })
+
+    axiosClient.interceptors.response.use(
+      this.#handleAxiosResponse.bind(this),
+      this.#handleAxiosError.bind(this)
+    )
+
     this.ocsClient = ocs(this.configStore.serverUrl, axiosClient)
   }
 

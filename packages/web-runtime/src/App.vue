@@ -17,7 +17,7 @@
 import SkipTo from './components/SkipTo.vue'
 import ModalWrapper from './components/ModalWrapper.vue'
 import { useLayout } from './composables/layout'
-import { computed, defineComponent, unref, watch } from 'vue'
+import { computed, defineComponent, onWatcherCleanup, unref, watch } from 'vue'
 import { additionalTranslations } from './helpers/additionalTranslations' // eslint-disable-line
 import {
   eventBus,
@@ -33,6 +33,7 @@ import { isEqual } from 'lodash-es'
 import { MaintenanceBanner } from './components/MaintenanceBanner'
 import { useTemplateRef } from 'vue'
 import { MaybeElement, useElementSize } from '@vueuse/core'
+import { useMaintenanceMode } from './composables/maintenanceMode'
 
 export default defineComponent({
   components: {
@@ -47,6 +48,8 @@ export default defineComponent({
 
     const configStore = useConfigStore()
     const { maintenanceMode } = storeToRefs(configStore)
+
+    const { startCheckingMaintenanceMode, stopCheckingMaintenanceMode } = useMaintenanceMode()
 
     const router = useRouter()
     useHead()
@@ -94,6 +97,22 @@ export default defineComponent({
          */
         resourcesStore.setCurrentFolder(null)
       }
+    )
+
+    watch(
+      maintenanceMode,
+      (maintenanceMode) => {
+        if (maintenanceMode) {
+          startCheckingMaintenanceMode()
+        } else {
+          stopCheckingMaintenanceMode()
+        }
+
+        onWatcherCleanup(() => {
+          stopCheckingMaintenanceMode()
+        })
+      },
+      { immediate: true }
     )
 
     return {
