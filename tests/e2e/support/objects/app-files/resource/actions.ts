@@ -449,6 +449,7 @@ export const fillDocumentContent = async ({
       throw new Error("Editor should be 'TextEditor' but found " + editor)
   }
 }
+
 export const getDocumentContent = async ({
   page,
   editor
