@@ -5,10 +5,14 @@ import { mock } from 'vitest-mock-extended'
 import { Resource, SpaceResource } from '@ownclouders/web-client'
 import { VueWrapper } from '@vue/test-utils'
 import { SharingLinkType } from '@ownclouders/web-client/graph/generated'
+import { PasswordPolicyService, usePasswordPolicyService } from '@ownclouders/web-pkg'
+import { PasswordPolicy } from '../../../../design-system/src/helpers/types'
 
 vi.mock('../../../src/composables/useCreateFileHandler', () => ({
   useCreateFileHandler: vi.fn().mockReturnValue({ createFileHandler: vi.fn() })
 }))
+
+vi.mock('../../../../web-pkg/src/composables/passwordPolicyService')
 
 const currentFolder = mock<Resource>()
 const currentSpace = mock<SpaceResource>({ driveType: 'personal' })
@@ -21,7 +25,7 @@ const SELECTORS = Object.freeze({
 
 describe('CreateFolderModal', () => {
   it('should call "createFileHandler" when form is valid', () => {
-    const { wrapper } = getWrapper()
+    const { wrapper } = getWrapper({ passwordPolicyFulfilled: true })
 
     const folderNameInput = wrapper.findComponent(SELECTORS.inputFolderName) as VueWrapper
     const passwordInput = wrapper.findComponent(SELECTORS.inputFolderPassword) as VueWrapper
@@ -44,7 +48,7 @@ describe('CreateFolderModal', () => {
   })
 
   it('should not call "createFileHandler" when form is invalid', () => {
-    const { wrapper } = getWrapper()
+    const { wrapper } = getWrapper({ passwordPolicyFulfilled: false })
 
     const folderNameInput = wrapper.findComponent(SELECTORS.inputFolderName) as VueWrapper
     folderNameInput.vm.$emit('update:modelValue', 'name')
@@ -54,7 +58,15 @@ describe('CreateFolderModal', () => {
   })
 })
 
-function getWrapper() {
+function getWrapper({
+  passwordPolicyFulfilled = true
+}: { passwordPolicyFulfilled?: boolean } = {}) {
+  vi.mocked(usePasswordPolicyService).mockReturnValue(
+    mock<PasswordPolicyService>({
+      getPolicy: () => mock<PasswordPolicy>({ check: () => passwordPolicyFulfilled })
+    })
+  )
+
   const mocks = defaultComponentMocks()
 
   return {
