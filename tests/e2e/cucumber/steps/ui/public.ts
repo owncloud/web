@@ -68,18 +68,13 @@ Then(
 
 When(
   '{string} enters the text {string} in editor {string}',
-  async function (
-    this: World,
-    stepUser: string,
-    text: string,
-    editorToOpen: string
-  ): Promise<void> {
+  async function (this: World, stepUser: string, text: string, editor: string): Promise<void> {
     const { page } = this.actorsEnvironment.getActor({ key: stepUser })
     const pageObject = new objects.applicationFiles.page.Public({ page })
-    await pageObject.fillContentOfOpenDocumentOrMicrosoftWordDocument({
+    await pageObject.fillDocumentContent({
       page,
       text,
-      editorToOpen
+      editor
     })
   }
 )
@@ -90,13 +85,13 @@ When(
     this: World,
     stepUser: string,
     expectedContent: string,
-    editorToOpen: string
+    editor: string
   ): Promise<void> {
     const { page } = this.actorsEnvironment.getActor({ key: stepUser })
     const pageObject = new objects.applicationFiles.page.Public({ page })
-    const actualFileContent = await pageObject.getContentOfOpenDocumentOrMicrosoftWordDocument({
+    const actualFileContent = await pageObject.getDocumentContent({
       page,
-      editorToOpen
+      editor
     })
     expect(actualFileContent.trim()).toBe(expectedContent)
   }
