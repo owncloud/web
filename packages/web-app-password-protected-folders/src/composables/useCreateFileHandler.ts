@@ -37,27 +37,35 @@ export const useCreateFileHandler = () => {
       recursive: true
     })
 
-    if (currentSpace.id === personalSpace.id && currentFolder.path === '/') {
-      const psecFolders = await clientService.webdav.getFileInfo(personalSpace, {
-        path: '/.PasswordProtectedFolders'
+    try {
+      if (currentSpace.id === personalSpace.id && currentFolder.path === '/') {
+        const psecFolders = await clientService.webdav.getFileInfo(personalSpace, {
+          path: '/.PasswordProtectedFolders'
+        })
+        upsertResource(psecFolders)
+      }
+
+      const share = await addLink({
+        clientService,
+        space: personalSpace,
+        resource: folder,
+        options: { password, type }
       })
-      upsertResource(psecFolders)
+
+      const path = urlJoin(currentFolder.path, fileName + '.psec')
+
+      const file = await clientService.webdav.putFileContents(currentSpace, {
+        path,
+        content: btoa(share.webUrl)
+      })
+      upsertResource(file)
+    } catch (error) {
+      await clientService.webdav.deleteFile(personalSpace, {
+        path: folderPath
+      })
+
+      throw error
     }
-
-    const share = await addLink({
-      clientService,
-      space: personalSpace,
-      resource: folder,
-      options: { password, type }
-    })
-
-    const path = urlJoin(currentFolder.path, fileName + '.psec')
-
-    const file = await clientService.webdav.putFileContents(currentSpace, {
-      path,
-      content: btoa(share.webUrl)
-    })
-    upsertResource(file)
   }
 
   return { createFileHandler }
