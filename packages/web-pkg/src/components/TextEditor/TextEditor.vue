@@ -19,6 +19,7 @@
       :preview="isMarkdown"
       :toolbars="isMarkdown ? undefined : []"
       :read-only="isReadOnly"
+      :auto-focus="autoFocus"
       :sanitize="sanitize"
       @on-change="(value) => $emit('update:currentContent', value)"
     />
@@ -45,6 +46,7 @@ interface TextEditorProps {
   markdownMode?: boolean
   isReadOnly?: boolean
   resource?: Resource
+  autoFocus?: boolean
 }
 interface TextEditorEmits {
   (e: 'update:currentContent', value: string): void
@@ -54,7 +56,8 @@ const {
   isReadOnly = false,
   applicationConfig,
   currentContent,
-  resource
+  resource,
+  autoFocus = true
 } = defineProps<TextEditorProps>()
 
 defineEmits<TextEditorEmits>()

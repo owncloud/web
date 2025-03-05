@@ -1000,8 +1000,8 @@ importers:
         specifier: 4.3.2
         version: 4.3.2(@uppy/core@4.4.1)
       '@vavt/cm-extension':
-        specifier: ^1.6.0
-        version: 1.6.0
+        specifier: ^1.8.0
+        version: 1.8.0
       '@vue/shared':
         specifier: ^3.5.11
         version: 3.5.13
@@ -2985,8 +2985,8 @@ packages:
     peerDependencies:
       '@uppy/core': ^4.4.1
 
-  '@vavt/cm-extension@1.6.0':
-    resolution: {integrity: sha512-JjbVdQqPPzzFcS+FpG8ilA5Ea7R/XxTggWy8GqHC9gN+it8p9fjjY7ul/QScZItmQ04eldUri7sS88rvOL+SBQ==}
+  '@vavt/cm-extension@1.8.0':
+    resolution: {integrity: sha512-lqz5mfyeiWb3iqasvEfgFZsxil8wd5iuRqWeX6eKcGhGN0+Wh+Sbi1qmlNzqyaXngC5EFgZ12hR6NI4XKuY65g==}
 
   '@vavt/util@2.1.0':
     resolution: {integrity: sha512-YIfAvArSFVXmWvoF+DEGD0FhkhVNcCtVWWkfYtj76eSrwHh/wuEEFhiEubg1XLNM3tChO8FH8xJCT/hnizjgFQ==}
@@ -10524,7 +10524,7 @@ snapshots:
       '@cucumber/ci-environment': 9.1.0
       '@cucumber/cucumber-expressions': 16.1.1
       '@cucumber/gherkin': 26.0.3
-      '@cucumber/gherkin-streams': 5.0.1(@cucumber/gherkin@26.0.3)(@cucumber/message-streams@4.0.1(@cucumber/messages@21.0.1))(@cucumber/messages@21.0.1)
+      '@cucumber/gherkin-streams': 5.0.1(@cucumber/gherkin@26.0.3)(@cucumber/message-streams@4.0.1(@cucumber/messages@27.0.2))(@cucumber/messages@21.0.1)
       '@cucumber/gherkin-utils': 8.0.2
       '@cucumber/html-formatter': 20.2.1(@cucumber/messages@21.0.1)
       '@cucumber/message-streams': 4.0.1(@cucumber/messages@21.0.1)
@@ -10562,7 +10562,7 @@ snapshots:
       yaml: 2.6.0
       yup: 0.32.11
 
-  '@cucumber/gherkin-streams@5.0.1(@cucumber/gherkin@26.0.3)(@cucumber/message-streams@4.0.1(@cucumber/messages@21.0.1))(@cucumber/messages@21.0.1)':
+  '@cucumber/gherkin-streams@5.0.1(@cucumber/gherkin@26.0.3)(@cucumber/message-streams@4.0.1(@cucumber/messages@27.0.2))(@cucumber/messages@21.0.1)':
     dependencies:
       '@cucumber/gherkin': 26.0.3
       '@cucumber/message-streams': 4.0.1(@cucumber/messages@21.0.1)
@@ -11560,7 +11560,7 @@ snapshots:
       '@uppy/core': 4.4.1
       '@uppy/utils': 6.1.1
 
-  '@vavt/cm-extension@1.6.0': {}
+  '@vavt/cm-extension@1.8.0': {}
 
   '@vavt/util@2.1.0': {}
 
