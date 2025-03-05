@@ -12,6 +12,7 @@
       type="password"
       :label="$gettext('Password')"
       class="oc-mt-s"
+      :password-policy="passwordPolicy"
     />
 
     <div class="oc-flex oc-flex-middle oc-mt-m">
@@ -32,6 +33,7 @@ import {
   LinkRoleDropdown,
   useLinkTypes,
   useMessages,
+  usePasswordPolicyService,
   useResourcesStore,
   useSpacesStore
 } from '@ownclouders/web-pkg'
@@ -51,6 +53,7 @@ const { createFileHandler } = useCreateFileHandler()
 const { currentFolder } = useResourcesStore()
 const { spaces, currentSpace } = useSpacesStore()
 const { defaultLinkType, getAvailableLinkTypes, getLinkRoleByType } = useLinkTypes()
+const passwordPolicyService = usePasswordPolicyService()
 
 const formData = reactive({
   folderName: '',
@@ -60,9 +63,15 @@ const formData = reactive({
 
 const folderNameError = ref('')
 
-const isFormValid = computed(() => formData.folderName !== '' && formData.password !== '')
+const isFormValid = computed(() => {
+  return formData.folderName !== '' && passwordPolicy.check(formData.password)
+})
 const availableLinkTypes = computed(() => getAvailableLinkTypes({ isFolder: true }))
 const selectedTypeIcon = computed(() => getLinkRoleByType(formData.selectedType).icon)
+
+const passwordPolicy = passwordPolicyService.getPolicy({
+  enforcePassword: true
+})
 
 const onConfirm = async () => {
   if (!unref(isFormValid)) {
