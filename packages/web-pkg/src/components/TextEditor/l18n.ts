@@ -6,6 +6,7 @@ import PL from '@vavt/cm-extension/dist/locale/pl-PL'
 import RU from '@vavt/cm-extension/dist/locale/ru'
 import JP from '@vavt/cm-extension/dist/locale/jp-JP'
 import ID from '@vavt/cm-extension/dist/locale/id-ID'
+import AR from '@vavt/cm-extension/dist/locale/ar'
 
 export const languages = {
   zh: 'zh-CN',
@@ -13,6 +14,7 @@ export const languages = {
   ja: 'jp-JP',
   id: 'id-ID',
   ru: 'ru',
+  ar: 'ar',
   de: 'de-DE',
   it: 'it-IT',
   es: 'es-ES',
@@ -27,6 +29,7 @@ export const languageUserDefined = {
   'es-ES': ES,
   'pl-PL': PL,
   ru: RU,
+  ar: AR,
   'jp-JP': JP,
   'id-ID': ID
 }
