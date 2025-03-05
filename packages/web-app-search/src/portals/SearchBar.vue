@@ -8,7 +8,6 @@
   >
     <oc-search-bar
       id="files-global-search-bar"
-      ref="search"
       :label="searchLabel"
       :type-ahead="true"
       :value="term"

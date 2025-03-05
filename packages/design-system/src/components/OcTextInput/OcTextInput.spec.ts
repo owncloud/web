@@ -3,6 +3,25 @@ import OcTextInput from './OcTextInput.vue'
 import { PasswordPolicy } from '../../helpers'
 import { mock } from 'vitest-mock-extended'
 
+interface Props {
+  id?: string
+  type?: string | 'text' | 'number' | 'email' | 'password' | 'date'
+  modelValue?: string
+  selectionRange?: [number, number]
+  clearButtonEnabled?: boolean
+  clearButtonAccessibleLabel?: string
+  defaultValue?: string
+  disabled?: boolean
+  label: string
+  warningMessage?: string
+  errorMessage?: string
+  fixMessageLine?: boolean
+  descriptionMessage?: string
+  readOnly?: boolean
+  passwordPolicy?: PasswordPolicy
+  generatePasswordMethod?: (...args: unknown[]) => string
+}
+
 const defaultProps = {
   label: 'label'
 }
@@ -27,7 +46,7 @@ describe('OcTextInput', () => {
   }
 
   function getMountedWrapper(
-    options: { props?: Record<string, unknown>; attachTo?: HTMLElement } = { props: {} },
+    options: { props: Props; attachTo?: HTMLElement } = { props: { label: defaultProps.label } },
     passwordPolicy = { active: false, pass: false }
   ) {
     const passwordPolicyMock = mock<PasswordPolicy>()
@@ -44,7 +63,10 @@ describe('OcTextInput', () => {
     passwordPolicyMock.check.mockReturnValueOnce(passwordPolicy.pass)
 
     if (passwordPolicy.active) {
-      options.props = { ...(options.props || {}), passwordPolicy: passwordPolicyMock }
+      options.props = {
+        ...(options.props || { label: defaultProps.label }),
+        passwordPolicy: passwordPolicyMock
+      }
     }
 
     return mount(OcTextInput, {
@@ -90,20 +112,28 @@ describe('OcTextInput', () => {
       it('should not exist if type is not "password" or no value entered', () => {
         const wrapper = getMountedWrapper()
         expect(wrapper.find(selectors.copyPasswordBtn).exists()).toBeFalsy()
-        const wrapper2 = getMountedWrapper({ props: { type: 'password' } })
+        const wrapper2 = getMountedWrapper({
+          props: { type: 'password', label: defaultProps.label }
+        })
         expect(wrapper2.find(selectors.copyPasswordBtn).exists()).toBeFalsy()
       })
       it('should not exist if the input is disabled', () => {
-        const wrapper = getMountedWrapper({ props: { type: 'password', disabled: true } })
+        const wrapper = getMountedWrapper({
+          props: { type: 'password', disabled: true, label: defaultProps.label }
+        })
         expect(wrapper.find(selectors.copyPasswordBtn).exists()).toBeFalsy()
       })
       it('should exist if type is "password" and value entered', async () => {
-        const wrapper = getMountedWrapper({ props: { type: 'password' } })
+        const wrapper = getMountedWrapper({
+          props: { type: 'password', label: defaultProps.label }
+        })
         await wrapper.find(selectors.inputField).setValue('password')
         expect(wrapper.find(selectors.copyPasswordBtn).exists()).toBeTruthy()
       })
       it('should copy password to clipboard if clicked', async () => {
-        const wrapper = getMountedWrapper({ props: { type: 'password' } })
+        const wrapper = getMountedWrapper({
+          props: { type: 'password', label: defaultProps.label }
+        })
         await wrapper.find(selectors.inputField).setValue('password')
         await wrapper.find(selectors.copyPasswordBtn).trigger('click')
         expect(navigator.clipboard.writeText).toHaveBeenCalledWith('password')
@@ -114,20 +144,28 @@ describe('OcTextInput', () => {
         const wrapper = getMountedWrapper()
         expect(wrapper.find(selectors.showPasswordToggleBtn).exists()).toBeFalsy()
 
-        const wrapper2 = getMountedWrapper({ props: { type: 'password' } })
+        const wrapper2 = getMountedWrapper({
+          props: { type: 'password', label: defaultProps.label }
+        })
         expect(wrapper2.find(selectors.showPasswordToggleBtn).exists()).toBeFalsy()
       })
       it('should not exist if the input is disabled', () => {
-        const wrapper = getMountedWrapper({ props: { type: 'password', disabled: true } })
+        const wrapper = getMountedWrapper({
+          props: { type: 'password', disabled: true, label: defaultProps.label }
+        })
         expect(wrapper.find(selectors.showPasswordToggleBtn).exists()).toBeFalsy()
       })
       it('should exist if type is "password" and value entered', async () => {
-        const wrapper = getMountedWrapper({ props: { type: 'password' } })
+        const wrapper = getMountedWrapper({
+          props: { type: 'password', label: defaultProps.label }
+        })
         await wrapper.find(selectors.inputField).setValue('password')
         expect(wrapper.find(selectors.showPasswordToggleBtn).exists()).toBeTruthy()
       })
       it('should show password plaintext/veiled if clicked', async () => {
-        const wrapper = getMountedWrapper({ props: { type: 'password' } })
+        const wrapper = getMountedWrapper({
+          props: { type: 'password', label: defaultProps.label }
+        })
         await wrapper.find(selectors.inputField).setValue('password')
         await wrapper.find(selectors.showPasswordToggleBtn).trigger('click')
         expect(wrapper.find(selectors.inputField).attributes().type).toBe('text')
@@ -140,22 +178,30 @@ describe('OcTextInput', () => {
         const wrapper = getMountedWrapper()
         expect(wrapper.find(selectors.generatePasswordBtn).exists()).toBeFalsy()
 
-        const wrapper2 = getMountedWrapper({ props: { type: 'password' } })
+        const wrapper2 = getMountedWrapper({
+          props: { type: 'password', label: defaultProps.label }
+        })
         expect(wrapper2.find(selectors.generatePasswordBtn).exists()).toBeFalsy()
       })
       it('should not exist if the input is disabled', () => {
-        const wrapper = getMountedWrapper({ props: { type: 'password', disabled: true } })
+        const wrapper = getMountedWrapper({
+          props: { type: 'password', disabled: true, label: defaultProps.label }
+        })
         expect(wrapper.find(selectors.generatePasswordBtn).exists()).toBeFalsy()
       })
       it('should exist if type is "password" and prop "generatePasswordMethod" is provided', () => {
         const wrapper = getMountedWrapper({
-          props: { generatePasswordMethod: vi.fn(), type: 'password' }
+          props: { generatePasswordMethod: vi.fn(), type: 'password', label: defaultProps.label }
         })
         expect(wrapper.find(selectors.generatePasswordBtn).exists()).toBeTruthy()
       })
       it('should fill input with generated password if clicked', async () => {
         const wrapper = getMountedWrapper({
-          props: { generatePasswordMethod: vi.fn(() => 'PAssword12#!'), type: 'password' }
+          props: {
+            generatePasswordMethod: vi.fn(() => 'PAssword12#!'),
+            type: 'password',
+            label: defaultProps.label
+          }
         })
         await wrapper.find(selectors.generatePasswordBtn).trigger('click')
         expect((wrapper.find(selectors.inputField).element as HTMLInputElement).value).toEqual(
@@ -167,7 +213,7 @@ describe('OcTextInput', () => {
       it('should emit "passwordChallengeFailed" if password does not match criteria', async () => {
         const wrapper = getMountedWrapper(
           {
-            props: { type: 'password' }
+            props: { type: 'password', label: defaultProps.label }
           },
           { active: true, pass: false }
         )
@@ -177,7 +223,7 @@ describe('OcTextInput', () => {
       it('should emit "passwordChallengeCompleted" if password matches criteria', async () => {
         const wrapper = getMountedWrapper(
           {
-            props: { type: 'password' }
+            props: { type: 'password', label: defaultProps.label }
           },
           { active: true, pass: true }
         )
@@ -187,7 +233,7 @@ describe('OcTextInput', () => {
       it('displays error state if password does not match criteria', async () => {
         const wrapper = getMountedWrapper(
           {
-            props: { type: 'password' }
+            props: { type: 'password', label: defaultProps.label }
           },
           { active: true, pass: false }
         )
@@ -197,7 +243,7 @@ describe('OcTextInput', () => {
       it('displays success state if password matches criteria', async () => {
         const wrapper = getMountedWrapper(
           {
-            props: { type: 'password' }
+            props: { type: 'password', label: defaultProps.label }
           },
           { active: true, pass: true }
         )
@@ -218,7 +264,9 @@ describe('OcTextInput', () => {
       expect(wrapper.find(selectors.textInputMessage).text()).toBe('You should pass.')
     })
 
-    const mountedWrapper = getMountedWrapper({ props: { descriptionMessage: 'You should pass.' } })
+    const mountedWrapper = getMountedWrapper({
+      props: { descriptionMessage: 'You should pass.', label: defaultProps.label }
+    })
     it('should show an info icon', () => {
       expect(mountedWrapper.find(selectors.infoIcon).exists()).toBe(true)
     })
@@ -282,13 +330,10 @@ describe('OcTextInput', () => {
   })
 
   describe('type prop', () => {
-    it('should only allow text, number, email and password as type', () => {
-      expect(OcTextInput.props.type.validator('binary')).toBeFalsy()
-    })
     it.each(['text', 'number', 'email', 'password'])(
       'should set the provided type for the input',
       (type) => {
-        const wrapper = getMountedWrapper({ props: { type: type } })
+        const wrapper = getMountedWrapper({ props: { type: type, label: defaultProps.label } })
         expect(wrapper.find('input').attributes('type')).toBe(type)
       }
     )

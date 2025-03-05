@@ -1,7 +1,7 @@
 // Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
 exports[`OcTextInput > password input field > password policy > displays error state if password does not match criteria 1`] = `
-"<div class=""><label class="oc-label" for="oc-textinput-24"></label>
+"<div class=""><label class="oc-label" for="oc-textinput-24">label</label>
   <div class="oc-position-relative">
     <!--v-if-->
     <div class="oc-text-input-password-wrapper"><input id="oc-textinput-24" aria-invalid="false" class="oc-text-input oc-input oc-rounded" type="password"> <button type="button" aria-label="Show password" class="oc-button oc-rounded oc-button-s oc-button-justify-content-center oc-button-gap-m oc-button-passive oc-button-passive-raw oc-text-input-show-password-toggle oc-px-s oc-background-default">
@@ -28,7 +28,7 @@ exports[`OcTextInput > password input field > password policy > displays error s
 `;
 
 exports[`OcTextInput > password input field > password policy > displays success state if password matches criteria 1`] = `
-"<div class=""><label class="oc-label" for="oc-textinput-25"></label>
+"<div class=""><label class="oc-label" for="oc-textinput-25">label</label>
   <div class="oc-position-relative">
     <!--v-if-->
     <div class="oc-text-input-password-wrapper"><input id="oc-textinput-25" aria-invalid="false" class="oc-text-input oc-input oc-rounded" type="password"> <button type="button" aria-label="Show password" class="oc-button oc-rounded oc-button-s oc-button-justify-content-center oc-button-gap-m oc-button-passive oc-button-passive-raw oc-text-input-show-password-toggle oc-px-s oc-background-default">

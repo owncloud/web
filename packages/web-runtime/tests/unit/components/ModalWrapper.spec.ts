@@ -6,7 +6,8 @@ import {
   defaultPlugins,
   shallowMount,
   defaultComponentMocks,
-  writable
+  writable,
+  VueWrapper
 } from '@ownclouders/web-test-helpers'
 
 const CustomModalComponent = defineComponent({
@@ -145,6 +146,6 @@ function getShallowWrapper({ modals = [] }: { modals?: Modal[] } = {}) {
         provide: mocks,
         stubs: { OcModal: false }
       }
-    })
+    }) as VueWrapper<any, any>
   }
 }

@@ -3,7 +3,7 @@
 exports[`SpacesList > should render all spaces in a table 1`] = `
 "<div id="space-list" headerposition="0">
   <div class="space-filters oc-flex oc-flex-right oc-flex-wrap oc-flex-bottom oc-mx-m oc-mb-m">
-    <div class=""><label class="oc-label" for="spaces-filter">Search</label>
+    <div class="" autocomplete="off"><label class="oc-label" for="spaces-filter">Search</label>
       <div class="oc-position-relative">
         <!--v-if--> <input id="spaces-filter" autocomplete="off" aria-invalid="false" class="oc-text-input oc-input oc-rounded" type="text" value="">
         <!--v-if-->

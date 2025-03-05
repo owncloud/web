@@ -74,11 +74,12 @@
   </div>
 </template>
 
-<script lang="ts">
+<script lang="ts" setup>
+import Fuse from 'fuse.js'
+import Mark from 'mark.js'
+import { useGettext } from 'vue3-gettext'
 import { storeToRefs } from 'pinia'
-import CollaboratorListItem from './Collaborators/ListItem.vue'
-import InviteCollaboratorForm from './Collaborators/InviteCollaborator/InviteCollaboratorForm.vue'
-import { GraphSharePermission } from '@ownclouders/web-client'
+import { computed, inject, nextTick, ref, Ref, unref, useTemplateRef, watch } from 'vue'
 import {
   createLocationSpaces,
   isLocationSpacesActive,
@@ -88,185 +89,158 @@ import {
   useModals,
   useSharesStore,
   useSpacesStore,
-  useUserStore
+  useUserStore,
+  defaultFuseOptions,
+  useClientService,
+  useRouter
 } from '@ownclouders/web-pkg'
-import { computed, defineComponent, inject, nextTick, ref, Ref, unref, useTemplateRef } from 'vue'
 import { shareSpaceAddMemberHelp } from '../../../helpers/contextualHelpers'
-import { ProjectSpaceResource, CollaboratorShare } from '@ownclouders/web-client'
-import { useClientService } from '@ownclouders/web-pkg'
-import Fuse from 'fuse.js'
-import Mark from 'mark.js'
-import { defaultFuseOptions } from '@ownclouders/web-pkg'
-import CopyPrivateLink from '../../Shares/CopyPrivateLink.vue'
+import {
+  ProjectSpaceResource,
+  CollaboratorShare,
+  GraphSharePermission
+} from '@ownclouders/web-client'
 import { OcTextInput } from '@ownclouders/design-system/components'
+import CopyPrivateLink from '../../Shares/CopyPrivateLink.vue'
+import CollaboratorListItem from './Collaborators/ListItem.vue'
+import InviteCollaboratorForm from './Collaborators/InviteCollaborator/InviteCollaboratorForm.vue'
 
-export default defineComponent({
-  name: 'SpaceMembers',
-  components: {
-    CopyPrivateLink,
-    CollaboratorListItem,
-    InviteCollaboratorForm
-  },
-  setup() {
-    const filterInput = useTemplateRef<typeof OcTextInput>('filterInput')
+const filterInput = useTemplateRef<typeof OcTextInput>('filterInput')
+const collaboratorList = useTemplateRef('collaboratorList')
 
-    const userStore = useUserStore()
-    const clientService = useClientService()
-    const { canShare } = useCanShare()
-    const { dispatchModal } = useModals()
-    const sharesStore = useSharesStore()
-    const { deleteShare } = sharesStore
-    const { graphRoles } = storeToRefs(sharesStore)
-    const spacesStore = useSpacesStore()
-    const { upsertSpace, getSpaceMembers } = spacesStore
+const userStore = useUserStore()
+const router = useRouter()
+const clientService = useClientService()
+const { canShare } = useCanShare()
+const { dispatchModal } = useModals()
+const sharesStore = useSharesStore()
+const { $gettext } = useGettext()
+const { deleteShare } = sharesStore
+const { graphRoles } = storeToRefs(sharesStore)
+const spacesStore = useSpacesStore()
+const { showMessage, showErrorMessage } = useMessages()
+const { upsertSpace, getSpaceMembers } = spacesStore
 
-    const configStore = useConfigStore()
-    const { options: configOptions } = storeToRefs(configStore)
+const configStore = useConfigStore()
+// const { options: configOptions } = storeToRefs(configStore)
 
-    const { user } = storeToRefs(userStore)
+const { user } = storeToRefs(userStore)
 
-    const markInstance = ref<Mark>()
-    const filterTerm = ref('')
-    const isFilterOpen = ref(false)
+const markInstance = ref<Mark>()
+const filterTerm = ref('')
+const isFilterOpen = ref(false)
 
-    const resource = inject<Ref<ProjectSpaceResource>>('resource')
+const resource = inject<Ref<ProjectSpaceResource>>('resource')
 
-    const spaceMembers = computed(() => getSpaceMembers(unref(resource)))
+const spaceMembers = computed(() => getSpaceMembers(unref(resource)))
 
-    return {
-      user,
-      clientService,
-      configStore,
-      configOptions,
-      resource,
-      dispatchModal,
-      spaceMembers,
-      deleteShare,
-      upsertSpace,
-      canShare,
-      markInstance,
-      graphRoles,
-      filterTerm,
-      isFilterOpen,
-      filterInput,
-      ...useMessages()
-    }
-  },
-  computed: {
-    filteredSpaceMembers() {
-      return this.filter(this.spaceMembers, this.filterTerm)
-    },
-    helpersEnabled() {
-      return this.configStore.options.contextHelpers
-    },
-    spaceAddMemberHelp() {
-      return shareSpaceAddMemberHelp({ configStore: this.configStore })
-    },
-    hasCollaborators() {
-      return this.spaceMembers.length > 0
-    }
-  },
-  watch: {
-    isFilterOpen() {
-      this.filterTerm = ''
-    },
-    filterTerm() {
-      this.$nextTick(() => {
-        if (this.$refs.collaboratorList) {
-          this.markInstance = new Mark(this.$refs.collaboratorList as HTMLElement)
-          this.markInstance.unmark()
-          this.markInstance.mark(this.filterTerm, {
-            element: 'span',
-            className: 'mark-highlight'
-          })
-        }
-      })
-    }
-  },
-  methods: {
-    filter(collection: CollaboratorShare[], term: string) {
-      if (!(term || '').trim()) {
-        return collection
-      }
-      const searchEngine = new Fuse(collection, {
-        ...defaultFuseOptions,
-        keys: ['sharedWith.displayName', 'sharedWith.name']
-      })
-
-      return searchEngine.search(term).map((r) => r.item)
-    },
-    async toggleFilter() {
-      this.isFilterOpen = !this.isFilterOpen
-      if (this.isFilterOpen) {
-        await nextTick()
-        this.filterInput.focus()
-      }
-    },
-    isModifiable(share: CollaboratorShare) {
-      if (!this.canShare({ space: this.resource, resource: this.resource })) {
-        return false
-      }
-
-      const memberCanUpdateMembers = share.permissions.includes(
-        GraphSharePermission.updatePermissions
-      )
-      if (!memberCanUpdateMembers) {
-        return true
-      }
-
-      // make sure at least one member can edit other members
-      const managers = this.spaceMembers.filter(({ permissions }) =>
-        permissions.includes(GraphSharePermission.updatePermissions)
-      )
-      return managers.length > 1
-    },
-
-    deleteMemberConfirm(share: CollaboratorShare) {
-      this.dispatchModal({
-        variation: 'danger',
-        title: this.$gettext('Remove member'),
-        confirmText: this.$gettext('Remove'),
-        message: this.$gettext('Are you sure you want to remove this member?'),
-        hasInput: false,
-        onConfirm: async () => {
-          try {
-            const currentUserRemoved = share.sharedWith.id === this.user.id
-            await this.deleteShare({
-              clientService: this.clientService,
-              space: this.resource,
-              resource: this.resource,
-              collaboratorShare: share
-            })
-
-            if (!currentUserRemoved) {
-              const client = this.clientService.graphAuthenticated
-              const space = await client.drives.getDrive(share.resourceId, this.graphRoles)
-              this.upsertSpace(space)
-            }
-
-            this.showMessage({
-              title: this.$gettext('Share was removed successfully')
-            })
-
-            if (currentUserRemoved) {
-              if (isLocationSpacesActive(this.$router, 'files-spaces-projects')) {
-                await this.$router.go(0)
-                return
-              }
-              await this.$router.push(createLocationSpaces('files-spaces-projects'))
-            }
-          } catch (error) {
-            console.error(error)
-            this.showErrorMessage({
-              title: this.$gettext('Failed to remove share'),
-              errors: [error]
-            })
-          }
-        }
-      })
-    }
-  }
+const filteredSpaceMembers = computed(() => {
+  return filter(unref(spaceMembers), unref(filterTerm))
 })
+const helpersEnabled = computed(() => {
+  return unref(configStore.options.contextHelpers)
+})
+const spaceAddMemberHelp = computed(() => {
+  return shareSpaceAddMemberHelp({ configStore: unref(configStore) })
+})
+const hasCollaborators = computed(() => {
+  return unref(spaceMembers).length > 0
+})
+function filter(collection: CollaboratorShare[], term: string) {
+  if (!(term || '').trim()) {
+    return collection
+  }
+  const searchEngine = new Fuse(collection, {
+    ...defaultFuseOptions,
+    keys: ['sharedWith.displayName', 'sharedWith.name']
+  })
+
+  return searchEngine.search(term).map((r) => r.item)
+}
+watch(isFilterOpen, () => {
+  filterTerm.value = ''
+})
+watch(filterTerm, () => {
+  nextTick(() => {
+    if (unref(collaboratorList)) {
+      markInstance.value = new Mark(unref(collaboratorList) as HTMLElement)
+      markInstance.value.unmark()
+      markInstance.value.mark(unref(filterTerm), {
+        element: 'span',
+        className: 'mark-highlight'
+      })
+    }
+  })
+})
+
+async function toggleFilter() {
+  isFilterOpen.value = !unref(isFilterOpen)
+  if (unref(isFilterOpen)) {
+    await nextTick()
+    unref(filterInput)?.focus()
+  }
+}
+function isModifiable(share: CollaboratorShare) {
+  if (!canShare({ space: unref(resource), resource: unref(resource) })) {
+    return false
+  }
+
+  const memberCanUpdateMembers = share.permissions.includes(GraphSharePermission.updatePermissions)
+  if (!memberCanUpdateMembers) {
+    return true
+  }
+
+  // make sure at least one member can edit other members
+  const managers = unref(spaceMembers).filter(({ permissions }) =>
+    permissions.includes(GraphSharePermission.updatePermissions)
+  )
+  return managers.length > 1
+}
+
+function deleteMemberConfirm(share: CollaboratorShare) {
+  dispatchModal({
+    variation: 'danger',
+    title: $gettext('Remove member'),
+    confirmText: $gettext('Remove'),
+    message: $gettext('Are you sure you want to remove this member?'),
+    hasInput: false,
+    onConfirm: async () => {
+      try {
+        const currentUserRemoved = share.sharedWith.id === unref(user).id
+        await deleteShare({
+          clientService,
+          space: unref(resource),
+          resource: unref(resource),
+          collaboratorShare: share
+        })
+
+        if (!currentUserRemoved) {
+          const client = clientService.graphAuthenticated
+          const space = await client.drives.getDrive(share.resourceId, unref(graphRoles))
+          upsertSpace(space)
+        }
+
+        showMessage({
+          title: $gettext('Share was removed successfully')
+        })
+
+        if (currentUserRemoved) {
+          if (isLocationSpacesActive(router, 'files-spaces-projects')) {
+            await router.go(0)
+            return
+          }
+          await router.push(createLocationSpaces('files-spaces-projects'))
+        }
+      } catch (error) {
+        console.error(error)
+        showErrorMessage({
+          title: $gettext('Failed to remove share'),
+          errors: [error]
+        })
+      }
+    }
+  })
+}
 </script>
 
 <style lang="scss">

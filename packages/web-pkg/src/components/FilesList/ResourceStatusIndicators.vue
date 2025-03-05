@@ -1,5 +1,10 @@
 <template>
-  <oc-status-indicators v-if="indicators.length > 0" v-bind="attrs" :indicators="indicators" />
+  <oc-status-indicators
+    v-if="indicators.length > 0"
+    v-bind="attrs"
+    :resource="resource"
+    :indicators="indicators"
+  />
 </template>
 
 <script setup lang="ts">
@@ -10,7 +15,7 @@ import { useResourcesStore, useUserStore } from '../../composables/piniaStores'
 
 const attrs = useAttrs()
 const { space, resource, filter } = defineProps<{
-  space: SpaceResource
+  space?: SpaceResource
   resource: Resource
   filter?: (indicator: ResourceIndicator) => boolean
 }>()

@@ -1,13 +1,13 @@
 <template>
   <component
-    :is="extension.content"
+    :is="toRaw(extension.content)"
     v-for="extension in extensions"
     :key="`custom-component-${extension.id}`"
   />
 </template>
 
 <script lang="ts">
-import { computed, defineComponent, PropType, unref } from 'vue'
+import { computed, defineComponent, PropType, unref, toRaw } from 'vue'
 import {
   CustomComponentExtension,
   ExtensionPoint,
@@ -59,7 +59,8 @@ export default defineComponent({
     })
 
     return {
-      extensions
+      extensions,
+      toRaw
     }
   }
 })

@@ -12,7 +12,8 @@ import {
   mount,
   shallowMount,
   defaultComponentMocks,
-  RouteLocation
+  RouteLocation,
+  VueWrapper
 } from '@ownclouders/web-test-helpers'
 import { User } from '@ownclouders/web-client/graph/generated'
 import { useCanShare, useModals, useSpacesStore } from '@ownclouders/web-pkg'
@@ -167,5 +168,5 @@ function getWrapper({
         'collaborator-list-item': true
       }
     }
-  })
+  }) as VueWrapper<any, any>
 }

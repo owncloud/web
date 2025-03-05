@@ -9,7 +9,8 @@ import {
   mount,
   shallowMount,
   defaultComponentMocks,
-  defaultStubs
+  defaultStubs,
+  VueWrapper
 } from '@ownclouders/web-test-helpers'
 import CollaboratorListItem from '../../../../../src/components/SideBar/Shares/Collaborators/ListItem.vue'
 import { AncestorMetaData, CapabilityStore, useCanShare, useModals } from '@ownclouders/web-pkg'
@@ -215,6 +216,6 @@ function getWrapper({
           'collaborator-list-item': true
         }
       }
-    })
+    }) as VueWrapper<any, any>
   }
 }
