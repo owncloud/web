@@ -53,18 +53,6 @@ export const getOfficeDocumentContent = async (page: Page) => {
   // copying and getting the value with keyboard requires some time
   await page.keyboard.press('ControlOrMeta+A', { delay: 200 })
   await page.keyboard.press('ControlOrMeta+C', { delay: 200 })
-  try {
-    const editorMainFrame = page.frameLocator(externalEditorIframe)
-    await editorMainFrame.locator(copyPasteWarningPopup).waitFor({ timeout: 1000 })
-    console.log('copy-paste warning popup found...')
-    // close popup
-    await page.keyboard.press('Escape')
-    // deselect text. otherwise the clipboard will be empty
-    await page.keyboard.press('Escape')
-    // select text again and copy text
-    await page.keyboard.press('ControlOrMeta+A', { delay: 200 })
-    await page.keyboard.press('ControlOrMeta+C', { delay: 200 })
-  } catch {}
   return page.evaluate(() => navigator.clipboard.readText())
 }
 
