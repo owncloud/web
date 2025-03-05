@@ -18,7 +18,6 @@
     <div class="oc-flex oc-flex-middle oc-mt-m">
       <oc-icon class="oc-mr-s" :name="selectedTypeIcon" fill-type="line" />
       <link-role-dropdown
-        id="input-folder-permissions"
         v-model="formData.selectedType"
         :available-link-type-options="availableLinkTypes"
       />

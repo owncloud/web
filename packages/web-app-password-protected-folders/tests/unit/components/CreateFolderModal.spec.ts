@@ -7,6 +7,7 @@ import { VueWrapper } from '@vue/test-utils'
 import { SharingLinkType } from '@ownclouders/web-client/graph/generated'
 import { PasswordPolicyService, usePasswordPolicyService } from '@ownclouders/web-pkg'
 import { PasswordPolicy } from '../../../../design-system/src/helpers/types'
+import LinkRoleDropdown from '@ownclouders/web-pkg/src/components/LinkRoleDropdown.vue'
 
 vi.mock('../../../src/composables/useCreateFileHandler', () => ({
   useCreateFileHandler: vi.fn().mockReturnValue({ createFileHandler: vi.fn() })
@@ -19,8 +20,7 @@ const currentSpace = mock<SpaceResource>({ driveType: 'personal' })
 
 const SELECTORS = Object.freeze({
   inputFolderName: '#input-folder-name',
-  inputFolderPassword: '#input-folder-password',
-  inputFolderPermissions: '#input-folder-permissions'
+  inputFolderPassword: '#input-folder-password'
 })
 
 describe('CreateFolderModal', () => {
@@ -29,7 +29,7 @@ describe('CreateFolderModal', () => {
 
     const folderNameInput = wrapper.findComponent(SELECTORS.inputFolderName) as VueWrapper
     const passwordInput = wrapper.findComponent(SELECTORS.inputFolderPassword) as VueWrapper
-    const permissionsInput = wrapper.findComponent(SELECTORS.inputFolderPermissions) as VueWrapper
+    const permissionsInput = wrapper.findComponent(LinkRoleDropdown) as VueWrapper
 
     folderNameInput.vm.$emit('update:modelValue', 'name')
     passwordInput.vm.$emit('update:modelValue', 'password')
