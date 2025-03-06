@@ -46,6 +46,10 @@ const getAuthorizedEndPoint = async (user: User): Promise<Array<string>> => {
     const elapsedTime = Date.now() - startTime
     retry = elapsedTime < timeout
 
+    if (logonResponse.status === 200) {
+      break
+    }
+
     if (logonResponse.status === 502 && retry) {
       console.info('[INFO] Failed with 502 Bad Gateway. Retrying logon request...')
       // wait for 1 second before retrying
