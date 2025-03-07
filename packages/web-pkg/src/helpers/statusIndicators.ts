@@ -1,6 +1,7 @@
 import { ShareTypes } from '@ownclouders/web-client'
 import { eventBus } from '../services'
 import { SideBarEventTopics } from '../composables/sideBar'
+import { useExtensionRegistry } from '../composables/piniaStores/extensionRegistry'
 import { Resource } from '@ownclouders/web-client'
 import { AncestorMetaData } from '../types'
 import {
@@ -10,6 +11,7 @@ import {
 } from '@ownclouders/web-client'
 import { User } from '@ownclouders/web-client/graph/generated'
 import { IconFillType } from './resource'
+import { resourceIndicatorExtensionPoint } from '../extensionPoints'
 
 // dummy to trick gettext string extraction into recognizing strings
 const $gettext = (str: string): string => {
@@ -156,6 +158,15 @@ export const getIndicators = ({
       indicators.push(getLinkIndicator({ resource, isDirect: isDirectLinkShare }))
     }
   }
+
+  ;(useExtensionRegistry().requestExtensions(resourceIndicatorExtensionPoint) || []).forEach(
+    (extension) => {
+      const extensionIndicators = extension.getResourceIndicators(resource)
+      if (extensionIndicators) {
+        indicators.push(...extensionIndicators)
+      }
+    }
+  )
 
   return indicators
 }
