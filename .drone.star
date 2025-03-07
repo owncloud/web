@@ -228,7 +228,7 @@ def stagePipelines(ctx):
 
     e2e_pipelines = e2eTests(ctx)
     keycloak_pipelines = e2eTestsOnKeycloak(ctx)
-    return unit_test_pipelines + buildAndTestDesignSystem(ctx) + pipelinesDependsOn(e2e_pipelines + keycloak_pipelines, unit_test_pipelines)
+    return unit_test_pipelines + pipelinesDependsOn(e2e_pipelines + keycloak_pipelines, unit_test_pipelines)
 
 def afterPipelines(ctx):
     return build(ctx) + pipelinesDependsOn(notify(), build(ctx))
@@ -1693,41 +1693,6 @@ def wopiCollaborationService(name):
             ],
         },
     ]
-
-def buildDesignSystemDocs():
-    return [{
-        "name": "build-design-system-docs",
-        "image": OC_CI_NODEJS,
-        "commands": [
-            "pnpm --filter @ownclouders/design-system build:docs",
-        ],
-    }]
-
-def buildAndTestDesignSystem(ctx):
-    design_system_trigger = {
-        "ref": [
-            "refs/heads/master",
-            "refs/heads/stable-*",
-            "refs/tags/**",
-            "refs/pull/**",
-        ],
-    }
-
-    steps = restoreBuildArtifactCache(ctx, "pnpm", ".pnpm-store") + \
-            installPnpm() + \
-            buildDesignSystemDocs()
-
-    return [{
-        "kind": "pipeline",
-        "type": "docker",
-        "name": "build-design-system-docs",
-        "workspace": {
-            "base": dir["base"],
-            "path": config["app"],
-        },
-        "steps": steps,
-        "trigger": design_system_trigger,
-    }]
 
 def postgresService():
     return [
