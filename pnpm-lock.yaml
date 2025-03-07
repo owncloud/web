@@ -749,7 +749,7 @@ importers:
         version: link:../web-pkg
       '@panzoom/panzoom':
         specifier: ^4.5.1
-        version: 4.5.1
+        version: 4.6.0
       '@vueuse/core':
         specifier: ^11.0.0 || ^12.0.0
         version: 12.0.0(typescript@5.6.3)
@@ -2355,8 +2355,8 @@ packages:
   '@one-ini/wasm@0.1.1':
     resolution: {integrity: sha512-XuySG1E38YScSJoMlqovLru4KTUNSjgVTIjyh7qMX6aNN5HY5Ct5LhRJdxO79JtTzKfzV/bnWpz+zquYrISsvw==}
 
-  '@panzoom/panzoom@4.5.1':
-    resolution: {integrity: sha512-QOr/t7314XTwgAUDazR+RDcTAWSbkpjDnZJddd9f56jSUA8ptUsyDblAb+sp/O5O1o5Fiu9KpWxVHKuhGUgp5w==}
+  '@panzoom/panzoom@4.6.0':
+    resolution: {integrity: sha512-3KxkY1lNKFn98fW5ZFR6vV0YzsXj3I4EQDyFWSXME6/cic86eSS7VjuqIjrA3PEpySo0r5fFtlX8eYCt4JPUFQ==}
 
   '@parcel/watcher-android-arm64@2.4.1':
     resolution: {integrity: sha512-LOi/WTbbh3aTn2RYddrO8pnapixAziFl6SMxHM69r3tvdSm94JtCenaKgk1GRg5FJ5wpMCpHeW+7yqPlvZv7kg==}
@@ -8303,7 +8303,7 @@ snapshots:
 
   '@one-ini/wasm@0.1.1': {}
 
-  '@panzoom/panzoom@4.5.1': {}
+  '@panzoom/panzoom@4.6.0': {}
 
   '@parcel/watcher-android-arm64@2.4.1':
     optional: true
