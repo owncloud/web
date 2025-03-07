@@ -73,7 +73,11 @@ self.onmessage = async (e: MessageEvent) => {
   const { baseUrl, headers, space, resources, missingFolderPaths } = data
 
   storedHeaders = headers
-  const webdav = _webdav(baseUrl, () => storedHeaders)
+  const webdav = _webdav(
+    baseUrl,
+    () => {},
+    () => storedHeaders
+  )
 
   const successful: RestoreWorkerReturnData['successful'] = []
   const failed: RestoreWorkerReturnData['failed'] = []

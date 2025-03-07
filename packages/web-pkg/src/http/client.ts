@@ -1,4 +1,5 @@
 import axios, {
+  AxiosError,
   AxiosInstance,
   AxiosRequestConfig,
   AxiosResponse,
@@ -15,16 +16,29 @@ export class HttpClient {
   private readonly instance: AxiosInstance
   private readonly cancelToken: CancelTokenSource
 
-  constructor(
-    config?: AxiosRequestConfig,
-    interceptor?: (
+  constructor({
+    config,
+    requestInterceptor,
+    responseInterceptor
+  }: {
+    config?: AxiosRequestConfig
+    requestInterceptor?: (
       value: InternalAxiosRequestConfig<any>
     ) => InternalAxiosRequestConfig<any> | Promise<InternalAxiosRequestConfig<any>>
-  ) {
+    responseInterceptor?: [
+      (response: AxiosResponse<any>) => AxiosResponse<any> | Promise<AxiosResponse<any>>,
+      (error: AxiosError<any>) => AxiosResponse<any> | Promise<AxiosError<any>>
+    ]
+  } = {}) {
     this.cancelToken = axios.CancelToken.source()
     this.instance = axios.create(config)
-    if (interceptor) {
-      this.instance.interceptors.request.use(interceptor)
+
+    if (requestInterceptor) {
+      this.instance.interceptors.request.use(requestInterceptor)
+    }
+
+    if (responseInterceptor) {
+      this.instance.interceptors.response.use(responseInterceptor[0], responseInterceptor[1])
     }
   }
 

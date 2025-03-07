@@ -20,6 +20,7 @@ import { DAV } from './client/dav'
 import { ListFileVersionsFactory } from './listFileVersions'
 import { SetFavoriteFactory } from './setFavorite'
 import { ListFavoriteFilesFactory } from './listFavoriteFiles'
+import { shouldResponseTriggerMaintenance } from '../helpers/maintenance'
 
 export * from './constants'
 export * from './types'
@@ -27,7 +28,11 @@ export * from './types'
 export type { ListFilesOptions, ListFilesResult } from './listFiles'
 export type { GetFileContentsResponse } from './getFileContents'
 
-export const webdav = (baseURI: string, headers?: () => Headers): WebDAV => {
+export const webdav = (
+  baseURI: string,
+  onSetMaintenance: (value: boolean) => void,
+  headers?: () => Headers
+): WebDAV => {
   const axiosClient = axios.create()
   if (headers) {
     axiosClient.interceptors.request.use((config) => {
@@ -36,9 +41,25 @@ export const webdav = (baseURI: string, headers?: () => Headers): WebDAV => {
     })
   }
 
+  axiosClient.interceptors.response.use(
+    (response) => {
+      onSetMaintenance(false)
+      return response
+    },
+    (error) => {
+      const isInMaintenanceMode = shouldResponseTriggerMaintenance(
+        error.response?.status || 500,
+        error.config.url
+      )
+      onSetMaintenance(isInMaintenanceMode)
+
+      return Promise.reject(error)
+    }
+  )
+
   const options = { axiosClient, baseUrl: baseURI, headers }
 
-  const dav = new DAV({ baseUrl: baseURI, headers })
+  const dav = new DAV({ baseUrl: baseURI, headers, onSetMaintenance })
   const registerExtraProp = (name: string) => {
     dav.extraProps.push(name)
   }

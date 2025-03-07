@@ -46,13 +46,14 @@ describe('ClientService', () => {
       const mocky = vi.mocked(HttpClient)
       getClientServiceMock()
 
-      expect(mocky).toHaveBeenCalledWith(
-        {
+      expect(mocky).toHaveBeenCalledWith({
+        config: {
           baseURL: serverUrl,
           headers: { 'Initiator-ID': v4uuid, 'X-Requested-With': 'XMLHttpRequest' }
         },
-        expect.anything()
-      )
+        requestInterceptor: expect.anything(),
+        responseInterceptor: expect.anything()
+      })
     })
   })
   describe('http unauthenticated', () => {
@@ -65,13 +66,14 @@ describe('ClientService', () => {
       const mocky = vi.mocked(HttpClient)
       getClientServiceMock()
 
-      expect(mocky).toHaveBeenCalledWith(
-        {
+      expect(mocky).toHaveBeenCalledWith({
+        config: {
           baseURL: serverUrl,
           headers: { 'Initiator-ID': v4uuid, 'X-Requested-With': 'XMLHttpRequest' }
         },
-        expect.anything()
-      )
+        requestInterceptor: expect.anything(),
+        responseInterceptor: expect.anything()
+      })
     })
   })
   describe('graph', () => {
@@ -105,7 +107,7 @@ describe('ClientService', () => {
       const webDavMock = mock<WebDAV>()
       const webDavSpy = vi.mocked(webdav).mockReturnValue(webDavMock)
       const clientService = getClientServiceMock()
-      expect(webDavSpy).toHaveBeenCalledWith(serverUrl, expect.anything())
+      expect(webDavSpy).toHaveBeenCalledWith(serverUrl, expect.anything(), expect.anything())
       expect(clientService.webdav).toEqual(webDavMock)
     })
   })
