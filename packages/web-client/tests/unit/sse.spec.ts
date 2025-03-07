@@ -1,10 +1,10 @@
-vi.mock('@microsoft/fetch-event-source', () => ({
-  fetchEventSource: vi.fn()
-}))
-
 import { EventSourceMessage, fetchEventSource } from '@microsoft/fetch-event-source'
 import { SSEAdapter, sse, MESSAGE_TYPE, RetriableError } from '../../src/sse'
 import { Mock } from 'vitest'
+
+vi.mock('@microsoft/fetch-event-source', () => ({
+  fetchEventSource: vi.fn()
+}))
 
 const url = 'https://owncloud.test/'
 describe('SSEAdapter', () => {
