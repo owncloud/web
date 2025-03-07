@@ -86,25 +86,19 @@ export class Public {
     await po.expectThatPublicLinkIsDeleted({ page: this.#page, url })
   }
 
-  async getContentOfOpenDocumentOrMicrosoftWordDocument({
-    page,
-    editorToOpen
-  }: {
-    page: Page
-    editorToOpen: string
-  }): Promise<string> {
-    return await po.openAndGetContentOfDocument({ page, editorToOpen })
+  async getDocumentContent({ page, editor }: { page: Page; editor: string }): Promise<string> {
+    return await po.getDocumentContent({ page, editor })
   }
 
-  async fillContentOfOpenDocumentOrMicrosoftWordDocument({
+  async fillDocumentContent({
     page,
     text,
-    editorToOpen
+    editor
   }: {
     page: Page
     text: string
-    editorToOpen: string
+    editor: string
   }): Promise<void> {
-    return await po.fillContentOfDocument({ page, text, editorToOpen })
+    return await po.fillDocumentContent({ page, text, editor })
   }
 }

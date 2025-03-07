@@ -224,7 +224,7 @@ export class Resource {
   }
 
   async editResource(args: Omit<po.editResourcesArgs, 'page'>): Promise<void> {
-    await po.editResources({ ...args, page: this.#page })
+    await po.editResource({ ...args, page: this.#page })
   }
 
   async openFileInViewer(args: Omit<po.openFileInViewerArgs, 'page'>): Promise<void> {
@@ -331,8 +331,8 @@ export class Resource {
     return await po.canManageResource({ ...args, page: this.#page })
   }
 
-  async canEditContent({ type }: { type: string }): Promise<boolean> {
-    return await po.canEditContent({ page: this.#page, type })
+  async canEditDocumentContent({ type }: { type: string }): Promise<boolean> {
+    return await po.canEditDocumentContent({ page: this.#page, type })
   }
 
   async getAllAvailableActions({ resource }: { resource: string }): Promise<string[]> {
