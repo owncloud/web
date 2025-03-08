@@ -20,6 +20,7 @@ Summary
 * Bugfix - Sorting arrow misplaced: [#12236](https://github.com/owncloud/web/pull/12236)
 * Bugfix - Add password policies to password protected folders: [#12240](https://github.com/owncloud/web/pull/12240)
 * Bugfix - Revert password protected folder creation on error: [#12241](https://github.com/owncloud/web/pull/12241)
+* Bugfix - Disable cutting and pasting into the same folder: [#12265](https://github.com/owncloud/web/pull/12265)
 * Enhancement - Accessibility improvements: [#5379](https://github.com/owncloud/web/issues/5379)
 * Enhancement - Create spaces via admin settings: [#11849](https://github.com/owncloud/web/pull/11849)
 * Enhancement - Add new supported language to md-editor: [#12243](https://github.com/owncloud/web/pull/12243)
@@ -128,6 +129,17 @@ Details
 
    https://github.com/owncloud/web/issues/12223
    https://github.com/owncloud/web/pull/12241
+
+* Bugfix - Disable cutting and pasting into the same folder: [#12265](https://github.com/owncloud/web/pull/12265)
+
+   We've fixed the issue where users were allowed to cut and paste files into the
+   same folder, either by clicking on the "Paste" button or by using keyboard paste
+   shortcuts. This fix ensures that the paste operation is only allowed when the
+   destination folder is different from the source folder, preventing invalid file
+   operations.
+
+   https://github.com/owncloud/web/issues/12021
+   https://github.com/owncloud/web/pull/12265
 
 * Enhancement - Accessibility improvements: [#5379](https://github.com/owncloud/web/issues/5379)
 
