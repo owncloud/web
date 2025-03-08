@@ -25,6 +25,7 @@ export const useFileActionsPaste = () => {
 
   const resourcesStore = useResourcesStore()
   const { currentFolder } = storeToRefs(resourcesStore)
+  const { resources: clipboardResources } = storeToRefs(clipboardStore)
 
   const isMacOs = computed(() => {
     return window.navigator.platform.match('Mac')
@@ -110,7 +111,34 @@ export const useFileActionsPaste = () => {
     })
   }
 
+  /**
+   * Computed property that determines if the user is attempting to cut and paste files into the same folder.
+   *
+   * This property checks if the current folder is the same as the parent folder of any resource in the clipboard.
+   * If the current folder is of type 'space', the folder ID is appended with the owner ID. Otherwise, only the folder ID is used.
+   * It also verifies if the clipboard action is a cut operation.
+   * User is allowed to copy and paste into the same folder, but not cut and paste into the same folder.
+   *
+   * @returns {boolean} - Returns `true` if the user is trying to cut and paste files into the same folder, otherwise `false`.
+   */
+  const isCuttingAndPastingIntoSameFolder = computed(() => {
+    const folderId =
+      unref(currentFolder)?.type === 'space'
+        ? `${unref(currentFolder).id}!${unref(currentFolder).owner.id}`
+        : unref(currentFolder)?.id
+
+    const isPastingIntoSameFolder =
+      unref(folderId) &&
+      unref(clipboardResources).some((resource) => resource.parentFolderId === unref(folderId))
+
+    return clipboardStore.action === ClipboardActions.Cut && unref(isPastingIntoSameFolder)
+  })
+
   const handler = async ({ space: targetSpace }: FileActionOptions) => {
+    if (unref(isCuttingAndPastingIntoSameFolder)) {
+      return
+    }
+
     const resourceSpaceMapping = clipboardStore.resources.reduce<
       Record<string, { space: SpaceResource; resources: Resource[] }>
     >((acc, resource) => {
@@ -173,6 +201,7 @@ export const useFileActionsPaste = () => {
   ])
 
   return {
-    actions
+    actions,
+    isCuttingAndPastingIntoSameFolder
   }
 }
