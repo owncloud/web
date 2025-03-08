@@ -466,8 +466,8 @@ importers:
         specifier: workspace:^
         version: link:../web-pkg
       axios:
-        specifier: 1.7.9
-        version: 1.7.9
+        specifier: 1.8.2
+        version: 1.8.2
       deep-object-diff:
         specifier: ^1.1.9
         version: 1.1.9
@@ -512,8 +512,8 @@ importers:
         specifier: workspace:*
         version: link:../web-pkg
       axios:
-        specifier: 1.7.9
-        version: 1.7.9
+        specifier: 1.8.2
+        version: 1.8.2
       fuse.js:
         specifier: 7.0.0
         version: 7.0.0
@@ -617,8 +617,8 @@ importers:
         specifier: ^11.0.0 || ^12.0.0
         version: 12.0.0(typescript@5.6.3)
       axios:
-        specifier: 1.7.9
-        version: 1.7.9
+        specifier: 1.8.2
+        version: 1.8.2
       email-validator:
         specifier: ^2.0.4
         version: 2.0.4
@@ -675,8 +675,8 @@ importers:
         specifier: workspace:*
         version: link:../web-pkg
       axios:
-        specifier: 1.7.9
-        version: 1.7.9
+        specifier: 1.8.2
+        version: 1.8.2
       email-validator:
         specifier: ^2.0.4
         version: 2.0.4
@@ -846,7 +846,7 @@ importers:
         version: link:../web-pkg
       axios:
         specifier: ^1.7.7
-        version: 1.7.9
+        version: 1.8.2
       fast-xml-parser:
         specifier: ^4.5.0
         version: 4.5.3
@@ -935,7 +935,7 @@ importers:
         version: 12.0.0(typescript@5.6.3)
       axios:
         specifier: ^1.7.7
-        version: 1.7.9
+        version: 1.8.2
       deepmerge:
         specifier: ^4.2.2
         version: 4.3.1
@@ -1071,8 +1071,8 @@ importers:
         specifier: 2.0.0
         version: 2.0.0(vue@3.5.13(typescript@5.6.3))
       axios:
-        specifier: 1.7.9
-        version: 1.7.9
+        specifier: 1.8.2
+        version: 1.8.2
       deepmerge:
         specifier: 4.3.1
         version: 4.3.1
@@ -1174,8 +1174,8 @@ importers:
         specifier: ^2.4.6
         version: 2.4.6
       axios:
-        specifier: 1.7.9
-        version: 1.7.9
+        specifier: 1.8.2
+        version: 1.8.2
       pinia:
         specifier: 2.3.1
         version: 2.3.1(typescript@5.6.3)(vue@3.5.13(typescript@5.6.3))
@@ -3221,8 +3221,8 @@ packages:
     resolution: {integrity: sha512-DMD0KiN46eipeziST1LPP/STfDU0sufISXmjSgvVsoU2tqxctQeASejWcfNtxYKqETM1UxQ8sp2OrSBWpHY6sw==}
     engines: {node: '>= 0.4'}
 
-  axios@1.7.9:
-    resolution: {integrity: sha512-LhLcE7Hbiryz8oMDdDptSrWowmB4Bl6RCt6sIJKpRB4XtVf0iEgewX3au/pJqm+Py1kCASkb/FFKjxQaLtxJvw==}
+  axios@1.8.2:
+    resolution: {integrity: sha512-ls4GYBm5aig9vWx8AWDSGLpnpDQRtWAfrjU+EuytuODrFBkqesN2RkOQCBzrA1RQNHw1SmRMSDDDSwzNAYQ6Rg==}
 
   babel-core@7.0.0-bridge.0:
     resolution: {integrity: sha512-poPX9mZH/5CSanm50Q+1toVci6pv5KSRv/5TWCwtzQS5XEwn40BcCrgIeMFWP9CKKIniKXNxoIOnOq4VVlGXhg==}
@@ -9256,7 +9256,7 @@ snapshots:
 
   available-typed-arrays@1.0.5: {}
 
-  axios@1.7.9:
+  axios@1.8.2:
     dependencies:
       follow-redirects: 1.15.9
       form-data: 4.0.1
