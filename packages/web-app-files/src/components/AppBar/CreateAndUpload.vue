@@ -299,7 +299,7 @@ export default defineComponent({
 
     let uploadCompletedSub: string
 
-    const { actions: pasteFileActions } = useFileActionsPaste()
+    const { actions: pasteFileActions, isCuttingAndPastingIntoSameFolder } = useFileActionsPaste()
     const pasteFileAction = () => {
       return unref(pasteFileActions)[0].handler({ space: unref(space) })
     }
@@ -408,18 +408,8 @@ export default defineComponent({
       return !unref(canUpload)
     })
 
-    const isPastingIntoSameFolder = computed(() => {
-      if (!unref(clipboardResources) || unref(clipboardResources).length < 1) {
-        return false
-      }
-
-      return !unref(clipboardResources).some(
-        (resource) => resource.parentFolderId !== unref(currentFolder).id
-      )
-    })
-
     const isPasteHereButtonDisabled = computed(() => {
-      return unref(uploadOrFileCreationBlocked) || unref(isPastingIntoSameFolder)
+      return unref(uploadOrFileCreationBlocked) || unref(isCuttingAndPastingIntoSameFolder)
     })
 
     const pasteHereButtonTooltip = computed(() => {
@@ -427,8 +417,8 @@ export default defineComponent({
         return $gettext('You have no permission to paste files here.')
       }
 
-      if (unref(isPastingIntoSameFolder)) {
-        return $gettext('You cannot paste resources into the same folder.')
+      if (unref(isCuttingAndPastingIntoSameFolder)) {
+        return $gettext('You cannot cut and paste resources into the same folder.')
       }
 
       return ''

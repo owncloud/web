@@ -107,12 +107,14 @@ describe('CreateAndUpload component', () => {
     })
     it('should disable the "paste files"-action when clipboardResources are from same folder', () => {
       const { wrapper } = getWrapper({
+        isCuttingAndPastingIntoSameFolder: true,
         clipboardResources: [mock<Resource>({ parentFolderId: 'current-folder' })],
         currentFolder: mock<Resource>({
           id: 'current-folder',
           canUpload: vi.fn().mockReturnValue(true)
         })
       })
+
       expect(
         wrapper.findComponent<typeof OcButton>(elSelector.pasteFilesBtn).vm.disabled
       ).toStrictEqual(true)
@@ -198,6 +200,7 @@ function getWrapper({
   itemId = undefined,
   newFileAction = false,
   areFileExtensionsShown = false,
+  isCuttingAndPastingIntoSameFolder = false,
   createActions = [
     mock<FileAction>({ label: () => 'Plain text file', ext: 'txt' }),
     mock<FileAction>({ label: () => 'Mark-down file', ext: 'md' }),
@@ -214,6 +217,7 @@ function getWrapper({
   newFileAction?: boolean
   areFileExtensionsShown?: boolean
   createActions?: FileAction[]
+  isCuttingAndPastingIntoSameFolder?: boolean
 } = {}) {
   const capabilities = {
     spaces: { enabled: true },
@@ -242,7 +246,12 @@ function getWrapper({
   const pasteActionHandler = vi.fn()
   vi.mocked(useFileActionsPaste).mockReturnValue(
     mock<ReturnType<typeof useFileActionsPaste>>({
-      actions: ref([mock<FileAction>({ handler: pasteActionHandler })])
+      isCuttingAndPastingIntoSameFolder: ref(isCuttingAndPastingIntoSameFolder),
+      actions: ref([
+        mock<FileAction>({
+          handler: pasteActionHandler
+        })
+      ])
     })
   )
 
