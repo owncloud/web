@@ -10,6 +10,7 @@ const dropUploadResourceSelector = '.upload-info-items [data-test-resource-name=
 const toggleUploadDetailsButton = '.upload-info-toggle-details-btn'
 const uploadInfoSuccessLabelSelector = '.upload-info-success'
 const publicLinkAuthorizeButton = '.oc-login-authorize-button'
+const fileFolderIframe = '#iframe-folder-view'
 
 export class Public {
   #page: Page
@@ -23,11 +24,16 @@ export class Public {
   }
 
   async authenticate({ password }: { password: string }): Promise<void> {
-    await this.#page.locator(passwordInput).fill(password)
-    await this.#page.locator(publicLinkAuthorizeButton).click()
-    await this.#page.locator('#web-content').waitFor()
+    if ((await this.#page.locator(fileFolderIframe).count()) > 0) {
+      await this.#page.frameLocator(fileFolderIframe).locator(passwordInput).fill(password)
+      await this.#page.frameLocator(fileFolderIframe).locator(publicLinkAuthorizeButton).click()
+      await this.#page.frameLocator(fileFolderIframe).locator('#web-content').waitFor()
+    } else {
+      await this.#page.locator(passwordInput).fill(password)
+      await this.#page.locator(publicLinkAuthorizeButton).click()
+      await this.#page.locator('#web-content').waitFor()
+    }
   }
-
   async dropUpload({ resources }: { resources: File[] }): Promise<void> {
     const startUrl = this.#page.url()
     await this.#page.locator(fileUploadInput).setInputFiles(resources.map((file) => file.path))
