@@ -2,7 +2,7 @@ import { useLocalStorage, usePreferredDark } from '@vueuse/core'
 import { useThemeStore, WebThemeConfigType } from '../../../../src/composables/piniaStores'
 import { mockDeep } from 'vitest-mock-extended'
 import { createPinia, setActivePinia } from 'pinia'
-import { ref } from 'vue'
+import { ref, computed } from 'vue'
 
 vi.mock('@vueuse/core', () => {
   return { useLocalStorage: vi.fn(() => ref('')), usePreferredDark: vi.fn(() => ref(false)) }
@@ -28,7 +28,7 @@ describe('useThemeStore', () => {
     })
     describe('currentTheme', () => {
       it.each([true, false])('gets set based on the OS setting', (isDark) => {
-        vi.mocked(usePreferredDark).mockReturnValue(ref(isDark))
+        vi.mocked(usePreferredDark).mockReturnValue(computed(() => isDark))
         vi.mocked(useLocalStorage).mockReturnValue(ref(null))
 
         const themeConfig = mockDeep<WebThemeConfigType>()
@@ -46,7 +46,7 @@ describe('useThemeStore', () => {
         )
       })
       it('falls back to the first theme if no match for the OS setting is found', () => {
-        vi.mocked(usePreferredDark).mockReturnValue(ref(true))
+        vi.mocked(usePreferredDark).mockReturnValue(computed(() => true))
         vi.mocked(useLocalStorage).mockReturnValue(ref(null))
 
         const themeConfig = mockDeep<WebThemeConfigType>()
