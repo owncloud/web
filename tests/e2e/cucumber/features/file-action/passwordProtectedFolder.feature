@@ -19,6 +19,12 @@ Feature: password protected folder operations
       | resource                  |
       | .PasswordProtectedFolders |
       | sampleFolder.psec         |
+
+    # Opening
+    When "Alice" opens folder "sampleFolder.psec"
+    And "Alice" unlocks the public link with password "%public%"
+    And "Alice" closes the public link password dialog box
+
     When "Alice" opens folder ".PasswordProtectedFolders/projects/Personal"
     Then following resources should be displayed in the files list for user "Alice"
       | resource     |
