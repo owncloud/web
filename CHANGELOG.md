@@ -23,6 +23,7 @@ Summary
 * Bugfix - Disable cutting and pasting into the same folder: [#12265](https://github.com/owncloud/web/pull/12265)
 * Enhancement - Accessibility improvements: [#5379](https://github.com/owncloud/web/issues/5379)
 * Enhancement - Create spaces via admin settings: [#11849](https://github.com/owncloud/web/pull/11849)
+* Enhancement - Add maintenance banner: [#12239](https://github.com/owncloud/web/pull/12239)
 * Enhancement - Add new supported language to md-editor: [#12243](https://github.com/owncloud/web/pull/12243)
 
 Details
@@ -156,6 +157,16 @@ Details
 
    https://github.com/owncloud/web/issues/11771
    https://github.com/owncloud/web/pull/11849
+
+* Enhancement - Add maintenance banner: [#12239](https://github.com/owncloud/web/pull/12239)
+
+   We've added a maintenance banner to the web app. This banner is displayed when
+   any request responds with 503 status code. The banner displays a short message
+   notifying the user that the system is in maintenance mode. The banner is also
+   clickable and will open a modal with more details about the maintenance mode.
+
+   https://github.com/owncloud/web/issues/10260
+   https://github.com/owncloud/web/pull/12239
 
 * Enhancement - Add new supported language to md-editor: [#12243](https://github.com/owncloud/web/pull/12243)
 
