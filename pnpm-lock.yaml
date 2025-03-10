@@ -219,7 +219,7 @@ importers:
         version: 4.0.3(focus-trap@7.6.4)(vue@3.5.13(typescript@5.8.2))
       fuse.js:
         specifier: ^7.0.0
-        version: 7.0.0
+        version: 7.1.0
       lodash-es:
         specifier: ^4.17.21
         version: 4.17.21
@@ -475,8 +475,8 @@ importers:
         specifier: ^2.0.4
         version: 2.0.4
       fuse.js:
-        specifier: 7.0.0
-        version: 7.0.0
+        specifier: 7.1.0
+        version: 7.1.0
       lodash-es:
         specifier: 4.17.21
         version: 4.17.21
@@ -515,8 +515,8 @@ importers:
         specifier: 1.8.2
         version: 1.8.2
       fuse.js:
-        specifier: 7.0.0
-        version: 7.0.0
+        specifier: 7.1.0
+        version: 7.1.0
       lodash-es:
         specifier: 4.17.21
         version: 4.17.21
@@ -623,8 +623,8 @@ importers:
         specifier: ^2.0.4
         version: 2.0.4
       fuse.js:
-        specifier: 7.0.0
-        version: 7.0.0
+        specifier: 7.1.0
+        version: 7.1.0
       lodash-es:
         specifier: 4.17.21
         version: 4.17.21
@@ -681,8 +681,8 @@ importers:
         specifier: ^2.0.4
         version: 2.0.4
       fuse.js:
-        specifier: 7.0.0
-        version: 7.0.0
+        specifier: 7.1.0
+        version: 7.1.0
       lodash-es:
         specifier: 4.17.21
         version: 4.17.21
@@ -947,7 +947,7 @@ importers:
         version: 10.1.6
       fuse.js:
         specifier: ^7.0.0
-        version: 7.0.0
+        version: 7.1.0
       js-generate-password:
         specifier: ^1.0.0
         version: 1.0.0
@@ -1086,8 +1086,8 @@ importers:
         specifier: ^4.0.1
         version: 4.0.3(focus-trap@7.6.4)(vue@3.5.13(typescript@5.8.2))
       fuse.js:
-        specifier: 7.0.0
-        version: 7.0.0
+        specifier: 7.1.0
+        version: 7.1.0
       lodash-es:
         specifier: 4.17.21
         version: 4.17.21
@@ -4219,8 +4219,8 @@ packages:
   function-bind@1.1.2:
     resolution: {integrity: sha512-7XHNxH7qX9xG5mIwxkhumTox/MIRNcOgDrxWsMt2pAr23WHp6MrRlN7FBSFpCpr+oVO0F744iUgR82nJMfG2SA==}
 
-  fuse.js@7.0.0:
-    resolution: {integrity: sha512-14F4hBIxqKvD4Zz/XjDc3y94mNZN6pRv3U13Udo0lNLCWRBUsrMv2xwcF/y/Z5sV6+FQW+/ow68cHpm4sunt8Q==}
+  fuse.js@7.1.0:
+    resolution: {integrity: sha512-trLf4SzuuUxfusZADLINj+dE8clK1frKdmqiJNb1Es75fmI5oY6X2mxLVUciLLjxqw/xr72Dhy+lER6dGd02FQ==}
     engines: {node: '>=10'}
 
   gensync@1.0.0-beta.2:
@@ -10492,7 +10492,7 @@ snapshots:
 
   function-bind@1.1.2: {}
 
-  fuse.js@7.0.0: {}
+  fuse.js@7.1.0: {}
 
   gensync@1.0.0-beta.2: {}
 

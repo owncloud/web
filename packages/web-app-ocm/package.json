@@ -9,7 +9,7 @@
     "@ownclouders/web-pkg": "workspace:*",
     "axios": "1.8.2",
     "email-validator": "^2.0.4",
-    "fuse.js": "7.0.0",
+    "fuse.js": "7.1.0",
     "lodash-es": "4.17.21",
     "vue-concurrency": "5.0.3",
     "uuid": "11.0.5",
