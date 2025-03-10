@@ -40,26 +40,26 @@ Feature: Kindergarten can use web to organize a day
     # Implementation of sharing with different roles is currently broken
     # since we switched to bulk creating of shares with a single dropdown
     And "Alice" shares the following resources using the sidebar panel
-      | resource                                           | recipient | type  | role     | resourceType |
-      | groups/Pre-Schools Pirates/meal plan               | Brian     | user  | Can edit | folder       |
-      | groups/Pre-Schools Pirates/meal plan               | Carol     | user  | Can edit | folder       |
-      | groups/Pre-Schools Pirates/meal plan/lorem-big.txt | sales     | group | Can view | file         |
-      | groups/Pre-Schools Pirates/meal plan/lorem-big.txt | Carol     | user  | Can view | file         |
-      | groups/Kindergarten Koalas/meal plan               | sales     | group | Can view | folder       |
-      | groups/Kindergarten Koalas/meal plan               | security  | group | Can edit | folder       |
-      | groups/Kindergarten Koalas/meal plan/lorem.txt     | sales     | group | Can view | file         |
-      | groups/Kindergarten Koalas/meal plan/lorem.txt     | security  | group | Can view | file         |
-      | groups/Teddy Bear Daycare/meal plan                | Brian     | user  | Can edit | folder       |
-      | groups/Teddy Bear Daycare/meal plan                | Carol     | user  | Can edit | folder       |
-      | groups/Teddy Bear Daycare/meal plan/data.zip       | Brian     | user  | Can edit | file         |
-      | groups/Teddy Bear Daycare/meal plan/data.zip       | Carol     | user  | Can edit | file         |
+      | resource                                           | recipient | type  | role                      | resourceType |
+      | groups/Pre-Schools Pirates/meal plan               | Brian     | user  | Can edit without versions | folder       |
+      | groups/Pre-Schools Pirates/meal plan               | Carol     | user  | Can edit without versions | folder       |
+      | groups/Pre-Schools Pirates/meal plan/lorem-big.txt | sales     | group | Can view                  | file         |
+      | groups/Pre-Schools Pirates/meal plan/lorem-big.txt | Carol     | user  | Can view                  | file         |
+      | groups/Kindergarten Koalas/meal plan               | sales     | group | Can view                  | folder       |
+      | groups/Kindergarten Koalas/meal plan               | security  | group | Can edit without versions | folder       |
+      | groups/Kindergarten Koalas/meal plan/lorem.txt     | sales     | group | Can view                  | file         |
+      | groups/Kindergarten Koalas/meal plan/lorem.txt     | security  | group | Can view                  | file         |
+      | groups/Teddy Bear Daycare/meal plan                | Brian     | user  | Can edit without versions | folder       |
+      | groups/Teddy Bear Daycare/meal plan                | Carol     | user  | Can edit without versions | folder       |
+      | groups/Teddy Bear Daycare/meal plan/data.zip       | Brian     | user  | Can edit without versions | file         |
+      | groups/Teddy Bear Daycare/meal plan/data.zip       | Carol     | user  | Can edit without versions | file         |
     # update share
     And "Alice" updates following sharee role
-      | resource                                           | recipient | type  | role     | resourceType |
-      | groups/Pre-Schools Pirates/meal plan               | Carol     | user  | Can view | folder       |
-      | groups/Pre-Schools Pirates/meal plan/lorem-big.txt | sales     | group | Can edit | file         |
-      | groups/Kindergarten Koalas/meal plan               | sales     | group | Can edit | folder       |
-      | groups/Teddy Bear Daycare/meal plan/data.zip       | Carol     | user  | Can edit | file         |
+      | resource                                           | recipient | type  | role                      | resourceType |
+      | groups/Pre-Schools Pirates/meal plan               | Carol     | user  | Can view                  | folder       |
+      | groups/Pre-Schools Pirates/meal plan/lorem-big.txt | sales     | group | Can edit without versions | file         |
+      | groups/Kindergarten Koalas/meal plan               | sales     | group | Can edit without versions | folder       |
+      | groups/Teddy Bear Daycare/meal plan/data.zip       | Carol     | user  | Can edit without versions | file         |
     # Then what do we check for to be confident that the above things done by Alice have worked?
     When "Brian" logs in
     And "Brian" navigates to the shared with me page
