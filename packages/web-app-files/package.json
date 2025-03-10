@@ -15,7 +15,7 @@
     "@vueuse/core": "^11.0.0 || ^12.0.0",
     "axios": "1.8.2",
     "email-validator": "^2.0.4",
-    "fuse.js": "7.0.0",
+    "fuse.js": "7.1.0",
     "lodash-es": "4.17.21",
     "luxon": "3.5.0",
     "mark.js": "^8.11.1",
