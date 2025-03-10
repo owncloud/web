@@ -18,6 +18,7 @@
   },
   "license": "AGPL-3.0",
   "author": "ownClouders",
+  "type": "module",
   "main": "src/index.ts",
   "private": false,
   "scripts": {

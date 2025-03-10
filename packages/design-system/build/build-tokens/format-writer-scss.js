@@ -1,9 +1,9 @@
-import { sortProps } from './utils'
+import { sortProps } from './utils.js'
 
 export default {
   name: 'format/ods/scss',
-  formatter: (dictionary) => {
-    const props = sortProps(dictionary.allProperties)
+  format: (dictionary) => {
+    const props = sortProps(dictionary.allTokens)
     const data = [
       ...props.map((p) => `$${p.name}: ${p.value};`),
       '',

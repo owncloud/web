@@ -1,22 +1,28 @@
 import StyleDictionary from 'style-dictionary'
-import path from 'node:path'
+import path, { dirname } from 'node:path'
 import yaml from 'yaml'
+import jsonFormat from './build-tokens/format-writer-json.js'
+import scssFormat from './build-tokens/format-writer-scss.js'
+import namespaceTransform from './build-tokens/transform-namespace.js'
+import { fileURLToPath } from 'node:url'
 
-StyleDictionary.registerFormat(require('./build-tokens/format-writer-json'))
-StyleDictionary.registerFormat(require('./build-tokens/format-writer-scss'))
-StyleDictionary.registerTransform(require('./build-tokens/transform-namespace'))
+const __filename = fileURLToPath(import.meta.url)
+const __dirname = dirname(__filename)
 
-StyleDictionary.extend({
-  parsers: [
-    {
-      pattern: /\.yaml$/,
-      parse: ({ contents }) => yaml.parse(contents)
+const sd = new StyleDictionary({
+  hooks: {
+    parsers: {
+      'yaml-parser': {
+        pattern: /\.yaml$/,
+        parser: ({ contents }) => yaml.parse(contents)
+      }
     }
-  ],
+  },
+  parsers: ['yaml-parser'],
   source: [path.join(__dirname, '../src/tokens/**/*.yaml')],
   platforms: {
     ods: {
-      transforms: ['name/cti/kebab', 'transform/ods/namespace'],
+      transforms: ['name/kebab', 'transform/ods/namespace'],
       buildPath: 'src/assets/tokens/',
       files: [
         {
@@ -32,4 +38,11 @@ StyleDictionary.extend({
       ]
     }
   }
-}).buildAllPlatforms()
+})
+
+await sd.hasInitialized
+sd.registerFormat(jsonFormat)
+sd.registerFormat(scssFormat)
+sd.registerTransform(namespaceTransform)
+await sd.cleanAllPlatforms()
+await sd.buildAllPlatforms()
