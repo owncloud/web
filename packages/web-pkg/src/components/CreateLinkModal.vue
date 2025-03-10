@@ -35,7 +35,7 @@
       :model-value="password.value"
       type="password"
       :password-policy="passwordPolicy"
-      :generate-password-method="passwordPolicyService.generatePassword()"
+      :generate-password-method="() => passwordPolicyService.generatePassword()"
       :error-message="password.error"
       :label="passwordEnforced ? `${$gettext('Password')}*` : $gettext('Password')"
       class="link-modal-password-input"
