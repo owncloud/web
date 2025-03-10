@@ -1,8 +1,8 @@
-const path = require('path')
-const { color } = require('style-value-types')
+import path from 'node:path'
+import { color } from 'style-value-types'
 
-exports.getPropType = (prop) => {
-  const { type } = prop.arguments | {}
+export const getPropType = (prop) => {
+  const { type } = prop.arguments || {}
 
   if (type) {
     return type
@@ -15,9 +15,9 @@ exports.getPropType = (prop) => {
   return '...'
 }
 
-exports.getPropCategory = (prop) => path.parse(prop.filePath).name
+export const getPropCategory = (prop) => path.parse(prop.filePath).name
 
-exports.sortProps = (props) => {
+export const sortProps = (props) => {
   return props.sort((a, b) => {
     if (a.name < b.name) {
       return -1

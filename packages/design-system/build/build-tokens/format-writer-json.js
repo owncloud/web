@@ -1,7 +1,7 @@
-const tinyColor = require('tinycolor2')
-const { getPropType, sortProps, getPropCategory } = require('./utils')
+import tinyColor from 'tinycolor2'
+import { getPropType, sortProps, getPropCategory } from './utils'
 
-module.exports = {
+export default {
   name: 'format/ods/json',
   formatter: (dictionary) => {
     const attributes = sortProps(dictionary.allProperties).reduce((acc, cur) => {

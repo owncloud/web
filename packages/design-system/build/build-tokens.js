@@ -1,6 +1,6 @@
-const StyleDictionary = require('style-dictionary')
-const path = require('path')
-const yaml = require('yaml')
+import StyleDictionary from 'style-dictionary'
+import path from 'node:path'
+import yaml from 'yaml'
 
 StyleDictionary.registerFormat(require('./build-tokens/format-writer-json'))
 StyleDictionary.registerFormat(require('./build-tokens/format-writer-scss'))
