@@ -487,8 +487,8 @@ importers:
         specifier: 2.3.1
         version: 2.3.1(typescript@5.8.2)(vue@3.5.13(typescript@5.8.2))
       uuid:
-        specifier: 11.0.5
-        version: 11.0.5
+        specifier: 11.1.0
+        version: 11.1.0
       vue-concurrency:
         specifier: 5.0.3
         version: 5.0.3(vue@3.5.13(typescript@5.8.2))
@@ -580,8 +580,8 @@ importers:
         specifier: ^6.13.0
         version: 6.14.0
       uuid:
-        specifier: 11.0.5
-        version: 11.0.5
+        specifier: 11.1.0
+        version: 11.1.0
       vue-concurrency:
         specifier: 5.0.3
         version: 5.0.3(vue@3.5.13(typescript@5.8.2))
@@ -644,8 +644,8 @@ importers:
         specifier: 6.14.0
         version: 6.14.0
       uuid:
-        specifier: 11.0.5
-        version: 11.0.5
+        specifier: 11.1.0
+        version: 11.1.0
       vue-concurrency:
         specifier: 5.0.3
         version: 5.0.3(vue@3.5.13(typescript@5.8.2))
@@ -687,8 +687,8 @@ importers:
         specifier: 4.17.21
         version: 4.17.21
       uuid:
-        specifier: 11.0.5
-        version: 11.0.5
+        specifier: 11.1.0
+        version: 11.1.0
       vue-concurrency:
         specifier: 5.0.3
         version: 5.0.3(vue@3.5.13(typescript@5.8.2))
@@ -715,7 +715,7 @@ importers:
         version: 2.4.6
       uuid:
         specifier: ^11.0.0
-        version: 11.0.5
+        version: 11.1.0
       vitest-mock-extended:
         specifier: 2.0.2
         version: 2.0.2(typescript@5.8.2)(vitest@3.0.8(@types/node@22.13.10)(happy-dom@16.8.1)(jiti@1.21.0)(jsdom@26.0.0)(sass@1.85.1)(terser@5.39.0)(yaml@2.7.0))
@@ -858,7 +858,7 @@ importers:
         version: 3.5.0
       uuid:
         specifier: ^11.0.0
-        version: 11.0.5
+        version: 11.1.0
       webdav:
         specifier: ^5.7.1
         version: 5.7.1
@@ -989,7 +989,7 @@ importers:
         version: 7.7.1
       uuid:
         specifier: ^11.0.0
-        version: 11.0.5
+        version: 11.1.0
       vue-concurrency:
         specifier: ^5.0.1
         version: 5.0.3(vue@3.5.13(typescript@5.8.2))
@@ -1122,8 +1122,8 @@ importers:
         specifier: ^3.0.0
         version: 3.0.0
       uuid:
-        specifier: 11.0.5
-        version: 11.0.5
+        specifier: 11.1.0
+        version: 11.1.0
       vue:
         specifier: 3.5.13
         version: 3.5.13(typescript@5.8.2)
@@ -6530,6 +6530,10 @@ packages:
     resolution: {integrity: sha512-508e6IcKLrhxKdBbcA2b4KQZlLVp2+J5UwQ6F7Drckkc5N9ZJwFa4TgWtsww9UG8fGHbm6gbV19TdM5pQ4GaIA==}
     hasBin: true
 
+  uuid@11.1.0:
+    resolution: {integrity: sha512-0/A9rDy9P7cJ+8w1c9WD9V//9Wj15Ce2MPz8Ri6032usz+NfePxx5AcN3bN+r6ZL6jEo066/yNYB3tn4pQEx+A==}
+    hasBin: true
+
   uuid@3.4.0:
     resolution: {integrity: sha512-HjSDRw6gZE5JMggctHBcjVak08+KEVhSIiDzFnT9S9aegmp85S/bReBVTb4QTFaRNptJ9kuYaNhnbNEOkbKb/A==}
     deprecated: Please upgrade  to version 7 or higher.  Older versions may use Math.random() in certain circumstances, which is known to be problematic.  See https://v8.dev/blog/math-random for details.
@@ -8015,7 +8019,7 @@ snapshots:
       '@cucumber/ci-environment': 9.1.0
       '@cucumber/cucumber-expressions': 16.1.1
       '@cucumber/gherkin': 26.0.3
-      '@cucumber/gherkin-streams': 5.0.1(@cucumber/gherkin@26.0.3)(@cucumber/message-streams@4.0.1(@cucumber/messages@27.2.0))(@cucumber/messages@21.0.1)
+      '@cucumber/gherkin-streams': 5.0.1(@cucumber/gherkin@26.0.3)(@cucumber/message-streams@4.0.1(@cucumber/messages@21.0.1))(@cucumber/messages@21.0.1)
       '@cucumber/gherkin-utils': 8.0.2
       '@cucumber/html-formatter': 20.2.1(@cucumber/messages@21.0.1)
       '@cucumber/message-streams': 4.0.1(@cucumber/messages@21.0.1)
@@ -8053,7 +8057,7 @@ snapshots:
       yaml: 2.7.0
       yup: 0.32.11
 
-  '@cucumber/gherkin-streams@5.0.1(@cucumber/gherkin@26.0.3)(@cucumber/message-streams@4.0.1(@cucumber/messages@27.2.0))(@cucumber/messages@21.0.1)':
+  '@cucumber/gherkin-streams@5.0.1(@cucumber/gherkin@26.0.3)(@cucumber/message-streams@4.0.1(@cucumber/messages@21.0.1))(@cucumber/messages@21.0.1)':
     dependencies:
       '@cucumber/gherkin': 26.0.3
       '@cucumber/message-streams': 4.0.1(@cucumber/messages@21.0.1)
@@ -12885,6 +12889,8 @@ snapshots:
   uuid@10.0.0: {}
 
   uuid@11.0.5: {}
+
+  uuid@11.1.0: {}
 
   uuid@3.4.0: {}
 
