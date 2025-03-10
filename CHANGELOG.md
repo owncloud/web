@@ -22,6 +22,7 @@ Summary
 * Bugfix - Revert password protected folder creation on error: [#12241](https://github.com/owncloud/web/pull/12241)
 * Bugfix - Disable cutting and pasting into the same folder: [#12265](https://github.com/owncloud/web/pull/12265)
 * Bugfix - Generate public link password on click: [#12266](https://github.com/owncloud/web/pull/12266)
+* Bugfix - Add password generator into password protected folders: [#12270](https://github.com/owncloud/web/pull/12270)
 * Enhancement - Accessibility improvements: [#5379](https://github.com/owncloud/web/issues/5379)
 * Enhancement - Create spaces via admin settings: [#11849](https://github.com/owncloud/web/pull/11849)
 * Enhancement - Add maintenance banner: [#12239](https://github.com/owncloud/web/pull/12239)
@@ -150,6 +151,13 @@ Details
    callback.
 
    https://github.com/owncloud/web/pull/12266
+
+* Bugfix - Add password generator into password protected folders: [#12270](https://github.com/owncloud/web/pull/12270)
+
+   We've added a password generator into the password protected folders modal. This
+   allows users to generate a new password if they want to.
+
+   https://github.com/owncloud/web/pull/12270
 
 * Enhancement - Accessibility improvements: [#5379](https://github.com/owncloud/web/issues/5379)
 
