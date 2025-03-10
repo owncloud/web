@@ -1116,8 +1116,8 @@ importers:
         specifier: 6.14.0
         version: 6.14.0
       semver:
-        specifier: 7.6.3
-        version: 7.6.3
+        specifier: 7.7.1
+        version: 7.7.1
       utf8:
         specifier: ^3.0.0
         version: 3.0.0
@@ -5920,11 +5920,6 @@ packages:
     engines: {node: '>=10'}
     hasBin: true
 
-  semver@7.6.3:
-    resolution: {integrity: sha512-oVekP1cKtI+CTDvHWYFUcMtsK/00wmAEfyqKfNdARm8u1wNVhSgaX7A8d4UuIlUI5e84iEwOhs7ZPYRmzU9U6A==}
-    engines: {node: '>=10'}
-    hasBin: true
-
   semver@7.7.1:
     resolution: {integrity: sha512-hlq8tAfn0m/61p4BVRcPzIGr6LKiMwo4VM6dGi6pt4qcRkmNzTcWq6eCEjEh+qXjkMDvPlOFFSGwQjoEa6gyMA==}
     engines: {node: '>=10'}
@@ -8015,7 +8010,7 @@ snapshots:
       '@cucumber/ci-environment': 9.1.0
       '@cucumber/cucumber-expressions': 16.1.1
       '@cucumber/gherkin': 26.0.3
-      '@cucumber/gherkin-streams': 5.0.1(@cucumber/gherkin@26.0.3)(@cucumber/message-streams@4.0.1(@cucumber/messages@27.2.0))(@cucumber/messages@21.0.1)
+      '@cucumber/gherkin-streams': 5.0.1(@cucumber/gherkin@26.0.3)(@cucumber/message-streams@4.0.1(@cucumber/messages@21.0.1))(@cucumber/messages@21.0.1)
       '@cucumber/gherkin-utils': 8.0.2
       '@cucumber/html-formatter': 20.2.1(@cucumber/messages@21.0.1)
       '@cucumber/message-streams': 4.0.1(@cucumber/messages@21.0.1)
@@ -8053,7 +8048,7 @@ snapshots:
       yaml: 2.7.0
       yup: 0.32.11
 
-  '@cucumber/gherkin-streams@5.0.1(@cucumber/gherkin@26.0.3)(@cucumber/message-streams@4.0.1(@cucumber/messages@27.2.0))(@cucumber/messages@21.0.1)':
+  '@cucumber/gherkin-streams@5.0.1(@cucumber/gherkin@26.0.3)(@cucumber/message-streams@4.0.1(@cucumber/messages@21.0.1))(@cucumber/messages@21.0.1)':
     dependencies:
       '@cucumber/gherkin': 26.0.3
       '@cucumber/message-streams': 4.0.1(@cucumber/messages@21.0.1)
@@ -12269,8 +12264,6 @@ snapshots:
   semver@7.5.4:
     dependencies:
       lru-cache: 6.0.0
-
-  semver@7.6.3: {}
 
   semver@7.7.1: {}
 
