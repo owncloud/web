@@ -13,6 +13,7 @@
       :label="$gettext('Password')"
       class="oc-mt-s"
       :password-policy="passwordPolicy"
+      :generate-password-method="() => passwordPolicyService.generatePassword()"
     />
 
     <div class="oc-flex oc-flex-middle oc-mt-m">
