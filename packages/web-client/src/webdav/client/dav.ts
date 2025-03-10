@@ -17,6 +17,7 @@ import { DavHttpError } from '../../errors'
 export interface DAVOptions {
   baseUrl: string
   headers?: () => Headers
+  onSetMaintenance: (value: boolean) => void
 }
 
 export interface DavResult {
@@ -35,12 +36,14 @@ export class DAV {
   private davPath: string
   private headers: () => Headers
   public extraProps: string[]
+  #onSetMaintenance: (value: boolean) => void
 
-  constructor({ baseUrl, headers }: DAVOptions) {
+  constructor({ baseUrl, headers, onSetMaintenance }: DAVOptions) {
     this.davPath = urlJoin(baseUrl, 'remote.php/dav')
     this.client = createClient(this.davPath, {})
     this.headers = headers
     this.extraProps = []
+    this.#onSetMaintenance = onSetMaintenance
   }
 
   public mkcol(path: string, opts: DAVRequestOptions = {}) {
@@ -208,6 +211,8 @@ export class DAV {
         resultBody = await parseMultiStatus(parsedBody)
       }
 
+      this.#onSetMaintenance(false)
+
       return {
         body: resultBody,
         status: result.status,
@@ -215,6 +220,11 @@ export class DAV {
       }
     } catch (error) {
       const { response } = error
+
+      if (response.status === 503) {
+        this.#onSetMaintenance(true)
+      }
+
       const body = await response.text()
       const errorMessage = parseError(body)
       throw new DavHttpError(

@@ -37,6 +37,6 @@ export const client = ({ axiosClient, baseURI }: ClientOptions): Client => {
   return {
     graph: graph(baseURI, axiosClient),
     ocs: ocs(baseURI, axiosClient),
-    webdav: webdav(baseURI, webDavHeaders)
+    webdav: webdav(baseURI, () => {}, webDavHeaders)
   }
 }
