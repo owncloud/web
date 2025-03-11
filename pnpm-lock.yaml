@@ -233,8 +233,8 @@ importers:
         specifier: ^3.5.11
         version: 3.5.13(typescript@5.8.2)
       vue-inline-svg:
-        specifier: ^3.1.4
-        version: 3.1.4(vue@3.5.13(typescript@5.8.2))
+        specifier: ^4.0.0
+        version: 4.0.0(vue@3.5.13(typescript@5.8.2))
       vue-router:
         specifier: ^4.2.5
         version: 4.2.5(vue@3.5.13(typescript@5.8.2))
@@ -6669,8 +6669,8 @@ packages:
     peerDependencies:
       eslint: '>=6.0.0'
 
-  vue-inline-svg@3.1.4:
-    resolution: {integrity: sha512-2WrOViZroRvB0UqwkwxDlCz516pkmT9ojsWri9Vxp8wBcQ1/wzfF0ubw5J/ZxNgjkBBAp0qkTiXDdzBPonT21A==}
+  vue-inline-svg@4.0.0:
+    resolution: {integrity: sha512-6kFnPZXQ5jPgumqhDGyJbpqtR5/hlkF4euXxMPai2tcnd6n7zYrEUhZPjE49blf3dDjdoslCu1oyk4EqX/KwgA==}
     peerDependencies:
       vue: ^3
 
@@ -12992,7 +12992,7 @@ snapshots:
     transitivePeerDependencies:
       - supports-color
 
-  vue-inline-svg@3.1.4(vue@3.5.13(typescript@5.8.2)):
+  vue-inline-svg@4.0.0(vue@3.5.13(typescript@5.8.2)):
     dependencies:
       vue: 3.5.13(typescript@5.8.2)
 
