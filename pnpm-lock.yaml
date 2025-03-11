@@ -258,8 +258,8 @@ importers:
         specifier: 7.26.9
         version: 7.26.9(@babel/core@7.26.9)
       '@babel/runtime':
-        specifier: 7.26.9
-        version: 7.26.9
+        specifier: 7.26.10
+        version: 7.26.10
       '@ownclouders/web-test-helpers':
         specifier: workspace:*
         version: link:../web-test-helpers
@@ -1732,8 +1732,8 @@ packages:
     peerDependencies:
       '@babel/core': ^7.0.0-0
 
-  '@babel/runtime@7.26.9':
-    resolution: {integrity: sha512-aA63XwOkcl4xxQa3HjPMqOP6LiK0ZDv3mUPYEFXkpHbaFjtGggE1A61FjFzJnB+p7/oy2gA8E+rcBNl/zC1tMg==}
+  '@babel/runtime@7.26.10':
+    resolution: {integrity: sha512-2WJMeRQPHKSPemqk/awGrAiuFfzBmOIPXKizAsVhWH9YJqLZ0H+HS4c8loHGgW6utJ3E/ejXQUsiGaQy2NZ9Fw==}
     engines: {node: '>=6.9.0'}
 
   '@babel/template@7.26.9':
@@ -7569,7 +7569,7 @@ snapshots:
       pirates: 4.0.6
       source-map-support: 0.5.21
 
-  '@babel/runtime@7.26.9':
+  '@babel/runtime@7.26.10':
     dependencies:
       regenerator-runtime: 0.14.1
 
@@ -12034,7 +12034,7 @@ snapshots:
 
   regenerator-transform@0.15.2:
     dependencies:
-      '@babel/runtime': 7.26.9
+      '@babel/runtime': 7.26.10
 
   regexp-match-indices@1.0.2:
     dependencies:
@@ -13221,7 +13221,7 @@ snapshots:
 
   yup@0.32.11:
     dependencies:
-      '@babel/runtime': 7.26.9
+      '@babel/runtime': 7.26.10
       '@types/lodash': 4.14.202
       lodash: 4.17.21
       lodash-es: 4.17.21
