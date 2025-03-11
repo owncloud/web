@@ -99,6 +99,8 @@ const passwordInputDescription = '.oc-text-input-description .oc-text-input-desc
 const advancedModeButton = '.link-modal-advanced-mode-button'
 const copyLinkButton =
   '//span[contains(@class, "files-links-name") and text()="%s"]//ancestor::li//button[contains(@class, "oc-files-public-link-copy-url")]'
+const fileFolderIframe = '#iframe-folder-view'
+const closeFolderButton = '.oc-modal-body-actions-cancel'
 
 const getRecentLinkUrl = async (page: Page, name: string): Promise<string> => {
   await page.locator(util.format(copyLinkButton, name)).click()
@@ -366,6 +368,15 @@ export const copyLinkToClipboard = async (args: copyLinkArgs): Promise<string> =
   // clear the clipboard
   await page.evaluate(`navigator.clipboard.writeText('')`)
 
-  await page.getByLabel('Copy link to clipboard').click()
+  // checking if iFrame wrapping the password-protected folder container is present
+  if ((await page.locator(fileFolderIframe).count()) > 0) {
+    await page.frameLocator(fileFolderIframe).getByLabel('Copy link to clipboard').click()
+  } else {
+    await page.getByLabel('Copy link to clipboard').click()
+  }
   return await page.evaluate('navigator.clipboard.readText()')
+}
+
+export const closeFolderModal = async (page: Page): Promise<void> => {
+  await page.locator(closeFolderButton).click()
 }
