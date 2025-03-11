@@ -1,4 +1,4 @@
-import { Download, Page } from '@playwright/test'
+import { Download, FrameLocator, Page } from '@playwright/test'
 import { File } from '../../../types'
 import util from 'util'
 import path from 'path'
@@ -10,6 +10,7 @@ const dropUploadResourceSelector = '.upload-info-items [data-test-resource-name=
 const toggleUploadDetailsButton = '.upload-info-toggle-details-btn'
 const uploadInfoSuccessLabelSelector = '.upload-info-success'
 const publicLinkAuthorizeButton = '.oc-login-authorize-button'
+const folderModalIframe = '#iframe-folder-view'
 
 export class Public {
   #page: Page
@@ -22,10 +23,20 @@ export class Public {
     await this.#page.goto(url)
   }
 
-  async authenticate({ password }: { password: string }): Promise<void> {
-    await this.#page.locator(passwordInput).fill(password)
-    await this.#page.locator(publicLinkAuthorizeButton).click()
-    await this.#page.locator('#web-content').waitFor()
+  async authenticate({
+    password,
+    passwordProtectedFolder = false
+  }: {
+    password: string
+    passwordProtectedFolder?: boolean
+  }): Promise<void> {
+    let page: Page | FrameLocator = this.#page
+    if (passwordProtectedFolder) {
+      page = this.#page.frameLocator(folderModalIframe)
+    }
+    await page.locator(passwordInput).fill(password)
+    await page.locator(publicLinkAuthorizeButton).click()
+    await page.locator('#web-content').waitFor()
   }
 
   async dropUpload({ resources }: { resources: File[] }): Promise<void> {
