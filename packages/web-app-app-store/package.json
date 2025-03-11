@@ -15,7 +15,7 @@
     "fuse.js": "7.1.0",
     "lodash-es": "4.17.21",
     "mark.js": "^8.11.1",
-    "pinia": "2.3.1",
+    "pinia": "3.0.1",
     "vue-concurrency": "5.0.3",
     "vue-router": "4.2.5",
     "zod": "3.24.2",
