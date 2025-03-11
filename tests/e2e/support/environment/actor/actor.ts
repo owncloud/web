@@ -6,6 +6,11 @@ import { ActorOptions, buildBrowserContextOptions } from './shared'
 
 export class ActorEnvironment extends EventEmitter implements Actor {
   private readonly options: ActorOptions
+  private readonly localStorage: Record<string, any> = {
+    // disables copy-paste dialog in web office
+    clipboardApiAvailable: false
+  }
+
   public context: BrowserContext
   public page: Page
   public tabs: Page[] = []
@@ -32,6 +37,12 @@ export class ActorEnvironment extends EventEmitter implements Actor {
         expect(exception).not.toBeDefined()
       }
     })
+    // set local storage
+    await this.context.addInitScript((storage) => {
+      for (const [key, value] of Object.entries(storage)) {
+        localStorage.setItem(key, value)
+      }
+    }, this.localStorage)
   }
 
   public savePage(newPage: Page) {
