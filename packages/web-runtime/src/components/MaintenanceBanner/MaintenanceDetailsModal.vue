@@ -2,7 +2,9 @@
   <div>
     <p>
       {{
-        $gettext('The system is in maintenance mode. Any access will fail during this mode like:')
+        $gettext(
+          'The system is in maintenance mode. Any access will fail during this mode such as:'
+        )
       }}
     </p>
 
@@ -15,7 +17,7 @@
     <p>
       {{
         $gettext(
-          '* ... Saving an edited file may not immediately respond to the maintenance mode depending on its duration. If you get a warning that saving is not possible, save a backup of your file locally.'
+          '* ... Saving an edited file may not respond immediately to maintenance mode, depending on its duration. If you receive a warning that you cannot save, save a backup of your file locally.'
         )
       }}
     </p>
@@ -23,7 +25,7 @@
     <p>
       {{
         $gettext(
-          'If maintenance mode has finished, the yellow warning bar will automatically go away and full access is restored. You can now save an open edited file as usual.'
+          'When maintenance mode is complete, the yellow warning bar will automatically disappear and full access will be restored. You can now save an open edited file as normal.'
         )
       }}
     </p>
