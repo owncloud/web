@@ -25,6 +25,7 @@ export const shareRoles: Readonly<{
   'Can upload': string
   'Can manage': string
   'Can edit': string
+  'Can edit without versions': string
   'Can view': string
   'Secret File Drop': string
 }> = {
@@ -32,6 +33,7 @@ export const shareRoles: Readonly<{
   'Can upload': 'contributor',
   'Can manage': 'manager',
   'Can edit': 'editor',
+  'Can edit without versions': 'editor',
   'Can view': 'viewer',
   'Secret File Drop': 'uploader'
 } as const
@@ -41,12 +43,14 @@ export const linkShareRoles: Readonly<{
   'Can view': string
   'Can upload': string
   'Can edit': string
+  'Can edit without versions': string
   'Secret File Drop': string
 }> = {
   'Invited people': 'internal',
   'Can view': 'view',
   'Can upload': 'upload',
   'Can edit': 'edit',
+  'Can edit without versions': 'edit',
   'Secret File Drop': 'createOnly'
 } as const
 
