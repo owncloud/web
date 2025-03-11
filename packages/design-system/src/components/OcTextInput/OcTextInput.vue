@@ -32,6 +32,7 @@
         @password-challenge-completed="$emit('passwordChallengeCompleted')"
         @password-challenge-failed="$emit('passwordChallengeFailed')"
         @focus="onFocus($event.target)"
+        @keydown.enter="$emit('enterKeyDown')"
       />
       <oc-button
         v-if="showClearButton"
@@ -252,7 +253,8 @@ export default defineComponent({
     'update:modelValue',
     'focus',
     'passwordChallengeCompleted',
-    'passwordChallengeFailed'
+    'passwordChallengeFailed',
+    'enterKeyDown'
   ],
   computed: {
     showMessageLine() {
