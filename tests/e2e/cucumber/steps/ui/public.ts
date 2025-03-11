@@ -1,5 +1,5 @@
 import { DataTable, Then, When } from '@cucumber/cucumber'
-import { Page, expect } from '@playwright/test'
+import { expect, Page } from '@playwright/test'
 import { World } from '../../environment'
 import { objects } from '../../../support'
 import { processDelete, processDownload } from './resources'
@@ -12,13 +12,16 @@ When(
     let page: Page
     try {
       page = this.actorsEnvironment.getActor({ key: stepUser }).page
-    } catch {
-      await this.actorsEnvironment
-        .createActor({
+    } catch (err) {
+      if (!['anonymous', 'public'].includes(stepUser.toLowerCase())) {
+        throw err
+      }
+      page = (
+        await this.actorsEnvironment.createActor({
           key: stepUser,
           namespace: this.actorsEnvironment.generateNamespace(this.feature.name, stepUser)
         })
-        .then((actor) => (page = actor.page))
+      ).page
     }
 
     const { url } = this.linksEnvironment.getLink({ name })
@@ -212,5 +215,15 @@ Then(
     const { page } = this.actorsEnvironment.getActor({ key: stepUser })
     const resourceObject = new objects.applicationFiles.Resource({ page })
     await resourceObject.expectFileToBeSelected({ fileName: fileName })
+  }
+)
+
+When(
+  '{string} unlocks password protected folder with password {string}',
+  async function (this: World, stepUser: string, password: string): Promise<void> {
+    const { page } = this.actorsEnvironment.getActor({ key: stepUser })
+    const pageObject = new objects.applicationFiles.page.Public({ page })
+    password = password === '%public%' ? securePassword : password
+    await pageObject.authenticate({ password, passwordProtectedFolder: true })
   }
 )

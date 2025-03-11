@@ -105,4 +105,8 @@ export class Link {
   copyLinkToClipboard(args: Omit<po.copyLinkArgs, 'page'>): Promise<string> {
     return po.copyLinkToClipboard({ ...args, page: this.#page })
   }
+
+  async closeFolderModal(): Promise<void> {
+    await po.closeFolderModal(this.#page)
+  }
 }

@@ -27,9 +27,20 @@ Feature: password-protected folder operations
       | folder1  |
       | folder2  |
 
-    # Deletion
+    # Opening
     When "Alice" opens the "files" app
-    And "Alice" deletes the following resources using the sidebar panel
+    And "Alice" opens folder "sampleFolder.psec"
+    And "Alice" unlocks password protected folder with password "%public%"
+    And "Alice" copies the link of password protected folder "sampleFolder.psec"
+    And "Alice" closes the password protected folder modal
+
+    # Opening by public user
+    When "Anonymous" opens the "%clipboard%" url
+    And "Anonymous" unlocks the public link with password "%public%"
+    And "Anonymous" closes the current tab
+
+    # Deletion
+    When "Alice" deletes the following resources using the sidebar panel
       | resource     |
       | folder1.psec |
     And "Alice" opens folder ".PasswordProtectedFolders/projects/Personal"
@@ -89,6 +100,22 @@ Feature: password-protected folder operations
       | space-folder2 |
       | space-folder3 |
 
+    # Opening
+    When "Alice" navigates to the projects space page
+    And "Alice" navigates to the project space "team.1"
+    And "Alice" opens folder "space-folder.psec"
+    And "Alice" unlocks password protected folder with password "%public%"
+    And "Alice" closes the password protected folder modal
+
+    # Opening by space member
+    And "Brian" logs in
+    And "Brian" enables the option to display the hidden file
+    When "Brian" navigates to the projects space page
+    And "Brian" navigates to the project space "team.1"
+    And "Brian" opens folder "new-space-folder.psec"
+    And "Brian" unlocks password protected folder with password "%public%"
+    And "Brian" closes the password protected folder modal
+
     # Deletion
     When "Alice" deletes the following resources using the sidebar panel
       | resource      |
@@ -106,10 +133,6 @@ Feature: password-protected folder operations
       | space-folder3.psec |
 
     # Deletion by space-member
-    And "Brian" logs in
-    And "Brian" enables the option to display the hidden file
-    And "Brian" navigates to the projects space page
-    And "Brian" navigates to the project space "team.1"
     When "Brian" deletes the following resources using the sidebar panel
       | resource           |
       | space-folder2.psec |
