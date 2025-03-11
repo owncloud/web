@@ -1,7 +1,7 @@
 <template>
   <div class="maintenance-banner">
     <button class="maintenance-banner-text" @click="openDetailsModal">
-      {{ $gettext('System maintenance in progress. Click to read IMPORTANT details.') }}
+      {{ $gettext('System maintenance in progress. Click here to read IMPORTANT details.') }}
     </button>
   </div>
 </template>
