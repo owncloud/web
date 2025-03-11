@@ -32,6 +32,7 @@
         @password-challenge-completed="$emit('passwordChallengeCompleted')"
         @password-challenge-failed="$emit('passwordChallengeFailed')"
         @focus="onFocus($event.target)"
+        @keydown.enter="$emit('enterKeyDown')"
       />
       <oc-button
         v-if="showClearButton"
@@ -128,6 +129,7 @@ import { useGettext } from 'vue3-gettext'
  * @emits focus - Emitted when the input field is focused.
  * @emits passwordChallengeCompleted - Emitted when the password challenge is completed.
  * @emits passwordChallengeFailed - Emitted when the password challenge fails.
+ * @emits enterKeyDown - Emitted when enter key is pressed.
  */
 
 interface Props {
@@ -154,6 +156,7 @@ interface Emits {
   (e: 'focus', value: string): void
   (e: 'passwordChallengeCompleted'): void
   (e: 'passwordChallengeFailed'): void
+  (e: 'enterKeyDown'): void
 }
 
 defineOptions({

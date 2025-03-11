@@ -48,7 +48,7 @@
               :fix-message-line="true"
               :selection-range="inputSelectionRange"
               @update:model-value="inputOnInput"
-              @keydown.enter.prevent="confirm"
+              @enter-key-down="confirm"
             />
           </template>
         </div>
