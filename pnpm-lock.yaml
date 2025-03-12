@@ -965,7 +965,7 @@ importers:
         version: 5.3.2(vue@3.5.13(typescript@5.8.2))
       oidc-client-ts:
         specifier: ^2.4.0 || ^3.0.0
-        version: 3.1.0
+        version: 3.2.0
       p-queue:
         specifier: ^8.0.0
         version: 8.1.0
@@ -1099,7 +1099,7 @@ importers:
         version: 8.11.1
       oidc-client-ts:
         specifier: ^3.0.0
-        version: 3.1.0
+        version: 3.2.0
       p-queue:
         specifier: 8.1.0
         version: 8.1.0
@@ -5242,8 +5242,8 @@ packages:
     resolution: {integrity: sha512-byy+U7gp+FVwmyzKPYhW2h5l3crpmGsxl7X2s8y43IgxvG4g3QZ6CffDtsNQy1WsmZpQbO+ybo0AlW7TY6DcBQ==}
     engines: {node: '>= 0.4'}
 
-  oidc-client-ts@3.1.0:
-    resolution: {integrity: sha512-IDopEXjiwjkmJLYZo6BTlvwOtnlSniWZkKZoXforC/oLZHC9wkIxd25Kwtmo5yKFMMVcsp3JY6bhcNJqdYk8+g==}
+  oidc-client-ts@3.2.0:
+    resolution: {integrity: sha512-wUvVcG3SXzZDKHxi/VGQGaTUk9qguMKfYh26Y1zOVrQsu1zp85JWx/SjZzKSXK5j3NA1RcasgMoaHe6gt1WNtw==}
     engines: {node: '>=18'}
 
   on-exit-leak-free@2.1.2:
@@ -11540,7 +11540,7 @@ snapshots:
       has-symbols: 1.1.0
       object-keys: 1.1.1
 
-  oidc-client-ts@3.1.0:
+  oidc-client-ts@3.2.0:
     dependencies:
       jwt-decode: 4.0.0
 
