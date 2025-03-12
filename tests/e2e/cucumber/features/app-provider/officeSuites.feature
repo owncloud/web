@@ -19,8 +19,8 @@ Feature: Integrate with online office suites like Collabora and OnlyOffice
       | resource         | type         | content              |
       | OpenDocument.odt | OpenDocument | OpenDocument Content |
     And "Alice" creates a public link of following resource using the sidebar panel
-      | resource         | role     | password |
-      | OpenDocument.odt | Can edit | %public% |
+      | resource         | role                      | password |
+      | OpenDocument.odt | Can edit without versions | %public% |
     And "Alice" opens the following file in Collabora
       | resource         |
       | OpenDocument.odt |
@@ -56,8 +56,8 @@ Feature: Integrate with online office suites like Collabora and OnlyOffice
       | OpenDocument.odt | OpenDocument | Edited OpenDocument Content |
     And "Brian" closes the file viewer
     When "Alice" updates following sharee role
-      | resource         | recipient | type | role     | resourceType |
-      | OpenDocument.odt | Brian     | user | Can edit | file         |
+      | resource         | recipient | type | role                      | resourceType |
+      | OpenDocument.odt | Brian     | user | Can edit without versions | file         |
     And "Alice" opens the following file in Collabora
       | resource         |
       | OpenDocument.odt |
@@ -81,8 +81,8 @@ Feature: Integrate with online office suites like Collabora and OnlyOffice
       | resource           | type           | content                |
       | MicrosoftWord.docx | Microsoft Word | Microsoft Word Content |
     And "Alice" creates a public link of following resource using the sidebar panel
-      | resource           | role     | password |
-      | MicrosoftWord.docx | Can edit | %public% |
+      | resource           | role                      | password |
+      | MicrosoftWord.docx | Can edit without versions | %public% |
     And "Alice" opens the following file in OnlyOffice
       | resource           |
       | MicrosoftWord.docx |
@@ -119,8 +119,8 @@ Feature: Integrate with online office suites like Collabora and OnlyOffice
       | MicrosoftWord.docx | Microsoft Word | Edited Microsoft Word Content |
     And "Brian" closes the file viewer
     When "Alice" updates following sharee role
-      | resource           | recipient | type | role     | resourceType |
-      | MicrosoftWord.docx | Brian     | user | Can edit | file         |
+      | resource           | recipient | type | role                      | resourceType |
+      | MicrosoftWord.docx | Brian     | user | Can edit without versions | file         |
     And "Alice" opens the following file in OnlyOffice
       | resource           |
       | MicrosoftWord.docx |
@@ -152,10 +152,10 @@ Feature: Integrate with online office suites like Collabora and OnlyOffice
     When "Alice" navigates to the project space "marketing.1"
     And "Alice" creates a public link for the space with password "%public%" using the sidebar panel
     And "Alice" renames the most recently created public link of space to "spaceLink"
-    And "Alice" edits the public link named "spaceLink" of the space changing role to "Can edit"
+    And "Alice" edits the public link named "spaceLink" of the space changing role to "Can edit without versions"
     And "Alice" creates a public link of following resource using the sidebar panel
-      | resource | role     | password |
-      | myfolder | Can edit | %public% |
+      | resource | role                      | password |
+      | myfolder | Can edit without versions | %public% |
 
     # public create .docx file using spaceLink
     When "Anonymous" opens the public link "spaceLink"
@@ -199,10 +199,10 @@ Feature: Integrate with online office suites like Collabora and OnlyOffice
     When "Alice" navigates to the project space "marketing.1"
     And "Alice" creates a public link for the space with password "%public%" using the sidebar panel
     And "Alice" renames the most recently created public link of space to "spaceLink"
-    And "Alice" edits the public link named "spaceLink" of the space changing role to "Can edit"
+    And "Alice" edits the public link named "spaceLink" of the space changing role to "Can edit without versions"
     And "Alice" creates a public link of following resource using the sidebar panel
-      | resource | role     | password |
-      | myfolder | Can edit | %public% |
+      | resource | role                      | password |
+      | myfolder | Can edit without versions | %public% |
 
     # public create .docx file using spaceLink
     When "Anonymous" opens the public link "spaceLink"
