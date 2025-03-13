@@ -45,9 +45,9 @@ Feature: Notifications
       | folder_to_shared | Brian     |
     And "Alice" navigates to the project space "team.1"
     And "Alice" adds following users to the project space
-      | user  | role                      | kind |
-      | Brian | Can edit without versions | user |
-      | Carol | Can edit without versions | user |
+      | user  | role     | kind |
+      | Brian | Can edit | user |
+      | Carol | Can edit | user |
     Then "Alice" should see no notifications
     And "Brian" should see the following notifications
       | message                                         |
