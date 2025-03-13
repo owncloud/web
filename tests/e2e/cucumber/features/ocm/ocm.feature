@@ -39,10 +39,10 @@ Feature: federation management
       | Brian Murphy | brian@example.org |
     And "Alice" opens the "files" app
     And "Alice" shares the following resource using the sidebar panel
-      | resource       | recipient | type | role     | resourceType | shareType |
-      | folderPublic   | Brian     | user | Can edit | folder       | external  |
-      | sampleGif.gif  | Brian     | user | Can edit | file         | external  |
-      | testavatar.jpg | Brian     | user | Can view | file         | external  |
+      | resource       | recipient | type | role                      | resourceType | shareType |
+      | folderPublic   | Brian     | user | Can edit without versions | folder       | external  |
+      | sampleGif.gif  | Brian     | user | Can edit without versions | file         | external  |
+      | testavatar.jpg | Brian     | user | Can view                  | file         | external  |
     And "Alice" logs out
 
     And using "FEDERATED" server

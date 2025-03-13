@@ -34,9 +34,9 @@ Feature: groups management
 
     And "Alice" logs in
     And "Alice" shares the following resource using the sidebar panel
-      | resource            | recipient      | type  | role     | resourceType |
-      | shareToSales.txt    | keycloak sales | group | Can edit | file         |
-      | shareToSecurity.txt | security       | group | Can edit | file         |
+      | resource            | recipient      | type  | role                      | resourceType |
+      | shareToSales.txt    | keycloak sales | group | Can edit without versions | file         |
+      | shareToSecurity.txt | security       | group | Can edit without versions | file         |
     And "Alice" logs out
 
     And "Brian" logs in

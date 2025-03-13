@@ -20,10 +20,10 @@ Feature: share
       | lorem.txt     | folder_to_shared   |
       | lorem-big.txt | folder_to_shared_2 |
     When "Alice" shares the following resource using the sidebar panel
-      | resource           | recipient | type | role     | resourceType |
-      | folder_to_shared   | Brian     | user | Can edit | folder       |
-      | shared_folder      | Brian     | user | Can edit | folder       |
-      | folder_to_shared_2 | Brian     | user | Can edit | folder       |
+      | resource           | recipient | type | role                      | resourceType |
+      | folder_to_shared   | Brian     | user | Can edit without versions | folder       |
+      | shared_folder      | Brian     | user | Can edit without versions | folder       |
+      | folder_to_shared_2 | Brian     | user | Can edit without versions | folder       |
 
     And "Brian" logs in
     And "Brian" navigates to the shared with me page
@@ -140,12 +140,12 @@ Feature: share
       | test_video.mp4 | file |
     And "Alice" closes the file viewer
     And "Alice" shares the following resource using the sidebar panel
-      | resource         | recipient | type | role     | resourceType |
-      | shareToBrian.txt | Brian     | user | Can edit | file         |
-      | shareToBrian.md  | Brian     | user | Can edit | file         |
-      | testavatar.jpeg  | Brian     | user | Can view | file         |
-      | simple.pdf       | Brian     | user | Can edit | file         |
-      | sharedFile.txt   | Brian     | user | Can edit | file         |
+      | resource         | recipient | type | role                      | resourceType |
+      | shareToBrian.txt | Brian     | user | Can edit without versions | file         |
+      | shareToBrian.md  | Brian     | user | Can edit without versions | file         |
+      | testavatar.jpeg  | Brian     | user | Can view                  | file         |
+      | simple.pdf       | Brian     | user | Can edit without versions | file         |
+      | sharedFile.txt   | Brian     | user | Can edit without versions | file         |
     And "Alice" navigates to the shared with others page
     And "Alice" opens the following file in mediaviewer
       | resource        |
@@ -206,10 +206,10 @@ Feature: share
       | mainFolder/lorem.txt | lorem epsum  |
     And "Alice" logs in
     When "Alice" shares the following resource using the sidebar panel
-      | resource   | recipient | type  | role     | resourceType | expirationDate |
-      | new.txt    | Brian     | user  | Can edit | file         | +5 days        |
-      | myfolder   | sales     | group | Can view | folder       | +10 days       |
-      | mainFolder | Brian     | user  | Can edit | folder       |                |
+      | resource   | recipient | type  | role                      | resourceType | expirationDate |
+      | new.txt    | Brian     | user  | Can edit without versions | file         | +5 days        |
+      | myfolder   | sales     | group | Can view                  | folder       | +10 days       |
+      | mainFolder | Brian     | user  | Can edit without versions | folder       |                |
 
     # set expirationDate to existing share
     And "Alice" sets the expiration date of share "mainFolder" of user "Brian" to "+5 days"
@@ -282,9 +282,9 @@ Feature: share
       | testfile.txt             | example text |
       | test-folder/testfile.txt | some text    |
     And "Alice" shares the following resource using API
-      | resource                 | recipient | type | role     |
-      | testfile.txt             | Brian     | user | Can edit |
-      | test-folder/testfile.txt | Brian     | user | Can edit |
+      | resource                 | recipient | type | role                      |
+      | testfile.txt             | Brian     | user | Can edit without versions |
+      | test-folder/testfile.txt | Brian     | user | Can edit without versions |
     And "Alice" logs in
     And "Alice" navigates to the shared with others page
     Then following resources should be displayed in the files list for user "Alice"
@@ -299,8 +299,8 @@ Feature: share
       | name                  |
       | shareFolder/subFolder |
     And "Alice" shares the following resource using API
-      | resource    | recipient | type | role     |
-      | shareFolder | Brian     | user | Can edit |
+      | resource    | recipient | type | role                      |
+      | shareFolder | Brian     | user | Can edit without versions |
     And "Alice" logs in
     Then "Alice" should see user-direct indicator on the folder "shareFolder"
     When "Alice" opens folder "shareFolder"
