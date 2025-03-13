@@ -52,8 +52,8 @@ Feature: Trashbin delete
       | folderToShare/lorem.txt | lorem ipsum |
       | sample.txt              | sample      |
     And "Alice" shares the following resource using the sidebar panel
-      | resource      | recipient | type | role     | resourceType |
-      | folderToShare | Brian     | user | Can edit | folder       |
+      | resource      | recipient | type | role                      | resourceType |
+      | folderToShare | Brian     | user | Can edit without versions | folder       |
     And "Brian" logs in
     And "Brian" navigates to the shared with me page
     And "Brian" opens folder "folderToShare"

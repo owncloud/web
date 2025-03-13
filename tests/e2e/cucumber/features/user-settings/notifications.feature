@@ -28,9 +28,9 @@ Feature: Notifications
       | team | team.1 |
     And "Alice" logs in
     When "Alice" shares the following resource using the sidebar panel
-      | resource         | recipient | type  | role     | resourceType |
-      | folder_to_shared | Brian     | user  | Can edit | folder       |
-      | share_to_group   | sales     | group | Can edit | folder       |
+      | resource         | recipient | type  | role                      | resourceType |
+      | folder_to_shared | Brian     | user  | Can edit without versions | folder       |
+      | share_to_group   | sales     | group | Can edit without versions | folder       |
     And "Brian" logs in
     Then "Brian" should see the following notifications
       | message                                       |
@@ -52,8 +52,8 @@ Feature: Notifications
       | Alice Hansen added you to Space team            |
     And "Brian" marks all notifications as read
     When "Alice" removes access to following users from the project space
-      | user  | role     | kind |
-      | Carol | Can edit | user |
+      | user  | role                      | kind |
+      | Carol | Can edit without versions | user |
     And "Carol" logs in
     Then "Carol" should see the following notifications
       | message                                  |
