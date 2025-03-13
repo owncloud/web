@@ -19,6 +19,7 @@ import {
 import { ApplicationFileExtension } from '../../../apps'
 import { storeToRefs } from 'pinia'
 import { useEmbedMode } from '../../embedMode'
+import { useRouter } from 'vue-router'
 
 export const useFileActionsCreateNewFile = ({ space }: { space?: Ref<SpaceResource> } = {}) => {
   const { showMessage, showErrorMessage } = useMessages()
@@ -27,12 +28,14 @@ export const useFileActionsCreateNewFile = ({ space }: { space?: Ref<SpaceResour
   const { dispatchModal } = useModals()
   const appsStore = useAppsStore()
   const { isEnabled: isEmbedModeEnabled } = useEmbedMode()
+  const router = useRouter()
 
   const { openEditor } = useFileActions()
   const clientService = useClientService()
 
   const resourcesStore = useResourcesStore()
-  const { resources, currentFolder, areFileExtensionsShown } = storeToRefs(resourcesStore)
+  const { resources, currentFolder, areFileExtensionsShown, ancestorMetaData } =
+    storeToRefs(resourcesStore)
 
   const appNewFileMenuExtensions = computed(() =>
     appsStore.fileExtensions.filter(({ newFileMenu }) => !!newFileMenu)
