@@ -19,7 +19,7 @@ import {
 import { ApplicationFileExtension } from '../../../apps'
 import { storeToRefs } from 'pinia'
 import { useEmbedMode } from '../../embedMode'
-import { useRouter } from 'vue-router'
+import { useRouter } from '../../router'
 
 export const useFileActionsCreateNewFile = ({ space }: { space?: Ref<SpaceResource> } = {}) => {
   const { showMessage, showErrorMessage } = useMessages()
