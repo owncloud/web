@@ -65,8 +65,8 @@ Feature: server sent events
     # space-share-updated
     When "Alice" navigates to the project space "marketing"
     And "Alice" changes the roles of the following users in the project space
-      | user  | role                      |
-      | Brian | Can edit without versions |
+      | user  | role     |
+      | Brian | Can edit |
     Then "Alice" should get "space-share-updated" SSE event
     And "Brian" should get "space-share-updated" SSE event
     And "Brian" should be able to edit folder "space-folder"
