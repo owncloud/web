@@ -23,6 +23,7 @@ Summary
 * Bugfix - Disable cutting and pasting into the same folder: [#12265](https://github.com/owncloud/web/pull/12265)
 * Bugfix - Generate public link password on click: [#12266](https://github.com/owncloud/web/pull/12266)
 * Bugfix - Add password generator into password protected folders: [#12270](https://github.com/owncloud/web/pull/12270)
+* Bugfix - Two spaces are created at the same time when user tries to create a space: [#12297](https://github.com/owncloud/web/pull/12297)
 * Enhancement - Accessibility improvements: [#5379](https://github.com/owncloud/web/issues/5379)
 * Enhancement - Create spaces via admin settings: [#11849](https://github.com/owncloud/web/pull/11849)
 * Enhancement - Add maintenance banner: [#12239](https://github.com/owncloud/web/pull/12239)
@@ -158,6 +159,16 @@ Details
    allows users to generate a new password if they want to.
 
    https://github.com/owncloud/web/pull/12270
+
+* Bugfix - Two spaces are created at the same time when user tries to create a space: [#12297](https://github.com/owncloud/web/pull/12297)
+
+   This bugfix addresses an issue where pressing the Enter key in a modal to create
+   a space or folder results in the creation of two spaces or folders instead of
+   just one. The fix ensures that only a single space or folder is created when the
+   Enter key is pressed.
+
+   https://github.com/owncloud/web/issues/12276
+   https://github.com/owncloud/web/pull/12297
 
 * Enhancement - Accessibility improvements: [#5379](https://github.com/owncloud/web/issues/5379)
 
