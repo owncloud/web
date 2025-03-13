@@ -27,3 +27,23 @@ for app in "${apps[@]}"; do
 done
 
 echo "package.json files have been updated to version $NEW_VERSION"
+
+SONAR_PROPERTIES_FILE="sonar-project.properties"
+
+if [ ! -f "$SONAR_PROPERTIES_FILE" ]; then
+    echo "Error: $SONAR_PROPERTIES_FILE file not found!"
+    exit 1
+fi
+
+if [[ "$OSTYPE" == "darwin"* ]]; then
+    sed -i '' "s/sonar\.projectVersion=[0-9][0-9]*\.[0-9][0-9]*\.[0-9][0-9]*/sonar.projectVersion=$NEW_VERSION/" "$SONAR_PROPERTIES_FILE"
+else
+    sed -i "s/sonar\.projectVersion=[0-9][0-9]*\.[0-9][0-9]*\.[0-9][0-9]*/sonar.projectVersion=$NEW_VERSION/" "$SONAR_PROPERTIES_FILE"
+fi
+
+if grep -q "sonar.projectVersion=$NEW_VERSION" "$SONAR_PROPERTIES_FILE"; then
+    echo "Sonar project version successfully updated to $NEW_VERSION"
+else
+    echo "Failed to update Sonar project version. Please check the file format."
+    exit 1
+fi

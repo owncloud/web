@@ -1,7 +1,6 @@
 import { Resource, SpaceResource, extractNameWithoutExtension } from '@ownclouders/web-client'
 import { computed, Ref, unref } from 'vue'
 import { useClientService } from '../../clientService'
-import { useRouter } from '../../router'
 import { FileAction, FileActionOptions } from '../types'
 import { useGettext } from 'vue3-gettext'
 import { resolveFileNameDuplicate } from '../../../helpers/resource'
@@ -20,21 +19,22 @@ import {
 import { ApplicationFileExtension } from '../../../apps'
 import { storeToRefs } from 'pinia'
 import { useEmbedMode } from '../../embedMode'
+import { useRouter } from '../../router'
 
 export const useFileActionsCreateNewFile = ({ space }: { space?: Ref<SpaceResource> } = {}) => {
   const { showMessage, showErrorMessage } = useMessages()
   const userStore = useUserStore()
-  const router = useRouter()
   const { $gettext } = useGettext()
   const { dispatchModal } = useModals()
   const appsStore = useAppsStore()
   const { isEnabled: isEmbedModeEnabled } = useEmbedMode()
+  const router = useRouter()
 
   const { openEditor } = useFileActions()
   const clientService = useClientService()
 
   const resourcesStore = useResourcesStore()
-  const { resources, currentFolder, ancestorMetaData, areFileExtensionsShown } =
+  const { resources, currentFolder, areFileExtensionsShown, ancestorMetaData } =
     storeToRefs(resourcesStore)
 
   const appNewFileMenuExtensions = computed(() =>
@@ -190,6 +190,13 @@ export const useFileActionsCreateNewFile = ({ space }: { space?: Ref<SpaceResour
             : handler(args, appFileExtension.extension, appFileExtension),
         label: () => $gettext(appFileExtension.newFileMenu.menuTitle()),
         isVisible: () => {
+          if (
+            typeof appFileExtension.newFileMenu.isVisible === 'function' &&
+            !appFileExtension.newFileMenu.isVisible({ currentFolder: unref(currentFolder) })
+          ) {
+            return false
+          }
+
           return unref(currentFolder)?.canUpload({ user: userStore.user })
         },
         class: 'oc-files-actions-create-new-file',

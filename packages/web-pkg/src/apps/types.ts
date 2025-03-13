@@ -61,7 +61,10 @@ export interface ApplicationFileExtension {
   name?: string
   icon?: string
   mimeType?: string
-  newFileMenu?: { menuTitle: () => string }
+  newFileMenu?: {
+    menuTitle: () => string
+    isVisible?: ({ currentFolder }: { currentFolder: Resource }) => boolean
+  }
   routeName?: string
   secureView?: boolean
   customHandler?: (
