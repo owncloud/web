@@ -63,8 +63,8 @@ Feature: Users can use web to organize tags
       | resource                   | tags         |
       | folder_to_shared/lorem.txt | tag 1, tag 2 |
     When "Alice" shares the following resource using the sidebar panel
-      | resource         | recipient | type | role     | resourceType |
-      | folder_to_shared | Brian     | user | Can edit | folder       |
+      | resource         | recipient | type | role                      | resourceType |
+      | folder_to_shared | Brian     | user | Can edit without versions | folder       |
     And "Alice" logs out
 
     And "Brian" logs in

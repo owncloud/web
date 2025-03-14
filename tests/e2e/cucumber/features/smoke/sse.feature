@@ -147,8 +147,8 @@ Feature: server sent events
     # share-updated
     When "Brian" opens folder "sharedFolder"
     And "Alice" updates following sharee role
-      | resource     | recipient | type | role     | resourceType |
-      | sharedFolder | Brian     | user | Can edit | folder       |
+      | resource     | recipient | type | role                      | resourceType |
+      | sharedFolder | Brian     | user | Can edit without versions | folder       |
     Then "Alice" should get "share-updated" SSE event
     And "Brian" should get "share-updated" SSE event
     And "Brian" should be able to edit folder "subFolder"
@@ -173,8 +173,8 @@ Feature: server sent events
       | name      | id        |
       | Marketing | marketing |
     And "Alice" adds the following members to the space "Marketing" using API
-      | user  | role     | shareType |
-      | Brian | Can edit | user      |
+      | user  | role                      | shareType |
+      | Brian | Can edit without versions | user      |
     And "Alice" creates the following folder in space "Marketing" using API
       | name         |
       | space-folder |
