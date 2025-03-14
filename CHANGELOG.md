@@ -3,7 +3,7 @@ Changelog for ownCloud Web [unreleased] (UNRELEASED)
 The following sections list the changes in ownCloud web unreleased relevant to
 ownCloud admins and users.
 
-[unreleased]: https://github.com/owncloud/web/compare/v11.3.0...master
+[unreleased]: https://github.com/owncloud/web/compare/v11.3.1...master
 
 Summary
 -------
@@ -13,17 +13,11 @@ Summary
 * Bugfix - Reload preloaded resource in sidebar: [#12059](https://github.com/owncloud/web/pull/12059)
 * Bugfix - Missing User Light translations: [#12101](https://github.com/owncloud/web/pull/12101)
 * Bugfix - Preserve current page when opening a file: [#12207](https://github.com/owncloud/web/pull/12207)
-* Bugfix - Broken title for public files link: [#12225](https://github.com/owncloud/web/pull/12225)
-* Bugfix - Disable password protected folders creation inside public links: [#12226](https://github.com/owncloud/web/pull/12226)
 * Bugfix - Make password protected folder tile clickable: [#12227](https://github.com/owncloud/web/pull/12227)
 * Bugfix - Allow email address as user name in the user creation form: [#12228](https://github.com/owncloud/web/issues/12228)
 * Bugfix - Sorting arrow misplaced: [#12236](https://github.com/owncloud/web/pull/12236)
-* Bugfix - Add password policies to password protected folders: [#12240](https://github.com/owncloud/web/pull/12240)
-* Bugfix - Revert password protected folder creation on error: [#12241](https://github.com/owncloud/web/pull/12241)
 * Bugfix - Disable cutting and pasting into the same folder: [#12265](https://github.com/owncloud/web/pull/12265)
 * Bugfix - Generate public link password on click: [#12266](https://github.com/owncloud/web/pull/12266)
-* Bugfix - Add password generator into password protected folders: [#12270](https://github.com/owncloud/web/pull/12270)
-* Bugfix - Two spaces are created at the same time when user tries to create a space: [#12297](https://github.com/owncloud/web/pull/12297)
 * Enhancement - Accessibility improvements: [#5379](https://github.com/owncloud/web/issues/5379)
 * Enhancement - Create spaces via admin settings: [#11849](https://github.com/owncloud/web/pull/11849)
 * Enhancement - Add maintenance banner: [#12239](https://github.com/owncloud/web/pull/12239)
@@ -73,22 +67,6 @@ Details
    https://github.com/owncloud/web/issues/12162
    https://github.com/owncloud/web/pull/12207
 
-* Bugfix - Broken title for public files link: [#12225](https://github.com/owncloud/web/pull/12225)
-
-   We've fixed the issue of showing an incorrect/broken window title when user
-   opens a public files link
-
-   https://github.com/owncloud/web/issues/12220
-   https://github.com/owncloud/web/pull/12225
-
-* Bugfix - Disable password protected folders creation inside public links: [#12226](https://github.com/owncloud/web/pull/12226)
-
-   We've disabled the option to create password protected folders creation inside
-   of folders that are shared via a public link.
-
-   https://github.com/owncloud/web/issues/12190
-   https://github.com/owncloud/web/pull/12226
-
 * Bugfix - Make password protected folder tile clickable: [#12227](https://github.com/owncloud/web/pull/12227)
 
    We've fixed an issue where the password protected folder resource was not
@@ -116,24 +94,6 @@ Details
    https://github.com/owncloud/web/issues/12232
    https://github.com/owncloud/web/pull/12236
 
-* Bugfix - Add password policies to password protected folders: [#12240](https://github.com/owncloud/web/pull/12240)
-
-   We've added password policies to the password protected folders so that the
-   creation of the folder does not fail with a generic error message and to prevent
-   the user from even continuing with the creation of the folder if the password
-   does not meet the policy.
-
-   https://github.com/owncloud/web/issues/12223
-   https://github.com/owncloud/web/pull/12240
-
-* Bugfix - Revert password protected folder creation on error: [#12241](https://github.com/owncloud/web/pull/12241)
-
-   We've fixed an issue where the hidden folder with password protected files was
-   not being deleted in case of an error with link or file creation.
-
-   https://github.com/owncloud/web/issues/12223
-   https://github.com/owncloud/web/pull/12241
-
 * Bugfix - Disable cutting and pasting into the same folder: [#12265](https://github.com/owncloud/web/pull/12265)
 
    We've fixed the issue where users were allowed to cut and paste files into the
@@ -152,23 +112,6 @@ Details
    callback.
 
    https://github.com/owncloud/web/pull/12266
-
-* Bugfix - Add password generator into password protected folders: [#12270](https://github.com/owncloud/web/pull/12270)
-
-   We've added a password generator into the password protected folders modal. This
-   allows users to generate a new password if they want to.
-
-   https://github.com/owncloud/web/pull/12270
-
-* Bugfix - Two spaces are created at the same time when user tries to create a space: [#12297](https://github.com/owncloud/web/pull/12297)
-
-   This bugfix addresses an issue where pressing the Enter key in a modal to create
-   a space or folder results in the creation of two spaces or folders instead of
-   just one. The fix ensures that only a single space or folder is created when the
-   Enter key is pressed.
-
-   https://github.com/owncloud/web/issues/12276
-   https://github.com/owncloud/web/pull/12297
 
 * Enhancement - Accessibility improvements: [#5379](https://github.com/owncloud/web/issues/5379)
 
@@ -202,6 +145,77 @@ Details
    Arabic language. We have also added auto focus on the editor.
 
    https://github.com/owncloud/web/pull/12243
+
+Changelog for ownCloud Web [11.3.1] (2025-03-13)
+=======================================
+The following sections list the changes in ownCloud web 11.3.1 relevant to
+ownCloud admins and users.
+
+[11.3.1]: https://github.com/owncloud/web/compare/v11.3.0...v11.3.1
+
+Summary
+-------
+
+* Bugfix - Broken title for public files link: [#12225](https://github.com/owncloud/web/pull/12225)
+* Bugfix - Disable password protected folders creation inside public links: [#12226](https://github.com/owncloud/web/pull/12226)
+* Bugfix - Add password policies to password protected folders: [#12240](https://github.com/owncloud/web/pull/12240)
+* Bugfix - Revert password protected folder creation on error: [#12241](https://github.com/owncloud/web/pull/12241)
+* Bugfix - Add password generator into password protected folders: [#12270](https://github.com/owncloud/web/pull/12270)
+* Bugfix - Two spaces are created at the same time when user tries to create a space: [#12297](https://github.com/owncloud/web/pull/12297)
+
+Details
+-------
+
+* Bugfix - Broken title for public files link: [#12225](https://github.com/owncloud/web/pull/12225)
+
+   We've fixed the issue of showing an incorrect/broken window title when user
+   opens a public files link
+
+   https://github.com/owncloud/web/issues/12220
+   https://github.com/owncloud/web/pull/12225
+
+* Bugfix - Disable password protected folders creation inside public links: [#12226](https://github.com/owncloud/web/pull/12226)
+
+   We've disabled the option to create password protected folders creation inside
+   of folders that are shared via a public link.
+
+   https://github.com/owncloud/web/issues/12190
+   https://github.com/owncloud/web/pull/12226
+
+* Bugfix - Add password policies to password protected folders: [#12240](https://github.com/owncloud/web/pull/12240)
+
+   We've added password policies to the password protected folders so that the
+   creation of the folder does not fail with a generic error message and to prevent
+   the user from even continuing with the creation of the folder if the password
+   does not meet the policy.
+
+   https://github.com/owncloud/web/issues/12223
+   https://github.com/owncloud/web/pull/12240
+
+* Bugfix - Revert password protected folder creation on error: [#12241](https://github.com/owncloud/web/pull/12241)
+
+   We've fixed an issue where the hidden folder with password protected files was
+   not being deleted in case of an error with link or file creation.
+
+   https://github.com/owncloud/web/issues/12223
+   https://github.com/owncloud/web/pull/12241
+
+* Bugfix - Add password generator into password protected folders: [#12270](https://github.com/owncloud/web/pull/12270)
+
+   We've added a password generator into the password protected folders modal. This
+   allows users to generate a new password if they want to.
+
+   https://github.com/owncloud/web/pull/12270
+
+* Bugfix - Two spaces are created at the same time when user tries to create a space: [#12297](https://github.com/owncloud/web/pull/12297)
+
+   This bugfix addresses an issue where pressing the Enter key in a modal to create
+   a space or folder results in the creation of two spaces or folders instead of
+   just one. The fix ensures that only a single space or folder is created when the
+   Enter key is pressed.
+
+   https://github.com/owncloud/web/issues/12276
+   https://github.com/owncloud/web/pull/12297
 
 Changelog for ownCloud Web [11.3.0] (2025-02-25)
 =======================================
