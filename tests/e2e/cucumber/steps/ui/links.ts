@@ -246,3 +246,21 @@ When(
     expect(clipboard).toBe(this.linksEnvironment.getLink({ name: linkName }).url)
   }
 )
+
+When(
+  '{string} copies the link of password protected folder {string}',
+  async function (this: World, stepUser: string, resource: string) {
+    const { page } = this.actorsEnvironment.getActor({ key: stepUser })
+    const linkObject = new objects.applicationFiles.Link({ page })
+    await linkObject.copyLinkToClipboard({ resource: resource })
+  }
+)
+
+When(
+  '{string} closes the folder modal',
+  async function (this: World, stepUser: string): Promise<void> {
+    const { page } = this.actorsEnvironment.getActor({ key: stepUser })
+    const linkObject = new objects.applicationFiles.Link({ page })
+    await linkObject.closeFolderModal()
+  }
+)
