@@ -61,7 +61,7 @@
     "oidc-client-ts": "^2.4.0 || ^3.0.0",
     "p-queue": "^8.0.0",
     "password-sheriff": "^1.1.1",
-    "pinia": "^2.2.4",
+    "pinia": "^3.0.1",
     "portal-vue": "^3.0.0",
     "prismjs": "^1.29.0",
     "qs": "^6.13.0",
