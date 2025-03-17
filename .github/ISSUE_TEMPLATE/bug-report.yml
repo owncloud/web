@@ -1,0 +1,68 @@
+name: Bug report
+about: Create a report to help us improve
+title: ''
+type: Bug
+assignees: ''
+projects: ['owncloud/338']
+body:
+  - type: textarea
+    id: description
+    attributes:
+      label: Describe the bug
+      description: A clear and concise description of what the bug is.
+    validations:
+      required: true
+  - type: markdown
+    id: steps
+    attributes:
+      label: Steps to reproduce
+      description: Steps to reproduce the behavior.
+      value: |
+        1.
+        2.
+        3.
+        ...
+      render: bash
+    validations:
+      required: true
+  - type: textarea
+    id: expected
+    attributes:
+      label: Expected behavior
+      description: A clear and concise description of what you expected to happen.
+    validations:
+      required: true
+  - type: textarea
+    id: actual
+    attributes:
+      label: Actual behavior
+      description: A clear and concise description of what happened.
+    validations:
+      required: true
+  - type: markdown
+    id: setup
+    attributes:
+      label: Setup
+      description: Please describe how you started the server and provide a list of relevant environment variables or configuration files.
+      value: |
+        <details>
+        <p>
+
+        ```console
+        OCIS_XXX=somevalue
+        OCIS_YYY=somevalue
+        PROXY_XXX=somevalue
+        ```
+
+        </p>
+        </details>
+    validations:
+      required: false
+  - type: markdown
+    id: additional-context
+    attributes:
+      label: Additional context
+      description: Add any other context about the problem here.
+    validations:
+      required: false
+
