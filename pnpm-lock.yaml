@@ -861,7 +861,7 @@ importers:
         version: 11.1.0
       webdav:
         specifier: ^5.7.1
-        version: 5.7.1
+        version: 5.8.0
       xml-js:
         specifier: ^1.6.11
         version: 1.6.11
@@ -1137,8 +1137,8 @@ importers:
         specifier: 2.4.0
         version: 2.4.0(patch_hash=6f231bbef273efbc788b5657c47fc744b52bc838f972357a764c144fde6065f2)(@vue/compiler-sfc@3.5.13)(vue@3.5.13(typescript@5.8.2))
       webdav:
-        specifier: 5.7.1
-        version: 5.7.1
+        specifier: 5.8.0
+        version: 5.8.0
       xml-js:
         specifier: ^1.6.11
         version: 1.6.11
@@ -3875,8 +3875,8 @@ packages:
     resolution: {integrity: sha512-V0hjH4dGPh9Ao5p0MoRY6BVqtwCjhz6vI5LT8AJ55H+4g9/4vbHx1I54fS0XuclLhDHArPQCiMjDxjaL8fPxhw==}
     engines: {node: '>=0.12'}
 
-  entities@5.0.0:
-    resolution: {integrity: sha512-BeJFvFRJddxobhvEdm5GqHzRV/X+ACeuw0/BuuxsCh1EUZcAIz8+kYmBp/LrQuloy6K1f3a0M7+IhmZ7QnkISA==}
+  entities@6.0.0:
+    resolution: {integrity: sha512-aKstq2TDOndCn4diEyp9Uq/Flu2i1GlLkc6XIDQSDMuaFE3OPW5OphLCyQ5SpSJZTb4reN+kTcYru5yIfXoRPw==}
     engines: {node: '>=0.12'}
 
   env-paths@2.2.1:
@@ -6777,9 +6777,9 @@ packages:
     resolution: {integrity: sha512-d2JWLCivmZYTSIoge9MsgFCZrt571BikcWGYkjC1khllbTeDlGqZ2D8vD8E/lJa8WGWbb7Plm8/XJYV7IJHZZw==}
     engines: {node: '>= 8'}
 
-  webdav@5.7.1:
-    resolution: {integrity: sha512-JVPn3nLxXJfHSRvennHsOrDYjFLkilZ1Qlw8Ff6hpqp6AvkgF7a//aOh5wA4rMp+sLZ1Km0V+iv0LyO1FIwtXg==}
-    engines: {node: '>=16'}
+  webdav@5.8.0:
+    resolution: {integrity: sha512-iuFG7NamJ41Oshg4930iQgfIpRrUiatPWIekeznYgEf2EOraTRcDPTjy7gIOMtkdpKTaqPk1E68NO5PAGtJahA==}
+    engines: {node: '>=14'}
 
   webfontloader@1.6.28:
     resolution: {integrity: sha512-Egb0oFEga6f+nSgasH3E0M405Pzn6y3/9tOVanv/DLfa1YBIgcv90L18YyWnvXkRbIM17v5Kv6IT2N6g1x5tvQ==}
@@ -10180,7 +10180,7 @@ snapshots:
 
   entities@4.5.0: {}
 
-  entities@5.0.0: {}
+  entities@6.0.0: {}
 
   env-paths@2.2.1: {}
 
@@ -13172,12 +13172,12 @@ snapshots:
 
   web-streams-polyfill@3.3.3: {}
 
-  webdav@5.7.1:
+  webdav@5.8.0:
     dependencies:
       '@buttercup/fetch': 0.2.1
       base-64: 1.0.0
       byte-length: 1.0.2
-      entities: 5.0.0
+      entities: 6.0.0
       fast-xml-parser: 4.5.3
       hot-patcher: 2.0.1
       layerr: 3.0.0
