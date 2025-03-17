@@ -49,7 +49,7 @@
     "@ownclouders/design-system": "workspace:^",
     "@ownclouders/web-client": "workspace:^",
     "@pinia/testing": "^1.0.0",
-    "axios": "1.8.2",
+    "axios": "1.8.3",
     "pinia": "3.0.1",
     "vitest-mock-extended": "3.0.1",
     "vue-router": "4.2.5",
