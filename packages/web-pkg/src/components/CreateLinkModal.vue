@@ -1,6 +1,6 @@
 <template>
   <div class="oc-flex oc-button-justify-content-space-between oc-pb-s">
-    <div v-if="isAdvancedMode" class="oc-flex oc-flex-middle">
+    <div class="oc-flex oc-flex-middle">
       <oc-icon class="oc-mr-s" :name="selectedTypeIcon" fill-type="line" />
       <link-role-dropdown
         :model-value="selectedType"
@@ -8,44 +8,20 @@
         @update:model-value="updateSelectedLinkType"
       />
     </div>
-    <div v-else class="oc-flex oc-flex-middle">
-      <oc-icon class="oc-mr-s" :name="selectedTypeIcon" fill-type="line" />
-      <div class="oc-flex oc-flex-column">
-        <span class="oc-text-bold" v-text="selectedTypeDisplayName" />
-        <span class="oc-text-small" v-text="selectedTypeDescription" />
-      </div>
-    </div>
-    <oc-button
-      v-if="!isAdvancedMode"
-      class="link-modal-advanced-mode-button"
-      gap-size="xsmall"
-      appearance="raw"
-      variation="primary"
-      @click="setAdvancedMode()"
-    >
-      <oc-icon name="settings-3" size="small" fill-type="fill" />
-      <span v-text="$gettext('Options')" />
-    </oc-button>
   </div>
   <div class="link-modal-password oc-mb-m">
     <oc-text-input
-      v-if="isAdvancedMode"
       :key="passwordInputKey"
       :model-value="password.value"
       type="password"
       :password-policy="passwordPolicy"
-      :generate-password-method="generatePasswordMethod"
+      :generate-password-method="() => passwordPolicyService.generatePassword()"
       :error-message="password.error"
       :label="passwordEnforced ? `${$gettext('Password')}*` : $gettext('Password')"
       class="link-modal-password-input"
       @update:model-value="updatePassword"
     />
-    <div v-else-if="password.value" class="link-modal-password-text oc-text-small oc-text-muted">
-      <span v-text="$gettext('Password:')" />
-      <span v-text="password.value" />
-    </div>
     <oc-datepicker
-      v-if="isAdvancedMode"
       class="oc-mt-s"
       :min-date="DateTime.now()"
       :label="$gettext('Expiry date')"
@@ -104,28 +80,19 @@
   </div>
 </template>
 
-<script lang="ts">
+<script lang="ts" setup>
 import { DateTime } from 'luxon'
 import { v4 as uuidV4 } from 'uuid'
 import { upperFirst } from 'lodash-es'
 import { useGettext } from 'vue3-gettext'
-import {
-  ComponentPublicInstance,
-  computed,
-  defineComponent,
-  PropType,
-  ref,
-  reactive,
-  unref,
-  onMounted
-} from 'vue'
+import { ComponentPublicInstance, computed, ref, reactive, unref, onMounted } from 'vue'
 import {
   usePasswordPolicyService,
   useEmbedMode,
   useLinkTypes,
-  Modal,
   useSharesStore,
-  useClientService
+  useClientService,
+  Modal
 } from '../composables'
 import { LinkShare, SpaceResource } from '@ownclouders/web-client'
 import { Resource } from '@ownclouders/web-client'
@@ -140,203 +107,154 @@ interface CallbackArgs {
   password: string
   options?: { copyPassword?: boolean }
 }
+interface Props {
+  modal: Modal
+  resources: Resource[]
+  space: SpaceResource
+  callbackFn: (args: CallbackArgs) => Promise<void> | void
+}
 
-export default defineComponent({
-  name: 'CreateLinkModal',
-  components: { LinkRoleDropdown },
-  props: {
-    modal: { type: Object as PropType<Modal>, required: true },
-    resources: { type: Array as PropType<Resource[]>, required: true },
-    space: { type: Object as PropType<SpaceResource>, default: undefined },
-    callbackFn: {
-      type: Function as PropType<(args: CallbackArgs) => Promise<void> | void>,
-      default: undefined
-    }
-  },
-  emits: ['cancel', 'confirm'],
-  setup(props, { expose }) {
-    const clientService = useClientService()
-    const language = useGettext()
-    const { $gettext } = language
-    const passwordPolicyService = usePasswordPolicyService()
-    const { isEnabled: isEmbedEnabled, postMessage } = useEmbedMode()
-    const {
-      defaultLinkType,
-      getAvailableLinkTypes,
-      getLinkRoleByType,
-      isPasswordEnforcedForLinkType
-    } = useLinkTypes()
-    const { addLink } = useSharesStore()
-    const isAdvancedMode = ref(false)
-    const isInvalidExpiryDate = ref(false)
+interface Emits {
+  (e: 'confirm', payload?: { copyPassword: boolean }): void
+  (e: 'cancel'): void
+}
 
-    const isFolder = computed(() => props.resources.every(({ isFolder }) => isFolder))
+defineEmits<Emits>()
 
-    const confirmButtonText = computed(() => {
-      if (unref(isEmbedEnabled)) {
-        return $gettext('Share link(s)')
-      }
+const { resources, space = undefined, callbackFn = undefined } = defineProps<Props>()
 
-      return $gettext('Copy link')
-    })
+const clientService = useClientService()
+const language = useGettext()
+const { $gettext } = language
+const passwordPolicyService = usePasswordPolicyService()
+const { isEnabled: isEmbedEnabled, postMessage } = useEmbedMode()
+const { defaultLinkType, getAvailableLinkTypes, getLinkRoleByType, isPasswordEnforcedForLinkType } =
+  useLinkTypes()
+const { addLink } = useSharesStore()
+const isInvalidExpiryDate = ref(false)
 
-    const passwordInputKey = ref(uuidV4())
-    const roleRefs = ref<Record<string, RoleRef>>({})
+const isFolder = computed(() => resources.every(({ isFolder }) => isFolder))
 
-    const selectedExpiry = ref<DateTime>()
-    const password = reactive({ value: '', error: undefined })
-    const selectedType = ref(unref(defaultLinkType))
+const confirmButtonText = computed(() => {
+  if (unref(isEmbedEnabled)) {
+    return $gettext('Share link(s)')
+  }
 
-    const selectedTypeDescription = computed(() =>
-      $gettext(getLinkRoleByType(unref(selectedType)).description)
+  return $gettext('Copy link')
+})
+
+const passwordInputKey = ref(uuidV4())
+const roleRefs = ref<Record<string, RoleRef>>({})
+
+const selectedExpiry = ref<DateTime>()
+const password = reactive({ value: '', error: undefined })
+const selectedType = ref(unref(defaultLinkType))
+
+const selectedTypeIcon = computed(() => getLinkRoleByType(unref(selectedType)).icon)
+
+const availableLinkTypes = computed(() => getAvailableLinkTypes({ isFolder: unref(isFolder) }))
+const passwordEnforced = computed(() => isPasswordEnforcedForLinkType(unref(selectedType)))
+
+const passwordPolicy = passwordPolicyService.getPolicy({
+  enforcePassword: unref(passwordEnforced)
+})
+
+const onExpiryDateChanged = ({ date, error }: { date: DateTime; error: boolean }) => {
+  selectedExpiry.value = date
+  isInvalidExpiryDate.value = error
+}
+
+const createLinks = () => {
+  return Promise.allSettled<LinkShare>(
+    resources.map((resource) =>
+      addLink({
+        clientService,
+        space,
+        resource,
+        options: {
+          type: unref(selectedType),
+          '@libre.graph.quickLink': false,
+          password: unref(password).value,
+          expirationDateTime: unref(selectedExpiry)?.toISO(),
+          displayName: $gettext('Unnamed link')
+        }
+      })
     )
+  )
+}
 
-    const selectedTypeDisplayName = computed(() =>
-      $gettext(getLinkRoleByType(unref(selectedType)).displayName)
+const passwordPolicyFulfilled = computed(() => {
+  if (!passwordPolicy.check(unref(password).value)) {
+    return false
+  }
+
+  return true
+})
+
+const confirmButtonDisabled = computed(() => {
+  if (unref(passwordPolicyFulfilled) && !unref(isInvalidExpiryDate)) {
+    return false
+  }
+
+  return true
+})
+
+const onConfirm = async (options: { copyPassword?: boolean } = {}) => {
+  const result = await createLinks()
+
+  const succeeded = result.filter(({ status }) => status === 'fulfilled')
+  if (succeeded.length && unref(isEmbedEnabled)) {
+    postMessage<string[]>(
+      'owncloud-embed:share',
+      (succeeded as PromiseFulfilledResult<LinkShare>[]).map(({ value }) => value.webUrl)
     )
+  }
 
-    const selectedTypeIcon = computed(() => getLinkRoleByType(unref(selectedType)).icon)
+  const userFacingErrors: Error[] = []
+  const failed = result.filter(({ status }) => status === 'rejected')
+  if (failed.length) {
+    ;(failed as PromiseRejectedResult[])
+      .map(({ reason }) => reason)
+      .forEach((e) => {
+        console.error(e)
+        // Human-readable error message is provided, for example when password is on banned list
+        if (e.response?.status === 400) {
+          const error = e.response.data.error
+          error.message = upperFirst(error.message)
+          userFacingErrors.push(error)
+        }
+      })
+  }
 
-    const availableLinkTypes = computed(() => getAvailableLinkTypes({ isFolder: unref(isFolder) }))
-    const passwordEnforced = computed(() => isPasswordEnforcedForLinkType(unref(selectedType)))
+  if (userFacingErrors.length) {
+    password.error = $gettext(userFacingErrors[0].message)
+    return Promise.reject()
+  }
 
-    const passwordPolicy = passwordPolicyService.getPolicy({
-      enforcePassword: unref(passwordEnforced)
-    })
+  if (callbackFn) {
+    callbackFn({ result, password: password.value, options })
+  }
+}
 
-    const setAdvancedMode = () => {
-      isAdvancedMode.value = true
-    }
+defineExpose({ onConfirm })
 
-    const onExpiryDateChanged = ({ date, error }: { date: DateTime; error: boolean }) => {
-      selectedExpiry.value = date
-      isInvalidExpiryDate.value = error
-    }
+const updatePassword = (value: string) => {
+  password.value = value
+  password.error = undefined
+}
 
-    const createLinks = () => {
-      return Promise.allSettled<LinkShare>(
-        props.resources.map((resource) =>
-          addLink({
-            clientService,
-            space: props.space,
-            resource,
-            options: {
-              type: unref(selectedType),
-              '@libre.graph.quickLink': false,
-              password: unref(password).value,
-              expirationDateTime: unref(selectedExpiry)?.toISO(),
-              displayName: $gettext('Unnamed link')
-            }
-          })
-        )
-      )
-    }
+const updateSelectedLinkType = (type: SharingLinkType) => {
+  selectedType.value = type
+}
 
-    const passwordPolicyFulfilled = computed(() => {
-      if (!passwordPolicy.check(unref(password).value)) {
-        return false
-      }
+onMounted(() => {
+  const activeRoleOption = unref(roleRefs)[unref(selectedType)]
+  if (activeRoleOption) {
+    activeRoleOption.$el.focus()
+  }
 
-      return true
-    })
-
-    const confirmButtonDisabled = computed(() => {
-      if (unref(passwordPolicyFulfilled) && !unref(isInvalidExpiryDate)) {
-        return false
-      }
-
-      return true
-    })
-
-    const onConfirm = async (options: { copyPassword?: boolean } = {}) => {
-      const result = await createLinks()
-
-      const succeeded = result.filter(({ status }) => status === 'fulfilled')
-      if (succeeded.length && unref(isEmbedEnabled)) {
-        postMessage<string[]>(
-          'owncloud-embed:share',
-          (succeeded as PromiseFulfilledResult<LinkShare>[]).map(({ value }) => value.webUrl)
-        )
-      }
-
-      const userFacingErrors: Error[] = []
-      const failed = result.filter(({ status }) => status === 'rejected')
-      if (failed.length) {
-        ;(failed as PromiseRejectedResult[])
-          .map(({ reason }) => reason)
-          .forEach((e) => {
-            console.error(e)
-            // Human-readable error message is provided, for example when password is on banned list
-            if (e.response?.status === 400) {
-              const error = e.response.data.error
-              error.message = upperFirst(error.message)
-              userFacingErrors.push(error)
-            }
-          })
-      }
-
-      if (userFacingErrors.length) {
-        password.error = $gettext(userFacingErrors[0].message)
-        return Promise.reject()
-      }
-
-      if (props.callbackFn) {
-        props.callbackFn({ result, password: password.value, options })
-      }
-    }
-
-    expose({ onConfirm })
-
-    const isSelectedLinkType = (type: SharingLinkType) => {
-      return unref(selectedType) === type
-    }
-    const updatePassword = (value: string) => {
-      password.value = value
-      password.error = undefined
-    }
-
-    const updateSelectedLinkType = (type: SharingLinkType) => {
-      selectedType.value = type
-    }
-
-    onMounted(() => {
-      const activeRoleOption = unref(roleRefs)[unref(selectedType)]
-      if (activeRoleOption) {
-        activeRoleOption.$el.focus()
-      }
-
-      if (unref(passwordEnforced)) {
-        password.value = passwordPolicyService.generatePassword()
-      }
-    })
-
-    return {
-      roleRefs,
-      password,
-      passwordEnforced,
-      passwordPolicy,
-      generatePasswordMethod: () => passwordPolicyService.generatePassword(),
-      passwordInputKey,
-      selectedExpiry,
-      availableLinkTypes,
-      selectedType,
-      selectedTypeIcon,
-      selectedTypeDisplayName,
-      selectedTypeDescription,
-      isSelectedLinkType,
-      updateSelectedLinkType,
-      updatePassword,
-      getLinkRoleByType,
-      confirmButtonText,
-      isAdvancedMode,
-      setAdvancedMode,
-      onExpiryDateChanged,
-      confirmButtonDisabled,
-      DateTime,
-
-      // unit tests
-      onConfirm
-    }
+  if (unref(passwordEnforced)) {
+    updatePassword(passwordPolicyService.generatePassword())
   }
 })
 </script>

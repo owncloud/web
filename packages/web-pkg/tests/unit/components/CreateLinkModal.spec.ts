@@ -8,11 +8,11 @@ import {
 import { mock } from 'vitest-mock-extended'
 import { PasswordPolicyService } from '../../../src/services'
 import { usePasswordPolicyService } from '../../../src/composables/passwordPolicyService'
-import { AbilityRule, LinkShare, Resource, ShareRole } from '@ownclouders/web-client'
+import { AbilityRule, LinkShare, Resource, ShareRole, SpaceResource } from '@ownclouders/web-client'
 import { PasswordPolicy } from '@ownclouders/design-system/helpers'
 import { useEmbedMode } from '../../../src/composables/embedMode'
 import { useLinkTypes } from '../../../src/composables/links'
-import { nextTick, ref } from 'vue'
+import { ref } from 'vue'
 import { CapabilityStore, Modal, useSharesStore } from '../../../src/composables/piniaStores'
 import { SharingLinkType } from '@ownclouders/web-client/graph/generated'
 import { describe } from 'vitest'
@@ -35,61 +35,21 @@ const selectors = {
 
 describe('CreateLinkModal', () => {
   describe('password input', () => {
-    it('should not rendered when "isAdvancedMode" is not set', async () => {
+    it('should be rendered', () => {
       const { wrapper } = getWrapper()
-      wrapper.vm.isAdvancedMode = false
-      await nextTick()
-      expect(wrapper.find(selectors.passwordInput).exists()).toBeFalsy()
-    })
-    it('should be rendered', async () => {
-      const { wrapper } = getWrapper()
-      wrapper.vm.isAdvancedMode = true
-      await nextTick()
       expect(wrapper.find(selectors.passwordInput).exists()).toBeTruthy()
-    })
-    it('should not be rendered if user cannot create public links', () => {
-      const { wrapper } = getWrapper({
-        userCanCreatePublicLinks: false,
-        availableLinkTypes: [],
-        defaultLinkType: SharingLinkType.View
-      })
-      expect(wrapper.find(selectors.passwordInput).exists()).toBeFalsy()
     })
   })
   describe('datepicker', () => {
-    it('should not rendered when "isAdvancedMode" is not set', async () => {
+    it('should be rendered', () => {
       const { wrapper } = getWrapper()
-      wrapper.vm.isAdvancedMode = false
-      await nextTick()
-      expect(wrapper.findComponent({ name: 'oc-datepicker' }).exists()).toBeFalsy()
-    })
-    it('should be rendered', async () => {
-      const { wrapper } = getWrapper()
-      wrapper.vm.isAdvancedMode = true
-      await nextTick()
       expect(wrapper.findComponent({ name: 'oc-datepicker' }).exists()).toBeTruthy()
-    })
-    it('should not be rendered if user cannot create public links', () => {
-      const { wrapper } = getWrapper({
-        userCanCreatePublicLinks: false,
-        availableLinkTypes: [],
-        defaultLinkType: SharingLinkType.View
-      })
-      expect(wrapper.findComponent({ name: 'oc-datepicker' }).exists()).toBeFalsy()
     })
   })
   describe('link role drop', () => {
-    it('should not rendered when "isAdvancedMode" is not set', async () => {
-      const { wrapper } = getWrapper()
-      wrapper.vm.isAdvancedMode = false
-      await nextTick()
-      expect(wrapper.find(selectors.linkRoleDropDownToggle).exists()).toBeFalsy()
-    })
     it('lists all types as roles', async () => {
       const availableLinkTypes = [SharingLinkType.View, SharingLinkType.Edit]
       const { wrapper } = getWrapper({ availableLinkTypes })
-      wrapper.vm.isAdvancedMode = true
-      await nextTick()
       await wrapper.find(selectors.linkRoleDropDownToggle).trigger('click')
 
       expect(wrapper.findAll(selectors.roleElements).length).toBe(availableLinkTypes.length)
@@ -140,8 +100,6 @@ describe('CreateLinkModal', () => {
     describe('confirm button', () => {
       it('is disabled when password policy is not fulfilled', async () => {
         const { wrapper } = getWrapper({ passwordPolicyFulfilled: false })
-        wrapper.vm.isAdvancedMode = true
-        await nextTick()
         expect(wrapper.find(selectors.confirmBtn).attributes('disabled')).toBeTruthy()
       })
     })
@@ -150,6 +108,7 @@ describe('CreateLinkModal', () => {
 
 function getWrapper({
   resources = [],
+  space = undefined,
   defaultLinkType = SharingLinkType.View,
   userCanCreatePublicLinks = true,
   passwordEnforced = false,
@@ -159,6 +118,7 @@ function getWrapper({
   availableLinkTypes = [SharingLinkType.View]
 }: {
   resources?: Resource[]
+  space?: SpaceResource
   defaultLinkType?: SharingLinkType
   userCanCreatePublicLinks?: boolean
   passwordEnforced?: boolean
@@ -211,6 +171,7 @@ function getWrapper({
     mocks,
     wrapper: mount(CreateLinkModal, {
       props: {
+        space,
         resources,
         callbackFn,
         modal: mock<Modal>()

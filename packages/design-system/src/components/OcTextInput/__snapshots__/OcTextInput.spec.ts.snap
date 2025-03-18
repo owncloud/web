@@ -4,7 +4,7 @@ exports[`OcTextInput > password input field > password policy > displays error s
 "<div class=""><label class="oc-label" for="oc-textinput-24"></label>
   <div class="oc-position-relative">
     <!--v-if-->
-    <div class="oc-text-input-password-wrapper"><input id="oc-textinput-24" aria-invalid="false" class="oc-text-input oc-input oc-rounded" type="password"> <button type="button" aria-label="Show password" class="oc-button oc-rounded oc-button-s oc-button-justify-content-center oc-button-gap-m oc-button-passive oc-button-passive-raw oc-text-input-show-password-toggle oc-px-s oc-background-default">
+    <div class="oc-text-input-password-wrapper"><input id="oc-textinput-24" aria-invalid="false" class="oc-text-input oc-input oc-rounded" type="password" value="pass"> <button type="button" aria-label="Show password" class="oc-button oc-rounded oc-button-s oc-button-justify-content-center oc-button-gap-m oc-button-passive oc-button-passive-raw oc-text-input-show-password-toggle oc-px-s oc-background-default">
         <!--v-if-->
         <!-- @slot Content of the button --> <span class="oc-icon oc-icon-s oc-icon-passive"><!----></span>
       </button> <button type="button" aria-label="Copy password" class="oc-button oc-rounded oc-button-s oc-button-justify-content-center oc-button-gap-m oc-button-passive oc-button-passive-raw oc-text-input-copy-password-button oc-px-s oc-background-default">
@@ -31,7 +31,7 @@ exports[`OcTextInput > password input field > password policy > displays success
 "<div class=""><label class="oc-label" for="oc-textinput-25"></label>
   <div class="oc-position-relative">
     <!--v-if-->
-    <div class="oc-text-input-password-wrapper"><input id="oc-textinput-25" aria-invalid="false" class="oc-text-input oc-input oc-rounded" type="password"> <button type="button" aria-label="Show password" class="oc-button oc-rounded oc-button-s oc-button-justify-content-center oc-button-gap-m oc-button-passive oc-button-passive-raw oc-text-input-show-password-toggle oc-px-s oc-background-default">
+    <div class="oc-text-input-password-wrapper"><input id="oc-textinput-25" aria-invalid="false" class="oc-text-input oc-input oc-rounded" type="password" value="password123"> <button type="button" aria-label="Show password" class="oc-button oc-rounded oc-button-s oc-button-justify-content-center oc-button-gap-m oc-button-passive oc-button-passive-raw oc-text-input-show-password-toggle oc-px-s oc-background-default">
         <!--v-if-->
         <!-- @slot Content of the button --> <span class="oc-icon oc-icon-s oc-icon-passive"><!----></span>
       </button> <button type="button" aria-label="Copy password" class="oc-button oc-rounded oc-button-s oc-button-justify-content-center oc-button-gap-m oc-button-passive oc-button-passive-raw oc-text-input-copy-password-button oc-px-s oc-background-default">
