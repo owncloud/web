@@ -18,6 +18,8 @@ Summary
 * Bugfix - Sorting arrow misplaced: [#12236](https://github.com/owncloud/web/pull/12236)
 * Bugfix - Disable cutting and pasting into the same folder: [#12265](https://github.com/owncloud/web/pull/12265)
 * Bugfix - Generate public link password on click: [#12266](https://github.com/owncloud/web/pull/12266)
+* Bugfix - Do not reveal generated password: [#12326](https://github.com/owncloud/web/pull/12326)
+* Bugfix - Drop advanced mode when creating links: [#12326](https://github.com/owncloud/web/pull/12326)
 * Enhancement - Accessibility improvements: [#5379](https://github.com/owncloud/web/issues/5379)
 * Enhancement - Create spaces via admin settings: [#11849](https://github.com/owncloud/web/pull/11849)
 * Enhancement - Add maintenance banner: [#12239](https://github.com/owncloud/web/pull/12239)
@@ -112,6 +114,23 @@ Details
    callback.
 
    https://github.com/owncloud/web/pull/12266
+
+* Bugfix - Do not reveal generated password: [#12326](https://github.com/owncloud/web/pull/12326)
+
+   We've stopped revealing passwords in the password input when user clicks on the
+   generate action. In order to preview the password, the user needs to click on
+   the eye icon inside the input.
+
+   https://github.com/owncloud/web/issues/12275
+   https://github.com/owncloud/web/pull/12326
+
+* Bugfix - Drop advanced mode when creating links: [#12326](https://github.com/owncloud/web/pull/12326)
+
+   We've removed the advanced mode in the create public link dialog and we show the
+   password and expiration date fields directly.
+
+   https://github.com/owncloud/web/issues/12275
+   https://github.com/owncloud/web/pull/12326
 
 * Enhancement - Accessibility improvements: [#5379](https://github.com/owncloud/web/issues/5379)
 
