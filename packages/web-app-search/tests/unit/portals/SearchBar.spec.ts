@@ -62,6 +62,17 @@ const selectors = {
 
 vi.mock('lodash-es', () => ({ debounce: (fn: unknown) => fn }))
 vi.mock('../../../src/composables/useAvailableProviders')
+vi.mock('mark.js', () => ({
+  default: class MockMark {
+    constructor() {}
+    mark() {
+      return this
+    }
+    unmark() {
+      return this
+    }
+  }
+}))
 
 beforeEach(() => {
   providerFiles.previewSearch.search.mockImplementation(() => {
