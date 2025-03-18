@@ -279,7 +279,8 @@ def pnpmlint(ctx):
         "steps": skipIfUnchanged(ctx, "lint") +
                  restoreBuildArtifactCache(ctx, "pnpm", ".pnpm-store") +
                  installPnpm() +
-                 lint(),
+                 lint() +
+                 checkFormatting(),
         "trigger": {
             "ref": [
                 "refs/heads/master",
@@ -742,6 +743,15 @@ def lint():
         "image": OC_CI_NODEJS,
         "commands": [
             "pnpm lint",
+        ],
+    }]
+
+def checkFormatting():
+    return [{
+        "name": "check-formatting",
+        "image": OC_CI_NODEJS,
+        "commands": [
+            "pnpm check:format",
         ],
     }]
 

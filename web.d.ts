@@ -22,7 +22,7 @@ declare module 'vue' {
 
   interface GlobalComponents {
     // https://github.com/LinusBorg/portal-vue/issues/380
-    Portal: typeof import('portal-vue')['Portal']
-    PortalTarget: typeof import('portal-vue')['PortalTarget']
+    Portal: (typeof import('portal-vue'))['Portal']
+    PortalTarget: (typeof import('portal-vue'))['PortalTarget']
   }
 }

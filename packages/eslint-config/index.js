@@ -1,5 +1,5 @@
 import unusedImports from 'eslint-plugin-unused-imports'
-import eslintConfigPrettier from 'eslint-plugin-prettier/recommended'
+import eslintConfigPrettier from 'eslint-config-prettier/flat'
 import tseslint from 'typescript-eslint'
 import globals from 'globals'
 import pluginVue from 'eslint-plugin-vue'
