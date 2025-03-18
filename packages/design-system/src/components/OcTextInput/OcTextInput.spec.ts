@@ -69,12 +69,19 @@ describe('OcTextInput', () => {
       }
     }
 
-    return mount(OcTextInput, {
+    const wrapper = mount(OcTextInput, {
       ...options,
+      props: {
+        'onUpdate:modelValue': (e) => wrapper.setProps({ modelValue: e }),
+        modelValue: '',
+        ...options.props
+      },
       global: {
         plugins: [...defaultPlugins()]
       }
     })
+
+    return wrapper
   }
 
   const selectors = {
@@ -413,11 +420,8 @@ describe('OcTextInput', () => {
 
       await btn.trigger('click')
 
-      // value as data is supposed to be `null`
       expect(wrapper.emitted('update:modelValue')[0][0]).toEqual(null)
-      // value in DOM would be the empty string if two way binding was used
-      // by just passing in the value it should remain unchanged
-      expect((input.element as HTMLInputElement).value).toEqual('non-empty-value')
+      expect((input.element as HTMLInputElement).value).toEqual('')
       expect(document.activeElement.id).toBe(input.element.id)
     })
   })

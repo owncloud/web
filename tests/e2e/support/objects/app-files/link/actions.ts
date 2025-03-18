@@ -96,7 +96,6 @@ const copyPasswordButton = '.oc-text-input-copy-password-button'
 const generatePasswordButton = '.oc-text-input-generate-password-button'
 const expectedRegexForGeneratedPassword = /^[A-Za-z0-9\s\S]{12}$/
 const passwordInputDescription = '.oc-text-input-description .oc-text-input-description'
-const advancedModeButton = '.link-modal-advanced-mode-button'
 const copyLinkButton =
   '//span[contains(@class, "files-links-name") and text()="%s"]//ancestor::li//button[contains(@class, "oc-files-public-link-copy-url")]'
 
@@ -122,7 +121,6 @@ export const createLink = async (args: createLinkArgs): Promise<string> => {
     await sidebar.openPanel({ page: page, name: 'sharing' })
   }
   await page.locator(addPublicLinkButton).click()
-  await page.locator(advancedModeButton).click()
 
   if (role) {
     await page.locator(publicLinkRoleToggle).click()

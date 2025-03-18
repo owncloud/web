@@ -12,7 +12,7 @@ import { AbilityRule, LinkShare, Resource, ShareRole, SpaceResource } from '@own
 import { PasswordPolicy } from '@ownclouders/design-system/helpers'
 import { useEmbedMode } from '../../../src/composables/embedMode'
 import { useLinkTypes } from '../../../src/composables/links'
-import { nextTick, ref } from 'vue'
+import { ref } from 'vue'
 import { CapabilityStore, Modal, useSharesStore } from '../../../src/composables/piniaStores'
 import { SharingLinkType } from '@ownclouders/web-client/graph/generated'
 import { describe } from 'vitest'
@@ -30,64 +30,26 @@ const selectors = {
   contextMenuToggle: '#link-modal-context-menu-toggle',
   confirmBtn: '.link-modal-confirm',
   cancelBtn: '.link-modal-cancel',
-  linkRoleDropDownToggle: '.link-role-dropdown-toggle',
-  modalAdvancedModeButton: '[data-testid="modal-advanced-mode-button"]'
+  linkRoleDropDownToggle: '.link-role-dropdown-toggle'
 }
 
 describe('CreateLinkModal', () => {
   describe('password input', () => {
-    it('should not rendered when "isAdvancedMode" is not set', async () => {
+    it('should be rendered', () => {
       const { wrapper } = getWrapper()
-      await nextTick()
-      expect(wrapper.find(selectors.passwordInput).exists()).toBeFalsy()
-    })
-    it('should be rendered', async () => {
-      const { wrapper } = getWrapper()
-      wrapper.find(selectors.modalAdvancedModeButton).trigger('click')
-      await nextTick()
       expect(wrapper.find(selectors.passwordInput).exists()).toBeTruthy()
-    })
-    it('should not be rendered if user cannot create public links', () => {
-      const { wrapper } = getWrapper({
-        userCanCreatePublicLinks: false,
-        availableLinkTypes: [],
-        defaultLinkType: SharingLinkType.View
-      })
-      expect(wrapper.find(selectors.passwordInput).exists()).toBeFalsy()
     })
   })
   describe('datepicker', () => {
-    it('should not rendered when "isAdvancedMode" is not set', async () => {
+    it('should be rendered', () => {
       const { wrapper } = getWrapper()
-      await nextTick()
-      expect(wrapper.findComponent({ name: 'oc-datepicker' }).exists()).toBeFalsy()
-    })
-    it('should be rendered', async () => {
-      const { wrapper } = getWrapper()
-      wrapper.find(selectors.modalAdvancedModeButton).trigger('click')
-      await nextTick()
       expect(wrapper.findComponent({ name: 'oc-datepicker' }).exists()).toBeTruthy()
-    })
-    it('should not be rendered if user cannot create public links', () => {
-      const { wrapper } = getWrapper({
-        userCanCreatePublicLinks: false,
-        availableLinkTypes: [],
-        defaultLinkType: SharingLinkType.View
-      })
-      expect(wrapper.findComponent({ name: 'oc-datepicker' }).exists()).toBeFalsy()
     })
   })
   describe('link role drop', () => {
-    it('should not rendered when "isAdvancedMode" is not set', async () => {
-      const { wrapper } = getWrapper()
-      await nextTick()
-      expect(wrapper.find(selectors.linkRoleDropDownToggle).exists()).toBeFalsy()
-    })
     it('lists all types as roles', async () => {
       const availableLinkTypes = [SharingLinkType.View, SharingLinkType.Edit]
       const { wrapper } = getWrapper({ availableLinkTypes })
-      wrapper.find(selectors.modalAdvancedModeButton).trigger('click')
-      await nextTick()
       await wrapper.find(selectors.linkRoleDropDownToggle).trigger('click')
 
       expect(wrapper.findAll(selectors.roleElements).length).toBe(availableLinkTypes.length)
@@ -138,8 +100,6 @@ describe('CreateLinkModal', () => {
     describe('confirm button', () => {
       it('is disabled when password policy is not fulfilled', async () => {
         const { wrapper } = getWrapper({ passwordPolicyFulfilled: false })
-        wrapper.find(selectors.modalAdvancedModeButton).trigger('click')
-        await nextTick()
         expect(wrapper.find(selectors.confirmBtn).attributes('disabled')).toBeTruthy()
       })
     })
