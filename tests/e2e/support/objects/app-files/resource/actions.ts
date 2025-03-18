@@ -1022,7 +1022,7 @@ export const moveOrCopyResource = async (args: moveOrCopyResourceArgs): Promise<
             resp.status() === 201 &&
             resp.request().method() === 'MOVE'
         ),
-        source.dragTo(target)
+        utils.dragTo(page, source, target)
       ])
 
       await Promise.all([
