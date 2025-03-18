@@ -68,8 +68,13 @@ async function getRecentChanges() {
       ['Test-Type', 'Date', 'Tests Added', 'Tests Changed', 'Tests Deleted', 'commit-ID']
     ]
 
-    for (const log of logs.all) {      
-      const e2eDiff = await git.diff([`${log.hash}~1`, log.hash, '--', 'tests/e2e/cucumber/features'])
+    for (const log of logs.all) {
+      const e2eDiff = await git.diff([
+        `${log.hash}~1`,
+        log.hash,
+        '--',
+        'tests/e2e/cucumber/features'
+      ])
       const unitDiff = await git.diff([`${log.hash}~1`, log.hash, '--', 'packages/**/*.spec.ts'])
 
       const e2eRow = analyzeE2eDiff(e2eDiff, log)
@@ -84,7 +89,7 @@ async function getRecentChanges() {
       }
     }
 
-    const csvContent = csvRows.map(row => row.join(',')).join('\n')
+    const csvContent = csvRows.map((row) => row.join(',')).join('\n')
     const reportsDir = path.join(__dirname, 'reports')
 
     if (!fs.existsSync(reportsDir)) {
@@ -99,7 +104,6 @@ async function getRecentChanges() {
         console.log(`CSV report generated successfully. You can find it in , ${reportFilePath}`)
       }
     })
-
   } catch (error) {
     console.error('Error:', error)
   }
@@ -129,20 +133,13 @@ function analyzeE2eDiff(diff, log) {
       if (line.includes('Scenario:')) {
         commitDeletedTests++
       }
-    } else if ((line.includes('@@ Feature:')) && currentFile) {
+    } else if (line.includes('@@ Feature:') && currentFile) {
       // if line contains 'Feature', that is test change. Example @@ -17,8 +17,8 @@ Feature: Download
       commitChangedTests++
     }
   }
   if (commitAddedTests || commitChangedTests || commitDeletedTests) {
-    return [
-      'UI Test',
-      log.date,
-      commitAddedTests,
-      commitChangedTests,
-      commitDeletedTests,
-      log.hash
-    ]
+    return ['UI Test', log.date, commitAddedTests, commitChangedTests, commitDeletedTests, log.hash]
   }
 }
 
@@ -157,7 +154,7 @@ function analyzeUnitDiff(diff, log) {
   let inTest = false
 
   for (let i = 0; i < diffLines.length; i++) {
-    const line = diffLines[i];
+    const line = diffLines[i]
 
     // Detect the file being diffed
     if (line.startsWith('diff --git')) {
