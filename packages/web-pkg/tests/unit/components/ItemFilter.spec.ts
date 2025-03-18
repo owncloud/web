@@ -9,6 +9,17 @@ import { queryItemAsString } from '../../../src/composables/appDefaults'
 import { OcCheckbox } from '@ownclouders/design-system/components'
 
 vi.mock('../../../src/composables/appDefaults')
+vi.mock('mark.js', () => ({
+  default: class MockMark {
+    constructor() {}
+    mark() {
+      return this
+    }
+    unmark() {
+      return this
+    }
+  }
+}))
 
 const filterItems = [
   { id: '1', name: 'Albert Einstein' },
