@@ -679,7 +679,6 @@ export const startSentry = (configStore: ConfigStore, app: App): void => {
       dsn,
       environment,
       attachProps: true,
-      logErrors: true,
       transportOptions: transportOptions as SentryConfig['transportOptions'],
       ...moreSentryOptions
     })
