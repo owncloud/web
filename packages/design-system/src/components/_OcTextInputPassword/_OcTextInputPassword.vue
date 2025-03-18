@@ -9,12 +9,14 @@
     <input
       v-bind="attrs"
       ref="passwordInput"
-      v-model="password"
+      :value="value"
       :type="showPassword ? 'text' : 'password'"
       :disabled="disabled"
+      @input="$emit('input', $event)"
+      @change="$emit('change', $event)"
     />
     <oc-button
-      v-if="password && !disabled"
+      v-if="value && !disabled"
       v-oc-tooltip="showPassword ? $gettext('Hide password') : $gettext('Show password')"
       :aria-label="showPassword ? $gettext('Hide password') : $gettext('Show password')"
       class="oc-text-input-show-password-toggle oc-px-s oc-background-default"
@@ -25,7 +27,7 @@
       <oc-icon size="small" :name="showPassword ? 'eye-off' : 'eye'" />
     </oc-button>
     <oc-button
-      v-if="password && !disabled"
+      v-if="value && !disabled"
       v-oc-tooltip="$gettext('Copy password')"
       :aria-label="$gettext('Copy password')"
       class="oc-text-input-copy-password-button oc-px-s oc-background-default"
@@ -97,6 +99,8 @@ interface Emits {
   (e: 'passwordChallengeCompleted'): void
   (e: 'passwordChallengeFailed'): void
   (e: 'passwordGenerated', password: string): void
+  (e: 'input', event: Event): void
+  (e: 'change', event: Event): void
 }
 
 defineOptions({
@@ -107,7 +111,7 @@ defineOptions({
 })
 
 const {
-  value = '',
+  value,
   passwordPolicy = {
     rules: [],
     check: () => false,
@@ -123,7 +127,6 @@ const emit = defineEmits<Emits>()
 const attrs = useAttrs()
 const passwordInput = ref(null)
 const { $gettext } = useGettext()
-const password = ref(value)
 const showPassword = ref(false)
 const copyPasswordIconInitial = 'file-copy'
 const copyPasswordIcon = ref(copyPasswordIconInitial)
@@ -133,7 +136,7 @@ const showPasswordPolicyInformation = computed(() => {
 })
 
 const testedPasswordPolicy = computed(() => {
-  return passwordPolicy.missing(unref(password))
+  return passwordPolicy.missing(unref(value))
 })
 
 const getPasswordPolicyRuleMessage = (rule: PasswordPolicyRule) => {
@@ -147,29 +150,35 @@ const getPasswordPolicyRuleMessage = (rule: PasswordPolicyRule) => {
 }
 
 const copyPasswordToClipboard = () => {
-  navigator.clipboard.writeText(unref(password))
+  navigator.clipboard.writeText(unref(value))
   copyPasswordIcon.value = 'check'
   setTimeout(() => (copyPasswordIcon.value = copyPasswordIconInitial), 500)
 }
 
 const generatePassword = () => {
   const generatedPassword = generatePasswordMethod()
-  password.value = generatedPassword
-  showPassword.value = true
-  emit('passwordGenerated', password.value)
+
+  const inputEvent = new Event('input', { bubbles: true })
+  Object.defineProperty(inputEvent, 'target', { value: passwordInput.value })
+
+  emit('input', inputEvent)
+  emit('passwordGenerated', generatedPassword)
 }
 
-watch(password, (value) => {
-  if (!Object.keys(passwordPolicy).length) {
-    return
-  }
+watch(
+  () => value,
+  (value) => {
+    if (!Object.keys(passwordPolicy).length) {
+      return
+    }
 
-  if (!passwordPolicy.check(value)) {
-    return emit('passwordChallengeFailed')
-  }
+    if (!passwordPolicy.check(value)) {
+      return emit('passwordChallengeFailed')
+    }
 
-  emit('passwordChallengeCompleted')
-})
+    emit('passwordChallengeCompleted')
+  }
+)
 </script>
 <style lang="scss">
 .oc-text-input-password {

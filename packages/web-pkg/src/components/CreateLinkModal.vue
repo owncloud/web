@@ -1,6 +1,6 @@
 <template>
   <div class="oc-flex oc-button-justify-content-space-between oc-pb-s">
-    <div v-if="isAdvancedMode" class="oc-flex oc-flex-middle">
+    <div class="oc-flex oc-flex-middle">
       <oc-icon class="oc-mr-s" :name="selectedTypeIcon" fill-type="line" />
       <link-role-dropdown
         :model-value="selectedType"
@@ -8,29 +8,9 @@
         @update:model-value="updateSelectedLinkType"
       />
     </div>
-    <div v-else class="oc-flex oc-flex-middle">
-      <oc-icon class="oc-mr-s" :name="selectedTypeIcon" fill-type="line" />
-      <div class="oc-flex oc-flex-column">
-        <span class="oc-text-bold" v-text="selectedTypeDisplayName" />
-        <span class="oc-text-small" v-text="selectedTypeDescription" />
-      </div>
-    </div>
-    <oc-button
-      v-if="!isAdvancedMode"
-      class="link-modal-advanced-mode-button"
-      gap-size="xsmall"
-      appearance="raw"
-      variation="primary"
-      data-testid="modal-advanced-mode-button"
-      @click="setAdvancedMode()"
-    >
-      <oc-icon name="settings-3" size="small" fill-type="fill" />
-      <span v-text="$gettext('Options')" />
-    </oc-button>
   </div>
   <div class="link-modal-password oc-mb-m">
     <oc-text-input
-      v-if="isAdvancedMode"
       :key="passwordInputKey"
       :model-value="password.value"
       type="password"
@@ -41,12 +21,7 @@
       class="link-modal-password-input"
       @update:model-value="updatePassword"
     />
-    <div v-else-if="password.value" class="link-modal-password-text oc-text-small oc-text-muted">
-      <span v-text="$gettext('Password:')" />
-      <span v-text="password.value" />
-    </div>
     <oc-datepicker
-      v-if="isAdvancedMode"
       class="oc-mt-s"
       :min-date="DateTime.now()"
       :label="$gettext('Expiry date')"
@@ -156,7 +131,6 @@ const { isEnabled: isEmbedEnabled, postMessage } = useEmbedMode()
 const { defaultLinkType, getAvailableLinkTypes, getLinkRoleByType, isPasswordEnforcedForLinkType } =
   useLinkTypes()
 const { addLink } = useSharesStore()
-const isAdvancedMode = ref(false)
 const isInvalidExpiryDate = ref(false)
 
 const isFolder = computed(() => resources.every(({ isFolder }) => isFolder))
@@ -176,14 +150,6 @@ const selectedExpiry = ref<DateTime>()
 const password = reactive({ value: '', error: undefined })
 const selectedType = ref(unref(defaultLinkType))
 
-const selectedTypeDescription = computed(() =>
-  $gettext(getLinkRoleByType(unref(selectedType)).description)
-)
-
-const selectedTypeDisplayName = computed(() =>
-  $gettext(getLinkRoleByType(unref(selectedType)).displayName)
-)
-
 const selectedTypeIcon = computed(() => getLinkRoleByType(unref(selectedType)).icon)
 
 const availableLinkTypes = computed(() => getAvailableLinkTypes({ isFolder: unref(isFolder) }))
@@ -192,10 +158,6 @@ const passwordEnforced = computed(() => isPasswordEnforcedForLinkType(unref(sele
 const passwordPolicy = passwordPolicyService.getPolicy({
   enforcePassword: unref(passwordEnforced)
 })
-
-const setAdvancedMode = () => {
-  isAdvancedMode.value = true
-}
 
 const onExpiryDateChanged = ({ date, error }: { date: DateTime; error: boolean }) => {
   selectedExpiry.value = date
@@ -276,9 +238,6 @@ const onConfirm = async (options: { copyPassword?: boolean } = {}) => {
 
 defineExpose({ onConfirm })
 
-const isSelectedLinkType = (type: SharingLinkType) => {
-  return unref(selectedType) === type
-}
 const updatePassword = (value: string) => {
   password.value = value
   password.error = undefined
@@ -295,7 +254,7 @@ onMounted(() => {
   }
 
   if (unref(passwordEnforced)) {
-    password.value = passwordPolicyService.generatePassword()
+    updatePassword(passwordPolicyService.generatePassword())
   }
 })
 </script>
