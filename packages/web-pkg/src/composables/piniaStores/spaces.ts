@@ -264,6 +264,11 @@ export const useSpacesStore = defineStore('spaces', () => {
     addSpaces(projectSpaces)
   }
 
+  const getSpacesByName = (name: string): SpaceResource[] => {
+    const matchingSpaces = unref(spaces).filter((s) => s.name === name)
+    return matchingSpaces
+  }
+
   return {
     spaces,
     spacesInitialized,
@@ -287,7 +292,8 @@ export const useSpacesStore = defineStore('spaces', () => {
     updateSpaceField,
     loadSpaces,
     loadMountPoints,
-    reloadProjectSpaces
+    reloadProjectSpaces,
+    getSpacesByName
   }
 })
 

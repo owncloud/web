@@ -28,6 +28,7 @@ Users can create password-protected folders by following these steps:
 1. The target folder for the PPF is ALWAYS created as **subfolder** mirroring the original path of the link folder in a hidden folder located in the root of the private space of the PPF creator. This means he normally does not see the target folder except if showing hidden files is enabled in his private space. Do not change or delete this folder unless you know what you are doing.
 1. The link file and target folder have the same name.
 1. If the **owner** of the PPF deletes the **link file**, it also deletes the target folder with its content automatically.
+1. If the **owner** of the PPF deletes the parent **folder(s)** containing the **link file**, it deletes the link file and related data automatically.
 1. The deletion of a PPF moves the link file and the target folder into the respective trashbin of the space.
 
 ## Considerations

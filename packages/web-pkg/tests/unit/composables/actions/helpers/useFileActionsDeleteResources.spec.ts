@@ -8,7 +8,8 @@ import {
 } from '@ownclouders/web-test-helpers'
 import { useDeleteWorker } from '../../../../../src/composables/webWorkers/deleteWorker'
 import { useGetMatchingSpace } from '../../../../../src/composables/spaces/useGetMatchingSpace'
-import { useResourcesStore } from '../../../../../src/composables/piniaStores'
+import { useResourcesStore, useSpacesStore } from '../../../../../src/composables/piniaStores'
+import { MockedFunction } from 'vitest'
 
 vi.mock('../../../../../src/composables/webWorkers/deleteWorker')
 vi.mock('../../../../../src/composables/spaces/useGetMatchingSpace')
@@ -18,7 +19,11 @@ const currentFolder = {
   path: '/folder'
 }
 
-const passwordProtectedFolder = mock<Resource>({ path: '/.psecFolder', canBeDeleted: () => true })
+const passwordProtectedFolder = mock<Resource>({
+  path: '/.PasswordProtectedFolders/projects/Personal/folder/psecFolder',
+  storageId: 'personal',
+  canBeDeleted: () => true
+})
 
 describe('deleteResources', () => {
   describe('method "filesList_delete"', () => {
@@ -62,7 +67,7 @@ describe('deleteResources', () => {
       expect(addResourcesIntoDeleteQueue).toHaveBeenCalledWith(['2'])
     })
 
-    it('should delete password protected folders', async () => {
+    it('should delete password protected folders when deleting psec file', () => {
       const filesToDelete = [
         mock<Resource>({
           id: '2',
@@ -72,23 +77,55 @@ describe('deleteResources', () => {
           name: 'psecFolder.psec'
         })
       ]
-      const { mocks } = await getWrapper({
+      getWrapper({
         currentFolder,
-        result: filesToDelete,
-        setup: async ({ filesList_delete }) => {
+        getFileInfoResult: passwordProtectedFolder,
+        setup: async ({ filesList_delete }, { space }) => {
           await filesList_delete(filesToDelete)
+
+          const { startWorker } = vi.mocked(useDeleteWorker)()
+          expect(startWorker).toHaveBeenCalledWith(
+            {
+              resources: [...filesToDelete, passwordProtectedFolder],
+              space: space,
+              topic: 'fileListDelete'
+            },
+            expect.any(Function)
+          )
         }
       })
+    })
 
-      const { startWorker } = vi.mocked(useDeleteWorker)()
-      expect(startWorker).toHaveBeenCalledWith(
-        {
-          resources: [...filesToDelete, passwordProtectedFolder],
-          space: mocks.space,
-          topic: 'fileListDelete'
-        },
-        expect.any(Function)
-      )
+    it('should delete psec file when deleting password protected folder', () => {
+      const psecFile = mock<Resource>({
+        id: '2',
+        path: '/folder/psecFolder.psec',
+        storageId: 'personal',
+        extension: 'psec',
+        name: 'psecFolder.psec',
+        canBeDeleted: () => true
+      })
+
+      getWrapper({
+        currentFolder,
+        getFileInfoResult: psecFile,
+        setup: async ({ filesList_delete }, { space }) => {
+          const { getSpacesByName } = useSpacesStore()
+          ;(getSpacesByName as MockedFunction<typeof getSpacesByName>).mockReturnValue([space])
+
+          await filesList_delete([passwordProtectedFolder])
+
+          const { startWorker } = vi.mocked(useDeleteWorker)()
+          expect(startWorker).toHaveBeenCalledWith(
+            {
+              resources: [passwordProtectedFolder, psecFile],
+              space: space,
+              topic: 'fileListDelete'
+            },
+            expect.any(Function)
+          )
+        }
+      })
     })
   })
 })
@@ -96,7 +133,8 @@ describe('deleteResources', () => {
 function getWrapper({
   currentFolder,
   setup,
-  result = []
+  result = [],
+  getFileInfoResult
 }: {
   currentFolder: FolderResource
   setup: (
@@ -110,13 +148,14 @@ function getWrapper({
     }
   ) => void
   result?: Resource[]
+  getFileInfoResult?: Resource
 }) {
   const mocks = {
     ...defaultComponentMocks(),
     space: mockDeep<SpaceResource>({ id: 'personal' })
   }
   mocks.$clientService.webdav.deleteFile.mockResolvedValue(undefined)
-  mocks.$clientService.webdav.getFileInfo.mockResolvedValue(passwordProtectedFolder)
+  mocks.$clientService.webdav.getFileInfo.mockResolvedValue(getFileInfoResult)
 
   vi.mocked(useDeleteWorker).mockReturnValue({
     startWorker: vi.fn().mockImplementation((_, callback) => {
