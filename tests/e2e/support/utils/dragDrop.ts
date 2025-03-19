@@ -1,5 +1,5 @@
 import { readFileSync } from 'fs'
-import { Page } from '@playwright/test'
+import { Locator, Page } from '@playwright/test'
 
 interface File {
   name: string
@@ -11,6 +11,7 @@ interface FileBuffer {
   bufferString: string
 }
 
+// drag and drop local files to a target element
 export const dragDropFiles = async (page: Page, resources: File[], targetSelector: string) => {
   const files = resources.map((file) => ({
     name: file.name,
@@ -34,4 +35,16 @@ export const dragDropFiles = async (page: Page, resources: File[], targetSelecto
     },
     [files, targetSelector]
   )
+}
+
+// drag and drop a element to another element
+export const dragTo = async (page: Page, sourceLocator: Locator, destinationLocator: Locator) => {
+  // playwright 'dragTo' can be flaky sometimes
+  // https://playwright.dev/docs/api/class-locator#locator-drag-to
+
+  // perform drag and drop manually
+  await sourceLocator.hover()
+  await page.mouse.down()
+  await destinationLocator.hover()
+  await page.mouse.up()
 }
