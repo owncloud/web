@@ -94,8 +94,8 @@ export class Link {
     return await po.getLinkEditButtonVisibility({ page: this.#page, linkName })
   }
 
-  async checkErrorMessage(): Promise<string> {
-    return await po.getPublicLinkPasswordErrorMessage(this.#page)
+  async checkErrorMessage({ passwordProtectedFolder = false } = {}): Promise<string> {
+    return await po.getPublicLinkPasswordErrorMessage(this.#page, passwordProtectedFolder)
   }
 
   async clickOnCancelButton(): Promise<void> {

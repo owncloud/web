@@ -25,10 +25,12 @@ export class Public {
 
   async authenticate({
     password,
-    passwordProtectedFolder = false
+    passwordProtectedFolder = false,
+    expectToSucceed = true
   }: {
     password: string
     passwordProtectedFolder?: boolean
+    expectToSucceed?: boolean
   }): Promise<void> {
     let page: Page | FrameLocator = this.#page
     if (passwordProtectedFolder) {
@@ -36,7 +38,9 @@ export class Public {
     }
     await page.locator(passwordInput).fill(password)
     await page.locator(publicLinkAuthorizeButton).click()
-    await page.locator('#web-content').waitFor()
+    if (expectToSucceed) {
+      await page.locator('#web-content').waitFor()
+    }
   }
 
   async dropUpload({ resources }: { resources: File[] }): Promise<void> {
