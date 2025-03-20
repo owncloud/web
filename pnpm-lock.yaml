@@ -1176,9 +1176,6 @@ importers:
       axios:
         specifier: 1.8.3
         version: 1.8.3
-      pinia:
-        specifier: 3.0.1
-        version: 3.0.1(typescript@5.8.2)(vue@3.5.13(typescript@5.8.2))
       vitest-mock-extended:
         specifier: 3.0.1
         version: 3.0.1(typescript@5.8.2)(vitest@3.0.8(@types/node@22.13.10)(happy-dom@17.4.4)(jsdom@26.0.0)(sass@1.85.1)(terser@5.39.0)(yaml@2.7.0))
