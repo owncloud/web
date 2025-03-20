@@ -34,7 +34,7 @@ export const useFileActionsDeleteResources = () => {
   const { $gettext, $ngettext } = language
   const clientService = useClientService()
   const { dispatchModal } = useModals()
-  const { personalSpace, updateSpaceField } = useSpacesStore()
+  const { personalSpace, updateSpaceField, getSpacesByName } = useSpacesStore()
   const sharesStore = useSharesStore()
   const { startWorker } = useDeleteWorker({
     concurrentRequests: configStore.options.concurrentRequests.resourceBatchActions
@@ -152,59 +152,111 @@ export const useFileActionsDeleteResources = () => {
     )
   }
 
-  const filesList_delete = async (resources: Resource[]) => {
-    resourcesToDelete.value = [...resources]
+  const getPasswordProtectedFolder = async (psecFile: Resource): Promise<Resource | null> => {
+    try {
+      const matchingSpace = getMatchingSpace(psecFile)
 
-    const resourceSpaceMapping: Record<string, { space: SpaceResource; resources: Resource[] }> = {}
+      const folderPath = urlJoin(
+        '/.PasswordProtectedFolders/projects/',
+        matchingSpace.name,
+        psecFile.path.replace(psecFile.name, ''),
+        psecFile.name.replace('.psec', '')
+      )
+      const passwordProtectedFolder = await clientService.webdav.getFileInfo(unref(personalSpace), {
+        path: folderPath
+      })
 
-    for (const resource of unref(resourcesToDelete)) {
-      if (resource.extension !== PASSWORD_PROTECTED_FOLDER_FILE_EXTENSION) {
-        continue
+      if (!passwordProtectedFolder.canBeDeleted()) {
+        console.warn(
+          '[getPasswordProtectedFolder]: User does not have sufficient permissions to delete password protected folder'
+        )
+        return null
       }
 
+      return passwordProtectedFolder
+    } catch (error) {
+      if (error instanceof DavHttpError && error.statusCode === 404) {
+        console.warn(
+          '[getPasswordProtectedFolder]: User is not owner of the password protected folder'
+        )
+        return null
+      }
+
+      console.error(error)
+      captureException(error)
+      return null
+    }
+  }
+
+  const getPsecFile = async (folder: Resource): Promise<Resource | null> => {
+    const [spaceName, ...psecFilePathParts] = folder.path
+      .replace('/.PasswordProtectedFolders/projects/', '')
+      .split('/')
+    const matchingSpaces = getSpacesByName(spaceName)
+
+    if (matchingSpaces.length < 1) {
+      console.warn(
+        `[getPsecFile]: No matching space with name ${spaceName} of password protected folder ${folder.id}`
+      )
+      return null
+    }
+
+    for (const space of matchingSpaces) {
       try {
-        const matchingSpace = getMatchingSpace(resource)
+        const psecFile = await clientService.webdav.getFileInfo(space, {
+          path: urlJoin(...psecFilePathParts) + '.' + PASSWORD_PROTECTED_FOLDER_FILE_EXTENSION
+        })
 
-        const folderPath = urlJoin(
-          '/.PasswordProtectedFolders/projects/',
-          matchingSpace.name,
-          resource.path.replace(resource.name, ''),
-          resource.name.replace('.psec', '')
-        )
-        const passwordProtectedFolder = await clientService.webdav.getFileInfo(
-          unref(personalSpace),
-          {
-            path: folderPath
-          }
-        )
-
-        if (!passwordProtectedFolder) {
-          const error = new Error(
-            'Could not find password protected folder with path ' + folderPath
-          )
-
-          captureException(error)
-          console.error(error)
-
-          continue
-        }
-
-        if (!passwordProtectedFolder.canBeDeleted()) {
+        if (!psecFile.canBeDeleted()) {
           console.warn(
-            '[filesList_delete]: User does not have sufficient permissions to delete password protected folder'
+            `[getPsecFile]: User does not have sufficient permissions to delete psec file ${psecFile.id}`
           )
-          return
+          return null
         }
 
-        resourcesToDelete.value.push(passwordProtectedFolder)
+        return psecFile
       } catch (error) {
         if (error instanceof DavHttpError && error.statusCode === 404) {
-          console.warn('[filesList_delete]: User is not owner of the password protected folder')
+          console.warn(
+            `[getPsecFile]: psec file of password protected folder ${folder.id} not found`
+          )
           continue
         }
 
         console.error(error)
         captureException(error)
+
+        continue
+      }
+    }
+
+    return null
+  }
+
+  const filesList_delete = async (resources: Resource[]) => {
+    resourcesToDelete.value = [...resources]
+
+    const resourceSpaceMapping: Record<string, { space: SpaceResource; resources: Resource[] }> = {}
+
+    for (const resource of unref(resourcesToDelete).slice(0)) {
+      if (resource.extension === PASSWORD_PROTECTED_FOLDER_FILE_EXTENSION) {
+        const folder = await getPasswordProtectedFolder(resource)
+
+        if (!folder) {
+          continue
+        }
+
+        resourcesToDelete.value.push(folder)
+      }
+
+      if (resource.path.startsWith('/.PasswordProtectedFolders/projects/')) {
+        const psecFile = await getPsecFile(resource)
+
+        if (!psecFile) {
+          continue
+        }
+
+        resourcesToDelete.value.push(psecFile)
       }
     }
 
