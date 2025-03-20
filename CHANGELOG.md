@@ -21,6 +21,7 @@ Summary
 * Bugfix - Do not reveal generated password: [#12326](https://github.com/owncloud/web/pull/12326)
 * Bugfix - Drop advanced mode when creating links: [#12326](https://github.com/owncloud/web/pull/12326)
 * Bugfix - Disallow user from inviting themselves: [#12328](https://github.com/owncloud/web/pull/12328)
+* Bugfix - Delete .psec file: [#12329](https://github.com/owncloud/web/pull/12329)
 * Enhancement - Accessibility improvements: [#5379](https://github.com/owncloud/web/issues/5379)
 * Enhancement - Create spaces via admin settings: [#11849](https://github.com/owncloud/web/pull/11849)
 * Enhancement - Add maintenance banner: [#12239](https://github.com/owncloud/web/pull/12239)
@@ -141,6 +142,16 @@ Details
 
    https://github.com/owncloud/web/issues/12183
    https://github.com/owncloud/web/pull/12328
+
+* Bugfix - Delete .psec file: [#12329](https://github.com/owncloud/web/pull/12329)
+
+   We've extended the deletion of resources to also delete `.psec` file when
+   deleting its related folder in personal space. The deletion works only when the
+   user has delete permissions on that `.psec` file and if the folder and path and
+   name still match.
+
+   https://github.com/owncloud/web/issues/12273
+   https://github.com/owncloud/web/pull/12329
 
 * Enhancement - Accessibility improvements: [#5379](https://github.com/owncloud/web/issues/5379)
 
