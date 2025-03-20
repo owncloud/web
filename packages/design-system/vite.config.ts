@@ -10,7 +10,10 @@ export default defineConfig({
   css: {
     preprocessorOptions: {
       scss: {
-        additionalData: `@import "${projectRootDir}/packages/design-system/src/styles/styles";`,
+        additionalData: `
+          @use "sass:math";
+          @import "${projectRootDir}/packages/design-system/src/styles/styles";
+        `,
         silenceDeprecations: ['legacy-js-api', 'import']
       }
     }
