@@ -23,6 +23,7 @@ Summary
 * Bugfix - Disallow user from inviting themselves: [#12328](https://github.com/owncloud/web/pull/12328)
 * Bugfix - Delete .psec file: [#12329](https://github.com/owncloud/web/pull/12329)
 * Bugfix - Handle shares loading error: [#12336](https://github.com/owncloud/web/pull/12336)
+* Bugfix - Add domain to distinguish between external users: [#12339](https://github.com/owncloud/web/pull/12339)
 * Enhancement - Accessibility improvements: [#5379](https://github.com/owncloud/web/issues/5379)
 * Enhancement - Create spaces via admin settings: [#11849](https://github.com/owncloud/web/pull/11849)
 * Enhancement - Add maintenance banner: [#12239](https://github.com/owncloud/web/pull/12239)
@@ -161,6 +162,15 @@ Details
 
    https://github.com/owncloud/ocis/issues/11119
    https://github.com/owncloud/web/pull/12336
+
+* Bugfix - Add domain to distinguish between external users: [#12339](https://github.com/owncloud/web/pull/12339)
+
+   We've fixed an issue where multiple external users with the same name were
+   indistinguishable. By adding the domain to the user information/tooltip and
+   below the user name, external users can now be easily distinguished.
+
+   https://github.com/owncloud/web/issues/12184
+   https://github.com/owncloud/web/pull/12339
 
 * Enhancement - Accessibility improvements: [#5379](https://github.com/owncloud/web/issues/5379)
 
