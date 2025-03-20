@@ -22,6 +22,7 @@ Summary
 * Bugfix - Drop advanced mode when creating links: [#12326](https://github.com/owncloud/web/pull/12326)
 * Bugfix - Disallow user from inviting themselves: [#12328](https://github.com/owncloud/web/pull/12328)
 * Bugfix - Delete .psec file: [#12329](https://github.com/owncloud/web/pull/12329)
+* Bugfix - Handle shares loading error: [#12336](https://github.com/owncloud/web/pull/12336)
 * Enhancement - Accessibility improvements: [#5379](https://github.com/owncloud/web/issues/5379)
 * Enhancement - Create spaces via admin settings: [#11849](https://github.com/owncloud/web/pull/11849)
 * Enhancement - Add maintenance banner: [#12239](https://github.com/owncloud/web/pull/12239)
@@ -152,6 +153,14 @@ Details
 
    https://github.com/owncloud/web/issues/12273
    https://github.com/owncloud/web/pull/12329
+
+* Bugfix - Handle shares loading error: [#12336](https://github.com/owncloud/web/pull/12336)
+
+   Display error message instead of showing the loader infinitely when we encounter
+   an error during shares or space members loading.
+
+   https://github.com/owncloud/ocis/issues/11119
+   https://github.com/owncloud/web/pull/12336
 
 * Enhancement - Accessibility improvements: [#5379](https://github.com/owncloud/web/issues/5379)
 
