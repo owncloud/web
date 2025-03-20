@@ -35,7 +35,10 @@ const getShareMock = ({
   expirationDateTime
 }: Partial<CollaboratorShare> = {}): CollaboratorShare => ({
   id: '1',
-  sharedWith: sharedWith || { id: '3', displayName: 'einstein' },
+  sharedWith: sharedWith || {
+    id: 'ZWluc3RlaW5AaHR0cHM6Ly93d3cubG9yZW0uY29t',
+    displayName: 'einstein'
+  },
   sharedBy: { id: '2', displayName: 'marie' },
   permissions: [],
   shareType: shareType || ShareTypes.user.value,
@@ -197,6 +200,14 @@ describe('Collaborator ListItem component', () => {
 
       expect(roleDropDown.props('isExternal')).toBeTruthy()
       expect(wrapper.find(selectors.externalContextHelper).exists()).toBeTruthy()
+    })
+
+    it('should show domain name below external user name', () => {
+      const share = getShareMock({ shareType: ShareTypes.remote.value })
+      const { wrapper } = createWrapper({ share })
+      const el = wrapper.find('[data-testid="external-share-domain"]')
+
+      expect(el.text()).toEqual('www.lorem.com')
     })
   })
 })

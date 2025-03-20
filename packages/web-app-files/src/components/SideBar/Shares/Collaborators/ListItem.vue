@@ -53,6 +53,14 @@
               :title="$gettext('External user')"
             />
           </div>
+          <div
+            v-if="isExternalShare"
+            class="oc-text-small"
+            data-testid="external-share-domain"
+            :aria-label="`External Share Domain: ${externalShareDomainName}`"
+          >
+            {{ externalShareDomainName }}
+          </div>
           <div>
             <div
               v-if="isShareDenied"
@@ -324,10 +332,26 @@ export default defineComponent({
     shareOwnerDisplayName() {
       return this.share.sharedBy.displayName
     },
+    externalShareDomainName() {
+      if (this.isExternalShare) {
+        const decodedId = atob(this.share.sharedWith.id)
+        const [, serverUrl] = decodedId.split('@')
+        const domain = new URL(serverUrl).hostname
+
+        return domain
+      }
+
+      return null
+    },
     accessDetails() {
       const list: ContextualHelperDataListItem[] = []
 
       list.push({ text: this.$gettext('Name'), headline: true }, { text: this.shareDisplayName })
+      this.isExternalShare &&
+        list.push(
+          { text: this.$gettext('Domain'), headline: true },
+          { text: this.externalShareDomainName }
+        )
 
       list.push({ text: this.$gettext('Type'), headline: true }, { text: this.shareTypeText })
       list.push(
