@@ -27,6 +27,7 @@ export const useSharesStore = defineStore('shares', () => {
   const collaboratorShares = ref<CollaboratorShare[]>([]) as Ref<CollaboratorShare[]>
   const linkShares = ref<LinkShare[]>([]) as Ref<LinkShare[]>
   const graphRoles = ref<Record<string, ShareRole>>({}) as Ref<Record<string, ShareRole>>
+  const hasLoadingFailed = ref(false)
 
   const setGraphRoles = (values: UnifiedRoleDefinition[]) => {
     graphRoles.value = values.reduce<Record<string, ShareRole>>((acc, role) => {
@@ -269,6 +270,10 @@ export const useSharesStore = defineStore('shares', () => {
     updateFileShareTypes(resource.id)
   }
 
+  const setHasLoadingFailed = (value: boolean) => {
+    hasLoadingFailed.value = value
+  }
+
   return {
     loading,
     collaboratorShares,
@@ -288,7 +293,10 @@ export const useSharesStore = defineStore('shares', () => {
 
     addLink,
     updateLink,
-    deleteLink
+    deleteLink,
+
+    hasLoadingFailed,
+    setHasLoadingFailed
   }
 })
 
