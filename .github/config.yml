@@ -6,6 +6,7 @@ updateDocsComment: >
 
 updateDocsWhiteList:
   - Tests-only
+  - docs-only
 
 updateDocsTargetFiles:
   - changelog/unreleased/
