@@ -31,6 +31,15 @@ Feature: password-protected folder operations
     And "Alice" copies the link of password protected folder "sampleFolder.psec"
     And "Alice" closes the password protected folder modal
 
+    # Trying to open with wrong password
+    And "Alice" opens folder "sampleFolder.psec"
+    When "Alice" tries to unlock password protected folder with password "wrong-password"
+    Then "Alice" should see an error message in the password protected folder modal
+      """
+      Incorrect password
+      """
+    And "Alice" closes the password protected folder modal
+
     # Opening by public user
     When "Anonymous" opens the "%clipboard%" url
     And "Anonymous" unlocks the public link with password "%public%"
@@ -90,6 +99,15 @@ Feature: password-protected folder operations
     And "Alice" unlocks password protected folder with password "%public%"
     And "Alice" closes the password protected folder modal
 
+    # Trying to open with wrong password
+    And "Alice" opens folder "space-folder.psec"
+    When "Alice" tries to unlock password protected folder with password "wrong-password"
+    Then "Alice" should see an error message in the password protected folder modal
+      """
+      Incorrect password
+      """
+    And "Alice" closes the password protected folder modal
+
     # Opening by space member
     And "Brian" logs in
     And "Brian" enables the option to display the hidden file
@@ -97,6 +115,15 @@ Feature: password-protected folder operations
     And "Brian" navigates to the project space "team.1"
     And "Brian" opens folder "new-space-folder.psec"
     And "Brian" unlocks password protected folder with password "%public%"
+    And "Brian" closes the password protected folder modal
+
+    # Trying to open with wrong password
+    And "Brian" opens folder "new-space-folder.psec"
+    When "Brian" tries to unlock password protected folder with password "wrong-password"
+    Then "Brian" should see an error message in the password protected folder modal
+      """
+      Incorrect password
+      """
     And "Brian" closes the password protected folder modal
 
     # Deletion

@@ -351,8 +351,13 @@ export const clearCurrentPopup = async (page: Page): Promise<void> => {
   await clearAllPopups(page)
 }
 
-export const getPublicLinkPasswordErrorMessage = async (page: Page): Promise<string> => {
-  return await page.locator(publicLinkPasswordErrorMessage).innerText()
+export const getPublicLinkPasswordErrorMessage = async (
+  page: Page,
+  passwordProtectedFolder?: boolean
+): Promise<string> => {
+  return passwordProtectedFolder
+    ? await page.frameLocator(folderModalIframe).locator(publicLinkPasswordErrorMessage).innerText()
+    : await page.locator(publicLinkPasswordErrorMessage).innerText()
 }
 
 export const clickOnCancelButton = async (page: Page): Promise<void> => {

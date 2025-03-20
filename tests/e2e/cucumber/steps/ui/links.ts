@@ -267,3 +267,13 @@ When(
     await linkObject.closeFolderModal()
   }
 )
+
+Then(
+  '{string} should see an error message in the password protected folder modal',
+  async function (this: World, stepUser: any, errorMessage: string): Promise<void> {
+    const { page } = this.actorsEnvironment.getActor({ key: stepUser })
+    const linkObject = new objects.applicationFiles.Link({ page })
+    const actualErrorMessage = await linkObject.checkErrorMessage({ passwordProtectedFolder: true })
+    expect(actualErrorMessage).toBe(errorMessage)
+  }
+)
