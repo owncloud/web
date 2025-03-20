@@ -20,6 +20,7 @@ Summary
 * Bugfix - Generate public link password on click: [#12266](https://github.com/owncloud/web/pull/12266)
 * Bugfix - Do not reveal generated password: [#12326](https://github.com/owncloud/web/pull/12326)
 * Bugfix - Drop advanced mode when creating links: [#12326](https://github.com/owncloud/web/pull/12326)
+* Bugfix - Disallow user from inviting themselves: [#12328](https://github.com/owncloud/web/pull/12328)
 * Enhancement - Accessibility improvements: [#5379](https://github.com/owncloud/web/issues/5379)
 * Enhancement - Create spaces via admin settings: [#11849](https://github.com/owncloud/web/pull/11849)
 * Enhancement - Add maintenance banner: [#12239](https://github.com/owncloud/web/pull/12239)
@@ -131,6 +132,15 @@ Details
 
    https://github.com/owncloud/web/issues/12275
    https://github.com/owncloud/web/pull/12326
+
+* Bugfix - Disallow user from inviting themselves: [#12328](https://github.com/owncloud/web/pull/12328)
+
+   We've fixed the issue where users were allowed to accept invitations from their
+   own generated token link by disabling the accept invitation button when user is
+   using their own generated token link.
+
+   https://github.com/owncloud/web/issues/12183
+   https://github.com/owncloud/web/pull/12328
 
 * Enhancement - Accessibility improvements: [#5379](https://github.com/owncloud/web/issues/5379)
 
