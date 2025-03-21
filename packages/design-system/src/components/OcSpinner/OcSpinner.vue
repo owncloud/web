@@ -56,8 +56,8 @@ export default defineComponent({
 
 <style lang="scss">
 @mixin oc-spinner-size($factor) {
-  height: round(calc($oc-size-icon-default * $factor / 2)) * 2;
-  width: round(calc($oc-size-icon-default * $factor / 2)) * 2;
+  height: math.round(calc($oc-size-icon-default * $factor / 2)) * 2;
+  width: math.round(calc($oc-size-icon-default * $factor / 2)) * 2;
 }
 
 .oc-spinner {

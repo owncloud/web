@@ -200,7 +200,7 @@ export default defineComponent({
 
 <style lang="scss">
 @mixin oc-button-gap($factor) {
-  gap: round(calc($oc-space-small * $factor / 2)) * 2;
+  gap: math.round(calc($oc-space-small * $factor / 2)) * 2;
 }
 
 @mixin oc-button-line-height($factor) {
