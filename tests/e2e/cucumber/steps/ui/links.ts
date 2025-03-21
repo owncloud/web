@@ -246,3 +246,34 @@ When(
     expect(clipboard).toBe(this.linksEnvironment.getLink({ name: linkName }).url)
   }
 )
+
+When(
+  '{string} copies the link of password protected folder {string}',
+  async function (this: World, stepUser: string, resource: string) {
+    const { page } = this.actorsEnvironment.getActor({ key: stepUser })
+    const linkObject = new objects.applicationFiles.Link({ page })
+    await linkObject.copyLinkToClipboard({
+      resource: resource,
+      resourceType: 'passwordProtectedFolder'
+    })
+  }
+)
+
+When(
+  '{string} closes the password protected folder modal',
+  async function (this: World, stepUser: string): Promise<void> {
+    const { page } = this.actorsEnvironment.getActor({ key: stepUser })
+    const linkObject = new objects.applicationFiles.Link({ page })
+    await linkObject.closeFolderModal()
+  }
+)
+
+Then(
+  '{string} should see an error message in the password protected folder modal',
+  async function (this: World, stepUser: any, errorMessage: string): Promise<void> {
+    const { page } = this.actorsEnvironment.getActor({ key: stepUser })
+    const linkObject = new objects.applicationFiles.Link({ page })
+    const actualErrorMessage = await linkObject.checkErrorMessage({ passwordProtectedFolder: true })
+    expect(actualErrorMessage).toBe(errorMessage)
+  }
+)
