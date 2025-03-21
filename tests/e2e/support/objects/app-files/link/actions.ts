@@ -16,6 +16,7 @@ export interface createLinkArgs {
 export interface copyLinkArgs {
   page: Page
   resource: string
+  resourceType?: string
   name?: string
   via?: string
 }
@@ -98,6 +99,8 @@ const expectedRegexForGeneratedPassword = /^[A-Za-z0-9\s\S]{12}$/
 const passwordInputDescription = '.oc-text-input-description .oc-text-input-description'
 const copyLinkButton =
   '//span[contains(@class, "files-links-name") and text()="%s"]//ancestor::li//button[contains(@class, "oc-files-public-link-copy-url")]'
+const folderModalIframe = '#iframe-folder-view'
+const closeFolderModalButton = '.oc-modal-body-actions-cancel'
 
 const getRecentLinkUrl = async (page: Page, name: string): Promise<string> => {
   await page.locator(util.format(copyLinkButton, name)).click()
@@ -357,13 +360,21 @@ export const clickOnCancelButton = async (page: Page): Promise<void> => {
 }
 
 export const copyLinkToClipboard = async (args: copyLinkArgs): Promise<string> => {
-  const { page, resource } = args
-  await sidebar.open({ page: page, resource: resource })
-  await sidebar.openPanel({ page: page, name: 'sharing' })
+  const { page, resource, resourceType } = args
+  await sidebar.open({ page: page, resource: resource, resourceType })
+  await sidebar.openPanel({ page: page, name: 'sharing', resourceType })
 
   // clear the clipboard
   await page.evaluate(`navigator.clipboard.writeText('')`)
 
-  await page.getByLabel('Copy link to clipboard').click()
+  if (resourceType === 'passwordProtectedFolder') {
+    await page.frameLocator(folderModalIframe).getByLabel('Copy link to clipboard').click()
+  } else {
+    await page.getByLabel('Copy link to clipboard').click()
+  }
   return await page.evaluate('navigator.clipboard.readText()')
+}
+
+export const closeFolderModal = async (page: Page): Promise<void> => {
+  await page.locator(closeFolderModalButton).click()
 }

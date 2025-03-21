@@ -2,6 +2,7 @@ import { When } from '@cucumber/cucumber'
 import { World } from '../../environment'
 import { objects } from '../../../support'
 import { waitForSSEEvent } from '../../../support/utils/locator'
+import { config } from './../../../config'
 
 When(
   '{string} navigates to the project spaces management page',
@@ -37,8 +38,9 @@ When(
 When(
   '{string} opens the {string} url',
   async function (this: World, stepUser: string, url: string): Promise<void> {
-    const { page } = this.actorsEnvironment.getActor({ key: stepUser })
+    const page = await this.actorsEnvironment.getOrCreateActorPage(stepUser, this.feature.name)
     const applicationObject = new objects.runtime.Application({ page })
+    await applicationObject.openUrl(config.baseUrl)
     url = url === '%clipboard%' ? await page.evaluate('navigator.clipboard.readText()') : url
     await applicationObject.openUrl(url)
   }
