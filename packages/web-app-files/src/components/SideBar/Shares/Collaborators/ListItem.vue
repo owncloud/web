@@ -127,7 +127,7 @@
   </div>
 </template>
 
-<script lang="ts">
+<script lang="ts" setup>
 import { storeToRefs } from 'pinia'
 import { DateTime } from 'luxon'
 
@@ -143,7 +143,7 @@ import {
   useSharesStore
 } from '@ownclouders/web-pkg'
 import { Resource, extractDomSelector } from '@ownclouders/web-client'
-import { computed, defineComponent, inject, PropType, Ref, unref } from 'vue'
+import { computed, inject, Ref, unref } from 'vue'
 import { formatDateFromDateTime } from '@ownclouders/web-pkg'
 import { useClientService } from '@ownclouders/web-pkg'
 import { RouteLocationNamedRaw } from 'vue-router'
@@ -153,288 +153,239 @@ import { isProjectSpaceResource } from '@ownclouders/web-client'
 import { ContextualHelperDataListItem } from '@ownclouders/design-system/helpers'
 import ExpirationDateIndicator from '../ExpirationDateIndicator.vue'
 
-export default defineComponent({
-  name: 'ListItem',
-  components: {
-    ExpirationDateIndicator,
-    EditDropdown,
-    RoleDropdown
-  },
-  props: {
-    share: {
-      type: Object as PropType<CollaboratorShare>,
-      required: true
-    },
-    isShareDenied: {
-      type: Boolean,
-      default: false
-    },
-    modifiable: {
-      type: Boolean,
-      default: false
-    },
-    sharedParentRoute: {
-      type: Object as PropType<RouteLocationNamedRaw>,
-      default: null
-    },
-    resourceName: {
-      type: String,
-      default: ''
-    },
-    deniable: {
-      type: Boolean,
-      default: false
-    },
-    isLocked: {
-      type: Boolean,
-      default: false
-    },
-    isSpaceShare: {
-      type: Boolean,
-      default: false
-    }
-  },
-  emits: ['onDelete', 'onSetDeny'],
-  setup(props, { emit }) {
-    const { showMessage, showErrorMessage } = useMessages()
-    const userStore = useUserStore()
-    const clientService = useClientService()
-    const language = useGettext()
-    const { $gettext } = language
-    const { dispatchModal } = useModals()
+interface Props {
+  share: CollaboratorShare
+  isShareDenied?: boolean
+  modifiable?: boolean
+  sharedParentRoute?: RouteLocationNamedRaw | null
+  resourceName?: string
+  deniable?: boolean
+  isLocked?: boolean
+  isSpaceShare?: boolean
+}
+interface Emits {
+  (e: 'onDelete', share: CollaboratorShare): void
+  (e: 'onSetDeny', payload: { share: CollaboratorShare; value: boolean }): void
+}
 
-    const sharesStore = useSharesStore()
-    const { graphRoles } = storeToRefs(sharesStore)
-    const { updateShare } = sharesStore
-    const { upsertSpace } = useSpacesStore()
+const {
+  share,
+  isShareDenied = false,
+  modifiable = false,
+  sharedParentRoute = null,
+  resourceName = '',
+  deniable = false,
+  isLocked = false,
+  isSpaceShare = false
+} = defineProps<Props>()
 
-    const { user } = storeToRefs(userStore)
+const emit = defineEmits<Emits>()
+const space = inject<Ref<SpaceResource>>('space')
+const resource = inject<Ref<Resource>>('resource')
+const { showMessage, showErrorMessage } = useMessages()
+const userStore = useUserStore()
+const clientService = useClientService()
+const language = useGettext()
+const { $gettext } = language
+const { dispatchModal } = useModals()
 
-    const sharedParentDir = computed(() => {
-      return queryItemAsString(props.sharedParentRoute?.params?.driveAliasAndItem).split('/').pop()
-    })
+const sharesStore = useSharesStore()
+const { graphRoles } = storeToRefs(sharesStore)
+const { updateShare } = sharesStore
+const { upsertSpace } = useSpacesStore()
 
-    const shareDate = computed(() => {
-      return formatDateFromDateTime(DateTime.fromISO(props.share.createdDateTime), language.current)
-    })
+const { user } = storeToRefs(userStore)
 
-    const isExternalShare = computed(() => props.share.shareType === ShareTypes.remote.value)
-
-    const setDenyShare = (value: boolean) => {
-      emit('onSetDeny', { share: props.share, value })
-    }
-
-    const showNotifyShareModal = () => {
-      dispatchModal({
-        variation: 'warning',
-        icon: 'mail-send',
-        title: $gettext('Send a reminder'),
-        confirmText: $gettext('Send'),
-        message: $gettext('Are you sure you want to send a reminder about this share?'),
-        onConfirm: notifyShare
-      })
-    }
-    const notifyShare = async () => {
-      // FIXME: cern code
-      // const response = await clientService.owncloudSdk.shares.notifyShare(props.share.id)
-    }
-
-    const sharedViaTooltip = computed(() =>
-      $gettext('Shared via the parent folder "%{sharedParentDir}"', {
-        sharedParentDir: unref(sharedParentDir)
-      })
-    )
-    return {
-      resource: inject<Ref<Resource>>('resource'),
-      space: inject<Ref<SpaceResource>>('space'),
-      updateShare,
-      user,
-      clientService,
-      sharedParentDir,
-      shareDate,
-      graphRoles,
-      setDenyShare,
-      showNotifyShareModal,
-      showMessage,
-      showErrorMessage,
-      upsertSpace,
-      isExternalShare,
-      sharedViaTooltip,
-      DateTime
-    }
-  },
-  computed: {
-    shareType() {
-      return ShareTypes.getByValue(this.share.shareType)
-    },
-
-    shareTypeIcon() {
-      return this.shareType.icon
-    },
-
-    shareTypeKey() {
-      return this.shareType.key
-    },
-
-    shareDomSelector() {
-      if (!this.share.id) {
-        return undefined
-      }
-      return extractDomSelector(this.share.id)
-    },
-
-    isAnyUserShareType() {
-      return ShareTypes.user === this.shareType
-    },
-
-    shareTypeText() {
-      return this.$gettext(this.shareType.label)
-    },
-
-    shareCategory() {
-      return ShareTypes.isIndividual(this.shareType) ? 'user' : 'group'
-    },
-
-    shareDeniedTooltip() {
-      return this.$gettext('%{shareType} cannot access %{resourceName}', {
-        shareType: this.shareTypeText,
-        resourceName: this.resourceName
-      })
-    },
-
-    shareDisplayName() {
-      if (this.user.id === this.share.sharedWith.id) {
-        return this.$gettext('%{collaboratorName} (me)', {
-          collaboratorName: this.share.sharedWith.displayName
-        })
-      }
-      return this.share.sharedWith.displayName
-    },
-
-    screenreaderShareDisplayName() {
-      const context = {
-        displayName: this.share.sharedWith.displayName
-      }
-
-      return this.$gettext('Share receiver name: %{ displayName }', context)
-    },
-
-    hasExpirationDate() {
-      return !!this.share.expirationDateTime
-    },
-
-    expirationDate() {
-      return formatDateFromDateTime(
-        DateTime.fromISO(this.share.expirationDateTime).endOf('day'),
-        this.$language.current
-      )
-    },
-    shareOwnerDisplayName() {
-      return this.share.sharedBy.displayName
-    },
-    externalShareDomainName() {
-      if (this.isExternalShare) {
-        const decodedId = atob(this.share.sharedWith.id)
-        const [, serverUrl] = decodedId.split('@')
-        const domain = new URL(serverUrl).hostname
-
-        return domain
-      }
-
-      return null
-    },
-    accessDetails() {
-      const list: ContextualHelperDataListItem[] = []
-
-      list.push({ text: this.$gettext('Name'), headline: true }, { text: this.shareDisplayName })
-      this.isExternalShare &&
-        list.push(
-          { text: this.$gettext('Domain'), headline: true },
-          { text: this.externalShareDomainName }
-        )
-
-      list.push({ text: this.$gettext('Type'), headline: true }, { text: this.shareTypeText })
-      list.push(
-        { text: this.$gettext('Access expires'), headline: true },
-        { text: this.hasExpirationDate ? this.expirationDate : this.$gettext('no') }
-      )
-      list.push({ text: this.$gettext('Shared on'), headline: true }, { text: this.shareDate })
-
-      if (!this.isSpaceShare) {
-        list.push(
-          { text: this.$gettext('Invited by'), headline: true },
-          { text: this.shareOwnerDisplayName }
-        )
-      }
-
-      return list
-    }
-  },
-  methods: {
-    removeShare() {
-      this.$emit('onDelete', this.share)
-    },
-
-    async shareRoleChanged(role: ShareRole) {
-      const expirationDateTime = this.share.expirationDateTime
-      try {
-        await this.saveShareChanges({ role, expirationDateTime })
-      } catch (e) {
-        console.error(e)
-        this.showErrorMessage({
-          title: this.$gettext('Failed to apply new permissions'),
-          errors: [e]
-        })
-      }
-    },
-
-    async shareExpirationChanged({ expirationDateTime }: { expirationDateTime: string }) {
-      const role = this.share.role
-      try {
-        await this.saveShareChanges({ role, expirationDateTime })
-      } catch (e) {
-        console.error(e)
-        this.showErrorMessage({
-          title: this.$gettext('Failed to apply expiration date'),
-          errors: [e]
-        })
-      }
-    },
-
-    async saveShareChanges({
-      role,
-      expirationDateTime
-    }: {
-      role: ShareRole
-      expirationDateTime?: string
-    }) {
-      try {
-        await this.updateShare({
-          clientService: this.$clientService,
-          space: this.space,
-          resource: this.resource,
-          collaboratorShare: this.share,
-          options: { roles: [role.id], expirationDateTime }
-        })
-
-        if (isProjectSpaceResource(this.resource)) {
-          const client = this.clientService.graphAuthenticated
-          const space = await client.drives.getDrive(this.resource.id, this.graphRoles)
-
-          this.upsertSpace(space)
-        }
-
-        this.showMessage({ title: this.$gettext('Share successfully changed') })
-      } catch (e) {
-        console.error(e)
-        this.showErrorMessage({
-          title: this.$gettext('Error while editing the share.'),
-          errors: [e]
-        })
-      }
-    }
-  }
+const sharedParentDir = computed(() => {
+  return queryItemAsString(sharedParentRoute?.params?.driveAliasAndItem).split('/').pop()
 })
+
+const shareDate = computed(() => {
+  return formatDateFromDateTime(DateTime.fromISO(share.createdDateTime), language.current)
+})
+
+const isExternalShare = computed(() => share.shareType === ShareTypes.remote.value)
+
+const setDenyShare = (value: boolean) => {
+  emit('onSetDeny', { share: share, value })
+}
+
+const showNotifyShareModal = () => {
+  dispatchModal({
+    variation: 'warning',
+    icon: 'mail-send',
+    title: $gettext('Send a reminder'),
+    confirmText: $gettext('Send'),
+    message: $gettext('Are you sure you want to send a reminder about this share?'),
+    onConfirm: notifyShare
+  })
+}
+const notifyShare = async () => {
+  // FIXME: cern code
+  // const response = await clientService.owncloudSdk.shares.notifyShare(props.share.id)
+}
+
+const sharedViaTooltip = computed(() =>
+  $gettext('Shared via the parent folder "%{sharedParentDir}"', {
+    sharedParentDir: unref(sharedParentDir)
+  })
+)
+
+const shareType = computed(() => ShareTypes.getByValue(share.shareType))
+
+const shareTypeIcon = computed(() => unref(shareType).icon)
+
+const shareTypeKey = computed(() => unref(shareType).key)
+
+const shareDomSelector = computed(() => {
+  if (!share.id) {
+    return undefined
+  }
+  return extractDomSelector(share.id)
+})
+
+const isAnyUserShareType = computed(() => ShareTypes.user === unref(shareType))
+
+const shareTypeText = computed(() => $gettext(unref(shareType).label))
+
+const shareCategory = computed(() => (ShareTypes.isIndividual(unref(shareType)) ? 'user' : 'group'))
+
+const shareDeniedTooltip = computed(() => {
+  return $gettext('%{shareType} cannot access %{resourceName}', {
+    shareType: unref(shareTypeText),
+    resourceName: resourceName
+  })
+})
+
+const shareDisplayName = computed(() => {
+  if (unref(user).id === share.sharedWith.id) {
+    return $gettext('%{collaboratorName} (me)', {
+      collaboratorName: share.sharedWith.displayName
+    })
+  }
+  return share.sharedWith.displayName
+})
+
+const screenreaderShareDisplayName = computed(() => {
+  const context = {
+    displayName: share.sharedWith.displayName
+  }
+
+  return $gettext('Share receiver name: %{ displayName }', context)
+})
+
+const hasExpirationDate = computed(() => !!share.expirationDateTime)
+
+const expirationDate = computed(() => {
+  return formatDateFromDateTime(
+    DateTime.fromISO(share.expirationDateTime).endOf('day'),
+    language.current
+  )
+})
+
+const shareOwnerDisplayName = computed(() => share.sharedBy.displayName)
+
+const externalShareDomainName = computed(() => {
+  if (unref(isExternalShare)) {
+    const decodedId = atob(share.sharedWith.id)
+    const [, serverUrl] = decodedId.split('@')
+    const domain = new URL(serverUrl).hostname
+
+    return domain
+  }
+
+  return null
+})
+
+const accessDetails = computed(() => {
+  const list: ContextualHelperDataListItem[] = []
+
+  list.push({ text: $gettext('Name'), headline: true }, { text: unref(shareDisplayName) })
+  unref(isExternalShare) &&
+    list.push(
+      { text: $gettext('Domain'), headline: true },
+      { text: unref(externalShareDomainName) }
+    )
+
+  list.push({ text: $gettext('Type'), headline: true }, { text: unref(shareTypeText) })
+  list.push(
+    { text: $gettext('Access expires'), headline: true },
+    { text: unref(hasExpirationDate) ? unref(expirationDate) : $gettext('no') }
+  )
+  list.push({ text: $gettext('Shared on'), headline: true }, { text: unref(shareDate) })
+
+  if (!isSpaceShare) {
+    list.push(
+      { text: $gettext('Invited by'), headline: true },
+      { text: unref(shareOwnerDisplayName) }
+    )
+  }
+
+  return list
+})
+
+function removeShare() {
+  emit('onDelete', share)
+}
+
+async function shareRoleChanged(role: ShareRole) {
+  const expirationDateTime = share.expirationDateTime
+  try {
+    await saveShareChanges({ role, expirationDateTime })
+  } catch (e) {
+    console.error(e)
+    showErrorMessage({
+      title: $gettext('Failed to apply new permissions'),
+      errors: [e]
+    })
+  }
+}
+
+async function shareExpirationChanged({ expirationDateTime }: { expirationDateTime: string }) {
+  const role = share.role
+  try {
+    await saveShareChanges({ role, expirationDateTime })
+  } catch (e) {
+    console.error(e)
+    showErrorMessage({
+      title: $gettext('Failed to apply expiration date'),
+      errors: [e]
+    })
+  }
+}
+
+async function saveShareChanges({
+  role,
+  expirationDateTime
+}: {
+  role: ShareRole
+  expirationDateTime?: string
+}) {
+  try {
+    await updateShare({
+      clientService,
+      space: unref(space),
+      resource: unref(resource),
+      collaboratorShare: share,
+      options: { roles: [role.id], expirationDateTime }
+    })
+
+    if (isProjectSpaceResource(unref(resource))) {
+      const client = clientService.graphAuthenticated
+      const space = await client.drives.getDrive(unref(resource).id, unref(graphRoles))
+
+      upsertSpace(space)
+    }
+
+    showMessage({ title: $gettext('Share successfully changed') })
+  } catch (e) {
+    console.error(e)
+    showErrorMessage({
+      title: $gettext('Error while editing the share.'),
+      errors: [e]
+    })
+  }
+}
 </script>
 
 <style lang="scss" scoped>
