@@ -323,7 +323,12 @@ export default defineComponent({
     const items = computed(() =>
       orderBy(
         filter(unref(spaces), unref(filterTerm)),
-        [(item: SpaceResource) => item[unref(sortBy)].toLowerCase()],
+        [
+          (item: SpaceResource) =>
+            typeof item[unref(sortBy)] === 'string'
+              ? item[unref(sortBy)].toLowerCase()
+              : item[unref(sortBy)]
+        ],
         unref(sortDir)
       )
     )
