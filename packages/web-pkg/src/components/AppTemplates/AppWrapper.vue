@@ -96,6 +96,7 @@ import { useFileActionsOpenWithApp } from '../../composables/actions/files/useFi
 import { UnsavedChangesModal } from '../Modals'
 import { formatFileSize, getSharedDriveItem } from '../../helpers'
 import toNumber from 'lodash-es/toNumber'
+import { useAuthService } from '../../composables/authContext/useAuthService'
 
 export default defineComponent({
   name: 'AppWrapper',
@@ -149,6 +150,7 @@ export default defineComponent({
     const configStore = useConfigStore()
     const resourcesStore = useResourcesStore()
     const sharesStore = useSharesStore()
+    const authService = useAuthService()
 
     const { actions: openWithAppActions } = useFileActionsOpenWithApp({
       appId: props.applicationId
@@ -317,6 +319,10 @@ export default defineComponent({
         resourcesStore.initResourceList({ currentFolder: null, resources: [unref(resource)] })
         selectedResources.value = [unref(resource)]
       } catch (e) {
+        if (typeof e === 'object' && e.statusCode === 401) {
+          return authService.handleAuthError(unref(router.currentRoute))
+        }
+
         console.error(e)
         loadingError.value = e
         loading.value = false
