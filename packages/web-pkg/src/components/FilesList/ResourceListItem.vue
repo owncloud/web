@@ -39,7 +39,6 @@
         <resource-name
           :key="resource.name"
           :name="resource.name"
-          :path-prefix="pathPrefix"
           :extension="resource.extension"
           :type="resource.type"
           :full-path="resource.path"
@@ -53,6 +52,7 @@
         <component
           :is="parentFolderComponentType"
           v-if="isPathDisplayed"
+          v-oc-tooltip="parentFolderPathTooltip"
           :to="parentFolderLink"
           :style="parentFolderStyle"
           class="parent-folder oc-text-truncate"
@@ -65,13 +65,14 @@
   </div>
 </template>
 <script lang="ts">
-import { defineComponent, PropType } from 'vue'
+import { computed, defineComponent, PropType } from 'vue'
 import { Resource } from '@ownclouders/web-client'
 import ResourceIcon from './ResourceIcon.vue'
 import ResourceLink from './ResourceLink.vue'
 import ResourceName from './ResourceName.vue'
 import { RouteLocationRaw } from 'vue-router'
 import { HIDDEN_FILE_EXTENSIONS } from '../../constants'
+import { dirname, join } from 'node:path'
 /**
  * Displays a resource together with the resource type icon or thumbnail
  */
@@ -169,8 +170,22 @@ export default defineComponent({
   },
   emits: ['click'],
 
-  setup() {
-    return { HIDDEN_EXTENSIONS: HIDDEN_FILE_EXTENSIONS }
+  setup(props) {
+    const parentFolderPathTooltip = computed(() => {
+      if (!props.isPathDisplayed) {
+        return null
+      }
+
+      const parentFolderPath = dirname(props.resource.path)
+
+      if (props.pathPrefix) {
+        return join(props.pathPrefix, parentFolderPath).replaceAll('/', ' > ')
+      }
+
+      return parentFolderPath.replaceAll('/', ' > ')
+    })
+
+    return { HIDDEN_EXTENSIONS: HIDDEN_FILE_EXTENSIONS, parentFolderPathTooltip }
   },
 
   computed: {
