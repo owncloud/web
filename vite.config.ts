@@ -174,7 +174,10 @@ export default defineConfig(({ mode, command }) => {
       css: {
         preprocessorOptions: {
           scss: {
-            additionalData: `@import "${projectRootDir}/packages/design-system/src/styles/styles";${stripScssMarker}`,
+            additionalData: `
+              @use "sass:math";
+              @import "${projectRootDir}/packages/design-system/src/styles/styles";${stripScssMarker}
+            `,
             silenceDeprecations: ['legacy-js-api', 'import']
           }
         }
