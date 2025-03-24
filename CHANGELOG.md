@@ -24,6 +24,7 @@ Summary
 * Bugfix - Delete .psec file: [#12329](https://github.com/owncloud/web/pull/12329)
 * Bugfix - Handle shares loading error: [#12336](https://github.com/owncloud/web/pull/12336)
 * Bugfix - Add domain to distinguish between external users: [#12339](https://github.com/owncloud/web/pull/12339)
+* Bugfix - Fix sorting in spaces view that may crash the application: [#12351](https://github.com/owncloud/web/pull/12351)
 * Enhancement - Accessibility improvements: [#5379](https://github.com/owncloud/web/issues/5379)
 * Enhancement - Create spaces via admin settings: [#11849](https://github.com/owncloud/web/pull/11849)
 * Enhancement - Add maintenance banner: [#12239](https://github.com/owncloud/web/pull/12239)
@@ -171,6 +172,12 @@ Details
 
    https://github.com/owncloud/web/issues/12184
    https://github.com/owncloud/web/pull/12339
+
+* Bugfix - Fix sorting in spaces view that may crash the application: [#12351](https://github.com/owncloud/web/pull/12351)
+
+   Fixed a bug where the project/spaces view crashed when orderd by quota items.
+
+   https://github.com/owncloud/web/pull/12351
 
 * Enhancement - Accessibility improvements: [#5379](https://github.com/owncloud/web/issues/5379)
 
