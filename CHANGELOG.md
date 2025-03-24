@@ -25,6 +25,8 @@ Summary
 * Bugfix - Handle shares loading error: [#12336](https://github.com/owncloud/web/pull/12336)
 * Bugfix - Add domain to distinguish between external users: [#12339](https://github.com/owncloud/web/pull/12339)
 * Bugfix - Fix sorting in spaces view that may crash the application: [#12351](https://github.com/owncloud/web/pull/12351)
+* Bugfix - Show path tooltip on parent folder: [#12356](https://github.com/owncloud/web/pull/12356)
+* Bugfix - Handle changed public link password in file editors: [#12357](https://github.com/owncloud/web/pull/12357)
 * Enhancement - Accessibility improvements: [#5379](https://github.com/owncloud/web/issues/5379)
 * Enhancement - Create spaces via admin settings: [#11849](https://github.com/owncloud/web/pull/11849)
 * Enhancement - Add maintenance banner: [#12239](https://github.com/owncloud/web/pull/12239)
@@ -179,6 +181,25 @@ Details
    Fixed a bug where the project/spaces view crashed when orderd by quota items.
 
    https://github.com/owncloud/web/pull/12351
+
+* Bugfix - Show path tooltip on parent folder: [#12356](https://github.com/owncloud/web/pull/12356)
+
+   Instead of displaying tooltip with resource path while hovering/focusing on the
+   resource, display it on parent folder with parent folder path.
+
+   https://github.com/owncloud/web/issues/7776
+   https://github.com/owncloud/web/pull/12356
+
+* Bugfix - Handle changed public link password in file editors: [#12357](https://github.com/owncloud/web/pull/12357)
+
+   Refreshing a file editor while having a file shared via public link opened will
+   no longer display an error that username or password is incorrect when the
+   public link password has been changed. Instead, it will correctly redirect to
+   the public link password screen where user can enter new password and continue
+   editing the file afterwards.
+
+   https://github.com/owncloud/web/issues/12113
+   https://github.com/owncloud/web/pull/12357
 
 * Enhancement - Accessibility improvements: [#5379](https://github.com/owncloud/web/issues/5379)
 
