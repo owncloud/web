@@ -3,7 +3,7 @@
     <div>
       <div class="oc-flex oc-flex-middle oc-px-m oc-pt-s">
         <oc-icon name="user-shared" />
-        <h2 class="oc-px-s" v-text="$gettext('Invite users')"></h2>
+        <h2 class="oc-px-s" v-text="$gettext('Invite users to federate')"></h2>
         <oc-contextual-helper class="oc-pl-xs" v-bind="helperContent" />
       </div>
       <div class="oc-flex oc-flex-middle oc-flex-center oc-p-m">
