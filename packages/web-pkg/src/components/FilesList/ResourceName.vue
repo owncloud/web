@@ -1,6 +1,5 @@
 <template>
   <span
-    v-oc-tooltip="tooltip"
     class="oc-resource-name"
     :class="[{ 'oc-display-inline-block': !truncateName }]"
     :data-test-resource-path="fullPath"
@@ -21,7 +20,6 @@
 
 <script lang="ts">
 import { defineComponent } from 'vue'
-import path from 'path'
 
 export default defineComponent({
   name: 'ResourceName',
@@ -32,14 +30,6 @@ export default defineComponent({
     name: {
       type: String,
       required: true
-    },
-    /**
-     * The prefix that will be shown in the path
-     */
-    pathPrefix: {
-      type: String,
-      required: false,
-      default: ''
     },
     /**
      * The extension of the resource, if there is one
@@ -90,10 +80,6 @@ export default defineComponent({
   },
 
   computed: {
-    tooltip() {
-      return this.pathTooltip
-    },
-
     fullName() {
       return (this.displayPath || '') + this.name
     },
@@ -123,24 +109,7 @@ export default defineComponent({
       return `…/${pathSplit[pathSplit.length - 2]}/`
     },
 
-    pathTooltip() {
-      if (!this.isPathDisplayed) {
-        return null
-      }
-      if (this.displayPath === this.fullPath) {
-        return null
-      }
-      if (this.pathPrefix) {
-        return path.join(this.pathPrefix, this.fullPath)
-      }
-      return this.fullPath
-    },
-
     htmlTitle() {
-      if (this.tooltip) {
-        return
-      }
-
       if (this.isExtensionDisplayed) {
         return `${this.displayName}${this.displayExtension}`
       }

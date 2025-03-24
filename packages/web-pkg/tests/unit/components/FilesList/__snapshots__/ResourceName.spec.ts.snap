@@ -1,7 +1,7 @@
 // Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
 exports[`OcResourceName > does not show the name as HTML title if the path is being displayed 1`] = `
-"<span class="oc-resource-name" data-test-resource-path="folder" data-test-resource-name="folder" data-test-resource-type="folder"><span class="oc-text-truncate"><span class="oc-resource-basename">folder</span></span>
+"<span class="oc-resource-name" data-test-resource-path="folder" data-test-resource-name="folder" data-test-resource-type="folder" title="folder"><span class="oc-text-truncate"><span class="oc-resource-basename">folder</span></span>
 <!--v-if--></span>"
 `;
 
