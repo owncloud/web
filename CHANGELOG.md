@@ -29,6 +29,7 @@ Summary
 * Enhancement - Create spaces via admin settings: [#11849](https://github.com/owncloud/web/pull/11849)
 * Enhancement - Add maintenance banner: [#12239](https://github.com/owncloud/web/pull/12239)
 * Enhancement - Add new supported language to md-editor: [#12243](https://github.com/owncloud/web/pull/12243)
+* Enhancement - Rephrase invite users to invite users to federate: [#12355](https://github.com/owncloud/web/pull/12355)
 
 Details
 -------
@@ -211,6 +212,14 @@ Details
    Arabic language. We have also added auto focus on the editor.
 
    https://github.com/owncloud/web/pull/12243
+
+* Enhancement - Rephrase invite users to invite users to federate: [#12355](https://github.com/owncloud/web/pull/12355)
+
+   We have rephrase science mesh "invite users" to "invite users to federate" to
+   make it clearer to the users.
+
+   https://github.com/owncloud/web/issues/11566
+   https://github.com/owncloud/web/pull/12355
 
 Changelog for ownCloud Web [11.3.1] (2025-03-13)
 =======================================
