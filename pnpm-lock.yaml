@@ -228,7 +228,7 @@ importers:
         version: 4.17.21
       luxon:
         specifier: ^3.5.0
-        version: 3.5.0
+        version: 3.6.0
       tippy.js:
         specifier: ^6.3.7
         version: 6.3.7
@@ -436,7 +436,7 @@ importers:
         version: link:../web-pkg
       luxon:
         specifier: ^3.5.0
-        version: 3.5.0
+        version: 3.6.0
       pinia:
         specifier: ^3.0.1
         version: 3.0.1(typescript@5.8.2)(vue@3.5.13(typescript@5.8.2))
@@ -629,8 +629,8 @@ importers:
         specifier: 4.17.21
         version: 4.17.21
       luxon:
-        specifier: 3.5.0
-        version: 3.5.0
+        specifier: 3.6.0
+        version: 3.6.0
       mark.js:
         specifier: ^8.11.1
         version: 8.11.1
@@ -855,7 +855,7 @@ importers:
         version: 4.17.21
       luxon:
         specifier: ^3.5.0
-        version: 3.5.0
+        version: 3.6.0
       uuid:
         specifier: ^11.0.0
         version: 11.1.0
@@ -956,7 +956,7 @@ importers:
         version: 4.17.21
       luxon:
         specifier: ^3.5.0
-        version: 3.5.0
+        version: 3.6.0
       mark.js:
         specifier: ^8.11.1
         version: 8.11.1
@@ -1092,8 +1092,8 @@ importers:
         specifier: 4.17.21
         version: 4.17.21
       luxon:
-        specifier: 3.5.0
-        version: 3.5.0
+        specifier: 3.6.0
+        version: 3.6.0
       mark.js:
         specifier: 8.11.1
         version: 8.11.1
@@ -4948,6 +4948,10 @@ packages:
     resolution: {integrity: sha512-rh+Zjr6DNfUYR3bPwJEnuwDdqMbxZW7LOQfUN4B54+Cl+0o5zaU9RJ6bcidfDtC1cWCZXQ+nvX8bf6bAji37QQ==}
     engines: {node: '>=12'}
 
+  luxon@3.6.0:
+    resolution: {integrity: sha512-WE7p0p7W1xji9qxkLYsvcIxZyfP48GuFrWIBQZIsbjCyf65dG1rv4n83HcOyEyhvzxJCrUoObCRNFgRNIQ5KNA==}
+    engines: {node: '>=12'}
+
   magic-string@0.30.17:
     resolution: {integrity: sha512-sNPKHvyjVf7gyjwS4xGTaW/mCnF8wnjtifKBEhxfZ7E/S8tQ0rssrwGNn6q8JH/ohItJfSQp9mBtQYuTlH5QnA==}
 
@@ -8106,7 +8110,7 @@ snapshots:
       '@cucumber/messages': 27.0.2
       '@cucumber/query': 13.2.0(@cucumber/messages@27.0.2)
       '@teppeis/multimaps': 3.0.0
-      luxon: 3.5.0
+      luxon: 3.6.0
       xmlbuilder: 15.1.1
 
   '@cucumber/message-streams@4.0.1(@cucumber/messages@21.0.1)':
@@ -11267,6 +11271,8 @@ snapshots:
   luxon@3.2.1: {}
 
   luxon@3.5.0: {}
+
+  luxon@3.6.0: {}
 
   magic-string@0.30.17:
     dependencies:
