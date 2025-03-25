@@ -1,5 +1,5 @@
 import { DataTable, Then, When } from '@cucumber/cucumber'
-import { expect, Page } from '@playwright/test'
+import { expect } from '@playwright/test'
 import { World } from '../../environment'
 import { objects } from '../../../support'
 import { processDelete, processDownload } from './resources'
@@ -9,20 +9,10 @@ import { securePassword } from '../../../support/store'
 When(
   '{string} opens the public link {string}',
   async function (this: World, stepUser: string, name: string): Promise<void> {
-    let page: Page
-    try {
-      page = this.actorsEnvironment.getActor({ key: stepUser }).page
-    } catch (err) {
-      if (!['anonymous', 'public'].includes(stepUser.toLowerCase())) {
-        throw err
-      }
-      page = (
-        await this.actorsEnvironment.createActor({
-          key: stepUser,
-          namespace: this.actorsEnvironment.generateNamespace(this.feature.name, stepUser)
-        })
-      ).page
-    }
+    const { page } = await this.actorsEnvironment.createActor({
+      key: stepUser,
+      namespace: this.actorsEnvironment.generateNamespace(this.feature.name, stepUser)
+    })
 
     const { url } = this.linksEnvironment.getLink({ name })
     const pageObject = new objects.applicationFiles.page.Public({ page })

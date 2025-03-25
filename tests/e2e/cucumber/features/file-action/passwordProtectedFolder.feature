@@ -29,9 +29,9 @@ Feature: password-protected folder operations
 
     # Opening
     When "Alice" opens the "files" app
-    And "Alice" opens folder "sampleFolder.psec"
+    And "Alice" opens folder "folder1.psec"
     And "Alice" unlocks password protected folder with password "%public%"
-    And "Alice" copies the link of password protected folder "sampleFolder.psec"
+    And "Alice" copies the link of password protected folder "folder1.psec"
     And "Alice" closes the password protected folder modal
 
     # Opening by public user
@@ -103,7 +103,7 @@ Feature: password-protected folder operations
     # Opening
     When "Alice" navigates to the projects space page
     And "Alice" navigates to the project space "team.1"
-    And "Alice" opens folder "space-folder.psec"
+    And "Alice" opens folder "space-folder1.psec"
     And "Alice" unlocks password protected folder with password "%public%"
     And "Alice" closes the password protected folder modal
 
@@ -112,12 +112,14 @@ Feature: password-protected folder operations
     And "Brian" enables the option to display the hidden file
     When "Brian" navigates to the projects space page
     And "Brian" navigates to the project space "team.1"
-    And "Brian" opens folder "new-space-folder.psec"
+    And "Brian" opens folder "space-folder1.psec"
     And "Brian" unlocks password protected folder with password "%public%"
     And "Brian" closes the password protected folder modal
 
     # Deletion
-    When "Alice" deletes the following resources using the sidebar panel
+    When "Alice" navigates to the personal space page
+    And "Alice" opens folder ".PasswordProtectedFolders/projects/team"
+    And "Alice" deletes the following resources using the sidebar panel
       | resource      |
       | space-folder3 |
     And "Alice" navigates to the projects space page

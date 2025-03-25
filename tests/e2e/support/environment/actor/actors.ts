@@ -5,7 +5,6 @@ import { Actor } from '../../types'
 import { ActorsOptions } from './shared'
 import { ActorEnvironment } from './actor'
 import { actorStore } from '../../store'
-import { Page } from '@playwright/test'
 
 export class ActorsEnvironment extends EventEmitter {
   private readonly options: ActorsOptions
@@ -46,18 +45,5 @@ export class ActorsEnvironment extends EventEmitter {
 
   public generateNamespace(scenarioTitle: string, user: string): string {
     return kebabCase([scenarioTitle, user, DateTime.now().toFormat('yyyy-M-d-hh-mm-ss')].join('-'))
-  }
-
-  public async getOrCreateActorPage(stepUser: string, featureName: string): Promise<Page> {
-    let page: Page
-    try {
-      page = this.getActor({ key: stepUser }).page
-    } catch {
-      await this.createActor({
-        key: stepUser,
-        namespace: this.generateNamespace(featureName, stepUser)
-      }).then((actor) => (page = actor.page))
-    }
-    return page
   }
 }
