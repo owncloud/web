@@ -608,6 +608,7 @@ def e2eTests(ctx):
             "FAIL_ON_UNCAUGHT_CONSOLE_ERR": "true",
             "PLAYWRIGHT_BROWSERS_PATH": ".playwright",
             "BROWSER": "chromium",
+            "FEDERATED_BASE_URL_OCIS": "federation-ocis:9200",
         }
 
         steps = skipIfUnchanged(ctx, "e2e-tests") + \
@@ -973,11 +974,12 @@ def ocisService(extra_env_config = {}, deploy_type = "ocis"):
     }
 
     if deploy_type == "federation":
-        environment["OCIS_URL"] = "https://federation-ocis:10200"
-        environment["PROXY_HTTP_ADDR"] = "federation-ocis:10200"
+        environment["OCIS_URL"] = "https://federation-ocis:9200"
+        environment["PROXY_HTTP_ADDR"] = "federation-ocis:9200"
         environment["WEB_UI_CONFIG_FILE"] = dir["federatedOcisConfig"]
+        environment["OCIS_LOG_LEVEL"] = "debug"
         container_name = "federation-ocis"
-        ocis_domain = "federation-ocis:10200"
+        ocis_domain = "federation-ocis:9200"
     else:
         container_name = "ocis"
         ocis_domain = "ocis:9200"
