@@ -228,9 +228,22 @@ export default defineComponent({
               const spaceAbove = availableHeight - spaceBelow
 
               if (dropHeight > spaceBelow && dropHeight > spaceAbove) {
-                // place drop on top of screen because of limited screen estate above and below
-                state.styles.popper.top = `-${dropYPos}px`
-                state.modifiersData.fullHeight = dropHeight
+                /*
+                  if context menu placement from the top 'dropYPos' is the same or less than space above
+                  and placement is right-start or left-start
+                  then subtract the dropYPos from spaceAbove and set the drop on top of the screen
+                */
+                if (
+                  dropYPos <= spaceAbove &&
+                  ['right-start', 'left-start'].includes(state.placement)
+                ) {
+                  state.styles.popper.top = `${spaceAbove - dropYPos}px`
+                  state.modifiersData.fullHeight = dropHeight
+                } else {
+                  // place drop on top of screen because of limited screen estate above and below
+                  state.styles.popper.top = `-${dropYPos}px`
+                  state.modifiersData.fullHeight = dropHeight
+                }
               }
 
               if (dropHeight > availableHeight) {
