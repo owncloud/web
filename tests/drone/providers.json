@@ -3,7 +3,7 @@
     "name": "ocis",
     "full_name": "ocis server",
     "organization": "ownCloud",
-    "domain": ".*ocis:9200",
+    "domain": ".*:9200",
     "homepage": "https://owncloud.com",
     "services": [
       {
@@ -13,11 +13,11 @@
             "description": "ownCloud Open Cloud Mesh API"
           },
           "name": "ownCloud - OCM API",
-          "path": "https://.*ocis:9200/ocm/",
+          "path": "https://.*:9200/ocm/",
           "is_monitored": true
         },
         "api_version": "0.0.1",
-        "host": ".*ocis:9200"
+        "host": ".*:9200"
       }
     ]
   }

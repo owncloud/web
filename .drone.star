@@ -977,7 +977,6 @@ def ocisService(extra_env_config = {}, deploy_type = "ocis"):
         environment["OCIS_URL"] = "https://federation-ocis:9200"
         environment["PROXY_HTTP_ADDR"] = "federation-ocis:9200"
         environment["WEB_UI_CONFIG_FILE"] = dir["federatedOcisConfig"]
-        environment["OCIS_LOG_LEVEL"] = "debug"
         container_name = "federation-ocis"
         ocis_domain = "federation-ocis:9200"
     else:
