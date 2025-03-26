@@ -12,31 +12,45 @@ Feature: password-protected folder operations
   Scenario: password-protected folder in personal space
     Given "Alice" has logged in
     When "Alice" creates the following resources
-      | resource     | type                      | password |
-      | sampleFolder | Password Protected Folder | %public% |
+      | resource | type                      | password |
+      | folder1  | Password Protected Folder | %public% |
+      | folder2  | Password Protected Folder | %public% |
     And "Alice" enables the option to display the hidden file
     Then following resources should be displayed in the files list for user "Alice"
       | resource                  |
       | .PasswordProtectedFolders |
-      | sampleFolder.psec         |
+      | folder1.psec              |
+      | folder2.psec              |
     When "Alice" opens folder ".PasswordProtectedFolders/projects/Personal"
     Then following resources should be displayed in the files list for user "Alice"
-      | resource     |
-      | sampleFolder |
+      | resource |
+      | folder1  |
+      | folder2  |
 
     # Deletion
     When "Alice" opens the "files" app
     And "Alice" deletes the following resources using the sidebar panel
-      | resource          |
-      | sampleFolder.psec |
-    When "Alice" opens folder ".PasswordProtectedFolders/projects/Personal"
-    Then following resources should not be displayed in the files list for user "Alice"
       | resource     |
-      | sampleFolder |
+      | folder1.psec |
+    And "Alice" opens folder ".PasswordProtectedFolders/projects/Personal"
+    Then following resources should not be displayed in the files list for user "Alice"
+      | resource |
+      | folder1  |
+    When "Alice" deletes the following resources using the sidebar panel
+      | resource |
+      | folder2  |
+    Then following resources should not be displayed in the files list for user "Alice"
+      | resource |
+      | folder2  |
+    And "Alice" navigates to the personal space page
+    And following resources should not be displayed in the files list for user "Alice"
+      | resource     |
+      | folder2.psec |
     When "Alice" navigates to the trashbin
     Then following resources should be displayed in the trashbin for user "Alice"
-      | resource          |
-      | sampleFolder.psec |
+      | resource     |
+      | folder1.psec |
+      | folder2.psec |
     And "Alice" logs out
 
 
@@ -58,26 +72,38 @@ Feature: password-protected folder operations
       | user  | role     | kind |
       | Brian | Can edit | user |
     When "Alice" creates the following resources
-      | resource         | type                      | password |
-      | space-folder     | Password Protected Folder | %public% |
-      | new-space-folder | Password Protected Folder | %public% |
+      | resource      | type                      | password |
+      | space-folder1 | Password Protected Folder | %public% |
+      | space-folder2 | Password Protected Folder | %public% |
+      | space-folder3 | Password Protected Folder | %public% |
     Then following resources should be displayed in the files list for user "Alice"
-      | resource              |
-      | space-folder.psec     |
-      | new-space-folder.psec |
+      | resource           |
+      | space-folder1.psec |
+      | space-folder2.psec |
+      | space-folder3.psec |
     And "Alice" navigates to the personal space page
     When "Alice" opens folder ".PasswordProtectedFolders/projects/team"
     Then following resources should be displayed in the files list for user "Alice"
-      | resource         |
-      | space-folder     |
-      | new-space-folder |
+      | resource      |
+      | space-folder1 |
+      | space-folder2 |
+      | space-folder3 |
 
     # Deletion
-    When "Alice" navigates to the projects space page
+    When "Alice" deletes the following resources using the sidebar panel
+      | resource      |
+      | space-folder3 |
+    And "Alice" navigates to the projects space page
     And "Alice" navigates to the project space "team.1"
     And "Alice" deletes the following resources using the sidebar panel
-      | resource          |
-      | space-folder.psec |
+      | resource           |
+      | space-folder1.psec |
+    And "Alice" navigates to the projects space page
+    And "Alice" navigates to the project space "team.1"
+    Then following resources should not be displayed in the files list for user "Alice"
+      | resource           |
+      | space-folder1.psec |
+      | space-folder3.psec |
 
     # Deletion by space-member
     And "Brian" logs in
@@ -85,25 +111,28 @@ Feature: password-protected folder operations
     And "Brian" navigates to the projects space page
     And "Brian" navigates to the project space "team.1"
     When "Brian" deletes the following resources using the sidebar panel
-      | resource              |
-      | new-space-folder.psec |
+      | resource           |
+      | space-folder2.psec |
     And "Brian" navigates to the trashbin of the project space "team.1"
     Then following resources should be displayed in the trashbin for user "Brian"
-      | resource              |
-      | space-folder.psec     |
-      | new-space-folder.psec |
+      | resource           |
+      | space-folder1.psec |
+      | space-folder2.psec |
+      | space-folder3.psec |
     And "Alice" navigates to the trashbin of the project space "team.1"
     Then following resources should be displayed in the trashbin for user "Alice"
-      | resource              |
-      | space-folder.psec     |
-      | new-space-folder.psec |
+      | resource           |
+      | space-folder1.psec |
+      | space-folder2.psec |
+      | space-folder3.psec |
     When "Alice" navigates to the personal space page
     And "Alice" opens folder ".PasswordProtectedFolders/projects/team"
     Then following resources should be displayed in the files list for user "Alice"
-      | resource         |
-      | new-space-folder |
+      | resource      |
+      | space-folder2 |
     And following resources should not be displayed in the files list for user "Alice"
-      | resource     |
-      | space-folder |
+      | resource      |
+      | space-folder1 |
+      | space-folder3 |
     And "Brian" logs out
     And "Alice" logs out
