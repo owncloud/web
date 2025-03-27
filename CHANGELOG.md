@@ -27,6 +27,7 @@ Summary
 * Bugfix - Fix sorting in spaces view that may crash the application: [#12351](https://github.com/owncloud/web/pull/12351)
 * Bugfix - Show path tooltip on parent folder: [#12356](https://github.com/owncloud/web/pull/12356)
 * Bugfix - Handle changed public link password in file editors: [#12357](https://github.com/owncloud/web/pull/12357)
+* Bugfix - Space context menu is cropped with limited vertical screen space: [#12368](https://github.com/owncloud/web/pull/12368)
 * Enhancement - Accessibility improvements: [#5379](https://github.com/owncloud/web/issues/5379)
 * Enhancement - Create spaces via admin settings: [#11849](https://github.com/owncloud/web/pull/11849)
 * Enhancement - Add maintenance banner: [#12239](https://github.com/owncloud/web/pull/12239)
@@ -200,6 +201,14 @@ Details
 
    https://github.com/owncloud/web/issues/12113
    https://github.com/owncloud/web/pull/12357
+
+* Bugfix - Space context menu is cropped with limited vertical screen space: [#12368](https://github.com/owncloud/web/pull/12368)
+
+   We've fixed the issue of context menu being cut off when vertical screen space
+   is limited.
+
+   https://github.com/owncloud/web/issues/11205
+   https://github.com/owncloud/web/pull/12368
 
 * Enhancement - Accessibility improvements: [#5379](https://github.com/owncloud/web/issues/5379)
 
