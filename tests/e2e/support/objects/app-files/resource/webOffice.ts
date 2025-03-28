@@ -5,8 +5,10 @@ const externalEditorIframe = '[name="app-iframe"]'
 const collaboraDocPermissionModeSelector = '#permissionmode-container'
 const collaboraEditorSaveSelector = '.notebookbar-shortcuts-bar #save'
 const collaboraDocTextAreaSelector = '#clipboard-area'
-const collaboraWelcomeModal = '.iframe-welcome-modal'
 const collaboraCanvasEditorSelector = '.leaflet-layer'
+const collaboraWelcomeModal = '.iframe-welcome-modal'
+const collaboraWelcomeSlide = '.slider > a'
+const collaboraWelcomeClose = '//button[text()="Close"]'
 // OnlyOffice
 const onlyOfficeInnerFrameSelector = '[name="frameEditor"]'
 const onlyOfficeSaveButtonSelector = '#slot-btn-dt-save > button'
@@ -21,11 +23,14 @@ export const removeCollaboraWelcomeModal = async (page: Page): Promise<void> => 
   })
   if (!versionSet) {
     await editorMainFrame.locator(collaboraWelcomeModal).waitFor()
-    await page.keyboard.press('Escape')
+    const welcomeModal = editorMainFrame.frameLocator(collaboraWelcomeModal)
+    await welcomeModal.locator(collaboraWelcomeSlide).last().click()
+    await welcomeModal.locator(collaboraWelcomeClose).click()
   }
 }
 
 export const waitForCollaboraEditor = async (page: Page): Promise<void> => {
+  await removeCollaboraWelcomeModal(page)
   const editorMainFrame = page.frameLocator(externalEditorIframe)
   await editorMainFrame.locator(collaboraDocTextAreaSelector).waitFor()
 }
@@ -38,6 +43,7 @@ export const waitForOnlyOfficeEditor = async (page: Page): Promise<void> => {
 }
 
 export const focusCollaboraEditor = async (page: Page): Promise<void> => {
+  await removeCollaboraWelcomeModal(page)
   const editorMainFrame = page.frameLocator(externalEditorIframe)
   await editorMainFrame.locator(collaboraCanvasEditorSelector).click()
 }
@@ -83,6 +89,7 @@ export const fillOnlyOfficeDocumentContent = async (page: Page, content: string)
 }
 
 export const canEditCollaboraDocument = async (page: Page): Promise<boolean> => {
+  await removeCollaboraWelcomeModal(page)
   const editorMainFrame = page.frameLocator(externalEditorIframe)
   const collaboraDocPermissionModeLocator = editorMainFrame.locator(
     collaboraDocPermissionModeSelector
