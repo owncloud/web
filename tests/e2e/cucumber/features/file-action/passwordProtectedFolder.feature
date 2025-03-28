@@ -30,6 +30,7 @@ Feature: password-protected folder operations
     # Opening
     When "Alice" opens the "files" app
     And "Alice" opens folder "folder1.psec"
+    When "Alice" tries to unlock password protected folder with password "wrong-password"
     And "Alice" unlocks password protected folder with password "%public%"
     And "Alice" copies the link of password protected folder "folder1.psec"
     And "Alice" closes the password protected folder modal

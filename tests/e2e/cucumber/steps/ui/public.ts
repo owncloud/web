@@ -217,3 +217,20 @@ When(
     await pageObject.authenticate({ password, passwordProtectedFolder: true })
   }
 )
+
+When(
+  '{string} tries to unlock password protected folder with password {string}',
+  async function (this: World, stepUser: string, password: string): Promise<void> {
+    const { page } = this.actorsEnvironment.getActor({ key: stepUser })
+    const pageObject = new objects.applicationFiles.page.Public({ page })
+    const linkObject = new objects.applicationFiles.Link({ page })
+    password = password === '%public%' ? securePassword : password
+    await pageObject.authenticate({
+      password,
+      passwordProtectedFolder: true,
+      expectToSucceed: false
+    })
+    const actualErrorMessage = await linkObject.checkErrorMessage({ passwordProtectedFolder: true })
+    expect(actualErrorMessage).toBe('Incorrect password')
+  }
+)
