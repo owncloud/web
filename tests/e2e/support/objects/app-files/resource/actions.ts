@@ -3,7 +3,6 @@ import util from 'util'
 import path from 'path'
 import { resourceExists, waitForResources } from './utils'
 import {
-  removeCollaboraWelcomeModal,
   fillCollaboraDocumentContent,
   fillOnlyOfficeDocumentContent,
   canEditCollaboraDocument,
@@ -461,7 +460,6 @@ export const getDocumentContent = async ({
   await page.waitForURL(/.*\/external-.*/)
   switch (editor) {
     case 'Collabora':
-      await removeCollaboraWelcomeModal(page)
       await focusCollaboraEditor(page)
       break
     case 'OnlyOffice':
@@ -2005,7 +2003,6 @@ export const canEditDocumentContent = async ({
 }): Promise<boolean> => {
   switch (type) {
     case 'OpenDocument':
-      await removeCollaboraWelcomeModal(page)
       return canEditCollaboraDocument(page)
     case 'Microsoft Word':
       return canEditOnlyOfficeDocument(page)

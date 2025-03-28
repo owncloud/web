@@ -8,7 +8,9 @@ export class ActorEnvironment extends EventEmitter implements Actor {
   private readonly options: ActorOptions
   private readonly localStorage: Record<string, any> = {
     // disables copy-paste dialog in web office
-    clipboardApiAvailable: false
+    clipboardApiAvailable: false,
+    // disable help tip
+    'help-tip-rtl-dir': 1
   }
 
   public context: BrowserContext

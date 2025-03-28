@@ -11,10 +11,10 @@ Feature: Integrate with online office suites like Collabora and OnlyOffice
       | Alice |
       | Brian |
     And "Alice" logs in
-    And "Alice" opens the "files" app
 
 
   Scenario: create an OpenDocument file with Collabora
+    Given "Alice" opens the "files" app
     When "Alice" creates the following resources
       | resource         | type         | content              |
       | OpenDocument.odt | OpenDocument | OpenDocument Content |
@@ -77,9 +77,11 @@ Feature: Integrate with online office suites like Collabora and OnlyOffice
 
 
   Scenario: create a Microsoft Word file with OnlyOffice
+    Given "Alice" opens the "files" app
     When "Alice" creates the following resources
       | resource           | type           | content                |
       | MicrosoftWord.docx | Microsoft Word | Microsoft Word Content |
+    And for "Alice" file "MicrosoftWord.docx" should not be locked
     And "Alice" creates a public link of following resource using the sidebar panel
       | resource           | role     | password |
       | MicrosoftWord.docx | Can edit | %public% |
@@ -172,6 +174,7 @@ Feature: Integrate with online office suites like Collabora and OnlyOffice
       | usingFolderLink.docx | Microsoft Word | Microsoft Word Content |
 
     When "Alice" navigates to the project space "marketing.1"
+    And for "Alice" file "usingSpaceLink.docx" should not be locked
     And "Alice" opens the following file in OnlyOffice
       | resource            |
       | usingSpaceLink.docx |
@@ -179,6 +182,7 @@ Feature: Integrate with online office suites like Collabora and OnlyOffice
     And "Alice" closes the file viewer
 
     When "Alice" opens folder "myfolder"
+    And for "Alice" file "usingFolderLink.docx" should not be locked
     And "Alice" opens the following file in OnlyOffice
       | resource             |
       | usingFolderLink.docx |
@@ -238,6 +242,7 @@ Feature: Integrate with online office suites like Collabora and OnlyOffice
       | localFile     | to            |
       | Template.dotx | Template.dotx |
       | Template.ott  | Template.ott  |
+    And "Alice" opens the "files" app
 
     When "Alice" creates a file from template file "Template.dotx" via "OnlyOffice" using the sidebar panel
     Then "Alice" should see the content "As a user I want to create a document by clicking on a template file" in editor "OnlyOffice"
