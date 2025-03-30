@@ -28,6 +28,7 @@ Summary
 * Bugfix - Show path tooltip on parent folder: [#12356](https://github.com/owncloud/web/pull/12356)
 * Bugfix - Handle changed public link password in file editors: [#12357](https://github.com/owncloud/web/pull/12357)
 * Bugfix - Space context menu is cropped with limited vertical screen space: [#12368](https://github.com/owncloud/web/pull/12368)
+* Bugfix - Add space not found message: [#12373](https://github.com/owncloud/web/pull/12373)
 * Enhancement - Accessibility improvements: [#5379](https://github.com/owncloud/web/issues/5379)
 * Enhancement - Create spaces via admin settings: [#11849](https://github.com/owncloud/web/pull/11849)
 * Enhancement - Add maintenance banner: [#12239](https://github.com/owncloud/web/pull/12239)
@@ -209,6 +210,19 @@ Details
 
    https://github.com/owncloud/web/issues/11205
    https://github.com/owncloud/web/pull/12368
+
+* Bugfix - Add space not found message: [#12373](https://github.com/owncloud/web/pull/12373)
+
+   We've added a space not found message. If users are trying to open a space that
+   does not exist or users has not got access to it, the error message will be
+   shown instead of users being redirected to their personal space.
+
+   The error message will be shown in the following cases:
+
+   - The space does not exist - The space exists but the user has no access to it
+
+   https://github.com/owncloud/web/issues/11014
+   https://github.com/owncloud/web/pull/12373
 
 * Enhancement - Accessibility improvements: [#5379](https://github.com/owncloud/web/issues/5379)
 
