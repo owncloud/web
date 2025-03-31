@@ -181,7 +181,8 @@ services:
 
   collabora:
     image: collabora/code:24.04.13.2.1
-    command: ['bash', '-c', 'coolconfig generate-proof-key ; /start-collabora-online.sh']
+    entrypoint: /bin/sh
+    command: ['-c', 'coolconfig generate-proof-key ; /start-collabora-online.sh']
     environment:
       DONT_GEN_SSL_CERT: YES
       extra_params: --o:ssl.enable=false --o:ssl.ssl_verification=false --o:ssl.termination=true --o:welcome.enable=false --o:net.frame_ancestors=${OCIS_URL:-https://host.docker.internal:9200}
