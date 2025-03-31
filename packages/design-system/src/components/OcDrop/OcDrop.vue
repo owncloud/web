@@ -10,264 +10,238 @@
   </div>
 </template>
 
-<script lang="ts">
-import tippy, { ReferenceElement, hideAll } from 'tippy.js'
-import { Modifier } from '@popperjs/core'
-import { detectOverflow } from '@popperjs/core'
+<script lang="ts" setup>
+import tippy, { ReferenceElement, hideAll, Props as TippyProps } from 'tippy.js'
+import { Modifier, detectOverflow } from '@popperjs/core'
 import { destroy, hideOnEsc } from '../../directives/OcTooltip'
-import { AVAILABLE_SIZES } from '../../helpers/constants'
-import { getSizeClass, uniqueId } from '../../helpers'
-import { defineComponent, onBeforeUnmount, onMounted, ref, unref, useTemplateRef } from 'vue'
+import { getSizeClass, uniqueId, AvailableSizeType } from '../../helpers'
+import { onBeforeUnmount, onMounted, ref, unref, useTemplateRef, computed, watch } from 'vue'
 
 /**
- * Position any element in relation to another element.
+ * @component OcDrop
+ * @description Position any element in relation to another element with a dropdown/popover interface.
+ * Uses tippy.js for positioning and popper.js for overflow handling.
+ *
+ * @prop {String} [dropId] - Unique ID for the drop element. Defaults to auto-generated ID.
+ * @prop {Object} [popperOptions] - Specifies custom Popper options
+ * @prop {String} [toggle] - CSS selector for the element that triggers the drop. Defaults to previous sibling.
+ * @prop {String} [position='bottom-start'] - Position of the drop relative to the target.
+ *   Options: 'top-start', 'right-start', 'bottom-start', 'left-start', 'auto-start',
+ *            'top-end', 'right-end', 'bottom-end', 'left-end', 'auto-end'
+ * @prop {String} [mode='click'] - How the drop is triggered. Options: 'click', 'hover', 'manual'
+ * @prop {Boolean} [closeOnClick=false] - Whether the drop closes when clicked inside.
+ * @prop {Boolean} [isNested=false] - Whether this drop is nested inside another drop.
+ * @prop {String} [target=null] - CSS selector for target element. Replaces default target selection.
+ * @prop {String} [paddingSize='medium'] - Padding size applied to the drop content.
+ *   Options: 'xsmall', 'small', 'medium', 'large', 'xlarge', 'xxlarge', 'xxxlarge', 'remove'
+ * @prop {String} [offset] - Offset distance in the format "x, y" (e.g. "10, 20").
+ *
+ * @event showDrop - Emitted when the drop is shown
+ * @event hideDrop - Emitted when the drop is hidden
+ *
+ * @slot default - Default content of the drop. Wrapped in a card with the specified padding.
+ * @slot special - Special content slot used when default slot is not provided (no automatic styling).
+ *
+ * @exposes {Function} show - Show the drop with an optional duration
+ * @exposes {Function} hide - Hide the drop with an optional duration
+ * @exposes {Object} tippy - Reference to the internal tippy.js instance
  */
-export default defineComponent({
+
+interface Props {
+  dropId?: string
+  popperOptions?: TippyProps['popperOptions']
+  toggle?: string
+  position?:
+    | 'top-start'
+    | 'right-start'
+    | 'bottom-start'
+    | 'left-start'
+    | 'auto-start'
+    | 'top-end'
+    | 'right-end'
+    | 'bottom-end'
+    | 'left-end'
+    | 'auto-end'
+  mode?: 'click' | 'hover' | 'manual' | string
+  closeOnClick?: boolean
+  isNested?: boolean
+  target?: string
+  paddingSize?: AvailableSizeType | 'remove'
+  offset?: string
+}
+interface Emits {
+  (e: 'hideDrop'): void
+  (e: 'showDrop'): void
+}
+
+defineOptions({
   name: 'OcDrop',
   status: 'ready',
-  release: '1.0.0',
-  props: {
-    /**
-     * Id of the drop.
-     */
-    dropId: {
-      type: String,
-      required: false,
-      default: () => uniqueId('oc-drop-')
-    },
-    /**
-     * Specifies custom Popper options
-     */
+  release: '1.0.0'
+})
+
+const {
+  dropId = uniqueId('oc-drop-'),
+  popperOptions = {},
+  toggle = '',
+  position = 'bottom-start',
+  mode = 'click',
+  closeOnClick = false,
+  isNested = false,
+  target = null,
+  paddingSize = 'medium',
+  offset
+} = defineProps<Props>()
+
+const emit = defineEmits<Emits>()
+
+const drop = useTemplateRef<HTMLElement>('drop')
+const tippyInstance = ref(null)
+
+const show = (duration?: number) => {
+  unref(tippyInstance)?.show(duration)
+}
+const hide = (duration?: number) => {
+  unref(tippyInstance)?.hide(duration)
+}
+
+const onClick = () => {
+  if (closeOnClick) {
+    hide()
+  }
+}
+
+const onFocusOut = (event: FocusEvent) => {
+  const tippyBox = unref(drop).closest('.tippy-box')
+  const focusLeft = event.relatedTarget && !tippyBox.contains(event.relatedTarget as Node)
+  if (focusLeft) {
+    // close drop when the focus leaves it
+    hide()
+  }
+}
+
+const triggerMapping = computed(() => {
+  return (
+    {
+      hover: 'mouseenter focus'
+    }[mode] || mode
+  )
+})
+
+const paddingClass = computed(() => {
+  return `oc-p-${getSizeClass(paddingSize)}`
+})
+
+watch(
+  () => [position, mode],
+  () => {
+    if (tippyInstance.value) {
+      tippyInstance.value.setProps({ placement: position, trigger: triggerMapping.value })
+    }
+  },
+  { immediate: true }
+)
+
+function initializeTippy() {
+  destroy(unref(tippyInstance))
+  const to = unref(target)
+    ? document.querySelector(unref(target))
+    : unref(toggle)
+      ? document.querySelector(unref(toggle))
+      : drop.value.previousElementSibling
+  const content = drop.value
+
+  if (!to || !content) {
+    return
+  }
+  const config: any = {
+    trigger: unref(triggerMapping),
+    placement: unref(position),
+    arrow: false,
+    hideOnClick: true,
+    interactive: true,
+    plugins: [hideOnEsc],
+    theme: 'none',
+    maxWidth: 416,
+    offset: unref(offset) ?? 0,
+    ...(!unref(isNested) && {
+      onShow: (instance: ReferenceElement) => {
+        emit('showDrop')
+        hideAll({ exclude: instance })
+      },
+      onHide: () => {
+        emit('hideDrop')
+      }
+    }),
     popperOptions: {
-      type: Object,
-      required: false,
-      default: () => ({})
-    },
-    /**
-     * CSS selector for the element to be used as toggle. By default, the preceding element is used.
-     **/
-    toggle: {
-      type: String,
-      default: ''
-    },
-    /**
-     * The position of the drop: `(top|right|bottom|left|auto)|(top|right|bottom|left|auto)-(start|end)`.
-     **/
-    position: {
-      type: String,
-      default: 'bottom-start',
-      validator: (value: string) => {
-        return !!value.match(
-          /((top|right|bottom|left|auto)|(top|right|bottom|left|auto)-(start|end))/
-        )
-      }
-    },
-    /**
-     * Events that cause the drop to show. Multiple event names are separated by spaces
-     *
-     * @values click, hover, manual
-     **/
-    mode: {
-      type: String,
-      default: 'click',
-      validator: (value: string) => {
-        return !!value.match(/(click|hover|manual)/)
-      }
-    },
-    /**
-     * Defines if the drop should be closed after clicking on it. Needs to have defined dropId to work.
-     */
-    closeOnClick: {
-      type: Boolean,
-      required: false
-    },
-    /**
-     * Defines if the drop should be nested drop in another drop.
-     */
-    isNested: {
-      type: Boolean,
-      required: false
-    },
-    /**
-     * Element selector used as a target of the drop
-     */
-    target: {
-      type: String,
-      required: false,
-      default: null
-    },
-    /**
-     * Defines the padding size around the drop content. Defaults to `medium`.
-     *
-     * @values xsmall, small, medium, large, xlarge, xxlarge, xxxlarge, remove
-     */
-    paddingSize: {
-      type: String,
-      required: false,
-      default: 'medium',
-      validator: (value) => {
-        return [...AVAILABLE_SIZES, 'remove'].some((e) => e === value)
-      }
-    },
-    /**
-     * Determines the offset of the drop element. The value can work on both axes by using a string in the form "x, y", such as "50, 20".
-     */
-    offset: {
-      type: String,
-      required: false,
-      default: undefined
-    }
-  },
-  emits: ['hideDrop', 'showDrop'],
-  setup(props) {
-    const drop = useTemplateRef<HTMLElement>('drop')
-    const tippy = ref(null)
-
-    const show = (duration?: number) => {
-      unref(tippy)?.show(duration)
-    }
-    const hide = (duration?: number) => {
-      unref(tippy)?.hide(duration)
-    }
-
-    const onClick = () => {
-      if (props.closeOnClick) {
-        hide()
-      }
-    }
-
-    const onFocusOut = (event: FocusEvent) => {
-      const tippyBox = unref(drop).closest('.tippy-box')
-      const focusLeft = event.relatedTarget && !tippyBox.contains(event.relatedTarget as Node)
-      if (focusLeft) {
-        // close drop when the focus leaves it
-        hide()
-      }
-    }
-
-    onMounted(() => {
-      unref(drop).addEventListener('focusout', onFocusOut)
-    })
-
-    onBeforeUnmount(() => {
-      unref(drop).removeEventListener('focusout', onFocusOut)
-    })
-
-    return { drop, tippy, show, hide, onClick }
-  },
-  computed: {
-    triggerMapping() {
-      return (
+      ...unref(popperOptions),
+      modifiers: [
+        ...(unref(popperOptions)?.modifiers ? unref(popperOptions).modifiers : []),
         {
-          hover: 'mouseenter focus'
-        }[this.mode] || this.mode
-      )
-    },
-    paddingClass() {
-      return `oc-p-${getSizeClass(this.paddingSize)}`
-    }
-  },
-  watch: {
-    position() {
-      this.tippy.setProps({ placement: this.position })
-    },
-    mode() {
-      this.tippy.setProps({ trigger: this.triggerMapping })
-    }
-  },
-  beforeUnmount() {
-    destroy(this.tippy)
-  },
-  mounted() {
-    destroy(this.tippy)
-    const to = this.target
-      ? document.querySelector(this.target)
-      : this.toggle
-        ? document.querySelector(this.toggle)
-        : this.$el.previousElementSibling
-    const content = this.$refs.drop
+          name: 'fixVerticalPosition',
+          enabled: true,
+          phase: 'beforeWrite',
+          requiresIfExists: ['offset', 'preventOverflow', 'flip'],
+          fn({ state }) {
+            const overflow = detectOverflow(state)
+            const dropHeight = state.modifiersData.fullHeight || state.elements.popper.offsetHeight
+            const dropYPos = overflow.top * -1 - 10
+            const availableHeight = dropYPos + dropHeight + overflow.bottom * -1
+            const spaceBelow = availableHeight - dropYPos
+            const spaceAbove = availableHeight - spaceBelow
 
-    if (!to || !content) {
-      return
-    }
-    const config: any = {
-      trigger: this.triggerMapping,
-      placement: this.position,
-      arrow: false,
-      hideOnClick: true,
-      interactive: true,
-      plugins: [hideOnEsc],
-      theme: 'none',
-      maxWidth: 416,
-      offset: this.offset ?? 0,
-      ...(!this.isNested && {
-        onShow: (instance: ReferenceElement) => {
-          this.$emit('showDrop')
-          hideAll({ exclude: instance })
-        },
-        onHide: () => {
-          this.$emit('hideDrop')
-        }
-      }),
-      popperOptions: {
-        ...this.popperOptions,
-        modifiers: [
-          ...(this.popperOptions?.modifiers ? this.popperOptions.modifiers : []),
-          {
-            name: 'fixVerticalPosition',
-            enabled: true,
-            phase: 'beforeWrite',
-            requiresIfExists: ['offset', 'preventOverflow', 'flip'],
-            fn({ state }) {
-              const overflow = detectOverflow(state)
-              const dropHeight =
-                state.modifiersData.fullHeight || state.elements.popper.offsetHeight
-              const dropYPos = overflow.top * -1 - 10
-              const availableHeight = dropYPos + dropHeight + overflow.bottom * -1
-              const spaceBelow = availableHeight - dropYPos
-              const spaceAbove = availableHeight - spaceBelow
-
-              if (dropHeight > spaceBelow && dropHeight > spaceAbove) {
-                /*
+            if (dropHeight > spaceBelow && dropHeight > spaceAbove) {
+              /*
                   if context menu placement from the top 'dropYPos' is the same or less than space above
                   and placement is right-start or left-start
                   then subtract the dropYPos from spaceAbove and set the drop on top of the screen
                 */
-                if (
-                  dropYPos <= spaceAbove &&
-                  ['right-start', 'left-start'].includes(state.placement)
-                ) {
-                  state.styles.popper.top = `${spaceAbove - dropYPos}px`
-                  state.modifiersData.fullHeight = dropHeight
-                } else {
-                  // place drop on top of screen because of limited screen estate above and below
-                  state.styles.popper.top = `-${dropYPos}px`
-                  state.modifiersData.fullHeight = dropHeight
-                }
-              }
-
-              if (dropHeight > availableHeight) {
-                // drop is bigger than total available height
-                state.styles.popper.maxHeight = `${availableHeight - 10}px`
-                state.styles.popper.overflowY = `auto`
-                state.styles.popper.overflowX = `hidden`
+              if (
+                dropYPos <= spaceAbove &&
+                ['right-start', 'left-start'].includes(state.placement)
+              ) {
+                state.styles.popper.top = `${spaceAbove - dropYPos}px`
+                state.modifiersData.fullHeight = dropHeight
+              } else {
+                // place drop on top of screen because of limited screen estate above and below
+                state.styles.popper.top = `-${dropYPos}px`
+                state.modifiersData.fullHeight = dropHeight
               }
             }
-          } as Modifier<'fixVerticalPosition', unknown>
-        ]
-      },
-      content
-    }
 
-    if (this.target) {
-      config.triggerTarget = this.toggle
-        ? document.querySelector(this.toggle)
-        : this.$el.previousElementSibling
-    }
-
-    this.tippy = tippy(to, config)
+            if (dropHeight > availableHeight) {
+              // drop is bigger than total available height
+              state.styles.popper.maxHeight = `${availableHeight - 10}px`
+              state.styles.popper.overflowY = `auto`
+              state.styles.popper.overflowX = `hidden`
+            }
+          }
+        } as Modifier<'fixVerticalPosition', unknown>
+      ]
+    },
+    content
   }
+
+  if (unref(target)) {
+    config.triggerTarget = unref(toggle)
+      ? document.querySelector(unref(toggle))
+      : drop.value.previousElementSibling
+  }
+
+  tippyInstance.value = tippy(to, config)
+}
+
+onMounted(() => {
+  unref(drop).addEventListener('focusout', onFocusOut)
+  initializeTippy()
 })
+
+onBeforeUnmount(() => {
+  unref(drop).removeEventListener('focusout', onFocusOut)
+  destroy(unref(tippyInstance))
+})
+
+defineExpose({ show, hide, tippy: tippyInstance })
 </script>
 
 <style lang="scss">
