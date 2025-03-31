@@ -86,13 +86,7 @@ describe('FileSideBar', () => {
   describe('loadSharesTask', () => {
     it('sets the loading state correctly', async () => {
       const resource = mock<Resource>()
-      const { wrapper, mocks } = createWrapper()
-
-      mocks.$clientService.graphAuthenticated.permissions.listPermissions.mockResolvedValue({
-        shares: [],
-        allowedActions: [],
-        allowedRoles: []
-      })
+      const { wrapper } = createWrapper()
 
       const { setLoading } = useSharesStore()
       await wrapper.vm.loadSharesTask.perform(resource)
@@ -101,15 +95,17 @@ describe('FileSideBar', () => {
     })
     it('sets direct collaborator and link shares', async () => {
       const resource = mock<Resource>()
-      const { wrapper, mocks } = createWrapper()
 
       const collaboratorShare = { id: '1', role: {} } as unknown as CollaboratorShare
       const linkShare = { id: '2' } as unknown as LinkShare
-      mocks.$clientService.graphAuthenticated.permissions.listPermissions.mockResolvedValue({
+
+      const mockedResponse = {
         shares: [collaboratorShare, linkShare],
         allowedActions: [],
         allowedRoles: []
-      })
+      }
+
+      const { wrapper } = createWrapper({ mockedResponse })
 
       const { setCollaboratorShares, setLinkShares } = useSharesStore()
       await wrapper.vm.loadSharesTask.perform(resource)
@@ -119,20 +115,14 @@ describe('FileSideBar', () => {
     })
     it('sets indirect shares', async () => {
       const resource = mock<Resource>()
-      const { wrapper, mocks } = createWrapper()
-
-      mocks.$clientService.graphAuthenticated.permissions.listPermissions.mockResolvedValueOnce({
-        shares: [],
-        allowedActions: [],
-        allowedRoles: []
-      })
 
       const collaboratorShare = { id: '1', role: {} } as unknown as CollaboratorShare
-      mocks.$clientService.graphAuthenticated.permissions.listPermissions.mockResolvedValueOnce({
+      const mockedResponse = {
         shares: [collaboratorShare],
         allowedActions: [],
         allowedRoles: []
-      })
+      }
+      const { wrapper } = createWrapper({ mockedResponse })
 
       const resourcesStore = useResourcesStore()
       resourcesStore.ancestorMetaData = { '/foo': mock<AncestorMetaDataValue>({ id: '1' }) }
@@ -140,18 +130,12 @@ describe('FileSideBar', () => {
       await wrapper.vm.loadSharesTask.perform(resource)
 
       expect(
-        mocks.$clientService.graphAuthenticated.permissions.listPermissions
+        wrapper.vm.$clientService.graphAuthenticated.permissions.listPermissions
       ).toHaveBeenCalledTimes(2)
     })
     it('loads available external share roles if the ocm app is enabled', async () => {
       const resource = mock<Resource>()
       const { wrapper, mocks } = createWrapper()
-
-      mocks.$clientService.graphAuthenticated.permissions.listPermissions.mockResolvedValue({
-        shares: [],
-        allowedActions: [],
-        allowedRoles: []
-      })
 
       const { isAppEnabled } = useAppsStore()
       vi.mocked(isAppEnabled).mockReturnValue(true)
@@ -167,12 +151,6 @@ describe('FileSideBar', () => {
       const { wrapper, mocks } = createWrapper({ currentRouteName: 'files-common-search' })
       const { loadAncestorMetaData } = useResourcesStore()
 
-      mocks.$clientService.graphAuthenticated.permissions.listPermissions.mockResolvedValue({
-        shares: [],
-        allowedActions: [],
-        allowedRoles: []
-      })
-
       await wrapper.vm.loadSharesTask.perform(resource)
       expect(loadAncestorMetaData).toHaveBeenCalled()
     })
@@ -181,12 +159,6 @@ describe('FileSideBar', () => {
       it('is being used in non-flat file lists', async () => {
         const resource = mock<Resource>()
         const { wrapper, mocks } = createWrapper()
-
-        mocks.$clientService.graphAuthenticated.permissions.listPermissions.mockResolvedValue({
-          shares: [],
-          allowedActions: [],
-          allowedRoles: []
-        })
 
         const sharesStore = useSharesStore()
         sharesStore.collaboratorShares = [mock<CollaboratorShare>()]
@@ -199,12 +171,6 @@ describe('FileSideBar', () => {
         const resource = mock<Resource>()
         const { wrapper, mocks } = createWrapper({ currentRouteName: 'files-shares-with-me' })
 
-        mocks.$clientService.graphAuthenticated.permissions.listPermissions.mockResolvedValue({
-          shares: [],
-          allowedActions: [],
-          allowedRoles: []
-        })
-
         const sharesStore = useSharesStore()
         sharesStore.collaboratorShares = [mock<CollaboratorShare>()]
 
@@ -215,12 +181,6 @@ describe('FileSideBar', () => {
       it('is not being used on projects overview', async () => {
         const resource = mock<Resource>()
         const { wrapper, mocks } = createWrapper({ currentRouteName: 'files-spaces-projects' })
-
-        mocks.$clientService.graphAuthenticated.permissions.listPermissions.mockResolvedValue({
-          shares: [],
-          allowedActions: [],
-          allowedRoles: []
-        })
 
         const sharesStore = useSharesStore()
         sharesStore.collaboratorShares = [mock<CollaboratorShare>()]
@@ -265,8 +225,23 @@ function createWrapper({
   item = undefined,
   isOpen = true,
   currentRouteName = 'files-spaces-generic',
-  space = undefined
-}: { item?: Resource; isOpen?: boolean; currentRouteName?: string; space?: SpaceResource } = {}) {
+  space = undefined,
+  mockedResponse = {
+    shares: [],
+    allowedActions: [],
+    allowedRoles: []
+  }
+}: {
+  item?: Resource
+  isOpen?: boolean
+  currentRouteName?: string
+  space?: SpaceResource
+  mockedResponse?: {
+    shares: any
+    allowedActions: any
+    allowedRoles: any
+  }
+} = {}) {
   const plugins = defaultPlugins()
 
   const { requestExtensions } = useExtensionRegistry()
@@ -279,6 +254,9 @@ function createWrapper({
   const mocks = defaultComponentMocks({
     currentRoute: mock<RouteLocation>({ name: currentRouteName })
   })
+  mocks.$clientService.graphAuthenticated.permissions.listPermissions.mockResolvedValue(
+    mockedResponse
+  )
   return {
     mocks,
     wrapper: shallowMount(FileSideBar, {
