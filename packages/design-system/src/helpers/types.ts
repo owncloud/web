@@ -78,3 +78,12 @@ export interface BreadcrumbItem {
   isTruncationPlaceholder?: boolean
   isStaticNav?: boolean
 }
+
+export type AvailableSizeType =
+  | 'xsmall'
+  | 'small'
+  | 'medium'
+  | 'large'
+  | 'xlarge'
+  | 'xxlarge'
+  | 'xxxlarge'

@@ -109,7 +109,7 @@
 import { computed, nextTick, ref, unref, watch, useAttrs } from 'vue'
 import { useGettext } from 'vue3-gettext'
 import {
-  AVAILABLE_SIZES,
+  AvailableSizeType,
   EVENT_ITEM_DROPPED_BREADCRUMB,
   uniqueId,
   BreadcrumbItem
@@ -141,12 +141,11 @@ import { RouteLocationPathRaw } from 'vue-router'
  * ```
  */
 
-type AvailableSizeType = (typeof AVAILABLE_SIZES)[number] | 'remove'
 interface Props {
   id?: string
   items: BreadcrumbItem[]
   variation?: 'default' | 'lead'
-  contextMenuPadding?: AvailableSizeType
+  contextMenuPadding?: AvailableSizeType | 'remove'
   maxWidth?: number
   truncationOffset?: number
   showContextActions?: boolean

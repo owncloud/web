@@ -16,7 +16,7 @@ const dom = ({ position = 'auto', mode = 'click', paddingSize = 'medium' } = {})
     }
   )
   const drop = wrapper.findComponent({ name: 'oc-drop' })
-  const tippy = drop.vm.tippy
+  const tippy = drop.vm.tippyInstance
 
   return { wrapper, drop, tippy }
 }
@@ -37,38 +37,6 @@ describe('OcDrop', () => {
       })
       expect(wrapper.attributes().id).toBe(id)
     }
-  })
-
-  it('handles position prop validator', () => {
-    ;[
-      'top',
-      'right',
-      'bottom',
-      'left',
-      'auto',
-      'top-start',
-      'top-end',
-      'right-start',
-      'right-end',
-      'bottom-start',
-      'bottom-end',
-      'left-start',
-      'left-end',
-      'auto-start',
-      'auto-end'
-    ].forEach((pos) => {
-      expect(Drop.props.position.validator(pos)).toBeTruthy()
-    })
-
-    expect(Drop.props.position.validator('unknown')).toBeFalsy()
-  })
-
-  it('handles mode prop', () => {
-    ;['click', 'hover'].forEach((pos) => {
-      expect(Drop.props.mode.validator(pos)).toBeTruthy()
-    })
-
-    expect(Drop.props.mode.validator('unknown')).toBeFalsy()
   })
 
   it.each(['xsmall', 'small', 'medium', 'large', 'xlarge', 'xxlarge', 'remove'])(
