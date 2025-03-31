@@ -29,6 +29,7 @@ Summary
 * Bugfix - Handle changed public link password in file editors: [#12357](https://github.com/owncloud/web/pull/12357)
 * Bugfix - Space context menu is cropped with limited vertical screen space: [#12368](https://github.com/owncloud/web/pull/12368)
 * Bugfix - Add space not found message: [#12373](https://github.com/owncloud/web/pull/12373)
+* Bugfix - Mock services correctly in test file: [#12377](https://github.com/owncloud/web/pull/12377)
 * Enhancement - Accessibility improvements: [#5379](https://github.com/owncloud/web/issues/5379)
 * Enhancement - Create spaces via admin settings: [#11849](https://github.com/owncloud/web/pull/11849)
 * Enhancement - Add maintenance banner: [#12239](https://github.com/owncloud/web/pull/12239)
@@ -223,6 +224,13 @@ Details
 
    https://github.com/owncloud/web/issues/11014
    https://github.com/owncloud/web/pull/12373
+
+* Bugfix - Mock services correctly in test file: [#12377](https://github.com/owncloud/web/pull/12377)
+
+   We've mocked the clientservice correctly in the test file.
+
+   https://github.com/owncloud/web/issues/12375
+   https://github.com/owncloud/web/pull/12377
 
 * Enhancement - Accessibility improvements: [#5379](https://github.com/owncloud/web/issues/5379)
 
