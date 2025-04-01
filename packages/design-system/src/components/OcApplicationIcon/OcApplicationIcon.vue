@@ -4,7 +4,7 @@
   </div>
 </template>
 
-<script lang="ts">
+<script lang="ts" setup>
 import {
   generateHashedColorForString,
   getHexFromCssVar,
@@ -13,74 +13,78 @@ import {
   setDesiredContrastRatio,
   calculateShadeColor
 } from '../../helpers'
-import { computed, defineComponent, unref } from 'vue'
+import { computed, unref } from 'vue'
 import OcIcon from '../OcIcon/OcIcon.vue'
 
-export default defineComponent({
+/**
+ * OcApplicationIcon - A component for displaying application icons with customizable colors and gradients.
+ *
+ * @prop {string} icon - The name of the icon to display. This is required.
+ * @prop {string} [colorPrimary=''] - The primary color for the icon background. If not provided, a hashed color based on the icon name will be generated.
+ * @prop {string} [colorSecondary=''] - The secondary color for the icon background gradient. If not provided, a shade of the primary color will be used.
+ *
+ * @example
+ * ```vue
+ * <!-- Default usage with hashed color -->
+ * <oc-application-icon icon="icon-name" />
+ *
+ * <!-- With a primary color -->
+ * <oc-application-icon icon="icon-name" colorPrimary="#000" />
+ *
+ * <!-- With primary and secondary colors -->
+ * <oc-application-icon icon="icon-name" colorPrimary="#000" colorSecondary="#fff" />
+ * ```
+ */
+
+interface Props {
+  icon: string
+  colorPrimary?: string
+  colorSecondary?: string
+}
+defineOptions({
   name: 'OcApplicationIcon',
   components: { OcIcon },
   status: 'ready',
-  release: '15.0.0',
-  props: {
-    icon: {
-      type: String,
-      required: true
-    },
-    colorPrimary: {
-      type: String,
-      required: false,
-      default: ''
-    },
-    colorSecondary: {
-      type: String,
-      required: false,
-      default: ''
-    }
-  },
+  release: '15.0.0'
+})
 
-  setup(props) {
-    const iconColor = computed(() => {
-      return 'rgba(255,255,255,0.7)'
-    })
-    const getGradient = (primary: string, secondary: string): string => {
-      return `linear-gradient(90deg, ${primary} 0%, ${secondary} 100%)`
-    }
-    const primaryColor = computed(() => {
-      return getHexFromCssVar(props.colorPrimary)
-    })
-    const secondaryColor = computed(() => {
-      return getHexFromCssVar(props.colorSecondary)
-    })
-    const hasPrimaryColor = computed(() => {
-      return !!props.colorPrimary
-    })
-    const hasSecondaryColor = computed((): boolean => {
-      return !!props.colorSecondary
-    })
-    const generatedHashedPrimaryColor = computed((): string => {
-      const hashedColor = generateHashedColorForString(props.icon)
-      return rgbToHex(setDesiredContrastRatio(hexToRgb(hashedColor), hexToRgb('#ffffff'), 4))
-    })
-    const iconStyle = computed(() => {
-      const primaryHex = unref(hasPrimaryColor)
-        ? unref(primaryColor)
-        : unref(generatedHashedPrimaryColor)
-      const secondaryHex = unref(hasSecondaryColor)
-        ? unref(secondaryColor)
-        : calculateShadeColor(hexToRgb(primaryHex), 40)
+const { icon, colorPrimary = '', colorSecondary = '' } = defineProps<Props>()
 
-      const darkBorderHex = calculateShadeColor(hexToRgb(primaryHex), -25)
-      const lightBorderHex = calculateShadeColor(hexToRgb(primaryHex), 45)
-      return {
-        background: getGradient(primaryHex, secondaryHex),
-        boxShadow: `inset ${lightBorderHex} 0px 0px 1px 0px,${darkBorderHex} 0px 0px 1px 0px`
-      }
-    })
+const iconColor = computed(() => {
+  return 'rgba(255,255,255,0.7)'
+})
+const getGradient = (primary: string, secondary: string): string => {
+  return `linear-gradient(90deg, ${primary} 0%, ${secondary} 100%)`
+}
+const primaryColor = computed(() => {
+  return getHexFromCssVar(colorPrimary)
+})
+const secondaryColor = computed(() => {
+  return getHexFromCssVar(colorSecondary)
+})
+const hasPrimaryColor = computed(() => {
+  return !!colorPrimary
+})
+const hasSecondaryColor = computed((): boolean => {
+  return !!colorSecondary
+})
+const generatedHashedPrimaryColor = computed((): string => {
+  const hashedColor = generateHashedColorForString(icon)
+  return rgbToHex(setDesiredContrastRatio(hexToRgb(hashedColor), hexToRgb('#ffffff'), 4))
+})
+const iconStyle = computed(() => {
+  const primaryHex = unref(hasPrimaryColor)
+    ? unref(primaryColor)
+    : unref(generatedHashedPrimaryColor)
+  const secondaryHex = unref(hasSecondaryColor)
+    ? unref(secondaryColor)
+    : calculateShadeColor(hexToRgb(primaryHex), 40)
 
-    return {
-      iconColor,
-      iconStyle
-    }
+  const darkBorderHex = calculateShadeColor(hexToRgb(primaryHex), -25)
+  const lightBorderHex = calculateShadeColor(hexToRgb(primaryHex), 45)
+  return {
+    background: getGradient(primaryHex, secondaryHex),
+    boxShadow: `inset ${lightBorderHex} 0px 0px 1px 0px,${darkBorderHex} 0px 0px 1px 0px`
   }
 })
 </script>
