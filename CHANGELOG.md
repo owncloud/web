@@ -30,6 +30,8 @@ Summary
 * Bugfix - Space context menu is cropped with limited vertical screen space: [#12368](https://github.com/owncloud/web/pull/12368)
 * Bugfix - Add space not found message: [#12373](https://github.com/owncloud/web/pull/12373)
 * Bugfix - Mock services correctly in test file: [#12377](https://github.com/owncloud/web/pull/12377)
+* Bugfix - Use resource ID in share notifications: [#12385](https://github.com/owncloud/web/pull/12385)
+* Bugfix - Watch scroll target in shared list: [#12385](https://github.com/owncloud/web/pull/12385)
 * Enhancement - Accessibility improvements: [#5379](https://github.com/owncloud/web/issues/5379)
 * Enhancement - Create spaces via admin settings: [#11849](https://github.com/owncloud/web/pull/11849)
 * Enhancement - Add maintenance banner: [#12239](https://github.com/owncloud/web/pull/12239)
@@ -231,6 +233,24 @@ Details
 
    https://github.com/owncloud/web/issues/12375
    https://github.com/owncloud/web/pull/12377
+
+* Bugfix - Use resource ID in share notifications: [#12385](https://github.com/owncloud/web/pull/12385)
+
+   When building a link to a resource in shared with me notifications, we now use
+   the resource ID instead of share ID to correctly navigate and scroll to the
+   resource.
+
+   https://github.com/owncloud/web/issues/10398
+   https://github.com/owncloud/web/pull/12385
+
+* Bugfix - Watch scroll target in shared list: [#12385](https://github.com/owncloud/web/pull/12385)
+
+   Inside of shared with me list, watch for changes of the scroll target so that we
+   can react and scroll to the resource when user clicks on a notification while
+   being already in the list.
+
+   https://github.com/owncloud/web/issues/10398
+   https://github.com/owncloud/web/pull/12385
 
 * Enhancement - Accessibility improvements: [#5379](https://github.com/owncloud/web/issues/5379)
 
