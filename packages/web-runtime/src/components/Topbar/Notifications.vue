@@ -154,8 +154,8 @@ export default {
       if (object_type === 'share') {
         return {
           name: 'files-shares-with-me',
-          ...(!!messageRichParameters?.share?.id && {
-            query: { scrollTo: messageRichParameters.share.id }
+          ...(!!messageRichParameters?.resource.id && {
+            query: { scrollTo: messageRichParameters.resource.id }
           })
         }
       }

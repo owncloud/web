@@ -175,6 +175,8 @@ export default defineComponent({
 
     const selectedShareTypesQuery = useRouteQuery('q_shareType')
     const selectedSharedByQuery = useRouteQuery('q_sharedBy')
+    const scrollToTarget = useRouteQuery('scrollTo')
+
     const filteredItems = computed(() => {
       let result = unref(currentItems)
 
@@ -270,6 +272,14 @@ export default defineComponent({
 
     onMounted(() => {
       performLoaderTask()
+    })
+
+    watch(scrollToTarget, (value) => {
+      if (!value) {
+        return
+      }
+
+      scrollToResourceFromRoute(unref(items), 'files-app-bar')
     })
 
     return {
