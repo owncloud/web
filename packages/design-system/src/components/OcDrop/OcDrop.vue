@@ -62,7 +62,7 @@ interface Props {
     | 'bottom-end'
     | 'left-end'
     | 'auto-end'
-  mode?: 'click' | 'hover' | 'manual' | string
+  mode?: 'click' | 'hover' | 'manual'
   closeOnClick?: boolean
   isNested?: boolean
   target?: string
