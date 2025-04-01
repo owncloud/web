@@ -6,39 +6,40 @@
   />
 </template>
 
-<script lang="ts">
-import { defineComponent } from 'vue'
+<script lang="ts" setup>
+import { computed, unref } from 'vue'
 
 /**
- * Count of avatars which weren't displayed.
+ * OcAvatarCount - A component for displaying a count badge, typically used to indicate the number of additional users or items.
+ *
+ * @prop {number} count - The count to display. This is required and will be prefixed with a "+" (e.g., "+21").
+ * @prop {number} [size=30] - The size of the badge in pixels. This determines both the width/height and the font size.
+ *
+ * @example
+ * ```vue
+ * <!-- Default size with a count -->
+ * <oc-avatar-count :count="21" />
+ *
+ * <!-- Custom size -->
+ * <oc-avatar-count :count="99" :size="50" />
+ * ```
  */
-export default defineComponent({
+
+interface Props {
+  count: number
+  size?: number
+}
+
+defineOptions({
   name: 'OcAvatarCount',
   status: 'ready',
-  release: '2.1.0',
-  props: {
-    /**
-     * Count of avatars
-     */
-    count: {
-      type: Number,
-      required: true
-    },
-    /**
-     * Width and height of the element in pixels
-     */
-    size: {
-      type: Number,
-      required: false,
-      default: 30
-    }
-  },
+  release: '2.1.0'
+})
 
-  computed: {
-    fontSize() {
-      return Math.floor(this.size / 2.5) + 'px'
-    }
-  }
+const { count, size = 30 } = defineProps<Props>()
+
+const fontSize = computed(() => {
+  return Math.floor(unref(size) / 2.5) + 'px'
 })
 </script>
 
