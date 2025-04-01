@@ -14,121 +14,104 @@
   </span>
 </template>
 
-<script lang="ts">
+<script lang="ts" setup>
 import OcImg from '../OcImage/OcImage.vue'
 import { extractInitials } from './extractInitials'
-import { defineComponent } from 'vue'
+import { ref, computed, unref } from 'vue'
 
 /**
- * Avatar is a thumbnail representing user or group
+ * OcAvatar - A component for displaying user avatars with support for images, initials, and accessible labels.
+ *
+ * @prop {string} [src] - The source URL of the avatar image. If not provided or if the image fails to load, initials will be displayed instead.
+ * @prop {string} [userName=''] - The name of the user. Used to generate initials if no image is provided or the image fails to load.
+ * @prop {string} [accessibleLabel=''] - An accessible label for the avatar. If empty, the avatar will be hidden from assistive technologies.
+ * @prop {number} [width=50] - The width and height of the avatar in pixels. Defaults to 50px.
+ *
+ * @example
+ * ```vue
+ * <!-- Avatar with an image -->
+ * <oc-avatar src="https://example.com" accessible-label="accessibleLabel" />
+ *
+ * <!-- Avatar with user initials -->
+ * <oc-avatar user-name="lorem" accessible-label="lorem" />
+ *
+ * <!-- Avatar with custom size -->
+ * <oc-avatar user-name="lorem" width="100" accessible-label="lorem" />
+ * ```
  */
-export default defineComponent({
+
+interface Props {
+  src?: string
+  userName?: string
+  accessibleLabel?: string
+  width?: number
+}
+
+defineOptions({
   name: 'OcAvatar',
   status: 'ready',
-  release: '1.0.0',
-  components: { OcImg },
-  props: {
-    /**
-     * Source of the avatar img. If none is provided, the avatar's initials get rendered on a colorful background
-     */
-    src: {
-      type: String,
-      default: ''
-    },
-    /**
-     * User name to display initials if src is not set
-     */
-    userName: {
-      type: String,
-      default: ''
-    },
-    /**
-     * Accessibility label used as alt. Use only in case the avatar is used alone.
-     * In case the avatar is used next to username or display name leave empty.
-     * If not specified, avatar will get `aria-hidden="true"`.
-     **/
-    accessibleLabel: {
-      type: String,
-      required: false,
-      default: ''
-    },
-    /**
-     * The size of the avatar in pixels
-     */
-    width: {
-      type: Number,
-      required: false,
-      default: 50
-    }
-  },
-  data() {
-    return {
-      backgroundColors: [
-        '#b82015',
-        '#c21c53',
-        '#9C27B0',
-        '#673AB7',
-        '#3F51B5',
-        '#106892',
-        '#055c68',
-        '#208377',
-        '#1a761d',
-        '#476e1a',
-        '#636d0b',
-        '#8e5c11',
-        '#795548',
-        '#465a64'
-      ],
-      imgError: false
-    }
-  },
-  computed: {
-    background() {
-      if (!this.isImage) {
-        return this.randomBackgroundColor(this.userName.length, this.backgroundColors)
-      }
-      return ''
-    },
+  release: '1.0.0'
+})
+const { src = '', userName = '', accessibleLabel = '', width = 50 } = defineProps<Props>()
+const backgroundColors = [
+  '#b82015',
+  '#c21c53',
+  '#9C27B0',
+  '#673AB7',
+  '#3F51B5',
+  '#106892',
+  '#055c68',
+  '#208377',
+  '#1a761d',
+  '#476e1a',
+  '#636d0b',
+  '#8e5c11',
+  '#795548',
+  '#465a64'
+]
+const imgError = ref(false)
+function onImgError() {
+  imgError.value = true
+}
 
-    isImage() {
-      return !this.imgError && Boolean(this.src)
-    },
-
-    style() {
-      const style = {
-        width: `${this.width}px`,
-        height: `${this.width}px`,
-        lineHeight: `${this.width}px`
-      }
-
-      const initialBackgroundAndFontStyle = {
-        backgroundColor: this.background,
-        fontSize: `${Math.floor(this.width / 2.5)}px`,
-        fontFamily: 'Helvetica, Arial, sans-serif',
-        color: 'white'
-      }
-
-      Object.assign(style, initialBackgroundAndFontStyle)
-
-      return style
-    },
-
-    userInitial() {
-      if (!this.isImage) {
-        return extractInitials(this.userName)
-      }
-      return ''
-    }
-  },
-  methods: {
-    onImgError() {
-      this.imgError = true
-    },
-
-    randomBackgroundColor(seed: number, colors: string[]) {
-      return colors[seed % colors.length]
-    }
+function randomBackgroundColor(seed: number, colors: string[]) {
+  return colors[seed % colors.length]
+}
+const background = computed(() => {
+  if (!unref(isImage)) {
+    return unref(randomBackgroundColor(unref(userName).length, unref(backgroundColors)))
   }
+  return ''
+})
+
+const isImage = computed(() => {
+  return !unref(imgError) && Boolean(unref(src))
+})
+
+const style = computed(() => {
+  const style = {
+    width: `${unref(width)}px`,
+    height: `${unref(width)}px`,
+    lineHeight: `${unref(width)}px`
+  }
+
+  const initialBackgroundAndFontStyle = {
+    backgroundColor: unref(background),
+    fontSize: `${Math.floor(unref(width) / 2.5)}px`,
+    fontFamily: 'Helvetica, Arial, sans-serif',
+    color: 'white'
+  }
+
+  Object.assign(style, initialBackgroundAndFontStyle)
+
+  return style
+})
+
+const userInitial = computed(() => {
+  if (!unref(isImage)) {
+    return extractInitials(unref(userName))
+  }
+  return ''
 })
 </script>
 
