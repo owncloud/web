@@ -48,8 +48,8 @@
   </oc-drop>
 </template>
 
-<script lang="ts">
-import { computed, defineComponent, PropType, ref } from 'vue'
+<script lang="ts" setup>
+import { computed, ref } from 'vue'
 import OcButton from '../OcButton/OcButton.vue'
 import OcIcon from '../OcIcon/OcIcon.vue'
 import OcDrop from '../OcDrop/OcDrop.vue'
@@ -57,100 +57,68 @@ import { uniqueId } from '../../helpers'
 import { FocusTrap } from 'focus-trap-vue'
 import { ContextualHelperDataListItem } from '../../helpers'
 
-export default defineComponent({
+/**
+ * OcInfoDrop - A dropdown component that displays contextual help information
+ *
+ * @prop {string} [dropId] - Optional unique identifier for the dropdown. If not provided, an auto-generated ID will be used.
+ * @prop {string} [toggle=''] - CSS selector for the element that triggers the dropdown.
+ * @prop {'click' | 'hover' | 'manual'} [mode='click'] - Interaction mode to trigger the dropdown.
+ * @prop {string} title - Required title text displayed in the header of the dropdown.
+ * @prop {string} [text] - Optional main descriptive text content.
+ * @prop {ContextualHelperDataListItem[]} [list] - Optional array of list items to display in a definition list format.
+ * @prop {string} [endText] - Optional text displayed after the list and before the "Read more" link.
+ * @prop {string} [readMoreLink] - Optional URL for the "Read more" link that opens in a new tab.
+ *
+ * @event {void} hide-drop - Emitted when the dropdown is hidden.
+ * @event {void} show-drop - Emitted when the dropdown is shown.
+ *
+ * @example
+ * ```vue
+ * <template>
+ *   <oc-info-drop
+ *     title="title"
+ *     text="text"
+ *     :list="[
+ *       {text: 'text', headline: true},
+ *       {text: 'text', headline: true}
+ *     ]"
+ *     end-text="endText"
+ *     read-more-link="https://example.com"
+ *   />
+ * </template>
+ * ```
+ */
+
+interface Props {
+  dropId?: string
+  toggle?: string
+  mode?: 'click' | 'hover' | 'manual'
+  title: string
+  text?: string
+  list?: ContextualHelperDataListItem[]
+  endText?: string
+  readMoreLink?: string
+}
+
+defineOptions({
   name: 'OcInfoDrop',
-  status: 'unreleased',
-  components: { OcButton, OcIcon, OcDrop, FocusTrap },
-  props: {
-    /**
-     * Id of the element
-     */
-    dropId: {
-      type: String,
-      required: false,
-      default: () => uniqueId('oc-info-drop-')
-    },
-    /**
-     * CSS selector for the element to be used as toggle. By default, the preceding element is used
-     **/
-    toggle: {
-      type: String,
-      required: false,
-      default: ''
-    },
-    /**
-     * Events that cause the drop to show. Multiple event names are separated by spaces
-     *
-     * @values click, hover, manual
-     **/
-    mode: {
-      type: String,
-      required: false,
-      default: 'click',
-      validator: (value: string) => {
-        return ['click', 'hover', 'manual'].includes(value)
-      }
-    },
-    /**
-     * Element selector used as a target of the element
-     */
-    target: {
-      type: String,
-      required: false,
-      default: null
-    },
-    /**
-     * Title
-     */
-    title: {
-      type: String,
-      required: true
-    },
-    /**
-     * Text at the beginning
-     */
-    text: {
-      type: String,
-      required: false,
-      default: ''
-    },
-    /**
-     * List element
-     */
-    list: {
-      type: Array as PropType<ContextualHelperDataListItem[]>,
-      required: false,
-      default: (): ContextualHelperDataListItem[] => []
-    },
-    /**
-     * Text at the end
-     */
-    endText: {
-      type: String,
-      required: false,
-      default: ''
-    },
-    /**
-     * Read more link at the end
-     */
-    readMoreLink: {
-      type: String,
-      required: false,
-      default: ''
-    }
-  },
-  setup(props) {
-    const dropOpen = ref(false)
+  status: 'unreleased'
+})
 
-    const listItems = computed(() => {
-      return (props.list || []).filter((item) => !!item.text)
-    })
+const {
+  dropId = uniqueId('oc-info-drop-'),
+  toggle = '',
+  mode = 'click',
+  title,
+  text = '',
+  list = [],
+  endText = '',
+  readMoreLink = ''
+} = defineProps<Props>()
 
-    return {
-      dropOpen,
-      listItems
-    }
-  }
+const dropOpen = ref(false)
+const listItems = computed(() => {
+  return (list || []).filter((item) => !!item.text)
 })
 </script>
 

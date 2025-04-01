@@ -11,6 +11,9 @@ describe('OcInfoDrop', () => {
         title: props.title || 'test-title'
       },
       global: {
+        components: {
+          FocusTrap
+        },
         plugins: [...defaultPlugins()],
         renderStubDefaultSlot: true,
         stubs: {
