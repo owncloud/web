@@ -19,117 +19,98 @@
   </div>
 </template>
 
-<script lang="ts">
-import { defineComponent } from 'vue'
+<script lang="ts" setup>
+import { computed, unref } from 'vue'
 import OcIcon from '../OcIcon/OcIcon.vue'
 
-export default defineComponent({
+/**
+ * OcAvatarItem - A base component for displaying customizable avatar items with icons.
+ *
+ * @prop {string} name - Name of the public link used as an accessible label
+ * @prop {string} [icon=null] - Icon that should be used for the avatar
+ * @prop {string} [iconColor='var(--oc-color-text-inverse)'] - Color that should be used for the icon
+ * @prop {string} [iconFillType='fill'] - Fill-type that should be used for the icon
+ * @prop {string} [iconSize='small'] - Describes the size of the avatar icon e.g.(small)
+ * @prop {string} [background='var(--oc-color-swatch-passive-default)'] - Background color that should be used for the avatar.
+ *   If empty a random color will be picked
+ * @prop {string} [accessibleLabel=''] - Accessibility label used as alt. Use only in case the avatar is used alone.
+ *   In case the avatar is used next to username or display name leave empty.
+ *   If not specified, avatar will get `aria-hidden="true"`.
+ * @prop {number} [width=30] - Describes the width of the avatar
+ *
+ * @example
+ * ```vue
+ * <!-- Basic usage -->
+ * <oc-avatar-item name="name" accessible-label="name" />
+ *
+ * <!-- With icon and default background -->
+ * <oc-avatar-item name="name" icon="close" accessible-label="name" />
+ *
+ * <!-- With custom styling -->
+ * <oc-avatar-item
+ *   name="name"
+ *   icon="close"
+ *   background="#465a64"
+ *   :width="100"
+ *   icon-size="large"
+ *   accessible-label="name"
+ * />
+ * ```
+ */
+
+interface Props {
+  name: string
+  icon?: string
+  iconColor?: string
+  iconFillType?: string
+  iconSize?: string
+  background?: string
+  accessibleLabel?: string
+  width?: number
+}
+defineOptions({
   name: 'OcAvatarItem',
   status: 'ready',
-  release: '10.0.0',
-  components: {
-    OcIcon
-  },
-  props: {
-    /**
-     * Name of the public link used as an accessible label
-     */
-    name: {
-      type: String,
-      required: true
-    },
-    /**
-     * Icon that should be used for the avatar
-     */
-    icon: {
-      type: String,
-      required: false,
-      default: null
-    },
-    /**
-     * Color that should be used for the icon
-     */
-    iconColor: {
-      type: String,
-      required: false,
-      default: 'var(--oc-color-text-inverse)'
-    },
-    /**
-     * Fill-type that should be used for the icon
-     */
-    iconFillType: {
-      type: String,
-      required: false,
-      default: 'fill'
-    },
-    /**
-     * Describes the size of the avatar icon e.g.(small)
-     */
-    iconSize: {
-      type: String,
-      required: false,
-      default: 'small'
-    },
-    /**
-     * Background color that should be used for the avatar. If empty
-     * a random color will be picked
-     */
-    background: {
-      type: String,
-      required: false,
-      default: 'var(--oc-color-swatch-passive-default)'
-    },
-    /**
-     * Accessibility label used as alt. Use only in case the avatar is used alone.
-     * In case the avatar is used next to username or display name leave empty.
-     * If not specified, avatar will get `aria-hidden="true"`.
-     **/
-    accessibleLabel: {
-      type: String,
-      required: false,
-      default: ''
-    },
+  release: '10.0.0'
+})
+const {
+  name,
+  icon = null,
+  iconColor = 'var(--oc-color-text-inverse)',
+  iconFillType = 'fill',
+  iconSize = 'small',
+  background = 'var(--oc-color-swatch-passive-default)',
+  accessibleLabel = '',
+  width = 30
+} = defineProps<Props>()
 
-    /**
-     * Describes the width of the avatar
-     */
-    width: {
-      type: Number,
-      required: false,
-      default: 30
-    }
-  },
-
-  computed: {
-    avatarWidth() {
-      return this.width + 'px'
-    },
-    hasIcon() {
-      return this.icon !== null
-    },
-    backgroundColor() {
-      return this.background || this.pickBackgroundColor
-    },
-    pickBackgroundColor() {
-      const backgroundColors = [
-        '#b82015',
-        '#c21c53',
-        '#9C27B0',
-        '#673AB7',
-        '#3F51B5',
-        '#106892',
-        '#055c68',
-        '#208377',
-        '#1a761d',
-        '#476e1a',
-        '#636d0b',
-        '#8e5c11',
-        '#795548',
-        '#465a64'
-      ]
-      return backgroundColors[Math.floor(Math.random() * backgroundColors.length)]
-    }
-  }
+const avatarWidth = computed(() => {
+  return `${unref(width)}px`
+})
+const hasIcon = computed(() => {
+  return unref(icon) !== null
+})
+const backgroundColor = computed(() => {
+  return unref(background) || unref(pickBackgroundColor)
+})
+const pickBackgroundColor = computed(() => {
+  const backgroundColors = [
+    '#b82015',
+    '#c21c53',
+    '#9C27B0',
+    '#673AB7',
+    '#3F51B5',
+    '#106892',
+    '#055c68',
+    '#208377',
+    '#1a761d',
+    '#476e1a',
+    '#636d0b',
+    '#8e5c11',
+    '#795548',
+    '#465a64'
+  ]
+  return backgroundColors[Math.floor(Math.random() * backgroundColors.length)]
 })
 </script>
 
