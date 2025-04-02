@@ -83,14 +83,6 @@ describe('OcButton', () => {
       expect(wrapper.attributes('class')).toContain(expected)
     })
   })
-  describe('invalid prop value', () => {
-    it.each(['appearance', 'size', 'submit', 'justifyContent', 'variation', 'gapSize', 'type'])(
-      'when prop "%s" is set to an invalid value"',
-      (prop) => {
-        expect(OcButton.props[prop].validator('not-valid')).toBeFalsy()
-      }
-    )
-  })
   describe('oc button appearance', () => {
     // appearance prop is combined with variation prop
     describe('when appearance is "filled"', () => {

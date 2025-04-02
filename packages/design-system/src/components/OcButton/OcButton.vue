@@ -3,7 +3,7 @@
     :is="type"
     v-bind="additionalAttributes"
     :aria-label="ariaLabel"
-    :class="$_ocButton_buttonClass"
+    :class="ocButton_buttonClass"
     v-on="handlers"
   >
     <oc-spinner v-if="showSpinner" size="small" class="spinner" />
@@ -12,188 +12,128 @@
   </component>
 </template>
 
-<script lang="ts">
-import { defineComponent, PropType } from 'vue'
+<script lang="ts" setup>
+import { computed } from 'vue'
 import { RouteLocationRaw } from 'vue-router'
 import { getSizeClass } from '../../helpers'
 
-export default defineComponent({
+/**
+ * OcButton - A versatile button component with various styling options and types.
+ *
+ * @prop {'button' | 'a' | 'router-link'} [type='button'] - The HTML element used for the button.
+ * @prop {boolean} [disabled=false] - Whether the button is disabled.
+ * @prop {'small' | 'medium' | 'large'} [size='medium'] - The size of the button.
+ * @prop {string} [href=null] - When type is 'a', specifies the URL to link to.
+ * @prop {'_blank' | '_self' | '_parent' | '_top'} [target=null] - When type is 'a', specifies where to open the linked document.
+ * @prop {RouteLocationRaw} [to=null] - When type is 'router-link', specifies the target route.
+ * @prop {string} [ariaLabel=null] - An accessible label for the button. Use only when needed to override the visible text.
+ * @prop {'button' | 'submit' | 'reset'} [submit='button'] - The type attribute when rendering a button element.
+ * @prop {'passive' | 'primary' | 'danger' | 'success' | 'warning' | 'brand'} [variation='passive'] - The color variation of the button.
+ * @prop {'outline' | 'filled' | 'raw' | 'raw-inverse'} [appearance='outline'] - The visual style of the button.
+ *   - outline: transparent with colored border
+ *   - filled: colored background with contrasting text
+ *   - raw: text-only button with colored text
+ *   - raw-inverse: text-only button with contrasting text
+ * @prop {'left' | 'center' | 'right' | 'space-around' | 'space-between' | 'space-evenly'} [justifyContent='center'] - How to align content within the button.
+ * @prop {'none' | 'xsmall' | 'small' | 'medium' | 'large' | 'xlarge'} [gapSize='medium'] - Spacing between child elements.
+ * @prop {boolean} [showSpinner=false] - Whether to show a loading spinner.
+ *
+ * @slot default - Content of the button.
+ *
+ * @event {MouseEvent} click - Emitted when the button is clicked.
+ *
+ * @example
+ * ```vue
+ * <!-- Basic button -->
+ * <oc-button>Click me</oc-button>
+ *
+ * <!-- Primary filled button -->
+ * <oc-button variation="primary" appearance="filled">Submit</oc-button>
+ *
+ * <!-- Button with icon -->
+ * <oc-button>
+ *   <oc-icon name="home" />
+ *   Home
+ * </oc-button>
+ *
+ * <!-- Link button -->
+ * <oc-button type="a" href="https://example.com" target="_blank">External Link</oc-button>
+ *
+ * <!-- Button with loading state -->
+ * <oc-button :show-spinner="isLoading" @click="handleClick">Save</oc-button>
+ * ```
+ */
+
+interface Props {
+  type?: 'button' | 'a' | 'router-link'
+  disabled?: boolean
+  size?: 'small' | 'medium' | 'large'
+  href?: string
+  target?: '_blank' | '_self' | '_parent' | '_top'
+  to?: RouteLocationRaw
+  ariaLabel?: string
+  submit?: 'button' | 'submit' | 'reset'
+  variation?: 'passive' | 'primary' | 'danger' | 'success' | 'warning' | 'brand' | string
+  appearance?: 'outline' | 'filled' | 'raw' | 'raw-inverse' | string
+  justifyContent?: 'left' | 'center' | 'right' | 'space-around' | 'space-between' | 'space-evenly'
+  gapSize?: 'none' | 'xsmall' | 'small' | 'medium' | 'large' | 'xlarge'
+  showSpinner?: boolean
+}
+interface Emits {
+  (e: 'click', event: MouseEvent): void
+}
+defineOptions({
   name: 'OcButton',
   status: 'ready',
-  release: '1.0.0',
-  props: {
-    /**
-     * The html element used for the button.
-     * `button, a, router-link`
-     */
-    type: {
-      type: String,
-      default: 'button',
-      validator: (value: any) => {
-        return ['button', 'a', 'router-link'].includes(value)
-      }
-    },
-    /**
-     * Disable the button
-     */
-    disabled: {
-      type: Boolean,
-      default: false
-    },
-    /**
-     * The size of the button. Defaults to medium.
-     * `small, medium, large`
-     */
-    size: {
-      type: String,
-      default: 'medium',
-      validator: (value: string) => {
-        return ['small', 'medium', 'large'].includes(value)
-      }
-    },
-    /**
-     * When setting the button’s type to a link, use this option to give a href.
-     */
-    href: {
-      type: String,
-      default: null
-    },
-    /**
-     * When setting the button’s type to a link, use this option to give a give a target.
-     * `_blank, _self, _parent, _top`
-     */
-    target: {
-      type: String,
-      default: null,
-      validator: (value: string) => {
-        return ['_blank', '_self', '_parent', '_top'].includes(value)
-      }
-    },
-    /**
-     * When setting the button’s type to a router-link, use this option to give a to.
-     */
-    to: {
-      type: [String, Object] as PropType<RouteLocationRaw>,
-      default: null
-    },
-    /**
-     * The aria-label of the button. Only use this property if you want to overwrite the accessible content of the
-     * oc-button. Usually this is not needed.
-     */
-    ariaLabel: {
-      type: String,
-      default: null
-    },
-    /**
-     * Set the button’s type ("submit", "button" or "reset").
-     */
-    submit: {
-      type: String,
-      default: 'button',
-      validator: (value: string) => {
-        return ['null', 'button', 'submit', 'reset'].includes(value)
-      }
-    },
-    /**
-     * Style variation to give additional meaning.
-     * Defaults to `primary`.
-     * Can be `passive, primary, danger, success, warning, brand`.
-     */
-    variation: {
-      type: String,
-      default: 'passive',
-      validator: (value: string) => {
-        return ['passive', 'primary', 'danger', 'success', 'warning', 'brand'].includes(value)
-      }
-    },
-    /**
-     * Style variation to give additional meaning.
-     * Defaults to `outline`.
-     * Can be `outline, filled, raw, raw-inverse` with following characteristics:
-     * - outline: transparent button with text- and border-color according to variation default-color
-     * - filled: button filled in variation default-color, text in variation contrast-color
-     * - raw: text-only button with text in variation default-color
-     * - raw-inverse: text-only button with text in variation contrast-color
-     */
-    appearance: {
-      type: String,
-      default: 'outline',
-      validator: (value: string) => {
-        return ['filled', 'outline', 'raw', 'raw-inverse'].includes(value)
-      }
-    },
-    /**
-     * How to justify content within the button. Defaults to center.
-     * `left, center, right, space-around, space-between, space-evenly`
-     */
-    justifyContent: {
-      type: String,
-      default: 'center',
-      validator: (value: string) => {
-        return [
-          'left',
-          'center',
-          'right',
-          'space-around',
-          'space-between',
-          'space-evenly'
-        ].includes(value)
-      }
-    },
-    /**
-     * Distance between children of the button. Defaults to medium. Might be overruled by justify-content value.
-     * @values none, xsmall, small, medium, large, xlarge
-     */
-    gapSize: {
-      type: String,
-      default: 'medium',
-      validator: (value: string) => {
-        return ['none', 'xsmall', 'small', 'medium', 'large', 'xlarge'].includes(value)
-      }
-    },
+  release: '1.0.0'
+})
+const {
+  type = 'button',
+  disabled = false,
+  size = 'medium',
+  href = null,
+  target = null,
+  to = null,
+  ariaLabel = null,
+  submit = 'button',
+  variation = 'passive',
+  appearance = 'outline',
+  justifyContent = 'center',
+  gapSize = 'medium',
+  showSpinner = false
+} = defineProps<Props>()
 
-    /**
-     * Show loading spinner
-     */
-    showSpinner: {
-      type: Boolean,
-      default: false
-    }
-  },
-  emits: ['click'],
-  computed: {
-    $_ocButton_buttonClass() {
-      return [
-        'oc-button',
-        'oc-rounded',
-        `oc-button-${getSizeClass(this.size)}`,
-        `oc-button-justify-content-${this.justifyContent}`,
-        `oc-button-gap-${getSizeClass(this.gapSize)}`,
-        `oc-button-${this.variation}`,
-        `oc-button-${this.variation}-${this.appearance}`
-      ]
-    },
+const emit = defineEmits<Emits>()
 
-    additionalAttributes() {
-      return {
-        ...(this.href && { href: this.href }),
-        ...(this.target && { target: this.target }),
-        ...(this.to && { to: this.to }),
-        ...(this.type === 'button' && { type: this.submit }),
-        ...(this.type === 'button' && { disabled: this.disabled })
-      }
-    },
+function ocButton_onClick(event: MouseEvent) {
+  emit('click', event)
+}
 
-    handlers() {
-      return {
-        ...(this.type === 'button' && { click: this.$_ocButton_onClick })
-      }
-    }
-  },
-  methods: {
-    $_ocButton_onClick(event: MouseEvent) {
-      this.$emit('click', event)
-    }
+const ocButton_buttonClass = computed(() => {
+  return [
+    'oc-button',
+    'oc-rounded',
+    `oc-button-${getSizeClass(size)}`,
+    `oc-button-justify-content-${justifyContent}`,
+    `oc-button-gap-${getSizeClass(gapSize)}`,
+    `oc-button-${variation}`,
+    `oc-button-${variation}-${appearance}`
+  ]
+})
+
+const additionalAttributes = computed(() => {
+  return {
+    ...(href && { href: href }),
+    ...(target && { target }),
+    ...(to && { to }),
+    ...(type === 'button' && { type: submit }),
+    ...(type === 'button' && { disabled })
+  }
+})
+
+const handlers = computed(() => {
+  return {
+    ...(type === 'button' && { click: ocButton_onClick })
   }
 })
 </script>
