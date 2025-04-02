@@ -29,7 +29,7 @@
   </span>
 </template>
 
-<script lang="ts">
+<script lang="ts" setup>
 import { shareType } from '../../utils/shareType'
 import OcAvatar from '../OcAvatar/OcAvatar.vue'
 import OcAvatarCount from '../OcAvatarCount/OcAvatarCount.vue'
@@ -37,7 +37,39 @@ import OcAvatarLink from '../OcAvatarLink/OcAvatarLink.vue'
 import OcAvatarGroup from '../OcAvatarGroup/OcAvatarGroup.vue'
 import OcAvatarFederated from '../OcAvatarFederated/OcAvatarFederated.vue'
 import OcAvatarGuest from '../OcAvatarGuest/OcAvatarGuest.vue'
-import { defineComponent, PropType } from 'vue'
+import { computed, unref } from 'vue'
+
+/**
+ * OcAvatars - A component for displaying a group of different types of avatars with various display options.
+ *
+ * @prop {Array<Object>} items - Users, public links, groups, federated and guests to be displayed with avatar.
+ * @prop {boolean} [stacked=false] - Asserts whether avatars should be stacked on each other.
+ * @prop {boolean} [isTooltipDisplayed=false] - Asserts whether tooltip should be displayed on hover/focus.
+ * @prop {number} [maxDisplayed=null] - Limits the number of avatars which will be displayed.
+ * @prop {string} [accessibleDescription=null] - A description of the avatar group for screen readers. This is required as the avatar group element
+ *   is hidden for screen readers.
+ *
+ * @example
+ * ```vue
+ * <!-- Basic usage with users and groups -->
+ * <oc-avatars
+ *   :items="[
+ *     { username: 'john', displayName: 'doe', shareType: 0, avatar: 'avatar-url' },
+ *     { name: 'Developers', shareType: 1 }
+ *   ]"
+ *   accessible-description="Marie and Developers group have access to this resource"
+ * />
+ *
+ * <!-- Stacked avatars with tooltip and limited display -->
+ * <oc-avatars
+ *   :items="usersList"
+ *   :stacked="true"
+ *   :is-tooltip-displayed="true"
+ *   :max-displayed="5"
+ *   accessible-description="This resource is shared with multiple users and groups"
+ * />
+ * ```
+ */
 
 type Item = {
   displayName?: string
@@ -46,125 +78,81 @@ type Item = {
   username?: string
   avatar?: string
 }
+interface Props {
+  items: Item[]
+  stacked?: boolean
+  isTooltipDisplayed?: boolean
+  maxDisplayed?: number
+  accessibleDescription?: string | null
+}
 
-/**
- * Display a group of avatars
- */
-export default defineComponent({
+defineOptions({
   name: 'OcAvatars',
   status: 'ready',
-  release: '2.1.0',
+  release: '2.1.0'
+})
+const {
+  items,
+  stacked = false,
+  isTooltipDisplayed = false,
+  maxDisplayed = null,
+  accessibleDescription = null
+} = defineProps<Props>()
 
-  components: {
-    OcAvatar,
-    OcAvatarCount,
-    OcAvatarLink,
-    OcAvatarGroup,
-    OcAvatarFederated,
-    OcAvatarGuest
-  },
-
-  props: {
-    /**
-     * Users, public links, groups, federated and guests to be displayed with avatars
-     */
-    items: {
-      type: Array as PropType<Item[]>,
-      required: true
-    },
-    /**
-     * Asserts whether avatars should be stacked on each other
-     */
-    stacked: {
-      type: Boolean,
-      required: false,
-      default: false
-    },
-    /**
-     * Asserts whether tooltip should be displayed on hover/focus
-     */
-    isTooltipDisplayed: {
-      type: Boolean,
-      required: false,
-      default: false
-    },
-    /**
-     * Limits the number of avatars which will be displayed
-     */
-    maxDisplayed: {
-      type: Number,
-      required: false,
-      default: null
-    },
-    /**
-     * A description of the avatar group for screen readers. This is required as the avatar group element
-     * is hidden for screen readers.
-     */
-    accessibleDescription: {
-      type: String,
-      required: false,
-      default: null
-    }
-  },
-
-  computed: {
-    isOverlapping() {
-      return this.maxDisplayed && this.maxDisplayed < this.items.length
-    },
-
-    tooltip() {
-      if (this.isTooltipDisplayed) {
-        const names = this.avatars.map((user) => user.displayName)
-
-        if (this.otherItems.length > 0) {
-          names.push(...this.otherItems.map((item) => item.name))
-        }
-
-        let tooltip = names.join(', ')
-
-        if (this.isOverlapping) {
-          tooltip += ` +${this.items.length - this.maxDisplayed}`
-        }
-
-        return tooltip
-      }
-
-      return null
-    },
-
-    avatars() {
-      const a = this.items.filter((u) => u.shareType === shareType.user)
-      if (!this.isOverlapping) {
-        return a
-      }
-      return a.slice(0, this.maxDisplayed)
-    },
-
-    otherItems() {
-      const a = this.items.filter((u) => u.shareType !== shareType.user)
-      if (!this.isOverlapping) {
-        return a
-      }
-      if (this.maxDisplayed <= this.avatars.length) {
-        return []
-      }
-      return a.slice(0, this.maxDisplayed - this.avatars.length)
-    }
-  },
-  methods: {
-    getAvatarComponentForItem(item: Item) {
-      switch (item.shareType) {
-        case shareType.link:
-          return OcAvatarLink
-        case shareType.remote:
-          return OcAvatarFederated
-        case shareType.group:
-          return OcAvatarGroup
-        case shareType.guest:
-          return OcAvatarGuest
-      }
-    }
+function getAvatarComponentForItem(item: Item) {
+  switch (item.shareType) {
+    case shareType.link:
+      return OcAvatarLink
+    case shareType.remote:
+      return OcAvatarFederated
+    case shareType.group:
+      return OcAvatarGroup
+    case shareType.guest:
+      return OcAvatarGuest
   }
+}
+
+const isOverlapping = computed(() => {
+  return maxDisplayed && maxDisplayed < items.length
+})
+
+const tooltip = computed(() => {
+  if (isTooltipDisplayed) {
+    const names = unref(avatars).map((user) => user.displayName)
+
+    if (unref(otherItems).length > 0) {
+      names.push(...unref(otherItems).map((item) => item.name))
+    }
+
+    let tooltip = names.join(', ')
+
+    if (unref(isOverlapping)) {
+      tooltip += ` +${items.length - maxDisplayed}`
+    }
+
+    return tooltip
+  }
+
+  return null
+})
+
+const avatars = computed(() => {
+  const a = items.filter((u) => u.shareType === shareType.user)
+  if (!unref(isOverlapping)) {
+    return a
+  }
+  return a.slice(0, maxDisplayed)
+})
+
+const otherItems = computed(() => {
+  const a = items.filter((u) => u.shareType !== shareType.user)
+  if (!unref(isOverlapping)) {
+    return a
+  }
+  if (maxDisplayed <= unref(avatars).length) {
+    return []
+  }
+  return a.slice(0, maxDisplayed - unref(avatars).length)
 })
 </script>
 
