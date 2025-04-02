@@ -10,53 +10,39 @@
   />
 </template>
 
-<script lang="ts">
-import { defineComponent } from 'vue'
+<script lang="ts" setup>
 import OcAvatarItem from '../OcAvatarItem/OcAvatarItem.vue'
 
-export default defineComponent({
+/**
+ * OcAvatarFederated - A component for displaying a federated avatar with a globe icon.
+ *
+ * @prop {string} name - The name associated with the avatar. This is required.
+ * @prop {string} [accessibleLabel=''] - An accessible label for the avatar. If empty, the avatar will be hidden from assistive technologies.
+ * @prop {number} [width=30] - The width and height of the avatar in pixels. Defaults to 30px.
+ * @prop {string} [iconSize='small'] - The size of the globe icon. Defaults to "small".
+ *
+ * @example
+ * ```vue
+ * <!-- Default usage -->
+ * <oc-avatar-federated name="federated" accessible-label="federated" />
+ *
+ * <!-- Custom size -->
+ * <oc-avatar-federated name="federated" accessible-label="federated" :width="50" icon-size="medium" />
+ * ```
+ */
+
+interface Props {
+  name: string
+  accessibleLabel?: string
+  width?: number
+  iconSize?: string
+}
+defineOptions({
   name: 'OcAvatarFederated',
   status: 'ready',
-  release: '10.0.0',
-  components: { OcAvatarItem },
-
-  props: {
-    /**
-     * Name of the federated share used as an accessible label
-     */
-    name: {
-      type: String,
-      required: true
-    },
-    /**
-     * Accessibility label used as alt. Use only in case the avatar is used alone.
-     * In case the avatar is used next to username or display name leave empty.
-     * If not specified, avatar will get `aria-hidden="true"`.
-     **/
-    accessibleLabel: {
-      type: String,
-      required: false,
-      default: ''
-    },
-    /**
-     * Describes the width of the avatar
-     */
-    width: {
-      type: Number,
-      required: false,
-      default: 30
-    },
-
-    /**
-     * Describes the size of the avatar icon e.g.(small)
-     */
-    iconSize: {
-      type: String,
-      required: false,
-      default: 'small'
-    }
-  }
+  release: '10.0.0'
 })
+const { name, accessibleLabel = '', width = 30, iconSize = 'small' } = defineProps<Props>()
 </script>
 
 <docs>
