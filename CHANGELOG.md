@@ -32,6 +32,8 @@ Summary
 * Bugfix - Mock services correctly in test file: [#12377](https://github.com/owncloud/web/pull/12377)
 * Bugfix - Use resource ID in share notifications: [#12385](https://github.com/owncloud/web/pull/12385)
 * Bugfix - Watch scroll target in shared list: [#12385](https://github.com/owncloud/web/pull/12385)
+* Bugfix - Download archives directly: [#12406](https://github.com/owncloud/web/pull/12406)
+* Bugfix - Request archive as blob: [#12406](https://github.com/owncloud/web/pull/12406)
 * Enhancement - Accessibility improvements: [#5379](https://github.com/owncloud/web/issues/5379)
 * Enhancement - Create spaces via admin settings: [#11849](https://github.com/owncloud/web/pull/11849)
 * Enhancement - Add maintenance banner: [#12239](https://github.com/owncloud/web/pull/12239)
@@ -251,6 +253,27 @@ Details
 
    https://github.com/owncloud/web/issues/10398
    https://github.com/owncloud/web/pull/12385
+
+* Bugfix - Download archives directly: [#12406](https://github.com/owncloud/web/pull/12406)
+
+   In authenticated context and inside public links without a password, download
+   zip archives directly by opening the download URL instead of fetching it first.
+   Fetching the archive first puts constraints on the size of the archive that can
+   be downloaded because it is being saved into the devices memory. In case of a
+   public link with a password, the archive is still being fetched because signed
+   URLs are not supported for public links.
+
+   https://github.com/owncloud/web/issues/12405
+   https://github.com/owncloud/web/pull/12406
+
+* Bugfix - Request archive as blob: [#12406](https://github.com/owncloud/web/pull/12406)
+
+   When downloading an archive in public links with passwords, the archive is now
+   being fetched as a blob instead of a signed URL. This allows for downloading
+   larger archives in Chrome and Firefox.
+
+   https://github.com/owncloud/web/issues/12405
+   https://github.com/owncloud/web/pull/12406
 
 * Enhancement - Accessibility improvements: [#5379](https://github.com/owncloud/web/issues/5379)
 
