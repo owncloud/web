@@ -46,105 +46,67 @@ describe('archiver', () => {
       new RuntimeError('no archiver available')
     )
   })
-  describe('with one v2 archiver capability', () => {
-    const archiverUrl = [serverUrl, 'archiver'].join('/')
-    const capabilities = ref([
-      {
-        enabled: true,
-        version: 'v2.3.5',
-        archiver_url: archiverUrl,
-        formats: [],
-        max_num_files: '42',
-        max_size: '1073741824'
-      }
-    ])
 
-    it('is announcing itself as supporting fileIds', () => {
-      const archiverService = getArchiverServiceInstance(capabilities)
-      expect(unref(archiverService.fileIdsSupported)).toBe(true)
-    })
-    it('fails to trigger a download if no files were given', async () => {
-      const archiverService = getArchiverServiceInstance(capabilities)
-      await expect(archiverService.triggerDownload({})).rejects.toThrow(
-        new RuntimeError('requested archive with empty list of resources')
-      )
-    })
-    it('returns a download url for a valid archive download trigger', async () => {
-      const archiverService = getArchiverServiceInstance(capabilities)
-      const fileId = 'asdf'
-      const url = await archiverService.triggerDownload({ fileIds: [fileId] })
-      expect(window.open).toHaveBeenCalled()
-      expect(url.startsWith(archiverUrl)).toBeTruthy()
-      expect(url.indexOf(`id=${fileId}`)).toBeGreaterThan(-1)
-    })
+  const archiverUrl = [serverUrl, 'archiver'].join('/')
+  const capabilities = ref([
+    {
+      enabled: true,
+      version: 'v2.3.5',
+      archiver_url: archiverUrl,
+      formats: [],
+      max_num_files: '42',
+      max_size: '1073741824'
+    }
+  ])
+
+  it('is announcing itself as supporting fileIds', () => {
+    const archiverService = getArchiverServiceInstance(capabilities)
+    expect(unref(archiverService.fileIdsSupported)).toBe(true)
   })
-  describe('with one v1 archiver capability', () => {
-    const archiverUrl = [serverUrl, 'archiver'].join('/')
+  it('fails to trigger a download if no files were given', async () => {
+    const archiverService = getArchiverServiceInstance(capabilities)
+    await expect(archiverService.triggerDownload({})).rejects.toThrow(
+      new RuntimeError('requested archive with empty list of resources')
+    )
+  })
+  it('returns a download url for a valid archive download trigger', async () => {
+    const archiverService = getArchiverServiceInstance(capabilities)
+    const fileId = 'asdf'
+    const url = await archiverService.triggerDownload({ fileIds: [fileId] })
+    expect(window.open).toHaveBeenCalled()
+    expect(url.startsWith(archiverUrl)).toBeTruthy()
+    expect(url.indexOf(`id=${fileId}`)).toBeGreaterThan(-1)
+  })
+
+  it('uses the highest major version', async () => {
     const capabilities = ref([
       {
         enabled: true,
         version: 'v1.2.3',
-        archiver_url: archiverUrl,
+        archiver_url: archiverUrl + '/v1',
+        formats: [],
+        max_num_files: '42',
+        max_size: '1073741824'
+      },
+      {
+        enabled: true,
+        version: 'v2.3.5',
+        archiver_url: archiverUrl + '/v2',
+        formats: [],
+        max_num_files: '42',
+        max_size: '1073741824'
+      },
+      {
+        enabled: false,
+        version: 'v3.2.5',
+        archiver_url: archiverUrl + '/v3',
         formats: [],
         max_num_files: '42',
         max_size: '1073741824'
       }
     ])
-    it('is announcing itself as not supporting fileIds', () => {
-      const archiverService = getArchiverServiceInstance(capabilities)
-      expect(unref(archiverService.fileIdsSupported)).toBe(false)
-    })
-    it('fails to trigger a download if no files were given', async () => {
-      const archiverService = getArchiverServiceInstance(capabilities)
-      await expect(archiverService.triggerDownload({})).rejects.toThrow(
-        new RuntimeError('requested archive with empty list of resources')
-      )
-    })
-    it('returns a download url for a valid archive download trigger', async () => {
-      const archiverService = getArchiverServiceInstance(capabilities)
-      const dir = '/some/path'
-      const fileName = 'qwer'
-      const url = await archiverService.triggerDownload({ dir, files: [fileName] })
-
-      expect(window.open).toHaveBeenCalled()
-      expect(url.startsWith(archiverUrl)).toBeTruthy()
-      expect(url.indexOf(`files[]=${fileName}`)).toBeGreaterThan(-1)
-      expect(url.indexOf(`dir=${encodeURIComponent(dir)}`)).toBeGreaterThan(-1)
-      expect(url.indexOf('downloadStartSecret=')).toBeGreaterThan(-1)
-    })
-  })
-  describe('with multiple archiver capabilities of different versions', () => {
-    const archiverUrl = [serverUrl, 'archiver'].join('/')
-    const capabilityV1 = {
-      enabled: true,
-      version: 'v1.2.3',
-      archiver_url: archiverUrl + '/v1',
-      formats: [],
-      max_num_files: '42',
-      max_size: '1073741824'
-    } as ArchiverCapability
-    const capabilityV2 = {
-      enabled: true,
-      version: 'v2.3.5',
-      archiver_url: archiverUrl + '/v2',
-      formats: [],
-      max_num_files: '42',
-      max_size: '1073741824'
-    } as ArchiverCapability
-    const capabilityV3 = {
-      enabled: false,
-      version: 'v3.2.5',
-      archiver_url: archiverUrl + '/v3',
-      formats: [],
-      max_num_files: '42',
-      max_size: '1073741824'
-    } as ArchiverCapability
-
-    it('uses the highest major version', async () => {
-      const capabilities = ref([capabilityV1, capabilityV2, capabilityV3])
-      const archiverService = getArchiverServiceInstance(capabilities)
-      const downloadUrl = await archiverService.triggerDownload({ fileIds: ['any'] })
-      expect(downloadUrl.startsWith(capabilityV2.archiver_url)).toBeTruthy()
-    })
+    const archiverService = getArchiverServiceInstance(capabilities)
+    const downloadUrl = await archiverService.triggerDownload({ fileIds: ['any'] })
+    expect(downloadUrl.startsWith(archiverUrl + '/v2')).toBeTruthy()
   })
 })
