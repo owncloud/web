@@ -20,6 +20,11 @@ const getArchiverServiceInstance = (capabilities: Ref<ArchiverCapability[]>) => 
   } as unknown as AxiosResponse)
   clientServiceMock.ocsUserContext.signUrl.mockImplementation((url) => Promise.resolve(url))
 
+  Object.defineProperty(window, 'open', {
+    value: vi.fn(),
+    writable: true
+  })
+
   return new ArchiverService(clientServiceMock, userStore, serverUrl, capabilities)
 }
 
@@ -66,10 +71,9 @@ describe('archiver', () => {
     })
     it('returns a download url for a valid archive download trigger', async () => {
       const archiverService = getArchiverServiceInstance(capabilities)
-      window.URL.createObjectURL = vi.fn(() => '')
       const fileId = 'asdf'
       const url = await archiverService.triggerDownload({ fileIds: [fileId] })
-      expect(window.URL.createObjectURL).toHaveBeenCalled()
+      expect(window.open).toHaveBeenCalled()
       expect(url.startsWith(archiverUrl)).toBeTruthy()
       expect(url.indexOf(`id=${fileId}`)).toBeGreaterThan(-1)
     })
@@ -98,12 +102,11 @@ describe('archiver', () => {
     })
     it('returns a download url for a valid archive download trigger', async () => {
       const archiverService = getArchiverServiceInstance(capabilities)
-      window.URL.createObjectURL = vi.fn(() => '')
       const dir = '/some/path'
       const fileName = 'qwer'
       const url = await archiverService.triggerDownload({ dir, files: [fileName] })
 
-      expect(window.URL.createObjectURL).toHaveBeenCalled()
+      expect(window.open).toHaveBeenCalled()
       expect(url.startsWith(archiverUrl)).toBeTruthy()
       expect(url.indexOf(`files[]=${fileName}`)).toBeGreaterThan(-1)
       expect(url.indexOf(`dir=${encodeURIComponent(dir)}`)).toBeGreaterThan(-1)

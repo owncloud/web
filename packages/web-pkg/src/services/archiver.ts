@@ -73,33 +73,37 @@ export class ArchiverService {
       throw new RuntimeError('download url could not be built')
     }
 
+    if (options.publicToken && options.publicLinkPassword) {
+      try {
+        const response = await this.clientService.httpUnAuthenticated.get<Blob>(downloadUrl, {
+          headers: {
+            ...(!!options.publicLinkPassword && {
+              Authorization:
+                'Basic ' +
+                Buffer.from(['public', options.publicLinkPassword].join(':')).toString('base64')
+            })
+          },
+          responseType: 'blob'
+        })
+
+        const objectUrl = URL.createObjectURL(response.data)
+        const fileName = this.getFileNameFromResponseHeaders(response.headers)
+        triggerDownloadWithFilename(objectUrl, fileName)
+        return downloadUrl
+      } catch (e) {
+        throw new HttpError('archive could not be fetched', e.response)
+      }
+    }
+
     const url = options.publicToken
       ? downloadUrl
-      : await this.clientService.ocsUserContext.signUrl(
+      : await this.clientService.ocs.signUrl(
           downloadUrl,
           this.userStore.user?.onPremisesSamAccountName
         )
 
-    try {
-      const response = await this.clientService.httpUnAuthenticated.get<ArrayBuffer>(url, {
-        headers: {
-          ...(!!options.publicLinkPassword && {
-            Authorization:
-              'Basic ' +
-              Buffer.from(['public', options.publicLinkPassword].join(':')).toString('base64')
-          })
-        },
-        responseType: 'arraybuffer'
-      })
-
-      const blob = new Blob([response.data], { type: 'application/octet-stream' })
-      const objectUrl = URL.createObjectURL(blob)
-      const fileName = this.getFileNameFromResponseHeaders(response.headers)
-      triggerDownloadWithFilename(objectUrl, fileName)
-      return url
-    } catch (e) {
-      throw new HttpError('archive could not be fetched', e.response)
-    }
+    window.open(url, '_blank')
+    return downloadUrl
   }
 
   private buildDownloadUrl(options: TriggerDownloadOptions): string {
