@@ -15,129 +15,108 @@
   </span>
 </template>
 
-<script lang="ts">
-import { defineComponent, PropType } from 'vue'
+<script lang="ts" setup>
+import { computed, unref } from 'vue'
 import { isEqual } from 'lodash-es'
 import { getSizeClass, uniqueId } from '../../helpers'
 
 /**
- * A checkbox input element. The checkbox is either checked or unchecked.
+ * OcCheckbox - A customizable checkbox component supporting single checkboxes and checkbox groups.
+ *
+ * @prop {string} [id] - Unique identifier for the checkbox input. If not provided, an auto-generated ID will be used.
+ * @prop {boolean|Array} [modelValue=false] - Value bound to the checkbox. Boolean for single checkboxes, array for checkbox groups.
+ * @prop {boolean} [disabled=false] - Whether the checkbox is disabled.
+ * @prop {any} [option=null] - Value associated with the checkbox when used in a checkbox group with array binding.
+ * @prop {string} [label=null] - Text label displayed next to the checkbox.
+ * @prop {boolean} [labelHidden=false] - Whether to hide the label visually but keep it accessible to screen readers.
+ * @prop {'small'|'medium'|'large'} [size='medium'] - Size of the checkbox.
+ *
+ * @event {Event} click - Emitted when the checkbox is clicked.
+ * @event {boolean|Array} update:modelValue - Emitted when the checkbox value changes.
+ *
+ * @example
+ * ```vue
+ * <!-- Basic checkbox -->
+ * <oc-checkbox v-model="isChecked" label="label" />
+ *
+ * <!-- Disabled checkbox -->
+ * <oc-checkbox v-model="isChecked" label="label" disabled />
+ *
+ * <!-- Different sizes -->
+ * <oc-checkbox size="small" label="label" />
+ * <oc-checkbox label="label" />
+ * <oc-checkbox size="large" label="label" />
+ *
+ * <!-- Checkbox group with array model -->
+ * <oc-checkbox
+ *   v-for="option in ['a', 'b', 'c']"
+ *   :key="option"
+ *   v-model="selectedOptions"
+ *   :option="option"
+ *   :label="option"
+ * />
+ * ```
  */
-export default defineComponent({
+
+interface Props {
+  id?: string
+  modelValue?: boolean | unknown[]
+  disabled?: boolean
+  option?: unknown
+  label?: string
+  labelHidden?: boolean
+  size?: 'small' | 'medium' | 'large'
+}
+interface Emits {
+  (e: 'click', event: Event): void
+  (e: 'update:modelValue', value: boolean | unknown[]): void
+}
+
+defineOptions({
   name: 'OcCheckbox',
   status: 'ready',
-  release: '1.0.0',
-  props: {
-    /**
-     * Id for the checkbox. If it's empty, a generated one will be used.
-     */
-    id: {
-      type: String,
-      required: false,
-      default: () => uniqueId('oc-checkbox-')
-    },
-    /**
-     * Disables the checkbox
-     */
-    disabled: {
-      type: Boolean,
-      default: false
-    },
-    /**
-     * The model of the checkbox. It determines, based on the option this checkbox represents, whether or not this
-     * checkbox is checked. Provide it as value or bind it with v-model.
-     *
-     * Can be any type, but most common is boolean for singular checkbox use, or array when used in a group of checkboxes.
-     **/
+  release: '1.0.0'
+})
 
-    modelValue: {
-      type: [Boolean, Array] as PropType<boolean | unknown[]>,
-      required: false,
-      default: false
-    },
-    /**
-     * The value/object this checkbox represents.
-     *
-     * Can be of any type. If `value` is an array, the type of the option needs to match the value item types. If the
-     * checkbox is used standalone (not in a group on a shared model) the option can be omitted.
-     **/
-    // eslint-disable-next-line vue/require-prop-types
-    option: {
-      required: false,
-      default: null
-    },
-    /**
-     * Label of the Checkbox
-     *
-     * Always required for aria-label property. If you want to hide the label, use `hideLabel` property.
-     **/
-    label: {
-      type: String,
-      required: true,
-      default: null
-    },
-    /**
-     * Hide the label of the Checkbox
-     */
-    labelHidden: {
-      type: Boolean,
-      default: false
-    },
-    /**
-     * Size of the Checkbox. Valid values are `small`, `medium` and `large`.
-     * If not specified, defaults to `medium`
-     */
-    size: {
-      type: String,
-      required: false,
-      default: 'medium',
-      validator: (size: string) => ['small', 'medium', 'large'].includes(size)
-    },
-    /**
-     * Show outline of checkbox
-     **/
-    outline: {
-      type: Boolean,
-      required: false,
-      default: false
-    }
+const {
+  id = uniqueId('oc-checkbox-'),
+  disabled = false,
+  option = null,
+  label = null,
+  labelHidden = false,
+  size = 'medium',
+  modelValue = false
+} = defineProps<Props>()
+
+const emit = defineEmits<Emits>()
+const model = computed({
+  get() {
+    return modelValue
   },
-  emits: ['click', 'update:modelValue'],
-  computed: {
-    model: {
-      get() {
-        return this.modelValue
-      },
-      set: function (value: boolean) {
-        this.$emit('update:modelValue', value)
-      }
-    },
-    classes() {
-      return [
-        'oc-checkbox',
-        'oc-rounded',
-        'oc-checkbox-' + getSizeClass(this.size),
-        { 'oc-checkbox-checked': this.isChecked }
-      ]
-    },
-    labelClasses() {
-      return {
-        'oc-cursor-pointer': !this.disabled
-      }
-    },
-    isChecked() {
-      if (typeof this.model === 'boolean') {
-        return this.model
-      }
-      return this.model.some((m) => isEqual(m, this.option))
-    }
-  },
-  methods: {
-    keydownEnter(event: KeyboardEvent) {
-      this.model = !this.model
-      this.$emit('click', event)
-    }
+  set(value: boolean) {
+    emit('update:modelValue', value)
   }
+})
+function keydownEnter(event: KeyboardEvent) {
+  model.value = !model.value
+  emit('click', event)
+}
+const classes = computed(() => {
+  return [
+    'oc-checkbox',
+    'oc-rounded',
+    `oc-checkbox-${getSizeClass(size)}`,
+    { 'oc-checkbox-checked': isChecked.value }
+  ]
+})
+
+const labelClasses = computed(() => ({ 'oc-cursor-pointer': !disabled }))
+
+const isChecked = computed(() => {
+  if (Array.isArray(model.value)) {
+    return unref(model.value).some((m) => isEqual(m, option))
+  }
+  return unref(model)
 })
 </script>
 
