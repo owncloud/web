@@ -3,75 +3,68 @@
     <oc-button :id="buttonId" :aria-label="$gettext('Show more information')" appearance="raw">
       <oc-icon name="question" fill-type="line" size="small" />
     </oc-button>
-    <oc-info-drop :drop-id="dropId" :toggle="toggleId" v-bind="$props as any" />
+    <oc-info-drop :drop-id="dropId" :toggle="toggleId" v-bind="props" />
   </div>
 </template>
 
-<script lang="ts">
-import { PropType, defineComponent } from 'vue'
+<script lang="ts" setup>
+import { computed, unref } from 'vue'
 import { uniqueId } from '../../helpers'
 import OcButton from '../OcButton/OcButton.vue'
 import OcIcon from '../OcIcon/OcIcon.vue'
 import OcInfoDrop from '../OcInfoDrop/OcInfoDrop.vue'
 import { ContextualHelperDataListItem } from '../../helpers'
 
-export default defineComponent({
+/**
+ * OcContextualHelper - A component that displays contextual help information in a dropdown when clicked.
+ * It shows a question mark icon that opens additional information in a popup.
+ *
+ * @prop {string} title - The title text displayed in the header of the contextual helper popup.
+ * @prop {string} [text=''] - Optional main descriptive text content.
+ * @prop {ContextualHelperDataListItem[]} [list=[]] - Optional array of list items to display in a definition list format.
+ * @prop {string} [endText=''] - Optional text displayed after the list and before the "Read more" link.
+ * @prop {string} [readMoreLink=''] - Optional URL for the "Read more" link that opens in a new tab.
+ *
+ * @example
+ * ```vue
+ * <!-- Basic usage -->
+ * <oc-contextual-helper
+ *   title="title?"
+ *   text="explanation text"
+ * />
+ *
+ * <!-- With list and read more link -->
+ * <oc-contextual-helper
+ *   title="title?"
+ *   text="explanation text"
+ *   :list="[
+ *     { text: 'Personal storage: 5GB', headline: true },
+ *     { text: 'Project storage: 50GB', headline: true }
+ *   ]"
+ *   end-text="Contact your administrator for more space."
+ *   read-more-link="https://docs.example.com/storage-quotas"
+ * />
+ * ```
+ */
+
+interface Props {
+  title: string
+  text?: string
+  list?: ContextualHelperDataListItem[]
+  endText?: string
+  readMoreLink?: string
+}
+defineOptions({
   name: 'OcContextualHelper',
-  status: 'unreleased',
-  components: { OcButton, OcIcon, OcInfoDrop },
-  props: {
-    /**
-     * Title
-     */
-    title: {
-      type: String,
-      required: true
-    },
-    /**
-     * Text at the beginning
-     */
-    text: {
-      type: String,
-      required: false,
-      default: ''
-    },
-    /**
-     * List element
-     */
-    list: {
-      type: Array as PropType<ContextualHelperDataListItem[]>,
-      required: false,
-      default: (): ContextualHelperDataListItem[] => []
-    },
-    /**
-     * Text at the end
-     */
-    endText: {
-      type: String,
-      required: false,
-      default: ''
-    },
-    /**
-     * Read more link at the end
-     */
-    readMoreLink: {
-      type: String,
-      required: false,
-      default: ''
-    }
-  },
-  computed: {
-    dropId() {
-      return uniqueId('oc-contextual-helper-')
-    },
-    buttonId() {
-      return `${this.dropId}-button`
-    },
-    toggleId() {
-      return `#${this.buttonId}`
-    }
-  }
+  status: 'unreleased'
 })
+
+const { title, text = '', list = [], endText = '', readMoreLink = '' } = defineProps<Props>()
+const props = computed(() => ({ title, text, list, endText, readMoreLink }))
+
+const dropId = computed(() => uniqueId('oc-contextual-helper-'))
+const buttonId = computed(() => `${unref(dropId)}-button`)
+const toggleId = computed(() => `#${unref(buttonId)}`)
 </script>
 
 <style lang="scss">
@@ -82,55 +75,3 @@ export default defineComponent({
   }
 }
 </style>
-
-<docs>
-## Examples
-A simple example, using only text.
-```js
-<template>
-  <div>
-    <oc-contextual-helper v-bind="helperContent"/>
-  </div>
-</template>
-<script>
-export default {
-  computed: {
-    helperContent() {
-      return {
-        text: "Invite persons or groups to access this file or folder.",
-      }
-    }
-  },
-}
-</script>
-```
-
-An example using Title, Text, List, End-Text and Read-More-Link properties.
-```js
-<template>
-  <div>
-    <oc-contextual-helper v-bind="helperContent"/>
-  </div>
-</template>
-<script>
-export default {
-  computed: {
-    helperContent() {
-      return {
-        title: 'Choose how access is granted ',
-        text: "Share a file or folder by link",
-        list: [
-          {text: "Only invited people can access", headline: true},
-          {text: "Only people from the list \"Invited people\" can access. If there is no list, no people are invited yet."},
-          {text: "Everyone with the link", headline: true },
-          {text: "Everyone with the link can access. Note: If you share this link with people from the list \"Invited people\", they need to login-in so that their individual assigned permissions can take effect. If they are not logged-in, the permissions of the link take effect." }
-        ],
-        endText: "Invited persons can not see who else has access",
-        readMoreLink: "https://owncloud.design"
-      }
-    }
-  },
-}
-</script>
-```
-</docs>
