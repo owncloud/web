@@ -8,8 +8,31 @@
   </dl>
 </template>
 
-<script lang="ts">
-import { PropType, defineComponent } from 'vue'
+<script lang="ts" setup>
+/**
+ * OcDefinitionList Component
+ *
+ * A Vue component for rendering a semantic definition list (`<dl>`), which displays key-value pairs.
+ * This is useful for presenting metadata, definitions, or other structured data in a readable format.
+ *
+ * @component
+ * @name OcDefinitionList
+ * @status ready
+ * @release 16.0.0
+ *
+ * @props {Array<Object>} items - An array of objects representing the key-value pairs to display.
+ * @props {string} items[].term - The term or key in the key-value pair.
+ * @props {string} items[].definition - The definition or value in the key-value pair.
+ *
+ * @example
+ * <template>
+ *   <OcDefinitionList :items="[
+ *     { term: 'Name', definition: 'John Doe' },
+ *     { term: 'Age', definition: '30' }
+ *   ]" />
+ * </template>
+ *
+ */
 
 /**
  * Definition lists are used to visually communicate key-value pairs.
@@ -22,21 +45,16 @@ interface DefinitionItem {
   term: string
   definition: string
 }
+interface Props {
+  items: DefinitionItem[]
+}
 
-export default defineComponent({
+defineOptions({
   name: 'OcDefinitionList',
   status: 'ready',
-  release: '16.0.0',
-  props: {
-    /**
-     * The items to display in the list.
-     */
-    items: {
-      type: Array as PropType<DefinitionItem[]>,
-      required: true
-    }
-  }
+  release: '16.0.0'
 })
+const { items } = defineProps<Props>()
 </script>
 
 <style lang="scss">
