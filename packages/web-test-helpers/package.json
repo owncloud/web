@@ -50,7 +50,7 @@
     "@ownclouders/web-client": "workspace:^",
     "@pinia/testing": "^1.0.0",
     "axios": "1.8.4",
-    "vitest-mock-extended": "3.0.1",
+    "vitest-mock-extended": "3.1.0",
     "vue-router": "4.2.5",
     "vue3-gettext": "2.4.0"
   }
