@@ -5,10 +5,25 @@
   </div>
 </template>
 
-<script lang="ts">
-import { defineComponent } from 'vue'
+<script lang="ts" setup>
+/**
+ * @component OcDropzone
+ * @description A dropzone component for drag-and-drop file uploads.
+ *
+ * @slot default - Content to display inside the dropzone.
+ *
+ * @example
+ * ```vue
+ * <oc-dropzone>
+ *   Drag and drop to upload content into current folder
+ * </oc-dropzone>
+ * ```
+ *
+ * @status ready
+ * @release 0.0.1
+ */
 
-export default defineComponent({
+defineOptions({
   name: 'OcDropzone',
   status: 'ready',
   release: '0.0.1'
