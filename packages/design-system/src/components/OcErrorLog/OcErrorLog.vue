@@ -26,48 +26,52 @@
   </div>
 </template>
 
-<script lang="ts">
-import { computed, defineComponent, ref } from 'vue'
-
+<script lang="ts" setup>
+import { computed, ref } from 'vue'
 import { useGettext } from 'vue3-gettext'
 
-export default defineComponent({
+/**
+ * OcErrorLog Component
+ *
+ * This component displays an error log with a textarea containing the error content
+ * and a button to copy the content to the clipboard. It also provides feedback
+ * when the content is successfully copied.
+ *
+ * @name OcErrorLog
+ * @status ready
+ * @release 2.0.0
+ *
+ * @props {string} content - The error log content to be displayed in the textarea.
+ *
+ * @example
+ * <OcErrorLog content="Error details" />
+ *
+ */
+
+interface Props {
+  content: string
+}
+
+defineOptions({
   name: 'OcErrorLog',
   status: 'ready',
-  release: '2.0.0',
-
-  props: {
-    /**
-     * Content to be displayed
-     */
-    content: {
-      type: String,
-      required: true
-    }
-  },
-  setup(props) {
-    const { $gettext } = useGettext()
-    const showCopied = ref(false)
-
-    const contentLabel = computed(() => {
-      return $gettext(
-        'Copy the following information and pass them to technical support to troubleshoot the problem:'
-      )
-    })
-
-    const copyContentToClipboard = () => {
-      navigator.clipboard.writeText(props.content)
-      showCopied.value = true
-      setTimeout(() => (showCopied.value = false), 500)
-    }
-
-    return {
-      contentLabel,
-      showCopied,
-      copyContentToClipboard
-    }
-  }
+  release: '2.0.0'
 })
+const { content } = defineProps<Props>()
+const { $gettext } = useGettext()
+const showCopied = ref(false)
+
+const contentLabel = computed(() => {
+  return $gettext(
+    'Copy the following information and pass them to technical support to troubleshoot the problem:'
+  )
+})
+
+const copyContentToClipboard = () => {
+  navigator.clipboard.writeText(content)
+  showCopied.value = true
+  setTimeout(() => (showCopied.value = false), 500)
+}
 </script>
 
 <style lang="scss">
@@ -85,12 +89,3 @@ export default defineComponent({
   }
 }
 </style>
-
-<docs>
-Component to display error log.
-```js
-<oc-error-log>
-  <oc-error-log content="X-REQUEST-ID: 123456789" />
-</oc-error-log>
-```
-</docs>
