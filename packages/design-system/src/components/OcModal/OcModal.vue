@@ -80,8 +80,8 @@
   </div>
 </template>
 
-<script lang="ts">
-import { defineComponent, PropType, ref, watch, computed } from 'vue'
+<script lang="ts" setup>
+import { ref, watch, computed, unref } from 'vue'
 import OcButton from '../OcButton/OcButton.vue'
 import OcIcon from '../OcIcon/OcIcon.vue'
 import OcTextInput from '../OcTextInput/OcTextInput.vue'
@@ -90,6 +90,18 @@ import { FocusTargetOrFalse, FocusTrapTabbableOptions } from 'focus-trap'
 import { ContextualHelperData } from '../../helpers'
 
 /**
+ * @component OcModal
+ *
+ * @description
+ * A reusable modal component designed to focus user attention on a single action or confirmation.
+ *
+ * @features
+ * - Displays a modal with customizable title, message, and actions.
+ * - Supports optional input fields with validation and error messages.
+ * - Includes contextual helper data for additional guidance.
+ * - Configurable cancel and confirm buttons with loading states.
+ * - Focus management using `focus-trap` for accessibility.
+ *
  * Modals are generally used to force the user to focus on confirming or completing a single action.
  *
  * ## Background and position
@@ -103,323 +115,200 @@ import { ContextualHelperData } from '../../helpers'
  * variation of the confirm button, while the cancel buttons defaults to the `passive` variation. Both button's
  * variations and appearances can be targeted individually (see examples and API docs below).
  *
+ * @props
+ * @prop {string} [elementId] - Optional modal ID.
+ * @prop {string} [elementClass] - Optional modal class.
+ * @prop {'passive' | 'primary' | 'danger' | 'success' | 'warning' | 'info'} [variation='passive'] - Modal variation.
+ * @prop {string} [icon] - Optional icon to display next to the title.
+ * @prop {string} title - Modal title (required).
+ * @prop {string} [message] - Modal message (can be replaced by content slot).
+ * @prop {string} [contextualHelperLabel] - Label for contextual helper data.
+ * @prop {ContextualHelperData} [contextualHelperData] - Data for contextual helper.
+ * @prop {string} [buttonCancelText='Cancel'] - Text for the cancel button.
+ * @prop {string} [buttonConfirmText='Confirm'] - Text for the confirm button.
+ * @prop {boolean} [buttonConfirmDisabled=false] - Disables the confirm button.
+ * @prop {boolean} [hideConfirmButton=false] - Hides the confirm button.
+ * @prop {boolean} [hasInput=false] - Enables an input field in the modal.
+ * @prop {string} [inputType='text'] - Type of the input field.
+ * @prop {string} [inputValue] - Value of the input field.
+ * @prop {[number, number]} [inputSelectionRange] - Selection range for the input field.
+ * @prop {string} [inputLabel] - Label for the input field.
+ * @prop {string} [inputDescription] - Description message for the input field.
+ * @prop {string} [inputError] - Error message for the input field.
+ * @prop {string | boolean} [focusTrapInitial] - Custom initial focus target.
+ * @prop {boolean} [hideActions=false] - Hides the action buttons at the bottom.
+ * @prop {boolean} [isLoading=false] - Enables loading state for the modal.
+ *
+ * @emits
+ * @event cancel - Triggered when the cancel button is clicked or the escape key is pressed.
+ * @event confirm - Triggered when the confirm button is clicked. Emits the input value if present.
+ * @event input - Triggered when the user types into the input field. Emits the input value.
+ *
+ * @slots
+ * @slot content - Custom content to replace the default message.
+ *
+ *
  */
-export default defineComponent({
+
+interface Props {
+  elementId?: string
+  elementClass?: string
+  variation?: 'passive' | 'primary' | 'danger' | 'success' | 'warning' | 'info'
+  icon?: string
+  title: string
+  message?: string
+  contextualHelperLabel?: string
+  contextualHelperData?: ContextualHelperData
+  buttonCancelText?: string
+  buttonConfirmText?: string
+  buttonConfirmDisabled?: boolean
+  hideConfirmButton?: boolean
+  hasInput?: boolean
+  inputType?: string
+  inputValue?: string
+  inputSelectionRange?: [number, number]
+  inputLabel?: string
+  inputDescription?: string
+  inputError?: string
+  focusTrapInitial?: string | boolean
+  hideActions?: boolean
+  isLoading?: boolean
+}
+
+interface Emits {
+  (e: 'cancel'): void
+  (e: 'confirm', value: string): void
+  (e: 'input', value: string): void
+}
+
+defineOptions({
   name: 'OcModal',
   status: 'ready',
-  release: '1.3.0',
+  release: '1.3.0'
+})
 
-  components: {
-    OcButton,
-    OcIcon,
-    OcTextInput,
-    FocusTrap
+const {
+  elementId = null,
+  elementClass = null,
+  variation = 'passive',
+  icon = null,
+  title,
+  message = null,
+  contextualHelperLabel = '',
+  contextualHelperData = null,
+  buttonCancelText = 'Cancel',
+  buttonConfirmText = 'Confirm',
+  buttonConfirmDisabled = false,
+  hideConfirmButton = false,
+  hasInput = false,
+  inputType = 'text',
+  inputValue = null,
+  inputSelectionRange = null,
+  inputLabel = null,
+  inputDescription = null,
+  inputError = null,
+  focusTrapInitial = null,
+  hideActions = false,
+  isLoading = false
+} = defineProps<Props>()
+
+const emit = defineEmits<Emits>()
+const userInputValue = ref<string>()
+const showSpinner = ref(false)
+const buttonConfirmAppearance = ref('filled')
+const ocModal = ref<HTMLElement>()
+const ocModalInput = ref<typeof OcTextInput>()
+
+const tabbableOptions = computed((): FocusTrapTabbableOptions => {
+  // Enable shadow DOM support for e.g. emoji-picker
+  return {
+    getShadowRoot: true
+  }
+})
+
+const resetLoadingState = () => {
+  showSpinner.value = false
+  buttonConfirmAppearance.value = 'filled'
+}
+
+const setLoadingState = () => {
+  showSpinner.value = true
+  buttonConfirmAppearance.value = 'outline'
+}
+function cancelModalAction() {
+  /**
+   * The user clicked on the cancel button or hit the escape key
+   */
+  emit('cancel')
+}
+function confirm() {
+  if (buttonConfirmDisabled || inputError) {
+    return
+  }
+  /**
+   * The user clicked on the confirm button. If input exists, emits its value
+   *
+   * @property {String} value Value of the input
+   */
+  emit('confirm', unref(userInputValue))
+}
+function inputOnInput(value: string) {
+  /**
+   * The user typed into the input
+   *
+   * @property {String} value Value of the input
+   */
+  emit('input', value)
+}
+watch(
+  () => isLoading,
+  () => {
+    if (!isLoading) {
+      return resetLoadingState()
+    }
+    setTimeout(() => {
+      if (!isLoading) {
+        return resetLoadingState()
+      }
+      setLoadingState()
+    }, 700)
   },
+  { immediate: true }
+)
 
-  props: {
-    /**
-     * Optional modal id
-     */
-    elementId: {
-      type: String,
-      required: false,
-      default: null
-    },
-    /**
-     * Optional modal class
-     */
-    elementClass: {
-      type: String,
-      required: false,
-      default: null
-    },
-    /**
-     * Modal variation
-     * Defaults to `passive`.
-     * Can be `passive, primary, danger, success, warning`.
-     */
-    variation: {
-      type: String,
-      required: false,
-      default: 'passive',
-      validator: (value: string) => {
-        return ['passive', 'primary', 'danger', 'success', 'warning', 'info'].includes(value)
-      }
-    },
-    /**
-     * Optional icon to be displayed next to the title
-     */
-    icon: {
-      type: String,
-      required: false,
-      default: null
-    },
-    /**
-     * Modal title
-     */
-    title: {
-      type: String,
-      required: true
-    },
-    /**
-     * Modal message. Can be replaced by content slot
-     */
-    message: {
-      type: String,
-      required: false,
-      default: null
-    },
-    /**
-     * Contextual helper label
-     */
-    contextualHelperLabel: {
-      type: String,
-      required: false,
-      default: ''
-    },
-    /**
-     * Contextual helper data
-     */
-    contextualHelperData: {
-      type: Object as PropType<ContextualHelperData>,
-      required: false,
-      default: null
-    },
-    /**
-     * Text of the cancel button
-     */
-    buttonCancelText: {
-      type: String,
-      required: false,
-      default: 'Cancel'
-    },
-    /**
-     * Text of the confirm button
-     */
-    buttonConfirmText: {
-      type: String,
-      required: false,
-      default: 'Confirm'
-    },
-    /**
-     * Asserts whether the confirm action is disabled
-     */
-    buttonConfirmDisabled: {
-      type: Boolean,
-      required: false,
-      default: false
-    },
-    /**
-     * Asserts whether the modal should render a confirm button
-     */
-    hideConfirmButton: {
-      type: Boolean,
-      required: false,
-      default: false
-    },
-    /**
-     * Asserts whether the modal should render a text input
-     */
-    hasInput: {
-      type: Boolean,
-      required: false,
-      default: false
-    },
-    /**
-     * Type of the input field
-     */
-    inputType: {
-      type: String,
-      default: 'text'
-    },
-    /**
-     * Value of the input
-     */
-    inputValue: {
-      type: String,
-      required: false,
-      default: null
-    },
-    /**
-     * Selection range for input to accomplish partial selection
-     */
-    inputSelectionRange: {
-      type: Array as unknown as PropType<[number, number]>,
-      required: false,
-      default: null
-    },
-    /**
-     * Label of the text input field
-     */
-    inputLabel: {
-      type: String,
-      required: false,
-      default: null
-    },
-    /**
-     * Additional description message for the input field
-     */
-    inputDescription: {
-      type: String,
-      required: false,
-      default: null
-    },
-    /**
-     * Error message for the input field
-     */
-    inputError: {
-      type: String,
-      required: false,
-      default: null
-    },
-    /**
-     * Overwrite default focused element
-     * Can be `#id, .class`.
-     */
-    focusTrapInitial: {
-      type: [String, Boolean],
-      required: false,
-      default: null,
-      validator: (focusTrapInitial: string | boolean) => {
-        return !(typeof focusTrapInitial === 'boolean' && focusTrapInitial === true)
-      }
-    },
-    /**
-     * Hide the actions at the bottom of the modal
-     */
-    hideActions: {
-      type: Boolean,
-      default: false
-    },
-    /**
-     * Sets the loading state
-     * if enabled, confirm and cancel buttons are disabled,
-     * loading spinner will be shown in confirm button after a certain timeout
-     */
-    isLoading: {
-      type: Boolean,
-      required: false,
-      default: false
-    }
+watch(
+  () => inputValue,
+  (value: string) => {
+    userInputValue.value = value
   },
-  emits: ['cancel', 'confirm', 'input'],
-  setup(props) {
-    const showSpinner = ref(false)
-    const buttonConfirmAppearance = ref('filled')
-    const ocModal = ref<HTMLElement>()
-    const ocModalInput = ref<typeof OcTextInput>()
+  { immediate: true }
+)
+const initialFocusRef = computed<FocusTargetOrFalse>(() => {
+  if (focusTrapInitial || focusTrapInitial === false) {
+    return focusTrapInitial as FocusTargetOrFalse
+  }
 
-    const tabbableOptions = computed((): FocusTrapTabbableOptions => {
-      // Enable shadow DOM support for e.g. emoji-picker
-      return {
-        getShadowRoot: true
-      }
-    })
+  return () => unref(ocModalInput)?.$el || unref(ocModal)
+})
+const classes = computed(() => {
+  return ['oc-modal', `oc-modal-${variation}`, elementClass]
+})
+const iconName = computed(() => {
+  if (icon) {
+    return icon
+  }
 
-    const resetLoadingState = () => {
-      showSpinner.value = false
-      buttonConfirmAppearance.value = 'filled'
-    }
-
-    const setLoadingState = () => {
-      showSpinner.value = true
-      buttonConfirmAppearance.value = 'outline'
-    }
-
-    watch(
-      () => props.isLoading,
-      () => {
-        if (!props.isLoading) {
-          return resetLoadingState()
-        }
-        setTimeout(() => {
-          if (!props.isLoading) {
-            return resetLoadingState()
-          }
-          setLoadingState()
-        }, 700)
-      },
-      { immediate: true }
-    )
-
-    return {
-      showSpinner,
-      buttonConfirmAppearance,
-      tabbableOptions,
-      ocModal,
-      ocModalInput
-    }
-  },
-  data() {
-    return {
-      userInputValue: null
-    }
-  },
-  computed: {
-    initialFocusRef(): FocusTargetOrFalse {
-      if (this.focusTrapInitial || this.focusTrapInitial === false) {
-        return this.focusTrapInitial as FocusTargetOrFalse
-      }
-
-      return () => this.ocModalInput?.$el || this.ocModal
-    },
-    classes() {
-      return ['oc-modal', `oc-modal-${this.variation}`, this.elementClass]
-    },
-    iconName() {
-      if (this.icon) {
-        return this.icon
-      }
-
-      switch (this.variation) {
-        case 'danger':
-          return 'alert'
-        case 'warning':
-          return 'error-warning'
-        case 'success':
-          return 'checkbox-circle'
-        case 'info':
-          return 'information'
-        default:
-          return ''
-      }
-    }
-  },
-  watch: {
-    inputValue: {
-      handler: 'inputAssignPropAsValue',
-      immediate: true
-    }
-  },
-  methods: {
-    cancelModalAction() {
-      /**
-       * The user clicked on the cancel button or hit the escape key
-       */
-      this.$emit('cancel')
-    },
-    confirm() {
-      if (this.buttonConfirmDisabled || this.inputError) {
-        return
-      }
-      /**
-       * The user clicked on the confirm button. If input exists, emits its value
-       *
-       * @property {String} value Value of the input
-       */
-      this.$emit('confirm', this.userInputValue)
-    },
-    inputOnInput(value: string) {
-      /**
-       * The user typed into the input
-       *
-       * @property {String} value Value of the input
-       */
-      this.$emit('input', value)
-    },
-    inputAssignPropAsValue(value: string) {
-      this.userInputValue = value
-    }
+  switch (variation) {
+    case 'danger':
+      return 'alert'
+    case 'warning':
+      return 'error-warning'
+    case 'success':
+      return 'checkbox-circle'
+    case 'info':
+      return 'information'
+    default:
+      return ''
   }
 })
 </script>
@@ -550,118 +439,3 @@ export default defineComponent({
   }
 }
 </style>
-
-<docs>
-```js
-<div>
-  <oc-modal
-    icon="information"
-    title="Accept terms of use"
-    message="Do you accept our terms of use?"
-    button-cancel-text="Decline"
-    button-confirm-text="Accept"
-    class="oc-mb-l oc-position-relative"
-  />
-</div>
-```
-```js
-<div>
-  <oc-modal
-    variation="danger"
-    icon="alert"
-    title="Delete file lorem.txt"
-    message="Are you sure you want to delete this file? All its content will be permanently removed. This action cannot be undone."
-    button-cancel-text="Cancel"
-    button-confirm-text="Delete"
-    class="oc-mb-l oc-position-relative"
-  />
-</div>
-```
-```js
-<div>
-  <oc-modal
-    title="Create new folder"
-    button-cancel-text="Cancel"
-    button-confirm-text="Create"
-    :has-input="true"
-    input-value="New folder"
-    input-label="Folder name"
-    input-description="Enter a folder name"
-    input-error="This name is already taken, please choose another one"
-    class="oc-mb-l oc-position-relative"
-  />
-</div>
-```
-
-```js
-<div>
-  <oc-modal
-    title="Rename file lorem.txt"
-    button-cancel-text="Cancel"
-    button-confirm-text="Rename"
-    class="oc-position-relative"
-  >
-    <template v-slot:content>
-      <oc-text-input
-        value="lorem.txt"
-        label="File name"
-      />
-    </template>
-  </oc-modal>
-</div>
-```
-
-```js
-<div>
-  <oc-modal
-    icon="information"
-    title="Accept terms of use"
-    message="Do you accept our terms of use?"
-    button-cancel-text="Decline"
-    button-confirm-text="Accept"
-    class="oc-mb-l oc-position-relative"
-  />
-</div>
-```
-
-```js
-<div>
-  <oc-modal
-    icon="information"
-    title="Accept terms of use"
-    message="Do you accept our terms of use?"
-    button-cancel-text="Decline"
-    button-confirm-text="Accept"
-    class="oc-mb-l oc-position-relative"
-  />
-</div>
-```
-
-```js
-<div>
-  <oc-modal
-    icon="information"
-    title="Accept terms of use"
-    message="Do you accept our terms of use?"
-    button-cancel-text="Decline"
-    button-confirm-text="Accept"
-    contextual-helper-label="I need more information?"
-    :contextual-helper-data="{ title: 'This is more information' }"
-    class="oc-mb-l oc-position-relative"
-  />
-</div>
-```
-
-```js
-<div>
-  <oc-modal
-    icon="info"
-    title="Accept terms of use"
-    message="Do you accept our terms of use?"
-    button-cancel-text="Decline"
-    button-confirm-text="Accept"
-    class="oc-mb-l oc-position-relative"
-  />
-</div>
-```
-</docs>
