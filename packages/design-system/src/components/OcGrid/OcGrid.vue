@@ -4,49 +4,56 @@
   </div>
 </template>
 
-<script lang="ts">
-import { defineComponent } from 'vue'
+<script lang="ts" setup>
+import { computed } from 'vue'
 
 /**
- * The Grid system allows you to arrange block elements in columns.
+ * OcGrid Component
+ *
+ * The Grid system allows you to arrange block elements in columns. It supports
+ * configurable gutters and optional flexbox alignment for centering elements.
+ *
+ * @component
+ * @name OcGrid
+ * @status ready
+ * @release 1.0.0
+ *
+ * @props
+ * @property {('small'|'medium'|'large'|'collapse')} [gutter='collapse'] - The Grid component comes with a default gutter that is decreased automatically from a certain breakpoint. To apply a different gutter, use one of the following: 'small', 'medium', 'large', or 'collapse'.
+ * @property {boolean} [flex=false] - Center elements along the cross axis using flexbox.
+ *
+ * @slots
+ * @slot default - Slot for grid content.
+ *
+ * @example
+ * <template>
+ *   <oc-grid gutter="large" :flex="tue" />
+ * </template>
  */
-export default defineComponent({
+
+interface Props {
+  gutter?: 'small' | 'medium' | 'large' | 'collapse'
+  flex?: boolean
+}
+
+defineOptions({
   name: 'OcGrid',
   status: 'ready',
-  release: '1.0.0',
-  props: {
-    /**
-     * The Grid component comes with a default gutter that is decreased automatically from a certain breakpoint usually on a smaller desktop viewport width. To apply a different gutter, add one of the following: small, medium, large
-     */
-    gutter: {
-      type: String,
-      default: 'collapse',
-      validator: (value: string) => {
-        return ['small', 'medium', 'large', 'collapse'].includes(value)
-      }
-    },
-    /**
-     * Center elements along the cross axis.
-     */
-    flex: {
-      type: [Boolean],
-      default: false
-    }
-  },
-  computed: {
-    classes() {
-      const c = []
+  release: '1.0.0'
+})
+const { gutter = 'collapse', flex = false } = defineProps<Props>()
 
-      c.push('oc-grid-' + this.gutter)
+const classes = computed(() => {
+  const c = []
 
-      if (this.flex) {
-        c.push('oc-flex')
-        c.push('oc-flex-middle')
-      }
+  c.push('oc-grid-' + gutter)
 
-      return c
-    }
+  if (flex) {
+    c.push('oc-flex')
+    c.push('oc-flex-middle')
   }
+
+  return c
 })
 </script>
 
@@ -537,68 +544,3 @@ $grid-divider-border: #e5e5e5 !default;
   flex: auto;
 }
 </style>
-
-<docs>
-```js
-  <h3 class="oc-heading-divider">
-    Simple boxes
-  </h3>
-  <oc-grid>
-    <div style="width: 80px; height: 80px; background-color: var(--oc-color-swatch-passive-default)" class="oc-height-small"></div>
-    <div style="width: 80px; height: 80px; background-color: var(--oc-color-swatch-success-default)" class="oc-height-small"></div>
-    <div style="width: 80px; height: 80px; background-color: var(--oc-color-swatch-warning-default)" class="oc-height-small"></div>
-  </oc-grid>
-
-  <h3 class="oc-heading-divider">
-    Simple boxes
-  </h3>
-  <oc-grid gutter="large">
-    <div class="oc-width-1-1 oc-width-large@l">
-      <div style="background-color: var(--oc-color-swatch-passive-default)" class="oc-p-m">
-        <p>Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.</p>
-      </div>
-    </div>
-    <div class="oc-width-expand">
-      <div style="background-color: var(--oc-color-swatch-passive-default)" class="oc-p-m">
-        <p>I'm matching my neightbors height in @l viewports</p>
-      </div>
-    </div>
-  </oc-grid>
-
-  <h3 class="oc-heading-divider">
-    An application bar
-  </h3>
-
-<div style="background-color: var(--oc-color-background-muted)" class="oc-p-s">
-  <oc-grid flex gutter="small">
-    <div class="oc-width-expand">
-      <oc-breadcrumb :items="[{text:'First',to:{path:'first'}},{text:'Second'},{text:'Third'}]" />
-    </div>
-    <div class="oc-width-auto oc-visible@m">
-      <oc-search-bar />
-    </div>
-    <div class="oc-width-auto">
-      <div class="oc-button-group">
-        <oc-button text="Nothing">Nothing</oc-button>
-        <oc-button id="my_drop_1"><oc-icon name="list-settings" fill-type="line" /></oc-button>
-      </div>
-    </div>
-  </oc-grid>
-  <oc-drop toggle="#my_drop_1" mode="hover">
-    <div slot="special" class="oc-card">
-      <div class="oc-card-header">
-        <h3 class="oc-card-title">
-          Advanced
-        </h3>
-      </div>
-      <div class="oc-card-body">
-        <p>
-          I'm a slightly more advanced drop down
-        </p>
-        <oc-search-bar small class="oc-hidden@m" />
-      </div>
-    </div>
-  </oc-drop>
-</div>
-```
-</docs>
