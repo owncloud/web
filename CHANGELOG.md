@@ -39,6 +39,7 @@ Summary
 * Enhancement - Add maintenance banner: [#12239](https://github.com/owncloud/web/pull/12239)
 * Enhancement - Add new supported language to md-editor: [#12243](https://github.com/owncloud/web/pull/12243)
 * Enhancement - Rephrase invite users to invite users to federate: [#12355](https://github.com/owncloud/web/pull/12355)
+* Enhancement - Use custom password generator: [#12424](https://github.com/owncloud/web/pull/12424)
 
 Details
 -------
@@ -315,6 +316,15 @@ Details
 
    https://github.com/owncloud/web/issues/11566
    https://github.com/owncloud/web/pull/12355
+
+* Enhancement - Use custom password generator: [#12424](https://github.com/owncloud/web/pull/12424)
+
+   Use custom password generator implementation instead of the previously used
+   package. The previous implementation was using `Math.random()` which is not
+   cryptographically secure. The new implementation uses the Web Crypto API.
+
+   https://github.com/owncloud/web/issues/10461
+   https://github.com/owncloud/web/pull/12424
 
 Changelog for ownCloud Web [11.3.1] (2025-03-13)
 =======================================
