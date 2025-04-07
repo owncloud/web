@@ -4,21 +4,39 @@
   </ul>
 </template>
 
-<script lang="ts">
-import { defineComponent } from 'vue'
+<script lang="ts" setup>
+/**
+ * OcList Component
+ *
+ * Renders a list with optional raw styling.
+ *
+ * @component
+ * @name OcList
+ * @status ready
+ * @release 12.0.0
+ *
+ * @prop {boolean} [raw=false] - If true, applies raw styling to the list.
+ *
+ * @slot default - Slot for list items.
+ *
+ * @example
+ * <OcList :raw="true">
+ *   <li>Item 1</li>
+ *   <li>Item 2</li>
+ * </OcList>
+ */
 
-export default defineComponent({
+interface Props {
+  raw?: boolean
+}
+
+defineOptions({
   name: 'OcList',
   status: 'ready',
-  release: '12.0.0',
-  props: {
-    raw: {
-      type: Boolean,
-      default: false,
-      required: false
-    }
-  }
+  release: '12.0.0'
 })
+
+const { raw = false } = defineProps<Props>()
 </script>
 
 <style lang="scss">
@@ -43,29 +61,3 @@ export default defineComponent({
   }
 }
 </style>
-
-<docs>
-```js
-<h3>Example list</h3>
-<oc-list>
-  <li>
-      <oc-icon name="user" fill-type="line" />
-      <a href="https://google.de">
-        Profile
-      </a>
-  </li>
-  <li>
-      <oc-icon name="link" fill-type="line" />
-      <a href="https://google.de">
-        Links
-      </a>
-  </li>
-  <li>
-      <oc-icon name="file" fill-type="line" />
-      <a href="https://google.de">
-        Dateien
-      </a>
-  </li>
-</oc-list>
-```
-</docs>
