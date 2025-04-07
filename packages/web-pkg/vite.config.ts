@@ -32,11 +32,7 @@ export default defineConfig({
       fileName: 'web-pkg'
     },
     rollupOptions: {
-      external: external.filter(
-        (e) =>
-          // something is off with this lib, see https://github.com/ahmadjoya/generate-password-lite/issues/8
-          e !== 'js-generate-password'
-      )
+      external
     }
   },
   plugins: [
