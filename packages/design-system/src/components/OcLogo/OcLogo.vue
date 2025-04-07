@@ -2,33 +2,34 @@
   <oc-img class="oc-logo" :src="src" :alt="alt" />
 </template>
 
-<script lang="ts">
-import { defineComponent } from 'vue'
+<script lang="ts" setup>
 import OcImg from '../OcImage/OcImage.vue'
 
-export default defineComponent({
+/**
+ * @component OcLogo
+ * @description A logo component that displays an image with specified source and alternative text.
+ * @status ready
+ * @release 7.3.0
+ *
+ * @props
+ * @prop {string} src - The source URL of the logo image.
+ * @prop {string} alt - The alternative text for the logo image.
+ *
+ * @example
+ * <oc-logo src="src" alt="alt" />
+ */
+
+interface Props {
+  src: string
+  alt: string
+}
+defineOptions({
   name: 'OcLogo',
   status: 'ready',
-  release: '7.3.0',
-  components: { OcImg },
-
-  props: {
-    /**
-     * Location of the logo image
-     */
-    src: {
-      type: String,
-      required: true
-    },
-    /**
-     * Alternative text of the logo image
-     */
-    alt: {
-      type: String,
-      required: true
-    }
-  }
+  release: '7.3.0'
 })
+
+const { src, alt } = defineProps<Props>()
 </script>
 
 <style lang="scss">
