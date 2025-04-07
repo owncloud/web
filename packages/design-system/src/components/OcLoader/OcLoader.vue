@@ -2,33 +2,44 @@
   <div :class="['oc-loader', { 'oc-loader-flat': flat }]" :aria-label="ariaLabel" />
 </template>
 
-<script lang="ts">
-import { defineComponent } from 'vue'
-
+<script lang="ts" setup>
 /**
- * Remote actions can take an undefined portion of time. The spinner gives feedback to the users about an actions being processed.
+ * OcLoader Component
+ *
+ * A loader component that provides visual feedback for ongoing actions.
+ *
+ * @component
+ * @name OcLoader
+ * @status ready
+ * @release 1.0.0
+ *
+ * @props
+ * @prop {string} [ariaLabel='Loading'] - Descriptive text to be read by screen readers.
+ * @prop {boolean} [flat=false] - Removes border radius and shrinks the height when set to true.
+ *
+ * @example
+ * <h3>Default style</h3>
+ * <div>
+ *   <oc-loader />
+ * </div>
+ *
+ * <h3>Flat style</h3>
+ * <div>
+ *   <oc-loader :flat="true" />
+ * </div>
  */
-export default defineComponent({
+
+interface Props {
+  ariaLabel?: string
+  flat?: boolean
+}
+defineOptions({
   name: 'OcLoader',
   status: 'ready',
-  release: '1.0.0',
-  props: {
-    /**
-     * Descriptive text to be read to screen-readers.
-     */
-    ariaLabel: {
-      type: String,
-      default: 'Loading'
-    },
-    /**
-     * Removes border radius and shrinks the height. Defaults to false.
-     */
-    flat: {
-      type: Boolean,
-      default: false
-    }
-  }
+  release: '1.0.0'
 })
+
+const { ariaLabel = 'Loading', flat = false } = defineProps<Props>()
 </script>
 
 <style lang="scss">
