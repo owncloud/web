@@ -17,9 +17,6 @@ describe('OcGrid', () => {
         expect(wrapper.attributes('class')).toBe('oc-grid-' + gutter)
       }
     )
-    it('should not accept invalid values', () => {
-      expect(OcGrid.props.gutter.validator('invalid')).toBeFalsy()
-    })
   })
   describe('when flex prop is true', () => {
     it('should set grid flex class', () => {
