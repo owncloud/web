@@ -139,6 +139,73 @@ describe('PasswordPolicyService', () => {
       })
     })
   })
+
+  describe('password generator', () => {
+    it('should generate a password with default rules when no capability is set', () => {
+      const { passwordPolicyService, store } = getWrapper({})
+      passwordPolicyService.initialize(store)
+
+      const password = passwordPolicyService.generatePassword()
+
+      expect(password.length).toBe(12)
+      expect((password.match(/[a-z]/g) || []).length).toBeGreaterThanOrEqual(2)
+      expect((password.match(/[A-Z]/g) || []).length).toBeGreaterThanOrEqual(2)
+      expect((password.match(/[0-9]/g) || []).length).toBeGreaterThanOrEqual(2)
+
+      const specialCharsRegex = /[!#$%&'()*+,\-./:;<=>?@[\\\]^_`{|}~]/g
+      expect((password.match(specialCharsRegex) || []).length).toBeGreaterThanOrEqual(2)
+    })
+
+    it('should generate a password with the specified minimum character counts', () => {
+      const capability = {
+        min_characters: 16,
+        min_lowercase_characters: 3,
+        min_uppercase_characters: 4,
+        min_digits: 5,
+        min_special_characters: 2
+      }
+
+      const { passwordPolicyService, store } = getWrapper(capability)
+      passwordPolicyService.initialize(store)
+
+      const password = passwordPolicyService.generatePassword()
+
+      expect(password.length).toBe(16)
+      expect((password.match(/[a-z]/g) || []).length).toBeGreaterThanOrEqual(3)
+      expect((password.match(/[A-Z]/g) || []).length).toBeGreaterThanOrEqual(4)
+      expect((password.match(/[0-9]/g) || []).length).toBeGreaterThanOrEqual(5)
+
+      const specialCharsRegex = /[!#$%&'()*+,\-./:;<=>?@[\\\]^_`{|}~]/g
+      expect((password.match(specialCharsRegex) || []).length).toBeGreaterThanOrEqual(2)
+    })
+
+    it('should generate a password with length based on sum of minimum requirements if greater than min_characters', () => {
+      const capability = {
+        min_characters: 10,
+        min_lowercase_characters: 3,
+        min_uppercase_characters: 4,
+        min_digits: 5,
+        min_special_characters: 2
+      }
+
+      const { passwordPolicyService, store } = getWrapper(capability)
+      passwordPolicyService.initialize(store)
+
+      const password = passwordPolicyService.generatePassword()
+
+      expect(password.length).toBe(14)
+    })
+
+    it('should generate different passwords on subsequent calls', () => {
+      const { passwordPolicyService, store } = getWrapper({} as PasswordPolicyCapability)
+      passwordPolicyService.initialize(store)
+
+      const password1 = passwordPolicyService.generatePassword()
+      const password2 = passwordPolicyService.generatePassword()
+
+      expect(password1).not.toBe(password2)
+    })
+  })
 })
 
 const getWrapper = (capability: PasswordPolicyCapability) => {

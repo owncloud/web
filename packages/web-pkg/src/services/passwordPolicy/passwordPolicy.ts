@@ -8,7 +8,6 @@ import {
   MustNotBeEmptyRule
 } from './rules'
 import { PasswordPolicyCapability } from '@ownclouders/web-client/ocs'
-import { GeneratePassword } from 'js-generate-password'
 import { CapabilityStore } from '../../composables'
 
 // @ts-ignore
@@ -130,13 +129,63 @@ export class PasswordPolicyService {
   }
 
   public generatePassword(): string {
-    return GeneratePassword({
-      symbols: true,
-      length: this.generatePasswordRules.length,
-      minLengthLowercase: this.generatePasswordRules.minLowercaseCharacters,
-      minLengthUppercase: this.generatePasswordRules.minUppercaseCharacters,
-      minLengthNumbers: this.generatePasswordRules.minDigits,
-      minLengthSymbols: this.generatePasswordRules.minSpecialCharacters
-    })
+    const lowerChars = 'abcdefghijklmnopqrstuvwxyz'
+    const upperChars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'
+    const numberChars = '0123456789'
+    const symbolChars = "!#\\$%&'()*+,-./:;<=>?@[\\]^_`{|}~"
+
+    const totalMinChars =
+      this.generatePasswordRules.minUppercaseCharacters +
+      this.generatePasswordRules.minLowercaseCharacters +
+      this.generatePasswordRules.minDigits +
+      this.generatePasswordRules.minSpecialCharacters
+
+    if (totalMinChars > this.generatePasswordRules.length) {
+      throw new Error('Sum of minimum character requirements exceeds password length')
+    }
+
+    let passwdArray: string[] = []
+
+    const getRandomCharsFromSet = (charSet: string, count: number): string[] => {
+      const setLimit = 256 - (256 % charSet.length)
+      const result: string[] = []
+
+      for (let i = 0; i < count; i++) {
+        let randval: number
+
+        do {
+          randval = window.crypto.getRandomValues(new Uint8Array(1))[0]
+        } while (randval >= setLimit)
+
+        result.push(charSet[randval % charSet.length])
+      }
+
+      return result
+    }
+
+    passwdArray = passwdArray.concat(
+      getRandomCharsFromSet(lowerChars, this.generatePasswordRules.minLowercaseCharacters)
+    )
+    passwdArray = passwdArray.concat(
+      getRandomCharsFromSet(upperChars, this.generatePasswordRules.minUppercaseCharacters)
+    )
+    passwdArray = passwdArray.concat(
+      getRandomCharsFromSet(numberChars, this.generatePasswordRules.minDigits)
+    )
+    passwdArray = passwdArray.concat(
+      getRandomCharsFromSet(symbolChars, this.generatePasswordRules.minSpecialCharacters)
+    )
+
+    const allChars = lowerChars + upperChars + numberChars + symbolChars
+    const remaining = this.generatePasswordRules.length - passwdArray.length
+
+    passwdArray = passwdArray.concat(getRandomCharsFromSet(allChars, remaining))
+
+    for (let i = passwdArray.length - 1; i > 0; i--) {
+      const j = Math.floor((window.crypto.getRandomValues(new Uint8Array(1))[0] / 256) * (i + 1))
+      ;[passwdArray[i], passwdArray[j]] = [passwdArray[j], passwdArray[i]]
+    }
+
+    return passwdArray.join('')
   }
 }
