@@ -1,4 +1,5 @@
 import { defaultPlugins, mount, shallowMount } from '@ownclouders/web-test-helpers'
+import { FocusTrap } from 'focus-trap-vue'
 import Modal from './OcModal.vue'
 import OcButton from './../OcButton/OcButton.vue'
 
@@ -21,7 +22,14 @@ describe('OcModal', () => {
         ...defaultProps,
         variation: 'danger'
       },
-      global: { renderStubDefaultSlot: true, plugins: [...defaultPlugins()] }
+      global: {
+        components: {
+          FocusTrap
+        },
+
+        renderStubDefaultSlot: true,
+        plugins: [...defaultPlugins()]
+      }
     })
 
     expect(wrapper.findAll('.oc-modal-danger').length).toBe(1)
@@ -29,7 +37,13 @@ describe('OcModal', () => {
 
   it('hides icon if not specified', () => {
     const wrapper = shallowMount(Modal, {
-      global: { renderStubDefaultSlot: true, plugins: [...defaultPlugins()] },
+      global: {
+        components: {
+          FocusTrap
+        },
+        renderStubDefaultSlot: true,
+        plugins: [...defaultPlugins()]
+      },
       props: {
         ...defaultProps
       }
@@ -41,7 +55,13 @@ describe('OcModal', () => {
 
   it('overrides props message with slot', () => {
     const wrapper = shallowMount(Modal, {
-      global: { renderStubDefaultSlot: true, plugins: [...defaultPlugins()] },
+      global: {
+        components: {
+          FocusTrap
+        },
+        renderStubDefaultSlot: true,
+        plugins: [...defaultPlugins()]
+      },
       props: {
         ...defaultProps
       },
@@ -56,7 +76,13 @@ describe('OcModal', () => {
 
   it('matches snapshot', () => {
     const wrapper = shallowMount(Modal, {
-      global: { renderStubDefaultSlot: true, plugins: [...defaultPlugins()] },
+      global: {
+        components: {
+          FocusTrap
+        },
+        renderStubDefaultSlot: true,
+        plugins: [...defaultPlugins()]
+      },
       props: {
         ...defaultProps,
         icon: 'info'
@@ -68,7 +94,13 @@ describe('OcModal', () => {
 
   it('displays input', () => {
     const wrapper = shallowMount(Modal, {
-      global: { renderStubDefaultSlot: true, plugins: [...defaultPlugins()] },
+      global: {
+        components: {
+          FocusTrap
+        },
+        renderStubDefaultSlot: true,
+        plugins: [...defaultPlugins()]
+      },
       props: inputProps
     })
 
@@ -84,6 +116,9 @@ describe('OcModal', () => {
 
     const wrapper = mount(Modal, {
       global: {
+        components: {
+          FocusTrap
+        },
         renderStubDefaultSlot: true,
         plugins: [...defaultPlugins()],
         stubs: {
