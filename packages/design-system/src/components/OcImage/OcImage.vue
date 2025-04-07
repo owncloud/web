@@ -1,73 +1,48 @@
 <template>
   <img :src="src" :alt="alt" :aria-hidden="`${ariaHidden}`" :title="title" :loading="loadingType" />
 </template>
-<script lang="ts">
-import { PropType } from 'vue'
-import { defineComponent } from 'vue'
+<script lang="ts" setup>
+import { computed } from 'vue'
 
 /**
- * Images can be displayed using this component.
+ * OcImg Component
  *
+ * Displaying images with support for lazy loading, accessibility, and additional metadata.
+ *
+ * @component
+ * @name OcImg
+ * @status ready
+ * @release 1.0.0
+ *
+ * @props
+ * @prop {string} [src=''] - The source URL of the image.
+ * @prop {string} [alt=''] - The alt text for the image, used for accessibility.
+ * @prop {string} [title=''] - The title of the image, displayed on hover.
+ * @prop {'lazy' | 'eager'} [loadingType='eager'] - Specifies whether the image should be loaded lazily or eagerly.
+ *
+ * @example
+ * <h3>Example image, with width set explicitly:</h3>
+ * <oc-img width="200" height="300" src="https://example.com/image" title="I am random" alt="example image" />
+ *
+ * <h3>Example grayscale image:</h3>
+ * <oc-img src="https://example.com/image" title="Grayscale" alt="example grayscale image" />
+ *
+ * <h3>Example using an SVG file:</h3>
+ * <oc-img width="100" src="icons/folder.svg" title="I am a folder" alt="folder icon" />
  */
-export default defineComponent({
+
+interface Props {
+  src?: string
+  alt?: string
+  title?: string
+  loadingType?: 'lazy' | 'eager'
+}
+defineOptions({
   name: 'OcImg',
   status: 'ready',
-  release: '1.0.0',
-  props: {
-    /**
-     * Image source, path to image
-     *
-     **/
-    src: {
-      required: true,
-      type: String,
-      default: null
-    },
-    /**
-     * The alt-attribute of the image.
-     */
-    alt: {
-      type: String,
-      required: false,
-      default: ''
-    },
-    /**
-     * The title of the image. Displayed when hover.
-     */
-    title: {
-      type: String,
-      required: false,
-      default: null
-    },
-    /**
-     * Defines whether the image gets loaded immediately or once it comes near the user's viewport
-     */
-    loadingType: {
-      type: String as PropType<'lazy' | 'eager'>,
-      required: false,
-      default: 'eager',
-      validator: (value: string) => {
-        return ['eager', 'lazy'].includes(value)
-      }
-    }
-  },
-  computed: {
-    ariaHidden() {
-      return this.alt.length === 0
-    }
-  }
+  release: '1.0.0'
 })
+const { src = null, alt = '', title = null, loadingType = 'eager' } = defineProps<Props>()
+
+const ariaHidden = computed(() => alt.length === 0)
 </script>
-
-<docs>
-```js
-<h3>Example image, with width set explicitly:</h3>
-<oc-img width="200" height="300" src="https://picsum.photos/200/300/?random" title="I am random" alt="example image" />
-
-<h3>Example grayschale image:</h3>
-<oc-img src="https://picsum.photos/g/200/300" title="Grayscale" alt="example grayschale image" />
-
-<h3>Example using a SVG file:</h3>
-<oc-img width="100" src="icons/folder.svg" title="i am a folder" alt="folder icon" />
-```
-</docs>

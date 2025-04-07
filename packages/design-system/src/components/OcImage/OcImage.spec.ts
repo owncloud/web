@@ -23,9 +23,6 @@ describe('OcImage', () => {
     const wrapper = getWrapper({ loadingType: loadingType })
     expect(wrapper.attributes('loading')).toBe(loadingType)
   })
-  it('should not accept value other than (lazy & eager) for prop loading type', () => {
-    expect(OcImage.props.loadingType.validator('invalid')).toBeFalsy()
-  })
   describe('when alt is set', () => {
     const wrapper = getWrapper({ alt: 'test alt text' })
     it('should set the provided alt for image', () => {
