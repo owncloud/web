@@ -4,54 +4,54 @@
     <label v-if="showLabel" class="oc-progress-pie-label oc-text-muted" v-text="_label" />
   </div>
 </template>
-<script lang="ts">
-import { defineComponent } from 'vue'
+<script lang="ts" setup>
+import { computed } from 'vue'
 
 /**
- * Show progress to the users in a pie shape.
+ * @component OcProgressPie
+ * @description Displays progress in a pie chart format.
+ *
+ * @props {number} [progress=0] - Current value of the progress. Must be between 0 and `max`.
+ * @props {number} [max=100] - Maximum value of the progress.
+ * @props {boolean} [showLabel=false] - Determines if the progress label should be displayed.
+ *
+ * @computed {number} _fill - The calculated percentage of the progress.
+ * @computed {string} _label - The label to display, formatted as either a percentage or a fraction.
+ *
+ * @example
+ *  <!-- Basic usage -->
+ *  <oc-progress-pie :progress="33" />
+ *
+ *  <!-- With label -->
+ *  <oc-progress-pie :progress="33" show-label />
+ *
+ *  <!-- Custom max value -->
+ *  <oc-progress-pie :progress="2" :max="4" />
+ *
+ *  <!-- Custom max value with label -->
+ *  <oc-progress-pie :progress="4" :max="6" show-label />
  */
-export default defineComponent({
+
+interface Props {
+  progress?: number
+  max?: number
+  showLabel?: boolean
+}
+
+defineOptions({
   name: 'OcProgressPie',
   status: 'ready',
-  release: '1.0.0',
-  props: {
-    /**
-     * Current value of the progress
-     */
-    progress: {
-      type: Number,
-      default: 0,
-      required: true,
-      validator: (value: number) => {
-        return value >= 0 && value <= 100
-      }
-    },
-    /**
-     * Maximum value.
-     */
-    max: {
-      type: Number,
-      default: 100
-    },
-    /**
-     * Defines if the label shall be shown.
-     */
-    showLabel: {
-      type: Boolean,
-      default: false
-    }
-  },
-  computed: {
-    _fill() {
-      return Math.round((100 / this.max) * this.progress)
-    },
-    _label() {
-      if (this.max === 100) {
-        return this.progress + '%'
-      } else {
-        return `${this.progress}/${this.max}`
-      }
-    }
+  release: '1.0.0'
+})
+const { progress = 0, max = 100, showLabel = false } = defineProps<Props>()
+const _fill = computed(() => {
+  return Math.round((100 / max) * progress)
+})
+const _label = computed(() => {
+  if (max === 100) {
+    return progress + '%'
+  } else {
+    return `${progress}/${max}`
   }
 })
 </script>
