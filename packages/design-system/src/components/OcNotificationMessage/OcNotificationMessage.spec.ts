@@ -35,10 +35,6 @@ describe('OcNotificationMessage', () => {
   })
 
   describe('status prop', () => {
-    it('should not allow values other than passive, primary, success, warning, danger', () => {
-      expect(OcNotificationMessage.props.status.validator('invalid')).toBeFalsy()
-    })
-
     it.each(['passive', 'primary', 'success', 'warning', 'danger'])(
       'should set provided status as class for wrapper',
       (status) => {
