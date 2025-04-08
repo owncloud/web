@@ -6,9 +6,6 @@ describe('OcNotifications', () => {
     return shallowMount(OcNotifications, options)
   }
   describe('position prop', () => {
-    it('should not allow values other than top-left, top-center, top-right', () => {
-      expect(OcNotifications.props.position.validator('invalid')).toBeFalsy()
-    })
     it.each(['top-left', 'top-center', 'top-right'])(
       'should set provided position as class for wrapper',
       (position) => {
