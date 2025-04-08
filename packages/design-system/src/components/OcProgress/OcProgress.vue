@@ -15,80 +15,69 @@
   </div>
 </template>
 
-<script lang="ts">
-import { defineComponent } from 'vue'
+<script lang="ts" setup>
+import { computed } from 'vue'
 
-export default defineComponent({
+/**
+ * OcProgress Component
+ *
+ * A progress bar component that visually represents the completion status of a task or process.
+ *
+ * @component
+ * @name OcProgress
+ * @status ready
+ * @release 1.0.0
+ *
+ * @props
+ * @prop {number} [value=0] - The current progress value.
+ * @prop {number} [max] - The maximum value for the progress bar. If not provided, the progress bar will not display a percentage.
+ * @prop {'default' | 'small'} [size='default'] - The size of the progress bar. Can be 'default' or 'small'.
+ * @prop {'primary' | 'passive' | 'success' | 'warning' | 'danger'} [variation='primary'] - The visual variation of the progress bar.
+ * @prop {boolean} [indeterminate=false] - If true, the progress bar will display an indeterminate animation.
+ * @example
+ *  <!-- Default progress bar -->
+ *  <OcProgress :value="50" :max="100" />
+ *
+ *  <!-- Small progress bar -->
+ *  <OcProgress :value="30" :max="100" size="small" />
+ *
+ *  <!-- Indeterminate progress bar -->
+ *  <OcProgress indeterminate />
+ *
+ *  <!-- Progress bar with variation -->
+ *  <OcProgress :value="70" :max="100" variation="success" />
+ *
+ */
+
+interface Props {
+  value?: number
+  max?: number
+  size?: 'default' | 'small'
+  variation?: 'primary' | 'passive' | 'success' | 'warning' | 'danger'
+  indeterminate?: boolean
+}
+defineOptions({
   name: 'OcProgress',
   status: 'ready',
-  release: '1.0.0',
-  props: {
-    /**
-     * The current progress.
-     */
-    value: {
-      type: Number,
-      required: false,
-      default: 0
-    },
-    /**
-     * The maximum value. This represents 100% completion.
-     */
-    max: {
-      type: Number,
-      required: false,
-      default: undefined,
-      validator: (value: number) => {
-        return value > 0
-      }
-    },
-    /**
-     * The size of the progress bar.
-     * Can be `default` or `small`
-     */
-    size: {
-      type: String,
-      required: false,
-      default: 'default',
-      validator: (value: string) => {
-        return ['default', 'small'].includes(value)
-      }
-    },
-    /**
-     * The variation of the progress bar.
-     * Defaults to `primary`.
-     * Can be `passive, primary, danger, success, warning`.
-     */
-    variation: {
-      type: String,
-      required: false,
-      default: 'primary',
-      validator: (value: string) => {
-        return ['primary', 'passive', 'success', 'warning', 'danger'].includes(value)
-      }
-    },
-    /**
-     * Determines if the progress bar should be displayed in an indeterminate state.
-     */
-    indeterminate: {
-      type: Boolean,
-      required: false,
-      default: false
-    }
-  },
+  release: '1.0.0'
+})
+const {
+  value = 0,
+  max = undefined,
+  size = 'default',
+  variation = 'primary',
+  indeterminate = false
+} = defineProps<Props>()
 
-  computed: {
-    classes() {
-      return `oc-progress oc-progress-${this.size} oc-progress-${this.variation}`
-    },
-    progressValue() {
-      if (!this.max) {
-        return '-'
-      }
-      const num = (this.value / this.max) * 100
-      return `${num}%`
-    }
+const classes = computed(() => {
+  return `oc-progress oc-progress-${size} oc-progress-${variation}`
+})
+const progressValue = computed(() => {
+  if (!max) {
+    return '-'
   }
+  const num = (value / max) * 100
+  return `${num}%`
 })
 </script>
 
@@ -169,16 +158,3 @@ $progress-height-small: 5px !default;
   }
 }
 </style>
-
-<docs>
-Show progress to the users.
-
-```js
-<div>
-  <oc-progress :value="4" :max="10" class="oc-mb-s" />
-  <oc-progress :value="8" :max="10" size="small" variation="warning" class="oc-mb-s"  />
-  <oc-progress :max="10" :indeterminate="true" size="small" />
-
-</div>
-```
-</docs>
