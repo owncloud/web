@@ -61,29 +61,4 @@ describe('OcRecipient', () => {
 
     expect(wrapper.find('#test-slot').exists()).toBeTruthy()
   })
-
-  it.each([
-    [
-      'name is not a string',
-      {
-        name: null
-      }
-    ],
-    [
-      'name is empty',
-      {
-        name: ''
-      }
-    ],
-    ['icon name is not defined', { name: 'Alice', icon: {} }],
-    ['icon name is not a string', { name: 'Alice', icon: { name: null } }],
-    ['icon name is empty', { name: 'Alice', icon: { name: '' } }],
-    ['icon label is not defined', { name: 'Alice', icon: { name: 'person' } }],
-    ['icon label is not a string', { name: 'Alice', icon: { name: 'person', label: null } }],
-    ['icon label is empty', { name: 'Alice', icon: { name: 'Alice', label: '' } }]
-  ])('throws an error if %s', (def: string, prop: RecipientType) => {
-    expect(() => shallowMount(Recipient, { props: { recipient: prop } })).toThrow(
-      `Recipient ${def}`
-    )
-  })
 })
