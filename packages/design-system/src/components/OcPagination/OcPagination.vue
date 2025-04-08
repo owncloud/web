@@ -28,173 +28,153 @@
   </nav>
 </template>
 
-<script lang="ts">
-import { defineComponent } from 'vue'
+<script lang="ts" setup>
+import { computed, unref } from 'vue'
+import { RouteLocation } from 'vue-router'
+import { useGettext } from 'vue3-gettext'
 import OcIcon from '../OcIcon/OcIcon.vue'
 
-type Page = string | number
-
 /**
- * A list of links used for switching to different pages
+ * @component OcPagination
+ *
+ * Rendering a pagination control with support for dynamic page ranges,
+ * ellipsis, and navigation links. It integrates with Vue Router for seamless navigation.
+ *
+ * @props
+ * @prop {number} pages - Total number of pages.
+ * @prop {number} currentPage - The currently active page.
+ * @prop {number} [maxDisplayed] - Maximum number of pages to display at once. Defaults to showing all pages.
+ * @prop {RouteLocation} currentRoute - The current Vue Router route object.
+ *
+ * @example
+ *   <OcPagination
+ *     :pages="10"
+ *     :currentPage="5"
+ *     :maxDisplayed="5"
+ *     :currentRoute="$route"
+ *   />
+ *
  */
-export default defineComponent({
+
+defineOptions({
   name: 'OcPagination',
   status: 'ready',
-  release: '7.2.0',
+  release: '7.2.0'
+})
+type Page = string | number
 
-  components: { OcIcon },
+interface Props {
+  pages: number
+  currentPage: number
+  maxDisplayed?: number
+  currentRoute: RouteLocation
+}
 
-  props: {
-    /**
-     * Number of pages to be displayed
-     */
-    pages: {
-      type: Number,
-      required: true
-    },
-    /**
-     * Currently active page
-     */
-    currentPage: {
-      type: Number,
-      required: true
-    },
-    /**
-     * Number of pages to be displayed. It is required to use an odd number.
-     * Pages will be equally split into two parts around the current page and remaining pages will be displayed as ellipsis
-     */
-    maxDisplayed: {
-      type: Number,
-      required: false,
-      default: null,
-      validator: (value: number) => {
-        if (value % 2 === 0) {
-          // Since Vue doesn't support custom validator error message, log the error manually
-          console.error('maxDisplayed needs to be an odd number')
+const { pages, currentPage, maxDisplayed = null, currentRoute } = defineProps<Props>()
+const { $gettext } = useGettext()
 
-          return false
-        }
+function pageLabel(page: Page) {
+  return $gettext('Go to page %{ page }', { page: page.toString() })
+}
 
-        return true
-      }
-    },
-    /**
-     * Current route which is used to render pages
-     */
-    currentRoute: {
-      type: Object,
-      required: true
-    }
-  },
+function isCurrentPage(page: Page) {
+  return unref(computedCurrentPage) === page
+}
 
-  computed: {
-    displayedPages() {
-      let pages: Array<Page> = []
+function pageComponent(page: Page) {
+  return page === '...' || isCurrentPage(page) ? 'span' : 'router-link'
+}
 
-      for (let i = 0; i < this.pages; i++) {
-        pages.push(i + 1)
-      }
+function bindPageProps(page: Page) {
+  if (page === '...') {
+    return
+  }
 
-      if (this.maxDisplayed && this.maxDisplayed + 1 < this.pages) {
-        const currentPageIndex = this.$_currentPage - 1
-        const indentation = Math.floor(this.maxDisplayed / 2)
-
-        pages = pages.slice(
-          Math.max(0, currentPageIndex - indentation),
-          currentPageIndex + indentation + 1
-        )
-
-        if (this.$_currentPage > 2) {
-          Number(pages[0]) > 2 ? pages.unshift(1, '...') : pages.unshift(1)
-        }
-
-        if (this.$_currentPage < this.pages - 1) {
-          Number(pages[pages.length - 1]) < this.pages - 1
-            ? pages.push('...', this.pages)
-            : pages.push(this.pages)
-        }
-
-        return pages
-      }
-
-      return pages
-    },
-
-    isPrevPageAvailable() {
-      return this.$_currentPage > 1
-    },
-
-    isNextPageAvailable() {
-      return this.$_currentPage < this.pages
-    },
-
-    previousPageLink() {
-      return this.bindPageLink(this.$_currentPage - 1)
-    },
-
-    nextPageLink() {
-      return this.bindPageLink(this.$_currentPage + 1)
-    },
-
-    $_currentPage() {
-      return Math.max(1, Math.min(this.currentPage, this.pages))
-    }
-  },
-
-  methods: {
-    pageLabel(page: Page) {
-      return this.$gettext('Go to page %{ page }', { page: page.toString() })
-    },
-
-    isCurrentPage(page: Page) {
-      return this.$_currentPage === page
-    },
-
-    pageComponent(page: Page) {
-      return page === '...' || this.isCurrentPage(page) ? 'span' : 'router-link'
-    },
-
-    bindPageProps(page: Page) {
-      if (page === '...') {
-        return
-      }
-
-      if (this.isCurrentPage(page)) {
-        return {
-          'aria-current': 'page'
-        }
-      }
-
-      const link = this.bindPageLink(page)
-
-      return {
-        'aria-label': this.pageLabel(page),
-        to: link
-      }
-    },
-
-    pageClass(page: Page) {
-      const classes = ['oc-pagination-list-item-page']
-
-      if (this.isCurrentPage(page)) {
-        classes.push('oc-pagination-list-item-current')
-      } else if (page === '...') {
-        classes.push('oc-pagination-list-item-ellipsis')
-      } else {
-        classes.push('oc-pagination-list-item-link')
-      }
-
-      return classes
-    },
-
-    bindPageLink(page: Page) {
-      return {
-        name: this.currentRoute.name,
-        query: { ...this.currentRoute.query, page },
-        params: this.currentRoute.params
-      }
+  if (isCurrentPage(page)) {
+    return {
+      'aria-current': 'page'
     }
   }
+
+  const link = bindPageLink(page)
+
+  return {
+    'aria-label': pageLabel(page),
+    to: link
+  }
+}
+
+function pageClass(page: Page) {
+  const classes = ['oc-pagination-list-item-page']
+
+  if (isCurrentPage(page)) {
+    classes.push('oc-pagination-list-item-current')
+  } else if (page === '...') {
+    classes.push('oc-pagination-list-item-ellipsis')
+  } else {
+    classes.push('oc-pagination-list-item-link')
+  }
+
+  return classes
+}
+
+function bindPageLink(page: Page) {
+  return {
+    name: currentRoute.name,
+    query: { ...currentRoute.query, page },
+    params: currentRoute.params
+  }
+}
+const displayedPages = computed(() => {
+  let pagination: Array<Page> = []
+
+  for (let i = 0; i < pages; i++) {
+    pagination.push(i + 1)
+  }
+
+  if (maxDisplayed && maxDisplayed + 1 < pages) {
+    const currentPageIndex = unref(computedCurrentPage) - 1
+    const indentation = Math.floor(maxDisplayed / 2)
+
+    pagination = pagination.slice(
+      Math.max(0, currentPageIndex - indentation),
+      currentPageIndex + indentation + 1
+    )
+
+    if (unref(computedCurrentPage) > 2) {
+      Number(pagination[0]) > 2 ? pagination.unshift(1, '...') : pagination.unshift(1)
+    }
+
+    if (unref(computedCurrentPage) < pages - 1) {
+      Number(pagination[pagination.length - 1]) < pages - 1
+        ? pagination.push('...', pages)
+        : pagination.push(pages)
+    }
+
+    return pagination
+  }
+
+  return pagination
+})
+
+const isPrevPageAvailable = computed(() => {
+  return unref(computedCurrentPage) > 1
+})
+
+const isNextPageAvailable = computed(() => {
+  return unref(computedCurrentPage) < pages
+})
+
+const previousPageLink = computed(() => {
+  return bindPageLink(unref(computedCurrentPage) - 1)
+})
+
+const nextPageLink = computed(() => {
+  return bindPageLink(unref(computedCurrentPage) + 1)
+})
+
+const computedCurrentPage = computed(() => {
+  return Math.max(1, Math.min(currentPage, pages))
 })
 </script>
 
@@ -249,26 +229,3 @@ export default defineComponent({
   }
 }
 </style>
-
-<docs>
-## Examples
-```js
-<div class="oc-flex oc-flex-column" style="gap: 20px;">
-    <oc-pagination :pages="3" :currentPage="3" :currentRoute="{ name: 'files' }" />
-    <oc-pagination :pages="4" :currentPage="1" :currentRoute="{ name: 'files' }" />
-    <oc-pagination :pages="5" :currentPage="3" :currentRoute="{ name: 'files' }" />
-</div>
-```
-
-### Truncate visible pages with ellipsis
-If the current page is close enough to the first or/and last page and ellipsis would hide only 1 page, ellipsis will be omitted and the actual page will be still displayed instead.
-
-```js
-<div class="oc-flex oc-flex-column" style="gap: 20px;">
-    <oc-pagination :pages="5" :currentPage="3" :maxDisplayed="3" :currentRoute="{ name: 'files' }" />
-    <oc-pagination :pages="10" :currentPage="3" :maxDisplayed="3" :currentRoute="{ name: 'files' }" />
-    <oc-pagination :pages="54" :currentPage="28" :maxDisplayed="3" :currentRoute="{ name: 'files' }" />
-    <oc-pagination :pages="54" :currentPage="51" :maxDisplayed="5" :currentRoute="{ name: 'files' }" />
-</div>
-```
-</docs>

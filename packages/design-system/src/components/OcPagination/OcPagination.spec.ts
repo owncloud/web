@@ -1,11 +1,12 @@
-import { defaultPlugins, shallowMount } from '@ownclouders/web-test-helpers'
-
+import { defaultPlugins, shallowMount, RouteLocation } from '@ownclouders/web-test-helpers'
+import { mock } from 'vitest-mock-extended'
+import { RouteLocationPathRaw, RouterLink } from 'vue-router'
 import Pagination from './OcPagination.vue'
 
 const defaultProps = {
   pages: 5,
   currentPage: 3,
-  currentRoute: { name: 'files' }
+  currentRoute: mock<RouteLocation>({ name: 'files' })
 }
 
 const selectors = {
@@ -94,26 +95,16 @@ describe('OcPagination', () => {
     expect(wrapper.findAll(selectors.listItemCurrent).length).toBe(1)
   })
 
-  it('logs error if maxDisplayed prop is not an even number', () => {
-    console.error = vi.fn()
-    expect(Pagination.props.maxDisplayed.validator(2)).toBeFalsy()
-  })
-
   it('builds correct prev and next links', () => {
-    const localThis = {
-      ...defaultProps,
-      bindPageLink: Pagination.methods.bindPageLink,
-      $_currentPage: 3
-    }
+    const wrapper = getWrapper({ pages: 10, currentPage: 6 })
 
-    expect(Pagination.computed.previousPageLink.call(localThis)).toMatchObject({
-      name: 'files',
-      query: { page: 2 }
-    })
-    expect(Pagination.computed.nextPageLink.call(localThis)).toMatchObject({
-      name: 'files',
-      query: { page: 4 }
-    })
+    const prevPage = wrapper
+      .findComponent<typeof RouterLink>(selectors.listItemPrevious)
+      .props('to')
+    const nextPage = wrapper.findComponent<typeof RouterLink>(selectors.listItemNext).props('to')
+
+    expect((prevPage as RouteLocationPathRaw).query?.page).toBe(5)
+    expect((nextPage as RouteLocationPathRaw).query?.page).toBe(7)
   })
 })
 
