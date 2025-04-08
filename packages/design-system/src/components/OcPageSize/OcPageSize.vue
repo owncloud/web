@@ -22,70 +22,59 @@
   </div>
 </template>
 
-<script lang="ts">
-import { defineComponent } from 'vue'
+<script lang="ts" setup>
 import { uniqueId } from '../../helpers'
 import OcSelect from '../OcSelect/OcSelect.vue'
 
 /**
- * Select how many items will be displayed per page
+ * OcPageSize Component
+ *
+ * A reusable component for selecting a page size from a predefined set of options.
+ *
+ * @component
+ * @name OcPageSize
+ * @status ready
+ * @release 8.0.0
+ *
+ * @props
+ * @prop {Array<unknown>} options - The list of options to display in the dropdown.
+ * @prop {string} label - The label for the dropdown.
+ * @prop {string|number} selected - The currently selected value.
+ * @prop {string} [selectId] - Optional unique ID for the dropdown. Defaults to a generated unique ID.
+ *
+ * @emits
+ * @event change - Emitted when the selected value changes.
+ * @param {string|boolean} value - The new selected value.
+ *
+ * @example
+ * <OcPageSize
+ *   :options="[{ value: 10, label: '10' }, { value: 20, label: '20' }]"
+ *   label="Page Size"
+ *   :selected="10"
+ *   @change="handlePageSizeChange"
+ * />
  */
-export default defineComponent({
+
+interface Props {
+  options: unknown[]
+  label: string
+  selected: string | number
+  selectId?: string
+}
+interface Emits {
+  (e: 'change', value: string | boolean): void
+}
+
+defineOptions({
   name: 'OcPageSize',
   status: 'ready',
-  release: '8.0.0',
-
-  components: { OcSelect },
-  props: {
-    /**
-     * All possible sizes that the user can pick from
-     */
-    options: {
-      type: Array,
-      required: true
-    },
-
-    /**
-     * Label of the select
-     */
-    label: {
-      type: String,
-      required: true
-    },
-
-    /**
-     * Selected size
-     * @model
-     */
-    selected: {
-      type: [String, Number],
-      required: true
-    },
-
-    /**
-     * An ID of the select component.
-     * Default value is a unique ID with prefix `oc-page-size`
-     */
-    selectId: {
-      type: String,
-      required: false,
-      default: () => uniqueId('oc-page-size-')
-    }
-  },
-  emits: ['change'],
-
-  methods: {
-    emitChange(value: boolean) {
-      /**
-       * Triggers when a value is selected
-       *
-       * @event change
-       * @property {number|string} value selected value
-       */
-      this.$emit('change', value)
-    }
-  }
+  release: '8.0.0'
 })
+const { options, label, selected, selectId = uniqueId('oc-page-size-') } = defineProps<Props>()
+const emit = defineEmits<Emits>()
+function emitChange(value: boolean) {
+  emit('change', value)
+}
 </script>
 
 <style lang="scss">
@@ -100,21 +89,3 @@ export default defineComponent({
   }
 }
 </style>
-
-<docs>
-```js
-<template>
-  <div>
-    <oc-page-size v-model="selected" label="Items per page" :options="[100, 500, 1000, 'All']" />
-    Selected: {{ selected }}
-  </div>
-</template>
-<script>
-  export default {
-    data: () => ({
-      selected: 100,
-    })
-  }
-</script>
-```
-</docs>
