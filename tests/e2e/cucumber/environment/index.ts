@@ -104,7 +104,11 @@ Before(async function (this: World, { pickle }: ITestCaseHookParameter) {
 BeforeAll(async (): Promise<void> => {
   const browserConfiguration = {
     slowMo: config.slowMo,
-    args: ['--use-fake-ui-for-media-stream', '--use-fake-device-for-media-stream'],
+    args: [
+      '--use-fake-ui-for-media-stream',
+      '--use-fake-device-for-media-stream',
+      '--headless=new'
+    ],
     firefoxUserPrefs: {
       'media.navigator.streams.fake': true,
       'media.navigator.permission.disabled': true
