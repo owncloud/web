@@ -36,116 +36,104 @@
     </div>
   </div>
 </template>
-<script lang="ts">
-import { defineComponent, ref } from 'vue'
+<script lang="ts" setup>
+import { computed, ref, onMounted } from 'vue'
 import OcIcon from '../OcIcon/OcIcon.vue'
 import OcButton from '../OcButton/OcButton.vue'
 import OcErrorLog from '../OcErrorLog/OcErrorLog.vue'
 
 /**
- * Notifications are used to inform users about errors, warnings and as confirmations for their actions.
+ * OcNotificationMessage Component
+ *
+ * This component is used to display notification messages to users. Notifications can have different statuses
+ * (e.g., passive, primary, success, warning, danger) and can include a title, message, and optional error log content.
+ * The component also supports an auto-dismiss feature based on a timeout.
+ *
+ * @component
+ * @name OcNotificationMessage
+ * @status ready
+ * @release 1.0.0
+ *
+ * @props {string} [status='passive'] - The status of the notification. Defines the color and icon variation.
+ *                                      Possible values: 'passive', 'primary', 'success', 'warning', 'danger'.
+ * @props {string} title - The title of the notification. This is a required property.
+ * @props {string} [message=null] - The message content of the notification.
+ * @props {string} [errorLogContent=null] - The error log content to display when the "Details" button is clicked.
+ * @props {number} [timeout=5] - The number of seconds the notification is displayed before auto-dismiss.
+ *                                If set to 0, the notification will not auto-dismiss.
+ *
+ * @emits {void} close - Emitted when the user clicks the close button or when the notification auto-dismisses.
+ *
+ * @example
+ * <OcNotificationMessage
+ *   status="success"
+ *   title="Operation Successful"
+ *   message="Your changes have been saved."
+ *   :timeout="10"
+ *   @close="handleClose"
+ * />
+ *
  */
-export default defineComponent({
+
+interface Props {
+  status?: 'passive' | 'primary' | 'success' | 'warning' | 'danger'
+  title: string
+  message?: string
+  errorLogContent?: string
+  timeout?: number
+}
+interface Emits {
+  (e: 'close'): void
+}
+defineOptions({
   name: 'OcNotificationMessage',
   status: 'ready',
-  release: '1.0.0',
-  components: {
-    OcErrorLog,
-    OcIcon,
-    OcButton
-  },
-  props: {
-    /**
-     * Notification messages are sub components of the oc-notifications component.
-     * Messages can have one of the five states: `passive, primary, success, warning and danger`
-     *
-     * The status defines the color of the notification.
-     */
-    status: {
-      type: String,
-      required: false,
-      default: 'passive',
-      validator: (value: string) => {
-        return ['passive', 'primary', 'success', 'warning', 'danger'].includes(value)
-      }
-    },
-    /**
-     * The title that will be displayed in notification
-     */
-    title: {
-      type: String,
-      required: true
-    },
-    /**
-     * The message that will be displayed in notification
-     */
-    message: {
-      type: String,
-      required: false,
-      default: null
-    },
-    /**
-     * The error log content that will be displayed in notification
-     */
-    errorLogContent: {
-      type: String,
-      required: false,
-      default: null
-    },
-    /**
-     * Number of seconds the message shows. It will disappear after this time.
-     * If set to 0, message won't disappear automatically.
-     */
-    timeout: {
-      type: Number,
-      required: false,
-      default: 5,
-      validator: (value: number) => value > 0
-    }
-  },
-  emits: ['close'],
-  setup: function () {
-    const showErrorLog = ref(false)
+  release: '1.0.0'
+})
 
-    return {
-      showErrorLog
-    }
-  },
-  computed: {
-    classes() {
-      return `oc-notification-message-${this.status}`
-    },
-    iconVariation() {
-      return this.status
-    },
-    isStatusDanger() {
-      return this.status === 'danger'
-    },
-    role() {
-      return this.isStatusDanger ? 'alert' : 'status'
-    },
-    ariaLive() {
-      return this.isStatusDanger ? 'assertive' : 'polite'
-    }
-  },
-  mounted() {
-    /**
-     * Notification will be destroyed if timeout is set
-     */
-    if (this.timeout !== 0) {
-      setTimeout(() => {
-        this.close()
-      }, this.timeout * 1000)
-    }
-  },
-  methods: {
-    close() {
-      /**
-       * The close event is emitted when the user clicks the close icon.
-       * @type {void}
-       */
-      this.$emit('close')
-    }
+const {
+  status = 'passive',
+  title,
+  message = null,
+  errorLogContent = null,
+  timeout = 5
+} = defineProps<Props>()
+
+const emit = defineEmits<Emits>()
+const showErrorLog = ref(false)
+
+function close() {
+  /**
+   * The close event is emitted when the user clicks the close icon.
+   * @type {void}
+   */
+  emit('close')
+}
+
+const classes = computed(() => {
+  return `oc-notification-message-${status}`
+})
+const iconVariation = computed(() => {
+  return status
+})
+const isStatusDanger = computed(() => {
+  return status === 'danger'
+})
+const role = computed(() => {
+  return isStatusDanger.value ? 'alert' : 'status'
+})
+const ariaLive = computed(() => {
+  return isStatusDanger.value ? 'assertive' : 'polite'
+})
+
+onMounted(() => {
+  /**
+   * Notification will be destroyed if timeout is set
+   */
+  if (timeout !== 0) {
+    setTimeout(() => {
+      close()
+    }, timeout * 1000)
   }
 })
 </script>
@@ -166,7 +154,3 @@ export default defineComponent({
   }
 }
 </style>
-
-<docs>
-  Please have a look at the component [OcNotifications](#/oC%20Components/OcNotifications) for example code.
-</docs>
