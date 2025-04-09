@@ -90,17 +90,16 @@
   </div>
 </template>
 
-<script lang="ts">
+<script lang="ts" setup>
 import Fuse from 'fuse.js'
 import { uniqueId } from '../../helpers'
 import {
-  defineComponent,
   ComponentPublicInstance,
   onMounted,
   ref,
   unref,
   VNodeRef,
-  PropType,
+  useAttrs,
   nextTick,
   onBeforeUnmount,
   watch,
@@ -112,6 +111,76 @@ import { ContextualHelper } from '../../helpers'
 // @ts-ignore
 import VueSelect from 'vue-select'
 
+/**
+ * OcSelect Component
+ *
+ * A select component with a trigger and dropdown based on [Vue Select](https://vue-select.org/).
+ *
+ * @component
+ * @name OcSelect
+ * @status ready
+ * @release 4.3.0
+ *
+ * @props
+ * @property {string} [id] - The ID of the element. Defaults to a unique ID.
+ * @property {Function} [filter] - Function to filter items when searching. Defaults to a Fuse.js-based search.
+ * @property {boolean} [disabled=false] - Disable the select component.
+ * @property {string} label - Label of the select component, required for accessibility.
+ * @property {boolean} [labelHidden=false] - Hide the label visually but keep it for accessibility.
+ * @property {ContextualHelper|null} [contextualHelper=null] - Contextual helper data.
+ * @property {string} [optionLabel='label'] - Key to use as label when option is an object.
+ * @property {boolean} [searchable=true] - Determines if the select field is searchable.
+ * @property {boolean} [clearable=false] - Determines if the select field is clearable.
+ * @property {boolean} [loading=false] - Determines if the select field is in a loading state.
+ * @property {string|null} [warningMessage=null] - A warning message shown below the select.
+ * @property {string|null} [errorMessage=null] - An error message shown below the select.
+ * @property {boolean} [fixMessageLine=false] - Reserve vertical space for a one-line message.
+ * @property {string|null} [descriptionMessage=null] - A description text shown below the select field.
+ * @property {boolean} [multiple=false] - Determines if multiple options can be selected.
+ * @property {boolean} [readOnly=false] - Determines if the select field is read-only.
+ * @property {boolean} [positionFixed=false] - Sets the dropdown menu to `position: fixed`.
+ *
+ * @emits
+ * @event search:input - Triggered when the search input value changes.
+ * @property {string} query - The search query.
+ * @event update:modelValue - Triggered when the model value is updated.
+ * @property {unknown} value - The updated value.
+ *
+ * @example
+ *   <OcSelect
+ *     :id="'example-select'"
+ *     :label="'Example Select'"
+ *     :options="options"
+ *     :multiple="true"
+ *     :searchable="true"
+ *     :clearable="true"
+ *     update:modelValue="onValueUpdate"
+ *   />
+ */
+
+interface Props {
+  id?: string
+  filter?: (items: unknown[], search: string, label: string) => unknown[]
+  disabled?: boolean
+  label: string
+  labelHidden?: boolean
+  contextualHelper?: ContextualHelper | null
+  optionLabel?: string
+  searchable?: boolean
+  clearable?: boolean
+  loading?: boolean
+  warningMessage?: string | null
+  errorMessage?: string | null
+  fixMessageLine?: boolean
+  descriptionMessage?: string | null
+  multiple?: boolean
+  readOnly?: boolean
+  positionFixed?: boolean
+}
+interface Emits {
+  (event: 'search:input', query: string): void
+  (event: 'update:modelValue', value: unknown): void
+}
 // the keycode property is deprecated in the JS event API, vue-select still works with it though
 enum KeyCode {
   Enter = 13,
@@ -119,389 +188,232 @@ enum KeyCode {
   ArrowUp = 38
 }
 
-/**
- * Select component with a trigger and dropdown based on [Vue Select](https://vue-select.org/)
- */
-export default defineComponent({
+defineOptions({
   name: 'OcSelect',
   status: 'ready',
   release: '4.3.0',
-  components: { VueSelect },
-
-  inheritAttrs: true,
-
-  props: {
-    /**
-     * The ID of the element.
-     */
-    id: {
-      type: String,
-      required: false,
-      default: () => uniqueId('oc-select-')
-    },
-    /**
-     * Function to filter items when searching
-     */
-    filter: {
-      type: Function,
-      required: false,
-      default: (items: unknown[], search: string, props: { label: string }) => {
-        if (items.length < 1) {
-          return []
-        }
-
-        const fuse = new Fuse(items, {
-          ...(props.label && { keys: [props.label] }),
-          shouldSort: true,
-          threshold: 0,
-          ignoreLocation: true,
-          distance: 100,
-          minMatchCharLength: 1
-        })
-
-        return search.length ? fuse.search(search).map(({ item }) => item) : items
-      }
-    },
-    /**
-     * Disable the select component
-     */
-    disabled: {
-      type: Boolean,
-      required: false,
-      default: false
-    },
-    /**
-     * Label of the select component, required because of accessibility reasons
-     * ATTENTION: this shadows the vue-select prop `label`. If you need access to that use `optionLabel`.
-     */
-    label: {
-      type: String,
-      required: true
-    },
-    /**
-     * Hide the label visually, but keep it for accessibility
-     */
-    labelHidden: {
-      type: Boolean,
-      required: false,
-      default: false
-    },
-    /**
-     * oc-contextual-helper can be injected here
-     */
-    contextualHelper: {
-      type: Object as PropType<ContextualHelper>,
-      required: false,
-      default: null
-    },
-    /**
-     * Key to use as label when option is an object
-     * NOTE: this maps to the vue-select prop `label`
-     */
-    optionLabel: {
-      type: String,
-      default: 'label'
-    },
-    getOptionLabel: {
-      type: Function,
-      default(this: any, option: string | Record<string, unknown>) {
-        if (typeof option === 'object') {
-          // we pass this function down to vue-select
-          // so it needs to work in this component and in vue-select
-          // hence we need to handle optionLabel and label
-          const key = this.optionLabel || this.label
-          if (!option.hasOwnProperty(key)) {
-            return console.warn(
-              `[vue-select warn]: Label key "option.${key}" does not` +
-                ` exist in options object ${JSON.stringify(option)}.\n` +
-                'https://vue-select.org/api/props.html#getoptionlabel'
-            )
-          }
-          return option[key]
-        }
-        return option
-      }
-    },
-    /**
-     * Determines if the select field is searchable
-     */
-    searchable: {
-      type: Boolean,
-      required: false,
-      default: true
-    },
-    /**
-     * Determines if the select field is clearable
-     */
-    clearable: {
-      type: Boolean,
-      required: false,
-      default: false
-    },
-    /**
-     * Determines if the select field loading
-     */
-    loading: {
-      type: Boolean,
-      required: false,
-      default: false
-    },
-
-    /**
-     * A warning message which is shown below the select.
-     */
-    warningMessage: {
-      type: String,
-      default: null
-    },
-    /**
-     * An error message which is shown below the select.
-     */
-    errorMessage: {
-      type: String,
-      default: null
-    },
-    /**
-     * Whether or not vertical space below the select should be reserved for a one line message,
-     * so that content actually appearing there doesn't shift the layout.
-     */
-    fixMessageLine: {
-      type: Boolean,
-      default: false
-    },
-    /**
-     * A description text which is shown below the select field.
-     */
-    descriptionMessage: {
-      type: String,
-      default: null
-    },
-    /**
-     * Determines if multiple options can be selected.
-     */
-    multiple: {
-      type: Boolean,
-      default: false
-    },
-    /**
-     * Determines if the select field is read only.
-     *
-     * Read only field will be visualized by a lock item and additionally behaves like a disabled field.
-     * Read only takes effect if the server won't allow to change the value at all,
-     * disabled should be used instead, if the value can't be changed in a specific context.
-     *
-     * For example: If the backend doesn't allow to set the login states for users in general, use read only.
-     * If it's not allowed to change for the current logged-in User, use disabled.
-     *
-     */
-    readOnly: {
-      type: Boolean,
-      default: false
-    },
-    /**
-     * Sets the dropdown menu to position: fixed.
-     * Use in modals, so the dropdown will be able to overflow.
-     * Positioning will be computed automatically
-     */
-    positionFixed: {
-      type: Boolean,
-      default: false
+  // needed for unit testing, otherwise, it will be rendered as anonymous component -->
+  components: { VueSelect }
+})
+const {
+  id = uniqueId('oc-select-'),
+  filter = (items: unknown[], search: string, { label }: { label?: string }) => {
+    if (items.length < 1) {
+      return []
     }
+
+    const fuse = new Fuse(items, {
+      ...(label && { keys: [label] }),
+      shouldSort: true,
+      threshold: 0,
+      ignoreLocation: true,
+      distance: 100,
+      minMatchCharLength: 1
+    })
+
+    return search.length ? fuse.search(search).map(({ item }) => item) : items
   },
-  emits: ['search:input', 'update:modelValue'],
-  setup(props, { emit }) {
-    const { $gettext } = useGettext()
-    const select: VNodeRef = ref()
+  disabled = false,
+  label,
+  labelHidden = false,
+  contextualHelper = null,
+  optionLabel = 'label',
+  searchable = true,
+  clearable = false,
+  loading = false,
+  warningMessage = null,
+  errorMessage = null,
+  fixMessageLine = false,
+  descriptionMessage = null,
+  multiple = false,
+  readOnly = false,
+  positionFixed = false
+} = defineProps<Props>()
 
-    const setComboBoxAriaLabel = () => {
-      const comboBoxElement = (unref(select) as ComponentPublicInstance).$el.querySelector(
-        'div:first-child'
+const emit = defineEmits<Emits>()
+const { $gettext } = useGettext()
+const select: VNodeRef = ref()
+const attrs = useAttrs()
+const getOptionLabel = (option: string | Record<string, unknown>): string => {
+  if (typeof option === 'object') {
+    const key = optionLabel || label
+    if (!Object.hasOwn(option, key)) {
+      console.warn(
+        `[vue-select warn]: Label key "option.${key}" does not` +
+          ` exist in options object ${JSON.stringify(option)}.\n` +
+          'https://vue-select.org/api/html#getoptionlabel'
       )
-      comboBoxElement?.setAttribute(
-        'aria-label',
-        `${props.label} - ${$gettext('Search for option')}`
-      )
+      return ''
     }
+    return option[key] as string
+  }
+  return option
+}
+const setComboBoxAriaLabel = () => {
+  const comboBoxElement = (unref(select) as ComponentPublicInstance).$el.querySelector(
+    'div:first-child'
+  )
+  comboBoxElement?.setAttribute('aria-label', `${label} - ${$gettext('Search for option')}`)
+}
 
-    const userInput = (event: Event) => {
-      /**
-       * Triggers when a value of search input is changed
-       *
-       * @property {string} query search query
-       */
-      emit('search:input', (event.target as HTMLInputElement).value)
-    }
+const userInput = (event: Event) => {
+  /**
+   * Triggers when a value of search input is changed
+   *
+   * @property {string} query search query
+   */
+  emit('search:input', (event.target as HTMLInputElement).value)
+}
 
-    const dropdownEnabled = ref(false)
-    const setDropdownEnabled = (enabled: boolean) => {
-      dropdownEnabled.value = enabled
-    }
+const dropdownEnabled = ref(false)
+const setDropdownEnabled = (enabled: boolean) => {
+  dropdownEnabled.value = enabled
+}
 
-    const selectDropdownShouldOpen = ({
-      noDrop,
-      open,
-      mutableLoading
-    }: {
-      noDrop?: boolean
-      open?: boolean
-      mutableLoading?: boolean
-    }) => {
-      return !noDrop && open && !mutableLoading && unref(dropdownEnabled)
-    }
+const selectDropdownShouldOpen = ({
+  noDrop,
+  open,
+  mutableLoading
+}: {
+  noDrop?: boolean
+  open?: boolean
+  mutableLoading?: boolean
+}) => {
+  return !noDrop && open && !mutableLoading && unref(dropdownEnabled)
+}
 
-    const onSelectClick = () => {
-      setDropdownEnabled(true)
-    }
+const onSelectClick = () => {
+  setDropdownEnabled(true)
+}
 
-    const onSelectBlur = () => {
-      setDropdownEnabled(false)
-    }
+const onSelectBlur = () => {
+  setDropdownEnabled(false)
+}
 
-    /**
-     * Sets the outline for the highlighted option. This needs to be applied when
-     * navigating via keyboard because of a11y.
-     */
-    const setKeyboardOutline = async () => {
-      const optionEls = unref(select).$refs.dropdownMenu.querySelectorAll('li')
-      const highlightedOption = optionEls[unref(select).typeAheadPointer]
-      if (highlightedOption) {
-        await nextTick()
-        highlightedOption.classList.add('keyboard-outline')
-      }
-    }
+/**
+ * Sets the outline for the highlighted option. This needs to be applied when
+ * navigating via keyboard because of a11y.
+ */
+const setKeyboardOutline = async () => {
+  const optionEls = unref(select).$refs.dropdownMenu.querySelectorAll('li')
+  const highlightedOption = optionEls[unref(select).typeAheadPointer]
+  if (highlightedOption) {
+    await nextTick()
+    highlightedOption.classList.add('keyboard-outline')
+  }
+}
 
-    const selectMapKeydown = (map: Record<number, (e: KeyboardEvent) => void>) => {
-      return {
-        ...map,
-        [KeyCode.Enter]: (e: KeyboardEvent) => {
-          if (!unref(dropdownEnabled)) {
-            setDropdownEnabled(true)
-            return
-          }
-          map[KeyCode.Enter](e)
-          unref(select).searchEl.focus()
-        },
-        [KeyCode.ArrowDown]: async (e: KeyboardEvent) => {
-          e.preventDefault()
-          unref(select).typeAheadDown()
-
-          if (unref(dropdownOpen)) {
-            await setKeyboardOutline()
-          }
-        },
-        [KeyCode.ArrowUp]: async (e: KeyboardEvent) => {
-          e.preventDefault()
-          unref(select).typeAheadUp()
-
-          if (unref(dropdownOpen)) {
-            await setKeyboardOutline()
-          }
-        }
-      }
-    }
-
-    const onSelectKeyDown = async (e: KeyboardEvent) => {
-      if (e.key === 'Enter' || e.key === 'Tab') {
-        if (unref(dropdownOpen)) {
-          // set initial outline for highlighted option
-          await setKeyboardOutline()
-        }
-
+const selectMapKeydown = (map: Record<number, (e: KeyboardEvent) => void>) => {
+  return {
+    ...map,
+    [KeyCode.Enter]: (e: KeyboardEvent) => {
+      if (!unref(dropdownEnabled)) {
+        setDropdownEnabled(true)
         return
       }
-
-      setDropdownEnabled(true)
-    }
-
-    const setDropdownPosition = () => {
-      const dropdownMenu = unref(select).$refs.dropdownMenu
-      if (!dropdownMenu) {
-        return
-      }
-
-      const toggleClientRect = unref(select).$refs.toggle.getBoundingClientRect()
-      const dropdownMenuBottomOffset = 25
-      const dropdownMenuMaxHeight = Math.min(
-        window.innerHeight - toggleClientRect.bottom - dropdownMenuBottomOffset,
-        window.innerHeight
-      )
-
-      dropdownMenu.style.maxHeight = `${dropdownMenuMaxHeight}px`
-      dropdownMenu.style.width = `${toggleClientRect.width}px`
-      dropdownMenu.style.top = `${toggleClientRect.top + toggleClientRect.height + 1}px`
-      dropdownMenu.style.left = `${toggleClientRect.left}px`
-    }
-
-    const dropdownOpen = computed(() => {
-      return unref(select)?.dropdownOpen
-    })
-
-    watch(dropdownOpen, async () => {
-      if (props.positionFixed && unref(dropdownOpen)) {
-        await nextTick()
-        setDropdownPosition()
-      }
-    })
-
-    onMounted(() => {
-      setComboBoxAriaLabel()
-
-      if (props.positionFixed) {
-        window.addEventListener('resize', setDropdownPosition)
-      }
-    })
-
-    onBeforeUnmount(() => {
-      if (props.positionFixed) {
-        window.removeEventListener('resize', setDropdownPosition)
-      }
-    })
-
-    return {
-      select,
-      userInput,
-      selectDropdownShouldOpen,
-      selectMapKeydown,
-      onSelectKeyDown,
-      onSelectBlur,
-      onSelectClick
-    }
-  },
-  computed: {
-    additionalAttributes() {
-      const additionalAttrs: Record<string, unknown> = {}
-      additionalAttrs['input-id'] = this.id
-      additionalAttrs['getOptionLabel'] = this.getOptionLabel
-      additionalAttrs['label'] = this.optionLabel
-
-      return { ...this.$attrs, ...additionalAttrs }
+      map[KeyCode.Enter](e)
+      unref(select).searchEl.focus()
     },
-    showMessageLine() {
-      return (
-        this.fixMessageLine ||
-        !!this.warningMessage ||
-        !!this.errorMessage ||
-        !!this.descriptionMessage
-      )
-    },
-    messageText() {
-      if (this.errorMessage) {
-        return this.errorMessage
-      }
+    [KeyCode.ArrowDown]: async (e: KeyboardEvent) => {
+      e.preventDefault()
+      unref(select).typeAheadDown()
 
-      if (this.warningMessage) {
-        return this.warningMessage
+      if (unref(dropdownOpen)) {
+        await setKeyboardOutline()
       }
-
-      return this.descriptionMessage
     },
-    messageId() {
-      return `${this.id}-message`
+    [KeyCode.ArrowUp]: async (e: KeyboardEvent) => {
+      e.preventDefault()
+      unref(select).typeAheadUp()
+
+      if (unref(dropdownOpen)) {
+        await setKeyboardOutline()
+      }
     }
+  }
+}
+
+const onSelectKeyDown = async (e: KeyboardEvent) => {
+  if (e.key === 'Enter' || e.key === 'Tab') {
+    if (unref(dropdownOpen)) {
+      // set initial outline for highlighted option
+      await setKeyboardOutline()
+    }
+
+    return
+  }
+
+  setDropdownEnabled(true)
+}
+
+const setDropdownPosition = () => {
+  const dropdownMenu = unref(select).$refs.dropdownMenu
+  if (!dropdownMenu) {
+    return
+  }
+
+  const toggleClientRect = unref(select).$refs.toggle.getBoundingClientRect()
+  const dropdownMenuBottomOffset = 25
+  const dropdownMenuMaxHeight = Math.min(
+    window.innerHeight - toggleClientRect.bottom - dropdownMenuBottomOffset,
+    window.innerHeight
+  )
+
+  dropdownMenu.style.maxHeight = `${dropdownMenuMaxHeight}px`
+  dropdownMenu.style.width = `${toggleClientRect.width}px`
+  dropdownMenu.style.top = `${toggleClientRect.top + toggleClientRect.height + 1}px`
+  dropdownMenu.style.left = `${toggleClientRect.left}px`
+}
+
+const dropdownOpen = computed(() => {
+  return unref(select)?.dropdownOpen
+})
+const additionalAttributes = computed(() => {
+  const additionalAttrs: Record<string, unknown> = {}
+  additionalAttrs['input-id'] = id
+  additionalAttrs['getOptionLabel'] = getOptionLabel
+  additionalAttrs['label'] = optionLabel
+
+  return { ...attrs, ...additionalAttrs }
+})
+const showMessageLine = computed(() => {
+  return fixMessageLine || !!warningMessage || !!errorMessage || !!descriptionMessage
+})
+const messageText = computed(() => {
+  if (errorMessage) {
+    return errorMessage
+  }
+
+  if (warningMessage) {
+    return warningMessage
+  }
+
+  return descriptionMessage
+})
+const messageId = computed(() => {
+  return `${id}-message`
+})
+watch(dropdownOpen, async () => {
+  if (positionFixed && unref(dropdownOpen)) {
+    await nextTick()
+    setDropdownPosition()
+  }
+})
+
+onMounted(() => {
+  setComboBoxAriaLabel()
+
+  if (positionFixed) {
+    window.addEventListener('resize', setDropdownPosition)
+  }
+})
+
+onBeforeUnmount(() => {
+  if (positionFixed) {
+    window.removeEventListener('resize', setDropdownPosition)
   }
 })
 </script>
-
 <style lang="scss">
 .vs--disabled {
   cursor: not-allowed;
@@ -693,192 +605,3 @@ export default defineComponent({
   }
 }
 </style>
-
-<docs>
-For detailed documentation (props, slots, events, etc.), please visit https://vue-select.org/
-
-```js
-<template>
-  <div class="oc-docs-width-medium">
-    <oc-select label="Fruit" v-model="selected" :options="['Bannana', 'Orange', 'Pear']"/>
-  </div>
-</template>
-<script>
-  export default {
-    data: () => ({
-      selected: "Apple"
-    })
-  };
-</script>
-```
-
-### Prevent user from clearing the selection
-If we want to disable the clear button from the `oc-select`, we can set prop `clearable` to false. This will also
-prevent clearing the selected value by hitting `delete`.
-
-```js
-<template>
-  <div class="oc-docs-width-medium">
-    <oc-select label="Fruit" v-model="selected" :options="['Apple', 'Bannana', 'Orange', 'Pear']" :clearable="false"/>
-  </div>
-</template>
-<script>
-  export default {
-    data: () => ({
-      selected: "Apple"
-    })
-  };
-</script>
-```
-
-### Multiple selection
-```js
-<template>
-  <div class="oc-docs-width-medium">
-    <oc-select label="Fruits" v-model="selected" :multiple="true" :options="options"/>
-  </div>
-</template>
-<script>
-  export default {
-    data: () => ({
-      selected: ["Apple"]
-    }),
-
-    computed: {
-      options() {
-        return ["Apple", "Bannana", "Orange", "Pear"].filter(option => this.selected.indexOf(option) < 0);
-      }
-    }
-  };
-</script>
-```
-
-### Disable search
-To prevent user from filtering options by typing a serach query into the `oc-select` component, set prop called
-`searchable` to false.
-
-```js
-<template>
-  <div class="oc-docs-width-medium">
-    <oc-select :label="Fruit" v-model="selected" :options="['Apple', 'Bannana', 'Orange', 'Pear']" :searchable="false"/>
-  </div>
-</template>
-<script>
-  export default {
-    data: () => ({
-      selected: "Apple"
-    })
-  };
-</script>
-```
-
-### Use objects as options
-If we want to select from a list of option objects, we can use `option-label` to select the key of the object to use as
-label.
-
-```js
-<template>
-  <div class="oc-docs-width-medium">
-    <oc-select
-      label="Fruit"
-      option-label="title"
-      :options="options"
-      v-model="selected"
-      class="oc-mb-m"
-    />
-  </div>
-</template>
-<script>
-  const options = [
-    {
-      title: 'Apple',
-      desc: 'An apple is an edible fruit produced by an apple tree (Malus domestica)'
-    },
-    {
-      title: 'Bannana',
-      desc: 'Bannana is a genus of goblin spiders (family Oonopidae) native to Xishuangbanna prefecture, Yunnan Province, China, where it lives in the leaf-litter of tropical rainforest'
-    },
-    {
-      title: 'Orange',
-      desc: 'The orange is the fruit of various citrus species in the family Rutaceae'
-    },
-  ]
-
-  export default {
-    data: () => ({
-      selected: options[1],
-      options
-    })
-  }
-</script>
-```
-
-
-### Using slots to display complex options
-Sometimes we need to display more complex options. This can include e.g. an option with a title and a description. To
-still display all those values exactly as we want to, we need to use scoped slots called `option` and `selected-option`.
-We can then retrieve all the values that we want to display from the slot parameters.
-It is important to specify the `option-label` prop on the `oc-select` to make filtering work.
-
-```js
-<template>
-  <div class="oc-docs-width-medium">
-    <oc-select
-      label="Fruit"
-      :options="options"
-      v-model="selected"
-      class="oc-mb-m"
-    >
-      <template v-slot:option="{ title, desc }">
-        <span class="option">
-          <strong v-text="title"/>
-        </span>
-        <span class="option" v-text="desc"/>
-      </template>
-      <template #no-options>
-        Your search query hasn't returned any results.
-      </template>
-      <template #selected-option="{ title, desc }">
-        <strong class="oc-mr-s" v-text="title"/> <small v-text="desc.slice(0, 20) + '...'"/>
-      </template>
-    </oc-select>
-    <p>
-      Selected: {{ selected }}
-    </p>
-  </div>
-</template>
-<script>
-  const options = [
-    {
-      title: "Apple",
-      desc: "An apple is an edible fruit produced by an apple tree (Malus domestica)"
-    },
-    {
-      title: "Bannana",
-      desc: "Bannana is a genus of goblin spiders (family Oonopidae) native to Xishuangbanna prefecture, Yunnan Province, China, where it lives in the leaf-litter of tropical rainforest"
-    },
-    {
-      title: "Orange",
-      desc: "The orange is the fruit of various citrus species in the family Rutaceae"
-    }
-  ];
-
-  export default {
-    data: () => ({
-      selected: options[0],
-      options
-    })
-  };
-</script>
-<style>
-  .option {
-    display: block;
-  }
-</style>
-```
-
-## Loading spinner
-```js
-<oc-select :options="['Apple', 'Bannana', 'Orange', 'Pear']" :multiple="true" :loading="true"/>
-```
-</docs>
