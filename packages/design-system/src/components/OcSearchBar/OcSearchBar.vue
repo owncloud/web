@@ -58,246 +58,187 @@
   </oc-grid>
 </template>
 
-<script lang="ts">
-import { computed, defineComponent, ref, useSlots, watch } from 'vue'
-
+<script lang="ts" setup>
+import { computed, unref, ref, useSlots, watch } from 'vue'
 import OcButton from '../OcButton/OcButton.vue'
 import OcGrid from '../OcGrid/OcGrid.vue'
 import OcIcon from '../OcIcon/OcIcon.vue'
 import OcSpinner from '../OcSpinner/OcSpinner.vue'
+import { useGettext } from 'vue3-gettext'
 
 /**
- * The search bar is an input element used for searching server side resources or to filter local results.
+ * @component OcSearchBar
+ * @description
+ * The OcSearchBar component is an input element used for searching server-side resources or filtering local results.
+ * It supports features like type-ahead search, trimming input, and customizable buttons for search and cancel actions.
  *
- * ## Accessibility
+ * @Accessibility
+ * Landmark role=search**: Communicates its purpose as the main site search to screen readers. Use `isFilter="true"` to disable the landmark role if used as a filter form.
+ * Submit button**: Ensures a submit button exists, even if visually hidden (`buttonHidden="true"`).
+ * Loading spinner aria-label**: Set via `loadingAccessibleLabel` or defaults to "Loading results".
  *
- * ### Landmark role=search
- * Given there is only one instance of `<oc-search-bar>` per page/route, this component should communicate its purpose, being the main site search, to screen readers ([explainer of landmark roles](https://www.washington.edu/accessibility/web/landmarks/)). If the component serves as a filter form, it is advised to disable the landmark role via `isFilter="true"`.
+ * @props
+ * @prop {string|null} [value=null] - The search query value.
+ * @prop {string} [icon='search'] - The icon to display in the search bar.
+ * @prop {string} [placeholder=''] - Placeholder text for the input field.
+ * @prop {string} [label=''] - Aria-label for the input field.
+ * @prop {boolean} [small=false] - Whether the search bar should be smaller in size.
+ * @prop {string} [buttonLabel='Search'] - Label for the search button.
+ * @prop {boolean} [buttonHidden=false] - Whether to hide the search button visually.
+ * @prop {boolean} [typeAhead=false] - If true, triggers the search event on each character input.
+ * @prop {boolean} [trimQuery=true] - Automatically trims whitespaces around the search term.
+ * @prop {boolean} [loading=false] - If true, disables input and shows a loading spinner.
+ * @prop {boolean} [isFilter=false] - If true, removes the search landmark role.
+ * @prop {string} [loadingAccessibleLabel=''] - Aria-label for the loading spinner.
+ * @prop {boolean} [showCancelButton=false] - Whether to show a cancel button.
+ * @prop {'passive'|'primary'|'danger'|'success'|'warning'|'brand'} [cancelButtonVariation='primary'] - Variation of the cancel button.
+ * @prop {'outline'|'filled'|'raw'|'raw-inverse'} [cancelButtonAppearance='raw'] - Appearance of the cancel button.
+ * @prop {Function} [cancelHandler=() => {}] - Handler function for the cancel button click.
  *
- * ### Making sure a submit button exits
+ * @emits
+ * @event advancedSearch {MouseEvent} - Emitted when the advanced search button is clicked.
+ * @event clear {Event} - Emitted when the search input is cleared.
+ * @event input {string} - Emitted on input change.
+ * @event keyup {KeyboardEvent} - Emitted on keyup event in the input field.
+ * @event search {string} - Emitted when the search button is clicked or enter is pressed.
  *
- * Both a search and filter form does need a submit button, regardless if the button is visually perceivable or not. If a "buttonless" look is desired, use `button-hidden="true"`, which renders the button visually hidden.
- *
- * The `aria-label` of the loading spinner can be set via `customLoadingAccessibleLabel`. If not set, it will default to "Loading results".
+ * @example
+ *   <OcSearchBar
+ *     :value="searchQuery"
+ *     icon="search"
+ *     placeholder="Search for items"
+ *     label="Search"
+ *     :small="false"
+ *     buttonLabel="Search"
+ *     :buttonHidden="false"
+ *     :typeAhead="true"
+ *     :trimQuery="true"
+ *     :loading="isLoading"
+ *     :isFilter="false"
+ *     loadingAccessibleLabel="Loading search results"
+ *     :showCancelButton="true"
+ *     cancelButtonVariation="primary"
+ *     cancelButtonAppearance="outline"
+ *     :cancelHandler="onCancel"
+ *     @search="onSearch"
+ *     @input="onInput"
+ *   />
  */
-export default defineComponent({
+
+interface Props {
+  value?: string | null
+  icon?: string
+  placeholder?: string
+  label?: string
+  small?: boolean
+  buttonLabel?: string
+  buttonHidden?: boolean
+  typeAhead?: boolean
+  trimQuery?: boolean
+  loading?: boolean
+  isFilter?: boolean
+  loadingAccessibleLabel?: string
+  showCancelButton?: boolean
+  cancelButtonVariation?: 'passive' | 'primary' | 'danger' | 'success' | 'warning' | 'brand'
+  cancelButtonAppearance?: 'outline' | 'filled' | 'raw' | 'raw-inverse'
+  cancelHandler?: () => void
+}
+
+interface Emits {
+  (e: 'advancedSearch', event: MouseEvent): void
+  (e: 'clear', event: Event): void
+  (e: 'input', event: string): void
+  (e: 'keyup', event: KeyboardEvent): void
+  (e: 'search', event: string): void
+}
+defineOptions({
   name: 'OcSearchBar',
   status: 'ready',
-  release: '1.0.0',
-  components: {
-    OcButton,
-    OcGrid,
-    OcIcon,
-    OcSpinner
-  },
-  props: {
-    /**
-     * Set the search query
-     */
-    value: {
-      type: String,
-      required: false,
-      default: null
-    },
-    /**
-     * The icon to be displayed
-     */
-    icon: {
-      type: String,
-      required: false,
-      default: 'search'
-    },
-    /**
-     * Informative placeholder about the data to be entered
-     */
-    placeholder: {
-      type: String,
-      required: false,
-      default: ''
-    },
-    /**
-     * Informative label about the data to be entered
-     */
-    label: {
-      type: String,
-      required: true,
-      default: ''
-    },
-    /**
-     * Indicator if the search bar should be of smaller size
-     */
-    small: {
-      type: Boolean,
-      default: false
-    },
-    /**
-     * Determine the button text
-     */
-    buttonLabel: {
-      type: [String],
-      required: false,
-      default: 'Search'
-    },
-    /**
-     * Determine the button visibility
-     */
-    buttonHidden: {
-      type: [Boolean],
-      required: false,
-      default: false
-    },
-    /**
-     * If set to true the search event is triggered on each entered character
-     */
-    typeAhead: {
-      type: Boolean,
-      required: false,
-      default: false
-    },
-    /**
-     * automatically trim whitespaces around search term
-     */
-    trimQuery: {
-      type: Boolean,
-      required: false,
-      default: true
-    },
-    /**
-     * If set to true data is loaded and the user cannot enter further data
-     */
-    loading: {
-      type: Boolean,
-      required: false,
-      default: false
-    },
-    /**
-     * If set to true the search landmark role is removed since it's not the page's main search function anymore
-     */
-    isFilter: {
-      type: Boolean,
-      required: false,
-      default: false
-    },
-    /**
-     * The aria-label for the loading spinner
-     */
-    loadingAccessibleLabel: {
-      type: String,
-      required: false,
-      default: ''
-    },
-    /**
-     * Show a "cancel" button next to the search bar.
-     */
-    showCancelButton: {
-      type: Boolean,
-      required: false,
-      default: false
-    },
-    /**
-     * Variation of the cancel button
-     */
-    cancelButtonVariation: {
-      type: String,
-      required: false,
-      default: 'primary',
-      validator: (value: string) => {
-        return ['passive', 'primary', 'danger', 'success', 'warning', 'brand'].includes(value)
-      }
-    },
-    /**
-     * Appearance of the cancel button
-     */
-    cancelButtonAppearance: {
-      type: String,
-      required: false,
-      default: 'raw',
-      validator: (value: string) => {
-        return ['outline', 'filled', 'raw', 'raw-inverse'].includes(value)
-      }
-    },
-    /**
-     * Handler function for when the cancel button is clicked.
-     */
-    cancelHandler: {
-      type: Function,
-      required: false,
-      default: () => {}
-    }
-  },
-  emits: ['advancedSearch', 'clear', 'input', 'keyup', 'search'],
-  setup(props) {
-    const slots = useSlots()
-    const query = ref<string>('')
-    watch(
-      () => props.value,
-      () => {
-        if (!props.value) {
-          query.value = ''
-        }
-      }
-    )
-    const inputIconRightPadding = computed(() => {
-      if (slots.locationFilter?.().length > 0) {
-        return '125px'
-      }
-      return '48px'
-    })
+  release: '1.0.0'
+})
+const {
+  value = null,
+  icon = 'search',
+  placeholder = '',
+  label = '',
+  small = false,
+  buttonLabel = 'Search',
+  buttonHidden = false,
+  typeAhead = false,
+  trimQuery = true,
+  loading = false,
+  isFilter = false,
+  loadingAccessibleLabel = '',
+  showCancelButton = false,
+  cancelButtonVariation = 'primary',
+  cancelButtonAppearance = 'raw',
+  cancelHandler = () => {}
+} = defineProps<Props>()
+const emit = defineEmits<Emits>()
+const slots = useSlots()
+const query = ref<string>('')
+const { $gettext } = useGettext()
 
-    return { query, inputIconRightPadding }
-  },
-  computed: {
-    searchQuery() {
-      // please don't treat empty string the same as null...
-      return this.value === null ? this.query : this.value
-    },
-    spinnerSize() {
-      if (this.small) {
-        return 'xsmall'
-      }
-      return 'medium'
-    },
-    inputClass() {
-      const classes = ['oc-search-input', 'oc-input']
+function onSearch() {
+  /**
+   * Search event on filter or search user input
+   * @event search
+   * @type {event}
+   */
+  emit('search', unref(query))
+}
+function onType(currentQuery: string) {
+  query.value = trimQuery ? currentQuery.trim() : currentQuery
+  /**
+   * Input event to support model directive
+   * @event Input
+   * @type {event}
+   */
+  emit('input', unref(query))
+  if (typeAhead) onSearch()
+}
 
-      !this.buttonHidden && classes.push('oc-search-input-button')
+function onCancel() {
+  query.value = ''
+  onType('')
+  onSearch()
+  cancelHandler()
+}
 
-      return classes
-    },
-    loadingAccessibleLabelValue() {
-      return this.loadingAccessibleLabel || this.$gettext('Loading results')
-    }
-  },
-  methods: {
-    focusSearchInput() {
-      ;(this.$refs.searchInput as HTMLElement).focus()
-    },
-    onSearch() {
-      /**
-       * Search event on filter or search user input
-       * @event search
-       * @type {event}
-       */
-      this.$emit('search', this.query)
-    },
-    onType(query: string) {
-      this.query = this.trimQuery ? query.trim() : query
-      /**
-       * Input event to support model directive
-       * @event Input
-       * @type {event}
-       */
-      this.$emit('input', query)
-      if (this.typeAhead) this.onSearch(query)
-    },
-
-    onCancel() {
-      this.query = ''
-      this.onType('')
-      this.onSearch()
-      this.cancelHandler()
+watch(
+  () => value,
+  () => {
+    if (!value) {
+      query.value = ''
     }
   }
+)
+const inputIconRightPadding = computed(() => {
+  if (slots.locationFilter?.().length > 0) {
+    return '125px'
+  }
+  return '48px'
+})
+
+const searchQuery = computed(() => {
+  // please don't treat empty string the same as null...
+  return value === null ? unref(query) : value
+})
+const spinnerSize = computed(() => {
+  if (small) {
+    return 'xsmall'
+  }
+  return 'medium'
+})
+const inputClass = computed(() => {
+  const classes = ['oc-search-input', 'oc-input']
+
+  !buttonHidden && classes.push('oc-search-input-button')
+
+  return classes
+})
+const loadingAccessibleLabelValue = computed(() => {
+  return loadingAccessibleLabel || $gettext('Loading results')
 })
 </script>
 
@@ -376,67 +317,3 @@ export default defineComponent({
   }
 }
 </style>
-
-<docs>
-```js
-<template>
-  <div>
-    <section>
-      <h3 class="oc-heading-divider">
-        Search examples
-      </h3>
-      <oc-search-bar label="Search files" placeholder="Search files" @search="onSearch" @clear="onClear" />
-      <div v-if="searchQuery" class="oc-m">Search query: {{ searchQuery }}</div>
-      <div class="oc-my-m">
-        <oc-search-bar label="Loading..." placeholder="Loading ..." loadingAccessibleLabel="Custom loading aria label" :loading="true" />
-      </div>
-      <div class="oc-my-m">
-        <oc-search-bar small label="Small searchbar" placeholder="Small searchbar" :loading="true" />
-      </div>
-    </section>
-    <section>
-      <h3 class="oc-heading-divider">
-        Search example with visually hidden button
-      </h3>
-      <div class="oc-mb">
-        <oc-search-bar label="Search files" placeholder="Search files" @search="onSearch" @clear="onClear" :button-hidden="true" />
-      </div>
-    </section>
-    <section>
-      <h3 class="oc-heading-divider">
-        Filter examples
-      </h3>
-      <oc-search-bar :isFilter="true" label="Search files" placeholder="Filter Files ..." :type-ahead="true" @search="onFilter" button="Filter" icon="" />
-      <div v-if="filterQuery" class="oc-m">Filter query: {{ filterQuery }}</div>
-    </section>
-    <section>
-      <h3 class="oc-heading-divider">
-        Search with cancel button
-      </h3>
-      <oc-search-bar label="Search files" placeholder="Enter search term" :type-ahead="true" :show-cancel-button="true" />
-    </section>
-  </div>
-</template>
-<script>
-  export default {
-    data: () => {
-      return {
-        filterQuery: '',
-        searchQuery: ''
-      }
-    },
-    methods: {
-      onFilter(val) {
-        this.filterQuery = val
-      },
-      onSearch(val) {
-        this.searchQuery = val
-      },
-      onClear () {
-        alert('Query has been cleared')
-      }
-    }
-  }
-</script>
-```
-</docs>
