@@ -12,59 +12,63 @@
   </span>
 </template>
 
-<script lang="ts">
-import { defineComponent } from 'vue'
-
+<script lang="ts" setup>
 import { uniqueId } from '../../helpers'
 
 /**
- * The switch has two states between users can choose.
+ * OcSwitch Component
+ *
+ * A toggle switch component that allows users to switch between two states.
+ *
+ * @component
+ * @name OcSwitch
+ * @status ready
+ * @release 1.0.0
+ *
+ * @props
+ * @prop {boolean} [checked=false] - The current state of the switch (true for on, false for off).
+ * @prop {string} [label=null] - The accessible name of the switch.
+ * @prop {string} [labelId=uniqueId('oc-switch-label-')] - The ID of the label element. If not provided, a unique ID is generated.
+ *
+ * @emits
+ * @event update:checked - Emitted when the switch state changes.
+ * @type {boolean}
+ *
+ * @example
+ *   <OcSwitch
+ *     :checked="isOn"
+ *     label="Enable notifications"
+ *     @update:checked="handleToggle"
+ *   />
+ *
  */
-export default defineComponent({
+
+interface Props {
+  checked?: boolean
+  label?: string
+  labelId?: string
+}
+
+interface Emits {
+  (e: 'update:checked', value: boolean): void
+}
+
+defineOptions({
   name: 'OcSwitch',
   status: 'ready',
-  release: '1.0.0',
-  props: {
-    /**
-     * Value of the switch
-     *
-     * @model
-     **/
-    checked: {
-      type: Boolean,
-      required: false,
-      default: false
-    },
-    /**
-     * Accessible name of the switch
-     **/
-    label: {
-      type: String,
-      required: true,
-      default: null
-    },
-    /**
-     * ID of the label element
-     * If not set, unique ID is used instead with format `oc-switch-label-{number}`
-     */
-    labelId: {
-      type: String,
-      required: false,
-      default: () => uniqueId('oc-switch-label-')
-    }
-  },
-  emits: ['update:checked'],
-  methods: {
-    toggle() {
-      /**
-       * Change event
-       * @event update:checked
-       * @type {boolean}
-       */
-      this.$emit('update:checked', !this.checked)
-    }
-  }
+  release: '1.0.0'
 })
+const {
+  checked = false,
+  label = null,
+  labelId = uniqueId('oc-switch-label-')
+} = defineProps<Props>()
+
+const emit = defineEmits<Emits>()
+
+function toggle() {
+  emit('update:checked', !checked)
+}
 </script>
 
 <style lang="scss">
@@ -118,26 +122,3 @@ export default defineComponent({
   }
 }
 </style>
-
-<docs>
-```js
-<template>
-  <section>
-    <h3>Switcher behavior</h3>
-    <oc-switch label="Darkmode" v-model="state" />
-    <p>
-      The switch is turned <strong v-if="state">on</strong><strong v-else="state">off</strong>.
-    </p>
-  </section>
-</template>
-<script>
-  export default {
-    data: () => {
-      return {
-        state: true
-      }
-    }
-  }
-</script>
-```
-</docs>
