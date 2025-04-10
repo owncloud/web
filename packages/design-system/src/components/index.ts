@@ -40,7 +40,7 @@ export { default as OcStatusIndicators } from './OcStatusIndicators/OcStatusIndi
 export { default as OcSwitch } from './OcSwitch/OcSwitch.vue'
 export { default as OcTable } from './OcTable/OcTable.vue'
 export { default as OcTableBody } from './_OcTableBody/_OcTableBody.vue'
-export { default as OcTableCell } from './_OcTableCell/_OcTableCell.vue'
+export { default as OcTableCell } from './OcTableCell/OcTableCell.vue'
 export { default as OcTableCellData } from './_OcTableCellData/_OcTableCellData.vue'
 export { default as OcTableCellHead } from './_OcTableCellHead/_OcTableCellHead.vue'
 export { default as OcTableFooter } from './_OcTableFooter/_OcTableFooter.vue'
