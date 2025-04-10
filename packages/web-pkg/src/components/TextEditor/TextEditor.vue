@@ -4,7 +4,7 @@
       v-if="isReadOnly"
       id="space-description-preview"
       :model-value="currentContent"
-      :language="languages[language.current] || 'en-US'"
+      :language="languages[currentLanguage] || 'en-US'"
       :theme="theme"
       read-only
       :toolbars="[]"
@@ -14,15 +14,36 @@
       v-else
       id="text-editor-component"
       :model-value="currentContent"
-      :language="languages[language.current] || 'en-US'"
+      :language="languages[currentLanguage] || 'en-US'"
       :theme="theme"
       :preview="isMarkdown"
       :toolbars="isMarkdown ? undefined : []"
+      :footers="['markdownTotal', 0, '=', 'scrollSwitch']"
       :read-only="isReadOnly"
       :auto-focus="autoFocus"
       :sanitize="sanitize"
+      :toolbars-exclude="['save', 'github']"
+      no-upload-img
       @on-change="(value) => $emit('update:currentContent', value)"
-    />
+    >
+      <template #defFooters>
+        <span class="footer-links">
+          <a
+            href="https://imzbf.github.io/md-editor-v3/en-US/api#%F0%9F%AA%A1%20Shortcut%20keys"
+            target="_blank"
+            rel="noopener noreferrer"
+            >{{ $gettext('Keyboard shortcuts') }}</a
+          >
+
+          <a
+            href="https://highlightjs.readthedocs.io/en/latest/supported-languages.html"
+            target="_blank"
+            rel="noopener noreferrer"
+            >{{ $gettext('Supported languages') }}</a
+          >
+        </span>
+      </template>
+    </md-editor>
   </div>
 </template>
 
@@ -34,11 +55,24 @@ import dompurify from 'dompurify'
 import { config, MdEditor, MdPreview } from 'md-editor-v3'
 import 'md-editor-v3/lib/style.css'
 
+import screenfull from 'screenfull'
+
+import katex from 'katex'
+import 'katex/dist/katex.min.css'
+
+import mermaid from 'mermaid'
+
+import highlight from 'highlight.js'
+import 'highlight.js/styles/atom-one-dark.css'
+
+import * as prettier from 'prettier'
+import parserMarkdown from 'prettier/plugins/markdown'
+
 import { languageUserDefined, languages } from './l18n'
 
 import { useGettext } from 'vue3-gettext'
-import { useThemeStore } from '../../composables'
 import { AppConfigObject } from '../../apps'
+import { useThemeStore } from '../../composables'
 
 interface TextEditorProps {
   applicationConfig?: AppConfigObject
@@ -61,7 +95,8 @@ const {
 } = defineProps<TextEditorProps>()
 
 defineEmits<TextEditorEmits>()
-const language = useGettext()
+
+const { current: currentLanguage } = useGettext()
 const { currentTheme } = useThemeStore()
 
 // Should not be a ref, otherwise functions like setMarkdown won't work
@@ -80,17 +115,97 @@ const isMarkdown = computed(() => {
 
 const theme = computed(() => (unref(currentTheme).isDark ? 'dark' : 'light'))
 
-const sanitize = (html) => dompurify.sanitize(html)
+const sanitize = (html) =>
+  dompurify.sanitize(html, { ADD_ATTR: ['target'], ADD_TAGS: ['foreignObject'] })
 
 config({
   editorConfig: {
     languageUserDefined
+  },
+  editorExtensions: {
+    prettier: {
+      prettierInstance: prettier,
+      parserMarkdownInstance: parserMarkdown
+    },
+    highlight: {
+      instance: highlight
+    },
+    screenfull: {
+      instance: screenfull
+    },
+    katex: {
+      instance: katex
+    },
+    mermaid: {
+      instance: mermaid
+    }
+  },
+  markdownItConfig(md) {
+    md.renderer.rules.link_open = function (tokens, idx, options, _, self) {
+      const token = tokens[idx]
+      const href = token.attrGet('href')
+
+      if (!href) {
+        return self.renderToken(tokens, idx, options)
+      }
+
+      token.attrSet('target', '_blank')
+      token.attrSet('rel', 'noopener noreferrer')
+
+      return self.renderToken(tokens, idx, options)
+    }
   }
 })
 </script>
 <style lang="scss">
 #text-editor-component {
   height: 100%;
+
+  .md-editor-mermaid {
+    .messageText,
+    .legend text,
+    .titleText,
+    .sectionTitle.sectionTitle0,
+    .grid .tick text,
+    text {
+      fill: var(--oc-color-text-default);
+      opacity: 0.8;
+    }
+
+    line {
+      stroke: var(--oc-color-text-default);
+      opacity: 0.8;
+    }
+
+    .slice {
+      fill: #000;
+    }
+
+    .sectionTitle.sectionTitle1,
+    .taskText.taskText1,
+    .taskText.taskText0 {
+      fill: #fff;
+    }
+
+    .messageLine1,
+    .messageLine0,
+    .flowchart-link,
+    .transition,
+    .relationshipLine {
+      stroke: var(--oc-color-text-default);
+      opacity: 0.8;
+    }
+
+    .nodeLabel p {
+      fill: #000;
+      color: #000;
+    }
+  }
+
+  .footer-links {
+    display: inline-flex;
+    gap: 0.625rem;
+  }
 }
 
 .toastui-editor-tabs {
