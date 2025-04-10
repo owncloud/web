@@ -12,7 +12,7 @@
 </template>
 <script lang="ts">
 import { defineComponent } from 'vue'
-import OcTableCell from '../_OcTableCell/_OcTableCell.vue'
+import OcTableCell from '../OcTableCell/OcTableCell.vue'
 
 export default defineComponent({
   name: 'OcTd',
