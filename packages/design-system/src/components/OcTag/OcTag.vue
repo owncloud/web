@@ -1,89 +1,78 @@
 <template>
-  <component :is="type" :class="$_ocTag_class" :to="to" @click="$_ocTag_click">
+  <component :is="type" :class="ocTagClass" :to="to" @click="ocTagClick">
     <!-- @slot Content of the tag -->
     <slot />
   </component>
 </template>
 
-<script lang="ts">
-import { defineComponent } from 'vue'
-
+<script lang="ts" setup>
+import { computed } from 'vue'
+import { RouteLocationRaw } from 'vue-router'
 import { getSizeClass } from '../../helpers'
 
-export default defineComponent({
+/**
+ * @component OcTag
+ * @description A versatile tag component for displaying various types of information as labels, links or buttons
+ *
+ * @prop {('span'|'button'|'router-link'|'a')} [type='span'] - HTML element or component to be rendered
+ * @prop {string|RouteLocationRaw} [to=null] - Target location for router-link or anchor href
+ * @prop {('small'|'medium'|'large')} [size='medium'] - Size of the tag
+ * @prop {boolean} [rounded=false] - Whether the tag should have fully rounded corners
+ *
+ * @emits {MouseEvent} click - Emitted when the tag is clicked
+ *
+ * @slot default - Content of the tag. Can include text, icons, or other elements
+ *
+ * @example
+ * <!-- Basic tag -->
+ * <oc-tag>Basic tag</oc-tag>
+ *
+ * @example
+ * <!-- Tag with icon -->
+ * <oc-tag>
+ *   <oc-icon name="links" />
+ *   Shared via link
+ * </oc-tag>
+ *
+ */
+
+interface Props {
+  type?: 'span' | 'button' | 'router-link' | 'a'
+  to?: string | RouteLocationRaw
+  size?: 'small' | 'medium' | 'large'
+  rounded?: boolean
+}
+
+interface Emits {
+  (e: 'click', event: MouseEvent): void
+}
+
+defineOptions({
   name: 'OcTag',
   status: 'ready',
-  release: '2.0.0',
+  release: '2.0.0'
+})
 
-  props: {
-    /**
-     * Specify which component should be used for the tag.
-     * Can be `span`, `button`, `router-link` or `a`.
-     */
-    type: {
-      type: String,
-      required: false,
-      default: 'span',
-      validator: (type: string) => ['span', 'button', 'router-link', 'a'].includes(type)
-    },
+const { type = 'span', to = null, size = 'medium', rounded = false } = defineProps<Props>()
 
-    /**
-     * Target of the router link
-     */
-    to: {
-      type: [String, Object],
-      required: false,
-      default: null
-    },
+const emit = defineEmits<Emits>()
 
-    /**
-     * The size of the tag. Defaults to medium.
-     * `small, medium, large`
-     */
-    size: {
-      type: String,
-      default: 'medium',
-      validator: (value: string) => {
-        return ['small', 'medium', 'large'].includes(value)
-      }
-    },
+function ocTagClick(event: MouseEvent) {
+  emit('click', event)
+}
 
-    /**
-     * Enables fully rounded borders
-     */
-    rounded: {
-      type: Boolean,
-      default: false,
-      required: false
-    }
-  },
+const ocTagClass = computed(() => {
+  const classes = ['oc-tag', `oc-tag-${getSizeClass(size)}`]
 
-  emits: ['click'],
+  type === 'router-link' || type === 'a'
+    ? classes.push('oc-tag-link')
+    : classes.push(`oc-tag-${type}`)
 
-  computed: {
-    $_ocTag_class() {
-      const classes = ['oc-tag', `oc-tag-${getSizeClass(this.size)}`]
-
-      this.type === 'router-link' || this.type === 'a'
-        ? classes.push('oc-tag-link')
-        : classes.push(`oc-tag-${this.type}`)
-
-      if (this.rounded) {
-        classes.push('oc-tag-rounded')
-      }
-
-      return classes
-    }
-  },
-  methods: {
-    $_ocTag_click(event: MouseEvent) {
-      /**
-       * Emitted as soon as the user clicks on the tag
-       * @type {event}
-       */
-      this.$emit('click', event)
-    }
+  if (rounded) {
+    classes.push('oc-tag-rounded')
   }
+
+  return classes
 })
 </script>
 
