@@ -9,13 +9,13 @@ const tableFieldId = {
   name: 'id',
   title: 'Id',
   sortable: true,
-  sortDir: 'desc'
+  sortDir: 'desc' as 'asc' | 'desc'
 }
 const tableFieldResource = {
   name: 'resource',
   title: 'Resource',
   sortable: true,
-  sortDir: 'asc'
+  sortDir: 'asc' as 'asc' | 'desc'
 }
 const tableFields: {
   name: string
@@ -86,7 +86,7 @@ describe('OcTable.sort', () => {
         ASC,
         {
           sortBy: tableFieldId.name,
-          sortDir: 'asc',
+          sortDir: 'asc' as 'asc' | 'desc',
           ariaSort: ASC
         }
       ],
@@ -94,7 +94,7 @@ describe('OcTable.sort', () => {
         DESC,
         {
           sortBy: tableFieldId.name,
-          sortDir: 'desc',
+          sortDir: 'desc' as 'asc' | 'desc',
           ariaSort: DESC
         }
       ],
@@ -102,7 +102,7 @@ describe('OcTable.sort', () => {
         NONE,
         {
           sortBy: tableFieldResource.name,
-          sortDir: 'asc',
+          sortDir: 'asc' as 'asc' | 'desc',
           ariaSort: NONE
         }
       ]
