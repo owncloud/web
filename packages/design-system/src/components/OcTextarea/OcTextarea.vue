@@ -4,6 +4,7 @@
     <textarea
       :id="id"
       v-bind="additionalAttributes"
+      ref="textAreaRef"
       class="oc-textarea oc-rounded"
       :class="{
         'oc-textarea-warning': !!warningMessage,
@@ -12,7 +13,7 @@
       :value="modelValue"
       :aria-invalid="ariaInvalid"
       @input="onInput(($event.target as HTMLInputElement).value)"
-      @focus="onFocus(($event.target as HTMLInputElement).value)"
+      @focus="onFocus(true)"
       @keydown="onKeyDown($event)"
     />
     <div v-if="showMessageLine" class="oc-textarea-message">
@@ -29,164 +30,145 @@
   </div>
 </template>
 
-<script lang="ts">
-import { defineComponent, HTMLAttributes } from 'vue'
+<script lang="ts" setup>
+import { computed, HTMLAttributes, useAttrs, useTemplateRef } from 'vue'
 import { uniqueId } from '../../helpers'
 
 /**
- * Textareas are used to allow users to provide text input when the expected
- * input is long. Textarea has a range of options. For shorter input,
- * use the `Input` element.
+ * @component OcTextarea
+ * @description A customizable textarea component that supports validation states,
+ * accessibility features, and various user interactions.
  *
- * ## Accessibility
- * The label is required and represents the name of the textarea.
+ * @example
+ *   <OcTextarea
+ *     v-model="textContent"
+ *     label="Description"
+ *     description-message="description"
+ *   />
  *
- * The description-message can be used additionally to give further information about the textarea . When a
- * description is given, it will be automatically referenced via the `aria-describedby` property.
- * An error or warning will replace the description as well as the `aria-describedby` property until the error
- * or warning is fixed.
+ *   <OcTextarea
+ *     v-model="comment"
+ *     label="Comment"
+ *     error-message="This field is required"
+ *     @change="submitComment"
+ *   />
+ * </template>
+ *
+ * @prop {string} [id] - Unique identifier for the textarea. Auto-generated if not provided.
+ * @prop {string} [modelValue] - The value of the textarea (for v-model binding).
+ * @prop {string} [label] - Label text displayed above the textarea.
+ * @prop {string} [warningMessage] - Warning message to display below the textarea.
+ * @prop {string} [errorMessage] - Error message to display below the textarea.
+ * @prop {string} [descriptionMessage] - Description message to display below the textarea.
+ * @prop {boolean} [fixMessageLine=false] - Whether to always show the message line, even without a message.
+ * @prop {boolean} [submitOnEnter=true] - Whether to emit change event when Enter is pressed.
+ *
+ * @event {string} update:modelValue - Emitted when the input value changes.
+ * @event {boolean} focus - Emitted when the textarea is focused.
+ * @event {string} change - Emitted when Enter is pressed and submitOnEnter is true.
+ * @event {KeyboardEvent} keydown - Emitted when any key is pressed.
+ *
+ * @method focus() - Programmatically focus the textarea.
  */
-export default defineComponent({
+
+interface Props {
+  id?: string
+  modelValue?: string
+  label?: string
+  warningMessage?: string
+  errorMessage?: string
+  descriptionMessage?: string
+  fixMessageLine?: boolean
+  submitOnEnter?: boolean
+}
+interface Emits {
+  (event: 'update:modelValue', value: string): void
+  (event: 'focus', value: boolean): void
+  (event: 'change', value: string): void
+  (event: 'keydown', value: KeyboardEvent): void
+}
+defineOptions({
   name: 'OcTextarea',
   status: 'ready',
-  release: '1.0.0',
-  props: {
-    /**
-     * The ID of the element.
-     */
-    id: {
-      type: String,
-      required: false,
-      default: () => uniqueId('oc-textarea-')
-    },
-    /**
-     * Text value of the form textarea.
-     */
-    modelValue: {
-      type: String,
-      default: null
-    },
-    /**
-     * Label of the textarea.
-     **/
-    label: {
-      type: String,
-      required: true,
-      default: null
-    },
-    /**
-     * A warning message which is shown below the textarea.
-     */
-    warningMessage: {
-      type: String,
-      default: null
-    },
-    /**
-     * An error message which is shown below the textarea.
-     */
-    errorMessage: {
-      type: String,
-      default: null
-    },
-    /**
-     * A description text which is shown below the textarea.
-     */
-    descriptionMessage: {
-      type: String,
-      default: null
-    },
-    /**
-     * Whether or not vertical space below the textarea should be reserved for a one line message,
-     * so that content actually appearing there doesn't shift the layout.
-     */
-    fixMessageLine: {
-      type: Boolean,
-      default: false
-    },
-    /**
-     * Configure if the value should be emitted on 'enter' or if it should do a linebreak
-     * if true: 'enter' emits value, ctrl + enter and shift + enter creates linebreak
-     * if false: 'enter' creates linebreak
-     */
-    submitOnEnter: {
-      type: Boolean,
-      required: false,
-      default: true
-    }
-  },
-  emits: ['update:modelValue', 'focus', 'change', 'keydown'],
-  computed: {
-    showMessageLine() {
-      return (
-        this.fixMessageLine ||
-        !!this.warningMessage ||
-        !!this.errorMessage ||
-        !!this.descriptionMessage
-      )
-    },
-    messageId() {
-      return `${this.id}-message`
-    },
-    additionalAttributes() {
-      const additionalAttrs: Record<string, unknown> = {}
-      if (!!this.warningMessage || !!this.errorMessage || !!this.descriptionMessage) {
-        additionalAttrs['aria-describedby'] = this.messageId
-      }
-      return { ...this.$attrs, ...additionalAttrs }
-    },
-    ariaInvalid() {
-      return (!!this.errorMessage).toString() as HTMLAttributes['aria-invalid']
-    },
-    messageText() {
-      if (this.errorMessage) {
-        return this.errorMessage
-      }
-      if (this.warningMessage) {
-        return this.warningMessage
-      }
-      return this.descriptionMessage
-    }
-  },
-  methods: {
-    /**
-     * Puts focus on this input element
-     * @public
-     */
-    focus() {
-      ;(this.$refs.input as HTMLInputElement).focus()
-    },
-    onInput(value: string) {
-      /**
-       * Input event
-       * @type {event}
-       **/
-      this.$emit('update:modelValue', value)
-    },
-    onFocus(value: boolean) {
-      /**
-       * Focus event - emitted as soon as the input field is focused
-       * @type {event}
-       **/
-      this.$emit('focus', value)
-    },
-    onKeyDown(e: KeyboardEvent) {
-      const enterKey = e.key?.toLowerCase() === 'enter'
-      if (this.submitOnEnter && enterKey && !e.ctrlKey && !e.shiftKey) {
-        /**
-         * Change event - emitted as soon as the user hits enter (without ctrl or shift)
-         * Only applies if submitOnEnter is set to true
-         * @type {string}
-         */
-        this.$emit('change', (e.target as HTMLInputElement).value)
-      }
+  release: '1.0.0'
+})
+const {
+  id = uniqueId('oc-textarea-'),
+  modelValue = null,
+  label = null,
+  warningMessage = null,
+  errorMessage = null,
+  descriptionMessage = null,
+  fixMessageLine = false,
+  submitOnEnter = true
+} = defineProps<Props>()
 
-      /**
-       * KeyDown event - emitted as soon as the user hits a key
-       * @type {event}
-       */
-      this.$emit('keydown', e)
-    }
+const emit = defineEmits<Emits>()
+const attrs = useAttrs()
+const textAreaRef = useTemplateRef('textAreaRef')
+
+function focus() {
+  textAreaRef.value.focus()
+}
+function onInput(value: string) {
+  /**
+   * Input event
+   * @type {event}
+   **/
+  emit('update:modelValue', value)
+}
+function onFocus(value: boolean) {
+  /**
+   * Focus event - emitted as soon as the input field is focused
+   * @type {event}
+   **/
+  emit('focus', value)
+}
+function onKeyDown(e: KeyboardEvent) {
+  const enterKey = e.key?.toLowerCase() === 'enter'
+  if (submitOnEnter && enterKey && !e.ctrlKey && !e.shiftKey) {
+    /**
+     * Change event - emitted as soon as the user hits enter (without ctrl or shift)
+     * Only applies if submitOnEnter is set to true
+     * @type {string}
+     */
+    emit('change', (e.target as HTMLInputElement).value)
   }
+
+  /**
+   * KeyDown event - emitted as soon as the user hits a key
+   * @type {event}
+   */
+  emit('keydown', e)
+}
+const showMessageLine = computed(() => {
+  return fixMessageLine || !!warningMessage || !!errorMessage || !!descriptionMessage
+})
+const messageId = computed(() => {
+  return `${id}-message`
+})
+const additionalAttributes = computed(() => {
+  const additionalAttrs: Record<string, unknown> = {}
+  if (!!warningMessage || !!errorMessage || !!descriptionMessage) {
+    additionalAttrs['aria-describedby'] = messageId
+  }
+  return { ...attrs, ...additionalAttrs }
+})
+const ariaInvalid = computed(() => {
+  return (!!errorMessage).toString() as HTMLAttributes['aria-invalid']
+})
+const messageText = computed(() => {
+  if (errorMessage) {
+    return errorMessage
+  }
+  if (warningMessage) {
+    return warningMessage
+  }
+  return descriptionMessage
+})
+
+defineExpose({
+  focus
 })
 </script>
 
@@ -238,67 +220,3 @@ export default defineComponent({
   }
 }
 </style>
-
-<docs>
-```js
-<template>
-  <div>
-    <h3 class="oc-heading-divider">
-      Textarea fields
-    </h3>
-    <oc-textarea class="oc-mb-s" label="A simple textarea" />
-    <oc-textarea disabled value="I am disabled" label="Disabled Textarea" />
-    <h3 class="oc-heading-divider">
-      Messages
-    </h3>
-    <oc-textarea
-      label="Textarea with description message below"
-      class="oc-mb-s"
-      description-message="This is a description message."
-      :fix-message-line="true"
-    />
-    <oc-textarea
-      label="Textarea with error and warning messages with reserved space below"
-      class="oc-mb-s"
-      v-model="valueForMessages"
-      :error-message="errorMessage"
-      :warning-message="warningMessage"
-      :fix-message-line="true"
-    />
-    <oc-textarea
-      label="Textarea with error and warning messages without reserved space below"
-      class="oc-mb-s"
-      v-model="valueForMessages"
-      :error-message="errorMessage"
-      :warning-message="warningMessage"
-    />
-  </div>
-</template>
-<script>
-  export default {
-    data: () => {
-      return {
-        inputValue: 'initial',
-        valueForMessages: '',
-      }
-    },
-    computed: {
-      errorMessage() {
-        return this.valueForMessages.length === 0 ? 'Value is required.' : ''
-      },
-      warningMessage() {
-        return this.valueForMessages.endsWith(' ') ? 'Trailing whitespace should be avoided.' : ''
-      }
-    },
-    methods: {
-      _focus() {
-        this.$refs.inputForFocus.focus()
-      },
-      _focusAndSelect() {
-        this.$refs.inputForFocusSelect.focus()
-      }
-    }
-  }
-</script>
-```
-</docs>
