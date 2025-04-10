@@ -19,7 +19,7 @@
 <script lang="ts">
 import { customRef, computed, ref, unref, defineComponent } from 'vue'
 import { useIsVisible } from '../../composables'
-import OcTd from '../_OcTableCellData/_OcTableCellData.vue'
+import OcTd from '../OcTableCellData/OcTableCellData.vue'
 
 export default defineComponent({
   name: 'OcTr',
