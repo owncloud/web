@@ -3,9 +3,8 @@
     <slot />
   </tfoot>
 </template>
-<script lang="ts">
-import { defineComponent } from 'vue'
-export default defineComponent({
+<script lang="ts" setup>
+defineOptions({
   name: 'OcTfoot',
   status: 'ready',
   release: '2.1.0'
