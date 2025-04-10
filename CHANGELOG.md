@@ -34,6 +34,9 @@ Summary
 * Bugfix - Watch scroll target in shared list: [#12385](https://github.com/owncloud/web/pull/12385)
 * Bugfix - Download archives directly: [#12406](https://github.com/owncloud/web/pull/12406)
 * Bugfix - Request archive as blob: [#12406](https://github.com/owncloud/web/pull/12406)
+* Bugfix - Add missing dependencies to markdown editor: [#12460](https://github.com/owncloud/web/pull/12460)
+* Bugfix - Hide image upload in markdown editor: [#12460](https://github.com/owncloud/web/pull/12460)
+* Bugfix - Hide save in markdown editor: [#12460](https://github.com/owncloud/web/pull/12460)
 * Enhancement - Accessibility improvements: [#5379](https://github.com/owncloud/web/issues/5379)
 * Enhancement - Create spaces via admin settings: [#11849](https://github.com/owncloud/web/pull/11849)
 * Enhancement - Add maintenance banner: [#12239](https://github.com/owncloud/web/pull/12239)
@@ -275,6 +278,32 @@ Details
 
    https://github.com/owncloud/web/issues/12405
    https://github.com/owncloud/web/pull/12406
+
+* Bugfix - Add missing dependencies to markdown editor: [#12460](https://github.com/owncloud/web/pull/12460)
+
+   Due to several missing dependencies of the markdown editor app, some features
+   were not fully working or were throwing an error. We added the following
+   dependencies:
+
+   - highlight.js - mermaid - screenfull - katex
+
+   https://github.com/owncloud/web/pull/12460
+
+* Bugfix - Hide image upload in markdown editor: [#12460](https://github.com/owncloud/web/pull/12460)
+
+   We hid a non-functioning image upload in the markdown editor to avoid pointless
+   buttons that lead to no actions.
+
+   https://github.com/owncloud/web/issues/12407
+   https://github.com/owncloud/web/pull/12460
+
+* Bugfix - Hide save in markdown editor: [#12460](https://github.com/owncloud/web/pull/12460)
+
+   We hid the save button in the markdown editor as it was not functional. We
+   decided on hiding it as it could be confusing with already having a save button
+   provided by the app container.
+
+   https://github.com/owncloud/web/pull/12460
 
 * Enhancement - Accessibility improvements: [#5379](https://github.com/owncloud/web/issues/5379)
 
