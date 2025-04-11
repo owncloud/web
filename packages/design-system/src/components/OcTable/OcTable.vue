@@ -97,7 +97,7 @@
   </table>
 </template>
 <script lang="ts" setup>
-import OcThead from '../_OcTableHeader/_OcTableHeader.vue'
+import OcThead from '../OcTableHeader/OcTableHeader.vue'
 import OcTbody from '../OcTableBody/OcTableBody.vue'
 import OcTr from '../_OcTableRow/_OcTableRow.vue'
 import OcTd from '../OcTableCellData/OcTableCellData.vue'
