@@ -18,7 +18,7 @@ async function LogInUser(this: World, stepUser: string): Promise<void> {
   const { page } = this.actorsEnvironment.getActor({ key: stepUser })
 
   const user =
-    stepUser === 'Admin'
+    stepUser === 'Admin' || config.externalUsers
       ? this.usersEnvironment.getUser({ key: stepUser })
       : this.usersEnvironment.getCreatedUser({ key: stepUser })
 
