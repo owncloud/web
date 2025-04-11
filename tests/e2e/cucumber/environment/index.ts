@@ -35,6 +35,7 @@ setDefaultTimeout(config.debug ? -1 : config.timeout * 1000)
 setWorldConstructor(World)
 
 Before(async function (this: World, { pickle }: ITestCaseHookParameter) {
+  console.log(config.basicAuth,config.keycloak)
   this.feature = pickle
   this.actorsEnvironment.on('console', (actorId, message): void => {
     const msg = {
