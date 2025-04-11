@@ -1,5 +1,6 @@
 import { User } from '../types'
 
+// get this from json
 export const dummyUserStore = new Map<string, User>([
   [
     'admin',
@@ -62,6 +63,15 @@ export const dummyUserStore = new Map<string, User>([
       displayName: 'Max Testing',
       password: '12345678',
       email: 'maxtesting@owncloud.com'
+    }
+  ],
+  [
+    'marie',
+    {
+      id: 'marie',
+      displayName: 'Marie Skłodowska Curie',
+      password: 'radioactivity',
+      email: 'marie@example.org'
     }
   ]
 ])
