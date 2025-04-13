@@ -1,5 +1,6 @@
 import OcRadio from './OcRadio.vue'
 import { PartialComponentProps, mount } from '@ownclouders/web-test-helpers'
+import { AvailableSizeType } from '../../helpers'
 
 describe('OcRadio', () => {
   function getWrapper(props: PartialComponentProps<typeof OcRadio> = {}) {
@@ -17,14 +18,7 @@ describe('OcRadio', () => {
     expect(wrapper.find('label').attributes('for')).toBe('test-radio-input')
   })
   describe('size prop', () => {
-    it('should not allow values other than small, medium and large', () => {
-      const wrapper = getWrapper({
-        size: 'x-large'
-      })
-      const radioInput = wrapper.find(radioElementSelector)
-      expect(radioInput.attributes('class')).toContain('oc-radio-undefined')
-    })
-    it.each(['small', 'medium', 'large'])(
+    it.each(['small', 'medium', 'large'] as AvailableSizeType[])(
       'should set input class according to the provided size',
       (size) => {
         const wrapper = getWrapper({
