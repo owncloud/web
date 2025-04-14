@@ -99,7 +99,7 @@
 <script lang="ts" setup>
 import OcThead from '../OcTableHeader/OcTableHeader.vue'
 import OcTbody from '../OcTableBody/OcTableBody.vue'
-import OcTr from '../_OcTableRow/_OcTableRow.vue'
+import OcTr from '../OcTableRow/OcTableRow.vue'
 import OcTd from '../OcTableCellData/OcTableCellData.vue'
 import OcTh from '../OcTableCellHead/OcTableCellHead.vue'
 import OcButton from '../OcButton/OcButton.vue'

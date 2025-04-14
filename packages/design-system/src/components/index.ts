@@ -45,7 +45,7 @@ export { default as OcTableCellData } from './OcTableCellData/OcTableCellData.vu
 export { default as OcTableFooter } from './OcTableFooter/OcTableFooter.vue'
 export { default as OcTableCellHead } from './OcTableCellHead/OcTableCellHead.vue'
 export { default as OcTableHeader } from './OcTableHeader/OcTableHeader.vue'
-export { default as OcTableRow } from './_OcTableRow/_OcTableRow.vue'
+export { default as OcTableRow } from './OcTableRow/OcTableRow.vue'
 export { default as OcTableSimple } from './OcTableSimple/OcTableSimple.vue'
 export { default as OcTag } from './OcTag/OcTag.vue'
 export { default as OcTextarea } from './OcTextarea/OcTextarea.vue'
