@@ -173,6 +173,9 @@ export interface Capabilities {
         delete_disabled?: boolean
         read_only_attributes?: string[]
       }
+      tags: {
+        max_tag_length: number
+      }
     }
   }
   version: {

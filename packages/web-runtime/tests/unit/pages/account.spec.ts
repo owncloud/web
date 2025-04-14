@@ -136,7 +136,9 @@ describe('account page', () => {
     describe('change password button', () => {
       it('should be displayed if not disabled via capability', async () => {
         const { wrapper } = getWrapper({
-          capabilities: { graph: { users: { change_password_self_disabled: false } } }
+          capabilities: {
+            graph: { users: { change_password_self_disabled: false }, tags: { max_tag_length: 30 } }
+          }
         })
         await blockLoadingState(wrapper)
 
@@ -145,7 +147,9 @@ describe('account page', () => {
       })
       it('should not be displayed if disabled via capability', async () => {
         const { wrapper } = getWrapper({
-          capabilities: { graph: { users: { change_password_self_disabled: true } } }
+          capabilities: {
+            graph: { users: { change_password_self_disabled: true }, tags: { max_tag_length: 30 } }
+          }
         })
         await blockLoadingState(wrapper)
 
