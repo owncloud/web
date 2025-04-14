@@ -146,6 +146,8 @@ export function createMockStore({
       spaceSettings: { spaces: [], selectedSpaces: [], ...spaceSettingsStore },
       user: { user: { ...mock<User>({ id: '1' }), ...(userState?.user && { ...userState.user }) } },
       capabilities: {
+        graphTagsMaxTagLength: 30,
+        ...capabilityState,
         isInitialized: capabilityState?.isInitialized ? capabilityState.isInitialized : true,
         capabilities: {
           ...mock<Capabilities['capabilities']>(),

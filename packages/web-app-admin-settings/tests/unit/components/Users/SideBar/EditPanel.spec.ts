@@ -181,7 +181,7 @@ function getWrapper({
 }: { readOnlyUserAttributes?: string[]; selectedGroups?: Group[]; groups?: Group[] } = {}) {
   const mocks = defaultComponentMocks()
   const capabilities = {
-    graph: { users: { read_only_attributes: readOnlyUserAttributes } }
+    graph: { users: { read_only_attributes: readOnlyUserAttributes }, tags: { max_tag_length: 30 } }
   } satisfies Partial<CapabilityStore['capabilities']>
 
   return {

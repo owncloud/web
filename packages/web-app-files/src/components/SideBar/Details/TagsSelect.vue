@@ -77,6 +77,7 @@ import {
   eventBus,
   SideBarEventTopics,
   useAuthStore,
+  useCapabilityStore,
   useClientService,
   useMessages,
   useResourcesStore,
@@ -120,6 +121,9 @@ export default defineComponent({
     const authStore = useAuthStore()
     const { publicLinkContextReady } = storeToRefs(authStore)
 
+    const capabilitiesStore = useCapabilityStore()
+    const { graphTagsMaxTagLength } = storeToRefs(capabilitiesStore)
+
     const type = unref(publicLinkContextReady) ? 'span' : 'router-link'
     const resource = toRef(props, 'resource')
     const { $gettext } = useGettext()
@@ -158,13 +162,26 @@ export default defineComponent({
       selectedTags.value = unref(currentTags)
     }
     const createOption = (label: string): TagOption => {
-      if (!label.trim().length) {
+      const len = label.trim().length
+
+      if (!len) {
         return {
           label: label.toLowerCase().trim(),
           error: $gettext('Tag must not consist of blanks only'),
           selectable: false
         }
       }
+
+      if (len > unref(graphTagsMaxTagLength)) {
+        return {
+          label: label.toLowerCase().trim(),
+          error: $gettext('Tag must not be longer than %{max} characters', {
+            max: unref(graphTagsMaxTagLength).toString()
+          }),
+          selectable: false
+        }
+      }
+
       return { label: label.toLowerCase().trim() }
     }
     const isOptionSelectable = (option: TagOption) => {
