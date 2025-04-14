@@ -2,8 +2,10 @@ import { defaultComponentMocks, mount, defaultPlugins } from '@ownclouders/web-t
 import TagsSelect from '../../../../src/components/SideBar/Details/TagsSelect.vue'
 import { mock, mockDeep } from 'vitest-mock-extended'
 import { Resource } from '@ownclouders/web-client'
-import { ClientService, eventBus, useMessages } from '@ownclouders/web-pkg'
+import { ClientService, eventBus, useCapabilityStore, useMessages } from '@ownclouders/web-pkg'
 import { OcSelect } from '@ownclouders/design-system/components'
+import { storeToRefs } from 'pinia'
+import { unref } from 'vue'
 
 describe('Tag Select', () => {
   it('show tags input form if loaded successfully', () => {
@@ -116,6 +118,18 @@ describe('Tag Select', () => {
   it('does not accept tags consisting of blanks only', () => {
     const { wrapper } = createWrapper(mock<Resource>({ tags: [] }))
     const option = wrapper.vm.createOption(' ')
+    expect(option.error).toBeDefined()
+    expect(option.selectable).toBeFalsy()
+  })
+
+  it('should not accept tags longer than max tag length', () => {
+    const { wrapper } = createWrapper(mock<Resource>({ tags: [] }))
+
+    const capabilitiesStore = useCapabilityStore()
+    const { graphTagsMaxTagLength } = storeToRefs(capabilitiesStore)
+
+    const option = wrapper.vm.createOption('a'.repeat(unref(graphTagsMaxTagLength) + 1))
+
     expect(option.error).toBeDefined()
     expect(option.selectable).toBeFalsy()
   })

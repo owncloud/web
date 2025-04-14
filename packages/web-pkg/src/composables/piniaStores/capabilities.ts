@@ -45,6 +45,9 @@ const defaultValues = {
       create_disabled: false,
       delete_disabled: false,
       read_only_attributes: [] as string[]
+    },
+    tags: {
+      max_tag_length: 30
     }
   },
   notifications: {
@@ -92,6 +95,8 @@ export const useCapabilityStore = defineStore('capabilities', () => {
   const graphUsersReadOnlyAttributes = computed(
     () => unref(capabilities).graph.users.read_only_attributes
   )
+
+  const graphTagsMaxTagLength = computed(() => unref(capabilities).graph.tags.max_tag_length)
 
   const filesAppProviders = computed(() => unref(capabilities).files.app_providers)
   const filesFavorites = computed(() => unref(capabilities).files.favorites)
@@ -157,6 +162,7 @@ export const useCapabilityStore = defineStore('capabilities', () => {
     graphUsersDeleteDisabled,
     graphUsersChangeSelfPasswordDisabled,
     graphUsersReadOnlyAttributes,
+    graphTagsMaxTagLength,
     filesAppProviders,
     filesFavorites,
     filesThumbnail,
