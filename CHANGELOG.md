@@ -43,6 +43,7 @@ Summary
 * Enhancement - Add new supported language to md-editor: [#12243](https://github.com/owncloud/web/pull/12243)
 * Enhancement - Rephrase invite users to invite users to federate: [#12355](https://github.com/owncloud/web/pull/12355)
 * Enhancement - Use custom password generator: [#12424](https://github.com/owncloud/web/pull/12424)
+* Enhancement - Add tag characters limit: [#12474](https://github.com/owncloud/web/pull/12474)
 
 Details
 -------
@@ -354,6 +355,13 @@ Details
 
    https://github.com/owncloud/web/issues/10461
    https://github.com/owncloud/web/pull/12424
+
+* Enhancement - Add tag characters limit: [#12474](https://github.com/owncloud/web/pull/12474)
+
+   We now limit the number of characters in a tag. The limit is configured in the
+   capabilities and defaults to 30.
+
+   https://github.com/owncloud/web/pull/12474
 
 Changelog for ownCloud Web [11.3.1] (2025-03-13)
 =======================================
