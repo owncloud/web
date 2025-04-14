@@ -94,7 +94,7 @@
     "zod": "^3.23.8"
   },
   "devDependencies": {
-    "@types/luxon": "3.4.2",
+    "@types/luxon": "3.6.2",
     "@vitejs/plugin-vue": "5.2.3",
     "clean-publish": "5.1.0",
     "vite-plugin-dts": "4.5.3",
