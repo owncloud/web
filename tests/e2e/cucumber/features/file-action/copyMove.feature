@@ -1,3 +1,4 @@
+@predefined-users
 Feature: Copy
   As a user
   I want to copy/move
