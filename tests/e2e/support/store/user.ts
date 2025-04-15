@@ -1,13 +1,13 @@
 import { User } from '../types'
+import { config } from '../../config'
 
-// get this from json
 export const dummyUserStore = new Map<string, User>([
   [
     'admin',
     {
-      id: 'admin',
-      displayName: process.env.ADMIN_USERNAME || 'admin',
-      password: process.env.ADMIN_PASSWORD || 'admin',
+      id: config.adminUsername,
+      displayName: config.adminUsername,
+      password: config.adminPassword,
       email: 'admin@example.org'
     }
   ],
@@ -63,15 +63,6 @@ export const dummyUserStore = new Map<string, User>([
       displayName: 'Max Testing',
       password: '12345678',
       email: 'maxtesting@owncloud.com'
-    }
-  ],
-  [
-    'marie',
-    {
-      id: 'marie',
-      displayName: 'Marie Skłodowska Curie',
-      password: 'radioactivity',
-      email: 'marie@example.org'
     }
   ]
 ])
