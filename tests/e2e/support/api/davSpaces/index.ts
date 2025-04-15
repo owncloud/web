@@ -4,5 +4,8 @@ export {
   createFolderInsidePersonalSpace,
   getIdOfFileInsideSpace,
   uploadFileInsideSpaceBySpaceName,
-  addTagToResource
+  addTagToResource,
+  listSpaceResources,
+  deleteSpaceResource,
+  emptyTrashbin
 } from './spaces'

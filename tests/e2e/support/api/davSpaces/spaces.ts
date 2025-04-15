@@ -49,6 +49,7 @@ const createFolder = async ({
     parentFolder = join(parentFolder, resource)
   }
 }
+
 const createFile = async ({
   user,
   pathToFile,
@@ -234,4 +235,107 @@ export const addTagToResource = async ({
   })
   const tagNames = tags.split(',').map((tag) => tag.trim())
   await createTagsForResource({ user, resourceId, tags: tagNames })
+}
+
+export const listSpaceResources = async ({
+  user,
+  spaceType,
+  spaceName = '',
+  folder = ''
+}: {
+  user: User
+  spaceType: string
+  spaceName?: string
+  folder?: string
+}): Promise<object> => {
+  const propBody =
+    '<?xml version="1.0"?>\n' +
+    '<d:propfind  xmlns:d="DAV:" xmlns:oc="http://owncloud.org/ns">\n' +
+    '  <d:prop>\n' +
+    '    <oc:id />\n' +
+    '    <oc:name />\n' +
+    '  </d:prop>\n' +
+    '</d:propfind>'
+  const spaceId = await getSpaceIdBySpaceName({ user, spaceType, spaceName })
+
+  const response = await request({
+    method: 'PROPFIND',
+    path: join('remote.php', 'dav', 'spaces', spaceId, folder),
+    body: propBody,
+    user: user
+  })
+
+  checkResponseStatus(response, `Failed to list resources of space '${spaceName}'`)
+  const xmlData = await response.text()
+
+  const data = JSON.parse(convert.xml2json(xmlData, { compact: true }))
+  let entries = _.get(data, '[d:multistatus][d:response]')
+  if (!Array.isArray(entries)) {
+    entries = [entries]
+  }
+
+  const resources = {}
+  for (const entry of entries) {
+    const resourceName = _.get(entry, '[d:propstat][d:prop][oc:name]')._text
+    const resourceId = _.get(entry, '[d:propstat][d:prop][oc:id]')._text
+
+    // do not include root folder
+    if (!resourceId.endsWith(spaceId.split('$')[1])) {
+      resources[resourceId] = resourceName
+    }
+  }
+  return resources
+}
+
+export const deleteSpaceResource = async ({
+  user,
+  spaceType = '',
+  spaceName = '',
+  folder = '',
+  fileId = ''
+}: {
+  user: User
+  spaceType?: string
+  spaceName?: string
+  folder?: string
+  fileId?: string
+}): Promise<void> => {
+  const path = ['remote.php', 'dav', 'spaces']
+  let errMessage = `Failed to delete resource '${folder}'`
+  if (!fileId) {
+    const spaceId = await getSpaceIdBySpaceName({ user, spaceType, spaceName })
+    path.push(spaceId)
+    path.push(folder)
+  } else {
+    path.push(fileId)
+    errMessage = `Failed to delete resource with id '${fileId}'`
+  }
+
+  const response = await request({
+    method: 'DELETE',
+    path: join(...path),
+    user: user
+  })
+
+  checkResponseStatus(response, errMessage)
+}
+
+export const emptyTrashbin = async ({
+  user,
+  spaceType,
+  spaceName = ''
+}: {
+  user: User
+  spaceType: string
+  spaceName?: string
+}): Promise<void> => {
+  const spaceId = await getSpaceIdBySpaceName({ user, spaceType, spaceName })
+
+  const response = await request({
+    method: 'DELETE',
+    path: join('remote.php', 'dav', 'spaces', 'trash-bin', spaceId),
+    user: user
+  })
+
+  checkResponseStatus(response, `Failed to empty trashbin of space '${spaceName}'`)
 }
