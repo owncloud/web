@@ -37,6 +37,7 @@ Summary
 * Bugfix - Add missing dependencies to markdown editor: [#12460](https://github.com/owncloud/web/pull/12460)
 * Bugfix - Hide image upload in markdown editor: [#12460](https://github.com/owncloud/web/pull/12460)
 * Bugfix - Hide save in markdown editor: [#12460](https://github.com/owncloud/web/pull/12460)
+* Bugfix - Fix wrong HTML lang attribute: [#12478](https://github.com/owncloud/web/pull/12478)
 * Enhancement - Accessibility improvements: [#5379](https://github.com/owncloud/web/issues/5379)
 * Enhancement - Create spaces via admin settings: [#11849](https://github.com/owncloud/web/pull/11849)
 * Enhancement - Add maintenance banner: [#12239](https://github.com/owncloud/web/pull/12239)
@@ -305,6 +306,16 @@ Details
    provided by the app container.
 
    https://github.com/owncloud/web/pull/12460
+
+* Bugfix - Fix wrong HTML lang attribute: [#12478](https://github.com/owncloud/web/pull/12478)
+
+   We've added a fix to ensure that the HTML lang attribute is set correctly in the
+   web application. This change improves accessibility and ensures that screen
+   readers and other assistive technologies can properly interpret the language of
+   the content.
+
+   https://github.com/owncloud/web/issues/12409
+   https://github.com/owncloud/web/pull/12478
 
 * Enhancement - Accessibility improvements: [#5379](https://github.com/owncloud/web/issues/5379)
 
