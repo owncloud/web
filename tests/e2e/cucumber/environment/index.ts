@@ -89,7 +89,7 @@ Before(async function (this: World, { pickle }: ITestCaseHookParameter) {
     }
   })
 
-  if (!config.basicAuth) {
+  if (!config.basicAuth && !config.predefinedUsers) {
     let user = this.usersEnvironment.getUser({ key: config.adminUsername })
     if (config.keycloak) {
       user = this.usersEnvironment.getUser({ key: config.keycloakAdminUser })
@@ -121,27 +121,30 @@ After(async function (this: World, { result, willBeRetried, pickle }: ITestCaseH
 
   await this.actorsEnvironment.close()
 
-  let adminUser = this.usersEnvironment.getUser({ key: config.adminUsername })
+  if (!config.predefinedUsers) {
+    let adminUser = this.usersEnvironment.getUser({ key: config.adminUsername })
 
-  // refresh keycloak admin access token
-  if (config.keycloak) {
-    adminUser = this.usersEnvironment.getUser({ key: config.keycloakAdminUser })
-    await api.keycloak.refreshAccessTokenForKeycloakUser(adminUser)
-    await api.keycloak.refreshAccessTokenForKeycloakOcisUser(adminUser)
-  } else {
-    await api.token.refreshAccessToken(adminUser)
+    // refresh keycloak admin access token
+    if (config.keycloak) {
+      adminUser = this.usersEnvironment.getUser({ key: config.keycloakAdminUser })
+      await api.keycloak.refreshAccessTokenForKeycloakUser(adminUser)
+      await api.keycloak.refreshAccessTokenForKeycloakOcisUser(adminUser)
+    } else {
+      await api.token.refreshAccessToken(adminUser)
+    }
+
+    if (isOcm(pickle)) {
+      // need to set federatedServer config to true to delete federated oCIS users
+      config.federatedServer = true
+      await api.token.refreshAccessToken(adminUser)
+      await cleanUpUser(
+        store.federatedUserStore,
+        this.usersEnvironment.getUser({ key: config.adminUsername })
+      )
+      config.federatedServer = false
+    }
   }
 
-  if (isOcm(pickle)) {
-    // need to set federatedServer config to true to delete federated oCIS users
-    config.federatedServer = true
-    await api.token.refreshAccessToken(adminUser)
-    await cleanUpUser(
-      store.federatedUserStore,
-      this.usersEnvironment.getUser({ key: config.adminUsername })
-    )
-    config.federatedServer = false
-  }
   await cleanUpUser(
     store.createdUserStore,
     this.usersEnvironment.getUser({ key: config.adminUsername })
@@ -153,6 +156,7 @@ After(async function (this: World, { result, willBeRetried, pickle }: ITestCaseH
   store.createdTokenStore.clear()
   store.federatedTokenStore.clear()
   store.keycloakTokenStore.clear()
+
   utils.removeTempUploadDirectory()
   environment.closeSSEConnections()
 
@@ -200,15 +204,31 @@ function filterTracingReports(status: string) {
 
 const cleanUpUser = async (createdUserStore, adminUser: User) => {
   const requests: Promise<User>[] = []
-  createdUserStore.forEach((user) => {
-    requests.push(api.provision.deleteUser({ user, admin: adminUser }))
-  })
+  for (const user of createdUserStore.values()) {
+    console.log(`Cleanup user: ${user.id}`)
+    if (!config.predefinedUsers) {
+      requests.push(api.provision.deleteUser({ user, admin: adminUser }))
+    } else {
+      // delete personal space resources
+      const resources = await api.dav.listSpaceResources({ user, spaceType: 'personal' })
+      for (const fileId in resources) {
+        await api.dav.deleteSpaceResource({ user, fileId })
+      }
+      // cleanup trashbin if resources have been deleted
+      if (Object.keys(resources).length) {
+        await api.dav.emptyTrashbin({ user, spaceType: 'personal' })
+      }
+    }
+  }
   await Promise.all(requests)
   createdUserStore.clear()
   store.keycloakCreatedUser.clear()
 }
 
 const cleanUpSpaces = async (adminUser: User) => {
+  if (config.predefinedUsers) {
+    return
+  }
   const requests: Promise<void>[] = []
   store.createdSpaceStore.forEach((space) => {
     requests.push(
@@ -232,6 +252,9 @@ const cleanUpSpaces = async (adminUser: User) => {
 }
 
 const cleanUpGroup = async (adminUser: User) => {
+  if (config.predefinedUsers) {
+    return
+  }
   const requests: Promise<Group>[] = []
   store.createdGroupStore.forEach((group) => {
     if (!group.id.startsWith('keycloak')) {

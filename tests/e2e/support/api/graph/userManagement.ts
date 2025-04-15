@@ -40,7 +40,7 @@ export const createUser = async ({ user, admin }: { user: User; admin: User }): 
 
   const usersEnvironment = new UsersEnvironment()
   const resBody = (await response.json()) as User
-  usersEnvironment.storeCreatedUser({ user: { ...user, uuid: resBody.id } })
+  usersEnvironment.storeCreatedUser(user.id, { ...user, uuid: resBody.id })
   await setAccessAndRefreshToken(user)
   return user
 }

@@ -15,14 +15,10 @@ import { config } from '../../../config'
 import { UsersEnvironment } from '../../environment'
 
 export const createUser = async ({ user, admin }: { user: User; admin: User }): Promise<User> => {
-  if(!config.externalUsers){
-    if (config.keycloak) {
-      return await keycloakCreateUser({ user, admin })
-    }
-    return await graphCreateUser({ user, admin })
-  }else{
-    console.info("using external users skipping user creation")
+  if (config.keycloak) {
+    return await keycloakCreateUser({ user, admin })
   }
+  return await graphCreateUser({ user, admin })
 }
 
 export const deleteUser = async ({ user, admin }: { user: User; admin: User }): Promise<User> => {

@@ -3,15 +3,25 @@ import { World } from '../environment'
 import { api } from '../../support'
 import fs from 'fs'
 import { Space } from '../../support/types'
+import { config } from '../../config'
+import { setAccessAndRefreshToken, getUserIdFromToken } from '../../support/api/token'
 
 Given(
   '{string} creates following user(s) using API',
   async function (this: World, stepUser: string, stepTable: DataTable): Promise<void> {
     const admin = this.usersEnvironment.getUser({ key: stepUser })
-
     for (const info of stepTable.hashes()) {
       const user = this.usersEnvironment.getUser({ key: info.id })
-      await api.provision.createUser({ user, admin })
+      // do not try to create users when using predefined users
+      if (config.predefinedUsers) {
+        await setAccessAndRefreshToken(user)
+        this.usersEnvironment.storeCreatedUser(info.id.toLowerCase(), {
+          ...user,
+          uuid: getUserIdFromToken(user)
+        })
+      } else {
+        await api.provision.createUser({ user, admin })
+      }
     }
   }
 )

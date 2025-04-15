@@ -1,6 +1,6 @@
 import { Group, User } from '../types'
 import {
-  dummyUserStore,
+  userStore,
   dummyGroupStore,
   createdUserStore,
   createdGroupStore,
@@ -14,31 +14,31 @@ export class UsersEnvironment {
   getUser({ key }: { key: string }): User {
     const userKey = key.toLowerCase()
 
-    if (!dummyUserStore.has(userKey)) {
+    if (!userStore.has(userKey)) {
       throw new Error(`user with key '${userKey}' not found`)
     }
 
-    return dummyUserStore.get(userKey)
+    return userStore.get(userKey)
   }
 
   createUser({ key, user }: { key: string; user: User }): User {
     const userKey = key.toLowerCase()
 
-    if (dummyUserStore.has(userKey)) {
+    if (userStore.has(userKey)) {
       throw new Error(`user with key '${userKey}' already exists`)
     }
 
-    dummyUserStore.set(userKey, user)
+    userStore.set(userKey, user)
 
     return user
   }
 
-  storeCreatedUser({ user }: { user: User }): User {
+  storeCreatedUser(key: string, user: User): User {
     const store = config.federatedServer ? federatedUserStore : createdUserStore
-    if (store.has(user.id)) {
-      throw new Error(`user '${user.id}' already exists`)
+    if (store.has(key)) {
+      throw new Error(`user '${key}' already exists`)
     }
-    store.set(user.id, user)
+    store.set(key, user)
     return user
   }
 

@@ -11,7 +11,12 @@ export const config = {
   adminPassword: process.env.ADMIN_PASSWORD ?? 'admin',
   // use predefined users
   // if set to true, tests will not create the users
+  // all users are expected to exist beforehand
   predefinedUsers: process.env.PREDEFINED_USERS === 'true',
+  // json file with predefined users
+  // The json file MUST contain the list of users matching the key defined in tests/e2e/support/store/user.ts
+  // useful where useres are predefined but different from the default ones
+  predefinedUsersFile: process.env.PREDEFINED_USERS_FILE,
   // keycloak config
   keycloak: process.env.KEYCLOAK === 'true',
   keycloakHost: process.env.KEYCLOAK_HOST ?? 'keycloak.owncloud.test',

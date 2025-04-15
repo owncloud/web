@@ -1,7 +1,8 @@
+import fs from 'fs'
 import { User } from '../types'
 import { config } from '../../config'
 
-export const dummyUserStore = new Map<string, User>([
+export const userStore = new Map<string, User>([
   [
     'admin',
     {
@@ -70,3 +71,14 @@ export const dummyUserStore = new Map<string, User>([
 export const createdUserStore = new Map<string, User>()
 
 export const federatedUserStore = new Map<string, User>()
+
+// map predefined users to the user store
+if (config.predefinedUsers && config.predefinedUsersFile) {
+  if (!fs.existsSync(config.predefinedUsersFile)) {
+    throw new Error('File not found: ' + config.predefinedUsersFile)
+  }
+  const users = JSON.parse(fs.readFileSync(config.predefinedUsersFile, 'utf8'))
+  for (const [key, user] of Object.entries(users)) {
+    userStore.set(key, user as User)
+  }
+}
