@@ -12,6 +12,7 @@ export interface DefaultPluginsOptions {
   gettext?: boolean
   pinia?: boolean
   piniaOptions?: PiniaMockOptions
+  getTextDefaultLanguage?: string
 }
 
 export const defaultPlugins = ({
@@ -19,7 +20,8 @@ export const defaultPlugins = ({
   designSystem = true,
   gettext = true,
   pinia = true,
-  piniaOptions = {}
+  piniaOptions = {},
+  getTextDefaultLanguage = 'en'
 }: DefaultPluginsOptions = {}): Plugin[] => {
   const plugins = []
 
@@ -34,7 +36,9 @@ export const defaultPlugins = ({
   }
 
   if (gettext) {
-    plugins.push(createGettext({ translations: {}, silent: true }))
+    plugins.push(
+      createGettext({ translations: {}, silent: true, defaultLanguage: getTextDefaultLanguage })
+    )
   } else {
     plugins.push({
       install(app: App) {
