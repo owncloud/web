@@ -6,6 +6,12 @@ export const config = {
   tempAssetsPath: './tests/e2e/filesForUpload/temp',
   baseUrlOcis: process.env.BASE_URL_OCIS ?? 'host.docker.internal:9200',
   basicAuth: process.env.BASIC_AUTH === 'true',
+  // admin user
+  adminUsername: process.env.ADMIN_USERNAME ?? 'admin',
+  adminPassword: process.env.ADMIN_PASSWORD ?? 'admin',
+  // use predefined users
+  // if set to true, tests will not create the users
+  predefinedUsers: process.env.PREDEFINED_USERS === 'true',
   // keycloak config
   keycloak: process.env.KEYCLOAK === 'true',
   keycloakHost: process.env.KEYCLOAK_HOST ?? 'keycloak.owncloud.test',
@@ -43,6 +49,5 @@ export const config = {
   reportVideo: process.env.REPORT_VIDEO === 'true',
   reportHar: process.env.REPORT_HAR === 'true',
   reportTracing: process.env.REPORT_TRACING === 'true',
-  failOnUncaughtConsoleError: process.env.FAIL_ON_UNCAUGHT_CONSOLE_ERR === 'true',
-  externalUsers: process.env.EXTERNAL_USER === 'true'
+  failOnUncaughtConsoleError: process.env.FAIL_ON_UNCAUGHT_CONSOLE_ERR === 'true'
 }
