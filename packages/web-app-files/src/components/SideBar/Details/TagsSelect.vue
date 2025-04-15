@@ -175,7 +175,7 @@ export default defineComponent({
       if (len > unref(graphTagsMaxTagLength)) {
         return {
           label: label.toLowerCase().trim(),
-          error: $gettext('Tag must not be longer than %{max} characters', {
+          error: $gettext('Tags must not be longer than %{max} characters', {
             max: unref(graphTagsMaxTagLength).toString()
           }),
           selectable: false
