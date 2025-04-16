@@ -323,6 +323,15 @@ export default defineComponent({
           return authService.handleAuthError(unref(router.currentRoute))
         }
 
+        if (e?.response?.status === 404 && e?.message === 'Unknown error') {
+          console.error(e)
+          loadingError.value = new Error(
+            $gettext('The resource could not be located, it may not exist anymore.')
+          )
+          loading.value = false
+          return
+        }
+
         console.error(e)
         loadingError.value = e
         loading.value = false
