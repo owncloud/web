@@ -19,6 +19,7 @@ Given(
           ...user,
           uuid: getUserIdFromToken(user)
         })
+        this.usersEnvironment.saveUserState(info.id, {})
       } else {
         await api.provision.createUser({ user, admin })
       }
@@ -111,7 +112,9 @@ Given(
   '{string} disables auto-accepting using API',
   async function (this: World, stepUser: string): Promise<void> {
     const user = this.usersEnvironment.getUser({ key: stepUser })
-    await api.settings.disableAutoAcceptShare({ user })
+    await api.settings.configureAutoAcceptShare({ user, state: false })
+    // save previous auto-accept config
+    this.usersEnvironment.saveUserState(stepUser, { autoAcceptShare: true })
   }
 )
 

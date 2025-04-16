@@ -1,4 +1,4 @@
-import { Group, User } from '../types'
+import { Group, User, UserState } from '../types'
 import {
   userStore,
   dummyGroupStore,
@@ -6,7 +6,8 @@ import {
   createdGroupStore,
   keycloakCreatedUser,
   federatedUserStore,
-  dummyKeycloakGroupStore
+  dummyKeycloakGroupStore,
+  userStateStore
 } from '../store'
 import { config } from '../../config'
 
@@ -124,5 +125,23 @@ export class UsersEnvironment {
     }
 
     return keycloakCreatedUser.delete(userKey)
+  }
+
+  saveUserState(key: string, states: UserState): void {
+    key = key.toLowerCase()
+    let userStates = {}
+    if (userStateStore.has(key)) {
+      userStates = userStateStore.get(key)
+    }
+    userStateStore.set(key, { ...userStates, ...states })
+  }
+
+  getUserState(key: string): UserState {
+    const userKey = key.toLowerCase()
+    if (!userStateStore.has(userKey)) {
+      throw new Error(`User key '${userKey}' not found`)
+    }
+
+    return userStateStore.get(userKey)
   }
 }

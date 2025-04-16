@@ -3,7 +3,13 @@ import join from 'join-path'
 import { checkResponseStatus, request } from '../http'
 import { User } from '../../types'
 
-export const disableAutoAcceptShare = async ({ user }: { user: User }): Promise<void> => {
+export const configureAutoAcceptShare = async ({
+  user,
+  state
+}: {
+  user: User
+  state: boolean
+}): Promise<void> => {
   const body = JSON.stringify({
     value: {
       accountUuid: 'me',
@@ -12,7 +18,7 @@ export const disableAutoAcceptShare = async ({ user }: { user: User }): Promise<
       resource: {
         type: 'TYPE_USER'
       },
-      boolValue: false
+      boolValue: state
     }
   })
   const response = await request({

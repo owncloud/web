@@ -82,3 +82,7 @@ if (config.predefinedUsers && config.predefinedUsersFile) {
     userStore.set(key, user as User)
   }
 }
+
+// states of the test users:
+// - sync enabled/disabled
+export const userStateStore = new Map<string, any>()
