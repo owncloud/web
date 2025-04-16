@@ -1,3 +1,4 @@
+@predefined-users
 Feature: Search
   As a user
   I want to search for resources

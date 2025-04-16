@@ -1,3 +1,4 @@
+@predefined-users
 Feature: deny share access
 
   Scenario: deny and grant access

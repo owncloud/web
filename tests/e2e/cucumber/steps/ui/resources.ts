@@ -347,6 +347,8 @@ When(
     keyword = keyword ?? ''
     const pressEnter = !!command && command.endsWith('presses enter')
     const { page } = this.actorsEnvironment.getActor({ key: stepUser })
+    // let search indexing to complete
+    await page.waitForTimeout(1000)
     const resourceObject = new objects.applicationFiles.Resource({ page })
     await resourceObject.searchResource({
       keyword,
