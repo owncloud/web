@@ -71,9 +71,9 @@ Feature: share
       | folder_to_shared |                  |
     And "Alice" logs out
     Then "Brian" should not be able to see the following shares
-      | resource           | owner        |
-      | folder_to_shared_2 | Alice Hansen |
-      | folder_to_shared   | Alice Hansen |
+      | resource           | owner                    |
+      | folder_to_shared_2 | %user_alice_displayName% |
+      | folder_to_shared   | %user_alice_displayName% |
     And "Brian" logs out
 
   @predefined-users
@@ -184,9 +184,9 @@ Feature: share
       | shareToBrian.md  | Brian     |
     And "Alice" logs out
     Then "Brian" should not be able to see the following shares
-      | resource         | owner        |
-      | shareToBrian.txt | Alice Hansen |
-      | shareToBrian.md  | Alice Hansen |
+      | resource         | owner                    |
+      | shareToBrian.txt | %user_alice_displayName% |
+      | shareToBrian.md  | %user_alice_displayName% |
     And "Brian" logs out
 
 
@@ -215,11 +215,11 @@ Feature: share
     # set expirationDate to existing share
     And "Alice" sets the expiration date of share "mainFolder" of user "Brian" to "+5 days"
     And "Alice" checks the following access details of share "mainFolder" for user "Brian"
-      | Name | Brian Murphy |
-      | Type | User         |
+      | Name | %user_brian_displayName% |
+      | Type | User                     |
     And "Alice" checks the following access details of share "mainFolder/lorem.txt" for user "Brian"
-      | Name | Brian Murphy |
-      | Type | User         |
+      | Name | %user_brian_displayName% |
+      | Type | User                     |
     And "Alice" sets the expiration date of share "myfolder" of group "sales" to "+3 days"
     And "Alice" checks the following access details of share "myfolder" for group "sales"
       | Name | sales department |

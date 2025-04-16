@@ -1,3 +1,4 @@
+@predefined-users
 Feature: Upload large resources
   As a user
   I want to upload large resources

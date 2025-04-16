@@ -1,1 +1,1 @@
-export { configureAutoAcceptShare } from './settings'
+export { configureAutoAcceptShare, changeLanguage } from './settings'

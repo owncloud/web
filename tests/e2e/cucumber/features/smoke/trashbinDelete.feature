@@ -1,3 +1,4 @@
+@predefined-users
 Feature: Trashbin delete
   As a user
   I want to delete files and folders from the trashbin

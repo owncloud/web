@@ -81,4 +81,5 @@ export interface FederatedShareInvitation {
 // previous user state
 export interface UserState {
   autoAcceptShare?: boolean
+  language?: string
 }

@@ -1,6 +1,7 @@
 import { DataTable, Then, When } from '@cucumber/cucumber'
 import { World } from '../../environment'
 import { objects } from '../../../support'
+import { substitute } from '../../../support/utils'
 import { expect } from '@playwright/test'
 
 Then(
@@ -10,7 +11,8 @@ Then(
     const application = new objects.runtime.Application({ page })
     const messages = await application.getNotificationMessages()
     for (const { message } of stepTable.hashes()) {
-      expect(messages).toContain(message)
+      const expectedMessage = substitute(message)
+      expect(messages).toContain(expectedMessage)
     }
   }
 )

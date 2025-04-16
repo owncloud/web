@@ -15,6 +15,7 @@ import { Resource } from '../../../support/objects/app-files'
 import * as runtimeFs from '../../../support/utils/runtimeFs'
 import { searchFilter } from '../../../support/objects/app-files/resource/actions'
 import { File } from '../../../support/types'
+import { substitute } from '../../../support/utils'
 
 When(
   '{string} creates the following resource(s)',
@@ -994,7 +995,10 @@ Then(
     const resourceObject = new objects.applicationFiles.Resource({ page })
 
     for (const info of stepTable.hashes()) {
-      await resourceObject.checkActivity({ resource: info.resource, activity: info.activity })
+      await resourceObject.checkActivity({
+        resource: info.resource,
+        activity: substitute(info.activity)
+      })
     }
   }
 )

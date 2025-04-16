@@ -1,3 +1,4 @@
+@predefined-users
 Feature: Users can use web to organize tags
 
   Background:

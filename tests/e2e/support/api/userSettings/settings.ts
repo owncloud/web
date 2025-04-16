@@ -29,3 +29,19 @@ export const configureAutoAcceptShare = async ({
   })
   checkResponseStatus(response, 'Failed while disabling auto-accept share')
 }
+
+export const changeLanguage = async ({
+  user,
+  language
+}: {
+  user: User
+  language: string
+}): Promise<void> => {
+  const response = await request({
+    method: 'PATCH',
+    path: join('graph', 'v1.0', 'me'),
+    body: JSON.stringify({ preferredLanguage: language }),
+    user: user
+  })
+  checkResponseStatus(response, 'Failed change language: ' + language)
+}
