@@ -1,3 +1,4 @@
+@predefined-users
 Feature: language settings
   As a user
   I want to be able to use the system with my preferred language
@@ -22,8 +23,8 @@ Feature: language settings
     When "Alice" logs out
     And "Alice" logs in
     Then "Alice" should see the following notifications
-      | message                                          |
-      | Brian Murphy hat check_message mit Ihnen geteilt |
+      | message                                                      |
+      | %user_brian_displayName% hat check_message mit Ihnen geteilt |
     And "Alice" logs out
 
 

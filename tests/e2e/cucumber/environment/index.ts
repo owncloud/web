@@ -235,6 +235,9 @@ const cleanupPredefinedUser = async (userKey: string, user: User) => {
   if (userState.hasOwnProperty('autoAcceptShare')) {
     await api.settings.configureAutoAcceptShare({ user, state: userState.autoAcceptShare })
   }
+  if (userState.hasOwnProperty('language')) {
+    await api.settings.changeLanguage({ user, language: userState.language })
+  }
 }
 
 const cleanUpSpaces = async (adminUser: User) => {

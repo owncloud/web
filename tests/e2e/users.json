@@ -1,0 +1,26 @@
+{
+  "admin": {
+    "id": "admin",
+    "displayName": "admin",
+    "password": "admin",
+    "email": "admin@example.org"
+  },
+  "alice": {
+    "id": "einstein",
+    "displayName": "Albert Einstein",
+    "password": "relativity",
+    "email": "einstein@example.org"
+  },
+  "brian": {
+    "id": "marie",
+    "displayName": "Marie Skłodowska Curie",
+    "password": "radioactivity",
+    "email": "marie@example.org"
+  },
+  "carol": {
+    "id": "moss",
+    "displayName": "Maurice Moss",
+    "password": "vista",
+    "email": "moss@example.org"
+  }
+}

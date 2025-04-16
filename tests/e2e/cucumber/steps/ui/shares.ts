@@ -7,6 +7,7 @@ import {
   ICollaborator
 } from '../../../support/objects/app-files/share/collaborator'
 import { ActionViaType } from '../../../support/objects/app-files/share/actions'
+import { substitute } from '../../../support/utils'
 
 const parseShareTable = function (
   stepTable: DataTable,
@@ -229,7 +230,10 @@ Then(
     const { page } = this.actorsEnvironment.getActor({ key: stepUser })
     const shareObject = new objects.applicationFiles.Share({ page })
     for (const { resource, owner } of stepTable.hashes()) {
-      const isAcceptedSharePresent = await shareObject.isAcceptedSharePresent(resource, owner)
+      const isAcceptedSharePresent = await shareObject.isAcceptedSharePresent(
+        resource,
+        substitute(owner)
+      )
       expect(isAcceptedSharePresent, '${resource} does not exist in accepted share').toBe(
         shouldExist
       )
@@ -276,6 +280,8 @@ When(
     const { page } = this.actorsEnvironment.getActor({ key: stepUser })
     const shareObject = new objects.applicationFiles.Share({ page })
     const expectedDetails = stepTable.rowsHash()
+    expectedDetails.Name = substitute(expectedDetails.Name)
+
     const actualDetails = await shareObject.getAccessDetails({
       resource,
       collaborator: {

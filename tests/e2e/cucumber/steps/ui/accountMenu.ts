@@ -56,6 +56,8 @@ When(
     const accountObject = new objects.account.Account({ page })
     const isAnonymousUser = stepUser === 'Anonymous'
     await accountObject.changeLanguage(language, isAnonymousUser)
+    // save initial language
+    this.usersEnvironment.saveUserState(stepUser, { language: 'en' })
   }
 )
 

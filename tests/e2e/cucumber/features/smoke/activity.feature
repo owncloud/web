@@ -49,29 +49,29 @@ Feature: Users can see all activities of the resources and spaces
       | resource  | from         |
       | subFolder | sharedFolder |
     Then "Alice" should see activity of the following resource
-      | resource     | activity                                         |
-      | sharedFolder | Alice Hansen deleted subFolder from sharedFolder |
-      | sharedFolder | Alice Hansen renamed textfile.txt to new.txt     |
-      | sharedFolder | Public updated textfile.txt in sharedFolder      |
-      | sharedFolder | Alice Hansen shared sharedFolder via link        |
-      | sharedFolder | Alice Hansen shared sharedFolder with brian      |
-      | sharedFolder | Alice Hansen added textfile.txt to sharedFolder  |
-      | sharedFolder | Alice Hansen added subFolder to sharedFolder     |
-      | sharedFolder | Alice Hansen added sharedFolder to Alice Hansen  |
+      | resource     | activity                                                                 |
+      | sharedFolder | %user_alice_displayName% deleted subFolder from sharedFolder             |
+      | sharedFolder | %user_alice_displayName% renamed textfile.txt to new.txt                 |
+      | sharedFolder | Public updated textfile.txt in sharedFolder                              |
+      | sharedFolder | %user_alice_displayName% shared sharedFolder via link                    |
+      | sharedFolder | %user_alice_displayName% shared sharedFolder with brian                  |
+      | sharedFolder | %user_alice_displayName% added textfile.txt to sharedFolder              |
+      | sharedFolder | %user_alice_displayName% added subFolder to sharedFolder                 |
+      | sharedFolder | %user_alice_displayName% added sharedFolder to %user_alice_displayName%  |
 
-      | sharedFolder/new.txt | Alice Hansen renamed textfile.txt to new.txt    |
-      | new.txt              | Public updated textfile.txt in sharedFolder     |
-      | new.txt              | Alice Hansen added textfile.txt to sharedFolder |
+      | sharedFolder/new.txt | %user_alice_displayName% renamed textfile.txt to new.txt         |
+      | new.txt              | Public updated textfile.txt in sharedFolder                      |
+      | new.txt              | %user_alice_displayName% added textfile.txt to sharedFolder      |
     And "Alice" logs out
 
     # see activity in the project space
     When "Brian" logs in
     And "Brian" navigates to the project space "team.1"
     Then "Brian" should see activity of the space
-      | activity                               |
-      |Alice Hansen shared team via link|
-      |Alice Hansen added brian as member of team|
-      | Alice Hansen added readme.md to .space |
+      | activity                                               |
+      | %user_alice_displayName% shared team via link          |
+      | %user_alice_displayName% added brian as member of team |
+      | %user_alice_displayName% added readme.md to .space     |
 
     # see activity in the shared resources
     When "Brian" navigates to the shared with me page

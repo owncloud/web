@@ -1,7 +1,9 @@
 import { Given, When, Then, DataTable } from '@cucumber/cucumber'
+import { expect } from '@playwright/test'
 import { World } from '../../environment'
 import { objects } from '../../../support'
-import { expect } from '@playwright/test'
+import { substitute } from '../../../support/utils'
+
 Given(
   '{string} generates invitation token for the federation share',
   async function (this: World, stepUser: any): Promise<void> {
@@ -27,8 +29,10 @@ Then(
     const { page } = this.actorsEnvironment.getActor({ key: stepUser })
     const pageObject = new objects.scienceMesh.Federation({ page })
     for (const info of stepTable.hashes()) {
+      info.user = substitute(info.user)
+      info.email = substitute(info.email)
       const isConnectionExist = await pageObject.connectionExists(info)
-      await expect(isConnectionExist).toBeTruthy()
+      expect(isConnectionExist).toBeTruthy()
     }
   }
 )
