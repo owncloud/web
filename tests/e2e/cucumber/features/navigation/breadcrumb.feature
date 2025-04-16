@@ -1,3 +1,4 @@
+@predefined-users
 Feature: access breadcrumb
   As a user
   I want to browse to parent folders using breadcrumb

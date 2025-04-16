@@ -176,6 +176,5 @@ export const getUserIdFromToken = (user: User): string => {
   const accessToken = tokenEnvironment.getToken({ user }).accessToken
   const parsed = JSON.parse(atob(accessToken.split('.')[1]))
   const userId = parsed['lg.i'].id.split('=')[1]
-  console.log(userId)
   return userId
 }

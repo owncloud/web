@@ -213,8 +213,11 @@ export const getIdOfFileInsideSpace = async ({
       }
     }
   } else {
-    // extract file id form the response
-    return _.get(fileDataResponse, '[d:propstat][0][d:prop][oc:fileid]')._text
+    const propstat = _.get(fileDataResponse, '[d:propstat]')
+    if (Array.isArray(propstat)) {
+      return _.get(propstat, '[0][d:prop][oc:fileid]')._text
+    }
+    return _.get(propstat, '[d:prop][oc:fileid]')._text
   }
 }
 

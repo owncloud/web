@@ -6,6 +6,7 @@ Feature: share
       | Alice |
       | Brian |
 
+  @predefined-users
   Scenario: folder
     # disabling auto accepting to check accepting share
     Given "Brian" disables auto-accepting using API
@@ -75,7 +76,7 @@ Feature: share
       | folder_to_shared   | Alice Hansen |
     And "Brian" logs out
 
-
+  @predefined-users
   Scenario: file
     Given "Alice" logs in
     And "Alice" creates the following resources
@@ -229,7 +230,7 @@ Feature: share
       | myfolder | sales     | group |
     And  "Alice" logs out
 
-
+  @predefined-users
   Scenario: receive two shares with same name
     Given "Admin" creates following users using API
       | id    |
@@ -269,7 +270,7 @@ Feature: share
       | test-folder (1)  |
     And "Brian" logs out
 
-
+  @predefined-users
   Scenario: check file with same name but different paths are displayed correctly in shared with others page
     Given "Admin" creates following users using API
       | id    |
@@ -293,7 +294,7 @@ Feature: share
       | test-folder/testfile.txt |
     And "Alice" logs out
 
-
+  @predefined-users
   Scenario: share indication
     When "Alice" creates the following folders in personal space using API
       | name                  |
