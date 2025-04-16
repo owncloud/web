@@ -77,3 +77,8 @@ export interface FederatedShareInvitation {
   description?: string
   email?: string
 }
+
+// previous user state
+export interface UserState {
+  autoAcceptShare?: boolean
+}

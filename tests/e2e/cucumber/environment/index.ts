@@ -16,7 +16,7 @@ import fs from 'fs'
 import { World } from './world'
 import { state } from './shared'
 import { config } from '../../config'
-import { Group, User } from '../../support/types'
+import { Group, User, UserState } from '../../support/types'
 import { api, environment, utils, store } from '../../support'
 
 export { World }
@@ -204,25 +204,37 @@ function filterTracingReports(status: string) {
 
 const cleanUpUser = async (createdUserStore, adminUser: User) => {
   const requests: Promise<User>[] = []
-  for (const user of createdUserStore.values()) {
+  for (const [key, user] of createdUserStore.entries()) {
     console.log(`Cleanup user: ${user.id}`)
     if (!config.predefinedUsers) {
       requests.push(api.provision.deleteUser({ user, admin: adminUser }))
     } else {
-      // delete personal space resources
-      const resources = await api.dav.listSpaceResources({ user, spaceType: 'personal' })
-      for (const fileId in resources) {
-        await api.dav.deleteSpaceResource({ user, fileId })
-      }
-      // cleanup trashbin if resources have been deleted
-      if (Object.keys(resources).length) {
-        await api.dav.emptyTrashbin({ user, spaceType: 'personal' })
-      }
+      await cleanupPredefinedUser(key, user)
     }
   }
   await Promise.all(requests)
   createdUserStore.clear()
   store.keycloakCreatedUser.clear()
+}
+
+const cleanupPredefinedUser = async (userKey: string, user: User) => {
+  // delete personal space resources
+  const resources = await api.dav.listSpaceResources({ user, spaceType: 'personal' })
+  for (const fileId in resources) {
+    await api.dav.deleteSpaceResource({ user, fileId })
+  }
+
+  // cleanup trashbin if resources have been deleted
+  if (Object.keys(resources).length) {
+    await api.dav.emptyTrashbin({ user, spaceType: 'personal' })
+  }
+
+  // revert user state
+  const usersEnvironment = new environment.UsersEnvironment()
+  const userState: UserState = usersEnvironment.getUserState(userKey)
+  if (userState.hasOwnProperty('autoAcceptShare')) {
+    await api.settings.configureAutoAcceptShare({ user, state: userState.autoAcceptShare })
+  }
 }
 
 const cleanUpSpaces = async (adminUser: User) => {

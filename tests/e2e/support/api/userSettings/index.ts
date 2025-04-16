@@ -1,1 +1,1 @@
-export { disableAutoAcceptShare } from './settings'
+export { configureAutoAcceptShare } from './settings'
