@@ -289,6 +289,11 @@ export const bootstrapApp = async (configurationPath: string, appsReadyCallback:
 }
 
 export const bootstrapErrorApp = async (err: Error): Promise<void> => {
+  const useBrowserLanguage = (language: string): string => {
+    const fallbackLanguage = 'en'
+
+    return supportedLanguages[language] ? language : fallbackLanguage
+  }
   const { capabilityStore, configStore } = announcePiniaStores()
   announceVersions({ capabilityStore })
   const app = createApp(pages.failure)
@@ -299,7 +304,7 @@ export const bootstrapErrorApp = async (err: Error): Promise<void> => {
   const gettext = announceGettext({
     app,
     availableLanguages: supportedLanguages,
-    defaultLanguage: window.navigator.language.slice(0, 3)
+    defaultLanguage: useBrowserLanguage(window.navigator.language.slice(0, 2))
   })
   announceTranslations({ gettext, coreTranslations: translations })
   app.mount('#owncloud')
