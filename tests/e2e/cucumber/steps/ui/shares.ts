@@ -276,6 +276,13 @@ When(
     const { page } = this.actorsEnvironment.getActor({ key: stepUser })
     const shareObject = new objects.applicationFiles.Share({ page })
     const expectedDetails = stepTable.rowsHash()
+
+    let selectorType = collaboratorType
+    // NOTE: external users have group type element selector
+    if (expectedDetails.hasOwnProperty('Type') && expectedDetails.Type === 'External') {
+      selectorType = 'group'
+    }
+
     const actualDetails = await shareObject.getAccessDetails({
       resource,
       collaborator: {
@@ -283,11 +290,36 @@ When(
           collaboratorType === 'group'
             ? this.usersEnvironment.getGroup({ key: collaboratorName })
             : this.usersEnvironment.getUser({ key: collaboratorName }),
-        type: collaboratorType
+        type: selectorType
       } as ICollaborator
     })
 
     expect(actualDetails).toMatchObject(expectedDetails)
+  }
+)
+
+Then(
+  /^"([^"]*)" should see the following access details of share "([^"]*)" for federated user "([^"]*)"$/,
+  async function (
+    this: World,
+    stepUser: string,
+    resource: string,
+    collaboratorName: string,
+    stepTable: DataTable
+  ): Promise<void> {
+    const { page } = this.actorsEnvironment.getActor({ key: stepUser })
+    const shareObject = new objects.applicationFiles.Share({ page })
+    const expectedDetails = stepTable.hashes().map(({ detail }) => detail)
+
+    const actualDetails = await shareObject.getAccessDetails({
+      resource,
+      collaborator: {
+        collaborator: this.usersEnvironment.getUser({ key: collaboratorName }),
+        type: 'group'
+      } as ICollaborator
+    })
+
+    expect(Object.keys(actualDetails)).toEqual(expect.arrayContaining(expectedDetails))
   }
 )
 

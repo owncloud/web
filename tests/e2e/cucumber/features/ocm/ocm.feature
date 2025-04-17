@@ -43,6 +43,12 @@ Feature: federation management
       | folderPublic   | Brian     | user | Can edit without versions | folder       | external  |
       | sampleGif.gif  | Brian     | user | Can edit without versions | file         | external  |
       | testavatar.jpg | Brian     | user | Can view                  | file         | external  |
+    And "Alice" checks the following access details of share "folderPublic" for user "Brian"
+      | Name   | Brian Murphy |
+      | Type   | External     |
+    And "Alice" should see the following access details of share "folderPublic" for federated user "Brian"
+      | detail |
+      | Domain |
     And "Alice" logs out
 
     And using "FEDERATED" server
