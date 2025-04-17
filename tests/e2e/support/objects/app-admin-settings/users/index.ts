@@ -159,14 +159,12 @@ export class Users {
   }): Promise<void> {
     const response = await po.createUser({ page: this.#page, name, displayname, email, password })
 
-    this.#usersEnvironment.storeCreatedUser({
-      user: {
-        id: response.onPremisesSamAccountName,
-        displayName: response.displayName,
-        password: password,
-        email: response.mail,
-        uuid: response.id
-      }
+    this.#usersEnvironment.storeCreatedUser(name, {
+      id: response.onPremisesSamAccountName,
+      displayName: response.displayName,
+      password: password,
+      email: response.mail,
+      uuid: response.id
     })
   }
 
