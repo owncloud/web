@@ -1,3 +1,4 @@
+@predefined-users
 Feature: check files pagination in personal space
   As a user
   I want to navigate a large number of files using pagination

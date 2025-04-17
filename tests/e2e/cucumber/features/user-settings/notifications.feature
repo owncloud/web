@@ -36,9 +36,9 @@ Feature: Notifications
       | share_to_group   | sales     | group | Can edit without versions | folder       |
     And "Brian" logs in
     Then "Brian" should see the following notifications
-      | message                                       |
-      | Alice Hansen shared folder_to_shared with you |
-      | Alice Hansen shared share_to_group with you   |
+      | message                                                   |
+      | %user_alice_displayName% shared folder_to_shared with you |
+      | %user_alice_displayName% shared share_to_group with you   |
     And "Brian" marks all notifications as read
     When "Alice" removes following sharee
       | resource         | recipient |
@@ -51,8 +51,8 @@ Feature: Notifications
     Then "Alice" should see no notifications
     And "Brian" should see the following notifications
       | message                                         |
-      | Alice Hansen unshared folder_to_shared with you |
-      | Alice Hansen added you to Space team            |
+      | %user_alice_displayName% unshared folder_to_shared with you |
+      | %user_alice_displayName% added you to Space team            |
     And "Brian" marks all notifications as read
     When "Alice" removes access to following users from the project space
       | user  | role                      | kind |
@@ -60,19 +60,19 @@ Feature: Notifications
     And "Carol" logs in
     Then "Carol" should see the following notifications
       | message                                  |
-      | Alice Hansen added you to Space team     |
-      | Alice Hansen removed you from Space team |
+      | %user_alice_displayName% added you to Space team     |
+      | %user_alice_displayName% removed you from Space team |
     And "Carol" logs out
     When "Alice" opens the "admin-settings" app
     And "Alice" navigates to the project spaces management page
     And "Alice" disables the space "team.1" using the context-menu
     Then "Brian" should see the following notifications
       | message                          |
-      | Alice Hansen disabled Space team |
+      | %user_alice_displayName% disabled Space team |
     When "Alice" deletes the space "team.1" using the context-menu
     Then "Brian" should see the following notifications
       | message                         |
-      | Alice Hansen deleted Space team |
+      | %user_alice_displayName% deleted Space team |
     And "Brian" logs out
     And "Alice" logs out
 

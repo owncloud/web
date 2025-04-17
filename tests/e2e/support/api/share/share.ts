@@ -1,6 +1,6 @@
 import join from 'join-path'
 import { checkResponseStatus, request } from '../http'
-import { Group, User } from '../../types'
+import { User } from '../../types'
 import { getSpaceIdBySpaceName } from '../graph'
 import { getIdOfFileInsideSpace } from '../davSpaces'
 import { LinksEnvironment, UsersEnvironment } from '../../environment'
@@ -100,13 +100,11 @@ const getRoleId = (role: string, resourceType: ResourceType): string => {
 
 const getRecipientId = (shareType: string, shareWith: string): string => {
   const usersEnvironment: UsersEnvironment = new UsersEnvironment()
-  let recipient: User | Group, recipientId: string
+  let recipientId: string
   if (shareType === 'user') {
-    recipient = usersEnvironment.getUser({ key: shareWith })
-    recipientId = usersEnvironment.getCreatedUser({ key: recipient.id }).uuid
+    recipientId = usersEnvironment.getCreatedUser({ key: shareWith }).uuid
   } else {
-    recipient = usersEnvironment.getGroup({ key: shareWith })
-    recipientId = usersEnvironment.getCreatedGroup({ key: recipient.id }).uuid
+    recipientId = usersEnvironment.getCreatedGroup({ key: shareWith }).uuid
   }
   return recipientId
 }

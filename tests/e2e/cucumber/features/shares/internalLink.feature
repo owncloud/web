@@ -1,3 +1,4 @@
+@predefined-users
 Feature: internal link share
 
 

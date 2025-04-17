@@ -1,3 +1,4 @@
+@predefined-users
 Feature: Application menu
   As a user
   I want to open the editor via the application menu

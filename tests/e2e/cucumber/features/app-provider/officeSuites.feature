@@ -12,7 +12,7 @@ Feature: Integrate with online office suites like Collabora and OnlyOffice
       | Brian |
     And "Alice" logs in
 
-
+  @predefined-users
   Scenario: create an OpenDocument file with Collabora
     Given "Alice" opens the "files" app
     When "Alice" creates the following resources
@@ -75,7 +75,7 @@ Feature: Integrate with online office suites like Collabora and OnlyOffice
     And "Brian" logs out
     And "Alice" logs out
 
-
+  @predefined-users
   Scenario: create a Microsoft Word file with OnlyOffice
     Given "Alice" opens the "files" app
     When "Alice" creates the following resources
@@ -236,7 +236,7 @@ Feature: Integrate with online office suites like Collabora and OnlyOffice
     Then "Alice" should see the content "OpenDocument Content" in editor "Collabora"
     And "Alice" logs out
 
-
+  @predefined-users
   Scenario: create files from office templates
     Given "Alice" uploads the following local file into personal space using API
       | localFile     | to            |

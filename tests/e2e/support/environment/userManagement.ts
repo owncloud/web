@@ -1,12 +1,13 @@
-import { Group, User } from '../types'
+import { Group, User, UserState } from '../types'
 import {
-  dummyUserStore,
+  userStore,
   dummyGroupStore,
   createdUserStore,
   createdGroupStore,
   keycloakCreatedUser,
   federatedUserStore,
-  dummyKeycloakGroupStore
+  dummyKeycloakGroupStore,
+  userStateStore
 } from '../store'
 import { config } from '../../config'
 
@@ -14,31 +15,31 @@ export class UsersEnvironment {
   getUser({ key }: { key: string }): User {
     const userKey = key.toLowerCase()
 
-    if (!dummyUserStore.has(userKey)) {
+    if (!userStore.has(userKey)) {
       throw new Error(`user with key '${userKey}' not found`)
     }
 
-    return dummyUserStore.get(userKey)
+    return userStore.get(userKey)
   }
 
   createUser({ key, user }: { key: string; user: User }): User {
     const userKey = key.toLowerCase()
 
-    if (dummyUserStore.has(userKey)) {
+    if (userStore.has(userKey)) {
       throw new Error(`user with key '${userKey}' already exists`)
     }
 
-    dummyUserStore.set(userKey, user)
+    userStore.set(userKey, user)
 
     return user
   }
 
-  storeCreatedUser({ user }: { user: User }): User {
+  storeCreatedUser(key: string, user: User): User {
     const store = config.federatedServer ? federatedUserStore : createdUserStore
-    if (store.has(user.id)) {
-      throw new Error(`user '${user.id}' already exists`)
+    if (store.has(key)) {
+      throw new Error(`user '${key}' already exists`)
     }
-    store.set(user.id, user)
+    store.set(key, user)
     return user
   }
 
@@ -124,5 +125,23 @@ export class UsersEnvironment {
     }
 
     return keycloakCreatedUser.delete(userKey)
+  }
+
+  saveUserState(key: string, states: UserState): void {
+    key = key.toLowerCase()
+    let userStates = {}
+    if (userStateStore.has(key)) {
+      userStates = userStateStore.get(key)
+    }
+    userStateStore.set(key, { ...userStates, ...states })
+  }
+
+  getUserState(key: string): UserState {
+    const userKey = key.toLowerCase()
+    if (!userStateStore.has(userKey)) {
+      throw new Error(`User key '${userKey}' not found`)
+    }
+
+    return userStateStore.get(userKey)
   }
 }
