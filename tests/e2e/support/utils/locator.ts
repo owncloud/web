@@ -1,6 +1,7 @@
 import { Locator } from '@playwright/test'
 import { getSSEEvents } from '../environment/sse'
 import { config } from '../../config'
+import { User } from '../types'
 
 export const waitForEvent = (locator: Locator, type: keyof SVGElementEventMap): Promise<void> =>
   locator.evaluate(
@@ -30,7 +31,7 @@ export const buildXpathLiteral = (value: string) => {
   }
 }
 
-export const waitForSSEEvent = (user: string, event: string) => {
+export const waitForSSEEvent = (user: User, event: string) => {
   return new Promise((resolve, reject) => {
     const startTime = Date.now()
     const interval = setInterval(function () {

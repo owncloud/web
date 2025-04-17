@@ -30,7 +30,8 @@ When('{string} reloads the page', async function (this: World, stepUser: string)
 
 When(
   '{string} should get {string} SSE event',
-  async function (this: World, user: string, event: string): Promise<void> {
+  async function (this: World, userKey: string, event: string): Promise<void> {
+    const user = this.usersEnvironment.getCreatedUser({ key: userKey })
     await waitForSSEEvent(user, event)
   }
 )
