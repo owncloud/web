@@ -39,6 +39,7 @@ Summary
 * Bugfix - Hide save in markdown editor: [#12460](https://github.com/owncloud/web/pull/12460)
 * Bugfix - Fix wrong HTML lang attribute: [#12478](https://github.com/owncloud/web/pull/12478)
 * Bugfix - Delete resource throws unknown error: [#12482](https://github.com/owncloud/web/pull/12482)
+* Bugfix - Application language and browser language do not match: [#12487](https://github.com/owncloud/web/pull/12487)
 * Enhancement - Accessibility improvements: [#5379](https://github.com/owncloud/web/issues/5379)
 * Enhancement - Create spaces via admin settings: [#11849](https://github.com/owncloud/web/pull/11849)
 * Enhancement - Add maintenance banner: [#12239](https://github.com/owncloud/web/pull/12239)
@@ -325,6 +326,15 @@ Details
 
    https://github.com/owncloud/web/issues/11014
    https://github.com/owncloud/web/pull/12482
+
+* Bugfix - Application language and browser language do not match: [#12487](https://github.com/owncloud/web/pull/12487)
+
+   We've added a fix to ensure that the application language and browser language
+   match. This fix is particularly important for users who have set their browser
+   language to a language that is not supported by us.
+
+   https://github.com/owncloud/web/issues/12486
+   https://github.com/owncloud/web/pull/12487
 
 * Enhancement - Accessibility improvements: [#5379](https://github.com/owncloud/web/issues/5379)
 
