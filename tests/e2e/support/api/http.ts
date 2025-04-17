@@ -41,11 +41,22 @@ export const request = async ({
 
   const baseUrl = isKeycloakRequest ? config.keycloakUrl : config.baseUrl
 
-  return await fetch(join(baseUrl, path), {
-    method,
-    body,
-    headers: basicHeader
-  })
+  let response: Response
+  let retried: boolean = false
+  do {
+    // wait for 1 second before retrying
+    if (retried) {
+      await new Promise((resolve) => setTimeout(resolve, 1000))
+    }
+    response = await fetch(join(baseUrl, path), {
+      method,
+      body,
+      headers: basicHeader
+    })
+    retried = true
+  } while (response.status === 425)
+
+  return response
 }
 
 export const checkResponseStatus = (response: Response, message = ''): void => {

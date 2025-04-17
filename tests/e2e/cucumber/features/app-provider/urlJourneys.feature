@@ -1,3 +1,4 @@
+@predefined-users
 Feature: url stability for mobile and desktop client
   As a user
   I want to work on different docs, sheets, slides etc.., using online office suites like Collabora or OnlyOffice
