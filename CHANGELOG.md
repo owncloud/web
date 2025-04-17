@@ -47,6 +47,7 @@ Summary
 * Enhancement - Rephrase invite users to invite users to federate: [#12355](https://github.com/owncloud/web/pull/12355)
 * Enhancement - Use custom password generator: [#12424](https://github.com/owncloud/web/pull/12424)
 * Enhancement - Add tag characters limit: [#12474](https://github.com/owncloud/web/pull/12474)
+* Enhancement - Add OCM explanatory tooltips: [#12488](https://github.com/owncloud/web/pull/12488)
 
 Details
 -------
@@ -392,6 +393,28 @@ Details
    capabilities and defaults to 30.
 
    https://github.com/owncloud/web/pull/12474
+
+* Enhancement - Add OCM explanatory tooltips: [#12488](https://github.com/owncloud/web/pull/12488)
+
+   We added two contextual helpers to the Connections panel in the OCM app.
+
+   - The first one is for the "User" column header. - The second one is for the
+   "Institution" column header.
+
+   The contextual helpers are used to provide additional information about the
+   columns.
+
+   The "User" column header tooltip reads:
+
+   > This is the user the federation is set up with, and the one you can share
+   resources with.
+
+   The "Institution" column header tooltip reads:
+
+   > This URL represents the trusted partner's instance.
+
+   https://github.com/owncloud/web/issues/11567
+   https://github.com/owncloud/web/pull/12488
 
 Changelog for ownCloud Web [11.3.1] (2025-03-13)
 =======================================
