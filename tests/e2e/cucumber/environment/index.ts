@@ -218,7 +218,7 @@ const cleanUpUser = async (createdUserStore, adminUser: User) => {
 }
 
 const cleanupPredefinedUser = async (userKey: string, user: User) => {
-  // delete personal space resources
+  // delete the personal space resources
   const resources = await api.dav.listSpaceResources({ user, spaceType: 'personal' })
   for (const fileId in resources) {
     await api.dav.deleteSpaceResource({ user, fileId })

@@ -1,4 +1,5 @@
 import { UsersEnvironment } from '../../support/environment'
+import { User } from '../../support/types'
 
 export const getValue = (pattern): string => {
   switch (pattern) {
@@ -12,7 +13,15 @@ export const getValue = (pattern): string => {
           throw new Error('Invalid user property: ' + pattern)
         }
         const usersEnvironment = new UsersEnvironment()
-        const user = usersEnvironment.getCreatedUser({ key: userKey })
+        let user: User
+        try {
+          user = usersEnvironment.getCreatedUser({ key: userKey })
+        } catch (err) {
+          // useful for ocm tests where users are from different server
+          console.error('[ERR] Failed to get user from created list.', err)
+          console.info('[INFO] Getting user from user store.')
+          user = usersEnvironment.getUser({ key: userKey })
+        }
         return user[property]
       }
   }
