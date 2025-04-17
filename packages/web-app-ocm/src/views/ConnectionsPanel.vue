@@ -49,7 +49,7 @@
               :title="$gettext('User')"
               :text="
                 $gettext(
-                  'This is the user the federation is set up with, and the one you can share resources with.'
+                  'This is the remote user with whom the federation is set up and resources can be shared.'
                 )
               "
             />
@@ -59,7 +59,7 @@
             <oc-contextual-helper
               class="oc-pl-xs oc-text-left"
               :title="$gettext('Institution')"
-              :text="$gettext('This URL represents the trusted partner\'s instance.')"
+              :text="$gettext('This URL represents the instance of the trusted partner.')"
             />
           </template>
           <template #actions="{ item }">
