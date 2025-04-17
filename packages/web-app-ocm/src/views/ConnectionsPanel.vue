@@ -42,6 +42,26 @@
           </template>
         </no-content-message>
         <oc-table v-else :fields="fields" :data="connections" :highlighted="highlightedConnections">
+          <template #display_nameHeader>
+            {{ $gettext('User') }}
+            <oc-contextual-helper
+              class="oc-pl-xs"
+              :title="$gettext('User')"
+              :text="
+                $gettext(
+                  'This is the remote user with whom the federation is set up and resources can be shared.'
+                )
+              "
+            />
+          </template>
+          <template #idpHeader>
+            {{ $gettext('Institution') }}
+            <oc-contextual-helper
+              class="oc-pl-xs oc-text-left"
+              :title="$gettext('Institution')"
+              :text="$gettext('This URL represents the instance of the trusted partner.')"
+            />
+          </template>
           <template #actions="{ item }">
             <oc-button
               appearance="raw"
@@ -111,7 +131,8 @@ export default defineComponent({
         {
           name: 'display_name',
           title: $gettext('User'),
-          alignH: 'left'
+          alignH: 'left',
+          headerType: 'slot'
         },
         {
           name: 'mail',
@@ -121,7 +142,8 @@ export default defineComponent({
         {
           name: 'idp',
           title: $gettext('Institution'),
-          alignH: 'right'
+          alignH: 'right',
+          headerType: 'slot'
         },
         {
           name: 'actions',
