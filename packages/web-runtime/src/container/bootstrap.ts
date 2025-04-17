@@ -161,8 +161,16 @@ export const announceConfiguration = async ({
   )
 
   const langQuery = getQueryParam('lang')
+  const useBrowserLanguage = (language: string): string => {
+    const fallbackLanguage = 'en'
+
+    return supportedLanguages[language] ? language : fallbackLanguage
+  }
+
   const defaultLanguage =
-    langQuery && supportedLanguages[langQuery] ? langQuery : navigator.language.substring(0, 2)
+    langQuery && supportedLanguages[langQuery]
+      ? langQuery
+      : useBrowserLanguage(navigator.language.substring(0, 2))
 
   rawConfig.options = {
     ...rawConfig.options,
