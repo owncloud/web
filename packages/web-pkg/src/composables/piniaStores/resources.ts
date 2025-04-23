@@ -160,6 +160,7 @@ export const useResourcesStore = defineStore('resources', () => {
     latestSelectedId.value = id
   }
 
+  const shouldShowFlatList = ref(false)
   const areHiddenFilesShown = ref(true)
   const areFileExtensionsShown = ref(true)
   const areWebDavDetailsShown = ref(false)
@@ -167,6 +168,10 @@ export const useResourcesStore = defineStore('resources', () => {
   const setAreHiddenFilesShown = (value: boolean) => {
     areHiddenFilesShown.value = value
     window.localStorage.setItem('oc_hiddenFilesShown', value.toString())
+  }
+  const setShouldShowFlatList = (value: boolean) => {
+    shouldShowFlatList.value = value
+    window.localStorage.setItem('oc_flatList', value.toString())
   }
   const setAreFileExtensionsShown = (value: boolean) => {
     areFileExtensionsShown.value = value
@@ -336,6 +341,8 @@ export const useResourcesStore = defineStore('resources', () => {
     resetSelection,
     setLastSelectedId,
 
+    shouldShowFlatList,
+    setShouldShowFlatList,
     areHiddenFilesShown,
     areFileExtensionsShown,
     areWebDavDetailsShown,

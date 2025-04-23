@@ -23,6 +23,7 @@
                 :has-hidden-files="false"
                 :has-file-extensions="false"
                 :has-pagination="true"
+                :should-show-flat-list-toggle="true"
                 :pagination-options="paginationOptions"
                 :per-page-default="perPageDefault"
                 per-page-storage-prefix="admin-settings"

@@ -9,7 +9,7 @@ exports[`Spaces view > loading states > should render spaces list after loading 
           <oc-breadcrumb-stub items="[object Object],[object Object]" id="admin-settings-breadcrumb" variation="default" contextmenupadding="medium" maxwidth="-1" truncationoffset="2" showcontextactions="false" class="oc-flex oc-flex-middle"></oc-breadcrumb-stub>
           <portal-target name="app.runtime.mobile.nav"></portal-target>
           <div class="oc-flex">
-            <view-options-stub perpagestorageprefix="admin-settings" hashiddenfiles="false" hasfileextensions="false" haspagination="true" paginationoptions="20,50,100,250" perpagequeryname="items-per-page" perpagedefault="50" viewmodedefault="resource-table" viewmodes=""></view-options-stub>
+            <view-options-stub perpagestorageprefix="admin-settings" shouldshowflatlisttoggle="true" hashiddenfiles="false" hasfileextensions="false" haspagination="true" paginationoptions="20,50,100,250" perpagequeryname="items-per-page" perpagedefault="50" viewmodedefault="resource-table" viewmodes=""></view-options-stub>
           </div>
         </div>
         <div class="admin-settings-app-bar-actions oc-flex oc-flex-middle oc-mt-xs">
