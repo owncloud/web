@@ -48,7 +48,6 @@ export const createSpace = async ({
   space: Space
 }): Promise<string> => {
   const body = JSON.stringify({
-    id: space.id,
     name: space.name
   })
 
