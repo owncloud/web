@@ -36,4 +36,4 @@ reporter.generate({
       { label: "Environment", value: environment },
     ],
   }
-});
+})
