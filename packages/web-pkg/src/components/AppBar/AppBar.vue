@@ -87,7 +87,8 @@ import {
   useFileActionsEmptyTrashBin,
   useFileActionsMove,
   useFileActionsRestore,
-  useSpaceActionsDuplicate
+  useSpaceActionsDuplicate,
+  useFileActionsDuplicate
 } from '../../composables/actions'
 import {
   useAbility,
@@ -179,6 +180,7 @@ export default defineComponent({
     const { actions: disableSpaceActions } = useSpaceActionsDisable()
     const { actions: editSpaceQuotaActions } = useSpaceActionsEditQuota()
     const { actions: restoreSpaceActions } = useSpaceActionsRestore()
+    const { actions: duplicateResourcesActions } = useFileActionsDuplicate()
 
     const breadcrumbMaxWidth = ref<number>(0)
     const isSearchLocation = useActiveLocation(isLocationCommonActive, 'files-common-search')
@@ -196,6 +198,7 @@ export default defineComponent({
         ...unref(downloadFileActions),
         ...unref(moveActions),
         ...unref(copyActions),
+        ...unref(duplicateResourcesActions),
         ...unref(emptyTrashBinActions),
         ...unref(deleteActions),
         ...unref(restoreActions)

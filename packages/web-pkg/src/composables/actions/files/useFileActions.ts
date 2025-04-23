@@ -27,7 +27,8 @@ import {
   useFileActionsNavigate,
   useFileActionsRename,
   useFileActionsRestore,
-  useFileActionsCreateSpaceFromResource
+  useFileActionsCreateSpaceFromResource,
+  useFileActionsDuplicate
 } from './index'
 import {
   ActionExtension,
@@ -74,6 +75,7 @@ export const useFileActions = () => {
   const { actions: renameActions } = useFileActionsRename()
   const { actions: restoreActions } = useFileActionsRestore()
   const { actions: createSpaceFromResource } = useFileActionsCreateSpaceFromResource()
+  const { actions: duplicateActions } = useFileActionsDuplicate()
 
   const systemActions = computed((): Action[] => [
     ...unref(downloadArchiveActions),
@@ -82,6 +84,7 @@ export const useFileActions = () => {
     ...unref(moveActions),
     ...unref(copyActions),
     ...unref(renameActions),
+    ...unref(duplicateActions),
     ...unref(createSpaceFromResource),
     ...unref(restoreActions),
     ...unref(enableSyncActions),
