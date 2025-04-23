@@ -52,8 +52,8 @@ playwright-report
 /packages/design-system/src/assets/tokens/
 
 # Report for tests
-tests/report/cucumber_report.json
-tests/report/cucumber_report.html
+tests/e2e/cucumber/report/*
+!tests/e2e/cucumber/report/index.mjs
 .vscode/settings.json
 
 # third party licenses

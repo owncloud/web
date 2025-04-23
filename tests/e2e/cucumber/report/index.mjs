@@ -1,15 +1,12 @@
 import { Command } from 'commander'
 import getRepoInfo from 'git-repo-info'
-import reporter from 'cucumber-html-reporter'
-import os from 'os'
-import pkg from '../../../../package.json' with { type: 'json' }
+import reporter from 'multiple-cucumber-html-reporter'
 
 const program = new Command()
 
 program
   .option('--backend-version <semver>', 'version of used backend')
   .option('--environment <type>', 'test environment e.g. docker, local, remote ...')
-  .option('--report-open', 'open report in browser', false)
   .option(
     '--report-location <path>',
     'location where the report gets generated to',
@@ -23,22 +20,20 @@ program
 
 program.parse()
 
-const { backendName, backendVersion, environment, reportOpen, reportLocation, reportInput } =
+const { backendVersion, environment, reportLocation, reportInput } =
   program.opts()
 const repoInfo = getRepoInfo()
 
 reporter.generate({
-  theme: 'bootstrap',
-  jsonFile: reportInput,
-  output: reportLocation,
-  reportSuiteAsScenarios: true,
-  scenarioTimestamp: true,
-  launchReport: reportOpen,
-  metadata: {
-    'web-version': pkg.version,
-    platform: os.platform(),
-    repository: `${repoInfo.branch}`,
-    ...(backendVersion && { ['ocis-version']: backendVersion }),
-    ...(environment && { environment: environment })
+  jsonDir: reportLocation,
+  reportPath: reportInput,
+  customData: {
+    title: "Run info",
+    data: [
+      { label: "Project", value: "web" },
+      { label: "Web version", value: repoInfo.tag },
+      { label: "Backend version", value: backendVersion },
+      { label: "Environment", value: environment },
+    ],
   }
 })
