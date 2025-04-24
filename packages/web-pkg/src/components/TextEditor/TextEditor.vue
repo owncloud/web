@@ -32,14 +32,24 @@
             href="https://imzbf.github.io/md-editor-v3/en-US/api#%F0%9F%AA%A1%20Shortcut%20keys"
             target="_blank"
             rel="noopener noreferrer"
-            >{{ $gettext('Keyboard shortcuts') }}</a
+            >{{
+              $pgettext(
+                'A link to a list of keyboard shortcuts that can be used in the markdown editor.',
+                'Keyboard shortcuts'
+              )
+            }}</a
           >
 
           <a
             href="https://highlightjs.readthedocs.io/en/latest/supported-languages.html"
             target="_blank"
             rel="noopener noreferrer"
-            >{{ $gettext('Supported languages') }}</a
+            >{{
+              $pgettext(
+                'A link to a list of supported programming languages that can be used in the markdown editor.',
+                'Supported programming languages'
+              )
+            }}</a
           >
         </span>
       </template>
