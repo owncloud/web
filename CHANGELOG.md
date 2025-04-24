@@ -48,6 +48,7 @@ Summary
 * Enhancement - Use custom password generator: [#12424](https://github.com/owncloud/web/pull/12424)
 * Enhancement - Add tag characters limit: [#12474](https://github.com/owncloud/web/pull/12474)
 * Enhancement - Add OCM explanatory tooltips: [#12488](https://github.com/owncloud/web/pull/12488)
+* Enhancement - Add flat list view: [#12509](https://github.com/owncloud/web/pull/12509)
 
 Details
 -------
@@ -415,6 +416,15 @@ Details
 
    https://github.com/owncloud/web/issues/11567
    https://github.com/owncloud/web/pull/12488
+
+* Enhancement - Add flat list view: [#12509](https://github.com/owncloud/web/pull/12509)
+
+   We've added a new flat list view. This feature provides a flat view of files and
+   folders, allowing users to sort them in ascending or descending order without
+   grouping folders separately from files.
+
+   https://github.com/owncloud/web/issues/12503
+   https://github.com/owncloud/web/pull/12509
 
 Changelog for ownCloud Web [11.3.1] (2025-03-13)
 =======================================
