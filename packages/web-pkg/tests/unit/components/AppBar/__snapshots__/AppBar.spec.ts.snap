@@ -10,7 +10,7 @@ exports[`AppBar component > renders > by default no breadcrumbs, no bulkactions,
       <portal-target data-v-aba8ddeb="" name="app.runtime.mobile.nav"></portal-target>
       <!--v-if-->
       <div data-v-aba8ddeb="" id="files-app-bar-controls-right" class="oc-flex">
-        <view-options-stub data-v-aba8ddeb="" perpagestorageprefix="files" hashiddenfiles="true" hasfileextensions="true" haspagination="true" paginationoptions="20,50,100,250,500" perpagequeryname="items-per-page" perpagedefault="100" viewmodedefault="resource-table" viewmodes=""></view-options-stub>
+        <view-options-stub data-v-aba8ddeb="" perpagestorageprefix="files" shouldshowflatlisttoggle="true" hashiddenfiles="true" hasfileextensions="true" haspagination="true" paginationoptions="20,50,100,250,500" perpagequeryname="items-per-page" perpagedefault="100" viewmodedefault="resource-table" viewmodes=""></view-options-stub>
       </div>
     </div>
     <div data-v-aba8ddeb="" class="files-app-bar-actions oc-mt-xs">
@@ -32,7 +32,7 @@ exports[`AppBar component > renders > if given, with content in the actions slot
       <portal-target data-v-aba8ddeb="" name="app.runtime.mobile.nav"></portal-target>
       <!--v-if-->
       <div data-v-aba8ddeb="" id="files-app-bar-controls-right" class="oc-flex">
-        <view-options-stub data-v-aba8ddeb="" perpagestorageprefix="files" hashiddenfiles="true" hasfileextensions="true" haspagination="true" paginationoptions="20,50,100,250,500" perpagequeryname="items-per-page" perpagedefault="100" viewmodedefault="resource-table" viewmodes=""></view-options-stub>
+        <view-options-stub data-v-aba8ddeb="" perpagestorageprefix="files" shouldshowflatlisttoggle="true" hashiddenfiles="true" hasfileextensions="true" haspagination="true" paginationoptions="20,50,100,250,500" perpagequeryname="items-per-page" perpagedefault="100" viewmodedefault="resource-table" viewmodes=""></view-options-stub>
       </div>
     </div>
     <div data-v-aba8ddeb="" class="files-app-bar-actions oc-mt-xs">
@@ -54,7 +54,7 @@ exports[`AppBar component > renders > if given, with content in the content slot
       <portal-target data-v-aba8ddeb="" name="app.runtime.mobile.nav"></portal-target>
       <!--v-if-->
       <div data-v-aba8ddeb="" id="files-app-bar-controls-right" class="oc-flex">
-        <view-options-stub data-v-aba8ddeb="" perpagestorageprefix="files" hashiddenfiles="true" hasfileextensions="true" haspagination="true" paginationoptions="20,50,100,250,500" perpagequeryname="items-per-page" perpagedefault="100" viewmodedefault="resource-table" viewmodes=""></view-options-stub>
+        <view-options-stub data-v-aba8ddeb="" perpagestorageprefix="files" shouldshowflatlisttoggle="true" hashiddenfiles="true" hasfileextensions="true" haspagination="true" paginationoptions="20,50,100,250,500" perpagequeryname="items-per-page" perpagedefault="100" viewmodedefault="resource-table" viewmodes=""></view-options-stub>
       </div>
     </div>
     <div data-v-aba8ddeb="" class="files-app-bar-actions oc-mt-xs">

@@ -26,6 +26,7 @@ vi.mock('../../../src/composables/router', async (importOriginal) => ({
 const selectors = {
   pageSizeSelect: '.oc-page-size',
   hiddenFilesSwitch: '[data-testid="files-switch-hidden-files"]',
+  flatListSwitch: '[data-testid="files-switch-flat-list"]',
   fileExtensionsSwitch: '[data-testid="files-switch-files-extensions-files"]',
   viewModeSwitchBtns: '.viewmode-switch-buttons',
   tileSizeSlider: '[data-testid="files-tiles-size-slider"]'
@@ -47,7 +48,7 @@ describe('ViewOptions component', () => {
     it('sets the correct files page limit', () => {
       const perPage = '100'
       const newItemsPerPage = '500'
-      const { wrapper, mocks } = getWrapper({ perPage })
+      const { wrapper, mocks } = getWrapper({ perPage }) as any
       wrapper.vm.setItemsPerPage(newItemsPerPage)
       expect(mocks.$router.replace).toHaveBeenCalledWith(
         expect.objectContaining({
@@ -58,7 +59,7 @@ describe('ViewOptions component', () => {
     it('resets the page to 1 if current page is > 1', () => {
       const perPage = '100'
       const newItemsPerPage = '500'
-      const { wrapper, mocks } = getWrapper({ perPage, currentPage: '2' })
+      const { wrapper, mocks } = getWrapper({ perPage, currentPage: '2' }) as any
       wrapper.vm.setItemsPerPage(newItemsPerPage)
       expect(mocks.$router.replace).toHaveBeenCalledWith(
         expect.objectContaining({
@@ -80,6 +81,21 @@ describe('ViewOptions component', () => {
 
       const { setAreHiddenFilesShown } = useResourcesStore()
       expect(setAreHiddenFilesShown).toHaveBeenCalled()
+    })
+  })
+  describe('flat list toggle', () => {
+    it('does not show when disabled', () => {
+      const { wrapper } = getWrapper({ props: { shouldShowFlatListToggle: false } })
+      expect(wrapper.find(selectors.flatListSwitch).exists()).toBeFalsy()
+    })
+    it('toggles the setting to show/hide flat list', () => {
+      const { wrapper } = getWrapper()
+      wrapper
+        .findComponent<typeof OcSwitch>(selectors.flatListSwitch)
+        .vm.$emit('update:checked', false)
+
+      const { setShouldShowFlatList } = useResourcesStore()
+      expect(setShouldShowFlatList).toHaveBeenCalled()
     })
   })
   describe('file extension toggle', () => {

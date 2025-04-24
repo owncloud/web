@@ -3,6 +3,9 @@ import { ReadOnlyRef } from '../../utils'
 import { useRouteName, useRouter, useRouteQueryPersisted, QueryValue } from '../router'
 import { SortConstants } from './constants'
 import get from 'lodash-es/get'
+import { useResourcesStore } from '../index'
+
+import { storeToRefs } from 'pinia'
 
 export interface SortableItem {
   type?: string
@@ -139,8 +142,10 @@ export const sortHelper = <T extends SortableItem>(
   }
   const { sortable } = field
   const collator = new Intl.Collator(navigator.language, { sensitivity: 'base', numeric: true })
+  const resourcesStore = useResourcesStore()
+  const { shouldShowFlatList } = storeToRefs(resourcesStore)
 
-  if (sortBy === 'name') {
+  if (sortBy === 'name' && !shouldShowFlatList.value) {
     const folders = [...items.filter((i) => i.type === 'folder')].sort((a, b) =>
       compare(a, b, collator, sortBy, sortDir, sortable)
     )

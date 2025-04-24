@@ -40,6 +40,7 @@
             :has-hidden-files="hasHiddenFiles"
             :has-file-extensions="hasFileExtensions"
             :has-pagination="hasPagination"
+            :should-show-flat-list-toggle="true"
             per-page-storage-prefix="files"
             :view-mode-default="viewModeDefault"
           />

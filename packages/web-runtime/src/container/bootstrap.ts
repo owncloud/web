@@ -960,7 +960,6 @@ export const setViewOptions = ({ resourcesStore }: { resourcesStore: ResourcesSt
   if (areHiddenFilesShownBoolean !== resourcesStore.areHiddenFilesShown) {
     resourcesStore.setAreHiddenFilesShown(areHiddenFilesShownBoolean)
   }
-
   const areFileExtensionsShown = window.localStorage.getItem('oc_fileExtensionsShown') || 'true'
   const areFileExtensionsShownBoolean = areFileExtensionsShown === 'true'
 
@@ -973,5 +972,12 @@ export const setViewOptions = ({ resourcesStore }: { resourcesStore: ResourcesSt
 
   if (areWebDavDetailsShownBoolean !== resourcesStore.areWebDavDetailsShown) {
     resourcesStore.setAreWebDavDetailsShown(areWebDavDetailsShownBoolean)
+  }
+
+  const shouldShowFlatList = window.localStorage.getItem('oc_flatList') || 'false'
+  const isShouldShowFlatListBoolean = shouldShowFlatList === 'true'
+
+  if (isShouldShowFlatListBoolean !== resourcesStore.shouldShowFlatList) {
+    resourcesStore.setShouldShowFlatList(isShouldShowFlatListBoolean)
   }
 }

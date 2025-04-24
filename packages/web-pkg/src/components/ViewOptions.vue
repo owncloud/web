@@ -40,6 +40,14 @@
       padding-size="medium"
     >
       <oc-list>
+        <li v-if="shouldShowFlatListToggle" class="files-view-options-list-item">
+          <oc-switch
+            v-model:checked="showFlatList"
+            data-testid="files-switch-flat-list"
+            :label="$gettext('Flat List (A-Z)')"
+            @update:checked="toggleFlatList"
+          />
+        </li>
         <li v-if="hasHiddenFiles" class="files-view-options-list-item">
           <oc-switch
             v-model:checked="hiddenFilesShownModel"
@@ -87,8 +95,8 @@
   </div>
 </template>
 
-<script lang="ts">
-import { computed, defineComponent, PropType, ref, unref, watch } from 'vue'
+<script lang="ts" setup>
+import { computed, ref, unref, watch } from 'vue'
 import { useGettext } from 'vue3-gettext'
 import {
   queryItemAsString,
@@ -105,142 +113,106 @@ import {
 import { FolderView } from '../ui/types'
 import { storeToRefs } from 'pinia'
 
-export default defineComponent({
-  props: {
-    hasHiddenFiles: { type: Boolean, default: true },
-    hasFileExtensions: { type: Boolean, default: true },
-    hasPagination: { type: Boolean, default: true },
-    paginationOptions: {
-      type: Array as PropType<string[]>,
-      default: () => PaginationConstants.options
-    },
-    perPageQueryName: {
-      type: String,
-      default: () => PaginationConstants.perPageQueryName
-    },
-    perPageDefault: {
-      type: String,
-      default: () => PaginationConstants.perPageDefault
-    },
-    perPageStoragePrefix: {
-      type: String,
-      required: true
-    },
-    viewModeDefault: {
-      type: String,
-      required: false,
-      default: () => FolderViewModeConstants.defaultModeName
-    },
-    viewModes: {
-      type: Array as PropType<FolderView[]>,
-      default: (): FolderView[] => []
-    }
-  },
-  setup(props) {
-    const router = useRouter()
-    const currentRoute = useRoute()
-    const { $gettext } = useGettext()
+interface Props {
+  shouldShowFlatListToggle?: boolean
+  hasHiddenFiles?: boolean
+  hasFileExtensions?: boolean
+  hasPagination?: boolean
+  paginationOptions?: string[]
+  perPageQueryName?: string
+  perPageDefault?: string
+  perPageStoragePrefix: string
+  viewModeDefault?: string
+  viewModes?: FolderView[]
+}
+const {
+  shouldShowFlatListToggle = true,
+  hasHiddenFiles = true,
+  hasFileExtensions = true,
+  hasPagination = true,
+  paginationOptions = PaginationConstants.options,
+  perPageQueryName = PaginationConstants.perPageQueryName,
+  perPageDefault = PaginationConstants.perPageDefault,
+  perPageStoragePrefix,
+  viewModeDefault = FolderViewModeConstants.defaultModeName,
+  viewModes = []
+} = defineProps<Props>()
+const router = useRouter()
+const currentRoute = useRoute()
+const { $gettext } = useGettext()
 
-    const resourcesStore = useResourcesStore()
-    const { setAreHiddenFilesShown, setAreFileExtensionsShown } = resourcesStore
-    const { areHiddenFilesShown, areFileExtensionsShown } = storeToRefs(resourcesStore)
+const resourcesStore = useResourcesStore()
+const { setAreHiddenFilesShown, setAreFileExtensionsShown, setShouldShowFlatList } = resourcesStore
+const { areHiddenFilesShown, areFileExtensionsShown, shouldShowFlatList } =
+  storeToRefs(resourcesStore)
 
-    const queryParamsLoading = ref(false)
+const queryParamsLoading = ref(false)
 
-    const currentPageQuery = useRouteQuery('page')
-    const currentPage = computed(() => {
-      if (!unref(currentPageQuery)) {
-        return 1
-      }
-      return parseInt(queryItemAsString(unref(currentPageQuery)))
-    })
-    const itemsPerPageQuery = useRouteQueryPersisted({
-      name: props.perPageQueryName,
-      defaultValue: props.perPageDefault,
-      storagePrefix: props.perPageStoragePrefix
-    })
-
-    const routeName = useRouteName()
-    const viewModeQuery = useRouteQueryPersisted({
-      name: `${unref(routeName)}-${FolderViewModeConstants.queryName}`,
-      defaultValue: props.viewModeDefault
-    })
-
-    const viewSizeQuery = useRouteQueryPersisted({
-      name: FolderViewModeConstants.tilesSizeQueryName,
-      defaultValue: FolderViewModeConstants.tilesSizeDefault.toString()
-    })
-
-    const setItemsPerPage = (itemsPerPage: string) => {
-      return router.replace({
-        query: {
-          ...unref(currentRoute).query,
-          [props.perPageQueryName]: itemsPerPage,
-          ...(unref(currentPage) > 1 && { page: '1' })
-        }
-      })
-    }
-
-    const setViewMode = (mode: FolderView) => {
-      viewModeQuery.value = mode.name
-    }
-
-    watch(
-      [itemsPerPageQuery, viewModeQuery, viewSizeQuery],
-      (params) => {
-        queryParamsLoading.value = params.some((p) => !p)
-      },
-      { immediate: true, deep: true }
-    )
-
-    const viewSizeMax = useViewSizeMax()
-
-    return {
-      FolderViewModeConstants,
-      viewModeCurrent: viewModeQuery,
-      viewSizeCurrent: viewSizeQuery,
-      viewSizeMax,
-      itemsPerPageCurrent: itemsPerPageQuery,
-      queryParamsLoading,
-      queryItemAsString,
-      setItemsPerPage,
-      setViewMode,
-      areHiddenFilesShown,
-      areFileExtensionsShown,
-      setAreHiddenFilesShown,
-      setAreFileExtensionsShown,
-      viewOptionsButtonLabel: $gettext('Display customization options of the files list')
-    }
-  },
-  computed: {
-    hiddenFilesShownModel: {
-      get() {
-        return this.areHiddenFilesShown
-      },
-
-      set(value: boolean) {
-        this.setAreHiddenFilesShown(value)
-      }
-    },
-    fileExtensionsShownModel: {
-      get() {
-        return this.areFileExtensionsShown
-      },
-
-      set(value: boolean) {
-        this.setAreFileExtensionsShown(value)
-      }
-    }
-  },
-  methods: {
-    updateHiddenFilesShownModel(event: boolean) {
-      this.hiddenFilesShownModel = event
-    },
-    updateFileExtensionsShownModel(event: boolean) {
-      this.fileExtensionsShownModel = event
-    }
+const currentPageQuery = useRouteQuery('page')
+const currentPage = computed(() => {
+  if (!unref(currentPageQuery)) {
+    return 1
   }
+  return parseInt(queryItemAsString(unref(currentPageQuery)))
 })
+const itemsPerPageQuery = useRouteQueryPersisted({
+  name: perPageQueryName,
+  defaultValue: perPageDefault,
+  storagePrefix: perPageStoragePrefix
+})
+
+const routeName = useRouteName()
+const viewModeQuery = useRouteQueryPersisted({
+  name: `${unref(routeName)}-${FolderViewModeConstants.queryName}`,
+  defaultValue: viewModeDefault
+})
+
+const viewSizeQuery = useRouteQueryPersisted({
+  name: FolderViewModeConstants.tilesSizeQueryName,
+  defaultValue: FolderViewModeConstants.tilesSizeDefault.toString()
+})
+
+function toggleFlatList(event: boolean) {
+  setShouldShowFlatList(event)
+}
+function updateHiddenFilesShownModel(event: boolean) {
+  setAreHiddenFilesShown(event)
+}
+function updateFileExtensionsShownModel(event: boolean) {
+  setAreFileExtensionsShown(event)
+}
+
+const setItemsPerPage = (itemsPerPage: string) => {
+  return router.replace({
+    query: {
+      ...unref(currentRoute).query,
+      [perPageQueryName]: itemsPerPage,
+      ...(unref(currentPage) > 1 && { page: '1' })
+    }
+  })
+}
+
+const setViewMode = (mode: FolderView) => {
+  viewModeQuery.value = mode.name
+}
+
+watch(
+  [itemsPerPageQuery, viewModeQuery, viewSizeQuery],
+  (params) => {
+    queryParamsLoading.value = params.some((p) => !p)
+  },
+  { immediate: true, deep: true }
+)
+
+const viewSizeMax = useViewSizeMax()
+const viewModeCurrent = viewModeQuery
+const viewSizeCurrent = viewSizeQuery
+const itemsPerPageCurrent = itemsPerPageQuery
+
+const viewOptionsButtonLabel = $gettext('Display customization options of the files list')
+const showFlatList = computed(() => unref(shouldShowFlatList))
+const hiddenFilesShownModel = computed(() => unref(areHiddenFilesShown))
+const fileExtensionsShownModel = computed(() => unref(areFileExtensionsShown))
 </script>
 
 <style lang="scss" scoped>
