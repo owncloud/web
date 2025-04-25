@@ -48,6 +48,7 @@ Summary
 * Enhancement - Use custom password generator: [#12424](https://github.com/owncloud/web/pull/12424)
 * Enhancement - Add tag characters limit: [#12474](https://github.com/owncloud/web/pull/12474)
 * Enhancement - Add OCM explanatory tooltips: [#12488](https://github.com/owncloud/web/pull/12488)
+* Enhancement - Add duplicate action: [#12508](https://github.com/owncloud/web/pull/12508)
 * Enhancement - Add flat list view: [#12509](https://github.com/owncloud/web/pull/12509)
 
 Details
@@ -416,6 +417,17 @@ Details
 
    https://github.com/owncloud/web/issues/11567
    https://github.com/owncloud/web/pull/12488
+
+* Enhancement - Add duplicate action: [#12508](https://github.com/owncloud/web/pull/12508)
+
+   We've added a new resource action that can be used to duplicate resources. The
+   action is available in the app bar of files app, resource context menu, and the
+   resource actions panel in the sidebar. The action can be used on a single or
+   multiple resources. Triggering the action will start a worker that will
+   duplicate the resources into the same folder and space.
+
+   https://github.com/owncloud/web/issues/9898
+   https://github.com/owncloud/web/pull/12508
 
 * Enhancement - Add flat list view: [#12509](https://github.com/owncloud/web/pull/12509)
 
