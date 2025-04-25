@@ -50,6 +50,7 @@ Summary
 * Enhancement - Add OCM explanatory tooltips: [#12488](https://github.com/owncloud/web/pull/12488)
 * Enhancement - Add duplicate action: [#12508](https://github.com/owncloud/web/pull/12508)
 * Enhancement - Add flat list view: [#12509](https://github.com/owncloud/web/pull/12509)
+* Enhancement - Add loading spinner to submit button: [#12513](https://github.com/owncloud/web/pull/12513)
 
 Details
 -------
@@ -437,6 +438,16 @@ Details
 
    https://github.com/owncloud/web/issues/12503
    https://github.com/owncloud/web/pull/12509
+
+* Enhancement - Add loading spinner to submit button: [#12513](https://github.com/owncloud/web/pull/12513)
+
+   We have enhanced the user experience by displaying a loading spinner and
+   disabling the submit button when clicked on password-protected public links.
+   This ensures users on slower connections receive clear feedback that their
+   request is being processed.
+
+   https://github.com/owncloud/enterprise/issues/7190
+   https://github.com/owncloud/web/pull/12513
 
 Changelog for ownCloud Web [11.3.1] (2025-03-13)
 =======================================
