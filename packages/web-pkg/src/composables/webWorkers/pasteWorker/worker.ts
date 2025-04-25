@@ -70,7 +70,10 @@ self.onmessage = async (e: MessageEvent) => {
       const resource = data.resource
 
       try {
-        if (data.transferType === TransferType.COPY) {
+        if (
+          data.transferType === TransferType.COPY ||
+          data.transferType === TransferType.DUPLICATE
+        ) {
           await doCopy(data)
           resource.id = undefined
           resource.fileId = undefined

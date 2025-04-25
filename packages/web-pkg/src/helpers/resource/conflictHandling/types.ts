@@ -13,7 +13,8 @@ export interface ResolveConflict {
 
 export enum TransferType {
   COPY,
-  MOVE
+  MOVE,
+  DUPLICATE
 }
 
 export type TransferData = {

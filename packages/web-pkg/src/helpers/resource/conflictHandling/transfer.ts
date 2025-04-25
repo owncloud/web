@@ -124,11 +124,17 @@ export class ResourceTransfer extends ConflictDialog {
       await this.clientService.webdav.listFiles(this.targetSpace, this.targetFolder)
     ).children
 
-    const resolvedConflicts = await this.resolveAllConflicts(
-      this.resourcesToMove,
-      this.targetFolder,
-      targetFolderResources
-    )
+    const resolvedConflicts =
+      transferType === TransferType.DUPLICATE
+        ? this.resourcesToMove.map((resource) => ({
+            resource,
+            strategy: ResolveStrategy.KEEP_BOTH
+          }))
+        : await this.resolveAllConflicts(
+            this.resourcesToMove,
+            this.targetFolder,
+            targetFolderResources
+          )
 
     const result: TransferData[] = []
 

@@ -28,7 +28,8 @@ import {
   useFileActionsNavigate,
   useFileActionsFavorite,
   useFileActionsCreateSpaceFromResource,
-  useFileActions
+  useFileActions,
+  useFileActionsDuplicate
 } from '../../composables'
 import { isNil } from 'lodash-es'
 
@@ -58,6 +59,7 @@ const { actions: setSpaceImageActions } = useFileActionsSetImage()
 const { actions: showDetailsActions } = useFileActionsShowDetails()
 const { actions: createSpaceFromResourceActions } = useFileActionsCreateSpaceFromResource()
 const { actions: showSharesActions } = useFileActionsShowShares()
+const { actions: duplicateActions } = useFileActionsDuplicate()
 
 const extensionRegistry = useExtensionRegistry()
 const extensionsContextActions = computed(() => {
@@ -87,6 +89,7 @@ const menuItemsBatchActions = computed(() =>
     ...unref(downloadArchiveActions),
     ...unref(moveActions),
     ...unref(copyActions),
+    ...unref(duplicateActions),
     ...unref(emptyTrashBinActions),
     ...unref(deleteActions),
     ...unref(restoreActions),
@@ -127,6 +130,7 @@ const menuItemsActions = computed(() => {
     ...unref(copyActions),
     ...unref(pasteActions),
     ...unref(renameActions),
+    ...unref(duplicateActions),
     ...unref(createSpaceFromResourceActions),
     ...unref(restoreActions),
     ...unref(enableSyncActions),
