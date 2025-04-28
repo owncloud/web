@@ -1,3 +1,4 @@
+@predefined-users
 Feature: Secure view
   As a user
   I want to share different docs using secure view role

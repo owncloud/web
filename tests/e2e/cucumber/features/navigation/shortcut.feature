@@ -1,3 +1,4 @@
+@predefined-users
 Feature: Users can create shortcuts for resources and sites
 
   Background:

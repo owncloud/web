@@ -8,7 +8,7 @@ Feature: password-protected folder operations
       | id    |
       | Alice |
 
-
+  @predefined-users
   Scenario: password-protected folder in personal space
     Given "Alice" has logged in
     When "Alice" creates the following resources

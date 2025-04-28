@@ -4,19 +4,19 @@ Feature: Upload
   So that I can store them in owncloud
 
   Background:
-    Given "Admin" logs in
-    And "Admin" creates following user using API
+    Given "Admin" creates following user using API
       | id    |
       | Alice |
     And "Alice" logs in
-    And "Admin" opens the "admin-settings" app
-    And "Admin" navigates to the users management page
-    When "Admin" changes the quota of the user "Alice" to "0.00008" using the sidebar panel
-    And "Admin" logs out
     And "Alice" opens the "files" app
 
 
   Scenario: Upload files in personal space
+    Given "Admin" logs in
+    And "Admin" opens the "admin-settings" app
+    And "Admin" navigates to the users management page
+    And "Admin" changes the quota of the user "Alice" to "0.00008" using the sidebar panel
+    And "Admin" logs out
     Given "Alice" creates the following resources
       | resource          | type    | content             |
       | new-lorem-big.txt | txtFile | new lorem big file  |
@@ -53,13 +53,13 @@ Feature: Upload
       | test#folder   | folder |
     And "Alice" logs out
 
-
+  @predefined-users
   Scenario: upload multiple small files
     When "Alice" uploads 50 small files in personal space
     Then "Alice" should see 50 resources in the personal space files view
     And "Alice" logs out
 
-
+  @predefined-users
   Scenario: upload folder
     When "Alice" uploads the following resources
       | resource | type   |

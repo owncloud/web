@@ -29,14 +29,14 @@ Feature: federation management
     And "Brian" opens the "open-cloud-mesh" app
     When "Brian" accepts federated share invitation by local user "Alice"
     Then "Brian" should see the following federated connections:
-      | user         | email             |
-      | Alice Hansen | alice@example.org |
+      | user                     | email              |
+      | %user_alice_displayName% | %user_alice_email% |
 
     And using "LOCAL" server
     When "Alice" reloads the page
     Then "Alice" should see the following federated connections:
-      | user         | email             |
-      | Brian Murphy | brian@example.org |
+      | user                     | email              |
+      | %user_brian_displayName% | %user_brian_email% |
     And "Alice" opens the "files" app
     And "Alice" shares the following resource using the sidebar panel
       | resource       | recipient | type | role                      | resourceType | shareType |

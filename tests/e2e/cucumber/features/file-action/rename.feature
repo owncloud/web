@@ -1,3 +1,4 @@
+@predefined-users
 Feature: rename
   As a user
   I want to rename resources

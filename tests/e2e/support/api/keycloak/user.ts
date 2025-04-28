@@ -65,8 +65,10 @@ export const createUser = async ({ user, admin }: { user: User; admin: User }): 
   })
 
   // store oCIS user information
-  usersEnvironment.storeCreatedUser({
-    user: { ...user, uuid: await getUserId({ user, admin }), role: defaultNewUserRole }
+  usersEnvironment.storeCreatedUser(user.id, {
+    ...user,
+    uuid: await getUserId({ user, admin }),
+    role: defaultNewUserRole
   })
   await setAccessTokenForKeycloakOcisUser(user)
   return user

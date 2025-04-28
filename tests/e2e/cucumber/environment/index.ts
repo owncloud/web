@@ -16,7 +16,7 @@ import fs from 'fs'
 import { World } from './world'
 import { state } from './shared'
 import { config } from '../../config'
-import { Group, User } from '../../support/types'
+import { Group, User, UserState } from '../../support/types'
 import { api, environment, utils, store } from '../../support'
 
 export { World }
@@ -33,6 +33,34 @@ const logger = pino({
 
 setDefaultTimeout(config.debug ? -1 : config.timeout * 1000)
 setWorldConstructor(World)
+
+BeforeAll(async (): Promise<void> => {
+  const browserConfiguration = {
+    slowMo: config.slowMo,
+    args: ['--use-fake-ui-for-media-stream', '--use-fake-device-for-media-stream'],
+    firefoxUserPrefs: {
+      'media.navigator.streams.fake': true,
+      'media.navigator.permission.disabled': true
+    },
+    headless: config.headless
+  }
+
+  const browsers: Record<string, () => Promise<Browser>> = {
+    firefox: async (): Promise<Browser> => await firefox.launch(browserConfiguration),
+    webkit: async (): Promise<Browser> => await webkit.launch(browserConfiguration),
+    chrome: async (): Promise<Browser> =>
+      await chromium.launch({ ...browserConfiguration, channel: 'chrome' }),
+    chromium: async (): Promise<Browser> => await chromium.launch(browserConfiguration)
+  }
+
+  state.browser = await browsers[config.browser]()
+
+  // setup keycloak admin user
+  if (config.keycloak) {
+    const usersEnvironment = new environment.UsersEnvironment()
+    api.keycloak.setupKeycloakAdminUser(usersEnvironment.getUser({ key: config.keycloakAdminUser }))
+  }
+})
 
 Before(async function (this: World, { pickle }: ITestCaseHookParameter) {
   this.feature = pickle
@@ -61,9 +89,10 @@ Before(async function (this: World, { pickle }: ITestCaseHookParameter) {
     }
   })
 
-  if (!config.basicAuth) {
-    const user = this.usersEnvironment.getUser({ key: 'admin' })
+  if (!config.basicAuth && !config.predefinedUsers) {
+    let user = this.usersEnvironment.getUser({ key: config.adminUsername })
     if (config.keycloak) {
+      user = this.usersEnvironment.getUser({ key: config.keycloakAdminUser })
       await api.keycloak.setAccessTokenForKeycloakOcisUser(user)
       await api.keycloak.setAccessTokenForKeycloakUser(user)
       await storeKeycloakGroups(user, this.usersEnvironment)
@@ -76,34 +105,6 @@ Before(async function (this: World, { pickle }: ITestCaseHookParameter) {
         config.federatedServer = false
       }
     }
-  }
-})
-
-BeforeAll(async (): Promise<void> => {
-  const browserConfiguration = {
-    slowMo: config.slowMo,
-    args: ['--use-fake-ui-for-media-stream', '--use-fake-device-for-media-stream'],
-    firefoxUserPrefs: {
-      'media.navigator.streams.fake': true,
-      'media.navigator.permission.disabled': true
-    },
-    headless: config.headless
-  }
-
-  const browsers: Record<string, () => Promise<Browser>> = {
-    firefox: async (): Promise<Browser> => await firefox.launch(browserConfiguration),
-    webkit: async (): Promise<Browser> => await webkit.launch(browserConfiguration),
-    chrome: async (): Promise<Browser> =>
-      await chromium.launch({ ...browserConfiguration, channel: 'chrome' }),
-    chromium: async (): Promise<Browser> => await chromium.launch(browserConfiguration)
-  }
-
-  state.browser = await browsers[config.browser]()
-
-  // setup keycloak admin user
-  if (config.keycloak) {
-    const usersEnvironment = new environment.UsersEnvironment()
-    api.keycloak.setupKeycloakAdminUser(usersEnvironment.getUser({ key: 'admin' }))
   }
 })
 
@@ -120,31 +121,42 @@ After(async function (this: World, { result, willBeRetried, pickle }: ITestCaseH
 
   await this.actorsEnvironment.close()
 
-  const adminUser = this.usersEnvironment.getUser({ key: 'admin' })
+  if (!config.predefinedUsers) {
+    let adminUser = this.usersEnvironment.getUser({ key: config.adminUsername })
 
-  // refresh keycloak admin access token
-  if (config.keycloak) {
-    await api.keycloak.refreshAccessTokenForKeycloakUser(adminUser)
-    await api.keycloak.refreshAccessTokenForKeycloakOcisUser(adminUser)
-  } else {
-    await api.token.refreshAccessToken(adminUser)
+    // refresh keycloak admin access token
+    if (config.keycloak) {
+      adminUser = this.usersEnvironment.getUser({ key: config.keycloakAdminUser })
+      await api.keycloak.refreshAccessTokenForKeycloakUser(adminUser)
+      await api.keycloak.refreshAccessTokenForKeycloakOcisUser(adminUser)
+    } else {
+      await api.token.refreshAccessToken(adminUser)
+    }
+
+    if (isOcm(pickle)) {
+      // need to set federatedServer config to true to delete federated oCIS users
+      config.federatedServer = true
+      await api.token.refreshAccessToken(adminUser)
+      await cleanUpUser(
+        store.federatedUserStore,
+        this.usersEnvironment.getUser({ key: config.adminUsername })
+      )
+      config.federatedServer = false
+    }
   }
 
-  if (isOcm(pickle)) {
-    // need to set federatedServer config to true to delete federated oCIS users
-    config.federatedServer = true
-    await api.token.refreshAccessToken(adminUser)
-    await cleanUpUser(store.federatedUserStore, this.usersEnvironment.getUser({ key: 'admin' }))
-    config.federatedServer = false
-  }
-  await cleanUpUser(store.createdUserStore, this.usersEnvironment.getUser({ key: 'admin' }))
-  await cleanUpSpaces(this.usersEnvironment.getUser({ key: 'admin' }))
-  await cleanUpGroup(this.usersEnvironment.getUser({ key: 'admin' }))
+  await cleanUpUser(
+    store.createdUserStore,
+    this.usersEnvironment.getUser({ key: config.adminUsername })
+  )
+  await cleanUpSpaces(this.usersEnvironment.getUser({ key: config.adminUsername }))
+  await cleanUpGroup(this.usersEnvironment.getUser({ key: config.adminUsername }))
 
   store.createdLinkStore.clear()
   store.createdTokenStore.clear()
   store.federatedTokenStore.clear()
   store.keycloakTokenStore.clear()
+
   utils.removeTempUploadDirectory()
   environment.closeSSEConnections()
 
@@ -192,15 +204,46 @@ function filterTracingReports(status: string) {
 
 const cleanUpUser = async (createdUserStore, adminUser: User) => {
   const requests: Promise<User>[] = []
-  createdUserStore.forEach((user) => {
-    requests.push(api.provision.deleteUser({ user, admin: adminUser }))
-  })
+  for (const [key, user] of createdUserStore.entries()) {
+    console.log(`Cleanup user: ${user.id}`)
+    if (!config.predefinedUsers) {
+      requests.push(api.provision.deleteUser({ user, admin: adminUser }))
+    } else {
+      await cleanupPredefinedUser(key, user)
+    }
+  }
   await Promise.all(requests)
   createdUserStore.clear()
   store.keycloakCreatedUser.clear()
 }
 
+const cleanupPredefinedUser = async (userKey: string, user: User) => {
+  // delete the personal space resources
+  const resources = await api.dav.listSpaceResources({ user, spaceType: 'personal' })
+  for (const fileId in resources) {
+    await api.dav.deleteSpaceResource({ user, fileId })
+  }
+
+  // cleanup trashbin if resources have been deleted
+  if (Object.keys(resources).length) {
+    await api.dav.emptyTrashbin({ user, spaceType: 'personal' })
+  }
+
+  // revert user state
+  const usersEnvironment = new environment.UsersEnvironment()
+  const userState: UserState = usersEnvironment.getUserState(userKey)
+  if (userState.hasOwnProperty('autoAcceptShare')) {
+    await api.settings.configureAutoAcceptShare({ user, state: userState.autoAcceptShare })
+  }
+  if (userState.hasOwnProperty('language')) {
+    await api.settings.changeLanguage({ user, language: userState.language })
+  }
+}
+
 const cleanUpSpaces = async (adminUser: User) => {
+  if (config.predefinedUsers) {
+    return
+  }
   const requests: Promise<void>[] = []
   store.createdSpaceStore.forEach((space) => {
     requests.push(
@@ -224,6 +267,9 @@ const cleanUpSpaces = async (adminUser: User) => {
 }
 
 const cleanUpGroup = async (adminUser: User) => {
+  if (config.predefinedUsers) {
+    return
+  }
   const requests: Promise<Group>[] = []
   store.createdGroupStore.forEach((group) => {
     if (!group.id.startsWith('keycloak')) {

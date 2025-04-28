@@ -67,7 +67,7 @@ export const setAccessTokenForKeycloakUser = async (user: User): Promise<void> =
     body: new URLSearchParams({
       client_id: 'admin-cli',
       username: config.keycloakAdminUser,
-      password: config.keycloakAdminUser,
+      password: config.keycloakAdminPassword,
       grant_type: 'password'
     })
   })

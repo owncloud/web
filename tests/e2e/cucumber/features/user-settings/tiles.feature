@@ -1,3 +1,4 @@
+@predefined-users
 Feature: Tiles
   As a user
   I want to view and navigate resources displayed as tiles

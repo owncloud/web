@@ -1,3 +1,4 @@
+@predefined-users
 Feature: Page not found
   As a user
   I want to see a not found page

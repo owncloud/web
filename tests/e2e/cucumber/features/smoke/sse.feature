@@ -127,7 +127,7 @@ Feature: server sent events
     And "Brian" logs out
     And "Alice" logs out
 
-
+  @predefined-users
   Scenario: share sse events
     When "Brian" logs in
     And "Brian" navigates to the shared with me page
@@ -145,12 +145,12 @@ Feature: server sent events
     And "Brian" should not be able to edit folder "sharedFolder"
 
     # share-updated
-    When "Brian" opens folder "sharedFolder"
-    And "Alice" updates following sharee role
+    When "Alice" updates following sharee role
       | resource     | recipient | type | role                      | resourceType |
       | sharedFolder | Brian     | user | Can edit without versions | folder       |
     Then "Alice" should get "share-updated" SSE event
     And "Brian" should get "share-updated" SSE event
+    And "Brian" opens folder "sharedFolder"
     And "Brian" should be able to edit folder "subFolder"
 
     # share-removed

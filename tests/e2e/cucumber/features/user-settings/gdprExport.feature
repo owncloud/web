@@ -1,3 +1,4 @@
+@predefined-users
 Feature: GDPR export
   As a user
   I want to export a report of all my personal data

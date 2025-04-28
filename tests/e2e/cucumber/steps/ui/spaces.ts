@@ -3,6 +3,7 @@ import { expect } from '@playwright/test'
 import { World } from '../../environment'
 import { objects } from '../../../support'
 import { Space } from '../../../support/types'
+import { substitute } from '../../../support/utils'
 
 When(
   '{string} navigates to the personal space page',
@@ -214,7 +215,7 @@ Then(
     const spacesObject = new objects.applicationFiles.Spaces({ page })
 
     for (const info of stepTable.hashes()) {
-      await spacesObject.checkSpaceActivity({ activity: info.activity })
+      await spacesObject.checkSpaceActivity({ activity: substitute(info.activity) })
     }
   }
 )

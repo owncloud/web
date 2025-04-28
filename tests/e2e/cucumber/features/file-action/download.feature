@@ -1,3 +1,4 @@
+@predefined-users
 Feature: Download
   As a user
   I want to download resources
