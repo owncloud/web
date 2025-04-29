@@ -6,7 +6,11 @@
         :has-bulk-actions="true"
         :is-side-bar-open="isSideBarOpen"
         :space="space"
-      />
+      >
+        <template #actions>
+          <trashbin-datepicker />
+        </template>
+      </app-bar>
       <app-loading-spinner v-if="areResourcesLoading" />
       <template v-else>
         <no-content-message
@@ -59,6 +63,7 @@ import { storeToRefs } from 'pinia'
 import { AppBar, ContextActions, FileSideBar, useUserStore } from '@ownclouders/web-pkg'
 import FilesViewWrapper from '../../components/FilesViewWrapper.vue'
 import ListInfo from '../../components/FilesList/ListInfo.vue'
+import TrashbinDatepicker from '../../components/FilesList/TrashbinDatepicker.vue'
 import { ResourceTable } from '@ownclouders/web-pkg'
 import { AppLoadingSpinner } from '@ownclouders/web-pkg'
 import { NoContentMessage } from '@ownclouders/web-pkg'
@@ -85,7 +90,8 @@ export default defineComponent({
     ListInfo,
     NoContentMessage,
     Pagination,
-    ResourceTable
+    ResourceTable,
+    TrashbinDatepicker
   },
 
   props: {
