@@ -8,7 +8,7 @@
         :space="space"
       >
         <template #actions>
-          <trashbin-datepicker />
+          <oc-date-range-picker />
         </template>
       </app-bar>
       <app-loading-spinner v-if="areResourcesLoading" />
@@ -63,7 +63,6 @@ import { storeToRefs } from 'pinia'
 import { AppBar, ContextActions, FileSideBar, useUserStore } from '@ownclouders/web-pkg'
 import FilesViewWrapper from '../../components/FilesViewWrapper.vue'
 import ListInfo from '../../components/FilesList/ListInfo.vue'
-import TrashbinDatepicker from '../../components/FilesList/TrashbinDatepicker.vue'
 import { ResourceTable } from '@ownclouders/web-pkg'
 import { AppLoadingSpinner } from '@ownclouders/web-pkg'
 import { NoContentMessage } from '@ownclouders/web-pkg'
@@ -90,8 +89,7 @@ export default defineComponent({
     ListInfo,
     NoContentMessage,
     Pagination,
-    ResourceTable,
-    TrashbinDatepicker
+    ResourceTable
   },
 
   props: {
