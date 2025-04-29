@@ -107,6 +107,8 @@ const fileVersionSidebar = '#oc-file-versions-sidebar'
 const versionsPanelSelect = '//*[@data-testid="sidebar-panel-versions-select"]'
 const noLinkMessage = '#web .oc-link-resolve-error-message'
 const listItemPageSelector = '//*[contains(@class,"oc-pagination-list-item-page") and text()="%s"]'
+const currentPageSelector =
+  '//*[contains(@class,"oc-pagination-list-item-current") and text()="%s"]'
 const itemsPerPageDropDownOptionSelector =
   '//li[contains(@class,"vs__dropdown-option") and text()="%s"]'
 const footerTextSelector = '//*[@data-testid="files-list-footer-info"]'
@@ -1830,6 +1832,11 @@ export interface changePageArgs {
 export const changePage = async (args: changePageArgs): Promise<void> => {
   const { page, pageNumber } = args
   await page.locator(util.format(listItemPageSelector, pageNumber)).click()
+}
+
+export const getCurrentPageNumber = (args: changePageArgs): Promise<string> => {
+  const { page, pageNumber } = args
+  return page.locator(util.format(currentPageSelector, pageNumber)).textContent()
 }
 
 export interface changeItemsPerPageArgs {

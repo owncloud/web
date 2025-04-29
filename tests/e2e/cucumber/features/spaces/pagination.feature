@@ -25,6 +25,9 @@ Feature: check files pagination in project space
     And "Alice" should see 10 resources in the project space files view
     When "Alice" enables the option to display the hidden file
     Then "Alice" should see 12 resources in the project space files view
+    When "Alice" opens file "testfile45.txt"
+    And "Alice" closes the file viewer
+    Then "Alice" should be on page "2"
     When "Alice" changes the items per page to "500"
     Then "Alice" should not see the pagination in the project space files view
     And "Alice" logs out

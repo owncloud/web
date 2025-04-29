@@ -275,6 +275,10 @@ export class Resource {
     await po.changePage({ ...args, page: this.#page })
   }
 
+  async getCurrentPageNumber(args: Omit<po.changePageArgs, 'page'>): Promise<string> {
+    return await po.getCurrentPageNumber({ ...args, page: this.#page })
+  }
+
   async changeItemsPerPage(args: Omit<po.changeItemsPerPageArgs, 'page'>): Promise<void> {
     await po.changeItemsPerPage({ ...args, page: this.#page })
   }
