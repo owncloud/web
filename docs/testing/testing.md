@@ -143,12 +143,15 @@ node tests/e2e/cucumber/report --help
 ```
 
 ### E2E Tests on oCIS With Keycloak
+
 We can run some of the e2e tests on oCIS setup with Keycloak as an external idp. To run tests against locally, please follow the steps below:
 
 #### Run oCIS With Keycloak
+
 There's a documentation to serve [oCIS with Keycloak](https://owncloud.dev/ocis/deployment/ocis_keycloak/). Please follow each step to run **oCIS with Keycloak**.
 
 #### Run E2E Tests
+
 ```bash
 KEYCLOAK=true \
 BASE_URL_OCIS=ocis.owncloud.test \
@@ -156,7 +159,78 @@ pnpm run test:e2e:cucumber tests/e2e/cucumber/features/journeys
 ```
 
 Following environment variables come in use while running e2e tests on oCIS with Keycloak:
+
 - `BASE_URL_OCIS` sets oCIS url (e.g.: ocis.owncloud.test)
 - `KEYCLOAK_HOST` sets Keycloak url (e.g.: keycloak.owncloud.test)
 - `KEYCLOAK=true` runs the tests with Keycloak
 - `KEYCLOAK_REALM` sets oCIS realm name used on Keycloak
+
+### E2E Tests With Predefiend Users (`@predefined-users`)
+
+It is possible to run e2e tests with predefined users. This is useful for running tests on a production-like environment.
+The following environment variables are used to run the tests with predefined users:
+
+- `PREDEFINED_USERS`: `true`|`false`
+- `PREDEFINED_USERS_FILE`: path to a JSON file mapping predefined users
+
+We have to create a JSON file that contains the mapping of the users. JSON file MUST contain the following keys:
+
+```json
+{
+ "alice": {// map user},
+ "brian": {// mapuser},
+ "carol": {// mapuser},
+}
+```
+
+And the user object MUST have the following properties defined:
+
+```json
+{
+  "id": "<usernmae>",
+  "displayName": "<display-name>",
+  "password": "<password>",
+  "email": "<email>"
+}
+```
+
+A complete example of a JSON file.
+
+```json
+{
+  "alice": {
+    "id": "einstein",
+    "displayName": "Albert Einstein",
+    "password": "relativity",
+    "email": "einstein@example.org"
+  },
+  "brian": {
+    "id": "marie",
+    "displayName": "Marie Skłodowska Curie",
+    "password": "radioactivity",
+    "email": "marie@example.org"
+  },
+  "carol": {
+    "id": "moss",
+    "displayName": "Maurice Moss",
+    "password": "vista",
+    "email": "moss@example.org"
+  }
+}
+```
+
+The test scenarios that can run with predefined users are marked with the `@predefined-users` tag.
+The tests can be run with the following command:
+
+```bash
+PREDEFINED_USERS=true \
+PREDEFINED_USERS_FILE='<path-to>/users.json' \
+pnpm test:e2e:cucumber tests/e2e/cucumber/features/file-action/rename.feature --tags '@predefined-users'
+```
+
+**What tests cannot be run with predefined users?**
+
+Tests related to:
+
+- admin actions
+- group
