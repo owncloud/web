@@ -7,8 +7,17 @@
         :is-side-bar-open="isSideBarOpen"
         :space="space"
       >
-        <template #actions>
-          <oc-date-range-picker />
+        <template #actions="{ limitedScreenSpace }">
+          <div
+            class="oc-flex oc-flex-1 oc-flex-bottom"
+            :class="{ 'oc-gap-m': !limitedScreenSpace }"
+          >
+            <oc-text-input v-model="range.startDate" type="date" label="Deleted after" />
+            <span v-if="limitedScreenSpace" class="oc-px-s">
+              <oc-icon name="arrow-right" />
+            </span>
+            <oc-text-input v-model="range.endDate" type="date" label="Deleted before" />
+          </div>
         </template>
       </app-bar>
       <app-loading-spinner v-if="areResourcesLoading" />
@@ -70,7 +79,15 @@ import { Pagination } from '@ownclouders/web-pkg'
 
 import { eventBus } from '@ownclouders/web-pkg'
 import { useResourcesViewDefaults } from '../../composables'
-import { computed, defineComponent, PropType, onMounted, onBeforeUnmount, unref } from 'vue'
+import {
+  computed,
+  defineComponent,
+  PropType,
+  onMounted,
+  onBeforeUnmount,
+  unref,
+  reactive
+} from 'vue'
 import { Resource } from '@ownclouders/web-client'
 import { createLocationTrash } from '@ownclouders/web-pkg'
 import { isProjectSpaceResource, SpaceResource } from '@ownclouders/web-client'
@@ -111,6 +128,9 @@ export default defineComponent({
     const { user } = storeToRefs(userStore)
 
     let loadResourcesEventToken: string
+
+    const range = reactive({ startDate: null, endDate: null })
+
     const noContentMessage = computed(() => {
       return props.space.driveType === 'personal'
         ? $gettext('You have no deleted files')
@@ -148,6 +168,7 @@ export default defineComponent({
 
     return {
       ...resourcesViewDefaults,
+      range,
       user,
       noContentMessage
     }
