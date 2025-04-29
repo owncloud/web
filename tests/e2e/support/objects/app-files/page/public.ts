@@ -7,7 +7,6 @@ import * as po from '../resource/actions'
 const passwordInput = 'input[type="password"]'
 const fileUploadInput = '//input[@id="files-file-upload-input"]'
 const dropUploadResourceSelector = '.upload-info-items [data-test-resource-name="%s"]'
-const toggleUploadDetailsButton = '.upload-info-toggle-details-btn'
 const uploadInfoSuccessLabelSelector = '.upload-info-success'
 const publicLinkAuthorizeButton = '.oc-login-authorize-button'
 const folderModalIframe = '#iframe-folder-view'
@@ -48,7 +47,6 @@ export class Public {
     await this.#page.locator(fileUploadInput).setInputFiles(resources.map((file) => file.path))
     const names = resources.map((file) => path.basename(file.name))
     await this.#page.locator(uploadInfoSuccessLabelSelector).waitFor()
-    await this.#page.locator(toggleUploadDetailsButton).click()
     await Promise.all(
       names.map((name) =>
         this.#page.locator(util.format(dropUploadResourceSelector, name)).waitFor()

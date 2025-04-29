@@ -39,7 +39,7 @@
     </div>
     <div class="snackbars">
       <message-bar />
-      <upload-info />
+      <upload-bar v-if="!isUploadSnackbarHidden" id="upload-info-snackbar" />
     </div>
   </div>
 </template>
@@ -61,7 +61,7 @@ import {
 import TopBar from '../components/Topbar/TopBar.vue'
 import MessageBar from '../components/MessageBar.vue'
 import SidebarNav from '../components/SidebarNav/SidebarNav.vue'
-import UploadInfo from '../components/UploadInfo.vue'
+import UploadBar from '../components/UploadBar.vue'
 import MobileNav from '../components/MobileNav.vue'
 import { NavItem, getExtensionNavItems } from '../helpers/navItems'
 import { LoadingIndicator } from '@ownclouders/web-pkg'
@@ -95,7 +95,7 @@ export default defineComponent({
     MobileNav,
     TopBar,
     SidebarNav,
-    UploadInfo
+    UploadBar
   },
   setup() {
     const router = useRouter()
@@ -134,6 +134,11 @@ export default defineComponent({
       },
       { immediate: true }
     )
+
+    const uploadSnackbarRouteMeta = useRouteMeta('isUploadSnackbarHidden', 'false')
+    const isUploadSnackbarHidden = computed<boolean>(() => {
+      return JSON.parse(unref(uploadSnackbarRouteMeta))
+    })
 
     const requiredAuthContext = useRouteMeta('authContext')
     const { areSpacesLoading } = useSpacesLoading()
@@ -241,6 +246,7 @@ export default defineComponent({
       isMobileWidth,
       navBarClosed,
       hideNavigation,
+      isUploadSnackbarHidden,
       setNavBarClosed
     }
   },
@@ -313,6 +319,14 @@ export default defineComponent({
       margin: 0 auto;
       width: 100%;
       max-width: 500px;
+    }
+
+    #upload-info-snackbar {
+      width: 400px;
+      @media (max-width: 640px) {
+        width: 100%;
+        max-width: 500px;
+      }
     }
   }
 }

@@ -14,13 +14,13 @@ describe('FilesDrop view', () => {
   describe('different files view states', () => {
     it('shows the loading spinner during loading', () => {
       const { wrapper } = getMountedWrapper()
-      expect(wrapper.find('app-loading-spinner').exists()).toBeTruthy()
+      expect(wrapper.find('#app-loading-spinner').exists()).toBeTruthy()
     })
     it('shows the "resource-upload"-component after loading', async () => {
       const { wrapper } = getMountedWrapper()
       wrapper.vm.loading = false
       await wrapper.vm.$nextTick()
-      expect(wrapper.find('app-loading-spinner').exists()).toBeFalsy()
+      expect(wrapper.find('#app-loading-spinner').exists()).toBeFalsy()
       expect(wrapper.find('resource-upload-stub').exists()).toBeTruthy()
     })
   })

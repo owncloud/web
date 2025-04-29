@@ -1,5 +1,10 @@
 <template>
-  <div v-if="showInfo" id="upload-info" class="oc-rounded oc-box-shadow-medium">
+  <div
+    v-if="showInfo"
+    id="upload-info"
+    class="oc-background-muted upload-info"
+    :class="{ 'oc-rounded oc-box-shadow-medium': headless === false }"
+  >
     <div
       class="upload-info-title oc-flex oc-flex-between oc-flex-middle oc-px-m oc-py-s oc-rounded-top"
     >
@@ -143,7 +148,7 @@
             class="upload-info-message oc-ml-xs oc-text-small"
             :class="getUploadItemClass(item)"
             v-text="getUploadItemMessage(item)"
-          ></span>
+          />
         </li>
       </ul>
     </div>
@@ -179,6 +184,26 @@ interface UploadResult extends OcUppyFile {
 
 export default defineComponent({
   components: { ResourceListItem, ResourceIcon, ResourceName },
+  props: {
+    /*
+     * show the info including all uploads?
+     * Prop only works intially, state gets copied ot local var infoExpanded
+     */
+    infoExpandedInitial: {
+      type: Boolean,
+      default: false,
+      required: false
+    },
+    /**
+     * Render as headless component?
+     * Renders the header and the close button
+     */
+    headless: {
+      type: Boolean,
+      default: false,
+      required: false
+    }
+  },
   setup() {
     const configStore = useConfigStore()
     const { options: configOptions } = storeToRefs(configStore)
@@ -317,6 +342,8 @@ export default defineComponent({
     }
   },
   created() {
+    this.infoExpanded = this.infoExpandedInitial
+
     this.$uppyService.subscribe('uploadStarted', () => {
       if (!this.remainingTime) {
         this.remainingTime = this.$gettext('Calculating estimated time...')
@@ -699,14 +726,9 @@ export default defineComponent({
 </script>
 
 <style lang="scss">
-#upload-info {
-  background-color: var(--oc-color-background-secondary);
-  width: 400px;
-
+.upload-info {
   @media (max-width: 640px) {
     margin: 0 auto;
-    width: 100%;
-    max-width: 500px;
   }
 
   .oc-resource-details {
@@ -726,12 +748,7 @@ export default defineComponent({
   }
 
   .upload-info-items {
-    max-height: 50vh;
     overflow-y: auto;
-  }
-
-  .upload-info-items.has-errors {
-    max-height: calc(50vh - 100px) !important;
   }
 
   .upload-info-danger {

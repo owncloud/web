@@ -75,7 +75,7 @@ export type OcUppyMeta = {
   isFolder: boolean
 }
 export type OcUppyBody = Body
-export type OcUppyFile = UppyFile<OcUppyMeta, OcUppyBody>
+export type OcUppyFile = UppyFile<OcUppyMeta, OcUppyBody> & { isFolder?: boolean }
 type OcUppyPlugin = typeof BasePlugin<any, OcUppyMeta, OcUppyBody>
 export type OcMinimalUppyFile = MinimalRequiredUppyFile<OcUppyMeta, OcUppyBody>
 

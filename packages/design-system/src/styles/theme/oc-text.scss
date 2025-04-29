@@ -198,6 +198,13 @@ td.oc-text-break {
 }
 
 /*
+ * Give text the brand contrast color.
+ */
+ .oc-text-brand-contrast {
+  color: var(--oc-color-swatch-brand-contrast);
+}
+
+/*
  * Transform text to all uppercase
  */
 .oc-text-uppercase {
