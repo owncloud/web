@@ -167,7 +167,7 @@ Following environment variables come in use while running e2e tests on oCIS with
 
 ### E2E Tests With Predefiend Users (`@predefined-users`)
 
-It is possible to run e2e tests with predefined users. This is useful for running tests on a production-like environment.
+It is possible to run e2e tests with predefined users. This is useful for running tests in a production-like environment.
 The following environment variables are used to run the tests with predefined users:
 
 - `PREDEFINED_USERS`: `true`|`false`
