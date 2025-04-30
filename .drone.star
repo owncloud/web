@@ -1563,7 +1563,7 @@ def uploadTracingResult(ctx):
         "pull": "if-not-exists",
         "settings": {
             "bucket": S3_PUBLIC_CACHE_BUCKET,
-            "endpoint": S3_CACHE_BUCKET,
+            "endpoint": S3_CACHE_SERVER,
             "path_style": True,
             "source": "%s/reports/e2e/playwright/tracing/**/*" % dir["web"],
             "strip_prefix": "%s/reports/e2e/playwright/tracing" % dir["web"],
