@@ -3,6 +3,7 @@ import vue from '@vitejs/plugin-vue'
 import path from 'path'
 import { compilerOptions } from '../../../vite.config.common'
 
+process.env.TZ = 'UTC'
 const root = path.resolve(__dirname, '../../../')
 
 export default defineConfig({
@@ -28,12 +29,11 @@ export default defineConfig({
     }
   },
   test: {
-    root,
     globals: true,
     environment: 'happy-dom',
     clearMocks: true,
     include: ['**/*.spec.ts'],
-    setupFiles: ['tests/unit/config/vitest.init.ts', '@vitest/web-worker'],
+    setupFiles: [`${root}/tests/unit/config/vitest.init.ts`, '@vitest/web-worker'],
     exclude: [
       '**/node_modules/**',
       '**/dist/**',
@@ -46,11 +46,6 @@ export default defineConfig({
     alias: {
       'vue-inline-svg': `${root}/tests/unit/stubs/empty.ts`,
       webfontloader: `${root}/tests/unit/stubs/webfontloader.ts`
-    },
-    coverage: {
-      provider: 'v8',
-      reportsDirectory: `${root}/coverage`,
-      reporter: 'lcov'
     }
   }
 })

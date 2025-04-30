@@ -4,6 +4,9 @@
   "private": true,
   "description": "ownCloud Web Preview",
   "license": "AGPL-3.0",
+  "scripts": {
+    "test:unit": "NODE_OPTIONS=--unhandled-rejections=throw vitest"
+  },
   "dependencies": {
     "@panzoom/panzoom": "^4.5.1"
   },
