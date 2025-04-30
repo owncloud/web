@@ -227,9 +227,9 @@ PREDEFINED_USERS_FILE='<path-to>/users.json' \
 pnpm test:e2e:cucumber tests/e2e/cucumber/features/file-action/rename.feature --tags '@predefined-users'
 ```
 
-**What tests cannot be run with predefined users?**
+**The following tests cannot be run with predefined users:**
 
-Tests related to:
+All tests which are related to:
 
-- admin actions
-- group
+- Admin Actions
+- Groups
