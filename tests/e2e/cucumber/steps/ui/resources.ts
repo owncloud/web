@@ -751,6 +751,16 @@ When(
   }
 )
 
+Then(
+  '{string} should be on page "{int}"',
+  async function (this: World, stepUser: any, pageNumber: any) {
+    const { page } = this.actorsEnvironment.getActor({ key: stepUser })
+    const resourceObject = new objects.applicationFiles.Resource({ page })
+    const currentPage = await resourceObject.getCurrentPageNumber({ pageNumber })
+    expect(currentPage).toBe(pageNumber.toString())
+  }
+)
+
 When(
   '{string} changes the items per page to {string}',
   async function (this: World, stepUser: string, itemsPerPage: string): Promise<void> {
