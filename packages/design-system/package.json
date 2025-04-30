@@ -28,7 +28,8 @@
     "tokens:w": "onchange -i \"./src/tokens/**/*.json\" -- npm run tokens",
     "vite": "vite",
     "prepublishOnly": "rm -rf ./package && clean-publish && find package && cat package/package.json",
-    "postpublish": "rm -rf ./package"
+    "postpublish": "rm -rf ./package",
+    "test:unit": "NODE_OPTIONS=--unhandled-rejections=throw vitest"
   },
   "browserslist": [
     "> 1%",

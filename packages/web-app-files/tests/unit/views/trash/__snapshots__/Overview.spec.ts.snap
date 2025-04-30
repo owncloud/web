@@ -2,8 +2,8 @@
 
 exports[`TrashOverview > view states > should render spaces list 1`] = `
 "<div class="oc-flex">
-  <div data-v-39c970be="" class="files-view-wrapper oc-width-expand">
-    <div data-v-39c970be="" id="files-view">
+  <div data-v-e62b9535="" class="files-view-wrapper oc-width-expand">
+    <div data-v-e62b9535="" id="files-view">
       <app-bar-stub viewmodedefault="resource-table" breadcrumbs="[object Object]" breadcrumbscontextactionsitems="" viewmodes="" hasbulkactions="false" hasviewoptions="false" hashiddenfiles="false" hasfileextensions="false" haspagination="false" showactionsonselection="false" issidebaropen="false"></app-bar-stub>
       <div class="trash-bin-filters oc-flex oc-flex-right oc-flex-wrap oc-flex-bottom oc-mx-m oc-mb-m">
         <div class="" autocomplete="off"><label class="oc-label" for="spaces-filter">Search</label>
