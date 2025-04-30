@@ -219,8 +219,7 @@ A complete example of a JSON file.
 }
 ```
 
-The test scenarios that can run with predefined users are marked with the `@predefined-users` tag.
-The tests can be run with the following command:
+The test scenarios that can run with predefined users are marked with the `@predefined-users` tag and can be run with the following command:
 
 ```bash
 PREDEFINED_USERS=true \
