@@ -51,6 +51,7 @@ Summary
 * Enhancement - Add duplicate action: [#12508](https://github.com/owncloud/web/pull/12508)
 * Enhancement - Add flat list view: [#12509](https://github.com/owncloud/web/pull/12509)
 * Enhancement - Add loading spinner to submit button: [#12513](https://github.com/owncloud/web/pull/12513)
+* Enhancement - Improve file drop view UI: [#12519](https://github.com/owncloud/web/pull/12519)
 
 Details
 -------
@@ -448,6 +449,14 @@ Details
 
    https://github.com/owncloud/enterprise/issues/7190
    https://github.com/owncloud/web/pull/12513
+
+* Enhancement - Improve file drop view UI: [#12519](https://github.com/owncloud/web/pull/12519)
+
+   We've added an explanatory note to the file drop view to help users understand
+   the purpose of the view. We also added more branding elements and we made the
+   upload action more prominent by adding a dedicated button to start the upload.
+
+   https://github.com/owncloud/web/pull/12519
 
 Changelog for ownCloud Web [11.3.1] (2025-03-13)
 =======================================
