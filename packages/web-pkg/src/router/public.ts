@@ -38,7 +38,8 @@ export const buildRoutes = (components: RouteComponents): RouteRecordRaw[] => [
     path: '/upload',
     component: components.App,
     meta: {
-      auth: false
+      auth: false,
+      isUploadSnackbarHidden: true
     },
     children: [
       {

@@ -4,16 +4,18 @@
       isRemoteUploadInProgress ? $gettext('Please wait until all imports have finished') : null
     "
   >
-    <oc-button
-      :class="btnClass"
-      justify-content="left"
-      appearance="raw"
-      :disabled="isRemoteUploadInProgress"
-      @click="triggerUpload"
-    >
-      <resource-icon :resource="resource" size="medium" />
-      <span :id="uploadLabelId">{{ buttonLabel }}</span>
-    </oc-button>
+    <slot :trigger-upload="triggerUpload" :upload-label-id="uploadLabelId">
+      <oc-button
+        :class="btnClass"
+        justify-content="left"
+        appearance="raw"
+        :disabled="isRemoteUploadInProgress"
+        @click="triggerUpload"
+      >
+        <resource-icon :resource="resource" size="medium" />
+        <span :id="uploadLabelId">{{ buttonLabel }}</span>
+      </oc-button>
+    </slot>
     <input
       :id="inputId"
       ref="input"
