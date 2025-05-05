@@ -223,6 +223,14 @@ export class Resource {
     await po.showHiddenResources(this.#page)
   }
 
+  async toggleFlatList(): Promise<void> {
+    await po.toggleFlatList(this.#page)
+  }
+
+  async getAllFiles(): Promise<string[]> {
+    return po.getAllFiles(this.#page)
+  }
+
   async editResource(args: Omit<po.editResourcesArgs, 'page'>): Promise<void> {
     await po.editResource({ ...args, page: this.#page })
   }

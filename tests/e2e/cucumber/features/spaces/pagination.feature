@@ -30,4 +30,6 @@ Feature: check files pagination in project space
     Then "Alice" should be on page "2"
     When "Alice" changes the items per page to "500"
     Then "Alice" should not see the pagination in the project space files view
+    When "Alice" enables flat list
+    Then "Alice" should see files being sorted in alphabetic order
     And "Alice" logs out

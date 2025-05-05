@@ -91,7 +91,9 @@ const searchList =
 const globalSearchOptions = '#files-global-search-options'
 const loadingSpinner = '#files-global-search-options .loading'
 const filesViewOptionButton = '#files-view-options-btn'
-const hiddenFilesToggleButton = '//*[@data-testid="files-switch-hidden-files"]//button'
+const hiddenFilesToggleButton = '//*[@data-testid="files-switch-hidden-files"]/button'
+const flatListToggleButton = '//*[@data-testid="files-switch-flat-list"]/button'
+const fileNameSelector = '.oc-resource-basename'
 const previewImage = '//main[@id="preview"]//div[contains(@class,"stage_media")]//img'
 const previewAudio = '//main[@id="preview"]//div[contains(@class,"stage_media")]//audio//source'
 const previewVideo = '//main[@id="preview"]//div[contains(@class,"stage_media")]//video//source'
@@ -1605,6 +1607,19 @@ export const showHiddenResources = async (page: Page): Promise<void> => {
   await page.locator(hiddenFilesToggleButton).click()
   // close the files view option
   await page.locator(filesViewOptionButton).click()
+}
+
+export const toggleFlatList = async (page: Page): Promise<void> => {
+  await page.locator(filesViewOptionButton).click()
+  await page.locator(flatListToggleButton).click()
+  // close the files view option
+  await page.locator(filesViewOptionButton).click()
+}
+
+export const getAllFiles = async (page: Page): Promise<string[]> => {
+  await page.locator(footerTextSelector).waitFor()
+  const fileLocators = await page.locator(fileNameSelector).all()
+  return await Promise.all(fileLocators.map((locator) => locator.textContent()))
 }
 
 export interface editResourcesArgs {
