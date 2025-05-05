@@ -28,6 +28,10 @@ TOOLHIPPIE_CALENS = "toolhippie/calens:latest"
 WEB_PUBLISH_NPM_PACKAGES = ["babel-preset", "design-system", "eslint-config", "extension-sdk", "prettier-config", "tsconfig", "web-client", "web-pkg", "web-test-helpers"]
 WEB_PUBLISH_NPM_ORGANIZATION = "@ownclouders"
 
+S3_CACHE_SERVER = "https://cache.owncloud.com"
+S3_CACHE_BUCKET = "cache"
+S3_PUBLIC_CACHE_BUCKET = "public"
+
 dir = {
     "base": "/var/www/owncloud",
     "web": "/var/www/owncloud/web",
@@ -152,14 +156,10 @@ config = {
     "build": True,
 }
 
-# minio mc environment variables
-minio_mc_environment = {
-    "CACHE_BUCKET": {
-        "from_secret": "cache_s3_bucket",
-    },
-    "MC_HOST": {
-        "from_secret": "cache_s3_server",
-    },
+# minio environment variables
+MINIO_ENV = {
+    "CACHE_BUCKET": S3_CACHE_BUCKET,
+    "MC_HOST": S3_CACHE_SERVER,
     "AWS_ACCESS_KEY_ID": {
         "from_secret": "cache_s3_access_key",
     },
@@ -1028,7 +1028,7 @@ def checkForExistingOcisCache(ctx):
         {
             "name": "check-for-existing-cache",
             "image": MINIO_MC,
-            "environment": minio_mc_environment,
+            "environment": MINIO_ENV,
             "commands": [
                 "curl -o .drone.env %s/.drone.env" % web_repo_path,
                 "curl -o script.sh %s/tests/drone/script.sh" % web_repo_path,
@@ -1078,7 +1078,7 @@ def restoreOcisCache():
     return [{
         "name": "restore-ocis-cache",
         "image": MINIO_MC,
-        "environment": minio_mc_environment,
+        "environment": MINIO_ENV,
         "commands": [
             ". ./.drone.env",
             "mc alias set s3 $MC_HOST $AWS_ACCESS_KEY_ID $AWS_SECRET_ACCESS_KEY",
@@ -1134,7 +1134,7 @@ def cacheOcis():
     return [{
         "name": "upload-ocis-cache",
         "image": MINIO_MC,
-        "environment": minio_mc_environment,
+        "environment": MINIO_ENV,
         "commands": [
             ". ./.drone.env",
             "mc alias set s3 $MC_HOST $AWS_ACCESS_KEY_ID $AWS_SECRET_ACCESS_KEY",
@@ -1404,18 +1404,12 @@ def genericCache(name, action, mounts, cache_path):
         "name": "%s_%s" % (action, name),
         "image": PLUGINS_S3_CACHE,
         "settings": {
-            "endpoint": {
-                "from_secret": "cache_s3_server",
-            },
+            "endpoint": S3_CACHE_SERVER,
             "rebuild": rebuild,
             "restore": restore,
             "mount": mounts,
-            "access_key": {
-                "from_secret": "cache_s3_access_key",
-            },
-            "secret_key": {
-                "from_secret": "cache_s3_secret_key",
-            },
+            "access_key": MINIO_ENV["AWS_ACCESS_KEY_ID"],
+            "secret_key": MINIO_ENV["AWS_SECRET_ACCESS_KEY"],
             "filename": "%s.tar" % (name),
             "path": cache_path,
             "fallback_path": cache_path,
@@ -1440,15 +1434,9 @@ def genericCachePurge(flush_path):
                 "name": "purge-cache",
                 "image": PLUGINS_S3_CACHE,
                 "settings": {
-                    "access_key": {
-                        "from_secret": "cache_s3_access_key",
-                    },
-                    "endpoint": {
-                        "from_secret": "cache_s3_server",
-                    },
-                    "secret_key": {
-                        "from_secret": "cache_s3_secret_key",
-                    },
+                    "endpoint": S3_CACHE_SERVER,
+                    "access_key": MINIO_ENV["AWS_ACCESS_KEY_ID"],
+                    "secret_key": MINIO_ENV["AWS_SECRET_ACCESS_KEY"],
                     "flush": True,
                     "flush_age": 1,
                     "flush_path": flush_path,
@@ -1471,12 +1459,12 @@ def genericCachePurge(flush_path):
 
 def genericBuildArtifactCache(ctx, name, action, path):
     if action == "rebuild" or action == "restore":
-        cache_path = "%s/%s/%s" % ("cache", ctx.repo.slug, ctx.build.commit + "-${DRONE_BUILD_NUMBER}")
+        cache_path = "%s/%s/%s" % (S3_CACHE_BUCKET, ctx.repo.slug, ctx.build.commit + "-${DRONE_BUILD_NUMBER}")
         name = "%s_build_artifact_cache" % (name)
         return genericCache(name, action, [path], cache_path)
 
     if action == "purge":
-        flush_path = "%s/%s" % ("cache", ctx.repo.slug)
+        flush_path = "%s/%s" % (S3_CACHE_BUCKET, ctx.repo.slug)
         return genericCachePurge(flush_path)
     return []
 
@@ -1566,12 +1554,8 @@ def uploadTracingResult(ctx):
         "image": PLUGINS_S3,
         "pull": "if-not-exists",
         "settings": {
-            "bucket": {
-                "from_secret": "cache_public_s3_bucket",
-            },
-            "endpoint": {
-                "from_secret": "cache_public_s3_server",
-            },
+            "bucket": S3_PUBLIC_CACHE_BUCKET,
+            "endpoint": S3_CACHE_SERVER,
             "path_style": True,
             "source": "%s/reports/e2e/playwright/tracing/**/*" % dir["web"],
             "strip_prefix": "%s/reports/e2e/playwright/tracing" % dir["web"],
@@ -1602,7 +1586,7 @@ def logTracingResult(ctx, suite):
         "commands": [
             "cd %s/reports/e2e/playwright/tracing/" % dir["web"],
             'echo "To see the trace, please open the following link in the console"',
-            'for f in *.zip; do echo "npx playwright show-trace https://cache.owncloud.com/public/${DRONE_REPO}/${DRONE_BUILD_NUMBER}/tracing/$f \n"; done',
+            'for f in *.zip; do echo "npx playwright show-trace %s/%s/${DRONE_REPO}/${DRONE_BUILD_NUMBER}/tracing/$f \n"; done' % (S3_CACHE_SERVER, S3_PUBLIC_CACHE_BUCKET),
         ],
         "when": {
             "status": status,
@@ -1893,7 +1877,7 @@ def cacheBrowsers():
         {
             "name": "upload-browsers-cache",
             "image": MINIO_MC,
-            "environment": minio_mc_environment,
+            "environment": MINIO_ENV,
             "commands": [
                 "playwright_version=$(bash tests/drone/script.sh get_playwright_version)",
                 "mc alias set s3 $MC_HOST $AWS_ACCESS_KEY_ID $AWS_SECRET_ACCESS_KEY",
@@ -1907,7 +1891,7 @@ def checkBrowsersCache():
     return [{
         "name": "check-browsers-cache",
         "image": MINIO_MC,
-        "environment": minio_mc_environment,
+        "environment": MINIO_ENV,
         "commands": [
             "mc alias set s3 $MC_HOST $AWS_ACCESS_KEY_ID $AWS_SECRET_ACCESS_KEY",
             "mc ls --recursive s3/$CACHE_BUCKET/web",
@@ -1920,7 +1904,7 @@ def restoreBrowsersCache():
         {
             "name": "restore-browsers-cache",
             "image": MINIO_MC,
-            "environment": minio_mc_environment,
+            "environment": MINIO_ENV,
             "commands": [
                 "playwright_version=$(bash tests/drone/script.sh get_playwright_version)",
                 "mc alias set s3 $MC_HOST $AWS_ACCESS_KEY_ID $AWS_SECRET_ACCESS_KEY",
