@@ -69,10 +69,18 @@ Feature: Upload
     And "Alice" opens the following file in pdfviewer
       | resource   |
       | simple.pdf |
-    And "Alice" closes the file viewer
-
+    Then "Alice" closes the file viewer
+    # upload a folder via drag-n-drop
+    When "Alice" uploads the following resources via drag-n-drop
+      | resource          |
+      | Folder,With,Comma |
+    And "Alice" opens folder "Folder,With,Comma"
+    Then following resources should be displayed in the files list for user "Alice"
+      | resource          |
+      | sunday,monday.txt |
+    And "Alice" opens the "files" app
     # upload empty folder
-    And "Alice" uploads the following resources
+    When "Alice" uploads the following resources
       | resource | type   |
       | FOLDER   | folder |
     And "Alice" logs out
