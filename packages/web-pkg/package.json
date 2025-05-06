@@ -82,6 +82,7 @@
     "@types/lodash-es": "4.17.12",
     "@vitest/web-worker": "3.1.2",
     "clean-publish": "5.1.0",
+    "vite": "6.3.5",
     "vite-plugin-dts": "4.5.3",
     "vite-plugin-node-polyfills": "0.23.0"
   }
