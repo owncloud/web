@@ -38,6 +38,7 @@ playwright-report
 /.vite-inspect
 
 /coverage
+**/coverage/
 
 /.pnpm-store/
 

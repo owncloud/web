@@ -4,6 +4,9 @@
   "private": true,
   "description": "ownCloud admin settings",
   "license": "AGPL-3.0",
+  "scripts": {
+    "test:unit": "NODE_OPTIONS=--unhandled-rejections=throw vitest"
+  },
   "devDependencies": {
     "@ownclouders/web-test-helpers": "workspace:*"
   },
