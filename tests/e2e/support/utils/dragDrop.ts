@@ -1,4 +1,4 @@
-import { readFileSync } from 'fs'
+import { readFileSync, lstatSync, readdirSync } from 'fs'
 import { Locator, Page } from '@playwright/test'
 
 interface File {
@@ -9,14 +9,35 @@ interface File {
 interface FileBuffer {
   name: string
   bufferString: string
+  relativePath: string
+}
+
+const getFiles = (resources: File[], files: FileBuffer[] = [], parent = '') => {
+  for (const resource of resources) {
+    const filePath = parent ? `${parent}/${resource.name}` : resource.name
+    const stat = lstatSync(resource.path)
+    if (stat.isFile()) {
+      files.push({
+        name: resource.name,
+        bufferString: JSON.stringify(Array.from(readFileSync(resource.path))),
+        relativePath: filePath
+      })
+      continue
+    }
+    // read the directory
+    const entries = readdirSync(resource.path)
+    const subResources: File[] = entries.map((entry) => ({
+      path: resource.path + '/' + entry,
+      name: entry
+    }))
+    getFiles(subResources, files, filePath)
+  }
+  return files
 }
 
 // drag and drop local files to a target element
 export const dragDropFiles = async (page: Page, resources: File[], targetSelector: string) => {
-  const files = resources.map((file) => ({
-    name: file.name,
-    bufferString: JSON.stringify(Array.from(readFileSync(file.path)))
-  }))
+  const files = getFiles(resources)
 
   await page.evaluate<Promise<void>, [FileBuffer[], string]>(
     ([files, targetSelector]) => {
@@ -26,7 +47,18 @@ export const dragDropFiles = async (page: Page, resources: File[], targetSelecto
       for (const file of files) {
         const buffer = Buffer.from(JSON.parse(file.bufferString))
         const blob = new Blob([buffer])
-        dt.items.add(new File([blob], file.name))
+
+        const fileObj = new File([blob], file.name)
+        // add 'webkitRelativePath' file property only if the file has a parent
+        // relative path includes the path with folder structure
+        // e.g. folderA/file.txt
+        if (file.relativePath.split('/').length > 1) {
+          Object.defineProperty(fileObj, 'webkitRelativePath', {
+            value: file.relativePath
+          })
+        }
+
+        dt.items.add(fileObj)
       }
 
       dropArea.dispatchEvent(new DragEvent('drop', { dataTransfer: dt }))
