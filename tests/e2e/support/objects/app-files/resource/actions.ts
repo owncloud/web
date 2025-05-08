@@ -2094,3 +2094,45 @@ export const checkEmptyActivity = async ({
   await expect(page.getByTestId(activitySidebarPanel)).toBeVisible()
   await expect(page.locator(activitySidebarPanelBodyContent)).toContainText('No activities')
 }
+
+export const duplicateResource = async ({
+  page,
+  resource,
+  method
+}: {
+  page: Page
+  resource: string
+  method: string
+}): Promise<void> => {
+  const { dir: resourceDir, base: resourceBase } = path.parse(resource)
+
+  if (resourceDir) {
+    await clickResource({ page, path: resourceDir })
+  }
+
+  switch (method) {
+    case 'dropdown-menu': {
+      await page.locator(util.format(resourceNameSelector, resourceBase)).click({ button: 'right' })
+      await page.locator(util.format(filesContextMenuAction, "duplicate")).click()
+      break
+    }
+    case 'batch-action': {
+      await page.locator(util.format(checkBox, resourceBase)).click()
+      await selectBatchAction(page, "duplicate")
+      break
+    }
+    case 'sidebar-panel': {
+      await sidebar.open({ page: page, resource: resourceBase })
+      await sidebar.openPanel({ page: page, name: 'actions' })
+
+      await page.locator(util.format(sideBarActionButton, "Duplicate")).click()
+      break
+    }
+  }
+  await page.waitForResponse(
+    (resp) =>
+      resp.url().endsWith(resource) &&
+      resp.status() === 201 &&
+      resp.request().method() === 'COPY'
+  )
+}
