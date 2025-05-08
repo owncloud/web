@@ -2095,6 +2095,16 @@ export const checkEmptyActivity = async ({
   await expect(page.locator(activitySidebarPanelBodyContent)).toContainText('No activities')
 }
 
+const waitForResourceDuplicationResponse = async (page: Page, resource: string): Promise<void> => {
+  const { base: resourceBase } = path.parse(resource)
+
+  await page.waitForResponse((resp) =>
+    resp.url().includes(resourceBase) &&
+    resp.status() === 201 &&
+    resp.request().method() === 'COPY'
+  )
+}
+
 export const duplicateResource = async ({
   page,
   resource,
@@ -2129,10 +2139,33 @@ export const duplicateResource = async ({
       break
     }
   }
-  await page.waitForResponse(
-    (resp) =>
-      resp.url().endsWith(resource) &&
-      resp.status() === 201 &&
-      resp.request().method() === 'COPY'
-  )
+  await waitForResourceDuplicationResponse(page, resource)
+}
+
+export const duplicateMultipleResources = async ({
+  page,
+  resources,
+  method
+}: {
+  page: Page
+  resources: string[]
+  method: string
+}): Promise<void> => {
+
+  for (const resource of resources) {
+    await page.locator(util.format(checkBox, resource)).click()
+  }
+
+  switch (method) {
+    case 'dropdown-menu': {
+      await page.locator(highlightedFileRowSelector).first().click({ button: 'right' })
+      await page.locator(util.format(filesContextMenuAction, "duplicate")).click()
+      break
+    }
+    case 'batch-action': {
+      await selectBatchAction(page, "duplicate")
+      break
+    }
+  }
+  await Promise.all(resources.map(resource => waitForResourceDuplicationResponse(page, resource)))
 }

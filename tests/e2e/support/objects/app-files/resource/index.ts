@@ -2,6 +2,7 @@ import { Download, Locator, Page, Response } from '@playwright/test'
 import * as po from './actions'
 import { Space } from '../../../types'
 import { showShareIndicator } from './utils'
+import {duplicateMultipleResources} from "./actions";
 
 export class Resource {
   #page: Page
@@ -380,6 +381,12 @@ export class Resource {
   async duplicate(resource: string, method: string): Promise<void> {
     const startUrl = this.#page.url()
     await po.duplicateResource({ page: this.#page, resource, method })
+    await this.#page.goto(startUrl)
+  }
+
+  async duplicateMultipleResources(resources: string[], method: string): Promise<void> {
+    const startUrl = this.#page.url()
+    await po.duplicateMultipleResources({ page: this.#page, resources, method })
     await this.#page.goto(startUrl)
   }
 }

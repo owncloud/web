@@ -44,10 +44,16 @@ Feature: Copy
     And "Alice" duplicates the following resource using dropdown-menu
       | resource  |
       | Duplicate |
+    When "Alice" duplicates the following resource at once using batch-action
+      | resource      |
+      | Duplicate     |
+      | duplicate.txt |
     Then following resources should be displayed in the files list for user "Alice"
       | resource          |
       | duplicate (1).txt |
+      | duplicate (2).txt |
       | Duplicate (1)     |
+      | Duplicate (2)     |
     When "Alice" duplicates the following resource using batch-action
       | resource                |
       | Duplicate/duplicate.txt |
