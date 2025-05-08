@@ -30,6 +30,13 @@ Feature: Users can use web to organize tags
     Then the following resources should contain the following tags in the details panel for user "Alice"
       | resource  | tags  |
       | lorem.txt | tag 2 |
+    When "Alice" tries to add the following tag for the following resources using the sidebar panel
+      | resource  | tags                                                                                                       |
+      | lorem.txt | Loremipsum dolor sit amet consectetur adipiscing elit sed do eiusmod tempor incididunt ut labore et dolore |
+    Then "Alice" should see the following tag validation message:
+      """
+      Tags must not be longer than 100 characters
+      """
     And "Alice" logs out
 
 

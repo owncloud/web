@@ -659,6 +659,30 @@ When(
 )
 
 When(
+  '{string} tries to add the following tag(s) for the following resources using the sidebar panel',
+  async function (this: World, stepUser: string, stepTable: DataTable): Promise<void> {
+    const { page } = this.actorsEnvironment.getActor({ key: stepUser })
+    const resourceObject = new objects.applicationFiles.Resource({ page })
+    for (const { resource, tags } of stepTable.hashes()) {
+      await resourceObject.tryToAddTags({
+        resource,
+        tags: tags.split(',').map((tag) => tag.trim().toLowerCase())
+      })
+    }
+  }
+)
+
+Then(
+  '{string} should see the following tag validation message:',
+  async function (this: World, stepUser: string, message: string): Promise<void> {
+    const { page } = this.actorsEnvironment.getActor({ key: stepUser })
+    const resourceObject = new objects.applicationFiles.Resource({ page })
+    const actualMessage = await resourceObject.getTagValidationMessage()
+    expect(actualMessage).toBe(message)
+  }
+)
+
+When(
   /^"([^"].*)" creates a file from template file "([^"].*)" via "([^"].*)" using the (sidebar panel|context menu)$/,
   async function (
     this: World,
