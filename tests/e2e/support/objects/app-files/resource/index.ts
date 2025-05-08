@@ -245,6 +245,10 @@ export class Resource {
     await this.#page.goto(startUrl)
   }
 
+  async tryToAddTags(args: Omit<po.resourceTagsArgs, 'page'>): Promise<void> {
+    await po.tryToAddTagsToResource({ ...args, page: this.#page })
+  }
+
   async removeTags(args: Omit<po.resourceTagsArgs, 'page'>): Promise<void> {
     const startUrl = this.#page.url()
     await po.removeTagsFromResource({ ...args, page: this.#page })
@@ -383,5 +387,9 @@ export class Resource {
 
   async createFileFromTemplate(resource: string, webOffice: string, via: string): Promise<void> {
     await po.createFileFromTemplate({ page: this.#page, resource, webOffice, via })
+  }
+
+  async getTagValidationMessage(): Promise<string> {
+    return po.getTagValidationMessage({ page: this.#page })
   }
 }
