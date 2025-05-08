@@ -406,6 +406,25 @@ When(
   }
 )
 
+When('{string} enables flat list', async function (this: World, stepUser: string): Promise<void> {
+  const { page } = this.actorsEnvironment.getActor({ key: stepUser })
+  const resourceObject = new objects.applicationFiles.Resource({ page })
+  await resourceObject.toggleFlatList()
+})
+
+Then(
+  '{string} should see files being sorted in alphabetic order',
+  async function (this: World, stepUser: string): Promise<void> {
+    const { page } = this.actorsEnvironment.getActor({ key: stepUser })
+    const resourceObject = new objects.applicationFiles.Resource({ page })
+    const allFiles: string[] = await resourceObject.getAllFiles()
+    const sortedFiles = [...allFiles].sort((a, b) =>
+      a.localeCompare(b, 'en-us', { numeric: true, ignorePunctuation: true })
+    )
+    expect(allFiles).toEqual(sortedFiles)
+  }
+)
+
 When(
   '{string} switches to the tiles-view',
   async function (this: World, stepUser: string): Promise<void> {
