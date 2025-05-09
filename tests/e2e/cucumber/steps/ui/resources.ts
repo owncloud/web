@@ -1043,3 +1043,19 @@ Then(
     }
   }
 )
+
+When(
+  /^"([^"]*)" duplicates the following resource(?:s)? using (sidebar-panel|dropdown-menu|batch-action)$/,
+  async function (
+    this: World,
+    stepUser: string,
+    method: string,
+    stepTable: DataTable
+  ): Promise<void> {
+    const { page } = this.actorsEnvironment.getActor({ key: stepUser })
+    const resourceObject = new objects.applicationFiles.Resource({ page })
+    for (const info of stepTable.hashes()) {
+      await resourceObject.duplicate(info.resource, method)
+    }
+  }
+)
