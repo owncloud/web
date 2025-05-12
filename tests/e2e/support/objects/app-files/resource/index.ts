@@ -384,4 +384,10 @@ export class Resource {
   async createFileFromTemplate(resource: string, webOffice: string, via: string): Promise<void> {
     await po.createFileFromTemplate({ page: this.#page, resource, webOffice, via })
   }
+
+  async duplicate(resource: string, method: string): Promise<void> {
+    const startUrl = this.#page.url()
+    await po.duplicateResource({ page: this.#page, resource, method })
+    await this.#page.goto(startUrl)
+  }
 }

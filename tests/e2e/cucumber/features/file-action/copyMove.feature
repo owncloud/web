@@ -21,6 +21,7 @@ Feature: Copy
       | PARENT/Sub3           |
       | PARENT/Sub4           |
       | PARENT/Sub5           |
+      | Duplicate             |
     And "Alice" creates the following files into personal space using API
       | pathToFile               | content                             |
       | PARENTCopy3/example1.txt | example text                        |
@@ -28,6 +29,8 @@ Feature: Copy
       | KeyboardExample.txt      | copy with the help of keyboard      |
       | dragDrop.txt             | copy with the help of drag-drop     |
       | sidebar.txt              | copy with the help of sidebar panel |
+      | duplicate.txt            | duplicate file                      |
+      | Duplicate/duplicate.txt  | duplicate file                      |
       | PARENT/fileToCopy1.txt   | some content                        |
       | PARENT/fileToCopy2.txt   | some content                        |
       | PARENT/fileToCopy3.txt   | some content                        |
@@ -35,6 +38,24 @@ Feature: Copy
       | PARENT/fileToCopy5.txt   | some content                        |
     And "Alice" logs in
 
+    When "Alice" duplicates the following resource using sidebar-panel
+      | resource      |
+      | duplicate.txt |
+    And "Alice" duplicates the following resource using dropdown-menu
+      | resource  |
+      | Duplicate |
+    Then following resources should be displayed in the files list for user "Alice"
+      | resource          |
+      | duplicate (1).txt |
+      | Duplicate (1)     |
+    When "Alice" duplicates the following resource using batch-action
+      | resource                |
+      | Duplicate/duplicate.txt |
+    And "Alice" opens folder "Duplicate"
+    Then following resources should be displayed in the files list for user "Alice"
+      | resource          |
+      | duplicate (1).txt |
+    And "Alice" opens the "files" app
     When "Alice" copies the following resource using sidebar-panel
       | resource    | to          |
       | sidebar.txt | PARENTCopy2 |
