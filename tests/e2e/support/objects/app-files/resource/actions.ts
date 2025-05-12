@@ -104,6 +104,7 @@ const tagInDetailsPanel = '//*[@data-testid="tags"]/td//span[text()="%s"]'
 const tagInInputForm =
   '//span[contains(@class, "tags-select-tag")]//span[text()="%s"]//ancestor::span//button[contains(@class, "vs__deselect")]'
 const tagFormInput = '//*[@data-testid="tags"]//input'
+const tagValidationMessageSelector = '.vs__dropdown-menu .oc-text-input-danger'
 const resourcesAsTiles = '#files-view .oc-tiles'
 const fileVersionSidebar = '#oc-file-versions-sidebar'
 const versionsPanelSelect = '//*[@data-testid="sidebar-panel-versions-select"]'
@@ -1653,8 +1654,7 @@ export const editResource = async (args: editResourcesArgs): Promise<void> => {
   }
 }
 
-export const addTagsToResource = async (args: resourceTagsArgs): Promise<void> => {
-  const { page, resource, tags } = args
+const openSideBar = async ({ page, resource }): Promise<void> => {
   const { dir: resourceDir } = path.parse(resource)
 
   const folderPaths = resource.split('/')
@@ -1665,6 +1665,11 @@ export const addTagsToResource = async (args: resourceTagsArgs): Promise<void> =
   }
 
   await sidebar.open({ page: page, resource: resourceName })
+}
+
+export const addTagsToResource = async (args: resourceTagsArgs): Promise<void> => {
+  const { page, resource, tags } = args
+  await openSideBar({ page, resource })
   const inputForm = page.locator(tagFormInput)
 
   for (const tag of tags) {
@@ -1681,6 +1686,16 @@ export const addTagsToResource = async (args: resourceTagsArgs): Promise<void> =
   }
 
   await sidebar.close({ page })
+}
+
+export const tryToAddTagsToResource = async (args: resourceTagsArgs): Promise<void> => {
+  const { page, resource, tags } = args
+  await openSideBar({ page, resource })
+  const inputForm = page.locator(tagFormInput)
+
+  for (const tag of tags) {
+    await inputForm.pressSequentially(tag)
+  }
 }
 
 export const removeTagsFromResource = async (args: resourceTagsArgs): Promise<void> => {
@@ -2160,4 +2175,8 @@ const waitForResourceDuplicationResponse = async (page: Page, resource: string):
     (resp) =>
       resp.url().endsWith(resource) && resp.status() === 201 && resp.request().method() === 'COPY'
   )
+}
+
+export const getTagValidationMessage = async ({ page }: { page: Page }): Promise<string> => {
+  return page.locator(tagValidationMessageSelector).innerText()
 }
