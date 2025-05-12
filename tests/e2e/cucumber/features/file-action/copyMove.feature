@@ -9,19 +9,20 @@ Feature: Copy
       | id    |
       | Alice |
     And "Alice" creates the following folders in personal space using API
-      | name                  |
-      | PARENTCopy1           |
-      | PARENTCopy2           |
-      | PARENTMove            |
-      | PARENTCopy3           |
-      | PARENTCopy4/Sub1/Sub2 |
-      | PARENT                |
-      | PARENT/Sub1/Sub       |
-      | PARENT/Sub2           |
-      | PARENT/Sub3           |
-      | PARENT/Sub4           |
-      | PARENT/Sub5           |
-      | Duplicate             |
+      | name                        |
+      | PARENTCopy1                 |
+      | PARENTCopy2                 |
+      | PARENTMove                  |
+      | PARENTCopy3                 |
+      | PARENTCopy4/Sub1/Sub2       |
+      | PARENT                      |
+      | PARENT/Sub1/Sub             |
+      | PARENT/Sub2                 |
+      | PARENT/Sub3                 |
+      | PARENT/Sub4                 |
+      | PARENT/Sub5                 |
+      | Duplicate                   |
+      | Duplicate/folderToDuplicate |
     And "Alice" creates the following files into personal space using API
       | pathToFile               | content                             |
       | PARENTCopy3/example1.txt | example text                        |
@@ -48,13 +49,25 @@ Feature: Copy
       | resource          |
       | duplicate (1).txt |
       | Duplicate (1)     |
-    When "Alice" duplicates the following resource using batch-action
-      | resource                |
-      | Duplicate/duplicate.txt |
     And "Alice" opens folder "Duplicate"
-    Then following resources should be displayed in the files list for user "Alice"
+    When "Alice" duplicates the following resource using batch-action
+      | resource      |
+      | duplicate.txt |
+    And "Alice" duplicates the following resource at once using batch-action
       | resource          |
-      | duplicate (1).txt |
+      | folderToDuplicate |
+      | duplicate.txt     |
+    And "Alice" duplicates the following resource at once using dropdown-menu
+      | resource          |
+      | folderToDuplicate |
+      | duplicate.txt     |
+    Then following resources should be displayed in the files list for user "Alice"
+      | resource              |
+      | duplicate (1).txt     |
+      | duplicate (2).txt     |
+      | duplicate (3).txt     |
+      | folderToDuplicate (1) |
+      | folderToDuplicate (2) |
     And "Alice" opens the "files" app
     When "Alice" copies the following resource using sidebar-panel
       | resource    | to          |

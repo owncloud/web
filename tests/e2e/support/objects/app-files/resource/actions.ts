@@ -2134,15 +2134,9 @@ export const duplicateResource = async ({
   resource: string
   method: string
 }): Promise<void> => {
-  const { dir: resourceDir, base: resourceBase } = path.parse(resource)
-
-  if (resourceDir) {
-    await clickResource({ page, path: resourceDir })
-  }
-
   switch (method) {
     case 'dropdown-menu': {
-      await page.locator(util.format(resourceNameSelector, resourceBase)).click({ button: 'right' })
+      await page.locator(util.format(resourceNameSelector, resource)).click({ button: 'right' })
       await Promise.all([
         waitForResourceDuplicationResponse(page, resource),
         page.locator(util.format(filesContextMenuAction, 'duplicate')).click()
@@ -2150,7 +2144,7 @@ export const duplicateResource = async ({
       break
     }
     case 'batch-action': {
-      await page.locator(util.format(checkBox, resourceBase)).click()
+      await page.locator(util.format(checkBox, resource)).click()
       await Promise.all([
         waitForResourceDuplicationResponse(page, resource),
         selectBatchAction(page, 'duplicate')
@@ -2158,7 +2152,7 @@ export const duplicateResource = async ({
       break
     }
     case 'sidebar-panel': {
-      await sidebar.open({ page: page, resource: resourceBase })
+      await sidebar.open({ page: page, resource: resource })
       await sidebar.openPanel({ page: page, name: 'actions' })
 
       await Promise.all([
@@ -2170,8 +2164,8 @@ export const duplicateResource = async ({
   }
 }
 
-const waitForResourceDuplicationResponse = async (page: Page, resource: string): Promise<void> => {
-  await page.waitForResponse(
+const waitForResourceDuplicationResponse = (page: Page, resource: string): Promise<Response> => {
+  return page.waitForResponse(
     (resp) =>
       resp.url().endsWith(resource) && resp.status() === 201 && resp.request().method() === 'COPY'
   )
@@ -2179,4 +2173,37 @@ const waitForResourceDuplicationResponse = async (page: Page, resource: string):
 
 export const getTagValidationMessage = async ({ page }: { page: Page }): Promise<string> => {
   return page.locator(tagValidationMessageSelector).innerText()
+}
+
+export const duplicateMultipleResources = async ({
+  page,
+  resources,
+  method
+}: {
+  page: Page
+  resources: string[]
+  method: string
+}): Promise<void> => {
+  // tick all the checkboxes first
+  for (const resource of resources) {
+    await page.locator(util.format(checkBox, resource)).click()
+  }
+
+  switch (method) {
+    case 'dropdown-menu': {
+      await page.locator(highlightedFileRowSelector).first().click({ button: 'right' })
+      await Promise.all([
+        ...resources.map((resource) => waitForResourceDuplicationResponse(page, resource)),
+        page.locator(util.format(filesContextMenuAction, 'duplicate')).click()
+      ])
+      break
+    }
+    case 'batch-action': {
+      await Promise.all([
+        ...resources.map((resource) => waitForResourceDuplicationResponse(page, resource)),
+        selectBatchAction(page, 'duplicate')
+      ])
+      break
+    }
+  }
 }

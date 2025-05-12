@@ -398,4 +398,10 @@ export class Resource {
   async getTagValidationMessage(): Promise<string> {
     return po.getTagValidationMessage({ page: this.#page })
   }
+
+  async duplicateMultipleResources(resources: string[], method: string): Promise<void> {
+    const startUrl = this.#page.url()
+    await po.duplicateMultipleResources({ page: this.#page, resources, method })
+    await this.#page.goto(startUrl)
+  }
 }
