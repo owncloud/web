@@ -160,9 +160,9 @@ After(async function (this: World, { result, willBeRetried, pickle }: ITestCaseH
   utils.removeTempUploadDirectory()
   environment.closeSSEConnections()
 
-  if (fs.existsSync(config.tracingReportDir)) {
-    filterTracingReports(result.status)
-  }
+  // if (fs.existsSync(config.tracingReportDir)) {
+  //   filterTracingReports(result.status)
+  // }
 
   // NOTE: config should be changed at the very end of the test
   config.reportHar = willBeRetried || defaults.reportHar
@@ -177,10 +177,10 @@ AfterAll(async () => {
   }
 
   // move failed tracing reports
-  const failedDir = path.dirname(config.tracingReportDir) + '/failed'
-  if (fs.existsSync(failedDir)) {
-    fs.renameSync(failedDir, config.tracingReportDir)
-  }
+  // const failedDir = path.dirname(config.tracingReportDir) + '/failed'
+  // if (fs.existsSync(failedDir)) {
+  //   fs.renameSync(failedDir, config.tracingReportDir)
+  // }
 })
 
 function filterTracingReports(status: string) {

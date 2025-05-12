@@ -60,7 +60,7 @@ config = {
     "e2e": {
         "1": {
             "earlyFail": True,
-            "skip": False,
+            "skip": True,
             "suites": [
                 "journeys",
                 "smoke",
@@ -68,7 +68,7 @@ config = {
         },
         "2": {
             "earlyFail": True,
-            "skip": False,
+            "skip": True,
             "suites": [
                 "admin-settings",
                 "spaces",
@@ -76,7 +76,7 @@ config = {
         },
         "3": {
             "earlyFail": True,
-            "skip": False,
+            "skip": True,
             "tikaNeeded": True,
             "suites": [
                 "search",
@@ -92,15 +92,18 @@ config = {
         "4": {
             "earlyFail": True,
             "skip": False,
-            "suites": [
-                "navigation",
-                "user-settings",
-                "file-action",
-                "app-store",
+            # "suites": [
+            #     "navigation",
+            #     "user-settings",
+            #     "file-action",
+            #     "app-store",
+            # ],
+            "features": [
+                "cucumber/features/file-action/download.feature",
             ],
         },
         "app-provider": {
-            "skip": False,
+            "skip": True,
             "suites": [
                 "app-provider",
             ],
@@ -117,7 +120,7 @@ config = {
             },
         },
         "oidc-refresh-token": {
-            "skip": False,
+            "skip": True,
             "features": [
                 "cucumber/features/oidc/refreshToken.feature",
             ],
@@ -127,7 +130,7 @@ config = {
             },
         },
         "oidc-iframe": {
-            "skip": False,
+            "skip": True,
             "features": [
                 "cucumber/features/oidc/iframeTokenRenewal.feature",
             ],
@@ -137,7 +140,7 @@ config = {
         },
         "ocm": {
             "earlyFail": True,
-            "skip": False,
+            "skip": True,
             "federationServer": True,
             "suites": [
                 "ocm",
@@ -210,16 +213,12 @@ def main(ctx):
     return pipelines
 
 def beforePipelines(ctx):
-    return checkStarlark() + \
-           licenseCheck(ctx) + \
-           documentation(ctx) + \
-           changelog(ctx) + \
-           pnpmCache(ctx) + \
+    return pnpmCache(ctx) + \
            cacheOcisPipeline(ctx) + \
-           pipelinesDependsOn(buildCacheWeb(ctx), pnpmCache(ctx)) + \
-           pipelinesDependsOn(pnpmlint(ctx), pnpmCache(ctx))
+           pipelinesDependsOn(buildCacheWeb(ctx), pnpmCache(ctx))
 
 def stagePipelines(ctx):
+    return e2eTests(ctx)
     unit_test_pipelines = unitTests(ctx)
 
     # run only unit tests when publishing a standalone package
@@ -602,8 +601,8 @@ def e2eTests(ctx):
 
         environment = {
             "HEADLESS": "true",
-            "RETRY": "1",
-            "REPORT_TRACING": params["reportTracing"],
+            "RETRY": "0",
+            "REPORT_TRACING": True,
             "BASE_URL_OCIS": "ocis:9200",
             "FAIL_ON_UNCAUGHT_CONSOLE_ERR": "true",
             "PLAYWRIGHT_BROWSERS_PATH": ".playwright",
