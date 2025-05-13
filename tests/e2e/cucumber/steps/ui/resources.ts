@@ -1083,3 +1083,18 @@ When(
     }
   }
 )
+
+When(
+  /^"([^"]*)" duplicates the following resource(?:s)? at once using (dropdown-menu|batch-action)$/,
+  async function (
+    this: World,
+    stepUser: string,
+    method: string,
+    stepTable: DataTable
+  ): Promise<void> {
+    const { page } = this.actorsEnvironment.getActor({ key: stepUser })
+    const resourceObject = new objects.applicationFiles.Resource({ page })
+    const resources = [].concat(...stepTable.rows())
+    await resourceObject.duplicateMultipleResources(resources, method)
+  }
+)
