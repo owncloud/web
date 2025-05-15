@@ -147,7 +147,7 @@ export default defineComponent({
       default: undefined
     },
     sortDir: {
-      type: String,
+      type: String as PropType<SortDir>,
       required: false,
       default: undefined,
       validator: (value: string) => {
