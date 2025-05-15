@@ -2,7 +2,7 @@ import { Given, When, Then } from '@cucumber/cucumber'
 import { PickleTag } from '@cucumber/messages'
 import { World } from '../../environment'
 import { config } from '../../../config'
-import { objects } from '../../../support'
+import { objects, api } from '../../../support'
 import { listenSSE } from '../../../support/environment/sse'
 
 async function createNewSession(world: World, stepUser: string) {
@@ -24,6 +24,16 @@ async function LogInUser(this: World, stepUser: string): Promise<void> {
 
   await page.goto(config.baseUrl)
   await sessionObject.login(user)
+
+  this.usersEnvironment.updateCreatedUser({
+    key: stepUser,
+    user: {
+      ...user,
+      uuid: api.token.getUserIdFromToken(user)
+    }
+  })
+
+  // TODO: init user states by requesting settings: language, auto-sync
 
   if (this.feature.tags.length > 0) {
     const tags: string[] = []

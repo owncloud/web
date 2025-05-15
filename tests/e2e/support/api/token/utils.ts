@@ -171,6 +171,7 @@ export const refreshAccessToken = async (user: User): Promise<void> => {
   })
 }
 
+// TODO: request to get ocis user id instead of parsing the token
 export const getUserIdFromToken = (user: User): string => {
   const tokenEnvironment = TokenEnvironmentFactory()
   const accessToken = tokenEnvironment.getToken({ user }).accessToken

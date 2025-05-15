@@ -36,13 +36,13 @@ Feature: Group actions
       | folder5                |
       | parentFolder/SubFolder |
     And "Alice" shares the following resource using API
-      | resource     | recipient | type | role                      |
-      | folder1      | Brian     | user | Can edit without versions |
-      | folder2      | Brian     | user | Can edit without versions |
-      | folder3      | Brian     | user | Can edit without versions |
-      | folder4      | Brian     | user | Can edit without versions |
-      | folder5      | Brian     | user | Can edit without versions |
-      | parentFolder | Brian     | user | Can edit without versions |
+      | resource     | recipient | type | role                      | resourceType |
+      | folder1      | Brian     | user | Can edit without versions | folder       |
+      | folder2      | Brian     | user | Can edit without versions | folder       |
+      | folder3      | Brian     | user | Can edit without versions | folder       |
+      | folder4      | Brian     | user | Can edit without versions | folder       |
+      | folder5      | Brian     | user | Can edit without versions | folder       |
+      | parentFolder | Brian     | user | Can edit without versions | folder       |
     And "Alice" logs in
 
     # multiple share

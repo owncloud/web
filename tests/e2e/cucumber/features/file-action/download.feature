@@ -23,10 +23,10 @@ Feature: Download
       | localFile                     | to             |
       | filesForUpload/testavatar.jpg | testavatar.jpg |
     And "Alice" shares the following resource using API
-      | resource       | recipient | type | role     |
-      | folderPublic   | Brian     | user | Can edit |
-      | emptyFolder    | Brian     | user | Can edit |
-      | testavatar.jpg | Brian     | user | Can edit |
+      | resource       | recipient | type | role     | resourceType |
+      | folderPublic   | Brian     | user | Can edit | folder       |
+      | emptyFolder    | Brian     | user | Can edit | folder       |
+      | testavatar.jpg | Brian     | user | Can edit | file         |
 
     When "Alice" logs in
     And "Alice" downloads the following resources using the batch action

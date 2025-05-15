@@ -18,8 +18,8 @@ Feature: Search
       | resource        | tags      |
       | fileToShare.txt | alice tag |
     And "Alice" shares the following resource using API
-      | resource        | recipient | type | role     |
-      | fileToShare.txt | Brian     | user | Can edit |
+      | resource        | recipient | type | role     | resourceType |
+      | fileToShare.txt | Brian     | user | Can edit | file         |
     And "Brian" creates the following folder in personal space using API
       | name       |
       | testFolder |

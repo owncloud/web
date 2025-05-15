@@ -114,10 +114,10 @@ Feature: link
       | filesForUpload/testavatar.jpg | testavatar.jpg |
       | filesForUpload/test_video.mp4 | test_video.mp4 |
     And "Alice" shares the following resource using API
-      | resource       | recipient | type | role     |
-      | folderPublic   | Brian     | user | Can edit |
-      | simple.pdf     | Brian     | user | Can edit |
-      | testavatar.jpg | Brian     | user | Can edit |
+      | resource       | recipient | type | role     | resourceType |
+      | folderPublic   | Brian     | user | Can edit | folder       |
+      | simple.pdf     | Brian     | user | Can edit | file         |
+      | testavatar.jpg | Brian     | user | Can edit | file         |
 
     And "Alice" opens the "files" app
     And "Alice" creates a public link of following resource using the sidebar panel
