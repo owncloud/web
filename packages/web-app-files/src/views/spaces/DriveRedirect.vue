@@ -34,6 +34,7 @@ import { AppLoadingSpinner } from '@ownclouders/web-pkg'
 import { urlJoin } from '@ownclouders/web-client'
 import { createFileRouteOptions } from '@ownclouders/web-pkg'
 import { createLocationSpaces } from '@ownclouders/web-pkg'
+import { RouteLocationRaw } from 'vue-router'
 
 // 'personal/home' is used as personal drive alias from static contexts
 // (i.e. places where we can't load the actual personal space)
@@ -72,15 +73,18 @@ if (!unref(spaceNotFound)) {
       path: itemPath
     })
 
+    const { fullPath, ...routeWithoutFullPath } = unref(route)
+
     router
       .replace({
-        ...unref(route),
+        ...routeWithoutFullPath,
+        path: fullPath,
         params: {
-          ...unref(route).params,
+          ...routeWithoutFullPath.params,
           ...params
         },
         query
-      })
+      } as RouteLocationRaw)
       // avoid NavigationDuplicated error in console
       .catch(() => {})
   }

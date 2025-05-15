@@ -78,7 +78,7 @@ import {
   unref,
   watch
 } from 'vue'
-import { useRouter } from 'vue-router'
+import { RouteLocationAsRelativeTyped, useRouter } from 'vue-router'
 import { useGettext } from 'vue3-gettext'
 
 import '@uppy/core/dist/style.min.css'
@@ -168,7 +168,9 @@ export default defineComponent({
           if (active) {
             active = [item.route, ...(item.activeFor || [])].filter(Boolean).some((currentItem) => {
               try {
-                const comparativeHref = router.resolve(currentItem).href
+                const comparativeHref = router.resolve(
+                  currentItem as RouteLocationAsRelativeTyped
+                ).href
                 return currentHref.startsWith(comparativeHref)
               } catch (e) {
                 console.error(e)

@@ -16,12 +16,12 @@ describe('utils', () => {
           mock<RouteLocation & { href: string }>({ href: r.name.toString() })
       })
 
-      expect(isLocationActive(fakeRouter, mock<RouteLocation>({ name: 'foo' }))).toBe(true)
+      expect(isLocationActive(fakeRouter, mock<RouteLocationNamedRaw>({ name: 'foo' }))).toBe(true)
       expect(
         isLocationActive(
           fakeRouter,
-          mock<RouteLocation>({ name: 'foo' }),
-          mock<RouteLocation>({ name: 'bar' })
+          mock<RouteLocationNamedRaw>({ name: 'foo' }),
+          mock<RouteLocationNamedRaw>({ name: 'bar' })
         )
       ).toBe(true)
     })
@@ -33,12 +33,12 @@ describe('utils', () => {
           mock<RouteLocation & { href: string }>({ href: r.name.toString() })
       })
 
-      expect(isLocationActive(fakeRouter, mock<RouteLocation>({ name: 'bar' }))).toBe(false)
+      expect(isLocationActive(fakeRouter, mock<RouteLocationNamedRaw>({ name: 'bar' }))).toBe(false)
       expect(
         isLocationActive(
           fakeRouter,
-          mock<RouteLocation>({ name: 'bar' }),
-          mock<RouteLocation>({ name: 'baz' })
+          mock<RouteLocationNamedRaw>({ name: 'bar' }),
+          mock<RouteLocationNamedRaw>({ name: 'baz' })
         )
       ).toBe(false)
     })
@@ -53,9 +53,9 @@ describe('utils', () => {
       })
 
       const isFilesLocationActive = isLocationActiveDirector(
-        mock<RouteLocation>({ name: 'foo' }),
-        mock<RouteLocation>({ name: 'bar' }),
-        mock<RouteLocation>({ name: 'baz' })
+        mock<RouteLocationNamedRaw>({ name: 'foo' }),
+        mock<RouteLocationNamedRaw>({ name: 'bar' }),
+        mock<RouteLocationNamedRaw>({ name: 'baz' })
       )
       expect(isFilesLocationActive(fakeRouter)).toBe(false)
 
@@ -73,8 +73,8 @@ describe('utils', () => {
       })
 
       const isFilesLocationActive = isLocationActiveDirector(
-        mock<RouteLocation>({ name: 'foo' }),
-        mock<RouteLocation>({ name: 'bar' })
+        mock<RouteLocationNamedRaw>({ name: 'foo' }),
+        mock<RouteLocationNamedRaw>({ name: 'bar' })
       )
       expect(() => isFilesLocationActive(fakeRouter, 'unknown')).toThrow()
     })
@@ -84,8 +84,7 @@ describe('utils', () => {
     test('creates a location and handle arguments', () => {
       const testLocation = createLocation(
         'foo',
-        mock<RouteLocation>({
-          path: '/should-not-add',
+        mock<RouteLocationNamedRaw>({
           params: { foo: 'foo-param-value' },
           query: { bar: 'bar-query-value' }
         })

@@ -8,7 +8,7 @@ import {
   UppyService
 } from '@ownclouders/web-pkg'
 import { Router, RouteLocationNormalizedLoaded, RouteLocationRaw } from 'vue-router'
-import { ref } from 'vue'
+import { computed } from 'vue'
 import { writable } from '../helpers'
 
 export interface ComponentMocksOptions {
@@ -18,9 +18,9 @@ export interface ComponentMocksOptions {
 export const defaultComponentMocks = ({ currentRoute = undefined }: ComponentMocksOptions = {}) => {
   const $router = mock<Router>()
   if (currentRoute) {
-    writable($router).currentRoute = ref(currentRoute)
+    writable($router).currentRoute = computed(() => currentRoute)
   } else {
-    writable($router).currentRoute = ref(
+    writable($router).currentRoute = computed(() =>
       mock<RouteLocationNormalizedLoaded>({ name: '', path: '' })
     )
   }

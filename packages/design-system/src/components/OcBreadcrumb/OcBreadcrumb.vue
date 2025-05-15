@@ -23,10 +23,10 @@
           }
         ]"
         @dragover.prevent
-        @dragenter.prevent="dropItemStyling(item, index, false, $event)"
-        @dragleave.prevent="dropItemStyling(item, index, true, $event)"
-        @mouseleave="dropItemStyling(item, index, true, $event as DragEvent)"
-        @drop="dropItemEvent(item, index)"
+        @dragenter.prevent="dropItemStyling(item as BreadcrumbItem, index, false, $event)"
+        @dragleave.prevent="dropItemStyling(item as BreadcrumbItem, index, true, $event)"
+        @mouseleave="dropItemStyling(item as BreadcrumbItem, index, true, $event as DragEvent)"
+        @drop="dropItemEvent(item as BreadcrumbItem, index)"
       >
         <router-link
           v-if="item.to"

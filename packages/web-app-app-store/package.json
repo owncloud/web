@@ -17,7 +17,7 @@
     "mark.js": "^8.11.1",
     "pinia": "3.0.2",
     "vue-concurrency": "5.0.3",
-    "vue-router": "4.2.5",
+    "vue-router": "4.5.1",
     "zod": "3.24.4",
     "vue3-gettext": "2.4.0"
   }
