@@ -4,6 +4,9 @@
   "private": true,
   "description": "ownCloud Web epub-reader",
   "license": "AGPL-3.0",
+  "scripts": {
+    "test:unit": "NODE_OPTIONS=--unhandled-rejections=throw vitest"
+  },
   "dependencies": {
     "epubjs": "^0.3.93"
   },

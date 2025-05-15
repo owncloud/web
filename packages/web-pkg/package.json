@@ -31,7 +31,8 @@
   "scripts": {
     "vite": "vite",
     "prepublishOnly": "rm -rf ./package && clean-publish && rm -rf package/dist/tests package/dist/*.css && find package && cat package/package.json",
-    "postpublish": "rm -rf ./package"
+    "postpublish": "rm -rf ./package",
+    "test:unit": "NODE_OPTIONS=--unhandled-rejections=throw vitest"
   },
   "dependencies": {
     "@casl/ability": "^6.7.1",

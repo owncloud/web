@@ -4,6 +4,9 @@
   "private": true,
   "description": "ownCloud web runtime",
   "license": "AGPL-3.0",
+  "scripts": {
+    "test:unit": "NODE_OPTIONS=--unhandled-rejections=throw vitest"
+  },
   "dependencies": {
     "@casl/ability": "6.7.3",
     "@casl/vue": "^2.2.2",
