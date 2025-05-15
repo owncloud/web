@@ -1,7 +1,7 @@
 import { mock } from 'vitest-mock-extended'
 import { defaultComponentMocks, defaultPlugins, shallowMount } from '@ownclouders/web-test-helpers'
 import { AppProviderService, useRequest, useRoute } from '@ownclouders/web-pkg'
-import { ref } from 'vue'
+import { computed } from 'vue'
 
 import { Resource } from '@ownclouders/web-client'
 import App from '../../src/App.vue'
@@ -76,9 +76,11 @@ function createShallowMountWrapper(makeRequest = vi.fn().mockResolvedValue({ sta
   vi.mocked(useRequest).mockImplementation(() => ({
     makeRequest
   }))
-  vi.mocked(useRoute).mockImplementation(() =>
-    ref(mock<RouteLocation>({ name: 'external-example-app-apps' }))
+
+  vi.mocked(useRoute).mockReturnValue(
+    computed(() => mock<RouteLocation>({ name: 'external-example-app-apps' }))
   )
+
   const mocks = {
     ...defaultComponentMocks(),
     $appProviderService: mock<AppProviderService>({ appNames: ['example-app'] })

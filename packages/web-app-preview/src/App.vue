@@ -109,6 +109,7 @@ import {
   usePreviewDimensions
 } from './composables'
 import { mimeTypes } from './mimeTypes'
+import { RouteLocationRaw } from 'vue-router'
 
 export const appId = 'preview'
 const PRELOAD_COUNT = 5
@@ -256,11 +257,14 @@ export default defineComponent({
       }
 
       const { params, query } = createFileRouteOptions(unref(space), unref(activeFilteredFile))
+      const { fullPath, ...routeWithoutFullPath } = unref(route)
+
       router.replace({
-        ...unref(route),
-        params: { ...unref(route).params, ...params },
-        query: { ...unref(route).query, ...query }
-      })
+        ...routeWithoutFullPath,
+        path: fullPath,
+        params: { ...routeWithoutFullPath.params, ...params },
+        query: { ...routeWithoutFullPath.query, ...query }
+      } as RouteLocationRaw)
     }
 
     const instance = getCurrentInstance()

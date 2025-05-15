@@ -3,7 +3,7 @@ import { HandleUpload } from '../../src/HandleUpload'
 import { mock, mockDeep } from 'vitest-mock-extended'
 import { Resource, SpaceResource } from '@ownclouders/web-client'
 import { RouteLocationNormalizedLoaded } from 'vue-router'
-import { ref, unref } from 'vue'
+import { computed, ref, unref } from 'vue'
 import {
   ClientService,
   UppyService,
@@ -288,7 +288,7 @@ const getWrapper = ({
   const opts = {
     clientService: mockDeep<ClientService>(),
     language: mock<Language>({ current: 'en' }),
-    route: ref(route),
+    route: computed(() => route),
     userStore: useUserStore(),
     messageStore: useMessages(),
     spacesStore: useSpacesStore(),

@@ -1,5 +1,5 @@
 import { mock } from 'vitest-mock-extended'
-import { ref, unref } from 'vue'
+import { computed, unref } from 'vue'
 import {
   defaultComponentMocks,
   RouteLocation,
@@ -133,7 +133,7 @@ function getWrapper({
   )
 
   vi.mocked(useRoute).mockImplementation(() =>
-    ref(mock<RouteLocation>({ name: 'files-spaces-generic', path: '/files/' }))
+    computed(() => mock<RouteLocation>({ name: 'files-spaces-generic', path: '/files/' }))
   )
 
   return {
