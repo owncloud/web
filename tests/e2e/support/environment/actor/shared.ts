@@ -1,5 +1,7 @@
-import { Browser, BrowserContextOptions } from '@playwright/test'
+import { Browser, BrowserContextOptions, LaunchOptions } from '@playwright/test'
 import path from 'path'
+
+import { config } from '../../../config'
 
 export interface ActorsOptions {
   browser: Browser
@@ -20,9 +22,16 @@ export interface ActorOptions extends ActorsOptions {
 }
 
 export const buildBrowserContextOptions = (options: ActorOptions): BrowserContextOptions => {
+  const permissions = []
+  // clipboard permissions are only available in chromium and chrome
+  // https://github.com/microsoft/playwright/issues/13037
+  if (['chromium', 'chrome'].includes(config.browser)) {
+    permissions.push('clipboard-read', 'clipboard-write')
+  }
+
   const contextOptions: BrowserContextOptions = {
     acceptDownloads: options.context.acceptDownloads,
-    permissions: ['clipboard-read', 'clipboard-write'],
+    permissions: permissions,
     ignoreHTTPSErrors: true,
     locale: 'en-US'
   }
@@ -40,4 +49,21 @@ export const buildBrowserContextOptions = (options: ActorOptions): BrowserContex
   }
 
   return contextOptions
+}
+
+export const getBrowserLaunchOptions = (): LaunchOptions => {
+  const args = []
+  if (config.browser !== 'webkit') {
+    args.push('--use-fake-ui-for-media-stream', '--use-fake-device-for-media-stream')
+  }
+
+  return {
+    slowMo: config.slowMo,
+    args,
+    firefoxUserPrefs: {
+      'media.navigator.streams.fake': true,
+      'media.navigator.permission.disabled': true
+    },
+    headless: config.headless
+  }
 }

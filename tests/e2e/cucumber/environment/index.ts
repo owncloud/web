@@ -18,6 +18,7 @@ import { state } from './shared'
 import { config } from '../../config'
 import { Group, User, UserState } from '../../support/types'
 import { api, environment, utils, store } from '../../support'
+import { getBrowserLaunchOptions } from '../../support/environment/actor/shared'
 
 export { World }
 
@@ -35,15 +36,7 @@ setDefaultTimeout(config.debug ? -1 : config.timeout * 1000)
 setWorldConstructor(World)
 
 BeforeAll(async (): Promise<void> => {
-  const browserConfiguration = {
-    slowMo: config.slowMo,
-    args: ['--use-fake-ui-for-media-stream', '--use-fake-device-for-media-stream'],
-    firefoxUserPrefs: {
-      'media.navigator.streams.fake': true,
-      'media.navigator.permission.disabled': true
-    },
-    headless: config.headless
-  }
+  const browserConfiguration = getBrowserLaunchOptions()
 
   const browsers: Record<string, () => Promise<Browser>> = {
     firefox: async (): Promise<Browser> => await firefox.launch(browserConfiguration),
