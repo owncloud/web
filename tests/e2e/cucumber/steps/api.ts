@@ -1,10 +1,10 @@
 import { Given, DataTable } from '@cucumber/cucumber'
 import { World } from '../environment'
 import { api } from '../../support'
+import { ResourceType } from '../../support/api/share/share'
 import fs from 'fs'
 import { Space } from '../../support/types'
 import { config } from '../../config'
-import { setAccessAndRefreshToken, getUserIdFromToken } from '../../support/api/token'
 
 Given(
   '{string} creates following user(s) using API',
@@ -14,11 +14,7 @@ Given(
       const user = this.usersEnvironment.getUser({ key: info.id })
       // do not try to create users when using predefined users
       if (config.predefinedUsers) {
-        await setAccessAndRefreshToken(user)
-        this.usersEnvironment.storeCreatedUser(info.id.toLowerCase(), {
-          ...user,
-          uuid: getUserIdFromToken(user)
-        })
+        this.usersEnvironment.storeCreatedUser(info.id, user)
         this.usersEnvironment.saveUserState(info.id, {})
       } else {
         await api.provision.createUser({ user, admin })
@@ -102,7 +98,8 @@ Given(
         path: info.resource,
         shareType: info.type,
         shareWith: info.recipient,
-        role: info.role
+        role: info.role,
+        resourceType: info.resourceType as ResourceType
       })
     }
   }

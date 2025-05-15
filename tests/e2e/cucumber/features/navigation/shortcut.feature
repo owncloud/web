@@ -18,8 +18,8 @@ Feature: Users can create shortcuts for resources and sites
       | localFile                     | to             |
       | filesForUpload/testavatar.jpg | testavatar.jpg |
     And "Alice" shares the following resource using API
-      | resource       | recipient | type | role     |
-      | testavatar.jpg | Brian     | user | Can view |
+      | resource       | recipient | type | role     | resourceType |
+      | testavatar.jpg | Brian     | user | Can view | file         |
     And "Alice" creates a public link of following resource using API
       | resource        | password |
       | docs/notice.txt | %public% |

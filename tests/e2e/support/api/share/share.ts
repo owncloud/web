@@ -5,6 +5,16 @@ import { getSpaceIdBySpaceName } from '../graph'
 import { getIdOfFileInsideSpace } from '../davSpaces'
 import { LinksEnvironment, UsersEnvironment } from '../../environment'
 import { securePassword } from '../../store'
+import { config } from '../../../config'
+
+export type ResourceType = 'file' | 'folder' | 'space'
+interface Role {
+  id: string
+  displayName: string
+  rolePermissions: {
+    condition: string[]
+  }[]
+}
 
 export const shareTypes: Readonly<{
   user: string
@@ -81,8 +91,6 @@ const getPermissionsRoleIdByName = (permissionsRole: string): string => {
   }
 }
 
-type ResourceType = 'file' | 'folder' | 'space'
-
 const getRoleId = (role: string, resourceType: ResourceType): string => {
   let roleId: string
   const shareRole: string = shareRoles[role as keyof typeof shareRoles]
@@ -109,18 +117,68 @@ const getRecipientId = (shareType: string, shareWith: string): string => {
   return recipientId
 }
 
+const dynamicRoles = {}
+
+const getShareRoles = async (user: User): Promise<object> => {
+  if (Object.keys(dynamicRoles).length) {
+    return dynamicRoles
+  }
+
+  const response = await request({
+    method: 'GET',
+    path: join('graph', 'v1beta1', 'roleManagement', 'permissions', 'roleDefinitions'),
+    user
+  })
+  const roles = await response.json()
+
+  for (const role of roles as Role[]) {
+    switch (role.displayName) {
+      case 'Can view':
+        if (role.rolePermissions[0].condition.includes('@Resource.Root')) {
+          dynamicRoles[`${role.displayName} (space)`] = role.id
+        } else {
+          dynamicRoles[role.displayName] = role.id
+        }
+        break
+      case 'Can edit without versions':
+        if (role.rolePermissions[0].condition.includes('@Resource.Root')) {
+          dynamicRoles[`${role.displayName} (space)`] = role.id
+        } else if (role.rolePermissions[0].condition.includes('@Resource.File')) {
+          dynamicRoles[`${role.displayName} (file)`] = role.id
+        } else {
+          dynamicRoles[role.displayName] = role.id
+        }
+        break
+      case 'Can edit':
+        if (role.rolePermissions[0].condition.includes('@Resource.Root')) {
+          dynamicRoles[`${role.displayName} (space)`] = role.id
+        } else if (role.rolePermissions[0].condition.includes('@Resource.File')) {
+          dynamicRoles[`${role.displayName} (file)`] = role.id
+        } else {
+          dynamicRoles[role.displayName] = role.id
+        }
+        break
+      default:
+        dynamicRoles[role.displayName] = role.id
+    }
+  }
+  return dynamicRoles
+}
+
 export const createShare = async ({
   user,
   path,
   shareType,
-  shareWith,
-  role
+  role,
+  resourceType,
+  shareWith
 }: {
   user: User
   path: string
   shareType: string
-  shareWith?: string
   role: string
+  resourceType: ResourceType
+  shareWith?: string
 }): Promise<void> => {
   const driveId: string = await getSpaceIdBySpaceName({
     user,
@@ -135,13 +193,19 @@ export const createShare = async ({
   })
   const recipientId: string = getRecipientId(shareType, shareWith)
 
-  let resourceType: ResourceType
-  if (path.includes('.')) {
-    resourceType = 'file'
+  let roleId: string
+  if (config.predefinedUsers) {
+    const roles = await getShareRoles(user)
+    let roleName = role
+    if (resourceType === 'file') {
+      roleName = `${role} (${resourceType})`
+    }
+    console.log(roleName)
+    console.log(roles)
+    roleId = roles[roleName]
   } else {
-    resourceType = 'folder'
+    roleId = getRoleId(role, resourceType)
   }
-  const roleId: string = getRoleId(role, resourceType)
 
   const response = await request({
     method: 'POST',
