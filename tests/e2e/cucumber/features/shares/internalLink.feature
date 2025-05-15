@@ -11,8 +11,8 @@ Feature: internal link share
       | name     |
       | myfolder |
     And "Alice" shares the following resource using API
-      | resource | recipient | type | role     |
-      | myfolder | Brian     | user | Can edit |
+      | resource | recipient | type | role     | resourceType |
+      | myfolder | Brian     | user | Can edit | folder       |
     And "Alice" creates a public link of following resource using API
       | resource | role           |
       | myfolder | Invited people |
