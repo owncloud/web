@@ -28,9 +28,11 @@ We have a steadily growing coverage of unit tests. You can run them locally via
 
 ```shell
 $ pnpm test:unit
+$ pnpm -r test:unit 
 ```
 
-You can also specify which tests to run by giving a path param, like so: `pnpm test:unit packages/<app-name>/tests/unit/path/to/test.spec.js`.
+You can also specify which package to run the test on, such as: `pnpm --filter @ownclouders/web-pkg test:unit`.
+Alternatively, tests can also be run by navigating to the package name and then running `pnpm test:unit`.
 
 #### Unit Test File Structure
 
