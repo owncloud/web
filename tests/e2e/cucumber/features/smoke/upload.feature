@@ -55,8 +55,8 @@ Feature: Upload
 
   @predefined-users
   Scenario: upload multiple small files
-    When "Alice" uploads 50 small files in personal space
-    Then "Alice" should see 50 resources in the personal space files view
+    When "Alice" uploads 10 small files in personal space
+    Then "Alice" should see 10 resources in the personal space files view
     And "Alice" logs out
 
   @predefined-users

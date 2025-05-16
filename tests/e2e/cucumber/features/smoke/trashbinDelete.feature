@@ -44,21 +44,21 @@ Feature: Trashbin delete
 
 
   Scenario: delete and restore a file inside a received shared folder
-    Given "Alice" creates the following folders in personal space using API
+    Given "Brian" logs in
+    And "Alice" creates the following folders in personal space using API
       | name          |
       | folderToShare |
-      | empty-folder   |
+      | empty-folder  |
     And "Alice" creates the following files into personal space using API
       | pathToFile              | content     |
       | folderToShare/lorem.txt | lorem ipsum |
       | sample.txt              | sample      |
-    And "Alice" shares the following resource using the sidebar panel
+    And "Alice" shares the following resource using API
       | resource      | recipient | type | role                      | resourceType |
       | folderToShare | Brian     | user | Can edit without versions | folder       |
-    And "Brian" logs in
-    And "Brian" navigates to the shared with me page
+    When "Brian" navigates to the shared with me page
     And "Brian" opens folder "folderToShare"
-    When "Brian" deletes the following resources using the sidebar panel
+    And "Brian" deletes the following resources using the sidebar panel
       | resource  |
       | lorem.txt |
     And "Brian" navigates to the trashbin
