@@ -62,7 +62,7 @@ const passwordProtectedFolderPasswordInput = '#input-folder-password'
 const resourceUploadButton = '#upload-menu-btn'
 const fileUploadInput = '#files-file-upload-input'
 const folderUploadInput = '#files-folder-upload-input'
-const uploadInfoCloseButton = '#close-upload-bar-btn'
+const uploadInfoCloseButton = '//button[contains(@id, "close-upload")]'
 const uploadErrorCloseButton = '.oc-notification-message-danger button[aria-label="Close"]'
 const filesBatchAction = '.files-app-bar-actions .oc-files-actions-%s-trigger'
 const pasteButton = '.paste-files-btn'
@@ -118,13 +118,11 @@ const footerTextSelector = '//*[@data-testid="files-list-footer-info"]'
 const filesTableRowSelector = 'tbody tr'
 const itemsPerPageDropDownSelector = '.vs__actions'
 const filesPaginationNavSelector = '.files-pagination'
-const uploadInfoSuccessLabelSelector = '.upload-bar-label.upload-bar-success'
-const uploadInfoTitle = '.upload-bar-title'
-const uploadInfoLabelSelector = '.upload-bar-label'
-const pauseResumeUploadButton = '#pause-upload-bar-btn'
-const pauseUploadButton = '#pause-upload-bar-btn[aria-label="Pause upload"]'
-const resumeUploadButton = '#pause-upload-bar-btn[aria-label="Resume upload"]'
-const cancelUploadButton = '#cancel-upload-bar-btn'
+const uploadInfoLabel = '//*[text()="%s"]'
+const pauseResumeUploadButton = '//button[contains(@id, "pause-upload")]'
+const pauseUploadButton = '//button[contains(@id, "pause-upload") and @aria-label="Pause upload"]'
+const resumeUploadButton = '//button[contains(@id, "pause-upload") and @aria-label="Resume upload"]'
+const cancelUploadButton = '//button[contains(@id, "cancel-upload")]'
 const filesContextMenuAction = 'div[id^="context-menu-drop"] button.oc-files-actions-%s-trigger'
 const highlightedFileRowSelector = '#files-space-table tr.oc-table-highlighted'
 const emptyTrashbinButtonSelector = '.oc-files-actions-empty-trash-bin-trigger'
@@ -600,9 +598,7 @@ export const uploadLargeNumberOfResources = async (args: uploadResourceArgs): Pr
   const { page, resources } = args
   await performUpload(args)
   await page.locator(uploadInfoCloseButton).waitFor()
-  await expect(page.locator(uploadInfoSuccessLabelSelector)).toHaveText(
-    `${resources.length} items uploaded`
-  )
+  await page.locator(util.format(uploadInfoLabel, `${resources.length} items uploaded`)).waitFor()
 }
 
 export const uploadResource = async (args: uploadResourceArgs): Promise<void> => {
@@ -680,14 +676,14 @@ export const resumeResourceUpload = async (page: Page): Promise<void> => {
   await pauseResumeUpload(page)
   await page.locator(pauseUploadButton).waitFor()
 
-  await page.locator(uploadInfoSuccessLabelSelector).waitFor()
+  await page.locator(util.format(uploadInfoLabel, 'Upload complete')).waitFor()
   await page.locator(uploadInfoCloseButton).click()
 }
 
 export const cancelResourceUpload = async (page: Page): Promise<void> => {
   await page.locator(cancelUploadButton).click()
-  await expect(page.locator(uploadInfoTitle)).toHaveText('Upload cancelled')
-  await expect(page.locator(uploadInfoLabelSelector)).toHaveText('0 items uploaded')
+  await page.locator(util.format(uploadInfoLabel, 'Upload cancelled')).waitFor()
+  await page.locator(util.format(uploadInfoLabel, '0 items uploaded')).waitFor()
 }
 
 /**/
