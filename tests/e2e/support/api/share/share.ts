@@ -127,7 +127,34 @@ const requiredDynamicRoles = [
   'Can manage'
 ]
 
-const getDynamicShareRoles = async (user: User): Promise<object> => {
+export const getDynamicRoleIdByName = async (
+  user: User,
+  roleName: string,
+  resourceType: ResourceType
+): Promise<string> => {
+  if (!config.predefinedUsers) {
+    return getRoleId(roleName, resourceType)
+  }
+
+  if (resourceType === 'file' && ['Can edit', 'Can edit without versions'].includes(roleName)) {
+    roleName = `${roleName} (file)`
+  } else if (resourceType === 'space' && !['Can manage'].includes(roleName)) {
+    roleName = `${roleName} (space)`
+  }
+
+  if (Object.keys(dynamicRoles).length) {
+    return dynamicRoles[roleName]
+  }
+
+  const roles = await getDynamicShareRoles(user)
+  if (roleName in roles) {
+    return roles[roleName]
+  } else {
+    throw new Error(`Role '${roleName}' not found`)
+  }
+}
+
+export const getDynamicShareRoles = async (user: User): Promise<object> => {
   if (Object.keys(dynamicRoles).length) {
     return dynamicRoles
   }

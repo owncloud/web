@@ -67,6 +67,7 @@ export default class Collaborator {
     '%s//button[contains(@class,"files-recipient-role-select-btn")]'
   private static readonly collaboratorRoleItemSelector =
     '%s//span[contains(@class,"roles-select-role-item")]/span[text()="%s"]'
+  private static readonly collaboratorRoleButton = '//button[contains(@id, "%s")]'
   public static readonly collaboratorEditDropdownButton =
     '%s//button[contains(@class,"collaborator-edit-dropdown-options-btn")]'
   private static readonly collaboratorUserSelector = '//*[@data-testid="collaborator-user-item-%s"]'
@@ -149,9 +150,9 @@ export default class Collaborator {
   ): Promise<void> {
     if (!dropdownSelector) {
       dropdownSelector = Collaborator.newCollaboratorRoleDropdown
-      itemSelector = util.format(Collaborator.collaboratorRoleItemSelector, '')
+      itemSelector = Collaborator.collaboratorRoleButton
     }
-    await page.click(dropdownSelector)
+    await page.locator(dropdownSelector).click()
 
     return await page.click(util.format(itemSelector, role))
   }
