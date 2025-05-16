@@ -276,6 +276,10 @@ export class UppyService {
       this.clearInputs()
     })
     this.uppy.on('complete', (result) => {
+      if (!result) {
+        return
+      }
+
       this.publish('uploadCompleted', result)
       result.successful.forEach((file: any) => {
         this.uppy.removeFile(file.id)
