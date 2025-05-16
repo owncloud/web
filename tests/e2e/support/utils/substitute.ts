@@ -1,7 +1,7 @@
 import { UsersEnvironment } from '../../support/environment'
 import { User } from '../../support/types'
 
-export const getValue = (pattern): string => {
+const getValue = (pattern): string => {
   switch (pattern) {
     case '%public%':
       return 'Pwd:12345567'
@@ -30,7 +30,6 @@ export const getValue = (pattern): string => {
 export const substitute = (text: string): string => {
   const regex = /%[A-Za-z0-9_-]+%/g
   const matches = text.match(regex)
-  console.log(matches)
   if (matches) {
     for (const match of matches) {
       const value = getValue(match)

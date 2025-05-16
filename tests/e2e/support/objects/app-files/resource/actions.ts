@@ -17,7 +17,7 @@ import { editor, sidebar } from '../utils'
 import { environment, utils } from '../../../../support'
 import { config } from '../../../../config'
 import { File, Space } from '../../../types'
-import { securePassword } from '../../../store'
+import { substitute } from '../../../utils/substitute'
 
 const topbarFilenameSelector = '#app-top-bar-resource .oc-resource-name'
 const downloadFileButtonSingleShareView = '.oc-files-actions-download-file-trigger'
@@ -325,7 +325,7 @@ export const createPasswordProtectedFolder = async ({
   resource: string
   password: string
 }): Promise<void> => {
-  password = password === '%public%' ? securePassword : password
+  password = substitute(password)
   await page.locator(passwordProtectedFolderButton).click()
   await page.locator(passwordProtectedFolderNameInput).fill(resource)
   await page.locator(passwordProtectedFolderPasswordInput).fill(password)

@@ -5,7 +5,7 @@ import { User } from '../../types'
 import { getSpaceIdBySpaceName } from '../graph'
 import { getIdOfFileInsideSpace } from '../davSpaces'
 import { LinksEnvironment, UsersEnvironment } from '../../environment'
-import { getValue } from '../../utils/substitute'
+import { substitute } from '../../utils/substitute'
 import { config } from '../../../config'
 
 export type ResourceType = 'file' | 'folder' | 'space'
@@ -330,7 +330,7 @@ export const createLinkShare = async ({
   })
 
   const roleType: string = linkShareRoles[role as keyof typeof linkShareRoles]
-  password = getValue(password)
+  password = substitute(password)
   const response = await request({
     method: 'POST',
     path: join('graph', 'v1beta1', 'drives', driveId, 'items', itemId, 'createLink'),
@@ -377,7 +377,7 @@ export const createSpaceLinkShare = async ({
   })
 
   const roleType: string = linkShareRoles[role as keyof typeof linkShareRoles]
-  password = password === '%public%' ? securePassword : password
+  password = substitute(password)
 
   const response = await request({
     method: 'POST',
