@@ -26,7 +26,7 @@ async function initUserStates(userKey: string, user: User, usersEnvironment: Use
     }
   })
   usersEnvironment.saveUserState(userKey, {
-    language: user.preferredLanguage,
+    language: userInfo.preferredLanguage,
     autoAcceptShare: true
   })
 }
