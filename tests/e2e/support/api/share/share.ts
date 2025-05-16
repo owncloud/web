@@ -5,7 +5,7 @@ import { User } from '../../types'
 import { getSpaceIdBySpaceName } from '../graph'
 import { getIdOfFileInsideSpace } from '../davSpaces'
 import { LinksEnvironment, UsersEnvironment } from '../../environment'
-import { securePassword } from '../../store'
+import { getValue } from '../../utils/substitute'
 import { config } from '../../../config'
 
 export type ResourceType = 'file' | 'folder' | 'space'
@@ -67,29 +67,25 @@ export const linkShareRoles: Readonly<{
   'Secret File Drop': 'createOnly'
 } as const
 
+const defaultRoles = {
+  viewer: { id: 'b1e2218d-eef8-4d4c-b82d-0f1a1b48f3b5', displayName: 'Can view' },
+  'space viewer': { id: 'a8d5fe5e-96e3-418d-825b-534dbdf22b99', displayName: 'Can view (space)' },
+  editor: { id: 'fb6c3e19-e378-47e5-b277-9732f9de6e21', displayName: 'Can edit without versions' },
+  'file editor': {
+    id: '2d00ce52-1fc2-4dbc-8b95-a73b73395f5a',
+    displayName: 'Can edit without versions (file)'
+  },
+  'space editor': { id: '58c63c02-1d89-4572-916a-870abc5a1b7d', displayName: 'Can edit (space)' },
+  manager: { id: '312c0871-5ef7-4b3a-85b6-0e4074c64049', displayName: 'Can Manage' },
+  uploader: { id: '1c996275-f1c9-4e71-abdf-a42f6495e960', displayName: 'Can upload' },
+  'secure viewer': { id: 'aa97fe03-7980-45ac-9e50-b325749fd7e6', displayName: 'Can view (secure)' }
+}
+
 const getPermissionsRoleIdByName = (permissionsRole: string): string => {
-  switch (permissionsRole) {
-    case 'viewer':
-      return 'b1e2218d-eef8-4d4c-b82d-0f1a1b48f3b5'
-    case 'space viewer':
-      return 'a8d5fe5e-96e3-418d-825b-534dbdf22b99'
-    case 'editor':
-      return 'fb6c3e19-e378-47e5-b277-9732f9de6e21'
-    case 'space editor':
-      return '58c63c02-1d89-4572-916a-870abc5a1b7d'
-    case 'file editor':
-      return '2d00ce52-1fc2-4dbc-8b95-a73b73395f5a'
-    case 'co owner':
-      return '3a4ba8e9-6a0d-4235-9140-0e7a34007abe'
-    case 'uploader':
-      return '1c996275-f1c9-4e71-abdf-a42f6495e960'
-    case 'manager':
-      return '312c0871-5ef7-4b3a-85b6-0e4074c64049'
-    case 'secure viewer':
-      return 'aa97fe03-7980-45ac-9e50-b325749fd7e6'
-    default:
-      throw new Error(`Role ${permissionsRole} not found`)
+  if (!(permissionsRole in defaultRoles)) {
+    throw new Error(`Role ${permissionsRole} not found`)
   }
+  return defaultRoles[permissionsRole].id
 }
 
 const getRoleId = (role: string, resourceType: ResourceType): string => {
@@ -139,9 +135,22 @@ const getDynamicShareRoles = async (user: User): Promise<object> => {
   // NOTE: sometimes roles can be in different language
   // fetch roles until all required roles are present
   await expect
-    .poll(async () => {
-      return Object.keys(await getShareRoles(user))
-    })
+    .poll(
+      async () => {
+        const roles = await getShareRoles(user)
+        const unknownRoles = Object.values(roles).filter((role) => !(role in requiredDynamicRoles))
+        const dRoles = Object.values(defaultRoles)
+        for (const rId of Object.values(unknownRoles)) {
+          const role = dRoles.find((r) => r.id === rId)
+          if (role) {
+            dynamicRoles[role.displayName] = role.id
+          }
+        }
+        return Object.keys(dynamicRoles)
+      },
+      // poll for half of the async timeout
+      { timeout: (config.timeout / 2) * 1000 }
+    )
     .toEqual(expect.arrayContaining(requiredDynamicRoles))
 
   return dynamicRoles
@@ -321,7 +330,7 @@ export const createLinkShare = async ({
   })
 
   const roleType: string = linkShareRoles[role as keyof typeof linkShareRoles]
-  password = password === '%public%' ? securePassword : password
+  password = getValue(password)
   const response = await request({
     method: 'POST',
     path: join('graph', 'v1beta1', 'drives', driveId, 'items', itemId, 'createLink'),
@@ -334,6 +343,10 @@ export const createLinkShare = async ({
   })
 
   const responseData = (await response.json()) as { link: { webUrl: string } }
+  if (!responseData.link) {
+    throw new Error('Failed to create link share. \n' + JSON.stringify(responseData))
+  }
+
   const webUrl = responseData.link.webUrl
   const linksEnvironment: LinksEnvironment = new LinksEnvironment()
   linksEnvironment.createLink({

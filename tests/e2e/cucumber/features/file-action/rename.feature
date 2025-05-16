@@ -23,9 +23,9 @@ Feature: rename
     And "Alice" creates a public link of following resource using API
       | resource | role     | password |
       | folder   | Can edit | %public% |
+
     And "Brian" navigates to the shared with me page
     And "Brian" opens folder "folder"
-
     # rename in the shares with me page
     When "Brian" renames the following resource
       | resource    | as                 |
