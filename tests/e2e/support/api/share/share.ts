@@ -1,4 +1,5 @@
 import join from 'join-path'
+import { expect } from '@playwright/test'
 import { checkResponseStatus, request } from '../http'
 import { User } from '../../types'
 import { getSpaceIdBySpaceName } from '../graph'
@@ -118,12 +119,35 @@ const getRecipientId = (shareType: string, shareWith: string): string => {
 }
 
 const dynamicRoles = {}
+const requiredDynamicRoles = [
+  'Can view',
+  'Can view (space)',
+  'Can edit',
+  'Can edit (file)',
+  'Can edit (space)',
+  'Can edit without versions',
+  'Can edit without versions (file)',
+  'Can edit without versions (space)',
+  'Can manage'
+]
 
-const getShareRoles = async (user: User): Promise<object> => {
+const getDynamicShareRoles = async (user: User): Promise<object> => {
   if (Object.keys(dynamicRoles).length) {
     return dynamicRoles
   }
 
+  // NOTE: sometimes roles can be in different language
+  // fetch roles until all required roles are present
+  await expect
+    .poll(async () => {
+      return Object.keys(await getShareRoles(user))
+    })
+    .toEqual(expect.arrayContaining(requiredDynamicRoles))
+
+  return dynamicRoles
+}
+
+const getShareRoles = async (user: User): Promise<object> => {
   const response = await request({
     method: 'GET',
     path: join('graph', 'v1beta1', 'roleManagement', 'permissions', 'roleDefinitions'),
@@ -195,13 +219,11 @@ export const createShare = async ({
 
   let roleId: string
   if (config.predefinedUsers) {
-    const roles = await getShareRoles(user)
+    const roles = await getDynamicShareRoles(user)
     let roleName = role
     if (resourceType === 'file') {
       roleName = `${role} (${resourceType})`
     }
-    console.log(roleName)
-    console.log(roles)
     roleId = roles[roleName]
   } else {
     roleId = getRoleId(role, resourceType)
