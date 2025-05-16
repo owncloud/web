@@ -45,6 +45,18 @@ export const createUser = async ({ user, admin }: { user: User; admin: User }): 
   return user
 }
 
+export const getMeInfo = async (user: User): Promise<User> => {
+  const response = await request({
+    method: 'GET',
+    path: join('graph', 'v1.0', 'me'),
+    user
+  })
+  checkResponseStatus(response, `Failed get user: ${user.id}`)
+
+  const resBody = (await response.json()) as User
+  return resBody
+}
+
 export const deleteUser = async ({ user, admin }: { user: User; admin: User }): Promise<User> => {
   const response = await request({
     method: 'DELETE',

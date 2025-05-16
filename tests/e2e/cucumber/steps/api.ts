@@ -15,7 +15,6 @@ Given(
       // do not try to create users when using predefined users
       if (config.predefinedUsers) {
         this.usersEnvironment.storeCreatedUser(info.id, user)
-        this.usersEnvironment.saveUserState(info.id, {})
       } else {
         await api.provision.createUser({ user, admin })
       }
