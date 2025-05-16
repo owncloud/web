@@ -17,13 +17,10 @@ async function createNewSession(world: World, stepUser: string) {
 
 async function initUserStates(userKey: string, user: User, usersEnvironment: UsersEnvironment) {
   const userInfo = await api.graph.getMeInfo(user)
-  usersEnvironment.updateCreatedUser({
-    key: userKey,
-    user: {
-      ...user,
-      uuid: userInfo.id,
-      email: userInfo.mail
-    }
+  usersEnvironment.storeCreatedUser(userKey, {
+    ...user,
+    uuid: userInfo.id,
+    email: userInfo.mail
   })
   usersEnvironment.saveUserState(userKey, {
     language: userInfo.preferredLanguage,
@@ -35,10 +32,7 @@ async function LogInUser(this: World, stepUser: string): Promise<void> {
   const sessionObject = await createNewSession(this, stepUser)
   const { page } = this.actorsEnvironment.getActor({ key: stepUser })
 
-  const user =
-    stepUser === 'Admin'
-      ? this.usersEnvironment.getUser({ key: stepUser })
-      : this.usersEnvironment.getCreatedUser({ key: stepUser })
+  const user = this.usersEnvironment.getUser({ key: stepUser })
 
   await page.goto(config.baseUrl)
   await sessionObject.login(user)
