@@ -283,9 +283,9 @@ Feature: share
       | testfile.txt             | example text |
       | test-folder/testfile.txt | some text    |
     And "Alice" shares the following resource using API
-      | resource                 | recipient | type | role                      |
-      | testfile.txt             | Brian     | user | Can edit without versions |
-      | test-folder/testfile.txt | Brian     | user | Can edit without versions |
+      | resource                 | recipient | type | role                      | resourceType |
+      | testfile.txt             | Brian     | user | Can edit without versions | file         |
+      | test-folder/testfile.txt | Brian     | user | Can edit without versions | file         |
     And "Alice" logs in
     And "Alice" navigates to the shared with others page
     Then following resources should be displayed in the files list for user "Alice"
@@ -300,8 +300,8 @@ Feature: share
       | name                  |
       | shareFolder/subFolder |
     And "Alice" shares the following resource using API
-      | resource    | recipient | type | role                      |
-      | shareFolder | Brian     | user | Can edit without versions |
+      | resource    | recipient | type | role                      | resourceType |
+      | shareFolder | Brian     | user | Can edit without versions | folder       |
     And "Alice" logs in
     Then "Alice" should see user-direct indicator on the folder "shareFolder"
     When "Alice" opens folder "shareFolder"
