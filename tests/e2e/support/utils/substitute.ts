@@ -4,7 +4,7 @@ import { User } from '../../support/types'
 export const getValue = (pattern): string => {
   switch (pattern) {
     case '%public%':
-      return 'Pwd:12345'
+      return 'Pwd:12345567'
     default:
       pattern = pattern.replace(/%/g, '')
       const [type, userKey, property] = pattern.split('_')

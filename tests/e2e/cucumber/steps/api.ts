@@ -13,9 +13,7 @@ Given(
     for (const info of stepTable.hashes()) {
       const user = this.usersEnvironment.getUser({ key: info.id })
       // do not try to create users when using predefined users
-      if (config.predefinedUsers) {
-        this.usersEnvironment.storeCreatedUser(info.id, user)
-      } else {
+      if (!config.predefinedUsers) {
         await api.provision.createUser({ user, admin })
       }
     }
