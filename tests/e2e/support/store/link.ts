@@ -9,4 +9,3 @@ export const roleDisplayText: Record<string, string> = {
   'Can edit': 'Anyone with the link can edit',
   'Secret File Drop': 'Secret File drop'
 }
-export const securePassword = 'Pwd:12345'
