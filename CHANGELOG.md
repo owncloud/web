@@ -40,6 +40,7 @@ Summary
 * Bugfix - Fix wrong HTML lang attribute: [#12478](https://github.com/owncloud/web/pull/12478)
 * Bugfix - Delete resource throws unknown error: [#12482](https://github.com/owncloud/web/pull/12482)
 * Bugfix - Application language and browser language do not match: [#12487](https://github.com/owncloud/web/pull/12487)
+* Change - Remove CERN's collapsible table: [#12567](https://github.com/owncloud/web/pull/12567)
 * Enhancement - Accessibility improvements: [#5379](https://github.com/owncloud/web/issues/5379)
 * Enhancement - Create spaces via admin settings: [#11849](https://github.com/owncloud/web/pull/11849)
 * Enhancement - Add maintenance banner: [#12239](https://github.com/owncloud/web/pull/12239)
@@ -340,6 +341,14 @@ Details
 
    https://github.com/owncloud/web/issues/12486
    https://github.com/owncloud/web/pull/12487
+
+* Change - Remove CERN's collapsible table: [#12567](https://github.com/owncloud/web/pull/12567)
+
+   We have removed the CERN's collapsible table component. Resource table will now
+   always use the regular `oc-table` component. The collapsible table is replaced
+   by filtering functionality in the shares page.
+
+   https://github.com/owncloud/web/pull/12567
 
 * Enhancement - Accessibility improvements: [#5379](https://github.com/owncloud/web/issues/5379)
 
