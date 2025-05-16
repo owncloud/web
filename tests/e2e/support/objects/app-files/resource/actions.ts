@@ -629,6 +629,7 @@ export const dropUploadFiles = async (args: uploadResourceArgs): Promise<void> =
   await page.locator(addNewResourceButton).waitFor()
   await utils.dragDropFiles(page, resources, filesView)
 
+  await page.locator(util.format(uploadInfoLabel, 'Upload complete')).waitFor()
   await page.locator(uploadInfoCloseButton).click()
   await Promise.all(
     resources.map((file) =>

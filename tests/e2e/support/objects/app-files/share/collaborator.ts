@@ -100,7 +100,7 @@ export default class Collaborator {
     await collaboratorInputLocator.click()
     await Promise.all([
       page.waitForResponse((resp) => resp.url().includes('users') && resp.status() === 200),
-      collaboratorInputLocator.fill(collaborator.id)
+      collaboratorInputLocator.fill(collaborator.displayName)
     ])
     await collaboratorInputLocator.focus()
     await page.locator('.vs--open').waitFor()
@@ -134,7 +134,7 @@ export default class Collaborator {
     const collaboratorNames = []
     for (const collaborator of collaborators) {
       await Collaborator.addCollaborator({ page, collaborator })
-      collaboratorNames.push(collaborator.collaborator.id)
+      collaboratorNames.push(collaborator.collaborator.displayName)
     }
     await Collaborator.setCollaboratorRole(page, role, resourceType)
     await Collaborator.sendInvitation(page, collaboratorNames)
