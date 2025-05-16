@@ -4,6 +4,8 @@ import { World } from '../../environment'
 import { config } from '../../../config'
 import { objects, api } from '../../../support'
 import { listenSSE } from '../../../support/environment/sse'
+import { UsersEnvironment } from '../../../support/environment'
+import { User } from '../../../support/types'
 
 async function createNewSession(world: World, stepUser: string) {
   const { page } = await world.actorsEnvironment.createActor({
@@ -11,6 +13,22 @@ async function createNewSession(world: World, stepUser: string) {
     namespace: world.actorsEnvironment.generateNamespace(world.feature.name, stepUser)
   })
   return new objects.runtime.Session({ page })
+}
+
+async function initUserStates(userKey: string, user: User, usersEnvironment: UsersEnvironment) {
+  const userInfo = await api.graph.getMeInfo(user)
+  usersEnvironment.updateCreatedUser({
+    key: userKey,
+    user: {
+      ...user,
+      uuid: userInfo.id,
+      email: userInfo.mail
+    }
+  })
+  usersEnvironment.saveUserState(userKey, {
+    language: user.preferredLanguage,
+    autoAcceptShare: true
+  })
 }
 
 async function LogInUser(this: World, stepUser: string): Promise<void> {
@@ -25,16 +43,6 @@ async function LogInUser(this: World, stepUser: string): Promise<void> {
   await page.goto(config.baseUrl)
   await sessionObject.login(user)
 
-  this.usersEnvironment.updateCreatedUser({
-    key: stepUser,
-    user: {
-      ...user,
-      uuid: api.token.getUserIdFromToken(user)
-    }
-  })
-
-  // TODO: init user states by requesting settings: language, auto-sync
-
   if (this.feature.tags.length > 0) {
     const tags: string[] = []
     this.feature.tags.forEach((tag: PickleTag) => {
@@ -48,6 +56,14 @@ async function LogInUser(this: World, stepUser: string): Promise<void> {
   }
 
   await page.locator('#web-content').waitFor()
+
+  // initialize user states: uuid, language, auto-sync
+  if (config.predefinedUsers) {
+    await initUserStates(stepUser, user, this.usersEnvironment)
+    // test should run with English language
+    await api.settings.changeLanguage({ user, language: 'en' })
+    await page.reload()
+  }
 }
 
 Given('{string} has logged in', LogInUser)

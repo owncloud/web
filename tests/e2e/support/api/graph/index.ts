@@ -7,6 +7,7 @@ export {
   addUserToGroup,
   assignRole,
   getUserId,
-  getGroups
+  getGroups,
+  getMeInfo
 } from './userManagement'
 export { createSpace, disableSpace, deleteSpace, getSpaceIdBySpaceName } from './spaces'
