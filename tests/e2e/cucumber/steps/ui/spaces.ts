@@ -4,6 +4,7 @@ import { World } from '../../environment'
 import { objects } from '../../../support'
 import { Space } from '../../../support/types'
 import { substitute } from '../../../support/utils'
+import { getDynamicRoleIdByName, ResourceType } from '../../../support/api/share/share'
 
 When(
   '{string} navigates to the personal space page',
@@ -88,14 +89,17 @@ When(
   async function (this: World, stepUser: string, stepTable: DataTable): Promise<void> {
     const { page } = this.actorsEnvironment.getActor({ key: stepUser })
     const spacesObject = new objects.applicationFiles.Spaces({ page })
+    const sharer = this.usersEnvironment.getUser({ key: stepUser })
+
     for (const { user, role, kind } of stepTable.hashes()) {
       const collaborator =
         kind === 'user'
           ? this.usersEnvironment.getUser({ key: user })
           : this.usersEnvironment.getGroup({ key: user })
+      const roleId = await getDynamicRoleIdByName(sharer, role, 'space' as ResourceType)
       const collaboratorWithRole = {
         collaborator,
-        role
+        role: roleId
       }
       await spacesObject.addMembers({ users: [collaboratorWithRole] })
     }

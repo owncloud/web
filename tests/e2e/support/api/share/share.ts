@@ -78,12 +78,13 @@ const defaultRoles = {
   'space editor': { id: '58c63c02-1d89-4572-916a-870abc5a1b7d', displayName: 'Can edit (space)' },
   manager: { id: '312c0871-5ef7-4b3a-85b6-0e4074c64049', displayName: 'Can Manage' },
   uploader: { id: '1c996275-f1c9-4e71-abdf-a42f6495e960', displayName: 'Can upload' },
-  'secure viewer': { id: 'aa97fe03-7980-45ac-9e50-b325749fd7e6', displayName: 'Can view (secure)' }
+  'secure viewer': { id: 'aa97fe03-7980-45ac-9e50-b325749fd7e6', displayName: 'Can view (secure)' },
+  denied: { id: '63e64e19-8d43-42ec-a738-2b6af2610efa', displayName: 'Cannot access' }
 }
 
 const getPermissionsRoleIdByName = (permissionsRole: string): string => {
   if (!(permissionsRole in defaultRoles)) {
-    throw new Error(`Role ${permissionsRole} not found`)
+    throw new Error(`Role '${permissionsRole}' not found`)
   }
   return defaultRoles[permissionsRole].id
 }
@@ -357,7 +358,7 @@ export const createLinkShare = async ({
   })
 
   const roleType: string = linkShareRoles[role as keyof typeof linkShareRoles]
-  password = substitute(password)
+  password = password && substitute(password)
   const response = await request({
     method: 'POST',
     path: join('graph', 'v1beta1', 'drives', driveId, 'items', itemId, 'createLink'),
