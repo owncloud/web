@@ -16,8 +16,8 @@ Feature: language settings
       | name          |
       | check_message |
     And "Alice" shares the following resource using API
-      | resource      | recipient | type | role     |
-      | check_message | Brian     | user | Can edit |
+      | resource      | recipient | type | role     | resourceType |
+      | check_message | Brian     | user | Can edit | folder       |
     And "Alice" logs out
     When "Brian" opens the user menu
     And "Brian" changes the language to "Deutsch - German"

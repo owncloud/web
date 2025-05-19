@@ -47,14 +47,14 @@ Feature: Group actions
 
     # multiple share
     And "Alice" shares the following resources using the sidebar panel
-      | resource     | recipient | type  | role                      |
-      | sharedFolder | Brian     | user  | Can edit without versions |
-      | sharedFolder | Carol     | user  | Can edit without versions |
-      | sharedFolder | David     | user  | Can edit without versions |
-      | sharedFolder | Edith     | user  | Can edit without versions |
-      | sharedFolder | sales     | group | Can edit without versions |
-      | sharedFolder | finance   | group | Can edit without versions |
-      | sharedFolder | security  | group | Can edit without versions |
+      | resource     | recipient | type  | role                      | resourceType |
+      | sharedFolder | Brian     | user  | Can edit without versions | folder       |
+      | sharedFolder | Carol     | user  | Can edit without versions | folder       |
+      | sharedFolder | David     | user  | Can edit without versions | folder       |
+      | sharedFolder | Edith     | user  | Can edit without versions | folder       |
+      | sharedFolder | sales     | group | Can edit without versions | folder       |
+      | sharedFolder | finance   | group | Can edit without versions | folder       |
+      | sharedFolder | security  | group | Can edit without versions | folder       |
 
     And "Brian" navigates to the shared with me page
 

@@ -243,9 +243,9 @@ Feature: share
       | testfile.txt | example text |
     And "Alice" logs in
     And "Alice" shares the following resource using the sidebar panel
-      | resource     | recipient | type | role     |
-      | testfile.txt | Brian     | user | Can view |
-      | test-folder  | Brian     | user | Can view |
+      | resource     | recipient | type | role     | resourceType |
+      | testfile.txt | Brian     | user | Can view | file         |
+      | test-folder  | Brian     | user | Can view | folder       |
     And "Alice" logs out
     And "Carol" creates the following folder in personal space using API
       | name        |
@@ -255,9 +255,9 @@ Feature: share
       | testfile.txt | example text |
     And "Carol" logs in
     And "Carol" shares the following resource using the sidebar panel
-      | resource     | recipient | type | role     |
-      | testfile.txt | Brian     | user | Can view |
-      | test-folder  | Brian     | user | Can view |
+      | resource     | recipient | type | role     | resourceType |
+      | testfile.txt | Brian     | user | Can view | file         |
+      | test-folder  | Brian     | user | Can view | folder       |
     And "Carol" logs out
     When "Brian" logs in
     And "Brian" navigates to the shared with me page
