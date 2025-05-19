@@ -8,14 +8,15 @@ Feature: share
 
   @predefined-users
   Scenario: folder
+    Given "Alice" logs in
+    And "Brian" logs in
     # disabling auto accepting to check accepting share
-    Given "Brian" disables auto-accepting using API
+    And "Brian" disables auto-accepting using API
     And "Alice" creates the following folder in personal space using API
       | name               |
       | folder_to_shared   |
       | folder_to_shared_2 |
       | shared_folder      |
-    And "Alice" logs in
     And "Alice" uploads the following resource
       | resource      | to                 |
       | lorem.txt     | folder_to_shared   |
@@ -26,7 +27,6 @@ Feature: share
       | shared_folder      | Brian     | user | Can edit without versions | folder       |
       | folder_to_shared_2 | Brian     | user | Can edit without versions | folder       |
 
-    And "Brian" logs in
     And "Brian" navigates to the shared with me page
     And "Brian" opens folder "folder_to_shared"
     # user should have access to unsynced shares
@@ -235,31 +235,31 @@ Feature: share
     Given "Admin" creates following users using API
       | id    |
       | Carol |
+    And "Alice" logs in
+    And "Brian" logs in
     And "Alice" creates the following folder in personal space using API
       | name        |
       | test-folder |
     And "Alice" creates the following files into personal space using API
       | pathToFile   | content      |
       | testfile.txt | example text |
-    And "Alice" logs in
-    And "Alice" shares the following resource using the sidebar panel
+    When "Alice" shares the following resource using the sidebar panel
       | resource     | recipient | type | role     | resourceType |
       | testfile.txt | Brian     | user | Can view | file         |
       | test-folder  | Brian     | user | Can view | folder       |
-    And "Alice" logs out
+    Then "Alice" logs out
+    When "Carol" logs in
     And "Carol" creates the following folder in personal space using API
       | name        |
       | test-folder |
     And "Carol" creates the following files into personal space using API
       | pathToFile   | content      |
       | testfile.txt | example text |
-    And "Carol" logs in
     And "Carol" shares the following resource using the sidebar panel
       | resource     | recipient | type | role     | resourceType |
       | testfile.txt | Brian     | user | Can view | file         |
       | test-folder  | Brian     | user | Can view | folder       |
     And "Carol" logs out
-    When "Brian" logs in
     And "Brian" navigates to the shared with me page
     Then following resources should be displayed in the Shares for user "Brian"
       | resource         |
@@ -272,9 +272,8 @@ Feature: share
 
   @predefined-users
   Scenario: check file with same name but different paths are displayed correctly in shared with others page
-    Given "Admin" creates following users using API
-      | id    |
-      | Carol |
+    Given "Alice" logs in
+    And "Brian" logs in
     And "Alice" creates the following folder in personal space using API
       | name        |
       | test-folder |
@@ -286,15 +285,15 @@ Feature: share
       | resource                 | recipient | type | role                      | resourceType |
       | testfile.txt             | Brian     | user | Can edit without versions | file         |
       | test-folder/testfile.txt | Brian     | user | Can edit without versions | file         |
-    And "Alice" logs in
-    And "Alice" navigates to the shared with others page
+    And "Brian" logs out
+    When "Alice" navigates to the shared with others page
     Then following resources should be displayed in the files list for user "Alice"
       | resource                 |
       | testfile.txt             |
       | test-folder/testfile.txt |
     And "Alice" logs out
 
-  @predefined-users
+
   Scenario: share indication
     When "Alice" creates the following folders in personal space using API
       | name                  |
