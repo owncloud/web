@@ -26,12 +26,13 @@ export const listenSSE = (baseUrl: string, user: User): Promise<void> => {
       if (message.event === 'FatalError') {
         throw new Error(message.data)
       }
-      if (!Object.hasOwn(sseEventStore, user.id)) {
-        sseEventStore[user.id] = []
+      const userKey = user.id.toLowerCase()
+      if (!Object.hasOwn(sseEventStore, userKey)) {
+        sseEventStore[userKey] = []
       }
       // push event to the array
       // TODO: also store message.data if necessary
-      sseEventStore[user.id.toLowerCase()].push(message.event)
+      sseEventStore[userKey].push(message.event)
     },
     onclose() {
       console.error('Closing SSE...')
@@ -45,7 +46,7 @@ export const listenSSE = (baseUrl: string, user: User): Promise<void> => {
 
 export const getSSEEvents = (user: User): Array<string> => {
   // recent events should be evaluated first
-  return sseEventStore[user.id].reverse()
+  return sseEventStore[user.id.toLowerCase()].reverse()
 }
 
 export const closeSSEConnections = () => {

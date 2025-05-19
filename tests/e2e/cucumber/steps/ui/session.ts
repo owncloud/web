@@ -32,10 +32,12 @@ async function LogInUser(this: World, stepUser: string): Promise<void> {
   const sessionObject = await createNewSession(this, stepUser)
   const { page } = this.actorsEnvironment.getActor({ key: stepUser })
 
-  const user =
-    stepUser === 'Admin'
-      ? this.usersEnvironment.getUser({ key: stepUser })
-      : this.usersEnvironment.getCreatedUser({ key: stepUser })
+  let user = null
+  if (stepUser === 'Admin' || config.predefinedUsers) {
+    user = this.usersEnvironment.getUser({ key: stepUser })
+  } else {
+    user = this.usersEnvironment.getCreatedUser({ key: stepUser })
+  }
 
   await page.goto(config.baseUrl)
   await sessionObject.login(user)
