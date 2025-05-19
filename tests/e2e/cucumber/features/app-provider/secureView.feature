@@ -29,9 +29,9 @@ Feature: Secure view
       | secureDocument.odt | OpenDocument | very important document |
 
     And "Alice" shares the following resources using the sidebar panel
-      | resource           | recipient | type | role              |
-      | secureDocument.odt | Brian     | user | Can view (secure) |
-      | shared folder      | Brian     | user | Can view (secure) |
+      | resource           | recipient | type | role              | resourceType |
+      | secureDocument.odt | Brian     | user | Can view (secure) | file         |
+      | shared folder      | Brian     | user | Can view (secure) | folder       |
     And "Alice" logs out
 
     And "Brian" logs in
@@ -75,9 +75,9 @@ Feature: Secure view
       | resource           | type         | content                 |
       | secureDocument.odt | OpenDocument | very important document |
     And "Alice" shares the following resources using the sidebar panel
-      | resource           | recipient | type | role              |
-      | secureDocument.odt | Brian     | user | Can view (secure) |
-      | shared folder      | Brian     | user | Can view (secure) |
+      | resource           | recipient | type | role              | resourceType |
+      | secureDocument.odt | Brian     | user | Can view (secure) | file         |
+      | shared folder      | Brian     | user | Can view (secure) | fodler       |
     And "Alice" logs out
 
     And "Brian" logs in
