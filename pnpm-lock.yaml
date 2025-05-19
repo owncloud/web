@@ -549,8 +549,8 @@ importers:
         specifier: 2.4.0
         version: 2.4.0(patch_hash=6f231bbef273efbc788b5657c47fc744b52bc838f972357a764c144fde6065f2)(@vue/compiler-sfc@3.5.14)(vue@3.5.14(typescript@5.8.3))
       zod:
-        specifier: 3.24.4
-        version: 3.24.4
+        specifier: 3.25.7
+        version: 3.25.7
     devDependencies:
       '@ownclouders/web-test-helpers':
         specifier: workspace:*
@@ -605,8 +605,8 @@ importers:
         specifier: 2.4.0
         version: 2.4.0(patch_hash=6f231bbef273efbc788b5657c47fc744b52bc838f972357a764c144fde6065f2)(@vue/compiler-sfc@3.5.14)(vue@3.5.14(typescript@5.8.3))
       zod:
-        specifier: 3.24.4
-        version: 3.24.4
+        specifier: 3.25.7
+        version: 3.25.7
     devDependencies:
       '@ownclouders/web-test-helpers':
         specifier: workspace:*
@@ -709,8 +709,8 @@ importers:
         specifier: 4.5.1
         version: 4.5.1(vue@3.5.14(typescript@5.8.3))
       zod:
-        specifier: 3.24.4
-        version: 3.24.4
+        specifier: 3.25.7
+        version: 3.25.7
 
   packages/web-app-password-protected-folders:
     devDependencies:
@@ -880,7 +880,7 @@ importers:
         version: 1.6.11
       zod:
         specifier: ^3.23.8
-        version: 3.24.4
+        version: 3.25.7
     devDependencies:
       '@types/luxon':
         specifier: 3.6.2
@@ -1026,7 +1026,7 @@ importers:
         version: 2.4.0(patch_hash=6f231bbef273efbc788b5657c47fc744b52bc838f972357a764c144fde6065f2)(@vue/compiler-sfc@3.5.14)(vue@3.5.14(typescript@5.8.3))
       zod:
         specifier: ^3.23.8
-        version: 3.24.4
+        version: 3.25.7
     devDependencies:
       '@ownclouders/web-test-helpers':
         specifier: workspace:^
@@ -1171,8 +1171,8 @@ importers:
         specifier: ^1.6.11
         version: 1.6.11
       zod:
-        specifier: 3.24.4
-        version: 3.24.4
+        specifier: 3.25.7
+        version: 3.25.7
     devDependencies:
       '@ownclouders/web-test-helpers':
         specifier: workspace:*
@@ -3677,6 +3677,10 @@ packages:
 
   commander@12.1.0:
     resolution: {integrity: sha512-Vw8qHK3bZM9y/P10u3Vib8o/DdkvA2OtPtZvD871QKjy74Wj1WSKFILMPRPSdUSx5RFK1arlJzEtA4PkFgnbuA==}
+    engines: {node: '>=18'}
+
+  commander@13.1.0:
+    resolution: {integrity: sha512-/rFeCpNJQbhSZjGVwO9RFV3xPqbnERS8MmIQzCtD/zl6gpJuV/bMLuN92oG3F7d8oDEHHRrujSXNUr8fpjntKw==}
     engines: {node: '>=18'}
 
   commander@14.0.0:
@@ -7147,8 +7151,8 @@ packages:
   zhead@2.2.4:
     resolution: {integrity: sha512-8F0OI5dpWIA5IGG5NHUg9staDwz/ZPxZtvGVf01j7vHqSyZ0raHY+78atOVxRqb73AotX22uV1pXt3gYSstGag==}
 
-  zod@3.24.4:
-    resolution: {integrity: sha512-OdqJE9UDRPwWsrHjLN2F8bPxvwJBK22EHLWtanu0LSYr5YqzsaaW3RMgmjwr8Rypg5k+meEJdSPXJZXE/yqOMg==}
+  zod@3.25.7:
+    resolution: {integrity: sha512-YGdT1cVRmKkOg6Sq7vY7IkxdphySKnXhaUmFI4r4FcuFVNgpCb9tZfNwXbT6BPjD5oz0nubFsoo9pIqKrDcCvg==}
 
 snapshots:
 
@@ -10098,6 +10102,8 @@ snapshots:
   commander@10.0.1: {}
 
   commander@12.1.0: {}
+
+  commander@13.1.0: {}
 
   commander@14.0.0: {}
 
@@ -13729,4 +13735,4 @@ snapshots:
 
   zhead@2.2.4: {}
 
-  zod@3.24.4: {}
+  zod@3.25.7: {}
