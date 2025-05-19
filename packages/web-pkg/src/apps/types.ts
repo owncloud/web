@@ -113,7 +113,7 @@ export interface ClassicApplicationScript {
   appInfo?: Omit<ApplicationInformation, 'hasEditor'>
   routes?: ((args: ComponentCustomProperties) => RouteRecordRaw[]) | RouteRecordRaw[]
   navItems?: ((args: ComponentCustomProperties) => AppNavigationItem[]) | AppNavigationItem[]
-  translations?: ApplicationTranslations
+  translations?: Translations
   extensions?: Ref<Extension[]>
   extensionPoints?: Ref<ExtensionPoint<any>[]>
   initialize?: () => void
