@@ -53,6 +53,7 @@ Summary
 * Enhancement - Add flat list view: [#12509](https://github.com/owncloud/web/pull/12509)
 * Enhancement - Add loading spinner to submit button: [#12513](https://github.com/owncloud/web/pull/12513)
 * Enhancement - Improve file drop view UI: [#12519](https://github.com/owncloud/web/pull/12519)
+* Enhancement - Add Catalan to list of supported languages: [#12578](https://github.com/owncloud/web/pull/12578)
 
 Details
 -------
@@ -466,6 +467,13 @@ Details
    upload action more prominent by adding a dedicated button to start the upload.
 
    https://github.com/owncloud/web/pull/12519
+
+* Enhancement - Add Catalan to list of supported languages: [#12578](https://github.com/owncloud/web/pull/12578)
+
+   We have added Catalan to the list of supported languages.
+
+   https://github.com/owncloud/web/issues/11299
+   https://github.com/owncloud/web/pull/12578
 
 Changelog for ownCloud Web [11.3.1] (2025-03-13)
 =======================================
