@@ -59,7 +59,7 @@
     "@vue/test-utils": "2.4.6",
     "browserslist-to-esbuild": "^2.0.0",
     "browserslist-useragent-regexp": "^4.0.0",
-    "commander": "13.1.0",
+    "commander": "14.0.0",
     "ejs": "3.1.10",
     "eslint": "9.27.0",
     "git-repo-info": "2.1.1",
