@@ -5,6 +5,7 @@ export const supportedLanguages = {
   ar: 'العربية - Arabic',
   bs: 'Bosanski - Bosnian',
   bg: 'български - Bulgarian',
+  ca: 'Català - Catalan',
   cs: 'Čeština - Czech',
   de: 'Deutsch - German',
   el: 'Ελληνικά - Greek',
