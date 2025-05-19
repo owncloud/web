@@ -60,8 +60,12 @@ export class UsersEnvironment {
       throw new Error(`user '${userKey}' not found`)
     }
     createdUserStore.delete(userKey)
-    createdUserStore.set(userKey, user)
-
+    // add to new key if the username is changed
+    if (userKey !== user.id) {
+      createdUserStore.set(user.id, user)
+    } else {
+      createdUserStore.set(userKey, user)
+    }
     return user
   }
 
