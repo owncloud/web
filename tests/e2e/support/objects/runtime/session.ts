@@ -42,16 +42,18 @@ export class Session {
       this.signIn(id, password)
     ])
 
-    const tokenRes = await response.json()
-    const tokenEnvironment = TokenEnvironmentFactory()
-    tokenEnvironment.setToken({
-      user: { ...user },
-      token: {
-        userId: user.id,
-        accessToken: tokenRes.access_token,
-        refreshToken: tokenRes.refresh_token
-      }
-    })
+    if (config.predefinedUsers) {
+      const tokenRes = await response.json()
+      const tokenEnvironment = TokenEnvironmentFactory()
+      tokenEnvironment.setToken({
+        user: { ...user },
+        token: {
+          userId: user.id,
+          accessToken: tokenRes.access_token,
+          refreshToken: tokenRes.refresh_token
+        }
+      })
+    }
   }
 
   async logout(): Promise<void> {
