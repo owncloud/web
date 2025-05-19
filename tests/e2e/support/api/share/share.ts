@@ -145,16 +145,21 @@ export const getDynamicRoleIdByName = async (
     roleName = `${roleName} (space)`
   }
 
+  let roleId: string = ''
   if (Object.keys(dynamicRoles).length) {
-    return dynamicRoles[roleName]
+    roleId = dynamicRoles[roleName]
+  } else {
+    const roles = await getDynamicShareRoles(user)
+    if (roleName in roles) {
+      roleId = roles[roleName]
+    }
   }
 
-  const roles = await getDynamicShareRoles(user)
-  if (roleName in roles) {
-    return roles[roleName]
-  } else {
+  if (!roleId) {
     throw new Error(`Role '${roleName}' not found`)
   }
+
+  return roleId
 }
 
 export const getDynamicShareRoles = async (user: User): Promise<object> => {

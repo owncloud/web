@@ -94,11 +94,18 @@ When(
     const { page } = this.actorsEnvironment.getActor({ key: stepUser })
     const shareObject = new objects.applicationFiles.Share({ page })
     const shareInfo = parseShareTable(stepTable, this.usersEnvironment)
+    const sharer = this.usersEnvironment.getUser({ key: stepUser })
 
-    for (const resource of Object.keys(shareInfo)) {
+    for (const [resource, shareObj] of Object.entries(shareInfo)) {
+      const roleId = await getDynamicRoleIdByName(
+        sharer,
+        shareObj[0].role,
+        shareObj[0].resourceType as ResourceType
+      )
+      shareObj.forEach((item) => (item.role = roleId))
       await shareObject.changeShareeRole({
         resource,
-        recipients: shareInfo[resource]
+        recipients: shareObj
       })
     }
   }

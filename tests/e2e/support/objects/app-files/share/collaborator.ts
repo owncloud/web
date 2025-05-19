@@ -65,8 +65,7 @@ export default class Collaborator {
   private static readonly sendInvitationButton = '#new-collaborators-form-create-button'
   public static readonly collaboratorRoleDropdownButton =
     '%s//button[contains(@class,"files-recipient-role-select-btn")]'
-  private static readonly collaboratorRoleItemSelector =
-    '%s//span[contains(@class,"roles-select-role-item")]/span[text()="%s"]'
+  private static readonly collaboratorRoleItemSelector = '%s//button[contains(@id, "%s")]'
   private static readonly collaboratorRoleButton = '//button[contains(@id, "%s")]'
   public static readonly collaboratorEditDropdownButton =
     '%s//button[contains(@class,"collaborator-edit-dropdown-options-btn")]'
@@ -154,7 +153,7 @@ export default class Collaborator {
     }
     await page.locator(dropdownSelector).click()
 
-    return await page.click(util.format(itemSelector, role))
+    await page.locator(util.format(itemSelector, role)).click()
   }
 
   static async changeCollaboratorRole(args: CollaboratorArgs): Promise<void> {
