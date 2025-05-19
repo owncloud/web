@@ -84,7 +84,7 @@
     "@vitest/web-worker": "3.1.3",
     "clean-publish": "5.2.0",
     "vite": "6.3.5",
-    "vite-plugin-dts": "4.5.3",
+    "vite-plugin-dts": "4.5.4",
     "vite-plugin-node-polyfills": "0.23.0"
   }
 }

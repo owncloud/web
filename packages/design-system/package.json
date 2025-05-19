@@ -123,7 +123,7 @@
     "postcss-safe-parser": "7.0.1",
     "postcss-simple-vars": "^7.0.1",
     "process": "^0.11.10",
-    "sass": "1.88.0",
+    "sass": "1.89.0",
     "semver": "7.7.2",
     "shelljs": "^0.10.0",
     "style-dictionary": "^4.0.0",
