@@ -12,6 +12,8 @@ Feature: Download
 
 
   Scenario: download resources
+    Given "Alice" logs in
+    And "Brian" logs in
     And "Alice" creates the following folders in personal space using API
       | name         |
       | folderPublic |
@@ -28,8 +30,7 @@ Feature: Download
       | emptyFolder    | Brian     | user | Can edit | folder       |
       | testavatar.jpg | Brian     | user | Can edit | file         |
 
-    When "Alice" logs in
-    And "Alice" downloads the following resources using the batch action
+    When "Alice" downloads the following resources using the batch action
       | resource       | type   |
       | folderPublic   | folder |
       | emptyFolder    | folder |
@@ -43,8 +44,7 @@ Feature: Download
     And "Alice" closes the file viewer
     And "Alice" logs out
 
-    And "Brian" logs in
-    And "Brian" navigates to the shared with me page
+    When "Brian" navigates to the shared with me page
     And "Brian" downloads the following resources using the batch action
       | resource       | type   |
       | folderPublic   | folder |
