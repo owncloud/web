@@ -151,10 +151,13 @@ When(
   async function (this: World, stepUser: string, stepTable: DataTable): Promise<void> {
     const { page } = this.actorsEnvironment.getActor({ key: stepUser })
     const spacesObject = new objects.applicationFiles.Spaces({ page })
+    const sharer = this.usersEnvironment.getUser({ key: stepUser })
+
     for (const { user, role } of stepTable.hashes()) {
+      const roleId = await getDynamicRoleIdByName(sharer, role, 'space' as ResourceType)
       const member = {
         collaborator: this.usersEnvironment.getUser({ key: user }),
-        role
+        role: roleId
       }
       await spacesObject.changeRoles({ users: [member] })
     }
