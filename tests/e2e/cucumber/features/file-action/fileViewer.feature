@@ -3,7 +3,10 @@ Feature: Different file viewers
 
 
   Scenario: file viewers
-    Given "Alice" logs in
+    Given "Admin" creates following user using API
+      | id    |
+      | Alice |
+    And "Alice" logs in
     When "Alice" creates the following resources
       | resource  | type    | content   |
       | lorem.txt | txtFile | some text |
