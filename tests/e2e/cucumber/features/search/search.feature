@@ -9,21 +9,20 @@ Feature: Search
       | id    |
       | Alice |
       | Brian |
-      | Carol |
+    And "Brian" logs in
+    And "Alice" logs in
     And "Brian" creates the following folder in personal space using API
       | name                 |
       | new_share_from_brian |
     And "Brian" uploads the following local file into personal space using API
       | localFile                        | to                |
       | filesForUpload/new-lorem-big.txt | new-lorem-big.txt |
-    And "Brian" logs in
     And "Brian" shares the following resource using the sidebar panel
       | resource             | recipient | type | role     | resourceType |
       | new_share_from_brian | Alice     | user | Can view | folder       |
       | new-lorem-big.txt    | Alice     | user | Can view | file         |
     And "Brian" logs out
 
-    When "Alice" logs in
     And "Alice" creates the following resources
       | resource                   | type   |
       | folder                     | folder |
@@ -123,6 +122,7 @@ Feature: Search
     Given "Admin" creates following users using API
       | id    |
       | Alice |
+    And "Alice" logs in
     And "Alice" creates the following folders in personal space using API
       | name                 |
       | mainFolder/subFolder |
@@ -131,7 +131,6 @@ Feature: Search
       | exampleInsideThePersonalSpace.txt                  | I'm in the personal Space |
       | mainFolder/exampleInsideTheMainFolder.txt          | I'm in the main folder    |
       | mainFolder/subFolder/exampleInsideTheSubFolder.txt | I'm in the sub folder     |
-    And "Alice" logs in
     When "Alice" opens folder "mainFolder"
     And "Alice" searches "example" using the global search and the "all files" filter
     Then following resources should be displayed in the search list for user "Alice"
@@ -155,6 +154,7 @@ Feature: Search
     Given "Admin" creates following users using API
       | id    |
       | Alice |
+    And "Alice" logs in
     And "Alice" creates the following folders in personal space using API
       | name      |
       | mediaTest |
@@ -167,7 +167,6 @@ Feature: Search
       | mediaTest.pdf | I'm a PDF      |
       | mediaTest.mp3 | I'm a Audio    |
       | mediaTest.zip | I'm a Archive  |
-    And "Alice" logs in
     And "Alice" searches "mediaTest" using the global search and the "all files" filter and presses enter
     And "Alice" enables the option to search title only
     And "Alice" selects mediaType "Document" from the search result filter chip
@@ -210,6 +209,7 @@ Feature: Search
     Given "Admin" creates following users using API
       | id    |
       | Alice |
+    And "Alice" logs in
     And "Alice" creates the following folders in personal space using API
       | name       |
       | mainFolder |
@@ -218,7 +218,6 @@ Feature: Search
       | mainFolder/mediaTest.pdf | created 29 days ago | -29 days       |
       | mainFolder/mediaTest.txt | created 5 days ago  | -5 days        |
       | mainFolder/mediaTest.md  | created today       |                |
-    And "Alice" logs in
     When "Alice" opens folder "mainFolder"
     And "Alice" searches "mediaTest" using the global search and the "current folder" filter and presses enter
     And "Alice" enables the option to search title only
