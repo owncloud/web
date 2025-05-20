@@ -9,7 +9,7 @@ export const useCanShare = () => {
   const userStore = useUserStore()
 
   const canShare = ({ space, resource }: { space: SpaceResource; resource: Resource }) => {
-    if (!capabilityStore.sharingApiEnabled) {
+    if (!capabilityStore.sharingApiEnabled || capabilityStore.capabilities.spaces.server_managed) {
       return false
     }
 

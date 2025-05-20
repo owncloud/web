@@ -164,6 +164,7 @@ export interface Capabilities {
       max_quota?: number
       projects?: boolean
       version?: string
+      server_managed?: boolean
     }
     graph?: {
       'personal-data-export'?: boolean
