@@ -155,14 +155,20 @@ export const clickResource = async ({
     const resource = page.locator(util.format(resourceNameSelector, folder))
     const itemId = await resource.locator(fileRow).getAttribute('data-item-id')
     await Promise.all([
-      page.waitForResponse(
-        (resp) =>
-          (resp.status() === 207 &&
-            resp.request().method() === 'PROPFIND' &&
+      page.waitForResponse((resp) => {
+        if (
+          ([207, 200].includes(resp.status()) &&
+            ['PROPFIND', 'GET'].includes(resp.request().method()) &&
             resp.url().endsWith(encodeURIComponent(name))) ||
           resp.url().endsWith(itemId) ||
           resp.url().endsWith(encodeURIComponent(itemId))
-      ),
+        ) {
+          return true
+        }
+        if (resp.request().method() === 'PROPFIND' && resp.status() === 207) {
+          return true
+        }
+      }),
       resource.click()
     ])
   }
@@ -335,9 +341,24 @@ export const createPasswordProtectedFolder = async ({
   await page.locator(passwordProtectedFolderNameInput).fill(resource)
   await page.locator(passwordProtectedFolderPasswordInput).fill(password)
   await Promise.all([
-    page.waitForResponse((resp) => resp.status() === 201 && resp.request().method() === 'MKCOL'),
-    page.waitForResponse((resp) => resp.status() === 200 && resp.request().method() === 'POST'),
-    page.waitForResponse((resp) => resp.status() === 207 && resp.request().method() === 'PROPFIND'),
+    page.waitForResponse(
+      (resp) =>
+        resp.url().endsWith(`/${encodeURIComponent(resource)}`) &&
+        resp.status() === 201 &&
+        resp.request().method() === 'MKCOL'
+    ),
+    page.waitForResponse(
+      (resp) =>
+        resp.url().endsWith('/createLink') &&
+        resp.status() === 200 &&
+        resp.request().method() === 'POST'
+    ),
+    page.waitForResponse(
+      (resp) =>
+        resp.url().endsWith(`${encodeURIComponent(resource)}.psec`) &&
+        resp.status() === 207 &&
+        resp.request().method() === 'PROPFIND'
+    ),
     page.locator(util.format(actionConfirmationButton, 'Create')).click()
   ])
 }
