@@ -1510,11 +1510,10 @@ export const searchResourceGlobalSearch = async (
 
   await Promise.all([
     page.waitForResponse((resp) => resp.status() === 207 && resp.request().method() === 'REPORT'),
-    page.locator(globalSearchInput).fill(keyword)
+    page.locator(globalSearchInput).fill(keyword),
+    expect(page.locator(globalSearchOptions)).toBeVisible(),
+    expect(page.locator(loadingSpinner)).not.toBeVisible()
   ])
-
-  await expect(page.locator(globalSearchOptions)).toBeVisible()
-  await expect(page.locator(loadingSpinner)).not.toBeVisible()
 
   if (pressEnter) {
     await page.keyboard.press('Enter')
