@@ -8,6 +8,7 @@ Feature: Copy
     Given "Admin" creates following user using API
       | id    |
       | Alice |
+    And "Alice" logs in
     And "Alice" creates the following folders in personal space using API
       | name                        |
       | PARENTCopy1                 |
@@ -37,7 +38,6 @@ Feature: Copy
       | PARENT/fileToCopy3.txt   | some content                        |
       | PARENT/fileToCopy4.txt   | some content                        |
       | PARENT/fileToCopy5.txt   | some content                        |
-    And "Alice" logs in
 
     When "Alice" duplicates the following resource using sidebar-panel
       | resource      |
@@ -190,6 +190,7 @@ Feature: Copy
     Given "Admin" creates following user using API
       | id    |
       | Alice |
+    And "Alice" logs in
     And "Alice" creates the following folders in personal space using API
       | name         |
       | sub          |
@@ -202,7 +203,6 @@ Feature: Copy
       | folder1/example1.txt      | folder1 location        |
       | sub/folder1/example1.txt  | sub/folder1 location    |
       | sub1/folder1/example1.txt | sub1/folder1 location   |
-    And "Alice" logs in
 
     # copy and move file
     When "Alice" copies the following resource using sidebar-panel
