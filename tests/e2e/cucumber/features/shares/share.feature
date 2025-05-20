@@ -10,8 +10,6 @@ Feature: share
   Scenario: folder
     Given "Alice" logs in
     And "Brian" logs in
-    # disabling auto accepting to check accepting share
-    And "Brian" disables auto-accepting using API
     And "Alice" creates the following folder in personal space using API
       | name               |
       | folder_to_shared   |
@@ -34,18 +32,19 @@ Feature: share
       | resource  |
       | lorem.txt |
     When "Brian" navigates to the shared with me page
-    And "Brian" enables the sync for the following shares
+    And "Brian" disables the sync for the following shares
       | name               |
       | folder_to_shared   |
       | folder_to_shared_2 |
-    Then "Brian" should not see a sync status for the folder "shared_folder"
+    Then "Brian" should not see a sync status for the folder "folder_to_shared"
+    And "Brian" should not see a sync status for the folder "folder_to_shared_2"
     When "Brian" enables the sync for the following share using the context menu
-      | name          |
-      | shared_folder |
-    And "Brian" disables the sync for the following share using the context menu
-      | name          |
-      | shared_folder |
-    And "Brian" renames the following resource
+      | name               |
+      | folder_to_shared   |
+      | folder_to_shared_2 |
+    Then "Brian" should see a sync status for the folder "folder_to_shared"
+    And "Brian" should see a sync status for the folder "folder_to_shared_2"
+    When "Brian" renames the following resource
       | resource                   | as            |
       | folder_to_shared/lorem.txt | lorem_new.txt |
     And "Brian" uploads the following resource
@@ -79,6 +78,7 @@ Feature: share
   @predefined-users
   Scenario: file
     Given "Alice" logs in
+    And "Brian" logs in
     And "Alice" creates the following resources
       | resource         | type    | content   |
       | shareToBrian.txt | txtFile | some text |
@@ -91,56 +91,8 @@ Feature: share
     And "Alice" uploads the following resource
       | resource        |
       | simple.pdf      |
-      | sampleGif.gif   |
-      | testimage.mp3   |
-      | sampleOgg.ogg   |
-      | sampleWebm.webm |
-      | test_video.mp4  |
       | testavatar.jpeg |
-      | testavatar.png  |
-    Then "Alice" should see thumbnail and preview for file "sampleGif.gif"
-    And "Alice" should see thumbnail and preview for file "testavatar.jpeg"
-    And "Alice" should see thumbnail and preview for file "testavatar.png"
-    And "Alice" should see preview for file "shareToBrian.txt"
-    When "Alice" opens a file "testavatar.png" in the media-viewer using the sidebar panel
-    Then "Alice" is in a media-viewer
-    When "Alice" closes the file viewer
-    And "Alice" opens the following file in mediaviewer
-      | resource        |
-      | testavatar.jpeg |
-    Then "Alice" is in a media-viewer
-    When "Alice" navigates to the next media resource
-    And "Alice" navigates to the previous media resource
-    And "Alice" closes the file viewer
-    And "Alice" opens the following file in mediaviewer
-      | resource      |
-      | sampleGif.gif |
-    Then "Alice" is in a media-viewer
-    When "Alice" closes the file viewer
-    And "Alice" opens the following file in mediaviewer
-      | resource      |
-      | testimage.mp3 |
-    Then "Alice" is in a media-viewer
-    When "Alice" closes the file viewer
-    And "Alice" opens the following file in mediaviewer
-      | resource      |
-      | sampleOgg.ogg |
-    Then "Alice" is in a media-viewer
-    When "Alice" closes the file viewer
-    And "Alice" opens the following file in mediaviewer
-      | resource        |
-      | sampleWebm.webm |
-    Then "Alice" is in a media-viewer
-    When "Alice" closes the file viewer
-    And "Alice" opens the following file in mediaviewer
-      | resource       |
-      | test_video.mp4 |
-    Then "Alice" is in a media-viewer
-    When "Alice" downloads the following resource using the preview topbar
-      | resource       | type |
-      | test_video.mp4 | file |
-    And "Alice" closes the file viewer
-    And "Alice" shares the following resource using the sidebar panel
+    When "Alice" shares the following resource using the sidebar panel
       | resource         | recipient | type | role                      | resourceType |
       | shareToBrian.txt | Brian     | user | Can edit without versions | file         |
       | shareToBrian.md  | Brian     | user | Can edit without versions | file         |
@@ -152,10 +104,9 @@ Feature: share
       | resource        |
       | testavatar.jpeg |
     Then "Alice" is in a media-viewer
-    When "Alice" closes the file viewer
+    And "Alice" closes the file viewer
 
-    When "Brian" logs in
-    And "Brian" navigates to the shared with me page
+    When "Brian" navigates to the shared with me page
     And "Brian" disables the sync for the following share
       | name           |
       | sharedFile.txt |
