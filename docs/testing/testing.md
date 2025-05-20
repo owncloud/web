@@ -28,7 +28,7 @@ We have a steadily growing coverage of unit tests. You can run them locally via
 
 ```shell
 $ pnpm test:unit
-$ pnpm -r test:unit 
+$ pnpm -r test:unit
 ```
 
 You can also specify which package to run the test on, such as: `pnpm --filter @ownclouders/web-pkg test:unit`.
@@ -235,3 +235,10 @@ All tests which are related to:
 
 - Admin Actions
 - Groups
+
+**The tests might show flakiness or fail due to the following reasons:**
+
+- Slower network connection
+- Features enabled/disabled
+- Running latest tests on older version of oCIS/Web
+- Large file uploads may take longer time
