@@ -7,6 +7,7 @@ Feature: deny share access
       | Alice |
       | Brian |
     When "Alice" logs in
+    And "Brian" logs in
     And "Alice" creates the following folder in personal space using API
       | name                            |
       | folder_to_shared                |
@@ -18,11 +19,10 @@ Feature: deny share access
       | folder_to_shared | Brian     | user | Can view | folder       |
     And "Alice" opens folder "folder_to_shared"
     # deny access
-    When "Alice" shares the following resource using the sidebar panel
+    And "Alice" shares the following resource using the sidebar panel
       | resource       | recipient | type | role          | resourceType |
       | folder_to_deny | Brian     | user | Cannot access | folder       |
-    And "Brian" logs in
-    And "Brian" opens the "files" app
+    When "Brian" opens the "files" app
     And "Brian" navigates to the shared with me page
     And "Brian" opens folder "folder_to_shared"
     Then following resources should not be displayed in the files list for user "Brian"

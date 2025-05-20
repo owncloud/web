@@ -12,6 +12,7 @@ Feature: Secure view
       | Alice |
       | Brian |
     And "Alice" logs in
+    And "Brian" logs in
     And "Alice" opens the "files" app
 
 
@@ -34,9 +35,8 @@ Feature: Secure view
       | shared folder      | Brian     | user | Can view (secure) | folder       |
     And "Alice" logs out
 
-    And "Brian" logs in
-    And "Brian" navigates to the shared with me page
-    When "Brian" opens the following file in Collabora
+    When "Brian" navigates to the shared with me page
+    And "Brian" opens the following file in Collabora
       | resource           |
       | secureDocument.odt |
 
@@ -80,9 +80,7 @@ Feature: Secure view
       | shared folder      | Brian     | user | Can view (secure) | fodler       |
     And "Alice" logs out
 
-    And "Brian" logs in
-    And "Brian" navigates to the shared with me page
-
+    When "Brian" navigates to the shared with me page
     # .odt file
     Then "Brian" should see following actions for file "secureDocument.odt"
       | action            |

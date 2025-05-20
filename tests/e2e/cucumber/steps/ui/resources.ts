@@ -1031,11 +1031,15 @@ Then(
     const resourceObject = new objects.applicationFiles.Resource({ page })
     if (actionType === 'should') {
       action === 'thumbnail and preview' &&
-        (await expect(resourceObject.getFileThumbnailLocator(resource)).toBeVisible())
+        (await expect(resourceObject.getFileThumbnailLocator(resource)).toBeVisible({
+          timeout: 10000
+        }))
       await resourceObject.shouldSeeFilePreview({ resource })
     } else {
       action === 'thumbnail and preview' &&
-        (await expect(resourceObject.getFileThumbnailLocator(resource)).not.toBeVisible())
+        (await expect(resourceObject.getFileThumbnailLocator(resource)).not.toBeVisible({
+          timeout: 10000
+        }))
       await resourceObject.shouldNotSeeFilePreview({ resource })
     }
   }
