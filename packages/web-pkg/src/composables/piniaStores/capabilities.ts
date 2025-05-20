@@ -63,7 +63,8 @@ const defaultValues = {
   spaces: {
     enabled: false,
     max_quota: 0,
-    projects: false
+    projects: false,
+    server_managed: false
   }
 } satisfies Partial<Capabilities['capabilities']>
 
