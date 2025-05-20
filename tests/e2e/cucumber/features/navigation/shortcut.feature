@@ -8,7 +8,9 @@ Feature: Users can create shortcuts for resources and sites
       | Brian |
 
   Scenario: shortcut
-    When "Alice" creates the following folders in personal space using API
+    Given "Alice" logs in
+    And "Brian" logs in
+    And "Alice" creates the following folders in personal space using API
       | name |
       | docs |
     And "Alice" creates the following files into personal space using API
@@ -23,9 +25,8 @@ Feature: Users can create shortcuts for resources and sites
     And "Alice" creates a public link of following resource using API
       | resource        | password |
       | docs/notice.txt | %public% |
-    And "Alice" logs in
     And "Alice" renames the most recently created public link of resource "docs/notice.txt" to "myPublicLink"
-    And "Alice" opens the "files" app
+    When "Alice" opens the "files" app
 
     # create a shortcut to file folder website
     And "Alice" creates a shortcut for the following resources
@@ -46,8 +47,7 @@ Feature: Users can create shortcuts for resources and sites
     And "Alice" logs out
 
     # create a shortcut to the shared file
-    When "Brian" logs in
-    And "Brian" creates a shortcut for the following resources
+    When "Brian" creates a shortcut for the following resources
       | resource       | name | type |
       | testavatar.jpg | logo | file |
     And "Brian" opens a shortcut "logo.url"

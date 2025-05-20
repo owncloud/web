@@ -152,10 +152,17 @@ export const clickResource = async ({
   for (const name of paths) {
     // if resource name consists of single or double quotes, add an escape character
     const folder = name.replace(/'/g, "\\'").replace(/"/g, '\\"')
-
     const resource = page.locator(util.format(resourceNameSelector, folder))
+    const itemId = await resource.locator(fileRow).getAttribute('data-item-id')
     await Promise.all([
-      page.waitForResponse((resp) => resp.request().method() === 'PROPFIND'),
+      page.waitForResponse(
+        (resp) =>
+          (resp.status() === 207 &&
+            resp.request().method() === 'PROPFIND' &&
+            resp.url().endsWith(encodeURIComponent(name))) ||
+          resp.url().endsWith(itemId) ||
+          resp.url().endsWith(encodeURIComponent(itemId))
+      ),
       resource.click()
     ])
   }

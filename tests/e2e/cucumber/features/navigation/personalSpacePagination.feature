@@ -9,12 +9,12 @@ Feature: check files pagination in personal space
      Given "Admin" creates following user using API
        | id    |
        | Alice |
+     And "Alice" logs in
      And "Alice" creates 55 folders in personal space using API
      And "Alice" creates 55 files in personal space using API
      And "Alice" creates the following files into personal space using API
        | pathToFile           | content                |
        | .hidden-testFile.txt | This is a hidden file. |
-     And "Alice" logs in
      When "Alice" navigates to page "2" of the personal space files view
      Then "Alice" should see the text "111 items with 1 kB in total (56 files including 1 hidden, 55 folders)" at the footer of the page
      And "Alice" should see 10 resources in the personal space files view
