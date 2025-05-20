@@ -54,6 +54,7 @@ Summary
 * Enhancement - Add loading spinner to submit button: [#12513](https://github.com/owncloud/web/pull/12513)
 * Enhancement - Improve file drop view UI: [#12519](https://github.com/owncloud/web/pull/12519)
 * Enhancement - Add Catalan to list of supported languages: [#12578](https://github.com/owncloud/web/pull/12578)
+* Enhancement - Disable space membership management when it's server-managed: [#12584](https://github.com/owncloud/web/pull/12584)
 
 Details
 -------
@@ -474,6 +475,13 @@ Details
 
    https://github.com/owncloud/web/issues/11299
    https://github.com/owncloud/web/pull/12578
+
+* Enhancement - Disable space membership management when it's server-managed: [#12584](https://github.com/owncloud/web/pull/12584)
+
+   Hide the "Add members" section and member edit options in the "Members" panel in
+   the space sidebar when the `spaces.server_managed` capability is `true`.
+
+   https://github.com/owncloud/web/pull/12584
 
 Changelog for ownCloud Web [11.3.1] (2025-03-13)
 =======================================
