@@ -10,13 +10,8 @@ Feature: Upload
     And "Alice" logs in
     And "Alice" opens the "files" app
 
-
+  @predefined-users
   Scenario: Upload files in personal space
-    Given "Admin" logs in
-    And "Admin" opens the "admin-settings" app
-    And "Admin" navigates to the users management page
-    And "Admin" changes the quota of the user "Alice" to "0.00008" using the sidebar panel
-    And "Admin" logs out
     Given "Alice" creates the following resources
       | resource          | type    | content             |
       | new-lorem-big.txt | txtFile | new lorem big file  |
@@ -40,9 +35,6 @@ Feature: Upload
       | resource       |
       | simple.pdf     |
       | testavatar.jpg |
-    And "Alice" tries to upload the following resource
-      | resource      | error              |
-      | lorem-big.txt | Insufficient quota |
     And "Alice" downloads the following resources using the sidebar panel
       | resource      | type   |
       | PARENT        | folder |
@@ -83,4 +75,19 @@ Feature: Upload
     When "Alice" uploads the following resources
       | resource | type   |
       | FOLDER   | folder |
+    And "Alice" logs out
+
+
+  Scenario: Upload large file when insufficient quota
+    Given "Admin" logs in
+    And "Admin" opens the "admin-settings" app
+    And "Admin" navigates to the users management page
+    And "Admin" changes the quota of the user "Alice" to "0.00001" using the sidebar panel
+    And "Admin" logs out
+    And "Alice" uploads the following resource
+      | resource        |
+      | simple.pdf      |
+    When "Alice" tries to upload the following resource
+      | resource      | error              |
+      | lorem-big.txt | Insufficient quota |
     And "Alice" logs out
