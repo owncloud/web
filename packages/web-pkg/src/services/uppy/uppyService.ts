@@ -276,7 +276,7 @@ export class UppyService {
       this.clearInputs()
     })
     this.uppy.on('complete', (result) => {
-      if (!result) {
+      if (!result || result.successful.length === 0) {
         return
       }
 
