@@ -61,7 +61,7 @@ async function LogInUser(this: World, stepUser: string): Promise<void> {
     await initUserStates(stepUser, user, this.usersEnvironment)
     // test should run with English language
     await api.settings.changeLanguage({ user, language: 'en' })
-    await page.reload()
+    await page.reload({ waitUntil: 'load' })
   }
 }
 
