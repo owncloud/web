@@ -263,12 +263,7 @@ export const createShare = async ({
 
   let roleId: string
   if (config.predefinedUsers) {
-    const roles = await getDynamicShareRoles(user)
-    let roleName = role
-    if (resourceType === 'file') {
-      roleName = `${role} (${resourceType})`
-    }
-    roleId = roles[roleName]
+    roleId = await getDynamicRoleIdByName(user, role, resourceType)
   } else {
     roleId = getRoleId(role, resourceType)
   }
