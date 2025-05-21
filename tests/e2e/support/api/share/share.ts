@@ -120,14 +120,10 @@ const getRecipientId = (shareType: string, shareWith: string): string => {
 const dynamicRoles = {}
 const requiredDynamicRoles = [
   'Can view',
-  'Can view (space)',
   'Can edit',
   'Can edit (file)',
-  'Can edit (space)',
   'Can edit without versions',
-  'Can edit without versions (file)',
-  'Can edit without versions (space)',
-  'Can manage'
+  'Can edit without versions (file)'
 ]
 
 export const getDynamicRoleIdByName = async (
