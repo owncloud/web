@@ -240,5 +240,5 @@ All tests which are related to:
 
 - Slower network connection
 - Features enabled/disabled
-- Running latest tests on older version of oCIS/Web
+- Running latest tests against an older version of oCIS/Web
 - Large file uploads may take longer time
