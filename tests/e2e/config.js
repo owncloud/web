@@ -30,7 +30,7 @@ export const config = {
     return withHttp(this.keycloakHost + '/admin/master/console')
   },
   // ocm config
-  federatedBaseUrlOcis: process.env.FEDERATED_BASE_URL_OCIS ?? 'federation-ocis:10200',
+  federatedBaseUrlOcis: process.env.FEDERATED_BASE_URL_OCIS ?? 'host.docker.internal:10200',
   federatedServer: false,
   get baseUrl() {
     return withHttp(this.federatedServer ? this.federatedBaseUrlOcis : this.baseUrlOcis)

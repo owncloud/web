@@ -72,7 +72,6 @@ x-ocis-server: &ocis-service
 
   extra_hosts:
     - host.docker.internal:${DOCKER_HOST:-host-gateway}
-    - ocis.owncloud.test:${DOCKER_HOST:-host-gateway}
   restart: unless-stopped
   depends_on:
     - traefik
@@ -121,13 +120,13 @@ services:
     container_name: web_ocis_federated
     environment:
       <<: *ocis-environment
-      OCIS_URL: https://ocis.owncloud.test:10200
-      OCIS_CORS_ALLOW_ORIGINS: https://ocis.owncloud.test:10201
-      OCM_WEBAPP_TEMPLATE: https://ocis.owncloud.test:10201/o/{{.Token}}/{relative-path-to-shared-resource}
+      OCIS_URL: https://host.docker.internal:10200
+      OCIS_CORS_ALLOW_ORIGINS: https://host.docker.internal:10201
+      OCM_WEBAPP_TEMPLATE: https://host.docker.internal:10201/o/{{.Token}}/{relative-path-to-shared-resource}
     labels:
       traefik.enable: true
       traefik.http.routers.ocis-federated.tls: true
-      traefik.http.routers.ocis-federated.rule: Host(`ocis.owncloud.test`) && PathPrefix(`/`)
+      traefik.http.routers.ocis-federated.rule: Host(`host.docker.internal`) && PathPrefix(`/`)
       traefik.http.routers.ocis-federated.entrypoints: ocis-federated
       traefik.http.services.ocis-federated.loadbalancer.server.port: 9200
       # workaround: https://github.com/owncloud/ocis/issues/5108
@@ -180,7 +179,7 @@ services:
     restart: always
 
   collabora:
-    image: collabora/code:25.04.2.1.1
+    image: collabora/code:24.04.10.2.1
     entrypoint: /bin/sh
     command: ['-c', 'coolconfig generate-proof-key ; /start-collabora-online.sh']
     environment:
