@@ -156,6 +156,7 @@ export const clickResource = async ({
     const itemId = await resource.locator(fileRow).getAttribute('data-item-id')
     await Promise.all([
       page.waitForResponse((resp) => {
+        // check with resource name or file-id
         if (
           ([207, 200].includes(resp.status()) &&
             ['PROPFIND', 'GET'].includes(resp.request().method()) &&
@@ -165,6 +166,8 @@ export const clickResource = async ({
         ) {
           return true
         }
+        // pass for PROPFIND request wiht 207 status code
+        // required for ocm shares where resource name and file-id are not determinable
         if (resp.request().method() === 'PROPFIND' && resp.status() === 207) {
           return true
         }

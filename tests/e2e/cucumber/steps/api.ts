@@ -107,8 +107,6 @@ Given(
   async function (this: World, stepUser: string): Promise<void> {
     const user = this.usersEnvironment.getUser({ key: stepUser })
     await api.settings.configureAutoAcceptShare({ user, state: false })
-    // save initial auto-accept config
-    this.usersEnvironment.saveUserState(stepUser, { autoAcceptShare: true })
   }
 )
 
