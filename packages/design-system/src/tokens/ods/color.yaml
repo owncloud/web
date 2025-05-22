@@ -1,8 +1,5 @@
 ---
 color:
-  #  sample:
-  #    default:
-  #      value: "{color.swatch.warning.hover.value}"
   swatch:
     brand:
       default:
@@ -12,7 +9,7 @@ color:
       muted:
         value: rgb(0, 20, 40)
       contrast:
-        value: '{color.text.inverse.value}'
+        value: '{color.text.inverse}'
     primary:
       default:
         value: rgb(74, 118, 172)
@@ -23,7 +20,7 @@ color:
       gradient:
         value: rgb(78, 133, 200)
       contrast:
-        value: '{color.text.inverse.value}'
+        value: '{color.text.inverse}'
     success:
       default:
         value: rgb(3, 84, 63)
@@ -32,7 +29,7 @@ color:
       muted:
         value: rgb(83, 150, 10)
       contrast:
-        value: '{color.text.inverse.value}'
+        value: '{color.text.inverse}'
     warning:
       default:
         value: rgb(183, 76, 27)
@@ -41,7 +38,7 @@ color:
       muted:
         value: rgba(183, 76, 27, .5)
       contrast:
-        value: '{color.text.inverse.value}'
+        value: '{color.text.inverse}'
     danger:
       default:
         value: rgb(197, 48, 48)
@@ -50,7 +47,7 @@ color:
       muted:
         value: rgb(204, 117, 117)
       contrast:
-        value: '{color.text.inverse.value}'
+        value: '{color.text.inverse}'
     passive:
       default:
         value: rgb(76, 95, 121)
@@ -59,7 +56,7 @@ color:
       muted:
         value: rgb(40, 62, 93)
       contrast:
-        value: '{color.text.inverse.value}'
+        value: '{color.text.inverse}'
     inverse:
       default:
         value: rgb(255, 255, 255)
@@ -68,7 +65,7 @@ color:
       muted:
         value: rgb(191, 191, 191)
       contrast:
-        value: '{color.text.default.value}'
+        value: '{color.text.default}'
   background:
     default:
       value: rgb(255, 255, 255)
@@ -86,17 +83,17 @@ color:
     value: rgb(236, 235, 238)
   text:
     default:
-      value: '{color.swatch.brand.default.value}'
+      value: '{color.swatch.brand.default}'
     muted:
-      value: '{color.swatch.passive.default.value}'
+      value: '{color.swatch.passive.default}'
     inverse:
-      value: '{color.background.default.value}'
+      value: '{color.background.default}'
   input:
     text:
       default:
-        value: '{color.swatch.brand.default.value}'
+        value: '{color.swatch.brand.default}'
       muted:
-        value: '{color.swatch.passive.default.value}'
+        value: '{color.swatch.passive.default}'
     border:
       value: rgb(206, 221, 238)
     bg:
@@ -117,7 +114,7 @@ color:
     drawio:
       value: rgb(255, 111, 0)
     file:
-      value: '{color.text.default.value}'
+      value: '{color.text.default}'
     ifc:
       value: rgb(208, 67, 236)
     image:
@@ -125,9 +122,9 @@ color:
     jupyter:
       value: rgb(243, 119, 38)
     code:
-      value: '{color.text.default.value}'
+      value: '{color.text.default}'
     text:
-      value: '{color.text.default.value}'
+      value: '{color.text.default}'
     spreadsheet:
       value: rgb(0, 182, 87)
     document:
