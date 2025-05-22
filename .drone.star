@@ -1,7 +1,6 @@
 ALPINE_GIT = "alpine/git:latest"
 APACHE_TIKA = "apache/tika:2.8.0.0"
-COLLABORA_CODE = "collabora/code:25.04.2.1.1"
-CS3ORG_WOPI_SERVER = "cs3org/wopiserver:v10.3.0"
+COLLABORA_CODE_IMAGE = "collabora/code:25.04.2.1.1"
 KEYCLOAK = "quay.io/keycloak/keycloak:25.0.0"
 MINIO_MC = "minio/mc:RELEASE.2021-10-07T04-19-58Z"
 OC_CI_ALPINE = "owncloudci/alpine:latest"
@@ -13,7 +12,7 @@ OC_CI_HUGO = "owncloudci/hugo:0.115.2"
 OC_CI_NODEJS = "owncloudci/nodejs:20"
 OC_CI_WAIT_FOR = "owncloudci/wait-for:latest"
 OC_UBUNTU = "owncloud/ubuntu:20.04"
-ONLYOFFICE_DOCUMENT_SERVER = "onlyoffice/documentserver:8.1.3"
+ONLYOFFICE_DOCUMENT_SERVER_IMAGE = "onlyoffice/documentserver:8.1.3"
 PLUGINS_DOCKER = "plugins/docker:20.14"
 PLUGINS_GH_PAGES = "plugins/gh-pages:1"
 PLUGINS_GIT_ACTION = "plugins/git-action:1"
@@ -1616,7 +1615,7 @@ def collaboraService():
         {
             "name": "collabora",
             "type": "docker",
-            "image": COLLABORA_CODE,
+            "image": COLLABORA_CODE_IMAGE,
             "detach": True,
             "environment": {
                 "DONT_GEN_SSL_CERT": "set",
@@ -1634,7 +1633,7 @@ def onlyofficeService():
         {
             "name": "onlyoffice",
             "type": "docker",
-            "image": ONLYOFFICE_DOCUMENT_SERVER,
+            "image": ONLYOFFICE_DOCUMENT_SERVER_IMAGE,
             "detach": True,
             "environment": {
                 "WOPI_ENABLED": "true",
