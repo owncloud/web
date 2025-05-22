@@ -12930,7 +12930,7 @@ snapshots:
       '@bundled-es-modules/deepmerge': 4.3.1
       '@bundled-es-modules/glob': 10.4.2
       '@bundled-es-modules/memfs': 4.9.4
-      '@types/node': 22.15.18
+      '@types/node': 22.15.21
       '@zip.js/zip.js': 2.7.57
       chalk: 5.4.1
       change-case: 5.4.4
