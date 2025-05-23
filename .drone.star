@@ -1,28 +1,28 @@
-ALPINE_GIT = "alpine/git:latest"
-APACHE_TIKA = "apache/tika:2.8.0.0"
+ALPINE_GIT_IMAGE = "alpine/git:2.47.2"
+APACHE_TIKA_IMAGE = "apache/tika:2.8.0.0"
 COLLABORA_CODE_IMAGE = "collabora/code:25.04.2.1.1"
-KEYCLOAK = "quay.io/keycloak/keycloak:25.0.0"
-MINIO_MC = "minio/mc:RELEASE.2021-10-07T04-19-58Z"
-OC_CI_ALPINE = "owncloudci/alpine:latest"
-OC_CI_BAZEL_BUILDIFIER = "owncloudci/bazel-buildifier"
-OC_CI_DRONE_ANSIBLE = "owncloudci/drone-ansible:latest"
-OC_CI_DRONE_SKIP_PIPELINE = "owncloudci/drone-skip-pipeline"
-OC_CI_GOLANG = "owncloudci/golang:1.24"
-OC_CI_HUGO = "owncloudci/hugo:0.115.2"
-OC_CI_NODEJS = "owncloudci/nodejs:20"
-OC_CI_WAIT_FOR = "owncloudci/wait-for:latest"
-OC_UBUNTU = "owncloud/ubuntu:20.04"
+KEYCLOAK_IMAGE = "quay.io/keycloak/keycloak:25.0.0"
+MINIO_MC_IMAGE = "minio/mc:RELEASE.2025-04-16T18-13-26Z"
+OC_CI_ALPINE_IMAGE = "owncloudci/alpine:latest"
+OC_CI_BAZEL_BUILDIFIER_IMAGE = "owncloudci/bazel-buildifier:latest"
+OC_CI_DRONE_ANSIBLE_IMAGE = "owncloudci/drone-ansible:latest"
+OC_CI_DRONE_SKIP_PIPELINE_IMAGE = "owncloudci/drone-skip-pipeline:latest"
+OC_CI_GOLANG_IMAGE = "owncloudci/golang:1.24"
+OC_CI_HUGO_IMAGE = "owncloudci/hugo:0.115.2"
+OC_CI_NODEJS_IMAGE = "owncloudci/nodejs:20"
+OC_CI_WAIT_FOR_IMAGE = "owncloudci/wait-for:latest"
+OC_UBUNTU_IMAGE = "owncloud/ubuntu:20.04"
 ONLYOFFICE_DOCUMENT_SERVER_IMAGE = "onlyoffice/documentserver:8.3.3"
-PLUGINS_DOCKER = "plugins/docker:20.14"
-PLUGINS_GH_PAGES = "plugins/gh-pages:1"
-PLUGINS_GIT_ACTION = "plugins/git-action:1"
-PLUGINS_GITHUB_RELEASE = "plugins/github-release:1"
-PLUGINS_S3 = "plugins/s3:1.5"
-PLUGINS_S3_CACHE = "plugins/s3-cache:1"
-PLUGINS_SLACK = "plugins/slack:1"
-POSTGRES_ALPINE = "postgres:alpine3.18"
-SONARSOURCE_SONAR_SCANNER_CLI = "sonarsource/sonar-scanner-cli:5.0"
-TOOLHIPPIE_CALENS = "toolhippie/calens:latest"
+PLUGINS_DOCKER_IMAGE = "plugins/docker:20.14"
+PLUGINS_GH_PAGES_IMAGE = "plugins/gh-pages:1"
+PLUGINS_GIT_ACTION_IMAGE = "plugins/git-action:1"
+PLUGINS_GITHUB_RELEASE_IMAGE = "plugins/github-release:1"
+PLUGINS_S3_IMAGE = "plugins/s3:1.5"
+PLUGINS_S3_CACHE_IMAGE = "plugins/s3-cache:1"
+PLUGINS_SLACK_IMAGE = "plugins/slack:1"
+POSTGRES_ALPINE_IMAGE = "postgres:alpine3.18"
+SONARSOURCE_SONAR_SCANNER_CLI_IMAGE = "sonarsource/sonar-scanner-cli:5.0"
+TOOLHIPPIE_CALENS_IMAGE = "toolhippie/calens:20250421"
 
 WEB_PUBLISH_NPM_PACKAGES = ["babel-preset", "design-system", "eslint-config", "extension-sdk", "prettier-config", "tsconfig", "web-client", "web-pkg", "web-test-helpers"]
 WEB_PUBLISH_NPM_ORGANIZATION = "@ownclouders"
@@ -348,7 +348,7 @@ def changelog(ctx):
         "steps": [
             {
                 "name": "clone",
-                "image": PLUGINS_GIT_ACTION,
+                "image": PLUGINS_GIT_ACTION_IMAGE,
                 "settings": {
                     "actions": [
                         "clone",
@@ -367,28 +367,28 @@ def changelog(ctx):
             },
             {
                 "name": "generate",
-                "image": TOOLHIPPIE_CALENS,
+                "image": TOOLHIPPIE_CALENS_IMAGE,
                 "commands": [
                     "calens >| CHANGELOG.md",
                 ],
             },
             {
                 "name": "diff",
-                "image": OC_CI_ALPINE,
+                "image": OC_CI_ALPINE_IMAGE,
                 "commands": [
                     "git diff",
                 ],
             },
             {
                 "name": "output",
-                "image": TOOLHIPPIE_CALENS,
+                "image": TOOLHIPPIE_CALENS_IMAGE,
                 "commands": [
                     "cat CHANGELOG.md",
                 ],
             },
             {
                 "name": "publish",
-                "image": PLUGINS_GIT_ACTION,
+                "image": PLUGINS_GIT_ACTION_IMAGE,
                 "settings": {
                     "actions": [
                         "commit",
@@ -443,7 +443,7 @@ def buildCacheWeb(ctx):
                  installPnpm() +
                  [{
                      "name": "build-web",
-                     "image": OC_CI_NODEJS,
+                     "image": OC_CI_NODEJS_IMAGE,
                      "environment": {
                          "NO_INSTALL": "true",
                      },
@@ -498,7 +498,7 @@ def unitTests(ctx):
         "steps": [
                      {
                          "name": "clone",
-                         "image": ALPINE_GIT,
+                         "image": ALPINE_GIT_IMAGE,
                          "commands": [
                                          # Always use the owncloud/web repository as base to have an up to date default branch.
                                          # This is needed for the skipIfUnchanged step, since it references a commit on master (which could be absent on a fork)
@@ -515,7 +515,7 @@ def unitTests(ctx):
                  [
                      {
                          "name": "unit-tests",
-                         "image": OC_CI_NODEJS,
+                         "image": OC_CI_NODEJS_IMAGE,
                          "commands": [
                              "pnpm build:tokens",
                              "pnpm test:unit --coverage",
@@ -523,7 +523,7 @@ def unitTests(ctx):
                      },
                      {
                          "name": "sonarcloud",
-                         "image": SONARSOURCE_SONAR_SCANNER_CLI,
+                         "image": SONARSOURCE_SONAR_SCANNER_CLI_IMAGE,
                          "environment": sonar_env,
                      },
                  ],
@@ -651,7 +651,7 @@ def e2eTests(ctx):
 
         steps += [{
                      "name": "e2e-tests",
-                     "image": OC_CI_NODEJS,
+                     "image": OC_CI_NODEJS_IMAGE,
                      "environment": environment,
                      "commands": [
                          "cd tests/e2e",
@@ -686,7 +686,7 @@ def notify():
         "steps": [
             {
                 "name": "notify-rocketchat",
-                "image": PLUGINS_SLACK,
+                "image": PLUGINS_SLACK_IMAGE,
                 "settings": {
                     "webhook": {
                         "from_secret": config["rocketchat"]["from_secret"],
@@ -716,7 +716,7 @@ def notify():
 def installPnpm():
     return [{
         "name": "pnpm-install",
-        "image": OC_CI_NODEJS,
+        "image": OC_CI_NODEJS_IMAGE,
         "commands": [
             'npm install --silent --global --force "$(jq -r ".packageManager" < package.json)"',
             "pnpm config set store-dir ./.pnpm-store",
@@ -727,7 +727,7 @@ def installPnpm():
 def installBrowsers():
     return [{
         "name": "install-browsers",
-        "image": OC_CI_NODEJS,
+        "image": OC_CI_NODEJS_IMAGE,
         "environment": {
             "PLAYWRIGHT_BROWSERS_PATH": ".playwright",
         },
@@ -740,7 +740,7 @@ def installBrowsers():
 def lint():
     return [{
         "name": "lint",
-        "image": OC_CI_NODEJS,
+        "image": OC_CI_NODEJS_IMAGE,
         "commands": [
             "pnpm lint",
         ],
@@ -749,7 +749,7 @@ def lint():
 def checkFormatting():
     return [{
         "name": "check-formatting",
-        "image": OC_CI_NODEJS,
+        "image": OC_CI_NODEJS_IMAGE,
         "commands": [
             "pnpm check:format",
         ],
@@ -758,7 +758,7 @@ def checkFormatting():
 def buildDockerImage():
     return [{
         "name": "docker",
-        "image": PLUGINS_DOCKER,
+        "image": PLUGINS_DOCKER_IMAGE,
         "settings": {
             "username": {
                 "from_secret": "docker_username",
@@ -805,7 +805,7 @@ def buildRelease(ctx):
         steps += [
             {
                 "name": "make",
-                "image": OC_CI_NODEJS,
+                "image": OC_CI_NODEJS_IMAGE,
                 "environment": {
                     "NO_INSTALL": "true",
                 },
@@ -816,7 +816,7 @@ def buildRelease(ctx):
             },
             {
                 "name": "changelog",
-                "image": TOOLHIPPIE_CALENS,
+                "image": TOOLHIPPIE_CALENS_IMAGE,
                 "commands": [
                     "calens --version %s -o dist/CHANGELOG.md -t changelog/CHANGELOG-Release.tmpl" % version.split("-")[0],
                 ],
@@ -828,7 +828,7 @@ def buildRelease(ctx):
             },
             {
                 "name": "publish",
-                "image": PLUGINS_GITHUB_RELEASE,
+                "image": PLUGINS_GITHUB_RELEASE_IMAGE,
                 "settings": {
                     "api_key": {
                         "from_secret": "github_token",
@@ -856,7 +856,7 @@ def buildRelease(ctx):
         steps.append(
             {
                 "name": "publish",
-                "image": OC_CI_NODEJS,
+                "image": OC_CI_NODEJS_IMAGE,
                 "environment": {
                     "NPM_TOKEN": {
                         "from_secret": "npm_token",
@@ -901,14 +901,14 @@ def documentation(ctx):
             "steps": [
                 {
                     "name": "prepare",
-                    "image": OC_CI_ALPINE,
+                    "image": OC_CI_ALPINE_IMAGE,
                     "commands": [
                         "make docs-copy",
                     ],
                 },
                 {
                     "name": "test",
-                    "image": OC_CI_HUGO,
+                    "image": OC_CI_HUGO_IMAGE,
                     "commands": [
                         "cd hugo",
                         "hugo",
@@ -916,14 +916,14 @@ def documentation(ctx):
                 },
                 {
                     "name": "list",
-                    "image": OC_CI_ALPINE,
+                    "image": OC_CI_ALPINE_IMAGE,
                     "commands": [
                         "tree hugo/public",
                     ],
                 },
                 {
                     "name": "publish",
-                    "image": PLUGINS_GH_PAGES,
+                    "image": PLUGINS_GH_PAGES_IMAGE,
                     "settings": {
                         "username": {
                             "from_secret": "github_username",
@@ -992,7 +992,7 @@ def ocisService(extra_env_config = {}, deploy_type = "ocis"):
         wait_for_service = [
             {
                 "name": "wait-for-%s" % container_name,
-                "image": OC_CI_ALPINE,
+                "image": OC_CI_ALPINE_IMAGE,
                 "commands": [
                     "timeout 300 bash -c 'while [ $(curl -sk -uadmin:admin " +
                     "%s/graph/v1.0/users/admin " % environment["OCIS_URL"] +
@@ -1004,7 +1004,7 @@ def ocisService(extra_env_config = {}, deploy_type = "ocis"):
     return [
         {
             "name": container_name,
-            "image": OC_CI_GOLANG,
+            "image": OC_CI_GOLANG_IMAGE,
             "detach": True,
             "environment": environment,
             "commands": [
@@ -1026,7 +1026,7 @@ def checkForExistingOcisCache(ctx):
     return [
         {
             "name": "check-for-existing-cache",
-            "image": MINIO_MC,
+            "image": MINIO_MC_IMAGE,
             "environment": MINIO_ENV,
             "commands": [
                 "curl -o .drone.env %s/.drone.env" % web_repo_path,
@@ -1076,7 +1076,7 @@ def cacheOcisPipeline(ctx):
 def restoreOcisCache():
     return [{
         "name": "restore-ocis-cache",
-        "image": MINIO_MC,
+        "image": MINIO_MC_IMAGE,
         "environment": MINIO_ENV,
         "commands": [
             ". ./.drone.env",
@@ -1094,7 +1094,7 @@ def buildOcis(enableVips = False):
     return [
         {
             "name": "clone-ocis",
-            "image": OC_CI_GOLANG,
+            "image": OC_CI_GOLANG_IMAGE,
             "commands": [
                 "source .drone.env",
                 # NOTE: it is important to not start repo name with ocis*
@@ -1109,7 +1109,7 @@ def buildOcis(enableVips = False):
         },
         {
             "name": "generate-ocis",
-            "image": OC_CI_NODEJS,
+            "image": OC_CI_NODEJS_IMAGE,
             "commands": [
                 "cd repo_ocis",
                 "retry -t 3 'make ci-node-generate'",
@@ -1118,7 +1118,7 @@ def buildOcis(enableVips = False):
         },
         {
             "name": "build-ocis",
-            "image": OC_CI_GOLANG,
+            "image": OC_CI_GOLANG_IMAGE,
             "commands": [
                 "source .drone.env",
                 "cd repo_ocis/ocis",
@@ -1132,7 +1132,7 @@ def buildOcis(enableVips = False):
 def cacheOcis():
     return [{
         "name": "upload-ocis-cache",
-        "image": MINIO_MC,
+        "image": MINIO_MC_IMAGE,
         "environment": MINIO_ENV,
         "commands": [
             ". ./.drone.env",
@@ -1178,7 +1178,7 @@ def deploy(ctx, config, rebuild):
         "steps": [
             {
                 "name": "clone continuous deployment playbook",
-                "image": ALPINE_GIT,
+                "image": ALPINE_GIT_IMAGE,
                 "commands": [
                     "cd deployments/continuous-deployment-config",
                     "git clone https://github.com/owncloud-devops/continuous-deployment.git",
@@ -1186,7 +1186,7 @@ def deploy(ctx, config, rebuild):
             },
             {
                 "name": "deploy",
-                "image": OC_CI_DRONE_ANSIBLE,
+                "image": OC_CI_DRONE_ANSIBLE_IMAGE,
                 "failure": "ignore",
                 "environment": {
                     "CONTINUOUS_DEPLOY_SERVERS_CONFIG": "../%s" % (config),
@@ -1224,14 +1224,14 @@ def checkStarlark():
         "steps": [
             {
                 "name": "format-check-starlark",
-                "image": OC_CI_BAZEL_BUILDIFIER,
+                "image": OC_CI_BAZEL_BUILDIFIER_IMAGE,
                 "commands": [
                     "buildifier --mode=check .drone.star",
                 ],
             },
             {
                 "name": "show-diff",
-                "image": OC_CI_BAZEL_BUILDIFIER,
+                "image": OC_CI_BAZEL_BUILDIFIER_IMAGE,
                 "commands": [
                     "buildifier --mode=fix .drone.star",
                     "git diff",
@@ -1262,14 +1262,14 @@ def licenseCheck(ctx):
         "steps": installPnpm() + [
             {
                 "name": "node-check-licenses",
-                "image": OC_CI_NODEJS,
+                "image": OC_CI_NODEJS_IMAGE,
                 "commands": [
                     "pnpm licenses:check",
                 ],
             },
             {
                 "name": "node-save-licenses",
-                "image": OC_CI_NODEJS,
+                "image": OC_CI_NODEJS_IMAGE,
                 "commands": [
                     "pnpm licenses:csv",
                     "pnpm licenses:save",
@@ -1320,7 +1320,7 @@ def skipIfUnchanged(ctx, type):
 
     skip_step = {
         "name": "skip-if-unchanged",
-        "image": OC_CI_DRONE_SKIP_PIPELINE,
+        "image": OC_CI_DRONE_SKIP_PIPELINE_IMAGE,
         "when": {
             "event": [
                 "pull_request",
@@ -1401,7 +1401,7 @@ def genericCache(name, action, mounts, cache_path):
 
     step = {
         "name": "%s_%s" % (action, name),
-        "image": PLUGINS_S3_CACHE,
+        "image": PLUGINS_S3_CACHE_IMAGE,
         "settings": {
             "endpoint": S3_CACHE_SERVER,
             "rebuild": rebuild,
@@ -1431,7 +1431,7 @@ def genericCachePurge(flush_path):
         "steps": [
             {
                 "name": "purge-cache",
-                "image": PLUGINS_S3_CACHE,
+                "image": PLUGINS_S3_CACHE_IMAGE,
                 "settings": {
                     "endpoint": S3_CACHE_SERVER,
                     "access_key": MINIO_ENV["AWS_ACCESS_KEY_ID"],
@@ -1550,7 +1550,7 @@ def uploadTracingResult(ctx):
 
     return [{
         "name": "upload-tracing-result",
-        "image": PLUGINS_S3,
+        "image": PLUGINS_S3_IMAGE,
         "pull": "if-not-exists",
         "settings": {
             "bucket": S3_PUBLIC_CACHE_BUCKET,
@@ -1581,7 +1581,7 @@ def logTracingResult(ctx, suite):
 
     return [{
         "name": "log-tracing-result",
-        "image": OC_UBUNTU,
+        "image": OC_UBUNTU_IMAGE,
         "commands": [
             "cd %s/reports/e2e/playwright/tracing/" % dir["web"],
             'echo "To see the trace, please open the following link in the console"',
@@ -1596,7 +1596,7 @@ def waitForServices(name, services = []):
     services = ",".join(services)
     return [{
         "name": "wait-for-%s" % name,
-        "image": OC_CI_WAIT_FOR,
+        "image": OC_CI_WAIT_FOR_IMAGE,
         "commands": [
             "wait-for -it %s -t 300" % services,
         ],
@@ -1606,7 +1606,7 @@ def tikaService():
     return [{
         "name": "tika",
         "type": "docker",
-        "image": APACHE_TIKA,
+        "image": APACHE_TIKA_IMAGE,
         "detach": True,
     }] + waitForServices("tika", ["tika:9998"])
 
@@ -1679,7 +1679,7 @@ def wopiCollaborationService(name):
     return [
         {
             "name": service_name,
-            "image": OC_CI_GOLANG,
+            "image": OC_CI_GOLANG_IMAGE,
             "detach": True,
             "environment": environment,
             "commands": [
@@ -1692,7 +1692,7 @@ def postgresService():
     return [
         {
             "name": "postgres",
-            "image": POSTGRES_ALPINE,
+            "image": POSTGRES_ALPINE_IMAGE,
             "environment": {
                 "POSTGRES_DB": "keycloak",
                 "POSTGRES_USER": "keycloak",
@@ -1704,7 +1704,7 @@ def postgresService():
 def keycloakService():
     return [{
                "name": "generate-keycloak-certs",
-               "image": OC_CI_NODEJS,
+               "image": OC_CI_NODEJS_IMAGE,
                "commands": [
                    "mkdir -p keycloak-certs",
                    "openssl req -x509 -newkey rsa:2048 -keyout keycloak-certs/keycloakkey.pem -out keycloak-certs/keycloakcrt.pem -nodes -days 365 -subj '/CN=keycloak'",
@@ -1719,7 +1719,7 @@ def keycloakService():
            }] + waitForServices("postgres", ["postgres:5432"]) + \
            [{
                "name": "keycloak",
-               "image": KEYCLOAK,
+               "image": KEYCLOAK_IMAGE,
                "detach": True,
                "environment": {
                    "OCIS_DOMAIN": "ocis:9200",
@@ -1818,7 +1818,7 @@ def e2eTestsOnKeycloak(ctx):
              [
                  {
                      "name": "e2e-tests",
-                     "image": OC_CI_NODEJS,
+                     "image": OC_CI_NODEJS_IMAGE,
                      "environment": {
                          "BASE_URL_OCIS": "ocis:9200",
                          "HEADLESS": "true",
@@ -1861,7 +1861,7 @@ def getOcislatestCommitId(ctx):
     return [
         {
             "name": "get-ocis-latest-commit-id",
-            "image": OC_CI_ALPINE,
+            "image": OC_CI_ALPINE_IMAGE,
             "commands": [
                 "curl -o .drone.env %s/.drone.env" % web_repo_path,
                 "curl -o script.sh %s/tests/drone/script.sh" % web_repo_path,
@@ -1875,7 +1875,7 @@ def cacheBrowsers():
     return [
         {
             "name": "upload-browsers-cache",
-            "image": MINIO_MC,
+            "image": MINIO_MC_IMAGE,
             "environment": MINIO_ENV,
             "commands": [
                 "playwright_version=$(bash tests/drone/script.sh get_playwright_version)",
@@ -1889,7 +1889,7 @@ def cacheBrowsers():
 def checkBrowsersCache():
     return [{
         "name": "check-browsers-cache",
-        "image": MINIO_MC,
+        "image": MINIO_MC_IMAGE,
         "environment": MINIO_ENV,
         "commands": [
             "mc alias set s3 $MC_HOST $AWS_ACCESS_KEY_ID $AWS_SECRET_ACCESS_KEY",
@@ -1902,7 +1902,7 @@ def restoreBrowsersCache():
     return [
         {
             "name": "restore-browsers-cache",
-            "image": MINIO_MC,
+            "image": MINIO_MC_IMAGE,
             "environment": MINIO_ENV,
             "commands": [
                 "playwright_version=$(bash tests/drone/script.sh get_playwright_version)",
@@ -1912,7 +1912,7 @@ def restoreBrowsersCache():
         },
         {
             "name": "unzip-browsers-cache",
-            "image": OC_UBUNTU,
+            "image": OC_UBUNTU_IMAGE,
             "commands": [
                 "tar -xvf %s -C ." % dir["playwrightBrowsersArchive"],
             ],
