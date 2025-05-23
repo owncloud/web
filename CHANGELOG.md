@@ -40,6 +40,7 @@ Summary
 * Bugfix - Fix wrong HTML lang attribute: [#12478](https://github.com/owncloud/web/pull/12478)
 * Bugfix - Delete resource throws unknown error: [#12482](https://github.com/owncloud/web/pull/12482)
 * Bugfix - Application language and browser language do not match: [#12487](https://github.com/owncloud/web/pull/12487)
+* Bugfix - Add src attribute to external app iframe: [#12598](https://github.com/owncloud/web/pull/12598)
 * Change - Remove CERN's collapsible table: [#12567](https://github.com/owncloud/web/pull/12567)
 * Enhancement - Accessibility improvements: [#5379](https://github.com/owncloud/web/issues/5379)
 * Enhancement - Create spaces via admin settings: [#11849](https://github.com/owncloud/web/pull/11849)
@@ -343,6 +344,19 @@ Details
 
    https://github.com/owncloud/web/issues/12486
    https://github.com/owncloud/web/pull/12487
+
+* Bugfix - Add src attribute to external app iframe: [#12598](https://github.com/owncloud/web/pull/12598)
+
+   This adds the `src` attribute to the external app iframe using the `POST`
+   request. Some external apps like Collabora and OnlyOffice are using the `POST`
+   requests to load the app with authenticated user. `src` attribute was in that
+   case omitted as it was not necessarily needed. That however introduced a bug
+   with permissions propagation. Any custom permissions set on the iframe like
+   `camera` were not propagated to the final website. Adding the `src` attribute
+   should ensure that the permissions are propagated.
+
+   https://github.com/owncloud/web/issues/12121
+   https://github.com/owncloud/web/pull/12598
 
 * Change - Remove CERN's collapsible table: [#12567](https://github.com/owncloud/web/pull/12567)
 
