@@ -1,4 +1,3 @@
-@predefined-users
 Feature: Users can use web to organize tags
 
   Background:
@@ -7,11 +6,12 @@ Feature: Users can use web to organize tags
       | Alice |
       | Brian |
 
+  @predefined-users
   Scenario: Tag management
+    Given "Alice" logs in
     When "Alice" creates the following files into personal space using API
       | pathToFile | content     |
       | lorem.txt  | lorem ipsum |
-    And "Alice" logs in
     And "Alice" adds the following tags for the following resources using the sidebar panel
       | resource  | tags         |
       | lorem.txt | tag 1, tag 2 |
@@ -30,6 +30,14 @@ Feature: Users can use web to organize tags
     Then the following resources should contain the following tags in the details panel for user "Alice"
       | resource  | tags  |
       | lorem.txt | tag 2 |
+    And "Alice" logs out
+
+
+  Scenario: Long tag name
+    Given "Alice" logs in
+    And "Alice" creates the following files into personal space using API
+      | pathToFile | content     |
+      | lorem.txt  | lorem ipsum |
     When "Alice" tries to add the following tag for the following resources using the sidebar panel
       | resource  | tags                                                                                                       |
       | lorem.txt | Loremipsum dolor sit amet consectetur adipiscing elit sed do eiusmod tempor incididunt ut labore et dolore |
@@ -40,12 +48,13 @@ Feature: Users can use web to organize tags
     And "Alice" logs out
 
 
+  @predefined-users
   Scenario: Tag search
+    Given "Alice" logs in
     When "Alice" creates the following files into personal space using API
       | pathToFile   | content     |
       | lorem.txt    | lorem ipsum |
       | textfile.txt | test file   |
-    And "Alice" logs in
     And "Alice" adds the following tags for the following resources using the sidebar panel
       | resource  | tags       |
       | lorem.txt | tag1, tag2 |
@@ -58,15 +67,16 @@ Feature: Users can use web to organize tags
       | textfile.txt |
     And "Alice" logs out
 
-
-  Scenario: Tag sharing
-    Given "Alice" creates the following folders in personal space using API
+  @predefined-users
+  Scenario: Tags in shared resources
+    Given "Alice" logs in
+    And "Brian" logs in
+    And "Alice" creates the following folders in personal space using API
       | name             |
       | folder_to_shared |
     And "Alice" creates the following files into personal space using API
       | pathToFile                 | content     |
       | folder_to_shared/lorem.txt | lorem ipsum |
-    And "Alice" logs in
     And "Alice" adds the following tags for the following resources using the sidebar panel
       | resource                   | tags         |
       | folder_to_shared/lorem.txt | tag 1, tag 2 |
@@ -75,7 +85,6 @@ Feature: Users can use web to organize tags
       | folder_to_shared | Brian     | user | Can edit without versions | folder       |
     And "Alice" logs out
 
-    And "Brian" logs in
     And "Brian" navigates to the shared with me page
     Then the following resources should contain the following tags in the files list for user "Brian"
       | resource                   | tags         |

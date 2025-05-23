@@ -1,10 +1,10 @@
 import { Given, DataTable } from '@cucumber/cucumber'
 import { World } from '../environment'
 import { api } from '../../support'
+import { ResourceType } from '../../support/api/share/share'
 import fs from 'fs'
 import { Space } from '../../support/types'
 import { config } from '../../config'
-import { setAccessAndRefreshToken, getUserIdFromToken } from '../../support/api/token'
 
 Given(
   '{string} creates following user(s) using API',
@@ -13,14 +13,7 @@ Given(
     for (const info of stepTable.hashes()) {
       const user = this.usersEnvironment.getUser({ key: info.id })
       // do not try to create users when using predefined users
-      if (config.predefinedUsers) {
-        await setAccessAndRefreshToken(user)
-        this.usersEnvironment.storeCreatedUser(info.id.toLowerCase(), {
-          ...user,
-          uuid: getUserIdFromToken(user)
-        })
-        this.usersEnvironment.saveUserState(info.id, {})
-      } else {
+      if (!config.predefinedUsers) {
         await api.provision.createUser({ user, admin })
       }
     }
@@ -102,7 +95,8 @@ Given(
         path: info.resource,
         shareType: info.type,
         shareWith: info.recipient,
-        role: info.role
+        role: info.role,
+        resourceType: info.resourceType as ResourceType
       })
     }
   }
@@ -113,8 +107,6 @@ Given(
   async function (this: World, stepUser: string): Promise<void> {
     const user = this.usersEnvironment.getUser({ key: stepUser })
     await api.settings.configureAutoAcceptShare({ user, state: false })
-    // save initial auto-accept config
-    this.usersEnvironment.saveUserState(stepUser, { autoAcceptShare: true })
   }
 )
 

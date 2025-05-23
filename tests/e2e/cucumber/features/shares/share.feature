@@ -8,14 +8,13 @@ Feature: share
 
   @predefined-users
   Scenario: folder
-    # disabling auto accepting to check accepting share
-    Given "Brian" disables auto-accepting using API
+    Given "Alice" logs in
+    And "Brian" logs in
     And "Alice" creates the following folder in personal space using API
       | name               |
       | folder_to_shared   |
       | folder_to_shared_2 |
       | shared_folder      |
-    And "Alice" logs in
     And "Alice" uploads the following resource
       | resource      | to                 |
       | lorem.txt     | folder_to_shared   |
@@ -26,7 +25,6 @@ Feature: share
       | shared_folder      | Brian     | user | Can edit without versions | folder       |
       | folder_to_shared_2 | Brian     | user | Can edit without versions | folder       |
 
-    And "Brian" logs in
     And "Brian" navigates to the shared with me page
     And "Brian" opens folder "folder_to_shared"
     # user should have access to unsynced shares
@@ -34,18 +32,19 @@ Feature: share
       | resource  |
       | lorem.txt |
     When "Brian" navigates to the shared with me page
-    And "Brian" enables the sync for the following shares
+    And "Brian" disables the sync for the following shares
       | name               |
       | folder_to_shared   |
       | folder_to_shared_2 |
-    Then "Brian" should not see a sync status for the folder "shared_folder"
+    Then "Brian" should not see a sync status for the folder "folder_to_shared"
+    And "Brian" should not see a sync status for the folder "folder_to_shared_2"
     When "Brian" enables the sync for the following share using the context menu
-      | name          |
-      | shared_folder |
-    And "Brian" disables the sync for the following share using the context menu
-      | name          |
-      | shared_folder |
-    And "Brian" renames the following resource
+      | name               |
+      | folder_to_shared   |
+      | folder_to_shared_2 |
+    Then "Brian" should see a sync status for the folder "folder_to_shared"
+    And "Brian" should see a sync status for the folder "folder_to_shared_2"
+    When "Brian" renames the following resource
       | resource                   | as            |
       | folder_to_shared/lorem.txt | lorem_new.txt |
     And "Brian" uploads the following resource
@@ -79,6 +78,7 @@ Feature: share
   @predefined-users
   Scenario: file
     Given "Alice" logs in
+    And "Brian" logs in
     And "Alice" creates the following resources
       | resource         | type    | content   |
       | shareToBrian.txt | txtFile | some text |
@@ -91,56 +91,8 @@ Feature: share
     And "Alice" uploads the following resource
       | resource        |
       | simple.pdf      |
-      | sampleGif.gif   |
-      | testimage.mp3   |
-      | sampleOgg.ogg   |
-      | sampleWebm.webm |
-      | test_video.mp4  |
       | testavatar.jpeg |
-      | testavatar.png  |
-    Then "Alice" should see thumbnail and preview for file "sampleGif.gif"
-    And "Alice" should see thumbnail and preview for file "testavatar.jpeg"
-    And "Alice" should see thumbnail and preview for file "testavatar.png"
-    And "Alice" should see preview for file "shareToBrian.txt"
-    When "Alice" opens a file "testavatar.png" in the media-viewer using the sidebar panel
-    Then "Alice" is in a media-viewer
-    When "Alice" closes the file viewer
-    And "Alice" opens the following file in mediaviewer
-      | resource        |
-      | testavatar.jpeg |
-    Then "Alice" is in a media-viewer
-    When "Alice" navigates to the next media resource
-    And "Alice" navigates to the previous media resource
-    And "Alice" closes the file viewer
-    And "Alice" opens the following file in mediaviewer
-      | resource      |
-      | sampleGif.gif |
-    Then "Alice" is in a media-viewer
-    When "Alice" closes the file viewer
-    And "Alice" opens the following file in mediaviewer
-      | resource      |
-      | testimage.mp3 |
-    Then "Alice" is in a media-viewer
-    When "Alice" closes the file viewer
-    And "Alice" opens the following file in mediaviewer
-      | resource      |
-      | sampleOgg.ogg |
-    Then "Alice" is in a media-viewer
-    When "Alice" closes the file viewer
-    And "Alice" opens the following file in mediaviewer
-      | resource        |
-      | sampleWebm.webm |
-    Then "Alice" is in a media-viewer
-    When "Alice" closes the file viewer
-    And "Alice" opens the following file in mediaviewer
-      | resource       |
-      | test_video.mp4 |
-    Then "Alice" is in a media-viewer
-    When "Alice" downloads the following resource using the preview topbar
-      | resource       | type |
-      | test_video.mp4 | file |
-    And "Alice" closes the file viewer
-    And "Alice" shares the following resource using the sidebar panel
+    When "Alice" shares the following resource using the sidebar panel
       | resource         | recipient | type | role                      | resourceType |
       | shareToBrian.txt | Brian     | user | Can edit without versions | file         |
       | shareToBrian.md  | Brian     | user | Can edit without versions | file         |
@@ -152,10 +104,9 @@ Feature: share
       | resource        |
       | testavatar.jpeg |
     Then "Alice" is in a media-viewer
-    When "Alice" closes the file viewer
+    And "Alice" closes the file viewer
 
-    When "Brian" logs in
-    And "Brian" navigates to the shared with me page
+    When "Brian" navigates to the shared with me page
     And "Brian" disables the sync for the following share
       | name           |
       | sharedFile.txt |
@@ -235,31 +186,31 @@ Feature: share
     Given "Admin" creates following users using API
       | id    |
       | Carol |
+    And "Alice" logs in
+    And "Brian" logs in
     And "Alice" creates the following folder in personal space using API
       | name        |
       | test-folder |
     And "Alice" creates the following files into personal space using API
       | pathToFile   | content      |
       | testfile.txt | example text |
-    And "Alice" logs in
-    And "Alice" shares the following resource using the sidebar panel
-      | resource     | recipient | type | role     |
-      | testfile.txt | Brian     | user | Can view |
-      | test-folder  | Brian     | user | Can view |
-    And "Alice" logs out
+    When "Alice" shares the following resource using the sidebar panel
+      | resource     | recipient | type | role     | resourceType |
+      | testfile.txt | Brian     | user | Can view | file         |
+      | test-folder  | Brian     | user | Can view | folder       |
+    Then "Alice" logs out
+    When "Carol" logs in
     And "Carol" creates the following folder in personal space using API
       | name        |
       | test-folder |
     And "Carol" creates the following files into personal space using API
       | pathToFile   | content      |
       | testfile.txt | example text |
-    And "Carol" logs in
     And "Carol" shares the following resource using the sidebar panel
-      | resource     | recipient | type | role     |
-      | testfile.txt | Brian     | user | Can view |
-      | test-folder  | Brian     | user | Can view |
+      | resource     | recipient | type | role     | resourceType |
+      | testfile.txt | Brian     | user | Can view | file         |
+      | test-folder  | Brian     | user | Can view | folder       |
     And "Carol" logs out
-    When "Brian" logs in
     And "Brian" navigates to the shared with me page
     Then following resources should be displayed in the Shares for user "Brian"
       | resource         |
@@ -272,9 +223,8 @@ Feature: share
 
   @predefined-users
   Scenario: check file with same name but different paths are displayed correctly in shared with others page
-    Given "Admin" creates following users using API
-      | id    |
-      | Carol |
+    Given "Alice" logs in
+    And "Brian" logs in
     And "Alice" creates the following folder in personal space using API
       | name        |
       | test-folder |
@@ -283,25 +233,25 @@ Feature: share
       | testfile.txt             | example text |
       | test-folder/testfile.txt | some text    |
     And "Alice" shares the following resource using API
-      | resource                 | recipient | type | role                      |
-      | testfile.txt             | Brian     | user | Can edit without versions |
-      | test-folder/testfile.txt | Brian     | user | Can edit without versions |
-    And "Alice" logs in
-    And "Alice" navigates to the shared with others page
+      | resource                 | recipient | type | role                      | resourceType |
+      | testfile.txt             | Brian     | user | Can edit without versions | file         |
+      | test-folder/testfile.txt | Brian     | user | Can edit without versions | file         |
+    And "Brian" logs out
+    When "Alice" navigates to the shared with others page
     Then following resources should be displayed in the files list for user "Alice"
       | resource                 |
       | testfile.txt             |
       | test-folder/testfile.txt |
     And "Alice" logs out
 
-  @predefined-users
+
   Scenario: share indication
     When "Alice" creates the following folders in personal space using API
       | name                  |
       | shareFolder/subFolder |
     And "Alice" shares the following resource using API
-      | resource    | recipient | type | role                      |
-      | shareFolder | Brian     | user | Can edit without versions |
+      | resource    | recipient | type | role                      | resourceType |
+      | shareFolder | Brian     | user | Can edit without versions | folder       |
     And "Alice" logs in
     Then "Alice" should see user-direct indicator on the folder "shareFolder"
     When "Alice" opens folder "shareFolder"

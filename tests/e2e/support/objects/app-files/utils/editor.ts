@@ -6,16 +6,17 @@ const texEditor = '#text-editor'
 const pdfViewer = '#pdf-viewer'
 const imageViewer = '.stage'
 
-export const close = (page: Page): Promise<unknown> => {
-  return Promise.all([
+export const close = async (page: Page): Promise<void> => {
+  await Promise.all([
     page.waitForURL(/.*\/files\/(spaces|shares|link|search)\/.*/),
     page.locator(closeTextEditorOrViewerButton).click()
   ])
 }
 
-export const save = async (page: Page): Promise<unknown> => {
-  return await Promise.all([
+export const save = async (page: Page): Promise<void> => {
+  await Promise.all([
     page.waitForResponse((res) => res.request().method() === 'PUT' && res.status() === 204),
+    page.waitForResponse((res) => res.request().method() === 'PROPFIND' && res.status() === 207),
     page.locator(saveTextEditorOrViewerButton).click()
   ])
 }
