@@ -1,7 +1,7 @@
 export interface AncestorMetaDataValue {
   id: string
   shareTypes: number[]
-  parentFolderId: string
+  parentFolderId?: string
   spaceId: string
   path: string
 }
