@@ -42,7 +42,7 @@
     "uuid": "11.1.0",
     "vue-concurrency": "5.0.3",
     "vue-router": "4.5.1",
-    "vue": "3.5.14",
+    "vue": "3.5.15",
     "vue3-gettext": "2.4.0",
     "webdav": "5.8.0",
     "xml-js": "^1.6.11",
