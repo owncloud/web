@@ -28,6 +28,10 @@ const getValue = (pattern): string => {
 }
 
 export const substitute = (text: string): string => {
+  if (!text) {
+    return text
+  }
+
   const regex = /%[A-Za-z0-9_-]+%/g
   const matches = text.match(regex)
   if (matches) {

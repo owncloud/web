@@ -356,7 +356,7 @@ export const createLinkShare = async ({
   })
 
   const roleType: string = linkShareRoles[role as keyof typeof linkShareRoles]
-  password = password && substitute(password)
+  password = substitute(password)
   const response = await request({
     method: 'POST',
     path: join('graph', 'v1beta1', 'drives', driveId, 'items', itemId, 'createLink'),
