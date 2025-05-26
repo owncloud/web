@@ -130,7 +130,7 @@ export const useCapabilityStore = defineStore('capabilities', () => {
   )
 
   const tusMaxChunkSize = computed(() => unref(capabilities).files.tus_support?.max_chunk_size)
-  const tusExtension = computed(() => unref(capabilities).files.tus_support?.extension)
+  const tusExtension = computed(() => unref(capabilities).files.tus_support?.extension || '')
   const tusHttpMethodOverride = computed(
     () => unref(capabilities).files.tus_support?.http_method_override
   )
