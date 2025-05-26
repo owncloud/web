@@ -41,6 +41,7 @@ Summary
 * Bugfix - Delete resource throws unknown error: [#12482](https://github.com/owncloud/web/pull/12482)
 * Bugfix - Application language and browser language do not match: [#12487](https://github.com/owncloud/web/pull/12487)
 * Bugfix - Add src attribute to external app iframe: [#12598](https://github.com/owncloud/web/pull/12598)
+* Bugfix - Access correct key when loading favorites: [#12606](https://github.com/owncloud/web/pull/12606)
 * Change - Remove CERN's collapsible table: [#12567](https://github.com/owncloud/web/pull/12567)
 * Enhancement - Accessibility improvements: [#5379](https://github.com/owncloud/web/issues/5379)
 * Enhancement - Create spaces via admin settings: [#11849](https://github.com/owncloud/web/pull/11849)
@@ -357,6 +358,15 @@ Details
 
    https://github.com/owncloud/web/issues/12121
    https://github.com/owncloud/web/pull/12598
+
+* Bugfix - Access correct key when loading favorites: [#12606](https://github.com/owncloud/web/pull/12606)
+
+   When loading favorites, we were trying to build resources by mapping the
+   response object itself. This was throwing an error because the response object
+   is not a list. We are now using the `results` property of the response object to
+   access the list of favorite resources.
+
+   https://github.com/owncloud/web/pull/12606
 
 * Change - Remove CERN's collapsible table: [#12567](https://github.com/owncloud/web/pull/12567)
 
