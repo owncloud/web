@@ -42,6 +42,7 @@ Summary
 * Bugfix - Application language and browser language do not match: [#12487](https://github.com/owncloud/web/pull/12487)
 * Bugfix - Add src attribute to external app iframe: [#12598](https://github.com/owncloud/web/pull/12598)
 * Bugfix - Access correct key when loading favorites: [#12606](https://github.com/owncloud/web/pull/12606)
+* Bugfix - Load ancestor space only when parent id is returned: [#12607](https://github.com/owncloud/web/pull/12607)
 * Change - Remove CERN's collapsible table: [#12567](https://github.com/owncloud/web/pull/12567)
 * Enhancement - Accessibility improvements: [#5379](https://github.com/owncloud/web/issues/5379)
 * Enhancement - Create spaces via admin settings: [#11849](https://github.com/owncloud/web/pull/11849)
@@ -367,6 +368,14 @@ Details
    access the list of favorite resources.
 
    https://github.com/owncloud/web/pull/12606
+
+* Bugfix - Load ancestor space only when parent id is returned: [#12607](https://github.com/owncloud/web/pull/12607)
+
+   When loading ancestor meta data, we were trying to load the space even when the
+   parent ID was not returned by the API. We are now only loading the space when
+   the parent ID is returned.
+
+   https://github.com/owncloud/web/pull/12607
 
 * Change - Remove CERN's collapsible table: [#12567](https://github.com/owncloud/web/pull/12567)
 
