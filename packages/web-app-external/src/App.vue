@@ -16,6 +16,7 @@
     </form>
     <iframe
       name="app-iframe"
+      :src="appUrl"
       class="oc-width-1-1 oc-height-1-1"
       :title="iFrameTitle"
       allowfullscreen
