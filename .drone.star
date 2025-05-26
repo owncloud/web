@@ -1025,12 +1025,18 @@ def checkForExistingOcisCache(ctx):
     web_repo_path = "https://raw.githubusercontent.com/owncloud/web/%s" % ctx.build.commit
     return [
         {
+            "name": "download-scripts",
+            "image": OC_CI_ALPINE_IMAGE,
+            "commands": [
+                "curl -o .drone.env %s/.drone.env" % web_repo_path,
+                "curl -o script.sh %s/tests/drone/script.sh" % web_repo_path,
+            ],
+        },
+        {
             "name": "check-for-existing-cache",
             "image": MINIO_MC_IMAGE,
             "environment": MINIO_ENV,
             "commands": [
-                "curl -o .drone.env %s/.drone.env" % web_repo_path,
-                "curl -o script.sh %s/tests/drone/script.sh" % web_repo_path,
                 ". ./.drone.env",
                 "mc alias set s3 $MC_HOST $AWS_ACCESS_KEY_ID $AWS_SECRET_ACCESS_KEY",
                 "mc ls --recursive s3/$CACHE_BUCKET/ocis-build",

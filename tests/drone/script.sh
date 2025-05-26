@@ -2,6 +2,8 @@
 
 source .drone.env
 
+MC_CACHE_NOT_FOUND_PATTERN=".*Object does not exist"
+
 # Function to get the latest oCIS commit ID
 get_latest_ocis_commit_id() {
     echo "Getting latest commit ID for branch: $OCIS_BRANCH"
@@ -18,11 +20,12 @@ get_latest_ocis_commit_id() {
 
 # Function to check if the cache exists for the given commit ID
 check_ocis_cache() {
-    echo "Checking OCIS cache for commit ID: $OCIS_COMMITID"
-    ocis_cache=$(mc find s3/$CACHE_BUCKET/ocis-build/$OCIS_COMMITID/ocis 2>&1 | grep 'Object does not exist')
+    local output
 
-    if [[ "$ocis_cache" != "" ]]
-    then
+    echo "Checking OCIS cache for commit ID: $OCIS_COMMITID"
+    output=$(mc find s3/"$CACHE_BUCKET"/ocis-build/"$OCIS_COMMITID"/ocis 2>&1)
+
+    if [[ "$output" =~ $MC_CACHE_NOT_FOUND_PATTERN ]]; then
         echo "$OCIS_COMMITID doesn't exist in cache."
         exit 0
     fi
@@ -31,11 +34,22 @@ check_ocis_cache() {
 
 # get playwright version from package.json
 get_playwright_version() {
+    local playwright_version
+
     if [[ ! -f "package.json" ]]; then
         echo "Error: package.json file not found."
     fi
 
-    playwright_version=$(grep '"@playwright/test":' "package.json" | cut -d':' -f2 | tr -d '", ')
+    # get the playwright version from package.json
+    while IFS= read -r line; do
+        case "$line" in
+        *'"@playwright/test":'*)
+            playwright_version=$(echo "$line" | cut -d':' -f2 | tr -d '", ')
+            break
+            ;;
+        esac
+    done <package.json
+
     if [[ -z "$playwright_version" ]]; then
         echo "Error: Playwright package not found in package.json." >&2
         exit 78
@@ -46,18 +60,18 @@ get_playwright_version() {
 
 # Function to check if the cache exists for the given commit ID
 check_browsers_cache() {
-    get_playwright_version
+    local output
+    local playwright_version
 
-    playwright_cache=$(mc find s3/$CACHE_BUCKET/web/browsers-cache/$playwright_version/playwright-browsers.tar.gz 2>&1 | grep 'Object does not exist')
+    playwright_version=$(get_playwright_version)
+    output=$(mc find s3/"$CACHE_BUCKET"/web/browsers-cache/"$playwright_version"/playwright-browsers.tar.gz 2>&1)
 
-    if [[ "$playwright_cache" != "" ]]
-    then
+    if [[ "$output" =~ $MC_CACHE_NOT_FOUND_PATTERN ]]; then
         echo "Playwright v$playwright_version supported browsers doesn't exist in cache."
         exit 0
     fi
     exit 78
 }
-
 
 if [[ "$1" == "" ]]; then
     echo "Usage: $0 [COMMAND]"
