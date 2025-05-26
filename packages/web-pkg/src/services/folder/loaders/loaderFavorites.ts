@@ -26,12 +26,12 @@ export class FolderLoaderFavorites implements FolderLoader {
       resourcesStore.clearResourceList()
       resourcesStore.setAncestorMetaData({})
 
-      let resources = yield clientService.webdav.listFavoriteFiles({
+      const { results } = yield clientService.webdav.listFavoriteFiles({
         username: userStore.user?.onPremisesSamAccountName,
         signal: signal1
       })
 
-      resources = resources.map(buildResource)
+      const resources = results.map(buildResource)
       resourcesStore.initResourceList({ currentFolder: null, resources })
     })
   }
