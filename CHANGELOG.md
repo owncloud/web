@@ -43,6 +43,7 @@ Summary
 * Bugfix - Add src attribute to external app iframe: [#12598](https://github.com/owncloud/web/pull/12598)
 * Bugfix - Access correct key when loading favorites: [#12606](https://github.com/owncloud/web/pull/12606)
 * Bugfix - Load ancestor space only when parent id is returned: [#12607](https://github.com/owncloud/web/pull/12607)
+* Bugfix - Do not crash when tus is unsupported: [#12608](https://github.com/owncloud/web/pull/12608)
 * Change - Remove CERN's collapsible table: [#12567](https://github.com/owncloud/web/pull/12567)
 * Enhancement - Accessibility improvements: [#5379](https://github.com/owncloud/web/issues/5379)
 * Enhancement - Create spaces via admin settings: [#11849](https://github.com/owncloud/web/pull/11849)
@@ -376,6 +377,14 @@ Details
    the parent ID is returned.
 
    https://github.com/owncloud/web/pull/12607
+
+* Bugfix - Do not crash when tus is unsupported: [#12608](https://github.com/owncloud/web/pull/12608)
+
+   When TUS is not supported, we were not setting a fallback value. This was
+   causing the app to crash. We're now setting an empty string as fallback value so
+   that we can still call `includes` method and not crash the app.
+
+   https://github.com/owncloud/web/pull/12608
 
 * Change - Remove CERN's collapsible table: [#12567](https://github.com/owncloud/web/pull/12567)
 
