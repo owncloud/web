@@ -1743,7 +1743,7 @@ def keycloakService():
                },
                "commands": [
                    "mkdir -p /opt/keycloak/data/import",
-                   "cp tests/drone/ocis_keycloak/ocis-ci-realm.dist.json /opt/keycloak/data/import/ocis-realm.json",
+                   "cp tests/drone/ocis_keycloak/ocis-ci-realm.dist.json /opt/keycloak/data/import/oCIS-realm.json",
                    "/opt/keycloak/bin/kc.sh start-dev --proxy-headers xforwarded --spi-connections-http-client-default-disable-trust-manager=true --import-realm --health-enabled=true",
                ],
                "volumes": [
@@ -1752,7 +1752,7 @@ def keycloakService():
                        "path": "/keycloak-certs",
                    },
                ],
-           }] + waitForServices("keycloack", ["keycloak:8443"])
+           }] + waitForServices("keycloak", ["keycloak:8443"])
 
 def e2eTestsOnKeycloak(ctx):
     e2e_Keycloak_tests = [
@@ -1842,7 +1842,7 @@ def e2eTestsOnKeycloak(ctx):
                  },
              ] + \
              uploadTracingResult(ctx) + \
-             logTracingResult(ctx, "e2e-tests keycloack-journey-suite")
+             logTracingResult(ctx, "e2e-tests keycloak-journey-suite")
 
     return [{
         "kind": "pipeline",
