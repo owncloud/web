@@ -1,7 +1,7 @@
 ALPINE_GIT_IMAGE = "alpine/git:2.47.2"
 APACHE_TIKA_IMAGE = "apache/tika:3.1.0.0"
 COLLABORA_CODE_IMAGE = "collabora/code:25.04.2.1.1"
-KEYCLOAK_IMAGE = "quay.io/keycloak/keycloak:25.0.6"
+KEYCLOAK_IMAGE = "quay.io/keycloak/keycloak:26.2.4"
 MINIO_MC_IMAGE = "minio/mc:RELEASE.2025-04-16T18-13-26Z"
 OC_CI_ALPINE_IMAGE = "owncloudci/alpine:latest"
 OC_CI_BAZEL_BUILDIFIER_IMAGE = "owncloudci/bazel-buildifier:latest"
@@ -1743,7 +1743,7 @@ def keycloakService():
                },
                "commands": [
                    "mkdir -p /opt/keycloak/data/import",
-                   "cp tests/drone/ocis_keycloak/ocis-ci-realm.dist.json /opt/keycloak/data/import/ocis-realm.json",
+                   "cp tests/drone/ocis_keycloak/ocis-ci-realm.dist.json /opt/keycloak/data/import/oCIS-realm.json",
                    "/opt/keycloak/bin/kc.sh start-dev --proxy-headers xforwarded --spi-connections-http-client-default-disable-trust-manager=true --import-realm --health-enabled=true",
                ],
                "volumes": [
@@ -1752,7 +1752,7 @@ def keycloakService():
                        "path": "/keycloak-certs",
                    },
                ],
-           }] + waitForServices("keycloack", ["keycloak:8443"])
+           }] + waitForServices("keycloak", ["keycloak:8443"])
 
 def e2eTestsOnKeycloak(ctx):
     e2e_Keycloak_tests = [
@@ -1842,7 +1842,7 @@ def e2eTestsOnKeycloak(ctx):
                  },
              ] + \
              uploadTracingResult(ctx) + \
-             logTracingResult(ctx, "e2e-tests keycloack-journey-suite")
+             logTracingResult(ctx, "e2e-tests keycloak-journey-suite")
 
     return [{
         "kind": "pipeline",
