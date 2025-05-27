@@ -1,7 +1,7 @@
 ALPINE_GIT_IMAGE = "alpine/git:2.47.2"
 APACHE_TIKA_IMAGE = "apache/tika:2.8.0.0"
 COLLABORA_CODE_IMAGE = "collabora/code:25.04.2.1.1"
-KEYCLOAK_IMAGE = "quay.io/keycloak/keycloak:25.0.0"
+KEYCLOAK_IMAGE = "quay.io/keycloak/keycloak:25.0.6"
 MINIO_MC_IMAGE = "minio/mc:RELEASE.2025-04-16T18-13-26Z"
 OC_CI_ALPINE_IMAGE = "owncloudci/alpine:latest"
 OC_CI_BAZEL_BUILDIFIER_IMAGE = "owncloudci/bazel-buildifier:latest"
