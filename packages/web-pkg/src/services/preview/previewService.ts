@@ -9,14 +9,24 @@ import { AuthStore, CapabilityStore, ConfigStore, UserStore } from '../../compos
 // @ts-ignore
 import { stringify } from 'qs'
 
+const DEFAULT_SUPPORTED_MIME_TYPES = [
+  'image/gif',
+  'image/png',
+  'image/jpeg',
+  'text/plain',
+  'image/tiff',
+  'image/bmp',
+  'image/x-ms-bmp',
+  'application/vnd.geogebra.slides',
+  'application/vnd.geogebra.pinboard'
+]
+
 export class PreviewService {
   clientService: ClientService
   configStore: ConfigStore
   userStore: UserStore
   authStore: AuthStore
   capabilityStore: CapabilityStore
-
-  capability?: CapabilityStore['capabilities']['files']['thumbnail']
 
   constructor({
     clientService,
@@ -35,30 +45,19 @@ export class PreviewService {
     this.userStore = userStore
     this.authStore = authStore
     this.configStore = configStore
-
-    this.capability = capabilityStore.filesThumbnail || {
-      enabled: true,
-      version: 'v0.1',
-      supportedMimeTypes: [
-        'image/gif',
-        'image/png',
-        'image/jpeg',
-        'text/plain',
-        'image/tiff',
-        'image/bmp',
-        'image/x-ms-bmp',
-        'application/vnd.geogebra.slides',
-        'application/vnd.geogebra.pinboard'
-      ]
-    }
+    this.capabilityStore = capabilityStore
   }
 
   private get available(): boolean {
-    return !!this.capability?.version
+    if (this.capabilityStore.filesThumbnail) {
+      return !!this.capabilityStore.filesThumbnail.version
+    }
+
+    return true
   }
 
   private get supportedMimeTypes() {
-    return this.capability?.supportedMimeTypes || []
+    return this.capabilityStore.filesThumbnail?.supportedMimeTypes || DEFAULT_SUPPORTED_MIME_TYPES
   }
 
   private get user() {
