@@ -587,11 +587,14 @@ def e2eTests(ctx):
         for item in default:
             params[item] = matrix[item] if item in matrix else default[item]
 
+        # pipeline steps
+        steps = skipIfUnchanged(ctx, "e2e-tests")
+
         if "app-provider" in suite and not "full-ci" in ctx.build.title.lower() and ctx.build.event != "cron":
-            continue
+            steps = skipIfUnchanged(ctx, "drone-ci")
 
         if "ocm" in suite and not "full-ci" in ctx.build.title.lower() and ctx.build.event != "cron":
-            continue
+            steps = skipIfUnchanged(ctx, "drone-ci")
 
         if params["skip"]:
             continue
@@ -610,11 +613,10 @@ def e2eTests(ctx):
             "FEDERATED_BASE_URL_OCIS": "federation-ocis:9200",
         }
 
-        steps = skipIfUnchanged(ctx, "e2e-tests") + \
-                restoreBuildArtifactCache(ctx, "pnpm", ".pnpm-store") + \
-                installPnpm() + \
-                restoreBrowsersCache() + \
-                restoreBuildArtifactCache(ctx, "web-dist", "dist")
+        steps += restoreBuildArtifactCache(ctx, "pnpm", ".pnpm-store") + \
+                 installPnpm() + \
+                 restoreBrowsersCache() + \
+                 restoreBuildArtifactCache(ctx, "web-dist", "dist")
 
         if ctx.build.event == "cron":
             steps += restoreBuildArtifactCache(ctx, "ocis", "ocis")
@@ -1372,24 +1374,9 @@ def skipIfUnchanged(ctx, type):
         }
         return [skip_step]
 
-    if type == "e2e-tests":
-        e2e_skip_steps = [
-            "^__fixtures__/.*",
-            "^__mocks__/.*",
-            "^packages/.*/tests/.*",
-            "^tests/unit/.*",
-        ]
+    if type == "drone-ci":
         skip_step["settings"] = {
-            "ALLOW_SKIP_CHANGED": base_skip_steps + e2e_skip_steps,
-        }
-        return [skip_step]
-
-    if type == "unit-tests":
-        unit_skip_steps = [
-            "^tests/e2e/.*",
-        ]
-        skip_step["settings"] = {
-            "ALLOW_SKIP_CHANGED": base_skip_steps + unit_skip_steps,
+            "DISALLOW_SKIP_CHANGED": [".drone.star"],
         }
         return [skip_step]
 
@@ -1791,14 +1778,15 @@ def e2eTestsOnKeycloak(ctx):
         },
     ]
 
+    steps = []
     if not "full-ci" in ctx.build.title.lower() and ctx.build.event != "cron":
-        return []
+        steps += skipIfUnchanged(ctx, "drone-ci")
 
-    steps = restoreBuildArtifactCache(ctx, "pnpm", ".pnpm-store") + \
-            installPnpm() + \
-            restoreBrowsersCache() + \
-            keycloakService() + \
-            restoreBuildArtifactCache(ctx, "web-dist", "dist")
+    steps += restoreBuildArtifactCache(ctx, "pnpm", ".pnpm-store") + \
+             installPnpm() + \
+             restoreBrowsersCache() + \
+             keycloakService() + \
+             restoreBuildArtifactCache(ctx, "web-dist", "dist")
     if ctx.build.event == "cron":
         steps += restoreBuildArtifactCache(ctx, "ocis", "ocis")
     else:
