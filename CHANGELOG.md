@@ -44,6 +44,7 @@ Summary
 * Bugfix - Access correct key when loading favorites: [#12606](https://github.com/owncloud/web/pull/12606)
 * Bugfix - Load ancestor space only when parent id is returned: [#12607](https://github.com/owncloud/web/pull/12607)
 * Bugfix - Do not crash when tus is unsupported: [#12608](https://github.com/owncloud/web/pull/12608)
+* Bugfix - Use capabilities store in preview service: [#12628](https://github.com/owncloud/web/pull/12628)
 * Change - Remove CERN's collapsible table: [#12567](https://github.com/owncloud/web/pull/12567)
 * Enhancement - Accessibility improvements: [#5379](https://github.com/owncloud/web/issues/5379)
 * Enhancement - Create spaces via admin settings: [#11849](https://github.com/owncloud/web/pull/11849)
@@ -385,6 +386,16 @@ Details
    that we can still call `includes` method and not crash the app.
 
    https://github.com/owncloud/web/pull/12608
+
+* Bugfix - Use capabilities store in preview service: [#12628](https://github.com/owncloud/web/pull/12628)
+
+   When preview service was initialised, the user is not yet logged in and the
+   capabilities store is not yet initialised. Assigning then values from the
+   capabilities store directly to the preview service was causing an error. Adding
+   the store itself into the service and accessing the values from there ensures
+   that the values are up to date.
+
+   https://github.com/owncloud/web/pull/12628
 
 * Change - Remove CERN's collapsible table: [#12567](https://github.com/owncloud/web/pull/12567)
 
