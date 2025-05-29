@@ -111,6 +111,7 @@
   },
   "dependencies": {
     "@chevrotain/regexp-to-ast": "^11.0.3",
+    "crelt": "^1.0.6",
     "mermaid": "^11.6.0",
     "vscode-jsonrpc": "^8.2.1",
     "vscode-languageserver-types": "^3.17.5"
