@@ -19,7 +19,6 @@ PLUGINS_GIT_ACTION_IMAGE = "plugins/git-action:1"
 PLUGINS_GITHUB_RELEASE_IMAGE = "plugins/github-release:1"
 PLUGINS_S3_IMAGE = "plugins/s3:1.5"
 PLUGINS_S3_CACHE_IMAGE = "plugins/s3-cache:1"
-PLUGINS_SLACK_IMAGE = "plugins/slack:1"
 POSTGRES_ALPINE_IMAGE = "postgres:alpine3.18"
 SONARSOURCE_SONAR_SCANNER_CLI_IMAGE = "sonarsource/sonar-scanner-cli:11.3"
 TOOLHIPPIE_CALENS_IMAGE = "toolhippie/calens:20250421"
@@ -47,10 +46,6 @@ dir = {
 
 config = {
     "app": "web",
-    "rocketchat": {
-        "channel": "builds",
-        "from_secret": "rocketchat_talk_webhook",
-    },
     "branches": [
         "master",
         "stable-*",
@@ -682,19 +677,18 @@ def notify():
         "kind": "pipeline",
         "type": "docker",
         "name": "chat-notifications",
-        "clone": {
-            "disable": True,
-        },
         "steps": [
             {
-                "name": "notify-rocketchat",
-                "image": PLUGINS_SLACK_IMAGE,
-                "settings": {
-                    "webhook": {
-                        "from_secret": config["rocketchat"]["from_secret"],
+                "name": "notify-matrix",
+                "image": OC_CI_ALPINE_IMAGE,
+                "environment": {
+                    "MATRIX_TOKEN": {
+                        "from_secret": "matrix_token",
                     },
-                    "channel": config["rocketchat"]["channel"],
                 },
+                "commands": [
+                    "bash /drone/src/tests/drone/notification.sh",
+                ],
             },
         ],
         "trigger": {
