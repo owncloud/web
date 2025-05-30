@@ -1,5 +1,5 @@
 import { mock } from 'vitest-mock-extended'
-import { useFileActions } from '../../../../../src/composables/actions'
+import { Action, FileActionOptions, useFileActions } from '../../../../../src/composables/actions'
 import {
   defaultComponentMocks,
   RouteLocation,
@@ -7,7 +7,7 @@ import {
 } from '@ownclouders/web-test-helpers'
 import { computed, unref } from 'vue'
 import { describe } from 'vitest'
-import { Resource } from '@ownclouders/web-client'
+import { Resource, SpaceResource } from '@ownclouders/web-client'
 
 const mockUseEmbedMode = vi.fn().mockReturnValue({ isEnabled: computed(() => false) })
 vi.mock('../../../../../src/composables/embedMode', () => ({
@@ -30,6 +30,29 @@ describe('fileActions', () => {
       getWrapper({
         setup: ({ editorActions }) => {
           expect(unref(editorActions).length).toBeFalsy()
+        }
+      })
+    })
+
+    it('should hide action when editor with matching routeName is opened', () => {
+      getWrapper({
+        currentRoute: mock<RouteLocation>({ name: 'text-editor' }),
+        setup: ({ editorActions }) => {
+          const [textEditor] = unref(editorActions)
+
+          expect(
+            (textEditor as Action<FileActionOptions>).isVisible({
+              space: mock<SpaceResource>(),
+              resources: [
+                mock<Resource>({
+                  id: '2',
+                  extension: 'txt',
+                  mimeType: 'text/txt',
+                  canDownload: () => true
+                })
+              ]
+            })
+          ).toStrictEqual(false)
         }
       })
     })
@@ -60,10 +83,16 @@ describe('fileActions', () => {
   })
 })
 
-function getWrapper({ setup }: { setup: (instance: ReturnType<typeof useFileActions>) => void }) {
+function getWrapper({
+  setup,
+  currentRoute = mock<RouteLocation>({ name: 'files-spaces-generic' })
+}: {
+  setup: (instance: ReturnType<typeof useFileActions>) => void
+  currentRoute?: RouteLocation
+}) {
   const mocks = {
     ...defaultComponentMocks({
-      currentRoute: mock<RouteLocation>({ name: 'files-spaces-generic' })
+      currentRoute
     })
   }
   return {
@@ -112,7 +141,8 @@ function getWrapper({ setup }: { setup: (instance: ReturnType<typeof useFileActi
                 {
                   app: 'text-editor',
                   extension: 'txt',
-                  hasPriority: false
+                  hasPriority: false,
+                  routeName: 'text-editor'
                 },
                 {
                   app: 'external',
