@@ -65,8 +65,8 @@ export default class Collaborator {
   private static readonly sendInvitationButton = '#new-collaborators-form-create-button'
   public static readonly collaboratorRoleDropdownButton =
     '%s//button[contains(@class,"files-recipient-role-select-btn")]'
-  private static readonly collaboratorRoleItemSelector =
-    '%s//span[contains(@class,"roles-select-role-item")]/span[text()="%s"]'
+  private static readonly collaboratorRoleItemSelector = '%s//button[contains(@id, "%s")]'
+  private static readonly collaboratorRoleButton = '//button[contains(@id, "%s")]'
   public static readonly collaboratorEditDropdownButton =
     '%s//button[contains(@class,"collaborator-edit-dropdown-options-btn")]'
   private static readonly collaboratorUserSelector = '//*[@data-testid="collaborator-user-item-%s"]'
@@ -100,7 +100,7 @@ export default class Collaborator {
     await collaboratorInputLocator.click()
     await Promise.all([
       page.waitForResponse((resp) => resp.url().includes('users') && resp.status() === 200),
-      collaboratorInputLocator.fill(collaborator.id)
+      collaboratorInputLocator.fill(collaborator.displayName)
     ])
     await collaboratorInputLocator.focus()
     await page.locator('.vs--open').waitFor()
@@ -134,7 +134,7 @@ export default class Collaborator {
     const collaboratorNames = []
     for (const collaborator of collaborators) {
       await Collaborator.addCollaborator({ page, collaborator })
-      collaboratorNames.push(collaborator.collaborator.id)
+      collaboratorNames.push(collaborator.collaborator.displayName)
     }
     await Collaborator.setCollaboratorRole(page, role, resourceType)
     await Collaborator.sendInvitation(page, collaboratorNames)
@@ -149,11 +149,11 @@ export default class Collaborator {
   ): Promise<void> {
     if (!dropdownSelector) {
       dropdownSelector = Collaborator.newCollaboratorRoleDropdown
-      itemSelector = util.format(Collaborator.collaboratorRoleItemSelector, '')
+      itemSelector = Collaborator.collaboratorRoleButton
     }
-    await page.click(dropdownSelector)
+    await page.locator(dropdownSelector).click()
 
-    return await page.click(util.format(itemSelector, role))
+    await page.locator(util.format(itemSelector, role)).click()
   }
 
   static async changeCollaboratorRole(args: CollaboratorArgs): Promise<void> {

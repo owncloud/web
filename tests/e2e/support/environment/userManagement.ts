@@ -35,11 +35,12 @@ export class UsersEnvironment {
   }
 
   storeCreatedUser(key: string, user: User): User {
+    const userKey = key.toLowerCase()
     const store = config.federatedServer ? federatedUserStore : createdUserStore
-    if (store.has(key)) {
-      throw new Error(`user '${key}' already exists`)
+    if (store.has(userKey)) {
+      throw new Error(`user '${userKey}' already exists`)
     }
-    store.set(key, user)
+    store.set(userKey, user)
     return user
   }
 
@@ -59,8 +60,12 @@ export class UsersEnvironment {
       throw new Error(`user '${userKey}' not found`)
     }
     createdUserStore.delete(userKey)
-    createdUserStore.set(user.id, user)
-
+    // add to new key if the username is changed
+    if (userKey !== user.id) {
+      createdUserStore.set(user.id, user)
+    } else {
+      createdUserStore.set(userKey, user)
+    }
     return user
   }
 

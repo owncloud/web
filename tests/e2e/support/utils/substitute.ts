@@ -1,10 +1,10 @@
 import { UsersEnvironment } from '../../support/environment'
 import { User } from '../../support/types'
 
-export const getValue = (pattern): string => {
+const getValue = (pattern): string => {
   switch (pattern) {
     case '%public%':
-      return 'Pwd:12345'
+      return 'Pwd:12345567'
     default:
       pattern = pattern.replace(/%/g, '')
       const [type, userKey, property] = pattern.split('_')
@@ -28,9 +28,12 @@ export const getValue = (pattern): string => {
 }
 
 export const substitute = (text: string): string => {
+  if (!text) {
+    return text
+  }
+
   const regex = /%[A-Za-z0-9_-]+%/g
   const matches = text.match(regex)
-  console.log(matches)
   if (matches) {
     for (const match of matches) {
       const value = getValue(match)

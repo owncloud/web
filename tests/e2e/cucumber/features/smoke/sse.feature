@@ -73,8 +73,8 @@ Feature: server sent events
 
     # share-created
     When "Alice" shares the following resource using the sidebar panel
-      | resource     | recipient | type | role     |
-      | space-folder | Carol     | user | Can view |
+      | resource     | recipient | type | role     | resourceType |
+      | space-folder | Carol     | user | Can view | folder       |
     Then "Alice" should get "share-created" SSE event
     And "Brian" should get "share-created" SSE event
     And "Brian" closes the sidebar
@@ -138,8 +138,8 @@ Feature: server sent events
 
     # share-created
     When "Alice" shares the following resource using the sidebar panel
-      | resource     | recipient | type | role     |
-      | sharedFolder | Brian     | user | Can view |
+      | resource     | recipient | type | role     | resourceType |
+      | sharedFolder | Brian     | user | Can view | folder       |
     Then "Alice" should get "share-created" SSE event
     And "Brian" should get "share-created" SSE event
     And "Brian" should not be able to edit folder "sharedFolder"

@@ -1,4 +1,3 @@
-@predefined-users
 Feature: link
 
   Background:
@@ -6,11 +5,12 @@ Feature: link
       | id    |
       | Alice |
 
-
+  @predefined-users
   Scenario: public link
     Given "Admin" creates following user using API
       | id    |
       | Brian |
+    And "Alice" logs in
     And "Alice" creates the following folders in personal space using API
       | name                   |
       | folderPublic           |
@@ -19,8 +19,7 @@ Feature: link
       | pathToFile             | content     |
       | folderPublic/lorem.txt | lorem ipsum |
 
-    When "Alice" logs in
-    And "Alice" creates a public link of following resource using the sidebar panel
+    When "Alice" creates a public link of following resource using the sidebar panel
       | resource     | role             | password |
       | folderPublic | Secret File Drop | %public% |
     And "Alice" renames the most recently created public link of resource "folderPublic" to "myPublicLink"
@@ -39,7 +38,6 @@ Feature: link
     And "Brian" drop uploads following resources
       | resource   |
       | simple.pdf |
-
 
     When "Alice" opens folder "folderPublic"
     Then following resources should be displayed in the files list for user "Alice"
@@ -94,13 +92,14 @@ Feature: link
     And "Anonymous" should not be able to open the old link "myPublicLink"
     And "Alice" logs out
 
-
+  @predefined-users
   Scenario: public link for folder and file (by authenticated user)
     Given "Admin" creates following user using API
       | id    |
       | Brian |
       | Carol |
     And "Alice" logs in
+    And "Brian" logs in
     And "Alice" creates the following folders in personal space using API
       | name         |
       | folderPublic |
@@ -114,10 +113,10 @@ Feature: link
       | filesForUpload/testavatar.jpg | testavatar.jpg |
       | filesForUpload/test_video.mp4 | test_video.mp4 |
     And "Alice" shares the following resource using API
-      | resource       | recipient | type | role     |
-      | folderPublic   | Brian     | user | Can edit |
-      | simple.pdf     | Brian     | user | Can edit |
-      | testavatar.jpg | Brian     | user | Can edit |
+      | resource       | recipient | type | role     | resourceType |
+      | folderPublic   | Brian     | user | Can edit | folder       |
+      | simple.pdf     | Brian     | user | Can edit | file         |
+      | testavatar.jpg | Brian     | user | Can edit | file         |
 
     And "Alice" opens the "files" app
     And "Alice" creates a public link of following resource using the sidebar panel
@@ -147,7 +146,6 @@ Feature: link
     And "Alice" logs out
 
     # authenticated user with access to resources. should be redirected to shares with me page
-    And "Brian" logs in
     When "Brian" opens the public link "folderLink"
     And "Brian" unlocks the public link with password "%public%"
     And "Brian" downloads the following public link resources using the sidebar panel
@@ -288,7 +286,7 @@ Feature: link
     And "Anonymous" unlocks the public link with password "%copied_password%"
     And "Alice" logs out
 
-
+  @predefined-users
   Scenario: edit password of the public link
     When "Alice" logs in
     And "Alice" creates the following folders in personal space using API
@@ -312,7 +310,7 @@ Feature: link
       | lorem.txt | file |
     And "Alice" logs out
 
-
+  @predefined-users
   Scenario: link indication
     When "Alice" logs in
     And "Alice" creates the following folders in personal space using API

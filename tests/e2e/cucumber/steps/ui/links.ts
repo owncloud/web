@@ -2,7 +2,7 @@ import { DataTable, Then, When } from '@cucumber/cucumber'
 import { expect } from '@playwright/test'
 import { World } from '../../environment'
 import { objects } from '../../../support'
-import { securePassword } from '../../../support/store'
+import { substitute } from '../../../support/utils/substitute'
 
 When(
   '{string} creates a public link of following resource using the sidebar panel',
@@ -14,7 +14,7 @@ When(
       await linkObject.create({
         resource: info.resource,
         role: info.role,
-        password: info.password === '%public%' ? securePassword : info.password,
+        password: substitute(info.password),
         name: 'Unnamed link'
       })
     }
@@ -26,7 +26,7 @@ When(
   async function (this: World, stepUser: string, password: string): Promise<void> {
     const { page } = this.actorsEnvironment.getActor({ key: stepUser })
     const spaceObject = new objects.applicationFiles.Spaces({ page })
-    password = password === '%public%' ? securePassword : password
+    password = substitute(password)
     await spaceObject.createPublicLink({ password })
   }
 )

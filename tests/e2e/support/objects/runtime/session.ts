@@ -1,6 +1,7 @@
 import { Page } from '@playwright/test'
 import { User } from '../../types'
 import { config } from '../../../config'
+import { TokenEnvironmentFactory } from '../../environment'
 
 export class Session {
   #page: Page
@@ -17,8 +18,8 @@ export class Session {
   }
 
   async idpSignIn(username: string, password: string): Promise<void> {
-    await this.#page.locator('#oc-login-username').fill(username)
-    await this.#page.locator('#oc-login-password').fill(password)
+    await this.#page.locator('//input[@type="text" or @placeholder="Username"]').fill(username)
+    await this.#page.locator('//input[@type="password" or @placeholder="Password"]').fill(password)
     await this.#page.locator('button[type="submit"]').click()
   }
 
@@ -31,7 +32,7 @@ export class Session {
   async login(user: User): Promise<void> {
     const { id, password } = user
 
-    await Promise.all([
+    const [response] = await Promise.all([
       this.#page.waitForResponse(
         (resp) =>
           resp.url().endsWith('/token') &&
@@ -40,6 +41,19 @@ export class Session {
       ),
       this.signIn(id, password)
     ])
+
+    if (config.predefinedUsers) {
+      const tokenRes = await response.json()
+      const tokenEnvironment = TokenEnvironmentFactory()
+      tokenEnvironment.setToken({
+        user: { ...user },
+        token: {
+          userId: user.id,
+          accessToken: tokenRes.access_token,
+          refreshToken: tokenRes.refresh_token
+        }
+      })
+    }
   }
 
   async logout(): Promise<void> {

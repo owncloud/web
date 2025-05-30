@@ -30,7 +30,9 @@ export interface User {
   displayName: string
   password: string
   email: string
+  mail?: string
   role?: string
+  preferredLanguage?: string
 }
 
 export interface File {

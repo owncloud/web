@@ -36,25 +36,25 @@ Feature: Group actions
       | folder5                |
       | parentFolder/SubFolder |
     And "Alice" shares the following resource using API
-      | resource     | recipient | type | role                      |
-      | folder1      | Brian     | user | Can edit without versions |
-      | folder2      | Brian     | user | Can edit without versions |
-      | folder3      | Brian     | user | Can edit without versions |
-      | folder4      | Brian     | user | Can edit without versions |
-      | folder5      | Brian     | user | Can edit without versions |
-      | parentFolder | Brian     | user | Can edit without versions |
+      | resource     | recipient | type | role                      | resourceType |
+      | folder1      | Brian     | user | Can edit without versions | folder       |
+      | folder2      | Brian     | user | Can edit without versions | folder       |
+      | folder3      | Brian     | user | Can edit without versions | folder       |
+      | folder4      | Brian     | user | Can edit without versions | folder       |
+      | folder5      | Brian     | user | Can edit without versions | folder       |
+      | parentFolder | Brian     | user | Can edit without versions | folder       |
     And "Alice" logs in
 
     # multiple share
     And "Alice" shares the following resources using the sidebar panel
-      | resource     | recipient | type  | role                      |
-      | sharedFolder | Brian     | user  | Can edit without versions |
-      | sharedFolder | Carol     | user  | Can edit without versions |
-      | sharedFolder | David     | user  | Can edit without versions |
-      | sharedFolder | Edith     | user  | Can edit without versions |
-      | sharedFolder | sales     | group | Can edit without versions |
-      | sharedFolder | finance   | group | Can edit without versions |
-      | sharedFolder | security  | group | Can edit without versions |
+      | resource     | recipient | type  | role                      | resourceType |
+      | sharedFolder | Brian     | user  | Can edit without versions | folder       |
+      | sharedFolder | Carol     | user  | Can edit without versions | folder       |
+      | sharedFolder | David     | user  | Can edit without versions | folder       |
+      | sharedFolder | Edith     | user  | Can edit without versions | folder       |
+      | sharedFolder | sales     | group | Can edit without versions | folder       |
+      | sharedFolder | finance   | group | Can edit without versions | folder       |
+      | sharedFolder | security  | group | Can edit without versions | folder       |
 
     And "Brian" navigates to the shared with me page
 

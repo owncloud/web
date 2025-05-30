@@ -170,11 +170,3 @@ export const refreshAccessToken = async (user: User): Promise<void> => {
     }
   })
 }
-
-export const getUserIdFromToken = (user: User): string => {
-  const tokenEnvironment = TokenEnvironmentFactory()
-  const accessToken = tokenEnvironment.getToken({ user }).accessToken
-  const parsed = JSON.parse(atob(accessToken.split('.')[1]))
-  const userId = parsed['lg.i'].id.split('=')[1]
-  return userId
-}

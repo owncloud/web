@@ -8,6 +8,7 @@ import {
 } from '../../../support/objects/app-files/share/collaborator'
 import { ActionViaType } from '../../../support/objects/app-files/share/actions'
 import { substitute } from '../../../support/utils'
+import { getDynamicRoleIdByName, ResourceType } from '../../../support/api/share/share'
 
 const parseShareTable = function (
   stepTable: DataTable,
@@ -41,6 +42,7 @@ When(
   async function (this: World, stepUser: string, actionType: string, stepTable: DataTable) {
     const { page } = this.actorsEnvironment.getActor({ key: stepUser })
     const shareObject = new objects.applicationFiles.Share({ page })
+    const sharer = this.usersEnvironment.getUser({ key: stepUser })
     const shareInfo = parseShareTable(stepTable, this.usersEnvironment)
 
     let via: ActionViaType
@@ -58,10 +60,16 @@ When(
         throw new Error(`Unknown action type: ${actionType}`)
     }
 
-    for (const resource of Object.keys(shareInfo)) {
+    for (const [resource, shareObj] of Object.entries(shareInfo)) {
+      const roleId = await getDynamicRoleIdByName(
+        sharer,
+        shareObj[0].role,
+        shareObj[0].resourceType as ResourceType
+      )
+      shareObj.forEach((item) => (item.role = roleId))
       await shareObject.create({
         resource,
-        recipients: shareInfo[resource],
+        recipients: shareObj,
         via
       })
     }
@@ -86,11 +94,18 @@ When(
     const { page } = this.actorsEnvironment.getActor({ key: stepUser })
     const shareObject = new objects.applicationFiles.Share({ page })
     const shareInfo = parseShareTable(stepTable, this.usersEnvironment)
+    const sharer = this.usersEnvironment.getUser({ key: stepUser })
 
-    for (const resource of Object.keys(shareInfo)) {
+    for (const [resource, shareObj] of Object.entries(shareInfo)) {
+      const roleId = await getDynamicRoleIdByName(
+        sharer,
+        shareObj[0].role,
+        shareObj[0].resourceType as ResourceType
+      )
+      shareObj.forEach((item) => (item.role = roleId))
       await shareObject.changeShareeRole({
         resource,
-        recipients: shareInfo[resource]
+        recipients: shareObj
       })
     }
   }

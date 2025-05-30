@@ -2,8 +2,10 @@ import { Given, When, Then } from '@cucumber/cucumber'
 import { PickleTag } from '@cucumber/messages'
 import { World } from '../../environment'
 import { config } from '../../../config'
-import { objects } from '../../../support'
+import { objects, api } from '../../../support'
 import { listenSSE } from '../../../support/environment/sse'
+import { UsersEnvironment } from '../../../support/environment'
+import { User } from '../../../support/types'
 
 async function createNewSession(world: World, stepUser: string) {
   const { page } = await world.actorsEnvironment.createActor({
@@ -13,14 +15,29 @@ async function createNewSession(world: World, stepUser: string) {
   return new objects.runtime.Session({ page })
 }
 
+async function initUserStates(userKey: string, user: User, usersEnvironment: UsersEnvironment) {
+  const userInfo = await api.graph.getMeInfo(user)
+  usersEnvironment.storeCreatedUser(userKey, {
+    ...user,
+    uuid: userInfo.id,
+    email: userInfo.mail
+  })
+  usersEnvironment.saveUserState(userKey, {
+    language: userInfo.preferredLanguage,
+    autoAcceptShare: await api.settings.getAutoAcceptSharesValue(user)
+  })
+}
+
 async function LogInUser(this: World, stepUser: string): Promise<void> {
   const sessionObject = await createNewSession(this, stepUser)
   const { page } = this.actorsEnvironment.getActor({ key: stepUser })
 
-  const user =
-    stepUser === 'Admin'
-      ? this.usersEnvironment.getUser({ key: stepUser })
-      : this.usersEnvironment.getCreatedUser({ key: stepUser })
+  let user = null
+  if (stepUser === 'Admin' || config.predefinedUsers) {
+    user = this.usersEnvironment.getUser({ key: stepUser })
+  } else {
+    user = this.usersEnvironment.getCreatedUser({ key: stepUser })
+  }
 
   await page.goto(config.baseUrl)
   await sessionObject.login(user)
@@ -38,6 +55,14 @@ async function LogInUser(this: World, stepUser: string): Promise<void> {
   }
 
   await page.locator('#web-content').waitFor()
+
+  // initialize user states: uuid, language, auto-sync
+  if (config.predefinedUsers) {
+    await initUserStates(stepUser, user, this.usersEnvironment)
+    // test should run with English language
+    await api.settings.changeLanguage({ user, language: 'en' })
+    await page.reload({ waitUntil: 'load' })
+  }
 }
 
 Given('{string} has logged in', LogInUser)

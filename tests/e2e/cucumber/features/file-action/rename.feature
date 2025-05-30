@@ -9,6 +9,8 @@ Feature: rename
       | id    |
       | Alice |
       | Brian |
+    And "Alice" logs in
+    And "Brian" logs in
     And "Alice" creates the following folders in personal space using API
       | name   |
       | folder |
@@ -16,15 +18,14 @@ Feature: rename
       | pathToFile         | content      |
       | folder/example.txt | example text |
     And "Alice" shares the following resource using API
-      | resource | recipient | type | role     |
-      | folder   | Brian     | user | Can edit |
+      | resource | resourceType | recipient | type | role     |
+      | folder   | folder       | Brian     | user | Can edit |
     And "Alice" creates a public link of following resource using API
       | resource | role     | password |
       | folder   | Can edit | %public% |
-    And "Brian" logs in
+
     And "Brian" navigates to the shared with me page
     And "Brian" opens folder "folder"
-
     # rename in the shares with me page
     When "Brian" renames the following resource
       | resource    | as                 |
@@ -39,7 +40,6 @@ Feature: rename
       | renamedByBrian.txt | renamedByAnonymous.txt |
 
     # rename in the shares with other page
-    And "Alice" logs in
     And "Alice" navigates to the shared with others page
     And "Alice" opens folder "folder"
     When "Alice" renames the following resource
