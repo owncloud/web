@@ -48,6 +48,7 @@ Summary
 * Change - Remove CERN's collapsible table: [#12567](https://github.com/owncloud/web/pull/12567)
 * Enhancement - Accessibility improvements: [#5379](https://github.com/owncloud/web/issues/5379)
 * Enhancement - Create spaces via admin settings: [#11849](https://github.com/owncloud/web/pull/11849)
+* Enhancement - Hide active editor action: [#12110](https://github.com/owncloud/web/pull/12110)
 * Enhancement - Add maintenance banner: [#12239](https://github.com/owncloud/web/pull/12239)
 * Enhancement - Add new supported language to md-editor: [#12243](https://github.com/owncloud/web/pull/12243)
 * Enhancement - Rephrase invite users to invite users to federate: [#12355](https://github.com/owncloud/web/pull/12355)
@@ -420,6 +421,14 @@ Details
 
    https://github.com/owncloud/web/issues/11771
    https://github.com/owncloud/web/pull/11849
+
+* Enhancement - Hide active editor action: [#12110](https://github.com/owncloud/web/pull/12110)
+
+   We've hidden the sidebar file action of a currently opened editor. This prevents
+   confusion where user might try to re-open the current editor.
+
+   https://github.com/owncloud/web/issues/12108
+   https://github.com/owncloud/web/pull/12110
 
 * Enhancement - Add maintenance banner: [#12239](https://github.com/owncloud/web/pull/12239)
 
