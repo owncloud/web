@@ -671,7 +671,7 @@ def notify():
         "steps": [
             {
                 "name": "notify-matrix",
-                "image": OC_CI_ALPINE_IMAGE,
+                "image": OC_CI_ALPINE,
                 "environment": {
                     "MATRIX_TOKEN": {
                         "from_secret": "matrix_token",
