@@ -5,12 +5,14 @@ import { Item } from '@ownclouders/web-client'
 import { FolderView } from '../../../ui'
 import { Component, Slot } from 'vue'
 import { StringUnionOrAnyString } from '../../../utils'
+import { ResourceIndicator } from '../../../helpers'
 
 export type ExtensionType = StringUnionOrAnyString<
   | 'action'
   | 'appMenuItem'
   | 'customComponent'
   | 'folderView'
+  | 'resourceIndicator'
   | 'search'
   | 'sidebarNav'
   | 'sidebarPanel'
@@ -65,6 +67,11 @@ export interface AppMenuItemExtension extends Extension {
   path?: string
   priority?: number
   url?: string
+}
+
+export interface ResourceIndicatorExtension extends Extension {
+  type: 'resourceIndicator'
+  getResourceIndicators: (Resource) => ResourceIndicator[] | void
 }
 
 export type ExtensionPoint<T extends Extension> = {
