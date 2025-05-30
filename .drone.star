@@ -225,7 +225,7 @@ def stagePipelines(ctx):
     return unit_test_pipelines + pipelinesDependsOn(e2e_pipelines + keycloak_pipelines, unit_test_pipelines)
 
 def afterPipelines(ctx):
-    return build(ctx) + pipelinesDependsOn(notify(), build(ctx))
+    return build(ctx) + pipelinesDependsOn(notify(ctx), build(ctx))
 
 def pnpmCache(ctx):
     return [{
@@ -670,7 +670,10 @@ def e2eTests(ctx):
         })
     return pipelines
 
-def notify():
+def notify(ctx):
+    status = ["failure"]
+    if ctx.build.event in ["cron", "tag"]:
+        status.append("success")
     pipelines = []
 
     result = {
@@ -695,10 +698,7 @@ def notify():
             "ref": [
                 "refs/tags/**",
             ],
-            "status": [
-                "success",
-                "failure",
-            ],
+            "status": status,
         },
     }
 
