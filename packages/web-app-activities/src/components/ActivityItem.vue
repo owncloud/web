@@ -20,8 +20,8 @@
   </div>
 </template>
 
-<script lang="ts">
-import { computed, defineComponent, onMounted, PropType, ref, unref } from 'vue'
+<script lang="ts" setup>
+import { computed, onMounted, ref, unref } from 'vue'
 import { Activity as GraphActivity, User } from '@ownclouders/web-client/graph/generated'
 import { DateTime } from 'luxon'
 import {
@@ -43,48 +43,38 @@ type Activity = GraphActivity & {
     }
   }
 }
-export default defineComponent({
-  name: 'ActivityList',
-  components: { ResourceListItem },
-  props: {
-    activity: {
-      type: Object as PropType<Activity>,
-      required: true
-    }
-  },
-  setup(props) {
-    const clientService = useClientService()
-    const { current: currentLanguage } = useGettext()
-    const resource = ref<Resource>()
-    const resourceNotAccessible = ref(false)
+interface Props {
+  activity: Activity
+}
 
-    const recordedDateTime = computed(() => {
-      const dateTime = DateTime.fromISO(props.activity.times.recordedTime)
+defineOptions({
+  name: 'ActivityList'
+})
+const props = defineProps<Props>()
+const clientService = useClientService()
+const { current: currentLanguage } = useGettext()
+const resource = ref<Resource>()
+const resourceNotAccessible = ref(false)
 
-      const isWithinLastHour = dateTime > DateTime.now().minus({ hour: 1 })
-      if (isWithinLastHour) {
-        return formatRelativeDateFromDateTime(dateTime, currentLanguage)
-      }
+const recordedDateTime = computed(() => {
+  const dateTime = DateTime.fromISO(props.activity.times.recordedTime)
 
-      return formatDateFromDateTime(dateTime, currentLanguage)
-    })
+  const isWithinLastHour = dateTime > DateTime.now().minus({ hour: 1 })
+  if (isWithinLastHour) {
+    return formatRelativeDateFromDateTime(dateTime, currentLanguage)
+  }
 
-    onMounted(async () => {
-      try {
-        resource.value = await clientService.webdav.getFileInfo(
-          unref(props.activity.template.variables?.space),
-          { fileId: props.activity.template.variables?.resource?.id }
-        )
-      } catch {
-        resourceNotAccessible.value = true
-      }
-    })
+  return formatDateFromDateTime(dateTime, currentLanguage)
+})
 
-    return {
-      recordedDateTime,
-      resource,
-      resourceNotAccessible
-    }
+onMounted(async () => {
+  try {
+    resource.value = await clientService.webdav.getFileInfo(
+      unref(props.activity.template.variables?.space),
+      { fileId: props.activity.template.variables?.resource?.id }
+    )
+  } catch {
+    resourceNotAccessible.value = true
   }
 })
 </script>
