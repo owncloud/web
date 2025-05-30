@@ -552,8 +552,8 @@ importers:
         specifier: 2.4.0
         version: 2.4.0(patch_hash=6f231bbef273efbc788b5657c47fc744b52bc838f972357a764c144fde6065f2)(@vue/compiler-sfc@3.5.16)(vue@3.5.16(typescript@5.8.3))
       zod:
-        specifier: 3.25.36
-        version: 3.25.36
+        specifier: 3.25.41
+        version: 3.25.41
     devDependencies:
       '@ownclouders/web-test-helpers':
         specifier: workspace:*
@@ -608,8 +608,8 @@ importers:
         specifier: 2.4.0
         version: 2.4.0(patch_hash=6f231bbef273efbc788b5657c47fc744b52bc838f972357a764c144fde6065f2)(@vue/compiler-sfc@3.5.16)(vue@3.5.16(typescript@5.8.3))
       zod:
-        specifier: 3.25.36
-        version: 3.25.36
+        specifier: 3.25.41
+        version: 3.25.41
     devDependencies:
       '@ownclouders/web-test-helpers':
         specifier: workspace:*
@@ -712,8 +712,8 @@ importers:
         specifier: 4.5.1
         version: 4.5.1(vue@3.5.16(typescript@5.8.3))
       zod:
-        specifier: 3.25.36
-        version: 3.25.36
+        specifier: 3.25.41
+        version: 3.25.41
 
   packages/web-app-password-protected-folders:
     devDependencies:
@@ -883,7 +883,7 @@ importers:
         version: 1.6.11
       zod:
         specifier: ^3.23.8
-        version: 3.25.36
+        version: 3.25.41
     devDependencies:
       '@types/luxon':
         specifier: 3.6.2
@@ -1029,7 +1029,7 @@ importers:
         version: 2.4.0(patch_hash=6f231bbef273efbc788b5657c47fc744b52bc838f972357a764c144fde6065f2)(@vue/compiler-sfc@3.5.16)(vue@3.5.16(typescript@5.8.3))
       zod:
         specifier: ^3.23.8
-        version: 3.25.36
+        version: 3.25.41
     devDependencies:
       '@ownclouders/web-test-helpers':
         specifier: workspace:^
@@ -1174,8 +1174,8 @@ importers:
         specifier: ^1.6.11
         version: 1.6.11
       zod:
-        specifier: 3.25.36
-        version: 3.25.36
+        specifier: 3.25.41
+        version: 3.25.41
     devDependencies:
       '@ownclouders/web-test-helpers':
         specifier: workspace:*
@@ -7202,8 +7202,8 @@ packages:
   zhead@2.2.4:
     resolution: {integrity: sha512-8F0OI5dpWIA5IGG5NHUg9staDwz/ZPxZtvGVf01j7vHqSyZ0raHY+78atOVxRqb73AotX22uV1pXt3gYSstGag==}
 
-  zod@3.25.36:
-    resolution: {integrity: sha512-eRFS3i8T0IrpGdL8HQyqFAugGOn7jOjyGgGdtv5NY4Wkhi7lJDk732bNZ609YMIGFbLoaj6J69O1Mura23gfIw==}
+  zod@3.25.41:
+    resolution: {integrity: sha512-8+sDJTGtCYIDBhdqDygp0ffj8kzziRKqAJPhpYObbElJ+3TRe/mnlnwH+/OMa3kKhueS4Drm5UMW00/u1p07zA==}
 
 snapshots:
 
@@ -13840,4 +13840,4 @@ snapshots:
 
   zhead@2.2.4: {}
 
-  zod@3.25.36: {}
+  zod@3.25.41: {}
