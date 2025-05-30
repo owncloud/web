@@ -20,7 +20,6 @@ PLUGINS_GIT_ACTION = "plugins/git-action:1"
 PLUGINS_GITHUB_RELEASE = "plugins/github-release:1"
 PLUGINS_S3 = "plugins/s3:1.4.0"
 PLUGINS_S3_CACHE = "plugins/s3-cache:1"
-PLUGINS_SLACK = "plugins/slack:1"
 POSTGRES_ALPINE = "postgres:alpine3.18"
 SONARSOURCE_SONAR_SCANNER_CLI = "sonarsource/sonar-scanner-cli:5.0"
 TOOLHIPPIE_CALENS = "toolhippie/calens:latest"
@@ -43,10 +42,6 @@ dir = {
 
 config = {
     "app": "web",
-    "rocketchat": {
-        "channel": "builds",
-        "from_secret": "rocketchat_talk_webhook",
-    },
     "branches": [
         "master",
         "stable-*",
@@ -229,7 +224,7 @@ def stagePipelines(ctx):
     return unit_test_pipelines + buildAndTestDesignSystem(ctx) + pipelinesDependsOn(e2e_pipelines + keycloak_pipelines, unit_test_pipelines)
 
 def afterPipelines(ctx):
-    return build(ctx) + pipelinesDependsOn(notify(), build(ctx))
+    return build(ctx) + pipelinesDependsOn(notify(ctx), build(ctx))
 
 def pnpmCache(ctx):
     return [{
@@ -280,7 +275,6 @@ def pnpmlint(ctx):
         "trigger": {
             "ref": [
                 "refs/heads/master",
-                "refs/heads/stable-*",
                 "refs/tags/**",
                 "refs/pull/**",
             ],
@@ -666,36 +660,35 @@ def e2eTests(ctx):
         })
     return pipelines
 
-def notify():
+def notify(ctx):
+    status = ["failure"]
+    if ctx.build.event in ["cron", "tag"]:
+        status.append("success")
     pipelines = []
 
     result = {
         "kind": "pipeline",
         "type": "docker",
         "name": "chat-notifications",
-        "clone": {
-            "disable": True,
-        },
         "steps": [
             {
-                "name": "notify-rocketchat",
-                "image": PLUGINS_SLACK,
-                "settings": {
-                    "webhook": {
-                        "from_secret": config["rocketchat"]["from_secret"],
+                "name": "notify-matrix",
+                "image": OC_CI_ALPINE,
+                "environment": {
+                    "MATRIX_TOKEN": {
+                        "from_secret": "matrix_token",
                     },
-                    "channel": config["rocketchat"]["channel"],
                 },
+                "commands": [
+                    "bash /drone/src/tests/drone/notification.sh",
+                ],
             },
         ],
         "trigger": {
             "ref": [
                 "refs/tags/**",
             ],
-            "status": [
-                "success",
-                "failure",
-            ],
+            "status": status,
         },
     }
 
