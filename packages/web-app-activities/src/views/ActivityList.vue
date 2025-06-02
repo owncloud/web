@@ -14,55 +14,48 @@
   </oc-list>
 </template>
 
-<script lang="ts">
-import { computed, defineComponent, PropType } from 'vue'
+<script lang="ts" setup>
+import { computed } from 'vue'
 import { Activity } from '@ownclouders/web-client/graph/generated'
 import { DateTime } from 'luxon'
 import ActivityItem from '../components/ActivityItem.vue'
 import { formatDateFromDateTime } from '@ownclouders/web-pkg'
 import { useGettext } from 'vue3-gettext'
 
+interface Props {
+  activities: Activity[]
+}
+
 type DateActivityCollection = Record<string, Activity[]>
-export default defineComponent({
-  name: 'ActivityList',
-  components: { ActivityItem },
-  props: {
-    activities: {
-      type: Array as PropType<Activity[]>,
-      required: true
+const { current: currentLanguage } = useGettext()
+
+const props = defineProps<Props>()
+
+const activitiesDateCategorized = computed<DateActivityCollection>(() => {
+  return props.activities.reduce((acc: DateActivityCollection, activity) => {
+    const date = DateTime.fromISO(activity.times.recordedTime).toISODate()
+
+    if (!acc[date]) {
+      acc[date] = []
     }
-  },
-  setup(props) {
-    const { current: currentLanguage } = useGettext()
+    acc[date].push(activity)
 
-    const activitiesDateCategorized = computed<DateActivityCollection>(() => {
-      return props.activities.reduce((acc: DateActivityCollection, activity) => {
-        const date = DateTime.fromISO(activity.times.recordedTime).toISODate()
-
-        if (!acc[date]) {
-          acc[date] = []
-        }
-        acc[date].push(activity)
-
-        return acc
-      }, {} as DateActivityCollection)
-    })
-    const getDateHeadline = (dateISO: string) => {
-      const dateTime = DateTime.fromISO(dateISO)
-
-      if (
-        dateTime.hasSame(DateTime.now(), 'day') ||
-        dateTime.hasSame(DateTime.now().minus({ day: 1 }), 'day')
-      ) {
-        return dateTime.toRelativeCalendar({ locale: currentLanguage })
-      }
-
-      return formatDateFromDateTime(dateTime, currentLanguage, DateTime.DATE_MED_WITH_WEEKDAY)
-    }
-
-    return { activitiesDateCategorized, getDateHeadline }
-  }
+    return acc
+  }, {} as DateActivityCollection)
 })
+
+const getDateHeadline = (dateISO: string) => {
+  const dateTime = DateTime.fromISO(dateISO)
+
+  if (
+    dateTime.hasSame(DateTime.now(), 'day') ||
+    dateTime.hasSame(DateTime.now().minus({ day: 1 }), 'day')
+  ) {
+    return dateTime.toRelativeCalendar({ locale: currentLanguage })
+  }
+
+  return formatDateFromDateTime(dateTime, currentLanguage, DateTime.DATE_MED_WITH_WEEKDAY)
+}
 </script>
 
 <style lang="scss">
