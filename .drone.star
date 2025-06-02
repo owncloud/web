@@ -1,4 +1,4 @@
-ALPINE_GIT_IMAGE = "alpine/git:2.47.2"
+ALPINE_GIT_IMAGE = "alpine/git:v2.49.0"
 APACHE_TIKA_IMAGE = "apache/tika:3.1.0.0"
 COLLABORA_CODE_IMAGE = "collabora/code:25.04.2.1.1"
 KEYCLOAK_IMAGE = "quay.io/keycloak/keycloak:26.2.5"
