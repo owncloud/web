@@ -62,6 +62,7 @@ Summary
 * Enhancement - Improve file drop view UI: [#12519](https://github.com/owncloud/web/pull/12519)
 * Enhancement - Add Catalan to list of supported languages: [#12578](https://github.com/owncloud/web/pull/12578)
 * Enhancement - Disable space membership management when it's server-managed: [#12584](https://github.com/owncloud/web/pull/12584)
+* Enhancement - Add login error: [#12648](https://github.com/owncloud/web/pull/12648)
 
 Details
 -------
@@ -552,6 +553,13 @@ Details
    the space sidebar when the `spaces.server_managed` capability is `true`.
 
    https://github.com/owncloud/web/pull/12584
+
+* Enhancement - Add login error: [#12648](https://github.com/owncloud/web/pull/12648)
+
+   When the login fails due to any kind of error, the user is now presented with an
+   error message.
+
+   https://github.com/owncloud/web/pull/12648
 
 Changelog for ownCloud Web [11.3.1] (2025-03-13)
 =======================================
