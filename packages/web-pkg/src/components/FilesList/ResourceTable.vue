@@ -94,6 +94,7 @@
         />
         <oc-button
           v-if="hasRenameAction(item)"
+          :aria-label="getRenameButtonAriaLabel(item)"
           class="resource-table-edit-name"
           appearance="raw"
           @click="openRenameDialog(item)"
@@ -314,6 +315,7 @@ import { OcButton, OcTable } from '@ownclouders/design-system/components'
 import { FieldType } from '@ownclouders/design-system/helpers'
 import { OcSpinner } from '@ownclouders/design-system/components'
 import ResourceStatusIndicators from './ResourceStatusIndicators.vue'
+import { useGettext } from 'vue3-gettext'
 
 const TAGS_MINIMUM_SCREEN_WIDTH = 850
 
@@ -553,6 +555,8 @@ export default defineComponent({
       fileTypes: embedModeFileTypes
     } = useEmbedMode()
     const { getDefaultAction } = useFileActions()
+    const { $pgettext } = useGettext()
+
     const configStore = useConfigStore()
     const { options: configOptions } = storeToRefs(configStore)
 
@@ -655,6 +659,20 @@ export default defineComponent({
       return unref(deleteQueue).includes(id)
     }
 
+    const getRenameButtonAriaLabel = (resource: Resource): string => {
+      if (resource.isFolder) {
+        return $pgettext(
+          'The label of the rename button in the resource table for folders',
+          'Rename folder'
+        )
+      }
+
+      return $pgettext(
+        'The label of the rename button in the resource table for files',
+        'Rename file'
+      )
+    }
+
     return {
       router,
       configOptions,
@@ -693,7 +711,8 @@ export default defineComponent({
       isResourceClickable,
       getResourceLink,
       isSticky,
-      isResourceInDeleteQueue
+      isResourceInDeleteQueue,
+      getRenameButtonAriaLabel
     }
   },
   data() {
