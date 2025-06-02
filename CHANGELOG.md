@@ -45,6 +45,7 @@ Summary
 * Bugfix - Load ancestor space only when parent id is returned: [#12607](https://github.com/owncloud/web/pull/12607)
 * Bugfix - Do not crash when tus is unsupported: [#12608](https://github.com/owncloud/web/pull/12608)
 * Bugfix - Use capabilities store in preview service: [#12628](https://github.com/owncloud/web/pull/12628)
+* Bugfix - Add missing label to rename button: [#12646](https://github.com/owncloud/web/pull/12646)
 * Change - Remove CERN's collapsible table: [#12567](https://github.com/owncloud/web/pull/12567)
 * Enhancement - Accessibility improvements: [#5379](https://github.com/owncloud/web/issues/5379)
 * Enhancement - Create spaces via admin settings: [#11849](https://github.com/owncloud/web/pull/11849)
@@ -397,6 +398,13 @@ Details
    that the values are up to date.
 
    https://github.com/owncloud/web/pull/12628
+
+* Bugfix - Add missing label to rename button: [#12646](https://github.com/owncloud/web/pull/12646)
+
+   Set `aria-label` to the rename button in the resource table for folders and
+   files.
+
+   https://github.com/owncloud/web/pull/12646
 
 * Change - Remove CERN's collapsible table: [#12567](https://github.com/owncloud/web/pull/12567)
 
