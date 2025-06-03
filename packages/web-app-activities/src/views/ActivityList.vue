@@ -27,8 +27,8 @@ interface Props {
 }
 
 type DateActivityCollection = Record<string, Activity[]>
-const { current: currentLanguage } = useGettext()
 
+const { current: currentLanguage } = useGettext()
 const props = defineProps<Props>()
 
 const activitiesDateCategorized = computed<DateActivityCollection>(() => {
