@@ -33,8 +33,8 @@
   </template>
 </template>
 
-<script lang="ts">
-import { computed, defineComponent, onMounted, ref, unref, watch } from 'vue'
+<script lang="ts" setup>
+import { computed, onMounted, ref, unref, watch } from 'vue'
 import {
   AppLoadingSpinner,
   ItemFilter,
@@ -54,64 +54,56 @@ import { useTask } from 'vue-concurrency'
 import { Activity } from '@ownclouders/web-client/graph/generated'
 import ActivityList from './ActivityList.vue'
 
-export default defineComponent({
-  name: 'App',
-  components: { ActivityList, NoContentMessage, ItemFilter, AppLoadingSpinner },
-  setup() {
-    const spacesStore = useSpacesStore()
-    const { spaces } = storeToRefs(spacesStore)
-    const clientService = useClientService()
-    const activities = ref<Activity[]>([])
+const spacesStore = useSpacesStore()
+const { spaces } = storeToRefs(spacesStore)
+const clientService = useClientService()
+const activities = ref<Activity[]>([])
 
-    const locationQuery = useRouteQuery('q_location')
+const locationQuery = useRouteQuery('q_location')
 
-    const filterableSpaces = computed(() => {
-      return [...unref(spaces)]
-        .filter(
-          (space) =>
-            !space.disabled && (isProjectSpaceResource(space) || isPersonalSpaceResource(space))
-        )
-        .sort((a, b) => {
-          if (isPersonalSpaceResource(a) === isPersonalSpaceResource(b)) {
-            return a.name.localeCompare(b.name)
-          }
-          return isPersonalSpaceResource(a) ? -1 : 1
-        })
-    })
-
-    const loadActivitiesTask = useTask(function* (signal) {
-      const filters = ['sort:desc', 'limit:100']
-
-      if (unref(locationQuery)) {
-        filters.push(`itemid:${unref(locationQuery)}`)
+const filterableSpaces = computed(() => {
+  return [...unref(spaces)]
+    .filter(
+      (space) =>
+        !space.disabled && (isProjectSpaceResource(space) || isPersonalSpaceResource(space))
+    )
+    .sort((a, b) => {
+      if (isPersonalSpaceResource(a) === isPersonalSpaceResource(b)) {
+        return a.name.localeCompare(b.name)
       }
-
-      activities.value = yield* call(
-        clientService.graphAuthenticated.activities.listActivities(filters.join(' AND '), {
-          signal
-        })
-      )
+      return isPersonalSpaceResource(a) ? -1 : 1
     })
+})
 
-    const isLoading = computed(() => loadActivitiesTask.isRunning || !loadActivitiesTask.last)
+const loadActivitiesTask = useTask(function* (signal) {
+  const filters = ['sort:desc', 'limit:100']
 
-    const getLocationFilterIcon = (space: SpaceResource) => {
-      if (isPersonalSpaceResource(space)) {
-        return 'folder'
-      }
-
-      return 'layout-grid'
-    }
-
-    onMounted(() => {
-      loadActivitiesTask.perform()
-    })
-
-    watch(locationQuery, () => {
-      loadActivitiesTask.perform()
-    })
-
-    return { activities, filterableSpaces, getLocationFilterIcon, isLoading }
+  if (unref(locationQuery)) {
+    filters.push(`itemid:${unref(locationQuery)}`)
   }
+
+  activities.value = yield* call(
+    clientService.graphAuthenticated.activities.listActivities(filters.join(' AND '), {
+      signal
+    })
+  )
+})
+
+const isLoading = computed(() => loadActivitiesTask.isRunning || !loadActivitiesTask.last)
+
+const getLocationFilterIcon = (space: SpaceResource) => {
+  if (isPersonalSpaceResource(space)) {
+    return 'folder'
+  }
+
+  return 'layout-grid'
+}
+
+onMounted(() => {
+  loadActivitiesTask.perform()
+})
+
+watch(locationQuery, () => {
+  loadActivitiesTask.perform()
 })
 </script>
