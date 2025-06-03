@@ -5,6 +5,7 @@ release/*
 
 build/version.json
 
+# docs
 /hugo
 
 .env

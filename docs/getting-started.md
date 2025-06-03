@@ -9,11 +9,15 @@ geekdocFilePath: getting-started.md
 
 {{< toc >}}
 
+## Source Code
+
+The source code is hosted at [https://github.com/owncloud/web](https://github.com/owncloud/web).
+Please refer to the [build documentation for Web]({{< ref "./building.md" >}}).
+
 ## Installation
 
-### Docker
-
-Make sure to have Docker, Docker-Compose, Node.js and pnpm installed.
+Make sure to have Docker, Docker-Compose, [Node.js](https://nodejs.org/en/download) and [pnpm](https://pnpm.io/installation) installed.
+If you plan to work with translations, you also need to install the [Transifex Client](https://developers.transifex.com/docs/cli). Note when installing the Transifex Client, change to your `~/.local/bin` directory first because it installs at the current location.
 
 {{< hint info >}}
 This setup currently doesn't work on Windows out of the box.
@@ -27,16 +31,13 @@ This setup currently doesn't work on Windows out of the box.
 
 After cloning the [source code](https://github.com/owncloud/web), install the dependencies via `pnpm install` and bundle the frontend code by running `pnpm build:w`.
 
+### Docker
+
 Then, you can start the server by running `docker-compose up ocis` and access it via [https://host.docker.internal:9200](https://host.docker.internal:9200). If you're not using Docker Desktop, you might have to modify your `/etc/hosts` and add `127.0.0.1 host.docker.internal` to make the `host.docker.internal` links work.
 
 The bundled frontend code automatically gets mounted into the Docker containers, recompiles on changes and you can log in using the demo user (admin/admin) and take a look around!
 
 For more details on how to set up Web for development, please see [tooling]({{< ref "tooling.md#development-setup" >}}).
-
-### Source Code
-
-The source code is hosted at [https://github.com/owncloud/web](https://github.com/owncloud/web).
-Please refer to the [build documentation for Web]({{< ref "./building.md" >}}).
 
 ## Configuration
 
