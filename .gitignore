@@ -2,11 +2,9 @@ release/*
 
 **/l10n/locale
 **/l10n/template.pot
+**/hugo
 
 build/version.json
-
-# docs
-/hugo
 
 .env
 .idea
