@@ -83,7 +83,7 @@ Note that only the command `make l10n-write` will create changes that can be com
 **/l10n/template.pot
 ```
 
-If you want to remove all extractions and translations like to have a clean translation base, use the following command **BEFORE** starting with `make l10n-read`:
+If you want to start with a clean translation base by removing all extractions and translations, use the following command **before** starting with `make l10n-read`:
 
 ```
 make l10n-clean        --> Delete all translation template.pot and locale files
