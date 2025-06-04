@@ -50,12 +50,12 @@ Translations are defined in 4 levels:
 1. The source text such as `$gettext('Administration Settings')`.
 2. For each language, the minimum translation completion percentage required for processing.\
 This can either be the individual setting in the config file or the global setting behind `make l10n-pull`, the latter takes precedence.
-3. The languages that will appear in the language selector are defined in `/gettext.config.cjs`.
-4. The user-facing text in the selector identifies a language, which is defined in\
+3. Languages that will be processed by the make commands are defined in `/gettext.config.cjs`.
+4. Languages shown in the webUI including their user-facing text are defined in\
 `/packages/web-runtime/src/defaults/languages.ts`.
 
-Note 1: Languages defined in 3. and 4. must match.\
-Note 2: The source string is used for languages defined in 3. but do not match 2.
+Note 1: Languages defined in 3. and 4. should match.\
+Note 2: The source string is used for any language that does not meet 2.) **OR** is not listed in 3.)
 
 ## Translation Process
 
