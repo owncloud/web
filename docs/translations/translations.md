@@ -28,7 +28,7 @@ The following files are managed via `make` commands in all folders containing tr
 `make l10n-read` --> `template.pot` and\
 `make l10n-write` --> `translations.json`,
 
-The `config` files must be created manually and define the Transifex setup for each folder. Here is an example how this file lookes like:
+The `config` files must be created manually and define the Transifex setup for each folder. Here is an example how this file looks like:
 
 ```
 [main]
