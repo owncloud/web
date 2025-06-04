@@ -42,8 +42,8 @@
   </div>
 </template>
 
-<script lang="ts">
-import { defineComponent, computed, unref, VNodeRef, ref } from 'vue'
+<script lang="ts" setup>
+import { computed, unref, VNodeRef, ref } from 'vue'
 import { ContextActionMenu, useThemeStore } from '@ownclouders/web-pkg'
 import {
   useGeneralActionsResetLogo,
@@ -52,50 +52,36 @@ import {
 import { supportedLogoMimeTypes } from '../../defaults'
 import { storeToRefs } from 'pinia'
 
-export default defineComponent({
-  name: 'AppearanceSection',
-  components: {
-    ContextActionMenu
-  },
-  setup() {
-    const themeStore = useThemeStore()
-    const { currentTheme } = storeToRefs(themeStore)
-
-    const logoInput: VNodeRef = ref(null)
-
-    const { actions: resetLogoActions } = useGeneralActionsResetLogo()
-    const { actions: uploadLogoActions, uploadImage } = useGeneralActionsUploadLogo({
-      imageInput: logoInput
-    })
-
-    const menuItems = computed(() =>
-      [...unref(uploadLogoActions), ...unref(resetLogoActions)].filter((i) => i.isVisible())
-    )
-
-    const actionOptions = computed(() => ({
-      resources: unref(menuItems)
-    }))
-
-    const menuSections = computed(() => [
-      {
-        name: 'primaryActions',
-        items: unref(menuItems)
-      }
-    ])
-
-    const supportedLogoMimeTypesAcceptValue = supportedLogoMimeTypes.join(',')
-
-    return {
-      actionOptions,
-      currentTheme,
-      menuItems,
-      menuSections,
-      supportedLogoMimeTypesAcceptValue,
-      uploadImage,
-      logoInput
-    }
-  }
+defineOptions({
+  name: 'AppearanceSection'
 })
+
+const themeStore = useThemeStore()
+const { currentTheme } = storeToRefs(themeStore)
+
+const logoInput: VNodeRef = ref(null)
+
+const { actions: resetLogoActions } = useGeneralActionsResetLogo()
+const { actions: uploadLogoActions, uploadImage } = useGeneralActionsUploadLogo({
+  imageInput: logoInput
+})
+
+const menuItems = computed(() =>
+  [...unref(uploadLogoActions), ...unref(resetLogoActions)].filter((i) => i.isVisible())
+)
+
+const actionOptions = computed(() => ({
+  resources: unref(menuItems)
+}))
+
+const menuSections = computed(() => [
+  {
+    name: 'primaryActions',
+    items: unref(menuItems)
+  }
+])
+
+const supportedLogoMimeTypesAcceptValue = supportedLogoMimeTypes.join(',')
 </script>
 
 <style lang="scss" scoped>
