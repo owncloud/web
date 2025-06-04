@@ -2,6 +2,13 @@ NAME := web
 HUGO := ${CURDIR}/hugo
 HDIR := ${CURDIR}/hugo/.git
 
+# for drone only, run necessary doc prep commands. drone uses an image for hugo, so do not execute hugo with docs-build
+# CURDIR will work for make only but not when running manually in the shell
+.PHONY: docs-drone
+docs-drone: docs-init docs-copy
+	@echo 'Linking directory hugo for drone.'
+	@ln -s $(HUGO) ../hugo
+
 # run all necessary doc commands
 .PHONY: docs
 docs: docs-init docs-copy docs-build

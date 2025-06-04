@@ -899,7 +899,7 @@ def documentation(ctx):
                     "name": "prepare",
                     "image": OC_CI_ALPINE_IMAGE,
                     "commands": [
-                        "make docs-copy",
+                        "make docs-drone",
                     ],
                 },
                 {
