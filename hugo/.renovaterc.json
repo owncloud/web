@@ -1,0 +1,13 @@
+{
+  "$schema": "https://docs.renovatebot.com/renovate-schema.json",
+  "extends": ["github>owncloud-ops/renovate-presets:docker"],
+  "packageRules": [
+    {
+      "description": "Automerge docs theme updates",
+      "matchDatasources": ["github-releases"],
+      "matchPackagePatterns": ["^thegeeklab/hugo-geekdoc"],
+      "matchUpdateTypes": ["patch"],
+      "automerge": true
+    }
+  ]
+}

@@ -1,0 +1,14 @@
+{
+  "printWidth": 99,
+  "singleQuote": false,
+  "semi": false,
+  "trailingComma": "none",
+  "overrides": [
+    {
+      "files": ["*.html"],
+      "options": {
+        "parser": "go-template"
+      }
+    }
+  ]
+}

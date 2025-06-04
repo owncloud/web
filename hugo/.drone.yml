@@ -1,0 +1,48 @@
+---
+kind: pipeline
+name: default
+
+platform:
+  os: linux
+  arch: amd64
+
+concurrency:
+  limit: 1
+
+steps:
+- name: assets
+  image: docker.io/owncloudci/alpine
+  commands:
+  - make theme
+
+- name: sync
+  image: quay.io/thegeeklab/git-batch
+  commands:
+  - git-batch -vv
+
+- name: build
+  image: docker.io/owncloudci/hugo:0.115.2
+  commands:
+  - hugo
+
+- name: publish
+  image: docker.io/plugins/gh-pages
+  settings:
+    pages_directory: public/
+    copy_contents: true
+    password:
+      from_secret: github_token
+    target_branch: gh-pages
+    username:
+      from_secret: github_username
+    delete: true
+  when:
+    ref:
+    - refs/heads/main
+
+trigger:
+  ref:
+  - refs/heads/main
+  - refs/pull/**
+
+...

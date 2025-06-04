@@ -1,5 +1,5 @@
 ---
-title: "Setup with oCIS"
+title: "Setup With oCIS"
 date: 2020-04-15T00:00:00+00:00
 weight: 50
 geekdocRepo: https://github.com/owncloud/web
