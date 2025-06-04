@@ -26,7 +26,7 @@ dist:
 
 # note that everything docs related is located in the docs/ folder
 # we keep this original calls for the sake of history and ease of use
-# for drone only, prepare docs
+# for drone only, prepare docs, do not run manually
 .PHONY: docs-drone
 docs-drone:
 	@make --no-print-directory -C docs docs-drone

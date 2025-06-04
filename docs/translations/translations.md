@@ -10,8 +10,6 @@ geekdocCollapseSection: true
 
 {{< toc >}}
 
-[Using the client](https://developers.transifex.com/docs/using-the-client)
-
 ## Translation Setup
 
 The translation setup is managed within each Packages folder that contains a translation source. These directories contain a structure relevant to translation. The structure is shown below using the `web-runtime` folder as an example. When a new app (parent directory) is created, this structure must be applied.
