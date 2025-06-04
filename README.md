@@ -76,7 +76,7 @@ The full documentation on all available packages and the general repository stru
 
 ## Releases
 
-We currently publish a new release every couple of weeks, strictly following [semver](https://semver.org/). Releases and their corresponding changelogs can be found on [the release page](https://github.com/owncloud/web/releases) on GitHub.
+We currently publish a new release every couple of weeks, strictly following [semver](https://semver.org/). Releases and their corresponding changelogs can be found on the [release page](https://github.com/owncloud/web/releases) on GitHub.
 
 ## Documentation
 

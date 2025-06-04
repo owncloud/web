@@ -1,5 +1,5 @@
 ---
-title: 'Extension system'
+title: 'Extension System'
 date: 2024-01-23T00:00:00+00:00
 weight: 60
 geekdocRepo: https://github.com/owncloud/web

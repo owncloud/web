@@ -1,6 +1,5 @@
-NAME := web
 DIST := ${CURDIR}/dist
-HUGO := ${CURDIR}/hugo
+HUGO := docs/hugo
 RELEASE := ${CURDIR}/release
 NODE_MODULES := ${CURDIR}/node_modules
 
@@ -25,45 +24,48 @@ release: clean
 dist:
 	make -f Makefile.release
 
+# note that everything docs related is located in the docs/ folder
+# we keep this original calls for the sake of history and ease of use
+# for drone only, prepare docs, do not run manually
+.PHONY: docs-drone
+docs-drone:
+	@make --no-print-directory -C docs docs-drone
+
+# build the docs
 .PHONY: docs
-docs: docs-copy docs-build
+docs:
+	@make --no-print-directory -C docs docs
 
-.PHONY: docs-copy
-docs-copy:
-	mkdir -p $(HUGO); \
-	mkdir -p $(HUGO)/content/extensions; \
-	cd $(HUGO); \
-	git init; \
-	git remote rm origin; \
-	git remote add origin https://github.com/owncloud/owncloud.github.io; \
-	git fetch; \
-	git checkout origin/main -f; \
-	make -C $(HUGO) theme; \
-	rsync --delete -ax ../docs/ content/$(NAME)
+# serve the built docs
+.PHONY: docs-serve
+docs-serve:
+	@make --no-print-directory -C docs docs-serve
 
-.PHONY: docs-build
-docs-build:
-	cd $(HUGO); hugo
+# clean up doc build artifacts 
+.PHONY: docs-clean
+docs-clean:
+	@make --no-print-directory -C docs docs-clean
 
+# translation relevant
 .PHONY: l10n-push
 l10n-push:
-	make -C packages/web-runtime/l10n push
+	@make --no-print-directory -C packages/web-runtime/l10n push
 
 .PHONY: l10n-pull
 l10n-pull:
-	make -C packages/web-runtime/l10n pull
+	@make --no-print-directory -C packages/web-runtime/l10n pull
 
 .PHONY: l10n-clean
 l10n-clean:
-	make -C packages/web-runtime/l10n clean
+	@make --no-print-directory -C packages/web-runtime/l10n clean
 
 .PHONY: l10n-read
 l10n-read: node_modules
-	make -C packages/web-runtime/l10n extract
+	make --no-print-directory -C packages/web-runtime/l10n extract
 
 .PHONY: l10n-write
 l10n-write: node_modules
-	make -C packages/web-runtime/l10n translations
+	@make --no-print-directory -C packages/web-runtime/l10n translations
 
 .PHONY: generate-qa-activity-report
 generate-qa-activity-report: node_modules

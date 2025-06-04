@@ -1,5 +1,5 @@
 ---
-title: 'Viewer and editor apps'
+title: 'Viewer and Editor Apps'
 date: 2024-03-12T00:00:00+00:00
 weight: 60
 geekdocRepo: https://github.com/owncloud/web

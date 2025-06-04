@@ -1,5 +1,5 @@
 ---
-title: 'Repo structure and (published) packages'
+title: 'Repo Structure and (Published) Packages'
 date: 2022-01-28T00:00:00+00:00
 weight: 30
 geekdocRepo: https://github.com/owncloud/web
