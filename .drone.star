@@ -927,7 +927,7 @@ def documentation(ctx):
                         "password": {
                             "from_secret": "github_token",
                         },
-                        "pages_directory": "docs/",
+                        "pages_directory": "docs/hugo/content/web/",
                         "copy_contents": "true",
                         "target_branch": "docs",
                         "delete": "true",
