@@ -20,37 +20,27 @@
     </div>
   </div>
 </template>
-<script lang="ts">
-import { defineComponent, PropType } from 'vue'
+<script lang="ts" setup>
+import { computed } from 'vue'
 import GroupInfoBox from './GroupInfoBox.vue'
 import { Group } from '@ownclouders/web-client/graph/generated'
+import { useGettext } from 'vue3-gettext'
 
-export default defineComponent({
-  name: 'DetailsPanel',
-  components: { GroupInfoBox },
-  props: {
-    groups: {
-      type: Array as PropType<Group[]>,
-      required: true
-    }
-  },
-  computed: {
-    group() {
-      return this.groups.length === 1 ? this.groups[0] : null
-    },
-    noGroups() {
-      return !this.groups.length
-    },
-    multipleGroups() {
-      return this.groups.length > 1
-    },
-    multipleGroupsSelectedText() {
-      return this.$gettext('%{count} groups selected', {
-        count: this.groups.length.toString()
-      })
-    }
-  }
+interface Props {
+  groups: Group[]
+}
+defineOptions({
+  name: 'DetailsPanel'
 })
+const { $gettext } = useGettext()
+
+const props = defineProps<Props>()
+const group = computed(() => (props.groups.length === 1 ? props.groups[0] : null))
+const noGroups = computed(() => !props.groups.length)
+const multipleGroups = computed(() => props.groups.length > 1)
+const multipleGroupsSelectedText = computed(() =>
+  $gettext('%{count} groups selected', { count: props.groups.length.toString() })
+)
 </script>
 <style lang="scss">
 .group-info {
