@@ -48,7 +48,7 @@ docs-first-time-message:
 .PHONY: docs-copy
 docs-copy:
 	@echo 'Syncing required doc files and directories for the build process.'
-	@rsync --delete -ax --exclude=hugo/ --exclude=.gitignore ./ $(HUGO)/content/$(NAME)
+	@rsync --delete -ax --exclude=hugo/ --exclude=Makefile ./ $(HUGO)/content/$(NAME)
 
 # create a docs build
 .PHONY: docs-build
