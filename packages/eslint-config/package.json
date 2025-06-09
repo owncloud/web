@@ -2,7 +2,7 @@
   "name": "@ownclouders/eslint-config",
   "main": "index.js",
   "private": false,
-  "version": "11.3.1",
+  "version": "11.3.4",
   "license": "AGPL-3.0",
   "type": "module",
   "author": "ownCloud GmbH <devops@owncloud.com>",
