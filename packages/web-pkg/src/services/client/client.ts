@@ -97,16 +97,6 @@ export class ClientService {
     return this.ocsClient
   }
 
-  /** @deprecated use `ocs()` instead */
-  public get ocsUserContext() {
-    return this.ocs
-  }
-
-  /** @deprecated use `ocs()` instead */
-  public ocsPublicLinkContext(password?: string) {
-    return this.ocs
-  }
-
   public get webdav() {
     return this.webDavClient
   }

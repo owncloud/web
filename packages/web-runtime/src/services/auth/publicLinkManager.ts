@@ -97,9 +97,7 @@ export class PublicLinkManager {
     }
 
     try {
-      await this.fetchCapabilities({
-        password
-      })
+      await this.fetchCapabilities()
     } catch (e) {
       console.error(e)
     }
@@ -116,11 +114,11 @@ export class PublicLinkManager {
     this.authStore.clearPublicLinkContext()
   }
 
-  private async fetchCapabilities({ password = '' }): Promise<void> {
+  private async fetchCapabilities(): Promise<void> {
     if (this.capabilityStore.isInitialized) {
       return
     }
-    const client = this.clientService.ocsPublicLinkContext(password)
+    const client = this.clientService.ocs
     const response = await client.getCapabilities()
     this.capabilityStore.setCapabilities(response)
   }

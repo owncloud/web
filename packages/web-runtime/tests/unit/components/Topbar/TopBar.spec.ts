@@ -119,9 +119,7 @@ const getWrapper = ({
       props: {
         applicationsList: [
           mock<ApplicationInformation>({
-            type: 'extension',
-            icon: '',
-            applicationMenu: undefined
+            icon: ''
           })
         ]
       },

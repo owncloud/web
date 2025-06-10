@@ -246,7 +246,7 @@ export class UserManager extends OidcUserManager {
       return
     }
 
-    const capabilities = await this.clientService.ocsUserContext.getCapabilities()
+    const capabilities = await this.clientService.ocs.getCapabilities()
 
     this.capabilityStore.setCapabilities(capabilities)
   }
