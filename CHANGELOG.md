@@ -41,6 +41,12 @@ Summary
 * Bugfix - Use capabilities store in preview service: [#12628](https://github.com/owncloud/web/pull/12628)
 * Bugfix - Add missing label to rename button: [#12646](https://github.com/owncloud/web/pull/12646)
 * Change - Remove CERN's collapsible table: [#12567](https://github.com/owncloud/web/pull/12567)
+* Change - Remove deprecated applicationMenu: [#12686](https://github.com/owncloud/web/pull/12686)
+* Change - Remove deprecated ApplicationQuickAction: [#12686](https://github.com/owncloud/web/pull/12686)
+* Change - Remove deprecated client init method: [#12686](https://github.com/owncloud/web/pull/12686)
+* Change - Remove deprecated isFileEditor: [#12686](https://github.com/owncloud/web/pull/12686)
+* Change - Remove deprecated ocsUserContext and ocsPublicLinkContext: [#12686](https://github.com/owncloud/web/pull/12686)
+* Change - Remove deprecated type prop: [#12686](https://github.com/owncloud/web/pull/12686)
 * Enhancement - Accessibility improvements: [#5379](https://github.com/owncloud/web/issues/5379)
 * Enhancement - Create spaces via admin settings: [#11849](https://github.com/owncloud/web/pull/11849)
 * Enhancement - Hide active editor action: [#12110](https://github.com/owncloud/web/pull/12110)
@@ -351,6 +357,58 @@ Details
    by filtering functionality in the shares page.
 
    https://github.com/owncloud/web/pull/12567
+
+* Change - Remove deprecated applicationMenu: [#12686](https://github.com/owncloud/web/pull/12686)
+
+   We have removed the deprecated applicationMenu property from the
+   ApplicationInformation type. Register app menu items via the
+   appMenuExtensionPoint instead (https://github.com/owncloud/web/pull/11258).
+
+   https://github.com/owncloud/web/issues/7338
+   https://github.com/owncloud/web/pull/12686
+
+* Change - Remove deprecated ApplicationQuickAction: [#12686](https://github.com/owncloud/web/pull/12686)
+
+   We have removed the deprecated ApplicationQuickAction type. Register quick
+   actions as extension instead (https://github.com/owncloud/web/pull/10102).
+
+   https://github.com/owncloud/web/issues/7338
+   https://github.com/owncloud/web/pull/12686
+
+* Change - Remove deprecated client init method: [#12686](https://github.com/owncloud/web/pull/12686)
+
+   We have removed the deprecated client init method. Use `graph()`, `ocs()` and
+   `webdav()` to initialize and use clients
+   (https://github.com/owncloud/web/pull/11656).
+
+   https://github.com/owncloud/web/issues/7338
+   https://github.com/owncloud/web/pull/12686
+
+* Change - Remove deprecated isFileEditor: [#12686](https://github.com/owncloud/web/pull/12686)
+
+   We have removed the deprecated isFileEditor property from the
+   ApplicationInformation type.
+
+   https://github.com/owncloud/web/issues/7338
+   https://github.com/owncloud/web/pull/12686
+   https://github.com/owncloud/web/commit/67ce21ce1bcc449d18f53e4930d180198a19faa0
+
+* Change - Remove deprecated ocsUserContext and ocsPublicLinkContext: [#12686](https://github.com/owncloud/web/pull/12686)
+
+   We have removed the deprecated ocsUserContext and ocsPublicLinkContext
+   properties from the ClientService. Use `ocs` instead
+   (https://github.com/owncloud/web/pull/11656).
+
+   https://github.com/owncloud/web/issues/7338
+   https://github.com/owncloud/web/pull/12686
+
+* Change - Remove deprecated type prop: [#12686](https://github.com/owncloud/web/pull/12686)
+
+   We have removed the deprecated type prop from the ApplicationInformation type.
+
+   https://github.com/owncloud/web/issues/7338
+   https://github.com/owncloud/web/pull/12686
+   https://github.com/owncloud/web/commit/5e8ac918de780f0b03ad79a85b8c25e4ba1fe4df
 
 * Enhancement - Accessibility improvements: [#5379](https://github.com/owncloud/web/issues/5379)
 
