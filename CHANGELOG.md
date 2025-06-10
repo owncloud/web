@@ -3,7 +3,7 @@ Changelog for ownCloud Web [unreleased] (UNRELEASED)
 The following sections list the changes in ownCloud web unreleased relevant to
 ownCloud admins and users.
 
-[unreleased]: https://github.com/owncloud/web/compare/v11.3.1...master
+[unreleased]: https://github.com/owncloud/web/compare/v11.3.4...master
 
 Summary
 -------
@@ -18,8 +18,6 @@ Summary
 * Bugfix - Sorting arrow misplaced: [#12236](https://github.com/owncloud/web/pull/12236)
 * Bugfix - Disable cutting and pasting into the same folder: [#12265](https://github.com/owncloud/web/pull/12265)
 * Bugfix - Generate public link password on click: [#12266](https://github.com/owncloud/web/pull/12266)
-* Bugfix - Do not reveal generated password: [#12326](https://github.com/owncloud/web/pull/12326)
-* Bugfix - Drop advanced mode when creating links: [#12326](https://github.com/owncloud/web/pull/12326)
 * Bugfix - Disallow user from inviting themselves: [#12328](https://github.com/owncloud/web/pull/12328)
 * Bugfix - Delete .psec file: [#12329](https://github.com/owncloud/web/pull/12329)
 * Bugfix - Handle shares loading error: [#12336](https://github.com/owncloud/web/pull/12336)
@@ -34,13 +32,9 @@ Summary
 * Bugfix - Watch scroll target in shared list: [#12385](https://github.com/owncloud/web/pull/12385)
 * Bugfix - Download archives directly: [#12406](https://github.com/owncloud/web/pull/12406)
 * Bugfix - Request archive as blob: [#12406](https://github.com/owncloud/web/pull/12406)
-* Bugfix - Add missing dependencies to markdown editor: [#12460](https://github.com/owncloud/web/pull/12460)
-* Bugfix - Hide image upload in markdown editor: [#12460](https://github.com/owncloud/web/pull/12460)
-* Bugfix - Hide save in markdown editor: [#12460](https://github.com/owncloud/web/pull/12460)
 * Bugfix - Fix wrong HTML lang attribute: [#12478](https://github.com/owncloud/web/pull/12478)
 * Bugfix - Delete resource throws unknown error: [#12482](https://github.com/owncloud/web/pull/12482)
 * Bugfix - Application language and browser language do not match: [#12487](https://github.com/owncloud/web/pull/12487)
-* Bugfix - Add src attribute to external app iframe: [#12598](https://github.com/owncloud/web/pull/12598)
 * Bugfix - Access correct key when loading favorites: [#12606](https://github.com/owncloud/web/pull/12606)
 * Bugfix - Load ancestor space only when parent id is returned: [#12607](https://github.com/owncloud/web/pull/12607)
 * Bugfix - Do not crash when tus is unsupported: [#12608](https://github.com/owncloud/web/pull/12608)
@@ -54,7 +48,6 @@ Summary
 * Enhancement - Add new supported language to md-editor: [#12243](https://github.com/owncloud/web/pull/12243)
 * Enhancement - Rephrase invite users to invite users to federate: [#12355](https://github.com/owncloud/web/pull/12355)
 * Enhancement - Use custom password generator: [#12424](https://github.com/owncloud/web/pull/12424)
-* Enhancement - Add tag characters limit: [#12474](https://github.com/owncloud/web/pull/12474)
 * Enhancement - Add OCM explanatory tooltips: [#12488](https://github.com/owncloud/web/pull/12488)
 * Enhancement - Add duplicate action: [#12508](https://github.com/owncloud/web/pull/12508)
 * Enhancement - Add flat list view: [#12509](https://github.com/owncloud/web/pull/12509)
@@ -153,23 +146,6 @@ Details
    callback.
 
    https://github.com/owncloud/web/pull/12266
-
-* Bugfix - Do not reveal generated password: [#12326](https://github.com/owncloud/web/pull/12326)
-
-   We've stopped revealing passwords in the password input when user clicks on the
-   generate action. In order to preview the password, the user needs to click on
-   the eye icon inside the input.
-
-   https://github.com/owncloud/web/issues/12275
-   https://github.com/owncloud/web/pull/12326
-
-* Bugfix - Drop advanced mode when creating links: [#12326](https://github.com/owncloud/web/pull/12326)
-
-   We've removed the advanced mode in the create public link dialog and we show the
-   password and expiration date fields directly.
-
-   https://github.com/owncloud/web/issues/12275
-   https://github.com/owncloud/web/pull/12326
 
 * Bugfix - Disallow user from inviting themselves: [#12328](https://github.com/owncloud/web/pull/12328)
 
@@ -299,32 +275,6 @@ Details
    https://github.com/owncloud/web/issues/12405
    https://github.com/owncloud/web/pull/12406
 
-* Bugfix - Add missing dependencies to markdown editor: [#12460](https://github.com/owncloud/web/pull/12460)
-
-   Due to several missing dependencies of the markdown editor app, some features
-   were not fully working or were throwing an error. We added the following
-   dependencies:
-
-   - highlight.js - mermaid - screenfull - katex
-
-   https://github.com/owncloud/web/pull/12460
-
-* Bugfix - Hide image upload in markdown editor: [#12460](https://github.com/owncloud/web/pull/12460)
-
-   We hid a non-functioning image upload in the markdown editor to avoid pointless
-   buttons that lead to no actions.
-
-   https://github.com/owncloud/web/issues/12407
-   https://github.com/owncloud/web/pull/12460
-
-* Bugfix - Hide save in markdown editor: [#12460](https://github.com/owncloud/web/pull/12460)
-
-   We hid the save button in the markdown editor as it was not functional. We
-   decided on hiding it as it could be confusing with already having a save button
-   provided by the app container.
-
-   https://github.com/owncloud/web/pull/12460
-
 * Bugfix - Fix wrong HTML lang attribute: [#12478](https://github.com/owncloud/web/pull/12478)
 
    We've added a fix to ensure that the HTML lang attribute is set correctly in the
@@ -351,19 +301,6 @@ Details
 
    https://github.com/owncloud/web/issues/12486
    https://github.com/owncloud/web/pull/12487
-
-* Bugfix - Add src attribute to external app iframe: [#12598](https://github.com/owncloud/web/pull/12598)
-
-   This adds the `src` attribute to the external app iframe using the `POST`
-   request. Some external apps like Collabora and OnlyOffice are using the `POST`
-   requests to load the app with authenticated user. `src` attribute was in that
-   case omitted as it was not necessarily needed. That however introduced a bug
-   with permissions propagation. Any custom permissions set on the iframe like
-   `camera` were not propagated to the final website. Adding the `src` attribute
-   should ensure that the permissions are propagated.
-
-   https://github.com/owncloud/web/issues/12121
-   https://github.com/owncloud/web/pull/12598
 
 * Bugfix - Access correct key when loading favorites: [#12606](https://github.com/owncloud/web/pull/12606)
 
@@ -473,13 +410,6 @@ Details
    https://github.com/owncloud/web/issues/10461
    https://github.com/owncloud/web/pull/12424
 
-* Enhancement - Add tag characters limit: [#12474](https://github.com/owncloud/web/pull/12474)
-
-   We now limit the number of characters in a tag. The limit is configured in the
-   capabilities and defaults to 30.
-
-   https://github.com/owncloud/web/pull/12474
-
 * Enhancement - Add OCM explanatory tooltips: [#12488](https://github.com/owncloud/web/pull/12488)
 
    We added two contextual helpers to the Connections panel in the OCM app.
@@ -560,6 +490,118 @@ Details
    error message.
 
    https://github.com/owncloud/web/pull/12648
+
+Changelog for ownCloud Web [11.3.4] (2025-05-26)
+=======================================
+The following sections list the changes in ownCloud web 11.3.4 relevant to
+ownCloud admins and users.
+
+[11.3.4]: https://github.com/owncloud/web/compare/v11.3.3...v11.3.4
+
+Summary
+-------
+
+* Bugfix - Add tag characters limit: [#12474](https://github.com/owncloud/web/pull/12474)
+* Bugfix - Add src attribute to external app iframe: [#12598](https://github.com/owncloud/web/pull/12598)
+
+Details
+-------
+
+* Bugfix - Add tag characters limit: [#12474](https://github.com/owncloud/web/pull/12474)
+
+   We now limit the number of characters in a tag. The limit is configured in the
+   capabilities and defaults to 30.
+
+   https://github.com/owncloud/web/pull/12474
+
+* Bugfix - Add src attribute to external app iframe: [#12598](https://github.com/owncloud/web/pull/12598)
+
+   This adds the `src` attribute to the external app iframe using the `POST`
+   request. Some external apps like Collabora and OnlyOffice are using the `POST`
+   requests to load the app with authenticated user. `src` attribute was in that
+   case omitted as it was not necessarily needed. That however introduced a bug
+   with permissions propagation. Any custom permissions set on the iframe like
+   `camera` were not propagated to the final website. Adding the `src` attribute
+   should ensure that the permissions are propagated.
+
+   https://github.com/owncloud/web/issues/12121
+   https://github.com/owncloud/web/pull/12598
+
+Changelog for ownCloud Web [11.3.3] (2025-05-22)
+=======================================
+The following sections list the changes in ownCloud web 11.3.3 relevant to
+ownCloud admins and users.
+
+[11.3.3]: https://github.com/owncloud/web/compare/v11.3.2...v11.3.3
+
+Summary
+-------
+
+* Bugfix - Do not reveal generated password: [#12326](https://github.com/owncloud/web/pull/12326)
+* Bugfix - Drop advanced mode when creating links: [#12326](https://github.com/owncloud/web/pull/12326)
+
+Details
+-------
+
+* Bugfix - Do not reveal generated password: [#12326](https://github.com/owncloud/web/pull/12326)
+
+   We've stopped revealing passwords in the password input when user clicks on the
+   generate action. In order to preview the password, the user needs to click on
+   the eye icon inside the input.
+
+   https://github.com/owncloud/web/issues/12275
+   https://github.com/owncloud/web/pull/12326
+
+* Bugfix - Drop advanced mode when creating links: [#12326](https://github.com/owncloud/web/pull/12326)
+
+   We've removed the advanced mode in the create public link dialog and we show the
+   password and expiration date fields directly.
+
+   https://github.com/owncloud/web/issues/12275
+   https://github.com/owncloud/web/pull/12326
+
+Changelog for ownCloud Web [11.3.2] (2025-05-19)
+=======================================
+The following sections list the changes in ownCloud web 11.3.2 relevant to
+ownCloud admins and users.
+
+[11.3.2]: https://github.com/owncloud/web/compare/v11.3.1...v11.3.2
+
+Summary
+-------
+
+* Bugfix - Add missing dependencies to markdown editor: [#12460](https://github.com/owncloud/web/pull/12460)
+* Bugfix - Hide image upload in markdown editor: [#12460](https://github.com/owncloud/web/pull/12460)
+* Bugfix - Hide save in markdown editor: [#12460](https://github.com/owncloud/web/pull/12460)
+
+Details
+-------
+
+* Bugfix - Add missing dependencies to markdown editor: [#12460](https://github.com/owncloud/web/pull/12460)
+
+   Due to several missing dependencies of the markdown editor app, some features
+   were not fully working or were throwing an error. We added the following
+   dependencies:
+
+   - highlight.js - mermaid - screenfull - katex
+
+   https://github.com/owncloud/web/pull/12460
+
+* Bugfix - Hide image upload in markdown editor: [#12460](https://github.com/owncloud/web/pull/12460)
+
+   We hid a non-functioning image upload in the markdown editor to avoid pointless
+   buttons that lead to no actions.
+
+   https://github.com/owncloud/web/issues/12407
+   https://github.com/owncloud/web/pull/12460
+
+* Bugfix - Hide save in markdown editor: [#12460](https://github.com/owncloud/web/pull/12460)
+
+   We hid the save button in the markdown editor as it was not functional. We
+   decided on hiding it as it could be confusing with already having a save button
+   provided by the app container.
+
+   https://github.com/owncloud/web/pull/12460
 
 Changelog for ownCloud Web [11.3.1] (2025-03-13)
 =======================================
