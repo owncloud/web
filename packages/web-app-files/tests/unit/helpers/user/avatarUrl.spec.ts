@@ -17,7 +17,7 @@ describe('avatarUrl', () => {
     defaultOptions.clientService.httpAuthenticated.head.mockResolvedValue({
       status: 200
     } as AxiosResponse)
-    defaultOptions.clientService.ocsUserContext.signUrl.mockRejectedValue(new Error('error'))
+    defaultOptions.clientService.ocs.signUrl.mockRejectedValue(new Error('error'))
     const avatarUrlPromise = avatarUrl(defaultOptions)
     await expect(avatarUrlPromise).rejects.toThrow(new Error('error'))
     expect(defaultOptions.clientService.httpAuthenticated.head).toHaveBeenCalledWith(
@@ -29,7 +29,7 @@ describe('avatarUrl', () => {
     defaultOptions.clientService.httpAuthenticated.head.mockResolvedValue({
       status: 200
     } as AxiosResponse)
-    defaultOptions.clientService.ocsUserContext.signUrl.mockImplementation((url) => {
+    defaultOptions.clientService.ocs.signUrl.mockImplementation((url) => {
       return Promise.resolve(`${url}?signed=true`)
     })
     const avatarUrlPromise = avatarUrl(defaultOptions)
@@ -40,9 +40,7 @@ describe('avatarUrl', () => {
     defaultOptions.clientService.httpAuthenticated.head.mockResolvedValue({
       status: 200
     } as AxiosResponse)
-    defaultOptions.clientService.ocsUserContext.signUrl.mockImplementation((url) =>
-      Promise.resolve(url)
-    )
+    defaultOptions.clientService.ocs.signUrl.mockImplementation((url) => Promise.resolve(url))
 
     const avatarUrlPromiseUncached = avatarUrl(defaultOptions, true)
     await expect(avatarUrlPromiseUncached).resolves.toBe(buildUrl(defaultOptions))

@@ -25,28 +25,7 @@ export interface AppNavigationItem {
   priority?: number
 }
 
-/**
- * ApplicationQuickAction describes an application action that is used in the runtime.
- *
- * @deprecated Quick actions should be registered as extension via the `files.quick-action` scope.
- */
-export interface ApplicationQuickAction {
-  id?: string
-  label?: (...args: unknown[]) => string | string
-  icon?: string
-  iconFillType?: IconFillType
-  handler?: (...args: unknown[]) => Promise<void> | void
-  displayed?: (...args: unknown[]) => boolean | boolean
-}
-
 export type AppConfigObject = Record<string, any>
-
-/** @deprecated */
-export interface ApplicationMenuItem {
-  enabled: () => boolean
-  priority?: number
-  openAsEditor?: boolean
-}
 
 export interface ApplicationFileExtension {
   app?: string
@@ -86,15 +65,9 @@ export interface ApplicationInformation {
   meta?: {
     fileSizeLimit?: number
   }
-  /** @deprecated */
-  isFileEditor?: boolean
   extensions?: ApplicationFileExtension[]
   defaultExtension?: string
-  /** @deprecated */
-  type?: string
   translations?: Translations
-  /** @deprecated */
-  applicationMenu?: ApplicationMenuItem
   /** Asserts whether the app has any route which works as an editor */
   hasEditor?: boolean
 }

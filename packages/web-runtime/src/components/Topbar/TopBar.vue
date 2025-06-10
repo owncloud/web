@@ -38,7 +38,7 @@
 
 <script lang="ts">
 import { storeToRefs } from 'pinia'
-import { computed, unref, PropType, ref, onMounted } from 'vue'
+import { computed, unref, PropType, ref } from 'vue'
 import ApplicationsMenu from './ApplicationsMenu.vue'
 import UserMenu from './UserMenu.vue'
 import Notifications from './Notifications.vue'
@@ -46,7 +46,6 @@ import FeedbackLink from './FeedbackLink.vue'
 import SideBarToggle from './SideBarToggle.vue'
 import {
   ApplicationInformation,
-  AppMenuItemExtension,
   CustomComponentTarget,
   useAuthStore,
   useCapabilityStore,
@@ -76,7 +75,7 @@ export default {
       default: (): ApplicationInformation[] => []
     }
   },
-  setup(props) {
+  setup() {
     const capabilityStore = useCapabilityStore()
     const themeStore = useThemeStore()
     const { currentTheme } = storeToRefs(themeStore)
@@ -126,28 +125,6 @@ export default {
     const updateLeftPortal = (newContent: { hasContent: boolean; sources: string[] }) => {
       contentOnLeftPortal.value = newContent.hasContent
     }
-
-    onMounted(() => {
-      // FIXME: backwards compatibility for the deprecated applicationMenu prop
-      const navExtensions = props.applicationsList
-        .filter((app) => app.applicationMenu?.enabled())
-        .map((app) => ({
-          id: app.id,
-          type: 'appMenuItem',
-          label: () => app.name,
-          path: `/${app.id}`,
-          icon: app.icon,
-          color: app.color,
-          extensionPointIds: [appMenuExtensionPoint.id],
-          priority: app.applicationMenu?.priority || 50,
-          ...((app as any).url && { url: (app as any).url, target: '_blank' }),
-          ...(app.applicationMenu?.openAsEditor && {
-            handler: () => openEmptyEditor(app.id, app.defaultExtension)
-          })
-        })) as AppMenuItemExtension[]
-
-      extensionRegistry.registerExtensions(computed(() => navExtensions))
-    })
 
     return {
       configOptions,

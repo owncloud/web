@@ -23,7 +23,7 @@ export const avatarUrl = async (options: AvatarUrlOptions, cached = false): Prom
     throw new Error(statusText)
   }
 
-  return options.clientService.ocsUserContext.signUrl(url, options.username)
+  return options.clientService.ocs.signUrl(url, options.username)
 }
 
 const cacheFactory = async (options: AvatarUrlOptions): Promise<string> => {

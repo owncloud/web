@@ -22,7 +22,6 @@ export const useAppsStore = defineStore('apps', () => {
     }
 
     unref(apps)[appInfo.id] = {
-      applicationMenu: appInfo.applicationMenu || { enabled: () => false },
       defaultExtension: appInfo.defaultExtension || '',
       icon: 'check_box_outline_blank',
       name: appInfo.name || appInfo.id,
