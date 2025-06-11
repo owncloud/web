@@ -96,6 +96,7 @@ describe('DateFilter', () => {
     })
     describe('apply button', () => {
       it('is not clickable without dates entered', async () => {
+        console.error = vi.fn()
         const { wrapper } = getWrapper()
         const applyBtn = wrapper.find(selectors.customDateRangeApplyBtn)
         await applyBtn.trigger('click')
