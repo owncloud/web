@@ -216,6 +216,10 @@ config({
     display: inline-flex;
     gap: 0.625rem;
   }
+
+  #text-editor-component-html-wrapper {
+    margin-left: var(--oc-space-xsmall);
+  }
 }
 
 .toastui-editor-tabs {
