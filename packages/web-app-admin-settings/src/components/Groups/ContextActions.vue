@@ -4,58 +4,47 @@
   </div>
 </template>
 
-<script lang="ts">
+<script lang="ts" setup>
 import { useActionsShowDetails } from '@ownclouders/web-pkg'
-import { computed, defineComponent, PropType, unref } from 'vue'
+import { computed, unref } from 'vue'
 import { ContextActionMenu } from '@ownclouders/web-pkg'
 import { GroupActionOptions } from '@ownclouders/web-pkg'
 import { useGroupActionsEdit, useGroupActionsDelete } from '../../composables/actions/groups'
 
-export default defineComponent({
-  name: 'ContextActions',
-  components: { ContextActionMenu },
-  props: {
-    actionOptions: {
-      type: Object as PropType<GroupActionOptions>,
-      required: true
-    }
-  },
-  setup(props) {
-    const { actions: showDetailsActions } = useActionsShowDetails()
-    const { actions: deleteActions } = useGroupActionsDelete()
-    const { actions: editActions } = useGroupActionsEdit()
+interface Props {
+  actionOptions: GroupActionOptions
+}
 
-    const menuItemsPrimaryActions = computed(() =>
-      [...unref(editActions), ...unref(deleteActions)].filter((item) =>
-        item.isVisible(props.actionOptions)
-      )
-    )
+const props = defineProps<Props>()
+const { actions: showDetailsActions } = useActionsShowDetails()
+const { actions: deleteActions } = useGroupActionsDelete()
+const { actions: editActions } = useGroupActionsEdit()
 
-    const menuItemsSidebar = computed(() =>
-      [...unref(showDetailsActions)].filter((item) => item.isVisible(props.actionOptions))
-    )
+const menuItemsPrimaryActions = computed(() =>
+  [...unref(editActions), ...unref(deleteActions)].filter((item) =>
+    item.isVisible(props.actionOptions)
+  )
+)
 
-    const menuSections = computed(() => {
-      const sections = []
+const menuItemsSidebar = computed(() =>
+  [...unref(showDetailsActions)].filter((item) => item.isVisible(props.actionOptions))
+)
 
-      if (unref(menuItemsPrimaryActions).length) {
-        sections.push({
-          name: 'primaryActions',
-          items: unref(menuItemsPrimaryActions)
-        })
-      }
-      if (unref(menuItemsSidebar).length) {
-        sections.push({
-          name: 'sidebar',
-          items: unref(menuItemsSidebar)
-        })
-      }
-      return sections
+const menuSections = computed(() => {
+  const sections = []
+
+  if (unref(menuItemsPrimaryActions).length) {
+    sections.push({
+      name: 'primaryActions',
+      items: unref(menuItemsPrimaryActions)
     })
-
-    return {
-      menuSections
-    }
   }
+  if (unref(menuItemsSidebar).length) {
+    sections.push({
+      name: 'sidebar',
+      items: unref(menuItemsSidebar)
+    })
+  }
+  return sections
 })
 </script>
