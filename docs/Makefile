@@ -50,16 +50,17 @@ docs-copy:
 	@echo 'Syncing required doc files and directories for the build process.'
 	@rsync --delete -ax --exclude=hugo/ --exclude=Makefile ./ $(HUGO)/content/$(NAME)
 
+# the docs-build|serve commands require that docs-init was run first for the required data to exists
 # create a docs build
 .PHONY: docs-build
 docs-build:
-	@cd $(HUGO) && hugo
+	@$(MAKE) -C hugo --no-print-directory hugo-build
 	@echo 'To view the rendered docs in the browser, run: make docs-serve'
 
 # serve built docs with hugo
 .PHONY: docs-serve
 docs-serve:
-	@cd $(HUGO) && hugo server
+	@$(MAKE) -C hugo --no-print-directory hugo-server
 
 # clean up docs build artifacts (removing the hogo folder)
 .PHONY: docs-clean
