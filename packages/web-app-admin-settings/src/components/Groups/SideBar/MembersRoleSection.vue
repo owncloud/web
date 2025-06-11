@@ -11,18 +11,12 @@
     </li>
   </ul>
 </template>
-<script lang="ts">
-import { defineComponent, PropType } from 'vue'
+<script lang="ts" setup>
 import { User } from '@ownclouders/web-client/graph/generated'
 
-export default defineComponent({
-  name: 'MembersRoleSection',
-  props: {
-    groupMembers: {
-      type: Array as PropType<User[]>,
-      required: false,
-      default: (): User[] => []
-    }
-  }
-})
+interface Props {
+  groupMembers?: User[]
+}
+
+const { groupMembers = [] } = defineProps<Props>()
 </script>
