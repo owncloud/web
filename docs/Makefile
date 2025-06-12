@@ -65,5 +65,10 @@ docs-serve:
 # clean up docs build artifacts (removing the hogo folder)
 .PHONY: docs-clean
 docs-clean:
-	@rm -rf $(HUGO)
-	@echo "Removed folder: $(HUGO)"
+# note that the whitespace at the begginning of the lines of ifneq/else/endif statements are intentionally!
+ 	ifneq ($(shell id -u), 0)
+		@echo "You need to run the clean command using sudo or as root because some doc files are created by root"
+ 	else
+		@rm -rf $(HUGO)
+		@echo "Removed folder: $(HUGO)"
+ 	endif
