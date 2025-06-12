@@ -3,7 +3,30 @@ Changelog for ownCloud Web [unreleased] (UNRELEASED)
 The following sections list the changes in ownCloud web unreleased relevant to
 ownCloud admins and users.
 
-[unreleased]: https://github.com/owncloud/web/compare/v11.3.4...master
+[unreleased]: https://github.com/owncloud/web/compare/v12.0.0...master
+
+Summary
+-------
+
+* Bugfix - Md Text Html Preview Text gets Clipped: [#12697](https://github.com/owncloud/web/pull/12697)
+
+Details
+-------
+
+* Bugfix - Md Text Html Preview Text gets Clipped: [#12697](https://github.com/owncloud/web/pull/12697)
+
+   We've fixed an issue where the first letter of a text was clipped during HTML
+   preview rendering due to improper margin
+
+   https://github.com/owncloud/enterprise/issues/7233
+   https://github.com/owncloud/web/pull/12697
+
+Changelog for ownCloud Web [12.0.0] (2025-06-11)
+=======================================
+The following sections list the changes in ownCloud web 12.0.0 relevant to
+ownCloud admins and users.
+
+[12.0.0]: https://github.com/owncloud/web/compare/v11.3.4...v12.0.0
 
 Summary
 -------
@@ -40,7 +63,6 @@ Summary
 * Bugfix - Do not crash when tus is unsupported: [#12608](https://github.com/owncloud/web/pull/12608)
 * Bugfix - Use capabilities store in preview service: [#12628](https://github.com/owncloud/web/pull/12628)
 * Bugfix - Add missing label to rename button: [#12646](https://github.com/owncloud/web/pull/12646)
-* Bugfix - Md Text Html Preview Text gets Clipped: [#12697](https://github.com/owncloud/web/pull/12697)
 * Change - Remove CERN's collapsible table: [#12567](https://github.com/owncloud/web/pull/12567)
 * Change - Remove deprecated applicationMenu: [#12686](https://github.com/owncloud/web/pull/12686)
 * Change - Remove deprecated ApplicationQuickAction: [#12686](https://github.com/owncloud/web/pull/12686)
@@ -350,14 +372,6 @@ Details
    files.
 
    https://github.com/owncloud/web/pull/12646
-
-* Bugfix - Md Text Html Preview Text gets Clipped: [#12697](https://github.com/owncloud/web/pull/12697)
-
-   We've fixed an issue where the first letter of a text was clipped during HTML
-   preview rendering due to improper margin
-
-   https://github.com/owncloud/enterprise/issues/7233
-   https://github.com/owncloud/web/pull/12697
 
 * Change - Remove CERN's collapsible table: [#12567](https://github.com/owncloud/web/pull/12567)
 
