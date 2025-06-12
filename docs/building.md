@@ -22,10 +22,9 @@ geekdocFilePath: building.md
 
 Note that the documentation is located in the `docs/` folder. 
 
-### Install Hugo
+### Prerequisites
 
-- There is no need to install Hugo, the framework that generates the documentation. You can install the required version for other projects. Hugo is used via a predefined container that is downloaded if it does not exist.
-- To meet the sole requirement of building docs, Docker must be installed on your computer.
+- [Docker](https://www.docker.com/) must be installed on your computer.
 
 ### Run a Docs Build
 
