@@ -10,7 +10,7 @@ OC_CI_DRONE_SKIP_PIPELINE_IMAGE = "owncloudci/drone-skip-pipeline:latest"
 OC_CI_GOLANG_IMAGE = "owncloudci/golang:1.24"
 
 # hugo needs to be the same as in owncloud.github.io 
-OC_CI_HUGO_IMAGE = "hugomods/hugo:base-0.129.0"
+OC_CI_HUGO_IMAGE_STATIC = "hugomods/hugo:base-0.129.0"
 
 OC_CI_NODEJS_IMAGE = "owncloudci/nodejs:22"
 OC_CI_WAIT_FOR_IMAGE = "owncloudci/wait-for:latest"
@@ -907,7 +907,7 @@ def documentation(ctx):
                 },
                 {
                     "name": "test",
-                    "image": OC_CI_HUGO_IMAGE,
+                    "image": OC_CI_HUGO_IMAGE_STATIC,
                     "commands": [
                         "cd hugo",
                         "hugo",
