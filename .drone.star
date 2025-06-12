@@ -8,7 +8,10 @@ OC_CI_BAZEL_BUILDIFIER_IMAGE = "owncloudci/bazel-buildifier:latest"
 OC_CI_DRONE_ANSIBLE_IMAGE = "owncloudci/drone-ansible:latest"
 OC_CI_DRONE_SKIP_PIPELINE_IMAGE = "owncloudci/drone-skip-pipeline:latest"
 OC_CI_GOLANG_IMAGE = "owncloudci/golang:1.24"
-OC_CI_HUGO_IMAGE = "owncloudci/hugo:0.115.2"
+
+# hugo needs to be the same as in owncloud.github.io
+OC_CI_HUGO_IMAGE_STATIC = "hugomods/hugo:base-0.129.0"
+
 OC_CI_NODEJS_IMAGE = "owncloudci/nodejs:22"
 OC_CI_WAIT_FOR_IMAGE = "owncloudci/wait-for:latest"
 OC_UBUNTU_IMAGE = "owncloud/ubuntu:24.04"
@@ -904,7 +907,7 @@ def documentation(ctx):
                 },
                 {
                     "name": "test",
-                    "image": OC_CI_HUGO_IMAGE,
+                    "image": OC_CI_HUGO_IMAGE_STATIC,
                     "commands": [
                         "cd hugo",
                         "hugo",

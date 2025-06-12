@@ -29,43 +29,43 @@ dist:
 # for drone only, prepare docs, do not run manually
 .PHONY: docs-drone
 docs-drone:
-	@make --no-print-directory -C docs docs-drone
+	@$(MAKE) --no-print-directory -C docs docs-drone
 
 # build the docs
 .PHONY: docs
 docs:
-	@make --no-print-directory -C docs docs
+	@$(MAKE) --no-print-directory -C docs docs
 
 # serve the built docs
 .PHONY: docs-serve
 docs-serve:
-	@make --no-print-directory -C docs docs-serve
+	@$(MAKE) --no-print-directory -C docs docs-serve
 
 # clean up doc build artifacts 
 .PHONY: docs-clean
 docs-clean:
-	@make --no-print-directory -C docs docs-clean
+	@$(MAKE) --no-print-directory -C docs docs-clean
 
 # translation relevant
 .PHONY: l10n-push
 l10n-push:
-	@make --no-print-directory -C packages/web-runtime/l10n push
+	@$(MAKE) --no-print-directory -C packages/web-runtime/l10n push
 
 .PHONY: l10n-pull
 l10n-pull:
-	@make --no-print-directory -C packages/web-runtime/l10n pull
+	@$(MAKE) --no-print-directory -C packages/web-runtime/l10n pull
 
 .PHONY: l10n-clean
 l10n-clean:
-	@make --no-print-directory -C packages/web-runtime/l10n clean
+	@$(MAKE)e --no-print-directory -C packages/web-runtime/l10n clean
 
 .PHONY: l10n-read
 l10n-read: node_modules
-	make --no-print-directory -C packages/web-runtime/l10n extract
+	@$(MAKE) --no-print-directory -C packages/web-runtime/l10n extract
 
 .PHONY: l10n-write
 l10n-write: node_modules
-	@make --no-print-directory -C packages/web-runtime/l10n translations
+	@$(MAKE) --no-print-directory -C packages/web-runtime/l10n translations
 
 .PHONY: generate-qa-activity-report
 generate-qa-activity-report: node_modules

@@ -22,14 +22,9 @@ geekdocFilePath: building.md
 
 Note that the documentation is located in the `docs/` folder. 
 
-### Install Hugo
+### Prerequisites
 
-- Install [hugo](https://gohugo.io/getting-started/installing/)\
-{{< hint warning >}}
-It is **VERY** important to have the same hugo version installed as defined in the [ocis](https://github.com/owncloud/ocis/) repo.
-The relevant file/command to look at is `cat .bingo/Variables.mk | grep HUGO`. At the time of writing, the version is `v0.123.7`. Using any other version will break building docs in the web repo.
-<!-- the required/correlated theme version is defined in: https://github.com/owncloud/owncloud.github.io/blob/main/Makefile -->
-{{< /hint >}}
+- [Docker](https://www.docker.com/) must be installed on your computer.
 
 ### Run a Docs Build
 
@@ -45,3 +40,6 @@ The relevant file/command to look at is `cat .bingo/Variables.mk | grep HUGO`. A
 
 The documentation is automatically deployed from the master branch to https://owncloud.dev/clients/web/
 
+### Building Information
+
+During the building process, the documentation requests that the `owncloud.github.io` repo be cloned locally into the `docs/` folder. This repository contains all the necessary files and processes to build and serve the documentation.
