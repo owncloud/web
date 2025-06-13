@@ -57,7 +57,7 @@ l10n-pull:
 
 .PHONY: l10n-clean
 l10n-clean:
-	@$(MAKE)e --no-print-directory -C packages/web-runtime/l10n clean
+	@$(MAKE) --no-print-directory -C packages/web-runtime/l10n clean
 
 .PHONY: l10n-read
 l10n-read: node_modules
