@@ -16,7 +16,7 @@
     "@ownclouders/web-pkg": "workspace:*",
     "@uppy/core": "4.4.6",
     "@vueuse/core": "^11.0.0 || ^12.0.0 || ^13.0.0",
-    "axios": "1.9.0",
+    "axios": "1.10.0",
     "email-validator": "^2.0.4",
     "fuse.js": "7.1.0",
     "lodash-es": "4.17.21",
