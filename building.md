@@ -22,6 +22,8 @@ geekdocFilePath: building.md
 
 Note that the documentation is located in the `docs/` folder. 
 
+Note that you should always rebase your working branch if it is based on an older master. This ensures that any relevant documentation build changes have been applied and will not affect the building process.
+
 ### Prerequisites
 
 - [Docker](https://www.docker.com/) must be installed on your computer.
