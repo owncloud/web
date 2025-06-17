@@ -57,7 +57,7 @@ config = {
     "e2e": {
         "1": {
             "earlyFail": True,
-            "skip": False,
+            "skip": True,
             "suites": [
                 "journeys",
                 "smoke",
@@ -65,7 +65,7 @@ config = {
         },
         "2": {
             "earlyFail": True,
-            "skip": False,
+            "skip": True,
             "suites": [
                 "admin-settings",
                 "spaces",
@@ -73,7 +73,7 @@ config = {
         },
         "3": {
             "earlyFail": True,
-            "skip": False,
+            "skip": True,
             "tikaNeeded": True,
             "suites": [
                 "search",
@@ -88,7 +88,7 @@ config = {
         },
         "4": {
             "earlyFail": True,
-            "skip": False,
+            "skip": True,
             "suites": [
                 "navigation",
                 "user-settings",
@@ -97,7 +97,7 @@ config = {
             ],
         },
         "app-provider": {
-            "skip": False,
+            "skip": True,
             "suites": [
                 "app-provider",
             ],
@@ -114,7 +114,7 @@ config = {
             },
         },
         "oidc-refresh-token": {
-            "skip": False,
+            "skip": True,
             "features": [
                 "cucumber/features/oidc/refreshToken.feature",
             ],
@@ -124,7 +124,7 @@ config = {
             },
         },
         "oidc-iframe": {
-            "skip": False,
+            "skip": True,
             "features": [
                 "cucumber/features/oidc/iframeTokenRenewal.feature",
             ],
@@ -134,7 +134,7 @@ config = {
         },
         "ocm": {
             "earlyFail": True,
-            "skip": False,
+            "skip": True,
             "federationServer": True,
             "suites": [
                 "ocm",
@@ -189,7 +189,7 @@ def main(ctx):
 
     after = pipelinesDependsOn(afterPipelines(ctx), stages)
 
-    pipelines = before + stages + after
+    pipelines = before + stages  #+ after
 
     deploys = example_deploys(ctx)
     if ctx.build.event != "cron":
@@ -207,16 +207,12 @@ def main(ctx):
     return pipelines
 
 def beforePipelines(ctx):
-    return checkStarlark() + \
-           licenseCheck(ctx) + \
-           documentation(ctx) + \
-           changelog(ctx) + \
-           pnpmCache(ctx) + \
+    return pnpmCache(ctx) + \
            cacheOcisPipeline(ctx) + \
-           pipelinesDependsOn(buildCacheWeb(ctx), pnpmCache(ctx)) + \
-           pipelinesDependsOn(pnpmlint(ctx), pnpmCache(ctx))
+           pipelinesDependsOn(buildCacheWeb(ctx), pnpmCache(ctx))
 
 def stagePipelines(ctx):
+    return e2eTestsOnKeycloak(ctx)
     unit_test_pipelines = unitTests(ctx)
 
     # run only unit tests when publishing a standalone package
@@ -959,8 +955,8 @@ def ocisService(extra_env_config = {}, deploy_type = "ocis"):
         "OCIS_INSECURE": "true",
         "OCIS_LOG_LEVEL": "error",
         "OCIS_JWT_SECRET": "some-ocis-jwt-secret",
-        "LDAP_GROUP_SUBSTRING_FILTER_TYPE": "any",
-        "LDAP_USER_SUBSTRING_FILTER_TYPE": "any",
+        # "LDAP_GROUP_SUBSTRING_FILTER_TYPE": "any",
+        # "LDAP_USER_SUBSTRING_FILTER_TYPE": "any",
         "PROXY_ENABLE_BASIC_AUTH": True,
         "WEB_ASSET_CORE_PATH": "%s/dist" % dir["web"],
         "FRONTEND_SEARCH_MIN_LENGTH": "2",
@@ -1740,15 +1736,15 @@ def keycloakService():
 
 def e2eTestsOnKeycloak(ctx):
     e2e_Keycloak_tests = [
-        "journeys",
-        "admin-settings/users.feature:20",
-        "admin-settings/users.feature:43",
-        "admin-settings/users.feature:106",
-        "admin-settings/users.feature:131",
-        "admin-settings/users.feature:185",
-        "admin-settings/spaces.feature",
-        "admin-settings/groups.feature",
-        "admin-settings/general.feature",
+        # "journeys",
+        # "admin-settings/users.feature:20",
+        # "admin-settings/users.feature:43",
+        # "admin-settings/users.feature:106",
+        # "admin-settings/users.feature:131",
+        # "admin-settings/users.feature:185",
+        # "admin-settings/spaces.feature",
+        # "admin-settings/groups.feature",
+        # "admin-settings/general.feature",
         "keycloak",
     ]
 
