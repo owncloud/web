@@ -52,7 +52,12 @@ function getWrapper() {
         linkShare
       },
       global: {
-        plugins: [...defaultPlugins()]
+        plugins: [...defaultPlugins()],
+        stubs: {
+          'oc-icon': {
+            template: '<span class="oc-icon" />'
+          }
+        }
       }
     })
   }
