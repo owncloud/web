@@ -182,13 +182,13 @@ export class PasswordPolicyService {
     passwdArray = passwdArray.concat(getRandomCharsFromSet(allChars, remaining))
 
     for (let i = passwdArray.length - 1; i > 0; i--) {
-      const setLimit = 256 - (256 % (i + 1));
-      let randval: number;
+      const setLimit = 256 - (256 % (i + 1))
+      let randval: number
       do {
-        randval = window.crypto.getRandomValues(new Uint8Array(1))[0];
-      } while (randval >= setLimit);
-      const j = randval % (i + 1);
-      [passwdArray[i], passwdArray[j]] = [passwdArray[j], passwdArray[i]];
+        randval = window.crypto.getRandomValues(new Uint8Array(1))[0]
+      } while (randval >= setLimit)
+      const j = randval % (i + 1)
+      ;[passwdArray[i], passwdArray[j]] = [passwdArray[j], passwdArray[i]]
     }
 
     return passwdArray.join('')
