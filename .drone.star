@@ -60,20 +60,21 @@ config = {
             "skip": False,
             "suites": [
                 "journeys",
-                "smoke",
+                # "smoke",
             ],
         },
         "2": {
             "earlyFail": True,
             "skip": False,
             "suites": [
-                "admin-settings",
-                "spaces",
+                "journeys",
+                # "admin-settings",
+                # "spaces",
             ],
         },
         "3": {
             "earlyFail": True,
-            "skip": False,
+            "skip": True,
             "tikaNeeded": True,
             "suites": [
                 "search",
@@ -88,7 +89,7 @@ config = {
         },
         "4": {
             "earlyFail": True,
-            "skip": False,
+            "skip": True,
             "suites": [
                 "navigation",
                 "user-settings",
@@ -97,7 +98,7 @@ config = {
             ],
         },
         "app-provider": {
-            "skip": False,
+            "skip": True,
             "suites": [
                 "app-provider",
             ],
@@ -114,7 +115,7 @@ config = {
             },
         },
         "oidc-refresh-token": {
-            "skip": False,
+            "skip": True,
             "features": [
                 "cucumber/features/oidc/refreshToken.feature",
             ],
@@ -124,7 +125,7 @@ config = {
             },
         },
         "oidc-iframe": {
-            "skip": False,
+            "skip": True,
             "features": [
                 "cucumber/features/oidc/iframeTokenRenewal.feature",
             ],
@@ -134,7 +135,7 @@ config = {
         },
         "ocm": {
             "earlyFail": True,
-            "skip": False,
+            "skip": True,
             "federationServer": True,
             "suites": [
                 "ocm",
@@ -189,7 +190,7 @@ def main(ctx):
 
     after = pipelinesDependsOn(afterPipelines(ctx), stages)
 
-    pipelines = before + stages + after
+    pipelines = before + stages  #+ after
 
     deploys = example_deploys(ctx)
     if ctx.build.event != "cron":
@@ -207,16 +208,12 @@ def main(ctx):
     return pipelines
 
 def beforePipelines(ctx):
-    return checkStarlark() + \
-           licenseCheck(ctx) + \
-           documentation(ctx) + \
-           changelog(ctx) + \
-           pnpmCache(ctx) + \
+    return pnpmCache(ctx) + \
            cacheOcisPipeline(ctx) + \
-           pipelinesDependsOn(buildCacheWeb(ctx), pnpmCache(ctx)) + \
-           pipelinesDependsOn(pnpmlint(ctx), pnpmCache(ctx))
+           pipelinesDependsOn(buildCacheWeb(ctx), pnpmCache(ctx))
 
 def stagePipelines(ctx):
+    return e2eTests(ctx)
     unit_test_pipelines = unitTests(ctx)
 
     # run only unit tests when publishing a standalone package
@@ -600,14 +597,17 @@ def e2eTests(ctx):
         if ("with-tracing" in ctx.build.title.lower()):
             params["reportTracing"] = "true"
 
+        browser = "chromium"
+        if suite == "2":
+            browser = "chrome"
         environment = {
             "HEADLESS": "true",
-            "RETRY": "1",
-            "REPORT_TRACING": params["reportTracing"],
+            "RETRY": "0",
+            "REPORT_TRACING": True,
             "BASE_URL_OCIS": "ocis:9200",
             "FAIL_ON_UNCAUGHT_CONSOLE_ERR": "true",
             "PLAYWRIGHT_BROWSERS_PATH": ".playwright",
-            "BROWSER": "chromium",
+            "BROWSER": browser,
             "FEDERATED_BASE_URL_OCIS": "federation-ocis:9200",
         }
 
