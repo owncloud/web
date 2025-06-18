@@ -989,8 +989,8 @@ importers:
         specifier: ^11.6.0
         version: 11.6.0
       oidc-client-ts:
-        specifier: ^2.4.0 || ^3.0.0
-        version: 3.2.1
+        specifier: ^3.3.0
+        version: 3.3.0
       p-queue:
         specifier: ^8.0.0
         version: 8.1.0
@@ -1129,8 +1129,8 @@ importers:
         specifier: 8.11.1
         version: 8.11.1
       oidc-client-ts:
-        specifier: ^3.0.0
-        version: 3.2.1
+        specifier: ^3.3.0
+        version: 3.3.0
       p-queue:
         specifier: 8.1.0
         version: 8.1.0
@@ -5556,8 +5556,8 @@ packages:
     resolution: {integrity: sha512-nK28WOo+QIjBkDduTINE4JkF/UJJKyf2EJxvJKfblDpyg0Q+pkOHNTL0Qwy6NP6FhE/EnzV73BxxqcJaXY9anw==}
     engines: {node: '>= 0.4'}
 
-  oidc-client-ts@3.2.1:
-    resolution: {integrity: sha512-hS5AJ5s/x4bXhHvNJT1v+GGvzHUwdRWqNQQbSrp10L1IRmzfRGKQ3VWN3dstJb+oF3WtAyKezwD2+dTEIyBiAA==}
+  oidc-client-ts@3.3.0:
+    resolution: {integrity: sha512-t13S540ZwFOEZKLYHJwSfITugupW4uYLwuQSSXyKH/wHwZ+7FvgHE7gnNJh1YQIZ1Yd1hKSRjqeXGSUtS0r9JA==}
     engines: {node: '>=18'}
 
   on-exit-leak-free@2.1.2:
@@ -12158,7 +12158,7 @@ snapshots:
       has-symbols: 1.1.0
       object-keys: 1.1.1
 
-  oidc-client-ts@3.2.1:
+  oidc-client-ts@3.3.0:
     dependencies:
       jwt-decode: 4.0.0
 
