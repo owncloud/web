@@ -10,6 +10,7 @@ Summary
 
 * Bugfix - Ensure uniform distribution when generating password: [#12575](https://github.com/owncloud/web/pull/12575)
 * Bugfix - Md Text Html Preview Text gets Clipped: [#12697](https://github.com/owncloud/web/pull/12697)
+* Bugfix - Export correct design system files: [#12717](https://github.com/owncloud/web/pull/12717)
 
 Details
 -------
@@ -32,6 +33,13 @@ Details
 
    https://github.com/owncloud/enterprise/issues/7233
    https://github.com/owncloud/web/pull/12697
+
+* Bugfix - Export correct design system files: [#12717](https://github.com/owncloud/web/pull/12717)
+
+   We've fixed the export of the design system files to ensure they are correctly
+   exported as ES modules.
+
+   https://github.com/owncloud/web/pull/12717
 
 Changelog for ownCloud Web [12.0.0] (2025-06-11)
 =======================================
