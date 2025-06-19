@@ -247,7 +247,7 @@ services:
     restart: always
 
   onlyoffice:
-    image: onlyoffice/documentserver:8.3.3
+    image: onlyoffice/documentserver:9.0.0
     entrypoint:
       - /bin/sh
       - /entrypoint-override.sh
@@ -266,6 +266,7 @@ services:
       traefik.http.routers.onlyoffice.tls: true
       traefik.http.routers.onlyoffice.rule: PathPrefix(`/`)
       traefik.http.routers.onlyoffice.entrypoints: websecure
+      traefik.http.services.onlyoffice.loadbalancer.server.port: 80
       # websockets can't be opened when this is ommitted
       traefik.http.middlewares.onlyoffice.headers.customrequestheaders.X-Forwarded-Proto: https
       traefik.http.routers.onlyoffice.middlewares: onlyoffice
