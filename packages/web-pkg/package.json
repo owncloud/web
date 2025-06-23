@@ -79,7 +79,6 @@
   },
   "devDependencies": {
     "@ownclouders/web-test-helpers": "workspace:^",
-    "@types/dompurify": "3.2.0",
     "@types/lodash-es": "4.17.12",
     "@vitest/web-worker": "3.2.4",
     "clean-publish": "5.2.2",
