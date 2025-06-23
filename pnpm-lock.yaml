@@ -1199,8 +1199,8 @@ importers:
         specifier: workspace:^
         version: link:../web-pkg
       '@pinia/testing':
-        specifier: ^1.0.0
-        version: 1.0.1(pinia@3.0.3(typescript@5.8.3)(vue@3.5.17(typescript@5.8.3)))
+        specifier: ^1.0.2
+        version: 1.0.2(pinia@3.0.3(typescript@5.8.3)(vue@3.5.17(typescript@5.8.3)))
       '@vue/test-utils':
         specifier: ^2.4.6
         version: 2.4.6
@@ -2510,10 +2510,10 @@ packages:
     resolution: {integrity: sha512-dfUnCxiN9H4ap84DvD2ubjw+3vUNpstxa0TneY/Paat8a3R4uQZDLSvWjmznAY/DoahqTHl9V46HF/Zs3F29pg==}
     engines: {node: '>= 10.0.0'}
 
-  '@pinia/testing@1.0.1':
-    resolution: {integrity: sha512-EYnPfoFtbrgkPj4QLiCp8dHgsqmc8fLqmQtTzp760V7enEb5ZOgH5zkwitGhkF7DM+AW3H+btdzkGeD1U3KKiQ==}
+  '@pinia/testing@1.0.2':
+    resolution: {integrity: sha512-yZVXJTKh677J0AT8kOPxGk5s1v7hMQIDT3tmeriwtR5LDu41DvXTEBQf0ql9SsHW1mCSDG38QDFzSSl5ucJqnQ==}
     peerDependencies:
-      pinia: '>=3.0.2'
+      pinia: '>=3.0.3'
 
   '@pkgjs/parseargs@0.11.0':
     resolution: {integrity: sha512-+1VkjdD0QBLPodGrJUeqarH8VAIvQODIbwh9XpP5Syisf7YoQgsJKPNFoqqLQlu+VQ/tVSshMR6loPMn8U+dPg==}
@@ -8825,7 +8825,7 @@ snapshots:
       '@parcel/watcher-win32-x64': 2.5.1
     optional: true
 
-  '@pinia/testing@1.0.1(pinia@3.0.3(typescript@5.8.3)(vue@3.5.17(typescript@5.8.3)))':
+  '@pinia/testing@1.0.2(pinia@3.0.3(typescript@5.8.3)(vue@3.5.17(typescript@5.8.3)))':
     dependencies:
       pinia: 3.0.3(typescript@5.8.3)(vue@3.5.17(typescript@5.8.3))
 
