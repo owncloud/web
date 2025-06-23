@@ -12,7 +12,7 @@
   </div>
 </template>
 
-<script lang="ts">
+<script lang="ts" setup>
 import { ActionMenuItem } from '@ownclouders/web-pkg'
 import {
   useSpaceActionsDelete,
@@ -22,45 +22,33 @@ import {
   useSpaceActionsRename,
   useSpaceActionsRestore
 } from '@ownclouders/web-pkg'
-import { computed, defineComponent, inject, unref } from 'vue'
+import { computed, inject, unref } from 'vue'
 import { SpaceResource } from '@ownclouders/web-client'
 
-export default defineComponent({
-  name: 'ActionsPanel',
-  components: { ActionMenuItem },
-  setup() {
-    const resource = inject<SpaceResource>('resource')
-    const resources = computed(() => {
-      return [unref(resource)]
-    })
-    const actionOptions = computed(() => ({
-      resources: unref(resources)
-    }))
+const resource = inject<SpaceResource>('resource')
+const resources = computed(() => {
+  return [unref(resource)]
+})
+const actionOptions = computed(() => ({
+  resources: unref(resources)
+}))
 
-    const { actions: deleteActions } = useSpaceActionsDelete()
-    const { actions: disableActions } = useSpaceActionsDisable()
-    const { actions: editDescriptionActions } = useSpaceActionsEditDescription()
-    const { actions: editQuotaActions } = useSpaceActionsEditQuota()
-    const { actions: renameActions } = useSpaceActionsRename()
-    const { actions: restoreActions } = useSpaceActionsRestore()
+const { actions: deleteActions } = useSpaceActionsDelete()
+const { actions: disableActions } = useSpaceActionsDisable()
+const { actions: editDescriptionActions } = useSpaceActionsEditDescription()
+const { actions: editQuotaActions } = useSpaceActionsEditQuota()
+const { actions: renameActions } = useSpaceActionsRename()
+const { actions: restoreActions } = useSpaceActionsRestore()
 
-    const actions = computed(() => {
-      return [
-        ...unref(renameActions),
-        ...unref(editDescriptionActions),
-        ...unref(editQuotaActions),
-        ...unref(restoreActions),
-        ...unref(deleteActions),
-        ...unref(disableActions)
-      ].filter((item) => item.isVisible(unref(actionOptions)))
-    })
-
-    return {
-      actions,
-      actionOptions,
-      resources
-    }
-  }
+const actions = computed(() => {
+  return [
+    ...unref(renameActions),
+    ...unref(editDescriptionActions),
+    ...unref(editQuotaActions),
+    ...unref(restoreActions),
+    ...unref(deleteActions),
+    ...unref(disableActions)
+  ].filter((item) => item.isVisible(unref(actionOptions)))
 })
 </script>
 
