@@ -4,6 +4,7 @@ import {
   defaultStubs,
   mount
 } from '@ownclouders/web-test-helpers'
+import { ActionMenuItem } from '@ownclouders/web-pkg'
 import { mock } from 'vitest-mock-extended'
 import { Resource } from '@ownclouders/web-client'
 import ActionsPanel from '../../../../../src/components/Spaces/SideBar/ActionsPanel.vue'
@@ -75,6 +76,9 @@ function getWrapper() {
         items: [mock<Resource>()]
       },
       global: {
+        components: {
+          ActionMenuItem
+        },
         mocks,
         stubs: { ...defaultStubs, 'action-menu-item': true },
         plugins: [...defaultPlugins()]
