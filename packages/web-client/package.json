@@ -86,7 +86,7 @@
     "@microsoft/fetch-event-source": "^2.0.1",
     "@ownclouders/web-pkg": "workspace:*",
     "axios": "^1.7.7",
-    "fast-xml-parser": "^5.0.0",
+    "fast-xml-parser": "^5.2.5",
     "lodash-es": "^4.17.21",
     "luxon": "^3.5.0",
     "uuid": "^11.0.0",
