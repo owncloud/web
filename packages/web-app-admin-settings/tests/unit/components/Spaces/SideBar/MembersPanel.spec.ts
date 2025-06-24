@@ -31,7 +31,7 @@ describe('MembersPanel', () => {
   it('should filter members accordingly to the entered search term', async () => {
     const userToFilterFor = spaceMock.members['3']
     const { wrapper } = getWrapper()
-    wrapper.vm.filterTerm = 'ein'
+    ;(wrapper.vm as any).filterTerm = 'ein'
     await wrapper.vm.$nextTick()
     expect(wrapper.findAll(selectors.membersRolePanelStub).length).toBe(1)
     expect(
@@ -41,7 +41,7 @@ describe('MembersPanel', () => {
   })
   it('should display an empty result if no matching members found', async () => {
     const { wrapper } = getWrapper()
-    wrapper.vm.filterTerm = 'no-match'
+    ;(wrapper.vm as any).filterTerm = 'no-match'
     await wrapper.vm.$nextTick()
     expect(wrapper.findAll(selectors.membersRolePanelStub).length).toBe(0)
     expect(wrapper.html()).toMatchSnapshot()
