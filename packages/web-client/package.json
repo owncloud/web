@@ -96,7 +96,7 @@
   },
   "devDependencies": {
     "@types/luxon": "3.6.2",
-    "@vitejs/plugin-vue": "5.2.4",
+    "@vitejs/plugin-vue": "6.0.0",
     "clean-publish": "5.2.2",
     "vite": "7.0.0",
     "vite-plugin-dts": "4.5.4",
