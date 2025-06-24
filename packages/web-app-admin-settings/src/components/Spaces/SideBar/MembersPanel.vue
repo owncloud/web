@@ -26,86 +26,71 @@
     </div>
   </div>
 </template>
-<script lang="ts">
-import { computed, defineComponent, inject, ref, watch, unref } from 'vue'
+<script lang="ts" setup>
+import { computed, inject, ref, watch, unref } from 'vue'
 import { ShareRole, SpaceMember, SpaceResource } from '@ownclouders/web-client'
 import MembersRoleSection from './MembersRoleSection.vue'
 import Fuse from 'fuse.js'
 import Mark from 'mark.js'
 import { defaultFuseOptions, useSharesStore } from '@ownclouders/web-pkg'
 
-export default defineComponent({
-  name: 'MembersPanel',
-  components: { MembersRoleSection },
-  setup() {
-    const sharesStore = useSharesStore()
+const sharesStore = useSharesStore()
 
-    const resource = inject<SpaceResource>('resource')
-    const filterTerm = ref('')
-    const markInstance = ref(null)
-    const membersListRef = ref(null)
+const resource = inject<SpaceResource>('resource')
+const filterTerm = ref('')
+const markInstance = ref(null)
+const membersListRef = ref(null)
 
-    const filterMembers = (collection: SpaceMember[], term: string) => {
-      if (!(term || '').trim()) {
-        return collection
-      }
+const filterMembers = (collection: SpaceMember[], term: string) => {
+  if (!(term || '').trim()) {
+    return collection
+  }
 
-      const searchEngine = new Fuse(collection, {
-        ...defaultFuseOptions,
-        keys: ['grantedTo.user.displayName', 'grantedTo.group.displayName']
-      })
-      return searchEngine.search(term).map((r) => r.item)
-    }
+  const searchEngine = new Fuse(collection, {
+    ...defaultFuseOptions,
+    keys: ['grantedTo.user.displayName', 'grantedTo.group.displayName']
+  })
+  return searchEngine.search(term).map((r) => r.item)
+}
 
-    const spaceMembers = computed<SpaceMember[]>(() => {
-      return Object.values(unref(resource).members)
+const spaceMembers = computed<SpaceMember[]>(() => {
+  return Object.values(unref(resource).members)
+})
+
+const filteredSpaceMembers = computed<SpaceMember[]>(() => {
+  return filterMembers(unref(spaceMembers), unref(filterTerm))
+})
+
+const availableRoles = computed<ShareRole[]>(() => {
+  const permissionsWithRole = unref(spaceMembers).filter((p) => !!p.roleId)
+  const roleIds = [...new Set(permissionsWithRole.map((p) => p.roleId))]
+  return roleIds
+    .map((r) => sharesStore.graphRoles[r])
+    .filter(Boolean)
+    .sort((a, b) => {
+      // sort roles by amount of permissions (most likely translates to manager > editor > viewer)
+      const permissionsA = a.rolePermissions.flatMap((r) => r.allowedResourceActions)
+      const permissionsB = b.rolePermissions.flatMap((r) => r.allowedResourceActions)
+      return permissionsB.length - permissionsA.length
     })
+})
 
-    const filteredSpaceMembers = computed<SpaceMember[]>(() => {
-      return filterMembers(unref(spaceMembers), unref(filterTerm))
+const membersWithoutRole = computed<SpaceMember[]>(() => {
+  return unref(filteredSpaceMembers).filter(({ roleId }) => !roleId)
+})
+
+const getMembersForRole = (role: ShareRole): SpaceMember[] => {
+  return unref(filteredSpaceMembers).filter(({ roleId }) => roleId === role.id)
+}
+
+watch(filterTerm, () => {
+  if (unref(membersListRef)) {
+    markInstance.value = new Mark(unref(membersListRef))
+    unref(markInstance).unmark()
+    unref(markInstance).mark(unref(filterTerm), {
+      element: 'span',
+      className: 'mark-highlight'
     })
-
-    const availableRoles = computed<ShareRole[]>(() => {
-      const permissionsWithRole = unref(spaceMembers).filter((p) => !!p.roleId)
-      const roleIds = [...new Set(permissionsWithRole.map((p) => p.roleId))]
-      return roleIds
-        .map((r) => sharesStore.graphRoles[r])
-        .filter(Boolean)
-        .sort((a, b) => {
-          // sort roles by amount of permissions (most likely translates to manager > editor > viewer)
-          const permissionsA = a.rolePermissions.flatMap((r) => r.allowedResourceActions)
-          const permissionsB = b.rolePermissions.flatMap((r) => r.allowedResourceActions)
-          return permissionsB.length - permissionsA.length
-        })
-    })
-
-    const membersWithoutRole = computed<SpaceMember[]>(() => {
-      return unref(filteredSpaceMembers).filter(({ roleId }) => !roleId)
-    })
-
-    const getMembersForRole = (role: ShareRole): SpaceMember[] => {
-      return unref(filteredSpaceMembers).filter(({ roleId }) => roleId === role.id)
-    }
-
-    watch(filterTerm, () => {
-      if (unref(membersListRef)) {
-        markInstance.value = new Mark(unref(membersListRef))
-        unref(markInstance).unmark()
-        unref(markInstance).mark(unref(filterTerm), {
-          element: 'span',
-          className: 'mark-highlight'
-        })
-      }
-    })
-
-    return {
-      filterTerm,
-      filteredSpaceMembers,
-      membersListRef,
-      availableRoles,
-      membersWithoutRole,
-      getMembersForRole
-    }
   }
 })
 </script>
