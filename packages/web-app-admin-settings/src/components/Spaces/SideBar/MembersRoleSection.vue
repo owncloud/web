@@ -1,7 +1,7 @@
 <template>
   <ul class="oc-list">
     <li
-      v-for="(m, index) in members"
+      v-for="(m, index) in props.members"
       :key="index"
       class="oc-flex oc-flex-middle oc-mb-s"
       data-testid="space-members-list"
@@ -23,23 +23,14 @@
     </li>
   </ul>
 </template>
-<script lang="ts">
-import { computed, defineComponent, PropType } from 'vue'
+<script lang="ts" setup>
+import { computed } from 'vue'
 import { ShareTypes, SpaceMember } from '@ownclouders/web-client'
 
-export default defineComponent({
-  name: 'MembersRoleSection',
-  props: {
-    members: {
-      type: Array as PropType<SpaceMember[]>,
-      required: true
-    }
-  },
-  setup() {
-    const groupIcon = computed(() => {
-      return ShareTypes.group.icon
-    })
-    return { groupIcon }
-  }
-})
+interface Props {
+  members: SpaceMember[]
+}
+
+const props = defineProps<Props>()
+const groupIcon = computed(() => ShareTypes.group.icon)
 </script>
