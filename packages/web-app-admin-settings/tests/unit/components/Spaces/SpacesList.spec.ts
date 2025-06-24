@@ -92,7 +92,7 @@ describe('SpacesList', () => {
     'sorts by property "%s"',
     async (prop) => {
       const { wrapper } = getWrapper({ mountType: shallowMount, spaces: spaceMocks })
-      wrapper.vm.sortBy = prop
+      ;(wrapper.vm as any).sortBy = prop
       await wrapper.vm.$nextTick()
       expect(
         (
@@ -100,7 +100,7 @@ describe('SpacesList', () => {
             .data[0] as SpaceResource
         ).id
       ).toBe(spaceMocks[0].id)
-      wrapper.vm.sortDir = SortDir.Desc
+      ;(wrapper.vm as any).sortDir = SortDir.Desc
       await wrapper.vm.$nextTick()
       expect(
         (
@@ -114,15 +114,15 @@ describe('SpacesList', () => {
     const { wrapper } = getWrapper({ spaces: [spaceMocks[0]] })
     const sortBy = 'members'
     const sortDir = SortDir.Desc
-    wrapper.vm.handleSort({ sortBy, sortDir })
-    expect(wrapper.vm.sortBy).toEqual(sortBy)
-    expect(wrapper.vm.sortDir).toEqual(sortDir)
+    ;(wrapper.vm as any).handleSort({ sortBy, sortDir })
+    expect((wrapper.vm as any).sortBy).toEqual(sortBy)
+    expect((wrapper.vm as any).sortDir).toEqual(sortDir)
   })
   it('shows only filtered spaces if filter applied', async () => {
     const { wrapper } = getWrapper({ spaces: spaceMocks })
-    wrapper.vm.filterTerm = 'Another'
+    ;(wrapper.vm as any).filterTerm = 'Another'
     await nextTick()
-    expect(wrapper.vm.items).toEqual([spaceMocks[1]])
+    expect((wrapper.vm as any).items).toEqual([spaceMocks[1]])
   })
   it('should show the context menu on right click', async () => {
     const spyDisplayPositionedDropdown = vi.mocked(displayPositionedDropdown)
@@ -150,7 +150,7 @@ describe('SpacesList', () => {
           mock<SpaceResource>({ id: '2', name: 'Some other Space' })
         ]
         const { wrapper } = getWrapper({ mountType: shallowMount, spaces })
-        wrapper.vm.selectSpaces(spaces)
+        ;(wrapper.vm as any).selectSpaces(spaces)
         const { setSelectedSpaces } = useSpaceSettingsStore()
         expect(setSelectedSpaces).toHaveBeenCalledWith(spaces)
       })
@@ -159,14 +159,14 @@ describe('SpacesList', () => {
       it('selects a space', () => {
         const spaces = [mock<SpaceResource>({ id: '1', name: 'Some Space' })]
         const { wrapper } = getWrapper({ mountType: shallowMount, spaces })
-        wrapper.vm.selectSpace(spaces[0])
+        ;(wrapper.vm as any).selectSpace(spaces[0])
         const { addSelectedSpace } = useSpaceSettingsStore()
         expect(addSelectedSpace).toHaveBeenCalledWith(spaces[0])
       })
       it('de-selects a selected space', () => {
         const spaces = [mock<SpaceResource>({ id: '1', name: 'Some Space' })]
         const { wrapper } = getWrapper({ mountType: shallowMount, spaces, selectedSpaces: spaces })
-        wrapper.vm.selectSpace(spaces[0])
+        ;(wrapper.vm as any).selectSpace(spaces[0])
         const { setSelectedSpaces } = useSpaceSettingsStore()
         expect(setSelectedSpaces).toHaveBeenCalledWith([])
       })
@@ -175,7 +175,7 @@ describe('SpacesList', () => {
       it('de-selects all selected spaces', () => {
         const spaces = [mock<SpaceResource>({ id: '1', name: 'Some Space' })]
         const { wrapper } = getWrapper({ mountType: shallowMount, spaces })
-        wrapper.vm.unselectAllSpaces()
+        ;(wrapper.vm as any).unselectAllSpaces()
         const { setSelectedSpaces } = useSpaceSettingsStore()
         expect(setSelectedSpaces).toHaveBeenCalledWith([])
       })
