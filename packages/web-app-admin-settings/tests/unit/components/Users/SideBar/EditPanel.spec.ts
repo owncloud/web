@@ -40,53 +40,53 @@ describe('EditPanel', () => {
   describe('method "isInputFieldReadOnly"', () => {
     it('should be true if included in capability readOnlyUserAttributes list', () => {
       const { wrapper } = getWrapper({ readOnlyUserAttributes: ['user.displayName'] })
-      expect(wrapper.vm.isInputFieldReadOnly('user.displayName')).toBeTruthy()
+      expect((wrapper.vm as any).isInputFieldReadOnly('user.displayName')).toBeTruthy()
     })
     it('should be false if not included in capability readOnlyUserAttributes list', () => {
       const { wrapper } = getWrapper()
-      expect(wrapper.vm.isInputFieldReadOnly('user.displayName')).toBeFalsy()
+      expect((wrapper.vm as any).isInputFieldReadOnly('user.displayName')).toBeFalsy()
     })
   })
 
   describe('method "revertChanges"', () => {
     it('should revert changes on property editUser', () => {
       const { wrapper } = getWrapper()
-      wrapper.vm.editUser.displayName = 'jana'
-      wrapper.vm.editUser.mail = 'jana@owncloud.com'
-      wrapper.vm.revertChanges()
-      expect(wrapper.vm.editUser.displayName).toEqual('jan')
-      expect(wrapper.vm.editUser.mail).toEqual('jan@owncloud.com')
+      ;(wrapper.vm as any).editUser.displayName = 'jana'
+      ;(wrapper.vm as any).editUser.mail = 'jana@owncloud.com'
+      ;(wrapper.vm as any).revertChanges()
+      expect((wrapper.vm as any).editUser.displayName).toEqual('jan')
+      expect((wrapper.vm as any).editUser.mail).toEqual('jan@owncloud.com')
     })
     it('should revert changes on property formData', () => {
       const { wrapper } = getWrapper()
-      wrapper.vm.formData.displayName.valid = false
-      wrapper.vm.formData.displayName.errorMessage = 'error'
-      wrapper.vm.revertChanges()
-      expect(wrapper.vm.formData.displayName.valid).toBeTruthy()
-      expect(wrapper.vm.formData.displayName.errorMessage).toEqual('')
+      ;(wrapper.vm as any).formData.displayName.valid = false
+      ;(wrapper.vm as any).formData.displayName.errorMessage = 'error'
+      ;(wrapper.vm as any).revertChanges()
+      expect((wrapper.vm as any).formData.displayName.valid).toBeTruthy()
+      expect((wrapper.vm as any).formData.displayName.errorMessage).toEqual('')
     })
   })
 
   describe('method "validateUserName"', () => {
     it('should be false when userName is empty', async () => {
       const { wrapper } = getWrapper()
-      wrapper.vm.editUser.onPremisesSamAccountName = ''
-      expect(await wrapper.vm.validateUserName()).toBeFalsy()
+      ;(wrapper.vm as any).editUser.onPremisesSamAccountName = ''
+      expect(await (wrapper.vm as any).validateUserName()).toBeFalsy()
     })
     it('should be false if userName is longer than 255 characters', async () => {
       const { wrapper } = getWrapper()
-      wrapper.vm.editUser.onPremisesSamAccountName = 'n'.repeat(256)
-      expect(await wrapper.vm.validateUserName()).toBeFalsy()
+      ;(wrapper.vm as any).editUser.onPremisesSamAccountName = 'n'.repeat(256)
+      expect(await (wrapper.vm as any).validateUserName()).toBeFalsy()
     })
     it('should be false when userName contains white spaces', async () => {
       const { wrapper } = getWrapper()
-      wrapper.vm.editUser.onPremisesSamAccountName = 'jan owncCloud'
-      expect(await wrapper.vm.validateUserName()).toBeFalsy()
+      ;(wrapper.vm as any).editUser.onPremisesSamAccountName = 'jan owncCloud'
+      expect(await (wrapper.vm as any).validateUserName()).toBeFalsy()
     })
     it('should be false when userName starts with a numeric value', async () => {
       const { wrapper } = getWrapper()
-      wrapper.vm.editUser.onPremisesSamAccountName = '1moretry'
-      expect(await wrapper.vm.validateUserName()).toBeFalsy()
+      ;(wrapper.vm as any).editUser.onPremisesSamAccountName = '1moretry'
+      expect(await (wrapper.vm as any).validateUserName()).toBeFalsy()
     })
     it('should be false when userName is already existing', async () => {
       const { wrapper, mocks } = getWrapper()
@@ -94,16 +94,16 @@ describe('EditPanel', () => {
       const getUserStub = graphMock.users.getUser.mockResolvedValue(
         mock<User>({ onPremisesSamAccountName: 'jan' })
       )
-      wrapper.vm.editUser.onPremisesSamAccountName = 'jan'
-      expect(await wrapper.vm.validateUserName()).toBeFalsy()
+      ;(wrapper.vm as any).editUser.onPremisesSamAccountName = 'jan'
+      expect(await (wrapper.vm as any).validateUserName()).toBeFalsy()
       expect(getUserStub).toHaveBeenCalled()
     })
     it('should be true when userName is valid', async () => {
       const { wrapper, mocks } = getWrapper()
       const graphMock = mocks.$clientService.graphAuthenticated
       const getUserStub = graphMock.users.getUser.mockRejectedValue(() => mockAxiosReject())
-      wrapper.vm.editUser.onPremisesSamAccountName = 'jana'
-      expect(await wrapper.vm.validateUserName()).toBeTruthy()
+      ;(wrapper.vm as any).editUser.onPremisesSamAccountName = 'jana'
+      expect(await (wrapper.vm as any).validateUserName()).toBeTruthy()
       expect(getUserStub).toHaveBeenCalled()
     })
   })
@@ -111,48 +111,48 @@ describe('EditPanel', () => {
   describe('method "validateDisplayName"', () => {
     it('should return true if displayName is valid', () => {
       const { wrapper } = getWrapper()
-      wrapper.vm.editUser.displayName = 'jan'
-      expect(wrapper.vm.validateDisplayName()).toBeTruthy()
-      expect(wrapper.vm.formData.displayName.valid).toBeTruthy()
+      ;(wrapper.vm as any).editUser.displayName = 'jan'
+      expect((wrapper.vm as any).validateDisplayName()).toBeTruthy()
+      expect((wrapper.vm as any).formData.displayName.valid).toBeTruthy()
     })
     it('should be false if displayName is longer than 255 characters', async () => {
       const { wrapper } = getWrapper()
-      wrapper.vm.editUser.displayName = 'n'.repeat(256)
-      expect(await wrapper.vm.validateDisplayName()).toBeFalsy()
+      ;(wrapper.vm as any).editUser.displayName = 'n'.repeat(256)
+      expect(await (wrapper.vm as any).validateDisplayName()).toBeFalsy()
     })
     it('should return false if displayName is not valid', () => {
       const { wrapper } = getWrapper()
-      wrapper.vm.editUser.displayName = ''
-      expect(wrapper.vm.validateDisplayName()).toBeFalsy()
-      expect(wrapper.vm.formData.displayName.valid).toBeFalsy()
+      ;(wrapper.vm as any).editUser.displayName = ''
+      expect((wrapper.vm as any).validateDisplayName()).toBeFalsy()
+      expect((wrapper.vm as any).formData.displayName.valid).toBeFalsy()
     })
   })
 
   describe('method "validateEmail"', () => {
     it('should return true if email is valid', () => {
       const { wrapper } = getWrapper()
-      wrapper.vm.editUser.mail = 'jan@owncloud.com'
-      expect(wrapper.vm.validateEmail()).toBeTruthy()
-      expect(wrapper.vm.formData.email.valid).toBeTruthy()
+      ;(wrapper.vm as any).editUser.mail = 'jan@owncloud.com'
+      expect((wrapper.vm as any).validateEmail()).toBeTruthy()
+      expect((wrapper.vm as any).formData.email.valid).toBeTruthy()
     })
     it('should return false if email is not valid', () => {
       const { wrapper } = getWrapper()
-      wrapper.vm.editUser.mail = ''
-      expect(wrapper.vm.validateEmail()).toBeFalsy()
-      expect(wrapper.vm.formData.email.valid).toBeFalsy()
+      ;(wrapper.vm as any).editUser.mail = ''
+      expect((wrapper.vm as any).validateEmail()).toBeFalsy()
+      expect((wrapper.vm as any).formData.email.valid).toBeFalsy()
     })
   })
 
   describe('computed method "invalidFormData"', () => {
     it('should be false if formData is invalid', () => {
       const { wrapper } = getWrapper()
-      wrapper.vm.formData.displayName.valid = true
-      expect(wrapper.vm.invalidFormData).toBeFalsy()
+      ;(wrapper.vm as any).formData.displayName.valid = true
+      expect((wrapper.vm as any).invalidFormData).toBeFalsy()
     })
     it('should be true if formData is valid', () => {
       const { wrapper } = getWrapper()
-      wrapper.vm.formData.displayName.valid = false
-      expect(wrapper.vm.invalidFormData).toBeTruthy()
+      ;(wrapper.vm as any).formData.displayName.valid = false
+      expect((wrapper.vm as any).invalidFormData).toBeTruthy()
     })
   })
 
