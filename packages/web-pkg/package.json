@@ -67,7 +67,7 @@
     "password-sheriff": "^1.1.1",
     "pinia": "^3.0.1",
     "portal-vue": "^3.0.0",
-    "prettier": "^3.6.0",
+    "prettier": "^3.6.1",
     "prismjs": "^1.29.0",
     "qs": "^6.13.0",
     "screenfull": "^6.0.2",
