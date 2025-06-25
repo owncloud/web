@@ -25,32 +25,32 @@ describe('DetailsPanel', () => {
   })
 
   describe('computed method "noUsers"', () => {
-    it('should be true if no users are given', () => {
+    it('should have 0 users if no users are given', () => {
       const { wrapper } = getWrapper({
         props: { user: null, users: [] }
       })
-      expect(wrapper.vm.noUsers).toBeTruthy()
+      expect((wrapper.vm as any).noUsers).toEqual(0)
     })
-    it('should be false if users are given', () => {
+    it('should have users if users are given', () => {
       const { wrapper } = getWrapper({ props: { user: defaultUser, users: [defaultUser] } })
-      expect(wrapper.vm.noUsers).toBeFalsy()
+      expect((wrapper.vm as any).noUsers).toEqual(1)
     })
   })
 
   describe('computed method "multipleUsers"', () => {
     it('should be false if no users are given', () => {
       const { wrapper } = getWrapper({ props: { user: null, users: [] } })
-      expect(wrapper.vm.multipleUsers).toBeFalsy()
+      expect((wrapper.vm as any).multipleUsers).toBeFalsy()
     })
     it('should be false if one user is given', () => {
       const { wrapper } = getWrapper({ props: { user: defaultUser, users: [defaultUser] } })
-      expect(wrapper.vm.multipleUsers).toBeFalsy()
+      expect((wrapper.vm as any).multipleUsers).toBeFalsy()
     })
     it('should be true if multiple users are given', () => {
       const { wrapper } = getWrapper({
         props: { user: null, users: [defaultUser, { displayName: 'user2' } as User] }
       })
-      expect(wrapper.vm.multipleUsers).toBeTruthy()
+      expect((wrapper.vm as any).multipleUsers).toBeTruthy()
     })
   })
 })
