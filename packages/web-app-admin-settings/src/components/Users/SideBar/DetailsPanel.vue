@@ -8,8 +8,8 @@
       <oc-icon name="group" size="xxlarge" />
       <p>{{ multipleUsersSelectedText }}</p>
     </div>
-    <div v-if="_user">
-      <UserInfoBox :user="_user" />
+    <div v-if="user">
+      <UserInfoBox :user="user" />
       <table
         class="details-table"
         :aria-label="$gettext('Overview of the information about the selected user')"
@@ -17,22 +17,22 @@
         <tbody>
           <tr>
             <th scope="col" class="oc-pr-s" v-text="$gettext('User name')" />
-            <td v-text="_user.onPremisesSamAccountName" />
+            <td v-text="user.onPremisesSamAccountName" />
           </tr>
           <tr>
             <th scope="col" class="oc-pr-s" v-text="$gettext('First and last name')" />
-            <td v-text="_user.displayName" />
+            <td v-text="user.displayName" />
           </tr>
           <tr>
             <th scope="col" class="oc-pr-s" v-text="$gettext('Email')" />
             <td>
-              <span v-text="_user.mail" />
+              <span v-text="user.mail" />
             </td>
           </tr>
           <tr>
             <th scope="col" class="oc-pr-s" v-text="$gettext('Role')" />
             <td>
-              <span v-if="_user.appRoleAssignments" v-text="roleDisplayName" />
+              <span v-if="user.appRoleAssignments" v-text="roleDisplayName" />
               <span v-else>
                 <span class="oc-mr-xs">-</span>
                 <oc-contextual-helper
@@ -72,7 +72,7 @@
           <tr>
             <th scope="col" class="oc-pr-s" v-text="$gettext('Groups')" />
             <td>
-              <span v-if="_user.memberOf.length" v-text="groupsDisplayValue" />
+              <span v-if="user.memberOf.length" v-text="groupsDisplayValue" />
               <span v-else>
                 <span class="oc-mr-xs">-</span>
                 <oc-contextual-helper
@@ -87,89 +87,54 @@
     </div>
   </div>
 </template>
-<script lang="ts">
-import { computed, defineComponent } from 'vue'
+<script lang="ts" setup>
+import { computed } from 'vue'
 import UserInfoBox from './UserInfoBox.vue'
-import { PropType } from 'vue'
 import { AppRole, User } from '@ownclouders/web-client/graph/generated'
 import { formatFileSize } from '@ownclouders/web-pkg'
 import { useGettext } from 'vue3-gettext'
 
-export default defineComponent({
-  name: 'DetailsPanel',
-  components: {
-    UserInfoBox
-  },
-  props: {
-    user: {
-      type: Object as PropType<User>,
-      required: false,
-      default: null
-    },
-    users: {
-      type: Array as PropType<User[]>,
-      required: true
-    },
-    roles: {
-      type: Array as PropType<AppRole[]>,
-      required: true
-    }
-  },
-  setup(props) {
-    const language = useGettext()
-    const { $gettext } = language
-    const currentLanguage = computed(() => {
-      return language.current
-    })
+interface Props {
+  user?: User | null
+  users: User[]
+  roles: AppRole[]
+}
+const { user = null, users, roles } = defineProps<Props>()
+const language = useGettext()
+const { $gettext } = language
+const currentLanguage = computed(() => {
+  return language.current
+})
+const noUsers = computed(() => users.length)
+const multipleUsers = computed(() => users.length > 1)
+const multipleUsersSelectedText = computed(() => {
+  return $gettext('%{count} users selected', {
+    count: users.length.toString()
+  })
+})
+const roleDisplayName = computed(() => {
+  const assignedRole = user.appRoleAssignments[0]
 
-    return {
-      $gettext,
-      currentLanguage,
-      // HACK: make sure _user has a proper type
-      _user: computed(() => props.user as User)
-    }
-  },
-  computed: {
-    noUsers() {
-      return !this.users.length
-    },
-    multipleUsers() {
-      return this.users.length > 1
-    },
-    multipleUsersSelectedText() {
-      return this.$gettext('%{count} users selected', {
-        count: this.users.length.toString()
-      })
-    },
-    roleDisplayName() {
-      const assignedRole = this.user.appRoleAssignments[0]
-
-      return (
-        this.$gettext(
-          this.roles.find((role) => role.id === assignedRole?.appRoleId)?.displayName || ''
-        ) || '-'
-      )
-    },
-    groupsDisplayValue() {
-      return this._user.memberOf
-        .map((group) => group.displayName)
-        .sort()
-        .join(', ')
-    },
-    showUserQuota() {
-      return 'total' in (this.user.drive?.quota || {})
-    },
-    quotaDisplayValue() {
-      return this.user.drive.quota.total === 0
-        ? this.$gettext('No restriction')
-        : formatFileSize(this.user.drive.quota.total, this.currentLanguage)
-    },
-    loginDisplayValue() {
-      return this.user.accountEnabled === false
-        ? this.$gettext('Forbidden')
-        : this.$gettext('Allowed')
-    }
-  }
+  return (
+    $gettext(roles.find((role) => role.id === assignedRole?.appRoleId)?.displayName || '') || '-'
+  )
+})
+const groupsDisplayValue = computed(() => {
+  return user.memberOf
+    .map((group) => group.displayName)
+    .sort()
+    .join(', ')
+})
+const showUserQuota = computed(() => {
+  return 'total' in (user.drive?.quota || {})
+})
+const quotaDisplayValue = computed(() => {
+  return user.drive.quota.total === 0
+    ? $gettext('No restriction')
+    : formatFileSize(user.drive.quota.total, currentLanguage.value)
+})
+const loginDisplayValue = computed(() => {
+  return user.accountEnabled === false ? $gettext('Forbidden') : $gettext('Allowed')
 })
 </script>
 <style lang="scss">
