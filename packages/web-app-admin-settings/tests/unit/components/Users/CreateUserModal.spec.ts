@@ -14,38 +14,38 @@ describe('CreateUserModal', () => {
   describe('computed method "isFormInvalid"', () => {
     it('should be true if any data set is invalid', () => {
       const { wrapper } = getWrapper()
-      wrapper.vm.formData.userName.valid = false
-      expect(wrapper.vm.isFormInvalid).toBeTruthy()
+      ;(wrapper.vm as any).formData.userName.valid = false
+      expect((wrapper.vm as any).isFormInvalid).toBeTruthy()
     })
   })
   it('should be false if no data set is invalid', () => {
     const { wrapper } = getWrapper()
-    Object.keys(wrapper.vm.formData).forEach((key) => {
-      wrapper.vm.formData[key].valid = true
+    Object.keys((wrapper.vm as any).formData).forEach((key) => {
+      ;(wrapper.vm as any).formData[key].valid = true
     })
-    expect(wrapper.vm.isFormInvalid).toBeFalsy()
+    expect((wrapper.vm as any).isFormInvalid).toBeFalsy()
   })
 
   describe('method "validateUserName"', () => {
     it('should be false when userName is empty', async () => {
       const { wrapper } = getWrapper()
-      wrapper.vm.user.onPremisesSamAccountName = ''
-      expect(await wrapper.vm.validateUserName()).toBeFalsy()
+      ;(wrapper.vm as any).user.onPremisesSamAccountName = ''
+      expect(await (wrapper.vm as any).validateUserName()).toBeFalsy()
     })
     it('should be false when userName is longer than 255 characters', async () => {
       const { wrapper } = getWrapper()
-      wrapper.vm.user.onPremisesSamAccountName = 'n'.repeat(256)
-      expect(await wrapper.vm.validateUserName()).toBeFalsy()
+      ;(wrapper.vm as any).user.onPremisesSamAccountName = 'n'.repeat(256)
+      expect(await (wrapper.vm as any).validateUserName()).toBeFalsy()
     })
     it('should be false when userName contains white spaces', async () => {
       const { wrapper } = getWrapper()
-      wrapper.vm.user.onPremisesSamAccountName = 'jan owncCloud'
-      expect(await wrapper.vm.validateUserName()).toBeFalsy()
+      ;(wrapper.vm as any).user.onPremisesSamAccountName = 'jan owncCloud'
+      expect(await (wrapper.vm as any).validateUserName()).toBeFalsy()
     })
     it('should be false when userName starts with a numeric value', async () => {
       const { wrapper } = getWrapper()
-      wrapper.vm.user.onPremisesSamAccountName = '1moretry'
-      expect(await wrapper.vm.validateUserName()).toBeFalsy()
+      ;(wrapper.vm as any).user.onPremisesSamAccountName = '1moretry'
+      expect(await (wrapper.vm as any).validateUserName()).toBeFalsy()
     })
     it('should be false when userName is already existing', async () => {
       const { wrapper, mocks } = getWrapper()
@@ -53,24 +53,24 @@ describe('CreateUserModal', () => {
       const getUserStub = graphMock.users.getUser.mockResolvedValue(
         mock<User>({ onPremisesSamAccountName: 'jan' })
       )
-      wrapper.vm.user.onPremisesSamAccountName = 'jan'
-      expect(await wrapper.vm.validateUserName()).toBeFalsy()
+      ;(wrapper.vm as any).user.onPremisesSamAccountName = 'jan'
+      expect(await (wrapper.vm as any).validateUserName()).toBeFalsy()
       expect(getUserStub).toHaveBeenCalled()
     })
     it('should be true when userName is valid', async () => {
       const { wrapper, mocks } = getWrapper()
       const graphMock = mocks.$clientService.graphAuthenticated
       const getUserStub = graphMock.users.getUser.mockRejectedValue(() => mockAxiosReject())
-      wrapper.vm.user.onPremisesSamAccountName = 'jana'
-      expect(await wrapper.vm.validateUserName()).toBeTruthy()
+      ;(wrapper.vm as any).user.onPremisesSamAccountName = 'jana'
+      expect(await (wrapper.vm as any).validateUserName()).toBeTruthy()
       expect(getUserStub).toHaveBeenCalled()
     })
     it('should be true when userName is an email address', async () => {
       const { wrapper, mocks } = getWrapper()
       const graphMock = mocks.$clientService.graphAuthenticated
       const getUserStub = graphMock.users.getUser.mockRejectedValue(() => mockAxiosReject())
-      wrapper.vm.user.onPremisesSamAccountName = 'sk@domain.tld'
-      expect(await wrapper.vm.validateUserName()).toBeTruthy()
+      ;(wrapper.vm as any).user.onPremisesSamAccountName = 'sk@domain.tld'
+      expect(await (wrapper.vm as any).validateUserName()).toBeTruthy()
       expect(getUserStub).toHaveBeenCalled()
     })
   })
@@ -78,46 +78,46 @@ describe('CreateUserModal', () => {
   describe('method "validateDisplayName"', () => {
     it('should be false when displayName is empty', () => {
       const { wrapper } = getWrapper()
-      wrapper.vm.user.displayName = ''
-      expect(wrapper.vm.validateDisplayName()).toBeFalsy()
+      ;(wrapper.vm as any).user.displayName = ''
+      expect((wrapper.vm as any).validateDisplayName()).toBeFalsy()
     })
     it('should be false when displayName is longer than 255 characters', async () => {
       const { wrapper } = getWrapper()
-      wrapper.vm.user.displayName = 'n'.repeat(256)
-      expect(await wrapper.vm.validateDisplayName()).toBeFalsy()
+      ;(wrapper.vm as any).user.displayName = 'n'.repeat(256)
+      expect(await (wrapper.vm as any).validateDisplayName()).toBeFalsy()
     })
     it('should be true when displayName is valid', () => {
       const { wrapper } = getWrapper()
-      wrapper.vm.user.displayName = 'jana'
-      expect(wrapper.vm.validateDisplayName()).toBeTruthy()
+      ;(wrapper.vm as any).user.displayName = 'jana'
+      expect((wrapper.vm as any).validateDisplayName()).toBeTruthy()
     })
   })
 
   describe('method "validateEmail"', () => {
     it('should be false when email is invalid', () => {
       const { wrapper } = getWrapper()
-      wrapper.vm.user.mail = 'jana@'
-      expect(wrapper.vm.validateEmail()).toBeFalsy()
+      ;(wrapper.vm as any).user.mail = 'jana@'
+      expect((wrapper.vm as any).validateEmail()).toBeFalsy()
     })
 
     it('should be true when email is valid', () => {
       const { wrapper } = getWrapper()
-      wrapper.vm.user.mail = 'jana@owncloud.com'
-      expect(wrapper.vm.validateEmail()).toBeTruthy()
+      ;(wrapper.vm as any).user.mail = 'jana@owncloud.com'
+      expect((wrapper.vm as any).validateEmail()).toBeTruthy()
     })
   })
 
   describe('method "validatePassword"', () => {
     it('should be false when password is empty', () => {
       const { wrapper } = getWrapper()
-      wrapper.vm.user.passwordProfile.password = ''
-      expect(wrapper.vm.validatePassword()).toBeFalsy()
+      ;(wrapper.vm as any).user.passwordProfile.password = ''
+      expect((wrapper.vm as any).validatePassword()).toBeFalsy()
     })
 
     it('should be true when password is valid', () => {
       const { wrapper } = getWrapper()
-      wrapper.vm.user.passwordProfile.password = 'asecret'
-      expect(wrapper.vm.validatePassword()).toBeTruthy()
+      ;(wrapper.vm as any).user.passwordProfile.password = 'asecret'
+      expect((wrapper.vm as any).validatePassword()).toBeTruthy()
     })
   })
   describe('method "onConfirm"', () => {
@@ -137,15 +137,14 @@ describe('CreateUserModal', () => {
     it('should create user on success', async () => {
       const { wrapper, mocks } = getWrapper()
       mocks.$clientService.graphAuthenticated.users.getUser.mockRejectedValueOnce(new Error(''))
-
-      wrapper.vm.user.onPremisesSamAccountName = 'foo'
-      await wrapper.vm.validateUserName()
-      wrapper.vm.user.displayName = 'foo bar'
-      wrapper.vm.validateDisplayName()
-      wrapper.vm.user.mail = 'foo@bar.com'
-      wrapper.vm.validateEmail()
-      wrapper.vm.user.passwordProfile.password = 'asecret'
-      wrapper.vm.validatePassword()
+      ;(wrapper.vm as any).user.onPremisesSamAccountName = 'foo'
+      await (wrapper.vm as any).validateUserName()
+      ;(wrapper.vm as any).user.displayName = 'foo bar'
+      ;(wrapper.vm as any).validateDisplayName()
+      ;(wrapper.vm as any).user.mail = 'foo@bar.com'
+      ;(wrapper.vm as any).validateEmail()
+      ;(wrapper.vm as any).user.passwordProfile.password = 'asecret'
+      ;(wrapper.vm as any).validatePassword()
 
       mocks.$clientService.graphAuthenticated.users.createUser.mockResolvedValue(
         mock<User>({ id: 'e3515ffb-d264-4dfc-8506-6c239f6673b5' })
@@ -167,15 +166,14 @@ describe('CreateUserModal', () => {
 
       const { wrapper, mocks } = getWrapper()
       mocks.$clientService.graphAuthenticated.users.getUser.mockRejectedValue(new Error(''))
-
-      wrapper.vm.user.onPremisesSamAccountName = 'foo'
-      await wrapper.vm.validateUserName()
-      wrapper.vm.user.displayName = 'foo bar'
-      wrapper.vm.validateDisplayName()
-      wrapper.vm.user.mail = 'foo@bar.com'
-      wrapper.vm.validateEmail()
-      wrapper.vm.user.passwordProfile.password = 'asecret'
-      wrapper.vm.validatePassword()
+      ;(wrapper.vm as any).user.onPremisesSamAccountName = 'foo'
+      await (wrapper.vm as any).validateUserName()
+      ;(wrapper.vm as any).user.displayName = 'foo bar'
+      ;(wrapper.vm as any).validateDisplayName()
+      ;(wrapper.vm as any).user.mail = 'foo@bar.com'
+      ;(wrapper.vm as any).validateEmail()
+      ;(wrapper.vm as any).user.passwordProfile.password = 'asecret'
+      ;(wrapper.vm as any).validatePassword()
 
       mocks.$clientService.graphAuthenticated.users.createUser.mockResolvedValue(
         mock<User>({ id: 'e3515ffb-d264-4dfc-8506-6c239f6673b5' })
