@@ -38,45 +38,37 @@
     </oc-select>
   </div>
 </template>
-<script lang="ts">
-import { computed, defineComponent, PropType, ref, unref, watch } from 'vue'
+<script lang="ts" setup>
+import { computed, ref, unref, watch } from 'vue'
 import { Group } from '@ownclouders/web-client/graph/generated'
 
-export default defineComponent({
-  name: 'GroupSelect',
-  props: {
-    selectedGroups: {
-      type: Array as PropType<Group[]>,
-      required: true
-    },
-    groupOptions: {
-      type: Array as PropType<Group[]>,
-      required: true
-    }
+interface Props {
+  selectedGroups: Group[]
+  groupOptions: Group[]
+}
+interface Emits {
+  (e: 'selectedOptionChange', value: Group): void
+}
+
+const props = defineProps<Props>()
+const emit = defineEmits<Emits>()
+const selectedOptions = ref()
+const onUpdate = (group: Group) => {
+  selectedOptions.value = group
+  emit('selectedOptionChange', unref(selectedOptions))
+}
+
+const currentGroups = computed(() => props.selectedGroups)
+watch(
+  currentGroups,
+  () => {
+    selectedOptions.value = props.selectedGroups
+      .map((g) => ({
+        ...g,
+        readonly: g.groupTypes?.includes('ReadOnly')
+      }))
+      .sort((a: any, b: any) => b.readonly - a.readonly)
   },
-  emits: ['selectedOptionChange'],
-  setup(props, { emit }) {
-    const selectedOptions = ref()
-    const onUpdate = (group: Group) => {
-      selectedOptions.value = group
-      emit('selectedOptionChange', unref(selectedOptions))
-    }
-
-    const currentGroups = computed(() => props.selectedGroups)
-    watch(
-      currentGroups,
-      () => {
-        selectedOptions.value = props.selectedGroups
-          .map((g) => ({
-            ...g,
-            readonly: g.groupTypes?.includes('ReadOnly')
-          }))
-          .sort((a: any, b: any) => b.readonly - a.readonly)
-      },
-      { immediate: true }
-    )
-
-    return { selectedOptions, onUpdate }
-  }
-})
+  { immediate: true }
+)
 </script>

@@ -13,14 +13,14 @@ describe('GroupSelect', () => {
   it('correctly maps the read-only state', () => {
     const groupMock = mock<Group>({ id: '1', groupTypes: ['ReadOnly'] })
     const { wrapper } = getWrapper(groupMock)
-    expect(wrapper.vm.selectedOptions[0].readonly).toBeTruthy()
+    expect((wrapper.vm as any).selectedOptions[0].readonly).toBeTruthy()
   })
   it('emits "selectedOptionChange" on update', () => {
     const group = mock<Group>({ id: '2', groupTypes: [] })
     const { wrapper } = getWrapper()
-    wrapper.vm.onUpdate(group)
+    ;(wrapper.vm as any).onUpdate(group)
     expect(wrapper.emitted().selectedOptionChange).toBeTruthy()
-    expect(wrapper.vm.selectedOptions).toEqual(group)
+    expect((wrapper.vm as any).selectedOptions).toEqual(group)
   })
 })
 
