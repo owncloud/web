@@ -5,17 +5,13 @@
     <span class="oc-text-muted user-info-display-name" v-text="user.displayName"></span>
   </div>
 </template>
-<script lang="ts">
-import { defineComponent } from 'vue'
-export default defineComponent({
-  name: 'UserInfoBox',
-  props: {
-    user: {
-      type: Object,
-      required: true
-    }
-  }
-})
+<script lang="ts" setup>
+import { User } from '@ownclouders/web-client/graph/generated'
+
+interface Props {
+  user: User
+}
+const { user } = defineProps<Props>()
 </script>
 <style lang="scss">
 .user-info {
