@@ -150,8 +150,8 @@ importers:
         specifier: 13.0.0
         version: 13.0.0
       prettier:
-        specifier: ^3.6.1
-        version: 3.6.1
+        specifier: ^3.6.2
+        version: 3.6.2
       qs:
         specifier: 6.14.0
         version: 6.14.0
@@ -431,8 +431,8 @@ importers:
   packages/prettier-config:
     dependencies:
       prettier:
-        specifier: ^3.6.1
-        version: 3.6.1
+        specifier: ^3.6.2
+        version: 3.6.2
 
   packages/tsconfig: {}
 
@@ -1001,8 +1001,8 @@ importers:
         specifier: ^3.0.0
         version: 3.0.0(patch_hash=ce486dc8fb49b1e3f9b160bfede1dfeb31a492b7e1ea6dc8d10bbee39174cdcb)(vue@3.5.17(typescript@5.8.3))
       prettier:
-        specifier: ^3.6.1
-        version: 3.6.1
+        specifier: ^3.6.2
+        version: 3.6.2
       prismjs:
         specifier: ^1.29.0
         version: 1.30.0
@@ -5887,6 +5887,11 @@ packages:
 
   prettier@3.6.1:
     resolution: {integrity: sha512-5xGWRa90Sp2+x1dQtNpIpeOQpTDBs9cZDmA/qs2vDNN2i18PdapqY7CmBeyLlMuGqXJRIOPaCaVZTLNQRWUH/A==}
+    engines: {node: '>=14'}
+    hasBin: true
+
+  prettier@3.6.2:
+    resolution: {integrity: sha512-I7AIg5boAr5R0FFtJ6rCfD+LFsWHp81dolrFD8S79U9tb8Az2nGrJncnMSnys+bpQJfRUzqs9hnA81OAA3hCuQ==}
     engines: {node: '>=14'}
     hasBin: true
 
@@ -12495,6 +12500,8 @@ snapshots:
   prelude-ls@1.2.1: {}
 
   prettier@3.6.1: {}
+
+  prettier@3.6.2: {}
 
   prismjs@1.30.0: {}
 
