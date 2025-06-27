@@ -5,15 +5,19 @@
   </main>
 </template>
 <script lang="ts">
-import { defineComponent, onBeforeUnmount, watch, ref } from 'vue'
+import { defineComponent, onBeforeUnmount, watch, ref, computed, unref } from 'vue'
 import { useRoute, eventBus, useResourcesStore } from '@ownclouders/web-pkg'
 
 export default defineComponent({
   setup() {
-    const dragareaEnabled = ref(false)
+    const route = useRoute()
     const { resetSelection } = useResourcesStore()
 
-    watch(useRoute(), () => {
+    const dragareaEnabled = ref(false)
+
+    const routePath = computed(() => unref(route).path)
+
+    watch(routePath, (value) => {
       resetSelection()
     })
 
