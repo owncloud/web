@@ -24,14 +24,14 @@ describe('UsersList', () => {
         users: getUserMocks(),
         selectedUsers: getUserMocks()
       })
-      expect(wrapper.vm.allUsersSelected).toBeTruthy()
+      expect((wrapper.vm as any).allUsersSelected).toBeTruthy()
     })
     it('should be false if not every user is selected', () => {
       const { wrapper } = getWrapper({
         users: getUserMocks(),
         selectedUsers: []
       })
-      expect(wrapper.vm.allUsersSelected).toBeFalsy()
+      expect((wrapper.vm as any).allUsersSelected).toBeFalsy()
     })
   })
 
@@ -40,7 +40,7 @@ describe('UsersList', () => {
       const { wrapper } = getWrapper()
 
       expect(
-        wrapper.vm.orderBy(
+        (wrapper.vm as any).orderBy(
           [{ displayName: 'user' }, { displayName: 'admin' }] as User[],
           'displayName',
           false
@@ -51,7 +51,7 @@ describe('UsersList', () => {
       const { wrapper } = getWrapper()
 
       expect(
-        wrapper.vm.orderBy(
+        (wrapper.vm as any).orderBy(
           [{ displayName: 'admin' }, { displayName: 'user' }] as User[],
           'displayName',
           true
@@ -63,7 +63,7 @@ describe('UsersList', () => {
       const { wrapper } = getWrapper()
 
       expect(
-        wrapper.vm.orderBy(
+        (wrapper.vm as any).orderBy(
           [
             { appRoleAssignments: [{ appRoleId: '1' }] },
             { appRoleAssignments: [{ appRoleId: '2' }] }
@@ -80,7 +80,7 @@ describe('UsersList', () => {
       const { wrapper } = getWrapper()
 
       expect(
-        wrapper.vm.orderBy(
+        (wrapper.vm as any).orderBy(
           [
             { appRoleAssignments: [{ appRoleId: '1' }] },
             { appRoleAssignments: [{ appRoleId: '2' }] }
@@ -127,7 +127,7 @@ describe('UsersList', () => {
       it('selects all users', () => {
         const users = getUserMocks()
         const { wrapper } = getWrapper({ mountType: shallowMount, users })
-        wrapper.vm.selectUsers(users)
+        ;(wrapper.vm as any).selectUsers(users)
         const { setSelectedUsers } = useUserSettingsStore()
         expect(setSelectedUsers).toHaveBeenCalledWith(users)
       })
@@ -136,7 +136,7 @@ describe('UsersList', () => {
       it('selects a user', () => {
         const users = getUserMocks()
         const { wrapper } = getWrapper({ mountType: shallowMount, users: [users[0]] })
-        wrapper.vm.selectUser(users[0])
+        ;(wrapper.vm as any).selectUser(users[0])
         const { addSelectedUser } = useUserSettingsStore()
         expect(addSelectedUser).toHaveBeenCalledWith(users[0])
       })
@@ -147,7 +147,7 @@ describe('UsersList', () => {
           users: [users[0]],
           selectedUsers: [users[0]]
         })
-        wrapper.vm.selectUser(users[0])
+        ;(wrapper.vm as any).selectUser(users[0])
         const { setSelectedUsers } = useUserSettingsStore()
         expect(setSelectedUsers).toHaveBeenCalledWith([])
       })
@@ -160,7 +160,7 @@ describe('UsersList', () => {
           users: [users[0]],
           selectedUsers: [users[0]]
         })
-        wrapper.vm.unselectAllUsers()
+        ;(wrapper.vm as any).unselectAllUsers()
         const { setSelectedUsers } = useUserSettingsStore()
         expect(setSelectedUsers).toHaveBeenCalledWith([])
       })

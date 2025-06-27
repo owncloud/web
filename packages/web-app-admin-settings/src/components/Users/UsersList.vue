@@ -104,19 +104,9 @@
   </div>
 </template>
 
-<script lang="ts">
+<script lang="ts" setup>
 import { useGettext } from 'vue3-gettext'
-import {
-  ComponentPublicInstance,
-  PropType,
-  computed,
-  defineComponent,
-  nextTick,
-  onMounted,
-  ref,
-  unref,
-  watch
-} from 'vue'
+import { ComponentPublicInstance, computed, nextTick, onMounted, ref, unref, watch } from 'vue'
 import {
   AppLoadingSpinner,
   ContextMenuBtnClickEventData,
@@ -143,309 +133,259 @@ import {
 import { findIndex } from 'lodash-es'
 import Mark from 'mark.js'
 
-export default defineComponent({
-  name: 'UsersList',
-  components: { AppLoadingSpinner, ContextMenuQuickAction, Pagination },
-  props: {
-    roles: {
-      type: Array as PropType<AppRole[]>,
-      required: true
-    },
-    isLoading: {
-      type: Boolean,
-      default: false
-    }
-  },
-  setup(props) {
-    const { $gettext } = useGettext()
-    const { isSticky } = useIsTopBarSticky()
+interface Props {
+  roles: AppRole[]
+  isLoading?: boolean
+}
+const { roles, isLoading = false } = defineProps<Props>()
 
-    const contextMenuButtonRef = ref(undefined)
-    const sortBy = ref('onPremisesSamAccountName')
-    const sortDir = ref<SortDir>(SortDir.Asc)
-    const { y: fileListHeaderY } = useFileListHeaderPosition('#admin-settings-app-bar')
+const { $gettext } = useGettext()
+const { isSticky } = useIsTopBarSticky()
 
-    const lastSelectedUserIndex = ref(0)
-    const lastSelectedUserId = ref(null)
+const contextMenuButtonRef = ref(undefined)
+const sortBy = ref('onPremisesSamAccountName')
+const sortDir = ref<SortDir>(SortDir.Asc)
+const { y: fileListHeaderY } = useFileListHeaderPosition('#admin-settings-app-bar')
 
-    const userSettingsStore = useUserSettingsStore()
-    const { users, selectedUsers } = storeToRefs(userSettingsStore)
+const lastSelectedUserIndex = ref(0)
+const lastSelectedUserId = ref(null)
 
-    const isUserSelected = (user: User) => {
-      return unref(selectedUsers).some((s) => s.id === user.id)
-    }
-    const selectUser = (selectedUser: User) => {
-      lastSelectedUserIndex.value = findIndex(unref(users), (u) => u.id === selectedUser.id)
-      lastSelectedUserId.value = selectedUser.id
-      keyActions.resetSelectionCursor()
+const userSettingsStore = useUserSettingsStore()
+const { users, selectedUsers } = storeToRefs(userSettingsStore)
 
-      const isUserSelected = unref(selectedUsers).find((user) => user.id === selectedUser.id)
-      if (!isUserSelected) {
-        return userSettingsStore.addSelectedUser(selectedUser)
-      }
+const isUserSelected = (user: User) => {
+  return unref(selectedUsers).some((s) => s.id === user.id)
+}
+const selectUser = (selectedUser: User) => {
+  lastSelectedUserIndex.value = findIndex(unref(users), (u) => u.id === selectedUser.id)
+  lastSelectedUserId.value = selectedUser.id
+  keyActions.resetSelectionCursor()
 
-      userSettingsStore.setSelectedUsers(
-        unref(selectedUsers).filter((user) => user.id !== selectedUser.id)
-      )
-    }
-
-    const unselectAllUsers = () => {
-      userSettingsStore.setSelectedUsers([])
-    }
-
-    const selectUsers = (users: User[]) => {
-      userSettingsStore.setSelectedUsers(users)
-    }
-
-    const showDetails = (user: User) => {
-      if (!isUserSelected(user)) {
-        selectUser(user)
-      }
-      eventBus.publish(SideBarEventTopics.open)
-    }
-
-    const showEditPanel = (user: User) => {
-      if (!isUserSelected(user)) {
-        selectUser(user)
-      }
-      eventBus.publish(SideBarEventTopics.openWithPanel, 'EditPanel')
-    }
-
-    const showUserAssigmentPanel = (user: User) => {
-      if (!isUserSelected(user)) {
-        selectUser(user)
-      }
-      eventBus.publish(SideBarEventTopics.openWithPanel, 'UserAssignmentsPanel')
-    }
-
-    const rowClicked = (data: [User, MouseEvent]) => {
-      const resource = data[0]
-      const eventData = data[1]
-      const isCheckboxClicked =
-        (eventData?.target as HTMLElement).getAttribute('type') === 'checkbox'
-
-      const contextActionClicked =
-        (eventData?.target as HTMLElement)?.closest('div')?.id === 'oc-files-context-menu'
-      if (contextActionClicked) {
-        return
-      }
-
-      if (eventData?.metaKey) {
-        return eventBus.publish('app.resources.list.clicked.meta', resource)
-      }
-      if (eventData?.shiftKey) {
-        return eventBus.publish('app.resources.list.clicked.shift', {
-          resource,
-          skipTargetSelection: isCheckboxClicked
-        })
-      }
-      if (isCheckboxClicked) {
-        return
-      }
-      unselectAllUsers()
-      selectUser(resource)
-    }
-    const showContextMenuOnBtnClick = (data: ContextMenuBtnClickEventData, user: User) => {
-      const { dropdown, event } = data
-      if (dropdown?.tippy === undefined) {
-        return
-      }
-      if (!isUserSelected(user)) {
-        userSettingsStore.setSelectedUsers([user])
-      }
-      displayPositionedDropdown(dropdown.tippy, event, unref(contextMenuButtonRef))
-    }
-    const showContextMenuOnRightClick = (
-      row: ComponentPublicInstance<unknown>,
-      event: MouseEvent,
-      user: User
-    ) => {
-      event.preventDefault()
-      const dropdown = row.$el.getElementsByClassName('users-table-btn-action-dropdown')[0]
-      if (dropdown === undefined) {
-        return
-      }
-      if (!isUserSelected(user)) {
-        userSettingsStore.setSelectedUsers([user])
-      }
-      displayPositionedDropdown(dropdown._tippy, event, unref(contextMenuButtonRef))
-    }
-
-    const getRoleDisplayNameByUser = (user: User) => {
-      const assignedRole = user.appRoleAssignments[0]
-
-      return (
-        $gettext(
-          props.roles.find((role) => role.id === assignedRole?.appRoleId)?.displayName || ''
-        ) || '-'
-      )
-    }
-
-    const orderBy = (list: User[], prop: string, desc: boolean) => {
-      return [...list].sort((user1, user2) => {
-        let a: string, b: string
-
-        switch (prop) {
-          case 'role':
-            a = getRoleDisplayNameByUser(user1)
-            b = getRoleDisplayNameByUser(user2)
-            break
-          case 'accountEnabled':
-            a = ('accountEnabled' in user1 ? user1.accountEnabled : true).toString()
-            b = ('accountEnabled' in user2 ? user2.accountEnabled : true).toString()
-            break
-          default:
-            a = user1[prop as keyof User].toString() || ''
-            b = user2[prop as keyof User].toString() || ''
-        }
-
-        return desc ? b.localeCompare(a) : a.localeCompare(b)
-      })
-    }
-
-    const items = computed(() => {
-      return orderBy(unref(users), unref(sortBy), unref(sortDir) === SortDir.Desc)
-    })
-
-    const {
-      items: paginatedItems,
-      page: currentPage,
-      total: totalPages
-    } = usePagination({ items, perPageDefault, perPageStoragePrefix })
-
-    const keyActions = useKeyboardActions()
-    useKeyboardTableNavigation(
-      keyActions,
-      paginatedItems,
-      selectedUsers,
-      lastSelectedUserIndex,
-      lastSelectedUserId
-    )
-    useKeyboardTableMouseActions(
-      keyActions,
-      paginatedItems,
-      selectedUsers,
-      lastSelectedUserIndex,
-      lastSelectedUserId
-    )
-
-    const markInstance = ref<Mark>(null)
-    onMounted(async () => {
-      await nextTick()
-      markInstance.value = new Mark('.mark-element')
-    })
-    const displayNameQuery = useRouteQuery('q_displayName')
-    watch([displayNameQuery, paginatedItems], () => {
-      unref(markInstance)?.unmark()
-      const filterTerm = queryItemAsString(unref(displayNameQuery))
-      if (filterTerm) {
-        unref(markInstance)?.mark(filterTerm, {
-          element: 'span',
-          className: 'mark-highlight'
-        })
-      }
-    })
-
-    return {
-      showDetails,
-      showEditPanel,
-      showUserAssigmentPanel,
-      isUserSelected,
-      rowClicked,
-      contextMenuButtonRef,
-      showContextMenuOnBtnClick,
-      showContextMenuOnRightClick,
-      fileListHeaderY,
-      getRoleDisplayNameByUser,
-      items,
-      sortBy,
-      sortDir,
-      paginatedItems,
-      currentPage,
-      totalPages,
-      orderBy,
-      selectedUsers,
-      selectUser,
-      selectUsers,
-      unselectAllUsers,
-      users,
-      isSticky
-    }
-  },
-  computed: {
-    allUsersSelected() {
-      return this.paginatedItems.length === this.selectedUsers.length
-    },
-    footerTextTotal() {
-      return this.$gettext('%{userCount} users in total', {
-        userCount: this.users.length.toString()
-      })
-    },
-    fields() {
-      return [
-        {
-          name: 'select',
-          title: '',
-          type: 'slot',
-          width: 'shrink',
-          headerType: 'slot'
-        },
-        {
-          name: 'avatar',
-          title: '',
-          type: 'slot',
-          width: 'shrink'
-        },
-        {
-          name: 'onPremisesSamAccountName',
-          title: this.$gettext('User name'),
-          sortable: true
-        },
-        {
-          name: 'displayName',
-          title: this.$gettext('First and last name'),
-          sortable: true,
-          tdClass: 'mark-element'
-        },
-        {
-          name: 'mail',
-          title: this.$gettext('Email'),
-          sortable: true
-        },
-        {
-          name: 'role',
-          title: this.$gettext('Role'),
-          type: 'slot',
-          sortable: true
-        },
-        {
-          name: 'accountEnabled',
-          title: this.$gettext('Login'),
-          type: 'slot',
-          sortable: true
-        },
-        {
-          name: 'actions',
-          title: this.$gettext('Actions'),
-          sortable: false,
-          type: 'slot',
-          alignH: 'right'
-        }
-      ]
-    },
-    highlighted() {
-      return this.selectedUsers.map((user) => user.id)
-    }
-  },
-  methods: {
-    handleSort(event: { sortBy: string; sortDir: SortDir }) {
-      this.sortBy = event.sortBy
-      this.sortDir = event.sortDir
-    },
-    getSelectUserLabel(user: User) {
-      return this.$gettext('Select %{ user }', { user: user.displayName }, true)
-    }
+  const isUserSelected = unref(selectedUsers).find((user) => user.id === selectedUser.id)
+  if (!isUserSelected) {
+    return userSettingsStore.addSelectedUser(selectedUser)
   }
+
+  userSettingsStore.setSelectedUsers(
+    unref(selectedUsers).filter((user) => user.id !== selectedUser.id)
+  )
+}
+
+const unselectAllUsers = () => {
+  userSettingsStore.setSelectedUsers([])
+}
+
+const selectUsers = (users: User[]) => {
+  userSettingsStore.setSelectedUsers(users)
+}
+
+const showDetails = (user: User) => {
+  if (!isUserSelected(user)) {
+    selectUser(user)
+  }
+  eventBus.publish(SideBarEventTopics.open)
+}
+
+const showEditPanel = (user: User) => {
+  if (!isUserSelected(user)) {
+    selectUser(user)
+  }
+  eventBus.publish(SideBarEventTopics.openWithPanel, 'EditPanel')
+}
+
+const rowClicked = (data: [User, MouseEvent]) => {
+  const resource = data[0]
+  const eventData = data[1]
+  const isCheckboxClicked = (eventData?.target as HTMLElement).getAttribute('type') === 'checkbox'
+
+  const contextActionClicked =
+    (eventData?.target as HTMLElement)?.closest('div')?.id === 'oc-files-context-menu'
+  if (contextActionClicked) {
+    return
+  }
+
+  if (eventData?.metaKey) {
+    return eventBus.publish('app.resources.list.clicked.meta', resource)
+  }
+  if (eventData?.shiftKey) {
+    return eventBus.publish('app.resources.list.clicked.shift', {
+      resource,
+      skipTargetSelection: isCheckboxClicked
+    })
+  }
+  if (isCheckboxClicked) {
+    return
+  }
+  unselectAllUsers()
+  selectUser(resource)
+}
+const showContextMenuOnBtnClick = (data: ContextMenuBtnClickEventData, user: User) => {
+  const { dropdown, event } = data
+  if (dropdown?.tippy === undefined) {
+    return
+  }
+  if (!isUserSelected(user)) {
+    userSettingsStore.setSelectedUsers([user])
+  }
+  displayPositionedDropdown(dropdown.tippy, event, unref(contextMenuButtonRef))
+}
+const showContextMenuOnRightClick = (
+  row: ComponentPublicInstance<unknown>,
+  event: MouseEvent,
+  user: User
+) => {
+  event.preventDefault()
+  const dropdown = row.$el.getElementsByClassName('users-table-btn-action-dropdown')[0]
+  if (dropdown === undefined) {
+    return
+  }
+  if (!isUserSelected(user)) {
+    userSettingsStore.setSelectedUsers([user])
+  }
+  displayPositionedDropdown(dropdown._tippy, event, unref(contextMenuButtonRef))
+}
+
+const getRoleDisplayNameByUser = (user: User) => {
+  const assignedRole = user.appRoleAssignments[0]
+
+  return (
+    $gettext(roles.find((role) => role.id === assignedRole?.appRoleId)?.displayName || '') || '-'
+  )
+}
+
+const orderBy = (list: User[], prop: string, desc: boolean) => {
+  return [...list].sort((user1, user2) => {
+    let a: string, b: string
+
+    switch (prop) {
+      case 'role':
+        a = getRoleDisplayNameByUser(user1)
+        b = getRoleDisplayNameByUser(user2)
+        break
+      case 'accountEnabled':
+        a = ('accountEnabled' in user1 ? user1.accountEnabled : true).toString()
+        b = ('accountEnabled' in user2 ? user2.accountEnabled : true).toString()
+        break
+      default:
+        a = user1[prop as keyof User].toString() || ''
+        b = user2[prop as keyof User].toString() || ''
+    }
+
+    return desc ? b.localeCompare(a) : a.localeCompare(b)
+  })
+}
+
+const items = computed(() => {
+  return orderBy(unref(users), unref(sortBy), unref(sortDir) === SortDir.Desc)
+})
+
+const {
+  items: paginatedItems,
+  page: currentPage,
+  total: totalPages
+} = usePagination({ items, perPageDefault, perPageStoragePrefix })
+
+const keyActions = useKeyboardActions()
+useKeyboardTableNavigation(
+  keyActions,
+  paginatedItems,
+  selectedUsers,
+  lastSelectedUserIndex,
+  lastSelectedUserId
+)
+useKeyboardTableMouseActions(
+  keyActions,
+  paginatedItems,
+  selectedUsers,
+  lastSelectedUserIndex,
+  lastSelectedUserId
+)
+
+const markInstance = ref<Mark>(null)
+onMounted(async () => {
+  await nextTick()
+  markInstance.value = new Mark('.mark-element')
+})
+const displayNameQuery = useRouteQuery('q_displayName')
+watch([displayNameQuery, paginatedItems], () => {
+  unref(markInstance)?.unmark()
+  const filterTerm = queryItemAsString(unref(displayNameQuery))
+  if (filterTerm) {
+    unref(markInstance)?.mark(filterTerm, {
+      element: 'span',
+      className: 'mark-highlight'
+    })
+  }
+})
+function handleSort(event: { sortBy: string; sortDir: SortDir }) {
+  sortBy.value = event.sortBy
+  sortDir.value = event.sortDir
+}
+function getSelectUserLabel(user: User) {
+  return $gettext('Select %{ user }', { user: user.displayName }, true)
+}
+const allUsersSelected = computed(() => {
+  return unref(paginatedItems).length === unref(selectedUsers).length
+})
+const footerTextTotal = computed(() => {
+  return $gettext('%{userCount} users in total', {
+    userCount: unref(users).length.toString()
+  })
+})
+const fields = computed(() => {
+  return [
+    {
+      name: 'select',
+      title: '',
+      type: 'slot',
+      width: 'shrink',
+      headerType: 'slot'
+    },
+    {
+      name: 'avatar',
+      title: '',
+      type: 'slot',
+      width: 'shrink'
+    },
+    {
+      name: 'onPremisesSamAccountName',
+      title: $gettext('User name'),
+      sortable: true
+    },
+    {
+      name: 'displayName',
+      title: $gettext('First and last name'),
+      sortable: true,
+      tdClass: 'mark-element'
+    },
+    {
+      name: 'mail',
+      title: $gettext('Email'),
+      sortable: true
+    },
+    {
+      name: 'role',
+      title: $gettext('Role'),
+      type: 'slot',
+      sortable: true
+    },
+    {
+      name: 'accountEnabled',
+      title: $gettext('Login'),
+      type: 'slot',
+      sortable: true
+    },
+    {
+      name: 'actions',
+      title: $gettext('Actions'),
+      sortable: false,
+      type: 'slot',
+      alignH: 'right'
+    }
+  ]
+})
+const highlighted = computed(() => {
+  return unref(selectedUsers).map((user: User) => user.id)
 })
 </script>
 
