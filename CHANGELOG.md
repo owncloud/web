@@ -11,6 +11,7 @@ Summary
 * Bugfix - Ensure uniform distribution when generating password: [#12575](https://github.com/owncloud/web/pull/12575)
 * Bugfix - Md Text Html Preview Text gets Clipped: [#12697](https://github.com/owncloud/web/pull/12697)
 * Bugfix - Export correct design system files: [#12717](https://github.com/owncloud/web/pull/12717)
+* Bugfix - Reset selection only when path changes: [#12768](https://github.com/owncloud/web/pull/12768)
 
 Details
 -------
@@ -40,6 +41,19 @@ Details
    exported as ES modules.
 
    https://github.com/owncloud/web/pull/12717
+
+* Bugfix - Reset selection only when path changes: [#12768](https://github.com/owncloud/web/pull/12768)
+
+   We've changed the way we reset the selection when the route changes.
+
+   Previously, we were resetting the selection when the route changed, but this was
+   not working as expected. For example, when updating `scrollTo` route query, the
+   selection was being unintentionally reset.
+
+   Now, we're only resetting the selection when the path changes.
+
+   https://github.com/owncloud/web/issues/10398
+   https://github.com/owncloud/web/pull/12768
 
 Changelog for ownCloud Web [12.0.0] (2025-06-11)
 =======================================
