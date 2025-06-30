@@ -39,7 +39,7 @@
               :limited-screen-space="limitedScreenSpace"
               class="oc-flex-1 oc-flex oc-flex-start"
             />
-            <batch-actions
+            <batch-actions-component
               v-if="showBatchActions"
               :actions="batchActions"
               :action-options="{ resources: batchActionItems }"
@@ -67,150 +67,83 @@
   </main>
 </template>
 
-<script lang="ts">
+<script lang="ts" setup>
 import { perPageDefault, paginationOptions } from '../defaults'
 import {
   AppLoadingSpinner,
   SideBar,
-  BatchActions,
+  BatchActions as BatchActionsComponent,
   SideBarPanelContext,
   Action,
   useIsTopBarSticky
 } from '@ownclouders/web-pkg'
-import {
-  defineComponent,
-  inject,
-  onBeforeUnmount,
-  PropType,
-  Ref,
-  ref,
-  unref,
-  VNodeRef,
-  watch
-} from 'vue'
-import { eventBus, useAppDefaults } from '@ownclouders/web-pkg'
+import { inject, onBeforeUnmount, Ref, ref, unref, VNodeRef, watch } from 'vue'
+import { eventBus } from '@ownclouders/web-pkg'
 import { SideBarEventTopics } from '@ownclouders/web-pkg'
 import { SideBarPanel } from '@ownclouders/web-pkg'
 import { BreadcrumbItem } from '@ownclouders/design-system/helpers'
 import { ViewOptions } from '@ownclouders/web-pkg'
 import { Item } from '@ownclouders/web-client'
 
-export default defineComponent({
-  components: {
-    SideBar,
-    AppLoadingSpinner,
-    BatchActions,
-    ViewOptions
-  },
-  props: {
-    breadcrumbs: {
-      required: true,
-      type: Array as PropType<BreadcrumbItem[]>
-    },
-    isSideBarOpen: {
-      required: false,
-      type: Boolean,
-      default: false
-    },
-    sideBarAvailablePanels: {
-      required: false,
-      type: Array as PropType<SideBarPanel<unknown, unknown, unknown>[]>,
-      default: (): SideBarPanel<unknown, unknown, unknown>[] => []
-    },
-    sideBarPanelContext: {
-      required: false,
-      type: Object as PropType<SideBarPanelContext<unknown, unknown, unknown>>,
-      default: (): SideBarPanelContext<unknown, unknown, unknown> => ({})
-    },
-    sideBarActivePanel: {
-      required: false,
-      type: [String, null],
-      default: null
-    },
-    loading: {
-      required: false,
-      type: Boolean,
-      default: false
-    },
-    sideBarLoading: {
-      required: false,
-      type: Boolean,
-      default: false
-    },
-    showViewOptions: {
-      type: Boolean,
-      required: false,
-      default: false
-    },
-    showBatchActions: {
-      type: Boolean,
-      required: false,
-      default: false
-    },
-    batchActionItems: {
-      type: Array as PropType<Item[]>,
-      required: false,
-      default: (): Item[] => []
-    },
-    batchActions: {
-      type: Array as PropType<Action[]>,
-      required: false,
-      default: (): Action[] => []
-    },
-    showAppBar: {
-      type: Boolean,
-      required: false,
-      default: true
+interface Props {
+  breadcrumbs: BreadcrumbItem[]
+  isSideBarOpen?: boolean
+  sideBarAvailablePanels?: SideBarPanel<unknown, unknown, unknown>[]
+  sideBarPanelContext?: SideBarPanelContext<unknown, unknown, unknown>
+  sideBarActivePanel?: string | null
+  loading?: boolean
+  sideBarLoading?: boolean
+  showViewOptions?: boolean
+  showBatchActions?: boolean
+  batchActionItems?: Item[]
+  batchActions?: Action[]
+  showAppBar?: boolean
+}
+const {
+  breadcrumbs,
+  isSideBarOpen = false,
+  sideBarAvailablePanels = [],
+  sideBarPanelContext = {},
+  sideBarActivePanel = null,
+  loading = false,
+  sideBarLoading = false,
+  showViewOptions = false,
+  showBatchActions = false,
+  batchActionItems = [],
+  batchActions = [],
+  showAppBar = true
+} = defineProps<Props>()
+
+const isMobileWidth = inject<Ref<boolean>>('isMobileWidth')
+const appBarRef = ref<VNodeRef>()
+const limitedScreenSpace = ref(false)
+const { isSticky } = useIsTopBarSticky()
+
+const onResize = () => {
+  limitedScreenSpace.value = isSideBarOpen ? window.innerWidth <= 1600 : window.innerWidth <= 1200
+}
+const resizeObserver = new ResizeObserver(onResize)
+
+const closeSideBar = () => {
+  eventBus.publish(SideBarEventTopics.close)
+}
+const selectPanel = (panel: string) => {
+  eventBus.publish(SideBarEventTopics.setActivePanel, panel)
+}
+
+watch(
+  appBarRef,
+  (ref) => {
+    if (ref) {
+      resizeObserver.observe(unref(appBarRef) as unknown as HTMLElement)
     }
   },
-  setup(props) {
-    const appBarRef = ref<VNodeRef>()
-    const limitedScreenSpace = ref(false)
-    const { isSticky } = useIsTopBarSticky()
+  { immediate: true }
+)
 
-    const onResize = () => {
-      limitedScreenSpace.value = props.isSideBarOpen
-        ? window.innerWidth <= 1600
-        : window.innerWidth <= 1200
-    }
-    const resizeObserver = new ResizeObserver(onResize)
-
-    const closeSideBar = () => {
-      eventBus.publish(SideBarEventTopics.close)
-    }
-    const selectPanel = (panel: string) => {
-      eventBus.publish(SideBarEventTopics.setActivePanel, panel)
-    }
-
-    watch(
-      appBarRef,
-      (ref) => {
-        if (ref) {
-          resizeObserver.observe(unref(appBarRef) as unknown as HTMLElement)
-        }
-      },
-      { immediate: true }
-    )
-
-    onBeforeUnmount(() => {
-      if (unref(appBarRef)) {
-        resizeObserver.unobserve(unref(appBarRef) as unknown as HTMLElement)
-      }
-    })
-
-    return {
-      isMobileWidth: inject<Ref<boolean>>('isMobileWidth'),
-      appBarRef,
-      limitedScreenSpace,
-      closeSideBar,
-      selectPanel,
-      ...useAppDefaults({
-        applicationId: 'admin-settings'
-      }),
-      perPageDefault,
-      paginationOptions,
-      isSticky
-    }
+onBeforeUnmount(() => {
+  if (unref(appBarRef)) {
+    resizeObserver.unobserve(unref(appBarRef) as unknown as HTMLElement)
   }
 })
 </script>

@@ -6,7 +6,7 @@ import {
   RouteLocation,
   shallowMount
 } from '@ownclouders/web-test-helpers'
-import { eventBus, SideBar, useIsTopBarSticky } from '@ownclouders/web-pkg'
+import { eventBus, SideBar, useIsTopBarSticky, AppLoadingSpinner } from '@ownclouders/web-pkg'
 import { SideBarEventTopics } from '@ownclouders/web-pkg'
 import { mock } from 'vitest-mock-extended'
 import { OcBreadcrumb } from '@ownclouders/design-system/components'
@@ -124,6 +124,10 @@ function getWrapper({ props = {}, isMobileWidth = false } = {}) {
         ...props
       },
       global: {
+        components: {
+          AppLoadingSpinner,
+          SideBar
+        },
         plugins: [...defaultPlugins()],
         provide: { isMobileWidth: ref(isMobileWidth) },
         stubs: {

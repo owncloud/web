@@ -19,7 +19,7 @@ vi.mock('@ownclouders/web-pkg', async (importOriginal) => ({
 vi.mocked(useAppDefaults).mockImplementation(() => useAppDefaultsMock({}))
 
 const selectors = {
-  loadingSpinnerStub: 'app-loading-spinner-stub',
+  loadingSpinnerStub: '#app-loading-spinner',
   spacesListStub: 'spaces-list-stub',
   noContentMessageStub: 'no-content-message-stub',
   batchActionsStub: 'batch-actions-stub'
@@ -104,7 +104,6 @@ function getWrapper({
         mocks,
         provide: mocks,
         stubs: {
-          AppLoadingSpinner: true,
           NoContentMessage: true,
           SpacesList: true,
           OcBreadcrumb: true,
