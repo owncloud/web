@@ -3,15 +3,85 @@ Changelog for ownCloud Web [unreleased] (UNRELEASED)
 The following sections list the changes in ownCloud web unreleased relevant to
 ownCloud admins and users.
 
-[unreleased]: https://github.com/owncloud/web/compare/v12.0.0...master
+[unreleased]: https://github.com/owncloud/web/compare/v11.3.5...master
+
+Summary
+-------
+
+* Bugfix - Reset selection only when path changes: [#12768](https://github.com/owncloud/web/pull/12768)
+
+Details
+-------
+
+* Bugfix - Reset selection only when path changes: [#12768](https://github.com/owncloud/web/pull/12768)
+
+   We've changed the way we reset the selection when the route changes.
+
+   Previously, we were resetting the selection when the route changed, but this was
+   not working as expected. For example, when updating `scrollTo` route query, the
+   selection was being unintentionally reset.
+
+   Now, we're only resetting the selection when the path changes.
+
+   https://github.com/owncloud/web/issues/10398
+   https://github.com/owncloud/web/pull/12768
+
+Changelog for ownCloud Web [11.3.5] (2025-06-26)
+=======================================
+The following sections list the changes in ownCloud web 11.3.5 relevant to
+ownCloud admins and users.
+
+[11.3.5]: https://github.com/owncloud/web/compare/v12.0.3...v11.3.5
+
+Summary
+-------
+
+* Bugfix - Md Text Html Preview Text gets Clipped: [#12697](https://github.com/owncloud/web/pull/12697)
+
+Details
+-------
+
+* Bugfix - Md Text Html Preview Text gets Clipped: [#12697](https://github.com/owncloud/web/pull/12697)
+
+   We've fixed an issue where the first letter of a text was clipped during HTML
+   preview rendering due to improper margin
+
+   https://github.com/owncloud/enterprise/issues/7233
+   https://github.com/owncloud/web/pull/12697
+
+Changelog for ownCloud Web [12.0.3] (2025-06-19)
+=======================================
+The following sections list the changes in ownCloud web 12.0.3 relevant to
+ownCloud admins and users.
+
+[12.0.3]: https://github.com/owncloud/web/compare/v12.0.2...v12.0.3
+
+Summary
+-------
+
+* Bugfix - Export correct design system files: [#12717](https://github.com/owncloud/web/pull/12717)
+
+Details
+-------
+
+* Bugfix - Export correct design system files: [#12717](https://github.com/owncloud/web/pull/12717)
+
+   We've fixed the export of the design system files to ensure they are correctly
+   exported as ES modules.
+
+   https://github.com/owncloud/web/pull/12717
+
+Changelog for ownCloud Web [12.0.2] (2025-06-17)
+=======================================
+The following sections list the changes in ownCloud web 12.0.2 relevant to
+ownCloud admins and users.
+
+[12.0.2]: https://github.com/owncloud/web/compare/v12.0.1...v12.0.2
 
 Summary
 -------
 
 * Bugfix - Ensure uniform distribution when generating password: [#12575](https://github.com/owncloud/web/pull/12575)
-* Bugfix - Md Text Html Preview Text gets Clipped: [#12697](https://github.com/owncloud/web/pull/12697)
-* Bugfix - Export correct design system files: [#12717](https://github.com/owncloud/web/pull/12717)
-* Bugfix - Reset selection only when path changes: [#12768](https://github.com/owncloud/web/pull/12768)
 
 Details
 -------
@@ -27,6 +97,21 @@ Details
 
    https://github.com/owncloud/web/pull/12575
 
+Changelog for ownCloud Web [12.0.1] (2025-06-12)
+=======================================
+The following sections list the changes in ownCloud web 12.0.1 relevant to
+ownCloud admins and users.
+
+[12.0.1]: https://github.com/owncloud/web/compare/v12.0.0...v12.0.1
+
+Summary
+-------
+
+* Bugfix - Md Text Html Preview Text gets Clipped: [#12697](https://github.com/owncloud/web/pull/12697)
+
+Details
+-------
+
 * Bugfix - Md Text Html Preview Text gets Clipped: [#12697](https://github.com/owncloud/web/pull/12697)
 
    We've fixed an issue where the first letter of a text was clipped during HTML
@@ -34,26 +119,6 @@ Details
 
    https://github.com/owncloud/enterprise/issues/7233
    https://github.com/owncloud/web/pull/12697
-
-* Bugfix - Export correct design system files: [#12717](https://github.com/owncloud/web/pull/12717)
-
-   We've fixed the export of the design system files to ensure they are correctly
-   exported as ES modules.
-
-   https://github.com/owncloud/web/pull/12717
-
-* Bugfix - Reset selection only when path changes: [#12768](https://github.com/owncloud/web/pull/12768)
-
-   We've changed the way we reset the selection when the route changes.
-
-   Previously, we were resetting the selection when the route changed, but this was
-   not working as expected. For example, when updating `scrollTo` route query, the
-   selection was being unintentionally reset.
-
-   Now, we're only resetting the selection when the path changes.
-
-   https://github.com/owncloud/web/issues/10398
-   https://github.com/owncloud/web/pull/12768
 
 Changelog for ownCloud Web [12.0.0] (2025-06-11)
 =======================================
@@ -834,7 +899,7 @@ Changelog for ownCloud Web [11.2.0] (2025-02-24)
 The following sections list the changes in ownCloud web 11.2.0 relevant to
 ownCloud admins and users.
 
-[11.2.0]: https://github.com/owncloud/web/compare/v11.1.3...v11.2.0
+[11.2.0]: https://github.com/owncloud/web/compare/v11.0.7...v11.2.0
 
 Summary
 -------
@@ -1048,6 +1113,29 @@ Details
 
    https://github.com/owncloud/web/issues/12186
    https://github.com/owncloud/web/pull/12206
+
+Changelog for ownCloud Web [11.0.7] (2025-02-07)
+=======================================
+The following sections list the changes in ownCloud web 11.0.7 relevant to
+ownCloud admins and users.
+
+[11.0.7]: https://github.com/owncloud/web/compare/v11.1.3...v11.0.7
+
+Summary
+-------
+
+* Bugfix - Replace text editor: [#12156](https://github.com/owncloud/web/pull/12156)
+
+Details
+-------
+
+* Bugfix - Replace text editor: [#12156](https://github.com/owncloud/web/pull/12156)
+
+   We've added a new text editor because of security issues with the previous
+   editor and lack of support.
+
+   https://github.com/owncloud/enterprise/issues/7077
+   https://github.com/owncloud/web/pull/12156
 
 Changelog for ownCloud Web [11.1.3] (2025-02-06)
 =======================================
