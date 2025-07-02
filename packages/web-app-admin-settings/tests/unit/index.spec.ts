@@ -45,47 +45,27 @@ describe('admin settings index', () => {
   })
   describe('routes', () => {
     describe('default-route "/"', () => {
-      it('should redirect to general if permission given', () => {
+      it('should redirect to general', () => {
         const ability = mock<Ability>()
         ability.can.mockReturnValueOnce(true)
         const route = routes({ $ability: ability }).find((n) => n.path === '/')
         expect((route.redirect as any)().name).toEqual('admin-settings-general')
       })
-      it('should redirect to user management if permission given', () => {
-        const ability = mock<Ability>()
-        ability.can.mockReturnValueOnce(false)
-        ability.can.mockReturnValueOnce(true)
-        const route = routes({ $ability: ability }).find((n) => n.path === '/')
-        expect((route.redirect as any)().name).toEqual('admin-settings-users')
-      })
-      it('should redirect to group management if permission given', () => {
-        const ability = mock<Ability>()
-        ability.can.mockReturnValueOnce(false)
-        ability.can.mockReturnValueOnce(false)
-        ability.can.mockReturnValueOnce(true)
-        const route = routes({ $ability: ability }).find((n) => n.path === '/')
-        expect((route.redirect as any)().name).toEqual('admin-settings-groups')
-      })
-      it('should redirect to space management if permission given', () => {
-        const ability = mock<Ability>()
-        ability.can.mockReturnValueOnce(false)
-        ability.can.mockReturnValueOnce(false)
-        ability.can.mockReturnValueOnce(false)
-        ability.can.mockReturnValueOnce(true)
-        const route = routes({ $ability: ability }).find((n) => n.path === '/')
-        expect((route.redirect as any)().name).toEqual('admin-settings-spaces')
-      })
-      it('should throw an error if permissions are insufficient', () => {
-        const ability = mock<Ability>()
-        ability.can.mockReturnValue(false)
-        expect(routes({ $ability: ability }).find((n) => n.path === '/').redirect).toThrow()
-      })
     })
     it.each([
-      { can: true, redirect: null },
-      { can: false, redirect: { path: '/' } }
+      { can: vi.fn(() => true), redirect: null },
+      {
+        can: vi.fn((_, subject) => {
+          if (subject === 'Group') {
+            return true
+          }
+
+          return false
+        }),
+        redirect: { name: 'admin-settings-groups' }
+      }
     ])('redirects "/general" with sufficient permissions', ({ can, redirect }) => {
-      const ability = mock<Ability>({ can: vi.fn(() => can) })
+      const ability = mock<Ability>({ can })
       const route = routes({ $ability: ability }).find((n) => n.path === '/general')
       const nextMock = vi.fn()
       ;(route.beforeEnter as any)({}, {}, nextMock)
@@ -93,10 +73,19 @@ describe('admin settings index', () => {
       expect(nextMock).toHaveBeenCalledWith(...args)
     })
     it.each([
-      { can: true, redirect: null },
-      { can: false, redirect: { path: '/' } }
+      { can: vi.fn(() => true), redirect: null },
+      {
+        can: vi.fn((_, subject) => {
+          if (subject === 'Drive') {
+            return true
+          }
+
+          return false
+        }),
+        redirect: { name: 'admin-settings-spaces' }
+      }
     ])('redirects "/users" with sufficient permissions', ({ can, redirect }) => {
-      const ability = mock<Ability>({ can: vi.fn(() => can) })
+      const ability = mock<Ability>({ can })
       const route = routes({ $ability: ability }).find((n) => n.path === '/users')
       const nextMock = vi.fn()
       ;(route.beforeEnter as any)({}, {}, nextMock)
@@ -104,10 +93,19 @@ describe('admin settings index', () => {
       expect(nextMock).toHaveBeenCalledWith(...args)
     })
     it.each([
-      { can: true, redirect: null },
-      { can: false, redirect: { path: '/' } }
+      { can: vi.fn(() => true), redirect: null },
+      {
+        can: vi.fn((_, subject) => {
+          if (subject === 'Setting') {
+            return true
+          }
+
+          return false
+        }),
+        redirect: { name: 'admin-settings-general' }
+      }
     ])('redirects "/groups" with sufficient permissions', ({ can, redirect }) => {
-      const ability = mock<Ability>({ can: vi.fn(() => can) })
+      const ability = mock<Ability>({ can })
       const route = routes({ $ability: ability }).find((n) => n.path === '/groups')
       const nextMock = vi.fn()
       ;(route.beforeEnter as any)({}, {}, nextMock)
@@ -115,15 +113,35 @@ describe('admin settings index', () => {
       expect(nextMock).toHaveBeenCalledWith(...args)
     })
     it.each([
-      { can: true, redirect: null },
-      { can: false, redirect: { path: '/' } }
+      { can: vi.fn(() => true), redirect: null },
+      {
+        can: vi.fn((_, subject) => {
+          if (subject === 'Account') {
+            return true
+          }
+
+          return false
+        }),
+        redirect: { name: 'admin-settings-users' }
+      }
     ])('redirects "/spaces" with sufficient permissions', ({ can, redirect }) => {
-      const ability = mock<Ability>({ can: vi.fn(() => can) })
+      const ability = mock<Ability>({ can })
       const route = routes({ $ability: ability }).find((n) => n.path === '/spaces')
       const nextMock = vi.fn()
       ;(route.beforeEnter as any)({}, {}, nextMock)
       const args = [...(redirect ? [redirect] : [])]
       expect(nextMock).toHaveBeenCalledWith(...args)
     })
+    it.each(['/general', '/users', '/groups', '/spaces'])(
+      'should throw an error if permissions are insufficient',
+      (path) => {
+        const ability = mock<Ability>({ can: vi.fn(() => false) })
+        const route = routes({ $ability: ability }).find((n) => n.path === path)
+        const nextMock = vi.fn()
+        expect(() => {
+          ;(route.beforeEnter as any)({}, {}, nextMock)
+        }).toThrowError('Insufficient permissions')
+      }
+    )
   })
 })
