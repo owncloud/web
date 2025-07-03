@@ -70,7 +70,8 @@ import {
   FileAction,
   useLoadingService,
   useFileActionsSaveAs,
-  useSharesStore
+  useSharesStore,
+  useFileActionsExportAsPdf
 } from '../../composables'
 import {
   Action,
@@ -176,6 +177,7 @@ export default defineComponent({
     const currentContent = ref()
 
     const { actions: saveAsActions } = useFileActionsSaveAs({ content: currentContent })
+    const { actions: exportAsPdfActions } = useFileActionsExportAsPdf({ content: currentContent })
 
     const isEditor = computed(() => {
       return Boolean(props.wrappedComponent.emits?.includes('update:currentContent'))
@@ -593,6 +595,12 @@ export default defineComponent({
         ...unref(openWithAppActions),
         ...unref(fileActionsSave),
         ...unref(saveAsActions).map((action) => {
+          return {
+            ...action,
+            isVisible: (args: FileActionOptions) => isEditor.value && action.isVisible(args)
+          }
+        }),
+        ...unref(exportAsPdfActions).map((action) => {
           return {
             ...action,
             isVisible: (args: FileActionOptions) => isEditor.value && action.isVisible(args)
