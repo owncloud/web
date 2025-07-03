@@ -9,6 +9,7 @@ Summary
 -------
 
 * Bugfix - Reset selection only when path changes: [#12768](https://github.com/owncloud/web/pull/12768)
+* Bugfix - Handle direct admin settings access: [#12780](https://github.com/owncloud/web/pull/12780)
 
 Details
 -------
@@ -25,6 +26,16 @@ Details
 
    https://github.com/owncloud/web/issues/10398
    https://github.com/owncloud/web/pull/12768
+
+* Bugfix - Handle direct admin settings access: [#12780](https://github.com/owncloud/web/pull/12780)
+
+   Opening the admin settings directly by pasting the URL in the browser address
+   bar or opening the app in a new tab now works correctly. The redirect was not
+   correctly using the navigation guard leading to a mismatch in users permissions.
+   We now redirect to the first available route and leave the route itself to
+   handle the permissions navigation guard.
+
+   https://github.com/owncloud/web/pull/12780
 
 Changelog for ownCloud Web [11.3.5] (2025-06-26)
 =======================================
