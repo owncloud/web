@@ -23,7 +23,7 @@ describe('Groups view', () => {
       it('should be available when one group is selected', () => {
         const { wrapper } = getWrapper()
         expect(
-          wrapper.vm.sideBarAvailablePanels
+          (wrapper.vm as any).sideBarAvailablePanels
             .find(({ name }) => name === 'EditPanel')
             .isVisible({ items: [{ id: '1' }] })
         ).toBeTruthy()
@@ -31,7 +31,7 @@ describe('Groups view', () => {
       it('should not be available when multiple groups are selected', () => {
         const { wrapper } = getWrapper()
         expect(
-          wrapper.vm.sideBarAvailablePanels
+          (wrapper.vm as any).sideBarAvailablePanels
             .find(({ name }) => name === 'EditPanel')
             .isVisible({ items: [{ id: '1' }, { id: '2' }] })
         ).toBeFalsy()
@@ -39,7 +39,7 @@ describe('Groups view', () => {
       it('should not be available when one read-only group is selected', () => {
         const { wrapper } = getWrapper()
         expect(
-          wrapper.vm.sideBarAvailablePanels
+          (wrapper.vm as any).sideBarAvailablePanels
             .find(({ name }) => name === 'EditPanel')
             .isVisible({ items: [{ id: '1', groupTypes: ['ReadOnly'] }] })
         ).toBeFalsy()
@@ -49,7 +49,7 @@ describe('Groups view', () => {
       it('should contain DetailsPanel when no group is selected', () => {
         const { wrapper } = getWrapper()
         expect(
-          wrapper.vm.sideBarAvailablePanels
+          (wrapper.vm as any).sideBarAvailablePanels
             .find(({ name }) => name === 'DetailsPanel')
             .isVisible({ items: [] })
         ).toBeTruthy()
@@ -60,18 +60,18 @@ describe('Groups view', () => {
   describe('batch actions', () => {
     it('do not display when no group selected', async () => {
       const { wrapper } = getWrapper()
-      await wrapper.vm.loadResourcesTask.last
+      await (wrapper.vm as any).loadResourcesTask.last
       expect(wrapper.find(selectors.batchActionsStub).exists()).toBeFalsy()
     })
     it('display when one group selected', async () => {
       const { wrapper } = getWrapper({ selectedGroups: [{ id: '1' }] })
-      await wrapper.vm.loadResourcesTask.last
+      await (wrapper.vm as any).loadResourcesTask.last
       await wrapper.vm.$nextTick()
       expect(wrapper.find(selectors.batchActionsStub).exists()).toBeTruthy()
     })
     it('display when more than one groups selected', async () => {
       const { wrapper } = getWrapper({ selectedGroups: [{ id: '1' }, { id: '2' }] })
-      await wrapper.vm.loadResourcesTask.last
+      await (wrapper.vm as any).loadResourcesTask.last
       await wrapper.vm.$nextTick()
       expect(wrapper.find(selectors.batchActionsStub).exists()).toBeTruthy()
     })
