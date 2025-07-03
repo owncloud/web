@@ -53,7 +53,7 @@
   </div>
 </template>
 
-<script lang="ts">
+<script lang="ts" setup>
 import AppTemplate from '../components/AppTemplate.vue'
 import SpacesList from '../components/Spaces/SpacesList.vue'
 import ContextActions from '../components/Spaces/ContextActions.vue'
@@ -83,7 +83,7 @@ import {
   CreateSpace
 } from '@ownclouders/web-pkg'
 import { call, SpaceResource } from '@ownclouders/web-client'
-import { computed, defineComponent, onBeforeUnmount, onMounted, ref, unref } from 'vue'
+import { computed, provide, onBeforeUnmount, onMounted, ref, unref } from 'vue'
 import { useTask } from 'vue-concurrency'
 import { useGettext } from 'vue3-gettext'
 
@@ -91,199 +91,164 @@ import { useSpaceSettingsStore } from '../composables'
 import { storeToRefs } from 'pinia'
 import { Quota } from '@ownclouders/web-client/graph/generated'
 
-export default defineComponent({
-  name: 'SpacesView',
-  components: {
-    CreateSpace,
-    AppLoadingSpinner,
-    SpacesList,
-    AppTemplate,
-    NoContentMessage,
-    ContextActions,
-    SpaceInfo
-  },
-  provide() {
-    return {
-      resource: computed(() => this.selectedSpaces[0])
-    }
-  },
-  setup() {
-    const clientService = useClientService()
-    const { $gettext } = useGettext()
-    const { isSideBarOpen, sideBarActivePanel } = useSideBar()
-    const sharesStore = useSharesStore()
-    const { can } = useAbility()
+const clientService = useClientService()
+const { $gettext } = useGettext()
+const { isSideBarOpen, sideBarActivePanel } = useSideBar()
+const sharesStore = useSharesStore()
+const { can } = useAbility()
 
-    const loadResourcesEventToken = ref(null)
-    let updateQuotaForSpaceEventToken: string
-    const template = ref(null)
-    const spaceSettingsStore = useSpaceSettingsStore()
-    const { spaces, selectedSpaces } = storeToRefs(spaceSettingsStore)
+const loadResourcesEventToken = ref(null)
+let updateQuotaForSpaceEventToken: string
+const template = ref(null)
+const spaceSettingsStore = useSpaceSettingsStore()
+const { spaces, selectedSpaces } = storeToRefs(spaceSettingsStore)
 
-    const currentPageQuery = useRouteQuery('page', '1')
-    const currentPage = computed(() => {
-      return parseInt(queryItemAsString(unref(currentPageQuery)))
-    })
+provide(
+  'resource',
+  computed(() => selectedSpaces.value[0])
+)
 
-    const itemsPerPageQuery = useRouteQuery('items-per-page', '1')
-    const itemsPerPage = computed(() => {
-      return parseInt(queryItemAsString(unref(itemsPerPageQuery)))
-    })
+const currentPageQuery = useRouteQuery('page', '1')
+const currentPage = computed(() => {
+  return parseInt(queryItemAsString(unref(currentPageQuery)))
+})
 
-    const hasCreatePermission = computed(() => can('create-all', 'Drive'))
+const itemsPerPageQuery = useRouteQuery('items-per-page', '1')
+const itemsPerPage = computed(() => {
+  return parseInt(queryItemAsString(unref(itemsPerPageQuery)))
+})
 
-    const loadResourcesTask = useTask(function* (signal) {
-      const drives = yield* call(
-        clientService.graphAuthenticated.drives.listAllDrives(
-          sharesStore.graphRoles,
-          {
-            orderBy: 'name asc',
-            filter: 'driveType eq project'
-          },
-          { signal }
-        )
-      )
-      spaceSettingsStore.setSpaces(drives)
-    })
+const hasCreatePermission = computed(() => can('create-all', 'Drive'))
 
-    const isLoading = computed(() => {
-      return loadResourcesTask.isRunning || !loadResourcesTask.last
-    })
-
-    const breadcrumbs = computed(() => [
-      { text: $gettext('Administration Settings'), to: { path: '/admin-settings' } },
+const loadResourcesTask = useTask(function* (signal) {
+  const drives = yield* call(
+    clientService.graphAuthenticated.drives.listAllDrives(
+      sharesStore.graphRoles,
       {
-        text: $gettext('Spaces'),
-        onClick: () => {
-          spaceSettingsStore.setSelectedSpaces([])
-          loadResourcesTask.perform()
-        }
-      }
-    ])
-
-    const { actions: deleteActions } = useSpaceActionsDelete()
-    const { actions: disableActions } = useSpaceActionsDisable()
-    const { actions: editQuotaActions } = useSpaceActionsEditQuota()
-    const { actions: restoreActions } = useSpaceActionsRestore()
-
-    const batchActions = computed((): SpaceAction[] => {
-      return [
-        ...unref(editQuotaActions),
-        ...unref(restoreActions),
-        ...unref(deleteActions),
-        ...unref(disableActions)
-      ].filter((item) => item.isVisible({ resources: unref(selectedSpaces) }))
-    })
-
-    const sideBarPanelContext = computed<SideBarPanelContext<unknown, unknown, SpaceResource>>(
-      () => {
-        return {
-          parent: null,
-          items: unref(selectedSpaces)
-        }
-      }
+        orderBy: 'name asc',
+        filter: 'driveType eq project'
+      },
+      { signal }
     )
-    const sideBarAvailablePanels = [
-      {
-        name: 'SpaceNoSelection',
-        icon: 'layout-grid',
-        title: () => $gettext('Details'),
-        component: SpaceNoSelection,
-        isRoot: () => true,
-        isVisible: ({ items }) => items.length === 0
-      },
-      {
-        name: 'SpaceDetails',
-        icon: 'layout-grid',
-        title: () => $gettext('Details'),
-        component: SpaceDetails,
-        componentAttrs: () => ({
-          showSpaceImage: false,
-          showShareIndicators: false
-        }),
-        isRoot: () => true,
-        isVisible: ({ items }) => items.length === 1
-      },
-      {
-        name: 'SpaceDetailsMultiple',
-        icon: 'layout-grid',
-        title: () => $gettext('Details'),
-        component: SpaceDetailsMultiple,
-        componentAttrs: ({ items }) => ({
-          selectedSpaces: items
-        }),
-        isRoot: () => true,
-        isVisible: ({ items }) => items.length > 1
-      },
-      {
-        name: 'SpaceActions',
-        icon: 'play-circle',
-        iconFillType: 'line',
-        title: () => $gettext('Actions'),
-        component: ActionsPanel,
-        isVisible: ({ items }) => items.length === 1
-      },
-      {
-        name: 'SpaceMembers',
-        icon: 'group',
-        title: () => $gettext('Members'),
-        component: MembersPanel,
-        isVisible: ({ items }) => items.length === 1
-      }
-    ] satisfies SideBarPanel<unknown, unknown, SpaceResource>[]
+  )
+  spaceSettingsStore.setSpaces(drives)
+})
 
-    onMounted(async () => {
-      await loadResourcesTask.perform()
+const isLoading = computed(() => {
+  return loadResourcesTask.isRunning || !loadResourcesTask.last
+})
 
-      loadResourcesEventToken.value = eventBus.subscribe(
-        'app.admin-settings.list.load',
-        async () => {
-          await loadResourcesTask.perform()
-          selectedSpaces.value = []
-
-          const pageCount = Math.ceil(unref(spaces).length / unref(itemsPerPage))
-          if (unref(currentPage) > 1 && unref(currentPage) > pageCount) {
-            // reset pagination to avoid empty lists (happens when deleting all items on the last page)
-            currentPageQuery.value = pageCount.toString()
-          }
-        }
-      )
-
-      updateQuotaForSpaceEventToken = eventBus.subscribe(
-        'app.admin-settings.spaces.space.quota.updated',
-        ({ spaceId, quota }: { spaceId: string; quota: Quota }) => {
-          const space = unref(spaces).find((s) => s.id === spaceId)
-          if (space) {
-            space.spaceQuota = quota
-          }
-        }
-      )
-    })
-
-    onBeforeUnmount(() => {
-      spaceSettingsStore.reset()
-      eventBus.unsubscribe('app.admin-settings.list.load', unref(loadResourcesEventToken))
-      eventBus.unsubscribe(
-        'app.admin-settings.spaces.space.quota.updated',
-        updateQuotaForSpaceEventToken
-      )
-    })
-
-    return {
-      isSideBarOpen,
-      sideBarActivePanel,
-      spaces,
-      loadResourcesTask,
-      breadcrumbs,
-      batchActions,
-      selectedSpaces,
-      sideBarAvailablePanels,
-      sideBarPanelContext,
-      isLoading,
-      template,
-      hasCreatePermission,
-      spaceSettingsStore
+const breadcrumbs = computed(() => [
+  { text: $gettext('Administration Settings'), to: { path: '/admin-settings' } },
+  {
+    text: $gettext('Spaces'),
+    onClick: () => {
+      spaceSettingsStore.setSelectedSpaces([])
+      loadResourcesTask.perform()
     }
   }
+])
+
+const { actions: deleteActions } = useSpaceActionsDelete()
+const { actions: disableActions } = useSpaceActionsDisable()
+const { actions: editQuotaActions } = useSpaceActionsEditQuota()
+const { actions: restoreActions } = useSpaceActionsRestore()
+
+const batchActions = computed((): SpaceAction[] => {
+  return [
+    ...unref(editQuotaActions),
+    ...unref(restoreActions),
+    ...unref(deleteActions),
+    ...unref(disableActions)
+  ].filter((item) => item.isVisible({ resources: unref(selectedSpaces) }))
+})
+
+const sideBarPanelContext = computed<SideBarPanelContext<unknown, unknown, SpaceResource>>(() => {
+  return {
+    parent: null,
+    items: unref(selectedSpaces)
+  }
+})
+const sideBarAvailablePanels = [
+  {
+    name: 'SpaceNoSelection',
+    icon: 'layout-grid',
+    title: () => $gettext('Details'),
+    component: SpaceNoSelection,
+    isRoot: () => true,
+    isVisible: ({ items }) => items.length === 0
+  },
+  {
+    name: 'SpaceDetails',
+    icon: 'layout-grid',
+    title: () => $gettext('Details'),
+    component: SpaceDetails,
+    componentAttrs: () => ({
+      showSpaceImage: false,
+      showShareIndicators: false
+    }),
+    isRoot: () => true,
+    isVisible: ({ items }) => items.length === 1
+  },
+  {
+    name: 'SpaceDetailsMultiple',
+    icon: 'layout-grid',
+    title: () => $gettext('Details'),
+    component: SpaceDetailsMultiple,
+    componentAttrs: ({ items }) => ({
+      selectedSpaces: items
+    }),
+    isRoot: () => true,
+    isVisible: ({ items }) => items.length > 1
+  },
+  {
+    name: 'SpaceActions',
+    icon: 'play-circle',
+    iconFillType: 'line',
+    title: () => $gettext('Actions'),
+    component: ActionsPanel,
+    isVisible: ({ items }) => items.length === 1
+  },
+  {
+    name: 'SpaceMembers',
+    icon: 'group',
+    title: () => $gettext('Members'),
+    component: MembersPanel,
+    isVisible: ({ items }) => items.length === 1
+  }
+] satisfies SideBarPanel<unknown, unknown, SpaceResource>[]
+
+onMounted(async () => {
+  await loadResourcesTask.perform()
+
+  loadResourcesEventToken.value = eventBus.subscribe('app.admin-settings.list.load', async () => {
+    await loadResourcesTask.perform()
+    selectedSpaces.value = []
+
+    const pageCount = Math.ceil(unref(spaces).length / unref(itemsPerPage))
+    if (unref(currentPage) > 1 && unref(currentPage) > pageCount) {
+      // reset pagination to avoid empty lists (happens when deleting all items on the last page)
+      currentPageQuery.value = pageCount.toString()
+    }
+  })
+
+  updateQuotaForSpaceEventToken = eventBus.subscribe(
+    'app.admin-settings.spaces.space.quota.updated',
+    ({ spaceId, quota }: { spaceId: string; quota: Quota }) => {
+      const space = unref(spaces).find((s) => s.id === spaceId)
+      if (space) {
+        space.spaceQuota = quota
+      }
+    }
+  )
+})
+
+onBeforeUnmount(() => {
+  spaceSettingsStore.reset()
+  eventBus.unsubscribe('app.admin-settings.list.load', unref(loadResourcesEventToken))
+  eventBus.unsubscribe(
+    'app.admin-settings.spaces.space.quota.updated',
+    updateQuotaForSpaceEventToken
+  )
 })
 </script>
