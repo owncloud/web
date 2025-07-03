@@ -22,23 +22,31 @@ function $gettext(msg: string) {
 
 const appId = 'admin-settings'
 
+function getAvailableRoute(ability: Ability) {
+  if (ability.can('read-all', 'Setting')) {
+    return { name: 'admin-settings-general' }
+  }
+
+  if (ability.can('read-all', 'Account')) {
+    return { name: 'admin-settings-users' }
+  }
+
+  if (ability.can('read-all', 'Group')) {
+    return { name: 'admin-settings-groups' }
+  }
+
+  if (ability.can('read-all', 'Drive')) {
+    return { name: 'admin-settings-spaces' }
+  }
+
+  throw Error('Insufficient permissions')
+}
+
 export const routes = ({ $ability }: { $ability: Ability }): RouteRecordRaw[] => [
   {
     path: '/',
     redirect: () => {
-      if ($ability.can('read-all', 'Setting')) {
-        return { name: 'admin-settings-general' }
-      }
-      if ($ability.can('read-all', 'Account')) {
-        return { name: 'admin-settings-users' }
-      }
-      if ($ability.can('read-all', 'Group')) {
-        return { name: 'admin-settings-groups' }
-      }
-      if ($ability.can('read-all', 'Drive')) {
-        return { name: 'admin-settings-spaces' }
-      }
-      throw Error('Insufficient permissions')
+      return { name: 'admin-settings-general' }
     }
   },
   {
@@ -47,7 +55,7 @@ export const routes = ({ $ability }: { $ability: Ability }): RouteRecordRaw[] =>
     component: General,
     beforeEnter: (to, from, next) => {
       if (!$ability.can('read-all', 'Setting')) {
-        next({ path: '/' })
+        return next(getAvailableRoute($ability))
       }
       next()
     },
@@ -62,7 +70,7 @@ export const routes = ({ $ability }: { $ability: Ability }): RouteRecordRaw[] =>
     component: Users,
     beforeEnter: (to, from, next) => {
       if (!$ability.can('read-all', 'Account')) {
-        next({ path: '/' })
+        return next(getAvailableRoute($ability))
       }
       next()
     },
@@ -77,7 +85,7 @@ export const routes = ({ $ability }: { $ability: Ability }): RouteRecordRaw[] =>
     component: Groups,
     beforeEnter: (to, from, next) => {
       if (!$ability.can('read-all', 'Group')) {
-        next({ path: '/' })
+        return next(getAvailableRoute($ability))
       }
       next()
     },
@@ -92,7 +100,7 @@ export const routes = ({ $ability }: { $ability: Ability }): RouteRecordRaw[] =>
     component: Spaces,
     beforeEnter: (to, from, next) => {
       if (!$ability.can('read-all', 'Drive')) {
-        next({ path: '/' })
+        return next(getAvailableRoute($ability))
       }
       next()
     },
