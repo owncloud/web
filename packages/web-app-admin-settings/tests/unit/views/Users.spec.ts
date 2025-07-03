@@ -96,7 +96,7 @@ describe('Users view', () => {
   describe('list view', () => {
     it('renders list initially', async () => {
       const { wrapper } = getMountedWrapper({ mountType: mount, users: [getDefaultUser()] })
-      await wrapper.vm.loadResourcesTask.last
+      await (wrapper.vm as any).loadResourcesTask.last
       expect(wrapper.html()).toMatchSnapshot()
     })
     it('renders initially warning if filters are mandatory', async () => {
@@ -104,7 +104,7 @@ describe('Users view', () => {
         mountType: mount,
         options: { userListRequiresFilter: true }
       })
-      await wrapper.vm.loadResourcesTask.last
+      await (wrapper.vm as any).loadResourcesTask.last
       expect(wrapper.html()).toMatchSnapshot()
     })
   })
@@ -131,7 +131,7 @@ describe('Users view', () => {
     it('should contain EditPanel when one user is selected', () => {
       const { wrapper } = getMountedWrapper()
       expect(
-        wrapper.vm.sideBarAvailablePanels
+        (wrapper.vm as any).sideBarAvailablePanels
           .find(({ name }) => name === 'EditPanel')
           .isVisible({ items: [{ id: '1' } as User] })
       ).toBeTruthy()
@@ -139,7 +139,7 @@ describe('Users view', () => {
     it('should contain DetailsPanel no user is selected', () => {
       const { wrapper } = getMountedWrapper()
       expect(
-        wrapper.vm.sideBarAvailablePanels
+        (wrapper.vm as any).sideBarAvailablePanels
           .find(({ name }) => name === 'DetailsPanel')
           .isVisible({ items: [] })
       ).toBeTruthy()
@@ -147,7 +147,7 @@ describe('Users view', () => {
     it('should not contain EditPanel when multiple users are selected', () => {
       const { wrapper } = getMountedWrapper()
       expect(
-        wrapper.vm.sideBarAvailablePanels
+        (wrapper.vm as any).sideBarAvailablePanels
           .find(({ name }) => name === 'EditPanel')
           .isVisible({ items: [{ id: '1' }, { id: '2' }] as User[] })
       ).toBeFalsy()
@@ -157,7 +157,7 @@ describe('Users view', () => {
   describe('batch actions', () => {
     it('do not display when no user selected', async () => {
       const { wrapper } = getMountedWrapper({ mountType: mount })
-      await wrapper.vm.loadResourcesTask.last
+      await (wrapper.vm as any).loadResourcesTask.last
       expect(wrapper.find('batch-actions-stub').exists()).toBeFalsy()
     })
     it('display when one user selected', async () => {
@@ -165,8 +165,8 @@ describe('Users view', () => {
         mountType: mount,
         selectedUsers: [{ id: '1' } as User]
       })
-      await wrapper.vm.loadResourcesTask.last
-      await wrapper.vm.$nextTick()
+      await (wrapper.vm as any).loadResourcesTask.last
+      await (wrapper.vm as any).$nextTick()
       expect(wrapper.find('batch-actions-stub').exists()).toBeTruthy()
     })
     it('display when more than one users selected', async () => {
@@ -174,7 +174,7 @@ describe('Users view', () => {
         mountType: mount,
         selectedUsers: [{ id: '1' }, { id: '2' }] as User[]
       })
-      await wrapper.vm.loadResourcesTask.last
+      await (wrapper.vm as any).loadResourcesTask.last
       await wrapper.vm.$nextTick()
       expect(wrapper.find('batch-actions-stub').exists()).toBeTruthy()
     })
@@ -185,7 +185,7 @@ describe('Users view', () => {
       it('does filter users by groups when the "selectionChange"-event is triggered', async () => {
         const clientService = getClientService()
         const { wrapper } = getMountedWrapper({ mountType: mount, clientService })
-        await wrapper.vm.loadResourcesTask.last
+        await (wrapper.vm as any).loadResourcesTask.last
         expect(clientService.graphAuthenticated.users.listUsers).toHaveBeenCalledTimes(1)
         wrapper
           .findComponent<typeof ItemFilter>(selectors.itemFilterGroupsStub)
@@ -210,7 +210,7 @@ describe('Users view', () => {
           clientService,
           groupFilterQuery: groupIdsQueryParam
         })
-        await wrapper.vm.loadResourcesTask.last
+        await (wrapper.vm as any).loadResourcesTask.last
         expect(clientService.graphAuthenticated.users.listUsers).toHaveBeenCalledWith(
           {
             orderBy: ['displayName'],
@@ -225,7 +225,7 @@ describe('Users view', () => {
       it('does filter users by roles when the "selectionChange"-event is triggered', async () => {
         const clientService = getClientService()
         const { wrapper } = getMountedWrapper({ mountType: mount, clientService })
-        await wrapper.vm.loadResourcesTask.last
+        await (wrapper.vm as any).loadResourcesTask.last
         expect(clientService.graphAuthenticated.users.listUsers).toHaveBeenCalledTimes(1)
         wrapper
           .findComponent<typeof ItemFilter>(selectors.itemFilterRolesStub)
@@ -250,7 +250,7 @@ describe('Users view', () => {
           clientService,
           roleFilterQuery: roleIdsQueryParam
         })
-        await wrapper.vm.loadResourcesTask.last
+        await (wrapper.vm as any).loadResourcesTask.last
         expect(clientService.graphAuthenticated.users.listUsers).toHaveBeenCalledWith(
           {
             orderBy: ['displayName'],
@@ -271,7 +271,7 @@ describe('Users view', () => {
           clientService,
           displayNameFilterQuery: displayNameFilterQueryParam
         })
-        await wrapper.vm.loadResourcesTask.last
+        await (wrapper.vm as any).loadResourcesTask.last
         expect(clientService.graphAuthenticated.users.listUsers).toHaveBeenCalledWith(
           {
             orderBy: ['displayName'],
