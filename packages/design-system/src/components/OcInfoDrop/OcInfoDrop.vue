@@ -18,7 +18,13 @@
             appearance="raw"
             :aria-label="$gettext('Close')"
           >
-            <oc-icon name="close" fill-type="line" size="medium" variation="inherit" />
+            <oc-icon
+              name="close"
+              fill-type="line"
+              size="medium"
+              variation="inherit"
+              :accessible-label="$gettext('Close')"
+            />
           </oc-button>
         </div>
         <p v-if="text" class="info-text" v-text="$gettext(text)" />
