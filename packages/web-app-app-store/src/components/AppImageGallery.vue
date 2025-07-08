@@ -50,54 +50,32 @@
     </ul>
   </div>
 </template>
-<script lang="ts">
-import { computed, defineComponent, PropType, ref, unref } from 'vue'
+<script lang="ts" setup>
+import { computed, ref, unref } from 'vue'
 import { App, AppImage } from '../types'
 
-export default defineComponent({
-  name: 'AppImageGallery',
-  props: {
-    app: {
-      type: Object as PropType<App>,
-      required: true,
-      default: (): App => undefined
-    },
-    showPagination: {
-      type: Boolean,
-      required: false,
-      default: false
-    }
-  },
-  setup(props) {
-    const images = computed(() => {
-      return [props.app.coverImage, ...props.app.screenshots]
-    })
-
-    const currentImageIndex = ref<number>(0)
-    const currentImage = computed<AppImage>(() => unref(images)[unref(currentImageIndex)])
-    const hasPagination = computed(() => props.showPagination && unref(images).length > 1)
-    const nextImage = () => {
-      currentImageIndex.value = (unref(currentImageIndex) + 1) % unref(images).length
-    }
-    const previousImage = () => {
-      currentImageIndex.value =
-        (unref(currentImageIndex) - 1 + unref(images).length) % unref(images).length
-    }
-    const setImageIndex = (index: number) => {
-      currentImageIndex.value = index
-    }
-
-    return {
-      currentImage,
-      currentImageIndex,
-      images,
-      hasPagination,
-      nextImage,
-      previousImage,
-      setImageIndex
-    }
-  }
+interface Props {
+  app?: App
+  showPagination?: boolean
+}
+const { app = undefined, showPagination = false } = defineProps<Props>()
+const images = computed(() => {
+  return [app.coverImage, ...app.screenshots]
 })
+
+const currentImageIndex = ref<number>(0)
+const currentImage = computed<AppImage>(() => unref(images)[unref(currentImageIndex)])
+const hasPagination = computed(() => showPagination && unref(images).length > 1)
+const nextImage = () => {
+  currentImageIndex.value = (unref(currentImageIndex) + 1) % unref(images).length
+}
+const previousImage = () => {
+  currentImageIndex.value =
+    (unref(currentImageIndex) - 1 + unref(images).length) % unref(images).length
+}
+const setImageIndex = (index: number) => {
+  currentImageIndex.value = index
+}
 </script>
 
 <style lang="scss">
