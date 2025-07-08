@@ -19,39 +19,28 @@
     </li>
   </ul>
 </template>
-<script lang="ts">
-import { computed, defineComponent, PropType } from 'vue'
+<script lang="ts" setup>
+import { computed } from 'vue'
 import { App } from '../types'
 import { isEmpty } from 'lodash-es'
 
-export default defineComponent({
-  name: 'AppResources',
-  props: {
-    app: {
-      type: Object as PropType<App>,
-      required: true,
-      default: (): App => undefined
-    }
-  },
-  setup(props) {
-    const resources = computed(() => {
-      return (props.app.resources || []).filter((resource) => {
-        if (isEmpty(resource.url) || isEmpty(resource.label)) {
-          return false
-        }
-        try {
-          new URL(resource.url)
-        } catch {
-          return false
-        }
-        return true
-      })
-    })
+interface Props {
+  app?: App
+}
+const { app = undefined } = defineProps<Props>()
 
-    return {
-      resources
+const resources = computed(() => {
+  return (app.resources || []).filter((resource) => {
+    if (isEmpty(resource.url) || isEmpty(resource.label)) {
+      return false
     }
-  }
+    try {
+      new URL(resource.url)
+    } catch {
+      return false
+    }
+    return true
+  })
 })
 </script>
 
