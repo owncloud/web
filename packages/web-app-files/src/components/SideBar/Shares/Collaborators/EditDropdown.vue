@@ -10,7 +10,7 @@
       appearance="raw"
       :disabled="isLocked"
     >
-      <oc-icon name="more-2" />
+      <oc-icon name="more-2" :accessible-label="$gettext('Access details')" />
     </oc-button>
     <oc-drop
       ref="expirationDateDrop"

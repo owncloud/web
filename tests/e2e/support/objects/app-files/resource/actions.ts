@@ -1982,7 +1982,7 @@ export const createShotcut = async (args: shortcutArgs): Promise<void> => {
   }
 
   if (name) {
-    await page.getByLabel('Shortcut name').fill(name)
+    await page.getByRole('textbox', { name: 'Shortcut name' }).fill(name)
   }
   await Promise.all([
     page.waitForResponse(
