@@ -9,39 +9,29 @@
   </ul>
 </template>
 
-<script lang="ts">
-import { computed, defineComponent, PropType } from 'vue'
+<script lang="ts" setup>
+import { computed } from 'vue'
 import { App } from '../types'
 import { isEmpty } from 'lodash-es'
 
-export default defineComponent({
-  props: {
-    app: {
-      type: Object as PropType<App>,
-      required: true,
-      default: (): App => undefined
+interface Props {
+  app?: App
+}
+const { app = undefined } = defineProps<Props>()
+const authors = computed(() => {
+  return (app.authors || []).filter((author) => {
+    if (isEmpty(author.name)) {
+      return false
     }
-  },
-  setup(props) {
-    const authors = computed(() => {
-      return (props.app.authors || []).filter((author) => {
-        if (isEmpty(author.name)) {
-          return false
-        }
-        if (!isEmpty(author.url)) {
-          try {
-            new URL(author.url)
-          } catch {
-            return false
-          }
-        }
-        return true
-      })
-    })
-    return {
-      authors
+    if (!isEmpty(author.url)) {
+      try {
+        new URL(author.url)
+      } catch {
+        return false
+      }
     }
-  }
+    return true
+  })
 })
 </script>
 
