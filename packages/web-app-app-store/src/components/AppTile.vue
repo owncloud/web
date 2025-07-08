@@ -25,36 +25,24 @@
   </li>
 </template>
 
-<script lang="ts">
-import { defineComponent, type PropType } from 'vue'
+<script lang="ts" setup>
 import { App } from '../types'
 import { APPID } from '../appid'
 import AppTags from './AppTags.vue'
 import AppActions from './AppActions.vue'
 import AppImageGallery from './AppImageGallery.vue'
 
-export default defineComponent({
-  name: 'AppTile',
-  components: { AppImageGallery, AppActions, AppTags },
-  props: {
-    app: {
-      type: Object as PropType<App>,
-      required: true,
-      default: (): App => undefined
-    }
-  },
-  emits: ['search'],
-  setup(props, { emit }) {
-    const emitSearchTerm = (term: string) => {
-      emit('search', term)
-    }
-
-    return {
-      emitSearchTerm,
-      APPID
-    }
-  }
-})
+interface Props {
+  app?: App
+}
+interface Emits {
+  (e: 'search', value: string): void
+}
+const { app = undefined } = defineProps<Props>()
+const emit = defineEmits<Emits>()
+const emitSearchTerm = (term: string) => {
+  emit('search', term)
+}
 </script>
 
 <style lang="scss">
