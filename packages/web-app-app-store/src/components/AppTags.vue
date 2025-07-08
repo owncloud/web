@@ -13,30 +13,20 @@
     </oc-tag>
   </div>
 </template>
-<script lang="ts">
-import { defineComponent, PropType } from 'vue'
+<script lang="ts" setup>
 import { App } from '../types'
 
-export default defineComponent({
-  name: 'AppTags',
-  props: {
-    app: {
-      type: Object as PropType<App>,
-      required: true,
-      default: (): App => undefined
-    }
-  },
-  emits: ['click'],
-  setup(props, { emit }) {
-    const emitClick = (tagName: string) => {
-      emit('click', tagName)
-    }
-
-    return {
-      emitClick
-    }
-  }
-})
+interface Props {
+  app?: App
+}
+interface Emits {
+  (e: 'click', value: string): void
+}
+const { app = undefined } = defineProps<Props>()
+const emit = defineEmits<Emits>()
+const emitClick = (tagName: string) => {
+  emit('click', tagName)
+}
 </script>
 
 <style lang="scss">
