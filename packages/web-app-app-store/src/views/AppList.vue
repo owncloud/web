@@ -31,8 +31,8 @@
   </div>
 </template>
 
-<script lang="ts">
-import { computed, defineComponent, nextTick, onMounted, ref, unref, watch } from 'vue'
+<script lang="ts" setup>
+import { computed, nextTick, onMounted, ref, unref, watch } from 'vue'
 import Mark from 'mark.js'
 import Fuse from 'fuse.js'
 import { useAppsStore } from '../piniaStores'
@@ -48,64 +48,51 @@ import {
 } from '@ownclouders/web-pkg'
 import AppContextualHelper from '../components/AppContextualHelper.vue'
 
-export default defineComponent({
-  name: 'AppList',
-  components: { AppContextualHelper, AppTile, NoContentMessage },
-  setup() {
-    const appsStore = useAppsStore()
-    const { apps } = storeToRefs(appsStore)
-    const router = useRouter()
+const appsStore = useAppsStore()
+const { apps } = storeToRefs(appsStore)
+const router = useRouter()
 
-    const filterTermQueryItem = useRouteQuery('filter', '')
-    const filterTerm = computed(() => {
-      return queryItemAsString(unref(filterTermQueryItem))
-    })
-    const filterTermInput = ref('')
+const filterTermQueryItem = useRouteQuery('filter', '')
+const filterTerm = computed(() => {
+  return queryItemAsString(unref(filterTermQueryItem))
+})
+const filterTermInput = ref('')
 
-    const setFilterTerm = (term: string) => {
-      return router.replace({
-        query: {
-          ...(term && { filter: term.trim() })
-        }
-      })
+const setFilterTerm = (term: string) => {
+  return router.replace({
+    query: {
+      ...(term && { filter: term.trim() })
     }
-    const filter = (apps: App[], filterTerm: string) => {
-      if (!(filterTerm || '').trim()) {
-        return apps
-      }
-      const searchEngine = new Fuse(apps, {
-        ...defaultFuseOptions,
-        keys: ['name', 'subtitle', 'tags']
-      })
-      return searchEngine.search(filterTerm).map((r) => r.item)
-    }
-    const filteredApps = computed(() => {
-      // TODO: debounce the filtering by 100-300ms
-      return filter(unref(apps), unref(filterTerm))
-    })
+  })
+}
+const filter = (apps: App[], filterTerm: string) => {
+  if (!(filterTerm || '').trim()) {
+    return apps
+  }
+  const searchEngine = new Fuse(apps, {
+    ...defaultFuseOptions,
+    keys: ['name', 'subtitle', 'tags']
+  })
+  return searchEngine.search(filterTerm).map((r) => r.item)
+}
+const filteredApps = computed(() => {
+  // TODO: debounce the filtering by 100-300ms
+  return filter(unref(apps), unref(filterTerm))
+})
 
-    const markInstance = ref<Mark>(null)
-    onMounted(async () => {
-      await nextTick()
-      markInstance.value = new Mark('.mark-element')
+const markInstance = ref<Mark>(null)
+onMounted(async () => {
+  await nextTick()
+  markInstance.value = new Mark('.mark-element')
+})
+watch([filterTerm, markInstance], () => {
+  filterTermInput.value = unref(filterTerm)
+  unref(markInstance)?.unmark()
+  if (unref(filterTerm)) {
+    unref(markInstance)?.mark(unref(filterTerm), {
+      element: 'span',
+      className: 'mark-highlight'
     })
-    watch([filterTerm, markInstance], () => {
-      filterTermInput.value = unref(filterTerm)
-      unref(markInstance)?.unmark()
-      if (unref(filterTerm)) {
-        unref(markInstance)?.mark(unref(filterTerm), {
-          element: 'span',
-          className: 'mark-highlight'
-        })
-      }
-    })
-
-    return {
-      filteredApps,
-      filterTerm,
-      setFilterTerm,
-      filterTermInput
-    }
   }
 })
 </script>
