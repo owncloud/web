@@ -47,8 +47,8 @@
   </div>
 </template>
 
-<script lang="ts">
-import { computed, defineComponent, unref } from 'vue'
+<script lang="ts" setup>
+import { computed, unref } from 'vue'
 import { App } from '../types'
 import { APPID } from '../appid'
 import { TextEditor, useRouteParam, useRouter } from '@ownclouders/web-pkg'
@@ -60,39 +60,20 @@ import AppAuthors from '../components/AppAuthors.vue'
 import AppImageGallery from '../components/AppImageGallery.vue'
 import AppContextualHelper from '../components/AppContextualHelper.vue'
 
-export default defineComponent({
-  components: {
-    AppContextualHelper,
-    AppImageGallery,
-    AppAuthors,
-    AppResources,
-    AppTags,
-    AppVersions,
-    TextEditor
-  },
-  setup() {
-    const appIdRouteParam = useRouteParam('appId')
-    const appId = computed(() => {
-      return decodeURIComponent(unref(appIdRouteParam))
-    })
-    const appsStore = useAppsStore()
-    const router = useRouter()
-
-    const app = computed<App>(() => {
-      return appsStore.getById(unref(appId))
-    })
-
-    const onTagClicked = (tag: string) => {
-      router.push({ name: `${APPID}-list`, query: { filter: tag } })
-    }
-
-    return {
-      app,
-      APPID,
-      onTagClicked
-    }
-  }
+const appIdRouteParam = useRouteParam('appId')
+const appId = computed(() => {
+  return decodeURIComponent(unref(appIdRouteParam))
 })
+const appsStore = useAppsStore()
+const router = useRouter()
+
+const app = computed<App>(() => {
+  return appsStore.getById(unref(appId))
+})
+
+const onTagClicked = (tag: string) => {
+  router.push({ name: `${APPID}-list`, query: { filter: tag } })
+}
 </script>
 
 <style lang="scss">
