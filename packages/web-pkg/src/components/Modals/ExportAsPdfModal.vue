@@ -6,19 +6,20 @@
       ref="iframeRef"
       class="oc-width-1-1 oc-height-1-1"
       :title="iframeTitle"
-      :src="iframeSrc"
+      :src="iframeUrl.href"
       tabindex="0"
       @load="onLoad"
-    ></iframe>
+    />
   </div>
 </template>
 
-<script lang="ts">
-import { defineComponent, onBeforeUnmount, onMounted, PropType, ref } from 'vue'
+<script lang="ts" setup>
+import { onBeforeUnmount, onMounted, ref } from 'vue'
 import {
   EDITOR_MODE_EDIT,
   embedModeLocationPickMessageData,
   Modal,
+  useAppsStore,
   useClientService,
   useFileActions,
   useGetMatchingSpace,
@@ -29,169 +30,183 @@ import {
 } from '../../composables'
 import { LocationQuery, RouteLocationRaw } from 'vue-router'
 import AppLoadingSpinner from '../AppLoadingSpinner.vue'
-import { isShareSpaceResource, Resource, SpaceResource, urlJoin } from '@ownclouders/web-client'
+import { Resource, SpaceResource, urlJoin } from '@ownclouders/web-client'
 import { unref } from 'vue'
 import { resolveFileNameDuplicate } from '../../helpers'
 import { useGettext } from 'vue3-gettext'
 import { DavProperty } from '@ownclouders/web-client/webdav'
-import { jsPDF } from 'jspdf'
+import { useExportAsPdfWorker } from '../../composables/webWorkers/exportAsPdfWorker'
 
-export default defineComponent({
-  name: 'SaveAsModal',
-  components: { AppLoadingSpinner },
-  props: {
-    modal: { type: Object as PropType<Modal>, required: true },
-    parentFolderLink: { type: Object as PropType<RouteLocationRaw>, required: true },
-    originalResource: { type: Object as PropType<Resource>, required: true },
-    content: { type: String, required: true }
-  },
-  setup(props) {
-    const iframeRef = ref<HTMLIFrameElement>()
-    const isLoading = ref(true)
-    const themeStore = useThemeStore()
-    const { $gettext } = useGettext()
-    const router = useRouter()
-    const clientService = useClientService()
-    const { removeModal } = useModals()
-    const { showMessage, showErrorMessage } = useMessages()
-    const { getMatchingSpace } = useGetMatchingSpace()
-    const { getEditorRouteOpts } = useFileActions()
+const { modal, parentFolderLink, originalResource, content } = defineProps<{
+  modal: Modal
+  parentFolderLink: RouteLocationRaw
+  originalResource: Resource
+  content: string
+}>()
 
-    const parentFolderRoute = router.resolve(props.parentFolderLink)
-    const iframeTitle = themeStore.currentTheme.common?.name
-    const iframeUrl = new URL(parentFolderRoute.href, window.location.origin)
-    iframeUrl.searchParams.append('hide-logo', 'true')
-    iframeUrl.searchParams.append('embed', 'true')
-    iframeUrl.searchParams.append('embed-target', 'location')
-    iframeUrl.searchParams.append('embed-choose-file-name', 'true')
-    iframeUrl.searchParams.append('embed-delegate-authentication', 'false')
-    iframeUrl.searchParams.append(
-      'embed-choose-file-name-suggestion',
-      props.originalResource.name.replace('.md', '.pdf')
-    )
+const themeStore = useThemeStore()
+const { $pgettext } = useGettext()
+const router = useRouter()
+const clientService = useClientService()
+const { removeModal } = useModals()
+const { showMessage, showErrorMessage } = useMessages()
+const { getMatchingSpace } = useGetMatchingSpace()
+const { openEditor } = useFileActions()
+const appsStore = useAppsStore()
+const { startWorker } = useExportAsPdfWorker()
 
-    const onLoad = () => {
-      isLoading.value = false
-      unref(iframeRef).contentWindow.focus()
-    }
+const parentFolderRoute = router.resolve(parentFolderLink)
+const iframeTitle = themeStore.currentTheme.common?.name
+const iframeUrl = new URL(parentFolderRoute.href, window.location.origin)
+iframeUrl.searchParams.append('hide-logo', 'true')
+iframeUrl.searchParams.append('embed', 'true')
+iframeUrl.searchParams.append('embed-target', 'location')
+iframeUrl.searchParams.append('embed-choose-file-name', 'true')
+iframeUrl.searchParams.append('embed-delegate-authentication', 'false')
+iframeUrl.searchParams.append(
+  'embed-choose-file-name-suggestion',
+  originalResource.name.replace('.md', '.pdf')
+)
 
-    const onLocationPick = async ({ data }: MessageEvent) => {
-      if (data.name !== 'owncloud-embed:select') {
-        return
-      }
+const iframeRef = ref<HTMLIFrameElement>()
+const isLoading = ref(true)
+const previewEl = ref<HTMLDivElement>()
 
-      const { resources, fileName, locationQuery }: embedModeLocationPickMessageData = data.data
+const onLoad = () => {
+  isLoading.value = false
+  unref(iframeRef).contentWindow.focus()
+}
 
-      const destinationFolder: Resource = resources[0]
-      const space = getMatchingSpace(destinationFolder)
-
-      try {
-        const resource = await saveFile({ destinationFolder, fileName, space })
-        showMessage({
-          title: $gettext('"%{fileName}" was saved successfully', { fileName: resource.name })
-        })
-        openFile({ resource, space, locationQuery })
-      } catch (e) {
-        console.error(e)
-        showErrorMessage({
-          title: $gettext('Unable to save "%{fileName}"', { fileName }),
-          errors: [e]
-        })
-        console.error(e)
-      }
-
-      removeModal(props.modal.id)
-    }
-
-    const saveFile = async ({
-      destinationFolder,
-      fileName,
-      space
-    }: {
-      destinationFolder: Resource
-      fileName: string
-      space: SpaceResource
-    }) => {
-      const { children: existingResources } = await clientService.webdav.listFiles(
-        space,
-        {
-          fileId: destinationFolder.fileId
-        },
-        { davProperties: [DavProperty.Name] }
-      )
-      const resourceAlreadyExists = existingResources.find(
-        (existingResource) => existingResource.name === fileName
-      )
-      if (resourceAlreadyExists) {
-        fileName = resolveFileNameDuplicate(
-          fileName,
-          props.originalResource.extension,
-          existingResources
-        )
-      }
-
-      const pdf = new jsPDF()
-      pdf.text(props.content, 10, 10)
-
-      return clientService.webdav.putFileContents(space, {
-        fileName,
-        parentFolderId: destinationFolder.id,
-        content: pdf.output(),
-        path: urlJoin(destinationFolder.path, fileName)
-      })
-    }
-
-    const openFile = ({
-      locationQuery,
-      resource,
-      space
-    }: {
-      locationQuery: LocationQuery
-      resource: Resource
-      space: SpaceResource
-    }) => {
-      const remoteItemId = isShareSpaceResource(space) ? space.id : undefined
-      const routeOpts = getEditorRouteOpts(
-        unref(router.currentRoute).name,
-        space,
-        resource,
-        EDITOR_MODE_EDIT,
-        remoteItemId
-      )
-      routeOpts.query = { ...routeOpts.query, ...locationQuery }
-
-      const editorRoute = router.resolve(routeOpts)
-      const editorRouteUrl = new URL(editorRoute.href, window.location.origin)
-      window.open(editorRouteUrl.href, '_blank')
-    }
-
-    const onCancel = ({ data }: MessageEvent) => {
-      if (data.name !== 'owncloud-embed:cancel') {
-        return
-      }
-
-      removeModal(props.modal.id)
-    }
-
-    onMounted(() => {
-      window.addEventListener('message', onLocationPick)
-      window.addEventListener('message', onCancel)
-    })
-
-    onBeforeUnmount(() => {
-      window.removeEventListener('message', onLocationPick)
-      window.removeEventListener('message', onCancel)
-    })
-
-    return {
-      isLoading,
-      onLoad,
-      iframeTitle,
-      iframeSrc: iframeUrl.href,
-      iframeRef,
-      onLocationPick
-    }
+const onLocationPick = async ({ data }: MessageEvent) => {
+  if (data.name !== 'owncloud-embed:select') {
+    return
   }
+
+  if (Array.isArray(data.data)) {
+    // The location pick is somehow triggered twice as soon as we list the destination folder in `saveFile` method.
+    // It uses an array as payload instead of an object. That is why we can use that to ignore the second message.
+    return
+  }
+
+  const { resources, fileName, locationQuery }: embedModeLocationPickMessageData = data.data
+
+  const destinationFolder: Resource = resources[0]
+  const space = getMatchingSpace(destinationFolder)
+
+  startWorker(destinationFolder, space, fileName, content, (result) => {
+    console.log(result)
+  })
+  removeModal(modal.id)
+
+  // try {
+  //   const resource = await saveFile({ destinationFolder, fileName, space })
+  //   showMessage({
+  //     title: $pgettext(
+  //       'Success toast message title shown to a user when a file is exported as PDF via the export as PDF modal.',
+  //       '"%{fileName}" was exported successfully',
+  //       { fileName: resource.name }
+  //     )
+  //   })
+  //   openFile({ resource, space, locationQuery })
+  // } catch (e) {
+  //   console.error(e)
+  //   showErrorMessage({
+  //     title: $pgettext(
+  //       'Error toast message title shown to a user when exporting a file as PDF via the export as PDF modal failed.',
+  //       'Unable to export "%{fileName}"',
+  //       { fileName }
+  //     ),
+  //     errors: [e]
+  //   })
+  //   console.error(e)
+  // }
+}
+
+// const saveFile = async ({
+//   destinationFolder,
+//   fileName,
+//   space
+// }: {
+//   destinationFolder: Resource
+//   fileName: string
+//   space: SpaceResource
+// }) => {
+//   console.log('saveFile', fileName)
+//   const { children: existingResources } = await clientService.webdav.listFiles(
+//     space,
+//     {
+//       fileId: destinationFolder.fileId
+//     },
+//     { davProperties: [DavProperty.Name] }
+//   )
+
+//   const resourceAlreadyExists = existingResources.find(
+//     (existingResource) => existingResource.name === fileName
+//   )
+
+//   if (resourceAlreadyExists) {
+//     fileName = resolveFileNameDuplicate(fileName, 'pdf', existingResources)
+//   }
+
+//   const A4_WIDTH = 793.7066666667
+//   const A4_HEIGHT = 1122.52
+
+//   const output = await html3pdf()
+//     .set({
+//       margin: 10,
+//       html2canvas: {
+//         scale: 3,
+//         useCORS: true,
+//         letterRendering: true,
+//         width: A4_WIDTH,
+//         windowWidth: A4_WIDTH,
+//         height: A4_HEIGHT,
+//         windowHeight: A4_HEIGHT
+//       },
+//       pagesPerCanvas: navigator.userAgent.includes('Chrome') ? 19 : 9,
+//       pagebreak: { mode: 'avoid-all' },
+//       jsPDF: { format: 'a4', orientation: 'portrait' }
+//     })
+//     .from(unref(previewEl).children[0])
+//     .output('arraybuffer')
+
+//   return clientService.webdav.putFileContents(space, {
+//     fileName,
+//     parentFolderId: destinationFolder.id,
+//     content: output,
+//     path: urlJoin(destinationFolder.path, fileName)
+//   })
+// }
+
+// const openFile = ({
+//   locationQuery,
+//   resource,
+//   space
+// }: {
+//   locationQuery: LocationQuery
+//   resource: Resource
+//   space: SpaceResource
+// }) => {
+//   const [pdfApp] = appsStore.fileExtensions.filter(({ extension }) => extension === 'pdf')
+//   openEditor(pdfApp, space, resource, EDITOR_MODE_EDIT, locationQuery, true)
+// }
+
+const onCancel = ({ data }: MessageEvent) => {
+  if (data.name !== 'owncloud-embed:cancel') {
+    return
+  }
+
+  removeModal(modal.id)
+}
+
+onMounted(() => {
+  window.addEventListener('message', onLocationPick)
+  window.addEventListener('message', onCancel)
+})
+
+onBeforeUnmount(() => {
+  window.removeEventListener('message', onLocationPick)
+  window.removeEventListener('message', onCancel)
 })
 </script>
 
@@ -211,6 +226,25 @@ export default defineComponent({
     &-message {
       height: 60vh;
       margin: 0;
+    }
+  }
+
+  .export-pdf-preview {
+    h1,
+    h2,
+    h3,
+    h4,
+    h5,
+    h6,
+    p {
+      color: var(--oc-color-text-default);
+    }
+
+    .md-editor-preview {
+      hyphens: auto;
+      overflow-wrap: break-word;
+      word-break: normal;
+      word-break: auto-phrase;
     }
   }
 }

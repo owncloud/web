@@ -227,11 +227,13 @@ const tabbableOptions = computed((): FocusTrapTabbableOptions => {
 })
 
 const resetLoadingState = () => {
+  console.log('resetLoadingState')
   showSpinner.value = false
   buttonConfirmAppearance.value = 'filled'
 }
 
 const setLoadingState = () => {
+  console.log('setLoadingState')
   showSpinner.value = true
   buttonConfirmAppearance.value = 'outline'
 }
@@ -263,6 +265,7 @@ function inputOnInput(value: string) {
 watch(
   () => isLoading,
   () => {
+    console.log('isLoading', isLoading)
     if (!isLoading) {
       return resetLoadingState()
     }
