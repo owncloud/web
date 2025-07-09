@@ -62,26 +62,26 @@ describe('Epub reader app', () => {
     it('sets the theme based on current theme setting', async () => {
       const { wrapper } = getWrapper({ localStorageGeneral: { fontSizePercentage: 50 } })
       await nextTicks(2)
-      expect(wrapper.vm.rendition.themes.select).toHaveBeenCalledWith('light')
+      expect((wrapper.vm as any).rendition.themes.select).toHaveBeenCalledWith('light')
     })
   })
   describe('font size', () => {
     it('initializes with default font size percentage', async () => {
       const { wrapper } = getWrapper()
       await nextTicks(2)
-      expect(wrapper.vm.rendition.themes.fontSize).toHaveBeenCalledWith('100%')
+      expect((wrapper.vm as any).rendition.themes.fontSize).toHaveBeenCalledWith('100%')
     })
     it('initializes with local storage font size when set', async () => {
       const { wrapper } = getWrapper({ localStorageGeneral: { fontSizePercentage: 50 } })
       await nextTicks(2)
-      expect(wrapper.vm.rendition.themes.fontSize).toHaveBeenCalledWith('50%')
+      expect((wrapper.vm as any).rendition.themes.fontSize).toHaveBeenCalledWith('50%')
     })
     describe('increase font size button', () => {
       it('increases font size when clicked', async () => {
         const { wrapper } = getWrapper()
         await nextTicks(2)
         await wrapper.find(selectors.increaseFontSize).trigger('click')
-        expect(wrapper.vm.rendition.themes.fontSize).toHaveBeenCalledWith('110%')
+        expect((wrapper.vm as any).rendition.themes.fontSize).toHaveBeenCalledWith('110%')
       })
       it('is disabled when "MAX_FONT_SIZE_PERCENTAGE" is reached', () => {
         const { wrapper } = getWrapper({ localStorageGeneral: { fontSizePercentage: 150 } })
@@ -95,7 +95,7 @@ describe('Epub reader app', () => {
         const { wrapper } = getWrapper()
         await nextTicks(2)
         await wrapper.find(selectors.decreaseFontSize).trigger('click')
-        expect(wrapper.vm.rendition.themes.fontSize).toHaveBeenCalledWith('90%')
+        expect((wrapper.vm as any).rendition.themes.fontSize).toHaveBeenCalledWith('90%')
       })
       it('is disabled when "MIN_FONT_SIZE_PERCENTAGE" is reached', () => {
         const { wrapper } = getWrapper({ localStorageGeneral: { fontSizePercentage: 50 } })
@@ -109,7 +109,7 @@ describe('Epub reader app', () => {
         const { wrapper } = getWrapper({ localStorageGeneral: { fontSizePercentage: 50 } })
         await nextTicks(2)
         await wrapper.find(selectors.resetFontSize).trigger('click')
-        expect(wrapper.vm.rendition.themes.fontSize).toHaveBeenCalledWith('100%')
+        expect((wrapper.vm as any).rendition.themes.fontSize).toHaveBeenCalledWith('100%')
       })
       it('shows the current font size', async () => {
         const { wrapper } = getWrapper()
@@ -127,7 +127,7 @@ describe('Epub reader app', () => {
         }
       })
       await nextTicks(2)
-      expect(wrapper.vm.rendition.display).toHaveBeenCalledWith(
+      expect((wrapper.vm as any).rendition.display).toHaveBeenCalledWith(
         'epubcfi(/6/4!/4/4/14/2/150/2/1:23)'
       )
     })
@@ -147,7 +147,7 @@ describe('Epub reader app', () => {
         await nextTicks(2)
         const chapterElements = wrapper.findAll(selectors.chaptersListItem)
         await chapterElements[1].find('.oc-button').trigger('click')
-        expect(wrapper.vm.rendition.display).toHaveBeenCalledWith('c2')
+        expect((wrapper.vm as any).rendition.display).toHaveBeenCalledWith('c2')
       })
     })
     describe('chapters select', () => {
@@ -166,7 +166,7 @@ describe('Epub reader app', () => {
           close: false
         })
         await chapterElements[1].trigger('click')
-        expect(wrapper.vm.rendition.display).toHaveBeenCalledWith('c2')
+        expect((wrapper.vm as any).rendition.display).toHaveBeenCalledWith('c2')
       })
     })
   })
@@ -177,14 +177,14 @@ describe('Epub reader app', () => {
         await nextTicks(2)
         const keyboardEvent = new KeyboardEvent('keydown', { key: 'ArrowLeft' })
         document.dispatchEvent(keyboardEvent)
-        expect(wrapper.vm.rendition.prev).toHaveBeenCalled()
+        expect((wrapper.vm as any).rendition.prev).toHaveBeenCalled()
       })
       it('calls method "next" when right arrow key is pressed', async () => {
         const { wrapper } = getWrapper()
         await nextTicks(2)
         const keyboardEvent = new KeyboardEvent('keydown', { key: 'ArrowRight' })
         document.dispatchEvent(keyboardEvent)
-        expect(wrapper.vm.rendition.next).toHaveBeenCalled()
+        expect((wrapper.vm as any).rendition.next).toHaveBeenCalled()
       })
     })
     describe('navigate left button', () => {
@@ -192,7 +192,7 @@ describe('Epub reader app', () => {
         const { wrapper } = getWrapper()
         await nextTicks(2)
         await wrapper.find(selectors.navigateLeft).trigger('click')
-        expect(wrapper.vm.rendition.prev).toHaveBeenCalled()
+        expect((wrapper.vm as any).rendition.prev).toHaveBeenCalled()
       })
     })
     describe('navigate right button', () => {
@@ -200,7 +200,7 @@ describe('Epub reader app', () => {
         const { wrapper } = getWrapper()
         await nextTicks(2)
         await wrapper.find(selectors.navigateRight).trigger('click')
-        expect(wrapper.vm.rendition.next).toHaveBeenCalled()
+        expect((wrapper.vm as any).rendition.next).toHaveBeenCalled()
       })
     })
   })
@@ -221,9 +221,7 @@ function getWrapper({
   return {
     wrapper: mount(App, {
       props: {
-        applicationConfig: {},
         currentContent: '',
-        isReadOnly: false,
         resource: mock<Resource>({
           id: '1'
         }),
