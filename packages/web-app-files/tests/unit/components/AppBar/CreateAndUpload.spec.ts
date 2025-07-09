@@ -150,7 +150,7 @@ describe('CreateAndUpload component', () => {
       const { wrapper, mocks } = getWrapper({ spaces })
       const graphMock = mocks.$clientService.graphAuthenticated
       graphMock.drives.getDrive.mockResolvedValue(mock<SpaceResource>())
-      await wrapper.vm.onUploadComplete({ successful: [file], failed: [] })
+      await (wrapper.vm as any).onUploadComplete({ successful: [file], failed: [] })
       const spacesStore = useSpacesStore()
       expect(spacesStore.updateSpaceField).toHaveBeenCalledTimes(updated)
     })
@@ -164,7 +164,7 @@ describe('CreateAndUpload component', () => {
       })
       const graphMock = mocks.$clientService.graphAuthenticated
       graphMock.drives.getDrive.mockResolvedValue(mock<SpaceResource>())
-      await wrapper.vm.onUploadComplete({ successful: [file], failed: [] })
+      await (wrapper.vm as any).onUploadComplete({ successful: [file], failed: [] })
       expect(eventSpy).toHaveBeenCalled()
     })
   })
