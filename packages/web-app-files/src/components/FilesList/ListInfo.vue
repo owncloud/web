@@ -4,14 +4,8 @@
   </div>
 </template>
 
-<script lang="ts">
-import { defineComponent } from 'vue'
+<script lang="ts" setup>
 import { useResourceContents } from '@ownclouders/web-pkg'
 
-export default defineComponent({
-  setup: () => {
-    const { resourceContentsText } = useResourceContents()
-    return { resourceContentsText }
-  }
-})
+const { resourceContentsText } = useResourceContents()
 </script>
