@@ -41,7 +41,7 @@
   </nav>
 </template>
 
-<script lang="ts">
+<script lang="ts" setup>
 import { isLocationSharesActive, RouteShareTypes } from '@ownclouders/web-pkg'
 import {
   locationSharesViaLink,
@@ -49,63 +49,53 @@ import {
   locationSharesWithOthers
 } from '@ownclouders/web-pkg'
 
-import { computed, defineComponent, unref } from 'vue'
+import { computed, unref } from 'vue'
 import { useRouter } from '@ownclouders/web-pkg'
 import { useActiveLocation } from '@ownclouders/web-pkg'
 import { useGettext } from 'vue3-gettext'
 import { RouteRecordNormalized } from 'vue-router'
 
-export default defineComponent({
-  setup() {
-    const { $gettext } = useGettext()
-    const router = useRouter()
-    const sharesRoutes = [
-      locationSharesWithMe,
-      locationSharesWithOthers,
-      locationSharesViaLink
-    ].reduce<Record<string, RouteRecordNormalized>>((routes, route) => {
-      routes[route.name as string] = router.getRoutes().find((r) => r.name === route.name)
-      return routes
-    }, {})
-    const sharesWithMeActive = useActiveLocation(
-      isLocationSharesActive,
-      locationSharesWithMe.name as RouteShareTypes
-    )
-    const sharesWithOthersActive = useActiveLocation(
-      isLocationSharesActive,
-      locationSharesWithOthers.name as RouteShareTypes
-    )
-    const sharesViaLinkActive = useActiveLocation(
-      isLocationSharesActive,
-      locationSharesViaLink.name as RouteShareTypes
-    )
-    const navItems = computed(() => [
-      {
-        icon: 'share-forward',
-        to: sharesRoutes[locationSharesWithMe.name as string].path,
-        text: $gettext('Shared with me'),
-        active: unref(sharesWithMeActive)
-      },
-      {
-        icon: 'reply',
-        to: sharesRoutes[locationSharesWithOthers.name as string].path,
-        text: $gettext('Shared with others'),
-        active: unref(sharesWithOthersActive)
-      },
-      {
-        icon: 'link',
-        to: sharesRoutes[locationSharesViaLink.name as string].path,
-        text: $gettext('Shared via link'),
-        active: unref(sharesViaLinkActive)
-      }
-    ])
-    const currentNavItem = computed(() => unref(navItems).find((navItem) => navItem.active))
-    return {
-      currentNavItem,
-      navItems
-    }
+const { $gettext } = useGettext()
+const router = useRouter()
+const sharesRoutes = [locationSharesWithMe, locationSharesWithOthers, locationSharesViaLink].reduce<
+  Record<string, RouteRecordNormalized>
+>((routes, route) => {
+  routes[route.name as string] = router.getRoutes().find((r) => r.name === route.name)
+  return routes
+}, {})
+const sharesWithMeActive = useActiveLocation(
+  isLocationSharesActive,
+  locationSharesWithMe.name as RouteShareTypes
+)
+const sharesWithOthersActive = useActiveLocation(
+  isLocationSharesActive,
+  locationSharesWithOthers.name as RouteShareTypes
+)
+const sharesViaLinkActive = useActiveLocation(
+  isLocationSharesActive,
+  locationSharesViaLink.name as RouteShareTypes
+)
+const navItems = computed(() => [
+  {
+    icon: 'share-forward',
+    to: sharesRoutes[locationSharesWithMe.name as string].path,
+    text: $gettext('Shared with me'),
+    active: unref(sharesWithMeActive)
+  },
+  {
+    icon: 'reply',
+    to: sharesRoutes[locationSharesWithOthers.name as string].path,
+    text: $gettext('Shared with others'),
+    active: unref(sharesWithOthersActive)
+  },
+  {
+    icon: 'link',
+    to: sharesRoutes[locationSharesViaLink.name as string].path,
+    text: $gettext('Shared via link'),
+    active: unref(sharesViaLinkActive)
   }
-})
+])
+const currentNavItem = computed(() => unref(navItems).find((navItem) => navItem.active))
 </script>
 <style lang="scss" scoped>
 #shares-navigation {
