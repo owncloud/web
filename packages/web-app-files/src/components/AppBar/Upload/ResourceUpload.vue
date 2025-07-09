@@ -29,104 +29,82 @@
   </div>
 </template>
 
-<script lang="ts">
-import { computed, defineComponent, onMounted, onBeforeUnmount, ref } from 'vue'
+<script lang="ts" setup>
+import { computed, onMounted, onBeforeUnmount, ref, useTemplateRef } from 'vue'
 import { Resource } from '@ownclouders/web-client'
 import { useService, ResourceIcon } from '@ownclouders/web-pkg'
+import { useGettext } from 'vue3-gettext'
 import type { UppyService } from '@ownclouders/web-pkg'
 
-export default defineComponent({
-  components: { ResourceIcon },
-  props: {
-    btnLabel: {
-      type: String,
-      required: false,
-      default: ''
-    },
-    btnClass: {
-      type: String,
-      required: false,
-      default: ''
-    },
-    isFolder: {
-      type: Boolean,
-      required: false,
-      default: false
-    }
-  },
-  setup(props) {
-    const uppyService = useService<UppyService>('$uppyService')
-    const isRemoteUploadInProgress = ref(uppyService.isRemoteUploadInProgress())
+interface Props {
+  btnLabel?: string
+  btnClass?: string
+  isFolder?: boolean
+}
+const { btnLabel = '', btnClass = '', isFolder = false } = defineProps<Props>()
+const input = useTemplateRef('input')
+const language = useGettext()
+const { $gettext } = language
 
-    let uploadStartedSub: string
-    let uploadCompletedSub: string
+const uppyService = useService<UppyService>('$uppyService')
+const isRemoteUploadInProgress = ref(uppyService.isRemoteUploadInProgress())
 
-    const resource = computed(() => {
-      return { extension: '', isFolder: props.isFolder } as Resource
-    })
+let uploadStartedSub: string
+let uploadCompletedSub: string
 
-    const onUploadStarted = () =>
-      (isRemoteUploadInProgress.value = uppyService.isRemoteUploadInProgress())
-    const onUploadCompleted = () => (isRemoteUploadInProgress.value = false)
+const resource = computed(() => {
+  return { extension: '', isFolder: isFolder } as Resource
+})
 
-    onMounted(() => {
-      uploadStartedSub = uppyService.subscribe('uploadStarted', onUploadStarted)
-      uploadCompletedSub = uppyService.subscribe('uploadCompleted', onUploadCompleted)
-    })
+const onUploadStarted = () =>
+  (isRemoteUploadInProgress.value = uppyService.isRemoteUploadInProgress())
+const onUploadCompleted = () => (isRemoteUploadInProgress.value = false)
 
-    onBeforeUnmount(() => {
-      uppyService.unsubscribe('uploadStarted', uploadStartedSub)
-      uppyService.unsubscribe('uploadCompleted', uploadCompletedSub)
-    })
+onMounted(() => {
+  uploadStartedSub = uppyService.subscribe('uploadStarted', onUploadStarted)
+  uploadCompletedSub = uppyService.subscribe('uploadCompleted', onUploadCompleted)
+  uppyService.registerUploadInput(input.value as HTMLInputElement)
+})
+
+onBeforeUnmount(() => {
+  uppyService.unsubscribe('uploadStarted', uploadStartedSub)
+  uppyService.unsubscribe('uploadCompleted', uploadCompletedSub)
+  uppyService.removeUploadInput(input.value as HTMLInputElement)
+})
+
+function triggerUpload() {
+  ;(input.value as HTMLInputElement).click()
+}
+const inputId = computed(() => {
+  if (isFolder) {
+    return 'files-folder-upload-input'
+  }
+  return 'files-file-upload-input'
+})
+const uploadLabelId = computed(() => {
+  if (isFolder) {
+    return 'files-folder-upload-button'
+  }
+  return 'files-file-upload-button'
+})
+const buttonLabel = computed(() => {
+  if (btnLabel) {
+    return btnLabel
+  }
+  if (isFolder) {
+    return $gettext('Folder')
+  }
+  return $gettext('Files')
+})
+const inputAttrs = computed(() => {
+  if (isFolder) {
     return {
-      isRemoteUploadInProgress,
-      resource
-    }
-  },
-  computed: {
-    inputId() {
-      if (this.isFolder) {
-        return 'files-folder-upload-input'
-      }
-      return 'files-file-upload-input'
-    },
-    uploadLabelId() {
-      if (this.isFolder) {
-        return 'files-folder-upload-button'
-      }
-      return 'files-file-upload-button'
-    },
-    buttonLabel() {
-      if (this.btnLabel) {
-        return this.btnLabel
-      }
-      if (this.isFolder) {
-        return this.$gettext('Folder')
-      }
-      return this.$gettext('Files')
-    },
-    inputAttrs() {
-      if (this.isFolder) {
-        return {
-          webkitdirectory: true,
-          mozdirectory: true,
-          allowdirs: true
-        }
-      }
-      return { multiple: true }
-    }
-  },
-  mounted() {
-    this.$uppyService.registerUploadInput(this.$refs.input as HTMLInputElement)
-  },
-  beforeUnmount() {
-    this.$uppyService.removeUploadInput(this.$refs.input as HTMLInputElement)
-  },
-  methods: {
-    triggerUpload() {
-      ;(this.$refs.input as HTMLInputElement).click()
+      webkitdirectory: true,
+      mozdirectory: true,
+      allowdirs: true
     }
   }
+  return { multiple: true }
 })
 </script>
 
