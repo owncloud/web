@@ -181,13 +181,11 @@
   </div>
 </template>
 
-<script lang="ts">
+<script lang="ts" setup>
 import {
   FileAction,
   isLocationPublicActive,
-  isLocationSpacesActive,
   useClipboardStore,
-  useFileActions,
   useFileActionsCreateNewShortcut,
   useMessages,
   useResourcesStore,
@@ -201,22 +199,11 @@ import {
   useFileActionsCreateNewFile,
   useFileActionsCreateNewFolder,
   useFileActionsPaste,
-  useRequest,
   useClientService
 } from '@ownclouders/web-pkg'
 
 import ResourceUpload from './Upload/ResourceUpload.vue'
-
-import {
-  computed,
-  defineComponent,
-  onMounted,
-  onBeforeUnmount,
-  PropType,
-  unref,
-  watch,
-  ref
-} from 'vue'
+import { computed, onMounted, onBeforeUnmount, unref, watch, ref } from 'vue'
 import { eventBus } from '@ownclouders/web-pkg'
 import {
   Resource,
@@ -233,305 +220,259 @@ import { v4 as uuidV4 } from 'uuid'
 import { storeToRefs } from 'pinia'
 import { uploadMenuExtensionPoint } from '../../extensionPoints'
 
-export default defineComponent({
-  components: {
-    ResourceIcon,
-    ResourceUpload
-  },
-  props: {
-    space: {
-      type: Object as PropType<SpaceResource>,
-      required: true
-    },
-    item: {
-      type: String,
-      required: false,
-      default: null
-    },
-    limitedScreenSpace: {
-      type: Boolean,
-      default: false,
-      required: false
-    },
-    itemId: {
-      type: [String, Number],
-      required: false,
-      default: null
-    }
-  },
-  setup(props) {
-    const uppyService = useService<UppyService>('$uppyService')
-    const clientService = useClientService()
-    const userStore = useUserStore()
-    const spacesStore = useSpacesStore()
-    const messageStore = useMessages()
-    const sharesStore = useSharesStore()
-    const route = useRoute()
-    const language = useGettext()
-    const { $gettext } = language
+interface Props {
+  space: SpaceResource
+  item?: string | null
+  limitedScreenSpace?: boolean
+  itemId?: string | number | null
+}
 
-    const clipboardStore = useClipboardStore()
-    const { clearClipboard } = clipboardStore
-    const { resources: clipboardResources } = storeToRefs(clipboardStore)
+const {
+  space: currentSpace,
+  item = null,
+  limitedScreenSpace = false,
+  itemId = null
+} = defineProps<Props>()
+const uppyService = useService<UppyService>('$uppyService')
+const clientService = useClientService()
+const userStore = useUserStore()
+const spacesStore = useSpacesStore()
+const messageStore = useMessages()
+const sharesStore = useSharesStore()
+const route = useRoute()
+const language = useGettext()
+const { $gettext } = language
 
-    const resourcesStore = useResourcesStore()
-    const { currentFolder } = storeToRefs(resourcesStore)
+const clipboardStore = useClipboardStore()
+const { clearClipboard } = clipboardStore
+const { resources: clipboardResources } = storeToRefs(clipboardStore)
 
-    const areFileExtensionsShown = computed(() => unref(resourcesStore.areFileExtensionsShown))
+const resourcesStore = useResourcesStore()
+const { currentFolder } = storeToRefs(resourcesStore)
 
-    const space = computed(() => props.space)
+const areFileExtensionsShown = computed(() => unref(resourcesStore.areFileExtensionsShown))
 
-    useUpload({ uppyService })
+const space = computed(() => currentSpace)
 
-    if (!uppyService.getPlugin('HandleUpload')) {
-      uppyService.addPlugin(HandleUpload, {
-        clientService,
-        language,
-        route,
-        space,
-        userStore,
-        spacesStore,
-        messageStore,
-        resourcesStore,
-        uppyService
-      })
-    }
+useUpload({ uppyService })
 
-    let uploadCompletedSub: string
+if (!uppyService.getPlugin('HandleUpload')) {
+  uppyService.addPlugin(HandleUpload, {
+    clientService,
+    language,
+    route,
+    space,
+    userStore,
+    spacesStore,
+    messageStore,
+    resourcesStore,
+    uppyService
+  })
+}
 
-    const { actions: pasteFileActions, isCuttingAndPastingIntoSameFolder } = useFileActionsPaste()
-    const pasteFileAction = () => {
-      return unref(pasteFileActions)[0].handler({ space: unref(space) })
-    }
+let uploadCompletedSub: string
 
-    const { actions: createNewFolder } = useFileActionsCreateNewFolder({ space })
-    const createNewFolderAction = computed(() => unref(createNewFolder)[0].handler)
+const { actions: pasteFileActions, isCuttingAndPastingIntoSameFolder } = useFileActionsPaste()
+const pasteFileAction = () => {
+  return unref(pasteFileActions)[0].handler({ space: unref(space) })
+}
 
-    const { actions: createNewShortcut } = useFileActionsCreateNewShortcut({ space })
-    const createNewShortcutAction = computed(() => unref(createNewShortcut)[0].handler)
+const { actions: createNewFolder } = useFileActionsCreateNewFolder({ space })
+const createNewFolderAction = computed(() => unref(createNewFolder)[0].handler)
 
-    const { actions: createNewFileActions } = useFileActionsCreateNewFile({ space })
+const { actions: createNewShortcut } = useFileActionsCreateNewShortcut({ space })
+const createNewShortcutAction = computed(() => unref(createNewShortcut)[0].handler)
 
-    const createFileActionsGroups = computed(() => {
-      const result = []
-      const externalFileActions = unref(createNewFileActions).filter(
-        ({ isExternal, isVisible }) => isExternal && isVisible()
-      )
-      if (externalFileActions.length) {
-        result.push(externalFileActions)
-      }
-      const appFileActions = unref(createNewFileActions).filter(
-        ({ isExternal, isVisible }) => !isExternal && isVisible()
-      )
-      if (appFileActions.length) {
-        result.push(appFileActions)
-      }
-      return result
-    })
-    const createFileActionsAvailable = computed(() => {
-      return unref(createFileActionsGroups).some((group) => group.length > 0)
-    })
+const { actions: createNewFileActions } = useFileActionsCreateNewFile({ space })
 
-    const extensionRegistry = useExtensionRegistry()
-    const extensionActions = computed(() => {
-      return [
-        ...extensionRegistry.requestExtensions(uploadMenuExtensionPoint).map((e) => e.action)
-      ].filter((e) => e.isVisible())
-    })
+const createFileActionsGroups = computed(() => {
+  const result = []
+  const externalFileActions = unref(createNewFileActions).filter(
+    ({ isExternal, isVisible }) => isExternal && isVisible()
+  )
+  if (externalFileActions.length) {
+    result.push(externalFileActions)
+  }
+  const appFileActions = unref(createNewFileActions).filter(
+    ({ isExternal, isVisible }) => !isExternal && isVisible()
+  )
+  if (appFileActions.length) {
+    result.push(appFileActions)
+  }
+  return result
+})
+const createFileActionsAvailable = computed(() => {
+  return unref(createFileActionsGroups).some((group) => group.length > 0)
+})
 
-    const canUpload = computed(() => {
-      return unref(currentFolder)?.canUpload({ user: userStore.user })
-    })
+const extensionRegistry = useExtensionRegistry()
+const extensionActions = computed(() => {
+  return [
+    ...extensionRegistry.requestExtensions(uploadMenuExtensionPoint).map((e) => e.action)
+  ].filter((e) => e.isVisible())
+})
 
-    const actionKeySuffix = ref(uuidV4())
-    const showDrop = () => {
-      // force actions to be re-rendered when the drop is being opened
-      actionKeySuffix.value = uuidV4()
-    }
-    const isActionDisabled = (action: Action) => {
-      return action.isDisabled ? action.isDisabled() : false
-    }
+const canUpload = computed(() => {
+  return unref(currentFolder)?.canUpload({ user: userStore.user })
+})
 
-    const handlePasteFileEvent = (event: ClipboardEvent) => {
-      // Ignore file in clipboard if there are already files from owncloud in the clipboard
-      if (unref(clipboardResources).length || !unref(canUpload)) {
-        return
-      }
-      // Browsers only allow single files to be pasted for security reasons
-      const items = event.clipboardData.items
-      const fileItem = [...items].find((i) => i.kind === 'file')
-      if (!fileItem) {
-        return
-      }
-      const file = fileItem.getAsFile()
-      uppyService.addFiles([file])
-      event.preventDefault()
+const actionKeySuffix = ref(uuidV4())
+const showDrop = () => {
+  // force actions to be re-rendered when the drop is being opened
+  actionKeySuffix.value = uuidV4()
+}
+const isActionDisabled = (action: Action) => {
+  return action.isDisabled ? action.isDisabled() : false
+}
+
+const handlePasteFileEvent = (event: ClipboardEvent) => {
+  // Ignore file in clipboard if there are already files from owncloud in the clipboard
+  if (unref(clipboardResources).length || !unref(canUpload)) {
+    return
+  }
+  // Browsers only allow single files to be pasted for security reasons
+  const items = event.clipboardData.items
+  const fileItem = [...items].find((i) => i.kind === 'file')
+  if (!fileItem) {
+    return
+  }
+  const file = fileItem.getAsFile()
+  uppyService.addFiles([file])
+  event.preventDefault()
+}
+
+const onUploadComplete = async (result: UploadResult) => {
+  if (result.successful) {
+    const file = result.successful[0]
+
+    if (!file) {
+      return
     }
 
-    const onUploadComplete = async (result: UploadResult) => {
-      if (result.successful) {
-        const file = result.successful[0]
+    const { spaceId, currentFolder, currentFolderId, driveType } = file.meta
+    if (!isPublicSpaceResource(unref(space))) {
+      const isOwnSpace = spacesStore.spaces
+        .find(({ id }) => id === spaceId)
+        ?.isOwner(userStore.user)
 
-        if (!file) {
-          return
-        }
-
-        const { spaceId, currentFolder, currentFolderId, driveType } = file.meta
-        if (!isPublicSpaceResource(unref(space))) {
-          const isOwnSpace = spacesStore.spaces
-            .find(({ id }) => id === spaceId)
-            ?.isOwner(userStore.user)
-
-          if (driveType === 'project' || isOwnSpace) {
-            const client = clientService.graphAuthenticated
-            const updatedSpace = await client.drives.getDrive(spaceId, sharesStore.graphRoles)
-            spacesStore.updateSpaceField({
-              id: updatedSpace.id,
-              field: 'spaceQuota',
-              value: updatedSpace.spaceQuota
-            })
-          }
-        }
-
-        const sameFolder =
-          props.itemId && !isShareSpaceResource(unref(space))
-            ? props.itemId.toString().startsWith(currentFolderId.toString())
-            : currentFolder === props.item
-        const fileIsInCurrentPath = spaceId === unref(space).id && sameFolder
-        if (fileIsInCurrentPath) {
-          eventBus.publish('app.files.list.load')
-        }
+      if (driveType === 'project' || isOwnSpace) {
+        const client = clientService.graphAuthenticated
+        const updatedSpace = await client.drives.getDrive(spaceId, sharesStore.graphRoles)
+        spacesStore.updateSpaceField({
+          id: updatedSpace.id,
+          field: 'spaceQuota',
+          value: updatedSpace.spaceQuota
+        })
       }
     }
 
-    const uploadOrFileCreationBlocked = computed(() => {
-      return !unref(canUpload)
-    })
-
-    const isPasteHereButtonDisabled = computed(() => {
-      return unref(uploadOrFileCreationBlocked) || unref(isCuttingAndPastingIntoSameFolder)
-    })
-
-    const pasteHereButtonTooltip = computed(() => {
-      if (unref(uploadOrFileCreationBlocked)) {
-        return $gettext('You have no permission to paste files here.')
-      }
-
-      if (unref(isCuttingAndPastingIntoSameFolder)) {
-        return $gettext('You cannot cut and paste resources into the same folder.')
-      }
-
-      return ''
-    })
-
-    onMounted(() => {
-      uploadCompletedSub = uppyService.subscribe('uploadCompleted', onUploadComplete)
-      document.addEventListener('paste', handlePasteFileEvent)
-    })
-
-    onBeforeUnmount(() => {
-      uppyService.removePlugin(uppyService.getPlugin('HandleUpload'))
-      uppyService.unsubscribe('uploadCompleted', uploadCompletedSub)
-      uppyService.removeDropTarget()
-      document.removeEventListener('paste', handlePasteFileEvent)
-    })
-
-    watch(
-      canUpload,
-      (canUpload) => {
-        const el = document.getElementById('files-view')
-
-        if (!el || !canUpload) {
-          uppyService.removeDropTarget()
-          return
-        }
-
-        uppyService.useDropTarget({ targetSelector: '#files-view' })
-      },
-      { immediate: true }
-    )
-
-    return {
-      ...useFileActions(),
-      ...useRequest(),
-      clientService,
-      isPublicLocation: useActiveLocation(isLocationPublicActive, 'files-public-link'),
-      isSpacesGenericLocation: useActiveLocation(isLocationSpacesActive, 'files-spaces-generic'),
-      canUpload,
-      currentFolder,
-      createNewFolder,
-      createFileActionsGroups,
-      createFileActionsAvailable,
-      createNewFolderAction,
-      createNewShortcutAction,
-      extensionActions,
-      pasteFileAction,
-      isActionDisabled,
-      actionKeySuffix,
-      showDrop,
-      areFileExtensionsShown,
-      clearClipboard,
-      clipboardResources,
-      uploadOrFileCreationBlocked,
-      isPasteHereButtonDisabled,
-      pasteHereButtonTooltip,
-
-      // HACK: exported for unit tests:
-      onUploadComplete
-    }
-  },
-  computed: {
-    showPasteHereButton() {
-      return this.clipboardResources && this.clipboardResources.length !== 0
-    },
-    hideButtonLabels() {
-      return this.limitedScreenSpace
-    },
-
-    showActions() {
-      return !(this.uploadOrFileCreationBlocked && this.isPublicLocation)
-    },
-
-    newButtonTooltip() {
-      if (!this.canUpload) {
-        return this.$gettext('You have no permission to create new files!')
-      }
-      return null
-    },
-    newButtonAriaLabel() {
-      const tooltip = this.newButtonTooltip
-      if (tooltip) {
-        return tooltip
-      }
-      if (!this.createFileActionsAvailable) {
-        return this.$gettext('New folder')
-      }
-      return this.$gettext('Create new files or folders')
-    },
-    uploadButtonTooltip() {
-      if (!this.canUpload) {
-        return this.$gettext('You have no permission to upload!')
-      }
-      return null
-    },
-    uploadButtonAriaLabel() {
-      const tooltip = this.uploadButtonTooltip
-      if (tooltip) {
-        return tooltip
-      }
-      return this.$gettext('Upload files or folders')
-    },
-
-    folderIconResource() {
-      return { isFolder: true, extension: '' } as Resource
-    }
-  },
-  methods: {
-    getIconResource(fileHandler: FileAction) {
-      return { type: 'file', extension: fileHandler.ext } as Resource
+    const sameFolder =
+      itemId && !isShareSpaceResource(unref(space))
+        ? itemId.toString().startsWith(currentFolderId.toString())
+        : currentFolder === item
+    const fileIsInCurrentPath = spaceId === unref(space).id && sameFolder
+    if (fileIsInCurrentPath) {
+      eventBus.publish('app.files.list.load')
     }
   }
+}
+
+function getIconResource(fileHandler: FileAction) {
+  return { type: 'file', extension: fileHandler.ext } as Resource
+}
+
+const uploadOrFileCreationBlocked = computed(() => {
+  return !unref(canUpload)
 })
+
+const isPasteHereButtonDisabled = computed(() => {
+  return unref(uploadOrFileCreationBlocked) || unref(isCuttingAndPastingIntoSameFolder)
+})
+
+const pasteHereButtonTooltip = computed(() => {
+  if (unref(uploadOrFileCreationBlocked)) {
+    return $gettext('You have no permission to paste files here.')
+  }
+
+  if (unref(isCuttingAndPastingIntoSameFolder)) {
+    return $gettext('You cannot cut and paste resources into the same folder.')
+  }
+
+  return ''
+})
+
+const showPasteHereButton = computed(() => {
+  return unref(clipboardResources) && unref(clipboardResources).length !== 0
+})
+
+const isPublicLocation = useActiveLocation(isLocationPublicActive, 'files-public-link')
+
+const hideButtonLabels = computed(() => limitedScreenSpace)
+
+const showActions = computed(() => {
+  return !(unref(uploadOrFileCreationBlocked) && unref(isPublicLocation))
+})
+
+const newButtonTooltip = computed(() => {
+  if (!canUpload.value) {
+    return $gettext('You have no permission to create new files!')
+  }
+  return null
+})
+const newButtonAriaLabel = computed(() => {
+  const tooltip = unref(newButtonTooltip)
+  if (tooltip) {
+    return tooltip
+  }
+  if (!unref(createFileActionsAvailable)) {
+    return $gettext('New folder')
+  }
+  return $gettext('Create new files or folders')
+})
+const uploadButtonTooltip = computed(() => {
+  if (!unref(canUpload)) {
+    return $gettext('You have no permission to upload!')
+  }
+  return null
+})
+const uploadButtonAriaLabel = computed(() => {
+  const tooltip = unref(uploadButtonTooltip)
+  if (tooltip) {
+    return tooltip
+  }
+  return $gettext('Upload files or folders')
+})
+
+const folderIconResource = computed(() => {
+  return { isFolder: true, extension: '' } as Resource
+})
+
+onMounted(() => {
+  uploadCompletedSub = uppyService.subscribe('uploadCompleted', onUploadComplete)
+  document.addEventListener('paste', handlePasteFileEvent)
+})
+
+onBeforeUnmount(() => {
+  uppyService.removePlugin(uppyService.getPlugin('HandleUpload'))
+  uppyService.unsubscribe('uploadCompleted', uploadCompletedSub)
+  uppyService.removeDropTarget()
+  document.removeEventListener('paste', handlePasteFileEvent)
+})
+
+watch(
+  canUpload,
+  (canUpload) => {
+    const el = document.getElementById('files-view')
+
+    if (!el || !canUpload) {
+      uppyService.removeDropTarget()
+      return
+    }
+
+    uppyService.useDropTarget({ targetSelector: '#files-view' })
+  },
+  { immediate: true }
+)
 </script>
 <style lang="scss">
 #upload-menu-drop,
