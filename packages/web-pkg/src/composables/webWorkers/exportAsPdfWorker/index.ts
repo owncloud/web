@@ -5,6 +5,7 @@ import { unref } from 'vue'
 import { useLoadingService } from '../../../composables/loadingService'
 import { useRequestHeaders } from '../../../composables/requestHeaders'
 import { useConfigStore } from '../../piniaStores'
+import { preprocessMermaidCharts } from './mermaid'
 
 export type ExportAsPdfWorkerReturnData = {
   successful: Resource[]
@@ -22,7 +23,7 @@ export const useExportAsPdfWorker = () => {
   const configStore = useConfigStore()
   const { headers } = useRequestHeaders()
 
-  function startWorker(
+  async function startWorker(
     destinationFolder: Resource,
     space: SpaceResource,
     fileName: string,
@@ -49,8 +50,8 @@ export const useExportAsPdfWorker = () => {
         })
     )
 
-    console.log('posting worker data')
-    worker.post(getWorkerData(destinationFolder, space, fileName, content))
+    const processedContent = await preprocessMermaidCharts(content)
+    worker.post(getWorkerData(destinationFolder, space, fileName, processedContent))
   }
 
   function getWorkerData(
