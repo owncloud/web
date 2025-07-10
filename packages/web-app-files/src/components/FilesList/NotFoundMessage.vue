@@ -44,48 +44,34 @@
   </div>
 </template>
 
-<script lang="ts">
+<script lang="ts" setup>
 import {
   createLocationPublic,
   createLocationSpaces,
   isLocationPublicActive,
-  isLocationSpacesActive
+  isLocationSpacesActive,
+  useRouter,
+  createFileRouteOptions
 } from '@ownclouders/web-pkg'
-
-import { useRouter } from '@ownclouders/web-pkg'
-import { defineComponent, PropType } from 'vue'
 import { SpaceResource } from '@ownclouders/web-client'
-import { createFileRouteOptions } from '@ownclouders/web-pkg'
 
-export default defineComponent({
-  name: 'NotFoundMessage',
-  props: {
-    space: {
-      type: Object as PropType<SpaceResource>,
-      required: false,
-      default: null
-    }
-  },
-  setup(props) {
-    const router = useRouter()
-    const isProjectSpace = props.space?.driveType === 'project'
-    return {
-      showPublicLinkButton: isLocationPublicActive(router, 'files-public-link'),
-      showHomeButton: isLocationSpacesActive(router, 'files-spaces-generic') && !isProjectSpace,
-      showSpacesButton: isLocationSpacesActive(router, 'files-spaces-generic') && isProjectSpace,
-      homeRoute: createLocationSpaces('files-spaces-generic', {
-        params: {
-          driveAliasAndItem: 'personal'
-        }
-      }),
-      publicLinkRoute: createLocationPublic(
-        'files-public-link',
-        createFileRouteOptions(props.space, {})
-      ),
-      spacesRoute: createLocationSpaces('files-spaces-projects')
-    }
+interface Props {
+  space?: SpaceResource
+}
+const { space = null } = defineProps<Props>()
+const router = useRouter()
+const isProjectSpace = space?.driveType === 'project'
+
+const showPublicLinkButton = isLocationPublicActive(router, 'files-public-link')
+const showHomeButton = isLocationSpacesActive(router, 'files-spaces-generic') && !isProjectSpace
+const showSpacesButton = isLocationSpacesActive(router, 'files-spaces-generic') && isProjectSpace
+const homeRoute = createLocationSpaces('files-spaces-generic', {
+  params: {
+    driveAliasAndItem: 'personal'
   }
 })
+const publicLinkRoute = createLocationPublic('files-public-link', createFileRouteOptions(space, {}))
+const spacesRoute = createLocationSpaces('files-spaces-projects')
 </script>
 <style>
 #files-list-not-found-message {
