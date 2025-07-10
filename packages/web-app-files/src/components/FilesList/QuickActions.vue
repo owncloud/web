@@ -15,41 +15,26 @@
   </div>
 </template>
 
-<script lang="ts">
-import { computed, defineComponent, PropType } from 'vue'
+<script lang="ts" setup>
+import { computed } from 'vue'
 import { useEmbedMode, useExtensionRegistry } from '@ownclouders/web-pkg'
 import { Resource, SpaceResource } from '@ownclouders/web-client'
 import { unref } from 'vue'
 import { quickActionsExtensionPoint } from '../../extensionPoints'
 
-export default defineComponent({
-  name: 'QuickActions',
-  props: {
-    item: {
-      type: Object as PropType<Resource>,
-      required: true
-    },
-    space: {
-      type: Object as PropType<SpaceResource>,
-      default: undefined
-    }
-  },
-  setup(props) {
-    const extensionRegistry = useExtensionRegistry()
-    const { isEnabled: isEmbedModeEnabled } = useEmbedMode()
+interface Props {
+  item: Resource
+  space?: SpaceResource
+}
+const { item, space = undefined } = defineProps<Props>()
+const extensionRegistry = useExtensionRegistry()
+const { isEnabled: isEmbedModeEnabled } = useEmbedMode()
 
-    const filteredActions = computed(() => {
-      return unref(extensionRegistry)
-        .requestExtensions(quickActionsExtensionPoint)
-        .map((e) => e.action)
-        .filter(({ isVisible }) => isVisible({ space: props.space, resources: [props.item] }))
-    })
-
-    return {
-      filteredActions,
-      isEmbedModeEnabled
-    }
-  }
+const filteredActions = computed(() => {
+  return unref(extensionRegistry)
+    .requestExtensions(quickActionsExtensionPoint)
+    .map((e) => e.action)
+    .filter(({ isVisible }) => isVisible({ space: space, resources: [item] }))
 })
 </script>
 
