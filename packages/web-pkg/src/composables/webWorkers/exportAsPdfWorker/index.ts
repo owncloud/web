@@ -5,7 +5,7 @@ import { unref } from 'vue'
 import { useLoadingService } from '../../../composables/loadingService'
 import { useRequestHeaders } from '../../../composables/requestHeaders'
 import { useConfigStore } from '../../piniaStores'
-import { preprocessMermaidCharts } from './mermaid'
+import { useMermaid } from './useMermaid'
 
 export type ExportAsPdfWorkerReturnData = {
   successful: Resource[]
@@ -22,6 +22,7 @@ export const useExportAsPdfWorker = () => {
   const loadingService = useLoadingService()
   const configStore = useConfigStore()
   const { headers } = useRequestHeaders()
+  const { preprocessMermaidCharts } = useMermaid()
 
   async function startWorker(
     destinationFolder: Resource,
