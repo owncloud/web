@@ -21,6 +21,18 @@ export type TextSegment = {
   color?: any
 }
 
+/**
+ * Splits text into lines that fit within a specified maximum width using the given font and size.
+ *
+ * This function performs word-wrapping by measuring the width of text segments and breaking
+ * lines when they exceed the maximum width. It ensures that words are not broken across lines.
+ *
+ * @param text - The text to split into lines
+ * @param font - The PDF font object used for measuring text width
+ * @param fontSize - The font size in points
+ * @param maxWidth - The maximum width in points that each line should not exceed
+ * @returns Array of text lines that fit within the specified width
+ */
 export function splitTextToFit(text: string, font: any, fontSize: number, maxWidth: number) {
   const words = text.split(' ')
   const lines: string[] = []
@@ -48,6 +60,16 @@ export function splitTextToFit(text: string, font: any, fontSize: number, maxWid
   return lines
 }
 
+/**
+ * Loads and embeds all required fonts into the PDF document.
+ *
+ * This function embeds the standard fonts needed for text rendering in the PDF:
+ * - Helvetica (regular, bold, italic, bold-italic) for normal text
+ * - Courier (regular, bold) for monospace text and code
+ *
+ * @param pdfDoc - The PDF document to embed fonts into
+ * @returns Promise resolving to a Fonts object containing all embedded fonts
+ */
 export async function loadFonts(pdfDoc: PDFDocument): Promise<Fonts> {
   return {
     regular: await pdfDoc.embedFont(StandardFonts.Helvetica),
@@ -59,6 +81,20 @@ export async function loadFonts(pdfDoc: PDFDocument): Promise<Fonts> {
   }
 }
 
+/**
+ * Determines the appropriate font to use for a text segment based on its formatting properties.
+ *
+ * This function selects the correct font variant based on the text segment's formatting:
+ * - Monospace font for code segments
+ * - Bold-italic font for segments with both bold and italic formatting
+ * - Bold font for bold segments
+ * - Italic font for italic segments
+ * - Regular font as the default
+ *
+ * @param segment - The text segment with formatting properties
+ * @param fonts - The available fonts object
+ * @returns The appropriate PDF font for the segment
+ */
 export function getFontForSegment(segment: TextSegment, fonts: Fonts) {
   if (segment.code) {
     return fonts.mono
@@ -75,6 +111,18 @@ export function getFontForSegment(segment: TextSegment, fonts: Fonts) {
   return fonts.regular
 }
 
+/**
+ * Extracts plain text content from an array of markdown tokens.
+ *
+ * This function processes different token types and converts them to readable text:
+ * - Links are converted to "text (url)" format
+ * - Images are converted to "[Image: title]" format
+ * - Text tokens are extracted directly
+ * - Other tokens fall back to their raw content
+ *
+ * @param tokens - Array of markdown tokens to extract text from
+ * @returns Concatenated plain text representation of all tokens
+ */
 export function extractTextFromTokens(tokens: Token[]): string {
   return tokens
     .map((token) => {
@@ -149,6 +197,17 @@ export function sanitizeText(text: string): string {
     .replaceAll('–', '-')
 }
 
+/**
+ * Parses inline markdown tokens into TextSegment objects with formatting information.
+ *
+ * This function converts markdown inline tokens (text, strong, em, codespan, sub, sup, link)
+ * into TextSegment objects that contain the text content and formatting flags. Each segment
+ * represents a piece of text with consistent formatting that can be rendered with the
+ * appropriate font and styling.
+ *
+ * @param tokens - Array of inline markdown tokens to parse
+ * @returns Array of TextSegment objects with formatting information
+ */
 export function parseInlineTokens(tokens: Token[]): TextSegment[] {
   const segments: TextSegment[] = []
 
@@ -243,6 +302,18 @@ export function parseInlineTokens(tokens: Token[]): TextSegment[] {
   return segments
 }
 
+/**
+ * Fetches an image from a URL or data URI and embeds it into the PDF document.
+ *
+ * This function handles both remote URLs and data URIs, supporting PNG and JPEG formats.
+ * For unsupported formats, it attempts to convert them to PNG using OffscreenCanvas.
+ * The function returns either a success result with the embedded image and dimensions,
+ * or an error result if the image cannot be fetched or embedded.
+ *
+ * @param pdfDoc - The PDF document to embed the image into
+ * @param imageUrl - The URL or data URI of the image to fetch and embed
+ * @returns Promise resolving to an object with success status, embedded image (if successful), dimensions, and error message (if failed)
+ */
 export async function fetchAndEmbedImage(pdfDoc: PDFDocument, imageUrl: string) {
   try {
     let imageBytes: ArrayBuffer

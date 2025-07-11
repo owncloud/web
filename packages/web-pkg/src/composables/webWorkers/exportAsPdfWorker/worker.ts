@@ -1,11 +1,5 @@
 import { DavProperty } from '@ownclouders/web-client/webdav'
-import {
-  webdav as _webdav,
-  HttpError,
-  Resource,
-  SpaceResource,
-  urlJoin
-} from '@ownclouders/web-client'
+import { webdav, HttpError, Resource, SpaceResource, urlJoin } from '@ownclouders/web-client'
 
 import { WorkerTopic } from '../../piniaStores/webWorkers'
 import { resolveFileNameDuplicate } from '../../../helpers/resource/conflictHandling/conflictUtils'
@@ -45,14 +39,14 @@ self.onmessage = async (event: MessageEvent) => {
   let { fileName } = data
 
   storedHeaders = headers
-  const webdav = _webdav(
+  const webdavService = webdav(
     baseUrl,
     () => {},
     () => storedHeaders
   )
 
   try {
-    const { children: existingResources } = await webdav.listFiles(
+    const { children: existingResources } = await webdavService.listFiles(
       space,
       {
         fileId: destinationFolder.fileId
@@ -68,7 +62,7 @@ self.onmessage = async (event: MessageEvent) => {
       fileName = resolveFileNameDuplicate(fileName, 'pdf', existingResources)
     }
 
-    const resource = await webdav.putFileContents(space, {
+    const resource = await webdavService.putFileContents(space, {
       fileName,
       parentFolderId: destinationFolder.id,
       content: await convertMarkdownToPdf(content),

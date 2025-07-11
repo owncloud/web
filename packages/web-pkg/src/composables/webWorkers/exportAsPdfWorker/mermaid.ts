@@ -6,7 +6,14 @@ mermaid.initialize({
 })
 
 /**
- * Renders a Mermaid diagram string into a PNG data URL.
+ * Renders a Mermaid diagram string into a PNG data URL with specified dimensions.
+ *
+ * This function converts Mermaid chart syntax into an SVG, then renders it to a canvas
+ * at a higher resolution (3x scale factor) for better quality, and converts it to a
+ * PNG data URL that can be embedded in the PDF.
+ *
+ * @param diagram - The Mermaid diagram syntax to render
+ * @returns Promise resolving to an object containing the PNG data URL and image dimensions
  */
 async function renderMermaidToDataURL(
   diagram: string
@@ -48,6 +55,14 @@ async function renderMermaidToDataURL(
 
 /**
  * Pre-processes markdown content to convert Mermaid charts into embedded images.
+ *
+ * This function scans markdown content for Mermaid code blocks (```mermaid) and converts
+ * each chart into an embedded PNG image with width and height attributes. If rendering
+ * fails, it replaces the chart with an error message. The processed content can then
+ * be passed to the PDF generation pipeline.
+ *
+ * @param markdownContent - The markdown content containing Mermaid charts to process
+ * @returns Promise resolving to the processed markdown content with charts converted to images
  */
 export async function preprocessMermaidCharts(markdownContent: string): Promise<string> {
   const mermaidRegex = /```mermaid\n([\s\S]*?)\n```/g

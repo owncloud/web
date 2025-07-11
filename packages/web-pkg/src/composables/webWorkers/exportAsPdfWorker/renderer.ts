@@ -110,6 +110,16 @@ async function renderImage(
   }
 }
 
+/**
+ * Renders a heading token to the PDF page with appropriate font size and spacing.
+ *
+ * @param token - The markdown heading token containing text and depth level
+ * @param page - The PDF page to render on
+ * @param fonts - Pre-loaded fonts for text rendering
+ * @param yPosition - Current Y position on the page
+ * @param margin - Left margin for positioning
+ * @returns RenderResult with updated Y position and optional new page flag
+ */
 function renderHeading(
   token: Tokens.Heading,
   page: PDFPage,
@@ -144,6 +154,18 @@ function renderHeading(
   return { yPosition: localY - PDF_THEME.spacing.afterHeading }
 }
 
+/**
+ * Renders a paragraph token to the PDF page, handling inline formatting and images.
+ *
+ * @param token - The markdown paragraph token containing inline tokens
+ * @param page - The PDF page to render on
+ * @param pdfDoc - The PDF document for embedding images
+ * @param fonts - Pre-loaded fonts for text rendering
+ * @param yPosition - Current Y position on the page
+ * @param margin - Left margin for positioning
+ * @param maxWidth - Maximum width available for rendering
+ * @returns Promise resolving to RenderResult with updated Y position and optional new page flag
+ */
 async function renderParagraph(
   token: Tokens.Paragraph,
   page: PDFPage,
@@ -254,6 +276,17 @@ async function renderParagraph(
   return { yPosition: localY - PDF_THEME.spacing.afterParagraph }
 }
 
+/**
+ * Renders a code block token to the PDF page with background and monospace font.
+ *
+ * @param token - The markdown code token containing the code text
+ * @param page - The PDF page to render on
+ * @param fonts - Pre-loaded fonts for text rendering
+ * @param yPosition - Current Y position on the page
+ * @param margin - Left margin for positioning
+ * @param maxWidth - Maximum width available for rendering
+ * @returns RenderResult with updated Y position and optional new page flag
+ */
 function renderCodeBlock(
   token: Tokens.Code,
   page: PDFPage,
@@ -298,6 +331,19 @@ function renderCodeBlock(
   return { yPosition: localY - PDF_THEME.spacing.afterCodeBlock }
 }
 
+/**
+ * Renders a list token to the PDF page, supporting both ordered and unordered lists with nested items.
+ *
+ * @param token - The markdown list token containing list items
+ * @param page - The PDF page to render on
+ * @param pdfDoc - The PDF document for embedding images
+ * @param fonts - Pre-loaded fonts for text rendering
+ * @param yPosition - Current Y position on the page
+ * @param margin - Left margin for positioning
+ * @param maxWidth - Maximum width available for rendering
+ * @param level - Nesting level for indentation (default: 0)
+ * @returns Promise resolving to RenderResult with updated Y position and optional new page flag
+ */
 async function renderList(
   token: Tokens.List,
   page: PDFPage,
@@ -398,6 +444,18 @@ async function renderList(
   return { yPosition: localY - PDF_THEME.spacing.afterList }
 }
 
+/**
+ * Renders a blockquote token to the PDF page with a colored bar and italic text.
+ *
+ * @param token - The markdown blockquote token containing quoted content
+ * @param page - The PDF page to render on
+ * @param pdfDoc - The PDF document for embedding images
+ * @param fonts - Pre-loaded fonts for text rendering
+ * @param yPosition - Current Y position on the page
+ * @param margin - Left margin for positioning
+ * @param maxWidth - Maximum width available for rendering
+ * @returns Promise resolving to RenderResult with updated Y position and optional new page flag
+ */
 async function renderBlockquote(
   token: Tokens.Blockquote,
   page: PDFPage,
@@ -489,6 +547,17 @@ async function renderBlockquote(
   return { yPosition: localY - PDF_THEME.spacing.afterBlockquote }
 }
 
+/**
+ * Renders a table token to the PDF page with headers, borders, and cell content.
+ *
+ * @param token - The markdown table token containing header and row data
+ * @param page - The PDF page to render on
+ * @param fonts - Pre-loaded fonts for text rendering
+ * @param yPosition - Current Y position on the page
+ * @param margin - Left margin for positioning
+ * @param maxWidth - Maximum width available for rendering
+ * @returns RenderResult with updated Y position and optional new page flag
+ */
 function renderTable(
   token: Tokens.Table,
   page: PDFPage,
@@ -568,6 +637,15 @@ function renderTable(
   return { yPosition: localY - PDF_THEME.spacing.afterTable }
 }
 
+/**
+ * Renders a horizontal rule to the PDF page as a simple line.
+ *
+ * @param page - The PDF page to render on
+ * @param yPosition - Current Y position on the page
+ * @param margin - Left margin for positioning
+ * @param maxWidth - Maximum width available for rendering
+ * @returns RenderResult with updated Y position and optional new page flag
+ */
 function renderHorizontalRule(
   page: PDFPage,
   yPosition: number,
@@ -586,6 +664,22 @@ function renderHorizontalRule(
   return { yPosition: yPosition - PDF_THEME.spacing.afterHr }
 }
 
+/**
+ * Renders a markdown token to the PDF page by delegating to the appropriate renderer function.
+ *
+ * This function acts as a dispatcher that routes different token types to their specific
+ * rendering functions. It handles all supported markdown token types including headings,
+ * paragraphs, code blocks, lists, blockquotes, tables, horizontal rules, and spaces.
+ *
+ * @param token - The markdown token to render
+ * @param page - The PDF page to render on
+ * @param pdfDoc - The PDF document for embedding images
+ * @param fonts - Pre-loaded fonts for text rendering
+ * @param yPosition - Current Y position on the page
+ * @param margin - Left margin for positioning
+ * @param maxWidth - Maximum width available for rendering
+ * @returns Promise resolving to RenderResult with updated Y position and optional new page flag, or RenderResult directly for synchronous operations
+ */
 export function renderToken(
   token: Token,
   page: PDFPage,
