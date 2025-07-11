@@ -7,7 +7,7 @@ import {
   urlJoin
 } from '@ownclouders/web-client'
 import { marked, Token, Tokens } from 'marked'
-import { PDFDocument, PDFImage, PDFPage, StandardFonts } from 'pdf-lib'
+import { PDFDocument, PDFImage, PDFPage } from 'pdf-lib'
 
 import { WorkerTopic } from '../../piniaStores/webWorkers'
 import { resolveFileNameDuplicate } from '../../../helpers/resource/conflictHandling/conflictUtils'
@@ -117,10 +117,11 @@ async function fetchAndEmbedImage(pdfDoc: PDFDocument, imageUrl: string) {
   }
 }
 
-async function renderImageToken(
+async function renderImage(
   imageToken: Tokens.Image,
   page: PDFPage,
   pdfDoc: PDFDocument,
+  fonts: Fonts,
   yPosition: number,
   margin: number,
   maxWidth: number
@@ -177,7 +178,7 @@ async function renderImageToken(
         x: margin,
         y: yPosition,
         size: PDF_THEME.font.imageTitleSize,
-        font: await pdfDoc.embedFont(StandardFonts.HelveticaOblique),
+        font: fonts.italic,
         color: PDF_THEME.color.imagePlaceholder
       })
     }
@@ -189,7 +190,7 @@ async function renderImageToken(
       x: margin,
       y: yPosition,
       size: PDF_THEME.font.imageTitleSize,
-      font: await pdfDoc.embedFont(StandardFonts.HelveticaOblique),
+      font: fonts.italic,
       color: PDF_THEME.color.error
     })
     return { yPosition: yPosition - 10 }
@@ -258,10 +259,11 @@ async function renderParagraph(
         currentX = margin
       }
 
-      const imageResult = await renderImageToken(
+      const imageResult = await renderImage(
         inlineToken as Tokens.Image,
         page,
         pdfDoc,
+        fonts,
         localY,
         margin,
         maxWidth
@@ -418,10 +420,11 @@ async function renderList(
     const imageTokens = item.tokens.filter((t: any) => t.type === 'image')
 
     for (const imageToken of imageTokens) {
-      const imageResult = await renderImageToken(
+      const imageResult = await renderImage(
         imageToken as Tokens.Image,
         page,
         pdfDoc,
+        fonts,
         localY,
         indent + 20,
         maxWidth - (indent + 20 - margin)
@@ -520,10 +523,11 @@ async function renderBlockquote(
       const textTokens = quoteToken.tokens.filter((t: any) => t.type !== 'image')
 
       for (const imageToken of imageTokens) {
-        const imageResult = await renderImageToken(
+        const imageResult = await renderImage(
           imageToken as Tokens.Image,
           page,
           pdfDoc,
+          fonts,
           localY,
           quoteMargin,
           maxWidth - 40

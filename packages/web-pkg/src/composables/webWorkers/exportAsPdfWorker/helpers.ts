@@ -94,6 +94,28 @@ export function extractTextFromTokens(tokens: Token[]): string {
     .join('')
 }
 
+/**
+ * Sanitizes text by converting typographic characters to ASCII equivalents for PDF compatibility.
+ *
+ * This function is necessary because the PDF generation uses StandardFonts (Helvetica, Courier)
+ * from pdf-lib, which have limited Unicode character support. Typographic characters like curly
+ * quotes and em/en dashes are not supported by these fonts and would cause rendering issues
+ * or PDF generation failures.
+ *
+ * The replacements maintain semantic meaning while ensuring compatibility:
+ * - Typographic quotes → straight quotes (same meaning)
+ * - Em/en dashes → hyphens (similar visual effect)
+ * - Ellipsis → three dots (same meaning)
+ *
+ * @param text - The input text that may contain typographic characters
+ * @returns The sanitized text with typographic characters replaced by ASCII equivalents
+ *
+ * @example
+ * ```typescript
+ * sanitizeText("Here's a "quote" with an em—dash and ellipsis…")
+ * // Returns: "Here's a "quote" with an em--dash and ellipsis..."
+ * ```
+ */
 export function sanitizeText(text: string): string {
   return text
     .replaceAll('…', '...')
