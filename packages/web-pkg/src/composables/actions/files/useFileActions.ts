@@ -40,7 +40,7 @@ import { ApplicationFileExtension } from '../../../apps'
 import { Resource, SpaceResource } from '@ownclouders/web-client'
 import { storeToRefs } from 'pinia'
 import { useEmbedMode } from '../../embedMode'
-import { LocationQuery, RouteRecordName } from 'vue-router'
+import { RouteRecordName } from 'vue-router'
 import { isLocationActive } from '../../../router/utils'
 
 export const EDITOR_MODE_EDIT = 'edit'
@@ -236,28 +236,17 @@ export const useFileActions = () => {
     appFileExtension: ApplicationFileExtension,
     space: SpaceResource,
     resource: Resource,
-    mode: string,
-    locationQuery: LocationQuery = {},
-    newTab: boolean = false
+    mode: string
   ) => {
     const remoteItemId = isShareSpaceResource(space) ? space.id : undefined
     const routeName = appFileExtension.routeName || appFileExtension.app
     const routeOpts = getEditorRouteOpts(routeName, space, resource, mode, remoteItemId)
-    routeOpts.query = { ...routeOpts.query, ...locationQuery }
 
     if (unref(options).cernFeatures) {
       const path = router.resolve(routeOpts).href
       const target = `${appFileExtension.routeName}-${resource.path}`
 
       openUrl(path, target, true)
-      return
-    }
-
-    if (newTab) {
-      const route = router.resolve(routeOpts)
-      const routeUrl = new URL(route.href, window.location.origin)
-      window.open(routeUrl.href, '_blank')
-
       return
     }
 

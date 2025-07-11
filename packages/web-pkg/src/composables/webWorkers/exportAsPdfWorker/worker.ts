@@ -7,86 +7,20 @@ import {
   urlJoin
 } from '@ownclouders/web-client'
 import { marked, Token, Tokens } from 'marked'
-import { PDFDocument, PDFImage, PDFPage, rgb, StandardFonts } from 'pdf-lib'
+import { PDFDocument, PDFImage, PDFPage, StandardFonts } from 'pdf-lib'
 
 import { WorkerTopic } from '../../piniaStores/webWorkers'
 import { resolveFileNameDuplicate } from '../../../helpers/resource/conflictHandling/conflictUtils'
-import { Fonts, loadFonts, splitTextToFit } from './helpers'
-
-const PDF_CONFIG = Object.freeze({
-  layout: {
-    margin: 50,
-    pageBottom: 50
-  },
-  font: {
-    baseSize: 12,
-    lineHeight: 16,
-    subSupSize: 9,
-    headingBaseSize: 24,
-    headingDepthMultiplier: 2,
-    headingMinSize: 14,
-    codeSize: 10,
-    codeLineHeight: 14,
-    listBulletSize: 12,
-    listItemLineHeight: 16,
-    blockquoteLineHeight: 16,
-    tableHeaderTextSize: 11,
-    tableCellTextSize: 10,
-    imageTitleSize: 10
-  },
-  offset: {
-    subscript: -3,
-    superscript: 4
-  },
-  color: {
-    text: rgb(0, 0, 0),
-    link: rgb(0, 0, 0.8),
-    error: rgb(0.8, 0.2, 0.2),
-    codeSpan: rgb(0.7, 0.1, 0.1),
-    codeBlockBg: rgb(0.95, 0.95, 0.95),
-    blockquoteBar: rgb(0.7, 0.7, 0.7),
-    blockquoteText: rgb(0.3, 0.3, 0.3),
-    tableHeaderBg: rgb(0.9, 0.9, 0.9),
-    tableBorder: rgb(0.5, 0.5, 0.5),
-    hr: rgb(0.5, 0.5, 0.5),
-    imagePlaceholder: rgb(0.5, 0.5, 0.5)
-  },
-  spacing: {
-    beforeParagraph: 20,
-    afterParagraph: 10,
-    afterHeading: 15,
-    afterCodeBlock: 15,
-    afterList: 10,
-    afterBlockquote: 15,
-    afterTable: 15,
-    afterHr: 20,
-    forSpaceToken: 10,
-    afterImage: 10,
-    beforeImageTitle: 20,
-    listItemYDecrement: 18,
-    listItemIndent: 20,
-    blockquoteYDecrement: 20,
-    hrYDecrement: 20,
-    tableYDecrement: 20
-  },
-  codeBlock: {
-    padding: 10
-  },
-  table: {
-    cellPadding: 8,
-    rowHeight: 30
-  },
-  blockquote: {
-    barWidth: 3,
-    barXOffset: 10
-  },
-  hr: {
-    thickness: 1
-  },
-  image: {
-    contentPadding: 40
-  }
-})
+import {
+  extractTextFromTokens,
+  Fonts,
+  getFontForSegment,
+  loadFonts,
+  sanitizeText,
+  splitTextToFit,
+  TextSegment
+} from './helpers'
+import { PDF_THEME } from './pdfConfig'
 
 type MessageData = {
   accessToken?: string
@@ -103,31 +37,12 @@ type Message = {
   data: MessageData
 }
 
-type TextSegment = {
-  text: string
-  bold: boolean
-  italic: boolean
-  code: boolean
-  subscript: boolean
-  superscript: boolean
-  color?: any
-}
-
 type RenderResult = {
   yPosition: number
   needsNewPage?: boolean
 }
 
 let storedHeaders: Record<string, string>
-
-function sanitizeText(text: string): string {
-  return text
-    .replace(/…/g, '...')
-    .replace(/‘|’/g, "'")
-    .replace(/“|”/g, '"')
-    .replace(/—/g, '--')
-    .replace(/–/g, '-')
-}
 
 async function fetchAndEmbedImage(pdfDoc: PDFDocument, imageUrl: string) {
   try {
@@ -233,7 +148,7 @@ async function renderImageToken(
     } else {
       finalWidth = imageResult.width
       finalHeight = imageResult.height
-      const pageContentWidth = maxWidth - PDF_CONFIG.image.contentPadding
+      const pageContentWidth = maxWidth - PDF_THEME.image.contentPadding
       if (finalWidth > pageContentWidth) {
         const scale = pageContentWidth / finalWidth
         finalWidth = pageContentWidth
@@ -241,11 +156,11 @@ async function renderImageToken(
       }
     }
 
-    if (yPosition - finalHeight < PDF_CONFIG.layout.pageBottom) {
+    if (yPosition - finalHeight < PDF_THEME.layout.pageBottom) {
       return { yPosition, needsNewPage: true }
     }
 
-    yPosition -= finalHeight + PDF_CONFIG.spacing.afterImage
+    yPosition -= finalHeight + PDF_THEME.spacing.afterImage
 
     page.drawImage(imageResult.image, {
       x: margin + (maxWidth - finalWidth) / 2,
@@ -257,13 +172,13 @@ async function renderImageToken(
     const isMermaidChartWithDimensions = imageToken.title && /^w=\d+,h=\d+$/.test(imageToken.title)
 
     if (imageToken.title && !isMermaidChartWithDimensions) {
-      yPosition -= PDF_CONFIG.spacing.beforeImageTitle
+      yPosition -= PDF_THEME.spacing.beforeImageTitle
       page.drawText(`${imageToken.title}`, {
         x: margin,
         y: yPosition,
-        size: PDF_CONFIG.font.imageTitleSize,
+        size: PDF_THEME.font.imageTitleSize,
         font: await pdfDoc.embedFont(StandardFonts.HelveticaOblique),
-        color: PDF_CONFIG.color.imagePlaceholder
+        color: PDF_THEME.color.imagePlaceholder
       })
     }
 
@@ -273,9 +188,9 @@ async function renderImageToken(
     page.drawText(`Image failed to load: ${imageToken.title || imageToken.href}`, {
       x: margin,
       y: yPosition,
-      size: PDF_CONFIG.font.imageTitleSize,
+      size: PDF_THEME.font.imageTitleSize,
       font: await pdfDoc.embedFont(StandardFonts.HelveticaOblique),
-      color: PDF_CONFIG.color.error
+      color: PDF_THEME.color.error
     })
     return { yPosition: yPosition - 10 }
   }
@@ -289,15 +204,15 @@ function renderHeading(
   margin: number
 ): RenderResult {
   const fontSize = Math.max(
-    PDF_CONFIG.font.headingBaseSize - token.depth * PDF_CONFIG.font.headingDepthMultiplier,
-    PDF_CONFIG.font.headingMinSize
+    PDF_THEME.font.headingBaseSize - token.depth * PDF_THEME.font.headingDepthMultiplier,
+    PDF_THEME.font.headingMinSize
   )
   const lineHeight = fontSize + 2
   const lines = splitTextToFit(token.text, fonts.bold, fontSize, page.getWidth() - margin * 2)
 
   let localY = yPosition - (fontSize + 10)
 
-  if (yPosition - (fontSize + 10) - lines.length * lineHeight < PDF_CONFIG.layout.pageBottom) {
+  if (yPosition - (fontSize + 10) - lines.length * lineHeight < PDF_THEME.layout.pageBottom) {
     return { yPosition, needsNewPage: true }
   }
 
@@ -307,12 +222,12 @@ function renderHeading(
       y: localY,
       size: fontSize,
       font: fonts.bold,
-      color: PDF_CONFIG.color.text
+      color: PDF_THEME.color.text
     })
     localY -= lineHeight
   }
 
-  return { yPosition: localY - PDF_CONFIG.spacing.afterHeading }
+  return { yPosition: localY - PDF_THEME.spacing.afterHeading }
 }
 
 async function renderParagraph(
@@ -324,10 +239,10 @@ async function renderParagraph(
   margin: number,
   maxWidth: number
 ): Promise<RenderResult> {
-  const lineHeight = PDF_CONFIG.font.lineHeight
-  let localY = yPosition - PDF_CONFIG.spacing.beforeParagraph
+  const lineHeight = PDF_THEME.font.lineHeight
+  let localY = yPosition - PDF_THEME.spacing.beforeParagraph
 
-  if (localY - lineHeight < PDF_CONFIG.layout.pageBottom) {
+  if (localY - lineHeight < PDF_THEME.layout.pageBottom) {
     return { yPosition, needsNewPage: true }
   }
 
@@ -336,7 +251,7 @@ async function renderParagraph(
   for (const inlineToken of token.tokens) {
     if (inlineToken.type === 'image') {
       if (currentX > margin) {
-        if (localY - lineHeight < PDF_CONFIG.layout.pageBottom) {
+        if (localY - lineHeight < PDF_THEME.layout.pageBottom) {
           return { yPosition, needsNewPage: true }
         }
         localY -= lineHeight
@@ -370,12 +285,12 @@ async function renderParagraph(
     const segment = tempSegments[0]
 
     const font = getFontForSegment(segment, fonts)
-    let fontSize = PDF_CONFIG.font.baseSize
+    let fontSize = PDF_THEME.font.baseSize
     let yOffset = 0
 
     if (segment.subscript || segment.superscript) {
-      fontSize = PDF_CONFIG.font.subSupSize
-      yOffset = segment.subscript ? PDF_CONFIG.offset.subscript : PDF_CONFIG.offset.superscript
+      fontSize = PDF_THEME.font.subSupSize
+      yOffset = segment.subscript ? PDF_THEME.offset.subscript : PDF_THEME.offset.superscript
     }
 
     const textLines = segment.text.split('\n')
@@ -393,7 +308,7 @@ async function renderParagraph(
         const wordWidth = font.widthOfTextAtSize(wordWithSpace, fontSize)
 
         if (currentX + wordWidth > margin + maxWidth) {
-          if (localY - lineHeight < PDF_CONFIG.layout.pageBottom) {
+          if (localY - lineHeight < PDF_THEME.layout.pageBottom) {
             return { yPosition, needsNewPage: true }
           }
           localY -= lineHeight
@@ -405,14 +320,14 @@ async function renderParagraph(
           y: localY + yOffset,
           size: fontSize,
           font: font,
-          color: segment.color || PDF_CONFIG.color.text
+          color: segment.color || PDF_THEME.color.text
         })
 
         currentX += wordWidth
       }
 
       if (i < textLines.length - 1) {
-        if (localY - lineHeight < PDF_CONFIG.layout.pageBottom) {
+        if (localY - lineHeight < PDF_THEME.layout.pageBottom) {
           return { yPosition, needsNewPage: true }
         }
         localY -= lineHeight
@@ -421,7 +336,7 @@ async function renderParagraph(
     }
   }
 
-  return { yPosition: localY - PDF_CONFIG.spacing.afterParagraph }
+  return { yPosition: localY - PDF_THEME.spacing.afterParagraph }
 }
 
 function renderCodeBlock(
@@ -432,25 +347,25 @@ function renderCodeBlock(
   margin: number,
   maxWidth: number
 ): RenderResult {
-  const fontSize = PDF_CONFIG.font.codeSize
-  const lineHeight = PDF_CONFIG.font.codeLineHeight
-  const padding = PDF_CONFIG.codeBlock.padding
+  const fontSize = PDF_THEME.font.codeSize
+  const lineHeight = PDF_THEME.font.codeLineHeight
+  const padding = PDF_THEME.codeBlock.padding
 
   const lines = token.text.split('\n')
   const blockHeight = lines.length * lineHeight + padding * 2
 
-  if (yPosition - blockHeight < PDF_CONFIG.layout.pageBottom) {
+  if (yPosition - blockHeight < PDF_THEME.layout.pageBottom) {
     return { yPosition, needsNewPage: true }
   }
 
-  let localY = yPosition - blockHeight
+  const localY = yPosition - blockHeight
 
   page.drawRectangle({
     x: margin,
     y: localY,
     width: maxWidth,
     height: blockHeight,
-    color: PDF_CONFIG.color.codeBlockBg
+    color: PDF_THEME.color.codeBlockBg
   })
 
   let currentY = yPosition - padding - fontSize
@@ -460,12 +375,12 @@ function renderCodeBlock(
       y: currentY,
       size: fontSize,
       font: fonts.mono,
-      color: PDF_CONFIG.color.text
+      color: PDF_THEME.color.text
     })
     currentY -= lineHeight
   }
 
-  return { yPosition: localY - PDF_CONFIG.spacing.afterCodeBlock }
+  return { yPosition: localY - PDF_THEME.spacing.afterCodeBlock }
 }
 
 async function renderList(
@@ -478,25 +393,25 @@ async function renderList(
   maxWidth: number,
   level = 0
 ): Promise<RenderResult> {
-  const indent = margin + level * PDF_CONFIG.spacing.listItemIndent
+  const indent = margin + level * PDF_THEME.spacing.listItemIndent
   const bulletChar = token.ordered ? '1.' : '•'
-  const lineHeight = PDF_CONFIG.font.listItemLineHeight
+  const lineHeight = PDF_THEME.font.listItemLineHeight
   let localY = yPosition
 
   for (let i = 0; i < token.items.length; i++) {
     const item = token.items[i]
-    if (localY - PDF_CONFIG.spacing.listItemYDecrement < PDF_CONFIG.layout.pageBottom) {
+    if (localY - PDF_THEME.spacing.listItemYDecrement < PDF_THEME.layout.pageBottom) {
       return { yPosition, needsNewPage: true }
     }
-    localY -= PDF_CONFIG.spacing.listItemYDecrement
+    localY -= PDF_THEME.spacing.listItemYDecrement
 
     const bullet = token.ordered ? `${i + 1}.` : bulletChar
     page.drawText(bullet, {
       x: indent,
       y: localY,
-      size: PDF_CONFIG.font.listBulletSize,
+      size: PDF_THEME.font.listBulletSize,
       font: fonts.regular,
-      color: PDF_CONFIG.color.text
+      color: PDF_THEME.color.text
     })
 
     const textTokens = item.tokens.filter((t: any) => t.type !== 'image')
@@ -523,15 +438,15 @@ async function renderList(
       const lines = splitTextToFit(itemText, fonts.regular, 12, maxWidth - (indent + 20 - margin))
 
       for (const line of lines) {
-        if (localY < PDF_CONFIG.layout.pageBottom) {
+        if (localY < PDF_THEME.layout.pageBottom) {
           return { yPosition, needsNewPage: true }
         }
         page.drawText(line, {
           x: indent + 20,
           y: localY,
-          size: PDF_CONFIG.font.baseSize,
+          size: PDF_THEME.font.baseSize,
           font: fonts.regular,
-          color: PDF_CONFIG.color.text
+          color: PDF_THEME.color.text
         })
         localY -= lineHeight
       }
@@ -560,7 +475,7 @@ async function renderList(
     }
   }
 
-  return { yPosition: localY - PDF_CONFIG.spacing.afterList }
+  return { yPosition: localY - PDF_THEME.spacing.afterList }
 }
 
 async function renderBlockquote(
@@ -572,11 +487,11 @@ async function renderBlockquote(
   margin: number,
   maxWidth: number
 ): Promise<RenderResult> {
-  const quoteMargin = margin + PDF_CONFIG.spacing.listItemIndent
-  const lineHeight = PDF_CONFIG.font.blockquoteLineHeight
-  let localY = yPosition - PDF_CONFIG.spacing.blockquoteYDecrement
+  const quoteMargin = margin + PDF_THEME.spacing.listItemIndent
+  const lineHeight = PDF_THEME.font.blockquoteLineHeight
+  let localY = yPosition - PDF_THEME.spacing.blockquoteYDecrement
 
-  if (localY - lineHeight < PDF_CONFIG.layout.pageBottom) {
+  if (localY - lineHeight < PDF_THEME.layout.pageBottom) {
     return { yPosition, needsNewPage: true }
   }
 
@@ -592,11 +507,11 @@ async function renderBlockquote(
   }
 
   page.drawRectangle({
-    x: margin + PDF_CONFIG.blockquote.barXOffset,
+    x: margin + PDF_THEME.blockquote.barXOffset,
     y: tempY - totalHeight,
-    width: PDF_CONFIG.blockquote.barWidth,
+    width: PDF_THEME.blockquote.barWidth,
     height: totalHeight + 10,
-    color: PDF_CONFIG.color.blockquoteBar
+    color: PDF_THEME.color.blockquoteBar
   })
 
   for (const quoteToken of token.tokens) {
@@ -622,18 +537,18 @@ async function renderBlockquote(
 
       if (textTokens.length > 0) {
         const text = extractTextFromTokens(textTokens)
-        const lines = splitTextToFit(text, fonts.italic, PDF_CONFIG.font.baseSize, maxWidth - 40)
+        const lines = splitTextToFit(text, fonts.italic, PDF_THEME.font.baseSize, maxWidth - 40)
 
         for (const line of lines) {
-          if (localY < PDF_CONFIG.layout.pageBottom) {
+          if (localY < PDF_THEME.layout.pageBottom) {
             return { yPosition, needsNewPage: true }
           }
           page.drawText(line, {
             x: quoteMargin,
             y: localY,
-            size: PDF_CONFIG.font.baseSize,
+            size: PDF_THEME.font.baseSize,
             font: fonts.italic,
-            color: PDF_CONFIG.color.blockquoteText
+            color: PDF_THEME.color.blockquoteText
           })
           localY -= lineHeight
         }
@@ -641,7 +556,7 @@ async function renderBlockquote(
     }
   }
 
-  return { yPosition: localY - PDF_CONFIG.spacing.afterBlockquote }
+  return { yPosition: localY - PDF_THEME.spacing.afterBlockquote }
 }
 
 function renderTable(
@@ -652,16 +567,16 @@ function renderTable(
   margin: number,
   maxWidth: number
 ): RenderResult {
-  const cellPadding = PDF_CONFIG.table.cellPadding
-  const rowHeight = PDF_CONFIG.table.rowHeight
+  const cellPadding = PDF_THEME.table.cellPadding
+  const rowHeight = PDF_THEME.table.rowHeight
   const tableHeight = (token.rows.length + 1) * rowHeight
 
-  if (yPosition - tableHeight < PDF_CONFIG.layout.pageBottom) {
+  if (yPosition - tableHeight < PDF_THEME.layout.pageBottom) {
     return { yPosition, needsNewPage: true }
   }
 
   const colWidth = maxWidth / token.header.length
-  let localY = yPosition - PDF_CONFIG.spacing.tableYDecrement
+  let localY = yPosition - PDF_THEME.spacing.tableYDecrement
 
   for (let col = 0; col < token.header.length; col++) {
     const cellX = margin + col * colWidth
@@ -671,16 +586,16 @@ function renderTable(
       y: localY - rowHeight,
       width: colWidth,
       height: rowHeight,
-      color: PDF_CONFIG.color.tableHeaderBg
+      color: PDF_THEME.color.tableHeaderBg
     })
 
     const headerText = extractTextFromTokens(token.header[col].tokens)
     page.drawText(headerText, {
       x: cellX + cellPadding,
       y: localY - rowHeight + cellPadding,
-      size: PDF_CONFIG.font.tableHeaderTextSize,
+      size: PDF_THEME.font.tableHeaderTextSize,
       font: fonts.bold,
-      color: PDF_CONFIG.color.text
+      color: PDF_THEME.color.text
     })
 
     page.drawRectangle({
@@ -688,7 +603,7 @@ function renderTable(
       y: localY - rowHeight,
       width: colWidth,
       height: rowHeight,
-      borderColor: PDF_CONFIG.color.tableBorder,
+      borderColor: PDF_THEME.color.tableBorder,
       borderWidth: 1
     })
   }
@@ -703,9 +618,9 @@ function renderTable(
       page.drawText(cellText, {
         x: cellX + cellPadding,
         y: localY - rowHeight + cellPadding,
-        size: PDF_CONFIG.font.tableCellTextSize,
+        size: PDF_THEME.font.tableCellTextSize,
         font: fonts.regular,
-        color: PDF_CONFIG.color.text
+        color: PDF_THEME.color.text
       })
 
       page.drawRectangle({
@@ -713,14 +628,14 @@ function renderTable(
         y: localY - rowHeight,
         width: colWidth,
         height: rowHeight,
-        borderColor: PDF_CONFIG.color.tableBorder,
+        borderColor: PDF_THEME.color.tableBorder,
         borderWidth: 1
       })
     }
     localY -= rowHeight
   }
 
-  return { yPosition: localY - PDF_CONFIG.spacing.afterTable }
+  return { yPosition: localY - PDF_THEME.spacing.afterTable }
 }
 
 function renderHorizontalRule(
@@ -729,16 +644,16 @@ function renderHorizontalRule(
   margin: number,
   maxWidth: number
 ): RenderResult {
-  yPosition -= PDF_CONFIG.spacing.hrYDecrement
+  yPosition -= PDF_THEME.spacing.hrYDecrement
 
   page.drawLine({
     start: { x: margin, y: yPosition },
     end: { x: margin + maxWidth, y: yPosition },
-    thickness: PDF_CONFIG.hr.thickness,
-    color: PDF_CONFIG.color.hr
+    thickness: PDF_THEME.hr.thickness,
+    color: PDF_THEME.color.hr
   })
 
-  return { yPosition: yPosition - PDF_CONFIG.spacing.afterHr }
+  return { yPosition: yPosition - PDF_THEME.spacing.afterHr }
 }
 
 function parseInlineTokens(tokens: Token[]): TextSegment[] {
@@ -784,7 +699,7 @@ function parseInlineTokens(tokens: Token[]): TextSegment[] {
           code: true,
           subscript: false,
           superscript: false,
-          color: PDF_CONFIG.color.codeSpan
+          color: PDF_THEME.color.codeSpan
         })
         break
       case 'sub':
@@ -815,7 +730,7 @@ function parseInlineTokens(tokens: Token[]): TextSegment[] {
           code: false,
           subscript: false,
           superscript: false,
-          color: PDF_CONFIG.color.link
+          color: PDF_THEME.color.link
         })
         break
       default:
@@ -833,30 +748,6 @@ function parseInlineTokens(tokens: Token[]): TextSegment[] {
   }
 
   return segments
-}
-
-function getFontForSegment(segment: TextSegment, fonts: Fonts) {
-  if (segment.code) return fonts.mono
-  if (segment.bold && segment.italic) return fonts.boldItalic
-  if (segment.bold) return fonts.bold
-  if (segment.italic) return fonts.italic
-  return fonts.regular
-}
-
-function extractTextFromTokens(tokens: Token[]) {
-  return tokens
-    .map((token) => {
-      if (token.type === 'text') return token.text
-      if (token.type === 'strong') return token.text
-      if (token.type === 'em') return token.text
-      if (token.type === 'codespan') return token.text
-      if (token.type === 'sub') return token.text
-      if (token.type === 'sup') return token.text
-      if (token.type === 'link') return `${token.text} (${token.href})`
-      if (token.type === 'image') return `[Image: ${token.title || 'Image'}]`
-      return (token as Tokens.Text).text || (token as Tokens.Text).raw || ''
-    })
-    .join('')
 }
 
 function renderToken(
@@ -900,7 +791,7 @@ function renderToken(
     case 'hr':
       return renderHorizontalRule(page, yPosition, margin, maxWidth)
     case 'space':
-      return { yPosition: yPosition - PDF_CONFIG.spacing.forSpaceToken }
+      return { yPosition: yPosition - PDF_THEME.spacing.forSpaceToken }
     default:
       return { yPosition }
   }
@@ -913,7 +804,7 @@ async function markdownToPDF(markdownText: string): Promise<ArrayBuffer> {
 
   let page = pdfDoc.addPage()
   const pageHeight = page.getHeight()
-  const margin = PDF_CONFIG.layout.margin
+  const margin = PDF_THEME.layout.margin
   let yPosition = pageHeight - margin
   const maxWidth = page.getWidth() - margin * 2
 
