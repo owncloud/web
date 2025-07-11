@@ -95,6 +95,27 @@ export function extractTextFromTokens(tokens: Token[]): string {
 }
 
 /**
+ * Partitions tokens into text and image tokens
+ *
+ * @param tokens - Array of markdown tokens to partition
+ * @returns Object containing separated text and image tokens
+ */
+export function partitionTokens(tokens: Token[]): { textTokens: Token[]; imageTokens: Token[] } {
+  return tokens.reduce(
+    (acc, token) => {
+      if (token.type === 'image') {
+        acc.imageTokens.push(token)
+      } else {
+        acc.textTokens.push(token)
+      }
+
+      return acc
+    },
+    { textTokens: [] as Token[], imageTokens: [] as Token[] }
+  )
+}
+
+/**
  * Sanitizes text by converting typographic characters to ASCII equivalents for PDF compatibility.
  *
  * This function is necessary because the PDF generation uses StandardFonts (Helvetica, Courier)

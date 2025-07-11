@@ -16,6 +16,7 @@ import {
   Fonts,
   getFontForSegment,
   loadFonts,
+  partitionTokens,
   sanitizeText,
   splitTextToFit,
   TextSegment
@@ -117,6 +118,18 @@ async function fetchAndEmbedImage(pdfDoc: PDFDocument, imageUrl: string) {
   }
 }
 
+/**
+ * Renders an image token to the PDF page, including the image and optional title.
+ *
+ * @param imageToken - The markdown image token containing href and optional title
+ * @param page - The PDF page to render on
+ * @param pdfDoc - The PDF document for embedding images
+ * @param fonts - Pre-loaded fonts for text rendering
+ * @param yPosition - Current Y position on the page
+ * @param margin - Left margin for positioning
+ * @param maxWidth - Maximum width available for rendering
+ * @returns RenderResult with updated Y position and optional new page flag
+ */
 async function renderImage(
   imageToken: Tokens.Image,
   page: PDFPage,
@@ -287,7 +300,7 @@ async function renderParagraph(
     const segment = tempSegments[0]
 
     const font = getFontForSegment(segment, fonts)
-    let fontSize = PDF_THEME.font.baseSize
+    let fontSize: number = PDF_THEME.font.baseSize
     let yOffset = 0
 
     if (segment.subscript || segment.superscript) {
@@ -416,8 +429,7 @@ async function renderList(
       color: PDF_THEME.color.text
     })
 
-    const textTokens = item.tokens.filter((t: any) => t.type !== 'image')
-    const imageTokens = item.tokens.filter((t: any) => t.type === 'image')
+    const { textTokens, imageTokens } = partitionTokens(item.tokens)
 
     for (const imageToken of imageTokens) {
       const imageResult = await renderImage(
@@ -438,7 +450,12 @@ async function renderList(
 
     if (textTokens.length > 0) {
       const itemText = extractTextFromTokens(textTokens)
-      const lines = splitTextToFit(itemText, fonts.regular, 12, maxWidth - (indent + 20 - margin))
+      const lines = splitTextToFit(
+        itemText,
+        fonts.regular,
+        PDF_THEME.font.baseSize,
+        maxWidth - (indent + 20 - margin)
+      )
 
       for (const line of lines) {
         if (localY < PDF_THEME.layout.pageBottom) {
@@ -504,7 +521,12 @@ async function renderBlockquote(
   for (const quoteToken of token.tokens) {
     if (quoteToken.type === 'paragraph') {
       const text = extractTextFromTokens(quoteToken.tokens)
-      const lines = splitTextToFit(text, fonts.italic, 12, maxWidth - 40)
+      const lines = splitTextToFit(
+        text,
+        fonts.italic,
+        PDF_THEME.font.baseSize,
+        maxWidth - PDF_THEME.blockquote.contentPadding
+      )
       totalHeight += lines.length * lineHeight
     }
   }
@@ -519,8 +541,7 @@ async function renderBlockquote(
 
   for (const quoteToken of token.tokens) {
     if (quoteToken.type === 'paragraph') {
-      const imageTokens = quoteToken.tokens.filter((t: any) => t.type === 'image')
-      const textTokens = quoteToken.tokens.filter((t: any) => t.type !== 'image')
+      const { textTokens, imageTokens } = partitionTokens(quoteToken.tokens)
 
       for (const imageToken of imageTokens) {
         const imageResult = await renderImage(
@@ -530,7 +551,7 @@ async function renderBlockquote(
           fonts,
           localY,
           quoteMargin,
-          maxWidth - 40
+          maxWidth - PDF_THEME.blockquote.contentPadding
         )
 
         if (imageResult.needsNewPage) {
@@ -541,7 +562,12 @@ async function renderBlockquote(
 
       if (textTokens.length > 0) {
         const text = extractTextFromTokens(textTokens)
-        const lines = splitTextToFit(text, fonts.italic, PDF_THEME.font.baseSize, maxWidth - 40)
+        const lines = splitTextToFit(
+          text,
+          fonts.italic,
+          PDF_THEME.font.baseSize,
+          maxWidth - PDF_THEME.blockquote.contentPadding
+        )
 
         for (const line of lines) {
           if (localY < PDF_THEME.layout.pageBottom) {
@@ -801,6 +827,19 @@ function renderToken(
   }
 }
 
+/**
+ * Converts markdown text to a PDF document.
+ *
+ * This function processes markdown content through the following steps:
+ * 1. Sanitizes text for PDF compatibility (typographic characters)
+ * 2. Creates a new PDF document and loads fonts
+ * 3. Parses markdown into tokens
+ * 4. Renders each token type to the PDF
+ * 5. Handles page breaks automatically
+ *
+ * @param markdownText - The markdown content to convert
+ * @returns Promise resolving to the PDF as an ArrayBuffer
+ */
 async function markdownToPDF(markdownText: string): Promise<ArrayBuffer> {
   const sanitizedMarkdown = sanitizeText(markdownText)
   const pdfDoc = await PDFDocument.create()

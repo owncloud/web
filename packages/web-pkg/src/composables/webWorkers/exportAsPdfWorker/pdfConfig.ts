@@ -65,7 +65,8 @@ export const PDF_THEME = Object.freeze({
   },
   blockquote: {
     barWidth: 3,
-    barXOffset: 10
+    barXOffset: 10,
+    contentPadding: 40
   },
   hr: {
     thickness: 1
@@ -73,4 +74,4 @@ export const PDF_THEME = Object.freeze({
   image: {
     contentPadding: 40
   }
-})
+} as const)
