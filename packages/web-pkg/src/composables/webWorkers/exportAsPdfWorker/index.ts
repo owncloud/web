@@ -59,8 +59,6 @@ export const useExportAsPdfWorker = () => {
     processedContent = await preprocessKaTeXFormulas(processedContent)
     processedContent = await preprocessImages(processedContent)
 
-    console.log(processedContent)
-
     worker.post(getWorkerData(destinationFolder, space, fileName, processedContent))
   }
 

@@ -1,4 +1,5 @@
 import mermaid from 'mermaid'
+import html2canvas from 'html2canvas'
 import { useGettext } from 'vue3-gettext'
 
 mermaid.initialize({
@@ -11,77 +12,84 @@ async function renderMermaidToDataURL(
 ): Promise<{ dataURL: string; width: number; height: number }> {
   const { svg } = await mermaid.render('mermaid-temp-div', diagram)
 
-  const encoder = new TextEncoder()
-  const uint8Array = encoder.encode(svg)
-  const binaryString = String.fromCharCode.apply(null, uint8Array)
-  const base64 = btoa(binaryString)
-  const svgDataUrl = 'data:image/svg+xml;base64,' + base64
+  const container = document.createElement('div')
+  container.style.position = 'absolute'
+  container.style.left = '-9999px'
+  container.style.background = '#fff'
+  container.innerHTML = svg
+  document.body.appendChild(container)
 
-  return new Promise((resolve, reject) => {
-    const img = new Image()
+  const svgElement = container.querySelector('svg')
+  if (!svgElement) {
+    document.body.removeChild(container)
+    throw new Error('Mermaid did not produce a valid SVG element.')
+  }
 
-    img.onload = () => {
-      const scaleFactor = 3
-      const canvas = document.createElement('canvas')
-      canvas.width = img.width * scaleFactor
-      canvas.height = img.height * scaleFactor
+  const rect = svgElement.getBoundingClientRect()
+  const width = Math.ceil(rect.width)
+  const height = Math.ceil(rect.height)
 
-      const ctx = canvas.getContext('2d')
-      if (!ctx) {
-        return reject(new Error('Could not get canvas context.'))
-      }
+  try {
+    const scaleFactor = 3
+    const canvas = await html2canvas(container, {
+      backgroundColor: '#fff',
+      scale: scaleFactor,
+      logging: false
+    })
 
-      ctx.drawImage(img, 0, 0, canvas.width, canvas.height)
-
-      const dataURL = canvas.toDataURL('image/png')
-      resolve({ dataURL, width: img.width, height: img.height })
-    }
-    img.onerror = (err) => {
-      reject(new Error(`Failed to load SVG data URL for conversion: ${err}`))
-    }
-
-    img.src = svgDataUrl
-  })
+    const dataURL = canvas.toDataURL('image/png')
+    return { dataURL, width, height }
+  } finally {
+    document.body.removeChild(container)
+  }
 }
 
+/**
+ * Composable providing Mermaid chart preprocessing for PDF generation.
+ */
 export function useMermaid() {
   const { $pgettext } = useGettext()
 
+  /**
+   * Preprocesses markdown content to convert Mermaid chart blocks into image data URLs.
+   *
+   * @param markdownContent - The markdown content to preprocess
+   * @returns A promise resolving to the content with charts replaced by image tags
+   */
   async function preprocessMermaidCharts(markdownContent: string): Promise<string> {
     const mermaidRegex = /```mermaid\n([\s\S]*?)\n```/g
-    let processedContent = markdownContent
-    const replacements = []
+    const matches = Array.from(markdownContent.matchAll(mermaidRegex))
+    if (matches.length === 0) {
+      return markdownContent
+    }
 
-    for (const match of markdownContent.matchAll(mermaidRegex)) {
-      const originalBlock = match[0]
+    const renderingPromises = matches.map((match) => {
       const chartSyntax = match[1]
-
-      try {
-        const { dataURL, width, height } = await renderMermaidToDataURL(chartSyntax)
-        const imageMarkdown = `![w=${width},h=${height}](${dataURL})`
-        replacements.push({ find: originalBlock, replace: imageMarkdown })
-      } catch (error) {
+      return renderMermaidToDataURL(chartSyntax).catch((error) => {
         console.error('Failed to render Mermaid chart:', error)
+        return null
+      })
+    })
 
-        const errorMessageWithFormatting =
+    const results = await Promise.all(renderingPromises)
+
+    let i = 0
+    return markdownContent.replace(mermaidRegex, () => {
+      const result = results[i++]
+      if (result) {
+        const imageMarkdown = `![w=${result.width};h=${result.height}](${result.dataURL})`
+        return imageMarkdown
+      } else {
+        return (
           '*' +
           $pgettext(
             'Error message rendered in a PDF file when there is any error during the rendering of a Mermaid chart.',
             'Failed to render Mermaid chart.'
           ) +
           '*'
-        replacements.push({
-          find: originalBlock,
-          replace: errorMessageWithFormatting
-        })
+        )
       }
-    }
-
-    for (const rep of replacements) {
-      processedContent = processedContent.replace(rep.find, rep.replace)
-    }
-
-    return processedContent
+    })
   }
 
   return {

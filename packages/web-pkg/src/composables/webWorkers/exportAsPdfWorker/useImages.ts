@@ -29,44 +29,51 @@ function convertImageToDataURL(imageUrl: string): Promise<string> {
   })
 }
 
+/**
+ * Composable providing image preprocessing for PDF generation.
+ */
 export function useImages() {
   const { $pgettext } = useGettext()
 
+  /**
+   * Preprocesses markdown content to convert external image URLs into data URLs.
+   *
+   * @param markdownContent - The markdown content to preprocess
+   * @returns A promise resolving to the content with image sources replaced by data URLs
+   */
   async function preprocessImages(markdownContent: string): Promise<string> {
-    const imageRegex = /!\[([^\]]*)\]\(([^)]+)\)/g
-    let processedContent = markdownContent
-    const replacements = []
+    const imageRegex = /!\[([^\]]*)\]\((?!data:)([^)]+)\)/g
+    const matches = Array.from(markdownContent.matchAll(imageRegex))
+    if (matches.length === 0) {
+      return markdownContent
+    }
 
-    for (const match of markdownContent.matchAll(imageRegex)) {
-      const originalImage = match[0]
+    const conversionPromises = matches.map((match) => {
       const imageUrl = match[2]
-
-      try {
-        const dataURL = await convertImageToDataURL(imageUrl)
-        const imageMarkdown = `![](${dataURL})`
-        replacements.push({ find: originalImage, replace: imageMarkdown })
-      } catch (error) {
+      return convertImageToDataURL(imageUrl).catch((error) => {
         console.error('Failed to convert image to data URL:', error)
+        return null
+      })
+    })
 
-        const errorMessageWithFormatting =
+    const results = await Promise.all(conversionPromises)
+
+    let i = 0
+    return markdownContent.replace(imageRegex, (original, altText) => {
+      const dataURL = results[i++]
+      if (dataURL) {
+        return `![${altText}](${dataURL})`
+      } else {
+        return (
           '*' +
           $pgettext(
             'Error message rendered in a PDF file when there is any error during the rendering of an image.',
             'Failed to render image.'
           ) +
           '*'
-        replacements.push({
-          find: originalImage,
-          replace: errorMessageWithFormatting
-        })
+        )
       }
-    }
-
-    for (const rep of replacements) {
-      processedContent = processedContent.replace(rep.find, rep.replace)
-    }
-
-    return processedContent
+    })
   }
 
   return {

@@ -311,79 +311,36 @@ export function parseInlineTokens(tokens: Token[]): TextSegment[] {
  * or an error result if the image cannot be fetched or embedded.
  *
  * @param pdfDoc - The PDF document to embed the image into
- * @param imageUrl - The URL or data URI of the image to fetch and embed
- * @returns Promise resolving to an object with success status, embedded image (if successful), dimensions, and error message (if failed)
+ * @param imageUrl - The data URI of the image to embed
+ * @returns Promise resolving to an object with embedded image, width, and height
  */
-export async function fetchAndEmbedImage(pdfDoc: PDFDocument, imageUrl: string) {
-  try {
-    let imageBytes: ArrayBuffer
-    let embeddedImage: PDFImage
+export async function embedImage(pdfDoc: PDFDocument, imageUrl: string) {
+  const parts = imageUrl.split(',')
+  const meta = parts[0]
+  const base64Data = parts[1]
+  const binaryStr = atob(base64Data)
+  const len = binaryStr.length
+  const bytes = new Uint8Array(len)
 
-    if (imageUrl.startsWith('data:image')) {
-      const parts = imageUrl.split(',')
-      const meta = parts[0]
-      const base64Data = parts[1]
-      const binaryStr = atob(base64Data)
-      const len = binaryStr.length
-      const bytes = new Uint8Array(len)
-      for (let i = 0; i < len; i++) {
-        bytes[i] = binaryStr.charCodeAt(i)
-      }
-      imageBytes = bytes.buffer
+  for (let i = 0; i < len; i++) {
+    bytes[i] = binaryStr.charCodeAt(i)
+  }
 
-      if (meta.includes('image/png')) {
-        embeddedImage = await pdfDoc.embedPng(imageBytes)
-      } else if (meta.includes('image/jpeg')) {
-        embeddedImage = await pdfDoc.embedJpg(imageBytes)
-      } else {
-        embeddedImage = await pdfDoc.embedPng(imageBytes)
-      }
-    } else {
-      const response = await fetch(imageUrl)
-      if (!response.ok) {
-        throw new Error(`Failed to fetch image: ${response.status}`)
-      }
-      imageBytes = await response.arrayBuffer()
-      const contentType = response.headers.get('content-type') || ''
-      const lowerCaseUrl = imageUrl.toLowerCase()
+  const imageBytes = bytes.buffer
+  let embeddedImage: PDFImage
 
-      if (contentType.includes('image/png') || lowerCaseUrl.endsWith('.png')) {
-        embeddedImage = await pdfDoc.embedPng(imageBytes)
-      } else if (
-        contentType.includes('image/jpeg') ||
-        contentType.includes('image/jpg') ||
-        lowerCaseUrl.endsWith('.jpg') ||
-        lowerCaseUrl.endsWith('.jpeg')
-      ) {
-        embeddedImage = await pdfDoc.embedJpg(imageBytes)
-      } else {
-        if (typeof OffscreenCanvas === 'undefined' || typeof createImageBitmap === 'undefined') {
-          throw new Error(
-            'Browser does not support OffscreenCanvas/createImageBitmap for image conversion.'
-          )
-        }
-        const blob = new Blob([imageBytes], { type: contentType })
-        const bitmap = await createImageBitmap(blob)
-        const canvas = new OffscreenCanvas(bitmap.width, bitmap.height)
-        const ctx = canvas.getContext('2d')
-        ctx.drawImage(bitmap, 0, 0)
-        const pngBlob = await canvas.convertToBlob({ type: 'image/png' })
-        const pngBytes = await pngBlob.arrayBuffer()
-        embeddedImage = await pdfDoc.embedPng(pngBytes)
-      }
-    }
+  if (meta.includes('image/png')) {
+    embeddedImage = await pdfDoc.embedPng(imageBytes)
+  } else if (meta.includes('image/jpeg')) {
+    embeddedImage = await pdfDoc.embedJpg(imageBytes)
+  } else {
+    embeddedImage = await pdfDoc.embedPng(imageBytes)
+  }
 
-    return {
-      image: embeddedImage,
-      width: embeddedImage.width,
-      height: embeddedImage.height,
-      success: true
-    }
-  } catch (error) {
-    return {
-      error: (error as Error).message,
-      success: false
-    }
+  return {
+    image: embeddedImage,
+    width: embeddedImage.width,
+    height: embeddedImage.height
   }
 }
 
@@ -394,5 +351,72 @@ export async function fetchAndEmbedImage(pdfDoc: PDFDocument, imageUrl: string) 
  * @returns The CSS rgb() string
  */
 export function pdfColorToCssRgb(color: RGB): string {
-  return `rgb(${color.red}, ${color.green}, ${color.blue})`
+  const r = Math.round(color.red * 255)
+  const g = Math.round(color.green * 255)
+  const b = Math.round(color.blue * 255)
+  return `rgb(${r}, ${g}, ${b})`
+}
+
+type ImageAttributes = {
+  display: 'inline' | 'block'
+  width: number
+  height: number
+  text: string | null
+}
+
+/**
+ * Parses an image title for custom attributes like display mode, width, and height.
+ * Attributes are expected in a semicolon-separated key-value format (e.g., "d=inline;w=50;h=20").
+ * If the title does not conform to this format, it is treated as a regular image title.
+ *
+ * @param title - The title string from the markdown image token
+ * @returns An ImageAttributes object with parsed values
+ */
+export function parseImageAttributes(title: string | null | undefined): ImageAttributes {
+  const result: ImageAttributes = {
+    display: 'block',
+    width: 0,
+    height: 0,
+    text: title || null
+  }
+
+  if (!title || !title.includes('=')) {
+    return result
+  }
+
+  const pairs = title.split(';')
+  let isAttributeString = false
+
+  for (const pair of pairs) {
+    const parts = pair.split('=')
+
+    if (parts.length !== 2) {
+      continue
+    }
+
+    isAttributeString = true
+    const key = parts[0].trim()
+    const value = parts[1].trim()
+
+    switch (key) {
+      case 'd':
+        console.log('d', value)
+        if (value === 'inline') {
+          result.display = 'inline'
+        }
+        break
+      case 'w':
+        result.width = parseInt(value, 10) || 0
+        break
+      case 'h':
+        result.height = parseInt(value, 10) || 0
+        break
+    }
+  }
+
+  if (isAttributeString) {
+    result.text = null
+  }
+
+  return result
 }

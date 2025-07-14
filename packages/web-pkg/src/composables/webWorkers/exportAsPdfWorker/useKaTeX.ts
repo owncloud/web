@@ -12,7 +12,7 @@ async function renderKaTeXToDataURL(
   container.style.position = 'absolute'
   container.style.left = '-9999px'
   container.style.background = '#fff'
-  container.style.padding = '2px'
+  container.style.padding = isBlockMode ? '2px' : '0px'
   container.style.fontSize = `${PDF_THEME.font.baseSize}px`
   container.style.color = pdfColorToCssRgb(PDF_THEME.color.text)
 
@@ -49,38 +49,41 @@ async function renderKaTeXToDataURL(
   }
 }
 
-async function replaceAsync(
-  str: string,
-  regex: RegExp,
-  replacer: (...args: any[]) => Promise<string>
-): Promise<string> {
-  let result = ''
-  let lastIndex = 0
-  let match: RegExpExecArray | null
-
-  regex.lastIndex = 0
-
-  while ((match = regex.exec(str)) !== null) {
-    result += str.slice(lastIndex, match.index)
-    result += await replacer(...match)
-    lastIndex = regex.lastIndex
-  }
-
-  result += str.slice(lastIndex)
-  return result
-}
-
+/**
+ * Composable providing KaTeX formula preprocessing for PDF generation.
+ */
 export function useKaTeX() {
   const { $pgettext } = useGettext()
 
-  function replaceFormulas(content: string, regex: RegExp, isBlockMode: boolean): Promise<string> {
-    return replaceAsync(content, regex, async (_, formula: string) => {
-      formula = formula.trim()
+  const replaceFormulas = async (
+    content: string,
+    regex: RegExp,
+    isBlockMode: boolean
+  ): Promise<string> => {
+    const matches = Array.from(content.matchAll(regex))
+    if (matches.length === 0) {
+      return content
+    }
 
-      try {
-        const { dataURL, width, height } = await renderKaTeXToDataURL(formula, isBlockMode)
-        return `![w=${width},h=${height}](${dataURL})`
-      } catch {
+    const renderingPromises = matches.map((match) => {
+      const formula = match[1].trim()
+      return renderKaTeXToDataURL(formula, isBlockMode).catch((error) => {
+        console.error('Failed to render KaTeX formula:', error)
+        return null
+      })
+    })
+
+    const results = await Promise.all(renderingPromises)
+
+    let i = 0
+    return content.replace(regex, () => {
+      const result = results[i++]
+      if (result) {
+        const attributes = isBlockMode
+          ? `w=${result.width};h=${result.height}`
+          : `d=inline;w=${result.width};h=${result.height}`
+        return `![${attributes}](${result.dataURL})`
+      } else {
         return (
           '*' +
           $pgettext(
@@ -93,6 +96,12 @@ export function useKaTeX() {
     })
   }
 
+  /**
+   * Preprocesses markdown content to convert KaTeX formulas into image data URLs.
+   *
+   * @param markdownContent - The markdown content to preprocess
+   * @returns A promise resolving to the content with formulas replaced by image tags
+   */
   async function preprocessKaTeXFormulas(markdownContent: string): Promise<string> {
     const blockRegex = /\$\$([\s\S]*?)\$\$/g
     const inlineRegex = /\$([^\$]+?)\$/g
@@ -102,5 +111,6 @@ export function useKaTeX() {
 
     return content
   }
+
   return { preprocessKaTeXFormulas }
 }

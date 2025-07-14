@@ -2,10 +2,11 @@ import { marked, Token, Tokens } from 'marked'
 import { PDFDocument, PDFPage } from 'pdf-lib'
 import {
   extractTextFromTokens,
-  fetchAndEmbedImage,
+  embedImage,
   Fonts,
   getFontForSegment,
   loadFonts,
+  parseImageAttributes,
   parseInlineTokens,
   partitionTokens,
   sanitizeText,
@@ -39,75 +40,44 @@ async function renderImage(
   margin: number,
   maxWidth: number
 ): Promise<RenderResult> {
-  let targetWidth = 0
-  let targetHeight = 0
+  const attrs = parseImageAttributes(imageToken.text)
+  const imageResult = await embedImage(pdfDoc, imageToken.href)
 
-  if (imageToken.title) {
-    const match = imageToken.title.match(/w=(\d+),h=(\d+)/)
-    if (match) {
-      targetWidth = parseInt(match[1], 10)
-      targetHeight = parseInt(match[2], 10)
-    }
+  let finalWidth = attrs.width > 0 ? attrs.width : imageResult.width
+  let finalHeight = attrs.height > 0 ? attrs.height : imageResult.height
+
+  const pageContentWidth = maxWidth - PDF_THEME.image.contentPadding
+  if (finalWidth > pageContentWidth) {
+    const scale = pageContentWidth / finalWidth
+    finalWidth = pageContentWidth
+    finalHeight = finalHeight * scale
   }
 
-  const imageResult = await fetchAndEmbedImage(pdfDoc, imageToken.href)
+  if (yPosition - finalHeight < PDF_THEME.layout.pageBottom) {
+    return { yPosition, needsNewPage: true }
+  }
 
-  if (imageResult.success) {
-    let finalWidth: number
-    let finalHeight: number
+  yPosition -= finalHeight + PDF_THEME.spacing.afterImage
 
-    if (targetWidth > 0 && targetHeight > 0) {
-      finalWidth = targetWidth
-      finalHeight = targetHeight
-    } else {
-      finalWidth = imageResult.width
-      finalHeight = imageResult.height
-      const pageContentWidth = maxWidth - PDF_THEME.image.contentPadding
-      if (finalWidth > pageContentWidth) {
-        const scale = pageContentWidth / finalWidth
-        finalWidth = pageContentWidth
-        finalHeight = finalHeight * scale
-      }
-    }
+  page.drawImage(imageResult.image, {
+    x: margin + (maxWidth - finalWidth) / 2,
+    y: yPosition,
+    width: finalWidth,
+    height: finalHeight
+  })
 
-    if (yPosition - finalHeight < PDF_THEME.layout.pageBottom) {
-      return { yPosition, needsNewPage: true }
-    }
-
-    yPosition -= finalHeight + PDF_THEME.spacing.afterImage
-
-    page.drawImage(imageResult.image, {
-      x: margin + (maxWidth - finalWidth) / 2,
-      y: yPosition,
-      width: finalWidth,
-      height: finalHeight
-    })
-
-    const isMermaidChartWithDimensions = imageToken.title && /^w=\d+,h=\d+$/.test(imageToken.title)
-
-    if (imageToken.title && !isMermaidChartWithDimensions) {
-      yPosition -= PDF_THEME.spacing.beforeImageTitle
-      page.drawText(`${imageToken.title}`, {
-        x: margin,
-        y: yPosition,
-        size: PDF_THEME.font.imageTitleSize,
-        font: fonts.italic,
-        color: PDF_THEME.color.imagePlaceholder
-      })
-    }
-
-    return { yPosition: yPosition - 15 }
-  } else {
-    yPosition -= 20
-    page.drawText(`Image failed to load: ${imageToken.title || imageToken.href}`, {
+  if (attrs.text) {
+    yPosition -= PDF_THEME.spacing.beforeImageTitle
+    page.drawText(`${attrs.text}`, {
       x: margin,
       y: yPosition,
       size: PDF_THEME.font.imageTitleSize,
       font: fonts.italic,
-      color: PDF_THEME.color.error
+      color: PDF_THEME.color.imagePlaceholder
     })
-    return { yPosition: yPosition - 10 }
   }
+
+  return { yPosition: yPosition - 15 }
 }
 
 /**
@@ -176,99 +146,124 @@ async function renderParagraph(
   maxWidth: number
 ): Promise<RenderResult> {
   const lineHeight = PDF_THEME.font.lineHeight
+
   let localY = yPosition - PDF_THEME.spacing.beforeParagraph
+  let currentX = margin
+
+  const wrapLine = () => {
+    localY -= lineHeight
+    currentX = margin
+
+    return localY < PDF_THEME.layout.pageBottom
+  }
+
+  if (token.tokens.length === 1 && token.tokens[0].type === 'image') {
+    const imageToken = token.tokens[0] as Tokens.Image
+    const attrs = parseImageAttributes(imageToken.text)
+
+    if (attrs.display === 'block') {
+      return renderImage(imageToken, page, pdfDoc, fonts, yPosition, margin, maxWidth)
+    }
+  }
 
   if (localY - lineHeight < PDF_THEME.layout.pageBottom) {
     return { yPosition, needsNewPage: true }
   }
 
-  let currentX = margin
-
   for (const inlineToken of token.tokens) {
     if (inlineToken.type === 'image') {
-      if (currentX > margin) {
-        if (localY - lineHeight < PDF_THEME.layout.pageBottom) {
+      console.log(inlineToken)
+      const attrs = parseImageAttributes(inlineToken.text)
+
+      console.log(attrs.display)
+
+      if (attrs.display === 'inline') {
+        const imageWidth = attrs.width + PDF_THEME.math.inlineModePadding
+
+        if (currentX + imageWidth > margin + maxWidth && currentX > margin && wrapLine()) {
+          console.log('image requiers new page')
           return { yPosition, needsNewPage: true }
         }
-        localY -= lineHeight
-        currentX = margin
-      }
 
-      const imageResult = await renderImage(
-        inlineToken as Tokens.Image,
-        page,
-        pdfDoc,
-        fonts,
-        localY,
-        margin,
-        maxWidth
-      )
+        const imageResult = await embedImage(pdfDoc, inlineToken.href)
+        const yOffset = (attrs.height - PDF_THEME.font.baseSize) / 2
 
-      if (imageResult.needsNewPage) {
-        return { yPosition, needsNewPage: true }
-      }
+        console.log(attrs.width, attrs.height)
 
-      localY = imageResult.yPosition
-      currentX = margin
-      continue
-    }
-
-    const tempSegments = parseInlineTokens([inlineToken])
-
-    if (tempSegments.length === 0) {
-      continue
-    }
-
-    const segment = tempSegments[0]
-
-    const font = getFontForSegment(segment, fonts)
-    let fontSize: number = PDF_THEME.font.baseSize
-    let yOffset = 0
-
-    if (segment.subscript || segment.superscript) {
-      fontSize = PDF_THEME.font.subSupSize
-      yOffset = segment.subscript ? PDF_THEME.offset.subscript : PDF_THEME.offset.superscript
-    }
-
-    const textLines = segment.text.split('\n')
-
-    for (let i = 0; i < textLines.length; i++) {
-      const lineText = textLines[i]
-      const words = lineText.split(' ')
-
-      for (const word of words) {
-        if (word === '') {
-          continue
-        }
-
-        const wordWithSpace = word + ' '
-        const wordWidth = font.widthOfTextAtSize(wordWithSpace, fontSize)
-
-        if (currentX + wordWidth > margin + maxWidth) {
-          if (localY - lineHeight < PDF_THEME.layout.pageBottom) {
-            return { yPosition, needsNewPage: true }
-          }
-          localY -= lineHeight
-          currentX = margin
-        }
-
-        page.drawText(wordWithSpace, {
+        page.drawImage(imageResult.image, {
           x: currentX,
-          y: localY + yOffset,
-          size: fontSize,
-          font: font,
-          color: segment.color || PDF_THEME.color.text
+          y: localY - yOffset,
+          width: attrs.width,
+          height: attrs.height
         })
 
-        currentX += wordWidth
-      }
-
-      if (i < textLines.length - 1) {
-        if (localY - lineHeight < PDF_THEME.layout.pageBottom) {
+        currentX += imageWidth
+      } else {
+        if (currentX > margin && wrapLine()) {
           return { yPosition, needsNewPage: true }
         }
-        localY -= lineHeight
+
+        const imageRenderResult = await renderImage(
+          inlineToken as Tokens.Image,
+          page,
+          pdfDoc,
+          fonts,
+          localY,
+          margin,
+          maxWidth
+        )
+
+        if (imageRenderResult.needsNewPage) {
+          return { yPosition, needsNewPage: true }
+        }
+
+        localY = imageRenderResult.yPosition
         currentX = margin
+      }
+
+      continue
+    }
+
+    const segments = parseInlineTokens([inlineToken])
+
+    for (const segment of segments) {
+      const font = getFontForSegment(segment, fonts)
+      let fontSize: number = PDF_THEME.font.baseSize
+      let yOffset = 0
+
+      if (segment.subscript || segment.superscript) {
+        fontSize = PDF_THEME.font.subSupSize
+        yOffset = segment.subscript ? PDF_THEME.offset.subscript : PDF_THEME.offset.superscript
+      }
+
+      const textLines = segment.text.split('\n')
+
+      for (let lineIndex = 0; lineIndex < textLines.length; lineIndex++) {
+        const lineText = textLines[lineIndex]
+        const words = lineText.split(' ')
+
+        for (const word of words) {
+          if (!word) continue
+          const wordWithSpace = word + ' '
+          const wordWidth = font.widthOfTextAtSize(wordWithSpace, fontSize)
+
+          if (currentX + wordWidth > margin + maxWidth && currentX > margin) {
+            if (wrapLine()) return { yPosition, needsNewPage: true }
+          }
+
+          page.drawText(wordWithSpace, {
+            x: currentX,
+            y: localY + yOffset,
+            font,
+            size: fontSize,
+            color: segment.color || PDF_THEME.color.text
+          })
+          currentX += wordWidth
+        }
+
+        if (lineIndex < textLines.length - 1) {
+          if (wrapLine()) return { yPosition, needsNewPage: true }
+        }
       }
     }
   }
@@ -588,7 +583,7 @@ function renderTable(
       color: PDF_THEME.color.tableHeaderBg
     })
 
-    const headerText = extractTextFromTokens(token.header[col].tokens)
+    const headerText = extractTextFromTokens(token.header[col].tokens).replace(/\n/g, ' ')
     page.drawText(headerText, {
       x: cellX + cellPadding,
       y: localY - rowHeight + cellPadding,
@@ -613,7 +608,7 @@ function renderTable(
     for (let col = 0; col < row.length; col++) {
       const cellX = margin + col * colWidth
 
-      const cellText = extractTextFromTokens(row[col].tokens)
+      const cellText = extractTextFromTokens(row[col].tokens).replace(/\n/g, ' ')
       page.drawText(cellText, {
         x: cellX + cellPadding,
         y: localY - rowHeight + cellPadding,
