@@ -27,33 +27,25 @@
   </div>
 </template>
 
-<script lang="ts">
-import { defineComponent, PropType, ref } from 'vue'
-import { Modal } from '@ownclouders/web-pkg'
+<script lang="ts" setup>
+import { ref } from 'vue'
 import { DateTime } from 'luxon'
 
-export default defineComponent({
-  name: 'DatePickerModal',
-  props: {
-    modal: { type: Object as PropType<Modal>, required: true },
-    currentDate: { type: Object as PropType<DateTime>, required: false, default: null },
-    minDate: { type: Object as PropType<DateTime>, required: false, default: null },
-    isClearable: { type: Boolean, default: true }
-  },
-  emits: ['confirm', 'cancel'],
-  setup() {
-    const dateTime = ref<DateTime>()
-    const confirmDisabled = ref(true)
-    const onDateChanged = ({ date, error }: { date: DateTime; error: boolean }) => {
-      confirmDisabled.value = error || !date
-      dateTime.value = date
-    }
-
-    return {
-      confirmDisabled,
-      onDateChanged,
-      dateTime
-    }
-  }
-})
+interface Props {
+  currentDate?: DateTime
+  minDate?: DateTime
+  isClearable?: boolean
+}
+interface Emits {
+  (e: 'confirm', value: DateTime): void
+  (e: 'cancel'): void
+}
+defineEmits<Emits>()
+const { currentDate = null, minDate = null, isClearable = true } = defineProps<Props>()
+const dateTime = ref<DateTime>()
+const confirmDisabled = ref(true)
+const onDateChanged = ({ date, error }: { date: DateTime; error: boolean }) => {
+  confirmDisabled.value = error || !date
+  dateTime.value = date
+}
 </script>
