@@ -3,7 +3,7 @@ import { defineStore } from 'pinia'
 import { v4 as uuidV4 } from 'uuid'
 import { Component, ComponentPublicInstance, computed, ref, unref } from 'vue'
 
-export type CustomModalComponent = Component<{ modal: Modal } & Record<string, any>>
+export type CustomModalComponent = Component<{ modal?: Modal } & Record<string, any>>
 
 export type CustomModalComponentEmits = {
   confirm?: () => Promise<void>
