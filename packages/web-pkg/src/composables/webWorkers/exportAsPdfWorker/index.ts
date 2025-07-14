@@ -7,6 +7,7 @@ import { useRequestHeaders } from '../../../composables/requestHeaders'
 import { useConfigStore } from '../../piniaStores'
 import { useMermaid } from './useMermaid'
 import { useImages } from './useImages'
+import { useKaTeX } from './useKaTeX'
 
 export type ExportAsPdfWorkerReturnData = {
   successful: Resource[]
@@ -25,6 +26,7 @@ export const useExportAsPdfWorker = () => {
   const { headers } = useRequestHeaders()
   const { preprocessMermaidCharts } = useMermaid()
   const { preprocessImages } = useImages()
+  const { preprocessKaTeXFormulas } = useKaTeX()
 
   async function startWorker(
     destinationFolder: Resource,
@@ -54,7 +56,10 @@ export const useExportAsPdfWorker = () => {
     )
 
     let processedContent = await preprocessMermaidCharts(content)
+    processedContent = await preprocessKaTeXFormulas(processedContent)
     processedContent = await preprocessImages(processedContent)
+
+    console.log(processedContent)
 
     worker.post(getWorkerData(destinationFolder, space, fileName, processedContent))
   }

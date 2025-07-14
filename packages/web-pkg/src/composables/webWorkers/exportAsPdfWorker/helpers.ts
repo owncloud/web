@@ -1,5 +1,5 @@
 import { Token, Tokens } from 'marked'
-import { PDFDocument, PDFFont, PDFImage, StandardFonts } from 'pdf-lib'
+import { PDFDocument, PDFFont, PDFImage, RGB, StandardFonts } from 'pdf-lib'
 import { PDF_THEME } from './pdfConfig'
 
 export type Fonts = {
@@ -385,4 +385,14 @@ export async function fetchAndEmbedImage(pdfDoc: PDFDocument, imageUrl: string) 
       success: false
     }
   }
+}
+
+/**
+ * Converts a PDF color to CSS rgb() string
+ *
+ * @param color - The PDF color to convert
+ * @returns The CSS rgb() string
+ */
+export function pdfColorToCssRgb(color: RGB): string {
+  return `rgb(${color.red}, ${color.green}, ${color.blue})`
 }

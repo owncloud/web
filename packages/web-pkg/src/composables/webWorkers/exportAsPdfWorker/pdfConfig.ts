@@ -73,5 +73,12 @@ export const PDF_THEME = Object.freeze({
   },
   image: {
     contentPadding: 40
+  },
+  math: {
+    displayModePadding: 20,
+    inlineModePadding: 5
+  },
+  svg: {
+    scaleFactor: 3
   }
 } as const)

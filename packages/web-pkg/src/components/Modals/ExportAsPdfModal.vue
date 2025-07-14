@@ -75,6 +75,7 @@ function onLocationPick({ data }: MessageEvent) {
 
   startWorker(destinationFolder, space, fileName, content, (result) => {
     if (result.failed.length > 0) {
+      console.error(result.failed)
       showErrorMessage({
         title: $pgettext(
           'Error toast message title shown to a user when exporting a file as PDF via the export as PDF modal failed.',
@@ -99,13 +100,13 @@ function onLocationPick({ data }: MessageEvent) {
   removeModal(modal.id)
 }
 
-function handleMessage({ data }: MessageEvent) {
-  if (data.name === 'owncloud-embed:select') {
-    onLocationPick(data)
+function handleMessage(event: MessageEvent) {
+  if (event.data.name === 'owncloud-embed:select') {
+    onLocationPick(event)
     return
   }
 
-  if (data.name === 'owncloud-embed:cancel') {
+  if (event.data.name === 'owncloud-embed:cancel') {
     removeModal(modal.id)
   }
 }
