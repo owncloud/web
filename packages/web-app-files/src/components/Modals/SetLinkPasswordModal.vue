@@ -15,12 +15,11 @@
   />
 </template>
 
-<script lang="ts">
-import { defineComponent, ref, unref, PropType } from 'vue'
+<script lang="ts" setup>
+import { ref, unref } from 'vue'
 import { useGettext } from 'vue3-gettext'
 import { upperFirst } from 'lodash-es'
 import {
-  Modal,
   useClientService,
   useMessages,
   usePasswordPolicyService,
@@ -28,76 +27,69 @@ import {
 } from '@ownclouders/web-pkg'
 import { LinkShare, Resource, SpaceResource } from '@ownclouders/web-client'
 
-export default defineComponent({
-  name: 'SetLinkPasswordModal',
-  props: {
-    modal: { type: Object as PropType<Modal>, required: true },
-    space: { type: Object as PropType<SpaceResource>, required: true },
-    resource: { type: Object as PropType<Resource>, required: true },
-    link: { type: Object as PropType<LinkShare>, required: true },
-    callbackFn: {
-      type: Function as PropType<() => void>,
-      default: undefined
+interface Props {
+  space: SpaceResource
+  resource: Resource
+  link: LinkShare
+  callbackFn?: () => void
+}
+
+interface Emits {
+  (e: 'confirm'): void
+  (e: 'update:confirmDisabled', value: boolean): void
+}
+const { space, resource, link, callbackFn = undefined } = defineProps<Props>()
+
+defineEmits<Emits>()
+
+const { showMessage, showErrorMessage } = useMessages()
+const clientService = useClientService()
+const passwordPolicyService = usePasswordPolicyService()
+const { $gettext } = useGettext()
+const { updateLink } = useSharesStore()
+
+const password = ref('')
+const errorMessage = ref<string>()
+
+const onInput = (value: string) => {
+  password.value = value
+  errorMessage.value = undefined
+}
+
+const onConfirm = async () => {
+  try {
+    await updateLink({
+      clientService,
+      space: space,
+      resource: resource,
+      linkShare: link,
+      options: { password: unref(password) }
+    })
+    if (callbackFn) {
+      callbackFn()
+      return
     }
-  },
-  emits: ['confirm', 'update:confirmDisabled'],
-  setup(props, { expose }) {
-    const { showMessage, showErrorMessage } = useMessages()
-    const clientService = useClientService()
-    const passwordPolicyService = usePasswordPolicyService()
-    const { $gettext } = useGettext()
-    const { updateLink } = useSharesStore()
-
-    const password = ref('')
-    const errorMessage = ref<string>()
-
-    const onInput = (value: string) => {
-      password.value = value
-      errorMessage.value = undefined
-    }
-
-    const onConfirm = async () => {
-      try {
-        await updateLink({
-          clientService,
-          space: props.space,
-          resource: props.resource,
-          linkShare: props.link,
-          options: { password: unref(password) }
-        })
-        if (props.callbackFn) {
-          props.callbackFn()
-          return
-        }
-        showMessage({ title: $gettext('Link was updated successfully') })
-      } catch (e) {
-        // Human-readable error message is provided, for example when password is on banned list
-        if (e.response?.status === 400) {
-          const errorMsg = e.response.data.error.message
-          errorMessage.value = $gettext(upperFirst(errorMsg))
-          return Promise.reject()
-        }
-
-        showErrorMessage({
-          title: $gettext('Failed to update link'),
-          errors: [e]
-        })
-      }
+    showMessage({ title: $gettext('Link was updated successfully') })
+  } catch (e) {
+    // Human-readable error message is provided, for example when password is on banned list
+    if (e.response?.status === 400) {
+      const errorMsg = e.response.data.error.message
+      errorMessage.value = $gettext(upperFirst(errorMsg))
+      return Promise.reject()
     }
 
-    expose({ onConfirm })
-
-    return {
-      password,
-      onInput,
-      errorMessage,
-      passwordPolicyService,
-      inputPasswordPolicy: passwordPolicyService.getPolicy({ enforcePassword: true }),
-      inputGeneratePasswordMethod: () => passwordPolicyService.generatePassword(),
-
-      // unit tests
-      onConfirm
-    }
+    showErrorMessage({
+      title: $gettext('Failed to update link'),
+      errors: [e]
+    })
   }
-})
+}
+
+const inputPasswordPolicy = passwordPolicyService.getPolicy({ enforcePassword: true })
+const inputGeneratePasswordMethod = () => passwordPolicyService.generatePassword()
+
+/*
+ * onConfirm is called by modalWrapper component and should be exposed.
+ */
+defineExpose({ onConfirm })
 </script>
