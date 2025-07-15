@@ -1,15 +1,6 @@
 import { Token, Tokens } from 'marked'
-import { PDFDocument, PDFFont, PDFImage, RGB, StandardFonts } from 'pdf-lib'
+import { PDFDocument, PDFFont, PDFImage, RGB } from 'pdf-lib'
 import { PDF_THEME } from './pdfConfig'
-
-export type Fonts = {
-  regular: PDFFont
-  bold: PDFFont
-  italic: PDFFont
-  boldItalic: PDFFont
-  mono: PDFFont
-  monoBold: PDFFont
-}
 
 export type TextSegment = {
   text: string
@@ -60,24 +51,36 @@ export function splitTextToFit(text: string, font: any, fontSize: number, maxWid
   return lines
 }
 
+const FONT_URLS = Object.freeze({
+  regular: 'https://pdf-lib.js.org/assets/ubuntu/Ubuntu-R.ttf',
+  bold: 'https://pdf-lib.js.org/assets/ubuntu/Ubuntu-B.ttf',
+  italic: 'https://pdf-lib.js.org/assets/ubuntu/Ubuntu-RI.ttf',
+  boldItalic: 'https://pdf-lib.js.org/assets/ubuntu/Ubuntu-BI.ttf',
+  mono: 'https://pdf-lib.js.org/assets/ubuntu/UbuntuMono-R.ttf',
+  monoBold: 'https://pdf-lib.js.org/assets/ubuntu/UbuntuMono-B.ttf'
+})
+
+export type FontLoader = (fontWeight: string) => Promise<PDFFont>
+
 /**
- * Loads and embeds all required fonts into the PDF document.
- *
- * This function embeds the standard fonts needed for text rendering in the PDF:
- * - Helvetica (regular, bold, italic, bold-italic) for normal text
- * - Courier (regular, bold) for monospace text and code
+ * Returns a function that loads and embeds a font into the PDF document.
  *
  * @param pdfDoc - The PDF document to embed fonts into
- * @returns Promise resolving to a Fonts object containing all embedded fonts
+ * @returns Function that loads and embeds a font into the PDF document
  */
-export async function loadFonts(pdfDoc: PDFDocument): Promise<Fonts> {
-  return {
-    regular: await pdfDoc.embedFont(StandardFonts.Helvetica),
-    bold: await pdfDoc.embedFont(StandardFonts.HelveticaBold),
-    italic: await pdfDoc.embedFont(StandardFonts.HelveticaOblique),
-    boldItalic: await pdfDoc.embedFont(StandardFonts.HelveticaBoldOblique),
-    mono: await pdfDoc.embedFont(StandardFonts.Courier),
-    monoBold: await pdfDoc.embedFont(StandardFonts.CourierBold)
+export function getFontLoader(pdfDoc: PDFDocument): FontLoader {
+  const loadedFonts = {}
+
+  return async (fontWeight: string): Promise<PDFFont> => {
+    if (loadedFonts[fontWeight]) {
+      return loadedFonts[fontWeight]
+    }
+
+    const fontBytes = await fetch(FONT_URLS[fontWeight]).then((res) => res.arrayBuffer())
+    const font = await pdfDoc.embedFont(fontBytes)
+    loadedFonts[fontWeight] = font
+
+    return font
   }
 }
 
@@ -92,23 +95,27 @@ export async function loadFonts(pdfDoc: PDFDocument): Promise<Fonts> {
  * - Regular font as the default
  *
  * @param segment - The text segment with formatting properties
- * @param fonts - The available fonts object
+ * @param loadFont - Function to load and embed a font into the PDF document
  * @returns The appropriate PDF font for the segment
  */
-export function getFontForSegment(segment: TextSegment, fonts: Fonts) {
+export async function getFontForSegment(segment: TextSegment, loadFont: FontLoader) {
   if (segment.code) {
-    return fonts.mono
+    return await loadFont('mono')
   }
+
   if (segment.bold && segment.italic) {
-    return fonts.boldItalic
+    return await loadFont('boldItalic')
   }
+
   if (segment.bold) {
-    return fonts.bold
+    return await loadFont('bold')
   }
+
   if (segment.italic) {
-    return fonts.italic
+    return await loadFont('italic')
   }
-  return fonts.regular
+
+  return await loadFont('regular')
 }
 
 /**
@@ -195,6 +202,7 @@ export function sanitizeText(text: string): string {
     .replaceAll('”', '"')
     .replaceAll('—', '--')
     .replaceAll('–', '-')
+    .replaceAll(' ', ' ')
 }
 
 /**

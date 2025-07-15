@@ -1,16 +1,17 @@
 import { marked, Token, Tokens } from 'marked'
 import { PDFDocument, PDFPage } from 'pdf-lib'
+import fontkit from '@pdf-lib/fontkit'
 import {
   extractTextFromTokens,
   embedImage,
-  Fonts,
   getFontForSegment,
-  loadFonts,
+  getFontLoader,
   parseImageAttributes,
   parseInlineTokens,
   partitionTokens,
   sanitizeText,
-  splitTextToFit
+  splitTextToFit,
+  FontLoader
 } from './helpers'
 import { PDF_THEME } from './pdfConfig'
 
@@ -25,7 +26,7 @@ type RenderResult = {
  * @param imageToken - The markdown image token containing href and optional title
  * @param page - The PDF page to render on
  * @param pdfDoc - The PDF document for embedding images
- * @param fonts - Pre-loaded fonts for text rendering
+ * @param loadFont - Function to load and embed a font into the PDF document
  * @param yPosition - Current Y position on the page
  * @param margin - Left margin for positioning
  * @param maxWidth - Maximum width available for rendering
@@ -35,7 +36,7 @@ async function renderImage(
   imageToken: Tokens.Image,
   page: PDFPage,
   pdfDoc: PDFDocument,
-  fonts: Fonts,
+  loadFont: FontLoader,
   yPosition: number,
   margin: number,
   maxWidth: number
@@ -72,7 +73,7 @@ async function renderImage(
       x: margin,
       y: yPosition,
       size: PDF_THEME.font.imageTitleSize,
-      font: fonts.italic,
+      font: await loadFont('italic'),
       color: PDF_THEME.color.imagePlaceholder
     })
   }
@@ -85,24 +86,29 @@ async function renderImage(
  *
  * @param token - The markdown heading token containing text and depth level
  * @param page - The PDF page to render on
- * @param fonts - Pre-loaded fonts for text rendering
+ * @param loadFont - Function to load and embed a font into the PDF document
  * @param yPosition - Current Y position on the page
  * @param margin - Left margin for positioning
  * @returns RenderResult with updated Y position and optional new page flag
  */
-function renderHeading(
+async function renderHeading(
   token: Tokens.Heading,
   page: PDFPage,
-  fonts: Fonts,
+  loadFont: FontLoader,
   yPosition: number,
   margin: number
-): RenderResult {
+): Promise<RenderResult> {
   const fontSize = Math.max(
     PDF_THEME.font.headingBaseSize - token.depth * PDF_THEME.font.headingDepthMultiplier,
     PDF_THEME.font.headingMinSize
   )
   const lineHeight = fontSize + 2
-  const lines = splitTextToFit(token.text, fonts.bold, fontSize, page.getWidth() - margin * 2)
+  const lines = splitTextToFit(
+    token.text,
+    await loadFont('bold'),
+    fontSize,
+    page.getWidth() - margin * 2
+  )
 
   let localY = yPosition - (fontSize + 10)
 
@@ -115,7 +121,7 @@ function renderHeading(
       x: margin,
       y: localY,
       size: fontSize,
-      font: fonts.bold,
+      font: await loadFont('bold'),
       color: PDF_THEME.color.text
     })
     localY -= lineHeight
@@ -130,7 +136,7 @@ function renderHeading(
  * @param token - The markdown paragraph token containing inline tokens
  * @param page - The PDF page to render on
  * @param pdfDoc - The PDF document for embedding images
- * @param fonts - Pre-loaded fonts for text rendering
+ * @param loadFont - Function to load and embed a font into the PDF document
  * @param yPosition - Current Y position on the page
  * @param margin - Left margin for positioning
  * @param maxWidth - Maximum width available for rendering
@@ -140,7 +146,7 @@ async function renderParagraph(
   token: Tokens.Paragraph,
   page: PDFPage,
   pdfDoc: PDFDocument,
-  fonts: Fonts,
+  loadFont: FontLoader,
   yPosition: number,
   margin: number,
   maxWidth: number
@@ -162,7 +168,7 @@ async function renderParagraph(
     const attrs = parseImageAttributes(imageToken.text)
 
     if (attrs.display === 'block') {
-      return renderImage(imageToken, page, pdfDoc, fonts, yPosition, margin, maxWidth)
+      return renderImage(imageToken, page, pdfDoc, loadFont, yPosition, margin, maxWidth)
     }
   }
 
@@ -207,7 +213,7 @@ async function renderParagraph(
           inlineToken as Tokens.Image,
           page,
           pdfDoc,
-          fonts,
+          loadFont,
           localY,
           margin,
           maxWidth
@@ -227,7 +233,7 @@ async function renderParagraph(
     const segments = parseInlineTokens([inlineToken])
 
     for (const segment of segments) {
-      const font = getFontForSegment(segment, fonts)
+      const font = await getFontForSegment(segment, loadFont)
       let fontSize: number = PDF_THEME.font.baseSize
       let yOffset = 0
 
@@ -276,20 +282,20 @@ async function renderParagraph(
  *
  * @param token - The markdown code token containing the code text
  * @param page - The PDF page to render on
- * @param fonts - Pre-loaded fonts for text rendering
+ * @param loadFont - Function to load and embed a font into the PDF document
  * @param yPosition - Current Y position on the page
  * @param margin - Left margin for positioning
  * @param maxWidth - Maximum width available for rendering
  * @returns RenderResult with updated Y position and optional new page flag
  */
-function renderCodeBlock(
+async function renderCodeBlock(
   token: Tokens.Code,
   page: PDFPage,
-  fonts: Fonts,
+  loadFont: FontLoader,
   yPosition: number,
   margin: number,
   maxWidth: number
-): RenderResult {
+): Promise<RenderResult> {
   const fontSize = PDF_THEME.font.codeSize
   const lineHeight = PDF_THEME.font.codeLineHeight
   const padding = PDF_THEME.codeBlock.padding
@@ -317,7 +323,7 @@ function renderCodeBlock(
       x: margin + padding,
       y: currentY,
       size: fontSize,
-      font: fonts.mono,
+      font: await loadFont('mono'),
       color: PDF_THEME.color.text
     })
     currentY -= lineHeight
@@ -332,7 +338,7 @@ function renderCodeBlock(
  * @param token - The markdown list token containing list items
  * @param page - The PDF page to render on
  * @param pdfDoc - The PDF document for embedding images
- * @param fonts - Pre-loaded fonts for text rendering
+ * @param loadFont - Function to load and embed a font into the PDF document
  * @param yPosition - Current Y position on the page
  * @param margin - Left margin for positioning
  * @param maxWidth - Maximum width available for rendering
@@ -343,7 +349,7 @@ async function renderList(
   token: Tokens.List,
   page: PDFPage,
   pdfDoc: PDFDocument,
-  fonts: Fonts,
+  loadFont: FontLoader,
   yPosition: number,
   margin: number,
   maxWidth: number,
@@ -366,7 +372,7 @@ async function renderList(
       x: indent,
       y: localY,
       size: PDF_THEME.font.listBulletSize,
-      font: fonts.regular,
+      font: await loadFont('regular'),
       color: PDF_THEME.color.text
     })
 
@@ -377,7 +383,7 @@ async function renderList(
         imageToken as Tokens.Image,
         page,
         pdfDoc,
-        fonts,
+        loadFont,
         localY,
         indent + 20,
         maxWidth - (indent + 20 - margin)
@@ -393,7 +399,7 @@ async function renderList(
       const itemText = extractTextFromTokens(textTokens)
       const lines = splitTextToFit(
         itemText,
-        fonts.regular,
+        await loadFont('regular'),
         PDF_THEME.font.baseSize,
         maxWidth - (indent + 20 - margin)
       )
@@ -406,7 +412,7 @@ async function renderList(
           x: indent + 20,
           y: localY,
           size: PDF_THEME.font.baseSize,
-          font: fonts.regular,
+          font: await loadFont('regular'),
           color: PDF_THEME.color.text
         })
         localY -= lineHeight
@@ -420,7 +426,7 @@ async function renderList(
             nestedToken as Tokens.List,
             page,
             pdfDoc,
-            fonts,
+            loadFont,
             localY,
             margin,
             maxWidth,
@@ -445,7 +451,7 @@ async function renderList(
  * @param token - The markdown blockquote token containing quoted content
  * @param page - The PDF page to render on
  * @param pdfDoc - The PDF document for embedding images
- * @param fonts - Pre-loaded fonts for text rendering
+ * @param loadFont - Function to load and embed a font into the PDF document
  * @param yPosition - Current Y position on the page
  * @param margin - Left margin for positioning
  * @param maxWidth - Maximum width available for rendering
@@ -455,7 +461,7 @@ async function renderBlockquote(
   token: Tokens.Blockquote,
   page: PDFPage,
   pdfDoc: PDFDocument,
-  fonts: Fonts,
+  loadFont: FontLoader,
   yPosition: number,
   margin: number,
   maxWidth: number
@@ -476,7 +482,7 @@ async function renderBlockquote(
       const text = extractTextFromTokens(quoteToken.tokens)
       const lines = splitTextToFit(
         text,
-        fonts.italic,
+        await loadFont('italic'),
         PDF_THEME.font.baseSize,
         maxWidth - PDF_THEME.blockquote.contentPadding
       )
@@ -501,7 +507,7 @@ async function renderBlockquote(
           imageToken as Tokens.Image,
           page,
           pdfDoc,
-          fonts,
+          loadFont,
           localY,
           quoteMargin,
           maxWidth - PDF_THEME.blockquote.contentPadding
@@ -517,7 +523,7 @@ async function renderBlockquote(
         const text = extractTextFromTokens(textTokens)
         const lines = splitTextToFit(
           text,
-          fonts.italic,
+          await loadFont('italic'),
           PDF_THEME.font.baseSize,
           maxWidth - PDF_THEME.blockquote.contentPadding
         )
@@ -530,7 +536,7 @@ async function renderBlockquote(
             x: quoteMargin,
             y: localY,
             size: PDF_THEME.font.baseSize,
-            font: fonts.italic,
+            font: await loadFont('italic'),
             color: PDF_THEME.color.blockquoteText
           })
           localY -= lineHeight
@@ -547,20 +553,20 @@ async function renderBlockquote(
  *
  * @param token - The markdown table token containing header and row data
  * @param page - The PDF page to render on
- * @param fonts - Pre-loaded fonts for text rendering
+ * @param loadFont - Function to load and embed a font into the PDF document
  * @param yPosition - Current Y position on the page
  * @param margin - Left margin for positioning
  * @param maxWidth - Maximum width available for rendering
  * @returns RenderResult with updated Y position and optional new page flag
  */
-function renderTable(
+async function renderTable(
   token: Tokens.Table,
   page: PDFPage,
-  fonts: Fonts,
+  loadFont: FontLoader,
   yPosition: number,
   margin: number,
   maxWidth: number
-): RenderResult {
+): Promise<RenderResult> {
   const cellPadding = PDF_THEME.table.cellPadding
   const rowHeight = PDF_THEME.table.rowHeight
   const tableHeight = (token.rows.length + 1) * rowHeight
@@ -588,7 +594,7 @@ function renderTable(
       x: cellX + cellPadding,
       y: localY - rowHeight + cellPadding,
       size: PDF_THEME.font.tableHeaderTextSize,
-      font: fonts.bold,
+      font: await loadFont('bold'),
       color: PDF_THEME.color.text
     })
 
@@ -613,7 +619,7 @@ function renderTable(
         x: cellX + cellPadding,
         y: localY - rowHeight + cellPadding,
         size: PDF_THEME.font.tableCellTextSize,
-        font: fonts.regular,
+        font: await loadFont('regular'),
         color: PDF_THEME.color.text
       })
 
@@ -669,7 +675,7 @@ function renderHorizontalRule(
  * @param token - The markdown token to render
  * @param page - The PDF page to render on
  * @param pdfDoc - The PDF document for embedding images
- * @param fonts - Pre-loaded fonts for text rendering
+ * @param loadFont - Function to load and embed a font into the PDF document
  * @param yPosition - Current Y position on the page
  * @param margin - Left margin for positioning
  * @param maxWidth - Maximum width available for rendering
@@ -679,40 +685,40 @@ export function renderToken(
   token: Token,
   page: PDFPage,
   pdfDoc: PDFDocument,
-  fonts: Fonts,
+  loadFont: FontLoader,
   yPosition: number,
   margin: number,
   maxWidth: number
 ): Promise<RenderResult> | RenderResult {
   switch (token.type) {
     case 'heading':
-      return renderHeading(token as Tokens.Heading, page, fonts, yPosition, margin)
+      return renderHeading(token as Tokens.Heading, page, loadFont, yPosition, margin)
     case 'paragraph':
       return renderParagraph(
         token as Tokens.Paragraph,
         page,
         pdfDoc,
-        fonts,
+        loadFont,
         yPosition,
         margin,
         maxWidth
       )
     case 'code':
-      return renderCodeBlock(token as Tokens.Code, page, fonts, yPosition, margin, maxWidth)
+      return renderCodeBlock(token as Tokens.Code, page, loadFont, yPosition, margin, maxWidth)
     case 'list':
-      return renderList(token as Tokens.List, page, pdfDoc, fonts, yPosition, margin, maxWidth)
+      return renderList(token as Tokens.List, page, pdfDoc, loadFont, yPosition, margin, maxWidth)
     case 'blockquote':
       return renderBlockquote(
         token as Tokens.Blockquote,
         page,
         pdfDoc,
-        fonts,
+        loadFont,
         yPosition,
         margin,
         maxWidth
       )
     case 'table':
-      return renderTable(token as Tokens.Table, page, fonts, yPosition, margin, maxWidth)
+      return renderTable(token as Tokens.Table, page, loadFont, yPosition, margin, maxWidth)
     case 'hr':
       return renderHorizontalRule(page, yPosition, margin, maxWidth)
     case 'space':
@@ -738,7 +744,9 @@ export function renderToken(
 export async function convertMarkdownToPdf(markdownText: string): Promise<ArrayBuffer> {
   const sanitizedMarkdown = sanitizeText(markdownText)
   const pdfDoc = await PDFDocument.create()
-  const fonts = await loadFonts(pdfDoc)
+  pdfDoc.registerFontkit(fontkit)
+
+  const loadFont = getFontLoader(pdfDoc)
 
   let page = pdfDoc.addPage()
   const pageHeight = page.getHeight()
@@ -749,12 +757,12 @@ export async function convertMarkdownToPdf(markdownText: string): Promise<ArrayB
   const tokens = marked.lexer(sanitizedMarkdown, { breaks: true })
 
   for (const token of tokens) {
-    let result = await renderToken(token, page, pdfDoc, fonts, yPosition, margin, maxWidth)
+    let result = await renderToken(token, page, pdfDoc, loadFont, yPosition, margin, maxWidth)
 
     if (result.needsNewPage) {
       page = pdfDoc.addPage()
       yPosition = pageHeight - margin
-      result = await renderToken(token, page, pdfDoc, fonts, yPosition, margin, maxWidth)
+      result = await renderToken(token, page, pdfDoc, loadFont, yPosition, margin, maxWidth)
     }
 
     yPosition = result.yPosition
