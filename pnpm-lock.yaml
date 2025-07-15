@@ -980,8 +980,8 @@ importers:
         specifier: ^8.11.1
         version: 8.11.1
       md-editor-v3:
-        specifier: ^5.7.1
-        version: 5.7.1(vue@3.5.17(typescript@5.8.3))
+        specifier: ^5.8.1
+        version: 5.8.1(vue@3.5.17(typescript@5.8.3))
       mermaid:
         specifier: ^11.6.0
         version: 11.7.0
@@ -5295,8 +5295,8 @@ packages:
   mathml-tag-names@2.1.3:
     resolution: {integrity: sha512-APMBEanjybaPzUrfqU0IMU5I0AswKMH7k8OTLs0vvV4KZpExkTkY87nR/zpbuTPj+gARop7aGUbl11pnDfW6xg==}
 
-  md-editor-v3@5.7.1:
-    resolution: {integrity: sha512-QPqa+xKpd0MMG2G0aYZGr0X0xcc43KKv03PVEe49BrsOr9/rlTPAz1an2M7yZKrCkuE2YIBPaQSIhcLLpLawrA==}
+  md-editor-v3@5.8.1:
+    resolution: {integrity: sha512-XXJaxULwX4N2fX4Tg+LAjj0b1+29erDNto3DAJya494ZmRYoegDmaJS6e7th6k4rKXPztPTeCbg9lyPpQEz1tw==}
     peerDependencies:
       vue: ^3.5.3
 
@@ -11848,7 +11848,7 @@ snapshots:
 
   mathml-tag-names@2.1.3: {}
 
-  md-editor-v3@5.7.1(vue@3.5.17(typescript@5.8.3)):
+  md-editor-v3@5.8.1(vue@3.5.17(typescript@5.8.3)):
     dependencies:
       '@codemirror/autocomplete': 6.18.6
       '@codemirror/commands': 6.8.1
