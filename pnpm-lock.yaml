@@ -968,7 +968,7 @@ importers:
         specifier: ^11.11.1
         version: 11.11.1
       katex:
-        specifier: ^0.16.21
+        specifier: ^0.16.22
         version: 0.16.22
       lodash-es:
         specifier: ^4.17.21
