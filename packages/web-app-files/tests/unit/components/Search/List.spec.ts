@@ -1,5 +1,6 @@
-import { merge } from 'lodash-es'
 import { shallowMount } from '@vue/test-utils'
+import { merge } from 'lodash-es'
+import { ResourceTable } from '@ownclouders/web-pkg'
 import List from '../../../../src/components/Search/List.vue'
 import { useResourcesViewDefaults } from '../../../../src/composables'
 import { useResourcesViewDefaultsMock } from '../../../../tests/mocks/useResourcesViewDefaultsMock'
@@ -17,7 +18,9 @@ vi.mock('@ownclouders/web-pkg', async (importOriginal) => ({
   ...(await importOriginal<any>()),
   queryItemAsString: vi.fn(),
   useAppDefaults: vi.fn(),
-  useFileActions: vi.fn()
+  useFileActions: vi.fn(() => ({
+    triggerDefaultAction: vi.fn()
+  }))
 }))
 
 const selectors = {
@@ -46,7 +49,7 @@ describe('List component', () => {
   })
   it('should emit search event on mount', async () => {
     const { wrapper } = getWrapper()
-    await wrapper.vm.loadAvailableTagsTask.last
+    await (wrapper.vm as any).loadAvailableTagsTask.last
     expect(wrapper.emitted('search').length).toBeGreaterThan(0)
   })
   it('should emit search only if one of the queries changes', async () => {
@@ -78,7 +81,7 @@ describe('List component', () => {
       replacementCounter++
     }
 
-    await wrapper.vm.loadAvailableTagsTask.last
+    await (wrapper.vm as any).loadAvailableTagsTask.last
     expect(replacementCounter).toBe(queries.length)
     expect(wrapper.emitted('search').length).toBe(4)
   })
@@ -99,7 +102,7 @@ describe('List component', () => {
     describe('general', () => {
       it('should not be rendered if no filtering is available', async () => {
         const { wrapper } = getWrapper({ fullTextSearchEnabled: false, availableTags: [] })
-        await wrapper.vm.loadAvailableTagsTask.last
+        await (wrapper.vm as any).loadAvailableTagsTask.last
         expect(wrapper.find(selectors.filter).exists()).toBeFalsy()
       })
     })
@@ -107,7 +110,7 @@ describe('List component', () => {
       it('should show all available tags', async () => {
         const tag = 'tag1'
         const { wrapper } = getWrapper({ availableTags: [tag] })
-        await wrapper.vm.loadAvailableTagsTask.last
+        await (wrapper.vm as any).loadAvailableTagsTask.last
         expect(wrapper.find(selectors.tagFilter).exists()).toBeTruthy()
         expect(
           wrapper.findComponent<typeof ItemFilter>(selectors.tagFilter).props('items')
@@ -121,7 +124,7 @@ describe('List component', () => {
           searchTerm,
           tagFilterQuery: availableTags.join('+')
         })
-        await wrapper.vm.loadAvailableTagsTask.last
+        await (wrapper.vm as any).loadAvailableTagsTask.last
         expect(wrapper.emitted('search')[0][0]).toEqual(
           `(name:"*${searchTerm}*" OR content:"${searchTerm}") AND tag:("${availableTags[0]}" OR "${availableTags[1]}")`
         )
@@ -160,7 +163,7 @@ describe('List component', () => {
           availableLastModifiedValues: lastModifiedValues,
           availableTags: ['tag']
         })
-        await wrapper.vm.loadAvailableTagsTask.last
+        await (wrapper.vm as any).loadAvailableTagsTask.last
 
         expect(wrapper.find(selectors.lastModifiedFilter).exists()).toBeTruthy()
         expect(
@@ -174,7 +177,7 @@ describe('List component', () => {
           searchTerm,
           lastModifiedFilterQuery
         })
-        await wrapper.vm.loadAvailableTagsTask.last
+        await (wrapper.vm as any).loadAvailableTagsTask.last
         expect(wrapper.emitted('search')[0][0]).toEqual(
           `(name:"*${searchTerm}*" OR content:"${searchTerm}") AND mtime:${lastModifiedFilterQuery}`
         )
@@ -197,7 +200,7 @@ describe('List component', () => {
           titleOnlyFilterQuery: 'true',
           fullTextSearchEnabled: true
         })
-        await wrapper.vm.loadAvailableTagsTask.last
+        await (wrapper.vm as any).loadAvailableTagsTask.last
         expect(wrapper.emitted('search')[0][0]).toEqual(`name:"*${searchTerm}*"`)
       })
     })
@@ -256,6 +259,10 @@ function getWrapper({
     mocks: localMocks,
     wrapper: shallowMount(List, {
       global: {
+        components: {
+          ResourceTable,
+          AppBar
+        },
         mocks: localMocks,
         provide: localMocks,
         stubs: {
