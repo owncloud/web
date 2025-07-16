@@ -10,37 +10,23 @@
   </oc-list>
 </template>
 
-<script lang="ts">
+<script lang="ts" setup>
 import { ActionMenuItem } from '@ownclouders/web-pkg'
 import { useFileActions } from '@ownclouders/web-pkg'
-import { computed, defineComponent, inject, Ref, unref } from 'vue'
+import { computed, inject, Ref, unref } from 'vue'
 import { Resource, SpaceResource } from '@ownclouders/web-client'
 
-export default defineComponent({
-  name: 'FileActions',
-  components: {
-    ActionMenuItem
-  },
-  setup() {
-    const resource = inject<Ref<Resource>>('resource')
-    const space = inject<Ref<SpaceResource>>('space')
-    const resources = computed(() => {
-      return [unref(resource)]
-    })
-    const { getAllAvailableActions } = useFileActions()
-    const actions = computed(() => {
-      return getAllAvailableActions({
-        space: unref(space),
-        resources: unref(resources)
-      })
-    })
-
-    return {
-      space,
-      resources,
-      actions
-    }
-  }
+const resource = inject<Ref<Resource>>('resource')
+const space = inject<Ref<SpaceResource>>('space')
+const resources = computed(() => {
+  return [unref(resource)]
+})
+const { getAllAvailableActions } = useFileActions()
+const actions = computed(() => {
+  return getAllAvailableActions({
+    space: unref(space),
+    resources: unref(resources)
+  })
 })
 </script>
 
