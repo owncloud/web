@@ -21,8 +21,8 @@
   </div>
 </template>
 
-<script lang="ts">
-import { computed, defineComponent, inject, Ref, ref, unref, VNodeRef } from 'vue'
+<script lang="ts" setup>
+import { computed, inject, Ref, ref, unref, VNodeRef } from 'vue'
 import { Resource, SpaceResource } from '@ownclouders/web-client'
 import {
   ActionMenuItem,
@@ -44,63 +44,47 @@ import {
 import { useSpaceActionsUploadImage } from '../../../composables'
 import { useFileActionsDownloadArchive } from '@ownclouders/web-pkg'
 
-export default defineComponent({
-  name: 'SpaceActions',
-  components: { ActionMenuItem },
-  setup() {
-    const previewService = usePreviewService()
-    const resource = inject<Ref<SpaceResource>>('resource')
-    const actionOptions = computed((): SpaceActionOptions & FileActionOptions<Resource> => ({
-      space: undefined,
-      resources: [unref(resource)]
-    }))
+const previewService = usePreviewService()
+const resource = inject<Ref<SpaceResource>>('resource')
+const actionOptions = computed((): SpaceActionOptions & FileActionOptions<Resource> => ({
+  space: undefined,
+  resources: [unref(resource)]
+}))
 
-    const spaceImageInput: VNodeRef = ref(null)
-    const supportedSpaceImageMimeTypes = computed(() => {
-      return previewService.getSupportedMimeTypes('image/').join(',')
-    })
-
-    const { actions: deleteActions } = useSpaceActionsDelete()
-    const { actions: disableActions } = useSpaceActionsDisable()
-    const { actions: duplicateActions } = useSpaceActionsDuplicate()
-    const { actions: editDescriptionActions } = useSpaceActionsEditDescription()
-    const { actions: editQuotaActions } = useSpaceActionsEditQuota()
-    const { actions: editReadmeContentActions } = useSpaceActionsEditReadmeContent()
-    const { actions: renameActions } = useSpaceActionsRename()
-    const { actions: restoreActions } = useSpaceActionsRestore()
-    const { actions: uploadImageActions, uploadImageSpace } = useSpaceActionsUploadImage({
-      spaceImageInput
-    })
-    const { actions: setSpaceIconActions } = useSpaceActionsSetIcon()
-    const { actions: downloadArchiveActions } = useFileActionsDownloadArchive()
-
-    const actions = computed(() =>
-      [
-        ...unref(downloadArchiveActions),
-        ...unref(renameActions),
-        ...unref(duplicateActions),
-        ...unref(editDescriptionActions),
-        ...unref(uploadImageActions),
-        ...unref(setSpaceIconActions),
-        ...unref(editReadmeContentActions),
-        ...unref(editQuotaActions),
-        ...unref(restoreActions),
-        ...unref(deleteActions),
-        ...unref(disableActions)
-      ].filter((item) => item.isVisible(unref(actionOptions)))
-    )
-
-    return {
-      actions,
-      actionOptions,
-      spaceImageInput,
-      supportedSpaceImageMimeTypes,
-
-      uploadImageActions,
-      uploadImageSpace
-    }
-  }
+const spaceImageInput: VNodeRef = ref(null)
+const supportedSpaceImageMimeTypes = computed(() => {
+  return previewService.getSupportedMimeTypes('image/').join(',')
 })
+
+const { actions: deleteActions } = useSpaceActionsDelete()
+const { actions: disableActions } = useSpaceActionsDisable()
+const { actions: duplicateActions } = useSpaceActionsDuplicate()
+const { actions: editDescriptionActions } = useSpaceActionsEditDescription()
+const { actions: editQuotaActions } = useSpaceActionsEditQuota()
+const { actions: editReadmeContentActions } = useSpaceActionsEditReadmeContent()
+const { actions: renameActions } = useSpaceActionsRename()
+const { actions: restoreActions } = useSpaceActionsRestore()
+const { actions: uploadImageActions, uploadImageSpace } = useSpaceActionsUploadImage({
+  spaceImageInput
+})
+const { actions: setSpaceIconActions } = useSpaceActionsSetIcon()
+const { actions: downloadArchiveActions } = useFileActionsDownloadArchive()
+
+const actions = computed(() =>
+  [
+    ...unref(downloadArchiveActions),
+    ...unref(renameActions),
+    ...unref(duplicateActions),
+    ...unref(editDescriptionActions),
+    ...unref(uploadImageActions),
+    ...unref(setSpaceIconActions),
+    ...unref(editReadmeContentActions),
+    ...unref(editQuotaActions),
+    ...unref(restoreActions),
+    ...unref(deleteActions),
+    ...unref(disableActions)
+  ].filter((item) => item.isVisible(unref(actionOptions)))
+)
 </script>
 
 <style lang="scss">
