@@ -178,10 +178,7 @@ async function renderParagraph(
 
   for (const inlineToken of token.tokens) {
     if (inlineToken.type === 'image') {
-      console.log(inlineToken)
       const attrs = parseImageAttributes(inlineToken.text)
-
-      console.log(attrs.display)
 
       if (attrs.display === 'inline') {
         const imageWidth = attrs.width + PDF_THEME.math.inlineModePadding
@@ -193,8 +190,6 @@ async function renderParagraph(
 
         const imageResult = await embedImage(pdfDoc, inlineToken.href)
         const yOffset = (attrs.height - PDF_THEME.font.baseSize) / 2
-
-        console.log(attrs.width, attrs.height)
 
         page.drawImage(imageResult.image, {
           x: currentX,
@@ -324,7 +319,7 @@ async function renderCodeBlock(
       y: currentY,
       size: fontSize,
       font: await loadFont('mono'),
-      color: PDF_THEME.color.text
+      color: PDF_THEME.color.codeBlockText
     })
     currentY -= lineHeight
   }
