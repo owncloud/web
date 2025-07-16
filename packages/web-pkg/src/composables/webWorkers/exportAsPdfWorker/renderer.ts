@@ -1,5 +1,5 @@
 import { marked, Token, Tokens } from 'marked'
-import { PDFDocument, PDFPage } from 'pdf-lib'
+import { PDFDocument, PDFFont, PDFPage } from 'pdf-lib'
 import fontkit from '@pdf-lib/fontkit'
 import {
   extractTextFromTokens,
@@ -14,6 +14,9 @@ import {
   FontLoader
 } from './helpers'
 import { PDF_THEME } from './pdfConfig'
+import { markedExtensions } from './markedExtensions'
+
+marked.use({ extensions: markedExtensions })
 
 type RenderResult = {
   yPosition: number
@@ -88,15 +91,13 @@ async function renderImage(
  * @param page - The PDF page to render on
  * @param loadFont - Function to load and embed a font into the PDF document
  * @param yPosition - Current Y position on the page
- * @param margin - Left margin for positioning
  * @returns RenderResult with updated Y position and optional new page flag
  */
 async function renderHeading(
   token: Tokens.Heading,
   page: PDFPage,
   loadFont: FontLoader,
-  yPosition: number,
-  margin: number
+  yPosition: number
 ): Promise<RenderResult> {
   const fontSize = Math.max(
     PDF_THEME.font.headingBaseSize - token.depth * PDF_THEME.font.headingDepthMultiplier,
@@ -107,7 +108,7 @@ async function renderHeading(
     token.text,
     await loadFont('bold'),
     fontSize,
-    page.getWidth() - margin * 2
+    page.getWidth() - PDF_THEME.layout.margin * 2
   )
 
   let localY = yPosition - (fontSize + 10)
@@ -118,7 +119,7 @@ async function renderHeading(
 
   for (const line of lines) {
     page.drawText(line, {
-      x: margin,
+      x: PDF_THEME.layout.margin,
       y: localY,
       size: fontSize,
       font: await loadFont('bold'),
@@ -138,7 +139,6 @@ async function renderHeading(
  * @param pdfDoc - The PDF document for embedding images
  * @param loadFont - Function to load and embed a font into the PDF document
  * @param yPosition - Current Y position on the page
- * @param margin - Left margin for positioning
  * @param maxWidth - Maximum width available for rendering
  * @returns Promise resolving to RenderResult with updated Y position and optional new page flag
  */
@@ -148,10 +148,10 @@ async function renderParagraph(
   pdfDoc: PDFDocument,
   loadFont: FontLoader,
   yPosition: number,
-  margin: number,
   maxWidth: number
 ): Promise<RenderResult> {
   const lineHeight = PDF_THEME.font.lineHeight
+  const margin = PDF_THEME.layout.margin
 
   let localY = yPosition - PDF_THEME.spacing.beforeParagraph
   let currentX = margin
@@ -244,12 +244,15 @@ async function renderParagraph(
         const words = lineText.split(' ')
 
         for (const word of words) {
-          if (!word) continue
+          if (!word) {
+            continue
+          }
+
           const wordWithSpace = word + ' '
           const wordWidth = font.widthOfTextAtSize(wordWithSpace, fontSize)
 
-          if (currentX + wordWidth > margin + maxWidth && currentX > margin) {
-            if (wrapLine()) return { yPosition, needsNewPage: true }
+          if (currentX + wordWidth > margin + maxWidth && currentX > margin && wrapLine()) {
+            return { yPosition, needsNewPage: true }
           }
 
           page.drawText(wordWithSpace, {
@@ -259,11 +262,34 @@ async function renderParagraph(
             size: fontSize,
             color: segment.color || PDF_THEME.color.text
           })
+
+          if (segment.underline) {
+            const underlineY = localY + yOffset + PDF_THEME.underline.offset
+
+            page.drawLine({
+              start: { x: currentX, y: underlineY },
+              end: { x: currentX + wordWidth, y: underlineY },
+              thickness: PDF_THEME.underline.thickness,
+              color: segment.color || PDF_THEME.color.text
+            })
+          }
+
+          if (segment.strikeThrough) {
+            const strikeThroughY =
+              localY + yOffset + (fontSize / 2 - PDF_THEME.strikeThrough.thickness)
+
+            page.drawLine({
+              start: { x: currentX, y: strikeThroughY },
+              end: { x: currentX + wordWidth, y: strikeThroughY },
+              thickness: PDF_THEME.strikeThrough.thickness
+            })
+          }
+
           currentX += wordWidth
         }
 
-        if (lineIndex < textLines.length - 1) {
-          if (wrapLine()) return { yPosition, needsNewPage: true }
+        if (lineIndex < textLines.length - 1 && wrapLine()) {
+          return { yPosition, needsNewPage: true }
         }
       }
     }
@@ -279,7 +305,6 @@ async function renderParagraph(
  * @param page - The PDF page to render on
  * @param loadFont - Function to load and embed a font into the PDF document
  * @param yPosition - Current Y position on the page
- * @param margin - Left margin for positioning
  * @param maxWidth - Maximum width available for rendering
  * @returns RenderResult with updated Y position and optional new page flag
  */
@@ -288,12 +313,12 @@ async function renderCodeBlock(
   page: PDFPage,
   loadFont: FontLoader,
   yPosition: number,
-  margin: number,
   maxWidth: number
 ): Promise<RenderResult> {
   const fontSize = PDF_THEME.font.codeSize
   const lineHeight = PDF_THEME.font.codeLineHeight
   const padding = PDF_THEME.codeBlock.padding
+  const margin = PDF_THEME.layout.margin
 
   const lines = token.text.split('\n')
   const blockHeight = lines.length * lineHeight + padding * 2
@@ -335,7 +360,6 @@ async function renderCodeBlock(
  * @param pdfDoc - The PDF document for embedding images
  * @param loadFont - Function to load and embed a font into the PDF document
  * @param yPosition - Current Y position on the page
- * @param margin - Left margin for positioning
  * @param maxWidth - Maximum width available for rendering
  * @param level - Nesting level for indentation (default: 0)
  * @returns Promise resolving to RenderResult with updated Y position and optional new page flag
@@ -346,10 +370,10 @@ async function renderList(
   pdfDoc: PDFDocument,
   loadFont: FontLoader,
   yPosition: number,
-  margin: number,
   maxWidth: number,
   level = 0
 ): Promise<RenderResult> {
+  const margin = PDF_THEME.layout.margin
   const indent = margin + level * PDF_THEME.spacing.listItemIndent
   const bulletChar = token.ordered ? '1.' : '•'
   const lineHeight = PDF_THEME.font.listItemLineHeight
@@ -423,7 +447,6 @@ async function renderList(
             pdfDoc,
             loadFont,
             localY,
-            margin,
             maxWidth,
             level + 1
           )
@@ -448,7 +471,6 @@ async function renderList(
  * @param pdfDoc - The PDF document for embedding images
  * @param loadFont - Function to load and embed a font into the PDF document
  * @param yPosition - Current Y position on the page
- * @param margin - Left margin for positioning
  * @param maxWidth - Maximum width available for rendering
  * @returns Promise resolving to RenderResult with updated Y position and optional new page flag
  */
@@ -458,9 +480,9 @@ async function renderBlockquote(
   pdfDoc: PDFDocument,
   loadFont: FontLoader,
   yPosition: number,
-  margin: number,
   maxWidth: number
 ): Promise<RenderResult> {
+  const margin = PDF_THEME.layout.margin
   const quoteMargin = margin + PDF_THEME.spacing.listItemIndent
   const lineHeight = PDF_THEME.font.blockquoteLineHeight
   let localY = yPosition - PDF_THEME.spacing.blockquoteYDecrement
@@ -543,6 +565,80 @@ async function renderBlockquote(
   return { yPosition: localY - PDF_THEME.spacing.afterBlockquote }
 }
 
+function renderTableCell(
+  col: number,
+  text: string,
+  page: PDFPage,
+  font: PDFFont,
+  y: number,
+  colWidth: number,
+  rowHeight: number
+) {
+  const margin = PDF_THEME.layout.margin
+  const cellPadding = PDF_THEME.table.cellPadding
+  const cellX = margin + col * colWidth
+
+  page.drawRectangle({
+    x: cellX,
+    y: y - rowHeight,
+    width: colWidth,
+    height: rowHeight,
+    borderColor: PDF_THEME.color.tableBorder,
+    borderWidth: 1
+  })
+
+  // FIXME: the Y position is off
+  page.drawText(text, {
+    x: cellX + cellPadding,
+    y: y - cellPadding,
+    size: PDF_THEME.font.tableHeaderTextSize,
+    font,
+    color: PDF_THEME.color.text,
+    maxWidth: colWidth - cellPadding * 2,
+    lineHeight: PDF_THEME.font.tableHeaderLineHeight
+  })
+}
+
+async function renderTableHeader(
+  cells: Tokens.TableCell[],
+  page: PDFPage,
+  loadFont: FontLoader,
+  y: number,
+  colWidth: number
+): Promise<RenderResult> {
+  const cellPadding = PDF_THEME.table.cellPadding
+  const headerFont = await loadFont('bold')
+  const margin = PDF_THEME.layout.margin
+
+  const cellTexts = cells.map((cell) => extractTextFromTokens(cell.tokens).replace(/\n/g, ' '))
+  const cellLines = cellTexts.map((text) =>
+    splitTextToFit(text, headerFont, PDF_THEME.font.tableHeaderTextSize, colWidth - cellPadding * 2)
+  )
+
+  const rowHeight =
+    cellPadding * 2 +
+    cellLines.reduce((max, lines) => Math.max(max, lines.length), 0) *
+      PDF_THEME.font.tableHeaderLineHeight
+
+  if (y - rowHeight < PDF_THEME.layout.pageBottom) {
+    return { yPosition: y, needsNewPage: true }
+  }
+
+  page.drawRectangle({
+    x: margin,
+    y: y - rowHeight,
+    width: colWidth * cells.length,
+    height: rowHeight,
+    color: PDF_THEME.color.tableHeaderBg
+  })
+
+  for (let col = 0; col < cells.length; col++) {
+    renderTableCell(col, cellTexts.at(col), page, headerFont, y, colWidth, rowHeight)
+  }
+
+  return { yPosition: (y -= rowHeight) }
+}
+
 /**
  * Renders a table token to the PDF page with headers, borders, and cell content.
  *
@@ -550,7 +646,6 @@ async function renderBlockquote(
  * @param page - The PDF page to render on
  * @param loadFont - Function to load and embed a font into the PDF document
  * @param yPosition - Current Y position on the page
- * @param margin - Left margin for positioning
  * @param maxWidth - Maximum width available for rendering
  * @returns RenderResult with updated Y position and optional new page flag
  */
@@ -559,51 +654,26 @@ async function renderTable(
   page: PDFPage,
   loadFont: FontLoader,
   yPosition: number,
-  margin: number,
   maxWidth: number
 ): Promise<RenderResult> {
+  const margin = PDF_THEME.layout.margin
   const cellPadding = PDF_THEME.table.cellPadding
   const rowHeight = PDF_THEME.table.rowHeight
-  const tableHeight = (token.rows.length + 1) * rowHeight
-
-  if (yPosition - tableHeight < PDF_THEME.layout.pageBottom) {
-    return { yPosition, needsNewPage: true }
-  }
 
   const colWidth = maxWidth / token.header.length
   let localY = yPosition - PDF_THEME.spacing.tableYDecrement
 
-  for (let col = 0; col < token.header.length; col++) {
-    const cellX = margin + col * colWidth
+  const headerResult = await renderTableHeader(token.header, page, loadFont, localY, colWidth)
 
-    page.drawRectangle({
-      x: cellX,
-      y: localY - rowHeight,
-      width: colWidth,
-      height: rowHeight,
-      color: PDF_THEME.color.tableHeaderBg
-    })
-
-    const headerText = extractTextFromTokens(token.header[col].tokens).replace(/\n/g, ' ')
-    page.drawText(headerText, {
-      x: cellX + cellPadding,
-      y: localY - rowHeight + cellPadding,
-      size: PDF_THEME.font.tableHeaderTextSize,
-      font: await loadFont('bold'),
-      color: PDF_THEME.color.text
-    })
-
-    page.drawRectangle({
-      x: cellX,
-      y: localY - rowHeight,
-      width: colWidth,
-      height: rowHeight,
-      borderColor: PDF_THEME.color.tableBorder,
-      borderWidth: 1
-    })
+  if (headerResult.needsNewPage) {
+    return { yPosition, needsNewPage: true }
   }
 
-  localY -= rowHeight
+  localY = headerResult.yPosition
+
+  if (localY < PDF_THEME.layout.pageBottom) {
+    return { yPosition, needsNewPage: true }
+  }
 
   for (const row of token.rows) {
     for (let col = 0; col < row.length; col++) {
@@ -638,16 +708,12 @@ async function renderTable(
  *
  * @param page - The PDF page to render on
  * @param yPosition - Current Y position on the page
- * @param margin - Left margin for positioning
  * @param maxWidth - Maximum width available for rendering
  * @returns RenderResult with updated Y position and optional new page flag
  */
-function renderHorizontalRule(
-  page: PDFPage,
-  yPosition: number,
-  margin: number,
-  maxWidth: number
-): RenderResult {
+function renderHorizontalRule(page: PDFPage, yPosition: number, maxWidth: number): RenderResult {
+  const margin = PDF_THEME.layout.margin
+
   yPosition -= PDF_THEME.spacing.hrYDecrement
 
   page.drawLine({
@@ -672,7 +738,6 @@ function renderHorizontalRule(
  * @param pdfDoc - The PDF document for embedding images
  * @param loadFont - Function to load and embed a font into the PDF document
  * @param yPosition - Current Y position on the page
- * @param margin - Left margin for positioning
  * @param maxWidth - Maximum width available for rendering
  * @returns Promise resolving to RenderResult with updated Y position and optional new page flag, or RenderResult directly for synchronous operations
  */
@@ -682,26 +747,17 @@ export function renderToken(
   pdfDoc: PDFDocument,
   loadFont: FontLoader,
   yPosition: number,
-  margin: number,
   maxWidth: number
 ): Promise<RenderResult> | RenderResult {
   switch (token.type) {
     case 'heading':
-      return renderHeading(token as Tokens.Heading, page, loadFont, yPosition, margin)
+      return renderHeading(token as Tokens.Heading, page, loadFont, yPosition)
     case 'paragraph':
-      return renderParagraph(
-        token as Tokens.Paragraph,
-        page,
-        pdfDoc,
-        loadFont,
-        yPosition,
-        margin,
-        maxWidth
-      )
+      return renderParagraph(token as Tokens.Paragraph, page, pdfDoc, loadFont, yPosition, maxWidth)
     case 'code':
-      return renderCodeBlock(token as Tokens.Code, page, loadFont, yPosition, margin, maxWidth)
+      return renderCodeBlock(token as Tokens.Code, page, loadFont, yPosition, maxWidth)
     case 'list':
-      return renderList(token as Tokens.List, page, pdfDoc, loadFont, yPosition, margin, maxWidth)
+      return renderList(token as Tokens.List, page, pdfDoc, loadFont, yPosition, maxWidth)
     case 'blockquote':
       return renderBlockquote(
         token as Tokens.Blockquote,
@@ -709,13 +765,12 @@ export function renderToken(
         pdfDoc,
         loadFont,
         yPosition,
-        margin,
         maxWidth
       )
     case 'table':
-      return renderTable(token as Tokens.Table, page, loadFont, yPosition, margin, maxWidth)
+      return renderTable(token as Tokens.Table, page, loadFont, yPosition, maxWidth)
     case 'hr':
-      return renderHorizontalRule(page, yPosition, margin, maxWidth)
+      return renderHorizontalRule(page, yPosition, maxWidth)
     case 'space':
       return { yPosition: yPosition - PDF_THEME.spacing.forSpaceToken }
     default:
@@ -749,15 +804,15 @@ export async function convertMarkdownToPdf(markdownText: string): Promise<ArrayB
   let yPosition = pageHeight - margin
   const maxWidth = page.getWidth() - margin * 2
 
-  const tokens = marked.lexer(sanitizedMarkdown, { breaks: true })
+  const tokens = marked.lexer(sanitizedMarkdown)
 
   for (const token of tokens) {
-    let result = await renderToken(token, page, pdfDoc, loadFont, yPosition, margin, maxWidth)
+    let result = await renderToken(token, page, pdfDoc, loadFont, yPosition, maxWidth)
 
     if (result.needsNewPage) {
       page = pdfDoc.addPage()
       yPosition = pageHeight - margin
-      result = await renderToken(token, page, pdfDoc, loadFont, yPosition, margin, maxWidth)
+      result = await renderToken(token, page, pdfDoc, loadFont, yPosition, maxWidth)
     }
 
     yPosition = result.yPosition

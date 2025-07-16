@@ -18,6 +18,7 @@ export const PDF_THEME = Object.freeze({
     listItemLineHeight: 16,
     blockquoteLineHeight: 16,
     tableHeaderTextSize: 11,
+    tableHeaderLineHeight: 14,
     tableCellTextSize: 10,
     imageTitleSize: 10
   },
@@ -81,5 +82,12 @@ export const PDF_THEME = Object.freeze({
   },
   svg: {
     scaleFactor: 3
+  },
+  underline: {
+    thickness: 1,
+    offset: -3
+  },
+  strikeThrough: {
+    thickness: 1
   }
 } as const)

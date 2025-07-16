@@ -10,6 +10,8 @@ export type TextSegment = {
   subscript: boolean
   superscript: boolean
   color?: any
+  underline: boolean
+  strikeThrough: boolean
 }
 
 /**
@@ -24,7 +26,7 @@ export type TextSegment = {
  * @param maxWidth - The maximum width in points that each line should not exceed
  * @returns Array of text lines that fit within the specified width
  */
-export function splitTextToFit(text: string, font: any, fontSize: number, maxWidth: number) {
+export function splitTextToFit(text: string, font: PDFFont, fontSize: number, maxWidth: number) {
   const words = text.split(' ')
   const lines: string[] = []
   let currentLine = ''
@@ -228,7 +230,9 @@ export function parseInlineTokens(tokens: Token[]): TextSegment[] {
           italic: false,
           code: false,
           subscript: false,
-          superscript: false
+          superscript: false,
+          underline: false,
+          strikeThrough: false
         })
         break
       case 'strong':
@@ -238,7 +242,9 @@ export function parseInlineTokens(tokens: Token[]): TextSegment[] {
           italic: false,
           code: false,
           subscript: false,
-          superscript: false
+          superscript: false,
+          underline: false,
+          strikeThrough: false
         })
         break
       case 'em':
@@ -248,7 +254,9 @@ export function parseInlineTokens(tokens: Token[]): TextSegment[] {
           italic: true,
           code: false,
           subscript: false,
-          superscript: false
+          superscript: false,
+          underline: false,
+          strikeThrough: false
         })
         break
       case 'codespan':
@@ -259,7 +267,9 @@ export function parseInlineTokens(tokens: Token[]): TextSegment[] {
           code: true,
           subscript: false,
           superscript: false,
-          color: PDF_THEME.color.codeSpan
+          color: PDF_THEME.color.codeSpan,
+          underline: false,
+          strikeThrough: false
         })
         break
       case 'sub':
@@ -269,7 +279,9 @@ export function parseInlineTokens(tokens: Token[]): TextSegment[] {
           italic: false,
           code: false,
           subscript: true,
-          superscript: false
+          superscript: false,
+          underline: false,
+          strikeThrough: false
         })
         break
       case 'sup':
@@ -279,7 +291,9 @@ export function parseInlineTokens(tokens: Token[]): TextSegment[] {
           italic: false,
           code: false,
           subscript: false,
-          superscript: true
+          superscript: true,
+          underline: false,
+          strikeThrough: false
         })
         break
       case 'link':
@@ -290,7 +304,33 @@ export function parseInlineTokens(tokens: Token[]): TextSegment[] {
           code: false,
           subscript: false,
           superscript: false,
-          color: PDF_THEME.color.link
+          color: PDF_THEME.color.link,
+          underline: false,
+          strikeThrough: false
+        })
+        break
+      case 'u':
+        segments.push({
+          text: token.text,
+          bold: false,
+          italic: false,
+          code: false,
+          subscript: false,
+          superscript: false,
+          underline: true,
+          strikeThrough: false
+        })
+        break
+      case 'del':
+        segments.push({
+          text: token.text,
+          bold: false,
+          italic: false,
+          code: false,
+          subscript: false,
+          superscript: false,
+          underline: false,
+          strikeThrough: true
         })
         break
       default:
@@ -301,7 +341,9 @@ export function parseInlineTokens(tokens: Token[]): TextSegment[] {
             italic: false,
             code: false,
             subscript: false,
-            superscript: false
+            superscript: false,
+            underline: false,
+            strikeThrough: false
           })
         }
     }
