@@ -97,17 +97,15 @@
   </div>
 </template>
 
-<script lang="ts">
+<script lang="ts" setup>
 import {
   ResourceTable,
-  useCapabilityStore,
-  useConfigStore,
   useFileActions,
   useFileActionsToggleHideShare,
   useLoadPreview,
-  useResourcesStore
+  type GroupingSettings
 } from '@ownclouders/web-pkg'
-import { computed, defineComponent, PropType, unref } from 'vue'
+import { computed, unref, ref } from 'vue'
 import { SortDir, useGetMatchingSpace } from '@ownclouders/web-pkg'
 import { createLocationSpaces } from '@ownclouders/web-pkg'
 import ListInfo from '../../components/FilesList/ListInfo.vue'
@@ -118,146 +116,84 @@ import { useSelectedResources } from '@ownclouders/web-pkg'
 import { RouteLocationNamedRaw } from 'vue-router'
 import { CreateTargetRouteOptions } from '@ownclouders/web-pkg'
 import { createFileRouteOptions } from '@ownclouders/web-pkg'
+import { useGettext } from 'vue3-gettext'
 
-export default defineComponent({
-  components: {
-    ResourceTable,
-    ContextActions,
-    ListInfo,
-    NoContentMessage
-  },
+type SortHandlerParams = {
+  sortBy: string
+  sortDir: SortDir
+}
 
-  props: {
-    title: {
-      type: String,
-      required: true
-    },
-    emptyMessage: {
-      type: String,
-      required: false,
-      default: ''
-    },
-    items: {
-      type: Array as PropType<IncomingShareResource[]>,
-      required: true
-    },
-    sortBy: {
-      type: String,
-      required: false,
-      default: undefined
-    },
-    sortDir: {
-      type: String as PropType<SortDir>,
-      required: false,
-      default: undefined,
-      validator: (value: string) => {
-        return (
-          value === undefined || [SortDir.Asc.toString(), SortDir.Desc.toString()].includes(value)
-        )
-      }
-    },
-    sortHandler: {
-      type: Function as PropType<any>,
-      required: true
-    },
-    showMoreToggle: {
-      type: Boolean,
-      default: false
-    },
-    showMoreToggleCount: {
-      type: Number,
-      default: 3
-    },
-    resourceClickable: {
-      type: Boolean,
-      default: true
-    },
-    isSideBarOpen: {
-      type: Boolean,
-      default: false
-    },
-    fileListHeaderY: {
-      type: Number,
-      default: 0
-    },
-    /**
-     * This is only relevant for CERN and can be ignored in any other cases.
-     */
-    groupingSettings: {
-      type: Object,
-      required: false,
-      default: null
-    }
-  },
-  setup() {
-    const capabilityStore = useCapabilityStore()
-    const configStore = useConfigStore()
-    const { getMatchingSpace } = useGetMatchingSpace()
-    const { loadPreview } = useLoadPreview()
+interface Props {
+  title: string
+  emptyMessage?: string
+  items: IncomingShareResource[]
+  sortBy?: string
+  sortDir?: SortDir
+  sortHandler: (params: SortHandlerParams) => void
+  showMoreToggle?: boolean
+  showMoreToggleCount?: number
+  resourceClickable?: boolean
+  isSideBarOpen?: boolean
+  fileListHeaderY?: number
+  groupingSettings?: GroupingSettings
+}
+const {
+  title,
+  emptyMessage = '',
+  items,
+  sortBy = undefined,
+  sortDir = undefined,
+  sortHandler,
+  showMoreToggle = false,
+  showMoreToggleCount = 3,
+  resourceClickable = true,
+  isSideBarOpen = false,
+  fileListHeaderY = 0,
+  groupingSettings = null
+} = defineProps<Props>()
 
-    const { triggerDefaultAction } = useFileActions()
-    const { actions: hideShareActions } = useFileActionsToggleHideShare()
-    const hideShareAction = computed(() => unref(hideShareActions)[0])
+const { $gettext } = useGettext()
+const { getMatchingSpace } = useGetMatchingSpace()
+const { loadPreview } = useLoadPreview()
+const showMore = ref(false)
+const { selectedResourcesIds, isResourceInSelection, selectedResources } = useSelectedResources()
 
-    const { updateResourceField } = useResourcesStore()
+const { triggerDefaultAction } = useFileActions()
+const { actions: hideShareActions } = useFileActionsToggleHideShare()
+const hideShareAction = computed(() => unref(hideShareActions)[0])
 
-    const isExternalShare = (resource: IncomingShareResource) => {
-      return resource.shareTypes.includes(ShareTypes.remote.value)
-    }
+const isExternalShare = (resource: IncomingShareResource) => {
+  return resource.shareTypes.includes(ShareTypes.remote.value)
+}
 
-    const resourceTargetRouteCallback = ({
-      path,
-      fileId,
-      resource
-    }: CreateTargetRouteOptions): RouteLocationNamedRaw => {
-      return createLocationSpaces(
-        'files-spaces-generic',
-        createFileRouteOptions(getMatchingSpace(resource), { path, fileId })
-      )
-    }
-
-    return {
-      capabilityStore,
-      configStore,
-      triggerDefaultAction,
-      hideShareAction,
-      resourceTargetRouteCallback,
-      ...useSelectedResources(),
-      getMatchingSpace,
-      updateResourceField,
-      isExternalShare,
-      ShareTypes,
-      loadPreview
-    }
-  },
-
-  data: () => ({
-    showMore: false
-  }),
-
-  computed: {
-    displayedFields() {
-      return ['name', 'syncEnabled', 'sharedBy', 'sdate', 'sharedWith']
-    },
-    toggleMoreLabel() {
-      return this.showMore ? this.$gettext('Show less') : this.$gettext('Show more')
-    },
-    hasMore() {
-      return this.items.length > this.showMoreToggleCount
-    },
-    resourceItems() {
-      if (!this.showMoreToggle || this.showMore) {
-        return this.items
-      }
-      return this.items.slice(0, this.showMoreToggleCount)
-    }
-  },
-  methods: {
-    toggleShowMore() {
-      this.showMore = !this.showMore
-    }
-  }
+const resourceTargetRouteCallback = ({
+  path,
+  fileId,
+  resource
+}: CreateTargetRouteOptions): RouteLocationNamedRaw => {
+  return createLocationSpaces(
+    'files-spaces-generic',
+    createFileRouteOptions(getMatchingSpace(resource), { path, fileId })
+  )
+}
+const displayedFields = computed(() => {
+  return ['name', 'syncEnabled', 'sharedBy', 'sdate', 'sharedWith']
 })
+const toggleMoreLabel = computed(() => {
+  return unref(showMore) ? $gettext('Show less') : $gettext('Show more')
+})
+const hasMore = computed(() => {
+  return items.length > showMoreToggleCount
+})
+const resourceItems = computed(() => {
+  if (!showMoreToggle || unref(showMore)) {
+    return items
+  }
+  return items.slice(0, showMoreToggleCount)
+})
+function toggleShowMore() {
+  showMore.value = !unref(showMore)
+}
 </script>
 
 <style lang="scss" scoped>

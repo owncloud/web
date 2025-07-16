@@ -1,6 +1,17 @@
 import { IncomingShareResource } from '@ownclouders/web-client'
 import { computed, Ref, unref } from 'vue'
 
+export interface GroupingSettings {
+  groupingBy: string
+  showGroupingOptions: boolean
+  groupingFunctions: {
+    [key: string]: (row: IncomingShareResource) => string | void
+  }
+  sortGroups: {
+    [key: string]: (groups: { name: string }[]) => { name: string }[]
+  }
+}
+
 export const useGroupingSettings = ({
   sortBy,
   sortDir
