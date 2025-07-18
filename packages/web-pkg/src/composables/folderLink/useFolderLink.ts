@@ -23,6 +23,9 @@ export const useFolderLink = (options: ResourceRouteResolverOptions = {}) => {
     const space = unref(options.space) || getMatchingSpace(resource)
 
     if (isProjectSpaceResource(space)) {
+      if (resource.path === '.') {
+        return $gettext('Spaces')
+      }
       return path.join($gettext('Spaces'), space.name)
     }
 
@@ -53,6 +56,9 @@ export const useFolderLink = (options: ResourceRouteResolverOptions = {}) => {
     if (isProjectSpaceResource(resource)) {
       return createLocationSpaces('files-spaces-projects')
     }
+    if (resource.path === '.') {
+      return createLocationSpaces('files-spaces-projects')
+    }
 
     return createFolderLink({
       path: dirname(resource.path),
@@ -76,6 +82,9 @@ export const useFolderLink = (options: ResourceRouteResolverOptions = {}) => {
     }
     const parentFolder = extractParentFolderName(resource)
     if (parentFolder) {
+      if (resource.path === '.' && parentFolder === '.') {
+        return $gettext('Spaces')
+      }
       return parentFolder
     }
 

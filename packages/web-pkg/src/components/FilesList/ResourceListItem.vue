@@ -39,7 +39,6 @@
         <resource-name
           :key="resource.name"
           :name="resource.name"
-          :path-prefix="pathPrefix"
           :extension="resource.extension"
           :type="resource.type"
           :full-path="resource.path"
@@ -53,6 +52,7 @@
         <component
           :is="parentFolderComponentType"
           v-if="isPathDisplayed"
+          v-oc-tooltip="parentFolderPathTooltip"
           :to="parentFolderLink"
           :style="parentFolderStyle"
           class="parent-folder oc-text-truncate"
@@ -64,162 +64,121 @@
     </div>
   </div>
 </template>
-<script lang="ts">
-import { defineComponent, PropType } from 'vue'
+<script lang="ts" setup>
+import { computed } from 'vue'
+import { useGettext } from 'vue3-gettext'
 import { Resource } from '@ownclouders/web-client'
 import ResourceIcon from './ResourceIcon.vue'
 import ResourceLink from './ResourceLink.vue'
 import ResourceName from './ResourceName.vue'
 import { RouteLocationRaw } from 'vue-router'
 import { HIDDEN_FILE_EXTENSIONS } from '../../constants'
+import { dirname, join } from 'node:path'
+
+interface Props {
+  resource: Resource
+  pathPrefix?: string
+  link?: RouteLocationRaw | null
+  isPathDisplayed?: boolean
+  parentFolderLink?: RouteLocationRaw | null
+  parentFolderName?: string
+  parentFolderLinkIconAdditionalAttributes?: Record<string, any>
+  isExtensionDisplayed?: boolean
+  isThumbnailDisplayed?: boolean
+  isIconDisplayed?: boolean
+  isResourceClickable?: boolean
+}
+
+interface Emits {
+  (e: 'click'): void
+}
+const {
+  resource,
+  pathPrefix = '',
+  link = null,
+  isPathDisplayed = false,
+  parentFolderLink = null,
+  parentFolderName = '',
+  parentFolderLinkIconAdditionalAttributes = {},
+  isExtensionDisplayed = true,
+  isThumbnailDisplayed = true,
+  isIconDisplayed = true,
+  isResourceClickable = true
+} = defineProps<Props>()
+
+const emit = defineEmits<Emits>()
+const { $gettext } = useGettext()
+const HIDDEN_EXTENSIONS = HIDDEN_FILE_EXTENSIONS
+
 /**
- * Displays a resource together with the resource type icon or thumbnail
+ * Checks if a path has a valid second segment after splitting by '/'.
+ * Used for tooltip display - if true, shows "segment1 > segment2 > ...",
+ * otherwise just shows "segment1" without trailing ">".
+ *
+ * @param {string} value - The path to check
+ * @returns {boolean} - True if path has a valid second segment, false otherwise
  */
-export default defineComponent({
-  name: 'ResourceListItem',
-  components: { ResourceIcon, ResourceLink, ResourceName },
-  props: {
-    /**
-     * The resource to be displayed
-     */
-    resource: {
-      type: Object as PropType<Resource>,
-      required: true
-    },
-    /**
-     * The prefix that will be shown in the path
-     */
-    pathPrefix: {
-      type: String,
-      required: false,
-      default: ''
-    },
-    /**
-     * The resource link
-     */
-    link: {
-      type: Object as PropType<RouteLocationRaw>,
-      required: false,
-      default: null
-    },
-    /**
-     * Asserts whether the resource path should be displayed
-     */
-    isPathDisplayed: {
-      type: Boolean,
-      required: false,
-      default: false
-    },
-    /**
-     * The resource parent folder link path
-     */
-    parentFolderLink: {
-      type: Object,
-      required: false,
-      default: null
-    },
-    /**
-     * The resource parent folder name to be displayed
-     */
-    parentFolderName: {
-      type: String,
-      required: false,
-      default: ''
-    },
-    /**
-     * The resource parent folder link path icon additional attributes
-     */
-    parentFolderLinkIconAdditionalAttributes: {
-      type: Object,
-      required: false,
-      default: () => ({})
-    },
-    /**
-     * Asserts whether the resource extension should be displayed
-     */
-    isExtensionDisplayed: {
-      type: Boolean,
-      required: false,
-      default: true
-    },
-    /**
-     * Asserts whether the resource thumbnail should be displayed
-     */
-    isThumbnailDisplayed: {
-      type: Boolean,
-      required: false,
-      default: true
-    },
-    /**
-     * Asserts whether the resource thumbnail should be displayed
-     */
-    isIconDisplayed: {
-      type: Boolean,
-      required: false,
-      default: true
-    },
-    /**
-     * Asserts whether clicking on the resource name triggers any action
-     */
-    isResourceClickable: {
-      type: Boolean,
-      required: false,
-      default: true
-    }
-  },
-  emits: ['click'],
 
-  setup() {
-    return { HIDDEN_EXTENSIONS: HIDDEN_FILE_EXTENSIONS }
-  },
+function splitPathHasSecondSegment(value: string): boolean {
+  const result = value.split('/')
+  return result?.length > 1 && result[1].length > 0
+}
 
-  computed: {
-    parentFolderComponentType() {
-      return this.parentFolderLink ? 'router-link' : 'span'
-    },
+function emitClick() {
+  /**
+   * Triggered when the resource is a file and the name is clicked
+   */
+  emit('click')
+}
 
-    parentFolderStyle() {
-      return {
-        cursor: this.parentFolderLink ? 'pointer' : 'default'
-      }
-    },
-
-    parentFolderLinkIconAttrs() {
-      return {
-        'fill-type': 'line',
-        name: 'folder-2',
-        size: 'small',
-        ...this.parentFolderLinkIconAdditionalAttributes
-      }
-    },
-
-    hasThumbnail() {
-      return (
-        this.isThumbnailDisplayed &&
-        Object.prototype.hasOwnProperty.call(this.resource, 'thumbnail')
-      )
-    },
-
-    thumbnail() {
-      return this.resource.thumbnail
-    },
-
-    tooltipLabelIcon() {
-      if (this.resource.locked) {
-        return this.$gettext('This item is locked')
-      }
-      return null
-    }
-  },
-
-  methods: {
-    emitClick() {
-      /**
-       * Triggered when the resource is a file and the name is clicked
-       */
-      this.$emit('click')
-    }
+const parentFolderPathTooltip = computed(() => {
+  if (!isPathDisplayed) {
+    return null
   }
+
+  const parentFolderPath = dirname(resource.path)
+
+  if (pathPrefix) {
+    if (splitPathHasSecondSegment(parentFolderPath)) {
+      return join(pathPrefix, parentFolderPath).replaceAll('/', ' > ')
+    }
+    return pathPrefix.replace('/', ' > ')
+  }
+
+  return parentFolderPath.replaceAll('/', ' > ')
+})
+const parentFolderComponentType = computed(() => {
+  return parentFolderLink ? 'router-link' : 'span'
+})
+
+const parentFolderStyle = computed(() => {
+  return {
+    cursor: parentFolderLink ? 'pointer' : 'default'
+  }
+})
+
+const parentFolderLinkIconAttrs = computed(() => {
+  return {
+    'fill-type': 'line',
+    name: 'folder-2',
+    size: 'small',
+    ...parentFolderLinkIconAdditionalAttributes
+  }
+})
+
+const hasThumbnail = computed(() => {
+  return isThumbnailDisplayed && Object.prototype.hasOwnProperty.call(resource, 'thumbnail')
+})
+
+const thumbnail = computed(() => {
+  return resource.thumbnail
+})
+
+const tooltipLabelIcon = computed(() => {
+  if (resource.locked) {
+    return $gettext('This item is locked')
+  }
+  return null
 })
 </script>
 
