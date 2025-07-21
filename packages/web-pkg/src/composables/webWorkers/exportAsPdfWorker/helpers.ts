@@ -205,6 +205,7 @@ export function sanitizeText(text: string): string {
     .replaceAll('—', '--')
     .replaceAll('–', '-')
     .replaceAll(' ', ' ')
+    .replaceAll('‑', '-')
 }
 
 /**
