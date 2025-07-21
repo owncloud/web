@@ -577,6 +577,8 @@ function renderTableCell(
   const margin = PDF_THEME.layout.margin
   const cellPadding = PDF_THEME.table.cellPadding
   const cellX = margin + col * colWidth
+  const lineHeight = PDF_THEME.font.tableHeaderLineHeight
+  const fontSize = PDF_THEME.font.tableHeaderTextSize
 
   page.drawRectangle({
     x: cellX,
@@ -587,15 +589,14 @@ function renderTableCell(
     borderWidth: 1
   })
 
-  // FIXME: the Y position is off
   page.drawText(text, {
     x: cellX + cellPadding,
-    y: y - cellPadding,
-    size: PDF_THEME.font.tableHeaderTextSize,
+    y: y - cellPadding - fontSize,
+    size: fontSize,
     font,
     color: PDF_THEME.color.text,
     maxWidth: colWidth - cellPadding * 2,
-    lineHeight: PDF_THEME.font.tableHeaderLineHeight
+    lineHeight
   })
 }
 
