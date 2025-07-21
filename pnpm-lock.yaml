@@ -961,6 +961,9 @@ importers:
       dompurify:
         specifier: ^3.2.3
         version: 3.2.6
+      emoji-regex:
+        specifier: ^10.4.0
+        version: 10.4.0
       filesize:
         specifier: ^10.1.0
         version: 10.1.6

@@ -1,5 +1,6 @@
 import { Token, Tokens } from 'marked'
 import { PDFDocument, PDFFont, PDFImage, RGB } from 'pdf-lib'
+import emojiRegex from 'emoji-regex'
 import { PDF_THEME } from './pdfConfig'
 
 export type TextSegment = {
@@ -206,6 +207,7 @@ export function sanitizeText(text: string): string {
     .replaceAll('–', '-')
     .replaceAll(' ', ' ')
     .replaceAll('‑', '-')
+    .replace(emojiRegex(), '')
 }
 
 /**
