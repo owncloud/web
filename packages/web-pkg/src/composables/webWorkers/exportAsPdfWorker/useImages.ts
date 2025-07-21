@@ -22,7 +22,7 @@ function convertImageToDataURL(imageUrl: string): Promise<string> {
     }
 
     img.onerror = (err) => {
-      reject(new Error(`Failed to load image: ${err}`))
+      reject(err)
     }
 
     img.src = imageUrl
