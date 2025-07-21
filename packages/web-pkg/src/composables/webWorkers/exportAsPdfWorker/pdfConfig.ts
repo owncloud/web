@@ -20,6 +20,7 @@ export const PDF_THEME = Object.freeze({
     tableHeaderTextSize: 11,
     tableHeaderLineHeight: 14,
     tableCellTextSize: 10,
+    tableCellLineHeight: 14,
     imageTitleSize: 10
   },
   offset: {
@@ -37,6 +38,7 @@ export const PDF_THEME = Object.freeze({
     blockquoteText: rgb(0.3, 0.3, 0.3),
     tableHeaderBg: rgb(0.9, 0.9, 0.9),
     tableBorder: rgb(0.5, 0.5, 0.5),
+    tableCellBg: rgb(1, 1, 1),
     hr: rgb(0.5, 0.5, 0.5),
     imagePlaceholder: rgb(0.5, 0.5, 0.5)
   },

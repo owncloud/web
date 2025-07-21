@@ -1,5 +1,5 @@
 import { marked, Token, Tokens } from 'marked'
-import { PDFDocument, PDFFont, PDFPage } from 'pdf-lib'
+import { PDFDocument, PDFFont, PDFPage, RGB } from 'pdf-lib'
 import fontkit from '@pdf-lib/fontkit'
 import {
   extractTextFromTokens,
@@ -570,6 +570,8 @@ function renderTableCell(
   text: string,
   page: PDFPage,
   font: PDFFont,
+  fontSize: number,
+  lineHeight: number,
   y: number,
   colWidth: number,
   rowHeight: number
@@ -577,8 +579,6 @@ function renderTableCell(
   const margin = PDF_THEME.layout.margin
   const cellPadding = PDF_THEME.table.cellPadding
   const cellX = margin + col * colWidth
-  const lineHeight = PDF_THEME.font.tableHeaderLineHeight
-  const fontSize = PDF_THEME.font.tableHeaderTextSize
 
   page.drawRectangle({
     x: cellX,
@@ -600,20 +600,22 @@ function renderTableCell(
   })
 }
 
-async function renderTableHeader(
+function renderTableRow(
   cells: Tokens.TableCell[],
   page: PDFPage,
-  loadFont: FontLoader,
+  font: PDFFont,
+  fontSize: number,
+  lineHeight: number,
+  backgroundColor: RGB,
   y: number,
   colWidth: number
-): Promise<RenderResult> {
+): RenderResult {
   const cellPadding = PDF_THEME.table.cellPadding
-  const headerFont = await loadFont('bold')
   const margin = PDF_THEME.layout.margin
 
   const cellTexts = cells.map((cell) => extractTextFromTokens(cell.tokens).replace(/\n/g, ' '))
   const cellLines = cellTexts.map((text) =>
-    splitTextToFit(text, headerFont, PDF_THEME.font.tableHeaderTextSize, colWidth - cellPadding * 2)
+    splitTextToFit(text, font, fontSize, colWidth - cellPadding * 2)
   )
 
   const rowHeight =
@@ -630,11 +632,21 @@ async function renderTableHeader(
     y: y - rowHeight,
     width: colWidth * cells.length,
     height: rowHeight,
-    color: PDF_THEME.color.tableHeaderBg
+    color: backgroundColor
   })
 
   for (let col = 0; col < cells.length; col++) {
-    renderTableCell(col, cellTexts.at(col), page, headerFont, y, colWidth, rowHeight)
+    renderTableCell(
+      col,
+      cellTexts.at(col),
+      page,
+      font,
+      fontSize,
+      lineHeight,
+      y,
+      colWidth,
+      rowHeight
+    )
   }
 
   return { yPosition: (y -= rowHeight) }
@@ -657,14 +669,23 @@ async function renderTable(
   yPosition: number,
   maxWidth: number
 ): Promise<RenderResult> {
-  const margin = PDF_THEME.layout.margin
-  const cellPadding = PDF_THEME.table.cellPadding
-  const rowHeight = PDF_THEME.table.rowHeight
-
+  const headerFont = await loadFont('bold')
+  const headerFontSize = PDF_THEME.font.tableHeaderTextSize
+  const headerLineHeight = PDF_THEME.font.tableHeaderLineHeight
   const colWidth = maxWidth / token.header.length
+
   let localY = yPosition - PDF_THEME.spacing.tableYDecrement
 
-  const headerResult = await renderTableHeader(token.header, page, loadFont, localY, colWidth)
+  const headerResult = renderTableRow(
+    token.header,
+    page,
+    headerFont,
+    headerFontSize,
+    headerLineHeight,
+    PDF_THEME.color.tableHeaderBg,
+    localY,
+    colWidth
+  )
 
   if (headerResult.needsNewPage) {
     return { yPosition, needsNewPage: true }
@@ -676,29 +697,27 @@ async function renderTable(
     return { yPosition, needsNewPage: true }
   }
 
+  const rowFont = await loadFont('regular')
+  const rowFontSize = PDF_THEME.font.tableCellTextSize
+  const rowLineHeight = PDF_THEME.font.tableCellLineHeight
+
   for (const row of token.rows) {
-    for (let col = 0; col < row.length; col++) {
-      const cellX = margin + col * colWidth
+    const rowResult = renderTableRow(
+      row,
+      page,
+      rowFont,
+      rowFontSize,
+      rowLineHeight,
+      PDF_THEME.color.tableCellBg,
+      localY,
+      colWidth
+    )
 
-      const cellText = extractTextFromTokens(row[col].tokens).replace(/\n/g, ' ')
-      page.drawText(cellText, {
-        x: cellX + cellPadding,
-        y: localY - rowHeight + cellPadding,
-        size: PDF_THEME.font.tableCellTextSize,
-        font: await loadFont('regular'),
-        color: PDF_THEME.color.text
-      })
-
-      page.drawRectangle({
-        x: cellX,
-        y: localY - rowHeight,
-        width: colWidth,
-        height: rowHeight,
-        borderColor: PDF_THEME.color.tableBorder,
-        borderWidth: 1
-      })
+    if (rowResult.needsNewPage) {
+      return { yPosition, needsNewPage: true }
     }
-    localY -= rowHeight
+
+    localY = rowResult.yPosition
   }
 
   return { yPosition: localY - PDF_THEME.spacing.afterTable }
