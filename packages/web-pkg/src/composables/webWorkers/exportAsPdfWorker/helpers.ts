@@ -453,7 +453,6 @@ export function parseImageAttributes(title: string | null | undefined): ImageAtt
 
     switch (key) {
       case 'd':
-        console.log('d', value)
         if (value === 'inline') {
           result.display = 'inline'
         }

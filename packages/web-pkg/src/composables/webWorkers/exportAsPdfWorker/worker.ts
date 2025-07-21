@@ -3,7 +3,7 @@ import { webdav, HttpError, Resource, SpaceResource, urlJoin } from '@ownclouder
 
 import { WorkerTopic } from '../../piniaStores/webWorkers'
 import { resolveFileNameDuplicate } from '../../../helpers/resource/conflictHandling/conflictUtils'
-import { convertMarkdownToPdf } from './renderer'
+import { PDFRenderer } from './renderer'
 
 type MessageData = {
   accessToken?: string
@@ -62,10 +62,13 @@ self.onmessage = async (event: MessageEvent) => {
       fileName = resolveFileNameDuplicate(fileName, 'pdf', existingResources)
     }
 
+    const renderer = new PDFRenderer(content)
+    const pdf = await renderer.renderAsArrayBuffer()
+
     const resource = await webdavService.putFileContents(space, {
       fileName,
       parentFolderId: destinationFolder.id,
-      content: await convertMarkdownToPdf(content),
+      content: pdf,
       path: urlJoin(destinationFolder.path, fileName)
     })
 
