@@ -701,7 +701,8 @@ async function renderTable(
   const rowFontSize = PDF_THEME.font.tableCellTextSize
   const rowLineHeight = PDF_THEME.font.tableCellLineHeight
 
-  for (const row of token.rows) {
+  for (let i = 0; i < token.rows.length; i++) {
+    const row = token.rows[i]
     const rowResult = renderTableRow(
       row,
       page,
@@ -714,6 +715,7 @@ async function renderTable(
     )
 
     if (rowResult.needsNewPage) {
+      token.rows = token.rows.slice(i)
       return { yPosition, needsNewPage: true }
     }
 
