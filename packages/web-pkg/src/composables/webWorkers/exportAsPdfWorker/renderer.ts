@@ -99,11 +99,10 @@ async function renderHeading(
   loadFont: FontLoader,
   yPosition: number
 ): Promise<RenderResult> {
-  const fontSize = Math.max(
-    PDF_THEME.font.headingBaseSize - token.depth * PDF_THEME.font.headingDepthMultiplier,
-    PDF_THEME.font.headingMinSize
-  )
-  const lineHeight = fontSize + 2
+  const fontSize = PDF_THEME.font[`h${token.depth}`]
+  const marginBottom = PDF_THEME.spacing[`afterH${token.depth}`]
+  const lineHeight = fontSize * 1.4
+
   const lines = splitTextToFit(
     token.text,
     await loadFont('bold'),
@@ -111,9 +110,9 @@ async function renderHeading(
     page.getWidth() - PDF_THEME.layout.margin * 2
   )
 
-  let localY = yPosition - (fontSize + 10)
+  let localY = yPosition - fontSize
 
-  if (yPosition - (fontSize + 10) - lines.length * lineHeight < PDF_THEME.layout.pageBottom) {
+  if (yPosition - fontSize - lines.length * lineHeight < PDF_THEME.layout.pageBottom) {
     return { yPosition, needsNewPage: true }
   }
 
@@ -128,7 +127,7 @@ async function renderHeading(
     localY -= lineHeight
   }
 
-  return { yPosition: localY - PDF_THEME.spacing.afterHeading }
+  return { yPosition: localY - marginBottom }
 }
 
 /**

@@ -9,9 +9,6 @@ export const PDF_THEME = Object.freeze({
     baseSize: 12,
     lineHeight: 16,
     subSupSize: 9,
-    headingBaseSize: 24,
-    headingDepthMultiplier: 2,
-    headingMinSize: 14,
     codeSize: 10,
     codeLineHeight: 14,
     listBulletSize: 12,
@@ -21,7 +18,13 @@ export const PDF_THEME = Object.freeze({
     tableHeaderLineHeight: 14,
     tableCellTextSize: 10,
     tableCellLineHeight: 14,
-    imageTitleSize: 10
+    imageTitleSize: 10,
+    h1: 24,
+    h2: 18,
+    h3: 15,
+    h4: 12,
+    h5: 10.5,
+    h6: 10.2
   },
   offset: {
     subscript: -3,
@@ -45,7 +48,6 @@ export const PDF_THEME = Object.freeze({
   spacing: {
     beforeParagraph: 20,
     afterParagraph: 10,
-    afterHeading: 15,
     afterCodeBlock: 15,
     afterList: 10,
     afterBlockquote: 15,
@@ -58,7 +60,13 @@ export const PDF_THEME = Object.freeze({
     listItemIndent: 20,
     blockquoteYDecrement: 20,
     hrYDecrement: 20,
-    tableYDecrement: 20
+    tableYDecrement: 20,
+    afterH1: 19.2,
+    afterH2: 14.4,
+    afterH3: 12,
+    afterH4: 9.6,
+    afterH5: 8.4,
+    afterH6: 8.16
   },
   codeBlock: {
     padding: 10
