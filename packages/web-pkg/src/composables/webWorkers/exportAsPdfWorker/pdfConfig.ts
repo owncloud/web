@@ -2,8 +2,7 @@ import { rgb } from 'pdf-lib'
 
 export const PDF_THEME = Object.freeze({
   layout: {
-    margin: 50,
-    pageBottom: 50
+    margin: 50
   },
   font: {
     baseSize: 12,
@@ -46,27 +45,10 @@ export const PDF_THEME = Object.freeze({
     imagePlaceholder: rgb(0.5, 0.5, 0.5)
   },
   spacing: {
-    beforeParagraph: 20,
-    afterParagraph: 10,
-    afterCodeBlock: 15,
-    afterList: 10,
-    afterBlockquote: 15,
-    afterTable: 15,
-    afterHr: 20,
-    forSpaceToken: 10,
-    afterImage: 10,
-    beforeImageTitle: 20,
-    listItemYDecrement: 18,
-    listItemIndent: 20,
-    blockquoteYDecrement: 20,
-    hrYDecrement: 20,
-    tableYDecrement: 20,
-    afterH1: 19.2,
-    afterH2: 14.4,
-    afterH3: 12,
-    afterH4: 9.6,
-    afterH5: 8.4,
-    afterH6: 8.16
+    md: 12,
+    listIndent: 20,
+    listGap: 8,
+    sm: 8
   },
   codeBlock: {
     padding: 10

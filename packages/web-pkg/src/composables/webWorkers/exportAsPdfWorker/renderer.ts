@@ -107,7 +107,7 @@ export class PDFRenderer {
       case 'hr':
         return this.#renderHorizontalRule()
       case 'space':
-        this.#yPosition - PDF_THEME.spacing.forSpaceToken
+        this.#yPosition -= PDF_THEME.spacing.md
       default:
         return { needsNewPage: false }
     }
@@ -120,7 +120,6 @@ export class PDFRenderer {
    */
   #renderHeading(token: Tokens.Heading): RenderResult {
     const fontSize = PDF_THEME.font[`h${token.depth}`]
-    const marginBottom = PDF_THEME.spacing[`afterH${token.depth}`]
     const lineHeight = fontSize * 1.4
 
     const lines = splitTextToFit(
@@ -130,7 +129,7 @@ export class PDFRenderer {
       this.#page.getWidth() - PDF_THEME.layout.margin * 2
     )
 
-    if (this.#yPosition - lines.length * lineHeight < PDF_THEME.layout.pageBottom) {
+    if (this.#yPosition - lines.length * lineHeight < PDF_THEME.layout.margin) {
       return { needsNewPage: true }
     }
 
@@ -147,7 +146,7 @@ export class PDFRenderer {
       this.#yPosition -= lineHeight
     }
 
-    this.#yPosition -= marginBottom
+    this.#yPosition -= PDF_THEME.spacing.md
     return { needsNewPage: false }
   }
 
@@ -162,13 +161,11 @@ export class PDFRenderer {
 
     let currentX = margin
 
-    this.#yPosition -= PDF_THEME.spacing.beforeParagraph
-
     const wrapLine = () => {
       this.#yPosition -= lineHeight
       currentX = margin
 
-      return this.#yPosition < PDF_THEME.layout.pageBottom
+      return this.#yPosition < PDF_THEME.layout.margin
     }
 
     if (token.tokens.length === 1 && token.tokens[0].type === 'image') {
@@ -180,7 +177,7 @@ export class PDFRenderer {
       }
     }
 
-    if (this.#yPosition - lineHeight < PDF_THEME.layout.pageBottom) {
+    if (this.#yPosition - lineHeight < PDF_THEME.layout.margin) {
       return { needsNewPage: true }
     }
 
@@ -297,7 +294,7 @@ export class PDFRenderer {
       }
     }
 
-    this.#yPosition -= PDF_THEME.spacing.afterParagraph
+    this.#yPosition -= PDF_THEME.spacing.md
     return { needsNewPage: false }
   }
 
@@ -315,7 +312,7 @@ export class PDFRenderer {
     const lines = token.text.split('\n')
     const blockHeight = lines.length * lineHeight + padding * 2
 
-    if (this.#yPosition - blockHeight < PDF_THEME.layout.pageBottom) {
+    if (this.#yPosition - blockHeight < PDF_THEME.layout.margin) {
       return { needsNewPage: true }
     }
 
@@ -340,7 +337,7 @@ export class PDFRenderer {
       this.#yPosition -= lineHeight
     }
 
-    this.#yPosition -= PDF_THEME.spacing.afterCodeBlock
+    this.#yPosition -= PDF_THEME.spacing.md
     return { needsNewPage: false }
   }
 
@@ -352,18 +349,18 @@ export class PDFRenderer {
    */
   async #renderList(token: Tokens.List, level = 0): Promise<RenderResult> {
     const margin = PDF_THEME.layout.margin
-    const indent = margin + level * PDF_THEME.spacing.listItemIndent
+    const indent = margin + level * PDF_THEME.spacing.listIndent
     const bulletChar = token.ordered ? '1.' : '•'
     const lineHeight = PDF_THEME.font.listItemLineHeight
 
     for (let i = 0; i < token.items.length; i++) {
       const item = token.items[i]
 
-      if (this.#yPosition - PDF_THEME.spacing.listItemYDecrement < PDF_THEME.layout.pageBottom) {
+      if (this.#yPosition - PDF_THEME.spacing.listGap < PDF_THEME.layout.margin) {
         return { needsNewPage: true }
       }
 
-      this.#yPosition -= PDF_THEME.spacing.listItemYDecrement
+      this.#yPosition -= PDF_THEME.spacing.listGap
 
       const bullet = token.ordered ? `${i + 1}.` : bulletChar
       this.#page.drawText(bullet, {
@@ -398,7 +395,7 @@ export class PDFRenderer {
         )
 
         for (const line of lines) {
-          if (this.#yPosition < PDF_THEME.layout.pageBottom) {
+          if (this.#yPosition < PDF_THEME.layout.margin) {
             return { needsNewPage: true }
           }
 
@@ -426,7 +423,7 @@ export class PDFRenderer {
       }
     }
 
-    this.#yPosition -= PDF_THEME.spacing.afterList
+    this.#yPosition -= PDF_THEME.spacing.md
     return { needsNewPage: false }
   }
 
@@ -438,12 +435,10 @@ export class PDFRenderer {
    */
   async #renderBlockquote(token: Tokens.Blockquote): Promise<RenderResult> {
     const margin = PDF_THEME.layout.margin
-    const quoteMargin = margin + PDF_THEME.spacing.listItemIndent
+    const quoteMargin = margin + PDF_THEME.spacing.listIndent
     const lineHeight = PDF_THEME.font.blockquoteLineHeight
 
-    this.#yPosition -= PDF_THEME.spacing.blockquoteYDecrement
-
-    if (this.#yPosition - lineHeight < PDF_THEME.layout.pageBottom) {
+    if (this.#yPosition - lineHeight < PDF_THEME.layout.margin) {
       return { needsNewPage: true }
     }
 
@@ -498,7 +493,7 @@ export class PDFRenderer {
           )
 
           for (const line of lines) {
-            if (this.#yPosition < PDF_THEME.layout.pageBottom) {
+            if (this.#yPosition < PDF_THEME.layout.margin) {
               return { needsNewPage: true }
             }
 
@@ -515,7 +510,7 @@ export class PDFRenderer {
       }
     }
 
-    this.#yPosition -= PDF_THEME.spacing.afterBlockquote
+    this.#yPosition -= PDF_THEME.spacing.md
     return { needsNewPage: false }
   }
 
@@ -545,11 +540,11 @@ export class PDFRenderer {
       finalHeight = finalHeight * scale
     }
 
-    if (this.#yPosition - finalHeight < PDF_THEME.layout.pageBottom) {
+    if (this.#yPosition - finalHeight < PDF_THEME.layout.margin) {
       return { needsNewPage: true }
     }
 
-    this.#yPosition -= finalHeight + PDF_THEME.spacing.afterImage
+    this.#yPosition -= finalHeight + PDF_THEME.spacing.md
 
     this.#page.drawImage(imageResult.image, {
       x: margin + (maxWidth - finalWidth) / 2,
@@ -559,7 +554,7 @@ export class PDFRenderer {
     })
 
     if (attrs.text) {
-      this.#yPosition -= PDF_THEME.spacing.beforeImageTitle
+      this.#yPosition -= PDF_THEME.spacing.sm
       this.#page.drawText(`${attrs.text}`, {
         x: margin,
         y: this.#yPosition,
@@ -569,7 +564,7 @@ export class PDFRenderer {
       })
     }
 
-    this.#yPosition -= 15
+    this.#yPosition -= PDF_THEME.spacing.md
     return { needsNewPage: false }
   }
 
@@ -584,8 +579,6 @@ export class PDFRenderer {
     const headerLineHeight = PDF_THEME.font.tableHeaderLineHeight
     const colWidth = this.#maxWidth / token.header.length
 
-    this.#yPosition -= PDF_THEME.spacing.tableYDecrement
-
     const headerResult = this.#renderTableRow(
       token.header,
       headerFont,
@@ -599,7 +592,7 @@ export class PDFRenderer {
       return { needsNewPage: true }
     }
 
-    if (this.#yPosition < PDF_THEME.layout.pageBottom) {
+    if (this.#yPosition < PDF_THEME.layout.margin) {
       return { needsNewPage: true }
     }
 
@@ -624,6 +617,7 @@ export class PDFRenderer {
       }
     }
 
+    this.#yPosition -= PDF_THEME.spacing.md
     return { needsNewPage: false }
   }
 
@@ -681,7 +675,7 @@ export class PDFRenderer {
       cellLines.reduce((max, lines) => Math.max(max, lines.length), 0) *
         PDF_THEME.font.tableHeaderLineHeight
 
-    if (this.#yPosition - rowHeight < PDF_THEME.layout.pageBottom) {
+    if (this.#yPosition - rowHeight < PDF_THEME.layout.margin) {
       return { needsNewPage: true }
     }
 
@@ -707,8 +701,6 @@ export class PDFRenderer {
   #renderHorizontalRule(): RenderResult {
     const margin = PDF_THEME.layout.margin
 
-    this.#yPosition -= PDF_THEME.spacing.hrYDecrement
-
     this.#page.drawLine({
       start: { x: margin, y: this.#yPosition },
       end: { x: margin + this.#maxWidth, y: this.#yPosition },
@@ -716,6 +708,7 @@ export class PDFRenderer {
       color: PDF_THEME.color.hr
     })
 
+    this.#yPosition -= PDF_THEME.spacing.md
     return { needsNewPage: false }
   }
 
