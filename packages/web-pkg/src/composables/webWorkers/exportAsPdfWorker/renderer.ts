@@ -5,13 +5,12 @@ import {
   extractTextFromTokens,
   embedImage,
   getFontForSegment,
-  getFontLoader,
   parseImageAttributes,
   parseInlineTokens,
   partitionTokens,
   sanitizeText,
   splitTextToFit,
-  FontLoader
+  FontWeight
 } from './helpers'
 import { PDF_THEME } from './pdfConfig'
 import { markedExtensions } from './markedExtensions'
@@ -22,13 +21,22 @@ type RenderResult = {
   needsNewPage?: boolean
 }
 
+const FONT_URLS = Object.freeze({
+  regular: 'https://pdf-lib.js.org/assets/ubuntu/Ubuntu-R.ttf',
+  bold: 'https://pdf-lib.js.org/assets/ubuntu/Ubuntu-B.ttf',
+  italic: 'https://pdf-lib.js.org/assets/ubuntu/Ubuntu-RI.ttf',
+  boldItalic: 'https://pdf-lib.js.org/assets/ubuntu/Ubuntu-BI.ttf',
+  mono: 'https://pdf-lib.js.org/assets/ubuntu/UbuntuMono-R.ttf',
+  monoBold: 'https://pdf-lib.js.org/assets/ubuntu/UbuntuMono-B.ttf'
+})
+
 export class PDFRenderer {
   #pdfDoc: PDFDocument
   #page: PDFPage
   #maxWidth: number
   #tokens: Token[]
-  #loadFont: FontLoader
   #pageHeight: number
+  #fonts = {} as Record<FontWeight, PDFFont>
   #yPosition = 0
 
   constructor(content: string) {
@@ -50,6 +58,7 @@ export class PDFRenderer {
    */
   async renderAsArrayBuffer() {
     await this.#setupPdfDoc()
+    await this.#loadFonts()
 
     for (const token of this.#tokens) {
       let result = await this.#renderToken(token)
@@ -73,7 +82,6 @@ export class PDFRenderer {
   async #setupPdfDoc() {
     this.#pdfDoc = await PDFDocument.create()
     this.#pdfDoc.registerFontkit(fontkit)
-    this.#loadFont = getFontLoader(this.#pdfDoc)
     this.#page = this.#pdfDoc.addPage()
     this.#pageHeight = this.#page.getHeight()
     this.#maxWidth = this.#page.getWidth() - PDF_THEME.layout.margin * 2
@@ -116,14 +124,14 @@ export class PDFRenderer {
    *
    * @param token - The markdown heading token containing text and depth level
    */
-  async #renderHeading(token: Tokens.Heading): Promise<RenderResult> {
+  #renderHeading(token: Tokens.Heading): RenderResult {
     const fontSize = PDF_THEME.font[`h${token.depth}`]
     const marginBottom = PDF_THEME.spacing[`afterH${token.depth}`]
     const lineHeight = fontSize * 1.4
 
     const lines = splitTextToFit(
       token.text,
-      await this.#loadFont('bold'),
+      this.#fonts['bold'],
       fontSize,
       this.#page.getWidth() - PDF_THEME.layout.margin * 2
     )
@@ -139,7 +147,7 @@ export class PDFRenderer {
         x: PDF_THEME.layout.margin,
         y: this.#yPosition,
         size: fontSize,
-        font: await this.#loadFont('bold'),
+        font: this.#fonts['bold'],
         color: PDF_THEME.color.text
       })
       this.#yPosition -= lineHeight
@@ -228,7 +236,7 @@ export class PDFRenderer {
       const segments = parseInlineTokens([inlineToken])
 
       for (const segment of segments) {
-        const font = await getFontForSegment(segment, this.#loadFont)
+        const font = getFontForSegment(segment, this.#fonts)
         let fontSize: number = PDF_THEME.font.baseSize
         let yOffset = 0
 
@@ -304,7 +312,7 @@ export class PDFRenderer {
    *
    * @param token - The markdown code token containing the code text
    */
-  async #renderCodeBlock(token: Tokens.Code): Promise<RenderResult> {
+  #renderCodeBlock(token: Tokens.Code): RenderResult {
     const fontSize = PDF_THEME.font.codeSize
     const lineHeight = PDF_THEME.font.codeLineHeight
     const padding = PDF_THEME.codeBlock.padding
@@ -334,7 +342,7 @@ export class PDFRenderer {
         x: margin + padding,
         y: this.#yPosition,
         size: fontSize,
-        font: await this.#loadFont('mono'),
+        font: this.#fonts['mono'],
         color: PDF_THEME.color.codeBlockText
       })
       this.#yPosition -= lineHeight
@@ -370,7 +378,7 @@ export class PDFRenderer {
         x: indent,
         y: this.#yPosition,
         size: PDF_THEME.font.listBulletSize,
-        font: await this.#loadFont('regular'),
+        font: this.#fonts['regular'],
         color: PDF_THEME.color.text
       })
 
@@ -392,7 +400,7 @@ export class PDFRenderer {
         const itemText = extractTextFromTokens(textTokens)
         const lines = splitTextToFit(
           itemText,
-          await this.#loadFont('regular'),
+          this.#fonts['regular'],
           PDF_THEME.font.baseSize,
           this.#maxWidth - (indent + 20 - margin)
         )
@@ -406,7 +414,7 @@ export class PDFRenderer {
             x: indent + 20,
             y: this.#yPosition,
             size: PDF_THEME.font.baseSize,
-            font: await this.#loadFont('regular'),
+            font: this.#fonts['regular'],
             color: PDF_THEME.color.text
           })
           this.#yPosition -= lineHeight
@@ -434,11 +442,6 @@ export class PDFRenderer {
    * Renders a blockquote token to the PDF page with a colored bar and italic text.
    *
    * @param token - The markdown blockquote token containing quoted content
-   * @param page - The PDF page to render on
-   * @param pdfDoc - The PDF document for embedding images
-   * @param loadFont - Function to load and embed a font into the PDF document
-   * @param yPosition - Current Y position on the page
-   * @param maxWidth - Maximum width available for rendering
    * @returns Promise resolving to RenderResult with updated Y position and optional new page flag
    */
   async #renderBlockquote(token: Tokens.Blockquote): Promise<RenderResult> {
@@ -460,7 +463,7 @@ export class PDFRenderer {
         const text = extractTextFromTokens(quoteToken.tokens)
         const lines = splitTextToFit(
           text,
-          await this.#loadFont('italic'),
+          this.#fonts['italic'],
           PDF_THEME.font.baseSize,
           this.#maxWidth - PDF_THEME.blockquote.contentPadding
         )
@@ -497,7 +500,7 @@ export class PDFRenderer {
           const text = extractTextFromTokens(textTokens)
           const lines = splitTextToFit(
             text,
-            await this.#loadFont('italic'),
+            this.#fonts['italic'],
             PDF_THEME.font.baseSize,
             this.#maxWidth - PDF_THEME.blockquote.contentPadding
           )
@@ -511,7 +514,7 @@ export class PDFRenderer {
               x: quoteMargin,
               y: this.#yPosition,
               size: PDF_THEME.font.baseSize,
-              font: await this.#loadFont('italic'),
+              font: this.#fonts['italic'],
               color: PDF_THEME.color.blockquoteText
             })
             this.#yPosition -= lineHeight
@@ -528,10 +531,6 @@ export class PDFRenderer {
    * Renders an image token to the PDF page, including the image and optional title.
    *
    * @param imageToken - The markdown image token containing href and optional title
-   * @param page - The PDF page to render on
-   * @param pdfDoc - The PDF document for embedding images
-   * @param loadFont - Function to load and embed a font into the PDF document
-   * @param yPosition - Current Y position on the page
    * @param margin - Left margin for positioning
    * @param maxWidth - Maximum width available for rendering
    * @returns RenderResult with updated Y position and optional new page flag
@@ -573,7 +572,7 @@ export class PDFRenderer {
         x: margin,
         y: this.#yPosition,
         size: PDF_THEME.font.imageTitleSize,
-        font: await this.#loadFont('italic'),
+        font: this.#fonts['italic'],
         color: PDF_THEME.color.imagePlaceholder
       })
     }
@@ -587,8 +586,8 @@ export class PDFRenderer {
    *
    * @param token - The markdown table token containing header and row data
    */
-  async #renderTable(token: Tokens.Table): Promise<RenderResult> {
-    const headerFont = await this.#loadFont('bold')
+  #renderTable(token: Tokens.Table): RenderResult {
+    const headerFont = this.#fonts['bold']
     const headerFontSize = PDF_THEME.font.tableHeaderTextSize
     const headerLineHeight = PDF_THEME.font.tableHeaderLineHeight
     const colWidth = this.#maxWidth / token.header.length
@@ -612,7 +611,7 @@ export class PDFRenderer {
       return { needsNewPage: true }
     }
 
-    const rowFont = await this.#loadFont('regular')
+    const rowFont = this.#fonts['regular']
     const rowFontSize = PDF_THEME.font.tableCellTextSize
     const rowLineHeight = PDF_THEME.font.tableCellLineHeight
 
@@ -726,5 +725,29 @@ export class PDFRenderer {
     })
 
     return { needsNewPage: false }
+  }
+
+  /**
+   * Returns a function that loads and embeds a font into the PDF document.
+   *
+   * @param pdfDoc - The PDF document to embed fonts into
+   * @returns Function that loads and embeds a font into the PDF document
+   */
+  async #loadFonts() {
+    const fontWeights = Object.keys(FONT_URLS) as FontWeight[]
+
+    const promises = fontWeights.map(async (fontWeight) => {
+      const fontUrl = FONT_URLS[fontWeight]
+      const fontBytes = await fetch(fontUrl).then((res) => res.arrayBuffer())
+      const font = await this.#pdfDoc.embedFont(fontBytes)
+
+      return { fontWeight, font }
+    })
+
+    const results = await Promise.all(promises)
+
+    for (const { fontWeight, font } of results) {
+      this.#fonts[fontWeight] = font
+    }
   }
 }

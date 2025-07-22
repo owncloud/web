@@ -15,6 +15,8 @@ export type TextSegment = {
   strikeThrough: boolean
 }
 
+export type FontWeight = 'regular' | 'bold' | 'italic' | 'boldItalic' | 'mono' | 'monoBold'
+
 /**
  * Splits text into lines that fit within a specified maximum width using the given font and size.
  *
@@ -54,39 +56,6 @@ export function splitTextToFit(text: string, font: PDFFont, fontSize: number, ma
   return lines
 }
 
-const FONT_URLS = Object.freeze({
-  regular: 'https://pdf-lib.js.org/assets/ubuntu/Ubuntu-R.ttf',
-  bold: 'https://pdf-lib.js.org/assets/ubuntu/Ubuntu-B.ttf',
-  italic: 'https://pdf-lib.js.org/assets/ubuntu/Ubuntu-RI.ttf',
-  boldItalic: 'https://pdf-lib.js.org/assets/ubuntu/Ubuntu-BI.ttf',
-  mono: 'https://pdf-lib.js.org/assets/ubuntu/UbuntuMono-R.ttf',
-  monoBold: 'https://pdf-lib.js.org/assets/ubuntu/UbuntuMono-B.ttf'
-})
-
-export type FontLoader = (fontWeight: string) => Promise<PDFFont>
-
-/**
- * Returns a function that loads and embeds a font into the PDF document.
- *
- * @param pdfDoc - The PDF document to embed fonts into
- * @returns Function that loads and embeds a font into the PDF document
- */
-export function getFontLoader(pdfDoc: PDFDocument): FontLoader {
-  const loadedFonts = {}
-
-  return async (fontWeight: string): Promise<PDFFont> => {
-    if (loadedFonts[fontWeight]) {
-      return loadedFonts[fontWeight]
-    }
-
-    const fontBytes = await fetch(FONT_URLS[fontWeight]).then((res) => res.arrayBuffer())
-    const font = await pdfDoc.embedFont(fontBytes)
-    loadedFonts[fontWeight] = font
-
-    return font
-  }
-}
-
 /**
  * Determines the appropriate font to use for a text segment based on its formatting properties.
  *
@@ -98,27 +67,30 @@ export function getFontLoader(pdfDoc: PDFDocument): FontLoader {
  * - Regular font as the default
  *
  * @param segment - The text segment with formatting properties
- * @param loadFont - Function to load and embed a font into the PDF document
+ * @param fonts - Record of font weights and their corresponding PDF fonts
  * @returns The appropriate PDF font for the segment
  */
-export async function getFontForSegment(segment: TextSegment, loadFont: FontLoader) {
+export function getFontForSegment(
+  segment: TextSegment,
+  fonts: Record<FontWeight, PDFFont>
+): PDFFont {
   if (segment.code) {
-    return await loadFont('mono')
+    return fonts['mono']
   }
 
   if (segment.bold && segment.italic) {
-    return await loadFont('boldItalic')
+    return fonts['boldItalic']
   }
 
   if (segment.bold) {
-    return await loadFont('bold')
+    return fonts['bold']
   }
 
   if (segment.italic) {
-    return await loadFont('italic')
+    return fonts['italic']
   }
 
-  return await loadFont('regular')
+  return fonts['regular']
 }
 
 /**
