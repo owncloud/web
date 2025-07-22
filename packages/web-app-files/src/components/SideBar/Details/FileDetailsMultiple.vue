@@ -30,70 +30,65 @@
     </div>
   </div>
 </template>
-<script lang="ts">
-import { computed, defineComponent, unref } from 'vue'
+<script lang="ts" setup>
+import { computed, unref } from 'vue'
 import { storeToRefs } from 'pinia'
+import { useGettext } from 'vue3-gettext'
 import { formatFileSize, useResourcesStore } from '@ownclouders/web-pkg'
 
-export default defineComponent({
-  name: 'FileDetailsMultiple',
-  props: {
-    showSpaceCount: { type: Boolean, default: false }
-  },
-  setup() {
-    const resourcesStore = useResourcesStore()
-    const { selectedResources } = storeToRefs(resourcesStore)
+interface Props {
+  showSpaceCount?: boolean
+}
+const { showSpaceCount = false } = defineProps<Props>()
+const resourcesStore = useResourcesStore()
+const language = useGettext()
+const { $ngettext, $gettext } = language
+const { selectedResources } = storeToRefs(resourcesStore)
 
-    const hasSize = computed(() => {
-      return unref(selectedResources).some((resource) => Object.hasOwn(resource, 'size'))
-    })
-
-    return { hasSize, selectedResources }
-  },
-  computed: {
-    selectedFilesCount() {
-      return this.selectedResources.length
-    },
-    selectedFilesString() {
-      return this.$ngettext(
-        '%{ itemCount } item selected',
-        '%{ itemCount } items selected',
-        this.selectedFilesCount,
-        {
-          itemCount: this.selectedFilesCount.toString()
-        }
-      )
-    },
-    sizeValue() {
-      let size = 0
-      this.selectedResources.forEach((i) => (size += parseInt(i.size?.toString() || '0')))
-      return formatFileSize(size, this.$language.current)
-    },
-    sizeText() {
-      return this.$gettext('Size')
-    },
-    filesCount() {
-      return this.selectedResources.filter((i) => i.type === 'file').length
-    },
-    filesText() {
-      return this.$gettext('Files')
-    },
-    foldersCount() {
-      return this.selectedResources.filter((i) => i.type === 'folder').length
-    },
-    foldersText() {
-      return this.$gettext('Folders')
-    },
-    spacesCount() {
-      return this.selectedResources.filter((i) => i.type === 'space').length
-    },
-    spacesText() {
-      return this.$gettext('Spaces')
-    },
-    detailsTableLabel() {
-      return this.$gettext('Overview of the information about the selected files')
+const hasSize = computed(() => {
+  return unref(selectedResources).some((resource) => Object.hasOwn(resource, 'size'))
+})
+const selectedFilesCount = computed(() => {
+  return unref(selectedResources).length
+})
+const selectedFilesString = computed(() => {
+  return $ngettext(
+    '%{ itemCount } item selected',
+    '%{ itemCount } items selected',
+    unref(selectedFilesCount),
+    {
+      itemCount: unref(selectedFilesCount).toString()
     }
-  }
+  )
+})
+const sizeValue = computed(() => {
+  let size = 0
+  unref(selectedResources).forEach((i) => (size += parseInt(i.size?.toString() || '0')))
+  return formatFileSize(size, language.current)
+})
+const sizeText = computed(() => {
+  return $gettext('Size')
+})
+const filesCount = computed(() => {
+  return unref(selectedResources).filter((i) => i.type === 'file').length
+})
+const filesText = computed(() => {
+  return $gettext('Files')
+})
+const foldersCount = computed(() => {
+  return unref(selectedResources).filter((i) => i.type === 'folder').length
+})
+const foldersText = computed(() => {
+  return $gettext('Folders')
+})
+const spacesCount = computed(() => {
+  return unref(selectedResources).filter((i) => i.type === 'space').length
+})
+const spacesText = computed(() => {
+  return $gettext('Spaces')
+})
+const detailsTableLabel = computed(() => {
+  return $gettext('Overview of the information about the selected files')
 })
 </script>
 <style lang="scss" scoped>
