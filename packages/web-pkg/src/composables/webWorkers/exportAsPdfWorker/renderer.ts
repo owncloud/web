@@ -18,7 +18,7 @@ import { markedExtensions } from './markedExtensions'
 marked.use({ extensions: markedExtensions })
 
 type RenderResult = {
-  needsNewPage?: boolean
+  needsNewPage: boolean
 }
 
 const FONT_URLS = Object.freeze({
@@ -57,7 +57,9 @@ export class PDFRenderer {
    * @returns Promise resolving to the PDF as an ArrayBuffer
    */
   async renderAsArrayBuffer() {
-    await this.#setupPdfDoc()
+    this.#pdfDoc = await PDFDocument.create()
+
+    this.#addNewPage()
     await this.#loadFonts()
 
     for (const token of this.#tokens) {
@@ -77,14 +79,6 @@ export class PDFRenderer {
 
     const pdfBytes = await this.#pdfDoc.save()
     return pdfBytes.buffer as ArrayBuffer
-  }
-
-  async #setupPdfDoc() {
-    this.#pdfDoc = await PDFDocument.create()
-    this.#pdfDoc.registerFontkit(fontkit)
-    this.#page = this.#pdfDoc.addPage()
-    this.#pageHeight = this.#page.getHeight()
-    this.#maxWidth = this.#page.getWidth() - PDF_THEME.layout.margin * 2
   }
 
   /**
@@ -136,11 +130,11 @@ export class PDFRenderer {
       this.#page.getWidth() - PDF_THEME.layout.margin * 2
     )
 
-    this.#yPosition - fontSize
-
-    if (this.#yPosition - fontSize - lines.length * lineHeight < PDF_THEME.layout.pageBottom) {
+    if (this.#yPosition - lines.length * lineHeight < PDF_THEME.layout.pageBottom) {
       return { needsNewPage: true }
     }
+
+    this.#yPosition -= fontSize
 
     for (const line of lines) {
       this.#page.drawText(line, {
@@ -171,10 +165,10 @@ export class PDFRenderer {
     this.#yPosition -= PDF_THEME.spacing.beforeParagraph
 
     const wrapLine = () => {
-      const localY = this.#yPosition - lineHeight
+      this.#yPosition -= lineHeight
       currentX = margin
 
-      return localY < PDF_THEME.layout.pageBottom
+      return this.#yPosition < PDF_THEME.layout.pageBottom
     }
 
     if (token.tokens.length === 1 && token.tokens[0].type === 'image') {
@@ -325,22 +319,20 @@ export class PDFRenderer {
       return { needsNewPage: true }
     }
 
-    this.#yPosition -= blockHeight
-
     this.#page.drawRectangle({
       x: margin,
-      y: this.#yPosition,
+      y: this.#yPosition - blockHeight,
       width: this.#maxWidth,
       height: blockHeight,
       color: PDF_THEME.color.codeBlockBg
     })
 
-    this.#yPosition -= padding - fontSize
+    this.#yPosition -= padding
 
     for (const line of lines) {
       this.#page.drawText(line, {
         x: margin + padding,
-        y: this.#yPosition,
+        y: this.#yPosition - fontSize,
         size: fontSize,
         font: this.#fonts['mono'],
         color: PDF_THEME.color.codeBlockText
@@ -449,7 +441,7 @@ export class PDFRenderer {
     const quoteMargin = margin + PDF_THEME.spacing.listItemIndent
     const lineHeight = PDF_THEME.font.blockquoteLineHeight
 
-    this.#yPosition - PDF_THEME.spacing.blockquoteYDecrement
+    this.#yPosition -= PDF_THEME.spacing.blockquoteYDecrement
 
     if (this.#yPosition - lineHeight < PDF_THEME.layout.pageBottom) {
       return { needsNewPage: true }
@@ -523,7 +515,7 @@ export class PDFRenderer {
       }
     }
 
-    this.#yPosition - PDF_THEME.spacing.afterBlockquote
+    this.#yPosition -= PDF_THEME.spacing.afterBlockquote
     return { needsNewPage: false }
   }
 
@@ -577,7 +569,7 @@ export class PDFRenderer {
       })
     }
 
-    this.#yPosition - 15
+    this.#yPosition -= 15
     return { needsNewPage: false }
   }
 
@@ -592,7 +584,7 @@ export class PDFRenderer {
     const headerLineHeight = PDF_THEME.font.tableHeaderLineHeight
     const colWidth = this.#maxWidth / token.header.length
 
-    this.#yPosition - PDF_THEME.spacing.tableYDecrement
+    this.#yPosition -= PDF_THEME.spacing.tableYDecrement
 
     const headerResult = this.#renderTableRow(
       token.header,
@@ -734,6 +726,8 @@ export class PDFRenderer {
    * @returns Function that loads and embeds a font into the PDF document
    */
   async #loadFonts() {
+    this.#pdfDoc.registerFontkit(fontkit)
+
     const fontWeights = Object.keys(FONT_URLS) as FontWeight[]
 
     const promises = fontWeights.map(async (fontWeight) => {
@@ -749,5 +743,12 @@ export class PDFRenderer {
     for (const { fontWeight, font } of results) {
       this.#fonts[fontWeight] = font
     }
+  }
+
+  #addNewPage() {
+    this.#page = this.#pdfDoc.addPage()
+    this.#pageHeight = this.#page.getHeight()
+    this.#maxWidth = this.#page.getWidth() - PDF_THEME.layout.margin * 2
+    this.#yPosition = this.#pageHeight - PDF_THEME.layout.margin
   }
 }
