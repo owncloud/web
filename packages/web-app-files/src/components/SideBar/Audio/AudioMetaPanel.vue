@@ -21,80 +21,59 @@
   </div>
 </template>
 
-<script lang="ts">
-import { computed, defineComponent, inject, Ref, unref } from 'vue'
+<script lang="ts" setup>
+import { computed, inject, Ref, unref } from 'vue'
 import { Resource } from '@ownclouders/web-client'
 import { Duration } from 'luxon'
 
-export default defineComponent({
-  name: 'AudioMetaPanel',
-  setup() {
-    const resource = inject<Ref<Resource>>('resource')
+const resource = inject<Ref<Resource>>('resource')
 
-    const album = computed(() => {
-      return unref(resource).audio.album || '-'
-    })
+const album = computed(() => {
+  return unref(resource).audio.album || '-'
+})
 
-    const artist = computed(() => {
-      return unref(resource).audio.artist || '-'
-    })
+const artist = computed(() => {
+  return unref(resource).audio.artist || '-'
+})
 
-    const albumArtist = computed(() => {
-      return unref(resource).audio.albumArtist || '-'
-    })
+const genre = computed(() => {
+  return unref(resource).audio.genre || '-'
+})
 
-    const genre = computed(() => {
-      return unref(resource).audio.genre || '-'
-    })
+const title = computed(() => {
+  return unref(resource).audio.title || '-'
+})
 
-    const title = computed(() => {
-      return unref(resource).audio.title || '-'
-    })
-
-    const duration = computed(() => {
-      const milliseconds = unref(resource).audio.duration
-      if (!milliseconds) {
-        return '-'
-      }
-      const d = Duration.fromMillis(milliseconds)
-      if (d.hours > 0) {
-        return d.toFormat('hh:mm:ss')
-      }
-      return d.toFormat('mm:ss')
-    })
-
-    const track = computed(() => {
-      const audio = unref(resource).audio
-      if (audio.track && audio.trackCount) {
-        return `${audio.track} / ${audio.trackCount}`
-      }
-      return audio.track || '-'
-    })
-
-    const disc = computed(() => {
-      const audio = unref(resource).audio
-      if (audio.disc && audio.discCount) {
-        return `${audio.disc} / ${audio.discCount}`
-      }
-      return audio.disc || '-'
-    })
-
-    const year = computed(() => {
-      return unref(resource).audio.year || '-'
-    })
-
-    return {
-      album,
-      artist,
-      albumArtist,
-      genre,
-      title,
-      duration,
-      track,
-      disc,
-      year
-    }
+const duration = computed(() => {
+  const milliseconds = unref(resource).audio.duration
+  if (!milliseconds) {
+    return '-'
   }
+  const d = Duration.fromMillis(milliseconds)
+  if (d.hours > 0) {
+    return d.toFormat('hh:mm:ss')
+  }
+  return d.toFormat('mm:ss')
+})
+
+const track = computed(() => {
+  const audio = unref(resource).audio
+  if (audio.track && audio.trackCount) {
+    return `${audio.track} / ${audio.trackCount}`
+  }
+  return audio.track || '-'
+})
+
+const disc = computed(() => {
+  const audio = unref(resource).audio
+  if (audio.disc && audio.discCount) {
+    return `${audio.disc} / ${audio.discCount}`
+  }
+  return audio.disc || '-'
+})
+
+const year = computed(() => {
+  return unref(resource).audio.year || '-'
 })
 </script>
 
