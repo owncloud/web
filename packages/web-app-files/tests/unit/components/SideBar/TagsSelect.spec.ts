@@ -21,7 +21,7 @@ describe('Tag Select', () => {
     clientService.graphAuthenticated.tags.listTags.mockResolvedValueOnce(tags.split(','))
 
     const { wrapper } = createWrapper(resource, clientService)
-    await wrapper.vm.loadAvailableTagsTask.last
+    await (wrapper.vm as any).loadAvailableTagsTask.last
     expect(
       (wrapper.findComponent<typeof OcSelect>('vue-select-stub').props() as any).options
     ).toEqual([{ label: 'a' }, { label: 'b' }, { label: 'c' }])
@@ -33,7 +33,7 @@ describe('Tag Select', () => {
       const tags = ['a', 'b']
       const resource = mock<Resource>({ tags: tags })
       const { wrapper } = createWrapper(resource, mockDeep<ClientService>(), false)
-      await wrapper.vm.save(tags)
+      await (wrapper.vm as any).save(tags)
       expect(eventStub).toHaveBeenCalled()
     })
   })
@@ -54,9 +54,9 @@ describe('Tag Select', () => {
       const stub = clientService.graphAuthenticated.tags.assignTags.mockResolvedValue(undefined)
       const { wrapper } = createWrapper(resource, clientService, false)
 
-      wrapper.vm.selectedTags = selectedTags
+      ;(wrapper.vm as any).selectedTags = selectedTags
 
-      await wrapper.vm.save(selectedTags)
+      await (wrapper.vm as any).save(selectedTags)
 
       if (expected.length) {
         expect(stub).toHaveBeenCalledWith(
@@ -82,9 +82,9 @@ describe('Tag Select', () => {
       const stub = clientService.graphAuthenticated.tags.unassignTags.mockResolvedValue(undefined)
       const { wrapper } = createWrapper(resource, clientService, false)
 
-      wrapper.vm.selectedTags = selectedTags
+      ;(wrapper.vm as any).selectedTags = selectedTags
 
-      await wrapper.vm.save(selectedTags)
+      await (wrapper.vm as any).save(selectedTags)
 
       if (expected.length) {
         expect(stub).toHaveBeenCalledWith(
@@ -107,8 +107,8 @@ describe('Tag Select', () => {
     const resource = mock<Resource>({ tags: ['a'] })
     const eventStub = vi.spyOn(eventBus, 'publish')
     const { wrapper } = createWrapper(resource, clientService)
-    wrapper.vm.selectedTags.push({ label: 'b' })
-    await wrapper.vm.save(wrapper.vm.selectedTags)
+    ;(wrapper.vm as any).selectedTags.push({ label: 'b' })
+    await (wrapper.vm as any).save((wrapper.vm as any).selectedTags)
     expect(assignTagsStub).toHaveBeenCalled()
     expect(eventStub).not.toHaveBeenCalled()
     const { showErrorMessage } = useMessages()
@@ -117,7 +117,7 @@ describe('Tag Select', () => {
 
   it('does not accept tags consisting of blanks only', () => {
     const { wrapper } = createWrapper(mock<Resource>({ tags: [] }))
-    const option = wrapper.vm.createOption(' ')
+    const option = (wrapper.vm as any).createOption(' ')
     expect(option.error).toBeDefined()
     expect(option.selectable).toBeFalsy()
   })
@@ -128,7 +128,7 @@ describe('Tag Select', () => {
     const capabilitiesStore = useCapabilityStore()
     const { graphTagsMaxTagLength } = storeToRefs(capabilitiesStore)
 
-    const option = wrapper.vm.createOption('a'.repeat(unref(graphTagsMaxTagLength) + 1))
+    const option = (wrapper.vm as any).createOption('a'.repeat(unref(graphTagsMaxTagLength) + 1))
 
     expect(option.error).toBeDefined()
     expect(option.selectable).toBeFalsy()
