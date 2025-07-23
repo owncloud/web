@@ -482,8 +482,8 @@ importers:
         specifier: workspace:^
         version: link:../web-pkg
       axios:
-        specifier: 1.9.0
-        version: 1.9.0
+        specifier: 1.11.0
+        version: 1.11.0
       deep-object-diff:
         specifier: ^1.1.9
         version: 1.1.9
@@ -633,8 +633,8 @@ importers:
         specifier: ^11.0.0 || ^12.0.0 || ^13.0.0
         version: 13.3.0(vue@3.5.16(typescript@5.8.3))
       axios:
-        specifier: 1.9.0
-        version: 1.9.0
+        specifier: 1.11.0
+        version: 1.11.0
       email-validator:
         specifier: ^2.0.4
         version: 2.0.4
@@ -691,8 +691,8 @@ importers:
         specifier: workspace:*
         version: link:../web-pkg
       axios:
-        specifier: 1.9.0
-        version: 1.9.0
+        specifier: 1.11.0
+        version: 1.11.0
       email-validator:
         specifier: ^2.0.4
         version: 2.0.4
@@ -861,11 +861,11 @@ importers:
         specifier: workspace:*
         version: link:../web-pkg
       axios:
-        specifier: ^1.7.7
-        version: 1.9.0
+        specifier: ^1.11.0
+        version: 1.11.0
       fast-xml-parser:
-        specifier: ^5.0.0
-        version: 5.2.3
+        specifier: ^5.2.5
+        version: 5.2.5
       lodash-es:
         specifier: ^4.17.21
         version: 4.17.21
@@ -953,8 +953,8 @@ importers:
         specifier: ^13.0.0
         version: 13.3.0(vue@3.5.16(typescript@5.8.3))
       axios:
-        specifier: ^1.7.7
-        version: 1.9.0
+        specifier: ^1.11.0
+        version: 1.11.0
       deepmerge:
         specifier: ^4.2.2
         version: 4.3.1
@@ -1102,8 +1102,8 @@ importers:
         specifier: 2.0.0
         version: 2.0.0(vue@3.5.16(typescript@5.8.3))
       axios:
-        specifier: 1.9.0
-        version: 1.9.0
+        specifier: 1.11.0
+        version: 1.11.0
       deepmerge:
         specifier: 4.3.1
         version: 4.3.1
@@ -1199,14 +1199,14 @@ importers:
         specifier: workspace:^
         version: link:../web-pkg
       '@pinia/testing':
-        specifier: ^1.0.0
-        version: 1.0.1(pinia@3.0.3(typescript@5.8.3)(vue@3.5.16(typescript@5.8.3)))
+        specifier: ^1.0.2
+        version: 1.0.2(pinia@3.0.3(typescript@5.8.3)(vue@3.5.16(typescript@5.8.3)))
       '@vue/test-utils':
         specifier: ^2.4.6
         version: 2.4.6
       axios:
-        specifier: 1.9.0
-        version: 1.9.0
+        specifier: 1.11.0
+        version: 1.11.0
       vitest-mock-extended:
         specifier: 3.1.0
         version: 3.1.0(typescript@5.8.3)(vitest@3.2.3(@types/node@24.0.0)(happy-dom@17.6.3)(jsdom@26.1.0)(sass@1.89.1)(terser@5.42.0)(yaml@2.8.0))
@@ -2502,10 +2502,10 @@ packages:
     resolution: {integrity: sha512-dfUnCxiN9H4ap84DvD2ubjw+3vUNpstxa0TneY/Paat8a3R4uQZDLSvWjmznAY/DoahqTHl9V46HF/Zs3F29pg==}
     engines: {node: '>= 10.0.0'}
 
-  '@pinia/testing@1.0.1':
-    resolution: {integrity: sha512-EYnPfoFtbrgkPj4QLiCp8dHgsqmc8fLqmQtTzp760V7enEb5ZOgH5zkwitGhkF7DM+AW3H+btdzkGeD1U3KKiQ==}
+  '@pinia/testing@1.0.2':
+    resolution: {integrity: sha512-yZVXJTKh677J0AT8kOPxGk5s1v7hMQIDT3tmeriwtR5LDu41DvXTEBQf0ql9SsHW1mCSDG38QDFzSSl5ucJqnQ==}
     peerDependencies:
-      pinia: '>=3.0.2'
+      pinia: '>=3.0.3'
 
   '@pkgjs/parseargs@0.11.0':
     resolution: {integrity: sha512-+1VkjdD0QBLPodGrJUeqarH8VAIvQODIbwh9XpP5Syisf7YoQgsJKPNFoqqLQlu+VQ/tVSshMR6loPMn8U+dPg==}
@@ -3430,6 +3430,9 @@ packages:
   axe-core@4.10.3:
     resolution: {integrity: sha512-Xm7bpRXnDSX2YE2YFfBk2FnF0ep6tmG7xPh8iHee8MIcrgq762Nkce856dYtJYLkuIoYZvGfTs/PbZhideTcEg==}
     engines: {node: '>=4'}
+
+  axios@1.11.0:
+    resolution: {integrity: sha512-1Lx3WLFQWm3ooKDYZD1eXmoGO9fxYQjrycfHFC8P0sCfQVXyROp0p9PFWBehewBOdCwHc+f/b8I0fMto5eSfwA==}
 
   axios@1.9.0:
     resolution: {integrity: sha512-re4CqKTJaURpzbLHtIi6XpDv20/CnpXOtjRY5/CU32L8gU8ek9UIivcfvSWvmKEngmVbrUtPpdDwWDWL7DNHvg==}
@@ -4410,8 +4413,8 @@ packages:
     resolution: {integrity: sha512-RKihhV+SHsIUGXObeVy9AXiBbFwkVk7Syp8XgwN5U3JV416+Gwp/GO9i0JYKmikykgz/UHRrrV4ROuZEo/T0ig==}
     hasBin: true
 
-  fast-xml-parser@5.2.3:
-    resolution: {integrity: sha512-OdCYfRqfpuLUFonTNjvd30rCBZUneHpSQkCqfaeWQ9qrKcl6XlWeDBNVwGb+INAIxRshuN2jF+BE0L6gbBO2mw==}
+  fast-xml-parser@5.2.5:
+    resolution: {integrity: sha512-pfX9uG9Ki0yekDHx2SiuRIyFdyAr1kMIMitPvb0YBo8SUfKvia7w7FIyd/l6av85pFYRhZscS75MwMnbvY+hcQ==}
     hasBin: true
 
   fastest-levenshtein@1.0.16:
@@ -4522,6 +4525,10 @@ packages:
 
   form-data@4.0.2:
     resolution: {integrity: sha512-hGfm/slu0ZabnNt4oaRZ6uREyfCj6P4fT/n6A1rGV+Z0VdGXjfOhVUpkn6qVQONHGIFwmveGXyDs75+nr6FM8w==}
+    engines: {node: '>= 6'}
+
+  form-data@4.0.4:
+    resolution: {integrity: sha512-KrGhL9Q4zjj0kiUt5OO4Mr/A/jlI2jDYs5eHBpYHPcBEVSiipAvn2Ko2HnPe20rmcuuvMHNdZFp+4IlGTMF0Ow==}
     engines: {node: '>= 6'}
 
   formdata-polyfill@4.0.10:
@@ -8802,7 +8809,7 @@ snapshots:
       '@parcel/watcher-win32-x64': 2.5.1
     optional: true
 
-  '@pinia/testing@1.0.1(pinia@3.0.3(typescript@5.8.3)(vue@3.5.16(typescript@5.8.3)))':
+  '@pinia/testing@1.0.2(pinia@3.0.3(typescript@5.8.3)(vue@3.5.16(typescript@5.8.3)))':
     dependencies:
       pinia: 3.0.3(typescript@5.8.3)(vue@3.5.16(typescript@5.8.3))
 
@@ -9849,6 +9856,14 @@ snapshots:
       possible-typed-array-names: 1.1.0
 
   axe-core@4.10.3: {}
+
+  axios@1.11.0:
+    dependencies:
+      follow-redirects: 1.15.9
+      form-data: 4.0.4
+      proxy-from-env: 1.1.0
+    transitivePeerDependencies:
+      - debug
 
   axios@1.9.0:
     dependencies:
@@ -10980,7 +10995,7 @@ snapshots:
     dependencies:
       strnum: 1.1.2
 
-  fast-xml-parser@5.2.3:
+  fast-xml-parser@5.2.5:
     dependencies:
       strnum: 2.1.1
 
@@ -11090,6 +11105,14 @@ snapshots:
       asynckit: 0.4.0
       combined-stream: 1.0.8
       es-set-tostringtag: 2.1.0
+      mime-types: 2.1.35
+
+  form-data@4.0.4:
+    dependencies:
+      asynckit: 0.4.0
+      combined-stream: 1.0.8
+      es-set-tostringtag: 2.1.0
+      hasown: 2.0.2
       mime-types: 2.1.35
 
   formdata-polyfill@4.0.10:
