@@ -479,8 +479,8 @@ importers:
         specifier: workspace:^
         version: link:../web-pkg
       axios:
-        specifier: 1.10.0
-        version: 1.10.0
+        specifier: 1.11.0
+        version: 1.11.0
       deep-object-diff:
         specifier: ^1.1.9
         version: 1.1.9
@@ -630,8 +630,8 @@ importers:
         specifier: ^11.0.0 || ^12.0.0 || ^13.0.0
         version: 13.4.0(vue@3.5.17(typescript@5.8.3))
       axios:
-        specifier: 1.10.0
-        version: 1.10.0
+        specifier: 1.11.0
+        version: 1.11.0
       email-validator:
         specifier: ^2.0.4
         version: 2.0.4
@@ -688,8 +688,8 @@ importers:
         specifier: workspace:*
         version: link:../web-pkg
       axios:
-        specifier: 1.10.0
-        version: 1.10.0
+        specifier: 1.11.0
+        version: 1.11.0
       email-validator:
         specifier: ^2.0.4
         version: 2.0.4
@@ -858,8 +858,8 @@ importers:
         specifier: workspace:*
         version: link:../web-pkg
       axios:
-        specifier: ^1.7.7
-        version: 1.10.0
+        specifier: ^1.11.0
+        version: 1.11.0
       fast-xml-parser:
         specifier: ^5.2.5
         version: 5.2.5
@@ -950,8 +950,8 @@ importers:
         specifier: ^13.0.0
         version: 13.4.0(vue@3.5.17(typescript@5.8.3))
       axios:
-        specifier: ^1.7.7
-        version: 1.10.0
+        specifier: ^1.11.0
+        version: 1.11.0
       deepmerge:
         specifier: ^4.2.2
         version: 4.3.1
@@ -1096,8 +1096,8 @@ importers:
         specifier: 2.0.0
         version: 2.0.0(vue@3.5.17(typescript@5.8.3))
       axios:
-        specifier: 1.10.0
-        version: 1.10.0
+        specifier: 1.11.0
+        version: 1.11.0
       deepmerge:
         specifier: 4.3.1
         version: 4.3.1
@@ -1199,8 +1199,8 @@ importers:
         specifier: ^2.4.6
         version: 2.4.6
       axios:
-        specifier: 1.10.0
-        version: 1.10.0
+        specifier: 1.11.0
+        version: 1.11.0
       vitest-mock-extended:
         specifier: 3.1.0
         version: 3.1.0(typescript@5.8.3)(vitest@3.2.4(@types/node@24.0.4)(happy-dom@18.0.1)(jsdom@26.1.0)(sass@1.89.2)(terser@5.43.1)(yaml@2.8.0))
@@ -3437,6 +3437,9 @@ packages:
   axios@1.10.0:
     resolution: {integrity: sha512-/1xYAC4MP/HEG+3duIhFr4ZQXR4sQXOIe+o6sdqzeykGLx6Upp/1p8MHqhINOvGeP7xyNHe7tsiJByc4SSVUxw==}
 
+  axios@1.11.0:
+    resolution: {integrity: sha512-1Lx3WLFQWm3ooKDYZD1eXmoGO9fxYQjrycfHFC8P0sCfQVXyROp0p9PFWBehewBOdCwHc+f/b8I0fMto5eSfwA==}
+
   babel-core@7.0.0-bridge.0:
     resolution: {integrity: sha512-poPX9mZH/5CSanm50Q+1toVci6pv5KSRv/5TWCwtzQS5XEwn40BcCrgIeMFWP9CKKIniKXNxoIOnOq4VVlGXhg==}
     peerDependencies:
@@ -4521,6 +4524,10 @@ packages:
 
   form-data@4.0.2:
     resolution: {integrity: sha512-hGfm/slu0ZabnNt4oaRZ6uREyfCj6P4fT/n6A1rGV+Z0VdGXjfOhVUpkn6qVQONHGIFwmveGXyDs75+nr6FM8w==}
+    engines: {node: '>= 6'}
+
+  form-data@4.0.4:
+    resolution: {integrity: sha512-KrGhL9Q4zjj0kiUt5OO4Mr/A/jlI2jDYs5eHBpYHPcBEVSiipAvn2Ko2HnPe20rmcuuvMHNdZFp+4IlGTMF0Ow==}
     engines: {node: '>= 6'}
 
   formdata-polyfill@4.0.10:
@@ -9868,6 +9875,14 @@ snapshots:
     transitivePeerDependencies:
       - debug
 
+  axios@1.11.0:
+    dependencies:
+      follow-redirects: 1.15.9
+      form-data: 4.0.4
+      proxy-from-env: 1.1.0
+    transitivePeerDependencies:
+      - debug
+
   babel-core@7.0.0-bridge.0(@babel/core@7.27.4):
     dependencies:
       '@babel/core': 7.27.4
@@ -11098,6 +11113,14 @@ snapshots:
       asynckit: 0.4.0
       combined-stream: 1.0.8
       es-set-tostringtag: 2.1.0
+      mime-types: 2.1.35
+
+  form-data@4.0.4:
+    dependencies:
+      asynckit: 0.4.0
+      combined-stream: 1.0.8
+      es-set-tostringtag: 2.1.0
+      hasown: 2.0.2
       mime-types: 2.1.35
 
   formdata-polyfill@4.0.10:
