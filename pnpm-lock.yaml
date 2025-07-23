@@ -574,8 +574,13 @@ importers:
         specifier: workspace:^
         version: link:../web-pkg
       axios:
+<<<<<<< HEAD
         specifier: 1.7.7
         version: 1.7.7
+=======
+        specifier: 1.11.0
+        version: 1.11.0
+>>>>>>> 5cd700912 (chore: [OCISDEV-214] update axios to v1.11.0)
       deep-object-diff:
         specifier: ^1.1.9
         version: 1.1.9
@@ -725,8 +730,13 @@ importers:
         specifier: ^11.0.0
         version: 11.1.0(vue@3.5.12(typescript@5.6.3))
       axios:
+<<<<<<< HEAD
         specifier: 1.7.7
         version: 1.7.7
+=======
+        specifier: 1.11.0
+        version: 1.11.0
+>>>>>>> 5cd700912 (chore: [OCISDEV-214] update axios to v1.11.0)
       email-validator:
         specifier: ^2.0.4
         version: 2.0.4
@@ -783,8 +793,13 @@ importers:
         specifier: workspace:*
         version: link:../web-pkg
       axios:
+<<<<<<< HEAD
         specifier: 1.7.7
         version: 1.7.7
+=======
+        specifier: 1.11.0
+        version: 1.11.0
+>>>>>>> 5cd700912 (chore: [OCISDEV-214] update axios to v1.11.0)
       email-validator:
         specifier: ^2.0.4
         version: 2.0.4
@@ -953,8 +968,13 @@ importers:
         specifier: workspace:*
         version: link:../web-pkg
       axios:
+<<<<<<< HEAD
         specifier: ^1.7.7
         version: 1.7.7
+=======
+        specifier: ^1.11.0
+        version: 1.11.0
+>>>>>>> 5cd700912 (chore: [OCISDEV-214] update axios to v1.11.0)
       fast-xml-parser:
         specifier: ^4.5.0
         version: 4.5.3
@@ -1045,8 +1065,13 @@ importers:
         specifier: ^11.0.0
         version: 11.1.0(vue@3.5.12(typescript@5.6.3))
       axios:
+<<<<<<< HEAD
         specifier: ^1.7.7
         version: 1.7.7
+=======
+        specifier: ^1.11.0
+        version: 1.11.0
+>>>>>>> 5cd700912 (chore: [OCISDEV-214] update axios to v1.11.0)
       deepmerge:
         specifier: ^4.2.2
         version: 4.3.1
@@ -1197,8 +1222,13 @@ importers:
         specifier: 2.0.0
         version: 2.0.0(vue@3.5.12(typescript@5.6.3))
       axios:
+<<<<<<< HEAD
         specifier: 1.7.7
         version: 1.7.7
+=======
+        specifier: 1.11.0
+        version: 1.11.0
+>>>>>>> 5cd700912 (chore: [OCISDEV-214] update axios to v1.11.0)
       deepmerge:
         specifier: 4.3.1
         version: 4.3.1
@@ -1300,11 +1330,16 @@ importers:
         specifier: ^2.4.6
         version: 2.4.6
       axios:
+<<<<<<< HEAD
         specifier: 1.7.7
         version: 1.7.7
       pinia:
         specifier: 2.2.6
         version: 2.2.6(typescript@5.6.3)(vue@3.5.12(typescript@5.6.3))
+=======
+        specifier: 1.11.0
+        version: 1.11.0
+>>>>>>> 5cd700912 (chore: [OCISDEV-214] update axios to v1.11.0)
       vitest-mock-extended:
         specifier: 2.0.2
         version: 2.0.2(typescript@5.6.3)(vitest@2.1.2(@types/node@22.15.19)(happy-dom@15.10.2)(jsdom@25.0.1)(sass@1.79.5)(terser@5.39.2))
@@ -3666,6 +3701,9 @@ packages:
   axios@1.7.7:
     resolution: {integrity: sha512-S4kL7XrjgBmvdGut0sN3yJxqYzrDOnivkBiN0OFs6hLiUam3UPvswUo0kqGyhqUZGEOytHyumEdXsAkgCOUf3Q==}
 
+  axios@1.11.0:
+    resolution: {integrity: sha512-1Lx3WLFQWm3ooKDYZD1eXmoGO9fxYQjrycfHFC8P0sCfQVXyROp0p9PFWBehewBOdCwHc+f/b8I0fMto5eSfwA==}
+
   babel-core@7.0.0-bridge.0:
     resolution: {integrity: sha512-poPX9mZH/5CSanm50Q+1toVci6pv5KSRv/5TWCwtzQS5XEwn40BcCrgIeMFWP9CKKIniKXNxoIOnOq4VVlGXhg==}
     peerDependencies:
@@ -5364,6 +5402,10 @@ packages:
 
   form-data@4.0.2:
     resolution: {integrity: sha512-hGfm/slu0ZabnNt4oaRZ6uREyfCj6P4fT/n6A1rGV+Z0VdGXjfOhVUpkn6qVQONHGIFwmveGXyDs75+nr6FM8w==}
+    engines: {node: '>= 6'}
+
+  form-data@4.0.4:
+    resolution: {integrity: sha512-KrGhL9Q4zjj0kiUt5OO4Mr/A/jlI2jDYs5eHBpYHPcBEVSiipAvn2Ko2HnPe20rmcuuvMHNdZFp+4IlGTMF0Ow==}
     engines: {node: '>= 6'}
 
   formdata-polyfill@4.0.10:
@@ -13358,7 +13400,19 @@ snapshots:
     transitivePeerDependencies:
       - debug
 
+<<<<<<< HEAD
   babel-core@7.0.0-bridge.0(@babel/core@7.25.8):
+=======
+  axios@1.11.0:
+    dependencies:
+      follow-redirects: 1.15.9
+      form-data: 4.0.4
+      proxy-from-env: 1.1.0
+    transitivePeerDependencies:
+      - debug
+
+  babel-core@7.0.0-bridge.0(@babel/core@7.27.4):
+>>>>>>> 5cd700912 (chore: [OCISDEV-214] update axios to v1.11.0)
     dependencies:
       '@babel/core': 7.25.8
 
@@ -15482,6 +15536,14 @@ snapshots:
       asynckit: 0.4.0
       combined-stream: 1.0.8
       es-set-tostringtag: 2.1.0
+      mime-types: 2.1.35
+
+  form-data@4.0.4:
+    dependencies:
+      asynckit: 0.4.0
+      combined-stream: 1.0.8
+      es-set-tostringtag: 2.1.0
+      hasown: 2.0.2
       mime-types: 2.1.35
 
   formdata-polyfill@4.0.10:
