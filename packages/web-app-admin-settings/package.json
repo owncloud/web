@@ -17,7 +17,7 @@
     "@ownclouders/design-system": "workspace:^",
     "@ownclouders/web-client": "workspace:^",
     "@ownclouders/web-pkg": "workspace:^",
-    "axios": "1.9.0",
+    "axios": "1.11.0",
     "email-validator": "^2.0.4",
     "fuse.js": "7.1.0",
     "lodash-es": "4.17.21",
