@@ -39,120 +39,98 @@
   </div>
 </template>
 
-<script lang="ts">
-import { computed, defineComponent, inject, Ref, unref } from 'vue'
+<script lang="ts" setup>
+import { computed, inject, Ref, unref } from 'vue'
 import { Resource } from '@ownclouders/web-client'
 import { formatDateFromISO, useMessages } from '@ownclouders/web-pkg'
 import { useGettext } from 'vue3-gettext'
 import { useClipboard } from '@vueuse/core'
 
-export default defineComponent({
-  name: 'ExifPanel',
-  setup() {
-    const resource = inject<Ref<Resource>>('resource')
-    const language = useGettext()
-    const { $gettext } = language
-    const { showMessage } = useMessages()
-    const {
-      copy: copyToClipboard,
-      copied: isCopiedToClipboard,
-      isSupported: isCopyToClipboardSupported
-    } = useClipboard({ legacy: true, copiedDuring: 550 })
+const resource = inject<Ref<Resource>>('resource')
+const language = useGettext()
+const { $gettext } = language
+const { showMessage } = useMessages()
+const {
+  copy: copyToClipboard,
+  copied: isCopiedToClipboard,
+  isSupported: isCopyToClipboardSupported
+} = useClipboard({ legacy: true, copiedDuring: 550 })
 
-    const dimensions = computed(() => {
-      const image = unref(resource).image
-      const width = image?.width
-      const height = image?.height
-      if (!width || !height) {
-        return '-'
-      }
-      if ([5, 6, 7, 8].includes(unref(resource).photo?.orientation)) {
-        // these orientations indicate portrait mode. tika normalizes width and height according to orientation.
-        return `${height}x${width}`
-      }
-      return `${width}x${height}`
-    })
-
-    const cameraMake = computed(() => {
-      return unref(resource).photo?.cameraMake || '-'
-    })
-
-    const cameraModel = computed(() => {
-      return unref(resource).photo?.cameraModel || '-'
-    })
-
-    const focalLength = computed(() => {
-      const photo = unref(resource).photo
-      return photo?.focalLength ? `${photo.focalLength} mm` : '-'
-    })
-
-    const fNumber = computed(() => {
-      const photo = unref(resource).photo
-      return photo?.fNumber ? `f/${photo.fNumber}` : '-'
-    })
-
-    const exposureTime = computed(() => {
-      const photo = unref(resource).photo
-      return photo?.exposureDenominator
-        ? `${photo.exposureNumerator}/${photo.exposureDenominator}`
-        : '-'
-    })
-
-    const iso = computed(() => {
-      return unref(resource).photo?.iso || '-'
-    })
-
-    const orientation = computed(() => {
-      return unref(resource).photo?.orientation || '-'
-    })
-
-    const takenDateTime = computed(() => {
-      const photo = unref(resource).photo
-      return photo?.takenDateTime ? formatDateFromISO(photo.takenDateTime, language.current) : '-'
-    })
-
-    const location = computed(() => {
-      const l = unref(resource).location
-      if (!l?.latitude || !l?.longitude) {
-        return '-'
-      }
-      return `${l.latitude}, ${l.longitude}`
-    })
-
-    const isCopyToClipboardAvailable = computed(() => {
-      if (!unref(isCopyToClipboardSupported)) {
-        return false
-      }
-      const l = unref(resource).location
-      return l?.latitude && l?.longitude
-    })
-    const copyLocationToClipboard = () => {
-      copyToClipboard(unref(location))
-      showMessage({
-        title: $gettext('The location has been copied to your clipboard.')
-      })
-    }
-    const copyLocationToClipboardLabel = computed(() => {
-      return $gettext('Copy location to clipboard')
-    })
-
-    return {
-      dimensions,
-      cameraMake,
-      cameraModel,
-      focalLength,
-      fNumber,
-      exposureTime,
-      iso,
-      orientation,
-      takenDateTime,
-      location,
-      isCopyToClipboardAvailable,
-      isCopiedToClipboard,
-      copyLocationToClipboardLabel,
-      copyLocationToClipboard
-    }
+const dimensions = computed(() => {
+  const image = unref(resource).image
+  const width = image?.width
+  const height = image?.height
+  if (!width || !height) {
+    return '-'
   }
+  if ([5, 6, 7, 8].includes(unref(resource).photo?.orientation)) {
+    // these orientations indicate portrait mode. tika normalizes width and height according to orientation.
+    return `${height}x${width}`
+  }
+  return `${width}x${height}`
+})
+
+const cameraMake = computed(() => {
+  return unref(resource).photo?.cameraMake || '-'
+})
+
+const cameraModel = computed(() => {
+  return unref(resource).photo?.cameraModel || '-'
+})
+
+const focalLength = computed(() => {
+  const photo = unref(resource).photo
+  return photo?.focalLength ? `${photo.focalLength} mm` : '-'
+})
+
+const fNumber = computed(() => {
+  const photo = unref(resource).photo
+  return photo?.fNumber ? `f/${photo.fNumber}` : '-'
+})
+
+const exposureTime = computed(() => {
+  const photo = unref(resource).photo
+  return photo?.exposureDenominator
+    ? `${photo.exposureNumerator}/${photo.exposureDenominator}`
+    : '-'
+})
+
+const iso = computed(() => {
+  return unref(resource).photo?.iso || '-'
+})
+
+const orientation = computed(() => {
+  return unref(resource).photo?.orientation || '-'
+})
+
+const takenDateTime = computed(() => {
+  const photo = unref(resource).photo
+  return photo?.takenDateTime ? formatDateFromISO(photo.takenDateTime, language.current) : '-'
+})
+
+const location = computed(() => {
+  const l = unref(resource).location
+  if (!l?.latitude || !l?.longitude) {
+    return '-'
+  }
+  return `${l.latitude}, ${l.longitude}`
+})
+
+const isCopyToClipboardAvailable = computed(() => {
+  if (!unref(isCopyToClipboardSupported)) {
+    return false
+  }
+  const l = unref(resource).location
+  return l?.latitude && l?.longitude
+})
+const copyLocationToClipboard = () => {
+  copyToClipboard(unref(location))
+  showMessage({
+    title: $gettext('The location has been copied to your clipboard.')
+  })
+}
+const copyLocationToClipboardLabel = computed(() => {
+  return $gettext('Copy location to clipboard')
 })
 </script>
 
