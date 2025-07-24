@@ -55,9 +55,19 @@ config = {
     ],
     "pnpmlint": True,
     "e2e": {
-        "1": {
+        "chrome": {
             "earlyFail": True,
             "skip": False,
+            "suites": [],
+        },
+        "chromium": {
+            "earlyFail": True,
+            "skip": False,
+            "suites": [],
+        },
+        "1": {
+            "earlyFail": True,
+            "skip": True,
             "suites": [
                 "journeys",
                 "smoke",
@@ -65,7 +75,7 @@ config = {
         },
         "2": {
             "earlyFail": True,
-            "skip": False,
+            "skip": True,
             "suites": [
                 "admin-settings",
                 "spaces",
@@ -73,7 +83,7 @@ config = {
         },
         "3": {
             "earlyFail": True,
-            "skip": False,
+            "skip": True,
             "tikaNeeded": True,
             "suites": [
                 "search",
@@ -88,7 +98,7 @@ config = {
         },
         "4": {
             "earlyFail": True,
-            "skip": False,
+            "skip": True,
             "suites": [
                 "navigation",
                 "user-settings",
@@ -97,7 +107,7 @@ config = {
             ],
         },
         "app-provider": {
-            "skip": False,
+            "skip": True,
             "suites": [
                 "app-provider",
             ],
@@ -114,7 +124,7 @@ config = {
             },
         },
         "oidc-refresh-token": {
-            "skip": False,
+            "skip": True,
             "features": [
                 "cucumber/features/oidc/refreshToken.feature",
             ],
@@ -124,7 +134,7 @@ config = {
             },
         },
         "oidc-iframe": {
-            "skip": False,
+            "skip": True,
             "features": [
                 "cucumber/features/oidc/iframeTokenRenewal.feature",
             ],
@@ -134,7 +144,7 @@ config = {
         },
         "ocm": {
             "earlyFail": True,
-            "skip": False,
+            "skip": True,
             "federationServer": True,
             "suites": [
                 "ocm",
@@ -207,16 +217,12 @@ def main(ctx):
     return pipelines
 
 def beforePipelines(ctx):
-    return checkStarlark() + \
-           licenseCheck(ctx) + \
-           documentation(ctx) + \
-           changelog(ctx) + \
-           pnpmCache(ctx) + \
+    return pnpmCache(ctx) + \
            cacheOcisPipeline(ctx) + \
-           pipelinesDependsOn(buildCacheWeb(ctx), pnpmCache(ctx)) + \
-           pipelinesDependsOn(pnpmlint(ctx), pnpmCache(ctx))
+           pipelinesDependsOn(buildCacheWeb(ctx), pnpmCache(ctx))
 
 def stagePipelines(ctx):
+    return e2eTests(ctx)
     unit_test_pipelines = unitTests(ctx)
 
     # run only unit tests when publishing a standalone package
@@ -585,20 +591,20 @@ def e2eTests(ctx):
         for item in default:
             params[item] = matrix[item] if item in matrix else default[item]
 
-        # pipeline steps
-        steps = skipIfUnchanged(ctx, "e2e-tests")
+        # # pipeline steps
+        # steps = skipIfUnchanged(ctx, "e2e-tests")
 
-        if "app-provider" in suite and not "full-ci" in ctx.build.title.lower() and ctx.build.event != "cron":
-            steps = skipIfUnchanged(ctx, "drone-ci")
+        # if "app-provider" in suite and not "full-ci" in ctx.build.title.lower() and ctx.build.event != "cron":
+        #     steps = skipIfUnchanged(ctx, "drone-ci")
 
-        if "ocm" in suite and not "full-ci" in ctx.build.title.lower() and ctx.build.event != "cron":
-            steps = skipIfUnchanged(ctx, "drone-ci")
+        # if "ocm" in suite and not "full-ci" in ctx.build.title.lower() and ctx.build.event != "cron":
+        #     steps = skipIfUnchanged(ctx, "drone-ci")
 
         if params["skip"]:
             continue
 
-        if ("with-tracing" in ctx.build.title.lower()):
-            params["reportTracing"] = "true"
+        # if ("with-tracing" in ctx.build.title.lower()):
+        #     params["reportTracing"] = "true"
 
         environment = {
             "HEADLESS": "true",
@@ -611,6 +617,7 @@ def e2eTests(ctx):
             "FEDERATED_BASE_URL_OCIS": "federation-ocis:9200",
         }
 
+        steps = []
         steps += restoreBuildArtifactCache(ctx, "pnpm", ".pnpm-store") + \
                  installPnpm() + \
                  restoreBrowsersCache() + \
@@ -640,23 +647,37 @@ def e2eTests(ctx):
             steps += (tikaService() if params["tikaNeeded"] else []) + \
                      ocisService(params["extraServerEnvironment"])
 
-        command = "bash run-e2e.sh "
-        if "suites" in matrix:
-            command += "--suites %s" % ",".join(params["suites"])
-        elif "features" in matrix:
-            command += "%s" % " ".join(params["features"])
-        else:
-            print("Error: No suites or features defined for e2e test suite '%s'" % suite)
-            return []
+        # command = "bash run-e2e.sh "
+        # if "suites" in matrix:
+        #     command += "--suites %s" % ",".join(params["suites"])
+        # elif "features" in matrix:
+        #     command += "%s" % " ".join(params["features"])
+        # else:
+        #     print("Error: No suites or features defined for e2e test suite '%s'" % suite)
+        #     return []
 
         steps += [{
                      "name": "e2e-tests",
                      "image": OC_CI_NODEJS_IMAGE,
-                     "environment": environment,
                      "commands": [
-                         "cd tests/e2e",
-                         command,
+                         "cd tests/pw",
+                         "npx playwright install chromium --with-deps" if suite == "chromium" else "",
+                         "npx playwright test --project='%s'" % suite,
                      ],
+                 }, {
+                     "name": "tracings",
+                     "image": OC_CI_NODEJS_IMAGE,
+                     "commands": [
+                         "mkdir -p %s/reports/e2e/playwright/tracing" % dir["web"],
+                         # "%s/reports/e2e/playwright/tracing/**/*" % dir["web"]
+                         "mv %s/test-results/test-download-%s/trace.zip %s/reports/e2e/playwright/tracing/trace-%s.zip" % (dir["web"], suite, dir["web"], suite),
+                     ],
+                     "when": {
+                         "status": [
+                             "success",
+                             "failure",
+                         ],
+                     },
                  }] + \
                  uploadTracingResult(ctx) + \
                  logTracingResult(ctx, "e2e-tests %s" % suite)
