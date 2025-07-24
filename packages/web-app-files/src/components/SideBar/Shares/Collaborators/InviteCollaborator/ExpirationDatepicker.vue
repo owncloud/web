@@ -29,68 +29,54 @@
   </oc-button>
 </template>
 
-<script lang="ts">
+<script lang="ts" setup>
 import { DateTime } from 'luxon'
-import { watch, defineComponent, customRef, PropType, unref } from 'vue'
+import { watch, customRef, unref } from 'vue'
 import { useModals } from '@ownclouders/web-pkg'
 import { useGettext } from 'vue3-gettext'
 import DatePickerModal from '../../../../Modals/DatePickerModal.vue'
 
-export default defineComponent({
-  name: 'DateCurrentpicker',
-  props: {
-    shareTypes: {
-      type: Array as PropType<number[]>,
-      required: false,
-      default: (): number[] => []
-    }
-  },
-  emits: ['optionChange'],
-  setup(props, { emit }) {
-    const language = useGettext()
-    const { dispatchModal } = useModals()
+interface Emits {
+  (e: 'optionChange', data: { expirationDate: DateTime | null }): void
+}
 
-    const dateCurrent = customRef<DateTime>((track, trigger) => {
-      let date: DateTime = null
-      return {
-        get() {
-          track()
-          return date
-        },
-        set(val: DateTime) {
-          date = val
-          trigger()
-        }
-      }
-    })
+const emit = defineEmits<Emits>()
+const language = useGettext()
+const { dispatchModal } = useModals()
 
-    const showDatePickerModal = () => {
-      dispatchModal({
-        title: language.$gettext('Set expiration date'),
-        hideActions: true,
-        customComponent: DatePickerModal,
-        customComponentAttrs: () => ({
-          currentDate: unref(dateCurrent),
-          minDate: DateTime.now()
-        }),
-        onConfirm: (expirationDateTime: DateTime) => {
-          dateCurrent.value = expirationDateTime
-        }
-      })
-    }
-
-    watch(dateCurrent, () => {
-      emit('optionChange', {
-        expirationDate: unref(dateCurrent)?.isValid ? dateCurrent.value : null
-      })
-    })
-
-    return {
-      language,
-      dateCurrent,
-      showDatePickerModal
+const dateCurrent = customRef<DateTime>((track, trigger) => {
+  let date: DateTime = null
+  return {
+    get() {
+      track()
+      return date
+    },
+    set(val: DateTime) {
+      date = val
+      trigger()
     }
   }
+})
+
+const showDatePickerModal = () => {
+  dispatchModal({
+    title: language.$gettext('Set expiration date'),
+    hideActions: true,
+    customComponent: DatePickerModal,
+    customComponentAttrs: () => ({
+      currentDate: unref(dateCurrent),
+      minDate: DateTime.now()
+    }),
+    onConfirm: (expirationDateTime: DateTime) => {
+      dateCurrent.value = expirationDateTime
+    }
+  })
+}
+
+watch(dateCurrent, () => {
+  emit('optionChange', {
+    expirationDate: unref(dateCurrent)?.isValid ? dateCurrent.value : null
+  })
 })
 </script>
 
