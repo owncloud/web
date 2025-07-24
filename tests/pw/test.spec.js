@@ -23,27 +23,32 @@ test('download', async ({ page, browser }) => {
   ])
   await page.locator('#web-content').waitFor()
 
-  await page.route('*/**/playwright.png', async (route, req) => {
-    if (req.method() === 'HEAD') {
-      console.log('Intercepted request:', req.url())
-      await route.fulfill('')
-      return
-    }
-    await route.continue()
-  })
+  // await page.route('*/**/playwright.png', async (route, req) => {
+  //   if (req.method() === 'HEAD') {
+  //     console.log('Intercepted request:', req.url())
+  //     await route.fulfill('')
+  //     return
+  //   }
+  //   await route.continue()
+  // })
+
+  // await page.pause()
 
   // upload
   await page.locator('#upload-menu-btn').click()
   await page.locator('#files-file-upload-input').setInputFiles([path.resolve('playwright.png')])
-  await page.waitForTimeout(3000)
-  await page.locator('#close-upload-bar-btn').click()
   await page.waitForTimeout(2000)
-  await page.locator('[title="playwright.png"]').click()
+  await page.locator('#close-upload-bar-btn').click()
+  await page.waitForTimeout(1000)
+  await page.locator('td [data-test-resource-name="playwright.png"]').click()
   // download
   await page.locator('#oc-openfile-contextmenu-trigger').click()
   await page.locator('.oc-files-actions-download-file-trigger').click()
-  await page.locator('button#app-top-bar-close').click()
-  await page.locator('[title="playwright.png"]').click()
+  // close viewer
+  await page.locator('#app-top-bar-close').click()
+  await page.screenshot({ path: 'screenshot.png', fullPage: true })
+  // check file in the list
+  await page.locator('td [data-test-resource-name="playwright.png"]').waitFor()
 
   // await context.tracing.stop({ path: 'trace.zip' })
 })
