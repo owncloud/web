@@ -43,59 +43,49 @@
   </div>
 </template>
 
-<script lang="ts">
-import { computed, PropType } from 'vue'
+<script lang="ts" setup>
+import { computed, unref } from 'vue'
 import { CollaboratorAutoCompleteItem, ShareTypes } from '@ownclouders/web-client'
 
-export default {
-  name: 'AutocompleteItem',
-
-  props: {
-    item: {
-      type: Object as PropType<CollaboratorAutoCompleteItem>,
-      required: true
-    }
-  },
-  setup(props) {
-    const additionalInfo = computed(() => {
-      return props.item.mail || props.item.onPremisesSamAccountName
-    })
-
-    const externalIssuer = computed(() => {
-      if (props.item.shareType === ShareTypes.remote.value) {
-        return props.item.identities?.[0]?.issuer
-      }
-      return ''
-    })
-
-    return { additionalInfo, externalIssuer }
-  },
-  computed: {
-    shareType() {
-      return ShareTypes.getByValue(this.item.shareType)
-    },
-
-    shareTypeIcon() {
-      return this.shareType.icon
-    },
-
-    shareTypeKey() {
-      return this.shareType.key
-    },
-
-    isAnyUserShareType() {
-      return ShareTypes.user.key === this.shareType.key
-    },
-
-    isAnyPrimaryShareType() {
-      return [ShareTypes.user.key, ShareTypes.group.key].includes(this.shareType.key)
-    },
-
-    collaboratorClass() {
-      return `files-collaborators-search-${this.shareType.key}`
-    }
-  }
+interface Props {
+  item: CollaboratorAutoCompleteItem
 }
+
+const props = defineProps<Props>()
+
+const additionalInfo = computed(() => {
+  return props.item.mail || props.item.onPremisesSamAccountName
+})
+
+const externalIssuer = computed(() => {
+  if (props.item.shareType === ShareTypes.remote.value) {
+    return props.item.identities?.[0]?.issuer
+  }
+  return ''
+})
+const shareType = computed(() => {
+  return ShareTypes.getByValue(props.item.shareType)
+})
+
+const shareTypeIcon = computed(() => {
+  return unref(shareType).icon
+})
+
+const shareTypeKey = computed(() => {
+  return unref(shareType).key
+})
+
+const isAnyUserShareType = computed(() => {
+  return ShareTypes.user.key === unref(shareType).key
+})
+
+const isAnyPrimaryShareType = computed(() => {
+  return [ShareTypes.user.key, ShareTypes.group.key].includes(unref(shareType).key)
+})
+
+const collaboratorClass = computed(() => {
+  return `files-collaborators-search-${unref(shareType).key}`
+})
 </script>
 
 <style lang="scss">
