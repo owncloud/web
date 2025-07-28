@@ -10,6 +10,7 @@ Summary
 
 * Bugfix - Reset selection only when path changes: [#12768](https://github.com/owncloud/web/pull/12768)
 * Bugfix - Handle direct admin settings access: [#12780](https://github.com/owncloud/web/pull/12780)
+* Enhancement - Add markdown to PDF export: [#12788](https://github.com/owncloud/web/pull/12788)
 
 Details
 -------
@@ -36,6 +37,16 @@ Details
    handle the permissions navigation guard.
 
    https://github.com/owncloud/web/pull/12780
+
+* Enhancement - Add markdown to PDF export: [#12788](https://github.com/owncloud/web/pull/12788)
+
+   Added a new file action which allows exporting a markdown files as a PDF. Users
+   can export the markdown file as a PDF by clicking on the new action in the
+   context menu inside the markdown editor. Users are able to choose a location and
+   a name for the exported PDF file. The export is done in the background and the
+   user is notified when it is ready.
+
+   https://github.com/owncloud/web/pull/12788
 
 Changelog for ownCloud Web [11.3.5] (2025-06-26)
 =======================================
