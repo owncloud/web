@@ -27,17 +27,11 @@
   </oc-button>
 </template>
 
-<script lang="ts">
-import { defineComponent, PropType } from 'vue'
+<script lang="ts" setup>
 import { EditOption } from './EditDropdown.vue'
 
-export default defineComponent({
-  name: 'ContextMenuItem',
-  props: {
-    option: {
-      type: Object as PropType<EditOption>,
-      required: true
-    }
-  }
-})
+interface Props {
+  option: EditOption
+}
+const { option } = defineProps<Props>()
 </script>
