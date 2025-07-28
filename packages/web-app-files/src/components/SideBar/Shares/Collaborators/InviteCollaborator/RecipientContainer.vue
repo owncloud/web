@@ -17,114 +17,101 @@
   </oc-recipient>
 </template>
 
-<script lang="ts">
-import { avatarUrl } from '../../../../../helpers/user'
+<script lang="ts" setup>
+import { useGettext } from 'vue3-gettext'
 import { CollaboratorAutoCompleteItem, ShareTypes } from '@ownclouders/web-client'
-import { computed, defineComponent, PropType } from 'vue'
+import { computed, unref, ref } from 'vue'
 import { Recipient } from '@ownclouders/design-system/helpers'
-import { useCapabilityStore, useConfigStore } from '@ownclouders/web-pkg'
+import { useCapabilityStore, useConfigStore, useClientService } from '@ownclouders/web-pkg'
 import { storeToRefs } from 'pinia'
+import { avatarUrl } from '../../../../../helpers/user'
 
-export default defineComponent({
-  props: {
-    recipient: {
-      type: Object as PropType<CollaboratorAutoCompleteItem>,
-      required: true
-    },
-    deselect: {
-      type: Function,
-      required: false,
-      default: null
-    }
-  },
-  setup(props) {
-    const capabilityStore = useCapabilityStore()
-    const capabilityRefs = storeToRefs(capabilityStore)
+interface Props {
+  recipient: CollaboratorAutoCompleteItem
+  deselect?: (recipient: CollaboratorAutoCompleteItem) => void
+}
+const { recipient, deselect = null } = defineProps<Props>()
+const capabilityStore = useCapabilityStore()
+const capabilityRefs = storeToRefs(capabilityStore)
+const clientService = useClientService()
 
-    const configStore = useConfigStore()
-    const { serverUrl } = storeToRefs(configStore)
+const configStore = useConfigStore()
+const { serverUrl } = storeToRefs(configStore)
 
-    const externalIssuer = computed(() => {
-      if (props.recipient.shareType === ShareTypes.remote.value) {
-        return props.recipient.identities?.[0]?.issuer
+const { $gettext } = useGettext()
+const externalIssuer = computed(() => {
+  if (recipient.shareType === ShareTypes.remote.value) {
+    return recipient.identities?.[0]?.issuer
+  }
+  return ''
+})
+
+const userProfilePicture = unref(capabilityRefs.sharingUserProfilePicture)
+const btnDeselectRecipientLabel = computed(() => {
+  return $gettext('Deselect %{name}', { name: recipient.displayName })
+})
+
+const recipientName = computed(() => {
+  let name = recipient.displayName
+  if (unref(externalIssuer)) {
+    name += ` (${unref(externalIssuer)})`
+  }
+
+  return name
+})
+
+const formattedRecipient = ref<Recipient>({
+  name: unref(recipientName),
+  icon: getRecipientIcon(),
+  hasAvatar: recipient.shareType === ShareTypes.user.value,
+  isLoadingAvatar: true
+})
+
+function getRecipientIcon() {
+  switch (recipient.shareType) {
+    case ShareTypes.group.value:
+      return {
+        name: ShareTypes.group.icon,
+        label: $gettext('Group')
       }
-      return ''
-    })
 
-    return {
-      serverUrl,
-      userProfilePicture: capabilityRefs.sharingUserProfilePicture,
-      externalIssuer
-    }
-  },
-  data(): { formattedRecipient: Recipient } {
-    let name = this.recipient.displayName
-    if (this.externalIssuer) {
-      name += ` (${this.externalIssuer})`
-    }
-
-    return {
-      formattedRecipient: {
-        name,
-        icon: this.getRecipientIcon(),
-        hasAvatar: this.recipient.shareType === ShareTypes.user.value,
-        isLoadingAvatar: true
+    case ShareTypes.guest.value:
+      return {
+        name: ShareTypes.guest.icon,
+        label: $gettext('Guest user')
       }
-    }
-  },
 
-  computed: {
-    btnDeselectRecipientLabel() {
-      return this.$gettext('Deselect %{name}', { name: this.recipient.displayName })
-    }
-  },
-
-  async created() {
-    if (this.userProfilePicture && this.formattedRecipient.hasAvatar) {
-      try {
-        this.formattedRecipient.avatar = await avatarUrl({
-          clientService: this.$clientService,
-          server: this.serverUrl,
-          username: this.recipient.displayName
-        })
-      } catch (error) {
-        console.error(error)
+    case ShareTypes.remote.value:
+      return {
+        name: ShareTypes.remote.icon,
+        label: $gettext('External user')
       }
-    }
 
-    this.formattedRecipient.isLoadingAvatar = false
-  },
-
-  methods: {
-    getRecipientIcon() {
-      switch (this.recipient.shareType) {
-        case ShareTypes.group.value:
-          return {
-            name: ShareTypes.group.icon,
-            label: this.$gettext('Group')
-          }
-
-        case ShareTypes.guest.value:
-          return {
-            name: ShareTypes.guest.icon,
-            label: this.$gettext('Guest user')
-          }
-
-        case ShareTypes.remote.value:
-          return {
-            name: ShareTypes.remote.icon,
-            label: this.$gettext('External user')
-          }
-
-        default:
-          return {
-            name: ShareTypes.user.icon,
-            label: this.$gettext('User')
-          }
+    default:
+      return {
+        name: ShareTypes.user.icon,
+        label: $gettext('User')
       }
+  }
+}
+
+async function onCreated() {
+  if (userProfilePicture && unref(formattedRecipient).hasAvatar) {
+    try {
+      unref(formattedRecipient).avatar = await avatarUrl({
+        clientService,
+        server: unref(serverUrl),
+        username: recipient.displayName
+      })
+    } catch (error) {
+      console.error(error)
     }
   }
-})
+
+  unref(formattedRecipient).isLoadingAvatar = false
+}
+
+onCreated()
 </script>
 
 <style lang="scss">
