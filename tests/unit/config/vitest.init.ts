@@ -15,3 +15,8 @@ const ResizeObserverMock = vi.fn(() => ({
 vi.stubGlobal('ResizeObserver', ResizeObserverMock)
 
 vi.stubGlobal('define', vi.fn())
+
+// This is needed for KaTeX to work in the tests
+Object.defineProperty(document, 'compatMode', {
+  value: 'CSS1Compat'
+})
