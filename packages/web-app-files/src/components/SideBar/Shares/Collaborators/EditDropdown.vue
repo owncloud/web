@@ -50,8 +50,8 @@
   </div>
 </template>
 
-<script lang="ts">
-import { computed, defineComponent, inject, PropType, Ref, unref, useTemplateRef } from 'vue'
+<script lang="ts" setup>
+import { computed, inject, Ref, unref, useTemplateRef } from 'vue'
 import { DateTime } from 'luxon'
 import { ContextualHelperDataListItem, uniqueId } from '@ownclouders/design-system/helpers'
 import { OcDrop, OcInfoDrop } from '@ownclouders/design-system/components'
@@ -74,213 +74,179 @@ export type EditOption = {
   to?: RouteLocationNamedRaw
 }
 
-export default defineComponent({
-  name: 'EditDropdown',
-  components: { ContextMenuItem },
-  props: {
-    expirationDate: {
-      type: String,
-      required: false,
-      default: undefined
-    },
-    shareCategory: {
-      type: String,
-      required: false,
-      default: null,
-      validator: function (value: string) {
-        return ['user', 'group'].includes(value) || !value
-      }
-    },
-    canEdit: {
-      type: Boolean,
-      required: true
-    },
-    accessDetails: {
-      type: Array as PropType<ContextualHelperDataListItem[]>,
-      required: true
-    },
-    isShareDenied: {
-      type: Boolean,
-      default: false
-    },
-    deniable: {
-      type: Boolean,
-      default: false
-    },
-    isLocked: {
-      type: Boolean,
-      default: false
-    },
-    sharedParentRoute: {
-      type: Object as PropType<RouteLocationNamedRaw>,
-      default: undefined
-    }
-  },
-  emits: ['expirationDateChanged', 'removeShare', 'setDenyShare', 'notifyShare'],
-  setup(props, { emit }) {
-    const language = useGettext()
-    const { $gettext } = language
-    const configStore = useConfigStore()
-    const { dispatchModal } = useModals()
-    const expirationDateDrop = useTemplateRef<typeof OcDrop>('expirationDateDrop')
-    const accessDetailsDrop = useTemplateRef<typeof OcInfoDrop>('accessDetailsDrop')
+interface Props {
+  expirationDate?: string
+  shareCategory?: 'user' | 'group' | null
+  canEdit: boolean
+  accessDetails: ContextualHelperDataListItem[]
+  isShareDenied?: boolean
+  deniable?: boolean
+  isLocked?: boolean
+  sharedParentRoute?: RouteLocationNamedRaw
+}
+interface Emits {
+  (e: 'expirationDateChanged', payload: { expirationDateTime: DateTime | null }): void
+  (e: 'removeShare'): void
+  (e: 'setDenyShare', value: boolean): void
+  (e: 'notifyShare'): void
+}
+const {
+  expirationDate = undefined,
+  shareCategory = null,
+  canEdit,
+  accessDetails,
+  isShareDenied = false,
+  deniable = false,
+  isLocked = false,
+  sharedParentRoute = undefined
+} = defineProps<Props>()
+const emit = defineEmits<Emits>()
+const language = useGettext()
+const { $gettext } = language
+const configStore = useConfigStore()
+const { dispatchModal } = useModals()
+const expirationDateDrop = useTemplateRef<typeof OcDrop>('expirationDateDrop')
+const accessDetailsDrop = useTemplateRef<typeof OcInfoDrop>('accessDetailsDrop')
 
-    const resource = inject<Ref<Resource>>('resource')
+const resource = inject<Ref<Resource>>('resource')
 
-    const toggleShareDenied = (value: boolean) => {
-      emit('setDenyShare', value)
-    }
+const toggleShareDenied = (value: boolean) => {
+  emit('setDenyShare', value)
+}
 
-    const dropButtonTooltip = computed(() => {
-      if (props.isLocked) {
-        return $gettext('Resource is temporarily locked, unable to manage share')
-      }
+function removeExpirationDate() {
+  emit('expirationDateChanged', { expirationDateTime: null })
+  unref(expirationDateDrop).hide()
+}
+function showDatePickerModal() {
+  const currentDate = DateTime.fromISO(expirationDate)
 
-      return ''
-    })
-
-    const navigateToParentOption = computed<EditOption>(() => {
-      return {
-        title: $gettext('Navigate to parent'),
-        icon: 'folder-shared',
-        class: 'navigate-to-parent',
-        to: props.sharedParentRoute
-      }
-    })
-
-    const removeShareOption = computed<EditOption>(() => {
-      return {
-        title: isProjectSpaceResource(unref(resource))
-          ? $gettext('Remove member')
-          : $gettext('Remove share'),
-        method: () => {
-          emit('removeShare')
-        },
-        class: 'remove-share',
-        icon: 'delete-bin-5',
-        additionalAttributes: {
-          'data-testid': 'collaborator-remove-share-btn'
-        }
-      }
-    })
-
-    return {
-      configStore,
-      resource,
-      expirationDateDrop,
-      accessDetailsDrop,
-      toggleShareDenied,
-      dropButtonTooltip,
-      dispatchModal,
-      navigateToParentOption,
-      removeShareOption
-    }
-  },
-  computed: {
-    options(): EditOption[] {
-      const result: EditOption[] = [
-        {
-          title: this.$gettext('Access details'),
-          method: () => this.accessDetailsDrop.$refs.drop.show(),
-          icon: 'information',
-          class: 'show-access-details'
-        }
-      ]
-
-      if (this.deniable) {
-        result.push({
-          title: this.$gettext('Deny access'),
-          method: this.toggleShareDenied,
-          icon: 'stop-circle',
-          class: 'deny-share',
-          hasSwitch: true,
-          isChecked: computed(() => this.isShareDenied)
-        })
-      }
-
-      if (this.canEdit && this.isExpirationSupported) {
-        result.push({
-          title: this.isExpirationDateSet
-            ? this.$gettext('Edit expiration date')
-            : this.$gettext('Set expiration date'),
-          class: 'set-expiration-date recipient-datepicker-btn',
-          icon: 'calendar-event',
-          method: this.showDatePickerModal
-        })
-      }
-
-      if (this.isRemoveExpirationPossible) {
-        result.push({
-          title: this.$gettext('Remove expiration date'),
-          class: 'remove-expiration-date',
-          icon: 'calendar-close',
-          method: this.removeExpirationDate
-        })
-      }
-
-      if (this.configStore.options.isRunningOnEos) {
-        result.push({
-          title: this.$gettext('Notify via mail'),
-          method: () => this.$emit('notifyShare'),
-          icon: 'mail',
-          class: 'notify-via-mail'
-        })
-      }
-
-      return result
-    },
-
-    editShareBtnId() {
-      return uniqueId('files-collaborators-edit-button-')
-    },
-    shareEditOptions() {
-      return this.$gettext('Context menu of the share')
-    },
-
-    editingUser() {
-      return this.shareCategory === 'user'
-    },
-
-    editingGroup() {
-      return this.shareCategory === 'group'
-    },
-
-    isExpirationSupported() {
-      return this.editingUser || this.editingGroup
-    },
-
-    isExpirationDateSet() {
-      return !!this.expirationDate
-    },
-
-    isRemoveExpirationPossible() {
-      return this.canEdit && this.isExpirationSupported && this.isExpirationDateSet
-    }
-  },
-  methods: {
-    removeExpirationDate() {
-      this.$emit('expirationDateChanged', { expirationDateTime: null })
-      this.expirationDateDrop.hide()
-    },
-    showDatePickerModal() {
-      const currentDate = DateTime.fromISO(this.expirationDate)
-
-      this.dispatchModal({
-        title: this.$gettext('Set expiration date'),
-        hideActions: true,
-        customComponent: DatePickerModal,
-        customComponentAttrs: () => ({
-          currentDate: currentDate.isValid ? currentDate : null,
-          minDate: DateTime.now()
-        }),
-        onConfirm: (expirationDateTime: DateTime) => {
-          this.$emit('expirationDateChanged', {
-            expirationDateTime
-          })
-        }
+  dispatchModal({
+    title: $gettext('Set expiration date'),
+    hideActions: true,
+    customComponent: DatePickerModal,
+    customComponentAttrs: () => ({
+      currentDate: currentDate.isValid ? currentDate : null,
+      minDate: DateTime.now()
+    }),
+    onConfirm: (expirationDateTime: DateTime) => {
+      emit('expirationDateChanged', {
+        expirationDateTime
       })
     }
+  })
+}
+const dropButtonTooltip = computed(() => {
+  if (isLocked) {
+    return $gettext('Resource is temporarily locked, unable to manage share')
   }
+
+  return ''
+})
+
+const navigateToParentOption = computed<EditOption>(() => {
+  return {
+    title: $gettext('Navigate to parent'),
+    icon: 'folder-shared',
+    class: 'navigate-to-parent',
+    to: sharedParentRoute
+  }
+})
+
+const removeShareOption = computed<EditOption>(() => {
+  return {
+    title: isProjectSpaceResource(unref(resource))
+      ? $gettext('Remove member')
+      : $gettext('Remove share'),
+    method: () => {
+      emit('removeShare')
+    },
+    class: 'remove-share',
+    icon: 'delete-bin-5',
+    additionalAttributes: {
+      'data-testid': 'collaborator-remove-share-btn'
+    }
+  }
+})
+
+const options = computed<EditOption[]>(() => {
+  const result: EditOption[] = [
+    {
+      title: $gettext('Access details'),
+      method: () => accessDetailsDrop.value.$refs.drop.show(),
+      icon: 'information',
+      class: 'show-access-details'
+    }
+  ]
+
+  if (deniable) {
+    result.push({
+      title: $gettext('Deny access'),
+      method: toggleShareDenied,
+      icon: 'stop-circle',
+      class: 'deny-share',
+      hasSwitch: true,
+      isChecked: computed(() => isShareDenied)
+    })
+  }
+
+  if (canEdit && unref(isExpirationSupported)) {
+    result.push({
+      title: unref(isExpirationDateSet)
+        ? $gettext('Edit expiration date')
+        : $gettext('Set expiration date'),
+      class: 'set-expiration-date recipient-datepicker-btn',
+      icon: 'calendar-event',
+      method: showDatePickerModal
+    })
+  }
+
+  if (unref(isRemoveExpirationPossible)) {
+    result.push({
+      title: $gettext('Remove expiration date'),
+      class: 'remove-expiration-date',
+      icon: 'calendar-close',
+      method: removeExpirationDate
+    })
+  }
+
+  if (configStore.options.isRunningOnEos) {
+    result.push({
+      title: $gettext('Notify via mail'),
+      method: () => emit('notifyShare'),
+      icon: 'mail',
+      class: 'notify-via-mail'
+    })
+  }
+
+  return result
+})
+
+const editShareBtnId = computed(() => {
+  return uniqueId('files-collaborators-edit-button-')
+})
+const shareEditOptions = computed(() => {
+  return $gettext('Context menu of the share')
+})
+
+const editingUser = computed(() => {
+  return shareCategory === 'user'
+})
+
+const editingGroup = computed(() => {
+  return shareCategory === 'group'
+})
+
+const isExpirationSupported = computed(() => {
+  return unref(editingUser) || unref(editingGroup)
+})
+
+const isExpirationDateSet = computed(() => {
+  return !!expirationDate
+})
+
+const isRemoveExpirationPossible = computed(() => {
+  return canEdit && unref(isExpirationSupported) && unref(isExpirationDateSet)
 })
 </script>
 <style lang="scss">
