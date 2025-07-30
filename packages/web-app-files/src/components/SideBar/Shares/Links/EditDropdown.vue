@@ -42,7 +42,7 @@
   </div>
 </template>
 
-<script lang="ts">
+<script lang="ts" setup>
 import { DateTime } from 'luxon'
 import {
   createLocationSpaces,
@@ -51,7 +51,7 @@ import {
   useResourcesStore
 } from '@ownclouders/web-pkg'
 import { LinkShare } from '@ownclouders/web-client'
-import { computed, defineComponent, inject, PropType, Ref, unref, useTemplateRef } from 'vue'
+import { computed, inject, Ref, unref, useTemplateRef } from 'vue'
 import { Resource } from '@ownclouders/web-client'
 import { createFileRouteOptions } from '@ownclouders/web-pkg'
 import { OcDrop } from '@ownclouders/design-system/components'
@@ -70,209 +70,196 @@ export type EditOption = {
   variation?: string
 }
 
-export default defineComponent({
-  name: 'EditDropdown',
-  components: { ContextMenuItem },
-  props: {
-    canRename: {
-      type: Boolean,
-      default: false
-    },
-    isModifiable: {
-      type: Boolean,
-      default: false
-    },
-    isPasswordRemovable: {
-      type: Boolean,
-      default: false
-    },
-    linkShare: {
-      type: Object as PropType<LinkShare>,
-      required: true
-    }
-  },
-  emits: ['removePublicLink', 'updateLink', 'showPasswordModal'],
-  setup(props, { emit }) {
-    const { dispatchModal } = useModals()
-    const { $gettext } = useGettext()
-    const { getMatchingSpace } = useGetMatchingSpace()
-    const resourcesStore = useResourcesStore()
-    const editPublicLinkDropdown = useTemplateRef<typeof OcDrop>('editPublicLinkDropdown')
+interface Props {
+  canRename?: boolean
+  isModifiable?: boolean
+  isPasswordRemovable?: boolean
+  linkShare: LinkShare
+}
+interface Emits {
+  (e: 'removePublicLink', payload: { link: LinkShare }): void
+  (
+    e: 'updateLink',
+    payload: { linkShare: LinkShare; options?: Record<string, DateTime | string> }
+  ): void
+  (e: 'showPasswordModal'): void
+}
+const {
+  canRename = false,
+  isModifiable = false,
+  isPasswordRemovable = false,
+  linkShare
+} = defineProps<Props>()
 
-    const resource = inject<Ref<Resource>>('resource')
+const emit = defineEmits<Emits>()
+const { dispatchModal } = useModals()
+const { $gettext } = useGettext()
+const { getMatchingSpace } = useGetMatchingSpace()
+const resourcesStore = useResourcesStore()
+const editPublicLinkDropdown = useTemplateRef<typeof OcDrop>('editPublicLinkDropdown')
 
-    const showDatePickerModal = () => {
-      const currentDate = DateTime.fromISO(props.linkShare.expirationDateTime)
+const resource = inject<Ref<Resource>>('resource')
 
-      dispatchModal({
-        title: $gettext('Set expiration date'),
-        hideActions: true,
-        customComponent: DatePickerModal,
-        customComponentAttrs: () => ({
-          currentDate: currentDate.isValid ? currentDate : null,
-          minDate: DateTime.now()
-        }),
-        onConfirm: (expirationDateTime: DateTime) => {
-          emit('updateLink', {
-            linkShare: { ...props.linkShare },
-            options: { expirationDateTime }
-          })
-        }
+const showDatePickerModal = () => {
+  const currentDate = DateTime.fromISO(linkShare.expirationDateTime)
+
+  dispatchModal({
+    title: $gettext('Set expiration date'),
+    hideActions: true,
+    customComponent: DatePickerModal,
+    customComponentAttrs: () => ({
+      currentDate: currentDate.isValid ? currentDate : null,
+      minDate: DateTime.now()
+    }),
+    onConfirm: (expirationDateTime: DateTime) => {
+      emit('updateLink', {
+        linkShare: { ...linkShare },
+        options: { expirationDateTime }
       })
     }
+  })
+}
 
-    const isInternalLink = computed(() => {
-      return props.linkShare.type === SharingLinkType.Internal
+const isInternalLink = computed(() => {
+  return linkShare.type === SharingLinkType.Internal
+})
+
+const sharedAncestor = computed(() => {
+  if (!linkShare.indirect) {
+    return null
+  }
+
+  return resourcesStore.getAncestorById(linkShare.resourceId)
+})
+
+const viaRouterParams = computed(() => {
+  const matchingSpace = getMatchingSpace(unref(resource))
+  if (!matchingSpace || !unref(sharedAncestor)) {
+    return {}
+  }
+
+  return createLocationSpaces(
+    'files-spaces-generic',
+    createFileRouteOptions(matchingSpace, {
+      path: unref(sharedAncestor).path,
+      fileId: unref(sharedAncestor).id
     })
+  )
+})
 
-    const sharedAncestor = computed(() => {
-      if (!props.linkShare.indirect) {
-        return null
+const deleteOption = computed<EditOption>(() => {
+  return {
+    id: 'delete',
+    title: $gettext('Delete link'),
+    method: () => {
+      emit('removePublicLink', { link: linkShare })
+      unref(editPublicLinkDropdown).hide()
+    },
+    icon: 'delete-bin-5',
+    variation: 'danger'
+  }
+})
+
+const navigateToParentOption = computed<EditOption>(() => {
+  return {
+    id: 'open-shared-via',
+    title: $gettext('Navigate to parent'),
+    icon: 'folder-shared',
+    to: unref(viaRouterParams)
+  }
+})
+
+const showRenameModal = () => {
+  dispatchModal({
+    title: $gettext('Edit name'),
+    confirmText: $gettext('Save'),
+    hasInput: true,
+    inputValue: linkShare.displayName,
+    inputLabel: $gettext('Link name'),
+    onInput: (name, setError) => {
+      if (name.length > 255) {
+        return setError($gettext('Link name cannot exceed 255 characters'))
       }
-
-      return resourcesStore.getAncestorById(props.linkShare.resourceId)
-    })
-
-    const viaRouterParams = computed(() => {
-      const matchingSpace = getMatchingSpace(unref(resource))
-      if (!matchingSpace || !unref(sharedAncestor)) {
-        return {}
-      }
-
-      return createLocationSpaces(
-        'files-spaces-generic',
-        createFileRouteOptions(matchingSpace, {
-          path: unref(sharedAncestor).path,
-          fileId: unref(sharedAncestor).id
-        })
-      )
-    })
-
-    const deleteOption = computed<EditOption>(() => {
-      return {
-        id: 'delete',
-        title: $gettext('Delete link'),
-        method: () => {
-          emit('removePublicLink', { link: props.linkShare })
-          unref(editPublicLinkDropdown).hide()
-        },
-        icon: 'delete-bin-5',
-        variation: 'danger'
-      }
-    })
-
-    const navigateToParentOption = computed<EditOption>(() => {
-      return {
-        id: 'open-shared-via',
-        title: $gettext('Navigate to parent'),
-        icon: 'folder-shared',
-        to: unref(viaRouterParams)
-      }
-    })
-
-    const showRenameModal = () => {
-      dispatchModal({
-        title: $gettext('Edit name'),
-        confirmText: $gettext('Save'),
-        hasInput: true,
-        inputValue: props.linkShare.displayName,
-        inputLabel: $gettext('Link name'),
-        onInput: (name, setError) => {
-          if (name.length > 255) {
-            return setError($gettext('Link name cannot exceed 255 characters'))
-          }
-          return setError(null)
-        },
-        onConfirm: (displayName: string) => {
-          const linkShare = props.linkShare
-          emit('updateLink', { linkShare, options: { displayName } })
-        }
-      })
+      return setError(null)
+    },
+    onConfirm: (displayName: string) => {
+      emit('updateLink', { linkShare, options: { displayName } })
     }
+  })
+}
 
-    const editOptions = computed<EditOption[]>(() => {
-      const result: EditOption[] = []
+const editOptions = computed<EditOption[]>(() => {
+  const result: EditOption[] = []
 
-      if (!props.isModifiable) {
-        return result
-      }
+  if (!isModifiable) {
+    return result
+  }
 
-      if (props.canRename) {
-        result.push({
-          id: 'rename',
-          title: $gettext('Rename'),
-          icon: 'pencil',
-          method: showRenameModal
-        })
-      }
+  if (canRename) {
+    result.push({
+      id: 'rename',
+      title: $gettext('Rename'),
+      icon: 'pencil',
+      method: showRenameModal
+    })
+  }
 
-      if (props.linkShare.expirationDateTime) {
-        result.push({
-          id: 'edit-expiration',
-          title: $gettext('Edit expiration date'),
-          icon: 'calendar-event',
-          method: showDatePickerModal
-        })
-
-        result.push({
-          id: 'remove-expiration',
-          title: $gettext('Remove expiration date'),
-          icon: 'calendar-close',
-          method: () => {
-            emit('updateLink', {
-              linkShare: { ...props.linkShare },
-              options: { expirationDateTime: null }
-            })
-            unref(editPublicLinkDropdown).hide()
-          }
-        })
-      } else if (!unref(isInternalLink)) {
-        result.push({
-          id: 'add-expiration',
-          title: $gettext('Set expiration date'),
-          method: showDatePickerModal,
-          icon: 'calendar-event'
-        })
-      }
-
-      if (props.linkShare.hasPassword) {
-        result.push({
-          id: 'edit-password',
-          title: $gettext('Edit password'),
-          icon: 'lock-password',
-          method: () => emit('showPasswordModal')
-        })
-
-        if (props.isPasswordRemovable) {
-          result.push({
-            id: 'remove-password',
-            title: $gettext('Remove password'),
-            icon: 'lock-unlock',
-            method: () =>
-              emit('updateLink', { linkShare: props.linkShare, options: { password: '' } })
-          })
-        }
-      }
-      if (!props.linkShare.hasPassword && !unref(isInternalLink)) {
-        result.push({
-          id: 'add-password',
-          title: $gettext('Add password'),
-          icon: 'lock-password',
-          method: () => emit('showPasswordModal')
-        })
-      }
-
-      return result
+  if (linkShare.expirationDateTime) {
+    result.push({
+      id: 'edit-expiration',
+      title: $gettext('Edit expiration date'),
+      icon: 'calendar-event',
+      method: showDatePickerModal
     })
 
-    return {
-      editPublicLinkDropdown,
-      sharedAncestor,
-      editOptions,
-      deleteOption,
-      navigateToParentOption
+    result.push({
+      id: 'remove-expiration',
+      title: $gettext('Remove expiration date'),
+      icon: 'calendar-close',
+      method: () => {
+        emit('updateLink', {
+          linkShare: { ...linkShare },
+          options: { expirationDateTime: null }
+        })
+        unref(editPublicLinkDropdown).hide()
+      }
+    })
+  } else if (!unref(isInternalLink)) {
+    result.push({
+      id: 'add-expiration',
+      title: $gettext('Set expiration date'),
+      method: showDatePickerModal,
+      icon: 'calendar-event'
+    })
+  }
+
+  if (linkShare.hasPassword) {
+    result.push({
+      id: 'edit-password',
+      title: $gettext('Edit password'),
+      icon: 'lock-password',
+      method: () => emit('showPasswordModal')
+    })
+
+    if (isPasswordRemovable) {
+      result.push({
+        id: 'remove-password',
+        title: $gettext('Remove password'),
+        icon: 'lock-unlock',
+        method: () => emit('updateLink', { linkShare: linkShare, options: { password: '' } })
+      })
     }
   }
+  if (!linkShare.hasPassword && !unref(isInternalLink)) {
+    result.push({
+      id: 'add-password',
+      title: $gettext('Add password'),
+      icon: 'lock-password',
+      method: () => emit('showPasswordModal')
+    })
+  }
+
+  return result
 })
 </script>
 
