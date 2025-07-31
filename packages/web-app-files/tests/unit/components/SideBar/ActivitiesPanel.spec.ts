@@ -85,22 +85,22 @@ const defaultActivities = [
 describe('ActivitiesPanel', () => {
   it('should show no activities message if there is no data', async () => {
     const { wrapper } = getMountedWrapper({ activities: [] })
-    wrapper.vm.isVisible = true
+    ;(wrapper.vm as any).isVisible = true
     await nextTick()
-    await wrapper.vm.loadActivitiesTask.last
+    await (wrapper.vm as any).loadActivitiesTask.last
     expect(wrapper.html()).toContain('No activities')
   })
   it('should show loading spinner when fetching data', async () => {
     const { wrapper } = getMountedWrapper()
-    wrapper.vm.isVisible = true
+    ;(wrapper.vm as any).isVisible = true
     await nextTick()
     expect(wrapper.find('#app-loading-spinner').exists()).toBeTruthy()
   })
   it('should render a list of activities when data is present', async () => {
     const { wrapper } = getMountedWrapper()
-    wrapper.vm.isVisible = true
+    ;(wrapper.vm as any).isVisible = true
     await nextTick()
-    await wrapper.vm.loadActivitiesTask.last
+    await (wrapper.vm as any).loadActivitiesTask.last
     expect(wrapper.html()).toMatchSnapshot()
   })
 })
