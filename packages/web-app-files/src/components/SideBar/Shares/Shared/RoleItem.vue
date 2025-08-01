@@ -11,19 +11,13 @@
   </span>
 </template>
 
-<script lang="ts">
+<script lang="ts" setup>
 import { ShareRole } from '@ownclouders/web-client'
-import { defineComponent, PropType } from 'vue'
 
-export default defineComponent({
-  name: 'RoleItem',
-  props: {
-    role: {
-      type: Object as PropType<ShareRole>,
-      required: true
-    }
-  }
-})
+interface Props {
+  role: ShareRole
+}
+const { role } = defineProps<Props>()
 </script>
 
 <style lang="scss" scoped>
