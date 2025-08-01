@@ -19,18 +19,8 @@
   </div>
 </template>
 
-<script lang="ts">
-import {
-  computed,
-  defineComponent,
-  inject,
-  onBeforeUnmount,
-  onMounted,
-  Ref,
-  ref,
-  unref,
-  watch
-} from 'vue'
+<script lang="ts" setup>
+import { computed, inject, onBeforeUnmount, onMounted, Ref, ref, unref, watch } from 'vue'
 import { useGettext } from 'vue3-gettext'
 import {
   AppLoadingSpinner,
@@ -45,98 +35,80 @@ import { Activity } from '@ownclouders/web-client/graph/generated'
 import escape from 'lodash-es/escape'
 
 const visibilityObserver = new VisibilityObserver()
-export default defineComponent({
-  name: 'ActivitiesPanel',
-  components: { AppLoadingSpinner },
-  setup() {
-    const rootElement = ref<HTMLElement>()
-    const { $ngettext, current: currentLanguage } = useGettext()
-    const clientService = useClientService()
-    const resource = inject<Ref<Resource>>('resource')
-    const activities = ref<Activity[]>([])
-    const activitiesLimit = 200
+const rootElement = ref<HTMLElement>()
+const { $ngettext, current: currentLanguage } = useGettext()
+const clientService = useClientService()
+const resource = inject<Ref<Resource>>('resource')
+const activities = ref<Activity[]>([])
+const activitiesLimit = 200
 
-    const activitiesFooterText = computed(() => {
-      return $ngettext(
-        'Showing %{activitiesCount} activity',
-        'Showing %{activitiesCount} activities',
-        unref(activities).length,
-        {
-          activitiesCount: unref(activities).length.toString()
-        }
-      )
-    })
-
-    const loadActivitiesTask = useTask(function* (signal) {
-      activities.value = yield* call(
-        clientService.graphAuthenticated.activities.listActivities(
-          `itemid:${unref(resource).fileId} AND limit:${activitiesLimit} AND sort:desc`,
-          { signal }
-        )
-      )
-    }).restartable()
-
-    const isLoading = computed(() => {
-      return loadActivitiesTask.isRunning || !loadActivitiesTask.last
-    })
-
-    const getHtmlFromActivity = (activity: Activity) => {
-      let message = activity.template.message
-      for (const [key, value] of Object.entries(activity.template.variables)) {
-        const escapedValue = escape(value.displayName || value.name)
-
-        message = message.replace(`{${key}}`, `<strong>${escapedValue}</strong>`)
-      }
-      return message
+const activitiesFooterText = computed(() => {
+  return $ngettext(
+    'Showing %{activitiesCount} activity',
+    'Showing %{activitiesCount} activities',
+    unref(activities).length,
+    {
+      activitiesCount: unref(activities).length.toString()
     }
+  )
+})
 
-    const getTimeFromActivity = (activity: Activity) => {
-      const dateTime = DateTime.fromISO(activity.times.recordedTime)
-      return formatDateFromDateTime(dateTime, currentLanguage)
-    }
-
-    const isVisible = ref(false)
-    watch(
-      [resource, isVisible],
-      () => {
-        if (!unref(isVisible)) {
-          return
-        }
-        loadActivitiesTask.perform()
-      },
-      {
-        immediate: true,
-        deep: true
-      }
+const loadActivitiesTask = useTask(function* (signal) {
+  activities.value = yield* call(
+    clientService.graphAuthenticated.activities.listActivities(
+      `itemid:${unref(resource).fileId} AND limit:${activitiesLimit} AND sort:desc`,
+      { signal }
     )
+  )
+}).restartable()
 
-    onMounted(() => {
-      visibilityObserver.observe(unref(rootElement), {
-        onEnter: () => {
-          isVisible.value = true
-        },
-        onExit: () => {
-          isVisible.value = false
-        }
-      })
-    })
+const isLoading = computed(() => {
+  return loadActivitiesTask.isRunning || !loadActivitiesTask.last
+})
 
-    onBeforeUnmount(() => {
-      visibilityObserver.disconnect()
-    })
+const getHtmlFromActivity = (activity: Activity) => {
+  let message = activity.template.message
+  for (const [key, value] of Object.entries(activity.template.variables)) {
+    const escapedValue = escape(value.displayName || value.name)
 
-    return {
-      rootElement,
-      activities,
-      activitiesLimit,
-      activitiesFooterText,
-      isLoading,
-      isVisible,
-      loadActivitiesTask,
-      getHtmlFromActivity,
-      getTimeFromActivity
-    }
+    message = message.replace(`{${key}}`, `<strong>${escapedValue}</strong>`)
   }
+  return message
+}
+
+const getTimeFromActivity = (activity: Activity) => {
+  const dateTime = DateTime.fromISO(activity.times.recordedTime)
+  return formatDateFromDateTime(dateTime, currentLanguage)
+}
+
+const isVisible = ref(false)
+watch(
+  [resource, isVisible],
+  () => {
+    if (!unref(isVisible)) {
+      return
+    }
+    loadActivitiesTask.perform()
+  },
+  {
+    immediate: true,
+    deep: true
+  }
+)
+
+onMounted(() => {
+  visibilityObserver.observe(unref(rootElement), {
+    onEnter: () => {
+      isVisible.value = true
+    },
+    onExit: () => {
+      isVisible.value = false
+    }
+  })
+})
+
+onBeforeUnmount(() => {
+  visibilityObserver.disconnect()
 })
 </script>
 
