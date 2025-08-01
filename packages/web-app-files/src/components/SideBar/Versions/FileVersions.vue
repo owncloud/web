@@ -52,7 +52,7 @@
     </div>
   </div>
 </template>
-<script lang="ts">
+<script lang="ts" setup>
 import { DavPermission } from '@ownclouders/web-client/webdav'
 import {
   formatRelativeDateFromHTTP,
@@ -62,84 +62,64 @@ import {
   useDownloadFile,
   useResourcesStore
 } from '@ownclouders/web-pkg'
-import { computed, defineComponent, inject, Ref, unref } from 'vue'
+import { computed, inject, Ref, unref } from 'vue'
 import { isShareSpaceResource, Resource, SpaceResource } from '@ownclouders/web-client'
 import { useGettext } from 'vue3-gettext'
 
-export default defineComponent({
-  name: 'FileVersions',
-  props: {
-    isReadOnly: {
-      type: Boolean,
-      required: false,
-      default: false
-    }
-  },
-  setup(props) {
-    const clientService = useClientService()
-    const language = useGettext()
-    const { downloadFile } = useDownloadFile({ clientService })
-    const { updateResourceField } = useResourcesStore()
+interface Props {
+  isReadOnly?: boolean
+}
+const { isReadOnly } = defineProps<Props>()
+const clientService = useClientService()
+const language = useGettext()
+const { downloadFile } = useDownloadFile({ clientService })
+const { updateResourceField } = useResourcesStore()
 
-    const space = inject<Ref<SpaceResource>>('space')
-    const resource = inject<Ref<Resource>>('resource')
-    const versions = inject<Ref<Resource[]>>('versions')
+const space = inject<Ref<SpaceResource>>('space')
+const resource = inject<Ref<Resource>>('resource')
+const versions = inject<Ref<Resource[]>>('versions')
 
-    const isRevertible = computed(() => {
-      if (props.isReadOnly) {
-        return false
-      }
+const isRevertible = computed(() => {
+  if (isReadOnly) {
+    return false
+  }
 
-      if (isShareSpaceResource(unref(space)) || unref(resource).isReceivedShare()) {
-        if (unref(resource).permissions !== undefined) {
-          return unref(resource).permissions.includes(DavPermission.Updateable)
-        }
-      }
-
-      return true
-    })
-
-    const revertToVersion = async (version: Resource) => {
-      await clientService.webdav.restoreFileVersion(unref(space), unref(resource), version.name)
-      const restoredResource = await clientService.webdav.getFileInfo(unref(space), unref(resource))
-
-      const fieldsToUpdate = ['size', 'mdate'] as const
-      for (const field of fieldsToUpdate) {
-        if (Object.prototype.hasOwnProperty.call(unref(resource), field)) {
-          updateResourceField({
-            id: unref(resource).id,
-            field: field,
-            value: restoredResource[field]
-          })
-        }
-      }
-    }
-    const downloadVersion = (version: Resource) => {
-      return downloadFile(unref(space), unref(resource), version.name)
-    }
-    const formatVersionDateRelative = (version: Resource) => {
-      return formatRelativeDateFromHTTP(version.mdate, language.current)
-    }
-    const formatVersionDate = (version: Resource) => {
-      return formatDateFromJSDate(new Date(version.mdate), language.current)
-    }
-    const formatVersionFileSize = (version: Resource) => {
-      return formatFileSize(version.size, language.current)
-    }
-
-    return {
-      space,
-      resource,
-      versions,
-      isRevertible,
-      revertToVersion,
-      downloadVersion,
-      formatVersionDateRelative,
-      formatVersionDate,
-      formatVersionFileSize
+  if (isShareSpaceResource(unref(space)) || unref(resource).isReceivedShare()) {
+    if (unref(resource).permissions !== undefined) {
+      return unref(resource).permissions.includes(DavPermission.Updateable)
     }
   }
+
+  return true
 })
+
+const revertToVersion = async (version: Resource) => {
+  await clientService.webdav.restoreFileVersion(unref(space), unref(resource), version.name)
+  const restoredResource = await clientService.webdav.getFileInfo(unref(space), unref(resource))
+
+  const fieldsToUpdate = ['size', 'mdate'] as const
+  for (const field of fieldsToUpdate) {
+    if (Object.prototype.hasOwnProperty.call(unref(resource), field)) {
+      updateResourceField({
+        id: unref(resource).id,
+        field: field,
+        value: restoredResource[field]
+      })
+    }
+  }
+}
+const downloadVersion = (version: Resource) => {
+  return downloadFile(unref(space), unref(resource), version.name)
+}
+const formatVersionDateRelative = (version: Resource) => {
+  return formatRelativeDateFromHTTP(version.mdate, language.current)
+}
+const formatVersionDate = (version: Resource) => {
+  return formatDateFromJSDate(new Date(version.mdate), language.current)
+}
+const formatVersionFileSize = (version: Resource) => {
+  return formatFileSize(version.size, language.current)
+}
 </script>
 
 <style lang="scss" scoped>
