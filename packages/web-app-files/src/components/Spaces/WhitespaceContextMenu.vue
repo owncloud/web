@@ -23,9 +23,8 @@
   </oc-button>
 </template>
 
-<script lang="ts">
-import { computed, defineComponent, PropType, unref } from 'vue'
-import { useGettext } from 'vue3-gettext'
+<script lang="ts" setup>
+import { computed, unref } from 'vue'
 import {
   useFileActionsPaste,
   useFileActionsShowDetails,
@@ -36,41 +35,29 @@ import { SpaceResource } from '@ownclouders/web-client'
 import { ActionMenuItem } from '@ownclouders/web-pkg'
 import { storeToRefs } from 'pinia'
 
-export default defineComponent({
-  name: 'WhitespaceContextMenu',
-  components: { ActionMenuItem },
-  props: {
-    space: {
-      type: Object as PropType<SpaceResource>,
-      required: false,
-      default: null
-    }
-  },
-  setup(props) {
-    const { $gettext } = useGettext()
-    const resourcesStore = useResourcesStore()
-    const { currentFolder } = storeToRefs(resourcesStore)
+interface Props {
+  space?: SpaceResource
+}
+const { space = null } = defineProps<Props>()
+const resourcesStore = useResourcesStore()
+const { currentFolder } = storeToRefs(resourcesStore)
 
-    const space = computed(() => props.space)
-    const contextMenuLabel = computed(() => $gettext('Show context menu'))
-    const actionOptions = computed(() => ({
-      space: unref(space),
-      resources: [currentFolder.value]
-    }))
-    const { actions: createNewFolderAction } = useFileActionsCreateNewFolder({ space })
-    const { actions: showDetailsAction } = useFileActionsShowDetails()
-    const { actions: pasteAction } = useFileActionsPaste()
+const currentSpace = computed(() => space)
+// const contextMenuLabel = computed(() => $gettext('Show context menu'))
+const actionOptions = computed(() => ({
+  space: unref(currentSpace),
+  resources: [currentFolder.value]
+}))
+const { actions: createNewFolderAction } = useFileActionsCreateNewFolder({ space: currentSpace })
+const { actions: showDetailsAction } = useFileActionsShowDetails()
+const { actions: pasteAction } = useFileActionsPaste()
 
-    const menuItemsActions = computed(() => {
-      return [
-        ...unref(createNewFolderAction),
-        ...unref(pasteAction),
-        ...unref(showDetailsAction)
-      ].filter((item) => item.isVisible(unref(actionOptions)))
-    })
-
-    return { contextMenuLabel, actionOptions, currentFolder, menuItemsActions }
-  }
+const menuItemsActions = computed(() => {
+  return [
+    ...unref(createNewFolderAction),
+    ...unref(pasteAction),
+    ...unref(showDetailsAction)
+  ].filter((item) => item.isVisible(unref(actionOptions)))
 })
 </script>
 
