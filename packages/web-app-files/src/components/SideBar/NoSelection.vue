@@ -4,15 +4,10 @@
     <p data-testid="selectedFilesText" v-text="selectedFilesString" />
   </div>
 </template>
-<script lang="ts">
-import { defineComponent } from 'vue'
+<script lang="ts" setup>
+import { computed } from 'vue'
+import { useGettext } from 'vue3-gettext'
 
-export default defineComponent({
-  name: 'NoSelection',
-  computed: {
-    selectedFilesString() {
-      return this.$gettext('Select a file or folder to view details')
-    }
-  }
-})
+const { $gettext } = useGettext()
+const selectedFilesString = computed(() => $gettext('Select a file or folder to view details'))
 </script>
