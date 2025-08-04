@@ -2,6 +2,7 @@ import SharedViaLink from '../../../../src/views/shares/SharedViaLink.vue'
 import { useResourcesViewDefaults } from '../../../../src/composables'
 import { useResourcesViewDefaultsMock } from '../../../../tests/mocks/useResourcesViewDefaultsMock'
 import { ref } from 'vue'
+import { AppBar, ResourceTable } from '@ownclouders/web-pkg'
 import { mock, mockDeep } from 'vitest-mock-extended'
 import { OutgoingShareResource } from '@ownclouders/web-client'
 import {
@@ -11,12 +12,13 @@ import {
   defaultStubs,
   RouteLocation
 } from '@ownclouders/web-test-helpers'
-import { ResourceTable } from '@ownclouders/web-pkg'
 
 vi.mock('../../../../src/composables')
 vi.mock('@ownclouders/web-pkg', async (importOriginal) => ({
   ...(await importOriginal<any>()),
-  useFileActions: vi.fn()
+  useFileActions: vi.fn(() => ({
+    triggerDefaultAction: vi.fn()
+  }))
 }))
 
 describe('SharedViaLink view', () => {
@@ -39,7 +41,21 @@ describe('SharedViaLink view', () => {
       expect(wrapper.find('.no-content-message').exists()).toBeTruthy()
     })
     it('shows the files table when files are available', () => {
-      const mockedFiles = [mockDeep<OutgoingShareResource>(), mockDeep<OutgoingShareResource>()]
+      const mockedFiles: OutgoingShareResource[] = [
+        mockDeep<OutgoingShareResource>({
+          id: '1',
+          fileId: 'f1',
+          name: 'file1',
+          sdate: '2024-01-01'
+        }),
+        mockDeep<OutgoingShareResource>({
+          id: '2',
+          fileId: 'f2',
+          name: 'file2',
+          sdate: '2024-01-02'
+        })
+      ]
+
       const { wrapper } = getMountedWrapper({ files: mockedFiles })
       expect(wrapper.find('.no-content-message').exists()).toBeFalsy()
       expect(wrapper.find('resource-table-stub').exists()).toBeTruthy()
@@ -72,6 +88,10 @@ function getMountedWrapper({
     mocks: defaultMocks,
     wrapper: mount(SharedViaLink, {
       global: {
+        components: {
+          AppBar,
+          ResourceTable
+        },
         plugins: [...defaultPlugins()],
         mocks: defaultMocks,
         provide: defaultMocks,
