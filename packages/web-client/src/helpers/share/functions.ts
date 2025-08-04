@@ -186,7 +186,10 @@ export function buildOutgoingShareResource({
   serverUrl: string
 }): OutgoingShareResource {
   const storageId = extractStorageId(driveItem.id)
-  const path = urlJoin(driveItem.parentReference.path, driveItem.name)
+  const path =
+    driveItem.parentReference.path === '.'
+      ? driveItem.parentReference.path
+      : urlJoin(driveItem.parentReference.path, driveItem.name)
 
   const resource: OutgoingShareResource = {
     id: driveItem.id,

@@ -574,8 +574,8 @@ importers:
         specifier: workspace:^
         version: link:../web-pkg
       axios:
-        specifier: 1.7.7
-        version: 1.7.7
+        specifier: 1.11.0
+        version: 1.11.0
       deep-object-diff:
         specifier: ^1.1.9
         version: 1.1.9
@@ -725,8 +725,8 @@ importers:
         specifier: ^11.0.0
         version: 11.1.0(vue@3.5.12(typescript@5.6.3))
       axios:
-        specifier: 1.7.7
-        version: 1.7.7
+        specifier: 1.11.0
+        version: 1.11.0
       email-validator:
         specifier: ^2.0.4
         version: 2.0.4
@@ -783,8 +783,8 @@ importers:
         specifier: workspace:*
         version: link:../web-pkg
       axios:
-        specifier: 1.7.7
-        version: 1.7.7
+        specifier: 1.11.0
+        version: 1.11.0
       email-validator:
         specifier: ^2.0.4
         version: 2.0.4
@@ -953,8 +953,8 @@ importers:
         specifier: workspace:*
         version: link:../web-pkg
       axios:
-        specifier: ^1.7.7
-        version: 1.7.7
+        specifier: ^1.11.0
+        version: 1.11.0
       fast-xml-parser:
         specifier: ^4.5.0
         version: 4.5.3
@@ -1045,8 +1045,8 @@ importers:
         specifier: ^11.0.0
         version: 11.1.0(vue@3.5.12(typescript@5.6.3))
       axios:
-        specifier: ^1.7.7
-        version: 1.7.7
+        specifier: ^1.11.0
+        version: 1.11.0
       deepmerge:
         specifier: ^4.2.2
         version: 4.3.1
@@ -1197,8 +1197,8 @@ importers:
         specifier: 2.0.0
         version: 2.0.0(vue@3.5.12(typescript@5.6.3))
       axios:
-        specifier: 1.7.7
-        version: 1.7.7
+        specifier: 1.11.0
+        version: 1.11.0
       deepmerge:
         specifier: 4.3.1
         version: 4.3.1
@@ -1300,8 +1300,8 @@ importers:
         specifier: ^2.4.6
         version: 2.4.6
       axios:
-        specifier: 1.7.7
-        version: 1.7.7
+        specifier: 1.11.0
+        version: 1.11.0
       pinia:
         specifier: 2.2.6
         version: 2.2.6(typescript@5.6.3)(vue@3.5.12(typescript@5.6.3))
@@ -3663,6 +3663,9 @@ packages:
     resolution: {integrity: sha512-Xm7bpRXnDSX2YE2YFfBk2FnF0ep6tmG7xPh8iHee8MIcrgq762Nkce856dYtJYLkuIoYZvGfTs/PbZhideTcEg==}
     engines: {node: '>=4'}
 
+  axios@1.11.0:
+    resolution: {integrity: sha512-1Lx3WLFQWm3ooKDYZD1eXmoGO9fxYQjrycfHFC8P0sCfQVXyROp0p9PFWBehewBOdCwHc+f/b8I0fMto5eSfwA==}
+
   axios@1.7.7:
     resolution: {integrity: sha512-S4kL7XrjgBmvdGut0sN3yJxqYzrDOnivkBiN0OFs6hLiUam3UPvswUo0kqGyhqUZGEOytHyumEdXsAkgCOUf3Q==}
 
@@ -5364,6 +5367,10 @@ packages:
 
   form-data@4.0.2:
     resolution: {integrity: sha512-hGfm/slu0ZabnNt4oaRZ6uREyfCj6P4fT/n6A1rGV+Z0VdGXjfOhVUpkn6qVQONHGIFwmveGXyDs75+nr6FM8w==}
+    engines: {node: '>= 6'}
+
+  form-data@4.0.4:
+    resolution: {integrity: sha512-KrGhL9Q4zjj0kiUt5OO4Mr/A/jlI2jDYs5eHBpYHPcBEVSiipAvn2Ko2HnPe20rmcuuvMHNdZFp+4IlGTMF0Ow==}
     engines: {node: '>= 6'}
 
   formdata-polyfill@4.0.10:
@@ -11624,7 +11631,7 @@ snapshots:
       '@cucumber/ci-environment': 9.1.0
       '@cucumber/cucumber-expressions': 16.1.1
       '@cucumber/gherkin': 26.0.3
-      '@cucumber/gherkin-streams': 5.0.1(@cucumber/gherkin@26.0.3)(@cucumber/message-streams@4.0.1(@cucumber/messages@21.0.1))(@cucumber/messages@21.0.1)
+      '@cucumber/gherkin-streams': 5.0.1(@cucumber/gherkin@26.0.3)(@cucumber/message-streams@4.0.1(@cucumber/messages@27.0.0))(@cucumber/messages@21.0.1)
       '@cucumber/gherkin-utils': 8.0.2
       '@cucumber/html-formatter': 20.2.1(@cucumber/messages@21.0.1)
       '@cucumber/message-streams': 4.0.1(@cucumber/messages@21.0.1)
@@ -11662,7 +11669,7 @@ snapshots:
       yaml: 2.8.0
       yup: 0.32.11
 
-  '@cucumber/gherkin-streams@5.0.1(@cucumber/gherkin@26.0.3)(@cucumber/message-streams@4.0.1(@cucumber/messages@21.0.1))(@cucumber/messages@21.0.1)':
+  '@cucumber/gherkin-streams@5.0.1(@cucumber/gherkin@26.0.3)(@cucumber/message-streams@4.0.1(@cucumber/messages@27.0.0))(@cucumber/messages@21.0.1)':
     dependencies:
       '@cucumber/gherkin': 26.0.3
       '@cucumber/message-streams': 4.0.1(@cucumber/messages@21.0.1)
@@ -13349,6 +13356,14 @@ snapshots:
       possible-typed-array-names: 1.1.0
 
   axe-core@4.10.3: {}
+
+  axios@1.11.0:
+    dependencies:
+      follow-redirects: 1.15.9(debug@4.4.1(supports-color@6.1.0))
+      form-data: 4.0.4
+      proxy-from-env: 1.1.0
+    transitivePeerDependencies:
+      - debug
 
   axios@1.7.7:
     dependencies:
@@ -15482,6 +15497,14 @@ snapshots:
       asynckit: 0.4.0
       combined-stream: 1.0.8
       es-set-tostringtag: 2.1.0
+      mime-types: 2.1.35
+
+  form-data@4.0.4:
+    dependencies:
+      asynckit: 0.4.0
+      combined-stream: 1.0.8
+      es-set-tostringtag: 2.1.0
+      hasown: 2.0.2
       mime-types: 2.1.35
 
   formdata-polyfill@4.0.10:

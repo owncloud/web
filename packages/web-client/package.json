@@ -84,7 +84,7 @@
     "@casl/ability": "^6.7.1",
     "@microsoft/fetch-event-source": "^2.0.1",
     "@ownclouders/web-pkg": "workspace:*",
-    "axios": "^1.7.7",
+    "axios": "^1.11.0",
     "fast-xml-parser": "^4.5.0",
     "lodash-es": "^4.17.21",
     "luxon": "^3.5.0",
