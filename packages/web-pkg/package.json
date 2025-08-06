@@ -50,7 +50,7 @@
     "@vavt/cm-extension": "^1.8.0",
     "@vue/shared": "^3.5.14",
     "@vueuse/core": "^13.0.0",
-    "axios": "^1.7.7",
+    "axios": "^1.11.0",
     "deepmerge": "^4.2.2",
     "dompurify": "^3.2.3",
     "filesize": "^10.1.0",
