@@ -274,6 +274,12 @@ export const useSharesStore = defineStore('shares', () => {
     hasLoadingFailed.value = value
   }
 
+  async function fetchShareRolesDefinitions({ clientService }): Promise<UnifiedRoleDefinition[]> {
+    const result = await clientService.graphAuthenticated.permissions.listRoleDefinitions()
+
+    return result
+  }
+
   return {
     loading,
     collaboratorShares,
@@ -296,7 +302,8 @@ export const useSharesStore = defineStore('shares', () => {
     deleteLink,
 
     hasLoadingFailed,
-    setHasLoadingFailed
+    setHasLoadingFailed,
+    fetchShareRolesDefinitions
   }
 })
 

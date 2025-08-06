@@ -295,7 +295,8 @@ import {
   useModals,
   useResourcesStore,
   useSpacesStore,
-  useUserStore
+  useUserStore,
+  useSharesStore
 } from '@ownclouders/web-pkg'
 import { useTask } from 'vue-concurrency'
 import { useGettext } from 'vue3-gettext'
@@ -334,6 +335,7 @@ export default defineComponent({
     const clientService = useClientService()
     const resourcesStore = useResourcesStore()
     const appsStore = useAppsStore()
+    const sharesStore = useSharesStore()
 
     const valuesList = ref<SettingsValue[]>()
     const graphUser = ref<User>()
@@ -542,6 +544,15 @@ export default defineComponent({
           await clientService.graphAuthenticated.users.editMe({
             preferredLanguage: option.value
           } as User)
+
+          /*
+           * Refetch shared roles to update their translations when the user changes their preferred language.
+           * Otherwise, the roles will remain in the previous language (e.g., English) until the page is refreshed.
+           * */
+          const shareRolesDefinitions = await sharesStore.fetchShareRolesDefinitions({
+            clientService
+          })
+          sharesStore.setGraphRoles(shareRolesDefinitions)
 
           if (capabilityStore.supportSSE) {
             ;(clientService.sseAuthenticated as SSEAdapter).updateLanguage(language.current)
