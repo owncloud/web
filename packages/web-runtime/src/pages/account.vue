@@ -222,6 +222,7 @@
               <oc-select
                 :model-value="emailNotificationsValues[option.id]"
                 :options="option.singleChoiceValue.options"
+                :label="$gettext('Email Notifications Intervals')"
                 :clearable="false"
                 option-label="displayValue"
                 @update:model-value="(value) => updateSingleChoiceValue(option.name, value)"
