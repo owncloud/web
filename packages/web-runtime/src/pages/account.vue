@@ -27,11 +27,11 @@
         </template>
         <oc-tr class="account-page-info-username">
           <oc-td>{{ $gettext('Username') }}</oc-td>
-          <oc-td>{{ user.onPremisesSamAccountName }}</oc-td>
+          <oc-td translate="no">{{ user.onPremisesSamAccountName }}</oc-td>
         </oc-tr>
         <oc-tr class="account-page-info-displayname">
           <oc-td>{{ $gettext('First and last name') }}</oc-td>
-          <oc-td>{{ user.displayName }}</oc-td>
+          <oc-td translate="no">{{ user.displayName }}</oc-td>
         </oc-tr>
         <oc-tr class="account-page-info-email">
           <oc-td>{{ $gettext('Email') }}</oc-td>
