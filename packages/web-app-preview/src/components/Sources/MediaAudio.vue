@@ -6,37 +6,22 @@
     <p v-if="audioText" class="oc-text-muted oc-text-small" v-text="audioText"></p>
   </div>
 </template>
-<script lang="ts">
-import { computed, defineComponent, PropType } from 'vue'
+<script lang="ts" setup>
+import { computed } from 'vue'
 import { CachedFile } from '../../helpers/types'
 import { Resource } from '@ownclouders/web-client'
 
-export default defineComponent({
-  name: 'MediaAudio',
-  props: {
-    file: {
-      type: Object as PropType<CachedFile>,
-      required: true
-    },
-    resource: {
-      type: Object as PropType<Resource>,
-      required: true
-    },
-    isAutoPlayEnabled: {
-      type: Boolean,
-      default: true
-    }
-  },
-  setup(props) {
-    const audioText = computed(() => {
-      if (props.resource.audio?.artist && props.resource.audio?.title) {
-        return `${props.resource.audio.artist} - ${props.resource.audio.title}`
-      }
-      return ''
-    })
-
-    return { audioText }
+interface Props {
+  file: CachedFile
+  resource: Resource
+  isAutoPlayEnabled?: boolean
+}
+const { file, resource, isAutoPlayEnabled = true } = defineProps<Props>()
+const audioText = computed(() => {
+  if (resource.audio?.artist && resource.audio?.title) {
+    return `${resource.audio.artist} - ${resource.audio.title}`
   }
+  return ''
 })
 </script>
 <style lang="scss" scoped>
