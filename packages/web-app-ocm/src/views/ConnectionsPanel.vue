@@ -77,8 +77,8 @@
   </div>
 </template>
 
-<script lang="ts">
-import { computed, defineComponent, PropType } from 'vue'
+<script lang="ts" setup>
+import { computed } from 'vue'
 import {
   NoContentMessage,
   AppLoadingSpinner,
@@ -90,110 +90,84 @@ import { useGettext } from 'vue3-gettext'
 import { ShareTypes } from '@ownclouders/web-client'
 import { buildConnection } from '../functions'
 
-export default defineComponent({
-  components: {
-    NoContentMessage,
-    AppLoadingSpinner
-  },
-  props: {
-    /**
-     * Accepted connections
-     */
-    connections: {
-      type: Array as PropType<FederatedConnection[]>,
-      required: true
+interface Props {
+  connections: FederatedConnection[]
+  highlightedConnections?: string[]
+  loading?: boolean
+}
+
+interface Emits {
+  (event: 'update:connections', connections: FederatedConnection[]): void
+}
+
+const { connections, highlightedConnections = [], loading = true } = defineProps<Props>()
+const emit = defineEmits<Emits>()
+const router = useRouter()
+const { $gettext } = useGettext()
+const clientService = useClientService()
+
+const fields = computed(() => {
+  return [
+    {
+      name: 'display_name',
+      title: $gettext('User'),
+      alignH: 'left',
+      headerType: 'slot'
     },
-    /**
-     * Highlighted connections
-     */
-    highlightedConnections: {
-      type: Array as PropType<string[]>,
-      required: false,
-      default: (): string[] => []
+    {
+      name: 'mail',
+      title: $gettext('Email'),
+      alignH: 'right'
     },
-    /**
-     * Loading
-     */
-    loading: {
-      type: Boolean,
-      required: false,
-      default: () => true
+    {
+      name: 'idp',
+      title: $gettext('Institution'),
+      alignH: 'right',
+      headerType: 'slot'
+    },
+    {
+      name: 'actions',
+      title: $gettext('Actions'),
+      type: 'slot',
+      alignH: 'right',
+      wrap: 'nowrap',
+      width: 'shrink'
     }
-  },
-  emits: ['update:connections'],
-  setup(props, { emit }) {
-    const router = useRouter()
-    const { $gettext } = useGettext()
-    const clientService = useClientService()
+  ]
+})
 
-    const fields = computed(() => {
-      return [
-        {
-          name: 'display_name',
-          title: $gettext('User'),
-          alignH: 'left',
-          headerType: 'slot'
-        },
-        {
-          name: 'mail',
-          title: $gettext('Email'),
-          alignH: 'right'
-        },
-        {
-          name: 'idp',
-          title: $gettext('Institution'),
-          alignH: 'right',
-          headerType: 'slot'
-        },
-        {
-          name: 'actions',
-          title: $gettext('Actions'),
-          type: 'slot',
-          alignH: 'right',
-          wrap: 'nowrap',
-          width: 'shrink'
-        }
-      ]
-    })
-
-    const helperContent = computed(() => {
-      return {
-        text: $gettext(
-          'Federated conections for mutual sharing. To share, go to "Files" app, select the resource click "Share" in the context menu and select account type "federated".'
-        ),
-        title: $gettext('Federated connections')
-      }
-    })
-
-    const toSharedWithMe = () => {
-      router.push({ name: 'files-shares-with-me', query: { q_shareType: ShareTypes.remote.key } })
-    }
-    const toSharedWithOthers = () => {
-      router.push({
-        name: 'files-shares-with-others',
-        query: { q_shareType: ShareTypes.remote.key }
-      })
-    }
-
-    const deleteConnection = async (user: FederatedConnection) => {
-      try {
-        await clientService.httpAuthenticated.delete('/sciencemesh/delete-accepted-user', {
-          data: { user_id: user.user_id, idp: user.idp }
-        })
-
-        const updatedConnections = props.connections.filter(
-          ({ id }) => id !== buildConnection(user).id
-        )
-
-        emit('update:connections', updatedConnections)
-      } catch (e) {
-        console.error(e)
-      }
-    }
-
-    return { helperContent, toSharedWithOthers, toSharedWithMe, fields, deleteConnection }
+const helperContent = computed(() => {
+  return {
+    text: $gettext(
+      'Federated conections for mutual sharing. To share, go to "Files" app, select the resource click "Share" in the context menu and select account type "federated".'
+    ),
+    title: $gettext('Federated connections')
   }
 })
+
+const toSharedWithMe = () => {
+  router.push({ name: 'files-shares-with-me', query: { q_shareType: ShareTypes.remote.key } })
+}
+const toSharedWithOthers = () => {
+  router.push({
+    name: 'files-shares-with-others',
+    query: { q_shareType: ShareTypes.remote.key }
+  })
+}
+
+const deleteConnection = async (user: FederatedConnection) => {
+  try {
+    await clientService.httpAuthenticated.delete('/sciencemesh/delete-accepted-user', {
+      data: { user_id: user.user_id, idp: user.idp }
+    })
+
+    const updatedConnections = connections.filter(({ id }) => id !== buildConnection(user).id)
+
+    emit('update:connections', updatedConnections)
+  } catch (e) {
+    console.error(e)
+  }
+}
 </script>
 
 <style lang="scss">
