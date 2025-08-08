@@ -5,7 +5,9 @@ import {
   queryItemAsString,
   useFileActionsDelete,
   useExtensionRegistry,
-  FolderViewExtension
+  FolderViewExtension,
+  AppBar,
+  CreateSpace
 } from '@ownclouders/web-pkg'
 
 import {
@@ -85,33 +87,33 @@ describe('Projects view', () => {
     })
     it('shows the no-content-message after loading', async () => {
       const { wrapper } = getMountedWrapper()
-      await wrapper.vm.loadResourcesTask.last
+      await (wrapper.vm as any).loadResourcesTask.last
       expect(wrapper.find('oc-spinner-stub').exists()).toBeFalsy()
       expect(wrapper.find('.no-content-message').exists()).toBeTruthy()
     })
     it('lists all available project spaces', async () => {
       const spaces = spacesResources
       const { wrapper } = getMountedWrapper({ spaces })
-      await wrapper.vm.loadResourcesTask.last
+      await (wrapper.vm as any).loadResourcesTask.last
       expect(wrapper.html()).toMatchSnapshot()
       expect(wrapper.find('.no-content-message').exists()).toBeFalsy()
       expect(wrapper.find('.spaces-list').exists()).toBeTruthy()
     })
     it('shows only filtered spaces if filter applied', async () => {
       const { wrapper } = getMountedWrapper({ spaces: spacesResources })
-      wrapper.vm.filterTerm = 'Some other space'
+      ;(wrapper.vm as any).filterTerm = 'Some other space'
       await nextTick()
-      expect(wrapper.vm.items).toEqual([spacesResources[1]])
+      expect((wrapper.vm as any).items).toEqual([spacesResources[1]])
     })
     it('shows only enabled spaces if includeDisabled filter is not applied', async () => {
       const { wrapper } = getMountedWrapper({ spaces: spacesResources })
       await nextTick()
-      expect(wrapper.vm.items.length).toEqual(2)
+      expect((wrapper.vm as any).items.length).toEqual(2)
     })
     it('shows all spaces if includeDisabled filter is applied', async () => {
       const { wrapper } = getMountedWrapper({ spaces: spacesResources, includeDisabled: true })
       await nextTick()
-      expect(wrapper.vm.items.length).toEqual(3)
+      expect((wrapper.vm as any).items.length).toEqual(3)
     })
   })
   it('should display the "Create Space"-button when permission given', () => {
@@ -127,7 +129,7 @@ describe('Projects view', () => {
       store: { resourcesStore: { resources: [resource], selectedIds: ['selected-resource'] } }
     })
 
-    expect(wrapper.vm.selectedSpace).toStrictEqual(null)
+    expect((wrapper.vm as any).selectedSpace).toStrictEqual(null)
   })
   it('should pass selected resource as space to sidebar when driveType is "project"', () => {
     const resource = mock<SpaceResource>({ id: 'selected-resource', driveType: 'project' })
@@ -135,7 +137,7 @@ describe('Projects view', () => {
       store: { resourcesStore: { resources: [resource], selectedIds: ['selected-resource'] } }
     })
 
-    expect(wrapper.vm.selectedSpace.id).toStrictEqual('selected-resource')
+    expect((wrapper.vm as any).selectedSpace.id).toStrictEqual('selected-resource')
   })
 })
 
@@ -192,6 +194,10 @@ function getMountedWrapper({
     mocks: defaultMocks,
     wrapper: mount(Projects, {
       global: {
+        components: {
+          AppBar,
+          CreateSpace
+        },
         plugins,
         mocks: defaultMocks,
         provide: defaultMocks,
