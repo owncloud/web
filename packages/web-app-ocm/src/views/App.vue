@@ -20,8 +20,8 @@
   </div>
 </template>
 
-<script lang="ts">
-import { defineComponent, onMounted, onUnmounted, ref, unref, Ref } from 'vue'
+<script lang="ts" setup>
+import { onMounted, onUnmounted, ref, unref, Ref } from 'vue'
 import ConnectionsPanel from './ConnectionsPanel.vue'
 import IncomingInvitations from './IncomingInvitations.vue'
 import OutgoingInvitations from './OutgoingInvitations.vue'
@@ -34,87 +34,71 @@ import {
 import { useGettext } from 'vue3-gettext'
 import { buildConnection } from '../functions'
 
-export default defineComponent({
-  components: {
-    IncomingInvitations,
-    OutgoingInvitations,
-    ConnectionsPanel
-  },
-  setup() {
-    const { showMessage } = useMessages()
-    const { scrollToResource } = useScrollTo()
-    const clientSerivce = useClientService()
-    const { $gettext } = useGettext()
+const { showMessage } = useMessages()
+const { scrollToResource } = useScrollTo()
+const clientSerivce = useClientService()
+const { $gettext } = useGettext()
 
-    const connections: Ref<FederatedConnection[]> = ref([])
-    const highlightedConnections: Ref<FederatedConnection[]> = ref([])
-    const highlightNewConnectionsInterval = ref(null)
-    const loadingConnections = ref(true)
+const connections: Ref<FederatedConnection[]> = ref([])
+const highlightedConnections: Ref<FederatedConnection[]> = ref([])
+const highlightNewConnectionsInterval = ref(null)
+const loadingConnections = ref(true)
 
-    const findAcceptedUsers = async () => {
-      try {
-        const { data: acceptedUsers } = await clientSerivce.httpAuthenticated.get<
-          FederatedConnection[]
-        >('/sciencemesh/find-accepted-users')
-        loadingConnections.value = false
-        connections.value = acceptedUsers.map(buildConnection)
-      } catch {
-        connections.value = []
-        loadingConnections.value = false
-      }
-    }
+const findAcceptedUsers = async () => {
+  try {
+    const { data: acceptedUsers } = await clientSerivce.httpAuthenticated.get<
+      FederatedConnection[]
+    >('/sciencemesh/find-accepted-users')
+    loadingConnections.value = false
+    connections.value = acceptedUsers.map(buildConnection)
+  } catch {
+    connections.value = []
+    loadingConnections.value = false
+  }
+}
 
-    const highlightNewConnections = async () => {
-      const oldConnections = [...unref(connections)]
-      await findAcceptedUsers()
-      if (oldConnections.length < unref(connections).length) {
-        highlightedConnections.value = unref(connections).filter(
-          (connection) => !oldConnections.map((c) => c.id).includes(connection.id)
-        )
-        if (unref(highlightedConnections).length === 1) {
-          scrollToResource(unref(highlightedConnections)[0].id)
-          showMessage({
-            title: $gettext('New federated connection'),
-            status: 'success',
-            desc: $gettext('You can share with and recieve shares from %{user} now', {
-              user: unref(highlightedConnections)[0].display_name
-            })
-          })
-        } else if (unref(highlightedConnections).length > 1) {
-          const newConnections = unref(highlightedConnections)
-            .map((c) => c.display_name)
-            .join(', ')
+const highlightNewConnections = async () => {
+  const oldConnections = [...unref(connections)]
+  await findAcceptedUsers()
+  if (oldConnections.length < unref(connections).length) {
+    highlightedConnections.value = unref(connections).filter(
+      (connection) => !oldConnections.map((c) => c.id).includes(connection.id)
+    )
+    if (unref(highlightedConnections).length === 1) {
+      scrollToResource(unref(highlightedConnections)[0].id)
+      showMessage({
+        title: $gettext('New federated connection'),
+        status: 'success',
+        desc: $gettext('You can share with and recieve shares from %{user} now', {
+          user: unref(highlightedConnections)[0].display_name
+        })
+      })
+    } else if (unref(highlightedConnections).length > 1) {
+      const newConnections = unref(highlightedConnections)
+        .map((c) => c.display_name)
+        .join(', ')
 
-          showMessage({
-            title: $gettext('New federated connections'),
-            status: 'success',
-            desc: $gettext('You can share with and receive shares from %{ connections } now', {
-              connections: newConnections
-            })
-          })
-        }
-      }
-    }
-
-    onMounted(async () => {
-      await findAcceptedUsers()
-      loadingConnections.value = false
-      highlightNewConnectionsInterval.value = setInterval(() => {
-        highlightNewConnections()
-      }, 10 * 1000)
-    })
-
-    onUnmounted(() => {
-      clearInterval(unref(highlightNewConnectionsInterval))
-    })
-
-    return {
-      highlightNewConnections,
-      connections,
-      highlightedConnections,
-      loadingConnections
+      showMessage({
+        title: $gettext('New federated connections'),
+        status: 'success',
+        desc: $gettext('You can share with and receive shares from %{ connections } now', {
+          connections: newConnections
+        })
+      })
     }
   }
+}
+
+onMounted(async () => {
+  await findAcceptedUsers()
+  loadingConnections.value = false
+  highlightNewConnectionsInterval.value = setInterval(() => {
+    highlightNewConnections()
+  }, 10 * 1000)
+})
+
+onUnmounted(() => {
+  clearInterval(unref(highlightNewConnectionsInterval))
 })
 </script>
 
