@@ -1,3 +1,4 @@
+
 ---
 title: "Building From Source"
 date: 2018-05-02T00:00:00+00:00
@@ -24,24 +25,6 @@ Note that the documentation is located in the `docs/` folder.
 
 Note that you should always rebase your working branch if it is based on an older master. This ensures that any relevant documentation build changes have been applied and will not affect the building process.
 
-### Prerequisites
+### Details
 
-- [Docker](https://www.docker.com/) must be installed on your computer.
-
-### Run a Docs Build
-
-- Run `make docs` from the root of the local web clone.
-
-### Viewing the Documentation
-
-- Run `make docs-serve` to start a mini webserver for the rendered docs.
-- Open with a browser `http://localhost:1313/`
-- When making changes to the docs, start with a docs build as described above.
-
-### Deploying the documentation
-
-The documentation is automatically deployed from the master branch to https://owncloud.dev/clients/web/
-
-### Building Information
-
-During the building process, the documentation requests that the `owncloud.github.io` repo be cloned locally into the `docs/` folder. This repository contains all the necessary files and processes to build and serve the documentation.
+For details of the documentation such as notes, setup and how-to's, see the [Documentation](https://owncloud.dev/ocis/build-docs/) section in the developer docs.

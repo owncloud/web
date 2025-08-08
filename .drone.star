@@ -9,8 +9,8 @@ OC_CI_DRONE_ANSIBLE_IMAGE = "owncloudci/drone-ansible:latest"
 OC_CI_DRONE_SKIP_PIPELINE_IMAGE = "owncloudci/drone-skip-pipeline:latest"
 OC_CI_GOLANG_IMAGE = "owncloudci/golang:1.24"
 
-# hugo needs to be the same as in owncloud.github.io
-OC_CI_HUGO_IMAGE_STATIC = "hugomods/hugo:base-0.129.0"
+# the hugo version needs to be the same as in owncloud.github.io
+OC_CI_HUGO_STATIC_IMAGE = "hugomods/hugo:base-0.129.0"
 
 OC_CI_NODEJS_IMAGE = "owncloudci/nodejs:22"
 OC_CI_WAIT_FOR_IMAGE = "owncloudci/wait-for:latest"
@@ -903,25 +903,27 @@ def documentation(ctx):
             },
             "steps": [
                 {
-                    "name": "prepare",
-                    "image": OC_CI_ALPINE_IMAGE,
-                    "commands": [
-                        "make docs-drone",
-                    ],
+                    "name": "docs-generate",
+                    "image": OC_CI_GOLANG_IMAGE,
+                    # "pull": "always",
+                    "commands": ["make docs-generate"],
                 },
                 {
-                    "name": "test",
-                    "image": OC_CI_HUGO_IMAGE_STATIC,
+                    "name": "docs-copy",
+                    "image": OC_CI_GOLANG_IMAGE,
+                    "commands": ["make docs-copy"],
+                },
+                {
+                    "name": "docs-hugo-drone-prep",
+                    "image": OC_CI_GOLANG_IMAGE,
+                    "commands": ["make docs-hugo-drone-prep"],
+                },
+                {
+                    "name": "docs-build",
+                    "image": OC_CI_HUGO_STATIC_IMAGE,
                     "commands": [
                         "cd hugo",
                         "hugo",
-                    ],
-                },
-                {
-                    "name": "list",
-                    "image": OC_CI_ALPINE_IMAGE,
-                    "commands": [
-                        "tree hugo/public",
                     ],
                 },
                 {
@@ -946,6 +948,15 @@ def documentation(ctx):
                             ],
                         },
                     },
+                },
+                {
+                    "name": "list and remove temporary files",
+                    "image": OC_CI_GOLANG_IMAGE,
+                    "commands": [
+                        "tree docs/hugo/public",
+                        "rm -rf docs/hugo",
+                        "rm -rf hugo",
+                    ],
                 },
             ],
             "trigger": {
