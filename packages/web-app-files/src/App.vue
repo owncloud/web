@@ -4,41 +4,36 @@
     <router-view tabindex="0" class="files-wrapper oc-width-expand oc-height-1-1 oc-flex-wrap" />
   </main>
 </template>
-<script lang="ts">
-import { defineComponent, onBeforeUnmount, watch, ref, computed, unref } from 'vue'
+<script lang="ts" setup>
+import { onBeforeUnmount, watch, ref, computed, unref } from 'vue'
 import { useRoute, eventBus, useResourcesStore } from '@ownclouders/web-pkg'
 
-export default defineComponent({
-  setup() {
-    const route = useRoute()
-    const { resetSelection } = useResourcesStore()
+const route = useRoute()
+const { resetSelection } = useResourcesStore()
 
-    const dragareaEnabled = ref(false)
+const dragareaEnabled = ref(false)
 
-    const routePath = computed(() => unref(route).path)
+const routePath = computed(() => unref(route).path)
 
-    watch(routePath, (value) => {
-      resetSelection()
-    })
+watch(routePath, () => {
+  resetSelection()
+})
 
-    const hideDropzone = () => {
-      dragareaEnabled.value = false
-    }
-    const onDragOver = (event: DragEvent) => {
-      dragareaEnabled.value = (event.dataTransfer.types || []).some((e) => e === 'Files')
-    }
+const hideDropzone = () => {
+  dragareaEnabled.value = false
+}
+const onDragOver = (event: DragEvent) => {
+  dragareaEnabled.value = (event.dataTransfer.types || []).some((e) => e === 'Files')
+}
 
-    const dragOver = eventBus.subscribe('drag-over', onDragOver)
-    const dragOut = eventBus.subscribe('drag-out', hideDropzone)
-    const drop = eventBus.subscribe('drop', hideDropzone)
+const dragOver = eventBus.subscribe('drag-over', onDragOver)
+const dragOut = eventBus.subscribe('drag-out', hideDropzone)
+const drop = eventBus.subscribe('drop', hideDropzone)
 
-    onBeforeUnmount(() => {
-      eventBus.unsubscribe('drag-over', dragOver)
-      eventBus.unsubscribe('drag-out', dragOut)
-      eventBus.unsubscribe('drop', drop)
-    })
-    return { dragareaEnabled }
-  }
+onBeforeUnmount(() => {
+  eventBus.unsubscribe('drag-over', dragOver)
+  eventBus.unsubscribe('drag-out', dragOut)
+  eventBus.unsubscribe('drop', drop)
 })
 </script>
 
