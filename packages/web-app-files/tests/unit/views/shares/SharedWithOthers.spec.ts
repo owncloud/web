@@ -8,7 +8,7 @@ import { IncomingShareResource } from '@ownclouders/web-client'
 import { defaultPlugins, mount, defaultComponentMocks } from '@ownclouders/web-test-helpers'
 import { ShareTypes } from '@ownclouders/web-client'
 import { useSortMock } from '../../../mocks/useSortMock'
-import { ResourceTable } from '@ownclouders/web-pkg'
+import { ResourceTable, AppBar } from '@ownclouders/web-pkg'
 
 vi.mock('../../../../src/composables')
 vi.mock('@ownclouders/web-pkg', async (importOriginal) => ({
@@ -16,7 +16,9 @@ vi.mock('@ownclouders/web-pkg', async (importOriginal) => ({
   useSort: vi.fn().mockImplementation(() => useSortMock()),
   queryItemAsString: vi.fn(),
   useRouteQuery: vi.fn(),
-  useFileActions: vi.fn()
+  useFileActions: vi.fn(() => ({
+    triggerDefaultAction: vi.fn()
+  }))
 }))
 
 describe('SharedWithOthers view', () => {
@@ -98,6 +100,10 @@ function getMountedWrapper({
     mocks: defaultMocks,
     wrapper: mount(SharedWithOthers, {
       global: {
+        components: {
+          AppBar,
+          ResourceTable
+        },
         plugins: [...defaultPlugins()],
         mocks: defaultMocks,
         provide: defaultMocks,
