@@ -13,6 +13,7 @@ import {
   OptionsConfig,
   useExtensionRegistry,
   useMessages,
+  useSharesStore,
   useResourcesStore
 } from '@ownclouders/web-pkg'
 import { LanguageOption, SettingsBundle, SettingsValue } from '../../../src/helpers/settings'
@@ -194,6 +195,19 @@ describe('account page', () => {
       const { showMessage } = useMessages()
       expect(showMessage).toHaveBeenCalled()
     })
+
+    it('should fetch share roles', async () => {
+      const { wrapper } = getWrapper({})
+      await blockLoadingState(wrapper)
+      const sharesStore = useSharesStore()
+
+      await wrapper.vm.updateSelectedLanguage({ value: 'en' } as LanguageOption)
+
+      expect(sharesStore.fetchShareRolesDefinitions).toHaveBeenCalled()
+
+      expect(sharesStore.setGraphRoles).toHaveBeenCalled()
+    })
+
     it('should show a message on error', async () => {
       vi.spyOn(console, 'error').mockImplementation(() => undefined)
 
