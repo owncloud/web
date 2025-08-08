@@ -10,20 +10,15 @@
   </portal>
 </template>
 
-<script lang="ts">
-import { defineComponent } from 'vue'
+<script lang="ts" setup>
 import { useEmbedMode } from '@ownclouders/web-pkg'
 import EmbedActions from './EmbedActions/EmbedActions.vue'
 
-export default defineComponent({
-  components: { EmbedActions },
-  inheritAttrs: false,
-  setup() {
-    const { isEnabled: isEmbedModeEnabled } = useEmbedMode()
-
-    return { isEmbedModeEnabled }
-  }
+defineOptions({
+  inheritAttrs: false
 })
+
+const { isEnabled: isEmbedModeEnabled } = useEmbedMode()
 </script>
 
 <style lang="scss" scoped>
