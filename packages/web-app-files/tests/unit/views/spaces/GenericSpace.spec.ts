@@ -143,18 +143,18 @@ describe('GenericSpace view', () => {
   describe('loader task', () => {
     it('re-loads the resources on item change', async () => {
       const { wrapper, mocks } = getMountedWrapper()
-      await wrapper.vm.loadResourcesTask.last
+      await (wrapper.vm as any).loadResourcesTask.last
       expect(mocks.refreshFileListHeaderPosition).toHaveBeenCalledTimes(1)
       await wrapper.setProps({ item: 'newItem' })
-      await wrapper.vm.loadResourcesTask.last
+      await (wrapper.vm as any).loadResourcesTask.last
       expect(mocks.refreshFileListHeaderPosition).toHaveBeenCalledTimes(2)
     })
     it('re-loads the resources on space change', async () => {
       const { wrapper, mocks } = getMountedWrapper()
-      await wrapper.vm.loadResourcesTask.last
+      await (wrapper.vm as any).loadResourcesTask.last
       expect(mocks.refreshFileListHeaderPosition).toHaveBeenCalledTimes(1)
       await wrapper.setProps({ space: mockDeep<SpaceResource>() })
-      await wrapper.vm.loadResourcesTask.last
+      await (wrapper.vm as any).loadResourcesTask.last
       expect(mocks.refreshFileListHeaderPosition).toHaveBeenCalledTimes(2)
     })
   })
@@ -175,10 +175,10 @@ describe('GenericSpace view', () => {
   describe('whitespace context menu', () => {
     it('shows whitespace context menu on right click in whitespace', async () => {
       const { wrapper } = getMountedWrapper()
-      await wrapper.vm.loadResourcesTask.last
+      await (wrapper.vm as any).loadResourcesTask.last
       await wrapper.find('#files-view').trigger('contextmenu')
       await wrapper.vm.$nextTick()
-      expect(wrapper.vm.whitespaceContextMenu).toBeDefined()
+      expect((wrapper.vm as any).whitespaceContextMenu).toBeDefined()
     })
   })
   describe('for a single file', () => {
@@ -327,6 +327,9 @@ function getMountedWrapper({
     wrapper: mount(GenericSpace, {
       props: propsData,
       global: {
+        components: {
+          AppBar
+        },
         plugins,
         mocks: defaultMocks,
         provide: defaultMocks,
