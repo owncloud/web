@@ -91,7 +91,7 @@
   </div>
 </template>
 
-<script lang="ts">
+<script lang="ts" setup>
 import Fuse from 'fuse.js'
 import Mark from 'mark.js'
 import { useResourcesViewDefaults } from '../../composables'
@@ -107,7 +107,7 @@ import {
 import { AppBar, ItemFilterInline } from '@ownclouders/web-pkg'
 import { queryItemAsString, useRouteQuery } from '@ownclouders/web-pkg'
 import SharedWithMeSection from '../../components/Shares/SharedWithMeSection.vue'
-import { computed, defineComponent, onMounted, ref, unref, watch } from 'vue'
+import { computed, onMounted, ref, unref, watch } from 'vue'
 import FilesViewWrapper from '../../components/FilesViewWrapper.vue'
 import { useGetMatchingSpace, useSort } from '@ownclouders/web-pkg'
 import { useGroupingSettings } from '@ownclouders/web-pkg'
@@ -117,200 +117,157 @@ import { useOpenWithDefaultApp, defaultFuseOptions } from '@ownclouders/web-pkg'
 import { IncomingShareResource, ShareTypes } from '@ownclouders/web-client'
 import { uniq } from 'lodash-es'
 
-export default defineComponent({
-  components: {
-    SharesNavigation,
-    FilesViewWrapper,
-    AppBar,
-    AppLoadingSpinner,
-    SharedWithMeSection,
-    FileSideBar,
-    ItemFilterInline,
-    ItemFilter
-  },
+const { openWithDefaultApp } = useOpenWithDefaultApp()
+const appsStore = useAppsStore()
+const resourcesStore = useResourcesStore()
 
-  setup() {
-    const { openWithDefaultApp } = useOpenWithDefaultApp()
-    const appsStore = useAppsStore()
-    const resourcesStore = useResourcesStore()
+const {
+  areResourcesLoading,
+  sortFields,
+  fileListHeaderY,
+  loadResourcesTask,
+  selectedResources,
+  sideBarActivePanel,
+  isSideBarOpen,
+  paginatedResources,
+  scrollToResourceFromRoute
+} = useResourcesViewDefaults<IncomingShareResource, any, any>()
 
-    const {
-      areResourcesLoading,
-      sortFields,
-      fileListHeaderY,
-      loadResourcesTask,
-      selectedResources,
-      selectedResourcesIds,
-      sideBarActivePanel,
-      isSideBarOpen,
-      paginatedResources,
-      scrollToResourceFromRoute
-    } = useResourcesViewDefaults<IncomingShareResource, any, any>()
+const { $gettext } = useGettext()
 
-    const { $gettext } = useGettext()
+const areHiddenFilesShown = ref(false)
+const filterTerm = ref('')
+const markInstance = ref<Mark>()
 
-    const areHiddenFilesShown = ref(false)
-    const filterTerm = ref('')
-    const markInstance = ref<Mark>()
+const shareSectionTitle = computed(() => {
+  return unref(areHiddenFilesShown) ? $gettext('Hidden Shares') : $gettext('Shares')
+})
 
-    const shareSectionTitle = computed(() => {
-      return unref(areHiddenFilesShown) ? $gettext('Hidden Shares') : $gettext('Shares')
+const visibilityOptions = computed(() => [
+  { name: 'visible', label: $gettext('Shares') },
+  { name: 'hidden', label: $gettext('Hidden Shares') }
+])
+
+const setAreHiddenFilesShown = (value: InlineFilterOption) => {
+  areHiddenFilesShown.value = value.name === 'hidden'
+  resourcesStore.resetSelection()
+}
+
+const visibleShares = computed(() => unref(paginatedResources).filter((r) => !r.hidden))
+const hiddenShares = computed(() => unref(paginatedResources).filter((r) => r.hidden))
+const currentItems = computed(() => {
+  return unref(areHiddenFilesShown) ? unref(hiddenShares) : unref(visibleShares)
+})
+
+const selectedShareTypesQuery = useRouteQuery('q_shareType')
+const selectedSharedByQuery = useRouteQuery('q_sharedBy')
+const scrollToTarget = useRouteQuery('scrollTo')
+
+const filteredItems = computed(() => {
+  let result = unref(currentItems)
+
+  const selectedShareTypes = queryItemAsString(unref(selectedShareTypesQuery))?.split('+')
+  if (selectedShareTypes?.length) {
+    result = result.filter(({ shareTypes }) => {
+      return ShareTypes.getByKeys(selectedShareTypes)
+        .map(({ value }) => value)
+        .some((t) => shareTypes.includes(t))
     })
-
-    const visibilityOptions = computed(() => [
-      { name: 'visible', label: $gettext('Shares') },
-      { name: 'hidden', label: $gettext('Hidden Shares') }
-    ])
-
-    const setAreHiddenFilesShown = (value: InlineFilterOption) => {
-      areHiddenFilesShown.value = value.name === 'hidden'
-      resourcesStore.resetSelection()
-    }
-
-    const visibleShares = computed(() => unref(paginatedResources).filter((r) => !r.hidden))
-    const hiddenShares = computed(() => unref(paginatedResources).filter((r) => r.hidden))
-    const currentItems = computed(() => {
-      return unref(areHiddenFilesShown) ? unref(hiddenShares) : unref(visibleShares)
-    })
-
-    const selectedShareTypesQuery = useRouteQuery('q_shareType')
-    const selectedSharedByQuery = useRouteQuery('q_sharedBy')
-    const scrollToTarget = useRouteQuery('scrollTo')
-
-    const filteredItems = computed(() => {
-      let result = unref(currentItems)
-
-      const selectedShareTypes = queryItemAsString(unref(selectedShareTypesQuery))?.split('+')
-      if (selectedShareTypes?.length) {
-        result = result.filter(({ shareTypes }) => {
-          return ShareTypes.getByKeys(selectedShareTypes)
-            .map(({ value }) => value)
-            .some((t) => shareTypes.includes(t))
-        })
-      }
-
-      const selectedSharedBy = queryItemAsString(unref(selectedSharedByQuery))?.split('+')
-      if (selectedSharedBy?.length) {
-        result = result.filter(({ sharedBy }) =>
-          sharedBy.some(({ id }) => selectedSharedBy.includes(id))
-        )
-      }
-
-      if (unref(filterTerm).trim()) {
-        const usersSearchEngine = new Fuse(result, { ...defaultFuseOptions, keys: ['name'] })
-        const fuseResult = usersSearchEngine.search(unref(filterTerm)).map((r) => r.item)
-        result = fuseResult.filter((item) => result.includes(item))
-      }
-
-      return result
-    })
-
-    watch(filteredItems, () => {
-      if (!unref(areResourcesLoading)) {
-        if (!unref(markInstance)) {
-          markInstance.value = new Mark('.oc-resource-details')
-        }
-
-        unref(markInstance).unmark()
-        unref(markInstance).mark(unref(filterTerm), {
-          element: 'span',
-          className: 'mark-highlight'
-        })
-      }
-    })
-
-    const { sortBy, sortDir, items, handleSort } = useSort({
-      items: filteredItems,
-      fields: sortFields
-    })
-
-    const { getMatchingSpace } = useGetMatchingSpace()
-
-    const selectedShareSpace = computed(() => {
-      if (unref(selectedResources).length !== 1) {
-        return null
-      }
-      const resource = unref(selectedResources)[0]
-      return getMatchingSpace(resource)
-    })
-
-    const openWithDefaultAppQuery = useRouteQuery('openWithDefaultApp')
-    const performLoaderTask = async () => {
-      await loadResourcesTask.perform()
-      scrollToResourceFromRoute(unref(items), 'files-app-bar')
-      if (queryItemAsString(unref(openWithDefaultAppQuery)) === 'true') {
-        openWithDefaultApp({
-          space: unref(selectedShareSpace),
-          resource: unref(selectedResources)[0]
-        })
-      }
-    }
-
-    const shareTypes = computed(() => {
-      const uniqueShareTypes = uniq(unref(paginatedResources).flatMap((i) => i.shareTypes))
-
-      const ocmAvailable = appsStore.appIds.includes('open-cloud-mesh')
-      if (ocmAvailable && !uniqueShareTypes.includes(ShareTypes.remote.value)) {
-        uniqueShareTypes.push(ShareTypes.remote.value)
-      }
-
-      return ShareTypes.getByValues(uniqueShareTypes).map((shareType) => {
-        return {
-          key: shareType.key,
-          value: shareType.value,
-          label: $gettext(shareType.label)
-        }
-      })
-    })
-
-    const fileOwners = computed(() => {
-      const flatList = unref(paginatedResources)
-        .map((i) => i.sharedBy)
-        .flat()
-      return [...new Map(flatList.map((item) => [item.displayName, item])).values()]
-    })
-
-    onMounted(() => {
-      performLoaderTask()
-    })
-
-    watch(scrollToTarget, (value) => {
-      if (!value) {
-        return
-      }
-
-      scrollToResourceFromRoute(unref(items), 'files-app-bar')
-    })
-
-    return {
-      loadResourcesTask,
-      areResourcesLoading,
-      selectedResources,
-      selectedResourcesIds,
-      fileListHeaderY,
-      isSideBarOpen,
-      sideBarActivePanel,
-      selectedShareSpace,
-
-      areHiddenFilesShown,
-      visibilityOptions,
-      hiddenShares,
-      setAreHiddenFilesShown,
-      shareSectionTitle,
-      visibleShares,
-      shareTypes,
-      fileOwners,
-      filterTerm,
-
-      handleSort,
-      sortBy,
-      sortDir,
-      items,
-
-      // CERN
-      ...useGroupingSettings({ sortBy: sortBy, sortDir: sortDir })
-    }
   }
+
+  const selectedSharedBy = queryItemAsString(unref(selectedSharedByQuery))?.split('+')
+  if (selectedSharedBy?.length) {
+    result = result.filter(({ sharedBy }) =>
+      sharedBy.some(({ id }) => selectedSharedBy.includes(id))
+    )
+  }
+
+  if (unref(filterTerm).trim()) {
+    const usersSearchEngine = new Fuse(result, { ...defaultFuseOptions, keys: ['name'] })
+    const fuseResult = usersSearchEngine.search(unref(filterTerm)).map((r) => r.item)
+    result = fuseResult.filter((item) => result.includes(item))
+  }
+
+  return result
+})
+
+watch(filteredItems, () => {
+  if (!unref(areResourcesLoading)) {
+    if (!unref(markInstance)) {
+      markInstance.value = new Mark('.oc-resource-details')
+    }
+
+    unref(markInstance).unmark()
+    unref(markInstance).mark(unref(filterTerm), {
+      element: 'span',
+      className: 'mark-highlight'
+    })
+  }
+})
+
+const { sortBy, sortDir, items, handleSort } = useSort({
+  items: filteredItems,
+  fields: sortFields
+})
+
+const { groupingSettings } = useGroupingSettings({ sortBy, sortDir })
+
+const { getMatchingSpace } = useGetMatchingSpace()
+
+const selectedShareSpace = computed(() => {
+  if (unref(selectedResources).length !== 1) {
+    return null
+  }
+  const resource = unref(selectedResources)[0]
+  return getMatchingSpace(resource)
+})
+
+const openWithDefaultAppQuery = useRouteQuery('openWithDefaultApp')
+const performLoaderTask = async () => {
+  await loadResourcesTask.perform()
+  scrollToResourceFromRoute(unref(items), 'files-app-bar')
+  if (queryItemAsString(unref(openWithDefaultAppQuery)) === 'true') {
+    openWithDefaultApp({
+      space: unref(selectedShareSpace),
+      resource: unref(selectedResources)[0]
+    })
+  }
+}
+
+const shareTypes = computed(() => {
+  const uniqueShareTypes = uniq(unref(paginatedResources).flatMap((i) => i.shareTypes))
+
+  const ocmAvailable = appsStore.appIds.includes('open-cloud-mesh')
+  if (ocmAvailable && !uniqueShareTypes.includes(ShareTypes.remote.value)) {
+    uniqueShareTypes.push(ShareTypes.remote.value)
+  }
+
+  return ShareTypes.getByValues(uniqueShareTypes).map((shareType) => {
+    return {
+      key: shareType.key,
+      value: shareType.value,
+      label: $gettext(shareType.label)
+    }
+  })
+})
+
+const fileOwners = computed(() => {
+  const flatList = unref(paginatedResources)
+    .map((i) => i.sharedBy)
+    .flat()
+  return [...new Map(flatList.map((item) => [item.displayName, item])).values()]
+})
+
+onMounted(() => {
+  performLoaderTask()
+})
+
+watch(scrollToTarget, (value) => {
+  if (!value) {
+    return
+  }
+
+  scrollToResourceFromRoute(unref(items), 'files-app-bar')
 })
 </script>
 

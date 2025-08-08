@@ -5,7 +5,8 @@ import {
   InlineFilterOption,
   useSort,
   useOpenWithDefaultApp,
-  ItemFilter
+  ItemFilter,
+  AppBar
 } from '@ownclouders/web-pkg'
 import { useResourcesViewDefaultsMock } from '../../../../tests/mocks/useResourcesViewDefaultsMock'
 import { ref } from 'vue'
@@ -47,12 +48,12 @@ describe('SharedWithMe view', () => {
   describe('open with default app', () => {
     it('gets called if given via route query param', async () => {
       const { wrapper, mocks } = getMountedWrapper({ openWithDefaultAppQuery: 'true' })
-      await wrapper.vm.loadResourcesTask.last
+      await (wrapper.vm as any).loadResourcesTask.last
       expect(mocks.openWithDefaultApp).toHaveBeenCalled()
     })
     it('gets not called if not given via route query param', async () => {
       const { wrapper, mocks } = getMountedWrapper()
-      await wrapper.vm.loadResourcesTask.last
+      await (wrapper.vm as any).loadResourcesTask.last
       expect(mocks.openWithDefaultApp).not.toHaveBeenCalled()
     })
   })
@@ -74,7 +75,7 @@ describe('SharedWithMe view', () => {
       })
       it('shows all hidden shares', async () => {
         const { wrapper } = getMountedWrapper()
-        wrapper.vm.setAreHiddenFilesShown(mock<InlineFilterOption>({ name: 'hidden' }))
+        ;(wrapper.vm as any).setAreHiddenFilesShown(mock<InlineFilterOption>({ name: 'hidden' }))
         await wrapper.vm.$nextTick()
         expect(wrapper.findAll('shared-with-me-section-stub').length).toBe(1)
         expect(
@@ -148,9 +149,9 @@ describe('SharedWithMe view', () => {
         })
 
         await wrapper.vm.$nextTick()
-        wrapper.vm.filterTerm = 'share1'
-        expect(wrapper.vm.items.find(({ name }) => name === 'share1')).toBeDefined()
-        expect(wrapper.vm.items.find(({ name }) => name === 'share2')).toBeUndefined()
+        ;(wrapper.vm as any).filterTerm = 'share1'
+        expect((wrapper.vm as any).items.find(({ name }) => name === 'share1')).toBeDefined()
+        expect((wrapper.vm as any).items.find(({ name }) => name === 'share2')).toBeUndefined()
       })
     })
   })
@@ -196,6 +197,9 @@ function getMountedWrapper({
     mocks: defaultMocks,
     wrapper: mount(SharedWithMe, {
       global: {
+        components: {
+          AppBar
+        },
         plugins: [...defaultPlugins()],
         mocks: defaultMocks,
         stubs: { ...defaultStubs, itemFilterInline: true, ItemFilter: true }
