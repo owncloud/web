@@ -1,5 +1,5 @@
 <template>
-  <component :is="type" :aria-hidden="true">
+  <component :is="type" :aria-hidden="true" translate="no">
     <oc-spinner
       v-if="loading"
       key="avatar-loading"

@@ -16,11 +16,11 @@ exports[`account page > account information section > displays basic user inform
     <tbody>
       <tr class="account-page-info-username">
         <td class="oc-table-cell oc-table-cell-align-left oc-table-cell-align-middle oc-table-cell-width-auto oc-td">Username</td>
-        <td class="oc-table-cell oc-table-cell-align-left oc-table-cell-align-middle oc-table-cell-width-auto oc-td">some-username</td>
+        <td class="oc-table-cell oc-table-cell-align-left oc-table-cell-align-middle oc-table-cell-width-auto oc-td" translate="no">some-username</td>
       </tr>
       <tr class="account-page-info-displayname">
         <td class="oc-table-cell oc-table-cell-align-left oc-table-cell-align-middle oc-table-cell-width-auto oc-td">First and last name</td>
-        <td class="oc-table-cell oc-table-cell-align-left oc-table-cell-align-middle oc-table-cell-width-auto oc-td">some-displayname</td>
+        <td class="oc-table-cell oc-table-cell-align-left oc-table-cell-align-middle oc-table-cell-width-auto oc-td" translate="no">some-displayname</td>
       </tr>
       <tr class="account-page-info-email">
         <td class="oc-table-cell oc-table-cell-align-left oc-table-cell-align-middle oc-table-cell-width-auto oc-td">Email</td>
