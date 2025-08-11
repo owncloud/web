@@ -10,6 +10,7 @@ Summary
 
 * Bugfix - Reset selection only when path changes: [#12768](https://github.com/owncloud/web/pull/12768)
 * Bugfix - Handle direct admin settings access: [#12780](https://github.com/owncloud/web/pull/12780)
+* Bugfix - Incorrect translation when using switches language: [#12889](https://github.com/owncloud/web/pull/12889)
 * Bugfix - Deactivated Space button clips German translated word: [#12890](https://github.com/owncloud/web/pull/12890)
 * Enhancement - Add markdown to PDF export: [#12788](https://github.com/owncloud/web/pull/12788)
 
@@ -38,6 +39,16 @@ Details
    handle the permissions navigation guard.
 
    https://github.com/owncloud/web/pull/12780
+
+* Bugfix - Incorrect translation when using switches language: [#12889](https://github.com/owncloud/web/pull/12889)
+
+   We have fixed an issue where the translation was incorrect when switching
+   languages in the web interface. This ensures that the language displayed matches
+   the selected language without inconsistencies by fetching the roles when use
+   switches language.
+
+   https://github.com/owncloud/web/pull/12889
+   https://kiteworks.atlassian.net/browse/OCISDEV-186
 
 * Bugfix - Deactivated Space button clips German translated word: [#12890](https://github.com/owncloud/web/pull/12890)
 
