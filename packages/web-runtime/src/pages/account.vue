@@ -222,6 +222,8 @@
               <oc-select
                 :model-value="emailNotificationsValues[option.id]"
                 :options="option.singleChoiceValue.options"
+                :label="emailNotificationsValues[option.id].displayValue"
+                :label-hidden="true"
                 :clearable="false"
                 option-label="displayValue"
                 @update:model-value="(value) => updateSingleChoiceValue(option.name, value)"
