@@ -1,10 +1,10 @@
 import { ApplicationInformation, AppWrapperRoute, defineWebApplication } from '@ownclouders/web-pkg'
 import translations from '../l10n/translations.json'
-import * as app from './App.vue'
+import App from './App.vue'
 import { useGettext } from 'vue3-gettext'
 import { mimeTypes } from './mimeTypes'
 
-const { default: App, appId } = app
+const appId = 'preview'
 
 export default defineWebApplication({
   setup() {

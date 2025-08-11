@@ -68,21 +68,10 @@
     </div>
   </div>
 </template>
-<script lang="ts">
-import {
-  computed,
-  defineComponent,
-  ref,
-  unref,
-  PropType,
-  nextTick,
-  getCurrentInstance,
-  watch,
-  Ref
-} from 'vue'
+<script lang="ts" setup>
+import { computed, ref, unref, nextTick, watch, Ref, onMounted, onBeforeMount } from 'vue'
 import { IncomingShareResource, Resource } from '@ownclouders/web-client'
 import {
-  AppFileHandlingResult,
   AppFolderHandlingResult,
   FileContext,
   ProcessorType,
@@ -111,314 +100,292 @@ import {
 import { mimeTypes } from './mimeTypes'
 import { RouteLocationRaw } from 'vue-router'
 
-export const appId = 'preview'
 const PRELOAD_COUNT = 5
 
-export default defineComponent({
-  name: 'Preview',
-  components: {
-    MediaControls,
-    MediaAudio,
-    MediaImage,
-    MediaVideo
-  },
-  props: {
-    activeFiles: { type: Object as PropType<Resource[]>, required: true },
-    currentFileContext: { type: Object as PropType<FileContext>, required: true },
-    loadFolderForFileContext: {
-      type: Function as PropType<AppFolderHandlingResult['loadFolderForFileContext']>,
-      required: true
-    },
-    getUrlForResource: {
-      type: Function as PropType<AppFileHandlingResult['getUrlForResource']>,
-      required: true
-    },
-    revokeUrl: { type: Function as PropType<AppFileHandlingResult['revokeUrl']>, required: true },
-    isFolderLoading: { type: Boolean, required: true }
-  },
-  emits: ['update:resource'],
-  setup(props, { emit }) {
-    const router = useRouter()
-    const route = useRoute()
-    const contextRouteQuery = useRouteQuery('contextRouteQuery') as unknown as Ref<
-      Record<string, string>
-    >
+interface Props {
+  activeFiles: Resource[]
+  currentFileContext: FileContext
+  loadFolderForFileContext: (fileContext: FileContext) => Promise<AppFolderHandlingResult>
+  getUrlForResource: (space: Resource, resource: Resource) => Promise<string>
+  revokeUrl: (url: string | undefined) => void
+  isFolderLoading: boolean
+}
+interface Emits {
+  (e: 'update:resource', resource: Resource | undefined): void
+}
+const {
+  activeFiles,
+  currentFileContext,
+  loadFolderForFileContext,
+  getUrlForResource,
+  revokeUrl,
+  isFolderLoading
+} = defineProps<Props>()
+const emit = defineEmits<Emits>()
+const router = useRouter()
+const route = useRoute()
+const contextRouteQuery = useRouteQuery('contextRouteQuery') as unknown as Ref<
+  Record<string, string>
+>
 
-    const { isFileTypeAudio, isFileTypeImage, isFileTypeVideo } = useFileTypes()
-    const previewService = usePreviewService()
-    const { dimensions } = usePreviewDimensions()
-    const { getMatchingSpace } = useGetMatchingSpace()
+const { isFileTypeAudio, isFileTypeImage, isFileTypeVideo } = useFileTypes()
+const previewService = usePreviewService()
+const { dimensions } = usePreviewDimensions()
+const { getMatchingSpace } = useGetMatchingSpace()
+const {
+  currentImageZoom,
+  currentImageRotation,
+  currentImagePositionX,
+  currentImagePositionY,
+  resetImage,
+  onPanZoomChanged
+} = useImageControls()
 
-    const activeIndex = ref<number>()
-    const cachedFiles = ref<Record<string, CachedFile>>({})
-    const folderLoaded = ref(false)
-    const isAutoPlayEnabled = ref(true)
-    const preview = ref<HTMLElement>()
+const { isFullScreenModeActivated, toggleFullScreenMode } = useFullScreenMode()
 
-    const space = computed(() => {
-      return getMatchingSpace(unref(activeFilteredFile))
-    })
+const activeIndex = ref<number>()
+const cachedFiles = ref<Record<string, CachedFile>>({})
+const folderLoaded = ref(false)
+const isAutoPlayEnabled = ref(true)
+const preview = ref<HTMLElement>()
 
-    const sortBy = computed(() => {
-      if (!unref(contextRouteQuery)) {
-        return 'name'
-      }
-      return unref(contextRouteQuery)['sort-by'] ?? 'name'
-    })
-    const sortDir = computed<SortDir>(() => {
-      if (!unref(contextRouteQuery)) {
-        return SortDir.Desc
-      }
-      return (unref(contextRouteQuery)['sort-dir'] as SortDir) ?? SortDir.Asc
-    })
+const space = computed(() => {
+  return getMatchingSpace(unref(activeFilteredFile))
+})
 
-    const fileIdQuery = useRouteQuery('fileId')
-    const fileId = computed(() => queryItemAsString(unref(fileIdQuery)))
-
-    const filteredFiles = computed(() => {
-      if (!props.activeFiles) {
-        return []
-      }
-
-      const files = props.activeFiles.filter((file) => {
-        if (
-          unref(props.currentFileContext.routeQuery)?.['q_share-visibility'] === 'hidden' &&
-          !(file as IncomingShareResource).hidden
-        ) {
-          return false
-        }
-
-        if (
-          unref(props.currentFileContext.routeQuery)?.['q_share-visibility'] !== 'hidden' &&
-          (file as IncomingShareResource).hidden
-        ) {
-          return false
-        }
-
-        return mimeTypes.includes(file.mimeType?.toLowerCase()) && file.canDownload()
-      })
-
-      return sortHelper(files, [{ name: unref(sortBy) }], unref(sortBy), unref(sortDir))
-    })
-    const activeFilteredFile = computed(() => {
-      return unref(filteredFiles)[unref(activeIndex)]
-    })
-    const activeMediaFileCached = computed(() => {
-      return unref(cachedFiles)[unref(activeFilteredFile)?.id]
-    })
-
-    const loadFileIntoCache = async (file: Resource) => {
-      if (Object.hasOwn(unref(cachedFiles), file.id)) {
-        return
-      }
-
-      const cachedFile: CachedFile = {
-        id: file.id,
-        name: file.name,
-        url: undefined,
-        ext: file.extension,
-        mimeType: file.mimeType,
-        isVideo: isFileTypeVideo(file),
-        isImage: isFileTypeImage(file),
-        isAudio: isFileTypeAudio(file),
-        isLoading: ref(true),
-        isError: ref(false)
-      }
-      cachedFiles.value[file.id] = cachedFile
-
-      try {
-        if (cachedFile.isImage) {
-          cachedFile.url = await previewService.loadPreview(
-            {
-              space: unref(space),
-              resource: file,
-              dimensions: unref(dimensions),
-              processor: ProcessorType.enum.fit
-            },
-            false,
-            false
-          )
-          return
-        }
-        cachedFile.url = await props.getUrlForResource(unref(space), file)
-      } catch (e) {
-        console.error(e)
-        cachedFile.isError.value = true
-      } finally {
-        cachedFile.isLoading.value = false
-      }
-    }
-
-    const updateLocalHistory = () => {
-      // this is a rare edge case when browsing quickly through a lot of files
-      // we workaround context being null, when useDriveResolver is in loading state
-      if (!props.currentFileContext) {
-        return
-      }
-
-      const { params, query } = createFileRouteOptions(unref(space), unref(activeFilteredFile))
-      const { fullPath, ...routeWithoutFullPath } = unref(route)
-
-      router.replace({
-        ...routeWithoutFullPath,
-        path: fullPath,
-        params: { ...routeWithoutFullPath.params, ...params },
-        query: { ...routeWithoutFullPath.query, ...query }
-      } as RouteLocationRaw)
-    }
-
-    const instance = getCurrentInstance()
-    watch(
-      props.currentFileContext,
-      async () => {
-        if (!props.currentFileContext) {
-          return
-        }
-
-        if (!unref(folderLoaded)) {
-          await props.loadFolderForFileContext(props.currentFileContext)
-          folderLoaded.value = true
-        }
-
-        ;(instance.proxy as any).setActiveFile()
-      },
-      { immediate: true }
-    )
-
-    watch(activeFilteredFile, (file) => {
-      emit('update:resource', file)
-    })
-
-    const loading = computed(() => {
-      if (props.isFolderLoading) {
-        return true
-      }
-      const file = unref(activeMediaFileCached)
-      if (!file) {
-        return true
-      }
-      return unref(file.isLoading)
-    })
-    watch(
-      loading,
-      async (loading) => {
-        if (!loading) {
-          await nextTick()
-          unref(preview).focus()
-        }
-      },
-      { immediate: true }
-    )
-
-    return {
-      ...useImageControls(),
-      ...useFullScreenMode(),
-      fileId,
-      activeFilteredFile,
-      activeIndex,
-      activeMediaFileCached,
-      cachedFiles,
-      filteredFiles,
-      updateLocalHistory,
-      isAutoPlayEnabled,
-      preview,
-      isFileTypeImage,
-      loadFileIntoCache,
-      space
-    }
-  },
-
-  watch: {
-    activeIndex(newValue, oldValue) {
-      if (newValue !== oldValue) {
-        this.loadFileIntoCache(this.activeFilteredFile)
-        this.preloadImages()
-      }
-
-      if (oldValue !== null) {
-        this.isAutoPlayEnabled = false
-      }
-
-      this.currentImageZoom = 1
-      this.currentImageRotation = 0
-    }
-  },
-
-  mounted() {
-    // keep a local history for this component
-    window.addEventListener('popstate', this.handleLocalHistoryEvent)
-  },
-
-  beforeUnmount() {
-    window.removeEventListener('popstate', this.handleLocalHistoryEvent)
-
-    Object.values(this.cachedFiles).forEach((cachedFile) => {
-      this.revokeUrl(cachedFile.url)
-    })
-  },
-
-  methods: {
-    setActiveFile() {
-      for (let i = 0; i < this.filteredFiles.length; i++) {
-        const filterAttr = isLocationSharesActive(this.$router, 'files-shares-with-me')
-          ? 'remoteItemId'
-          : 'fileId'
-
-        // match the given file id with the filtered files to get the current index
-        if (this.filteredFiles[i][filterAttr] === this.fileId) {
-          this.activeIndex = i
-          return
-        }
-
-        this.activeIndex = 0
-      }
-    },
-    // react to PopStateEvent ()
-    handleLocalHistoryEvent() {
-      this.setActiveFile()
-    },
-    goToNext() {
-      if (this.activeIndex + 1 >= this.filteredFiles.length) {
-        this.activeIndex = 0
-        this.updateLocalHistory()
-        return
-      }
-      this.activeIndex++
-      this.updateLocalHistory()
-    },
-    goToPrev() {
-      if (this.activeIndex === 0) {
-        this.activeIndex = this.filteredFiles.length - 1
-        this.updateLocalHistory()
-        return
-      }
-      this.activeIndex--
-      this.updateLocalHistory()
-    },
-    preloadImages() {
-      const preloadFile = (preloadFileIndex: number) => {
-        const cycleIndex =
-          (((this.activeIndex + preloadFileIndex) % this.filteredFiles.length) +
-            this.filteredFiles.length) %
-          this.filteredFiles.length
-
-        const file = this.filteredFiles[cycleIndex]
-        this.loadFileIntoCache(file)
-      }
-
-      for (let followingFileIndex = 1; followingFileIndex <= PRELOAD_COUNT; followingFileIndex++) {
-        preloadFile(followingFileIndex)
-      }
-
-      for (
-        let previousFileIndex = -1;
-        previousFileIndex >= PRELOAD_COUNT * -1;
-        previousFileIndex--
-      ) {
-        preloadFile(previousFileIndex)
-      }
-    }
+const sortBy = computed(() => {
+  if (!unref(contextRouteQuery)) {
+    return 'name'
   }
+  return unref(contextRouteQuery)['sort-by'] ?? 'name'
+})
+const sortDir = computed<SortDir>(() => {
+  if (!unref(contextRouteQuery)) {
+    return SortDir.Desc
+  }
+  return (unref(contextRouteQuery)['sort-dir'] as SortDir) ?? SortDir.Asc
+})
+
+const fileIdQuery = useRouteQuery('fileId')
+const fileId = computed(() => queryItemAsString(unref(fileIdQuery)))
+
+const filteredFiles = computed(() => {
+  if (!activeFiles) {
+    return []
+  }
+
+  const files = activeFiles.filter((file) => {
+    if (
+      unref(currentFileContext.routeQuery)?.['q_share-visibility'] === 'hidden' &&
+      !(file as IncomingShareResource).hidden
+    ) {
+      return false
+    }
+
+    if (
+      unref(currentFileContext.routeQuery)?.['q_share-visibility'] !== 'hidden' &&
+      (file as IncomingShareResource).hidden
+    ) {
+      return false
+    }
+
+    return mimeTypes.includes(file.mimeType?.toLowerCase()) && file.canDownload()
+  })
+
+  return sortHelper(files, [{ name: unref(sortBy) }], unref(sortBy), unref(sortDir))
+})
+const activeFilteredFile = computed(() => {
+  return unref(filteredFiles)[unref(activeIndex)]
+})
+const activeMediaFileCached = computed(() => {
+  return unref(cachedFiles)[unref(activeFilteredFile)?.id]
+})
+
+const loadFileIntoCache = async (file: Resource) => {
+  if (Object.hasOwn(unref(cachedFiles), file.id)) {
+    return
+  }
+
+  const cachedFile: CachedFile = {
+    id: file.id,
+    name: file.name,
+    url: undefined,
+    ext: file.extension,
+    mimeType: file.mimeType,
+    isVideo: isFileTypeVideo(file),
+    isImage: isFileTypeImage(file),
+    isAudio: isFileTypeAudio(file),
+    isLoading: ref(true),
+    isError: ref(false)
+  }
+  cachedFiles.value[file.id] = cachedFile
+
+  try {
+    if (cachedFile.isImage) {
+      cachedFile.url = await previewService.loadPreview(
+        {
+          space: unref(space),
+          resource: file,
+          dimensions: unref(dimensions),
+          processor: ProcessorType.enum.fit
+        },
+        false,
+        false
+      )
+      return
+    }
+    cachedFile.url = await getUrlForResource(unref(space), file)
+  } catch (e) {
+    console.error(e)
+    cachedFile.isError.value = true
+  } finally {
+    cachedFile.isLoading.value = false
+  }
+}
+
+const updateLocalHistory = () => {
+  // this is a rare edge case when browsing quickly through a lot of files
+  // we workaround context being null, when useDriveResolver is in loading state
+  if (!currentFileContext) {
+    return
+  }
+
+  const { params, query } = createFileRouteOptions(unref(space), unref(activeFilteredFile))
+  const { fullPath, ...routeWithoutFullPath } = unref(route)
+
+  router.replace({
+    ...routeWithoutFullPath,
+    path: fullPath,
+    params: { ...routeWithoutFullPath.params, ...params },
+    query: { ...routeWithoutFullPath.query, ...query }
+  } as RouteLocationRaw)
+}
+
+watch(
+  () => currentFileContext,
+  async () => {
+    if (!currentFileContext) {
+      return
+    }
+
+    if (!unref(folderLoaded)) {
+      await loadFolderForFileContext(currentFileContext)
+      folderLoaded.value = true
+    }
+
+    setActiveFile()
+  },
+  { immediate: true, deep: true }
+)
+
+watch(
+  () => activeFilteredFile.value,
+  (file) => {
+    emit('update:resource', unref(file))
+  }
+)
+
+const loading = computed(() => {
+  if (isFolderLoading) {
+    return true
+  }
+  const file = unref(activeMediaFileCached)
+  if (!file) {
+    return true
+  }
+  return unref(file.isLoading)
+})
+watch(
+  () => loading.value,
+  async (loadingState) => {
+    if (!loadingState) {
+      await nextTick()
+      unref(preview).focus()
+    }
+  },
+  { immediate: true }
+)
+
+function setActiveFile() {
+  for (let i = 0; i < unref(filteredFiles).length; i++) {
+    const filterAttr = isLocationSharesActive(router, 'files-shares-with-me')
+      ? 'remoteItemId'
+      : 'fileId'
+
+    // match the given file id with the filtered files to get the current index
+    if (unref(filteredFiles)[i][filterAttr] === unref(fileId)) {
+      activeIndex.value = i
+      return
+    }
+
+    activeIndex.value = 0
+  }
+}
+// react to PopStateEvent ()
+function handleLocalHistoryEvent() {
+  setActiveFile()
+}
+function goToNext() {
+  if (unref(activeIndex) + 1 >= unref(filteredFiles).length) {
+    activeIndex.value = 0
+    updateLocalHistory()
+    return
+  }
+  activeIndex.value++
+  updateLocalHistory()
+}
+function goToPrev() {
+  if (unref(activeIndex) === 0) {
+    activeIndex.value = unref(filteredFiles).length - 1
+    updateLocalHistory()
+    return
+  }
+  activeIndex.value--
+  updateLocalHistory()
+}
+function preloadImages() {
+  const preloadFile = (preloadFileIndex: number) => {
+    const cycleIndex =
+      (((unref(activeIndex) + preloadFileIndex) % unref(filteredFiles).length) +
+        unref(filteredFiles).length) %
+      unref(filteredFiles).length
+
+    const file = unref(filteredFiles)[cycleIndex]
+    loadFileIntoCache(file)
+  }
+
+  for (let followingFileIndex = 1; followingFileIndex <= PRELOAD_COUNT; followingFileIndex++) {
+    preloadFile(followingFileIndex)
+  }
+
+  for (let previousFileIndex = -1; previousFileIndex >= PRELOAD_COUNT * -1; previousFileIndex--) {
+    preloadFile(previousFileIndex)
+  }
+}
+
+watch(activeIndex, (newValue, oldValue) => {
+  if (newValue !== oldValue) {
+    loadFileIntoCache(unref(activeFilteredFile))
+    preloadImages()
+  }
+
+  if (oldValue !== null) {
+    isAutoPlayEnabled.value = false
+  }
+
+  currentImageZoom.value = 1
+  currentImageRotation.value = 0
+})
+onMounted(() => {
+  // keep a local history for this component
+  window.addEventListener('popstate', handleLocalHistoryEvent)
+})
+onBeforeMount(() => {
+  window.removeEventListener('popstate', handleLocalHistoryEvent)
+
+  Object.values(unref(cachedFiles)).forEach((cachedFile) => {
+    revokeUrl(unref(cachedFile).url)
+  })
 })
 </script>
 
