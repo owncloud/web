@@ -99,16 +99,15 @@ describe('Preview app', () => {
     it('should preload images if active file changes', async () => {
       const { wrapper } = createShallowMountWrapper()
       await nextTick()
-
-      wrapper.vm.cachedFiles = {}
-      wrapper.vm.goToNext()
+      ;(wrapper.vm as any).cachedFiles = {}
+      ;(wrapper.vm as any).goToNext()
 
       await nextTick()
 
       expect(
-        Object.values(wrapper.vm.cachedFiles)
-          .filter((cachedFile) => cachedFile.isImage)
-          .map((cachedFile) => cachedFile.id)
+        Object.values((wrapper.vm as any).cachedFiles)
+          .filter((cachedFile) => (cachedFile as any).isImage)
+          .map((cachedFile) => (cachedFile as any).id)
           .sort((a, b) => a.localeCompare(b))
       ).toEqual(['1', '2', '4', '6', '7', '8', '9'])
     })
@@ -117,21 +116,21 @@ describe('Preview app', () => {
   describe('Computed "filteredFiles"', () => {
     it('should hide hidden shares if the share visibility query is not set to "hidden"', () => {
       const { wrapper } = createShallowMountWrapper()
-      expect(wrapper.vm.filteredFiles.length).toStrictEqual(7)
+      expect((wrapper.vm as any).filteredFiles.length).toStrictEqual(7)
     })
 
     it('should hide visible shares if the share visibility query is set to "hidden"', () => {
       const { wrapper } = createShallowMountWrapper({
         currentFileContext: { routeQuery: ref({ ['q_share-visibility']: 'hidden' }) }
       })
-      expect(wrapper.vm.filteredFiles.length).toStrictEqual(2)
+      expect((wrapper.vm as any).filteredFiles.length).toStrictEqual(2)
     })
 
     it('should filter files even when routeQuery is undefined', () => {
       const { wrapper } = createShallowMountWrapper({
         currentFileContext: { routeQuery: undefined }
       })
-      expect(wrapper.vm.filteredFiles.length).toStrictEqual(7)
+      expect((wrapper.vm as any).filteredFiles.length).toStrictEqual(7)
     })
   })
 })
