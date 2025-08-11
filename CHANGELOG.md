@@ -12,6 +12,7 @@ Summary
 * Bugfix - Handle direct admin settings access: [#12780](https://github.com/owncloud/web/pull/12780)
 * Bugfix - Incorrect translation when using switches language: [#12889](https://github.com/owncloud/web/pull/12889)
 * Bugfix - Deactivated Space button clips German translated word: [#12890](https://github.com/owncloud/web/pull/12890)
+* Bugfix - User info getting translated: [#12893](https://github.com/owncloud/web/pull/12893)
 * Enhancement - Add markdown to PDF export: [#12788](https://github.com/owncloud/web/pull/12788)
 
 Details
@@ -57,6 +58,15 @@ Details
 
    https://github.com/owncloud/web/pull/12890
    https://kiteworks.atlassian.net/browse/OCISDEV-194
+
+* Bugfix - User info getting translated: [#12893](https://github.com/owncloud/web/pull/12893)
+
+   We have fixed the issue where user's info are getting translated by disabling
+   browser translation for certain fields, avatar image, first name, last name and
+   username.
+
+   https://github.com/owncloud/web/pull/12893
+   https://kiteworks.atlassian.net/browse/OCISDEV-193
 
 * Enhancement - Add markdown to PDF export: [#12788](https://github.com/owncloud/web/pull/12788)
 
