@@ -53,10 +53,9 @@
   </div>
 </template>
 
-<script lang="ts">
+<script lang="ts" setup>
 import {
   FileSideBar,
-  useConfigStore,
   useFileActions,
   useLoadPreview,
   useResourcesStore
@@ -71,83 +70,65 @@ import { ResourceTable } from '@ownclouders/web-pkg'
 import { Pagination } from '@ownclouders/web-pkg'
 
 import { useResourcesViewDefaults } from '../../composables'
-import { defineComponent, unref } from 'vue'
-import { Resource } from '@ownclouders/web-client'
+import { computed, unref } from 'vue'
 import { useGetMatchingSpace } from '@ownclouders/web-pkg'
 import SharesNavigation from '../../../src/components/AppBar/SharesNavigation.vue'
-import { storeToRefs } from 'pinia'
 import { OutgoingShareResource } from '@ownclouders/web-client'
 
-export default defineComponent({
-  components: {
-    SharesNavigation,
-    FilesViewWrapper,
-    AppBar,
-    ResourceTable,
-    AppLoadingSpinner,
-    NoContentMessage,
-    ListInfo,
-    Pagination,
-    ContextActions,
-    FileSideBar
-  },
+const { getMatchingSpace } = useGetMatchingSpace()
 
-  setup() {
-    const { getMatchingSpace } = useGetMatchingSpace()
-    const configStore = useConfigStore()
-    const { options: configOptions } = storeToRefs(configStore)
+const resourcesStore = useResourcesStore()
+const { triggerDefaultAction } = useFileActions()
 
-    const resourcesStore = useResourcesStore()
-    const { totalResourcesCount } = storeToRefs(resourcesStore)
+const {
+  loadResourcesTask,
+  selectedResourcesIds,
+  paginatedResources,
+  viewMode,
+  scrollToResourceFromRoute,
+  isSideBarOpen,
+  sideBarActivePanel,
+  selectedResourceSpace,
+  sortBy,
+  sortDir,
+  isResourceInSelection,
+  handleSort,
+  areResourcesLoading,
+  fileListHeaderY,
+  paginationPages,
+  paginationPage,
+  selectedResources
+} = useResourcesViewDefaults<OutgoingShareResource, any, any[]>()
+const { loadPreview } = useLoadPreview(viewMode)
 
-    const { loadResourcesTask, selectedResourcesIds, paginatedResources, viewMode } =
-      useResourcesViewDefaults<OutgoingShareResource, any, any[]>()
-    const { loadPreview } = useLoadPreview(viewMode)
-
-    resourcesStore.$onAction((action) => {
-      if (action.name !== 'updateResourceField') {
-        return
-      }
-
-      if (selectedResourcesIds.value.length !== 1) return
-      const id = selectedResourcesIds.value[0]
-
-      const match = unref(paginatedResources).find((r) => {
-        return r.id === id
-      })
-      if (!match) return
-
-      loadResourcesTask.perform()
-
-      const matchedNewResource = unref(paginatedResources).find((r) => r.fileId === match.fileId)
-      if (!matchedNewResource) return
-
-      selectedResourcesIds.value = [matchedNewResource.id]
-    })
-
-    return {
-      ...useFileActions(),
-      ...useResourcesViewDefaults<Resource, any, any[]>(),
-      configOptions,
-      getMatchingSpace,
-      totalResourcesCount,
-      loadPreview
-    }
-  },
-
-  computed: {
-    helpersEnabled() {
-      return this.configOptions.contextHelpers
-    },
-
-    isEmpty() {
-      return this.paginatedResources.length < 1
-    }
-  },
-
-  async created() {
-    await this.loadResourcesTask.perform()
-    this.scrollToResourceFromRoute(this.paginatedResources, 'files-app-bar')
+resourcesStore.$onAction((action) => {
+  if (action.name !== 'updateResourceField') {
+    return
   }
+
+  if (selectedResourcesIds.value.length !== 1) return
+  const id = selectedResourcesIds.value[0]
+
+  const match = unref(paginatedResources).find((r) => {
+    return r.id === id
+  })
+  if (!match) return
+
+  loadResourcesTask.perform()
+
+  const matchedNewResource = unref(paginatedResources).find((r) => r.fileId === match.fileId)
+  if (!matchedNewResource) return
+
+  selectedResourcesIds.value = [matchedNewResource.id]
 })
+
+const isEmpty = computed(() => {
+  return unref(paginatedResources).length < 1
+})
+async function created() {
+  await unref(loadResourcesTask).perform()
+  scrollToResourceFromRoute(unref(paginatedResources), 'files-app-bar')
+}
+
+created()
 </script>
