@@ -14,7 +14,7 @@ import {
   PartialComponentProps,
   ComponentProps
 } from '@ownclouders/web-test-helpers'
-import { AppBar } from '@ownclouders/web-pkg'
+import { AppBar, ResourceTable } from '@ownclouders/web-pkg'
 
 vi.mock('../../../../src/composables')
 
@@ -90,6 +90,10 @@ function getMountedWrapper({
     wrapper: mount(GenericTrash, {
       props: propsData,
       global: {
+        components: {
+          AppBar,
+          ResourceTable
+        },
         plugins: [...defaultPlugins()],
         mocks: defaultMocks,
         stubs: { ...defaultStubs, portal: true }

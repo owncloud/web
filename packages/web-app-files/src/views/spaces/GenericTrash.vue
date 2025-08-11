@@ -17,7 +17,7 @@
           icon-fill-type="line"
         >
           <template #message>
-            <span>{{ noContentMessage }}</span>
+            <span>{{ emptyTrashMessage }}</span>
           </template>
         </no-content-message>
         <resource-table
@@ -53,7 +53,7 @@
   </div>
 </template>
 
-<script lang="ts">
+<script lang="ts" setup>
 import { storeToRefs } from 'pinia'
 
 import { AppBar, ContextActions, FileSideBar, useUserStore } from '@ownclouders/web-pkg'
@@ -66,118 +66,96 @@ import { Pagination } from '@ownclouders/web-pkg'
 
 import { eventBus } from '@ownclouders/web-pkg'
 import { useResourcesViewDefaults } from '../../composables'
-import { computed, defineComponent, PropType, onMounted, onBeforeUnmount, unref } from 'vue'
+import { computed, onMounted, onBeforeUnmount, unref } from 'vue'
 import { Resource } from '@ownclouders/web-client'
 import { createLocationTrash } from '@ownclouders/web-pkg'
 import { isProjectSpaceResource, SpaceResource } from '@ownclouders/web-client'
 import { useDocumentTitle } from '@ownclouders/web-pkg'
 import { useGettext } from 'vue3-gettext'
 
-export default defineComponent({
-  name: 'GenericTrash',
+interface Props {
+  space?: SpaceResource
+}
+const { space = null } = defineProps<Props>()
+const { $gettext } = useGettext()
+const userStore = useUserStore()
+const { user } = storeToRefs(userStore)
 
-  components: {
-    AppBar,
-    AppLoadingSpinner,
-    ContextActions,
-    FileSideBar,
-    FilesViewWrapper,
-    ListInfo,
-    NoContentMessage,
-    Pagination,
-    ResourceTable
-  },
+let loadResourcesEventToken: string
+const emptyTrashMessage = computed(() => {
+  return space.driveType === 'personal'
+    ? $gettext('You have no deleted files')
+    : $gettext('Space has no deleted files')
+})
 
-  props: {
-    space: {
-      type: Object as PropType<SpaceResource>,
-      required: false,
-      default: null
-    },
-    itemId: {
-      type: [String, Number],
-      required: false,
-      default: null
-    }
-  },
+const titleSegments = computed(() => {
+  const segments = [$gettext('Deleted files')]
+  segments.unshift(space.name)
 
-  setup(props) {
-    const { $gettext } = useGettext()
-    const userStore = useUserStore()
-    const { user } = storeToRefs(userStore)
+  return segments
+})
+useDocumentTitle({ titleSegments })
 
-    let loadResourcesEventToken: string
-    const noContentMessage = computed(() => {
-      return props.space.driveType === 'personal'
-        ? $gettext('You have no deleted files')
-        : $gettext('Space has no deleted files')
-    })
+const {
+  loadResourcesTask,
+  refreshFileListHeaderPosition,
+  scrollToResourceFromRoute,
+  paginatedResources,
+  isSideBarOpen,
+  areResourcesLoading,
+  sortBy,
+  sortDir,
+  selectedResourcesIds,
+  fileListHeaderY,
+  handleSort,
+  isResourceInSelection,
+  selectedResources,
+  paginationPages,
+  paginationPage,
+  sideBarActivePanel
+} = useResourcesViewDefaults<Resource, any, any[]>()
 
-    const titleSegments = computed(() => {
-      const segments = [$gettext('Deleted files')]
-      segments.unshift(props.space.name)
+const performLoaderTask = async () => {
+  await loadResourcesTask.perform(space)
+  refreshFileListHeaderPosition()
+  scrollToResourceFromRoute(unref(paginatedResources), 'files-app-bar')
+}
+const isEmpty = computed(() => {
+  return unref(paginatedResources).length < 1
+})
 
-      return segments
-    })
-    useDocumentTitle({ titleSegments })
-
-    const resourcesViewDefaults = useResourcesViewDefaults<Resource, any, any[]>()
-    const performLoaderTask = async () => {
-      await resourcesViewDefaults.loadResourcesTask.perform(props.space)
-      resourcesViewDefaults.refreshFileListHeaderPosition()
-      resourcesViewDefaults.scrollToResourceFromRoute(
-        unref(resourcesViewDefaults.paginatedResources),
-        'files-app-bar'
-      )
-    }
-
-    onMounted(() => {
-      performLoaderTask()
-      loadResourcesEventToken = eventBus.subscribe('app.files.list.load', () => {
-        performLoaderTask()
-      })
-    })
-
-    onBeforeUnmount(() => {
-      eventBus.unsubscribe('app.files.list.load', loadResourcesEventToken)
-    })
-
-    return {
-      ...resourcesViewDefaults,
-      user,
-      noContentMessage
-    }
-  },
-
-  computed: {
-    isEmpty() {
-      return this.paginatedResources.length < 1
-    },
-
-    breadcrumbs() {
-      let currentNodeName = this.space?.name
-      if (this.space.driveType === 'personal') {
-        currentNodeName = this.$gettext('Personal')
-      }
-      return [
-        {
-          text: this.$gettext('Deleted files'),
-          to: createLocationTrash('files-trash-overview')
-        },
-        {
-          text: currentNodeName,
-          onClick: () => eventBus.publish('app.files.list.load')
-        }
-      ]
-    },
-
-    showActions() {
-      return (
-        !isProjectSpaceResource(this.space) ||
-        this.space.canDeleteFromTrashBin({ user: this.user }) ||
-        this.space.canRestoreFromTrashbin({ user: this.user })
-      )
-    }
+const breadcrumbs = computed(() => {
+  let currentNodeName = space?.name
+  if (space.driveType === 'personal') {
+    currentNodeName = $gettext('Personal')
   }
+  return [
+    {
+      text: $gettext('Deleted files'),
+      to: createLocationTrash('files-trash-overview')
+    },
+    {
+      text: currentNodeName,
+      onClick: () => eventBus.publish('app.files.list.load')
+    }
+  ]
+})
+
+const showActions = computed(() => {
+  return (
+    !isProjectSpaceResource(space) ||
+    space.canDeleteFromTrashBin({ user: unref(user) }) ||
+    space.canRestoreFromTrashbin({ user: unref(user) })
+  )
+})
+onMounted(() => {
+  performLoaderTask()
+  loadResourcesEventToken = eventBus.subscribe('app.files.list.load', () => {
+    performLoaderTask()
+  })
+})
+
+onBeforeUnmount(() => {
+  eventBus.unsubscribe('app.files.list.load', loadResourcesEventToken)
 })
 </script>
