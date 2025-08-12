@@ -113,7 +113,7 @@ describe('Search Bar portal component', () => {
     console.warn = vi.fn()
     wrapper = getMountedWrapper().wrapper
     wrapper.find(selectors.searchInput).setValue('alice')
-    expect(wrapper.vm.term).toBe('alice')
+    expect((wrapper.vm as any).term).toBe('alice')
   })
   test('shows message if no results are available', async () => {
     wrapper = getMountedWrapper().wrapper
@@ -206,7 +206,7 @@ describe('Search Bar portal component', () => {
     }).wrapper
 
     await wrapper.vm.$nextTick()
-    expect(wrapper.vm.term).toBe('alice')
+    expect((wrapper.vm as any).term).toBe('alice')
     expect((wrapper.get('input').element as HTMLInputElement).value).toBe('alice')
   })
   test('sets active preview item via keyboard navigation', async () => {
@@ -271,8 +271,16 @@ describe('Search Bar portal component', () => {
   })
 })
 
+type Mocks = {
+  $route: {
+    query: {
+      term: string
+    }
+  }
+}
+
 function getMountedWrapper({
-  mocks = {},
+  mocks = {} as Partial<Mocks>,
   userContextReady = true,
   providers = [providerFiles, providerContacts],
   route = 'files-spaces-generic',
@@ -283,7 +291,7 @@ function getMountedWrapper({
   const currentRoute = mock<RouteLocation>({
     name: route,
     query: {
-      term: '',
+      term: mocks?.$route?.query?.term || '',
       provider: ''
     }
   })
