@@ -143,7 +143,7 @@ export default defineComponent({
     text-decoration: none;
     font-size: var(--oc-font-size-xsmall);
     line-height: 1rem;
-    max-width: 150px;
+    max-width: 180px;
     padding: var(--oc-space-xsmall) var(--oc-space-small) !important;
     height: 100%;
   }
