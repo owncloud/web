@@ -3,7 +3,6 @@
     <files-view-wrapper>
       <app-bar
         :breadcrumbs="breadcrumbs"
-        :show-actions-on-selection="true"
         :has-bulk-actions="true"
         :has-hidden-files="false"
         :has-file-extensions="false"
