@@ -284,6 +284,12 @@ export const useSharesStore = defineStore('shares', () => {
     }
   }
 
+  async function fetchShareRolesDefinitions({ clientService }): Promise<UnifiedRoleDefinition[]> {
+    const result = await clientService.graphAuthenticated.permissions.listRoleDefinitions()
+
+    return result
+  }
+
   return {
     loading,
     collaboratorShares,
@@ -303,7 +309,8 @@ export const useSharesStore = defineStore('shares', () => {
 
     addLink,
     updateLink,
-    deleteLink
+    deleteLink,
+    fetchShareRolesDefinitions
   }
 })
 
