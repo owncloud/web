@@ -116,11 +116,7 @@
               :aria-label="'shareEditOptions'"
             >
               <li class="oc-rounded oc-menu-item-hover">
-                <expiration-datepicker
-                  v-if="!saving"
-                  :share-types="selectedCollaborators.map(({ shareType }) => shareType)"
-                  @option-change="collaboratorExpiryChanged"
-                />
+                <expiration-datepicker v-if="!saving" @option-change="collaboratorExpiryChanged" />
               </li>
             </oc-list>
           </oc-drop>
