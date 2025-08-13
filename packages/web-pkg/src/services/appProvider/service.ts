@@ -15,12 +15,12 @@ export class AppProviderService {
 
   public async loadData(): Promise<void> {
     const appListUrl = urlJoin(this.serverUrl, 'app', 'list')
-    const {
-      data: { 'mime-types': mimeTypes }
-    } = await this.clientService.httpUnAuthenticated.get(appListUrl, {
-      schema: MimeTypesToAppsSchema
-    })
-    this._mimeTypes.value = mimeTypes
+    // const {
+    //   data: { 'mime-types': mimeTypes }
+    // } = await this.clientService.httpUnAuthenticated.get(appListUrl, {
+    //   schema: MimeTypesToAppsSchema
+    // })
+    this._mimeTypes.value = []
   }
 
   set mimeTypes(value: MimeType[]) {

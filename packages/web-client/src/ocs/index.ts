@@ -11,7 +11,7 @@ export interface OCS {
 
 export const ocs = (baseURI: string, axiosClient: AxiosInstance): OCS => {
   const url = new URL(baseURI)
-  url.pathname = [...url.pathname.split('/'), 'ocs', 'v1.php'].filter(Boolean).join('/')
+  url.pathname = [...url.pathname.split('/'), 'ocs', 'v2.php'].filter(Boolean).join('/')
   const ocsV1BaseURI = url.href
 
   const capabilitiesFactory = GetCapabilitiesFactory(ocsV1BaseURI, axiosClient)

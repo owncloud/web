@@ -28,9 +28,9 @@ export const parseTusHeaders = (headers: Headers) => {
 export const parseMultiStatus = async (xmlBody: string) => {
   const parseFileName = (name: string) => {
     const decoded = decodeURIComponent(name)
-    if (name?.startsWith('/remote.php/dav/')) {
+    if (name?.startsWith('/kwdav/dav/')) {
       // strip out '/remote.php/dav/' from the beginning
-      return urlJoin(decoded.replace('/remote.php/dav/', ''), {
+      return urlJoin(decoded.replace('/kwdav/dav/', ''), {
         leadingSlash: true,
         trailingSlash: false
       })

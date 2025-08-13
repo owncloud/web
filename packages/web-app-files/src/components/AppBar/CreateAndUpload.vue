@@ -313,6 +313,7 @@ const extensionActions = computed(() => {
 })
 
 const canUpload = computed(() => {
+  console.log(unref(currentFolder))
   return unref(currentFolder)?.canUpload({ user: userStore.user })
 })
 
@@ -382,6 +383,7 @@ function getIconResource(fileHandler: FileAction) {
 }
 
 const uploadOrFileCreationBlocked = computed(() => {
+  console.log('uploadOrFileCreationBlocked', unref(canUpload))
   return !unref(canUpload)
 })
 

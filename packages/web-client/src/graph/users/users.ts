@@ -65,10 +65,26 @@ export const UsersFactory = ({ axiosClient, config }: GraphFactoryOptions): Grap
     },
 
     async getMe(options, requestOptions) {
-      const { data } = await meUserApiFactory.getOwnUser(
-        options?.expand ? new Set([...options.expand]) : new Set(['memberOf']),
-        requestOptions
-      )
+      const data = {
+        accountEnabled: true,
+        displayName: 'Katherine Johnson',
+        givenName: 'Katherine',
+        id: '534bb038-6f9d-4093-946f-133be61fa4e7',
+        identities: [
+          {
+            issuer: 'https://demo.owncloud.com',
+            issuerAssignedId: '534bb038-6f9d-4093-946f-133be61fa4e7'
+          }
+        ],
+        mail: 'katherine@example.org',
+        memberOf: [],
+        onPremisesSamAccountName: 'katherine',
+        preferredLanguage: 'en',
+        signInActivity: { lastSuccessfulSignInDateTime: '2025-07-28T09:33:17Z' },
+        surname: 'Johnson',
+        userType: 'Member'
+      }
+
       return data
     },
 

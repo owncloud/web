@@ -3,7 +3,8 @@ import { Drive, DrivesApiFactory, DrivesGetDrivesApi, MeDrivesApi } from './../g
 import type { GraphFactoryOptions } from './../types'
 import type { GraphDrives } from './types'
 
-const getServerUrlFromDrive = (drive: Drive) => new URL(drive.webUrl).origin
+// const getServerUrlFromDrive = (drive: Drive) => new URL(drive.webUrl).origin
+const getServerUrlFromDrive = (drive: Drive) => 'https://client-testing.acc.guru'
 
 const roleIdv1Tov2Map = {
   manager: '312c0871-5ef7-4b3a-85b6-0e4074c64049',
@@ -65,7 +66,7 @@ export const DrivesFactory = ({ axiosClient, config }: GraphFactoryOptions): Gra
     async listMyDrives(graphRoles, options, requestOptions) {
       const {
         data: { value }
-      } = await meDrivesApi.listMyDrivesBeta(options?.orderBy, options?.filter, requestOptions)
+      } = await meDrivesApi.listMyDrives(options?.orderBy, options?.filter, requestOptions)
       return value.map((d) => buildSpace({ ...d, serverUrl: getServerUrlFromDrive(d) }, graphRoles))
     },
 

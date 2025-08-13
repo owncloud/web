@@ -34,6 +34,7 @@ export const ListFilesFactory = (
       { path, fileId }: { path?: string; fileId?: string } = {},
       { depth = 1, davProperties, isTrash = false, ...opts }: ListFilesOptions = {}
     ): Promise<ListFilesResult> {
+      console.log('space:', space)
       let webDavResources: WebDavResponseResource[]
       if (isPublicSpaceResource(space)) {
         webDavResources = await dav.propfind(urlJoin(space.webDavPath, path), {
@@ -108,11 +109,14 @@ export const ListFilesFactory = (
           webDavPath = getWebDavPath(space, { fileId, path })
         }
 
+        console.log('webDavPath:', webDavPath)
+
         webDavResources = await dav.propfind(webDavPath, {
           depth,
           properties: davProperties || DavProperties.Default,
           ...opts
         })
+        console.log('webDavResources:', webDavResources)
         if (isTrash) {
           return {
             resource: buildResource(webDavResources[0], dav.extraProps),
@@ -121,6 +125,7 @@ export const ListFilesFactory = (
         }
 
         const resources = webDavResources.map((r) => buildResource(r, dav.extraProps))
+        console.log('resources:', resources)
 
         const resourceIsSpace = fileId === space.id
         if (fileId && !resourceIsSpace && fileId !== resources[0].fileId) {

@@ -157,11 +157,11 @@ export function buildSpace(
   const webDavPath = urlJoin(data.webDavPath || buildWebDavSpacesPath(data.id), {
     leadingSlash: true
   })
-  const webDavUrl = urlJoin(data.serverUrl, 'remote.php/dav', webDavPath)
+  const webDavUrl = urlJoin(data.serverUrl, 'dav', webDavPath)
   const webDavTrashPath = urlJoin(data.webDavTrashPath || buildWebDavSpacesTrashPath(data.id), {
     leadingSlash: true
   })
-  const webDavTrashUrl = urlJoin(data.serverUrl, 'remote.php/dav', webDavTrashPath)
+  const webDavTrashUrl = urlJoin(data.serverUrl, 'dav', webDavTrashPath)
 
   const members = data.root?.permissions?.reduce<Record<string, SpaceMember>>((acc, p) => {
     acc[(p.grantedToV2.user || p.grantedToV2.group).id] = {
@@ -183,7 +183,7 @@ export function buildSpace(
     path: '/',
     webDavPath,
     webDavTrashPath,
-    driveAlias: data.driveAlias,
+    driveAlias: data.driveAlias || 'personal/katherine',
     driveType: data.driveType,
     type: 'space',
     isFolder: true,

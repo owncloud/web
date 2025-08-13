@@ -15,7 +15,7 @@ export const avatarUrl = async (options: AvatarUrlOptions, cached = false): Prom
     return cacheFactory({ ...options, size })
   }
 
-  const url = [options.server, 'remote.php/dav/avatars/', options.username, `/${size}.png`].join('')
+  const url = [options.server, 'dav/avatars/', options.username, `/${size}.png`].join('')
 
   const { status, statusText } = await options.clientService.httpAuthenticated.head(url)
 

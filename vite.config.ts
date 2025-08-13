@@ -82,7 +82,37 @@ type ConfigJsonResponseBody = {
 }
 
 const getConfigJson = async (url: string) => {
-  return (await getJson(url)) as ConfigJsonResponseBody
+  // return (await getJson(url)) as ConfigJsonResponseBody
+  return {
+    server: 'https://client-testing.acc.guru/kwdav',
+    theme: 'https://host.docker.internal:9200/themes/owncloud/theme.json',
+    openIdConnect: {
+      metadata_url: 'https://client-testing.acc.guru/.well-known/openid-configuration',
+      authority: 'https://client-testing.acc.guru',
+      client_id: '61159ae7-5a6d-5b1c-bdcd-25a9eb876ea9',
+      response_type: 'code',
+      client_secret: '~iDhzpa9pnqn',
+      fetchRequestCredentials: 'omit'
+    },
+    options: {
+      contextHelpersReadMore: true
+    },
+    apps: [
+      'files',
+      'text-editor',
+      'pdf-viewer',
+      'search',
+      'external',
+      'admin-settings',
+      'ocm',
+      'webfinger',
+      'epub-reader',
+      'app-store',
+      'activities',
+      'preview',
+      'password-protected-folders'
+    ]
+  }
 }
 
 export const historyModePlugins = () =>
