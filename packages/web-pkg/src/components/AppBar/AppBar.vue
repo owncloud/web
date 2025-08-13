@@ -28,7 +28,10 @@
         >
           <template #contextMenu>
             <context-actions
-              :action-options="{ space, resources: breadcrumbsContextActionsItems.filter(Boolean) }"
+              :action-options="{
+                space: currentSpace,
+                resources: breadcrumbsContextActionsItems.filter(Boolean)
+              }"
             />
           </template>
         </oc-breadcrumb>
@@ -51,8 +54,8 @@
           <slot name="actions" :limited-screen-space="limitedScreenSpace" />
           <batch-actions
             v-if="showBatchActions"
-            :actions="batchActions"
-            :action-options="{ space, resources: selectedResources }"
+            :actions="computedBatchActions"
+            :action-options="{ space: currentSpace, resources: selectedResources }"
             :limited-screen-space="limitedScreenSpace"
           />
         </div>
@@ -62,9 +65,19 @@
   </div>
 </template>
 
-<script lang="ts">
+<script lang="ts" setup>
 import last from 'lodash-es/last'
-import { computed, defineComponent, inject, PropType, ref, Ref, unref, useSlots } from 'vue'
+import {
+  computed,
+  inject,
+  onMounted,
+  onBeforeUnmount,
+  ref,
+  Ref,
+  unref,
+  useSlots,
+  useTemplateRef
+} from 'vue'
 import { Resource } from '@ownclouders/web-client'
 import {
   isPersonalSpaceResource,
@@ -115,238 +128,205 @@ import {
 import { storeToRefs } from 'pinia'
 import { RouteLocationRaw } from 'vue-router'
 
-export default defineComponent({
-  components: {
-    BatchActions,
-    ContextActions,
-    ViewOptions
-  },
-  props: {
-    viewModeDefault: {
-      type: String,
-      required: false,
-      default: () => FolderViewModeConstants.name.table
-    },
-    breadcrumbs: {
-      type: Array as PropType<BreadcrumbItem[]>,
-      default: (): BreadcrumbItem[] => []
-    },
-    breadcrumbsContextActionsItems: {
-      type: Array as PropType<Resource[]>,
-      default: (): Resource[] => []
-    },
-    viewModes: {
-      type: Array as PropType<FolderView[]>,
-      default: (): FolderView[] => []
-    },
-    hasBulkActions: { type: Boolean, default: false },
-    hasViewOptions: { type: Boolean, default: true },
-    hasHiddenFiles: { type: Boolean, default: true },
-    hasFileExtensions: { type: Boolean, default: true },
-    hasPagination: { type: Boolean, default: true },
-    showActionsOnSelection: { type: Boolean, default: false },
-    isSideBarOpen: { type: Boolean, default: false },
-    space: {
-      type: Object as PropType<SpaceResource>,
-      required: false,
-      default: null
-    }
-  },
-  setup(props, { emit }) {
-    const spacesStore = useSpacesStore()
-    const { $gettext } = useGettext()
-    const { can } = useAbility()
-    const router = useRouter()
-    const { requestExtensions } = useExtensionRegistry()
-    const { isSticky } = useIsTopBarSticky()
+interface Props {
+  viewModeDefault?: string
+  breadcrumbs?: BreadcrumbItem[]
+  breadcrumbsContextActionsItems?: Resource[]
+  viewModes?: FolderView[]
+  hasBulkActions?: boolean
+  hasViewOptions?: boolean
+  hasHiddenFiles?: boolean
+  hasFileExtensions?: boolean
+  hasPagination?: boolean
+  isSideBarOpen?: boolean
+  space?: SpaceResource | null
+}
+interface Emits {
+  (event: typeof EVENT_ITEM_DROPPED, data: RouteLocationRaw): void
+}
+const emit = defineEmits<Emits>()
+const {
+  viewModeDefault = FolderViewModeConstants.name.table,
+  breadcrumbs = [],
+  breadcrumbsContextActionsItems = [],
+  viewModes = [],
+  hasBulkActions = false,
+  hasViewOptions = true,
+  hasHiddenFiles = true,
+  hasFileExtensions = true,
+  hasPagination = true,
+  isSideBarOpen = false,
+  space = null
+} = defineProps<Props>()
+const filesAppBarRef = useTemplateRef('filesAppBar')
+const spacesStore = useSpacesStore()
+const { $gettext, $ngettext } = useGettext()
+const { can } = useAbility()
+const router = useRouter()
+const { requestExtensions } = useExtensionRegistry()
+const { isSticky } = useIsTopBarSticky()
 
-    const resourcesStore = useResourcesStore()
-    const { selectedResources } = storeToRefs(resourcesStore)
+const resourcesStore = useResourcesStore()
+const { selectedResources } = storeToRefs(resourcesStore)
 
-    const space = computed(() => props.space)
+const currentSpace = computed(() => space)
 
-    const { actions: enableSyncActions } = useFileActionsEnableSync()
-    const { actions: hideShareActions } = useFileActionsToggleHideShare()
-    const { actions: copyActions } = useFileActionsCopy()
-    const { actions: duplicateActions } = useSpaceActionsDuplicate()
-    const { actions: disableSyncActions } = useFileActionsDisableSync()
-    const { actions: deleteActions } = useFileActionsDelete()
-    const { actions: downloadArchiveActions } = useFileActionsDownloadArchive()
-    const { actions: downloadFileActions } = useFileActionsDownloadFile()
-    const { actions: emptyTrashBinActions } = useFileActionsEmptyTrashBin()
-    const { actions: moveActions } = useFileActionsMove()
-    const { actions: restoreActions } = useFileActionsRestore()
-    const { actions: deleteSpaceActions } = useSpaceActionsDelete()
-    const { actions: disableSpaceActions } = useSpaceActionsDisable()
-    const { actions: editSpaceQuotaActions } = useSpaceActionsEditQuota()
-    const { actions: restoreSpaceActions } = useSpaceActionsRestore()
-    const { actions: duplicateResourcesActions } = useFileActionsDuplicate()
+const { actions: enableSyncActions } = useFileActionsEnableSync()
+const { actions: hideShareActions } = useFileActionsToggleHideShare()
+const { actions: copyActions } = useFileActionsCopy()
+const { actions: duplicateActions } = useSpaceActionsDuplicate()
+const { actions: disableSyncActions } = useFileActionsDisableSync()
+const { actions: deleteActions } = useFileActionsDelete()
+const { actions: downloadArchiveActions } = useFileActionsDownloadArchive()
+const { actions: downloadFileActions } = useFileActionsDownloadFile()
+const { actions: emptyTrashBinActions } = useFileActionsEmptyTrashBin()
+const { actions: moveActions } = useFileActionsMove()
+const { actions: restoreActions } = useFileActionsRestore()
+const { actions: deleteSpaceActions } = useSpaceActionsDelete()
+const { actions: disableSpaceActions } = useSpaceActionsDisable()
+const { actions: editSpaceQuotaActions } = useSpaceActionsEditQuota()
+const { actions: restoreSpaceActions } = useSpaceActionsRestore()
+const { actions: duplicateResourcesActions } = useFileActionsDuplicate()
 
-    const breadcrumbMaxWidth = ref<number>(0)
-    const isSearchLocation = useActiveLocation(isLocationCommonActive, 'files-common-search')
+const resizeObserver = ref(new ResizeObserver(onResize as ResizeObserverCallback))
+const limitedScreenSpace = ref(false)
+const breadcrumbMaxWidth = ref<number>(0)
+const isSearchLocation = useActiveLocation(isLocationCommonActive, 'files-common-search')
 
-    const hasSharesNavigation = computed(
-      () => useSlots().hasOwnProperty('navigation') && can('create-all', 'Share')
-    )
+const hasSharesNavigation = computed(
+  () => useSlots().hasOwnProperty('navigation') && can('create-all', 'Share')
+)
 
-    const batchActions = computed(() => {
-      let actions: FileAction[] = [
-        ...unref(hideShareActions),
-        ...unref(enableSyncActions),
-        ...unref(disableSyncActions),
-        ...unref(downloadArchiveActions),
-        ...unref(downloadFileActions),
-        ...unref(moveActions),
-        ...unref(copyActions),
-        ...unref(duplicateResourcesActions),
-        ...unref(emptyTrashBinActions),
-        ...unref(deleteActions),
-        ...unref(restoreActions)
-      ]
+const computedBatchActions = computed(() => {
+  let actions: FileAction[] = [
+    ...unref(hideShareActions),
+    ...unref(enableSyncActions),
+    ...unref(disableSyncActions),
+    ...unref(downloadArchiveActions),
+    ...unref(downloadFileActions),
+    ...unref(moveActions),
+    ...unref(copyActions),
+    ...unref(duplicateResourcesActions),
+    ...unref(emptyTrashBinActions),
+    ...unref(deleteActions),
+    ...unref(restoreActions)
+  ]
 
-      /**
-       * We show mixed results in search result page, including resources like files and folders but also spaces.
-       * Space actions shouldn't be possible in that context.
-       **/
-      if (!isSearchLocation.value) {
-        actions = [
-          ...actions,
-          ...unref(duplicateActions),
-          ...unref(editSpaceQuotaActions),
-          ...unref(restoreSpaceActions),
-          ...unref(deleteSpaceActions),
-          ...unref(disableSpaceActions)
-        ] as FileAction[]
-      }
-
-      const actionExtensions = requestExtensions<ActionExtension>({
-        id: 'global.files.batch-actions',
-        extensionType: 'action'
-      })
-      if (actionExtensions.length) {
-        actions = [...actions, ...actionExtensions.map((e) => e.action)]
-      }
-
-      return actions.filter((item) =>
-        item.isVisible({ space: unref(space), resources: resourcesStore.selectedResources })
-      )
-    })
-
-    const spaces = computed(() =>
-      spacesStore.spaces.filter((s) => isPersonalSpaceResource(s) || isProjectSpaceResource(s))
-    )
-
-    const isMobileWidth = inject<Ref<boolean>>('isMobileWidth')
-    const isTrashLocation = useActiveLocation(isLocationTrashActive, 'files-trash-generic')
-    const showBreadcrumb = computed(() => {
-      if (!unref(isMobileWidth) && props.breadcrumbs.length) {
-        return true
-      }
-      if (unref(isTrashLocation) && unref(spaces).length === 1) {
-        return false
-      }
-      return props.breadcrumbs.length > 1
-    })
-    const showMobileNav = computed(() => {
-      if (unref(isTrashLocation) && unref(spaces).length === 1) {
-        return props.breadcrumbs.length <= 2
-      }
-      return props.breadcrumbs.length <= 1
-    })
-
-    const breadcrumbTruncationOffset = computed(() => {
-      if (!unref(space)) {
-        return 2
-      }
-      return isProjectSpaceResource(unref(space)) || isShareSpaceResource(unref(space)) ? 3 : 2
-    })
-    const fileDroppedBreadcrumb = (data: RouteLocationRaw) => {
-      emit(EVENT_ITEM_DROPPED, data)
-    }
-
-    const routeMetaTitle = useRouteMeta('title')
-    const pageTitle = computed(() => {
-      if (unref(routeMetaTitle)) {
-        return $gettext(unref(routeMetaTitle))
-      }
-      return unref(space)?.name || ''
-    })
-
-    return {
-      router,
-      hasSharesNavigation,
-      batchActions,
-      showBreadcrumb,
-      showMobileNav,
-      breadcrumbMaxWidth,
-      breadcrumbTruncationOffset,
-      fileDroppedBreadcrumb,
-      pageTitle,
-      selectedResources,
-      isSticky
-    }
-  },
-  data: function () {
-    return {
-      resizeObserver: new ResizeObserver(this.onResize as ResizeObserverCallback),
-      limitedScreenSpace: false
-    }
-  },
-  computed: {
-    showContextActions() {
-      return last<BreadcrumbItem>(this.breadcrumbs).allowContextActions
-    },
-    showBatchActions() {
-      return (
-        this.hasBulkActions &&
-        (this.selectedResources.length >= 1 ||
-          isLocationTrashActive(this.router, 'files-trash-generic'))
-      )
-    },
-    selectedResourcesAnnouncement() {
-      if (this.selectedResources.length === 0) {
-        return this.$gettext('No items selected.')
-      }
-      return this.$ngettext(
-        '%{ amount } item selected. Actions are available above the table.',
-        '%{ amount } items selected. Actions are available above the table.',
-        this.selectedResources.length,
-        {
-          amount: this.selectedResources.length.toString()
-        }
-      )
-    }
-  },
-  mounted() {
-    this.resizeObserver.observe(this.$refs.filesAppBar as HTMLElement)
-    window.addEventListener('resize', this.onResize)
-  },
-  beforeUnmount() {
-    this.resizeObserver.unobserve(this.$refs.filesAppBar as HTMLElement)
-    window.removeEventListener('resize', this.onResize)
-  },
-
-  methods: {
-    onResize() {
-      const totalContentWidth =
-        document.getElementById('web-content-main')?.getBoundingClientRect().width || 0
-      const leftSidebarWidth =
-        document.getElementById('web-nav-sidebar')?.getBoundingClientRect().width || 0
-      const rightSidebarWidth =
-        document.getElementById('app-sidebar')?.getBoundingClientRect().width || 0
-
-      const rightControlsWidth = document.getElementById(
-        'files-app-bar-controls-right'
-      )?.clientWidth
-
-      this.breadcrumbMaxWidth =
-        totalContentWidth - leftSidebarWidth - rightSidebarWidth - rightControlsWidth
-      this.limitedScreenSpace = this.isSideBarOpen
-        ? window.innerWidth <= 1280
-        : window.innerWidth <= 1000
-    }
+  /**
+   * We show mixed results in search result page, including resources like files and folders but also spaces.
+   * Space actions shouldn't be possible in that context.
+   **/
+  if (!isSearchLocation.value) {
+    actions = [
+      ...actions,
+      ...unref(duplicateActions),
+      ...unref(editSpaceQuotaActions),
+      ...unref(restoreSpaceActions),
+      ...unref(deleteSpaceActions),
+      ...unref(disableSpaceActions)
+    ] as FileAction[]
   }
+
+  const actionExtensions = requestExtensions<ActionExtension>({
+    id: 'global.files.batch-actions',
+    extensionType: 'action'
+  })
+  if (actionExtensions.length) {
+    actions = [...actions, ...actionExtensions.map((e) => e.action)]
+  }
+
+  return actions.filter((item) =>
+    item.isVisible({ space: unref(currentSpace), resources: resourcesStore.selectedResources })
+  )
 })
+
+const spaces = computed(() =>
+  spacesStore.spaces.filter((s) => isPersonalSpaceResource(s) || isProjectSpaceResource(s))
+)
+
+const isMobileWidth = inject<Ref<boolean>>('isMobileWidth')
+const isTrashLocation = useActiveLocation(isLocationTrashActive, 'files-trash-generic')
+const showBreadcrumb = computed(() => {
+  if (!unref(isMobileWidth) && breadcrumbs.length) {
+    return true
+  }
+  if (unref(isTrashLocation) && unref(spaces).length === 1) {
+    return false
+  }
+  return breadcrumbs.length > 1
+})
+const showMobileNav = computed(() => {
+  if (unref(isTrashLocation) && unref(spaces).length === 1) {
+    return breadcrumbs.length <= 2
+  }
+  return breadcrumbs.length <= 1
+})
+
+const breadcrumbTruncationOffset = computed(() => {
+  if (!unref(currentSpace)) {
+    return 2
+  }
+  return isProjectSpaceResource(unref(currentSpace)) || isShareSpaceResource(unref(currentSpace))
+    ? 3
+    : 2
+})
+const fileDroppedBreadcrumb = (data: RouteLocationRaw) => {
+  emit(EVENT_ITEM_DROPPED, data)
+}
+
+const routeMetaTitle = useRouteMeta('title')
+const pageTitle = computed(() => {
+  if (unref(routeMetaTitle)) {
+    return $gettext(unref(routeMetaTitle))
+  }
+  return unref(currentSpace)?.name || ''
+})
+const showContextActions = computed(() => {
+  return last<BreadcrumbItem>(unref(breadcrumbs)).allowContextActions
+})
+const showBatchActions = computed(() => {
+  return (
+    hasBulkActions &&
+    (unref(selectedResources).length >= 1 || isLocationTrashActive(router, 'files-trash-generic'))
+  )
+})
+const selectedResourcesAnnouncement = computed(() => {
+  if (unref(selectedResources).length === 0) {
+    return $gettext('No items selected.')
+  }
+  return $ngettext(
+    '%{ amount } item selected. Actions are available above the table.',
+    '%{ amount } items selected. Actions are available above the table.',
+    unref(selectedResources).length,
+    {
+      amount: unref(selectedResources).length.toString()
+    }
+  )
+})
+onMounted(() => {
+  unref(resizeObserver).observe(filesAppBarRef.value as HTMLElement)
+  window.addEventListener('resize', onResize)
+})
+onBeforeUnmount(() => {
+  unref(resizeObserver).unobserve(filesAppBarRef.value as HTMLElement)
+  window.removeEventListener('resize', onResize)
+})
+function onResize() {
+  const totalContentWidth =
+    document.getElementById('web-content-main')?.getBoundingClientRect().width || 0
+  const leftSidebarWidth =
+    document.getElementById('web-nav-sidebar')?.getBoundingClientRect().width || 0
+  const rightSidebarWidth =
+    document.getElementById('app-sidebar')?.getBoundingClientRect().width || 0
+
+  const rightControlsWidth = document.getElementById('files-app-bar-controls-right')?.clientWidth
+
+  breadcrumbMaxWidth.value =
+    totalContentWidth - leftSidebarWidth - rightSidebarWidth - rightControlsWidth
+  limitedScreenSpace.value = unref(isSideBarOpen)
+    ? window.innerWidth <= 1280
+    : window.innerWidth <= 1000
+}
 </script>
 
 <style lang="scss" scoped>
