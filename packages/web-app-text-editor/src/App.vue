@@ -13,25 +13,22 @@
   </div>
 </template>
 
-<script lang="ts">
-import { defineComponent, PropType } from 'vue'
+<script lang="ts" setup>
 import { Resource } from '@ownclouders/web-client'
 import { AppConfigObject, TextEditor as TextEditorComponent } from '@ownclouders/web-pkg'
 
-export default defineComponent({
-  name: 'TextEditor',
-  components: { TextEditorComponent },
-  props: {
-    applicationConfig: { type: Object as PropType<AppConfigObject>, required: true },
-    currentContent: {
-      type: String,
-      required: true
-    },
-    isReadOnly: { type: Boolean, required: false },
-    resource: { type: Object as PropType<Resource>, required: true }
-  },
-  emits: ['update:currentContent']
-})
+interface Props {
+  applicationConfig: AppConfigObject
+  currentContent: string
+  isReadOnly?: boolean
+  resource: Resource
+}
+interface Emits {
+  (e: 'update:currentContent', value: Event): void
+}
+const { applicationConfig, currentContent, isReadOnly, resource } = defineProps<Props>()
+
+defineEmits<Emits>()
 </script>
 
 <style lang="scss">
