@@ -23,15 +23,15 @@ vi.mock('@ownclouders/web-pkg', async (importOriginal) => ({
 describe('search result List view', () => {
   it('requests the listSearch from the current active provider', () => {
     const { wrapper } = getWrapper()
-    expect(wrapper.vm.listSearch).toMatchObject(mockProvider.listSearch)
+    expect((wrapper.vm as any).listSearch).toMatchObject(mockProvider.listSearch)
   })
   it('by default loading is true', () => {
     const { wrapper } = getWrapper()
-    expect(wrapper.vm.loading).toBeTruthy()
+    expect((wrapper.vm as any).loading).toBeTruthy()
   })
   it('triggers the search', async () => {
     const { wrapper } = getWrapper()
-    await wrapper.vm.search('term')
+    await (wrapper.vm as any).search('term')
     expect(mockProvider.listSearch.search).toHaveBeenCalledTimes(1)
   })
 })
