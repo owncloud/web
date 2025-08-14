@@ -14,6 +14,7 @@ Summary
 * Bugfix - Deactivated Space button clips German translated word: [#12890](https://github.com/owncloud/web/pull/12890)
 * Bugfix - User info getting translated: [#12893](https://github.com/owncloud/web/pull/12893)
 * Enhancement - Add markdown to PDF export: [#12788](https://github.com/owncloud/web/pull/12788)
+* Enhancement - Use switch for full text search filter: [#12915](https://github.com/owncloud/web/pull/12915)
 
 Details
 -------
@@ -77,6 +78,14 @@ Details
    user is notified when it is ready.
 
    https://github.com/owncloud/web/pull/12788
+
+* Enhancement - Use switch for full text search filter: [#12915](https://github.com/owncloud/web/pull/12915)
+
+   We've replaced the "Title only" search filter pill with a toggle between "Title
+   Only" and "Full Text Search". This change should improve the user experience as
+   it's easier to understand the toggle.
+
+   https://github.com/owncloud/web/pull/12915
 
 Changelog for ownCloud Web [11.3.5] (2025-06-26)
 =======================================
