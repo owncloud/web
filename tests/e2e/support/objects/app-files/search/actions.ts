@@ -12,9 +12,9 @@ const clearFilterSelector = '.item-filter-%s .oc-filter-chip-clear'
 const lastModifiedFilterSelector = '.item-filter-lastModified'
 const lastModifiedFilterItem = '[data-test-value="%s"]'
 const enableSearchTitleOnlySelector =
-  '//div[contains(@class,"files-search-filter-title-only")]//button[contains(@class,"oc-filter-chip-button")]'
+  '//div[contains(@class,"files-search-filter-title-only")]//button[contains(@class,"item-inline-filter-option") and contains(@id,"true")]'
 const disableSearchTitleOnlySelector =
-  '//div[contains(@class,"files-search-filter-title-only")]//button[contains(@class,"oc-filter-chip-clear")]'
+  '//div[contains(@class,"files-search-filter-title-only")]//button[contains(@class,"item-inline-filter-option") and contains(@id,"false")]'
 
 export const getSearchResultMessage = ({ page }: { page: Page }): Promise<string> => {
   return page.locator(searchResultMessageSelector).innerText()

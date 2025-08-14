@@ -72,9 +72,9 @@
           </template>
         </item-filter>
 
-        <item-filter-toggle
+        <item-filter-inline
           v-if="fullTextSearchEnabled"
-          :filter-label="$gettext('Title only')"
+          :filter-options="searchTermScopeOptions"
           filter-name="titleOnly"
           class="files-search-filter-title-only oc-mr-s"
         />
@@ -182,7 +182,7 @@ import { useTask } from 'vue-concurrency'
 import { eventBus } from '@ownclouders/web-pkg'
 import { ItemFilter } from '@ownclouders/web-pkg'
 import { isLocationCommonActive } from '@ownclouders/web-pkg'
-import { ItemFilterToggle } from '@ownclouders/web-pkg'
+import { ItemFilterInline } from '@ownclouders/web-pkg'
 import { useKeyboardActions, ResourceIcon } from '@ownclouders/web-pkg'
 import {
   useKeyboardTableNavigation,
@@ -213,7 +213,7 @@ const emit = defineEmits<Emits>()
 const capabilityStore = useCapabilityStore()
 const router = useRouter()
 const route = useRoute()
-const { $gettext } = useGettext()
+const { $gettext, $pgettext } = useGettext()
 const { y: fileListHeaderY } = useFileListHeaderPosition()
 const clientService = useClientService()
 const { getMatchingSpace } = useGetMatchingSpace()
@@ -379,6 +379,23 @@ const breadcrumbs = computed(() => {
     }
   ]
 })
+
+const searchTermScopeOptions = computed(() => [
+  {
+    name: 'true',
+    label: $pgettext(
+      'Label of a search page filter used to search only for resources with the search term in their name.',
+      'Title only'
+    )
+  },
+  {
+    name: 'false',
+    label: $pgettext(
+      'Label of a search page filter used to search for resources with the search term in their name and content.',
+      'Full Text Search'
+    )
+  }
+])
 
 const resourceDomSelector = ({ id, remoteItemId }: Resource) => {
   let selectorStr = id.toString()

@@ -374,7 +374,8 @@ const getSearchResultLocation = (providerId: string) => {
       term: unref(term),
       ...(unref(scope) && { scope: unref(scope) }),
       useScope: unref(useScope).toString(),
-      provider: providerId
+      provider: providerId,
+      ...(unref(fullTextSearchEnabled) && { q_titleOnly: 'false' })
     }
   })
 }
