@@ -6,6 +6,8 @@ export type ContextMenuBtnClickEventData = {
   dropdown: ComponentPublicInstance<typeof OcDrop>
 }
 
+export type OcDropType = typeof OcDrop
+
 const isKeyboardEvent = (event: Event): event is KeyboardEvent => {
   return (event as any).clientY === 0
 }
