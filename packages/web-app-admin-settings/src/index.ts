@@ -10,6 +10,7 @@ import {
   AppNavigationItem,
   defineWebApplication,
   useAbility,
+  useAuthService,
   useUserStore
 } from '@ownclouders/web-pkg'
 import { RouteRecordRaw } from 'vue-router'
@@ -22,7 +23,7 @@ function $gettext(msg: string) {
 
 const appId = 'admin-settings'
 
-function getAvailableRoute(ability: Ability) {
+function getNextAvailableRoute(ability: Ability) {
   if (ability.can('read-all', 'Setting')) {
     return { name: 'admin-settings-general' }
   }
@@ -42,6 +43,12 @@ function getAvailableRoute(ability: Ability) {
   throw Error('Insufficient permissions')
 }
 
+async function requireAcr(acrValue: string, redirectUrl: string) {
+  // TODO: check capabilities
+  const authService = useAuthService()
+  await authService.requireAcr(acrValue, redirectUrl)
+}
+
 export const routes = ({ $ability }: { $ability: Ability }): RouteRecordRaw[] => [
   {
     path: '/',
@@ -53,10 +60,13 @@ export const routes = ({ $ability }: { $ability: Ability }): RouteRecordRaw[] =>
     path: '/general',
     name: 'admin-settings-general',
     component: General,
-    beforeEnter: (to, from, next) => {
+    beforeEnter: async (to, from, next) => {
       if (!$ability.can('read-all', 'Setting')) {
-        return next(getAvailableRoute($ability))
+        return next(getNextAvailableRoute($ability))
       }
+
+      await requireAcr('advanced', to.fullPath)
+
       next()
     },
     meta: {
@@ -68,10 +78,13 @@ export const routes = ({ $ability }: { $ability: Ability }): RouteRecordRaw[] =>
     path: '/users',
     name: 'admin-settings-users',
     component: Users,
-    beforeEnter: (to, from, next) => {
+    beforeEnter: async (to, from, next) => {
       if (!$ability.can('read-all', 'Account')) {
-        return next(getAvailableRoute($ability))
+        return next(getNextAvailableRoute($ability))
       }
+
+      await requireAcr('advanced', to.fullPath)
+
       next()
     },
     meta: {
@@ -83,10 +96,13 @@ export const routes = ({ $ability }: { $ability: Ability }): RouteRecordRaw[] =>
     path: '/groups',
     name: 'admin-settings-groups',
     component: Groups,
-    beforeEnter: (to, from, next) => {
+    beforeEnter: async (to, from, next) => {
       if (!$ability.can('read-all', 'Group')) {
-        return next(getAvailableRoute($ability))
+        return next(getNextAvailableRoute($ability))
       }
+
+      await requireAcr('advanced', to.fullPath)
+
       next()
     },
     meta: {
@@ -98,10 +114,13 @@ export const routes = ({ $ability }: { $ability: Ability }): RouteRecordRaw[] =>
     path: '/spaces',
     name: 'admin-settings-spaces',
     component: Spaces,
-    beforeEnter: (to, from, next) => {
+    beforeEnter: async (to, from, next) => {
       if (!$ability.can('read-all', 'Drive')) {
-        return next(getAvailableRoute($ability))
+        return next(getNextAvailableRoute($ability))
       }
+
+      await requireAcr('advanced', to.fullPath)
+
       next()
     },
     meta: {
