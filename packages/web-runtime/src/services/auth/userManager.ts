@@ -73,7 +73,10 @@ export class UserManager extends OidcUserManager {
       client_id: '',
 
       // we trigger the token renewal manually via a timer running in a web worker
-      automaticSilentRenew: false
+      automaticSilentRenew: false,
+
+      // do not filter acr
+      filterProtocolClaims: ['nbf', 'jti', 'auth_time', 'nonce', 'amr', 'azp', 'at_hash']
     }
 
     if (options.configStore.isOIDC) {

@@ -5,6 +5,12 @@ import merge from 'lodash-es/merge'
 import { SharePermissionBit } from '@ownclouders/web-client'
 
 const defaultValues = {
+  auth: {
+    mfa: {
+      enabled: false,
+      levelnames: ['advanced']
+    }
+  },
   core: {
     'support-sse': false,
     'support-url-signing': false
@@ -145,6 +151,9 @@ export const useCapabilityStore = defineStore('capabilities', () => {
   const searchMediaType = computed(() => unref(capabilities).search.property?.mediatype)
   const searchContent = computed(() => unref(capabilities).search.property?.content)
 
+  const authMfaEnabled = computed(() => unref(capabilities).auth.mfa.enabled)
+  const authMfaRequiredLevelname = computed(() => unref(capabilities).auth.mfa.levelnames.at(0))
+
   return {
     isInitialized,
     capabilities,
@@ -191,7 +200,9 @@ export const useCapabilityStore = defineStore('capabilities', () => {
     passwordPolicy,
     searchLastMofifiedDate,
     searchMediaType,
-    searchContent
+    searchContent,
+    authMfaEnabled,
+    authMfaRequiredLevelname
   }
 })
 
