@@ -20,8 +20,7 @@
   </div>
 </template>
 
-<script lang="ts">
-import { defineComponent, PropType } from 'vue'
+<script lang="ts" setup>
 import ActionMenuItem from './ActionMenuItem.vue'
 import { Action, ActionOptions } from '../../composables'
 
@@ -29,47 +28,29 @@ export type MenuSection = {
   name: string
   items: Action[]
 }
-
-export default defineComponent({
-  name: 'ContextActionMenu',
-  components: { ActionMenuItem },
-  props: {
-    menuSections: {
-      type: Array as PropType<MenuSection[]>,
-      required: true
-    },
-    appearance: {
-      type: String,
-      default: 'raw'
-    },
-    variation: {
-      type: String,
-      default: 'passive'
-    },
-    actionOptions: {
-      type: Object as PropType<ActionOptions>,
-      required: true
-    }
-  },
-  methods: {
-    getSectionClasses(index: number) {
-      const classes: string[] = []
-      if (!this.menuSections.length) {
-        return classes
-      }
-      if (index < this.menuSections.length - 1) {
-        classes.push('oc-pb-s')
-      }
-      if (index > 0) {
-        classes.push('oc-pt-s')
-      }
-      if (index < this.menuSections.length - 1) {
-        classes.push('oc-files-context-actions-border')
-      }
-      return classes
-    }
+interface Props {
+  menuSections: MenuSection[]
+  appearance?: string
+  variation?: string
+  actionOptions: ActionOptions
+}
+const { menuSections, appearance = 'raw', variation = 'passive' } = defineProps<Props>()
+function getSectionClasses(index: number) {
+  const classes: string[] = []
+  if (!menuSections.length) {
+    return classes
   }
-})
+  if (index < menuSections.length - 1) {
+    classes.push('oc-pb-s')
+  }
+  if (index > 0) {
+    classes.push('oc-pt-s')
+  }
+  if (index < menuSections.length - 1) {
+    classes.push('oc-files-context-actions-border')
+  }
+  return classes
+}
 </script>
 
 <style lang="scss">
