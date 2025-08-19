@@ -8,16 +8,27 @@
   />
 </template>
 
-<script lang="ts">
-import { computed, defineComponent, inject, PropType, unref } from 'vue'
+<script lang="ts" setup>
+import { computed, inject, unref } from 'vue'
 import { Resource } from '@ownclouders/web-client'
-import { AVAILABLE_SIZES } from '@ownclouders/design-system/helpers'
 import {
   IconType,
   createDefaultFileIconMapping,
   ResourceIconMapping,
   resourceIconMappingInjectionKey
 } from '../../helpers/resource/icon'
+
+interface Props {
+  /**
+   * The resource to be displayed
+   */
+  resource: Resource
+  /**
+   * The size of the icon. Defaults to large.
+   * `xsmall, small, medium, large, xlarge, xxlarge`
+   */
+  size?: 'xsmall' | 'small' | 'medium' | 'large' | 'xlarge' | 'xxlarge' | 'xxxlarge' | string
+}
 
 const defaultFolderIcon: IconType = {
   name: 'resource-type-folder',
@@ -34,83 +45,54 @@ const defaultFallbackIcon: IconType = {
 }
 
 const defaultFileIconMapping = createDefaultFileIconMapping()
+const { resource, size = 'large' } = defineProps<Props>()
 
-export default defineComponent({
-  name: 'ResourceIcon',
-  props: {
-    /**
-     * The resource to be displayed
-     */
-    resource: {
-      type: Object as PropType<Resource>,
-      required: true
-    },
-    /**
-     * The size of the icon. Defaults to small.
-     * `xsmall, small, medium, large, xlarge, xxlarge`
-     */
-    size: {
-      type: String,
-      default: 'large',
-      validator: (value: string): boolean => {
-        return AVAILABLE_SIZES.some((e) => e === value)
-      }
-    }
-  },
-  setup(props) {
-    const iconMappingInjection = inject<ResourceIconMapping>(resourceIconMappingInjectionKey)
+const iconMappingInjection = inject<ResourceIconMapping>(resourceIconMappingInjectionKey)
 
-    const isFolder = computed(() => {
-      // fallback is necessary since
-      // sometimes resources without a type
-      // but with `isFolder` are being passed
-      return props.resource.type === 'folder' || props.resource.isFolder
-    })
+const isFolder = computed(() => {
+  // fallback is necessary since
+  // sometimes resources without a type
+  // but with `isFolder` are being passed
+  return resource.type === 'folder' || resource.isFolder
+})
 
-    const isSpace = computed(() => {
-      return props.resource.type === 'space'
-    })
-    const extension = computed(() => {
-      return props.resource.extension?.toLowerCase()
-    })
-    const mimeType = computed(() => {
-      return props.resource.mimeType?.toLowerCase()
-    })
+const isSpace = computed(() => {
+  return resource.type === 'space'
+})
+const extension = computed(() => {
+  return resource.extension?.toLowerCase()
+})
+const mimeType = computed(() => {
+  return resource.mimeType?.toLowerCase()
+})
 
-    const icon = computed((): IconType => {
-      if (unref(isSpace)) {
-        return defaultSpaceIcon
-      }
-      if (unref(isFolder)) {
-        return defaultFolderIcon
-      }
-
-      const icon =
-        defaultFileIconMapping[unref(extension)] ||
-        iconMappingInjection?.mimeType[unref(mimeType)] ||
-        iconMappingInjection?.extension[unref(extension)]
-
-      return {
-        ...defaultFallbackIcon,
-        ...icon
-      }
-    })
-
-    const iconTypeClass = computed(() => {
-      if (unref(isSpace)) {
-        return 'oc-resource-icon-space'
-      }
-      if (unref(isFolder)) {
-        return 'oc-resource-icon-folder'
-      }
-      return 'oc-resource-icon-file'
-    })
-
-    return {
-      icon,
-      iconTypeClass
-    }
+const icon = computed((): IconType => {
+  if (unref(isSpace)) {
+    return defaultSpaceIcon
   }
+  if (unref(isFolder)) {
+    return defaultFolderIcon
+  }
+
+  const icon =
+    defaultFileIconMapping[unref(extension)] ||
+    iconMappingInjection?.mimeType[unref(mimeType)] ||
+    iconMappingInjection?.extension[unref(extension)]
+
+  return {
+    ...defaultFallbackIcon,
+    ...icon
+  }
+})
+
+const iconTypeClass = computed(() => {
+  if (unref(isSpace)) {
+    return 'oc-resource-icon-space'
+  }
+  if (unref(isFolder)) {
+    return 'oc-resource-icon-folder'
+  }
+  return 'oc-resource-icon-file'
 })
 </script>
 
