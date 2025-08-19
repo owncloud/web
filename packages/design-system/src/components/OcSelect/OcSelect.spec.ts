@@ -58,6 +58,17 @@ describe('OcSelect', () => {
         options[0].customLabel
       )
     })
+    it('displays with a custom label function', () => {
+      const options = [{ customLabel: 'label1' }, { customLabel: 'label2' }]
+      const wrapper = getWrapper<(typeof options)[0]>({
+        options,
+        modelValue: options[0],
+        getOptionLabel: (o) => o.customLabel
+      })
+      expect(wrapper.findAll(selectors.selectedOptions).at(0).text()).toEqual(
+        options[0].customLabel
+      )
+    })
     it('can be cleared if multi-select is allowed', () => {
       const options = [{ label: 'label1' }, { label: 'label2' }]
       const wrapper = getWrapper({ options, modelValue: options[0], multiple: true })
@@ -87,9 +98,13 @@ describe('OcSelect', () => {
   })
 })
 
-function getWrapper(
+function getWrapper<T>(
   props: Partial<
-    PartialComponentProps<typeof OcSelect> & { options: unknown[]; modelValue: unknown }
+    Omit<PartialComponentProps<typeof OcSelect>, 'getOptionLabel'> & {
+      options: T[]
+      getOptionLabel: (o: T) => string
+      modelValue: T
+    }
   > = {}
 ) {
   return mount(OcSelect, {
