@@ -96,14 +96,13 @@
           </li>
         </template>
       </oc-list>
-      <div v-if="imprintUrl || privacyUrl" class="imprint-footer oc-py-s oc-mt-m oc-text-center">
-        <oc-button v-if="imprintUrl" type="a" appearance="raw" :href="imprintUrl" target="_blank"
-          ><span v-text="$gettext('Imprint')"
-        /></oc-button>
-        <span v-if="privacyUrl">·</span>
-        <oc-button v-if="privacyUrl" type="a" appearance="raw" :href="privacyUrl" target="_blank"
-          ><span v-text="$gettext('Privacy')"
-        /></oc-button>
+      <div v-if="footerLinks.length > 0" class="imprint-footer oc-py-s oc-mt-m oc-text-center">
+        <template v-for="(link, index) in footerLinks" :key="link.label">
+          <span v-if="index > 0"> · </span>
+          <oc-button v-if="link.url" type="a" appearance="raw" :href="link.url" target="_blank">
+            <span v-text="link.label" />
+          </oc-button>
+        </template>
       </div>
     </oc-drop>
   </nav>
@@ -122,6 +121,7 @@ import {
 } from '@ownclouders/web-pkg'
 import { OcDrop } from '@ownclouders/design-system/components'
 import QuotaInformation from '../Account/QuotaInformation.vue'
+import { useGettext } from 'vue3-gettext'
 
 export default defineComponent({
   components: { QuotaInformation },
@@ -131,6 +131,7 @@ export default defineComponent({
     const themeStore = useThemeStore()
     const spacesStore = useSpacesStore()
     const authService = useAuthService()
+    const { $pgettext } = useGettext()
 
     const { user } = storeToRefs(userStore)
 
@@ -151,18 +152,46 @@ export default defineComponent({
 
     const imprintUrl = computed(() => themeStore.currentTheme.common.urls.imprint)
     const privacyUrl = computed(() => themeStore.currentTheme.common.urls.privacy)
+    const accessibilityStatementUrl = computed(
+      () => themeStore.currentTheme.common.urls.accessibilityStatement
+    )
 
     const quota = computed(() => {
       return spacesStore.personalSpace?.spaceQuota
     })
 
+    const footerLinks = computed(() =>
+      [
+        unref(imprintUrl) && {
+          label: $pgettext(
+            'User profile menu: link label; opens the service’s imprint.',
+            'Imprint'
+          ),
+          url: unref(imprintUrl)
+        },
+        unref(accessibilityStatementUrl) && {
+          label: $pgettext(
+            'User profile menu: link label; opens the service’s accessibility statement.',
+            'Accessibility'
+          ),
+          url: unref(accessibilityStatementUrl)
+        },
+        unref(privacyUrl) && {
+          label: $pgettext(
+            'User profile menu: link label; opens the service’s privacy policy.',
+            'Privacy'
+          ),
+          url: unref(privacyUrl)
+        }
+      ].filter(Boolean)
+    )
+
     return {
       user,
       accountPageRoute,
       loginLink,
-      imprintUrl,
-      privacyUrl,
       quota,
+      footerLinks,
       logout
     }
   },
