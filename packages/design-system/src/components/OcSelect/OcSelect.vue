@@ -166,6 +166,7 @@ interface Props {
   labelHidden?: boolean
   contextualHelper?: ContextualHelper | null
   optionLabel?: string
+  getOptionLabel?: (option: unknown) => string
   searchable?: boolean
   clearable?: boolean
   loading?: boolean
@@ -218,6 +219,7 @@ const {
   labelHidden = false,
   contextualHelper = null,
   optionLabel = 'label',
+  getOptionLabel: getOptionLabelProp = null,
   searchable = true,
   clearable = false,
   loading = false,
@@ -234,21 +236,7 @@ const emit = defineEmits<Emits>()
 const { $gettext } = useGettext()
 const select: VNodeRef = ref()
 const attrs = useAttrs()
-const getOptionLabel = (option: string | Record<string, unknown>): string => {
-  if (typeof option === 'object') {
-    const key = optionLabel || label
-    if (!Object.hasOwn(option, key)) {
-      console.warn(
-        `[vue-select warn]: Label key "option.${key}" does not` +
-          ` exist in options object ${JSON.stringify(option)}.\n` +
-          'https://vue-select.org/api/html#getoptionlabel'
-      )
-      return ''
-    }
-    return option[key] as string
-  }
-  return option
-}
+
 const setComboBoxAriaLabel = () => {
   const comboBoxElement = (unref(select) as ComponentPublicInstance).$el.querySelector(
     'div:first-child'
@@ -368,10 +356,32 @@ const setDropdownPosition = () => {
 const dropdownOpen = computed(() => {
   return unref(select)?.dropdownOpen
 })
+
+const getOptionLabel = computed(() => {
+  return (
+    getOptionLabelProp ||
+    ((option: string | Record<string, unknown>): string => {
+      if (typeof option === 'object') {
+        const key = optionLabel || label
+        if (!Object.hasOwn(option, key)) {
+          console.warn(
+            `[vue-select warn]: Label key "option.${key}" does not` +
+              ` exist in options object ${JSON.stringify(option)}.\n` +
+              'https://vue-select.org/api/html#getoptionlabel'
+          )
+          return ''
+        }
+        return option[key] as string
+      }
+      return option
+    })
+  )
+})
+
 const additionalAttributes = computed(() => {
   const additionalAttrs: Record<string, unknown> = {}
   additionalAttrs['input-id'] = id
-  additionalAttrs['getOptionLabel'] = getOptionLabel
+  additionalAttrs['getOptionLabel'] = unref(getOptionLabel)
   additionalAttrs['label'] = optionLabel
 
   return { ...attrs, ...additionalAttrs }
