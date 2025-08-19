@@ -16,90 +16,75 @@
   </span>
 </template>
 
-<script lang="ts">
+<script lang="ts" setup>
 import { useConfigStore } from '../../composables'
 import { storeToRefs } from 'pinia'
-import { computed, PropType, unref } from 'vue'
+import { computed, unref } from 'vue'
+import { SpaceResource, Resource } from '@ownclouders/web-client'
+import { isSpaceResource } from '@ownclouders/web-client'
 import { RouteLocationRaw } from 'vue-router'
 
 /**
  * Wraps content in a resource link
  */
-export default {
-  name: 'ResourceLink',
-  props: {
-    /**
-     * The resource folder link
-     */
-    link: {
-      type: Object as PropType<RouteLocationRaw>,
-      required: false,
-      default: null
-    },
-    /**
-     * The resource to be displayed
-     */
-    resource: {
-      type: Object,
-      required: true
-    },
-    /**
-     * Asserts whether clicking on the resource name triggers any action
-     */
-    isResourceClickable: {
-      type: Boolean,
-      required: false,
-      default: true
-    }
-  },
-  emits: ['click'],
-  setup: (props) => {
-    const configStore = useConfigStore()
-    const { options } = storeToRefs(configStore)
 
-    const linkTarget = computed(() => {
-      return unref(options).cernFeatures && props.link && !props.resource.isFolder
-        ? '_blank'
-        : '_self'
-    })
+interface Props {
+  /**
+   * The resource folder link
+   */
+  link?: RouteLocationRaw
+  /**
+   * The resource to be displayed
+   */
+  resource: SpaceResource | Resource
+  /**
+   * Asserts whether clicking on the resource name triggers any action
+   */
+  isResourceClickable?: boolean
+}
+interface Emits {
+  (event: 'click'): void
+}
+const { link = null, resource, isResourceClickable = true } = defineProps<Props>()
+const emit = defineEmits<Emits>()
+const configStore = useConfigStore()
+const { options } = storeToRefs(configStore)
 
+const linkTarget = computed(() => {
+  return unref(options).cernFeatures && link && !resource.isFolder ? '_blank' : '_self'
+})
+const isNavigatable = computed(() => {
+  if (isSpaceResource(resource)) {
+    return (resource.isFolder || link) && !resource.disabled
+  }
+
+  return resource.isFolder || link
+})
+const componentType = computed(() => {
+  return unref(isNavigatable) ? 'router-link' : 'oc-button'
+})
+const componentProps = computed(() => {
+  if (!unref(isNavigatable)) {
     return {
-      linkTarget
-    }
-  },
-  computed: {
-    isNavigatable() {
-      return (this.resource.isFolder || this.link) && !this.resource.disabled
-    },
-    componentType() {
-      return this.isNavigatable ? 'router-link' : 'oc-button'
-    },
-    componentProps() {
-      if (!this.isNavigatable) {
-        return {
-          appearance: 'raw',
-          gapSize: 'none',
-          justifyContent: 'left'
-        }
-      }
-
-      return {
-        to: this.link
-      }
-    }
-  },
-  methods: {
-    emitClick() {
-      if (this.isNavigatable) {
-        return
-      }
-
-      /**
-       * Triggered when the resource is a file and the name is clicked
-       */
-      this.$emit('click')
+      appearance: 'raw',
+      gapSize: 'none',
+      justifyContent: 'left'
     }
   }
+
+  return {
+    to: link
+  }
+})
+function emitClick() {
+  if (unref(isNavigatable)) {
+    return
+  }
+
+  /**
+   * Triggered when the resource is a file and the name is clicked
+   */
+  emit('click')
 }
 </script>
 <style lang="scss">
