@@ -7,7 +7,7 @@
     @click.stop.prevent="
       $emit('quickActionClicked', {
         event: $event,
-        dropdown: $refs[`context-menu-drop-ref-${resourceDomSelector(item)}`]
+        dropdown: ocDropRef
       })
     "
   >
@@ -27,29 +27,27 @@
   </oc-button>
 </template>
 
-<script lang="ts">
-import { computed, defineComponent } from 'vue'
-import { Resource, extractDomSelector } from '@ownclouders/web-client'
+<script lang="ts" setup>
+import { computed, useTemplateRef, ComponentPublicInstance } from 'vue'
 import { useGettext } from 'vue3-gettext'
+import { Item, extractDomSelector } from '@ownclouders/web-client'
+import { ContextMenuBtnClickEventData, type OcDropType } from '../../helpers'
 
-export default defineComponent({
-  name: 'ContextMenuQuickAction',
-  props: {
-    item: {
-      type: Object,
-      required: true
-    },
-    resourceDomSelector: {
-      type: Function,
-      required: false,
-      default: (resource: Resource) => extractDomSelector(resource.id)
-    }
-  },
-  emits: ['quickActionClicked'],
-  setup() {
-    const { $gettext } = useGettext()
-    const contextMenuLabel = computed(() => $gettext('Show context menu'))
-    return { contextMenuLabel }
-  }
-})
+interface Props {
+  item: Item
+  resourceDomSelector?: (resource: Item) => string
+}
+interface Emits {
+  (event: 'quickActionClicked', payload: ContextMenuBtnClickEventData): void
+}
+const { item, resourceDomSelector = (resource: Item) => extractDomSelector(resource.id) } =
+  defineProps<Props>()
+
+defineEmits<Emits>()
+
+const ocDropRef = useTemplateRef<ComponentPublicInstance<OcDropType>>(
+  `context-menu-drop-ref-${resourceDomSelector(item)}`
+)
+const { $gettext } = useGettext()
+const contextMenuLabel = computed(() => $gettext('Show context menu'))
 </script>
