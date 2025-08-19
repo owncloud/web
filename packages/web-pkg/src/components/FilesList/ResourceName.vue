@@ -18,105 +18,74 @@
   </span>
 </template>
 
-<script lang="ts">
-import { defineComponent } from 'vue'
+<script lang="ts" setup>
+import { computed, unref } from 'vue'
 
-export default defineComponent({
-  name: 'ResourceName',
-  props: {
-    /**
-     * The name of the resource
-     */
-    name: {
-      type: String,
-      required: true
-    },
-    /**
-     * The extension of the resource, if there is one
-     */
-    extension: {
-      type: String,
-      required: false,
-      default: ''
-    },
-    /**
-     * The type of the resource
-     */
-    type: {
-      type: String,
-      required: true
-    },
-    /**
-     * A full path of the resource
-     */
-    fullPath: {
-      type: String,
-      required: true
-    },
-    /**
-     * Asserts whether the resource path should be displayed
-     */
-    isPathDisplayed: {
-      type: Boolean,
-      required: false,
-      default: false
-    },
-    /**
-     * Asserts whether the resource extension should be displayed
-     */
-    isExtensionDisplayed: {
-      type: Boolean,
-      required: false,
-      default: true
-    },
-    /**
-     * Asserts whether the resource name should be truncated if it's too long
-     */
-    truncateName: {
-      type: Boolean,
-      required: false,
-      default: true
-    }
-  },
+/**
+ * Props for the ResourceName component.
+ * @property {string} name - The name of the resource.
+ * @property {string} [extension] - The file extension, if any.
+ * @property {string} type - The type of the resource.
+ * @property {string} fullPath - The full path to the resource.
+ * @property {boolean} [isPathDisplayed] - Whether to display the path.
+ * @property {boolean} [isExtensionDisplayed] - Whether to display the extension.
+ * @property {boolean} [truncateName] - Whether to truncate the name.
+ */
 
-  computed: {
-    fullName() {
-      return (this.displayPath || '') + this.name
-    },
+interface Props {
+  name: string
+  extension?: string
+  type: string
+  fullPath: string
+  isPathDisplayed?: boolean
+  isExtensionDisplayed?: boolean
+  truncateName?: boolean
+}
+const {
+  name,
+  extension = '',
+  type,
+  fullPath,
+  isPathDisplayed = false,
+  isExtensionDisplayed = true,
+  truncateName = true
+} = defineProps<Props>()
 
-    displayName() {
-      if (this.extension) {
-        return this.name.slice(0, -this.extension.length - 1)
-      }
-      return this.name
-    },
+const fullName = computed(() => {
+  return (unref(displayPath) || '') + name
+})
 
-    displayExtension() {
-      return this.extension ? '.' + this.extension : ''
-    },
-
-    displayPath() {
-      if (!this.isPathDisplayed) {
-        return null
-      }
-      const pathSplit = this.fullPath.replace(/^\//, '').split('/')
-      if (pathSplit.length < 2) {
-        return null
-      }
-      if (pathSplit.length === 2) {
-        return pathSplit[0] + '/'
-      }
-      return `…/${pathSplit[pathSplit.length - 2]}/`
-    },
-
-    htmlTitle() {
-      if (this.isExtensionDisplayed) {
-        return `${this.displayName}${this.displayExtension}`
-      }
-
-      return this.displayName
-    }
+const displayName = computed(() => {
+  if (extension) {
+    return name.slice(0, -extension.length - 1)
   }
+  return name
+})
+
+const displayExtension = computed(() => {
+  return extension ? '.' + extension : ''
+})
+
+const displayPath = computed(() => {
+  if (!isPathDisplayed) {
+    return null
+  }
+  const pathSplit = fullPath.replace(/^\//, '').split('/')
+  if (pathSplit.length < 2) {
+    return null
+  }
+  if (pathSplit.length === 2) {
+    return pathSplit[0] + '/'
+  }
+  return `…/${pathSplit[pathSplit.length - 2]}/`
+})
+
+const htmlTitle = computed(() => {
+  if (isExtensionDisplayed) {
+    return `${unref(displayName)}${unref(displayExtension)}`
+  }
+
+  return unref(displayName)
 })
 </script>
 
