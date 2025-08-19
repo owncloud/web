@@ -67,7 +67,7 @@
 <script lang="ts" setup>
 import { computed } from 'vue'
 import { useGettext } from 'vue3-gettext'
-import { Resource } from '@ownclouders/web-client'
+import { SpaceResource, Resource } from '@ownclouders/web-client'
 import ResourceIcon from './ResourceIcon.vue'
 import ResourceLink from './ResourceLink.vue'
 import ResourceName from './ResourceName.vue'
@@ -76,7 +76,7 @@ import { HIDDEN_FILE_EXTENSIONS } from '../../constants'
 import { dirname, join } from 'node:path'
 
 interface Props {
-  resource: Resource
+  resource: SpaceResource | Resource
   pathPrefix?: string
   link?: RouteLocationRaw | null
   isPathDisplayed?: boolean

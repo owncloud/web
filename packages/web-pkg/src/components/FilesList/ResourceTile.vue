@@ -89,7 +89,7 @@ import { computed, defineComponent, PropType } from 'vue'
 import ResourceIcon from './ResourceIcon.vue'
 import ResourceListItem from './ResourceListItem.vue'
 import ResourceLink from './ResourceLink.vue'
-import { isProjectSpaceResource, Resource } from '@ownclouders/web-client'
+import { isProjectSpaceResource, SpaceResource, Resource } from '@ownclouders/web-client'
 import { useGettext } from 'vue3-gettext'
 import { isSpaceResource } from '@ownclouders/web-client'
 import { RouteLocationRaw } from 'vue-router'
@@ -104,7 +104,7 @@ export default defineComponent({
      * Resource to be displayed within the tile
      */
     resource: {
-      type: Object as PropType<Resource>,
+      type: Object as PropType<SpaceResource | Resource>,
       default: () => ({})
     },
     resourceRoute: {
@@ -196,7 +196,7 @@ export default defineComponent({
       return ''
     })
 
-    const shouldDisplayThumbnails = (resource: Resource) => {
+    const shouldDisplayThumbnails = (resource: SpaceResource | Resource) => {
       return resource.thumbnail
     }
 

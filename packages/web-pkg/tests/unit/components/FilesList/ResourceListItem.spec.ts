@@ -158,7 +158,7 @@ describe('OcResource', () => {
     (extension) => {
       const { wrapper } = getWrapper({
         props: {
-          resource: mock<Resource>({ extension, name: 'forest.' + extension }),
+          resource: mock<Resource>({ extension, name: 'forest.' + extension, isFolder: false }),
           isExtensionDisplayed: true
         }
       })
