@@ -46,8 +46,10 @@ describe('OcResourceIcon', () => {
   )
 })
 
+type Size = 'xsmall' | 'small' | 'medium' | 'large' | 'xlarge' | 'xxlarge' | 'xxxlarge'
+
 function match(resource: Partial<Resource>, additionalText?: string) {
-  AVAILABLE_SIZES.forEach((size) => {
+  AVAILABLE_SIZES.forEach((size: Size) => {
     it(`renders OcIcon for resource type ${resource.type}${
       additionalText ? ` ${additionalText}` : ''
     } in size ${size}`, () => {
@@ -57,7 +59,7 @@ function match(resource: Partial<Resource>, additionalText?: string) {
   })
 }
 
-function getWrapper({ resource, size }: { resource: Partial<Resource>; size: string }) {
+function getWrapper({ resource, size }: { resource: Partial<Resource>; size: Size }) {
   return {
     wrapper: shallowMount(ResourceIcon, {
       global: {
