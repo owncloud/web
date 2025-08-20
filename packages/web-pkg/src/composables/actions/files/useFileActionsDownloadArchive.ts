@@ -42,13 +42,15 @@ export const useFileActionsDownloadArchive = () => {
           dir: path.dirname(first<Resource>(resources).path) || '/',
           files: resources.map((resource) => resource.name)
         }
+
     return archiverService
       .triggerDownload({
         ...fileOptions,
         ...(space &&
           isPublicSpaceResource(space) && {
             publicToken: space.id as string,
-            publicLinkPassword: authStore.publicLinkPassword
+            publicLinkPassword: authStore.publicLinkPassword,
+            publicLinkShareOwner: space.publicLinkShareOwner
           })
       })
       .catch((e) => {
