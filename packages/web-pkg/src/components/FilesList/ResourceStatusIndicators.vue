@@ -14,7 +14,11 @@ import { computed, useAttrs } from 'vue'
 import { useResourcesStore, useUserStore } from '../../composables/piniaStores'
 
 const attrs = useAttrs()
-const { space, resource, filter } = defineProps<{
+const {
+  space = null,
+  resource,
+  filter = null
+} = defineProps<{
   space?: SpaceResource
   resource: Resource
   filter?: (indicator: ResourceIndicator) => boolean
