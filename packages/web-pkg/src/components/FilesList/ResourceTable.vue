@@ -249,16 +249,8 @@
   </Teleport>
 </template>
 
-<script lang="ts">
-import {
-  defineComponent,
-  PropType,
-  computed,
-  unref,
-  ref,
-  ComputedRef,
-  ComponentPublicInstance
-} from 'vue'
+<script lang="ts" setup>
+import { computed, unref, ref, ComputedRef, ComponentPublicInstance, nextTick } from 'vue'
 import { useWindowSize } from '@vueuse/core'
 import {
   IncomingShareResource,
@@ -278,7 +270,6 @@ import {
   useEmbedMode,
   useAuthStore,
   useCapabilityStore,
-  useConfigStore,
   useClipboardStore,
   useResourcesStore,
   useRouter,
@@ -304,7 +295,6 @@ import {
 import { SideBarEventTopics } from '../../composables/sideBar'
 import ContextMenuQuickAction from '../ContextActions/ContextMenuQuickAction.vue'
 
-import { useResourceRouteResolver } from '../../composables/filesList/useResourceRouteResolver'
 import { ClipboardActions } from '../../helpers/clipboardActions'
 import { determineResourceTableSortFields } from '../../helpers/ui/resourceTable'
 import { useFileActionsRename } from '../../composables/actions'
@@ -319,944 +309,745 @@ import { useGettext } from 'vue3-gettext'
 
 const TAGS_MINIMUM_SCREEN_WIDTH = 850
 
-export default defineComponent({
-  components: {
-    ContextMenuQuickAction,
-    ResourceGhostElement,
-    ResourceListItem,
-    ResourceSize,
-    ResourceStatusIndicators,
-    OcSpinner,
-    OcTable
-  },
-  props: {
-    /**
-     * Resources to be displayed in the table.
-     * Required fields:
-     * - name: The name of the resource containing the file extension in case of a file
-     * - path: The full path of the resource
-     * - type: The type of the resource. Can be `file` or `folder`
-     * Optional fields:
-     * - thumbnail
-     * - size: The size of the resource
-     * - modificationDate: The date of the last modification of the resource
-     * - shareDate: The date when the share was created
-     * - deletionDate: The date when the resource has been deleted
-     * - syncEnabled: The sync status of the share
-     */
-    resources: {
-      type: Array as PropType<Resource[]>,
-      required: true
-    },
-    /**
-     * Closure function to mutate the resource id into a valid DOM selector.
-     */
-    resourceDomSelector: {
-      type: Function as PropType<(resource: Resource) => string>,
-      required: false,
-      default: (resource: Resource) => extractDomSelector(resource.id)
-    },
-    /**
-     * Asserts whether resources path should be shown in the resource name
-     */
-    arePathsDisplayed: {
-      type: Boolean,
-      required: false,
-      default: false
-    },
-    /**
-     * Asserts whether icons should be replaced with thumbnails for resources which provide them
-     */
-    areThumbnailsDisplayed: {
-      type: Boolean,
-      required: false,
-      default: true
-    },
-    /**
-     * V-model for the selection
-     */
-    selectedIds: {
-      type: Array as PropType<string[]>,
-      default: (): string[] => []
-    },
-    /**
-     * Asserts whether actions are available
-     */
-    hasActions: {
-      type: Boolean,
-      required: false,
-      default: true
-    },
-    /**
-     * Accepts a `path` and a `resource` param and returns a corresponding route object.
-     */
-    targetRouteCallback: {
-      type: Function as PropType<(arg: CreateTargetRouteOptions) => unknown>,
-      required: false,
-      default: undefined
-    },
-    /**
-     * Asserts whether clicking on the resource name triggers any action
-     */
-    areResourcesClickable: {
-      type: Boolean,
-      required: false,
-      default: true
-    },
-    /**
-     * Top position of header used when the header is sticky in pixels
-     */
-    headerPosition: {
-      type: Number,
-      required: false,
-      default: 0
-    },
-    /**
-     * Asserts whether resources in the table can be selected
-     */
-    isSelectable: {
-      type: Boolean,
-      required: false,
-      default: true
-    },
-    /**
-     * Sets specific css classes for when the side bar is (not) open
-     */
-    isSideBarOpen: {
-      type: Boolean,
-      required: false,
-      default: false
-    },
-    /**
-     * Sets the padding size for x axis
-     * @values xsmall, small, medium, large, xlarge
-     */
-    paddingX: {
-      type: String,
-      required: false,
-      default: 'small',
-      validator: (size: string) => /(xsmall|small|medium|large|xlarge)/.test(size)
-    },
-    /**
-     * Enable Drag & Drop events
-     */
-    dragDrop: {
-      type: Boolean,
-      required: false,
-      default: false
-    },
-    /**
-     * The active view mode.
-     */
-    viewMode: {
-      type: String as PropType<
-        | typeof FolderViewModeConstants.name.condensedTable
-        | typeof FolderViewModeConstants.name.table
-      >,
-      default: () => FolderViewModeConstants.defaultModeName,
-      validator: (
-        value:
-          | typeof FolderViewModeConstants.name.condensedTable
-          | typeof FolderViewModeConstants.name.table
-      ) =>
-        [FolderViewModeConstants.name.condensedTable, FolderViewModeConstants.name.table].includes(
-          value
-        )
-    },
-    /**
-     * Enable hover effect
-     */
-    hover: {
-      type: Boolean,
-      required: false,
-      default: true
-    },
-    /**
-     * Show that the table is sorted by this column (no actual sorting takes place)
-     */
-    sortBy: {
-      type: String,
-      required: false,
-      default: undefined
-    },
-    /**
-     * Define what fields should be displayed in the table
-     * If null, all fields are displayed
-     */
-    fieldsDisplayed: {
-      type: Array,
-      required: false,
-      default: null
-    },
-    /**
-     * Show that the table is sorted ascendingly/descendingly (no actual sorting takes place)
-     */
-    sortDir: {
-      type: String as PropType<SortDir>,
-      required: false,
-      default: undefined,
-      validator: (value: string) => {
-        return (
-          value === undefined || [SortDir.Asc.toString(), SortDir.Desc.toString()].includes(value)
-        )
-      }
-    },
-    /**
-     * Space resource the provided resources originate from. Not required on meta pages like favorites, search, ...
-     */
-    space: {
-      type: Object as PropType<SpaceResource>,
-      required: false,
-      default: null
-    },
-    resourceType: {
-      type: String as PropType<'file' | 'space'>,
-      default: 'file'
-    },
-    /**
-     * Determines if the table content should be loaded lazily.
-     */
-    lazy: {
-      type: Boolean,
-      default: true
-    },
-    /**
-     * This is only relevant for CERN and can be ignored in any other cases.
-     */
-    groupingSettings: {
-      type: Object,
-      required: false,
-      default: null
-    }
-  },
-  emits: [
-    'fileClick',
-    'sort',
-    'rowMounted',
-    EVENT_FILE_DROPPED,
-    'update:selectedIds',
-    'update:modelValue'
-  ],
-  setup(props, context) {
-    const router = useRouter()
-    const capabilityStore = useCapabilityStore()
-    const { getMatchingSpace } = useGetMatchingSpace()
-    const { canBeOpenedWithSecureView } = useCanBeOpenedWithSecureView()
-    const folderLinkUtils = useFolderLink({
-      space: ref(props.space),
-      targetRouteCallback: computed(() => props.targetRouteCallback)
-    })
-    const { isSticky } = useIsTopBarSticky()
-    const {
-      isLocationPicker,
-      isFilePicker,
-      postMessage,
-      isEnabled: isEmbedModeEnabled,
-      fileTypes: embedModeFileTypes
-    } = useEmbedMode()
-    const { getDefaultAction } = useFileActions()
-    const { $pgettext } = useGettext()
+interface GroupingSettings {
+  groupingBy: string
+  showGroupingOptions: boolean
+  groupingFunctions: {
+    [key: string]: (row: IncomingShareResource) => string | void
+  }
+  sortGroups: {
+    [key: string]: (groups: { name: string }[]) => { name: string }[]
+  }
+}
+/**
+ * Resources to be displayed in the table.
+ * Required fields:
+ * - name: The name of the resource containing the file extension in case of a file
+ * - path: The full path of the resource
+ * - type: The type of the resource. Can be `file` or `folder`
+ * Optional fields:
+ * - thumbnail
+ * - size: The size of the resource
+ * - modificationDate: The date of the last modification of the resource
+ * - shareDate: The date when the share was created
+ * - deletionDate: The date when the resource has been deleted
+ * - syncEnabled: The sync status of the share
+ */
+interface Props {
+  resources: Resource[]
+  resourceDomSelector?: (resource: Resource) => string
+  arePathsDisplayed?: boolean
+  selectedIds?: string[]
+  hasActions?: boolean
+  targetRouteCallback?: (arg: CreateTargetRouteOptions) => unknown
+  areResourcesClickable?: boolean
+  headerPosition?: number
+  isSelectable?: boolean
+  isSideBarOpen?: boolean
+  dragDrop?: boolean
+  viewMode?:
+    | typeof FolderViewModeConstants.name.condensedTable
+    | typeof FolderViewModeConstants.name.table
+  hover?: boolean
+  sortBy?: string
+  sortDir?: SortDir
+  fieldsDisplayed?: string[] | null
+  space?: SpaceResource | null
+  resourceType?: 'file' | 'space'
+  lazy?: boolean
+  groupingSettings?: GroupingSettings
+}
+interface Emits {
+  (e: 'fileClick', data: { space: SpaceResource; resources: Resource[] }): void
+  (e: 'sort', data: { sortBy: string; sortDir: SortDir }): void
+  (
+    e: 'rowMounted',
+    resource: Resource,
+    component: ComponentPublicInstance<unknown>,
+    thumbnailDimension: ImageDimension
+  ): void
+  (e: typeof EVENT_FILE_DROPPED, data: string): void
+  (e: 'update:selectedIds', selectedIds: string[]): void
+  (e: 'update:modelValue', value: string[]): void
+}
+const {
+  resources,
+  resourceDomSelector = (resource: Resource) => extractDomSelector(resource.id),
+  arePathsDisplayed = false,
+  selectedIds = [],
+  hasActions = true,
+  targetRouteCallback = undefined,
+  areResourcesClickable = true,
+  headerPosition = 0,
+  isSelectable = true,
+  isSideBarOpen = false,
+  dragDrop = false,
+  viewMode = FolderViewModeConstants.defaultModeName,
+  hover = true,
+  sortBy = undefined,
+  sortDir = undefined,
+  fieldsDisplayed = null,
+  space = null,
+  resourceType = 'file',
+  lazy = true,
+  groupingSettings = null
+} = defineProps<Props>()
 
-    const configStore = useConfigStore()
-    const { options: configOptions } = storeToRefs(configStore)
+const emit = defineEmits<Emits>()
+const router = useRouter()
+const capabilityStore = useCapabilityStore()
+const { getMatchingSpace } = useGetMatchingSpace()
+const { canBeOpenedWithSecureView } = useCanBeOpenedWithSecureView()
+const folderLinkUtils = useFolderLink({
+  space: ref(space),
+  targetRouteCallback: computed(() => targetRouteCallback)
+})
+const {
+  getPathPrefix,
+  getParentFolderName,
+  getParentFolderLink,
+  getParentFolderLinkIconAdditionalAttributes
+} = folderLinkUtils
+const { isSticky } = useIsTopBarSticky()
+const {
+  isLocationPicker,
+  isFilePicker,
+  postMessage,
+  isEnabled: isEmbedModeEnabled,
+  fileTypes: embedModeFileTypes
+} = useEmbedMode()
+const { getDefaultAction } = useFileActions()
+const language = useGettext()
+const { $pgettext, $gettext, $ngettext } = language
 
-    const clipboardStore = useClipboardStore()
-    const { resources: clipboardResources, action: clipboardAction } = storeToRefs(clipboardStore)
+const clipboardStore = useClipboardStore()
+const { resources: clipboardResources, action: clipboardAction } = storeToRefs(clipboardStore)
 
-    const authStore = useAuthStore()
-    const { userContextReady } = storeToRefs(authStore)
+const authStore = useAuthStore()
+const { userContextReady } = storeToRefs(authStore)
 
-    const resourcesStore = useResourcesStore()
-    const { areFileExtensionsShown, latestSelectedId, deleteQueue } = storeToRefs(resourcesStore)
+const resourcesStore = useResourcesStore()
+const { areFileExtensionsShown, latestSelectedId, deleteQueue } = storeToRefs(resourcesStore)
 
-    const dragItem = ref<Resource>()
-    const ghostElement = ref()
-    const contextMenuButton = ref<ComponentPublicInstance<typeof OcButton>>()
+const dragItem = ref<Resource>()
+const ghostElement = ref()
+const contextMenuButton = ref<ComponentPublicInstance<typeof OcButton>>()
 
-    const { width } = useWindowSize()
-    const hasTags = computed(
-      () => capabilityStore.filesTags && width.value >= TAGS_MINIMUM_SCREEN_WIDTH
+const { width } = useWindowSize()
+const constants = ref({
+  ImageDimension,
+  EVENT_TROW_MOUNTED
+})
+const hasTags = computed(
+  () => capabilityStore.filesTags && width.value >= TAGS_MINIMUM_SCREEN_WIDTH
+)
+
+const { actions: renameActions } = useFileActionsRename()
+const { actions: renameActionsSpace } = useSpaceActionsRename()
+const renameHandler = computed(() => unref(renameActions)[0].handler)
+const renameHandlerSpace = computed(() => unref(renameActionsSpace)[0].handler)
+
+const getTagToolTip = (text: string) => (text.length > 7 ? text : '')
+
+const isResourceDisabled = (resource: Resource) => {
+  if (unref(isEmbedModeEnabled) && unref(embedModeFileTypes)?.length) {
+    return (
+      !unref(embedModeFileTypes).includes(resource.extension) &&
+      !unref(embedModeFileTypes).includes(resource.mimeType) &&
+      !resource.isFolder
     )
+  }
+  return resource.processing === true || isResourceInDeleteQueue(resource.id)
+}
 
-    const { actions: renameActions } = useFileActionsRename()
-    const { actions: renameActionsSpace } = useSpaceActionsRename()
-    const renameHandler = computed(() => unref(renameActions)[0].handler)
-    const renameHandlerSpace = computed(() => unref(renameActionsSpace)[0].handler)
+const disabledResources: ComputedRef<Array<Resource['id']>> = computed(() => {
+  return (
+    resources
+      ?.filter((resource) => isResourceDisabled(resource) === true)
+      ?.map((resource) => resource.id) || []
+  )
+})
 
-    const getTagToolTip = (text: string) => (text.length > 7 ? text : '')
+const isResourceClickable = (resource: Resource) => {
+  if (!areResourcesClickable) {
+    return false
+  }
 
-    const isResourceDisabled = (resource: Resource) => {
-      if (unref(isEmbedModeEnabled) && unref(embedModeFileTypes)?.length) {
-        return (
-          !unref(embedModeFileTypes).includes(resource.extension) &&
-          !unref(embedModeFileTypes).includes(resource.mimeType) &&
-          !resource.isFolder
-        )
-      }
-      return resource.processing === true || isResourceInDeleteQueue(resource.id)
+  if (isProjectSpaceResource(resource) && resource.disabled) {
+    return false
+  }
+
+  if (!resource.isFolder && !isPasswordProtectedFolderFileResource(resource.name)) {
+    if (!resource.canDownload() && !canBeOpenedWithSecureView(resource)) {
+      return false
     }
 
-    const disabledResources: ComputedRef<Array<Resource['id']>> = computed(() => {
-      return (
-        props.resources
-          ?.filter((resource) => isResourceDisabled(resource) === true)
-          ?.map((resource) => resource.id) || []
-      )
+    if (unref(isEmbedModeEnabled) && !unref(isFilePicker)) {
+      return false
+    }
+  }
+
+  return !unref(disabledResources).includes(resource.id)
+}
+
+const emitSelect = (selectedIds: string[]) => {
+  eventBus.publish('app.files.list.clicked')
+  emit('update:selectedIds', selectedIds)
+}
+
+const toggleSelection = (resourceId: string) => {
+  resourcesStore.toggleSelection(resourceId)
+  emitSelect(resourcesStore.selectedIds)
+}
+
+const getResourceLink = (resource: Resource) => {
+  if (resource.isFolder) {
+    return folderLinkUtils.getFolderLink(resource)
+  }
+
+  let currentSpace = space
+  if (!currentSpace) {
+    currentSpace = getMatchingSpace(resource)
+  }
+
+  const action = getDefaultAction({ resources: [resource], space: currentSpace })
+
+  if (!action?.route) {
+    return
+  }
+
+  return action.route({ space: currentSpace, resources: [resource] })
+}
+
+const isResourceInDeleteQueue = (id: string): boolean => {
+  return unref(deleteQueue).includes(id)
+}
+
+const getRenameButtonAriaLabel = (resource: Resource): string => {
+  if (resource.isFolder) {
+    return $pgettext(
+      'The label of the rename button in the resource table for folders',
+      'Rename folder'
+    )
+  }
+
+  return $pgettext('The label of the rename button in the resource table for files', 'Rename file')
+}
+const fields = computed(() => {
+  if (resources.length === 0) {
+    return []
+  }
+  const firstResource = resources[0]
+  const fields: FieldType[] = []
+  if (isSelectable) {
+    fields.push({
+      name: 'select',
+      title: '',
+      type: 'slot',
+      headerType: 'slot',
+      width: 'shrink'
     })
+  }
 
-    const isResourceClickable = (resource: Resource) => {
-      if (!props.areResourcesClickable) {
-        return false
-      }
-
-      if (isProjectSpaceResource(resource) && resource.disabled) {
-        return false
-      }
-
-      if (!resource.isFolder && !isPasswordProtectedFolderFileResource(resource.name)) {
-        if (!resource.canDownload() && !canBeOpenedWithSecureView(resource)) {
-          return false
-        }
-
-        if (unref(isEmbedModeEnabled) && !unref(isFilePicker)) {
-          return false
-        }
-      }
-
-      return !unref(disabledResources).includes(resource.id)
-    }
-
-    const emitSelect = (selectedIds: string[]) => {
-      eventBus.publish('app.files.list.clicked')
-      context.emit('update:selectedIds', selectedIds)
-    }
-
-    const toggleSelection = (resourceId: string) => {
-      resourcesStore.toggleSelection(resourceId)
-      emitSelect(resourcesStore.selectedIds)
-    }
-
-    const getResourceLink = (resource: Resource) => {
-      if (resource.isFolder) {
-        return folderLinkUtils.getFolderLink(resource)
-      }
-
-      let space = props.space
-      if (!space) {
-        space = getMatchingSpace(resource)
-      }
-
-      const action = getDefaultAction({ resources: [resource], space })
-
-      if (!action?.route) {
-        return
-      }
-
-      return action.route({ space, resources: [resource] })
-    }
-
-    const isResourceInDeleteQueue = (id: string): boolean => {
-      return unref(deleteQueue).includes(id)
-    }
-
-    const getRenameButtonAriaLabel = (resource: Resource): string => {
-      if (resource.isFolder) {
-        return $pgettext(
-          'The label of the rename button in the resource table for folders',
-          'Rename folder'
-        )
-      }
-
-      return $pgettext(
-        'The label of the rename button in the resource table for files',
-        'Rename file'
-      )
-    }
-
-    return {
-      router,
-      configOptions,
-      dragItem,
-      ghostElement,
-      contextMenuButton,
-      getTagToolTip,
-      renameActions,
-      renameActionsSpace,
-      renameHandler,
-      renameHandlerSpace,
-      FolderViewModeConstants,
-      hasTags,
-      disabledResources,
-      isResourceDisabled,
-      userContextReady,
-      getMatchingSpace,
-      clipboardResources,
-      clipboardAction,
-      ...useResourceRouteResolver(
+  const sortFields = determineResourceTableSortFields(firstResource)
+  fields.push(
+    ...(
+      [
         {
-          space: ref(props.space),
-          targetRouteCallback: computed(() => props.targetRouteCallback)
-        },
-        context
-      ),
-      ...folderLinkUtils,
-      postMessage,
-      isFilePicker,
-      isLocationPicker,
-      isEmbedModeEnabled,
-      emitSelect,
-      toggleSelection,
-      areFileExtensionsShown,
-      latestSelectedId,
-      isResourceClickable,
-      getResourceLink,
-      isSticky,
-      isResourceInDeleteQueue,
-      getRenameButtonAriaLabel
-    }
-  },
-  data() {
-    return {
-      constants: {
-        ImageDimension,
-        EVENT_TROW_MOUNTED
-      }
-    }
-  },
-  computed: {
-    fields() {
-      if (this.resources.length === 0) {
-        return []
-      }
-      const firstResource = this.resources[0]
-      const fields: FieldType[] = []
-      if (this.isSelectable) {
-        fields.push({
-          name: 'select',
-          title: '',
+          name: 'name',
+          title: $gettext('Name'),
           type: 'slot',
-          headerType: 'slot',
-          width: 'shrink'
-        })
-      }
+          width: 'expand',
+          wrap: 'truncate'
+        },
 
-      const sortFields = determineResourceTableSortFields(firstResource)
-      fields.push(
-        ...(
-          [
-            {
-              name: 'name',
-              title: this.$gettext('Name'),
-              type: 'slot',
-              width: 'expand',
-              wrap: 'truncate'
-            },
-
-            {
-              name: 'manager',
-              prop: 'members',
-              title: this.$gettext('Manager'),
-              type: 'slot'
-            },
-            {
-              name: 'members',
-              title: this.$gettext('Members'),
-              prop: 'members',
-              type: 'slot'
-            },
-            {
-              name: 'totalQuota',
-              prop: 'spaceQuota.total',
-              title: this.$gettext('Total quota'),
-              type: 'slot',
-              sortable: true
-            },
-            {
-              name: 'usedQuota',
-              prop: 'spaceQuota.used',
-              title: this.$gettext('Used quota'),
-              type: 'slot',
-              sortable: true
-            },
-            {
-              name: 'remainingQuota',
-              prop: 'spaceQuota.remaining',
-              title: this.$gettext('Remaining quota'),
-              type: 'slot',
-              sortable: true
-            },
-            {
-              name: 'indicators',
-              title: this.$gettext('Status'),
-              type: 'slot',
-              alignH: 'right',
-              wrap: 'nowrap',
-              width: 'shrink'
-            },
-            {
-              name: 'size',
-              title: this.$gettext('Size'),
-              type: 'slot',
-              alignH: 'right',
-              wrap: 'nowrap',
-              width: 'shrink'
-            },
-            {
-              name: 'syncEnabled',
-              title: this.$gettext('Info'),
-              type: 'slot',
-              alignH: 'right',
-              wrap: 'nowrap',
-              width: 'shrink'
-            },
-            {
-              name: 'status',
-              prop: 'disabled',
-              title: this.$gettext('Status'),
-              type: 'slot',
-              alignH: 'right',
-              wrap: 'nowrap',
-              width: 'shrink'
-            },
-            {
-              name: 'tags',
-              title: this.$gettext('Tags'),
-              type: 'slot',
-              alignH: 'right',
-              wrap: 'nowrap',
-              width: 'shrink'
-            },
-            {
-              name: 'sharedBy',
-              title: this.$gettext('Shared by'),
-              type: 'slot',
-              alignH: 'right',
-              wrap: 'nowrap',
-              width: 'shrink'
-            },
-            {
-              name: 'sharedWith',
-              title: this.$gettext('Shared with'),
-              type: 'slot',
-              alignH: 'right',
-              wrap: 'nowrap',
-              width: 'shrink'
-            },
-            {
-              name: 'mdate',
-              title: this.$gettext('Modified'),
-              type: 'slot',
-              alignH: 'right',
-              wrap: 'nowrap',
-              width: 'shrink',
-              accessibleLabelCallback: (item) =>
-                this.formatDateRelative((item as Resource).mdate) +
-                ' (' +
-                this.formatDate((item as Resource).mdate) +
-                ')'
-            },
-            {
-              name: 'sdate',
-              title: this.$gettext('Shared on'),
-              type: 'slot',
-              alignH: 'right',
-              wrap: 'nowrap',
-              width: 'shrink',
-              accessibleLabelCallback: (item) =>
-                this.formatDateRelative((item as IncomingShareResource).sdate) +
-                ' (' +
-                this.formatDate((item as IncomingShareResource).sdate) +
-                ')'
-            },
-            {
-              name: 'ddate',
-              title: this.$gettext('Deleted'),
-              type: 'slot',
-              alignH: 'right',
-              wrap: 'nowrap',
-              width: 'shrink',
-              accessibleLabelCallback: (item) =>
-                this.formatDateRelative((item as TrashResource).ddate) +
-                ' (' +
-                this.formatDate((item as TrashResource).ddate) +
-                ')'
-            }
-          ] as FieldType[]
-        )
-          .filter((field) => {
-            if (field.name === 'tags' && !this.hasTags) {
-              return false
-            }
-
-            if (field.name === 'indicators') {
-              return true
-            }
-
-            let hasField: boolean
-            if (field.prop) {
-              hasField = get(firstResource, field.prop) !== undefined
-            } else {
-              hasField = Object.prototype.hasOwnProperty.call(firstResource, field.name)
-            }
-            if (!this.fieldsDisplayed) {
-              return hasField
-            }
-
-            return hasField && this.fieldsDisplayed.includes(field.name)
-          })
-          .map((field) => {
-            const sortField = sortFields.find((f) => f.name === field.name)
-            if (sortField) {
-              Object.assign(field, {
-                sortable: sortField.sortable,
-                sortDir: sortField.sortDir
-              })
-            }
-            return field
-          })
-      )
-      if (this.hasActions) {
-        fields.push({
-          name: 'actions',
-          title: this.$gettext('Actions'),
+        {
+          name: 'manager',
+          prop: 'members',
+          title: $gettext('Manager'),
+          type: 'slot'
+        },
+        {
+          name: 'members',
+          title: $gettext('Members'),
+          prop: 'members',
+          type: 'slot'
+        },
+        {
+          name: 'totalQuota',
+          prop: 'spaceQuota.total',
+          title: $gettext('Total quota'),
+          type: 'slot',
+          sortable: true
+        },
+        {
+          name: 'usedQuota',
+          prop: 'spaceQuota.used',
+          title: $gettext('Used quota'),
+          type: 'slot',
+          sortable: true
+        },
+        {
+          name: 'remainingQuota',
+          prop: 'spaceQuota.remaining',
+          title: $gettext('Remaining quota'),
+          type: 'slot',
+          sortable: true
+        },
+        {
+          name: 'indicators',
+          title: $gettext('Status'),
           type: 'slot',
           alignH: 'right',
           wrap: 'nowrap',
           width: 'shrink'
-        })
-      }
-
-      return fields
-    },
-    areAllResourcesSelected() {
-      const allResourcesDisabled = this.disabledResources.length === this.resources.length
-      const allSelected =
-        this.selectedResources.length === this.resources.length - this.disabledResources.length
-
-      return !allResourcesDisabled && allSelected
-    },
-    selectAllCheckboxLabel() {
-      return this.areAllResourcesSelected
-        ? this.$gettext('Clear selection')
-        : this.$gettext('Select all')
-    },
-    selectedResources() {
-      return this.resources.filter((resource) => this.selectedIds.includes(resource.id))
-    },
-    contextMenuLabel() {
-      return this.$gettext('Show context menu')
-    },
-    dragSelection() {
-      const selection = [...this.selectedResources]
-      selection.splice(
-        selection.findIndex((i) => i.id === this.dragItem.id),
-        1
-      )
-      return selection
-    }
-  },
-  methods: {
-    isResourceSelected(item: Resource) {
-      return this.selectedIds.includes(item.id)
-    },
-    isResourceCut(resource: Resource) {
-      if (this.clipboardAction !== ClipboardActions.Cut) {
-        return false
-      }
-      return this.clipboardResources.some((r) => r.id === resource.id)
-    },
-    getTagLink(tag: string) {
-      const currentTerm = unref(this.router.currentRoute).query?.term
-      return createLocationCommon('files-common-search', {
-        query: { provider: 'files.sdk', q_tags: tag, ...(currentTerm && { term: currentTerm }) }
-      })
-    },
-    getTagComponentAttrs(tag: string) {
-      if (!this.userContextReady) {
-        return {}
-      }
-
-      return {
-        to: this.getTagLink(tag)
-      }
-    },
-    isLatestSelectedItem(item: Resource) {
-      return item.id === this.latestSelectedId
-    },
-    hasRenameAction(item: Resource) {
-      if (isProjectSpaceResource(item)) {
-        return this.renameActionsSpace.filter((menuItem) =>
-          menuItem.isVisible({ resources: [item] })
-        ).length
-      }
-
-      return this.renameActions.filter((menuItem) =>
-        menuItem.isVisible({ space: this.space, resources: [item] })
-      ).length
-    },
-    openRenameDialog(item: Resource) {
-      if (isProjectSpaceResource(item)) {
-        return this.renameHandlerSpace({
-          resources: [item]
-        })
-      }
-      this.renameHandler({
-        space: this.getMatchingSpace(item),
-        resources: [item]
-      })
-    },
-    openTagsSidebar() {
-      eventBus.publish(SideBarEventTopics.open)
-    },
-    openSharingSidebar(file: Resource) {
-      let panelToOpen
-      if (file.type === 'space') {
-        panelToOpen = 'space-share'
-      } else {
-        panelToOpen = 'sharing'
-      }
-      eventBus.publish(SideBarEventTopics.openWithPanel, panelToOpen)
-    },
-    async fileDragged(file: Resource, event: DragEvent) {
-      if (!this.dragDrop) {
-        return
-      }
-
-      await this.setDragItem(file, event)
-
-      this.addSelectedResource(file)
-    },
-    fileDropped(selector: HTMLElement, event: DragEvent) {
-      if (!this.dragDrop) {
-        return
-      }
-      const hasFilePayload = (event.dataTransfer.types || []).some((e) => e === 'Files')
-      if (hasFilePayload) {
-        return
-      }
-      this.dragItem = null
-      const dropTarget = event.target as HTMLElement
-      const dropTargetTr = dropTarget.closest('tr')
-      const dropItemId = dropTargetTr.dataset.itemId
-      this.dropRowStyling(selector, true, event)
-
-      this.$emit(EVENT_FILE_DROPPED, dropItemId)
-    },
-    async setDragItem(item: Resource, event: DragEvent) {
-      this.dragItem = item
-      await this.$nextTick()
-      this.ghostElement.$el.ariaHidden = 'true'
-      this.ghostElement.$el.style.left = '-99999px'
-      this.ghostElement.$el.style.top = '-99999px'
-      event.dataTransfer.setDragImage(this.ghostElement.$el, 0, 0)
-      event.dataTransfer.dropEffect = 'move'
-      event.dataTransfer.effectAllowed = 'move'
-    },
-    dropRowStyling(selector: HTMLElement, leaving: boolean, event: DragEvent) {
-      const hasFilePayload = (event.dataTransfer?.types || []).some((e) => e === 'Files')
-      if (hasFilePayload) {
-        return
-      }
-      if ((event.currentTarget as HTMLElement)?.contains(event.relatedTarget as HTMLElement)) {
-        return
-      }
-
-      const classList = document.getElementsByClassName(`oc-tbody-tr-${selector}`)[0].classList
-      const className = 'highlightedDropTarget'
-      leaving ? classList.remove(className) : classList.add(className)
-    },
-    sort(opts: { sortBy: string; sortDir: SortDir }) {
-      this.$emit('sort', opts)
-    },
-    addSelectedResource(file: Resource) {
-      const isSelected = this.isResourceSelected(file)
-      if (isSelected) {
-        return
-      }
-      this.toggleSelection(file.id)
-    },
-    showContextMenuOnBtnClick(data: ContextMenuBtnClickEventData, item: Resource) {
-      if (this.isResourceDisabled(item)) {
-        return false
-      }
-
-      const { dropdown, event } = data
-      if (dropdown?.tippy === undefined) {
-        return
-      }
-      if (!this.isResourceSelected(item)) {
-        this.emitSelect([item.id])
-      }
-      displayPositionedDropdown(dropdown.tippy, event, this.contextMenuButton)
-    },
-    showContextMenu(row: ComponentPublicInstance<unknown>, event: MouseEvent, item: Resource) {
-      event.preventDefault()
-
-      if (this.isResourceDisabled(item)) {
-        return false
-      }
-
-      const instance = row.$el.getElementsByClassName('resource-table-btn-action-dropdown')[0]
-      if (instance === undefined) {
-        return
-      }
-      if (!this.isResourceSelected(item)) {
-        this.emitSelect([item.id])
-      }
-      displayPositionedDropdown(instance._tippy, event, this.contextMenuButton)
-    },
-    rowMounted(resource: Resource, component: ComponentPublicInstance<unknown>) {
-      /**
-       * Triggered whenever a row is mounted
-       * @property {object} resource The resource which was mounted as table row
-       * @property {object} component The table row component
-       */
-      this.$emit('rowMounted', resource, component, this.constants.ImageDimension.Thumbnail)
-    },
-    fileClicked(data: [Resource, MouseEvent, boolean]) {
-      /**
-       * Triggered when the file row is clicked
-       * @property {object} resource The resource for which the event is triggered
-       */
-      const resource = data[0]
-
-      if (this.isResourceDisabled(resource)) {
-        return
-      }
-
-      if (this.isEmbedModeEnabled && this.isFilePicker && !resource.isFolder) {
-        return this.postMessage<embedModeFilePickMessageData>('owncloud-embed:file-pick', {
-          resource: JSON.parse(JSON.stringify(resource)),
-          locationQuery: JSON.parse(
-            JSON.stringify(routeToContextQuery(unref(this.router.currentRoute)))
-          )
-        })
-      }
-
-      const eventData = data[1]
-      const skipTargetSelection = data[2] ?? false
-
-      const isCheckboxClicked =
-        (eventData?.target as HTMLElement).getAttribute('type') === 'checkbox'
-      const contextActionClicked =
-        (eventData?.target as HTMLElement)?.closest('div')?.id === 'oc-files-context-menu'
-      if (contextActionClicked) {
-        return
-      }
-      if (eventData && eventData.metaKey) {
-        return eventBus.publish('app.files.list.clicked.meta', resource)
-      }
-      if (eventData && eventData.shiftKey) {
-        return eventBus.publish('app.files.list.clicked.shift', { resource, skipTargetSelection })
-      }
-      if (isCheckboxClicked) {
-        return
-      }
-
-      if (this.isResourceSelected(resource)) {
-        return
-      }
-
-      return this.emitSelect([resource.id])
-    },
-    formatDate(date: string) {
-      return formatDateFromJSDate(new Date(date), this.$language.current)
-    },
-    formatDateRelative(date: string) {
-      return formatRelativeDateFromJSDate(new Date(date), this.$language.current)
-    },
-    toggleSelectionAll() {
-      if (this.areAllResourcesSelected) {
-        return this.emitSelect([])
-      }
-      this.emitSelect(
-        this.resources
-          .filter((resource) => !this.disabledResources.includes(resource.id))
-          .map((resource) => resource.id)
-      )
-    },
-    emitFileClick(resource: Resource) {
-      const space = this.getMatchingSpace(resource)
-
-      /**
-       * Triggered when a default action is triggered on a file
-       * @property {object} resource resource for which the event is triggered
-       */
-      this.$emit('fileClick', { space, resources: [resource] })
-    },
-    getResourceCheckboxLabel(resource: Resource) {
-      if (resource.type === 'folder') {
-        return this.$gettext('Select folder')
-      }
-      return this.$gettext('Select file')
-    },
-    getSharedWithAvatarDescription(resource: Resource) {
-      if (!isShareResource(resource)) {
-        return
-      }
-      const resourceType =
-        resource.type === 'folder' ? this.$gettext('folder') : this.$gettext('file')
-
-      const shareCount = resource.sharedWith.filter(({ shareType }) =>
-        ShareTypes.authenticated.includes(ShareTypes.getByValue(shareType))
-      ).length
-
-      if (!shareCount) {
-        return ''
-      }
-
-      return this.$ngettext(
-        'This %{ resourceType } is shared via %{ shareCount } invite',
-        'This %{ resourceType } is shared via %{ shareCount } invites',
-        shareCount,
+        },
         {
-          resourceType,
-          shareCount: shareCount.toString()
+          name: 'size',
+          title: $gettext('Size'),
+          type: 'slot',
+          alignH: 'right',
+          wrap: 'nowrap',
+          width: 'shrink'
+        },
+        {
+          name: 'syncEnabled',
+          title: $gettext('Info'),
+          type: 'slot',
+          alignH: 'right',
+          wrap: 'nowrap',
+          width: 'shrink'
+        },
+        {
+          name: 'status',
+          prop: 'disabled',
+          title: $gettext('Status'),
+          type: 'slot',
+          alignH: 'right',
+          wrap: 'nowrap',
+          width: 'shrink'
+        },
+        {
+          name: 'tags',
+          title: $gettext('Tags'),
+          type: 'slot',
+          alignH: 'right',
+          wrap: 'nowrap',
+          width: 'shrink'
+        },
+        {
+          name: 'sharedBy',
+          title: $gettext('Shared by'),
+          type: 'slot',
+          alignH: 'right',
+          wrap: 'nowrap',
+          width: 'shrink'
+        },
+        {
+          name: 'sharedWith',
+          title: $gettext('Shared with'),
+          type: 'slot',
+          alignH: 'right',
+          wrap: 'nowrap',
+          width: 'shrink'
+        },
+        {
+          name: 'mdate',
+          title: $gettext('Modified'),
+          type: 'slot',
+          alignH: 'right',
+          wrap: 'nowrap',
+          width: 'shrink',
+          accessibleLabelCallback: (item) =>
+            formatDateRelative((item as Resource).mdate) +
+            ' (' +
+            formatDate((item as Resource).mdate) +
+            ')'
+        },
+        {
+          name: 'sdate',
+          title: $gettext('Shared on'),
+          type: 'slot',
+          alignH: 'right',
+          wrap: 'nowrap',
+          width: 'shrink',
+          accessibleLabelCallback: (item) =>
+            formatDateRelative((item as IncomingShareResource).sdate) +
+            ' (' +
+            formatDate((item as IncomingShareResource).sdate) +
+            ')'
+        },
+        {
+          name: 'ddate',
+          title: $gettext('Deleted'),
+          type: 'slot',
+          alignH: 'right',
+          wrap: 'nowrap',
+          width: 'shrink',
+          accessibleLabelCallback: (item) =>
+            formatDateRelative((item as TrashResource).ddate) +
+            ' (' +
+            formatDate((item as TrashResource).ddate) +
+            ')'
         }
-      )
-    },
-    getSharedByAvatarDescription(resource: Resource) {
-      if (!isShareResource(resource)) {
-        return ''
-      }
+      ] as FieldType[]
+    )
+      .filter((field) => {
+        if (field.name === 'tags' && !unref(hasTags)) {
+          return false
+        }
 
-      const resourceType =
-        resource.type === 'folder' ? this.$gettext('folder') : this.$gettext('file')
-      return this.$gettext('This %{ resourceType } is shared by %{ user }', {
-        resourceType,
-        user: resource.sharedBy.map(({ displayName }) => displayName).join(', ')
+        if (field.name === 'indicators') {
+          return true
+        }
+
+        let hasField: boolean
+        if (field.prop) {
+          hasField = get(firstResource, field.prop) !== undefined
+        } else {
+          hasField = Object.prototype.hasOwnProperty.call(firstResource, field.name)
+        }
+        if (!fieldsDisplayed) {
+          return hasField
+        }
+
+        return hasField && fieldsDisplayed.includes(field.name)
       })
-    },
-    getSharedByAvatarItems(resource: Resource) {
-      if (!isShareResource(resource)) {
-        return []
-      }
-
-      return resource.sharedBy.map((s) => ({
-        displayName: s.displayName,
-        name: s.displayName,
-        shareType: ShareTypes.user.value,
-        username: s.id
-      }))
-    },
-    getSharedWithAvatarItems(resource: Resource) {
-      if (!isShareResource(resource)) {
-        return []
-      }
-
-      return resource.sharedWith
-        .filter(({ shareType }) =>
-          ShareTypes.authenticated.includes(ShareTypes.getByValue(shareType))
-        )
-        .map((s) => ({
-          displayName: s.displayName,
-          name: s.displayName,
-          shareType: s.shareType,
-          username: s.id
-        }))
-    }
+      .map((field) => {
+        const sortField = sortFields.find((f) => f.name === field.name)
+        if (sortField) {
+          Object.assign(field, {
+            sortable: sortField.sortable,
+            sortDir: sortField.sortDir
+          })
+        }
+        return field
+      })
+  )
+  if (hasActions) {
+    fields.push({
+      name: 'actions',
+      title: $gettext('Actions'),
+      type: 'slot',
+      alignH: 'right',
+      wrap: 'nowrap',
+      width: 'shrink'
+    })
   }
+
+  return fields
 })
+const areAllResourcesSelected = computed(() => {
+  const allResourcesDisabled = unref(disabledResources).length === resources.length
+  const allSelected =
+    unref(selectedResources).length === resources.length - unref(disabledResources).length
+
+  return !allResourcesDisabled && allSelected
+})
+const selectAllCheckboxLabel = computed(() => {
+  return unref(areAllResourcesSelected) ? $gettext('Clear selection') : $gettext('Select all')
+})
+const selectedResources = computed(() => {
+  return resources.filter((resource) => selectedIds.includes(resource.id))
+})
+const dragSelection = computed(() => {
+  const selection = [...unref(selectedResources)]
+  selection.splice(
+    selection.findIndex((i) => i.id === unref(dragItem).id),
+    1
+  )
+  return selection
+})
+function isResourceSelected(item: Resource) {
+  return selectedIds.includes(item.id)
+}
+function isResourceCut(resource: Resource) {
+  if (unref(clipboardAction) !== ClipboardActions.Cut) {
+    return false
+  }
+  return unref(clipboardResources).some((r) => r.id === resource.id)
+}
+function getTagLink(tag: string) {
+  const currentTerm = unref(router.currentRoute).query?.term
+  return createLocationCommon('files-common-search', {
+    query: { provider: 'files.sdk', q_tags: tag, ...(currentTerm && { term: currentTerm }) }
+  })
+}
+function getTagComponentAttrs(tag: string) {
+  if (!userContextReady) {
+    return {}
+  }
+
+  return {
+    to: getTagLink(tag)
+  }
+}
+function isLatestSelectedItem(item: Resource) {
+  return item.id === unref(latestSelectedId)
+}
+function hasRenameAction(item: Resource) {
+  if (isProjectSpaceResource(item)) {
+    return unref(renameActionsSpace).filter((menuItem) => menuItem.isVisible({ resources: [item] }))
+      .length
+  }
+
+  return unref(renameActions).filter((menuItem) => menuItem.isVisible({ space, resources: [item] }))
+    .length
+}
+function openRenameDialog(item: Resource) {
+  if (isProjectSpaceResource(item)) {
+    return unref(renameHandlerSpace)({
+      resources: [item]
+    })
+  }
+  unref(renameHandler)({
+    space: getMatchingSpace(item),
+    resources: [item]
+  })
+}
+function openTagsSidebar() {
+  eventBus.publish(SideBarEventTopics.open)
+}
+function openSharingSidebar(file: Resource) {
+  let panelToOpen
+  if (file.type === 'space') {
+    panelToOpen = 'space-share'
+  } else {
+    panelToOpen = 'sharing'
+  }
+  eventBus.publish(SideBarEventTopics.openWithPanel, panelToOpen)
+}
+async function fileDragged(file: Resource, event: DragEvent) {
+  if (!unref(dragDrop)) {
+    return
+  }
+
+  await setDragItem(file, event)
+
+  addSelectedResource(file)
+}
+function fileDropped(selector: HTMLElement, event: DragEvent) {
+  if (!unref(dragDrop)) {
+    return
+  }
+  const hasFilePayload = (event.dataTransfer.types || []).some((e) => e === 'Files')
+  if (hasFilePayload) {
+    return
+  }
+  dragItem.value = null
+  const dropTarget = event.target as HTMLElement
+  const dropTargetTr = dropTarget.closest('tr')
+  const dropItemId = dropTargetTr.dataset.itemId
+  dropRowStyling(selector, true, event)
+
+  emit(EVENT_FILE_DROPPED, dropItemId)
+}
+async function setDragItem(item: Resource, event: DragEvent) {
+  dragItem.value = item
+  await nextTick()
+  unref(ghostElement).$el.ariaHidden = 'true'
+  unref(ghostElement).$el.style.left = '-99999px'
+  unref(ghostElement).$el.style.top = '-99999px'
+  event.dataTransfer.setDragImage(unref(ghostElement).$el, 0, 0)
+  event.dataTransfer.dropEffect = 'move'
+  event.dataTransfer.effectAllowed = 'move'
+}
+function dropRowStyling(selector: HTMLElement, leaving: boolean, event: DragEvent) {
+  const hasFilePayload = (event.dataTransfer?.types || []).some((e) => e === 'Files')
+  if (hasFilePayload) {
+    return
+  }
+  if ((event.currentTarget as HTMLElement)?.contains(event.relatedTarget as HTMLElement)) {
+    return
+  }
+
+  const classList = document.getElementsByClassName(`oc-tbody-tr-${selector}`)[0].classList
+  const className = 'highlightedDropTarget'
+  leaving ? classList.remove(className) : classList.add(className)
+}
+function sort(opts: { sortBy: string; sortDir: SortDir }) {
+  emit('sort', opts)
+}
+function addSelectedResource(file: Resource) {
+  const isSelected = isResourceSelected(file)
+  if (isSelected) {
+    return
+  }
+  toggleSelection(file.id)
+}
+function showContextMenuOnBtnClick(data: ContextMenuBtnClickEventData, item: Resource) {
+  if (unref(isResourceDisabled)(item)) {
+    return false
+  }
+
+  const { dropdown, event } = data
+  if (dropdown?.tippy === undefined) {
+    return
+  }
+  if (!isResourceSelected(item)) {
+    emitSelect([item.id])
+  }
+  displayPositionedDropdown(dropdown.tippy, event, unref(contextMenuButton))
+}
+function showContextMenu(row: ComponentPublicInstance<unknown>, event: MouseEvent, item: Resource) {
+  event.preventDefault()
+
+  if (isResourceDisabled(item)) {
+    return false
+  }
+
+  const instance = row.$el.getElementsByClassName('resource-table-btn-action-dropdown')[0]
+  if (instance === undefined) {
+    return
+  }
+  if (!isResourceSelected(item)) {
+    emitSelect([item.id])
+  }
+  displayPositionedDropdown(instance._tippy, event, unref(contextMenuButton))
+}
+function rowMounted(resource: Resource, component: ComponentPublicInstance<unknown>) {
+  /**
+   * Triggered whenever a row is mounted
+   * @property {object} resource The resource which was mounted as table row
+   * @property {object} component The table row component
+   */
+  emit('rowMounted', resource, component, unref(constants).ImageDimension.Thumbnail)
+}
+function fileClicked(data: [Resource, MouseEvent, boolean]) {
+  /**
+   * Triggered when the file row is clicked
+   * @property {object} resource The resource for which the event is triggered
+   */
+  const resource = data[0]
+
+  if (isResourceDisabled(resource)) {
+    return
+  }
+
+  if (isEmbedModeEnabled && isFilePicker && !resource.isFolder) {
+    return postMessage<embedModeFilePickMessageData>('owncloud-embed:file-pick', {
+      resource: JSON.parse(JSON.stringify(resource)),
+      locationQuery: JSON.parse(JSON.stringify(routeToContextQuery(unref(router.currentRoute))))
+    })
+  }
+
+  const eventData = data[1]
+  const skipTargetSelection = data[2] ?? false
+
+  const isCheckboxClicked = (eventData?.target as HTMLElement).getAttribute('type') === 'checkbox'
+  const contextActionClicked =
+    (eventData?.target as HTMLElement)?.closest('div')?.id === 'oc-files-context-menu'
+  if (contextActionClicked) {
+    return
+  }
+  if (eventData && eventData.metaKey) {
+    return eventBus.publish('app.files.list.clicked.meta', resource)
+  }
+  if (eventData && eventData.shiftKey) {
+    return eventBus.publish('app.files.list.clicked.shift', { resource, skipTargetSelection })
+  }
+  if (isCheckboxClicked) {
+    return
+  }
+
+  if (isResourceSelected(resource)) {
+    return
+  }
+
+  return emitSelect([resource.id])
+}
+function formatDate(date: string) {
+  return formatDateFromJSDate(new Date(date), language.current)
+}
+function formatDateRelative(date: string) {
+  return formatRelativeDateFromJSDate(new Date(date), language.current)
+}
+function toggleSelectionAll() {
+  if (unref(areAllResourcesSelected)) {
+    return emitSelect([])
+  }
+  emitSelect(
+    resources
+      .filter((resource) => !unref(disabledResources).includes(resource.id))
+      .map((resource) => resource.id)
+  )
+}
+function emitFileClick(resource: Resource) {
+  const space = getMatchingSpace(resource)
+
+  /**
+   * Triggered when a default action is triggered on a file
+   * @property {object} resource resource for which the event is triggered
+   */
+  emit('fileClick', { space, resources: [resource] })
+}
+function getResourceCheckboxLabel(resource: Resource) {
+  if (resource.type === 'folder') {
+    return $gettext('Select folder')
+  }
+  return $gettext('Select file')
+}
+function getSharedWithAvatarDescription(resource: Resource) {
+  if (!isShareResource(resource)) {
+    return
+  }
+  const resourceType = resource.type === 'folder' ? $gettext('folder') : $gettext('file')
+
+  const shareCount = resource.sharedWith.filter(({ shareType }) =>
+    ShareTypes.authenticated.includes(ShareTypes.getByValue(shareType))
+  ).length
+
+  if (!shareCount) {
+    return ''
+  }
+
+  return $ngettext(
+    'This %{ resourceType } is shared via %{ shareCount } invite',
+    'This %{ resourceType } is shared via %{ shareCount } invites',
+    shareCount,
+    {
+      resourceType,
+      shareCount: shareCount.toString()
+    }
+  )
+}
+function getSharedByAvatarDescription(resource: Resource) {
+  if (!isShareResource(resource)) {
+    return ''
+  }
+
+  const resourceType = resource.type === 'folder' ? $gettext('folder') : $gettext('file')
+  return $gettext('This %{ resourceType } is shared by %{ user }', {
+    resourceType,
+    user: resource.sharedBy.map(({ displayName }) => displayName).join(', ')
+  })
+}
+function getSharedByAvatarItems(resource: Resource) {
+  if (!isShareResource(resource)) {
+    return []
+  }
+
+  return resource.sharedBy.map((s) => ({
+    displayName: s.displayName,
+    name: s.displayName,
+    shareType: ShareTypes.user.value,
+    username: s.id
+  }))
+}
+function getSharedWithAvatarItems(resource: Resource) {
+  if (!isShareResource(resource)) {
+    return []
+  }
+
+  return resource.sharedWith
+    .filter(({ shareType }) => ShareTypes.authenticated.includes(ShareTypes.getByValue(shareType)))
+    .map((s) => ({
+      displayName: s.displayName,
+      name: s.displayName,
+      shareType: s.shareType,
+      username: s.id
+    }))
+}
 </script>
 <style lang="scss">
 .oc-table.condensed > tbody > tr {
