@@ -48,7 +48,7 @@ export const GetFileUrlFactory = (
         // sign url
         if (isUrlSigningEnabled && username) {
           const ocsClient = ocs(baseUrl, axiosClient)
-          downloadURL = await ocsClient.signUrl(downloadURL, username)
+          downloadURL = await ocsClient.signUrl({ url: downloadURL, username })
         } else {
           signed = false
         }

@@ -1,13 +1,10 @@
 import { RuntimeError } from '../errors'
-import { HttpError } from '@ownclouders/web-client'
 import { ClientService } from '../services'
 import { urlJoin } from '@ownclouders/web-client'
-import { triggerDownloadWithFilename } from '../helpers/download'
 
 import { Ref, ref, computed, unref } from 'vue'
 import { ArchiverCapability } from '@ownclouders/web-client/ocs'
 import { UserStore } from '../composables'
-import { AxiosResponseHeaders, RawAxiosResponseHeaders } from 'axios'
 
 interface TriggerDownloadOptions {
   dir?: string
@@ -16,6 +13,7 @@ interface TriggerDownloadOptions {
   downloadSecret?: string
   publicToken?: string
   publicLinkPassword?: string
+  publicLinkShareOwner?: string
 }
 
 function sortArchivers(a: ArchiverCapability, b: ArchiverCapability): number {
@@ -85,34 +83,15 @@ export class ArchiverService {
       throw new RuntimeError('download url could not be built')
     }
 
-    if (options.publicToken && options.publicLinkPassword) {
-      try {
-        const response = await this.clientService.httpUnAuthenticated.get<Blob>(downloadUrl, {
-          headers: {
-            ...(!!options.publicLinkPassword && {
-              Authorization:
-                'Basic ' +
-                Buffer.from(['public', options.publicLinkPassword].join(':')).toString('base64')
-            })
-          },
-          responseType: 'blob'
-        })
-
-        const objectUrl = URL.createObjectURL(response.data)
-        const fileName = this.getFileNameFromResponseHeaders(response.headers)
-        triggerDownloadWithFilename(objectUrl, fileName)
-        return downloadUrl
-      } catch (e) {
-        throw new HttpError('archive could not be fetched', e.response)
-      }
-    }
-
-    const url = options.publicToken
-      ? downloadUrl
-      : await this.clientService.ocs.signUrl(
-          downloadUrl,
-          this.userStore.user?.onPremisesSamAccountName
-        )
+    const url =
+      options.publicToken && !options.publicLinkPassword
+        ? downloadUrl
+        : await this.clientService.ocs.signUrl({
+            url: downloadUrl,
+            username: options.publicLinkShareOwner || this.userStore.user?.onPremisesSamAccountName,
+            publicToken: options.publicToken,
+            publicLinkPassword: options.publicLinkPassword
+          })
 
     window.open(url, '_blank')
     return downloadUrl
@@ -120,7 +99,7 @@ export class ArchiverService {
 
   private buildDownloadUrl(options: TriggerDownloadOptions): string {
     const queryParams = []
-    if (options.publicToken) {
+    if (options.publicToken && !options.publicLinkPassword) {
       queryParams.push(`public-token=${options.publicToken}`)
     }
 
@@ -137,10 +116,5 @@ export class ArchiverService {
       return capability.archiver_url
     }
     return urlJoin(this.serverUrl, capability.archiver_url)
-  }
-
-  private getFileNameFromResponseHeaders(headers: RawAxiosResponseHeaders | AxiosResponseHeaders) {
-    const fileName = headers['content-disposition']?.split('"')[1]
-    return decodeURI(fileName)
   }
 }
