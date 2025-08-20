@@ -50,7 +50,12 @@ export default defineConfig({
   },
   plugins: [
     vue(),
-    dts({ exclude: ['**/tests', '**/*.spec.ts'] }),
+    dts({
+      exclude: ['**/tests', '**/*.spec.ts'],
+      include: ['src'],
+      outDir: 'dist/types',
+      insertTypesEntry: true
+    }),
     {
       name: '@ownclouders/vite-plugin-docs',
       transform(src, id) {
