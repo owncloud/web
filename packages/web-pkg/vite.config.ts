@@ -40,7 +40,7 @@ export default defineConfig({
     nodePolyfills({
       exclude: ['crypto']
     }),
-    dts({ exclude: ['**/tests'] }),
+    dts({ exclude: ['**/tests'], include: ['src'], outDir: 'dist/types', insertTypesEntry: true }),
     {
       name: '@ownclouders/vite-plugin-docs',
       transform(src, id) {
