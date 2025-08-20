@@ -28,7 +28,6 @@
           :are-paths-displayed="true"
           :resources="paginatedResources"
           :are-resources-clickable="false"
-          :are-thumbnails-displayed="false"
           :header-position="fileListHeaderY"
           :sort-by="sortBy"
           :sort-dir="sortDir"
