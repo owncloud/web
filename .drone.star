@@ -223,9 +223,10 @@ def stagePipelines(ctx):
     if (determineReleasePackage(ctx) != None):
         return unit_test_pipelines
 
+    e2e_playwright_pipeline = e2eTestsOnPlaywright(ctx)
     e2e_pipelines = e2eTests(ctx)
     keycloak_pipelines = e2eTestsOnKeycloak(ctx)
-    return unit_test_pipelines + pipelinesDependsOn(e2e_pipelines + keycloak_pipelines, unit_test_pipelines)
+    return unit_test_pipelines + pipelinesDependsOn(e2e_playwright_pipeline + e2e_pipelines + keycloak_pipelines, unit_test_pipelines)
 
 def afterPipelines(ctx):
     return build(ctx) + pipelinesDependsOn(notify(ctx), build(ctx))
@@ -534,6 +535,64 @@ def unitTests(ctx):
             ],
         },
     }]
+
+def e2eTestsOnPlaywright(ctx):
+    e2e_workspace = {
+        "base": dir["base"],
+        "path": config["app"],
+    }
+
+    e2e_trigger = {
+        "ref": [
+            "refs/heads/master",
+            "refs/heads/stable-*",
+            "refs/tags/**",
+            "refs/pull/**",
+        ],
+    }
+
+    pipelines = []
+
+    # pipeline steps
+    steps = skipIfUnchanged(ctx, "e2e-tests-playwright")
+
+    environment = {
+        "BASE_URL_OCIS": "ocis:9200",
+        "PLAYWRIGHT_BROWSERS_PATH": ".playwright",
+    }
+
+    steps += restoreBuildArtifactCache(ctx, "pnpm", ".pnpm-store") + \
+             installPnpm() + \
+             restoreBrowsersCache() + \
+             restoreBuildArtifactCache(ctx, "web-dist", "dist")
+
+    if ctx.build.event == "cron":
+        steps += restoreBuildArtifactCache(ctx, "ocis", "ocis")
+    else:
+        steps += restoreOcisCache()
+
+    steps += ocisService()
+
+    steps += [{
+        "name": "e2e-tests-playwright",
+        "image": OC_CI_NODEJS_IMAGE,
+        "environment": environment,
+        "commands": [
+            "pnpm test:e2e:playwright --project=chromium",
+        ],
+    }]
+
+    pipelines.append({
+        "kind": "pipeline",
+        "type": "docker",
+        "name": "e2e-tests-playwright",
+        "workspace": e2e_workspace,
+        "steps": steps,
+        "depends_on": ["cache-ocis"],
+        "trigger": e2e_trigger,
+    })
+
+    return pipelines
 
 def e2eTests(ctx):
     e2e_workspace = {
@@ -1365,12 +1424,26 @@ def skipIfUnchanged(ctx, type):
         }
         return [skip_step]
 
+    if type == "e2e-tests-playwright":
+        e2e_playwright_skip_steps = [
+            "^__fixtures__/.*",
+            "^__mocks__/.*",
+            "^packages/.*/tests/.*",
+            "^tests/unit/.*",
+            "^tests/e2e/cucumber/.*",
+        ]
+        skip_step["settings"] = {
+            "ALLOW_SKIP_CHANGED": base_skip_steps + e2e_playwright_skip_steps,
+        }
+        return [skip_step]
+
     if type == "e2e-tests":
         e2e_skip_steps = [
             "^__fixtures__/.*",
             "^__mocks__/.*",
             "^packages/.*/tests/.*",
             "^tests/unit/.*",
+            "^tests/e2e-playwright/.*",
         ]
         skip_step["settings"] = {
             "ALLOW_SKIP_CHANGED": base_skip_steps + e2e_skip_steps,
