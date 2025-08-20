@@ -29,7 +29,7 @@
     "focus-trap": "7.6.5",
     "fuse.js": "7.1.0",
     "lodash-es": "4.17.21",
-    "luxon": "3.6.1",
+    "luxon": "3.7.1",
     "mark.js": "8.11.1",
     "oidc-client-ts": "^3.3.0",
     "p-queue": "8.1.0",
