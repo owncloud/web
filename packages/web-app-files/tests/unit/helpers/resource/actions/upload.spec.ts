@@ -47,7 +47,8 @@ describe('upload helper', () => {
           name: 'test',
           meta: {
             relativeFolder: ''
-          }
+          },
+          xhrUpload: { endpoint: 'https://example.com/upload' }
         })
         const conflict = {
           name: OcUppyFile.name,
