@@ -170,7 +170,12 @@ export class UploadResourceConflict extends ConflictDialog {
       file.name = resolveFileNameDuplicate(fileName, extension, this.resourcesStore.resources)
       file.meta.name = file.name
       if (file.xhrUpload?.endpoint) {
-        file.xhrUpload.endpoint = file.xhrUpload.endpoint.replace(
+        const endpoint =
+          typeof file.xhrUpload.endpoint === 'function'
+            ? await file.xhrUpload.endpoint(file)
+            : file.xhrUpload.endpoint
+
+        file.xhrUpload.endpoint = endpoint.replace(
           new RegExp(`/${encodeURIComponent(fileName)}`),
           `/${encodeURIComponent(file.name)}`
         )
@@ -193,7 +198,12 @@ export class UploadResourceConflict extends ConflictDialog {
           `/${encodeURIComponent(newFolderName)}`
         )
         if (file.xhrUpload?.endpoint) {
-          file.xhrUpload.endpoint = file.xhrUpload.endpoint.replace(
+          const endpoint =
+            typeof file.xhrUpload.endpoint === 'function'
+              ? await file.xhrUpload.endpoint(file)
+              : file.xhrUpload.endpoint
+
+          file.xhrUpload.endpoint = endpoint.replace(
             new RegExp(`/${encodeURIComponent(folder)}$`),
             `/${encodeURIComponent(newFolderName)}`
           )
