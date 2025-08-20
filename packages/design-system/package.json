@@ -92,7 +92,7 @@
     "deepmerge": "^4.2.2",
     "emoji-mart": "5.6.0",
     "focus-trap": "^7.6.0",
-    "focus-trap-vue": "^4.0.1",
+    "focus-trap-vue": "^4.1.0",
     "fuse.js": "^7.0.0",
     "lodash-es": "^4.17.21",
     "luxon": "^3.5.0",
