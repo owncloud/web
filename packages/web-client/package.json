@@ -22,32 +22,32 @@
       ".": {
         "default": "./dist/web-client.js",
         "require": "./dist/web-client.cjs",
-        "types": "./dist/src/index.d.ts"
+        "types": "./dist/types/index.d.ts"
       },
       "./graph": {
         "default": "./dist/web-client/graph.js",
         "require": "./dist/web-client/graph.cjs",
-        "types": "./dist/src/graph/index.d.ts"
+        "types": "./dist/types/graph/index.d.ts"
       },
       "./graph/generated": {
         "default": "./dist/web-client/graph/generated.js",
         "require": "./dist/web-client/graph/generated.cjs",
-        "types": "./dist/src/graph/generated/index.d.ts"
+        "types": "./dist/types/graph/generated/index.d.ts"
       },
       "./ocs": {
         "default": "./dist/web-client/ocs.js",
         "require": "./dist/web-client/ocs.cjs",
-        "types": "./dist/src/ocs/index.d.ts"
+        "types": "./dist/types/ocs/index.d.ts"
       },
       "./sse": {
         "default": "./dist/web-client/sse.js",
         "require": "./dist/web-client/sse.cjs",
-        "types": "./dist/src/sse/index.d.ts"
+        "types": "./dist/types/sse/index.d.ts"
       },
       "./webdav": {
         "default": "./dist/web-client/webdav.js",
         "require": "./dist/web-client/webdav.cjs",
-        "types": "./dist/src/webdav/index.d.ts"
+        "types": "./dist/types/webdav/index.d.ts"
       }
     }
   },
