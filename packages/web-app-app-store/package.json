@@ -14,7 +14,7 @@
     "@ownclouders/design-system": "workspace:^",
     "@ownclouders/web-client": "workspace:*",
     "@ownclouders/web-pkg": "workspace:*",
-    "axios": "1.10.0",
+    "axios": "1.11.0",
     "fuse.js": "7.1.0",
     "lodash-es": "4.17.21",
     "mark.js": "^8.11.1",
