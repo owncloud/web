@@ -92,6 +92,20 @@ export const bootstrapApp = async (configurationPath: string, appsReadyCallback:
     webWorkersStore
   })
 
+  // Handle step-up request routed via query (e.g., /?stepupAcr=advanced&redirectUrl=/admin-settings/...)
+  const urlParams = new URLSearchParams(window.location.search)
+  const stepupAcr = urlParams.get('stepupAcr')
+  const redirectUrl = urlParams.get('redirectUrl')
+  if (stepupAcr) {
+    try {
+      // trigger ACR login and stop further bootstrap; IDP will redirect back
+      app.config.globalProperties.$authService?.loginUserWithAcr?.(stepupAcr, redirectUrl || '/')
+      return
+    } catch (e) {
+      console.error('Failed to initiate step-up login:', e)
+    }
+  }
+
   if (!isSilentRedirect) {
     const designSystem = await loadDesignSystem()
 

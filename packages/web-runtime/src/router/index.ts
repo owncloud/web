@@ -27,6 +27,33 @@ function $gettext(msg: string) {
 }
 
 export const base = document.querySelector('base')
+
+function accountAcrGuard(to, from) {
+  if (typeof window === 'undefined') {
+    return true
+  }
+  const hasStepupParam = !!to.query.stepup
+  const hasGlobalStepupFlag = new URLSearchParams(window.location.search).has('stepupAcr')
+  const stepupKey = 'oc.stepup:account'
+  const alreadyRequested = sessionStorage.getItem(stepupKey) === '1'
+  console.debug('[accountAcrGuard] enter', {
+    to: to.fullPath,
+    hasStepupParam,
+    hasGlobalStepupFlag,
+    alreadyRequested
+  })
+  if (!hasStepupParam && !hasGlobalStepupFlag && !alreadyRequested) {
+    const redirectUrl = to.fullPath + (to.fullPath.includes('?') ? '&' : '?') + 'stepup=1'
+    try {
+      sessionStorage.setItem(stepupKey, '1')
+    } catch (_) {}
+    console.info('[accountAcrGuard] initiating step-up', { redirectUrl })
+    window.location.assign(`/?stepupAcr=advanced&redirectUrl=${encodeURIComponent(redirectUrl)}`)
+    return false
+  }
+  console.debug('[accountAcrGuard] pass-through')
+  return true
+}
 const routes = [
   {
     path: '/login',
@@ -86,6 +113,7 @@ const routes = [
     path: '/account',
     name: 'account',
     component: Account,
+    beforeEnter: accountAcrGuard,
     meta: { title: $gettext('Account'), authContext: 'hybrid' }
   },
   {

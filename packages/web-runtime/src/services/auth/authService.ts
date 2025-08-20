@@ -68,6 +68,23 @@ export class AuthService implements AuthServiceInterface {
     this.webWorkersStore = webWorkersStore
   }
 
+  private ensureUserManager(): void {
+    if (this.userManager) {
+      return
+    }
+    this.userManager = new UserManager({
+      clientService: this.clientService,
+      configStore: this.configStore,
+      ability: this.ability,
+      language: this.language,
+      userStore: this.userStore,
+      authStore: this.authStore,
+      capabilityStore: this.capabilityStore,
+      webWorkersStore: this.webWorkersStore,
+      accessTokenExpiryThreshold: this.accessTokenExpiryThreshold
+    })
+  }
+
   /**
    * Initialize publicLinkContext and userContext (whichever is available, respectively).
    *
@@ -235,8 +252,22 @@ export class AuthService implements AuthServiceInterface {
   }
 
   public loginUser(redirectUrl?: string) {
+    this.ensureUserManager()
     this.userManager.setPostLoginRedirectUrl(redirectUrl)
     return this.userManager.signinRedirect()
+  }
+
+  public loginUserWithAcr(acr: string, redirectUrl?: string) {
+    this.ensureUserManager()
+    this.userManager.setPostLoginRedirectUrl(redirectUrl)
+    // Use extra query params to request step-up per OIDC (acr_values, prompt login, max_age)
+    return this.userManager.signinRedirect({
+      extraQueryParams: {
+        acr_values: acr,
+        prompt: 'login',
+        max_age: 0
+      }
+    } as any)
   }
 
   public signinSilent() {
@@ -263,7 +294,11 @@ export class AuthService implements AuthServiceInterface {
         await this.userManager.signinRedirectCallback(this.buildSignInCallbackUrl())
       }
 
-      const redirectRoute = this.router.resolve(this.userManager.getAndClearPostLoginRedirectUrl())
+      const postRedirectUrl = this.userManager.getAndClearPostLoginRedirectUrl()
+      try {
+        sessionStorage.setItem('oc.postStepupRedirectUrl', postRedirectUrl)
+      } catch (_) {}
+      const redirectRoute = this.router.resolve(postRedirectUrl)
       return this.router.replace({
         path: redirectRoute.path,
         ...(redirectRoute.query && { query: redirectRoute.query })

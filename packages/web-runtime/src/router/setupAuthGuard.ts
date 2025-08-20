@@ -26,6 +26,23 @@ export const setupAuthGuard = (router: Router) => {
     const authStore = useAuthStore()
     await authService.initializeContext(to)
 
+    // Admin settings sanity: proactively trigger step-up if hitting the admin app root
+    if (to.path === '/admin-settings' && !to.query.stepup) {
+      try {
+        const stepupKey = 'oc.stepup:admin-settings'
+        const already = sessionStorage.getItem(stepupKey) === '1'
+        if (!already && !new URLSearchParams(window.location.search).has('stepupAcr')) {
+          const redirectUrl = to.fullPath + (to.fullPath.includes('?') ? '&' : '?') + 'stepup=1'
+          sessionStorage.setItem(stepupKey, '1')
+          console.info('[setupAuthGuard] admin step-up initiate', { redirectUrl })
+          window.location.assign(`/?stepupAcr=advanced&redirectUrl=${encodeURIComponent(redirectUrl)}`)
+          return false
+        }
+      } catch (e) {
+        console.warn('[setupAuthGuard] admin step-up skipped', e)
+      }
+    }
+
     // vue-router currently (4.1.6) does not cancel navigations when a new one is triggered
     // we need to guard this case to be able to show the access denied page
     // and not be redirected to the login page

@@ -22,6 +22,52 @@ function $gettext(msg: string) {
 
 const appId = 'admin-settings'
 
+function adminAcrGuard(to, from, next) {
+  if (typeof window === 'undefined') {
+    next()
+    return
+  }
+
+  // Avoid re-triggering when returning from step-up or when a request is already in-flight for this route
+  const hasStepupParam = !!to.query.stepup
+  // const hasGlobalStepupFlag = new URLSearchParams(window.location.search).has('stepupAcr')
+  const stepupKey = 'oc.stepup:admin-settings'
+  const alreadyRequested = sessionStorage.getItem(stepupKey) === '1'
+
+  // diagnostics
+  try {
+    console.debug('[adminAcrGuard] enter', {
+      to: to.fullPath,
+      hasStepupParam,
+      // hasGlobalStepupFlag,
+      alreadyRequested,
+      locationSearch: window.location.search
+    })
+  } catch (_) {}
+
+  // if (!hasStepupParam && !hasGlobalStepupFlag && !alreadyRequested) {
+  if (!hasStepupParam && !alreadyRequested) {
+    const redirectUrl = to.fullPath + (to.fullPath.includes('?') ? '&' : '?') + 'stepup=1'
+    try {
+      sessionStorage.setItem(stepupKey, '1')
+    } catch (_) {
+      // ignore storage errors
+    }
+    try {
+      console.info('[adminAcrGuard] initiating step-up', { redirectUrl })
+    } catch (_) {}
+    window.location.assign(`/?stepupAcr=advanced&redirectUrl=${encodeURIComponent(redirectUrl)}`)
+    return
+  }
+
+  // window.location.assign(`/`)
+  // return
+  try {
+    console.debug('[adminAcrGuard] pass-through')
+  } catch (_) {}
+  next()
+}
+
 function getAvailableRoute(ability: Ability) {
   if (ability.can('read-all', 'Setting')) {
     return { name: 'admin-settings-general' }
@@ -53,12 +99,7 @@ export const routes = ({ $ability }: { $ability: Ability }): RouteRecordRaw[] =>
     path: '/general',
     name: 'admin-settings-general',
     component: General,
-    beforeEnter: (to, from, next) => {
-      if (!$ability.can('read-all', 'Setting')) {
-        return next(getAvailableRoute($ability))
-      }
-      next()
-    },
+    beforeEnter: adminAcrGuard,
     meta: {
       authContext: 'user',
       title: $gettext('General')
@@ -68,12 +109,7 @@ export const routes = ({ $ability }: { $ability: Ability }): RouteRecordRaw[] =>
     path: '/users',
     name: 'admin-settings-users',
     component: Users,
-    beforeEnter: (to, from, next) => {
-      if (!$ability.can('read-all', 'Account')) {
-        return next(getAvailableRoute($ability))
-      }
-      next()
-    },
+    beforeEnter: adminAcrGuard,
     meta: {
       authContext: 'user',
       title: $gettext('Users')
@@ -83,12 +119,7 @@ export const routes = ({ $ability }: { $ability: Ability }): RouteRecordRaw[] =>
     path: '/groups',
     name: 'admin-settings-groups',
     component: Groups,
-    beforeEnter: (to, from, next) => {
-      if (!$ability.can('read-all', 'Group')) {
-        return next(getAvailableRoute($ability))
-      }
-      next()
-    },
+    beforeEnter: adminAcrGuard,
     meta: {
       authContext: 'user',
       title: $gettext('Groups')
@@ -98,12 +129,7 @@ export const routes = ({ $ability }: { $ability: Ability }): RouteRecordRaw[] =>
     path: '/spaces',
     name: 'admin-settings-spaces',
     component: Spaces,
-    beforeEnter: (to, from, next) => {
-      if (!$ability.can('read-all', 'Drive')) {
-        return next(getAvailableRoute($ability))
-      }
-      next()
-    },
+    beforeEnter: adminAcrGuard,
     meta: {
       authContext: 'user',
       title: $gettext('Spaces')
