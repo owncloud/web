@@ -992,7 +992,7 @@ importers:
         specifier: ^8.11.1
         version: 8.11.1
       marked:
-        specifier: ^16.0.0
+        specifier: ^16.2.0
         version: 16.2.0
       md-editor-v3:
         specifier: ^5.8.4
