@@ -22,7 +22,10 @@ const CommonSection = z.object({
   urls: z.object({
     accessDeniedHelp: z.string(),
     imprint: z.string(),
-    privacy: z.string()
+    privacy: z.string(),
+    accessibilityStatement: z.string().optional(),
+    universalAccessEasyLanguage: z.string().optional(),
+    universalAccessSignLanguage: z.string().optional()
   }),
   shareRoles: z.record(
     z.string(),
@@ -52,12 +55,19 @@ const Logo = z.object({
   notFound: z.string().optional()
 })
 
+const Icons = z.object({
+  universalAccess: z.string().optional(),
+  universalAccessEasyLanguage: z.string().optional(),
+  universalAccessSignLanguage: z.string().optional()
+})
+
 const ThemeDefaults = z.object({
   appBanner: AppBanner.optional(),
   common: CommonSection.optional(),
   designTokens: DesignTokens,
   loginPage: LoginPage,
-  logo: Logo
+  logo: Logo,
+  icons: Icons
 })
 
 const WebTheme = z.object({
@@ -67,7 +77,8 @@ const WebTheme = z.object({
   isDark: z.boolean(),
   name: z.string(),
   loginPage: LoginPage.optional(),
-  logo: Logo.optional()
+  logo: Logo.optional(),
+  icons: Icons.optional()
 })
 
 export const WebThemeConfig = z.object({
