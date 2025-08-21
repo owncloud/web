@@ -1,7 +1,6 @@
 import { defaultComponentMocks, defaultPlugins, mount } from '@ownclouders/web-test-helpers'
 import ResourceListItem from '../../../../src/components/FilesList/ResourceListItem.vue'
-import { Resource } from '@ownclouders/web-client'
-import { HIDDEN_FILE_EXTENSIONS } from '../../../../src/constants'
+import { HIDDEN_FILE_EXTENSIONS, Resource } from '@ownclouders/web-client'
 import { mock } from 'vitest-mock-extended'
 
 const SELECTORS = Object.freeze({

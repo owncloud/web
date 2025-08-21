@@ -9,7 +9,7 @@ import {
   extractNameWithoutExtension
 } from '../../../../src/helpers'
 import { DavPermission, DavProperty } from '../../../../src/webdav/constants'
-import { HIDDEN_FILE_EXTENSIONS } from '@ownclouders/web-pkg'
+import { HIDDEN_FILE_EXTENSIONS } from '@ownclouders/web-client'
 
 describe('extractDomSelector', () => {
   it.each([

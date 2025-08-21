@@ -84,7 +84,6 @@
   "dependencies": {
     "@casl/ability": "^6.7.1",
     "@microsoft/fetch-event-source": "^2.0.1",
-    "@ownclouders/web-pkg": "workspace:*",
     "axios": "^1.11.0",
     "fast-xml-parser": "^5.2.5",
     "lodash-es": "^4.17.21",
