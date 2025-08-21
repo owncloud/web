@@ -36,7 +36,12 @@ describe('useThemeStore', () => {
           { name: 'light', designTokens: {}, isDark: false },
           { name: 'dark', designTokens: {}, isDark: true }
         ]
-        themeConfig.defaults = {}
+        themeConfig.defaults = {
+          designTokens: {},
+          loginPage: { backgroundImg: '' },
+          logo: { topbar: '', favicon: '', login: '' },
+          icons: {}
+        }
 
         const store = useThemeStore()
         store.initializeThemes(themeConfig)
@@ -51,7 +56,12 @@ describe('useThemeStore', () => {
 
         const themeConfig = mockDeep<WebThemeConfigType>()
         themeConfig.themes = [{ name: 'light', designTokens: {}, isDark: false }]
-        themeConfig.defaults = {}
+        themeConfig.defaults = {
+          designTokens: {},
+          loginPage: { backgroundImg: '' },
+          logo: { topbar: '', favicon: '', login: '' },
+          icons: {}
+        }
 
         const store = useThemeStore()
         store.initializeThemes(themeConfig)

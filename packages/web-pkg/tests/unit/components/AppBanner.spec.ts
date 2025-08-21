@@ -74,6 +74,8 @@ function getWrapper({
             piniaOptions: {
               themeState: {
                 currentTheme: {
+                  isDark: false,
+                  name: 'ownCloud',
                   appBanner: {
                     title: 'ownCloud',
                     publisher: 'ownCloud GmbH',
