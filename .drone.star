@@ -24,7 +24,7 @@ PLUGINS_S3_IMAGE = "plugins/s3:1.5"
 PLUGINS_S3_CACHE_IMAGE = "plugins/s3-cache:1"
 POSTGRES_ALPINE_IMAGE = "postgres:alpine3.18"
 SONARSOURCE_SONAR_SCANNER_CLI_IMAGE = "sonarsource/sonar-scanner-cli:11.4"
-TOOLHIPPIE_CALENS_IMAGE = "toolhippie/calens:20250421"
+TOOLHIPPIE_CALENS_IMAGE = "toolhippie/calens:20250818"
 
 WEB_PUBLISH_NPM_PACKAGES = ["babel-preset", "design-system", "eslint-config", "extension-sdk", "prettier-config", "tsconfig", "web-client", "web-pkg", "web-test-helpers"]
 WEB_PUBLISH_NPM_ORGANIZATION = "@ownclouders"
