@@ -8,6 +8,7 @@
       'oc-tile-card-disabled': isResourceDisabled && !isProjectSpaceResource(resource),
       'state-trashed': isResourceDisabled && isProjectSpaceResource(resource)
     }"
+    @contextmenu="$emit('contextmenu', $event)"
   >
     <div v-if="isHidden" class="oc-tile-card-lazy-shimmer"></div>
     <template v-else>

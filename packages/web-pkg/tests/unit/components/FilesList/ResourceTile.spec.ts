@@ -14,14 +14,15 @@ interface Props {
   resourceIconSize?: TypeIconSize
   lazy?: boolean
 }
-const getSpaceMock = (disabled = false) => ({
+const getSpaceMock = (props = {}) => ({
   id: 'lorem-id',
   name: 'Space 1',
   path: '',
   type: 'space',
   isFolder: true,
-  disabled,
-  getDriveAliasAndItem: () => '1'
+  disabled: false,
+  getDriveAliasAndItem: () => '1',
+  ...props
 })
 
 describe('OcTile component', () => {
@@ -30,7 +31,10 @@ describe('OcTile component', () => {
     expect(wrapper.html()).toMatchSnapshot()
   })
   it('renders disabled space correctly', () => {
-    const wrapper = getWrapper({ resource: getSpaceMock(true), isResourceDisabled: true })
+    const wrapper = getWrapper({
+      resource: getSpaceMock({ disabled: true }),
+      isResourceDisabled: true
+    })
     expect(wrapper.html()).toMatchSnapshot()
   })
   it('renders selected resource correctly', () => {
@@ -42,6 +46,18 @@ describe('OcTile component', () => {
     const resourceLink = wrapper.find('resource-link-stub')
     resourceLink.trigger('click')
     expect(wrapper.emitted()).toHaveProperty('click')
+  })
+  it('should load lazily and show shimmering tile cards', () => {
+    const wrapper = getWrapper({ resource: getSpaceMock(), isResourceSelected: false, lazy: true })
+    expect(wrapper.find('.oc-tile-card-lazy-shimmer').exists()).toBeTruthy()
+  })
+  it('should show locked resource', () => {
+    const wrapper = getWrapper({
+      resource: getSpaceMock({ locked: true }),
+      isResourceSelected: true
+    })
+    const element = wrapper.find('.oc-tile-card-preview')
+    expect(element.attributes('aria-label')).toEqual('This item is locked')
   })
   it.each(['xlarge, xxlarge, xxxlarge'])(
     'renders resource icon size correctly',
