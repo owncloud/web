@@ -36,12 +36,12 @@ const CommonSection = z.object({
 })
 
 const DesignTokens = z.object({
-  breakpoints: z.record(z.string()).optional(),
-  colorPalette: z.record(z.string()).optional(),
+  breakpoints: z.record(z.string(), z.string()).optional(),
+  colorPalette: z.record(z.string(), z.string()).optional(),
   fontFamily: z.string().optional(),
-  fontSizes: z.record(z.string()).optional(),
-  sizes: z.record(z.string()).optional(),
-  spacing: z.record(z.string()).optional()
+  fontSizes: z.record(z.string(), z.string()).optional(),
+  sizes: z.record(z.string(), z.string()).optional(),
+  spacing: z.record(z.string(), z.string()).optional()
 })
 
 const LoginPage = z.object({
@@ -108,7 +108,9 @@ export const useThemeStore = defineStore('theme', () => {
   const availableThemes = ref<WebThemeType[]>([])
 
   const initializeThemes = (themeConfig: WebThemeConfigType) => {
-    availableThemes.value = themeConfig.themes.map((theme) => merge(themeConfig.defaults, theme))
+    availableThemes.value = themeConfig.themes.map((theme) =>
+      merge<WebThemeType>(themeConfig.defaults, theme)
+    )
     setThemeFromStorageOrSystem()
   }
 

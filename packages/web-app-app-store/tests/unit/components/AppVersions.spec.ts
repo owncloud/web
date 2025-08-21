@@ -23,6 +23,7 @@ const version4: AppVersion = {
 }
 const version5: AppVersion = {
   url: 'https://wololo.com/download-1.3.0.zip',
+  version: '',
   minOCIS: '6.5.0'
 }
 const validVersions = [version1, version2, version3]

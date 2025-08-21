@@ -38,7 +38,10 @@ describe('initialize applications', () => {
 
     const configStore = useConfigStore()
     configStore.apps = ['internalFishy', 'internalValid']
-    configStore.externalApps = [{ path: 'externalFishy' }, { path: 'externalValid' }]
+    configStore.externalApps = [
+      { id: 'external-fishy', path: 'externalFishy' },
+      { id: 'external-valid', path: 'externalValid' }
+    ]
 
     const applications = await initializeApplications({
       app: createApp(defineComponent({})),

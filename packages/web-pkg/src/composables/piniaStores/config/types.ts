@@ -33,7 +33,7 @@ const OpenIdConnectConfigSchema = z
 
 export type OpenIdConnectConfig = z.infer<typeof OpenIdConnectConfigSchema>
 
-const SentryConfigSchema = z.record(z.any())
+const SentryConfigSchema = z.record(z.string(), z.any())
 
 export type SentryConfig = z.infer<typeof SentryConfigSchema>
 
@@ -134,7 +134,7 @@ export type OptionsConfig = z.infer<typeof OptionsConfigSchema>
 const ExternalApp = z.object({
   id: z.string(),
   path: z.string(),
-  config: z.record(z.unknown()).optional()
+  config: z.record(z.string(), z.unknown()).optional()
 })
 
 export const RawConfigSchema = z.object({

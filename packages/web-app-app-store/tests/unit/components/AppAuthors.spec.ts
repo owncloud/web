@@ -15,6 +15,7 @@ const author3: AppAuthor = {
   url: 'wololo'
 }
 const author4: AppAuthor = {
+  name: 'Trololo',
   url: 'trololo'
 }
 const authors = [author1, author2, author3, author4]

@@ -144,10 +144,17 @@ const getMountedWrapper = (
           piniaOptions: {
             themeState: {
               currentTheme: {
+                isDark: false,
+                name: 'ownCloud',
                 common: {
+                  name: 'ownCloud',
+                  slogan: 'ownCloud',
+                  logo: 'https://logo.url.theme',
+                  shareRoles: {},
                   urls: {
                     privacy: areThemeUrlsSet ? 'https://privacy.url.theme' : '',
-                    imprint: areThemeUrlsSet ? 'https://imprint.url.theme' : ''
+                    imprint: areThemeUrlsSet ? 'https://imprint.url.theme' : '',
+                    accessDeniedHelp: areThemeUrlsSet ? 'https://access-denied-help.url.theme' : ''
                   }
                 }
               }

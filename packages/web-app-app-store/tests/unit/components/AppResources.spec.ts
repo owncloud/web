@@ -14,10 +14,12 @@ const resource2: AppResource = {
 }
 const resource3: AppResource = {
   url: 'https://some.url',
-  icon: 'file'
+  icon: 'file',
+  label: ''
 }
 const resource4: AppResource = {
-  label: 'Wololo'
+  label: 'Wololo',
+  url: ''
 }
 const resources = [resource1, resource2, resource3, resource4]
 
