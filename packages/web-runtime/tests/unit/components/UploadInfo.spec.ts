@@ -54,7 +54,7 @@ describe('UploadInfo component', () => {
     it('should show that an upload failed', async () => {
       const { wrapper } = getShallowWrapper()
       wrapper.vm.showInfo = true
-      ;(wrapper.vm.errors = { '1': new HttpError('', undefined) }), await nextTick()
+      ;((wrapper.vm.errors = { '1': new HttpError('', undefined) }), await nextTick())
 
       const uploadTitle = wrapper.find(selectors.title).text()
       expect(uploadTitle).toBe('Upload failed')
@@ -163,7 +163,7 @@ describe('UploadInfo component', () => {
       const { wrapper } = getShallowWrapper()
       wrapper.vm.showInfo = true
       wrapper.vm.infoExpanded = true
-      ;(wrapper.vm.uploads = {
+      ;((wrapper.vm.uploads = {
         '1': {
           name: 'file',
           path: '/',
@@ -186,7 +186,7 @@ describe('UploadInfo component', () => {
         (wrapper.vm.errors = {
           1: new HttpError('', undefined),
           2: new HttpError('', undefined)
-        })
+        }))
       await nextTick()
 
       const info = wrapper.find(selectors.info.items)
