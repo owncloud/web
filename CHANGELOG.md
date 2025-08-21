@@ -13,6 +13,7 @@ Summary
 * Bugfix - Incorrect translation when using switches language: [#12889](https://github.com/owncloud/web/pull/12889)
 * Bugfix - Deactivated Space button clips German translated word: [#12890](https://github.com/owncloud/web/pull/12890)
 * Bugfix - User info getting translated: [#12893](https://github.com/owncloud/web/pull/12893)
+* Bugfix - Add clipboard permissions: [#12954](https://github.com/owncloud/web/pull/12954)
 * Enhancement - Add markdown to PDF export: [#12788](https://github.com/owncloud/web/pull/12788)
 * Enhancement - Use switch for full text search filter: [#12915](https://github.com/owncloud/web/pull/12915)
 * Enhancement - Add universal access: [#12933](https://github.com/owncloud/web/pull/12933)
@@ -69,6 +70,13 @@ Details
 
    https://github.com/owncloud/web/pull/12893
    https://kiteworks.atlassian.net/browse/OCISDEV-193
+
+* Bugfix - Add clipboard permissions: [#12954](https://github.com/owncloud/web/pull/12954)
+
+   We've added clipboard permissions to the iframe in external apps to allow the
+   external editor to read and write to the clipboard.
+
+   https://github.com/owncloud/web/pull/12954
 
 * Enhancement - Add markdown to PDF export: [#12788](https://github.com/owncloud/web/pull/12788)
 
