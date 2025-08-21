@@ -968,8 +968,8 @@ importers:
         specifier: ^10.4.0
         version: 10.4.0
       filesize:
-        specifier: ^10.1.0
-        version: 10.1.6
+        specifier: ^11.0.0
+        version: 11.0.2
       fuse.js:
         specifier: ^7.0.0
         version: 7.1.0
@@ -4509,8 +4509,8 @@ packages:
   filelist@1.0.4:
     resolution: {integrity: sha512-w1cEuf3S+DrLCQL7ET6kz+gmlJdbq9J7yXCSjK/OZCPA+qEN1WyF4ZAf0YYJa4/shHJra2t/d/r8SV4Ji+x+8Q==}
 
-  filesize@10.1.6:
-    resolution: {integrity: sha512-sJslQKU2uM33qH5nqewAwVB2QgR6w1aMNsYUp3aN5rMRyXEwJGmZvaWzeJFNTOXWlHQyBFCWrdj3fV/fsTOX8w==}
+  filesize@11.0.2:
+    resolution: {integrity: sha512-s/iAeeWLk5BschUIpmdrF8RA8lhFZ/xDZgKw1Tan72oGws1/dFGB06nYEiyyssWUfjKNQTNRlrwMVjO9/hvXDw==}
     engines: {node: '>= 10.4.0'}
 
   fill-range@7.1.1:
@@ -11162,7 +11162,7 @@ snapshots:
     dependencies:
       minimatch: 5.1.6
 
-  filesize@10.1.6: {}
+  filesize@11.0.2: {}
 
   fill-range@7.1.1:
     dependencies:
