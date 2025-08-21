@@ -216,6 +216,10 @@ const fileIcon = {
   psec: {
     icon: { name: 'file-psec', color: 'var(--oc-color-icon-folder)' },
     extensions: ['psec']
+  },
+  pinboard: {
+    icon: { name: 'resource-type-pinboard-beta' },
+    extensions: ['ggp']
   }
 }
 
