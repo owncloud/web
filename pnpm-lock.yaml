@@ -189,8 +189,8 @@ importers:
         specifier: 0.24.0
         version: 0.24.0(rollup@4.46.4)(vite@7.1.3(@types/node@24.3.0)(sass@1.90.0)(terser@5.43.1)(yaml@2.8.1))
       vite-plugin-static-copy:
-        specifier: ^3.0.0
-        version: 3.1.1(vite@7.1.3(@types/node@24.3.0)(sass@1.90.0)(terser@5.43.1)(yaml@2.8.1))
+        specifier: ^3.1.2
+        version: 3.1.2(vite@7.1.3(@types/node@24.3.0)(sass@1.90.0)(terser@5.43.1)(yaml@2.8.1))
       vite-plugin-treat-umd-as-commonjs:
         specifier: 0.1.4
         version: 0.1.4(vite@7.1.3(@types/node@24.3.0)(sass@1.90.0)(terser@5.43.1)(yaml@2.8.1))
@@ -337,8 +337,8 @@ importers:
         specifier: ^0.10.0
         version: 0.10.0
       style-dictionary:
-        specifier: ^5.0.0
-        version: 5.0.1
+        specifier: ^5.0.2
+        version: 5.0.2
       style-value-types:
         specifier: ^5.0.0
         version: 5.1.2
@@ -2045,11 +2045,6 @@ packages:
 
   '@cucumber/pretty-formatter@2.1.0':
     resolution: {integrity: sha512-VufasjEZLPDzhGmikvjp8BeV/p3d7N2nArqplWn3LMqu+SddmicCS0tHk59GduQxi5SYr8ldfFe5mBDgJpUWbQ==}
-    peerDependencies:
-      '@cucumber/messages': '*'
-
-  '@cucumber/query@13.2.0':
-    resolution: {integrity: sha512-S3g4u+2u/vo444bR1xL0+oVZmF8zb9QZ3MoiNF4GjBt6gG7Kf4S3NyJKjGUAQfESTb8oumOR1YMKHbv79FzA5w==}
     peerDependencies:
       '@cucumber/messages': '*'
 
@@ -6470,8 +6465,8 @@ packages:
   strnum@2.1.1:
     resolution: {integrity: sha512-7ZvoFTiCnGxBtDqJ//Cu6fWtZtc7Y3x+QOirG15wztbdngGSkht27o2pyGWrVy0b4WAy3jbKmnoK6g5VlVNUUw==}
 
-  style-dictionary@5.0.1:
-    resolution: {integrity: sha512-j+yQ4hM7a52iUQg5LVC8bnRkem4sU+unIY2qsyjoikPVzaxjkHd4ER7bnK+znW/Rhha69t4Fi5O46UHg6w8jFQ==}
+  style-dictionary@5.0.2:
+    resolution: {integrity: sha512-AlDpc9pvxz9EDSp2qduiQRDbI+I6IQ/bmKg+//JKD/xX3SEQGawAGUcKdbPsIkE2Po6eecUOg84uT026zbJCPQ==}
     engines: {node: '>=22.0.0'}
     hasBin: true
 
@@ -6917,8 +6912,8 @@ packages:
     peerDependencies:
       vite: ^2.0.0 || ^3.0.0 || ^4.0.0 || ^5.0.0 || ^6.0.0 || ^7.0.0
 
-  vite-plugin-static-copy@3.1.1:
-    resolution: {integrity: sha512-oR53SkL5cX4KT1t18E/xU50vJDo0N8oaHza4EMk0Fm+2/u6nQivxavOfrDk3udWj+dizRizB/QnBvJOOQrTTAQ==}
+  vite-plugin-static-copy@3.1.2:
+    resolution: {integrity: sha512-aVmYOzptLVOI2b1jL+cmkF7O6uhRv1u5fvOkQgbohWZp2CbR22kn9ZqkCUIt9umKF7UhdbsEpshn1rf4720QFg==}
     engines: {node: ^18.0.0 || >=20.0.0}
     peerDependencies:
       vite: ^5.0.0 || ^6.0.0 || ^7.0.0
@@ -8353,7 +8348,7 @@ snapshots:
       '@cucumber/ci-environment': 10.0.1
       '@cucumber/cucumber-expressions': 18.0.1
       '@cucumber/gherkin': 32.2.0
-      '@cucumber/gherkin-streams': 5.0.1(@cucumber/gherkin@32.2.0)(@cucumber/message-streams@4.0.1(@cucumber/messages@28.1.0))(@cucumber/messages@27.2.0)
+      '@cucumber/gherkin-streams': 5.0.1(@cucumber/gherkin@32.2.0)(@cucumber/message-streams@4.0.1(@cucumber/messages@27.2.0))(@cucumber/messages@27.2.0)
       '@cucumber/gherkin-utils': 9.2.0
       '@cucumber/html-formatter': 21.13.0(@cucumber/messages@27.2.0)
       '@cucumber/junit-xml-formatter': 0.7.1(@cucumber/messages@27.2.0)
@@ -8390,7 +8385,7 @@ snapshots:
       yaml: 2.8.1
       yup: 1.6.1
 
-  '@cucumber/gherkin-streams@5.0.1(@cucumber/gherkin@32.2.0)(@cucumber/message-streams@4.0.1(@cucumber/messages@28.1.0))(@cucumber/messages@27.2.0)':
+  '@cucumber/gherkin-streams@5.0.1(@cucumber/gherkin@32.2.0)(@cucumber/message-streams@4.0.1(@cucumber/messages@27.2.0))(@cucumber/messages@27.2.0)':
     dependencies:
       '@cucumber/gherkin': 32.2.0
       '@cucumber/message-streams': 4.0.1(@cucumber/messages@27.2.0)
@@ -8421,7 +8416,7 @@ snapshots:
   '@cucumber/junit-xml-formatter@0.7.1(@cucumber/messages@27.2.0)':
     dependencies:
       '@cucumber/messages': 27.2.0
-      '@cucumber/query': 13.2.0(@cucumber/messages@27.2.0)
+      '@cucumber/query': 13.6.0(@cucumber/messages@27.2.0)
       '@teppeis/multimaps': 3.0.0
       luxon: 3.7.1
       xmlbuilder: 15.1.1
@@ -8456,10 +8451,11 @@ snapshots:
       '@cucumber/messages': 28.1.0
       '@cucumber/query': 13.6.0(@cucumber/messages@28.1.0)
 
-  '@cucumber/query@13.2.0(@cucumber/messages@27.2.0)':
+  '@cucumber/query@13.6.0(@cucumber/messages@27.2.0)':
     dependencies:
       '@cucumber/messages': 27.2.0
       '@teppeis/multimaps': 3.0.0
+      lodash.sortby: 4.7.0
 
   '@cucumber/query@13.6.0(@cucumber/messages@28.1.0)':
     dependencies:
@@ -13195,7 +13191,7 @@ snapshots:
 
   strnum@2.1.1: {}
 
-  style-dictionary@5.0.1:
+  style-dictionary@5.0.2:
     dependencies:
       '@bundled-es-modules/deepmerge': 4.3.1
       '@bundled-es-modules/glob': 10.4.2
@@ -13674,7 +13670,7 @@ snapshots:
     transitivePeerDependencies:
       - rollup
 
-  vite-plugin-static-copy@3.1.1(vite@7.1.3(@types/node@24.3.0)(sass@1.90.0)(terser@5.43.1)(yaml@2.8.1)):
+  vite-plugin-static-copy@3.1.2(vite@7.1.3(@types/node@24.3.0)(sass@1.90.0)(terser@5.43.1)(yaml@2.8.1)):
     dependencies:
       chokidar: 3.6.0
       fs-extra: 11.3.1
