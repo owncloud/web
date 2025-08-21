@@ -5,7 +5,12 @@ import { FileAction, FileActionOptions } from '../../actions'
 import { useAbility } from '../../ability'
 import { useClientService } from '../../clientService'
 import { useRouter } from '../../router'
-import { Resource, SpaceResource, isPersonalSpaceResource } from '@ownclouders/web-client'
+import {
+  HIDDEN_FILE_EXTENSIONS,
+  Resource,
+  SpaceResource,
+  isPersonalSpaceResource
+} from '@ownclouders/web-client'
 import { isLocationSpacesActive } from '../../../router'
 import { useCreateSpace } from '../../spaces'
 import { useSpaceHelpers } from '../../spaces'
@@ -17,7 +22,6 @@ import {
   useResourcesStore,
   useSpacesStore
 } from '../../piniaStores'
-import { HIDDEN_FILE_EXTENSIONS } from '../../../constants'
 
 export const useFileActionsCreateSpaceFromResource = () => {
   const { showMessage, showErrorMessage } = useMessages()
