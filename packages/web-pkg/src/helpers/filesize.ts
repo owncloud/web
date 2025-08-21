@@ -1,4 +1,4 @@
-import { filesize, FileSizeOptionsString } from 'filesize'
+import { filesize, FilesizeOptions } from 'filesize'
 import { getLocaleFromLanguage } from './locale'
 
 const mb = 1048576
@@ -20,7 +20,7 @@ export const formatFileSize = (size: number | string, currentLanguage: string) =
     return '?'
   }
 
-  return filesize<FileSizeOptionsString>(parsedSize, {
+  return filesize<FilesizeOptions>(parsedSize, {
     round: parsedSize < mb ? 0 : 1,
     locale: getLocaleFromLanguage(currentLanguage),
     base: 10,
