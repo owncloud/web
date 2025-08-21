@@ -15,5 +15,5 @@ export default defineConfig({
       external: [...Object.keys(pkg.dependencies), ...Object.keys(pkg.peerDependencies)]
     }
   },
-  plugins: [vue(), dts()]
+  plugins: [vue(), dts({ include: ['src'], outDir: 'dist/types', insertTypesEntry: true })]
 })

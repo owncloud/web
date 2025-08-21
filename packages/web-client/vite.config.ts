@@ -27,6 +27,10 @@ export default defineConfig({
     nodePolyfills({
       exclude: ['crypto']
     }),
-    dts()
+    dts({
+      include: ['src'],
+      outDir: 'dist/types',
+      insertTypesEntry: true
+    })
   ]
 })

@@ -24,7 +24,7 @@
       ".": {
         "import": "./dist/web-pkg.js",
         "require": "./dist/web-pkg.umd.cjs",
-        "types": "./dist/src/index.d.ts"
+        "types": "./dist/types/index.d.ts"
       }
     }
   },

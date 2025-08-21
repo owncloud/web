@@ -23,7 +23,7 @@
       ".": {
         "import": "./dist/web-test-helpers.es.js",
         "require": "./dist/web-test-helpers.umd.cjs",
-        "types": "./dist/src/index.d.ts"
+        "types": "./dist/types/index.d.ts"
       }
     }
   },
