@@ -155,7 +155,7 @@ describe('ResourceTiles component', () => {
         selectedIds: [spacesResources[0].id]
       }
     })
-    wrapper.vm.toggleSelection(spacesResources[0])
+    ;(wrapper.vm as any).toggleSelection(spacesResources[0])
     expect(
       wrapper.findComponent({ name: 'resource-tile' }).props('isResourceSelected')
     ).toBeTruthy()
@@ -187,17 +187,17 @@ describe('ResourceTiles component', () => {
   describe('drag and drop', () => {
     it('emits the "update:selectedIds"-event on drag start', async () => {
       const { wrapper } = getWrapper()
-      wrapper.vm.dragItem = mock<Resource>()
+      ;(wrapper.vm as any).dragItem = mock<Resource>()
       await wrapper.vm.$nextTick()
       ;(wrapper.vm.$refs.ghostElementRef as ComponentPublicInstance<unknown>).$el = { style: {} }
-      wrapper.vm.dragStart(mock<Resource>(), {
+      ;(wrapper.vm as any).dragStart(mock<Resource>(), {
         dataTransfer: { setDragImage: vi.fn() }
       } as unknown as DragEvent)
       expect(wrapper.emitted('update:selectedIds')).toBeDefined()
     })
     it('emits the "fileDropped"-event on resource drop', () => {
       const { wrapper } = getWrapper()
-      wrapper.vm.fileDropped(mock<Resource>(), { dataTransfer: {} } as DragEvent)
+      ;(wrapper.vm as any).fileDropped(mock<Resource>(), { dataTransfer: {} } as DragEvent)
       expect(wrapper.emitted('fileDropped')).toBeDefined()
     })
   })

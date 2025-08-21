@@ -111,19 +111,18 @@
   </div>
 </template>
 
-<script lang="ts">
+<script lang="ts" setup>
 import {
   computed,
   ComponentPublicInstance,
-  defineComponent,
   nextTick,
   onBeforeUnmount,
   onBeforeUpdate,
   onMounted,
-  PropType,
   ref,
   unref,
-  watch
+  watch,
+  type MaybeRef
 } from 'vue'
 import { useGettext } from 'vue3-gettext'
 import {
@@ -170,479 +169,399 @@ type ResourceTileRef = ComponentPublicInstance<typeof ResourceTile>
 type ContextMenuQuickActionRef = ComponentPublicInstance<typeof ContextMenuQuickAction>
 type IconSize = 'large' | 'xlarge' | 'xxlarge' | 'xxxlarge'
 
-export default defineComponent({
-  name: 'ResourceTiles',
-  components: {
-    ContextMenuQuickAction,
-    ResourceGhostElement,
-    ResourceStatusIndicators,
-    ResourceTile
+interface Props {
+  resources?: Resource[]
+  selectedIds?: string[]
+  targetRouteCallback?: (arg: CreateTargetRouteOptions) => unknown
+  space?: SpaceResource
+  sortFields?: SortField[]
+  sortBy?: string
+  sortDir?: SortDir
+  viewSize?: number
+  dragDrop?: boolean
+  lazy?: boolean
+}
+interface Emits {
+  (e: 'fileClick', data: { space: SpaceResource; resource: Resource }): void
+  (e: 'fileDropped', resourceId: string): void
+  (e: 'rowMounted', resource: Resource, tileRef: ResourceTileRef, dimension: ImageDimension): void
+  (e: 'sort', sortData: { sortBy: string; sortDir: MaybeRef<SortDir> }): void
+  (e: 'itemVisible', resource: Resource): void
+  (e: 'update:selectedIds', selectedIds: string[]): void
+}
+const {
+  resources = [],
+  selectedIds = [],
+  targetRouteCallback = undefined,
+  space = null,
+  sortFields = [],
+  sortBy = undefined,
+  sortDir = undefined,
+  viewSize = FolderViewModeConstants.tilesSizeDefault,
+  dragDrop = false,
+  lazy = true
+} = defineProps<Props>()
+const emit = defineEmits<Emits>()
+const { $gettext } = useGettext()
+const router = useRouter()
+const resourcesStore = useResourcesStore()
+const { getDefaultAction } = useFileActions()
+const { getMatchingSpace } = useGetMatchingSpace()
+const { canBeOpenedWithSecureView } = useCanBeOpenedWithSecureView()
+const {
+  isEnabled: isEmbedModeEnabled,
+  fileTypes: embedModeFileTypes,
+  isLocationPicker,
+  isFilePicker,
+  postMessage
+} = useEmbedMode()
+const viewSizeMax = useViewSizeMax()
+const viewSizeCurrent = computed(() => {
+  return Math.min(unref(viewSizeMax), viewSize)
+})
+
+const areFileExtensionsShown = computed(() => resourcesStore.areFileExtensionsShown)
+
+const selectAllCheckboxLabel = computed(() => {
+  return unref(areAllResourcesSelected) ? $gettext('Clear selection') : $gettext('Select all')
+})
+
+const dragItem = ref()
+const ghostElementRef = ref()
+
+const tileRefs = ref({
+  tiles: {} as Record<string, ResourceTileRef>,
+  dropBtns: {} as Record<string, ContextMenuQuickActionRef>
+})
+
+const resourceRouteResolver = useResourceRouteResolver(
+  {
+    space: ref(space),
+    targetRouteCallback: computed(() => targetRouteCallback)
   },
-  props: {
-    /**
-     * Array of resources (spaces, folders, files) to be displayed as tiles
-     */
-    resources: {
-      type: Array as PropType<Resource[]>,
-      default: (): Resource[] => []
-    },
-    selectedIds: {
-      type: Array as PropType<string[]>,
-      default: (): string[] => []
-    },
-    targetRouteCallback: {
-      type: Function as PropType<(arg: CreateTargetRouteOptions) => unknown>,
-      required: false,
-      default: undefined
-    },
-    space: {
-      type: Object as PropType<SpaceResource>,
-      required: false,
-      default: null
-    },
-    sortFields: {
-      type: Array as PropType<SortField[]>,
-      default: (): SortField[] => []
-    },
-    sortBy: {
-      type: String,
-      required: false,
-      default: undefined
-    },
-    sortDir: {
-      type: String,
-      required: false,
-      default: undefined,
-      validator: (value: string) => {
-        return (
-          value === undefined || [SortDir.Asc.toString(), SortDir.Desc.toString()].includes(value)
-        )
-      }
-    },
-    viewSize: {
-      type: Number,
-      required: false,
-      default: () => FolderViewModeConstants.tilesSizeDefault
-    },
-    dragDrop: {
-      type: Boolean,
-      default: false
-    },
-    lazy: {
-      type: Boolean,
-      default: true
-    }
-  },
-  emits: ['fileClick', 'fileDropped', 'rowMounted', 'sort', 'itemVisible', 'update:selectedIds'],
-  setup(props, context) {
-    const { $gettext } = useGettext()
-    const router = useRouter()
-    const resourcesStore = useResourcesStore()
-    const { getDefaultAction } = useFileActions()
-    const { getMatchingSpace } = useGetMatchingSpace()
-    const { canBeOpenedWithSecureView } = useCanBeOpenedWithSecureView()
-    const { emit } = context
-    const {
-      isEnabled: isEmbedModeEnabled,
-      fileTypes: embedModeFileTypes,
-      isLocationPicker,
-      isFilePicker,
-      postMessage
-    } = useEmbedMode()
-    const viewSizeMax = useViewSizeMax()
-    const viewSizeCurrent = computed(() => {
-      return Math.min(unref(viewSizeMax), props.viewSize)
-    })
+  emit
+)
 
-    const areFileExtensionsShown = computed(() => resourcesStore.areFileExtensionsShown)
-
-    const selectAllCheckboxLabel = computed(() => {
-      return unref(areAllResourcesSelected) ? $gettext('Clear selection') : $gettext('Select all')
-    })
-
-    const dragItem = ref()
-    const ghostElementRef = ref()
-
-    const tileRefs = ref({
-      tiles: {} as Record<string, ResourceTileRef>,
-      dropBtns: {} as Record<string, ContextMenuQuickActionRef>
-    })
-
-    const resourceRouteResolver = useResourceRouteResolver(
-      {
-        space: ref(props.space),
-        targetRouteCallback: computed(() => props.targetRouteCallback)
-      },
-      context
-    )
-
-    const getRoute = (resource: Resource) => {
-      if (isSpaceResource(resource)) {
-        return resource.disabled
-          ? null
-          : createLocationSpaces(
-              'files-spaces-generic',
-              createFileRouteOptions(resource as SpaceResource, {
-                path: '',
-                fileId: resource.fileId
-              })
-            )
-      }
-
-      if (resource.isFolder) {
-        return resourceRouteResolver.createFolderLink({
-          path: resource.path,
-          fileId: resource.fileId,
-          resource: resource
-        })
-      }
-
-      let space = props.space
-      if (!space) {
-        space = getMatchingSpace(resource)
-      }
-
-      const action = getDefaultAction({ resources: [resource], space })
-      if (!action?.route) {
-        return null
-      }
-
-      return action.route({ space, resources: [resource] })
-    }
-    const emitTileClick = (resource: Resource) => {
-      if (unref(isEmbedModeEnabled) && unref(isFilePicker)) {
-        return postMessage<embedModeFilePickMessageData>('owncloud-embed:file-pick', {
-          resource: JSON.parse(JSON.stringify(resource)),
-          locationQuery: JSON.parse(JSON.stringify(routeToContextQuery(unref(router.currentRoute))))
-        })
-      }
-
-      if (resource.type !== 'space' && resource.type !== 'folder') {
-        resourceRouteResolver.createFileAction(resource)
-      }
-    }
-
-    const showContextMenuOnBtnClick = (
-      data: ContextMenuBtnClickEventData,
-      item: Resource,
-      index: string
-    ) => {
-      const { dropdown, event } = data
-      if (dropdown?.tippy === undefined) {
-        return
-      }
-      resourcesStore.setSelection([item.id])
-      displayPositionedDropdown(dropdown.tippy, event, unref(tileRefs).dropBtns[index])
-    }
-
-    const isResourceSelected = (resource: Resource) => {
-      return props.selectedIds.includes(resource.id)
-    }
-
-    const selectedResources = computed(() => {
-      return props.resources.filter((resource) => props.selectedIds.includes(resource.id))
-    })
-
-    const isResourceClickable = (resource: Resource) => {
-      if (isResourceDisabled(resource)) {
-        return false
-      }
-
-      if (resource.isFolder || isPasswordProtectedFolderFileResource(resource.name)) {
-        return true
-      }
-
-      if (!resource.canDownload() && !canBeOpenedWithSecureView(resource)) {
-        return false
-      }
-
-      if (unref(isEmbedModeEnabled) && !unref(isFilePicker)) {
-        return false
-      }
-
-      return true
-    }
-
-    const isResourceDisabled = (resource: Resource) => {
-      if (unref(isEmbedModeEnabled) && unref(embedModeFileTypes)?.length) {
-        return (
-          !unref(embedModeFileTypes).includes(resource.extension) &&
-          !unref(embedModeFileTypes).includes(resource.mimeType) &&
-          !resource.isFolder
-        )
-      }
-
-      if (isSpaceResource(resource) && resource.disabled) {
-        return true
-      }
-
-      return resource.processing === true
-    }
-
-    const disabledResourceIds = computed(() => {
-      return (
-        props.resources
-          ?.filter((resource) => isResourceDisabled(resource) === true)
-          ?.map((resource) => resource.id) || []
-      )
-    })
-
-    const emitSelect = (selectedIds: string[]) => {
-      emit('update:selectedIds', selectedIds)
-    }
-
-    const toggleSelectionAll = () => {
-      if (unref(areAllResourcesSelected)) {
-        return emit('update:selectedIds', [])
-      }
-
-      emit(
-        'update:selectedIds',
-        props.resources
-          .filter((resource) => !unref(disabledResourceIds).includes(resource.id))
-          .map((resource) => resource.id)
-      )
-    }
-
-    const showContextMenu = (
-      event: MouseEvent,
-      item: Resource,
-      reference: ComponentPublicInstance<unknown>
-    ) => {
-      event.preventDefault()
-      const drop = unref(tileRefs).tiles[item.id]?.$el.getElementsByClassName(
-        'resource-tiles-btn-action-dropdown'
-      )[0]
-
-      if (drop === undefined) {
-        return
-      }
-      if (!isResourceSelected(item)) {
-        emitSelect([item.id])
-      }
-      displayPositionedDropdown(drop._tippy, event, reference)
-    }
-
-    const toggleTile = (data: [Resource, MouseEvent]) => {
-      const resource = data[0]
-      const eventData = data[1]
-
-      if (eventData && eventData.metaKey) {
-        return eventBus.publish('app.files.list.clicked.meta', resource)
-      }
-      if (eventData && eventData.shiftKey) {
-        return eventBus.publish('app.files.list.clicked.shift', {
-          resource,
-          skipTargetSelection: false
-        })
-      }
-      toggleSelection(resource)
-    }
-
-    const toggleSelection = (resource: Resource) => {
-      const selectedIds = !isResourceSelected(resource)
-        ? [...props.selectedIds, resource.id]
-        : props.selectedIds.filter((id) => id !== resource.id)
-      context.emit('update:selectedIds', selectedIds)
-    }
-
-    const getResourceCheckboxLabel = (resource: Resource) => {
-      switch (resource.type) {
-        case 'folder':
-          return $gettext('Select folder')
-        case 'space':
-          return $gettext('Select space')
-        default:
-          return $gettext('Select file')
-      }
-    }
-
-    const currentSortField = computed(() => {
-      return (
-        props.sortFields.find((o) => o.name === props.sortBy && o.sortDir === props.sortDir) ||
-        props.sortFields[0]
-      )
-    })
-    const selectSorting = (field: SortField) => {
-      context.emit('sort', { sortBy: field.name, sortDir: field.sortDir })
-    }
-    const isSortFieldSelected = (field: SortField) => {
-      return unref(currentSortField) === field
-    }
-
-    const resourceIconSize = computed<IconSize>(() => {
-      const sizeMap: Record<number, string> = {
-        1: 'xlarge',
-        2: 'xlarge',
-        3: 'xxlarge',
-        4: 'xxlarge',
-        5: 'xxxlarge',
-        6: 'xxxlarge'
-      }
-      const size = unref(viewSizeCurrent)
-      return (sizeMap[size] as IconSize) ?? ('xxlarge' as IconSize)
-    })
-    onBeforeUpdate(() => {
-      tileRefs.value = {
-        tiles: {},
-        dropBtns: {}
-      }
-    })
-
-    const setDropStyling = (resource: Resource, leaving: boolean, event: DragEvent) => {
-      const hasFilePayload = (event.dataTransfer?.types || []).some((e) => e === 'Files')
-      if (
-        hasFilePayload ||
-        (event.currentTarget as HTMLElement)?.contains(event.relatedTarget as HTMLElement) ||
-        props.selectedIds.includes(resource.id) ||
-        resource.type !== 'folder'
-      ) {
-        return
-      }
-      const el = unref(tileRefs).tiles[resource.id]
-      if (leaving) {
-        el.$el.classList.remove('oc-tiles-item-drop-highlight')
-        return
-      }
-      el.$el.classList.add('oc-tiles-item-drop-highlight')
-    }
-    const dragSelection = computed(() => {
-      return props.selectedIds.filter((id) => id !== unref(dragItem).id)
-    })
-    const setDragItem = async (item: Resource, event: DragEvent) => {
-      dragItem.value = item
-      await nextTick()
-      unref(ghostElementRef).$el.ariaHidden = 'true'
-      unref(ghostElementRef).$el.style.left = '-99999px'
-      unref(ghostElementRef).$el.style.top = '-99999px'
-      event.dataTransfer.setDragImage(unref(ghostElementRef).$el, 0, 0)
-      event.dataTransfer.dropEffect = 'move'
-      event.dataTransfer.effectAllowed = 'move'
-    }
-    const dragStart = async (resource: Resource, event: DragEvent) => {
-      if (!isResourceSelected(resource)) {
-        toggleSelection(resource)
-      }
-      await setDragItem(resource, event)
-    }
-
-    const fileDropped = (resource: Resource, event: DragEvent) => {
-      const hasFilePayload = (event.dataTransfer.types || []).some((e) => e === 'Files')
-      if (hasFilePayload) {
-        return
-      }
-      dragItem.value = null
-      setDropStyling(resource, true, event)
-      context.emit('fileDropped', resource.id)
-    }
-
-    const viewWidth = ref(0)
-    const updateViewWidth = () => {
-      const element = document.getElementById('tiles-view')
-      const style = getComputedStyle(element)
-      const paddingLeft = parseInt(style.getPropertyValue('padding-left'), 10) | 0
-      const paddingRight = parseInt(style.getPropertyValue('padding-right'), 10) | 0
-      viewWidth.value = element.clientWidth - paddingLeft - paddingRight
-    }
-    const gapSizePixels = computed(() => {
-      return parseFloat(getComputedStyle(document.documentElement).fontSize)
-    })
-    const { calculateTileSizePixels } = useTileSize()
-    const maxTilesAll = computed<number[]>(() => {
-      const viewSizes = [...Array(FolderViewModeConstants.tilesSizeMax).keys()].map((i) => i + 1)
-      return [
-        ...new Set<number>(
-          viewSizes.map((viewSize) => {
-            const pixels = calculateTileSizePixels(viewSize)
-            return pixels ? Math.round(unref(viewWidth) / (pixels + unref(gapSizePixels))) : 0
+const getRoute = (resource: Resource) => {
+  if (isSpaceResource(resource)) {
+    return resource.disabled
+      ? null
+      : createLocationSpaces(
+          'files-spaces-generic',
+          createFileRouteOptions(resource as SpaceResource, {
+            path: '',
+            fileId: resource.fileId
           })
         )
-      ]
-    })
-    const maxTilesCurrent = computed(() => {
-      const maxTiles = unref(maxTilesAll)
-      return maxTiles.length < unref(viewSizeCurrent)
-        ? maxTiles[maxTiles.length - 1]
-        : maxTiles[unref(viewSizeCurrent) - 1]
-    })
-    const ghostTilesCount = computed(() => {
-      const remainder = unref(maxTilesCurrent) ? props.resources.length % unref(maxTilesCurrent) : 0
-      if (!remainder) {
-        return 0
-      }
-      return unref(maxTilesCurrent) - remainder
-    })
-
-    const tileSizePixels = computed(() => {
-      return unref(viewWidth) / unref(maxTilesCurrent) - unref(gapSizePixels)
-    })
-
-    const areAllResourcesSelected = computed(() => {
-      const allResourcesDisabled = unref(disabledResourceIds).length === props.resources.length
-      const allSelected =
-        unref(selectedResources).length ===
-        props.resources.length - unref(disabledResourceIds).length
-
-      return !allResourcesDisabled && allSelected
-    })
-
-    watch(
-      tileSizePixels,
-      (px: number) => {
-        document.documentElement.style.setProperty(`--oc-size-tiles-actual`, `${px}px`)
-      },
-      { immediate: true }
-    )
-    watch(maxTilesAll, (all) => {
-      viewSizeMax.value = Math.max(all.length, 1)
-    })
-
-    onMounted(() => {
-      window.addEventListener('resize', updateViewWidth)
-      updateViewWidth()
-    })
-    onBeforeUnmount(() => {
-      window.removeEventListener('resize', updateViewWidth)
-    })
-
-    return {
-      areFileExtensionsShown,
-      emitTileClick,
-      getRoute,
-      showContextMenuOnBtnClick,
-      showContextMenu,
-      tileRefs,
-      isResourceSelected,
-      toggleTile,
-      toggleSelection,
-      getResourceCheckboxLabel,
-      selectSorting,
-      isSortFieldSelected,
-      isResourceClickable,
-      currentSortField,
-      resourceIconSize,
-      ghostElementRef,
-      dragItem,
-      dragStart,
-      dragSelection,
-      fileDropped,
-      setDropStyling,
-      ghostTilesCount,
-      isFilePicker,
-      isLocationPicker,
-      isResourceDisabled,
-      isSpaceResource,
-      areAllResourcesSelected,
-      disabledResourceIds,
-      toggleSelectionAll,
-      selectAllCheckboxLabel
-    }
-  },
-  data() {
-    return {
-      ImageDimension
-    }
   }
+
+  if (resource.isFolder) {
+    return resourceRouteResolver.createFolderLink({
+      path: resource.path,
+      fileId: resource.fileId,
+      resource: resource
+    })
+  }
+
+  let currentSpace = space
+  if (!currentSpace) {
+    currentSpace = getMatchingSpace(resource)
+  }
+
+  const action = getDefaultAction({ resources: [resource], space })
+  if (!action?.route) {
+    return null
+  }
+
+  return action.route({ space, resources: [resource] })
+}
+const emitTileClick = (resource: Resource) => {
+  if (unref(isEmbedModeEnabled) && unref(isFilePicker)) {
+    return postMessage<embedModeFilePickMessageData>('owncloud-embed:file-pick', {
+      resource: JSON.parse(JSON.stringify(resource)),
+      locationQuery: JSON.parse(JSON.stringify(routeToContextQuery(unref(router.currentRoute))))
+    })
+  }
+
+  if (resource.type !== 'space' && resource.type !== 'folder') {
+    resourceRouteResolver.createFileAction(resource)
+  }
+}
+
+const showContextMenuOnBtnClick = (
+  data: ContextMenuBtnClickEventData,
+  item: Resource,
+  index: string
+) => {
+  const { dropdown, event } = data
+  if (dropdown?.tippy === undefined) {
+    return
+  }
+  resourcesStore.setSelection([item.id])
+  displayPositionedDropdown(dropdown.tippy, event, unref(tileRefs).dropBtns[index])
+}
+
+const isResourceSelected = (resource: Resource) => {
+  return selectedIds.includes(resource.id)
+}
+
+const selectedResources = computed(() => {
+  return resources.filter((resource) => selectedIds.includes(resource.id))
+})
+
+const isResourceClickable = (resource: Resource) => {
+  if (isResourceDisabled(resource)) {
+    return false
+  }
+
+  if (resource.isFolder || isPasswordProtectedFolderFileResource(resource.name)) {
+    return true
+  }
+
+  if (!resource.canDownload() && !canBeOpenedWithSecureView(resource)) {
+    return false
+  }
+
+  if (unref(isEmbedModeEnabled) && !unref(isFilePicker)) {
+    return false
+  }
+
+  return true
+}
+
+const isResourceDisabled = (resource: Resource) => {
+  if (unref(isEmbedModeEnabled) && unref(embedModeFileTypes)?.length) {
+    return (
+      !unref(embedModeFileTypes).includes(resource.extension) &&
+      !unref(embedModeFileTypes).includes(resource.mimeType) &&
+      !resource.isFolder
+    )
+  }
+
+  if (isSpaceResource(resource) && resource.disabled) {
+    return true
+  }
+
+  return resource.processing === true
+}
+
+const disabledResourceIds = computed(() => {
+  return (
+    resources
+      ?.filter((resource) => isResourceDisabled(resource) === true)
+      ?.map((resource) => resource.id) || []
+  )
+})
+
+const emitSelect = (selectedIds: string[]) => {
+  emit('update:selectedIds', selectedIds)
+}
+
+const toggleSelectionAll = () => {
+  if (unref(areAllResourcesSelected)) {
+    return emit('update:selectedIds', [])
+  }
+
+  emit(
+    'update:selectedIds',
+    resources
+      .filter((resource) => !unref(disabledResourceIds).includes(resource.id))
+      .map((resource) => resource.id)
+  )
+}
+
+const showContextMenu = (
+  event: MouseEvent,
+  item: Resource,
+  reference: ComponentPublicInstance<unknown>
+) => {
+  event.preventDefault()
+  const drop = unref(tileRefs).tiles[item.id]?.$el.getElementsByClassName(
+    'resource-tiles-btn-action-dropdown'
+  )[0]
+
+  if (drop === undefined) {
+    return
+  }
+  if (!isResourceSelected(item)) {
+    emitSelect([item.id])
+  }
+  displayPositionedDropdown(drop._tippy, event, reference)
+}
+
+const toggleTile = (data: [Resource, MouseEvent]) => {
+  const resource = data[0]
+  const eventData = data[1]
+
+  if (eventData && eventData.metaKey) {
+    return eventBus.publish('app.files.list.clicked.meta', resource)
+  }
+  if (eventData && eventData.shiftKey) {
+    return eventBus.publish('app.files.list.clicked.shift', {
+      resource,
+      skipTargetSelection: false
+    })
+  }
+  toggleSelection(resource)
+}
+
+const toggleSelection = (resource: Resource) => {
+  const currentSelectedIds = !isResourceSelected(resource)
+    ? [...selectedIds, resource.id]
+    : selectedIds.filter((id) => id !== resource.id)
+  emit('update:selectedIds', currentSelectedIds)
+}
+
+const getResourceCheckboxLabel = (resource: Resource) => {
+  switch (resource.type) {
+    case 'folder':
+      return $gettext('Select folder')
+    case 'space':
+      return $gettext('Select space')
+    default:
+      return $gettext('Select file')
+  }
+}
+
+const currentSortField = computed(() => {
+  return sortFields.find((o) => o.name === sortBy && o.sortDir === sortDir) || sortFields[0]
+})
+const selectSorting = (field: SortField) => {
+  emit('sort', { sortBy: field.name, sortDir: field.sortDir })
+}
+
+const resourceIconSize = computed<IconSize>(() => {
+  const sizeMap: Record<number, string> = {
+    1: 'xlarge',
+    2: 'xlarge',
+    3: 'xxlarge',
+    4: 'xxlarge',
+    5: 'xxxlarge',
+    6: 'xxxlarge'
+  }
+  const size = unref(viewSizeCurrent)
+  return (sizeMap[size] as IconSize) ?? ('xxlarge' as IconSize)
+})
+onBeforeUpdate(() => {
+  tileRefs.value = {
+    tiles: {},
+    dropBtns: {}
+  }
+})
+
+const setDropStyling = (resource: Resource, leaving: boolean, event: DragEvent) => {
+  const hasFilePayload = (event.dataTransfer?.types || []).some((e) => e === 'Files')
+  if (
+    hasFilePayload ||
+    (event.currentTarget as HTMLElement)?.contains(event.relatedTarget as HTMLElement) ||
+    selectedIds.includes(resource.id) ||
+    resource.type !== 'folder'
+  ) {
+    return
+  }
+  const el = unref(tileRefs).tiles[resource.id]
+  if (leaving) {
+    el.$el.classList.remove('oc-tiles-item-drop-highlight')
+    return
+  }
+  el.$el.classList.add('oc-tiles-item-drop-highlight')
+}
+const dragSelection = computed(() => {
+  return selectedIds.filter((id) => id !== unref(dragItem).id)
+})
+const setDragItem = async (item: Resource, event: DragEvent) => {
+  dragItem.value = item
+  await nextTick()
+  unref(ghostElementRef).$el.ariaHidden = 'true'
+  unref(ghostElementRef).$el.style.left = '-99999px'
+  unref(ghostElementRef).$el.style.top = '-99999px'
+  event.dataTransfer.setDragImage(unref(ghostElementRef).$el, 0, 0)
+  event.dataTransfer.dropEffect = 'move'
+  event.dataTransfer.effectAllowed = 'move'
+}
+const dragStart = async (resource: Resource, event: DragEvent) => {
+  if (!isResourceSelected(resource)) {
+    toggleSelection(resource)
+  }
+  await setDragItem(resource, event)
+}
+
+const fileDropped = (resource: Resource, event: DragEvent) => {
+  const hasFilePayload = (event.dataTransfer.types || []).some((e) => e === 'Files')
+  if (hasFilePayload) {
+    return
+  }
+  dragItem.value = null
+  setDropStyling(resource, true, event)
+  emit('fileDropped', resource.id)
+}
+
+const viewWidth = ref(0)
+const updateViewWidth = () => {
+  const element = document.getElementById('tiles-view')
+  const style = getComputedStyle(element)
+  const paddingLeft = parseInt(style.getPropertyValue('padding-left'), 10) | 0
+  const paddingRight = parseInt(style.getPropertyValue('padding-right'), 10) | 0
+  viewWidth.value = element.clientWidth - paddingLeft - paddingRight
+}
+const gapSizePixels = computed(() => {
+  return parseFloat(getComputedStyle(document.documentElement).fontSize)
+})
+const { calculateTileSizePixels } = useTileSize()
+const maxTilesAll = computed<number[]>(() => {
+  const viewSizes = [...Array(FolderViewModeConstants.tilesSizeMax).keys()].map((i) => i + 1)
+  return [
+    ...new Set<number>(
+      viewSizes.map((viewSize) => {
+        const pixels = calculateTileSizePixels(viewSize)
+        return pixels ? Math.round(unref(viewWidth) / (pixels + unref(gapSizePixels))) : 0
+      })
+    )
+  ]
+})
+const maxTilesCurrent = computed(() => {
+  const maxTiles = unref(maxTilesAll)
+  return maxTiles.length < unref(viewSizeCurrent)
+    ? maxTiles[maxTiles.length - 1]
+    : maxTiles[unref(viewSizeCurrent) - 1]
+})
+const ghostTilesCount = computed(() => {
+  const remainder = unref(maxTilesCurrent) ? resources.length % unref(maxTilesCurrent) : 0
+  if (!remainder) {
+    return 0
+  }
+  return unref(maxTilesCurrent) - remainder
+})
+
+const tileSizePixels = computed(() => {
+  return unref(viewWidth) / unref(maxTilesCurrent) - unref(gapSizePixels)
+})
+
+const areAllResourcesSelected = computed(() => {
+  const allResourcesDisabled = unref(disabledResourceIds).length === resources.length
+  const allSelected =
+    unref(selectedResources).length === resources.length - unref(disabledResourceIds).length
+
+  return !allResourcesDisabled && allSelected
+})
+
+watch(
+  tileSizePixels,
+  (px: number) => {
+    document.documentElement.style.setProperty(`--oc-size-tiles-actual`, `${px}px`)
+  },
+  { immediate: true }
+)
+watch(maxTilesAll, (all) => {
+  viewSizeMax.value = Math.max(all.length, 1)
+})
+
+onMounted(() => {
+  window.addEventListener('resize', updateViewWidth)
+  updateViewWidth()
+})
+onBeforeUnmount(() => {
+  window.removeEventListener('resize', updateViewWidth)
 })
 </script>
 
