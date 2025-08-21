@@ -14,7 +14,7 @@
     "@ownclouders/design-system": "workspace:^",
     "@ownclouders/web-client": "workspace:*",
     "@ownclouders/web-pkg": "workspace:*",
-    "@sentry/vue": "9.46.0",
+    "@sentry/vue": "10.5.0",
     "@uppy/core": "4.5.3",
     "@uppy/drop-target": "3.2.2",
     "@uppy/tus": "4.3.2",
