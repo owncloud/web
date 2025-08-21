@@ -168,6 +168,7 @@ import ResourceStatusIndicators from './ResourceStatusIndicators.vue'
 
 type ResourceTileRef = ComponentPublicInstance<typeof ResourceTile>
 type ContextMenuQuickActionRef = ComponentPublicInstance<typeof ContextMenuQuickAction>
+type IconSize = 'large' | 'xlarge' | 'xxlarge' | 'xxxlarge'
 
 export default defineComponent({
   name: 'ResourceTiles',
@@ -469,7 +470,7 @@ export default defineComponent({
       return unref(currentSortField) === field
     }
 
-    const resourceIconSize = computed(() => {
+    const resourceIconSize = computed<IconSize>(() => {
       const sizeMap: Record<number, string> = {
         1: 'xlarge',
         2: 'xlarge',
@@ -479,7 +480,7 @@ export default defineComponent({
         6: 'xxxlarge'
       }
       const size = unref(viewSizeCurrent)
-      return sizeMap[size] ?? 'xxlarge'
+      return (sizeMap[size] as IconSize) ?? ('xxlarge' as IconSize)
     })
     onBeforeUpdate(() => {
       tileRefs.value = {
