@@ -26,11 +26,10 @@
 
 <script lang="ts">
 import { computed, defineComponent, inject, unref } from 'vue'
-import { Resource } from '@ownclouders/web-client'
+import { HIDDEN_FILE_EXTENSIONS, Resource } from '@ownclouders/web-client'
 import { useResourcesStore } from '../../../composables'
 import ResourceIcon from '../../FilesList/ResourceIcon.vue'
 import ResourceName from '../../FilesList/ResourceName.vue'
-import { HIDDEN_FILE_EXTENSIONS } from '../../../constants'
 
 export default defineComponent({
   name: 'FileInfo',

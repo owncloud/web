@@ -1,6 +1,12 @@
 import { cloneStateObject } from '../../../helpers/store'
 import { isSameResource } from '../../../helpers/resource'
-import { DavHttpError, Resource, SpaceResource, urlJoin } from '@ownclouders/web-client'
+import {
+  DavHttpError,
+  PASSWORD_PROTECTED_FOLDER_FILE_EXTENSION,
+  Resource,
+  SpaceResource,
+  urlJoin
+} from '@ownclouders/web-client'
 import { isLocationSpacesActive } from '../../../router'
 import { dirname } from 'path'
 import { createFileRouteOptions } from '../../../helpers'
@@ -22,7 +28,6 @@ import {
 } from '../../piniaStores'
 import { storeToRefs } from 'pinia'
 import { useDeleteWorker } from '../../webWorkers'
-import { PASSWORD_PROTECTED_FOLDER_FILE_EXTENSION } from '../../../constants'
 import { captureException } from '@sentry/vue'
 
 export const useFileActionsDeleteResources = () => {
