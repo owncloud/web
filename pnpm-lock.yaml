@@ -929,7 +929,7 @@ importers:
         specifier: ^1.1.1
         version: 1.1.1
       '@sentry/vue':
-        specifier: ^10.0.0
+        specifier: 10.5.0
         version: 10.5.0(pinia@3.0.3(typescript@5.9.2)(vue@3.5.18(typescript@5.9.2)))(vue@3.5.18(typescript@5.9.2))
       '@uppy/core':
         specifier: 4.5.3
