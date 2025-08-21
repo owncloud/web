@@ -17,6 +17,7 @@ Summary
 * Enhancement - Add markdown to PDF export: [#12788](https://github.com/owncloud/web/pull/12788)
 * Enhancement - Use switch for full text search filter: [#12915](https://github.com/owncloud/web/pull/12915)
 * Enhancement - Add universal access: [#12933](https://github.com/owncloud/web/pull/12933)
+* Enhancement - Add GeoGebra pinboard icon: [#12973](https://github.com/owncloud/web/pull/12973)
 
 Details
 -------
@@ -129,6 +130,12 @@ Details
    ```
 
    https://github.com/owncloud/web/pull/12933
+
+* Enhancement - Add GeoGebra pinboard icon: [#12973](https://github.com/owncloud/web/pull/12973)
+
+   We've added a new icon for GeoGebra pinboards.
+
+   https://github.com/owncloud/web/pull/12973
 
 Changelog for ownCloud Web [11.3.5] (2025-06-26)
 =======================================
