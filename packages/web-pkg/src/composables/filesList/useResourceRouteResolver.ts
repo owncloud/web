@@ -15,7 +15,7 @@ export type ResourceRouteResolverOptions = {
 
 export const useResourceRouteResolver = (
   options: ResourceRouteResolverOptions = {},
-  context?: any
+  emit?: any
 ) => {
   const targetRouteCallback = options.targetRouteCallback
   const { getMatchingSpace } = useGetMatchingSpace(options)
@@ -43,7 +43,7 @@ export const useResourceRouteResolver = (
      * Triggered when a default action is triggered on a file
      * @property {object} resource resource for which the event is triggered
      */
-    context.emit('fileClick', { space, resources: [resource] })
+    emit('fileClick', { space, resources: [resource] })
   }
 
   return {
