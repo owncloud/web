@@ -18,6 +18,7 @@ Summary
 * Enhancement - Use switch for full text search filter: [#12915](https://github.com/owncloud/web/pull/12915)
 * Enhancement - Add universal access: [#12933](https://github.com/owncloud/web/pull/12933)
 * Enhancement - Add GeoGebra pinboard icon: [#12973](https://github.com/owncloud/web/pull/12973)
+* Enhancement - Replace board icon: [#12974](https://github.com/owncloud/web/pull/12974)
 
 Details
 -------
@@ -136,6 +137,13 @@ Details
    We've added a new icon for GeoGebra pinboards.
 
    https://github.com/owncloud/web/pull/12973
+
+* Enhancement - Replace board icon: [#12974](https://github.com/owncloud/web/pull/12974)
+
+   We've replaced the GeoGebra board icon with a new one. The new icon no longer
+   includes the "beta" badge.
+
+   https://github.com/owncloud/web/pull/12974
 
 Changelog for ownCloud Web [11.3.5] (2025-06-26)
 =======================================
