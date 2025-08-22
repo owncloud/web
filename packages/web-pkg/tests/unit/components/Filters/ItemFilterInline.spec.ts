@@ -44,7 +44,7 @@ describe('ItemFilterInline', () => {
       await wrapper.find(selectors.filterOption).trigger('click')
       expect(mocks.$router.push).toHaveBeenCalledWith(
         expect.objectContaining({
-          query: expect.objectContaining({ [wrapper.vm.queryParam]: 'filter1' })
+          query: expect.objectContaining({ [(wrapper.vm as any).queryParam]: 'filter1' })
         })
       )
     })
