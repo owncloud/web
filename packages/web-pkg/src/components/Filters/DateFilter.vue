@@ -18,7 +18,7 @@
               }"
               justify-content="space-between"
               appearance="raw"
-              :data-testid="item[displayNameAttribute as keyof Item]"
+              :data-testid="item[displayNameAttribute]"
               @click="toggleItemSelection(item)"
             >
               <div class="oc-flex oc-flex-middle oc-text-truncate">
@@ -132,6 +132,9 @@ interface Props {
 interface Emits {
   (e: 'selectionChange', value: Item): void
 }
+
+defineOptions({ name: 'DateFilter' })
+
 const {
   filterLabel,
   filterName,
