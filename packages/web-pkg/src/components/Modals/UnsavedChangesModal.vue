@@ -32,27 +32,26 @@
   </div>
 </template>
 
-<script lang="ts">
-import { defineComponent, PropType } from 'vue'
+<script lang="ts" setup>
 import { Modal, useModals } from '../../composables'
+import { useGettext } from 'vue3-gettext'
 
-export default defineComponent({
-  name: 'UnsavedChangesModal',
-  props: {
-    modal: { type: Object as PropType<Modal>, required: true },
-    closeCallback: { type: Function as PropType<() => void>, required: true }
-  },
-  emits: ['cancel', 'confirm'],
-  setup(props) {
-    const { removeModal } = useModals()
-    const onClose = () => {
-      removeModal(props.modal.id)
-      props.closeCallback()
-    }
+interface Props {
+  modal: Modal
+  closeCallback: () => void
+}
 
-    return {
-      onClose
-    }
-  }
-})
+interface Emits {
+  (e: 'cancel'): void
+  (e: 'confirm'): void
+}
+
+defineEmits<Emits>()
+const { modal, closeCallback } = defineProps<Props>()
+const { removeModal } = useModals()
+const { $gettext } = useGettext()
+const onClose = () => {
+  removeModal(modal.id)
+  closeCallback()
+}
 </script>
