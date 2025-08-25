@@ -6,7 +6,12 @@ export * from './capabilities'
 
 export interface OCS {
   getCapabilities: () => Promise<Capabilities>
-  signUrl: (url: string, username: string) => Promise<string>
+  signUrl: (
+    url: string,
+    username: string,
+    publicToken?: string,
+    publicLinkPassword?: string
+  ) => Promise<string>
 }
 
 export const ocs = (baseURI: string, axiosClient: AxiosInstance): OCS => {
@@ -22,8 +27,8 @@ export const ocs = (baseURI: string, axiosClient: AxiosInstance): OCS => {
     getCapabilities: () => {
       return capabilitiesFactory.getCapabilities()
     },
-    signUrl: (url: string, username: string) => {
-      return urlSign.signUrl(url, username)
+    signUrl: (url: string, username: string, publicToken?: string, publicLinkPassword?: string) => {
+      return urlSign.signUrl(url, username, publicToken, publicLinkPassword)
     }
   }
 }

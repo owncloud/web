@@ -59,6 +59,7 @@ export type PublicLinkType = 'ocm' | 'public-link'
 export function buildPublicSpaceResource(
   data: any & { publicLinkType: PublicLinkType }
 ): PublicSpaceResource {
+  console.log(data)
   const publicLinkPassword = data.publicLinkPassword
 
   const fileId = data.props?.[DavProperty.FileId]

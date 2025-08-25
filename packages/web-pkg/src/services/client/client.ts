@@ -168,7 +168,8 @@ export class ClientService {
     return {
       'Accept-Language': this.currentLanguage,
       'X-Request-ID': uuidV4(),
-      ...(useAuth && { Authorization: 'Bearer ' + this.authStore.accessToken })
+      ...(useAuth &&
+        this.authStore.accessToken && { Authorization: 'Bearer ' + this.authStore.accessToken })
     }
   }
 
