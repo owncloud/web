@@ -49,13 +49,13 @@ describe('DateFilter', () => {
       await item.trigger('click')
       expect(mocks.$router.push).toHaveBeenCalledWith(
         expect.objectContaining({
-          query: expect.objectContaining({ [wrapper.vm.queryParam]: '1' })
+          query: expect.objectContaining({ [(wrapper.vm as any).queryParam]: '1' })
         })
       )
     })
     it('sets the selected items initially when given via query param', () => {
       const { wrapper } = getWrapper({ initialQuery: '1' })
-      expect(wrapper.vm.selectedItem).toEqual(filterItems[0])
+      expect((wrapper.vm as any).selectedItem).toEqual(filterItems[0])
     })
   })
 
@@ -88,11 +88,11 @@ describe('DateFilter', () => {
     })
     it('back button should close the custom date range panel', async () => {
       const { wrapper } = getWrapper()
-      wrapper.vm.dateRangeClicked = true
+      ;(wrapper.vm as any).dateRangeClicked = true
       await wrapper.vm.$nextTick()
       const backBtn = wrapper.find(selectors.customDateRangeBackBtn)
       await backBtn.trigger('click')
-      expect(wrapper.vm.dateRangeClicked).toBeFalsy()
+      expect((wrapper.vm as any).dateRangeClicked).toBeFalsy()
     })
     describe('apply button', () => {
       it('is not clickable without dates entered', async () => {
@@ -104,8 +104,8 @@ describe('DateFilter', () => {
       })
       it('is not clickable when from date is after to date', async () => {
         const { wrapper } = getWrapper()
-        wrapper.vm.fromDate = DateTime.now().plus({ days: 1 })
-        wrapper.vm.toDate = DateTime.now()
+        ;(wrapper.vm as any).fromDate = DateTime.now().plus({ days: 1 })
+        ;(wrapper.vm as any).toDate = DateTime.now()
         await wrapper.vm.$nextTick()
         const applyBtn = wrapper.find(selectors.customDateRangeApplyBtn)
         await applyBtn.trigger('click')
@@ -113,8 +113,8 @@ describe('DateFilter', () => {
       })
       it('emits a selection change on click with today entered as date', async () => {
         const { wrapper } = getWrapper()
-        wrapper.vm.fromDate = DateTime.now()
-        wrapper.vm.toDate = DateTime.now()
+        ;(wrapper.vm as any).fromDate = DateTime.now()
+        ;(wrapper.vm as any).toDate = DateTime.now()
         await wrapper.vm.$nextTick()
         const applyBtn = wrapper.find(selectors.customDateRangeApplyBtn)
         await applyBtn.trigger('click')
