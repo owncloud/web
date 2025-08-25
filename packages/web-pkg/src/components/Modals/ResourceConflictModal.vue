@@ -36,105 +36,81 @@
   </div>
 </template>
 
-<script lang="ts">
-import { computed, defineComponent, PropType, ref, unref } from 'vue'
+<script lang="ts" setup>
+import { computed, ref, unref } from 'vue'
 import { useGettext } from 'vue3-gettext'
 import { Modal, useModals } from '../../composables'
 import { Resource } from '@ownclouders/web-client'
 import { ResolveConflict, ResolveStrategy } from '../../helpers/resource'
 
-export default defineComponent({
-  name: 'ResourceConflictModal',
-  props: {
-    modal: { type: Object as PropType<Modal>, required: true },
-    resource: { type: Object as PropType<Resource>, required: true },
-    conflictCount: { type: Number, required: true },
-    callbackFn: {
-      type: Function as PropType<(resolveConflict: ResolveConflict) => void>,
-      required: true
-    },
-    suggestMerge: { type: Boolean, default: true },
-    separateSkipHandling: { type: Boolean, default: false },
-    confirmSecondaryTextOverwrite: { type: String, default: null }
-  },
-  setup(props) {
-    const { removeModal } = useModals()
-    const { $gettext } = useGettext()
+interface Props {
+  modal: Modal
+  resource: Resource
+  conflictCount: number
+  callbackFn: (resolveConflict: ResolveConflict) => void
+  suggestMerge?: boolean
+  separateSkipHandling?: boolean
+  confirmSecondaryTextOverwrite?: string
+}
+const {
+  modal,
+  resource,
+  conflictCount,
+  callbackFn,
+  suggestMerge = true,
+  separateSkipHandling = false,
+  confirmSecondaryTextOverwrite = null
+} = defineProps<Props>()
 
-    const checkboxValue = ref(false)
-    const checkboxLabel = computed(() => {
-      if (props.conflictCount < 2) {
-        return ''
-      }
-      if (!props.separateSkipHandling) {
-        return $gettext(
-          'Apply to all %{count} conflicts',
-          { count: props.conflictCount.toString() },
-          true
-        )
-      } else if (props.resource.isFolder) {
-        return $gettext(
-          'Apply to all %{count} folders',
-          { count: props.conflictCount.toString() },
-          true
-        )
-      } else {
-        return $gettext(
-          'Apply to all %{count} files',
-          { count: props.conflictCount.toString() },
-          true
-        )
-      }
-    })
+const { removeModal } = useModals()
+const { $gettext } = useGettext()
 
-    const message = computed(() =>
-      props.resource.isFolder
-        ? $gettext(
-            'Folder with name "%{name}" already exists.',
-            { name: props.resource.name },
-            true
-          )
-        : $gettext('File with name "%{name}" already exists.', { name: props.resource.name }, true)
-    )
-
-    const confirmSecondaryText = computed(() => {
-      return props.confirmSecondaryTextOverwrite || $gettext('Replace')
-    })
-
-    const onConfirm = () => {
-      removeModal(props.modal.id)
-      props.callbackFn({
-        strategy: ResolveStrategy.KEEP_BOTH,
-        doForAllConflicts: unref(checkboxValue)
-      })
-    }
-
-    const onConfirmSecondary = () => {
-      removeModal(props.modal.id)
-      const strategy = props.suggestMerge ? ResolveStrategy.MERGE : ResolveStrategy.REPLACE
-      props.callbackFn({
-        strategy,
-        doForAllConflicts: unref(checkboxValue)
-      })
-    }
-
-    const onCancel = () => {
-      removeModal(props.modal.id)
-      props.callbackFn({
-        strategy: ResolveStrategy.SKIP,
-        doForAllConflicts: unref(checkboxValue)
-      })
-    }
-
-    return {
-      message,
-      checkboxValue,
-      checkboxLabel,
-      confirmSecondaryText,
-      onConfirm,
-      onConfirmSecondary,
-      onCancel
-    }
+const checkboxValue = ref(false)
+const checkboxLabel = computed(() => {
+  if (conflictCount < 2) {
+    return ''
+  }
+  if (!separateSkipHandling) {
+    return $gettext('Apply to all %{count} conflicts', { count: conflictCount.toString() }, true)
+  } else if (resource.isFolder) {
+    return $gettext('Apply to all %{count} folders', { count: conflictCount.toString() }, true)
+  } else {
+    return $gettext('Apply to all %{count} files', { count: conflictCount.toString() }, true)
   }
 })
+
+const message = computed(() =>
+  resource.isFolder
+    ? $gettext('Folder with name "%{name}" already exists.', { name: resource.name }, true)
+    : $gettext('File with name "%{name}" already exists.', { name: resource.name }, true)
+)
+
+const confirmSecondaryText = computed(() => {
+  return confirmSecondaryTextOverwrite || $gettext('Replace')
+})
+
+const onConfirm = () => {
+  removeModal(modal.id)
+  callbackFn({
+    strategy: ResolveStrategy.KEEP_BOTH,
+    doForAllConflicts: unref(checkboxValue)
+  })
+}
+
+const onConfirmSecondary = () => {
+  removeModal(modal.id)
+  const strategy = suggestMerge ? ResolveStrategy.MERGE : ResolveStrategy.REPLACE
+  callbackFn({
+    strategy,
+    doForAllConflicts: unref(checkboxValue)
+  })
+}
+
+const onCancel = () => {
+  removeModal(modal.id)
+  callbackFn({
+    strategy: ResolveStrategy.SKIP,
+    doForAllConflicts: unref(checkboxValue)
+  })
+}
 </script>

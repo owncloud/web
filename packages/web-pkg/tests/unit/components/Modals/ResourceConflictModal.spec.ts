@@ -21,13 +21,13 @@ describe('ResourceConflictModal', () => {
       describe('text', () => {
         it('should equal "Replace" when no "confirmSecondaryTextOverwrite" property is given', () => {
           const { wrapper } = getWrapper()
-          expect(wrapper.vm.confirmSecondaryText).toEqual('Replace')
+          expect((wrapper.vm as any).confirmSecondaryText).toEqual('Replace')
         })
         it('should equal "confirmSecondaryTextOverwrite" when property is given', () => {
           const { wrapper } = getWrapper({
             props: { confirmSecondaryTextOverwrite: 'Merge' }
           })
-          expect(wrapper.vm.confirmSecondaryText).toEqual('Merge')
+          expect((wrapper.vm as any).confirmSecondaryText).toEqual('Merge')
         })
       })
     })
@@ -36,7 +36,7 @@ describe('ResourceConflictModal', () => {
     it('should call the callback', async () => {
       const callbackFn = vi.fn()
       const { wrapper } = getWrapper({ props: { callbackFn } })
-      await wrapper.vm.onConfirm()
+      await (wrapper.vm as any).onConfirm()
       expect(callbackFn).toHaveBeenCalledWith({
         strategy: ResolveStrategy.KEEP_BOTH,
         doForAllConflicts: false
@@ -47,7 +47,7 @@ describe('ResourceConflictModal', () => {
     it('should call the callback with merge strategy if merge suggested', async () => {
       const callbackFn = vi.fn()
       const { wrapper } = getWrapper({ props: { callbackFn, suggestMerge: true } })
-      await wrapper.vm.onConfirmSecondary()
+      await (wrapper.vm as any).onConfirmSecondary()
       expect(callbackFn).toHaveBeenCalledWith({
         strategy: ResolveStrategy.MERGE,
         doForAllConflicts: false
@@ -56,7 +56,7 @@ describe('ResourceConflictModal', () => {
     it('should call the callback with replace strategy if merge not suggested', async () => {
       const callbackFn = vi.fn()
       const { wrapper } = getWrapper({ props: { callbackFn, suggestMerge: false } })
-      await wrapper.vm.onConfirmSecondary()
+      await (wrapper.vm as any).onConfirmSecondary()
       expect(callbackFn).toHaveBeenCalledWith({
         strategy: ResolveStrategy.REPLACE,
         doForAllConflicts: false
@@ -67,7 +67,7 @@ describe('ResourceConflictModal', () => {
     it('should call the callback', async () => {
       const callbackFn = vi.fn()
       const { wrapper } = getWrapper({ props: { callbackFn } })
-      await wrapper.vm.onCancel()
+      await (wrapper.vm as any).onCancel()
       expect(callbackFn).toHaveBeenCalledWith({
         strategy: ResolveStrategy.SKIP,
         doForAllConflicts: false
