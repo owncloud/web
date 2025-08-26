@@ -24,38 +24,25 @@
   </div>
 </template>
 
-<script lang="ts">
-import { computed, defineComponent, inject, unref } from 'vue'
+<script lang="ts" setup>
+import { computed, inject, unref } from 'vue'
 import { HIDDEN_FILE_EXTENSIONS, Resource } from '@ownclouders/web-client'
 import { useResourcesStore } from '../../../composables'
 import ResourceIcon from '../../FilesList/ResourceIcon.vue'
 import ResourceName from '../../FilesList/ResourceName.vue'
 
-export default defineComponent({
-  name: 'FileInfo',
-  components: { ResourceIcon, ResourceName },
-  props: {
-    isSubPanelActive: {
-      type: Boolean,
-      default: true
-    }
-  },
-  setup() {
-    const resourcesStore = useResourcesStore()
+interface Props {
+  isSubPanelActive?: boolean
+}
+const { isSubPanelActive = true } = defineProps<Props>()
+const resourcesStore = useResourcesStore()
 
-    const resource = inject<Resource>('resource')
-    const areFileExtensionsShown = computed(
-      () =>
-        resourcesStore.areFileExtensionsShown &&
-        !HIDDEN_FILE_EXTENSIONS.includes(unref(resource).extension)
-    )
-
-    return {
-      resource,
-      areFileExtensionsShown
-    }
-  }
-})
+const resource = inject<Resource>('resource')
+const areFileExtensionsShown = computed(
+  () =>
+    resourcesStore.areFileExtensionsShown &&
+    !HIDDEN_FILE_EXTENSIONS.includes(unref(resource).extension)
+)
 </script>
 
 <style lang="scss">
