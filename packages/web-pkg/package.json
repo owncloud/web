@@ -61,7 +61,7 @@
     "html2canvas": "^1.4.1",
     "katex": "^0.16.22",
     "lodash-es": "^4.17.21",
-    "luxon": "^3.5.0",
+    "luxon": "^3.7.1",
     "mark.js": "^8.11.1",
     "marked": "^16.2.0",
     "md-editor-v3": "^5.8.4",
