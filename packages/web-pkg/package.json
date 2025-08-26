@@ -49,7 +49,7 @@
     "@uppy/utils": "7.0.0",
     "@uppy/xhr-upload": "5.0.0",
     "@vavt/cm-extension": "^1.11.0",
-    "@vue/shared": "^3.5.19",
+    "@vue/shared": "^3.5.20",
     "@vueuse/core": "^13.0.0",
     "axios": "^1.11.0",
     "deepmerge": "^4.2.2",
