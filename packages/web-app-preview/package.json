@@ -8,7 +8,7 @@
     "test:unit": "NODE_OPTIONS=--unhandled-rejections=throw vitest"
   },
   "dependencies": {
-    "@panzoom/panzoom": "^4.5.1"
+    "@panzoom/panzoom": "^4.6.0"
   },
   "devDependencies": {
     "@ownclouders/web-test-helpers": "workspace:*"
