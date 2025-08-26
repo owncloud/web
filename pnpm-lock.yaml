@@ -386,7 +386,7 @@ importers:
         specifier: ^8.41.0
         version: 8.41.0(eslint@9.34.0)(typescript@5.9.2)
       eslint:
-        specifier: ^9.0.0
+        specifier: ^9.34.0
         version: 9.34.0
       eslint-config-prettier:
         specifier: ^10.1.8
@@ -395,7 +395,7 @@ importers:
         specifier: ^17.21.3
         version: 17.21.3(eslint@9.34.0)(typescript@5.9.2)
       eslint-plugin-promise:
-        specifier: ^7.0.0
+        specifier: ^7.2.1
         version: 7.2.1(eslint@9.34.0)
       eslint-plugin-unused-imports:
         specifier: ^4.2.0
@@ -404,7 +404,7 @@ importers:
         specifier: ^10.4.0
         version: 10.4.0(@typescript-eslint/parser@8.41.0(eslint@9.34.0)(typescript@5.9.2))(eslint@9.34.0)(vue-eslint-parser@9.4.3(eslint@9.34.0))
       eslint-plugin-vuejs-accessibility:
-        specifier: ^2.2.0
+        specifier: ^2.4.1
         version: 2.4.1(eslint@9.34.0)
       globals:
         specifier: ^16.3.0
