@@ -879,7 +879,7 @@ importers:
         specifier: ^1.6.11
         version: 1.6.11
       zod:
-        specifier: ^4.0.17
+        specifier: ^4.1.3
         version: 4.1.3
     devDependencies:
       '@types/luxon':
@@ -1040,7 +1040,7 @@ importers:
         specifier: ^2.4.0
         version: 2.4.0(patch_hash=6f231bbef273efbc788b5657c47fc744b52bc838f972357a764c144fde6065f2)(@vue/compiler-sfc@3.5.20)(vue@3.5.20(typescript@5.9.2))
       zod:
-        specifier: ^4.0.17
+        specifier: ^4.1.3
         version: 4.1.3
     devDependencies:
       '@ownclouders/web-test-helpers':
