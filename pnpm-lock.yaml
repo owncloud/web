@@ -651,7 +651,7 @@ importers:
         specifier: ^8.11.1
         version: 8.11.1
       p-queue:
-        specifier: ^8.0.0
+        specifier: ^8.1.0
         version: 8.1.0
       pinia:
         specifier: 3.0.3
@@ -1001,7 +1001,7 @@ importers:
         specifier: ^3.3.0
         version: 3.3.0
       p-queue:
-        specifier: ^8.0.0
+        specifier: ^8.1.0
         version: 8.1.0
       password-sheriff:
         specifier: ^1.1.1
