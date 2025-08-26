@@ -70,7 +70,7 @@
     "p-queue": "^8.1.0",
     "password-sheriff": "^1.1.1",
     "pdf-lib": "^1.17.1",
-    "pinia": "^3.0.1",
+    "pinia": "^3.0.3",
     "portal-vue": "^3.0.0",
     "prettier": "^3.6.2",
     "prismjs": "^1.29.0",

@@ -454,7 +454,7 @@ importers:
         specifier: ^3.7.1
         version: 3.7.1
       pinia:
-        specifier: ^3.0.1
+        specifier: ^3.0.3
         version: 3.0.3(typescript@5.9.2)(vue@3.5.20(typescript@5.9.2))
       vue-concurrency:
         specifier: ^5.0.1
@@ -1010,7 +1010,7 @@ importers:
         specifier: ^1.17.1
         version: 1.17.1
       pinia:
-        specifier: ^3.0.1
+        specifier: ^3.0.3
         version: 3.0.3(typescript@5.9.2)(vue@3.5.20(typescript@5.9.2))
       portal-vue:
         specifier: ^3.0.0
