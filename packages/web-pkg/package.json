@@ -48,7 +48,7 @@
     "@uppy/tus": "4.3.2",
     "@uppy/utils": "6.2.2",
     "@uppy/xhr-upload": "4.4.2",
-    "@vavt/cm-extension": "^1.10.1",
+    "@vavt/cm-extension": "^1.11.0",
     "@vue/shared": "^3.5.19",
     "@vueuse/core": "^13.0.0",
     "axios": "^1.11.0",
