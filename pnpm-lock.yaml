@@ -870,7 +870,7 @@ importers:
         specifier: ^3.7.1
         version: 3.7.1
       uuid:
-        specifier: ^11.0.0
+        specifier: ^11.1.0
         version: 11.1.0
       webdav:
         specifier: ^5.8.0
@@ -1028,7 +1028,7 @@ importers:
         specifier: ^6.0.2
         version: 6.0.2
       uuid:
-        specifier: ^11.0.0
+        specifier: ^11.1.0
         version: 11.1.0
       vue-concurrency:
         specifier: ^5.0.1
