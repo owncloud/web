@@ -81,7 +81,7 @@ import {
 import { RouteLocationAsRelativeTyped, useRouter } from 'vue-router'
 import { useGettext } from 'vue3-gettext'
 
-import '@uppy/core/dist/style.min.css'
+import '@uppy/core/css/style.min.css'
 import { storeToRefs } from 'pinia'
 
 const MOBILE_BREAKPOINT = 640
