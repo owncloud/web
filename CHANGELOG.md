@@ -13,6 +13,7 @@ Summary
 * Bugfix - Incorrect translation when using switches language: [#12889](https://github.com/owncloud/web/pull/12889)
 * Bugfix - Deactivated Space button clips German translated word: [#12890](https://github.com/owncloud/web/pull/12890)
 * Bugfix - User info getting translated: [#12893](https://github.com/owncloud/web/pull/12893)
+* Bugfix - Sign public link archiver download URL: [#12943](https://github.com/owncloud/web/pull/12943)
 * Bugfix - Add clipboard permissions: [#12954](https://github.com/owncloud/web/pull/12954)
 * Enhancement - Add markdown to PDF export: [#12788](https://github.com/owncloud/web/pull/12788)
 * Enhancement - Use switch for full text search filter: [#12915](https://github.com/owncloud/web/pull/12915)
@@ -72,6 +73,15 @@ Details
 
    https://github.com/owncloud/web/pull/12893
    https://kiteworks.atlassian.net/browse/OCISDEV-193
+
+* Bugfix - Sign public link archiver download URL: [#12943](https://github.com/owncloud/web/pull/12943)
+
+   We've started signing the archiver download URL in public link context in case
+   the link is password protected. This allows users to download large archives
+   without memory limits imposed by browsers.
+
+   https://github.com/owncloud/web/issues/12811
+   https://github.com/owncloud/web/pull/12943
 
 * Bugfix - Add clipboard permissions: [#12954](https://github.com/owncloud/web/pull/12954)
 
