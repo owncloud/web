@@ -5,11 +5,12 @@ import { useGetMatchingSpace } from '../../../../src/composables/spaces/useGetMa
 import {
   defaultComponentMocks,
   defaultPlugins,
-  shallowMount,
+  mount,
   useGetMatchingSpaceMock
 } from '@ownclouders/web-test-helpers'
 import { useFileActions } from '../../../../src/composables/actions'
 import { CapabilityStore } from '../../../../src/composables/piniaStores'
+import ResourceListItem from '../../../../src/components/FilesList/ResourceListItem.vue'
 
 vi.mock('../../../../src/composables/spaces/useGetMatchingSpace', () => ({
   useGetMatchingSpace: vi.fn()
@@ -18,10 +19,6 @@ vi.mock('../../../../src/composables/spaces/useGetMatchingSpace', () => ({
 vi.mock('../../../../src/composables/actions', () => ({
   useFileActions: vi.fn()
 }))
-
-const selectors = {
-  resourceListItemStub: 'resource-list-item-stub'
-}
 
 describe('Preview component', () => {
   const driveAliasAndItem = '1'
@@ -35,7 +32,7 @@ describe('Preview component', () => {
         getDriveAliasAndItem: () => driveAliasAndItem
       })
     })
-    wrapper.vm.previewData = 'blob:image'
+    ;(wrapper.vm as any).previewData = 'blob:image'
     await wrapper.vm.$nextTick()
     expect(wrapper.html()).toMatchSnapshot()
   })
@@ -49,9 +46,8 @@ describe('Preview component', () => {
         getDriveAliasAndItem: () => driveAliasAndItem
       })
     })
-    expect(
-      wrapper.findComponent<any>(selectors.resourceListItemStub).attributes().isextensiondisplayed
-    ).toBe('false')
+
+    expect(wrapper.findComponent<any>(ResourceListItem).props('isExtensionDisplayed')).toBe(false)
   })
 })
 
@@ -90,7 +86,7 @@ function getWrapper({
   } satisfies Partial<CapabilityStore['capabilities']>
 
   return {
-    wrapper: shallowMount(ResourcePreview, {
+    wrapper: mount(ResourcePreview, {
       props: {
         searchResult
       },

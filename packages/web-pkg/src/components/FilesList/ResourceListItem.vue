@@ -1,5 +1,6 @@
 <template>
   <div
+    ref="resourceListItem"
     class="oc-resource oc-text-overflow"
     :class="{ 'oc-resource-no-interaction': !isResourceClickable }"
   >
@@ -65,7 +66,7 @@
   </div>
 </template>
 <script lang="ts" setup>
-import { computed } from 'vue'
+import { computed, useTemplateRef } from 'vue'
 import { useGettext } from 'vue3-gettext'
 import { HIDDEN_FILE_EXTENSIONS, SpaceResource, Resource } from '@ownclouders/web-client'
 import ResourceIcon from './ResourceIcon.vue'
@@ -105,9 +106,12 @@ const {
   isResourceClickable = true
 } = defineProps<Props>()
 
+const resourceListItem = useTemplateRef('resourceListItem')
 const emit = defineEmits<Emits>()
 const { $gettext } = useGettext()
 const HIDDEN_EXTENSIONS = HIDDEN_FILE_EXTENSIONS
+
+defineExpose({ resourceListItem })
 
 /**
  * Checks if a path has a valid second segment after splitting by '/'.
