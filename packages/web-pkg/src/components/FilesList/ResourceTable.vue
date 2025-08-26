@@ -924,7 +924,7 @@ function fileClicked(data: [Resource, MouseEvent, boolean]) {
     return
   }
 
-  if (isEmbedModeEnabled && isFilePicker && !resource.isFolder) {
+  if (unref(isEmbedModeEnabled) && unref(isFilePicker) && !resource.isFolder) {
     return postMessage<embedModeFilePickMessageData>('owncloud-embed:file-pick', {
       resource: JSON.parse(JSON.stringify(resource)),
       locationQuery: JSON.parse(JSON.stringify(routeToContextQuery(unref(router.currentRoute))))
