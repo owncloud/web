@@ -1,3 +1,16 @@
 // Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
-exports[`Preview component > should render preview component 1`] = `"<resource-list-item-stub resource="[object Object]" pathprefix="Spaces/New space" ispathdisplayed="true" parentfolderlink="[object Object]" parentfoldername="New space" parentfolderlinkiconadditionalattributes="[object Object]" isextensiondisplayed="true" isthumbnaildisplayed="true" isicondisplayed="true" isresourceclickable="true"></resource-list-item-stub>"`;
+exports[`Preview component > should render preview component 1`] = `
+"<div class="oc-resource oc-text-overflow"><button target="_self" type="button" class="oc-button oc-rounded oc-button-m oc-button-justify-content-left oc-button-gap-undefined oc-button-passive oc-button-passive-raw oc-resource-link oc-resource-icon-link" draggable="false">
+    <!--v-if-->
+    <!-- @slot Content of the button --> <img src="blob:image" alt="" aria-hidden="true" loading="eager" class="oc-resource-thumbnail" width="40" height="40">
+  </button>
+  <div class="oc-resource-details oc-text-overflow oc-pl-s"><button target="_self" type="button" class="oc-button oc-rounded oc-button-m oc-button-justify-content-left oc-button-gap-undefined oc-button-passive oc-button-passive-raw oc-resource-link oc-text-overflow" draggable="false">
+      <!--v-if-->
+      <!-- @slot Content of the button --> <span class="oc-resource-name" data-test-resource-path="/" data-test-resource-name="lorem.txt" title="lorem.txt"><span class="oc-text-truncate"><span class="oc-resource-basename">lorem.txt</span></span>
+      <!--v-if--></span>
+    </button>
+    <div class="oc-resource-indicators"><a attrs="[object Object]" style="cursor: pointer;" class="parent-folder oc-text-truncate"></a></div>
+  </div>
+</div>"
+`;
