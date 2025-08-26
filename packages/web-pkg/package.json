@@ -56,7 +56,7 @@
     "dompurify": "^3.2.3",
     "emoji-regex": "^10.4.0",
     "filesize": "^11.0.0",
-    "fuse.js": "^7.0.0",
+    "fuse.js": "^7.1.0",
     "highlight.js": "^11.11.1",
     "html2canvas": "^1.4.1",
     "katex": "^0.16.22",
