@@ -457,7 +457,7 @@ importers:
         specifier: ^3.0.3
         version: 3.0.3(typescript@5.9.2)(vue@3.5.20(typescript@5.9.2))
       vue-concurrency:
-        specifier: ^5.0.1
+        specifier: ^5.0.3
         version: 5.0.3(vue@3.5.20(typescript@5.9.2))
       vue-router:
         specifier: ^4.5.1
@@ -1031,7 +1031,7 @@ importers:
         specifier: ^11.1.0
         version: 11.1.0
       vue-concurrency:
-        specifier: ^5.0.1
+        specifier: ^5.0.3
         version: 5.0.3(vue@3.5.20(typescript@5.9.2))
       vue-router:
         specifier: ^4.5.1
