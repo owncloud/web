@@ -216,7 +216,7 @@ importers:
   packages/babel-preset:
     dependencies:
       '@babel/helper-plugin-utils':
-        specifier: ^7.22.5
+        specifier: ^7.27.1
         version: 7.27.1
 
   packages/design-system:
