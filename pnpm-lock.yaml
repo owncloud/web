@@ -852,7 +852,7 @@ importers:
   packages/web-client:
     dependencies:
       '@casl/ability':
-        specifier: ^6.7.1
+        specifier: ^6.7.3
         version: 6.7.3
       '@microsoft/fetch-event-source':
         specifier: ^2.0.1
@@ -905,7 +905,7 @@ importers:
   packages/web-pkg:
     dependencies:
       '@casl/ability':
-        specifier: ^6.7.1
+        specifier: ^6.7.3
         version: 6.7.3
       '@casl/vue':
         specifier: ^2.2.2
@@ -1193,7 +1193,7 @@ importers:
   packages/web-test-helpers:
     dependencies:
       '@casl/ability':
-        specifier: ^6.7.1
+        specifier: ^6.7.3
         version: 6.7.3
       '@casl/vue':
         specifier: ^2.2.2
