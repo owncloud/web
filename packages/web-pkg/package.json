@@ -35,7 +35,7 @@
     "test:unit": "NODE_OPTIONS=--unhandled-rejections=throw vitest"
   },
   "dependencies": {
-    "@casl/ability": "^6.7.1",
+    "@casl/ability": "^6.7.3",
     "@casl/vue": "^2.2.2",
     "@chevrotain/regexp-to-ast": "^11.0.3",
     "@microsoft/fetch-event-source": "^2.0.1",
