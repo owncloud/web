@@ -255,7 +255,7 @@ importers:
         specifier: ^3.5.20
         version: 3.5.20(typescript@5.9.2)
       vue-inline-svg:
-        specifier: ^4.0.0
+        specifier: ^4.0.1
         version: 4.0.1(vue@3.5.20(typescript@5.9.2))
       vue-router:
         specifier: ^4.5.1
