@@ -228,7 +228,7 @@ importers:
         specifier: ^2.11.8
         version: 2.11.8
       deepmerge:
-        specifier: ^4.2.2
+        specifier: ^4.3.1
         version: 4.3.1
       emoji-mart:
         specifier: 5.6.0
@@ -956,7 +956,7 @@ importers:
         specifier: ^1.11.0
         version: 1.11.0(debug@4.4.1)
       deepmerge:
-        specifier: ^4.2.2
+        specifier: ^4.3.1
         version: 4.3.1
       dompurify:
         specifier: ^3.2.3
