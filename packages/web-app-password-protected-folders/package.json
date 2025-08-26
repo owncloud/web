@@ -16,7 +16,7 @@
     "@ownclouders/web-pkg": "workspace:*",
     "@ownclouders/web-test-helpers": "workspace:*",
     "@vue/test-utils": "^2.4.6",
-    "uuid": "^11.0.0",
+    "uuid": "^11.1.0",
     "vitest-mock-extended": "3.1.0",
     "vue": "^3.5.20",
     "vue3-gettext": "^2.4.0"
