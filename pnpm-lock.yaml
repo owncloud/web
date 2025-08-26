@@ -873,7 +873,7 @@ importers:
         specifier: ^11.0.0
         version: 11.1.0
       webdav:
-        specifier: ^5.7.1
+        specifier: ^5.8.0
         version: 5.8.0
       xml-js:
         specifier: ^1.6.11
