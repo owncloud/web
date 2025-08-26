@@ -163,7 +163,7 @@
 <script lang="ts" setup>
 import { ref, watch, unref, computed, onMounted, onWatcherCleanup } from 'vue'
 import { isUndefined } from 'lodash-es'
-import getSpeed from '@uppy/utils/lib/getSpeed'
+import { getSpeed } from '@uppy/utils'
 
 import { extractParentFolderName, HttpError, Resource, urlJoin } from '@ownclouders/web-client'
 import {

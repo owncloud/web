@@ -163,8 +163,7 @@
 <script lang="ts">
 import { defineComponent, ref, watch, unref } from 'vue'
 import { isUndefined } from 'lodash-es'
-// @ts-ignore
-import getSpeed from '@uppy/utils/lib/getSpeed'
+import { getSpeed } from '@uppy/utils'
 
 import { HttpError, Resource, urlJoin } from '@ownclouders/web-client'
 import { OcUppyFile, queryItemAsString, useConfigStore } from '@ownclouders/web-pkg'
