@@ -3,5 +3,12 @@
   "extends": ["github>owncloud-ops/renovate-presets:docker"],
   "prConcurrentLimit": 15,
   "ignoreDeps": ["@adobe/leonardo-contrast-colors"],
-  "postUpdateOptions": ["pnpmDedupe"]
+  "postUpdateOptions": ["pnpmDedupe"],
+  "rangeStrategy": "bump",
+  "packageRules": [
+    {
+      "matchPackageNames": ["vue", "@vue/shared", "@vue/compiler-dom", "@vue/compiler-sfc"],
+      "groupName": "vue monorepo"
+    }
+  ]
 }
