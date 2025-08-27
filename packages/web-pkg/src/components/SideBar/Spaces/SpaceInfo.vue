@@ -16,18 +16,11 @@
   </div>
 </template>
 
-<script lang="ts">
-import { defineComponent, inject } from 'vue'
+<script lang="ts" setup>
+import { inject } from 'vue'
 import { SpaceResource } from '@ownclouders/web-client'
 
-export default defineComponent({
-  name: 'SpaceInfo',
-  setup() {
-    return {
-      resource: inject<SpaceResource>('resource')
-    }
-  }
-})
+const resource = inject<SpaceResource>('resource')
 </script>
 
 <style lang="scss">
