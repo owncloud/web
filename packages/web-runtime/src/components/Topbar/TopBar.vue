@@ -9,11 +9,18 @@
         v-if="appMenuExtensions.length && !isEmbedModeEnabled && !hideAppSwitcher"
         :menu-items="appMenuExtensions"
       />
-      <router-link v-if="!hideLogo" :to="homeLink" class="oc-width-1-1 oc-logo-href">
-        <oc-img :src="currentTheme.logo.topbar" :alt="sidebarLogoAlt" class="oc-logo-image" />
+      <router-link v-if="!hideLogo" :to="homeLink" class="oc-logo-href">
+        <oc-responsive-image
+          :src="{
+            xs: currentTheme.logo.topbarSm,
+            md: currentTheme.logo.topbar
+          }"
+          :alt="sidebarLogoAlt"
+          class="oc-logo-image"
+        />
       </router-link>
     </div>
-    <div v-if="!contentOnLeftPortal" class="oc-topbar-center">
+    <div v-if="!contentOnLeftPortal" class="oc-topbar-center oc-width-1-1">
       <custom-component-target :extension-point="topBarCenterExtensionPoint" />
     </div>
     <div class="oc-topbar-right oc-flex oc-flex-middle">
@@ -95,7 +102,6 @@ export default {
       return extensionRegistry.requestExtensions(appMenuExtensionPoint)
     })
 
-    const logoWidth = ref('150px')
     const hideLogo = computed(() => unref(configOptions).hideLogo)
     const hideAppSwitcher = computed(() => unref(configOptions).hideAppSwitcher)
     const hideAccountMenu = computed(() => unref(configOptions).hideAccountMenu)
@@ -143,7 +149,6 @@ export default {
       updateLeftPortal,
       isNotificationBellEnabled,
       hideLogo,
-      logoWidth,
       isEmbedModeEnabled,
       isSideBarToggleVisible,
       isSideBarToggleDisabled,
@@ -176,21 +181,6 @@ export default {
         ...(feedback.description && { description: feedback.description })
       }
     }
-  },
-  async created() {
-    const image = new Image()
-    const imageDimensions = (await new Promise((resolve) => {
-      image.onload = () => {
-        resolve({
-          height: image.height,
-          width: image.width
-        })
-      }
-      image.src = this.currentTheme.logo.topbar
-    })) as { height: number; width: number }
-    // max-height of logo is 38px, so we calculate the width based on the ratio of the image
-    // and add 70px to account for the width of the left side of the topbar
-    this.logoWidth = `${imageDimensions.width / (imageDimensions.height / 38) + 70}px`
   }
 }
 </script>
@@ -208,7 +198,7 @@ export default {
 
   @media (min-width: $oc-breakpoint-small-default) {
     column-gap: 10px;
-    grid-template-columns: v-bind(logoWidth) 9fr 1fr;
+    grid-template-columns: max-content 9fr 1fr;
     grid-template-rows: 1;
     height: 52px;
     justify-content: center;
@@ -219,7 +209,7 @@ export default {
     grid-template-columns: 30% 30% 40%;
 
     @media (min-width: $oc-breakpoint-small-default) {
-      grid-template-columns: v-bind(logoWidth) 1fr 1fr;
+      grid-template-columns: max-content 1fr 1fr;
     }
   }
 
@@ -230,6 +220,7 @@ export default {
     image-rendering: pixelated;
     image-rendering: -webkit-optimize-contrast;
     user-select: none;
+    width: 100%;
   }
 
   .oc-topbar-left {
@@ -237,6 +228,10 @@ export default {
     grid-area: logo;
     @media (min-width: $oc-breakpoint-small-default) {
       gap: 20px;
+    }
+
+    .oc-logo-href {
+      flex: 1;
     }
   }
 

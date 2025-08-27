@@ -50,6 +50,7 @@ const LoginPage = z.object({
 
 const Logo = z.object({
   topbar: z.string(),
+  topbarSm: z.string().optional(),
   favicon: z.string(),
   login: z.string(),
   notFound: z.string().optional()
