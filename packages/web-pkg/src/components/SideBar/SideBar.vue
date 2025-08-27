@@ -98,14 +98,12 @@
   </div>
 </template>
 
-<script lang="ts">
+<script lang="ts" setup>
 import {
   computed,
-  defineComponent,
   nextTick,
   onBeforeUnmount,
   onMounted,
-  PropType,
   ref,
   unref,
   useTemplateRef,
@@ -114,177 +112,140 @@ import {
 import { SideBarPanel, SideBarPanelContext } from './types'
 import { useGettext } from 'vue3-gettext'
 
-export default defineComponent({
-  props: {
-    isOpen: {
-      type: Boolean,
-      required: true
-    },
-    loading: {
-      type: Boolean,
-      required: true
-    },
-    availablePanels: {
-      type: Array as PropType<SideBarPanel<unknown, unknown, unknown>[]>,
-      required: true
-    },
-    panelContext: {
-      type: Object as PropType<SideBarPanelContext<unknown, unknown, unknown>>,
-      required: true
-    },
-    activePanel: {
-      type: String,
-      required: false,
-      default: ''
+interface Props {
+  isOpen: boolean
+  loading: boolean
+  availablePanels: SideBarPanel<unknown, unknown, unknown>[]
+  panelContext: SideBarPanelContext<unknown, unknown, unknown>
+  activePanel?: string
+}
+
+interface Emits {
+  (e: 'close'): void
+  (e: 'selectPanel', value: string | null): void
+}
+
+const { isOpen, loading, availablePanels, panelContext, activePanel = '' } = defineProps<Props>()
+const emit = defineEmits<Emits>()
+const { $gettext } = useGettext()
+const appSideBar = useTemplateRef<HTMLElement>('appSideBar')
+
+const rootPanels = computed(() => {
+  return availablePanels.filter((p) => p.isVisible(panelContext) && p.isRoot?.(panelContext))
+})
+const subPanels = computed(() =>
+  availablePanels.filter((p) => p.isVisible(panelContext) && !p.isRoot?.(panelContext))
+)
+const displayPanels = computed<SideBarPanel<unknown, unknown, unknown>[]>(() => {
+  if (unref(rootPanels).length) {
+    return [unref(rootPanels)[0], ...unref(subPanels)]
+  }
+  return unref(subPanels)
+})
+
+const activeSubPanelName = computed(() => {
+  const panelName = activePanel?.split('#')[0]
+  if (!panelName) {
+    return null
+  }
+  if (
+    !unref(subPanels)
+      .map((p) => p.name)
+      .includes(panelName)
+  ) {
+    return null
+  }
+  return panelName
+})
+const hasActiveSubPanel = computed(() => {
+  return unref(activeSubPanelName) !== null
+})
+const hasActiveRootPanel = computed(() => {
+  return unref(activeSubPanelName) === null
+})
+
+const oldPanelName = ref<string>(null)
+const setOldPanelName = (name: string) => {
+  oldPanelName.value = name
+}
+const activePanelName = computed<string>(() => {
+  if (unref(hasActiveSubPanel)) {
+    return unref(activeSubPanelName)
+  }
+  return unref(rootPanels)[0].name
+})
+
+const accessibleLabelBack = computed(() => {
+  if (unref(rootPanels).length === 1) {
+    return $gettext('Back to %{panel} panel', {
+      panel: unref(rootPanels)[0].title(panelContext)
+    })
+  }
+  return $gettext('Back to main panels')
+})
+
+const windowWidth = ref(window.innerWidth)
+
+const fullWidthSideBar = computed(() => unref(windowWidth) <= 960)
+const backgroundContentEl = computed(() => {
+  return unref(appSideBar)?.parentElement?.querySelector('div') as HTMLElement
+})
+
+const onResize = () => {
+  if (!isOpen) {
+    return
+  }
+
+  windowWidth.value = window.innerWidth
+}
+
+watch(
+  () => isOpen,
+  async (isOpen) => {
+    if (!isOpen) {
+      return
+    }
+    await nextTick()
+    if (unref(fullWidthSideBar) && unref(backgroundContentEl)) {
+      // hide content behind sidebar when it has full width to avoid focusable elements
+      unref(backgroundContentEl).style.visibility = 'hidden'
     }
   },
-  emits: ['close', 'selectPanel'],
-  setup(props) {
-    const { $gettext } = useGettext()
-    const appSideBar = useTemplateRef<HTMLElement>('appSideBar')
+  { immediate: true }
+)
 
-    const rootPanels = computed(() => {
-      return props.availablePanels.filter(
-        (p) => p.isVisible(props.panelContext) && p.isRoot?.(props.panelContext)
-      )
-    })
-    const subPanels = computed(() =>
-      props.availablePanels.filter(
-        (p) => p.isVisible(props.panelContext) && !p.isRoot?.(props.panelContext)
-      )
-    )
-    const displayPanels = computed<SideBarPanel<unknown, unknown, unknown>[]>(() => {
-      if (unref(rootPanels).length) {
-        return [unref(rootPanels)[0], ...unref(subPanels)]
-      }
-      return unref(subPanels)
-    })
+function setSidebarPanel(panel: string) {
+  emit('selectPanel', panel)
+}
 
-    const activeSubPanelName = computed(() => {
-      const panelName = props.activePanel?.split('#')[0]
-      if (!panelName) {
-        return null
-      }
-      if (
-        !unref(subPanels)
-          .map((p) => p.name)
-          .includes(panelName)
-      ) {
-        return null
-      }
-      return panelName
-    })
-    const hasActiveSubPanel = computed(() => {
-      return unref(activeSubPanelName) !== null
-    })
-    const hasActiveRootPanel = computed(() => {
-      return unref(activeSubPanelName) === null
-    })
+function resetSidebarPanel() {
+  emit('selectPanel', null)
+}
 
-    const oldPanelName = ref<string>(null)
-    const clearOldPanelName = () => {
-      oldPanelName.value = null
-    }
-    const setOldPanelName = (name: string) => {
-      oldPanelName.value = name
-    }
-    const activePanelName = computed<string>(() => {
-      if (unref(hasActiveSubPanel)) {
-        return unref(activeSubPanelName)
-      }
-      return unref(rootPanels)[0].name
-    })
+function closeSidebar() {
+  emit('close')
+}
 
-    const accessibleLabelBack = computed(() => {
-      if (unref(rootPanels).length === 1) {
-        return $gettext('Back to %{panel} panel', {
-          panel: unref(rootPanels)[0].title(props.panelContext)
-        })
-      }
-      return $gettext('Back to main panels')
-    })
+function openPanel(panel: string) {
+  setOldPanelName(unref(activePanelName))
+  setSidebarPanel(panel)
+}
 
-    const windowWidth = ref(window.innerWidth)
+function closePanel() {
+  setOldPanelName(unref(activePanelName))
+  resetSidebarPanel()
+  unref(appSideBar).focus()
+}
 
-    const fullWidthSideBar = computed(() => unref(windowWidth) <= 960)
-    const backgroundContentEl = computed(() => {
-      return unref(appSideBar)?.parentElement?.querySelector('div') as HTMLElement
-    })
+onMounted(() => {
+  window.addEventListener('resize', onResize)
+})
 
-    const onResize = () => {
-      if (!props.isOpen) {
-        return
-      }
+onBeforeUnmount(() => {
+  window.removeEventListener('resize', onResize)
 
-      windowWidth.value = window.innerWidth
-    }
-
-    watch(
-      () => props.isOpen,
-      async (isOpen) => {
-        if (!isOpen) {
-          return
-        }
-        await nextTick()
-        if (unref(fullWidthSideBar) && unref(backgroundContentEl)) {
-          // hide content behind sidebar when it has full width to avoid focusable elements
-          unref(backgroundContentEl).style.visibility = 'hidden'
-        }
-      },
-      { immediate: true }
-    )
-
-    onMounted(() => {
-      window.addEventListener('resize', onResize)
-    })
-
-    onBeforeUnmount(() => {
-      window.removeEventListener('resize', onResize)
-
-      if (unref(backgroundContentEl)) {
-        unref(backgroundContentEl).style.visibility = 'visible'
-      }
-    })
-
-    return {
-      appSideBar,
-      displayPanels,
-      rootPanels,
-      subPanels,
-      activeSubPanelName,
-      activePanelName,
-      oldPanelName,
-      clearOldPanelName,
-      setOldPanelName,
-      hasActiveSubPanel,
-      hasActiveRootPanel,
-      accessibleLabelBack,
-      fullWidthSideBar
-    }
-  },
-  methods: {
-    setSidebarPanel(panel: string) {
-      this.$emit('selectPanel', panel)
-    },
-
-    resetSidebarPanel() {
-      this.$emit('selectPanel', null)
-    },
-
-    closeSidebar() {
-      this.$emit('close')
-    },
-
-    openPanel(panel: string) {
-      this.setOldPanelName(this.activePanelName)
-      this.setSidebarPanel(panel)
-    },
-
-    closePanel() {
-      this.setOldPanelName(this.activePanelName)
-      this.resetSidebarPanel()
-      this.appSideBar.focus()
-    }
+  if (unref(backgroundContentEl)) {
+    unref(backgroundContentEl).style.visibility = 'visible'
   }
 })
 </script>
