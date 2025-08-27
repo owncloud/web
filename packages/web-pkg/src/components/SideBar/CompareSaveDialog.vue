@@ -26,64 +26,63 @@
   </div>
 </template>
 
-<script lang="ts">
-import { defineComponent, onBeforeUnmount, onMounted, ref } from 'vue'
+<script lang="ts" setup>
+import { computed, watch, onBeforeUnmount, onMounted, ref, unref } from 'vue'
 import isEqual from 'lodash-es/isEqual'
+import { useGettext } from 'vue3-gettext'
+import { Group, User } from '@ownclouders/web-client/graph/generated'
 import { eventBus } from '../../services/eventBus'
 
-export default defineComponent({
-  name: 'CompareSaveDialog',
-  props: {
-    originalObject: {
-      type: Object,
-      required: true
-    },
-    compareObject: {
-      type: Object,
-      required: true
-    },
-    confirmButtonDisabled: {
-      type: Boolean,
-      default: () => {
-        return false
-      }
-    }
-  },
-  emits: ['confirm', 'revert'],
-  setup() {
-    const saved = ref(false)
-    let savedEventToken: string
+interface Props {
+  originalObject: Group | User
+  compareObject: Group | User
+  confirmButtonDisabled?: boolean
+}
 
-    onMounted(() => {
-      savedEventToken = eventBus.subscribe('sidebar.entity.saved', () => {
-        saved.value = true
-      })
-    })
+interface Emits {
+  (e: 'confirm'): void
+  (e: 'revert'): void
+}
 
-    onBeforeUnmount(() => {
-      eventBus.unsubscribe('sidebar.entity.saved', savedEventToken)
-    })
+const { originalObject, compareObject, confirmButtonDisabled = false } = defineProps<Props>()
+defineEmits<Emits>()
 
-    return { saved }
-  },
-  computed: {
-    unsavedChanges() {
-      return !isEqual(this.originalObject, this.compareObject)
-    },
-    unsavedChangesText() {
-      return this.unsavedChanges ? this.$gettext('Unsaved changes') : this.$gettext('No changes')
-    }
-  },
-  watch: {
-    unsavedChanges() {
-      if (this.unsavedChanges) {
-        this.saved = false
-      }
-    },
-    'originalObject.id': function () {
-      this.saved = false
+const { $gettext } = useGettext()
+const saved = ref(false)
+let savedEventToken: string
+
+const unsavedChanges = computed(() => {
+  return !isEqual(originalObject, compareObject)
+})
+
+const unsavedChangesText = computed(() => {
+  return unref(unsavedChanges) ? $gettext('Unsaved changes') : $gettext('No changes')
+})
+
+watch(
+  () => unsavedChanges.value,
+  () => {
+    if (unref(unsavedChanges)) {
+      saved.value = false
     }
   }
+)
+
+watch(
+  () => originalObject.id,
+  () => {
+    saved.value = false
+  }
+)
+
+onMounted(() => {
+  savedEventToken = eventBus.subscribe('sidebar.entity.saved', () => {
+    saved.value = true
+  })
+})
+
+onBeforeUnmount(() => {
+  eventBus.unsubscribe('sidebar.entity.saved', savedEventToken)
 })
 </script>
 <style lang="scss" scoped>
