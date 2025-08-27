@@ -7,6 +7,7 @@ import { AxiosResponse } from 'axios'
 import { ArchiverCapability } from '@ownclouders/web-client/ocs'
 import { createTestingPinia } from '@ownclouders/web-test-helpers'
 import { useUserStore } from '../../../src/composables/piniaStores'
+import { User } from '@ownclouders/web-client/graph/generated'
 
 const serverUrl = 'https://demo.owncloud.com'
 const getArchiverServiceInstance = (capabilities: Ref<ArchiverCapability[]>) => {
@@ -18,7 +19,7 @@ const getArchiverServiceInstance = (capabilities: Ref<ArchiverCapability[]>) => 
     data: new ArrayBuffer(8),
     headers: { 'content-disposition': 'filename="download.tar"' }
   } as unknown as AxiosResponse)
-  clientServiceMock.ocs.signUrl.mockImplementation((url) => Promise.resolve(url))
+  clientServiceMock.ocs.signUrl.mockImplementation((payload) => Promise.resolve(payload.url))
 
   Object.defineProperty(window, 'open', {
     value: vi.fn(),
@@ -108,5 +109,45 @@ describe('archiver', () => {
     const archiverService = getArchiverServiceInstance(capabilities)
     const downloadUrl = await archiverService.triggerDownload({ fileIds: ['any'] })
     expect(downloadUrl.startsWith(archiverUrl + '/v2')).toBeTruthy()
+  })
+
+  it('should sign the download url if a public token is not provided', async () => {
+    const archiverService = getArchiverServiceInstance(capabilities)
+
+    const user = mock<User>({ onPremisesSamAccountName: 'private-owner' })
+    archiverService.userStore.user = user
+
+    const fileId = 'asdf'
+    await archiverService.triggerDownload({ fileIds: [fileId] })
+    expect(archiverService.clientService.ocs.signUrl).toHaveBeenCalledWith({
+      url: archiverUrl + '?id=' + fileId,
+      username: 'private-owner',
+      publicToken: undefined,
+      publicLinkPassword: undefined
+    })
+  })
+
+  it('should sign the download url if a public token is provided with a password', async () => {
+    const archiverService = getArchiverServiceInstance(capabilities)
+    const fileId = 'asdf'
+    await archiverService.triggerDownload({
+      fileIds: [fileId],
+      publicToken: 'token',
+      publicLinkPassword: 'password',
+      publicLinkShareOwner: 'owner'
+    })
+    expect(archiverService.clientService.ocs.signUrl).toHaveBeenCalledWith({
+      url: archiverUrl + '?id=' + fileId,
+      username: 'owner',
+      publicToken: 'token',
+      publicLinkPassword: 'password'
+    })
+  })
+
+  it('should not sign the download url if a public token is provided without a password', async () => {
+    const archiverService = getArchiverServiceInstance(capabilities)
+    const fileId = 'asdf'
+    await archiverService.triggerDownload({ fileIds: [fileId], publicToken: 'token' })
+    expect(archiverService.clientService.ocs.signUrl).not.toHaveBeenCalled()
   })
 })

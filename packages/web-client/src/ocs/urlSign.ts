@@ -8,6 +8,13 @@ export interface UrlSignOptions {
   baseURI: string
 }
 
+export type SignUrlPayload = {
+  url: string
+  username: string
+  publicToken?: string
+  publicLinkPassword?: string
+}
+
 export class UrlSign {
   private axiosClient: AxiosInstance
   private baseURI: string
@@ -24,14 +31,18 @@ export class UrlSign {
     this.baseURI = baseURI
   }
 
-  public async signUrl(url: string, username: string) {
+  public async signUrl({ url, username, publicToken, publicLinkPassword }: SignUrlPayload) {
     const signedUrl = new URL(url)
     signedUrl.searchParams.set('OC-Credential', username)
     signedUrl.searchParams.set('OC-Date', new Date().toISOString())
     signedUrl.searchParams.set('OC-Expires', this.TTL.toString())
     signedUrl.searchParams.set('OC-Verb', 'GET')
 
-    const hashedKey = await this.createHashedKey(signedUrl.toString())
+    const hashedKey = await this.createHashedKey(
+      signedUrl.toString(),
+      publicToken,
+      publicLinkPassword
+    )
 
     signedUrl.searchParams.set('OC-Algo', `PBKDF2/${this.ITERATION_COUNT}-SHA512`)
     signedUrl.searchParams.set('OC-Signature', hashedKey)
@@ -39,7 +50,7 @@ export class UrlSign {
     return signedUrl.toString()
   }
 
-  private async getSignKey() {
+  private async getSignKey(publicToken?: string, publicLinkPassword?: string) {
     if (this.signingKey) {
       return this.signingKey
     }
@@ -47,7 +58,15 @@ export class UrlSign {
     const data = await this.axiosClient.get(
       urlJoin(this.baseURI, 'ocs/v1.php/cloud/user/signing-key'),
       {
-        headers: { 'Content-Type': 'application/x-www-form-urlencoded' }
+        params: {
+          ...(publicToken && { 'public-token': publicToken })
+        },
+        headers: {
+          'Content-Type': 'application/x-www-form-urlencoded',
+          ...(publicLinkPassword && {
+            Authorization: `Basic ${Buffer.from(['public', publicLinkPassword].join(':')).toString('base64')}`
+          })
+        }
       }
     )
 
@@ -56,8 +75,8 @@ export class UrlSign {
     return this.signingKey
   }
 
-  private async createHashedKey(url: string) {
-    const signignKey = await this.getSignKey()
+  private async createHashedKey(url: string, publicToken?: string, publicLinkPassword?: string) {
+    const signignKey = await this.getSignKey(publicToken, publicLinkPassword)
     const hashedKey = pbkdf2Sync(
       url,
       signignKey,

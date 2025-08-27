@@ -33,12 +33,13 @@ import {
 import { applicationStore } from './container/store'
 import {
   buildPublicSpaceResource,
+  DavHttpError,
   isPersonalSpaceResource,
   isPublicSpaceResource,
   PublicSpaceResource
 } from '@ownclouders/web-client'
 import { loadCustomTranslations } from './helpers/customTranslations'
-import { createApp, watch } from 'vue'
+import { createApp, onWatcherCleanup, watch } from 'vue'
 import PortalVue, { createWormhole } from 'portal-vue'
 import { createPinia } from 'pinia'
 import Avatar from './components/Avatar.vue'
@@ -247,7 +248,7 @@ export const bootstrapApp = async (configurationPath: string, appsReadyCallback:
   )
   watch(
     () => authStore.publicLinkContextReady,
-    (publicLinkContextReady) => {
+    async (publicLinkContextReady) => {
       if (!publicLinkContextReady) {
         return
       }
@@ -265,7 +266,46 @@ export const bootstrapApp = async (configurationPath: string, appsReadyCallback:
       })
 
       spacesStore.addSpaces([space])
-      spacesStore.setSpacesInitialized(true)
+
+      const controller = new AbortController()
+
+      onWatcherCleanup(() => {
+        controller.abort()
+      })
+
+      try {
+        const loadedSpace = await clientService.webdav.getFileInfo(
+          space,
+          {},
+          { signal: controller.signal }
+        )
+
+        for (const key in loadedSpace) {
+          if (loadedSpace[key] !== undefined) {
+            space[key] = loadedSpace[key]
+          }
+        }
+
+        spacesStore.upsertSpace(space)
+      } catch (error) {
+        const err = error as DavHttpError
+
+        if (err.statusCode === 401) {
+          return
+        }
+
+        if (err.statusCode === 404) {
+          throw new Error(
+            app.config.globalProperties.$gettext(
+              'The resource could not be located, it may not exist anymore.'
+            )
+          )
+        }
+
+        throw err
+      } finally {
+        spacesStore.setSpacesInitialized(true)
+      }
     },
     {
       immediate: true

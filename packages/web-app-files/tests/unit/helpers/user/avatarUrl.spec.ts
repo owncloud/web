@@ -29,8 +29,8 @@ describe('avatarUrl', () => {
     defaultOptions.clientService.httpAuthenticated.head.mockResolvedValue({
       status: 200
     } as AxiosResponse)
-    defaultOptions.clientService.ocs.signUrl.mockImplementation((url) => {
-      return Promise.resolve(`${url}?signed=true`)
+    defaultOptions.clientService.ocs.signUrl.mockImplementation((payload) => {
+      return Promise.resolve(`${payload.url}?signed=true`)
     })
     const avatarUrlPromise = avatarUrl(defaultOptions)
     await expect(avatarUrlPromise).resolves.toBe(`${buildUrl(defaultOptions)}?signed=true`)
@@ -40,7 +40,9 @@ describe('avatarUrl', () => {
     defaultOptions.clientService.httpAuthenticated.head.mockResolvedValue({
       status: 200
     } as AxiosResponse)
-    defaultOptions.clientService.ocs.signUrl.mockImplementation((url) => Promise.resolve(url))
+    defaultOptions.clientService.ocs.signUrl.mockImplementation((payload) =>
+      Promise.resolve(payload.url)
+    )
 
     const avatarUrlPromiseUncached = avatarUrl(defaultOptions, true)
     await expect(avatarUrlPromiseUncached).resolves.toBe(buildUrl(defaultOptions))
