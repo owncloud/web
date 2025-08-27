@@ -68,6 +68,7 @@ interface Props {
   target?: string
   paddingSize?: AvailableSizeType | 'remove'
   offset?: string
+  sameWidthAsTarget?: boolean
 }
 interface Emits {
   (e: 'hideDrop'): void
@@ -90,7 +91,8 @@ const {
   isNested = false,
   target = null,
   paddingSize = 'medium',
-  offset
+  offset,
+  sameWidthAsTarget = false
 } = defineProps<Props>()
 
 const emit = defineEmits<Emits>()
@@ -154,6 +156,20 @@ function initializeTippy() {
   if (!to || !content) {
     return
   }
+
+  const sameWidthModifier = {
+    name: 'sameWidth',
+    enabled: true,
+    phase: 'beforeWrite',
+    requires: ['computeStyles'],
+    fn: ({ state }) => {
+      state.styles.popper.width = `${state.rects.reference.width}px`
+    },
+    effect: ({ state }) => {
+      state.elements.popper.style.width = `${state.elements.reference.offsetWidth}px`
+    }
+  }
+
   const config: any = {
     trigger: unref(triggerMapping),
     placement: unref(position),
@@ -177,6 +193,7 @@ function initializeTippy() {
       ...unref(popperOptions),
       modifiers: [
         ...(unref(popperOptions)?.modifiers ? unref(popperOptions).modifiers : []),
+        ...(unref(sameWidthAsTarget) ? [sameWidthModifier] : []),
         {
           name: 'fixVerticalPosition',
           enabled: true,

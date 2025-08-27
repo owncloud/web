@@ -53,6 +53,7 @@
       mode="manual"
       target="#files-global-search-bar"
       close-on-click
+      same-width-as-target
     >
       <oc-list class="oc-list-divider">
         <li
@@ -496,6 +497,8 @@ onBeforeUnmount(() => {
 
 <style lang="scss">
 #files-global-search {
+  width: 100%;
+
   .mobile-search-btn {
     display: none;
     @media (max-width: 639px) {
@@ -515,9 +518,12 @@ onBeforeUnmount(() => {
   }
 
   #files-global-search-bar {
-    width: 452px;
+    width: 100%;
+    max-width: 452px;
+    margin: 0 auto;
+
     @media (max-width: 959px) {
-      width: 300px;
+      max-width: 300px;
     }
 
     @media (max-width: 639px) {
@@ -529,7 +535,7 @@ onBeforeUnmount(() => {
       right: 0;
       margin: 0 auto;
       top: 0;
-      width: 95vw !important;
+      max-width: 95vw !important;
       z-index: 9;
 
       .oc-search-input-icon {
@@ -547,7 +553,8 @@ onBeforeUnmount(() => {
   }
 
   #files-global-search-options {
-    width: 450px;
+    width: 100%;
+    max-width: 450px;
     overflow-y: auto;
     max-height: calc(100vh - 60px);
     text-decoration: none;
@@ -557,11 +564,11 @@ onBeforeUnmount(() => {
     }
 
     @media (max-width: 969px) {
-      width: 300px;
+      max-width: 300px;
     }
 
     @media (max-width: 639px) {
-      width: 93vw !important;
+      max-width: 93vw !important;
     }
 
     ul {
