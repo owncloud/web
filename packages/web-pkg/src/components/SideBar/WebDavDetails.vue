@@ -33,53 +33,37 @@
   </tr>
 </template>
 
-<script lang="ts">
-import { defineComponent, inject, ref, Ref, computed, unref, PropType } from 'vue'
+<script lang="ts" setup>
+import { inject, ref, Ref, computed, unref } from 'vue'
 import { Resource, SpaceResource } from '@ownclouders/web-client'
 import { encodePath } from '../../utils'
 
-export default defineComponent({
-  name: 'WebDavDetails',
-  props: {
-    space: {
-      type: Object as PropType<SpaceResource>,
-      required: true
-    }
-  },
-  setup(props) {
-    const resource = inject<Ref<Resource>>('resource')
-    const copiedIcon = 'check'
-    const copyIcon = 'file-copy'
-    const copyWebDAVPathIcon = ref(copyIcon)
-    const copyWebDAVUrlIcon = ref(copyIcon)
+interface Props {
+  space: SpaceResource
+}
+const { space } = defineProps<Props>()
+const resource = inject<Ref<Resource>>('resource')
+const copiedIcon = 'check'
+const copyIcon = 'file-copy'
+const copyWebDAVPathIcon = ref(copyIcon)
+const copyWebDAVUrlIcon = ref(copyIcon)
 
-    const webDavPath = computed(() => {
-      return encodePath(unref(resource).webDavPath)
-    })
-    const webDavUrl = computed(() => {
-      return props.space?.getWebDavUrl({ path: unref(resource).path })
-    })
-
-    const copyWebDAVPathToClipboard = () => {
-      navigator.clipboard.writeText(unref(webDavPath))
-      copyWebDAVPathIcon.value = copiedIcon
-      setTimeout(() => (copyWebDAVPathIcon.value = copyIcon), 500)
-    }
-
-    const copyWebDAVUrlToClipboard = () => {
-      navigator.clipboard.writeText(unref(webDavUrl))
-      copyWebDAVUrlIcon.value = copiedIcon
-      setTimeout(() => (copyWebDAVUrlIcon.value = copyIcon), 500)
-    }
-
-    return {
-      copyWebDAVPathIcon,
-      copyWebDAVPathToClipboard,
-      copyWebDAVUrlIcon,
-      copyWebDAVUrlToClipboard,
-      webDavPath,
-      webDavUrl
-    }
-  }
+const webDavPath = computed(() => {
+  return encodePath(unref(resource).webDavPath)
 })
+const webDavUrl = computed(() => {
+  return space?.getWebDavUrl({ path: unref(resource).path })
+})
+
+const copyWebDAVPathToClipboard = () => {
+  navigator.clipboard.writeText(unref(webDavPath))
+  copyWebDAVPathIcon.value = copiedIcon
+  setTimeout(() => (copyWebDAVPathIcon.value = copyIcon), 500)
+}
+
+const copyWebDAVUrlToClipboard = () => {
+  navigator.clipboard.writeText(unref(webDavUrl))
+  copyWebDAVUrlIcon.value = copiedIcon
+  setTimeout(() => (copyWebDAVUrlIcon.value = copyIcon), 500)
+}
 </script>
