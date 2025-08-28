@@ -1,4 +1,9 @@
 import { RouteLocationRaw } from 'vue-router'
+import type * as components from '../components'
+
+export type OcComponents = {
+  [K in keyof typeof components]: InstanceType<(typeof components)[K]>
+}
 
 export interface ContextualHelperDataListItem {
   text: string
