@@ -84,7 +84,9 @@ describe('ItemFilter', () => {
           item.findComponent<typeof OcCheckbox>(selectors.checkboxStub).props('modelValue')
         ).toBeTruthy()
       }
-      expect(wrapper.vm.selectedItems.length).toBe(wrapper.findAll(selectors.filterListItem).length)
+      expect((wrapper.vm as any).selectedItems.length).toBe(
+        wrapper.findAll(selectors.filterListItem).length
+      )
     })
     it('does not allow selection of multiple items when disabled', async () => {
       const { wrapper } = getWrapper({ props: { allowMultiple: false } })
@@ -96,7 +98,7 @@ describe('ItemFilter', () => {
       const second = wrapper.findAll(selectors.filterListItem).at(1)
       await second.trigger('click')
       expect(wrapper.emitted('selectionChange').length).toBe(2)
-      expect(wrapper.vm.selectedItems.length).toBe(1)
+      expect((wrapper.vm as any).selectedItems.length).toBe(1)
     })
     it('does de-select the current selected item on click', async () => {
       const { wrapper } = getWrapper({ props: { allowMultiple: true } })
@@ -107,7 +109,7 @@ describe('ItemFilter', () => {
       expect(
         item.findComponent<typeof OcCheckbox>(selectors.checkboxStub).props('modelValue')
       ).toBeFalsy()
-      expect(wrapper.vm.selectedItems.length).toBe(0)
+      expect((wrapper.vm as any).selectedItems.length).toBe(0)
     })
     it('clears the selection when the clear-button is being clicked', async () => {
       const { wrapper } = getWrapper({ props: { allowMultiple: true } })
@@ -118,7 +120,7 @@ describe('ItemFilter', () => {
       expect(
         item.findComponent<typeof OcCheckbox>(selectors.checkboxStub).props('modelValue')
       ).toBeFalsy()
-      expect(wrapper.vm.selectedItems.length).toBe(0)
+      expect((wrapper.vm as any).selectedItems.length).toBe(0)
     })
   })
   describe('route query', () => {
@@ -129,13 +131,13 @@ describe('ItemFilter', () => {
       await item.trigger('click')
       expect(mocks.$router.push).toHaveBeenCalledWith(
         expect.objectContaining({
-          query: expect.objectContaining({ [wrapper.vm.queryParam]: '1' })
+          query: expect.objectContaining({ [(wrapper.vm as any).queryParam]: '1' })
         })
       )
     })
     it('sets the selected items initially when given via query param', () => {
       const { wrapper } = getWrapper({ initialQuery: '1' })
-      expect(wrapper.vm.selectedItems).toEqual([filterItems[0]])
+      expect((wrapper.vm as any).selectedItems).toEqual([filterItems[0]])
     })
   })
 
@@ -183,7 +185,9 @@ function getWrapper({
       },
       slots: {
         item(data) {
-          return props.displayNameAttribute ? data.item[props.displayNameAttribute] : data.item.name
+          return props.displayNameAttribute
+            ? data.item[props.displayNameAttribute]
+            : (data.item as any).name
         }
       },
       global: {

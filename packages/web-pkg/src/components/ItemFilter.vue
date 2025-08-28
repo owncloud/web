@@ -61,8 +61,8 @@
   </div>
 </template>
 
-<script lang="ts">
-import { PropType, defineComponent, nextTick, onMounted, ref, unref, watch } from 'vue'
+<script lang="ts" setup>
+import { nextTick, onMounted, ref, unref, watch } from 'vue'
 import Fuse, { FuseOptionKey } from 'fuse.js'
 import Mark from 'mark.js'
 import omit from 'lodash-es/omit'
@@ -72,177 +72,138 @@ import { queryItemAsString } from '../composables/appDefaults'
 
 type Item = unknown
 
-export default defineComponent({
-  name: 'ItemFilter',
-  props: {
-    filterLabel: {
-      type: String,
-      required: true
-    },
-    filterName: {
-      type: String,
-      required: true
-    },
-    optionFilterLabel: {
-      type: String,
-      required: false,
-      default: ''
-    },
-    showOptionFilter: {
-      type: Boolean,
-      required: false,
-      default: false
-    },
-    items: {
-      type: Array as PropType<Item[]>,
-      required: true
-    },
-    allowMultiple: {
-      type: Boolean,
-      required: false,
-      default: false
-    },
-    idAttribute: {
-      type: String,
-      required: false,
-      default: 'id'
-    },
-    displayNameAttribute: {
-      type: String,
-      required: false,
-      default: 'name'
-    },
-    filterableAttributes: {
-      type: Array as PropType<FuseOptionKey<Item>[]>,
-      required: false,
-      default: (): FuseOptionKey<Item>[] => []
-    },
-    closeOnClick: {
-      type: Boolean,
-      default: false
-    }
-  },
-  emits: ['selectionChange'],
-  setup: function (props, { emit, expose }) {
-    const router = useRouter()
-    const currentRoute = useRoute()
-    const filterInputRef = ref()
-    const selectedItems = ref([])
-    const displayedItems = ref(props.items)
-    const markInstance = ref(null)
-    const itemFilterListRef = ref(null)
+interface Props {
+  filterLabel: string
+  filterName: string
+  optionFilterLabel?: string
+  showOptionFilter?: boolean
+  items: Item[]
+  allowMultiple?: boolean
+  idAttribute?: string
+  displayNameAttribute?: string
+  filterableAttributes?: FuseOptionKey<Item>[]
+  closeOnClick?: boolean
+}
 
-    const queryParam = `q_${props.filterName}`
-    const currentRouteQuery = useRouteQuery(queryParam)
+interface Emits {
+  (e: 'selectionChange', value: Item[]): void
+}
+const {
+  filterLabel,
+  filterName,
+  optionFilterLabel = '',
+  showOptionFilter = false,
+  items,
+  allowMultiple = false,
+  idAttribute = 'id',
+  displayNameAttribute = 'name',
+  filterableAttributes = [],
+  closeOnClick = false
+} = defineProps<Props>()
+const emit = defineEmits<Emits>()
+const router = useRouter()
+const currentRoute = useRoute()
+const filterInputRef = ref()
+const selectedItems = ref([])
+const displayedItems = ref(items)
+const markInstance = ref(null)
+const itemFilterListRef = ref(null)
 
-    const getId = (item: Item) => {
-      return item[props.idAttribute as keyof Item]
-    }
+const queryParam = `q_${filterName}`
+const currentRouteQuery = useRouteQuery(queryParam)
 
-    const setRouteQuery = () => {
-      return router.push({
-        query: {
-          ...omit(unref(currentRoute).query, [queryParam]),
-          ...(!!unref(selectedItems).length && {
-            [queryParam]: unref(selectedItems)
-              .reduce((acc, item) => {
-                acc += `${getId(item)}+`
-                return acc
-              }, '')
-              .slice(0, -1)
-          })
-        }
+const getId = (item: Item) => {
+  return item[idAttribute as keyof Item]
+}
+
+const setRouteQuery = () => {
+  return router.push({
+    query: {
+      ...omit(unref(currentRoute).query, [queryParam]),
+      ...(!!unref(selectedItems).length && {
+        [queryParam]: unref(selectedItems)
+          .reduce((acc, item) => {
+            acc += `${getId(item)}+`
+            return acc
+          }, '')
+          .slice(0, -1)
       })
     }
+  })
+}
 
-    const isItemSelected = (item: Item) => {
-      return !!unref(selectedItems).find((s) => getId(s) === getId(item))
-    }
+const isItemSelected = (item: Item) => {
+  return !!unref(selectedItems).find((s) => getId(s) === getId(item))
+}
 
-    const toggleItemSelection = async (item: Item) => {
-      if (isItemSelected(item)) {
-        selectedItems.value = unref(selectedItems).filter((s) => getId(s) !== getId(item))
-      } else {
-        if (!props.allowMultiple) {
-          selectedItems.value = []
-        }
-        selectedItems.value.push(item)
-      }
-      await setRouteQuery()
-      emit('selectionChange', unref(selectedItems))
-    }
-
-    const filterTerm = ref()
-    const filter = (items: Item[], filterTerm: string) => {
-      if (!(filterTerm || '').trim()) {
-        return items
-      }
-      const fuse = new Fuse(items, {
-        ...defaultFuseOptions,
-        keys: props.filterableAttributes
-      })
-
-      const results = fuse.search(filterTerm).map((r) => r.item)
-      return items.filter((item) => results.includes(item))
-    }
-    const clearFilter = () => {
+const toggleItemSelection = async (item: Item) => {
+  if (isItemSelected(item)) {
+    selectedItems.value = unref(selectedItems).filter((s) => getId(s) !== getId(item))
+  } else {
+    if (!allowMultiple) {
       selectedItems.value = []
-      emit('selectionChange', unref(selectedItems))
-      setRouteQuery()
     }
-
-    const setDisplayedItems = (items: Item[]) => {
-      displayedItems.value = items
-    }
-
-    const showDrop = async () => {
-      setDisplayedItems(props.items)
-      await nextTick()
-      unref(filterInputRef)?.focus()
-    }
-
-    watch(filterTerm, () => {
-      setDisplayedItems(filter(props.items, unref(filterTerm)))
-      if (unref(itemFilterListRef)) {
-        markInstance.value = new Mark(unref(itemFilterListRef))
-        unref(markInstance).unmark()
-        unref(markInstance).mark(unref(filterTerm), {
-          element: 'span',
-          className: 'mark-highlight'
-        })
-      }
-    })
-
-    const setSelectedItemsBasedOnQuery = () => {
-      const queryStr = queryItemAsString(unref(currentRouteQuery))
-      if (queryStr) {
-        const ids = queryStr.split('+')
-        selectedItems.value = props.items.filter((s) => ids.includes(getId(s)))
-      }
-    }
-
-    expose({ setSelectedItemsBasedOnQuery })
-
-    onMounted(() => {
-      setSelectedItemsBasedOnQuery()
-    })
-
-    return {
-      clearFilter,
-      displayedItems,
-      filterInputRef,
-      filterTerm,
-      isItemSelected,
-      itemFilterListRef,
-      queryParam,
-      selectedItems,
-      setDisplayedItems,
-      showDrop,
-      toggleItemSelection,
-      // expose to type
-      setSelectedItemsBasedOnQuery
-    }
+    selectedItems.value.push(item)
   }
+  await setRouteQuery()
+  emit('selectionChange', unref(selectedItems))
+}
+
+const filterTerm = ref()
+const filter = (items: Item[], filterTerm: string) => {
+  if (!(filterTerm || '').trim()) {
+    return items
+  }
+  const fuse = new Fuse(items, {
+    ...defaultFuseOptions,
+    keys: filterableAttributes
+  })
+
+  const results = fuse.search(filterTerm).map((r) => r.item)
+  return items.filter((item) => results.includes(item))
+}
+const clearFilter = () => {
+  selectedItems.value = []
+  emit('selectionChange', unref(selectedItems))
+  setRouteQuery()
+}
+
+const setDisplayedItems = (items: Item[]) => {
+  displayedItems.value = items
+}
+
+const showDrop = async () => {
+  setDisplayedItems(items)
+  await nextTick()
+  unref(filterInputRef)?.focus()
+}
+
+watch(filterTerm, () => {
+  setDisplayedItems(filter(items, unref(filterTerm)))
+  if (unref(itemFilterListRef)) {
+    markInstance.value = new Mark(unref(itemFilterListRef))
+    unref(markInstance).unmark()
+    unref(markInstance).mark(unref(filterTerm), {
+      element: 'span',
+      className: 'mark-highlight'
+    })
+  }
+})
+
+const setSelectedItemsBasedOnQuery = () => {
+  const queryStr = queryItemAsString(unref(currentRouteQuery))
+  if (queryStr) {
+    const ids = queryStr.split('+')
+    selectedItems.value = items.filter((s) => ids.includes(getId(s)))
+  }
+}
+
+defineExpose({
+  setSelectedItemsBasedOnQuery
+})
+
+onMounted(() => {
+  setSelectedItemsBasedOnQuery()
 })
 </script>
 
