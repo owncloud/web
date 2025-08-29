@@ -7,6 +7,7 @@ PROJECT_ROOT=$(cd "$SCRIPT_PATH/../../" && pwd)
 SCRIPT_PATH_REL=${SCRIPT_PATH//"$PROJECT_ROOT/"/}
 
 E2E_COMMAND="pnpm test:e2e:cucumber" # run command defined in package.json
+E2E_PLAYWRIGHT_COMMAND="pnpm test:e2e:playwright"
 
 ALL_SUITES=$(find "${FEATURES_DIR}"/ -type d | sort | rev | cut -d"/" -f1 | rev | grep -v '^[[:space:]]*$')
 FILTER_SUITES=""
@@ -118,6 +119,15 @@ function runE2E() {
         # shellcheck disable=SC2086
         $E2E_COMMAND $FEATURE_PATHS # do not enclose paths with quote
     fi
+    exit $?
+}
+
+function runE2EOnPlaywright() {
+    if [[ ! -d "$PROJECT_ROOT" ]]; then
+        log error "Project root doesn't exist: '$PROJECT_ROOT'"
+    fi
+    cd "$PROJECT_ROOT" || exit 1
+    $E2E_PLAYWRIGHT_COMMAND
     exit $?
 }
 
