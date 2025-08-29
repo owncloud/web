@@ -37,14 +37,14 @@ describe('CreateShortcutModal', () => {
   describe('method "searchTask"', () => {
     it('should set "searchResult" correctly', async () => {
       const { wrapper } = getWrapper()
-      await wrapper.vm.searchTask.perform('new file')
-      expect(wrapper.vm.searchResult.values.length).toBe(3)
+      await (wrapper.vm as any).searchTask.perform('new file')
+      expect((wrapper.vm as any).searchResult.values.length).toBe(3)
     })
     it('should reset "searchResult" on error', async () => {
       console.error = vi.fn()
       const { wrapper } = getWrapper({ rejectSearch: true })
-      await wrapper.vm.searchTask.perform('new folder')
-      expect(wrapper.vm.searchResult).toBe(null)
+      await (wrapper.vm as any).searchTask.perform('new folder')
+      expect((wrapper.vm as any).searchResult).toBe(null)
     })
   })
 })
