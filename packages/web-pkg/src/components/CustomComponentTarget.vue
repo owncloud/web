@@ -6,8 +6,8 @@
   />
 </template>
 
-<script lang="ts">
-import { computed, defineComponent, PropType, unref, toRaw } from 'vue'
+<script lang="ts" setup>
+import { computed, unref, toRaw } from 'vue'
 import {
   CustomComponentExtension,
   ExtensionPoint,
@@ -15,53 +15,41 @@ import {
   useExtensionRegistry
 } from '../composables'
 
-export default defineComponent({
-  name: 'CustomComponentTarget',
-  props: {
-    extensionPoint: {
-      type: Object as PropType<ExtensionPoint<CustomComponentExtension>>,
-      required: true
-    }
-  },
-  setup(props) {
-    const extensionRegistry = useExtensionRegistry()
-    const extensionPreferences = useExtensionPreferencesStore()
+interface Props {
+  extensionPoint: ExtensionPoint<CustomComponentExtension>
+}
+const { extensionPoint } = defineProps<Props>()
+const extensionRegistry = useExtensionRegistry()
+const extensionPreferences = useExtensionPreferencesStore()
 
-    const allExtensions = computed(() => {
-      return extensionRegistry.requestExtensions(props.extensionPoint)
-    })
+const allExtensions = computed(() => {
+  return extensionRegistry.requestExtensions(extensionPoint)
+})
 
-    const defaultExtensionIds = extensionPreferences.extractDefaultExtensionIds(
-      props.extensionPoint,
-      unref(allExtensions)
-    )
+const defaultExtensionIds = extensionPreferences.extractDefaultExtensionIds(
+  extensionPoint,
+  unref(allExtensions)
+)
 
-    const extensions = computed<CustomComponentExtension[]>(() => {
-      // TODO: for `multiple` we want to respect the selected extensions as well in the future.
-      if (props.extensionPoint.multiple || unref(allExtensions).length <= 1) {
-        return unref(allExtensions)
-      }
-
-      const preference = extensionPreferences.getExtensionPreference(
-        props.extensionPoint.id,
-        defaultExtensionIds
-      )
-      if (preference.selectedExtensionIds.length) {
-        return [
-          unref(allExtensions).find((extension) =>
-            preference.selectedExtensionIds.includes(extension.id)
-          ) || unref(allExtensions)[0]
-        ]
-      }
-
-      // if no user preference and no default provided, return the first one.
-      return [unref(allExtensions)[0]]
-    })
-
-    return {
-      extensions,
-      toRaw
-    }
+const extensions = computed<CustomComponentExtension[]>(() => {
+  // TODO: for `multiple` we want to respect the selected extensions as well in the future.
+  if (extensionPoint.multiple || unref(allExtensions).length <= 1) {
+    return unref(allExtensions)
   }
+
+  const preference = extensionPreferences.getExtensionPreference(
+    extensionPoint.id,
+    defaultExtensionIds
+  )
+  if (preference.selectedExtensionIds.length) {
+    return [
+      unref(allExtensions).find((extension) =>
+        preference.selectedExtensionIds.includes(extension.id)
+      ) || unref(allExtensions)[0]
+    ]
+  }
+
+  // if no user preference and no default provided, return the first one.
+  return [unref(allExtensions)[0]]
 })
 </script>
