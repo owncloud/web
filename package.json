@@ -101,7 +101,8 @@
   },
   "pnpm": {
     "overrides": {
-      "elliptic": "6.6.1"
+      "elliptic": "6.6.1",
+      "sha.js": "2.4.12"
     },
     "patchedDependencies": {
       "caf@15.0.1": "patches/caf@15.0.1.patch",
