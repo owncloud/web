@@ -93,11 +93,11 @@
     "vue3-gettext": "2.4.0"
   },
   "engines": {
-    "node": ">=22.18.0"
+    "node": ">=22.19.0"
   },
   "packageManager": "pnpm@10.15.1",
   "volta": {
-    "node": "22.18.0"
+    "node": "22.19.0"
   },
   "pnpm": {
     "overrides": {
