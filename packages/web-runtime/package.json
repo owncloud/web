@@ -20,7 +20,7 @@
     "@uppy/tus": "5.0.0",
     "@uppy/utils": "7.0.1",
     "@uppy/xhr-upload": "5.0.0",
-    "@vueuse/core": "13.8.0",
+    "@vueuse/core": "13.9.0",
     "@vueuse/head": "2.0.0",
     "axios": "1.11.0",
     "deepmerge": "4.3.1",
