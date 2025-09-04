@@ -740,7 +740,9 @@ export const registerSSEEventListeners = ({
   previewService,
   configStore,
   userStore,
-  router
+  router,
+  publicLinkToken,
+  publicLinkPassword
 }: {
   language: Language
   resourcesStore: ResourcesStore
@@ -752,6 +754,8 @@ export const registerSSEEventListeners = ({
   configStore: ConfigStore
   userStore: UserStore
   router: Router
+  publicLinkToken?: string
+  publicLinkPassword?: string
 }): void => {
   const resourceQueue = new PQueue({
     concurrency: configStore.options.concurrentRequests.sse
@@ -778,7 +782,16 @@ export const registerSSEEventListeners = ({
     resourceQueue
   } satisfies Partial<SseEventWrapperOptions>
 
-  clientService.sseAuthenticated.addEventListener(MESSAGE_TYPE.ITEM_RENAMED, (msg) =>
+  let sse: EventSource
+
+  if (publicLinkToken) {
+    clientService.initSseUnAuthenticated(publicLinkToken, publicLinkPassword)
+    sse = clientService.sseUnAuthenticated
+  } else {
+    sse = clientService.sseAuthenticated
+  }
+
+  sse.addEventListener(MESSAGE_TYPE.ITEM_RENAMED, (msg) =>
     sseEventWrapper({
       topic: MESSAGE_TYPE.ITEM_RENAMED,
       msg,
@@ -787,7 +800,7 @@ export const registerSSEEventListeners = ({
     })
   )
 
-  clientService.sseAuthenticated.addEventListener(MESSAGE_TYPE.POSTPROCESSING_FINISHED, (msg) =>
+  sse.addEventListener(MESSAGE_TYPE.POSTPROCESSING_FINISHED, (msg) =>
     sseEventWrapper({
       topic: MESSAGE_TYPE.POSTPROCESSING_FINISHED,
       msg,
@@ -796,7 +809,7 @@ export const registerSSEEventListeners = ({
     })
   )
 
-  clientService.sseAuthenticated.addEventListener(MESSAGE_TYPE.FILE_LOCKED, (msg) =>
+  sse.addEventListener(MESSAGE_TYPE.FILE_LOCKED, (msg) =>
     sseEventWrapper({
       topic: MESSAGE_TYPE.FILE_LOCKED,
       msg,
@@ -805,7 +818,7 @@ export const registerSSEEventListeners = ({
     })
   )
 
-  clientService.sseAuthenticated.addEventListener(MESSAGE_TYPE.FILE_UNLOCKED, (msg) =>
+  sse.addEventListener(MESSAGE_TYPE.FILE_UNLOCKED, (msg) =>
     sseEventWrapper({
       topic: MESSAGE_TYPE.FILE_UNLOCKED,
       msg,
@@ -814,7 +827,7 @@ export const registerSSEEventListeners = ({
     })
   )
 
-  clientService.sseAuthenticated.addEventListener(MESSAGE_TYPE.ITEM_TRASHED, (msg) =>
+  sse.addEventListener(MESSAGE_TYPE.ITEM_TRASHED, (msg) =>
     sseEventWrapper({
       topic: MESSAGE_TYPE.ITEM_TRASHED,
       msg,
@@ -823,7 +836,7 @@ export const registerSSEEventListeners = ({
     })
   )
 
-  clientService.sseAuthenticated.addEventListener(MESSAGE_TYPE.ITEM_RESTORED, (msg) =>
+  sse.addEventListener(MESSAGE_TYPE.ITEM_RESTORED, (msg) =>
     sseEventWrapper({
       topic: MESSAGE_TYPE.ITEM_RESTORED,
       msg,
@@ -832,7 +845,7 @@ export const registerSSEEventListeners = ({
     })
   )
 
-  clientService.sseAuthenticated.addEventListener(MESSAGE_TYPE.ITEM_MOVED, (msg) =>
+  sse.addEventListener(MESSAGE_TYPE.ITEM_MOVED, (msg) =>
     sseEventWrapper({
       topic: MESSAGE_TYPE.ITEM_MOVED,
       msg,
@@ -841,7 +854,7 @@ export const registerSSEEventListeners = ({
     })
   )
 
-  clientService.sseAuthenticated.addEventListener(MESSAGE_TYPE.FOLDER_CREATED, (msg) =>
+  sse.addEventListener(MESSAGE_TYPE.FOLDER_CREATED, (msg) =>
     sseEventWrapper({
       topic: MESSAGE_TYPE.FOLDER_CREATED,
       msg,
@@ -850,7 +863,7 @@ export const registerSSEEventListeners = ({
     })
   )
 
-  clientService.sseAuthenticated.addEventListener(MESSAGE_TYPE.FILE_TOUCHED, (msg) =>
+  sse.addEventListener(MESSAGE_TYPE.FILE_TOUCHED, (msg) =>
     sseEventWrapper({
       topic: MESSAGE_TYPE.FILE_TOUCHED,
       msg,
@@ -859,7 +872,7 @@ export const registerSSEEventListeners = ({
     })
   )
 
-  clientService.sseAuthenticated.addEventListener(MESSAGE_TYPE.SPACE_MEMBER_ADDED, (msg) =>
+  sse.addEventListener(MESSAGE_TYPE.SPACE_MEMBER_ADDED, (msg) =>
     sseEventWrapper({
       topic: MESSAGE_TYPE.SPACE_MEMBER_ADDED,
       msg,
@@ -868,7 +881,7 @@ export const registerSSEEventListeners = ({
     })
   )
 
-  clientService.sseAuthenticated.addEventListener(MESSAGE_TYPE.SPACE_MEMBER_REMOVED, (msg) =>
+  sse.addEventListener(MESSAGE_TYPE.SPACE_MEMBER_REMOVED, (msg) =>
     sseEventWrapper({
       topic: MESSAGE_TYPE.SPACE_MEMBER_REMOVED,
       msg,
@@ -877,7 +890,7 @@ export const registerSSEEventListeners = ({
     })
   )
 
-  clientService.sseAuthenticated.addEventListener(MESSAGE_TYPE.SPACE_SHARE_UPDATED, (msg) =>
+  sse.addEventListener(MESSAGE_TYPE.SPACE_SHARE_UPDATED, (msg) =>
     sseEventWrapper({
       topic: MESSAGE_TYPE.SPACE_SHARE_UPDATED,
       msg,
@@ -886,7 +899,7 @@ export const registerSSEEventListeners = ({
     })
   )
 
-  clientService.sseAuthenticated.addEventListener(MESSAGE_TYPE.SHARE_CREATED, (msg) =>
+  sse.addEventListener(MESSAGE_TYPE.SHARE_CREATED, (msg) =>
     sseEventWrapper({
       topic: MESSAGE_TYPE.SHARE_CREATED,
       msg,
@@ -895,7 +908,7 @@ export const registerSSEEventListeners = ({
     })
   )
 
-  clientService.sseAuthenticated.addEventListener(MESSAGE_TYPE.SHARE_REMOVED, (msg) =>
+  sse.addEventListener(MESSAGE_TYPE.SHARE_REMOVED, (msg) =>
     sseEventWrapper({
       topic: MESSAGE_TYPE.SHARE_REMOVED,
       msg,
@@ -904,7 +917,7 @@ export const registerSSEEventListeners = ({
     })
   )
 
-  clientService.sseAuthenticated.addEventListener(MESSAGE_TYPE.SHARE_UPDATED, (msg) =>
+  sse.addEventListener(MESSAGE_TYPE.SHARE_UPDATED, (msg) =>
     sseEventWrapper({
       topic: MESSAGE_TYPE.SHARE_UPDATED,
       msg,
@@ -913,7 +926,7 @@ export const registerSSEEventListeners = ({
     })
   )
 
-  clientService.sseAuthenticated.addEventListener(MESSAGE_TYPE.LINK_CREATED, (msg) =>
+  sse.addEventListener(MESSAGE_TYPE.LINK_CREATED, (msg) =>
     sseEventWrapper({
       topic: MESSAGE_TYPE.LINK_CREATED,
       msg,
@@ -922,7 +935,7 @@ export const registerSSEEventListeners = ({
     })
   )
 
-  clientService.sseAuthenticated.addEventListener(MESSAGE_TYPE.LINK_REMOVED, (msg) =>
+  sse.addEventListener(MESSAGE_TYPE.LINK_REMOVED, (msg) =>
     sseEventWrapper({
       topic: MESSAGE_TYPE.LINK_REMOVED,
       msg,
@@ -931,7 +944,7 @@ export const registerSSEEventListeners = ({
     })
   )
 
-  clientService.sseAuthenticated.addEventListener(MESSAGE_TYPE.LINK_UPDATED, (msg) =>
+  sse.addEventListener(MESSAGE_TYPE.LINK_UPDATED, (msg) =>
     sseEventWrapper({
       topic: MESSAGE_TYPE.LINK_UPDATED,
       msg,
@@ -940,7 +953,7 @@ export const registerSSEEventListeners = ({
     })
   )
 
-  clientService.sseAuthenticated.addEventListener(MESSAGE_TYPE.BACKCHANNEL_LOGOUT, (msg) =>
+  sse.addEventListener(MESSAGE_TYPE.BACKCHANNEL_LOGOUT, (msg) =>
     sseEventWrapper({
       topic: MESSAGE_TYPE.BACKCHANNEL_LOGOUT,
       msg,
