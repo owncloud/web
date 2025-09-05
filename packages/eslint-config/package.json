@@ -16,7 +16,7 @@
     ".": "./index.js"
   },
   "dependencies": {
-    "@babel/eslint-parser": "^7.28.0",
+    "@babel/eslint-parser": "^7.28.4",
     "@typescript-eslint/parser": "^8.42.0",
     "eslint-config-prettier": "^10.1.8",
     "eslint-plugin-n": "^17.21.3",
@@ -29,6 +29,6 @@
     "typescript-eslint": "^8.42.0"
   },
   "peerDependencies": {
-    "eslint": "^9.34.0"
+    "eslint": "^9.35.0"
   }
 }
