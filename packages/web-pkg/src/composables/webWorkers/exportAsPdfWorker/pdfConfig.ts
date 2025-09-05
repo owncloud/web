@@ -36,7 +36,7 @@ export const PDF_THEME = Object.freeze({
     codeSpan: rgb(0.7, 0.1, 0.1),
     codeBlockBg: rgb(0.15625, 0.171875, 0.203125),
     codeBlockText: rgb(0.875, 0.875, 0.875),
-    blockquoteBar: rgb(0.7, 0.7, 0.7),
+    blockquoteBar: rgb(0.208, 0.702, 0.471),
     blockquoteText: rgb(0.3, 0.3, 0.3),
     tableHeaderBg: rgb(0.9, 0.9, 0.9),
     tableBorder: rgb(0.5, 0.5, 0.5),
@@ -60,7 +60,7 @@ export const PDF_THEME = Object.freeze({
   blockquote: {
     barWidth: 3,
     barXOffset: 10,
-    contentPadding: 40
+    nestedQuoteYOffset: 10
   },
   hr: {
     thickness: 1

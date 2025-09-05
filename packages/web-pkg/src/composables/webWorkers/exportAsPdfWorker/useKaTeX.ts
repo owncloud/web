@@ -129,13 +129,45 @@ export function useKaTeX() {
    * @returns Promise resolving to the content with formulas replaced by image tags
    */
   async function preprocessKaTeXFormulas(markdownContent: string): Promise<string> {
+    // Extract code blocks, tables, and inline code, then replace with placeholders
+    const extractedContent: string[] = []
+    let content = markdownContent
+
+    content = content.replace(/```[\s\S]*?```/g, (match) => {
+      const placeholder = `__CODE_BLOCK_${extractedContent.length}__`
+      extractedContent.push(match)
+      return placeholder
+    })
+
+    content = content.replace(/^\|.*\|[\s\S]*?(?=\n(?!\|)|$)/gm, (match) => {
+      const placeholder = `__TABLE_${extractedContent.length}__`
+      extractedContent.push(match)
+      return placeholder
+    })
+
+    content = content.replace(/`[^`]+`/g, (match) => {
+      const placeholder = `__INLINE_CODE_${extractedContent.length}__`
+      extractedContent.push(match)
+      return placeholder
+    })
+
     const blockRegex = /\$\$([\s\S]*?)\$\$/g
-    const inlineRegex = /\$([^\$]+?)\$/g
+    const inlineRegex = /\$([\s\S]*?)\$/g
 
-    let content = await replaceFormulas(markdownContent, blockRegex, true)
-    content = await replaceFormulas(content, inlineRegex, false)
+    let processedContent = await replaceFormulas(content, blockRegex, true)
+    processedContent = await replaceFormulas(processedContent, inlineRegex, false)
 
-    return content
+    extractedContent.forEach((extracted, index) => {
+      const codeBlockPlaceholder = `__CODE_BLOCK_${index}__`
+      const tablePlaceholder = `__TABLE_${index}__`
+      const inlinePlaceholder = `__INLINE_CODE_${index}__`
+
+      processedContent = processedContent.replace(codeBlockPlaceholder, extracted)
+      processedContent = processedContent.replace(tablePlaceholder, extracted)
+      processedContent = processedContent.replace(inlinePlaceholder, extracted)
+    })
+
+    return processedContent
   }
 
   return { preprocessKaTeXFormulas }

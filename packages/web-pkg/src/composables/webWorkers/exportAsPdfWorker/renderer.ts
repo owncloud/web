@@ -8,12 +8,12 @@ import {
   parseImageAttributes,
   parseInlineTokens,
   partitionTokens,
-  sanitizeText,
   splitTextToFit,
   FontWeight
 } from './helpers'
 import { PDF_THEME } from './pdfConfig'
 import { markedExtensions } from './markedExtensions'
+import { captureException } from '@sentry/vue'
 
 marked.use({ extensions: markedExtensions })
 
@@ -63,8 +63,7 @@ export class PDFRenderer {
    * @param content - The markdown content to render as PDF
    */
   constructor(content: string) {
-    const sanitizedMarkdown = sanitizeText(content)
-    this.#tokens = marked.lexer(sanitizedMarkdown)
+    this.#tokens = marked.lexer(content)
   }
 
   /**
@@ -118,7 +117,7 @@ export class PDFRenderer {
       case 'heading':
         return this.#renderHeading(token as Tokens.Heading)
       case 'paragraph':
-        return this.#renderParagraph(token as Tokens.Paragraph)
+        return this.#renderParagraph({ token: token as Tokens.Paragraph })
       case 'code':
         return this.#renderCodeBlock(token as Tokens.Code)
       case 'list':
@@ -185,12 +184,23 @@ export class PDFRenderer {
    * images, formatting (bold, italic, code), links, and special characters.
    * It handles line wrapping, inline images, and maintains proper spacing.
    *
-   * @param token - The markdown paragraph token containing inline tokens
+   * @param options.token - The markdown paragraph token containing inline tokens
+   * @param options.margin - The left margin for the paragraph
+   * @param options.preferredFont - The font which should override the default font
    * @returns Promise resolving to RenderResult indicating if a new page is needed
    */
-  async #renderParagraph(token: Tokens.Paragraph): Promise<RenderResult> {
+  async #renderParagraph({
+    token,
+    margin = PDF_THEME.layout.margin,
+    preferredFont,
+    includeBottomSpacing = true
+  }: {
+    token: Tokens.Paragraph
+    margin?: number
+    preferredFont?: FontWeight
+    includeBottomSpacing?: boolean
+  }): Promise<RenderResult> {
     const lineHeight = PDF_THEME.font.lineHeight
-    const margin = PDF_THEME.layout.margin
 
     let currentX = margin
 
@@ -260,7 +270,7 @@ export class PDFRenderer {
       const segments = parseInlineTokens([inlineToken])
 
       for (const segment of segments) {
-        const font = getFontForSegment(segment, this.#fonts)
+        const font = getFontForSegment(segment, this.#fonts, preferredFont)
         let fontSize: number = PDF_THEME.font.baseSize
         let yOffset = 0
 
@@ -327,7 +337,10 @@ export class PDFRenderer {
       }
     }
 
-    this.#yPosition -= PDF_THEME.spacing.md
+    if (includeBottomSpacing) {
+      this.#yPosition -= PDF_THEME.spacing.md
+    }
+
     return { needsNewPage: false }
   }
 
@@ -374,7 +387,7 @@ export class PDFRenderer {
       this.#yPosition -= lineHeight
     }
 
-    this.#yPosition -= PDF_THEME.spacing.md
+    this.#yPosition -= PDF_THEME.spacing.md + padding
     return { needsNewPage: false }
   }
 
@@ -391,7 +404,7 @@ export class PDFRenderer {
   async #renderList(token: Tokens.List, level = 0): Promise<RenderResult> {
     const margin = PDF_THEME.layout.margin
     const indent = margin + level * PDF_THEME.spacing.listIndent
-    const bulletChar = token.ordered ? '1.' : '•'
+    const bulletChar = token.ordered ? token.start + '.' : '•'
     const lineHeight = PDF_THEME.font.listItemLineHeight
 
     for (let i = 0; i < token.items.length; i++) {
@@ -412,54 +425,66 @@ export class PDFRenderer {
         color: PDF_THEME.color.text
       })
 
-      const { textTokens, imageTokens } = partitionTokens(item.tokens)
+      const [content, ...subitems] = item.tokens
 
-      for (const imageToken of imageTokens) {
-        const imageResult = await this.#renderImage(
-          imageToken as Tokens.Image,
-          indent + 20,
-          this.#maxWidth - (indent + 20 - margin)
-        )
-
-        if (imageResult.needsNewPage) {
-          return { needsNewPage: true }
-        }
+      if (!content) {
+        continue
       }
 
-      if (textTokens.length > 0) {
-        const itemText = extractTextFromTokens(textTokens)
-        const lines = splitTextToFit(
-          itemText,
-          this.#fonts['regular'],
-          PDF_THEME.font.baseSize,
-          this.#maxWidth - (indent + 20 - margin)
-        )
+      if ('tokens' in content) {
+        const { textTokens, imageTokens } = partitionTokens(content.tokens)
 
-        for (const line of lines) {
-          if (this.#yPosition < PDF_THEME.layout.margin) {
+        for (const imageToken of imageTokens) {
+          const imageResult = await this.#renderImage(
+            imageToken as Tokens.Image,
+            indent + 20,
+            this.#maxWidth - (indent + 20 - margin)
+          )
+
+          if (imageResult.needsNewPage) {
             return { needsNewPage: true }
           }
+        }
 
-          this.#page.drawText(line, {
-            x: indent + 20,
-            y: this.#yPosition,
-            size: PDF_THEME.font.baseSize,
-            font: this.#fonts['regular'],
-            color: PDF_THEME.color.text
-          })
-          this.#yPosition -= lineHeight
+        if (textTokens.length > 0) {
+          const itemText = extractTextFromTokens(textTokens)
+          const lines = splitTextToFit(
+            itemText,
+            this.#fonts['regular'],
+            PDF_THEME.font.baseSize,
+            this.#maxWidth - (indent + 20 - margin)
+          )
+
+          for (const line of lines) {
+            if (this.#yPosition < PDF_THEME.layout.margin) {
+              return { needsNewPage: true }
+            }
+
+            this.#page.drawText(line, {
+              x: indent + 20,
+              y: this.#yPosition,
+              size: PDF_THEME.font.baseSize,
+              font: this.#fonts['regular'],
+              color: PDF_THEME.color.text
+            })
+            this.#yPosition -= lineHeight
+          }
         }
       }
 
-      if (item.tokens) {
-        for (const nestedToken of item.tokens) {
-          if (nestedToken.type === 'list') {
-            const result = await this.#renderList(nestedToken as Tokens.List, level + 1)
+      if (subitems.length < 1) {
+        continue
+      }
 
-            if (result.needsNewPage) {
-              return { needsNewPage: true }
-            }
-          }
+      for (const token of subitems) {
+        if (token.type !== 'list') {
+          continue
+        }
+
+        const result = await this.#renderList(token as Tokens.List, level + 1)
+
+        if (result.needsNewPage) {
+          return { needsNewPage: true }
         }
       }
     }
@@ -477,82 +502,63 @@ export class PDFRenderer {
    * @param token - The markdown blockquote token containing quoted content
    * @returns Promise resolving to RenderResult indicating if a new page is needed
    */
-  async #renderBlockquote(token: Tokens.Blockquote): Promise<RenderResult> {
-    const margin = PDF_THEME.layout.margin
-    const quoteMargin = margin + PDF_THEME.spacing.listIndent
+  async #renderBlockquote(token: Tokens.Blockquote, level = 1): Promise<RenderResult> {
+    const margin = PDF_THEME.layout.margin * level
+    const quoteMargin = margin + PDF_THEME.blockquote.barXOffset
     const lineHeight = PDF_THEME.font.blockquoteLineHeight
 
     if (this.#yPosition - lineHeight < PDF_THEME.layout.margin) {
       return { needsNewPage: true }
     }
 
-    const tempY = this.#yPosition
-    let totalHeight = 0
-
-    for (const quoteToken of token.tokens) {
-      if (quoteToken.type === 'paragraph') {
-        const text = extractTextFromTokens(quoteToken.tokens)
-        const lines = splitTextToFit(
-          text,
-          this.#fonts['italic'],
-          PDF_THEME.font.baseSize,
-          this.#maxWidth - PDF_THEME.blockquote.contentPadding
-        )
-
-        totalHeight += lines.length * lineHeight
-      }
+    if (level > 1) {
+      this.#yPosition -= PDF_THEME.blockquote.nestedQuoteYOffset
     }
 
-    this.#page.drawRectangle({
-      x: margin + PDF_THEME.blockquote.barXOffset,
-      y: tempY - totalHeight,
-      width: PDF_THEME.blockquote.barWidth,
-      height: totalHeight + 10,
-      color: PDF_THEME.color.blockquoteBar
-    })
+    const originalYPosition = this.#yPosition
+    this.#yPosition -= lineHeight
 
-    for (const quoteToken of token.tokens) {
-      if (quoteToken.type === 'paragraph') {
-        const { textTokens, imageTokens } = partitionTokens(quoteToken.tokens)
-
-        for (const imageToken of imageTokens) {
-          const imageResult = await this.#renderImage(
-            imageToken as Tokens.Image,
-            quoteMargin,
-            this.#maxWidth - PDF_THEME.blockquote.contentPadding
-          )
-
-          if (imageResult.needsNewPage) {
+    for (const item of token.tokens) {
+      switch (item.type) {
+        case 'paragraph': {
+          const { needsNewPage } = await this.#renderParagraph({
+            token: item as Tokens.Paragraph,
+            margin: quoteMargin,
+            preferredFont: 'italic',
+            includeBottomSpacing: false
+          })
+          if (needsNewPage) {
             return { needsNewPage: true }
           }
+          break
         }
-
-        if (textTokens.length > 0) {
-          const text = extractTextFromTokens(textTokens)
-          const lines = splitTextToFit(
-            text,
-            this.#fonts['italic'],
-            PDF_THEME.font.baseSize,
-            this.#maxWidth - PDF_THEME.blockquote.contentPadding
+        case 'blockquote': {
+          const { needsNewPage } = await this.#renderBlockquote(
+            item as Tokens.Blockquote,
+            level + 1
           )
-
-          for (const line of lines) {
-            if (this.#yPosition < PDF_THEME.layout.margin) {
-              return { needsNewPage: true }
-            }
-
-            this.#page.drawText(line, {
-              x: quoteMargin,
-              y: this.#yPosition,
-              size: PDF_THEME.font.baseSize,
-              font: this.#fonts['italic'],
-              color: PDF_THEME.color.blockquoteText
-            })
-            this.#yPosition -= lineHeight
+          if (needsNewPage) {
+            return { needsNewPage: true }
           }
+          break
+        }
+        default: {
+          const error = new Error(`Unsupported blockquote item type: ${item.type}`)
+          console.error(error)
+          captureException(error)
+          break
         }
       }
     }
+
+    this.#yPosition -= lineHeight
+    this.#page.drawRectangle({
+      x: margin,
+      y: originalYPosition,
+      width: PDF_THEME.blockquote.barWidth,
+      height: this.#yPosition - originalYPosition,
+      color: PDF_THEME.color.blockquoteBar
+    })
 
     this.#yPosition -= PDF_THEME.spacing.md
     return { needsNewPage: false }
@@ -585,6 +591,13 @@ export class PDFRenderer {
       const scale = pageContentWidth / finalWidth
       finalWidth = pageContentWidth
       finalHeight = finalHeight * scale
+    }
+
+    const availableHeight = this.#pageHeight - 2 * PDF_THEME.layout.margin
+    if (finalHeight > availableHeight) {
+      const scale = availableHeight / finalHeight
+      finalWidth = finalWidth * scale
+      finalHeight = availableHeight
     }
 
     if (this.#yPosition - finalHeight < PDF_THEME.layout.margin) {

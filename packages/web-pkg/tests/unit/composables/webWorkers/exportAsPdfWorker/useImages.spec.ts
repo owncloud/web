@@ -188,8 +188,7 @@ describe('useImages', () => {
       await new Promise<void>((resolve, reject) => {
         getWrapper({
           setup: async ({ preprocessImages }) => {
-            const content = '![test](https://example.com/image.png)'
-
+            const content = '![test](https://example.com/canvas-failure.png)'
             mockCanvas.getContext.mockReturnValue(null)
 
             try {

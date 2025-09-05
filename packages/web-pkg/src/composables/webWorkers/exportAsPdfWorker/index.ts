@@ -8,6 +8,7 @@ import { useConfigStore } from '../../piniaStores'
 import { useMermaid } from './useMermaid'
 import { useImages } from './useImages'
 import { useKaTeX } from './useKaTeX'
+import { sanitizeText } from './helpers'
 
 export type ExportAsPdfWorkerReturnData = {
   successful: Resource[]
@@ -55,7 +56,8 @@ export const useExportAsPdfWorker = () => {
         })
     )
 
-    let processedContent = await preprocessMermaidCharts(content)
+    let processedContent = sanitizeText(content)
+    processedContent = await preprocessMermaidCharts(processedContent)
     processedContent = await preprocessKaTeXFormulas(processedContent)
     processedContent = await preprocessImages(processedContent)
 
