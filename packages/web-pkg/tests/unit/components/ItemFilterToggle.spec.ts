@@ -30,13 +30,13 @@ describe('ItemFilterToggle', () => {
       await wrapper.find(selectors.filterBtn).trigger('click')
       expect(mocks.$router.push).toHaveBeenCalledWith(
         expect.objectContaining({
-          query: expect.objectContaining({ [wrapper.vm.queryParam]: 'true' })
+          query: expect.objectContaining({ [(wrapper.vm as any).queryParam]: 'true' })
         })
       )
     })
     it('sets the active state initially when given via query param', () => {
       const { wrapper } = getWrapper({ initialQuery: 'true' })
-      expect(wrapper.vm.filterActive).toEqual(true)
+      expect((wrapper.vm as any).filterActive).toEqual(true)
     })
   })
 })
