@@ -220,6 +220,9 @@ config({
   #text-editor-component-html-wrapper {
     margin-left: var(--oc-space-xsmall);
   }
+  .md-editor-code-head {
+    z-index: 0;
+  }
 }
 
 .toastui-editor-tabs {
