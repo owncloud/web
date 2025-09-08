@@ -2,7 +2,13 @@
   <div
     class="no-content-message oc-flex oc-flex-column oc-flex-center oc-flex-middle oc-text-center"
   >
-    <oc-icon :name="icon" type="div" size="xxlarge" :fill-type="iconFillType" class="oc-mb-m" />
+    <oc-icon
+      :name="props.icon"
+      type="div"
+      size="xxlarge"
+      :fill-type="props.iconFillType"
+      class="oc-mb-m"
+    />
     <div class="oc-text-muted oc-text-xlarge">
       <slot name="message" />
     </div>
@@ -12,22 +18,13 @@
   </div>
 </template>
 
-<script lang="ts">
-import { defineComponent } from 'vue'
-
-export default defineComponent({
-  name: 'NoContentMessage',
-
-  props: {
-    icon: {
-      type: String,
-      required: true
-    },
-    iconFillType: {
-      type: String,
-      default: 'fill'
-    }
-  }
+<script lang="ts" setup>
+interface Props {
+  icon: string
+  iconFillType?: string
+}
+const props = withDefaults(defineProps<Props>(), {
+  iconFillType: 'fill'
 })
 </script>
 <style>
