@@ -9,44 +9,37 @@
   </div>
 </template>
 
-<script lang="ts">
-import { defineComponent, onBeforeUnmount, onMounted, ref } from 'vue'
+<script lang="ts" setup>
+import { onBeforeUnmount, onMounted, ref } from 'vue'
 import { eventBus, LoadingEventTopics } from '../services'
 import { useLoadingService } from '../composables'
 
-export default defineComponent({
-  name: 'LoadingIndicator',
-  setup() {
-    const loadingService = useLoadingService()
-    let addLoadingEventToken: string
-    let removeLoadingEventToken: string
-    let setProgressToken: string
+const loadingService = useLoadingService()
+let addLoadingEventToken: string
+let removeLoadingEventToken: string
+let setProgressToken: string
 
-    const isLoading = ref(loadingService.isLoading)
-    const currentProgress = ref(loadingService.currentProgress)
+const isLoading = ref(loadingService.isLoading)
+const currentProgress = ref(loadingService.currentProgress)
 
-    const updateLoadingState = () => {
-      currentProgress.value = loadingService.currentProgress
-      isLoading.value = loadingService.isLoading
-    }
-    const setProgress = () => {
-      currentProgress.value = loadingService.currentProgress
-    }
+const updateLoadingState = () => {
+  currentProgress.value = loadingService.currentProgress
+  isLoading.value = loadingService.isLoading
+}
+const setProgress = () => {
+  currentProgress.value = loadingService.currentProgress
+}
 
-    onMounted(() => {
-      addLoadingEventToken = eventBus.subscribe(LoadingEventTopics.add, updateLoadingState)
-      removeLoadingEventToken = eventBus.subscribe(LoadingEventTopics.remove, updateLoadingState)
-      setProgressToken = eventBus.subscribe(LoadingEventTopics.setProgress, setProgress)
-    })
+onMounted(() => {
+  addLoadingEventToken = eventBus.subscribe(LoadingEventTopics.add, updateLoadingState)
+  removeLoadingEventToken = eventBus.subscribe(LoadingEventTopics.remove, updateLoadingState)
+  setProgressToken = eventBus.subscribe(LoadingEventTopics.setProgress, setProgress)
+})
 
-    onBeforeUnmount(() => {
-      eventBus.unsubscribe(LoadingEventTopics.add, addLoadingEventToken)
-      eventBus.unsubscribe(LoadingEventTopics.remove, removeLoadingEventToken)
-      eventBus.unsubscribe(LoadingEventTopics.setProgress, setProgressToken)
-    })
-
-    return { isLoading, currentProgress }
-  }
+onBeforeUnmount(() => {
+  eventBus.unsubscribe(LoadingEventTopics.add, addLoadingEventToken)
+  eventBus.unsubscribe(LoadingEventTopics.remove, removeLoadingEventToken)
+  eventBus.unsubscribe(LoadingEventTopics.setProgress, setProgressToken)
 })
 </script>
 <style lang="scss">
