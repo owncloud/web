@@ -15,6 +15,7 @@ Summary
 * Bugfix - User info getting translated: [#12893](https://github.com/owncloud/web/pull/12893)
 * Bugfix - Sign public link archiver download URL: [#12943](https://github.com/owncloud/web/pull/12943)
 * Bugfix - Add clipboard permissions: [#12954](https://github.com/owncloud/web/pull/12954)
+* Bugfix - Set md-editor code block header to have z-index of 0: [#13075](https://github.com/owncloud/web/pull/13075)
 * Enhancement - Add markdown to PDF export: [#12788](https://github.com/owncloud/web/pull/12788)
 * Enhancement - Use switch for full text search filter: [#12915](https://github.com/owncloud/web/pull/12915)
 * Enhancement - Add universal access: [#12933](https://github.com/owncloud/web/pull/12933)
@@ -89,6 +90,15 @@ Details
    external editor to read and write to the clipboard.
 
    https://github.com/owncloud/web/pull/12954
+
+* Bugfix - Set md-editor code block header to have z-index of 0: [#13075](https://github.com/owncloud/web/pull/13075)
+
+   We have fixed an issue where the code block header in the markdown editor was
+   cutting off other elements on the page. This has been resolved by setting the
+   z-index of the code block header to 0.
+
+   https://github.com/owncloud/web/pull/13075
+   https://kiteworks.atlassian.net/browse/OCISDEV-307
 
 * Enhancement - Add markdown to PDF export: [#12788](https://github.com/owncloud/web/pull/12788)
 
