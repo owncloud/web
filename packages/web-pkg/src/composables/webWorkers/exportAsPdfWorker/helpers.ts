@@ -43,7 +43,8 @@ export type FontWeight = 'regular' | 'bold' | 'italic' | 'boldItalic' | 'mono' |
  * Splits text into lines that fit within a specified maximum width using the given font and size.
  *
  * This function performs word-wrapping by measuring the width of text segments and breaking
- * lines when they exceed the maximum width. It ensures that words are not broken across lines.
+ * lines when they exceed the maximum width. If a single word is too long to fit within the
+ * maximum width, it will be split at character boundaries.
  *
  * @param text - The text to split into lines
  * @param font - The PDF font object used for measuring text width
@@ -65,9 +66,53 @@ export function splitTextToFit(text: string, font: PDFFont, fontSize: number, ma
     } else {
       if (currentLine) {
         lines.push(currentLine)
+        currentLine = ''
       }
 
-      currentLine = word
+      const wordWidth = font.widthOfTextAtSize(word, fontSize)
+      if (wordWidth > maxWidth) {
+        const wordLines = splitWordToFit(word, font, fontSize, maxWidth)
+        lines.push(...wordLines.slice(0, -1))
+        currentLine = wordLines[wordLines.length - 1]
+      } else {
+        currentLine = word
+      }
+    }
+  }
+
+  if (currentLine) {
+    lines.push(currentLine)
+  }
+
+  return lines
+}
+
+/**
+ * Splits a single word into lines that fit within the maximum width by breaking at character boundaries.
+ *
+ * @param word - The word to split
+ * @param font - The PDF font object used for measuring text width
+ * @param fontSize - The font size in points
+ * @param maxWidth - The maximum width in points that each line should not exceed
+ * @returns Array of text lines that fit within the specified width
+ */
+function splitWordToFit(word: string, font: PDFFont, fontSize: number, maxWidth: number): string[] {
+  const lines: string[] = []
+  let currentLine = ''
+
+  for (let i = 0; i < word.length; i++) {
+    const char = word[i]
+    const testLine = currentLine + char
+    const width = font.widthOfTextAtSize(testLine, fontSize)
+
+    if (width <= maxWidth) {
+      currentLine = testLine
+    } else {
+      if (currentLine) {
+        lines.push(currentLine)
+      }
+
+      currentLine = char
     }
   }
 
@@ -90,12 +135,22 @@ export function splitTextToFit(text: string, font: PDFFont, fontSize: number, ma
  *
  * @param segment - The text segment with formatting properties
  * @param fonts - Record of font weights and their corresponding PDF fonts
+ * @param preferredFont - The font which should override the default font
  * @returns The appropriate PDF font for the segment
  */
 export function getFontForSegment(
   segment: TextSegment,
-  fonts: Record<FontWeight, PDFFont>
+  fonts: Record<FontWeight, PDFFont>,
+  preferredFont?: FontWeight
 ): PDFFont {
+  if (preferredFont && preferredFont === 'italic' && segment.bold) {
+    return fonts['boldItalic']
+  }
+
+  if (preferredFont && Object.prototype.hasOwnProperty.call(fonts, preferredFont)) {
+    return fonts[preferredFont]
+  }
+
   if (segment.code) {
     return fonts['mono']
   }
@@ -130,7 +185,7 @@ export function extractTextFromTokens(tokens: Token[]): string {
   return tokens
     .map((token) => {
       if (token.type === 'link') {
-        return `${token.text} (${token.href})`
+        return token.href
       }
 
       if ('text' in token) {
@@ -168,39 +223,53 @@ export function partitionTokens(tokens: Token[]): { textTokens: Token[]; imageTo
 }
 
 /**
- * Sanitizes text by converting typographic characters to ASCII equivalents for PDF compatibility.
+ * Sanitizes text by converting typographic characters to ASCII equivalents for PDF compatibility
+ * and fixing common markdown formatting issues.
  *
- * This function is necessary because the PDF generation uses StandardFonts (Helvetica, Courier)
- * from pdf-lib, which have limited Unicode character support. Typographic characters like curly
- * quotes and em/en dashes are not supported by these fonts and would cause rendering issues
- * or PDF generation failures.
+ * This function is necessary because:
+ * 1. The PDF generation uses StandardFonts (Helvetica, Courier) from pdf-lib, which have limited
+ *    Unicode character support. Typographic characters like curly quotes and em/en dashes are not
+ *    supported by these fonts and would cause rendering issues or PDF generation failures.
+ * 2. User-provided markdown may contain formatting issues that break parsers (e.g., trailing
+ *    whitespace after code fence closings).
  *
  * The replacements maintain semantic meaning while ensuring compatibility:
  * - Typographic quotes → straight quotes (same meaning)
  * - Em/en dashes → hyphens (similar visual effect)
  * - Ellipsis → three dots (same meaning)
+ * - Trailing whitespace after code fences → removed (fixes parsing)
  *
- * @param text - The input text that may contain typographic characters
- * @returns The sanitized text with typographic characters replaced by ASCII equivalents
+ * @param text - The input text that may contain typographic characters and markdown issues
+ * @returns The sanitized text with typographic characters replaced and markdown issues fixed
  *
  * @example
  * ```typescript
  * sanitizeText("Here's a "quote" with an em—dash and ellipsis…")
  * // Returns: "Here's a "quote" with an em--dash and ellipsis..."
+ *
+ * sanitizeText("```\ncode\n```\t\nMore content")
+ * // Returns: "```\ncode\n```\nMore content"
  * ```
  */
 export function sanitizeText(text: string): string {
   return text
     .replaceAll('…', '...')
-    .replaceAll('‘', "'")
+    .replaceAll("'", "'")
+    .replaceAll("'", "'")
     .replaceAll('’', "'")
+    .replaceAll('‘', "'")
+    .replaceAll('"', '"')
+    .replaceAll('"', '"')
     .replaceAll('“', '"')
     .replaceAll('”', '"')
     .replaceAll('—', '--')
     .replaceAll('–', '-')
-    .replaceAll(' ', ' ')
+    .replaceAll(' ', ' ')
     .replaceAll('‑', '-')
     .replace(emojiRegex(), '')
+    .replace(/^(```+)[\t ]+$/gm, '$1')
+    .replace(/^(```+\w*)[\t ]+$/gm, '$1')
+    .replaceAll('⋅', '  ')
 }
 
 /**
@@ -294,7 +363,7 @@ export function parseInlineTokens(tokens: Token[]): TextSegment[] {
         break
       case 'link':
         segments.push({
-          text: `${token.text} (${token.href})`,
+          text: token.href,
           bold: false,
           italic: false,
           code: false,

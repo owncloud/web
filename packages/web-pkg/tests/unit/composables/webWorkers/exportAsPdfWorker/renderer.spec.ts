@@ -333,7 +333,7 @@ describe('PDFRenderer', () => {
       const result = await renderer.renderAsArrayBuffer()
 
       expect(result).toBeInstanceOf(ArrayBuffer)
-      expect(mockPage.drawText).toHaveBeenCalledTimes(6)
+      expect(mockPage.drawText).toHaveBeenCalledTimes(5)
     })
   })
 })

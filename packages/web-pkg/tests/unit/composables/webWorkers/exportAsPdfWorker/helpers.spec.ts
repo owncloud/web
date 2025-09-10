@@ -53,7 +53,7 @@ describe('export as PDF worker helpers', () => {
       const text = 'verylongwordthatexceedsmaxwidth'
       const result = splitTextToFit(text, mockFont, 12, 50)
 
-      expect(result).toEqual(['verylongwordthatexceedsmaxwidth'])
+      expect(result).toEqual(['verylo', 'ngword', 'thatex', 'ceedsm', 'axwidt', 'h'])
     })
   })
 
@@ -69,7 +69,7 @@ describe('export as PDF worker helpers', () => {
       ]
 
       const result = extractTextFromTokens(tokens)
-      expect(result).toBe('Click here (https://example.com)')
+      expect(result).toBe('https://example.com')
     })
 
     it('should extract text from text tokens', () => {
@@ -113,60 +113,43 @@ describe('export as PDF worker helpers', () => {
       ]
 
       const result = extractTextFromTokens(tokens)
-      expect(result).toBe('Check out this link (https://example.com)')
+      expect(result).toBe('Check out https://example.com')
     })
   })
 
   describe('sanitizeText', () => {
     it('should replace typographic characters with ASCII equivalents', () => {
-      const input = 'Here\u2019s a \u201cquote\u201d with an em\u2014dash and ellipsis\u2026'
-      const expected = 'Here\'s a "quote" with an em--dash and ellipsis...'
-
-      const result = sanitizeText(input)
-      expect(result).toBe(expected)
+      expect(
+        sanitizeText('Here\u2019s a \u201cquote\u201d with an em\u2014dash and ellipsis\u2026')
+      ).toBe('Here\'s a "quote" with an em--dash and ellipsis...')
     })
 
     it('should replace all types of quotes', () => {
-      const input = '\u2018\u2019\u201c\u201d'
-      const expected = '\'\'"\"'
-
-      const result = sanitizeText(input)
-      expect(result).toBe(expected)
+      expect(sanitizeText('\u2018\u2019\u201c\u201d')).toBe('\'\'"\"')
     })
 
     it('should replace all types of dashes', () => {
-      const input = '\u2014\u2013\u2011'
-      const expected = '----'
-
-      const result = sanitizeText(input)
-      expect(result).toBe(expected)
+      expect(sanitizeText('\u2014\u2013\u2011')).toBe('----')
     })
 
     it('should replace non-breaking spaces', () => {
-      const input = 'word word'
-      const expected = 'word word'
-
-      const result = sanitizeText(input)
-      expect(result).toBe(expected)
+      expect(sanitizeText('word word')).toBe('word word')
     })
 
     it('should remove emojis', () => {
-      const input = 'Hello 😀 world 🌍'
-      const result = sanitizeText(input)
+      const result = sanitizeText('Hello 😀 world 🌍')
 
       expect(result).not.toContain('😀')
       expect(result).not.toContain('🌍')
     })
 
     it('should handle empty string', () => {
-      const result = sanitizeText('')
-      expect(result).toBe('')
+      expect(sanitizeText('')).toBe('')
     })
 
     it('should handle string with no special characters', () => {
       const input = 'Regular text with no special characters'
-      const result = sanitizeText(input)
-      expect(result).toBe(input)
+      expect(sanitizeText(input)).toBe(input)
     })
   })
 
@@ -330,7 +313,7 @@ describe('export as PDF worker helpers', () => {
 
       expect(result).toHaveLength(1)
       expect(result[0]).toEqual({
-        text: 'Link text (https://example.com)',
+        text: 'https://example.com',
         bold: false,
         italic: false,
         code: false,
