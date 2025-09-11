@@ -64,7 +64,7 @@
     "luxon": "^3.7.2",
     "mark.js": "^8.11.1",
     "marked": "^16.2.1",
-    "md-editor-v3": "^5.8.4",
+    "md-editor-v3": "^5.8.5",
     "mermaid": "^11.11.0",
     "oidc-client-ts": "^3.3.0",
     "p-queue": "^8.1.1",
