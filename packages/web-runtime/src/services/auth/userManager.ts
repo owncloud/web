@@ -73,13 +73,17 @@ export class UserManager extends OidcUserManager {
       client_id: '',
 
       // we trigger the token renewal manually via a timer running in a web worker
-      automaticSilentRenew: false
+      automaticSilentRenew: false,
+
+      // Omit acr
+      filterProtocolClaims: ['nbf', 'jti', 'auth_time', 'nonce', 'amr', 'azp', 'at_hash']
     }
 
     if (options.configStore.isOIDC) {
       Object.assign(openIdConfig, {
         scope: 'openid profile',
         loadUserInfo: false,
+        acr_values: 'regular',
         ...options.configStore.openIdConnect,
         ...(options.configStore.openIdConnect.metadata_url && {
           metadataUrl: options.configStore.openIdConnect.metadata_url
