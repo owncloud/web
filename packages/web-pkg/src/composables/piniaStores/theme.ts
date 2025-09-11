@@ -67,7 +67,7 @@ const ThemeDefaults = z.object({
   designTokens: DesignTokens,
   loginPage: LoginPage,
   logo: Logo,
-  icons: Icons
+  icons: Icons.optional()
 })
 
 const WebTheme = z.object({
