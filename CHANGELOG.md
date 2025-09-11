@@ -21,6 +21,8 @@ Summary
 * Enhancement - Add universal access: [#12933](https://github.com/owncloud/web/pull/12933)
 * Enhancement - Add GeoGebra pinboard icon: [#12973](https://github.com/owncloud/web/pull/12973)
 * Enhancement - Replace board icon: [#12974](https://github.com/owncloud/web/pull/12974)
+* Enhancement - Add OcResponsiveImage component: [#13093](https://github.com/owncloud/web/pull/13093)
+* Enhancement - Add topbar mobile logo theme option: [#13093](https://github.com/owncloud/web/pull/13093)
 
 Details
 -------
@@ -164,6 +166,20 @@ Details
    includes the "beta" badge.
 
    https://github.com/owncloud/web/pull/12974
+
+* Enhancement - Add OcResponsiveImage component: [#13093](https://github.com/owncloud/web/pull/13093)
+
+   We've added a new component to display an image which will change its source
+   based on the viewport width.
+
+   https://github.com/owncloud/web/pull/13093
+
+* Enhancement - Add topbar mobile logo theme option: [#13093](https://github.com/owncloud/web/pull/13093)
+
+   We've added a new theme option called `logo.topbarSm` to set a different logo
+   for the topbar on mobile devices.
+
+   https://github.com/owncloud/web/pull/13093
 
 Changelog for ownCloud Web [11.3.5] (2025-06-26)
 =======================================
