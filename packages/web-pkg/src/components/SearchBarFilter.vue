@@ -33,8 +33,8 @@
   </div>
 </template>
 
-<script lang="ts">
-import { computed, defineComponent, ref, Ref, unref, watch } from 'vue'
+<script lang="ts" setup>
+import { computed, ref, Ref, unref, watch } from 'vue'
 import { useGettext } from 'vue3-gettext'
 import { SearchLocationFilterConstants, useRouteQuery } from '../composables'
 
@@ -44,92 +44,85 @@ type LocationOption = {
   enabled: Ref<boolean> | boolean
 }
 
-export default defineComponent({
-  name: 'SearchBarFilter',
-  props: {
-    currentFolderAvailable: {
-      type: Boolean,
-      default: false
-    }
-  },
-  emits: ['update:modelValue'],
-  setup(props, { emit }) {
-    const { $gettext } = useGettext()
-    const useScopeQueryValue = useRouteQuery('useScope')
+interface Props {
+  currentFolderAvailable?: boolean
+}
 
-    const currentSelection = ref<LocationOption>()
-    const userSelection = ref<LocationOption>()
-    const currentSelectionTitle = computed(() => $gettext(currentSelection.value?.title))
-    const locationOptions = computed<LocationOption[]>(() => [
-      {
-        id: SearchLocationFilterConstants.currentFolder,
-        title: $gettext('Current folder'),
-        enabled: props.currentFolderAvailable
-      },
-      {
-        id: SearchLocationFilterConstants.allFiles,
-        title: $gettext('All files'),
-        enabled: true
-      }
-    ])
+interface Emits {
+  (e: 'update:modelValue', payload: { value: LocationOption }): void
+}
 
-    const isIndexGreaterZero = (index: number): boolean => {
-      return index > 0
-    }
-
-    watch(
-      () => props.currentFolderAvailable,
-      () => {
-        if (unref(useScopeQueryValue)) {
-          const useScope = unref(useScopeQueryValue).toString() === 'true'
-          if (useScope) {
-            currentSelection.value = unref(locationOptions).find(
-              ({ id }) => id === SearchLocationFilterConstants.currentFolder
-            )
-            return
-          }
-          currentSelection.value = unref(locationOptions).find(
-            ({ id }) => id === SearchLocationFilterConstants.allFiles
-          )
-          return
-        }
-
-        if (!props.currentFolderAvailable) {
-          currentSelection.value = unref(locationOptions).find(
-            ({ id }) => id === SearchLocationFilterConstants.allFiles
-          )
-          return
-        }
-
-        if (unref(userSelection)) {
-          currentSelection.value = unref(locationOptions).find(
-            ({ id }) => id === unref(userSelection).id
-          )
-          return
-        }
-
-        currentSelection.value = unref(locationOptions).find(
-          ({ id }) => id === SearchLocationFilterConstants.allFiles
-        )
-      },
-      { immediate: true }
-    )
-
-    const onOptionSelected = (option: LocationOption) => {
-      userSelection.value = option
-      currentSelection.value = option
-      emit('update:modelValue', { value: option })
-    }
-
-    return {
-      currentSelection,
-      currentSelectionTitle,
-      isIndexGreaterZero,
-      onOptionSelected,
-      locationOptions
-    }
-  }
+const props = withDefaults(defineProps<Props>(), {
+  currentFolderAvailable: false
 })
+const emit = defineEmits<Emits>()
+
+const { $gettext } = useGettext()
+const useScopeQueryValue = useRouteQuery('useScope')
+
+const currentSelection = ref<LocationOption>()
+const userSelection = ref<LocationOption>()
+const currentSelectionTitle = computed(() => $gettext(currentSelection.value?.title))
+const locationOptions = computed<LocationOption[]>(() => [
+  {
+    id: SearchLocationFilterConstants.currentFolder,
+    title: $gettext('Current folder'),
+    enabled: props.currentFolderAvailable
+  },
+  {
+    id: SearchLocationFilterConstants.allFiles,
+    title: $gettext('All files'),
+    enabled: true
+  }
+])
+
+const isIndexGreaterZero = (index: number): boolean => {
+  return index > 0
+}
+
+watch(
+  () => props.currentFolderAvailable,
+  () => {
+    if (unref(useScopeQueryValue)) {
+      const useScope = unref(useScopeQueryValue).toString() === 'true'
+      if (useScope) {
+        currentSelection.value = unref(locationOptions).find(
+          ({ id }) => id === SearchLocationFilterConstants.currentFolder
+        )
+        return
+      }
+      currentSelection.value = unref(locationOptions).find(
+        ({ id }) => id === SearchLocationFilterConstants.allFiles
+      )
+      return
+    }
+
+    if (!props.currentFolderAvailable) {
+      currentSelection.value = unref(locationOptions).find(
+        ({ id }) => id === SearchLocationFilterConstants.allFiles
+      )
+      return
+    }
+
+    if (unref(userSelection)) {
+      currentSelection.value = unref(locationOptions).find(
+        ({ id }) => id === unref(userSelection).id
+      )
+      return
+    }
+
+    currentSelection.value = unref(locationOptions).find(
+      ({ id }) => id === SearchLocationFilterConstants.allFiles
+    )
+  },
+  { immediate: true }
+)
+
+const onOptionSelected = (option: LocationOption) => {
+  userSelection.value = option
+  currentSelection.value = option
+  emit('update:modelValue', { value: option })
+}
 </script>
 
 <style lang="scss">
