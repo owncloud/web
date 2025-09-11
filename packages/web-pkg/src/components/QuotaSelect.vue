@@ -31,8 +31,9 @@
   </div>
 </template>
 
-<script lang="ts">
-import { ref } from 'vue'
+<script lang="ts" setup>
+import { ref, computed, watch, onMounted } from 'vue'
+import { useGettext } from 'vue3-gettext'
 import { isNumber } from 'lodash-es'
 import { formatFileSize } from '../helpers'
 
@@ -42,156 +43,150 @@ type Option = {
   selectable?: boolean
 }
 
-export default {
-  name: 'QuotaSelect',
-  props: {
-    totalQuota: {
-      type: Number,
-      default: 0
-    },
-    maxQuota: {
-      type: Number,
-      default: 0
-    }
-  },
-  emits: ['selectedOptionChange'],
-  setup() {
-    const selectedOption = ref<Option>(undefined)
-    const options = ref<Option[]>([])
+interface Props {
+  totalQuota?: number
+  maxQuota?: number
+}
 
-    return { selectedOption, options }
-  },
-  computed: {
-    quotaLimit() {
-      return this.maxQuota || 1e15
-    },
-    DEFAULT_OPTIONS(): Option[] {
-      return [
-        {
-          value: Math.pow(10, 9),
-          displayValue: this.getFormattedFileSize(Math.pow(10, 9))
-        },
-        {
-          value: 2 * Math.pow(10, 9),
-          displayValue: this.getFormattedFileSize(2 * Math.pow(10, 9))
-        },
-        {
-          value: 5 * Math.pow(10, 9),
-          displayValue: this.getFormattedFileSize(5 * Math.pow(10, 9))
-        },
-        {
-          value: 10 * Math.pow(10, 9),
-          displayValue: this.getFormattedFileSize(10 * Math.pow(10, 9))
-        },
-        {
-          value: 50 * Math.pow(10, 9),
-          displayValue: this.getFormattedFileSize(50 * Math.pow(10, 9))
-        },
-        {
-          value: 100 * Math.pow(10, 9),
-          displayValue: this.getFormattedFileSize(100 * Math.pow(10, 9))
-        },
-        {
-          displayValue: this.$gettext('No restriction'),
-          value: 0
-        }
-      ]
-    }
-  },
-  watch: {
-    totalQuota() {
-      const selectedOption = this.options.find((o) => o.value === this.totalQuota)
-      if (selectedOption) {
-        this.selectedOption = selectedOption
-      }
-    }
-  },
-  mounted() {
-    this.setOptions()
-    this.selectedOption = this.options.find((o) => o.value === this.totalQuota)
-  },
-  methods: {
-    onUpdate(event: Option) {
-      this.selectedOption = event
-      this.$emit('selectedOptionChange', this.selectedOption)
-    },
-    optionSelectable(option: Option) {
-      return option.selectable !== false
-    },
-    isValueValidNumber(value: string | number) {
-      if (isNumber(value)) {
-        return value > 0
-      }
+interface Emits {
+  (e: 'selectedOptionChange', option: Option): void
+}
 
-      const optionIsNumberRegex = /^[0-9]\d*(([.,])\d+)?$/g
-      return optionIsNumberRegex.test(value)
-    },
-    createOption(option: string) {
-      option = option.replace(',', '.')
+const props = withDefaults(defineProps<Props>(), {
+  totalQuota: 0,
+  maxQuota: 0
+})
+const emit = defineEmits<Emits>()
+const selectedOption = ref<Option>(undefined)
+const options = ref<Option[]>([])
+const { $gettext, current } = useGettext()
+function onUpdate(event: Option) {
+  selectedOption.value = event
+  emit('selectedOptionChange', selectedOption.value)
+}
+function optionSelectable(option: Option) {
+  return option.selectable !== false
+}
+function isValueValidNumber(value: string | number) {
+  if (isNumber(value)) {
+    return value > 0
+  }
 
-      if (!this.isValueValidNumber(option)) {
-        return {
-          displayValue: option,
-          value: option,
-          error: this.$gettext('Please enter only numbers'),
-          selectable: false
-        }
-      }
-      const value = parseFloat(option) * Math.pow(10, 9)
+  const optionIsNumberRegex = /^[0-9]\d*(([.,])\d+)?$/g
+  return optionIsNumberRegex.test(value)
+}
+function createOption(option: string) {
+  option = option.replace(',', '.')
 
-      if (value > this.quotaLimit) {
-        return {
-          value,
-          displayValue: this.getFormattedFileSize(value),
-          error: this.$gettext('Please enter a value equal to or less than %{ quotaLimit }', {
-            quotaLimit: this.getFormattedFileSize(this.quotaLimit).toString()
-          }),
-
-          selectable: false
-        }
-      }
-
-      return {
-        value,
-        displayValue: this.getFormattedFileSize(value)
-      }
-    },
-    setOptions() {
-      let availableOptions = [...this.DEFAULT_OPTIONS]
-
-      if (this.maxQuota) {
-        availableOptions = availableOptions.filter((availableOption) => {
-          if (this.totalQuota === 0 && availableOption.value === 0) {
-            availableOption.selectable = false
-            return true
-          }
-          return availableOption.value !== 0 && availableOption.value <= this.maxQuota
-        })
-      }
-
-      const selectedQuotaInOptions = availableOptions.find(
-        (option) => option.value === this.totalQuota
-      )
-
-      if (!selectedQuotaInOptions) {
-        availableOptions.push({
-          displayValue: this.getFormattedFileSize(this.totalQuota),
-          value: this.totalQuota,
-          selectable: this.totalQuota <= this.quotaLimit
-        })
-      }
-
-      // Sort options and make sure that unlimited is at the end
-      availableOptions = [
-        ...availableOptions.filter((o) => o.value).sort((a, b) => a.value - b.value),
-        ...availableOptions.filter((o) => !o.value)
-      ]
-      this.options = availableOptions
-    },
-    getFormattedFileSize(value: number) {
-      const formattedFilesize = formatFileSize(value, this.$language.current)
-      return !this.isValueValidNumber(value) ? value.toString() : formattedFilesize
+  if (!isValueValidNumber(option)) {
+    return {
+      displayValue: option,
+      value: option,
+      error: $gettext('Please enter only numbers'),
+      selectable: false
     }
   }
+  const value = parseFloat(option) * Math.pow(10, 9)
+
+  if (value > quotaLimit.value) {
+    return {
+      value,
+      displayValue: getFormattedFileSize(value),
+      error: $gettext('Please enter a value equal to or less than %{ quotaLimit }', {
+        quotaLimit: getFormattedFileSize(quotaLimit.value).toString()
+      }),
+
+      selectable: false
+    }
+  }
+
+  return {
+    value,
+    displayValue: getFormattedFileSize(value)
+  }
 }
+function setOptions() {
+  let availableOptions = [...DEFAULT_OPTIONS.value]
+
+  if (props.maxQuota) {
+    availableOptions = availableOptions.filter((availableOption) => {
+      if (props.totalQuota === 0 && availableOption.value === 0) {
+        availableOption.selectable = false
+        return true
+      }
+      return availableOption.value !== 0 && availableOption.value <= props.maxQuota
+    })
+  }
+
+  const selectedQuotaInOptions = availableOptions.find(
+    (option) => option.value === props.totalQuota
+  )
+
+  if (!selectedQuotaInOptions) {
+    availableOptions.push({
+      displayValue: getFormattedFileSize(props.totalQuota),
+      value: props.totalQuota,
+      selectable: props.totalQuota <= quotaLimit.value
+    })
+  }
+
+  // Sort options and make sure that unlimited is at the end
+  availableOptions = [
+    ...availableOptions.filter((o) => o.value).sort((a, b) => a.value - b.value),
+    ...availableOptions.filter((o) => !o.value)
+  ]
+  options.value = availableOptions
+}
+function getFormattedFileSize(value: number) {
+  const formattedFilesize = formatFileSize(value, current)
+  return !isValueValidNumber(value) ? value.toString() : formattedFilesize
+}
+watch(
+  () => props.totalQuota,
+  () => {
+    const option = options.value.find((o) => o.value === props.totalQuota)
+    if (option) {
+      selectedOption.value = option
+    }
+  }
+)
+const quotaLimit = computed(() => {
+  return props.maxQuota || 1e15
+})
+const DEFAULT_OPTIONS = computed<Option[]>(() => {
+  return [
+    {
+      value: Math.pow(10, 9),
+      displayValue: getFormattedFileSize(Math.pow(10, 9))
+    },
+    {
+      value: 2 * Math.pow(10, 9),
+      displayValue: getFormattedFileSize(2 * Math.pow(10, 9))
+    },
+    {
+      value: 5 * Math.pow(10, 9),
+      displayValue: getFormattedFileSize(5 * Math.pow(10, 9))
+    },
+    {
+      value: 10 * Math.pow(10, 9),
+      displayValue: getFormattedFileSize(10 * Math.pow(10, 9))
+    },
+    {
+      value: 50 * Math.pow(10, 9),
+      displayValue: getFormattedFileSize(50 * Math.pow(10, 9))
+    },
+    {
+      value: 100 * Math.pow(10, 9),
+      displayValue: getFormattedFileSize(100 * Math.pow(10, 9))
+    },
+    {
+      displayValue: $gettext('No restriction'),
+      value: 0
+    }
+  ]
+})
+onMounted(() => {
+  setOptions()
+  selectedOption.value = options.value.find((o) => o.value === props.totalQuota)
+})
 </script>
