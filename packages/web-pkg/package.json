@@ -80,7 +80,7 @@
     "vue-concurrency": "^5.0.3",
     "vue-router": "^4.5.1",
     "vue3-gettext": "^2.4.0",
-    "zod": "^4.1.5"
+    "zod": "^4.1.8"
   },
   "devDependencies": {
     "@ownclouders/web-test-helpers": "workspace:^",
