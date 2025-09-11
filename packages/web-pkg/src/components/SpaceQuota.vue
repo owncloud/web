@@ -10,63 +10,51 @@
   </div>
 </template>
 
-<script lang="ts">
-import { defineComponent, PropType } from 'vue'
+<script lang="ts" setup>
+import { computed } from 'vue'
 import { Quota } from '@ownclouders/web-client/graph/generated'
 import { formatFileSize } from '../helpers'
 import { useGettext } from 'vue3-gettext'
 
-export default defineComponent({
-  name: 'SpaceQuota',
-  props: {
-    spaceQuota: {
-      type: Object as PropType<Quota>,
-      required: true,
-      default: () => undefined as Quota // FIXME: hack because vue doesn't detect type
-    }
-  },
-  setup: () => {
-    const { current: currentLanguage } = useGettext()
+interface Props {
+  spaceQuota: Quota
+}
 
-    return {
-      currentLanguage
-    }
-  },
-  computed: {
-    spaceStorageDetailsLabel() {
-      if (this.spaceQuota.total) {
-        return this.$gettext('%{used} of %{total} used (%{percentage}% used)', {
-          used: this.quotaUsed,
-          total: this.quotaTotal,
-          percentage: this.quotaUsagePercent.toString()
-        })
-      }
+const props = defineProps<Props>()
 
-      return this.$gettext('%{used} used (no restriction)', {
-        used: this.quotaUsed
-      })
-    },
-    quotaTotal() {
-      return formatFileSize(this.spaceQuota.total, this.currentLanguage)
-    },
-    quotaUsed() {
-      return formatFileSize(this.spaceQuota.used, this.currentLanguage)
-    },
-    quotaUsagePercent() {
-      return parseFloat(((this.spaceQuota.used / this.spaceQuota.total) * 100).toFixed(2))
-    },
-    quotaProgressVariant() {
-      switch (this.spaceQuota.state) {
-        case 'normal':
-          return 'primary'
-        case 'nearing':
-          return 'warning'
-        case 'critical':
-          return 'warning'
-        default:
-          return 'danger'
-      }
-    }
+const { current: currentLanguage, $gettext } = useGettext()
+const spaceStorageDetailsLabel = computed(() => {
+  if (props.spaceQuota.total) {
+    return $gettext('%{used} of %{total} used (%{percentage}% used)', {
+      used: quotaUsed.value,
+      total: quotaTotal.value,
+      percentage: quotaUsagePercent.value.toString()
+    })
+  }
+
+  return $gettext('%{used} used (no restriction)', {
+    used: quotaUsed.value
+  })
+})
+const quotaTotal = computed(() => {
+  return formatFileSize(props.spaceQuota.total, currentLanguage)
+})
+const quotaUsed = computed(() => {
+  return formatFileSize(props.spaceQuota.used, currentLanguage)
+})
+const quotaUsagePercent = computed(() => {
+  return parseFloat(((props.spaceQuota.used / props.spaceQuota.total) * 100).toFixed(2))
+})
+const quotaProgressVariant = computed(() => {
+  switch (props.spaceQuota.state) {
+    case 'normal':
+      return 'primary'
+    case 'nearing':
+      return 'warning'
+    case 'critical':
+      return 'warning'
+    default:
+      return 'danger'
   }
 })
 </script>
