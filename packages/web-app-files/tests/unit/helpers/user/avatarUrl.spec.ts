@@ -70,5 +70,4 @@ const buildUrl = ({
   server: string
   username: string
   size?: number
-}) =>
-  [server, 'remote.php/dav/avatars/', username, `/${size || ImageDimension.Avatar}.png`].join('')
+}) => [server, 'dav/avatars/', username, `/${size || ImageDimension.Avatar}.png`].join('')
