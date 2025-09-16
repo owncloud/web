@@ -550,8 +550,8 @@ importers:
         specifier: 2.4.0
         version: 2.4.0(patch_hash=6f231bbef273efbc788b5657c47fc744b52bc838f972357a764c144fde6065f2)(@vue/compiler-sfc@3.5.20)(vue@3.5.20(typescript@5.9.2))
       zod:
-        specifier: 4.1.5
-        version: 4.1.5
+        specifier: 4.1.8
+        version: 4.1.8
     devDependencies:
       '@ownclouders/web-test-helpers':
         specifier: workspace:*
@@ -606,8 +606,8 @@ importers:
         specifier: 2.4.0
         version: 2.4.0(patch_hash=6f231bbef273efbc788b5657c47fc744b52bc838f972357a764c144fde6065f2)(@vue/compiler-sfc@3.5.20)(vue@3.5.20(typescript@5.9.2))
       zod:
-        specifier: 4.1.5
-        version: 4.1.5
+        specifier: 4.1.8
+        version: 4.1.8
     devDependencies:
       '@ownclouders/web-test-helpers':
         specifier: workspace:*
@@ -710,8 +710,8 @@ importers:
         specifier: 4.5.1
         version: 4.5.1(vue@3.5.20(typescript@5.9.2))
       zod:
-        specifier: 4.1.5
-        version: 4.1.5
+        specifier: 4.1.8
+        version: 4.1.8
 
   packages/web-app-password-protected-folders:
     devDependencies:
@@ -877,8 +877,8 @@ importers:
         specifier: ^1.6.11
         version: 1.6.11
       zod:
-        specifier: ^4.1.5
-        version: 4.1.5
+        specifier: ^4.1.8
+        version: 4.1.8
     devDependencies:
       '@types/luxon':
         specifier: 3.7.1
@@ -1038,8 +1038,8 @@ importers:
         specifier: ^2.4.0
         version: 2.4.0(patch_hash=6f231bbef273efbc788b5657c47fc744b52bc838f972357a764c144fde6065f2)(@vue/compiler-sfc@3.5.20)(vue@3.5.20(typescript@5.9.2))
       zod:
-        specifier: ^4.1.5
-        version: 4.1.5
+        specifier: ^4.1.8
+        version: 4.1.8
     devDependencies:
       '@ownclouders/web-test-helpers':
         specifier: workspace:^
@@ -1181,8 +1181,8 @@ importers:
         specifier: ^1.6.11
         version: 1.6.11
       zod:
-        specifier: 4.1.5
-        version: 4.1.5
+        specifier: 4.1.8
+        version: 4.1.8
     devDependencies:
       '@ownclouders/web-test-helpers':
         specifier: workspace:*
@@ -7255,8 +7255,8 @@ packages:
   zhead@2.2.4:
     resolution: {integrity: sha512-8F0OI5dpWIA5IGG5NHUg9staDwz/ZPxZtvGVf01j7vHqSyZ0raHY+78atOVxRqb73AotX22uV1pXt3gYSstGag==}
 
-  zod@4.1.5:
-    resolution: {integrity: sha512-rcUUZqlLJgBC33IT3PNMgsCq6TzLQEG/Ei/KTCU0PedSWRMAXoOUN+4t/0H+Q8bdnLPdqUYnvboJT0bn/229qg==}
+  zod@4.1.8:
+    resolution: {integrity: sha512-5R1P+WwQqmmMIEACyzSvo4JXHY5WiAFHRMg+zBZKgKS+Q1viRa0C1hmUKtHltoIFKtIdki3pRxkmpP74jnNYHQ==}
 
 snapshots:
 
@@ -13964,4 +13964,4 @@ snapshots:
 
   zhead@2.2.4: {}
 
-  zod@4.1.5: {}
+  zod@4.1.8: {}

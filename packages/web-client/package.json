@@ -91,7 +91,7 @@
     "uuid": "^13.0.0",
     "webdav": "^5.8.0",
     "xml-js": "^1.6.11",
-    "zod": "^4.1.5"
+    "zod": "^4.1.8"
   },
   "devDependencies": {
     "@types/luxon": "3.7.1",
