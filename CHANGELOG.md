@@ -23,6 +23,7 @@ Summary
 * Enhancement - Replace board icon: [#12974](https://github.com/owncloud/web/pull/12974)
 * Enhancement - Add OcResponsiveImage component: [#13093](https://github.com/owncloud/web/pull/13093)
 * Enhancement - Add topbar mobile logo theme option: [#13093](https://github.com/owncloud/web/pull/13093)
+* Enhancement - Add mobile to query param: [#13110](https://github.com/owncloud/web/pull/13110)
 * Enhancement - Use OCS v2 API: [#13111](https://github.com/owncloud/web/pull/13111)
 
 Details
@@ -181,6 +182,16 @@ Details
    for the topbar on mobile devices.
 
    https://github.com/owncloud/web/pull/13093
+
+* Enhancement - Add mobile to query param: [#13110](https://github.com/owncloud/web/pull/13110)
+
+   In order to enable ONLYOFFICE Mobile Web View, we have added the `mobile` query
+   parameter to the document editor URL. This allows users to access a
+   mobile-optimized version of the document editor when accessing it from mobile
+   devices.
+
+   https://github.com/owncloud/web/pull/13110
+   https://kiteworks.atlassian.net/browse/OCISDEV-305
 
 * Enhancement - Use OCS v2 API: [#13111](https://github.com/owncloud/web/pull/13111)
 
