@@ -6,7 +6,7 @@ import { Language } from 'vue3-gettext'
 import { eventBus } from '../eventBus'
 import DropTarget from '@uppy/drop-target'
 import { Resource, urlJoin } from '@ownclouders/web-client'
-import { Body, generateFileID, MinimalRequiredUppyFile } from '@uppy/utils'
+import { Body, generateFileID, MinimalRequiredUppyFile, NetworkError } from '@uppy/utils'
 
 type UppyServiceTopics =
   | 'uploadStarted'
@@ -177,6 +177,12 @@ export class UppyService {
           return true
         }
         return next(err)
+      },
+      onAfterResponse(_, res) {
+        const status = res.getStatus()
+        if (status >= 500 && res.getHeader('content-type')?.includes('text/html')) {
+          throw new NetworkError(`Server error (${status}) - Please try again`)
+        }
       }
     }
 
@@ -203,6 +209,11 @@ export class UppyService {
       timeout,
       getResponseData() {
         return {}
+      },
+      onAfterResponse(xhr) {
+        if (xhr.status >= 500 && xhr.getResponseHeader('content-type')?.includes('text/html')) {
+          throw new NetworkError(`Server error (${xhr.status}) - Please try again`, xhr)
+        }
       }
     }
 
