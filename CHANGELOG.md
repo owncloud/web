@@ -23,6 +23,7 @@ Summary
 * Enhancement - Replace board icon: [#12974](https://github.com/owncloud/web/pull/12974)
 * Enhancement - Add OcResponsiveImage component: [#13093](https://github.com/owncloud/web/pull/13093)
 * Enhancement - Add topbar mobile logo theme option: [#13093](https://github.com/owncloud/web/pull/13093)
+* Enhancement - Use OCS v2 API: [#13111](https://github.com/owncloud/web/pull/13111)
 
 Details
 -------
@@ -180,6 +181,13 @@ Details
    for the topbar on mobile devices.
 
    https://github.com/owncloud/web/pull/13093
+
+* Enhancement - Use OCS v2 API: [#13111](https://github.com/owncloud/web/pull/13111)
+
+   We have updated the OCS API to version 2. This is not a breaking change because
+   oCIS uses one implementation for both versions.
+
+   https://github.com/owncloud/web/pull/13111
 
 Changelog for ownCloud Web [11.3.5] (2025-06-26)
 =======================================
