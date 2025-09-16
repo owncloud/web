@@ -203,28 +203,44 @@ export default defineComponent({
 
     const progressBarExtensionId = 'com.github.owncloud.web.runtime.default-progress-bar'
     const progressBarExtensionPointId = 'app.runtime.global-progress-bar'
-    const defaultProgressBarExtension: CustomComponentExtension = {
-      id: progressBarExtensionId,
-      type: 'customComponent',
-      extensionPointIds: [progressBarExtensionPointId],
-      content: LoadingIndicator,
-      userPreference: {
-        optionLabel: $gettext('Default progress bar')
+
+    function registerProgressBarExtension() {
+      const defaultProgressBarExtension: CustomComponentExtension = {
+        id: progressBarExtensionId,
+        type: 'customComponent',
+        extensionPointIds: [progressBarExtensionPointId],
+        content: LoadingIndicator,
+        userPreference: {
+          optionLabel: $gettext('Default progress bar')
+        }
       }
-    }
-    extensionRegistry.registerExtensions(toRef([defaultProgressBarExtension] satisfies Extension[]))
-    const progressBarExtensionPoint: ExtensionPoint<CustomComponentExtension> = {
-      id: progressBarExtensionPointId,
-      extensionType: 'customComponent',
-      multiple: false,
-      defaultExtensionId: defaultProgressBarExtension.id,
-      userPreference: {
-        label: $gettext('Global progress bar'),
-        description: $gettext('Customize your progress bar')
+      extensionRegistry.registerExtensions(
+        toRef([defaultProgressBarExtension] satisfies Extension[])
+      )
+      const progressBarExtensionPoint: ExtensionPoint<CustomComponentExtension> = {
+        id: progressBarExtensionPointId,
+        extensionType: 'customComponent',
+        multiple: false,
+        defaultExtensionId: defaultProgressBarExtension.id,
+        userPreference: {
+          label: $gettext('Global progress bar'),
+          description: $gettext('Customize your progress bar')
+        }
       }
+      extensionRegistry.registerExtensionPoints(toRef([progressBarExtensionPoint]))
+      return progressBarExtensionPoint
     }
-    const extensionPoints = computed<ExtensionPoint<Extension>[]>(() => [progressBarExtensionPoint])
-    extensionRegistry.registerExtensionPoints(extensionPoints)
+
+    const progressBarExtensionPoint = ref(registerProgressBarExtension())
+
+    watch(
+      () => $gettext('Global progress bar'),
+      () => {
+        extensionRegistry.unregisterExtensions([progressBarExtensionId])
+        extensionRegistry.unregisterExtensionPoints([progressBarExtensionPoint.value.id])
+        progressBarExtensionPoint.value = registerProgressBarExtension()
+      }
+    )
 
     onMounted(async () => {
       await nextTick()
@@ -236,7 +252,7 @@ export default defineComponent({
       window.removeEventListener('resize', onResize)
 
       extensionRegistry.unregisterExtensions([progressBarExtensionId])
-      extensionRegistry.unregisterExtensionPoints(unref(extensionPoints).flatMap((e) => e.id))
+      extensionRegistry.unregisterExtensionPoints([progressBarExtensionPoint.value.id])
     })
 
     return {
