@@ -280,7 +280,7 @@ export class UserManager extends OidcUserManager {
     try {
       console.log('CERNBox: login successful, exchange sso token with reva token')
       const httpClient = this.clientService.httpAuthenticated
-      const revaTokenReq = await httpClient.get('/ocs/v1.php/cloud/user')
+      const revaTokenReq = await httpClient.get('/ocs/v2.php/cloud/user')
       const revaToken = revaTokenReq.headers['x-access-token']
       const claims = JSON.parse(atob(revaToken.split('.')[1]))
       user.access_token = revaToken
