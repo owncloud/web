@@ -27,7 +27,7 @@
 
 <script lang="ts" setup>
 import { stringify } from 'qs'
-import { computed, unref, nextTick, ref, watch, VNodeRef, onMounted } from 'vue'
+import { computed, inject, unref, nextTick, ref, watch, VNodeRef, onMounted, type Ref } from 'vue'
 import { useTask } from 'vue-concurrency'
 import { useGettext } from 'vue3-gettext'
 
@@ -50,6 +50,14 @@ import {
   isShareSpaceResource
 } from '@ownclouders/web-client'
 
+type ExtendedNavigator = Navigator & {
+  userAgentData?: {
+    mobile: boolean
+    platform: string
+    brands: { brand: string; version: string }[]
+  }
+}
+
 interface Props {
   space: SpaceResource
   resource: Resource
@@ -66,6 +74,8 @@ const appProviderService = useAppProviderService()
 const { makeRequest } = useRequest()
 
 const viewModeQuery = useRouteQuery('view_mode')
+const isMobileWidth =
+  inject<Ref<boolean>>('isMobileWidth') || (navigator as ExtendedNavigator).userAgentData?.mobile
 const viewModeQueryValue = computed(() => {
   return queryItemAsString(unref(viewModeQuery))
 })
@@ -115,6 +125,7 @@ const loadAppUrl = useTask(function* (signal, viewMode: string) {
     const query = stringify({
       file_id: fileId,
       lang: language.current,
+      mobile: unref(isMobileWidth) ? 1 : 0,
       ...(unref(appName) && { app_name: encodeURIComponent(unref(appName)) }),
       ...(viewMode && { view_mode: viewMode }),
       ...(unref(templateIdQueryValue) && { template_id: unref(templateIdQueryValue) })
