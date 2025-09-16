@@ -17,16 +17,16 @@
   },
   "dependencies": {
     "@babel/eslint-parser": "^7.28.4",
-    "@typescript-eslint/parser": "^8.43.0",
+    "@typescript-eslint/parser": "^8.44.0",
     "eslint-config-prettier": "^10.1.8",
-    "eslint-plugin-n": "^17.21.3",
+    "eslint-plugin-n": "^17.23.0",
     "eslint-plugin-promise": "^7.2.1",
     "eslint-plugin-unused-imports": "^4.2.0",
     "eslint-plugin-vue": "^10.4.0",
     "eslint-plugin-vuejs-accessibility": "^2.4.1",
     "globals": "^16.4.0",
     "typescript": "^5.9.2",
-    "typescript-eslint": "^8.43.0"
+    "typescript-eslint": "^8.44.0"
   },
   "peerDependencies": {
     "eslint": "^9.35.0"
