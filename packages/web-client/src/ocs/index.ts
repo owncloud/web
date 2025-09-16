@@ -11,10 +11,10 @@ export interface OCS {
 
 export const ocs = (baseURI: string, axiosClient: AxiosInstance): OCS => {
   const url = new URL(baseURI)
-  url.pathname = [...url.pathname.split('/'), 'ocs', 'v1.php'].filter(Boolean).join('/')
-  const ocsV1BaseURI = url.href
+  url.pathname = [...url.pathname.split('/'), 'ocs', 'v2.php'].filter(Boolean).join('/')
+  const ocsV2BaseURI = url.href
 
-  const capabilitiesFactory = GetCapabilitiesFactory(ocsV1BaseURI, axiosClient)
+  const capabilitiesFactory = GetCapabilitiesFactory(ocsV2BaseURI, axiosClient)
 
   const urlSign = new UrlSign({ baseURI, axiosClient })
 

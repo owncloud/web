@@ -56,7 +56,7 @@ export class UrlSign {
     }
 
     const data = await this.axiosClient.get(
-      urlJoin(this.baseURI, 'ocs/v1.php/cloud/user/signing-key'),
+      urlJoin(this.baseURI, 'ocs/v2.php/cloud/user/signing-key'),
       {
         params: {
           ...(publicToken && { 'public-token': publicToken })
