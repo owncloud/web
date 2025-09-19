@@ -4,6 +4,7 @@ import { Router } from 'vue-router'
 import { AuthService } from '../../../../src/services/auth/authService'
 import { UserManager } from '../../../../src/services/auth/userManager'
 import { RouteLocation, createRouter, createTestingPinia } from '@ownclouders/web-test-helpers'
+import { User } from 'oidc-client-ts'
 
 const mockUpdateContext = vi.fn()
 console.debug = vi.fn()
@@ -151,6 +152,72 @@ describe('AuthService', () => {
       await authService.initializeContext(mock<RouteLocation>({}))
 
       expect(mockUpdateContext).toHaveBeenCalledWith('access-token', true)
+    })
+  })
+
+  describe('acr', () => {
+    const mockSignInRedirect = vi.fn()
+
+    it('when user is not authenticated, should redirect to login page', async () => {
+      const authService = new AuthService()
+
+      Object.defineProperty(authService, 'userManager', {
+        value: mock<UserManager>({
+          getUser: vi.fn().mockResolvedValue(null),
+          signinRedirect: mockSignInRedirect
+        })
+      })
+
+      await authService.requireAcr('advanced', '/')
+      expect(mockSignInRedirect).toHaveBeenCalledWith({ acr_values: 'advanced' })
+    })
+
+    it('when user is authenticated and acr is not the one required, should redirect to login page', async () => {
+      const authService = new AuthService()
+
+      Object.defineProperty(authService, 'userManager', {
+        value: mock<UserManager>({
+          getUser: vi
+            .fn()
+            .mockResolvedValue(mock<User>({ profile: { acr: 'regular' }, expired: false })),
+          signinRedirect: mockSignInRedirect
+        })
+      })
+
+      await authService.requireAcr('advanced', '/')
+      expect(mockSignInRedirect).toHaveBeenCalledWith({ acr_values: 'advanced' })
+    })
+
+    it('when user is authenticated and acr is the one required but access token is expired, should redirect to login page', async () => {
+      const authService = new AuthService()
+
+      Object.defineProperty(authService, 'userManager', {
+        value: mock<UserManager>({
+          getUser: vi
+            .fn()
+            .mockResolvedValue(mock<User>({ profile: { acr: 'advanced' }, expired: true })),
+          signinRedirect: mockSignInRedirect
+        })
+      })
+
+      await authService.requireAcr('advanced', '/')
+      expect(mockSignInRedirect).toHaveBeenCalledWith({ acr_values: 'advanced' })
+    })
+
+    it('when user is authenticated and acr is the one required, should not redirect to login page', async () => {
+      const authService = new AuthService()
+
+      Object.defineProperty(authService, 'userManager', {
+        value: mock<UserManager>({
+          getUser: vi
+            .fn()
+            .mockResolvedValue(mock<User>({ profile: { acr: 'advanced' }, expired: false })),
+          signinRedirect: mockSignInRedirect
+        })
+      })
+
+      await authService.requireAcr('advanced', '/')
+      expect(mockSignInRedirect).not.toHaveBeenCalled()
     })
   })
 })

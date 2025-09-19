@@ -384,6 +384,30 @@ export class AuthService implements AuthServiceInterface {
     console.debug('[authService:handleDelegatedTokenUpdate] - going to update the access_token')
     return this.userManager.updateContext(event.data, false)
   }
+
+  /**
+   * Redirects to the login page if the user is not authenticated or if the ACR value is not the one required.
+   *
+   * @param acrValue - The ACR value to require.
+   * @param redirectUrl - The URL to redirect to after login.
+   *
+   * @throws {Error} In cases of wrong authentication.
+   */
+  public async requireAcr(acrValue: string, redirectUrl: string) {
+    const user = await this.userManager.getUser()
+    if (!user || user.expired) {
+      this.userManager.setPostLoginRedirectUrl(redirectUrl)
+      return this.userManager.signinRedirect({ acr_values: acrValue })
+    }
+
+    const { acr } = user.profile
+    if (acr === acrValue) {
+      return
+    }
+
+    this.userManager.setPostLoginRedirectUrl(redirectUrl)
+    return this.userManager.signinRedirect({ acr_values: acrValue })
+  }
 }
 
 export const authService = new AuthService()

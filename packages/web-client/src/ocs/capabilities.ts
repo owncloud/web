@@ -50,8 +50,16 @@ export interface ArchiverCapability {
   max_size?: string
 }
 
+interface AuthCapability {
+  mfa: {
+    enabled?: boolean
+    levelnames?: string[]
+  }
+}
+
 export interface Capabilities {
   capabilities: {
+    auth: AuthCapability
     checksums?: {
       preferredUploadType?: string
       supportedTypes?: string[]
