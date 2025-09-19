@@ -18,6 +18,7 @@ Summary
 * Bugfix - Set md-editor code block header to have z-index of 0: [#13075](https://github.com/owncloud/web/pull/13075)
 * Enhancement - Add markdown to PDF export: [#12788](https://github.com/owncloud/web/pull/12788)
 * Enhancement - Use switch for full text search filter: [#12915](https://github.com/owncloud/web/pull/12915)
+* Enhancement - Add MFA capability: [#12925](https://github.com/owncloud/web/pull/12925)
 * Enhancement - Add universal access: [#12933](https://github.com/owncloud/web/pull/12933)
 * Enhancement - Add GeoGebra pinboard icon: [#12973](https://github.com/owncloud/web/pull/12973)
 * Enhancement - Replace board icon: [#12974](https://github.com/owncloud/web/pull/12974)
@@ -121,6 +122,13 @@ Details
    it's easier to understand the toggle.
 
    https://github.com/owncloud/web/pull/12915
+
+* Enhancement - Add MFA capability: [#12925](https://github.com/owncloud/web/pull/12925)
+
+   We've added a capability to check if MFA is enabled. If the capability is
+   enabled, we will require MFA when accessing the admin settings page.
+
+   https://github.com/owncloud/web/pull/12925
 
 * Enhancement - Add universal access: [#12933](https://github.com/owncloud/web/pull/12933)
 
