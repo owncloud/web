@@ -16,6 +16,7 @@ Summary
 * Bugfix - Sign public link archiver download URL: [#12943](https://github.com/owncloud/web/pull/12943)
 * Bugfix - Add clipboard permissions: [#12954](https://github.com/owncloud/web/pull/12954)
 * Bugfix - Set md-editor code block header to have z-index of 0: [#13075](https://github.com/owncloud/web/pull/13075)
+* Bugfix - Handle HTML upload error: [#13127](https://github.com/owncloud/web/pull/13127)
 * Enhancement - Add markdown to PDF export: [#12788](https://github.com/owncloud/web/pull/12788)
 * Enhancement - Use switch for full text search filter: [#12915](https://github.com/owncloud/web/pull/12915)
 * Enhancement - Add MFA capability: [#12925](https://github.com/owncloud/web/pull/12925)
@@ -104,6 +105,14 @@ Details
 
    https://github.com/owncloud/web/pull/13075
    https://kiteworks.atlassian.net/browse/OCISDEV-307
+
+* Bugfix - Handle HTML upload error: [#13127](https://github.com/owncloud/web/pull/13127)
+
+   We had a bug where the upload error was not handled correctly when the server
+   returned an HTML error. This caused the upload to fail and the user to not be
+   able to see details about the upload.
+
+   https://github.com/owncloud/web/pull/13127
 
 * Enhancement - Add markdown to PDF export: [#12788](https://github.com/owncloud/web/pull/12788)
 
