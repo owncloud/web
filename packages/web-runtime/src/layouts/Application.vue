@@ -74,7 +74,6 @@ import {
   onMounted,
   provide,
   ref,
-  toRef,
   unref,
   watch
 } from 'vue'
@@ -203,7 +202,7 @@ export default defineComponent({
 
     const progressBarExtensionId = 'com.github.owncloud.web.runtime.default-progress-bar'
     const progressBarExtensionPointId = 'app.runtime.global-progress-bar'
-    const defaultProgressBarExtension: CustomComponentExtension = {
+    const defaultProgressBarExtension = computed<CustomComponentExtension>(() => ({
       id: progressBarExtensionId,
       type: 'customComponent',
       extensionPointIds: [progressBarExtensionPointId],
@@ -211,19 +210,24 @@ export default defineComponent({
       userPreference: {
         optionLabel: $gettext('Default progress bar')
       }
-    }
-    extensionRegistry.registerExtensions(toRef([defaultProgressBarExtension] satisfies Extension[]))
-    const progressBarExtensionPoint: ExtensionPoint<CustomComponentExtension> = {
+    }))
+
+    extensionRegistry.registerExtensions(
+      computed(() => [unref(defaultProgressBarExtension)] satisfies Extension[])
+    )
+    const progressBarExtensionPoint = computed<ExtensionPoint<CustomComponentExtension>>(() => ({
       id: progressBarExtensionPointId,
       extensionType: 'customComponent',
       multiple: false,
-      defaultExtensionId: defaultProgressBarExtension.id,
+      defaultExtensionId: unref(defaultProgressBarExtension).id,
       userPreference: {
         label: $gettext('Global progress bar'),
         description: $gettext('Customize your progress bar')
       }
-    }
-    const extensionPoints = computed<ExtensionPoint<Extension>[]>(() => [progressBarExtensionPoint])
+    }))
+    const extensionPoints = computed<ExtensionPoint<Extension>[]>(() => [
+      unref(progressBarExtensionPoint)
+    ])
     extensionRegistry.registerExtensionPoints(extensionPoints)
 
     onMounted(async () => {
