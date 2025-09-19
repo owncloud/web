@@ -16,6 +16,7 @@ Summary
 * Bugfix - Sign public link archiver download URL: [#12943](https://github.com/owncloud/web/pull/12943)
 * Bugfix - Add clipboard permissions: [#12954](https://github.com/owncloud/web/pull/12954)
 * Bugfix - Set md-editor code block header to have z-index of 0: [#13075](https://github.com/owncloud/web/pull/13075)
+* Bugfix - Make progress bar settings reactive: [#13126](https://github.com/owncloud/web/pull/13126)
 * Bugfix - Handle HTML upload error: [#13127](https://github.com/owncloud/web/pull/13127)
 * Enhancement - Add markdown to PDF export: [#12788](https://github.com/owncloud/web/pull/12788)
 * Enhancement - Use switch for full text search filter: [#12915](https://github.com/owncloud/web/pull/12915)
@@ -105,6 +106,14 @@ Details
 
    https://github.com/owncloud/web/pull/13075
    https://kiteworks.atlassian.net/browse/OCISDEV-307
+
+* Bugfix - Make progress bar settings reactive: [#13126](https://github.com/owncloud/web/pull/13126)
+
+   We had a bug where the progress bar settings were not reactive. This caused
+   labels to not be updated when the language changed. Adding reactivity to the
+   progress bar settings fixes this issue.
+
+   https://github.com/owncloud/web/pull/13126
 
 * Bugfix - Handle HTML upload error: [#13127](https://github.com/owncloud/web/pull/13127)
 
