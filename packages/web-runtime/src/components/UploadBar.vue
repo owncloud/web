@@ -565,9 +565,8 @@ const getUploadItemMessage = (item: UploadResult) => {
     errorMessage: string | null
   } => {
     const responseCode = errorMessage.match(/response code: (\d+)/)?.[1]
-    const errorBody = JSON.parse(
-      errorMessage.match(/response text: ([\s\S]+?), request id/)?.[1] || '{}'
-    )
+    const responseText = errorMessage.match(/response text: ([\s\S]+?), request id/)?.[1]
+    const errorBody = JSON.parse(responseText?.startsWith('{') ? responseText : '{}')
 
     return {
       responseCode: responseCode ? parseInt(responseCode) : null,
@@ -756,6 +755,7 @@ onMounted(() => {
     uploads.value[file.meta.uploadId].status = 'error'
     errors.value[file.meta.uploadId] = error as HttpError
     filesInProgressCount.value -= 1
+    runningUploads.value -= 1
 
     if (file.meta.topLevelFolderId) {
       handleTopLevelFolderUpdate(file, 'error')
