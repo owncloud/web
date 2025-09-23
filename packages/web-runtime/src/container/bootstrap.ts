@@ -4,7 +4,7 @@ import { RouteLocationRaw, Router, RouteRecordNormalized } from 'vue-router'
 import { App, computed, watch } from 'vue'
 import { loadTheme } from '../helpers/theme'
 import { createGettext, GetTextOptions, Language, Translations } from 'vue3-gettext'
-import { getBackendVersion, getWebVersion } from './versions'
+import { getBackendVersion, getWebVersion } from '@ownclouders/web-pkg'
 import {
   useModals,
   useThemeStore,

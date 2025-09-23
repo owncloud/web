@@ -1,5 +1,5 @@
-import { useCapabilityStore } from '@ownclouders/web-pkg'
-import { getBackendVersion, getWebVersion } from '../../../src/container/versions'
+import { useCapabilityStore } from '../../../src/composables/index'
+import { getBackendVersion, getWebVersion } from '../../../src/helpers/versions'
 import { createTestingPinia } from '@ownclouders/web-test-helpers'
 import { Capabilities } from '@ownclouders/web-client/ocs'
 
