@@ -516,12 +516,7 @@ def unitTests(ctx):
                              "pnpm test:unit --coverage",
                          ],
                      },
-                     {
-                         "name": "sonarcloud",
-                         "image": SONARSOURCE_SONAR_SCANNER_CLI_IMAGE,
-                         "environment": sonar_env,
-                     },
-                 ],
+                 ] + sonarcloudCoverageReport(sonar_env = sonar_env),
         "trigger": {
             "ref": [
                 "refs/heads/master",
@@ -531,6 +526,20 @@ def unitTests(ctx):
             ],
         },
     }]
+
+def sonarcloudCoverageReport(sonar_env):
+    return [
+        {
+            "name": "sonarcloud",
+            "image": SONARSOURCE_SONAR_SCANNER_CLI_IMAGE,
+            "environment": sonar_env,
+            "when": {
+                "event": [
+                    "cron",
+                ],
+            },
+        },
+    ]
 
 def e2eTests(ctx):
     e2e_workspace = {
