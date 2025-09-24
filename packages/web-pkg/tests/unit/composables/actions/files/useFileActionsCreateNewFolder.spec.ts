@@ -21,6 +21,10 @@ vi.mock('../../../../../src/composables/scrollTo')
 describe('useFileActionsCreateNewFolder', () => {
   describe('checkFolderName', () => {
     it.each([
+      {
+        input: '‮folder name',
+        output: 'Folder name cannot contain the Right-to-Left Override character (U+202E)'
+      },
       { input: '', output: 'Folder name cannot be empty' },
       { input: '/', output: 'Folder name cannot contain "/"' },
       { input: '.', output: 'Folder name cannot be equal to "."' },
