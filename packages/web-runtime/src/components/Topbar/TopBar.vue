@@ -123,11 +123,15 @@ export default {
       return '/'
     })
 
+    const isFilesPublicUpoad = computed(() => {
+      return unref(router.currentRoute).name === 'files-public-upload'
+    })
+
     const isSideBarToggleVisible = computed(() => {
       return authStore.userContextReady || authStore.publicLinkContextReady
     })
     const isSideBarToggleDisabled = computed(() => {
-      return isRuntimeRoute(unref(router.currentRoute))
+      return isRuntimeRoute(unref(router.currentRoute)) || unref(isFilesPublicUpoad)
     })
 
     const contentOnLeftPortal = ref(false)

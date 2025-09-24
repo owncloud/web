@@ -84,6 +84,10 @@
                 </oc-button>
               </template>
             </div>
+            <div class="versions mt-5 oc-pb-m oc-pl-m oc-text-xsmall oc-text-muted">
+              <span v-text="getWebVersion()" />
+              <span v-text="backendVersion" />
+            </div>
           </div>
         </div>
       </div>
@@ -113,7 +117,10 @@ import {
   useGetMatchingSpace,
   useRouteQuery,
   queryItemAsString,
-  useUpload
+  useUpload,
+  getWebVersion,
+  getBackendVersion,
+  useCapabilityStore
 } from '@ownclouders/web-pkg'
 import { eventBus } from '@ownclouders/web-pkg'
 import { useService, UppyService } from '@ownclouders/web-pkg'
@@ -139,6 +146,9 @@ const { getInternalSpace } = useGetMatchingSpace()
 useUpload({ uppyService })
 
 const resourcesStore = useResourcesStore()
+const capabilityStore = useCapabilityStore()
+
+const backendVersion = computed(() => getBackendVersion({ capabilityStore }))
 
 const { currentTheme } = storeToRefs(themeStore)
 
@@ -176,7 +186,7 @@ const title = computed(() => {
   return $pgettext(
     'A message explaining who shared a folder with secret file upload role to the receiving user',
     '%{owner} shared this folder with you for uploading',
-    { owner: unref(share).publicLinkShareOwner },
+    { owner: unref(share).publicLinkShareOwnerDisplayName },
     true
   )
 })
@@ -188,7 +198,7 @@ const existingContentNote = computed(() => {
 
   return $pgettext(
     'A note explaining that existing content in secure file drop share is not revealed to anyone else than the owner of the share.',
-    'Existing content is not revealed. Only %{owner} can see uploads.',
+    'Everyone who has read permission to any parent folder can see the content.',
     { owner: unref(share).publicLinkShareOwnerDisplayName },
     true
   )
@@ -327,6 +337,9 @@ defineExpose({ loading })
       border-radius: 14px;
       padding: var(--oc-space-xlarge);
     }
+  }
+  .mt-5 {
+    margin-top: 5px;
   }
 
   &-info-message {
