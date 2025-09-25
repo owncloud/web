@@ -29,6 +29,7 @@ Summary
 * Enhancement - Add topbar mobile logo theme option: [#13093](https://github.com/owncloud/web/pull/13093)
 * Enhancement - Add mobile to query param: [#13110](https://github.com/owncloud/web/pull/13110)
 * Enhancement - Use OCS v2 API: [#13111](https://github.com/owncloud/web/pull/13111)
+* Enhancement - Drop `remote.php` from WebDAV paths: [#13113](https://github.com/owncloud/web/pull/13113)
 
 Details
 -------
@@ -236,6 +237,14 @@ Details
    oCIS uses one implementation for both versions.
 
    https://github.com/owncloud/web/pull/13111
+
+* Enhancement - Drop `remote.php` from WebDAV paths: [#13113](https://github.com/owncloud/web/pull/13113)
+
+   We have dropped the `remote.php` prefix from WebDAV paths. This is not a
+   breaking change because oCIS strips this string from the path and it had been
+   done in the past only to support ownCloud 10.
+
+   https://github.com/owncloud/web/pull/13113
 
 Changelog for ownCloud Web [11.3.5] (2025-06-26)
 =======================================
