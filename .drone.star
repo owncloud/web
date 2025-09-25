@@ -21,7 +21,7 @@ PLUGINS_GITHUB_RELEASE = "plugins/github-release:1"
 PLUGINS_S3 = "plugins/s3:1.4.0"
 PLUGINS_S3_CACHE = "plugins/s3-cache:1"
 POSTGRES_ALPINE = "postgres:alpine3.18"
-SONARSOURCE_SONAR_SCANNER_CLI = "sonarsource/sonar-scanner-cli:5.0"
+SONARSOURCE_SONAR_SCANNER_CLI_IMAGE = "sonarsource/sonar-scanner-cli:11.3"
 TOOLHIPPIE_CALENS = "toolhippie/calens:latest"
 
 WEB_PUBLISH_NPM_PACKAGES = ["babel-preset", "design-system", "eslint-config", "extension-sdk", "prettier-config", "tsconfig", "web-client", "web-pkg", "web-test-helpers"]
@@ -512,12 +512,7 @@ def unitTests(ctx):
                              "pnpm test:unit --coverage",
                          ],
                      },
-                     {
-                         "name": "sonarcloud",
-                         "image": SONARSOURCE_SONAR_SCANNER_CLI,
-                         "environment": sonar_env,
-                     },
-                 ],
+                 ] + sonarcloudCoverageReport(sonar_env = sonar_env),
         "trigger": {
             "ref": [
                 "refs/heads/master",
@@ -527,6 +522,20 @@ def unitTests(ctx):
             ],
         },
     }]
+
+def sonarcloudCoverageReport(sonar_env):
+    return [
+        {
+            "name": "sonarcloud",
+            "image": SONARSOURCE_SONAR_SCANNER_CLI_IMAGE,
+            "environment": sonar_env,
+            "when": {
+                "event": [
+                    "cron",
+                ],
+            },
+        },
+    ]
 
 def e2eTests(ctx):
     e2e_workspace = {
