@@ -18,6 +18,7 @@ Summary
 * Bugfix - Set md-editor code block header to have z-index of 0: [#13075](https://github.com/owncloud/web/pull/13075)
 * Bugfix - Make progress bar settings reactive: [#13126](https://github.com/owncloud/web/pull/13126)
 * Bugfix - Handle HTML upload error: [#13127](https://github.com/owncloud/web/pull/13127)
+* Bugfix - Disallow U+202E character in folder name: [#13136](https://github.com/owncloud/web/pull/13136)
 * Enhancement - Add markdown to PDF export: [#12788](https://github.com/owncloud/web/pull/12788)
 * Enhancement - Use switch for full text search filter: [#12915](https://github.com/owncloud/web/pull/12915)
 * Enhancement - Add MFA capability: [#12925](https://github.com/owncloud/web/pull/12925)
@@ -122,6 +123,16 @@ Details
    able to see details about the upload.
 
    https://github.com/owncloud/web/pull/13127
+
+* Bugfix - Disallow U+202E character in folder name: [#13136](https://github.com/owncloud/web/pull/13136)
+
+   We have fixed an issue where the U+202E (Right-to-Left Override) character could
+   be used in folder names, which could lead to confusion and potential security
+   risks. This character is now disallowed in folder names to ensure clarity and
+   prevent misuse.
+
+   https://github.com/owncloud/web/pull/13136
+   https://kiteworks.atlassian.net/browse/OCISDEV-124
 
 * Enhancement - Add markdown to PDF export: [#12788](https://github.com/owncloud/web/pull/12788)
 
