@@ -97,7 +97,7 @@ export default defineComponent({
         this.loading = false
         return
       }
-      const url = this.serverUrl + 'remote.php/dav/avatars/' + userid + '/128.png'
+      const url = this.serverUrl + 'dav/avatars/' + userid + '/128.png'
       this.$clientService.httpAuthenticated
         .get<Blob>(url, { responseType: 'blob' })
         .then((response) => {

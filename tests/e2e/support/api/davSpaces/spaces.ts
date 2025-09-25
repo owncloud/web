@@ -35,7 +35,7 @@ const createFolder = async ({
 
   let parentFolder = ''
   for (const resource of paths) {
-    const path = join('remote.php', 'dav', webDavEndPathToRoot, parentFolder, resource)
+    const path = join('dav', webDavEndPathToRoot, parentFolder, resource)
     // check if the folder exists already or not
     const folderExist = await folderExists({ user, path })
     if (folderExist === false) {
@@ -66,7 +66,7 @@ const createFile = async ({
   const today = new Date()
   const response = await request({
     method: 'PUT',
-    path: join('remote.php', 'dav', webDavEndPathToRoot, pathToFile),
+    path: join('dav', webDavEndPathToRoot, pathToFile),
     body: content,
     user: user,
     header: mtimeDeltaDays
@@ -173,7 +173,6 @@ export const getDataOfFileInsideSpace = async ({
   const response = await request({
     method: 'PROPFIND',
     path: join(
-      'remote.php',
       'dav',
       'spaces',
       await getSpaceIdBySpaceName({ user, spaceType, spaceName }),
@@ -263,7 +262,7 @@ export const listSpaceResources = async ({
 
   const response = await request({
     method: 'PROPFIND',
-    path: join('remote.php', 'dav', 'spaces', spaceId, folder),
+    path: join('dav', 'spaces', spaceId, folder),
     body: propBody,
     user: user
   })
@@ -303,7 +302,7 @@ export const deleteSpaceResource = async ({
   folder?: string
   fileId?: string
 }): Promise<void> => {
-  const path = ['remote.php', 'dav', 'spaces']
+  const path = ['dav', 'spaces']
   let errMessage = `Failed to delete resource '${folder}'`
   if (!fileId) {
     const spaceId = await getSpaceIdBySpaceName({ user, spaceType, spaceName })
@@ -336,7 +335,7 @@ export const emptyTrashbin = async ({
 
   const response = await request({
     method: 'DELETE',
-    path: join('remote.php', 'dav', 'spaces', 'trash-bin', spaceId),
+    path: join('dav', 'spaces', 'trash-bin', spaceId),
     user: user
   })
 
