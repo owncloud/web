@@ -25,6 +25,12 @@ export const useFileActionsCreateNewFolder = ({ space }: { space?: Ref<SpaceReso
       return setError($gettext('Folder name cannot be empty'))
     }
 
+    if (folderName.includes('\u202E')) {
+      return setError(
+        $gettext('Folder name cannot contain the Right-to-Left Override character (U+202E)')
+      )
+    }
+
     if (/[/]/.test(folderName)) {
       return setError($gettext('Folder name cannot contain "/"'))
     }
