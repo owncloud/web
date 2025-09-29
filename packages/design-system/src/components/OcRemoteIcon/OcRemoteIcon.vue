@@ -69,27 +69,27 @@ const style = computed(() => ({
     @include oc-icon-size(8);
   }
 
-  &.primary {
+  &.primary > svg {
     background-color: var(--oc-color-swatch-primary-default);
   }
 
-  &.passive {
+  &.passive > svg {
     background-color: var(--oc-color-swatch-passive-default);
   }
 
-  &.warning {
+  &.warning > svg {
     background-color: var(--oc-color-swatch-warning-default);
   }
 
-  &.success {
+  &.success > svg {
     background-color: var(--oc-color-swatch-success-default);
   }
 
-  &.danger {
+  &.danger > svg {
     background-color: var(--oc-color-swatch-danger-default);
   }
 
-  &.brand {
+  &.brand > svg {
     background-color: var(--oc-color-swatch-brand-default);
   }
 }
