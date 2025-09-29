@@ -1,0 +1,25 @@
+{
+  "server": "http://localhost:8888",
+  "theme": "http://localhost:8888/themes/owncloud/theme.json",
+  "openIdConnect": {
+    "metadata_url": "http://localhost:8888/.well-known/openid-configuration",
+    "authority": "http://localhost:8888/",
+    "client_id": "AAAAAAAA-BBBB-CCCC-DDDD-EEEEEEEEEEEE",
+    "response_type": "code",    
+    "client_secret": "FFFFFFFFFFFF",
+    "fetchRequestCredentials": "omit"
+  },
+  "apps": [
+    "files",
+    "preview",
+    "pdf-viewer",
+    "search",
+    "text-editor",
+    "external",
+    "admin-settings",
+    "epub-reader"
+  ],
+  "options": {
+    "contextHelpersReadMore": true
+  }
+}
