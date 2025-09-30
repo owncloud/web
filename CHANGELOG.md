@@ -31,6 +31,7 @@ Summary
 * Enhancement - Add mobile to query param: [#13110](https://github.com/owncloud/web/pull/13110)
 * Enhancement - Use OCS v2 API: [#13111](https://github.com/owncloud/web/pull/13111)
 * Enhancement - Drop `remote.php` from WebDAV paths: [#13113](https://github.com/owncloud/web/pull/13113)
+* Enhancement - Display custom attributes in share autocomplete: [#13144](https://github.com/owncloud/web/pull/13144)
 
 Details
 -------
@@ -253,6 +254,14 @@ Details
    done in the past only to support ownCloud 10.
 
    https://github.com/owncloud/web/pull/13113
+
+* Enhancement - Display custom attributes in share autocomplete: [#13144](https://github.com/owncloud/web/pull/13144)
+
+   When sharing a resource, we're now displaying custom attributes in the
+   autocomplete. Previously, we were only displaying the user's email address. What
+   attributes are displayed depends on the server configuration.
+
+   https://github.com/owncloud/web/pull/13144
 
 Changelog for ownCloud Web [11.3.5] (2025-06-26)
 =======================================
