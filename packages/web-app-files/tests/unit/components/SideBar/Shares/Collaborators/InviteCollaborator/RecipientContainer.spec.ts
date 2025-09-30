@@ -10,7 +10,8 @@ vi.mock('../../../../../../../src/helpers/user/avatarUrl', () => ({
 const getRecipient = (shareType: number = ShareTypes.user.value): CollaboratorAutoCompleteItem => ({
   displayName: 'Albert Einstein',
   id: 'einstein',
-  shareType
+  shareType,
+  attributes: []
 })
 
 describe('InviteCollaborator RecipientContainer', () => {

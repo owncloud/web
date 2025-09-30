@@ -80,4 +80,5 @@ export interface CollaboratorAutoCompleteItem {
   mail?: string
   onPremisesSamAccountName?: string
   identities?: ObjectIdentity[]
+  attributes: string[]
 }

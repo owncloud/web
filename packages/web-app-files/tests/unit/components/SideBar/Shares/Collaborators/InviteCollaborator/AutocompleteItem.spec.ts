@@ -60,6 +60,13 @@ describe('AutocompleteItem component', () => {
     })
   })
   describe('additional info', () => {
+    it('shows the attributes for a user if given', () => {
+      const attributes = ['foo', 'bar']
+      const { wrapper } = createWrapper({ shareType: ShareTypes.user.value, attributes })
+      expect(wrapper.find('.files-collaborators-autocomplete-additionalInfo').text()).toEqual(
+        attributes.join(' · ')
+      )
+    })
     it('shows the email for a user if given', () => {
       const mail = 'foo@bar.com'
       const { wrapper } = createWrapper({ shareType: ShareTypes.user.value, mail })
@@ -87,12 +94,13 @@ function createWrapper({
   id = '',
   displayName = '',
   mail = '',
-  onPremisesSamAccountName = ''
+  onPremisesSamAccountName = '',
+  attributes = []
 }: Partial<CollaboratorAutoCompleteItem>) {
   return {
     wrapper: shallowMount(AutocompleteItem, {
       props: {
-        item: { shareType, id, displayName, mail, onPremisesSamAccountName }
+        item: { shareType, id, displayName, mail, onPremisesSamAccountName, attributes }
       },
       global: {
         renderStubDefaultSlot: true,
