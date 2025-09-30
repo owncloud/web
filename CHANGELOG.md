@@ -19,6 +19,7 @@ Summary
 * Bugfix - Make progress bar settings reactive: [#13126](https://github.com/owncloud/web/pull/13126)
 * Bugfix - Handle HTML upload error: [#13127](https://github.com/owncloud/web/pull/13127)
 * Bugfix - Disallow U+202E character in folder name: [#13136](https://github.com/owncloud/web/pull/13136)
+* Bugfix - Use correct color for universal icon: [#13142](https://github.com/owncloud/web/pull/13142)
 * Enhancement - Add markdown to PDF export: [#12788](https://github.com/owncloud/web/pull/12788)
 * Enhancement - Use switch for full text search filter: [#12915](https://github.com/owncloud/web/pull/12915)
 * Enhancement - Add MFA capability: [#12925](https://github.com/owncloud/web/pull/12925)
@@ -134,6 +135,13 @@ Details
 
    https://github.com/owncloud/web/pull/13136
    https://kiteworks.atlassian.net/browse/OCISDEV-124
+
+* Bugfix - Use correct color for universal icon: [#13142](https://github.com/owncloud/web/pull/13142)
+
+   We've fixed the universal icon color to ensure it matches the chosen theme.
+
+   https://github.com/owncloud/web/pull/13142
+   https://kiteworks.atlassian.net/browse/OCISDEV-353
 
 * Enhancement - Add markdown to PDF export: [#12788](https://github.com/owncloud/web/pull/12788)
 
