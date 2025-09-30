@@ -54,7 +54,9 @@ interface Props {
 const props = defineProps<Props>()
 
 const additionalInfo = computed(() => {
-  return props.item.mail || props.item.onPremisesSamAccountName
+  return (
+    props.item.attributes?.join(' · ') || props.item.mail || props.item.onPremisesSamAccountName
+  )
 })
 
 const externalIssuer = computed(() => {
@@ -92,5 +94,6 @@ const collaboratorClass = computed(() => {
 .files-collaborators-autocomplete-additionalInfo,
 .files-collaborators-autocomplete-externalIssuer {
   font-size: var(--oc-font-size-small);
+  white-space: normal;
 }
 </style>
