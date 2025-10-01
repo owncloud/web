@@ -625,8 +625,8 @@ importers:
         specifier: workspace:*
         version: link:../web-pkg
       '@uppy/core':
-        specifier: 5.0.1
-        version: 5.0.1
+        specifier: 5.0.2
+        version: 5.0.2
       '@vueuse/core':
         specifier: ^11.0.0 || ^12.0.0 || ^13.0.0
         version: 13.9.0(vue@3.5.22(typescript@5.9.2))
@@ -927,20 +927,20 @@ importers:
         specifier: 10.11.0
         version: 10.11.0(pinia@3.0.3(typescript@5.9.2)(vue@3.5.22(typescript@5.9.2)))(vue@3.5.22(typescript@5.9.2))
       '@uppy/core':
-        specifier: 5.0.1
-        version: 5.0.1
+        specifier: 5.0.2
+        version: 5.0.2
       '@uppy/drop-target':
-        specifier: 4.0.0
-        version: 4.0.0(@uppy/core@5.0.1)
+        specifier: 4.0.1
+        version: 4.0.1(@uppy/core@5.0.2)
       '@uppy/tus':
-        specifier: 5.0.0
-        version: 5.0.0(@uppy/core@5.0.1)
+        specifier: 5.0.1
+        version: 5.0.1(@uppy/core@5.0.2)
       '@uppy/utils':
-        specifier: 7.0.1
-        version: 7.0.1
+        specifier: 7.0.2
+        version: 7.0.2
       '@uppy/xhr-upload':
-        specifier: 5.0.0
-        version: 5.0.0(@uppy/core@5.0.1)
+        specifier: 5.0.1
+        version: 5.0.1(@uppy/core@5.0.2)
       '@vavt/cm-extension':
         specifier: ^1.11.0
         version: 1.11.0
@@ -1088,20 +1088,20 @@ importers:
         specifier: 10.11.0
         version: 10.11.0(pinia@3.0.3(typescript@5.9.2)(vue@3.5.22(typescript@5.9.2)))(vue@3.5.22(typescript@5.9.2))
       '@uppy/core':
-        specifier: 5.0.1
-        version: 5.0.1
+        specifier: 5.0.2
+        version: 5.0.2
       '@uppy/drop-target':
-        specifier: 4.0.0
-        version: 4.0.0(@uppy/core@5.0.1)
+        specifier: 4.0.1
+        version: 4.0.1(@uppy/core@5.0.2)
       '@uppy/tus':
-        specifier: 5.0.0
-        version: 5.0.0(@uppy/core@5.0.1)
+        specifier: 5.0.1
+        version: 5.0.1(@uppy/core@5.0.2)
       '@uppy/utils':
-        specifier: 7.0.1
-        version: 7.0.1
+        specifier: 7.0.2
+        version: 7.0.2
       '@uppy/xhr-upload':
-        specifier: 5.0.0
-        version: 5.0.0(@uppy/core@5.0.1)
+        specifier: 5.0.1
+        version: 5.0.1(@uppy/core@5.0.2)
       '@vueuse/core':
         specifier: 13.9.0
         version: 13.9.0(vue@3.5.22(typescript@5.9.2))
@@ -3084,34 +3084,34 @@ packages:
     peerDependencies:
       vue: '>=2.7 || >=3'
 
-  '@uppy/companion-client@5.0.0':
-    resolution: {integrity: sha512-sI8AP5+mhi2HRuXFUGt2tJoIZqzHmznrPn8AdI2B/ny81upLvb5/Zo0BszlleK5iD7Wyxcn0hkBn/HQI73mcjA==}
+  '@uppy/companion-client@5.0.1':
+    resolution: {integrity: sha512-Gy4NCoj5JXQqm6Gr0T6VTeKVhrf8OvnFP1Ddz35dHUsy4GkXuvcc1FMzzKpxKWONtXWz6iQZocnhslgVIZvZwQ==}
     peerDependencies:
-      '@uppy/core': ^5.0.0
+      '@uppy/core': ^5.0.2
 
-  '@uppy/core@5.0.1':
-    resolution: {integrity: sha512-4hLCSjwkJtSZ/W/vJp+GX+4GkSXk/ilrL5ldH0gefAg+mQVxucuLFE7Rc1QdwmUQlnhqIFOSwLAkv2jTTNXGgw==}
+  '@uppy/core@5.0.2':
+    resolution: {integrity: sha512-HY1IIr5Xff6P67MMSlG8JIgK099zFGksTnS8oBdFOGt+42ge7b6RXPH1zMerpteTLGqVfVT1kOrJLoJyTvT+NA==}
 
-  '@uppy/drop-target@4.0.0':
-    resolution: {integrity: sha512-tYaFbXhA+YCbYvDjqhqthT4C6rfKhOG/Xom3PLHZfit++oFmMin44hMWJNDjBiol3qjmKnhgmO1lNPah50J1zg==}
+  '@uppy/drop-target@4.0.1':
+    resolution: {integrity: sha512-f8/t/Zr3y1Oia2k8PgdxBWMoA6ZVlRpzo63DuWIU6nB5KJ7dyhNI0KF193VfDFIU+wUCE8crLp3DJ1peZz04yg==}
     peerDependencies:
-      '@uppy/core': ^5.0.0
+      '@uppy/core': ^5.0.2
 
   '@uppy/store-default@5.0.0':
     resolution: {integrity: sha512-hQtCSQ1yGiaval/wVYUWquYGDJ+bpQ7e4FhUUAsRQz1x1K+o7NBtjfp63O9I4Ks1WRoKunpkarZ+as09l02cPw==}
 
-  '@uppy/tus@5.0.0':
-    resolution: {integrity: sha512-wGV8LgQAIdlMEQji91/glBy+TXlp6917z+nUCag4KhpW63WhQcd37xh34JjvQIf3IvaBa3Zjj37btQ3TL/aVeA==}
+  '@uppy/tus@5.0.1':
+    resolution: {integrity: sha512-4BQA2UFjznXrJhmjsgT/m8WDThoSX2vxKZJH/aF1Xj4GmB46+a5kas6ttCsMDcPq918/sdRJsqCMGj1r4oXKLQ==}
     peerDependencies:
-      '@uppy/core': ^5.0.0
+      '@uppy/core': ^5.0.2
 
-  '@uppy/utils@7.0.1':
-    resolution: {integrity: sha512-OLG5cbMYApwrj5VOeK4vEVOx0YtrsCMJKNqdA9LkFNIGWaF9KJPE6+P/MEvxgdAlnCZrF4Z7Gf/EuZF0gKMYJw==}
+  '@uppy/utils@7.0.2':
+    resolution: {integrity: sha512-2fdtgwNTkLgh7yMmHN3ZztHaP/o/iXDSt5VAbvGG4tFFkRxaaDmSKAljglEle1+m1OamKQLjm8fIxfOqu/szng==}
 
-  '@uppy/xhr-upload@5.0.0':
-    resolution: {integrity: sha512-ry/tDULv7xPEkm7VNl6GXV46JYb5lR/BUDo0Nl+S6n3I0EEMRO/sD30yA5BQZo80oZDUEyUGLoJ8HseD0nm4tA==}
+  '@uppy/xhr-upload@5.0.1':
+    resolution: {integrity: sha512-wG8M7WTVFi4widnwERxcZ73ap5tSSr8b8sGooGBEU8Kvhoo6P8l6tnJbuAFELRUAc/jkzZfL5WSYgsp0qTCUyQ==}
     peerDependencies:
-      '@uppy/core': ^5.0.0
+      '@uppy/core': ^5.0.2
 
   '@vavt/cm-extension@1.11.0':
     resolution: {integrity: sha512-rwKoSSBGpP2ayH5cO4ZrweJtmeIVkvSgoyILL24BTb9vkItXwRTDV6ctrdIaD0yJ8OQ8Lez6jlWVLfS9Ipk6Zw==}
@@ -9524,48 +9524,48 @@ snapshots:
       unhead: 1.11.20
       vue: 3.5.22(typescript@5.9.2)
 
-  '@uppy/companion-client@5.0.0(@uppy/core@5.0.1)':
+  '@uppy/companion-client@5.0.1(@uppy/core@5.0.2)':
     dependencies:
-      '@uppy/core': 5.0.1
-      '@uppy/utils': 7.0.1
+      '@uppy/core': 5.0.2
+      '@uppy/utils': 7.0.2
       namespace-emitter: 2.0.1
       p-retry: 6.2.1
 
-  '@uppy/core@5.0.1':
+  '@uppy/core@5.0.2':
     dependencies:
       '@transloadit/prettier-bytes': 0.3.5
       '@uppy/store-default': 5.0.0
-      '@uppy/utils': 7.0.1
+      '@uppy/utils': 7.0.2
       lodash: 4.17.21
       mime-match: 1.0.2
       namespace-emitter: 2.0.1
       nanoid: 5.1.5
       preact: 10.26.8
 
-  '@uppy/drop-target@4.0.0(@uppy/core@5.0.1)':
+  '@uppy/drop-target@4.0.1(@uppy/core@5.0.2)':
     dependencies:
-      '@uppy/core': 5.0.1
-      '@uppy/utils': 7.0.1
+      '@uppy/core': 5.0.2
+      '@uppy/utils': 7.0.2
 
   '@uppy/store-default@5.0.0': {}
 
-  '@uppy/tus@5.0.0(@uppy/core@5.0.1)':
+  '@uppy/tus@5.0.1(@uppy/core@5.0.2)':
     dependencies:
-      '@uppy/companion-client': 5.0.0(@uppy/core@5.0.1)
-      '@uppy/core': 5.0.1
-      '@uppy/utils': 7.0.1
+      '@uppy/companion-client': 5.0.1(@uppy/core@5.0.2)
+      '@uppy/core': 5.0.2
+      '@uppy/utils': 7.0.2
       tus-js-client: 4.3.1
 
-  '@uppy/utils@7.0.1':
+  '@uppy/utils@7.0.2':
     dependencies:
       lodash: 4.17.21
       preact: 10.26.8
 
-  '@uppy/xhr-upload@5.0.0(@uppy/core@5.0.1)':
+  '@uppy/xhr-upload@5.0.1(@uppy/core@5.0.2)':
     dependencies:
-      '@uppy/companion-client': 5.0.0(@uppy/core@5.0.1)
-      '@uppy/core': 5.0.1
-      '@uppy/utils': 7.0.1
+      '@uppy/companion-client': 5.0.1(@uppy/core@5.0.2)
+      '@uppy/core': 5.0.2
+      '@uppy/utils': 7.0.2
 
   '@vavt/cm-extension@1.11.0': {}
 
