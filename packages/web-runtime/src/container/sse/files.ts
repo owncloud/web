@@ -1,6 +1,7 @@
 import { createFileRouteOptions, ImageDimension } from '@ownclouders/web-pkg'
 import { SSEEventOptions } from './types'
 import { isItemInCurrentFolder } from './helpers'
+import { isPublicSpaceResource } from '@ownclouders/web-client'
 
 export const onSSEItemRenamedEvent = async ({
   sseData,
@@ -23,7 +24,13 @@ export const onSSEItemRenamedEvent = async ({
   if (!resource) {
     return
   }
-  const space = spacesStore.spaces.find((s) => s.id === resource.storageId)
+  const space = spacesStore.spaces.find((s) => {
+    if (isPublicSpaceResource(s)) {
+      return s.spaceId === resource.storageId
+    }
+
+    return s.id === resource.storageId
+  })
 
   if (!space) {
     return
@@ -54,7 +61,12 @@ export const onSSEFileLockingEvent = async ({
   clientService
 }: SSEEventOptions) => {
   const resource = resourcesStore.resources.find((f) => f.id === sseData.itemid)
-  const space = spacesStore.spaces.find((s) => s.id === resource?.storageId)
+  const space = spacesStore.spaces.find((s) => {
+    if (isPublicSpaceResource(s)) {
+      return s.spaceId === resource?.storageId
+    }
+    return s.id === resource?.storageId
+  })
 
   if (!resource || !space) {
     return
@@ -80,7 +92,12 @@ export const onSSEProcessingFinishedEvent = async ({
     return false
   }
   const resource = resourcesStore.resources.find((f) => f.id === sseData.itemid)
-  const space = spacesStore.spaces.find((s) => s.id === sseData.spaceid)
+  const space = spacesStore.spaces.find((s) => {
+    if (isPublicSpaceResource(s)) {
+      return s.spaceId === sseData.spaceid
+    }
+    return s.id === sseData.spaceid
+  })
   if (!space) {
     return
   }
@@ -187,7 +204,12 @@ export const onSSEItemRestoredEvent = async ({
     return
   }
 
-  const space = spacesStore.spaces.find((space) => space.id === sseData.spaceid)
+  const space = spacesStore.spaces.find((space) => {
+    if (isPublicSpaceResource(space)) {
+      return space.spaceId === sseData.spaceid
+    }
+    return space.id === sseData.spaceid
+  })
   if (!space) {
     return
   }
@@ -257,7 +279,12 @@ export const onSSEFileTouchedEvent = async ({
     return
   }
 
-  const space = spacesStore.spaces.find((space) => space.id === sseData.spaceid)
+  const space = spacesStore.spaces.find((space) => {
+    if (isPublicSpaceResource(space)) {
+      return space.spaceId === sseData.spaceid
+    }
+    return space.id === sseData.spaceid
+  })
   if (!space) {
     return
   }
@@ -289,7 +316,12 @@ export const onSSEFolderCreatedEvent = async ({
     return
   }
 
-  const space = spacesStore.spaces.find((space) => space.id === sseData.spaceid)
+  const space = spacesStore.spaces.find((space) => {
+    if (isPublicSpaceResource(space)) {
+      return space.spaceId === sseData.spaceid
+    }
+    return space.id === sseData.spaceid
+  })
   if (!space) {
     return
   }
@@ -298,7 +330,6 @@ export const onSSEFolderCreatedEvent = async ({
     path: '',
     fileId: sseData.itemid
   })
-
   if (!resource) {
     return
   }

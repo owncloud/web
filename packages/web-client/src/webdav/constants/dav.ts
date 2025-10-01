@@ -105,7 +105,8 @@ const DavPropertyMapping = {
   PublicLinkPermission: defString('public-link-permission' as const),
   PublicLinkExpiration: defString('public-link-expiration' as const),
   PublicLinkShareDate: defString('public-link-share-datetime' as const),
-  PublicLinkShareOwner: defString('public-link-share-owner' as const)
+  PublicLinkShareOwner: defString('public-link-share-owner' as const),
+  SpaceId: defString('spaceid' as const)
 } as const satisfies Record<string, M<unknown, unknown>>
 
 type DavPropertyMappingType = typeof DavPropertyMapping
@@ -156,7 +157,10 @@ export abstract class DavProperties {
     DavProperty.PublicLinkPermission,
     DavProperty.PublicLinkExpiration,
     DavProperty.PublicLinkShareDate,
-    DavProperty.PublicLinkShareOwner
+    DavProperty.PublicLinkShareOwner,
+    DavProperty.SpaceId,
+    DavProperty.FileId,
+    DavProperty.FileParent
   ])
 
   static readonly Trashbin: DavPropertyValue[] = [
