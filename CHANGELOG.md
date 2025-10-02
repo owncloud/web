@@ -1,19 +1,15 @@
-Changelog for ownCloud Web [unreleased] (UNRELEASED)
+Changelog for ownCloud Web [12.1.0] (2025-10-02)
 =======================================
-The following sections list the changes in ownCloud web unreleased relevant to
+The following sections list the changes in ownCloud web 12.1.0 relevant to
 ownCloud admins and users.
 
-[unreleased]: https://github.com/owncloud/web/compare/v11.3.5...master
+[12.1.0]: https://github.com/owncloud/web/compare/v12.0.4...v12.1.0
 
 Summary
 -------
 
 * Bugfix - Reset selection only when path changes: [#12768](https://github.com/owncloud/web/pull/12768)
 * Bugfix - Handle direct admin settings access: [#12780](https://github.com/owncloud/web/pull/12780)
-* Bugfix - Incorrect translation when using switches language: [#12889](https://github.com/owncloud/web/pull/12889)
-* Bugfix - Deactivated Space button clips German translated word: [#12890](https://github.com/owncloud/web/pull/12890)
-* Bugfix - User info getting translated: [#12893](https://github.com/owncloud/web/pull/12893)
-* Bugfix - Sign public link archiver download URL: [#12943](https://github.com/owncloud/web/pull/12943)
 * Bugfix - Add clipboard permissions: [#12954](https://github.com/owncloud/web/pull/12954)
 * Bugfix - Set md-editor code block header to have z-index of 0: [#13075](https://github.com/owncloud/web/pull/13075)
 * Bugfix - Make progress bar settings reactive: [#13126](https://github.com/owncloud/web/pull/13126)
@@ -58,42 +54,6 @@ Details
    handle the permissions navigation guard.
 
    https://github.com/owncloud/web/pull/12780
-
-* Bugfix - Incorrect translation when using switches language: [#12889](https://github.com/owncloud/web/pull/12889)
-
-   We have fixed an issue where the translation was incorrect when switching
-   languages in the web interface. This ensures that the language displayed matches
-   the selected language without inconsistencies by fetching the roles when use
-   switches language.
-
-   https://github.com/owncloud/web/pull/12889
-   https://kiteworks.atlassian.net/browse/OCISDEV-186
-
-* Bugfix - Deactivated Space button clips German translated word: [#12890](https://github.com/owncloud/web/pull/12890)
-
-   We have fixed an issue where the "Deactivated Space" button would clip the
-   German translated word. The button now displays the full word without clipping.
-
-   https://github.com/owncloud/web/pull/12890
-   https://kiteworks.atlassian.net/browse/OCISDEV-194
-
-* Bugfix - User info getting translated: [#12893](https://github.com/owncloud/web/pull/12893)
-
-   We have fixed the issue where user's info are getting translated by disabling
-   browser translation for certain fields, avatar image, first name, last name and
-   username.
-
-   https://github.com/owncloud/web/pull/12893
-   https://kiteworks.atlassian.net/browse/OCISDEV-193
-
-* Bugfix - Sign public link archiver download URL: [#12943](https://github.com/owncloud/web/pull/12943)
-
-   We've started signing the archiver download URL in public link context in case
-   the link is password protected. This allows users to download large archives
-   without memory limits imposed by browsers.
-
-   https://github.com/owncloud/web/issues/12811
-   https://github.com/owncloud/web/pull/12943
 
 * Bugfix - Add clipboard permissions: [#12954](https://github.com/owncloud/web/pull/12954)
 
@@ -262,6 +222,74 @@ Details
    attributes are displayed depends on the server configuration.
 
    https://github.com/owncloud/web/pull/13144
+
+Changelog for ownCloud Web [12.0.4] (2025-08-27)
+=======================================
+The following sections list the changes in ownCloud web 12.0.4 relevant to
+ownCloud admins and users.
+
+[12.0.4]: https://github.com/owncloud/web/compare/v11.3.6...v12.0.4
+
+Summary
+-------
+
+* Bugfix - Sign public link archiver download URL: [#12943](https://github.com/owncloud/web/pull/12943)
+
+Details
+-------
+
+* Bugfix - Sign public link archiver download URL: [#12943](https://github.com/owncloud/web/pull/12943)
+
+   We've started signing the archiver download URL in public link context in case
+   the link is password protected. This allows users to download large archives
+   without memory limits imposed by browsers.
+
+   https://github.com/owncloud/web/issues/12811
+   https://github.com/owncloud/web/pull/12943
+
+Changelog for ownCloud Web [11.3.6] (2025-08-14)
+=======================================
+The following sections list the changes in ownCloud web 11.3.6 relevant to
+ownCloud admins and users.
+
+[11.3.6]: https://github.com/owncloud/web/compare/v11.3.5...v11.3.6
+
+Summary
+-------
+
+* Bugfix - Incorrect translation when using switches language: [#12889](https://github.com/owncloud/web/pull/12889)
+* Bugfix - Deactivated Space button clips German translated word: [#12890](https://github.com/owncloud/web/pull/12890)
+* Bugfix - User info getting translated: [#12893](https://github.com/owncloud/web/pull/12893)
+
+Details
+-------
+
+* Bugfix - Incorrect translation when using switches language: [#12889](https://github.com/owncloud/web/pull/12889)
+
+   We have fixed an issue where the translation was incorrect when switching
+   languages in the web interface. This ensures that the language displayed matches
+   the selected language without inconsistencies by fetching the roles when use
+   switches language.
+
+   https://github.com/owncloud/web/pull/12889
+   https://kiteworks.atlassian.net/browse/OCISDEV-186
+
+* Bugfix - Deactivated Space button clips German translated word: [#12890](https://github.com/owncloud/web/pull/12890)
+
+   We have fixed an issue where the "Deactivated Space" button would clip the
+   German translated word. The button now displays the full word without clipping.
+
+   https://github.com/owncloud/web/pull/12890
+   https://kiteworks.atlassian.net/browse/OCISDEV-194
+
+* Bugfix - User info getting translated: [#12893](https://github.com/owncloud/web/pull/12893)
+
+   We have fixed the issue where user's info are getting translated by disabling
+   browser translation for certain fields, avatar image, first name, last name and
+   username.
+
+   https://github.com/owncloud/web/pull/12893
+   https://kiteworks.atlassian.net/browse/OCISDEV-193
 
 Changelog for ownCloud Web [11.3.5] (2025-06-26)
 =======================================
