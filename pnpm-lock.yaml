@@ -411,7 +411,7 @@ importers:
         specifier: ^16.4.0
         version: 16.4.0
       typescript:
-        specifier: ^5.9.2
+        specifier: ^5.9.3
         version: 5.9.3
       typescript-eslint:
         specifier: ^8.45.0
