@@ -9,6 +9,7 @@ Summary
 -------
 
 * Enhancement - Hide trashed spaces: [#13168](https://github.com/owncloud/web/pull/13168)
+* Enhancement - Drop beta badge from GeoGebra pinboards: [#13169](https://github.com/owncloud/web/pull/13169)
 
 Details
 -------
@@ -19,6 +20,12 @@ Details
    shown in the UI. This includes also personal spaces.
 
    https://github.com/owncloud/web/pull/13168
+
+* Enhancement - Drop beta badge from GeoGebra pinboards: [#13169](https://github.com/owncloud/web/pull/13169)
+
+   We've dropped the beta badge from the GeoGebra pinboard icon.
+
+   https://github.com/owncloud/web/pull/13169
 
 Changelog for ownCloud Web [12.1.0] (2025-10-02)
 =======================================
