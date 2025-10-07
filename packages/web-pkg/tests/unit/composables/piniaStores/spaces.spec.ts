@@ -206,6 +206,49 @@ describe('spaces', () => {
         }
       })
     })
+    it('should filter out trashed spaces', async () => {
+      await new Promise<void>((resolve, reject) => {
+        try {
+          getWrapper({
+            setup: async (instance) => {
+              const spaces = [
+                mock<SpaceResource>({ id: '1' }),
+                mock<SpaceResource>({ id: '2', root: { deleted: { state: 'trashed' } } })
+              ]
+              const graphClient = mockDeep<Graph>()
+              graphClient.drives.listMyDrives.mockResolvedValue(spaces)
+              await instance.loadSpaces({ graphClient })
+
+              expect(graphClient.drives.listMyDrives).toHaveBeenCalledTimes(2)
+              expect(graphClient.drives.listMyDrives).toHaveBeenNthCalledWith(
+                1,
+                {},
+                {
+                  orderBy: 'name asc',
+                  filter: 'driveType eq personal'
+                },
+                expect.anything()
+              )
+              expect(graphClient.drives.listMyDrives).toHaveBeenNthCalledWith(
+                2,
+                {},
+                {
+                  orderBy: 'name asc',
+                  filter: 'driveType eq project'
+                },
+                expect.anything()
+              )
+              expect(instance.spaces.length).toBe(2)
+              expect(instance.spacesLoading).toBeFalsy()
+              expect(instance.spacesInitialized).toBeTruthy()
+              resolve()
+            }
+          })
+        } catch (error) {
+          reject(error)
+        }
+      })
+    })
   })
   describe('method "loadMountPoints"', () => {
     it('correctly loads mount points', () => {

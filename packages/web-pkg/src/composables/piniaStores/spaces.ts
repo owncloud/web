@@ -3,6 +3,7 @@ import { computed, ref, unref } from 'vue'
 import {
   buildShareSpaceResource,
   isMountPointSpaceResource,
+  SpaceDeletedState,
   SpaceResource
 } from '@ownclouders/web-client'
 import { Graph } from '@ownclouders/web-client/graph'
@@ -47,12 +48,16 @@ export const getSpacesByType = async ({
     return []
   }
 
+  const enabledMountpoints = mountpoints.filter(
+    (space) => space.root.deleted?.state !== SpaceDeletedState.Trashed
+  )
+
   if (driveType !== 'mountpoint' || !configStore.options.routing?.fullShareOwnerPaths) {
-    return mountpoints
+    return enabledMountpoints
   }
 
   const rootSpaceDriveAliasMapping: Record<string, string> = {}
-  mountpoints.forEach((space) => {
+  enabledMountpoints.forEach((space) => {
     const { rootId, driveAlias } = space.root.remoteItem
     rootSpaceDriveAliasMapping[rootId] = driveAlias
   })
@@ -72,7 +77,7 @@ export const getSpacesByType = async ({
     )
   )
 
-  return [...mountpoints, ...rootSpaces]
+  return [...enabledMountpoints, ...rootSpaces]
 }
 
 export const useSpacesStore = defineStore('spaces', () => {
