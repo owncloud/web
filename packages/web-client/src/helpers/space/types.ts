@@ -23,6 +23,10 @@ export type SpaceMember = {
   roleId: string
 }
 
+export enum SpaceDeletedState {
+  Trashed = 'trashed'
+}
+
 export interface SpaceResource extends Resource {
   description: string
   disabled: boolean
