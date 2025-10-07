@@ -942,8 +942,8 @@ importers:
         specifier: 5.0.1
         version: 5.0.1(@uppy/core@5.0.2)
       '@vavt/cm-extension':
-        specifier: ^1.11.0
-        version: 1.11.0
+        specifier: ^1.11.1
+        version: 1.11.1
       '@vue/shared':
         specifier: ^3.5.22
         version: 3.5.22
@@ -3113,8 +3113,8 @@ packages:
     peerDependencies:
       '@uppy/core': ^5.0.2
 
-  '@vavt/cm-extension@1.11.0':
-    resolution: {integrity: sha512-rwKoSSBGpP2ayH5cO4ZrweJtmeIVkvSgoyILL24BTb9vkItXwRTDV6ctrdIaD0yJ8OQ8Lez6jlWVLfS9Ipk6Zw==}
+  '@vavt/cm-extension@1.11.1':
+    resolution: {integrity: sha512-UGWMhaMbk05aUH2duhTjDMD2SKPsh5D5LNnfYzDXHAVusmpcBT3Z/0gyyZIc1O4ZyKVaNRZ04dwkTzDpFEZD0g==}
 
   '@vavt/copy2clipboard@1.0.3':
     resolution: {integrity: sha512-HtG48r2FBYp9eRvGB3QGmtRBH1zzRRAVvFbGgFstOwz4/DDaNiX0uZc3YVKPydqgOav26pibr9MtoCaWxn7aeA==}
@@ -9548,7 +9548,7 @@ snapshots:
       '@uppy/core': 5.0.2
       '@uppy/utils': 7.0.2
 
-  '@vavt/cm-extension@1.11.0': {}
+  '@vavt/cm-extension@1.11.1': {}
 
   '@vavt/copy2clipboard@1.0.3': {}
 
