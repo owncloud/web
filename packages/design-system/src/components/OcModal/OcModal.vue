@@ -288,7 +288,7 @@ const initialFocusRef = computed<FocusTargetOrFalse>(() => {
     return focusTrapInitial as FocusTargetOrFalse
   }
 
-  return () => unref(ocModalInput)?.$el || unref(ocModal)
+  return () => false
 })
 const classes = computed(() => {
   return ['oc-modal', `oc-modal-${variation}`, elementClass]
