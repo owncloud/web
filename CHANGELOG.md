@@ -1,3 +1,25 @@
+Changelog for ownCloud Web [unreleased] (UNRELEASED)
+=======================================
+The following sections list the changes in ownCloud web unreleased relevant to
+ownCloud admins and users.
+
+[unreleased]: https://github.com/owncloud/web/compare/v12.1.0...master
+
+Summary
+-------
+
+* Enhancement - Hide trashed spaces: [#13168](https://github.com/owncloud/web/pull/13168)
+
+Details
+-------
+
+* Enhancement - Hide trashed spaces: [#13168](https://github.com/owncloud/web/pull/13168)
+
+   If the `root.deleted.state` property of a space is `trashed`, the space is not
+   shown in the UI. This includes also personal spaces.
+
+   https://github.com/owncloud/web/pull/13168
+
 Changelog for ownCloud Web [12.1.0] (2025-10-02)
 =======================================
 The following sections list the changes in ownCloud web 12.1.0 relevant to
