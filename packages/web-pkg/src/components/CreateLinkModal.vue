@@ -92,6 +92,7 @@ import {
   useLinkTypes,
   useSharesStore,
   useClientService,
+  useMessages,
   Modal
 } from '../composables'
 import { LinkShare, SpaceResource } from '@ownclouders/web-client'
@@ -124,8 +125,9 @@ defineEmits<Emits>()
 const { resources, space = undefined, callbackFn = undefined } = defineProps<Props>()
 
 const clientService = useClientService()
+const { showMessage, showErrorMessage } = useMessages()
 const language = useGettext()
-const { $gettext } = language
+const { $gettext, $ngettext } = language
 const passwordPolicyService = usePasswordPolicyService()
 const { isEnabled: isEmbedEnabled, postMessage } = useEmbedMode()
 const { defaultLinkType, getAvailableLinkTypes, getLinkRoleByType, isPasswordEnforcedForLinkType } =
@@ -200,40 +202,89 @@ const confirmButtonDisabled = computed(() => {
 })
 
 const onConfirm = async (options: { copyPassword?: boolean } = {}) => {
-  const result = await createLinks()
+  let successededLength = 0
+  let successMessage = ''
+  const processResults = (result: PromiseSettledResult<LinkShare>[]) => {
+    const succeeded = result.filter(
+      ({ status }) => status === 'fulfilled'
+    ) as PromiseFulfilledResult<LinkShare>[]
+    const failed = result.filter(({ status }) => status === 'rejected') as PromiseRejectedResult[]
 
-  const succeeded = result.filter(({ status }) => status === 'fulfilled')
-  if (succeeded.length && unref(isEmbedEnabled)) {
-    postMessage<string[]>(
-      'owncloud-embed:share',
-      (succeeded as PromiseFulfilledResult<LinkShare>[]).map(({ value }) => value.webUrl)
-    )
-  }
+    if (succeeded.length && unref(isEmbedEnabled)) {
+      postMessage<string[]>(
+        'owncloud-embed:share',
+        succeeded.map(({ value }) => value.webUrl)
+      )
+    }
 
-  const userFacingErrors: Error[] = []
-  const failed = result.filter(({ status }) => status === 'rejected')
-  if (failed.length) {
-    ;(failed as PromiseRejectedResult[])
-      .map(({ reason }) => reason)
-      .forEach((e) => {
-        console.error(e)
-        // Human-readable error message is provided, for example when password is on banned list
-        if (e.response?.status === 400) {
-          const error = e.response.data.error
-          error.message = upperFirst(error.message)
-          userFacingErrors.push(error)
-        }
+    const userFacingErrors: Error[] = []
+    if (failed.length) {
+      failed
+        .map(({ reason }) => reason)
+        .forEach((e) => {
+          console.error(e)
+          // Human-readable error message is provided, for example when password is on banned list
+          if (e.response?.status === 400) {
+            const error = e.response.data.error
+            error.message = upperFirst(error.message)
+            userFacingErrors.push(error)
+          }
+        })
+    }
+
+    if (userFacingErrors.length) {
+      password.error = $gettext(userFacingErrors[0].message)
+      throw new Error('Link creation failed')
+    }
+
+    let clipboardText = ''
+    if (succeeded.length) {
+      successMessage = $gettext('Link has been created successfully')
+      successededLength = succeeded.length
+
+      if (result.length === 1) {
+        clipboardText = options.copyPassword
+          ? $gettext(
+              '%{link} Password:%{password}',
+              {
+                link: succeeded[0].value.webUrl,
+                password: password.value
+              },
+              true
+            )
+          : succeeded[0].value.webUrl
+
+        successMessage = $gettext('The link has been copied to your clipboard.')
+      }
+    }
+
+    if (failed.length) {
+      showErrorMessage({
+        errors: failed.map(({ reason }) => reason),
+        title: $ngettext('Failed to create link', 'Failed to create links', failed.length)
       })
+    }
+
+    return clipboardText
   }
 
-  if (userFacingErrors.length) {
-    password.error = $gettext(userFacingErrors[0].message)
-    return Promise.reject()
-  }
+  const clipboardItem = new ClipboardItem({
+    'text/plain': createLinks()
+      .then(processResults)
+      .then((textToCopy) => new Blob([textToCopy], { type: 'text/plain' }))
+      .catch((e) => {
+        console.warn('Unable to copy link to clipboard', e)
+        return new Blob([], { type: 'text/plain' })
+      })
+  })
 
-  if (callbackFn) {
-    callbackFn({ result, password: password.value, options })
-  }
+  const result = await navigator.clipboard.write([clipboardItem])
+
+  showMessage({
+    title: $ngettext(successMessage, 'Links have been created successfully.', successededLength)
+  })
+
+  return result
 }
 
 defineExpose({ onConfirm })
