@@ -220,6 +220,10 @@ const fileIcon = {
   pinboard: {
     icon: { name: 'resource-type-pinboard' },
     extensions: ['ggp']
+  },
+  excalidraw: {
+    icon: { name: 'resource-type-excalidraw' },
+    extensions: ['excalidraw']
   }
 }
 
