@@ -10,6 +10,7 @@ Summary
 
 * Enhancement - Hide trashed spaces: [#13168](https://github.com/owncloud/web/pull/13168)
 * Enhancement - Drop beta badge from GeoGebra pinboards: [#13169](https://github.com/owncloud/web/pull/13169)
+* Enhancement - Add Excalidraw file icon: [#13172](https://github.com/owncloud/web/pull/13172)
 
 Details
 -------
@@ -26,6 +27,13 @@ Details
    We've dropped the beta badge from the GeoGebra pinboard icon.
 
    https://github.com/owncloud/web/pull/13169
+
+* Enhancement - Add Excalidraw file icon: [#13172](https://github.com/owncloud/web/pull/13172)
+
+   Added a new file icon for Excalidraw files. Any file with the extension
+   `.excalidraw` will now have the Excalidraw logo as file icon.
+
+   https://github.com/owncloud/web/pull/13172
 
 Changelog for ownCloud Web [12.1.0] (2025-10-02)
 =======================================
