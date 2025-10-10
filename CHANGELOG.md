@@ -8,12 +8,21 @@ ownCloud admins and users.
 Summary
 -------
 
+* Bugfix - Fix copying public link and password on Safari: [#13177](https://github.com/owncloud/web/pull/13177)
 * Enhancement - Hide trashed spaces: [#13168](https://github.com/owncloud/web/pull/13168)
 * Enhancement - Drop beta badge from GeoGebra pinboards: [#13169](https://github.com/owncloud/web/pull/13169)
 * Enhancement - Add Excalidraw file icon: [#13172](https://github.com/owncloud/web/pull/13172)
 
 Details
 -------
+
+* Bugfix - Fix copying public link and password on Safari: [#13177](https://github.com/owncloud/web/pull/13177)
+
+   We have fixed an issue where copying the public link and password on Safari was
+   not working as expected.
+
+   https://github.com/owncloud/web/pull/13177
+   https://kiteworks.atlassian.net/browse/OCISDEV-196
 
 * Enhancement - Hide trashed spaces: [#13168](https://github.com/owncloud/web/pull/13168)
 
