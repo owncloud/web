@@ -57,14 +57,12 @@ describe('CreateLinkModal', () => {
   })
   describe('method "confirm"', () => {
     it('creates links for all resources', async () => {
-      const callbackFn = vi.fn()
       const resources = [mock<Resource>({ isFolder: false }), mock<Resource>({ isFolder: false })]
-      const { wrapper } = getWrapper({ resources, callbackFn })
+      const { wrapper } = getWrapper({ resources })
       await wrapper.vm.onConfirm()
 
       const { addLink } = useSharesStore()
       expect(addLink).toHaveBeenCalledTimes(resources.length)
-      expect(callbackFn).toHaveBeenCalledTimes(1)
     })
     it('emits event in embed mode including the created links', async () => {
       const resources = [mock<Resource>({ isFolder: false })]
@@ -88,12 +86,25 @@ describe('CreateLinkModal', () => {
 
       expect(consoleMock).toHaveBeenCalledTimes(1)
     })
-    it('calls the callback at the end if given', async () => {
+    it('calls clipboard after link creation', async () => {
+      global.ClipboardItem = vi.fn().mockImplementation((data) => ({ data })) as any
+      global.navigator = {
+        ...global.navigator,
+        clipboard: {
+          write: vi.fn().mockResolvedValue(undefined)
+        }
+      } as any
       const resources = [mock<Resource>({ isFolder: false })]
-      const callbackFn = vi.fn()
-      const { wrapper } = getWrapper({ resources, callbackFn })
+      const { wrapper } = getWrapper({ resources })
+      const link = mock<LinkShare>({ webUrl: 'https://example.com/link' })
+
+      const { addLink } = useSharesStore()
+      vi.mocked(addLink).mockResolvedValue(link)
+
       await wrapper.vm.onConfirm()
-      expect(callbackFn).toHaveBeenCalledTimes(1)
+
+      expect(global.navigator.clipboard.write).toHaveBeenCalled()
+      expect(global.ClipboardItem).toHaveBeenCalled()
     })
   })
   describe('action buttons', () => {
