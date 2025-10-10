@@ -48,6 +48,8 @@ export class ClientService {
     'X-Requested-With': 'XMLHttpRequest'
   }
 
+  public sseUnAuthenticated?: EventSource
+
   constructor(options: ClientServiceOptions) {
     this.configStore = options.configStore
     this.language = options.language
@@ -187,5 +189,20 @@ export class ClientService {
     }
 
     return Promise.reject(error)
+  }
+
+  initSseUnAuthenticated(publicLinkToken: string, publicLinkPassword?: string) {
+    this.sseUnAuthenticated = sse(this.configStore.serverUrl, {
+      headers: {
+        'Accept-Language': this.currentLanguage,
+        'X-Request-ID': uuidV4(),
+        'X-Requested-With': 'XMLHttpRequest',
+        'public-token': publicLinkToken,
+        ...(publicLinkPassword && {
+          Authorization:
+            'Basic ' + Buffer.from(['public', publicLinkPassword].join(':')).toString('base64')
+        })
+      }
+    })
   }
 }
