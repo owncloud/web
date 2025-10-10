@@ -14,7 +14,7 @@ const selectors = {
   appDetailsTitle: '//h2[contains(@class, "app-details-title")][text()="%s"]',
   appsFilter: '#apps-filter',
   tag: '//button[contains(@class,"oc-tag")][span[text()="%s"]]',
-  appTag: '//a[contains(.,"%s")]/following::button[contains(@class,"oc-tag")][span[text()="%s"]]'
+  appTag: '//a[contains(.,"%s")]/following::button[contains(@class,"oc-tag")][span[text()="%s"]][1]'
 }
 
 export const openAppStore = async (args: { page: Page }): Promise<void> => {
