@@ -35,6 +35,7 @@ import AppTopBar from '../AppTopBar.vue'
 import ErrorScreen from './PartialViews/ErrorScreen.vue'
 import LoadingScreen from './PartialViews/LoadingScreen.vue'
 import FileSideBar from '../SideBar/FileSideBar.vue'
+import { useAppStore } from '../../composables/piniaStores/app'
 import {
   UrlForResourceOptions,
   queryItemAsString,
@@ -121,6 +122,8 @@ const configStore = useConfigStore()
 const resourcesStore = useResourcesStore()
 const sharesStore = useSharesStore()
 const authService = useAuthService()
+
+const appStore = useAppStore()
 
 const { actions: openWithAppActions } = useFileActionsOpenWithApp({
   appId: applicationId
@@ -361,6 +364,20 @@ const loadFileTask = useTask(function* (signal) {
     loading.value = false
   }
 }).restartable()
+
+watch(
+  () => appStore.error,
+  () => {
+    if (appStore.error) {
+      loadingError.value = new Error(
+        $gettext('The resource could not be located, it may not exist anymore.')
+      )
+      loading.value = false
+      return
+    }
+  },
+  { immediate: true }
+)
 
 watch(
   currentFileContext,

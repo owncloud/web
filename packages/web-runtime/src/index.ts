@@ -56,6 +56,7 @@ export const bootstrapApp = async (configurationPath: string, appsReadyCallback:
 
   const {
     appsStore,
+    appStore,
     authStore,
     configStore,
     capabilityStore,
@@ -295,11 +296,13 @@ export const bootstrapApp = async (configurationPath: string, appsReadyCallback:
         }
 
         if (err.statusCode === 404) {
-          throw new Error(
+          const notFoundError = new Error(
             app.config.globalProperties.$gettext(
               'The resource could not be located, it may not exist anymore.'
             )
           )
+          appStore.error = notFoundError
+          throw notFoundError
         }
 
         throw err
