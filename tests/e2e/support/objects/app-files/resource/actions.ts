@@ -315,6 +315,7 @@ export const createNewFileOrFolder = async (args: createResourceArgs): Promise<v
     }
     case 'txtFile': {
       await page.locator(createNewTxtFileButton).click()
+      await page.locator(resourceNameInput).clear()
       await page.locator(resourceNameInput).fill(name)
       await Promise.all([
         page.waitForResponse((resp) => resp.status() === 201 && resp.request().method() === 'PUT'),
@@ -325,6 +326,7 @@ export const createNewFileOrFolder = async (args: createResourceArgs): Promise<v
     }
     case 'mdFile': {
       await page.locator(createNewMdFileButton).click()
+      await page.locator(resourceNameInput).clear()
       await page.locator(resourceNameInput).fill(name)
       await Promise.all([
         page.waitForResponse((resp) => resp.status() === 201 && resp.request().method() === 'PUT'),
@@ -364,6 +366,7 @@ const createDocumentFile = async (
     )
   }
   await page.locator(util.format(createNewOfficeDocumentFileBUtton, type)).click()
+  await page.locator(resourceNameInput).clear()
   await page.locator(resourceNameInput).fill(name)
   await Promise.all([
     page.waitForLoadState(),
