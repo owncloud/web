@@ -468,7 +468,10 @@ const hasAutoSave = computed(() => {
 })
 
 let autosaveIntervalId: ReturnType<typeof setInterval> = null
-onMounted(() => {
+onMounted(async () => {
+  if (currentRoute.value.name === 'preview-media') {
+    await loadResourceTask.perform()
+  }
   if (resourcesStore.ancestorMetaData?.['/'] && unref(space)) {
     const clearAncestorData = resourcesStore.ancestorMetaData['/'].spaceId !== unref(space).id
     if (clearAncestorData) {
