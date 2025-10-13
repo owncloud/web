@@ -54,7 +54,7 @@
     "axios": "^1.12.2",
     "deepmerge": "^4.3.1",
     "dompurify": "^3.2.7",
-    "emoji-regex": "^10.5.0",
+    "emoji-regex": "^10.6.0",
     "filesize": "^11.0.13",
     "fuse.js": "^7.1.0",
     "highlight.js": "^11.11.1",
