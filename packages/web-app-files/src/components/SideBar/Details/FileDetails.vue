@@ -117,8 +117,8 @@
             <th scope="col" class="oc-pr-s oc-font-semibold">
               {{ $gettext('Tags') }}
               <oc-contextual-helper
-                v-if="contextualHelper?.isEnabled"
-                v-bind="contextualHelper?.data"
+                v-if="contextualHelper.isEnabled"
+                v-bind="contextualHelper.data"
                 class="oc-pl-xs"
               ></oc-contextual-helper>
             </th>
@@ -166,7 +166,7 @@ import { Resource, SpaceResource } from '@ownclouders/web-client'
 import { useGettext } from 'vue3-gettext'
 import { getSharedAncestorRoute } from '@ownclouders/web-pkg'
 import { ResourceIcon } from '@ownclouders/web-pkg'
-import { tagsHelper } from '../../../helpers/contextualHelpers'
+import { useContextualHelpers } from '../../../composables/contextualHelpers/useContextualHelpers'
 import { ContextualHelper } from '@ownclouders/design-system/helpers'
 import TagsSelect from './TagsSelect.vue'
 import { WebDavDetails } from '@ownclouders/web-pkg'
@@ -182,6 +182,7 @@ const capabilityStore = useCapabilityStore()
 const { getMatchingSpace } = useGetMatchingSpace()
 const { resourceContentsText } = useResourceContents({ showSizeInformation: false })
 const { loadPreview, previewsLoading } = useLoadPreview()
+const { tagsHelper } = useContextualHelpers()
 
 const language = useGettext()
 const { $gettext, current: currentLanguage } = language
@@ -226,10 +227,10 @@ const formatDateRelative = (date: string) => {
   return formatRelativeDateFromJSDate(new Date(date), language.current)
 }
 
-const contextualHelper = {
+const contextualHelper = computed<ContextualHelper>(() => ({
   isEnabled: configStore.options.contextHelpers,
-  data: tagsHelper({ configStore })
-} as ContextualHelper
+  data: unref(tagsHelper)
+}))
 
 const hasTags = computed(() => {
   return tagsEnabled && capabilityStore.filesTags

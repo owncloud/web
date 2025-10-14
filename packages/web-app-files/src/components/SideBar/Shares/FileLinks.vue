@@ -2,7 +2,7 @@
   <div id="oc-files-file-link" class="oc-position-relative">
     <div class="oc-flex oc-flex-middle">
       <h3 class="oc-text-bold oc-text-medium oc-m-rm" v-text="$gettext('Public links')" />
-      <oc-contextual-helper v-if="helpersEnabled" class="oc-pl-xs" v-bind="viaLinkHelp" />
+      <oc-contextual-helper v-if="helpersEnabled" class="oc-pl-xs" v-bind="shareViaLinkHelp" />
     </div>
     <p v-if="!directLinks.length" class="files-links-empty oc-mt-m" v-text="noLinksLabel" />
     <ul
@@ -51,7 +51,11 @@
       <hr class="oc-my-m" />
       <h4 class="oc-text-bold oc-text-medium oc-m-rm">
         {{ indirectLinksHeading }}
-        <oc-contextual-helper v-if="helpersEnabled" class="oc-pl-xs" v-bind="indirectLinkHelp" />
+        <oc-contextual-helper
+          v-if="helpersEnabled"
+          class="oc-pl-xs"
+          v-bind="shareViaIndirectLinkHelp"
+        />
       </h4>
       <div
         class="files-links-indirect-list"
@@ -95,7 +99,7 @@ import {
   UpdateLinkOptions,
   useRouter
 } from '@ownclouders/web-pkg'
-import { shareViaLinkHelp, shareViaIndirectLinkHelp } from '../../../helpers/contextualHelpers'
+import { useContextualHelpers } from '../../../composables/contextualHelpers/useContextualHelpers'
 import { isSpaceResource, LinkShare } from '@ownclouders/web-client'
 import ListItem from './Links/ListItem.vue'
 import { Resource, SpaceResource } from '@ownclouders/web-client'
@@ -128,6 +132,8 @@ const { linkShares } = storeToRefs(sharesStore)
 
 const configStore = useConfigStore()
 const { options: configOptions } = storeToRefs(configStore)
+
+const { shareViaLinkHelp, shareViaIndirectLinkHelp } = useContextualHelpers()
 
 const { actions: createLinkActions } = useFileActionsCreateLink()
 const createLinkAction = computed<FileAction>(() =>
@@ -274,12 +280,6 @@ const helpersEnabled = computed(() => {
   return unref(configOptions).contextHelpers
 })
 
-const viaLinkHelp = computed(() => {
-  return shareViaLinkHelp({ configStore })
-})
-const indirectLinkHelp = computed(() => {
-  return shareViaIndirectLinkHelp({ configStore })
-})
 const indirectLinksHeading = computed(() => {
   return $gettext('Indirect (%{ count })', {
     count: unref(indirectLinks).length.toString()
