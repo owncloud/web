@@ -118,7 +118,7 @@ const fileIcon = {
   },
   document: {
     icon: { name: 'resource-type-document', color: 'var(--oc-color-icon-document)' },
-    extensions: ['doc', 'docm', 'docx', 'dot', 'dotx', 'lwp', 'odt', 'one', 'vsd', 'wpd']
+    extensions: ['doc', 'docm', 'docx', 'dot', 'dotx', 'lwp', 'odt', 'one', 'wpd']
   },
   ifc: {
     icon: { name: 'resource-type-ifc', color: 'var(--oc-color-icon-ifc)' },
@@ -224,6 +224,10 @@ const fileIcon = {
   excalidraw: {
     icon: { name: 'resource-type-excalidraw' },
     extensions: ['excalidraw']
+  },
+  visio: {
+    icon: { name: 'resource-type-diagram', color: 'var(--oc-color-icon-visio)' },
+    extensions: ['vsd', 'vsdm', 'vsdx', 'vss', 'vssm', 'vssx', 'vst', 'vstm', 'vstx']
   }
 }
 
