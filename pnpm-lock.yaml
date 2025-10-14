@@ -960,8 +960,8 @@ importers:
         specifier: ^3.2.7
         version: 3.2.7
       emoji-regex:
-        specifier: ^10.5.0
-        version: 10.5.0
+        specifier: ^10.6.0
+        version: 10.6.0
       filesize:
         specifier: ^11.0.13
         version: 11.0.13
@@ -4223,8 +4223,8 @@ packages:
   emoji-mart@5.6.0:
     resolution: {integrity: sha512-eJp3QRe79pjwa+duv+n7+5YsNhRcMl812EcFVwrnRvYKoNPoQb5qxU8DG6Bgwji0akHdp6D4Ln6tYLG58MFSow==}
 
-  emoji-regex@10.5.0:
-    resolution: {integrity: sha512-lb49vf1Xzfx080OKA0o6l8DQQpV+6Vg95zyCJX9VB/BqKYlhG7N4wgROUUHRA+ZPUefLnteQOad7z1kT2bV7bg==}
+  emoji-regex@10.6.0:
+    resolution: {integrity: sha512-toUI84YS5YmxW219erniWD0CIVOo46xGKColeNQRgOzDorgBi1v4D71/OFzgD9GO2UGKIv1C3Sp8DAn0+j5w7A==}
 
   emoji-regex@8.0.0:
     resolution: {integrity: sha512-MSjYzcWNOA0ewAHpz0MxpYFvwg6yjy1NG3xteoqz644VCo/RPgnr1/GGt+ic3iJTzQ8Eu3TdM14SawnVUmGE6A==}
@@ -10829,7 +10829,7 @@ snapshots:
 
   emoji-mart@5.6.0: {}
 
-  emoji-regex@10.5.0: {}
+  emoji-regex@10.6.0: {}
 
   emoji-regex@8.0.0: {}
 
@@ -11000,7 +11000,7 @@ snapshots:
   eslint-plugin-vuejs-accessibility@2.4.1(eslint@9.37.0):
     dependencies:
       aria-query: 5.3.2
-      emoji-regex: 10.5.0
+      emoji-regex: 10.6.0
       eslint: 9.37.0
       vue-eslint-parser: 9.4.3(eslint@9.37.0)
     transitivePeerDependencies:
