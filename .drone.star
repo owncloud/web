@@ -522,6 +522,14 @@ def unitTests(ctx):
                          "name": "sonarcloud",
                          "image": SONARSOURCE_SONAR_SCANNER_CLI,
                          "environment": sonar_env,
+                         "when": {
+                             "event": {
+                                 "exclude": [
+                                     "cron",
+                                     "push",
+                                 ],
+                             },
+                         },
                      },
                  ],
         "trigger": {
