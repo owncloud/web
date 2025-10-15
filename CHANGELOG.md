@@ -9,6 +9,7 @@ Summary
 -------
 
 * Bugfix - Fix copying public link and password on Safari: [#13177](https://github.com/owncloud/web/pull/13177)
+* Bugfix - Remove duplicate resource links: [#13203](https://github.com/owncloud/web/pull/13203)
 * Enhancement - Hide trashed spaces: [#13168](https://github.com/owncloud/web/pull/13168)
 * Enhancement - Drop beta badge from GeoGebra pinboards: [#13169](https://github.com/owncloud/web/pull/13169)
 * Enhancement - Add Excalidraw file icon: [#13172](https://github.com/owncloud/web/pull/13172)
@@ -24,6 +25,14 @@ Details
 
    https://github.com/owncloud/web/pull/13177
    https://kiteworks.atlassian.net/browse/OCISDEV-196
+
+* Bugfix - Remove duplicate resource links: [#13203](https://github.com/owncloud/web/pull/13203)
+
+   In the resources table, we had duplicate resource links. This has been fixed by
+   removing the link from the resource icon. The icon is now treated solely as a
+   decorative element and is hidden from screen readers.
+
+   https://github.com/owncloud/web/pull/13203
 
 * Enhancement - Hide trashed spaces: [#13168](https://github.com/owncloud/web/pull/13168)
 
