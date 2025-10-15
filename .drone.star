@@ -541,6 +541,7 @@ def sonarcloudCoverageReport(sonar_env):
                 "event": {
                     "exclude": [
                         "cron",
+                        "push",
                     ],
                 },
             },
