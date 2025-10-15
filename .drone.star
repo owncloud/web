@@ -22,7 +22,7 @@ PLUGINS_S3 = "plugins/s3:1.4.0"
 PLUGINS_S3_CACHE = "plugins/s3-cache:1"
 PLUGINS_SLACK = "plugins/slack:1"
 POSTGRES_ALPINE = "postgres:alpine3.18"
-SONARSOURCE_SONAR_SCANNER_CLI = "sonarsource/sonar-scanner-cli:11.3"
+SONARSOURCE_SONAR_SCANNER_CLI = "sonarsource/sonar-scanner-cli:11.4"
 TOOLHIPPIE_CALENS = "toolhippie/calens:latest"
 
 WEB_PUBLISH_NPM_PACKAGES = ["babel-preset", "design-system", "eslint-config", "extension-sdk", "prettier-config", "tsconfig", "web-client", "web-pkg", "web-test-helpers"]
@@ -522,6 +522,14 @@ def unitTests(ctx):
                          "name": "sonarcloud",
                          "image": SONARSOURCE_SONAR_SCANNER_CLI,
                          "environment": sonar_env,
+                         "when": {
+                             "event": {
+                                 "exclude": [
+                                     "cron",
+                                     "push",
+                                 ],
+                             },
+                         },
                      },
                  ],
         "trigger": {
