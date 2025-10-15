@@ -9,6 +9,7 @@ Summary
 -------
 
 * Bugfix - Fix copying public link and password on Safari: [#13177](https://github.com/owncloud/web/pull/13177)
+* Bugfix - Fix incorrect translations: [#13198](https://github.com/owncloud/web/pull/13198)
 * Bugfix - Remove duplicate resource links: [#13203](https://github.com/owncloud/web/pull/13203)
 * Enhancement - Hide trashed spaces: [#13168](https://github.com/owncloud/web/pull/13168)
 * Enhancement - Drop beta badge from GeoGebra pinboards: [#13169](https://github.com/owncloud/web/pull/13169)
@@ -25,6 +26,14 @@ Details
 
    https://github.com/owncloud/web/pull/13177
    https://kiteworks.atlassian.net/browse/OCISDEV-196
+
+* Bugfix - Fix incorrect translations: [#13198](https://github.com/owncloud/web/pull/13198)
+
+   We have fixed an issue where translations were always showing in English,
+   regardless of the user's selected language.
+
+   https://github.com/owncloud/web/pull/13198
+   https://kiteworks.atlassian.net/browse/OCISDEV-420
 
 * Bugfix - Remove duplicate resource links: [#13203](https://github.com/owncloud/web/pull/13203)
 
