@@ -4,14 +4,7 @@
     class="oc-resource oc-text-overflow"
     :class="{ 'oc-resource-no-interaction': !isResourceClickable }"
   >
-    <resource-link
-      v-if="isIconDisplayed"
-      :resource="resource"
-      :link="link"
-      :is-resource-clickable="isResourceClickable"
-      class="oc-resource-icon-link"
-      @click="emitClick"
-    >
+    <span v-if="isIconDisplayed" class="oc-resource-icon-wrapper">
       <oc-img
         v-if="hasThumbnail"
         :key="thumbnail"
@@ -26,9 +19,10 @@
         v-else
         v-oc-tooltip="tooltipLabelIcon"
         :aria-label="tooltipLabelIcon"
+        :aria-hidden="tooltipLabelIcon !== null"
         :resource="resource"
       />
-    </resource-link>
+    </span>
     <div class="oc-resource-details oc-text-overflow" :class="{ 'oc-pl-s': isIconDisplayed }">
       <resource-link
         :resource="resource"

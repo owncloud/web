@@ -4,7 +4,7 @@ import AxeBuilder from '@axe-core/playwright'
 export const selectors = {
   files: '#files',
   resourceTableEditName: '.resource-table-edit-name',
-  resourceIconLink: '.oc-resource-icon-link',
+  resourceIconWrapper: '.oc-resource-icon-wrapper',
   resourceTableCondensedIcon: '.resource-table-condensed',
   filesSpaceTableCondensed: '#files-space-table.condensed', // '.condensed.files-table',
   resourceTiles: '.resource-tiles',
