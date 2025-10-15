@@ -116,10 +116,7 @@ import { textUtils } from '../../../helpers/textUtils'
 import { isShareSpaceResource, ShareTypes } from '@ownclouders/web-client'
 import InviteCollaboratorForm from './Collaborators/InviteCollaborator/InviteCollaboratorForm.vue'
 import CollaboratorListItem from './Collaborators/ListItem.vue'
-import {
-  shareInviteCollaboratorHelp,
-  shareInviteCollaboratorHelpCern
-} from '../../../helpers/contextualHelpers'
+import { useContextualHelpers } from '../../../composables/contextualHelpers/useContextualHelpers'
 import { computed, inject, ref, Ref, unref } from 'vue'
 import {
   isProjectSpaceResource,
@@ -148,6 +145,8 @@ const { getSpaceMembers } = useSpacesStore()
 
 const configStore = useConfigStore()
 const { options: configOptions } = storeToRefs(configStore)
+
+const { shareInviteCollaboratorHelp, shareInviteCollaboratorHelpCern } = useContextualHelpers()
 
 const sharesStore = useSharesStore()
 const { addShare, deleteShare } = sharesStore
@@ -208,17 +207,12 @@ const inviteCollaboratorHelp = computed(() => {
   const cernFeatures = configOptions.value.cernFeatures
 
   if (cernFeatures) {
-    const options = {
-      configStore
-    }
-    const mergedHelp = shareInviteCollaboratorHelp(options)
-    mergedHelp.list = [...shareInviteCollaboratorHelpCern(options).list, ...mergedHelp.list]
+    const mergedHelp = { ...unref(shareInviteCollaboratorHelp) }
+    mergedHelp.list = [...unref(shareInviteCollaboratorHelpCern).list, ...mergedHelp.list]
     return mergedHelp
   }
 
-  return shareInviteCollaboratorHelp({
-    configStore
-  })
+  return unref(shareInviteCollaboratorHelp)
 })
 
 const helpersEnabled = computed(() => {
@@ -282,32 +276,38 @@ const showSpaceMembers = computed(() => {
   )
 })
 
-function getDeniedShare(collaborator: CollaboratorShare) {
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+function getDeniedShare(_collaborator: CollaboratorShare) {
   // FIXME: currently not supported by sharing NG
   return undefined
 }
 
-function isShareDenied(collaborator: CollaboratorShare) {
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+function isShareDenied(_collaborator: CollaboratorShare) {
   // FIXME: currently not supported by sharing NG
   return false
 }
 
-function getDeniedSpaceMember(collaborator: CollaboratorShare) {
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+function getDeniedSpaceMember(_collaborator: CollaboratorShare) {
   // FIXME: currently not supported by sharing NG
   return undefined
 }
 
-function isSpaceMemberDenied(collaborator: CollaboratorShare) {
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+function isSpaceMemberDenied(_collaborator: CollaboratorShare) {
   // FIXME: currently not supported by sharing NG
   return false
 }
 
-function isSpaceMemberDeniable(collaborator: CollaboratorShare) {
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+function isSpaceMemberDeniable(_collaborator: CollaboratorShare) {
   // FIXME: currently not supported by sharing NG
   return false
 }
 
-function isShareDeniable(collaborator: CollaboratorShare) {
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+function isShareDeniable(_collaborator: CollaboratorShare) {
   // FIXME: currently not supported by sharing NG
   return false
 }

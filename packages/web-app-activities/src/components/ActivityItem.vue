@@ -4,7 +4,7 @@
       <oc-avatar :width="36" :user-name="activity.template.variables?.user?.displayName" />
       <span class="oc-ml-s" v-text="activity.template.variables?.user?.displayName" />
     </div>
-    <div>activity unknown</div>
+    <div>{{ $gettext('Activity unknown') }}</div>
     <div class="oc-text-truncate">
       <resource-list-item v-if="resource" :resource="resource" :is-resource-clickable="false" />
       <div

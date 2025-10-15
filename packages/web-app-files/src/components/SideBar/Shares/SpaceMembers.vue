@@ -3,7 +3,11 @@
     <div class="oc-flex">
       <div v-if="canShare({ space: resource, resource })" class="oc-flex oc-py-s">
         <h3 class="oc-text-bold oc-text-medium oc-m-rm" v-text="$gettext('Add members')" />
-        <oc-contextual-helper v-if="helpersEnabled" class="oc-pl-xs" v-bind="spaceAddMemberHelp" />
+        <oc-contextual-helper
+          v-if="helpersEnabled"
+          class="oc-pl-xs"
+          v-bind="shareSpaceAddMemberHelp"
+        />
       </div>
       <copy-private-link :resource="resource" />
     </div>
@@ -94,7 +98,7 @@ import {
   useClientService,
   useRouter
 } from '@ownclouders/web-pkg'
-import { shareSpaceAddMemberHelp } from '../../../helpers/contextualHelpers'
+import { useContextualHelpers } from '../../../composables/contextualHelpers/useContextualHelpers'
 import {
   ProjectSpaceResource,
   CollaboratorShare,
@@ -124,6 +128,8 @@ const { upsertSpace, getSpaceMembers } = spacesStore
 const configStore = useConfigStore()
 // const { options: configOptions } = storeToRefs(configStore)
 
+const { shareSpaceAddMemberHelp } = useContextualHelpers()
+
 const { user } = storeToRefs(userStore)
 
 const markInstance = ref<Mark>()
@@ -139,9 +145,6 @@ const filteredSpaceMembers = computed(() => {
 })
 const helpersEnabled = computed(() => {
   return unref(configStore.options.contextHelpers)
-})
-const spaceAddMemberHelp = computed(() => {
-  return shareSpaceAddMemberHelp({ configStore: unref(configStore) })
 })
 const hasCollaborators = computed(() => {
   return unref(spaceMembers).length > 0
