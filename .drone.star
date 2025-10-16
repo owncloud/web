@@ -530,9 +530,12 @@ def sonarcloudCoverageReport(sonar_env):
             "image": SONARSOURCE_SONAR_SCANNER_CLI_IMAGE,
             "environment": sonar_env,
             "when": {
-                "event": [
-                    "cron",
-                ],
+                "event": {
+                    "exclude": [
+                        "cron",
+                        "push",
+                    ],
+                },
             },
         },
     ]
