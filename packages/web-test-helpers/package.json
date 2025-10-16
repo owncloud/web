@@ -51,7 +51,7 @@
     "@pinia/testing": "^1.0.2",
     "axios": "1.12.2",
     "vitest-mock-extended": "3.1.0",
-    "vue-router": "4.6.2",
+    "vue-router": "4.6.3",
     "vue3-gettext": "2.4.0"
   }
 }
