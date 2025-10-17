@@ -85,6 +85,19 @@ const getConfigJson = async (url: string) => {
   return (await getJson(url)) as ConfigJsonResponseBody
 }
 
+const isHttpUrl = (value: string) => /^https?:\/\//i.test(value)
+
+const getConfigFromUrlOrFile = async (value: string): Promise<ConfigJsonResponseBody> => {
+  if (isHttpUrl(value)) {
+    return await getConfigJson(value)
+  }
+
+  // Treat non-http(s) values as filesystem paths relative to the dev server cwd
+  const filePath = value.startsWith('/') ? value : join(process.cwd(), value)
+  const raw = readFileSync(filePath, 'utf8')
+  return JSON.parse(raw) as ConfigJsonResponseBody
+}
+
 export const historyModePlugins = () =>
   [
     {
@@ -258,7 +271,7 @@ export default defineConfig(({ mode, command }) => {
             server.middlewares.use(async (request, response, next) => {
               if (request.url === '/config.json') {
                 try {
-                  const configJson = await getConfigJson(configUrl)
+                  const configJson = await getConfigFromUrlOrFile(configUrl)
                   response.statusCode = 200
                   response.setHeader('Content-Type', 'application/json')
                   response.end(JSON.stringify(configJson))
