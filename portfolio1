@@ -1,0 +1,26 @@
+{
+  "[javascript]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+  "[json]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+  "[typescript]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+  "[vue]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+  "editor.formatOnSave": true,
+  "eslint.format.enable": true,
+  "npm.packageManager": "pnpm",
+  "typescript.format.enable": false,
+  "editor.quickSuggestions": {
+    "strings": true
+  },
+  "cucumberautocomplete.steps": [
+    "tests/e2e/cucumber/steps/**/*.ts"
+  ],
+  "cucumberautocomplete.strictGherkinCompletion": true,
+  "typescript.tsdk": "node_modules/typescript/lib"
+}
