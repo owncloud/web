@@ -11,6 +11,7 @@ Summary
 * Bugfix - Fix copying public link and password on Safari: [#13177](https://github.com/owncloud/web/pull/13177)
 * Bugfix - Fix incorrect translations: [#13198](https://github.com/owncloud/web/pull/13198)
 * Bugfix - Remove duplicate resource links: [#13203](https://github.com/owncloud/web/pull/13203)
+* Bugfix - Do not disable sharing of resources when managing spaces via claims: [#13213](https://github.com/owncloud/web/pull/13213)
 * Enhancement - Hide trashed spaces: [#13168](https://github.com/owncloud/web/pull/13168)
 * Enhancement - Drop beta badge from GeoGebra pinboards: [#13169](https://github.com/owncloud/web/pull/13169)
 * Enhancement - Add Excalidraw file icon: [#13172](https://github.com/owncloud/web/pull/13172)
@@ -42,6 +43,14 @@ Details
    decorative element and is hidden from screen readers.
 
    https://github.com/owncloud/web/pull/13203
+
+* Bugfix - Do not disable sharing of resources when managing spaces via claims: [#13213](https://github.com/owncloud/web/pull/13213)
+
+   When managing spaces via claims, we were disabling sharing of resources when the
+   server managed spaces capability was enabled. This was not correct, as we should
+   only disable sharing of spaces.
+
+   https://github.com/owncloud/web/pull/13213
 
 * Enhancement - Hide trashed spaces: [#13168](https://github.com/owncloud/web/pull/13168)
 
