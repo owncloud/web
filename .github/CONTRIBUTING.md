@@ -1,7 +1,7 @@
 ## Submitting issues
 
 If you have questions about how to install or use ownCloud, please direct these to our [forum][forum].
-For getting in touch with the developers, join our public [RocketChat][rocketchat].
+For getting in touch with the developers, join our public [Matrix channel][matrix].
 
 ### Short version
 
@@ -28,7 +28,7 @@ Help us to maximize the effort we can spend fixing issues and adding new feature
 
 [tracker]: https://github.com/owncloud/web/issues/new
 [forum]: https://central.owncloud.org/
-[rocketchat]: https://talk.owncloud.com/channel/web
+[matrix]: https://matrix.to/#/#ocis:matrix.org
 
 ## Contributing to Source Code
 
