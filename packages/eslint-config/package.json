@@ -29,6 +29,6 @@
     "typescript-eslint": "^8.46.1"
   },
   "peerDependencies": {
-    "eslint": "^9.37.0"
+    "eslint": "^9.38.0"
   }
 }
