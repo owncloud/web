@@ -3,7 +3,6 @@ import Table from './OcTable.vue'
 
 const ASC = 'ascending'
 const DESC = 'descending'
-const NONE = 'none'
 
 const tableFieldId = {
   name: 'id',
@@ -63,13 +62,13 @@ describe('OcTable.sort', () => {
       }
     })
     const headers = wrapper.findAll('thead th')
-    it('has any [aria-sort] attribute on all sortable column headers', () => {
+    it('should not have [aria-sort] on column headers with no sorting applied', () => {
       const sortableFields = tableFields.filter((f) => f.sortable).map((f) => f.name)
       tableFields.forEach((field, index) => {
         if (!sortableFields.includes(field.name)) {
           return
         }
-        expect(headers.at(index).attributes()['aria-sort']).toBeTruthy()
+        expect(headers.at(index).attributes()['aria-sort']).toBeFalsy()
       })
     })
     it('lacks an [aria-sort] attribute on non-sortable column headers', () => {
@@ -96,14 +95,6 @@ describe('OcTable.sort', () => {
           sortBy: tableFieldId.name,
           sortDir: 'desc' as 'asc' | 'desc',
           ariaSort: DESC
-        }
-      ],
-      [
-        NONE,
-        {
-          sortBy: tableFieldResource.name,
-          sortDir: 'asc' as 'asc' | 'desc',
-          ariaSort: NONE
         }
       ]
     ])(

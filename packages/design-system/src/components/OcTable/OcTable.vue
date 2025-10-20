@@ -1,15 +1,30 @@
 <template>
   <table v-bind="extractTableProps()" class="has-item-context-menu">
+    <caption v-if="caption || isTableSortable" :class="{ 'oc-invisible-sr': !captionVisible }">
+      {{
+        caption
+      }}
+      <span
+        v-if="isTableSortable"
+        class="oc-invisible-sr"
+        v-text="
+          $pgettext(
+            'Table component caption sorting explanation available only to screen readers.',
+            'Column headers with buttons are sortable.'
+          )
+        "
+      />
+    </caption>
     <oc-thead v-if="hasHeader">
       <oc-tr class="oc-table-header-row">
         <oc-th
           v-for="(field, index) in fields"
           :key="`oc-thead-${field.name}`"
           v-bind="extractThProps(field, index)"
+          :aria-sort="getAriaSortValue(field.name)"
         >
           <oc-button
             v-if="field.sortable"
-            :aria-label="getSortLabel(field.name)"
             appearance="raw"
             class="oc-button-sort oc-width-1-1"
             @click="handleSort(field)"
@@ -104,7 +119,7 @@ import OcTd from '../OcTableCellData/OcTableCellData.vue'
 import OcTh from '../OcTableCellHead/OcTableCellHead.vue'
 import OcButton from '../OcButton/OcButton.vue'
 import { getSizeClass, Item, FieldType } from '../../helpers'
-import { computed } from 'vue'
+import { computed, unref } from 'vue'
 import { useGettext } from 'vue3-gettext'
 
 /**
@@ -204,6 +219,8 @@ interface Props {
   lazy?: boolean
   sortDir?: 'asc' | 'desc'
   sortBy?: string
+  caption?: string
+  captionVisible?: boolean
 }
 
 interface Emits {
@@ -238,12 +255,14 @@ const {
   dragDrop = false,
   lazy = false,
   sortDir = undefined,
-  sortBy = undefined
+  sortBy = undefined,
+  caption = '',
+  captionVisible = true
 } = defineProps<Props>()
 
 const emit = defineEmits<Emits>()
 
-const { $gettext } = useGettext()
+const { $pgettext } = useGettext()
 const domElementSelector = (item: Item) => {
   if (itemDomSelector) {
     return itemDomSelector(item)
@@ -257,6 +276,9 @@ const constants = {
   EVENT_TROW_MOUNTED,
   EVENT_TROW_CONTEXTMENU
 }
+
+const isTableSortable = computed(() => fields.some((field) => field.sortable))
+
 function dragOver(event: DragEvent) {
   event.preventDefault()
 }
@@ -303,8 +325,6 @@ function extractThProps(field: FieldType, index: number) {
   if (index === fields.length - 1) {
     props.class += ` oc-pr-${getSizeClass(paddingX)}`
   }
-
-  extractSortThProps(props, field)
 
   return props
 }
@@ -386,21 +406,6 @@ function cellKey(field: FieldType, index: number, item: Item) {
   return [...prefix, item[field.name as keyof Item]].join('-')
 }
 
-function getSortLabel(name: string) {
-  return $gettext('Sort by %{ name }', { name })
-}
-
-function extractSortThProps(props: Record<string, string>, field: FieldType) {
-  if (!fieldIsSortable(field)) {
-    return
-  }
-
-  let sort = 'none'
-  if (sortBy === field.name) {
-    sort = sortDir === SORT_DIRECTION_ASC ? 'ascending' : 'descending'
-  }
-  props['aria-sort'] = sort
-}
 function fieldIsSortable({ sortable }: FieldType) {
   return !!sortable
 }
@@ -447,6 +452,14 @@ const tableClasses = computed(() => {
 const fullColspan = computed(() => {
   return fields.length
 })
+
+function getAriaSortValue(field: string): string | null {
+  if (unref(sortBy) !== field) {
+    return null
+  }
+
+  return unref(sortDir) === 'asc' ? 'ascending' : 'descending'
+}
 </script>
 <style lang="scss">
 .oc-table {
