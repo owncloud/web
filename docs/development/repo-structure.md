@@ -106,8 +106,7 @@ Dedicated documentation for the `web-pkg` package is not available, yet, since o
 At the very heart of ownCloud Web, the `web-runtime` is responsible for dependency injection, app bootstrapping, configuration,
 authentication, data preloading and much more.
 It is very likely that you will never get in touch with it as most of the developer-facing features are exposed via `web-pkg`. If you
-have more questions about this package, please join our [public chat](https://talk.owncloud.com/channel/web) and simply ask
-or write an issue in our [issue tracker](https://github.com/owncloud/web/issues).
+have more questions about this package, please write an issue in our [issue tracker](https://github.com/owncloud/web/issues).
 
 ### Standalone Core Apps
 

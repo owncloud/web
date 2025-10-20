@@ -9,9 +9,7 @@
     <div class="oc-login-card-footer">
       <p>
         <span v-text="$gettext('For help visit our')" />
-        <a v-translate href="https://owncloud.dev/clients/web" target="_blank">documentation</a>
-        <span v-text="$gettext('or join our')" />
-        <a v-translate href="https://talk.owncloud.com/channel/web" target="_blank">chat</a>.
+        <a v-translate href="https://owncloud.dev/clients/web" target="_blank">documentation</a>.
       </p>
       <p>
         {{ footerSlogan }}
