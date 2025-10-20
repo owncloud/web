@@ -20,6 +20,7 @@ import {
   ExtensionRegistry,
   useAppsStore,
   AppsStore,
+  useAppStore,
   useConfigStore,
   ConfigStore,
   RawConfig,
@@ -372,8 +373,10 @@ export const announcePiniaStores = () => {
   const spacesStore = useSpacesStore()
   const userStore = useUserStore()
   const webWorkersStore = useWebWorkersStore()
+  const appStore = useAppStore()
 
   return {
+    appStore,
     appsStore,
     authStore,
     capabilityStore,

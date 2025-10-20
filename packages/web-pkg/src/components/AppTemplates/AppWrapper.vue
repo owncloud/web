@@ -61,7 +61,8 @@ import {
   useLoadingService,
   useFileActionsSaveAs,
   useSharesStore,
-  useFileActionsExportAsPdf
+  useFileActionsExportAsPdf,
+  useAppStore
 } from '../../composables'
 import {
   Action,
@@ -121,6 +122,7 @@ const configStore = useConfigStore()
 const resourcesStore = useResourcesStore()
 const sharesStore = useSharesStore()
 const authService = useAuthService()
+const appStore = useAppStore()
 
 const { actions: openWithAppActions } = useFileActionsOpenWithApp({
   appId: applicationId
@@ -363,6 +365,18 @@ const loadFileTask = useTask(function* (signal) {
 }).restartable()
 
 watch(
+  () => appStore.error,
+  () => {
+    if (appStore.error) {
+      loadingError.value = new Error(appStore.error.message)
+      loading.value = false
+      return
+    }
+  },
+  { immediate: true }
+)
+
+watch(
   currentFileContext,
   async () => {
     if (!unref(noResourceLoading)) {
@@ -494,6 +508,7 @@ onMounted(() => {
   }
 })
 onBeforeUnmount(() => {
+  appStore.error = null
   if (!loadingService.isLoading) {
     window.removeEventListener('beforeunload', preventUnload)
   }

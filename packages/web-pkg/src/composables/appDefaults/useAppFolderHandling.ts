@@ -120,8 +120,11 @@ export function useAppFolderHandling({
       }
       resourcesStore.setCurrentFolder(null)
       console.error(error)
+
+      throw error
+    } finally {
+      isFolderLoading.value = false
     }
-    isFolderLoading.value = false
   }
 
   return {
