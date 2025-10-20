@@ -12,6 +12,7 @@ Summary
 * Bugfix - Fix incorrect translations: [#13198](https://github.com/owncloud/web/pull/13198)
 * Bugfix - Remove duplicate resource links: [#13203](https://github.com/owncloud/web/pull/13203)
 * Bugfix - Do not disable sharing of resources when managing spaces via claims: [#13213](https://github.com/owncloud/web/pull/13213)
+* Bugfix - Fix spinner loading continuously when resource is deleted: [#13223](https://github.com/owncloud/web/pull/13223)
 * Enhancement - Hide trashed spaces: [#13168](https://github.com/owncloud/web/pull/13168)
 * Enhancement - Drop beta badge from GeoGebra pinboards: [#13169](https://github.com/owncloud/web/pull/13169)
 * Enhancement - Add Excalidraw file icon: [#13172](https://github.com/owncloud/web/pull/13172)
@@ -51,6 +52,14 @@ Details
    only disable sharing of spaces.
 
    https://github.com/owncloud/web/pull/13213
+
+* Bugfix - Fix spinner loading continuously when resource is deleted: [#13223](https://github.com/owncloud/web/pull/13223)
+
+   We have fixed an issue where the loading spinner would continue to spin
+   indefinitely when a resource was deleted.
+
+   https://github.com/owncloud/web/pull/13223
+   https://kiteworks.atlassian.net/browse/OCISDEV-418
 
 * Enhancement - Hide trashed spaces: [#13168](https://github.com/owncloud/web/pull/13168)
 
