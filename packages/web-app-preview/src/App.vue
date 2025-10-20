@@ -83,6 +83,7 @@ import {
   useRouteQuery,
   useRouter,
   usePreviewService,
+  useAppStore,
   useGetMatchingSpace,
   isLocationSharesActive
 } from '@ownclouders/web-pkg'
@@ -148,6 +149,7 @@ const cachedFiles = ref<Record<string, CachedFile>>({})
 const folderLoaded = ref(false)
 const isAutoPlayEnabled = ref(true)
 const preview = ref<HTMLElement>()
+const appStore = useAppStore()
 
 const space = computed(() => {
   return getMatchingSpace(unref(activeFilteredFile))
@@ -269,8 +271,12 @@ watch(
     }
 
     if (!unref(folderLoaded)) {
-      await loadFolderForFileContext(currentFileContext)
-      folderLoaded.value = true
+      try {
+        await loadFolderForFileContext(currentFileContext)
+        folderLoaded.value = true
+      } catch (e) {
+        appStore.error = e
+      }
     }
 
     setActiveFile()
