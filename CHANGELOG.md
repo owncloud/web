@@ -17,6 +17,7 @@ Summary
 * Enhancement - Drop beta badge from GeoGebra pinboards: [#13169](https://github.com/owncloud/web/pull/13169)
 * Enhancement - Add Excalidraw file icon: [#13172](https://github.com/owncloud/web/pull/13172)
 * Enhancement - Add Visio file icons: [#13197](https://github.com/owncloud/web/pull/13197)
+* Enhancement - Add table caption: [#13224](https://github.com/owncloud/web/pull/13224)
 
 Details
 -------
@@ -91,6 +92,21 @@ Details
    https://github.com/owncloud/web/pull/13197
    https://fontawesome.com/v5/icons/file?f=classic&s=solid
    https://fontawesome.com/v5/icons/project-diagram?f=classic&s=solid
+
+* Enhancement - Add table caption: [#13224](https://github.com/owncloud/web/pull/13224)
+
+   We added a caption to the `OcTable` component. It's content can be set via a
+   newly introduced `caption` prop. The visibility of the caption can also be
+   toggled via new `captionVisible` prop. By default, it is visible only to screen
+   readers. If the `OcTable` includes any sortable columns, the caption will
+   automatically include screen reader only explanation of sorting capabilities.
+   This makes sure that screen readers are not overriding column headers with
+   actions via `aria-label` and that it does not repeat the same action multiple
+   times. All of this behavior is directly inspired by the ARIA Authoring Practices
+   Guide (APG).
+
+   https://github.com/owncloud/web/pull/13224
+   https://www.w3.org/WAI/ARIA/apg/patterns/table/examples/sortable-table/
 
 Changelog for ownCloud Web [12.1.0] (2025-10-02)
 =======================================
