@@ -56,7 +56,7 @@ Depending on the backend you are using, there are sample config files provided i
     - `options.feedbackLink.ariaLabel` Since the link only has an icon, you can set an e.g. screen reader accessible label. Defaults to `ownCloud feedback survey`.
     - `options.feedbackLink.description` Provide any description you want to see as tooltip and as accessible description. Defaults to `Provide your feedback: We'd like to improve the web design and would be happy to hear your feedback. Thank you! Your ownCloud team.`
 - `options.sharingRecipientsPerPage` Sets the amount of users shown as recipients in the dropdown when sharing resources. Default amount is 200.
-- `options.runningOnEos` Set this option to `true` if running on an [EOS storage backend](https://eos-web.web.cern.ch/eos-web/) to enable its specific features. Defaults to `false`.
+- `options.runningOnEos` Set this option to `true` if running on an [EOS storage backend](https://eos-web.web.cern.ch/eos-web/) to enable its specific features. Defaults to `false`, and we recommend reaching out to [the ownCloud web team](https://matrix.to/#/#ocis:matrix.org) if you're not CERN and thinking about enabling this feature flag.
 - `options.cernFeatures` Enabling this will activate CERN-specific features. Defaults to `false`.
 - `options.editor.autosaveEnabled` Specifies if the autosave for the editor apps is enabled.
 - `options.editor.autosaveInterval` Specifies the time interval for the autosave of editor apps in seconds.
