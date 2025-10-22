@@ -2,16 +2,20 @@
   <div class="oc-login-card oc-position-center">
     <img class="oc-login-logo" :src="logoImg" alt="" :aria-hidden="true" />
     <div class="oc-login-card-body">
-      <h1 v-translate class="oc-login-card-title">Missing or invalid config</h1>
-      <p v-translate>Please check if the file config.json exists and is correct.</p>
-      <p v-translate>Also, make sure to check the browser console for more information.</p>
+      <h1 v-text="$gettext('Missing or invalid config')" class="oc-login-card-title" />
+      <p v-text="$gettext('Please check if the file config.json exists and is correct.')" />
+      <p v-text="$gettext('Also, make sure to check the browser console for more information.')" />
     </div>
     <div class="oc-login-card-footer">
       <p>
         <span v-text="$gettext('For help visit our')" />
-        <a v-translate href="https://owncloud.dev/clients/web" target="_blank">documentation</a>
+        <a
+          href="https://owncloud.dev/clients/web"
+          target="_blank"
+          v-text="$gettext('documentation')"
+        />
         <span v-text="$gettext('or join our')" />
-        <a v-translate href="https://talk.owncloud.com/channel/web" target="_blank">chat</a>.
+        <a href="https://matrix.to/#/#ocis:matrix.org" target="_blank" v-text="$gettext('chat')" />.
       </p>
       <p>
         {{ footerSlogan }}
