@@ -51,6 +51,10 @@ export const useFileActionsRename = () => {
       return $gettext('The name cannot be empty')
     }
 
+    if (resource.name === newName) {
+      return $gettext('Choose a new name to be able to rename the file')
+    }
+
     if (/[/]/.test(newName)) {
       return $gettext('The name cannot contain "/"')
     }
