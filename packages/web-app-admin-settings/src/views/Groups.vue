@@ -30,25 +30,49 @@
       </template>
       <template #mainContent>
         <app-loading-spinner v-if="isLoading" />
-        <template v-else>
-          <no-content-message
-            v-if="!groups.length"
-            id="admin-settings-groups-empty"
-            class="files-empty"
-            icon="user"
-          >
-            <template #message>
-              <span v-translate>No groups in here</span>
+        <div v-else>
+          <groups-list>
+            <template #contextMenu>
+              <context-actions :action-options="{ resources: selectedGroups }" />
             </template>
-          </no-content-message>
-          <div v-else>
-            <groups-list>
-              <template #contextMenu>
-                <context-actions :action-options="{ resources: selectedGroups }" />
-              </template>
-            </groups-list>
-          </div>
-        </template>
+            <template #filter>
+              <div class="oc-flex oc-flex-middle">
+                <oc-text-input
+                  id="groups-filter"
+                  v-model.trim="filterTerm"
+                  :label="$gettext('Search')"
+                  autocomplete="off"
+                  @enterKeyDown="filterGroups"
+                />
+                <oc-button
+                  id="groups-filter-confirm"
+                  class="oc-ml-xs"
+                  appearance="raw"
+                  @click="filterGroups"
+                >
+                  <oc-icon name="search" fill-type="line" />
+                </oc-button>
+              </div>
+            </template>
+            <template #noResults>
+              <no-content-message
+                v-if="!groups.length"
+                id="admin-settings-groups-empty"
+                class="files-empty"
+                icon="user"
+              >
+                <template #message>
+                  {{
+                    $pgettext(
+                      'A message displayed when no groups are found in the groups list in admin settings when there is no filter applied.',
+                      'No groups in here'
+                    )
+                  }}
+                </template>
+              </no-content-message>
+            </template>
+          </groups-list>
+        </div>
       </template>
     </app-template>
   </div>
@@ -66,6 +90,7 @@ import { useGroupActionsCreateGroup, useGroupActionsDelete } from '../composable
 import {
   AppLoadingSpinner,
   NoContentMessage,
+  queryItemAsString,
   SideBarPanel,
   SideBarPanelContext,
   useClientService,
@@ -77,6 +102,8 @@ import { useTask } from 'vue-concurrency'
 import { useGettext } from 'vue3-gettext'
 import { storeToRefs } from 'pinia'
 import { call } from '@ownclouders/web-client'
+import { useRoute, useRouter } from 'vue-router'
+import { omit } from 'lodash-es'
 
 const template = ref()
 const groupSettingsStore = useGroupSettingsStore()
@@ -84,8 +111,12 @@ const { selectedGroups, groups } = storeToRefs(groupSettingsStore)
 const clientService = useClientService()
 const { $gettext } = useGettext()
 const { sideBarActivePanel, isSideBarOpen } = useSideBar()
+const router = useRouter()
+const route = useRoute()
 
 provide('group', selectedGroups[0])
+
+const filterTerm = ref(queryItemAsString(unref(route).query.q_displayName))
 
 const { actions: createGroupActions } = useGroupActionsCreateGroup()
 const createGroupAction = computed(() => unref(createGroupActions)[0])
@@ -95,7 +126,8 @@ const loadResourcesTask = useTask(function* (signal) {
     clientService.graphAuthenticated.groups.listGroups(
       {
         orderBy: ['displayName'],
-        expand: ['members']
+        expand: ['members'],
+        search: queryItemAsString(unref(route).query.q_displayName)
       },
       { signal }
     )
@@ -154,6 +186,19 @@ const sideBarAvailablePanels = [
   }
 ] satisfies SideBarPanel<unknown, unknown, Group>[]
 
+async function filterGroups() {
+  await router.push({
+    ...unref(route),
+    query: {
+      ...omit(unref(route).query, 'q_displayName'),
+      ...(unref(filterTerm) ? { q_displayName: unref(filterTerm) } : {}),
+      page: '1'
+    }
+  })
+  loadResourcesTask.perform()
+  groupSettingsStore.setSelectedGroups([])
+}
+
 onMounted(async () => {
   await loadResourcesTask.perform()
 })
@@ -175,3 +220,9 @@ const breadcrumbs = computed(() => {
   ]
 })
 </script>
+
+<style lang="scss" scoped>
+#groups-filter-confirm {
+  margin-top: calc(0.2rem + var(--oc-font-size-default));
+}
+</style>

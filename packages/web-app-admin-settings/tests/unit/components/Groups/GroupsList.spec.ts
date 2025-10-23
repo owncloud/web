@@ -22,6 +22,11 @@ vi.mock('@ownclouders/web-pkg', async (importOriginal) => ({
   displayPositionedDropdown: vi.fn()
 }))
 
+vi.mock('vue-router', () => ({
+  useRoute: vi.fn().mockReturnValue({ query: {} }),
+  useRouter: vi.fn()
+}))
+
 describe('GroupsList', () => {
   describe('method "orderBy"', () => {
     it('should return an ascending ordered list while desc is set to false', () => {

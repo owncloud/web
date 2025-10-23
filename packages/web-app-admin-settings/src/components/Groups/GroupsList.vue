@@ -1,14 +1,12 @@
 <template>
   <div id="group-list">
     <div class="group-filters oc-flex oc-flex-right oc-flex-wrap oc-flex-bottom oc-mx-m oc-mb-m">
-      <oc-text-input
-        id="groups-filter"
-        v-model="filterTerm"
-        :label="$gettext('Search')"
-        autocomplete="off"
-      />
+      <slot name="filter" />
     </div>
+
+    <slot v-if="!paginatedItems.length" name="noResults" />
     <oc-table
+      v-else
       :sort-by="sortBy"
       :sort-dir="sortDir"
       :fields="fields"
@@ -100,7 +98,6 @@
         <pagination :pages="totalPages" :current-page="currentPage" />
         <div class="oc-text-center oc-width-1-1 oc-my-s">
           <p class="oc-text-muted">{{ footerTextTotal }}</p>
-          <p v-if="filterTerm" class="oc-text-muted">{{ footerTextFilter }}</p>
         </div>
       </template>
     </oc-table>
@@ -115,7 +112,6 @@ import {
   ref,
   unref,
   watch,
-  onMounted,
   nextTick
 } from 'vue'
 import Fuse from 'fuse.js'
@@ -124,11 +120,10 @@ import {
   ContextMenuBtnClickEventData,
   displayPositionedDropdown,
   eventBus,
+  queryItemAsString,
   SortDir,
   useIsTopBarSticky,
-  useKeyboardActions,
-  useRoute,
-  useRouter
+  useKeyboardActions
 } from '@ownclouders/web-pkg'
 import { SideBarEventTopics } from '@ownclouders/web-pkg'
 import { Group } from '@ownclouders/web-client/graph/generated'
@@ -145,6 +140,7 @@ import {
 import { useGroupSettingsStore } from '../../composables'
 import { storeToRefs } from 'pinia'
 import { findIndex } from 'lodash-es'
+import { useRoute } from 'vue-router'
 
 export default defineComponent({
   name: 'GroupsList',
@@ -155,8 +151,6 @@ export default defineComponent({
     const contextMenuButtonRef = ref(undefined)
     const sortBy = ref<keyof Group>('displayName')
     const sortDir = ref<SortDir>(SortDir.Asc)
-    const filterTerm = ref('')
-    const router = useRouter()
     const route = useRoute()
     const { isSticky } = useIsTopBarSticky()
 
@@ -278,11 +272,7 @@ export default defineComponent({
     }
 
     const items = computed(() => {
-      return orderBy(
-        filter(unref(groups), unref(filterTerm)),
-        unref(sortBy),
-        unref(sortDir) === SortDir.Desc
-      )
+      return orderBy(unref(groups), unref(sortBy), unref(sortDir) === SortDir.Desc)
     })
 
     const {
@@ -311,24 +301,30 @@ export default defineComponent({
       unselectAllGroups()
     })
 
-    watch(filterTerm, async () => {
-      await unref(router).push({ ...unref(route), query: { ...unref(route).query, page: '1' } })
-    })
-
     const markInstance = ref<Mark>(null)
-    onMounted(async () => {
-      await nextTick()
-      markInstance.value = new Mark('.mark-element')
-    })
-    watch([filterTerm, paginatedItems], () => {
-      unref(markInstance)?.unmark()
-      if (unref(filterTerm)) {
-        unref(markInstance)?.mark(unref(filterTerm), {
-          element: 'span',
-          className: 'mark-highlight'
+    watch(
+      [() => route.query, paginatedItems],
+      () => {
+        nextTick(() => {
+          if (!unref(markInstance)) {
+            markInstance.value = new Mark('.mark-element')
+          }
+
+          unref(markInstance).unmark()
+
+          const filterTerm = queryItemAsString(unref(route).query.q_displayName)
+          if (!filterTerm) {
+            return
+          }
+
+          unref(markInstance).mark(filterTerm, {
+            element: 'span',
+            className: 'mark-highlight'
+          })
         })
-      }
-    })
+      },
+      { immediate: true }
+    )
 
     return {
       showDetails,
@@ -340,7 +336,6 @@ export default defineComponent({
       contextMenuButtonRef,
       showEditPanel,
       readOnlyLabel,
-      filterTerm,
       sortBy,
       sortDir,
       items,
@@ -401,11 +396,6 @@ export default defineComponent({
     footerTextTotal() {
       return this.$gettext('%{groupCount} groups in total', {
         groupCount: this.groups.length.toString()
-      })
-    },
-    footerTextFilter() {
-      return this.$gettext('%{groupCount} matching groups', {
-        groupCount: this.items.length.toString()
       })
     },
     highlighted() {

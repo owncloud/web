@@ -4,7 +4,7 @@ import { ClientService } from '@ownclouders/web-pkg'
 import { defaultComponentMocks, defaultPlugins, mount } from '@ownclouders/web-test-helpers'
 import { Group } from '@ownclouders/web-client/graph/generated'
 
-const selectors = { batchActionsStub: 'batch-actions-stub' }
+const selectors = { batchActionsStub: 'batch-actions-stub', searchInput: '#groups-filter' }
 const getClientServiceMock = () => {
   const clientService = mockDeep<ClientService>()
   clientService.graphAuthenticated.groups.listGroups.mockResolvedValue([
@@ -15,6 +15,22 @@ const getClientServiceMock = () => {
 vi.mock('@ownclouders/web-pkg', async (importOriginal) => ({
   ...(await importOriginal<any>()),
   useAppDefaults: vi.fn()
+}))
+
+const { mockRouterPush, mockRoute } = vi.hoisted(() => {
+  const route = { query: {} }
+  const mockRouterPush = vi.fn((newRoute) => {
+    if (newRoute.query) {
+      route.query = { ...route.query, ...newRoute.query }
+    }
+    return Promise.resolve()
+  })
+  return { mockRouterPush, mockRoute: route }
+})
+
+vi.mock('vue-router', () => ({
+  useRoute: vi.fn(() => mockRoute),
+  useRouter: vi.fn().mockReturnValue({ push: mockRouterPush })
 }))
 
 describe('Groups view', () => {
@@ -76,6 +92,30 @@ describe('Groups view', () => {
       expect(wrapper.find(selectors.batchActionsStub).exists()).toBeTruthy()
     })
   })
+
+  describe('search', () => {
+    it('should search for groups when the search term changes', async () => {
+      const { wrapper, mocks } = getWrapper()
+      await (wrapper.vm as any).loadResourcesTask.last
+      const searchInput = wrapper.find(selectors.searchInput)
+      await searchInput.setValue('test')
+      await searchInput.trigger('keydown.enter')
+      expect(mockRouterPush).toHaveBeenCalledWith({
+        query: {
+          q_displayName: 'test',
+          page: '1'
+        }
+      })
+      expect(mocks.$clientService.graphAuthenticated.groups.listGroups).toHaveBeenCalledWith(
+        {
+          orderBy: ['displayName'],
+          expand: ['members'],
+          search: 'test'
+        },
+        { signal: expect.any(AbortSignal) }
+      )
+    })
+  })
 })
 
 function getWrapper({
@@ -100,11 +140,14 @@ function getWrapper({
         stubs: {
           AppLoadingSpinner: true,
           NoContentMessage: true,
-          GroupsList: true,
+          GroupsList: {
+            template: '<div><slot name="filter"></slot></div>'
+          },
           OcBreadcrumb: true,
           BatchActions: true
         }
       }
-    })
+    }),
+    mocks
   }
 }
