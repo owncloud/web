@@ -32,12 +32,12 @@ type RenderResult = {
  * to ensure consistent typography and proper Unicode support.
  */
 const FONT_URLS = Object.freeze({
-  regular: 'https://pdf-lib.js.org/assets/ubuntu/Ubuntu-R.ttf',
-  bold: 'https://pdf-lib.js.org/assets/ubuntu/Ubuntu-B.ttf',
-  italic: 'https://pdf-lib.js.org/assets/ubuntu/Ubuntu-RI.ttf',
-  boldItalic: 'https://pdf-lib.js.org/assets/ubuntu/Ubuntu-BI.ttf',
-  mono: 'https://pdf-lib.js.org/assets/ubuntu/UbuntuMono-R.ttf',
-  monoBold: 'https://pdf-lib.js.org/assets/ubuntu/UbuntuMono-B.ttf'
+  regular: '/fonts/ubuntu/Ubuntu-R.ttf',
+  bold: '/fonts/ubuntu/Ubuntu-B.ttf',
+  italic: '/fonts/ubuntu/Ubuntu-RI.ttf',
+  boldItalic: '/fonts/ubuntu/Ubuntu-BI.ttf',
+  mono: '/fonts/ubuntu/UbuntuMono-R.ttf',
+  monoBold: '/fonts/ubuntu/UbuntuMono-B.ttf'
 })
 
 /**
