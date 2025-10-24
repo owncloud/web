@@ -84,6 +84,7 @@ import {
   AppLoadingSpinner,
   useRouter,
   useClientService,
+  useMessages,
   FederatedConnection
 } from '@ownclouders/web-pkg'
 import { useGettext } from 'vue3-gettext'
@@ -105,6 +106,7 @@ const emit = defineEmits<Emits>()
 const router = useRouter()
 const { $gettext } = useGettext()
 const clientService = useClientService()
+const { showErrorMessage } = useMessages()
 
 const fields = computed(() => {
   return [
@@ -139,7 +141,7 @@ const fields = computed(() => {
 const helperContent = computed(() => {
   return {
     text: $gettext(
-      'Federated conections for mutual sharing. To share, go to "Files" app, select the resource click "Share" in the context menu and select account type "federated".'
+      'Federated connections for mutual sharing. To share, go to "Files" app, select the resource click "Share" in the context menu and select account type "federated".'
     ),
     title: $gettext('Federated connections')
   }
@@ -164,8 +166,13 @@ const deleteConnection = async (user: FederatedConnection) => {
     const updatedConnections = connections.filter(({ id }) => id !== buildConnection(user).id)
 
     emit('update:connections', updatedConnections)
-  } catch (e) {
-    console.error(e)
+  } catch (error) {
+    console.error('Failed to delete connection:', error)
+    showErrorMessage({
+      title: $gettext('Error'),
+      desc: $gettext('Failed to delete connection'),
+      errors: [error]
+    })
   }
 }
 </script>

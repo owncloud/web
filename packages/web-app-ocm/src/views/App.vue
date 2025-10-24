@@ -17,36 +17,87 @@
         />
       </div>
     </div>
+
+    <invitation-acceptance-modal
+      v-if="showInvitationModal"
+      :show-modal="showInvitationModal"
+      :token="invitationToken"
+      :provider="invitationProvider"
+      @highlight-new-connections="highlightNewConnections"
+      @close="closeInvitationModal"
+    />
   </div>
 </template>
 
 <script lang="ts" setup>
-import { onMounted, onUnmounted, ref, unref, Ref } from 'vue'
+import { onMounted, onUnmounted, ref, unref, Ref, computed, watch } from 'vue'
 import ConnectionsPanel from './ConnectionsPanel.vue'
 import IncomingInvitations from './IncomingInvitations.vue'
 import OutgoingInvitations from './OutgoingInvitations.vue'
+import InvitationAcceptanceModal from './InvitationAcceptanceModal.vue'
 import {
   useClientService,
   useScrollTo,
   FederatedConnection,
-  useMessages
+  useMessages,
+  useRoute,
+  useRouter
 } from '@ownclouders/web-pkg'
 import { useGettext } from 'vue3-gettext'
 import { buildConnection } from '../functions'
 
 const { showMessage } = useMessages()
 const { scrollToResource } = useScrollTo()
-const clientSerivce = useClientService()
+const clientService = useClientService()
 const { $gettext } = useGettext()
+const route = useRoute()
+const router = useRouter()
 
 const connections: Ref<FederatedConnection[]> = ref([])
 const highlightedConnections: Ref<FederatedConnection[]> = ref([])
 const highlightNewConnectionsInterval = ref(null)
 const loadingConnections = ref(true)
 
+// Modal state for invitation acceptance
+const showInvitationModal = ref(false)
+const invitationToken = ref('')
+const invitationProvider = ref('')
+
+// Check if we're on the accept-invite route and show modal
+const isAcceptInviteRoute = computed(() => {
+  return route.value.name === 'open-cloud-mesh-accept-invite'
+})
+
+// Watch for route changes to show modal
+watch(
+  isAcceptInviteRoute,
+  (isAcceptRoute) => {
+    if (isAcceptRoute) {
+      const token = route.value.query.token as string
+      const provider = route.value.query.providerDomain as string
+
+      if (token && provider) {
+        invitationToken.value = token
+        invitationProvider.value = provider
+        showInvitationModal.value = true
+      }
+    }
+  },
+  { immediate: true }
+)
+
+const closeInvitationModal = () => {
+  showInvitationModal.value = false
+  invitationToken.value = ''
+  invitationProvider.value = ''
+
+  // Clear URL query parameters and navigate to invitations
+  router.replace({ name: 'open-cloud-mesh-invitations' })
+}
+
 const findAcceptedUsers = async () => {
   try {
-    const { data: acceptedUsers } = await clientSerivce.httpAuthenticated.get<
+    const { data: acceptedUsers } = await clientService.httpAuthenticated.get<
       FederatedConnection[]
     >('/sciencemesh/find-accepted-users')
     loadingConnections.value = false
