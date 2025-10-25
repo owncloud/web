@@ -84,6 +84,11 @@ describe('rename', () => {
 
     it.each([
       { currentName: 'currentName', newName: '', message: 'The name cannot be empty' },
+      {
+        currentName: 'currentName',
+        newName: 'currentName',
+        message: 'Choose a new name to be able to rename the file'
+      },
       { currentName: 'currentName', newName: 'new/name', message: 'The name cannot contain "/"' },
       { currentName: 'currentName', newName: '.', message: 'The name cannot be equal to "."' },
       { currentName: 'currentName', newName: '..', message: 'The name cannot be equal to ".."' },
