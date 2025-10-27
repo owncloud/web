@@ -104,9 +104,9 @@
     "webfontloader": "^1.6.28"
   },
   "devDependencies": {
-    "@babel/core": "7.28.4",
-    "@babel/plugin-transform-runtime": "7.28.3",
-    "@babel/preset-env": "7.28.3",
+    "@babel/core": "7.28.5",
+    "@babel/plugin-transform-runtime": "7.28.5",
+    "@babel/preset-env": "7.28.5",
     "@babel/runtime": "7.28.4",
     "@ownclouders/web-test-helpers": "workspace:*",
     "@vitejs/plugin-vue": "6.0.1",
@@ -135,7 +135,7 @@
     "typescript": "5.9.3",
     "url": "^0.11.4",
     "url-loader": "^4.1.1",
-    "vite": "^7.1.10",
+    "vite": "^7.1.12",
     "vite-plugin-dts": "^4.5.4",
     "vite-plugin-node-polyfills": "^0.24.0",
     "yaml": "^2.8.1"
