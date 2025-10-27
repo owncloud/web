@@ -83,6 +83,7 @@
         @dragenter.prevent="dropRowStyling(domElementSelector(item), false, $event)"
         @dragleave.prevent="dropRowStyling(domElementSelector(item), true, $event)"
         @mouseleave="dropRowStyling(domElementSelector(item), true, $event)"
+        @blur="dropRowStyling(domElementSelector(item), true, $event)"
         @dragover="dragOver($event)"
         @item-visible="$emit('itemVisible', item)"
       >

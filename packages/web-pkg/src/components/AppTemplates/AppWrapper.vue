@@ -1,4 +1,5 @@
 <template>
+  <!-- eslint-disable-next-line vuejs-accessibility/no-static-element-interactions -->
   <main :id="applicationId" class="app-wrapper oc-height-1-1" @keydown.esc="closeApp">
     <h1 class="oc-invisible-sr" v-text="pageTitle" />
     <app-top-bar

@@ -1,5 +1,9 @@
+<!-- eslint-disable vuejs-accessibility/no-static-element-interactions -->
+<!-- eslint-disable vuejs-accessibility/click-events-have-key-events -->
 <template>
   <div :id="dropId" ref="drop" class="oc-drop oc-box-shadow-medium oc-rounded" @click="onClick">
+    <!-- eslint-enable vuejs-accessibility/no-static-element-interactions -->
+    <!-- eslint-enable vuejs-accessibility/click-events-have-key-events -->
     <div
       v-if="$slots.default"
       :class="['oc-card oc-card-body oc-background-secondary', paddingClass]"
@@ -91,7 +95,7 @@ const {
   isNested = false,
   target = null,
   paddingSize = 'medium',
-  offset,
+  offset = '',
   sameWidthAsTarget = false
 } = defineProps<Props>()
 

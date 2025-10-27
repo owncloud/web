@@ -8,6 +8,8 @@
         class="file_info__icon oc-mr-s oc-position-relative"
       />
       <div class="file_info__body oc-text-overflow">
+        <!-- The following rule is false-negative as the resource-name component includes the necessary content -->
+        <!-- eslint-disable-next-line vuejs-accessibility/heading-has-content -->
         <h3 data-testid="files-info-name" class="oc-font-semibold">
           <resource-name
             :name="resource.name"

@@ -1,6 +1,7 @@
 <template>
   <div class="oc-modal-background">
     <focus-trap :active="true" :initial-focus="initialFocusRef" :tabbable-options="tabbableOptions">
+      <!-- eslint-disable-next-line vuejs-accessibility/no-static-element-interactions -->
       <div
         :id="elementId"
         ref="ocModal"

@@ -132,6 +132,9 @@ importers:
       glob:
         specifier: 11.0.3
         version: 11.0.3
+      globals:
+        specifier: ^16.4.0
+        version: 16.4.0
       happy-dom:
         specifier: 20.0.8
         version: 20.0.8

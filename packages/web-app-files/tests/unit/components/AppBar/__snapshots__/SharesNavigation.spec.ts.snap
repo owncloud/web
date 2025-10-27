@@ -23,7 +23,7 @@ exports[`SharesNavigation component > renders a shares navigation for both mobil
     <oc-button-stub data-v-c20b2094="" type="button" disabled="false" size="medium" submit="button" variation="passive" appearance="raw" justifycontent="center" gapsize="medium" showspinner="false" id="shares_navigation_mobile"><span data-v-c20b2094="">Shared with me</span>
       <oc-icon-stub data-v-c20b2094="" name="arrow-down-s" filltype="line" accessiblelabel="" type="span" size="small" variation="passive" color=""></oc-icon-stub>
     </oc-button-stub>
-    <oc-drop-stub data-v-c20b2094="" dropid="oc-drop-1" popperoptions="[object Object]" toggle="#shares_navigation_mobile" position="bottom-start" mode="click" closeonclick="true" isnested="false" paddingsize="small" samewidthastarget="false">
+    <oc-drop-stub data-v-c20b2094="" dropid="oc-drop-1" popperoptions="[object Object]" toggle="#shares_navigation_mobile" position="bottom-start" mode="click" closeonclick="true" isnested="false" paddingsize="small" offset="" samewidthastarget="false">
       <oc-list-stub data-v-c20b2094="" raw="false">
         <li data-v-c20b2094="">
           <oc-button-stub data-v-c20b2094="" type="router-link" disabled="false" size="medium" to="/files/shares/with-me/" submit="button" variation="primary" appearance="raw-inverse" justifycontent="center" gapsize="medium" showspinner="false" class="oc-my-xs shares-nav-mobile oc-background-primary-gradient"><span data-v-c20b2094="" class="icon-box icon-box-active"><oc-icon-stub data-v-c20b2094="" name="share-forward" filltype="fill" accessiblelabel="" type="span" size="medium" variation="passive" color=""></oc-icon-stub></span> <span data-v-c20b2094="">Shared with me</span></oc-button-stub>

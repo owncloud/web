@@ -1,5 +1,12 @@
 <template>
-  <object class="pdf-viewer oc-width-1-1 oc-height-1-1" :data="url" :type="objectType" />
+  <object
+    class="pdf-viewer oc-width-1-1 oc-height-1-1"
+    :data="url"
+    :type="objectType"
+    :aria-label="
+      $pgettext('Accessible label for the object holding the PDF file content', 'PDF document')
+    "
+  />
 </template>
 
 <script lang="ts" setup>

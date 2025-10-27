@@ -4,6 +4,7 @@
       <oc-spinner :aria-label="$gettext('Loading media file')" size="xlarge" />
     </div>
   </div>
+  <!-- eslint-disable-next-line vuejs-accessibility/no-static-element-interactions -->
   <div
     v-else
     ref="preview"

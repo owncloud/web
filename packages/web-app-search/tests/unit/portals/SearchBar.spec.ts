@@ -50,7 +50,7 @@ const providerContacts = {
 const selectors = {
   search: '#files-global-search',
   noResults: '#no-results',
-  searchInput: 'input',
+  searchInput: '.oc-search-input',
   searchInputClear: '.oc-search-clear',
   providerListItem: '.provider',
   providerDisplayName: '.provider .display-name',
