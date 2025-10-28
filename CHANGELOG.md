@@ -19,6 +19,7 @@ Summary
 * Enhancement - Add Excalidraw file icon: [#13172](https://github.com/owncloud/web/pull/13172)
 * Enhancement - Add Visio file icons: [#13197](https://github.com/owncloud/web/pull/13197)
 * Enhancement - Add table caption: [#13224](https://github.com/owncloud/web/pull/13224)
+* Enhancement - Use API groups search in admin settings: [#13235](https://github.com/owncloud/web/pull/13235)
 
 Details
 -------
@@ -117,6 +118,14 @@ Details
 
    https://github.com/owncloud/web/pull/13224
    https://www.w3.org/WAI/ARIA/apg/patterns/table/examples/sortable-table/
+
+* Enhancement - Use API groups search in admin settings: [#13235](https://github.com/owncloud/web/pull/13235)
+
+   We have changed the search behaviour in the admin settings. Instead of filtering
+   the groups in the client, we now use the search parameter of the list groups API
+   endpoint.
+
+   https://github.com/owncloud/web/pull/13235
 
 Changelog for ownCloud Web [12.1.0] (2025-10-02)
 =======================================
