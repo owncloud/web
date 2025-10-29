@@ -206,6 +206,17 @@ describe('Collaborator ListItem component', () => {
 
       expect(el.text()).toEqual('www.lorem.com')
     })
+
+    it('should fallback to original ID if decoding fails', () => {
+      const share = getShareMock({
+        shareType: ShareTypes.remote.value,
+        sharedWith: { id: 'einstein@https://www.lorem.com', displayName: 'einstein' }
+      })
+      const { wrapper } = createWrapper({ share })
+      const el = wrapper.find('[data-testid="external-share-domain"]')
+
+      expect(el.text()).toEqual('www.lorem.com')
+    })
   })
 })
 
