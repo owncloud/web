@@ -8,7 +8,7 @@
           <oc-contextual-helper class="oc-pl-xs" v-bind="helperContent" />
         </div>
         <div id="shares-links" class="oc-flex oc-flex-middle oc-flex-wrap oc-mr-m">
-          <label class="oc-mr-s" v-text="$gettext('Federated shares:')" />
+          <span class="oc-mr-s" v-text="$gettext('Federated shares:')" />
           <oc-button
             :aria-current="$gettext('Federated shares with me')"
             appearance="raw"

@@ -5,6 +5,8 @@ exports[`ContextMenuQuickAction component > renders component 1`] = `
   <!--v-if-->
   <!-- @slot Content of the button --> <span class="oc-icon oc-icon-m oc-icon-passive"><!----></span>
   <div id="context-menu-drop-1" class="oc-drop oc-box-shadow-medium oc-rounded oc-overflow-hidden">
+    <!-- eslint-enable vuejs-accessibility/no-static-element-interactions -->
+    <!-- eslint-enable vuejs-accessibility/click-events-have-key-events -->
     <div class="oc-card oc-card-body oc-background-secondary oc-p-s"></div>
   </div>
 </button>"

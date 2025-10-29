@@ -13,6 +13,8 @@ exports[`SpaceHeader > should add the "squashed"-class when the sidebar is opene
           <!-- @slot Content of the button --> <span class="oc-icon oc-icon-m oc-icon-passive"><!----></span>
         </button>
         <div id="space-context-drop" class="oc-drop oc-box-shadow-medium oc-rounded" options="[object Object]">
+          <!-- eslint-enable vuejs-accessibility/no-static-element-interactions -->
+          <!-- eslint-enable vuejs-accessibility/click-events-have-key-events -->
           <div class="oc-card oc-card-body oc-background-secondary oc-p-s">
             <space-context-actions-stub actionoptions="[object Object]"></space-context-actions-stub>
           </div>
@@ -42,6 +44,8 @@ exports[`SpaceHeader > space description > should show the description 1`] = `
           <!-- @slot Content of the button --> <span class="oc-icon oc-icon-m oc-icon-passive"><!----></span>
         </button>
         <div id="space-context-drop" class="oc-drop oc-box-shadow-medium oc-rounded" options="[object Object]">
+          <!-- eslint-enable vuejs-accessibility/no-static-element-interactions -->
+          <!-- eslint-enable vuejs-accessibility/click-events-have-key-events -->
           <div class="oc-card oc-card-body oc-background-secondary oc-p-s">
             <space-context-actions-stub actionoptions="[object Object]"></space-context-actions-stub>
           </div>
@@ -74,6 +78,8 @@ exports[`SpaceHeader > space image > should show the default image if no other i
           <!-- @slot Content of the button --> <span class="oc-icon oc-icon-m oc-icon-passive"><!----></span>
         </button>
         <div id="space-context-drop" class="oc-drop oc-box-shadow-medium oc-rounded" options="[object Object]">
+          <!-- eslint-enable vuejs-accessibility/no-static-element-interactions -->
+          <!-- eslint-enable vuejs-accessibility/click-events-have-key-events -->
           <div class="oc-card oc-card-body oc-background-secondary oc-p-s">
             <space-context-actions-stub actionoptions="[object Object]"></space-context-actions-stub>
           </div>
@@ -92,7 +98,7 @@ exports[`SpaceHeader > space image > should show the default image if no other i
 
 exports[`SpaceHeader > space image > should show the set image 1`] = `
 "<div class="space-header oc-p-m oc-flex">
-  <div class="space-header-image"><img class="oc-cursor-pointer" alt="" src="blob:image"></div>
+  <div class="space-header-image"><button class="btn-toggle-image"><img alt="" src="blob:image"></button></div>
   <div class="space-header-infos">
     <div class="oc-flex oc-mb-s oc-flex-middle oc-flex-between">
       <div class="oc-flex oc-flex-middle space-header-infos-heading">
@@ -101,6 +107,8 @@ exports[`SpaceHeader > space image > should show the set image 1`] = `
           <!-- @slot Content of the button --> <span class="oc-icon oc-icon-m oc-icon-passive"><!----></span>
         </button>
         <div id="space-context-drop" class="oc-drop oc-box-shadow-medium oc-rounded" options="[object Object]">
+          <!-- eslint-enable vuejs-accessibility/no-static-element-interactions -->
+          <!-- eslint-enable vuejs-accessibility/click-events-have-key-events -->
           <div class="oc-card oc-card-body oc-background-secondary oc-p-s">
             <space-context-actions-stub actionoptions="[object Object]"></space-context-actions-stub>
           </div>

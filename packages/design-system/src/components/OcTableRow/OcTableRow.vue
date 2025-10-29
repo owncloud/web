@@ -9,6 +9,7 @@
     @dragleave="$emit('dragleave', $event)"
     @dragover="$emit('dragover', $event)"
     @mouseleave="$emit('mouseleave', $event)"
+    @blur="$emit('blur', $event)"
   >
     <oc-td v-if="isHidden" :colspan="lazyColspan">
       <span class="shimmer" />
@@ -81,6 +82,7 @@ interface Emits {
   (e: 'dragover', event: DragEvent): void
   (e: 'mouseleave', event: MouseEvent): void
   (e: 'itemVisible'): void
+  (e: 'blur', event: FocusEvent): void
 }
 defineOptions({
   name: 'OcTr',

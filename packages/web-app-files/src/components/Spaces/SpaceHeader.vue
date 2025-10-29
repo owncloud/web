@@ -7,13 +7,9 @@
       class="space-header-image"
       :class="{ 'space-header-image-expanded': imageExpanded || isMobileWidth }"
     >
-      <img
-        v-if="imageContent"
-        class="oc-cursor-pointer"
-        alt=""
-        :src="imageContent"
-        @click="toggleImageExpanded"
-      />
+      <button v-if="imageContent" class="btn-toggle-image" @click="toggleImageExpanded">
+        <img alt="" :src="imageContent" />
+      </button>
       <div v-else class="space-header-image-default oc-flex oc-flex-middle oc-flex-center">
         <oc-icon name="layout-grid" size="xxlarge" class="oc-px-m oc-py-m" />
       </div>
@@ -280,6 +276,13 @@ const isMobileWidth = inject<Ref<boolean>>('isMobileWidth')
       width: 100%;
       max-height: 100%;
       object-fit: cover;
+    }
+
+    .btn-toggle-image {
+      background: transparent;
+      border: none;
+      cursor: pointer;
+      outline: none;
     }
   }
 

@@ -1,7 +1,7 @@
 <template>
   <div class="oc-progress-pie" :data-fill="_fill">
     <div class="oc-progress-pie-container" />
-    <label v-if="showLabel" class="oc-progress-pie-label oc-text-muted" v-text="_label" />
+    <span v-if="showLabel" class="oc-progress-pie-label oc-text-muted" v-text="_label" />
   </div>
 </template>
 <script lang="ts" setup>

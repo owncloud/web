@@ -26,6 +26,7 @@
         @dragenter.prevent="dropItemStyling(item as BreadcrumbItem, index, false, $event)"
         @dragleave.prevent="dropItemStyling(item as BreadcrumbItem, index, true, $event)"
         @mouseleave="dropItemStyling(item as BreadcrumbItem, index, true, $event as DragEvent)"
+        @blur="dropItemStyling(item as BreadcrumbItem, index, true, $event as DragEvent)"
         @drop="dropItemEvent(item as BreadcrumbItem, index)"
       >
         <router-link

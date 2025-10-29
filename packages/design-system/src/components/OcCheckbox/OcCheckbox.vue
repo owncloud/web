@@ -1,5 +1,9 @@
 <template>
+  <!-- TODO: check whether we really need the click here -->
+  <!-- eslint-disable vuejs-accessibility/no-static-element-interactions -->
+  <!-- eslint-disable-next-line vuejs-accessibility/click-events-have-key-events -->
   <span @click="$emit('click', $event)">
+    <!-- eslint-enable vuejs-accessibility/no-static-element-interactions -->
     <input
       :id="id"
       v-model="model"

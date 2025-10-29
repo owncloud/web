@@ -6,6 +6,8 @@
       'oc-text-input-password-wrapper-danger': hasError
     }"
   >
+    <!-- Input label is handled in the OcTextInput component -->
+    <!-- eslint-disable-next-line vuejs-accessibility/form-control-has-label -->
     <input
       v-bind="attrs"
       ref="passwordInput"
