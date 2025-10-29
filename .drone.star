@@ -12,7 +12,7 @@ OC_CI_GOLANG_IMAGE = "owncloudci/golang:1.24"
 # the hugo version needs to be the same as in owncloud.github.io
 OC_CI_HUGO_STATIC_IMAGE = "hugomods/hugo:base-0.129.0"
 
-OC_CI_NODEJS_IMAGE = "owncloudci/nodejs:22"
+OC_CI_NODEJS_IMAGE = "owncloudci/nodejs:24"
 OC_CI_WAIT_FOR_IMAGE = "owncloudci/wait-for:latest"
 OC_UBUNTU_IMAGE = "owncloud/ubuntu:24.04"
 ONLYOFFICE_DOCUMENT_SERVER_IMAGE = "onlyoffice/documentserver:9.1.0"
