@@ -1,0 +1,15 @@
+{
+  "packages/web-app-activities": ["activities"],
+  "packages/web-app-admin-settings": ["admin-settings"],
+  "packages/web-app-app-store": ["app-store"],
+  "packages/web-app-epub-reader": ["epub-reader"],
+  "packages/web-app-external": ["external"],
+  "packages/web-app-files": ["files"],
+  "packages/web-app-ocm": ["ocm"],
+  "packages/web-app-password-protected-folders": ["password-protected-folders"],
+  "packages/web-app-pdf-viewer": ["pdf-viewer"],
+  "packages/web-app-preview": ["preview"],
+  "packages/web-app-search": ["search"],
+  "packages/web-app-text-editor": ["text-editor"],
+  "packages/web-app-webfinger": ["webfinger"]
+}
