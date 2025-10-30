@@ -14,6 +14,7 @@ Summary
 * Bugfix - Do not disable sharing of resources when managing spaces via claims: [#13213](https://github.com/owncloud/web/pull/13213)
 * Bugfix - Fix spinner loading continuously when resource is deleted: [#13223](https://github.com/owncloud/web/pull/13223)
 * Bugfix - Include Ubuntu font: [#13233](https://github.com/owncloud/web/pull/13233)
+* Bugfix - External share ID fallback: [#13253](https://github.com/owncloud/web/pull/13253)
 * Enhancement - Hide trashed spaces: [#13168](https://github.com/owncloud/web/pull/13168)
 * Enhancement - Drop beta badge from GeoGebra pinboards: [#13169](https://github.com/owncloud/web/pull/13169)
 * Enhancement - Add Excalidraw file icon: [#13172](https://github.com/owncloud/web/pull/13172)
@@ -72,6 +73,12 @@ Details
 
    https://github.com/owncloud/web/pull/13233
    https://canonical.com/legal/font-licence
+
+* Bugfix - External share ID fallback: [#13253](https://github.com/owncloud/web/pull/13253)
+
+   We now fallback to the original ID if decoding the external share ID fails.
+
+   https://github.com/owncloud/web/pull/13253
 
 * Enhancement - Hide trashed spaces: [#13168](https://github.com/owncloud/web/pull/13168)
 
