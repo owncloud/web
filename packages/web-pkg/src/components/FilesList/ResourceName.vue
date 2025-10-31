@@ -84,7 +84,6 @@ const htmlTitle = computed(() => {
   if (isExtensionDisplayed) {
     return `${unref(displayName)}${unref(displayExtension)}`
   }
-
   return unref(displayName)
 })
 </script>

@@ -6,6 +6,14 @@
     class="oc-flex"
     data-custom-key-bindings-disabled="true"
   >
+    <span id="search-description" class="oc-invisible-sr">
+      {{
+        $pgettext(
+          'Accesibility label to inform user that search results will appear below the search bar if they exist',
+          'Results will appear if they exist.'
+        )
+      }}
+    </span>
     <oc-search-bar
       id="files-global-search-bar"
       :label="searchLabel"
@@ -18,6 +26,9 @@
       cancel-button-variation="brand"
       cancel-button-appearance="raw-inverse"
       :cancel-handler="cancelSearch"
+      :aria-expanded="showDrop && term ? 'true' : 'false'"
+      aria-controls="files-global-search-options"
+      aria-describedby="search-description"
       @advanced-search="onKeyUpEnter"
       @input="updateTerm"
       @clear="onClear"
@@ -55,7 +66,7 @@
       close-on-click
       same-width-as-target
     >
-      <oc-list class="oc-list-divider">
+      <oc-list role="listbox" class="oc-list-divider">
         <li
           v-if="loading"
           class="loading spinner oc-flex oc-flex-center oc-flex-middle oc-text-muted"
@@ -80,6 +91,8 @@
               <li
                 v-for="providerSearchResultValue in getSearchResultForProvider(provider).values"
                 :key="providerSearchResultValue.id"
+                role="option"
+                :aria-selected="isPreviewElementActive(providerSearchResultValue.id)"
                 :data-search-id="providerSearchResultValue.id"
                 :class="{
                   active: isPreviewElementActive(providerSearchResultValue.id)

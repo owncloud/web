@@ -44,7 +44,8 @@
           size="large"
           :label="selectAllCheckboxLabel"
           :disabled="resources.length === disabledResources.length"
-          :label-hidden="true"
+          :label-hidden="false"
+          :label-classes="['oc-invisible-sr']"
           :model-value="areAllResourcesSelected"
           @click.stop="toggleSelectionAll"
         />
@@ -1052,6 +1053,12 @@ function getSharedWithAvatarItems(resource: Resource) {
 <style lang="scss">
 .oc-table.condensed > tbody > tr {
   height: 0 !important;
+}
+
+.remove-legend-styling {
+  margin: 0px;
+  padding: 0px;
+  border: 0;
 }
 
 .resource-table {

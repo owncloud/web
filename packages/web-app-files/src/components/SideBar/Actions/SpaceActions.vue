@@ -1,5 +1,8 @@
 <template>
   <div>
+    <label class="oc-invisible-sr" for="space-image-upload-input">
+      {{ $pgettext('Accesibility label to upload a space image', 'Upload space image') }}
+    </label>
     <input
       id="space-image-upload-input"
       ref="spaceImageInput"

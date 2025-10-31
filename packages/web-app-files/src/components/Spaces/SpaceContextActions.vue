@@ -1,6 +1,14 @@
 <template>
   <div>
     <context-action-menu :menu-sections="menuSections" :action-options="actionOptions" />
+    <label class="oc-invisible-sr" for="space-image-upload-input">
+      {{
+        $pgettext(
+          'Accesibility label to upload a space image in the space context actions',
+          'Upload space image'
+        )
+      }}
+    </label>
     <input
       id="space-image-upload-input"
       ref="spaceImageInput"

@@ -27,7 +27,8 @@
             class="oc-ml-s"
             :label="$gettext('Select all users')"
             :model-value="allUsersSelected"
-            :label-hidden="true"
+            :label-hidden="false"
+            :label-classes="['oc-invisible-sr']"
             @update:model-value="
               allUsersSelected ? unselectAllUsers() : selectUsers(paginatedItems)
             "

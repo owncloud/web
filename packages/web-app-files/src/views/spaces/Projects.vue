@@ -79,7 +79,7 @@
                   v-if="resource.thumbnail"
                   class="tile-preview"
                   :src="resource.thumbnail"
-                  alt=""
+                  :alt="resource.name"
                 />
               </template>
               <template v-else>
