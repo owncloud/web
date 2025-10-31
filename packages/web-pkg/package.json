@@ -68,7 +68,7 @@
     "mermaid": "^11.12.1",
     "oidc-client-ts": "^3.3.0",
     "p-queue": "^9.0.0",
-    "password-sheriff": "^1.1.1",
+    "password-sheriff": "^1.2.0",
     "pdf-lib": "^1.17.1",
     "pinia": "^3.0.3",
     "portal-vue": "^3.0.0",
