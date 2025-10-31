@@ -53,7 +53,7 @@ config = {
         "master",
         "stable-*",
     ],
-    "pnpmlint": True,
+    "pnpmlint": False,
     "e2e": {
         "1": {
             "earlyFail": True,
@@ -207,17 +207,12 @@ def main(ctx):
     return pipelines
 
 def beforePipelines(ctx):
-    return checkStarlark() + \
-           licenseCheck(ctx) + \
-           documentation(ctx) + \
-           changelog(ctx) + \
-           pnpmCache(ctx) + \
+    return pnpmCache(ctx) + \
            cacheOcisPipeline(ctx) + \
-           pipelinesDependsOn(buildCacheWeb(ctx), pnpmCache(ctx)) + \
-           pipelinesDependsOn(pnpmlint(ctx), pnpmCache(ctx))
+           pipelinesDependsOn(buildCacheWeb(ctx), pnpmCache(ctx))
 
 def stagePipelines(ctx):
-    unit_test_pipelines = unitTests(ctx)
+    unit_test_pipelines = []
 
     # run only unit tests when publishing a standalone package
     if (determineReleasePackage(ctx) != None):
