@@ -1005,8 +1005,8 @@ importers:
         specifier: ^9.0.0
         version: 9.0.0
       password-sheriff:
-        specifier: ^1.1.1
-        version: 1.1.1
+        specifier: ^1.2.0
+        version: 1.2.0
       pdf-lib:
         specifier: ^1.17.1
         version: 1.17.1
@@ -5756,8 +5756,8 @@ packages:
   parse5@8.0.0:
     resolution: {integrity: sha512-9m4m5GSgXjL4AjumKzq1Fgfp3Z8rsvjRNbnkVwfu2ImRqE5D0LnY2QfDen18FSY9C573YU5XxSapdHZTZ2WolA==}
 
-  password-sheriff@1.1.1:
-    resolution: {integrity: sha512-bt0ptyUs97Fb2ZXUcdQP0RYrBFjzO6KhGTjq4RkmR388c6wcT3khG0U7Bvvqwq3DyShEZ9IACed9JMVyAxdaCA==}
+  password-sheriff@1.2.0:
+    resolution: {integrity: sha512-O71+BrgfYpu88eb4X2juSmUZQtvwnkqyYmLicTJ3KPdJ7ZYuju5znIyLDSLFBjAKIAFDQEOh8slUMWCAISrHLw==}
 
   path-browserify@1.0.1:
     resolution: {integrity: sha512-b7uo2UCUOYZcnF/3ID0lulOJi/bafxa1xPe7ZPsammBSpjSWQkjNxlt635YGS2MiR9GjvuXCtz2emr3jbsz98g==}
@@ -12463,7 +12463,7 @@ snapshots:
     dependencies:
       entities: 6.0.0
 
-  password-sheriff@1.1.1: {}
+  password-sheriff@1.2.0: {}
 
   path-browserify@1.0.1: {}
 
