@@ -1,5 +1,8 @@
 <template>
   <oc-button id="context-menu-trigger-whitespace" aria-hidden appearance="raw">
+    <label class="oc-invisible-sr" for="context-menu-trigger-whitespace">
+      {{ $pgettext('Accessibility label', 'Show context menu') }}
+    </label>
     <oc-drop
       drop-id="context-menu-drop-whitespace"
       toggle="#context-menu-trigger-whitespace"

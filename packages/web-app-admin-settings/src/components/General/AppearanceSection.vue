@@ -28,6 +28,9 @@
         <div class="logo-wrapper">
           <img alt="" :src="currentTheme.logo.topbar" class="oc-p-xs" />
         </div>
+        <label for="logo-upload-input" class="oc-invisible-sr">
+          {{ $pgettext('Accesibility label to change logo', 'Change logo') }}
+        </label>
         <input
           id="logo-upload-input"
           ref="logoInput"

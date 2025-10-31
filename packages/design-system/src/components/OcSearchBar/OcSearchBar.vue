@@ -8,6 +8,10 @@
     <div class="oc-width-expand oc-position-relative">
       <input
         ref="searchInput"
+        role="combobox"
+        aria-autocomplete="list"
+        :aria-expanded="ariaExpanded"
+        :aria-controls="ariaControls"
         :class="inputClass"
         :aria-label="label"
         :value="searchQuery"
@@ -83,6 +87,8 @@ import { useGettext } from 'vue3-gettext'
  * @prop {string} [placeholder=''] - Placeholder text for the input field.
  * @prop {string} [label=''] - Aria-label for the input field.
  * @prop {boolean} [small=false] - Whether the search bar should be smaller in size.
+ * @prop {string} [ariaExpanded='false'] - Indicates if the dropdown is expanded (for combobox).
+ * @prop {string} [ariaControls=''] - ID of the dropdown element controlled by this input.
  * @prop {string} [buttonLabel='Search'] - Label for the search button.
  * @prop {boolean} [buttonHidden=false] - Whether to hide the search button visually.
  * @prop {boolean} [typeAhead=false] - If true, triggers the search event on each character input.
@@ -142,6 +148,8 @@ interface Props {
   cancelButtonVariation?: 'passive' | 'primary' | 'danger' | 'success' | 'warning' | 'brand'
   cancelButtonAppearance?: 'outline' | 'filled' | 'raw' | 'raw-inverse'
   cancelHandler?: () => void
+  ariaExpanded?: string
+  ariaControls?: string
 }
 
 interface Emits {
@@ -172,7 +180,9 @@ const {
   showCancelButton = false,
   cancelButtonVariation = 'primary',
   cancelButtonAppearance = 'raw',
-  cancelHandler = () => {}
+  cancelHandler = () => {},
+  ariaExpanded = 'false',
+  ariaControls = ''
 } = defineProps<Props>()
 const emit = defineEmits<Emits>()
 const slots = useSlots()

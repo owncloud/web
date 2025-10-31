@@ -15,7 +15,7 @@
       :aria-label="labelHidden ? label : null"
       @keydown.enter="keydownEnter"
     />
-    <label v-if="!labelHidden" :for="id" :class="labelClasses" v-text="label" />
+    <label v-if="!labelHidden" :for="id" :class="computedLabelClasses" v-text="label" />
   </span>
 </template>
 
@@ -69,6 +69,7 @@ interface Props {
   option?: unknown
   label?: string
   labelHidden?: boolean
+  labelClasses?: string[]
   size?: 'small' | 'medium' | 'large'
 }
 interface Emits {
@@ -89,7 +90,8 @@ const {
   label = null,
   labelHidden = false,
   size = 'medium',
-  modelValue = false
+  modelValue = false,
+  labelClasses = []
 } = defineProps<Props>()
 
 const emit = defineEmits<Emits>()
@@ -114,7 +116,7 @@ const classes = computed(() => {
   ]
 })
 
-const labelClasses = computed(() => ({ 'oc-cursor-pointer': !disabled }))
+const computedLabelClasses = computed(() => [{ 'oc-cursor-pointer': !disabled }, ...labelClasses])
 
 const isChecked = computed(() => {
   if (Array.isArray(model.value)) {

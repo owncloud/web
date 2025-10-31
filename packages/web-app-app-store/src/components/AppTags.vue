@@ -4,7 +4,7 @@
       v-for="tag in app.tags"
       :key="`app-tag-${app.id}-${tag}`"
       data-testid="tag-button"
-      size="small"
+      size="medium"
       class="oc-text-nowrap"
       type="button"
       @click="emitClick(tag)"
@@ -33,5 +33,6 @@ const emitClick = (tagName: string) => {
 .app-tags {
   display: flex;
   gap: 0.5rem;
+  flex-wrap: wrap;
 }
 </style>

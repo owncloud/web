@@ -4,7 +4,7 @@
       <span>{{ app.badge.label }}</span>
     </div>
     <div class="app-image">
-      <oc-img v-if="currentImage?.url" :src="currentImage?.url" />
+      <oc-img v-if="currentImage?.url" :src="currentImage?.url" :alt="app.name" />
       <div v-else class="fallback-icon">
         <oc-icon name="computer" size="xxlarge" />
       </div>

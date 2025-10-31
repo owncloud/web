@@ -8,6 +8,19 @@
       :class="{ 'space-header-image-expanded': imageExpanded || isMobileWidth }"
     >
       <button v-if="imageContent" class="btn-toggle-image" @click="toggleImageExpanded">
+        <label class="oc-invisible-sr" for="btn-toggle-image">
+          {{
+            imageExpanded
+              ? $pgettext(
+                  'Accessibility label to inform user when space image has been collapsed by being clicked on',
+                  'Collapse space image'
+                )
+              : $pgettext(
+                  'Accessibility label to inform user when space image has been expanded by being clicked on',
+                  'Expand space image'
+                )
+          }}
+        </label>
         <img alt="" :src="imageContent" />
       </button>
       <div v-else class="space-header-image-default oc-flex oc-flex-middle oc-flex-center">
@@ -56,6 +69,7 @@
         class="markdown-container oc-flex oc-flex-middle"
       >
         <text-editor is-read-only :current-content="markdownContent" />
+
         <div class="markdown-container-edit oc-ml-s">
           <router-link
             v-oc-tooltip="$gettext('Edit description')"
@@ -64,6 +78,9 @@
             :to="editReadMeContentLink"
           >
             <oc-icon name="pencil" size="small" fill-type="line" />
+            <span class="oc-invisible-sr">
+              {{ $gettext('Edit description') }}
+            </span>
           </router-link>
         </div>
       </div>

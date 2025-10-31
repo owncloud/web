@@ -98,7 +98,7 @@ exports[`SpaceHeader > space image > should show the default image if no other i
 
 exports[`SpaceHeader > space image > should show the set image 1`] = `
 "<div class="space-header oc-p-m oc-flex">
-  <div class="space-header-image"><button class="btn-toggle-image"><img alt="" src="blob:image"></button></div>
+  <div class="space-header-image"><button class="btn-toggle-image"><label class="oc-invisible-sr" for="btn-toggle-image">Expand space image</label> <img alt="" src="blob:image"></button></div>
   <div class="space-header-infos">
     <div class="oc-flex oc-mb-s oc-flex-middle oc-flex-between">
       <div class="oc-flex oc-flex-middle space-header-infos-heading">

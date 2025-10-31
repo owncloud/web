@@ -6,7 +6,7 @@ font:
     default:
       value: 0.875rem
     xsmall:
-      value: 0.72rem
+      value: 0.80rem
     small:
       value: 0.86rem
     medium:
