@@ -240,7 +240,8 @@ function initializeTippy() {
         } as Modifier<'fixVerticalPosition', unknown>
       ]
     },
-    content
+    content,
+    role: 'listbox'
   }
 
   if (unref(target)) {
