@@ -1,4 +1,9 @@
-import { defineConfig, devices } from '@playwright/test'
+import path from 'node:path'
+import { defineConfig, devices, ReporterDescription } from '@playwright/test'
+import { config } from '../e2e/config'
+
+const __dirname = path.dirname(new URL(import.meta.url).pathname)
+const reportsDir = path.resolve(__dirname, '../../', config.reportDir)
 
 /**
  * See https://playwright.dev/docs/test-configuration.
@@ -20,7 +25,12 @@ export default defineConfig({
   workers: process.env.CI ? 1 : undefined,
 
   // Reporter to use
-  reporter: 'html',
+  reporter: [
+    (process.env.CI && ['dot']) as ReporterDescription,
+    (!process.env.CI && ['list']) as ReporterDescription,
+    ['./reporters/a11y.ts', { outputFile: path.join(reportsDir, 'a11y-report.json') }]
+  ].filter(Boolean) as ReporterDescription[],
+  outputDir: reportsDir,
 
   use: {
     ignoreHTTPSErrors: true,

@@ -3,6 +3,7 @@ import util from 'util'
 import { sidebar } from '../utils'
 import { getActualExpiryDate } from '../../../utils/datePicker'
 import { clickResource } from '../resource/actions'
+import { objects } from '../../..'
 
 export interface createLinkArgs {
   page: Page
@@ -124,6 +125,15 @@ export const createLink = async (args: createLinkArgs): Promise<string> => {
     await sidebar.openPanel({ page: page, name: 'sharing' })
   }
   await page.locator(addPublicLinkButton).click()
+
+  const a11yObject = new objects.a11y.Accessibility({ page })
+  const violations = await a11yObject.getSevereAccessibilityViolations(
+    a11yObject.getSelectors().modal
+  )
+  expect(
+    violations,
+    `Found ${violations.length} severe accessibility violations in create public link modal`
+  ).toHaveLength(0)
 
   if (role) {
     await page.locator(publicLinkRoleToggle).click()

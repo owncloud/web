@@ -54,6 +54,12 @@
         appearance="filled"
         variation="primary"
         :disabled="confirmButtonDisabled"
+        :title="
+          $pgettext(
+            'Create link modal confirmation dropdown button title',
+            'Additional copy options'
+          )
+        "
       >
         <oc-icon size="small" name="arrow-down-s" />
       </oc-button>

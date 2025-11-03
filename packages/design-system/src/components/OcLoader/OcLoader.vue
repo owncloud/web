@@ -1,5 +1,7 @@
 <template>
-  <div :class="['oc-loader', { 'oc-loader-flat': flat }]" :aria-label="ariaLabel" />
+  <div :class="['oc-loader', { 'oc-loader-flat': flat }]">
+    <span class="oc-invisible-sr" data-testid="oc-loader-label" v-text="ariaLabel" />
+  </div>
 </template>
 
 <script lang="ts" setup>

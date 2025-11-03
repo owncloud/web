@@ -1,5 +1,6 @@
 import { Page } from '@playwright/test'
 import * as po from './actions'
+import { AxeResults } from 'axe-core'
 
 export class Accessibility {
   #page: Page
@@ -12,8 +13,15 @@ export class Accessibility {
     return po.selectors
   }
 
-  async getAccessibilityConformityViolations(include: string): Promise<any> {
+  async getAccessibilityConformityViolations(include: string): Promise<AxeResults['violations']> {
     return await po.analyzeAccessibilityConformityViolations({ page: this.#page, include })
+  }
+
+  async getSevereAccessibilityViolations(include: string): Promise<AxeResults['violations']> {
+    const violations = await this.getAccessibilityConformityViolations(include)
+    return violations.filter(
+      (violation) => violation.impact === 'critical' || violation.impact === 'serious'
+    )
   }
 
   async getAccessibilityConformityViolationsWithExclusions(

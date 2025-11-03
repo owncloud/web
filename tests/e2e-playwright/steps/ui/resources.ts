@@ -42,3 +42,20 @@ export async function isAbleToEditFileOrFolder({
   const userCanEdit = await resourceObject.canManageResource({ resource })
   return userCanEdit
 }
+
+export async function createDir({
+  actorsEnvironment,
+  stepUser,
+  directoryName
+}: {
+  actorsEnvironment: ActorsEnvironment
+  stepUser: string
+  directoryName: string
+}): Promise<void> {
+  const { page } = actorsEnvironment.getActor({ key: stepUser })
+  const resourceObject = new objects.applicationFiles.Resource({ page })
+  await resourceObject.create({
+    name: directoryName,
+    type: 'folder'
+  })
+}

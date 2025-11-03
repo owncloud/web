@@ -34,6 +34,7 @@
           class="oc-files-file-link-has-password oc-mr-xs"
           fill-type="line"
           :aria-label="$gettext('This link is password-protected')"
+          role="img"
         />
       </div>
       <expiration-date-indicator

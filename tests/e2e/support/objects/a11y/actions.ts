@@ -1,5 +1,7 @@
-import { Page } from '@playwright/test'
+import { Page, test } from '@playwright/test'
 import AxeBuilder from '@axe-core/playwright'
+import { AxeResults } from 'axe-core'
+import { config } from '../../../config'
 
 export const selectors = {
   files: '#files',
@@ -24,7 +26,9 @@ export const selectors = {
   uploadMenuBtn: '#upload-menu-btn',
   uploadContextMenu: '.files-app-bar-actions .tippy-content',
   appbarBatchActions: '#oc-appbar-batch-actions',
-  filesSpaceTableCheckbox: '#files-space-table .oc-checkbox'
+  filesSpaceTableCheckbox: '#files-space-table .oc-checkbox',
+  uploadMenuDropdown: '#upload-menu-drop',
+  appSidebar: '#app-sidebar'
 }
 
 const a11yRuleTags = ['wcag2a', 'wcag2aa', 'wcag21a', 'wcag21aa', 'best-practice']
@@ -33,13 +37,24 @@ const a11yRuleTags = ['wcag2a', 'wcag2aa', 'wcag21a', 'wcag21aa', 'best-practice
 export const analyzeAccessibilityConformityViolations = async (args: {
   page: Page
   include: string
-}): Promise<any> => {
+}): Promise<AxeResults['violations']> => {
+  if (config.skipA11y) {
+    return []
+  }
+
   const { page, include } = args
 
   const a11yResult = await new AxeBuilder({ page })
     .withTags(a11yRuleTags)
     .include(include)
     .analyze()
+
+  if (config.testRunner === 'playwright') {
+    test.info().attach('accessibility-scan', {
+      body: JSON.stringify(a11yResult, null, 2),
+      contentType: 'application/json'
+    })
+  }
 
   return a11yResult.violations
 }
@@ -48,7 +63,11 @@ export const analyzeAccessibilityConformityViolationsWithExclusions = async (arg
   page: Page
   include: string
   exclude: string | string[]
-}): Promise<any> => {
+}): Promise<AxeResults['violations']> => {
+  if (config.skipA11y) {
+    return []
+  }
+
   const { page, include, exclude } = args
 
   const axeBuilder = new AxeBuilder({ page }).withTags(a11yRuleTags).include(include)

@@ -1,10 +1,11 @@
-import { Page, Locator } from '@playwright/test'
+import { expect, Page, Locator } from '@playwright/test'
 import util from 'util'
 import Collaborator, { ICollaborator, IAccessDetails } from './collaborator'
 import { sidebar } from '../utils'
 import { clickResource } from '../resource/actions'
 import { User } from '../../../types'
 import { locatorUtils } from '../../../utils'
+import { objects } from '../../..'
 
 const invitePanel = '//*[@id="oc-files-sharing-sidebar"]'
 const quickShareButton =
@@ -69,8 +70,18 @@ export interface createShareArgs extends ShareArgs {
 
 export const createShare = async (args: createShareArgs): Promise<void> => {
   const { page, resource, recipients, via } = args
+  const a11yObject = new objects.a11y.Accessibility({ page })
+
   if (via !== 'URL_NAVIGATION') {
     await openSharingPanel(page, resource, via)
+
+    const violations = await a11yObject.getSevereAccessibilityViolations(
+      a11yObject.getSelectors().appSidebar
+    )
+    expect(
+      violations,
+      `Found ${violations.length} severe accessibility violations in app sidebar`
+    ).toHaveLength(0)
   }
   const expirationDate = recipients[0].expirationDate
 
@@ -91,6 +102,15 @@ export const createShare = async (args: createShareArgs): Promise<void> => {
     await page.locator(userTypeSelector).filter({ hasText: federatedShare }).click()
   }
   await Collaborator.inviteCollaborators({ page, collaborators: recipients })
+
+  const violations = await a11yObject.getSevereAccessibilityViolations(
+    a11yObject.getSelectors().appSidebar
+  )
+  expect(
+    violations,
+    `Found ${violations.length} severe accessibility violations in app sidebar`
+  ).toHaveLength(0)
+
   await sidebar.close({ page })
 }
 
