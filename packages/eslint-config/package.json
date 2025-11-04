@@ -17,7 +17,7 @@
   },
   "dependencies": {
     "@babel/eslint-parser": "^7.28.5",
-    "@typescript-eslint/parser": "^8.46.2",
+    "@typescript-eslint/parser": "^8.46.3",
     "eslint-config-prettier": "^10.1.8",
     "eslint-plugin-n": "^17.23.1",
     "eslint-plugin-promise": "^7.2.1",
@@ -26,9 +26,9 @@
     "eslint-plugin-vuejs-accessibility": "^2.4.1",
     "globals": "^16.5.0",
     "typescript": "^5.9.3",
-    "typescript-eslint": "^8.46.2"
+    "typescript-eslint": "^8.46.3"
   },
   "peerDependencies": {
-    "eslint": "^9.39.0"
+    "eslint": "^9.39.1"
   }
 }
