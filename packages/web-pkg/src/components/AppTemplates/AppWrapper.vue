@@ -1,6 +1,8 @@
+<!-- Keeping this comment out of the template because including it as a first element breaks the app -->
+<!-- eslint-disable vuejs-accessibility/no-static-element-interactions -->
 <template>
-  <!-- eslint-disable-next-line vuejs-accessibility/no-static-element-interactions -->
   <main :id="applicationId" class="app-wrapper oc-height-1-1" @keydown.esc="closeApp">
+    <!-- eslint-enable vuejs-accessibility/no-static-element-interactions -->
     <h1 class="oc-invisible-sr" v-text="pageTitle" />
     <app-top-bar
       v-if="!loading && !loadingError && resource"
