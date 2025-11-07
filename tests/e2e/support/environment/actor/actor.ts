@@ -77,7 +77,7 @@ export class ActorEnvironment extends EventEmitter implements Actor {
       })
     }
 
-    await this.page?.close()
+    await this.page?.close({ runBeforeUnload: true })
     await this.context?.close()
 
     this.emit('closed')
