@@ -313,6 +313,10 @@ const loadResourceTask = useTask(function* (signal) {
 }).restartable()
 
 const loadFileTask = useTask(function* (signal) {
+  if (!unref(resource)) {
+    return
+  }
+
   try {
     const newExtension = importResourceWithExtension(unref(resource))
     if (newExtension) {
