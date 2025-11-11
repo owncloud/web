@@ -586,14 +586,14 @@ def e2eTestsOnPlaywright(ctx):
 
     steps += ocisService()
 
-    steps += [{
+    steps.append({
         "name": "e2e-tests-playwright",
         "image": OC_CI_NODEJS_IMAGE,
         "environment": environment,
         "commands": [
             "pnpm test:e2e:playwright --project=chromium",
         ],
-    }]
+    })
 
     if not "skip-a11y" in ctx.build.title.lower():
         steps += uploadA11yResult(ctx)
@@ -691,6 +691,16 @@ def e2eTests(ctx):
             "SKIP_A11Y_TESTS": params["skipA11y"],
         }
 
+        if "suites" in matrix:
+            environment["TEST_SUITES"] = ",".join(params["suites"])
+            steps += filterTestSuitesToRun(ctx, params["suites"])
+        elif "features" in matrix:
+            environment["FEATURE_FILES"] = ",".join(params["features"])
+            steps += filterTestSuitesToRun(ctx, params["features"])
+        else:
+            print("Error: No suites or features defined for e2e test suite '%s'" % suite)
+            return []
+
         steps += restoreBuildArtifactCache(ctx, "pnpm", ".pnpm-store") + \
                  installPnpm() + \
                  restoreBrowsersCache() + \
@@ -720,22 +730,17 @@ def e2eTests(ctx):
             steps += (tikaService() if params["tikaNeeded"] else []) + \
                      ocisService(params["extraServerEnvironment"])
 
-        command = "bash run-e2e.sh "
-        if "suites" in matrix:
-            command += "--suites %s" % ",".join(params["suites"])
-        elif "features" in matrix:
-            command += "%s" % " ".join(params["features"])
-        else:
-            print("Error: No suites or features defined for e2e test suite '%s'" % suite)
-            return []
-
         steps += [{
                      "name": "e2e-tests",
                      "image": OC_CI_NODEJS_IMAGE,
                      "environment": environment,
                      "commands": [
+                         "cat %s/tests/drone/suites.env" % dir["web"],
+                         "source %s/tests/drone/suites.env || true" % dir["web"],
                          "cd tests/e2e",
-                         command,
+                         "echo $TEST_SUITES",
+                         "echo $FEATURE_FILES",
+                         "bash run-e2e.sh",
                      ],
                  }] + \
                  uploadTracingResult(ctx) + \
@@ -2044,5 +2049,23 @@ def uploadA11yResult(ctx):
             "when": {
                 "status": ["failure", "success"],
             },
+        },
+    ]
+
+def filterTestSuitesToRun(ctx, suites = []):
+    if "full-ci" in ctx.build.title.lower() and ctx.build.event == "cron":
+        return []
+    if len(suites) and "cucumber/" in suites[0]:
+        ENV = "FEATURE_FILES="
+    else:
+        ENV = "TEST_SUITES="
+    return [
+        {
+            "name": "filter-suites-to-run",
+            "image": OC_CI_NODEJS_IMAGE,
+            "commands": [
+                "node %s/tests/drone/filterTestSuitesToRun.js %s" % (dir["web"], ",".join(suites)),
+                "cat %s/tests/drone/suites.env" % dir["web"],
+            ],
         },
     ]
