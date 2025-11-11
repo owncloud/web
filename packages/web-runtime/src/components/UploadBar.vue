@@ -178,7 +178,7 @@ import { storeToRefs } from 'pinia'
 import { RouteLocationNamedRaw } from 'vue-router'
 import { useGettext } from 'vue3-gettext'
 
-interface UploadResult extends OcUppyFile {
+type UploadResult = OcUppyFile & {
   path?: string
   targetRoute?: RouteLocationNamedRaw
   status?: string

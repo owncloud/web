@@ -172,7 +172,7 @@ import { extractParentFolderName } from '@ownclouders/web-client'
 import { storeToRefs } from 'pinia'
 import { RouteLocationNamedRaw } from 'vue-router'
 
-interface UploadResult extends OcUppyFile {
+type UploadResult = OcUppyFile & {
   path?: string
   targetRoute?: RouteLocationNamedRaw
   status?: string

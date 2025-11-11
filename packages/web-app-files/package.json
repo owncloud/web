@@ -14,7 +14,7 @@
     "@ownclouders/design-system": "workspace:^",
     "@ownclouders/web-client": "workspace:*",
     "@ownclouders/web-pkg": "workspace:*",
-    "@uppy/core": "5.1.0",
+    "@uppy/core": "5.1.1",
     "@vueuse/core": "^11.0.0 || ^12.0.0 || ^13.0.0 || ^14.0.0",
     "axios": "1.13.2",
     "email-validator": "^2.0.4",
