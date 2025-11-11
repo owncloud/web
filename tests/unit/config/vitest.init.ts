@@ -1,16 +1,17 @@
-const IntersectionObserverMock = vi.fn(() => ({
-  disconnect: vi.fn(),
-  observe: vi.fn(),
-  takeRecords: vi.fn(),
-  unobserve: vi.fn()
-}))
+const IntersectionObserverMock = vi.fn(function () {
+  return {
+    disconnect: vi.fn(),
+    observe: vi.fn(),
+    takeRecords: vi.fn(),
+    unobserve: vi.fn()
+  }
+})
 
 vi.stubGlobal('IntersectionObserver', IntersectionObserverMock)
 
-const ResizeObserverMock = vi.fn(() => ({
-  observe: vi.fn(),
-  unobserve: vi.fn()
-}))
+const ResizeObserverMock = vi.fn(function () {
+  return { observe: vi.fn(), unobserve: vi.fn() }
+})
 
 vi.stubGlobal('ResizeObserver', ResizeObserverMock)
 

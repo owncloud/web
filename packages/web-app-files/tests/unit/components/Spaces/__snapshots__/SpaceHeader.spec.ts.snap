@@ -21,7 +21,7 @@ exports[`SpaceHeader > should add the "squashed"-class when the sidebar is opene
         </div>
       </div> <button type="button" aria-label="Open context menu and show members" class="oc-button oc-rounded oc-button-m oc-button-justify-content-center oc-button-gap-m oc-button-passive oc-button-passive-raw">
         <!--v-if-->
-        <!-- @slot Content of the button --> <span class="oc-icon oc-icon-s oc-icon-passive"><!----></span> <span class="space-header-people-count oc-text-small">17 members</span>
+        <!-- @slot Content of the button --> <span class="oc-icon oc-icon-s oc-icon-passive"><!----></span> <span class="space-header-people-count oc-text-small">19 members</span>
       </button>
     </div>
     <!--v-if-->
@@ -52,7 +52,7 @@ exports[`SpaceHeader > space description > should show the description 1`] = `
         </div>
       </div> <button type="button" aria-label="Open context menu and show members" class="oc-button oc-rounded oc-button-m oc-button-justify-content-center oc-button-gap-m oc-button-passive oc-button-passive-raw">
         <!--v-if-->
-        <!-- @slot Content of the button --> <span class="oc-icon oc-icon-s oc-icon-passive"><!----></span> <span class="space-header-people-count oc-text-small">17 members</span>
+        <!-- @slot Content of the button --> <span class="oc-icon oc-icon-s oc-icon-passive"><!----></span> <span class="space-header-people-count oc-text-small">19 members</span>
       </button>
     </div>
     <!--v-if-->
@@ -86,7 +86,7 @@ exports[`SpaceHeader > space image > should show the default image if no other i
         </div>
       </div> <button type="button" aria-label="Open context menu and show members" class="oc-button oc-rounded oc-button-m oc-button-justify-content-center oc-button-gap-m oc-button-passive oc-button-passive-raw">
         <!--v-if-->
-        <!-- @slot Content of the button --> <span class="oc-icon oc-icon-s oc-icon-passive"><!----></span> <span class="space-header-people-count oc-text-small">17 members</span>
+        <!-- @slot Content of the button --> <span class="oc-icon oc-icon-s oc-icon-passive"><!----></span> <span class="space-header-people-count oc-text-small">19 members</span>
       </button>
     </div>
     <!--v-if-->
@@ -115,7 +115,7 @@ exports[`SpaceHeader > space image > should show the set image 1`] = `
         </div>
       </div> <button type="button" aria-label="Open context menu and show members" class="oc-button oc-rounded oc-button-m oc-button-justify-content-center oc-button-gap-m oc-button-passive oc-button-passive-raw">
         <!--v-if-->
-        <!-- @slot Content of the button --> <span class="oc-icon oc-icon-s oc-icon-passive"><!----></span> <span class="space-header-people-count oc-text-small">17 members</span>
+        <!-- @slot Content of the button --> <span class="oc-icon oc-icon-s oc-icon-passive"><!----></span> <span class="space-header-people-count oc-text-small">19 members</span>
       </button>
     </div>
     <!--v-if-->

@@ -59,7 +59,7 @@ describe('useImages', () => {
     })
 
     Object.defineProperty(global, 'Image', {
-      value: vi.fn(() => {
+      value: vi.fn(function () {
         const image = { ...mockImage }
 
         setTimeout(() => {
@@ -154,7 +154,7 @@ describe('useImages', () => {
 
     it('should replace failed image conversions with error message', async () => {
       Object.defineProperty(global, 'Image', {
-        value: vi.fn(() => {
+        value: vi.fn(function () {
           const image = { ...mockImage }
 
           setTimeout(() => {
@@ -205,7 +205,7 @@ describe('useImages', () => {
 
     it('should handle mixed scenarios with some successful and some failed conversions', async () => {
       Object.defineProperty(global, 'Image', {
-        value: vi.fn(() => {
+        value: vi.fn(function () {
           const image = { ...mockImage }
 
           setTimeout(() => {

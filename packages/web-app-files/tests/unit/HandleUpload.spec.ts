@@ -269,7 +269,9 @@ const getWrapper = ({
   const resourceConflict = mock<UploadResourceConflict>()
   resourceConflict.getConflicts.mockReturnValue(conflicts)
   resourceConflict.displayOverwriteDialog.mockResolvedValue(conflictHandlerResult)
-  vi.mocked(UploadResourceConflict).mockImplementation(() => resourceConflict)
+  vi.mocked(UploadResourceConflict).mockImplementation(function () {
+    return resourceConflict
+  })
 
   const route = mock<RouteLocationNormalizedLoaded>()
   route.params.driveAliasAndItem = '1'

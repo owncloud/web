@@ -32,9 +32,11 @@ const createdResourceMock = {
 }
 
 vi.mock('../../../../../src/composables/webWorkers/exportAsPdfWorker/renderer', () => ({
-  PDFRenderer: vi.fn().mockImplementation(() => ({
-    renderAsArrayBuffer: vi.fn().mockResolvedValue(new ArrayBuffer(1024))
-  }))
+  PDFRenderer: vi.fn().mockImplementation(function () {
+    return {
+      renderAsArrayBuffer: vi.fn().mockResolvedValue(new ArrayBuffer(1024))
+    }
+  })
 }))
 
 describe('export as PDF worker', () => {
