@@ -9,7 +9,8 @@ export default defineConfig({
     coverage: {
       provider: 'v8',
       reportsDirectory: `${root}/coverage`,
-      reporter: 'lcov'
+      reporter: 'lcov',
+      include: ['packages/*/src/**/*.ts', 'packages/*/src/**/*.vue']
     }
   }
 })

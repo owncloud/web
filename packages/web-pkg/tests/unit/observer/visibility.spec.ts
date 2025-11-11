@@ -10,7 +10,7 @@ const reset = () => {
     disconnect: vi.fn(),
     unobserve: vi.fn()
   } as unknown as IntersectionObserver
-  window.IntersectionObserver = vi.fn().mockImplementation((cb) => {
+  window.IntersectionObserver = vi.fn().mockImplementation(function (cb) {
     callback = cb
     return mockIntersectionObserver
   })

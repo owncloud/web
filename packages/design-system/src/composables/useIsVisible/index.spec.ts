@@ -10,7 +10,9 @@ const mockIntersectionObserver = () => {
       unobserve: vi.fn()
     }
 
-    window.IntersectionObserver = vi.fn().mockImplementation(() => mock)
+    window.IntersectionObserver = vi.fn().mockImplementation(function () {
+      return mock
+    })
 
     return {
       mock,

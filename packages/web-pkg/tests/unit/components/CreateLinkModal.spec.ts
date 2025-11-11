@@ -87,7 +87,9 @@ describe('CreateLinkModal', () => {
       expect(consoleMock).toHaveBeenCalledTimes(1)
     })
     it('calls clipboard after link creation', async () => {
-      global.ClipboardItem = vi.fn().mockImplementation((data) => ({ data })) as any
+      global.ClipboardItem = vi.fn().mockImplementation(function (data) {
+        return { data }
+      }) as any
       global.navigator = {
         ...global.navigator,
         clipboard: {
