@@ -736,10 +736,8 @@ def e2eTests(ctx):
                      "environment": environment,
                      "commands": [
                          "cat %s/tests/drone/suites.env" % dir["web"],
-                         "source %s/tests/drone/suites.env || true" % dir["web"],
+                         ". %s/tests/drone/suites.env || true" % dir["web"],
                          "cd tests/e2e",
-                         "echo $TEST_SUITES",
-                         "echo $FEATURE_FILES",
                          "bash run-e2e.sh",
                      ],
                  }] + \
