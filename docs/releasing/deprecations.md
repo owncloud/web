@@ -18,6 +18,7 @@ The following features are deprecated and **will be removed** in the next major 
 
 | Component/Feature | Deprecated | Migration | Reference | Reasoning |
 |---|---|---|---|---|---|
+| `owncloud-embed:share` event | November 12, 2025 | Use `owncloud-embed:share-links` event instead | [PR #13296](https://github.com/owncloud/web/pull/13296) | New event provides structured data with both URL and optional password |
 
 ## Migration History
 

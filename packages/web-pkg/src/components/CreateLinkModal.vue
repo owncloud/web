@@ -71,7 +71,7 @@
               class="oc-modal-body-actions-confirm-password action-menu-item"
               appearance="raw"
               @click="$emit('confirm', { copyPassword: true })"
-              >{{ $gettext('Copy link and password') }}
+              >{{ confirmPasswordButtonText }}
             </oc-button>
           </li>
         </oc-list>
@@ -145,6 +145,14 @@ const confirmButtonText = computed(() => {
   return $gettext('Copy link')
 })
 
+const confirmPasswordButtonText = computed(() => {
+  if (unref(isEmbedEnabled)) {
+    return $gettext('Share link(s) and password(s)')
+  }
+
+  return $gettext('Copy link and password')
+})
+
 const passwordInputKey = ref(uuidV4())
 const roleRefs = ref<Record<string, RoleRef>>({})
 
@@ -211,9 +219,19 @@ const onConfirm = async (options: { copyPassword?: boolean } = {}) => {
     const failed = result.filter(({ status }) => status === 'rejected') as PromiseRejectedResult[]
 
     if (succeeded.length && unref(isEmbedEnabled)) {
+      // **DEPRECATED**: Always emit the share url for backwards compatibility
       postMessage<string[]>(
         'owncloud-embed:share',
         succeeded.map(({ value }) => value.webUrl)
+      )
+
+      // Always emit new event with objects, include password only when copyPassword is enabled
+      postMessage<Array<{ url: string; password?: string }>>(
+        'owncloud-embed:share-links',
+        succeeded.map(({ value }) => ({
+          url: value.webUrl,
+          ...(options.copyPassword && { password: password.value })
+        }))
       )
     }
 
