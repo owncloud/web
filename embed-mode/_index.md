@@ -35,10 +35,13 @@ To maintain uniformity and ease of handling, each event encapsulates the same st
 | Name | Data | Description |
 | --- | --- | --- |
 | **owncloud-embed:select** | Resource[] | Gets emitted when user selects resources or location via the select action |
-| **owncloud-embed:share** | string[] | Gets emitted when user selects resources and shares them via the "Share links" action |
+| **owncloud-embed:share** | string[] | **DEPRECATED**: Gets emitted when user selects resources and shares them via the "Share links" action. Use `owncloud-embed:share-links` instead. |
+| **owncloud-embed:share-links** | Array<{ url: string; password?: string }> | Gets emitted when user selects resources and shares them via the "Share link(s)" or "Share link(s) and password(s)" action. Each object contains the link URL and optionally the password (when shared with password). |
 | **owncloud-embed:cancel** | null | Gets emitted when user attempts to close the embedded instance via "Cancel" action |
 
 ### Example
+
+#### Selecting resources
 
 ```html
 <iframe src="https://my-owncloud-web-instance?embed=true"></iframe>
@@ -55,6 +58,28 @@ To maintain uniformity and ease of handling, each event encapsulates the same st
   }
 
   window.addEventListener('message', selectEventHandler)
+</script>
+```
+
+#### Sharing links with password
+
+```html
+<iframe src="https://my-owncloud-web-instance?embed=true"></iframe>
+
+<script>
+  function shareLinksEventHandler(event) {
+    if (event.data?.name !== 'owncloud-embed:share-links') {
+      return
+    }
+
+    const links = event.data.data // Array<{ url: string; password?: string }>
+
+    links.forEach(link => console.log("Link", link.url, "Password", link.password))
+
+    doSomethingWithSharedLinks(links)
+  }
+
+  window.addEventListener('message', shareLinksEventHandler)
 </script>
 ```
 
