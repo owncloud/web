@@ -22,6 +22,7 @@ Summary
 * Enhancement - Add Visio file icons: [#13197](https://github.com/owncloud/web/pull/13197)
 * Enhancement - Add table caption: [#13224](https://github.com/owncloud/web/pull/13224)
 * Enhancement - Use API groups search in admin settings: [#13235](https://github.com/owncloud/web/pull/13235)
+* Enhancement - Embed mode share links with password: [#13296](https://github.com/owncloud/web/pull/13296)
 
 Details
 -------
@@ -141,6 +142,20 @@ Details
    endpoint.
 
    https://github.com/owncloud/web/pull/13235
+
+* Enhancement - Embed mode share links with password: [#13296](https://github.com/owncloud/web/pull/13296)
+
+   In embed mode, the "Copy link and password" button text has been changed to
+   "Share link(s) and password(s)". When sharing links in embed mode, a new event
+   `owncloud-embed:share-links` is now emitted that contains an array of objects
+   with the link URL and optionally the password (when the "Share link(s) and
+   password(s)" button is clicked). This allows parent applications to handle both
+   the link and password programmatically.
+
+   DEPRECATION NOTICE: This deprecates the `owncloud-embed:share` event. The
+   existing event continues to be emitted for backward compatibility.
+
+   https://github.com/owncloud/web/pull/13296
 
 Changelog for ownCloud Web [12.1.0] (2025-10-02)
 =======================================
