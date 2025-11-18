@@ -85,7 +85,7 @@
   "devDependencies": {
     "@ownclouders/web-test-helpers": "workspace:^",
     "@types/lodash-es": "4.17.12",
-    "@vitest/web-worker": "4.0.8",
+    "@vitest/web-worker": "4.0.10",
     "clean-publish": "6.0.1",
     "vite": "7.2.2",
     "vite-plugin-dts": "4.5.4",
