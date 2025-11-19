@@ -14,6 +14,7 @@
         :appearance="appearance"
         :variation="variation"
         :action-options="actionOptions"
+        :has-limited-screen-space="true"
         class="context-menu oc-files-context-action oc-px-s oc-rounded oc-menu-item-hover"
       />
     </oc-list>
