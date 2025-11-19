@@ -39,17 +39,19 @@
           <div
             class="spaces-list-filters oc-flex oc-flex-between oc-flex-wrap oc-flex-bottom oc-mx-m oc-mb-m"
           >
-            <div class="oc-flex">
-              <div class="oc-mr-m oc-flex oc-flex-middle">
-                <oc-icon name="filter-2" class="oc-mr-xs" />
-                <span v-text="$gettext('Filter:')" />
+            <fieldset class="oc-flex">
+              <div>
+                <legend class="oc-mr-m oc-flex oc-flex-middle">
+                  <oc-icon name="filter-2" class="oc-mr-xs" />
+                  <span v-text="$gettext('Filter:')" />
+                </legend>
               </div>
               <item-filter-toggle
                 :filter-label="$gettext('Include disabled')"
                 filter-name="includeDisabled"
                 class="spaces-list-filter-include-disabled oc-mr-s"
               />
-            </div>
+            </fieldset>
             <oc-text-input
               id="spaces-filter"
               v-model="filterTerm"

@@ -21,11 +21,13 @@ exports[`Users view > list view > renders initially warning if filters are manda
       </div>
       <div data-v-10ab5d2a="" id="user-list" class="">
         <div class="user-filters oc-flex oc-flex-between oc-flex-wrap oc-flex-bottom oc-mx-m oc-mb-m">
-          <div data-v-10ab5d2a="" class="oc-flex oc-flex-middle">
-            <div data-v-10ab5d2a="" class="oc-mr-m oc-flex oc-flex-middle"><span data-v-10ab5d2a="" class="oc-icon oc-icon-m oc-icon-passive oc-mr-xs"><!----></span> <span data-v-10ab5d2a="">Filter:</span></div>
+          <fieldset data-v-10ab5d2a="" class="oc-flex oc-flex-middle">
+            <div data-v-10ab5d2a="">
+              <legend data-v-10ab5d2a="" class="oc-mr-m oc-flex oc-flex-middle"><span data-v-10ab5d2a="" class="oc-icon oc-icon-m oc-icon-passive oc-mr-xs"><!----></span> <span data-v-10ab5d2a="">Filter:</span></legend>
+            </div>
             <item-filter-stub data-v-10ab5d2a="" filterlabel="Groups" items="undefined" filtername="groups" optionfilterlabel="Filter groups" showoptionfilter="true" allowmultiple="true" idattribute="id" displaynameattribute="displayName" filterableattributes="displayName" closeonclick="false" class="oc-mr-s"></item-filter-stub>
             <item-filter-stub data-v-10ab5d2a="" filterlabel="Roles" items="[object Object],[object Object],[object Object],[object Object]" filtername="roles" optionfilterlabel="Filter roles" showoptionfilter="true" allowmultiple="true" idattribute="id" displaynameattribute="displayName" filterableattributes="displayName" closeonclick="false"></item-filter-stub>
-          </div>
+          </fieldset>
           <div data-v-10ab5d2a="" class="oc-flex oc-flex-middle">
             <div data-v-10ab5d2a="" class="" modelmodifiers="[object Object]" autocomplete="off"><label class="oc-label" for="users-filter">Search</label>
               <div class="oc-position-relative">
@@ -69,11 +71,13 @@ exports[`Users view > list view > renders list initially 1`] = `
       </div>
       <div data-v-10ab5d2a="" id="user-list" class="">
         <div class="user-filters oc-flex oc-flex-between oc-flex-wrap oc-flex-bottom oc-mx-m oc-mb-m">
-          <div data-v-10ab5d2a="" class="oc-flex oc-flex-middle">
-            <div data-v-10ab5d2a="" class="oc-mr-m oc-flex oc-flex-middle"><span data-v-10ab5d2a="" class="oc-icon oc-icon-m oc-icon-passive oc-mr-xs"><!----></span> <span data-v-10ab5d2a="">Filter:</span></div>
+          <fieldset data-v-10ab5d2a="" class="oc-flex oc-flex-middle">
+            <div data-v-10ab5d2a="">
+              <legend data-v-10ab5d2a="" class="oc-mr-m oc-flex oc-flex-middle"><span data-v-10ab5d2a="" class="oc-icon oc-icon-m oc-icon-passive oc-mr-xs"><!----></span> <span data-v-10ab5d2a="">Filter:</span></legend>
+            </div>
             <item-filter-stub data-v-10ab5d2a="" filterlabel="Groups" items="undefined" filtername="groups" optionfilterlabel="Filter groups" showoptionfilter="true" allowmultiple="true" idattribute="id" displaynameattribute="displayName" filterableattributes="displayName" closeonclick="false" class="oc-mr-s"></item-filter-stub>
             <item-filter-stub data-v-10ab5d2a="" filterlabel="Roles" items="[object Object],[object Object],[object Object],[object Object]" filtername="roles" optionfilterlabel="Filter roles" showoptionfilter="true" allowmultiple="true" idattribute="id" displaynameattribute="displayName" filterableattributes="displayName" closeonclick="false"></item-filter-stub>
-          </div>
+          </fieldset>
           <div data-v-10ab5d2a="" class="oc-flex oc-flex-middle">
             <div data-v-10ab5d2a="" class="" modelmodifiers="[object Object]" autocomplete="off"><label class="oc-label" for="users-filter">Search</label>
               <div class="oc-position-relative">
