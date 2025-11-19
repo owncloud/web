@@ -22,7 +22,7 @@ $ cd web
 $ pnpm install
 ```
 
-### Unit Tests
+## Unit Tests
 
 We have a steadily growing coverage of unit tests. You can run them locally via
 
@@ -34,7 +34,7 @@ $ pnpm -r test:unit
 You can also specify which package to run the test on, such as: `pnpm --filter @ownclouders/web-pkg test:unit`.
 Alternatively, tests can also be run by navigating to the package name and then running `pnpm test:unit`.
 
-#### Unit Test File Structure
+### Unit Test File Structure
 
 Our unit tests spec files follow a simple structure:
 
@@ -46,16 +46,16 @@ We usually organize tests with nested `describe` blocks. If you would like to ge
 the structure, scope and goals of your unit tests before actually writing some, we invite you to make a pull request
 with only `describe` blocks and nested `it.todo("put your test description here")` lines.
 
-### E2E Tests (Playwright)
+## E2E Tests (Playwright)
 
 Our end-to-end test suite is built upon the [Playwright Framework](https://github.com/microsoft/playwright),
 which makes it easy to write tests, debug them and have them run cross-browser with minimal overhead.
 
-#### Preparation
+### Preparation
 
 Please make sure you have installed all dependencies and started the server(s) as described in [tooling]({{< ref "tooling.md#development-setup" >}}).
 
-#### Prepare Web
+### Prepare Web
 
 Bundle the web frontend with the following command:
 
@@ -65,7 +65,7 @@ $ pnpm build
 
 Our compose setup automatically mounts it into an oCIS backend, respectively. Web also gets recompiled on changes.
 
-#### Start Web
+### Start Web
 
 Start the web with the following command:
 
@@ -75,7 +75,7 @@ docker compose up
 
 This will start all the services. The ENV variables specific to each services are defined in the `docker-compose.yml` file.
 
-#### Run E2E Tests
+### Run E2E Tests
 
 The following command will run all available e2e tests:
 
@@ -83,7 +83,7 @@ The following command will run all available e2e tests:
 $ pnpm test:e2e:cucumber 'tests/e2e/cucumber/**/*.feature'
 ```
 
-#### Options
+### Options
 
 To run a particular test, simply add the feature file and line number to the test command, e.g. `pnpm test:e2e:cucumber tests/e2e/cucumber/features/smoke/admin-settings/users.feature:84`
 
@@ -111,7 +111,7 @@ To then open e.g. the tracing from the `REPORT_DIR`, run
 $ npx playwright show-trace path/to/file.zip
 ```
 
-#### Lint E2E Test Code
+### Lint E2E Test Code
 
 Run the following command to find out the lint issues early in the test codes:
 
@@ -127,7 +127,7 @@ $ pnpm lint --fix
 
 If the lint problems are not fixed by `--fix` option, we have to manually fix the code.
 
-### Analyze the Test Report
+## Analyze the Test Report
 
 The cucumber library is used as the test runner for e2e tests. The report generator script lives inside the `tests/e2e/cucumber/report` folder. If you want to create a report after the tests are done, run the command:
 
@@ -144,15 +144,15 @@ To see all available options run
 node tests/e2e/cucumber/report --help
 ```
 
-### E2E Tests on oCIS With Keycloak
+## E2E Tests on oCIS With Keycloak
 
 We can run some of the e2e tests on oCIS setup with Keycloak as an external idp. To run tests against locally, please follow the steps below:
 
-#### Run oCIS With Keycloak
+### Run oCIS With Keycloak
 
 There's a documentation to serve [oCIS with Keycloak](https://owncloud.dev/ocis/deployment/ocis_keycloak/). Please follow each step to run **oCIS with Keycloak**.
 
-#### Run E2E Tests
+### Run E2E Tests
 
 ```bash
 KEYCLOAK=true \
@@ -167,7 +167,7 @@ Following environment variables come in use while running e2e tests on oCIS with
 - `KEYCLOAK=true` runs the tests with Keycloak
 - `KEYCLOAK_REALM` sets oCIS realm name used on Keycloak
 
-### E2E Tests With Predefiend Users (`@predefined-users`)
+## E2E Tests With Predefiend Users (`@predefined-users`)
 
 It is possible to run e2e tests with predefined users. This is useful for running tests in a production-like environment.
 The following environment variables are used to run the tests with predefined users:
@@ -242,3 +242,25 @@ All tests which are related to:
 - Features enabled/disabled
 - Running latest tests against an older version of oCIS/Web
 - Large file uploads may take longer time
+
+## Usage of `web-packages.txt` In the Test Suite
+
+Test suites may include the `web-packages.txt` file to denote which web packages changes affect the defined test scenarios. This information is used in CI pipelines to determine which test suites to run based on the changed web packages.
+
+The `web-packages.txt` file should be included within the test suite directory as shown below:
+
+```
+└── tests/e2e/cucumber/features
+    └── admin-settings
+        ├── users.feature
+        └── web-packages.txt
+```
+
+And the `web-packages.txt` file should list the dependent web packages, one per line, for example:
+
+NOTE: The package name should start with `web-` in order to be recognized correctly, if not, the line will be ignored.
+
+```
+web-app-files
+web-app-admin-settings
+```
