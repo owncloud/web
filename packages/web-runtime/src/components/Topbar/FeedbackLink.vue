@@ -12,7 +12,12 @@
     >
       <oc-icon name="feedback" />
     </oc-button>
-    <p id="oc-feedback-link-description" class="oc-invisible-sr" v-text="descriptionOrFallback" />
+    <p
+      id="oc-feedback-link-description"
+      class="oc-invisible-sr"
+      aria-hidden="true"
+      v-text="descriptionOrFallback"
+    />
   </div>
 </template>
 
