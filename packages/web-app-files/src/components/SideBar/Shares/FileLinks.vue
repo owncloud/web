@@ -1,7 +1,7 @@
 <template>
   <div id="oc-files-file-link" class="oc-position-relative">
     <div class="oc-flex oc-flex-middle">
-      <h3 class="oc-text-bold oc-text-medium oc-m-rm" v-text="$gettext('Public links')" />
+      <h4 class="oc-text-bold oc-text-medium oc-m-rm" v-text="$gettext('Public links')" />
       <oc-contextual-helper v-if="helpersEnabled" class="oc-pl-xs" v-bind="shareViaLinkHelp" />
     </div>
     <p v-if="!directLinks.length" class="files-links-empty oc-mt-m" v-text="noLinksLabel" />
@@ -49,14 +49,14 @@
     </div>
     <div v-if="indirectLinks.length" class="files-links-indirect oc-mt-m">
       <hr class="oc-my-m" />
-      <h4 class="oc-text-bold oc-text-medium oc-m-rm">
+      <h5 class="oc-text-bold oc-text-medium oc-m-rm">
         {{ indirectLinksHeading }}
         <oc-contextual-helper
           v-if="helpersEnabled"
           class="oc-pl-xs"
           v-bind="shareViaIndirectLinkHelp"
         />
-      </h4>
+      </h5>
       <div
         class="files-links-indirect-list"
         :class="{ 'files-links-indirect-list-open': !indirectLinkListCollapsed }"
