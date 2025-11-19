@@ -53,12 +53,7 @@
               :title="$gettext('External user')"
             />
           </div>
-          <div
-            v-if="isExternalShare"
-            class="oc-text-small"
-            data-testid="external-share-domain"
-            :aria-label="`External Share Domain: ${externalShareDomainName}`"
-          >
+          <div v-if="isExternalShare" class="oc-text-small" data-testid="external-share-domain">
             {{ externalShareDomainName }}
           </div>
           <div>

@@ -112,3 +112,35 @@ export async function updateShareeRole({
     })
   }
 }
+
+export async function shareResource({
+  actorsEnvironment,
+  usersEnvironment,
+  stepUser,
+  resource,
+  resourceType,
+  recipient
+}: {
+  actorsEnvironment: ActorsEnvironment
+  usersEnvironment: UsersEnvironment
+  stepUser: string
+  resource: string
+  resourceType: ResourceType
+  recipient: string
+}): Promise<void> {
+  const { page } = actorsEnvironment.getActor({ key: stepUser })
+  const shareObject = new objects.applicationFiles.Share({ page })
+  const roleId = await getDynamicRoleIdByName(
+    usersEnvironment.getUser({ key: stepUser }),
+    'Can view',
+    resourceType
+  )
+
+  await shareObject.create({
+    resource,
+    recipients: [
+      { collaborator: usersEnvironment.getUser({ key: recipient }), role: roleId, type: 'user' }
+    ],
+    via: 'QUICK_ACTION'
+  })
+}

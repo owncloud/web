@@ -14,7 +14,7 @@ import {
   waitForCollaboraEditor
 } from './webOffice'
 import { editor, sidebar } from '../utils'
-import { environment, utils } from '../../../../support'
+import { environment, objects, utils } from '../../../../support'
 import { config } from '../../../../config'
 import { File, Space } from '../../../types'
 import { substitute } from '../../../utils/substitute'
@@ -323,6 +323,16 @@ export const createNewFolder = async ({
   resource: string
 }): Promise<void> => {
   await page.locator(createNewFolderButton).click()
+
+  const a11yObject = new objects.a11y.Accessibility({ page })
+  const violations = await a11yObject.getSevereAccessibilityViolations(
+    a11yObject.getSelectors().modal
+  )
+  expect(
+    violations,
+    `Found ${violations.length} severe accessibility violations in create new folder modal`
+  ).toHaveLength(0)
+
   await page.locator(resourceNameInput).fill(resource)
   await Promise.all([
     page.waitForResponse((resp) => resp.status() === 207 && resp.request().method() === 'PROPFIND'),
@@ -588,6 +598,15 @@ const performUpload = async (args: uploadResourceArgs): Promise<void> => {
   }
 
   await page.locator(resourceUploadButton).click()
+
+  const a11yObject = new objects.a11y.Accessibility({ page })
+  const violations = await a11yObject.getSevereAccessibilityViolations(
+    a11yObject.getSelectors().uploadMenuDropdown
+  )
+  expect(
+    violations,
+    `Found ${violations.length} severe accessibility violations in upload menu dropdown`
+  ).toHaveLength(0)
 
   let uploadAction: Promise<void> = page
     .locator(type === 'folder' ? folderUploadInput : fileUploadInput)
@@ -1130,6 +1149,7 @@ export const renameResource = async (args: renameResourceArgs): Promise<void> =>
 
   await page.locator(util.format(resourceNameSelector, resourceBase)).click({ button: 'right' })
   await page.locator(util.format(filesContextMenuAction, 'rename')).click()
+  await page.locator(fileRenameInput).clear()
   await page.locator(fileRenameInput).fill(newName)
   await Promise.all([
     page.waitForResponse(

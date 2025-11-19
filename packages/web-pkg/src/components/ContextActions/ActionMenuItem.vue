@@ -5,10 +5,11 @@
       :type="componentType"
       v-bind="componentProps"
       :class="[action.class, 'action-menu-item', 'oc-py-s', 'oc-px-m', 'oc-width-1-1']"
-      :aria-label="componentProps.disabled ? action.disabledTooltip?.(actionOptions) : ''"
+      :aria-label="componentProps.disabled ? action.disabledTooltip?.(actionOptions) : null"
       data-testid="action-handler"
       :size="size"
       justify-content="left"
+      :title="action.label(actionOptions)"
       v-on="componentListeners"
     >
       <oc-img

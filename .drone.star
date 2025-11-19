@@ -571,6 +571,7 @@ def e2eTestsOnPlaywright(ctx):
     environment = {
         "BASE_URL_OCIS": "ocis:9200",
         "PLAYWRIGHT_BROWSERS_PATH": ".playwright",
+        "TESTS_RUNNER": "playwright",
     }
 
     steps += restoreBuildArtifactCache(ctx, "pnpm", ".pnpm-store") + \
@@ -593,6 +594,9 @@ def e2eTestsOnPlaywright(ctx):
             "pnpm test:e2e:playwright --project=chromium",
         ],
     }]
+
+    if not "skip-a11y" in ctx.build.title.lower():
+        steps += uploadA11yResult(ctx)
 
     pipelines.append({
         "kind": "pipeline",
@@ -637,6 +641,7 @@ def e2eTests(ctx):
         "federationServer": False,
         "failOnUncaughtConsoleError": "false",
         "extraServerEnvironment": {},
+        "skipA11y": "false",
     }
 
     e2e_trigger = {
@@ -671,6 +676,9 @@ def e2eTests(ctx):
         if ("with-tracing" in ctx.build.title.lower()):
             params["reportTracing"] = "true"
 
+        if "skip-a11y" in ctx.build.title.lower():
+            params["skipA11y"] = "true"
+
         environment = {
             "HEADLESS": "true",
             "RETRY": "1",
@@ -680,6 +688,7 @@ def e2eTests(ctx):
             "PLAYWRIGHT_BROWSERS_PATH": ".playwright",
             "BROWSER": "chromium",
             "FEDERATED_BASE_URL_OCIS": "federation-ocis:9200",
+            "SKIP_A11Y_TESTS": params["skipA11y"],
         }
 
         steps += restoreBuildArtifactCache(ctx, "pnpm", ".pnpm-store") + \
@@ -2007,5 +2016,33 @@ def restoreBrowsersCache():
             "commands": [
                 "tar -xvf %s -C ." % dir["playwrightBrowsersArchive"],
             ],
+        },
+    ]
+
+def uploadA11yResult(ctx):
+    return [
+        {
+            "name": "upload-a11y-result",
+            "image": PLUGINS_S3_IMAGE,
+            "pull": "if-not-exists",
+            "settings": {
+                "bucket": S3_PUBLIC_CACHE_BUCKET,
+                "endpoint": S3_CACHE_SERVER,
+                "path_style": True,
+                "source": "%s/reports/e2e/a11y-report.json" % dir["web"],
+                "strip_prefix": "%s/reports/e2e/" % dir["web"],
+                "target": "/${DRONE_REPO}/${DRONE_BUILD_NUMBER}/a11y",
+            },
+            "environment": {
+                "AWS_ACCESS_KEY_ID": {
+                    "from_secret": "cache_public_s3_access_key",
+                },
+                "AWS_SECRET_ACCESS_KEY": {
+                    "from_secret": "cache_public_s3_secret_key",
+                },
+            },
+            "when": {
+                "status": ["failure", "success"],
+            },
         },
     ]

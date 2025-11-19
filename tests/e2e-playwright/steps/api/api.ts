@@ -20,6 +20,20 @@ export async function userHasBeenCreated({
   }
 }
 
+export async function deleteUser({
+  usersEnvironment,
+  stepUser,
+  targetUser
+}: {
+  usersEnvironment: UsersEnvironment
+  stepUser: string
+  targetUser: string
+}): Promise<void> {
+  const admin = usersEnvironment.getUser({ key: stepUser })
+  const user = usersEnvironment.getUser({ key: targetUser })
+  await api.provision.deleteUser({ user, admin })
+}
+
 export async function userHasCreatedFolder({
   usersEnvironment,
   stepUser,
@@ -31,6 +45,23 @@ export async function userHasCreatedFolder({
 }): Promise<void> {
   const user = usersEnvironment.getUser({ key: stepUser })
   await api.dav.createFolderInsidePersonalSpace({ user, folder: folderName })
+}
+
+export async function userHasCreatedFile({
+  usersEnvironment,
+  stepUser,
+  filename
+}: {
+  usersEnvironment: UsersEnvironment
+  stepUser: string
+  filename: string
+}): Promise<void> {
+  const user = usersEnvironment.getUser({ key: stepUser })
+  await api.dav.uploadFileInPersonalSpace({
+    user,
+    pathToFile: filename,
+    content: 'This is a test file'
+  })
 }
 
 export async function userHasSharedResource({
