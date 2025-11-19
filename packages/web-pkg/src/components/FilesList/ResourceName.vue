@@ -6,6 +6,7 @@
     :data-test-resource-name="fullName"
     :data-test-resource-type="type"
     :title="htmlTitle"
+    :aria-label="htmlTitle"
   >
     <span v-if="truncateName" class="oc-text-truncate">
       <span class="oc-resource-basename" v-text="displayName" />
