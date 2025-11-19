@@ -8,10 +8,12 @@
       </app-bar>
       <app-loading-spinner v-if="areResourcesLoading" />
       <template v-else>
-        <div v-if="shareTypes.length > 1" class="oc-flex oc-m-m">
-          <div class="oc-mr-m oc-flex oc-flex-middle">
-            <oc-icon name="filter-2" class="oc-mr-xs" />
-            <span v-text="$gettext('Filter:')" />
+        <fieldset v-if="shareTypes.length > 1" class="oc-flex oc-m-m">
+          <div>
+            <legend class="oc-mr-m oc-flex oc-flex-middle">
+              <oc-icon name="filter-2" class="oc-mr-xs" />
+              <span v-text="$gettext('Filter:')" />
+            </legend>
           </div>
           <item-filter
             :allow-multiple="true"
@@ -29,7 +31,7 @@
               <span class="oc-ml-s" v-text="item.label" />
             </template>
           </item-filter>
-        </div>
+        </fieldset>
         <no-content-message
           v-if="isEmpty"
           id="files-shared-with-others-empty"

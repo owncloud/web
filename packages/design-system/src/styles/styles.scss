@@ -1,6 +1,7 @@
 // 1. Your custom variables and variable overwrites.
 @import "../assets/tokens/ods";
 @import "theme/variables";
+@import "theme/resets";
 
 // 2. Import Vendor.
 @import "../../node_modules/tippy.js/dist/tippy";
