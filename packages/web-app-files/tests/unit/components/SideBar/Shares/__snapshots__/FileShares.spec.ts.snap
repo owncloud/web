@@ -4,14 +4,14 @@ exports[`FileShares > collaborators list > renders sharedWithLabel and sharee li
 "<div data-v-89647fdf="" id="oc-files-sharing-sidebar" class="oc-position-relative">
   <div data-v-89647fdf="" class="oc-flex oc-flex-between oc-flex-middle">
     <div data-v-89647fdf="" class="oc-flex">
-      <h3 data-v-89647fdf="" class="oc-text-bold oc-text-medium oc-m-rm" data-msgid="Share with people" data-current-language="en">Share with people</h3>
+      <h4 data-v-89647fdf="" class="oc-text-bold oc-text-medium oc-m-rm" data-msgid="Share with people" data-current-language="en">Share with people</h4>
       <oc-contextual-helper-stub data-v-89647fdf="" title="Share with people" text="Use the input field to search for users and groups. Select them to share the item." list="[object Object],[object Object],[object Object],[object Object],[object Object],[object Object],[object Object],[object Object]" endtext="" readmorelink="https://doc.owncloud.com/go?to=webui-users-sharing" class="oc-pl-xs"></oc-contextual-helper-stub>
     </div>
     <copy-private-link-stub data-v-89647fdf="" resource="undefined"></copy-private-link-stub>
   </div>
   <invite-collaborator-form-stub data-v-89647fdf="" invitelabel="" class="oc-my-s"></invite-collaborator-form-stub>
   <div data-v-89647fdf="" id="files-collaborators-headline" class="oc-flex oc-flex-middle oc-flex-between">
-    <h4 data-v-89647fdf="" class="oc-text-bold oc-my-rm">Shared with</h4>
+    <h5 data-v-89647fdf="" class="oc-text-bold oc-text-medium oc-my-rm">Shared with</h5>
   </div>
   <portal-target data-v-89647fdf="" name="app.files.sidebar.sharing.shared-with.top" slot-props="[object Object]" multiple="true"></portal-target>
   <ul data-v-89647fdf="" id="files-collaborators-list" class="oc-list oc-list-divider oc-m-rm" aria-label="Share receivers">
@@ -41,14 +41,14 @@ exports[`FileShares > current space > loads space members if a space is given an
 "<div data-v-89647fdf="" id="oc-files-sharing-sidebar" class="oc-position-relative">
   <div data-v-89647fdf="" class="oc-flex oc-flex-between oc-flex-middle">
     <div data-v-89647fdf="" class="oc-flex">
-      <h3 data-v-89647fdf="" class="oc-text-bold oc-text-medium oc-m-rm" data-msgid="Share with people" data-current-language="en">Share with people</h3>
+      <h4 data-v-89647fdf="" class="oc-text-bold oc-text-medium oc-m-rm" data-msgid="Share with people" data-current-language="en">Share with people</h4>
       <oc-contextual-helper-stub data-v-89647fdf="" title="Share with people" text="Use the input field to search for users and groups. Select them to share the item." list="[object Object],[object Object],[object Object],[object Object],[object Object],[object Object],[object Object],[object Object]" endtext="" readmorelink="https://doc.owncloud.com/go?to=webui-users-sharing" class="oc-pl-xs"></oc-contextual-helper-stub>
     </div>
     <copy-private-link-stub data-v-89647fdf="" resource="undefined"></copy-private-link-stub>
   </div>
   <invite-collaborator-form-stub data-v-89647fdf="" invitelabel="" class="oc-my-s"></invite-collaborator-form-stub>
   <div data-v-89647fdf="" id="files-collaborators-headline" class="oc-flex oc-flex-middle oc-flex-between">
-    <h4 data-v-89647fdf="" class="oc-text-bold oc-my-rm">Shared with</h4>
+    <h5 data-v-89647fdf="" class="oc-text-bold oc-text-medium oc-my-rm">Shared with</h5>
   </div>
   <portal-target data-v-89647fdf="" name="app.files.sidebar.sharing.shared-with.top" slot-props="[object Object]" multiple="true"></portal-target>
   <ul data-v-89647fdf="" id="files-collaborators-list" class="oc-list oc-list-divider oc-mb-l" aria-label="Share receivers">
@@ -59,7 +59,7 @@ exports[`FileShares > current space > loads space members if a space is given an
   </ul>
   <!--v-if-->
   <div data-v-89647fdf="" class="oc-flex oc-flex-middle oc-flex-between">
-    <h4 data-v-89647fdf="" class="oc-text-bold oc-my-s">Space members</h4>
+    <h5 data-v-89647fdf="" class="oc-text-bold oc-text-medium oc-my-s">Space members</h5>
   </div>
   <ul data-v-89647fdf="" id="space-collaborators-list" class="oc-list oc-list-divider oc-overflow-hidden oc-m-rm" aria-label="Space members">
     <li data-v-89647fdf="">

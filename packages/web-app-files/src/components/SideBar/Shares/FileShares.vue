@@ -2,7 +2,7 @@
   <div id="oc-files-sharing-sidebar" class="oc-position-relative">
     <div class="oc-flex oc-flex-between oc-flex-middle">
       <div class="oc-flex">
-        <h3 v-translate class="oc-text-bold oc-text-medium oc-m-rm">Share with people</h3>
+        <h4 v-translate class="oc-text-bold oc-text-medium oc-m-rm">Share with people</h4>
         <oc-contextual-helper
           v-if="helpersEnabled"
           class="oc-pl-xs"
@@ -24,7 +24,7 @@
     />
     <template v-if="hasSharees">
       <div id="files-collaborators-headline" class="oc-flex oc-flex-middle oc-flex-between">
-        <h4 class="oc-text-bold oc-my-rm" v-text="sharedWithLabel" />
+        <h5 class="oc-text-bold oc-text-medium oc-my-rm" v-text="sharedWithLabel" />
       </div>
       <portal-target
         name="app.files.sidebar.sharing.shared-with.top"
@@ -68,7 +68,7 @@
     </template>
     <template v-if="showSpaceMembers">
       <div class="oc-flex oc-flex-middle oc-flex-between">
-        <h4 class="oc-text-bold oc-my-s" v-text="spaceMemberLabel" />
+        <h5 class="oc-text-bold oc-text-medium oc-my-s" v-text="spaceMemberLabel" />
       </div>
       <ul
         id="space-collaborators-list"
