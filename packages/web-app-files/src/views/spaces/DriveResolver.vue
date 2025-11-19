@@ -11,7 +11,6 @@
 <script lang="ts" setup>
 import DriveRedirect from './DriveRedirect.vue'
 import GenericSpace from './GenericSpace.vue'
-import GenericTrash from './GenericTrash.vue'
 
 import { computed, onMounted, ref, unref, useAttrs } from 'vue'
 import {

@@ -52,7 +52,13 @@
             <span
               v-else
               class="oc-table-thead-content header-text"
-              v-text="extractFieldTitle(field)"
+              :class="{ 'oc-invisible-sr': !extractFieldTitle(field) }"
+              :aria-hidden="extractFieldTitle(field) ? 'false' : 'true'"
+              v-text="
+                extractFieldTitle(field) || hasIconsColumn
+                  ? $pgettext('Table component header', 'icons')
+                  : ''
+              "
             />
           </div>
         </oc-th>
@@ -159,6 +165,7 @@ import { useGettext } from 'vue3-gettext'
  * @prop {String} sortDir - Current sort direction ('asc' or 'desc').
  * @prop {String} sortBy - Current sort column name.
  * @prop {Object} groupingSettings - Grouping configuration (CERN-specific).
+ * @prop {Boolean} hasIconsColumn - To show table header for columns with no value but icons.
  *
  * @event item-dropped - Emitted when an item is dropped during drag and drop.
  * @event item-dragged - Emitted when an item starts being dragged.
@@ -222,6 +229,7 @@ interface Props {
   sortBy?: string
   caption?: string
   captionVisible?: boolean
+  hasIconsColumn?: boolean
 }
 
 interface Emits {
@@ -258,7 +266,8 @@ const {
   sortDir = undefined,
   sortBy = undefined,
   caption = '',
-  captionVisible = true
+  captionVisible = true,
+  hasIconsColumn = false
 } = defineProps<Props>()
 
 const emit = defineEmits<Emits>()
