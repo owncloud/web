@@ -6,13 +6,15 @@
         :has-bulk-actions="true"
         :is-side-bar-open="isSideBarOpen"
       />
-      <div
+      <fieldset
         v-if="displayFilter"
         class="files-search-result-filter oc-flex oc-flex-wrap oc-mx-m oc-mb-m oc-mt-xs"
       >
-        <div class="oc-mr-m oc-flex oc-flex-middle">
-          <oc-icon name="filter-2" class="oc-mr-xs" />
-          <span v-text="$gettext('Filter:')" />
+        <div>
+          <legend class="oc-mr-m oc-flex oc-flex-middle">
+            <oc-icon name="filter-2" class="oc-mr-xs" />
+            <span v-text="$gettext('Filter:')" />
+          </legend>
         </div>
         <item-filter
           v-if="availableMediaTypeValues.length"
@@ -78,7 +80,7 @@
           filter-name="titleOnly"
           class="files-search-filter-title-only oc-mr-s"
         />
-      </div>
+      </fieldset>
       <app-loading-spinner v-if="loading" />
       <template v-else>
         <no-content-message

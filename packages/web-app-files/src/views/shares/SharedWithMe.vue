@@ -11,10 +11,12 @@
         <div
           class="shared-with-me-filters oc-flex oc-flex-between oc-flex-wrap oc-flex-bottom oc-mx-m oc-mb-m"
         >
-          <div class="oc-flex oc-flex-wrap">
-            <div class="oc-mr-m oc-flex oc-flex-middle">
-              <oc-icon name="filter-2" class="oc-mr-xs" />
-              <span v-text="$gettext('Filter:')" />
+          <fieldset class="oc-flex oc-flex-wrap">
+            <div>
+              <legend class="oc-mr-m oc-flex oc-flex-middle">
+                <oc-icon name="filter-2" class="oc-mr-xs" />
+                <span v-text="$gettext('Filter:')" />
+              </legend>
             </div>
             <item-filter-inline
               class="share-visibility-filter"
@@ -57,7 +59,7 @@
                 <span class="oc-ml-s" v-text="item.displayName" />
               </template>
             </item-filter>
-          </div>
+          </fieldset>
           <div>
             <oc-text-input
               v-model="filterTerm"
