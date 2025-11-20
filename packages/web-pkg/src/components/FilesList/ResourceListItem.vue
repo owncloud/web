@@ -19,7 +19,7 @@
         v-else
         v-oc-tooltip="tooltipLabelIcon"
         :aria-label="tooltipLabelIcon"
-        :aria-hidden="tooltipLabelIcon !== null"
+        :aria-hidden="tooltipLabelIcon === null"
         :resource="resource"
       />
     </span>

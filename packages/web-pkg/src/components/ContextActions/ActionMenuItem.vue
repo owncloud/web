@@ -5,7 +5,7 @@
       :type="componentType"
       v-bind="componentProps"
       :class="[action.class, 'action-menu-item', 'oc-py-s', 'oc-px-m', 'oc-width-1-1']"
-      :aria-label="componentProps.disabled ? action.disabledTooltip?.(actionOptions) : null"
+      :aria-label="ariaLabel"
       data-testid="action-handler"
       :size="size"
       justify-content="left"
@@ -68,6 +68,7 @@ interface Props {
   variation?: string
   shortcutHint?: boolean
   showTooltip?: boolean
+  hasLimitedScreenSpace?: boolean
 }
 const {
   action,
@@ -76,7 +77,8 @@ const {
   appearance = 'raw',
   variation = 'passive',
   shortcutHint = true,
-  showTooltip = false
+  showTooltip = false,
+  hasLimitedScreenSpace = false
 } = defineProps<Props>()
 const { $gettext } = useGettext()
 const configStore = useConfigStore()
@@ -96,6 +98,17 @@ const componentType = computed<string>(() => {
   return 'button'
 })
 
+const ariaLabel = computed<string | null>(() => {
+  if (componentProps.value.disabled && action.disabledTooltip) {
+    return action.disabledTooltip(actionOptions)
+  }
+
+  if (hasLimitedScreenSpace) {
+    return action.label(actionOptions)
+  }
+
+  return ''
+})
 const componentProps = computed(() => {
   const properties = {
     appearance: action.appearance || appearance,

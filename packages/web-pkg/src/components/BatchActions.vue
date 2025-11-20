@@ -13,6 +13,7 @@
         class="batch-actions oc-mr-s"
         :shortcut-hint="false"
         :show-tooltip="limitedScreenSpace"
+        :has-limited-screen-space="limitedScreenSpace"
       />
     </oc-list>
   </div>
