@@ -52,7 +52,13 @@
             <span
               v-else
               class="oc-table-thead-content header-text"
-              v-text="extractFieldTitle(field)"
+              :class="{ 'oc-invisible-sr': !extractFieldTitle(field) }"
+              :aria-hidden="extractFieldTitle(field) ? 'false' : 'true'"
+              v-text="
+                hasIconsColumn
+                  ? $pgettext('Sets a hidden table header text for screen readers', 'Icons')
+                  : extractFieldTitle(field)
+              "
             />
           </div>
         </oc-th>
@@ -222,6 +228,7 @@ interface Props {
   sortBy?: string
   caption?: string
   captionVisible?: boolean
+  hasIconsColumn?: boolean
 }
 
 interface Emits {
@@ -258,7 +265,8 @@ const {
   sortDir = undefined,
   sortBy = undefined,
   caption = '',
-  captionVisible = true
+  captionVisible = true,
+  hasIconsColumn = false
 } = defineProps<Props>()
 
 const emit = defineEmits<Emits>()
