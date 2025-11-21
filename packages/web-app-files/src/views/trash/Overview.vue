@@ -36,6 +36,7 @@
             :header-position="fileListHeaderY"
             :sticky="true"
             :hover="true"
+            :has-icons-column="true"
             @sort="handleSort"
           >
             <template #icon="{ item }">
