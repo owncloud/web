@@ -34,7 +34,7 @@
             :fields="fields"
             :data="displaySpaces"
             :header-position="fileListHeaderY"
-            :sticky="true"
+            :sticky="isSticky"
             :hover="true"
             :has-icons-column="true"
             @sort="handleSort"
@@ -77,6 +77,7 @@ import {
   FileSideBar,
   SortDir,
   useClientService,
+  useIsTopBarSticky,
   useResourcesStore,
   useRouter,
   useSideBar,
@@ -105,6 +106,7 @@ const clientService = useClientService()
 const { y: fileListHeaderY } = useFileListHeaderPosition()
 const resourcesStore = useResourcesStore()
 const { isSideBarOpen, sideBarActivePanel } = useSideBar()
+const { isSticky } = useIsTopBarSticky()
 
 const sortBy = ref<keyof SpaceResource>('name')
 const sortDir = ref<SortDir>(SortDir.Asc)
