@@ -57,12 +57,12 @@ const testSuites = fs.readdirSync(testSuitesDir).filter((entry) => {
     const depPackages = content.split('\n').filter((line) => line && line.startsWith('web-'))
     if (depPackages.length) {
       mapDependentPackagesToTestSuite(entry, depPackages)
-      return
+      return true
     }
   }
   // make all packages as dependent
   mapDependentPackagesToTestSuite(entry, allWebPackages)
-  return
+  return true
 })
 
 function mapDependentPackagesToTestSuite(testSuite, depPackages) {
@@ -89,7 +89,7 @@ function mapDependentPackagesToTestSuite(testSuite, depPackages) {
 function getChangedFiles() {
   const changedFiles = execSync(`git diff --name-only origin/${targetBranch} HEAD`).toString()
   console.log('[INFO] Changed files:\n', changedFiles)
-  return [...new Set([...changedFiles.split('\n')])].filter((file) => file)
+  return [...new Set([...changedFiles.split('\n')])].filter((file) => file.trim())
 }
 
 function getPackageFromFile(file) {
