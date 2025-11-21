@@ -57,12 +57,12 @@ const testSuites = fs.readdirSync(testSuitesDir).filter((entry) => {
     const depPackages = content.split('\n').filter((line) => line && line.startsWith('web-'))
     if (depPackages.length) {
       mapDependentPackagesToTestSuite(entry, depPackages)
-      return
+      return true
     }
   }
   // make all packages as dependent
   mapDependentPackagesToTestSuite(entry, allWebPackages)
-  return
+  return true
 })
 
 function mapDependentPackagesToTestSuite(testSuite, depPackages) {
