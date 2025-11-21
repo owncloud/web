@@ -89,7 +89,7 @@ function mapDependentPackagesToTestSuite(testSuite, depPackages) {
 function getChangedFiles() {
   const changedFiles = execSync(`git diff --name-only origin/${targetBranch} HEAD`).toString()
   console.log('[INFO] Changed files:\n', changedFiles)
-  return [...new Set([...changedFiles.split('\n')])].filter((file) => file)
+  return [...new Set([...changedFiles.split('\n')])].filter((file) => file.trim())
 }
 
 function getPackageFromFile(file) {
