@@ -32,10 +32,6 @@ Available options:
     --total-parts   - total number of groups to divide into
                       e.g.: --total-parts 4 (suites will be divided into 4 groups)
     --help, -h      - show cli options
-
-Available env variables:
-    TEST_SUITES     - Comma separated list of suites to run. (Will be ignored if --suites is provided)
-    FEATURE_FILES   - Comma separated list of feature files to run. (Will be ignored if feature paths are provided)
 "
 
 function log() {
@@ -149,13 +145,6 @@ function buildSuitesPattern() {
     fi
     GLOB_FEATURE_PATHS="$FEATURES_DIR/$suites/**/*.feature"
 }
-
-if [[ -n $TEST_SUITES ]] && [[ -z "$FILTER_SUITES" ]]; then
-    FILTER_SUITES=$(echo "$TEST_SUITES" | sed -E "s/,/\n/g")
-fi
-if [[ -n $FEATURE_FILES ]] && [[ -z "$FEATURE_PATHS_FROM_ARG" ]]; then
-    FEATURE_PATHS_FROM_ARG=$(echo "$FEATURE_FILES" | sed -E "s/,/ /g")
-fi
 
 # 1. [RUN E2E] run features from provided paths
 if [[ -n $FEATURE_PATHS_FROM_ARG && "$SKIP_RUN_PARTS" == true ]]; then
