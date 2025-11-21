@@ -735,8 +735,7 @@ def e2eTests(ctx):
                      "image": OC_CI_NODEJS_IMAGE,
                      "environment": environment,
                      "commands": [
-                         "cat %s/tests/drone/suites.env" % dir["web"],
-                         ". %s/tests/drone/suites.env || true" % dir["web"],
+                         "[ -f \"%s/tests/drone/suites.env\" ] && . \"%s/tests/drone/suites.env\"",
                          "cd tests/e2e",
                          "bash run-e2e.sh",
                      ],
@@ -2051,7 +2050,7 @@ def uploadA11yResult(ctx):
     ]
 
 def filterTestSuitesToRun(ctx, suites = []):
-    if "full-ci" in ctx.build.title.lower() and ctx.build.event == "cron":
+    if "full-ci" in ctx.build.title.lower() or ctx.build.event == "cron":
         return []
     if len(suites) and "cucumber/" in suites[0]:
         ENV = "FEATURE_FILES="
