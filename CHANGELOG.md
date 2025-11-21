@@ -16,6 +16,7 @@ Summary
 * Bugfix - Include Ubuntu font: [#13233](https://github.com/owncloud/web/pull/13233)
 * Bugfix - External share ID fallback: [#13253](https://github.com/owncloud/web/pull/13253)
 * Bugfix - Handle file loading error: [#13274](https://github.com/owncloud/web/pull/13274)
+* Bugfix - Use sticky header composable in deleted files: [#13329](https://github.com/owncloud/web/pull/13329)
 * Enhancement - Hide trashed spaces: [#13168](https://github.com/owncloud/web/pull/13168)
 * Enhancement - Drop beta badge from GeoGebra pinboards: [#13169](https://github.com/owncloud/web/pull/13169)
 * Enhancement - Add Excalidraw file icon: [#13172](https://github.com/owncloud/web/pull/13172)
@@ -88,6 +89,14 @@ Details
    unexpected error when opening a file.
 
    https://github.com/owncloud/web/pull/13274
+
+* Bugfix - Use sticky header composable in deleted files: [#13329](https://github.com/owncloud/web/pull/13329)
+
+   The sticky header composable is now used in the deleted files view. This fixes
+   the issue where the header was always sticky. On smaller screens, this breaks
+   the layout and overlaps the content.
+
+   https://github.com/owncloud/web/pull/13329
 
 * Enhancement - Hide trashed spaces: [#13168](https://github.com/owncloud/web/pull/13168)
 
