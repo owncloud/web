@@ -21,6 +21,7 @@
         :aria-label="tooltipLabelIcon"
         :aria-hidden="tooltipLabelIcon === null"
         :resource="resource"
+        :role="tooltipLabelIcon ? 'img' : 'presentation'"
       />
     </span>
     <div class="oc-resource-details oc-text-overflow" :class="{ 'oc-pl-s': isIconDisplayed }">
