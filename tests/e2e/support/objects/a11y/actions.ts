@@ -31,7 +31,7 @@ export const selectors = {
   appSidebar: '#app-sidebar'
 }
 
-const a11yRuleTags = ['wcag2a', 'wcag2aa', 'wcag21a', 'wcag21aa', 'best-practice']
+const a11yRuleTags = ['wcag2a', 'wcag2aa', 'wcag21a', 'wcag21aa', 'best-practice', 'wcag22aa']
 // decide which tags should be included in the default configuration of axebuilder
 
 export const analyzeAccessibilityConformityViolations = async (args: {
