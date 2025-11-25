@@ -24,7 +24,7 @@ export const selectors = {
   ocModal: '.oc-modal',
   ocModalCancel: '.oc-modal-body-actions-cancel',
   uploadMenuBtn: '#upload-menu-btn',
-  uploadContextMenu: '.files-app-bar-actions .tippy-content',
+  uploadContextMenu: '#upload-menu-drop',
   appbarBatchActions: '#oc-appbar-batch-actions',
   filesSpaceTableCheckbox: '#files-space-table .oc-checkbox',
   uploadMenuDropdown: '#upload-menu-drop',
