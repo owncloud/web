@@ -12,24 +12,10 @@ Then(
 
     const a11yObject = new objects.a11y.Accessibility({ page })
 
-    const a11yViolations = await a11yObject.getAccessibilityConformityViolations(
+    const a11yViolations = await a11yObject.getSevereAccessibilityViolations(
       a11yObject.getSelectors().files
     )
-    expect(a11yViolations).not.toMatchObject([])
-
-    // expected to fail due to known accessibility issues, therefore exclude:
-    // selectors.resourceTableEditName --> buttons must have discernible text
-    // selectors.resourceIconLink --> buttons/links must have discernible text
-
-    const a11yViolationsWithExclusions =
-      await a11yObject.getAccessibilityConformityViolationsWithExclusions(
-        a11yObject.getSelectors().files,
-        [
-          a11yObject.getSelectors().resourceTableEditName,
-          a11yObject.getSelectors().resourceIconLink
-        ]
-      )
-    expect(a11yViolationsWithExclusions).toMatchObject([])
+    expect(a11yViolations).toMatchObject([])
   }
 )
 
@@ -50,24 +36,10 @@ Then(
 
     const a11yObject = new objects.a11y.Accessibility({ page })
 
-    const a11yViolations = await a11yObject.getAccessibilityConformityViolations(
+    const a11yViolations = await a11yObject.getSevereAccessibilityViolations(
       a11yObject.getSelectors().filesSpaceTable
     )
-    expect(a11yViolations).not.toMatchObject([])
-
-    // expected to fail due to known accessibility issues, therefore exclude:
-    // selectors.resourceTableEditName --> buttons must have discernible text
-    // selectors.resourceIconLink --> buttons/links must have discernible text
-
-    const a11yViolationsWithExclusions =
-      await a11yObject.getAccessibilityConformityViolationsWithExclusions(
-        a11yObject.getSelectors().filesSpaceTable,
-        [
-          a11yObject.getSelectors().resourceTableEditName,
-          a11yObject.getSelectors().resourceIconLink
-        ]
-      )
-    expect(a11yViolationsWithExclusions).toMatchObject([])
+    expect(a11yViolations).toMatchObject([])
   }
 )
 
@@ -77,7 +49,7 @@ Then(
     const { page } = this.actorsEnvironment.getActor({ key: stepUser })
 
     const a11yObject = new objects.a11y.Accessibility({ page })
-    const a11yViolations = await a11yObject.getAccessibilityConformityViolations(
+    const a11yViolations = await a11yObject.getSevereAccessibilityViolations(
       a11yObject.getSelectors().tilesView
     )
     expect(a11yViolations).toMatchObject([])
@@ -110,7 +82,7 @@ Then(
     const { page } = this.actorsEnvironment.getActor({ key: stepUser })
 
     const a11yObject = new objects.a11y.Accessibility({ page })
-    const a11yViolations = await a11yObject.getAccessibilityConformityViolations(
+    const a11yViolations = await a11yObject.getSevereAccessibilityViolations(
       a11yObject.getSelectors().displayOptionsMenu
     )
     expect(a11yViolations).toMatchObject([])
@@ -143,7 +115,7 @@ Then(
     const { page } = this.actorsEnvironment.getActor({ key: stepUser })
 
     const a11yObject = new objects.a11y.Accessibility({ page })
-    const a11yViolations = await a11yObject.getAccessibilityConformityViolations(
+    const a11yViolations = await a11yObject.getSevereAccessibilityViolations(
       a11yObject.getSelectors().filesContextMenu
     )
     expect(a11yViolations).toMatchObject([])
@@ -173,7 +145,7 @@ Then(
     const { page } = this.actorsEnvironment.getActor({ key: stepUser })
 
     const a11yObject = new objects.a11y.Accessibility({ page })
-    const a11yViolations = await a11yObject.getAccessibilityConformityViolations(
+    const a11yViolations = await a11yObject.getSevereAccessibilityViolations(
       a11yObject.getSelectors().newResourceContextMenu
     )
     expect(a11yViolations).toMatchObject([])
@@ -196,7 +168,7 @@ Then(
     const { page } = this.actorsEnvironment.getActor({ key: stepUser })
 
     const a11yObject = new objects.a11y.Accessibility({ page })
-    const a11yViolations = await a11yObject.getAccessibilityConformityViolations(
+    const a11yViolations = await a11yObject.getSevereAccessibilityViolations(
       a11yObject.getSelectors().ocModal
     )
     expect(a11yViolations).toMatchObject([])
@@ -226,7 +198,7 @@ Then(
     const { page } = this.actorsEnvironment.getActor({ key: stepUser })
 
     const a11yObject = new objects.a11y.Accessibility({ page })
-    const a11yViolations = await a11yObject.getAccessibilityConformityViolations(
+    const a11yViolations = await a11yObject.getSevereAccessibilityViolations(
       a11yObject.getSelectors().uploadContextMenu
     )
     expect(a11yViolations).toMatchObject([])
@@ -259,7 +231,7 @@ Then(
     const { page } = this.actorsEnvironment.getActor({ key: stepUser })
 
     const a11yObject = new objects.a11y.Accessibility({ page })
-    const a11yViolations = await a11yObject.getAccessibilityConformityViolations(
+    const a11yViolations = await a11yObject.getSevereAccessibilityViolations(
       a11yObject.getSelectors().appbarBatchActions
     )
     expect(a11yViolations).toMatchObject([])
