@@ -11,6 +11,7 @@
     <inline-svg
       :src="nameWithFillType"
       :transform-source="transformSvgElement"
+      :tabindex="accessibleLabel ? '0' : null"
       :aria-hidden="accessibleLabel === '' ? 'true' : null"
       :aria-labelledby="accessibleLabel === '' ? null : svgTitleId"
       :focusable="accessibleLabel === '' ? 'false' : null"
