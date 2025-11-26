@@ -46,13 +46,16 @@
       </oc-button>
     </div>
     <div
-      v-if="showMessageLine"
+      v-if="showMessageLine || errorMessage || warningMessage"
       class="oc-text-input-message"
       :class="{
         'oc-text-input-description': !!descriptionMessage,
         'oc-text-input-warning': !!warningMessage,
         'oc-text-input-danger': !!errorMessage
       }"
+      :aria-live="errorMessage || warningMessage ? 'assertive' : 'off'"
+      aria-atomic="true"
+      role="alert"
     >
       <oc-icon
         v-if="messageText !== null && !!descriptionMessage"
@@ -207,9 +210,20 @@ const additionalListeners = computed(() => {
 
 const additionalAttributes = computed(() => {
   const additionalAttrs: Record<string, unknown> = {}
+  const describedByIds: string[] = []
+
   if (!!warningMessage || !!errorMessage || !!descriptionMessage) {
-    additionalAttrs['aria-describedby'] = messageId
+    describedByIds.push(messageId.value)
   }
+
+  if (type === 'password' && Object.keys(passwordPolicy).length) {
+    describedByIds.push(`${id}-password-policy`)
+  }
+
+  if (describedByIds.length > 0) {
+    additionalAttrs['aria-describedby'] = describedByIds.join(' ')
+  }
+
   // FIXME: placeholder usage is discouraged, we need to find a better UX concept
   if (defaultValue) {
     additionalAttrs['placeholder'] = defaultValue
