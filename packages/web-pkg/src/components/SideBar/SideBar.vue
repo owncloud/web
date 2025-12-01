@@ -10,7 +10,7 @@
       'app-sidebar-full-width': fullWidthSideBar
     }"
   >
-    <oc-spinner v-if="loading" />
+    <oc-spinner v-if="loading" :aria-label="$gettext('Loading sidebar')" />
     <template v-else>
       <div
         v-for="panel in displayPanels"
