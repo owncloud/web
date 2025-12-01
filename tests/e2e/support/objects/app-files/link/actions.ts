@@ -128,7 +128,7 @@ export const createLink = async (args: createLinkArgs): Promise<string> => {
 
   const a11yObject = new objects.a11y.Accessibility({ page })
   const violations = await a11yObject.getSevereAccessibilityViolations(
-    a11yObject.getSelectors().modal
+    a11yObject.getSelectors().ocModal
   )
   expect(
     violations,

@@ -326,7 +326,7 @@ export const createNewFolder = async ({
 
   const a11yObject = new objects.a11y.Accessibility({ page })
   const violations = await a11yObject.getSevereAccessibilityViolations(
-    a11yObject.getSelectors().modal
+    a11yObject.getSelectors().ocModal
   )
   expect(
     violations,
