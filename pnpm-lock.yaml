@@ -30,8 +30,8 @@ importers:
         specifier: ^1.0.6
         version: 1.0.6
       mermaid:
-        specifier: ^11.12.1
-        version: 11.12.1
+        specifier: ^11.12.2
+        version: 11.12.2
       vscode-jsonrpc:
         specifier: ^8.2.1
         version: 8.2.1
@@ -996,8 +996,8 @@ importers:
         specifier: ^6.1.1
         version: 6.1.1(vue@3.5.25(typescript@5.9.3))
       mermaid:
-        specifier: ^11.12.1
-        version: 11.12.1
+        specifier: ^11.12.2
+        version: 11.12.2
       oidc-client-ts:
         specifier: ^3.4.1
         version: 3.4.1
@@ -5428,8 +5428,8 @@ packages:
     resolution: {integrity: sha512-8q7VEgMJW4J8tcfVPy8g09NcQwZdbwFEqhe/WZkoIzjn/3TGDwtOCYtXGxA3O8tPzpczCCDgv+P2P5y00ZJOOg==}
     engines: {node: '>= 8'}
 
-  mermaid@11.12.1:
-    resolution: {integrity: sha512-UlIZrRariB11TY1RtTgUWp65tphtBv4CSq7vyS2ZZ2TgoMjs2nloq+wFqxiwcxlhHUvs7DPGgMjs2aeQxz5h9g==}
+  mermaid@11.12.2:
+    resolution: {integrity: sha512-n34QPDPEKmaeCG4WDMGy0OT6PSyxKCfy2pJgShP+Qow2KLrvWjclwbc3yXfSIf4BanqWEhQEpngWwNp/XhZt6w==}
 
   micromatch@4.0.8:
     resolution: {integrity: sha512-PXwfBhYu0hBCPw8Dn0E+WDYb7af3dSLVWKi3HGv84IdF4TyFoC0ysxFd0Goxw7nSv4T/PzEJQxsYsEiFCKo2BA==}
@@ -12064,7 +12064,7 @@ snapshots:
 
   merge2@1.4.1: {}
 
-  mermaid@11.12.1:
+  mermaid@11.12.2:
     dependencies:
       '@braintree/sanitize-url': 7.1.1
       '@iconify/utils': 3.0.1
