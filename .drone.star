@@ -55,6 +55,13 @@ config = {
     ],
     "pnpmlint": True,
     "e2e": {
+        "a11y": {
+            "earlyFail": True,
+            "skip": False,
+            "suites": [
+                "a11y",
+            ],
+        },
         "1": {
             "earlyFail": True,
             "skip": False,
