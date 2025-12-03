@@ -63,7 +63,7 @@
     "lodash-es": "^4.17.21",
     "luxon": "^3.7.2",
     "mark.js": "^8.11.1",
-    "marked": "^17.0.0",
+    "marked": "^17.0.1",
     "md-editor-v3": "^6.1.1",
     "mermaid": "^11.12.2",
     "oidc-client-ts": "^3.4.1",
