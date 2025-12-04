@@ -2,12 +2,14 @@ import { Page } from '@playwright/test'
 import util from 'util'
 import { locatorUtils } from '../../../utils'
 
-const contextMenuSelector =
+const sidebarPanel = '#app-sidebar'
+const contextMenuButton =
   '//span[@data-test-resource-name="%s"]/ancestor::tr[contains(@class, "oc-tbody-tr")]//button[contains(@class, "resource-table-btn-action-dropdown")]'
+const contextMenuContainer = '#oc-files-context-menu'
 const folderModalIframe = '#iframe-folder-view'
 const actionMenuForCurrentFolderSelector = '#oc-breadcrumb-contextmenu-trigger'
-const closeSidebarRootPanelBtn = `#app-sidebar .is-active-root-panel .header__close`
-const closeSidebarSubPanelBtn = `#app-sidebar .is-active-sub-panel .header__close`
+const closeSidebarRootPanelBtn = `${sidebarPanel} .is-active-root-panel .header__close:visible`
+const closeSidebarSubPanelBtn = `${sidebarPanel} .is-active-sub-panel .header__close:visible`
 
 const openForResource = async ({
   page,
@@ -25,8 +27,13 @@ const openForResource = async ({
       .locator('.oc-files-actions-show-details-trigger')
       .click()
   } else {
-    await page.locator(util.format(contextMenuSelector, resource)).click()
-    await page.locator('.oc-files-actions-show-details-trigger').click()
+    await page.locator(util.format(contextMenuButton, resource)).waitFor()
+    await page.locator(util.format(contextMenuButton, resource)).click()
+    await page.locator(contextMenuContainer).waitFor()
+    await page
+      .locator(contextMenuContainer)
+      .locator('.oc-files-actions-show-details-trigger')
+      .click()
   }
 }
 
@@ -39,8 +46,13 @@ export const openPanelForResource = async ({
   resource: string
   panel: string
 }): Promise<void> => {
-  await page.locator(util.format(contextMenuSelector, resource)).click()
-  await page.locator(`.oc-files-actions-show-${panel}-trigger`).click()
+  await page.locator(util.format(contextMenuButton, resource)).waitFor()
+  await page.locator(util.format(contextMenuButton, resource)).click()
+  await page.locator(contextMenuContainer).waitFor()
+  await page
+    .locator(contextMenuContainer)
+    .locator(`.oc-files-actions-show-${panel}-trigger`)
+    .click()
 }
 
 const openGlobal = async ({ page }: { page: Page }): Promise<void> => {
@@ -57,12 +69,15 @@ export const open = async ({
   resourceType?: string
 }): Promise<void> => {
   if (resourceType === 'passwordProtectedFolder') {
-    if (await page.frameLocator(folderModalIframe).locator('#app-sidebar').count()) {
+    if (await page.frameLocator(folderModalIframe).locator(sidebarPanel).count()) {
       await closePasswordProtectedFolder({ page })
     }
   } else {
-    if (await page.locator('#app-sidebar').count()) {
-      await close({ page })
+    if (await page.locator(sidebarPanel).count()) {
+      await Promise.all([
+        page.locator(sidebarPanel).waitFor({ state: 'detached' }),
+        close({ page })
+      ])
     }
   }
 

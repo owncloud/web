@@ -52,6 +52,7 @@ export const openSharingPanel = async function (
     case 'SIDEBAR_PANEL':
       await sidebar.open({ page, resource: item })
       await sidebar.openPanel({ page, name: 'sharing' })
+      await page.locator(invitePanel).waitFor()
       break
   }
 
