@@ -764,6 +764,18 @@ export const downloadResources = async (args: downloadResourcesArgs): Promise<Do
   const { page, resources, folder, via } = args
   const downloads = []
 
+  // When tracing is enabled, the HEAD request (download action) triggers a credentials prompt
+  // which blocks next actions in the test.
+  // See https://github.com/owncloud/web/issues/11541
+  // As a workaround, we fulfill the HEAD requests with an empty response to fix the issue.
+  await page.route('*/**/*.*', async (route, req) => {
+    if (req.method() === 'HEAD') {
+      await route.fulfill({ body: '' })
+      return
+    }
+    await route.continue()
+  })
+
   switch (via) {
     case 'SIDEBAR_PANEL': {
       if (folder) {
