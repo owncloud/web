@@ -11,6 +11,7 @@
   </div>
   <div class="link-modal-password oc-mb-m">
     <oc-text-input
+      id="link-password-input"
       :key="passwordInputKey"
       :model-value="password.value"
       type="password"

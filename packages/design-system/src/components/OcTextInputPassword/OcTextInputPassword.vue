@@ -14,6 +14,7 @@
       :value="value"
       :type="showPassword ? 'text' : 'password'"
       :disabled="disabled"
+      :aria-invalid="hasPasswordPolicyViolation"
       @input="$emit('input', $event)"
       @change="$emit('change', $event)"
     />
@@ -52,7 +53,14 @@
     </oc-button>
   </div>
   <portal v-if="showPasswordPolicyInformation" to="app.design-system.password-policy">
-    <div class="oc-flex oc-text-small oc-text-input-password-policy-rule-wrapper oc-pt-s">
+    <div
+      :id="passwordPolicyId"
+      class="oc-flex oc-text-small oc-text-input-password-policy-rule-wrapper oc-pt-s"
+      role="status"
+      aria-live="polite"
+      aria-atomic="true"
+    >
+      <span class="oc-invisible-sr" v-text="passwordPolicySummary" />
       <div
         v-for="(testedRule, index) in testedPasswordPolicy.rules"
         :key="index"
@@ -133,12 +141,42 @@ const showPassword = ref(false)
 const copyPasswordIconInitial = 'file-copy'
 const copyPasswordIcon = ref(copyPasswordIconInitial)
 
+const inputId = computed(() => attrs.id as string)
+const passwordPolicyId = computed(() => `${inputId.value}-password-policy`)
+
 const showPasswordPolicyInformation = computed(() => {
-  return !!Object.keys(passwordPolicy.rules || {}).length
+  return !!Object.keys(passwordPolicy?.rules || {}).length
 })
 
 const testedPasswordPolicy = computed(() => {
   return passwordPolicy.missing(unref(value))
+})
+
+const hasPasswordPolicyViolation = computed(() => {
+  if (!Object.keys(passwordPolicy?.rules || {})?.length) {
+    return false
+  }
+  // Check if password has any policy violations or if there's an explicit error
+  return !passwordPolicy.check(unref(value)) || hasError
+})
+
+const passwordPolicySummary = computed(() => {
+  const tested = testedPasswordPolicy.value
+  if (!tested || !tested.rules || tested.rules.length === 0) {
+    return ''
+  }
+
+  const unmetRequirements = tested.rules.filter((rule) => !rule.verified)
+  if (unmetRequirements.length === 0) {
+    return $gettext('Password meets all requirements')
+  }
+
+  const messages = unmetRequirements.map((rule) => getPasswordPolicyRuleMessage(rule))
+  return $gettext(
+    'Password requirements: %{requirements}',
+    { requirements: messages.join(', ') },
+    true
+  )
 })
 
 const getPasswordPolicyRuleMessage = (rule: PasswordPolicyRule) => {
@@ -170,7 +208,7 @@ const generatePassword = () => {
 watch(
   () => value,
   (value) => {
-    if (!Object.keys(passwordPolicy).length) {
+    if (!Object.keys(passwordPolicy?.rules || {})?.length) {
       return
     }
 

@@ -1,7 +1,11 @@
 <template>
   <div class="oc-flex oc-flex-center expiration-date-indicator">
-    <oc-icon v-oc-tooltip="expirationDateTooltip" name="calendar-event" fill-type="line" />
-    <span class="oc-invisible-sr" v-text="screenreaderShareExpiration" />
+    <oc-icon
+      v-oc-tooltip="expirationDateTooltip"
+      :accessible-label="screenreaderShareExpiration"
+      name="calendar-event"
+      fill-type="line"
+    />
   </div>
 </template>
 
