@@ -6,7 +6,7 @@ exports[`OcTextInput > password input field > password policy > displays error s
     <!--v-if-->
     <div class="oc-text-input-password-wrapper">
       <!-- Input label is handled in the OcTextInput component -->
-      <!-- eslint-disable-next-line vuejs-accessibility/form-control-has-label --> <input id="oc-textinput-24" aria-invalid="false" class="oc-text-input oc-input oc-rounded" type="password" value="pass"> <button type="button" aria-label="Show password" class="oc-button oc-rounded oc-button-s oc-button-justify-content-center oc-button-gap-m oc-button-passive oc-button-passive-raw oc-text-input-show-password-toggle oc-px-s oc-background-default">
+      <!-- eslint-disable-next-line vuejs-accessibility/form-control-has-label --> <input id="oc-textinput-24" aria-describedby="oc-textinput-24-password-policy" aria-invalid="true" class="oc-text-input oc-input oc-rounded" type="password" value="pass"> <button type="button" aria-label="Show password" class="oc-button oc-rounded oc-button-s oc-button-justify-content-center oc-button-gap-m oc-button-passive oc-button-passive-raw oc-text-input-show-password-toggle oc-px-s oc-background-default">
         <!--v-if-->
         <!-- @slot Content of the button --> <span class="oc-icon oc-icon-s oc-icon-passive"><!----></span>
       </button> <button type="button" aria-label="Copy password" class="oc-button oc-rounded oc-button-s oc-button-justify-content-center oc-button-gap-m oc-button-passive oc-button-passive-raw oc-text-input-copy-password-button oc-px-s oc-background-default">
@@ -16,7 +16,7 @@ exports[`OcTextInput > password input field > password policy > displays error s
       <!--v-if-->
     </div>
     <portal to="app.design-system.password-policy">
-      <div class="oc-flex oc-text-small oc-text-input-password-policy-rule-wrapper oc-pt-s">
+      <div id="oc-textinput-24-password-policy" class="oc-flex oc-text-small oc-text-input-password-policy-rule-wrapper oc-pt-s" role="status" aria-live="polite" aria-atomic="true"><span class="oc-invisible-sr">Password requirements: 8+ letters</span>
         <div class="oc-flex oc-flex-middle oc-text-input-password-policy-rule"><span class="oc-icon oc-icon-s oc-icon-danger oc-mr-xs"><!----></span> <span class="oc-text-input-danger">8+ letters</span>
           <!--v-if-->
         </div>
@@ -35,7 +35,7 @@ exports[`OcTextInput > password input field > password policy > displays success
     <!--v-if-->
     <div class="oc-text-input-password-wrapper">
       <!-- Input label is handled in the OcTextInput component -->
-      <!-- eslint-disable-next-line vuejs-accessibility/form-control-has-label --> <input id="oc-textinput-25" aria-invalid="false" class="oc-text-input oc-input oc-rounded" type="password" value="password123"> <button type="button" aria-label="Show password" class="oc-button oc-rounded oc-button-s oc-button-justify-content-center oc-button-gap-m oc-button-passive oc-button-passive-raw oc-text-input-show-password-toggle oc-px-s oc-background-default">
+      <!-- eslint-disable-next-line vuejs-accessibility/form-control-has-label --> <input id="oc-textinput-25" aria-describedby="oc-textinput-25-password-policy" aria-invalid="false" class="oc-text-input oc-input oc-rounded" type="password" value="password123"> <button type="button" aria-label="Show password" class="oc-button oc-rounded oc-button-s oc-button-justify-content-center oc-button-gap-m oc-button-passive oc-button-passive-raw oc-text-input-show-password-toggle oc-px-s oc-background-default">
         <!--v-if-->
         <!-- @slot Content of the button --> <span class="oc-icon oc-icon-s oc-icon-passive"><!----></span>
       </button> <button type="button" aria-label="Copy password" class="oc-button oc-rounded oc-button-s oc-button-justify-content-center oc-button-gap-m oc-button-passive oc-button-passive-raw oc-text-input-copy-password-button oc-px-s oc-background-default">
@@ -45,7 +45,7 @@ exports[`OcTextInput > password input field > password policy > displays success
       <!--v-if-->
     </div>
     <portal to="app.design-system.password-policy">
-      <div class="oc-flex oc-text-small oc-text-input-password-policy-rule-wrapper oc-pt-s">
+      <div id="oc-textinput-25-password-policy" class="oc-flex oc-text-small oc-text-input-password-policy-rule-wrapper oc-pt-s" role="status" aria-live="polite" aria-atomic="true"><span class="oc-invisible-sr">Password meets all requirements</span>
         <div class="oc-flex oc-flex-middle oc-text-input-password-policy-rule"><span class="oc-icon oc-icon-s oc-icon-success oc-mr-xs"><!----></span> <span class="oc-text-input-success">8+ letters</span>
           <!--v-if-->
         </div>

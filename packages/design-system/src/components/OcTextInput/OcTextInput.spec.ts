@@ -50,17 +50,19 @@ describe('OcTextInput', () => {
     passwordPolicy = { active: false, pass: false }
   ) {
     const passwordPolicyMock = mock<PasswordPolicy>()
+    const policyRules = [
+      {
+        code: 'minLength',
+        message: '%{param1}+ letters',
+        format: ['8'],
+        verified: passwordPolicy.pass
+      }
+    ]
+    passwordPolicyMock.rules = policyRules
     passwordPolicyMock.missing.mockReturnValue({
-      rules: [
-        {
-          code: 'minLength',
-          message: '%{param1}+ letters',
-          format: ['8'],
-          verified: passwordPolicy.pass
-        }
-      ]
+      rules: policyRules
     })
-    passwordPolicyMock.check.mockReturnValueOnce(passwordPolicy.pass)
+    passwordPolicyMock.check.mockReturnValue(passwordPolicy.pass)
 
     if (passwordPolicy.active) {
       options.props = {

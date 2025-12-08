@@ -57,7 +57,7 @@ exports[`DateFilter > can use a custom attribute as display name 1`] = `
                 <!--v-if--> <input id="oc-textinput-7" aria-invalid="false" class="oc-text-input oc-input oc-rounded" type="date" value="">
                 <!--v-if-->
               </div>
-              <div class="oc-text-input-message">
+              <div class="oc-text-input-message" aria-live="off" aria-atomic="true" role="alert">
                 <!--v-if--> <span id="oc-textinput-7-message" class=""></span>
               </div>
               <!--v-if-->
@@ -67,7 +67,7 @@ exports[`DateFilter > can use a custom attribute as display name 1`] = `
                 <!--v-if--> <input id="oc-textinput-8" aria-invalid="false" class="oc-text-input oc-input oc-rounded" type="date" value="">
                 <!--v-if-->
               </div>
-              <div class="oc-text-input-message">
+              <div class="oc-text-input-message" aria-live="off" aria-atomic="true" role="alert">
                 <!--v-if--> <span id="oc-textinput-8-message" class=""></span>
               </div>
               <!--v-if-->
@@ -142,7 +142,7 @@ exports[`DateFilter > renders all items 1`] = `
                 <!--v-if--> <input id="oc-textinput-3" aria-invalid="false" class="oc-text-input oc-input oc-rounded" type="date" value="">
                 <!--v-if-->
               </div>
-              <div class="oc-text-input-message">
+              <div class="oc-text-input-message" aria-live="off" aria-atomic="true" role="alert">
                 <!--v-if--> <span id="oc-textinput-3-message" class=""></span>
               </div>
               <!--v-if-->
@@ -152,7 +152,7 @@ exports[`DateFilter > renders all items 1`] = `
                 <!--v-if--> <input id="oc-textinput-4" aria-invalid="false" class="oc-text-input oc-input oc-rounded" type="date" value="">
                 <!--v-if-->
               </div>
-              <div class="oc-text-input-message">
+              <div class="oc-text-input-message" aria-live="off" aria-atomic="true" role="alert">
                 <!--v-if--> <span id="oc-textinput-4-message" class=""></span>
               </div>
               <!--v-if-->

@@ -6,7 +6,7 @@ exports[`OcDatePicker > renders 1`] = `
     <!--v-if--> <input id="oc-textinput-1" aria-invalid="false" class="oc-text-input oc-input oc-rounded" type="date" value="">
     <!--v-if-->
   </div>
-  <div class="oc-text-input-message">
+  <div class="oc-text-input-message" aria-live="off" aria-atomic="true" role="alert">
     <!--v-if--> <span id="oc-textinput-1-message" class=""></span>
   </div>
   <!--v-if-->
