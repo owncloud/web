@@ -939,11 +939,11 @@ importers:
         specifier: 5.1.0
         version: 5.1.0(@uppy/core@5.2.0)
       '@uppy/utils':
-        specifier: 7.1.4
-        version: 7.1.4
+        specifier: 7.1.5
+        version: 7.1.5
       '@uppy/xhr-upload':
-        specifier: 5.1.0
-        version: 5.1.0(@uppy/core@5.2.0)
+        specifier: 5.1.1
+        version: 5.1.1(@uppy/core@5.2.0)
       '@vavt/cm-extension':
         specifier: ^1.11.2
         version: 1.11.2
@@ -1100,11 +1100,11 @@ importers:
         specifier: 5.1.0
         version: 5.1.0(@uppy/core@5.2.0)
       '@uppy/utils':
-        specifier: 7.1.4
-        version: 7.1.4
+        specifier: 7.1.5
+        version: 7.1.5
       '@uppy/xhr-upload':
-        specifier: 5.1.0
-        version: 5.1.0(@uppy/core@5.2.0)
+        specifier: 5.1.1
+        version: 5.1.1(@uppy/core@5.2.0)
       '@vueuse/core':
         specifier: 14.1.0
         version: 14.1.0(vue@3.5.25(typescript@5.9.3))
@@ -3122,11 +3122,11 @@ packages:
     peerDependencies:
       '@uppy/core': ^5.2.0
 
-  '@uppy/utils@7.1.4':
-    resolution: {integrity: sha512-vFRVoxEl4/qEsI6cu0ZENRvKE6s/Ps1cONUinO8RcZqw0g7rDkcKhyW56qMLO9YUwxT5gsVp2eqNoms6Gf7Uhw==}
+  '@uppy/utils@7.1.5':
+    resolution: {integrity: sha512-Vz4WGTjef6WebECGur4clWjpkET4o3bdvPMj1m2sD5cL+dTt69m+FIE5h5JD3HBMLEPTXPVkrXGMIFcbOYC12Q==}
 
-  '@uppy/xhr-upload@5.1.0':
-    resolution: {integrity: sha512-beD1QMGTfeSve3pWR+n5wAYnROopfdLS3ut5wu2XbkCdpdzQQEWnsVdDY6m55p0zLCqOmmetj3NcmhnSLj+Dnw==}
+  '@uppy/xhr-upload@5.1.1':
+    resolution: {integrity: sha512-Vp0HWVA8o+niC2uISxPt0pZ+95bHHkk9HzNaUTrff/vq+20Ln68BS2auJhc9ecJzI6SKAlGZ342dcTQ/onw0nA==}
     peerDependencies:
       '@uppy/core': ^5.2.0
 
@@ -9512,7 +9512,7 @@ snapshots:
   '@uppy/companion-client@5.1.1(@uppy/core@5.2.0)':
     dependencies:
       '@uppy/core': 5.2.0
-      '@uppy/utils': 7.1.4
+      '@uppy/utils': 7.1.5
       namespace-emitter: 2.0.1
       p-retry: 6.2.1
 
@@ -9520,7 +9520,7 @@ snapshots:
     dependencies:
       '@transloadit/prettier-bytes': 0.3.5
       '@uppy/store-default': 5.0.0
-      '@uppy/utils': 7.1.4
+      '@uppy/utils': 7.1.5
       lodash: 4.17.21
       mime-match: 1.0.2
       namespace-emitter: 2.0.1
@@ -9530,7 +9530,7 @@ snapshots:
   '@uppy/drop-target@4.1.0(@uppy/core@5.2.0)':
     dependencies:
       '@uppy/core': 5.2.0
-      '@uppy/utils': 7.1.4
+      '@uppy/utils': 7.1.5
 
   '@uppy/store-default@5.0.0': {}
 
@@ -9538,19 +9538,19 @@ snapshots:
     dependencies:
       '@uppy/companion-client': 5.1.1(@uppy/core@5.2.0)
       '@uppy/core': 5.2.0
-      '@uppy/utils': 7.1.4
+      '@uppy/utils': 7.1.5
       tus-js-client: 4.3.1
 
-  '@uppy/utils@7.1.4':
+  '@uppy/utils@7.1.5':
     dependencies:
       lodash: 4.17.21
       preact: 10.26.8
 
-  '@uppy/xhr-upload@5.1.0(@uppy/core@5.2.0)':
+  '@uppy/xhr-upload@5.1.1(@uppy/core@5.2.0)':
     dependencies:
       '@uppy/companion-client': 5.1.1(@uppy/core@5.2.0)
       '@uppy/core': 5.2.0
-      '@uppy/utils': 7.1.4
+      '@uppy/utils': 7.1.5
 
   '@vavt/cm-extension@1.11.2': {}
 
