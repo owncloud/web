@@ -53,7 +53,7 @@
     "@vueuse/core": "^14.1.0",
     "axios": "^1.13.2",
     "deepmerge": "^4.3.1",
-    "dompurify": "^3.3.0",
+    "dompurify": "^3.3.1",
     "emoji-regex": "^10.6.0",
     "filesize": "^11.0.13",
     "fuse.js": "^7.1.0",
