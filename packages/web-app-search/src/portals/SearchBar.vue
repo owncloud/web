@@ -37,6 +37,7 @@
       @keyup.up="onKeyUpUp"
       @keyup.down="onKeyUpDown"
       @keyup.enter="onKeyUpEnter"
+      @keydown.tab="hideOptionsDrop"
     >
       <template #locationFilter>
         <search-bar-filter
@@ -169,6 +170,7 @@ const locationFilterId = ref(SearchLocationFilterConstants.allFiles)
 const optionsDropRef = useTemplateRef('optionsDropRef')
 const activePreviewIndex = ref(null)
 const term = ref('')
+const originalTerm = ref('')
 const restoreSearchFromRoute = ref(false)
 const searchResults = ref([])
 const loading = ref(false)
@@ -178,6 +180,7 @@ const clearTermEvent = ref(null)
 
 function onClear() {
   term.value = ''
+  originalTerm.value = ''
   optionsDrop.value.hide()
 }
 function findNextPreviewIndex(previous = false) {
@@ -195,12 +198,60 @@ function findNextPreviewIndex(previous = false) {
 
   return index
 }
+
+function getTextFromActivePreview() {
+  if (unref(activePreviewIndex) === null) {
+    return unref(originalTerm)
+  }
+
+  const previewElements = optionsDrop.value.$el.querySelectorAll('.preview')
+  const activeElement = previewElements[unref(activePreviewIndex)]
+
+  if (!activeElement) {
+    return unref(originalTerm)
+  }
+
+  const searchId = activeElement.dataset?.searchId
+  if (!searchId) {
+    return unref(originalTerm)
+  }
+
+  for (const searchResultObj of unref(searchResults)) {
+    const result = searchResultObj.result
+    if (!result) continue
+
+    for (const providerResult of result.values) {
+      if (providerResult.id === searchId) {
+        return providerResult.data?.name || unref(originalTerm)
+      }
+    }
+  }
+
+  return unref(originalTerm)
+}
+
 function onKeyUpUp() {
   activePreviewIndex.value = findNextPreviewIndex(true)
+
+  const inputElement = document.getElementsByClassName('oc-search-input')[0] as HTMLInputElement
+  if (inputElement) {
+    const newValue = getTextFromActivePreview()
+    term.value = newValue
+    inputElement.value = newValue
+  }
+
   scrollToActivePreviewOption()
 }
 function onKeyUpDown() {
   activePreviewIndex.value = findNextPreviewIndex(false)
+
+  const inputElement = document.getElementsByClassName('oc-search-input')[0] as HTMLInputElement
+  if (inputElement) {
+    const newValue = getTextFromActivePreview()
+    term.value = newValue
+    inputElement.value = newValue
+  }
+
   scrollToActivePreviewOption()
 }
 function scrollToActivePreviewOption() {
@@ -418,6 +469,7 @@ const showPreview = async () => {
 const updateTerm = (input: string) => {
   restoreSearchFromRoute.value = false
   term.value = input
+  originalTerm.value = input
   if (!unref(term)) {
     return unref(optionsDrop)?.hide()
   }
@@ -449,6 +501,25 @@ watch(
           element: 'span',
           className: 'mark-highlight',
           exclude: ['.provider-details *']
+        })
+
+        // Make all focusable elements in dropdown non-focusable via tab
+        const dropdownEl = unref(optionsDrop).$el as HTMLElement
+
+        // Set tabindex on the dropdown container itself
+        dropdownEl.setAttribute('tabindex', '-1')
+
+        // Also find and set tabindex on any tippy box containers
+        const tippyBox = document.querySelector('.tippy-box[data-state="visible"]')
+        if (tippyBox) {
+          tippyBox.setAttribute('tabindex', '-1')
+        }
+
+        const focusableElements = dropdownEl.querySelectorAll(
+          'a, button, input, select, textarea, [tabindex]:not([tabindex="-1"])'
+        )
+        focusableElements.forEach((el) => {
+          el.setAttribute('tabindex', '-1')
         })
       }
     })
@@ -572,6 +643,25 @@ onBeforeUnmount(() => {
     overflow-y: auto;
     max-height: calc(100vh - 60px);
     text-decoration: none;
+
+    // Prevent all elements inside dropdown from being focusable via tab
+    * {
+      -webkit-user-select: none;
+      user-select: none;
+    }
+
+    a,
+    button,
+    [role='option'] {
+      pointer-events: auto;
+      cursor: pointer;
+    }
+
+    a:focus,
+    button:focus,
+    [tabindex]:focus {
+      outline: none;
+    }
 
     .oc-card {
       padding: 0 !important;
