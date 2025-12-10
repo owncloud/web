@@ -40,6 +40,7 @@
     </div>
     <div class="oc-search-button-wrapper" :class="{ 'oc-invisible-sr': buttonHidden }">
       <oc-button
+        tabindex="-1"
         class="oc-search-button"
         variation="primary"
         appearance="filled"
