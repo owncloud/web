@@ -5,6 +5,7 @@ import { sidebar, editor } from '../utils'
 import Collaborator, { ICollaborator } from '../share/collaborator'
 import { createLink } from '../link/actions'
 import { File } from '../../../types'
+import { World } from '../../../../cucumber/environment'
 
 const newSpaceMenuButton = '#new-space-menu-btn'
 const spaceNameInputField = '.oc-modal input'
@@ -136,8 +137,9 @@ export const changeSpaceSubtitle = async (args: {
 export const changeSpaceDescription = async (args: {
   page: Page
   value: string
+  world: World
 }): Promise<void> => {
-  const { page, value } = args
+  const { page, value, world } = args
   await openActionsPanel(page)
   const waitForUpdate = () =>
     page.waitForResponse(
@@ -154,7 +156,7 @@ export const changeSpaceDescription = async (args: {
     page.waitForResponse((resp) => resp.status() === 207 && resp.request().method() === 'PROPFIND'),
     page.locator(spacesDescriptionSaveTextFileInEditorButton).click()
   ])
-  await editor.close(page)
+  await editor.close(page, world)
 }
 
 /**/

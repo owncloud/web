@@ -67,7 +67,7 @@ When(
         await spacesObject.changeSubtitle({ key, value })
         break
       case 'description':
-        await spacesObject.changeDescription({ value })
+        await spacesObject.changeDescription({ value, world: this })
         break
       case 'quota':
         await spacesObject.changeQuota({ key, value })

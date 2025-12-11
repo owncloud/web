@@ -38,7 +38,7 @@ When(
   '{string} closes the file viewer',
   async function (this: World, stepUser: string): Promise<void> {
     const { page } = this.actorsEnvironment.getActor({ key: stepUser })
-    await editor.close(page)
+    await editor.close(page, this)
   }
 )
 
@@ -46,7 +46,7 @@ When(
   '{string} saves the file viewer',
   async function (this: World, stepUser: string): Promise<void> {
     const { page } = this.actorsEnvironment.getActor({ key: stepUser })
-    await editor.save(page)
+    await editor.save(page, this)
   }
 )
 
@@ -69,6 +69,13 @@ When(
       text,
       editor
     })
+    const a11yObject = new objects.a11y.Accessibility({ page })
+    const a11yViolations =
+      await a11yObject.getSevereAccessibilityViolations('#text-editor-container')
+    this.currentStepData = {
+      a11yViolations
+    }
+    expect(a11yViolations).toMatchObject([])
   }
 )
 

@@ -1,5 +1,6 @@
 import { Download, Page } from '@playwright/test'
 import * as po from './actions'
+import { World } from '../../../cucumber/environment/world'
 
 export class AppStore {
   #page: Page
@@ -8,12 +9,12 @@ export class AppStore {
     this.#page = page
   }
 
-  async openAppStore(): Promise<void> {
-    await po.openAppStore({ page: this.#page })
+  async openAppStore(world: World): Promise<void> {
+    await po.openAppStore({ page: this.#page, world: world })
   }
 
-  waitForAppStoreIsVisible(): Promise<void> {
-    return po.waitForAppStoreIsVisible({ page: this.#page })
+  waitForAppStoreIsVisible(world: World): Promise<void> {
+    return po.waitForAppStoreIsVisible({ page: this.#page, world: world })
   }
 
   getAppsList(): Promise<string[]> {
@@ -32,8 +33,8 @@ export class AppStore {
     return po.selectTag({ page: this.#page, tag })
   }
 
-  selectApp(app: string): Promise<void> {
-    return po.selectApp({ page: this.#page, app })
+  selectApp(app: string, world: World): Promise<void> {
+    return po.selectApp({ page: this.#page, app, world })
   }
 
   waitForAppDetailsIsVisible(app: string): Promise<void> {

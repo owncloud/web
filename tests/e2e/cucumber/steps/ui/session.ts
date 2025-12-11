@@ -74,7 +74,7 @@ async function LogOutUser(this: World, stepUser: string): Promise<void> {
   const canLogout = !!(await actor.page.locator('#_userMenuButton').count())
 
   const sessionObject = new objects.runtime.Session({ page: actor.page })
-  canLogout && (await sessionObject.logout())
+  canLogout && (await sessionObject.logout(this))
   await actor.close()
 }
 
