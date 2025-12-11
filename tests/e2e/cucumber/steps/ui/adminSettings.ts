@@ -15,7 +15,12 @@ Then(
     const { page } = this.actorsEnvironment.getActor({ key: stepUser })
     const spacesObject = new objects.applicationAdminSettings.Spaces({ page })
     const actualList = await spacesObject.getDisplayedSpaces()
-
+    const a11yObject = new objects.a11y.Accessibility({ page })
+    const a11yViolations = await a11yObject.getSevereAccessibilityViolations('body')
+    this.currentStepData = {
+      a11yViolations
+    }
+    expect(a11yViolations).toMatchObject([])
     for (const info of stepTable.hashes()) {
       const space = spacesObject.getSpace({ key: info.id })
       expect(actualList.includes(space.id)).toBe(actionType === 'should')
@@ -42,6 +47,12 @@ When(
       default:
         throw new Error(`${action} not implemented`)
     }
+    const a11yObject = new objects.a11y.Accessibility({ page })
+    const a11yViolations = await a11yObject.getSevereAccessibilityViolations('body')
+    this.currentStepData = {
+      a11yViolations
+    }
+    expect(a11yViolations).toMatchObject([])
   }
 )
 
@@ -70,6 +81,12 @@ When(
       default:
         throw new Error(`'${attribute}' not implemented`)
     }
+    const a11yObject = new objects.a11y.Accessibility({ page })
+    const a11yViolations = await a11yObject.getSevereAccessibilityViolations('body')
+    this.currentStepData = {
+      a11yViolations
+    }
+    expect(a11yViolations).toMatchObject([])
   }
 )
 
@@ -93,6 +110,12 @@ When(
       value,
       context: 'batch-actions'
     })
+    const a11yObject = new objects.a11y.Accessibility({ page })
+    const a11yViolations = await a11yObject.getSevereAccessibilityViolations('body')
+    this.currentStepData = {
+      a11yViolations
+    }
+    expect(a11yViolations).toMatchObject([])
   }
 )
 
@@ -124,6 +147,12 @@ When(
       default:
         throw new Error(`'${action}' not implemented`)
     }
+    const a11yObject = new objects.a11y.Accessibility({ page })
+    const a11yViolations = await a11yObject.getSevereAccessibilityViolations('body')
+    this.currentStepData = {
+      a11yViolations
+    }
+    expect(a11yViolations).toMatchObject([])
   }
 )
 
@@ -133,6 +162,12 @@ When(
     const { page } = this.actorsEnvironment.getActor({ key: stepUser })
     const pageObject = new objects.applicationAdminSettings.page.Users({ page })
     await pageObject.navigate()
+    const a11yObject = new objects.a11y.Accessibility({ page })
+    const a11yViolations = await a11yObject.getSevereAccessibilityViolations('body')
+    this.currentStepData = {
+      a11yViolations
+    }
+    expect(a11yViolations).toMatchObject([])
   }
 )
 
@@ -152,6 +187,12 @@ When(
       default:
         throw new Error(`${action} not implemented`)
     }
+    const a11yObject = new objects.a11y.Accessibility({ page })
+    const a11yViolations = await a11yObject.getSevereAccessibilityViolations('body')
+    this.currentStepData = {
+      a11yViolations
+    }
+    expect(a11yViolations).toMatchObject([])
   }
 )
 
@@ -161,6 +202,12 @@ When(
     const { page } = this.actorsEnvironment.getActor({ key: stepUser })
     const pageObject = new objects.applicationAdminSettings.page.General({ page })
     await pageObject.navigate()
+    const a11yObject = new objects.a11y.Accessibility({ page })
+    const a11yViolations = await a11yObject.getSevereAccessibilityViolations('body')
+    this.currentStepData = {
+      a11yViolations
+    }
+    expect(a11yViolations).toMatchObject([])
   }
 )
 
@@ -170,7 +217,7 @@ Then(
     const { page } = this.actorsEnvironment.getActor({ key: stepUser })
     const generalObject = new objects.applicationAdminSettings.General({ page })
     const logoPath = this.filesEnvironment.getFile({ name: localFile.split('/').pop() }).path
-    await generalObject.uploadLogo({ path: logoPath })
+    await generalObject.uploadLogo({ path: logoPath, world: this })
   }
 )
 
@@ -179,7 +226,7 @@ Then(
   async function (this: World, stepUser: string): Promise<void> {
     const { page } = this.actorsEnvironment.getActor({ key: stepUser })
     const generalObject = new objects.applicationAdminSettings.General({ page })
-    await generalObject.resetLogo()
+    await generalObject.resetLogo(this)
   }
 )
 
@@ -189,6 +236,12 @@ When(
     const { page } = this.actorsEnvironment.getActor({ key: stepUser })
     const usersObject = new objects.applicationAdminSettings.Users({ page })
     await usersObject.changeQuota({ key, value, action: 'context-menu' })
+    const a11yObject = new objects.a11y.Accessibility({ page })
+    const a11yViolations = await a11yObject.getSevereAccessibilityViolations('body')
+    this.currentStepData = {
+      a11yViolations
+    }
+    expect(a11yViolations).toMatchObject([])
   }
 )
 
@@ -208,6 +261,12 @@ When(
       await usersObject.selectUser({ key: user })
     }
     await usersObject.changeQuotaUsingBatchAction({ value, users })
+    const a11yObject = new objects.a11y.Accessibility({ page })
+    const a11yViolations = await a11yObject.getSevereAccessibilityViolations('body')
+    this.currentStepData = {
+      a11yViolations
+    }
+    expect(a11yViolations).toMatchObject([])
   }
 )
 
@@ -222,6 +281,12 @@ Then(
     const { page } = this.actorsEnvironment.getActor({ key: stepUser })
     const usersObject = new objects.applicationAdminSettings.Users({ page })
     const users = await usersObject.getDisplayedUsers()
+    const a11yObject = new objects.a11y.Accessibility({ page })
+    const a11yViolations = await a11yObject.getSevereAccessibilityViolations('body')
+    this.currentStepData = {
+      a11yViolations
+    }
+    expect(a11yViolations).toMatchObject([])
     for (const { user } of stepTable.hashes()) {
       switch (action) {
         case 'should':
@@ -246,6 +311,12 @@ When(
     for (const { filter, values } of stepTable.hashes()) {
       await usersObject.filter({ filter, values: values.split(',') })
     }
+    const a11yObject = new objects.a11y.Accessibility({ page })
+    const a11yViolations = await a11yObject.getSevereAccessibilityViolations('body')
+    this.currentStepData = {
+      a11yViolations
+    }
+    expect(a11yViolations).toMatchObject([])
   }
 )
 
@@ -277,6 +348,12 @@ When(
       default:
         throw new Error(`'${action}' not implemented`)
     }
+    const a11yObject = new objects.a11y.Accessibility({ page })
+    const a11yViolations = await a11yObject.getSevereAccessibilityViolations('body')
+    this.currentStepData = {
+      a11yViolations
+    }
+    expect(a11yViolations).toMatchObject([])
   }
 )
 
@@ -298,6 +375,12 @@ When(
       value: value,
       action: 'context-menu'
     })
+    const a11yObject = new objects.a11y.Accessibility({ page })
+    const a11yViolations = await a11yObject.getSevereAccessibilityViolations('body')
+    this.currentStepData = {
+      a11yViolations
+    }
+    expect(a11yViolations).toMatchObject([])
   }
 )
 
@@ -330,6 +413,12 @@ When(
       default:
         throw new Error(`'${action}' not implemented`)
     }
+    const a11yObject = new objects.a11y.Accessibility({ page })
+    const a11yViolations = await a11yObject.getSevereAccessibilityViolations('body')
+    this.currentStepData = {
+      a11yViolations
+    }
+    expect(a11yViolations).toMatchObject([])
   }
 )
 
@@ -360,6 +449,12 @@ When(
       default:
         throw new Error(`'${actionType}' not implemented`)
     }
+    const a11yObject = new objects.a11y.Accessibility({ page })
+    const a11yViolations = await a11yObject.getSevereAccessibilityViolations('body')
+    this.currentStepData = {
+      a11yViolations
+    }
+    expect(a11yViolations).toMatchObject([])
   }
 )
 
@@ -369,6 +464,12 @@ When(
     const { page } = this.actorsEnvironment.getActor({ key: stepUser })
     const groupsObject = new objects.applicationAdminSettings.page.Groups({ page })
     await groupsObject.navigate()
+    const a11yObject = new objects.a11y.Accessibility({ page })
+    const a11yViolations = await a11yObject.getSevereAccessibilityViolations('body')
+    this.currentStepData = {
+      a11yViolations
+    }
+    expect(a11yViolations).toMatchObject([])
   }
 )
 
@@ -381,6 +482,12 @@ When(
     for (const info of stepTable.hashes()) {
       await groupsObject.createGroup({ key: info.id })
     }
+    const a11yObject = new objects.a11y.Accessibility({ page })
+    const a11yViolations = await a11yObject.getSevereAccessibilityViolations('body')
+    this.currentStepData = {
+      a11yViolations
+    }
+    expect(a11yViolations).toMatchObject([])
   }
 )
 
@@ -402,6 +509,12 @@ When(
       value: value,
       action: 'context-menu'
     })
+    const a11yObject = new objects.a11y.Accessibility({ page })
+    const a11yViolations = await a11yObject.getSevereAccessibilityViolations('body')
+    this.currentStepData = {
+      a11yViolations
+    }
+    expect(a11yViolations).toMatchObject([])
   }
 )
 
@@ -416,7 +529,12 @@ Then(
     const { page } = this.actorsEnvironment.getActor({ key: stepUser })
     const groupsObject = new objects.applicationAdminSettings.Groups({ page })
     const groups = await groupsObject.getDisplayedGroups()
-
+    const a11yObject = new objects.a11y.Accessibility({ page })
+    const a11yViolations = await a11yObject.getSevereAccessibilityViolations('body')
+    this.currentStepData = {
+      a11yViolations
+    }
+    expect(a11yViolations).toMatchObject([])
     for (const { group } of stepTable.hashes()) {
       switch (action) {
         case 'should':
@@ -445,6 +563,12 @@ When(
         password: info.password
       })
     }
+    const a11yObject = new objects.a11y.Accessibility({ page })
+    const a11yViolations = await a11yObject.getSevereAccessibilityViolations('body')
+    this.currentStepData = {
+      a11yViolations
+    }
+    expect(a11yViolations).toMatchObject([])
   }
 )
 
@@ -476,6 +600,12 @@ When(
       default:
         throw new Error(`'${actionType}' not implemented`)
     }
+    const a11yObject = new objects.a11y.Accessibility({ page })
+    const a11yViolations = await a11yObject.getSevereAccessibilityViolations('body')
+    this.currentStepData = {
+      a11yViolations
+    }
+    expect(a11yViolations).toMatchObject([])
   }
 )
 
@@ -485,6 +615,12 @@ When(
     const { page } = this.actorsEnvironment.getActor({ key: stepUser })
     const usersObject = new objects.applicationAdminSettings.Users({ page })
     await usersObject.openEditPanel({ key: actionUser, action: action.replace(' ', '-') })
+    const a11yObject = new objects.a11y.Accessibility({ page })
+    const a11yViolations = await a11yObject.getSevereAccessibilityViolations('body')
+    this.currentStepData = {
+      a11yViolations
+    }
+    expect(a11yViolations).toMatchObject([])
   }
 )
 
@@ -492,6 +628,12 @@ Then('{string} should see the edit panel', async function (this: World, stepUser
   const { page } = this.actorsEnvironment.getActor({ key: stepUser })
   const usersObject = new objects.applicationAdminSettings.Users({ page })
   await usersObject.waitForEditPanelToBeVisible()
+  const a11yObject = new objects.a11y.Accessibility({ page })
+  const a11yViolations = await a11yObject.getSevereAccessibilityViolations('body')
+  this.currentStepData = {
+    a11yViolations
+  }
+  expect(a11yViolations).toMatchObject([])
 })
 
 When(
@@ -501,6 +643,12 @@ When(
     const spacesObject = new objects.applicationAdminSettings.Spaces({ page })
     await spacesObject.openPanel({ key })
     await spacesObject.openActionSideBarPanel({ action: 'SpaceMembers' })
+    const a11yObject = new objects.a11y.Accessibility({ page })
+    const a11yViolations = await a11yObject.getSevereAccessibilityViolations('body')
+    this.currentStepData = {
+      a11yViolations
+    }
+    expect(a11yViolations).toMatchObject([])
   }
 )
 
@@ -514,6 +662,12 @@ Then(
       viewer: await spacesObject.listMembers({ filter: 'Can view' }),
       editor: await spacesObject.listMembers({ filter: 'Can edit' })
     }
+    const a11yObject = new objects.a11y.Accessibility({ page })
+    const a11yViolations = await a11yObject.getSevereAccessibilityViolations('body')
+    this.currentStepData = {
+      a11yViolations
+    }
+    expect(a11yViolations).toMatchObject([])
     for (const info of stepTable.hashes()) {
       const shareRole = shareRoles[info.role as keyof typeof shareRoles]
       expect(actualMemberList[shareRole as keyof typeof actualMemberList]).toContain(info.user)

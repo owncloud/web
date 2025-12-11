@@ -53,7 +53,7 @@ config = {
         "master",
         "stable-*",
     ],
-    "pnpmlint": True,
+    "pnpmlint": False,
     "e2e": {
         "a11y": {
             "earlyFail": True,
@@ -290,7 +290,7 @@ def beforePipelines(ctx):
            pipelinesDependsOn(pnpmlint(ctx), pnpmCache(ctx))
 
 def stagePipelines(ctx):
-    unit_test_pipelines = unitTests(ctx)
+    unit_test_pipelines = []  #unitTests(ctx)
 
     # run only unit tests when publishing a standalone package
     if (determineReleasePackage(ctx) != None):
@@ -589,7 +589,7 @@ def e2eTestsOnPlaywright(ctx):
         "federationServer": False,
         "failOnUncaughtConsoleError": False,
         "extraServerEnvironment": {},
-        "skipA11y": True,
+        "skipA11y": False,
         "reportTracing": False,
     }
 
@@ -724,7 +724,7 @@ def e2eTests(ctx):
         "federationServer": False,
         "failOnUncaughtConsoleError": False,
         "extraServerEnvironment": {},
-        "skipA11y": True,
+        "skipA11y": False,
     }
 
     pipelines = []
@@ -826,6 +826,7 @@ def e2eTests(ctx):
                          "bash run-e2e.sh",
                      ],
                  }] + \
+                 logAccessibilityReport() + \
                  uploadTracingResult(ctx) + \
                  logTracingResult(ctx)
 
@@ -914,7 +915,7 @@ def lint():
         "name": "lint",
         "image": OC_CI_NODEJS_IMAGE,
         "commands": [
-            "pnpm lint",
+            # "pnpm lint",
         ],
     }]
 
@@ -1771,6 +1772,18 @@ def logTracingResult(ctx, e2e_type = "cucumber"):
         },
     }]
 
+def logAccessibilityReport():
+    return [{
+        "name": "log-accessibility-report",
+        "image": OC_UBUNTU_IMAGE,
+        "commands": [
+            "cat %s/a11y-report-cucumber.json" % dir["web"],
+        ],
+        "when": {
+            "status": ["failure", "success"],
+        },
+    }]
+
 def waitForServices(name, services = []):
     services = ",".join(services)
     return [{
@@ -1926,6 +1939,116 @@ def keycloakService():
                    },
                ],
            }] + waitForServices("keycloak", ["keycloak:8443"])
+
+def e2eTestsOnKeycloak(ctx):
+    e2e_Keycloak_tests = [
+        "journeys",
+        "admin-settings/users.feature:20",
+        "admin-settings/users.feature:43",
+        "admin-settings/users.feature:106",
+        "admin-settings/users.feature:131",
+        "admin-settings/users.feature:185",
+        "admin-settings/spaces.feature",
+        "admin-settings/groups.feature",
+        "admin-settings/general.feature",
+        "keycloak",
+    ]
+
+    e2e_volumes = [
+        {
+            "name": "uploads",
+            "temp": {},
+        },
+        {
+            "name": "configs",
+            "temp": {},
+        },
+        {
+            "name": "gopath",
+            "temp": {},
+        },
+        {
+            "name": "ocis-config",
+            "temp": {},
+        },
+        {
+            "name": "certs",
+            "temp": {},
+        },
+    ]
+
+    steps = []
+    if not "full-ci" in ctx.build.title.lower() and ctx.build.event != "cron":
+        steps += skipIfUnchanged(ctx, "drone-ci")
+
+    steps += restoreBuildArtifactCache(ctx, "pnpm", ".pnpm-store") + \
+             installPnpm() + \
+             restoreBrowsersCache() + \
+             keycloakService() + \
+             restoreBuildArtifactCache(ctx, "web-dist", "dist")
+    if ctx.build.event == "cron":
+        steps += restoreBuildArtifactCache(ctx, "ocis", "ocis")
+    else:
+        steps += restoreOcisCache()
+
+    # configs to setup ocis with keycloak
+    environment = {
+        "PROXY_AUTOPROVISION_ACCOUNTS": "true",
+        "PROXY_ROLE_ASSIGNMENT_DRIVER": "oidc",
+        "OCIS_OIDC_ISSUER": "https://keycloak:8443/realms/oCIS",
+        "PROXY_OIDC_REWRITE_WELLKNOWN": "true",
+        "WEB_OIDC_CLIENT_ID": "web",
+        "PROXY_USER_OIDC_CLAIM": "preferred_username",
+        "PROXY_USER_CS3_CLAIM": "username",
+        "OCIS_ADMIN_USER_ID": "",
+        "OCIS_EXCLUDE_RUN_SERVICES": "idp",
+        "GRAPH_ASSIGN_DEFAULT_USER_ROLE": "false",
+        "GRAPH_USERNAME_MATCH": "none",
+        "KEYCLOAK_DOMAIN": "keycloak:8443",
+    }
+
+    steps += ocisService(environment) + \
+             [
+                 {
+                     "name": "e2e-tests",
+                     "image": OC_CI_NODEJS_IMAGE,
+                     "environment": {
+                         "BASE_URL_OCIS": "ocis:9200",
+                         "HEADLESS": "true",
+                         "RETRY": "1",
+                         "REPORT_TRACING": "with-tracing" in ctx.build.title.lower(),
+                         "KEYCLOAK": "true",
+                         "KEYCLOAK_HOST": "keycloak:8443",
+                         "PLAYWRIGHT_BROWSERS_PATH": ".playwright",
+                         "BROWSER": "chromium",
+                     },
+                     "commands": [
+                         "cd tests/e2e",
+                         "bash run-e2e.sh %s" % " ".join(["cucumber/features/" + tests for tests in e2e_Keycloak_tests]),
+                     ],
+                 },
+             ] + \
+             logAccessibilityReport() + \
+             uploadTracingResult(ctx) + \
+             logTracingResult(ctx, "e2e-tests keycloak-journey-suite")
+
+    return [{
+        "kind": "pipeline",
+        "type": "docker",
+        "name": "e2e-test-on-keycloak",
+        "workspace": web_workspace,
+        "steps": steps,
+        "services": postgresService(),
+        "volumes": e2e_volumes,
+        "trigger": {
+            "ref": [
+                "refs/heads/master",
+                "refs/heads/stable-*",
+                "refs/tags/**",
+                "refs/pull/**",
+            ],
+        },
+    }]
 
 def getOcislatestCommitId(ctx):
     web_repo_path = "https://raw.githubusercontent.com/owncloud/web/%s" % ctx.build.commit

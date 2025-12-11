@@ -1,6 +1,7 @@
 import { Page } from '@playwright/test'
 import { Actor } from '../../../../../support/types'
 import { objects } from '../../../..'
+import { World } from '../../../../../cucumber/environment'
 
 const sharesNavSelector = '//a[@data-nav-name="files-shares"]'
 const openShareWithMeButton = `//a/span[text()='Open "Shared with me"']`
@@ -13,12 +14,13 @@ export class WithMe {
     this.#page = page
   }
 
-  async navigate(): Promise<void> {
+  async navigate(world: World): Promise<void> {
     await this.#page.locator(sharesNavSelector).click()
     await objects.a11y.Accessibility.assertNoSevereA11yViolations(
       this.#page,
       ['files'],
-      'files page'
+      'files page',
+      world
     )
   }
 

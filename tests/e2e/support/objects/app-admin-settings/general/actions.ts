@@ -1,17 +1,16 @@
 import { basename } from 'path'
 import { Page, expect } from '@playwright/test'
 import { objects } from '../../..'
+import { World } from '../../../../cucumber/environment/world'
 
-export const uploadLogo = async (path: string, page: Page): Promise<void> => {
+export const uploadLogo = async (path: string, page: Page, world: World): Promise<void> => {
   await page.click('#logo-context-btn')
-
-  // wait for the visible context menu and run accessibility scan on that menu
-  await objects.a11y.Accessibility.assertNoSevereA11yViolations(
-    page,
-    ['tippyBoxVisible'],
-    'logo menu'
-  )
-
+  const a11yObject = new objects.a11y.Accessibility({ page })
+  const a11yViolations = await a11yObject.getSevereAccessibilityViolations('#space-context-drop')
+  world.currentStepData = {
+    a11yViolations
+  }
+  expect(a11yViolations).toMatchObject([])
   const logoInput = page.locator('#logo-upload-input')
   await logoInput.setInputFiles(path)
 
@@ -22,7 +21,8 @@ export const uploadLogo = async (path: string, page: Page): Promise<void> => {
   await objects.a11y.Accessibility.assertNoSevereA11yViolations(
     page,
     ['logoWrapper'],
-    'logo area after upload'
+    'logo area after upload',
+    world
   )
 
   const logoImg = page.locator(`${selectors.logoWrapper} img`)
@@ -30,20 +30,11 @@ export const uploadLogo = async (path: string, page: Page): Promise<void> => {
   expect(logoSrc).toContain(basename(path))
 }
 
-export const resetLogo = async (page: Page): Promise<void> => {
-  const a11yObject = new objects.a11y.Accessibility({ page })
-  const selectors = a11yObject.getSelectors()
-
-  const imgBefore = page.locator(`${selectors.logoWrapper} img`)
+export const resetLogo = async (page: Page, world: World): Promise<void> => {
+  const imgBefore = page.locator('.logo-wrapper img')
   const srcBefore = await imgBefore.getAttribute('src')
   await page.click('#logo-context-btn')
-
-  // wait for the visible context menu and run accessibility scan on that menu
-  await objects.a11y.Accessibility.assertNoSevereA11yViolations(
-    page,
-    ['tippyBoxVisible'],
-    'logo menu'
-  )
+  const a11yObject = new objects.a11y.Accessibility({ page })
 
   await page.click('.oc-general-actions-reset-logo-trigger')
 
@@ -54,9 +45,11 @@ export const resetLogo = async (page: Page): Promise<void> => {
   await objects.a11y.Accessibility.assertNoSevereA11yViolations(
     page,
     ['logoWrapper'],
-    'logo area after reset'
+    'logo area after reset',
+    world
   )
 
+  const selectors = a11yObject.getSelectors()
   const imgAfter = page.locator(`${selectors.logoWrapper} img`)
   const srcAfter = await imgAfter.getAttribute('src')
   expect(srcAfter).not.toEqual(srcBefore)

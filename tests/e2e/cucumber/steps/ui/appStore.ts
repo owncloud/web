@@ -8,7 +8,7 @@ When(
   async function (this: World, stepUser: string): Promise<void> {
     const { page } = this.actorsEnvironment.getActor({ key: stepUser })
     const pageObject = new objects.appStore.AppStore({ page })
-    await pageObject.openAppStore()
+    await pageObject.openAppStore(this)
   }
 )
 
@@ -17,7 +17,7 @@ Then(
   async function (this: World, stepUser: string): Promise<void> {
     const { page } = this.actorsEnvironment.getActor({ key: stepUser })
     const pageObject = new objects.appStore.AppStore({ page })
-    await pageObject.waitForAppStoreIsVisible()
+    await pageObject.waitForAppStoreIsVisible(this)
   }
 )
 
@@ -26,7 +26,13 @@ Then(
   async function (this: World, stepUser: string, stepTable: DataTable): Promise<void> {
     const { page } = this.actorsEnvironment.getActor({ key: stepUser })
     const pageObject = new objects.appStore.AppStore({ page })
-    const apps = await pageObject.getAppsList()
+    const apps = await pageObject.getAppsList(this)
+    const a11yObject = new objects.a11y.Accessibility({ page })
+    const a11yViolations = await a11yObject.getSevereAccessibilityViolations('body')
+    this.currentStepData = {
+      a11yViolations
+    }
+    expect(a11yViolations).toMatchObject([])
     for (const { app } of stepTable.hashes()) {
       expect(apps).toContain(app)
     }
@@ -38,7 +44,13 @@ When(
   async function (this: World, stepUser: string, searchTerm: string): Promise<void> {
     const { page } = this.actorsEnvironment.getActor({ key: stepUser })
     const pageObject = new objects.appStore.AppStore({ page })
-    await pageObject.setSearchTerm(searchTerm)
+    await pageObject.setSearchTerm(searchTerm, this)
+    const a11yObject = new objects.a11y.Accessibility({ page })
+    const a11yViolations = await a11yObject.getSevereAccessibilityViolations('body')
+    this.currentStepData = {
+      a11yViolations
+    }
+    expect(a11yViolations).toMatchObject([])
   }
 )
 
@@ -47,7 +59,13 @@ When(
   async function (this: World, stepUser: string, tag: string, app: string): Promise<void> {
     const { page } = this.actorsEnvironment.getActor({ key: stepUser })
     const pageObject = new objects.appStore.AppStore({ page })
-    await pageObject.selectAppTag({ tag, app })
+    await pageObject.selectAppTag({ tag, app, world: this })
+    const a11yObject = new objects.a11y.Accessibility({ page })
+    const a11yViolations = await a11yObject.getSevereAccessibilityViolations('body')
+    this.currentStepData = {
+      a11yViolations
+    }
+    expect(a11yViolations).toMatchObject([])
   }
 )
 
@@ -56,7 +74,13 @@ When(
   async function (this: World, stepUser: string, tag: string): Promise<void> {
     const { page } = this.actorsEnvironment.getActor({ key: stepUser })
     const pageObject = new objects.appStore.AppStore({ page })
-    await pageObject.selectTag(tag)
+    await pageObject.selectTag(tag, this)
+    const a11yObject = new objects.a11y.Accessibility({ page })
+    const a11yViolations = await a11yObject.getSevereAccessibilityViolations('body')
+    this.currentStepData = {
+      a11yViolations
+    }
+    expect(a11yViolations).toMatchObject([])
   }
 )
 
@@ -65,7 +89,7 @@ When(
   async function (this: World, stepUser: string, app: string): Promise<void> {
     const { page } = this.actorsEnvironment.getActor({ key: stepUser })
     const pageObject = new objects.appStore.AppStore({ page })
-    await pageObject.selectApp(app)
+    await pageObject.selectApp(app, this)
   }
 )
 
@@ -74,7 +98,13 @@ Then(
   async function (this: World, stepUser: string, app: string): Promise<void> {
     const { page } = this.actorsEnvironment.getActor({ key: stepUser })
     const pageObject = new objects.appStore.AppStore({ page })
-    await pageObject.waitForAppDetailsIsVisible(app)
+    await pageObject.waitForAppDetailsIsVisible(app, this)
+    const a11yObject = new objects.a11y.Accessibility({ page })
+    const a11yViolations = await a11yObject.getSevereAccessibilityViolations('#app-store')
+    this.currentStepData = {
+      a11yViolations
+    }
+    expect(a11yViolations).toMatchObject([])
   }
 )
 
@@ -83,7 +113,13 @@ Then(
   async function (this: World, stepUser: string, version: string): Promise<void> {
     const { page } = this.actorsEnvironment.getActor({ key: stepUser })
     const pageObject = new objects.appStore.AppStore({ page })
-    expect(await pageObject.downloadAppVersion(version)).toContain(version)
+    expect(await pageObject.downloadAppVersion(version, this)).toContain(version)
+    const a11yObject = new objects.a11y.Accessibility({ page })
+    const a11yViolations = await a11yObject.getSevereAccessibilityViolations('#app-store')
+    this.currentStepData = {
+      a11yViolations
+    }
+    expect(a11yViolations).toMatchObject([])
   }
 )
 Then(
@@ -91,7 +127,13 @@ Then(
   async function (this: World, stepUser: string, app: string): Promise<void> {
     const { page } = this.actorsEnvironment.getActor({ key: stepUser })
     const pageObject = new objects.appStore.AppStore({ page })
-    expect(await pageObject.downloadApp(app)).toBeDefined()
+    expect(await pageObject.downloadApp(app, this)).toBeDefined()
+    const a11yObject = new objects.a11y.Accessibility({ page })
+    const a11yViolations = await a11yObject.getSevereAccessibilityViolations('#app-store')
+    this.currentStepData = {
+      a11yViolations
+    }
+    expect(a11yViolations).toMatchObject([])
   }
 )
 
@@ -100,6 +142,12 @@ When(
   async function (this: World, stepUser: string): Promise<void> {
     const { page } = this.actorsEnvironment.getActor({ key: stepUser })
     const pageObject = new objects.appStore.AppStore({ page })
-    await pageObject.navigateToAppStoreOverview()
+    await pageObject.navigateToAppStoreOverview(this)
+    const a11yObject = new objects.a11y.Accessibility({ page })
+    const a11yViolations = await a11yObject.getSevereAccessibilityViolations('#app-store')
+    this.currentStepData = {
+      a11yViolations
+    }
+    expect(a11yViolations).toMatchObject([])
   }
 )

@@ -5,6 +5,7 @@ import { Group, User } from '../../../types'
 import { getActualExpiryDate } from '../../../utils/datePicker'
 import { locatorUtils } from '../../../utils'
 import { objects } from '../../..'
+import { World } from '../../../../cucumber/environment'
 
 export interface ICollaborator {
   collaborator: User | Group
@@ -18,16 +19,19 @@ export interface ICollaborator {
 export interface InviteCollaboratorsArgs {
   page: Page
   collaborators: ICollaborator[]
+  world: World
 }
 
 export interface CollaboratorArgs {
   page: Page
   collaborator: ICollaborator
+  world: World
 }
 
 export interface RemoveCollaboratorArgs extends Omit<CollaboratorArgs, 'collaborator'> {
   collaborator: Omit<ICollaborator, 'role'>
   removeOwnSpaceAccess?: boolean
+  world: World
 }
 
 export interface SetExpirationDateForCollaboratorArgs extends Omit<
@@ -96,7 +100,7 @@ export default class Collaborator {
   private static readonly collaboratorDropdownItem =
     'div[data-testid="new-collaborators-form"] div[data-testid="recipient-autocomplete-item-%s"]'
 
-  static async addCollaborator(args: CollaboratorArgs): Promise<void> {
+  static async addCollaborator(args: CollaboratorArgs, world: World): Promise<void> {
     const {
       page,
       collaborator: { collaborator }
@@ -110,7 +114,8 @@ export default class Collaborator {
     await objects.a11y.Accessibility.assertNoSevereA11yViolations(
       page,
       ['appSidebar'],
-      'account page'
+      'account page',
+      world
     )
     await collaboratorInputLocator.focus()
     await page.locator('.vs--open').waitFor()
@@ -136,17 +141,17 @@ export default class Collaborator {
   }
 
   static async inviteCollaborators(args: InviteCollaboratorsArgs): Promise<void> {
-    const { page, collaborators } = args
+    const { page, collaborators, world } = args
     // When adding multiple users/groups at once
     // the role of the first collaborator is used as the collaborators role
     const role = collaborators[0].role
     const resourceType = collaborators[0].resourceType
     const collaboratorNames = []
     for (const collaborator of collaborators) {
-      await Collaborator.addCollaborator({ page, collaborator })
+      await Collaborator.addCollaborator({ page, collaborator, world }, world)
       collaboratorNames.push(collaborator.collaborator.displayName)
     }
-    await Collaborator.setCollaboratorRole(page, role, resourceType)
+    await Collaborator.setCollaboratorRole(page, role, resourceType, undefined, undefined, world)
     await Collaborator.sendInvitation(page, collaboratorNames)
   }
 
@@ -155,21 +160,28 @@ export default class Collaborator {
     role: string,
     resourceType: string,
     dropdownSelector?: string,
-    itemSelector?: string
+    itemSelector?: string,
+    world?: World
   ): Promise<void> {
     if (!dropdownSelector) {
       dropdownSelector = Collaborator.newCollaboratorRoleDropdown
       itemSelector = Collaborator.collaboratorRoleButton
     }
     await page.locator(dropdownSelector).click()
-    await objects.a11y.Accessibility.assertNoSevereA11yViolations(page, ['tippyBox'], 'tippy box')
+    await objects.a11y.Accessibility.assertNoSevereA11yViolations(
+      page,
+      ['tippyBox'],
+      'tippy box',
+      world
+    )
     await page.locator(util.format(itemSelector, role)).click()
   }
 
   static async changeCollaboratorRole(args: CollaboratorArgs): Promise<void> {
     const {
       page,
-      collaborator: { collaborator, type, role, resourceType }
+      collaborator: { collaborator, type, role, resourceType },
+      world
     } = args
 
     const collaboratorRow = Collaborator.getCollaboratorUserOrGroupSelector(collaborator, type)
@@ -183,7 +195,8 @@ export default class Collaborator {
       role,
       resourceType,
       roleDropdownSelector,
-      roleItemSelector
+      roleItemSelector,
+      world
     )
   }
 
@@ -191,7 +204,8 @@ export default class Collaborator {
     const {
       page,
       collaborator: { collaborator, type },
-      removeOwnSpaceAccess
+      removeOwnSpaceAccess,
+      world
     } = args
     const collaboratorRow = Collaborator.getCollaboratorUserOrGroupSelector(collaborator, type)
 
@@ -199,12 +213,18 @@ export default class Collaborator {
       .locator(util.format(Collaborator.collaboratorEditDropdownButton, collaboratorRow))
       .first()
       .click()
-    await objects.a11y.Accessibility.assertNoSevereA11yViolations(page, ['tippyBox'], 'files modal')
+    await objects.a11y.Accessibility.assertNoSevereA11yViolations(
+      page,
+      ['tippyBox'],
+      'files modal',
+      world
+    )
     await page.locator(util.format(Collaborator.removeCollaboratorButton, collaboratorRow)).click()
     await objects.a11y.Accessibility.assertNoSevereA11yViolations(
       page,
       ['removeUserModal'],
-      'files modal'
+      'files modal',
+      world
     )
 
     await Promise.all([
@@ -245,7 +265,8 @@ export default class Collaborator {
   }
 
   static async setExpirationDateForCollaborator(
-    args: SetExpirationDateForCollaboratorArgs
+    args: SetExpirationDateForCollaboratorArgs,
+    world: World
   ): Promise<void> {
     const {
       page,
@@ -261,7 +282,8 @@ export default class Collaborator {
     await objects.a11y.Accessibility.assertNoSevereA11yViolations(
       page,
       ['tippyBox'],
-      'account page'
+      'account page',
+      world
     )
 
     const panel = page.locator(Collaborator.invitePanel)
@@ -271,7 +293,12 @@ export default class Collaborator {
         .locator(util.format(Collaborator.setExpirationDateCollaboratorButton, collaboratorRow))
         .click()
     ])
-    await objects.a11y.Accessibility.assertNoSevereA11yViolations(page, ['ocModal'], 'account page')
+    await objects.a11y.Accessibility.assertNoSevereA11yViolations(
+      page,
+      ['ocModal'],
+      'account page',
+      world
+    )
 
     await Collaborator.setExpirationDate(page, expirationDate)
   }
@@ -289,7 +316,8 @@ export default class Collaborator {
   }
 
   static async removeExpirationDateFromCollaborator(
-    args: RemoveExpirationDateFromCollaboratorArgs
+    args: RemoveExpirationDateFromCollaboratorArgs,
+    world: World
   ): Promise<void> {
     const {
       page,
@@ -303,7 +331,8 @@ export default class Collaborator {
     await objects.a11y.Accessibility.assertNoSevereA11yViolations(
       page,
       ['tippyBox'],
-      'account page'
+      'account page',
+      world
     )
     await Promise.all([
       page.waitForResponse(

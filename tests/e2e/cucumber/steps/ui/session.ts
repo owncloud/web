@@ -40,7 +40,7 @@ async function LogInUser(this: World, stepUser: string): Promise<void> {
   }
 
   await page.goto(config.baseUrl)
-  await sessionObject.login(user)
+  await sessionObject.login(user, this)
 
   if (this.feature.tags.length > 0) {
     const tags: string[] = []
@@ -74,7 +74,7 @@ async function LogOutUser(this: World, stepUser: string): Promise<void> {
   const canLogout = !!(await actor.page.locator('#_userMenuButton').count())
 
   const sessionObject = new objects.runtime.Session({ page: actor.page })
-  canLogout && (await sessionObject.logout())
+  canLogout && (await sessionObject.logout(this))
   await actor.close()
 }
 
@@ -100,7 +100,7 @@ When(
     const sessionObject = await createNewSession(this, stepUser)
     const { page } = this.actorsEnvironment.getActor({ key: stepUser })
     const user = this.usersEnvironment.getUser({ key: stepUser })
-    await sessionObject.login(user)
+    await sessionObject.login(user, this)
     await page.locator('#web').waitFor()
   }
 )

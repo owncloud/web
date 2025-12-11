@@ -15,6 +15,9 @@ Then(
     const a11yViolations = await a11yObject.getSevereAccessibilityViolations(
       a11yObject.getSelectors().files
     )
+    this.currentStepData = {
+      a11yViolations
+    }
     expect(a11yViolations).toMatchObject([])
   }
 )
@@ -26,6 +29,10 @@ When(
 
     const a11yObject = new objects.a11y.Accessibility({ page })
     await a11yObject.switchToCondensedTableView()
+    const a11yViolations = await a11yObject.getSevereAccessibilityViolations('body')
+    this.currentStepData = {
+      a11yViolations
+    }
   }
 )
 
@@ -39,6 +46,9 @@ Then(
     const a11yViolations = await a11yObject.getSevereAccessibilityViolations(
       a11yObject.getSelectors().filesSpaceTable
     )
+    this.currentStepData = {
+      a11yViolations
+    }
     expect(a11yViolations).toMatchObject([])
   }
 )
@@ -52,6 +62,9 @@ Then(
     const a11yViolations = await a11yObject.getSevereAccessibilityViolations(
       a11yObject.getSelectors().tilesView
     )
+    this.currentStepData = {
+      a11yViolations
+    }
     expect(a11yViolations).toMatchObject([])
   }
 )
@@ -73,6 +86,10 @@ When(
 
     const a11yObject = new objects.a11y.Accessibility({ page })
     await a11yObject.showDisplayOptions()
+    const a11yViolations = await a11yObject.getSevereAccessibilityViolations('body')
+    this.currentStepData = {
+      a11yViolations
+    }
   }
 )
 
@@ -85,6 +102,9 @@ Then(
     const a11yViolations = await a11yObject.getSevereAccessibilityViolations(
       a11yObject.getSelectors().displayOptionsMenu
     )
+    this.currentStepData = {
+      a11yViolations
+    }
     expect(a11yViolations).toMatchObject([])
   }
 )
@@ -106,6 +126,10 @@ When(
 
     const a11yObject = new objects.a11y.Accessibility({ page })
     await a11yObject.openFilesContextMenu()
+    const a11yViolations = await a11yObject.getSevereAccessibilityViolations('body')
+    this.currentStepData = {
+      a11yViolations
+    }
   }
 )
 
@@ -118,6 +142,9 @@ Then(
     const a11yViolations = await a11yObject.getSevereAccessibilityViolations(
       a11yObject.getSelectors().filesContextMenu
     )
+    this.currentStepData = {
+      a11yViolations
+    }
     expect(a11yViolations).toMatchObject([])
   }
 )
@@ -137,6 +164,10 @@ When('{string} selects new', async function (this: World, stepUser: string): Pro
 
   const a11yObject = new objects.a11y.Accessibility({ page })
   await a11yObject.selectNew()
+  const a11yViolations = await a11yObject.getSevereAccessibilityViolations('body')
+  this.currentStepData = {
+    a11yViolations
+  }
 })
 
 Then(
@@ -148,6 +179,9 @@ Then(
     const a11yViolations = await a11yObject.getSevereAccessibilityViolations(
       a11yObject.getSelectors().newResourceContextMenu
     )
+    this.currentStepData = {
+      a11yViolations
+    }
     expect(a11yViolations).toMatchObject([])
   }
 )
@@ -159,6 +193,10 @@ When(
 
     const a11yObject = new objects.a11y.Accessibility({ page })
     await a11yObject.selectFolderOptionWithinNew()
+    const a11yViolations = await a11yObject.getSevereAccessibilityViolations('body')
+    this.currentStepData = {
+      a11yViolations
+    }
   }
 )
 
@@ -171,6 +209,9 @@ Then(
     const a11yViolations = await a11yObject.getSevereAccessibilityViolations(
       a11yObject.getSelectors().ocModal
     )
+    this.currentStepData = {
+      a11yViolations
+    }
     expect(a11yViolations).toMatchObject([])
   }
 )
@@ -190,6 +231,10 @@ When('{string} selects upload', async function (this: World, stepUser: string): 
 
   const a11yObject = new objects.a11y.Accessibility({ page })
   await a11yObject.selectUpload()
+  const a11yViolations = await a11yObject.getSevereAccessibilityViolations('body')
+  this.currentStepData = {
+    a11yViolations
+  }
 })
 
 Then(
@@ -201,6 +246,9 @@ Then(
     const a11yViolations = await a11yObject.getSevereAccessibilityViolations(
       a11yObject.getSelectors().uploadContextMenu
     )
+    this.currentStepData = {
+      a11yViolations
+    }
     expect(a11yViolations).toMatchObject([])
   }
 )
@@ -222,6 +270,10 @@ When(
 
     const a11yObject = new objects.a11y.Accessibility({ page })
     await a11yObject.selectFileThroughCheckbox()
+    const a11yViolations = await a11yObject.getSevereAccessibilityViolations('body')
+    this.currentStepData = {
+      a11yViolations
+    }
   }
 )
 
@@ -234,6 +286,9 @@ Then(
     const a11yViolations = await a11yObject.getSevereAccessibilityViolations(
       a11yObject.getSelectors().appbarBatchActions
     )
+    this.currentStepData = {
+      a11yViolations
+    }
     expect(a11yViolations).toMatchObject([])
   }
 )

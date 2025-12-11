@@ -1,6 +1,7 @@
 import { Page, expect } from '@playwright/test'
 import * as po from './actions'
 import { AxeResults } from 'axe-core'
+import { World } from '../../../cucumber/environment'
 
 export class Accessibility {
   #page: Page
@@ -86,7 +87,8 @@ export class Accessibility {
   static async assertNoSevereA11yViolations(
     page: Page,
     selectors: string[],
-    selectorLabel: string
+    selectorLabel: string,
+    world: World
   ): Promise<void> {
     const a11yObject = new Accessibility({ page })
     const allViolations: AxeResults['violations'] = []
@@ -94,6 +96,11 @@ export class Accessibility {
       const include = a11yObject.getSelectors()[selector] || selector
       const violations = await a11yObject.getSevereAccessibilityViolations(include)
       allViolations.push(...violations)
+    }
+    if (world) {
+      world.currentStepData = {
+        allViolations
+      }
     }
     expect(
       allViolations,
