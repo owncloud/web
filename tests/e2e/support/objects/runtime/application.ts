@@ -1,7 +1,9 @@
 import { Page } from '@playwright/test'
 import util from 'util'
 import { config } from '../../../config'
+import { World } from '../../../cucumber/environment'
 import { objects } from '../..'
+import { expect } from '@playwright/test'
 
 const appSwitcherButton = '#_appSwitcherButton'
 const appSelector = `//ul[contains(@class, "applications-list")]//*[@data-test-id="%s"]`
@@ -24,23 +26,26 @@ export class Application {
     await this.#page.reload()
   }
 
-  async open({ name }: { name: string }): Promise<void> {
+  async open({ name, world }: { name: string; world?: World }): Promise<void> {
     await this.#page.waitForTimeout(1000)
     await this.#page.locator(appSwitcherButton).click()
-    await objects.a11y.Accessibility.assertNoSevereA11yViolations(
-      this.#page,
-      ['appSwitcherDropdown'],
-      'app switcher dropdown'
-    )
+    const a11yObject = new objects.a11y.Accessibility({ page: this.#page })
+    const a11yViolations =
+      await a11yObject.getSevereAccessibilityViolations('#app-switcher-dropdown')
+    world.currentStepData = {
+      a11yViolations
+    }
+    expect(a11yViolations).toMatchObject([])
     await this.#page.locator(util.format(appSelector, `app.${name}.menuItem`)).click()
     await objects.a11y.Accessibility.assertNoSevereA11yViolations(
       this.#page,
       ['body'],
-      'app switcher dropdown'
+      'app switcher dropdown',
+      world
     )
   }
 
-  async getNotificationMessages(): Promise<string[]> {
+  async getNotificationMessages(world?: World): Promise<string[]> {
     // reload will fetch notifications immediately
     // wait for the notifications to load
     await Promise.all([
@@ -62,7 +67,8 @@ export class Application {
     await objects.a11y.Accessibility.assertNoSevereA11yViolations(
       this.#page,
       [notificationItemsMessages],
-      'notifications'
+      'notifications',
+      world
     )
     const messages = []
     const count = await result.count()

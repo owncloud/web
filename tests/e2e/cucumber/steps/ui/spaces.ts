@@ -20,7 +20,7 @@ When(
   async function (this: World, stepUser: string): Promise<void> {
     const { page } = this.actorsEnvironment.getActor({ key: stepUser })
     const pageObject = new objects.applicationFiles.page.spaces.Projects({ page })
-    await pageObject.navigate()
+    await pageObject.navigate(this)
   }
 )
 
@@ -31,7 +31,11 @@ When(
     const spacesObject = new objects.applicationFiles.Spaces({ page })
 
     for (const space of stepTable.hashes()) {
-      await spacesObject.create({ key: space.id || space.name, space: space as unknown as Space })
+      await spacesObject.create({
+        key: space.id || space.name,
+        space: space as unknown as Space,
+        world: this
+      })
     }
   }
 )
@@ -42,8 +46,8 @@ When(
     const { page } = this.actorsEnvironment.getActor({ key: stepUser })
     const spacesObject = new objects.applicationFiles.Spaces({ page })
     const pageObject = new objects.applicationFiles.page.spaces.Projects({ page })
-    await pageObject.navigate()
-    await spacesObject.open({ key })
+    await pageObject.navigate(this)
+    await spacesObject.open({ key, world: this })
   }
 )
 
@@ -61,21 +65,22 @@ When(
 
     switch (attribute) {
       case 'name':
-        await spacesObject.changeName({ key, value })
+        await spacesObject.changeName({ key, value, world: this })
         break
       case 'subtitle':
-        await spacesObject.changeSubtitle({ key, value })
+        await spacesObject.changeSubtitle({ key, value, world: this })
         break
       case 'description':
-        await spacesObject.changeDescription({ value })
+        await spacesObject.changeDescription({ value, world: this })
         break
       case 'quota':
-        await spacesObject.changeQuota({ key, value })
+        await spacesObject.changeQuota({ key, value, world: this })
         break
       case 'image':
         await spacesObject.changeSpaceImage({
           key,
-          resource: this.filesEnvironment.getFile({ name: value })
+          resource: this.filesEnvironment.getFile({ name: value }),
+          world: this
         })
         break
       default:
@@ -101,7 +106,7 @@ When(
         collaborator,
         role: roleId
       }
-      await spacesObject.addMembers({ users: [collaboratorWithRole] })
+      await spacesObject.addMembers({ users: [collaboratorWithRole], world: this })
     }
   }
 )
@@ -116,7 +121,7 @@ When(
         collaborator: this.usersEnvironment.getUser({ key: user }),
         role
       }
-      await spacesObject.removeAccessToMember({ users: [member] })
+      await spacesObject.removeAccessToMember({ users: [member], world: this })
     }
   }
 )
@@ -159,7 +164,7 @@ When(
         collaborator: this.usersEnvironment.getUser({ key: user }),
         role: roleId
       }
-      await spacesObject.changeRoles({ users: [member] })
+      await spacesObject.changeRoles({ users: [member], world: this })
     }
   }
 )
@@ -175,7 +180,8 @@ When(
           collaborator: this.usersEnvironment.getUser({ key: stepUser })
         }
       ],
-      removeOwnSpaceAccess: true
+      removeOwnSpaceAccess: true,
+      world: this
     })
   }
 )
@@ -191,7 +197,7 @@ When(
     const { page } = this.actorsEnvironment.getActor({ key: stepUser })
     const spacesObject = new objects.applicationFiles.Spaces({ page })
     const member = { collaborator: this.usersEnvironment.getUser({ key: memberName }) }
-    await spacesObject.addExpirationDate({ member, expirationDate })
+    await spacesObject.addExpirationDate({ member, expirationDate, world: this })
   }
 )
 
@@ -201,7 +207,7 @@ When(
     const { page } = this.actorsEnvironment.getActor({ key: stepUser })
     const spacesObject = new objects.applicationFiles.Spaces({ page })
     const member = { collaborator: this.usersEnvironment.getUser({ key: memberName }) }
-    await spacesObject.removeExpirationDate({ member })
+    await spacesObject.removeExpirationDate({ member, world: this })
   }
 )
 
@@ -210,7 +216,7 @@ When(
   async function (this: World, stepUser: string): Promise<void> {
     const { page } = this.actorsEnvironment.getActor({ key: stepUser })
     const spacesObject = new objects.applicationFiles.Spaces({ page })
-    const downloadedResource = await spacesObject.downloadSpace()
+    const downloadedResource = await spacesObject.downloadSpace(this)
     expect(downloadedResource).toContain('download.zip')
   }
 )
@@ -222,7 +228,7 @@ Then(
     const spacesObject = new objects.applicationFiles.Spaces({ page })
 
     for (const info of stepTable.hashes()) {
-      await spacesObject.checkSpaceActivity({ activity: substitute(info.activity) })
+      await spacesObject.checkSpaceActivity({ activity: substitute(info.activity), world: this })
     }
   }
 )

@@ -1,3 +1,4 @@
+import { World } from '../../../e2e/cucumber/environment'
 import { objects } from '../../../e2e/support'
 import { ActorsEnvironment, LinksEnvironment } from '../../../e2e/support/environment'
 import { substitute } from '../../../e2e/support/utils'
@@ -6,12 +7,14 @@ export async function openPublicLink({
   actorsEnvironment,
   linksEnvironment,
   stepUser,
-  name
+  name,
+  world
 }: {
   actorsEnvironment: ActorsEnvironment
   linksEnvironment: LinksEnvironment
   stepUser: string
   name: string
+  world?: World
 }): Promise<void> {
   const { page } = await actorsEnvironment.createActor({
     key: stepUser,
@@ -20,7 +23,7 @@ export async function openPublicLink({
 
   const { url } = linksEnvironment.getLink({ name })
   const pageObject = new objects.applicationFiles.page.Public({ page })
-  await pageObject.open({ url })
+  await pageObject.open({ url, world })
 }
 
 export async function createPublicLink({
@@ -43,12 +46,14 @@ export async function anonymousUserOpensPublicLink({
   actorsEnvironment,
   linksEnvironment,
   stepUser,
-  name
+  name,
+  world
 }: {
   actorsEnvironment: ActorsEnvironment
   linksEnvironment: LinksEnvironment
   stepUser: string
   name: string
+  world?: World
 }): Promise<void> {
   const { page } = await actorsEnvironment.createActor({
     key: stepUser,
@@ -57,19 +62,21 @@ export async function anonymousUserOpensPublicLink({
 
   const { url } = linksEnvironment.getLink({ name })
   const pageObject = new objects.applicationFiles.page.Public({ page })
-  await pageObject.open({ url })
+  await pageObject.open({ url, world })
 }
 
 export async function anonymousUserUnlocksPublicLink({
   actorsEnvironment,
   stepUser,
-  password
+  password,
+  world
 }: {
   actorsEnvironment: ActorsEnvironment
   password: string
   stepUser: string
+  world?: World
 }): Promise<void> {
   const { page } = actorsEnvironment.getActor({ key: stepUser })
   const pageObject = new objects.applicationFiles.page.Public({ page })
-  await pageObject.authenticate({ password: substitute(password) })
+  await pageObject.authenticate({ password: substitute(password), world })
 }

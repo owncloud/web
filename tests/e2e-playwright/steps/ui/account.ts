@@ -1,3 +1,4 @@
+import { World } from '../../../e2e/cucumber/environment'
 import { objects } from '../../../e2e/support'
 import { ActorsEnvironment } from '../../../e2e/support/environment'
 
@@ -30,14 +31,16 @@ export async function changeLanguage({
 
 export async function getAccountPageTitle({
   actorsEnvironment,
-  stepUser
+  stepUser,
+  world
 }: {
   actorsEnvironment: ActorsEnvironment
   stepUser: string
+  world?: World
 }): Promise<string> {
   const { page } = actorsEnvironment.getActor({ key: stepUser })
   const accountObject = new objects.account.Account({ page })
-  return await accountObject.getTitle()
+  return await accountObject.getTitle(world)
 }
 
 export async function requestGdprExport({

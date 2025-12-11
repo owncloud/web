@@ -70,7 +70,8 @@ When(
       await shareObject.create({
         resource,
         recipients: shareObj,
-        via
+        via,
+        world: this
       })
     }
   }
@@ -83,7 +84,7 @@ When(
     const shareObject = new objects.applicationFiles.Share({ page })
 
     for (const info of stepTable.hashes()) {
-      await shareObject.enableSync({ resource: info.name })
+      await shareObject.enableSync({ resource: info.name, world: this }, this)
     }
   }
 )
@@ -105,7 +106,8 @@ When(
       shareObj.forEach((item) => (item.role = roleId))
       await shareObject.changeShareeRole({
         resource,
-        recipients: shareObj
+        recipients: shareObj,
+        world: this
       })
     }
   }
@@ -119,7 +121,7 @@ When(
     const shareInfo = parseShareTable(stepTable, this.usersEnvironment)
 
     for (const resource of Object.keys(shareInfo)) {
-      await shareObject.removeSharee({ resource, recipients: shareInfo[resource] })
+      await shareObject.removeSharee({ resource, recipients: shareInfo[resource], world: this })
     }
   }
 )
@@ -132,7 +134,7 @@ Then(
     const shareInfo = parseShareTable(stepTable, this.usersEnvironment)
 
     for (const resource of Object.keys(shareInfo)) {
-      await shareObject.checkSharee({ resource, recipients: shareInfo[resource] })
+      await shareObject.checkSharee({ resource, recipients: shareInfo[resource], world: this })
     }
   }
 )
@@ -142,7 +144,7 @@ When(
   async function (this: World, stepUser: string): Promise<void> {
     const { page } = this.actorsEnvironment.getActor({ key: stepUser })
     const pageObject = new objects.applicationFiles.page.shares.WithMe({ page })
-    await pageObject.navigate()
+    await pageObject.navigate(this)
   }
 )
 
@@ -171,7 +173,13 @@ When(
     const shareObject = new objects.applicationFiles.Share({ page })
 
     for (const resource of stepTable.hashes()) {
-      await shareObject.disableSync({ resource: resource.name })
+      await shareObject.disableSync(
+        {
+          resource: resource.name,
+          world: this
+        },
+        this
+      )
     }
   }
 )
@@ -183,7 +191,14 @@ When(
     const shareObject = new objects.applicationFiles.Share({ page })
 
     for (const resource of stepTable.hashes()) {
-      await shareObject.enableSync({ resource: resource.name, via: 'CONTEXT_MENU' })
+      await shareObject.enableSync(
+        {
+          resource: resource.name,
+          via: 'CONTEXT_MENU',
+          world: undefined
+        },
+        this
+      )
     }
   }
 )
@@ -204,7 +219,10 @@ When(
     const shareObject = new objects.applicationFiles.Share({ page })
 
     for (const resource of stepTable.hashes()) {
-      await shareObject.disableSync({ resource: resource.name, via: 'CONTEXT_MENU' })
+      await shareObject.disableSync(
+        { resource: resource.name, via: 'CONTEXT_MENU', world: this },
+        this
+      )
     }
   }
 )
@@ -277,7 +295,8 @@ When(
             : this.usersEnvironment.getUser({ key: collaboratorName }),
         type: collaboratorType
       } as ICollaborator,
-      expirationDate
+      expirationDate,
+      world: this
     })
   }
 )
@@ -311,7 +330,8 @@ When(
             ? this.usersEnvironment.getGroup({ key: collaboratorName })
             : this.usersEnvironment.getUser({ key: collaboratorName }),
         type: selectorType
-      } as ICollaborator
+      } as ICollaborator,
+      world: this
     })
 
     expect(actualDetails).toMatchObject(expectedDetails)
@@ -336,7 +356,8 @@ Then(
       collaborator: {
         collaborator: this.usersEnvironment.getUser({ key: collaboratorName }),
         type: 'group'
-      } as ICollaborator
+      } as ICollaborator,
+      world: this
     })
 
     expect(Object.keys(actualDetails)).toEqual(expect.arrayContaining(expectedDetails))
@@ -371,7 +392,7 @@ Then(
       this.usersEnvironment.getUser({ key: recipient })
     )
 
-    await shareObject.openSharingPanel(resource)
+    await shareObject.openSharingPanel(resource, this)
 
     if (actionType === 'should') {
       await expect(changeRole).not.toBeDisabled()

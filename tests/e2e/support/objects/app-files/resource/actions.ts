@@ -18,6 +18,7 @@ import { environment, objects, utils } from '../../../../support'
 import { config } from '../../../../config'
 import { File, Space } from '../../../types'
 import { substitute } from '../../../utils/substitute'
+import { World } from '../../../../cucumber/environment'
 
 const topbarFilenameSelector = '#app-top-bar-resource .oc-resource-name'
 const downloadFileButtonSingleShareView = '.oc-files-actions-download-file-trigger'
@@ -218,6 +219,7 @@ export interface createResourceArgs {
   type: createResourceTypes
   content?: string
   password?: string
+  world?: World
 }
 
 export const createSpaceFromFolder = async ({
@@ -263,16 +265,18 @@ export const createFileFromTemplate = async ({
   page,
   resource,
   webOffice,
-  via
+  via,
+  world
 }: {
   page: Page
   resource: string
   webOffice: string
   via: string
+  world: World
 }): Promise<void> => {
   const menuItem = `Create from template via ${webOffice}`
   if (via.startsWith('sidebar')) {
-    await sidebar.open({ page, resource })
+    await sidebar.open({ page, resource, world })
     await sidebar.openPanel({ page, name: 'actions' })
     await page.locator(util.format(sideBarActionButton, menuItem)).click()
     return
@@ -317,17 +321,20 @@ export const createSpaceFromSelection = async ({
 
 export const createNewFolder = async ({
   page,
-  resource
+  resource,
+  world
 }: {
   page: Page
   resource: string
+  world: World
 }): Promise<void> => {
   await page.locator(createNewFolderButton).click()
 
   await objects.a11y.Accessibility.assertNoSevereA11yViolations(
     page,
     ['ocModal'],
-    'create new folder modal'
+    'create new folder modal',
+    world
   )
 
   await page.locator(resourceNameInput).fill(resource)
@@ -340,17 +347,20 @@ export const createNewFolder = async ({
 export const createPasswordProtectedFolder = async ({
   page,
   resource,
-  password
+  password,
+  world
 }: {
   page: Page
   resource: string
   password: string
+  world: World
 }): Promise<void> => {
   password = substitute(password)
   await objects.a11y.Accessibility.assertNoSevereA11yViolations(
     page,
     ['ocModal'],
-    'create new folder modal'
+    'create new folder modal',
+    world
   )
   await page.locator(passwordProtectedFolderButton).click()
   await page.locator(passwordProtectedFolderNameInput).fill(resource)
@@ -379,20 +389,26 @@ export const createPasswordProtectedFolder = async ({
 }
 
 export const createNewFileOrFolder = async (args: createResourceArgs): Promise<void> => {
-  const { page, name, type, content, password } = args
+  const { page, name, type, content, password, world } = args
   await page.locator(addNewResourceButton).click()
   await objects.a11y.Accessibility.assertNoSevereA11yViolations(
     page,
     ['tippyBox'],
-    'create new tippy box'
+    'create new tippy box',
+    world
   )
   switch (type) {
     case 'folder': {
-      await createNewFolder({ page, resource: name })
+      await createNewFolder({ page, resource: name, world })
       break
     }
     case 'Password Protected Folder': {
-      await createPasswordProtectedFolder({ page, resource: name, password: password })
+      await createPasswordProtectedFolder({
+        page,
+        resource: name,
+        password: password,
+        world: world
+      })
       break
     }
     case 'txtFile': {
@@ -403,7 +419,7 @@ export const createNewFileOrFolder = async (args: createResourceArgs): Promise<v
         page.waitForResponse((resp) => resp.status() === 201 && resp.request().method() === 'PUT'),
         page.locator(util.format(actionConfirmationButton, 'Create')).click()
       ])
-      await editTextDocument({ page, content, name })
+      await editTextDocument({ page, content, name, world })
       break
     }
     case 'mdFile': {
@@ -414,17 +430,17 @@ export const createNewFileOrFolder = async (args: createResourceArgs): Promise<v
         page.waitForResponse((resp) => resp.status() === 201 && resp.request().method() === 'PUT'),
         page.locator(util.format(actionConfirmationButton, 'Create')).click()
       ])
-      await editTextDocument({ page, content, name })
+      await editTextDocument({ page, content, name, world })
       break
     }
     case 'OpenDocument': {
       // By Default when OpenDocument is created, it is opened with collabora if both app-provider services are running together
-      await createDocumentFile(args, 'Collabora')
+      await createDocumentFile(args, 'Collabora', world)
       break
     }
     case 'Microsoft Word': {
       // By Default when Microsoft Word document is created, it is opened with OnlyOffice if both app-provider services are running together
-      await createDocumentFile(args, 'OnlyOffice')
+      await createDocumentFile(args, 'OnlyOffice', world)
       break
     }
   }
@@ -432,7 +448,8 @@ export const createNewFileOrFolder = async (args: createResourceArgs): Promise<v
 
 const createDocumentFile = async (
   args: createResourceArgs,
-  editorToOpen: string
+  editorToOpen: string,
+  world: World
 ): Promise<void> => {
   const { page, name, type, content } = args
   // for creating office suites documents we need the external app provider services to be ready
@@ -451,7 +468,8 @@ const createDocumentFile = async (
   await objects.a11y.Accessibility.assertNoSevereA11yViolations(
     page,
     ['ocModal'],
-    'create new folder modal'
+    'create new folder modal',
+    world
   )
   await page.locator(util.format(createNewOfficeDocumentFileButton, type)).click()
   await page.locator(resourceNameInput).clear()
@@ -481,7 +499,7 @@ const createDocumentFile = async (
   }
   await Promise.all([
     page.waitForResponse((res) => res.status() === 207 && res.request().method() === 'PROPFIND'),
-    editor.close(page)
+    editor.close(page, world)
   ])
 }
 
@@ -550,7 +568,7 @@ const isAppProviderServiceForOfficeSuitesReadyInWebUI = async (page: Page, type:
 }
 
 export const createResources = async (args: createResourceArgs): Promise<void> => {
-  const { page, name, type, content, password } = args
+  const { page, name, type, content, password, world } = args
   const paths = name.split('/')
   const resource = paths.pop()
 
@@ -562,31 +580,33 @@ export const createResources = async (args: createResourceArgs): Promise<void> =
 
     if (!resourcesExists) {
       await page.locator(addNewResourceButton).click()
-      await createNewFolder({ page, resource: path })
+      await createNewFolder({ page, resource: path, world })
     }
     await clickResource({ page, path })
   }
-  await createNewFileOrFolder({ page, name: resource, type, content, password })
+  await createNewFileOrFolder({ page, name: resource, type, content, password, world })
 }
 
 export const editTextDocument = async ({
   page,
   name,
-  content
+  content,
+  world
 }: {
   page: Page
   name: string
   content: string
+  world: World
 }): Promise<void> => {
   const isMarkdownMode = await page.locator(textEditor).getAttribute('data-markdown-mode')
   const inputLocator =
     isMarkdownMode === 'true' ? textEditorMarkdownInput : textEditorPlainTextInput
 
-  const a11yObject = new objects.a11y.Accessibility({ page })
   await objects.a11y.Accessibility.assertNoSevereA11yViolations(
     page,
     ['textEditor', 'topBar'],
-    'text editor'
+    'text editor',
+    world
   )
 
   await page.locator(inputLocator).fill(content)
@@ -595,7 +615,7 @@ export const editTextDocument = async ({
     page.waitForResponse((resp) => resp.status() === 207 && resp.request().method() === 'PROPFIND'),
     page.locator(saveTextFileInEditorButton).click()
   ])
-  await editor.close(page)
+  await editor.close(page, world)
   await page.locator(util.format(resourceNameSelector, name)).waitFor()
 }
 
@@ -609,21 +629,22 @@ export interface uploadResourceArgs {
   error?: string
   expectToFail?: boolean
   type?: string
+  world: World
 }
 
 const performUpload = async (args: uploadResourceArgs): Promise<void> => {
-  const { page, resources, to, option, error, expectToFail, type } = args
+  const { page, resources, to, option, error, expectToFail, type, world } = args
   if (to) {
     await clickResource({ page, path: to })
   }
 
   await page.locator(resourceUploadButton).click()
 
-  const a11yObject = new objects.a11y.Accessibility({ page })
   await objects.a11y.Accessibility.assertNoSevereA11yViolations(
     page,
     ['uploadMenuDropdown'],
-    'upload menu dropdown'
+    'upload menu dropdown',
+    world
   )
 
   let uploadAction: Promise<void> = page
@@ -776,10 +797,11 @@ export interface downloadResourcesArgs {
   resources: resourceArgs[]
   folder?: string
   via: ActionViaType
+  world: World
 }
 
 export const downloadResources = async (args: downloadResourcesArgs): Promise<Download[]> => {
-  const { page, resources, folder, via } = args
+  const { page, resources, folder, via, world } = args
   const downloads = []
 
   // When tracing is enabled, the HEAD request (download action) triggers a credentials prompt
@@ -800,7 +822,7 @@ export const downloadResources = async (args: downloadResourcesArgs): Promise<Do
         await clickResource({ page, path: folder })
       }
       for (const resource of resources) {
-        await sidebar.open({ page, resource: resource.name })
+        await sidebar.open({ page, resource: resource.name, world })
         await sidebar.openPanel({ page, name: 'actions' })
         const downloadResourceSelector =
           resource.type === 'file' ? downloadFileButtonSideBar : downloadFolderButtonSideBar
@@ -809,7 +831,7 @@ export const downloadResources = async (args: downloadResourcesArgs): Promise<Do
           page.locator(downloadResourceSelector).click()
         ])
 
-        await sidebar.close({ page })
+        await sidebar.close({ page, world })
 
         downloads.push(download)
       }
@@ -896,6 +918,7 @@ export interface moveOrCopyResourceArgs {
   action: 'copy' | 'move'
   method: string
   option?: string
+  world: World
 }
 
 export interface moveOrCopyMultipleResourceArgs extends Omit<moveOrCopyResourceArgs, 'resource'> {
@@ -1042,7 +1065,7 @@ export const moveOrCopyMultipleResources = async (
 }
 
 export const moveOrCopyResource = async (args: moveOrCopyResourceArgs): Promise<void> => {
-  const { page, resource, newLocation, action, method, option } = args
+  const { page, resource, newLocation, action, method, option, world } = args
   const { dir: resourceDir, base: resourceBase } = path.parse(resource)
 
   if (resourceDir) {
@@ -1053,22 +1076,46 @@ export const moveOrCopyResource = async (args: moveOrCopyResourceArgs): Promise<
     case 'dropdown-menu': {
       await page.locator(util.format(resourceNameSelector, resourceBase)).click({ button: 'right' })
       await page.locator(util.format(filesContextMenuAction, action)).click()
-      await pasteResource({ page, resource: resourceBase, newLocation, action, method, option })
+      await pasteResource({
+        page,
+        resource: resourceBase,
+        newLocation,
+        action,
+        method,
+        option,
+        world
+      })
       break
     }
     case 'batch-action': {
       await page.locator(util.format(checkBox, resourceBase)).click()
       await selectBatchAction(page, action)
-      await pasteResource({ page, resource: resourceBase, newLocation, action, method, option })
+      await pasteResource({
+        page,
+        resource: resourceBase,
+        newLocation,
+        action,
+        method,
+        option,
+        world
+      })
       break
     }
     case 'sidebar-panel': {
-      await sidebar.open({ page: page, resource: resourceBase })
+      await sidebar.open({ page: page, resource: resourceBase, world })
       await sidebar.openPanel({ page: page, name: 'actions' })
 
       const actionButtonType = action === 'copy' ? 'Copy' : 'Cut'
       await page.locator(util.format(sideBarActionButton, actionButtonType)).click()
-      await pasteResource({ page, resource: resourceBase, newLocation, action, method, option })
+      await pasteResource({
+        page,
+        resource: resourceBase,
+        newLocation,
+        action,
+        method,
+        option,
+        world
+      })
       break
     }
     case 'keyboard': {
@@ -1167,6 +1214,7 @@ export interface resourceTagsArgs {
   page: Page
   resource: string
   tags: string[]
+  world: World
 }
 
 export const renameResource = async (args: renameResourceArgs): Promise<void> => {
@@ -1199,14 +1247,15 @@ export interface resourceVersionArgs {
   files: File[]
   folder?: string
   openDetailsPanel?: boolean
+  world: World
 }
 
 export const restoreResourceVersion = async (args: resourceVersionArgs) => {
-  const { page, files, folder, openDetailsPanel } = args
+  const { page, files, folder, openDetailsPanel, world } = args
   if (openDetailsPanel) {
     const fileName = files.map((file) => path.basename(file.name))
     await clickResource({ page, path: folder })
-    await sidebar.open({ page, resource: fileName[0] })
+    await sidebar.open({ page, resource: fileName[0], world })
     await sidebar.openPanel({ page, name: 'versions' })
   }
   await Promise.all([
@@ -1225,17 +1274,18 @@ export interface deleteResourceArgs {
   via: ActionViaType
   folder?: string
   isPublicLink?: boolean
+  world: World
 }
 
 export const deleteResource = async (args: deleteResourceArgs): Promise<void> => {
-  const { page, resourcesWithInfo, folder, via, isPublicLink } = args
+  const { page, resourcesWithInfo, folder, via, isPublicLink, world } = args
   switch (via) {
     case 'SIDEBAR_PANEL': {
       if (folder) {
         await clickResource({ page, path: folder })
       }
       for (const resource of resourcesWithInfo) {
-        await sidebar.open({ page, resource: resource.name })
+        await sidebar.open({ page, resource: resource.name, world })
         await sidebar.openPanel({ page, name: 'actions' })
         await Promise.all([
           page.waitForResponse(
@@ -1246,7 +1296,7 @@ export const deleteResource = async (args: deleteResourceArgs): Promise<void> =>
           ),
           page.locator(deleteButtonSidebar).first().click()
         ])
-        await sidebar.close({ page })
+        await sidebar.close({ page, world })
       }
       break
     }
@@ -1290,14 +1340,15 @@ export interface downloadResourceVersionArgs {
   page: Page
   files: File[]
   folder?: string
+  world: World
 }
 
 export const downloadResourceVersion = async (args: downloadResourceVersionArgs) => {
-  const { page, files, folder } = args
+  const { page, files, folder, world } = args
   const fileName = files.map((file) => path.basename(file.name))
   const downloads: Response[] = []
   await clickResource({ page, path: folder })
-  await sidebar.open({ page, resource: fileName[0] })
+  await sidebar.open({ page, resource: fileName[0], world })
   await sidebar.openPanel({ page, name: 'versions' })
   const [download] = await Promise.all([
     page.waitForResponse(
@@ -1307,7 +1358,7 @@ export const downloadResourceVersion = async (args: downloadResourceVersionArgs)
     page.waitForEvent('download'),
     page.locator('//*[@data-testid="file-versions-download-button"]').first().click()
   ])
-  await sidebar.close({ page: page })
+  await sidebar.close({ page: page, world })
   downloads.push(download)
   return downloads
 }
@@ -1535,7 +1586,7 @@ export const clickResourceTag = async (args: clickTagArgs): Promise<void> => {
 export const getTagsForResourceVisibilityInDetailsPanel = async (
   args: resourceTagsArgs
 ): Promise<boolean> => {
-  const { page, resource, tags } = args
+  const { page, resource, tags, world } = args
   const { dir: resourceDir } = path.parse(resource)
 
   const folderPaths = resource.split('/')
@@ -1545,7 +1596,7 @@ export const getTagsForResourceVisibilityInDetailsPanel = async (
     await clickResource({ page, path: resourceDir })
   }
 
-  await sidebar.open({ page: page, resource: resourceName })
+  await sidebar.open({ page: page, resource: resourceName, world })
 
   for (const tag of tags) {
     const tagSelector = util.format(tagInDetailsPanel, tag)
@@ -1672,49 +1723,57 @@ export const getDisplayedResourcesFromTrashbin = async (page: Page): Promise<str
 export interface switchViewModeArgs {
   page: Page
   target: 'resource-table' | 'resource-tiles'
+  world: World
 }
 
 export const clickViewModeToggle = async (args: switchViewModeArgs): Promise<void> => {
-  const { page, target } = args
+  const { page, target, world } = args
   const a11yObject = new objects.a11y.Accessibility({ page })
   await objects.a11y.Accessibility.assertNoSevereA11yViolations(
     page,
     ['displayOptions'],
-    'file controls modal'
+    'file controls modal',
+    world
   )
   await page.locator(`.viewmode-switch-buttons .${target}`).click()
 }
 
-export const expectThatResourcesAreTiles = async (args: { page: Page }): Promise<void> => {
-  const { page } = args
+export const expectThatResourcesAreTiles = async (args: {
+  page: Page
+  world: World
+}): Promise<void> => {
+  const { page, world } = args
   const a11yObject = new objects.a11y.Accessibility({ page })
   await objects.a11y.Accessibility.assertNoSevereA11yViolations(
     page,
     ['tilesView'],
-    'file tile view'
+    'file tile view',
+    world
   )
   const tiles = page.locator(resourcesAsTiles)
   await expect(tiles).toBeVisible()
 }
 
-export const showHiddenResources = async (page: Page): Promise<void> => {
+export const showHiddenResources = async (page: Page, world: World): Promise<void> => {
   await page.locator(filesViewOptionButton).click()
   await objects.a11y.Accessibility.assertNoSevereA11yViolations(
     page,
     ['tippyBox'],
-    'files control tippy box'
+    'files control tippy box',
+    world
   )
   await page.locator(hiddenFilesToggleButton).click()
   // close the files view option
   await page.locator(filesViewOptionButton).click()
 }
 
-export const toggleFlatList = async (page: Page): Promise<void> => {
+export const toggleFlatList = async (page: Page, world: World): Promise<void> => {
   await page.locator(filesViewOptionButton).click()
   await objects.a11y.Accessibility.assertNoSevereA11yViolations(
     page,
     ['tippyBox'],
-    'files control tippy box'
+    'files control tippy box',
+    world
   )
   await page.locator(flatListToggleButton).click()
   // close the files view option
@@ -1732,10 +1791,11 @@ export interface editResourcesArgs {
   name: string
   type: string
   content: string
+  world: World
 }
 
 export const editResource = async (args: editResourcesArgs): Promise<void> => {
-  const { page, name, type, content } = args
+  const { page, name, type, content, world } = args
   const { dir: resourceDir } = path.parse(name)
 
   const folderPaths = name.split('/')
@@ -1754,11 +1814,11 @@ export const editResource = async (args: editResourcesArgs): Promise<void> => {
       break
     default:
       await page.locator(util.format(resourceNameSelector, resourceName)).click()
-      await editTextDocument({ page, content: content, name: resourceName })
+      await editTextDocument({ page, content: content, name: resourceName, world })
   }
 }
 
-const openSideBar = async ({ page, resource }): Promise<void> => {
+const openSideBar = async ({ page, resource, world }): Promise<void> => {
   const { dir: resourceDir } = path.parse(resource)
 
   const folderPaths = resource.split('/')
@@ -1768,12 +1828,12 @@ const openSideBar = async ({ page, resource }): Promise<void> => {
     await clickResource({ page, path: resourceDir })
   }
 
-  await sidebar.open({ page: page, resource: resourceName })
+  await sidebar.open({ page: page, resource: resourceName, world })
 }
 
 export const addTagsToResource = async (args: resourceTagsArgs): Promise<void> => {
-  const { page, resource, tags } = args
-  await openSideBar({ page, resource })
+  const { page, resource, tags, world } = args
+  await openSideBar({ page, resource, world })
   const inputForm = page.locator(tagFormInput)
 
   for (const tag of tags) {
@@ -1789,12 +1849,12 @@ export const addTagsToResource = async (args: resourceTagsArgs): Promise<void> =
     ])
   }
 
-  await sidebar.close({ page })
+  await sidebar.close({ page, world })
 }
 
 export const tryToAddTagsToResource = async (args: resourceTagsArgs): Promise<void> => {
-  const { page, resource, tags } = args
-  await openSideBar({ page, resource })
+  const { page, resource, tags, world } = args
+  await openSideBar({ page, resource, world })
   const inputForm = page.locator(tagFormInput)
 
   for (const tag of tags) {
@@ -1803,7 +1863,7 @@ export const tryToAddTagsToResource = async (args: resourceTagsArgs): Promise<vo
 }
 
 export const removeTagsFromResource = async (args: resourceTagsArgs): Promise<void> => {
-  const { page, resource, tags } = args
+  const { page, resource, tags, world } = args
   const { dir: resourceDir } = path.parse(resource)
 
   const folderPaths = resource.split('/')
@@ -1813,12 +1873,12 @@ export const removeTagsFromResource = async (args: resourceTagsArgs): Promise<vo
     await clickResource({ page, path: resourceDir })
   }
 
-  await sidebar.open({ page: page, resource: resourceName })
+  await sidebar.open({ page: page, resource: resourceName, world })
 
   for (const tag of tags) {
     await page.locator(util.format(tagInInputForm, tag)).click()
   }
-  await sidebar.close({ page })
+  await sidebar.close({ page, world })
 }
 
 export interface openFileInViewerArgs {
@@ -1902,12 +1962,14 @@ export const openFileInViewer = async (args: openFileInViewerArgs): Promise<void
 
 export const previewMediaFromSidebarPanel = async ({
   page,
-  resource
+  resource,
+  world
 }: {
   page: Page
   resource: string
+  world: World
 }): Promise<void> => {
-  await sidebar.open({ page, resource })
+  await sidebar.open({ page, resource, world })
   await sidebar.openPanel({ page, name: 'actions' })
   await page.locator(util.format(sideBarActionButton, 'Preview')).first().click()
 }
@@ -1915,7 +1977,7 @@ export const previewMediaFromSidebarPanel = async ({
 export const checkThatFileVersionIsNotAvailable = async (
   args: resourceVersionArgs
 ): Promise<void> => {
-  const { page, files, folder } = args
+  const { page, files, folder, world } = args
   const fileName = files.map((file) => path.basename(file.name))
   await clickResource({ page, path: folder })
 
@@ -1926,7 +1988,7 @@ export const checkThatFileVersionIsNotAvailable = async (
         resp.status() === 403 &&
         resp.request().method() === 'PROPFIND'
     ),
-    sidebar.open({ page, resource: fileName[0] })
+    sidebar.open({ page, resource: fileName[0], world })
   ])
 
   await sidebar.openPanel({ page, name: 'versions' })
@@ -1936,10 +1998,10 @@ export const checkThatFileVersionIsNotAvailable = async (
 export const checkThatFileVersionPanelIsNotAvailable = async (
   args: resourceVersionArgs
 ): Promise<void> => {
-  const { page, files, folder } = args
+  const { page, files, folder, world } = args
   const fileName = files.map((file) => path.basename(file.name))
   await clickResource({ page, path: folder })
-  await sidebar.open({ page, resource: fileName[0] })
+  await sidebar.open({ page, resource: fileName[0], world })
 
   await expect(page.locator(versionsPanelSelect)).not.toBeVisible()
 }
@@ -1976,15 +2038,17 @@ export const getCurrentPageNumber = (args: changePageArgs): Promise<string> => {
 export interface changeItemsPerPageArgs {
   page: Page
   itemsPerPage: string
+  world: World
 }
 
 export const changeItemsPerPage = async (args: changeItemsPerPageArgs): Promise<void> => {
-  const { page, itemsPerPage } = args
+  const { page, itemsPerPage, world } = args
   await page.locator(filesViewOptionButton).click()
   await objects.a11y.Accessibility.assertNoSevereA11yViolations(
     page,
     ['tippyBox'],
-    'files control tippy box'
+    'files control tippy box',
+    world
   )
   await page.locator(itemsPerPageDropDownSelector).click()
   await page.locator(util.format(itemsPerPageDropDownOptionSelector, itemsPerPage)).click()
@@ -2123,12 +2187,13 @@ export const getLockLocator = (args: expectFileToBeLockedArgs): Locator => {
 export interface canManageResourceArgs {
   resource: string
   page: Page
+  world: World
 }
 
 export const canManageResource = async (args: canManageResourceArgs): Promise<boolean> => {
-  const { resource, page } = args
+  const { resource, page, world } = args
   const notExpectedActions = ['move', 'rename', 'delete']
-  await sidebar.open({ page: page, resource })
+  await sidebar.open({ page: page, resource, world })
   await sidebar.openPanel({ page: page, name: 'actions' })
   const presentActions = await page.locator(sideBarActions).allTextContents()
   const presentActionsToLower = presentActions.map((actions) => actions.toLowerCase())
@@ -2157,12 +2222,14 @@ export const canEditDocumentContent = async ({
 
 export const getAllAvailableActions = async ({
   page,
-  resource
+  resource,
+  world
 }: {
   page: Page
   resource: string
+  world: World
 }): Promise<string[]> => {
-  await sidebar.open({ page: page, resource })
+  await sidebar.open({ page: page, resource, world })
   await sidebar.openPanel({ page: page, name: 'actions' })
   return await page.getByTestId('action-label').allTextContents()
 }
@@ -2174,43 +2241,49 @@ export const getFileThumbnailLocator = (args: { page: Page; resource: string }):
 
 export const shouldSeeFilePreview = async ({
   page,
-  resource
+  resource,
+  world
 }: {
   page: Page
   resource: string
+  world: World
 }): Promise<void> => {
-  await sidebar.open({ page: page, resource })
+  await sidebar.open({ page: page, resource, world })
   await expect(page.locator(fileIconPreview)).toHaveCSS('background-image', /blob/)
-  await sidebar.close({ page: page })
+  await sidebar.close({ page: page, world })
 }
 
 export const shouldNotSeeFilePreview = async ({
   page,
-  resource
+  resource,
+  world
 }: {
   page: Page
   resource: string
+  world: World
 }): Promise<void> => {
-  await sidebar.open({ page: page, resource })
+  await sidebar.open({ page: page, resource, world })
   await expect(page.locator(fileIconWrapper)).toBeVisible()
-  await sidebar.close({ page: page })
+  await sidebar.close({ page: page, world })
 }
 
 export const checkActivity = async ({
   page,
   resource,
-  activity
+  activity,
+  world
 }: {
   page: Page
   resource: string
   activity: string
+  world: World
 }): Promise<void> => {
   const paths = resource.split('/')
   const finalResource = paths.pop()
   for (const path of paths) {
     await clickResource({ page, path })
   }
-  await sidebar.open({ page: page, resource: finalResource })
+  await sidebar.open({ page: page, resource: finalResource, world })
   await sidebar.openPanel({ page: page, name: 'activities' })
   await expect(page.getByTestId(activitySidebarPanel)).toBeVisible()
   await expect(page.locator(activitySidebarPanelBodyContent)).toContainText(activity)
@@ -2218,17 +2291,19 @@ export const checkActivity = async ({
 
 export const checkEmptyActivity = async ({
   page,
-  resource
+  resource,
+  world
 }: {
   page: Page
   resource: string
+  world: World
 }): Promise<void> => {
   const paths = resource.split('/')
   const finalResource = paths.pop()
   for (const path of paths) {
     await clickResource({ page, path })
   }
-  await sidebar.open({ page: page, resource: finalResource })
+  await sidebar.open({ page: page, resource: finalResource, world })
   await sidebar.openPanel({ page: page, name: 'activities' })
   await expect(page.getByTestId(activitySidebarPanel)).toBeVisible()
   await expect(page.locator(activitySidebarPanelBodyContent)).toContainText('No activities')
@@ -2237,11 +2312,13 @@ export const checkEmptyActivity = async ({
 export const duplicateResource = async ({
   page,
   resource,
-  method
+  method,
+  world
 }: {
   page: Page
   resource: string
   method: string
+  world: World
 }): Promise<void> => {
   switch (method) {
     case 'dropdown-menu': {
@@ -2261,7 +2338,7 @@ export const duplicateResource = async ({
       break
     }
     case 'sidebar-panel': {
-      await sidebar.open({ page: page, resource: resource })
+      await sidebar.open({ page: page, resource: resource, world })
       await sidebar.openPanel({ page: page, name: 'actions' })
 
       await Promise.all([

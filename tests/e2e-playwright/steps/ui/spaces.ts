@@ -1,6 +1,7 @@
 import { ActorsEnvironment, UsersEnvironment } from '../../../e2e/support/environment'
 import { objects } from '../../../e2e/support'
 import { Space } from '../../../e2e/support/types'
+import { World } from '../../../e2e/cucumber/environment'
 import { getDynamicRoleIdByName, ResourceType } from '../../../e2e/support/api/share/share'
 
 export async function navigateToPersonalSpacePage({
@@ -17,46 +18,56 @@ export async function navigateToPersonalSpacePage({
 
 export async function navigateToSpacesPage({
   actorsEnvironment,
-  stepUser
+  stepUser,
+  world
 }: {
   actorsEnvironment: ActorsEnvironment
   stepUser: string
+  world?: World
 }): Promise<void> {
   const { page } = actorsEnvironment.getActor({ key: stepUser })
   const pageObject = new objects.applicationFiles.page.spaces.Projects({ page })
-  await pageObject.navigate()
+  await pageObject.navigate(world)
 }
 
 export async function navigateToSpace({
   actorsEnvironment,
   stepUser,
-  space
+  space,
+  world
 }: {
   actorsEnvironment: ActorsEnvironment
   stepUser: string
   space: string
+  world?: World
 }): Promise<void> {
   const { page } = actorsEnvironment.getActor({ key: stepUser })
   const spacesObject = new objects.applicationFiles.Spaces({ page })
   const pageObject = new objects.applicationFiles.page.spaces.Projects({ page })
-  await pageObject.navigate()
-  await spacesObject.open({ key: space })
+  await pageObject.navigate(world)
+  await spacesObject.open({ key: space, world })
 }
 
 export async function createProjectSpace({
   actorsEnvironment,
   stepUser,
   name,
-  id
+  id,
+  world
 }: {
   actorsEnvironment: ActorsEnvironment
   stepUser: string
   name: string
   id: string
+  world?: World
 }): Promise<void> {
   const { page } = actorsEnvironment.getActor({ key: stepUser })
   const spacesObject = new objects.applicationFiles.Spaces({ page })
-  await spacesObject.create({ key: id || name, space: { name: name, id: id } as unknown as Space })
+  await spacesObject.create({
+    key: id || name,
+    space: { name: name, id: id, world } as unknown as Space,
+    world
+  })
 }
 export async function addMembersToSpace({
   actorsEnvironment,

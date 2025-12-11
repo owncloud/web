@@ -4,6 +4,7 @@ import { File } from '../../../types'
 import * as po from './actions'
 import { spaceLocator } from './utils'
 import { ICollaborator } from '../share/collaborator'
+import { World } from '../../../../cucumber/environment/world'
 
 export class Spaces {
   #page: Page
@@ -23,37 +24,63 @@ export class Spaces {
 
   async create({
     key,
-    space
+    space,
+    world
   }: {
     key: string
     space: Omit<po.createSpaceArgs, 'page'>
+    world: World
   }): Promise<void> {
-    const id = await po.createSpace({ ...space, page: this.#page })
+    const id = await po.createSpace({ ...space, page: this.#page }, world)
     this.#spacesEnvironment.createSpace({ key, space: { name: space.name, id } })
   }
 
-  async open({ key }: { key: string }): Promise<void> {
+  async open({ key, world }: { key: string; world: World }): Promise<void> {
     const { id } = this.#spacesEnvironment.getSpace({ key })
-    await po.openSpace({ page: this.#page, id })
+    await po.openSpace({ page: this.#page, id, world })
   }
 
-  async changeName({ key, value }: { key: string; value: string }): Promise<void> {
+  async changeName({
+    key,
+    value,
+    world
+  }: {
+    key: string
+    value: string
+    world: World
+  }): Promise<void> {
     const { id } = this.#spacesEnvironment.getSpace({ key })
-    await po.changeSpaceName({ id, value, page: this.#page })
+    await po.changeSpaceName({ id, value, page: this.#page, world })
   }
 
-  async changeSubtitle({ key, value }: { key: string; value: string }): Promise<void> {
+  async changeSubtitle({
+    key,
+    value,
+    world
+  }: {
+    key: string
+    value: string
+    world: World
+  }): Promise<void> {
     const { id } = this.#spacesEnvironment.getSpace({ key })
-    await po.changeSpaceSubtitle({ id, value, page: this.#page })
+    await po.changeSpaceSubtitle({ id, value, page: this.#page, world })
   }
 
-  async changeDescription({ value }: { value: string }): Promise<void> {
-    await po.changeSpaceDescription({ value, page: this.#page })
+  async changeDescription({ value, world }: { value: string; world: World }): Promise<void> {
+    await po.changeSpaceDescription({ value, page: this.#page, world: world })
   }
 
-  async changeQuota({ key, value }: { key: string; value: string }): Promise<void> {
+  async changeQuota({
+    key,
+    value,
+    world
+  }: {
+    key: string
+    value: string
+    world: World
+  }): Promise<void> {
     const { id } = this.#spacesEnvironment.getSpace({ key })
-    await po.changeQuota({ id, value, page: this.#page })
+    await po.changeQuota({ id, value, page: this.#page, world })
   }
 
   async addMembers(args: Omit<po.SpaceMembersArgs, 'page'>): Promise<void> {
@@ -73,13 +100,21 @@ export class Spaces {
     await po.changeSpaceRole({ ...args, page: this.#page })
   }
 
-  async changeSpaceImage({ key, resource }: { key: string; resource: File }): Promise<void> {
+  async changeSpaceImage({
+    key,
+    resource,
+    world
+  }: {
+    key: string
+    resource: File
+    world: World
+  }): Promise<void> {
     const { id } = this.#spacesEnvironment.getSpace({ key })
-    await po.changeSpaceImage({ id, resource, page: this.#page })
+    await po.changeSpaceImage({ id, resource, page: this.#page, world })
   }
 
-  async createPublicLink({ password }: { password: string }): Promise<void> {
-    const url = await po.createPublicLinkForSpace({ page: this.#page, password })
+  async createPublicLink({ password, world }: { password: string; world: World }): Promise<void> {
+    const url = await po.createPublicLinkForSpace({ page: this.#page, password, world })
     this.#linksEnvironment.createLink({
       key: 'Unnamed link',
       link: { name: 'Unnamed link', url }
@@ -88,23 +123,31 @@ export class Spaces {
 
   async addExpirationDate({
     member,
-    expirationDate
+    expirationDate,
+    world
   }: {
     member: Omit<ICollaborator, 'role'>
     expirationDate: string
+    world?: World
   }): Promise<void> {
-    await po.addExpirationDateToMember({ member, expirationDate, page: this.#page })
+    await po.addExpirationDateToMember({ member, expirationDate, page: this.#page, world })
   }
 
-  async removeExpirationDate({ member }: { member: Omit<ICollaborator, 'role'> }): Promise<void> {
-    await po.removeExpirationDateFromMember({ member, page: this.#page })
+  async removeExpirationDate({
+    member,
+    world
+  }: {
+    member: Omit<ICollaborator, 'role'>
+    world?: World
+  }): Promise<void> {
+    await po.removeExpirationDateFromMember({ member, page: this.#page, world })
   }
 
-  downloadSpace(): Promise<string> {
-    return po.downloadSpace(this.#page)
+  downloadSpace(world: World): Promise<string> {
+    return po.downloadSpace(this.#page, world)
   }
 
-  async checkSpaceActivity({ activity }: { activity: string }): Promise<void> {
-    await po.checkSpaceActivity({ page: this.#page, activity })
+  async checkSpaceActivity({ activity, world }: { activity: string; world: World }): Promise<void> {
+    await po.checkSpaceActivity({ page: this.#page, activity, world })
   }
 }

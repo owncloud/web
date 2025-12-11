@@ -9,7 +9,7 @@ Then(
   async function (this: World, stepUser: string, stepTable: DataTable): Promise<void> {
     const { page } = this.actorsEnvironment.getActor({ key: stepUser })
     const application = new objects.runtime.Application({ page })
-    const messages = await application.getNotificationMessages()
+    const messages = await application.getNotificationMessages(this)
     for (const { message } of stepTable.hashes()) {
       const expectedMessage = substitute(message)
       expect(messages).toContain(expectedMessage)
@@ -22,7 +22,7 @@ Then(
   async function (this: World, stepUser: string): Promise<void> {
     const { page } = this.actorsEnvironment.getActor({ key: stepUser })
     const application = new objects.runtime.Application({ page })
-    const messages = await application.getNotificationMessages()
+    const messages = await application.getNotificationMessages(this)
     expect(messages.length).toBe(0)
   }
 )

@@ -1,4 +1,4 @@
-import { DataTable, When, Then } from '@cucumber/cucumber'
+import { DataTable, When, Then, world } from '@cucumber/cucumber'
 import path from 'path'
 import { World } from '../../environment'
 import { objects } from '../../../support'
@@ -28,7 +28,8 @@ When(
         name: info.resource,
         type: info.type as createResourceTypes,
         content: info.content,
-        password: info.password
+        password: info.password,
+        world: this
       })
     }
   }
@@ -44,7 +45,8 @@ When(
         to: info.to,
         resources: [this.filesEnvironment.getFile({ name: info.resource })],
         option: info.option,
-        type: info.type
+        type: info.type,
+        world: this
       })
     }
   }
@@ -59,7 +61,8 @@ When(
       await resourceObject.tryToUpload({
         to: info.to,
         resources: [this.filesEnvironment.getFile({ name: info.resource })],
-        error: info.error
+        error: info.error,
+        world: this
       })
     }
   }
@@ -78,7 +81,8 @@ When(
             name: path.join(runtimeFs.getTempUploadPath().replace(config.assets, ''), info.resource)
           })
         ],
-        option: info.option
+        option: info.option,
+        world: this
       })
     }
   }
@@ -110,7 +114,7 @@ When(
   async function (this: World, stepUser: string, actionType: string, stepTable: DataTable) {
     const { page } = this.actorsEnvironment.getActor({ key: stepUser })
     const resourceObject = new objects.applicationFiles.Resource({ page })
-    await processDownload(stepTable, resourceObject, actionType)
+    await processDownload(stepTable, resourceObject, actionType, this)
   }
 )
 
@@ -156,7 +160,8 @@ When(
         resource,
         newLocation: to,
         method,
-        option: option
+        option: option,
+        world: this
       })
     }
   }
@@ -186,7 +191,8 @@ When(
     ]({
       newLocation,
       method,
-      resources
+      resources,
+      world: this
     })
   }
 )
@@ -216,7 +222,8 @@ When(
       await resourceObject.restoreVersion({
         folder,
         files: fileInfo[folder],
-        openDetailsPanel: fileInfo[folder]['openDetailsPanel']
+        openDetailsPanel: fileInfo[folder]['openDetailsPanel'],
+        world: this
       })
     }
   }
@@ -240,7 +247,7 @@ When(
     }, {})
 
     for (const folder of Object.keys(fileInfo)) {
-      await resourceObject.downloadVersion({ folder, files: fileInfo[folder] })
+      await resourceObject.downloadVersion({ folder, files: fileInfo[folder], world: this })
     }
   }
 )
@@ -376,6 +383,12 @@ Then(
     for (const info of stepTable.hashes()) {
       expect(actualList.includes(info.resource)).toBe(actionType === 'should')
     }
+    const a11yObject = new objects.a11y.Accessibility({ page })
+    const a11yViolations = await a11yObject.getSevereAccessibilityViolations('body')
+    this.currentStepData = {
+      a11yViolations
+    }
+    expect(a11yViolations).toMatchObject([])
   }
 )
 
@@ -402,14 +415,14 @@ When(
   async function (this: World, stepUser: string): Promise<void> {
     const { page } = this.actorsEnvironment.getActor({ key: stepUser })
     const resourceObject = new objects.applicationFiles.Resource({ page })
-    await resourceObject.showHiddenFiles()
+    await resourceObject.showHiddenFiles(this)
   }
 )
 
 When('{string} enables flat list', async function (this: World, stepUser: string): Promise<void> {
   const { page } = this.actorsEnvironment.getActor({ key: stepUser })
   const resourceObject = new objects.applicationFiles.Resource({ page })
-  await resourceObject.toggleFlatList()
+  await resourceObject.toggleFlatList(this)
 })
 
 Then(
@@ -430,7 +443,13 @@ When(
   async function (this: World, stepUser: string): Promise<void> {
     const { page } = this.actorsEnvironment.getActor({ key: stepUser })
     const resourceObject = new objects.applicationFiles.Resource({ page })
-    await resourceObject.switchToTilesViewMode()
+    await resourceObject.switchToTilesViewMode(this)
+    const a11yObject = new objects.a11y.Accessibility({ page })
+    const a11yViolations = await a11yObject.getSevereAccessibilityViolations('body')
+    this.currentStepData = {
+      a11yViolations
+    }
+    expect(a11yViolations).toMatchObject([])
   }
 )
 
@@ -439,7 +458,13 @@ When(
   async function (this: World, stepUser: string): Promise<void> {
     const { page } = this.actorsEnvironment.getActor({ key: stepUser })
     const resourceObject = new objects.applicationFiles.Resource({ page })
-    await resourceObject.expectThatResourcesAreTiles()
+    await resourceObject.expectThatResourcesAreTiles(this)
+    const a11yObject = new objects.a11y.Accessibility({ page })
+    const a11yViolations = await a11yObject.getSevereAccessibilityViolations('body')
+    this.currentStepData = {
+      a11yViolations
+    }
+    expect(a11yViolations).toMatchObject([])
   }
 )
 
@@ -469,7 +494,8 @@ export const processDelete = async (
     await pageObject.delete({
       folder: parentFolder,
       resourcesWithInfo: files,
-      via: actionType === 'batch action' ? 'BATCH_ACTION' : 'SIDEBAR_PANEL'
+      via: actionType === 'batch action' ? 'BATCH_ACTION' : 'SIDEBAR_PANEL',
+      world: this
     })
   }
 }
@@ -477,7 +503,8 @@ export const processDelete = async (
 export const processDownload = async (
   stepTable: DataTable,
   pageObject: Public | Resource,
-  actionType: string
+  actionType: string,
+  world: World
 ) => {
   let downloads, files, parentFolder
   const downloadedResources: string[] = []
@@ -520,7 +547,8 @@ export const processDownload = async (
     downloads = await pageObject.download({
       folder: parentFolder,
       resources: files,
-      via
+      via,
+      world
     })
 
     downloads.forEach((download) => {
@@ -560,8 +588,15 @@ When(
       await resourceObject.editResource({
         name: info.resource,
         type: info.type,
-        content: info.content
+        content: info.content,
+        world: this
       })
+      const a11yObject = new objects.a11y.Accessibility({ page })
+      const a11yViolations = await a11yObject.getSevereAccessibilityViolations('body')
+      this.currentStepData = {
+        a11yViolations
+      }
+      expect(a11yViolations).toMatchObject([])
     }
   }
 )
@@ -577,6 +612,12 @@ When(
     const { page } = this.actorsEnvironment.getActor({ key: stepUser })
     const resourceObject = new objects.applicationFiles.Resource({ page })
     await resourceObject.clickTag({ resource: resourceName, tag: tagName.toLowerCase() })
+    const a11yObject = new objects.a11y.Accessibility({ page })
+    const a11yViolations = await a11yObject.getSevereAccessibilityViolations('body')
+    this.currentStepData = {
+      a11yViolations
+    }
+    expect(a11yViolations).toMatchObject([])
   }
 )
 
@@ -596,6 +637,12 @@ When(
           | 'Collabora'
           | 'OnlyOffice'
       })
+      const a11yObject = new objects.a11y.Accessibility({ page })
+      const a11yViolations = await a11yObject.getSevereAccessibilityViolations('body')
+      this.currentStepData = {
+        a11yViolations
+      }
+      expect(a11yViolations).toMatchObject([])
     }
   }
 )
@@ -608,7 +655,8 @@ Then(
     for (const { resource, tags } of stepTable.hashes()) {
       const isVisible = await resourceObject.areTagsVisibleForResourceInFilesTable({
         resource,
-        tags: tags.split(',').map((tag) => tag.trim().toLowerCase())
+        tags: tags.split(',').map((tag) => tag.trim().toLowerCase()),
+        world: this
       })
       expect(isVisible).toBe(true)
     }
@@ -623,8 +671,15 @@ Then(
     for (const { resource, tags } of stepTable.hashes()) {
       const isVisible = await resourceObject.areTagsVisibleForResourceInDetailsPanel({
         resource,
-        tags: tags.split(',').map((tag) => tag.trim().toLowerCase())
+        tags: tags.split(',').map((tag) => tag.trim().toLowerCase()),
+        world: this
       })
+      const a11yObject = new objects.a11y.Accessibility({ page })
+      const a11yViolations = await a11yObject.getSevereAccessibilityViolations('body')
+      this.currentStepData = {
+        a11yViolations
+      }
+      expect(a11yViolations).toMatchObject([])
       expect(isVisible).toBe(true)
     }
   }
@@ -638,8 +693,15 @@ When(
     for (const { resource, tags } of stepTable.hashes()) {
       await resourceObject.addTags({
         resource,
-        tags: tags.split(',').map((tag) => tag.trim().toLowerCase())
+        tags: tags.split(',').map((tag) => tag.trim().toLowerCase()),
+        world: this
       })
+      const a11yObject = new objects.a11y.Accessibility({ page })
+      const a11yViolations = await a11yObject.getSevereAccessibilityViolations('body')
+      this.currentStepData = {
+        a11yViolations
+      }
+      expect(a11yViolations).toMatchObject([])
     }
   }
 )
@@ -652,8 +714,15 @@ When(
     for (const { resource, tags } of stepTable.hashes()) {
       await resourceObject.removeTags({
         resource,
-        tags: tags.split(',').map((tag) => tag.trim().toLowerCase())
+        tags: tags.split(',').map((tag) => tag.trim().toLowerCase()),
+        world: this
       })
+      const a11yObject = new objects.a11y.Accessibility({ page })
+      const a11yViolations = await a11yObject.getSevereAccessibilityViolations('body')
+      this.currentStepData = {
+        a11yViolations
+      }
+      expect(a11yViolations).toMatchObject([])
     }
   }
 )
@@ -666,9 +735,16 @@ When(
     for (const { resource, tags } of stepTable.hashes()) {
       await resourceObject.tryToAddTags({
         resource,
-        tags: tags.split(',').map((tag) => tag.trim().toLowerCase())
+        tags: tags.split(',').map((tag) => tag.trim().toLowerCase()),
+        world: this
       })
     }
+    const a11yObject = new objects.a11y.Accessibility({ page })
+    const a11yViolations = await a11yObject.getSevereAccessibilityViolations('body')
+    this.currentStepData = {
+      a11yViolations
+    }
+    expect(a11yViolations).toMatchObject([])
   }
 )
 
@@ -693,7 +769,13 @@ When(
   ): Promise<void> {
     const { page } = this.actorsEnvironment.getActor({ key: stepUser })
     const resourceObject = new objects.applicationFiles.Resource({ page })
-    await resourceObject.createFileFromTemplate(file, webOffice, via)
+    await resourceObject.createFileFromTemplate(file, webOffice, via, this)
+    const a11yObject = new objects.a11y.Accessibility({ page })
+    const a11yViolations = await a11yObject.getSevereAccessibilityViolations('body')
+    this.currentStepData = {
+      a11yViolations
+    }
+    expect(a11yViolations).toMatchObject([])
   }
 )
 
@@ -703,6 +785,12 @@ When(
     const { page } = this.actorsEnvironment.getActor({ key: stepUser })
     const resourceObject = new objects.applicationFiles.Resource({ page })
     await resourceObject.openTemplateFile(file, webOffice)
+    const a11yObject = new objects.a11y.Accessibility({ page })
+    const a11yViolations = await a11yObject.getSevereAccessibilityViolations('body')
+    this.currentStepData = {
+      a11yViolations
+    }
+    expect(a11yViolations).toMatchObject([])
   }
 )
 
@@ -719,6 +807,12 @@ When(
       key: space.name,
       space: { name: space.name, id: space.id }
     })
+    const a11yObject = new objects.a11y.Accessibility({ page })
+    const a11yViolations = await a11yObject.getSevereAccessibilityViolations('body')
+    this.currentStepData = {
+      a11yViolations
+    }
+    expect(a11yViolations).toMatchObject([])
   }
 )
 
@@ -733,6 +827,12 @@ When(
       key: space.name,
       space: { name: space.name, id: space.id }
     })
+    const a11yObject = new objects.a11y.Accessibility({ page })
+    const a11yViolations = await a11yObject.getSevereAccessibilityViolations('body')
+    this.currentStepData = {
+      a11yViolations
+    }
+    expect(a11yViolations).toMatchObject([])
   }
 )
 
@@ -754,8 +854,18 @@ Then(
     }, {})
 
     for (const folder of Object.keys(fileInfo)) {
-      await resourceObject.checkThatFileVersionIsNotAvailable({ folder, files: fileInfo[folder] })
+      await resourceObject.checkThatFileVersionIsNotAvailable({
+        folder,
+        files: fileInfo[folder],
+        world: this
+      })
     }
+    const a11yObject = new objects.a11y.Accessibility({ page })
+    const a11yViolations = await a11yObject.getSevereAccessibilityViolations('body')
+    this.currentStepData = {
+      a11yViolations
+    }
+    expect(a11yViolations).toMatchObject([])
   }
 )
 
@@ -779,8 +889,15 @@ Then(
     for (const folder of Object.keys(fileInfo)) {
       await resourceObject.checkThatFileVersionPanelIsNotAvailable({
         folder,
-        files: fileInfo[folder]
+        files: fileInfo[folder],
+        world: this
       })
+      const a11yObject = new objects.a11y.Accessibility({ page })
+      const a11yViolations = await a11yObject.getSevereAccessibilityViolations('body')
+      this.currentStepData = {
+        a11yViolations
+      }
+      expect(a11yViolations).toMatchObject([])
     }
   }
 )
@@ -791,6 +908,12 @@ When(
     const { page } = this.actorsEnvironment.getActor({ key: stepUser })
     const resourceObject = new objects.applicationFiles.Resource({ page })
     await resourceObject.changePage({ pageNumber })
+    const a11yObject = new objects.a11y.Accessibility({ page })
+    const a11yViolations = await a11yObject.getSevereAccessibilityViolations('body')
+    this.currentStepData = {
+      a11yViolations
+    }
+    expect(a11yViolations).toMatchObject([])
   }
 )
 
@@ -801,6 +924,12 @@ Then(
     const resourceObject = new objects.applicationFiles.Resource({ page })
     const currentPage = await resourceObject.getCurrentPageNumber({ pageNumber })
     expect(currentPage).toBe(pageNumber.toString())
+    const a11yObject = new objects.a11y.Accessibility({ page })
+    const a11yViolations = await a11yObject.getSevereAccessibilityViolations('body')
+    this.currentStepData = {
+      a11yViolations
+    }
+    expect(a11yViolations).toMatchObject([])
   }
 )
 
@@ -809,7 +938,13 @@ When(
   async function (this: World, stepUser: string, itemsPerPage: string): Promise<void> {
     const { page } = this.actorsEnvironment.getActor({ key: stepUser })
     const resourceObject = new objects.applicationFiles.Resource({ page })
-    await resourceObject.changeItemsPerPage({ itemsPerPage })
+    await resourceObject.changeItemsPerPage({ itemsPerPage, world: this })
+    const a11yObject = new objects.a11y.Accessibility({ page })
+    const a11yViolations = await a11yObject.getSevereAccessibilityViolations('body')
+    this.currentStepData = {
+      a11yViolations
+    }
+    expect(a11yViolations).toMatchObject([])
   }
 )
 
@@ -820,6 +955,12 @@ Then(
     const resourceObject = new objects.applicationFiles.Resource({ page })
     const actualText = await resourceObject.getFileListFooterText()
     expect(actualText).toBe(expectedText)
+    const a11yObject = new objects.a11y.Accessibility({ page })
+    const a11yViolations = await a11yObject.getSevereAccessibilityViolations('body')
+    this.currentStepData = {
+      a11yViolations
+    }
+    expect(a11yViolations).toMatchObject([])
   }
 )
 
@@ -830,6 +971,12 @@ Then(
     const resourceObject = new objects.applicationFiles.Resource({ page })
     const actualNumberOfResources = await resourceObject.countNumberOfResourcesInThePage()
     expect(actualNumberOfResources).toBe(expectedNumberOfResources)
+    const a11yObject = new objects.a11y.Accessibility({ page })
+    const a11yViolations = await a11yObject.getSevereAccessibilityViolations('body')
+    this.currentStepData = {
+      a11yViolations
+    }
+    expect(a11yViolations).toMatchObject([])
   }
 )
 
@@ -839,6 +986,12 @@ Then(
     const { page } = this.actorsEnvironment.getActor({ key: stepUser })
     const resourceObject = new objects.applicationFiles.Resource({ page })
     await resourceObject.expectPageNumberNotToBeVisible()
+    const a11yObject = new objects.a11y.Accessibility({ page })
+    const a11yViolations = await a11yObject.getSevereAccessibilityViolations('body')
+    this.currentStepData = {
+      a11yViolations
+    }
+    expect(a11yViolations).toMatchObject([])
   }
 )
 
@@ -850,7 +1003,13 @@ When(
     const resources = stepTable
       .hashes()
       .map((item) => this.filesEnvironment.getFile({ name: item.resource }))
-    await resourceObject.dropUpload({ resources })
+    await resourceObject.dropUpload({ resources, world: this })
+    const a11yObject = new objects.a11y.Accessibility({ page })
+    const a11yViolations = await a11yObject.getSevereAccessibilityViolations('body')
+    this.currentStepData = {
+      a11yViolations
+    }
+    expect(a11yViolations).toMatchObject([])
   }
 )
 
@@ -872,7 +1031,7 @@ When(
     const { page } = this.actorsEnvironment.getActor({ key: stepUser })
     const resourceObject = new objects.applicationFiles.Resource({ page })
 
-    await resourceObject.uploadLargeNumberOfResources({ resources: files })
+    await resourceObject.uploadLargeNumberOfResources({ resources: files, world: this })
   }
 )
 
@@ -938,7 +1097,7 @@ When(
   async function (this: World, stepUser: any, file: any): Promise<void> {
     const { page } = this.actorsEnvironment.getActor({ key: stepUser })
     const resourceObject = new objects.applicationFiles.Resource({ page })
-    await resourceObject.previewMediaFromSidebarPanel(file)
+    await resourceObject.previewMediaFromSidebarPanel(file, this)
   }
 )
 
@@ -952,7 +1111,7 @@ Then(
   ): Promise<void> {
     const { page } = this.actorsEnvironment.getActor({ key: stepUser })
     const resourceObject = new objects.applicationFiles.Resource({ page })
-    const userCanEdit = await resourceObject.canManageResource({ resource })
+    const userCanEdit = await resourceObject.canManageResource({ resource, world: this })
     expect(userCanEdit).toBe(actionType === 'should' ? true : false)
   }
 )
@@ -1008,7 +1167,7 @@ Then(
     const { page } = this.actorsEnvironment.getActor({ key: stepUser })
     const resourceObject = new objects.applicationFiles.Resource({ page })
     for (const info of stepTable.hashes()) {
-      const actions = await resourceObject.getAllAvailableActions({ resource })
+      const actions = await resourceObject.getAllAvailableActions({ resource, world: this })
       if (actionType === 'should') {
         expect(actions.some((action) => action.startsWith(info.action))).toBe(true)
       } else {
@@ -1032,11 +1191,11 @@ Then(
     if (actionType === 'should') {
       action === 'thumbnail and preview' &&
         (await expect(resourceObject.getFileThumbnailLocator(resource)).toBeVisible())
-      await resourceObject.shouldSeeFilePreview({ resource })
+      await resourceObject.shouldSeeFilePreview({ resource, world: this })
     } else {
       action === 'thumbnail and preview' &&
         (await expect(resourceObject.getFileThumbnailLocator(resource)).not.toBeVisible())
-      await resourceObject.shouldNotSeeFilePreview({ resource })
+      await resourceObject.shouldNotSeeFilePreview({ resource, world: this })
     }
   }
 )
@@ -1050,7 +1209,8 @@ Then(
     for (const info of stepTable.hashes()) {
       await resourceObject.checkActivity({
         resource: info.resource,
-        activity: substitute(info.activity)
+        activity: substitute(info.activity),
+        world: this
       })
     }
   }
@@ -1063,7 +1223,7 @@ Then(
     const resourceObject = new objects.applicationFiles.Resource({ page })
 
     for (const info of stepTable.hashes()) {
-      await resourceObject.checkEmptyActivity({ resource: info.resource })
+      await resourceObject.checkEmptyActivity({ resource: info.resource, world: this })
     }
   }
 )
@@ -1079,7 +1239,7 @@ When(
     const { page } = this.actorsEnvironment.getActor({ key: stepUser })
     const resourceObject = new objects.applicationFiles.Resource({ page })
     for (const info of stepTable.hashes()) {
-      await resourceObject.duplicate(info.resource, method)
+      await resourceObject.duplicate(info.resource, method, this)
     }
   }
 )

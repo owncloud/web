@@ -9,6 +9,12 @@ Then(
     const { page } = this.actorsEnvironment.getActor({ key: stepUser })
     const searchObject = new objects.applicationFiles.Search({ page })
     const actualMessage = await searchObject.getSearchResultMessage()
+    const a11yObject = new objects.a11y.Accessibility({ page })
+    const a11yViolations = await a11yObject.getSevereAccessibilityViolations('body')
+    this.currentStepData = {
+      a11yViolations
+    }
+    expect(a11yViolations).toMatchObject([])
     expect(actualMessage).toBe(message)
   }
 )
@@ -19,6 +25,12 @@ When(
     const { page } = this.actorsEnvironment.getActor({ key: stepUser })
     const searchObject = new objects.applicationFiles.Search({ page })
     await searchObject.selectTagFilter({ tag })
+    const a11yObject = new objects.a11y.Accessibility({ page })
+    const a11yViolations = await a11yObject.getSevereAccessibilityViolations('body')
+    this.currentStepData = {
+      a11yViolations
+    }
+    expect(a11yViolations).toMatchObject([])
   }
 )
 
@@ -28,6 +40,12 @@ When(
     const { page } = this.actorsEnvironment.getActor({ key: stepUser })
     const searchObject = new objects.applicationFiles.Search({ page })
     await searchObject.toggleSearchTitleOnly({ enableOrDisable })
+    const a11yObject = new objects.a11y.Accessibility({ page })
+    const a11yViolations = await a11yObject.getSevereAccessibilityViolations('body')
+    this.currentStepData = {
+      a11yViolations
+    }
+    expect(a11yViolations).toMatchObject([])
   }
 )
 When(
@@ -36,6 +54,12 @@ When(
     const { page } = this.actorsEnvironment.getActor({ key: stepUser })
     const searchObject = new objects.applicationFiles.Search({ page })
     await searchObject.selectMediaTypeFilter({ mediaType })
+    const a11yObject = new objects.a11y.Accessibility({ page })
+    const a11yViolations = await a11yObject.getSevereAccessibilityViolations('body')
+    this.currentStepData = {
+      a11yViolations
+    }
+    expect(a11yViolations).toMatchObject([])
   }
 )
 When(
@@ -44,6 +68,12 @@ When(
     const { page } = this.actorsEnvironment.getActor({ key: stepUser })
     const searchObject = new objects.applicationFiles.Search({ page })
     await searchObject.selectlastModifiedFilter({ lastModified })
+    const a11yObject = new objects.a11y.Accessibility({ page })
+    const a11yViolations = await a11yObject.getSevereAccessibilityViolations('body')
+    this.currentStepData = {
+      a11yViolations
+    }
+    expect(a11yViolations).toMatchObject([])
   }
 )
 When(
@@ -54,5 +84,11 @@ When(
     await searchObject.clearFilter({
       filter: filter as 'mediaType' | 'tags' | 'lastModified' | 'fullText'
     })
+    const a11yObject = new objects.a11y.Accessibility({ page })
+    const a11yViolations = await a11yObject.getSevereAccessibilityViolations('body')
+    this.currentStepData = {
+      a11yViolations
+    }
+    expect(a11yViolations).toMatchObject([])
   }
 )

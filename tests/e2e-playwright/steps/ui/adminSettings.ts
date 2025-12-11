@@ -1,16 +1,19 @@
+import { World } from '../../../e2e/cucumber/environment'
 import { objects } from '../../../e2e/support'
 import { ActorsEnvironment, FilesEnvironment } from '../../../e2e/support/environment'
 
 export async function navigateToGeneralManagementPage({
   actorsEnvironment,
-  stepUser
+  stepUser,
+  world
 }: {
   actorsEnvironment: ActorsEnvironment
   stepUser: string
+  world?: World
 }): Promise<void> {
   const { page } = actorsEnvironment.getActor({ key: stepUser })
   const pageObject = new objects.applicationAdminSettings.page.General({ page })
-  await pageObject.navigate()
+  await pageObject.navigate(world)
 }
 
 export async function uploadLogoFromLocalPath({

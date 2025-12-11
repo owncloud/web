@@ -1,5 +1,6 @@
 import { ActorsEnvironment } from '../../../e2e/support/environment/index.js'
 import { objects } from '../../../e2e/support'
+import { World } from '../../../e2e/cucumber/environment'
 
 export async function openApplication({
   actorsEnvironment,

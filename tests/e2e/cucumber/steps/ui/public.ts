@@ -16,7 +16,7 @@ When(
 
     const { url } = this.linksEnvironment.getLink({ name })
     const pageObject = new objects.applicationFiles.page.Public({ page })
-    await pageObject.open({ url })
+    await pageObject.open({ url, world: this })
   }
 )
 
@@ -30,7 +30,7 @@ When(
     } else {
       password = substitute(password)
     }
-    await pageObject.authenticate({ password })
+    await pageObject.authenticate({ password, world: this })
   }
 )
 
@@ -38,7 +38,7 @@ When(
   '{string} closes the file viewer',
   async function (this: World, stepUser: string): Promise<void> {
     const { page } = this.actorsEnvironment.getActor({ key: stepUser })
-    await editor.close(page)
+    await editor.close(page, this)
   }
 )
 
@@ -46,7 +46,7 @@ When(
   '{string} saves the file viewer',
   async function (this: World, stepUser: string): Promise<void> {
     const { page } = this.actorsEnvironment.getActor({ key: stepUser })
-    await editor.save(page)
+    await editor.save(page, this)
   }
 )
 
@@ -69,6 +69,13 @@ When(
       text,
       editor
     })
+    const a11yObject = new objects.a11y.Accessibility({ page })
+    const a11yViolations =
+      await a11yObject.getSevereAccessibilityViolations('#text-editor-container')
+    this.currentStepData = {
+      a11yViolations
+    }
+    expect(a11yViolations).toMatchObject([])
   }
 )
 
@@ -122,7 +129,7 @@ When(
   ): Promise<void> {
     const { page } = this.actorsEnvironment.getActor({ key: stepUser })
     const pageObject = new objects.applicationFiles.page.Public({ page })
-    await processDownload(stepTable, pageObject, actionType)
+    await processDownload(stepTable, pageObject, actionType, this)
   }
 )
 
@@ -147,7 +154,8 @@ When(
         to: info.to,
         resources: [this.filesEnvironment.getFile({ name: info.resource })],
         option: info.option,
-        type: info.type
+        type: info.type,
+        world: this
       })
     }
   }
@@ -169,7 +177,8 @@ When(
         to: info.to,
         resources: [this.filesEnvironment.getFile({ name: info.resource })],
         option: info.option,
-        link: url
+        link: url,
+        world: this
       })
     }
   }
@@ -214,7 +223,7 @@ When(
     const { page } = this.actorsEnvironment.getActor({ key: stepUser })
     const pageObject = new objects.applicationFiles.page.Public({ page })
     password = substitute(password)
-    await pageObject.authenticate({ password, passwordProtectedFolder: true })
+    await pageObject.authenticate({ password, passwordProtectedFolder: true, world: this })
   }
 )
 
@@ -228,7 +237,8 @@ When(
     await pageObject.authenticate({
       password,
       passwordProtectedFolder: true,
-      expectToSucceed: false
+      expectToSucceed: false,
+      world: this
     })
     const actualErrorMessage = await linkObject.checkErrorMessage({ passwordProtectedFolder: true })
     expect(actualErrorMessage).toBe('Incorrect password')

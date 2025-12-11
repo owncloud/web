@@ -6,6 +6,7 @@ import {
   displayedResourceType,
   searchFilter
 } from '../../../e2e/support/objects/app-files/resource/actions'
+import { World } from '../../../e2e/cucumber/environment'
 
 export async function uploadResource({
   actorsEnvironment,
@@ -14,7 +15,8 @@ export async function uploadResource({
   resource,
   to,
   type,
-  option
+  option,
+  world
 }: {
   actorsEnvironment: ActorsEnvironment
   filesEnvironment: FilesEnvironment
@@ -23,6 +25,7 @@ export async function uploadResource({
   to: string
   type?: string
   option?: string
+  world?: World
 }): Promise<void> {
   const { page } = actorsEnvironment.getActor({ key: stepUser })
   const resourceObject = new objects.applicationFiles.Resource({ page })
@@ -30,22 +33,25 @@ export async function uploadResource({
     to: to,
     resources: [filesEnvironment.getFile({ name: resource })],
     option: option,
-    type: type
+    type: type,
+    world: world
   })
 }
 
 export async function isAbleToEditFileOrFolder({
   actorsEnvironment,
   stepUser,
-  resource
+  resource,
+  world
 }: {
   actorsEnvironment: ActorsEnvironment
   stepUser: string
   resource: string
+  world?: World
 }): Promise<boolean> {
   const { page } = actorsEnvironment.getActor({ key: stepUser })
   const resourceObject = new objects.applicationFiles.Resource({ page })
-  const userCanEdit = await resourceObject.canManageResource({ resource })
+  const userCanEdit = await resourceObject.canManageResource({ resource, world })
   return userCanEdit
 }
 
@@ -102,26 +108,30 @@ export async function searchGloballyWithFilter({
 
 export async function switchToTilesViewMode({
   actorsEnvironment,
-  stepUser
+  stepUser,
+  world
 }: {
   actorsEnvironment: ActorsEnvironment
   stepUser: string
+  world?: World
 }): Promise<void> {
   const { page } = actorsEnvironment.getActor({ key: stepUser })
   const resourceObject = new objects.applicationFiles.Resource({ page })
-  await resourceObject.switchToTilesViewMode()
+  await resourceObject.switchToTilesViewMode(world)
 }
 
 export async function shouldSeeResourcesAsTiles({
   actorsEnvironment,
-  stepUser
+  stepUser,
+  world
 }: {
   actorsEnvironment: ActorsEnvironment
   stepUser: string
+  world?: World
 }): Promise<void> {
   const { page } = actorsEnvironment.getActor({ key: stepUser })
   const resourceObject = new objects.applicationFiles.Resource({ page })
-  await resourceObject.expectThatResourcesAreTiles()
+  await resourceObject.expectThatResourcesAreTiles(world)
 }
 
 export async function openResource({
@@ -203,14 +213,16 @@ export async function assertToHaveNoOfFiles({
 
 export async function showHiddenFiles({
   actorsEnvironment,
-  stepUser
+  stepUser,
+  world
 }: {
   actorsEnvironment: ActorsEnvironment
   stepUser: string
+  world?: World
 }): Promise<void> {
   const { page } = actorsEnvironment.getActor({ key: stepUser })
   const resourceObject = new objects.applicationFiles.Resource({ page })
-  await resourceObject.showHiddenFiles()
+  await resourceObject.showHiddenFiles(world)
 }
 
 export async function getCurrentPageNumber({
@@ -230,15 +242,17 @@ export async function getCurrentPageNumber({
 export async function changeItemsPerPage({
   actorsEnvironment,
   stepUser,
-  itemsPerPage
+  itemsPerPage,
+  world
 }: {
   actorsEnvironment: ActorsEnvironment
   stepUser: string
   itemsPerPage: string
+  world?: World
 }): Promise<void> {
   const { page } = actorsEnvironment.getActor({ key: stepUser })
   const resourceObject = new objects.applicationFiles.Resource({ page })
-  await resourceObject.changeItemsPerPage({ itemsPerPage })
+  await resourceObject.changeItemsPerPage({ itemsPerPage, world })
 }
 
 export async function expectPageNumberNotToBeVisible({
@@ -255,14 +269,16 @@ export async function expectPageNumberNotToBeVisible({
 
 export async function toggleFlatList({
   actorsEnvironment,
-  stepUser
+  stepUser,
+  world
 }: {
   actorsEnvironment: ActorsEnvironment
   stepUser: string
+  world?: World
 }): Promise<void> {
   const { page } = actorsEnvironment.getActor({ key: stepUser })
   const resourceObject = new objects.applicationFiles.Resource({ page })
-  await resourceObject.toggleFlatList()
+  await resourceObject.toggleFlatList(world)
 }
 
 export async function getFilesList({
