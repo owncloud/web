@@ -38,7 +38,7 @@ export const shareInviteCollaboratorHelp = (options: ContextualHelperOptions) =>
         { text: $gettext('“via folder”'), headline: true },
         {
           text: $gettext(
-            'The “via folder” is shown next to a share, if access has already been given via a parent folder. Click on the “via folder” to edit the share on its parent folder.'
+            'The “via folder” information can be shown in the details view, if access has already been given via a parent folder. Click on the “via folder” to edit the share on its parent folder.'
           )
         }
       ],
