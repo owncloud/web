@@ -172,6 +172,7 @@
       <oc-icon
         v-oc-tooltip="item.disabled ? $gettext('Disabled') : $gettext('Enabled')"
         :name="item.disabled ? 'stop-circle' : 'play-circle'"
+        :accessible-label="`${item.disabled ? $pgettext(`used by screen reader to announce spaces's status`, 'Space is disabled') : $pgettext(`used by reader to announce spaces's status`, 'Space is enabled')}`"
         size="small"
         fill-type="line"
       />
