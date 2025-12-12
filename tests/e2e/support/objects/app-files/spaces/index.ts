@@ -4,6 +4,7 @@ import { File } from '../../../types'
 import * as po from './actions'
 import { spaceLocator } from './utils'
 import { ICollaborator } from '../share/collaborator'
+import { World } from '../../../../cucumber/environment/world'
 
 export class Spaces {
   #page: Page
@@ -47,8 +48,8 @@ export class Spaces {
     await po.changeSpaceSubtitle({ id, value, page: this.#page })
   }
 
-  async changeDescription({ value }: { value: string }): Promise<void> {
-    await po.changeSpaceDescription({ value, page: this.#page })
+  async changeDescription({ value, world }: { value: string; world: World }): Promise<void> {
+    await po.changeSpaceDescription({ value, page: this.#page, world: world })
   }
 
   async changeQuota({ key, value }: { key: string; value: string }): Promise<void> {

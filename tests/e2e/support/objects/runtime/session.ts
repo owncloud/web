@@ -2,6 +2,9 @@ import { Page } from '@playwright/test'
 import { User } from '../../types'
 import { config } from '../../../config'
 import { TokenEnvironmentFactory } from '../../environment'
+import { World } from '../../../cucumber/environment'
+import { expect } from '@playwright/test'
+import { objects } from '../..'
 
 export class Session {
   #page: Page
@@ -56,8 +59,17 @@ export class Session {
     }
   }
 
-  async logout(): Promise<void> {
+  async logout(world: World): Promise<void> {
     await this.#page.locator('#_userMenuButton').click()
+    if (world !== undefined) {
+      const a11yObject = new objects.a11y.Accessibility({ page: this.#page })
+      const a11yViolations =
+        await a11yObject.getSevereAccessibilityViolations('#account-info-container')
+      world.currentStepData = {
+        a11yViolations
+      }
+      expect(a11yViolations).toMatchObject([])
+    }
     await this.#page.locator('#oc-topbar-account-logout').click()
   }
 }

@@ -28,7 +28,8 @@ When(
         name: info.resource,
         type: info.type as createResourceTypes,
         content: info.content,
-        password: info.password
+        password: info.password,
+        world: this
       })
     }
   }
@@ -376,6 +377,12 @@ Then(
     for (const info of stepTable.hashes()) {
       expect(actualList.includes(info.resource)).toBe(actionType === 'should')
     }
+    const a11yObject = new objects.a11y.Accessibility({ page })
+    const a11yViolations = await a11yObject.getSevereAccessibilityViolations('body')
+    this.currentStepData = {
+      a11yViolations
+    }
+    expect(a11yViolations).toMatchObject([])
   }
 )
 
@@ -431,6 +438,12 @@ When(
     const { page } = this.actorsEnvironment.getActor({ key: stepUser })
     const resourceObject = new objects.applicationFiles.Resource({ page })
     await resourceObject.switchToTilesViewMode()
+    const a11yObject = new objects.a11y.Accessibility({ page })
+    const a11yViolations = await a11yObject.getSevereAccessibilityViolations('body')
+    this.currentStepData = {
+      a11yViolations
+    }
+    expect(a11yViolations).toMatchObject([])
   }
 )
 
@@ -440,6 +453,12 @@ When(
     const { page } = this.actorsEnvironment.getActor({ key: stepUser })
     const resourceObject = new objects.applicationFiles.Resource({ page })
     await resourceObject.expectThatResourcesAreTiles()
+    const a11yObject = new objects.a11y.Accessibility({ page })
+    const a11yViolations = await a11yObject.getSevereAccessibilityViolations('body')
+    this.currentStepData = {
+      a11yViolations
+    }
+    expect(a11yViolations).toMatchObject([])
   }
 )
 
@@ -560,8 +579,15 @@ When(
       await resourceObject.editResource({
         name: info.resource,
         type: info.type,
-        content: info.content
+        content: info.content,
+        world: this
       })
+      const a11yObject = new objects.a11y.Accessibility({ page })
+      const a11yViolations = await a11yObject.getSevereAccessibilityViolations('body')
+      this.currentStepData = {
+        a11yViolations
+      }
+      expect(a11yViolations).toMatchObject([])
     }
   }
 )
@@ -577,6 +603,12 @@ When(
     const { page } = this.actorsEnvironment.getActor({ key: stepUser })
     const resourceObject = new objects.applicationFiles.Resource({ page })
     await resourceObject.clickTag({ resource: resourceName, tag: tagName.toLowerCase() })
+    const a11yObject = new objects.a11y.Accessibility({ page })
+    const a11yViolations = await a11yObject.getSevereAccessibilityViolations('body')
+    this.currentStepData = {
+      a11yViolations
+    }
+    expect(a11yViolations).toMatchObject([])
   }
 )
 
@@ -596,6 +628,12 @@ When(
           | 'Collabora'
           | 'OnlyOffice'
       })
+      const a11yObject = new objects.a11y.Accessibility({ page })
+      const a11yViolations = await a11yObject.getSevereAccessibilityViolations('body')
+      this.currentStepData = {
+        a11yViolations
+      }
+      expect(a11yViolations).toMatchObject([])
     }
   }
 )
@@ -625,6 +663,12 @@ Then(
         resource,
         tags: tags.split(',').map((tag) => tag.trim().toLowerCase())
       })
+      const a11yObject = new objects.a11y.Accessibility({ page })
+      const a11yViolations = await a11yObject.getSevereAccessibilityViolations('body')
+      this.currentStepData = {
+        a11yViolations
+      }
+      expect(a11yViolations).toMatchObject([])
       expect(isVisible).toBe(true)
     }
   }
@@ -640,6 +684,12 @@ When(
         resource,
         tags: tags.split(',').map((tag) => tag.trim().toLowerCase())
       })
+      const a11yObject = new objects.a11y.Accessibility({ page })
+      const a11yViolations = await a11yObject.getSevereAccessibilityViolations('body')
+      this.currentStepData = {
+        a11yViolations
+      }
+      expect(a11yViolations).toMatchObject([])
     }
   }
 )
@@ -654,6 +704,12 @@ When(
         resource,
         tags: tags.split(',').map((tag) => tag.trim().toLowerCase())
       })
+      const a11yObject = new objects.a11y.Accessibility({ page })
+      const a11yViolations = await a11yObject.getSevereAccessibilityViolations('body')
+      this.currentStepData = {
+        a11yViolations
+      }
+      expect(a11yViolations).toMatchObject([])
     }
   }
 )
@@ -669,6 +725,12 @@ When(
         tags: tags.split(',').map((tag) => tag.trim().toLowerCase())
       })
     }
+    const a11yObject = new objects.a11y.Accessibility({ page })
+    const a11yViolations = await a11yObject.getSevereAccessibilityViolations('body')
+    this.currentStepData = {
+      a11yViolations
+    }
+    expect(a11yViolations).toMatchObject([])
   }
 )
 
@@ -694,6 +756,12 @@ When(
     const { page } = this.actorsEnvironment.getActor({ key: stepUser })
     const resourceObject = new objects.applicationFiles.Resource({ page })
     await resourceObject.createFileFromTemplate(file, webOffice, via)
+    const a11yObject = new objects.a11y.Accessibility({ page })
+    const a11yViolations = await a11yObject.getSevereAccessibilityViolations('body')
+    this.currentStepData = {
+      a11yViolations
+    }
+    expect(a11yViolations).toMatchObject([])
   }
 )
 
@@ -703,6 +771,12 @@ When(
     const { page } = this.actorsEnvironment.getActor({ key: stepUser })
     const resourceObject = new objects.applicationFiles.Resource({ page })
     await resourceObject.openTemplateFile(file, webOffice)
+    const a11yObject = new objects.a11y.Accessibility({ page })
+    const a11yViolations = await a11yObject.getSevereAccessibilityViolations('body')
+    this.currentStepData = {
+      a11yViolations
+    }
+    expect(a11yViolations).toMatchObject([])
   }
 )
 
@@ -719,6 +793,12 @@ When(
       key: space.name,
       space: { name: space.name, id: space.id }
     })
+    const a11yObject = new objects.a11y.Accessibility({ page })
+    const a11yViolations = await a11yObject.getSevereAccessibilityViolations('body')
+    this.currentStepData = {
+      a11yViolations
+    }
+    expect(a11yViolations).toMatchObject([])
   }
 )
 
@@ -733,6 +813,12 @@ When(
       key: space.name,
       space: { name: space.name, id: space.id }
     })
+    const a11yObject = new objects.a11y.Accessibility({ page })
+    const a11yViolations = await a11yObject.getSevereAccessibilityViolations('body')
+    this.currentStepData = {
+      a11yViolations
+    }
+    expect(a11yViolations).toMatchObject([])
   }
 )
 
@@ -756,6 +842,12 @@ Then(
     for (const folder of Object.keys(fileInfo)) {
       await resourceObject.checkThatFileVersionIsNotAvailable({ folder, files: fileInfo[folder] })
     }
+    const a11yObject = new objects.a11y.Accessibility({ page })
+    const a11yViolations = await a11yObject.getSevereAccessibilityViolations('body')
+    this.currentStepData = {
+      a11yViolations
+    }
+    expect(a11yViolations).toMatchObject([])
   }
 )
 
@@ -781,6 +873,12 @@ Then(
         folder,
         files: fileInfo[folder]
       })
+      const a11yObject = new objects.a11y.Accessibility({ page })
+      const a11yViolations = await a11yObject.getSevereAccessibilityViolations('body')
+      this.currentStepData = {
+        a11yViolations
+      }
+      expect(a11yViolations).toMatchObject([])
     }
   }
 )
@@ -791,6 +889,12 @@ When(
     const { page } = this.actorsEnvironment.getActor({ key: stepUser })
     const resourceObject = new objects.applicationFiles.Resource({ page })
     await resourceObject.changePage({ pageNumber })
+    const a11yObject = new objects.a11y.Accessibility({ page })
+    const a11yViolations = await a11yObject.getSevereAccessibilityViolations('body')
+    this.currentStepData = {
+      a11yViolations
+    }
+    expect(a11yViolations).toMatchObject([])
   }
 )
 
@@ -801,6 +905,12 @@ Then(
     const resourceObject = new objects.applicationFiles.Resource({ page })
     const currentPage = await resourceObject.getCurrentPageNumber({ pageNumber })
     expect(currentPage).toBe(pageNumber.toString())
+    const a11yObject = new objects.a11y.Accessibility({ page })
+    const a11yViolations = await a11yObject.getSevereAccessibilityViolations('body')
+    this.currentStepData = {
+      a11yViolations
+    }
+    expect(a11yViolations).toMatchObject([])
   }
 )
 
@@ -810,6 +920,12 @@ When(
     const { page } = this.actorsEnvironment.getActor({ key: stepUser })
     const resourceObject = new objects.applicationFiles.Resource({ page })
     await resourceObject.changeItemsPerPage({ itemsPerPage })
+    const a11yObject = new objects.a11y.Accessibility({ page })
+    const a11yViolations = await a11yObject.getSevereAccessibilityViolations('body')
+    this.currentStepData = {
+      a11yViolations
+    }
+    expect(a11yViolations).toMatchObject([])
   }
 )
 
@@ -820,6 +936,12 @@ Then(
     const resourceObject = new objects.applicationFiles.Resource({ page })
     const actualText = await resourceObject.getFileListFooterText()
     expect(actualText).toBe(expectedText)
+    const a11yObject = new objects.a11y.Accessibility({ page })
+    const a11yViolations = await a11yObject.getSevereAccessibilityViolations('body')
+    this.currentStepData = {
+      a11yViolations
+    }
+    expect(a11yViolations).toMatchObject([])
   }
 )
 
@@ -830,6 +952,12 @@ Then(
     const resourceObject = new objects.applicationFiles.Resource({ page })
     const actualNumberOfResources = await resourceObject.countNumberOfResourcesInThePage()
     expect(actualNumberOfResources).toBe(expectedNumberOfResources)
+    const a11yObject = new objects.a11y.Accessibility({ page })
+    const a11yViolations = await a11yObject.getSevereAccessibilityViolations('body')
+    this.currentStepData = {
+      a11yViolations
+    }
+    expect(a11yViolations).toMatchObject([])
   }
 )
 
@@ -839,6 +967,12 @@ Then(
     const { page } = this.actorsEnvironment.getActor({ key: stepUser })
     const resourceObject = new objects.applicationFiles.Resource({ page })
     await resourceObject.expectPageNumberNotToBeVisible()
+    const a11yObject = new objects.a11y.Accessibility({ page })
+    const a11yViolations = await a11yObject.getSevereAccessibilityViolations('body')
+    this.currentStepData = {
+      a11yViolations
+    }
+    expect(a11yViolations).toMatchObject([])
   }
 )
 
@@ -851,6 +985,12 @@ When(
       .hashes()
       .map((item) => this.filesEnvironment.getFile({ name: item.resource }))
     await resourceObject.dropUpload({ resources })
+    const a11yObject = new objects.a11y.Accessibility({ page })
+    const a11yViolations = await a11yObject.getSevereAccessibilityViolations('body')
+    this.currentStepData = {
+      a11yViolations
+    }
+    expect(a11yViolations).toMatchObject([])
   }
 )
 

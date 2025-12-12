@@ -2,6 +2,7 @@ import { Page } from '@playwright/test'
 import { dav, graph, external } from '../../api'
 import { config } from '../../../config'
 import { User } from '../../types'
+import { World } from '../../../cucumber/environment/world'
 
 export interface navigateToDetailsPanelOfResourceArgs {
   page: Page
@@ -18,6 +19,7 @@ export interface openResourceViaUrlArgs {
   space?: string
   editorName?: string
   client?: string
+  world?: World
 }
 
 export const navigateToDetailsPanelOfResource = async (
@@ -33,7 +35,6 @@ export const openResourceViaUrl = async (args: openResourceViaUrlArgs) => {
   const { page, resource, user, space, editorName, client = '' } = args
   const fileId = await getTheFileIdOfSpaceFile(user, space, resource)
   let fullUrl
-
   switch (client) {
     case 'desktop':
       fullUrl = `${config.baseUrl}/external/open-with-web/?appName=${editorName}&fileId=${fileId}`

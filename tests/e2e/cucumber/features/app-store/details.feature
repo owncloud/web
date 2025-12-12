@@ -11,3 +11,11 @@ Feature: details
     Then "Admin" should see the app store
     And "Admin" downloads the latest version of the app "Development boilerplate"
     And "Admin" logs out
+
+
+# Errors  Files
+#      6  tests/e2e/support/objects/app-files/link/actions.ts:122
+#     26  tests/e2e/support/objects/app-files/resource/actions.ts:152
+#      1  tests/e2e/support/objects/app-files/resource/index.ts:207
+#      1  tests/e2e/support/objects/app-files/share/actions.ts:44
+#      1  tests/e2e/support/objects/app-files/spaces/index.ts:51
