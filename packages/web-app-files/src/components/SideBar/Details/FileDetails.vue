@@ -49,9 +49,29 @@
                 v-if="showVersions"
                 v-oc-tooltip="seeVersionsLabel"
                 appearance="raw"
-                :aria-label="seeVersionsLabel"
+                aria-labelledby="time-stamp"
                 @click="expandVersionsPanel"
               >
+                <span id="time-stamp" class="oc-invisible-sr">
+                  {{
+                    $pgettext(
+                      'Accessible label for showing last modified date of a resource',
+                      'Last modified %{ date }.',
+                      {
+                        date: capitalizedTimestamp
+                      }
+                    )
+                  }}
+                  {{
+                    $pgettext(
+                      'Accessible label for showing total number of versions a resource has',
+                      'See all %{ versions } versions',
+                      {
+                        versions: unref(versions).length.toString()
+                      }
+                    )
+                  }}
+                </span>
                 {{ capitalizedTimestamp }}
               </oc-button>
               <span v-else v-text="capitalizedTimestamp" />
@@ -101,9 +121,20 @@
               <oc-button
                 v-oc-tooltip="seeVersionsLabel"
                 appearance="raw"
-                :aria-label="seeVersionsLabel"
+                aria-labelledby="versions-count"
                 @click="expandVersionsPanel"
               >
+                <span id="versions-count" class="oc-invisible-sr">
+                  {{
+                    $pgettext(
+                      'Accessible label for showing total number of versions a resource has',
+                      'See all %{ versions } versions',
+                      {
+                        versions: unref(versions).length.toString()
+                      }
+                    )
+                  }}
+                </span>
                 {{ versions.length }}
               </oc-button>
             </td>
@@ -329,6 +360,7 @@ const showVersions = computed(() => {
 const seeVersionsLabel = computed(() => {
   return $gettext('See all versions')
 })
+
 const capitalizedTimestamp = computed(() => {
   const displayDate = formatDateFromHTTP(unref(resource).mdate, currentLanguage)
   return upperFirst(displayDate)
