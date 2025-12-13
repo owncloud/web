@@ -58,6 +58,12 @@ test.describe('internal link share', () => {
     })
   })
 
+  test.afterEach(async () => {
+    // clean up users
+    await api.deleteUser({ usersEnvironment, stepUser: 'Admin', targetUser: 'Alice' })
+    await api.deleteUser({ usersEnvironment, stepUser: 'Admin', targetUser: 'Brian' })
+  })
+
   test('opening a link with internal role', async () => {
     await ui.openPublicLink({
       actorsEnvironment,
