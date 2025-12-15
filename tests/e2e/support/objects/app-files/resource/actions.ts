@@ -18,6 +18,7 @@ import { environment, objects, utils } from '../../../../support'
 import { config } from '../../../../config'
 import { File, Space } from '../../../types'
 import { substitute } from '../../../utils/substitute'
+import { World } from '../../../../cucumber/environment'
 
 const topbarFilenameSelector = '#app-top-bar-resource .oc-resource-name'
 const downloadFileButtonSingleShareView = '.oc-files-actions-download-file-trigger'
@@ -218,6 +219,7 @@ export interface createResourceArgs {
   type: createResourceTypes
   content?: string
   password?: string
+  world?: World
 }
 
 export const createSpaceFromFolder = async ({
@@ -317,10 +319,12 @@ export const createSpaceFromSelection = async ({
 
 export const createNewFolder = async ({
   page,
-  resource
+  resource,
+  world
 }: {
   page: Page
   resource: string
+  world: World
 }): Promise<void> => {
   await page.locator(createNewFolderButton).click()
 
@@ -333,6 +337,10 @@ export const createNewFolder = async ({
     `Found ${violations.length} severe accessibility violations in create new folder modal`
   ).toHaveLength(0)
 
+  world.currentStepData = {
+    a11yViolations: violations
+  }
+
   await page.locator(resourceNameInput).fill(resource)
   await Promise.all([
     page.waitForResponse((resp) => resp.status() === 207 && resp.request().method() === 'PROPFIND'),
@@ -343,11 +351,13 @@ export const createNewFolder = async ({
 export const createPasswordProtectedFolder = async ({
   page,
   resource,
-  password
+  password,
+  world
 }: {
   page: Page
   resource: string
   password: string
+  world: World
 }): Promise<void> => {
   password = substitute(password)
   await page.locator(passwordProtectedFolderButton).click()
@@ -377,15 +387,20 @@ export const createPasswordProtectedFolder = async ({
 }
 
 export const createNewFileOrFolder = async (args: createResourceArgs): Promise<void> => {
-  const { page, name, type, content, password } = args
+  const { page, name, type, content, password, world } = args
   await page.locator(addNewResourceButton).click()
   switch (type) {
     case 'folder': {
-      await createNewFolder({ page, resource: name })
+      await createNewFolder({ page, resource: name, world })
       break
     }
     case 'Password Protected Folder': {
-      await createPasswordProtectedFolder({ page, resource: name, password: password })
+      await createPasswordProtectedFolder({
+        page,
+        resource: name,
+        password: password,
+        world: world
+      })
       break
     }
     case 'txtFile': {
@@ -396,7 +411,7 @@ export const createNewFileOrFolder = async (args: createResourceArgs): Promise<v
         page.waitForResponse((resp) => resp.status() === 201 && resp.request().method() === 'PUT'),
         page.locator(util.format(actionConfirmationButton, 'Create')).click()
       ])
-      await editTextDocument({ page, content, name })
+      await editTextDocument({ page, content, name, world })
       break
     }
     case 'mdFile': {
@@ -407,17 +422,17 @@ export const createNewFileOrFolder = async (args: createResourceArgs): Promise<v
         page.waitForResponse((resp) => resp.status() === 201 && resp.request().method() === 'PUT'),
         page.locator(util.format(actionConfirmationButton, 'Create')).click()
       ])
-      await editTextDocument({ page, content, name })
+      await editTextDocument({ page, content, name, world })
       break
     }
     case 'OpenDocument': {
       // By Default when OpenDocument is created, it is opened with collabora if both app-provider services are running together
-      await createDocumentFile(args, 'Collabora')
+      await createDocumentFile(args, 'Collabora', world)
       break
     }
     case 'Microsoft Word': {
       // By Default when Microsoft Word document is created, it is opened with OnlyOffice if both app-provider services are running together
-      await createDocumentFile(args, 'OnlyOffice')
+      await createDocumentFile(args, 'OnlyOffice', world)
       break
     }
   }
@@ -425,7 +440,8 @@ export const createNewFileOrFolder = async (args: createResourceArgs): Promise<v
 
 const createDocumentFile = async (
   args: createResourceArgs,
-  editorToOpen: string
+  editorToOpen: string,
+  world: World
 ): Promise<void> => {
   const { page, name, type, content } = args
   // for creating office suites documents we need the external app provider services to be ready
@@ -468,7 +484,7 @@ const createDocumentFile = async (
   }
   await Promise.all([
     page.waitForResponse((res) => res.status() === 207 && res.request().method() === 'PROPFIND'),
-    editor.close(page)
+    editor.close(page, world)
   ])
 }
 
@@ -537,7 +553,7 @@ const isAppProviderServiceForOfficeSuitesReadyInWebUI = async (page: Page, type:
 }
 
 export const createResources = async (args: createResourceArgs): Promise<void> => {
-  const { page, name, type, content, password } = args
+  const { page, name, type, content, password, world } = args
   const paths = name.split('/')
   const resource = paths.pop()
 
@@ -549,21 +565,23 @@ export const createResources = async (args: createResourceArgs): Promise<void> =
 
     if (!resourcesExists) {
       await page.locator(addNewResourceButton).click()
-      await createNewFolder({ page, resource: path })
+      await createNewFolder({ page, resource: path, world })
     }
     await clickResource({ page, path })
   }
-  await createNewFileOrFolder({ page, name: resource, type, content, password })
+  await createNewFileOrFolder({ page, name: resource, type, content, password, world })
 }
 
 export const editTextDocument = async ({
   page,
   name,
-  content
+  content,
+  world
 }: {
   page: Page
   name: string
   content: string
+  world: World
 }): Promise<void> => {
   const isMarkdownMode = await page.locator(textEditor).getAttribute('data-markdown-mode')
   const inputLocator =
@@ -575,7 +593,7 @@ export const editTextDocument = async ({
     page.waitForResponse((resp) => resp.status() === 207 && resp.request().method() === 'PROPFIND'),
     page.locator(saveTextFileInEditorButton).click()
   ])
-  await editor.close(page)
+  await editor.close(page, world)
   await page.locator(util.format(resourceNameSelector, name)).waitFor()
 }
 
@@ -1690,10 +1708,11 @@ export interface editResourcesArgs {
   name: string
   type: string
   content: string
+  world: World
 }
 
 export const editResource = async (args: editResourcesArgs): Promise<void> => {
-  const { page, name, type, content } = args
+  const { page, name, type, content, world } = args
   const { dir: resourceDir } = path.parse(name)
 
   const folderPaths = name.split('/')
@@ -1712,7 +1731,7 @@ export const editResource = async (args: editResourcesArgs): Promise<void> => {
       break
     default:
       await page.locator(util.format(resourceNameSelector, resourceName)).click()
-      await editTextDocument({ page, content: content, name: resourceName })
+      await editTextDocument({ page, content: content, name: resourceName, world })
   }
 }
 

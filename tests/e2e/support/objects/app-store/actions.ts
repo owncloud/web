@@ -1,5 +1,8 @@
 import { Download, Page } from '@playwright/test'
 import util from 'util'
+import { objects } from '../..'
+import { World } from '../../../cucumber/environment/world'
+import { expect } from '@playwright/test'
 
 const selectors = {
   appLoadingSpinner: '#app-loading-spinner',
@@ -17,9 +20,17 @@ const selectors = {
   appTag: '//a[contains(.,"%s")]/following::button[contains(@class,"oc-tag")][span[text()="%s"]][1]'
 }
 
-export const openAppStore = async (args: { page: Page }): Promise<void> => {
-  const { page } = args
+export const openAppStore = async (args: { page: Page; world: World }): Promise<void> => {
+  const { page, world } = args
   await page.locator(selectors.appSwitcherButton).click()
+  const a11yObject = new objects.a11y.Accessibility({ page })
+  const a11yViolations = await a11yObject.getSevereAccessibilityViolations(
+    selectors.appSwitcherButton
+  )
+  world.currentStepData = {
+    a11yViolations
+  }
+  expect(a11yViolations).toMatchObject([])
   await page.locator(selectors.appStoreMenuButton).click()
   await page.locator(selectors.appLoadingSpinner).waitFor({ state: 'detached' })
 }
@@ -29,9 +40,19 @@ export const navigateToAppStoreOverview = async (args: { page: Page }): Promise<
   await page.locator(selectors.appDetailsBack).waitFor({ state: 'detached' })
 }
 
-export const waitForAppStoreIsVisible = (args: { page: Page }): Promise<void> => {
-  const { page } = args
-  return page.locator(selectors.appStoreHeadline).waitFor()
+export const waitForAppStoreIsVisible = async (args: {
+  page: Page
+  world: World
+}): Promise<void> => {
+  const { page, world } = args
+  await page.locator(selectors.appStoreHeadline).waitFor()
+  const a11yObject = new objects.a11y.Accessibility({ page })
+  const a11yViolations = await a11yObject.getSevereAccessibilityViolations('body')
+  world.currentStepData = {
+    a11yViolations
+  }
+  expect(a11yViolations).toMatchObject([])
+  return
 }
 
 export const getAppsList = (args: { page: Page }): Promise<string[]> => {
@@ -53,9 +74,16 @@ export const selectTag = (args: { page: Page; tag: string }): Promise<void> => {
   return page.locator(util.format(selectors.tag, tag)).click()
 }
 
-export const selectApp = (args: { page: Page; app: string }): Promise<void> => {
-  const { page, app } = args
-  return page.locator(util.format(selectors.selectAppTitle, app)).click()
+export const selectApp = async (args: { page: Page; app: string; world: World }): Promise<void> => {
+  const { page, app, world } = args
+  await page.locator(util.format(selectors.selectAppTitle, app)).click()
+  const a11yObject = new objects.a11y.Accessibility({ page })
+  const a11yViolations = await a11yObject.getSevereAccessibilityViolations('#app-store')
+  world.currentStepData = {
+    a11yViolations
+  }
+  expect(a11yViolations).toMatchObject([])
+  return
 }
 
 export const waitForAppDetailsIsVisible = (args: { page: Page; app }): Promise<void> => {
