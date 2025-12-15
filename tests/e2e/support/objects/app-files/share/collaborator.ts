@@ -4,6 +4,7 @@ import util from 'util'
 import { Group, User } from '../../../types'
 import { getActualExpiryDate } from '../../../utils/datePicker'
 import { locatorUtils } from '../../../utils'
+import { objects } from '../../..'
 
 export interface ICollaborator {
   collaborator: User | Group
@@ -152,7 +153,8 @@ export default class Collaborator {
       itemSelector = Collaborator.collaboratorRoleButton
     }
     await page.locator(dropdownSelector).click()
-
+    const a11yObject = new objects.a11y.Accessibility({ page })
+    await a11yObject.getSevereAccessibilityViolations('.tippy-box')
     await page.locator(util.format(itemSelector, role)).click()
   }
 

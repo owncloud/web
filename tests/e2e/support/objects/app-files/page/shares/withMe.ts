@@ -1,5 +1,6 @@
 import { Page } from '@playwright/test'
 import { Actor } from '../../../../../support/types'
+import { objects } from '../../../..'
 
 const sharesNavSelector = '//a[@data-nav-name="files-shares"]'
 const openShareWithMeButton = `//a/span[text()='Open "Shared with me"']`
@@ -14,6 +15,8 @@ export class WithMe {
 
   async navigate(): Promise<void> {
     await this.#page.locator(sharesNavSelector).click()
+    const a11yObject = new objects.a11y.Accessibility({ page: this.#page })
+    await a11yObject.getSevereAccessibilityViolations('#files')
   }
 
   async openShareWithMeFromInternalLink(actor: Actor): Promise<void> {
