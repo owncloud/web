@@ -28,6 +28,7 @@
         <span
           v-if="!notifications.length"
           class="oc-notifications-no-new"
+          tabindex="0"
           v-text="$gettext('Nothing new')"
         />
         <oc-list v-else>
