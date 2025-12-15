@@ -11,12 +11,10 @@
         appearance="raw"
         gap-size="none"
         :disabled="isLocked"
-        :aria-label="
-          mode === 'create' ? $gettext('Select permission') : $gettext('Edit permission')
-        "
+        :aria-labelledby="roleLabelId"
       >
         <oc-icon v-if="showIcon" :name="selectedRole.icon" class="oc-mr-s" />
-        <span class="oc-text-truncate" v-text="inviteLabel" />
+        <span :id="roleLabelId" class="oc-text-truncate" v-text="inviteLabel"></span>
         <oc-icon name="arrow-down-s" />
       </oc-button>
       <oc-contextual-helper
@@ -181,6 +179,8 @@ const roleButtonId = computed(() => {
 const inviteLabel = computed(() => {
   return $gettext(unref(selectedRole)?.displayName || '')
 })
+
+const roleLabelId = computed(() => `${unref(roleButtonId)}-label`)
 
 watch(
   () => isExternal,
