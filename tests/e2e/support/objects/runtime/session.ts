@@ -2,6 +2,7 @@ import { Page } from '@playwright/test'
 import { User } from '../../types'
 import { config } from '../../../config'
 import { TokenEnvironmentFactory } from '../../environment'
+import { objects } from '../..'
 
 export class Session {
   #page: Page
@@ -18,12 +19,18 @@ export class Session {
   }
 
   async idpSignIn(username: string, password: string): Promise<void> {
+    await this.#page.locator('button[type="submit"]').waitFor()
+    const a11yObject = new objects.a11y.Accessibility({ page: this.#page })
+    await a11yObject.getSevereAccessibilityViolations('body')
     await this.#page.locator('//input[@type="text" or @placeholder="Username"]').fill(username)
     await this.#page.locator('//input[@type="password" or @placeholder="Password"]').fill(password)
     await this.#page.locator('button[type="submit"]').click()
   }
 
   async keycloakSignIn(username: string, password: string): Promise<void> {
+    await this.#page.locator('#username').waitFor()
+    const a11yObject = new objects.a11y.Accessibility({ page: this.#page })
+    await a11yObject.getSevereAccessibilityViolations('body')
     await this.#page.locator('#username').fill(username)
     await this.#page.locator('#password').fill(password)
     await this.#page.locator('#kc-login').click()
@@ -58,6 +65,8 @@ export class Session {
 
   async logout(): Promise<void> {
     await this.#page.locator('#_userMenuButton').click()
+    const a11yObject = new objects.a11y.Accessibility({ page: this.#page })
+    await a11yObject.getSevereAccessibilityViolations('#account-info-container')
     await this.#page.locator('#oc-topbar-account-logout').click()
   }
 }

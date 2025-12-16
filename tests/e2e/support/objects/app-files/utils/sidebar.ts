@@ -1,6 +1,7 @@
 import { Page } from '@playwright/test'
 import util from 'util'
 import { locatorUtils } from '../../../utils'
+import { objects } from '../../..'
 
 const sidebarPanel = '#app-sidebar'
 const contextMenuButton =
@@ -57,6 +58,8 @@ export const openPanelForResource = async ({
 
 const openGlobal = async ({ page }: { page: Page }): Promise<void> => {
   await page.locator('#files-toggle-sidebar').click()
+  const a11yObject = new objects.a11y.Accessibility({ page })
+  await a11yObject.getSevereAccessibilityViolations(sidebarPanel)
 }
 
 export const open = async ({
@@ -87,7 +90,8 @@ export const open = async ({
 export const close = async ({ page }: { page: Page }): Promise<void> => {
   // await sidebar transitions
   await new Promise((resolve) => setTimeout(resolve, 250))
-
+  const a11yObject = new objects.a11y.Accessibility({ page })
+  await a11yObject.getSevereAccessibilityViolations(sidebarPanel)
   const isSubPanelActive = await page.locator(closeSidebarSubPanelBtn).isVisible()
   if (isSubPanelActive) {
     await page.locator(closeSidebarSubPanelBtn).click()
@@ -132,6 +136,8 @@ export const closePasswordProtectedFolder = async ({ page }: { page: Page }): Pr
     .frameLocator(folderModalIframe)
     .locator(closeSidebarSubPanelBtn)
     .isVisible()
+  const a11yObject = new objects.a11y.Accessibility({ page })
+  await a11yObject.getSevereAccessibilityViolations(sidebarPanel)
   if (isSubPanelActive) {
     await page.frameLocator(folderModalIframe).locator(closeSidebarSubPanelBtn).click()
   } else {
