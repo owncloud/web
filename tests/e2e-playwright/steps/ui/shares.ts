@@ -150,13 +150,12 @@ export async function shareResourceViaActions({
   })
 }
 
-
 export async function removeSharee({
   actorsEnvironment,
   usersEnvironment,
   stepUser,
   resource,
-  recipient,
+  recipient
 }: {
   actorsEnvironment: ActorsEnvironment
   usersEnvironment: UsersEnvironment
@@ -168,8 +167,6 @@ export async function removeSharee({
   const shareObject = new objects.applicationFiles.Share({ page })
   await shareObject.removeSharee({
     resource,
-    recipients: [
-      { collaborator: usersEnvironment.getUser({ key: recipient }) }
-    ]
+    recipients: [{ collaborator: usersEnvironment.getUser({ key: recipient }) }]
   })
 }

@@ -1,9 +1,6 @@
 import { expect, test } from '@playwright/test'
 import { config } from '../../../e2e/config.js'
-import {
-  ActorsEnvironment,
-  UsersEnvironment,
-} from '../../../e2e/support/environment'
+import { ActorsEnvironment, UsersEnvironment } from '../../../e2e/support/environment'
 import { setAccessAndRefreshToken } from '../../helpers/setAccessAndRefreshToken'
 import * as api from '../../steps/api/api'
 import * as ui from '../../steps/ui/index'
@@ -34,12 +31,15 @@ test.describe('deny share access', () => {
     await ui.logInUser({ usersEnvironment, actorsEnvironment, stepUser: 'Alice' })
     await ui.logInUser({ usersEnvironment, actorsEnvironment, stepUser: 'Brian' })
 
-    await api.userHasCreatedFolders({ usersEnvironment, stepUser: 'Alice', 
-        folderNames: [
+    await api.userHasCreatedFolders({
+      usersEnvironment,
+      stepUser: 'Alice',
+      folderNames: [
         'folder_to_shared',
         'folder_to_shared/folder',
         'folder_to_shared/folder_to_deny'
-    ] })
+      ]
+    })
 
     await ui.openApplication({ actorsEnvironment, stepUser: 'Alice', name: 'files' })
 
@@ -84,12 +84,14 @@ test.describe('deny share access', () => {
 
     await ui.navigateToSharedWithMePage({ actorsEnvironment, stepUser: 'Brian' })
     await ui.openFolder({ actorsEnvironment, stepUser: 'Brian', resource: 'folder_to_shared' })
-    expect(await ui.isResourceDisplayedInList({ 
-      actorsEnvironment, 
-      listType: 'files list', 
-      stepUser: 'Brian', 
-      resource: 'folder_to_deny' 
-    })).toBeFalsy()
+    expect(
+      await ui.isResourceDisplayedInList({
+        actorsEnvironment,
+        listType: 'files list',
+        stepUser: 'Brian',
+        resource: 'folder_to_deny'
+      })
+    ).toBeFalsy()
 
     await ui.openApplication({
       actorsEnvironment,
@@ -101,11 +103,24 @@ test.describe('deny share access', () => {
 
     // allow access - deleting "Cannot access" share
 
-    await ui.removeSharee({ actorsEnvironment, usersEnvironment, stepUser: 'Alice', resource: 'folder_to_deny', recipient: 'Brian' })
+    await ui.removeSharee({
+      actorsEnvironment,
+      usersEnvironment,
+      stepUser: 'Alice',
+      resource: 'folder_to_deny',
+      recipient: 'Brian'
+    })
     await ui.openApplication({ actorsEnvironment, stepUser: 'Brian', name: 'files' })
     await ui.navigateToSharedWithMePage({ actorsEnvironment, stepUser: 'Brian' })
     await ui.openFolder({ actorsEnvironment, stepUser: 'Brian', resource: 'folder_to_shared' })
-    expect(await ui.isResourceDisplayedInList({ actorsEnvironment, listType: 'files list', stepUser: 'Brian', resource: 'folder_to_deny' })).toBeTruthy()
+    expect(
+      await ui.isResourceDisplayedInList({
+        actorsEnvironment,
+        listType: 'files list',
+        stepUser: 'Brian',
+        resource: 'folder_to_deny'
+      })
+    ).toBeTruthy()
 
     await ui.logOutUser({ actorsEnvironment, stepUser: 'Brian' })
     await ui.logOutUser({ actorsEnvironment, stepUser: 'Alice' })
