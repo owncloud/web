@@ -1,4 +1,4 @@
-import { objects, environment } from '../../../e2e/support'
+import { objects } from '../../../e2e/support'
 import { ActorsEnvironment, UsersEnvironment } from '../../../e2e/support/environment'
 import { getDynamicRoleIdByName, ResourceType } from '../../../e2e/support/api/share/share'
 import {

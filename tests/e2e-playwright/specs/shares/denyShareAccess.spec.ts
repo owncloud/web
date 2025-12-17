@@ -3,9 +3,9 @@ import { config } from '../../../e2e/config.js'
 import {
   ActorsEnvironment,
   UsersEnvironment,
-} from '../../../e2e/support/environment/index.js'
-import { setAccessAndRefreshToken } from '../../helpers/setAccessAndRefreshToken.js'
-import * as api from '../../steps/api/api.js'
+} from '../../../e2e/support/environment'
+import { setAccessAndRefreshToken } from '../../helpers/setAccessAndRefreshToken'
+import * as api from '../../steps/api/api'
 import * as ui from '../../steps/ui/index'
 
 test.describe('deny share access', () => {
