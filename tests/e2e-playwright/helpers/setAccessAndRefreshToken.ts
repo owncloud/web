@@ -4,7 +4,7 @@ import { UsersEnvironment } from '../../e2e/support/environment'
 
 export async function setAccessAndRefreshToken(usersEnvironment: UsersEnvironment) {
   if (!config.basicAuth && !config.predefinedUsers) {
-    let user = usersEnvironment.getUser({ key: config.adminUsername })
+    const user = usersEnvironment.getUser({ key: config.adminUsername })
     await api.token.setAccessAndRefreshToken(user)
   }
 }
