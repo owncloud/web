@@ -3,12 +3,13 @@
     class="oc-filter-chip oc-flex"
     :class="{ 'oc-filter-chip-toggle': isToggle, 'oc-filter-chip-raw': raw }"
   >
+    <oc-hidden-announcer :announcement="filterToggleAnnouncement" level="polite" />
     <oc-button
       :id="id"
       class="oc-filter-chip-button oc-pill"
       :class="{ 'oc-filter-chip-button-selected': filterActive }"
       appearance="raw"
-      @click="isToggle ? $emit('toggleFilter') : false"
+      @click="isToggle ? handleToggleFilter() : false"
     >
       <oc-icon
         :class="filterActive ? 'oc-filter-check-icon-active' : 'oc-filter-check-icon-inactive'"
@@ -51,6 +52,7 @@
 
 <script lang="ts" setup>
 import { computed, ref, unref } from 'vue'
+import { useGettext } from 'vue3-gettext'
 import { uniqueId } from '../../helpers'
 import OcDrop from '../OcDrop/OcDrop.vue'
 
@@ -112,6 +114,10 @@ defineOptions({
   status: 'ready',
   release: '15.0.0'
 })
+
+const { $pgettext } = useGettext()
+const filterToggleAnnouncement = ref('')
+
 const {
   id = uniqueId('oc-filter-chip-'),
   filterLabel,
@@ -122,8 +128,21 @@ const {
   closeOnClick = false
 } = defineProps<Props>()
 
-defineEmits<Emits>()
+const emit = defineEmits<Emits>()
 const dropRef = ref<typeof OcDrop>()
+
+const handleToggleFilter = () => {
+  filterToggleAnnouncement.value = isToggleActive
+    ? $pgettext(
+        'Accessibility announcement when a toggle filter is deactivated',
+        `${filterLabel} filter removed`
+      )
+    : $pgettext(
+        'Accessibility announcement when a toggle filter is activated',
+        `${filterLabel} filter applied`
+      )
+  emit('toggleFilter')
+}
 
 const filterActive = computed(() => {
   if (isToggle) {

@@ -2,7 +2,7 @@
 
 exports[`ItemFilter > can use a custom attribute as display name 1`] = `
 "<div class="item-filter oc-flex item-filter-users">
-  <div class="oc-filter-chip oc-flex"><button type="button" class="oc-button oc-rounded oc-button-m oc-button-justify-content-center oc-button-gap-m oc-button-passive oc-button-passive-raw oc-filter-chip-button oc-pill" id="oc-filter-chip-3">
+  <div class="oc-filter-chip oc-flex"><span id="004nym8equapq009bx8gtholfh" class="oc-invisible-sr oc-hidden-announcer" aria-live="polite" aria-atomic="true"></span> <button type="button" class="oc-button oc-rounded oc-button-m oc-button-justify-content-center oc-button-gap-m oc-button-passive oc-button-passive-raw oc-filter-chip-button oc-pill" id="oc-filter-chip-3">
       <!--v-if-->
       <!-- @slot Content of the button --> <span class="oc-icon oc-icon-s oc-icon-passive oc-filter-check-icon-inactive"><!----></span> <span class="oc-text-truncate oc-filter-chip-label">Users</span>
       <!--v-if--> <span class="oc-icon oc-icon-s oc-icon-passive"><!----></span>
@@ -49,7 +49,7 @@ exports[`ItemFilter > can use a custom attribute as display name 1`] = `
 
 exports[`ItemFilter > renders all items 1`] = `
 "<div class="item-filter oc-flex item-filter-users">
-  <div class="oc-filter-chip oc-flex"><button type="button" class="oc-button oc-rounded oc-button-m oc-button-justify-content-center oc-button-gap-m oc-button-passive oc-button-passive-raw oc-filter-chip-button oc-pill" id="oc-filter-chip-1">
+  <div class="oc-filter-chip oc-flex"><span id="004nym8equapq009bx8gtholfh" class="oc-invisible-sr oc-hidden-announcer" aria-live="polite" aria-atomic="true"></span> <button type="button" class="oc-button oc-rounded oc-button-m oc-button-justify-content-center oc-button-gap-m oc-button-passive oc-button-passive-raw oc-filter-chip-button oc-pill" id="oc-filter-chip-1">
       <!--v-if-->
       <!-- @slot Content of the button --> <span class="oc-icon oc-icon-s oc-icon-passive oc-filter-check-icon-inactive"><!----></span> <span class="oc-text-truncate oc-filter-chip-label">Users</span>
       <!--v-if--> <span class="oc-icon oc-icon-s oc-icon-passive"><!----></span>

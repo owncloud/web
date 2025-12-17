@@ -9,6 +9,7 @@
     :parent-folder-link-icon-additional-attributes="parentFolderLinkIconAdditionalAttributes"
     :parent-folder-name="parentFolderName"
     :is-thumbnail-displayed="!!previewData"
+    :is-search-result="isSearchResult"
     v-bind="additionalAttrs"
   />
 </template>
@@ -36,8 +37,14 @@ interface Props {
   searchResult?: SearchResultValue
   isClickable?: boolean
   term?: string
+  isSearchResult?: boolean
 }
-const { searchResult = { data: {} }, isClickable = true, term = '' } = defineProps<Props>()
+const {
+  searchResult = { data: {} },
+  isClickable = true,
+  term = '',
+  isSearchResult
+} = defineProps<Props>()
 const { triggerDefaultAction } = useFileActions()
 const { getMatchingSpace } = useGetMatchingSpace()
 const { getDefaultAction } = useFileActions()

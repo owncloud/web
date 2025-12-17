@@ -52,6 +52,7 @@
           :to="parentFolderLink"
           :style="parentFolderStyle"
           class="parent-folder oc-text-truncate"
+          :aria-current="isSearchResult ? null : 'page'"
         >
           <oc-icon v-bind="parentFolderLinkIconAttrs" />
           <span class="text oc-text-truncate" v-text="parentFolderName" />
@@ -82,6 +83,7 @@ interface Props {
   isThumbnailDisplayed?: boolean
   isIconDisplayed?: boolean
   isResourceClickable?: boolean
+  isSearchResult?: boolean
 }
 
 interface Emits {
@@ -98,7 +100,8 @@ const {
   isExtensionDisplayed = true,
   isThumbnailDisplayed = true,
   isIconDisplayed = true,
-  isResourceClickable = true
+  isResourceClickable = true,
+  isSearchResult = false
 } = defineProps<Props>()
 
 const resourceListItem = useTemplateRef('resourceListItem')
