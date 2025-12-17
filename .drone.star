@@ -198,6 +198,13 @@ config = {
                 "search",
             ],
         },
+        "4": {
+            "earlyFail": True,
+            "skip": False,
+            "suites": [
+                "user-settings",
+            ],
+        },
     },
     "build": True,
 }
