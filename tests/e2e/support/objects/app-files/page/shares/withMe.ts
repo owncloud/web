@@ -16,7 +16,7 @@ export class WithMe {
   async navigate(): Promise<void> {
     await this.#page.locator(sharesNavSelector).click()
     const a11yObject = new objects.a11y.Accessibility({ page: this.#page })
-    await a11yObject.getSevereAccessibilityViolations('#files')
+    await a11yObject.getSevereAccessibilityViolations(a11yObject.getSelectors().files)
   }
 
   async openShareWithMeFromInternalLink(actor: Actor): Promise<void> {

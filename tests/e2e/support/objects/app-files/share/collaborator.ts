@@ -192,6 +192,8 @@ export default class Collaborator {
       .first()
       .click()
     await page.locator(util.format(Collaborator.removeCollaboratorButton, collaboratorRow)).click()
+    const a11yObject = new objects.a11y.Accessibility({ page })
+    await a11yObject.getSevereAccessibilityViolations('.oc-modal.oc-modal-danger')
 
     await Promise.all([
       page.waitForResponse(

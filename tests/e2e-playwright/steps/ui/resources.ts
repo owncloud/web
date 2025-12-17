@@ -81,13 +81,15 @@ export async function isResourceDisplayedInList({
   stepUser,
   resource
 }: {
-  actorsEnvironment: ActorsEnvironment,
+  actorsEnvironment: ActorsEnvironment
   listType: 'search list' | 'files list' | 'Shares' | 'trashbin'
   stepUser: string
   resource: string
 }): Promise<boolean> {
   const { page } = actorsEnvironment.getActor({ key: stepUser })
   const resourceObject = new objects.applicationFiles.Resource({ page })
-  const actualList = await resourceObject.getDisplayedResources({ keyword: listType as displayedResourceType })
+  const actualList = await resourceObject.getDisplayedResources({
+    keyword: listType as displayedResourceType
+  })
   return actualList.includes(resource)
 }

@@ -1,8 +1,5 @@
-import {
-  ActorsEnvironment,
-} from '../../../e2e/support/environment/index.js'
+import { ActorsEnvironment } from '../../../e2e/support/environment/index.js'
 import { objects } from '../../../e2e/support'
-
 
 export async function openApplication({
   actorsEnvironment,
@@ -10,8 +7,8 @@ export async function openApplication({
   name
 }: {
   actorsEnvironment: ActorsEnvironment
-    stepUser: string
-    name: string
+  stepUser: string
+  name: string
 }): Promise<void> {
   const { page } = actorsEnvironment.getActor({ key: stepUser })
   const applicationObject = new objects.runtime.Application({ page })
