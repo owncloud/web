@@ -61,7 +61,7 @@ export async function createDir({
   })
 }
 
-export async function openFolder({
+export async function openResource({
   actorsEnvironment,
   stepUser,
   resource

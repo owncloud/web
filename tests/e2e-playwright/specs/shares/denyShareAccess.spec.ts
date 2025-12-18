@@ -54,7 +54,7 @@ test.describe('deny share access', () => {
       actions: 'QUICK_ACTION'
     })
 
-    await ui.openFolder({ actorsEnvironment, stepUser: 'Alice', resource: 'folder_to_shared' })
+    await ui.openResource({ actorsEnvironment, stepUser: 'Alice', resource: 'folder_to_shared' })
 
     await ui.shareResourceViaActions({
       actorsEnvironment,
@@ -83,7 +83,7 @@ test.describe('deny share access', () => {
     })
 
     await ui.navigateToSharedWithMePage({ actorsEnvironment, stepUser: 'Brian' })
-    await ui.openFolder({ actorsEnvironment, stepUser: 'Brian', resource: 'folder_to_shared' })
+    await ui.openResource({ actorsEnvironment, stepUser: 'Brian', resource: 'folder_to_shared' })
     expect(
       await ui.isResourceDisplayedInList({
         actorsEnvironment,
@@ -99,7 +99,7 @@ test.describe('deny share access', () => {
       name: 'files'
     })
 
-    await ui.openFolder({ actorsEnvironment, stepUser: 'Alice', resource: 'folder_to_shared' })
+    await ui.openResource({ actorsEnvironment, stepUser: 'Alice', resource: 'folder_to_shared' })
 
     // allow access - deleting "Cannot access" share
 
@@ -112,7 +112,7 @@ test.describe('deny share access', () => {
     })
     await ui.openApplication({ actorsEnvironment, stepUser: 'Brian', name: 'files' })
     await ui.navigateToSharedWithMePage({ actorsEnvironment, stepUser: 'Brian' })
-    await ui.openFolder({ actorsEnvironment, stepUser: 'Brian', resource: 'folder_to_shared' })
+    await ui.openResource({ actorsEnvironment, stepUser: 'Brian', resource: 'folder_to_shared' })
     expect(
       await ui.isResourceDisplayedInList({
         actorsEnvironment,

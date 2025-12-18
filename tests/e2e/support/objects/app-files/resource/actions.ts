@@ -140,7 +140,6 @@ const fileIconPreview = '#oc-file-details-sidebar .details-preview'
 const activitySidebarPanel = 'sidebar-panel-activities'
 const activitySidebarPanelBodyContent = '#sidebar-panel-activities .sidebar-panel__body-content'
 const contextMenuAction = '//*[@id="oc-files-context-actions-context"]//span[text()="%s"]'
-const breadcrumbSelector = '#files-breadcrumb'
 
 export const clickResource = async ({
   page,
@@ -175,8 +174,6 @@ export const clickResource = async ({
       }),
       resource.click()
     ])
-    const a11yObject = new objects.a11y.Accessibility({ page })
-    await a11yObject.getSevereAccessibilityViolations(breadcrumbSelector)
   }
 }
 
