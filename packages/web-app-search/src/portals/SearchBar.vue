@@ -14,6 +14,15 @@
         )
       }}
     </span>
+    <span
+      id="search-status"
+      role="status"
+      aria-live="polite"
+      aria-atomic="true"
+      class="oc-invisible-sr"
+    >
+      {{ liveStatusMessage }}
+    </span>
     <oc-search-bar
       id="files-global-search-bar"
       :label="searchLabel"
@@ -38,6 +47,7 @@
       @keyup.down="onKeyUpDown"
       @keyup.enter="onKeyUpEnter"
       @keydown.tab="hideOptionsDrop"
+      @search="showPreview"
     >
       <template #locationFilter>
         <search-bar-filter
@@ -81,7 +91,11 @@
         <template v-else>
           <li v-for="provider in displayProviders" :key="provider.id" class="provider">
             <oc-list>
-              <li class="oc-text-truncate oc-flex oc-flex-between oc-text-muted provider-details">
+              <li
+                role="presentation"
+                aria-hidden="true"
+                class="oc-text-truncate oc-flex oc-flex-between oc-text-muted provider-details"
+              >
                 <span class="display-name" v-text="$gettext(provider.displayName)" />
                 <span v-if="!!provider.listSearch">
                   <router-link class="more-results" :to="getSearchResultLocation(provider.id)">
@@ -91,9 +105,11 @@
               </li>
               <li
                 v-for="providerSearchResultValue in getSearchResultForProvider(provider).values"
+                :id="`search-option-${provider.id}-${providerSearchResultValue.id}`"
                 :key="providerSearchResultValue.id"
                 role="option"
                 :aria-selected="isPreviewElementActive(providerSearchResultValue.id)"
+                :aria-label="getAriaLabelForResult(providerSearchResultValue)"
                 :data-search-id="providerSearchResultValue.id"
                 :class="{
                   active: isPreviewElementActive(providerSearchResultValue.id)
@@ -105,6 +121,7 @@
                   class="preview-component"
                   :provider="provider"
                   :search-result="providerSearchResultValue"
+                  :is-search-result="true"
                   :term="term"
                 />
               </li>
@@ -172,11 +189,48 @@ const activePreviewIndex = ref(null)
 const term = ref('')
 const originalTerm = ref('')
 const restoreSearchFromRoute = ref(false)
+const navigatingPreview = ref(false)
 const searchResults = ref([])
 const loading = ref(false)
 const currentFolderAvailable = ref(false)
 const markInstance = ref<Mark>()
 const clearTermEvent = ref(null)
+
+// Announce status updates to screen readers via live region
+const totalResultCount = computed(() => {
+  if (unref(loading)) {
+    return null
+  }
+  const results = unref(searchResults)
+  if (!results.length || !unref(term)) {
+    return null
+  }
+  return results.reduce((total, { result }) => total + (result?.values?.length || 0), 0)
+})
+
+const selectedPreviewText = computed(() => {
+  return getTextFromActivePreview()
+})
+
+const liveStatusMessage = computed(() => {
+  // Priority: loading -> selection announcement -> results count -> empty
+  if (unref(loading)) {
+    return $gettext('Searching …')
+  }
+  // If a preview is actively selected via keyboard, announce it
+  if (unref(activePreviewIndex) !== null && unref(selectedPreviewText)) {
+    return $gettext('Selected: %{name}', { name: unref(selectedPreviewText) })
+  }
+  // Announce results count if available
+  if (unref(totalResultCount) !== null) {
+    const count = unref(totalResultCount) as number
+    return $ngettext('%{count} result found', '%{count} results found', count, {
+      count: String(count)
+    })
+  }
+
+  return ''
+})
 
 function onClear() {
   term.value = ''
@@ -230,7 +284,20 @@ function getTextFromActivePreview() {
   return unref(originalTerm)
 }
 
+function getAriaLabelForResult(providerSearchResultValue: any) {
+  const name = providerSearchResultValue?.data?.name
+  if (name) {
+    return name
+  }
+  const title = providerSearchResultValue?.data?.title || providerSearchResultValue?.title
+  if (title) {
+    return title
+  }
+  return providerSearchResultValue?.id.toString() ?? ''
+}
+
 function onKeyUpUp() {
+  navigatingPreview.value = true
   activePreviewIndex.value = findNextPreviewIndex(true)
 
   const inputElement = document.getElementsByClassName('oc-search-input')[0] as HTMLInputElement
@@ -240,9 +307,12 @@ function onKeyUpUp() {
     inputElement.value = newValue
   }
 
+  updateInputActivedescendant()
+
   scrollToActivePreviewOption()
 }
 function onKeyUpDown() {
+  navigatingPreview.value = true
   activePreviewIndex.value = findNextPreviewIndex(false)
 
   const inputElement = document.getElementsByClassName('oc-search-input')[0] as HTMLInputElement
@@ -251,6 +321,8 @@ function onKeyUpDown() {
     term.value = newValue
     inputElement.value = newValue
   }
+
+  updateInputActivedescendant()
 
   scrollToActivePreviewOption()
 }
@@ -268,6 +340,32 @@ function scrollToActivePreviewOption() {
       : previewElements[unref(activePreviewIndex)].getBoundingClientRect().y -
           previewElements[unref(activePreviewIndex)].getBoundingClientRect().height
   )
+}
+
+function setInputAriaActivedescendant(id?: string) {
+  const container = document.getElementById('files-global-search-bar')
+  const input = container?.querySelector('input.oc-search-input') as HTMLElement | null
+  if (!input) return
+  if (id) {
+    input.setAttribute('aria-activedescendant', id)
+  } else {
+    input.removeAttribute('aria-activedescendant')
+  }
+}
+
+function updateInputActivedescendant() {
+  if (unref(activePreviewIndex) === null) {
+    setInputAriaActivedescendant()
+    return
+  }
+  const previewEls = unref(optionsDrop)?.$el?.querySelectorAll('.preview')
+  const activeEl = previewEls?.[unref(activePreviewIndex)] as HTMLElement | undefined
+  const activeId = activeEl?.getAttribute('id') || undefined
+  setInputAriaActivedescendant(activeId)
+}
+
+function clearInputActivedescendant() {
+  setInputAriaActivedescendant()
 }
 
 function getSearchResultForProvider(provider: SearchProvider) {
@@ -327,6 +425,8 @@ function cancelSearch() {
 }
 function hideOptionsDrop() {
   unref(optionsDrop)?.hide()
+  navigatingPreview.value = false
+  clearInputActivedescendant()
 }
 
 const fullTextSearchEnabled = computed(() => capabilityStore.searchContent?.enabled)
@@ -428,6 +528,10 @@ const onKeyUpEnter = () => {
       ?.$el.querySelectorAll('.preview')
       [unref(activePreviewIndex)].firstChild.click()
   }
+
+  // Accessibility: Stop navigation mode when user confirms selection
+  navigatingPreview.value = false
+  clearInputActivedescendant()
 }
 
 const getSearchResultLocation = (providerId: string) => {
@@ -483,12 +587,17 @@ watch(term, () => {
     restoreSearchFromRoute.value = false
     return
   }
+  // Do not trigger search while navigating through previews
+  if (unref(navigatingPreview)) {
+    return
+  }
   debouncedSearch()
 })
 watch(
   searchResults,
   () => {
     activePreviewIndex.value = null
+    clearInputActivedescendant()
 
     nextTick(() => {
       if (unref(showNoResults)) {

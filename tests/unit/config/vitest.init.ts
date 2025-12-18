@@ -21,3 +21,16 @@ vi.stubGlobal('define', vi.fn())
 Object.defineProperty(document, 'compatMode', {
   value: 'CSS1Compat'
 })
+
+// Mock Math.random to return predictable values for tests
+let mathRandomCounter = 0
+const originalMathRandom = Math.random
+Math.random = () => {
+  mathRandomCounter++
+  return mathRandomCounter / 10000
+}
+
+// Reset counter before each test for consistent IDs
+beforeEach(() => {
+  mathRandomCounter = 0
+})

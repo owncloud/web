@@ -5,6 +5,7 @@
       :key="`action-${index}`"
       :action="action"
       :action-options="{ space, resources }"
+      :has-limited-screen-space="true"
       class="oc-rounded"
     />
   </oc-list>

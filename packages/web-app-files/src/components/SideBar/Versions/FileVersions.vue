@@ -12,12 +12,17 @@
             v-oc-tooltip="formatVersionDate(item)"
             class="version-date oc-font-semibold"
             data-testid="file-versions-file-last-modified-date"
-            >{{ formatVersionDateRelative(item) }}</span
           >
+            {{ formatVersionDateRelative(item) }}
+          </span>
+
           -
-          <span class="version-filesize" data-testid="file-versions-file-size">{{
-            formatVersionFileSize(item)
-          }}</span>
+          <span class="version-filesize" data-testid="file-versions-file-size">
+            {{ formatVersionFileSize(item) }}
+          </span>
+          <span tabindex="0" class="oc-invisible-sr">
+            {{ formatVersionDateRelative(item) }} {{ formatVersionDate(item) }}
+          </span>
         </div>
         <oc-list id="oc-file-versions-sidebar-actions" class="oc-pt-xs">
           <li v-if="isRevertible">

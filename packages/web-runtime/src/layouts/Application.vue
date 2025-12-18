@@ -38,6 +38,11 @@
       <portal-target name="app.runtime.footer" />
     </div>
     <div class="snackbars">
+      <div class="oc-invisible-sr" aria-live="polite" aria-atomic="true">
+        <div v-for="message in allMessages" :key="message.id">
+          {{ message.desc ? `${message.title}. ${message.desc}` : message.title }}
+        </div>
+      </div>
       <message-bar />
       <upload-bar v-if="!isUploadSnackbarHidden" id="upload-info-snackbar" />
     </div>
@@ -79,6 +84,7 @@ import {
 } from 'vue'
 import { RouteLocationAsRelativeTyped, useRouter } from 'vue-router'
 import { useGettext } from 'vue3-gettext'
+import { useMessages } from '@ownclouders/web-pkg'
 
 import '@uppy/core/css/style.min.css'
 import { storeToRefs } from 'pinia'
@@ -103,6 +109,23 @@ export default defineComponent({
     const authStore = useAuthStore()
     const activeApp = useActiveApp()
     const extensionRegistry = useExtensionRegistry()
+    const messageStore = useMessages()
+
+    const allMessages = ref<{ id: string; title: string; desc?: string }[]>([])
+
+    watch(
+      () => messageStore.messages,
+      (messages) => {
+        if (messages && messages.length > 0) {
+          allMessages.value = messages.map((msg) => ({
+            id: msg.id,
+            title: msg.title,
+            desc: msg.desc
+          }))
+        }
+      },
+      { deep: true, immediate: true }
+    )
 
     const appsStore = useAppsStore()
     const { apps } = storeToRefs(appsStore)
@@ -253,7 +276,8 @@ export default defineComponent({
       navBarClosed,
       hideNavigation,
       isUploadSnackbarHidden,
-      setNavBarClosed
+      setNavBarClosed,
+      allMessages
     }
   },
   computed: {

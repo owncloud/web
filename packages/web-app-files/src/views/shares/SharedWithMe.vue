@@ -8,6 +8,7 @@
       </app-bar>
       <app-loading-spinner v-if="areResourcesLoading" />
       <template v-else>
+        <oc-hidden-announcer :announcement="visibilityFilterAnnouncement" level="polite" />
         <div
           class="shared-with-me-filters oc-flex oc-flex-between oc-flex-wrap oc-flex-bottom oc-mx-m oc-mb-m"
         >
@@ -135,11 +136,12 @@ const {
   scrollToResourceFromRoute
 } = useResourcesViewDefaults<IncomingShareResource, any, any>()
 
-const { $gettext } = useGettext()
+const { $gettext, $pgettext } = useGettext()
 
 const areHiddenFilesShown = ref(false)
 const filterTerm = ref('')
 const markInstance = ref<Mark>()
+const visibilityFilterAnnouncement = ref('')
 
 const shareSectionTitle = computed(() => {
   return unref(areHiddenFilesShown) ? $gettext('Hidden Shares') : $gettext('Shares')
@@ -153,6 +155,15 @@ const visibilityOptions = computed(() => [
 const setAreHiddenFilesShown = (value: InlineFilterOption) => {
   areHiddenFilesShown.value = value.name === 'hidden'
   resourcesStore.resetSelection()
+  visibilityFilterAnnouncement.value = areHiddenFilesShown.value
+    ? $pgettext(
+        'Accessibility announcement for screen readers when the user switches to show hidden shares only',
+        'Now showing hidden shares'
+      )
+    : $pgettext(
+        'Accessibility announcement for screen readers when the user switches to show visible shares only',
+        'Now showing visible shares'
+      )
 }
 
 const visibleShares = computed(() => unref(paginatedResources).filter((r) => !r.hidden))

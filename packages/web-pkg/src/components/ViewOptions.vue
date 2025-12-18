@@ -1,5 +1,6 @@
 <template>
   <div class="oc-flex oc-flex-middle">
+    <oc-hidden-announcer :announcement="viewOptionsAnnouncement" level="polite" />
     <div
       v-if="viewModes.length > 1"
       class="viewmode-switch-buttons oc-button-group oc-visible@s oc-mr-s"
@@ -139,7 +140,7 @@ const {
 } = defineProps<Props>()
 const router = useRouter()
 const currentRoute = useRoute()
-const { $gettext } = useGettext()
+const { $gettext, $pgettext } = useGettext()
 
 const resourcesStore = useResourcesStore()
 const { setAreHiddenFilesShown, setAreFileExtensionsShown, setShouldShowFlatList } = resourcesStore
@@ -147,6 +148,7 @@ const { areHiddenFilesShown, areFileExtensionsShown, shouldShowFlatList } =
   storeToRefs(resourcesStore)
 
 const queryParamsLoading = ref(false)
+const viewOptionsAnnouncement = ref('')
 
 const currentPageQuery = useRouteQuery('page')
 const currentPage = computed(() => {
@@ -174,12 +176,33 @@ const viewSizeQuery = useRouteQueryPersisted({
 
 function toggleFlatList(event: boolean) {
   setShouldShowFlatList(event)
+  viewOptionsAnnouncement.value = event
+    ? $pgettext('Accessibility announcement when flat list view is enabled', 'Flat list enabled')
+    : $pgettext('Accessibility announcement when folder tree view is enabled', 'Flat list disabled')
 }
 function updateHiddenFilesShownModel(event: boolean) {
   setAreHiddenFilesShown(event)
+  viewOptionsAnnouncement.value = event
+    ? $pgettext(
+        'Accessibility announcement when hidden files are shown',
+        'Hidden files are now visible'
+      )
+    : $pgettext(
+        'Accessibility announcement when hidden files are hidden',
+        'Hidden files are now hidden'
+      )
 }
 function updateFileExtensionsShownModel(event: boolean) {
   setAreFileExtensionsShown(event)
+  viewOptionsAnnouncement.value = event
+    ? $pgettext(
+        'Accessibility announcement when file extensions are shown',
+        'File extensions are now visible'
+      )
+    : $pgettext(
+        'Accessibility announcement when file extensions are hidden',
+        'File extensions are now hidden'
+      )
 }
 
 const setItemsPerPage = (itemsPerPage: string) => {
@@ -194,6 +217,22 @@ const setItemsPerPage = (itemsPerPage: string) => {
 
 const setViewMode = (mode: FolderView) => {
   viewModeQuery.value = mode.name
+  if (mode.name === 'resource-table-condensed') {
+    viewOptionsAnnouncement.value = $pgettext(
+      'Accessibility announcement when condensed table view is selected',
+      'Condensed table view selected'
+    )
+  } else if (mode.name === 'resource-tiles') {
+    viewOptionsAnnouncement.value = $pgettext(
+      'Accessibility announcement when tiles view is selected',
+      'Tiles view selected'
+    )
+  } else {
+    viewOptionsAnnouncement.value = $pgettext(
+      'Accessibility announcement when table view is selected',
+      'Table view selected'
+    )
+  }
 }
 
 watch(

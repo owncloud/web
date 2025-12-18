@@ -26,7 +26,17 @@
       @keydown="onSelectKeyDown($event)"
     >
       <template #search="{ attributes, events }">
-        <input class="vs__search" v-bind="attributes" @input="userInput" v-on="events" />
+        <input
+          class="vs__search"
+          v-bind="attributes"
+          role="combobox"
+          :aria-expanded="dropdownOpen ? 'true' : 'false'"
+          aria-haspopup="listbox"
+          :aria-controls="listboxId"
+          :aria-label="label"
+          @input="userInput"
+          v-on="events"
+        />
       </template>
       <template v-for="(index, name) in $slots" #[name]="data">
         <slot v-if="name !== 'search'" :name="name" v-bind="data" />
@@ -94,7 +104,6 @@
 import Fuse from 'fuse.js'
 import { uniqueId } from '../../helpers'
 import {
-  ComponentPublicInstance,
   onMounted,
   ref,
   unref,
@@ -236,13 +245,7 @@ const emit = defineEmits<Emits>()
 const { $gettext } = useGettext()
 const select: VNodeRef = ref()
 const attrs = useAttrs()
-
-const setComboBoxAriaLabel = () => {
-  const comboBoxElement = (unref(select) as ComponentPublicInstance).$el.querySelector(
-    'div:first-child'
-  )
-  comboBoxElement?.setAttribute('aria-label', `${label} - ${$gettext('Search for option')}`)
-}
+const listboxId = computed(() => `${id}-listbox`)
 
 const userInput = (event: Event) => {
   /**
@@ -411,8 +414,6 @@ watch(dropdownOpen, async () => {
 })
 
 onMounted(() => {
-  setComboBoxAriaLabel()
-
   if (positionFixed) {
     window.addEventListener('resize', setDropdownPosition)
   }
@@ -464,6 +465,7 @@ onBeforeUnmount(() => {
     &__dropdown-toggle,
     &__dropdown-menu {
       -webkit-appearance: none;
+      appearance: none;
       background-color: var(--oc-color-background-highlight);
       border-radius: 0;
       border-radius: 5px;

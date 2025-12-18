@@ -12,7 +12,7 @@ exports[`Projects view > different files view states > lists all available proje
               <legend class="oc-mr-m oc-flex oc-flex-middle"><span class="oc-icon oc-icon-m oc-icon-passive oc-mr-xs"><!----></span> <span>Filter:</span></legend>
             </div>
             <div class="item-filter oc-flex item-filter-includeDisabled spaces-list-filter-include-disabled oc-mr-s">
-              <div class="oc-filter-chip oc-flex oc-filter-chip-toggle"><button type="button" class="oc-button oc-rounded oc-button-m oc-button-justify-content-center oc-button-gap-m oc-button-passive oc-button-passive-raw oc-filter-chip-button oc-pill" id="oc-filter-chip-1">
+              <div class="oc-filter-chip oc-flex oc-filter-chip-toggle"><span id="004nym8equapq009bx8gtholfh" class="oc-invisible-sr oc-hidden-announcer" aria-live="polite" aria-atomic="true"></span> <button type="button" class="oc-button oc-rounded oc-button-m oc-button-justify-content-center oc-button-gap-m oc-button-passive oc-button-passive-raw oc-filter-chip-button oc-pill" id="oc-filter-chip-1">
                   <!--v-if-->
                   <!-- @slot Content of the button --> <span class="oc-icon oc-icon-s oc-icon-passive oc-filter-check-icon-inactive"><!----></span> <span class="oc-text-truncate oc-filter-chip-label">Include disabled</span>
                   <!--v-if-->
