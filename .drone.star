@@ -604,10 +604,10 @@ def e2eTestsOnPlaywright(ctx):
     })
 
     if not "skip-a11y" in ctx.build.title.lower():
-        steps += uploadA11yResult(ctx) + \
-                 logA11yReport() + \
-                 uploadTracingResult(ctx, "playwright") + \
-                 logTracingResult(ctx)
+        steps += uploadA11yResult(ctx) + logA11yReport()
+
+    steps += uploadTracingResult(ctx, "playwright") + \
+             logTracingResult(ctx)
 
     pipelines.append({
         "kind": "pipeline",
@@ -1661,7 +1661,7 @@ def uploadTracingResult(ctx, e2e_type = "cucumber"):
         status = ["failure", "success"]
 
     trace_dir="reports/e2e/playwright/tracing"
-    if e2e_type != "playwright":
+    if e2e_type == "playwright":
         trace_dir="reports/e2e"
 
     return [{
@@ -1701,7 +1701,7 @@ def logTracingResult(ctx):
         "commands": [
             "cd %s/reports/e2e/" % dir["web"],
             'echo "To see the trace, please open the following link in the console"',
-            'for f in **/*.zip; do echo "npx playwright show-trace %s/%s/${DRONE_REPO}/${DRONE_BUILD_NUMBER}/tracing/$f \n"; done' % (S3_CACHE_SERVER, S3_PUBLIC_CACHE_BUCKET),
+            'for f in **/*.zip; do echo "- npx playwright show-trace %s/%s/${DRONE_REPO}/${DRONE_BUILD_NUMBER}/tracing/$f \n"; done' % (S3_CACHE_SERVER, S3_PUBLIC_CACHE_BUCKET),
         ],
         "when": {
             "status": status,
@@ -2071,7 +2071,7 @@ def logA11yReport():
         "image": OC_CI_ALPINE_IMAGE,
         "commands": [
             'echo "To see the report, please open the following link:"',
-            'echo "  Accessibility Report: %s/%s/${DRONE_REPO}/${DRONE_BUILD_NUMBER}/a11y/a11y-report.json"' % (S3_CACHE_SERVER, S3_PUBLIC_CACHE_BUCKET),
+            'echo "\n  Accessibility Report: %s/%s/${DRONE_REPO}/${DRONE_BUILD_NUMBER}/a11y/a11y-report.json"' % (S3_CACHE_SERVER, S3_PUBLIC_CACHE_BUCKET),
         ],
         "when": {
             "status": ["failure"],
