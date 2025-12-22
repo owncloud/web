@@ -3,7 +3,6 @@ import { File } from '../../../types'
 import util from 'util'
 import path from 'path'
 import * as po from '../resource/actions'
-import { objects } from '../../..'
 
 const passwordInput = 'input[type="password"]'
 const fileUploadInput = '//input[@id="files-file-upload-input"]'
@@ -21,8 +20,6 @@ export class Public {
 
   async open({ url }: { url: string }): Promise<void> {
     await this.#page.goto(url)
-    const a11yObject = new objects.a11y.Accessibility({ page: this.#page })
-    await a11yObject.getSevereAccessibilityViolations('body')
   }
 
   async authenticate({

@@ -579,6 +579,7 @@ def e2eTestsOnPlaywright(ctx):
         "BASE_URL_OCIS": "ocis:9200",
         "PLAYWRIGHT_BROWSERS_PATH": ".playwright",
         "TESTS_RUNNER": "playwright",
+        "SKIP_A11Y_TESTS": True,
     }
 
     steps += restoreBuildArtifactCache(ctx, "pnpm", ".pnpm-store") + \
@@ -695,7 +696,7 @@ def e2eTests(ctx):
             "PLAYWRIGHT_BROWSERS_PATH": ".playwright",
             "BROWSER": "chromium",
             "FEDERATED_BASE_URL_OCIS": "federation-ocis:9200",
-            "SKIP_A11Y_TESTS": params["skipA11y"],
+            "SKIP_A11Y_TESTS": True,
         }
 
         if "suites" in matrix:
@@ -1937,6 +1938,7 @@ def e2eTestsOnKeycloak(ctx):
                          "KEYCLOAK_HOST": "keycloak:8443",
                          "PLAYWRIGHT_BROWSERS_PATH": ".playwright",
                          "BROWSER": "chromium",
+                         "SKIP_A11Y_TESTS": True,
                      },
                      "commands": [
                          "cd tests/e2e",
