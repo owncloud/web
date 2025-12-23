@@ -607,7 +607,7 @@ def e2eTestsOnPlaywright(ctx):
         steps += uploadA11yResult(ctx) + logA11yReport()
 
     steps += uploadTracingResult(ctx, "playwright") + \
-             logTracingResult(ctx)
+             logTracingResult(ctx, "playwright")
 
     pipelines.append({
         "kind": "pipeline",
@@ -1680,19 +1680,25 @@ def uploadTracingResult(ctx, e2e_type = "cucumber"):
         },
     }]
 
-def logTracingResult(ctx):
+def logTracingResult(ctx, e2e_type = "cucumber"):
     status = ["failure"]
 
     if ("with-tracing" in ctx.build.title.lower()):
         status = ["failure", "success"]
 
+    trace_dir = "reports/e2e/playwright/tracing"
+    if e2e_type == "playwright":
+        trace_dir = "reports/e2e"
+
     return [{
         "name": "log-tracing-result",
         "image": OC_UBUNTU_IMAGE,
         "commands": [
-            "cd %s/reports/e2e/" % dir["web"],
-            'echo "To see the trace, please open the following link in the console"',
-            'for f in **/*.zip; do echo "- npx playwright show-trace %s/%s/${DRONE_REPO}/${DRONE_BUILD_NUMBER}/tracing/$f \n"; done' % (S3_CACHE_SERVER, S3_PUBLIC_CACHE_BUCKET),
+            "cd %s/%s" % (dir["web"], trace_dir),
+            'echo "To see the trace, please run the following `npx playwright show-trace ...` command:"',
+            "find . -type f -name '*.zip' -printf '%P\\n' | while IFS= read -r f; do " +
+            "echo \"- npx playwright show-trace %s/%s/${DRONE_REPO}/${DRONE_BUILD_NUMBER}/tracing/$f\\n\"" % (S3_CACHE_SERVER, S3_PUBLIC_CACHE_BUCKET) +
+            "; done",
         ],
         "when": {
             "status": status,
