@@ -748,7 +748,7 @@ def e2eTests(ctx):
             "PLAYWRIGHT_BROWSERS_PATH": ".playwright",
             "BROWSER": "chromium",
             "FEDERATED_BASE_URL_OCIS": "federation-ocis:9200",
-            "SKIP_A11Y_TESTS": True,
+            "SKIP_A11Y_TESTS": params["skipA11y"],
         }
 
         if "suites" in matrix:
@@ -1911,6 +1911,106 @@ def keycloakService():
                ],
            }] + waitForServices("keycloak", ["keycloak:8443"])
 
+<<<<<<< HEAD
+=======
+def e2eTestsOnKeycloak(ctx):
+    e2e_Keycloak_tests = [
+        "journeys",
+        "admin-settings/users.feature:20",
+        "admin-settings/users.feature:43",
+        "admin-settings/users.feature:106",
+        "admin-settings/users.feature:131",
+        "admin-settings/users.feature:185",
+        "admin-settings/spaces.feature",
+        "admin-settings/groups.feature",
+        "admin-settings/general.feature",
+        "keycloak",
+    ]
+
+    e2e_volumes = [
+        {
+            "name": "gopath",
+            "temp": {},
+        },
+        {
+            "name": "certs",
+            "temp": {},
+        },
+    ]
+
+    steps = []
+    if not "full-ci" in ctx.build.title.lower() and ctx.build.event != "cron":
+        steps += skipIfUnchanged(ctx, "drone-ci")
+
+    steps += restoreBuildArtifactCache(ctx, "pnpm", ".pnpm-store") + \
+             installPnpm() + \
+             restoreBrowsersCache() + \
+             keycloakService() + \
+             restoreBuildArtifactCache(ctx, "web-dist", "dist")
+    if ctx.build.event == "cron":
+        steps += restoreBuildArtifactCache(ctx, "ocis", "ocis")
+    else:
+        steps += restoreOcisCache()
+
+    # configs to setup ocis with keycloak
+    environment = {
+        "PROXY_AUTOPROVISION_ACCOUNTS": "true",
+        "PROXY_ROLE_ASSIGNMENT_DRIVER": "oidc",
+        "OCIS_OIDC_ISSUER": "https://keycloak:8443/realms/oCIS",
+        "PROXY_OIDC_REWRITE_WELLKNOWN": "true",
+        "WEB_OIDC_CLIENT_ID": "web",
+        "PROXY_USER_OIDC_CLAIM": "preferred_username",
+        "PROXY_USER_CS3_CLAIM": "username",
+        "OCIS_ADMIN_USER_ID": "",
+        "OCIS_EXCLUDE_RUN_SERVICES": "idp",
+        "GRAPH_ASSIGN_DEFAULT_USER_ROLE": "false",
+        "GRAPH_USERNAME_MATCH": "none",
+        "KEYCLOAK_DOMAIN": "keycloak:8443",
+    }
+
+    steps += ocisService(environment) + \
+             [
+                 {
+                     "name": "e2e-tests",
+                     "image": OC_CI_NODEJS_IMAGE,
+                     "environment": {
+                         "BASE_URL_OCIS": "ocis:9200",
+                         "HEADLESS": "true",
+                         "RETRY": "1",
+                         "REPORT_TRACING": "with-tracing" in ctx.build.title.lower(),
+                         "KEYCLOAK": "true",
+                         "KEYCLOAK_HOST": "keycloak:8443",
+                         "PLAYWRIGHT_BROWSERS_PATH": ".playwright",
+                         "BROWSER": "chromium",
+                     },
+                     "commands": [
+                         "cd tests/e2e",
+                         "bash run-e2e.sh %s" % " ".join(["cucumber/features/" + tests for tests in e2e_Keycloak_tests]),
+                     ],
+                 },
+             ] + \
+             uploadTracingResult(ctx) + \
+             logTracingResult(ctx)
+
+    return [{
+        "kind": "pipeline",
+        "type": "docker",
+        "name": "e2e-test-on-keycloak",
+        "workspace": web_workspace,
+        "steps": steps,
+        "services": postgresService(),
+        "volumes": e2e_volumes,
+        "trigger": {
+            "ref": [
+                "refs/heads/master",
+                "refs/heads/stable-*",
+                "refs/tags/**",
+                "refs/pull/**",
+            ],
+        },
+    }]
+
+>>>>>>> 52e7c0f4f (Revert "chore(ci): skip a11y checks in ci (#13402)")
 def getOcislatestCommitId(ctx):
     web_repo_path = "https://raw.githubusercontent.com/owncloud/web/%s" % ctx.build.commit
     return [
