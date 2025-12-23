@@ -628,16 +628,7 @@ def e2eTests(ctx):
     }
 
     e2e_volumes = [{
-        "name": "uploads",
-        "temp": {},
-    }, {
-        "name": "configs",
-        "temp": {},
-    }, {
         "name": "gopath",
-        "temp": {},
-    }, {
-        "name": "ocis-config",
         "temp": {},
     }]
 
@@ -1660,9 +1651,9 @@ def uploadTracingResult(ctx, e2e_type = "cucumber"):
     if ("with-tracing" in ctx.build.title.lower()):
         status = ["failure", "success"]
 
-    trace_dir="reports/e2e/playwright/tracing"
+    trace_dir = "reports/e2e/playwright/tracing"
     if e2e_type == "playwright":
-        trace_dir="reports/e2e"
+        trace_dir = "reports/e2e"
 
     return [{
         "name": "upload-tracing-result",
@@ -1880,19 +1871,7 @@ def e2eTestsOnKeycloak(ctx):
 
     e2e_volumes = [
         {
-            "name": "uploads",
-            "temp": {},
-        },
-        {
-            "name": "configs",
-            "temp": {},
-        },
-        {
             "name": "gopath",
-            "temp": {},
-        },
-        {
-            "name": "ocis-config",
             "temp": {},
         },
         {
