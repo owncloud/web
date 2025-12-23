@@ -1,4 +1,4 @@
-import { Page } from '@playwright/test'
+import { Page, expect } from '@playwright/test'
 import util from 'util'
 import { config } from '../../../config'
 import { objects } from '../..'
@@ -29,7 +29,13 @@ export class Application {
     await this.#page.waitForTimeout(1000)
     await this.#page.locator(appSwitcherButton).click()
     const a11yObject = new objects.a11y.Accessibility({ page: this.#page })
-    await a11yObject.getSevereAccessibilityViolations(appSwitcherDropdown)
+    const violations = await a11yObject.getSevereAccessibilityViolations(
+      a11yObject.getSelectors().appSwitcherDropdown
+    )
+    expect(
+      violations,
+      `Found ${violations.length} severe accessibility violations in app switcher dropdown`
+    ).toHaveLength(0)
     await this.#page.locator(util.format(appSelector, `app.${name}.menuItem`)).click()
   }
 

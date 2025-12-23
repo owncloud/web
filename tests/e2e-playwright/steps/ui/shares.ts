@@ -114,15 +114,15 @@ export async function updateShareeRole({
   }
 }
 
-export async function shareResourceViaActions({
+export async function shareResource({
   actorsEnvironment,
   usersEnvironment,
   stepUser,
   resource,
   resourceType,
   recipient,
-  role,
-  actions
+  role = 'Can view',
+  actions = 'QUICK_ACTION'
 }: {
   actorsEnvironment: ActorsEnvironment
   usersEnvironment: UsersEnvironment

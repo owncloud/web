@@ -75,7 +75,7 @@ export async function openResource({
   await resourceObject.openFolder(resource)
 }
 
-export async function isResourceDisplayedInList({
+export async function resourceExists({
   actorsEnvironment,
   listType,
   stepUser,

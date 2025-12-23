@@ -43,7 +43,7 @@ test.describe('deny share access', () => {
 
     await ui.openApplication({ actorsEnvironment, stepUser: 'Alice', name: 'files' })
 
-    await ui.shareResourceViaActions({
+    await ui.shareResource({
       actorsEnvironment,
       usersEnvironment,
       stepUser: 'Alice',
@@ -56,7 +56,7 @@ test.describe('deny share access', () => {
 
     await ui.openResource({ actorsEnvironment, stepUser: 'Alice', resource: 'folder_to_shared' })
 
-    await ui.shareResourceViaActions({
+    await ui.shareResource({
       actorsEnvironment,
       usersEnvironment,
       stepUser: 'Alice',
@@ -85,7 +85,7 @@ test.describe('deny share access', () => {
     await ui.navigateToSharedWithMePage({ actorsEnvironment, stepUser: 'Brian' })
     await ui.openResource({ actorsEnvironment, stepUser: 'Brian', resource: 'folder_to_shared' })
     expect(
-      await ui.isResourceDisplayedInList({
+      await ui.resourceExists({
         actorsEnvironment,
         listType: 'files list',
         stepUser: 'Brian',
@@ -114,7 +114,7 @@ test.describe('deny share access', () => {
     await ui.navigateToSharedWithMePage({ actorsEnvironment, stepUser: 'Brian' })
     await ui.openResource({ actorsEnvironment, stepUser: 'Brian', resource: 'folder_to_shared' })
     expect(
-      await ui.isResourceDisplayedInList({
+      await ui.resourceExists({
         actorsEnvironment,
         listType: 'files list',
         stepUser: 'Brian',

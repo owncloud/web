@@ -1,4 +1,4 @@
-import { Page } from '@playwright/test'
+import { Page, expect } from '@playwright/test'
 import { startCase } from 'lodash-es'
 import util from 'util'
 import { Group, User } from '../../../types'
@@ -197,7 +197,13 @@ export default class Collaborator {
       .click()
     await page.locator(util.format(Collaborator.removeCollaboratorButton, collaboratorRow)).click()
     const a11yObject = new objects.a11y.Accessibility({ page })
-    await a11yObject.getSevereAccessibilityViolations('.oc-modal.oc-modal-danger')
+    const violations = await a11yObject.getSevereAccessibilityViolations(
+      a11yObject.getSelectors().removeUserModal
+    )
+    expect(
+      violations,
+      `Found ${violations.length} severe accessibility violations in files modal`
+    ).toHaveLength(0)
 
     await Promise.all([
       page.waitForResponse(
