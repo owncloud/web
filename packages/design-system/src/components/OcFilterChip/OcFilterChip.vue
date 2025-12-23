@@ -17,10 +17,12 @@
         size="small"
         color="var(--oc-color-text-inverse)"
       />
-      <span
-        class="oc-text-truncate oc-filter-chip-label"
-        v-text="!!selectedItemNames.length ? selectedItemNames[0] : filterLabel"
-      />
+      <slot name="active" :selected-item-names="selectedItemNames">
+        <span
+          class="oc-text-truncate oc-filter-chip-label"
+          v-text="!!selectedItemNames.length ? selectedItemNames[0] : filterLabel"
+        />
+      </slot>
       <span v-if="selectedItemNames.length > 1" v-text="` +${selectedItemNames.length - 1}`" />
       <oc-icon v-if="!filterActive && !isToggle" name="arrow-down-s" size="small" />
     </oc-button>
