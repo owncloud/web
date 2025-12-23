@@ -604,7 +604,10 @@ def e2eTestsOnPlaywright(ctx):
     })
 
     if not "skip-a11y" in ctx.build.title.lower():
-        steps += uploadA11yResult(ctx)
+        steps += uploadA11yResult(ctx) + logA11yReport()
+
+    steps += uploadTracingResult(ctx, "playwright") + \
+             logTracingResult(ctx, "playwright")
 
     pipelines.append({
         "kind": "pipeline",
@@ -625,16 +628,7 @@ def e2eTests(ctx):
     }
 
     e2e_volumes = [{
-        "name": "uploads",
-        "temp": {},
-    }, {
-        "name": "configs",
-        "temp": {},
-    }, {
         "name": "gopath",
-        "temp": {},
-    }, {
-        "name": "ocis-config",
         "temp": {},
     }]
 
@@ -749,7 +743,7 @@ def e2eTests(ctx):
                      ],
                  }] + \
                  uploadTracingResult(ctx) + \
-                 logTracingResult(ctx, "e2e-tests %s" % suite)
+                 logTracingResult(ctx)
 
         pipelines.append({
             "kind": "pipeline",
@@ -1652,10 +1646,14 @@ def pipelineSanityChecks(ctx, pipelines):
     for image in images.keys():
         print(" %sx\t%s" % (images[image], image))
 
-def uploadTracingResult(ctx):
+def uploadTracingResult(ctx, e2e_type = "cucumber"):
     status = ["failure"]
     if ("with-tracing" in ctx.build.title.lower()):
         status = ["failure", "success"]
+
+    trace_dir = "reports/e2e/playwright/tracing"
+    if e2e_type == "playwright":
+        trace_dir = "reports/e2e"
 
     return [{
         "name": "upload-tracing-result",
@@ -1665,8 +1663,8 @@ def uploadTracingResult(ctx):
             "bucket": S3_PUBLIC_CACHE_BUCKET,
             "endpoint": S3_CACHE_SERVER,
             "path_style": True,
-            "source": "%s/reports/e2e/playwright/tracing/**/*" % dir["web"],
-            "strip_prefix": "%s/reports/e2e/playwright/tracing" % dir["web"],
+            "source": "%s/%s/**/*.zip" % (dir["web"], trace_dir),
+            "strip_prefix": "%s/%s" % (dir["web"], trace_dir),
             "target": "/${DRONE_REPO}/${DRONE_BUILD_NUMBER}/tracing",
         },
         "environment": {
@@ -1682,19 +1680,25 @@ def uploadTracingResult(ctx):
         },
     }]
 
-def logTracingResult(ctx, suite):
+def logTracingResult(ctx, e2e_type = "cucumber"):
     status = ["failure"]
 
     if ("with-tracing" in ctx.build.title.lower()):
         status = ["failure", "success"]
 
+    trace_dir = "reports/e2e/playwright/tracing"
+    if e2e_type == "playwright":
+        trace_dir = "reports/e2e"
+
     return [{
         "name": "log-tracing-result",
         "image": OC_UBUNTU_IMAGE,
         "commands": [
-            "cd %s/reports/e2e/playwright/tracing/" % dir["web"],
-            'echo "To see the trace, please open the following link in the console"',
-            'for f in *.zip; do echo "npx playwright show-trace %s/%s/${DRONE_REPO}/${DRONE_BUILD_NUMBER}/tracing/$f \n"; done' % (S3_CACHE_SERVER, S3_PUBLIC_CACHE_BUCKET),
+            "cd %s/%s" % (dir["web"], trace_dir),
+            'echo "To see the trace, please run the following `npx playwright show-trace ...` command:"',
+            "find . -type f -name '*.zip' -printf '%P\\n' | while IFS= read -r f; do " +
+            "echo \"- npx playwright show-trace %s/%s/${DRONE_REPO}/${DRONE_BUILD_NUMBER}/tracing/$f\\n\"" % (S3_CACHE_SERVER, S3_PUBLIC_CACHE_BUCKET) +
+            "; done",
         ],
         "when": {
             "status": status,
@@ -1873,19 +1877,7 @@ def e2eTestsOnKeycloak(ctx):
 
     e2e_volumes = [
         {
-            "name": "uploads",
-            "temp": {},
-        },
-        {
-            "name": "configs",
-            "temp": {},
-        },
-        {
             "name": "gopath",
-            "temp": {},
-        },
-        {
-            "name": "ocis-config",
             "temp": {},
         },
         {
@@ -1947,7 +1939,7 @@ def e2eTestsOnKeycloak(ctx):
                  },
              ] + \
              uploadTracingResult(ctx) + \
-             logTracingResult(ctx, "e2e-tests keycloak-journey-suite")
+             logTracingResult(ctx)
 
     return [{
         "kind": "pipeline",
@@ -2057,6 +2049,19 @@ def uploadA11yResult(ctx):
             },
         },
     ]
+
+def logA11yReport():
+    return [{
+        "name": "log-a11y-report",
+        "image": OC_CI_ALPINE_IMAGE,
+        "commands": [
+            'echo "To see the report, please open the following link:"',
+            'echo "\n  Accessibility Report: %s/%s/${DRONE_REPO}/${DRONE_BUILD_NUMBER}/a11y/a11y-report.json"' % (S3_CACHE_SERVER, S3_PUBLIC_CACHE_BUCKET),
+        ],
+        "when": {
+            "status": ["failure"],
+        },
+    }]
 
 def filterTestSuitesToRun(ctx, suites = []):
     if "full-ci" in ctx.build.title.lower() or ctx.build.event == "cron":
