@@ -579,6 +579,8 @@ def e2eTestsOnPlaywright(ctx):
         "BASE_URL_OCIS": "ocis:9200",
         "PLAYWRIGHT_BROWSERS_PATH": ".playwright",
         "TESTS_RUNNER": "playwright",
+        "HEADLESS": "true",
+        "RETRY": "1",
     }
 
     steps += restoreBuildArtifactCache(ctx, "pnpm", ".pnpm-store") + \
