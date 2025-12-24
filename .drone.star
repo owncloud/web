@@ -185,6 +185,15 @@ web_workspace = {
     "path": config["app"],
 }
 
+base_trigger = {
+    "ref": [
+        "refs/heads/master",
+        "refs/heads/stable-*",
+        "refs/tags/**",
+        "refs/pull/**",
+    ],
+}
+
 def main(ctx):
     before = beforePipelines(ctx)
 
@@ -243,24 +252,14 @@ def pnpmCache(ctx):
         "kind": "pipeline",
         "type": "docker",
         "name": "cache-pnpm",
-        "workspace": {
-            "base": dir["base"],
-            "path": config["app"],
-        },
+        "workspace": web_workspace,
         "steps": skipIfUnchanged(ctx, "cache") +
                  installPnpm() +
                  rebuildBuildArtifactCache(ctx, "pnpm", ".pnpm-store") +
                  checkBrowsersCache() +
                  installBrowsers() +
                  cacheBrowsers(),
-        "trigger": {
-            "ref": [
-                "refs/heads/master",
-                "refs/heads/stable-*",
-                "refs/tags/**",
-                "refs/pull/**",
-            ],
-        },
+        "trigger": base_trigger,
     }]
 
 def pnpmlint(ctx):
@@ -277,23 +276,13 @@ def pnpmlint(ctx):
         "kind": "pipeline",
         "type": "docker",
         "name": "lint",
-        "workspace": {
-            "base": dir["base"],
-            "path": config["app"],
-        },
+        "workspace": web_workspace,
         "steps": skipIfUnchanged(ctx, "lint") +
                  restoreBuildArtifactCache(ctx, "pnpm", ".pnpm-store") +
                  installPnpm() +
                  lint() +
                  checkFormatting(),
-        "trigger": {
-            "ref": [
-                "refs/heads/master",
-                "refs/heads/stable-*",
-                "refs/tags/**",
-                "refs/pull/**",
-            ],
-        },
+        "trigger": base_trigger,
     }
 
     for branch in config["branches"]:
@@ -322,10 +311,7 @@ def build(ctx):
         "kind": "pipeline",
         "type": "docker",
         "name": "build",
-        "workspace": {
-            "base": dir["base"],
-            "path": config["app"],
-        },
+        "workspace": web_workspace,
         "steps": steps,
         "trigger": {
             "ref": [
@@ -440,10 +426,7 @@ def buildCacheWeb(ctx):
         "kind": "pipeline",
         "type": "docker",
         "name": "cache-web",
-        "workspace": {
-            "base": dir["base"],
-            "path": config["app"],
-        },
+        "workspace": web_workspace,
         "steps": skipIfUnchanged(ctx, "cache") +
                  restoreBuildArtifactCache(ctx, "pnpm", ".pnpm-store") +
                  installPnpm() +
@@ -458,14 +441,7 @@ def buildCacheWeb(ctx):
                      ],
                  }] +
                  rebuildBuildArtifactCache(ctx, "web-dist", "dist"),
-        "trigger": {
-            "ref": [
-                "refs/heads/master",
-                "refs/heads/stable-*",
-                "refs/tags/**",
-                "refs/pull/**",
-            ],
-        },
+        "trigger": base_trigger,
     }]
 
 def unitTests(ctx):
@@ -494,10 +470,7 @@ def unitTests(ctx):
         "kind": "pipeline",
         "type": "docker",
         "name": "unit-tests",
-        "workspace": {
-            "base": dir["base"],
-            "path": config["app"],
-        },
+        "workspace": web_workspace,
         "clone": {
             "disable": True,  # Sonarcloud does not apply issues on already merged branch
         },
@@ -528,14 +501,7 @@ def unitTests(ctx):
                          ],
                      },
                  ] + sonarcloudCoverageReport(sonar_env = sonar_env),
-        "trigger": {
-            "ref": [
-                "refs/heads/master",
-                "refs/heads/stable-*",
-                "refs/tags/**",
-                "refs/pull/**",
-            ],
-        },
+        "trigger": base_trigger,
     }]
 
 def sonarcloudCoverageReport(sonar_env):
@@ -556,20 +522,6 @@ def sonarcloudCoverageReport(sonar_env):
     ]
 
 def e2eTestsOnPlaywright(ctx):
-    e2e_workspace = {
-        "base": dir["base"],
-        "path": config["app"],
-    }
-
-    e2e_trigger = {
-        "ref": [
-            "refs/heads/master",
-            "refs/heads/stable-*",
-            "refs/tags/**",
-            "refs/pull/**",
-        ],
-    }
-
     pipelines = []
 
     # pipeline steps
@@ -613,25 +565,15 @@ def e2eTestsOnPlaywright(ctx):
         "kind": "pipeline",
         "type": "docker",
         "name": "e2e-tests-playwright",
-        "workspace": e2e_workspace,
+        "workspace": web_workspace,
         "steps": steps,
         "depends_on": ["cache-ocis"],
-        "trigger": e2e_trigger,
+        "trigger": base_trigger,
     })
 
     return pipelines
 
 def e2eTests(ctx):
-    e2e_workspace = {
-        "base": dir["base"],
-        "path": config["app"],
-    }
-
-    e2e_volumes = [{
-        "name": "gopath",
-        "temp": {},
-    }]
-
     default = {
         "skip": False,
         "logLevel": "2",
@@ -644,15 +586,6 @@ def e2eTests(ctx):
         "failOnUncaughtConsoleError": "false",
         "extraServerEnvironment": {},
         "skipA11y": "false",
-    }
-
-    e2e_trigger = {
-        "ref": [
-            "refs/heads/master",
-            "refs/heads/stable-*",
-            "refs/tags/**",
-            "refs/pull/**",
-        ],
     }
 
     pipelines = []
@@ -749,11 +682,10 @@ def e2eTests(ctx):
             "kind": "pipeline",
             "type": "docker",
             "name": "e2e-tests-%s" % suite,
-            "workspace": e2e_workspace,
+            "workspace": web_workspace,
             "steps": steps,
             "depends_on": ["cache-ocis"],
-            "trigger": e2e_trigger,
-            "volumes": e2e_volumes,
+            "trigger": base_trigger,
         })
     return pipelines
 
@@ -1167,14 +1099,7 @@ def cacheOcisPipeline(ctx):
             "name": "gopath",
             "temp": {},
         }],
-        "trigger": {
-            "ref": [
-                "refs/heads/master",
-                "refs/heads/stable-*",
-                "refs/tags/**",
-                "refs/pull/**",
-            ],
-        },
+        "trigger": base_trigger,
     }]
 
 def restoreOcisCache():
@@ -1380,14 +1305,7 @@ def licenseCheck(ctx):
                 ],
             },
         ],
-        "trigger": {
-            "ref": [
-                "refs/heads/master",
-                "refs/heads/stable-*",
-                "refs/tags/**",
-                "refs/pull/**",
-            ],
-        },
+        "trigger": base_trigger,
     }]
 
 def pipelineDependsOn(pipeline, dependant_pipelines):
@@ -1546,12 +1464,7 @@ def genericCachePurge(flush_path):
             },
         ],
         "trigger": {
-            "ref": [
-                "refs/heads/master",
-                "refs/heads/stable-*",
-                "refs/tags/**",
-                "refs/pull/**",
-            ],
+            "ref": base_trigger["ref"],
             "status": [
                 "success",
                 "failure",
@@ -1875,16 +1788,10 @@ def e2eTestsOnKeycloak(ctx):
         "keycloak",
     ]
 
-    e2e_volumes = [
-        {
-            "name": "gopath",
-            "temp": {},
-        },
-        {
-            "name": "certs",
-            "temp": {},
-        },
-    ]
+    e2e_volumes = [{
+        "name": "certs",
+        "temp": {},
+    }]
 
     steps = []
     if not "full-ci" in ctx.build.title.lower() and ctx.build.event != "cron":
@@ -1949,14 +1856,7 @@ def e2eTestsOnKeycloak(ctx):
         "steps": steps,
         "services": postgresService(),
         "volumes": e2e_volumes,
-        "trigger": {
-            "ref": [
-                "refs/heads/master",
-                "refs/heads/stable-*",
-                "refs/tags/**",
-                "refs/pull/**",
-            ],
-        },
+        "trigger": base_trigger,
     }]
 
 def getOcislatestCommitId(ctx):
