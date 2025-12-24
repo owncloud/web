@@ -15,9 +15,13 @@ export class Link {
     const startUrl = this.#page.url()
     const url = await po.createLink({ ...args, page: this.#page })
 
+    let linkName = 'Unnamed link'
+    if (args.name) {
+      linkName = args.name
+    }
     this.#linksEnvironment.createLink({
-      key: args.name,
-      link: { name: args.name, url }
+      key: linkName,
+      link: { name: linkName, url }
     })
 
     await this.#page.goto(startUrl)
