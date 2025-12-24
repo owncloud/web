@@ -39,7 +39,7 @@ export const config = {
   debug: process.env.DEBUG === 'true',
   logLevel: process.env.LOG_LEVEL || 'silent',
   // cucumber
-  retry: process.env.RETRY || 0,
+  retry: parseInt(process.env.RETRY) || 0,
   // playwright
   slowMo: parseInt(process.env.SLOW_MO) || 0,
   timeout: parseInt(process.env.TIMEOUT) || 60,
