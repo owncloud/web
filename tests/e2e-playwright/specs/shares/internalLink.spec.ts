@@ -1,14 +1,14 @@
 import { expect, test } from '@playwright/test'
-import { config } from '../../e2e/config.js'
+import { config } from '../../../e2e/config.js'
 import {
   ActorsEnvironment,
   UsersEnvironment,
   LinksEnvironment,
   FilesEnvironment
-} from '../../e2e/support/environment'
-import { setAccessAndRefreshToken } from '../helpers/setAccessAndRefreshToken'
-import * as api from '../steps/api/api'
-import * as ui from '../steps/ui/index'
+} from '../../../e2e/support/environment'
+import { setAccessAndRefreshToken } from '../../helpers/setAccessAndRefreshToken'
+import * as api from '../../steps/api/api'
+import * as ui from '../../steps/ui/index'
 
 test.describe('internal link share', () => {
   let actorsEnvironment
