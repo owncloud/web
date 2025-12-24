@@ -228,7 +228,7 @@ export class Resource {
   }
 
   async getAllFiles(): Promise<string[]> {
-    return po.getAllFiles(this.#page)
+    return await po.getAllFiles(this.#page)
   }
 
   async editResource(args: Omit<po.editResourcesArgs, 'page'>): Promise<void> {

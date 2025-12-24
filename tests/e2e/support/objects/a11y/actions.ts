@@ -28,7 +28,12 @@ export const selectors = {
   appbarBatchActions: '#oc-appbar-batch-actions',
   filesSpaceTableCheckbox: '#files-space-table .oc-checkbox',
   uploadMenuDropdown: '#upload-menu-drop',
-  appSidebar: '#app-sidebar'
+  appSidebar: '#app-sidebar',
+  tippyBox: '.tippy-box',
+  textEditor: '#text-editor-component',
+  topBar: '#oc-topbar',
+  displayOptions: '#files-app-bar-controls-right',
+  ocCard: '.oc-card'
 }
 
 const a11yRuleTags = ['wcag2a', 'wcag2aa', 'wcag21a', 'wcag21aa', 'best-practice']
