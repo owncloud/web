@@ -11,6 +11,9 @@ const dropUploadResourceSelector = '.upload-info-items [data-test-resource-name=
 const uploadInfoSuccessLabelSelector = '.upload-info-success'
 const publicLinkAuthorizeButton = '.oc-login-authorize-button'
 const folderModalIframe = '#iframe-folder-view'
+const passwordProtectedPublicLinkForm =
+  '//span[contains(text(),"password-protected")]/ancestor::form'
+const publicLinkErrorMessage = 'div.oc-link-resolve-error-title'
 
 export class Public {
   #page: Page
@@ -20,9 +23,24 @@ export class Public {
   }
 
   async open({ url }: { url: string }): Promise<void> {
-    await this.#page.goto(url)
-    const a11yObject = new objects.a11y.Accessibility({ page: this.#page })
-    await a11yObject.getSevereAccessibilityViolations('body')
+    await Promise.all([
+      this.#page.waitForResponse(
+        (res) =>
+          res.url().includes('/public-files/') &&
+          res.request().method() === 'PROPFIND' &&
+          res.status() >= 207
+      ),
+      this.#page.goto(url)
+    ])
+    // check a11y for password protected link or error message
+    // other cases are covered in other page navigations
+    if (
+      (await this.#page.locator(passwordProtectedPublicLinkForm).isVisible()) ||
+      (await this.#page.locator(publicLinkErrorMessage).isVisible())
+    ) {
+      const a11yObject = new objects.a11y.Accessibility({ page: this.#page })
+      await a11yObject.getSevereAccessibilityViolations('body')
+    }
   }
 
   async authenticate({
