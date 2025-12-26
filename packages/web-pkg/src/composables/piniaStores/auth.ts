@@ -7,6 +7,7 @@ export const useAuthStore = defineStore('auth', () => {
   const userContextReady = ref(false)
   const publicLinkToken = ref<string>()
   const publicLinkPassword = ref<string>()
+  const publicLinkPasswordRequired = ref<boolean>()
   const publicLinkType = ref<string>()
   const publicLinkContextReady = ref(false)
 
@@ -24,11 +25,13 @@ export const useAuthStore = defineStore('auth', () => {
     publicLinkPassword: string
     publicLinkType: string
     publicLinkContextReady: boolean
+    publicLinkPasswordRequired: boolean
   }) => {
     publicLinkToken.value = context.publicLinkToken
     publicLinkPassword.value = context.publicLinkPassword
     publicLinkType.value = context.publicLinkType
     publicLinkContextReady.value = context.publicLinkContextReady
+    publicLinkPasswordRequired.value = context.publicLinkPasswordRequired
   }
 
   const clearUserContext = () => {
@@ -42,7 +45,8 @@ export const useAuthStore = defineStore('auth', () => {
       publicLinkToken: null,
       publicLinkPassword: null,
       publicLinkType: null,
-      publicLinkContextReady: false
+      publicLinkContextReady: false,
+      publicLinkPasswordRequired: null
     })
   }
 
@@ -54,6 +58,7 @@ export const useAuthStore = defineStore('auth', () => {
     publicLinkPassword,
     publicLinkType,
     publicLinkContextReady,
+    publicLinkPasswordRequired,
 
     setAccessToken,
     setIdpContextReady,
