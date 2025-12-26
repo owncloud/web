@@ -12,3 +12,19 @@ export async function navigateToPersonalSpacePage({
   const pageObject = new objects.applicationFiles.page.spaces.Personal({ page })
   await pageObject.navigate()
 }
+
+export async function navigateToProjectSpace({
+  actorsEnvironment,
+  stepUser,
+  space
+}: {
+  actorsEnvironment: ActorsEnvironment
+  stepUser: string
+  space: string
+}): Promise<void> {
+  const { page } = actorsEnvironment.getActor({ key: stepUser })
+  const spacesObject = new objects.applicationFiles.Spaces({ page })
+  const pageObject = new objects.applicationFiles.page.spaces.Projects({ page })
+  await pageObject.navigate()
+  await spacesObject.open({ key: space })
+}
