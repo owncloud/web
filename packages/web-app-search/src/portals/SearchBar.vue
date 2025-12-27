@@ -28,7 +28,7 @@
       :label="searchLabel"
       :type-ahead="true"
       :value="term"
-      :placeholder="searchLabel"
+      :placeholder="searchPlaceholder"
       :button-hidden="true"
       :show-cancel-button="showCancelButton"
       :show-advanced-search-button="listProviderAvailable"
@@ -674,6 +674,14 @@ const searchLabel = computed(() => {
   return $gettext('Enter search term')
 })
 
+const searchPlaceholder = computed(() => {
+  if (unref(isMobileWidth)) {
+    return ''
+  }
+
+  return unref(searchLabel)
+})
+
 function created() {
   clearTermEvent.value = eventBus.subscribe('app.search.term.clear', () => {
     term.value = ''
@@ -742,6 +750,7 @@ onBeforeUnmount(() => {
         border: 1px solid var(--oc-color-input-border);
         z-index: var(--oc-z-index-modal);
         margin: 0 auto;
+        padding-right: 5.875rem;
       }
     }
   }

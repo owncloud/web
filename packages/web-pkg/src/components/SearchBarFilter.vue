@@ -23,12 +23,18 @@
             :data-test-id="option.id"
             @click="onOptionSelected(option)"
           >
+            <oc-icon class="oc-hidden@s" :name="option.icon" />
             <span>{{ option.title }}</span>
             <div v-if="option.id === currentSelection.id" class="oc-flex">
               <oc-icon name="check" />
             </div>
-          </oc-button> </template
-      ></oc-filter-chip>
+          </oc-button>
+        </template>
+        <template #active>
+          <oc-icon class="oc-hidden@s" :name="currentSelection.icon" />
+          <span class="oc-text-truncate oc-invisible-sr@s">{{ currentSelectionTitle }}</span>
+        </template>
+      </oc-filter-chip>
     </div>
   </div>
 </template>
@@ -42,6 +48,7 @@ type LocationOption = {
   id: string
   title: string
   enabled: Ref<boolean> | boolean
+  icon: string
 }
 
 interface Props {
@@ -67,11 +74,13 @@ const locationOptions = computed<LocationOption[]>(() => [
   {
     id: SearchLocationFilterConstants.currentFolder,
     title: $gettext('Current folder'),
+    icon: 'folder',
     enabled: props.currentFolderAvailable
   },
   {
     id: SearchLocationFilterConstants.allFiles,
     title: $gettext('All files'),
+    icon: 'globe',
     enabled: true
   }
 ])
@@ -130,11 +139,22 @@ const onOptionSelected = (option: LocationOption) => {
   z-index: 9999;
   margin-right: 34px !important;
   float: right;
+
   .oc-drop {
-    width: 180px;
+    width: 220px;
+
+    @media (min-width: 640px) {
+      width: 180px;
+    }
+  }
+
+  .oc-filter-chip-button {
+    justify-content: flex-start;
   }
 }
 .search-bar-filter-item {
+  justify-content: flex-start;
+
   &:hover {
     background-color: var(--oc-color-background-hover) !important;
   }
