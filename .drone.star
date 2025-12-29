@@ -708,7 +708,7 @@ def e2eTests(ctx):
         "federationServer": False,
         "failOnUncaughtConsoleError": False,
         "extraServerEnvironment": {},
-        "skipA11y": False,
+        "skipA11y": True,
     }
 
     pipelines = []

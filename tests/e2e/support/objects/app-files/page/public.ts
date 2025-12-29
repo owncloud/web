@@ -32,15 +32,15 @@ export class Public {
       ),
       this.#page.goto(url)
     ])
-    // check a11y for password protected link or error message
-    // other cases are covered in other page navigations
     if (
-      (await this.#page.locator(passwordProtectedPublicLinkForm).isVisible()) ||
-      (await this.#page.locator(publicLinkErrorMessage).isVisible())
+      !(await this.#page.locator(passwordProtectedPublicLinkForm).isVisible()) &&
+      !(await this.#page.locator(publicLinkErrorMessage).isVisible())
     ) {
-      const a11yObject = new objects.a11y.Accessibility({ page: this.#page })
-      await a11yObject.getSevereAccessibilityViolations('body')
+      // wait for redirection to complete
+      await this.#page.waitForURL('**/public/**')
     }
+    const a11yObject = new objects.a11y.Accessibility({ page: this.#page })
+    await a11yObject.getSevereAccessibilityViolations('body')
   }
 
   async authenticate({
