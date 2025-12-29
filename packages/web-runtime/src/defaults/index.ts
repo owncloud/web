@@ -12,9 +12,8 @@ export const pages = {
 }
 
 export const loadTranslations = async () => {
-  const { coreTranslations, clientTranslations, pkgTranslations, odsTranslations } = await import(
-    './json'
-  )
+  const { coreTranslations, clientTranslations, pkgTranslations, odsTranslations } =
+    await import('./json')
 
   return merge({}, coreTranslations, clientTranslations, pkgTranslations, odsTranslations)
 }

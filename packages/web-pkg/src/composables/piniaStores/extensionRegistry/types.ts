@@ -42,8 +42,11 @@ export interface SidebarNavExtension extends Extension {
   navItem: AppNavigationItem
 }
 
-export interface SidebarPanelExtension<R extends Item, P extends Item, T extends Item>
-  extends Extension {
+export interface SidebarPanelExtension<
+  R extends Item,
+  P extends Item,
+  T extends Item
+> extends Extension {
   type: 'sidebarPanel'
   panel: SideBarPanel<R, P, T>
 }
