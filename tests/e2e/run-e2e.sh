@@ -179,11 +179,7 @@ function buildSuitesPattern() {
     if [[ $CURRENT_SUITES_COUNT -gt 1 ]]; then
         suites="{$suites}"
     fi
-    if [[ "$TEST_TYPE" == "playwright" ]]; then
-        GLOB_FEATURE_PATHS="$FEATURES_DIR/$suites"
-        return
-    fi
-    GLOB_FEATURE_PATHS="$FEATURES_DIR/$suites/**/*.feature"
+    GLOB_FEATURE_PATHS="$FEATURES_DIR/$suites"
 }
 
 if [[ -n $TEST_SUITES ]] && [[ -z "$FILTER_SUITES" ]]; then

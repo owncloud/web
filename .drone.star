@@ -156,7 +156,39 @@ config = {
                 "OCM_OCM_PROVIDER_AUTHORIZER_PROVIDERS_FILE": "%s" % dir["ocmProviders"],
             },
         },
+        "keycloak": {
+            "earlyFail": True,
+            "skip": False,
+            "features": [
+                "cucumber/features/journeys",
+                "cucumber/features/admin-settings/users.feature:20",
+                "cucumber/features/admin-settings/users.feature:43",
+                "cucumber/features/admin-settings/users.feature:106",
+                "cucumber/features/admin-settings/users.feature:131",
+                "cucumber/features/admin-settings/users.feature:185",
+                "cucumber/features/admin-settings/spaces.feature",
+                "cucumber/features/admin-settings/groups.feature",
+                "cucumber/features/admin-settings/general.feature",
+                "cucumber/features/keycloak",
+            ],
+            "extraServerEnvironment": {
+                "PROXY_AUTOPROVISION_ACCOUNTS": "true",
+                "PROXY_ROLE_ASSIGNMENT_DRIVER": "oidc",
+                "OCIS_OIDC_ISSUER": "https://keycloak:8443/realms/oCIS",
+                "PROXY_OIDC_REWRITE_WELLKNOWN": "true",
+                "WEB_OIDC_CLIENT_ID": "web",
+                "PROXY_USER_OIDC_CLAIM": "preferred_username",
+                "PROXY_USER_CS3_CLAIM": "username",
+                "OCIS_ADMIN_USER_ID": "",
+                "OCIS_EXCLUDE_RUN_SERVICES": "idp",
+                "GRAPH_ASSIGN_DEFAULT_USER_ROLE": "false",
+                "GRAPH_USERNAME_MATCH": "none",
+                "KEYCLOAK_DOMAIN": "keycloak:8443",
+            },
+        },
     },
+    # NOTE: make the pipelines similar to the above e2e
+    # along with the addition of new test suites
     "e2e-playwright": {
         "1": {
             "earlyFail": True,
@@ -250,8 +282,8 @@ def stagePipelines(ctx):
 
     e2e_playwright_pipeline = e2eTestsOnPlaywright(ctx)
     e2e_pipelines = e2eTests(ctx)
-    keycloak_pipelines = e2eTestsOnKeycloak(ctx)
-    return unit_test_pipelines + pipelinesDependsOn(e2e_playwright_pipeline + e2e_pipelines + keycloak_pipelines, unit_test_pipelines)
+    return e2e_playwright_pipeline + e2e_pipelines
+    return unit_test_pipelines + pipelinesDependsOn(e2e_playwright_pipeline + e2e_pipelines, unit_test_pipelines)
 
 def afterPipelines(ctx):
     return build(ctx) + pipelinesDependsOn(notify(ctx), build(ctx))
@@ -547,6 +579,8 @@ def e2eTestsOnPlaywright(ctx):
     }
 
     pipelines = []
+    e2e_volumes = []
+    services = []
     params = {}
     matrices = config["e2e-playwright"]
     browser = "chromium"
@@ -606,6 +640,16 @@ def e2eTestsOnPlaywright(ctx):
         else:
             steps += restoreOcisCache()
 
+        if "keycloak" in suite:
+            environment["KEYCLOAK"] = "true"
+            environment["KEYCLOAK_HOST"] = "keycloak:8443"
+            e2e_volumes += [{
+                "name": "certs",
+                "temp": {},
+            }]
+            steps += keycloakService()
+            services += postgresService()
+
         if "app-provider" in suite:
             environment["FAIL_ON_UNCAUGHT_CONSOLE_ERR"] = False
 
@@ -626,7 +670,7 @@ def e2eTestsOnPlaywright(ctx):
                      ocisService(params["extraServerEnvironment"])
 
         steps += [{
-                     "name": "e2e-tests-playwright",
+                     "name": "e2e-tests",
                      "image": OC_CI_NODEJS_IMAGE,
                      "environment": environment,
                      "commands": [
@@ -650,6 +694,8 @@ def e2eTestsOnPlaywright(ctx):
             "steps": steps,
             "depends_on": ["cache-ocis"],
             "trigger": base_trigger,
+            "volumes": e2e_volumes,
+            "services": services,
         })
     return pipelines
 
@@ -667,6 +713,8 @@ def e2eTests(ctx):
     }
 
     pipelines = []
+    e2e_volumes = []
+    services = []
     params = {}
     matrices = config["e2e"]
 
@@ -724,6 +772,16 @@ def e2eTests(ctx):
         else:
             steps += restoreOcisCache()
 
+        if "keycloak" in suite:
+            environment["KEYCLOAK"] = "true"
+            environment["KEYCLOAK_HOST"] = "keycloak:8443"
+            e2e_volumes += [{
+                "name": "certs",
+                "temp": {},
+            }]
+            steps += keycloakService()
+            services += postgresService()
+
         if "app-provider" in suite:
             environment["FAIL_ON_UNCAUGHT_CONSOLE_ERR"] = False
 
@@ -764,6 +822,8 @@ def e2eTests(ctx):
             "steps": steps,
             "depends_on": ["cache-ocis"],
             "trigger": base_trigger,
+            "volumes": e2e_volumes,
+            "services": services,
         })
     return pipelines
 
@@ -1851,91 +1911,6 @@ def keycloakService():
                    },
                ],
            }] + waitForServices("keycloak", ["keycloak:8443"])
-
-def e2eTestsOnKeycloak(ctx):
-    e2e_Keycloak_tests = [
-        "journeys",
-        "admin-settings/users.feature:20",
-        "admin-settings/users.feature:43",
-        "admin-settings/users.feature:106",
-        "admin-settings/users.feature:131",
-        "admin-settings/users.feature:185",
-        "admin-settings/spaces.feature",
-        "admin-settings/groups.feature",
-        "admin-settings/general.feature",
-        "keycloak",
-    ]
-
-    e2e_volumes = [{
-        "name": "certs",
-        "temp": {},
-    }]
-
-    steps = []
-    if not "full-ci" in ctx.build.title.lower() and ctx.build.event != "cron":
-        steps += skipIfUnchanged(ctx, "drone-ci")
-
-    steps += restoreBuildArtifactCache(ctx, "pnpm", ".pnpm-store") + \
-             installPnpm() + \
-             restoreBrowsersCache() + \
-             keycloakService() + \
-             restoreBuildArtifactCache(ctx, "web-dist", "dist")
-    if ctx.build.event == "cron":
-        steps += restoreBuildArtifactCache(ctx, "ocis", "ocis")
-    else:
-        steps += restoreOcisCache()
-
-    # configs to setup ocis with keycloak
-    environment = {
-        "PROXY_AUTOPROVISION_ACCOUNTS": "true",
-        "PROXY_ROLE_ASSIGNMENT_DRIVER": "oidc",
-        "OCIS_OIDC_ISSUER": "https://keycloak:8443/realms/oCIS",
-        "PROXY_OIDC_REWRITE_WELLKNOWN": "true",
-        "WEB_OIDC_CLIENT_ID": "web",
-        "PROXY_USER_OIDC_CLAIM": "preferred_username",
-        "PROXY_USER_CS3_CLAIM": "username",
-        "OCIS_ADMIN_USER_ID": "",
-        "OCIS_EXCLUDE_RUN_SERVICES": "idp",
-        "GRAPH_ASSIGN_DEFAULT_USER_ROLE": "false",
-        "GRAPH_USERNAME_MATCH": "none",
-        "KEYCLOAK_DOMAIN": "keycloak:8443",
-    }
-
-    steps += ocisService(environment) + \
-             [
-                 {
-                     "name": "e2e-tests",
-                     "image": OC_CI_NODEJS_IMAGE,
-                     "environment": {
-                         "BASE_URL_OCIS": "ocis:9200",
-                         "HEADLESS": "true",
-                         "RETRY": "1",
-                         "REPORT_TRACING": "with-tracing" in ctx.build.title.lower(),
-                         "KEYCLOAK": "true",
-                         "KEYCLOAK_HOST": "keycloak:8443",
-                         "PLAYWRIGHT_BROWSERS_PATH": ".playwright",
-                         "BROWSER": "chromium",
-                         "SKIP_A11Y_TESTS": True,
-                     },
-                     "commands": [
-                         "cd tests/e2e",
-                         "bash run-e2e.sh %s" % " ".join(["cucumber/features/" + tests for tests in e2e_Keycloak_tests]),
-                     ],
-                 },
-             ] + \
-             uploadTracingResult(ctx) + \
-             logTracingResult(ctx)
-
-    return [{
-        "kind": "pipeline",
-        "type": "docker",
-        "name": "e2e-test-on-keycloak",
-        "workspace": web_workspace,
-        "steps": steps,
-        "services": postgresService(),
-        "volumes": e2e_volumes,
-        "trigger": base_trigger,
-    }]
 
 def getOcislatestCommitId(ctx):
     web_repo_path = "https://raw.githubusercontent.com/owncloud/web/%s" % ctx.build.commit
