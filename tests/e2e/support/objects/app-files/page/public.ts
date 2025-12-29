@@ -1,4 +1,4 @@
-import { Download, FrameLocator, Page } from '@playwright/test'
+import { Download, FrameLocator, Page, expect } from '@playwright/test'
 import { File } from '../../../types'
 import util from 'util'
 import path from 'path'
@@ -40,7 +40,13 @@ export class Public {
       await this.#page.waitForURL('**/public/**')
     }
     const a11yObject = new objects.a11y.Accessibility({ page: this.#page })
-    await a11yObject.getSevereAccessibilityViolations('body')
+    const a11yViolations = await a11yObject.getSevereAccessibilityViolations(
+      a11yObject.getSelectors().body
+    )
+    expect(
+      a11yViolations,
+      `Found ${a11yViolations.length} severe accessibility violations in public link page`
+    ).toHaveLength(0)
   }
 
   async authenticate({
@@ -56,6 +62,12 @@ export class Public {
     if (passwordProtectedFolder) {
       page = this.#page.frameLocator(folderModalIframe)
     }
+    const a11yObject = new objects.a11y.Accessibility({ page: this.#page })
+    const a11yViolations = await a11yObject.getSevereAccessibilityViolations('body')
+    expect(
+      a11yViolations,
+      `Found ${a11yViolations.length} severe accessibility violations in public link authenticate page`
+    ).toHaveLength(0)
     await page.locator(passwordInput).fill(password)
     await page.locator(publicLinkAuthorizeButton).click()
     if (expectToSucceed) {
