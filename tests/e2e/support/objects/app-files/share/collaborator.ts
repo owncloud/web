@@ -30,14 +30,18 @@ export interface RemoveCollaboratorArgs extends Omit<CollaboratorArgs, 'collabor
   removeOwnSpaceAccess?: boolean
 }
 
-export interface SetExpirationDateForCollaboratorArgs
-  extends Omit<CollaboratorArgs, 'collaborator'> {
+export interface SetExpirationDateForCollaboratorArgs extends Omit<
+  CollaboratorArgs,
+  'collaborator'
+> {
   collaborator: Omit<ICollaborator, 'role'>
   expirationDate: any
 }
 
-export interface RemoveExpirationDateFromCollaboratorArgs
-  extends Omit<CollaboratorArgs, 'collaborator'> {
+export interface RemoveExpirationDateFromCollaboratorArgs extends Omit<
+  CollaboratorArgs,
+  'collaborator'
+> {
   collaborator: Omit<ICollaborator, 'role'>
 }
 
