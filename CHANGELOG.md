@@ -17,6 +17,7 @@ Summary
 * Bugfix - External share ID fallback: [#13253](https://github.com/owncloud/web/pull/13253)
 * Bugfix - Handle file loading error: [#13274](https://github.com/owncloud/web/pull/13274)
 * Bugfix - Use sticky header composable in deleted files: [#13329](https://github.com/owncloud/web/pull/13329)
+* Bugfix - Prevent overlapping search content: [#13406](https://github.com/owncloud/web/pull/13406)
 * Enhancement - Hide trashed spaces: [#13168](https://github.com/owncloud/web/pull/13168)
 * Enhancement - Drop beta badge from GeoGebra pinboards: [#13169](https://github.com/owncloud/web/pull/13169)
 * Enhancement - Add Excalidraw file icon: [#13172](https://github.com/owncloud/web/pull/13172)
@@ -97,6 +98,16 @@ Details
    the layout and overlaps the content.
 
    https://github.com/owncloud/web/pull/13329
+
+* Bugfix - Prevent overlapping search content: [#13406](https://github.com/owncloud/web/pull/13406)
+
+   We've fixed an issue where the search placeholder and value were overlapping the
+   search scope filter on mobile devices. The placeholder is now hidden on mobile
+   devices, scope filter is represented by an icon instead of text and a correct
+   padding is applied to the search input so that the value ends before reaching
+   the icons.
+
+   https://github.com/owncloud/web/pull/13406
 
 * Enhancement - Hide trashed spaces: [#13168](https://github.com/owncloud/web/pull/13168)
 
