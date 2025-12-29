@@ -282,7 +282,6 @@ def stagePipelines(ctx):
 
     e2e_playwright_pipeline = e2eTestsOnPlaywright(ctx)
     e2e_pipelines = e2eTests(ctx)
-    return e2e_playwright_pipeline + e2e_pipelines
     return unit_test_pipelines + pipelinesDependsOn(e2e_playwright_pipeline + e2e_pipelines, unit_test_pipelines)
 
 def afterPipelines(ctx):
@@ -670,21 +669,21 @@ def e2eTestsOnPlaywright(ctx):
                      ocisService(params["extraServerEnvironment"])
 
         steps += [{
-                     "name": "e2e-tests",
-                     "image": OC_CI_NODEJS_IMAGE,
-                     "environment": environment,
-                     "commands": [
-                         "[ -f \"%s/tests/drone/suites.env\" ] && . \"%s/tests/drone/suites.env\"",
-                         "cd tests/e2e",
-                         "bash run-e2e.sh --type playwright",
-                     ],
-                 }]
+            "name": "e2e-tests",
+            "image": OC_CI_NODEJS_IMAGE,
+            "environment": environment,
+            "commands": [
+                "[ -f \"%s/tests/drone/suites.env\" ] && . \"%s/tests/drone/suites.env\"",
+                "cd tests/e2e",
+                "bash run-e2e.sh --type playwright",
+            ],
+        }]
 
         if not "skip-a11y" in ctx.build.title.lower():
             steps += uploadA11yResult(ctx) + logA11yReport()
 
         steps += uploadTracingResult(ctx, "playwright") + \
-                logTracingResult(ctx, "playwright")
+                 logTracingResult(ctx, "playwright")
 
         pipelines.append({
             "kind": "pipeline",
